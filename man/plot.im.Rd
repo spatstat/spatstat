@@ -8,11 +8,12 @@
 \usage{
   \method{plot}{im}(x, \dots,
                    col=NULL, valuesAreColours=NULL,
-                   log=FALSE,
-                   ribbon=TRUE,
+                   add=FALSE, log=FALSE,
+                   ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
-                   ribscale=1, ribargs=list(), colargs=list()) 
+                   ribscale=1, ribargs=list(), colargs=list(),
+                   do.plot=TRUE) 
 }
 \arguments{
   \item{x}{
@@ -33,13 +34,24 @@
     Logical value. If \code{TRUE}, the pixel values of \code{x}
     are to be interpreted as colour values.
   }
+  \item{add}{
+    Logical value indicating whether to superimpose the image on the
+    existing plot (\code{add=TRUE})
+    or to initialise a new plot (\code{add=FALSE}, the default).
+  }
   \item{log}{
     Logical value. If \code{TRUE}, the colour map will be
     evenly-spaced on a logarithmic scale.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon
-    showing the colour map.
+    showing the colour map. Default is \code{TRUE}
+    for new plots and \code{FALSE} for added plots.
+  }
+  \item{show.all}{
+    Logical value indicating whether to display all plot elements
+    including the main title and colour ribbon. Default is \code{TRUE}
+    for new plots and \code{FALSE} for added plots.
   }
   \item{ribside}{
     Character string indicating where to display the ribbon
@@ -69,9 +81,18 @@
     List of additional arguments passed to
     \code{col} if it is a function.
   }
+  \item{do.plot}{
+    Logical value indicating whether to actually plot the image
+    and colour ribbon.
+    Setting \code{do.plot=FALSE} will simply return the
+    colour map and the bounding box that were chosen for the plot.
+  }
 }
 \value{
   The colour map used. An object of class \code{"colourmap"}.
+
+  Also has an attribute \code{"bbox"} giving a bounding box
+  for the colour image (including the ribbon if present).
 }
 \details{
   This is the \code{plot} method for the class \code{"im"}.
@@ -167,6 +188,9 @@
     containing colour values.
   }
 
+  If \code{spatstat.options("monochrome")} has been set to \code{TRUE}
+  then \bold{all colours will be converted to grey scale values}.
+  
   Other graphical parameters controlling the display of both the pixel image
   and the ribbon can be passed through the \code{...} arguments
   to the function \code{\link[graphics]{image.default}}.
@@ -205,6 +229,20 @@
   If pixel values are interpreted as colours, 
   the arguments \code{col} and \code{ribbon} will be ignored,
   and a ribbon will not be plotted.
+
+}
+\section{Monochrome colours}{
+  If \code{spatstat.options("monochrome")} has been set to \code{TRUE},
+  then \bold{the image will be plotted in greyscale}.
+  The colours are converted to grey scale values using
+  \code{\link{to.grey}}.
+  The choice of colour map still has an effect, since it determines
+  the final grey scale values.
+
+  Monochrome display can also be achieved by
+  setting the graphics device parameter \code{colormodel="grey"}
+  when starting a new graphics device, or in a call to
+  \code{\link{ps.options}} or \code{\link{pdf.options}}.
 }
 \section{Image Rendering Errors and Problems}{
   The help for \code{\link[graphics]{image.default}} explains that

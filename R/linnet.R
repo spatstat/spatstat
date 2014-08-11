@@ -247,7 +247,7 @@ shift.linnet <- function(X, ...) {
   Y$lines    <- shift(X$lines, ...)
   Y$window   <- shift(X$window, ...)
   # tack on shift vector
-  attr(Y, "lastshift") <- attr(Y$vertices, "lastshift")
+  attr(Y, "lastshift") <- getlastshift(Y$vertices)
   return(Y)
 }
 

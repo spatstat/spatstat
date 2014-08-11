@@ -93,9 +93,9 @@ if(enable3d) {
   plot(osteo[1:10,], tick.marks=FALSE, xlab="", ylab="", zlab="")
 }
 
-ponderosa.extra$plotit()
-
 plot(paracou, cols=2:3, chars=c(16,3))
+
+ponderosa.extra$plotit()
 
 pyr <- pyramidal
 pyr$grp <- abbreviate(pyramidal$group, minlength=7)

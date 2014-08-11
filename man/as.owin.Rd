@@ -8,6 +8,8 @@
 \alias{as.owin.lppm}
 \alias{as.owin.psp}
 \alias{as.owin.quad}
+\alias{as.owin.quadratcount}
+\alias{as.owin.quadrattest}
 \alias{as.owin.tess}
 \alias{as.owin.im}
 \alias{as.owin.layered}
@@ -40,6 +42,10 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{psp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quad}(W, \dots, fatal=TRUE)
+
+ \method{as.owin}{quadratcount}(W, \dots, fatal=TRUE)
+
+ \method{as.owin}{quadrattest}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{tess}(W, \dots, fatal=TRUE)
 

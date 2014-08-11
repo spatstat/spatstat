@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.82 $	$Date: 2013/11/01 06:49:45 $
+#	$Revision: 4.85 $	$Date: 2014/01/27 07:54:55 $
 #
 #
 #
@@ -211,7 +211,7 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     return(A)
 
   # check units
-  if(!compatible.units(unitname(A), unitname(B)))
+  if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
 
   # determine intersection of x and y ranges
@@ -241,14 +241,15 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     ####### Result is polygonal ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip(a, b, "intersection", fillA="nonzero", fillB="nonzero")
+    ab <- polyclip::polyclip(a, b, "intersection",
+                             fillA="nonzero", fillB="nonzero")
     if(length(ab)==0)
       return(emptywindow(C))
     # ensure correct polarity
     totarea <- sum(unlist(lapply(ab, area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE)
+    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
     AB <- rescue.rectangle(AB)
     return(AB)
   }
@@ -337,7 +338,7 @@ union.owin <- function(A, B, ...) {
     return(A)
 
   # check units
-  if(!compatible.units(unitname(A), unitname(B)))
+  if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
   
   # Determine type of intersection
@@ -360,14 +361,14 @@ union.owin <- function(A, B, ...) {
     ####### Result is polygonal ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip(a, b, "union", fillA="nonzero", fillB="nonzero")
+    ab <- polyclip::polyclip(a, b, "union", fillA="nonzero", fillB="nonzero")
     if(length(ab) == 0)
       return(emptywindow(C))
     # ensure correct polarity
     totarea <- sum(unlist(lapply(ab, area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE)
+    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
     AB <- rescue.rectangle(AB)
     return(AB)
   }
@@ -378,11 +379,11 @@ union.owin <- function(A, B, ...) {
   if(length(rasterinfo) == 0) {
     rasterinfo <-
       if(Amask)
-        list(xy=list(x=prolongseq(A$xcol, C$xrange),
-               y=prolongseq(A$yrow, C$yrange)))
+        list(xy=list(x=as.numeric(prolongseq(A$xcol, C$xrange)),
+               y=as.numeric(prolongseq(A$yrow, C$yrange))))
       else if(Bmask)
-        list(xy=list(x=prolongseq(B$xcol, C$xrange),
-               y=prolongseq(B$yrow, C$yrange)))
+        list(xy=list(x=as.numeric(prolongseq(B$xcol, C$xrange)),
+               y=as.numeric(prolongseq(B$yrow, C$yrange))))
       else
         list()
   }
@@ -414,7 +415,7 @@ setminus.owin <- function(A, B, ...) {
     return(emptywindow(as.rectangle(A)))
 
   # check units
-  if(!compatible.units(unitname(A), unitname(B)))
+  if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
   
   # Determine type of arguments
@@ -439,14 +440,14 @@ setminus.owin <- function(A, B, ...) {
     ####### Result is polygonal ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip(a, b, "minus", fillA="nonzero", fillB="nonzero")
+    ab <- polyclip::polyclip(a, b, "minus", fillA="nonzero", fillB="nonzero")
     if(length(ab) == 0)
       return(emptywindow(C))
     # ensure correct polarity
     totarea <- sum(unlist(lapply(ab, area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE)
+    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
     AB <- rescue.rectangle(AB)
     return(AB)
   }
@@ -577,7 +578,31 @@ grow.rectangle <- function(W, xmargin=0, ymargin=xmargin) {
        unitname=unitname(W))
 }
 
-
+grow.mask <- function(M, xmargin=0, ymargin=xmargin) {
+  stopifnot(is.mask(M))
+  m <- as.matrix(M)
+  Rplus <- grow.rectangle(as.rectangle(M), xmargin, ymargin)
+  ## extend the raster
+  xcolplus <- prolongseq(M$xcol, Rplus$xrange)
+  yrowplus <- prolongseq(M$yrow, Rplus$yrange)
+  mplus <- matrix(FALSE, length(yrowplus), length(xcolplus))
+  ## pad out the mask entries
+  nleft <- attr(xcolplus, "nleft")
+  nright <- attr(xcolplus, "nright")
+  nbot <- attr(yrowplus, "nleft")
+  ntop <- attr(yrowplus, "nright")
+  mplus[ (nleft+1):(length(yrowplus)-nright),
+         (nbot+1):(length(xcolplus)-ntop) ] <- m
+  ## pack up
+  result <- owin(xrange=Rplus$xrange,
+                 yrange=Rplus$yrange,
+                 xcol=as.numeric(xcolplus),
+                 yrow=as.numeric(yrowplus),
+                 mask=mplus,
+                 unitname=unitname(M))
+  return(result)
+}
+  
 bdry.mask <- function(W) {
   verifyclass(W, "owin")
   W <- as.mask(W)

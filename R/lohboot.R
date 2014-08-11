@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.7 $   $Date: 2013/08/01 09:40:03 $
+#  $Revision: 1.9 $   $Date: 2013/12/17 10:14:24 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -46,15 +46,16 @@ lohboot <-
          isotropic = { ctag <- "iso";   cadj <- "Ripley isotropic corrected" })
   # first n columns are the local pcfs (etc) for the n points of X
   y <- as.matrix(as.data.frame(f))[, 1:n]
+  nr <- nrow(y)
   # average them
-  ymean <- rowMeans(y, na.rm=TRUE)
+  ymean <- .rowMeans(y, na.rm=TRUE, nr, n)
   # resample
-  ystar <- matrix(, nrow=nrow(y), ncol=nsim)
+  ystar <- matrix(, nrow=nr, ncol=nsim)
   for(i in 1:nsim) {
     # resample n points with replacement
     ind <- sample(n, replace=TRUE)
     # average their local pcfs
-    ystar[,i] <- rowMeans(y[,ind], na.rm=TRUE)
+    ystar[,i] <- .rowMeans(y[,ind], nr, n, na.rm=TRUE)
   }
   # compute quantiles
   if(!global) {

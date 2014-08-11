@@ -20,8 +20,7 @@ Hest(X, r=NULL, breaks=NULL, ...,
     argument; there is a sensible default.
   }
   \item{breaks}{
-    Optional. An alternative to the argument \code{r}.
-    Not normally invoked by the user. 
+	This argument is for internal use only.
   }
   \item{\dots}{Arguments passed to \code{\link{as.mask}}
     to control the discretisation.

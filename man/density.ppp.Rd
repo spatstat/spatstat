@@ -6,7 +6,7 @@
 }
 \usage{
   \method{density}{ppp}(x, sigma, \dots,
-        weights, edge=TRUE, varcov=NULL,
+        weights=NULL, edge=TRUE, varcov=NULL,
         at="pixels", leaveoneout=TRUE,
         adjust=1, diggle=FALSE)
 }
@@ -20,12 +20,12 @@
     appropriate value of \code{sigma}.
   }
   \item{weights}{
-    Optional vector or matrix of weights to be attached to the points.
-    May include negative values. 
+    Optional weights to be attached to the points.
+    A numeric vector, numeric matrix, or an \code{expression}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine
-    the pixel resolution.
+    Additional arguments passed to \code{\link{as.mask}} to determine
+    the pixel resolution, or passed to \code{sigma} if it is a function.
   }
   \item{edge}{
     Logical flag: if \code{TRUE}, apply edge correction.
@@ -83,8 +83,7 @@
   with point masses at each of the data points in \code{x}.
   Anisotropic Gaussian kernels are also supported.
   Each point has unit weight, unless the argument \code{weights} is
-  given (it should be a numeric vector or matrix;
-  weights can be negative or zero).
+  given.
 
   If \code{edge=TRUE}, the intensity estimate is corrected for
   edge effect bias in one of two ways:
@@ -190,11 +189,19 @@
   If \code{leaveoneout=FALSE} then the sum is taken over all \eqn{j},
   so that the intensity value at a data point includes a contribution
   from the same point.
-  
+
   If \code{weights} is a matrix with more than one column, then the
   calculation is effectively repeated for each column of weights. The
   result is a list of images (if \code{at="pixels"}) or a matrix of
   numerical values (if \code{at="points"}).
+  
+  The argument \code{weights} can also be an \code{expression}.
+  It will be evaluated in the data frame \code{as.data.frame(x)}
+  to obtain a vector or matrix of weights. The expression may involve
+  the symbols \code{x} and \code{y} representing the Cartesian
+  coordinates, the symbol \code{marks} representing the mark values
+  if there is only one column of marks, and the names of the columns of
+  marks if there are several columns.  
   
   To select the bandwidth \code{sigma} automatically by
   cross-validation, use \code{\link{bw.diggle}} or \code{\link{bw.ppl}}.
@@ -262,6 +269,7 @@
      Z <- density(cells, 0.05, diggle=TRUE)
      Z <- density(cells, varcov=diag(c(0.05^2, 0.07^2)))
      Z <- density(cells, 0.05, weights=data.frame(a=1:42,b=42:1))
+     Z <- density(cells, 0.05, weights=expression(x))
   }
   # automatic bandwidth selection
   plot(density(cells, sigma=bw.diggle(cells)))

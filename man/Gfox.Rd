@@ -27,8 +27,8 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
     First-time users are strongly advised not to specify this argument.
     See below for important conditions on \eqn{r}.
   }
-  \item{breaks}{An alternative to the argument \code{r}.
-    Not normally invoked by the user. 
+  \item{breaks}{
+    This argument is for internal use only.
   }
   \item{correction}{
     Optional.

@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.19 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.20 $ $Date: 2014/01/13 00:32:05 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -270,3 +270,6 @@ print.summary.splitppp <- function(x, ...) {
   x
 }
   
+density.splitppp <- function(x, ...) {
+  as.listof(lapply(x, density, ...))
+}

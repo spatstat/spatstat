@@ -76,7 +76,7 @@ lgcp.estpcf(X,
   see \code{\link{mincontrast}}.
 
   The model fitted is a stationary, isotropic log-Gaussian Cox process
-  (Moller and Waagepetersen, 2003, pp. 72-76).
+  (\ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen, 2003, pp. 72-76).
   To define this process we start with
   a stationary Gaussian random field \eqn{Z} in the two-dimensional plane,
   with constant mean \eqn{\mu}{mu} and covariance function \eqn{C(r)}.
@@ -174,11 +174,11 @@ lgcp.estpcf(X,
   }
 }
 \references{
-  Moller, J, Syversveen, A. and Waagepetersen, R. (1998)
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J, Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
   
-  Moller, J. and Waagepetersen, R. (2003).
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

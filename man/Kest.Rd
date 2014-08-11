@@ -23,8 +23,7 @@ from a point pattern in a window of arbitrary shape.
     argument; there is a sensible default.
   }
   \item{breaks}{
-    Optional. An alternative to the argument \code{r}.
-    Not normally invoked by the user. See the \bold{Details} section.
+    This argument is for internal use only.
   }
   \item{correction}{
     Optional. A character vector containing any selection of the

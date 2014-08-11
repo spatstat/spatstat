@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.39 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.41 $	$Date: 2014/02/16 06:42:44 $
 #
 #
 # ------------------------------------------------------------------------
@@ -19,9 +19,10 @@ Lcross.inhom <- function(X, i, j, ...) {
   L <- rebadge.fv(L,
                   substitute(L[inhom,i,j](r),
                              list(i=iname,j=jname)),
-                  sprintf("L[list(inhom,%s,%s)]", i, j),
+                  c("L", paste0("list", paren(paste("inhom", i, j, sep=",")))),
                   new.yexp=substitute(L[list(inhom,i,j)](r),
                                       list(i=iname,j=jname)))
+  attr(L, "labl") <- attr(K, "labl")
   return(L)  
 }
 
@@ -35,9 +36,10 @@ Ldot.inhom <- function(X, i, ...) {
   iname <- make.parseable(paste(i))
   L <- rebadge.fv(L,
                   substitute(L[inhom, i ~ dot](r), list(i=iname)),
-                  paste("L[list(inhom,", iname, "~symbol(\"\\267\"))]"),
+                  c("L", paste0("list(inhom,", iname, "~symbol(\"\\267\"))")),
                   new.yexp=substitute(L[list(inhom, i ~ symbol("\267"))](r),
                     list(i=iname)))
+  attr(L, "labl") <- attr(K, "labl")
   return(L)  
 }
 
@@ -72,7 +74,7 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
     rebadge.fv(result,
                substitute(K[inhom,i,j](r),
                           list(i=iname,j=jname)),
-               sprintf("K[list(inhom,%s,%s)]", i, j),
+               c("K", paste0("list", paren(paste("inhom", i, j, sep=",")))),
                new.yexp=substitute(K[list(inhom,i,j)](r),
                                    list(i=iname,j=jname)))
   return(result)
@@ -109,7 +111,7 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
   result <-
     rebadge.fv(result,
                substitute(K[inhom, i ~ dot](r), list(i=iname)),
-               paste("K[list(inhom,", iname, "~symbol(\"\\267\"))]"),
+               c("K", paste0("list(inhom,", iname, "~symbol(\"\\267\"))")),
                new.yexp=substitute(K[list(inhom, i ~ symbol("\267"))](r),
                                    list(i=iname)))
   return(result)
@@ -233,9 +235,13 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   # It will be given more columns later
   K <- data.frame(r=r, theo= pi * r^2)
   desc <- c("distance argument r", "theoretical Poisson %s")
-  K <- fv(K, "r", substitute(K[inhom, multi](r), NULL),
-          "theo", , alim, c("r","{%s^{pois}}(r)"), desc,
-          fname="K[list(inhom, multi)]")
+  fname <- c("K", "list(inhom,I,J)")
+  K <- fv(K, "r", quote(K[inhom, I, J](r)),
+          "theo", , alim,
+          c("r", makefvlabel(NULL, NULL, fname, "pois")),
+          desc,
+          fname=fname,
+          yexp=quote(K[list(inhom,I,J)](r)))
 
 # identify close pairs of points
   XI <- X[I]
@@ -284,13 +290,15 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
     RS <- Kwtsum(dclose, bI, weight, b, 1/lambdaI, breaks)
     if(any(correction == "border")) {
       Kb <- RS$ratio
-      K <- bind.fv(K, data.frame(border=Kb), "hat(%s^{bord})(r)",
+      K <- bind.fv(K, data.frame(border=Kb),
+                   makefvlabel(NULL, "hat", fname, "bord"),
                    "border-corrected estimate of %s",
                    "border")
     }
     if(any(correction == "bord.modif")) {
       Kbm <- RS$numerator/eroded.areas(W, r)
-            K <- bind.fv(K, data.frame(bord.modif=Kbm), "hat(%s^{bordm})(r)",
+            K <- bind.fv(K, data.frame(bord.modif=Kbm),
+                         makefvlabel(NULL, "hat", fname, "bordm"),
                          "modified border-corrected estimate of %s",
                          "bord.modif")
           }
@@ -303,7 +311,8 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
             Ktrans <- cumsum(wh)/area
             rmax <- diameter(W)/2
             Ktrans[r >= rmax] <- NA
-            K <- bind.fv(K, data.frame(trans=Ktrans), "hat(%s^{trans})(r)",
+            K <- bind.fv(K, data.frame(trans=Ktrans),
+                         makefvlabel(NULL, "hat", fname, "trans"),
                          "translation-corrected estimate of %s",
                          "trans")
         }
@@ -315,7 +324,8 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
             Kiso <- cumsum(wh)/area
             rmax <- diameter(W)/2
             Kiso[r >= rmax] <- NA
-            K <- bind.fv(K, data.frame(iso=Kiso), "hat(%s^{iso})(r)",
+            K <- bind.fv(K, data.frame(iso=Kiso), 
+                         makefvlabel(NULL, "hat", fname, "iso"),
                          "Ripley isotropic correction estimate of %s",
                          "iso")
         }
@@ -323,5 +333,4 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         formula(K) <- . ~ r
         unitname(K) <- unitname(X)
         return(K)
-          
 }

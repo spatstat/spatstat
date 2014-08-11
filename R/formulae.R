@@ -4,7 +4,7 @@
 #
 #   Functions for manipulating model formulae
 #
-#	$Revision: 1.16 $	$Date: 2012/08/22 01:28:24 $
+#	$Revision: 1.17 $	$Date: 2014/01/20 07:42:33 $
 #
 #   identical.formulae()
 #          Test whether two formulae are identical
@@ -66,7 +66,7 @@ lhs.of.formula <- function(x) {
     stop("x must be a formula")
   if(length(as.list(x)) == 3) {
     # formula has a response: return it
-    return(x[2])
+    return(x[[2]])
   }
   return(NULL)
 }

@@ -45,7 +45,7 @@
   see Hubbell and Foster (1983), Condit, Hubbell and Foster (1996)
   and Condit (1998).
 
-  The present data were analysed by Moller and Waagepetersen (2007).
+  The present data were analysed by \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen (2007).
 }
 \references{
   Condit, R. (1998) \emph{Tropical Forest Census Plots}.
@@ -62,7 +62,7 @@
   (eds. S.L. Sutton, T.C. Whitmore and A.C. Chadwick),
   Blackwell Scientific Publications, Oxford, 25--41.
 
-  Moller, J. and Waagepetersen, R.P. (2007)
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.P. (2007)
   Modern spatial point process modelling and inference (with discussion).
   \emph{Scandinavian Journal of Statistics} \bold{34}, 643--711.
 } 

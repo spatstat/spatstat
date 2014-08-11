@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.33 $  $Date: 2012/09/05 08:17:55 $
+#  $Revision: 1.39 $  $Date: 2014/01/16 05:41:32 $
 #
 
 quadratcount <- function(X, ...) {
@@ -70,7 +70,8 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
 
 plot.quadratcount <- function(x, ...,
                               add=FALSE, entries=as.vector(t(as.table(x))),
-                              dx=0, dy=0, show.tiles=TRUE) {
+                              dx=0, dy=0, show.tiles=TRUE,
+                              textargs = list()) {
   xname <- short.deparse(substitute(x))
   tess <- attr(x, "tess")
   # add=FALSE, show.tiles=TRUE  => plot tiles + numbers
@@ -95,6 +96,7 @@ plot.quadratcount <- function(x, ...,
     do.call.matched("text.default",
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=labels),
+                                     textargs, 
                                      list(...)))
   }
   return(invisible(NULL))
@@ -162,5 +164,31 @@ quadrats <- function(X, nx=5, ny=nx, xbreaks = NULL, ybreaks = NULL,
 
 as.tess.quadratcount <- function(X) {
   return(attr(X, "tess"))
+}
+
+as.owin.quadratcount <- function(W, ..., fatal=TRUE) {
+  return(as.owin(as.tess(W), ..., fatal=fatal))
+}
+  
+intensity.quadratcount <- function(X, ..., image=FALSE) {
+  intensities <- X/tile.areas(as.tess(X))
+  if(!image) {
+    trap.extra.arguments(...)
+    class(intensities) <- "table"
+    return(intensities)
+  }
+  intensities <- as.numeric(intensities)
+  tileindex <- as.im(as.tess(X), ...)
+  result <- eval.im(intensities[tileindex])
+  return(result)
+}
+
+## The shift method is undocumented.
+## It is only needed in plot.listof
+
+shift.quadratcount <- function(X, ...) {
+  attr(X, "tess") <- te <- shift(attr(X, "tess"), ...)
+  attr(X, "lastshift") <- getlastshift(te)
+  return(X)
 }
 

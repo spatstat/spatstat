@@ -144,7 +144,8 @@ Harkness, R.D. and Isham, V. (1983)
 A bivariate spatial point pattern of ants' nests.
 \emph{Applied Statistics} \bold{32}, 293--303.
 
-H\"ogmander, H. and S\"arkk\"a, A. (1999)
+\ifelse{latex}{\out{H\"ogmander}}{Hogmander}, H. and
+\ifelse{latex}{\out{S\"arkk\"a}}{Sarkka}, A. (1999)
 Multitype spatial point patterns with hierarchical interactions.
 \emph{Biometrics} \bold{55}, 1051--1058.
 
@@ -157,11 +158,12 @@ Takacs, R. and Fiksel, T. (1986)
 Interaction pair-potentials for a system of ants' nests.
 \emph{Biometrical Journal} \bold{28}, 1007--1013.
 
-S\"arkk\"a, A. (1993)
+\ifelse{latex}{\out{S\"arkk\"a}}{Sarkka}, A. (1993)
 \emph{Pseudo-likelihood approach for pair potential
   estimation of Gibbs processes}.
-Number 22 in Jyv\"askyl\"a Studies in Computer Science, Economics
-and Statistics. University of Jyv\"askyl\"a, Finland.
+Number 22 in \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}
+Studies in Computer Science, Economics and Statistics.
+University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
 }
 \keyword{datasets}
 \keyword{spatial}

@@ -10,7 +10,9 @@
 \usage{
 edge.Trans(X, Y = X, W = X$window,
       exact = FALSE, paired = FALSE,
-      trim = spatstat.options("maxedgewt"))
+      ..., 
+      trim = spatstat.options("maxedgewt"),
+      dx=NULL, dy=NULL)
 }
 \arguments{
   \item{X,Y}{
@@ -33,8 +35,14 @@ edge.Trans(X, Y = X, W = X$window,
     each possible pair of points \code{X[i], Y[j]}
     for all \code{i} and \code{j}.
   }
+  \item{\dots}{Ignored.}
   \item{trim}{
     Maximum permitted value of the edge correction weight.
+  }
+  \item{dx,dy}{
+    Alternative data giving the \eqn{x} and \eqn{y} coordinates
+    of the vector differences between the points.
+    Incompatible with \code{X} and \code{Y}. See Details.
   }
 }
 \details{
@@ -75,7 +83,16 @@ edge.Trans(X, Y = X, W = X$window,
     using the Fast Fourier Transform.
   }
   If any value of the edge correction weight exceeds \code{trim},
-  it is set to \code{trim}. 
+  it is set to \code{trim}.
+
+  The arguments \code{dx} and \code{dy} can be provided as
+  an alternative to \code{X} and \code{Y}.
+  If \code{paired=TRUE} then \code{dx,dy} should be vectors of equal length
+  such that the vector difference of the \eqn{i}th pair is
+  \code{c(dx[i], dy[i])}. If \code{paired=FALSE} then 
+  \code{dx,dy} should be matrices of the same dimensions,
+  such that the vector difference between \code{X[i]} and \code{Y[j]} is
+  \code{c(dx[i,j], dy[i,j])}. The argument \code{W} is needed.
 }
 \value{
   Numeric vector or matrix.

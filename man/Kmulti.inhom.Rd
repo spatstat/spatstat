@@ -57,8 +57,8 @@
     First-time users are strongly advised not to specify this argument.
     See below for important conditions on \eqn{r}.
   }
-  \item{breaks}{An alternative to the argument \code{r}.
-    Not normally invoked by the user. See the \bold{Details} section.
+  \item{breaks}{
+	This argument is for internal use only.
   }
   \item{correction}{
     A character vector containing any selection of the
@@ -158,7 +158,7 @@ obtained by the edge corrections named.
     }
   }
   If \code{lambdaI} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -202,7 +202,7 @@ obtained by the edge corrections named.
   result of \code{Kmulti.inhom}.
 }
 \references{
-  Baddeley, A., Moller, J. and Waagepetersen, R. (2000)
+  Baddeley, A., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.68 $   $Date: 2013/10/02 05:35:12 $
+#  $Revision: 1.77 $   $Date: 2014/01/29 05:07:10 $
 #
 #  Plotting code for pixel images
 #
@@ -25,7 +25,8 @@ plot.im <- local({
   axisparams <- c("cex", 
                   "cex.axis", "cex.lab",
                   "col.axis", "col.lab",
-                  "font.axis", "font.lab")
+                  "font.axis", "font.lab",
+                  "mgp", "xaxp", "yaxp", "tck", "tcl", "las", "fg", "xpd")
   
   # auxiliary functions
 
@@ -47,22 +48,27 @@ plot.im <- local({
 
   log10orNA <- function(x) {
     y <- rep(NA_real_, length(x))
-    ok <- (x > 0)
+    ok <- !is.na(x) & (x > 0)
     y[ok] <- log10(x[ok])
     return(y)
   }
   
   # main function
   PlotIm <- function(x, ...,
-                     col=NULL, valuesAreColours=NULL, log=FALSE,
-                     ribbon=TRUE, ribside=c("right", "left", "bottom", "top"),
+                     col=NULL, valuesAreColours=NULL, add=FALSE, log=FALSE,
+                     ribbon=show.all, show.all=!add,
+                     ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
-                     ribscale=1, ribargs=list(), colargs=list()) {
+                     ribscale=1, ribargs=list(), colargs=list(),
+                     do.plot=TRUE) {
     main <- short.deparse(substitute(x))
     verifyclass(x, "im")
-    dotargs <- list(...)
-    stopifnot(is.list(ribargs))
     ribside <- match.arg(ribside)
+    col.given <- !is.null(col)
+    dotargs <- list(...)
+
+    stopifnot(is.list(ribargs))
+
     zlim <- dotargs$zlim
 
     x <- repair.image.xycoords(x)
@@ -84,7 +90,7 @@ plot.im <- local({
           warning(paste("Pixel values of type", sQuote(xtype),
                         "are not interpretable as colours"))
           valuesAreColours <- FALSE
-        } else if(!is.null(col)) {
+        } else if(col.given) {
           # colour info provided: contradictory
           warning(paste("Pixel values are taken to be colour values,",
                         "because valuesAreColours=TRUE;", 
@@ -98,11 +104,13 @@ plot.im <- local({
                         "the argument log=TRUE is ignored"),
                   call.=FALSE)
       }
-    } else if(!is.null(col)) {
+    } else if(col.given) {
       # argument 'col' controls colours
       valuesAreColours <- FALSE
+    } else if(spatstat.options("monochrome")) {
+      valuesAreColours <- FALSE
     } else {
-      # default : determine whether pixel values are colours
+      ## default : determine whether pixel values are colours
       strings <- switch(xtype,
                         character = { as.vector(x$v) },
                         factor    = { levels(x) },
@@ -159,14 +167,19 @@ plot.im <- local({
     imagebreaks <- NULL
     ribbonvalues <- ribbonbreaks <- NULL
 
-    # predetermined colour map?
-    # (i.e. mapping from values to colours)
-    colmap <- if(inherits(col, "colourmap")) col else NULL
+    ## predetermined colour map?
+    ## (i.e. mapping from values to colours)
+    colmap <- if(valuesAreColours) colourmap(col=col, inputs=col) else
+              if(inherits(col, "colourmap")) col else NULL
 
-    # colour map determined by a function?
-    if(is.null(colmap) && (is.null(col) || is.function(col))) {
+    ## colour map determined by a function?
+    colfun <- NULL
+    if(is.null(colmap) && (!col.given || is.function(col))) {
       colfun <- if(is.function(col)) col else spatstat.options("image.colfun")
       colargnames <- names(formals(colfun))
+      ## colfun could be a function(n) that generates n colours,
+      ## or a function(...) that generates a colour map.
+      ## If the latter, convert it to a 'colmap'
       if("range" %in% colargnames && xtype %in% c("real", "integer")) {
         # continuous 
         vrange <- range(range(x, finite=TRUE), zlim)
@@ -177,6 +190,7 @@ plot.im <- local({
           colmap <- if(inherits(cvals, "colourmap")) cvals else
             if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
         }
+        if(!is.null(colmap)) colfun <- NULL
       } else if("inputs" %in% colargnames && xtype != "real") {
         # discrete
         vpossible <- switch(xtype,
@@ -191,8 +205,10 @@ plot.im <- local({
             colmap <- if(inherits(cvals, "colourmap")) cvals else
             if(is.character(cvals)) colourmap(cvals, inputs=vpossible) else NULL
           }
+        if(!is.null(colmap)) colfun <- NULL
         }
-      }
+      } else if(colargnames[1] != "n")
+        stop("Unrecognised syntax for colour function")
     }
        
     switch(xtype,
@@ -293,7 +309,7 @@ plot.im <- local({
              ribbonticks <- ribbonvalues
              ribbonlabels <- paste(lev)
              vrange <- range(intlev)
-             if(!is.null(colmap)) 
+             if(!is.null(colmap) && !valuesAreColours) 
                col <- colmap(fac)
            },
            character  = {
@@ -317,33 +333,36 @@ plot.im <- local({
            stop(paste("Do not know how to plot image of type", sQuote(xtype)))
            )
   
-    # determine colour map
+    ## Compute colour values to be passed to image.default
     if(!is.null(colmap)) {
-      # explicit colour map object
+      ## Explicit colour map object
       colourinfo <- list(breaks=imagebreaks, col=col)
-    } else {
-      # compile colour information
-      # start with default colour values
-      colfun <- spatstat.options("image.colfun")
-      # we already know that colfun(n) works
-      colourinfo <- if(!is.null(imagebreaks)) {
-        list(breaks=imagebreaks, col=colfun(length(imagebreaks)-1))
-      } else list(col=colfun(256))
-      if(!is.null(col) && is.character(col)) {
-        # overwrite colour info with user-specified colour values
-        colourinfo$col <- col
-        if(!is.null(colourinfo$breaks)) {
-        # check consistency
-          nvalues <- length(colourinfo$breaks) - 1
-          if(length(col) != nvalues)
-            stop(paste("Length of argument", dQuote("col"),
-                       paren(paste(length(col))),
-                       "does not match the number of distinct values",
-                       paren(paste(nvalues))))
-        }
+    } else if(!is.null(colfun)) {
+      ## Function colfun(n)
+      colourinfo <- if(is.null(imagebreaks)) list(col=colfun(256)) else
+                    list(breaks=imagebreaks, col=colfun(length(imagebreaks)-1))
+    } else if(col.given) {
+      ## Colour values
+      if(inherits(try(col2rgb(col), silent=TRUE), "try-error"))
+        stop("Unable to interpret argument col as colour values")
+      if(is.null(imagebreaks)) {
+        colourinfo <- list(col=col)
+      } else {
+        nintervals <- length(imagebreaks) - 1
+        colourinfo <- list(breaks=imagebreaks, col=col)
+        if(length(col) != nintervals)
+          stop(paste("Length of argument", dQuote("col"),
+                     paren(paste(length(col))),
+                     "does not match the number of distinct values",
+                     paren(paste(nintervals))))
       }
-    }
+    } else stop("Internal error: unable to determine colour values")
 
+    if(spatstat.options("monochrome")) {
+      ## transform to grey scale
+      colourinfo$col <- to.grey(colourinfo$col)
+    }
+    
     # colour map to be returned (invisibly)
     i.col <- colourinfo$col
     i.bks <- colourinfo$breaks
@@ -366,32 +385,31 @@ plot.im <- local({
                colourmap(col=i.col, inputs=lev)
              },
              NULL)
-    
-    # ........ secret exit used by plot.listof
-    
-    preponly <- resolve.defaults(dotargs, list(preponly=FALSE))$preponly
-    if(preponly) return(output.colmap)
 
     # ........ start plotting .................
 
-    add <- resolve.defaults(dotargs, list(add=FALSE))$add
+    if(!identical(ribbon, TRUE) || trivial) {
+      ## no ribbon wanted
 
-    if(!identical(ribbon, TRUE)
-       || identical(add, TRUE)
-       || trivial)
-      {
-        # plot image without ribbon
-        image.doit(list(x=cellbreaks(x$xcol, x$xstep),
-                        y=cellbreaks(x$yrow, x$ystep),
-                        z=t(x$v)),
-                   dotargs,
-                   list(useRaster=TRUE),
-                   colourinfo,
-                   list(xlab = "", ylab = ""),
-                   list(asp = 1, main = main, axes=FALSE)
-                   )
-        return(invisible(output.colmap))
-      }
+      attr(output.colmap, "bbox") <- as.rectangle(x)
+      if(!do.plot)
+        return(output.colmap)
+
+      ## plot image without ribbon
+      image.doit(list(x=cellbreaks(x$xcol, x$xstep),
+                      y=cellbreaks(x$yrow, x$ystep),
+                      z=t(x$v)),
+                 dotargs,
+                 list(useRaster=TRUE, add=add),
+                 colourinfo,
+                 list(xlab = "", ylab = ""),
+                 list(asp = 1, main = main, axes=FALSE)
+                 )
+      if(add && show.all)
+        fakemaintitle(x, main, dotargs)
+      return(invisible(output.colmap))
+    }
+    
     # determine plot region
     bb <- owin(x$xrange, x$yrange)
     Width <- diff(bb$xrange)
@@ -423,15 +441,21 @@ plot.im <- local({
              rib.iside <- 1
            })
     bb.all <- bounding.box(bb.rib, bb)
+
+    attr(output.colmap, "bbox") <- bb.all
+    if(!do.plot)
+      return(output.colmap)
+    
     # establish coordinate system
-    do.call.matched("plot.default",
-                    resolve.defaults(list(x=0, y=0,  type="n",
-                                          axes=FALSE, asp=1,
-                                          xlim=bb.all$xrange,
-                                          ylim=bb.all$yrange),
-                                     dotargs,
-                                     list(main=main, xlab="", ylab="")),
-                    extrargs=plotparams)
+    if(!add)
+      do.call.plotfun("plot.default",
+                      resolve.defaults(list(x=0, y=0,  type="n", 
+                                            axes=FALSE, asp=1,
+                                            xlim=bb.all$xrange,
+                                            ylim=bb.all$yrange),
+                                       dotargs,
+                                       list(main=main, xlab="", ylab="")),
+                      extrargs=plotparams)
     # plot image
     image.doit(list(x=cellbreaks(x$xcol, x$xstep),
                     y=cellbreaks(x$yrow, x$ystep),
@@ -442,6 +466,10 @@ plot.im <- local({
                colourinfo,
                list(xlab = "", ylab = ""),
                list(asp = 1, main = main))
+
+    if(add && show.all)
+      fakemaintitle(bb.all, main, ...)
+    
     # axes for image
     imax <- identical(dotargs$axes, TRUE)
     imbox <- !identical(dotargs$box, FALSE)
@@ -450,13 +478,13 @@ plot.im <- local({
     if(imax) {
       px <- pretty(bb$xrange)
       py <- pretty(bb$yrange)
-      do.call.matched("axis",
+      do.call.plotfun("axis",
                       resolve.defaults(
                                        list(side=1, at=px), 
                                        dotargs,
                                        list(pos=bb$yrange[1])),
                       extrargs=axisparams)
-      do.call.matched("axis",
+      do.call.plotfun("axis",
                       resolve.defaults(
                                        list(side=2, at=py), 
                                        dotargs,
@@ -532,7 +560,7 @@ plot.im <- local({
                posargs <- list(pos=bb.rib$yrange[1],
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
-      do.call.matched("axis",
+      do.call.plotfun("axis",
                       resolve.defaults(axisargs,
                                        ribargs, dotargs,
                                        posargs),
@@ -559,8 +587,9 @@ persp.im <- function(x, ..., colmap=NULL) {
   if(xinfo$type == "factor")
     stop("Perspective plot is inappropriate for factor-valued image")
   pop <- spatstat.options("par.persp")
-  # check for common error
-  if(!is.null(col <- list(...)$col) && !is.matrix(col))
+  ## check whether 'col' was specified when 'colmap' was intended
+  Col <- list(...)$col
+  if(is.null(colmap) && !is.null(Col) && !is.matrix(Col) && length(Col) != 1)
     warning("Argument col is not a matrix. Did you mean colmap?")
   # colour map?
   if(is.null(colmap)) {
@@ -606,6 +635,9 @@ persp.im <- function(x, ..., colmap=NULL) {
     colinfo <- list(col=colval, border=NA)
   }
 
+  if(spatstat.options("monochrome"))
+    colinfo$col <- to.grey(colinfo$col)
+  
   # get reasonable z scale while fixing x:y aspect ratio
   if(xinfo$type %in% c("integer", "real")) {
     zrange <- xinfo$range
@@ -656,7 +688,7 @@ contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
   if(!add) {
     # new plot
     if(axes) # with axes
-      do.call.matched("plot.default",
+      do.call.plotfun("plot.default",
                       resolve.defaults(
                                        list(x = range(x$xcol),
                                             y = range(x$yrow),
@@ -672,7 +704,7 @@ contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
                                        list(main=main)))
     }
   }
-  do.call.matched("contour.default",
+  do.call.plotfun("contour.default",
                   resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
                                    list(add=TRUE),
                                    list(...)))

@@ -31,8 +31,8 @@ layered(..., plotargs = NULL, LayerList=NULL)
   several successive plots, for example, a background and a foreground
   plot. The layering mechanism makes it easier to issue the plot command,
   to switch on or off the plotting of each individual layer,
-  and to control the plotting arguments that are
-  passed to each layer.
+  to control the plotting arguments that are passed to each layer,
+  and to zoom in.
   
   Each individual layer in the plot should be saved as an object
   that can be plotted using \code{plot}. It will typically belong to
@@ -44,12 +44,16 @@ layered(..., plotargs = NULL, LayerList=NULL)
   type a single \code{plot} command to produce the multi-layered plot.
   Individual layers of the plot can be switched on or off, or
   manipulated, using arguments to \code{\link{plot.layered}}.
-  
+
   The argument \code{plotargs} contains default values of the
   plotting arguments for each layer. It should be a list, with one
   entry for each object in \code{\dots}. Each entry of  \code{plotargs}
   should be a list of arguments in the form \code{name=value}, which are
   recognised by the \code{plot} method for the relevant layer.
+
+  The length of \code{plotargs} should either be equal to the
+  number of layers, or equal to 1. In the latter case it will be
+  replicated to the appropriate length.
 }
 \value{
   A list, belonging to the class \code{"layered"}.

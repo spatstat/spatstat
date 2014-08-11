@@ -7,7 +7,7 @@
 \usage{
  \method{plot}{ppp}(x, main, \dots, chars=NULL, cols=NULL,
 use.marks, which.marks=NULL, add=FALSE, type=c("p","n"),
-maxsize=NULL, markscale=NULL,zap=0.01)
+maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
 }
 \arguments{
   \item{x}{
@@ -79,6 +79,14 @@ maxsize=NULL, markscale=NULL,zap=0.01)
     Any points which have marks smaller in absolute value
     than \code{zap * max(abs(marks(x)))} will not be plotted.
   }
+  \item{show.window}{
+    Logical value indicating whether to plot the observation
+    window of \code{x}.
+  }
+  \item{show.all}{
+    Logical value indicating whether to plot everything
+    including the main title and the observation window of \code{x}.
+  }
 }
 \value{
   \code{NULL}, or a vector giving the correspondence between 
@@ -88,7 +96,8 @@ maxsize=NULL, markscale=NULL,zap=0.01)
   This is the \code{plot} method for 
   point pattern datasets (of class \code{"ppp"}, see \code{\link{ppp.object}}).
 
-  First the observation window \code{x$window} is plotted.
+  First the observation window \code{x$window} is plotted
+  (if \code{show.window=TRUE}).
   Then the points themselves are plotted,
   in a fashion that depends on their marks,
   as follows.
@@ -139,7 +148,7 @@ maxsize=NULL, markscale=NULL,zap=0.01)
   \code{\link{plot.owin}}. This plot may be modified 
   through the \code{...} arguments. In particular the
   extra argument \code{border} determines
-  the colour of the window.
+  the colour of the window, if the window is not a binary mask.
 
   Plotting of the points themselves is performed
   by the function \code{\link{points}}, except for the case of
@@ -213,7 +222,6 @@ maxsize=NULL, markscale=NULL,zap=0.01)
   \code{\link{symbols}}
 }
 \examples{
-   data(cells)
    plot(cells)
 
    plot(cells, pch=16)
@@ -227,11 +235,9 @@ maxsize=NULL, markscale=NULL,zap=0.01)
    spatstat.options(oldopt)
 
    # multitype 
-   data(lansing)
    plot(lansing)
 
    # marked by a real number
-   data(longleaf)
    plot(longleaf)
 
    # just plot the points
@@ -260,12 +266,10 @@ maxsize=NULL, markscale=NULL,zap=0.01)
    plot(cells \%mark\% nndist(cells), markscale=1/2)
 
    # making the legend
-   data(amacrine)
    v <- plot(amacrine)
    legend(0.2, 1.2, pch=v, legend=names(v))
 
    # point pattern with multiple marks
-   data(finpines)
    plot(finpines, which.marks="height")
 }
 

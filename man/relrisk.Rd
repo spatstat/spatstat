@@ -10,7 +10,8 @@
   cross-validation.
 }
 \usage{
-relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
+relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
+           casecontrol=TRUE, case=2)
 }
 \arguments{
   \item{X}{
@@ -18,7 +19,11 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
     which has factor valued marks).
   }
   \item{sigma}{
-    Optional. Standard deviation of isotropic Gaussian smoothing kernel.
+    Optional. The numeric value of the smoothing bandwidth
+    (the standard deviation of isotropic
+    Gaussian smoothing kernel).
+    Alternatively \code{sigma} may be a function which can be used
+    to select a different bandwidth for each type of point. See Details.
   }
   \item{\dots}{
     Arguments passed to \code{\link{bw.relrisk}} to select the
@@ -37,6 +42,10 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
   \item{casecontrol}{
     Logical. Whether to treat a bivariate point pattern
     as consisting of cases and controls. See Details.
+  }
+  \item{case}{
+    Integer, or character string, identifying which mark value
+    corresponds to a case (rather than a control).
   }
 }
 \details{
@@ -75,9 +84,27 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
   each possible type \eqn{j} at each data point.
 
   Estimation is performed by a simple Nadaraja-Watson type kernel
-  smoother (Diggle, 2003). If \code{sigma} and \code{varcov}
-  are both missing or null, then the smoothing bandwidth \code{sigma}
-  is selected by cross-validation using \code{\link{bw.relrisk}}.
+  smoother (Diggle, 2003).
+  The smoothing bandwidth can be specified in any of the following ways:
+  \itemize{
+    \item \code{sigma} is a single numeric value, giving the standard
+    deviation of the isotropic Gaussian kernel.
+    \item \code{sigma} is a numeric vector of length 2, giving the
+    standard deviations in the \eqn{x} and \eqn{y} directions of
+    a Gaussian kernel.
+    \item \code{varcov} is a 2 by 2 matrix giving the
+    variance-covariance matrix of the Gaussian kernel.
+    \item \code{sigma} is a \code{function} which selects
+    the bandwidth. 
+    Bandwidth selection will be applied
+    \bold{separately to each type of point}.
+    An example of such a function is \code{\link{bw.diggle}}.
+    \item 
+    \code{sigma} and \code{varcov}
+    are both missing or null. Then a \bold{common}
+    smoothing bandwidth \code{sigma}
+    will be selected by cross-validation using \code{\link{bw.relrisk}}.
+  }
 }
 \value{
   If \code{X} consists of only two types of points,
@@ -102,8 +129,7 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
  \code{\link{bw.relrisk}},
  \code{\link{density.ppp}},
  \code{\link{Smooth.ppp}},
- \code{\link{eval.im}}.
- \code{\link{which.max.im}}.
+ \code{\link{eval.im}}
 }
 \examples{
    data(urkiola)
@@ -111,10 +137,13 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
    if(interactive()) {
       plot(p, main="proportion of oak")
       plot(eval.im(p > 0.3), main="More than 30 percent oak")
-      data(lansing)
-      z <- relrisk(lansing)
-      plot(z, main="Lansing Woods")
-      plot(which.max.im(z), main="Most common species")
+      plot(split(lansing), main="Lansing Woods")
+      rr <- relrisk(lansing, 0.05)
+      plot(rr, main="Lansing Woods relative risk")
+      wh <- im.apply(rr, which.max)
+      types <- levels(marks(lansing))
+      wh <- eval.im(types[wh])
+      plot(wh, main="Most common species")
    }
 }
 \references{

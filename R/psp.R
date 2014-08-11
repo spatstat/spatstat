@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.68 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.70 $ $Date: 2014/01/29 05:10:59 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -327,16 +327,18 @@ unmark.psp <- function(X) {
 #  plot and print methods
 #################################################
 
-plot.psp <- function(x, ..., add=FALSE, which.marks=1,
-                     ribbon=TRUE, ribsep=0.15, ribwid=0.05, ribn=1024) {
-  main <- short.deparse(substitute(x))
+plot.psp <- function(x, ..., add=FALSE, show.all=!add, which.marks=1,
+                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024) {
+  xname <- short.deparse(substitute(x))
   verifyclass(x, "psp")
   #
   n <- nsegments(x)
   marx <- marks(x)
   #
   use.colour <- !is.null(marx) && (n != 0)
-  do.ribbon <- identical(ribbon, TRUE) && use.colour && !add
+  do.ribbon <- identical(ribbon, TRUE) && use.colour 
+  ##
+  main <- if(show.all) xname else ""
   #
   if(!add) {
     # create plot region
@@ -357,7 +359,7 @@ plot.psp <- function(x, ..., add=FALSE, which.marks=1,
                      bb$yrange)
       bb.all <- bounding.box(bb.rib, bb)
       # establish coordinate system
-      do.call.matched("plot.default",
+      do.call.plotfun("plot.default",
                       resolve.defaults(list(x=0, y=0, type="n",
                                             axes=FALSE, asp=1,
                                             xlim=bb.all$xrange,
@@ -369,7 +371,8 @@ plot.psp <- function(x, ..., add=FALSE, which.marks=1,
                       resolve.defaults(list(x=x$window, add=TRUE),
                                        list(...)))
     }
-  }
+  } else if(show.all)
+    fakemaintitle(x, main, ...)
 
   # plot segments
   if(n == 0)
@@ -394,6 +397,13 @@ plot.psp <- function(x, ..., add=FALSE, which.marks=1,
     }
     col <- colmap(marx)
   }
+
+  ## convert to greyscale?
+  if(spatstat.options("monochrome")) {
+    col <- to.grey(col)
+    colmap <- to.grey(colmap)
+  }
+  
   # plot segments
   do.call("segments",
           resolve.defaults(as.list(x$ends),

@@ -10,7 +10,7 @@
                          singlerun = FALSE,
                          start = NULL,
                          control = default.rmhcontrol(object),
-                         project=TRUE,
+                         project=TRUE, new.coef=NULL,
                          verbose=FALSE, progress=(nsim > 1))
 }
 \arguments{
@@ -57,6 +57,10 @@
   \item{progress}{
     Logical flag indicating whether to print progress reports
     for the sequence of simulations.
+  }
+  \item{new.coef}{
+    New values for the canonical parameters of the model.
+    A numeric vector of the same length as \code{coef(model)}.
   }
 }
 \details{

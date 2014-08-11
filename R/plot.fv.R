@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.94 $    $Date: 2013/10/03 03:35:23 $
+#  $Revision: 1.97 $    $Date: 2014/02/06 11:42:20 $
 #
 #
 
@@ -126,7 +126,8 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   nmatches <- function(a, b) { sum(all.vars(parse(text=a)) %in% b) }
   nstar <- unlist(lapply(lhs.names, nmatches, b=fvnames(x, "*")))
   ndot  <- unlist(lapply(lhs.names, nmatches, b=dotnames))
-  explicit.lhs.names <- ifelse(ndot == 1 & nstar == ndot, lhs.names, "")
+  explicit.lhs.names    <- ifelse(nstar == 1, lhs.names, "")
+  explicit.lhs.dotnames <- ifelse(ndot == 1 & nstar == ndot, lhs.names, "")
   
   # check rhs data
   if(is.matrix(rhsdata))
@@ -156,7 +157,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
       if(defaultplot) {
         success <- TRUE
       } else if("." %in% variablesinformula(fmla.original)) {
-        # evaluate lhs of formula, expanding "." to shade names
+        ## evaluate lhs of formula, expanding "." to shade names
         u <- if(length(extrashadevars) == 1) as.name(extrashadevars) else {
           as.call(lapply(c("cbind", extrashadevars), as.name))
         }
@@ -167,6 +168,15 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
         lhsnew <- foo[[2]]
         morelhs <- eval(lhsnew, envir=indata)
         success <- identical(colnames(morelhs), extrashadevars)
+      } else if(is.name(lhs) && as.character(lhs) %in% names(indata)) {
+        ## lhs is the name of a single column in x
+        ## expand the LHS 
+        explicit.lhs.names <- c(explicit.lhs.names, extrashadevars)
+        ff <- paste("cbind",
+                    paren(paste(explicit.lhs.names, collapse=", ")),
+                    "~ 1")
+        lhs <- lhs.of.formula(as.formula(ff))
+        success <- TRUE
       } else {
         success <- FALSE
       }
@@ -254,11 +264,8 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   
   # -------------  work out how to label the plot --------------------
 
-  # extract plot labels 
-  labl <- attr(x, "labl")
-  # expand plot labels
-  if(!is.null(fname <- attr(x, "fname")))
-    labl <- sprintf(labl, fname)
+  # extract plot labels, substituting function name
+  labl <- fvlabels(x, expand=TRUE)
   # create plot label map (key -> algebraic expression)
   map <- fvlabelmap(x) 
 
@@ -282,13 +289,13 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   
   # ......... label for y axis ...................
 
-  leftside <- lhs.original
+  leftside <- lhs
   if(ncol(lhsdata) > 1 || length(dotnames) == 1) {
     # For labelling purposes only, simplify the LHS by 
     # replacing 'cbind(.....)' by '.'
     # even if not all columns are included.
     leftside <- paste(as.expression(leftside))
-    eln <- explicit.lhs.names
+    eln <- explicit.lhs.dotnames
     eln <- eln[nzchar(eln)]
     cb <- if(length(eln) == 1) eln else {
       paste("cbind(",
@@ -362,6 +369,10 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   col <- fixit(col, nplots, opt0$col, 1:nplots)
   lwd <- fixit(lwd, nplots, opt0$lwd, 1)
 
+  ## convert to greyscale?
+  if(spatstat.options("monochrome"))
+    col <- to.grey(col)
+    
   if(!is.null(shade)) {
     # shade region between critical boundaries
     # extract relevant columns for shaded bands
@@ -415,7 +426,6 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     return(invisible(NULL))
 
   # ---------------- determine legend -------------------------
-  
   key <- colnames(lhsdata)
   mat <- match(key, names(x))
   keyok <- !is.na(mat)
@@ -498,8 +508,11 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     
   }
 
+  ## convert labels back to character
+  labl <- paste.expr(legtxt)
+  labl <- gsub(" ", "", labl)
   # return legend info
-  df <- data.frame(lty=lty, col=col, key=key, label=paste.expr(legtxt),
+  df <- data.frame(lty=lty, col=col, key=key, label=labl,
                    meaning=legdesc, row.names=key)
   return(df)
 }

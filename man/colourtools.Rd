@@ -5,29 +5,37 @@
 \alias{col2hex}
 \alias{paletteindex}
 \alias{samecolour}
+\alias{to.grey}
 \title{
   Convert and Compare Colours in Different Formats
 }
 \description{
   These functions convert between different formats for specifying
-  a colour in \R, and determine whether colours are equivalent.
+  a colour in \R, determine whether colours are equivalent,
+  and convert colour to greyscale.
 }
 \usage{
 col2hex(x)
 rgb2hex(v)
 paletteindex(x)
 samecolour(x,y)
+to.grey(x, weights=c(1,1,1))
 }
 
 \arguments{
   \item{x,y}{
     Any valid specification for a colour or sequence of colours
-    accepted by \code{\link{col2rgb}}.
+    accepted by \code{\link[grDevices]{col2rgb}}.
   }
   \item{v}{
     A numeric vector of length 3, giving the RGB values (0 to 255) of
     a single colour, or a 3-column matrix giving the RGB values of
     several colours.
+  }
+  \item{weights}{
+    Numeric vector of length 3 giving 
+    relative weights for the red, green, and blue
+    channels respectively.
   }
 }
 \details{
@@ -39,11 +47,15 @@ samecolour(x,y)
 
   \code{paletteindex} checks whether the colour or colours specified
   by \code{x} are available in the default palette returned by
-  \code{\link{palette}()}. If so, it returns the index or indices of
+  \code{\link[grDevices]{palette}()}. If so, it returns the index or indices of
   the colours in the palette. If not, it returns \code{NA}.
 
   \code{samecolour} decides whether two colours \code{x} and \code{y}
   are equivalent.
+
+  \code{to.grey} converts the colour data in \code{x} to greyscale colours.
+  Alternatively \code{x} can be an object of class \code{"colourmap"}
+  and \code{to.grey(x)} is the modified colour map.
 }
 \section{Warning}{
   \code{paletteindex("green")} returns \code{NA} because
@@ -51,8 +63,8 @@ samecolour(x,y)
 }
 
 \value{
-  For \code{col2hex} and \code{rgb2hex}, a character vector containing
-  hexadecimal colour codes.
+  For \code{col2hex}, \code{rgb2hex} and \code{to.grey},
+  a character vector containing hexadecimal colour codes.
 
   For \code{paletteindex}, an integer vector, possibly containing
   \code{NA} values.
@@ -66,8 +78,8 @@ samecolour(x,y)
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
-  \code{\link{col2rgb}},
-  \code{\link{palette}}
+  \code{\link[grDevices]{col2rgb}},
+  \code{\link[grDevices]{palette}}
 
   See also the class of colour map objects:
   \code{\link{colourmap}}, 
@@ -77,5 +89,7 @@ samecolour(x,y)
 \examples{
   samecolour("grey", "gray")
   paletteindex("grey")
+  col2hex("orange")
+  to.grey("orange")
 }
 \keyword{color}

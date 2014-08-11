@@ -5,13 +5,14 @@
 #
 #
 
-adaptive.density <- function(X, f=0.1, ..., nrep=1) {
+adaptive.density <- function(X, f=0.1, ..., nrep=1, verbose=TRUE) {
   stopifnot(is.ppp(X))
   npts <- npoints(X)
   stopifnot(is.numeric(f) && length(f) == 1 && f > 0 & f < 1)
   ntess <- floor(f * npts)
   if(ntess == 0) {
     # naive estimate of intensity
+    if(verbose) cat("Tiny threshold: returning uniform intensity estimate")
     W <- X$window
     lam <- npts/area.owin(W)
     return(as.im(lam, W, ...))
@@ -19,10 +20,13 @@ adaptive.density <- function(X, f=0.1, ..., nrep=1) {
   if(nrep > 1) {
     # estimate is the average of nrep randomised estimates
     total <- 0
+    if(verbose) cat(paste("Computing", nrep, "intensity estimates..."))
     for(i in seq_len(nrep)) {
       estimate <- adaptive.density(X, f, ..., nrep=1)
       total <- eval.im(total + estimate)
+      if(verbose) progressreport(i, nrep)
     }
+    if(verbose) cat("Done.\n")
     average <- eval.im(total/nrep)
     return(average)
   }

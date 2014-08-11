@@ -64,8 +64,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
       See below for important conditions on \eqn{r}.
   }
   \item{breaks}{
-    Optional. An alternative to the argument \code{r}.
-    Not normally invoked by the user. See the \bold{Details} section.
+	This argument is for advanced use only.
   }
   \item{correction}{
     A character vector containing any selection of the
@@ -118,7 +117,8 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   in a manner similar to the function \code{\link{Kinhom}}.
 
   The inhomogeneous cross-type \eqn{K} function is described by
-  Moller and Waagepetersen (2003, pages 48-49 and 51-53).
+  \ifelse{latex}{\out{M\o ller}}{Moller}
+  and Waagepetersen (2003, pages 48-49 and 51-53).
   
   Briefly, given a multitype point process, suppose the sub-process
   of points of type \eqn{j} has intensity function
@@ -174,7 +174,8 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
     }
   }
   If \code{lambdaI} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother,
+  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -206,7 +207,13 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   result of \code{Kcross.inhom}; see \code{\link{pcf}}.
 }
 \references{
-  Moller, J. and Waagepetersen, R.
+  Baddeley, A.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Non- and semiparametric estimation of interaction in
+  inhomogeneous point patterns.
+  \emph{Statistica Neerlandica} \bold{54}, 329--350.
+
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.
   Statistical Inference and Simulation for Spatial Point Processes
   Chapman and Hall/CRC
   Boca Raton, 2003.

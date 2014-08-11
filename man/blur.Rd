@@ -1,14 +1,18 @@
 \name{blur}
 \alias{blur}
+\alias{Smooth.im}
 \title{Apply Gaussian Blur to a Pixel Image}
 \description{
   Applies a Gaussian blur to a pixel image.
 }
 \usage{
 blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
+
+\method{Smooth}{im}(X, sigma = NULL, ...,
+                    normalise=FALSE, bleed = TRUE, varcov=NULL)
 }
 \arguments{
-  \item{x}{The pixel image. An object of class \code{"im"}.}
+  \item{x,X}{The pixel image. An object of class \code{"im"}.}
   \item{sigma}{
     Standard deviation of isotropic Gaussian smoothing kernel.
   }
@@ -31,6 +35,10 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
 \details{
   This command applies a Gaussian blur to the pixel image \code{x}.
 
+  \code{Smooth.im} is a method for the generic \code{\link{Smooth}}
+  for pixel images. It is currently identical to \code{blur},
+  apart from the name of the first argument.
+  
   The blurring kernel is the isotropic Gaussian kernel with standard
   deviation \code{sigma}, or the anisotropic Gaussian kernel with
   variance-covariance matrix \code{varcov}.

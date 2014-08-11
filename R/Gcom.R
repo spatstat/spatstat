@@ -96,7 +96,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   
   # residuals
   resid <- residuals(fit, type="raw",drop=FALSE,
-                    coefs=truecoef, quad=hi.res)
+                    new.coef=truecoef, quad=hi.res)
   rescts  <- with(resid, "continuous")
   if(restrict) {
     # keep only data inside Wfree

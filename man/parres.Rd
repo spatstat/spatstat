@@ -161,10 +161,11 @@ parres(model, covariate, ...,
   which has methods for \code{print} and \code{plot}.
 }
 \references{
-  Baddeley, A. and Chang, Y.-M. and Song, Y. and Turner, R. (2012)
-  \emph{Residual diagnostics for covariate effects
-    in spatial point process models}.
-  Submitted for publication.
+  Baddeley, A., Chang, Y.-M., Song, Y. and Turner, R. (2013)
+  Residual diagnostics for covariate effects in
+  spatial point process models.
+  \emph{Journal of Computational and Graphical Statistics},
+  \bold{22}, 886--905.
 }
 \author{
   Adrian Baddeley

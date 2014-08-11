@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.29 $	$Date: 2013/11/22 01:01:39 $
+#    $Revision: 2.30 $	$Date: 2014/01/31 09:25:55 $
 #
 #    The Strauss process
 #
@@ -78,6 +78,16 @@ Strauss <- local({
          gamma <- exp(as.numeric(coeffs[1]))
          r <- self$par$r
          return((1-gamma) * pi * r^2)
+       },
+       Percy=function(d, coeffs, par, ...) {
+         ## term used in Percus-Yevick type approximation
+         gamma <- exp(as.numeric(coeffs[1]))
+         R <- par$r
+         t <- abs(d/(2*R))
+         t <- pmin.int(t, 1)
+         y <- 2 * R^2 * (pi * (1-gamma)
+                         - (1-gamma)^2 * (acos(t) - t * sqrt(1 - t^2)))
+         return(y)
        },
        delta2 = function(X, inte, correction, ...) {
          if(!(correction %in% c("border", "none")))

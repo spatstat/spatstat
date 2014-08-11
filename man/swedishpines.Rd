@@ -11,14 +11,18 @@
 \format{
   An object of class \code{"ppp"}
   representing the point pattern of tree locations
-  in a 10 x 10 metre square.
-  Cartesian coordinates are in decimetres (multiples of 0.1 metre).
+  in a rectangular plot 9.6 by 10 metres.
 
+  Cartesian coordinates are given in decimetres (multiples of 0.1 metre)
+  rounded to the nearest decimetre.
+  Type \code{\link{rescale}(swedishpines)} to get an equivalent dataset
+  where the coordinates are expressed in metres.
+  
   See \code{\link{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(swedishpines)}
-\source{Strand (1975), Ripley (1981)}
+\source{Strand (1972), Ripley (1981)}
 \section{Note}{
   For previous analyses see Ripley (1981, pp. 172-175),
   Venables and Ripley (1997, p. 483),

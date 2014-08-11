@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.10 $    $Date: 2013/08/30 01:57:20 $
+#           $Revision: 1.11 $    $Date: 2014/01/19 05:58:35 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -42,7 +42,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
     weights <- if(k == 1) as.vector(weights) else as.data.frame(weights)
   } else {
     k <- 1
-    if(!is.null(weights))
+    if(length(weights) == 0) weights <- NULL else 
       stopifnot(length(weights) == npoints(x) || length(weights) == 1)
     if(length(weights) == 1)
       weights <- rep(weights, npoints(x))

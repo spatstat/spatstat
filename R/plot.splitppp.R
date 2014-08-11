@@ -21,7 +21,21 @@ plot.listof <- plot.splitppp <-
       do.call(plot, resolve.defaults(list(cmd, ...)))
     }
   }
-  
+
+  ## bounding box, including ribbon for images
+  getplotbox <- function(x, ...) {
+    if(!is.im(x)) return(as.rectangle(x))
+    y <- plot.im(x, ..., do.plot=FALSE)
+    return(attr(y, "bbox"))
+  }
+
+  is.shiftable <- function(x) {
+    if(is.null(x)) return(TRUE)
+    if(is.function(x)) return(FALSE)
+    y <- try(as.rectangle(x), silent=TRUE)
+    return(!inherits(y, "try-error"))
+  }
+
   plot.splitppp <- function(x, ..., main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
                             main.panel=NULL,
@@ -34,9 +48,10 @@ plot.listof <- plot.splitppp <-
                             adorn.right=NULL,
                             adorn.top=NULL,
                             adorn.bottom=NULL,
-                            adorn.size=0.2) {
+                            adorn.size=0.2,
+                            equal.scales=FALSE) {
     xname <- short.deparse(substitute(x))
-
+    
     # `boomerang despatch'
     cl <- match.call()
     if(missing(plotcommand) && all(unlist(lapply(x, is.im)))) {
@@ -105,15 +120,31 @@ plot.listof <- plot.splitppp <-
       nrows <- as.integer(ceiling(n/ncols))
     else stopifnot(nrows * ncols >= length(x))
     nblank <- ncols * nrows - n
-    # determine approximate relative dimensions for equal scale plots
-    boxes <- try(lapply(x, as.rectangle), silent=TRUE)
+    ## determine dimensions of objects
+    ##     (including space for colour ribbons, if they are images)
+    boxes <- try(lapply(x, getplotbox), silent=TRUE)
     sizes.known <- !inherits(boxes, "try-error")
+    if(equal.scales && !sizes.known) {
+      warning("Ignored equal.scales=TRUE; scales could not be determined")
+      equal.scales <- FALSE
+    }
+    ## rescale?
+    if(sizes.known && !equal.scales) {
+      sides <- lapply(boxes, sidelengths)
+      bwidths <- unlist(lapply(sides, "[", 1))
+      bheights <- unlist(lapply(sides, "[", 2))
+      ## Force equal heights, unless there is only one column
+      scales <- if(ncols > 1) 1/bheights else 1/bwidths
+      scaledboxes <- vector(mode="list", length=n)
+      for(i in 1:n)
+        scaledboxes[[i]] <- scalardilate(boxes[[i]], scales[i])
+    } else scaledboxes <- boxes
     # set up layout
     mat <- matrix(c(seq_len(n), integer(nblank)),
                   byrow=TRUE, ncol=ncols, nrow=nrows)
     if(sizes.known) {
-      xwidths <- unlist(lapply(boxes, function(z) { diff(z$xrange) }))
-      xheights <- unlist(lapply(boxes, function(z) { diff(z$yrange) }))
+      xwidths <- unlist(lapply(scaledboxes, function(z) { diff(z$xrange) }))
+      xheights <- unlist(lapply(scaledboxes, function(z) { diff(z$yrange) }))
       heights <- apply(mat, 1, function(j,h) { max(h[j[j>0]]) }, h=xheights)
       widths <- apply(mat, 2, function(i,w) { max(w[i[i>0]]) }, w=xwidths)
     } else {
@@ -123,6 +154,51 @@ plot.listof <- plot.splitppp <-
     meanheight <- mean(heights)
     meanwidth  <- mean(widths)
     nall <- n
+    ## determine whether to display all objects in one enormous plot
+    ## Precondition is that everything has a spatial bounding box
+    single.plot <-
+      equal.scales && sizes.known &&
+      is.shiftable(panel.end) &&
+      is.shiftable(panel.begin) &&
+      is.null(adorn.left) && is.null(adorn.right) &&
+      is.null(adorn.top) && is.null(adorn.bottom)
+    ##
+    if(single.plot) {
+      ## .........  create a single plot ..................
+      ## determine sizes
+      ht <- max(heights)
+      wd <- max(widths)
+      marpar <- mar.panel * c(ht, wd, ht, wd)/6
+      mainheight <- any(nzchar(main.panel)) * ht/5
+      ewidths <- marpar[2] + widths + marpar[4]
+      eheights <- marpar[1] + heights + marpar[3] + mainheight
+      bigbox <- owin(c(0, sum(ewidths)), c(0, sum(eheights)))
+      ox <- cumsum(c(0, ewidths))[1:ncols] + marpar[2]
+      oy <- cumsum(c(0, eheights))[1:nrows] + marpar[1]
+      panelorigin <- as.matrix(expand.grid(x=ox, y=oy))
+      ## initialise, with banner
+      cex <- resolve.1.default(list(cex.title=1.5), list(...))
+      plot(bigbox, type="n", main=main, cex.main=cex)
+      ## plot individual objects
+      for(i in 1:n) {
+        ## determine shift vector that moves bottom left corner of spatial box
+        ## to bottom left corner of target area on plot device
+        vec <- panelorigin[i,] - with(scaledboxes[[i]], c(xrange[1], yrange[1]))
+        ## let rip
+        if(!is.null(panel.begin)) 
+          plot(shift(panel.begin, vec), add=TRUE,
+               main=main.panel[i], show.all=TRUE)
+        xi <- x[[i]] 
+        extraplot(i, shift(xi, vec), ...,
+                  add=TRUE, show.all=is.null(panel.begin),
+                  main=main.panel[i],
+                  panel.args=panel.args, plotcommand=plotcommand)
+        if(!is.null(panel.end))
+          plot(shift(panel.end, vec), add=TRUE)
+      }
+      return(invisible(NULL))
+    }
+    ## ................. multiple logical plots using 'layout' ..............
     if(!is.null(adorn.left)) {
       # add margin at left, of width adorn.size * meanwidth
       nall <- i.left <- n+1
@@ -163,7 +239,7 @@ plot.listof <- plot.splitppp <-
       opa <- par(mar=rep.int(0,4), xpd=TRUE)
       plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
            xlim=c(-1,1),ylim=c(-1,1))
-      cex <- resolve.defaults(list(...), list(cex.title=2))$cex.title
+      cex <- resolve.1.default(list(cex.title=2), list(...))
       text(0,0,main, cex=cex)
     }
     # plot panels
@@ -199,6 +275,3 @@ plot.listof <- plot.splitppp <-
   plot.splitppp
 })
 
-density.splitppp <- function(x, ...) {
-  as.listof(lapply(x, density, ...))
-}

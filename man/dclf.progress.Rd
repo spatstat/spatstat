@@ -50,7 +50,7 @@ mctest.progress(X, fun = Lest, \dots, expo = 1, nrank = 1)
   These tests depend on the choice of an interval of
   distance values (the argument \code{rinterval}).
   A \emph{progress plot} or \emph{envelope representation}
-  of the test (Baddeley et al, 2013) is a plot of the
+  of the test (Baddeley et al, 2014) is a plot of the
   test statistic (and the corresponding critical value) against the length of
   the interval \code{rinterval}.
   
@@ -107,9 +107,9 @@ mctest.progress(X, fun = Lest, \dots, expo = 1, nrank = 1)
 }
 \references{
   Baddeley, A., Diggle, P., Hardegen, A., Lawrence, T.,
-  Milne, R. and Nair, G. (2013)
-  \emph{On tests of spatial pattern based on simulation envelopes}.
-  Submitted for publication.
+  Milne, R. and Nair, G. (2014)
+  On tests of spatial pattern based on simulation envelopes.
+  \emph{Ecological Monographs}, in press.
 }
 \author{
   Adrian Baddeley

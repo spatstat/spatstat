@@ -51,9 +51,7 @@
     there is a sensible default.
   }
   \item{breaks}{
-    An alternative to the argument \code{r}.
-    Not normally invoked by the user.
-    See Details.
+	This argument is for internal use only.
   }
 }
 \details{
@@ -121,7 +119,8 @@
   vector with length equal to the number of points in \code{X}.
 
   If \code{lambda} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother,
+  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -135,6 +134,12 @@
   which can be plotted directly using \code{\link{plot.fv}}.
 }
 \references{
+  Baddeley, A.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Non- and semiparametric estimation of interaction in
+  inhomogeneous point patterns.
+  \emph{Statistica Neerlandica} \bold{54}, 329--350.
+
   van Lieshout, M.N.M. and Baddeley, A.J. (1996)
   A nonparametric measure of spatial interaction in point patterns.
   \emph{Statistica Neerlandica} \bold{50}, 344--361.

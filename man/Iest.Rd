@@ -25,8 +25,7 @@
     See below for important conditions on \code{r}.
   }
   \item{breaks}{
-    An alternative to the argument \code{r}. Not normally invoked by the user.
-    See Details section.
+	This argument is for internal use only.
   }
   \item{correction}{
     Optional. Vector of character strings specifying the edge correction(s)

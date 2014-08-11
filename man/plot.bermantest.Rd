@@ -20,11 +20,11 @@
   }
   \item{col,lwd,lty}{
     The width, colour and type of lines used to plot the
-    empirical distribution.
+    empirical distribution curve.
   }
   \item{col0,lwd0,lty0}{
     The width, colour and type of lines used to plot the
-    predicted distribution.
+    predicted (null) distribution curve.
   }
 }
 \value{

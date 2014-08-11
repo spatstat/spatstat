@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.22 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.23 $	$Date: 2013/12/17 04:13:06 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -204,40 +204,78 @@ union.quad <- function(Q) {
 #   Plot a quadrature scheme
 #
 #
-plot.quad <- function(x, ..., main, dum=list()) {
+plot.quad <- function(x, ..., main, add=FALSE, dum=list(), tiles=FALSE) {
   if(missing(main) || is.null(main)) 
-	main <- short.deparse(substitute(x))
+    main <- short.deparse(substitute(x))
   verifyclass(x, "quad")
   data <- x$data
   dummy <- x$dummy
-  dummyplot <- function(x, ..., pch=".", add=TRUE) {
-    plot(x, pch=pch, add=add, ...)
+  # determine plot parameters for dummy points
+  dum <- resolve.defaults(dum, list(pch=".", add=TRUE))
+  tt <- NULL
+  if(tiles) {
+    # show tiles that determined the weights
+    wp <- x$param$weight
+    tt <- NULL
+    if(is.null(wp) || is.null(wp$method)) {
+      warning("Tile information is not available")
+    } else {
+      switch(wp$method,
+             grid = {
+               ntile <- wp$ntile
+               tt <- quadrats(as.owin(x), ntile[1], ntile[2])
+             },
+             dirichlet = {
+               U <- union.quad(x)
+               if(wp$exact) {
+                 tt <- dirichlet(U)
+               } else {
+                 win <- as.mask(as.owin(U))
+                 tileid <- image(exactdt(U)$i,
+                                 win$xcol, win$yrow, win$xrange, win$yrange)
+                 tt <- tess(image=tileid[win, drop=FALSE])
+               }
+             },
+             warning("Unrecognised 'method' for tile weights")
+             )
+    }
   }
+  pixeltiles <- !is.null(tt) && tt$type == "image"
+  tileargs <- resolve.defaults(list(x=tt, main=main, add=add),
+                               list(...),
+                               if(!pixeltiles) list(col="grey") else NULL)
   if(!is.marked(data)) {
-    plot(data, main=main, ...)
-    do.call("dummyplot", append(list(
-                                     dummy,
-                                     main=paste(main, "\n dummy points")
-                                     ),
-                                dum))
-  } else if(is.multitype(data)) {
+    if(!is.null(tt)) {
+      do.call("plot", tileargs)
+      add <- TRUE
+    }
+    plot(data, main=main, add=add, ...)
+    do.call("plot", append(list(x=dummy), dum))
+  } else if(is.multitype(data) && !add) {
     oldpar <- par(ask = interactive() &&
-            (.Device %in% c("X11", "GTK", "windows", "Macintosh")))
+                  (.Device %in% c("X11", "GTK", "windows", "Macintosh")))
     on.exit(par(oldpar))
     data.marks <- marks(data)
     dummy.marks <- marks(dummy)
     types <- levels(data.marks)
     for(k in types) {
+      add <- FALSE
+      if(!is.null(tt)) {
+        do.call("plot", tileargs)
+        add <- TRUE
+      }
       maink <- paste(main, "\n mark = ", k, sep="")
-      plot(unmark(data[data.marks == k]), main=maink, ...)
-      do.call("dummyplot", append(list(unmark(dummy[dummy.marks == k])), dum))
+      plot(unmark(data[data.marks == k]), main=maink, add=add, ...)
+      do.call("plot", append(list(x=unmark(dummy[dummy.marks == k])),
+                             dum))
     }
   } else {
-    plot(data, ..., main=main)
-    addplot <- function(x, ..., add=TRUE, main=short.deparse(substitute(x))) {
-      plot(x, ..., main=main, add=add)
+    if(!is.null(tt)) {
+      do.call("plot", tileargs)
+      add <- TRUE
     }
-    do.call("addplot", append(list(dummy), dum))
+    plot(data, ..., main=main, add=add)
+    do.call("plot", append(list(x=dummy), dum))
   }
   invisible(NULL)
 }

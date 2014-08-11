@@ -136,10 +136,11 @@ addvar(model, covariate, ...,
   \code{"ppp"} with a data frame of marks.
 }
 \references{
-  Baddeley, A. and Chang, Y.-M. and Song, Y. and Turner, R. (2012)
-  \emph{Residual diagnostics for covariate effects
-    in spatial point process models}.
-  Submitted for publication.
+  Baddeley, A., Chang, Y.-M., Song, Y. and Turner, R. (2013)
+  Residual diagnostics for covariate effects in
+  spatial point process models.
+  \emph{Journal of Computational and Graphical Statistics},
+  \bold{22}, 886--905.
   
   Cook, R.D. and Weisberg, S. (1999)
   \emph{Applied regression, including computing and graphics}.

@@ -3,7 +3,7 @@
 #
 #  Huang-Ogata method 
 #
-#  $Revision: 1.13 $ $Date: 2010/05/07 12:18:59 $
+#  $Revision: 1.14 $ $Date: 2014/02/11 11:01:08 $
 #
 
 ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
@@ -46,7 +46,7 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   # Newton-Raphson update
   Vinverse <- solve(svar)
   theta <- theta0 + as.vector(Vinverse %*% (sobs - smean))
-  # update model
+  ## update model
   newmodel <- model
   newmodel$coef <- theta
   newmodel$coef.orig <- theta0
@@ -54,9 +54,13 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   newmodel$fitter <- "ho"
   newmodel$fisher <- svar
   newmodel$varcov <- Vinverse
-  # recompute fitted interaction  
+  # recompute fitted interaction
   newmodel$fitin <- NULL
   newmodel$fitin <- fitin(newmodel)
+  ## update pseudolikelihood value using code in logLik.ppm
+  newmodel$maxlogpl.orig <- model$maxlogpl
+  newmodel$maxlogpl <- logLik(newmodel, new.coef=theta, warn=FALSE)
+  ##
   return(newmodel)
 }
 

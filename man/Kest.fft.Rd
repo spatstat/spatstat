@@ -24,9 +24,7 @@ using the Fast Fourier Transform.
     should be evaluated. There is a sensible default.
   }
   \item{breaks}{
-    An alternative to the argument \code{r}.
-    Not normally invoked by the user.
-    See Details.
+	This argument is for internal use only.
   }
 }
 \value{

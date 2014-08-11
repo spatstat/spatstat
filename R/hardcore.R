@@ -2,7 +2,7 @@
 #
 #    hardcore.S
 #
-#    $Revision: 1.8 $	$Date: 2013/07/19 02:52:54 $
+#    $Revision: 1.9 $	$Date: 2014/01/31 08:04:21 $
 #
 #    The Hard core process
 #
@@ -98,6 +98,14 @@ Hardcore <- local({
          # second Mayer cluster integral
          hc <- self$par$hc
          return(pi * hc^2)
+       },
+       Percy=function(d, coeffs, par, ...) {
+         ## term used in Percus-Yevick type approximation
+         H <- par$hc
+         t <- abs(d/(2*H))
+         t <- pmin.int(t, 1)
+         y <- 2 * H^2 * (pi - acos(t) + t * sqrt(1 - t^2))
+         return(y)
        }
   )
   class(BlankHardcore) <- "interact"

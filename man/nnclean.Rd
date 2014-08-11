@@ -11,10 +11,12 @@
 }
 \usage{
   nnclean(X, k, ...)
+
   \method{nnclean}{ppp}(X, k, ..., 
                      edge.correct = FALSE, wrap = 0.1,
                      convergence = 0.001, plothist = FALSE,
                      verbose = TRUE, maxit = 50)
+
   \method{nnclean}{pp3}(X, k, ..., 
                      convergence = 0.001, plothist = FALSE,
                      verbose = TRUE, maxit = 50)
@@ -30,7 +32,8 @@
     \code{k=2} means second nearest, etc.
   }
   \item{\dots}{
-    Ignored.
+    Arguments passed to \code{\link{hist.default}} to control
+    the appearance of the histogram, if \code{plothist=TRUE}.
   }
   \item{edge.correct}{
     Logical flag specifying whether periodic edge correction
@@ -43,7 +46,7 @@
     A fraction of window width and window height.
   }
   \item{convergence}{
-    Tolerance threshold for testing convergence of EM algorithm.
+    Relative tolerance threshold for testing convergence of EM algorithm.
   }
   \item{maxit}{
     Maximum number of iterations for EM algorithm.
@@ -63,7 +66,8 @@
 
   For each point in the pattern, the distance to the
   \eqn{k}th nearest neighbour is computed. Then the E-M algorithm is
-  used to fit a mixture distribution to the nearest neighbour distances.
+  used to fit a mixture distribution to the
+  \eqn{k}th nearest neighbour distances.
   The mixture components represent the feature and the clutter. The
   mixture model can be used to classify each point as belong to one
   or other component.
@@ -85,10 +89,18 @@
       that each point belongs to a feature.
     }
   }
+  The object also has extra information stored in attributes:
+  \code{"theta"} contains the fitted parameters
+  of the mixture model, \code{"info"} contains
+  information about the fitting procedure, and \code{"hist"} contains
+  the histogram structure returned from \code{\link{hist.default}}
+  if \code{plothist = TRUE}.
 }
 \value{
   An object of the same kind as \code{X},
   obtained by attaching marks to the points of \code{X}.
+
+  The object also has attributes, as described under Details.
 }
 \references{
   Byers, S. and Raftery, A.E. (1998)

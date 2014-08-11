@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.172 $	$Date: 2013/10/16 07:35:44 $
+#	$Revision: 5.173 $	$Date: 2014/01/24 05:43:38 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -109,7 +109,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2013/10/16 07:35:44 $")
+                    date="$Date: 2014/01/24 05:43:38 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -1030,32 +1030,40 @@ deltasuffstat <- local({
     zeroes <- array(0, dim=c(nX, nX, ncoef)) 
     if(is.poisson(inte))
       return(zeroes)
-    # look for member function $delta2 in the interaction
+    
+    ## Get names of interaction terms in model (including offsets)
+    f <- fitin(model)
+    Inames <- f$Vnames
+    IsOffset <- f$IsOffset
+    ## Offset terms do not contribute to sufficient statistic
+    if(all(IsOffset)) 
+      return(zeroes)
+    
+    ## Nontrivial interaction terms must be computed.
+    ## Look for member function $delta2 in the interaction
     v <- NULL
     if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
       v <- delta2(X, inte, model$correction)
     }
-    # look for generic $delta2 function for the family
+    ## Look for generic $delta2 function for the family
     if(is.null(v) &&
        !is.null(delta2 <- inte$family$delta2) &&
        is.function(delta2))
       v <- delta2(X, inte, model$correction)
-
-    # no luck?
+    ## no luck?
     if(is.null(v)) {
       if(!force)
         return(NULL)
-      # use brute force algorithm
+      ## use brute force algorithm
       v <- if(dataonly) deltasufX(model) else deltasufQ(model)
     }
-
-    # make it a 3D array
+    ## make it a 3D array
     if(length(dim(v)) == 2)
       v <- array(v, dim=c(dim(v), 1))
   
     if(restrict) {
-      # kill contributions from points outside the domain of pseudolikelihood
-      # (e.g. points in the border region)
+      ## kill contributions from points outside the domain of pseudolikelihood
+      ## (e.g. points in the border region)
       use <- if(dataonly) getppmdatasubset(model) else getglmsubset(model)
       if(any(kill <- !use)) {
         kill <- array(outer(kill, kill, "&"), dim=dim(v))
@@ -1063,21 +1071,27 @@ deltasuffstat <- local({
       }
     }
 
-    if(all(dim(v) == dim(zeroes)))
-      return(v)
-  
-    # Pad to correct dimensions
-    # Determine which coefficients correspond to interaction terms
-    f <- fitin(model)
-    Inames <- f$Vnames[!f$IsOffset]
-    Imap <- match(Inames, names(coef(model)))
-    if(length(Imap) == 0)
-      return(v)
-    if(any(is.na(Imap)))
-      stop("Internal error: cannot match interaction coefficients")
-    # insert 'v' into array
+    ## Output array: planes must correspond to model coefficients
     result <- zeroes
-    result[ , , Imap] <- v
+    ## Planes of 'v' correspond to interaction terms (including offsets)
+    if(length(Inames) != dim(v)[3])
+      stop(paste("Internal error: deltasuffstat:",
+                 "number of planes of v =", dim(v)[3],
+                 "!= number of interaction terms =", length(Inames)),
+           call.=FALSE)
+    ## Offset terms do not contribute to sufficient statistic
+    if(any(IsOffset)) {
+      v <- v[ , , !IsOffset, drop=FALSE]
+      Inames <- Inames[!IsOffset]
+    }
+    ## Map planes of 'v' into coefficients
+    Imap <- match(Inames, names(coef(model)))
+    if(any(is.na(Imap)))
+      stop("Internal error: deltasuffstat: cannot match interaction coefficients")
+    if(length(Imap) > 0) {
+      ## insert 'v' into array
+      result[ , , Imap] <- v
+    }
     return(result)
   }
 

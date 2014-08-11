@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.35 $   $Date: 2013/11/18 13:50:49 $
+#   $Revision: 1.37 $   $Date: 2014/02/05 07:31:36 $
 #
 # stuff for handling marks
 #
@@ -16,10 +16,14 @@ marks.default <- function(x, ...) { NULL }
 # The 'dfok' switch is temporary
 # while we convert the code to accept data frames of marks
 
-marks.ppp <- function(x, ..., dfok=TRUE) {
+marks.ppp <- function(x, ..., dfok=TRUE, drop=TRUE) {
   ma <- x$marks
-  if((is.data.frame(ma) || is.matrix(ma)) && !dfok)
-    stop("Sorry, not implemented when the marks are a data frame")
+  if((is.data.frame(ma) || is.matrix(ma))) {
+    if(!dfok)
+      stop("Sorry, not implemented when the marks are a data frame")
+    if(drop && ncol(ma) == 1)
+      ma <- ma[,1,drop=TRUE]
+  }
   return(ma)
 }
 
@@ -29,7 +33,7 @@ marks.ppp <- function(x, ..., dfok=TRUE) {
   UseMethod("marks<-")
 }
 
-"marks<-.ppp" <- function(x, ..., dfok=TRUE, value) {
+"marks<-.ppp" <- function(x, ..., dfok=TRUE, drop=TRUE, value) {
   np <- npoints(x)
   m <- value
   switch(markformat(m),
@@ -65,6 +69,9 @@ marks.ppp <- function(x, ..., dfok=TRUE) {
                } else
                stop("number of rows of data frame != number of points")
              }
+             # convert single-column data frame to vector?
+             if(drop && ncol(marx) == 1)
+               marx <- marx[,1,drop=TRUE]
            }
          },
          hyperframe = 
@@ -96,8 +103,10 @@ markformat.ppp <- function(x) {
 
 markformat.default <- function(x) {
   if(is.null(x)) return("none")
-  if(is.vector(x) || is.factor(x)) return("vector")
-  if(is.null(dim(x)) && is.atomic(x)) return("vector")
+  if(is.null(dim(x))) {
+    if(is.vector(x) || is.factor(x) || is.atomic(x)) return("vector")
+    if(inherits(x, "POSIXt") || inherits(x, "Date")) return("vector")
+  }
   if(is.data.frame(x) || is.matrix(x)) return("dataframe")
   if(is.hyperframe(x)) return("hyperframe")
   if(inherits(x, "listof")) return("listof")

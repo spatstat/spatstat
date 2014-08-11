@@ -11,7 +11,7 @@
   \method{rmh}{ppm}(model, start=NULL,
                     control=default.rmhcontrol(model),
                     \dots,
-                    project=TRUE, verbose=TRUE)
+                    project=TRUE, verbose=TRUE, new.coef=NULL)
 }
 
 \arguments{
@@ -42,6 +42,10 @@
   }
   \item{verbose}{
     Logical flag indicating whether to print progress reports.
+  }
+  \item{new.coef}{
+    New values for the canonical parameters of the model.
+    A numeric vector of the same length as \code{coef(model)}.
   }
 }
 

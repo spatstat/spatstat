@@ -298,7 +298,7 @@ shift.lpp <- function(X, ...) {
   verifyclass(X, "lpp")
   Y <- X
   Y$domain <- shift(X$domain, ...)
-  vec <- attr(Y$domain, "lastshift")
+  vec <- getlastshift(Y$domain)
   Y$data[, c("x","y")] <- shiftxy(X$data[, c("x","y")], vec=vec)
   # tack on shift vector
   attr(Y, "lastshift") <- vec

@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.95 $	$Date: 2013/08/25 10:17:24 $
+#	$Revision: 5.103 $	$Date: 2014/02/15 03:39:44 $
 #
 #
 # -------- functions ----------------------------------------
@@ -73,7 +73,7 @@ function(X, ..., r=NULL, breaks=NULL,
   if(!is.null(domain)) {
     # estimate based on contributions from a subdomain
     domain <- as.owin(domain)
-    if(!is.subset.owin(domain, X$window))
+    if(!is.subset.owin(domain, W))
       stop(paste(dQuote("domain"),
                  "is not a subset of the window of X"))
     # trick Kdot() into doing it
@@ -118,7 +118,7 @@ function(X, ..., r=NULL, breaks=NULL,
   alim <- c(0, min(rmax, rmaxdefault))
 
   ###########################################
-  # Efficient code for border method
+  # Efficient code for border correction and no correction
   # Usable only if r values are evenly spaced from 0 to rmax
   # Invoked automatically if number of points is large
 
@@ -161,6 +161,16 @@ function(X, ..., r=NULL, breaks=NULL,
   }
 
   ###########################################
+  # Fast code for rectangular window
+  ###########################################
+
+  if(can.do.fast && is.rectangle(W) && spatstat.options("use.Krect")) {
+    Kr <-  Krect.engine(X, rmax, length(r), correction, ratio=ratio)
+    attr(Kr, "alim") <- alim
+    return(Kr)
+  }
+  
+  ###########################################
   # Slower code
   ###########################################
         
@@ -178,8 +188,7 @@ function(X, ..., r=NULL, breaks=NULL,
   rmax <- max(r)
   close <- closepairs(X, rmax)
   DIJ <- close$d
-  XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
-  
+
   if(any(correction == "none")) {
     # uncorrected! For demonstration purposes only!
     wh <- whist(DIJ, breaks$val)  # no weights
@@ -229,9 +238,8 @@ function(X, ..., r=NULL, breaks=NULL,
   }
 
   if(any(correction == "translate")) {
-    # translation correction
-    XJ <- ppp(close$xj, close$yj, window=W, check=FALSE)
-    edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+    ## Ohser-Stoyan translation correction
+    edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
     wh <- whist(DIJ, breaks$val, edgewt)
     numKtrans <- cumsum(wh)
     denKtrans <- lambda2 * area
@@ -246,7 +254,8 @@ function(X, ..., r=NULL, breaks=NULL,
                     ratio=ratio)
   }
   if(any(correction == "isotropic")) {
-    # Ripley isotropic correction
+    ## Ripley isotropic correction
+    XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
     edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
     wh <- whist(DIJ, breaks$val, edgewt)
     numKiso <- cumsum(wh)
@@ -745,3 +754,233 @@ good.correction.K <- function(X) {
   chosen <- rev(avail)[1]
   return(chosen)
 }
+
+Krect.engine <- function(X, rmax, nr=100,
+                           correction,
+                           weights=NULL, ratio=FALSE, fname="K") {
+  verifyclass(X, "ppp")
+  npts <- npoints(X)
+  W <- as.owin(X)
+
+  area <- area.owin(W)
+  width <- sidelengths(W)[1]
+  height <- sidelengths(W)[2]
+  lambda <- npts/area
+  lambda2 <- (npts * (npts - 1))/(area^2)
+
+  if(missing(rmax))
+    rmax <- diameter(W)/4
+  r <- seq(from=0, to=rmax, length.out=nr)
+
+  if(weighted <- !is.null(weights)) {
+    ## coerce weights to a vector
+    if(is.numeric(weights)) {
+      check.nvector(weights, npts)
+    } else {
+      wim <- as.im(weights, W)
+      weights <- wim[X, drop=FALSE]
+      if(any(is.na(weights)))
+        stop("domain of weights image does not contain all points of X")
+    }
+  }
+
+  # this will be the output data frame
+  Kdf <- data.frame(r=r, theo= pi * r^2)
+  desc <- c("distance argument r", "theoretical Poisson %s")
+  denom <- if(weighted) area else (lambda2 * area)
+  Kfv <- ratfv(Kdf, NULL, denom,
+               "r", quote(K(r)),
+               "theo", NULL, c(0,rmax),
+               c("r", makefvlabel(NULL, NULL, fname, "pois")),
+               desc, fname=fname,
+               ratio=ratio)
+
+  ####### prepare data ############
+
+  if(!all(correction == "translate")) {
+    ## Ensure rectangle has its bottom left corner at the origin
+    if(W$xrange[1] != 0 || W$yrange[1] != 0) {
+      X <- shift(X, origin="bottomleft")
+      W <- as.owin(X)
+    }
+  }
+
+  ## sort in ascending order of x coordinate
+  orderX <- fave.order(X$x)
+  x <- X$x[orderX]
+  y <- X$y[orderX]
+  if(weighted)
+    wt <- weights[orderX]
+
+  ## establish algorithm parameters
+  doIso <- "isotropic" %in% correction 
+  doTrans <- "translate" %in% correction
+  doBord <- any(c("border", "bord.modif") %in% correction)
+  doUnco <- "none" %in% correction
+  trimedge <- spatstat.options("maxedgewt")
+
+  ## allocate space for results
+  ziso   <- numeric(if(doIso) nr else 1L)
+  ztrans <- numeric(if(doTrans) nr else 1L)
+  
+  ## call the C code
+  DUP <- spatstat.options("dupC")
+
+  if(weighted) {
+    ## weighted version
+    zbnumer <- numeric(if(doBord) nr else 1L)
+    zbdenom <- numeric(if(doBord) nr else 1L)
+    zunco   <- numeric(if(doUnco) nr else 1L)
+    res <- .C("KrectWtd",
+              width=as.double(width),
+              height=as.double(height),
+              nxy=as.integer(npts),
+              x=as.double(x),
+              y=as.double(y),
+              w=as.double(wt),
+              nr=as.integer(nr),
+              rmax=as.double(rmax),
+              trimedge=as.double(trimedge),
+              doIso=as.integer(doIso),
+              doTrans=as.integer(doTrans),
+              doBord=as.integer(doBord),
+              doUnco=as.integer(doUnco),
+              iso=as.double(ziso),
+              trans=as.double(ztrans),
+              bnumer=as.double(zbnumer),
+              bdenom=as.double(zbdenom),
+              unco=as.double(zunco),
+              DUP=DUP)
+  } else if(npts < sqrt(.Machine$integer.max)) {
+    ## unweighted
+    ## numerator of border correction can be stored as an integer
+    ## use faster integer arithmetic
+    zbnumer <- integer(if(doBord) nr else 1L)
+    zbdenom <- integer(if(doBord) nr else 1L)
+    zunco   <- integer(if(doUnco) nr else 1L)
+    res <- .C("KrectInt",
+              width=as.double(width),
+              height=as.double(height),
+              nxy=as.integer(npts),
+              x=as.double(x),
+              y=as.double(y),
+              nr=as.integer(nr),
+              rmax=as.double(rmax),
+              trimedge=as.double(trimedge),
+              doIso=as.integer(doIso),
+              doTrans=as.integer(doTrans),
+              doBord=as.integer(doBord),
+              doUnco=as.integer(doUnco),
+              iso=as.double(ziso),
+              trans=as.double(ztrans),
+              bnumer=as.integer(zbnumer),
+              bdenom=as.integer(zbdenom),
+              unco=as.integer(zunco),
+              DUP=DUP)
+  } else {
+    ## unweighted
+    ## need double precision storage
+    zbnumer <- numeric(if(doBord) nr else 1L)
+    zbdenom <- numeric(if(doBord) nr else 1L)
+    zunco   <- numeric(if(doUnco) nr else 1L)
+    res <- .C("KrectDbl",
+              width=as.double(width),
+              height=as.double(height),
+              nxy=as.integer(npts),
+              x=as.double(x),
+              y=as.double(y),
+              nr=as.integer(nr),
+              rmax=as.double(rmax),
+              trimedge=as.double(trimedge),
+              doIso=as.integer(doIso),
+              doTrans=as.integer(doTrans),
+              doBord=as.integer(doBord),
+              doUnco=as.integer(doUnco),
+              iso=as.double(ziso),
+              trans=as.double(ztrans),
+              bnumer=as.double(zbnumer),
+              bdenom=as.double(zbdenom),
+              unco=as.double(zunco),
+              DUP=DUP)
+  }
+
+  ## Process corrections in reverse order of priority
+
+  ## Uncorrected estimate
+  if("none" %in% correction) {
+    numKun <- res$unco
+    denKun <- if(weighted) area else (lambda2 * area)
+    Kfv <- bind.ratfv(Kfv,
+                      data.frame(un=numKun),
+                      denKun,
+                      makefvlabel(NULL, "hat", fname, "un"),
+                      "uncorrected estimate of %s",
+                      "un",
+                      ratio=ratio)
+  }
+  
+  ## Modified border correction
+  if("bord.modif" %in% correction) {
+    denom.area <- eroded.areas(W, r)
+    numKbm <- res$bnumer
+    denKbm <- if(weighted) denom.area else (lambda2 * denom.area)
+    Kfv <- bind.ratfv(Kfv,
+                      data.frame(bord.modif=numKbm),
+                      denKbm,
+                      makefvlabel(NULL, "hat", fname, "bordm"),
+                      "modified border-corrected estimate of %s",
+                      "bord.modif",
+                      ratio=ratio)
+  }
+  ## Border correction
+  if("border" %in% correction) {
+    numKb <- res$bnumer
+    denKb <- if(weighted) res$bdenom else lambda * res$bdenom
+    Kfv <- bind.ratfv(Kfv,
+                      data.frame(border=numKb),
+                      denKb,
+                      makefvlabel(NULL, "hat", fname, "bord"),
+                      "border-corrected estimate of %s",
+                      "border",
+                      ratio=ratio)
+  }
+  
+  ## translation correction
+  if("translate" %in% correction) {
+    numKtrans <- res$trans
+    denKtrans <- if(weighted) area else (lambda2 * area)
+    h <- diameter(as.rectangle(W))/2
+    numKtrans[r >= h] <- NA
+    Kfv <- bind.ratfv(Kfv,
+                      data.frame(trans=numKtrans),
+                      denKtrans,
+                      makefvlabel(NULL, "hat", fname, "trans"),
+                      "translation-corrected estimate of %s",
+                      "trans",
+                      ratio=ratio)
+  }
+  ## isotropic correction
+  if("isotropic" %in% correction) {
+    numKiso <- res$iso
+    denKiso <- if(weighted) area else (lambda2 * area)
+    h <- diameter(as.rectangle(W))/2
+    numKiso[r >= h] <- NA
+    Kfv <- bind.ratfv(Kfv,
+                      data.frame(iso=numKiso),
+                      denKiso,
+                      makefvlabel(NULL, "hat", fname, "iso"),
+                      "isotropic-corrected estimate of %s",
+                      "iso",
+                      ratio=ratio)
+  }
+  ##
+  # default is to display them all
+  formula(Kfv) <- . ~ r
+  unitname(Kfv) <- unitname(X)
+  if(ratio) 
+    Kfv <- conform.ratfv(Kfv)
+  return(Kfv)
+}
+
+
+

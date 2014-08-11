@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.3 $   $Date: 2011/10/13 10:40:48 $
+#   $Revision: 1.6 $   $Date: 2014/01/29 03:59:19 $
 #
 
 
@@ -28,6 +28,17 @@ paletteindex <- function(x) {
 }
 
 samecolour <- function(x, y) { col2hex(x) == col2hex(y) }
+
+to.grey <- function(x, weights=c(1,1,1)) {
+  if(is.null(x)) return(NULL)
+  if(inherits(x, "colourmap")) {
+    col <- summary(x)[["outputs"]]
+    return(tweak.colourmap(x, to.grey(col, weights)))
+  }
+  y <- col2rgb(x)
+  z <- (weights %*% y)/(255 * sum(weights))
+  return(grey(z))
+}
 
 # versions of rgb() and hsv() that work with NA values
 

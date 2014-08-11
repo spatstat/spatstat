@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.47 $ $Date: 2013/10/06 07:59:38 $
+#   $Revision: 1.52 $ $Date: 2014/01/15 05:50:15 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -138,18 +138,17 @@ print.tess <- function(x, ..., brief=FALSE) {
   invisible(NULL)
 }
 
-plot.tess <- function(x, ..., main, add=FALSE, col=NULL) {
-  xname <- short.deparse(substitute(x))
-  if(missing(main))
-    main <- xname
+plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL) {
+  if(missing(main) || is.null(main))
+    main <- short.deparse(substitute(x))
   switch(x$type,
          rect={
            win <- x$window
-           if(!add)
-             do.call.matched("plot.owin",
-                             resolve.defaults(list(x=win, main=main),
-                                              list(...)),
-                             extrargs=c("sub", "lty", "lwd"))
+           do.call.matched("plot.owin",
+                           resolve.defaults(list(x=win, main=main,
+                                                 add=add, show.all=show.all),
+                                            list(...)),
+                           extrargs=c("sub", "lty", "lwd"))
            xg <- x$xgrid
            yg <- x$ygrid
            do.call.matched("segments",
@@ -166,10 +165,10 @@ plot.tess <- function(x, ..., main, add=FALSE, col=NULL) {
                                             .StripNull=TRUE))
          },
          tiled={
-           if(!add)
-             do.call.matched("plot.owin",
-                             resolve.defaults(list(x=x$window, main=main),
-                                              list(...)))
+           do.call.matched("plot.owin",
+                           resolve.defaults(list(x=x$window, main=main,
+                                                 add=add, show.all=show.all),
+                                            list(...)))
            til <- tiles(x)
            plotem <- function(z, ..., col=NULL) {
              if(is.null(col))
@@ -181,7 +180,11 @@ plot.tess <- function(x, ..., main, add=FALSE, col=NULL) {
            lapply(til, plotem, ..., col=col)
          },
          image={
-           plot(x$image, main=main, ..., add=add)
+           do.call("plot",
+                   resolve.defaults(list(x$image, add=add, main=main,
+                                         show.all=show.all),
+                                    list(...),
+                                    list(valuesAreColours=FALSE)))
          })
   return(invisible(NULL))
 }
@@ -308,7 +311,7 @@ tile.areas <- function(x) {
            names(a) <- as.vector(t(tilenames(x)))
          },
          tiled={
-           a <- lapply(x$tiles, area.owin)
+           a <- unlist(lapply(x$tiles, area.owin))
          },
          image={
            z <- x$image
@@ -498,3 +501,112 @@ bdist.tiles <- local({
   bdist.tiles
 })
 
+
+## ......... geometrical transformations ..................
+
+shift.tess <- function(X, ...) {
+  Y <- X
+  Y$window <- wY <- shift(X$window, ...)
+  vec <- getlastshift(wY)
+  switch(X$type,
+         rect={
+           Y$xgrid <- Y$xgrid + vec[1]
+           Y$ygrid <- Y$ygrid + vec[2]
+         },
+         tiled={
+           Y$tiles <- lapply(Y$tiles, shift, vec=vec)
+         },
+         image = {
+           Y$image <- shift(Y$image, vec)
+         })
+  attr(Y, "lastshift") <- vec
+  return(Y)
+}
+
+affine.tess <- function(X, mat=diag(c(1,1)), vec=c(0,0), ...) {
+  Y <- X
+  Y$window <- affine(X$window, mat=mat, vec=vec, ...)
+  switch(Y$type,
+         rect = {
+           if(all(mat == diag(diag(mat)))) {
+             ## result is rectangular
+             Y$xgrid <- sort(mat[1,1] * X$xgrid + vec[1])
+             Y$ygrid <- sort(mat[2,2] * X$ygrid + vec[2])
+           } else {
+             ## shear transformation; treat rectangles as general tiles
+             Y <- tess(tiles=tiles(X), window=Y$window)
+             Y$tiles <- lapply(Y$tiles, affine, mat=mat, vec=vec, ...)
+           }
+         },
+         tiled={
+           Y$tiles <- lapply(Y$tiles, affine, mat=mat, vec=vec, ...)
+         },
+         image = {
+           Y$image <- affine(Y$image, mat=mat, vec=vec, ...)
+         })
+  return(Y)
+}
+
+reflect.tess <- function(X) {
+  Y <- X
+  Y$window <- reflect(Y$window)
+  switch(X$type,
+         rect = {
+           Y$xgrid <- rev(- Y$xgrid)
+           Y$ygrid <- rev(- Y$ygrid)
+         },
+         tiled = {
+           Y$tiles <- lapply(Y$tiles, reflect)
+         },
+         image = {
+           Y$image <- reflect(Y$image)
+         })
+  return(Y)
+}
+
+scalardilate.tess <- function(X, f, ...) {
+  Y <- X
+  Y$window <- scalardilate(X$window, f, ...)
+  switch(X$type,
+         rect = {
+           Y$xgrid <- f * Y$xgrid
+           Y$ygrid <- f * Y$ygrid
+         },
+         tiled = {
+           Y$tiles <- lapply(Y$tiles, scalardilate, f=f, ...)
+         },
+         image = {
+           Y$image <- scalardilate(Y$image, f=f, ...)
+         })
+  return(Y)
+}
+
+rotate.tess <- function(X, angle=pi/2, ...) {
+  if(angle %% (2 * pi) == 0) return(X)
+  Y <- X
+  Y$window <- rotate(X$window, angle=angle, ...)
+  switch(X$type,
+         rect = {
+           if(angle %% (pi/2) == 0) {
+             ## result is rectangular
+             co <- round(cos(angle))
+             si <- round(sin(angle))
+             Y$xgrid <- sort((if(co == 0) 0 else (co * X$xgrid)) -
+                             (if(si == 0) 0 else (si * X$ygrid)))
+             Y$ygrid <- sort((if(si == 0) 0 else (si * X$xgrid)) +
+                             (if(co == 0) 0 else (co * X$ygrid)))
+           } else {
+             ## general tessellation
+             Y <- tess(tiles=lapply(tiles(X), rotate, angle=angle, ...),
+                       window=Y$window)
+           }
+         },
+         tiled = {
+           Y$tiles <- lapply(X$tiles, rotate, angle=angle, ...)
+         },
+         image = {
+           Y$image <- rotate(X$image, angle=angle, ...)
+         })
+  return(Y)
+}
+  

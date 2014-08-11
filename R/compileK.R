@@ -3,10 +3,11 @@
 # Function to take a matrix of pairwise distances
 # and compile a 'K' function in the format required by spatstat.
 #
-#   $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.6 $  $Date: 2014/02/16 08:50:15 $
 # -------------------------------------------------------------------
 
-compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE) {
+compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,
+                     fname="K") {
   # process r values
   breaks <- breakpts.from.r(r)
   rmax <- breaks$max
@@ -32,25 +33,25 @@ compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE) {
   # wrap it up as an 'fv' object for use in spatstat
   df <- data.frame(r=r, est=Kratio)
   if(!ratio) {
-    K <- fv(df, "r", substitute(compileK(r), NULL), "est", . ~ r , c(0,rmax),
-            c("r", "%s(r)"),
+    K <- fv(df, "r", quote(K(r)), "est", . ~ r , c(0,rmax),
+            c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname="compileK")
+            fname=fname)
   } else {
     num <- data.frame(r=r, est=Kcount)
     den <- data.frame(r=r, est=denom)
     K <- ratfv(num, den,
-               "r", substitute(compileK(r), NULL), "est", . ~ r , c(0,rmax),
-               c("r", "%s(r)"),
+               "r", quote(K[compile](r)), "est", . ~ r , c(0,rmax),
+               c("r", makefvlabel(NULL, "hat", fname)), 
                c("distance argument r", "estimated %s"),
-               fname="compileK")
+               fname=fname)
   }
   return(K)
 }
 
 
 compilepcf <- function(D, r, weights=NULL, denom=1, check=TRUE,
-                       endcorrect=TRUE, ...) {
+                       endcorrect=TRUE, ..., fname="g") {
   # process r values
   breaks <- breakpts.from.r(r)
   if(!breaks$even)
@@ -98,10 +99,10 @@ compilepcf <- function(D, r, weights=NULL, denom=1, check=TRUE,
   # wrap it up as an 'fv' object for use in spatstat
   df <- data.frame(r=r,
                    est=gval)
-  g <- fv(df, "r", substitute(compilepcf(r), NULL), "est", . ~ r , c(0,rmax),
-          c("r", "%s(r)"),
+  g <- fv(df, "r", quote(g(r)), "est", . ~ r , c(0,rmax),
+          c("r", makefvlabel(NULL, "hat", fname)),
           c("distance argument r", "estimated %s"),
-          fname="compilepcf")
+          fname=fname)
   attr(g, "bw") <- den$bw
   return(g)
 }

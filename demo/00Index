@@ -1,3 +1,4 @@
 spatstat	Demonstration of spatstat library
-diagnose	Demonstration of diagnostic functions in spatstat
+diagnose	Demonstration of diagnostic capabilities for models in spatstat
 data		Datasets in spatstat
+sumfun		Demonstration of nonparametric summary functions in spatstat

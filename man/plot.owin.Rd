@@ -6,7 +6,7 @@
 }
 \usage{
  \method{plot}{owin}(x, main, add=FALSE, \dots, box, edge=0.04,
-                      type=c("w","n"),
+                      type=c("w","n"), show.all=!add, 
                       hatch=FALSE, angle=45, spacing=diameter(x)/50,
                       invert=FALSE)
 }
@@ -41,6 +41,10 @@
     If \code{type="w"} (the default), the window is plotted.
     If \code{type="n"} and \code{add=TRUE}, a new plot is initialised
     and the coordinate system is established, but nothing is drawn.
+  }
+  \item{show.all}{
+    Logical value indicating whether to plot everything
+    including the main title.
   }
   \item{hatch}{
     logical flag; if \code{TRUE}, the interior of the window will

@@ -382,14 +382,15 @@ closethresh <- function(X, R, S, ordered=TRUE) {
   x <- Xsort$x
   y <- Xsort$y
   r <- R
+  s <- S
   ng <- nsize
   storage.mode(x) <- "double"
   storage.mode(y) <- "double"
   storage.mode(r) <- "double"
+  storage.mode(s) <- "double"
   storage.mode(ng) <- "integer"
   z <- .Call("Vclosethresh",
              xx=x, yy=y, rr=r, ss=s, nguess=ng)
-#             PACKAGE="spatstat")
   if(length(z) != 3)
     stop("Internal error: incorrect format returned from Vclosethresh")
   i  <- z[[1]]  # NB no increment required

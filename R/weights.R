@@ -160,18 +160,19 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
             tilepixels <- as.vector(table(pixelid))
             pixelarea <- win$xstep * win$ystep
             areas <- tilepixels * pixelarea
+            
+            zeroareas <- (tilepixels == 0)
           } 
         }
         
-	# classify each point according	to its tile
-
-        if(win$type == "mask") {
-          # first move each data point to nearest pixel
-          Xapprox <- nearest.raster.point(X$x, X$y, win, indices=FALSE)
-          x <- Xapprox$x
-          y <- Xapprox$y
-        }
         id <- gridindex(x, y, win$xrange, win$yrange, nx, ny)$index
+
+        if(win$type != "rectangle" && any(uhoh <- zeroareas[id])) {
+          # this can happen: the tile has digital area zero
+          # but contains a data/dummy point 
+          slivers <- unique(id[uhoh])
+          areas[slivers] <- pixelarea/2
+        }
         
 	# compute counting weights 
 	w <- countingweights(id, areas)

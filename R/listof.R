@@ -81,7 +81,7 @@ image.listof <- local({
     if(is.null(zlim))
       zlim <- range(unlist(lapply(x, range)))
     # determine common colour map
-    imcolmap <- plot.im(x[[1]], preponly=TRUE, zlim=zlim, ..., ribn=ribn)
+    imcolmap <- plot.im(x[[1]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
     # plot ribbon?
     if(!ribbon) {
       ribadorn <- list()

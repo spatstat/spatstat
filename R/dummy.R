@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.24 $     $Date: 2013/07/16 07:49:22 $
+#       $Revision: 5.26 $     $Date: 2013/12/17 08:59:51 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -74,8 +74,16 @@ cellmiddles <- local({
   middle <- function(v) { n <- length(v);
                           mid <- ceiling(n/2);
                           v[mid]}
+
+  dcut <- function(x, nx, xrange) {
+    dx <- diff(xrange)/nx
+    fx <- ((x - xrange[1])/dx) %% 1
+    bx <- dx * pmin(fx, 1-fx)
+    bx
+  }
+  
   # main
-  cellmiddles <- function (W, nx, ny, npix=NULL, gi=FALSE) {
+  cellmiddles <- function (W, nx, ny, npix=NULL, distances=FALSE) {
     if(W$type == "rectangle")
       return(gridcentres(W, nx, ny))
 
@@ -85,39 +93,40 @@ cellmiddles <- local({
     # that have nonzero digital area
     M   <- as.mask(W, dimyx=rev(npix))
     Mm <- M$m
-    if(gi) {
-      xx <- as.vector(raster.x(M)[Mm])
-      yy <- as.vector(raster.y(M)[Mm])
-      pid <- gridindex(xx,yy,W$xrange,W$yrange,nx,ny)$index
+    xx <- as.vector(raster.x(M)[Mm])
+    yy <- as.vector(raster.y(M)[Mm])
+    pid <- gridindex(xx,yy,W$xrange,W$yrange,nx,ny)$index
+
+    # compute tile centroids
+    xmid <- tapply(xx, pid, mean)
+    ymid <- tapply(yy, pid, mean)
+    # check whether they are inside window
+    ok <- inside.owin(xmid, ymid, W)
+    if(all(ok))
+      return(list(x=xmid, y=ymid))
+
+    # some problem tiles
+    bad <- rep.int(TRUE, nx * ny)
+    bad[as.integer(names(xmid))] <- !ok
+    badpid <- bad[pid]
+    if(!distances) {
+       midpix <- tapply(seq_along(pid)[badpid], pid[badpid], middle)
     } else {
-      # identify all pixels that are inside the window
-      # by their row and column index
-      Mrow <- as.vector(row(Mm)[Mm])
-      Mcol <- as.vector(col(Mm)[Mm])
-      # this code matches 'gridindex'
-      imap <- grid1index(M$yrow, M$yrange, ny)
-      jmap <- grid1index(M$xcol, M$xrange, nx)
-      # apply this mapping to all pixels inside the window
-      ii <- imap[Mrow]
-      jj <- jmap[Mcol]
-      # construct a tile index 
-      pid <- (ii-1) * nx + jj
+      # find 'middle' points using boundary distances
+      Dlines <- im(outer(dcut(M$yrow,ny,M$yrange),
+                         dcut(M$xcol,nx,M$xrange),
+                         "pmin"),
+                   M$xcol, M$yrow, M$xrange, M$yrange)
+      Dbdry <- bdist.pixels(M)
+      Dtile <- eval.im(pmin(Dlines, Dbdry))
+      dtile <- as.vector(Dtile[M])
+      df <- data.frame(dtile=dtile, id=seq_along(dtile))[badpid, , drop=FALSE]
+      midpix <- by(df, pid[badpid],
+                   function(z) { z$id[which.max(z$dtile)] })
     }
-    
-    ## For each tile, find middle point in list of pixels in each tile
-    # (always inside tile, by construction)
-    midpix <- tapply(seq_along(pid), pid, middle)
-    if(gi) {
-      x <- xx[midpix]
-      y <- yy[midpix]
-    }
-    else {
-      midcol   <- Mcol[midpix]
-      midrow   <- Mrow[midpix]
-      x <- M$xcol[midcol]
-      y <- M$yrow[midrow]
-    }
-    return(list(x=x,y=y))
+    xmid[!ok] <- xx[midpix]
+    ymid[!ok] <- yy[midpix]
+    return(list(x=xmid,y=ymid))
   }
   cellmiddles
 })
@@ -168,44 +177,42 @@ concatxy <- function(...) {
 
 default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
                           ..., eps=NULL, verbose=FALSE) {
-	# default action to create dummy points.
-	# regular grid of nd[1] * nd[2] points
-	# plus corner points of window frame,
-        # all clipped to window.
-	# 
-	X <- as.ppp(X)
-	win <- X$window
-        #
-        # default dimensions
-        a <- default.n.tiling(X, nd=nd, ntile=ntile, npix=npix,
-                              eps=eps, verbose=verbose)
-        nd    <- a$nd
-        ntile <- a$ntile
-        npix  <- a$npix
-        periodsample <- !random &&
-                         (win$type == "mask") &&
-                         all(nd %% win$dim == 0)
-        # make dummy points
-        dummy <- if(random) 
-                  stratrand(win, nd[1], nd[2], 1)
-                else
-                  cellmiddles(win, nd[1], nd[2], npix)
-        dummy <- as.ppp(dummy, win, check=FALSE)
-        # restrict to window
-        if(!(win$type == "rectangle" || periodsample))
-          dummy <- dummy[win]
-        # corner points
-        corn <- as.ppp(corners(win), win, check=FALSE)
-        corn <- corn[win]
-	dummy <- superimpose(dummy, corn, W=win)
-        if(dummy$n == 0)
-          stop("None of the dummy points lies inside the window")
-        # pass parameters for computing weights
-        attr(dummy, "dummy.parameters") <-
-          list(nd=nd, random=random, verbose=verbose)
-        attr(dummy, "weight.parameters") <-
-          append(list(...), list(ntile=ntile, verbose=verbose, npix=npix))
-        return(dummy)
+  # default action to create dummy points.
+  # regular grid of nd[1] * nd[2] points
+  # plus corner points of window frame,
+  # all clipped to window.
+  X <- as.ppp(X)
+  win <- X$window
+  #
+  # default dimensions
+  a <- default.n.tiling(X, nd=nd, ntile=ntile, npix=npix,
+                        eps=eps, verbose=verbose)
+  nd    <- a$nd
+  ntile <- a$ntile
+  npix  <- a$npix
+  periodsample <- !random &&
+                  (win$type == "mask") &&
+                  all(nd %% win$dim == 0)
+  # make dummy points
+  dummy <- if(random) stratrand(win, nd[1], nd[2], 1) else 
+           cellmiddles(win, nd[1], nd[2], npix)
+  dummy <- as.ppp(dummy, win, check=FALSE)
+  # restrict to window
+  if(!is.rectangle(win) &&
+     (random || !is.mask(win) || !all(nd %% win$dim == 0)))
+    dummy <- dummy[win]
+  # corner points
+  corn <- as.ppp(corners(win), win, check=FALSE)
+  corn <- corn[win]
+  dummy <- superimpose(dummy, corn, W=win)
+  if(dummy$n == 0)
+    stop("None of the dummy points lies inside the window")
+  # pass parameters for computing weights
+  attr(dummy, "dummy.parameters") <-
+    list(nd=nd, random=random, verbose=verbose)
+  attr(dummy, "weight.parameters") <-
+    append(list(...), list(ntile=ntile, verbose=verbose, npix=npix))
+  return(dummy)
 }
 
 

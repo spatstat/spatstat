@@ -6,11 +6,11 @@
 \description{
   Extracts the log likelihood, deviance, and AIC
   of a fitted Poisson point process
-  model, or analogous quantities based on the pseudolikelihood for
-  a fitted Gibbs point process model.
+  model, or analogous quantities based on the pseudolikelihood
+  or logistic likelihood for a fitted Gibbs point process model.
 }
 \usage{
-\method{logLik}{ppm}(object, ..., warn=TRUE)
+\method{logLik}{ppm}(object, ..., new.coef=NULL, warn=TRUE)
 \method{extractAIC}{ppm}(fit, scale=0, k=2, \dots)
 \method{nobs}{ppm}(object, ...)
 }
@@ -25,7 +25,12 @@
   }
   \item{scale}{Ignored.}
   \item{k}{Numeric value specifying the weight of the
-    equivalent degrees of freedom in the AIC. See Details.}
+    equivalent degrees of freedom in the AIC. See Details.
+  }
+  \item{new.coef}{
+    New values for the canonical parameters of the model.
+    A numeric vector of the same length as \code{coef(object)}.
+  }
 }
 \details{
   These functions are methods for the generic commands

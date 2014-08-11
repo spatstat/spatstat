@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.15 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.19 $ $Date: 2014/01/29 05:04:47 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -33,7 +33,10 @@ resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
   return(argue)
 }
 
-do.call.matched <- function(fun, arglist, funargs, extrargs=NULL, sieve=FALSE) {
+do.call.matched <- function(fun, arglist, funargs,
+                            extrargs=NULL,
+                            matchfirst=FALSE,
+                            sieve=FALSE) {
   if(!is.function(fun) && !is.character(fun))
     stop("Internal error: wrong argument type in do.call.matched")
   if(is.character(fun)) {
@@ -47,7 +50,11 @@ do.call.matched <- function(fun, arglist, funargs, extrargs=NULL, sieve=FALSE) {
     funargs <- names(formals(fun))
   funargs <- c(funargs, extrargs)
   givenargs <- names(arglist)
+  # identify which arguments in the call actually match a formal argument
   matched <- givenargs %in% funargs
+  # deem the first argument to be matched?
+  if(matchfirst && !nzchar(givenargs[1]))
+    matched[1] <- TRUE
   # apply 'fun' to matched arguments
   out <- do.call(fun, arglist[matched])
   # retain un-matched arguments?
@@ -56,9 +63,34 @@ do.call.matched <- function(fun, arglist, funargs, extrargs=NULL, sieve=FALSE) {
   return(out)
 }
 
+## This function traps the colour arguments
+## and converts to greyscale if required.
+
+do.call.plotfun <- function(fun, arglist, ...) {
+  if(spatstat.options("monochrome")) {
+    keys <- names(arglist)
+    if(!is.null(keys)) {
+      cols <- nzchar(keys) & ((keys %in% c("border", "col", "fg", "bg")) |
+                              (substr(keys, 1, 4) == "col."))
+      if(any(cols))
+        arglist[cols] <- lapply(arglist[cols], to.grey)
+    }
+  }
+  do.call.matched(fun, arglist, ...)
+}
+
+
 resolve.1.default <- function(.A, ...) {
-  res <- resolve.defaults(...)
-  hit <- (names(res) == .A)
+  if(is.character(.A)) {
+    ## .A is the name of the parameter to be returned
+    Aname <- .A
+    res <- resolve.defaults(...)
+  } else if(is.list(.A) && length(.A) == 1) {
+    ## .A is a list giving the name and default value of the parameter
+    Aname <- names(.A)
+    res <- resolve.defaults(..., .A)
+  } else stop("Unrecognised format for .A")
+  hit <- (names(res) == Aname)
   if(!any(hit)) return(NULL)
   return(res[[min(which(hit))]])
 }

@@ -8,7 +8,7 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.ppl(X, ..., srange=NULL, ns=32)
+   bw.ppl(X, ..., srange=NULL, ns=16)
 }
 \arguments{
   \item{X}{

@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.5 $ $Date: 2013/01/31 02:46:00 $
+# $Revision: 1.2 $ $Date: 2014/02/16 08:50:46 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -18,12 +18,9 @@ linearKdot <- function(X, i, r=NULL, ..., correction="Ang") {
   J <- rep(TRUE, npoints(X))  # i.e. all points
   result <- linearKmulti(X, I, J,
                          r=r, correction=correction, ...)
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(linearK[i ~ dot](r), list(i=iname)),
-               paste("linearK[", iname, "~ symbol(\"\\267\")]"),
-               new.yexp=substitute(linearK[i ~ symbol("\267")](r), list(i=iname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  result <- rebadge.as.dotfun(result, "K", type, i)
   return(result)
 }
 
@@ -45,14 +42,9 @@ linearKcross <- function(X, i, j, r=NULL, ..., correction="Ang") {
     result <- linearKmulti(X, I, J, r=r, correction=correction, ...)
   }
   # rebrand
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(linearKcross[i,j](r), list(i=iname,j=jname)),
-               sprintf("linearK[list(%s,%s)]", iname, jname),
-               new.yexp=substitute(linearK[list(i,j)](r),
-                                   list(i=iname,j=jname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  result <- rebadge.as.crossfun(result, "K", type, i, j)
   return(result)
 }
 
@@ -88,16 +80,9 @@ linearKmulti <- function(X, I, J, r=NULL, ..., correction="Ang") {
   K <- linearKmultiEngine(X, I, J, r=r, denom=denom,
                           correction=correction, ...)
   # set appropriate y axis label
-  switch(correction,
-         Ang  = {
-           ylab <- quote(Kmulti[L](r))
-           fname <- "Kmulti[L]"
-         },
-         none = {
-           ylab <- quote(Kmulti[net](r))
-           fname <- "Kmulti[net]"
-         })
-  K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
+  correction <- attr(K, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  K <- rebadge.as.crossfun(K, "K", type, "I", "J")
   return(K)
 }
 
@@ -119,12 +104,10 @@ linearKdot.inhom <- function(X, i, lambdaI, lambdadot,
   result <- linearKmulti.inhom(X, I, J, lambdaI, lambdadot, 
                                r=r, correction=correction, normalise=normalise,
                                ...)
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(linearK[inhom, i ~ dot](r), list(i=iname)),
-               paste("linearK[list(inhom,", iname, "~ symbol(\"\\267\"))]"),
-               new.yexp=substitute(linearK[list(inhom, i ~ symbol("\267"))](r), list(i=iname)))
+  ## relabel
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  result <- rebadge.as.dotfun(result, "K", type, i)
   return(result)
 }
 
@@ -152,14 +135,9 @@ linearKcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
                                  normalise=normalise, ...)
   }
   # rebrand
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(linearK[inhom,i,j](r), list(i=iname,j=jname)),
-               sprintf("linearK[list(inhom,%s,%s)]", iname, jname),
-               new.yexp=substitute(linearK[list(inhom,i,j)](r),
-                                   list(i=iname,j=jname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  result <- rebadge.as.crossfun(result, "K", type, i, j)
   return(result)
 }
 
@@ -197,16 +175,9 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
                           reweight=weightsIJ, denom=denom,
                           correction=correction, ...)
   # set appropriate y axis label
-  switch(correction,
-         Ang  = {
-           ylab <- quote(Kmulti[L](r))
-           fname <- "Kmulti[L]"
-         },
-         none = {
-           ylab <- quote(Kmulti[net](r))
-           fname <- "Kmulti[net]"
-         })
-  K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
+  correction <- attr(K, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  K <- rebadge.as.crossfun(K, "K", type, "I", "J")
   return(K)
 }
 
@@ -229,15 +200,23 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   r <- breaks$r
   rmax <- breaks$max
   #
+  if(correction == "Ang") {
+    fname <- c("K", "list(L, I, J)")
+    ylab <- quote(K[L,I,J](r))
+  } else {
+    fname <- c("K", "list(net, I, J)")
+    ylab <- quote(K[net,I,J](r))
+  }
+  #
   if(np < 2) {
     # no pairs to count: return zero function
     zeroes <- rep(0, length(r))
     df <- data.frame(r = r, est = zeroes)
-    K <- fv(df, "r", substitute(linearK(r), NULL),
+    K <- fv(df, "r", ylab,
             "est", . ~ r, c(0, rmax),
-            c("r", "%s(r)"),
+            c("r", makefvlabel(NULL, "hat", fname)),
             c("distance argument r", "estimated %s"),
-            fname = "linearK")
+            fname = fname)
     return(K)
   }
   #
@@ -264,8 +243,10 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   #---  compile into K function ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    K <- compileK(DIJ, r, denom=denom, check=FALSE)
+    K <- compileK(DIJ, r, denom=denom, check=FALSE, fname=fname)
+    K <- rebadge.as.crossfun(K, "K", "net", "I", "J")
     unitname(K) <- unitname(X)
+    attr(K, "correction") <- correction
     return(K)
   }
   if(correction == "none")
@@ -292,15 +273,21 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   }
   # compute K
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  K <- compileK(DIJ, r, weights=wt, denom=denom, check=FALSE)
+  K <- compileK(DIJ, r, weights=wt, denom=denom, check=FALSE, fname=fname)
+  ## rebadge and tweak
+  K <- rebadge.as.crossfun(K, "K", "L", "I", "J")
+  fname <- attr(K, "fname")
   # tack on theoretical value
-  K <- bind.fv(K, data.frame(theo=r), "%s[theo](r)",
+  K <- bind.fv(K, data.frame(theo=r),
+               makefvlabel(NULL, NULL, fname, "pois"),
                "theoretical Poisson %s")
+  ## 
   unitname(K) <- unitname(X)
   fvnames(K, ".") <- rev(fvnames(K, "."))
   # show working
   if(showworking)
     attr(K, "working") <- list(DIJ=DIJ, wt=wt)
+  attr(K, "correction") <- correction
   return(K)
 }
 

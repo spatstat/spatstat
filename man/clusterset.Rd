@@ -8,7 +8,7 @@
   using the (unrestricted) Allard-Fraley estimator.
 }
 \usage{
-  clusterset(X, result=c("marks", "domain"),
+  clusterset(X, what=c("marks", "domain"),
             \dots, verbose=TRUE,
             fast=FALSE,
             exact=!fast)
@@ -18,8 +18,9 @@
     A dimensional spatial point pattern (object of class
     \code{"ppp"}).
   }
-  \item{result}{
-    Character string specifying the type of result. See Details.
+  \item{what}{
+    Character string or character vector
+    specifying the type of result. See Details.
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.
@@ -67,19 +68,29 @@
     resolution, which is controlled by the arguments \code{\dots}).
   }
 
-  If \code{result="marks"} the result is the point pattern \code{X}
-  with a vector of marks labelling each point with a value \code{yes} or
-  \code{no} depending on whether the corresponding Dirichlet cell is
-  selected by the Allard-Fraley estimator. In other words each point of
-  \code{X} is labelled as either a cluster point or a non-cluster point.
-
-  If \code{result="domain"}, the result is the Allard-Fraley estimator
-  of the cluster feature set, which is the union of all the
-  selected Dirichlet cells, represented as a window (object of class
-  \code{"owin"}).
+  The type of result depends on the character vector \code{what}.
   \itemize{
     \item
-    If \code{exact=TRUE}, the Allard-Fraley set estimator
+    If \code{what="marks"} the result is the point pattern \code{X}
+    with a vector of marks labelling each point with a value \code{yes} or
+    \code{no} depending on whether the corresponding Dirichlet cell is
+    selected by the Allard-Fraley estimator. In other words each point of
+    \code{X} is labelled as either a cluster point or a non-cluster point.
+    \item 
+    If \code{what="domain"}, the result is the Allard-Fraley estimator
+    of the cluster feature set, which is the union of all the
+    selected Dirichlet cells, represented as a window (object of class
+    \code{"owin"}).
+    \item
+    If \code{what=c("marks", "domain")} the result is a list
+    containing both of the results described above.
+  }
+
+  Computation of the Allard-Fraley set estimator depends on
+  the argument \code{exact}.
+  \itemize{
+    \item
+    If \code{exact=TRUE} (the default), the Allard-Fraley set estimator
     will be computed exactly using polygonal geometry.
     The result is a polygonal window.
     \item
@@ -88,15 +99,16 @@
     This is faster than the exact computation.
     The result is a binary mask.
   }
-  When \pkg{spatstat} is initialised, the default is
-  \code{exact=FALSE}.
 }
 \value{
-  If \code{result="marks"}, a multitype point pattern (object of class
+  If \code{what="marks"}, a multitype point pattern (object of class
   \code{"ppp"}).
 
-  If  \code{result="domain"}, a window (object of class
-  \code{"owin"}). 
+  If  \code{what="domain"}, a window (object of class
+  \code{"owin"}).
+
+  If  \code{what=c("marks", "domain")} (the default),
+  a list consisting of a multitype point pattern and a window.
 }
 \references{
   Allard, D. and Fraley, C. (1997) 
@@ -121,11 +133,11 @@
   W <- grow.rectangle(as.rectangle(letterR), 1)
   X <- superimpose(runifpoint(300, letterR),
                    runifpoint(50, W), W=W)
-  plot(W, main="clusterset(X)")
-  plot(clusterset(X, fast=TRUE), add=TRUE, chars=c("o", "+"), cols=1:2)
+  plot(W, main="clusterset(X, 'm')")
+  plot(clusterset(X, "marks", fast=TRUE), add=TRUE, chars=c(1, 3), cols=1:2)
   plot(letterR, add=TRUE)
   plot(W, main="clusterset(X, 'd')")
-  plot(clusterset(X, "d", exact=FALSE), add=TRUE)
+  plot(clusterset(X, "domain", exact=FALSE), add=TRUE)
   plot(letterR, add=TRUE)
   par(opa)
 }

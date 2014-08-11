@@ -28,11 +28,11 @@
 \alias{as.breakpts}
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
-\alias{as.im.scan.test}
 \alias{as.im.linim}
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.units}
+\alias{as2vector}
 \alias{badprobability}
 \alias{bermantestEngine}
 \alias{bdrylength.xypolygon} 
@@ -111,6 +111,7 @@
 \alias{divisors}
 \alias{do.as.im}
 \alias{do.call.matched}
+\alias{do.call.plotfun}
 \alias{do.istat}
 \alias{dotexpr.to.call}
 \alias{dropifsingle}
@@ -143,6 +144,7 @@
 \alias{extractAIC.slrm}
 \alias{extractAtomicQtests}
 \alias{fakecallstring}
+\alias{fakemaintitle}
 \alias{fave.order}
 \alias{f3engine}
 \alias{f3Cengine}
@@ -153,6 +155,7 @@
 \alias{firstfactor}
 \alias{fii}
 \alias{fillNA}
+\alias{flatfname}
 \alias{flipxypolygon}
 \alias{forbidNA}
 \alias{forbid.logi}
@@ -170,6 +173,7 @@
 \alias{getglmfit}
 \alias{getglmsubset}
 \alias{getlambda.lpp}
+\alias{getlastshift}
 \alias{getppmdatasubset}
 \alias{getSumFun}
 \alias{geyercounts}
@@ -180,11 +184,13 @@
 \alias{gridindex}            
 \alias{grid1index}
 \alias{grow.rectangle}
+\alias{grow.mask}
 \alias{gsubdot}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
 \alias{ho.engine}
 \alias{hsvNA}
+\alias{IdenticalRows}
 \alias{identical.formulae}
 \alias{idorempty}
 \alias{ifelseAB}
@@ -235,6 +241,7 @@
 \alias{k3engine}
 \alias{Kborder.engine}
 \alias{Knone.engine}
+\alias{Krect.engine}
 \alias{Kount}
 \alias{Kwtsum}               
 \alias{Kpcf.kppm}               
@@ -269,6 +276,7 @@
 \alias{lookup.im}
 \alias{majorminorversion}
 \alias{make.even.breaks}
+\alias{makefvlabel}
 \alias{make.parseable}
 \alias{makeunits}
 \alias{markappend}
@@ -310,7 +318,7 @@
 \alias{mpl.prepare}
 \alias{MultiPair.checkmatrix}
 \alias{multiply.only.finite.entries}
-\alias{multiplicity.data.frame}
+\alias{multiplicityNumeric}
 \alias{na.handle.im}
 \alias{names.hyperframe}
 \alias{names<-.hyperframe}
@@ -362,9 +370,6 @@
 \alias{plot.pppmatching}
 \alias{plot.profilepl}
 \alias{plot.qqppm}
-\alias{plot.quadratcount}
-\alias{plot.quadrattest}
-\alias{plot.scan.test}
 \alias{polynom}
 \alias{ppllengine}
 \alias{ppmCovariates}
@@ -386,6 +391,7 @@
 \alias{print.diagppm}
 \alias{print.distfun}
 \alias{print.envelope}
+\alias{print.ewcdf}
 \alias{print.fasp}       
 \alias{print.fv}       
 \alias{print.fvfun}       
@@ -459,6 +465,8 @@
 \alias{rastery.im}
 \alias{rasterxy.im}
 \alias{rebadge.fv}
+\alias{rebadge.as.crossfun}
+\alias{rebadge.as.dotfun}
 \alias{rebound}
 \alias{rebound.im}
 \alias{rebound.ppp}
@@ -503,12 +511,13 @@
 \alias{scanmeasure.im}
 \alias{scanBinomLRTS}
 \alias{scanPoisLRTS}
-\alias{scanLRTS}
 \alias{second.moment.calc}
 \alias{second.moment.engine}
 \alias{sensiblevarname}
 \alias{sewpcf}
 \alias{sewsmod}
+\alias{shift.quadratcount}              
+\alias{shift.quadrattest}              
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{short.deparse}
@@ -532,6 +541,7 @@
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
 \alias{strausscounts}
+\alias{substringcount}
 \alias{suffloc}
 \alias{suffstat.generic}
 \alias{suffstat.poisson}
@@ -620,10 +630,10 @@ as.breakpts(\dots)
 \method{as.data.frame}{fv}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.list}{hyperframe}(x, \dots)
-\method{as.im}{scan.test}(X, \dots)
 \method{as.im}{linim}(X, \dots)
 as.listof(x)
 as.units(s)
+as2vector(x)
 badprobability(x, NAvalue)
 bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
 bdrylength.xypolygon(polly)
@@ -640,7 +650,7 @@ bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
 cannot.update(\dots)
 cartesian(pp, markset, fac = TRUE)
 cat.factor(\dots, recursive=FALSE)
-cellmiddles(W, nx, ny, npix, gi)
+cellmiddles(W, nx, ny, npix, distances)
 censtimeCDFest(o, cc, d, breaks, \dots,
      KM, RS, HAN, RAW, han.denom, tt, pmax)
 change.default.expand(x, newdefault)
@@ -650,9 +660,8 @@ check.hist.lengths(hist,breaks)
 check.named.list(x, nam, context, namopt)
 check.named.vector(x, nam, context, namopt)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
-check.nvector(v, npoints, fatal=TRUE, things="data points", naok=FALSE)
-check.nmatrix(m, npoints, fatal=TRUE, things="data points", naok=FALSE,
-              squarematrix=TRUE, matchto="nrow")
+check.nvector(v, npoints, fatal, things, naok, warn)
+check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
@@ -666,8 +675,8 @@ closethresh(X,R,S,ordered)
 \method{compatible}{rat}(A, B, \dots) %DontDeclare
 complaining(whinge, fatal, value)
 compileCDF(D, B, r, \dots, han.denom, check)
-compileK(D, r, weights, denom, check, ratio)
-compilepcf(D, r, weights, denom, check, endcorrect, \dots)
+compileK(D, r, weights, denom, check, ratio, fname)
+compilepcf(D, r, weights, denom, check, endcorrect, \dots, fname)
 conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
@@ -708,7 +717,8 @@ distributecbind(x)
 dist2dpath(dist, method="C")
 divisors(n)
 do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
-do.call.matched(fun, arglist, funargs, extrargs, sieve)
+do.call.matched(fun, arglist, funargs, extrargs, matchfirst, sieve)
+do.call.plotfun(fun, arglist, \dots)
 do.istat(panel)
 dotexpr.to.call(expr, dot, evaluator)
 dropifsingle(x)
@@ -757,6 +767,7 @@ explain.ifnot(expr, context)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
 fakecallstring(fname, parlist)
+fakemaintitle(bb, main, \dots)
 fave.order(x)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
@@ -767,6 +778,7 @@ findcbind(root, depth, maxdepth)
 firstfactor(x)
 fii(interaction, coefs, Vnames, IsOffset)
 fillNA(x, value)
+flatfname(x)
 flipxypolygon(p)
 forbidNA(x, context, xname, fatal, usergiven)
 forbid.logi(object)
@@ -784,6 +796,7 @@ getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
 getlambda.lpp(lambda, X, \dots)
+getlastshift(X)
 getppmdatasubset(object)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
@@ -794,11 +807,13 @@ good.correction.K(X)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
 grow.rectangle(W, xmargin=0, ymargin=xmargin)
+grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
 handle.r.b.args(r = NULL, breaks = NULL, window, eps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip, edgedefault)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
 hsvNA(h, s, v, \dots)
+IdenticalRows(i,j,a,b)
 identical.formulae(x,y)
 idorempty(w, r, caller)
 ifelseAB(test, a, b)
@@ -849,6 +864,7 @@ is.tess(x)
 k3engine(x, y, z, box, rmax, nrval, correction)
 Kborder.engine(X, rmax, nr, correction, weights, ratio)
 Knone.engine(X, rmax, nr, weights, ratio)
+Krect.engine(X, rmax, nr, correction, weights, ratio, fname)
 Kount(dIJ, bI, b, breaks)
 Kwtsum(dIJ, bI, wIJ, b, w, breaks)
 Kpcf.kppm(model, what)
@@ -892,6 +908,7 @@ prettyinside(x, \dots)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
+makefvlabel(op, accent, fname, sub, argname)
 make.parseable(x)
 makeunits(sing, plur, mul)
 markappend(\dots)
@@ -938,7 +955,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
             weightfactor, skip.border)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook)
-\method{multiplicity}{data.frame}(x)
+multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
 \method{names}{hyperframe}(x)
@@ -947,7 +964,8 @@ nearest.pixel(x, y, im)
 nearest.valid.pixel(x, y, im)
 newstyle.coeff.handling(object)
 niceround(x, m)
-nncleanEngine(kthNND, k, d, \dots, tol, plothist, verbose, maxit)
+nncleanEngine(kthNND, k, d, \dots, tol, maxit,
+              plothist, lineargs, verbose, Xname)
 nndcumfun(X, \dots, r)
 no.trend.ppm(x)
 nobjects(x)
@@ -1001,9 +1019,6 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ)
 \method{plot}{profilepl}(x, \dots, add=FALSE, main=NULL, tag=TRUE, coeff=NULL, xvariable=NULL)
 \method{plot}{qqppm}(x, \dots, limits=TRUE, monochrome=FALSE,
            limcol=if(monochrome) "black" else "red")
-\method{plot}{quadratcount}(x, \dots, add, entries, dx, dy, show.tiles)
-\method{plot}{quadrattest}(x, \dots)
-\method{plot}{scan.test}(x, \dots, do.window)
 polynom(x, \dots)
 ppllengine(X, Y, action="project", check=FALSE)
 ppmCovariates(model)
@@ -1027,6 +1042,7 @@ primesbelow(nmax)
 \method{print}{diagppm}(x, \dots)
 \method{print}{distfun}(x, \dots)
 \method{print}{envelope}(x, \dots)
+\method{print}{ewcdf}(x, digits, \dots)
 \method{print}{fasp}(x, \dots)
 \method{print}{funxy}(x, \dots)
 \method{print}{fv}(x, \dots)
@@ -1073,7 +1089,7 @@ primesbelow(nmax)
 \method{print}{summary.units}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
 \method{print}{timed}(x, \dots)
-prolongseq(x, newrange)
+prolongseq(x, newrange, step)
 quad(data, dummy, w, param)
 quad.mppm(x)
 RandomFieldsSafe()
@@ -1108,7 +1124,9 @@ rasterx.im(x)
 rastery.im(x)
 rasterxy.im(x, drop)
 rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
-new.dotnames, new.preferred, new.formula, new.tags)
+           new.dotnames, new.preferred, new.formula, new.tags)
+rebadge.as.crossfun(x, main, sub, i, j)
+rebadge.as.dotfun(x, main, sub, i)
 rebound(x, rect)
 \method{rebound}{im}(x, rect)  %DontDeclare
 \method{rebound}{ppp}(x, rect) %DontDeclare
@@ -1157,7 +1175,6 @@ scanmeasure(X, \dots)
 \method{scanmeasure}{im}(X, r, \dots) %DontDeclare
 scanPoisLRTS(nZ, nG, muZ, muG, alternative)
 scanBinomLRTS(nZ, nG, muZ, muG, alternative)
-scanLRTS(X, r, \dots, method, baseline, case, alternative)
 second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
 \dots, varcov=NULL, expand=FALSE)
 second.moment.engine(x, sigma, edge, what, \dots,
@@ -1165,6 +1182,8 @@ second.moment.engine(x, sigma, edge, what, \dots,
 sensiblevarname(guess, fallback, maxlen)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
+\method{shift}{quadratcount}(X, \dots)
+\method{shift}{quadrattest}(X, \dots)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 short.deparse(x, maxlen)
@@ -1189,6 +1208,7 @@ sp.foundclasses(cnames, inlist, formalname, argsgiven)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
 strausscounts(U,X,r,EqualPairs)
+substringcount(x,y)
 suffloc(object)
 suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)

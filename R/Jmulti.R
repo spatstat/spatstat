@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.36 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.38 $	$Date: 2014/02/16 05:51:17 $
 #
 #
 #
@@ -46,7 +46,7 @@ function(X, i, j, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
     rebadge.fv(result,
                substitute(J[i,j](r),
                           list(i=iname,j=jname)),
-               sprintf("J[list(%s,%s)]", iname, jname),
+               c("J", paste0("list(", iname, ",", jname, ")")),
                new.yexp=substitute(J[list(i,j)](r),
                                       list(i=iname,j=jname)))
   return(result)
@@ -84,7 +84,7 @@ function(X, i, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
   result <-
     rebadge.fv(result,
                substitute(J[i ~ dot](r), list(i=iname)),
-               paste("J[", iname, "~ symbol(\"\\267\")]"),
+               c("J", paste(iname, "~ symbol(\"\\267\")")),
                new.yexp=substitute(J[i ~ symbol("\267")](r), list(i=iname)))
   return(result)
 }
@@ -124,12 +124,14 @@ function(X, I, J, eps=NULL, r=NULL, breaks=NULL, ..., disjoint=NULL,
   bothnames <- Fnames[Fnames %in% Gnames]
   # initialise fv object
   alim <- attr(FJ, "alim")
+  fname <- c("J", "list(I,J)")
   Z <- fv(data.frame(r=rvals, theo=1),
-          "r", substitute(Jmulti(r), NULL), "theo",
+          "r", quote(J[I,J](r)), "theo",
           . ~ r, alim,
-          c("r", "{%s^{pois}}(r)"),
+          c("r", makefvlabel(NULL, NULL, fname, "pois")),
           c("distance argument r", "theoretical Poisson %s"),
-          fname="J[multi]")
+          fname=fname,
+          yexp=quote(J[list(I,J)](r)))
   # add pieces manually
   ratio <- function(a, b) {
     result <- a/b
@@ -138,22 +140,26 @@ function(X, I, J, eps=NULL, r=NULL, breaks=NULL, ..., disjoint=NULL,
   }
   if("raw" %in% bothnames) {
     Jun <- ratio(1-GIJ$raw, 1-FJ$raw)
-    Z <- bind.fv(Z, data.frame(un=Jun), "hat(%s^{un})(r)",
+    Z <- bind.fv(Z, data.frame(un=Jun),
+                 makefvlabel(NULL, "hat", fname, "un"),
                  "uncorrected estimate of %s", "un")
   }
   if("rs" %in% bothnames) {
     Jrs <- ratio(1-GIJ$rs, 1-FJ$rs)
-    Z <- bind.fv(Z, data.frame(rs=Jrs), "hat(%s^{rs})(r)",
+    Z <- bind.fv(Z, data.frame(rs=Jrs),
+                 makefvlabel(NULL, "hat", fname, "rs"),
                  "border corrected estimate of %s", "rs")
   }
   if("han" %in% Gnames && "cs" %in% Fnames) {
     Jhan <- ratio(1-GIJ$han, 1-FJ$cs)
-    Z <- bind.fv(Z, data.frame(han=Jhan), "hat(%s^{han})(r)",
+    Z <- bind.fv(Z, data.frame(han=Jhan),
+                 makefvlabel(NULL, "hat", fname, "han"),
                  "Hanisch-style estimate of %s", "han")
   }
   if("km" %in% bothnames) {
     Jkm <- ratio(1-GIJ$km, 1-FJ$km)
-    Z <- bind.fv(Z, data.frame(km=Jkm), "hat(%s^{km})(r)",
+    Z <- bind.fv(Z, data.frame(km=Jkm),
+                 makefvlabel(NULL, "hat", fname, "km"),
                  "Kaplan-Meier estimate of %s", "km")
     if("hazard" %in% names(GIJ) && "hazard" %in% names(FJ)) {
       Jhaz <- GIJ$hazard - FJ$hazard

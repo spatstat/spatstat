@@ -7,7 +7,7 @@
   quadrature scheme used to fit the model.
 }
 \usage{
-  quad.ppm(object, drop=FALSE)
+  quad.ppm(object, drop=FALSE, clip=FALSE)
 }
 \arguments{
   \item{object}{
@@ -17,6 +17,11 @@
   \item{drop}{
     Logical value determining whether to delete quadrature points
     that were not used to fit the model.
+  }
+  \item{clip}{
+    Logical value determining whether to erode the window,
+    if \code{object} was fitted using the border correction.
+    See Details.
   }
 }
 \value{
@@ -42,12 +47,23 @@
   (points and weights) to gauge the accuracy of the approximation to the
   exact pseudolikelihood.
 
-  It may happen that some quadrature points are not actually used in
-  fitting the model (typically because the value of a covariate is \code{NA}
+  Some quadrature points may not have been used in
+  fitting the model. This happens if the border correction is used,
+  and in other cases (e.g. when the value of a covariate is \code{NA}
   at these points). The argument \code{drop} specifies whether these
   unused quadrature points shall be deleted (\code{drop=TRUE}) or
   retained (\code{drop=FALSE}) in the return value.
 
+  The quadrature scheme has a \emph{window}, which by default is set to
+  equal the window of the original data. However this window may be
+  larger than the actual domain of integration of the pseudolikelihood
+  or composite likelihood that was used to fit the model.
+  If \code{clip=TRUE} then the window of the quadrature scheme is
+  set to the actual domain of integration. This option only has an effect
+  when the model was fitted using the border correction; then
+  the window is obtained by eroding the original data window
+  by the border correction distance. 
+  
   See \code{\link{ppm.object}} for a list of all operations that can be
   performed on objects of class \code{"ppm"}.
   See \code{\link{quad.object}} for a list of all operations that can be

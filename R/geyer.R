@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.23 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 2.24 $	$Date: 2014/02/06 05:55:47 $
 #
 #    Geyer's saturation process
 #
@@ -32,9 +32,6 @@ Geyer <- local({
                        stop("interaction distance r must be a positive number")
                       if(!is.numeric(sat) || length(sat) != 1 || sat < 1)
                        stop("saturation parameter sat must be a number >= 1")
-                      if(ceiling(sat) != floor(sat))
-                        warning(paste("saturation parameter sat",
-                                      "has a non-integer value"))
                     },
          update = NULL, # default OK
          print = NULL,    # default OK

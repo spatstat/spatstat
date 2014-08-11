@@ -1,15 +1,33 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.52 $	$Date: 2013/12/04 11:10:17 $
+#	$Revision: 1.55 $	$Date: 2014/01/14 01:44:28 $
 #
 #
 #--------------------------------------------------------------------------
 
-plot.ppp <-
-  function(x, main, ..., chars=NULL, cols=NULL, use.marks=TRUE,
-           which.marks=NULL, add=FALSE, type=c("p", "n"), 
-           maxsize=NULL, markscale=NULL, zap=0.01)
+plot.ppp <- local({
+
+  ## how to plot points
+  smartpoints <- function(xx, yy, ...,
+                          index=1, col=NULL, pch=NULL, cols=NULL, chars=NULL) {
+    if(!is.null(cols))
+      col <- cols[index]
+    if(is.null(pch) && !is.null(chars))
+      pch <- chars[index]
+    do.call.matched("points",
+            resolve.defaults(list(x=list(x=xx, y=yy), ...),
+                             if(!is.null(col)) list(col=col) else NULL,
+                             if(!is.null(pch)) list(pch=pch) else NULL),
+                    extrargs=c("col", "pch", "type", "bg", "cex", "lwd", "lty"))
+  }
+
+  ## main function
+  plot.ppp <-
+    function(x, main, ..., chars=NULL, cols=NULL, use.marks=TRUE,
+             which.marks=NULL, add=FALSE, type=c("p", "n"), 
+             maxsize=NULL, markscale=NULL, zap=0.01,
+             show.window=show.all, show.all=!add)
 {
   if(missing(main))
     main <- short.deparse(substitute(x))
@@ -17,7 +35,7 @@ plot.ppp <-
   type <- match.arg(type)
   
   if(type == "n") {
-    # plot the window only
+    ## plot the window only
     do.call("plot.owin",
             resolve.defaults(list(x$window),
                              list(...),
@@ -25,8 +43,8 @@ plot.ppp <-
     return(invisible(NULL))
   }
   
-# Handle multiple columns of marks as separate plots
-#  (unless add=TRUE or which.marks selects a single column)
+  ## Handle multiple columns of marks as separate plots
+  ##  (unless add=TRUE or which.marks selects a single column)
   if(use.marks && is.data.frame(mx <- marks(x))) {
     implied.all <- is.null(which.marks)
     do.several <- implied.all || is.data.frame(mx <- mx[,which.marks])
@@ -34,9 +52,10 @@ plot.ppp <-
       message("Plotting the first column of marks")
       which.marks <- 1
     } else if(!add && do.several) {
+      ## generate one plot for each column of marks
       y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
       out <- do.call("plot",
-                     resolve.defaults(list(x=y, main=main),
+                     resolve.defaults(list(x=y, main=main, show.window=show.window),
                                       list(...),
                                       list(chars=chars, cols=cols,
                                            maxsize=maxsize, markscale=markscale,
@@ -45,10 +64,10 @@ plot.ppp <-
     } 
   }
 
-# First handle `rejected' points
+  ## First handle `rejected' points
   sick <- inherits(x, "ppp") && !is.null(rejects <- attr(x, "rejects"))
   if(sick) {
-    # get any parameters
+    ## get any parameters
     par.direct <- list(main=main, use.marks=use.marks,
                    maxsize=maxsize, markscale=markscale)
     par.rejects.default <- list(pch="+")
@@ -57,7 +76,7 @@ plot.ppp <-
     par.rejects <- resolve.defaults(par.rejects, par.rejects.default)
     par.all <- resolve.defaults(par.rejects, par.direct)
     rw <- resolve.defaults(list(...), list(rejectwindow=NULL))$rejectwindow
-    # determine window for rejects
+    ## determine window for rejects
     rwin <-
       if(is.null(rw))
         rejects$window
@@ -73,45 +92,50 @@ plot.ppp <-
       } else stop("Unrecognised format for rejectwindow")
     if(is.null(rwin))
       stop("Selected window for rejects pattern is NULL")
-    # Create suitable space
-    plot(rejects$window, add=add, type="n", main="")
-    if(!add)
-      title(main=main)
-    # plot rejects window if commanded
-    if(!is.null(rw)) {
-      rwinpardefault <- list(lty=2,lwd=1,border=1)
-      rwinpars <-
-        resolve.defaults(par.rejects, rwinpardefault)[names(rwinpardefault)]
-      do.call("plot.owin", append(list(rwin, add=TRUE), rwinpars))
+    ## Create suitable space
+    plot(rwin, add=add, type="n", main="")
+    ## Adorn with title
+    if(!add) title(main=main) else if(show.all) fakemaintitle(rwin, main, ...)
+    if(show.window) {
+      ## plot windows
+      if(!is.null(rw)) {
+        ## plot window for rejects
+        rwinpardefault <- list(lty=2,lwd=1,border=1)
+        rwinpars <-
+          resolve.defaults(par.rejects, rwinpardefault)[names(rwinpardefault)]
+        do.call("plot.owin", append(list(rwin, add=TRUE), rwinpars))
+      }
+      ## plot window of main pattern
+      do.call("plot.owin",
+              resolve.defaults(list(x$window, add=TRUE),
+                               list(...),
+                               list(invert=TRUE)))
     }
-    # plot window of main pattern
-    do.call("plot.owin",
-            resolve.defaults(list(x$window, add=TRUE),
-                             list(...),
-                             list(invert=TRUE)))
-    # plot points
+    ## plot points
     do.call("plot.ppp", append(list(rejects, add=TRUE), par.all))
     warning(paste(rejects$n, "illegal points also plotted"))
-    # the rest is added
+    ## the rest is added
     add <- TRUE
   }
 
-# Now convert to bona fide point pattern
+  ## Now convert to bona fide point pattern
   x <- as.ppp(x)
   xwindow <- x$window
   marked <- is.marked(x, dfok=TRUE, na.action="ignore")
 
-# Plot observation window
-  if(!add)
+  ## Plot observation window
+  if(show.window)
     do.call("plot.owin",
-            resolve.defaults(list(xwindow),
+            resolve.defaults(list(x=xwindow, add=add),
                              list(...),
                              list(invert=TRUE, main=main)))
-    
+  if(add && show.all) 
+    fakemaintitle(xwindow, main, ...)
+
   if(x$n == 0)
     return(invisible())
-
-# Handle plot parameters
+  
+  ## Handle plot parameters
   explicit <- list()
   if(!is.null(cols))
     explicit <- append(explicit, list(cols=cols))
@@ -120,21 +144,8 @@ plot.ppp <-
     
   defaults <- spatstat.options("par.points")
 
-# Prepare to plot points
+  ## Prepare to plot points
   
-  smartpoints <- function(xx, yy, ...,
-                          index=1, col=NULL, pch=NULL, cols=NULL, chars=NULL) {
-    if(!is.null(cols))
-      col <- cols[index]
-    if(is.null(pch) && !is.null(chars))
-      pch <- chars[index]
-    do.call.matched("points",
-            resolve.defaults(list(x=list(x=xx, y=yy), ...),
-                             if(!is.null(col)) list(col=col) else NULL,
-                             if(!is.null(pch)) list(pch=pch) else NULL),
-                    extrargs=c("col", "pch", "type", "bg", "cex", "lwd", "lty"))
-  }
-
   if(!marked || !use.marks) {
     do.call("smartpoints",
             resolve.defaults(list(xx=x$x, yy=x$y),
@@ -144,16 +155,16 @@ plot.ppp <-
     return(invisible())
   }
 
-  # marked point pattern
+  ## marked point pattern
 
   marx <- marks(x, dfok=TRUE)
 
   if(is.data.frame(marx)) {
-    # select column or take first colum
+    ## select column or take first colum
     marx <- marx[, which.marks]
   }
 
-  # check there are some valid marks!
+  ## check there are some valid marks!
   ok <- !is.na(marx)
   if(all(!ok)) {
     warning("All mark values are NA; plotting locations only.")
@@ -165,7 +176,7 @@ plot.ppp <-
     return(invisible())
   }
 
-  # otherwise ignore invalid marks
+  ## otherwise ignore invalid marks
   if(!all(ok)) {
     warning(paste("Some marks are NA;",
                     "corresponding points are omitted."))
@@ -199,8 +210,8 @@ plot.ppp <-
     scal <- mark.scale.default(marx, xwindow,
                                markscale=markscale, maxsize=maxsize)
     if(is.na(scal)) {
-      # data cannot be scaled successfully;
-      # plot as points
+      ## data cannot be scaled successfully;
+      ## plot as points
       do.call("smartpoints",
               resolve.defaults(list(x$x, x$y),
                                explicit,
@@ -208,16 +219,16 @@ plot.ppp <-
                                spatstat.options("par.points")))
       return(invisible())
     }
-    # scale determined.
-    # Apply the scaling
+    ## scale determined.
+    ## Apply the scaling
     ms <- marx * scal 
 
-    # Finally, plot them..
+    ## Finally, plot them..
     absmarx <- abs(marx)
     tiny <- (absmarx <= zap * max(absmarx))
     neg <- (marx < 0) & !tiny
     pos <- (marx > 0) & !tiny
-    # plot positive values as circles
+    ## plot positive values as circles
     if(any(pos)) 
       do.call("symbols",
               resolve.defaults(
@@ -226,7 +237,7 @@ plot.ppp <-
                                list(inches = FALSE, add = TRUE),
                                if(!is.null(cols)) list(fg=cols[1]) else NULL,
                                list(...)))
-    # plot negative values as squares
+    ## plot negative values as squares
     if(any(neg))
       do.call("symbols",
               resolve.defaults(
@@ -235,7 +246,7 @@ plot.ppp <-
                                list(inches = FALSE, add = TRUE),
                                if(!is.null(cols)) list(fg=cols[1]) else NULL,
                                list(...)))
-    # return a plottable scale bar
+    ## return a plottable scale bar
     mr <- range(marx)
     mp.value <- if(is.na(scal)) mr[1] else pretty(mr)
     mp.plotted <- mp.value * scal
@@ -257,15 +268,15 @@ plot.ppp <-
   
   if(is.null(chars)) {
     if(ntypes <= 25) {
-      # numerical 'pch' 
+      ## numerical 'pch' 
       chars <- 1:ntypes
     } else {
-      # letters
+      ## letters
       ltr <- c(letters, LETTERS)
       if(ntypes <= 52) {
         chars <- ltr[1:ntypes]
       } else {
-        # wrapped sequence of letters
+        ## wrapped sequence of letters
         warning("There are too many types to display every type as a different character")
         chars <- ltr[1 + (0:(ntypes - 1) %% 52)]
       }
@@ -307,14 +318,18 @@ plot.ppp <-
     return(invisible(chars))
 }
 
+plot.ppp
+
+})
+
 
 mark.scale.default <- function(marx, w, markscale=NULL, maxsize=NULL) {
-    # establish values of markscale, maxsize
+  ## establish values of markscale, maxsize
   if(!is.null(maxsize) && !is.null(markscale))
     stop("Only one of maxsize and markscale should be given")
   if(is.null(maxsize) && is.null(markscale)) {
-    # if BOTH are absent, enforce the spatstat defaults
-    # (which could also be null)
+    ## if BOTH are absent, enforce the spatstat defaults
+    ## (which could also be null)
     pop <- spatstat.options("par.points")
     markscale <- pop$markscale
     maxsize   <- pop$maxsize
@@ -338,5 +353,21 @@ mark.scale.default <- function(marx, w, markscale=NULL, maxsize=NULL) {
   if(tiny)
     return(NA)
   else 
-    return(maxsize/maxabs)
+   return(maxsize/maxabs)
+}
+
+fakemaintitle <- function(bb, main, ...) {
+  ## Try to imitate effect of 'title(main=main)' above a specified box
+  if(!any(nzchar(main))) return(invisible(NULL))
+  bb <- as.rectangle(bb)
+  x0 <- mean(bb$xrange)
+  y0 <- bb$yrange[2] + length(main) * diff(bb$yrange)/12
+  parnames <- c('cex.main', 'col.main', 'font.main')
+  parlist <- par(parnames)
+  parlist <- resolve.defaults(list(...), parlist)[parnames]
+  names(parlist) <- c('cex', 'col', 'font')
+  do.call.matched("text.default",
+                  resolve.defaults(list(x=x0, y=y0, labels=main),
+                                   parlist,    list(...)))
+  return(invisible(NULL))
 }

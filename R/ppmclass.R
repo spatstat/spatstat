@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.89 $	$Date: 2013/09/02 10:25:16 $
+#	$Revision: 2.92 $	$Date: 2014/02/18 04:53:41 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -180,18 +180,24 @@ function(x, ...,
   return(invisible(NULL))
 }
 
-quad.ppm <- function(object, drop=FALSE) {
+quad.ppm <- function(object, drop=FALSE, clip=FALSE) {
   if(!is.ppm(object)) {
     if(inherits(object, "kppm")) object <- object$po else
-    stop("object is not of class ppm")
+    stop("object is not of class ppm or kppm")
   }
   Q <- object$Q
-  if(!drop || is.null(Q))
+  if(is.null(Q))
     return(Q)
-  ok <- getglmsubset(object)
-  if(is.null(ok))
-    return(Q)
-  return(Q[ok])
+  if(drop || clip) {
+    ok <- getglmsubset(object)
+    if(!is.null(ok))
+      Q <- Q[ok]
+  }
+  if(clip && object$correction == "border") {
+    Wminus <- erosion(as.owin(object), object$rbord)
+    Q <- Q[Wminus]
+  }
+  return(Q)
 }
 
 data.ppm <- function(object) { 
@@ -484,26 +490,36 @@ project.ppm <- local({
 
 # more methods
 
-logLik.ppm <- function(object, ..., warn=TRUE) {
+logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
   if(!is.poisson.ppm(object) && warn) 
     warning(paste("log likelihood is not available for non-Poisson model;",
                   "log-pseudolikelihood returned"))
+  if(is.null(new.coef)) {
+    ## extract from object
+    ll <- object$maxlogpl
+    attr(ll, "df") <- length(coef(object))
+    class(ll) <- "logLik"
+    return(ll)
+  } 
+  ## recompute for new parameter values
   method <- object$method
+  if(method == "exact")
+    method <- update(method, forcefit=TRUE)
+  Q <- quad.ppm(object, drop=TRUE)
+  Z <- is.data(Q)
+  cif <- fitted(object, type="cif", new.coef=new.coef, drop=TRUE)
+  cifdata <- cif[Z]
   switch(method,
-         mpl={
-           ll <- object$maxlogpl
-         },
-         ho={
-           # evaluate the log pseudolikelihood
-           Q <- quad.ppm(object, drop=TRUE)
-           Z <- is.data(Q)
+         mpl=,
+         exact=,
+         ho = {
            w <- w.quad(Q)
-           cif <- fitted(object, type="cif", drop=TRUE)
-           cifdata <- cif[Z]
            ll <- sum(log(cifdata[cifdata > 0])) - sum(w * cif)
          },
          logi={
-           ll <- object$maxlogpl
+           B <- getglmdata(object, drop=TRUE)$.logi.B
+           p <- cif/(B+cif)
+           ll <- sum(log(p/(1-p))[Z]) + sum(log(1-p)) + sum(log(B[Z]))
          },
          stop(paste("Internal error: unrecognised ppm method:",
                     dQuote(method)))

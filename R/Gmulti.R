@@ -8,7 +8,7 @@
 #		Gdot		      G_{i\bullet}
 #		Gmulti	              (generic)
 #
-#	$Revision: 4.40 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.41 $	$Date: 2014/02/16 03:47:06 $
 #
 ################################################################################
 
@@ -48,7 +48,7 @@ function(X, i, j, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"))
   result <-
     rebadge.fv(result,
                substitute(G[i,j](r), list(i=iname, j=jname)),
-               sprintf("G[list(%s,%s)]", iname, jname),
+               c("G", paste0("list(", iname, ",", jname, ")")),
                new.yexp=substitute(G[list(i,j)](r),
                                    list(i=iname,j=jname)))
   return(result)
@@ -81,7 +81,7 @@ function(X, i, r=NULL, breaks=NULL, ..., correction=c("km","rs","han")) {
   iname <- make.parseable(paste(i))
   result <- rebadge.fv(result,
                   substitute(G[i ~ dot](r), list(i=iname)),
-                  paste("G[", iname, "~ symbol(\"\\267\")]"),
+                  c("G", paste(iname, "~ symbol(\"\\267\")")),
                   new.yexp=substitute(G[i ~ symbol("\267")](r), list(i=iname)))
   return(result)
 }	
@@ -146,11 +146,13 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
   zeroes <- numeric(length(rvals))
 # initialise fv object
   df <- data.frame(r=rvals, theo=1-exp(-lamJ * pi * rvals^2))
-  Z <- fv(df, "r", substitute(G[multi](r), NULL), "theo", . ~ r,
+  fname <- c("G", "list(I,J)")
+  Z <- fv(df, "r", quote(G[I,J](r)), "theo", . ~ r,
           c(0,rmax),
-          c("r", "{%s^{pois}}(r)"), 
+          c("r", makefvlabel(NULL, NULL, fname, "pois")),
           c("distance argument r", "theoretical Poisson %s"),
-          fname="Gmulti")
+          fname=fname,
+          yexp=quote(G[list(I,J)](r)))
 #  "type I to type J" nearest neighbour distances
   XI <- X[I]
   XJ <- X[J]
@@ -179,7 +181,8 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
       hh <- hist(nnd[nnd <= rmax],breaks=breaks$val,plot=FALSE)$counts
       edf <- cumsum(hh)/length(nnd)
     }
-    Z <- bind.fv(Z, data.frame(raw=edf), "hat(%s^{raw})(r)",
+    Z <- bind.fv(Z, data.frame(raw=edf),
+                 makefvlabel(NULL, "hat", fname, "raw"),
                  "uncorrected estimate of %s", "raw")
   }
 
@@ -199,7 +202,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
     }
     # add to fv object
     Z <- bind.fv(Z, data.frame(han=G),
-                 "hat(%s^{han})(r)", 
+                 makefvlabel(NULL, "hat", fname, "han"),
                  "Hanisch estimate of %s",
                  "han")
     # modify recommended plot range
@@ -216,7 +219,9 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
     }
     # add to fv object
     Z <- bind.fv(Z, result,
-                 c("hat(%s^{bord})(r)", "hat(%s^{km})(r)", "hazard(r)"),
+                 c(makefvlabel(NULL, "hat", fname, "bord"),
+                   makefvlabel(NULL, "hat", fname, "km"),
+                   "hazard(r)"),
                  c("border corrected estimate of %s",
                    "Kaplan-Meier estimate of %s",
                    "Kaplan-Meier estimate of hazard function lambda(r)"),

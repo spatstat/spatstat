@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.63 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.72 $	$Date: 2014/02/11 08:32:33 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -48,8 +48,9 @@
   K <- Kinhom(...)
   L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
-  L <- rebadge.fv(L, quote(Linhom(r)), "Linhom",
+  L <- rebadge.fv(L, quote(L[inhom](r)), c("L", "inhom"),
                   names(K), new.labl=attr(K, "labl"))
+  attr(L, "labl") <- attr(K, "labl")
   #
   return(L)  
 }
@@ -72,7 +73,8 @@
     W <- X$window
     npts <- npoints(X)
     area <- area.owin(W)
-
+    diamW <- diameter(W)
+    
     rmaxdefault <- rmax.rule("K", W, npts/area)
     breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
     r <- breaks$r
@@ -89,10 +91,15 @@
                                trans="translate",
                                translate="translate",
                                translation="translate",
+                               good="good",
                                best="best"),
                              multi=TRUE)
 
     best.wanted <- ("best" %in% correction)
+    ## replace 'good' by the optimal choice for this size of dataset
+    if("good" %in% correction)
+      correction[correction == "good"] <- good.correction.K(X)
+    ## retain only corrections that are implemented for the window
     correction <- implemented.for.K(correction, W$type, correction.given)
 
     ###########################################################
@@ -164,42 +171,77 @@
     alim <- c(0, min(rmax, rmaxdefault))
         
   ###########################################
-  # Efficient code for border method
+  # Efficient code for border correction and no correction
   # Usable only if r values are evenly spaced from 0 to rmax
   # Invoked automatically if number of points is large
 
     can.do.fast <- breaks$even  && missing(lambda2)
-    borderonly <- all(correction == "border" | correction == "bord.modif")
     large.n    <- (npts >= nlarge)
     demand.best <- correction.given && best.wanted
-    large.n.trigger <- large.n && !demand.best
-    will.do.fast <- can.do.fast && (borderonly || large.n.trigger)
-    asked      <- borderonly || (nlarge.given && large.n.trigger)
-
-    if(will.do.fast && !asked)
-      message(paste("number of data points exceeds",
-                    nlarge, "- computing border estimate only"))
-
-    if(asked && !can.do.fast) {
+    large.n.trigger <- large.n && !correction.given
+    fastcorrections <- c("border", "bord.modif", "none")
+    fastdefault <- "border"
+    correction.fast  <- all(correction %in% fastcorrections)
+    will.do.fast <- can.do.fast && (correction.fast || large.n.trigger)
+    asked.fast <- (correction.given && correction.fast) ||
+                  (nlarge.given && large.n.trigger)
+    if(!can.do.fast && asked.fast) {
       whynot <-
         if(!(breaks$even)) "r values not evenly spaced" else
         if(!missing(lambda)) "matrix lambda2 was given" else NULL
       warning(paste(c("cannot use efficient code", whynot), sep="; "))
     }
-    
     if(will.do.fast) {
-    # restrict r values to recommended range, unless specifically requested
+      ## Compute Kinhom using fast algorithm(s)
+      ## determine correction(s)
+      ok <- correction %in% fastcorrections
+      correction <- if(any(ok)) correction[ok] else fastdefault
+      bord <- any(correction %in% c("border", "bord.modif"))
+      none <- any(correction =="none")
+      if(!all(ok)) {
+        ## some corrections were overridden; notify user
+        corx <- c(if(bord) "border correction estimate" else NULL,
+                  if(none) "uncorrected estimate" else NULL)
+        corx <- paste(corx, collapse=" and ")
+        message(paste("number of data points exceeds",
+                      nlarge, "- computing", corx , "only"))
+      }
+      ## restrict r values to recommended range, unless specifically requested
       if(!rfixed) 
         r <- seq(from=0, to=alim[2], length.out=length(r))
-      K <- Kborder.engine(X, max(r), length(r), correction, reciplambda)
-      # tweak labels
-      K <- rebadge.fv(K, substitute(K[inhom](r), NULL), "K[inhom]")
-      K <- tweak.fv.entry(K, "theo", new.labl="{%s^{pois}}(r)")
-      K <- tweak.fv.entry(K, "border", new.labl="hat(%s^{bord})(r)")
-      K <- tweak.fv.entry(K, "bord.modif", new.labl="hat(%s^{bordm})(r)")
+      ## border method
+      if(bord) {
+        Kb <- Kborder.engine(X, max(r), length(r), correction,
+                             weights=reciplambda)
+        Kb <- tweak.fv.entry(Kb, "border", new.labl="{hat(%s)[%s]^{bord}} (r)")
+        Kb <- tweak.fv.entry(Kb, "bord.modif", new.labl="{hat(%s)[%s]^{bordm}} (r)")
+      }
+      ## uncorrected
+      if(none) {
+        Kn <- Knone.engine(X, max(r), length(r), weights=reciplambda)
+        Kn <- tweak.fv.entry(Kn, "un", new.labl="{hat(%s)[%s]^{un}} (r)")
+      }
+      K <-
+        if(bord && !none) Kb else
+        if(!bord && none) Kn else 
+      cbind.fv(Kb, Kn[, names(Kn) != "theo"])
+      ## tweak labels
+      K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))
       return(K)
     }
 
+  ###########################################
+  # Fast code for rectangular window
+  ###########################################
+
+  if(can.do.fast && is.rectangle(W) && spatstat.options("use.Krect")) {
+    K <-  Krect.engine(X, rmax, length(r), correction,
+                        weights=reciplambda, fname=c("K", "inhom"))
+    K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))
+    attr(K, "alim") <- alim
+    return(K)
+  }
+  
   ###########################################
   # Slower code
   ###########################################
@@ -208,8 +250,9 @@
     # this will be the output data frame
     K <- data.frame(r=r, theo= pi * r^2)
     desc <- c("distance argument r", "theoretical Poisson %s")
-    K <- fv(K, "r", substitute(K[inhom](r), NULL),
-            "theo", , alim, c("r","{%s^{pois}}(r)"), desc, fname="K[inhom]")
+    K <- fv(K, "r", quote(K[inhom](r)),
+            "theo", , alim, c("r","{%s[%s]^{pois}}(r)"), desc,
+            fname=c("K", "inhom"))
 
     # identify all close pairs
     rmax <- max(r)
@@ -225,7 +268,6 @@
       else 
         reciplambda2[cbind(I,J)]
     # 
-    XI <- X[I]
 
     # compute edge corrected estimates
     if(any(correction == "border" | correction == "bord.modif")) {
@@ -239,42 +281,41 @@
       if(any(correction == "border")) {
         Kb <- RS$ratio
         if(renormalise) Kb <- Kb * renorm.factor
-        K <- bind.fv(K, data.frame(border=Kb), "hat(%s^{bord})(r)",
+        K <- bind.fv(K, data.frame(border=Kb), "{hat(%s)[%s]^{bord}}(r)",
                      "border-corrected estimate of %s",
                      "border")
       }
       if(any(correction == "bord.modif")) {
         Kbm <- RS$numerator/eroded.areas(W, r)
         if(renormalise) Kbm <- Kbm * renorm.factor
-        K <- bind.fv(K, data.frame(bord.modif=Kbm), "hat(%s^{bordm})(r)",
+        K <- bind.fv(K, data.frame(bord.modif=Kbm), "{hat(%s)[%s]^{bordm}}(r)",
                      "modified border-corrected estimate of %s",
                      "bord.modif")
       }
     }
     if(any(correction == "translate")) {
       # translation correction
-      XJ <- X[J]
-      edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+      edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
       Ktrans <- cumsum(wh)/area
       if(renormalise) Ktrans <- Ktrans * renorm.factor
-      rmax <- diameter(W)/2
+      rmax <- diamW/2
       Ktrans[r >= rmax] <- NA
-      K <- bind.fv(K, data.frame(trans=Ktrans), "hat(%s^{trans})(r)",
+      K <- bind.fv(K, data.frame(trans=Ktrans), "{hat(%s)[%s]^{trans}}(r)",
                    "translation-correction estimate of %s",
                    "trans")
     }
     if(any(correction == "isotropic" | correction == "Ripley")) {
       # Ripley isotropic correction
-      edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
+      edgewt <- edge.Ripley(X[I], matrix(dIJ, ncol=1))
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
       Kiso <- cumsum(wh)/area
       if(renormalise) Kiso <- Kiso * renorm.factor
-      rmax <- diameter(W)/2
+      rmax <- diamW/2
       Kiso[r >= rmax] <- NA
-      K <- bind.fv(K, data.frame(iso=Kiso), "hat(%s^{iso})(r)",
+      K <- bind.fv(K, data.frame(iso=Kiso), "{hat(%s)[%s]^{iso}}(r)",
                    "Ripley isotropic correction estimate of %s",
                    "iso")
     }

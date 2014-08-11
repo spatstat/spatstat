@@ -16,7 +16,7 @@
   layered objects (class \code{"layered"}).
 }
 \usage{
-  \method{shift}{layered}(X, ...)
+  \method{shift}{layered}(X, vec=c(0,0), ...)
 
   \method{rotate}{layered}(X, ...)
 
@@ -41,6 +41,9 @@
   \item{s}{
     Rescaling factor passed to the relevant method for
     \code{\link{rescale}}. May be missing.
+  }
+  \item{vec}{
+    Shift vector (numeric vector of length 2).
   }
 }
 \details{

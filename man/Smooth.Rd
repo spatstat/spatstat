@@ -24,6 +24,7 @@
 }
 \seealso{
   \code{\link{Smooth.ppp}},
+  \code{\link{Smooth.im}},
   \code{\link{Smooth.msr}},
   \code{\link{Smooth.fv}}.
 }

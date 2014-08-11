@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.98 $  $Date: 2013/11/27 09:27:15 $
+#  $Revision: 1.103 $  $Date: 2013/12/18 03:24:15 $
 #
 
 vcov.ppm <- local({
@@ -445,7 +445,7 @@ vcalcGibbsGeneral <- function(model,
       # momdel[ ,i,j] = h(X[i] | X[-j])
       momdel <- mom.array - ddS
       # lamdel[i,j] = lambda(X[i] | X[-j])
-      lamdel <- matrix(lam, nX, nX) * exp(tensor(-use.coef, ddS, 1, 1))
+      lamdel <- matrix(lam, nX, nX) * exp(tensor::tensor(-use.coef, ddS, 1, 1))
       #   pairweight[i,j] = lamdel[i,j]/lambda[i] - 1 
       pairweight <- lamdel / lam - 1
       # now compute sum_{i,j} for i != j
@@ -1161,7 +1161,7 @@ vcalcGibbsSpecial <- function(fit, ...,
   A1log <- sumouter(mokall, w = lamall[okall]*rho*rho/(lamall[okall]+rho)^3)
 
   ## Define W1, W2 and dW for the logistic method based on V1, V2 and dV (frac is unchanged)
-  lambda1 <- exp(rowSums(matrix(theta,n,p,byrow=TRUE)*V1))
+  lambda1 <- exp(.rowSums(matrix(theta,n,p,byrow=TRUE)*V1, n, p))
   W1 <- V1*rho/(lambda1+rho)
   lambda2 <- exp(apply(array(rep(theta,each=n*n),dim=c(n,n,p))*V2, c(1,2), sum))
   W2 <- V2
@@ -1292,10 +1292,10 @@ vcalcGibbsSpecial <- function(fit, ...,
   return(vc.logi)
 }
 
-vcovPairPiece <- function(Xplus, R, gam, matrix.action,
+vcovPairPiece <- function(Xplus, R, Gam, matrix.action,
                           spill=FALSE, spill.vc=FALSE){
   ## R is  the  vector of breaks (R[length(R)]= range of the pp.
-  ## gam is the vector of weights
+  ## Gam is the vector of weights
   Rmax <- R[length(R)]
   
   ## Xplus : point process observed in W+R
@@ -1307,7 +1307,9 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action,
   ## Interior points determined by bdist.points:
   IntPoints <- bdist.points(Xplus)>=Rmax
   X <- Xplus[IntPoints]
-  
+
+  nX <- npoints(X)
+  nXplus <- npoints(Xplus)
   ## Matrix D with pairwise distances between points and infinite distance
   ## between a point and itself:
   
@@ -1327,8 +1329,8 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action,
 	I[[i]] <- ((D>R[i-1]) & (D <=R[i]))
      }
      ## Vector T with the number of $R$-close neighbours to each point:
-     Tplus[,i]<-colSums(Iplus[[i]])[IntPoints]
-     T[,i] <- colSums(I[[i]])
+     Tplus[,i]<-  .colSums(Iplus[[i]], nXplus, nXplus)[IntPoints]
+     T[,i] <-  .colSums(I[[i]], nX, nX)
   }
   ## Matrices A1, A2 and A3 are initialized to zero:
   A1 <- A2 <- A3 <- matrix(0,p+1,p+1)
@@ -1344,10 +1346,10 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action,
   }
   ## A2:
   for (j in (2:(p+1))){
-    A2[1,1]<-A2[1,1]+(gam[j-1]^(-1)-1)*sum(T[,j-1])
+    A2[1,1]<-A2[1,1]+(Gam[j-1]^(-1)-1)*sum(T[,j-1])
     for (l in (2:(p+1))){
       if (l==j) vj<-Tplus[,j-1]-1 else vj<-Tplus[,j-1]
-	A2[1,j]<-A2[1,j]+(gam[l-1]^(-1)-1)*sum(T[,l-1]*(vj) )
+	A2[1,j]<-A2[1,j]+(Gam[l-1]^(-1)-1)*sum(T[,l-1]*(vj) )
     }
     A2[j,1]<-A2[1,j]
     for (k in (2:(p+1))){
@@ -1355,7 +1357,7 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action,
 	if (l==j) vj<-Tplus[,j-1]-1 else vj<-Tplus[,j-1]
 	if (l==k) vk<-Tplus[,k-1]-1 else vk<-Tplus[,k-1]
 
-	A2[j,k]<-A2[j,k]+ (gam[l-1]^(-1)-1)*sum(I[[l-1]]*outer(vj,vk))
+	A2[j,k]<-A2[j,k]+ (Gam[l-1]^(-1)-1)*sum(I[[l-1]]*outer(vj,vk))
       }
     }
 
@@ -1363,7 +1365,7 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action,
 
   Sigma<-A1+A2+A3
 
-  nam <- c("(Intercept)", names(gam))
+  nam <- c("(Intercept)", names(Gam))
   dnam <- list(nam, nam)
   
   if(spill) {
@@ -1410,6 +1412,11 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action,
   X1 <- X1plus[IntPoints1]
   X2 <- X2plus[IntPoints2]
 
+  nX1 <- npoints(X1)
+  nX2 <- npoints(X2)
+  nX1plus <- npoints(X1plus)
+  nX2plus <- npoints(X2plus)
+  
   ## Matrix D with pairwise distances between points and infinite distance
   ## between a point and itself:
 
@@ -1422,24 +1429,24 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action,
   diag(D2) <- diag(D2plus) <- Inf
   
   D12plus<-crossdist(X1,X2plus)  
-  T12plus<-rowSums(D12plus<=R12)
+  T12plus<-  .rowSums(D12plus<=R12, nX1, nX2plus)
   D21plus<-crossdist(X2,X1plus) 
-  T21plus<-rowSums(D21plus<=R12)
+  T21plus<-  .rowSums(D21plus<=R12, nX2, nX1plus)
   
   I12<-crossdist(X1,X2)<=R12
   I21<-crossdist(X2,X1)<=R12
-  T12<-rowSums( I12)  
-  T21<-rowSums(I21)
+  T12<-   .rowSums(I12, nX1, nX2)
+  T21<-   .rowSums(I21, nX2, nX1)
   ## logical matrix, I, indicating R-close pairs:
   I1plus<- D1plus <=R11
   I1 <- D1<=R11
   I2plus<- D2plus <=R22
   I2 <- D2<=R22
   ## Vector T with the number of $R$-close neighbours to each point:
-  T1plus<-colSums(I1plus)[IntPoints1]
-  T1 <- colSums(I1)
-  T2plus<-colSums(I2plus)[IntPoints2]
-  T2 <- colSums(I2)
+  T1plus<-  .colSums(I1plus, nX1plus, nX1plus)[IntPoints1]
+  T1 <-     .colSums(I1,     nX1,     nX1)
+  T2plus<-  .colSums(I2plus, nX2plus, nX2plus)[IntPoints2]
+  T2 <-     .colSums(I2,     nX2,     nX2)
 
   ## Matrices A1, A2 and A3 are initialized to zero:
   A1 <- A2 <- A3 <- matrix(0,5,5)

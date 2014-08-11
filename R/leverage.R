@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.32 $  $Date: 2013/09/25 06:00:07 $
+#  $Revision: 1.34 $  $Date: 2013/12/15 11:24:31 $
 #
 
 leverage <- function(model, ...) {
@@ -112,7 +112,7 @@ ppm.influence <- function(fit,
     # (zero because the irregular components are part of the trend)
     if(!is.null(ddS)) {
       paddim <- c(dim(ddS)[1:2], nirr)
-      ddS <- abind(ddS, array(0, dim=paddim), along=3)
+      ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
     }
     # evaluate additional (`irregular') entries of Hessian
     if(gotHess) {
@@ -166,7 +166,9 @@ ppm.influence <- function(fit,
                  if(all(ok)) wlam %*% ihessmat else
                              wlam[ok] %*% ihessmat[ok,, drop=FALSE]
                # sum over data points
-               vdata <- colSums(ihessmat[isdata, , drop=FALSE], na.rm=TRUE)
+               vdata <- .colSums(ihessmat[isdata, , drop=FALSE],
+                                 sum(isdata), ncol(ihessmat),
+                                 na.rm=TRUE)
                vcontrib <- vintegral - vdata
                hessextra[sub, sub] <-
                  hessextra[sub, sub] + matrix(vcontrib, nirr, nirr)
@@ -224,11 +226,11 @@ ppm.influence <- function(fit,
     momchange[ , isdata, ] <- - momchange[, isdata, ]
     momafter <- mombefore + momchange
     # effect of addition/deletion of U[j] on lambda(U[i], X)
-    lamratio <- exp(tensor(momchange, theta, 3, 1))
+    lamratio <- exp(tensor::tensor(momchange, theta, 3, 1))
     lamratio <- array(lamratio, dim=dim(momafter))
     # integrate 
     ddSintegrand <- lam * (momafter * lamratio - mombefore)
-    eff.back <- changesign * tensor(ddSintegrand, w, 1, 1)
+    eff.back <- changesign * tensor::tensor(ddSintegrand, w, 1, 1)
     # total
     eff <- eff + eff.data - eff.back
   } else ddSintegrand <- NULL

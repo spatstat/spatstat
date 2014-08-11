@@ -5,8 +5,8 @@
   Plot a two-dimensional line segment pattern
 }
 \usage{
-  \method{plot}{psp}(x, \dots, add=FALSE, which.marks=1,
-                     ribbon=TRUE, ribsep=0.15, ribwid=0.05, ribn=1024)
+  \method{plot}{psp}(x, \dots, add=FALSE, show.all=!add, which.marks=1,
+                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024)
 }
 \arguments{
   \item{x}{
@@ -24,7 +24,11 @@
   \item{add}{
     Logical. If \code{TRUE}, the current plot is not erased;
     the segments are plotted on top of the
-    current plot, and the window is not plotted.
+    current plot, and the window is not plotted (by default).
+  }
+  \item{show.all}{
+    Logical value specifying whether to plot everything
+    including the window, main title, and colour ribbon.
   }
   \item{which.marks}{
     Index determining which column of marks to use,

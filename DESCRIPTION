@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.35-0
-Nickname: Multiple Personality
-Date: 2013-12-12
+Version: 1.36-0
+Nickname: Intense Scrutiny
+Date: 2014-02-18
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au> 
 	and Rolf Turner <r.turner@auckland.ac.nz> 
@@ -37,6 +37,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	R. Corria Ainslie;
 	M. de la Cruz; 
 	P. Dalgaard; 
+        S. Das;
 	P.J. Diggle; 
 	P. Donnelly;
 	I. Dryden; 
@@ -114,6 +115,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	B. Taylor; 
 	T. Thorarinsdottir;
 	B. Turlach; 
+        K. Ummer;
 	A. van Burgel; 
 	T. Verbeke; 
 	A. Villers; 
@@ -126,8 +128,8 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	and
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
-Depends: R (>= 3.0.2), stats, graphics, grDevices, utils, mgcv, deldir
-        (>= 0.0-21), abind, tensor, polyclip (>= 1.2-0)
+Depends: R (>= 3.0.2), stats, graphics, grDevices, utils
+Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.2-0)
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
         scatterplot3d, RandomFields (>= 3.0.0)
 Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, and space-time point patterns in any number of dimensions. 
@@ -141,6 +143,6 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2013-12-12 12:12:12 UTC; adrian
+Packaged: 2014-02-18 05:14:55 UTC; adrian
 Repository: CRAN
-Date/Publication: 2013-12-12 17:47:25
+Date/Publication: 2014-02-18 08:44:46

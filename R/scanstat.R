@@ -1,10 +1,10 @@
-#
-#  scanstat.R
-#
-#  Spatial scan statistics
-#
-#  $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
-#
+##
+##  scanstat.R
+##
+##  Spatial scan statistics
+##
+##  $Revision: 1.11 $  $Date: 2014/01/08 03:43:29 $
+##
 
 scanmeasure <- function(X, ...){
   UseMethod("scanmeasure")
@@ -13,23 +13,24 @@ scanmeasure <- function(X, ...){
 
 scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
   method <- match.arg(method)
-  # enclosing window
-  W <- as.rectangle(as.owin(X))
-  # expand domain to include all circles
-  W <- grow.rectangle(W, r)
-  # determine pixel resolution  
-  W <- as.mask(W, ...)
-  # 
+  check.1.real(r)
+  ## enclosing window
+  R <- as.rectangle(as.owin(X))
+  ## determine pixel resolution  
+  M <- as.mask(R, ...)
+  ## expand domain to include centres of all circles intersecting R
+  W <- grow.mask(M, r)
+  ## 
   switch(method,
          counts = {
-           # direct calculation using C code
-           # get new dimensions
+           ## direct calculation using C code
+           ## get new dimensions
            dimyx <- W$dim
            xr <- W$xrange
            yr <- W$yrange
            nr <- dimyx[1]
            nc <- dimyx[2]
-           #
+           ##
            n <- npoints(X)
            DUP <- spatstat.options("dupC")
            zz <- .C("scantrans",
@@ -45,18 +46,17 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
                     R=as.double(r),
                     counts=as.integer(numeric(prod(dimyx))),
                     DUP=DUP)
-#                    PACKAGE="spatstat")
            zzz <- matrix(zz$counts, nrow=dimyx[1], ncol=dimyx[2], byrow=TRUE)
            Z <- im(zzz, xrange=xr, yrange=yr, unitname=unitname(X))
          },
          fft = {
-           # Previous version of scanmeasure.ppp had
-           #    Y <- pixellate(X, ..., padzero=TRUE)
-           # but this is liable to Gibbs phenomena.
-           # Instead, convolve with small Gaussian (sd = 1 pixel width)
+           ## Previous version of scanmeasure.ppp had
+           ##    Y <- pixellate(X, ..., padzero=TRUE)
+           ## but this is liable to Gibbs phenomena.
+           ## Instead, convolve with small Gaussian (sd = 1 pixel width)
            sigma <- with(W, unique(c(xstep, ystep)))
            Y <- density(X, ..., sigma=sigma)
-           # invoke scanmeasure.im
+           ## invoke scanmeasure.im
            Z <- scanmeasure(Y, r)
            Z <- eval.im(as.integer(round(Z)))
          })
@@ -110,14 +110,17 @@ scanLRTS <- function(X, r, ...,
                        method=c("poisson", "binomial"),
                        baseline=NULL,
                        case=2,
-                       alternative=c("greater", "less", "two.sided")) {
+                       alternative=c("greater", "less", "two.sided"),
+                       saveopt = FALSE,
+                       Xmask=NULL) {
   stopifnot(is.ppp(X))
+  stopifnot(check.nvector(r))
   method <- match.arg(method)
   alternative <- match.arg(alternative)
+  if(is.null(Xmask)) Xmask <- as.mask(as.owin(X), ...)
   switch(method,
          poisson={
            Y <- X
-           Xmask <- as.mask(as.owin(X), ...)
            if(is.null(baseline)) {
              mu <- as.im(Xmask, value=1)
            } else if(is.ppm(baseline)) {
@@ -128,6 +131,7 @@ scanLRTS <- function(X, r, ...,
              mu <- as.im(baseline, W=Xmask)
            } else stop(paste("baseline should be",
                              "a pixel image, a function, or a fitted model"))
+           nG <- npoints(Y)
          },
          binomial={
            stopifnot(is.multitype(X))
@@ -141,26 +145,41 @@ scanLRTS <- function(X, r, ...,
            if(is.numeric(case) && !(case %in% seq_along(lev)))
              stop(paste("Undefined level:", case))
            Y <- split(X)[[case]]
+           nG <- npoints(Y)
            mu <- unmark(X)
          })
-  nZ <- scanmeasure(Y, r, ...)
-  muZ <- scanmeasure(mu, r)
-  if(!compatible.im(nZ, muZ)) {
-    ha <- harmonise.im(nZ, muZ)
-    nZ <- ha[[1]]
-    muZ <- ha[[2]]
+  ## The following line ensures that the same pixel resolution information
+  ## is passed to the two calls to 'scanmeasure' below
+  Y$window <- Xmask
+  ## 
+  nr <- length(r)
+  lrts <- vector(mode="list", length=nr)
+  for(i in 1:nr) {
+    ri <- r[i]
+    nZ <- scanmeasure(Y, ri)
+    muZ <- scanmeasure(mu, ri)
+    if(!compatible.im(nZ, muZ)) {
+      ha <- harmonise.im(nZ, muZ)
+      nZ <- ha[[1]]
+      muZ <- ha[[2]]
+    }
+    switch(method,
+           poisson = {
+             muG <- integral.im(mu)
+             lrts[[i]] <- eval.im(scanPoisLRTS(nZ, nG, muZ, muG, alternative))
+           },
+           binomial = {
+             muG <- npoints(mu)
+             lrts[[i]] <- eval.im(scanBinomLRTS(nZ, nG, muZ, muG, alternative))
+           })
   }
-  nG <- npoints(Y)
-  switch(method,
-         poisson = {
-           muG <- integral.im(mu)
-           result <- eval.im(scanPoisLRTS(nZ, nG, muZ, muG, alternative))
-         },
-         binomial = {
-           muG <- npoints(mu)
-           result <- eval.im(scanBinomLRTS(nZ, nG, muZ, muG, alternative))
-         },
-         { result <- NULL })
+  if(length(lrts) == 1) {
+    result <- lrts[[1]]
+  } else {
+    result <- im.apply(lrts, max)
+    if(saveopt)
+      attr(result, "iopt") <- im.apply(lrts, which.max)
+  }
   return(result)
 }
 
@@ -175,21 +194,23 @@ scan.test <- function(X, r, ...,
   stopifnot(is.ppp(X))
   method <- match.arg(method)
   alternative <- match.arg(alternative)
-  check.1.real(r)
+  stopifnot(is.numeric(r))
   check.1.real(nsim)
   if(!(round(nsim) == nsim && nsim > 1))
     stop("nsim should be an integer > 1")
-  regionname <- paste("circles of radius", r)
-  #
-  # compute observed loglikelihood function
-  # This also validates the arguments.
+  regionname <-
+    paste("circles of radius",
+          if(length(r) == 1) r else paste("between", min(r), "and", max(r)))
+  ##
+  ## compute observed loglikelihood function
+  ## This also validates the arguments.
   obsLRTS <- scanLRTS(X=X, r=r,
                           method=method,
                           alternative=alternative, baseline=baseline,
-                          case=case, ...)
+                          case=case, ..., saveopt=TRUE)
   obs <- max(obsLRTS)
   sim <- numeric(nsim)
-  # determine how to simulate
+  ## determine how to simulate
   switch(method,
          binomial={
            methodname <- c("Spatial scan test",
@@ -213,7 +234,7 @@ scan.test <- function(X, r, ...,
            Xmask <- as.mask(Xwin, ...)
            if(is.null(baseline)) {
              nullname <- "Complete Spatial Randomness (CSR)"
-             lambda <- summary(X)$intensity
+             lambda <- intensity(X)
              simexpr <- expression(runifpoispp(lambda, Xwin))
            } else if(is.ppm(baseline)) {
              nullname <- baseline$callstring
@@ -261,22 +282,30 @@ scan.test <- function(X, r, ...,
   class(result) <- c("scan.test", "htest")
   attr(result, "obsLRTS") <- obsLRTS
   attr(result, "X") <- X
+  attr(result, "r") <- r
   return(result)
 }
 
-plot.scan.test <- function(x, ..., do.window=TRUE) {
+plot.scan.test <- function(x, ..., what=c("statistic", "radius"),
+                           do.window=TRUE) {
   xname <- short.deparse(substitute(x))
-  Z <- as.im(x)
-  do.call("plot",
-          resolve.defaults(list(x=Z), list(...), list(main=xname)))
+  what <- match.arg(what)
+  Z <- as.im(x, what=what)
+  do.call("plot", resolve.defaults(list(x=Z), list(...), list(main=xname)))
   if(do.window) {
     X <- attr(x, "X")
-    plot(as.owin(X), add=TRUE)
+    plot(as.owin(X), add=TRUE, invert=TRUE)
   }
   invisible(NULL)
 }
 
-as.im.scan.test <- function(X, ...) {
-  X <- attr(X, "obsLRTS")
-  return(as.im(X, ...))
+as.im.scan.test <- function(X, ..., what=c("statistic", "radius")) {
+  Y <- attr(X, "obsLRTS")
+  what <- match.arg(what)
+  if(what == "radius") {
+    iopt <- attr(Y, "iopt")
+    r <- attr(X, "r")
+    Y <- eval.im(r[iopt])
+  }
+  return(as.im(Y, ...))
 }

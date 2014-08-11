@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.42 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 5.44 $	$Date: 2014/02/15 11:27:34 $
 #
 #
 # -------- functions ----------------------------------------
@@ -55,7 +55,7 @@
   L <- rebadge.fv(L,
                   substitute(L[i,j](r),
                              list(i=iname,j=jname)),
-                  sprintf("L[list(%s,%s)]", iname, jname),
+                  c("L", paste0("list(", iname, ",", jname, ")")),
                   new.yexp=substitute(L[list(i,j)](r),
                                       list(i=iname,j=jname)))
   attr(L, "labl") <- attr(K, "labl")
@@ -72,7 +72,7 @@
   iname <- make.parseable(paste(i))
   L <- rebadge.fv(L,
                   substitute(L[i ~ dot](r), list(i=iname)),
-                  paste("L[", iname, "~ symbol(\"\\267\")]"),
+                  c("L", paste(iname, "~ symbol(\"\\267\")")), 
                   new.yexp=substitute(L[i ~ symbol("\267")](r), list(i=iname)))
   attr(L, "labl") <- attr(K, "labl")
   return(L)  
@@ -114,7 +114,7 @@ function(X, i, j, r=NULL, breaks=NULL,
   result <-
     rebadge.fv(result, 
                substitute(Kcross[i,j](r), list(i=iname,j=jname)),
-               sprintf("K[list(%s,%s)]", iname, jname),
+               c("K", paste0("list(", iname, ",", jname, ")")), 
                new.yexp=substitute(K[list(i,j)](r),
                                    list(i=iname,j=jname)))
   return(result)
@@ -146,7 +146,7 @@ function(X, i, r=NULL, breaks=NULL,
   result <-
     rebadge.fv(result,
                substitute(K[i ~ dot](r), list(i=iname)),
-               paste("K[", iname, "~ symbol(\"\\267\")]"),
+               c("K", paste0(iname, "~ symbol(\"\\267\")")),
                new.yexp=substitute(K[i ~ symbol("\267")](r), list(i=iname)))
   return(result)
 }
@@ -209,8 +209,10 @@ function(X, I, J, r=NULL, breaks=NULL,
   # It will be given more columns later
   K <- data.frame(r=r, theo= pi * r^2)
   desc <- c("distance argument r", "theoretical Poisson %s")
-  K <- fv(K, "r", substitute(Kmulti(r), NULL),
-          "theo", , alim, c("r","{%s^{pois}}(r)"), desc, fname="K[multi]")
+  K <- fv(K, "r", quote(K[IJ](r)), 
+          "theo", , alim, c("r","{%s[%s]^{pois}}(r)"),
+          desc, fname=c("K", "list(I,J)"),
+          yexp=quote(K[list(I,J)](r)))
   
   # save numerator and denominator?
   if(ratio) {
@@ -261,15 +263,15 @@ function(X, I, J, r=NULL, breaks=NULL,
     numKun <- cumsum(wh)
     denKun <- lambdaI * lambdaJ * area
     Kun <- numKun/denKun
-    K <- bind.fv(K, data.frame(un=Kun), "hat(%s^{un})(r)",
+    K <- bind.fv(K, data.frame(un=Kun), "{hat(%s)[%s]^{un}}(r)",
                  "uncorrected estimate of %s",
                  "un")
     if(ratio) {
       # save numerator and denominator
-      numK <- bind.fv(numK, data.frame(un=numKun), "hat(%s)[un](r)",
+      numK <- bind.fv(numK, data.frame(un=numKun), "{hat(%s)[%s]^{un}}(r)",
                  "numerator of uncorrected estimate of %s",
                  "un")
-      denK <- bind.fv(denK, data.frame(un=denKun), "hat(%s)[un](r)",
+      denK <- bind.fv(denK, data.frame(un=denKun), "{hat(%s)[%s]^{un}}(r)",
                  "denominator of uncorrected estimate of %s",
                  "un")
     }
@@ -288,17 +290,17 @@ function(X, I, J, r=NULL, breaks=NULL,
       numKbm <- RS$numerator
       denKbm <- denom.area * nI * nJ
       Kbm <- numKbm/denKbm
-      K <- bind.fv(K, data.frame(bord.modif=Kbm), "hat(%s^{bordm})(r)",
+      K <- bind.fv(K, data.frame(bord.modif=Kbm), "{hat(%s)[%s]^{bordm}}(r)",
                    "modified border-corrected estimate of %s",
                    "bord.modif")
       if(ratio) {
         # save numerator and denominator
         numK <- bind.fv(numK, data.frame(bord.modif=numKbm),
-                        "hat(%s)[bordm](r)",
+                        "{hat(%s)[%s]^{bordm}}(r)",
                         "numerator of modified border-corrected estimate of %s",
                         "bord.modif")
         denK <- bind.fv(denK, data.frame(bord.modif=denKbm),
-                        "hat(%s)[bordm](r)",
+                        "{hat(%s)[%s]^{bordm}}(r)",
                         "denominator of modified border-corrected estimate of %s",
                         "bord.modif")
       }
@@ -307,14 +309,16 @@ function(X, I, J, r=NULL, breaks=NULL,
       numKb <- RS$numerator
       denKb <- lambdaJ * RS$denom.count
       Kb <- numKb/denKb
-      K <- bind.fv(K, data.frame(border=Kb), "hat(%s^{bord})(r)",
+      K <- bind.fv(K, data.frame(border=Kb), "{hat(%s)[%s]^{bord}}(r)",
                    "border-corrected estimate of %s",
                    "border")
       if(ratio) {
-        numK <- bind.fv(numK, data.frame(border=numKb), "hat(%s)[bord](r)",
+        numK <- bind.fv(numK, data.frame(border=numKb),
+                        "{hat(%s)[%s]^{bord}}(r)",
                         "numerator of border-corrected estimate of %s",
                         "border")
-        denK <- bind.fv(denK, data.frame(border=denKb), "hat(%s)[bord](r)",
+        denK <- bind.fv(denK, data.frame(border=denKb),
+                        "{hat(%s)[%s]^{bord}}(r)",
                         "denominator of border-corrected estimate of %s",
                         "border")
       }
@@ -329,14 +333,16 @@ function(X, I, J, r=NULL, breaks=NULL,
     Ktrans <- numKtrans/denKtrans
     rmax <- diameter(W)/2
     Ktrans[r >= rmax] <- NA
-    K <- bind.fv(K, data.frame(trans=Ktrans), "hat(%s^{trans})(r)",
+    K <- bind.fv(K, data.frame(trans=Ktrans), "{hat(%s)[%s]^{trans}}(r)", 
                  "translation-corrected estimate of %s",
                  "trans")
     if(ratio) {
-      numK <- bind.fv(numK, data.frame(trans=numKtrans), "hat(%s)[trans](r)",
+      numK <- bind.fv(numK, data.frame(trans=numKtrans),
+                      "{hat(%s)[%s]^{trans}}(r)",
                       "numerator of translation-corrected estimate of %s",
                       "trans")
-      denK <- bind.fv(denK, data.frame(trans=denKtrans), "hat(%s)[trans](r)",
+      denK <- bind.fv(denK, data.frame(trans=denKtrans),
+                      "{hat(%s)[%s]^{trans}}(r)",
                       "denominator of translation-corrected estimate of %s",
                       "trans")
     }
@@ -350,14 +356,14 @@ function(X, I, J, r=NULL, breaks=NULL,
     Kiso <- numKiso/denKiso
     rmax <- diameter(W)/2
     Kiso[r >= rmax] <- NA
-    K <- bind.fv(K, data.frame(iso=Kiso), "hat(%s^{iso})(r)",
+    K <- bind.fv(K, data.frame(iso=Kiso), "{hat(%s)[%s]^{iso}}(r)",
                  "Ripley isotropic correction estimate of %s",
                  "iso")
    if(ratio) {
-      numK <- bind.fv(numK, data.frame(iso=numKiso), "hat(%s)[iso](r)",
+      numK <- bind.fv(numK, data.frame(iso=numKiso), "{hat(%s)[%s]^{iso}}(r)",
                       "numerator of Ripley isotropic correction estimate of %s",
                       "iso")
-      denK <- bind.fv(denK, data.frame(iso=denKiso), "hat(%s)[iso](r)",
+      denK <- bind.fv(denK, data.frame(iso=denKiso), "{hat(%s)[%s]^{iso}}(r)",
                       "denominator of Ripley isotropic correction estimate of %s",
                       "iso")
     }

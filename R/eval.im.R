@@ -191,3 +191,33 @@ commonGrid <- local({
   commonGrid
 })
 
+im.apply <- function(X, FUN, ...) {
+  stopifnot(is.list(X))
+  if(!all(unlist(lapply(X, is.im))))
+    stop("All elements of imlist must be pixel images")
+  fun <- if(is.character(FUN)) get(FUN) else
+         if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
+  ## ensure images are compatible
+  X <- do.call(harmonise.im, X)
+  template <- X[[1]]
+  ## extract numerical values and convert to matrix with one column per image
+  vlist <- lapply(X, function(z) as.vector(as.matrix(z)))
+  vals <- matrix(unlist(vlist), ncol=length(X))
+  colnames(vals) <- names(X)
+  ok <- complete.cases(vals)
+  if(!any(ok)) {
+    ## empty result
+    return(as.im(NA, W=template))
+  }
+  ## apply function
+  resultok <- apply(vals[ok,, drop=FALSE], 1, fun, ...)
+  if(length(resultok) != sum(ok))
+    stop("FUN should yield one value per pixel")
+  ## pack up, with attention to type of data
+  d <- dim(template)
+  resultmat <- matrix(resultok[1], d[1], d[2])
+  resultmat[ok] <- resultok
+  result <- as.im(resultmat, W=X[[1]])
+  if(is.factor(resultok)) levels(result) <- levels(resultok)
+  return(result)
+}

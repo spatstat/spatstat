@@ -48,7 +48,7 @@
   There is a plot method for this class. See \code{\link{fv.object}}.
 }
 \references{
-  Baddeley, A., Rubak, E. and Moller, J. (2011)
+  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
@@ -57,7 +57,7 @@
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  Ege Rubak and Jesper Moller.
+  Ege Rubak and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
 }
 \seealso{
   Related functions:

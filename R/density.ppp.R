@@ -5,7 +5,7 @@
 #
 #  + bandwidth selection rules bw.diggle, bw.scott
 #
-#  $Revision: 1.61 $    $Date: 2013/08/24 15:07:06 $
+#  $Revision: 1.65 $    $Date: 2014/01/19 11:09:10 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -28,6 +28,11 @@ density.ppp <- function(x, sigma=NULL, ...,
   ker <- resolve.2D.kernel(..., sigma=sigma, varcov=varcov, x=x, adjust=adjust)
   sigma <- ker$sigma
   varcov <- ker$varcov
+
+  if(is.expression(weights)) 
+    weights <- eval(weights, envir=as.data.frame(x), enclos=parent.frame())
+  if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+    weights <- NULL 
 
   if(output == "points") {
     # VALUES AT DATA POINTS ONLY
@@ -119,6 +124,8 @@ densitypointsEngine <- function(x, sigma, ...,
     Sinv <- solve(varcov)
     const <- 1/(2 * pi * sqrt(detSigma))
   }
+  if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+    weights <- NULL
   # Leave-one-out computation
   # cutoff: contributions from pairs of distinct points
   # closer than 8 standard deviations

@@ -685,10 +685,12 @@ coef(summary(fit1))
  # and exp(first order potential) =  activity = beta(x,y) = exp(a+bx)
  # using the periodic correction.
 
-# Huang-Ogata fit:
-\dontrun{ppm(nztrees, ~1, Strauss(r=10), method="ho")}
-\testonly{ppm(nztrees, ~1, Strauss(r=10), method="ho", nd=16, nsim=10)}
 
+# Compare Maximum Pseudolikelihood and Huang-Ogata fits:
+\dontrun{ppm(swedishpines, ~1, Strauss(9))}
+
+\dontrun{ppm(swedishpines, ~1, Strauss(9), method="ho")}
+\testonly{ppm(swedishpines, ~1, Strauss(9), method="ho", nd=16, nsim=8)}
 
  # COVARIATES
  #

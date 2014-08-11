@@ -38,11 +38,12 @@
     (by Berman-Turner approximate maximum likelihood
     or by spatial logistic regression)
     \item Gibbs/Markov point process models
-    (by Baddeley-Turner approximate maximum pseudolikelihood
-    or Huang-Ogata approximate maximum likelihood)
+    (by Baddeley-Turner approximate maximum pseudolikelihood,
+    Coeurjolly-Rubak logistic likelihood, or
+    Huang-Ogata approximate maximum likelihood)
     \item Cox/cluster process models
     (by Waagepetersen's two-step fitting procedure
-    and minimum contrast)
+    and minimum contrast, or by composite likelihood)
   }
   The models may include spatial trend,
   dependence on covariates, and complicated interpoint interactions.
@@ -59,7 +60,8 @@
   navigate to \code{Packages > spatstat > Vignettes}).
 
   For a complete 2-day course on using \pkg{spatstat}, see the workshop notes
-  by Baddeley (2010), available on the internet.
+  by Baddeley (2010), available on the internet. (This is now somewhat
+  out-of-date but it will get you started.)
 
   Type \code{demo(spatstat)} for a demonstration 
   of the package's capabilities.
@@ -79,8 +81,13 @@
   regularly.
   
   Type \code{latest.news} to read the news documentation about
-  changes to the current installed version of \pkg{spatstat}. Type
-  \code{news(package="spatstat")} to read news documentation about
+  changes to the current installed version of \pkg{spatstat}.
+
+  See the Vignette \emph{Summary of recent updates},
+  installed with \pkg{spatstat}, which describes the main changes
+  to \pkg{spatstat} since the workshop notes were published in 2010,
+  
+  Type \code{news(package="spatstat")} to read news documentation about
   all previous versions of the package.
 }
 \section{FUNCTIONS AND DATASETS}{
@@ -241,6 +248,7 @@
 	\code{\link{chorley}} \tab Chorley-Ribble cancer data \cr
 	\code{\link{clmfires}} \tab Castilla-La Mancha forest fires \cr
 	\code{\link{copper}} \tab Berman-Huntington copper deposits data \cr
+	\code{\link{demohyper}} \tab Synthetic point patterns\cr
 	\code{\link{demopat}} \tab Synthetic point pattern \cr
 	\code{\link{finpines}} \tab Finnish Pines data \cr
 	\code{\link{flu}} \tab Influenza virus proteins \cr
@@ -260,6 +268,7 @@
 	\code{\link{osteo}} \tab Osteocyte lacunae (3D, replicated) \cr
 	\code{\link{paracou}} \tab Kimboto trees in Paracou, French Guiana \cr
 	\code{\link{ponderosa}} \tab Getis-Franklin ponderosa pine trees data \cr
+	\code{\link{pyramidal}} \tab Pyramidal neurons from 31 brains \cr
 	\code{\link{redwood}} \tab Strauss-Ripley redwood saplings data \cr
 	\code{\link{redwoodfull}} \tab Strauss redwood saplings data (full set) \cr
 	\code{\link{residualspaper}} \tab Data from Baddeley et al (2005) \cr
@@ -268,7 +277,8 @@
 	\code{\link{spruces}} \tab Spruce trees in Saxonia \cr
 	\code{\link{swedishpines}} \tab Strand-Ripley Swedish pines data \cr
 	\code{\link{urkiola}} \tab Urkiola Woods data \cr
-	\code{\link{waka}} \tab Trees in Waka national park
+	\code{\link{waka}} \tab Trees in Waka national park \cr
+	\code{\link{waterstriders}} \tab Insects on water surface 
       }
 
       \bold{To manipulate a point pattern:}
@@ -312,11 +322,11 @@
 	\code{\link{scalardilate}} \tab
 	apply scalar dilation\cr
 	\code{\link{density.ppp}} \tab
-	kernel smoothing of point pattern\cr
+	kernel estimation of point pattern intensity\cr
 	\code{\link{Smooth.ppp}} \tab
-	nearest-neightbour smoothing of point pattern\cr
+	kernel smoothing of marks of point pattern\cr
 	\code{\link{nnmark}} \tab
-	smooth the marks attached to points\cr
+	mark value of nearest data point\cr
 	\code{\link{sharpen.ppp}} \tab
 	data sharpening\cr
 	\code{\link{identify.ppp}} \tab
@@ -473,6 +483,7 @@
 	\code{\link{is.im}} \tab test whether an object is a pixel image\cr
 	\code{\link{interp.im}} \tab interpolate a pixel image\cr
 	\code{\link{blur}} \tab apply Gaussian blur to image\cr
+	\code{\link{Smooth.im}} \tab apply Gaussian blur to image\cr
 	\code{\link{connected.im}} \tab find connected components \cr
 	\code{\link{compatible.im}} \tab test whether two images have
 	compatible dimensions \cr
@@ -550,6 +561,7 @@
     \tabular{ll}{
       \code{\link{tess}} \tab create a tessellation \cr
       \code{\link{quadrats}} \tab create a tessellation of rectangles\cr
+      \code{\link{hextess}} \tab create a tessellation of hexagons \cr
       \code{\link{as.tess}} \tab convert other data to a tessellation \cr
       \code{\link{plot.tess}} \tab plot a tessellation \cr
       \code{\link{tiles}} \tab extract all the tiles of a tessellation \cr
@@ -707,7 +719,7 @@
 
   \bold{Smoothing:}
   \tabular{ll}{
-    \code{\link{density.ppp}} \tab kernel smoothed density\cr
+    \code{\link{density.ppp}} \tab kernel smoothed density/intensity\cr
     \code{\link{relrisk}} \tab kernel estimate of relative risk\cr
     \code{\link{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link{bw.diggle}} \tab cross-validated bandwidth selection
@@ -735,8 +747,12 @@
   }
 
   \bold{Summary statistics for a point pattern:}
+  Type \code{demo(sumfun)} for a demonstration of many
+  of the summary statistics.
   \tabular{ll}{
+    \code{\link{intensity}} \tab Mean intensity \cr
     \code{\link{quadratcount}} \tab Quadrat counts \cr
+    \code{\link{intensity.quadratcount}} \tab Mean intensity in quadrats \cr
     \code{\link{Fest}} \tab empty space function \eqn{F} \cr
     \code{\link{Gest}} \tab nearest neighbour distribution function \eqn{G} \cr
     \code{\link{Jest}} \tab \eqn{J}-function \eqn{J = (1-G)/(1-F)} \cr
@@ -785,6 +801,8 @@
     \code{\link{exactdt}} \tab distance from any location to nearest data point\cr 
     \code{\link{distmap}} \tab distance map image\cr
     \code{\link{distfun}} \tab distance map function\cr
+    \code{\link{nnmap}} \tab nearest point image \cr
+    \code{\link{nnfun}} \tab nearest point function \cr
     \code{\link{density.ppp}} \tab kernel smoothed density\cr
     \code{\link{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link{relrisk}} \tab kernel estimate of relative risk\cr
@@ -815,6 +833,8 @@
     multitype pair correlation function \eqn{g_{ij}}{g[i,j]} \cr
     \code{\link{pcfdot}} \tab
     multitype pair correlation function \eqn{g_{i\bullet}}{g[i.]} \cr
+    \code{\link{pcfmulti}} \tab
+    general pair correlation function \cr
     \code{\link{markconnect}} \tab
     marked connection function \eqn{p_{ij}}{p[i,j]} \cr
     \code{\link{alltypes}} \tab  estimates of the above
@@ -1068,6 +1088,9 @@
     \tab   of the fitted point process model \cr
     \code{\link{coef.ppm}} \tab Extract the fitted model coefficients\cr
     \code{\link{formula.ppm}} \tab Extract the trend formula\cr
+    \code{\link{intensity.ppm}} \tab Compute fitted intensity \cr
+    \code{\link{Kmodel.ppm}} \tab \eqn{K} function of fitted model \cr
+    \code{\link{pcfmodel.ppm}} \tab pair correlation of fitted model \cr
     \code{\link{fitted.ppm}} \tab Compute fitted conditional intensity at quadrature points \cr
     \code{\link{residuals.ppm}} \tab Compute point process residuals at quadrature points \cr
     \code{\link{update.ppm}} \tab Update the fit \cr
@@ -1436,7 +1459,7 @@
   
   Residuals for a fitted point process model, and diagnostic plots
   based on the residuals, were introduced in Baddeley et al (2005) and
-  Baddeley, Rubak and Moller (2011).
+  Baddeley, Rubak and \ifelse{latex}{\out{M\o ller}}{Moller} (2011).
   
   Type \code{demo(diagnose)}
   for a demonstration of the diagnostics features.
@@ -1504,12 +1527,13 @@
   Springer-Verlag, New York, 2006. 
   ISBN: 0-387-28311-0.
 
-  Baddeley, A., Turner, R., Moller, J. and Hazelton, M. (2005)
+  Baddeley, A., Turner, R.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.
 
-  Baddeley, A., Rubak, E. and Moller, J. (2011)
+  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
@@ -1582,6 +1606,7 @@
   Robin Corria Ainslie,
   Marcelino de la Cruz,
   Peter Dalgaard,
+  Sourav Das,
   Peter Diggle,
   Patrick Donnelly,
   Ian Dryden,
@@ -1599,7 +1624,7 @@
   Ute Hahn,
   Andrew Hardegen,
   Mandy Hering, 
-  Martin Bogsted Hansen,
+  Martin \ifelse{latex}{\out{B\o gsted}}{Bogsted} Hansen,
   Martin Hazelton,
   Juha Heikkinen,
   Kurt Hornik,
@@ -1626,11 +1651,11 @@
   Ulf Mehlig,
   Sebastian Wastl Meyer,
   Mi Xiangcheng,
-  Jesper Moller,
+  Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
   Erika Mudrak,
   Linda Stougaard Nielsen,
   Felipe Nunes,
-  Jens Oehlschlaegel,
+  Jens \ifelse{latex}{\out{Oehlschl\"{a}gel}}{Oehlschlaegel},
   Thierry Onkelinx,
   Sean O'Riordan,
   Evgeni Parilov,
@@ -1645,7 +1670,7 @@
   Barry Rowlingson,
   John Rudge,
   Farzaneh Safavimanesh,
-  Aila Sarkka,
+  Aila \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka},
   Katja Schladitz,
   Bryan Scott,
   Vadim Shcherbakov,
@@ -1660,6 +1685,7 @@
   Ben Taylor,
   Thordis Linda Thorarinsdottir,
   Berwin Turlach,
+  Kevin Ummer,
   Andrew van Burgel,
   Tobias Verbeke,
   Alexendre Villers,

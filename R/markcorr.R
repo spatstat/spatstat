@@ -2,7 +2,7 @@
 #
 #     markcorr.R
 #
-#     $Revision: 1.62 $ $Date: 2012/08/22 01:43:05 $
+#     $Revision: 1.63 $ $Date: 2014/02/07 05:34:47 $
 #
 #    Estimate the mark correlation function
 #    and related functions 
@@ -25,7 +25,7 @@ function(X, correction=c("isotropic", "Ripley", "translate"),
   v$theo <- if(normalise) 1 else var(m)    
   # fix labels
   v <- rebadge.fv(v,
-                  substitute(gamma(r), NULL),
+                  quote(gamma(r)),
                   "gamma")
   return(v)
 }
@@ -56,8 +56,8 @@ function(X, i, j, r=NULL,
     p$theo <- 1
   }
   p <- rebadge.fv(p,
-                  substitute(p[i,j](r), list(i=paste(i),j=paste(j))),
-                  sprintf("p[list(%s, %s)]", i, j),
+                  new.ylab=substitute(p[i,j](r), list(i=paste(i),j=paste(j))),
+                  new.fname=c("p", paste0("list(", i, ",", j, ")")),
                   new.yexp=substitute(p[list(i,j)](r),
                                       list(i=paste(i),j=paste(j))))
   return(p)
@@ -73,7 +73,7 @@ Emark <- function(X, r=NULL,
   E <- markcorr(X, f, r=r,
                 correction=correction, method=method,
                 ..., normalise=normalise)
-  E <- rebadge.fv(E, substitute(E(r), NULL), "E")
+  E <- rebadge.fv(E, quote(E(r)), "E")
   return(E)
 }
 
@@ -93,7 +93,7 @@ Vmark <- function(X, r=NULL,
     sig2 <- var(marks(X))
     V <- eval.fv(V/sig2)
   }
-  V <- rebadge.fv(V, substitute(V(r), NULL), "V")
+  V <- rebadge.fv(V, quote(V(r)), "V")
   attr(V, "labl") <- attr(E, "labl")
   return(V)
 }
@@ -180,16 +180,16 @@ markcorrint <-
     K <- eval.fv(sqrt(K/pi))
   attr(K, "labl") <- labl
   if(normalise && !returnL) {
-    ylab <- substitute(K[f](r), NULL)
-    fnam <- "K[f]"
+    ylab <- quote(K[f](r))
+    fnam <- c("K", "f")
   } else if(normalise && returnL) {
-    ylab <- substitute(L[f](r), NULL)
-    fnam <- "L[f]"
+    ylab <- quote(L[f](r))
+    fnam <- c("L", "f")
   } else if(!normalise && !returnL) {
-    ylab <- substitute(C[f](r), NULL)
-    fnam <- "C[f]"
+    ylab <- quote(C[f](r))
+    fnam <- c("C", "f")
   } else {
-    ylab <- substitute(sqrt(C[f](r)/pi), NULL)
+    ylab <- quote(sqrt(C[f](r)/pi))
     fnam <- "sqrt(C[f]/pi)"
   }
   K <- rebadge.fv(K, ylab, fnam)
@@ -312,23 +312,23 @@ markcorr <-
   # determine conventional name of function
   if(ftype %in% c("mul", "equ")) {
     if(normalise) {
-      ylab <- substitute(k[mm](r), NULL)
-      fnam <- "k[mm]"
+      ylab <- quote(k[mm](r))
+      fnam <- c("k", "mm")
     } else {
-      ylab <- substitute(c[mm](r), NULL)
-      fnam <- "c[mm]"
+      ylab <- quote(c[mm](r))
+      fnam <- c("c", "mm")
     }
   } else {
     if(normalise) {
-      ylab <- substitute(k[f](r), NULL)
-      fnam <- "k[f]"
+      ylab <- quote(k[f](r))
+      fnam <- c("k", "f")
     } else {
-      ylab <- substitute(c[f](r), NULL)
-      fnam <- "c[f]"
+      ylab <- quote(c[f](r))
+      fnam <- c("c", "f")
     }
   }
   result <- fv(result, "r", ylab, "theo", , alim,
-               c("r","{%s^{iid}}(r)"), desc, fname=fnam)
+               c("r","{%s[%s]^{iid}}(r)"), desc, fname=fnam)
 
   # find close pairs of points
   close <- closepairs(X, rmax)
@@ -391,7 +391,7 @@ markcorr <-
     # get smoothed estimate of mark covariance
     Mtrans <- sewsmod(dIJ, ff, edgewt, Efdenom, r, method, ...)
     result <- bind.fv(result,
-                      data.frame(trans=Mtrans), "hat(%s^{trans})(r)",
+                      data.frame(trans=Mtrans), "{hat(%s)[%s]^{trans}}(r)",
                       "translation-corrected estimate of %s",
                       "trans")
   }
@@ -401,7 +401,7 @@ markcorr <-
     # get smoothed estimate of mark covariance
     Miso <- sewsmod(dIJ, ff, edgewt, Efdenom, r, method, ...)
     result <- bind.fv(result,
-                      data.frame(iso=Miso), "hat(%s^{iso})(r)",
+                      data.frame(iso=Miso), "{hat(%s)[%s]^{iso}}(r)",
                       "Ripley isotropic correction estimate of %s",
                       "iso")
   }

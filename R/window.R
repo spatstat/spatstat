@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.135 $	$Date: 2013/11/12 09:30:10 $
+#	$Revision: 4.140 $	$Date: 2014/01/27 08:27:36 $
 #
 #
 #	A window may be either
@@ -93,12 +93,13 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       poly <- lapply(poly, as.list)
   }
   
-  # avoid re-checking if already checked, or if checking suppressed
-  checkdefault <- spatstat.options("checkpolygons")
-  check <- resolve.defaults(list(...), list(check=checkdefault))$check
-
-  # whether to calculate polygon areas
-  calculate <- resolve.defaults(list(...), list(calculate=check))$calculate
+  ## Hidden options controlling how much checking is performed
+  check <- resolve.1.default(list(check=TRUE), list(...))
+  calculate <- resolve.1.default(list(calculate=check), list(...))
+  strict <- resolve.1.default(list(strict=spatstat.options("checkpolygons")),
+                              list(...))
+  fix <- resolve.1.default(list(fix=spatstat.options("fixpolygons")),
+                           list(...))
 
   if(!poly.given && !mask.given) {
     ######### rectangle #################
@@ -197,13 +198,28 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
     w <- list(type="polygonal",
               xrange=xrange, yrange=yrange, bdry=bdry, units=unitname)
     class(w) <- "owin"
-    # check for intersection or self-intersection
-    if(check) { 
+
+    if(check && strict) { 
+      ## strict checks on geometry (self-intersection etc)
       ok <- owinpolycheck(w)
       if(!ok) {
         errors <- attr(ok, "err")
         stop(paste("Polygon data contain", commasep(errors)))
       }
+    }
+    if(check && fix) {
+      ## repair polygon data by invoking polyclip
+      ##        to intersect polygon with bounding rectangle
+      ##        (Streamlined version of intersect.owin)
+      ww <- lapply(bdry, reverse.xypolygon)
+      rr <- list(list(x=xrange[c(1,2,2,1)], y=yrange[c(2,2,1,1)]))
+      bb <- polyclip::polyclip(ww, rr, "intersection",
+                               fillA="nonzero", fillB="nonzero")
+      ## ensure correct polarity
+      totarea <- sum(unlist(lapply(bb, area.xypolygon)))
+      if(totarea < 0)
+        bb <- lapply(bb, reverse.xypolygon)
+      w$bdry <- bb
     }
     return(w)
     
@@ -409,6 +425,8 @@ as.rectangle <- function(w, ...) {
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
   else if(inherits(w, "im"))
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
+  else if(inherits(w, "layered")) 
+    return(do.call(bounding.box, unname(lapply(w, as.rectangle))))
   else {
     w <- as.owin(w, ...)
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
@@ -572,7 +590,8 @@ as.polygonal <- function(W) {
            xr <- W$xrange
            yr <- W$yrange
            return(owin(xr, yr, poly=list(x=xr[c(1,2,2,1)],y=yr[c(1,1,2,2)]),
-                       unitname=unitname(W)))
+                       unitname=unitname(W),
+                       check=FALSE))
          },
          polygonal = {
            return(W)
@@ -600,7 +619,7 @@ as.polygonal <- function(W) {
              if(ns != nf)
                stop(paste("Internal error: length(starts)=", ns,
                           ", length(finishes)=", nf))
-             if(ns > 0)
+             if(ns > 0) {
                for(k in 1:ns) {
                  yfrom <- yrow[starts[k]]
                  yto   <- yrow[finishes[k]]
@@ -610,6 +629,8 @@ as.polygonal <- function(W) {
                  # add to result
                  out <- union.owin(out, recto)
                }
+               unitname(out) <- unitname(W)
+             }
            }
            return(out)
          }
@@ -665,21 +686,21 @@ raster.xy <- function(w, drop=FALSE) {
 }
   
 nearest.raster.point <- function(x,y,w, indices=TRUE) {
-	validate.mask(w)
-	nr <- w$dim[1]
-	nc <- w$dim[2]
-        if(length(x) == 0) 
-          cc <- rr <- integer(0)
-        else {
-          cc <- 1 + round((x - w$xcol[1])/w$xstep)
-          rr <- 1 + round((y - w$yrow[1])/w$ystep)
-          cc <- pmax.int(1,pmin.int(cc, nc))
-          rr <- pmax.int(1,pmin.int(rr, nr))
-        }
-        if(indices) 
-          return(list(row=rr, col=cc))
-        else
-          return(list(x=w$xcol[cc], y=w$yrow[rr]))
+  stopifnot(is.mask(w) || is.im(w))
+  nr <- w$dim[1]
+  nc <- w$dim[2]
+  if(length(x) == 0) {
+    cc <- rr <- integer(0)
+  } else {
+    cc <- 1 + round((x - w$xcol[1])/w$xstep)
+    rr <- 1 + round((y - w$yrow[1])/w$ystep)
+    cc <- pmax.int(1,pmin.int(cc, nc))
+    rr <- pmax.int(1,pmin.int(rr, nr))
+  }
+  if(indices) 
+    return(list(row=rr, col=cc))
+  else
+    return(list(x=w$xcol[cc], y=w$yrow[rr]))
 }
 
 mask2df <- function(w) {

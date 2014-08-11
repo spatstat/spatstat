@@ -2,7 +2,7 @@
 #
 #    badgey.S
 #
-#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.13 $	$Date: 2014/02/07 04:44:47 $
 #
 #    Hybrid Geyer process
 #
@@ -56,8 +56,6 @@ BadGey <- local({
                         stop("interaction radii r must be strictly increasing")
                       if(!is.numeric(sat) || any(sat < 0))
                         stop("saturation parameters must be nonnegative numbers")
-                      if(any(ceiling(sat) != floor(sat)))
-                        warning("saturation parameter has a non-integer value")
                       if(length(sat) != length(r) && length(sat) != 1)
                         stop("vectors r and sat must have equal length")
                     },

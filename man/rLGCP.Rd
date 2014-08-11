@@ -83,7 +83,7 @@
 \code{\link{kppm}}
 }
 \references{
-  Moller, J., Syversveen, A. and Waagepetersen, R. (1998)
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J., Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
 }

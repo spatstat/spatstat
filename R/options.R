@@ -3,7 +3,7 @@
 #
 #     Spatstat Options
 #
-#    $Revision: 1.47 $   $Date: 2013/07/17 03:07:17 $
+#    $Revision: 1.49 $   $Date: 2014/01/29 03:30:46 $
 #
 #
 
@@ -60,9 +60,18 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
        image.colfun=list(
          default=function(n){topo.colors(n)},
          check=function(x) {
-           is.function(x) && length(formals(x)) > 0 && all(is.character(x(42)))
+           if(!is.function(x) || length(formals(x)) == 0) return(FALSE)
+           y <- x(42)
+           if(length(y) != 42 || !is.character(y)) return(FALSE)
+           z <- try(col2rgb(y), silent=TRUE)
+           return(!inherits(z, "try-error"))
          },
-         valid="a function f(n) that returns character values"
+         valid="a function f(n) that returns character strings, interpretable as colours"
+         ),
+       monochrome = list(
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1},
+         valid="a single logical value"
          ),
        ndummy.min=list(
          default=32,
@@ -83,6 +92,14 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
            "or", dQuote("txtbar"))
          ),
        checkpolygons = list(
+         default=FALSE,
+         check=function(x) {
+           warning("spatstat.options('checkpolygons') will be ignored in future versions of spatstat", call.=FALSE)
+           return(is.logical(x) && length(x) == 1)
+         },
+         valid="a single logical value"
+         ),
+       fixpolygons = list(
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1},
          valid="a single logical value"
@@ -243,6 +260,11 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
        ),
        old.morpho.psp=list(
          default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       use.Krect=list(
+         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        )

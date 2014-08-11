@@ -1,4 +1,358 @@
 
+	CHANGES IN spatstat VERSION 1.36-0
+
+OVERVIEW
+
+   o We thank Sebastian Meyer, Kevin Ummer, Jean-Francois Coeurjolly,
+   Ege Rubak, Rasmus Waagepetersen, Oscar Garcia and Sourav Das
+   for contributions.
+
+   o Important change to package dependencies.
+
+   o Geometrical inconsistencies in polygons are now repaired automatically.
+
+   o Improved quadrature schemes and reduced bias in ppm.
+
+   o New vignette 'Summary of Recent Changes to Spatstat'.
+
+   o Approximation to K function and pcf for Gibbs models.
+
+   o Counterpart of 'apply' for lists of images.
+
+   o Hexagonal grids and tessellations.
+
+   o Extensions to scan test and Allard-Fraley cluster set estimator.
+
+   o Change the parameters of a fitted model before simulating it.
+
+   o Accelerated Kest, Kinhom for rectangular windows.
+
+   o Extensions and improvements to plotting functions.
+
+   o Improvements to labelling of 'fv' objects.
+
+   o New demo of summary functions.
+
+   o More methods for 'intensity'.
+
+   o Version nickname: 'Intense Scrutiny'
+
+NEW FUNCTIONS
+
+   o Kmodel.ppm, pcfmodel.ppm
+   Compute approximation to K-function or pair correlation function
+   of a Gibbs point process model.
+
+   o im.apply
+   Apply a function to corresponding pixel values in several images.
+
+   o hexgrid, hextess
+   Create a hexagonal grid of points, or a tessellation of hexagonal tiles
+
+   o shift.tess, rotate.tess, reflect.tess, scalardilate.tess, affine.tess
+   Apply a geometrical transformation to a tessellation.
+
+   o quantile.ewcdf
+   Extract quantiles from a weighted cumulative distribution function.
+
+   o scanLRTS
+   Evaluate the spatially-varying test statistic for the scan test.
+
+   o pcfmulti
+   General multitype pair correlation function
+
+   o intensity.splitppp
+   Estimate intensity in each component of a split point pattern.
+
+   o intensity.quadratcount
+   Use quadrat counts to estimate intensity in each quadrat.
+
+   o as.owin.quadratcount, as.owin.quadrattest
+   Extract the spatial window in which quadrat counts were performed.
+
+   o reload.or.compute
+   Utility function for R scripts: 
+   either reload results from file, or compute them.
+
+   o to.grey
+   Convert colour to greyscale.
+
+   o Smooth.im
+   Method for Smooth() for pixel images. Currently identical to blur().
+
+   o demo(sumfun)
+   Demonstration of nonparametric summary functions in spatstat.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o Package Dependencies
+   spatstat now "Imports" (rather than "Depends" on) 
+   the libraries mgcv, deldir, abind, tensor, polyclip.
+   This means that these libraries are not accessible to the user
+   unless the user explicitly loads them by typing 'library(mgcv)' and so on.
+
+   o owin, as.owin
+   Polygon data are no longer subjected to strict checks on 
+   geometrical validity (self-crossing points, overlaps etc.)
+   Instead, polygon geometry is automatically repaired.
+   
+   o ppm
+   The default quadrature scheme for a point pattern
+   has been improved (in the case of a non-rectangular window)
+   to remove a possible source of bias.
+
+   o Performance 
+   various parts of spatstat now run slightly faster.
+
+   o scan.test 
+   Now handles multiple values of circle radius 'r'.
+
+   o plot.scan.test, as.im.scan.test
+   These functions can now give the optimal value of circle radius 'r'.
+
+   o pcfcross, pcfdot
+   Algorithms have been reimplemented using a single-pass kernel smoother
+   and now run much faster. Bandwidth selection rule improved.
+
+   o plot.listof, plot.splitppp
+   Default behaviour has changed: panels are now plotted on different scales. 
+
+   o plot.listof, plot.splitppp
+   When 'equal.scales=TRUE' the panels are plotted on exactly equal scales
+   and are exactly aligned (under certain conditions).
+
+   o ppp, marks.ppp, marks<-.ppp
+   New argument 'drop' determines whether a data frame with a single column
+   will be converted to a vector.
+
+   o simulate.ppm, rmh.ppm, rmhmodel.ppm
+   New argument 'new.coef' allows the user to change the parameters
+   of a fitted model, before it is simulated.
+
+   o logLik.ppm
+   New argument 'new.coef' allows the user to evaluate the 
+   loglikelihood for a different value of the parameter.
+
+   o clusterset
+   The argument 'result' has been renamed 'what'.
+   It is now possible to give multiple values to 'what'
+   so that both types of result can be computed together.
+
+   o residuals.ppm
+   Argument 'coefs' has been renamed 'new.coef' for consistency
+   with fitted.ppm etc. 
+
+   o residuals.ppm
+   If drop=TRUE the window associated with the residuals
+   is now taken to be the domain of integration of the composite likelihood.
+   
+   o intensity.ppp
+   Now has argument 'weights'
+
+   o density.ppp, Smooth.ppp, markmean, markvar, intensity.ppp
+   Argument 'weights' can now be an 'expression'.
+
+   o pcf
+   New argument 'domain' causes the computation to be restricted to 
+   a subset of the window.
+
+   o nnclean
+   The result now has attributes which give the fitted parameter values,
+   information about the fitting procedure, and the histogram bar heights.
+
+   o nnclean
+   Extra arguments are now passed to hist.default.
+
+   o plot.tess
+   For a tessellation represented by a pixel image, 
+   plot.tess no longer treats the pixel labels as palette colours.
+
+   o relrisk
+   New argument 'case' allows the user to specify which mark value
+   corresponds to the cases in a case-control dataset.
+
+   o Kinhom
+   Now accepts correction="good" 
+
+   o spatstat.options
+   New option ('monochrome') controls whether plots generated by spatstat
+   will be displayed in colour or in greyscale. This will eventually be
+   applied to all plot commands in spatstat. 
+
+   o plot.im, persp.im, contour.im, plot.owin, plot.psp, plot.fv, plot.fasp
+   These functions now obey spatstat.options('monochrome')
+
+   o plot.ppp, plot.owin, plot.im, plot.psp, plot.tess, plot.layered
+   New universal argument 'show.all' determines what happens
+   when a plot is added to an existing plot. If show.all = TRUE
+   then everything is plotted, including the main title and colour ribbon.
+
+   o plot.ppp
+   New argument 'show.window' 
+
+   o plot.im 
+   New arguments 'add' and 'do.plot'.
+   More arguments recognised by 'ribargs'
+
+   o plot.layered
+   New arguments 'add', 'main' 
+   Better argument handling.
+
+   o plot.fv
+   Improved handling of argument 'shade'
+
+   o layered, layerplotargs, plot.layered
+   The plotting argument can now be a list of length 1,
+   which will be replicated to the correct length.
+
+   o varblock
+   Ugly legends have been repaired.
+
+   o quad.ppm
+   New argument 'clip'
+
+   o edge.Trans
+   New arguments 'dx', 'dy'
+
+   o disc
+   Argument 'centre' can be in various formats.
+
+   o affine, shift
+   Argument 'vec' can be in various formats.
+
+   o Geyer, BadGey
+   A warning is no longer issued when the parameter 'sat' is fractional.
+
+   o adaptive.density
+   Now has argument 'verbose'
+
+   o Smooth.ppp
+   'sigma' is now a formal argument of Smooth.ppp
+
+   o plot.quadratcount, plot.quadrattest
+   These functions have now been documented.
+
+   o Summary functions and envelopes
+   Improved mathematical labels in plots.
+
+   o Kest
+   Accelerated, in the case of a rectangular window.
+
+   o Kscaled
+   Argument 'lambda' can now be a fitted model (class ppm)
+
+   o print.fv
+   Improved layout.
+
+   o plot.bermantest
+   Improved graphics.
+
+   o which.max.im
+   This function is now deprecated.
+   which.max.im(x) is superseded by im.apply(x, which.max)
+
+   o smooth.ppp, smooth.fv, smooth.msr
+   These functions are now deprecated, in favour of 'Smooth' with a capital 'S'
+
+BUG FIXES
+
+   o bw.ppl
+   Crashed if the point pattern had multiple points at the same location.
+   Fixed.
+
+   o quantile
+   Crashed when applied to the result of 'ewcdf'.
+   Fixed.
+
+   o marks<-.ppp
+   Crashed with a message about 'unrecognised format'
+   if the current or replacement values of marks
+   were date/time values (belonging to class 'Date' or 'POSIXt').
+   Fixed.
+
+   o plot.im
+   Crashed in case log=TRUE if the window was not a rectangle.
+   Fixed.
+
+   o vcov.ppm
+   Crashed sometimes for models with a hard core term
+   (Hardcore, StraussHard, MultiHard or MultiStrauss interactions).
+   Spotted by Rasmus Waagepetersen.
+   Fixed.
+
+   o multiplicity.data.frame
+   Results were incorrect and included NA's (spotted by Sebastian Meyer).
+   Fixed.
+
+   o markvar
+   Values were incorrect.
+   Fixed.
+
+   o Smooth.ppp
+   Ignored argument 'diggle'.
+   Fixed.
+
+   o rotate.im, affine.im
+   Factor-valued images were not handled correctly.
+   Fixed.
+
+   o shift.layered
+   If argument 'origin' was used, different layers were shifted by 
+   different amounts.
+   Fixed.
+
+   o tile.areas
+   Sometimes returned a list instead of a numeric vector.
+   Fixed.
+
+   o print.ppp
+   If the marks were date/time values (belonging to class 'Date' or 'POSIXt'),
+   print.ppp reported that they were double precision numbers.
+   Fixed.
+
+   o plot.layered
+   Graphics were mangled if the argument 'add=FALSE' was given explicitly.
+   Fixed.
+
+   o Smooth.ppp
+   The argument 'sigma' was only recognised if it was explicitly named.
+   For example in 'Smooth(X, 5)' the '5' was ignored.
+   Fixed.
+
+   o clusterset
+   The bounding frame of the result was smaller than the
+   original bounding frame of the point pattern dataset,
+   when result="domain" and exact=TRUE.
+   Fixed.
+
+   o plot.im
+   Ignored argument 'col' if it was a 'function(n)'.
+   Fixed.
+
+   o Kinhom
+   Ignored argument 'correction' if there were more than 1000 points.
+   Fixed.
+
+   o [.fv
+   Mangled the plot label for the y axis.
+   Fixed.
+
+   o cbind.fv
+   Mangled the plot label for the y axis.
+   Fixed.
+
+   o plot.envelope
+   Main title was always 'x'.
+   Fixed.
+
+   o print.ppp
+   Ran over the right margin.
+   Fixed.
+
+   o union.owin, intersect.owin, setminus.owin
+   Sometimes deleted the name of the unit of length.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.35-0
 
 OVERVIEW

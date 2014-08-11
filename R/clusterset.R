@@ -3,16 +3,16 @@
 #
 #   Allard-Fraley estimator of cluster region
 #
-#   $Revision: 1.6 $  $Date: 2013/10/06 04:35:24 $
+#   $Revision: 1.9 $  $Date: 2014/01/08 07:19:42 $
 #
 
-clusterset <- function(X, result=c("marks", "domain"),
+clusterset <- function(X, what=c("marks", "domain"),
                        ...,
                        verbose=TRUE,
                        fast=FALSE,
                        exact=!fast) {
   stopifnot(is.ppp(X))
-  result <- match.arg(result)
+  what <- match.arg(what, several.ok=TRUE)
   if(!missing(exact)) stopifnot(is.logical(exact))
   if(fast && exact)
     stop("fast=TRUE is incompatible with exact=TRUE")
@@ -35,7 +35,7 @@ clusterset <- function(X, result=c("marks", "domain"),
     if(verbose) cat("done.\n")
     D <- tiles(d)
     suppressWarnings(id <- as.integer(names(D)))
-    if(any(is.na(id)) && result == "marks")
+    if(any(is.na(id)) && ("marks" %in% what))
       stop("Unable to map Dirichlet tiles to data points")
     A <- area.owin(W)
     a <- unlist(lapply(D, area.owin))
@@ -48,25 +48,29 @@ clusterset <- function(X, result=c("marks", "domain"),
   logl <- -n * log(n) + m * log(m/b) + (n-m) * log((n-m)/(A-b))
   mopt <- which.max(logl)
   picked <- o[seq_len(mopt)]
+  ## map tiles to points
+  if(!fast) picked <- id[picked]
+  ## logical vector
+  is.picked <- rep.int(FALSE, n)
+  is.picked[picked] <- TRUE
   # construct result
-  switch(result,
-         marks = {
-           # map tiles to points
-           if(!fast) picked <- id[picked]
-           # label points
-           is.picked <- rep.int("no", n)
-           is.picked[picked] <- "yes"
-           is.picked <- factor(is.picked, levels=c("no", "yes"))
-           out <- X %mark% is.picked
-         },
-         domain = {
-           if(exact) {
-             out <- do.call("union.owin", unname(D[picked]))
-           } else {
-             is.picked <- rep.int(FALSE, n)
-             is.picked[picked] <- TRUE
-             out <- eval.im(is.picked[cellid])
-           }
-         })
+  out <- list(marks=NULL, domain=NULL)
+  if("marks" %in% what) {
+    ## label points
+    yesno <- factor(ifelse(is.picked, "yes", "no"), levels=c("no", "yes"))
+    out$marks <- X %mark% yesno
+  }
+  if("domain" %in% what) {
+    if(verbose) cat("Computing cluster set...")
+    if(exact) {
+      domain <- do.call("union.owin", unname(D[is.picked]))
+      domain <- rebound.owin(domain, as.rectangle(W))
+    } else {
+      domain <- eval.im(is.picked[cellid])
+    }
+    out$domain <- domain
+    if(verbose) cat("done.\n")
+  }
+  out <- if(length(what) == 1) out[[what]] else out
   return(out)
 }

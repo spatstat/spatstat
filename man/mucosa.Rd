@@ -33,17 +33,17 @@
   proportional.
 
   The data were originally collected by Dr Thomas Berntsen.
-  The data were discussed and analysed in Moller and Waagepetersen (2004,
+  The data were discussed and analysed in \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen (2004,
   pp. 2, 169).
 
   The associated object \code{mucosa.subwin} is the smaller window
-  to which the data were restricted for analysis by Moller and Waagepetersen.
+  to which the data were restricted for analysis by \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen.
 }
 \source{
   Dr Thomas Berntsen and Prof Rasmus Waagepetersen.
 }
 \references{
-  Moller, J. and Waagepetersen, R. (2004).
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2004).
   \emph{Statistical Inference and Simulation for Spatial Point Processes}.
   Chapman and Hall/CRC.
 }

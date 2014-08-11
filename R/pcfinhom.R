@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.13 $   $Date: 2013/12/10 10:05:15 $
+#   $Revision: 1.14 $   $Date: 2014/02/07 04:27:57 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -130,11 +130,11 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   
   df <- data.frame(r=r, theo=rep.int(1,length(r)))
   out <- fv(df, "r",
-            substitute(g[inhom](r), NULL), "theo", ,
+            quote(g[inhom](r)), "theo", ,
             alim,
-            c("r","{%s^{Pois}}(r)"),
+            c("r","{%s[%s]^{pois}}(r)"),
             c("distance argument r", "theoretical Poisson %s"),
-            fname="g[inhom]")
+            fname=c("g", "inhom"))
 
   ###### compute #######
 
@@ -146,7 +146,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
     if(renormalise) gT <- gT * renorm.factor
     out <- bind.fv(out,
                    data.frame(trans=gT),
-                   "hat(%s^{Trans})(r)",
+                   "{hat(%s)[%s]^{Trans}}(r)",
                    "translation-corrected estimate of %s",
                    "trans")
   }
@@ -157,7 +157,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
     if(renormalise) gR <- gR * renorm.factor
     out <- bind.fv(out,
                    data.frame(iso=gR),
-                   "hat(%s^{Ripley})(r)",
+                   "{hat(%s)[%s]^{Ripley}}(r)",
                    "isotropic-corrected estimate of %s",
                    "iso")
   }

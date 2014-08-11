@@ -50,8 +50,7 @@ pcfdot.inhom(X, i, lambdaI = NULL, lambdadot = NULL, ...,
     should be evaluated. There is a sensible default.
   }
   \item{breaks}{
-    Optional. An alternative to the argument \code{r}.
-    Not normally invoked by the user. 
+	This argument is for internal use only.
   }
   \item{kernel}{
     Choice of smoothing kernel, passed to \code{\link{density.default}}.

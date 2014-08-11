@@ -22,7 +22,7 @@ scan.test(X, r, ...,
     A point pattern (object of class \code{"ppp"}).
   }
   \item{r}{
-    Radius of circle to use. A single number.
+    Radius of circle to use. A single number or a numeric vector.
   }
   \item{\dots}{
     Optional. Arguments passed to \code{\link{as.mask}} to determine the
@@ -119,7 +119,9 @@ scan.test(X, r, ...,
   (2 times the log likelihood ratio) as a function
   of the location of the centre of the circle.
   This pixel image can be extracted from the object
-  using \code{\link{as.im}}.
+  using \code{\link{as.im.scan.test}}.
+  The Likelihood Ratio Test Statistic is computed by
+  \code{\link{scanLRTS}}.
 }
 \value{
   An object of class \code{"htest"} (hypothesis test)
@@ -141,14 +143,16 @@ scan.test(X, r, ...,
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
- \code{\link{relrisk}}
+  \code{\link{plot.scan.test}},
+  \code{\link{as.im.scan.test}},
+  \code{\link{relrisk}},
+  \code{\link{scanLRTS}}
 }
 \examples{
    nsim <- if(interactive()) 19 else 2
-   data(redwood)
-   scan.test(redwood, 0.1, method="poisson", nsim=nsim)
-   data(chorley)
-   scan.test(chorley, 1, method="binomial", case="larynx", nsim=nsim)
+   r <- if(interactive()) seq(0.5, 1, by=0.1) else c(0.5, 1)
+   scan.test(redwood, 0.1 * r, method="poisson", nsim=nsim)
+   scan.test(chorley, r, method="binomial", case="larynx", nsim=nsim)
 }
 \keyword{htest}
 \keyword{spatial}

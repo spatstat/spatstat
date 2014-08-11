@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.13 $	$Date: 2013/12/17 03:59:09 $
 #
 #    The triplets interaction
 #
@@ -75,7 +75,7 @@ Triplets <- local({
     # count triangles containing a given quadrature point
     tcount <- apply(tri, 2,
                     function(x, n) { table(factor(x, levels=1:n)) }, n=nU)
-    tcount <- rowSums(tcount)
+    tcount <- .rowSums(tcount, nrow(tcount), ncol(tcount))
     # select triangles consisting only of data points
     triX <- matrix(mapUX[tri], nrow=nrow(tri))
     isX <- apply(!is.na(triX), 1, all)
@@ -85,7 +85,7 @@ Triplets <- local({
       # count triangles of data points containing each given data point
       tXcount <- apply(triX, 2,
                        function(x, n) { table(factor(x, levels=1:n)) }, n=nX)
-      tXcount <- rowSums(tXcount)
+      tXcount <- .rowSums(tXcount, nrow(tXcount), ncol(tXcount))
     } else {
       # there are no triangles of data points
       tXcount <- rep.int(0, nX)

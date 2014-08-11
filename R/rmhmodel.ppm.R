@@ -222,146 +222,154 @@ list(
 #
 
 
-rmhmodel.ppm <- function(model, win, ..., verbose=TRUE, project=TRUE,
-                         control=rmhcontrol()) {
-  # converts ppm object `model' into format palatable to rmh.default
+rmhmodel.ppm <- function(model, win, ...,
+                         verbose=TRUE, project=TRUE,
+                         control=rmhcontrol(),
+                         new.coef=NULL) {
+  ## converts ppm object `model' into format palatable to rmh.default
   
-    verifyclass(model, "ppm")
+  verifyclass(model, "ppm")
 
-    # Ensure the fitted model is valid
-    # (i.e. exists mathematically as a point process)
-    if(!valid.ppm(model)) {
-      if(project) {
-        if(verbose)
-          cat("Model is invalid - projecting it\n")
-        model <- project.ppm(model, fatal=TRUE)
-      } else stop("The fitted model is not a valid point process")
-    }
+  if(!is.null(new.coef)) {
+    ## hack the coefficients
+    co <- coef(model)
+    check.nvector(new.coef, length(co), things="coefficients")
+    model$orig.coef <- co
+    model$coef <- new.coef
+  }
+
+  ## Ensure the fitted model is valid
+  ## (i.e. exists mathematically as a point process)
+  if(!valid.ppm(model)) {
+    if(project) {
+      if(verbose)
+        cat("Model is invalid - projecting it\n")
+      model <- project.ppm(model, fatal=TRUE)
+    } else stop("The fitted model is not a valid point process")
+  }
     
-    X <- model
-
-    if(verbose)
-      cat("Extracting model information...")
+  if(verbose)
+    cat("Extracting model information...")
     
-    # Extract essential information
-    Y <- summary(X, quick="no variances")
+  ## Extract essential information
+  Y <- summary(model, quick="no variances")
 
-    if(Y$marked && !Y$multitype)
-      stop("Not implemented for marked point processes other than multitype")
+  if(Y$marked && !Y$multitype)
+    stop("Not implemented for marked point processes other than multitype")
 
-    if(Y$uses.covars && is.data.frame(X$covariates))
-      stop(paste("This model cannot be simulated, because the",
-                 "covariate values were given as a data frame."))
+  if(Y$uses.covars && is.data.frame(model$covariates))
+    stop(paste("This model cannot be simulated, because the",
+               "covariate values were given as a data frame."))
     
-    # enforce defaults for `control'
+  ## enforce defaults for `control'
 
-    control <- rmhcontrol(control)
+  control <- rmhcontrol(control)
 
-    # adjust to peculiarities of model
+  ## adjust to peculiarities of model
     
-    control <- rmhResolveControl(control, X)
+  control <- rmhResolveControl(control, model)
     
-    ########  Interpoint interaction
-    if(Y$poisson) {
-      Z <- list(cif="poisson",
-                par=list())  # par is filled in later
-    } else {
-      # First check version number of ppm object
-      if(Y$antiquated) 
-        stop(paste("This model was fitted by a very old version",
-                   "of the package: spatstat", Y$version,
-                   "; simulation is not possible.",
-                   "Re-fit the model using your original code"))
-      else if(Y$old)
-        warning(paste("This model was fitted by an old version",
-                      "of the package: spatstat", Y$version,
-                      ". Re-fit the model using update.ppm",
-                      "or your original code"))
-      # Extract the interpoint interaction object
-      inte <- Y$entries$interaction
-      # Determine whether the model can be simulated using rmh
-      siminfo <- .Spatstat.Rmhinfo[[inte$name]]
-      if(is.null(siminfo))
-        stop(paste("Simulation of a fitted", sQuote(inte$name),
-                   "has not yet been implemented"))
+  ########  Interpoint interaction
+  if(Y$poisson) {
+    Z <- list(cif="poisson",
+              par=list())  # par is filled in later
+  } else {
+    ## First check version number of ppm object
+    if(Y$antiquated) 
+      stop(paste("This model was fitted by a very old version",
+                 "of the package: spatstat", Y$version,
+                 "; simulation is not possible.",
+                 "Re-fit the model using your original code"))
+    else if(Y$old)
+      warning(paste("This model was fitted by an old version",
+                    "of the package: spatstat", Y$version,
+                    ". Re-fit the model using update.ppm",
+                    "or your original code"))
+    ## Extract the interpoint interaction object
+    inte <- Y$entries$interaction
+    ## Determine whether the model can be simulated using rmh
+    siminfo <- .Spatstat.Rmhinfo[[inte$name]]
+    if(is.null(siminfo))
+      stop(paste("Simulation of a fitted", sQuote(inte$name),
+                 "has not yet been implemented"))
       
-      # Get fitted model's canonical coefficients
-      coeffs <- Y$entries$coef
-      if(newstyle.coeff.handling(inte)) {
-        # extract only the interaction coefficients
-        Vnames <- Y$entries$Vnames
-        IsOffset <- Y$entries$IsOffset
-        coeffs <- coeffs[Vnames[!IsOffset]]
-      }
-      # Translate the model to the format required by rmh.default
-      Z <- siminfo(coeffs, inte)
-      if(is.null(Z))
-        stop("The model cannot be simulated")
-      else if(is.null(Z$cif))
-        stop(paste("Internal error: no cif returned from .Spatstat.Rmhinfo"))
+    ## Get fitted model's canonical coefficients
+    coeffs <- Y$entries$coef
+    if(newstyle.coeff.handling(inte)) {
+      ## extract only the interaction coefficients
+      Vnames <- Y$entries$Vnames
+      IsOffset <- Y$entries$IsOffset
+      coeffs <- coeffs[Vnames[!IsOffset]]
     }
+    ## Translate the model to the format required by rmh.default
+    Z <- siminfo(coeffs, inte)
+    if(is.null(Z))
+      stop("The model cannot be simulated")
+    else if(is.null(Z$cif))
+      stop(paste("Internal error: no cif returned from .Spatstat.Rmhinfo"))
+  }
 
-    # Don't forget the types
-    if(Y$multitype && is.null(Z$types))
-      Z$types <- levels(Y$entries$marks)
+  ## Don't forget the types
+  if(Y$multitype && is.null(Z$types))
+    Z$types <- levels(Y$entries$marks)
        
-    ######## Window for result 
+  ######## Window for result 
     
-    if(missing(win))
-      win <- Y$entries$data$window
+  if(missing(win))
+    win <- Y$entries$data$window
 
-    Z$w <- win
+  Z$w <- win
 
-    ######## Expanded window for simulation?
+  ######## Expanded window for simulation?
 
-    covims <- if(Y$uses.covars) X$covariates[Y$covars.used] else NULL
+  covims <- if(Y$uses.covars) model$covariates[Y$covars.used] else NULL
     
-    wsim <- rmhResolveExpansion(win, control, covims, "covariate")$wsim
+  wsim <- rmhResolveExpansion(win, control, covims, "covariate")$wsim
       
-    ###### Trend or Intensity ############
+  ###### Trend or Intensity ############
 
-    if(verbose)
-      cat("Evaluating trend...")
+  if(verbose)
+    cat("Evaluating trend...")
     
-    if(Y$stationary) {
-      # first order terms (beta or beta[i]) are carried in Z$par
-      beta <- as.numeric(Y$trend$value)
-      Z$trend <- NULL
+  if(Y$stationary) {
+    ## first order terms (beta or beta[i]) are carried in Z$par
+    beta <- as.numeric(Y$trend$value)
+    Z$trend <- NULL
+  } else {
+    ## trend terms present
+    ## all first order effects are subsumed in Z$trend
+    beta <- if(!Y$marked) 1 else rep.int(1, length(Z$types))
+    ## predict on window possibly larger than original data window
+    Z$trend <- 
+      if(wsim$type == "mask")
+        predict(model, window=wsim, type="trend", locations=wsim)
+      else 
+        predict(model, window=wsim, type="trend")
+  }
+    
+  Ncif <- length(Z$cif)
+  if(Ncif == 1) {
+    ## single interaction
+    Z$par[["beta"]] <- beta
+  } else {
+    ## hybrid interaction
+    if(all(Z$ntypes == 1)) {
+      ## unmarked model: scalar 'beta' is absorbed in first cif
+      absorb <- 1
     } else {
-      # trend terms present
-      # all first order effects are subsumed in Z$trend
-      beta <- if(!Y$marked) 1 else rep.int(1, length(Z$types))
-      # predict on window possibly larger than original data window
-      Z$trend <- 
-        if(wsim$type == "mask")
-          predict(X, window=wsim, type="trend", locations=wsim)
-        else 
-          predict(X, window=wsim, type="trend")
+      ## multitype model: vector 'beta' is absorbed in a multitype cif
+      absorb <- min(which(Z$ntypes > 1))
     }
+    Z$par[[absorb]]$beta <- beta
+    ## other cifs have par$beta = 1 
+    for(i in (1:Ncif)[-absorb])
+      Z$par[[i]]$beta <- rep.int(1, Z$ntypes[i])
+  }
     
-    Ncif <- length(Z$cif)
-    if(Ncif == 1) {
-      # single interaction
-      Z$par[["beta"]] <- beta
-    } else {
-      # hybrid interaction
-      if(all(Z$ntypes == 1)) {
-        # unmarked model: scalar 'beta' is absorbed in first cif
-        absorb <- 1
-      } else {
-        # multitype model: vector 'beta' is absorbed in a multitype cif
-        absorb <- min(which(Z$ntypes > 1))
-      }
-      Z$par[[absorb]]$beta <- beta
-      # other cifs have par$beta = 1 
-      for(i in (1:Ncif)[-absorb])
-        Z$par[[i]]$beta <- rep.int(1, Z$ntypes[i])
-    }
-    
-    if(verbose)
-      cat("done.\n")
-    Z <- rmhmodel(Z, ...)
-    return(Z)
+  if(verbose)
+    cat("done.\n")
+  Z <- rmhmodel(Z, ...)
+  return(Z)
 }
 
 rmhResolveExpansion <- function(win, control, imagelist, itype="covariate") {

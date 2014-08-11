@@ -30,10 +30,17 @@ ewcdf(x, weights = rep(1/length(x), length(x)))
   ignored.
 
   If \code{weights} is omitted, the default is equivalent to
-  \code{ecdf(x)}.
+  \code{ecdf(x)} except for the class membership.
+
+  The result of \code{ewcdf} is a function, of class \code{"ewcdf"},
+  inheriting from the classes \code{"ecdf"} and \code{"stepfun"}.
+  The class \code{ewcdf} has methods for \code{print} and \code{quantile}.
+  The inherited class \code{ecdf}
+  has methods for \code{plot} and \code{summary}.
 }
 \value{
-  A function, of class \code{"ecdf"}, inheriting from \code{"stepfun"}.
+  A function, of class \code{"ewcdf"}, inheriting from 
+  \code{"ecdf"} and \code{"stepfun"}. 
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
@@ -42,7 +49,9 @@ ewcdf(x, weights = rep(1/length(x), length(x)))
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
-  \code{\link{ecdf}}
+  \code{\link{ecdf}}.
+  
+  \code{\link{quantile.ewcdf}}
 }
 \examples{
    x <- rnorm(100)

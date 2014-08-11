@@ -121,7 +121,7 @@ Kcom <- local({
 
   # residuals
   resid <- residuals(fit, type="raw",drop=FALSE,
-                    coefs=truecoef, quad=hi.res)
+                    new.coef=truecoef, quad=hi.res)
   resval  <- with(resid, "increment")
   rescts  <- with(resid, "continuous")
   if(restrict) {

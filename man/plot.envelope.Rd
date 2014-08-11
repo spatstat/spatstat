@@ -5,13 +5,14 @@
   Plot method for the class \code{"envelope"}.
 }
 \usage{
- \method{plot}{envelope}(x, \dots)
+ \method{plot}{envelope}(x, \dots, main)
 }
 \arguments{
   \item{x}{
     An object of class \code{"envelope"}, containing the variables to be plotted
     or variables from which the plotting coordinates can be computed.
   }
+  \item{main}{Main title for plot.}
   \item{\dots}{
     Extra arguments passed to \code{\link{plot.fv}}.
   }

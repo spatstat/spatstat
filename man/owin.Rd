@@ -107,6 +107,16 @@ describing a window in the two-dimensional plane.
   Functions \code{\link{square}} and \code{\link{disc}}
   will create square and circular windows, respectively.
 }
+\section{Validity of polygon data}{
+  Polygon data may contain geometrical inconsistencies such as
+  self-intersections and overlaps. These inconsistencies must be
+  removed to prevent problems in other \pkg{spatstat} functions.
+  By default, polygon data will be repaired automatically
+  using polygon-clipping code.
+  The repair process may change the number of vertices in a polygon
+  and the number of polygon components. 
+  To disable the repair process, set \code{spatstat.options(fixpolygons=FALSE)}.
+}
 \seealso{
   \code{\link{square}},
   \code{\link{disc}},

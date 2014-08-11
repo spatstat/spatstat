@@ -51,9 +51,7 @@
     there is a sensible default.
   }
   \item{breaks}{
-    An alternative to the argument \code{r}.
-    Not normally invoked by the user.
-    See Details.
+    This argument is for internal use only.
   }
   \item{ratio}{
     Logical. 
@@ -124,7 +122,7 @@
   vector with length equal to the number of points in \code{X}.
 
   If \code{lambda} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using

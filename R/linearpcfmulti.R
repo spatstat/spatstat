@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.3 $ $Date: 2013/01/18 07:56:49 $
+# $Revision: 1.2 $ $Date: 2014/02/16 08:50:37 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -17,13 +17,10 @@ linearpcfdot <- function(X, i, r=NULL, ..., correction="Ang") {
   I <- (marx == i)
   J <- rep(TRUE, npoints(X))  # i.e. all points
   result <- linearpcfmulti(X, I, J,
-                         r=r, correction=correction, ...)
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(linearpcf[i ~ dot](r), list(i=iname)),
-               paste("linearpcf[", iname, "~ symbol(\"\\267\")]"),
-               new.yexp=substitute(linearpcf[i ~ symbol("\267")](r), list(i=iname)))
+                           r=r, correction=correction, ...)
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  result <- rebadge.as.dotfun(result, "g", type, i)
   return(result)
 }
 
@@ -45,14 +42,9 @@ linearpcfcross <- function(X, i, j, r=NULL, ..., correction="Ang") {
     result <- linearpcfmulti(X, I, J, r=r, correction=correction, ...)
   }
   # rebrand
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(linearpcfcross[i,j](r), list(i=iname,j=jname)),
-               sprintf("linearpcf[list(%s,%s)]", iname, jname),
-               new.yexp=substitute(linearpcf[list(i,j)](r),
-                                   list(i=iname,j=jname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  result <- rebadge.as.crossfun(result, "g", type, i, j)
   return(result)
 }
 
@@ -87,16 +79,10 @@ linearpcfmulti <- function(X, I, J, r=NULL, ..., correction="Ang") {
   denom <- (nI * nJ - nIandJ)/lengthL
   g <- linearPCFmultiEngine(X, I, J, r=r, denom=denom, correction=correction, ...)
   # set appropriate y axis label
-  switch(correction,
-         Ang  = {
-           ylab <- quote(pcfmulti[L](r))
-           fname <- "pcfmulti[L]"
-         },
-         none = {
-           ylab <- quote(pcfmulti[net](r))
-           fname <- "pcfmulti[net]"
-         })
-  g <- rebadge.fv(g, new.ylab=ylab, new.fname=fname)
+  correction <- attr(g, "correction")
+  type <- if(correction == "Ang") "L" else "net"
+  g <- rebadge.as.crossfun(g, "g", type, "I", "J")
+  attr(g, "correction") <- correction
   return(g)
 }
 
@@ -118,12 +104,9 @@ linearpcfdot.inhom <- function(X, i, lambdaI, lambdadot,
   result <- linearpcfmulti.inhom(X, I, J, lambdaI, lambdadot, 
                                r=r, correction=correction, normalise=normalise,
                                ...)
-  iname <- make.parseable(paste(i))
-  result <-
-    rebadge.fv(result,
-               substitute(linearpcf[inhom, i ~ dot](r), list(i=iname)),
-               paste("linearpcf[list(inhom,", iname, "~ symbol(\"\\267\"))]"),
-               new.yexp=substitute(linearpcf[list(inhom, i ~ symbol("\267"))](r), list(i=iname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  result <- rebadge.as.dotfun(result, "g", type, i)
   return(result)
 }
 
@@ -151,14 +134,9 @@ linearpcfcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
                                  normalise=normalise, ...)
   }
   # rebrand
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(linearpcf[inhom,i,j](r), list(i=iname,j=jname)),
-               sprintf("linearpcf[list(inhom,%s,%s)]", iname, jname),
-               new.yexp=substitute(linearpcf[list(inhom,i,j)](r),
-                                   list(i=iname,j=jname)))
+  correction <- attr(result, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  result <- rebadge.as.crossfun(result, "g", type, i, j)
   return(result)
 }
 
@@ -196,16 +174,10 @@ linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
                             reweight=weightsIJ, denom=denom,
                             correction=correction, ...)
   # set appropriate y axis label
-  switch(correction,
-         Ang  = {
-           ylab <- quote(pcfmulti[L](r))
-           fname <- "pcfmulti[L]"
-         },
-         none = {
-           ylab <- quote(pcfmulti[net](r))
-           fname <- "pcfmulti[net]"
-         })
-  g <- rebadge.fv(g, new.ylab=ylab, new.fname=fname)
+  correction <- attr(g, "correction")
+  type <- if(correction == "Ang") "L, inhom" else "net, inhom"
+  g <- rebadge.as.crossfun(g, "g", type, "I", "J")
+  attr(g, "correction") <- correction
   return(g)
 }
 
@@ -228,15 +200,25 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   r <- breaks$r
   rmax <- breaks$max
   #
-  if(np < 2) {
+  if(correction == "Ang") {
+    fname <- c("g", "list(L, I, J)")
+    ylab <- quote(g[L,I,J](r))
+  } else {
+    fname <- c("g", "list(net, I, J)")
+    ylab <- quote(g[net,I,J](r))
+  }
+  #
+   if(np < 2) {
     # no pairs to count: return zero function
     zeroes <- rep(0, length(r))
     df <- data.frame(r = r, est = zeroes)
-    g <- fv(df, "r", substitute(linearpcf(r), NULL),
+    g <- fv(df, "r", ylab,
             "est", . ~ r, c(0, rmax),
-            c("r", "%s(r)"),
+            c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname = "linearpcf")
+            fname = fname)
+    unitname(g) <- unitname(X)
+    attr(g, "correction") <- correction
     return(g)
   }
   #
@@ -263,8 +245,10 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   #---  compile into pair correlation function ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    g <- compilepcf(DIJ, r, denom=denom, check=FALSE)
+    g <- compilepcf(DIJ, r, denom=denom, check=FALSE, fname=fname)
+    g <- rebadge.as.crossfun(g, "g", "net", "I", "J")    
     unitname(g) <- unitname(X)
+    attr(g, "correction") <- correction
     return(g)
   }
   if(correction == "none")
@@ -291,15 +275,21 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   }
   # compute pcf
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  g <- compilepcf(DIJ, r, weights=wt, denom=denom, check=FALSE, ...)
+  g <- compilepcf(DIJ, r, weights=wt, denom=denom, check=FALSE, ...,
+                  fname=fname)
+  ## rebadge and tweak
+  g <- rebadge.as.crossfun(g, "g", "L", "I", "J")
+  fname <- attr(g, "fname")
   # tack on theoretical value
-  g <- bind.fv(g, data.frame(theo=rep(1,length(r))), "%s[theo](r)",
+  g <- bind.fv(g, data.frame(theo=rep(1,length(r))),
+               makefvlabel(NULL, NULL, fname, "pois"),
                "theoretical Poisson %s")
   unitname(g) <- unitname(X)
   fvnames(g, ".") <- rev(fvnames(g, "."))
   # show working
   if(showworking)
     attr(g, "working") <- list(DIJ=DIJ, wt=wt)
+  attr(g, "correction") <- correction
   return(g)
 }
 

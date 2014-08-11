@@ -202,21 +202,23 @@
 }
 \examples{
    # bramblecanes (3 marks).
+   bram <- bramblecanes
    \testonly{
-      bramblecanes <- bramblecanes[c(seq(1, 744, by=20), seq(745, 823, by=4))]
+      bram <- bram[c(seq(1, 744, by=20), seq(745, 823, by=4))]
    }
-   bF <- alltypes(bramblecanes,"F",verb=TRUE)
+   bF <- alltypes(bram,"F",verb=TRUE)
    plot(bF)
    if(interactive()) {
-     plot(alltypes(bramblecanes,"G"))
-     plot(alltypes(bramblecanes,"Gdot"))
+     plot(alltypes(bram,"G"))
+     plot(alltypes(bram,"Gdot"))
    }
    
    # Swedishpines (unmarked).
+  swed <- swedishpines
    \testonly{
-     swedishpines <- swedishpines[1:25]
+     swed <- swed[1:25]
    }
-   plot(alltypes(swedishpines,"K"))
+   plot(alltypes(swed,"K"))
 
    plot(alltypes(amacrine, "pcf"), ylim=c(0,1.3))
 
@@ -228,9 +230,9 @@
    }
 
    # envelopes
-   bKE <- alltypes(bramblecanes,"K",envelope=TRUE,nsim=19)
+   bKE <- alltypes(bram,"K",envelope=TRUE,nsim=19)
    \dontrun{
-   bFE <- alltypes(bramblecanes,"F",envelope=TRUE,nsim=19,global=TRUE)
+   bFE <- alltypes(bram,"F",envelope=TRUE,nsim=19,global=TRUE)
    }
 
    # extract one entry

@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.125 $    $Date: 2013/11/29 01:50:26 $
+#    $Revision: 1.132 $    $Date: 2014/01/09 06:53:08 $
 #
 #
 matrowsum <- function(x) {
@@ -233,31 +233,52 @@ revcumsum <- function(x) {
   }
 }
 
-prolongseq <- function(x, newrange) {
+prolongseq <- function(x, newrange, step=NULL) {
+  ## Extend a sequence x so that it covers the new range.
   stopifnot(length(newrange) == 2 && newrange[1] < newrange[2])
-  stopifnot(length(x) >= 2)
-  dx <- diff(x)
-  if(any(dx <= 0))
-    stop("x must be an increasing sequence")
-  if(diff(range(dx)) > 0.01 * abs(mean(dx)))
-    stop("x must be evenly spaced")
-  dx <- mean(dx)
+  ## Check 'x' is an evenly-spaced sequence
+  if(length(x) > 1) {
+    dx <- diff(x)
+    if(any(dx <= 0))
+      stop("x must be an increasing sequence")
+    if(diff(range(dx)) > 0.01 * abs(mean(dx)))
+      stop("x must be evenly spaced")
+  }
+  ## Infer step length
+  if(!is.null(step)) {
+    check.1.real(step)
+    stopifnot(step > 0)
+  } else if(length(x) > 1) {
+    step <- mean(dx)
+  } else stop("step is needed when x is a single value")
 
-  # add or trim data to left
+  ## 
+  if(max(x) < newrange[1] || min(x) > newrange[2])
+    stop("x lies entirely outside the desired range")
+    
+  ## add or trim data to left
   if(x[1] > newrange[1]) {
-    leftbit <- seq(from=x[1], to=newrange[1], by= -dx) 
-    x <- c(rev(leftbit), x[-1])
-  } else 
+    leftbit <- seq(from=x[1], to=newrange[1], by= -step)[-1]
+    x <- c(rev(leftbit), x)
+    nleft <- length(leftbit)
+  } else {
+    nx <- length(x)
     x <- x[x >= newrange[1]]
+    nleft <- length(x) - nx
+  }
 
   # add or trim data to right
   nx <- length(x)
   if(newrange[2] > x[nx]) {
-    rightbit <- seq(from=x[nx], to=newrange[2], by= dx)
-    x <- c(x[-nx], rightbit)
-  } else 
+    rightbit <- seq(from=x[nx], to=newrange[2], by= step)[-1]
+    x <- c(x, rightbit)
+    nright <- length(rightbit)
+  } else {
     x <- x[x <= newrange[2]]
-
+    nright <- length(x) - nx
+  }
+  attr(x, "nleft") <- nleft
+  attr(x, "nright") <- nright
   return(x)
 }
 
@@ -417,6 +438,28 @@ numalign <- function(i, nmax, zero="0") {
   return(out)
 }
 
+as2vector <- function(x) {
+  ## convert various wacky formats to numeric vector of length 2
+  ## for use as coordinates of a single point.
+  xname <- deparse(substitute(x))
+  if(is.numeric(x)) {
+    if(length(x) != 2)
+      stop(paste(xname, "should have length 2"))
+    return(x)
+  }
+  if(is.ppp(x)) {
+    if(npoints(x) != 1)
+      stop(paste(xname, "should consist of exactly one point"))
+    return(c(x$x, x$y))
+  }
+  if(is.list(x) && all(c("x", "y") %in% names(x))) {
+    if(length(x$x) != 1) stop(paste0(xname, "$x should have length 1"))
+    if(length(x$y) != 1) stop(paste0(xname, "$y should have length 1"))
+    return(c(x$x, x$y))
+  }
+  stop(paste("Format of", sQuote(xname), "not understood"))
+}
+
 ensure2vector <- function(x) {
   xname <- deparse(substitute(x))
   if(!is.numeric(x))
@@ -444,8 +487,8 @@ ensure3Darray <- function(x) {
   return(x)
 }
 
-check.nvector <- function(v, npoints, fatal=TRUE, things="data points",
-                          naok=FALSE) {
+check.nvector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
+                          naok=FALSE, warn=FALSE) {
   # vector of numeric values for each point/thing
   vname <- sQuote(deparse(substitute(v)))
   whinge <- NULL
@@ -453,21 +496,26 @@ check.nvector <- function(v, npoints, fatal=TRUE, things="data points",
     whinge <- paste(vname, "is not numeric")
   else if(!is.atomic(v) || !is.null(dim(v)))  # vector with attributes
     whinge <- paste(vname, "is not a vector")
-  else if(length(v) != npoints)
+  else if(!is.null(npoints) && (length(v) != npoints))
     whinge <- paste("The length of", vname,
-                    "should equal the number of", things)
+                    paren(paste0("=", length(v))), 
+                    "should equal the number of", things,
+                    paren(paste0("=", npoints)))
   else if(!naok && any(is.na(v)))
     whinge <- paste("Some values of", vname, "are NA or NaN")
   #
   if(!is.null(whinge)) {
-    if(fatal) stop(whinge) else return(FALSE)
+    if(fatal) stop(whinge)
+    if(warn) warning(whinge)
+    return(FALSE)
   }
   return(TRUE)
 }
 
-check.nmatrix <- function(m, npoints, fatal=TRUE, things="data points",
-                          naok=FALSE, squarematrix=TRUE, matchto="nrow") {
-  # matrix of values for each thing or each pair of things
+check.nmatrix <- function(m, npoints=NULL, fatal=TRUE, things="data points",
+                          naok=FALSE, squarematrix=TRUE, matchto="nrow",
+                          warn=FALSE) {
+  ## matrix of values for each thing or each pair of things
   mname <- sQuote(deparse(substitute(m)))
   whinge <- NULL
   if(!is.matrix(m))
@@ -476,15 +524,23 @@ check.nmatrix <- function(m, npoints, fatal=TRUE, things="data points",
     whinge <- paste(mname, "should be a square matrix")
   else if(!naok && any(is.na(m)))
     whinge <- paste("Some values of", mname, "are NA or NaN")
-  else if(matchto=="nrow" && nrow(m) != npoints)
-    whinge <- paste("Number of rows in", mname,
-               "does not match number of", things)
-  else if(matchto=="ncol" && ncol(m) != npoints)
-    whinge <- paste("Number of columns in", mname,
-               "does not match number of", things)
-  #
+  else if(!is.null(npoints)) {
+    if(matchto=="nrow" && nrow(m) != npoints)
+      whinge <- paste("Number of rows in", mname,
+                      paren(paste0("=", nrow(m))),
+                      "does not match number of", things,
+                      paren(paste0("=", npoints)))
+    else if(matchto=="ncol" && ncol(m) != npoints)
+      whinge <- paste("Number of columns in", mname,
+                      paren(paste0("=", ncol(m))),
+                      "does not match number of", things,
+                      paren(paste0("=", npoints)))
+  }
+  ##
   if(!is.null(whinge)) {
-    if(fatal) stop(whinge) else return(FALSE)
+    if(fatal) stop(whinge)
+    if(warn) warning(whinge)
+    return(FALSE)
   }
   return(TRUE)
 }
@@ -541,6 +597,7 @@ check.named.thing <- function(x, nam, namopt=character(0), xtitle=NULL,
     stop(whinge, call.=FALSE)
   return(whinge)
 }
+
 
 forbidNA <- function(x, context="", xname, fatal=TRUE, usergiven=TRUE) {
   if(missing(xname)) xname <- sQuote(deparse(substitute(x)))
@@ -766,6 +823,14 @@ nzpaste <- function(..., sep=" ", collapse=NULL) {
   v <- list(...)
   ok <- unlist(lapply(v, function(z) {any(nzchar(z))}))
   do.call("paste", append(v[ok], list(sep=sep, collapse=collapse)))
+}
+
+substringcount <- function(x, y) {
+  ## count occurrences of 'x' in 'y'
+  yy <- paste0("a", y, "a")
+  splot <- strsplit(yy, split=x, fixed=TRUE)
+  nhits <- unlist(lapply(splot, length)) - 1
+  return(nhits)
 }
 
 is.parseable <- function(x) {

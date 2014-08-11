@@ -123,13 +123,13 @@
   Funwi-Gabga, N. (2008)
   \emph{A pastoralist survey and fire impact assessment
   in the Kagwene Gorilla Sanctuary, Cameroon}. M.Sc. thesis,
-  Geology and Environmental Science, University of Buea.
+  Geology and Environmental Science, University of Buea, Cameroon.
 
   Funwi-Gabga, N. and Mateu, J. (2012)
   Understanding the nesting spatial behaviour of gorillas
   in the Kagwene Sanctuary, Cameroon.
-  \emph{Stochastic Environmental Research and Risk Assessment},
-  in press.
+  \emph{Stochastic Environmental Research and Risk Assessment}
+  \bold{26} (6), 793--811.
 }
 \examples{
   summary(gorillas)

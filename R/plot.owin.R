@@ -3,13 +3,13 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.41 $	$Date: 2013/10/09 00:50:18 $
+#	$Revision: 1.42 $	$Date: 2014/01/29 04:57:59 $
 #
 #
 #
 
 plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
-                      type = c("w", "n"), 
+                      type = c("w", "n"), show.all=!add,
                       hatch=FALSE, angle=45, spacing=diameter(x)/50,
                       invert=FALSE)
 {
@@ -51,15 +51,16 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
     guesslinespace <- 0.08 * diff(yr)
     ylim[2] <- ylim[2] + nlines * guesslinespace
     # set up plot with equal scales
-    do.call.matched("plot.default",
+    do.call.plotfun("plot.default",
                     resolve.defaults(list(x=numeric(0), y=numeric(0),
                                           type="n"),
                                      list(...),
                                      list(xlim=xlim, ylim=ylim,
                                           ann=FALSE, axes=FALSE,
                                           asp=1.0)))
-    
-    # add title in a reasonable place!
+  }
+  if(show.all) {
+    ## add title in a reasonable place!
     if(nlines > 0) {
       parval <- resolve.defaults(list(...), par())
       mainheight <- strheight(main, units="user", cex=parval$cex.main)
@@ -70,12 +71,11 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
            col=parval$col.main,
            font=parval$font.main)
     }
-
   }
   
 # Draw surrounding box
   if(box)
-    do.call.matched("segments",
+    do.call.plotfun("segments",
                     resolve.defaults(
                                      list(x0=xr[c(1,2,2,1)],
                                           y0=yr[c(1,1,2,2)],
@@ -94,7 +94,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
          rectangle = {
            Wpoly <- as.polygonal(W)
            po <- Wpoly$bdry[[1]]
-           do.call.matched("polygon",
+           do.call.plotfun("polygon",
                            resolve.defaults(list(x=po),
                                             list(...)),
                            extrargs="lwd")
@@ -130,7 +130,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
              # No triangulation required;
              # simply plot the polygons
              for(i in seq_along(p))
-               do.call.matched("polygon",
+               do.call.plotfun("polygon",
                                resolve.defaults(
                                                 list(x=p[[i]]),
                                                 list(...)),
@@ -141,7 +141,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
              if(!(lucy %in% c("xfig","pictex","X11"))) {
                xx <- unlist(lapply(p, function(a) {c(NA, a$x)}))[-1]
                yy <- unlist(lapply(p, function(a) {c(NA, a$y)}))[-1]
-               do.call.matched("polypath",
+               do.call.plotfun("polypath",
                                resolve.defaults(list(x=xx,y=yy),
                                                 list(border=col.poly),
                                                 list(...)))
@@ -154,7 +154,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                  # Fill pieces with colour (and draw border in same colour)
                  pp <- broken$bdry
                  for(i in seq_len(length(pp)))
-                   do.call.matched("polygon",
+                   do.call.plotfun("polygon",
                                    resolve.defaults(list(x=pp[[i]],
                                                          border=col.poly),
                                                     list(...)))
@@ -162,7 +162,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
              }
              # Now draw polygon boundaries
              for(i in seq_along(p))
-               do.call.matched("polygon",
+               do.call.plotfun("polygon",
                                resolve.defaults(
                                                 list(x=p[[i]]),
                                                 list(density=0, col=NA),
@@ -191,9 +191,12 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
              if(length(col) == 1) 
                col <- c(par("fg"), col)
            }
-           # invert colours?
+           ## invert colours?
            if(invert)
              col <- rev(col)
+           ## convert to greyscale?
+           if(spatstat.options("monochrome"))
+             col <- to.grey(col)
            
            do.call.matched("image.default",
                            resolve.defaults(
@@ -252,3 +255,4 @@ break.holes <- function(x, splitby=NULL, depth=0, maxdepth=100) {
                       depth=depth+1, maxdepth=max(maxdepth, 4*nholes))
   return(xnew)
 }
+

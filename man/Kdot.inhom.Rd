@@ -58,8 +58,7 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
       See below for important conditions on \eqn{r}.
   }
   \item{breaks}{
-    Optional. An alternative to the argument \code{r}.
-    Not normally invoked by the user. See the \bold{Details} section.
+	This argument is for internal use only.
   }
   \item{correction}{
     A character vector containing any selection of the
@@ -166,7 +165,7 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     }
   }
   If \code{lambdaI} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -198,7 +197,7 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
   result of \code{Kcross.inhom}; see \code{\link{pcf}}.
 }
 \references{
-  Moller, J. and Waagepetersen, R.
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.
   Statistical Inference and Simulation for Spatial Point Processes
   Chapman and Hall/CRC
   Boca Raton, 2003.

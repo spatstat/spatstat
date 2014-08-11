@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.45 $    $Date: 2013/07/26 07:44:42 $
+#           $Revision: 1.46 $    $Date: 2014/02/17 02:17:49 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -471,14 +471,14 @@ Kest.fft <- function(X, sigma, r=NULL, breaks=NULL) {
   w <- X$window
   alim <- c(0, min(diff(w$xrange), diff(w$yrange))/4)
   out <- fv(result,
-            "r", substitute(K[fft](r), NULL),
+            "r", quote(K(r)),
             "border",
              . ~ r, alim,
-            c("r", "{%s^{pois}}(r)", "{hat(%s)^{bord}}(r)"),
+            c("r", "%s[pois](r)", "hat(%s)[fb](r)"),
             c("distance argument r",
               "theoretical Poisson %s",
-              "border-corrected estimate of %s"),
-            fname="K[fft]",
+              "border-corrected FFT estimate of %s"),
+            fname="K",
             unitname=unitname(X)
             )
   return(out)

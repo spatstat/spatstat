@@ -3,13 +3,12 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.9 $  $Date: 2013/08/29 04:17:05 $
+#  $Revision: 1.17 $  $Date: 2014/01/19 11:27:11 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
-  message("smooth.ppp will soon be deprecated: use the generic Smooth with a capital S")
-#  .Deprecated("Smooth.ppp", package="spatstat",
-#     msg="smooth.ppp is deprecated: use the generic Smooth with a capital S")
+  .Deprecated("Smooth.ppp", package="spatstat",
+    msg="smooth.ppp is deprecated: use the generic Smooth with a capital S")
   Smooth(X, ..., weights=weights, at=at)
 }
 
@@ -17,18 +16,24 @@ Smooth <- function(X, ...) {
   UseMethod("Smooth")
 }
 
-Smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
+Smooth.ppp <- function(X, sigma=NULL, ...,
+                       weights=rep(1, npoints(X)), at="pixels",
+                       edge=TRUE, diggle=FALSE) {
   verifyclass(X, "ppp")
   if(!is.marked(X, dfok=TRUE))
     stop("X should be a marked point pattern")
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
-  # determine smoothing parameters
-  ker <- resolve.2D.kernel(..., x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
+  ## determine smoothing parameters
+  ker <- resolve.2D.kernel(sigma=sigma, ...,
+                           x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
   sigma <- ker$sigma
   varcov <- ker$varcov
-  # .....
+  ## Diggle's edge correction?
+  if(diggle && !edge) warning("Option diggle=TRUE overridden by edge=FALSE")
+  diggle <- diggle && edge
+  ## 
   if(ker$cutoff < min(nndist(X))) {
     # very small bandwidth
     leaveoneout <- resolve.1.default("leaveoneout",
@@ -44,15 +49,28 @@ Smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
     }
     return(Y)
   }
-  #
-  if(weightsgiven <- !missing(weights)) {
-    check.nvector(weights, npoints(X)) 
-    # rescale weights to avoid numerical gremlins
-    weights <- weights/median(abs(weights))
+  ## weights
+  weightsgiven <- !missing(weights) && !is.null(weights) && (length(weights)>0)
+  if(weightsgiven) {
+    check.nvector(weights, npoints(X))
+  } else weights <- NULL
+  if(diggle) {
+    ## absorb Diggle edge correction into weights vector
+    edg <- second.moment.calc(X, sigma, what="edge", ..., varcov=varcov)
+    ei <- safelookup(edg, X, warn=FALSE)
+    weights <- if(weightsgiven) weights/ei else 1/ei
+    weights[!is.finite(weights)] <- 0
+    weightsgiven <- TRUE
   }
-  # get marks
+  ## rescale weights to avoid numerical gremlins
+  if(weightsgiven && ((mw <- median(abs(weights))) > 0))
+    weights <- weights/mw
+
+  ## get marks
   marx <- marks(X, dfok=TRUE)
-  #
+
+  ## calculate...
+  
   if(!is.data.frame(marx)) {
     # ........ vector of marks ...................
     values <- marx
@@ -62,30 +80,33 @@ Smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
     }
     switch(at,
            points={
-             if(!weightsgiven)
-               weights <- NULL
              result <-
                do.call("smoothpointsEngine",
-                       resolve.defaults(list(x=X),
-                                        list(values=values, weights=weights),
-                                        list(sigma=sigma, varcov=varcov),
+                       resolve.defaults(list(x=X,
+                                             values=values, weights=weights,
+                                             sigma=sigma, varcov=varcov,
+                                             edge=FALSE),
                                         list(...)))
            },
            pixels={
+             values.weights <- if(weightsgiven) values * weights else values
              numerator <-
                do.call("density.ppp",
-                       resolve.defaults(list(x=X, at="pixels"),
-                                        list(weights = values * weights),
-                                        list(sigma=sigma, varcov=varcov),
-                                        list(...),
-                                        list(edge=FALSE)))
+                       resolve.defaults(list(x=X,
+                                             at="pixels",
+                                             weights = values.weights,
+                                             sigma=sigma, varcov=varcov,
+                                             edge=FALSE),
+                                        list(...)))
              denominator <-
                do.call("density.ppp",
-                       resolve.defaults(list(x=X, at="pixels"),
-                                        list(weights = weights),
-                                        list(sigma=sigma, varcov=varcov),
-                                        list(...),
-                                        list(edge=FALSE)))
+                       resolve.defaults(list(x=X,
+                                             at="pixels",
+                                             weights = weights,
+                                             sigma=sigma,
+                                             varcov=varcov,
+                                             edge=FALSE),
+                                        list(...)))
              result <- eval.im(numerator/denominator)
              # trap small values of denominator
              # trap NaN and +/- Inf values of result, but not NA
@@ -109,19 +130,22 @@ Smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
     # compute denominator
     denominator <-
       do.call("density.ppp",
-              resolve.defaults(list(x=X, at=at),
-                               list(weights = weights),
-                               list(sigma=sigma, varcov=varcov),
-                               list(...),
-                               list(edge=FALSE)))
+              resolve.defaults(list(x=X,
+                                    at=at,
+                                    weights = weights,
+                                    sigma=sigma, varcov=varcov,
+                                    edge=FALSE),
+                               list(...)))
     # compute numerator for each column of marks
+    marx.weights <- if(weightsgiven) marx * weights else marx
     numerators <-
       do.call("density.ppp",
-              resolve.defaults(list(x=X, at=at),
-                               list(weights = marx * weights),
-                               list(sigma=sigma, varcov=varcov),
-                               list(...),
-                               list(edge=FALSE)))
+              resolve.defaults(list(x=X,
+                                    at=at,
+                                    weights = marx.weights,
+                                    sigma=sigma, varcov=varcov,
+                                    edge=FALSE),
+                               list(...)))
     uhoh <- attr(numerators, "warnings")
     # calculate ratios
     switch(at,
@@ -186,7 +210,11 @@ smoothpointsEngine <- function(x, values, sigma, ...,
   # closer than 8 standard deviations
   sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
   cutoff <- 8 * sd
-  
+
+  ## Handle weights that are meant to be null
+  if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+     weights <- NULL
+     
   # detect very small bandwidth
   nnd <- nndist(x)
   nnrange <- range(nnd)
@@ -236,7 +264,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  sig     = as.double(sd),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -251,7 +278,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  weight  = as.double(wtsort),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     } else {
@@ -268,7 +294,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  sinv    = as.double(flatSinv),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -283,7 +308,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  weight  = as.double(wtsort),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     }
@@ -346,14 +370,22 @@ smoothpointsEngine <- function(x, values, sigma, ...,
 }
 
 
-markmean <- function(X, ...) { Smooth(X, ...) }
+markmean <- function(X, ...) {
+  stopifnot(is.marked(X))
+  Y <- Smooth(X, ...)
+  return(Y)
+}
 
-markvar  <- function(X, ...) {
-  if(!is.marked(X, dfok=FALSE))
-    stop("X should have (one column of) marks")
-  E1 <- Smooth(X, ...)
+markvar  <- function(X, sigma=NULL, ..., weights=NULL, varcov=NULL) {
+  stopifnot(is.marked(X))
+  if(is.expression(weights)) 
+    weights <- eval(weights, envir=as.data.frame(X), enclos=parent.frame())
+  E1 <- Smooth(X, sigma=sigma, varcov=varcov, weights=weights, ...)
   X2 <- X %mark% marks(X)^2
-  E2 <- Smooth(X2, ...)
+  ## ensure smoothing bandwidth is the same!
+  sigma <- attr(E1, "sigma")
+  varcov <- attr(E1, "varcov")
+  E2 <- Smooth(X2, sigma=sigma, varcov=varcov, weights=weights, ...)
   V <- eval.im(E2 - E1^2)
   return(V)
 }

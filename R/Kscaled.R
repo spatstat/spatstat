@@ -1,14 +1,15 @@
 #
 #	Kscaled.R	Estimation of K function for locally-scaled process
 #
-#	$Revision: 1.7 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.12 $	$Date: 2014/02/17 03:45:32 $
 #
 
 "Lscaled" <- function(...) {
   K <- Kscaled(...)
   L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
-  L <- rebadge.fv(L, substitute(Lscaled(r), NULL), "Lscaled")
+  L <- rebadge.fv(L, quote(L[scaled](r)), c("L","scaled"))
+  attr(L, "labl") <- attr(K, "labl")
   return(L)  
 }
 
@@ -62,10 +63,12 @@
         lambda <- safelookup(lambda, X)
       else if(is.function(lambda)) 
         lambda <- lambda(X$x, X$y)
-      else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
-        check.nvector(lambda, npts)
-      else stop(paste(sQuote("lambda"),
-                      "should be a vector, a pixel image, or a function"))
+      else if(is.ppm(lambda)) 
+        lambda <- safelookup(predict(lambda, type="trend"), X)
+      else if(!is.numeric(lambda) || !is.null(dim(lambda)))
+        stop(paste(sQuote("lambda"),
+                   "should be a vector, a pixel image, a function or a ppm"))
+      check.nvector(lambda, npts)
     }
     
     # recommended range of r values
@@ -74,8 +77,11 @@
     # this will be the output data frame
     K <- data.frame(r=r, theo= pi * r^2)
     desc <- c("distance argument r", "theoretical Poisson %s")
-    K <- fv(K, "r", substitute(Kscaled(r), NULL),
-            "theo", , alim, c("r","%s[pois](r)"), desc, fname="Kscaled")
+    K <- fv(K, "r", quote(K[scaled](r)),
+            "theo", , alim,
+            c("r","{%s[%s]^{pois}}(r)"),
+            desc,
+            fname=c("K", "scaled"))
         
     # identify all close pairs
     rmax <- max(r)
@@ -93,7 +99,7 @@
     # uncorrected! For demonstration purposes only!
     wh <- whist(DIJ, breaks$val)  # no weights
     Kun <- cumsum(wh)/npts
-    K <- bind.fv(K, data.frame(un=Kun), "%s[un](r)",
+    K <- bind.fv(K, data.frame(un=Kun), "{hat(%s)[%s]^{un}}(r)",
                  "uncorrected estimate of %s",
                  "un")
   }
@@ -108,7 +114,7 @@
     RS <- Kount(DIJ, bI, b, breaks)
     if(any(correction == "border")) {
       Kb <- RS$numerator/RS$denom.count
-      K <- bind.fv(K, data.frame(border=Kb), "%s[bord](r)",
+      K <- bind.fv(K, data.frame(border=Kb), "{hat(%s)[%s]^{bord}}(r)",
                    "border-corrected estimate of %s",
                    "border")
     }
@@ -122,7 +128,7 @@
     Ktrans <- cumsum(wh)/npts
     h <- diameter(W)/2
     Ktrans[r >= h] <- NA
-    K <- bind.fv(K, data.frame(trans=Ktrans), "%s[trans](r)",
+    K <- bind.fv(K, data.frame(trans=Ktrans), "{hat(%s)[%s]^{trans}}(r)",
                  "translation-corrected estimate of %s",
                  "trans")
   }
@@ -133,7 +139,7 @@
     Kiso <- cumsum(wh)/npts
     h <- diameter(W)/2
     Kiso[r >= h] <- NA
-    K <- bind.fv(K, data.frame(iso=Kiso), "%s[iso](r)",
+    K <- bind.fv(K, data.frame(iso=Kiso), "{hat(%s)[%s]^{iso}}(r)",
                  "Ripley isotropic correction estimate of %s",
                  "iso")
   }

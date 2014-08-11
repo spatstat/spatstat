@@ -72,7 +72,7 @@
 
   This function executes a Metropolis-Hastings algorithm
   with birth, death and shift proposals as described in
-  Geyer and Moller (1994).
+  Geyer and \ifelse{latex}{\out{M\o ller}}{Moller} (1994).
 
   The argument \code{model} specifies the point process model to be
   simulated. It is either a list, or an object of class
@@ -294,7 +294,7 @@
    A nonparametric estimator for pairwise-interaction point processes.
    Biometrika \bold{74}, 763 -- 770.
 
-   Geyer, C.J. and Moller, J. (1994)
+   Geyer, C.J. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (1994)
    Simulation procedures and likelihood inference for spatial
    point processes.
    \emph{Scandinavian Journal of Statistics} \bold{21}, 359--373.
@@ -662,7 +662,7 @@ trend corresponding to a particular type, there is still a component
     set.seed(496)
     X2  <- rmh(model=M2,start=list(n.start=300))
     chk <- affine(X1,mat=diag(c(10,10)))
-    all.equal(chk,X2,check.attribute=FALSE)
+    all.equal(chk,X2,check.attributes=FALSE)
     # Under the default spatstat options the foregoing all.equal()
     # will yield TRUE.  Setting spatstat.options(scalable=FALSE) and
     # re-running the code will reveal differences between X1 and X2.

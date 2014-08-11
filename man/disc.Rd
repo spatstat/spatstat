@@ -9,7 +9,7 @@ Creates a circular window
 }
 \arguments{
   \item{radius}{Radius of the circle.}
-  \item{centre}{Coordinates of the centre of the circle.}
+  \item{centre}{The centre of the circle.}
   \item{mask}{Logical flag controlling the type of approximation
     to a perfect circle. See Details.
   }
@@ -34,6 +34,12 @@ Creates a circular window
   If \code{mask=TRUE}, then the disc is approximated by a binary pixel
   mask. The resolution of the mask is controlled by
   the arguments \code{\dots} which are passed to \code{\link{as.mask}}.
+
+  The argument \code{radius} must be a single positive number.
+  The argument \code{centre} specifies the disc centre: it can be either 
+  a numeric vector of length 2 giving the coordinates,
+  or a \code{list(x,y)} giving the coordinates of exactly one point, or a
+  point pattern (object of class \code{"ppp"}) containing exactly one point.
 }
 \seealso{
   \code{\link{owin.object}},

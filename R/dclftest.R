@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.17 $  $Date: 2013/08/06 10:16:30 $
+#  $Revision: 1.19 $  $Date: 2013/12/17 10:11:05 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -59,6 +59,7 @@ envelopeTest <- function(X, ...,
   obs <- with(X, .y)
   sim <- as.matrix(as.data.frame(Y))[, -1]
   nsim <- ncol(sim)
+  nr <- length(r)
   # choose function as reference
   has.theo <- ("theo" %in% names(X))
   if(use.theo && !has.theo)
@@ -128,19 +129,19 @@ envelopeTest <- function(X, ...,
       # Cramer-von Mises
       devdata <- a * mean((obs - reference)^2)
       names(devdata) <- "u"
-      devsim <- a * colMeans((sim - reference)^2)
+      devsim <- a * .colMeans((sim - reference)^2, nr, nsim)
       testname <- "Diggle-Cressie-Loosmore-Ford test"
     } else if(power == 1) {
       # integral absolute deviation
       devdata <- a * mean(abs(obs - reference))
       names(devdata) <- "L1"
-      devsim <- a * colMeans(abs(sim - reference))
+      devsim <- a * .colMeans(abs(sim - reference), nr, nsim)
       testname <- "Integral absolute deviation test"
     } else {
       # general p
       devdata <- a * mean((abs(obs - reference)^power))
       names(devdata) <- "Lp"
-      devsim <- a * colMeans((abs(sim - reference)^power))
+      devsim <- a * .colMeans((abs(sim - reference)^power), nr, nsim)
       testname <- paste("Integrated", ordinal(power), "Power Deviation test")
     }
   }

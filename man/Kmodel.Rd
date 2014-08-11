@@ -1,24 +1,19 @@
 \name{Kmodel}
 \alias{Kmodel}
 \alias{pcfmodel}
-\alias{Kmodel.kppm}
-\alias{pcfmodel.kppm}
-\title{K function of a model}
+\title{K Function or Pair Correlation Function of a Point Process Model}
 \description{
   Returns the theoretical \eqn{K} function or the pair correlation function
   of a point process model.
 }
 \usage{
    Kmodel(model, \dots)
+
    pcfmodel(model, \dots)
-   \method{Kmodel}{kppm}(model, \dots)
-   \method{pcfmodel}{kppm}(model, \dots)
 }
 \arguments{
   \item{model}{
-    A fitted cluster point process model, typically obtained from
-    the model-fitting algorithm \code{\link{kppm}}. An object of
-    class \code{"kppm"}.
+    A fitted point process model of some kind.
   }
   \item{\dots}{
     Ignored.
@@ -31,12 +26,15 @@
 \details{
   For certain types of point process models, it is possible to
   write down a mathematical expression for the \eqn{K} function
-  or the pair correlation function of the model. In particular this
-  is possible for a fitted cluster point process model (object of
-  class \code{"kppm"} obtained from \code{\link{kppm}}).
+  or the pair correlation function of the model. 
   
-  The functions \code{Kmodel} and \code{pcfmodel} are generic.
-  Currently the only method is for the class \code{"kppm"}.
+  The functions \code{Kmodel} and \code{pcfmodel} give the
+  theoretical \eqn{K}-function and the theoretical pair correlation
+  function for a point process model that has been fitted to data.
+  
+  The functions \code{Kmodel} and \code{pcfmodel} are generic,
+  with methods for the classes \code{"kppm"} (cluster processes
+  and Cox processes) and \code{"ppm"} (Gibbs processes).
   
   The return value is a \code{function} in the \R language,
   which takes one argument \code{r}.
@@ -45,16 +43,14 @@
   function at these distance values.
 }
 \seealso{
-  \code{\link{kppm}},
-  \code{\link{Kest}},
-  \code{\link{pcf}}
-}
-\examples{
-  data(redwood)
-  fit <- kppm(redwood, ~x, "MatClust")
-  K <- Kmodel(fit)
-  K(c(0.1, 0.2))
-  curve(K(x), from=0, to=0.25)
+  \code{\link{Kest}} or \code{\link{pcf}}
+  to estimate the \eqn{K} function or pair correlation function
+  nonparametrically from data.
+
+  \code{\link{Kmodel.kppm}} for the method for cluster processes
+  and Cox processes.
+  
+  \code{\link{Kmodel.ppm}} for the method for Gibbs processes.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

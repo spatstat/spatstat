@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.47 $   $Date: 2013/12/11 02:12:43 $
+#   $Revision: 1.50 $   $Date: 2014/02/15 03:39:26 $
 #
 #
 #   calculate pair correlation function
@@ -17,7 +17,8 @@ pcf <- function(X, ...) {
 pcf.ppp <- function(X, ..., r=NULL,
                     kernel="epanechnikov", bw=NULL, stoyan=0.15,
                     correction=c("translate", "Ripley"),
-                    divisor=c("r", "d"))
+                    divisor=c("r", "d"),
+                    domain=NULL)
 {
   verifyclass(X, "ppp")
   r.override <- !is.null(r)
@@ -26,6 +27,25 @@ pcf.ppp <- function(X, ..., r=NULL,
   area <- area.owin(win)
   lambda <- X$n/area
   lambda2area <- area * lambda^2
+
+  if(!is.null(domain)) {
+    # estimate based on contributions from a subdomain
+    domain <- as.owin(domain)
+    if(!is.subset.owin(domain, win))
+      stop(paste(dQuote("domain"),
+                 "is not a subset of the window of X"))
+    # trick pcfdot() into doing it
+    indom <- factor(inside.owin(X$x, X$y, domain), levels=c(FALSE,TRUE))
+    g <- pcfdot(X %mark% indom,
+                i="TRUE",
+                r=r,
+                correction=correction, kernel=kernel, bw=bw, stoyan=stoyan,
+                divisor=divisor,
+                ...)
+    # relabel and exit
+    g <- rebadge.fv(g, quote(g(r)), "g")
+    return(g)
+  }
 
   correction.given <- !missing(correction)
   correction <- pickoption("correction", correction,
@@ -81,13 +101,12 @@ pcf.ppp <- function(X, ..., r=NULL,
   
   close <- closepairs(X, rmax + hmax)
   dIJ <- close$d
-  XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
 
   # initialise fv object
   
   df <- data.frame(r=r, theo=rep.int(1,length(r)))
   out <- fv(df, "r",
-            substitute(g(r), NULL), "theo", ,
+            quote(g(r)), "theo", ,
             alim,
             c("r","%s[Pois](r)"),
             c("distance argument r", "theoretical Poisson %s"),
@@ -97,8 +116,7 @@ pcf.ppp <- function(X, ..., r=NULL,
 
   if(any(correction=="translate")) {
     # translation correction
-    XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
-    edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+    edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=win, paired=TRUE)
     gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     out <- bind.fv(out,
                    data.frame(trans=gT),
@@ -108,6 +126,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   }
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
+    XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
     edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
     gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     out <- bind.fv(out,

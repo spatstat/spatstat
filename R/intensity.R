@@ -3,22 +3,65 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.5 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.9 $ $Date: 2014/01/03 01:53:37 $
 #
 
 intensity <- function(X, ...) {
   UseMethod("intensity")
 }
 
-intensity.ppp <- function(X, ...) {
-  sX <- summary(X, quick="no variances")
+intensity.ppp <- function(X, ..., weights=NULL) {
+  n <- npoints(X)
+  a <- area.owin(as.owin(X))
+  if(is.null(weights)) {
+    ## unweighted case - for efficiency
+    if(is.multitype(X)) {
+      mks <- marks(X)
+      answer <- as.vector(table(mks))/a
+      names(answer) <- levels(mks)
+    } else answer <- n/a
+    return(answer)
+  }
+  ## weighted case 
+  if(is.numeric(weights)) {
+    check.nvector(weights, n)
+  } else if(is.expression(weights)) {
+    # evaluate expression in data frame of coordinates and marks
+    df <- as.data.frame(X)
+    pf <- parent.frame()
+    eval.weights <- try(eval(weights, envir=df, enclos=pf))
+    if(inherits(eval.weights, "try-error"))
+      stop("Unable to evaluate expression for weights", call.=FALSE)
+    if(!check.nvector(eval.weights, n, fatal=FALSE, warn=TRUE))
+      stop("Result of evaluating the expression for weights has wrong format")
+    weights <- eval.weights
+  } else stop("Unrecognised format for argument 'weights'")
+  ##
   if(is.multitype(X)) {
-    answer <- sX$marks$intensity
-    names(answer) <- row.names(sX$marks)
+    mks <- marks(X)
+    answer <- as.vector(tapply(weights, mks, sum))/a
+    answer[is.na(answer)] <- 0
+    names(answer) <- levels(mks)
   } else {
-    answer <- unname(sX$intensity)
+    answer <- sum(weights)/a
   }
   return(answer)
+}
+
+intensity.splitppp <- function(X, ..., weights=NULL) {
+  if(is.null(weights))
+    return(sapply(X, intensity.ppp))
+  if(is.expression(weights))
+    return(sapply(X, intensity.ppp, weights=weights))
+  if(is.numeric(weights)) {
+    fsplit <- attr(X, "fsplit")
+    n <- length(fsplit)
+    check.nvector(weights, n)
+    result <- mapply(intensity.ppp, X, weights=split(weights, fsplit))
+    result <- simplify2array(result, higher=FALSE)
+    return(result)
+  }
+  stop("Unrecognised format for weights")
 }
 
 intensity.ppm <- function(X, ...) {

@@ -97,7 +97,7 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Jesper Moller.
+  and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
 }
 \seealso{
   \code{\link{ppm}},

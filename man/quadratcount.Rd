@@ -87,6 +87,15 @@
   \code{"quadratcount"}. Plotting the object will display the
   quadrats, annotated by their counts. See the examples.
 
+  To perform a chi-squared test based on the quadrat counts,
+  use \code{\link{quadrat.test}}.
+  
+  To calculate an estimate of intensity based on the quadrat counts,
+  use \code{\link{intensity.quadratcount}}.
+
+  To extract the quadrats used in a \code{quadratcount} object,
+  use \code{\link{as.tess}}.
+
   \bold{If \code{X} is a split point pattern} (object of class
   \code{"splitppp"} then quadrat counting will be performed on
   each of the components point patterns, and the resulting
@@ -104,8 +113,12 @@
   use \code{\link{quadrat.test}}.
 }
 \seealso{
-  \code{\link{quadrat.test}},
+  \code{\link{plot.quadratcount}},
+  \code{\link{intensity.quadratcount}},
   \code{\link{quadrats}},
+  \code{\link{quadrat.test}},
+  \code{\link{tess}},
+  \code{\link{hextess}},
   \code{\link{quadratresample}},
   \code{\link{miplot}}
 }

@@ -33,7 +33,7 @@ psstA(object, r = NULL, breaks = NULL, ...,
     This argument is usually not specified. There is a sensible default.
   }
   \item{breaks}{
-    Optional alternative to \code{r} for advanced use. 
+	This argument is for internal use only.
   }
   \item{\dots}{
     Ignored.
@@ -152,7 +152,7 @@ psstA(object, r = NULL, breaks = NULL, ...,
   of points in the point pattern.
 }
 \references{
-  Baddeley, A., Rubak, E. and Moller, J. (2011)
+  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
@@ -161,7 +161,7 @@ psstA(object, r = NULL, breaks = NULL, ...,
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  Ege Rubak and Jesper Moller.
+  Ege Rubak and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
 }
 \seealso{
   Alternative functions:

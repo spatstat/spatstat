@@ -36,7 +36,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
     This argument is usually not specified. There is a sensible default.
   }
   \item{breaks}{
-    Optional alternative to \code{r} for advanced use. 
+	This argument is for advanced use only.
   }
   \item{\dots}{
     Ignored.
@@ -162,7 +162,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   If \code{conditional=TRUE}, then the algorithm calculates
   the \emph{restriction estimator} if \code{restrict=TRUE},
   and calculates the \emph{reweighting estimator} if \code{restrict=FALSE}.
-  See Appendix D of Baddeley, Rubak and Moller (2011).
+  See Appendix D of Baddeley, Rubak and \ifelse{latex}{\out{M\o ller}}{Moller} (2011).
   Thus, by default, the reweighting estimator is computed
   for non-Poisson models.
   
@@ -180,7 +180,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   There is a plot method for this class. See \code{\link{fv.object}}.
 }
 \references{
-  Baddeley, A., Rubak, E. and Moller, J. (2011)
+  Baddeley, A., Rubak, E. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2011)
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
@@ -189,7 +189,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  Ege Rubak and Jesper Moller.
+  Ege Rubak and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
 }
 \seealso{
   Related functions: 

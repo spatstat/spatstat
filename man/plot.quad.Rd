@@ -1,11 +1,11 @@
 \name{plot.quad}
 \alias{plot.quad}
-\title{plot a Spatial Quadrature Scheme}
+\title{Plot a Spatial Quadrature Scheme}
 \description{
   Plot a two-dimensional spatial quadrature scheme.
 }
 \usage{
-  \method{plot}{quad}(x, ..., main, dum=list())
+  \method{plot}{quad}(x, ..., main, add=FALSE, dum=list(), tiles=FALSE)
 }
 \arguments{
   \item{x}{
@@ -16,12 +16,21 @@
     extra arguments controlling the plotting
     of the data points of the quadrature scheme.
   }
+  \item{main}{
+    text to be displayed as a title above the plot.
+  }
+  \item{add}{
+    Logical value indicating whether the graphics should be added to the
+    current plot if there is one (\code{add=TRUE})
+    or whether a new plot should be initialised (\code{add=FALSE}, the default).
+  }
   \item{dum}{
     list of extra arguments controlling the plotting of the dummy points of the
     quadrature scheme. See below.
   }
-  \item{main}{
-    text to be displayed as a title above the plot.
+  \item{tiles}{
+    Logical value indicating whether to display the tiles used to
+    compute the quadrature weights.
   }
 }
 \value{
@@ -45,13 +54,13 @@
   \code{add=FALSE} in the list \code{dum} as shown in the examples.
   In this case the data and dummy point patterns are plotted separately.
 
-  See \code{\link{par}} and \code{\link{plot.ppp}}
+  See \code{\link[graphics]{par}} and \code{\link{plot.ppp}}
   for other possible arguments controlling the plots.
 }
 \seealso{
   \code{\link{quad.object}},
   \code{\link{plot.ppp}},
-  \code{\link{par}}
+  \code{\link[graphics]{par}}
 }
 \examples{
    data(nztrees)

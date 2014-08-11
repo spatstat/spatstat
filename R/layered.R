@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.17 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.24 $  $Date: 2014/01/15 06:57:15 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -17,10 +17,11 @@ layered <- function(..., plotargs=NULL, LayerList=NULL) {
   if(!is.null(plotargs)) {
     if(!is.list(plotargs) || !all(unlist(lapply(plotargs, is.list))))
       stop("plotargs should be a list of lists")
-    if(length(plotargs) != length(out))
+    np <- length(plotargs)
+    if(np == 1) plotargs <- rep(plotargs, n) else if(np != n)
       stop("plotargs should have one component for each element of the list")
   } else {
-    plotargs <- rep.int(list(list()), length(out))
+    plotargs <- rep.int(list(list()), n)
   }
   names(plotargs) <- names(out)
   attr(out, "plotargs") <- plotargs
@@ -42,58 +43,92 @@ print.layered <- function(x, ...) {
   invisible(NULL)
 }
 
-plot.layered <- function(x, ..., which=NULL, plotargs=NULL) {
-  xname <- short.deparse(substitute(x))
-  main <- resolve.1.default("main", list(...), list(main=xname))
-  xp <- if(is.null(which)) x else x[which]
-  if(length(xp) == 0)
-    return(invisible(NULL))
-  # validate plotting arguments
-  if(is.null(plotargs)) {
-    plotargs <- attr(x, "plotargs")
-    if(!is.null(plotargs) && !is.null(which)) plotargs <- plotargs[which]
-  } else {
-    if(!is.list(plotargs) || !all(unlist(lapply(plotargs, is.list))))
+plot.layered <- function(x, ..., which=NULL, plotargs=NULL,
+                         add=FALSE, show.all=!add, main=NULL) {
+  if(is.null(main))
+    main <- short.deparse(substitute(x))
+  n <- length(x)
+  if(!is.null(plotargs)) {
+    np <- length(plotargs)
+    if(!(is.list(plotargs) && all(unlist(lapply(plotargs, is.list)))))
       stop("plotargs should be a list of lists")
-    if(length(plotargs) != length(xp))
-      stop("plotargs should have one component for each layer to be plotted")
   }
-  # determine plot frame 
-  started <- FALSE
-  add <- resolve.1.default("add", list(...), list(add=FALSE))
+  ## select layers
+  if(!is.null(which)) {
+    x <- x[which]
+    nw <- length(x)
+    if(!is.null(plotargs)) {
+      if(np == n) plotargs <- plotargs[which] else
+      if(np == 1) plotargs <- rep(plotargs, nw) else
+      if(np != nw) 
+        stop("plotargs should have one component for each layer to be plotted")
+    }
+    n <- nw
+  } else if(!is.null(plotargs)) {
+    if(np == 1) plotargs <- rep(plotargs, n) else
+    if(np != n) stop("plotargs should have one component for each layer")
+  }
+  ## remove null layers
+  if(any(isnul <- unlist(lapply(x, is.null)))) {
+    x <- x[!isnul]
+    if(!is.null(plotargs))
+      plotargs <- plotargs[!isnul]
+    n <- length(x)
+  }
+  ## anything to plot?
+  if(n == 0)
+    return(invisible(NULL))
+  ## Merge plotting arguments
+  xplotargs <- layerplotargs(x)
+  if(is.null(plotargs)) {
+    plotargs <- xplotargs
+  } else if(length(xplotargs) > 0) {
+    for(i in 1:n)
+      plotargs[[i]] <- resolve.defaults(plotargs[[i]], xplotargs[[i]])
+  }
+  ## Determine bounding box 
+  bb <- NULL
+  boxes <- lapply(x,
+                  function(z) { try(as.rectangle(z), silent=TRUE) })
+  if(!any(unlist(lapply(boxes, inherits, what="try-error")))) 
+    bb <- do.call("bounding.box", boxes)
+  ## Start plotting
+  started <- inked <- FALSE
   if(add) {
     started <- TRUE
-  } else {
-    # new plot
-    notnul <- !unlist(lapply(x, is.null))
-    if(sum(notnul) > 1) {
-      # more than one non-trivial layer.
-      # Determine bounding frame
-      boxes <- lapply(x[notnul],
-                    function(z) { try(as.rectangle(z), silent=TRUE) })
-      if(!any(unlist(lapply(boxes, inherits, what="try-error")))) {
-        bb <- do.call("bounding.box", boxes)
-        plot(bb, type="n", main=main)
-        started <- TRUE
-      }
-    }
+    if(show.all && !is.null(bb)) 
+      fakemaintitle(bb, main, ...)
+  } else if(!is.null(bb)) {
+    ## initialise new plot using bounding box
+    bb <- do.call("bounding.box", boxes)
+    plot(bb, type="n", main=if(show.all) main else "")
+    started <- TRUE
   }
   # plot the layers
   out <- list()
-  for(i in seq_along(xp)) {
-    xpi <- xp[[i]]
-    if(length(xpi) == 0) {
+  nama <- names(x)
+  for(i in seq_along(x)) {
+    xi <- x[[i]]
+    if(length(xi) == 0) {
       # null layer - no plotting
       out[[i]] <- NULL
     } else {
-      # plot layer i on top of previous layers
-      iargs <- if(!started) list(main=main) else list(add=TRUE)
+      ## plot layer i on top of previous layers if any.
+      ## Show all graphic elements of the first component only;
+      ## but do not display the names of any components.
+      show.name.i <- resolve.1.default(list(show.all=FALSE),
+                                       list(...), 
+                                       plotargs[[i]])
+      dflt <- list(main=if(show.name.i) nama[i] else "",
+                   show.all=show.all && !inked)
+      ## 
       out[[i]] <- do.call("plot",
-                          resolve.defaults(list(x=xpi),
+                          resolve.defaults(list(x=xi,
+                                                add=started),
                                            list(...),
                                            plotargs[[i]],
-                                           iargs))
-      started <- TRUE
+                                           dflt))
+      started <- titled <- TRUE
     }
   }
   return(invisible(out))
@@ -126,12 +161,16 @@ layerplotargs <- function(L) {
 
 "layerplotargs<-" <- function(L, value) {
   stopifnot(inherits(L, "layered"))
-  if(length(value) != length(L))
-    stop("Replacement value is wrong length")
+  if(!(is.list(value) && all(unlist(lapply(value, is.list)))))
+    stop("Replacement value should be a list of lists")
+  n <- length(L)
+  if(length(value) == 1) value <- unname(rep(value, n)) else 
+  if(length(value) != n) stop("Replacement value is wrong length")
+  if(is.null(names(value))) names(value) <- names(L) else
   if(!identical(names(value), names(L)))
     stop("Mismatch in names of list elements")
   attr(L, "plotargs") <- value
-  L
+  return(L)
 }
 
 applytolayers <- function(L, FUN, ...) {
@@ -144,8 +183,17 @@ applytolayers <- function(L, FUN, ...) {
   return(Z)
 }
   
-shift.layered <- function(X, ...) {
-  applytolayers(X, shift, ...)
+shift.layered <- function(X, vec=c(0,0), ...) {
+  if(length(list(...)) > 0) {
+    if(!missing(vec)) 
+      warning("Argument vec ignored; overridden by other arguments")
+    ## ensure the same shift is applied to all layers
+    s <- shift(X[[1]], ...)
+    vec <- getlastshift(s)
+  }
+  Y <- applytolayers(X, shift, vec=vec)
+  attr(Y, "lastshift") <- vec
+  return(Y)
 }
 
 affine.layered <- function(X, ...) {
@@ -181,6 +229,10 @@ as.owin.layered <- function(W, ..., fatal=TRUE) {
   # remove null layers
   isnul <- unlist(lapply(W, is.null))
   W <- W[!isnul]
+  if(length(W) == 0) {
+    if(fatal) stop("Layered object has no window data")
+    return(NULL)
+  }
   Wlist <- lapply(unname(W), as.owin, ..., fatal=fatal)
   Wlist <- lapply(Wlist, rescue.rectangle)
   Z <- Wlist[[1]]
@@ -191,3 +243,4 @@ as.owin.layered <- function(W, ..., fatal=TRUE) {
   }
   return(Z)
 }
+

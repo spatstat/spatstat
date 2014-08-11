@@ -4,15 +4,16 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.18 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.19 $ $Date: 2014/02/18 04:54:22 $
 #
 
 residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
                  fittedvalues = fitted.ppm(object, check=check, drop=drop),
-                          coefs=NULL, quad=NULL) {
+                          new.coef=NULL, quad=NULL) {
   
   verifyclass(object, "ppm")
-
+  trap.extra.arguments(..., .Context="In residuals.ppm")
+  
   type <- pickoption("type", type,
                      c(inverse="inverse",
                        raw="raw",
@@ -29,16 +30,16 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
 
   # ................. determine fitted values .................
   
-  if(is.null(coefs) && is.null(quad)) {
+  if(is.null(new.coef) && is.null(quad)) {
     # use 'object' without modification
     # validate 'object'
     if(check && missing(fittedvalues) && damaged.ppm(object)) 
       stop("object format corrupted; try update(object, use.internal=TRUE)")
   } else {
     # determine a new set of model coefficients
-    if(!is.null(coefs)) {
+    if(!is.null(new.coef)) {
       # use specified model parameters
-      modelcoef <- coefs
+      modelcoef <- new.coef
     } else {
       # estimate model parameters using a (presumably) denser set of dummy pts
       # Determine new quadrature scheme
@@ -64,7 +65,7 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
   # ..................... compute residuals .....................
 
   # Extract quadrature points and weights
-  Q <- quad.ppm(object, drop=drop)
+  Q <- quad.ppm(object, drop=drop, clip=drop)
   U <- union.quad(Q) # quadrature points
   Z <- is.data(Q) # indicator data/dummy
 #  W <- w.quad(Q) # quadrature weights

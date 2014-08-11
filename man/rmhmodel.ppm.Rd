@@ -8,7 +8,8 @@
 }
 \usage{
   \method{rmhmodel}{ppm}(model, win, ..., verbose=TRUE, project=TRUE,
-                         control=rmhcontrol())
+                         control=rmhcontrol(),
+                         new.coef=NULL)
 }
 \arguments{
   \item{model}{
@@ -27,6 +28,10 @@
   \item{control}{
     Parameters determining the iterative behaviour of the simulation
     algorithm. Passed to \code{\link{rmhcontrol}}.
+  }
+  \item{new.coef}{
+    New values for the canonical parameters of the model.
+    A numeric vector of the same length as \code{coef(model)}.
   }
 }
 \value{

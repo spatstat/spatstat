@@ -5,7 +5,7 @@
   Plots a tessellation.
 }
 \usage{
-  \method{plot}{tess}(x, ..., main, add=FALSE, col=NULL)
+  \method{plot}{tess}(x, ..., main, add=FALSE, show.all=!add, col=NULL)
 }
 \arguments{
   \item{x}{Tessellation (object of class \code{"tess"}) to be plotted.}
@@ -14,11 +14,14 @@
   \item{add}{Logical. Determines whether the tessellation plot is added
     to the existing plot.
   }
+  \item{show.all}{
+    Logical value indicating whether to plot everything
+    including the main title and the observation window of \code{x}.
+  }
   \item{col}{
     Colour of the tile boundaries. A character string.
     Ignored for pixel tessellations.
   }
-    
 }
 \details{
   This is a method for the generic \code{\link{plot}} function

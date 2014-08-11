@@ -6,7 +6,7 @@
   a point pattern dataset in the two-dimensional plane.
 }
 \usage{
-  ppp(x,y, \dots, window, marks, check=TRUE)
+  ppp(x,y, \dots, window, marks, check=TRUE, drop=TRUE)
 }
 \arguments{
   \item{x}{Vector of \eqn{x} coordinates of data points}
@@ -21,6 +21,10 @@
     that all the \eqn{(x,y)} points lie inside the specified window.
     Do not set this to \code{FALSE} unless you are sure that this
     check is unnecessary.
+  }
+  \item{drop}{
+    Logical flag indicating whether to simplify data frames of marks.
+    See Details.
   }
 }
 \value{
@@ -116,6 +120,10 @@
     pattern. The columns of the data frame correspond to different
     mark variables (e.g. tree species and tree diameter).
   }
+  If \code{drop=TRUE} (the default), then 
+  a data frame with only one column will be
+  converted to a vector, and a data frame with no columns will be
+  converted to \code{NULL}.
   
   See \code{\link{ppp.object}} for a description of the
   class \code{"ppp"}.

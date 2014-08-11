@@ -6,7 +6,7 @@
   pattern.
 }
 \usage{
-adaptive.density(X, f = 0.1, ..., nrep = 1)
+adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
 }
 \arguments{
   \item{X}{Point pattern dataset (object of class \code{"ppp"}).}
@@ -17,7 +17,10 @@ adaptive.density(X, f = 0.1, ..., nrep = 1)
   \item{\dots}{Arguments passed to \code{\link{as.im}} determining the
     pixel resolution of the result.
   }
-  \item{nrep}{Number of independent repetitions of the randomised procedure.}
+  \item{nrep}{Number of independent repetitions of the randomised
+    procedure.}
+  \item{verbose}{Logical value indicating whether to print
+    progress reports.}
 }
 \details{
   This function is an alternative to \code{\link{density.ppp}}. It

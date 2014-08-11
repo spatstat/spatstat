@@ -6,7 +6,8 @@
 #
 rmh.ppm <- function(model, start = NULL,
                     control = default.rmhcontrol(model),
-                    ..., project=TRUE, verbose=TRUE) {
+                    ..., project=TRUE, verbose=TRUE,
+                    new.coef=NULL) {
   verifyclass(model, "ppm")
   argh <- list(...)
 
@@ -21,7 +22,8 @@ rmh.ppm <- function(model, start = NULL,
     control <- update(control, ...)
   
   # convert fitted model object to list of parameters for rmh.default
-  X <- rmhmodel(model, verbose=verbose, project=project, control=control)
+  X <- rmhmodel(model, verbose=verbose, project=project, control=control,
+                new.coef=new.coef)
 
   # set initial state
 
@@ -47,6 +49,7 @@ simulate.ppm <- function(object, nsim=1, ...,
                          start = NULL,
                          control = default.rmhcontrol(object),
                          project=TRUE,
+                         new.coef=NULL,
                          verbose=FALSE,
                          progress=(nsim > 1)) {
   verifyclass(object, "ppm")
@@ -78,7 +81,8 @@ simulate.ppm <- function(object, nsim=1, ...,
     rcontr <- update(rcontr, ...)
 
   # Set up model parameters for rmh
-  rmodel <- rmhmodel(object, verbose=FALSE, project=TRUE, control=rcontr)
+  rmodel <- rmhmodel(object, verbose=FALSE, project=TRUE, control=rcontr,
+                     new.coef=new.coef)
   if(is.null(start)) {
     datapattern <- data.ppm(object)
     start <- rmhstart(n.start=datapattern$n)

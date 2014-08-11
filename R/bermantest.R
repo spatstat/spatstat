@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.12 $  $Date: 2013/02/15 11:20:20 $
+#  $Revision: 1.14 $  $Date: 2014/02/07 09:09:38 $
 #
 #
 
@@ -231,8 +231,8 @@ plot.bermantest <-
            if(is.null(FZX))
              FZX <- ecdf(values$ZX)
            plot(FZX, add=TRUE, do.points=FALSE, lwd=lwd, col=col, lty=lty)
-           abline(v=work$meanZ, lwd=lwd0,col=col0, lty=lty0)
-           abline(v=work$meanZX, lwd=lwd,col=col, lty=lty)
+           abline(v=work$meanZ, lwd=lwd0,col=col0, lty=lty0, xpd=FALSE)
+           abline(v=work$meanZX, lwd=lwd,col=col, lty=lty, xpd=FALSE)
          },
          Z2={
            # plot cdf of U
@@ -251,9 +251,9 @@ plot.bermantest <-
                                     list(lwd=lwd, col=col, lty=lty),
                                     list(xlab="U", ylab="relative frequency"),
                                     list(main=main)))
-           abline(0,1,lwd=lwd0,col=col0,lty=lty0)
-           abline(v=0.5, lwd=lwd0,col=col0,lty=lty0)
-           abline(v=work$meanU, lwd=lwd,col=col,lty=lty)
+           abline(0,1,lwd=lwd0,col=col0,lty=lty0, xpd=FALSE)
+           abline(v=0.5, lwd=lwd0,col=col0,lty=lty0, xpd=FALSE)
+           abline(v=work$meanU, lwd=lwd,col=col,lty=lty, xpd=FALSE)
          })
   options(op)
   return(invisible(NULL))

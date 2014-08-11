@@ -132,21 +132,13 @@ plot(as.owin(demopat), col="blue", main="polygonal region")
 
 
 ###################################################
-### code chunk number 19: shapefiles.Rnw:418-421 (eval = FALSE)
-###################################################
-## spatstat.options(checkpolygons=FALSE)
-## y <- as(x, "owin")
-## spatstat.options(checkpolygons=TRUE)
-
-
-###################################################
-### code chunk number 20: shapefiles.Rnw:438-439 (eval = FALSE)
+### code chunk number 19: shapefiles.Rnw:422-423 (eval = FALSE)
 ###################################################
 ## y <- as(x, "SpatialPolygons")
 
 
 ###################################################
-### code chunk number 21: shapefiles.Rnw:449-453 (eval = FALSE)
+### code chunk number 20: shapefiles.Rnw:433-437 (eval = FALSE)
 ###################################################
 ## cp      <- as(columbus, "SpatialPolygons")
 ## cregions <- slot(cp, "polygons")
@@ -155,7 +147,7 @@ plot(as.owin(demopat), col="blue", main="polygonal region")
 
 
 ###################################################
-### code chunk number 22: shapefiles.Rnw:463-465 (eval = FALSE)
+### code chunk number 21: shapefiles.Rnw:447-449 (eval = FALSE)
 ###################################################
 ## ch <- hyperframe(window=cwindows)
 ## ch <- cbind.hyperframe(ch, columbus@data)

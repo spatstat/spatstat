@@ -129,13 +129,14 @@ mincontrast(observed, theoretical, startpar, \dots,
   \emph{Journal of the Royal Statistical Society, series B}
   \bold{46}, 193 -- 212.
 
-  Moller, J. and Waagepetersen, R. (2003).
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 
   Waagepetersen, R. (2006).
-  An estimation function approach to inference for inhomogeneous
-  Neyman-Scott processes. Submitted.
+  An estimating function approach to inference for
+  inhomogeneous Neyman-Scott processes.
+  \emph{Biometrics} \bold{63} (2007) 252--258.
 }  
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk},

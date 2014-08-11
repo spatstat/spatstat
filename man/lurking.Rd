@@ -221,14 +221,16 @@ lurking(object, covariate, type="eem",
  \code{\link{ppm}}
 }
 \references{
-  Baddeley, A., Turner, R., Moller, J. and Hazelton, M. (2005)
+  Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.
 
-  Baddeley, A., Moller, J. and Pakes, A.G. (2006)
+  Baddeley, A.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Pakes, A.G. (2006)
   Properties of residuals for spatial point processes.
-  To appear.
+  \emph{Annals of the Institute of Statistical Mathematics}
+  \bold{60}, 627--649.
   
   Stoyan, D. and Grabarnik, P. (1991)
   Second-order characteristics for stochastic structures connected with

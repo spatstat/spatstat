@@ -24,11 +24,11 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang") {
   switch(correction,
          Ang  = {
            ylab <- quote(g[L](r))
-           fname <- "g[L]"
+           fname <- c("g", "L")
          },
          none = {
            ylab <- quote(g[net](r))
-           fname <- "g[net]"
+           fname <- c("g", "net")
          })
   g <- rebadge.fv(g, new.ylab=ylab, new.fname=fname)
   return(g)
@@ -78,12 +78,12 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
   # set appropriate y axis label
   switch(correction,
          Ang  = {
-           ylab <- quote(g[LI](r))
-           fname <- "g[LI]"
+           ylab <- quote(g[L, inhom](r))
+           fname <- c("g", "list(L, inhom)")
          },
          none = {
-           ylab <- quote(g[netI](r))
-           fname <- "g[netI]"
+           ylab <- quote(g[net, inhom](r))
+           fname <- c("g", "list(net, inhom)")
          })
   g <- rebadge.fv(g, new.fname=fname, new.ylab=ylab)
   # reattach bandwidth
@@ -109,15 +109,19 @@ linearpcfengine <- function(X, ..., r=NULL,
   r <- breaks$r
   rmax <- breaks$max
   #
+  type <- if(correction == "Ang") "L" else "net"
+  fname <- c("g", type)
+  ylab <- substitute(g[type](r), list(type=type))
+  #  
   if(np < 2) {
     # no pairs to count: return zero function
     zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
-    g <- fv(df, "r", substitute(linearpcf(r), NULL),
+    g <- fv(df, "r", ylab,
             "est", . ~ r, c(0, rmax),
-            c("r", "%s(r)"),
+            c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname = "linearpcf")
+            fname = fname)
     return(g)
   }
   # compute pairwise distances  
@@ -125,8 +129,9 @@ linearpcfengine <- function(X, ..., r=NULL,
   #---  compile into pcf ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    g <- compilepcf(D, r, denom=denom)
+    g <- compilepcf(D, r, denom=denom, fname=fname)
     unitname(g) <- unitname(X)
+    attr(g, "correction") <- correction
     return(g)
   }
   if(correction == "none")
@@ -141,18 +146,19 @@ linearpcfengine <- function(X, ..., r=NULL,
   }
   # compute pcf
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  g <- compilepcf(D, r, weights=wt, denom=denom, ...)
+  g <- compilepcf(D, r, weights=wt, denom=denom, ..., fname=fname)
   # extract bandwidth
   bw <- attr(g, "bw")
   # tack on theoretical value
-  g <- bind.fv(g, data.frame(theo=rep.int(1,length(r))), "%s[theo](r)",
+  g <- bind.fv(g, data.frame(theo=rep.int(1,length(r))),
+               makefvlabel(NULL, NULL, fname, "pois"),
                "theoretical Poisson %s")
   # tweak
-  g <- rebadge.fv(g, new.fname="linearpcfengine")
   unitname(g) <- unitname(X)
   fvnames(g, ".") <- rev(fvnames(g, "."))
   # tack on bandwidth again
   attr(g, "bw") <- bw
+  attr(g, "correction") <- correction
   return(g)
 }
 

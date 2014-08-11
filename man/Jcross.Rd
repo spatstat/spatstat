@@ -42,8 +42,8 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     First-time users are strongly advised not to specify this argument.
     See below for important conditions on \eqn{r}.
   }
-  \item{breaks}{An alternative to the argument \code{r}.
-    Not normally invoked by the user. See the \bold{Details} section.
+  \item{breaks}{
+	This argument is for internal use only.
   }
   \item{\dots}{Ignored.}
   \item{correction}{

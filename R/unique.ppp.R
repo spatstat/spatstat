@@ -1,8 +1,10 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.21 $  $Date: 2013/11/19 03:16:20 $
+# $Revision: 1.28 $  $Date: 2013/12/17 09:23:40 $
 #
+# Methods for 'multiplicity' co-authored by Sebastian Meyer
+# Copyright 2013 Adrian Baddeley and Sebastian Meyer 
 
 unique.ppp <- function(x, ..., warn=FALSE) {
   verifyclass(x, "ppp")
@@ -17,7 +19,7 @@ duplicated.ppp <- function(x, ..., rule=c("spatstat", "deldir")) {
   verifyclass(x, "ppp")
   rule <- match.arg(rule)
   if(rule == "deldir")
-    return(duplicatedxy(x))
+    return(deldir::duplicatedxy(x))
   n <- npoints(x)
   switch(markformat(x),
          none = {
@@ -63,6 +65,19 @@ duplicated.ppp <- function(x, ..., rule=c("spatstat", "deldir")) {
   return(result)
 }
 
+## utility to check whether two rows are identical
+
+IdenticalRows <- local({
+  id <- function(i,j, a, b=a) {
+    ai <- a[i,]
+    bj <- b[j,]
+    row.names(ai) <- row.names(bj) <- NULL
+    identical(ai, bj)
+  }
+  Vectorize(id, c("i", "j"))
+})
+    
+
 multiplicity <- function(x) {
   UseMethod("multiplicity")
 }
@@ -75,56 +90,101 @@ multiplicity.ppp <- function(x) {
   I <- cl$i
   J <- cl$j
   if(length(I) == 0)
-    return(rep.int(1, np))
+    return(rep.int(1L, np))
   switch(markformat(x),
          none = { },
          vector = {
-           marx <- marks(x)
-           agree <- (marx[I] == marx[J])
+           marx <- as.data.frame(marks(x))
+           agree <- IdenticalRows(I, J, marx)
            I <- I[agree]
            J <- J[agree]
          },
          dataframe = {
            marx <- marks(x)
-           agree <- apply(marx[I, ,drop=FALSE] == marx[J, ,drop=FALSE], 1, all)
+           agree <- IdenticalRows(I, J, marx)
            I <- I[agree]
            J <- J[agree]
          },
-         hyperframe =, 
-         listof = stop("Not implemented for hyperframes or lists of marks")
+         hyperframe = {
+           marx <- as.data.frame(marks(x)) # possibly discards columns
+           agree <- IdenticalRows(I, J, marx)
+           I <- I[agree]
+           J <- J[agree]
+         }, 
+         listof = stop("Not implemented for lists of marks")
          )
   if(length(I) == 0)
-    return(rep.int(1, np))
+    return(rep.int(1L, np))
   JbyI <- split(J, factor(I, levels=1:np))
   result <- 1 + sapply(JbyI, length)
   return(result)
 }
   
-multiplicity.data.frame <- local({
-
-  id <- function(i,j, a, b) identical(a[i,], b[j,])
-  IdenticalRows <- Vectorize(id, c("i", "j")) 
-
-  multiplicity.data.frame <- function(x) {
-    dup <- duplicated(x)
-    nx <- nrow(x)
-    if(!any(dup))
-      return(rep.int(1, nx))
-    ux <- x[!dup, , drop=FALSE]
-    dx <- x[dup,  , drop=FALSE]
-    row.names(ux) <- NULL
-    row.names(dx) <- NULL
-    nu <- nrow(ux)
-    nd <- nrow(dx)
-    hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
-    counts <- 1 + rowSums(hit)
-    result <- numeric(nx)
-    result[!dup] <- counts
-    dumap <- apply(hit, 2, function(z) min(which(z)))
-    result[dup] <- counts[dumap]
+multiplicity.data.frame <- function (x) {
+  if(all(unlist(lapply(x, is.numeric))))
+    return(multiplicityNumeric(as.matrix(x)))
+  ## result template (vector of 1's)
+  result <- setNames(rep.int(1L, nrow(x)), rownames(x))
+  ## check for duplicates (works for data frames, arrays and vectors)
+  ## CAVE: comparisons are based on a character representation of x
+  if (!any(dup <- duplicated(x)))
     return(result)
-  }
+  ux <- x[!dup, , drop=FALSE]
+  dx <- x[dup,  , drop=FALSE]
+  nu <- nrow(ux)
+  nd <- nrow(dx)
+  hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
+  counts <- as.integer(1 + .rowSums(hit, nu, nd))
+  result[!dup] <- counts
+  dumap <- apply(hit, 2, function(z) min(which(z)))
+  result[dup] <- counts[dumap]
+  return(result)
+}
 
-  multiplicity.data.frame
-})
+### multiplicity method for NUMERIC arrays, data frames, and vectors
+### This implementation is simply based on checking for dist(x)==0
+
+multiplicityNumeric <- function(x)
+{
+  if (anyDuplicated(x)) {
+    distmat <- as.matrix(dist(x, method="manhattan"))  # faster than euclid.
+    as.integer(rowSums(distmat == 0))                  # labels are kept
+  } else {                                             # -> vector of 1's
+    nx <- NROW(x)
+    labels <- if (length(dim(x))) rownames(x) else names(x)
+    if (is.null(labels)) labels <- seq_len(nx)
+    setNames(rep.int(1L, nx), labels)
+  }
+}
+
+### multiplicity method for arrays, data frames, and vectors (including lists)
+### It also works for non-numeric data, since it is based on duplicated().
+
+multiplicity.default <- function (x) {
+  if(is.numeric(x))
+    return(multiplicityNumeric(x))
+  nx <- NROW(x)                   # also works for a vector x
+  ## result template (vector of 1's)
+  labels <- if (length(dim(x))) rownames(x) else names(x)
+  if (is.null(labels)) labels <- seq_len(nx)
+  result <- setNames(rep.int(1L, nx), labels)
+  ## check for duplicates (works for data frames, arrays and vectors)
+  ## CAVE: comparisons are based on a character representation of x
+  if (!any(dup <- duplicated(x)))
+    return(result)
+
+  ## convert x to a matrix for IdenticalRows()
+  x <- as.matrix(x)
+  dimnames(x) <- NULL             # discard any names!
+  ux <- x[!dup, , drop=FALSE]
+  dx <- x[dup,  , drop=FALSE]
+  nu <- nrow(ux)
+  nd <- nrow(dx)
+  hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
+  counts <- as.integer(1 + .rowSums(hit, nu, nd))
+  dumap <- apply(hit, 2, function(z) min(which(z)))
+  result[dup] <- counts[dumap]
+  return(result)
+}
+
 

@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.3 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.5 $ $Date: 2014/02/07 02:45:04 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
@@ -118,21 +118,23 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   # border correction
   bX <- bdist.points(X)
   ok <- outer(r, bX, "<=")
-  denom <- rowSums(ok)
+  denom <- .rowSums(ok, nr, npts)
   loccumprod[!ok] <- 0
-  numer <- rowSums(loccumprod)
+  numer <- .rowSums(loccumprod, nr, npts)
   # pack up
   Gdf <- data.frame(r=r, theo = 1 - exp(- lmin * pi * r^2))
   desc <- c("distance argument r", "theoretical Poisson %s")
   theo.denom <- rep.int(npts, nr)
   G <- ratfv(Gdf, NULL, theo.denom,
-             "r", quote(Ginhom(r)),
+             "r", quote(G[inhom](r)),
              "theo", NULL, c(0,rmax),
-             c("r","%s[pois](r)"), desc, fname="Ginhom",
+             c("r", "{%s[%s]^{pois}}(r)"),
+             desc,
+             fname=c("G", "inhom"),
              ratio=ratio)
   G <- bind.ratfv(G,
                   data.frame(bord=denom-numer), denom,
-                  "hat(%s)[bord](r)",
+                   "{hat(%s)[%s]^{bord}}(r)",
                   "border estimate of %s",
                   "bord",
                   ratio=ratio)
@@ -269,21 +271,24 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   loccumprod <- matrix(z$ans, nrow=nr, ncol=nM)
   # border correction
   ok <- outer(r, bM, "<=")
-  denom <- rowSums(ok)
+  denom <- .rowSums(ok, nr, nM)
   loccumprod[!ok] <- 0
-  numer <- rowSums(loccumprod)
+  numer <- .rowSums(loccumprod, nr, nM)
   # pack up
   Fdf <- data.frame(r=r, theo = 1 - exp(- lmin * pi * r^2))
   desc <- c("distance argument r", "theoretical Poisson %s")
   theo.denom <- rep.int(npts, nr)
   FX <- ratfv(Fdf, NULL, theo.denom,
-             "r", quote(Finhom(r)),
-             "theo", NULL, c(0,rmax),
-             c("r","%s[pois](r)"), desc, fname="Finhom",
-             ratio=ratio)
+              "r",
+              quote(F[inhom](r)),
+              "theo", NULL, c(0,rmax),
+              c("r","{%s[%s]^{pois}}(r)"),
+              desc,
+              fname=c("F", "inhom"),
+              ratio=ratio)
   FX <- bind.ratfv(FX,
                   data.frame(bord=denom-numer), denom,
-                  "hat(%s)[bord](r)",
+                  "{hat(%s)[%s]^{bord}}(r)",
                   "border estimate of %s",
                   "bord",
                   ratio=ratio)
@@ -307,7 +312,7 @@ Jinhom <- function(X, lambda=NULL, lmin=NULL,
                sigma=sigma, varcov=varcov, r=r, ratio=FALSE)
   JX <- eval.fv((1-GX)/(1-FX))
   # relabel the fv object
-  JX <- rebadge.fv(JX, quote(Jinhom(r)), "Jinhom",
+  JX <- rebadge.fv(JX, quote(J[inhom](r)), c("J","inhom"),
                   names(JX), new.labl=attr(GX, "labl"))
   # tack on extra info
   attr(JX, "G") <- GX

@@ -28,7 +28,7 @@
 \source{Mark and Esler (1970), Ripley (1981).}
 \section{Note}{
   To trim a 5-foot margin off the window, type
-  \code{nzsub <- nztrees[ , owin(c(0,148),c(0,95)) ]}
+  \code{nzsub <- nztrees[owin(c(0,148),c(0,95)) ]}
 }
 \references{
   Ripley, B.D. (1981) 

@@ -68,7 +68,7 @@ matclust.estpcf(X, startpar=c(kappa=1,R=1), lambda=NULL,
   For a more detailed explanation of the Method of Minimum Contrast,
   see \code{\link{mincontrast}}. 
   
-  The Matern Cluster point process is described in Moller and Waagepetersen
+  The Matern Cluster point process is described in \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen
   (2003, p. 62). It is a cluster process formed by taking a 
   pattern of parent points, generated according to a Poisson process
   with intensity \eqn{\kappa}{kappa}, and around each parent point,
@@ -138,7 +138,7 @@ matclust.estpcf(X, startpar=c(kappa=1,R=1), lambda=NULL,
   }
 }
 \references{
-  Moller, J. and Waagepetersen, R. (2003).
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 

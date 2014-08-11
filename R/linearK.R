@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.30 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.31 $ $Date: 2014/02/16 08:30:25 $
 #
 # K function for point pattern on linear network
 #
@@ -24,11 +24,11 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
   switch(correction,
          Ang  = {
            ylab <- quote(K[L](r))
-           fname <- "K[L]"
+           fname <- c("K", "L")
          },
          none = {
            ylab <- quote(K[net](r))
-           fname <- "K[net]"
+           fname <- c("K", "net")
          })
   K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
   return(K)
@@ -59,12 +59,12 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   # set appropriate y axis label
   switch(correction,
          Ang  = {
-           ylab <- quote(K[LI](r))
-           fname <- "K[LI]"
+           ylab <- quote(K[L, inhom](r))
+           fname <- c("K", "list(L, inhom)")
          },
          none = {
-           ylab <- quote(K[netI](r))
-           fname <- "K[netI]"
+           ylab <- quote(K[net, inhom](r))
+           fname <- c("K", "list(net, inhom)")
          })
   K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab)
   return(K)
@@ -113,15 +113,19 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   r <- breaks$r
   rmax <- breaks$max
   #
+  type <- if(correction == "Ang") "L" else "net"
+  fname <- c("K", type)
+  ylab <- substitute(K[type](r), list(type=type))
+  #
   if(np < 2) {
     # no pairs to count: return zero function
     zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
-    K <- fv(df, "r", substitute(linearK(r), NULL),
+    K <- fv(df, "r", ylab,
             "est", . ~ r, c(0, rmax),
-            c("r", "%s(r)"),
+            c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname = "linearK")
+            fname = fname)
     return(K)
   }
   # compute pairwise distances  
@@ -129,7 +133,8 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   #---  compile into K function ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    K <- compileK(D, r, denom=denom)
+    K <- compileK(D, r, denom=denom, fname=fname)
+    K <- rebadge.fv(K, ylab, fname)
     unitname(K) <- unitname(X)
     return(K)
   }
@@ -149,15 +154,18 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   }
   # compute K
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  K <- compileK(D, r, weights=wt, denom=denom)
+  K <- compileK(D, r, weights=wt, denom=denom, fname=fname)
   # tack on theoretical value
-  K <- bind.fv(K, data.frame(theo=r), "%s[theo](r)",
+  K <- bind.fv(K, data.frame(theo=r),
+               makefvlabel(NULL, NULL, fname, "theo"),
                "theoretical Poisson %s")
+  K <- rebadge.fv(K, ylab, fname)
   unitname(K) <- unitname(X)
   fvnames(K, ".") <- rev(fvnames(K, "."))
   # show working
   if(showworking)
     attr(K, "working") <- list(D=D, wt=wt)
+  attr(K, "correction") <- correction
   return(K)
 }
 

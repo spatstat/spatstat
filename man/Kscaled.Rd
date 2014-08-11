@@ -26,8 +26,9 @@
     Either a vector giving the intensity values
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
-    intensity values at all locations, or a \code{function(x,y)} which
-    can be evaluated to give the intensity value at any location.
+    intensity values at all locations, a \code{function(x,y)} which
+    can be evaluated to give the intensity value at any location,
+    or a fitted point process model (object of class \code{"ppm"}).
   }
   \item{\dots}{
     Arguments passed from \code{Lscaled} to \code{Kscaled}
@@ -41,9 +42,7 @@
     there is a sensible default.
   }
   \item{breaks}{
-    An alternative to the argument \code{r}.
-    Not normally invoked by the user.
-    See Details.
+	This argument is for internal use only.
   }
   \item{correction}{
       A character vector containing any selection of the
@@ -156,7 +155,8 @@
   vector with length equal to the number of points in \code{X}.
 
   If \code{lambda} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, Moller
+  a `leave-one-out' kernel smoother,
+  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
   and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -175,6 +175,12 @@
   result of \code{Kscaled}; see \code{\link{pcf}} and \code{\link{pcf.fv}}.
 }
 \references{
+  Baddeley, A.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  Non- and semiparametric estimation of interaction in
+  inhomogeneous point patterns.
+  \emph{Statistica Neerlandica} \bold{54}, 329--350.
+
   Hahn, U. (2007)
   \emph{Global and Local Scaling in the
     Statistics of Spatial Point Processes}. Habilitationsschrift,

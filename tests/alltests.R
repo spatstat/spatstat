@@ -1220,10 +1220,12 @@ local({
   plot(alltypes(amacrine, "J"))
   plot(alltypes(amacrine, pcfcross))
 })
-# test of case where mark levels contain illegal characters
+## tests involving strange mark values
+## $Revision: 1.2 $ $Date: 2014/01/08 11:15:05 $
 
 require(spatstat)
 local({
+  ## ppm() where mark levels contain illegal characters
   hyphenated <- c("a", "not-a")
   spaced <- c("U", "non U")
   suffixed <- c("a+", "a*")
@@ -1247,6 +1249,18 @@ local({
   tryit(spaced, amacrine, irad, hrad)
   tryit(suffixed, amacrine, irad, hrad)
   tryit(charred, amacrine, irad, hrad)
+
+  ## marks which are dates
+  X <- cells
+  n <- npoints(X)
+  endoftime <- rep(ISOdate(2001,1,1), n)
+  eotDate   <- rep(as.Date("2001-01-01"), n)
+  markformat(endoftime)
+  markformat(eotDate)
+  marks(X) <- endoftime
+  print(X)
+  Y <- X %mark% data.frame(id=1:42, date=endoftime, dd=eotDate)
+  print(Y)
 })
 #
 # test cases where there are no (rows or columns of) marks
@@ -1401,9 +1415,28 @@ local({
 })
 
 
+## badwindowcheck.R
+## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
+##
+
 require(spatstat)
-source("badwindow.R")
-owinpolycheck(W,verbose=FALSE)
+local({
+  ## Simple example of self-crossing polygon
+  x <- read.table("selfcross.txt", header=TRUE)
+  ## Auto-repair
+  w <- owin(poly=x)
+
+  ## Real data involving various quirks
+  b <- read.table("badwindow.txt", header=TRUE)
+  b <- split(b, factor(b$i))
+  b <- lapply(b, function(z) { as.list(z[,-3]) })
+  ## make owin without checking
+  W <- owin(poly=b, check=FALSE)
+  ## Apply stringent checks
+  owinpolycheck(W,verbose=FALSE)
+  ## Auto-repair
+  W2 <- owin(poly=b)
+})
 
 
 
@@ -1517,7 +1550,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.8 $  $Date: 2013/10/06 08:44:28 $
+#  $Revision: 1.9 $  $Date: 2014/02/05 09:30:38 $
 #
 
 require(spatstat)
@@ -1558,6 +1591,11 @@ r55 <- shift(letterR,c(5,5))
 tessr4 <- tess(tiles=list(r00, r05,r50,r55))
 puntosr4 <- split(puntos, tessr4, drop=TRUE)
 split(puntos, tessr4, drop=TRUE) <- puntosr4
+
+## More headaches with mark format
+A <- runifpoint(10)
+B <- runifpoint(10)
+AB <- split(superimpose(A=A, B=B))
 
 })
 #
@@ -1658,7 +1696,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.4 $  $Date: 2013/09/20 09:01:34 $
+#  $Revision: 1.5 $  $Date: 2014/01/24 05:59:31 $
 #
 
 require(spatstat)
@@ -1715,9 +1753,18 @@ local({
   if(disagree(v, vc))
     stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' for Geyer model")
 
-  # test of pairwise.family$delta2
+
+  ## tests of 'deltasuffstat' code
+  ##     Handling of offset terms
+  modelH <- ppm(cells, ~x, Hardcore(0.05))
+  a <- vcov(modelH, generic=TRUE) ## may fall over
+  b <- vcov(modelH, generic=FALSE)
+  if(disagree(a, b))
+    stop("Disagreement between vcov.ppm algorithms for Hardcore model")
+  
+  ##     Correctness of pairwise.family$delta2
   modelZ <- ppm(amacrine, ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
-  b <- vcov(modelZ)
+  b <- vcov(modelZ, generic=FALSE)
   g <- vcov(modelZ, generic=TRUE)
   if(disagree(b, g))
     stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
@@ -1912,3 +1959,13 @@ local({
   duplicated(X)
   multiplicity(X)
 })
+## tests/percy.R
+## Tests of Percus-Yevick approximations
+##    $Revision: 1.1 $ $Date: 2014/01/31 11:49:46 $
+
+require(spatstat)
+local({
+  fit <- ppm(swedishpines, ~1, DiggleGatesStibbard(6))
+  K <- Kmodel(fit)
+})
+

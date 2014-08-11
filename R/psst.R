@@ -71,7 +71,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   
   # residuals
   resid <- residuals(fit, type="raw",drop=FALSE,
-                    coefs=truecoef, quad=hi.res)
+                    new.coef=truecoef, quad=hi.res)
   rescts <- with(resid, "continuous")
   # absolute weight for continuous integrals
   wc   <- -rescts

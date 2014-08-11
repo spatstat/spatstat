@@ -15,12 +15,19 @@
 }
 \usage{
 marks(x, \dots)
-\method{marks}{ppp}(x, \dots, dfok=TRUE)           
+
+\method{marks}{ppp}(x, \dots, dfok=TRUE, drop=TRUE)           
+
 \method{marks}{ppx}(x, \dots, drop=TRUE)
+
 marks(x, \dots) <- value
-\method{marks}{ppp}(x, \dots, dfok=TRUE) <- value
+
+\method{marks}{ppp}(x, \dots, dfok=TRUE, drop=TRUE) <- value
+
 \method{marks}{ppx}(x, \dots) <- value
+
 setmarks(x, value)
+
 x \%mark\% value
 }
 \arguments{
@@ -39,8 +46,8 @@ x \%mark\% value
     of marks will be converted to a vector or factor.
   }
   \item{value}{
-    Vector, data frame or hyperframe of mark values,
-    or \code{NULL}.
+    Replacement value. A vector, data frame or hyperframe of mark values,
+    or \code{NULL}. 
   }
 }
 \value{

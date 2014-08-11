@@ -64,8 +64,8 @@
 
   If \code{X} is a function value table (object of class \code{"fv"}),
   then it is assumed to contain estimates of the \eqn{K} function
-  or one of its variants (typically obtained from \code{Kest} or
-  \code{Kinhom}).
+  or one of its variants (typically obtained from \code{\link{Kest}} or
+  \code{\link{Kinhom}}).
   This routine computes an estimate of \eqn{g(r)} 
   using smoothing splines to approximate the derivative.
   See \code{\link{pcf.fv}} for details.

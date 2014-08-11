@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.12 $   $Date: 2009/12/16 18:23:52 $
+#    $Revision: 1.13 $   $Date: 2014/02/09 07:43:24 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -12,7 +12,12 @@ fillNA <- function(x, value=0) {
   x$v <- v
   return(x)
 }
-  
+
+Smooth.im <- function(X, sigma=NULL, ...,
+                      normalise=FALSE, bleed=TRUE, varcov=NULL) {
+  blur(X, sigma=sigma, ..., normalise=normalise, bleed=bleed, varcov=varcov)
+}
+
 blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
   stopifnot(is.im(x))
   # determine smoothing kernel 

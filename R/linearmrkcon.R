@@ -3,7 +3,7 @@
 #
 # mark connection function & mark equality function for linear networks
 #
-# $Revision$ $Date$
+# $Revision: 1.1 $ $Date: 2014/02/17 01:44:38 $
 #
 
 linearmarkconnect <- function(X, i, j, r=NULL, ...) {
@@ -25,18 +25,8 @@ linearmarkconnect <- function(X, i, j, r=NULL, ...) {
   result <- eval.fv(qi * qj * pcfij/pcfall)
   
   # rebrand
-  iname <- make.parseable(paste(i))
-  jname <- make.parseable(paste(j))
-  result <-
-    rebadge.fv(result, 
-               substitute(p[lin,i,j](r), list(i=iname,j=jname)),
-               sprintf("p[list(lin,%s,%s)]", iname, jname),
-               new.yexp=substitute(p[list(lin,i,j)](r),
-                                   list(i=iname,j=jname)))
-  result <- rebadge.fv(result,
-                       tags=c("est","theo"),
-                       new.labl=c("hat(%s)(r)", "%s[theo](r)"))
-
+  result <- rebadge.as.crossfun(result, "p", "L", i, j)
+  attr(result, "labl") <- attr(pcfij, "labl")
   return(result)
 }
 
@@ -50,11 +40,9 @@ linearmarkequal <- function(X, r=NULL, ...) {
 
   result <- Reduce(function(A,B){eval.fv(A+B)}, v)
   result <-rebadge.fv(result, 
-                      quote(p[lin](r)),
-                      new.fname="p[lin]")
-  result <- rebadge.fv(result,
-                       tags=c("est","theo"),
-                       new.labl=c("hat(%s)(r)", "%s[theo](r)"))
+                      quote(p[L](r)),
+                      new.fname=c("p", "L"))
+  attr(result, "labl") <- attr(v[[1]], "labl")
   return(result)
 }
 

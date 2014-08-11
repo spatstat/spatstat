@@ -85,6 +85,11 @@
   Tessellations can be used to classify the points of
   a point pattern, in \code{\link{split.ppp}}, \code{\link{cut.ppp}} and
   \code{\link{by.ppp}}.
+
+  To construct particular tessellations, see
+  \code{\link{quadrats}}, \code{\link{hextess}}, 
+  \code{\link{dirichlet}}, \code{\link{delaunay}}
+  and \code{\link{rpoislinetess}}.
 }
 \value{
   An object of class \code{"tess"} representing the tessellation.
@@ -98,9 +103,13 @@
   \code{\link{split.ppp}},
   \code{\link{cut.ppp}},
   \code{\link{by.ppp}},
-  \code{\link{quadrats}},
   \code{\link{bdist.tiles}},
   \code{\link{tile.areas}}.
+
+  To construct particular tessellations, see
+  \code{\link{quadrats}}, \code{\link{hextess}},
+  \code{\link{dirichlet}}, \code{\link{delaunay}}
+  and \code{\link{rpoislinetess}}.
 }
 \examples{
   A <- tess(xgrid=0:4,ygrid=0:4)

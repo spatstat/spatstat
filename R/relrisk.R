@@ -3,11 +3,11 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.20 $  $Date: 2013/08/29 03:57:16 $
+#  $Revision: 1.21 $  $Date: 2014/01/08 00:51:39 $
 #
 
 relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
-                    casecontrol=TRUE) {
+                    casecontrol=TRUE, case=2) {
   stopifnot(is.ppp(X))
   stopifnot(is.multitype(X))
   Y <- split(X)
@@ -28,7 +28,15 @@ relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
   }
   # compute probabilities
   if(ntypes == 2 && casecontrol) {
-    # 1 = control, 2 = case
+    ##
+    if(is.numeric(case)) {
+      icase <- case <- as.integer(case)
+      stopifnot(case %in% 1:2)
+    } else if(is.character(case)) {
+      icase <- match(case, levels(X))
+      if(is.na(icase)) stop(paste("No points have mark =", case))
+    } else stop(paste("Unrecognised format for argument", sQuote("case")))
+    icontrol <- 3 - icase
     # compute densities
     Deach <- do.call(density.splitppp,
                      append(list(Y, sigma=sigma, varcov=varcov, at=at),
@@ -39,29 +47,29 @@ relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
     # compute probability of case
     switch(at,
            pixels= {
-             Dcase <- Deach[[2]]
+             Dcase <- Deach[[icase]]
              result <- eval.im(Dcase/Dall)
              # trap NaN values
              nbg <- as.matrix(eval.im(badprobability(result, FALSE)))
              if(any(nbg)) {
                # apply l'Hopital's rule:
                #     p(case) = 1{nearest neighbour is case}
-               dist1 <- distmap(Y[[1]], xy=result)
-               dist2 <- distmap(Y[[2]], xy=result)
-               close2 <- eval.im(as.integer(dist2 < dist1))
-               result[nbg] <- close2[nbg]
+               distcase <- distmap(Y[[icase]], xy=result)
+               distcontrol <- distmap(Y[[icontrol]], xy=result)
+               closecase <- eval.im(as.integer(distcase < distcontrol))
+               result[nbg] <- closecase[nbg]
              }
            },
            points={
              result <- numeric(npoints(X))
-             iscase <- (imarks == 2)
-             result[iscase] <- Deach[[2]]/Dall[iscase]
-             result[!iscase] <- 1 - Deach[[1]]/Dall[!iscase]
+             isCase <- (imarks == icase)
+             result[isCase] <- Deach[[icase]]/Dall[isCase]
+             result[!isCase] <- 1 - Deach[[icontrol]]/Dall[!isCase]
              # trap NaN values
              if(any(nbg <- badprobability(result, TRUE))) {
                # apply l'Hopital's rule
                nntype <- imarks[nnwhich(X)]
-               result[nbg] <- as.integer(nntype[nbg] == 2)
+               result[nbg] <- as.integer(nntype[nbg] == icase)
              }
            })
   } else {
@@ -248,26 +256,9 @@ bw.relrisk <- function(X, method="likelihood",
 }
 
 which.max.im <- function(x) {
-  stopifnot(is.list(x))
-  n <- length(x)
-  if(n == 0)
-    return(list())
-  if(!all(unlist(lapply(x, is.im))))
-    stop("x should be a list of images")
-  nama <- names(x)
-  xmax <- x[[1]]
-  wmax <- as.im(1L, xmax)
-  if(n > 1) {
-    for(i in 2:n) {
-      xi <- x[[i]]
-      xmaxnew <- eval.im(pmax.int(xi, xmax))
-      wmaxnew <- eval.im(ifelseAX(xi > xmax, i, wmax))
-      xmax <- xmaxnew
-      wmax <- wmaxnew
-    }
-  }
-  wmax <- eval.im(factor(wmax, levels=1:n))
-  if(!is.null(nama))
-    levels(wmax) <- nama
-  return(wmax)
+  .Deprecated("im.apply", "spatstat",
+              "which.max.im(x) is deprecated: use im.apply(x, which.max)")
+  ans <- im.apply(x, which.max)
+  return(ans)
 }
+

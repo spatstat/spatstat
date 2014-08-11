@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.38 $  $Date: 2012/09/06 03:20:43 $
+#   $Revision: 1.43 $  $Date: 2014/01/16 05:41:24 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -244,7 +244,7 @@ print.quadrattest <- function(x, ...) {
 
 plot.quadrattest <- local({
 
-  plot.quadrattest <- function(x, ...) {
+  plot.quadrattest <- function(x, ..., textargs=list()) {
     xname <- short.deparse(substitute(x))
 
     if(!is.atomicQtest(x)) {
@@ -275,21 +275,27 @@ plot.quadrattest <- local({
     cos30 <- sqrt(2)/2
     sin30 <- 1/2
     f <- 0.4
-    dotext(-f * cos30, f * sin30, as.vector(t(as.table(Xcount)))[ok],
-           x0, y0, ra, adj=c(1,0), ...)
+    dotext(-f * cos30, f * sin30,
+           as.vector(t(as.table(Xcount)))[ok],
+           x0, y0, ra, textargs, 
+           adj=c(1,0), ...)
     # plot expected counts
-    dotext(f * cos30, f * sin30, round(x$expected,1)[ok],
-           x0, y0, ra, adj=c(0,0),
-           ...)
+    dotext(f * cos30, f * sin30,
+           round(x$expected,1)[ok],
+           x0, y0, ra, textargs,
+           adj=c(0,0), ...)
     # plot Pearson residuals
-    dotext(0, -f,  signif(x$residuals,2)[ok],x0, y0, ra, ...)
+    dotext(0, -f,  signif(x$residuals,2)[ok],
+           x0, y0, ra, textargs,
+           ...)
     return(invisible(NULL))
   }
  
-  dotext <- function(dx, dy, values, x0, y0, ra, ...) {
+  dotext <- function(dx, dy, values, x0, y0, ra, textargs, ...) {
     do.call.matched("text.default",
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=paste(as.vector(values))),
+                                     textargs, 
                                      list(...)))
   }
 
@@ -403,5 +409,26 @@ as.tess.quadrattest <- function(X) {
   return(as.listof(lapply(tests, as.tess.quadrattest)))
 }
 
+as.owin.quadrattest <- function(W, ..., fatal=TRUE) {
+  if(is.atomicQtest(W))
+    return(as.owin(as.tess(W), ..., fatal=fatal))    
+  gezeur <- paste("Cannot convert quadrat test result to a window;",
+                  "it contains data for several windows")
+  if(fatal) stop(gezeur) else warning(gezeur)
+  return(NULL)
+}
 
-            
+## The shift method is undocumented.
+## It is only needed in plot.listof
+
+shift.quadrattest <- function(X, ...) {
+  if(is.atomicQtest(X)) {
+    attr(X, "quadratcount") <- qc <- shift(attr(X, "quadratcount"), ...)
+    attr(X, "lastshift") <- getlastshift(qc)
+  } else {
+    tests <- extractAtomicQtests(X)
+    attr(X, "tests") <- te <- lapply(tests, shift, ...)
+    attr(X, "lastshift") <- getlastshift(te[[1]])
+  }
+  return(X)
+}

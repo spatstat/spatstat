@@ -43,7 +43,7 @@ from files in the popular `shapefile' format.
 This vignette is part of the documentation included in 
 \pkg{spatstat} version \texttt{\Sexpr{sversion}}.
 The information applies to 
-\pkg{spatstat} versions \texttt{1.18-0} and above.
+\pkg{spatstat} versions \texttt{1.36-0} and above.
 
 \section{Shapefiles}
 
@@ -387,42 +387,26 @@ te <- tess(tiles=windows)
 @ 
 \end{enumerate}
 
-The conversion process may generate an error message, saying
-that some of the polygons intersect each other, or are self-intersecting,
-or violate other geometrical conditions. 
-This happens because an object of class \texttt{SpatialPolygons} 
-is just a list of lists of polygons,
-possibly self-intersecting or mutually intersecting,
-but an object of class \texttt{"owin"} is intended to specify a 
-well-defined region of space. 
+{\bf The following is different from what happened in
+  previous versions of \pkg{spatstat}} (prior to version \texttt{1.36-0}.)
 
-If you chose option 1, the conversion process will check whether
-any of the polygons in \texttt{x} intersect each other. This often 
-generates an error with a shapefile representing a division of space
-into states or counties or administrative regions, 
-like the D\'epartements of France, 
-because two adjacent regions have boundaries that
-intersect (even though the intersection has zero area). 
-If you chose option 2, the conversion process will only check 
-whether, for each polygonal region in \texttt{x}, the component polygons
-intersect each other. This will \emph{usually} avoid the checking problem.
-
-If an error occurs, the error message
-will usually specify which component polygons fail the test. 
-The best strategy is usually just to 
-plot the object \texttt{x} (using the plot facilities in \pkg{sp})
-to identify the problem. 
-
-It is possible to suppress the stringent checking of polygons in 
-\pkg{spatstat} during the conversion:
-<<eval=FALSE>>=
-spatstat.options(checkpolygons=FALSE)
-y <- as(x, "owin")
-spatstat.options(checkpolygons=TRUE)
-@ 
-The resulting object \texttt{y} should be inspected carefully and used
-circumspectly; it has not passed the stringent tests
-required for many algorithms in \pkg{spatstat}. 
+During the conversion process, the geometry of the polygons
+will be automatically ``repaired'' if needed.
+Polygon data from shapefiles often contain geometrical inconsistencies 
+such as self-intersecting boundaries and overlapping pieces. 
+For example, these can arise from small errors in curve-tracing.
+Geometrical inconsistencies are tolerated in 
+an object of class \texttt{SpatialPolygons} which
+is a list of lists of polygonal curves.
+However, they are not tolerated in an object of class \texttt{owin},
+because an \texttt{owin} must specify a well-defined region of space.
+These data inconsistencies must be repaired to prevent technical problems. 
+\pkg{Spatstat} uses polygon-clipping code to automatically convert 
+polygonal lines into valid polygon boundaries. 
+The repair process changes the number of vertices in each polygon,
+and the number of polygons (if you chose option 1).
+To disable the repair process, set 
+\texttt{spatstat.options(fixpolygons=FALSE)}.
 
 \subsubsection{Objects of class \texttt{SpatialPolygonsDataFrame}}
 

@@ -9,7 +9,8 @@
   \method{pcf}{ppp}(X, \dots, r = NULL, kernel="epanechnikov", bw=NULL,
                     stoyan=0.15,
                     correction=c("translate", "Ripley"),
-                    divisor = c("r", "d"))
+                    divisor = c("r", "d"),
+                    domain=NULL)
 }
 \arguments{
   \item{X}{
@@ -39,6 +40,10 @@
   \item{divisor}{
     Choice of divisor in the estimation formula:
     either \code{"r"} (the default) or \code{"d"}. See Details.
+  }
+  \item{domain}{
+    Optional. Calculations will be restricted to this subset
+    of the window. See Details.
   }
 } 
 \value{
@@ -135,7 +140,7 @@
 
   The bandwidth of the smoothing kernel can be controlled by the
   argument \code{bw}. Its precise interpretation
-  is explained in the documentation for \code{\link{density}}.
+  is explained in the documentation for \code{\link{density.default}}.
   For the Epanechnikov kernel, the argument \code{bw} is
   equivalent to \eqn{h/\sqrt{5}}{h/sqrt(5)}.
 
@@ -155,6 +160,15 @@
   starting from \code{r[1] = 0}, 
   and \code{max(r)} must not exceed half the diameter of 
   the window.
+
+  If the argument \code{domain} is given, estimation will be restricted
+  to this region. That is, the estimate of 
+  \eqn{g(r)} will be based on pairs of points in which the first point lies
+  inside \code{domain} and the second point is unrestricted.
+  The argument \code{domain}
+  should be a window (object of class \code{"owin"}) or something acceptable to
+  \code{\link{as.owin}}. It must be a subset of the
+  window of the point pattern \code{X}.
 
   To compute a confidence band for the true value of the
   pair correlation function, use \code{\link{lohboot}}.

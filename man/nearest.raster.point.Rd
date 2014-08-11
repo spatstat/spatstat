@@ -10,8 +10,9 @@
 \arguments{
   \item{x}{Numeric vector of \eqn{x} coordinates of any points}
   \item{y}{Numeric vector of \eqn{y} coordinates of any points}
-  \item{w}{A window (an object of class \code{"owin"})
-    of type \code{"mask"} representing a binary pixel image.
+  \item{w}{An image (object of class \code{"im"})
+    or a binary mask window (an object of class \code{"owin"}
+    of type \code{"mask"}).
   }
   \item{indices}{Logical flag indicating whether to return the
     row and column indices, or the actual \eqn{x,y} coordinates.
@@ -26,9 +27,10 @@
   of the pixels.
 }
 \details{
-  The argument \code{w} should be a window (an object of class
+  The argument \code{w} should be either a pixel image
+  (object of class \code{"im"}) or a window (an object of class
   \code{"owin"}, see \code{\link{owin.object}} for details)
-  of type \code{"mask"}. This represents a binary pixel image.
+  of type \code{"mask"}. 
 
   The arguments \code{x} and \code{y} should be numeric vectors
   of equal length. They are interpreted as the coordinates of

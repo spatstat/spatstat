@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.21 $     $Date: 2013/04/25 06:37:43 $
+#     $Revision: 1.24 $     $Date: 2014/02/09 05:24:30 $
 #
 
 eval.fv <- local({
@@ -66,12 +66,13 @@ eval.fv <- local({
     # 'fname' is sprintf-ed into 'labl' for legend
     yexps <- lapply(funs, attr, which="yexp")
     ylabs <- lapply(funs, attr, which="ylab")
-    fnames <- unlist(lapply(funs, getfname))
+    fnames <- lapply(funs, getfname)
     # Repair 'fname' attributes if blank
-    if(any(blank <- !nzchar(fnames))) {
+    blank <- unlist(lapply(fnames, function(z) { !any(nzchar(z)) }))
+    if(any(blank)) {
       # Set function names to be object names as used in the expression
       for(i in which(blank))
-        attr(funs[[i]], "fname") <- fnames[i] <- names(funs)[i]
+        attr(funs[[i]], "fname") <- fnames[[i]] <- names(funs)[i]
     }
     # Remove duplicated names
     # Typically occurs when combining several K functions, etc.
@@ -85,8 +86,9 @@ eval.fv <- local({
       fnames <- newfnames
     }
     if(any(duplicated(ylabs))) {
+      flatnames <- lapply(funs, flatfname)
       for(i in 1:nfuns) {
-        new.ylab <- substitute(f(r), list(f=as.name(fnames[i])))
+        new.ylab <- substitute(f(r), list(f=flatnames[[i]]))
         funs[[i]] <- rebadge.fv(funs[[i]], new.ylab=new.ylab)
       }
       ylabs <- lapply(funs, attr, which="ylab")
@@ -108,7 +110,7 @@ eval.fv <- local({
     if(nfuns > 1) {
       # take original expression
       the.fname <- paren(flatten(deparse(elang)))
-    } else if(nzchar(oldname <- oldfnames[1])) {
+    } else if(nzchar(oldname <- flatfname(funs[[1]]))) {
       # replace object name in expression by its function name
       namemap <- list(as.name(oldname)) 
       names(namemap) <- names(funs)[1]
@@ -144,7 +146,6 @@ eval.fv <- local({
   }
   getfname <- function(x) { if(!is.null(y <- attr(x, "fname"))) y else "" }
   flatten <- function(x) { paste(x, collapse=" ") }
-  
   eval.fv
 })
     

@@ -62,7 +62,7 @@ Lcross.inhom(X, i, j, \dots)
   transformed by taking \eqn{L(r) = \sqrt{K(r)/\pi}}{L(r) = sqrt(K(r)/pi)}.
 }
 \references{
-  Moller, J. and Waagepetersen, R.
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R.
   Statistical Inference and Simulation for Spatial Point Processes
   Chapman and Hall/CRC
   Boca Raton, 2003.

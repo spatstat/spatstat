@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.97 $   $Date: 2013/11/16 08:02:00 $
+#    $Revision: 1.106 $   $Date: 2014/02/16 02:36:57 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -82,7 +82,7 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
     if(any(nbg)) desc[nbg] <- ""
   }
   if(!is.null(fname))
-    stopifnot(is.character(fname) && length(fname) == 1)
+    stopifnot(is.character(fname) && length(fname) %in% 1:2)
   # pack attributes
   attr(x, "argu") <- argu
   attr(x, "valu") <- valu
@@ -172,10 +172,7 @@ print.fv <- function(x, ...) {
   if(!is.null(ylab))
     desc <- sprintf(desc, ylab)
   # Labels ..
-  labl <- a$labl
-  # .. may require insertion of function name if it is known
-  if(!is.null(fname <- attr(x, "fname")))
-    labl <- sprintf(labl, fname)
+  labl <- fvlabels(x, expand=TRUE)
   # Start printing
   cat("Entries:\n")
   lablen <- nchar(labl)
@@ -308,11 +305,18 @@ fvnames <- function(X, a=".") {
 fvlabels <- function(x, expand=FALSE) {
   lab <- attr(x, "labl")
   names(lab) <- names(x)
-  if(expand) {
-    # expand plot labels
-    if(!is.null(fname <- attr(x, "fname")))
-      lab <- sprintf(lab, fname)
+  if(expand && !is.null(fname <- attr(x, "fname"))) {
+    ## expand plot labels using function name
+    nstrings <- max(substringcount("%s", lab))
+    ## pad with blanks
+    nextra <- nstrings - length(fname)
+    if(nextra > 0) 
+      fname <- c(fname, rep("", nextra))
+    ## render
+    lab <- do.call(sprintf, append(list(lab), as.list(fname)))
   }
+  ## remove empty space
+  lab <- gsub(" ", "", lab)
   return(lab)
 }
 
@@ -324,6 +328,36 @@ fvlabels <- function(x, expand=FALSE) {
   return(x)
 }
 
+flatfname <- function(x) {
+  fn <- if(is.character(x)) x else attr(x, "fname")
+  if(length(fn) > 1)
+    fn <- paste0(fn[1], "[", paste(fn[-1], collapse=" "), "]")
+  as.name(fn)
+}
+
+makefvlabel <- function(op=NULL, accent=NULL, fname, sub=NULL, argname="r") {
+  ## de facto standardised label
+  a <- "%s"
+  if(!is.null(accent)) 
+    a <- paste0(accent, paren(a))     ## eg hat(%s)
+  if(!is.null(op))
+    a <- paste0("bold", paren(op), "~", a)  ## eg bold(var)~hat(%s)
+  if(is.null(sub)) {
+    if(length(fname) != 1) {
+      a <- paste0(a, "[%s]")
+      a <- paren(a, "{")
+    }
+  } else {
+    if(length(fname) == 1) {
+      a <- paste0(a, paren(sub, "["))
+    } else {
+      a <- paste0(a, paren("%s", "["), "^", paren(sub, "{"))
+      a <- paren(a, "{")
+    }
+  } 
+  a <- paste0(a, paren(argname))
+  return(a)
+}
 
 fvlabelmap <- local({
   magic <- function(x) {
@@ -381,7 +415,7 @@ bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL) {
   if(is.fv(y)) {
     # y is already an fv object
     ay <- attributes(y)
-    if(ax$fname != ay$fname) {
+    if(!identical(ax$fname, ay$fname)) {
       # x and y represent different functions
       # expand the labels separately 
       fvlabels(x) <- fvlabels(x, expand=TRUE)
@@ -443,7 +477,8 @@ bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL) {
           c(ax$labl, labl),
           c(ax$desc, desc),
           unitname=unitname(x),
-          fname=ax$fname)
+          fname=ax$fname,
+          yexp=ax$yexp)
   return(z)
 }
 
@@ -598,6 +633,47 @@ rebadge.fv <- function(x, new.ylab, new.fname,
   return(x)
 }
 
+## common invocations to label a function like Kdot or Kcross
+rebadge.as.crossfun <- function(x, main, sub=NULL, i, j) {
+  i <- make.parseable(i)
+  j <- make.parseable(j)
+  if(is.null(sub)) {
+    ylab <- substitute(main[i, j](r),
+                       list(main=main, i=i, j=j))
+    fname <- c(main, paste0("list", paren(paste(i, j, sep=","))))
+    yexp <- substitute(main[list(i, j)](r),
+                       list(main=main, i=i, j=j))
+  } else {
+    ylab <- substitute(main[sub, i, j](r),
+                       list(main=main, sub=sub, i=i, j=j))
+    fname <- c(main, paste0("list", paren(paste(sub, i, j, sep=","))))
+    yexp <- substitute(main[list(sub, i, j)](r),
+                       list(main=main, sub=sub, i=i, j=j))
+  }
+  y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp)
+  return(y)
+}
+
+rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
+  i <- make.parseable(i)
+  if(is.null(sub)) {
+    ylab <- substitute(main[i ~ dot](r),
+                       list(main=main, i=i))
+    fname <- c(main, paste0(i, "~symbol(\"\\267\")"))
+    yexp <- substitute(main[i ~ symbol("\267")](r),
+                       list(main=main, i=i))
+  } else {
+    ylab <- substitute(main[sub, i ~ dot](r),
+                       list(main=main, sub=sub, i=i))
+    fname <- c(main, paste0("list",
+                            paren(paste0(sub, ",",
+                                         i, "~symbol(\"\\267\")"))))
+    yexp <- substitute(main[list(sub, i ~ symbol("\267"))](r),
+                       list(main=main, sub=sub, i=i))
+  }
+  y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp)
+  return(y)
+}
 
 # subset extraction operator
 "[.fv" <-
@@ -648,7 +724,8 @@ rebadge.fv <- function(x, new.ylab, new.fname,
                labl=attr(x, "labl")[selected],
                desc=attr(x, "desc")[selected],
                unitname=attr(x, "units"),
-               fname=attr(x,"fname"))
+               fname=attr(x,"fname"),
+               yexp=attr(x, "yexp"))
   # carry over preferred names, if possible
   dotn <- fvnames(x, ".")
   fvnames(result, ".") <- dotn[dotn %in% colnames(result)]
@@ -829,7 +906,7 @@ prefixfv <- function(x, tagprefix="", descprefix="", lablprefix=tagprefix,
   oldtags <- names(x)[relevant]
   newtags <- paste(tagprefix, oldtags, sep="")
   newlabl <- paste(lablprefix, att$labl[relevant], sep="")
-  newdesc <- paste(descprefix, att$desc[relevant], sep="")
+  newdesc <- paste(descprefix, att$desc[relevant])
   y <- rebadge.fv(x, tags=oldtags,
                   new.desc=newdesc,
                   new.labl=newlabl,
@@ -1089,3 +1166,4 @@ conform.ratfv <- function(x) {
   attr(x, "denominator") <- den
   return(x)
 }
+

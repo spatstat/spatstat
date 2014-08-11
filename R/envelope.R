@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.51 $  $Date: 2013/10/21 01:39:54 $
+#   $Revision: 2.53 $  $Date: 2014/02/15 12:37:41 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -707,7 +707,8 @@ envelopeEngine <-
                   labl=names(alldata),
                   desc=c("distance argument r",
                     paste("Simulation ", 1:nsim, sep="")),
-                  fname=attr(funX, "fname"))
+                  fname=attr(funX, "fname"),
+                  yexp=attr(funX, "yexp"))
     fvnames(SimFuns, ".") <- simnames
   } 
   if(savepatterns)
@@ -753,7 +754,8 @@ envelopeEngine <-
 }
 
 
-plot.envelope <- function(x, ...) {
+plot.envelope <- function(x, ..., main) {
+  if(missing(main)) main <- short.deparse(substitute(x))
   shade.given <- ("shade" %in% names(list(...)))
   shade.implied <- !is.null(fvnames(x, ".s"))
   if(!(shade.given || shade.implied)) {
@@ -763,7 +765,7 @@ plot.envelope <- function(x, ...) {
       fvnames(x, ".s") <- c("lo", "hi")
     else warning("Unable to determine shading for envelope")
   }
-  NextMethod("plot")
+  NextMethod("plot", main=main)
 }
 
 print.envelope <- function(x, ...) {
@@ -956,6 +958,8 @@ envelope.matrix <- function(Y, ...,
               yexp=quote(f(r)),
               fname="f")
 
+  fname <- atr$fname
+  
   if(!cheat) {
     # ................   standard calculation .....................
     # validate weights
@@ -1195,11 +1199,12 @@ envelope.matrix <- function(Y, ...,
                                      stdres=stdres,
                                      loCI=loCI,
                                      hiCI=hiCI)
-             mslabl <- c("bar(%s)(r)",
-                         "paste(var,%s)(r)",
-                         "paste(res,%s)(r)",
-                         "paste(stdres,%s)(r)",
-                         "%s[loCI](r)", "%s[hiCI](r)")
+             mslabl <- c(makefvlabel(NULL, "bar", fname),
+                         makefvlabel("var", "hat", fname),
+                         makefvlabel("res", "hat", fname),
+                         makefvlabel("stdres", "hat", fname),
+                         makefvlabel(NULL, NULL, fname, "loCI"),
+                         makefvlabel(NULL, NULL, fname, "hiCI"))
              wted <- if(use.weights) "weighted " else NULL
              msdesc <- c(paste0(wted, "sample mean of %s from simulations"),
                          paste0(wted, "sample variance of %s from simulations"),
@@ -1218,10 +1223,11 @@ envelope.matrix <- function(Y, ...,
                                      stdres=stdres,
                                      loCI=loCI,
                                      hiCI=hiCI)
-             mslabl <- c("paste(var,%s)(r)",
-                         "paste(res,%s)(r)",
-                         "paste(stdres,%s)(r)",
-                         "%s[loCI](r)", "%s[hiCI](r)")
+             mslabl <- c(makefvlabel("var", "hat", fname),
+                         makefvlabel("res", "hat", fname),
+                         makefvlabel("stdres", "hat", fname),
+                         makefvlabel(NULL, NULL, fname, "loCI"),
+                         makefvlabel(NULL, NULL, fname, "hiCI"))
              msdesc <- c(paste0(if(use.weights) "weighted " else NULL,
                                 "sample variance of %s from simulations"),
                          "raw residual",
@@ -1246,24 +1252,26 @@ envelope.matrix <- function(Y, ...,
 
   if(use.theory) {
     # reference is computed curve `theo'
-    reflabl <- "%s[theo](r)"
+    reflabl <- makefvlabel(NULL, NULL, fname, "theo")
     refdesc <- paste0("theoretical value of %s", if(csr) " for CSR" else NULL)
   } else {
     # reference is sample mean of simulations
-    reflabl <- "bar(%s)(r)"
+    reflabl <- makefvlabel(NULL, "bar", fname)
     refdesc <- paste0(if(use.weights) "weighted " else NULL,
                       "sample mean of %s from simulations")
   }
-  
+
   result <- fv(results,
                argu="r",
                ylab=atr$ylab,
                valu="obs",
                fmla= deparse(. ~ r),
                alim=atr$alim,
-               labl=c("r", "%s[obs](r)",
+               labl=c("r",
+                 makefvlabel(NULL, "hat", fname, "obs"),
                  reflabl,
-                 "%s[lo](r)", "%s[hi](r)"),
+                 makefvlabel(NULL, "hat", fname, "lo"),
+                 makefvlabel(NULL, "hat", fname, "hi")),
                desc=c("distance argument r",
                  "observed value of %s for data pattern",
                  refdesc, lo.name, hi.name),
@@ -1502,11 +1510,13 @@ pool.envelope <- function(..., savefuns=FALSE, savepatterns=FALSE) {
       stop(why)
     }
     # Simulated functions must be the same function
-    fnames <- unique(unlist(lapply(SFlist, attr, which="fname")))
-    if(length(fnames) > 1)
+    fnames <- unique(lapply(SFlist, attr, which="fname"))
+    if(length(fnames) > 1) {
+      fnames <- unlist(lapply(fnames, flatfname))
       stop(paste("Envelope objects contain values",
                  "of different functions:",
                  commasep(sQuote(fnames))))
+    }
     # vectors of r values must be identical
     rlist <- lapply(SFlist, function(z) { with(z, .x) })
     rvals <- rlist[[1]]
