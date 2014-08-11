@@ -1489,7 +1489,7 @@
   Baddeley, A. (2010)
   \emph{Analysing spatial point patterns in R}.
   Workshop notes. Version 4.1. CSIRO online technical publication.
-  URL: \code{www.csiro.au/resources/pf16h.html}
+  URL: \code{www.uwa.edu.au/resources/pf16h.html}
   
   Baddeley, A. and Turner, R. (2005a)
   Spatstat: an R package for analyzing spatial point patterns.
@@ -1513,6 +1513,11 @@
   Score, pseudo-score and residual
   diagnostics for spatial point process models.
   \emph{Statistical Science} \bold{26}, 613--646.
+
+  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
+  Hybrids of Gibbs point process models and their implementation.
+  \emph{Journal of Statistical Software} \bold{55}:11, 1--43.
+  \url{http://www.jstatsoft.org/v55/i11/}
 
   Diggle, P.J. (2003)
   \emph{Statistical analysis of spatial point patterns},
@@ -1633,6 +1638,7 @@
   Matt Reiter,
   Tom Richardson,
   Brian Ripley,
+  Ted Rosenbaum,
   Barry Rowlingson,
   John Rudge,
   Farzaneh Safavimanesh,
@@ -1658,9 +1664,10 @@
   Hao Wang,
   H. Wendrock,
   Jan Wild,
-  Selene Wong
+  Selene Wong,
+  Mike Zamboni
   and
-  Mike Zamboni.
+  Achim Zeileis.
 }
 \keyword{spatial}
 \keyword{package}

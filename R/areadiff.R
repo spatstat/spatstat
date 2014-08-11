@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.27 $  $Date: 2013/10/06 04:33:24 $
+#  $Revision: 1.28 $  $Date: 2013/11/02 01:53:09 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -260,7 +260,7 @@ areaLoss.grid <- function(X, r, ...,
              Di <- distmap(X[-i], ...)
              FiW <- ecdf(Di[W, drop=TRUE])
              answer[k, ] <-
-               ifelseXB(r > rcrit[i], a * (FW(r) - FiW(r)), pi * r^2)
+               ifelseXY(r > rcrit[i], a * (FW(r) - FiW(r)), pi * r^2)
            }
          })
   return(answer)

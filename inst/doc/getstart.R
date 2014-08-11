@@ -139,13 +139,13 @@ mypattern <-finpines
 ###################################################
 ### code chunk number 21: getstart.Rnw:252-253 (eval = FALSE)
 ###################################################
-## plot(smooth.ppp(mypattern))
+## plot(Smooth(mypattern))
 
 
 ###################################################
 ### code chunk number 22: getstart.Rnw:256-257
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
-plot(smooth.ppp(mypattern, sigma=1.2), main="smooth.ppp(mypattern)")
+plot(Smooth(mypattern, sigma=1.2), main="Smooth(mypattern)")
 
 

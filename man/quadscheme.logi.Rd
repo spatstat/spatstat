@@ -135,7 +135,7 @@ weights are never used and only appear to be compatible with the class
   
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/},
   Rolf Turner \email{r.turner@auckland.ac.nz}
   and Ege Rubak

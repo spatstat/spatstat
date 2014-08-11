@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.41 $     $Date: 2013/08/22 08:26:38 $
+#      $Revision: 1.44 $     $Date: 2013/11/03 05:20:13 $
 #
 #
 #      Interpoint distances between pairs 
@@ -76,25 +76,23 @@ pairdist.default <-
            d <- numeric( n * n)
            DUP <- spatstat.options("dupC")
            if(!periodic) {
-             # The following comment lines are captured by a 'sed' script.
-             #    .C("Cpair2dist",
-             #    .C("Cpairdist",
-             z<- .C(if(squared) "Cpair2dist" else "Cpairdist",
-                    n = as.integer(n),
-                    x= as.double(x), y= as.double(y), d= as.double(d),
-                    DUP=DUP)
-#                    PACKAGE="spatstat")
+               z<- .C("Cpairdist",
+                      n = as.integer(n),
+                      x= as.double(x),
+                      y= as.double(y),
+                      squared=as.integer(squared),
+                      d= as.double(d),
+                      DUP=DUP)
            } else {
-             # The following comment lines are captured by a 'sed' script.
-             #    .C("CpairP2dist",
-             #    .C("CpairPdist",
-             z <- .C(if(squared) "CpairP2dist" else "CpairPdist",
+             z <- .C("CpairPdist",
                      n = as.integer(n),
-                     x= as.double(x), y= as.double(y),
-                     xwidth=as.double(wide), yheight=as.double(high),
+                     x= as.double(x),
+                     y= as.double(y),
+                     xwidth=as.double(wide),
+                     yheight=as.double(high),
+                     squared = as.integer(squared),
                      d= as.double(d),
                      DUP=DUP)
-#                     PACKAGE="spatstat")
            }
            dout <- matrix(z$d, nrow=n, ncol=n)
          },
@@ -108,7 +106,8 @@ crossdist <- function(X, Y, ...) {
   UseMethod("crossdist")
 }
 
-crossdist.ppp <- function(X, Y, ..., periodic=FALSE, method="C") {
+crossdist.ppp <- function(X, Y, ...,
+                          periodic=FALSE, method="C", squared=FALSE) {
   verifyclass(X, "ppp")
   Y <- as.ppp(Y)
   if(!periodic)
@@ -125,11 +124,11 @@ crossdist.ppp <- function(X, Y, ..., periodic=FALSE, method="C") {
   wide <- diff(WX$xrange)
   high <- diff(WX$yrange)
   return(crossdist.default(X$x, X$y, Y$x, Y$y,
-                           period=c(wide,high), method=method))
+                           period=c(wide,high), method=method, squared=squared))
 }
 
 crossdist.default <-
-  function(X, Y, x2, y2, ..., period=NULL, method="C")
+  function(X, Y, x2, y2, ..., period=NULL, method="C", squared=FALSE)
 {
   x1 <- X
   y1 <- Y
@@ -159,15 +158,15 @@ crossdist.default <-
                  X2 <- matrix(rep.int(x2, n1), ncol = n1)
                  Y2 <- matrix(rep.int(y2, n1), ncol = n1)
                  if(!periodic) 
-                   d <- sqrt((X1 - t(X2))^2 + (Y1 - t(Y2))^2)
+                   d2 <- (X1 - t(X2))^2 + (Y1 - t(Y2))^2
                  else {
                    dx <- X1 - t(X2)
                    dy <- Y1 - t(Y2)
                    dx2 <- pmin.int(dx^2, (dx + wide)^2, (dx - wide)^2)
                    dy2 <- pmin.int(dy^2, (dy + high)^2, (dy - high)^2)
-                   d <- sqrt(dx2 + dy2)
+                   d2 <- dx2 + dy2
                  }
-                 return(d)
+                 return(if(squared) d2 else sqrt(d2))
                },
                C = {
                  DUP <- spatstat.options("dupC")
@@ -179,9 +178,9 @@ crossdist.default <-
                           nto = as.integer(n2),
                           xto = as.double(x2),
                           yto = as.double(y2),
+                          squared = as.integer(squared),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
                           DUP=DUP)
-#                          PACKAGE="spatstat")
                  } else {
                    z<- .C("CcrossPdist",
                           nfrom = as.integer(n1),
@@ -192,9 +191,9 @@ crossdist.default <-
                           yto = as.double(y2),
                           xwidth = as.double(wide),
                           yheight = as.double(high),
+                          squared = as.integer(squared),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
                           DUP=DUP)
-#                          PACKAGE="spatstat")
                  }
                  return(matrix(z$d, nrow=n1, ncol=n2))
                },

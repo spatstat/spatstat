@@ -241,6 +241,39 @@ printStatus <- function(x, errors.only=FALSE) {
   return(invisible(NULL))
 }
 
+accumulateStatus <- function(x, stats=NULL) {
+  if(is.null(stats))
+    stats <- list(values=list(), frequencies=integer(0))
+  if(!inherits(x, c("error", "warning", "message")))
+    return(stats)
+  with(stats,
+       {
+         same <- unlist(lapply(values, identical, y=x))
+         if(any(same)) {
+           i <- min(which(same))
+           frequencies[i] <- frequencies[i] + 1
+         } else {
+           values <- append(values, list(x))
+           frequencies <- c(frequencies, 1)
+         }
+       })
+  stats <- list(values=values, frequencies=frequencies)
+  return(stats)
+}
+
+printStatusList <- function(stats) {
+  with(stats,
+       {
+         for(i in seq_along(values)) {
+           printStatus(values[i])
+           cat(paste("\t", paren(paste(frequencies[i], "times")), "\n"))
+         }
+       }
+       )
+  invisible(NULL)
+}
+
+  
 ############### applications (specific models) ##################
 
 

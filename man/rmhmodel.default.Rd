@@ -59,7 +59,8 @@
     \item{\code{'straushm'}}{Multitype Strauss process with hard core}
     \item{\code{'triplets'}}{Triplets process (Geyer, 1999).}
   }
-  It is also possible to specify a \emph{hybrid} of these interactions.
+  It is also possible to specify a \emph{hybrid} of these interactions
+  in the sense of Baddeley et al (2013).
   In this case, \code{cif} is a character vector containing names from
   the list above. For example, \code{cif=c('strauss', 'geyer')} would
   specify a hybrid of the Strauss and Geyer models.
@@ -372,6 +373,11 @@
   types.
 }
 \references{
+  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
+  Hybrids of Gibbs point process models and their implementation.
+  \emph{Journal of Statistical Software} \bold{55}:11, 1--43.
+  \url{http://www.jstatsoft.org/v55/i11/}
+
    Diggle, P. J. (2003) \emph{Statistical Analysis of Spatial Point
    Patterns} (2nd ed.) Arnold, London.
 
@@ -524,7 +530,7 @@ otherwise an error is given.
                     w=square(1))
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

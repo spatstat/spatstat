@@ -45,9 +45,10 @@ is.hybrid(x)
   \code{TRUE} if the object is a hybrid, and \code{FALSE} otherwise.
 }
 \references{
-  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2012)
+  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
   Hybrids of Gibbs point process models and their implementation.
-  Submitted for publication.
+  \emph{Journal of Statistical Software} \bold{55}:11, 1--43.
+  \url{http://www.jstatsoft.org/v55/i11/}
 }
 \seealso{
   \code{\link{Hybrid}}
@@ -63,7 +64,7 @@ is.hybrid(x)
   is.hybrid(fit)
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

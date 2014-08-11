@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.81 $	$Date: 2013/10/06 06:47:42 $
+#	$Revision: 4.82 $	$Date: 2013/11/01 06:49:45 $
 #
 #
 #
@@ -348,11 +348,6 @@ union.owin <- function(A, B, ...) {
   Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
-
-  if(is.subset.owin(A, B))
-    return(B)
-  else if (is.subset.owin(B,A))
-    return(A)
 
   # Result is not rectangular.
   # Create a rectangle to contain it.

@@ -58,7 +58,7 @@ stieltjes(f, M, ...)
   stieltjes(function(x,a,b){ (x >= a) & (x <= b)}, G, a=0.1, b=0.2)
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

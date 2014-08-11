@@ -129,7 +129,7 @@ vargamma.estK(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
   Adapted for \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{

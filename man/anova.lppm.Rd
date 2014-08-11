@@ -90,7 +90,7 @@ models on a linear network.
  anova(mod0, modx, test="Chi")
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \references{

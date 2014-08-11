@@ -250,11 +250,11 @@ mypattern <-finpines
 @ 
 Now you can try things like the kernel smoother of mark values:
 <<eval=FALSE>>=
-plot(smooth.ppp(mypattern))
+plot(Smooth(mypattern))
 @ 
 \setkeys{Gin}{width=0.8\textwidth}
 <<fig=TRUE,echo=FALSE,results=hide>>=
-plot(smooth.ppp(mypattern, sigma=1.2), main="smooth.ppp(mypattern)")
+plot(Smooth(mypattern, sigma=1.2), main="Smooth(mypattern)")
 @ 
 \setkeys{Gin}{width=0.4\textwidth}
 \item

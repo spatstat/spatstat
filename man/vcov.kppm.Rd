@@ -49,7 +49,7 @@
 \author{
   Abdollah Jalilian and Rasmus Waagepetersen.
   Ported to \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
 }
 \seealso{
   \code{\link{kppm}}, 

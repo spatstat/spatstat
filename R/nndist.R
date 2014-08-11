@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.3 $ $Date: 2013/03/12 09:33:27 $
+#   $Revision: 1.4 $ $Date: 2013/11/03 02:22:24 $
 #
 
 nndist <- function(X, ...) {
@@ -110,7 +110,6 @@ nndist.default <-
                   x= as.double(x[o]), y= as.double(y[o]), nnd= as.double(nnd),
                   as.double(big),
                   DUP=DUP)
-#                  PACKAGE="spatstat")
            nnd[o] <- z$nnd
          },
          stop(paste("Unrecognised method", sQuote(method)))
@@ -151,7 +150,6 @@ nndist.default <-
                     nnd  = as.double(nnd),
                     huge = as.double(big),
                     DUP=DUP)
-#                    PACKAGE="spatstat")
              nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
              nnd[o, ] <- matrix(z$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
            },
@@ -293,7 +291,6 @@ nnwhich.default <-
                     nnwhich = as.integer(nnw),
                     huge = as.double(big),
                     DUP=DUP)
-#                    PACKAGE="spatstat")
              witch <- z$nnwhich # sic 
              if(any(witch <= 0))
                stop("Internal error: non-positive index returned from C code")
@@ -338,7 +335,6 @@ nnwhich.default <-
                     nnwhich = as.integer(nnw),
                     huge = as.double(big),
                     DUP=DUP)
-#                    PACKAGE="spatstat")
              witch <- z$nnwhich # sic
              witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
              if(any(witch <= 0))

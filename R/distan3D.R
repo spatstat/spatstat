@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.8 $     $Date: 2013/08/22 08:26:25 $
+#      $Revision: 1.10 $     $Date: 2013/11/03 02:18:14 $
 #
 #      Interpoint distances for 3D points
 #
@@ -25,26 +25,20 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
   #
   DUP <- spatstat.options("dupC")
   if(!periodic) {
-    # The following comment lines are captured by a 'sed' script.
-    #    .C("D3pair2dist",
-    #    .C("D3pairdist",
-    Cout <- .C(if(squared) "D3pair2dist" else "D3pairdist",
+    Cout <- .C("D3pairdist",
                n = as.integer(n),
                x = as.double(x),
                y = as.double(y),
                z = as.double(z),
+               squared = as.integer(squared),
                d = as.double(numeric(n*n)),
                DUP=DUP)
-#               PACKAGE="spatstat")
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
     high <- diff(b$yrange)
     deep <- diff(b$zrange)
-    # The following comment lines are captured by a 'sed' script.
-    #    .C("D3pairP2dist",
-    #    .C("D3pairPdist",
-    Cout <- .C(if(squared) "D3pairP2dist" else "D3pairPdist",
+    Cout <- .C("D3pairPdist",
                n = as.integer(n),
                x = as.double(x),
                y = as.double(y),
@@ -52,9 +46,9 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                xwidth=as.double(wide),
                yheight=as.double(high),
                zdepth=as.double(deep),
+               squared = as.integer(squared),
                d= as.double(numeric(n*n)),
                DUP=DUP)
-#               PACKAGE="spatstat")
   }
   dout <- matrix(Cout$d, nrow=n, ncol=n)
 }
@@ -117,7 +111,6 @@ nndist.pp3 <- function(X, ..., k=1) {
                nnwhich = as.integer(integer(1)),
                huge=as.double(big),
                DUP=DUP)
-#               PACKAGE="spatstat")
     nnd[o] <- Cout$nnd
   } else {
     # case kmaxcalc > 1
@@ -135,7 +128,6 @@ nndist.pp3 <- function(X, ..., k=1) {
                nnwhich = as.integer(integer(1)),
                huge = as.double(big),
                DUP=DUP)
-#               PACKAGE="spatstat")
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
   }
@@ -212,7 +204,6 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                nnwhich = as.integer(nnw),
                huge = as.double(big),
                DUP=DUP)
-#               PACKAGE="spatstat")
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich
     if(any(witch <= 0))
@@ -236,7 +227,6 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                nnwhich = as.integer(nnw),
                huge = as.double(big),
                DUP=DUP)
-#               PACKAGE="spatstat")
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich 
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
@@ -262,7 +252,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
   return(nnw)
 }
 
-crossdist.pp3 <- function(X, Y, ..., periodic=FALSE) {
+crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
   verifyclass(X, "pp3")
   verifyclass(Y, "pp3")
 
@@ -285,9 +275,9 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE) {
                xto = as.double(cY$x),
                yto = as.double(cY$y),
                zto = as.double(cY$z),
+               squared = as.integer(squared),
                d = as.double(matrix(0, nrow=nX, ncol=nY)),
                DUP=DUP)
-#               PACKAGE="spatstat")
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
@@ -305,9 +295,9 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE) {
                xwidth = as.double(wide),
                yheight = as.double(high),
                zheight = as.double(deep),
+               squared = as.integer(squared),
                d = as.double(matrix(0, nrow=nX, ncol=nY)),
                DUP=DUP)
-#               PACKAGE="spatstat")
   }
   return(matrix(Cout$d, nrow=nX, ncol=nY))
 }

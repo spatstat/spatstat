@@ -4,7 +4,7 @@
 
   Distances between pairs of points
 
-  $Revision: 1.27 $     $Date: 2012/03/27 04:22:13 $
+  $Revision: 1.30 $     $Date: 2013/11/03 03:35:34 $
 
   Cpairdist      Pairwise distances
   Cpair2dist     Pairwise distances squared
@@ -25,7 +25,24 @@
 
 double sqrt();
 
-void Cpairdist(n, x, y, d)
+void Cpairdist(n, x, y, squared, d) 
+     /* inputs */
+     int *n;
+     double *x, *y;
+     int *squared;
+     /* output */
+     double *d;
+{
+  void Cpair1dist(), Cpair2dist();
+  if(*squared == 0) {
+    Cpair1dist(n, x, y, d);
+  } else {
+    Cpair2dist(n, x, y, d);
+  }
+}
+
+
+void Cpair1dist(n, x, y, d)
      /* inputs */
      int *n;
      double *x, *y;
@@ -107,7 +124,24 @@ void Cpair2dist(n, x, y, d)
   }
 }
 
-void Ccrossdist(nfrom, xfrom, yfrom, nto, xto, yto, d)
+void Ccrossdist(nfrom, xfrom, yfrom, nto, xto, yto, squared, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *xto, *yto;
+     int *squared;
+     /* output */
+     double *d;
+{
+  void Ccross1dist(), Ccross2dist();
+  if(*squared == 0) {
+    Ccross1dist(nfrom, xfrom, yfrom, nto, xto, yto, d);
+  } else {
+    Ccross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d);
+  }
+}
+		      
+
+void Ccross1dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *xto, *yto;
@@ -173,7 +207,23 @@ void Ccross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
 
 /* distances with periodic correction */
 
-void CpairPdist(n, x, y, xwidth, yheight, d)
+void CpairPdist(n, x, y, xwidth, yheight, squared, d)
+     /* inputs */
+     int *n;
+     double *x, *y, *xwidth, *yheight;
+     int *squared;
+     /* output */
+     double *d;
+{ 
+  void CpairP1dist(), CpairP2dist();
+  if(*squared == 0) {
+    CpairP1dist(n, x, y, xwidth, yheight, d);
+  } else {
+    CpairP2dist(n, x, y, xwidth, yheight, d);
+  }
+}
+
+void CpairP1dist(n, x, y, xwidth, yheight, d)
      /* inputs */
      int *n;
      double *x, *y, *xwidth, *yheight;
@@ -279,7 +329,24 @@ void CpairP2dist(n, x, y, xwidth, yheight, d)
   }
 }
 
-void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
+void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, 
+		 squared, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
+     int *squared;
+     /* output */
+     double *d;
+{ 
+  void CcrossP1dist(), CcrossP2dist();
+  if(*squared == 0) {
+    CcrossP1dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d);
+  } else {
+    CcrossP2dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d); 
+  }
+}
+
+void CcrossP1dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
@@ -316,6 +383,48 @@ void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
 	if(dx2 < dx2p) dx2p = dx2;
 	if(dy2 < dy2p) dy2p = dy2;
 	*dptr = sqrt( dx2p + dy2p ); 
+      }
+    }
+  }
+}
+
+void CcrossP2dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
+     /* output */
+     double *d;
+{ 
+  int i, j, nf, nt, maxchunk; 
+  double *dptr;
+  double xj, yj, dx, dy, dx2, dy2, dx2p, dy2p, wide, high;
+
+  nf = *nfrom;
+  nt = *nto;
+  wide = *xwidth;
+  high = *yheight;
+
+  dptr = d;
+
+  OUTERCHUNKLOOP(j, nt, maxchunk, 16384) {
+    R_CheckUserInterrupt();
+    INNERCHUNKLOOP(j, nt, maxchunk, 16384) {
+      xj = xto[j];
+      yj = yto[j];
+      for(i = 0; i < nf; i++, dptr++) {
+	dx = xj - xfrom[i];
+	dy = yj - yfrom[i];
+	dx2p = dx * dx;
+	dy2p = dy * dy;
+	dx2 = (dx - wide) * (dx - wide);
+	dy2 = (dy - high) * (dy - high);
+	if(dx2 < dx2p) dx2p = dx2;
+	if(dy2 < dy2p) dy2p = dy2;
+	dx2 = (dx + wide) * (dx + wide);
+	dy2 = (dy + high) * (dy + high);
+	if(dx2 < dx2p) dx2p = dx2;
+	if(dy2 < dy2p) dy2p = dy2;
+	*dptr = dx2p + dy2p; 
       }
     }
   }

@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.5 $  $Date: 2013/09/20 10:34:29 $
+#    $Revision: 1.6 $  $Date: 2013/11/03 03:17:02 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -113,30 +113,14 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
   if(kmaxcalc == 1) {
     # ............... single nearest neighbour ..................
     # call C code
-    Cfun <- paste0("nnX",
-                   if(exclude) "E" else "",
-                   if(want.dist) "d" else "",
-                   if(want.which) "w" else "",
-                   "3D")
     nndv <- if(want.dist) numeric(nX) else numeric(1)
     nnwh <- if(want.which) integer(nX) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
+
     DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
-    # The following lines are captured by a 'sed' script.
-    # They ensure that the namespace file includes the
-    # explicit names of all the function entry points.
-    # ................................................
-    #    .C("nnXd3D",
-    #    .C("nnXw3D",
-    #    .C("nnXdw3D",
-    #    .C("nnXEd3D",
-    #    .C("nnXEw3D",
-    #    .C("nnXEdw3D",
-    # .................................................
-    
-    z <- .C(Cfun,
+    z <- .C("nnX3Dinterface",
             n1=as.integer(nX),
             x1=as.double(XX[,1]),
             y1=as.double(XX[,2]),
@@ -147,11 +131,13 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             y2=as.double(YY[,2]),
             z2=as.double(YY[,3]),
             id2=as.integer(iY),
+            exclude = as.integer(exclude),
+            wantdist = as.integer(want.dist),
+            wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),
             DUP=DUP)
-#            PACKAGE="spatstat")
 
     if(want.which) {
       # conversion to R indexing is done in C code
@@ -177,30 +163,13 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
   } else {
     # ............... k nearest neighbours ..................
     # call C code
-    Cfun <- paste0("knnX",
-                  if(exclude) "E" else "",
-                   if(want.dist) "d" else "",
-                   if(want.which) "w" else "",
-                   "3D")
     nndv <- if(want.dist) numeric(nX * kmaxcalc) else numeric(1)
     nnwh <- if(want.which) integer(nX * kmaxcalc) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
     DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
-    # The following lines are captured by a 'sed' script.
-    # They ensure that the namespace file includes the
-    # explicit names of all the function entry points.
-    # ................................................
-    #    .C("knnXd3D",
-    #    .C("knnXw3D",
-    #    .C("knnXdw3D",
-    #    .C("knnXEd3D",
-    #    .C("knnXEw3D",
-    #    .C("knnXEdw3D",
-    # .................................................
-
-    z <- .C(Cfun,
+    z <- .C("knnX3Dinterface",
             n1=as.integer(nX),
             x1=as.double(XX[,1]),
             y1=as.double(XX[,2]),
@@ -212,6 +181,9 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             z2=as.double(YY[,3]),
             id2=as.integer(iY),
             kmax=as.integer(kmaxcalc),
+            exclude = as.integer(exclude),
+            wantdist = as.integer(want.dist),
+            wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),

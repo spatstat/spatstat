@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.8 $     $Date: 2013/06/29 04:51:27 $
+  $Revision: 1.11 $     $Date: 2013/11/03 03:42:48 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT z IS SORTED IN ASCENDING ORDER 
 
@@ -67,6 +67,46 @@ double sqrt();
 
 
 /* .......... Two point patterns ...............................*/
+
+/* common interface */
+
+void nnX3Dinterface(n1, x1, y1, z1, id1, 
+		    n2, x2, y2, z2, id2,
+		    exclude, wantdist, wantwhich,
+		    nnd, nnwhich, huge)
+     /* inputs */
+     int *n1, *n2, *id1, *id2;
+     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
+     /* options */
+     int *exclude, *wantdist, *wantwhich;
+     /* outputs */
+     double *nnd;
+     int *nnwhich;
+{
+  void nnXdw3D(), nnXd3D(), nnXw3D();
+  void nnXEdw3D(), nnXEd3D(), nnXEw3D();
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      nnXdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } 
+  } else {
+    if(di && wh) {
+      nnXEdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXEd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXEw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } 
+  }
+}
 
 /* 
    nnXdw3D:  for TWO point patterns X and Y,
@@ -217,6 +257,51 @@ double sqrt();
 /* .......... Two point patterns ...............................*/
 /* .......... k-th nearest neighbours ...............................*/
 
+/* general interface */
+
+void knnX3Dinterface(n1, x1, y1, z1, id1, 
+		     n2, x2, y2, z2, id2, 
+		     kmax,
+		     exclude, wantdist, wantwhich,
+		     nnd, nnwhich, 
+		     huge)
+     /* inputs */
+     int *n1, *n2;
+     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
+     int *id1, *id2;
+     int *kmax;
+     /* options */
+     int *exclude, *wantdist, *wantwhich;
+     /* output matrices (npoints * kmax) in ROW MAJOR order */
+     double *nnd;
+     int *nnwhich;
+     /* some inputs + outputs are not used in all functions */
+{
+  void knnXdw3D(), knnXd3D(), knnXw3D();
+  void knnXEdw3D(), knnXEd3D(), knnXEw3D();
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      knnXdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(di) {
+      knnXd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(wh) {
+      knnXw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } 
+  } else {
+    if(di && wh) {
+      knnXEdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(di) {
+      knnXEd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(wh) {
+      knnXEw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } 
+  }
+}
+
 #undef FNAME
 #undef DIST
 #undef WHICH
@@ -276,7 +361,6 @@ double sqrt();
 
 /* .......... Two point patterns with exclusion ..........................*/
 /* .......... k-th nearest neighbours ...............................*/
-
 
 /* 
    knnXEdw3D

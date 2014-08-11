@@ -6,7 +6,7 @@
   taken from two different point patterns.
 }
 \usage{
-  \method{crossdist}{ppp}(X, Y, \dots, periodic=FALSE, method="C")
+  \method{crossdist}{ppp}(X, Y, \dots, periodic=FALSE, method="C", squared=FALSE)
 }
 \arguments{
   \item{X,Y}{
@@ -18,8 +18,13 @@
   \item{periodic}{
     Logical. Specifies whether to apply a periodic edge correction.
   }
-  \item{method}{String specifying which method of calculation to use.
+  \item{method}{
+    String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
+  }
+  \item{squared}{
+    Logical. If \code{squared=TRUE}, the squared distances are
+    returned instead (this computation is faster).
   }
 }
 \value{
@@ -72,7 +77,7 @@
   \email{pavel.grabar@issp.serpukhov.su}
   and
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \keyword{spatial}

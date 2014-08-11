@@ -1,28 +1,42 @@
-citHeader("To cite", sQuote("spatstat"), "in publications, please use:")
+citHeader("To cite spatstat in publications use:")
 
-citEntry(entry = "article",
-         title = "Spatstat: an {R} package for analyzing spatial point patterns",
-         author = personList(
-           as.person("Adrian Baddeley"), 
-           as.person("Rolf Turner")
-           ),
-         journal = "Journal of Statistical Software",
-         volume= "12",
-         number = "6",
-         pages = "1--42",
-         year  = "2005",
-         note  = "{ISSN} 1548-7660",
-         url   = "www.jstatsoft.org",
-	 textVersion = paste(
-		"A. Baddeley and R. Turner (2005).",
-		"Spatstat: an R package for analyzing spatial point patterns.",
-	        "Journal of Statistical Software 12 (6), 1-42.",
-         	"ISSN: 1548-7660.",
-	        "URL: www.jstatsoft.org")
-         )
+citEntry(entry = "Article",
+  title        = "{spatstat}: An {R} Package for Analyzing Spatial Point Patterns",
+  author       = personList(as.person("Adrian Baddeley"),
+                   as.person("Rolf Turner")),
+  journal      = "Journal of Statistical Software",
+  year         = "2005",
+  volume       = "12",
+  number       = "6",
+  pages        = "1--42",
+  url          = "http://www.jstatsoft.org/v12/i06/",
 
+  textVersion  =
+  paste("Adrian Baddeley, Rolf Turner (2005).",
+        "spatstat: An R Package for Analyzing Spatial Point Patterns.",
+        "Journal of Statistical Software 12(6), 1-42.",
+        "URL http://www.jstatsoft.org/v12/i06/.")
+)
 
-citFooter("For references to additional papers describing the use of",
-          sQuote("spatstat"),
-	  "see", sQuote("help(\"spatstat\")."))
+citEntry(entry = "Article",
+  title        = "Hybrids of Gibbs Point Process Models and Their Implementation",
+  author       = personList(as.person("Adrian Baddeley"),
+                   as.person("Rolf Turner"),
+                   as.person("Jorge Mateu"),
+                   as.person("Andrew Bevan")),
+  journal      = "Journal of Statistical Software",
+  year         = "2013",
+  volume       = "55",
+  number       = "11",
+  pages        = "1--43",
+  url          = "http://www.jstatsoft.org/v55/i11/",
+
+  textVersion  =
+  paste("Adrian Baddeley, Rolf Turner, Jorge Mateu, Andrew Bevan (2013).",
+        "Hybrids of Gibbs Point Process Models and Their Implementation.",
+        "Journal of Statistical Software, 55(11), 1-43.",
+        "URL http://www.jstatsoft.org/v55/i11/."),
+
+  header       = "If you use hybrid models, please also cite:"
+)
 

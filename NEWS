@@ -1,4 +1,35 @@
 
+	CHANGES IN spatstat VERSION 1.34-1
+
+OVERVIEW
+
+   o We thank Kurt Hornik, Ted Rosenbaum, Ege Rubak and Achim Zeileis
+    for contributions.
+
+   o Important bug fix.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o as.box3
+   Now accepts objects of class 'ppx' or 'boxx'.
+
+   o crossdist.ppp, crossdist.pp3, crossdist.default
+   New argument 'squared' allows the squared distances to be computed
+   (saving computation time in some applications)
+
+BUG FIXES
+
+   o union.owin, is.subset.owin, dilation.owin
+   Results were sometimes completely wrong for polygons with holes.
+   Spotted by Ted Rosenbaum.
+   Fixed.
+
+   o psstA, areaLoss
+   Crashed in some cases, with error message
+   'Number of items to replace is not a multiple of replacement length'. 
+   Spotted by Achim Zeileis.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.34-0
 
 OVERVIEW

@@ -149,7 +149,7 @@ matclust.estK(X, startpar=c(kappa=1,R=1), lambda=NULL,
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk}
   Adapted for \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{

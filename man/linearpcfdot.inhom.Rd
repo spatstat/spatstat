@@ -111,7 +111,7 @@ linearpcfdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
    }
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \keyword{spatial}

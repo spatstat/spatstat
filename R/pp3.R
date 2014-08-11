@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.13 $  $Date: 2013/06/29 04:21:01 $
+#  $Revision: 1.14 $  $Date: 2013/10/30 02:15:55 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -27,6 +27,13 @@ as.box3 <- function(...) {
       return(a)
     if(inherits(a, "pp3"))
       return(a$domain)
+    if(inherits(a, "boxx")){
+      if(ncol(a$ranges)==3)
+        return(box3(a$ranges[,1], a$ranges[,2], a$ranges[,3]))
+      stop("Supplied boxx object does not have dimension three")
+    }
+    if(inherits(a, "ppx"))
+      return(as.box3(a$domain))
     if(is.numeric(a)) {
       if(length(a) == 6)
         return(box3(a[1:2], a[3:4], a[5:6]))

@@ -98,7 +98,7 @@ which can then be fitted to point pattern data.
   levels and this set must equal \code{levels(marks(X))}.
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

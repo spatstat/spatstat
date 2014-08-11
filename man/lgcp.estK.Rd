@@ -191,7 +191,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}.
   Adapted for \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   Further modifications by Rasmus Waagepetersen
   and Shen Guochun.

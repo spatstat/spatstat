@@ -113,7 +113,7 @@ Performs analysis of deviance for two or more fitted point process models.
  anova(mod0, modx, test="Chi")
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

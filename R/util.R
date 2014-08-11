@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.122 $    $Date: 2013/10/03 03:34:54 $
+#    $Revision: 1.123 $    $Date: 2013/10/31 08:05:45 $
 #
 #
 matrowsum <- function(x) {
@@ -171,7 +171,9 @@ paren <- function(x, type="(") {
          },
          "{" = {
            out <- paste("{", x, "}", sep="")
-         })
+         },
+         stop(paste("Unrecognised parenthesis type:", sQuote(type)))
+         )
   out
 }
 

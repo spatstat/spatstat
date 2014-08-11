@@ -102,7 +102,7 @@ varblock(X, fun = Kest, blocks = quadrats(X, nx = nx, ny = ny), ...,
 }
 \author{
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

@@ -140,7 +140,7 @@ pcfdot.inhom(X, i, lambdaI = NULL, lambdadot = NULL, ...,
   plot(pcfdot.inhom(amacrine, "on", stoyan=0.1), legendpos="bottom")
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.4 $  $Date: 2013/09/29 09:02:32 $
+#  $Revision: 1.5 $  $Date: 2013/11/03 03:27:32 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -98,24 +98,10 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
 
     DUP <- spatstat.options("dupC")
 
-    # The following lines are captured by a 'sed' script.
-    # They ensure that the namespace file includes the
-    # explicit names of all the function entry points.
-    # ................................................
-    #    .C("nnGd",
-    #    .C("nnGw",
-    #    .C("nnGdw",
-    #    .C("knnGd",
-    #    .C("knnGw",
-    #    .C("knnGdw",
-
     # ............. call C code ............................
     
     if(kmaxcalc == 1) {
-      Cfun <- paste0("nnG",
-                     if(want.dist) "d" else "",
-                     if(want.which) "w" else "")
-      zz <- .C(Cfun,
+      zz <- .C("nnGinterface",
                nx = as.integer(nxcol),
                x0 = as.double(M$xcol[1]),
                xstep = as.double(M$xstep),
@@ -125,15 +111,14 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                np = as.integer(nX),
                xp = as.double(xx),
                yp = as.double(yy),
+               wantdist = as.integer(want.dist),
+               wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
                huge = as.double(huge),
                DUP = DUP)
     } else {
-      Cfun <- paste0("knnG",
-                     if(want.dist) "d" else "",
-                     if(want.which) "w" else "")
-      zz <- .C(Cfun,
+      zz <- .C("knnGinterface",
                nx = as.integer(nxcol),
                x0 = as.double(M$xcol[1]),
                xstep = as.double(M$xstep),
@@ -144,6 +129,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                xp = as.double(xx),
                yp = as.double(yy),
                kmax = as.integer(kmaxcalc),
+               wantdist = as.integer(want.dist),
+               wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
                huge = as.double(huge),

@@ -1666,6 +1666,14 @@ local({
   B <- dilation(A, 140)
   if(!is.subset.owin(A, B))
     stop("is.subset.owin fails in polygonal case")
+
+  # thanks to Tom Rosenbaum
+  A <- shift(square(3), origin="midpoint")
+  B <- shift(square(1), origin="midpoint")
+  AB <- setminus.owin(A, B)
+  D <- shift(square(2), origin="midpoint")
+  if(is.subset.owin(D,AB))
+    stop("is.subset.owin fails for polygons with holes")
 })
 
 #

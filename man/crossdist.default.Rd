@@ -6,7 +6,8 @@
   taken from two different sets of points.
 }
 \usage{
-  \method{crossdist}{default}(X, Y, x2, y2, \dots, period=NULL, method="C")
+  \method{crossdist}{default}(X, Y, x2, y2, \dots,
+             period=NULL, method="C", squared=FALSE)
 }
 \arguments{
   \item{X,Y}{
@@ -23,8 +24,13 @@
   \item{period}{
     Optional. Dimensions for periodic edge correction.
   }
-  \item{method}{String specifying which method of calculation to use.
+  \item{method}{
+    String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
+  }
+  \item{squared}{
+    Logical. If \code{squared=TRUE}, the squared distances are
+    returned instead (this computation is faster).
   }
 }
 \value{
@@ -75,7 +81,7 @@
   \email{pavel.grabar@issp.serpukhov.su}
   and
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \keyword{spatial}

@@ -73,7 +73,7 @@
 }
 \author{
   Kasper Klitgaard Berthelsen and Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \examples{

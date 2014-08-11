@@ -167,7 +167,7 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   \code{tweak.fv.entry} and \code{rebadge.fv}.
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

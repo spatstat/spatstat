@@ -40,7 +40,7 @@ commonGrid(\dots)
   A binary mask (object of class \code{"owin"} and type \code{"mask"}).
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

@@ -159,7 +159,7 @@ psstA(object, r = NULL, breaks = NULL, ...,
 }
 \author{
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   Ege Rubak and Jesper Moller.
 }

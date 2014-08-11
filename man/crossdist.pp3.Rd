@@ -6,7 +6,7 @@
   taken from two different three-dimensional point patterns.
 }
 \usage{
-  \method{crossdist}{pp3}(X, Y, \dots, periodic=FALSE)
+  \method{crossdist}{pp3}(X, Y, \dots, periodic=FALSE, squared=FALSE)
 }
 \arguments{
   \item{X,Y}{
@@ -17,6 +17,10 @@
   }
   \item{periodic}{
     Logical. Specifies whether to apply a periodic edge correction.
+  }
+  \item{squared}{
+    Logical. If \code{squared=TRUE}, the squared distances are
+    returned instead (this computation is faster).
   }
 }
 \value{
@@ -59,7 +63,7 @@
 }
 \author{
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   based on code for two dimensions by 
   Pavel Grabarnik.

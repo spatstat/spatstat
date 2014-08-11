@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.18 $     $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.21 $     $Date: 2013/11/03 03:36:27 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT y IS SORTED IN ASCENDING ORDER 
 
@@ -77,6 +77,49 @@ double sqrt();
 #include "nndist.h"
 
 /* --------------- two distinct point patterns X and Y  ----------------- */
+
+/* general interface */
+
+void nnXinterface(n1, x1, y1, id1, 
+		  n2, x2, y2, id2, 
+		  exclude, wantdist, wantwhich,
+		  nnd, nnwhich, 
+		  huge)
+     /* inputs */
+     int *n1, *n2;
+     double *x1, *y1, *x2, *y2, *huge;
+     int *id1, *id2;
+     /* options */
+     int *exclude, *wantdist, *wantwhich;
+     /* outputs */
+     double *nnd;
+     int *nnwhich;
+{
+  void nnX(), nnXdist(), nnXwhich();
+  void nnXE(), nnXEdist(), nnXEwhich();
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      nnX(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } 
+  } else {
+    if(di && wh) {
+      nnXE(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } 
+  }
+}
+
 
 /* 
    nnXdist:  nearest neighbour distance

@@ -65,7 +65,7 @@
  Y <- rMaternII(20, 0.05, stationary=FALSE)
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/},
   Ute Hahn, 
   and Rolf Turner

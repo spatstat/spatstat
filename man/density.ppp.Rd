@@ -273,7 +273,7 @@
 \references{
   Baddeley, A. (2010) Analysing spatial point patterns in R.
   Workshop notes. CSIRO online technical publication.
-  URL: \code{www.csiro.au/resources/pf16h.html}
+  URL: \code{www.uwa.edu.au/resources/pf16h.html}
 
   Diggle, P.J. (1985)
   A kernel method for smoothing point process data.
@@ -286,7 +286,7 @@
 }
 
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}

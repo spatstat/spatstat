@@ -146,7 +146,7 @@ thomas.estpcf(X, startpar=c(kappa=1,sigma2=1), lambda=NULL,
 }
 \author{
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{

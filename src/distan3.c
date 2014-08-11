@@ -4,7 +4,7 @@
 
   Distances between pairs of 3D points
 
-  $Revision: 1.1 $     $Date: 2010/01/05 05:03:31 $
+  $Revision: 1.3 $     $Date: 2013/11/03 03:34:15 $
 
   D3pairdist      Pairwise distances
   D3pair2dist     Pairwise distances squared
@@ -24,7 +24,23 @@
 
 double sqrt();
 
-void D3pairdist(n, x, y, z, d)
+void D3pairdist(n, x, y, z, squared, d)
+     /* inputs */
+     int *n;
+     double *x, *y, *z;
+     int *squared;
+     /* output */
+     double *d;
+{ 
+  void D3pair1dist(), D3pair2dist();
+  if(*squared == 0) {
+    D3pair1dist(n, x, y, z, d);
+  } else {
+    D3pair2dist(n, x, y, z, d);
+  }
+}
+
+void D3pair1dist(n, x, y, z, d)
      /* inputs */
      int *n;
      double *x, *y, *z;
@@ -106,7 +122,23 @@ void D3pair2dist(n, x, y, z, d)
     }
 }
 
-void D3crossdist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, d)
+void D3crossdist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, squared, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *zfrom, *xto, *yto, *zto;
+     int *squared;
+     /* output */
+     double *d;
+{
+  void D3cross1dist(), D3cross2dist();
+  if(*squared == 0) {
+    D3cross1dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, d);
+  } else {
+    D3cross2dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, d);
+  }
+}
+
+void D3cross1dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *zfrom, *xto, *yto, *zto;
@@ -170,7 +202,23 @@ void D3cross2dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, d)
 
 /* distances with periodic correction */
 
-void D3pairPdist(n, x, y, z, xwidth, yheight, zdepth, d)
+void D3pairPdist(n, x, y, z, xwidth, yheight, zdepth, squared, d)
+     /* inputs */
+     int *n;
+     double *x, *y, *z, *xwidth, *yheight, *zdepth;
+     int *squared;
+     /* output */
+     double *d;
+{
+  void D3pairP1dist(), D3pairP2dist();
+  if(*squared == 0) {
+    D3pairP1dist(n, x, y, z, xwidth, yheight, zdepth, d);
+  } else {
+    D3pairP2dist(n, x, y, z, xwidth, yheight, zdepth, d);
+  }
+}
+
+void D3pairP1dist(n, x, y, z, xwidth, yheight, zdepth, d)
      /* inputs */
      int *n;
      double *x, *y, *z, *xwidth, *yheight, *zdepth;
@@ -288,7 +336,36 @@ void D3pairP2dist(n, x, y, z, xwidth, yheight, zdepth, d)
     }
 }
 
-void D3crossPdist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, xwidth, yheight, zdepth, d)
+void D3crossPdist(nfrom, xfrom, yfrom, zfrom, 
+		   nto, xto, yto, zto, 
+		   xwidth, yheight, zdepth, 
+		   squared, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *zfrom, *xto, *yto, *zto, *xwidth, *yheight, *zdepth;
+     int *squared;
+     /* output */
+     double *d;
+{
+  void D3crossP1dist(), D3crossP2dist();
+  if(*squared == 0) {
+    D3crossP1dist(nfrom, xfrom, yfrom, zfrom, 
+		  nto, xto, yto, zto, 
+		  xwidth, yheight, zdepth, 
+		  d);
+  } else {
+    D3crossP2dist(nfrom, xfrom, yfrom, zfrom, 
+		  nto, xto, yto, zto, 
+		  xwidth, yheight, zdepth, 
+		  d);
+  }
+}
+
+
+void D3crossP1dist(nfrom, xfrom, yfrom, zfrom, 
+		   nto, xto, yto, zto, 
+		   xwidth, yheight, zdepth, 
+		   d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *zfrom, *xto, *yto, *zto, *xwidth, *yheight, *zdepth;
@@ -331,6 +408,54 @@ void D3crossPdist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, xwidth, yheigh
 	if(dy2 < dy2p) dy2p = dy2;
 	if(dz2 < dz2p) dz2p = dz2;
 	*dptr = sqrt( dx2p + dy2p + dz2p ); 
+    }
+  }
+}
+
+
+void D3crossP2dist(nfrom, xfrom, yfrom, zfrom, nto, xto, yto, zto, xwidth, yheight, zdepth, d)
+     /* inputs */
+     int *nto, *nfrom;
+     double *xfrom, *yfrom, *zfrom, *xto, *yto, *zto, *xwidth, *yheight, *zdepth;
+     /* output */
+     double *d;
+{ 
+  int i, j, nf, nt; 
+  double *dptr;
+  double xj, yj, zj, dx, dy, dz, dx2, dy2, dz2, dx2p, dy2p, dz2p, wide, high, deep;
+
+  nf = *nfrom;
+  nt = *nto;
+  wide = *xwidth;
+  high = *yheight;
+  deep = *zdepth;
+
+  dptr = d;
+
+  for (j=0; j < nt; j++) {
+    xj = xto[j];
+    yj = yto[j];
+    zj = zto[j];
+    for(i = 0; i < nf; i++, dptr++) {
+	dx = xj - xfrom[i];
+	dy = yj - yfrom[i];
+	dz = zj - zfrom[i];
+	dx2p = dx * dx;
+	dy2p = dy * dy;
+	dz2p = dz * dz;
+	dx2 = (dx - wide) * (dx - wide);
+	dy2 = (dy - high) * (dy - high);
+	dz2 = (dz - deep) * (dz - deep);
+	if(dx2 < dx2p) dx2p = dx2;
+	if(dy2 < dy2p) dy2p = dy2;
+	if(dz2 < dz2p) dz2p = dz2;
+	dx2 = (dx + wide) * (dx + wide);
+	dy2 = (dy + high) * (dy + high);
+	dz2 = (dy + deep) * (dz + deep);
+	if(dx2 < dx2p) dx2p = dx2;
+	if(dy2 < dy2p) dy2p = dy2;
+	if(dz2 < dz2p) dz2p = dz2;
+	*dptr = dx2p + dy2p + dz2p; 
     }
   }
 }

@@ -95,7 +95,7 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
 \author{
   Ege Rubak, 
   Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Jesper Moller.
 }

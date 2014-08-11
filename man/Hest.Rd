@@ -140,7 +140,7 @@ Hest(X, r=NULL, breaks=NULL, ...,
    H <- Hest(heather$coarse, conditional=FALSE)
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@csiro.au}
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   and Rolf Turner
   \email{r.turner@auckland.ac.nz}
