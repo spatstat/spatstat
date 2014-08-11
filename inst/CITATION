@@ -1,0 +1,28 @@
+citHeader("To cite", sQuote("spatstat"), "in publications, please use:")
+
+citEntry(entry = "article",
+         title = "Spatstat: an {R} package for analyzing spatial point patterns",
+         author = personList(
+           as.person("Adrian Baddeley"), 
+           as.person("Rolf Turner")
+           ),
+         journal = "Journal of Statistical Software",
+         volume= "12",
+         number = "6",
+         pages = "1--42",
+         year  = "2005",
+         note  = "{ISSN} 1548-7660",
+         url   = "www.jstatsoft.org",
+	 textVersion = paste(
+		"A. Baddeley and R. Turner (2005).",
+		"Spatstat: an R package for analyzing spatial point patterns.",
+	        "Journal of Statistical Software 12 (6), 1-42.",
+         	"ISSN: 1548-7660.",
+	        "URL: www.jstatsoft.org")
+         )
+
+
+citFooter("For references to additional papers describing the use of",
+          sQuote("spatstat"),
+	  "see", sQuote("help(\"spatstat\")."))
+

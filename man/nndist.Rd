@@ -1,0 +1,145 @@
+\name{nndist}
+\alias{nndist}
+\alias{nndist.ppp}
+\alias{nndist.default}
+\title{Nearest neighbour distances}
+\description{
+  Computes the distance from each point to its nearest neighbour
+  in a point pattern. Alternatively computes the distance to the
+  second nearest neighbour, or third nearest, etc.
+}
+\usage{
+  nndist(X, \dots)
+  \method{nndist}{ppp}(X, \dots, k=1, method="C")
+  \method{nndist}{default}(X, Y=NULL, \dots, k=1, method="C")
+}
+\arguments{
+  \item{X,Y}{
+    Arguments specifying the locations of
+    a set of points.
+    For \code{nndist.ppp}, the argument \code{X} should be a point
+    pattern (object of class \code{"ppp"}).
+    For \code{nndist.default}, typically \code{X} and \code{Y} would be
+    numeric vectors of equal length. Alternatively \code{Y} may be
+    omitted and \code{X} may be
+    a list with two components \code{x} and \code{y},
+    or a matrix with two columns.
+  }
+  \item{\dots}{
+    Ignored by \code{nndist.ppp}
+    and \code{nndist.default}.
+  }
+  \item{k}{
+    Integer, or integer vector. The algorithm will compute the distance to the
+    \code{k}th nearest neighbour. 
+  }
+  \item{method}{String specifying which method of calculation to use.
+    Values are \code{"C"} and \code{"interpreted"}.
+  }
+}
+\value{
+  Numeric vector or matrix containing the 
+  nearest neighbour distances for each point.
+
+  If \code{k = 1} (the default), the return value is a
+  numeric vector \code{v} such that \code{v[i]} is the
+  nearest neighbour distance for the \code{i}th data point.
+  
+  If \code{k} is a single integer, then the return value is a
+  numeric vector \code{v} such that \code{v[i]} is the
+  \code{k}th nearest neighbour distance for the
+  \code{i}th data point.
+
+  If \code{k} is a vector, then the return value is a
+  matrix \code{m} such that \code{m[i,j]} is the
+  \code{k[j]}th nearest neighbour distance for the
+  \code{i}th data point.
+}
+\details{
+  This function computes the Euclidean distance from each point
+  in a point pattern to its nearest neighbour (the nearest other
+  point of the pattern). If \code{k} is specified, it computes the
+  distance to the \code{k}th nearest neighbour.
+
+  The function \code{nndist} is generic, with
+  a method for point patterns (objects of class \code{"ppp"}),
+  and a default method for coordinate vectors.
+  There is also a method for line segment patterns, \code{\link{nndist.psp}}.
+
+  The method for point patterns expects a single
+  point pattern argument \code{X} and returns the vector of its
+  nearest neighbour distances.
+
+  The default method expects that \code{X} and \code{Y} will determine
+  the coordinates of a set of points. Typically \code{X} and
+  \code{Y} would be numeric vectors of equal length. Alternatively
+  \code{Y} may be omitted and \code{X} may be a list with two components
+  named \code{x} and \code{y}, or a matrix or data frame with two columns.
+  
+  The argument \code{k} may be a single integer, or an integer vector.
+  If it is a vector, then the \eqn{k}th nearest neighbour distances are
+  computed for each value of \eqn{k} specified in the vector.
+
+  The argument \code{method} is not normally used. It is
+  retained only for checking the validity of the software.
+  If \code{method = "interpreted"} then the distances are
+  computed using interpreted R code only. If \code{method="C"}
+  (the default) then C code is used. 
+  The C code is faster by two to three orders of magnitude
+  and uses much less memory.
+
+  If there is only one point (if \code{x} has length 1),
+  then a nearest neighbour distance of \code{Inf} is returned.
+  If there are no points (if \code{x} has length zero)
+  a numeric vector of length zero is returned.
+
+  To identify \emph{which} point is the nearest neighbour of a given point,
+  use \code{\link{nnwhich}}.
+
+  To use the nearest neighbour distances for statistical inference,
+  it is often advisable to use the edge-corrected empirical distribution,
+  computed by \code{\link{Gest}}.
+
+  To find the nearest neighbour distances from one point pattern
+  to another point pattern, use \code{\link{nncross}}.
+}
+\section{Warnings}{
+  An infinite or \code{NA} value is returned if the
+  distance is not defined (e.g. if there is only one point
+  in the point pattern).
+}
+\seealso{
+  \code{\link{nndist.psp}},
+  \code{\link{pairdist}},
+  \code{\link{Gest}},
+  \code{\link{nnwhich}},
+  \code{\link{nncross}}.
+}
+\examples{
+   data(cells)
+   # nearest neighbours
+   d <- nndist(cells)
+
+   # second nearest neighbours
+   d2 <- nndist(cells, k=2)
+
+   # first, second and third nearest
+   d1to3 <- nndist(cells, k=1:3)
+
+   x <- runif(100)
+   y <- runif(100)
+   d <- nndist(x, y)
+
+   # Stienen diagram
+   plot(cells \%mark\% (nndist(cells)/2), markscale=1)
+}
+\author{Pavel Grabarnik
+  \email{pavel.grabar@issp.serpukhov.su}
+  and
+  Adrian Baddeley
+  \email{Adrian.Baddeley@csiro.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
+}
+\keyword{spatial}
+\keyword{math}
+

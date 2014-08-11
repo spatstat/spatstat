@@ -1,0 +1,107 @@
+\name{default.dummy}
+\alias{default.dummy}
+\title{Generate a Default Pattern of Dummy Points}
+\description{
+  Generates a default pattern of dummy points
+  for use in a quadrature scheme.
+}
+\usage{
+ default.dummy(X, nd, random=FALSE, ntile=NULL, npix=NULL, \dots,
+              eps=NULL, verbose=FALSE)
+}
+\arguments{
+  \item{X}{
+    The observed data point pattern.
+    An object of class \code{"ppp"}
+    or in a format recognised by \code{\link{as.ppp}()}
+  }
+  \item{nd}{
+    Optional. Integer, or integer vector of length 2, specifying an
+    \code{nd * nd} or \code{nd[1] * nd[2]}
+    rectangular array of dummy points. 
+  }
+  \item{random}{
+    Logical value. If \code{TRUE}, the dummy points are
+    randomised.
+  }
+  \item{ntile}{
+  	Optional. Integer or pair of integers specifying 
+	the number of rows and columns of tiles used in the counting rule.
+  }
+  \item{npix}{
+  	Optional. Integer or pair of integers specifying the
+	number of rows and columns of pixels used in computing
+	approximate areas.
+  }
+  \item{\dots}{
+    Ignored.
+  }
+  \item{eps}{
+    Optional. Grid spacing.
+    A positive number, or a vector of two positive numbers, giving the
+    horizontal and vertical spacing, respectively, of the grid of
+    dummy points. Incompatible with \code{nd}.
+  }
+  \item{verbose}{
+    If \code{TRUE}, information about the construction of the
+    quadrature scheme is printed.
+  }
+} 
+\value{
+  A point pattern (an object of class \code{"ppp"},
+  see \code{\link{ppp.object}}) containing the dummy points.
+}
+\details{
+  This function provides a sensible default for the dummy points
+  in a quadrature scheme.
+
+  A quadrature scheme consists of 
+  the original data point pattern, an additional pattern of dummy points,
+  and a vector of quadrature weights for all these points.
+  See \code{\link{quad.object}} for further information about
+  quadrature schemes.
+
+  If \code{random} is false (the default),
+  then the function creates dummy points
+  in an \code{nd[1]} by \code{nd[1]} rectangular grid.
+  If \code{random} is true, then the frame of the window is divided into
+  an  \code{nd[1]} by \code{nd[1]} array of tiles, and one dummy point
+  is generated at random inside each tile.
+  In either case, the four corner points of the frame of the window
+  are added. Then if the window is not rectangular, any dummy points
+  lying outside it are deleted. 
+  
+  If \code{nd} is missing, 
+  a default value (depending on the
+  data pattern \code{X}) is computed by \code{default.ngrid}.
+
+  Alternative functions for creating dummy patterns
+  include \code{\link{corners}},
+  \code{\link{gridcentres}},
+  \code{\link{stratrand}} and
+  \code{\link{spokes}}.
+}
+\seealso{
+  \code{\link{quad.object}},
+  \code{\link{quadscheme}},
+  \code{\link{corners}},
+  \code{\link{gridcentres}},
+  \code{\link{stratrand}},
+  \code{\link{spokes}}
+}
+\examples{
+  data(simdat)
+  P <- simdat
+  D <- default.dummy(P, 100)
+  \dontrun{plot(D)}
+  Q <- quadscheme(P, D, "grid")
+  \dontrun{plot(union.quad(Q))}
+}
+\author{Adrian Baddeley
+  \email{Adrian.Baddeley@csiro.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
+  and Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+}
+\keyword{spatial}
+\keyword{datagen}

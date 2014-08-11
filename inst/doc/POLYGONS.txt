@@ -1,0 +1,26 @@
+
+	POLYGONS IN SPATSTAT
+
+Polygon geometry computations in 'spatstat'
+(such as computing the intersection or union of two polygons)
+currently depend on the package 'gpclib'. 
+
+'gpclib' has a restricted licence which explicitly forbids commercial use.
+
+Accordingly, in 'spatstat' (versions 1.17-1 and later) 
+the code which depends on 'gpclib' can be either enabled or disabled.
+
+By default, 'spatstat' does NOT use 'gpclib'.
+In this mode, polygon geometry computations will be executed by
+converting the polygons to binary pixel images (`masks'), so that 
+the result of the intersection or union will be a binary pixel mask.
+
+If you are covered by the gpclib licence, you can enable the use of gpclib
+inside spatstat by typing
+
+              spatstat.options(gpclib=TRUE)
+
+To check whether 'gpclib' is currently enabled or disabled, type 
+
+		spatstat.options("gpclib")
+

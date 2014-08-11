@@ -1,0 +1,3993 @@
+
+	CHANGES IN spatstat VERSION 1.31-1
+
+OVERVIEW
+
+   o We thank Marcelino de la Cruz, Daniel Esser, Jason Goldstick,
+     Abdollah Jalilian, Ege Rubak and Fabrice Vinatier for contributions.
+
+   o Nonparametric estimation and tests for 
+     point patterns in a linear network.
+
+   o More support for 'layered' objects.
+
+   o Find clumps in a point pattern.
+
+   o Connected component interaction model.
+
+   o Improvements to interactive plots.
+
+   o Visual debugger for Metropolis-Hastings algorithm.
+
+   o Bug fix in Metropolis-Hastings simulation of Geyer process.
+
+   o Faster Metropolis-Hastings simulation.
+
+   o Faster computation of 'envelope', 'fv' and 'fasp' objects.
+
+   o Improvements and bug fixes.
+
+NEW FUNCTIONS
+
+   o connected.ppp
+   Find clumps in a point pattern.
+
+   o kstest.lpp, kstest.lppm
+   The spatial Kolmogorov-Smirnov test can now be applied 
+   to point patterns on a linear network (class 'lpp') and 
+   point processes on a linear network (class 'lppm').
+
+   o bermantest.lpp, bermantest.lppm
+   Berman's Z1 and Z2 tests can now be applied to point patterns
+   on a linear network (class 'lpp') and point processes on a linear
+   network (class 'lppm').
+
+   o rhohat.lpp, rhohat.lppm
+   Nonparametric estimation of the dependence of a point pattern
+   on a spatial covariate: 'rhohat' now applies to 
+   objects of class 'lpp' and 'lppm'.
+
+   o intensity.lpp
+   Empirical intensity of a point pattern on a linear network.
+
+   o as.function.rhohat
+   Converts a 'rhohat' object to a function,
+   with extrapolation beyond the endpoints.
+
+   o [.layered
+   Subset operator for layered objects.
+
+   o shift, rotate, affine, rescale, reflect, flipxy, scalardilate
+   These geometrical transformations now work for 'layered' objects.
+
+   o iplot.layered
+   Interactive plotting for 'layered' objects.
+
+   o as.owin.layered
+   Method for as.owin for layered objects.
+
+   o [.owin
+   Subset operator for windows, equivalent to intersect.owin.
+
+   o rcellnumber
+   Generates random integers for the Baddeley-Silverman counterexample.
+
+   o is.lpp
+   Tests whether an object is a point pattern on a linear network.
+
+   o is.stationary.lppm, is.poisson.lppm
+   New methods for is.stationary and is.poisson for class 'lppm'
+
+   o sessionLibs
+   Print library names and version numbers (for use in Sweave scripts)
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o iplot
+   iplot is now generic, with methods for 'ppp', 'layered' and 'default'.
+   iplot methods now support zoom and pan navigation.
+
+   o rmh.default
+   New argument 'snoop' allows the user to activate a visual debugger
+   for the Metropolis-Hastings algorithm.
+
+   o connected
+   connected() is now generic, with methods for 'im', 'owin' and 'ppp'.
+
+   o alltypes
+   Now works for lpp objects 
+
+   o rlabel
+   Now works for lpp, pp3, ppx objects
+
+   o plot.kstest
+   Can now perform P-P and Q-Q plots as well.
+
+   o plot.fasp
+   New argument 'samey' controls whether all panels 
+   have the same y limits.
+
+   o plot.fasp
+   Changed default value of 'samex'.
+
+   o Objects of class 'envelope', 'fv' and 'fasp' 
+   Reduced computation time and storage required for these objects.
+   
+   o pcfmodel.kppm
+   Improved calculation.
+
+   o plot.fv
+   Improved collision-avoidance algorithm
+   (for avoiding overlaps between curves and legend)
+
+   o ppm
+   Improved error handling
+
+   o envelope
+   All methods for 'envelope' now handle fun=NULL   
+
+   o setminus.owin
+   Better handling of the case where both arguments are rectangles.
+
+   o rmh
+   Simulation has been further accelerated.
+
+   o lppm
+   Accelerated.
+
+   o vcov.ppm
+   Accelerated.
+
+   o marktable
+   Accelerated.
+
+   o Triplets() interaction
+   Accelerated.
+
+   o alltypes
+   Accelerated when envelope=TRUE.
+
+BUG FIXES
+
+   o rmh
+   Simulation of the Geyer saturation process was incorrect.
+   [Bug introduced in previous version, spatstat 1.31-0.]
+   Fixed.
+
+   o rmh
+   Simulation of the Geyer saturation process was 
+   incorrectly initialised, so that the results of a short run 
+   (i.e. small value of 'nrep') were incorrect, 
+   while long runs were correct.
+   [Bug introduced in spatstat 1.17-0, october 2009.]
+   Fixed.
+
+   o ppm 
+   Objects fitted with use.gam=TRUE caused fatal errors in
+   various functions including print, summary, vcov and model.frame.
+   Spotted by Jason Goldstick.
+   Fixed.
+
+   o lpp, runiflpp, rpoislpp
+   Empty point patterns caused an error.
+   Fixed.
+
+   o rmh.default
+   Crashed for hybrid models, with message 
+   'Attempt to apply non-function'.
+   Spotted by Ege Rubak.
+   Fixed.
+
+   o relrisk
+   Crashed when 'at="points"' for a multitype pattern
+   with more than 2 types.
+   Spotted by Marcelino de la Cruz.
+   Fixed.
+
+   o erosion.owin, dilation.psp, border
+   Ignored the arguments "..." in some cases
+   (namely when the window was polygonal and 'gpclib' was disabled).
+   Fixed.
+
+   o rsyst, rcell
+   Did not correctly handle the argument 'dx'.
+   Spotted by Fabrice Vinatier.
+   Fixed.
+
+   o correction="trans"
+   Various functions such as Kest 
+   no longer recognised 'correction = "trans"'.
+   Fixed.
+
+   o istat
+   Crashed with an error message about envelopes. 
+   Fixed.
+
+   o summary.ppm, print.ppm
+   p-values which were exactly equal to zero were reported as NA.
+   Fixed.
+
+   o [.im
+   Crashed if the intersection consisted of
+   a single row or column of pixels.
+   Fixed.
+
+   o plot.im
+   Sometimes incorrectly displayed an image consisting of 
+   a single row or column of pixels.
+   Fixed.
+
+   o plot.layered
+   The plot region was determined by the first layer,
+   so that objects in subsequent layers could sometimes 
+   fall outside the plot region.
+   Fixed.
+
+   o transect.im
+   If the arguments 'from' and 'to' were numeric vectors of length 2,
+   the result was garbled.
+   Fixed.   
+
+   o Inhomogeneous K functions and pair correlation functions
+   [Kinhom, pcfinhom, Kcross.inhom, Kdot.inhom, pcfcross.inhom, etc.]
+   These functions reported an error 'lambda is not a vector'
+   if the intensity argument lambda was computed using density(, at="points").
+   Fixed.
+
+   o rlabel
+   Did not accept a point pattern with a hyperframe of marks.
+   Fixed.
+
+   o alltypes
+   Crashed when envelope=TRUE if the summary function 'fun'
+   did not have default values for the marks i and j.
+   Fixed.
+
+   o Kres, Gres, psst, psstA
+   Ignored the unit of length.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.31-0
+
+OVERVIEW
+
+   o We thank Frederic Lavancier and Ege Rubak for contributions.
+
+   o Major bug fix in simulation of area-interaction process.
+
+   o Metropolis-Hastings simulations accelerated.
+
+   o Rounding of spatial coordinates
+
+   o clmfires dataset corrected.
+
+   o Bug fixes and minor improvements.
+
+NEW FUNCTIONS
+
+   o round.ppp
+   Round the spatial coordinates of a point pattern 
+   to a specified number of decimal places.
+
+   o rounding
+   Determine whether a dataset has been rounded.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o rmh
+   Simulation of the following models has been accelerated:
+   areaint, dgs, diggra, fiksel, geyer, hardcore, lennard, multihard,
+   strauss, straush, straussm, strausshm.
+
+   o rmh
+   The transition history of the simulation (which is saved if 'track=TRUE')
+   now also contains the value of the Hastings ratio for each proposal.
+
+   o clmfires
+   The clmfires dataset has been modified to remove errors and inconsistencies.
+
+   o plot.linim
+   Appearance of the plot has been improved, when style='width'.
+
+   o summary.ppm
+   Now reports whether the spatial coordinates have been rounded.
+
+   o dclf.test, mad.test
+   The range of distance values ('rinterval') used in the test
+   is now printed in the test output, and is saved as an attribute.
+
+
+BUG FIXES
+
+   o rmh
+   Simulation of the Area-Interaction model was completely incorrect.
+   Spotted by Frederic Lavancier.
+   The bug was introduced in spatstat version 1.23-6 or later.
+   Fixed.
+
+   o dclf.test
+   The test statistic was incorrectly scaled (by a few percent).
+   This did not affect the p-value of the test.
+   Fixed.
+
+   o ppx
+   If argument 'coord.type' was missing, various errors occurred:
+   a crash may have occurred, or the results may have depended
+   on the storage type of the data. 
+   Spotted by Ege Rubak.
+   Fixed. 
+
+   o plot.ppx
+   Crashed for 1-dimensional point patterns.
+   Spotted by Ege Rubak.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.30-0
+
+
+OVERVIEW 
+
+   o We thank Jorge Mateu, Andrew Bevan, Olivier Flores, Marie-Colette van Lieshout, Nicolas Picard and Ege Rubak for contributions.
+
+   o The spatstat manual now exceeds 1000 pages.
+
+   o Hybrids of point process models.
+
+   o Five new datasets
+
+   o Second order composite likelihood method for kppm.
+
+   o Inhomogeneous F, G and J functions.
+
+   o Delaunay graph distance
+
+   o Fixed serious bug in 'lppm' for marked patterns.
+
+   o bug fix in some calculations for Geyer model
+
+   o Improvements to linear networks code
+
+   o Pixel images can now be displayed with a logarithmic colour map.
+
+   o spatstat now formally 'Depends' on the R core package 'grDevices'
+
+   o miscellaneous improvements and bug fixes
+
+NEW DATASETS
+
+   o clmfires
+   Forest fires in Castilla-La Mancha
+
+   o gordon
+   People sitting on the grass in Gordon Square, London
+
+   o hyytiala 
+   Mixed forest in Hyytiala, Finland (marked by species)
+
+   o paracou
+   Kimboto trees in Paracou, French Guiana (marked as adult/juvenile)
+
+   o waka
+   Trees in Waka national park (marked with diameters)
+
+NEW FUNCTIONS
+
+   o Hybrid
+   The hybrid of several point process interactions
+   [Joint research with Jorge Mateu and Andrew Bevan]
+
+   o is.hybrid
+   Recognise a hybrid interaction or hybrid point process model.
+
+   o Finhom, Ginhom, Jinhom
+   Inhomogeneous versions of the F, G and J functions
+   [Thanks to Marie-Colette van Lieshout]
+
+   o delaunay.distance
+   Graph distance in the Delaunay triangulation.
+
+   o distcdf
+   Cumulative distribution function of the distance between
+   two independent random points in a given window.
+
+   o bw.frac
+   Bandwidth selection based on window geometry
+
+   o shortside.owin, sidelengths.owin
+   Side lengths of (enclosing rectangle of) a window
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o ppm
+   Can now fit models with 'hybrid' interactions
+   [Joint research with Jorge Mateu and Andrew Bevan]
+
+   o kppm
+   Now has the option of fitting models using Guan's (2006)
+   second order composite likelihood.
+
+   o envelope.lpp
+   Now handles multitype point patterns.
+
+   o envelope.envelope
+   New argument 'transform' allows the user to apply a transformation
+   to previously-computed summary functions.
+
+   o runifpointOnLines, rpoisppOnLines, runiflpp, rpoislpp
+   Can now generate multitype point patterns.
+
+   o rmhmodel, rmh, simulate.ppm
+   Now handle point process models with 'hybrid' interactions.
+
+   o kppm
+   Accelerated, and more reliable, due to better choice of starting values 
+   in the optimisation procedure.
+
+   o kppm
+   The internal format of kppm objects has changed.
+
+   o minimum contrast estimation
+   Error messages from the optimising function 'optim' are now trapped
+   and handled.
+
+   o rhohat
+   This command is now generic, with methods for ppp, quad, and ppm.
+
+   o raster.x, raster.y, raster.xy
+   These functions have a new argument 'drop'
+
+   o summary.ppm
+   Improved behaviour when the model covariates are a data frame.
+
+   o progressreport
+   Output improved.
+
+   o second order summary functions
+   (Kest, Lest, Kinhom, pcf.ppp, Kdot, Kcross, Ldot etc etc)
+   These functions now accept correction="translation" as an 
+   alternative to correction = "translate", for consistency.
+
+   o plot.im
+   New argument 'log' allows colour map to be equally spaced on a log scale.
+
+   o as.owin.ppm, as.owin.kppm
+   New argument 'from' allows the user to extract the spatial window
+   of the point data (from="points") or the covariate images (from="covariates")
+
+   o dclf.test, mad.test
+   The rule for handling tied values of the test statistic has been changed.
+   The tied values are now randomly ordered to obtain a randomised integer rank.
+
+   o with.fv
+   New argument 'enclos' allows evaluation in other environments
+
+BUG FIXES
+
+   o lppm
+   For multitype patterns, the fitted model was completely incorrect
+   due to an error in constructing the quadrature scheme.
+   Fixed.
+
+   o Geyer
+   For point process models with the 'Geyer' interaction, 
+   vcov.ppm() and suffstat() sometimes gave incorrect answers.
+   [Spotted by Ege Rubak.]
+   Fixed.
+
+   o as.im.im
+   Did not correctly handle factor-valued images
+   if one of the arguments 'dimyx', 'eps', 'xy' was given.
+   Fixed.
+
+   o envelope.lppm
+   Crashed if the model was multitype.
+   Fixed.
+
+   o lpp
+   Did not handle empty patterns.
+   Fixed.
+
+   o density.ppp
+   If 'sigma' was a bandwidth selection function such as bw.scott()
+   which returned a numeric vector of length 2, a warning message was issued, 
+   and the smoothing bandwidth was erroneously taken to be
+   the first element of the vector.
+   Fixed.
+
+   o Fest, Jcross, Jdot, Jmulti
+   If these functions were computed using correction = 'rs', 
+   plotting them would sometimes give an error,      
+   with the message "no finite x/y limits".
+   Fixed.
+
+   o pcfmodel.kppm
+   For models with clusters="VarGamma"
+   the value of the pcf at distance r=0 was given as NaN. 
+   Fixed.
+
+   o vcov.ppm
+   Result was incorrect in rare cases, due to numerical rounding effects.
+   Fixed.
+
+   o rLGCP, simulate.kppm
+   For models fitted to point patterns in an irregular window, 
+   simulation sometimes failed, with a message that the image 'mu' 
+   did not cover the simulation window.
+   (Spotted by George Limitsios.)
+   Fixed.
+
+   o rLGCP, simulate.kppm
+   Crashed sometimes with an error about unequal x and y steps
+   (from 'GaussRF').
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.29-0
+
+OVERVIEW 
+
+   o We thank Colin Beale, Li Haitao, Frederic Lavancier, Erika Mudrak and Ege Rubak for contributions.
+
+   o random sequential packing
+ 
+   o Allard-Fraley estimator
+
+   o method for pooling several quadrat tests
+
+   o better control over dummy points in ppm
+
+   o more support for data on a linear network
+
+   o nearest neighbour map 
+
+   o changes to subsetting of images
+
+   o improvements and bug fixes 
+
+NEW FUNCTIONS
+
+   o clusterset
+   Allard-Fraley estimator of high-density features in a point pattern
+
+   o pool.quadrattest
+   Pool several quadrat tests
+
+   o nnfun
+   Nearest-neighbour map of a point pattern or a line segment pattern
+
+   o as.ppm
+   Converts various kinds of objects to ppm
+
+   o crossdist.lpp
+   Shortest-path distances between pairs of points in a linear network
+
+   o nobs.lppm
+   Method for 'nobs' for lppm objects.
+
+   o as.linim
+   Converts various kinds of objects to 'linim'
+
+   o model.images.slrm
+   Method for model.images for slrm objects
+
+   o rotate.im
+   Rotate a pixel image
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o "[.im" and "[<-.im"
+   New argument 'j' allows any type of matrix indexing to be used.
+
+   o "[.im"
+   Default behaviour changed in the case of a rectangular subset.
+   New argument 'rescue' can be set to TRUE to reinstate previous behaviour.
+
+   o rSSI
+   Performs 'Random Sequential Packing' if n=Inf.
+
+   o ppm
+   New argument 'eps' determines the spacing between dummy points.
+   (also works for related functions quadscheme, default.dummy, ...)
+
+   o fitted.ppm, predict.ppm
+   Argument 'new.coef' specifies a vector of parameter values
+   to replace the fitted coefficients of the model.
+
+   o lppm
+   Stepwise model selection using step() now works for lppm objects.
+
+   o vcov.slrm
+   Can now calculate correlation matrix or Fisher information matrix
+   as well as variance-covariance matrix.
+
+   o eval.fv
+   Improved behaviour when plotted.
+
+   o "[.fv"
+   Improved behaviour when plotted.
+
+   o lohboot
+   When the result is plotted, the confidence limits are now shaded.
+
+   o lohboot
+   New argument 'global' allows global (simultaneous) confidence bands
+   instead of pointwise confidence intervals.
+
+   o vcov.ppm
+   Accelerated by 30% in some cases.
+
+   o quadrat.test.splitppp
+   The result is now a single object of class 'quadrattest'
+
+   o progressreport
+   Improved output (also affects many functions which print progress reports)
+
+   o Full redwood data (redwoodfull)
+   Plot function redwoodfull.extra$plotit has been slightly improved.
+
+   o nncross
+   This function is now generic, with methods for 'ppp' and 'default'.
+
+   o distfun
+   The internal format of objects of class 'distfun' has been changed.
+
+   o duplicated.ppp, unique.ppp   
+   New argument 'rule' allows behaviour to be consistent with package 'deldir'
+
+BUG FIXES
+
+   o bdist.tiles
+   Values were incorrect in some cases due to numerical error.
+   (Spotted by Erika Mudrak.)
+   Fixed.
+
+   o vcov.ppm, suffstat
+   These functions sometimes gave incorrect values 
+   for marked point process models.
+   Fixed.
+
+   o simulate.ppm, predict.ppm
+   Did not correctly handle the 'window' argument. (Spotted by Li Haitao).
+   Fixed.
+
+   o smooth.ppp, markmean
+   If sigma was very small, strange values were produced, due to
+   numerical underflow. (Spotted by Colin Beale).
+   Fixed.
+
+   o MultiHard, MultiStrauss, MultiStraussHard
+   Crashed if the data point pattern was empty.
+   (Spotted by Ege Rubak).
+   Fixed.
+
+   o vcov.ppm
+   Crashed sporadically, with multitype interactions.
+   (Spotted by Ege Rubak).
+   Fixed.
+
+   o rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS
+   If the simulated pattern was empty, these functions would either
+   crash, or return a pattern containing 1 point.
+   (Spotted by Frederic Lavancier).
+   Fixed.
+
+   o model.matrix.slrm
+   Crashed if the model was fitted using split pixels.
+   Fixed.
+
+   o residuals.ppm, diagnose.ppm
+   Did not always correctly handle models that included offset terms.
+   Fixed.
+
+   o project.ppm
+   When a model was projected by project.ppm or by ppm(project=TRUE),
+   the edge corrections used the projected models were sometimes different
+   from the edge corrections in the original model, so that the 
+   projected and unprojected models were not comparable.
+   Fixed.
+
+   o plot.listof, plot.splitppp
+   Crashed sometimes due to a scoping problem.
+   Fixed.
+
+   o dclf.test, mad.test
+   Crashed if any of the function values were infinite or NaN.
+   Fixed.
+
+   o psstA
+   Default plot did not show the horizontal line at y=0
+   corresponding to a perfect fit.
+   Fixed.
+
+   o vcov.ppm
+   names attribute was spelt incorrectly in some cases.
+   Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.28-2
+
+OVERVIEW 
+
+   o We thank Thomas Bendtsen, Ya-Mei Chang, Daniel Esser, 
+     Robert John-Chandran, Ege Rubak and Yong Song for contributions.
+
+   o New code for Partial Residual Plots and Added Variable Plots.
+
+   o maximum profile pseudolikelihood computations vastly accelerated.
+
+   o New dataset: cells in gastric mucosa
+
+   o now possible to capture every k-th state of Metropolis-Hastings algorithm.
+
+   o size of 'ppm' objects reduced.
+
+   o scope of 'intensity.ppm' extended.
+
+   o quadrat.test can now perform Monte Carlo tests and one/two-sided tests
+
+   o improvements to 'plot.fv'
+
+   o improvement to 'rescale'
+
+   o some datasets reorganised.
+
+   o numerous bug fixes
+
+NEW DATASET
+
+   o mucosa
+   Cells in gastric mucosa
+   Kindly contributed by Dr Thomas Bendtsen
+
+NEW FUNCTIONS
+
+   o parres
+   Partial residual plots for spatial point process models.
+   A diagnostic for the form of a covariate effect.
+
+   o addvar
+   Added variable plots for spatial point process models.
+   A diagnostic for the existence of a covariate effect.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+  o profilepl
+  Accelerated (typically by a factor of 5).
+
+  o rmh, rmhcontrol
+  It is now possible to save every k-th iteration of the Metropolis-Hastings
+  algorithm. The arguments 'nsave' and 'nburn' may be given to rmh
+  or to rmhcontrol. They specify that the point pattern will be saved
+  every 'nsave' iterations, after an initial burn-in of 'nburn' iterations.
+
+  o simulate.ppm
+  New argument 'singlerun' determines whether the simulated patterns
+  are generated using independent runs of the Metropolis-Hastings algorithm
+  or are obtained by performing one long run of the algorithm and saving
+  every k-th iteration.
+
+  o exactMPLEstrauss
+  New argument 'project' determines whether the parameter gamma
+  is constrained to lie in [0,1].
+
+  o intensity.ppm
+  Now works for stationary point process models with the interactions
+  DiggleGratton, DiggleGatesStibbard, Fiksel, PairPiece and Softcore.
+
+  o plot.fv
+  Improved algorithm for avoiding collisions between graphics and legend.
+
+  o plot.fv
+  New argument 'log' allows plotting on logarithmic axes.
+
+  o envelope
+  Can now calculate an estimate of the true significance level
+  of the "wrong" test (which declares the observed summary function
+  to be significant if it lies outside the pointwise critical boundary
+  anywhere). Controlled by new argument 'do.pwrong'.
+
+  o quadrat.test
+  New argument 'alternative' allows choice of alternative hypothesis
+  and returns one-sided or two-sided p-values as appropriate.
+
+  o quadrat.test
+  Can now perform Monte Carlo test as well 
+  (for use in small samples where the chi^2 approximation is inaccurate)
+
+  o Softcore
+  Improved numerical stability.
+  New argument 'sigma0' for manual control over rescaling.
+
+  o rescale
+  If scale argument 's' is missing, then the data are rescaled
+  to native units. For example if the current unit is 0.1 metres, 
+  coordinates will be re-expressed in metres.
+
+  o psst
+  Extra argument 'verbose=TRUE'
+
+  o is.subset.owin
+  Accelerated for polygonal windows
+
+  o rmh.default
+  'track' is no longer a formal argument of rmh.default; it is now a 
+  parameter of rmhcontrol. However there is no change in usage: 
+  the argument 'track' can still be given to rmh.default.
+
+  o clf.test
+  Has been renamed 'dclf.test' 
+  to give proper attribution to Peter Diggle.
+
+  o betacells
+  This dataset has been restructured. The vector of cell profile areas,
+  formerly given by betacells.extra$area, has now been included
+  as a column of marks in the point pattern 'betacells'.
+
+  o ants
+  The function ants.extra$plot() has been renamed plotit() 
+  for conformity with other datasets.
+
+  o redwoodfull
+  The function redwoodfull.extra$plot() has been renamed plotit() 
+  for conformity with other datasets.
+
+  o nbfires
+  For conformity with other datasets, there is now an object nbfires.extra
+
+BUG FIXES
+
+  o ripras
+  Expansion factor was incorrect in the rectangular case.
+  Fixed.
+
+  o Triplets
+  Crashed sometimes with error "dim(X) must have positive length".
+  Fixed.
+
+  o affine.im
+  Crashed in the case of a diagonal transformation matrix!
+  Spotted by Ege Rubak.
+  Fixed.
+
+  o envelope.envelope
+  Ignored the argument 'global'.
+  Fixed.
+
+  o MultiStraussHard
+  The printed output showed the hardcore radii as NULL.
+  Spotted by Ege Rubak.
+  Fixed.
+
+  o "[.psp"
+  Crashed if the data were generated by rpoisline().
+  Spotted by Marcelino de la Cruz.
+  Fixed.
+
+  o plot.linim
+  If style="colour", the main title was always "x".
+  Fixed.
+
+  o plot.ppx
+  Setting add=TRUE did not prevent the domain being plotted.
+  Fixed.
+
+  o rmh
+  Crashed if x.start was an empty point pattern.
+  Spotted by Ege Rubak.
+  Fixed.
+
+  o as.ppp.data.frame
+  Crashed if any points lay outside the window.
+  Spotted by Ege Rubak.
+  Fixed.
+
+  o Ripley isotropic edge correction
+  Divide-by-zero error in rare cases.
+  Spotted by Daniel Esser.
+  Fixed.
+
+  o summary functions
+  For many of the summary functions (e.g. Kest, pcf),
+  the result of saving the object to disc was an enormous file.
+  Spotted by Robert John-Chandran.
+  Fixed.
+
+  o pcf.fv
+  Default plot was wrongly coloured.
+  Fixed.
+  
+	CHANGES IN spatstat VERSION 1.28-1
+
+OVERVIEW 
+
+   o We thank Ege Rubak, Gopal Nair, Jens Oehlschlaegel and Mike Zamboni
+     for contributions.
+
+   o New approximation to the intensity of a fitted Gibbs model.
+
+   o Minor improvements and bug fixes
+
+   o spatstat now 'Suggests' the package 'gsl'
+
+NEW FUNCTIONS
+
+   o intensity, intensity.ppp, intensity.ppm
+   Calculate the intensity of a dataset or fitted model.
+   Includes new approximation to the intensity of a fitted Gibbs model
+
+   o LambertW
+   Lambert's W-function
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+  o envelope
+  Improved plot labels for envelopes that were generated using
+  the 'transform' argument.
+
+  o plot.fv
+  Improved algorithm for collision detection.
+
+  o plot.im
+  Now returns the colour map used.
+
+  o plot.listof, plot.splitppp
+  Slight change to handling of plot.begin and plot.end
+
+  o square
+  Now accepts vectors of length 2
+
+  o plot.fii
+  Increased resolution of the plot obtained from plot(fitin(ppm(...))) 
+
+  o image.listof
+  If equal.ribbon=TRUE, the colour ribbon will no longer be 
+  displayed repeatedly for each panel, 
+  but will now be plotted only once, at the right hand side of the plot array.
+
+BUG FIXES
+
+  o vcov.ppm
+  Results were sometimes incorrect for a Gibbs model with non-trivial trend.
+  Spotted by Ege Rubak.
+  Fixed.
+
+  o nncross
+  In rare cases the results could be slightly incorrect.
+  Spotted by Jens Oehlschlaegel.
+  Fixed.
+
+  o plot.fv
+  When add=TRUE, the x limits were sometimes truncated.
+  Spotted by Mike Zamboni.
+  Fixed.
+
+  o plot.im
+  Labels for the tick marks on the colour ribbon
+  were sometimes ridiculous, e.g. "2.00000001".
+  Fixed.
+
+	CHANGES IN spatstat VERSION 1.28-0
+
+OVERVIEW 
+
+   o We thank Farzaneh Safavimanesh, Andrew Hardegen and Tom Lawrence 
+     for contributions.
+
+   o Improvements to 3D summary functions.
+
+   o A multidimensional point pattern (ppx) can now have 'local' coordinates
+   as well as spatial and temporal coordinates and marks.
+
+   o Changed format for point patterns on a linear network (lpp).
+   Changes are backward compatible. Many computations run faster.
+
+   o More support for fitted cluster models (kppm).
+
+   o split method for multidimensional point patterns (ppx)
+   and point patterns on a linear network (lpp).
+
+   o Fixed bug causing errors in plot.im
+
+   o Miscellaneous improvements and bug fixes
+
+NEW FUNCTIONS
+
+   o exactMPLEstrauss
+   Fits the stationary Strauss point process model
+   using an exact maximum pseudolikelihood technique.
+   This is mainly intended for technical investigation of algorithms.
+
+   o split.ppx
+   Method for 'split' for multidimensional point patterns (class 'ppx').
+   This also works for point patterns on a linear network (class 'lpp').
+
+   o model.images
+   This function is now generic, with methods for classes ppm, kppm, lppm
+
+   o model.frame, model.matrix
+   These generic functions now have methods for classes kppm, lppm
+
+   o as.owin.kppm, as.owin.lppm
+   New methods for 'as.owin' for objects of class kppm, lppm
+
+   o as.linnet.lppm
+   Extracts the linear network in which a point process model was fitted.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o class 'ppx'
+   An object of class 'ppx' may now include 'local' coordinates 
+   as well as 'spatial' and 'temporal' coordinates, and marks.
+
+   o ppx
+   Arguments have changed.
+   
+   o class 'lpp'
+   The internal format of lpp objects has been extended
+   (but is backward-compatible). Many computations run faster.
+   To convert an object to the new format: X <- lpp(as.ppp(X), as.linnet(X)).
+
+   o F3est
+   Calculation of theoretical Poisson curve ('theo') has changed,
+   and is now controlled by the argument 'sphere'.
+
+   o rmh, rmhstart
+   The initial state ('start') can now be missing or null.
+
+   o im, as.im
+   The pixel coordinates in an image object are now generated
+   more accurately. This avoids a numerical error in plot.im.
+
+   o eval.fv, eval.fasp
+   Evaluation is now applied only to columns that contain
+   values of the function itself (rather than values of the
+   derivative, hazard rate, etc). This is controlled by the
+   new argument 'dotonly'.
+
+   o spatstat.options
+   New option 'nvoxel'
+
+   o quad.ppm
+   Now accepts kppm objects.
+
+   o str
+   This generic function (for inspecting the internal structure of an object)
+   now produces sensible output for objects of class 'hyperframe', 'ppx', 'lpp'
+
+   o ppx, coords.ppx, coords<-.ppx
+   The arguments to these functions have changed.
+
+   o lgcp.estK, Kmodel
+   Computation can be greatly accelerated 
+   by setting spatstat.options(fastK.lgcp=TRUE).
+
+   o G3est
+   Computation accelerated.
+
+   o envelope
+   Computation slightly accelerated.
+
+   o spatstat.options
+   New option 'fastK.lgcp' 
+
+BUG FIXES
+
+   o nndist.psp
+   Caused an error if length(k) > 1.
+   Fixed.
+
+   o plot.im
+   Sometimes reported an error 
+   "useRaster=TRUE can only be used with a regular grid."
+   This was due to numerical rounding effects on the coordinates
+   of a pixel image. 
+   Fixed.
+   
+   o plot.fv
+   If a formula was used to specify the plot,
+   the names of variables in the formula were sometimes
+   incorrectly matched to *functions*.
+   Spotted by Farzaneh Safavimanesh.
+   Fixed.
+
+   o F3est
+   Took a very long time if the containing box was very flat,
+   due to the default value of 'vside'.
+   Fixed.
+
+   o rmh, rmhmodel
+   An erroneous warning about 'outdated format of rmhmodel object' 
+   sometimes occurred.
+   Fixed.
+
+   o marks<-.ppx
+   Names of result were incorrect. Fixed.
+
+   o hyperframe class
+   Various minor bug fixes.
+
+
+	CHANGES IN spatstat VERSION 1.27-0
+
+OVERVIEW 
+
+   o Variance estimates are now available for all Gibbs point process models.
+
+   o Cressie-Loosmore-Ford test implemented
+
+   o plot.fv now avoids collisions between the legend and the graphics.
+
+   o Extension to predict.ppm
+
+   o Improvements to envelopes and multitype summary functions. 
+
+   o Line transects of a pixel image.
+
+   o Changes to defaults in Metropolis-Hastings simulations.
+
+   o More geometrical operations
+
+   o Bug fixes.
+
+   o We thank Aruna Jammalamadaka for contributions.
+
+NEW FUNCTIONS
+
+   o clf.test
+   Perform the Cressie (1991)/ Loosmore and Ford (2006) test of CSR 
+   (or another model)
+
+   o mad.test
+   Perform the Maximum Absolute Deviation test of CSR (or another model).
+
+   o convolve.im
+   Compute convolution of pixel images.
+
+   o Kmulti.inhom
+   Counterpart of 'Kmulti' for spatially-varying intensity.
+
+   o rmhexpand
+   Specify a simulation window, or a rule for expanding the
+   simulation window, in Metropolis-Hastings simulation (rmh)
+
+   o transect.im
+   Extract pixel values along a line transect.
+
+   o affine.im
+   Apply an affine transformation to a pixel image.
+
+   o scalardilate
+   Perform scalar dilation of a geometrical object 
+   relative to a specified origin.
+
+   o reflect
+   Reflect a geometrical object through the origin.
+
+   o "[.lpp", "[.ppx"
+   Subset operators for the classes "lpp" (point pattern on 
+   linear network) and "ppx" (multidimensional space-time
+   point pattern).
+ 
+   o is.rectangle, is.polygonal, is.mask
+   Determine whether a window w is a rectangle, a domain with polygonal 
+   boundaries, or a binary pixel mask.
+
+   o has.offset
+   Determines whether a fitted model object (of any kind)
+   has an offset.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o predict.ppm
+   This function can now calculate the conditional intensity of a model
+   relative to any point pattern X (not just the original data pattern).
+
+   o vcov.ppm
+   This function now handles all Gibbs point process models.
+
+   o plot.fv
+   Collisions between the legend box and the graphics are now detected
+   and avoided. 
+
+   o rmh.ppm, rmh.default, simulate.ppm, qqplot.ppm, envelope.ppm
+   These functions now have slightly different default behaviour
+   because of changes to the handling of arguments to 'rmhcontrol'.
+
+   o rmhcontrol
+   The default value of the parameters 'periodic' and 'expand'
+   has changed.
+
+   o rmhcontrol
+   The parameter 'expand' can now be in any format 
+   acceptable to rmhexpand().
+
+   o rmh.ppm, rmh.default, simulate.ppm
+   Any 'rmhcontrol' parameter can now be given directly 
+   as an argument to rmh.ppm, rmh.default or simulate.ppm.
+
+   o Kmulti, Gmulti, Jmulti
+   The arguments I, J can now be any kind of subset index
+   or can be functions that yield a subset index.
+
+   o envelope.envelope
+   In envelope(E, fun=NULL) if E does not contain simulated
+   summary functions, but does contain simulated point patterns, 
+   then 'fun' now defaults to Kest, instead of flagging an error.
+
+   o print.ppp, summary.ppp
+   If the point pattern x was generated by Metropolis-Hastings
+   simulation using 'rmh', then print(x) and summary(x) show 
+   information about the simulation parameters.
+
+   o print.ppm
+   Standard errors for the parameter estimates,
+   and confidence intervals for the parameters,
+   can now be printed for all Gibbs models 
+   (but are printed only for Poisson models by default).
+
+   o eval.im
+   Images with incompatible dimensions are now resampled 
+   to make them compatible (if harmonize=TRUE).
+
+   o spatstat.options
+   New option 'print.ppm.SE' controls whether standard errors 
+   and confidence intervals are printed for all Gibbs models,
+   for Poisson models only, or are never printed.
+
+   o inside.owin
+   Now accepts the form list(x,y) for the first argument.
+
+   o image.listof
+   New argument 'equal.ribbon' allows several images to be plotted
+   with the same colour map.
+
+   o is.subset.owin
+   Improved accuracy in marginal cases.
+
+   o expand.owin
+   Functionality extended to handle all types of expansion rule.
+
+   o default.rmhcontrol, default.expand
+   These functions now work with models of class 'rmhmodel' 
+   as well as 'ppm'
+
+   o print.rmhcontrol
+   Output improved.
+
+BUG FIXES
+
+   o linearK, linearKinhom
+   If any data points were located exactly at a vertex of the 
+   linear network, the weights for Ang's correction were incorrect, 
+   due to numerical error. This sometimes produced infinite 
+   or NA values of the linear K function.
+   Fixed.
+   
+   o predict.ppm
+   In some cases, predict.ppm(type="cif") generated a spurious warning 
+   that "number of rows of result is not a multiple of vector length."
+   Fixed.
+
+   o crossing.psp
+   Results were sometimes incorrect due to numerical rounding error
+   associated with GCC bug #323.
+   Fixed.
+
+   o MultiHard, MultiStrauss, MultiStraussHard
+   If the mark values contained non-alphanumeric characters,
+   the names of the interaction coefficients in coef(ppm(...)) 
+   were sometimes garbled.
+   Fixed.
+
+   o profilepl
+   For edge corrections other than the border correction,
+   an error message about 'rbord' would sometimes occur.
+   Fixed.
+
+   o is.marked, is.multitype
+   These functions gave the wrong answer for 'lpp' objects.
+   Fixed.
+
+   o marks<-.lpp,  marks<-.ppx
+   Format of result was garbled if new columns of marks were added.
+   Fixed.
+
+   o reach.rmhmodel
+   Gave the wrong answer for Geyer and BadGey models.
+   Fixed.
+
+   o envelope.envelope
+   Ignored the argument 'savefuns'.
+   Fixed.
+
+   o BadGey
+   Sometimes wrongly asserted that the parameter 'sat' was invalid.
+   Occurred only in ppm(project=TRUE).
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.26-1
+
+OVERVIEW 
+
+   o Variance-covariance matrix for Gibbs point process models.
+
+   o Bootstrap confidence bands for pair correlation function and K function.
+
+   o Bug fix in scan test.
+
+   o Area-interaction model accelerated.
+
+   o we thank Jean-Francois Coeurjolly and Ege Rubak for contributions.
+
+NEW FUNCTIONS
+
+  o lohboot
+  Computes bootstrap confidence bands for pair correlation function
+  and K function using Loh's (2008) mark bootstrap.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+  o vcov.ppm
+  Now works for all Gibbs point process models, thanks to new code (and theory)
+  from Jean-Francois Coeurjolly and Ege Rubak
+
+  o AreaInter
+  Computations related to the area-interaction point process 
+  (ppm, predict.ppm, residuals.ppm, diagnose.ppm, qqplot.ppm)
+  have been accelerated.
+
+BUG FIXES
+
+  o scan.test
+  Results were sometimes incorrect due to numerical instability
+  (a 'Gibbs phenomenon'). 
+  Fixed.
+  
+	CHANGES IN spatstat VERSION 1.26-0
+
+OVERVIEW 
+
+   o We thank Jens Oehlschlaegel for contributions.
+
+   o Further substantial acceleration of spatstat functions.
+
+   o Workaround for bug in RandomFields package.
+
+   o Numerous modifications to internal code.
+
+NEW FUNCTIONS
+
+   o RandomFieldsSafe
+   There is a bug in the package 'RandomFields' (version <= 2.0.54)
+   which causes a crash to occur, in the development version of R
+   but not in R 2.15.0. To avoid crashing spatstat, we have written
+   the temporary, undocumented function RandomFieldsSafe() 
+   which returns TRUE if it is safe to use the RandomFields package.
+   Examples in the spatstat help files for kppm, lgcp.estK, lgcp.estpcf
+   and rLGCP are only executed if RandomFieldsSafe() returns TRUE.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o Many functions
+   Many spatstat functions now run faster, and will handle larger datasets,
+   thanks to improvements in the internal code, 
+   following suggestions from Jens Oehlschlaegel.
+
+   o Many functions
+   The response to an 'Interrupt' signal is slightly slower.
+
+	CHANGES IN spatstat VERSION 1.25-5
+
+OVERVIEW 
+
+   o We thank Ya-Mei Chang, Jens Oehlschlaegel and Yong Song for contributions.
+
+   o Extended functionality of 'rhohat' to local likelihood smoothing
+   and bivariate smoothing.
+
+   o Nearest neighbour distance computations accelerated.
+
+   o spatstat now 'Suggests:' the package 'locfit'
+
+NEW FUNCTIONS
+
+   o rho2hat
+   Bivariate extension of 'rhohat' for estimating spatial residual risk, 
+   or intensity as a function of two covariates.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o rhohat
+   Estimation can now be performed using local likelihood fitting
+   with the 'locfit' package, or using kernel smoothing.
+
+   o nncross
+   Substantially accelerated.
+   New arguments added to control the return value and the sorting of data.
+
+BUG FIXES
+
+   o plot.msr
+   Crashed if the argument 'box' was given.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.25-4
+
+OVERVIEW 
+
+   o We thank Jonathan Lee and Sergiy Protsiv for contributions.
+
+   o Improvements and bug fixes to K function for very large datasets
+
+NEW FUNCTIONS
+
+   o rStraussHard
+   Perfect simulation for Strauss-hardcore process (with gamma <= 1)
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o plot.im
+   The colour ribbon can now be placed left, right, top or bottom 
+   using new argument 'ribside'
+
+   o profilepl
+   Does not generate warnings when some of the candidate models
+   have zero likelihood - for example when fitting model with a hard core.
+
+   o Kest
+   Now includes fast algorithm for 'correction="none"'
+   which will handle patterns containing millions of points.
+
+BUG FIXES
+
+   o Kest, Lest
+   Gave incorrect values in very large datasets, due to numerical overflow.
+   `Very large' typically means about 1 million points in a random pattern, 
+   or 100,000 points in a tightly clustered pattern.
+   [Overflow cannot occur unless there are at least 46,341 points.]
+   [Spotted by Sergiy Protsiv.]
+   Fixed.
+
+   o Kest, Lest
+   Ignored 'ratio=TRUE' if the argument 'domain' was given.
+   [Spotted by Jonathan Lee.]
+   Fixed.
+
+   o rjitter
+   Output was sometimes incorrect. 
+   [Spotted by Sergiy Protsiv.]
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.25-3
+
+OVERVIEW 
+
+   o We thank Daniel Esser for contributions.
+
+   o Improved support for fitted point process models.
+
+   o Bug fixes.
+
+NEW FUNCTIONS
+
+   o simulate.slrm
+   Method for 'simulate' for spatial logistic regression models.
+
+   o labels.ppm, labels.kppm, labels.slrm
+   Methods for 'labels' for fitted point process models.
+
+   o commonGrid
+   Determine a common spatial domain and pixel resolution
+   for several pixel images and/or binary masks
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o effectfun
+   Now has argument 'se.fit' allowing calculation of standard errors
+   and confidence intervals.
+
+   o [.msr
+   Now handles character-valued indices. 
+
+   o print.summary.ppm
+   Output gives a more precise description of the fitting method.
+
+   o ppm, kppm, slrm
+   Confidence intervals for the fitted trend parameters
+   can now be obtained using 'confint' 
+
+   o predict.slrm
+   New argument 'window' 
+
+   o union.owin
+   Now handles a single argument: union.owin(A) returns A.
+
+BUG FIXES
+
+   o selfcrossing.psp
+   y coordinate values were incorrect.
+   [Spotted by Daniel Esser.]
+   Fixed.
+
+   o as.im.owin
+   Did not handle a binary mask with a 1 x 1 pixel array.
+   Fixed.
+
+   o predict.slrm
+   Results of predict(object, newdata) were incorrect 
+   if the spatial domain of 'newdata' was larger than the original domain.
+   Fixed.
+
+   o ppm
+   If the model was the uniform Poisson process,
+   the argument 'rbord' was ignored.
+   Fixed.
+
+   o image subset assignment "[<-.im"
+   Generated an error if the indexing argument 'i' 
+   was a point pattern containing zero points.
+   Fixed.
+
+   o hyperframe subset assignment "[<-.hyperframe"
+   Did not correctly handle the case where a single column 
+   of the hyperframe was to be changed.
+   Fixed.
+   
+   o help(bw.relrisk), help(rmh.ppm), help(plot.plotppm)
+   These help files had the side-effect of changing some options
+   in spatstat.options.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.25-2
+
+OVERVIEW 
+
+   o We thank Abdollah Jalilian and Thierry Onkelinx for contributions.
+
+   o Very Important Bug fixes.
+
+   o Improved mechanism for handling 'invalid' point processes
+
+NEW FUNCTIONS
+
+   o as.matrix.owin
+   Converts a window to a logical matrix.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o project.ppm
+     Improved algorithm.
+     Now handles terms in the trend formula as well as the interaction.
+     The projected point process is now obtained by re-fitting the model,
+     and is guaranteed to be the maximum pseudolikelihood fit.
+
+   o plot.im
+     Now handles many arguments recognised by plot.default
+     such as 'cex.main'. Also handles argument 'box'.
+     New argument 'ribargs' contains parameters controlling the
+     ribbon plot only.      
+
+   o spatstat.options
+     New option 'project.fast' allows a faster shortcut for project.ppm
+
+   o spatstat.options
+     New options 'rmh.p', 'rmh.q', 'rmh.nrep' determine the default values
+     of the parameters p, q and nrep of the Metropolis-Hastings algorithm.
+     See rmhcontrol
+
+   o ppm
+     Slightly accelerated.
+
+BUG FIXES
+
+   o nncross, distfun, AreaInter
+     Results of nncross were possibly incorrect 
+     when X and Y did not have the same window. 
+     This bug affected values of 'distfun' and may also 
+     have affected ppm objects with interaction 'AreaInter'.
+     [Spotted by Thierry Onkelinx]
+     Bug introduced in spatstat 1.9-4 (June 2006).
+     Fixed.
+
+   o rCauchy
+     Simulations were incorrect in the sense that 
+     the value of 'omega' was inadvertently doubled 
+     (i.e. omega was incorrectly replaced by 2 * omega).
+     Bug introduced in spatstat 1.25-0.
+     Fixed.
+
+   o plot.im
+     White lines were present in the image display, on some graphics devices,
+     due to changes in R 2.14.
+     Fixed.
+
+   o update.ppm
+     The result of 'update(object, formula)' sometimes contained errors
+     in the internal format.
+     Bug introduced in spatstat 1.25-0.
+     Fixed.
+
+   o example(AreaInter), example(bw.smoothppp),
+   example(Kest.fft), example(plot.owin), example(predict.ppm),
+   example(simulate.ppm)
+	Executing these examples had the side-effect of
+	changing some of the parameters in spatstat.options.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.25-1
+
+OVERVIEW 
+
+   o We thank Neba Funwi-Gabga and Jorge Mateu for contributions.
+
+   o New dataset of gorilla nest sites
+
+   o New functions for perfect simulation 
+
+   o Bug fix for rare crashes in rStrauss
+
+   o Code for ensuring a fitted point process model is a valid point process
+
+NEW DATASET
+
+   o gorillas
+   Gorilla nest sites in a National Park in Cameroon.
+   Generously contributed by Neba Funwi-Gabga
+
+NEW FUNCTIONS
+
+   o rDiggleGratton, rDGS, rHardcore
+   Perfect simulation for the Diggle-Gratton process,
+   Diggle-Gates-Stibbard process, and Hardcore process.
+
+   o bw.scott
+   Scott's rule of thumb for bandwidth selection in
+   multidimensional smoothing
+
+   o valid.ppm
+   Checks whether a fitted point process model is a valid point process
+
+   o project.ppm
+   Forces a fitted point process model to be a valid point process
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o ppm
+   New argument 'project' determines whether the fitted model
+   is forced to be a valid point process
+
+   o linnet
+   Substantially accelerated.
+
+   o rStrauss
+   Slightly accelerated.
+
+   o summary.lpp
+   Now prints the units of length.
+
+BUG FIXES
+
+   o rStrauss
+   Crashed rarely (once every 10 000 realisations)
+   with a memory segmentation fault.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.25-0
+
+OVERVIEW 
+
+   o Leverage and influence for point process models
+
+   o New cluster models (support for model-fitting and simulation).
+
+   o Fit irregular parameters in trend of point process model
+
+   o Third order summary statistic.
+
+   o Improvements to speed and robustness of code.
+
+   o spatstat now depends on R 2.14
+
+   o We thank Abdollah Jalilian and Rasmus Waagepetersen for contributions.
+
+NEW FUNCTIONS
+
+   o leverage.ppm, influence.ppm, dfbetas.ppm
+   Leverage and influence for point process models
+
+   o ippm
+   Experimental extension to 'ppm' which fits irregular parameters in trend
+   by Fisher scoring algorithm.
+
+   o Tstat
+   Third order summary statistic for point patterns
+   based on counting triangles.
+
+   o rCauchy, rVarGamma
+   simulation of a Neyman-Scott process with Cauchy clusters
+   or Variance Gamma (Bessel) clusters.
+   Contributed by Abdollah Jalilian.
+
+   o rPoissonCluster
+   simulation of a general Poisson cluster process
+
+   o model.covariates
+   Identify the covariates involved in a model (lm, glm, ppm etc)
+
+   o as.im.distfun
+   Converts a 'distfun' to a pixel image.
+
+   o cauchy.estK, cauchy.estpcf, vargamma.estK, vargamma.estpcf
+   Low-level model-fitting functions for the Neyman-Scott process 
+   with Cauchy or Variance-Gamma cluster kernel.
+   Contributed by Abdollah Jalilian.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o kppm
+   Now accepts clusters="Cauchy" or clusters="VarGamma"
+   for the Neyman-Scott process with Cauchy or Variance-Gamma cluster kernel.
+   Code contributed by Abdollah Jalilian.
+
+   o rNeymanScott
+   Argument 'rcluster' may now take a different format.
+
+   o psst
+   Argument 'funcorrection' changed to 'funargs' allowing greater flexibility.
+
+   o plot.fv, plot.envelope
+   New argument 'limitsonly' allows calculation of 
+   a common x,y scale for several plots.
+
+   o overall speed 
+   spatstat is now byte-compiled and runs slightly faster.
+
+   o user interrupt
+   Long calculations in spatstat now respond to the Interrupt/Stop signal.
+
+   o update.ppm
+   Now runs faster and uses much less memory,
+   when the update only affects the model formula (trend formula).
+   
+   o rNeymanScott, rThomas, rMatClust
+   Accelerated thanks to Rasmus Waagepetersen.
+
+   o multitype data and models
+   Second order multitype statistics (such as Kcross, pcfcross)
+   and multitype interaction models (such as MultiStrauss)
+   now run faster, by a further 5%.
+
+BUG FIXES
+
+   o distfun
+   Some manipulations involving 'distfun' objects failed if the
+   original data X in distfun(X) did not have a rectangular window.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.24-2
+
+OVERVIEW 
+
+   o Geyer's triplet interaction
+
+   o more functionality for replicated point patterns
+
+   o changed default for simulation window in point process simulation
+
+   o changed default for edge correction in Kcom, Gcom
+ 
+   o data in spatstat is now lazy-loaded
+
+   o bug fixes 
+
+NEW FUNCTIONS
+
+   o Triplets
+   Geyer's triplet interaction, for point process models
+
+   o coef.summary.ppm
+   New method coef.summary.ppm
+   You can now type 'coef(summary(fit))' to extract a table
+   of the fitted coefficients of the point process model 'fit'
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o data in spatstat are now lazy-loaded
+   so you don't have to type data(amacrine), etc.
+
+   o rmh.default, rmh.ppm, simulate.ppm
+   These now handle the 'triplets' interaction
+   
+   o fryplot
+   Now has arguments 'to' and 'from', allowing 
+   selection of a subset of points.
+
+   o fryplot, frypoints
+   These functions now handle marked point patterns properly.
+
+   o Kcross, Kdot, Kmulti
+   New argument 'ratio' determines whether the numerator and denominator
+   of the estimate of the multitype K-function will be stored. 
+   This enables analysis of replicated point patterns, 
+   using 'pool.rat()' to pool the K function estimates.
+
+   o rmh.ppm, simulate.ppm, default.expand
+   For point process models which have a trend depending only on x and y,
+   the simulation window is now taken to be the same as the original 
+   window containing the data (by default). 
+   That is, `expansion' does not take place, by default.
+   (In previous versions of spatstat the simulation window was larger
+   than the original data window.)
+   
+   o rmh.ppm, simulate.ppm
+   The argument sequence for these functions has changed.
+   New argument 'expand' allows more explicit control over simulation domain.
+
+   o Kcom, Gcom
+   New argument 'conditional' gives more explicit control
+   over choice of edge correction in compensator.
+   Simplified defaults for edge correction.  
+
+   o Kinhom
+   Improved plot labels.
+
+   o profilepl
+   Printed output improved.
+
+BUG FIXES
+
+   o Lest
+   The variance approximations (Lotwick-Silverman and Ripley)
+   obtained with var.approx=TRUE, were incorrect for Lest 
+   (although they were correct for Kest) due to a coding error.
+   Fixed.
+   
+   o simulate.ppm
+   Ignored the argument 'control' in some cases. 
+   Fixed.
+
+   o pcf and its relatives (pcfinhom, pcfcross.inhom, pcfdot.inhom)
+   Sometimes gave a warning about 'extra arguments ignored'.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.24-1
+
+OVERVIEW 
+
+   o Spatial Scan Test
+
+   o Functionality for replicated point patterns
+
+   o Bug fixes
+
+NEW FUNCTIONS
+
+   o scan.test
+     Spatial scan test of clustering
+
+   o rat
+   New class of 'ratio objects'
+
+   o pool.rat
+   New method for 'pool'.
+   Combines K function estimates for replicated point patterns (etc) 
+   by computing ratio-of-sums 
+
+   o unnormdensity
+   Weighted kernel density with weights that do not sum to 1
+   and may be negative.
+
+   o compatible
+   New generic function with methods for 'fv', 'im', 'fasp' and 'units'
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o Kest
+   New argument 'ratio' determines whether the numerator and denominator
+   of the estimate of the K-function will be stored. 
+   This enables analysis of replicated point patterns, 
+   using 'pool.rat()' to pool the K function estimates.
+
+   o Lest
+   Now handles theoretical variance estimates (using delta method)
+   if var.approx=TRUE
+
+   o as.mask
+   Argument 'eps' can now be a 2-vector, specifying x and y resolutions.
+
+   o default.expand
+   Behaviour changed slightly.
+
+   o plot.listof, plot.splitppp, contour.listof, image.listof
+   The arguments 'panel.begin' and 'panel.end' can now be objects
+   such as windows. 
+
+BUG FIXES
+
+   o rgbim, hsvim
+   Did not work on images with non-rectangular domains.
+   Fixed.
+
+   o scaletointerval
+   Did not handle NA's.
+   Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.24-0
+
+OVERVIEW 
+
+   o This version was not released publicly.
+
+
+	CHANGES IN spatstat VERSION 1.23-6
+
+OVERVIEW 
+
+   o Spatial covariance functions of windows and pixel images.
+
+   o Area-interaction models can now be fitted in non-rectangular windows
+
+   o Bug fix for envelope of inhomogeneous Poisson process
+
+   o Bug fix for raster conversion
+
+   o New vignette on 'Getting Started with Spatstat'
+
+   o Code accelerated.
+
+NEW FUNCTIONS
+
+   o imcov
+   Spatial covariance function of pixel image
+   or spatial cross-covariance function of two pixel images
+
+   o harmonise.im
+   Make several pixel images compatible 
+   by converting them to the same pixel grid
+
+   o contour.listof, image.listof
+   Methods for contour() and image() for lists of objects
+
+   o dummify
+   Convert data to numeric values by constructing dummy variables.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o setcov
+   Can now compute the `cross-covariance' between two regions
+
+   o AreaInter
+   Point process models with the AreaInter() interaction
+   can now be fitted to point pattern data X in any window.
+
+   o areaGain, areaLoss
+   These now handle arbitrary windows W.
+   They are now more accurate when r is very small.
+
+   o Kcom
+   Computation vastly accelerated, for non-rectangular windows.
+
+   o vignettes
+   New vignette 'Getting Started with the Spatstat Package'
+
+   o nncorr, nnmean, nnvario
+   These functions now handle data frames of marks.
+
+BUG FIXES
+
+   o envelope.ppm
+   If the model was an inhomogeneous Poisson process, 
+   the resulting envelope object was incorrect
+   (the simulations were correct, but the envelopes were calculated
+   assuming the model was CSR). Bug was introduced in spatstat 1.23-5.
+   Fixed.
+
+   o envelope.ppm
+   If the model was an inhomogeneous Poisson process 
+   with intensity a function of x and y only,
+   overflow errors sometimes occurred ('insufficient storage' 
+   or 'attempting to generate a large number of random points').
+   Fixed.
+
+   o as.im.im
+   The result of as.im(X, W) was incorrect if 'W' did not cover 'X'.
+   Fixed.
+
+   o as.mask
+   The result of as.mask(w, xy) was incorrect if 'xy' did not cover 'w'.
+   Fixed.
+
+   o plot.fv
+   Legend was incorrectly labelled if 'shade' variables were not included
+   in the plot formula.
+   Fixed.
+
+   o areaGain, areaLoss
+   Crashed if the radius r was close to zero.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.23-5
+
+OVERVIEW 
+
+   o Bug fix to bandwidth selection.
+
+   o Functions to pool data from several objects of the same class.
+
+   o Improvements and bug fixes.
+
+   o We thank Michael Sumner for contributions.
+
+NEW FUNCTIONS
+
+   o pool
+   Pool data from several objects of the same class
+
+   o pool.envelope
+   Pool simulated data from several envelope objects and create a new envelope
+
+   o pool.fasp
+   Pool simulated data from several function arrays and create a new array
+
+   o envelope.envelope
+   Recalculate an envelope from simulated data using different parameters
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o bw.diggle, bw.relrisk, bw.smoothppp, bw.optim
+   Plot method modified.
+
+   o model.depends
+   Now also recognises 'offset' terms.
+
+BUG FIXES
+
+   o bw.diggle
+   Bandwidth was too large by a factor of 2.
+   Fixed.
+
+   o plot.psp
+   Crashed if any marks were NA.
+   Fixed.
+
+   o pointsOnLines
+   Crashed if any segments had zero length.
+   Ignored argument 'np' in some cases.
+   Fixed.
+
+   o stieltjes
+   Crashed if M had only a single column of function values.
+   Fixed.
+
+	CHANGES IN spatstat VERSION 1.23-4
+
+OVERVIEW 
+
+    o Bandwidth selection for density.ppp and smooth.ppp
+
+    o Layered plots. 
+
+    o Model-handling facilities.
+
+    o Improvements and bug fixes.
+
+
+NEW FUNCTIONS
+
+   o bw.diggle
+   Bandwidth selection for density.ppp by mean square error cross-validation.
+
+   o bw.smoothppp
+   Bandwidth selection for smooth.ppp by least-squares cross-validation.
+
+   o layered, plot.layered
+   A simple mechanism for controlling plots that consist of
+   several successive layers of data.
+
+   o model.depends
+   Given a fitted model (of any kind), identify which of the covariates
+   is involved in each term of the model.
+
+   o model.is.additive
+   Determine whether a fitted model  (of any kind) is additive, 
+   in the sense that each term in the model involves at most one covariate.
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o smooth.ppp
+   Bandwidth 'sigma' is now selected by least-squares cross-validation
+
+   o bw.relrisk
+   Computation in large datasets accelerated.
+   New arguments 'hmin', 'hmax' control the range of trial values of bandwidth.
+
+   o Hest, Gfox, Jfox
+   Improved algebraic labels for plot
+
+   o spatstat.options
+   New parameter 'n.bandwidth'
+
+   o density.ppp, smooth.ppp
+   Slightly accelerated.
+
+   o point-in-polygon test
+   Accelerated.
+
+BUG FIXES
+
+    o with.fv
+    Mathematical labels were incorrect in some cases.
+    Fixed.
+
+    o bw.relrisk
+    Implementation of method="weightedleastsquares" was incorrect
+    and was equivalent to method="leastsquares".
+    Fixed.
+
+    o smooth.ppp
+    NaN values occurred if the bandwidth was very small.
+    Fixed.
+
+	CHANGES IN spatstat VERSION 1.23-3
+
+OVERVIEW 
+
+    o Urgent bug fix.
+
+BUG FIXES
+
+    o crossing.psp
+    Crashed occasionally with a message about NA or NaN values.
+    Fixed.
+
+    o affine.ppp
+    Crashed if the point pattern was empty.
+    Fixed.
+
+	CHANGES IN spatstat VERSION 1.23-2
+
+OVERVIEW 
+
+    o Bug fixes.
+
+    o Several functions have been accelerated.
+
+    o We thank Marcelino de la Cruz and Ben Madin for contributions.
+
+NEW FUNCTIONS
+
+    o sumouter, quadform
+    Evaluate certain quadratic forms.
+
+    o flipxy
+    Exchange x and y coordinates.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o vcov.ppm
+   Accelerated.
+
+   o owin, as.owin
+   Checking the validity of polygons has been accelerated.
+
+   o crossing.psp, selfcrossing.psp
+   Accelerated.
+
+BUG FIXES
+
+    o split.ppp
+    If drop=TRUE then some of the point patterns had the wrong windows.
+    Spotted by Marcelino de la Cruz.
+    Fixed.
+
+    o split.ppp
+    Crashed if the tessellation did not cover the point pattern.
+    Fixed.
+
+    o predict.ppm
+    Crashed when type="se" if NA's were present.
+    Spotted by Ben Madin.
+    Fixed.
+
+    o plot.ppp
+    Incorrectly handled the case where both 'col' and 'cols' were present.
+    Fixed.
+
+    o polygon geometry
+    The point-in-polygon test gave the wrong answer in some boundary cases.
+    Fixed.
+    
+
+	CHANGES IN spatstat VERSION 1.23-1
+
+OVERVIEW 
+
+    o Important bug fix to 'localpcf'.
+
+    o Inverse-distance weighted smoothing.
+
+    o Inhomogeneous versions of neighbourhood density functions.
+
+    o Internal repairs and bug fixes.
+
+    o We thank Mike Kuhn and Ben Madin for contributions.
+
+NEW FUNCTIONS
+
+    o idw
+      Inverse-distance weighted smoothing.
+
+    o localKinhom, localLinhom, localpcfinhom
+      Inhomogeneous versions of localK, localL, localpcf
+
+BUG FIXES
+
+    o localpcf
+      The columns of the result were in the wrong order.
+      [i.e. pair correlation functions were associated with the wrong points.]
+      Fixed.
+
+    o delaunay
+      If the union of several Delaunay triangles formed a triangle,
+      this was erroneously included in the result of delaunay().
+      Fixed.
+
+    o predict.ppm, plot.ppm
+      Sometimes crashed with a warning about 'subscript out of bounds'.
+      Fixed.      
+      
+    o point-in-polygon test
+      Vertices of a polygon were sometimes incorrectly classified
+      as lying outside the polygon. 
+      Fixed.
+
+    o Internal code
+      Numerous tweaks and repairs to satisfy the package checker
+      for the future R version 2.14.
+    
+	CHANGES IN spatstat VERSION 1.23-0
+
+OVERVIEW 
+
+    o  point patterns on a linear network:
+       new tools including geometrically-corrected linear K function, 
+       pair correlation function, point process models, envelopes
+
+    o  changes to renormalisation of estimates in Kinhom and pcfinhom
+
+    o  new dataset: Chicago street crime
+
+    o  spatstat now 'Suggests:' the package RandomFields
+
+    o  spatstat now has a Namespace
+
+    o  we thank Mike Kuhn, Monia Mahling, Brian Ripley for contributions.
+
+NEW DATASET
+
+    o  chicago
+    Street crimes in the University district of Chicago.
+    A point pattern on a linear network.
+
+NEW FUNCTIONS
+
+    o envelope.lpp
+      Simulation envelopes for point patterns on a linear network
+
+    o lineardisc
+      Compute the 'disc' of radius r in a linear network 
+
+    o linearpcf 
+      Pair correlation for point pattern on a linear network
+
+    o linearKinhom, linearpcfinhom
+      Inhomogeneous versions of the K function and pair correlation function
+      for point patterns on a linear network
+
+    o lppm 
+      Fit point process models on a linear network.
+
+    o anova.lppm
+      Analysis of deviance for point process models on a linear network.
+
+    o predict.lppm
+      Prediction for point process models on a linear network.
+
+    o envelope.lppm
+      Simulation envelopes for point process models on a linear network.
+
+    o linim
+      Pixel image on a linear network
+
+    o plot.linim
+      Plot a pixel image on a linear network
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o linearK
+     New argument 'correction'.
+     Geometrically-corrected estimation is performed by default
+     (based on forthcoming paper by Ang, Baddeley and Nair)
+
+   o Kinhom
+     New argument 'normpower' allows different types of renormalisation.
+
+   o pcfinhom
+     Now performs renormalisation of estimate. 
+     Default behaviour changed - estimates are now renormalised by default.
+
+BUG FIXES
+
+    o  density.ppp
+       Crashed if argument 'varcov' was given.
+       Fixed.
+    
+	CHANGES IN spatstat VERSION 1.22-4
+
+OVERVIEW 
+
+    o  new diagnostics based on score residuals
+
+    o  new dataset
+
+    o  improvements to plotting summary functions 
+
+    o  We thank Ege Rubak, Jesper Moller, George Leser, Robert Lamb
+       and Ulf Mehlig for contributions.
+
+NEW FUNCTIONS
+
+    o  Gcom, Gres, Kcom, Kres
+       New diagnostics for fitted Gibbs or Poisson point process models
+       based on score residuals.
+       Gcom is the compensator of the G function
+       Gres is the residual of the G function
+       Kcom is the compensator of the K function
+       Kres is the residual of the K function
+
+    o  psst, psstA, psstG
+       New diagnostics for fitted Gibbs or Poisson point process models
+       based on pseudoscore residuals.
+       psst is the pseudoscore diagnostic for a general alternative
+       psstA is the pseudoscore diagnostic for an Area-interaction alternative
+       psstG is the pseudoscore diagnostic for a Geyer saturation alternative
+
+    o  compareFit
+       Computes and compares several point process models
+       fitted to the same dataset, using a chosen diagnostic.
+
+    o  as.interact
+       Extracts the interpoint interaction structure (without parameters)
+       from a fitted point process model or similar object.
+
+NEW DATASET
+
+    o  flu
+       Spatial point patterns giving the locations of 
+       influenza virus proteins on cell membranes.
+       Kindly released by Dr George Leser and Dr Robert Lamb.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o  pixel images and grids
+      The default size of a pixel grid, given by spatstat.options("npixel"),
+      has been changed from 100 to 128. A power of 2 gives faster
+      and more accurate results in many cases.
+
+   o  residuals.ppm
+       New arguments 'coefs' and 'quad' for advanced use
+       (make it possible to compute residuals from a
+        modified version of the fitted model.)
+
+   o   relrisk 	
+       New argument 'casecontrol' determines whether a bivariate
+       point pattern should be treated as case-control data.
+
+   o   plot.fv
+       Further improvements in mathematical labels.
+
+   o   plot.fv
+       The formula can now include the symbols .x and .y
+       as abbreviation for the function argument and the 
+       recommended function value, respectively.
+
+   o   plot.fv
+       New argument 'add'
+
+BUG FIXES
+
+   o   multitype summary functions
+       (Kcross, Kdot, Gcross, Gdot, .....)
+       Plotting these functions generated an error if the 
+       name of one of the types of points contained spaces,
+       e.g. "Escherichia coli". 
+       Fixed.
+
+	CHANGES IN spatstat VERSION 1.22-3
+
+OVERVIEW 
+
+    o  Important bug fix to simulation code
+
+    o  Miscellaneous improvements
+
+    o  spatstat now depends on R 2.13.0 or later
+
+    o  We thank Ege Rubak, Kaspar Stucki, Vadim Shcherbakov,
+       Jesper Moller and Ben Taylor for contributions.
+
+NEW FUNCTIONS
+
+    o  is.stationary, is.poisson
+       New generic functions for testing whether a point process model 
+       is stationary and/or Poisson.
+       Methods for ppm, kppm, slrm etc
+
+    o  raster.xy
+       raster coordinates of a pixel mask
+
+    o  zapsmall.im
+       'zapsmall' for pixel images
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o  density.ppp
+       New argument 'diggle' allows choice of edge correction
+
+    o  rotate.owin, affine.owin
+       These functions now handle binary pixel masks.
+       New argument 'rescue' determines whether rectangles will be preserved
+
+BUG FIXES
+
+    o  rmh, simulate.ppm
+       Serious bug - simulation was completely incorrect in the case of 
+       a multitype point process with an interaction that does not depend
+       on the marks, such as ppm(betacells, ~marks, Strauss(60))
+       The calling parameters were garbled.
+       Fixed.
+
+    o  effectfun
+       Crashed if the covariate was a function(x,y).
+       Fixed.
+
+    o  lurking
+       Gave erroneous error messages about 'damaged' models.
+       Fixed.
+
+    o  envelope.ppm
+       Did not recognise when the fitted model was equivalent to CSR.
+       Fixed.
+
+    o  plot.ppx
+       Crashed in some cases. Fixed.
+
+	CHANGES IN spatstat VERSION 1.22-2
+
+OVERVIEW 
+
+    o  Fitting and simulation of log-Gaussian Cox processes
+       with any covariance function
+
+    o  More support for 'kppm' and 'rhohat' objects
+
+    o  K-function for point patterns on a linear network
+
+    o  Metropolis-Hastings algorithm now saves its transition history
+
+    o  Easier control of dummy points in ppm
+
+    o  Convert an 'fv' object to an R function 
+
+    o  spatstat now depends on the package 'RandomFields'
+
+    o  We thank Abdollah Jalilian, Shen Guochun, Rasmus Waagepetersen,
+       Ege Rubak and Ang Qi Wei for contributions.
+
+NEW FUNCTIONS
+
+    o linearK
+      Computes the Okabe-Yamada network K-function 
+      for a point pattern on a linear network.
+
+    o pairdist.lpp
+      Shortest-path distances between each pair of points 
+      on a linear network.
+
+    o vcov.kppm
+      Asymptotic variance-covariance matrix for regression parameters
+      in kppm object. 
+      [Contributed by Abdollah Jalilian and Rasmus Waagepetersen]
+
+    o rLGCP
+      Simulation of log-Gaussian Cox processes
+      [Contributed by Abdollah Jalilian and Rasmus Waagepetersen]
+
+    o predict.rhohat
+      Method for 'predict' for objects of class 'rhohat'
+      Computes a pixel image of the predicted intensity.
+
+    o Kmodel, pcfmodel
+      Generic functions that compute the K-function or pair correlation function
+      of a point process *model*. 
+      So far the only methods are for the class 'kppm'.
+
+    o as.function.fv
+      Converts a function value table (class 'fv') to a function in R
+
+    o coef.kppm
+      Method for 'coef' for objects of class 'kppm'
+
+    o unitname, unitname<- 
+      These generic functions now have methods for fitted model objects
+      (classes ppm, slrm, kppm, minconfit) and quadrature schemes (quad).
+
+    o nobs.ppm
+      Method for 'nobs' for class 'ppm'.
+      Returns the number of points in the original data.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o kppm
+      Can now fit a log-Gaussian Cox process
+
+    o simulate.kppm
+      Can now simulate a fitted log-Gaussian Cox process
+
+    o lgcp.estK, lgcp.estpcf
+      These functions previously fitted a log-Gaussian Cox process
+      with exponential covariance. They can now fit a log-Gaussian Cox process
+      with any covariance function implemented by the RandomFields package.
+
+    o rmh
+      If track=TRUE, the history of transitions of the Metropolis-Hastings
+      algorithm is saved and returned.
+
+    o ppm
+      New argument 'nd' controls the number of dummy points.
+
+    o as.fv
+      Now handles objects of class kppm or minconfit.
+
+    o rhohat
+      If covariate = "x" or "y", the resulting object has the same
+      'unitname' as the original point pattern data.
+
+    o rhohat
+      Now has arguments 'eps, 'dimyx' to control pixel resolution.
+
+    o MultiStrauss, MultiHard, MultiStraussHard
+      Default value of 'types' has been changed to NULL.
+
+    o data(ants)
+      The auxiliary data 'ants.extra' now includes a function called 'side'
+      determining whether a given location is in the scrub or field region.
+      Can be used as a covariate in ppm, kppm, slrm.
+
+    o print.ppm
+      Now has argument 'what' to allow only selected information to be printed.
+
+BUG FIXES
+
+    o profilepl
+      Crashed in some cases involving multitype interactions.
+      Fixed.
+
+    o plot.splitppp
+      Behaved incorrectly if 'main' was an expression.
+      Fixed.
+
+    o effectfun
+      Crashed in trivial cases.
+      Fixed.
+
+    o kppm, thomas.estpcf, matclust.estpcf, lgcp.estpcf
+      Gave a spurious warning message.
+      Fixed.
+
+    o step
+      When applied to ppm objects this gave a spurious warning.
+      Fixed.
+    
+	CHANGES IN spatstat VERSION 1.22-1
+
+OVERVIEW 
+
+    o  marked line segment patterns can now be plotted
+
+    o  multitype point process models are now 'self-starting'
+
+    o  new functions to manipulate colour images
+
+NEW FUNCTIONS
+
+    o rgbim, hsvim
+      Specify three colour channels.
+      These functions convert three pixel images with numeric values
+      into a single image whose pixel values are strings representing colours.
+
+    o scaletointerval
+      Generic utility function to rescale data (including spatial data)
+      to a specified interval
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.im
+      Can now plot images whose pixel values are strings representing colours.
+      New argument 'valuesAreColours'
+  
+    o plot.psp
+      Now handles marked line segment patterns 
+      and plots the marks as colours.
+
+    o MultiHard, MultiStrauss, MultiStraussHard
+      The argument 'types' can now be omitted;
+      it will be inferred from the point pattern data.
+
+    o rhohat
+      Improved mathematical labels (when the result of rhohat is plotted)
+
+    o plot.fv
+      Minor improvements in graphics
+
+BUG FIXES
+
+    o  several minor bug fixes and improvements to satisfy R-devel
+
+
+	CHANGES IN spatstat VERSION 1.22-0
+
+OVERVIEW 
+
+    o  support for point patterns on a linear network
+
+    o  'superimpose' is now generic
+
+    o  improved mathematical labels when plotting functions
+
+NEW CLASSES
+
+    o linnet
+      An object of class 'linnet' represents a linear network,
+      i.e. a connected network of line segments, such as a road network.
+      Methods for this class include plot, print, summary etc.
+
+    o lpp
+      An object of class 'lpp' represents a point pattern on a linear network,
+      such as a record of the locations of road accidents on a road network.
+      Methods for this class include plot, print, summary etc.
+
+NEW FUNCTIONS
+
+    o runiflpp
+      Uniformly distributed random points on a linear network
+
+    o rpoislpp
+      Poisson point process on a linear network
+
+    o clickjoin
+      Interactive graphics to create a linear network
+    
+    o superimpose
+      The function 'superimpose' is now generic, with methods
+      for ppp, psp and a default method.
+
+    o as.ppp.psp 
+      New method for as.ppp extracts the endpoints and marks
+      from a line segment pattern
+
+NEW DATASETS
+
+    o simplenet
+      Simple example of a linear network
+
+SIGNIFICANT USER-VISIBLE CHANGES
+  
+    o superimposePSP 
+      This function is now deprecated in favour of 'superimpose'
+
+    o superimpose
+      Now handles data frames of marks.
+
+    o plot.fv
+      Argument 'legendmath' now defaults to TRUE.
+      New argument 'legendargs' gives more control over appearance of legend.
+      Increased default spacing between lines in legend.
+
+    o eval.fv, with.fv
+      Functions computed using eval.fv or with.fv
+      now have better labels when plotted.
+
+    o summary functions
+    (Kest, Kest.fft, Kcross, Kdot, Kmulti,
+    Kinhom, Kcross.inhom, Kdot.inhom, Kmulti.inhom,
+    Lest, Lcross, Ldot, 
+    pcf, pcfcross, pcfdot, pcfinhom, pcfcross.inhom, pcfdot.inhom,
+    Fest, Gest, Gcross, Gdot, Gmulti,
+    Jest, Jcross, Jdot, Jmulti, Iest,
+    localL, localK,
+    markcorr, markvario, markconnect, Emark, Vmark, 
+    allstats, alltypes)
+         Improved plot labels.
+
+BUG FIXES
+
+    o superimpose
+      If the marks components of patterns consisted of character
+      vectors (rather than factors or non-factor numeric vectors)
+      an error was triggered.
+      Fixed.
+
+    o plot.fv
+      The y axis limits did not always cover the range of values
+      if the argument 'shade' was used.
+      Fixed.
+
+    o plot.rhohat
+      The y axis label was sometimes incorrect.
+      Fixed.
+
+    o plot.rhohat
+      If argument 'xlim' was used, a warning was generated from 'rug'.
+      Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.21-6
+
+OVERVIEW 
+
+    o   A line segment pattern can now have a data frame of marks.
+
+    o	Various minor extensions and alterations in behaviour
+
+NEW FUNCTIONS
+
+    o   nsegments
+    	Number of segments in a line segment pattern
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   psp class
+        A line segment pattern (object of class 'psp') can now have a 
+	data frame of marks. 
+
+    o   density.ppp
+    	New argument 'adjust' makes it easy to adjust the smoothing bandwidth
+
+    o   plot.envelope
+    	If the upper envelope is NA but the lower envelope is finite,
+	the upper limit is now treated as +Infinity
+
+    o 	msr
+        Argument 'continuous' renamed 'density'
+
+BUG FIXES    
+
+    o   [.psp 
+        In X[W] if X is a line segment pattern and W is a polygonal window,
+	marks were sometimes discarded, leading to an error.
+	Fixed.
+
+    o   [.psp 
+        In X[W] if X is a line segment pattern and W is a rectangular window,
+	if the marks of X were factor values, they were converted to integers.
+	Fixed.
+
+    o   superimposePSP
+    	If the marks were a factor, they were mistakenly converted to integers.
+	Fixed.
+
+    o   is.marked.ppp 
+    	Did not generate a fatal error when na.action="fatal" as described
+	in the help file. 
+	Fixed. 
+
+	CHANGES IN spatstat VERSION 1.21-5
+
+OVERVIEW 
+
+    o	Increased numerical stability.
+	
+    o	New 'self-starting' feature of interpoint interactions.
+	
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o 	ppm
+        Interaction objects may now be 'self-starting'
+    	i.e. initial parameter estimates can be computed
+	from the point pattern dataset. 
+	So far, only the LennardJones() interaction 
+	has a self-starting feature.
+
+    o   LennardJones
+	Increased numerical stability.
+	New (optional) scaling argument 'sigma0'.
+	Interpoint distances are automatically rescaled
+	using 'self-starting' feature. 
+		
+    o	vcov.ppm
+	New argument 'matrix.action' controls what happens when
+	the matrix is ill-conditioned.
+	Changed name of argument 'gamaction' to 'gam.action'
+
+    o   rmhmodel.ppm
+	Default resolution of trend image has been increased.
+
+    o   is.poisson.ppm
+	Accelerated.
+
+    o   ppm, kppm, qqplot.ppm
+	Improved robustness to numerical error
+
+
+	CHANGES IN spatstat VERSION 1.21-4
+
+OVERVIEW 
+
+    o	Urgent bug fix
+
+BUG FIXES
+ 
+    o   print.summary.ppm exited with an error message,
+    	if the model had external covariates.
+    	Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.21-3
+
+OVERVIEW 
+
+    o	Point process model covariates may now depend on additional parameters.
+
+    o	New class of signed measures, for residual analysis.
+
+    o   Miscellaneous improvements and bug fixes.
+
+NEW FUNCTIONS
+
+    o   clarkevans.test
+    	Classical Clark-Evans test of randomness
+
+    o   msr
+	New class 'msr' of signed measures and vector-valued measures
+	supporting residual analysis.
+
+    o   quadrat.test.quadratcount
+	Method for 'quadrat.test' for objects of class 'quadratcount'
+	(allows a chi-squared test to be performed on quadrat counts
+	rather than recomputing from the original data)
+
+    o   tile.areas
+	Computes areas of tiles in a tessellation (efficiently)
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   ppm
+	The spatial trend can now depend on additional parameters.
+	This is done by allowing spatial covariate functions
+	to have	additional parameters: function(x, y, ...)
+	where ... is controlled by the new argument 'covfunargs' to ppm
+
+    o   profilepl
+	Can now maximise over trend parameters as well as interaction parameters
+
+    o   residuals.ppm
+    	The value returned by residuals.ppm is now an object 
+	of class 'msr'. It can be plotted directly.
+
+    o   eval.im
+	When the argument 'envir' is used, eval.im() now recognises
+	functions as well as variables in 'envir'
+
+    o   colourmap
+	The argument 'col' can now be any kind of colour data
+
+    o   persp.im
+	The 'colmap' argument can now be a 'colourmap' object
+
+    o   ppm
+    	The print and summary methods for 'ppm' objects 
+	now show standard errors for parameter estimates
+	if the model is Poisson.
+
+    o   quadrat.test
+	The print method for 'quadrattest' objects
+	now displays information about the quadrats
+
+    o   lurking
+    	Improved format of x axis label
+
+    o   distmap.ppp
+   	Internal code is more robust.
+BUG FIXES
+
+    o  im
+	Did not correctly handle 1 x 1 arrays.
+	Fixed.
+
+    o   as.mask, pixellate.ppp
+    	Weird things happened if the argument 'eps' was set
+	to a value greater than the size of the window.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.21-2
+
+OVERVIEW 
+
+    o   New multitype hardcore interaction.
+
+    o   Nonparametric estimation of covariate effects on point patterns.
+
+    o   Output of 'Kmeasure' has been rescaled.
+
+    o   Numerous improvements and bug fixes.
+
+NEW FUNCTIONS
+
+    o   MultiHard
+    	multitype hard core interaction for use in ppm() 
+
+    o   coords<-
+    	Assign new coordinates to the points in a point pattern
+
+    o   rhohat
+    	Kernel estimate for the effect of a spatial covariate
+	on point process intensity
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   as.ppp.matrix, as.ppp.data.frame
+    	These methods for 'as.ppp' now accept a matrix or data frame
+	with any number of columns (>= 2) and interpret the additional
+	columns as marks.
+
+    o   Kmeasure
+    	The interpretation of the output has changed:
+	the pixel values are now density estimates.
+
+    o   rmh.ppm, rmhmodel.ppm
+    	These functions now accept a point process model
+	fitted with the 'MultiHard' interaction
+
+    o   rmh.default, rmhmodel.default
+    	These functions now accept the option: cif='multihard'
+	defining a multitype hard core interaction.	
+
+    o   markcorr
+    	Now handles a data frame of marks
+
+    o   varblock
+    	Improved estimate in the case of the K function
+
+    o   colourmap, lut
+    	New argument 'range' makes it easier to specify a colour map
+	or lookup table
+
+    o   [<-.hyperframe
+    	Now handles multiple columns
+
+    o   plot.fv
+    	Improved y axis labels
+
+    o   spatstat.options
+    	New option 'par.fv' controls default parameters for line plotting
+
+    o   rmhmodel
+    	More safety checks on parameter values.
+
+    o   quadratresample
+    	New argument 'verbose'
+
+    o   smooth.fv
+    	Default value of 'which' has been changed.
+
+BUG FIXES
+
+    o   Kest
+    	If the argument 'domain' was used, the resulting estimate
+	was not correctly normalised.
+	Fixed.
+
+    o   Kest
+    	The Lotwick-Silverman variance approximation was incorrectly
+	calculated. (Spotted by Ian Dryden and Igor Chernayavsky).
+	Fixed.
+    	
+    o   plot.owin, plot.ppp
+    	Display of binary masks was garbled if the window was 
+	empty or if it was equivalent to a rectangle.
+	Fixed.
+
+    o   plot.bermantest
+    	One of the vertical lines for the Z1 test was in the wrong place.
+	Fixed.
+
+    o   marks<-.ppx
+    	Crashed in some cases.
+	Fixed.
+
+    o   is.convex
+    	An irrelevant warning was issued (for non-convex polygons).
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.21-1
+
+OVERVIEW 
+
+    o   Confidence intervals for K-function and other statistics
+
+    o   Bug fixes for smoothing and relative risk estimation
+
+NEW FUNCTIONS
+
+    o   varblock
+    	Variance estimation (and confidence intervals)
+	for summary statistics such as Kest, using subdivision technique
+
+    o   bw.stoyan
+    	Bandwidth selection by Stoyan's rule of thumb.
+
+    o   which.max.im
+     	Applied to a list of images, this determines which image
+	has the largest value at each pixel.
+
+    o   as.array.im
+    	Convert image to array
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   smooth.ppp, markmean, sharpen.ppp, relrisk, bw.relrisk
+    	Further acceleration achieved.
+
+    o   Kest
+    	Argument 'correction' now explicitly overrides automatic defaults
+
+    o   plot.fv
+    	More robust handling of 'shade'
+
+BUG FIXES
+
+    o   relrisk
+    	Format of relrisk(at="points") was incorrect.
+	Fixed.
+
+    o   bw.relrisk
+    	Result was incorrect in the default case method="likelihood"
+	because of previous bug.
+	Fixed.
+    	
+    o   Jdot, Jcross, Jmulti
+    	Return value did not include the hazard function, when correction="km"
+	Fixed.
+
+    o   Jdot, Jcross, Jmulti
+    	Format of output was incompatible with format of Jest.
+	Fixed.
+
+   
+	CHANGES IN spatstat VERSION 1.21-0
+
+OVERVIEW 
+
+    o   Implemented Spatial Logistic Regression
+
+    o   Implemented nonparametric estimation of relative risk
+        with bandwidth selection by cross-validation.
+
+    o   Smoothing functions can handle a data frame of marks.
+
+    o   New options in Kinhom; default behaviour has changed.
+
+NEW FUNCTIONS
+
+    o   slrm
+    	Fit a spatial logistic regression model
+
+    o   anova.slrm, coef.slrm, fitted.slrm, logLik.slrm, plot.slrm, predict.slrm
+    	Methods for spatial logistic regression models
+
+    o   relrisk
+    	Nonparametric estimation of relative risk 
+
+    o   bw.relrisk
+    	Automatic bandwidth selection by cross-validation
+
+    o   default.rmhcontrol
+        Sets default values of Metropolis-Hastings parameters
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   smooth.ppp, markmean
+    	These functions now accept a data frame of marks.
+
+    o   Kinhom
+	Default behaviour has changed. 
+    	New argument 'renormalise=TRUE' determines scaling of estimator
+	and affects bias and variance in small samples.
+
+    o   residuals.ppm
+    	Now also computes the score residuals.
+
+    o   plot.im
+    	New argument 'ribscale'
+
+    o   plot.listof, plot.splitppp
+    	New arguments panel.begin, panel.end and panel.args
+
+    o   ppp
+    	Now checks for NA/NaN/Inf values in the coordinates
+
+    o   envelope.ppm
+    	Changed default value of 'control' 
+    	New argument 'nrep'
+    	
+    o   qqplot.ppm
+    	Changed default value of 'control' 
+
+BUG FIXES
+
+    o   marks<-.ppp, setmarks, %mark%
+    	A matrix of marks was accepted by ppp() 
+	but not by these assignment functions. 
+	Fixed.
+
+    o   density.ppp, smooth.ppp, sharpen.ppp, markmean
+    	Crashed if the bandwidth was extremely small.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.20-5
+
+OVERVIEW 
+
+    o   Accelerated computations of kernel smoothing.
+
+    o	Implemented Choi-Hall data sharpening.
+
+NEW FUNCTIONS
+
+    o   sharpen.ppp
+    	Performs Choi-Hall data sharpening of a point pattern
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   density.ppp, smooth.ppp
+    	Computation has been vastly accelerated 
+	for density(X, at="points") and smooth.ppp(X, at="points")
+
+    o   Kinhom
+    	Accelerated in case where lambda=NULL
+	
+    o   Vignette 'shapefiles' updated
+
+
+	CHANGES IN spatstat VERSION 1.20-4
+
+OVERVIEW
+
+    o   New functions for inhomogeneous point patterns
+    	and local analysis.
+
+    o   Pair correlation function for 3D point patterns
+
+    o   Minor improvements and bug fixes to simulation code and image functions
+
+
+NEW FUNCTIONS
+
+    o   pcf3est
+    	Pair correlation function for 3D point patterns.
+
+    o   Kscaled, Lscaled
+	Estimator of the template K function (and L-function)
+	for a locally-scaled point process.
+        
+    o   localpcf
+        Local version of pair correlation function
+
+    o   identify.psp
+    	Method for 'identify' for line segment patterns.
+
+    o   as.im.matrix
+    	Converts a matrix to a pixel image
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   rMaternI, rMaternII
+	New argument 'stationary=TRUE' controls whether the 
+	simulated process is stationary (inside the simulation window).
+	Default simulation behaviour has changed.
+
+    o   im
+        New arguments 'xrange', 'yrange' 
+
+    o   envelope
+	Improvements to robustness of code.
+
+BUG FIXES
+
+   o    quadratcount
+   	If V was a tessellation created using a factor-valued image,
+	quadratcount(X, tess=V) crashed with the error
+	"Tessellation does not contain all the points of X".
+	Fixed.
+
+   o	[.im
+   	If Z was a factor valued image and X was a point pattern
+	then Z[X] was not a factor.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.20-3
+
+OVERVIEW
+
+    o   minor improvements (mostly internal).
+
+NEW FUNCTIONS
+
+    o   unmark.ppx
+    	Method for 'unmark' for general space-time point patterns
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   plot.ppx
+    	Now handles marked patterns, in two-dimensional case
+
+    o   as.psp.psp
+    	Default value of argument 'check' set to FALSE
+
+	CHANGES IN spatstat VERSION 1.20-2
+
+OVERVIEW
+
+    o   Extensions to minimum contrast estimation.
+
+    o   Bug fix in simulation of Lennard-Jones model.
+	
+    o	More support for distance functions.
+	
+    o	Changes to point process simulations.
+
+
+NEW FUNCTIONS
+
+    o   thomas.estpcf
+    	Fit Thomas process model by minimum contrast using the
+	pair correlation function (instead of the K-function).
+
+    o   matclust.estpcf
+    	Fit Matern Cluster model by minimum contrast using the
+	pair correlation function (instead of the K-function).
+
+    o   lgcp.estpcf
+    	Fit log-Gaussian Cox process model by minimum contrast using the
+	pair correlation function (instead of the K-function).
+
+    o   contour.distfun,  persp.distfun
+    	Methods for 'contour' and 'persp' for distance functions
+
+    o   default.expand
+        Computes default window for simulation of a fitted point process model.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   kppm
+    	Models can now be fitted using either the K-function
+	or the pair correlation function.
+
+    o   ppm
+    	The list of covariates can now include windows 
+	(objects of class 'owin'). A window will be treated
+	as a logical covariate that equals TRUE inside the window
+	and FALSE outside it.
+
+    o   plot.distfun
+    	Pixel resolution can now be controlled.
+
+    o   envelope.ppm, qqplot.ppm
+    	The default value of 'control' has changed;
+	simulation results may be slightly different.
+
+    o   rmh
+    	Slightly accelerated.
+
+BUG FIXES
+
+    o   rmh
+    	Simulation of the Lennard-Jones model (cif = 'lennard') was incorrect
+	due to an obscure bug, introduced in spatstat 1.20-1.
+	Fixed.
+
+    o   thomas.estK, matclust.estK, lgcp.estK
+    	The value of 'lambda' (if given) 
+	was ignored if X was a point pattern.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.20-1
+
+OVERVIEW
+
+    o   Further increases in speed and efficiency of ppm and rmh
+
+    o   New pairwise interaction model 
+
+
+NEW FUNCTIONS
+
+    o   DiggleGatesStibbard
+    	Diggle-Gates-Stibbard pairwise interaction for use in ppm()
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   ppm
+    	has been accelerated by a factor of 10 for the BadGey interaction.
+
+    o   rmh
+    	simulation of the Lennard-Jones model (cif='lennard')
+	has been greatly accelerated.
+
+    o   rmh, rmhmodel.ppm
+    	Point process models fitted by ppm() using the DiggleGatesStibbard
+	interaction can be simulated automatically using rmh.
+
+BUG FIXES
+
+    o   fitin
+    	The plot of a fitted Hardcore interaction was incorrect.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.20-0
+
+OVERVIEW
+
+    o   spatstat now contains over 1000 functions.
+
+    o   Substantial increase in speed and efficiency 
+        of model-fitting code.
+
+    o   Changes to factor-valued images.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o	ppm
+	has been accelerated by a factor of 10,
+        and can handle datasets with 20,000 points,
+        for the following interactions: 
+	DiggleGratton, Fiksel, Geyer, Hardcore, Strauss, StraussHard
+
+    o   predict.ppm 
+        accelerated by a factor of 3 (when type = "cif")
+	with vastly reduced memory requirements
+	for the following interactions: 
+	DiggleGratton, Fiksel, Geyer, Hardcore, Strauss, StraussHard
+
+    o   pixel images (class "im")
+    	The internal representation of factor-valued images has changed.
+	Existing objects in the old format should still work.
+
+    o   im
+	The syntax for creating a factor-valued image has changed.
+    	Argument 'lev' has been deleted.
+
+    o   ppm 
+    	Some warnings have been reworded for greater clarity.
+
+BUG FIXES
+
+    o   [.im
+    	Mishandled some factor-valued images.
+	Fixed.
+
+    o   hist.im
+    	Produced slightly erroneous output for some factor-valued images.
+	Fixed.
+
+    o   plot.owin
+    	Filled polygons appeared to contain criss-cross lines
+	on some graphics drivers.
+	Fixed.
+
+    o   deltametric
+    	Did not handle windows with different enclosing frames
+	(error message: 'dA and dB are incompatible')
+	Fixed.
+
+    o   quadratcount
+    	Crashed if the pattern was empty and the window was a rectangle.
+	(Noticed by Sandro Azaele)
+	Fixed.
+
+    o   rNeymanScott
+    	Crashed if the parent process realisation was empty.
+	(Noticed by Sandro Azaele)
+	Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.19-3
+
+ACKNOWLEDGEMENTS
+
+    o   We thank David Dereudre for contributions.    
+
+OVERVIEW
+
+    o   Urgent bug fix to Metropolis-Hastings for Lennard-Jones model.
+
+    o   Miscellaneous additions to plotting and colour management.
+
+NEW FUNCTIONS
+
+    o   col2hex, rgb2hex, paletteindex, samecolour
+    	Functions for converting and comparing colours.
+
+    o   plot.envelope
+	New method for plotting envelopes.
+	By default the area between the upper and lower envelopes
+	is shaded in grey.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o	plot.fasp
+	If the entries in the array are envelopes,
+	they are plotted using plot.envelope
+	(hence the envelope region is shaded grey).
+
+    o   plot.fv
+        Now displays mathematical notation for each curve,
+	if legendmath=TRUE.
+
+    o   print.fv
+	Now prints the available range of 'r' values
+	as well as the recommended range of 'r' values.
+
+BUG FIXES
+
+    o   rmh
+        Simulation of Lennard-Jones model was incorrect;
+	the simulations were effectively Poisson patterns.
+	(Spotted by David Dereudre.)
+	Fixed.
+
+    o   plot.fv
+	Did not correctly handle formulas that included I( )
+	Fixed.
+
+   
+	CHANGES IN spatstat VERSION 1.19-2
+
+ACKNOWLEDGEMENTS
+
+    o   We thank Jorge Mateu, Michael Sumner and Sebastian Luque
+        for contributions.    
+
+OVERVIEW
+
+    o   More support for fitted point process models and pixel images.
+
+    o   Improved plotting of pixel images and envelopes.
+        
+    o   Simulation algorithm for Lennard-Jones process.
+	
+    o   Improvements and bug fixes to envelopes. 
+	
+    o   Bug fixes to Metropolis-Hastings simulation.
+
+NEW FUNCTIONS
+
+    o   pairs.im
+    	Creates a scatterplot matrix for several pixel images.
+
+    o   model.frame.ppm
+    	Method for 'model.frame' for point process models.
+
+    o   sort.im
+        Method for 'sort' for pixel images.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   plot.fv, plot.fasp
+ 	New argument 'shade' enables confidence intervals
+        or significance bands to be displayed as filled grey shading.
+
+    o   LennardJones
+    	The parametrisation of this interaction function has been changed.
+
+    o   rmh, rmhmodel
+        These functions will now simulate a point process model
+	that was fitted using the LennardJones() interaction.
+
+    o   rmh.default, rmhmodel.default
+    	These functions will now simulate a point process model
+	with the Lennard-Jones interaction (cif='lennard').
+
+    o   ecdf
+    	This function now works for pixel images.
+
+    o   dim, row, col
+        These functions now work for pixel images.
+
+    o   order
+    	This function now works for pixel images.
+
+    o   [.im and [<-.im 
+    	The subset index can now be any valid subset index for a matrix.
+
+    o   density.ppp, smooth.ppp
+    	The return value now has attributes 'sigma' and 'varcov'
+	reporting the smoothing bandwidth.
+
+    o   plot.im
+        The argument 'col' can now be a 'colourmap' object.
+        This makes it possible to specify a fixed mapping between
+	numbers and colours (e.g. so that it is consistent between
+	plots of several different images).
+
+    o   rmh, spatstat.options
+    	spatstat.options now recognises the parameter 'expand' 
+	which determines the default window expansion factor in rmh.
+
+    o   rmh
+    	Improved handling of ppm objects with covariates.
+
+    o   kstest
+        The 'covariate' can now be one of the characters "x" or "y"
+	indicating the Cartesian coordinates.
+
+BUG FIXES
+
+    o   model.matrix.ppm
+    	For a fitted model that used a large number of quadrature points,
+	model.matrix.ppm sometimes reported an internal error about mismatch
+	between the model matrix and the quadrature scheme.
+	Fixed.
+
+    o   plot.ppx
+    	Minor bugs fixed.
+
+    o   rmh
+    	In rare cases, the simulated point pattern 
+	included multiple points at the origin (0,0).
+	(Bug introduced in spatstat 1.17-0.)
+	Fixed.
+
+    o   rmh, rmhmodel.ppm
+    	Crashed when applied to a fitted multitype point process model
+	if the model involved more than one covariate image.
+	(Spotted by Jorge Mateu)
+	Fixed.
+
+    o   density.psp
+    	If any segment had zero length, the result contained NaN values.
+	(Spotted by Michael Sumner and Sebastian Luque.)
+	Fixed.
+
+    o   envelope
+    	Crashed with fun=Lest or fun=Linhom if the number of points in 
+	a simulated pattern exceeded 3000.
+	Fixed.
+
+    o   plot.kstest
+    	Main title was corrupted if the covariate was a function.
+	Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.19-1
+
+OVERVIEW
+
+    o New dataset: replicated 3D point patterns. 
+      
+    o Improvements to Metropolis-Hastings simulation code.
+      
+    o More support for hyperframes. 
+
+    o Bug fixes.
+
+NEW DATASETS
+
+    o  osteo:
+       Osteocyte Lacunae data: replicated 3D point patterns
+       
+NEW FUNCTIONS
+
+    o  rbind.hyperframe:
+       Method for rbind for hyperframes.
+
+    o  as.data.frame.hyperframe:
+       Converts a hyperframe to a data frame.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o  Fiksel:
+       Fitted point process models (class ppm) with the Fiksel()
+       double exponential interaction can now be simulated by rmh.
+
+    o rmh.default: 
+       Point processes with the Fiksel interaction can now be
+       simulated by specifying parameters in rmh.default.
+
+    o  logLik.ppm:
+        New argument 'warn' controls warnings.
+
+    o  profilepl:
+        No longer issues spurious warnings.
+  
+BUG FIXES
+
+    o   Hardcore, rmh:
+    	Simulation of the 'Hardcore' process was incorrect.
+	The hard core radius was erroneously set to zero 
+	so that the simulated patterns were Poisson.
+	Fixed.
+
+    o   fitin:
+        A plot of the pairwise interaction function of a fitted model,
+	generated by plot(fitin(model)) where model <- ppm(...), 
+	was sometimes incorrect when the model included a hard core.
+	Fixed.
+
+
+	CHANGES IN spatstat VERSION 1.19-0
+
+OVERVIEW
+
+    o   Numerous bugs fixed in the implementation of
+    	the Huang-Ogata approximate maximum likelihood method.
+
+    o   New interpoint interaction model.
+
+NEW FUNCTIONS
+
+    o   Fiksel: 
+        new interpoint interaction: Fiksel's double exponential model.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   runifpoint, rpoispp, envelope
+    	These functions now issue a warning if the number of random points
+	to be generated is very large. This traps a common error in
+	simulation experiments.
+
+BUG FIXES
+
+    o   predict.ppm, fitted.ppm:
+        Predictions and fitted values were incorrect for 
+	objects fitted using ppm(..., method="ho").
+	Fixed.
+
+    o   logLik, AIC:
+        Values of logLik() and AIC() were incorrect for 
+    	objects fitted using ppm(..., method="ho").
+	Fixed.
+
+    o   profilepl:
+    	Results were incorrect if the argument 'method="ho"' was used.
+	Fixed.
+
+    o   fitin
+        The result of fitin() was incorrect for 
+    	objects fitted using ppm(..., method="ho").
+	Fixed.
+
+    o   rmhcontrol: 
+    	rmhcontrol(NULL) generated an error.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.18-4
+
+ACKNOWLEDGEMENTS
+
+    o   We thank Michael Sumner for contributions.    
+
+BUG FIXES
+
+    o   pixellate.psp: segments shorter than one pixel width
+    	were measured incorrectly if the 'weights' argument was present. 
+	Fixed.
+
+NEW FUNCTIONS
+
+    o   pairdist.ppx, crossdist.ppx, nndist.ppx, nnwhich.ppx:
+    	Methods for pairdist, crossdist, nndist, nnwhich 
+	for multidimensional point patterns (class 'ppx')
+
+    o	runifpointx, rpoisppx:
+	Random point patterns in any number of dimensions
+
+    o   boxx:
+	Multidimensional box in any number of dimensions
+
+    o   diameter.boxx, volume.boxx, shortside.boxx, eroded.volumes.boxx:
+        Geometrical computations for multidimensional boxes
+
+    o   sum.im, max.im, min.im: 
+        Methods for sum(), min(), max() for pixel images.
+
+    o   as.matrix.ppx:
+	Convert a multidimensional point pattern to a matrix
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   plot.ppp: New argument 'zap'
+
+    o   diameter: This function is now generic, 
+        with methods for "owin", "box3" and "boxx"
+
+    o   eroded.volumes: This function is now generic, 
+        with methods for "box3" and "boxx"
+
+	CHANGES IN spatstat VERSION 1.18-3
+
+ACKNOWLEDGEMENTS
+
+    o   We thank Michael Sumner for contributions.    
+
+BUG FIXES
+
+    o   pixellate.psp: segments shorter than one pixel width
+    	were measured incorrectly. Fixed.
+
+    o   fv: 'alim' not handled correctly.  Fixed.
+
+NEW FUNCTIONS
+
+    o   smooth.fv:
+        Applies spline smoothing to the columns of an fv object.
+        
+
+	CHANGES IN spatstat VERSION 1.18-2
+
+ACKNOWLEDGEMENTS
+
+    o   We thank Michael Sumner for contributions.    
+
+NEW FUNCTIONS
+
+    o   Gfox, Jfox:
+        Foxall's G and J functions
+
+    o   as.owin.distfun: 
+        New method for as.owin extracts the domain of a distfun object.
+    
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   distfun: objects of class 'distfun', when called as functions,
+        will now accept either two vectors (x,y) or a point pattern x.
+
+    o   Hest: this function can now compute the	Hanisch estimator. 
+        It now has arguments 'r', 'breaks' and 'correction', 
+	like other summary functions. 
+
+    o   Hest: new argument 'conditional'.
+
+BUG FIXES
+
+    o   pixellate.psp: Values were sometimes incorrect due to coding error.
+    	(Spotted by Michael Sumner)
+        Fixed.
+
+    o   kstest: Crashed if the covariate contained NA's.
+	Fixed.
+
+    o   kstest: Crashed if X was a multitype point pattern 
+	in which some mark values were unrepresented.
+	Fixed.
+
+    o   lurking: Minor bug in handling of NA values.
+    	Fixed.
+
+    o   Hest: labels of columns were incorrect. 
+        Fixed.
+
+	CHANGES IN spatstat VERSION 1.18-1
+
+ACKNOWLEDGEMENTS
+
+    o   we thank Andrew Bevan and Ege Rubak for suggestions.
+
+NEW FUNCTIONS
+
+    o   Hardcore: Hard core interaction (for use in ppm)
+
+    o   envelope.pp3: simulation envelopes for 3D point patterns
+
+    o   npoints: number of points in a point pattern of any kind
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   rmh.ppm, rmhmodel.ppm:
+    	It is now possible to simulate Gibbs point process models
+	that are fitted to multitype point patterns using a
+	non-multitype interaction, e.g.
+	     data(amacrine)
+	     fit <- ppm(amacrine, ~marks, Strauss(0.1))
+	     rmh(fit, ...)
+
+    o   rmh.ppm, rmhmodel.ppm, rmh.default, rmhmodel.default:
+    	Hard core models can be simulated.
+
+    o	rmh.default, rmhmodel.default:
+   	The argument 'par' is now required to be a list, in all cases
+	(previously it was sometimes a list and sometimes a vector).
+
+    o   Fest:
+        Calculation has been accelerated in some cases.
+
+    o   summary.pp3 now returns an object of class 'summary.pp3'
+    	containing useful summary information. It is plotted by
+	'plot.summary.pp3'.
+
+    o   F3est, G3est, K3est: these functions now accept 
+        'correction="best"' 
+
+    o   union.owin, intersect.owin: 
+    	these functions now handle any number of windows.
+
+    o   envelope.ppp, envelope.ppm, envelope.kppm: 
+        argument lists have changed slightly
+
+BUG FIXES
+
+    o   Fest: The result of Fest(X, correction="rs") had a slightly
+    	corrupted format, so that envelope(X, Fest, correction="rs")
+	in fact computed the envelopes based on the "km" correction.
+	(Spotted by Ege Rubak).
+	Fixed.
+
+    o   rmh (rmh.ppm, rmhmodel.ppm):
+	rmh sometimes failed for non-stationary point process models,
+	with a message about "missing value where TRUE/FALSE needed".
+	(Spotted by Andrew Bevan).
+	Fixed.
+
+    o   diagnose.ppm, lurking:
+        Calculations were not always correct if the model
+	had conditional intensity equal to zero at some locations.
+	Fixed.
+
+    o   ppm, profilepl:
+        If data points are illegal under the model (i.e. if any
+        data points have conditional intensity equal to zero)
+        the log pseudolikelihood should be -Inf but was sometimes
+	returned as a finite value. Thus profilepl did not always 
+	work correctly for models with a hard core.
+	Fixed.
+
+    o   F3est, G3est: 
+    	Debug messages were printed unnecessarily.
+	Fixed.
+
+	CHANGES IN spatstat VERSION 1.18-0
+
+ACKNOWLEDGEMENTS
+
+    o   we thank Ege Rubak and Tyler Dean Rudolph for suggestions.
+
+HEADLINES
+
+    o   A point pattern is now allowed to have a data frame of marks
+        (previously the marks had to be a vector).
+
+    o   Extended capabilities for 'envelope' and 'kstest'.
+
+NEW FUNCTIONS
+
+    o	pixellate.psp,  as.mask.psp
+    	Convert a line segment pattern to a pixel image or binary mask
+
+    o   as.data.frame.im
+        Convert a pixel image to a data frame
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   A point pattern is now allowed to have a data frame of marks
+        (previously the marks had to be a vector).
+
+    o   Many functions in spatstat now handle point patterns with 
+        a data frame of marks. 
+	These include print.ppp, summary.ppp, plot.ppp, split.ppp.
+
+    o   finpines, nbfires, shapley:
+        The format of these datasets has changed. 
+        They are now point patterns with a data frame of marks.
+
+    o	envelope() is now generic, with methods for "ppp", "ppm" and "kppm".
+
+    o   kstest() now handles multitype point patterns and 
+        multitype point process models.
+
+    o   nnclean() now returns a point pattern with a data frame of marks.
+
+    o   plot.ppp() has new argument 'which.marks' to select one column
+        from a data frame of marks to be plotted. 
+
+    o   plot.ppp() now handles marks that are POSIX times.
+
+    o   complement.owin now handles any object acceptable to as.owin.
+
+BUG FIXES
+
+    o   erosion(w) and opening(w) crashed if w was not a window.
+        Fixed.
+
+    o   diameter() and eroded.areas() refused to work if w was not a window.
+        Fixed.
+
+	CHANGES IN spatstat VERSION 1.17-6
+
+ACKNOWLEDGEMENTS
+
+    o   We thank Simon Byers and Adrian Raftery for generous contributions.
+
+OVERVIEW
+
+    o 	Nearest neighbour clutter removal algorithm
+
+    o   New documentation for the 'fv' class.
+	
+    o	Minor improvements and bug fixes.
+
+NEW FUNCTIONS
+
+    o	nnclean: Nearest neighbour clutter removal for recognising features 
+	in spatial point patterns. Technique of Byers and Raftery (1998) 
+	[From original code by Simon Byers and Adrian Raftery,
+	adapted for spatstat.]
+
+    o	marks.ppx, marks<-.ppx: Methods for extracting and changing marks
+	in a multidimensional point pattern
+
+    o   latest.news: print news about the current version of the package
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o   news: spatstat now has a NEWS file which can be printed by
+	typing news(package="spatstat").
+
+    o	areaGain, areaLoss: New algorithms in case exact=TRUE.
+	Syntax slightly modified.
+
+    o	with.hyperframe: 
+		- The result now inherits 'names' from the row names
+		of the hyperframe. 
+
+		- New argument 'enclos' controls the environment
+		in which the expression is evaluated.
+
+		- The algorithm is now smarter at simplifying the result
+		when simplify=TRUE.
+
+    o	update.ppm: Tweaked to improve the ability of ppm objects
+	to be re-fitted in different contexts.
+
+
+ADVANCED USERS ONLY
+   
+    o	Documentation for the class 'fv' of function value tables
+
+	- fv: Creates an object of class 'fv' 
+
+	- cbind.fv, collapse.fv: Combine objects of class 'fv'		
+
+	- bind.fv: Add additional columns of data to an 'fv' object
+
+		
+BUG FIXES
+
+    o	"$<-.hyperframe" destroyed the row names of the hyperframe.
+	Fixed.	
+
+    o	model.matrix.ppm had minor inconsistencies.
+	Fixed.		
+
+    o	ppm: The fitted coefficient vector had incorrect format
+	in the default case of a uniform Poisson process. 
+	Fixed.
+
+    o	plot.ppx: Crashed if the argument 'main' was given.
+	Fixed.
+
+    o   envelope.ppp: Crashed if the object returned by 'fun' 
+    	did not include a column called "theo".
+    	Fixed.

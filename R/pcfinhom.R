@@ -1,0 +1,175 @@
+#
+#   pcfinhom.R
+#
+#   $Revision: 1.9 $   $Date: 2013/02/07 09:58:14 $
+#
+#   inhomogeneous pair correlation function of point pattern 
+#
+#
+
+pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
+                     kernel="epanechnikov", bw=NULL, stoyan=0.15,
+                     correction=c("translate", "Ripley"),
+                     renormalise=TRUE,
+                     normpower=1,
+                     reciplambda=NULL, 
+                     sigma=NULL, varcov=NULL)
+{
+  verifyclass(X, "ppp")
+  r.override <- !is.null(r)
+
+  win <- X$window
+  area <- area.owin(win)
+  npts <- npoints(X)
+  
+  correction.given <- !missing(correction)
+  correction <- pickoption("correction", correction,
+                           c(isotropic="isotropic",
+                             Ripley="isotropic",
+                             trans="translate",
+                             translate="translate",
+                             translation="translate",
+                             best="best"),
+                           multi=TRUE)
+
+  correction <- implemented.for.K(correction, win$type, correction.given)
+  
+  if(is.null(bw) && kernel=="epanechnikov") {
+    # Stoyan & Stoyan 1995, eq (15.16), page 285
+    h <- stoyan /sqrt(npts/area)
+    # conversion to standard deviation
+    bw <- h/sqrt(5)
+  }
+
+  ########## intensity values #########################
+
+  if(missing(lambda) && is.null(reciplambda)) {
+    # No intensity data provided
+    # Estimate density by leave-one-out kernel smoothing
+    lambda <- density(X, ..., sigma=sigma, varcov=varcov,
+                      at="points", leaveoneout=TRUE)
+    lambda <- as.numeric(lambda)
+    reciplambda <- 1/lambda
+  } else if(!is.null(reciplambda)) {
+    # 1/lambda values provided
+    if(is.im(reciplambda)) 
+      reciplambda <- safelookup(reciplambda, X)
+    else if(is.function(reciplambda))
+      reciplambda <- reciplambda(X$x, X$y)
+    else if(is.numeric(reciplambda) && is.vector(as.numeric(reciplambda)))
+      check.nvector(reciplambda, npts)
+    else stop(paste(sQuote("reciplambda"),
+                    "should be a vector, a pixel image, or a function"))
+  } else {
+    # lambda values provided
+    if(is.im(lambda)) 
+      lambda <- safelookup(lambda, X)
+    else if(is.ppm(lambda))
+      lambda <- predict(lambda, locations=X, type="trend")
+    else if(is.function(lambda)) 
+      lambda <- lambda(X$x, X$y)
+    else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
+      check.nvector(lambda, npts)
+    else stop(paste(sQuote("lambda"),
+                    "should be a vector, a pixel image, or a function"))
+    # evaluate reciprocal
+    reciplambda <- 1/lambda
+  }
+  
+  # renormalise
+  if(renormalise) {
+    check.1.real(normpower)
+    stopifnot(normpower %in% 1:2)
+    renorm.factor <- (area/sum(reciplambda))^normpower
+  } 
+  
+  ########## r values ############################
+  # handle arguments r and breaks 
+
+  rmaxdefault <- rmax.rule("K", win, lambda)        
+  breaks <- handle.r.b.args(r, NULL, win, rmaxdefault=rmaxdefault)
+  if(!(breaks$even))
+    stop("r values must be evenly spaced")
+  # extract r values
+  r <- breaks$r
+  rmax <- breaks$max
+  # recommended range of r values for plotting
+  alim <- c(0, min(rmax, rmaxdefault))
+
+  ########## smoothing parameters for pcf ############################  
+  # arguments for 'density'
+
+  from <- 0
+  to <- max(r)
+  nr <- length(r)
+  
+  denargs <- resolve.defaults(list(kernel=kernel, bw=bw),
+                              list(...),
+                              list(n=nr, from=from, to=to))
+  
+  #################################################
+  
+  # compute pairwise distances
+  
+  close <- closepairs(X, max(r))
+  dIJ <- close$d
+  I <- close$i
+  J <- close$j
+  XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
+  wIJ <- reciplambda[I] * reciplambda[J]
+
+  # initialise fv object
+  
+  df <- data.frame(r=r, theo=rep(1,length(r)))
+  out <- fv(df, "r",
+            substitute(g[inhom](r), NULL), "theo", ,
+            alim,
+            c("r","{%s^{Pois}}(r)"),
+            c("distance argument r", "theoretical Poisson %s"),
+            fname="g[inhom]")
+
+  ###### compute #######
+
+  if(any(correction=="translate")) {
+    # translation correction
+    XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
+    edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+    gT <- sewpcf(dIJ, edgewt * wIJ, denargs, area)$g
+    if(renormalise) gT <- gT * renorm.factor
+    out <- bind.fv(out,
+                   data.frame(trans=gT),
+                   "hat(%s^{Trans})(r)",
+                   "translation-corrected estimate of %s",
+                   "trans")
+  }
+  if(any(correction=="isotropic")) {
+    # Ripley isotropic correction
+    edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
+    gR <- sewpcf(dIJ, edgewt * wIJ, denargs, area)$g
+    if(renormalise) gR <- gR * renorm.factor
+    out <- bind.fv(out,
+                   data.frame(iso=gR),
+                   "hat(%s^{Ripley})(r)",
+                   "isotropic-corrected estimate of %s",
+                   "iso")
+  }
+  
+  # sanity check
+  if(is.null(out)) {
+    warning("Nothing computed - no edge corrections chosen")
+    return(NULL)
+  }
+  
+  # which corrections have been computed?
+  nama2 <- names(out)
+  corrxns <- rev(nama2[nama2 != "r"])
+
+  # default is to display them all
+  formula(out) <- deparse(as.formula(paste(
+                       "cbind(",
+                        paste(corrxns, collapse=","),
+                        ") ~ r")))
+  unitname(out) <- unitname(X)
+  return(out)
+}
+
