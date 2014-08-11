@@ -214,14 +214,14 @@
    }
 
    # multitype Strauss models
-   MS <- MultiStrauss(types = levels(Y$marks),
-                      radii=matrix(0.07, ncol=2, nrow=2))
+   MS <- MultiStrauss(radii=matrix(0.07, ncol=2, nrow=2),
+                      types = levels(Y$marks))
    \dontrun{
-    fit <- ppm(Y, ~marks, MS)
+    fit <- ppm(Y ~marks, MS)
     Ysim <- rmh(fit)
    }
 
-   fit <- ppm(Y,~marks*polynom(x,y,2), MS)
+   fit <- ppm(Y ~ marks*polynom(x,y,2), MS)
    Ysim <- rmh(fit)
    if(live) plot(Ysim, main="simulation from fitted inhomogeneous Multitype Strauss")
 

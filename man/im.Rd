@@ -15,7 +15,7 @@
     matrix or vector containing the pixel values of the image.
   }
   \item{xcol}{
-    vector of \eqn{x} coordinates for the pixel gid
+    vector of \eqn{x} coordinates for the pixel grid
   }
   \item{yrow}{
     vector of \eqn{y} coordinates for the pixel grid

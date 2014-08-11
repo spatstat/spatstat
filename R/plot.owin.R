@@ -3,29 +3,33 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.42 $	$Date: 2014/01/29 04:57:59 $
+#	$Revision: 1.46 $	$Date: 2014/05/05 06:37:17 $
 #
 #
 #
 
 plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       type = c("w", "n"), show.all=!add,
-                      hatch=FALSE, angle=45, spacing=diameter(x)/50,
-                      invert=FALSE)
+                      hatch=FALSE,
+                      hatchargs=list(), 
+                      invert=FALSE, do.plot=TRUE)
 {
 #
 # Function plot.owin.  A method for plot.
 #
   if(missing(main))
     main <- short.deparse(substitute(x))
+
   W <- x
   verifyclass(W, "owin")
-  type <- match.arg(type)
+  if(!do.plot) 
+    return(invisible(as.rectangle(W)))
   
-  if(missing(box) || is.null(box))
-    box <- is.mask(W)
-  else
-    stopifnot(is.logical(box) && length(box) == 1)
+  type <- match.arg(type)
+
+  if(missing(box) || is.null(box)) {
+    box <- is.mask(W) && show.all
+  } else stopifnot(is.logical(box) && length(box) == 1)
 
 ####
   if(is.expression(main)) 
@@ -85,7 +89,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   
 # If type = "n", do not plot the window.
     if(type == "n")
-      return(invisible(NULL))
+      return(invisible(as.rectangle(W)))
 
   
 # Draw window
@@ -98,14 +102,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                            resolve.defaults(list(x=po),
                                             list(...)),
                            extrargs="lwd")
-           if(hatch) {
-             L <- rlinegrid(angle, spacing, W)
-             L <- L[W]
-             do.call.matched("plot.psp",
-                             resolve.defaults(list(x=L, add=TRUE),
-                                              list(...)),
-                             extrargs=c("lwd","lty","col"))
-           }
+           if(hatch)
+             do.call("add.texture", append(list(W=W), hatchargs))
          },
          polygonal = {
            p <- W$bdry
@@ -169,14 +167,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                                 list(...)),
                                extrargs="lwd")
            }
-           if(hatch) {
-             L <- rlinegrid(angle, spacing, W)
-             L <- L[W]
-             do.call.matched("plot.psp",
-                             resolve.defaults(list(x=L, add=TRUE),
-                                              list(...)),
-                             extrargs=c("lwd","lty","col"))
-           }
+           if(hatch)
+             do.call("add.texture", append(list(W=W), hatchargs))
          },
          mask = {
            # capture 'col' argument and ensure it's at least 2 values
@@ -206,53 +198,85 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                            spatstat.options("par.binary"),
                            list(zlim=c(FALSE, TRUE))))
            if(hatch)
-             warning("Hatching is not implemented for mask windows")
+             do.call("add.texture", append(list(W=W), hatchargs))
          },
          stop(paste("Don't know how to plot window of type", sQuote(W$type)))
          )
-
-  invisible()
+  return(invisible(as.rectangle(W)))
 }
 
-break.holes <- function(x, splitby=NULL, depth=0, maxdepth=100) {
-  if(is.null(splitby)) {
-    # first call: validate x
-    stopifnot(is.owin(x))
-    splitby <- "x"
+break.holes <- local({
+
+  insect <- function(A, Box) {
+    ## efficient version of intersect.owin which doesn't 'fix' the polygons
+    a <- lapply(A$bdry, reverse.xypolygon)
+    b <- lapply(as.polygonal(Box)$bdry, reverse.xypolygon)
+    ab <- polyclip::polyclip(a, b, "intersection",
+                             fillA="nonzero", fillB="nonzero")
+    if(length(ab)==0)
+      return(emptywindow(Box))
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    if(totarea < 0)
+      ab <- lapply(ab, reverse.xypolygon)
+    AB <- owin(Box$xrange, Box$yrange,
+               poly=ab, check=FALSE, strict=FALSE, fix=FALSE,
+               unitname=unitname(A))
+    return(AB)
   }
-  if(depth > maxdepth)
-    stop("Unable to divide window into simply-connected pieces")
-  p <- x$bdry
-  holes <- unlist(lapply(p, is.hole.xypolygon))
-  if(!any(holes)) return(x)
-  nholes <- sum(holes)
-  i <- min(which(holes))
-  p.i <- p[[i]]
-  b <- as.rectangle(x)
-  xr <- b$xrange
-  yr <- b$yrange
-  switch(splitby,
-         x = {
-           xsplit <- mean(range(p.i$x))
-           left <- c(xr[1], xsplit)
-           right <- c(xsplit, xr[2])
-           pleft <- intersect.owin(x, owin(left, yr))$bdry
-           pright <- intersect.owin(x, owin(right, yr))$bdry
-           xnew <- owin(poly=c(pleft, pright), check=FALSE)
-           nextsplit <- "y"
-         },
-         y = {
-           ysplit <- mean(range(p.i$y))
-           lower <- c(yr[1], ysplit)
-           upper <- c(ysplit, yr[2])
-           plower <- intersect.owin(x, owin(xr, lower))$bdry
-           pupper <- intersect.owin(x, owin(xr, upper))$bdry
-           xnew <- owin(poly=c(plower, pupper), check=FALSE)
-           nextsplit <- "x"
-         })
-  # recurse
-  xnew <- break.holes(xnew, splitby=nextsplit,
-                      depth=depth+1, maxdepth=max(maxdepth, 4*nholes))
-  return(xnew)
-}
+
+  break.holes <- function(x, splitby=NULL, depth=0, maxdepth=100) {
+    if(is.null(splitby)) {
+      ## first call: validate x
+      stopifnot(is.owin(x))
+      splitby <- "x"
+    }
+    if(depth > maxdepth)
+      stop("Unable to divide window into simply-connected pieces")
+    p <- x$bdry
+    holes <- unlist(lapply(p, is.hole.xypolygon))
+    if(!any(holes)) return(x)
+    nholes <- sum(holes)
+    maxdepth <- max(maxdepth, 4 * nholes)
+    i <- min(which(holes))
+    p.i <- p[[i]]
+    b <- as.rectangle(x)
+    xr <- b$xrange
+    yr <- b$yrange
+    switch(splitby,
+           x = {
+             xsplit <- mean(range(p.i$x))
+             left <- c(xr[1], xsplit)
+             right <- c(xsplit, xr[2])
+             xleft <- insect(x, owin(left, yr))
+             xright <- insect(x, owin(right, yr))
+             ## recurse
+             xleft <- break.holes(xleft, splitby="y",
+                                  depth=depth+1, maxdepth=maxdepth)
+             xright <- break.holes(xright, splitby="y",
+                                  depth=depth+1, maxdepth=maxdepth)
+             ## recombine (without fusing polygons again!)
+             result <- owin(xr, yr, poly=c(xleft$bdry, xright$bdry),
+                            check=FALSE, strict=FALSE, fix=FALSE)
+           },
+           y = {
+             ysplit <- mean(range(p.i$y))
+             lower <- c(yr[1], ysplit)
+             upper <- c(ysplit, yr[2])
+             xlower <- insect(x, owin(xr, lower))
+             xupper <- insect(x, owin(xr, upper))
+             ## recurse
+             xlower <- break.holes(xlower, splitby="x",
+                                   depth=depth+1, maxdepth=maxdepth)
+             xupper <- break.holes(xupper, splitby="x",
+                                   depth=depth+1, maxdepth=maxdepth)
+             ## recombine (without fusing polygons again!)
+             result <- owin(xr, yr, poly=c(xlower$bdry, xupper$bdry),
+                            check=FALSE, strict=FALSE, fix=FALSE)
+           })
+    return(result)
+  }
+
+  break.holes
+})
 

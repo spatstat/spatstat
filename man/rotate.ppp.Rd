@@ -5,13 +5,22 @@
   Rotates a point pattern
 }
 \usage{
- \method{rotate}{ppp}(X, angle=pi/2, \dots)
+ \method{rotate}{ppp}(X, angle=pi/2, \dots, centre=NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
   \item{angle}{Angle of rotation.}
-  \item{\dots}{Arguments passed to \code{\link{rotate.owin}} affecting
-    the handling of the observation window, if it is a binary pixel mask.}
+  \item{\dots}{
+    Arguments passed to \code{\link{rotate.owin}} affecting
+    the handling of the observation window, if it is a binary pixel mask.
+  }
+  \item{centre}{
+    Centre of rotation.
+    Either a vector of length 2, or a character string
+    (partially matched to \code{"centroid"}, \code{"midpoint"}
+    or \code{"bottomleft"}).
+    The default is the coordinate origin \code{c(0,0)}.
+  }
 }
 \value{
   Another object of class \code{"ppp"} representing the

@@ -8,14 +8,18 @@
   specified limits.
 }
 \usage{
-  scaletointerval(x, from=0, to=1)
-  \method{scaletointerval}{default}(x, from=0, to=1)
-  \method{scaletointerval}{im}(x, from=0, to=1)
+  scaletointerval(x, from=0, to=1, xrange=range(x))
+  \method{scaletointerval}{default}(x, from=0, to=1, xrange=range(x))
+  \method{scaletointerval}{im}(x, from=0, to=1, xrange=range(x))
 }
 \arguments{
   \item{x}{Data to be rescaled.}
   \item{from,to}{Lower and upper endpoints of the interval
     to which the values of \code{x} should be rescaled.
+  }
+  \item{xrange}{
+    Optional range of values of \code{x} that should be mapped
+    to the new interval.
   }
 }
 \details{

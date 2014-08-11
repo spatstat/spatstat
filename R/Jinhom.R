@@ -1,20 +1,21 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.5 $ $Date: 2014/02/07 02:45:04 $
+#  $Revision: 1.7 $ $Date: 2014/05/07 00:49:03 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
                    r=NULL, breaks=NULL,
-                   ratio=FALSE) {
+                   ratio=FALSE, update = TRUE) {
   
   stopifnot(is.ppp(X))
 
   npts <- npoints(X)
   W <- as.owin(X)
   area <- area.owin(W)
+  miss.update <- missing(update)
 
   # determine 'r' values
   rmaxdefault <- rmax.rule("G", W, npts/area)
@@ -25,9 +26,13 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   rmax <- breaks$max
   nr <- length(r)
 
+  dangerous <- "lambda"
+  danger <- TRUE
+  
   # Intensity values at data points
   if(is.null(lambda)) {
     # No intensity data provided
+    danger <- FALSE
     # Estimate density at points by leave-one-out kernel smoothing
     lamX <- density(X, ..., sigma=sigma, varcov=varcov,
                       at="points", leaveoneout=TRUE)
@@ -38,9 +43,24 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     # lambda values provided
     if(is.im(lambda)) 
       lambdaX <- safelookup(lambda, X)
-    else if(is.ppm(lambda)) 
-      lambdaX <- predict(lambda, locations=X, type="trend")
-    else if(is.function(lambda)) 
+    else if(is.ppm(lambda) || is.kppm(lambda)) {
+          model <- lambda
+          if(!update) {
+            ## just use intensity of fitted model
+            lambdaX <- predict(lambda, locations=X, type="trend")
+          } else {
+            ## re-fit model to data X
+            model <-
+              if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+            lambdaX <- fitted(model, dataonly=TRUE)
+            danger <- FALSE
+            if(miss.update) 
+              warn.once(key="Ginhom.update",
+                        "The behaviour of Ginhom when lambda is a ppm object",
+                        "has changed (in spatstat 1.37-0 and later).",
+                        "See help(Ginhom)")
+          }
+        } else if(is.function(lambda)) 
       lambdaX <- lambda(X$x, X$y)
     else if(is.numeric(lambda) && is.vector(as.numeric(lambda))) {
       lambdaX <- lambda
@@ -72,7 +92,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     } else {
       if(is.im(lambda)) 
         lmin <- min(lambda)
-      else if(is.ppm(lambda)) 
+      else if(is.ppm(lambda) || is.kppm(lambda)) 
         lmin <- min(predict(lambda))
       else if(is.function(lambda)) 
         lmin <- min(as.im(lambda, W))
@@ -144,6 +164,8 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   unitname(G) <- unitname(X)
   if(ratio)
     G <- conform.ratfv(G)
+  if(danger)
+    attr(G, "dangerous") <- dangerous
   return(G)
 }
 
@@ -154,13 +176,14 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
                    r=NULL, breaks=NULL,
-                   ratio=FALSE) {
+                   ratio=FALSE, update = TRUE) {
   
   stopifnot(is.ppp(X))
 
   npts <- npoints(X)
   W <- as.owin(X)
   area <- area.owin(W)
+  miss.update <- missing(update)
 
   # determine 'r' values
   rmaxdefault <- rmax.rule("F", W, npts/area)
@@ -171,9 +194,13 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   rmax <- breaks$max
   nr <- length(r)
 
+  dangerous <- "lambda"
+  danger <- TRUE
+  
   # Intensity values at data points
   if(is.null(lambda)) {
     # No intensity data provided
+    danger <- FALSE
     # Estimate density at points by leave-one-out kernel smoothing
     lamX <- density(X, ..., sigma=sigma, varcov=varcov,
                       at="points", leaveoneout=TRUE)
@@ -184,9 +211,24 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     # lambda values provided
     if(is.im(lambda)) 
       lambdaX <- safelookup(lambda, X)
-    else if(is.ppm(lambda)) 
-      lambdaX <- predict(lambda, locations=X, type="trend")
-    else if(is.function(lambda)) 
+    else if(is.ppm(lambda) || is.kppm(lambda)) {
+          model <- lambda
+          if(!update) {
+            ## just use intensity of fitted model
+            lambdaX <- predict(lambda, locations=X, type="trend")
+          } else {
+            ## re-fit model to data X
+            model <-
+              if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+            lambdaX <- fitted(model, dataonly=TRUE)
+            danger <- FALSE
+            if(miss.update) 
+              warn.once(key="Finhom.update",
+                        "The behaviour of Finhom when lambda is a ppm object",
+                        "has changed (in spatstat 1.37-0 and later).",
+                        "See help(Finhom)")
+          }
+        } else if(is.function(lambda)) 
       lambdaX <- lambda(X$x, X$y)
     else if(is.numeric(lambda) && is.vector(as.numeric(lambda))) {
       lambdaX <- lambda
@@ -218,7 +260,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     } else {
       if(is.im(lambda)) 
         lmin <- min(lambda)
-      else if(is.ppm(lambda)) 
+      else if(is.ppm(lambda) || is.kppm(lambda)) 
         lmin <- min(predict(lambda))
       else if(is.function(lambda)) 
         lmin <- min(as.im(lambda, W))
@@ -298,18 +340,26 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   unitname(FX) <- unitname(X)
   if(ratio)
     FX <- conform.ratfv(FX)
+  if(danger)
+    attr(FX, "dangerous") <- dangerous
   return(FX)
 }
 
 Jinhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
-                   r=NULL, breaks=NULL) {
+                   r=NULL, breaks=NULL, update = TRUE) {
+  if(missing(update) & (is.ppm(lambda) || is.kppm(lambda)))
+    warn.once(key="Jinhom.update",
+              "The behaviour of Jinhom when lambda is a ppm object",
+              "has changed (in spatstat 1.37-0 and later).",
+              "See help(Jinhom)")
+        
   GX <- Ginhom(X, lambda=lambda, lmin=lmin, ...,
-               sigma=sigma, varcov=varcov, r=r, breaks=breaks, ratio=FALSE)
+               sigma=sigma, varcov=varcov, r=r, breaks=breaks, ratio=FALSE, update=update)
   r <- GX$r
   FX <- Finhom(X, lambda=lambda, lmin=lmin, ...,
-               sigma=sigma, varcov=varcov, r=r, ratio=FALSE)
+               sigma=sigma, varcov=varcov, r=r, ratio=FALSE, update=update)
   JX <- eval.fv((1-GX)/(1-FX))
   # relabel the fv object
   JX <- rebadge.fv(JX, quote(J[inhom](r)), c("J","inhom"),
@@ -317,5 +367,6 @@ Jinhom <- function(X, lambda=NULL, lmin=NULL,
   # tack on extra info
   attr(JX, "G") <- GX
   attr(JX, "F") <- FX
+  attr(JX, "dangerous") <- attr(GX, "dangerous")
   return(JX)
 }

@@ -55,7 +55,7 @@
 }
 \section{Methods for Hyperframes}{
   There are methods for
-  \code{print}, \code{plot}, \code{summary}, \code{with},
+  \code{print}, \code{plot}, \code{summary}, \code{with}, \code{split},
   \code{[}, \code{[<},\code{$}, \code{$<-},
   \code{names}, \code{as.data.frame} \code{as.list},
   \code{cbind} and \code{rbind} for the class of hyperframes. There is also
@@ -74,7 +74,9 @@
   \code{\link{as.hyperframe}},
   \code{\link{as.hyperframe.ppx}},
   \code{\link{plot.hyperframe}},
+  \code{\link{[.hyperframe}},
   \code{\link{with.hyperframe}},
+  \code{\link{split.hyperframe}},
   \code{\link{as.data.frame.hyperframe}},
   \code{\link{cbind.hyperframe}},
   \code{\link{rbind.hyperframe}}

@@ -19,7 +19,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2013/09/29 08:55:27 $
+  $Revision: 1.4 $  $Date: 2014/02/18 08:43:29 $
 
 
 */
@@ -43,7 +43,7 @@ void FNAME(nx, x0, xstep,
   int i, j, ijpos;
   int mleft, mright, mwhich, lastmwhich;
   double  X0, Y0, Xstep, Ystep;
-  double d2, d2min, xj, yi, dx, dy, dx2, hu, hu2, tmp;
+  double d2, d2min, xj, yi, dx, dy, dx2, hu, hu2;
 
   Nxcol   = *nx;
   Nyrow   = *ny;

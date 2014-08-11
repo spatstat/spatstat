@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.92 $	$Date: 2014/02/18 04:53:41 $
+#	$Revision: 2.104 $	$Date: 2014/04/16 02:54:35 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -49,17 +49,27 @@ function(x, ...,
   what <- match.arg(what, c("all", opts), several.ok=TRUE)
   if("all" %in% what) what <- opts
 
+  np <- length(coef(x))
+  terselevel <- spatstat.options("terse")
+  digits <- getOption('digits')
+  
   # If SE was explicitly requested, calculate it.
   # Otherwise, do it only if the model is Poisson (by default)
-  do.SE <- if(!misswhat) ("se" %in% what) else
-           switch(spatstat.options("print.ppm.SE"),
-                  always = TRUE,
-                  never  = FALSE, 
-                  poisson = {
-                    is.poisson(x) &&
-                    !is.null(x$fitter) && (x$fitter != "gam")
-                  })
-  
+  do.SE <- force.no.SE <- force.SE <- FALSE
+  if(np == 0) {
+    force.no.SE <- TRUE
+  } else if(!misswhat && ("se" %in% what)) {
+    force.SE <- TRUE
+  } else switch(spatstat.options("print.ppm.SE"),
+                always = { force.SE <- TRUE }, 
+                never  = { force.no.SE <- TRUE },
+                poisson = {
+                  do.SE <- is.poisson(x) &&
+                           !is.null(x$fitter) && (x$fitter != "gam") &&
+                           waxlyrical("extras", terselevel)
+                })
+  do.SE <- (do.SE || force.SE) && !force.no.SE
+
   s <- summary.ppm(x, quick=if(do.SE) FALSE else "no variances")
         
   notrend <-    s$no.trend
@@ -69,62 +79,75 @@ function(x, ...,
   multitype  <- s$multitype
         
   markedpoisson <- poisson && markeddata
+  csr <- poisson && notrend && !markeddata
 
-  # ----------- Print model type -------------------
-
-  if("model" %in% what) {
-    cat(s$name)
-    cat("\n")
+  special <- csr && all(c("model", "trend") %in% what)
+  if(special) {
+    ## ---------- Trivial/special cases -----------------------
+    splat("Stationary Poisson process")
+    cat("Intensity:", signif(s$trend$value, digits), fill=TRUE)
+  } else {
+    ## ----------- Print model type -------------------
+    if("model" %in% what) {
+      splat(s$name)
+      parbreak(terselevel)
         
-    if(markeddata) mrk <- s$entries$marks
-    if(multitype) {
-      cat("Possible marks: \n")
-      cat(paste(levels(mrk)))
-      cat("\n")
+      if(markeddata) mrk <- s$entries$marks
+      if(multitype) {
+        cat("Possible marks:\n")
+        splat(paste(levels(mrk)))
+        parbreak(terselevel)
+      }
     }
-  }
-  
-  # ----- trend --------------------------
+    ## ----- trend --------------------------
+    if("trend" %in% what) {
+      if(!notrend) {
+        cat("Trend formula: ")
+        print(s$trend$formula, showEnv=FALSE)
+        parbreak(terselevel)
+      }
 
-  if("trend" %in% what) {
-    
-#       cat(paste("\n", s$trend$name, ":\n", sep=""))
-
-    if(!notrend) {
-      cat("\nTrend formula: ")
-      print(s$trend$formula, showEnv=FALSE)
-    }
-
-    tv <- s$trend$value
-
-    if(length(tv) == 0)
-      cat("\n[No trend coefficients]\n")
-    else {
-      cat(paste("\n", s$trend$label, ":", sep=""))
-      if(is.list(tv)) {
-        cat("\n")
-        for(i in seq_along(tv))
-          print(tv[[i]])
-      } else if(is.numeric(tv) && length(tv) == 1 && is.null(names(tv))) {
-        # single number: append to end of current line
-        cat("\t", paste(tv), "\n")
-      } else {
-        # some other format 
-        cat("\n")
-        print(tv)
+      tv <- s$trend$value
+      
+      if(length(tv) == 0) 
+        splat("[No trend coefficients]")
+      else {
+        thead <- paste0(s$trend$label, ":")
+        if(is.list(tv)) {
+          splat(thead)
+          for(i in seq_along(tv))
+            print(tv[[i]])
+        } else if(is.numeric(tv) && length(tv) == 1 && is.null(names(tv))) {
+          ## single number: append to end of current line
+          splat(paste0(thead, "\t", signif(tv, digits)))
+        } else {
+          ## some other format 
+          splat(thead)
+          print(tv)
+        }
       }
     }
 
-    cat("\n")
+    parbreak(terselevel)
 
-    if(!is.null(cfa <- s$covfunargs) && length(cfa) > 0) {
-      cat("Covariate function arguments (covfunargs) provided:\n")
+    if(waxlyrical("extras", terselevel) &&
+       !is.null(cfa <- s$covfunargs) && length(cfa) > 0) {
+      cfafitter <- s$cfafitter
+      if(is.null(cfafitter)) {
+        cat("Covariate", "function", "arguments", "(covfunargs)",
+            "provided:", fill=TRUE)
+      } else {
+        cat("Irregular", "parameters", "(covfunargs)",
+            "fitted", "by", paste0(sQuote(cfafitter), ":"),
+            fill=TRUE)
+      }
       for(i in seq_along(cfa)) {
         cat(paste(names(cfa)[i], "= "))
         cfai <- cfa[[i]]
         if(is.numeric(cfai) && length(cfai) == 1) {
+          cfai <- signif(cfai, digits)
           cat(paste(cfai, "\n"))
-        } else print(cfa[[i]])
+        } else print(cfai)
       }
     }
   }
@@ -133,33 +156,34 @@ function(x, ...,
 
   if("interaction" %in% what) {
     if(!poisson) {
-      print(s$interaction, family=FALSE)
-      cat("\n")
+      print(s$interaction, family=FALSE,
+            brief=!waxlyrical("extras", terselevel))
+      parbreak(terselevel)
     }
   }
   
   # ----- parameter estimates with SE and 95% CI --------------------
-  if("se" %in% what) {
+  if(waxlyrical("extras", terselevel) && ("se" %in% what) && (np > 0)) {
     if(!is.null(cose <- s$coefs.SE.CI)) {
-      print(cose)
+      print(cose, digits=digits)
     } else if(do.SE) {
       # standard error calculation failed
-      cat("Standard errors unavailable; variance-covariance matrix is singular")
-    } else {
+      splat("Standard errors unavailable; variance-covariance matrix is singular")
+    } else if(!force.no.SE) {
       # standard error was voluntarily omitted
-      cat("For standard errors, type coef(summary(x))\n")
+      splat("For standard errors, type coef(summary(x))\n")
     }
   }
   
   # ---- Warnings issued in mpl.prepare  ---------------------
 
-  if("errors" %in% what) {
+  if(waxlyrical("errors", terselevel) && "errors" %in% what) {
     probs <- s$problems
     if(!is.null(probs) && is.list(probs) && (length(probs) > 0)) 
       lapply(probs,
              function(x) {
                if(is.list(x) && !is.null(p <- x$print))
-                 cat(paste("Problem:\n", p, "\n\n"))
+                 splat(paste("Problem:\n", p, "\n\n"))
              })
     
     if(s$old)
@@ -170,12 +194,12 @@ function(x, ...,
     fitter <- s$fitter
     converged <- s$converged
     if(!is.null(fitter) && fitter %in% c("glm", "gam") && !converged)
-      cat(paste("*** Fitting algorithm for", sQuote(fitter),
-                "did not converge ***\n"))
+      splat(paste("*** Fitting algorithm for", sQuote(fitter),
+                "did not converge ***"))
   }
 
-  if(s$projected)
-    cat("Fit was projected to obtain a valid point process model\n")
+  if(waxlyrical("extras", terselevel) && s$projected)
+    splat("Fit was projected to obtain a valid point process model")
   
   return(invisible(NULL))
 }
@@ -258,7 +282,19 @@ getppmdatasubset <- function(object) {
   return(sub)
 }
 
-
+getppmOriginalCovariates <- function(object) {
+  df <- as.data.frame(as.ppp(quad.ppm(object)))
+  cova <- object$covariates
+  if(length(cova) > 0) {
+    df2 <- mpl.get.covariates(object$covariates,
+                              union.quad(quad.ppm(object)),
+                              "quadrature points",
+                              object$covfunargs)
+    df <- cbind(df, df2)
+  } 
+  return(df)
+}
+  
 # ??? method for 'effects' ???
 
 valid.ppm <- function(object) {
@@ -291,7 +327,7 @@ project.ppm <- local({
     spacer <- paste(rep.int("  ", depth), collapse="")
     marker <- ngettext(depth, "trace", paste("trace", depth))
     marker <- paren(marker, "[")
-    cat(paste(spacer, marker, " ", paste(...), "\n", sep=""))
+    splat(paste0(spacer, marker, " ", paste(...)))
   }
   leaving <- function(depth) {
     tracemessage(depth, ngettext(depth, "Returning.", "Exiting level."))
@@ -530,13 +566,11 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
 }
 
 formula.ppm <- function(x, ...) {
-  f <- x$trend
-  if(is.null(f)) f <- ~1
-  return(f)
+  return(x$trend)
 }
 
 terms.ppm <- function(x, ...) {
-  terms(formula(x), ...)
+  terms(x$terms, ...)
 }
 
 labels.ppm <- function(object, ...) {
@@ -657,9 +691,8 @@ model.images.ppm <- function(object, W=as.owin(object), ...) {
   imagenames <- colnames(mm)
   result <- lapply(imagenames,
                    function(nama, Z, mm) {
-                     values <- mm[, nama]
-                     im(values, xcol=Z$xcol, yrow=Z$yrow,
-                        unitname=unitname(Z))
+                     Z$v[!is.na(Z$v)] <- mm[, nama]
+                     return(Z)
                    },
                    Z=Z, mm=mm)
   result <- as.listof(result)

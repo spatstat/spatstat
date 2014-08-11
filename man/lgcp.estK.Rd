@@ -112,10 +112,13 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   \eqn{\lambda}{lambda}.
 
   The template covariance function \eqn{c(r)} is specified
-  using the argument \code{covmodel}. It may be any of the
-  covariance functions recognised by the command
-  \code{\link[RandomFields:CovarianceFct]{Covariance}} in the
-  \pkg{RandomFields} package. The default is the exponential covariance
+  using the argument \code{covmodel}. This should be of the form
+  \code{list(model="modelname", \dots)} where
+  \code{modelname} is a string identifying the template model
+  as explained below, and  \code{\dots} are optional arguments of the
+  form \code{tag=value} giving the values of parameters controlling the
+  \emph{shape} of the template model.
+  The default is the exponential covariance
   \eqn{c(r) = e^{-r}}{c(r) = e^(-r)}
   so that the scaled covariance is 
   \deqn{
@@ -123,17 +126,15 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   }{
     C(r) = sigma^2 * exp(-r/alpha).
   }
-  The argument \code{covmodel} should be of the form
-  \code{list(model="modelname", \dots)} where
-  \code{modelname} is the string name of one of the covariance models
-  recognised by the command
-  \code{\link[RandomFields:CovarianceFct]{Covariance}} in the
-  \pkg{RandomFields} package, and \code{\dots} are arguments of the
-  form \code{tag=value} giving the values of parameters controlling the
-  shape of these models. For example the exponential covariance is
-  specified by \code{covmodel=list(model="exponential")} while the
+  To determine the template model, the string \code{"modelname"} will be
+  prefixed by \code{"RM"} and the code will search for
+  a function of this name in the \pkg{RandomFields} package.
+  For a list of available models see 
+  \code{\link[RandomFields]{RMmodel}} in the
+  \pkg{RandomFields} package. For example the
   Matern covariance with exponent \eqn{\nu=0.3}{nu = 0.3} is specified
-  by \code{covmodel=list(model="matern", nu=0.3)}. 
+  by \code{covmodel=list(model="matern", nu=0.3)} corresponding
+  to the function \code{RMmatern} in the \pkg{RandomFields} package.
   
   If the argument \code{lambda} is provided, then this is used
   as the value of \eqn{\lambda}{lambda}. Otherwise, if \code{X} is a
@@ -206,7 +207,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   fitting algorithm, including important parameters that affect
   the accuracy of the fit.
   
-  \code{\link[RandomFields:CovarianceFct]{Covariance}} in the
+  \code{\link[RandomFields]{RMmodel}} in the
   \pkg{RandomFields} package, for covariance function models.
   
   \code{\link{Kest}} for the \eqn{K} function.

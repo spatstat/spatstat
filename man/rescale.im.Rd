@@ -6,11 +6,15 @@
   another unit of length.
 }
 \usage{
- \method{rescale}{im}(X, s)
+ \method{rescale}{im}(X, s, unitname)
 }
 \arguments{
   \item{X}{Pixel image (object of class \code{"im"}).}
   \item{s}{Conversion factor: the new units are \code{s} times the old units.}
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    See \code{\link{unitname}}.
+  }
 }
 \value{
   Another pixel image (of class \code{"im"}),

@@ -4,6 +4,8 @@
 
 # Similarly for nncross and distfun
 
+# Also test whether minnndist(X) == min(nndist(X))
+
 require(spatstat)
 local({
   eps <- sqrt(.Machine$double.eps)
@@ -141,6 +143,16 @@ local({
   b <- as.matrix(nnmap(cells, what="which", dimyx=23, k=1:2)[[1]])
   if(any(a != b))
     stop("algorithms in nngrid.h and knngrid.h disagree")
+
+  ## minnndist
+  mfast <- minnndist(X)
+  mslow <- min(nndist(X))
+  if(abs(mfast-mslow) > eps)
+    stop("minnndist(X) disagrees with min(nndist(X))")
+  mfast <- maxnndist(X)
+  mslow <- max(nndist(X))
+  if(abs(mfast-mslow) > eps)
+    stop("maxnndist(X) disagrees with max(nndist(X))")
 })
 
 
@@ -370,20 +382,28 @@ local({
 #
 #   Test things that might corrupt the internal format of ppm objects
 #
-#   $Revision: 1.3 $  $Date: 2011/12/05 07:29:16 $
+#   $Revision: 1.4 $  $Date: 2014/04/05 02:45:41 $
 #
-#   (1) Scoping problem that can arise when ppm splits the data
 
 require(spatstat)
 local({
+  ##   (1) Scoping problem that can arise when ppm splits the data
+
   fit <- ppm(bei, ~elev, covariates=bei.extra)
   mm <- model.matrix(fit)
 
-  #   (2) Fast update mechanism
+  ##   (2) Fast update mechanism
 
   fit1 <- ppm(cells, ~x+y, Strauss(0.07))
   fit2 <- update(fit1, ~y)
   fit3 <- update(fit2, ~x)
+
+  ## (3) New formula-based syntax
+  attach(bei.extra)
+  slfit <- ppm(bei ~ grad)
+  sl2fit <- update(slfit, ~grad + I(grad^2))
+  slfitup <- update(slfit, use.internal=TRUE)
+  sl2fitup <- update(sl2fit, use.internal=TRUE)
 })
 
 #
@@ -1601,7 +1621,7 @@ AB <- split(superimpose(A=A, B=B))
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.5 $   $Date: 2011/12/05 07:29:16 $
+#   $Revision: 1.6 $   $Date: 2014/03/20 04:02:20 $
 #
 
 require(spatstat)
@@ -1610,6 +1630,16 @@ local({
   B <- as.im(owin(c(1.1, 1.9), c(0,1)))
   Z <- imcov(A, B)
   stopifnot(abs(max(Z) - 0.8) < 0.1)
+
+  ## handling images with 1 row or column
+  ycov <- function(x, y) y
+  E <- as.im(ycov, owin(), dimyx = c(2,1))
+  G <- cut(E, 2)
+  H <- as.tess(G)
+
+  E12 <- as.im(ycov, owin(), dimyx = c(1,2))
+  G12 <- cut(E12, 2)
+  H12 <- as.tess(G12)
 })
 
 
@@ -1969,3 +1999,23 @@ local({
   K <- Kmodel(fit)
 })
 
+## legacy.R
+## Test that current version of spatstat is compatible with outmoded usage
+## $Revision: 1.1 $ $Date: 2014/04/30 08:05:57 $
+local({
+  require(spatstat)
+
+  ## (1) Old syntax of ppm
+  ppm(cells, ~x)
+  
+  ## (2) Old syntax of MultiStrauss etc.
+  r <- matrix(3, 2, 2)
+  a <- MultiStrauss( , r)
+  a <- MultiStrauss(NULL, r)
+  a <- MultiHard(, r)
+  
+  h <- r/2
+  a <- MultiStraussHard( , r, h)
+
+  NULL
+})

@@ -1,6 +1,6 @@
 
 // ..................... Strauss-Hardcore process ..........................
-//  $Revision: 1.2 $ $Date: 2012/03/10 11:23:17 $
+//  $Revision: 1.3 $ $Date: 2014/02/18 10:42:53 $
 
 class StraussHardProcess : public PointProcess {
  public:
@@ -99,7 +99,6 @@ extern "C" {
     double *Xrange, *Yrange;
     // internal
     int xcells, ycells;
-    PointProcess *TheProcess;
     long int StartTime, EndTime;
     // output 
     int noutmax;

@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.2 $	$Date: 2013/05/01 05:42:54 $
+#	$Revision: 1.3 $	$Date: 2014/04/14 09:57:01 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	
@@ -161,9 +161,13 @@ meanY.owin <- function(w) {
         return(answer)
 }
 
-centroid.owin <- function(w) {
-	verifyclass(w, "owin")
-	return(list(x=meanX.owin(w), y=meanY.owin(w)))
+centroid.owin <- function(w, as.ppp = FALSE) {
+	w <- as.owin(w)
+        out <- list(x=meanX.owin(w), y=meanY.owin(w))
+        if(as.ppp){
+            if(!inside.owin(out$x, out$y, w))
+                w <- as.rectangle(w)
+            out <- as.ppp(out, W=w)
+        }
+	return(out)
 }
-
-	

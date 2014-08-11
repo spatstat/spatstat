@@ -18,7 +18,7 @@
 \usage{
   \method{shift}{layered}(X, vec=c(0,0), ...)
 
-  \method{rotate}{layered}(X, ...)
+  \method{rotate}{layered}(X, ..., centre=NULL)
 
   \method{affine}{layered}(X, ...)
 
@@ -26,7 +26,7 @@
 
   \method{flipxy}{layered}(X)
 
-  \method{rescale}{layered}(X, s)
+  \method{rescale}{layered}(X, s, unitname)
 
   \method{scalardilate}{layered}(X, ...)
 }
@@ -44,6 +44,17 @@
   }
   \item{vec}{
     Shift vector (numeric vector of length 2).
+  }
+  \item{centre}{
+    Centre of rotation.
+    Either a vector of length 2, or a character string
+    (partially matched to \code{"centroid"}, \code{"midpoint"}
+    or \code{"bottomleft"}).
+    The default is the coordinate origin \code{c(0,0)}.
+  }
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    A value acceptable to the function \code{\link{unitname<-}}
   }
 }
 \details{

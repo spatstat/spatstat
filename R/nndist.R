@@ -56,7 +56,7 @@ nndist.default <-
 
   # split by factor ?
   if(!is.null(by)) {
-    X <- as.ppp(xy, W=bounding.box.xy)
+    X <- as.ppp(xy, W=boundingbox)
     return(nndist(X, by=by, k=k))
   }
   
@@ -238,7 +238,7 @@ nnwhich.default <-
 
   # split by factor ?
   if(!is.null(by)) {
-    X <- as.ppp(xy, W=bounding.box.xy)
+    X <- as.ppp(xy, W=boundingbox)
     return(nnwhich(X, by=by, k=k))
   }
   

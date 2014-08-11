@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.9 $	$Date: 2013/05/01 10:17:27 $
+#    $Revision: 1.10 $	$Date: 2014/04/30 07:57:38 $
 #
 #    The Hard core process
 #
@@ -130,7 +130,7 @@ MultiHard <- local({
          types <- self$par$types
          if(!is.null(types)) {
            cat("Possible types: \n")
-           print(types)
+           print(noquote(types))
          } else cat("Possible types: \t not yet determined\n")
          cat("Hardcore radii:\n")
          print(h)
@@ -154,7 +154,12 @@ MultiHard <- local({
   )
   class(BlankMH) <- "interact"
 
-  MultiHard <- function(types=NULL, hradii) {
+  MultiHard <- function(hradii, types=NULL) {
+    if((missing(hradii) || !is.matrix(hradii)) && is.matrix(types)) {
+      ## old syntax: (types=NULL, hradii)
+      hradii <- types
+      types <- NULL
+    }
     out <- instantiate.interact(BlankMH, list(types=types, hradii = hradii))
     if(!is.null(types))
       dimnames(out$par$hradii) <- list(types, types)

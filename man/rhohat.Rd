@@ -16,6 +16,7 @@
 rhohat(object, covariate, ...)
 
 \method{rhohat}{ppp}(object, covariate, ...,
+       baseline=NULL,
        method=c("ratio", "reweight", "transform"),
        smoother=c("kernel", "local"),
        dimyx=NULL, eps=NULL,
@@ -24,6 +25,7 @@ rhohat(object, covariate, ...)
        covname, confidence=0.95)
 
 \method{rhohat}{quad}(object, covariate, ...,
+       baseline=NULL,
        method=c("ratio", "reweight", "transform"),
        smoother=c("kernel", "local"),
        dimyx=NULL, eps=NULL,
@@ -70,6 +72,12 @@ rhohat(object, covariate, ...)
     Alternatively one of the strings \code{"x"} or \code{"y"}
     signifying the Cartesian coordinates.
   }
+  \item{baseline}{
+    Optional baseline for intensity function.
+    A \code{function(x,y)} or a pixel image (object of
+    class \code{"im"}) providing the values of the baseline at any
+    location. 
+  }
   \item{method}{
     Character string determining the smoothing method. See Details.
   }
@@ -112,17 +120,25 @@ rhohat(object, covariate, ...)
   }
 }
 \details{
-  If \code{object} is a point pattern, this command assumes that
-  \code{object} is a realisation of a Poisson point process with
-  intensity function \eqn{\lambda(u)}{lambda(u)} of the form
-  \deqn{\lambda(u) = \rho(Z(u))}{lambda(u) = rho(Z(u))} where
-  \eqn{Z} is the spatial covariate function given by \code{covariate},
-  and \eqn{\rho(z)}{rho(z)} is a function to be estimated. 
-  This command computes estimators of \eqn{\rho(z)}{rho(z)}
-  proposed by Baddeley and Turner (2005)
-  and Baddeley et al (2012).
+  If \code{object} is a point pattern, and \code{baseline} is missing or
+  null, this command assumes that \code{object} is a realisation of a
+  Poisson point process with intensity function
+  \eqn{\lambda(u)}{lambda(u)} of the form
+  \deqn{\lambda(u) = \rho(Z(u))}{lambda(u) = rho(Z(u))}
+  where \eqn{Z} is the spatial
+  covariate function given by \code{covariate}, and
+  \eqn{\rho(z)}{rho(z)} is a function to be estimated.  This command
+  computes estimators of \eqn{\rho(z)}{rho(z)} proposed by Baddeley and
+  Turner (2005) and Baddeley et al (2012).
 
   The covariate \eqn{Z} must have continuous values.
+
+  If \code{object} is a point pattern, and \code{baseline} is given,
+  then the intensity function is assumed to be
+  \deqn{\lambda(u) = \rho(Z(u)) B(u)}{lambda(u) = rho(Z(u)) * B(u)}
+  where \eqn{B(u)} is the baseline intensity at location \eqn{u}.
+  A smoothing estimator of the relative intensity  \eqn{\rho(z)}{rho(z)}
+  is computed.
 
   If \code{object} is a fitted point process model, suppose \code{X} is
   the original data point pattern to which the model was fitted. Then

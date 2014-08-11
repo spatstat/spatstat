@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.28 $   $Date: 2013/11/11 16:12:44 $
+#  $Revision: 1.30 $   $Date: 2014/03/22 01:21:07 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
@@ -124,7 +124,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2013/11/11 16:12:44 $")
+                      date="$Date: 2014/03/22 01:21:07 $")
   fake.call <- call("cannot.update", Q=NULL, trend=object$trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
@@ -163,8 +163,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
     Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
     # assemble relevant covariate images
     covariates <-
-      if(has.covar) as.list(covariates.hf[i, , drop=FALSE]) else NULL
-    
+      if(has.covar) covariates.hf[i, , drop=TRUE, strip=FALSE] else NULL
     if(has.covar && has.design) 
       ## Convert each data frame covariate value to an image
       covariates[dfvar] <- lapply(covariates[dfvar], as.im, W=Wi)
@@ -307,7 +306,6 @@ subfits.old <-
   }
   announce("done.\n")
   
-
   ## Loop through point patterns
   announce("Looping through rows...")
   for(i in 1:npat) {
@@ -316,8 +314,7 @@ subfits.old <-
     Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
     # assemble relevant covariate images
     covariates <-
-      if(has.covar) as.list(covariates.hf[i, , drop=FALSE]) else NULL
-    
+      if(has.covar) covariates.hf[i, , drop=TRUE, strip=FALSE] else NULL
     if(has.covar && has.design) {
       ## Convert each data frame covariate value to an image
       imrowi <- lapply(covariates[dfvar], as.im, W=Wi)

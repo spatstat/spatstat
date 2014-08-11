@@ -78,7 +78,7 @@
  # trimming
     plot(a)
     w <- owin(c(0.1,0.7), c(0.2, 0.8))
-    b <- a[,w]
+    b <- a[w]
     plot(b, add=TRUE, col="red")
 }
 \author{Adrian Baddeley

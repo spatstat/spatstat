@@ -5,6 +5,7 @@
 \alias{col2hex}
 \alias{paletteindex}
 \alias{samecolour}
+\alias{complementarycolour}
 \alias{to.grey}
 \title{
   Convert and Compare Colours in Different Formats
@@ -19,6 +20,7 @@ col2hex(x)
 rgb2hex(v)
 paletteindex(x)
 samecolour(x,y)
+complementarycolour(x)
 to.grey(x, weights=c(1,1,1))
 }
 
@@ -56,6 +58,12 @@ to.grey(x, weights=c(1,1,1))
   \code{to.grey} converts the colour data in \code{x} to greyscale colours.
   Alternatively \code{x} can be an object of class \code{"colourmap"}
   and \code{to.grey(x)} is the modified colour map.
+
+  \code{complementarycolour} replaces each colour by its
+  complementary colour in RGB space (the colour obtained by replacing
+  RGB values \code{(r, g, b)} by \code{(255-r, 255-g, 255-b)}).
+  Alternatively \code{x} can be an object of class \code{"colourmap"}
+  and \code{complementarycolour(x)} is the modified colour map.
 }
 \section{Warning}{
   \code{paletteindex("green")} returns \code{NA} because
@@ -91,5 +99,6 @@ to.grey(x, weights=c(1,1,1))
   paletteindex("grey")
   col2hex("orange")
   to.grey("orange")
+  complementarycolour("orange")
 }
 \keyword{color}

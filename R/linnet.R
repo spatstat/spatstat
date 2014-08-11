@@ -240,30 +240,38 @@ affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
   return(Y)
 }
 
-shift.linnet <- function(X, ...) {
+shift.linnet <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "linnet")
   Y <- X
-  Y$vertices <- shift(X$vertices, ...)
-  Y$lines    <- shift(X$lines, ...)
-  Y$window   <- shift(X$window, ...)
+  Y$window  <- W <- shift(X$window, vec=vec, ..., origin=origin)
+  v <- getlastshift(W)
+  Y$vertices <- shift(X$vertices, vec=v, ...)
+  Y$lines    <- shift(X$lines, vec=v, ...)
   # tack on shift vector
-  attr(Y, "lastshift") <- getlastshift(Y$vertices)
+  attr(Y, "lastshift") <- v
   return(Y)
 }
 
-rotate.linnet <- function(X, angle=pi/2, ...) {
+rotate.linnet <- function(X, angle=pi/2, ..., centre=NULL) {
   verifyclass(X, "linnet")
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   Y <- X
   Y$vertices <- rotate(X$vertices, angle=angle, ...)
   Y$lines    <- rotate(X$lines, angle=angle, ...)
   Y$window   <- rotate(X$window, angle=angle, ...)
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
   return(Y)
 }
 
-rescale.linnet <- function(X, s) {
-  if(missing(s)) s <- 1/unitname(X)$multiplier
+rescale.linnet <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
+  if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
   Y <- scalardilate(X, f=1/s)
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
 

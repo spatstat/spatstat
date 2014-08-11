@@ -42,7 +42,7 @@ distfun.owin <- function(X, ..., invert=FALSE) {
   # this line forces X to be bound
   stopifnot(is.owin(X))
   #
-  P <- as.psp(as.polygonal(X))
+  P <- edges(X)
   #
   g <- function(x,y=NULL) {
     Y <-  xy.coords(x, y)

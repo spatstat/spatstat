@@ -8,6 +8,7 @@
 \alias{as.im.function}
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
+\alias{as.im.Smoothfun}
 \alias{as.im.default}
 \title{Convert to Pixel Image}
 \description{
@@ -41,6 +42,8 @@
   \method{as.im}{nnfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL)
+
+  \method{as.im}{Smoothfun}(X, W=NULL, \dots)
 
   \method{as.im}{leverage.ppm}(X, \dots)
 

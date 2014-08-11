@@ -25,7 +25,7 @@
   This is a method for the generic function \code{\link{summary}}.
 
   If \code{checkdup=TRUE}, the pattern will be checked for the
-  presence of dublicate points, using \code{\link{duplicated.ppp}}.
+  presence of duplicate points, using \code{\link{duplicated.ppp}}.
   This can be time-consuming if the pattern contains many points,
   so the checking can be disabled by setting \code{checkdup=FALSE}.
 

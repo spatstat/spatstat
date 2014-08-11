@@ -13,9 +13,11 @@
                rbord=reach(object), cumulative=TRUE,
                plot.it=TRUE, rv = NULL, compute.sd=TRUE,
                compute.cts=TRUE, typename, check=TRUE, repair=TRUE,
-               oldstyle=FALSE)
+               oldstyle=FALSE, splineargs=list(spar=0.5))
+
   \method{plot}{diagppm}(x, \dots, which, 
-               plot.neg="image", plot.smooth="imagecontour", 
+               plot.neg=c("image", "discrete", "contour", "imagecontour"),
+               plot.smooth=c("imagecontour", "image", "contour", "persp"),
                plot.sd=TRUE, spacing=0.1,
                srange=NULL, monochrome=FALSE, main=NULL)
 }
@@ -64,13 +66,11 @@
     the computed diagnostic quantities are returned without plotting them.
   }
   \item{plot.neg}{
-    One of \code{"discrete"} or \code{"image"}
-    indicating how the density part of the residual measure should be plotted.
+    String indicating how the density part
+    of the residual measure should be plotted.
   }
   \item{plot.smooth}{
-    One of \code{"image"}, \code{"persp"}, \code{"contour"}
-    or \code{"imagecontour"}
-    indicating how the smoothed residual field should be plotted.
+    String indicating how the smoothed residual field should be plotted.
   }
   \item{compute.sd,plot.sd}{
     Logical values indicating whether 
@@ -116,6 +116,10 @@
     using the approximation given in the original paper
     (\code{oldstyle=TRUE}),
     or using the correct asymptotic formula (\code{oldstyle=FALSE}).
+  }
+  \item{splineargs}{
+    Argument passed to \code{\link{lurking}} 
+    to control the smoothing in the lurking variable plot.
   }
   \item{x}{The value returned from a previous call to 
   \code{diagnose.ppm}. An object of class \code{"diagppm"}.

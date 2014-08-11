@@ -6,12 +6,12 @@ Creates an instance of the multitype Strauss point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  MultiStrauss(types=NULL, radii)
+  MultiStrauss(radii, types=NULL)
 }
 \arguments{
+  \item{radii}{Matrix of interaction radii}
   \item{types}{Optional; vector of all possible types (i.e. the possible levels
     of the \code{marks} variable in the data)}
-  \item{radii}{Matrix of interaction radii}
 }
 \value{
   An object of class \code{"interact"}
@@ -73,19 +73,18 @@ which can then be fitted to point pattern data.
 }
 \examples{
    r <- matrix(c(1,2,2,1), nrow=2,ncol=2)
-   MultiStrauss(radii=r)
+   MultiStrauss(r)
    # prints a sensible description of itself
    r <- 0.03 * matrix(c(1,2,2,1), nrow=2,ncol=2)
    X <- amacrine
    \testonly{
       X <- X[ owin(c(0, 0.8), c(0, 1)) ]
    }
-   ppm(X, ~1, MultiStrauss(, r))
+   ppm(X ~1, MultiStrauss(r))
    # fit the stationary multitype Strauss process to `amacrine'
-   # Note the comma; needed since "types" is not specified.
 
    \dontrun{
-   ppm(X, ~polynom(x,y,3), MultiStrauss(c("off","on"), r))
+   ppm(X ~polynom(x,y,3), MultiStrauss(r, c("off","on")))
    # fit a nonstationary multitype Strauss process with log-cubic trend
    }
 }
@@ -97,11 +96,18 @@ which can then be fitted to point pattern data.
   \code{types} is specified it is interpreted as a set of factor
   levels and this set must equal \code{levels(marks(X))}.
 }
+\section{Changed Syntax}{
+  Before \pkg{spatstat} version \code{1.37-0},
+  the syntax of this function was different:
+  \code{MultiStrauss(types=NULL, radii)}.
+  The new code attempts to handle the old syntax as well.
+}
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
 }
 \keyword{spatial}
 \keyword{models}

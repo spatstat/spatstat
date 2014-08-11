@@ -25,10 +25,11 @@
 \usage{data(spruces)}
 \source{Stoyan et al (1987). Original source unknown.}
 \examples{
-     data(spruces)
      plot(spruces)
      # To reproduce Goulard et al. Figure 3
-     plot(spruces, maxsize=5*max(spruces$marks))
+     # (Goulard et al: "influence zone radius equals 5 * stem diameter")
+     # (spatstat help(plot.ppp): "size of symbol = diameter")
+     plot(spruces, maxsize=10*max(spruces$marks))
      plot(unmark(spruces), add=TRUE)
 }
 \references{

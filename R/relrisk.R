@@ -189,7 +189,7 @@ bw.relrisk <- function(X, method="likelihood",
     stoyan.low <- 0.15/sqrt(nmax/a)
     stoyan.high <- 0.15/sqrt(nmin/a)
     if(is.null(hmin)) 
-      hmin <- max(min(nndist(unique(X))), stoyan.low/5)
+      hmin <- max(minnndist(unique(X)), stoyan.low/5)
     if(is.null(hmax)) {
       hmax <- min(d/4, stoyan.high * 20)
       hmax <- max(hmax, hmin * 2)

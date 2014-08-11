@@ -5,11 +5,15 @@
   Converts a window to another unit of length.
 }
 \usage{
-  \method{rescale}{owin}(X, s)
+  \method{rescale}{owin}(X, s, unitname)
 }
 \arguments{
   \item{X}{Window (object of class \code{"owin"}).}
   \item{s}{Conversion factor: the new units are \code{s} times the old units.}
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    See \code{\link{unitname}}.
+  }
 }
 \value{
   Another window object (of class \code{"owin"}) representing the same

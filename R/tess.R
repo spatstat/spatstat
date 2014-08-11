@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.52 $ $Date: 2014/01/15 05:50:15 $
+#   $Revision: 1.54 $ $Date: 2014/03/12 03:41:01 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -381,6 +381,51 @@ as.im.tess <- function(X, W=NULL, ...,
   return(out)
 }
 
+tileindex <- function(x, y, Z) {
+  stopifnot(is.tess(Z))
+  stopifnot(length(x) == length(y))
+  switch(Z$type,
+         rect={
+           jx <- findInterval(x, Z$xgrid, rightmost.closed=TRUE)
+           iy <- findInterval(y, Z$ygrid, rightmost.closed=TRUE)
+           nrows    <- length(Z$ygrid) - 1
+           ncols <- length(Z$xgrid) - 1
+           jcol <- jx
+           irow <- nrows - iy + 1
+           ktile <- jcol + ncols * (irow - 1)
+           m <- factor(ktile, levels=seq_len(nrows*ncols))
+           ij <- expand.grid(j=seq_len(ncols),i=seq_len(nrows))
+           levels(m) <- paste("Tile row ", ij$i, ", col ", ij$j, sep="")
+         },
+         tiled={
+           n <- length(x)
+           todo <- seq_len(n)
+           nt <- length(Z$tiles)
+           m <- integer(n)
+           for(i in 1:nt) {
+             ti <- Z$tiles[[i]]
+             hit <- inside.owin(x[todo], y[todo], ti)
+             if(any(hit)) {
+               m[todo[hit]] <- i
+               todo <- todo[!hit]
+             }
+             if(length(todo) == 0)
+               break
+           }
+           m[m == 0] <- NA
+           nama <- names(Z$tiles)
+           lev <- seq_len(nt)
+           lab <- if(!is.null(nama) && all(nzchar(nama))) nama else paste("Tile", lev)
+           m <- factor(m, levels=lev, labels=lab)
+         },
+         image={
+           Zim <- Z$image
+           m <- factor(Zim[list(x=x, y=y), drop=FALSE], levels=levels(Zim))
+         }
+         )
+  return(m)
+}
+  
 as.tess <- function(X) {
   UseMethod("as.tess")
 }
@@ -462,7 +507,7 @@ bdist.tiles <- local({
     min(bdist.points(z))
   }
   edist <- function(x,b) {
-    xd <- crossdist(as.psp(x, check=FALSE), b, type="separation")
+    xd <- crossdist(edges(x, check=FALSE), b, type="separation")
     min(xd)
   }
 
@@ -482,7 +527,7 @@ bdist.tiles <- local({
                W  <- as.polygonal(W)
                tt <- lapply(tt, as.polygonal)
                # compute min dist from tile edges to window edges
-               d <- sapply(tt, edist, b=as.psp(W))
+               d <- sapply(tt, edist, b=edges(W))
              }
            },
            image={
@@ -581,8 +626,12 @@ scalardilate.tess <- function(X, f, ...) {
   return(Y)
 }
 
-rotate.tess <- function(X, angle=pi/2, ...) {
+rotate.tess <- function(X, angle=pi/2, ..., centre=NULL) {
   if(angle %% (2 * pi) == 0) return(X)
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   Y <- X
   Y$window <- rotate(X$window, angle=angle, ...)
   switch(X$type,
@@ -607,6 +656,8 @@ rotate.tess <- function(X, angle=pi/2, ...) {
          image = {
            Y$image <- rotate(X$image, angle=angle, ...)
          })
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
   return(Y)
 }
   

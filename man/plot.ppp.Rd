@@ -5,9 +5,16 @@
   Plot a two-dimensional spatial point pattern
 }
 \usage{
- \method{plot}{ppp}(x, main, \dots, chars=NULL, cols=NULL,
-use.marks, which.marks=NULL, add=FALSE, type=c("p","n"),
-maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
+ \method{plot}{ppp}(x, main, \dots, clipwin=NULL,
+                    chars=NULL, cols=NULL,
+                    use.marks=TRUE, which.marks=NULL,
+                    add=FALSE, type=c("p","n"),
+                    legend=TRUE,
+                    leg.side=c("left", "bottom", "top", "right"),
+                    leg.args=list(),
+                    symap=NULL, maxsize=NULL, markscale=NULL, zap=0.01,
+                    show.window=show.all, show.all=!add, do.plot=TRUE,
+                    multiplot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -23,6 +30,10 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
     extra arguments that will be passed to the plotting functions
     \code{\link{plot.default}}, \code{\link{points}} and/or
     \code{\link{symbols}}.
+  }
+  \item{clipwin}{
+    Optional. A window (object of class \code{"owin"}).
+    Only this subset of the image will be displayed.
   }
   \item{chars}{
     plotting character(s) used to plot points.
@@ -59,16 +70,34 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
     If \code{type="p"} (the default), both the points and the observation window
     are plotted. If \code{type="n"}, only the window is plotted.
   }
+  \item{legend}{
+    Logical value indicating whether to add a legend showing the mapping
+    between mark values and graphical symbols (for a marked point pattern).
+  }
+  \item{leg.side}{
+    Position of legend relative to main plot.
+  }
+  \item{leg.args}{
+    Additional arguments passed to \code{\link{plot.symbolmap}}
+    to control the legend.
+  }
+  \item{symap}{
+    Optional. The graphical symbol map to be applied to the marks.
+    An object of class \code{"symbolmap"}; see
+    \code{\link{symbolmap}}.
+  }
   \item{maxsize}{
-    maximum size of the circles/squares plotted
+    Maximum size of the circles/squares plotted
     when \code{x} is a marked point pattern with 
     numerical marks.
     Incompatible with \code{markscale}.
+    Ignored if \code{symap} is given.
   }
   \item{markscale}{
     physical scale factor determining the sizes of the
     circles/squares plotted when \code{x} is a marked point pattern with 
     numerical marks. Incompatible with \code{maxsize}.
+    Ignored if \code{symap} is given.
   }
   \item{zap}{
     Fraction between 0 and 1.
@@ -87,9 +116,16 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
     Logical value indicating whether to plot everything
     including the main title and the observation window of \code{x}.
   }
+  \item{do.plot}{
+    Logical value determining whether to actually perform the plotting.
+  }
+  \item{multiplot}{
+    Logical value giving permission to display multiple plots.
+  }
 }
 \value{
-  \code{NULL}, or a vector giving the correspondence between 
+  (Invisible) object of class \code{"symbolmap"}
+  giving the correspondence between 
   mark values and plotting characters.
 }
 \details{
@@ -116,9 +152,10 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
       If \code{x$marks} is a numeric vector,
       the marks are rescaled to the unit interval and
       each point is represented by a circle 
-      with radius proportional to the rescaled mark
-      (if the value is positive) or a square with side proportional
-      to the absolute value of the rescaled mark (if the value is negative).
+      with \emph{diameter} proportional to the rescaled mark
+      (if the value is positive) or a square with \emph{side length}
+      proportional to the absolute value of the rescaled mark
+      (if the value is negative).
     }
     \item{other kinds of marks:}{
       If \code{x$marks} is neither numeric nor a factor,
@@ -133,18 +170,18 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
   missing or \code{NULL}, then
   \itemize{
     \item 
-    if \code{add=FALSE},
+    if \code{add=FALSE} and \code{multiplot=TRUE}
     the default is to plot all columns of marks, in a series of separate
     plots, placed side-by-side. The plotting is coordinated by
     \code{\link{plot.listof}}, which calls \code{plot.ppp} to make each of
     the individual plots.
     \item
-    If \code{add=TRUE}, then only one column of marks can be plotted,
+    Otherwise, only one column of marks can be plotted,
     and the default is \code{which.marks=1}
     indicating the first column of marks.
   }
 
-  Plotting of the window \code{x$window} is performed by
+  Plotting of the window \code{as.owin(x)} is performed by
   \code{\link{plot.owin}}. This plot may be modified 
   through the \code{...} arguments. In particular the
   extra argument \code{border} determines
@@ -187,8 +224,10 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
   The arguments \code{maxsize} and \code{markscale} 
   incompatible. They control the physical size of the circles and
   squares which represent the marks in a point pattern with continuous
-  marks. If \code{markscale} is given, then a mark value of \code{m}
-  is plotted as a circle of radius \code{m * markscale}
+  marks. The size of a circle is defined as its \emph{diameter};
+  the size of a square is its side length.
+  If \code{markscale} is given, then a mark value of \code{m}
+  is plotted as a circle of diameter \code{m * markscale}
   (if \code{m} is positive) or a square of side \code{abs(m) * markscale}
   (if \code{m} is negative). If \code{maxsize} is given, then the
   largest mark in absolute value, \code{mmax=max(abs(x$marks))},
@@ -201,8 +240,11 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
   magnification), use the graphical arguments
   \code{xlim} and \code{ylim} to specify the rectangular field of view.
 
-  The value returned by this plot function can be used to make a
-  suitable legend, as shown in the examples.
+  The value returned by this plot function is an object of
+  class \code{"symbolmap"} representing the mapping from mark values
+  to graphical symbols. See \code{\link{symbolmap}}.
+  It can be used to make a suitable legend,
+  or to ensure that two plots use the same graphics map.
 }
 \section{Removing White Space Around The Plot}{
   A frequently-asked question is: How do I remove the white space around
@@ -244,6 +286,10 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
    plot(longleaf, use.marks=FALSE)
    plot(unmark(longleaf)) # equivalent
 
+   # point pattern with multiple marks
+   plot(finpines)
+   plot(finpines, which.marks="height")
+
    # controlling COLOURS of points
    plot(cells, cols="blue")
    plot(lansing, cols=c("black", "yellow", "green", 
@@ -253,7 +299,8 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
    # make window purple
    plot(lansing, border="purple")
    # make everything purple
-   plot(lansing, border="purple", cols="purple", col.main="purple")
+   plot(lansing, border="purple", cols="purple", col.main="purple",
+                 leg.args=list(col.axis="purple"))
  
    # controlling PLOT CHARACTERS
    plot(lansing, chars = 11:16)
@@ -262,15 +309,26 @@ maxsize=NULL, markscale=NULL,zap=0.01, show.window=show.all, show.all=!add)
    # controlling MARK SCALE
    plot(longleaf, markscale=0.1)
 
-   # draw circles of DIAMETER equal to nearest neighbour distance
-   plot(cells \%mark\% nndist(cells), markscale=1/2)
+   # draw circles of diameter equal to nearest neighbour distance
+   plot(cells \%mark\% nndist(cells), markscale=1, legend=FALSE)
 
-   # making the legend
+   # inspecting the symbol map
    v <- plot(amacrine)
-   legend(0.2, 1.2, pch=v, legend=names(v))
+   v
 
-   # point pattern with multiple marks
-   plot(finpines, which.marks="height")
+   ## re-using the same mark scale
+   a <- plot(longleaf)
+   juveniles <- longleaf[marks(longleaf) < 30]
+   plot(juveniles, symap=a)
+
+   ## numerical marks mapped to symbols of fixed size with variable colour
+   ra <- range(marks(longleaf))
+   colmap <- colourmap(terrain.colors(20), range=ra)
+   ## filled plot characters are the codes 21-25
+   ## fill colour is indicated by 'bg'
+   sy <- symbolmap(pch=21, bg=colmap, range=ra)
+   plot(longleaf, symap=sy)
+
 }
 
 \author{Adrian Baddeley

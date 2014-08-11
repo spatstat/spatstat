@@ -25,17 +25,10 @@
 }
 \source{N.A. Laskurain. Kindly formatted and communicated by M. de la Cruz Rot}
 \references{
-  \enc{Laskurain, N. A. (2008)
-    \emph{Dinámica espacio-temporal de un bosque secundario en el Parque
-      Natural de Urkiola (Bizkaia).} 
-    Tesis Doctoral. Universidad del País Vasco /Euskal Herriko
-    Unibertsitatea.
-  }{
-    Laskurain, N. A. (2008)
-    \emph{Dinamica espacio-temporal de un bosque secundario en el Parque
-      Natural de Urkiola (Bizkaia).} 
-    Tesis Doctoral. Universidad del Pais Vasco /Euskal Herriko
-    Unibertsitatea.
-  }
+  Laskurain, N. A. (2008)
+  \emph{\enc{Dinámica}{Dinamica} espacio-temporal de un bosque
+    secundario en el Parque Natural de Urkiola (Bizkaia).} 
+  Tesis Doctoral. Universidad del \enc{País}{Pais} Vasco /Euskal Herriko
+  Unibertsitatea.
 }
 \keyword{datasets}

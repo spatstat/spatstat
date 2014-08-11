@@ -9,7 +9,7 @@
 }
 \usage{
 \method{dfbetas}{ppm}(model, ..., drop = FALSE, iScore=NULL,
-iHessian=NULL, iArgs=list())
+iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{

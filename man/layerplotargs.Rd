@@ -31,6 +31,10 @@ layerplotargs(L) <- value
   length as the current value. However, it can also be a list with
   \emph{one} element which is a list of parameters. This will be
   replicated to the required length.
+
+  For the assignment function \code{layerplotargs<-},
+  the argument \code{L} can be any spatial object; it will be converted
+  to a \code{layered} object with a single layer.
 }
 \value{
   \code{layerplotargs} returns a list of lists of plot arguments.

@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.72 $	$Date: 2014/02/11 08:32:33 $
+#	$Revision: 1.80 $	$Date: 2014/04/25 11:12:53 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -51,15 +51,17 @@
   L <- rebadge.fv(L, quote(L[inhom](r)), c("L", "inhom"),
                   names(K), new.labl=attr(K, "labl"))
   attr(L, "labl") <- attr(K, "labl")
+  attr(L, "dangerous") <- attr(K, "dangerous")
   #
   return(L)  
 }
 
 "Kinhom"<-
   function (X, lambda=NULL, ..., r = NULL, breaks = NULL, 
-         correction=c("border", "bord.modif", "isotropic", "translate"),
+            correction=c("border", "bord.modif", "isotropic", "translate"),
             renormalise=TRUE,
             normpower=1,
+            update = TRUE,
             nlarge = 1000, 
             lambda2=NULL,
             reciplambda=NULL, reciplambda2=NULL,
@@ -68,7 +70,8 @@
     verifyclass(X, "ppp")
     nlarge.given <- !missing(nlarge)
     rfixed <- !missing(r) || !missing(breaks)
-
+    miss.update <- missing(update)
+    
     # determine basic parameters
     W <- X$window
     npts <- npoints(X)
@@ -109,7 +112,11 @@
     # unless we want the border correction.
     lambda2.given    <- !is.null(lambda2) || !is.null(reciplambda2)
     lambda2.suffices <- !any(correction %in% c("bord", "bord.modif"))
-
+    
+    ## Arguments that are 'dangerous' for envelope, if fixed
+    dangerous <- c("lambda", "reciplambda", "lambda2", "reciplambda2")
+    danger <- TRUE
+    
     # Use matrix of weights if it was provided and if it is sufficient
     if(lambda2.suffices && lambda2.given) {
       if(!is.null(reciplambda2)) 
@@ -128,6 +135,7 @@
       # Vector lambda or reciplambda is required
       if(missing(lambda) && is.null(reciplambda)) {
         # No intensity data provided
+        danger <- FALSE
         # Estimate density by leave-one-out kernel smoothing
         lambda <- density(X, ..., sigma=sigma, varcov=varcov,
                             at="points", leaveoneout=TRUE)
@@ -147,9 +155,24 @@
         # lambda values provided
         if(is.im(lambda)) 
           lambda <- safelookup(lambda, X)
-        else if(is.ppm(lambda))
-          lambda <- predict(lambda, locations=X, type="trend")
-        else if(is.function(lambda)) 
+        else if(is.ppm(lambda) || is.kppm(lambda)) {
+          model <- lambda
+          if(!update) {
+            ## just use intensity of fitted model
+            lambda <- predict(lambda, locations=X, type="trend")
+          } else {
+            ## re-fit model to data X
+            model <-
+              if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
+            lambda <- fitted(model, dataonly=TRUE)
+            danger <- FALSE
+            if(miss.update) 
+              warn.once(key="Kinhom.update",
+                        "The behaviour of Kinhom when lambda is a ppm object",
+                        "has changed (in spatstat 1.37-0 and later).",
+                        "See help(Kinhom)")
+          }
+        } else if(is.function(lambda)) 
           lambda <- lambda(X$x, X$y)
         else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
           check.nvector(lambda, npts)
@@ -175,7 +198,7 @@
   # Usable only if r values are evenly spaced from 0 to rmax
   # Invoked automatically if number of points is large
 
-    can.do.fast <- breaks$even  && missing(lambda2)
+    can.do.fast <- breaks$even && missing(lambda2)
     large.n    <- (npts >= nlarge)
     demand.best <- correction.given && best.wanted
     large.n.trigger <- large.n && !correction.given
@@ -189,7 +212,7 @@
       whynot <-
         if(!(breaks$even)) "r values not evenly spaced" else
         if(!missing(lambda)) "matrix lambda2 was given" else NULL
-      warning(paste(c("cannot use efficient code", whynot), sep="; "))
+      warning(paste("cannot use efficient code", whynot, sep="; "))
     }
     if(will.do.fast) {
       ## Compute Kinhom using fast algorithm(s)
@@ -213,12 +236,18 @@
       if(bord) {
         Kb <- Kborder.engine(X, max(r), length(r), correction,
                              weights=reciplambda)
+        if(renormalise) {
+          ynames <- fvnames(Kb, "*")
+          Kb[,ynames] <- renorm.factor * as.data.frame(Kb)[,ynames]
+        }
         Kb <- tweak.fv.entry(Kb, "border", new.labl="{hat(%s)[%s]^{bord}} (r)")
         Kb <- tweak.fv.entry(Kb, "bord.modif", new.labl="{hat(%s)[%s]^{bordm}} (r)")
       }
       ## uncorrected
       if(none) {
         Kn <- Knone.engine(X, max(r), length(r), weights=reciplambda)
+        if(renormalise) 
+          Kn$un <- Kn$un * renorm.factor
         Kn <- tweak.fv.entry(Kn, "un", new.labl="{hat(%s)[%s]^{un}} (r)")
       }
       K <-
@@ -227,6 +256,8 @@
       cbind.fv(Kb, Kn[, names(Kn) != "theo"])
       ## tweak labels
       K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))
+      if(danger)
+        attr(K, "dangerous") <- dangerous
       return(K)
     }
 
@@ -237,8 +268,14 @@
   if(can.do.fast && is.rectangle(W) && spatstat.options("use.Krect")) {
     K <-  Krect.engine(X, rmax, length(r), correction,
                         weights=reciplambda, fname=c("K", "inhom"))
+    if(renormalise) {
+      allfun <- fvnames(K, "*")
+      K[, allfun] <- renorm.factor * as.data.frame(K)[, allfun]
+    }
     K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))
     attr(K, "alim") <- alim
+    if(danger)
+      attr(K, "dangerous") <- dangerous
     return(K)
   }
   
@@ -323,6 +360,8 @@
     # default is to display them all
     formula(K) <- . ~ r
     unitname(K) <- unitname(X)
+    if(danger)
+      attr(K, "dangerous") <- dangerous
     return(K)
 }
 
@@ -347,18 +386,20 @@ Kwtsum <- function(dIJ, bI, wIJ, b, w, breaks) {
 
   if(!is.finite(sum(w, wIJ)))
     stop("Weights in K-function were infinite or NA")
+
+  bkval <- breaks$val
   
   # determine which distances d_{ij} were observed without censoring
   uncen <- (dIJ <= bI)
   #
   # histogram of noncensored distances
-  nco <- whist(dIJ[uncen], breaks$val, wIJ[uncen])
+  nco <- whist(dIJ[uncen], bkval, wIJ[uncen])
   # histogram of censoring times for noncensored distances
-  ncc <- whist(bI[uncen], breaks$val, wIJ[uncen])
+  ncc <- whist(bI[uncen], bkval, wIJ[uncen])
   # histogram of censoring times (yes, this is a different total size)
-  cen <- whist(b, breaks$val, w)
+  cen <- whist(b, bkval, w)
   # total weight of censoring times beyond rightmost breakpoint
-  uppercen <- sum(w[b > max(breaks$val)])
+  uppercen <- sum(w[b > breaks$max])
   # go
   RS <- reduced.sample(nco, cen, ncc, show=TRUE, uppercen=uppercen)
   # extract results

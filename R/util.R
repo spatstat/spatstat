@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.132 $    $Date: 2014/01/09 06:53:08 $
+#    $Revision: 1.148 $    $Date: 2014/05/06 15:32:53 $
 #
 #
 matrowsum <- function(x) {
@@ -151,14 +151,15 @@ pointgrid <- function(W, ngrid) {
 
 # text magic
 
-commasep <- function(x, join="and") {
+commasep <- function(x, join=" and ", flatten=TRUE) {
   px <- paste(x)
   nx <- length(px)
   if(nx <= 1) return(px)
   commas <- c(rep(", ", length(px)-2),
-              paste("", join, ""),
+              join,
               "")
-  return(paste(paste(px, commas, sep=""), collapse=""))
+  out <- paste0(px, commas, collapse=if(flatten) "" else NULL)
+  return(out)
 }
 
 paren <- function(x, type="(") {
@@ -189,6 +190,40 @@ unparen <- function(x) {
   if(any(enclosed))
     x[enclosed] <- substr(x[enclosed], 2, n-1)
   return(x)
+}
+
+strsplitretain <- local({
+  strsplitretain <- function(x, split=",") {
+    ## split strings after occurrence of character b, but retain b
+    y <- strsplit(x, split)
+    lapply(y, addback, b=split)
+  }
+  addback <- function(x, b=",") {
+    n <- length(x)
+    if(n <= 1) x else c(paste0(x[-n], b), x[n])
+  }    
+  strsplitretain
+})
+
+truncline <- function(x, nc) {
+  if(length(x) > 1)
+    return(unlist(lapply(as.list(x), truncline, nc=nc)))
+  ## split string into words
+  y <- strsplit(x, " ", fixed=TRUE)[[1]]
+  ## find max number of whole words that take up nc characters
+  maxwords <- max(0, which(cumsum(nchar(y) + 1) <= nc+1))
+  if(maxwords == length(y))
+    return(x)
+  ## truncation will occur.
+  pad <- " [..]"
+  nc <- nc - nchar(pad)
+  maxwords <- max(0, which(cumsum(nchar(y) + 1) <= nc+1))
+  z <- paste(y[seq_len(maxwords)], collapse=" ")
+  d <- nc - nchar(z)
+  if(d < 0)
+    z <- substr(z, 1, nc)
+  z <- paste0(z, pad)
+  return(z)
 }
 
 fakecallstring <- function(fname, parlist) {
@@ -299,10 +334,20 @@ inside.range <- function(x, r) {
 
 prettyinside <- function(x, ...) {
   r <- range(x, na.rm=TRUE)
+  if(diff(r) == 0) return(r[1])
   p <- pretty(x, ...)
   ok <- inside.range(p, r)
   return(p[ok])
 }
+
+prettydiscrete <- function(x, n=10) {
+  nx <- length(x)
+  dx <- nx %/% n
+  if(dx < 1) return(x)
+  i <- 1 + (0:(n-1)) * dx
+  return(x[i])
+}
+
 
 check.range <- function(x, fatal=TRUE) {
   xname <- deparse(substitute(x))
@@ -320,9 +365,6 @@ niceround <- function(x, m=c(1,2,5,10)) {
   return(z)
 }
 
-assign(".Spatstat.ProgressBar", NULL, envir = .spEnv)
-assign(".Spatstat.ProgressData", NULL, envir = .spEnv)
-
 progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
                            nperline=min(charsperline,
                              every * ceiling(charsperline /(every+3))),
@@ -337,17 +379,16 @@ progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
          txtbar={
            if(i == 1) {
              # initialise text bar
-             assign(".Spatstat.ProgressBar",
-                    txtProgressBar(1, n, 1, style=3),
-                    envir = .spEnv)
+             putSpatstatVariable("Spatstat.ProgressBar",
+                                 txtProgressBar(1, n, 1, style=3))
            } else {
              # get text bar
-             pbar <- get(".Spatstat.ProgressBar", envir = .spEnv)
+             pbar <- getSpatstatVariable("Spatstat.ProgressBar")
              # update 
              setTxtProgressBar(pbar, i)
              if(i == n) {
                close(pbar)
-               assign(".Spatstat.ProgressBar", NULL, envir = .spEnv)
+               putSpatstatVariable("Spatstat.ProgressBar", NULL)
              } 
            }
          },
@@ -362,13 +403,12 @@ progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
              }
              showtime <- FALSE
              showevery <- n
-             assign(".Spatstat.ProgressData",
-                    list(every=every, nperline=nperline,
-                         starttime=now,
-                         showtime=FALSE, showevery=n),
-                    envir=.spEnv)
+             putSpatstatVariable("Spatstat.ProgressData",
+                                 list(every=every, nperline=nperline,
+                                      starttime=now,
+                                      showtime=FALSE, showevery=n))
            } else {
-             pd <- get(".Spatstat.ProgressData", envir=.spEnv)
+             pd <- getSpatstatVariable("Spatstat.ProgressData")
              if(is.null(pd))
                stop(paste("progressreport called with i =", i, "before i = 1"))
              every     <- pd$every
@@ -397,11 +437,10 @@ progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
                      showevery <- min(niceround(aminute), showevery)
                  }
                }
-               assign(".Spatstat.ProgressData",
-                    list(every=every, nperline=nperline,
-                         starttime=starttime,
-                         showtime=showtime, showevery=showevery),
-                    envir=.spEnv)
+               putSpatstatVariable("Spatstat.ProgressData",
+                                   list(every=every, nperline=nperline,
+                                        starttime=starttime,
+                                        showtime=showtime, showevery=showevery))
              }
            }
            if(i == n) 
@@ -1006,7 +1045,27 @@ dotexpr.to.call <- function(expr, dot="funX", evaluator="eval.fv") {
   return(cc)
 }
 
-# print names and version numbers of libraries loaded
+## Match variable names to objects in 'data' list or environment
+getdataobjects <- function(nama, envir, datalist=NULL) {
+  if(is.null(nama)) return(NULL)
+  stopifnot(is.character(nama))
+  n <- length(nama)
+  y <- vector(mode="list", length=n)
+  names(y) <- nama
+  if(!is.null(datalist)) {
+    hit <- nama %in% names(datalist)
+    if(any(hit))
+      y[hit] <- as.list(datalist)[nama[hit]]
+    needed <- unlist(lapply(y, is.null))
+  } else needed <- rep(TRUE, n)
+  y[needed] <- mget(nama[needed], envir=envir,
+                    ifnotfound=list(NULL), inherits=TRUE)
+  names(y) <- nama
+  attr(y, "external") <- needed
+  return(y)
+}
+ 
+## print names and version numbers of libraries loaded
 
 sessionLibs <- function() {
   a <- sessionInfo()
@@ -1125,3 +1184,59 @@ ifelseNegPos <- function(test, x) {
   # b is evaluated only now
   return(b)
 }
+
+blockdiagmatrix <- function(...) {
+  x <- list(...)
+  if(!all(unlist(lapply(x, is.matrix))))
+    stop("Some of the arguments are not matrices", call.=FALSE)
+  nr <- unlist(lapply(x, nrow))
+  nc <- unlist(lapply(x, ncol))
+  result <- matrix(0, sum(nr), sum(nc))
+  rownames(result) <- unlist(lapply(x, rownames))
+  colnames(result) <- unlist(lapply(x, colnames))
+  rowend <- cumsum(nr)
+  rowstart <- c(0, rowend) + 1
+  colend <- cumsum(nc)
+  colstart <- c(0, colend) + 1
+  for(i in seq_along(x))
+    result[ (rowstart[i]):(rowend[i]) , (colstart[i]):(colend[i])] <- x[[i]]
+  return(result)
+}
+
+blockdiagarray <- function(...) {
+  x <- list(...)
+  if(!all(unlist(lapply(x, is.array))))
+    stop("Some of the arguments are not arrays", call.=FALSE)
+  dims <- lapply(x, dim)
+  dims1 <- unlist(lapply(dims, "[", i=1))
+  if(length(dim1 <- unique(dims1)) > 1)
+    stop("Arrays have different extents in first dimension")
+  dims2 <- unlist(lapply(dims, "[", i=2))
+  dims3 <- unlist(lapply(dims, "[", i=3))
+  result <- array(0, dim=c(dim1, sum(dims2), sum(dims3)))
+  dn <- lapply(x, dimnames)
+  dimnames(result)[[2]] <- unlist(lapply(dn, "[[", 2))
+  dimnames(result)[[3]] <- unlist(lapply(dn, "[[", 3))
+  rowend <- cumsum(dims2)
+  rowstart <- c(0, rowend) + 1
+  colend <- cumsum(dims3)
+  colstart <- c(0, colend) + 1
+  for(i in seq_along(x))
+    result[ , (rowstart[i]):(rowend[i]) , (colstart[i]):(colend[i])] <- x[[i]]
+  return(result)
+}
+
+lty2char <- function(i) {
+  if(is.numeric(i)) c("blank", "solid", "dashed", "dotted",
+                      "dotdash", "longdash", "twodash")[(i %% 7) + 1] else i
+}
+
+## convert numeric matrix to character, and blank out lower sub-diagonal.
+uptrimat <- function(x) {
+  stopifnot(is.matrix(x))
+  x[] <- as.character(x)
+  x[row(x) > col(x)] <- ""
+  return(noquote(x))
+}
+
+                  

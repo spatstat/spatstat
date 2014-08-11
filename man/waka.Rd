@@ -19,9 +19,9 @@
 \usage{data(waka)}
 \examples{
 data(waka)
-plot(waka, markscale=0.005)
+plot(waka, markscale=0.01)
 title(sub="Tree diameters to scale")
-plot(waka, markscale=0.02)
+plot(waka, markscale=0.04)
 title(sub="Tree diameters 4x scale")
 }
 \source{

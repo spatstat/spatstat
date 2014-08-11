@@ -41,7 +41,7 @@ is.subset.owin <- local({
       # (3) Feeling lucky
       # Test whether the bounding box of A is a subset of B
       # Then a fortiori, A is a subset of B
-      AA <- bounding.box(A)
+      AA <- boundingbox(A)
       if(is.subset.owin(AA, B))
         return(TRUE)
     }
@@ -58,7 +58,7 @@ is.subset.owin <- local({
       if(length(B$bdry) == 1 && length(A$bdry) == 1) {
         # two simply-connected sets 
         # check for boundary crossings
-        bx <- crossing.psp(as.psp(A), as.psp(B))
+        bx <- crossing.psp(edges(A), edges(B))
         return(npoints(bx) == 0)
       } else {
         # compare area of intersection with area of A

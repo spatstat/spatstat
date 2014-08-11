@@ -58,7 +58,7 @@ plot(as.ppp(chicago), add=TRUE, col="red", chars=c(16,2,22,17,24,15,6))
   Geometrically corrected second-order analysis of 
   events on a linear network, with applications to
   ecology and criminology.
-  To appear in \emph{Scandinavian Journal of Statistics}.
+  \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 
   Chicago Weekly News website: \url{www.chicagoweeklynews.com}
 }

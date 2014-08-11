@@ -1,6 +1,6 @@
 
 // ........................... Strauss process ..........................
-//  $Revision: 1.3 $ $Date: 2012/03/10 11:52:48 $
+//  $Revision: 1.4 $ $Date: 2014/02/18 10:43:00 $
 
 class StraussProcess : public PointProcess {
  public:
@@ -204,7 +204,6 @@ extern "C" {
     double *Xrange, *Yrange;
     // internal
     int xcells, ycells;
-    PointProcess *TheProcess;
     long int EndTime, StartTime;
     // output 
     int noutmax;

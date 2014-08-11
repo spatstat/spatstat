@@ -8,7 +8,10 @@ at new locations.
 }
 \usage{
    \method{predict}{ppm}(object, window=NULL, ngrid=NULL, locations=NULL,
-   covariates=NULL, type="trend", X=data.ppm(object), correction, 
+   covariates=NULL, type="trend",
+   interval=c("none", "confidence", "prediction"),
+   level = 0.95, total=NULL, 
+   X=data.ppm(object), correction, 
    \dots, new.coef=NULL, check=TRUE, repair=TRUE)
 }
 \arguments{
@@ -48,6 +51,23 @@ at new locations.
     \code{"cif"} or \code{"lambda"} for the conditional intensity,
     and \code{"se"} for the standard error of the fitted spatial trend.
   }
+  \item{interval}{
+    String (partially matched) indicating whether to produce
+    estimates (\code{interval="none"}, the default)
+    or a confidence interval (\code{interval="confidence"})
+    or a prediction interval (\code{interval="prediction"}).
+  }
+  \item{level}{
+    Coverage probability for the confidence or prediction interval.
+  }
+  \item{total}{
+    Optional. If present, then it should specify a spatial region,
+    and the code will compute an estimate, standard error, confidence interval
+    or prediction interval for the total number of points in this region.
+    The argument \code{total} can be a window (object of class \code{"owin"}),
+    a tessellation (object of class \code{"tess"}) or 
+    \code{TRUE} indicating the original data window.
+  }
   \item{X}{
     Optional. A point pattern (object of class \code{"ppp"})
     to be taken as the data point pattern when calculating the
@@ -82,6 +102,9 @@ at new locations.
   }
 }
 \value{
+  \emph{If \code{total} is given:}
+  a numeric vector or matrix.  
+  
   \emph{If \code{locations} is given and is a data frame:}
   a vector of predicted values for the spatial locations
   (and marks, if required) given in \code{locations}.
@@ -276,7 +299,6 @@ at new locations.
   listed above are satisfied.
 }
 \examples{
-  data(cells)
   \testonly{op <- spatstat.options(npixel=32)}
   m <- ppm(cells, ~ polynom(x,y,2), Strauss(0.05))
   trend <- predict(m, type="trend")
@@ -292,6 +314,9 @@ at new locations.
   mj <- ppm(japanesepines, ~harmonic(x,y,2))
   se <- predict(mj, type="se")
 
+  # prediction interval for total number of points
+  predict(mj, total=TRUE, interval="p")
+
   # prediction at arbitrary locations
   predict(mj, locations=data.frame(x=0.3, y=0.4))
 
@@ -300,9 +325,8 @@ at new locations.
   predict(mj, locations=X, type="se")
 
   # multitype
-  data(amacrine)
-  ma <- ppm(amacrine, ~marks,
-     MultiStrauss(c("off","on"),matrix(0.06, 2, 2)))
+  rr <- matrix(0.06, 2, 2)
+  ma <- ppm(amacrine ~ marks,  MultiStrauss(rr))
   Z <- predict(ma)
   Z <- predict(ma, type="cif")
   predict(ma, locations=data.frame(x=0.8, y=0.5,marks="on"), type="cif")

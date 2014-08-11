@@ -10,7 +10,7 @@
 \usage{
   Finhom(X, lambda = NULL, lmin = NULL, ...,
         sigma = NULL, varcov = NULL,
-        r = NULL, breaks = NULL, ratio = FALSE)
+        r = NULL, breaks = NULL, ratio = FALSE, update = TRUE)
 }
 \arguments{
   \item{X}{
@@ -59,6 +59,16 @@
     the estimate will also be saved,
     for use in analysing replicated point patterns.
   }
+  \item{update}{
+    Logical. If \code{lambda} is a fitted model
+    (class \code{"ppm"} or \code{"kppm"})
+    and \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without fitting it to \code{X}.
+  }
 }
 \details{
   This command computes estimates of the 
@@ -87,8 +97,10 @@
       at all locations in the window. 
     }
     \item{a fitted point process model}{
-      (object of class \code{"ppm"})
+      (object of class \code{"ppm"} or \code{"kppm"})
       whose fitted \emph{trend} can be used as the fitted intensity.
+      (If \code{update=TRUE} the model will first be refitted to the
+      data \code{X} before the trend is computed.)
     }
     \item{a function}{
       which can be evaluated to give values of the intensity at
@@ -160,6 +172,7 @@
   C implementation and R adaptation by Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
+  and Ege Rubak.
 }
 \keyword{spatial}
 \keyword{nonparametric}

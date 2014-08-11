@@ -1,4 +1,441 @@
 
+	CHANGES IN spatstat VERSION 1.37-0
+
+OVERVIEW
+
+   o Ege Rubak is now a joint author of spatstat. 
+
+   o We thank Peter Forbes, Tom Lawrence and Mikko Vihtakari for contributions.
+
+   o Spatstat now exceeds 100,000 lines of code.
+
+   o New syntax for point process models (ppm, kppm, lppm)
+     equivalent to syntax of lm, glm, ...
+
+   o Covariates in ppm and kppm can now be tessellations.
+
+   o Confidence intervals and prediction intervals for fitted models.
+
+   o Quasirandom point patterns and sequences.
+
+   o Plots using texture fill.
+
+   o Support for mappings from data to graphical symbols and textures.
+
+   o Automatic re-fitting of model in Ginhom, Kinhom, Finhom, Jinhom.
+
+   o Support for Mixed Poisson distribution.
+
+   o Interpretation of mark scale parameters has changed in plot.ppp
+
+   o Syntax of multitype interactions (eg MultiStrauss) has changed.
+
+   o Bug fix in Metropolis-Hastings simulation of 'StraussHard' models
+
+   o Changed default behaviour of perfect simulation algorithms.
+
+   o Improvements to layout of text output.
+
+   o Version nickname: 'Model Prisoner'
+
+NEW CLASSES
+
+   o symbolmap
+   An object of class 'symbolmap' represents a mapping
+   from data to graphical symbols
+
+   o texturemap
+   An object of class 'texturemap' represents a mapping
+   from data to graphical textures.
+
+NEW FUNCTIONS
+
+   o split.hyperframe, split<-.hyperframe
+   methods for split and split<- for hyperframes.
+
+   o dmixpois, pmixpois, qmixpois, rmixpois
+   (log-)normal mixture of Poisson distributions.
+
+   o vdCorput, Halton, Hammersley, rQuasi
+   quasirandom sequences and quasirandom point patterns.
+
+   o Smoothfun
+   create a function(x,y) equivalent to the result of Smooth.ppp
+
+   o minnndist, maxnndist
+   Faster ways to compute min(nndist(X)), max(nndist(X))
+
+   o add.texture
+   Draw a simple texture inside a specified region.
+
+   o textureplot
+   Display a factor-valued pixel image using texture fill.
+
+   o texturemap
+   Create a texture map
+
+   o plot.texturemap
+   Plot a texture map in the style of a legend
+   
+   o symbolmap
+   Create a symbol map
+
+   o update.symbolmap
+   Modify a symbol map
+
+   o invoke.symbolmap
+   Apply symbol map to data values, and plot them
+
+   o plot.symbolmap 
+   Plot the symbol map in the style of a legend
+
+   o as.owin.boxx
+   Converts a 'boxx' to an 'owin' if possible.
+
+   o ellipse
+   Create an elliptical window.
+
+   o clickbox
+   Interactively specify a rectangle, by point-and-click on a graphics device.
+
+   o complementarycolour
+   Compute the complementary colour value of a given colour value,
+   or the complementary colour map of a given colour map.
+
+   o gauss.hermite
+   Gauss-Hermite quadrature approximation to the expectation
+   of any function of a normally-distributed random variable.	
+
+   o boundingbox
+   Generic function, replaces bounding.box
+
+   o edges
+   Extract boundary edges of a window. 
+   Replaces and extends 'as.psp.owin'
+
+   o pixelcentres
+   Extract centres of pixels as a point pattern.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o ppm, kppm, lppm
+   NEW SYNTAX FOR POINT PROCESS MODELS
+   The model-fitting functions 'ppm', 'kppm' and 'lppm' now accept
+   a syntax similar to 'lm' or 'glm', for example  ppm(X ~ Z), 
+   but still accept the older syntax ppm(X, ~Z). 
+   To support both kinds of syntax, the functions 'ppm' and 'kppm'
+   are now generic, with methods for the classes 'formula', 'ppp' and 'quad'. 
+   The 'formula' method handles a syntax like ppm(X ~ Z) while the
+   'ppp' method handles the old syntax ppm(X, ~Z).
+   Similarly 'lppm' is generic with methods for 'formula' and 'lpp'.
+
+   o ppm, kppm, lppm
+   Covariates appearing in the model formula can be objects 
+   which exist in the R session, instead of always having to be
+   elements of the list `covariates'.
+   
+   o ppm.formula, kppm.formula, lppm.formula
+   Formulae involving polynom() are now expanded, symbolically,
+   so that polynom(x, 3) becomes x + I(x^2) + I(x^3) 
+   and polynom(x,y,2) becomes x + y + I(x^2) + I(x*y) + I(y^2).
+   This neatens the model output, and also makes it possible
+   for anova() and step() to add or delete single terms in the polynomial.
+
+   o predict.ppm
+   New argument 'interval' allows confidence intervals or prediction intervals
+   to be calculated.
+
+   o predict.ppm
+   New argument 'total' allows for prediction of the total number of points
+   in a specified region.
+   
+   o plot.ppp, plot.lpp
+   For marked point patterns, a legend is automatically added
+   to the plot, by default. Arguments have changed: new arguments
+   include parameters of the legend, and an optional symbol map.
+   Result has changed: it is now an object of class 'symbolmap'.
+
+   o plot.ppp, plot.lpp
+   Interpretation of the parameters 'markscale' and 'maxsize' 
+   has changed. The size of a circle in the plot is now defined 
+   as the circle's diameter instead of its radius. (Size of
+   a square is measured, as before, by its side length). 
+
+   o parres
+   Now handles the case where the fitted model is not separable
+   but its restriction to the given 'subregion' is separable.
+
+   o envelope
+   Now issues a warning if the usage of envelope() appears to be `invalid' 
+   in the sense that the simulated patterns and the data pattern
+   have not been treated equally.
+
+   o Kinhom, Finhom, Ginhom, Jinhom
+   New argument 'update'.
+   If 'lambda' is a fitted model (class ppm or kppm) and update=TRUE,
+   the model is re-fitted to the data pattern, before the intensities
+   are computed.
+
+   o rDiggleGratton, rDGS, rHardcore, rStrauss, rStraussHard
+   By default the point pattern is now generated on
+   a larger window, and trimmed to the original window.
+   New argument expand=TRUE.
+
+   o MultiStrauss, MultiHard, MultiStraussHard
+   The syntax of these functions has changed.
+   The new code should still accept the old syntax.
+
+   o rhohat
+   rhohat.ppp and rhohat.quad have new argument 'baseline'
+
+   o ippm
+   Algorithm improved. Argument syntax changed.
+
+   o default.dummy, quadscheme
+   Dummy points can now be generated by a quasirandom sequence.
+
+   o plot.owin
+   The window can now be filled with one of 8 different textures.
+   Arguments changed. 
+
+   o ppm, kppm
+   Covariates in the model can now be tessellations.
+
+   o [.im
+   New argument 'tight' allows the resulting image to be trimmed 
+   to the smallest possible rectangle.
+
+   o [.psp, rlinegrid, rpoisline
+   These functions now handle binary mask windows.
+
+   o rotate
+   The user can specify the centre of rotation.
+
+   o rescale
+   rescale() and all its methods now have argument 'unitname'
+   which can be used to change the name of the unit of length.
+
+   o anova.ppm
+   Output format has been improved. 
+   Number of columns of result has changed.
+
+   o print.ppp, print.summary.ppp, print.owin, print.summary.owin,
+   print.im, print.summary.im, print.fv, print.msr, print.profilepl
+   These functions now avoid over-running the text margin
+   (i.e. they respect options('width') where possible).
+
+   o layerplotargs<-
+   Now handles any spatial object, converting it to a 'layered' object.
+
+   o effectfun
+   Improved display in case se.fit=TRUE.
+
+   o scaletointerval
+   New argument 'xrange'
+
+   o contour.im
+   New argument 'show.all'.
+   Default value of 'axes' changed to FALSE.
+
+   o identify.ppp
+   Now handles multivariate marks. 
+
+   o plot.listof
+   Improved layout.
+   New arguments 'hsep', 'vsep'.
+   Argument 'mar.panel' may have length 1, 2 or 4.
+
+   o plot.splitppp
+   This function is no longer identical to plot.listof.
+   Instead it is a much simpler function which just
+   calls plot.listof with equal.scales=TRUE.
+
+   o anova.ppm
+   Output is neater.
+
+   o plot.layered
+   New argument 'do.plot'
+
+   o plot.psp
+   New argument 'do.plot'
+   
+   o as.psp.owin
+   New argument 'window'
+
+   o plot.im, contour.im, textureplot
+   New argument 'clipwin'
+
+   o plot.ppp
+   New argument 'clipwin'
+
+   o plot.msr
+   New argument 'how' allows density to be plotted as image and/or contour
+
+   o diagnose.ppm, plot.diagppm
+   More options for 'plot.neg'
+
+   o plot.leverage.ppm, plot.influence.ppm, plot.msr
+   Argument 'clipwin' can now be used to restrict the display
+   to a subset of the full data.
+
+   o [.hyperframe, [<-.hyperframe, $.hyperframe, $<-.hyperframe
+   These functions are now documented.
+
+   o leverage.ppm, influence.ppm, dfbetas.ppm
+   Resulting objects are now smaller (in memory size).
+
+   o print.ppm
+   Now indicates whether the irregular parameters 'covfunargs'
+   were optimised (by profilepl or ippm) or whether they were simply
+   provided by the user.
+
+   o plot.ppp
+   A point pattern with numerical marks can now be plotted as
+   filled dots with colours determined by the marks, 
+   by setting pch=21 and bg=<colourmap>
+
+   o colourmap
+   Now handles dates and date-time values (of class 'Date' or 'POSIXt').
+
+   o plot.ppp, print.ppp, summary.ppp
+   Improved handling of dates and date-time values 
+   (of class 'Date' or 'POSIXt') in the marks of a point pattern.
+
+   o cut.im
+   Now refuses to handle images whose pixel values are
+   factor, logical or character.
+
+   o centroid.owin
+   New argument 'as.ppp'
+
+   o superimpose
+   Improved default names for columns of marks.
+
+   o Softcore()
+   Improved printout.
+
+   o kppm, lgcp.estpcf, lgcp.estK
+   Adjusted to new structure of RandomFields package.
+   No change in syntax.
+
+   o data(murchison)
+   This dataset now belongs to class 'listof' so that it can be
+   plotted directly.
+
+   o data(clmfires)
+   The format of the covariate data has changed.
+   The objects 'clmcov100' and 'clmcov200' are now 
+   elements of a list 'clmfires.extra'.
+
+   o bounding.box
+   This function is now Deprecated; it has been replaced 
+   by the generic boundingbox().
+
+   o as.psp.owin 
+   This function is now Deprecated; it has been replaced 
+   and extended by the function edges().
+
+   o plot.kstest
+   Changed defaults so that the two curves are distinguishable.
+
+   o with.fv
+   Improved mathematical labels.
+
+BUG FIXES
+
+   o intensity.quadratcount
+   Values were incorrect for a rectangular tessellation
+   (the matrix of intensities was transposed).
+   Fixed.
+
+   o rmh, simulate.ppm
+   Simulation of the Strauss-hard core model (StraussHard) was incorrect
+   (intensity of the simulated process was about 15% too low).
+   Bug introduced in spatstat 1.31-0 (January 2013).
+
+   because of a 
+   o intensity.quadratcount
+   Crashed for a rectangular tessellation with only a single row or column.
+   Fixed.
+   
+   o model.images.ppm
+   Crashed sometimes if the argument W was given.
+   Fixed.
+
+   o eval.im
+   Crashed when applied to images with only a single row or column.
+   Fixed.
+
+   o ppp, marks<-.ppp
+   If the marks were a vector of dates, they were erroneously 
+   converted to numbers.
+   Fixed.
+
+   o ippm
+   Crashed if the model formula included an offset term
+   that was not a function.
+   Fixed.
+
+   o leverage.ppm
+   Crashed sometimes when the model had irregular parameters ('covfunargs').
+   Fixed.
+
+   o residuals.ppm
+   Crashed sometimes when type='score'.
+   Fixed.
+
+   o scaletointerval
+   Did not handle dates and date-time values correctly.
+   Fixed.
+
+   o rbind.hyperframe, as.list.hyperframe
+   Gave incorrect results for hyperframes with 1 row.
+   Fixed.
+
+   o Kinhom
+   Did not renormalise the result (even when renormalise=TRUE), in some cases.
+   Spotted by Peter Forbes.
+   Fixed.
+
+   o disc
+   If mask=TRUE the disc was erroneously clipped to the square [-1,1] x [-1,1].
+   Fixed.
+
+   o plot.fv
+   Sometimes shaded the wrong half of the graph 
+   when the 'shade' coordinates were infinite.
+   Fixed.
+
+   o print.ppm
+   Gave an error message if the coefficient vector had length zero.
+   Fixed.
+
+   o vcov.ppm
+   Gave an error message if the coefficient vector had length zero.
+   Fixed.
+
+   o plot.msr
+   Ignored certain additional arguments such as 'pch'.
+   Fixed.
+
+   o cut.im
+   Crashed if the image had 1 row or 1 column of pixels.
+   Fixed.
+
+   o iplot.ppp
+   Crashed with message about missing object 'vals'.
+   Fixed.
+
+   o effectfun
+   Demanded a value for every covariate supplied in the original call to ppm, 
+   even for covariates which were not used in the model.
+   Fixed.
+
+   o plot.listof, plot.hyperframe
+   When plotting 3D point patterns (class pp3), these functions
+   issued warnings about 'add' being an unrecognised graphics argument.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.36-0
 
 OVERVIEW
@@ -4178,6 +4615,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o   distmap.ppp
    	Internal code is more robust.
+
 BUG FIXES
 
     o  im

@@ -104,35 +104,37 @@ print.summary.fii <- function(x, ...) {
     # use thumbnail if available
     thumbnail <- x$thumbnail
     if(!is.null(thumbnail)) {
-      cat(paste(thumbnail, "\n"))
+      splat(thumbnail)
       return(invisible(NULL))
     }
   }
+  terselevel <- spatstat.options("terse")
   brief <- secret$brief
   if(!brief)
     cat(secret$prefix)
-  if(x$poisson)
-    cat("Poisson process\n")
-  else {
+  if(x$poisson) {
+    splat("Poisson process")
+    parbreak(terselevel)
+  } else {
     print(x$interaction, family=secret$family, brief=TRUE)
     if(!is.null(x$printable)) {
       nvalues <- length(x$printable)
       nheader <- length(x$header)
       if(nvalues == 1) {
-        cat(paste(x$header, ":\t", x$printable, "\n", sep=""))
+        splat(paste(paste0(x$header, ":\t"), x$printable))
       } else if(nvalues == nheader) {
         for(i in 1:nheader) {
-          cat(x$header[i])
+          hdi <- x$header[i]
           xpi <- x$printable[[i]]
           if(!is.list(xpi) && length(xpi) == 1) {
-            cat(":\t", xpi, "\n")
+            splat(paste0(hdi, ":\t", xpi))
           } else {
-            cat(":\n")
+            splat(paste0(hdi, ":"))
             print(xpi)
           }
         } 
       } else {
-        cat(paste(x$header, ":\n", sep=""))
+        splat(x$header)
         print(x$printable)
       } 
     }
@@ -140,7 +142,8 @@ print.summary.fii <- function(x, ...) {
   if(!brief) {
     co <- x$coefs[x$Vnames[!x$IsOffset]]
     if(length(co) > 0) {
-      cat("\nRelevant coefficients:\n")
+      parbreak(terselevel)
+      splat("Relevant coefficients:")
       print(co)
     }
   }

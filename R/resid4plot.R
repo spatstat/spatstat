@@ -5,14 +5,18 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.17 $    $Date: 2013/07/17 02:37:41 $
+#   $Revision: 1.26 $    $Date: 2014/05/09 01:12:42 $
 #
 #
 
-resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
-                       spacing=0.1, srange=NULL, monochrome=FALSE, main=NULL,
-                       ...)
+resid4plot <-
+  function(RES,
+           plot.neg=c("image", "discrete", "contour", "imagecontour"),
+           plot.smooth=c("imagecontour", "image", "contour", "persp"),
+           spacing=0.1, srange=NULL, monochrome=FALSE, main=NULL,
+           ...)
 {
+  plot.neg <- match.arg(plot.neg)
   clip     <- RES$clip
   Yclip    <- RES$Yclip
   Z        <- RES$smooth$Z
@@ -41,7 +45,6 @@ resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
     stopifnot(is.numeric(srange) && length(srange) == 2)
     stopifnot(all(is.finite(srange)))
   }
-    
   cols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
                       
   # ------ plot residuals/marks (in top left panel) ------------
@@ -51,7 +54,7 @@ resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
   Ws <- shift(W, vec)
   # shift the residuals 
   Ys <- shift(Yclip,vec)
-  
+
   # determine whether pre-plotting the window(s) is redundant
   redundant <- 
     (plot.neg == "image") && (type != "eem") && (Yclip$window$type == "mask")
@@ -64,17 +67,39 @@ resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
       ploterodewin(Ws, Ys$window, add=TRUE, ...)
   }
 
+  ## adjust position of legend associated with eroded window
+  sep <- if(clip) Wclip$yrange[1] - W$yrange[1] else NULL
+  
+  ## decide whether mark scale should be shown
+  showscale <- (type != "raw")
+  
   switch(plot.neg,
          discrete={
            neg <- (Ys$marks < 0)
+           ## plot negative masses of discretised measure as squares
            if(any(c("maxsize", "markscale") %in% names(list(...))))
-             plot(Ys[neg], add=TRUE, ...)
+             plot(Ys[neg], add=TRUE, ..., legend=FALSE)
            else {
              hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
-             plot(Ys[neg], add=TRUE, maxsize=hackmax, ...)
+             plot(Ys[neg], add=TRUE, maxsize=hackmax, ..., legend=FALSE)
            }
-           plot(Ys[!neg], add=TRUE, ...)
+           ## plot positive masses at atoms
+           plot(Ys[!neg], add=TRUE,
+                leg.side="left", leg.args=list(sep=sep),
+                show.all=TRUE, main="", ...)
          },
+         contour = {
+           Yds <- shift(Ydens, vec)
+           Yms <- shift(Ymass, vec)
+           contour(Yds, add=TRUE, ...)
+           do.call("plot",
+                   resolve.defaults(list(x=Yms, add=TRUE),
+                                    list(...),
+                                    list(use.marks=showscale,
+                                         leg.side="left", show.all=TRUE,
+                                         main="", leg.args=list(sep=sep))))
+         },
+         imagecontour=,
          image={
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
@@ -82,7 +107,15 @@ resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
              ploterodeimage(Ws, Yds, rangeZ=srange, colsZ=cols, ...)
            else if(type != "eem") 
              image(Yds, add=TRUE, ribbon=FALSE, col=cols, zlim=srange, ...)
-           plot(Yms, add=TRUE, ...)
+           if(plot.neg == "imagecontour")
+             contour(Yds, add=TRUE, ...)
+           ## plot positive masses at atoms
+           do.call("plot",
+                   resolve.defaults(list(x=Yms, add=TRUE),
+                                    list(...),
+                                    list(use.marks=showscale,
+                                         leg.side="left", show.all=TRUE,
+                                         main="", leg.args=list(sep=sep))))
          }
          )
   # --------- plot smoothed surface (in bottom right panel) ------------
@@ -212,111 +245,190 @@ resid4plot <- function(RES, plot.neg="image", plot.smooth="imagecontour",
 #
 #
 
-resid1plot <- function(RES, opt,
-                       plot.neg="image", plot.smooth="imagecontour",
-                       srange=NULL, monochrome=FALSE, main=NULL,
-                       ...) {
-  clip  <- RES$clip
-  Y     <- RES$Y
-  Yclip <- RES$Yclip
-  Z     <- RES$smooth$Z
-  W     <- RES$W
-  Wclip <- Yclip$window
-  type  <- RES$type
-  Ydens <- RES$Ydens[Wclip, drop=FALSE]
-  Ymass <- RES$Ymass[Wclip]
-  # determine colour map
-  if(opt$all || opt$marks || opt$smooth) {
-    if(is.null(srange)) {
-      Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
-      Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
-      srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
+resid1plot <-
+  function(RES, opt,
+           plot.neg=c("image", "discrete", "contour", "imagecontour"),
+           plot.smooth=c("imagecontour", "image", "contour", "persp"),
+           srange=NULL, monochrome=FALSE, main=NULL,
+           add=FALSE, show.all=!add, do.plot=TRUE, 
+           ...) {
+    if(!any(unlist(opt[c("all", "marks", "smooth",
+                         "xmargin", "ymargin", "xcumul", "ycumul")])))
+      return(invisible(NULL))
+    if(!add && do.plot) {
+      ## determine size of plot area by calling again with do.plot=FALSE
+      cl <- match.call()
+      cl$do.plot <- FALSE
+      b <- eval(cl, parent.frame())
+      bb <- as.owin(b, fatal=FALSE)
+      if(is.owin(bb)) {
+        ## initialise plot area
+        plot(bb, type="n", main="")
+        force(show.all)
+        add <- TRUE
+      }
     }
-    cols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
-  }
-  # determine main heading
-  if(is.null(main)) {
-    prefix <- if(opt$marks) NULL 
-              else if(opt$smooth) "Smoothed"
-              else if(opt$xcumul) "Lurking variable plot for x coordinate\n"
-              else if(opt$ycumul) "Lurking variable plot for y coordinate\n"
-              else if(opt$xmargin) "Lurking variable plot for x coordinate\n"
-              else if(opt$ymargin) "Lurking variable plot for y coordinate\n"
-    main <- paste(prefix, RES$typename)
-  }
-    
-  # ------------- residuals ---------------------------------
-  if(opt$marks) {
-    # determine whether pre-plotting the window(s) is redundant
-    redundant <- 
-      (plot.neg == "image") && (type != "eem") && (Yclip$window$type == "mask")
-  # pre-plot the window(s)
-    if(redundant)
-      plot(as.rectangle(W), box=FALSE, main="", ...)
-    else {
-      if(!clip) 
-        plot(W, main="", ...)
-      else
-        ploterodewin(W, Wclip, main="", ...)
+    ## extract info
+    clip  <- RES$clip
+    Y     <- RES$Y
+    Yclip <- RES$Yclip
+    Z     <- RES$smooth$Z
+    W     <- RES$W
+    Wclip <- Yclip$window
+    type  <- RES$type
+    Ydens <- RES$Ydens[Wclip, drop=FALSE]
+    Ymass <- RES$Ymass[Wclip]
+    ## determine colour map
+    if(opt$all || opt$marks || opt$smooth) {
+      if(is.null(srange)) {
+        Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
+        Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
+        srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
+      }
+      cols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
     }
+    ## determine main heading
+    if(is.null(main)) {
+      prefix <- if(opt$marks) NULL else
+      if(opt$smooth) "Smoothed" else
+      if(opt$xcumul) "Lurking variable plot for x coordinate\n" else 
+      if(opt$ycumul) "Lurking variable plot for y coordinate\n" else
+      if(opt$xmargin) "Lurking variable plot for x coordinate\n" else
+      if(opt$ymargin) "Lurking variable plot for y coordinate\n" else NULL
+      main <- paste(prefix, RES$typename)
+    }
+    ## ------------- residuals ---------------------------------
+    if(opt$marks) {
+      ## determine whether pre-plotting the window(s) is redundant
+      redundant <- (plot.neg == "image") &&
+                   (type != "eem") && (Yclip$window$type == "mask")
+      ## pre-plot the window(s)
+      if(redundant && !add) {
+        z <- plot(as.rectangle(W), box=FALSE, main="",
+                  do.plot=do.plot, ...)
+      } else {
+        if(!clip) 
+          z <- plot(W, main="",
+               add=add, show.all=show.all, do.plot=do.plot, ...)
+        else
+          z <- ploterodewin(W, Wclip, main="",
+                       add=add, show.all=show.all, do.plot=do.plot, ...)
+      }
+      bb <- as.owin(z)
 
-    switch(plot.neg,
-           discrete={
-             neg <- (Y$marks < 0)
-             if(any(c("maxsize", "markscale") %in% names(list(...))))
-               plot(Y[neg], add=TRUE, ...)
-             else {
-               hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
-               plot(Y[neg], add=TRUE, maxsize=hackmax, ...)
-             }
-             plot(Y[!neg], add=TRUE, ...)
+      switch(plot.neg,
+             discrete={
+               neg <- (Y$marks < 0)
+               ## plot negative masses of discretised measure as squares
+               if(any(c("maxsize", "markscale") %in% names(list(...)))) {
+                 z <- plot(Y[neg], add=TRUE,
+                          show.all=show.all, do.plot=do.plot, ...)
+               } else {
+                 hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
+                 z <- plot(Y[neg], add=TRUE, maxsize=hackmax,
+                           show.all=show.all, do.plot=do.plot, ...)
+               }
+               ## plot positive masses at atoms
+               zp <- plot(Y[!neg], add=TRUE,
+                          show.all=show.all, do.plot=do.plot, ...)
+               bb <- boundingbox(bb, z, zp)
            },
-         image={
-           if(redundant)
-             ploterodeimage(W, Ydens, rangeZ=srange, colsZ=cols, ...)
-           else if(type != "eem") 
-             image(Ydens, col=cols, zlim=srange, add=TRUE, ribbon=FALSE, ...)
-           plot(Ymass, add=TRUE, ...)
-         }
-         )
-    title(main=main)
+           contour = {
+             z <- contour(Ydens, add=TRUE, do.plot=do.plot, ...)
+             bb <- boundingbox(bb, z)
+           },
+           imagecontour=,
+           image={
+             if(redundant) {
+               z <- ploterodeimage(W, Ydens, rangeZ=srange, colsZ=cols,
+                                   add=add, show.all=show.all, main="", 
+                                   do.plot=do.plot, ...)
+             } else if(type != "eem") {
+               z <- image(Ydens, col=cols, zlim=srange, ribbon=FALSE,
+                          add=TRUE, show.all=show.all, do.plot=do.plot,
+                          main="", ...)
+             }
+             bb <- boundingbox(bb, z)
+             if(plot.neg == "imagecontour") {
+               z <- contour(Ydens, add=TRUE,
+                            show.all=show.all, do.plot=do.plot, ...)
+               bb <- boundingbox(bb, z)
+             }
+             ## decide whether mark scale should be shown
+             showscale <- (type != "raw")
+             ## plot positive masses at atoms
+             z <- do.call("plot",
+                          resolve.defaults(list(x=Ymass, add=TRUE),
+                                           list(...),
+                                           list(use.marks=showscale,
+                                                do.plot=do.plot)))
+             bb <- boundingbox(bb, z)
+           }
+           )
+    if(do.plot && show.all) title(main=main)
   }
   # -------------  smooth -------------------------------------
   if(opt$smooth) {
     if(!clip) {
       switch(plot.smooth,
-           image={image(Z, main=main, axes=FALSE, xlab="", ylab="",
-                        col=cols, zlim=srange, ribbon=FALSE, ...)},
-           contour={contour(Z, main=main, axes=FALSE, xlab="", ylab="", ...)},
-           persp={persp(Z, main=main, axes=FALSE, xlab="", ylab="", ...)},
-           imagecontour={
-             image(Z, main=main, axes=FALSE, xlab="", ylab="",
-                   col=cols, zlim=srange, ribbon=FALSE, ...)
-             contour(Z, add=TRUE, ...)
-           }
-           )
-    } else {
-      switch(plot.smooth,
            image={
-             plot(as.rectangle(W), box=FALSE, main=main, ...)
-             ploterodeimage(W, Z, colsZ=cols, rangeZ=srange, ...)
+             z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
+                        col=cols, zlim=srange, ribbon=FALSE,
+                        do.plot=do.plot, add=add, show.all=show.all, ...)
+             bb <- as.owin(z)
            },
            contour={
-             plot(W, main=main, ...)
-             contour(Z, add=TRUE, ...)
+             z <- contour(Z, main="", axes=FALSE, xlab="", ylab="",
+                        do.plot=do.plot, add=add, show.all=show.all, ...)
+             bb <- as.owin(z)
            },
            persp={
-             persp(Z, main=main, axes=FALSE, xlab="", ylab="", ...)
-           # there is no 'add' option for 'persp'
+             if(do.plot)
+               persp(Z, main="", axes=FALSE, xlab="", ylab="", ...)
+             bb <- NULL
            },
            imagecontour={
-             plot(as.rectangle(W), box=FALSE, main=main, ...)
-             ploterodeimage(W, Z, colsZ=cols, rangeZ=srange, ...)
-             contour(Z, add=TRUE, ...)
+             z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
+                        col=cols, zlim=srange, ribbon=FALSE,
+                        do.plot=do.plot, add=add, show.all=show.all, ...)
+             contour(Z, add=TRUE, do.plot=do.plot, ...)
+             bb <- as.owin(z)
            }
-           )
+             )
+      if(do.plot && show.all) title(main=main)             
+    } else {
+      switch(plot.smooth,
+             image={
+               plot(as.rectangle(W), box=FALSE, main=main,
+                    do.plot=do.plot, ...)
+               z <- ploterodeimage(W, Z, colsZ=cols, rangeZ=srange,
+                                   do.plot=do.plot, ...)
+               bb <- boundingbox(as.rectangle(W), z)
+             },
+             contour={
+               plot(W, main=main,
+                    do.plot=do.plot, add=add, show.all=show.all, ...)
+               z <- contour(Z, add=TRUE,
+                            show.all=show.all, do.plot=do.plot, ...)
+               bb <- as.owin(z)
+             },
+             persp={
+               if(do.plot) 
+                 persp(Z, main=main, axes=FALSE, xlab="", ylab="", ...)
+               bb <- NULL
+             },
+             imagecontour={
+               plot(as.rectangle(W), box=FALSE, main=main,
+                    do.plot=do.plot, ...)
+               z <- ploterodeimage(W, Z, colsZ=cols, rangeZ=srange,
+                                   do.plot=do.plot, ...)
+               contour(Z, add=TRUE, do.plot=do.plot, ...)
+               bb <- as.owin(z)
+             }
+             )
     }
   }
+
   # ------------  cumulative x -----------------------------------------
   if(opt$xcumul) {
     a <- RES$xcumul
@@ -324,7 +436,10 @@ resid1plot <- function(RES, opt,
     theo <- a$theoretical
     resid1panel(obs$covariate, obs$value,
                theo$covariate, theo$mean, theo$sd,
-               "x coordinate", "cumulative mark", main=main, ...)
+               "x coordinate", "cumulative mark", main=main,
+                ...,
+                do.plot=do.plot)
+    bb <- NULL
   }
   
   # ------------  cumulative y -----------------------------------------
@@ -334,67 +449,78 @@ resid1plot <- function(RES, opt,
     theo <- a$theoretical
     resid1panel(obs$covariate, obs$value,
                theo$covariate, theo$mean, theo$sd,
-               "y coordinate", "cumulative mark", main=main, ...)
+               "y coordinate", "cumulative mark", main=main,
+                ...,
+                do.plot=do.plot)
+    bb <- NULL
   }
-  # ------------  x margin -----------------------------------------
+  ## ------------  x margin -----------------------------------------
   if(opt$xmargin) {
     a <- RES$xmargin
     resid1panel(a$x, a$xZ, a$x, a$ExZ, NULL,
-               "x coordinate", "marginal of residuals", main=main, ...)
+               "x coordinate", "marginal of residuals", main=main,
+                ...,
+                do.plot=do.plot)
+    bb <- NULL
   }
   # ------------  y margin -----------------------------------------
   if(opt$ymargin) {
     a <- RES$ymargin
     resid1panel(a$y, a$yZ, a$y, a$EyZ, NULL,
-               "y coordinate", "marginal of residuals", main=main, ...)
+               "y coordinate", "marginal of residuals", main=main,
+                ...,
+                do.plot=do.plot)
+    bb <- NULL
   }
-  
-  return(invisible(NULL))
+
+  attr(bb, "bbox") <- bb  
+  return(invisible(bb))
 }
 
 
 resid1panel <- function(observedX, observedV,
                         theoreticalX, theoreticalV, theoreticalSD, xlab, ylab,
-                        ...)
+                        ..., do.plot=TRUE)
 {
-    # work out plot range
-    rX <- range(observedX, theoreticalX)
-    rV <- range(c(0, observedV, theoreticalV))
-    if(!is.null(theoreticalSD))
-        rV <- range(c(rV, theoreticalV + 2*theoreticalSD,
-                          theoreticalV - 2*theoreticalSD))
-    # argument handling
-    do.lines <-
-      function(x, y, defaulty=1, ...) {
-        do.call("lines",
-                resolve.defaults(list(x, y),
-                                 list(...),
-                                 list(lty=defaulty)))
-      }
-    # start plot
-    plot(rX, rV, type="n", xlab=xlab, ylab=ylab, ...)
-    do.lines(observedX, observedV, 1, ...)
-    do.lines(theoreticalX, theoreticalV, 2, ...)
-    if(!is.null(theoreticalSD)) {
-      do.lines(theoreticalX, theoreticalV + 2 * theoreticalSD, 3, ...)
-      do.lines(theoreticalX, theoreticalV - 2 * theoreticalSD, 3, ...)
+  if(!do.plot) return(NULL)
+  ## work out plot range
+  rX <- range(observedX, theoreticalX)
+  rV <- range(c(0, observedV, theoreticalV))
+  if(!is.null(theoreticalSD))
+    rV <- range(c(rV, theoreticalV + 2*theoreticalSD,
+                  theoreticalV - 2*theoreticalSD))
+  ## argument handling
+  do.lines <-
+    function(x, y, defaulty=1, ...) {
+      do.call("lines",
+              resolve.defaults(list(x, y),
+                               list(...),
+                               list(lty=defaulty)))
     }
+  ## start plot
+  plot(rX, rV, type="n", xlab=xlab, ylab=ylab, ...)
+  do.lines(observedX, observedV, 1, ...)
+  do.lines(theoreticalX, theoreticalV, 2, ...)
+  if(!is.null(theoreticalSD)) {
+    do.lines(theoreticalX, theoreticalV + 2 * theoreticalSD, 3, ...)
+    do.lines(theoreticalX, theoreticalV - 2 * theoreticalSD, 3, ...)
+  }
 }
 
 #
 #
 ploterodewin <- function(W1, W2, col.edge=grey(0.75), col.inside=rgb(1,0,0),
-                         ...) {
-  # internal use only
-  # W2 is assumed to be an erosion of W1
+                         do.plot=TRUE, ...) {
+  ## internal use only
+  ## W2 is assumed to be an erosion of W1
   switch(W1$type,
          rectangle={
-           plot(W1, ...)
-           plot(W2, add=TRUE, lty=2)
+           z <- plot(W1, ..., do.plot=do.plot)
+           plot(W2, add=TRUE, lty=2, do.plot=do.plot)
          },
          polygonal={
-           plot(W1, ...)
-           plot(W2, add=TRUE, lty=2)
+           z <- plot(W1, ..., do.plot=do.plot)
+           plot(W2, add=TRUE, lty=2, do.plot=do.plot)
          },
          mask={
            Z <- as.im(W1)
@@ -402,18 +528,20 @@ ploterodewin <- function(W1, W2, col.edge=grey(0.75), col.inside=rgb(1,0,0),
            y <- as.vector(raster.y(W1))
            ok <- inside.owin(x, y, W2)
            Z$v[ok] <- 2
-           plot(Z, ..., col=c(col.edge, col.inside),
-                  add=TRUE, ribbon=FALSE)
+           z <- plot(Z, ..., col=c(col.edge, col.inside),
+                     add=TRUE, ribbon=FALSE, do.plot=do.plot)
          }
          )
+  return(z)
 }
 
-ploterodeimage <- function(W, Z, ..., Wcol=grey(0.75), rangeZ, colsZ) {
+ploterodeimage <- function(W, Z, ..., Wcol=grey(0.75), rangeZ, colsZ,
+                           do.plot=TRUE) {
   # Internal use only
   # Image Z is assumed to live on a subset of mask W
   # colsZ are the colours for the values in the range 'rangeZ'
 
-  if(W$type != "mask") {
+  if(W$type != "mask" && do.plot) {
     plot(W, add=TRUE)
     W <- as.mask(W)
   }
@@ -439,8 +567,12 @@ ploterodeimage <- function(W, Z, ..., Wcol=grey(0.75), rangeZ, colsZ) {
   inZ <- !is.na(Zvalues)
   X$v[inZ] <- Zvalues[inZ]
 
-  image(X, ..., add=TRUE, ribbon=FALSE, col=pseudocols, breaks=pseudobreaks)
-  return(list(X, pseudocols, pseudobreaks))
+  z <- image(X, ..., add=TRUE, ribbon=FALSE, 
+             col=pseudocols, breaks=pseudobreaks,
+             do.plot=do.plot)
+  out <- list(X, pseudocols, pseudobreaks)
+  attr(out, "bbox") <- as.owin(z)
+  return(out)
 }
 
 

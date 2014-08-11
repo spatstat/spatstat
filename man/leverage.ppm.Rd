@@ -9,7 +9,7 @@
 }
 \usage{
 leverage(model, ...)
-\method{leverage}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=list())
+\method{leverage}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{
@@ -73,7 +73,8 @@ leverage(model, ...)
 }
 \value{
   An object of class \code{"leverage.ppm"} that can be plotted
-  by \code{\link{plot.leverage.ppm}}.
+  (by \code{\link{plot.leverage.ppm}}). There are also methods
+  for \code{print}, \code{[}, \code{as.im} and \code{as.owin}.
 }
 \references{
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)

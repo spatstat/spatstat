@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.37 $   $Date: 2014/02/05 07:31:36 $
+#   $Revision: 1.39 $   $Date: 2014/04/16 01:17:56 $
 #
 # stuff for handling marks
 #
@@ -312,13 +312,20 @@ markcbind <- function(...) {
     marxlist <- marxlist[!vacuous]
     mkfmt    <- mkfmt[!vacuous]
   }
-  if(all(mkfmt %in% c("vector", "dataframe"))) {
-    # result is a data frame
-    if(any(isvec <- (mkfmt == "vector")))
-      marxlist[isvec] <- lapply(marxlist[isvec], as.data.frame.vector)
+  if(any(isvec <- (mkfmt == "vector"))) {
+    ## convert vectors to data frames with invented names
+    for(i in which(isvec)) {
+      mi <- as.data.frame(marxlist[i])
+      colnames(mi) <- paste0("V", i)
+      marxlist[[i]] <- mi
+    }
+    mkfmt[isvec] <- "dataframe"
+  }
+  if(all(mkfmt == "dataframe")) {
+    ## result is a data frame
     marx <- do.call(data.frame, marxlist)
   } else {
-    # result is a hyperframe
+    ## result is a hyperframe
     if(!all(ishyp <- (mkfmt == "hyperframe"))) 
       marxlist[!ishyp] <- lapply(marxlist[!ishyp], as.hyperframe)
     marx <- do.call(hyperframe, marxlist)
@@ -351,4 +358,28 @@ numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
   if(ncol(M) == 1 && ncol(Mout) == 1)
     colnames(Mout) <- NULL
   return(Mout)
+}
+
+coerce.marks.numeric <- function(X, warn=TRUE) {
+  marx <- marks(X)
+  if(is.null(dim(marx))) {
+    if(is.factor(marx)) {
+      if(warn) warning("Factor-valued marks were converted to integer codes",
+                       call.=FALSE)
+      marx <- as.integer(marx)
+      return(X %mark% marx)
+    }
+  } else {
+    marx <- as.data.frame(marx)
+    if(any(fax <- unlist(lapply(marx, is.factor)))) {
+      if(warn) warning("Factor-valued mark",
+                       ngettext(sum(fax), "variable was", "variables were"),
+                       "converted to integer codes:",
+                       commasep(sQuote(colnames(marx)[fax])),
+                       call.=FALSE)
+      marx[,fax] <- as.data.frame(lapply(marx[,fax], as.integer))
+      return(X %mark% marx)
+    }
+  }
+  return(X)
 }

@@ -14,7 +14,7 @@
 
   \method{shift}{tess}(X, \dots)
 
-  \method{rotate}{tess}(X, angle=pi/2, \dots)
+  \method{rotate}{tess}(X, angle=pi/2, \dots, centre=NULL)
 
   \method{scalardilate}{tess}(X, f, \dots)
 
@@ -30,6 +30,13 @@
   \item{vec}{Vector of length 2 representing a translation.}
   \item{f}{Positive number giving scale factor.}
   \item{\dots}{Arguments passed to other methods.}
+  \item{centre}{
+    Centre of rotation.
+    Either a vector of length 2, or a character string
+    (partially matched to \code{"centroid"}, \code{"midpoint"}
+    or \code{"bottomleft"}).
+    The default is the coordinate origin \code{c(0,0)}.
+  }
 }
 \value{
   Another tessellation (of class \code{"tess"}) representing the

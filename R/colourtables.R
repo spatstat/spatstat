@@ -3,19 +3,31 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.28 $ $Date: 2013/12/12 05:17:44 $
+# $Revision: 1.31 $ $Date: 2014/04/17 03:58:58 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
-  # validate colour data 
-  h <- col2hex(col)
-  # store without conversion
-  f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs)
+  if(nargs() == 0) {
+    ## null colour map
+    f <- lut()
+  } else {
+    ## validate colour data 
+    h <- col2hex(col)
+    ## store without conversion
+    f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs)
+  }
   class(f) <- c("colourmap", class(f))
   f
 }
 
 lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
+  if(nargs() == 0) {
+    ## null lookup table
+    f <- function(x, what="value"){NULL}
+    class(f) <- c("lut", class(f))
+    attr(f, "stuff") <- list(n=0)
+    return(f)
+  }
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
   names(given) <- c("range", "breaks", "inputs")
@@ -39,6 +51,30 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
       if(what == "index")
         return(m)
       cout <- stuff$outputs[m]
+      return(cout)
+    }
+  } else if(!is.null(range) && inherits(range, c("Date", "POSIXt"))) {
+    # date/time interval mapped to colours
+    timeclass <- if(inherits(range, "Date")) "Date" else "POSIXt"
+    if(is.null(breaks)) {
+      breaks <- seq(from=range[1], to=range[2], length.out=length(outputs)+1)
+    } else {
+      if(!inherits(breaks, timeclass))
+        stop(paste("breaks should belong to class", dQuote(timeclass)),
+             call.=FALSE)
+      stopifnot(length(breaks) >= 2)
+      stopifnot(length(breaks) == length(outputs) + 1)
+      if(!all(diff(breaks) > 0))
+        stop("breaks must be increasing")
+    }
+    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs)
+    f <- function(x, what="value") {
+      x <- as.vector(as.numeric(x))
+      z <- findInterval(x, stuff$breaks,
+                        rightmost.closed=TRUE)
+      if(what == "index")
+        return(z)
+      cout <- stuff$outputs[z]
       return(cout)
     }
   } else {
@@ -69,14 +105,19 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
 }
 
 print.lut <- function(x, ...) {
-  stuff <- attr(x, "stuff")
-  n <- stuff$n
   if(inherits(x, "colourmap")) {
     tablename <- "Colour map"
     outputname <- "colour"
   } else {
     tablename  <- "Lookup table"
     outputname <- "output"
+  }
+  stuff <- attr(x, "stuff")
+  n <- stuff$n
+  if(n == 0) {
+    ## Null map
+    cat(paste("Null", tablename, "\n"))
+    return(invisible(NULL))
   }
   if(stuff$discrete) {
     cat(paste(tablename, "for discrete set of input values\n"))
@@ -113,6 +154,10 @@ summary.lut <- function(object, ...) {
 
 print.summary.lut <- function(x, ...) {
   n <- x$n
+  if(n == 0) {
+    cat(paste("Null", x$tablename, "\n"))
+    return(invisible(NULL))
+  }
   if(x$discrete) {
     cat(paste(x$tablename, "for discrete set of input values\n"))
     out <- data.frame(input=x$inputs, output=x$outputs)
@@ -164,6 +209,10 @@ plot.colourmap <- local({
     stuff <- attr(x, "stuff")
     col <- stuff$outputs
     n   <- stuff$n
+    if(n == 0) {
+      ## Null map
+      return(invisible(NULL))
+    }
     discrete <- stuff$discrete
     if(discrete) {
       check.1.real(gap, "In plot.colourmap")

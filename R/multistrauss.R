@@ -2,7 +2,7 @@
 #
 #    multistrauss.S
 #
-#    $Revision: 2.20 $	$Date: 2012/08/30 02:09:41 $
+#    $Revision: 2.21 $	$Date: 2014/04/30 07:57:47 $
 #
 #    The multitype Strauss process
 #
@@ -130,7 +130,7 @@ MultiStrauss <- local({
          cat(paste(nrow(radii), "types of points\n"))
          if(!is.null(types)) {
            cat("Possible types: \n")
-           print(types)
+           print(noquote(types))
          } else cat("Possible types:\t not yet determined\n")
          cat("Interaction radii:\n")
          print(self$par$radii)
@@ -214,7 +214,12 @@ MultiStrauss <- local({
   class(BlankMSobject) <- "interact"
 
   # finally create main function
-  MultiStrauss <- function(types=NULL, radii) {
+  MultiStrauss <- function(radii, types=NULL) {
+    if((missing(radii) || !is.matrix(radii)) && is.matrix(types)) {
+      ## old syntax: (types=NULL, radii)
+      radii <- types
+      types <- NULL
+    }
     out <- instantiate.interact(BlankMSobject, list(types=types, radii = radii))
     if(!is.null(types))
       dimnames(out$par$radii) <- list(types, types)

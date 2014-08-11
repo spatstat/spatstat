@@ -103,7 +103,7 @@ models on a linear network.
   Geometrically corrected second-order analysis of 
   events on a linear network, with applications to
   ecology and criminology.
-  To appear in \emph{Scandinavian Journal of Statistics}.
+  \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 
   McSwiggan, G., Nair, M.G. and Baddeley, A. (2012)
   Fitting Poisson point process models to events 

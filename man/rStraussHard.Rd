@@ -6,7 +6,7 @@
   of the Strauss-Hardcore process, using a perfect simulation algorithm.
 }
 \usage{
-  rStraussHard(beta, gamma = 1, R = 0, H = 0, W = owin())
+  rStraussHard(beta, gamma = 1, R = 0, H = 0, W = owin(), expand=TRUE)
 }
 \arguments{
   \item{beta}{
@@ -25,6 +25,16 @@
     window (object of class \code{"owin"}) in which to
     generate the random pattern. Currently this must be a rectangular
     window.
+  }
+  \item{expand}{
+    Logical. If \code{FALSE}, simulation is performed
+    in the window \code{W}, which must be rectangular.
+    If \code{TRUE} (the default), simulation is performed
+    on a larger window, and the result is clipped to the original
+    window \code{W}.
+    Alternatively \code{expand} can be an object of class 
+    \code{"rmhexpand"} (see \code{\link{rmhexpand}})
+    determining the expansion method.
   }
 }
 \details{

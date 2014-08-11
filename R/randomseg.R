@@ -1,13 +1,11 @@
 #
 # randomseg.R
 #
-# $Revision: 1.8 $ $Date: 2011/05/18 08:59:23 $
+# $Revision: 1.9 $ $Date: 2014/02/22 02:43:07 $
 #
 
 rpoisline <- function(lambda, win=owin()) {
   win <- as.owin(win)
-  if(win$type == "mask")
-    stop("Not implemented for masks")
   # determine circumcircle
   xr <- win$xrange
   yr <- win$yrange
@@ -40,8 +38,6 @@ rpoisline <- function(lambda, win=owin()) {
 
 rlinegrid <- function(angle=45, spacing=0.1, win=owin()) {
   win <- as.owin(win)
-  if(win$type == "mask")
-    stop("Not implemented for masks")
   # determine circumcircle
   width <- diff(win$xrange)
   height <- diff(win$yrange)

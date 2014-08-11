@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.39 $  $Date: 2014/01/16 05:41:32 $
+#  $Revision: 1.46 $  $Date: 2014/03/17 10:20:09 $
 #
 
 quadratcount <- function(X, ...) {
@@ -169,17 +169,24 @@ as.tess.quadratcount <- function(X) {
 as.owin.quadratcount <- function(W, ..., fatal=TRUE) {
   return(as.owin(as.tess(W), ..., fatal=fatal))
 }
-  
+
 intensity.quadratcount <- function(X, ..., image=FALSE) {
-  intensities <- X/tile.areas(as.tess(X))
+  Y <- as.tess(X)
+  a <- tile.areas(Y)
+  ## in the rectangular case, tiles are indexed in column-major order
+  if(Y$type == "rect" && length(dim(X)) > 1) 
+    a <- matrix(a, byrow=TRUE, nrow(X), ncol(X))
+  lambda <- X/a
   if(!image) {
     trap.extra.arguments(...)
-    class(intensities) <- "table"
-    return(intensities)
+    class(lambda) <- "table"
+    attr(lambda, "tess") <- NULL
+    return(lambda)
   }
-  intensities <- as.numeric(intensities)
-  tileindex <- as.im(as.tess(X), ...)
-  result <- eval.im(intensities[tileindex])
+  ## again to handle rectangular case
+  lambda <- as.vector(t(lambda))
+  tileid <- as.im(Y, ...)
+  result <- eval.im(lambda[tileid])
   return(result)
 }
 

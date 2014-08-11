@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.77 $   $Date: 2014/01/29 05:07:10 $
+#  $Revision: 1.84 $   $Date: 2014/05/08 05:23:48 $
 #
 #  Plotting code for pixel images
 #
@@ -55,13 +55,15 @@ plot.im <- local({
   
   # main function
   PlotIm <- function(x, ...,
-                     col=NULL, valuesAreColours=NULL, add=FALSE, log=FALSE,
+                     main, 
+                     add=FALSE, clipwin=NULL,
+                     col=NULL, valuesAreColours=NULL, log=FALSE,
                      ribbon=show.all, show.all=!add,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), colargs=list(),
                      do.plot=TRUE) {
-    main <- short.deparse(substitute(x))
+    if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
     ribside <- match.arg(ribside)
     col.given <- !is.null(col)
@@ -69,6 +71,11 @@ plot.im <- local({
 
     stopifnot(is.list(ribargs))
 
+    if(!is.null(clipwin)) {
+      x <- x[as.rectangle(clipwin)]
+      if(!is.rectangle(clipwin)) x <- x[clipwin, drop=FALSE]
+    }
+    
     zlim <- dotargs$zlim
 
     x <- repair.image.xycoords(x)
@@ -440,7 +447,7 @@ plot.im <- local({
                             bb$yrange[1] - c(ribsep+ribwid, ribsep) * Size)
              rib.iside <- 1
            })
-    bb.all <- bounding.box(bb.rib, bb)
+    bb.all <- boundingbox(bb.rib, bb)
 
     attr(output.colmap, "bbox") <- bb.all
     if(!do.plot)
@@ -652,16 +659,19 @@ persp.im <- function(x, ..., colmap=NULL) {
   } else 
     zscale <- zlim <- NULL
 
-  do.call.matched("persp",
-                  resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
-                                   list(...),
-                                   pop,
-                                   colinfo,
-                                   list(xlab="x", ylab="y", zlab=xname),
-                                   list(scale=FALSE, expand=zscale, zlim=zlim),
-                                   list(main=xname),
-                                   .StripNull=TRUE),
-                  funargs=.Spatstat.persp.args)
+  jawab <-
+    do.call.matched("persp",
+                    resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+                                     list(...),
+                                     pop,
+                                     colinfo,
+                                     list(xlab="x", ylab="y", zlab=xname),
+                                     list(scale=FALSE, expand=zscale,
+                                          zlim=zlim),
+                                     list(main=xname),
+                                     .StripNull=TRUE),
+                    funargs=.Spatstat.persp.args)
+  return(invisible(jawab))
 }
 
 .Spatstat.persp.args <- list("x", "y", "z",
@@ -675,9 +685,15 @@ persp.im <- function(x, ..., colmap=NULL) {
 
 ######################################################################
 
-contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
+contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
+                        clipwin=NULL, show.all=!add, do.plot=TRUE)
 {
   defaultmain <- deparse(substitute(x))
+  ## return value
+  z <- as.rectangle(x)
+  attr(z, "bbox") <- z
+  if(!do.plot) return(z)
+  ## 
   sop <- spatstat.options("par.contour")
   if(missing(main)) 
     main <- resolve.defaults(sop, list(main=defaultmain))$main
@@ -685,21 +701,22 @@ contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
     add <- resolve.defaults(sop, list(add=FALSE))$add
   if(missing(axes))
      axes <- resolve.defaults(sop, list(axes=TRUE))$axes
-  if(!add) {
-    # new plot
+  if(!is.null(clipwin))
+    x <- x[clipwin, drop=FALSE]
+  if(show.all) {
     if(axes) # with axes
       do.call.plotfun("plot.default",
                       resolve.defaults(
                                        list(x = range(x$xcol),
                                             y = range(x$yrow),
-                                            type = "n"),
+                                            type = "n", add=add),
                                        list(...),
                                        list(asp = 1, xlab = "x",
                                             ylab = "y", main = main)))
     else { # box without axes
       rec <- owin(x$xrange, x$yrange)
       do.call.matched("plot.owin",
-                      resolve.defaults(list(x=rec),
+                      resolve.defaults(list(x=rec, add=add),
                                        list(...),
                                        list(main=main)))
     }
@@ -708,6 +725,7 @@ contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
                   resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
                                    list(add=TRUE),
                                    list(...)))
-  return(invisible(NULL))
+  return(invisible(z))
 }
+
 

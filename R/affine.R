@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.45 $	$Date: 2014/01/31 10:56:14 $
+#	$Revision: 1.46 $	$Date: 2014/03/26 03:06:34 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -77,13 +77,13 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
          },
          mask={
            # binary mask
-           newframe <- bounding.box.xy(affinexy(corners(X), mat, vec))
+           newframe <- boundingbox(affinexy(corners(X), mat, vec))
            W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
                    as.mask(newframe, eps=with(X, min(xstep, ystep)))
            pixelxy <- raster.xy(W)
            xybefore <- affinexy(pixelxy, mat, vec, invert=TRUE)
            W$m[] <- with(xybefore, inside.owin(x, y, X))
-           W <- intersect.owin(W, bounding.box(W))
+           W <- intersect.owin(W, boundingbox(W))
            if(rescue)
              W <- rescue.rectangle(W)
            return(W)
@@ -140,7 +140,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
   } else {
     # general case
     # create box containing transformed image
-    newframe <- bounding.box.xy(affinexy(corners(X), mat, vec))
+    newframe <- boundingbox(affinexy(corners(X), mat, vec))
     W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
     as.mask(newframe, eps=with(X, min(xstep, ystep)))
     unitname(W) <- newunits
@@ -302,6 +302,12 @@ getlastshift <- function(X) {
          call.=FALSE)
   return(v)
 }
+
+putlastshift <- function(X, vec) {
+  attr(X, "lastshift") <- vec
+  return(X)
+}
+
 
 ### ---------------------- scalar dilation ---------------------------------
 

@@ -45,7 +45,7 @@
     stop("rcluster[[2]] should be a function")
 
   # Generate parents in dilated window
-  frame <- bounding.box(win)
+  frame <- boundingbox(win)
   dilated <- grow.rectangle(frame, rmax)
   if(is.im(kappa) && !is.subset.owin(dilated, as.owin(kappa)))
     stop(paste("The window in which the image",

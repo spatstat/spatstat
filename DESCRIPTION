@@ -1,15 +1,15 @@
 Package: spatstat
-Version: 1.36-0
-Nickname: Intense Scrutiny
-Date: 2014-02-18
+Version: 1.37-0
+Nickname: Model Prisoner
+Date: 2014-05-09
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
-Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au> 
-	and Rolf Turner <r.turner@auckland.ac.nz> 
+Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
+	Rolf Turner <r.turner@auckland.ac.nz> 
+        and Ege Rubak <rubak@math.aau.dk>,
 	with substantial contributions of code by 
 	Kasper Klitgaard Berthelsen;
 	Abdollah Jalilian;
 	Marie-Colette van Lieshout;
-	Ege Rubak; 
 	Dominic Schuhmacher;
 	and 
 	Rasmus Waagepetersen.
@@ -43,6 +43,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	I. Dryden; 
 	S. Eglen; 
         O. Flores;
+        P. Forbes;
 	N. Funwi-Gabga;
 	O. Garcia;
 	A. Gault; 
@@ -118,6 +119,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
         K. Ummer;
 	A. van Burgel; 
 	T. Verbeke; 
+        M. Vihtakari;
 	A. Villers; 
         F. Vinatier;
 	H. Wang; 
@@ -129,12 +131,12 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 Depends: R (>= 3.0.2), stats, graphics, grDevices, utils
-Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.2-0)
+Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.3-0)
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
         scatterplot3d, RandomFields (>= 3.0.0)
-Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, and space-time point patterns in any number of dimensions. 
+Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, and point patterns on a linear network. 
 	Contains over 1500 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
-	Data types include point patterns, line segment patterns, spatial windows, pixel images and tessellations. 
+	Data types include point patterns, line segment patterns, spatial windows, pixel images, tessellations, and linear networks. 
 	Exploratory methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Diggle-Cressie-Loosmore-Ford, Dao-Genton) and tests for covariate effects (Cox-Berman-Waller-Lawson, Kolmogorov-Smirnov) are also supported.
 	Parametric models can be fitted to point pattern data using the functions ppm, kppm, slrm similar to glm. Types of models include Poisson, Gibbs, Cox and cluster point processes. Models may involve dependence on covariates, interpoint interaction, cluster formation and dependence on marks. Models are fitted by maximum likelihood, logistic regression, minimum contrast, and composite likelihood methods. 
 	Fitted point process models can be simulated, automatically. Formal hypothesis tests of a fitted model are supported (likelihood ratio test, analysis of deviance, Monte Carlo tests) along with basic tools for model selection (stepwise, AIC). Tools for validating the fitted model include simulation envelopes, residuals, residual plots and Q-Q plots, leverage and influence diagnostics, partial residuals, and added variable plots.
@@ -143,6 +145,6 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2014-02-18 05:14:55 UTC; adrian
+Packaged: 2014-05-09 02:56:49 UTC; adrian
 Repository: CRAN
-Date/Publication: 2014-02-18 08:44:46
+Date/Publication: 2014-05-09 11:24:31

@@ -121,7 +121,7 @@ rmhsnoop <- local({
     if(is.mask(Wclip)) {
       parg.Wclip <- list(invert=TRUE, col="grey")
     } else {
-      Wclip <- as.psp(Wclip) 
+      Wclip <- edges(Wclip) 
       parg.Wclip <- list(lty=3, lwd=2, col="grey")
     }
     parg.birth <- list(pch=16, cols="green")
@@ -154,7 +154,7 @@ rmhsnoop <- local({
                propname <- "birth proposal"
                U <- ppp(proplocn[1], proplocn[2], window=Wsim)
                D <- if(is.finite(R) && R > 0) {
-                 as.psp(disc(R, proplocn))[Wsim]
+                 edges(disc(R, proplocn))[Wsim]
                } else NULL
                L <- layered(Wsim=Wsim,
                             Wclip=Wclip,
@@ -172,7 +172,7 @@ rmhsnoop <- local({
                XminI <- X[-propindx]
                XI <- X[propindx]
                D <- if(is.finite(R) && R > 0) {
-                 as.psp(disc(R, c(XI$x, XI$y)))[Wsim]
+                 edges(disc(R, c(XI$x, XI$y)))[Wsim]
                } else NULL
                L <- layered(Wsim=Wsim,
                             Wclip=Wclip,
@@ -193,8 +193,8 @@ rmhsnoop <- local({
                XI <- X[propindx]
                U <- ppp(proplocn[1], proplocn[2], window=Wsim)
                if(is.finite(R) && R > 0) {
-                 DU <- as.psp(disc(R, proplocn))[Wsim]
-                 DXI <- as.psp(disc(R, c(XI$x, XI$y)))[Wsim]
+                 DU <- edges(disc(R, proplocn))[Wsim]
+                 DXI <- edges(disc(R, c(XI$x, XI$y)))[Wsim]
                } else { DU <- DXI <- NULL }
                # make layers
                L <- layered(Wsim=Wsim,

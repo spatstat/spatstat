@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.34 $  $Date: 2013/12/15 11:24:31 $
+#  $Revision: 1.43 $  $Date: 2014/03/31 04:14:23 $
 #
 
 leverage <- function(model, ...) {
@@ -11,11 +11,11 @@ leverage <- function(model, ...) {
 }
 
 leverage.ppm <- function(model, ...,
-                         drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=list())
+                         drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  u <- list(fit=model, fitname=fitname)
-  s <- ppm.influence(model, what="leverage", drop=drop,
+  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  s <- ppmInfluence(model, what="leverage", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                          ...)
   a <- append(u, s)
@@ -24,11 +24,11 @@ leverage.ppm <- function(model, ...,
 }
 
 influence.ppm <- function(model, ...,
-                          drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=list())
+                          drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  u <- list(fit=model,fitname=fitname)
-  s <- ppm.influence(model, what="influence", drop=drop,
+  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  s <- ppmInfluence(model, what="influence", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                          ...)
   a <- append(u, s)
@@ -37,10 +37,10 @@ influence.ppm <- function(model, ...,
 }
 
 dfbetas.ppm <- function(model, ...,
-                        drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=list()) {
+                        drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL) {
   fitname <- short.deparse(substitute(model))
-  u <- list(fit=model,fitname=fitname)
-  s <- ppm.influence(model, what="dfbetas", drop=drop,
+  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  s <- ppmInfluence(model, what="dfbetas", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                      ...)
   a <- s$dfbetas
@@ -48,22 +48,25 @@ dfbetas.ppm <- function(model, ...,
   return(a)
 }
 
-ppm.influence <- function(fit,
+
+ppmInfluence <- function(fit,
                           what=c("leverage", "influence", "dfbetas",
                             "derivatives", "increments"),
-                          ..., iScore=NULL, iHessian=NULL, iArgs=list(),
+                          ..., iScore=NULL, iHessian=NULL, iArgs=NULL,
                           drop=FALSE,
                           method=c("C", "interpreted"),
                           precomputed=list()) {
   stopifnot(is.ppm(fit))
   what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
+  if(is.null(iArgs))
+    iArgs <- fit$covfunargs
   gotScore <- !is.null(iScore)
   gotHess <- !is.null(iHessian)
-  needHess <- gotScore && any(what %in% c("leverage", "influence", "dfbetas"))
+  influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
+  needHess <- gotScore && influencecalc
   if(!gotHess && needHess)
     stop("Must supply iHessian")
-  #
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
     stop("ppm influence measures are not yet implemented for method=logi")
   #
@@ -99,30 +102,30 @@ ppm.influence <- function(fit,
   }
   #
   # 
-  if(!is.null(iScore)) {
-    # evaluate additional (`irregular') components of score
-    iscoredf <- mpl.get.covariates(iScore, loc, covfunargs=iArgs)
-    iscoremat <- as.matrix(iscoredf)
-    # count regular and irregular parameters
+  ## evaluate additional (`irregular') components of score
+  iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
+  gotScore <- !is.null(iscoremat)
+  needHess <- gotScore && influencecalc
+  if(gotScore) {
+    ## count regular and irregular parameters
     nreg <- ncol(mom)
     nirr <- ncol(iscoremat)
-    # add extra columns to model matrix
+    ## add extra columns to model matrix
     mom <- cbind(mom, iscoremat)
-    # add extra planes of zeroes to second-order model matrix
-    # (zero because the irregular components are part of the trend)
+    REG <- 1:nreg
+    IRR <- nreg + 1:nirr
+    ## add extra planes of zeroes to second-order model matrix
+    ## (zero because the irregular components are part of the trend)
     if(!is.null(ddS)) {
       paddim <- c(dim(ddS)[1:2], nirr)
       ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
     }
-    # evaluate additional (`irregular') entries of Hessian
-    if(gotHess) {
-      ihessdf <- mpl.get.covariates(iHessian, loc, covfunargs=iArgs)
-      ihessmat <- as.matrix(ihessdf)
-    }
-    # recompute negative Hessian of log PL and its mean
+    ## evaluate additional (`irregular') entries of Hessian
+    ihessmat <- ppmDerivatives(fit, "hessian", iHessian, loc, covfunargs=iArgs)
+    if(gotHess <- !is.null(ihessmat))
+    ## recompute negative Hessian of log PL and its mean
     fush <- hessextra <- matrix(0, ncol(mom), ncol(mom))
-    sub <- nreg + 1:nirr
-    # integral over domain
+    ## integral over domain
     switch(method,
            interpreted = {
              for(i in seq(loc$n)) {
@@ -139,7 +142,7 @@ ppm.influence <- function(fit,
                  if(gotHess) {
                    v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) * wti
                    if(all(is.finite(v2)))
-                     hessextra[sub, sub] <- hessextra[sub, sub] + v2
+                     hessextra[IRR, IRR] <- hessextra[IRR, IRR] + v2
                  }
                }
              }
@@ -148,7 +151,7 @@ ppm.influence <- function(fit,
                for(i in which(isdata)) {
                  v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) 
                  if(all(is.finite(v2)))
-                   hessextra[sub, sub] <- hessextra[sub, sub] - v2
+                   hessextra[IRR, IRR] <- hessextra[IRR, IRR] - v2
                }
                hess <- fush + hessextra
                invhess <- solve(hess)
@@ -170,8 +173,8 @@ ppm.influence <- function(fit,
                                  sum(isdata), ncol(ihessmat),
                                  na.rm=TRUE)
                vcontrib <- vintegral - vdata
-               hessextra[sub, sub] <-
-                 hessextra[sub, sub] + matrix(vcontrib, nirr, nirr)
+               hessextra[IRR, IRR] <-
+                 hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
                hess <- fush + hessextra
                invhess <- solve(hess)
              } else {
@@ -226,7 +229,7 @@ ppm.influence <- function(fit,
     momchange[ , isdata, ] <- - momchange[, isdata, ]
     momafter <- mombefore + momchange
     # effect of addition/deletion of U[j] on lambda(U[i], X)
-    lamratio <- exp(tensor::tensor(momchange, theta, 3, 1))
+    lamratio <- exp(tensor::tensor(momchange[,,REG], theta, 3, 1))
     lamratio <- array(lamratio, dim=dim(momafter))
     # integrate 
     ddSintegrand <- lam * (momafter * lamratio - mombefore)
@@ -268,7 +271,7 @@ ppm.influence <- function(fit,
     # values of leverage (diagonal) at points of 'loc'
     h <- b * lam
     levval <- loc %mark% h
-    levsmo <- Smooth(levval, sigma=max(nndist(loc)))
+    levsmo <- Smooth(levval, sigma=maxnndist(loc))
     # nominal mean level
     a <- area.owin(loc$window)
     levmean <- p/a
@@ -306,7 +309,43 @@ ppm.influence <- function(fit,
   return(result)
 }
 
-plot.leverage.ppm <- function(x, ..., showcut=TRUE) {
+## extract derivatives from covariate functions
+## WARNING: these are not the score components in general
+
+ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
+                            Dcovfun=NULL, loc, covfunargs=list()) {
+  what <- match.arg(what)
+  if(!is.null(Dcovfun)) {
+    ## use provided function Dcov to compute derivatives
+    Dvalues <- mpl.get.covariates(Dcovfun, loc, covfunargs=covfunargs)
+    result <- as.matrix(as.data.frame(Dvalues))
+    return(result)
+  }
+  ## any irregular parameters?
+  if(length(covfunargs) == 0)
+    return(NULL)
+  ## Try to extract derivatives from covariate functions
+  ## This often works if the functions were created by symbolic differentiation
+  fvalues <- mpl.get.covariates(fit$covariates, loc, covfunargs=covfunargs,
+                                need.deriv=TRUE)
+  Dlist <- attr(fvalues, "derivatives")[[what]]
+  if(length(Dlist) == 0)
+    return(NULL)
+  switch(what,
+         gradient = {
+           result <- do.call("cbind", unname(lapply(Dlist, as.data.frame)))
+           result <- as.matrix(result)
+         },
+         hessian = {
+           ## construct array containing Hessian matrices
+           biga <- do.call(blockdiagarray, Dlist)
+           ## flatten matrices 
+           result <- matrix(biga, nrow=dim(biga)[1])
+         })
+  return(result)
+}
+
+plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
   fitname <- x$fitname
   defaultmain <- paste("Leverage for", fitname)
   y <- x$lev
@@ -315,7 +354,13 @@ plot.leverage.ppm <- function(x, ..., showcut=TRUE) {
                            list(...),
                            list(main=defaultmain)))
   if(showcut) 
-    contour(y$smo, levels=y$ave, add=TRUE, drawlabels=FALSE)
+    do.call.matched("contour.im",
+                    resolve.defaults(list(x=y$smo, levels=y$ave,
+                                          add=TRUE, col=col.cut),
+                                     list(...),
+                                     list(drawlabels=FALSE)),
+                    extrargs=c("levels", "drawlabels",
+                      "labcex", "col", "lty", "lwd", "frameplot"))
   invisible(NULL)
 }
 
@@ -336,6 +381,14 @@ as.ppp.influence.ppm <- function(X, ...) {
   return(X$infl)
 }
 
+as.owin.leverage.ppm <- function(W, ..., fatal=TRUE) {
+  as.owin(as.im(W), ..., fatal=fatal)
+}
+
+as.owin.influence.ppm <- function(W, ..., fatal=TRUE) {
+  as.owin(as.ppp(W), ..., fatal=fatal)
+}
+
 print.leverage.ppm <- function(x, ...) {
   cat("Point process leverage function\n")
   fitname <- x$fitname
@@ -345,7 +398,8 @@ print.leverage.ppm <- function(x, ...) {
   print(lev$val)
   cat("\nSmoothed values:\n")
   print(lev$smo)
-  if(is.poisson(x$fit))
+  ## for compatibility we retain the x$fit usage
+  if(x$fit.is.poisson %orifnull% is.poisson(x$fit))
     cat(paste("\nAverage value:", lev$ave, "\n"))
   return(invisible(NULL))
 }
@@ -358,3 +412,34 @@ print.influence.ppm <- function(x, ...) {
   print(x$infl)
   return(invisible(NULL))
 }
+
+"[.leverage.ppm" <- function(x, i, ...) {
+  if(missing(i)) return(x)
+  y <- x$lev
+  y$smo <- vi <- y$smo[i, ...]
+  if(!is.im(vi)) return(vi)
+  y$val <- y$val[i, ...]
+  x$lev <- y
+  return(x)
+}
+
+"[.influence.ppm" <- function(x, i, ...) {
+  if(missing(i)) return(x)
+  y <- x$infl[i, ...]
+  if(!is.ppp(y)) return(y)
+  x$infl <- y
+  return(x)
+}
+
+shift.leverage.ppm <- function(X, ...) {
+  vec <- getlastshift(shift(as.owin(X), ...))
+  X$lev$val <- shift(X$lev$val, vec=vec)
+  X$lev$smo <- shift(X$lev$smo, vec=vec)
+  return(putlastshift(X, vec))
+}
+
+shift.influence.ppm <- function(X, ...) {
+  X$infl <- shift(X$infl, ...)
+  return(putlastshift(X, getlastshift(X$infl)))
+}
+

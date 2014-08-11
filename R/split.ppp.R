@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.20 $ $Date: 2014/01/13 00:32:05 $
+# $Revision: 1.22 $ $Date: 2014/04/21 10:45:34 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -272,4 +272,12 @@ print.summary.splitppp <- function(x, ...) {
   
 density.splitppp <- function(x, ...) {
   as.listof(lapply(x, density, ...))
+}
+
+plot.splitppp <- function(x, ..., main) {
+  if(missing(main)) main <- short.deparse(substitute(x))
+  do.call("plot.listof",
+          resolve.defaults(list(x=x, main=main),
+                           list(...),
+                           list(equal.scales=TRUE)))
 }

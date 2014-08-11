@@ -1,4 +1,6 @@
 \name{spatstat-deprecated}
+\alias{as.psp.owin}
+\alias{bounding.box}
 \alias{clf.test}
 \alias{conspire}
 \alias{eval.hyper}
@@ -16,6 +18,9 @@
   Deprecated spatstat functions.
 }
 \usage{
+\method{as.psp}{owin}(x, \dots, window=NULL, 
+       check=spatstat.options("checksegments"), fatal=TRUE)
+bounding.box(\dots)
 clf.test(\dots)
 conspire(\dots)
 ksmooth.ppp(x, sigma, \dots, edge=TRUE)
@@ -33,6 +38,13 @@ which.max.im(x)
 }
 
 \details{
+  These functions are deprecated, and will eventually be deleted from
+  the \pkg{spatstat} package.
+  
+  \code{as.psp.owin} has been replaced by \code{\link{edges}}.
+  
+  \code{bounding.box} has been replaced by \code{\link{boundingbox}}.
+  
   \code{clf.test} has been renamed \code{\link{dclf.test}}.
 
   \code{conspire} has been replaced by \code{\link{plot.fv}}.

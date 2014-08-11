@@ -146,7 +146,7 @@ edge.Ripley <- local({
                       weight <- matrix(z$out, nrow=Nr, ncol=Nc)
                     },
                     polygonal={
-                      Y <- as.psp(W)
+                      Y <- edges(W)
                       z <- .C("ripleypoly",
                               nc=as.integer(n),
                               xc=as.double(x),

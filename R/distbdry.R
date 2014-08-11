@@ -159,7 +159,7 @@ rebound.owin <- function(x, rect) {
     return(emptywindow(rect))
   verifyclass(w, "owin")
   if(!is.subset.owin(as.rectangle(w), rect)) {
-    bb <- bounding.box(w)
+    bb <- boundingbox(w)
     if(!is.subset.owin(bb, rect))
       stop(paste("The new rectangle",
                  sQuote("rect"),

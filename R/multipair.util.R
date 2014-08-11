@@ -1,17 +1,16 @@
-#
-#
-#    multipair.util.R
-#
-#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
-#
-#    Utilities for multitype pairwise interactions
-#	
-# -------------------------------------------------------------------
-#	
-
+##
+##
+##    multipair.util.R
+##
+##    $Revision: 1.13 $	$Date: 2014/04/29 01:13:35 $
+##
+##    Utilities for multitype pairwise interactions
+##	
+## -------------------------------------------------------------------
+##	
 
 MultiPair.checkmatrix <-
-  function(mat, n, matname, naok=TRUE, zerook=TRUE) {
+  function(mat, n, matname, naok=TRUE, zerook=TRUE, asymmok=FALSE) {
     if(missing(matname))
       matname <- short.deparse(substitute(mat))
     if(!is.matrix(mat))
@@ -26,7 +25,7 @@ MultiPair.checkmatrix <-
       stop(paste("Negative entries not allowed in", matname))
     if(!zerook && any(mat[!isna] == 0))
       stop(paste("Zero entries not allowed in", matname))
-    if(!isSymmetric(mat))
+    if(!asymmok && !isSymmetric(mat))
       stop(paste(matname, "must be a symmetric matrix"))
   }
 

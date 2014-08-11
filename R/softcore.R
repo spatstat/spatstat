@@ -2,7 +2,7 @@
 #
 #    softcore.S
 #
-#    $Revision: 2.12 $   $Date: 2012/08/27 02:09:49 $
+#    $Revision: 2.13 $   $Date: 2014/04/14 03:53:40 $
 #
 #    Soft core processes.
 #
@@ -40,7 +40,7 @@ Softcore <- local({
            # not enough points to make any decisions
            return(self)
          }
-         md <- min(nndist(X))
+         md <- minnndist(X)
          if(md == 0) {
            warning(paste("Pattern contains duplicated points:",
                          "impossible under Softcore model"))
@@ -74,7 +74,7 @@ Softcore <- local({
            sigma <- sigma * sig0
          return(list(param=list(sigma=sigma),
                      inames="interaction parameter sigma",
-                     printable=sigma))
+                     printable=signif(sigma,4)))
        },
        valid = function(coeffs, self) {
          theta <- coeffs[1]

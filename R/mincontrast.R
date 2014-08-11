@@ -136,55 +136,53 @@ print.minconfit <- function(x, ...) {
   da <- x$info$dataname
   cm <- x$covmodel
   if(!is.null(mo))
-    cat(paste("Model:", mo, "\n"))
+    cat("Model:", mo, fill=TRUE)
   if(!is.null(cm)) {
     # Covariance/kernel model and nuisance parameters 
-    cat(paste("\t", cm$type, "model:", cm$model, "\n"))
+    cat("\t", cm$type, "model:", cm$model, fill=TRUE)
     margs <- cm$margs
     if(!is.null(margs)) {
       nama <- names(margs)
       tags <- ifelse(nzchar(nama), paste(nama, "="), "")
       tagvalue <- paste(tags, margs)
-      cat(paste("\t", cm$type, "parameters:",
-                paste(tagvalue, collapse=", "),
-                "\n"))
+      splat("\t", cm$type, "parameters:",
+            paste(tagvalue, collapse=", "))
     }
   }
   if(!is.null(fu) && !is.null(da))
-    cat(paste("Fitted by matching theoretical", fu, "function to", da))
+    splat("Fitted by matching theoretical", fu, "function to", da)
   else {
     if(!is.null(fu))
-      cat(paste(" based on", fu))
+      splat(" based on", fu)
     if(!is.null(da))
-      cat(paste(" fitted to", da))
+      splat(" fitted to", da)
   }
-  cat("\n")
   # Values
-  cat("Parameters fitted by minimum contrast ($par):\n")
+  splat("Parameters fitted by minimum contrast ($par):")
   print(x$par, ...)
   mp <- x$modelpar
   if(!is.null(mp)) {
-    cat(paste("Derived parameters of",
-              if(!is.null(mo)) mo else "model",
-              "($modelpar):\n"))
+    splat("Derived parameters of",
+          if(!is.null(mo)) mo else "model",
+          "($modelpar):")
     print(mp)
   }
   # Diagnostics
   printStatus(optimStatus(x$opt))
   # Starting values
-  cat("Starting values of parameters:\n")
+  splat("Starting values of parameters:")
   print(x$startpar)
   # Algorithm parameters
   ct <- x$ctrl
-  cat(paste("Domain of integration:",
-            "[",
-            signif(ct$rmin,4),
-            ",",
-            signif(ct$rmax,4),
-            "]\n"))
-  cat(paste("Exponents:",
-            "p=", paste(signif(ct$p, 3), ",",  sep=""),
-            "q=", signif(ct$q,3), "\n"))
+  splat("Domain of integration:",
+        "[",
+        signif(ct$rmin,4),
+        ",",
+        signif(ct$rmax,4),
+        "]")
+  splat("Exponents:",
+        "p=", paste(signif(ct$p, 3), ",",  sep=""),
+        "q=", signif(ct$q,3))
   invisible(NULL)
 }
               
@@ -499,18 +497,26 @@ printStatusList <- function(stats) {
          # Log Gaussian Cox process: par = (sigma2, alpha)
          modelname = "Log-Gaussian Cox process",
          isPCP=FALSE,
-         # calls Covariance() from RandomFields package
+         # calls relevant covariance function from RandomFields package
          K = function(par, rvals, ..., model, margs) {
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
-             # For efficiency
+             # For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
-             # RandomFields must be loaded (this is checked by parhandler)
-             integrand <- function(r,par,model,margs)
-               2*pi *r *exp(Covariance(r,model=model,
-                                       param=c(0.0,par[1],0.0,par[2],margs)))
+             # use RandomFields 
+             integrand <- function(r,par,model,margs) {
+               modgen <- attr(model, "modgen")
+               if(length(margs) == 0) {
+                 mod <- modgen(var=par[1], scale=par[2])
+               } else {
+                 mod <- do.call(modgen,
+                                append(list(var=par[1], scale=par[2]),
+                                       margs))
+               }
+               2*pi *r *exp(RFcov(model=mod, x=r))
+             }
            }
            nr <- length(rvals)
            th <- numeric(nr)
@@ -543,8 +549,15 @@ printStatusList <- function(stats) {
              # For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
-             gtheo <- exp(Covariance(rvals,model=model,
-                                     param=c(0.0,par[1],0.0,par[2],margs)))
+             modgen <- attr(model, "modgen")
+             if(length(margs) == 0) {
+               mod <- modgen(var=par[1], scale=par[2])
+             } else {
+               mod <- do.call(modgen,
+                              append(list(var=par[1], scale=par[2]),
+                                     margs))
+             }
+             gtheo <- exp(RFcov(model=mod, x=rvals))
            }
            return(gtheo)
          },
@@ -555,12 +568,14 @@ printStatusList <- function(stats) {
            if(model != "exponential") {
              if(!require(RandomFields))
                stop("The package RandomFields is required")
-             # check validity
-             ok <- try(Covariance(0, model=model,param=c(0,1,0,1,margs)))
-             if(inherits(ok, "try-error"))
-               stop("Error in evaluating Covariance")
+             ## get the 'model generator' 
+             modgen <- mget(paste0("RM", model), inherits=TRUE,
+                           ifnotfound=list(NULL))[[1]]
+             if(is.null(modgen) || !inherits(modgen, "RMmodelgenerator"))
+               stop(paste("Model", sQuote(model), "is not recognised"))
+             attr(model, "modgen") <- modgen
            }
-           return(list(type="Covariance",model=model, margs=margs))
+           return(list(type="Covariance", model=model, margs=margs))
          },
          # sensible starting values
          selfstart = function(X) {
@@ -602,7 +617,7 @@ thomas.estK <- function(X, startpar=c(kappa=1,sigma2=1),
 
   if(inherits(X, "fv")) {
     K <- X
-    if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
+    if(!identical(attr(K, "fname")[1], "K"))
       warning("Argument X does not appear to be a K-function")
   } else if(inherits(X, "ppp")) {
     K <- Kest(X)
@@ -643,7 +658,7 @@ lgcp.estK <- function(X, startpar=c(sigma2=1,alpha=1),
   
   if(inherits(X, "fv")) {
     K <- X
-    if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
+    if(!identical(attr(K, "fname")[1], "K"))
       warning("Argument X does not appear to be a K-function")
   } else if(inherits(X, "ppp")) {
     K <- Kest(X)
@@ -694,7 +709,7 @@ matclust.estK <- function(X, startpar=c(kappa=1,R=1),
 
   if(inherits(X, "fv")) {
     K <- X
-    if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
+    if(!identical(attr(K, "fname")[1], "K"))
       warning("Argument X does not appear to be a K-function")
   } else if(inherits(X, "ppp")) {
     K <- Kest(X)
@@ -741,7 +756,7 @@ thomas.estpcf <- function(X, startpar=c(kappa=1,sigma2=1),
 
   if(inherits(X, "fv")) {
     g <- X
-    if(!(attr(g, "fname") %in% c("g", "g[inhom]")))
+    if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
     g <- do.call("pcf.ppp", append(list(X), pcfargs))
@@ -790,7 +805,7 @@ matclust.estpcf <- function(X, startpar=c(kappa=1,R=1),
 
   if(inherits(X, "fv")) {
     g <- X
-    if(!(attr(g, "fname") %in% c("g", "g[inhom]")))
+    if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
     g <- do.call("pcf.ppp", append(list(X), pcfargs))
@@ -841,7 +856,7 @@ lgcp.estpcf <- function(X, startpar=c(sigma2=1,alpha=1),
   
   if(inherits(X, "fv")) {
     g <- X
-    if(!(attr(g, "fname") %in% c("g", "g[inhom]")))
+    if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
     g <- do.call("pcf.ppp", append(list(X), pcfargs))
@@ -895,7 +910,7 @@ cauchy.estK <- function(X, startpar=c(kappa=1,eta2=1),
 
   if(inherits(X, "fv")) {
     K <- X
-    if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
+    if(!identical(attr(K, "fname")[1], "K"))
       warning("Argument X does not appear to be a K-function")
   } else if(inherits(X, "ppp")) {
     K <- Kest(X)
@@ -941,7 +956,7 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,eta2=1),
 
   if(inherits(X, "fv")) {
     g <- X
-    if(!(attr(g, "fname") %in% c("g", "g[inhom]")))
+    if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
     g <- do.call("pcf.ppp", append(list(X), pcfargs))
@@ -1016,7 +1031,7 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
   
   if(inherits(X, "fv")) {
     K <- X
-    if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
+    if(!identical(attr(K, "fname")[1], "K"))
       warning("Argument X does not appear to be a K-function")
   } else if(inherits(X, "ppp")) {
     K <- Kest(X)
@@ -1073,7 +1088,7 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
 
   if(inherits(X, "fv")) {
     g <- X
-    if(!(attr(g, "fname") %in% c("g", "g[inhom]")))
+    if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
     g <- do.call("pcf.ppp", append(list(X), pcfargs))

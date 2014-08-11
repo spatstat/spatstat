@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.8 $  $Date: 2013/06/19 09:45:35 $
+#   $Revision: 1.9 $  $Date: 2014/04/17 08:45:16 $
 #
 #  Logistic likelihood method - under development
 #
@@ -64,6 +64,7 @@ logi.engine <- function(Q,
     if(is.null(Dinfo)){
       Dinfo <- list(how="given", rho=npoints(D)/(area.owin(D)*markspace.integral(D)))
     }
+    Q <- quadscheme.logi(Xplus, D)
   } else stop("Format of object Q is not understood")
   if (justQ) 
     return(Q)
@@ -179,7 +180,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2013/06/19 09:45:35 $")
+                      date="$Date: 2014/04/17 08:45:16 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -231,7 +232,7 @@ logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALS
   }
   W <- as.owin(X)
   type <- match.arg(dummytype, c("stratrand", "binomial", "poisson", "grid", "transgrid"))
-  B <- bounding.box(W)
+  B <- boundingbox(W)
   rho <- nd[1]*nd[2]/area.owin(B)
   Dinfo <- list(nd=nd, rho=rho, how=type)
   ## Repeating dummy process for each mark type 1:N (only once if unmarked or mark.repeat = FALSE)

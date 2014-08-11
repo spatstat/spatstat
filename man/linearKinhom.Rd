@@ -76,7 +76,7 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
   Geometrically corrected second-order analysis of 
   events on a linear network, with applications to
   ecology and criminology.
-  To appear in \emph{Scandinavian Journal of Statistics}.
+  \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 }
 \seealso{
   \code{\link{lpp}}

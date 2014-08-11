@@ -3,7 +3,7 @@
 #
 #  cut method for ppp objects
 #
-#  $Revision: 1.12 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.13 $   $Date: 2014/03/12 02:12:20 $
 #
 
 cut.ppp <- function(x, z=marks(x), ...) {
@@ -42,47 +42,10 @@ cut.ppp <- function(x, z=marks(x), ...) {
     return(cut(x, z[x, drop=FALSE], ...))
 
   if(is.tess(z)) {
-    switch(z$type,
-           rect={
-             jx <- findInterval(x$x, z$xgrid, rightmost.closed=TRUE)
-             iy <- findInterval(x$y, z$ygrid, rightmost.closed=TRUE)
-             nrows    <- length(z$ygrid) - 1
-             ncols <- length(z$xgrid) - 1
-             jcol <- jx
-             irow <- nrows - iy + 1
-             ktile <- jcol + ncols * (irow - 1)
-             m <- factor(ktile, levels=seq_len(nrows*ncols))
-             ij <- expand.grid(j=seq_len(ncols),i=seq_len(nrows))
-             levels(m) <- paste("Tile row ", ij$i, ", col ", ij$j, sep="")
-           },
-           tiled={
-             todo <- seq_len(npoints(x))
-             nt <- length(z$tiles)
-             m <- integer(x$n)
-             for(i in 1:nt) {
-               ti <- z$tiles[[i]]
-               hit <- inside.owin(x$x[todo], x$y[todo], ti)
-               if(any(hit)) {
-                 m[todo[hit]] <- i
-                 todo <- todo[!hit]
-               }
-               if(length(todo) == 0)
-                 break
-             }
-             m[m == 0] <- NA
-             nama <- names(z$tiles)
-             lev <- seq_len(nt)
-             lab <- if(!is.null(nama) && all(nzchar(nama))) nama else paste("Tile", lev)
-             m <- factor(m, levels=lev, labels=lab)
-           },
-           image={
-             zim <- z$image
-             m <- factor(zim[x, drop=FALSE], levels=levels(zim))
-           }
-           )
-    marks(x) <- m
+    marks(x) <- tileindex(x$x, x$y, z)
     return(x)
   }
+
   stop("Format of z not understood")
 } 
 

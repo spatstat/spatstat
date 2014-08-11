@@ -33,7 +33,7 @@ ripras <- function(x, y=NULL, shape="convex", f) {
   n <- length(xy$x)
   w <- switch(shape,
               convex = convexhull.xy(xy),
-              rectangle = bounding.box.xy(xy),
+              rectangle = boundingbox(xy),
               stop(paste("Unrecognised option: shape=", dQuote(shape))))
   if(is.null(w))
     return(NULL)

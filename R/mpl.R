@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.173 $	$Date: 2014/01/24 05:43:38 $
+#	$Revision: 5.179 $	$Date: 2014/04/04 10:06:06 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -98,10 +98,12 @@ function(Q,
 #
 #
 # Interpret the call
-want.trend <- !is.null(trend) && !identical.formulae(trend, ~1)
-want.inter <- !is.null(interaction) && !is.null(interaction$family)
-trend.formula <- if(want.trend) trend else (~1)
-
+  if(is.null(trend)) {
+    trend <- ~1
+    environment(trend) <- parent.frame()
+  }
+  want.trend <- !identical.formulae(trend, ~1)
+  want.inter <- !is.null(interaction) && !is.null(interaction$family)
   
 # Stamp with spatstat version number
   
@@ -109,7 +111,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2014/01/24 05:43:38 $")
+                    date="$Date: 2014/04/04 10:06:06 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -151,7 +153,7 @@ if(!want.trend && !want.inter && !forcefit && !allcovar) {
                fitter      = "exact",
                projected   = FALSE,
                coef        = co,
-               trend       = NULL,
+               trend       = trend,
                interaction = NULL,
                fitin       = fii(),
                Q           = Q,
@@ -161,7 +163,7 @@ if(!want.trend && !want.inter && !forcefit && !allcovar) {
                covfunargs  = covfunargs,
 	       correction  = correction,
                rbord       = rbord,
-               terms       = terms(trend.formula),
+               terms       = terms(trend),
                fisher      = fisher,
                varcov      = varcov,
                version     = the.version,
@@ -173,6 +175,7 @@ if(!want.trend && !want.inter && !forcefit && !allcovar) {
         
 #################  P r e p a r e    D a t a   ######################
 
+  
 
   prep <- mpl.prepare(Q, X, P, trend, interaction,
                       covariates, 
@@ -203,6 +206,9 @@ is.identifiable <- prep$is.identifiable
 computed <- append(computed, prep$computed)
 IsOffset <- prep$IsOffset
 
+## update covariates (if they were resolved from the environment)  
+if(!is.null(prep$covariates))
+  covariates <- prep$covariates
   
 ################# F i t    i t   ####################################
 
@@ -275,7 +281,7 @@ rslt <- list(
              fitter       = if(use.gam) "gam" else "glm",
              projected    = FALSE,
              coef         = co,
-             trend        = if(want.trend) trend       else NULL,
+             trend        = trend,
              interaction  = if(want.inter) interaction else NULL,
              fitin        = fitin,
              Q            = Q,
@@ -286,7 +292,7 @@ rslt <- list(
              covfunargs   = covfunargs,
              correction   = correction,
              rbord        = rbord,
-             terms        = terms(trend.formula),
+             terms        = terms(trend),
              version      = the.version,
              problems     = problems)
 class(rslt) <- "ppm"
@@ -342,15 +348,29 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
 ################ C o m p u t e     d a t a  ####################
 
 # Extract covariate values
-  if((allcovar || want.trend) && !is.null(covariates)) {
-    if("covariates.df" %in% names.precomputed)
+  updatecovariates <- FALSE
+  if(allcovar || want.trend) {
+    if("covariates.df" %in% names.precomputed) {
       covariates.df <- precomputed$covariates.df
-    else 
+    } else {
+      if(!is.data.frame(covariates)) {
+        ## names of 'external' covariates to be found
+        covnames <- variablesinformula(trend)
+        if(allcovar)
+          covnames <- union(covnames, names(covariates))
+        covnames <- setdiff(covnames, c("x", "y", "marks"))
+        ## resolve 'external' covariates
+        tenv <- environment(trend)
+        covariates <- getdataobjects(covnames, tenv, covariates)
+        updatecovariates <- any(attr(covariates, "external"))
+      }
+      ## extract values of covariates ('internal' and 'external')
       covariates.df <- mpl.get.covariates(covariates, P, Pname, covfunargs)
+    }
     if(savecomputed)
       computed$covariates.df <- covariates.df
-  }
-        
+  } 
+
 ### Form the weights and the ``response variable''.
 
   if("dotmplbase" %in% names.precomputed) 
@@ -684,15 +704,16 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
   ####  character string of trend formula (without Vnames)
   trendfmla <- paste(".mpl.Y ", trendpart)
 
-#### 
+####
 
-return(list(fmla=fmla, trendfmla=trendfmla,
-            glmdata=glmdata, Vnames=Vnames, IsOffset=IsOffset,
-            problems=problems,
-            likelihood.is.zero=likelihood.is.zero,
-            is.identifiable=is.identifiable,
-            computed=computed))
-
+  result <- list(fmla=fmla, trendfmla=trendfmla,
+                 covariates=if(updatecovariates) covariates else NULL,
+                 glmdata=glmdata, Vnames=Vnames, IsOffset=IsOffset,
+                 problems=problems,
+                 likelihood.is.zero=likelihood.is.zero,
+                 is.identifiable=is.identifiable,
+                 computed=computed)
+  return(result)
 }
 
 
@@ -700,62 +721,85 @@ return(list(fmla=fmla, trendfmla=trendfmla,
 ####################################################################
 ####################################################################
 
-mpl.get.covariates <- function(covariates, locations, type="locations",
-                               covfunargs=list()) {
-  covargname <- sQuote(short.deparse(substitute(covariates)))
-  locargname <- sQuote(short.deparse(substitute(locations)))
-  if(is.null(covfunargs)) covfunargs <- list()
-  #
-  x <- locations$x
-  y <- locations$y
-  if(is.null(x) || is.null(y)) {
-    xy <- xy.coords(locations)
-    x <- xy$x
-    y <- xy$y
-  }
-  if(is.null(x) || is.null(y))
-    stop(paste("Can't interpret", locargname, "as x,y coordinates"))
-  n <- length(x)
-  if(is.data.frame(covariates)) {
-    if(nrow(covariates) != n)
-      stop(paste("Number of rows in", covargname, 
-                 "does not equal the number of", type))
-    return(covariates)
-  } else if(is.list(covariates)) {
-    if(length(covariates) == 0)
-      return(as.data.frame(matrix(, n, 0)))
-    is.number <- function(x) { is.numeric(x) && (length(x) == 1) }
-    isim  <- unlist(lapply(covariates, is.im))
-    isfun <- unlist(lapply(covariates, is.function))
-    iswin <- unlist(lapply(covariates, is.owin))
-    isnum <- unlist(lapply(covariates, is.number))
-    if(!all(isim | isfun | isnum | iswin))
-      stop(paste("Each entry in the list", covargname, 
-                 "should be an image, a function, a window or a single number"))
-    if(sum(nzchar(names(covariates))) < length(covariates))
-      stop(paste("Some entries in the list",
-                 covargname, "are un-named"))
-    # look up values of each covariate at the quadrature points
-    values <- covariates
-    evalfxy <- function(f, x, y, extra) {
-      if(length(extra) == 0)
-        return(f(x,y))
-      # extra arguments must be matched explicitly by name
-      ok <- names(extra) %in% names(formals(f))
-      z <- do.call(f, append(list(x,y), extra[ok]))
-      return(z)
+mpl.get.covariates <- local({
+
+  mpl.get.covariates <- function(covariates, locations, type="locations",
+                                 covfunargs=list(),
+                                 need.deriv=FALSE) {
+    covargname <- sQuote(short.deparse(substitute(covariates)))
+    locargname <- sQuote(short.deparse(substitute(locations)))
+    if(is.null(covfunargs)) covfunargs <- list()
+    ##
+    x <- locations$x
+    y <- locations$y
+    if(is.null(x) || is.null(y)) {
+      xy <- xy.coords(locations)
+      x <- xy$x
+      y <- xy$y
     }
-    insidexy <- function(w, x, y) { inside.owin(x, y, w) }
-    values[isim] <- lapply(covariates[isim], lookup.im, x=x, y=y,
-                           naok=TRUE, strict=FALSE)
-    values[isfun] <- lapply(covariates[isfun], evalfxy, x=x, y=y,
-                            extra=covfunargs)
-    values[isnum] <- lapply(covariates[isnum], rep, length(x))
-    values[iswin] <- lapply(covariates[iswin], insidexy, x=x, y=y)
-    return(as.data.frame(values))
-  } else
+    if(is.null(x) || is.null(y))
+      stop(paste("Can't interpret", locargname, "as x,y coordinates"))
+    n <- length(x)
+    if(is.data.frame(covariates)) {
+      if(nrow(covariates) != n)
+        stop(paste("Number of rows in", covargname, 
+                   "does not equal the number of", type))
+      return(covariates)
+    } else if(is.list(covariates)) {
+      if(length(covariates) == 0)
+        return(as.data.frame(matrix(, n, 0)))
+      isim   <- unlist(lapply(covariates, is.im))
+      isfun  <- unlist(lapply(covariates, is.function))
+      iswin  <- unlist(lapply(covariates, is.owin))
+      istess <- unlist(lapply(covariates, is.tess))
+      isnum  <- unlist(lapply(covariates, is.number))
+      if(!all(isim | isfun | isnum | iswin | istess))
+        stop(paste("Each entry in the list", covargname, 
+                   "should be an image, a function,",
+                   "a window, a tessellation or a single number"))
+      if(sum(nzchar(names(covariates))) < length(covariates))
+        stop(paste("Some entries in the list",
+                   covargname, "are un-named"))
+      ## look up values of each covariate at the quadrature points
+      values <- covariates
+      values[isim] <- lapply(covariates[isim], lookup.im, x=x, y=y,
+                             naok=TRUE, strict=FALSE)
+      values[isfun] <- vf <- lapply(covariates[isfun], evalfxy, x=x, y=y,
+                                    extra=covfunargs)
+      values[isnum] <- lapply(covariates[isnum], rep, length(x))
+      values[iswin] <- lapply(covariates[iswin], insidexy, x=x, y=y)
+      values[istess] <- lapply(covariates[istess], tileindex, x=x, y=y)
+      result <- as.data.frame(values)
+      if(need.deriv && any(isfun)) {
+        ## check for gradient/hessian attributes of function values
+        grad <- lapply(vf, attr, which="gradient")
+        hess <- lapply(vf, attr, which="hessian")
+        grad <- grad[!unlist(lapply(grad, is.null))]
+        hess <- hess[!unlist(lapply(hess, is.null))]
+        if(length(grad) > 0 || length(hess) > 0)
+          attr(result, "derivatives") <- list(gradient=grad, hessian=hess)
+      }
+      return(result)
+    } 
     stop(paste(covargname, "must be either a data frame or a list"))
-}
+  }
+
+  ## functions for 'apply'
+  evalfxy <- function(f, x, y, extra) {
+    if(length(extra) == 0)
+      return(f(x,y))
+    ## extra arguments must be matched explicitly by name
+    ok <- names(extra) %in% names(formals(f))
+    z <- do.call(f, append(list(x,y), extra[ok]))
+    return(z)
+  }
+
+  insidexy <- function(w, x, y) { inside.owin(x, y, w) }
+
+  is.number <- function(x) { is.numeric(x) && (length(x) == 1) }
+
+  mpl.get.covariates
+})
 
 bt.frame <- function(Q, trend=~1, interaction=NULL,
                       ...,

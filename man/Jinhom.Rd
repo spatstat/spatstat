@@ -10,7 +10,7 @@
 \usage{
   Jinhom(X, lambda = NULL, lmin = NULL, ...,
         sigma = NULL, varcov = NULL,
-        r = NULL, breaks = NULL)
+        r = NULL, breaks = NULL, update = TRUE)
 }
 \arguments{
   \item{X}{
@@ -27,7 +27,7 @@
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
     intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    (object of class \code{"ppm"} or \code{"kppm"}) or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{lmin}{
@@ -52,6 +52,16 @@
   }
   \item{breaks}{
 	This argument is for internal use only.
+  }
+  \item{update}{
+    Logical. If \code{lambda} is a fitted model
+    (class \code{"ppm"} or \code{"kppm"})
+    and \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without fitting it to \code{X}.
   }
 }
 \details{
@@ -84,8 +94,10 @@
       at all locations in the window. 
     }
     \item{a fitted point process model}{
-      (object of class \code{"ppm"})
+      (object of class \code{"ppm"} or \code{"kppm"})
       whose fitted \emph{trend} can be used as the fitted intensity.
+      (If \code{update=TRUE} the model will first be refitted to the
+      data \code{X} before the trend is computed.)
     }
     \item{a function}{
       which can be evaluated to give values of the intensity at
@@ -164,6 +176,7 @@
   C implementation and R adaptation by Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
+  and Ege Rubak.
 }
 \keyword{spatial}
 \keyword{nonparametric}

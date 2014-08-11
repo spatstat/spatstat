@@ -6,19 +6,66 @@
 # $Revision: 1.82 $ $Date: 2013/11/12 14:17:38 $
 #
 
-kppm <- function(X, trend = ~1,
-                 clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
-                 covariates = NULL,
-                 ...,
-                 method = c("mincon", "clik"),
-                 weightfun=NULL,
-                 control=list(),
-                 statistic="K",
-                 statargs=list(),
-                 rmax = NULL,
-                 covfunargs=NULL,
-                 use.gam=FALSE,
-                 nd=NULL, eps=NULL) {
+kppm <- function(X, ...) {
+  UseMethod("kppm")
+}
+
+
+kppm.formula <-
+  function(X, clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+           ..., data=NULL) {
+  ## remember call
+  callstring <- short.deparse(sys.call())
+  ## cl <- match.call()
+
+  ########### INTERPRET FORMULA ##############################
+  
+  if(!inherits(X, "formula"))
+    stop(paste("Argument 'X' should be a formula"))
+  formula <- X
+  
+  if(spatstat.options("expand.polynom"))
+    formula <- expand.polynom(formula)
+
+  ## check formula has LHS and RHS. Extract them
+  if(length(formula) < 3)
+    stop(paste("Formula must have a left hand side"))
+  Yexpr <- lhs <- formula[[2]]
+  trend <- rhs <- formula[c(1,3)]
+  
+  ## FIT #######################################
+  thecall <- call("kppm", X=Yexpr, trend=trend,
+                  data=data, clusters=clusters)
+  ncall <- length(thecall)
+  argh <- list(...)
+  nargh <- length(argh)
+  if(nargh > 0) {
+    thecall[ncall + 1:nargh] <- argh
+    names(thecall)[ncall + 1:nargh] <- names(argh)
+  }
+  result <- eval(thecall, parent.frame())
+
+  if(!("callstring" %in% names(list(...))))
+    result$callstring <- callstring
+  
+  return(result)
+}
+
+kppm.ppp <- kppm.quad <-
+  function(X, trend = ~1,
+           clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+           data=NULL,
+           ...,
+           covariates = data,
+           method = c("mincon", "clik"),
+           weightfun=NULL,
+           control=list(),
+           statistic="K",
+           statargs=list(),
+           rmax = NULL,
+           covfunargs=NULL,
+           use.gam=FALSE,
+           nd=NULL, eps=NULL) {
   Xname <- short.deparse(substitute(X))
   clusters <- match.arg(clusters)
   method <- match.arg(method)

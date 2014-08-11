@@ -153,6 +153,15 @@ parres(model, covariate, ...,
   If \code{bw.restrict=TRUE} then the bandwidth selection is performed
   using only data from inside the \code{subregion}.
 }
+\section{Slow computation}{
+  In a large dataset, computation can be very slow if the default
+  settings are used, because the smoothing bandwidth is selected
+  automatically. To avoid this, specify a numerical value
+  for the bandwidth \code{bw}. One strategy is to use a coarser
+  subset of the data to select \code{bw} automatically.
+  The selected bandwidth can be read off the print output for
+  \code{parres}.  
+}
 \value{
   A function value table (object of class \code{"fv"})
   containing the values of the smoothed partial residual,

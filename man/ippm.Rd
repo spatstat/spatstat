@@ -1,27 +1,28 @@
 \name{ippm}
 \alias{ippm}
 \title{
-  Optimise Irregular Trend Parameters in Point Process Model
+  Fit Point Process Model Involving Irregular Trend Parameters
 }
 \description{
-  Experimental extension to \code{ppm}.
-  Find optimal values of the irregular trend parameters in a
-  point process model using Fisher scoring algorithm.
+  Experimental extension to \code{ppm}
+  which finds optimal values of the irregular trend parameters in a
+  point process model.
 }
 \usage{
 ippm(..., iScore=NULL,
           start=list(),
           covfunargs=start,
-          maxiter=20, tol=1e-4, progress=TRUE, stepfactor=1,
-          dbug=FALSE)
+          nlm.args=list(),
+          silent=FALSE)
 }
 \arguments{
   \item{\dots}{
-    Arguments passed to \code{\link[spatstat]{ppm}} to fit the point process model.
+    Arguments passed to \code{\link{ppm}}
+    to fit the point process model.
   }
   \item{iScore}{
-    A named list of \R functions that compute the partial derivatives
-    of \code{logf} with respect to each irregular parameter.
+    Optional. A named list of \R functions that compute the partial derivatives
+    of the logarithm of the trend, with respect to each irregular parameter.
     See Details.
   }
   \item{start}{
@@ -29,36 +30,26 @@ ippm(..., iScore=NULL,
     irregular parameters over which to optimise.
   }
   \item{covfunargs}{
-    Argument passed to \code{\link[spatstat]{ppm}}.
+    Argument passed to \code{\link{ppm}}.
     A named list containing values for \emph{all} irregular parameters
     required by the covariates in the model.
     Must include all the parameters named in \code{start}.
   }
-  \item{maxiter}{
-    Integer. Maximum number of iterations of Fisher scoring algorithm.
+  \item{nlm.args}{
+    Optional list of arguments passed to \code{\link[stats]{nlm}}
+    to control the optimization algorithm.
   }
-  \item{tol}{
-    Numeric value or vector. The algorithm stops when the
-    difference between two successive estimates of the irregular
-    parameter is less than \code{tol}.
-  }
-  \item{progress}{
-    Logical. Whether to print progress reports.
-  }
-  \item{stepfactor}{
-    Numeric value between 0 and 1 indicating that the change in the
-    parameter between successive iterations is only a specified
-    fraction of the step computed by the Newton-Raphson algorithm.
-  }
-  \item{dbug}{
-    Logical. Whether to print debugging output.
+  \item{silent}{
+    Logical. Whether to print warnings if the optimization algorithm
+    fails to converge.
   }
 }
 \details{
   This function is an experimental extension to the
-  point process model fitting command \code{\link[spatstat]{ppm}}.
+  point process model fitting command \code{\link{ppm}}.
   The extension allows the trend of the model to include irregular parameters,
-  which will be maximised by a Fisher scoring method. 
+  which will be maximised by a Newton-type iterative
+  method, using \code{\link[stats]{nlm}}.
 
   For the sake of explanation,
   consider a Poisson point process with intensity function
@@ -78,7 +69,7 @@ ippm(..., iScore=NULL,
   
   To fit this model using \code{ippm}, we specify the
   intensity using the \code{trend} formula
-  in the same way as usual for \code{\link[spatstat]{ppm}}.
+  in the same way as usual for \code{\link{ppm}}.
   The trend formula is a representation of the log intensity.
   In the above example the log intensity is
   \deqn{
@@ -91,10 +82,10 @@ ippm(..., iScore=NULL,
   is an \emph{offset} term, which means that it is included in the log trend
   as it is, without being multiplied by another regular parameter.
 
-  To perform Fisher scoring we also need the derivative
+  The optimisation runs faster if we specify the derivative
   of \eqn{\log f(u,\gamma)}{log(f(u,gamma))} with
   respect to \eqn{\gamma}{gamma}. We call this the
-  \emph{irregular score}. The user must write an \R function
+  \emph{irregular score}. To specify this, the user must write an \R function
   that computes the irregular score for any value of
   \eqn{\gamma}{gamma} at any location \code{(x,y)}.
   
@@ -104,7 +95,8 @@ ippm(..., iScore=NULL,
     log intensity, with the irregular part as an offset;
     \item The argument \code{start} should be a list
     containing initial values of each of the irregular parameters;
-    \item The argument \code{iScore} must be a list (with one entry
+    \item The argument \code{iScore}, if provided,
+    must be a list (with one entry
     for each entry of \code{start}) of functions
     with arguments \code{x,y,\dots}, that evaluate the partial derivatives
     of \eqn{\log f(u,\gamma)}{log(f(u,gamma))} with
@@ -119,7 +111,7 @@ ippm(..., iScore=NULL,
     f((x,y), (gamma, delta)) = 1 + \exp(gamma - delta * x^3)
   }
 
-  Arguments \code{\dots} passed to \code{\link[spatstat]{ppm}} may
+  Arguments \code{\dots} passed to \code{\link{ppm}} may
   also include \code{interaction}. In this case the model is not
   a Poisson point process but a more general Gibbs point process;
   the trend formula \code{trend} 
@@ -137,7 +129,8 @@ ippm(..., iScore=NULL,
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
-  \code{\link[spatstat]{ppm}}
+  \code{\link{ppm}},
+  \code{\link{profilepl}}
 }
 \examples{
   nd <- 32
@@ -171,7 +164,8 @@ ippm(..., iScore=NULL,
        covariates=list(Z=Z, f=f),
        iScore=Dlogf,
        start=list(gamma=1, delta=1),
-       tol=0.01, nd=nd)
+       nd=nd)
+
 }
 \keyword{spatial}
 \keyword{models}

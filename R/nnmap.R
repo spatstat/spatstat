@@ -15,7 +15,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   outputarray <- resolve.1.default("outputarray", ..., outputarray=FALSE)
   
   W <- as.owin(W)
-  huge <- 1.1 * diameter(bounding.box(as.rectangle(X), as.rectangle(W)))
+  huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(W)))
   
   what   <- match.arg(what, choices=c("dist", "which"), several.ok=TRUE)
   want.dist  <- "dist" %in% what 

@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.103 $  $Date: 2013/12/18 03:24:15 $
+#  $Revision: 1.105 $  $Date: 2014/04/28 01:47:21 $
 #
 
 vcov.ppm <- local({
@@ -15,7 +15,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
                      hessian=FALSE) {
   verifyclass(object, "ppm")
   argh <- list(...)
-  
+
   gam.action <- match.arg(gam.action)
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
@@ -27,6 +27,18 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
     stop(paste("Unrecognised option: what=", sQuote(what)))
   what <- what.map[m]
 
+  ## no parameters, no variance
+  if(length(coef(object)) == 0) {
+    result <- switch(what,
+                     vcov=, corr=, fisher= {
+                       matrix(, 0, 0)
+                     },
+                     internals=, all={
+                       list()
+                     })
+    return(result)
+  }
+  
   # nonstandard calculations (hack) 
   generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
   nonstandard <- any(generic.triggers %in% names(argh))
@@ -290,6 +302,12 @@ vcalcGibbs <- function(fit, ...,
            # (ensure model matrix is included)
            if(is.null(out$internals$mom))
              out$internals$mom <- model.matrix(fit)
+           # ensure Fisher info is included
+           if(is.null(out$internals$fisher)) {
+             Fmat <- with(out$internals,
+                     if(fit$method != "logi") Sigma else Sigma1log+Sigma2log)
+             out$internals$fisher <- Fmat
+           }
            return(out)
          },
          )

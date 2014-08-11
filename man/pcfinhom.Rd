@@ -45,7 +45,7 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     function \code{\link{density.default}}.
   }
   \item{stoyan}{
-    Bandwidth coefficient; see Details.
+    Bandwidth coefficient; see \code{\link{pcf.ppp}}.
   }
   \item{correction}{
     Choice of edge correction.

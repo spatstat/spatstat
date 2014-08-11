@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.26 $     $Date: 2013/12/17 08:59:51 $
+#       $Revision: 5.27 $     $Date: 2014/05/07 04:38:34 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -176,7 +176,7 @@ concatxy <- function(...) {
 #------------------------------------------------------------
 
 default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
-                          ..., eps=NULL, verbose=FALSE) {
+                          quasi=FALSE, ..., eps=NULL, verbose=FALSE) {
   # default action to create dummy points.
   # regular grid of nd[1] * nd[2] points
   # plus corner points of window frame,
@@ -186,30 +186,30 @@ default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
   #
   # default dimensions
   a <- default.n.tiling(X, nd=nd, ntile=ntile, npix=npix,
-                        eps=eps, verbose=verbose)
+                        eps=eps, random=random, quasi=quasi, verbose=verbose)
   nd    <- a$nd
   ntile <- a$ntile
   npix  <- a$npix
-  periodsample <- !random &&
-                  (win$type == "mask") &&
+  periodsample <- !quasi && !random &&
+                  is.mask(win) &&
                   all(nd %% win$dim == 0)
   # make dummy points
-  dummy <- if(random) stratrand(win, nd[1], nd[2], 1) else 
+  dummy <- if(quasi) rQuasi(prod(nd), as.rectangle(win)) else
+           if(random) stratrand(win, nd[1], nd[2], 1) else 
            cellmiddles(win, nd[1], nd[2], npix)
   dummy <- as.ppp(dummy, win, check=FALSE)
   # restrict to window
-  if(!is.rectangle(win) &&
-     (random || !is.mask(win) || !all(nd %% win$dim == 0)))
+  if(!is.rectangle(win) && !periodsample)
     dummy <- dummy[win]
   # corner points
   corn <- as.ppp(corners(win), win, check=FALSE)
   corn <- corn[win]
-  dummy <- superimpose(dummy, corn, W=win)
+  dummy <- superimpose(dummy, corn, W=win, check=FALSE)
   if(dummy$n == 0)
     stop("None of the dummy points lies inside the window")
   # pass parameters for computing weights
   attr(dummy, "dummy.parameters") <-
-    list(nd=nd, random=random, verbose=verbose)
+    list(nd=nd, random=random, quasi=quasi, verbose=verbose)
   attr(dummy, "weight.parameters") <-
     append(list(...), list(ntile=ntile, verbose=verbose, npix=npix))
   return(dummy)
@@ -269,11 +269,23 @@ default.n.tiling <- local({
   min2div <- function(N, lo, Nbig) 
     c(mindivisor(N[1], lo[1], Nbig[1]),
       mindivisor(N[2], lo[2], Nbig[2]))
-  
+
+  maxdiv <- function(n, k=1) {
+    if(length(n) > 1)
+      return(c(maxdiv(n[1], k),
+               maxdiv(n[2], k)))
+    ## k-th largest divisor other than n
+    d <- divisors(n)
+    m <- length(d)
+    ans <- if(m == 2) n else if(m < 2+k) d[2] else d[m-k]
+    return(ans)
+  }
+
   # main
   default.n.tiling <- function(X,
                                nd=NULL, ntile=NULL, npix=NULL,
-                               eps=NULL, verbose=TRUE) {
+                               eps=NULL,
+                               random=FALSE, quasi=FALSE, verbose=TRUE) {
   # computes dimensions of rectangular grids of 
   #     - dummy points  (nd) (eps)
   #     - tiles for grid weights (ntile)
@@ -355,12 +367,25 @@ default.n.tiling <- local({
     if(any(ntile > nd))
       warning("the number of tiles (ntile) exceeds the number of dummy points (nd)")
   }
-  
+
+  if(!ntile.given && quasi) {
+    if(verbose) cat("Adjusting ntile because quasi=TRUE\n")
+    ntile <- maxdiv(ntile, if(pixels) 2 else 1)
+  } 
+ 
   if(!npix.given && pixels) 
     npix <- min2mul(nd, Nmin, Nmax)
- 
+
   if(verbose) {
-    cat(paste("dummy point grid", nd[1], "x", nd[2], "\n"))
+    if(!quasi)
+      cat(paste("dummy points:",
+                paste0(if(random) "stratified random in" else NULL,
+                       "grid"),
+                nd[1], "x", nd[2], "\n"))
+    else
+      cat(paste("dummy points:",
+                nd[1], "x", nd[2], "=", prod(nd),
+                "quasirandom points\n"))
     cat(paste("weighting tiles", ntile[1], "x", ntile[2], "\n"))
     if(pixels) cat(paste("pixel grid", npix[1], "x", npix[2], "\n"))
   }

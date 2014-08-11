@@ -138,7 +138,7 @@ dilation.owin <-
   }
   
   # bounding frame
-  bb <- if(tight) bounding.box(w) else as.rectangle(w)
+  bb <- if(tight) boundingbox(w) else as.rectangle(w)
   newbox <- grow.rectangle(bb, r)
 
   # compute dilation
@@ -218,7 +218,7 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     return(emptywindow(as.owin(w)))
   
   # bounding frame
-  bb <- if(tight) bounding.box(x) else as.rectangle(x)
+  bb <- if(tight) boundingbox(x) else as.rectangle(x)
   newbox <- grow.rectangle(bb, r)
   
   # compute dilation
@@ -265,7 +265,7 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
                                       y=ends[i, c("y0","y1")])
     # call
     pnew <- polyclip::polylineoffset(plines, r,
-                                     jointype="round", endtype="round")
+                                     jointype="round", endtype="openround")
     # ensure correct polarity
     totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
     if(totarea < 0)
@@ -312,7 +312,7 @@ dilation.ppp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     return(emptywindow(as.owin(w)))
   
   # bounding frame
-  bb <- if(tight) bounding.box(x) else as.rectangle(x)
+  bb <- if(tight) boundingbox(x) else as.rectangle(x)
     newbox <- grow.rectangle(bb, r)
 
   # compute dilation

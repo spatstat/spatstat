@@ -137,7 +137,7 @@ Fest(X, ..., eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
   The argument \code{r} is the vector of values for the
   distance \eqn{r} at which \eqn{F(r)} should be evaluated. 
   It is also used to determine the breakpoints
-  (in the sense of \code{\link{hist}}
+  (in the sense of \code{\link{hist}})
   for the computation of histograms of distances. The 
   estimators are computed from histogram counts. 
   This introduces a discretisation

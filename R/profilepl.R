@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.18 $  $Date: 2013/06/18 01:38:42 $
+#  $Revision: 1.20 $  $Date: 2014/04/05 08:09:59 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -127,8 +127,9 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
   optint <- do.call("f", as.list(s[opti, is.farg, drop=FALSE]))
   optarg <- list(interaction=optint, ..., rbord=rbord)
   if(pass.cfa) {
-    optcfa <- list(covfunargs=as.list(s[opti, !is.farg, drop=FALSE]))
-    optarg <- append(optarg, optcfa)
+    optcfa <- as.list(s[opti, !is.farg, drop=FALSE])
+    attr(optcfa, "fitter") <- "profilepl"
+    optarg <- append(optarg, list(covfunargs=optcfa))
   }
   optfit <- do.call("ppm", optarg)
   if(verbose) message("done.")
@@ -150,24 +151,24 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
 #
 
 print.profilepl <- function(x, ...) {
-  cat("Profile log pseudolikelihood values\n")
+  cat("Profile", "log pseudolikelihood", "values", fill=TRUE)
   cat("for model:\t")
-  print(x$pseudocall)
-  cat(paste("fitted with rbord=", x$rbord, "\n"))
+  psc <- unlist(strsplitretain(format(x$pseudocall)))
+  cat(psc, fill=TRUE)
+  cat("fitted with", "rbord =", x$rbord, fill=TRUE)
   nparm <- ncol(x$param)
-  cat(paste("Interaction:", x$fname,
-            "\n", "with irregular",
-            ngettext(nparm, "parameter ", "parameters\n")))
+  cat("Interaction:", x$fname, fill=TRUE)
+  cat("Irregular", ngettext(nparm, "parameter ", "parameters\n"))
   for(na in names(x$param)) {
     ra <- range(x$param[[na]])
     cat(paste(sQuote(na), "in",
               paste("[",ra[1],", ",ra[2],"]",sep=""),
               "\n"))
   }
-  cat(paste("Optimum",
-            ngettext(nparm, "value", "values"),
-            "of irregular",
-            ngettext(nparm, "parameter: ", "parameters:\n")))
+  cat("Optimum",
+      ngettext(nparm, "value", "values"),
+      "of irregular",
+      ngettext(nparm, "parameter: ", "parameters:\n"))
   popt <- x$param[x$iopt,, drop=FALSE]
   cat(commasep(paste(names(popt), "=", popt)))
   cat("\n")

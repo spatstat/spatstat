@@ -171,7 +171,7 @@
   Bplus <- shift(Bvalue, c(1.2, 0))
   Bdone <- shift(Bplus, c(1.2, 0))
   myboxes <- list(Bminus, Bvalue, Bplus, Bdone)
-  myB <- do.call(bounding.box,myboxes)
+  myB <- do.call(boundingbox,myboxes)
 
   # make environment containing an integer count
   myenv <- new.env()

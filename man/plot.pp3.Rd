@@ -37,5 +37,13 @@
 \seealso{
   \code{\link{pp3}}
 }
+\examples{
+  if(require(scatterplot3d)) {
+    X <- osteo$pts[[1]]
+    plot(X, tick.marks=FALSE, xlab="", ylab="", zlab="",
+         main="Osteocyte lacunae, animal 1, brick 1",
+         mar=rep(0.5,4), cex.symbols=1.5, pch=16, type="h")
+  }
+}
 \keyword{spatial}
 \keyword{hplot}

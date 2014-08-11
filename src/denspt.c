@@ -8,7 +8,9 @@
 
   denspt.c
 
-  $Revision: 1.12 $     $Date: 2013/09/18 04:16:50 $
+  Calculation of density estimate at data points
+
+  $Revision: 1.13 $     $Date: 2014/04/02 07:30:05 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 

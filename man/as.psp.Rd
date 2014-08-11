@@ -3,7 +3,6 @@
 \alias{as.psp.psp}
 \alias{as.psp.data.frame}
 \alias{as.psp.matrix}
-\alias{as.psp.owin}
 \alias{as.psp.default}
 \title{Convert Data To Class psp}
 \description{
@@ -22,16 +21,12 @@
   \method{as.psp}{matrix}(x, \dots, window=NULL, marks=NULL,
        check=spatstat.options("checksegments"), fatal=TRUE)
 
-  \method{as.psp}{owin}(x, \dots,
-       check=spatstat.options("checksegments"), fatal=TRUE)
-
   \method{as.psp}{default}(x, \dots, window=NULL, marks=NULL,
        check=spatstat.options("checksegments"), fatal=TRUE)
 }
 \arguments{
   \item{x}{Data which will be converted into a line segment pattern}
-  \item{window}{Data which define a window for the pattern
-    when \code{x} does not contain a window}
+  \item{window}{Data which define a window for the pattern.}
   \item{\dots}{Ignored.}
   \item{marks}{(Optional) vector or data frame of marks for the pattern}
   \item{check}{
@@ -69,11 +64,6 @@
     \item a structure (list) with elements named  \code{x0, y0,
     x1, y1} or elements named \code{xmid, ymid, length, angle}
     and possibly a fifth element named \code{marks}
-    \item
-    an object of class \code{"owin"} representing a spatial window;
-    it must be of type \code{"rectangle"} or \code{"polygonal"}.
-    The boundary edges of the window will be extracted as a line
-    segment pattern.
   }
   If \code{x} is a data frame the interpretation of its columns is
   as follows:

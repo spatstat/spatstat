@@ -6,6 +6,7 @@
 \alias{as.owin.kppm}
 \alias{as.owin.lpp}
 \alias{as.owin.lppm}
+\alias{as.owin.msr}
 \alias{as.owin.psp}
 \alias{as.owin.quad}
 \alias{as.owin.quadratcount}
@@ -17,7 +18,10 @@
 \alias{as.owin.distfun}
 \alias{as.owin.nnfun}
 \alias{as.owin.funxy}
+\alias{as.owin.boxx}
 \alias{as.owin.rmhmodel}
+\alias{as.owin.leverage.ppm}
+\alias{as.owin.influence.ppm}
 \alias{as.owin.default}
 \title{Convert Data To Class owin}
 \description{
@@ -38,6 +42,8 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{lpp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{lppm}(W, \dots, fatal=TRUE)
+
+ \method{as.owin}{msr}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{psp}(W, \dots, fatal=TRUE)
 
@@ -61,7 +67,13 @@ in any of several formats, into an object of class \code{"owin"}.
 
  \method{as.owin}{funxy}(W, \dots, fatal=TRUE)
 
+ \method{as.owin}{boxx}(W, \dots, fatal=TRUE)
+
  \method{as.owin}{rmhmodel}(W, \dots, fatal=FALSE)
+
+ \method{as.owin}{leverage.ppm}(W, \dots, fatal=TRUE)
+
+ \method{as.owin}{influence.ppm}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{default}(W, \dots, fatal=TRUE)
 }

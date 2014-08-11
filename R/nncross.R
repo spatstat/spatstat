@@ -12,7 +12,7 @@ nncross <- function(X, Y, ...) {
 }
 
 nncross.default <- function(X, Y, ...) {
-  X <- as.ppp(X, W=bounding.box.xy)
+  X <- as.ppp(X, W=boundingbox)
   nncross(X, Y, ...)
 }
 
@@ -132,7 +132,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(!exclude) iX <- iY <- integer(1)
 
     DUP <- spatstat.options("dupC")
-    huge <- 1.1 * diameter(bounding.box(as.rectangle(X), as.rectangle(Y)))
+    huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
 
     z <- .C("nnXinterface",
             n1=as.integer(nX),
@@ -179,7 +179,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(!exclude) iX <- iY <- integer(1)
 
     DUP <- spatstat.options("dupC")
-    huge <- 1.1 * diameter(bounding.box(as.rectangle(X), as.rectangle(Y)))
+    huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
   
     z <- .C("knnXinterface",
             n1=as.integer(nX),

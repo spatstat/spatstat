@@ -6,11 +6,15 @@
   another unit of length.
 }
 \usage{
- \method{rescale}{psp}(X, s)
+ \method{rescale}{psp}(X, s, unitname)
 }
 \arguments{
   \item{X}{Line segment pattern (object of class \code{"psp"}).}
   \item{s}{Conversion factor: the new units are \code{s} times the old units.}
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    See \code{\link{unitname}}.
+  }
 }
 \value{
   Another line segment pattern (of class \code{"psp"}),
@@ -54,10 +58,9 @@
    # data are in km
    # convert to metres
    rescale(X, 1/1000)
-   X
-   # rename unit
-   unitname(X) <- c("metre", "metres")
-   X
+
+   # convert data and rename unit
+   rescale(X, 1/1000, c("metre", "metres"))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -10,6 +10,7 @@
     correction=c("border", "bord.modif", "isotropic", "translate"),
     renormalise=TRUE,
     normpower=1,
+    update=TRUE,
     nlarge = 1000,
     lambda2=NULL, reciplambda=NULL, reciplambda2=NULL,
     sigma=NULL, varcov=NULL)
@@ -29,7 +30,8 @@
     at the points of the pattern \code{X},
     a pixel image (object of class \code{"im"}) giving the
     intensity values at all locations, a fitted point process model
-    (object of class \code{"ppm"}) or a \code{function(x,y)} which
+    (object of class \code{"ppm"} or \code{"kppm"})
+    or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{\dots}{
@@ -59,6 +61,16 @@
   \item{normpower}{
     Integer (usually either 1 or 2).
     Normalisation power. See Details.
+  }
+  \item{update}{
+    Logical. If \code{lambda} is a fitted model
+    (class \code{"ppm"} or \code{"kppm"})
+    and \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without fitting it to \code{X}.
   }
   \item{nlarge}{
     Optional. Efficiency threshold.
@@ -171,8 +183,10 @@
       at all locations in the window. 
     }
     \item{a fitted point process model}{
-      (object of class \code{"ppm"})
+      (object of class \code{"ppm"} or \code{"kppm"})
       whose fitted \emph{trend} can be used as the fitted intensity.
+      (If \code{update=TRUE} the model will first be refitted to the
+      data \code{X} before the trend is computed.)
     }
     \item{a function}{
       which can be evaluated to give values of the intensity at

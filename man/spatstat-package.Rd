@@ -369,7 +369,11 @@
 	Ripley-Rasson estimator of window, given only the points \cr
 	\code{\link{convexhull}} \tab compute convex hull of something \cr 
 	\code{\link{letterR}}    \tab
-	polygonal window in the shape of the \R logo
+	polygonal window in the shape of the \R logo \cr
+	\code{\link{clickpoly}}    \tab
+	interactively draw a polygonal window  \cr
+	\code{\link{clickbox}}    \tab
+	interactively draw a rectangle 
       }
 
     \bold{To manipulate a window:}
@@ -377,7 +381,7 @@
     \tabular{ll}{
 	\code{\link{plot.owin}}	\tab	plot a window. \cr
 	\tab		\code{plot(W)}\cr
-	\code{\link{bounding.box}} \tab
+	\code{\link{boundingbox}} \tab
 	Find a tight bounding box for the window \cr
 	\code{\link{erosion}}	\tab
 	erode window by a distance r\cr
@@ -422,6 +426,7 @@
     \bold{Geometrical computations with windows:}
 
     \tabular{ll}{
+	\code{\link{edges}}	\tab	extract boundary edges \cr
 	\code{\link{intersect.owin}}	\tab	intersection of two windows\cr
 	\code{\link{union.owin}}	\tab	union of two windows\cr
 	\code{\link{setminus.owin}}	\tab	set subtraction of two windows\cr
@@ -449,7 +454,8 @@
 	\code{\link{is.rectangle}} \tab test whether window is a rectangle \cr 
 	\code{\link{is.polygonal}} \tab test whether window is polygonal \cr 
 	\code{\link{is.mask}} \tab test whether window is a mask \cr 
-	\code{\link{setcov}} \tab spatial covariance function of window
+	\code{\link{setcov}} \tab spatial covariance function of window \cr
+	\code{\link{pixelcentres}} \tab extract centres of pixels in mask 
       }
 
     \bold{Pixel images:}
@@ -496,7 +502,8 @@
 	\code{\link{solutionset}} \tab region where an expression is true \cr
 	\code{\link{imcov}} \tab spatial covariance function of image \cr
 	\code{\link{convolve.im}} \tab spatial convolution of images \cr
-	\code{\link{transect.im}} \tab line transect of image
+	\code{\link{transect.im}} \tab line transect of image \cr
+	\code{\link{pixelcentres}} \tab extract centres of pixels 
      }
 
     \bold{Line segment patterns}
@@ -506,6 +513,7 @@
     \tabular{ll}{
       \code{\link{psp}} \tab create a line segment pattern \cr
       \code{\link{as.psp}} \tab convert other data into a line segment pattern \cr
+      \code{\link{edges}} \tab extract edges of a window \cr
       \code{\link{is.psp}} \tab determine whether a dataset has class \code{"psp"} \cr
       \code{\link{plot.psp}} \tab plot a line segment pattern \cr
       \code{\link{print.psp}} \tab print basic information \cr
@@ -1569,15 +1577,15 @@
 \author{
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,
   Abdollah Jalilian,
   Marie-Colette van Lieshout,
-  Ege Rubak, 
   Dominic Schuhmacher and
   Rasmus Waagepetersen
   made substantial contributions of code.
@@ -1612,7 +1620,8 @@
   Ian Dryden,
   Stephen Eglen,
   Olivier Flores,
-  Neba Funwi-Gabga,
+  Peter Forbes,
+  Funwi-Gabga Neba,
   Oscar Garcia,
   Agnes Gault,
   Marc Genton,
@@ -1688,6 +1697,7 @@
   Kevin Ummer,
   Andrew van Burgel,
   Tobias Verbeke,
+  Mikko Vihtakari,
   Alexendre Villers,
   Fabrice Vinatier,
   Hao Wang,

@@ -73,7 +73,52 @@ print.lpp <- function(x, ...) {
   invisible(NULL)
 }
 
-# plot.lpp removed: plot.ppx sufficient
+plot.lpp <- function(x, ..., main, add=FALSE,
+                     use.marks=TRUE, which.marks=NULL,
+                     show.all=!add, do.plot=TRUE, multiplot=TRUE) {
+  if(missing(main))
+    main <- short.deparse(substitute(x))
+  ## Handle multiple columns of marks as separate plots
+  ##  (unless add=TRUE or which.marks selects a single column
+  ##   or multipage = FALSE)
+  if(use.marks && is.data.frame(mx <- marks(x))) {
+    implied.all <- is.null(which.marks)
+    want.several <- implied.all || is.data.frame(mx <- mx[,which.marks])
+    do.several <- want.several && !add && multiplot
+    if(do.several) {
+      ## generate one plot for each column of marks
+      y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      out <- do.call("plot",
+                     c(list(x=y, main=main, do.plot=do.plot),
+                       list(...)))
+      return(invisible(out))
+    } 
+    if(is.null(which.marks)) {
+      which.marks <- 1
+      if(do.plot) message("Plotting the first column of marks")
+    }
+  }
+  ## determine space required, including legend
+  P <- as.ppp(x)
+  a <- plot(P, ..., do.plot=FALSE)
+  if(!do.plot) return(a)
+  b <- attr(a, "bbox")
+  ## initialise
+  plot(b, type="n", main="  ", add=add)
+  L <- as.linnet(x)
+  do.call.matched("plot.linnet",
+                  resolve.defaults(list(x=L, add=TRUE),
+                                   list(...)),
+                  extrargs=c("col", "lty", "lwd"))
+  ans <- do.call.matched("plot.ppp",
+                         c(list(x=P, add=TRUE, main=main,
+                                show.all=show.all),
+                           list(...)),
+                         extrargs=c("pch", "fg", "bg", "lty", "lwd",
+                           "cex.main", "col.main", "line", "outer", "sub"))
+  return(invisible(ans))
+}
+
 
 summary.lpp <- function(object, ...) {
   stopifnot(inherits(object, "lpp"))
@@ -294,10 +339,10 @@ affine.lpp <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
   return(Y)
 }
 
-shift.lpp <- function(X, ...) {
+shift.lpp <- function(X, vec=c(0,0), ..., origin=NULL) {
   verifyclass(X, "lpp")
   Y <- X
-  Y$domain <- shift(X$domain, ...)
+  Y$domain <- shift(X$domain, vec=vec, ..., origin=origin)
   vec <- getlastshift(Y$domain)
   Y$data[, c("x","y")] <- shiftxy(X$data[, c("x","y")], vec=vec)
   # tack on shift vector
@@ -305,19 +350,25 @@ shift.lpp <- function(X, ...) {
   return(Y)
 }
 
-rotate.lpp <- function(X, angle=pi/2, ...) {
+rotate.lpp <- function(X, angle=pi/2, ..., centre=NULL) {
   verifyclass(X, "lpp")
-  Y <- X
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   Y <- X
   Y$data[, c("x","y")] <- rotxy(X$data[, c("x","y")], angle=angle)
   Y$domain <- rotate(X$domain, angle=angle, ...)
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
   return(Y)
 }
 
-rescale.lpp <- function(X, s) {
+rescale.lpp <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
   if(missing(s)) s <- 1/unitname(X)$multiplier
   Y <- scalardilate(X, f=1/s)
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
 

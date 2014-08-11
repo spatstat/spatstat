@@ -25,6 +25,9 @@
 
   The display shows circles centred at the data points
   with radii proportional to the influence values.
+
+  Use the argument \code{clipwin} to restrict the plot to a subset
+  of the full data.
 }
 \value{
   None.

@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.61 $   $Date: 2012/09/06 04:39:13 $
+#  $Revision: 1.62 $   $Date: 2014/03/22 01:22:27 $
 #
 
 mppm <- function(formula, data, interaction=Poisson(), ...,
@@ -239,14 +239,13 @@ mppm <- function(formula, data, interaction=Poisson(), ...,
   # set up list to contain 'IsOffset'
   Isoffsetlist <- rep(list(logical(0)), ninteract)
   names(Isoffsetlist) <- itags
-  # 
+  ##
   # ---------------- L O O P ---------------------------------
   for(i in 1:npat) {
-
     # extract responses and covariates for presentation to ppm()
     Yi <- Y[[i]]
     covariates <-
-      if(has.covar) as.list(covariates.hf[i, , drop=FALSE]) else NULL
+      if(has.covar) covariates.hf[i, , drop=TRUE, strip=FALSE] else NULL
     if(has.design) {
       # convert each data frame value to an image
       covariates[dfvarnames] <-

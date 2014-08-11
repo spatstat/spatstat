@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.15 $   $Date: 2013/05/01 05:45:01 $
+#    $Revision: 1.16 $   $Date: 2014/02/22 02:43:19 $
 #
 #
  
@@ -20,9 +20,17 @@ clip.psp <- function(x, window, check=TRUE) {
     return(emptypattern)
   }
   switch(window$type,
-         rectangle=cliprect.psp(x, window),
-         polygonal=clippoly.psp(x, window),
-         mask=stop("sorry, clipping is not implemented for masks"))
+         rectangle={
+           result <- cliprect.psp(x, window)
+         },
+         polygonal={
+           result <- clippoly.psp(x, window)
+         },
+         mask={
+           result <- clippoly.psp(x, as.polygonal(window))
+           result$window <- window
+         })
+  return(result)
 }
 
 
@@ -146,7 +154,7 @@ clippoly.psp <- function(s, window) {
   dxs <- es$x1 - es$x0
   dys <- es$y1 - es$y0
 
-  bdry <- as.psp(window)
+  bdry <- edges(window)
   nw <- bdry$n
   ew <- bdry$ends
   x0w <- ew$x0
@@ -181,7 +189,7 @@ clippoly.psp <- function(s, window) {
   # form all the chopped segments (whether in or out)
 
   chopped <- empty <- s[numeric(0)]
-  chopped$window <- bounding.box(s$window, window)
+  chopped$window <- boundingbox(s$window, window)
     
   for(seg in seq_len(ns)) {
     segment <- s$ends[seg, , drop=FALSE]

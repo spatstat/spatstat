@@ -175,7 +175,7 @@ expand.owin <- function(W, ...) {
          area = {
            if(f == 1)
              return(W)
-           bb <- bounding.box(W)
+           bb <- boundingbox(W)
            xr <- bb$xrange
            yr <- bb$yrange
            fff <- (sqrt(f) - 1)/2
@@ -184,7 +184,7 @@ expand.owin <- function(W, ...) {
          length = {
            if(f == 1)
              return(W)
-           bb <- bounding.box(W)
+           bb <- boundingbox(W)
            xr <- bb$xrange
            yr <- bb$yrange
            fff <- (f - 1)/2

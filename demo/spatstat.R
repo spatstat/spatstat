@@ -55,6 +55,8 @@ fanfare("II. Graphics")
 
 plot(letterR, col="green", border="red", lwd=2, main="Polygonal window with colour fill")
 plot(letterR, hatch=TRUE, spacing=0.15, angle=30, main="Polygonal window with line shading")
+plot(letterR, hatch=TRUE, hatchargs=list(texture=8, spacing=0.12),
+     main="Polygonal window with texture fill")
 
 plot(amacrine, chars=c(1,16),
      main="plot(X, chars = c(1,16))")
@@ -65,7 +67,11 @@ opa <- par(mfrow=c(1,2))
 plot(longleaf, markscale=0.03, main="markscale=0.03")
 plot(longleaf, markscale=0.09, main="markscale=0.09")           
 par(opa)
-           
+
+plot(longleaf, pch=21, cex=1,
+     bg=colourmap(terrain.colors(128), range=c(0,80)),
+     main="colourmap for numeric mark values")
+
 Z <- as.im(function(x,y) { r <- sqrt(x^2+y^2); r * exp(-r) },
            owin(c(-5,5),c(-5,5)))
 plot(Z, main="pixel image: image plot")
@@ -83,6 +89,10 @@ plot(ct, main="Colour map for real numbers")
 
 ca <- colourmap(rainbow(8), inputs=letters[1:8])
 plot(ca, main="Colour map for discrete values")
+
+Z <- as.im(nnfun(runifpoint(8)))
+plot(Z, main="colour image for discrete values")
+textureplot(Z, main="texture plot for discrete values")
 
 W <- owin(c(1,5),c(0,4.5))
 Lout <- scaletointerval(distmap(rebound.owin(letterR, W)))
@@ -138,8 +148,8 @@ plot(cut(longleaf, breaks=3),
 Z <- dirichlet(runifpoint(16))
 X <- runifpoint(100)
 
-plot(Z, main="points cut by tessellation")
-plot(cut(X, Z), add=TRUE)
+plot(cut(X,Z), main="points cut by tessellation", leg.side="left")
+plot(Z, add=TRUE)
 
 plot(split(X, Z), main="points split by tessellation")
 
@@ -178,7 +188,7 @@ X <- mur$gold
 D <- distfun(mur$faults)
 plot(X, main="Murchison gold deposits", cols="blue")
 plot(mur$faults, add=TRUE, col="red")
-rh <- rhohat(X,D, dimyx=256)
+rh <- rhohat(X,D)
 plot(rh,
      main="Smoothed rate estimate",
      xlab="Distance to nearest fault (km)",
@@ -198,8 +208,13 @@ te
 
 X <- unique(unmark(shapley))
 plot(X, "Shapley galaxy concentration", pch=".")
-plot(nnclean(X, k=17), main="Byers-Raftery nearest neighbour cleaning",
-     chars=c(".", "+"), cols=1:2)
+pa <- function(i, ...) {
+  if(i == 1) list(chars=c(".", "+"), cols=1:2) else
+             list(size=0.5, pch=21,
+                  bg=colourmap(topo.colors(128), range=c(0,1)))
+}
+plot(nnclean(X, k=17), panel.args=pa,
+     main="Byers-Raftery nearest neighbour cleaning")
 Y <- sharpen(X, sigma=0.5, edgecorrect=TRUE)
 plot(Y, main="Choi-Hall data sharpening", pch=".")
 
@@ -252,7 +267,8 @@ b <- swedishpines[m]
 arrows(swedishpines$x, swedishpines$y, b$x, b$y,
        angle=12, length=0.1, col="red")
 
-plot(swedishpines %mark% (nndist(swedishpines)/2), markscale=1, main="Stienen diagram")
+plot(swedishpines %mark% nndist(swedishpines),
+     markscale=1, main="Stienen diagram", legend=FALSE, fg="blue")
 
 plot(Gest(swedishpines),
      main=c("Nearest neighbour distance function G", "Gest(swedishpines)"),
@@ -296,7 +312,7 @@ plot(Jinhom(Fig4b, sigma=0.06), main="Inhomogeneous J-function")
 
 X <- unmark(bronzefilter)
 plot(X, "Bronze filter data")
-lam <- predict(ppm(X, ~x))
+lam <- predict(ppm(X ~x))
 plot(Kscaled(X, lam), xlim=c(0, 1.5), main="Locally-scaled K function")
 
 plot(urkiola)
@@ -376,9 +392,9 @@ par(par2)
 fanfare("VI. Model-fitting")
 
 plot(japanesepines)
-fit <- ppm(japanesepines, ~1)
+fit <- ppm(japanesepines ~1)
 print(fit)
-fit <- ppm(japanesepines, ~polynom(x,y,2))
+fit <- ppm(japanesepines ~polynom(x,y,2))
 print(fit)
 plot(fit, how="image", se=FALSE, main=c("Inhomogeneous Poisson model",
                                "fit by maximum likelihood",
@@ -391,7 +407,7 @@ plot(influence(fit))
 
 plot(mur$gold, main="Murchison gold deposits", cols="blue")
 plot(mur$faults, add=TRUE, col="red")
-fit <- ppm(mur$gold, ~D, covariates=list(D=distfun(mur$faults)))
+fit <- ppm(mur$gold ~D, covariates=list(D=distfun(mur$faults)))
 plot(parres(fit, "D"),
      main="Partial residuals from loglinear Poisson model",
      xlab="Distance to nearest fault (km)",
@@ -400,7 +416,7 @@ legend("bottomleft", legend=c("partial residual", "loglinear fit"), col=c(1,4), 
 
 parsave <- par(mfrow=c(1,2))
 plot(redwood)
-fitT <- kppm(redwood, ~1, clusters="Thomas")
+fitT <- kppm(redwood ~1, clusters="Thomas")
 plot(simulate(fitT)[[1]], main="simulation from fitted Thomas model")
 
 oop <- par(pty="s")
@@ -411,14 +427,14 @@ contour(os, add=TRUE)
 par(oop)
 
 plot(swedishpines)
-fit <- ppm(swedishpines, ~1, Strauss(r=7))
+fit <- ppm(swedishpines ~1, Strauss(r=7))
 print(fit)
 plot(fit, how="image", main=c("Strauss model",
                                "fit by maximum pseudolikelihood",
                                "Conditional intensity plot"))
 # fitted interaction
 plot(swedishpines)
-fit <- ppm(swedishpines, ~1, PairPiece(c(3,5,7,9,11,13)))
+fit <- ppm(swedishpines ~1, PairPiece(c(3,5,7,9,11,13)))
 plot(fitin(fit), legend=FALSE,
      main=c("Pairwise interaction model",
             "fit by maximum pseudolikelihood"))
@@ -432,7 +448,7 @@ plot(Xsim, main="Simulation from fitted Strauss model")
 
 # model compensator
 plot(swedishpines)
-fit <- ppm(swedishpines, ~1, Strauss(r=7))
+fit <- ppm(swedishpines ~1, Strauss(r=7))
 plot(Kcom(fit), cbind(iso, icom, pois) ~ r,
      legend=FALSE, main="model compensators")
 legend("topleft", legend=c("empirical K function",
@@ -447,7 +463,7 @@ unitname(dpat) <- c("mile", "miles")
 dpat
 
 plot(dpat, cols=c("red", "blue"))
-fit <- ppm(dpat, ~marks + polynom(x,y,2), Poisson())
+fit <- ppm(dpat ~marks + polynom(x,y,2), Poisson())
 plot(fit, trend=TRUE, se=TRUE)
 
 fanfare("VII. Simulation")
@@ -524,6 +540,9 @@ plot(X, add=TRUE)
 plot(rMosaicField(X, runif))
 plot(rMosaicSet(rpoislinetess(3), 0.5), col="green", border=NA, main="Switzer's random set")
 spatstat.options(npixel=100)
+
+plot(Halton(512, c(2,3)), main="quasirandom pattern")
+plot(Halton(16384, c(2,3)), main="quasirandom pattern", pch=".")
 
 fanfare("VIII. Geometry")
 

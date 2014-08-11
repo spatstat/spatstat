@@ -17,7 +17,6 @@
     Window in which to simulate the pattern.
     An object of class \code{"owin"}
     or something acceptable to \code{\link{as.owin}}.
-    Currently, the window must be a rectangle.
   }
 }
 \value{

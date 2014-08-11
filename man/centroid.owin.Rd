@@ -5,13 +5,16 @@
   Computes the centroid (centre of mass) of a window 
 }
 \usage{
- centroid.owin(w)
+ centroid.owin(w, as.ppp = FALSE)
 }
 \arguments{
   \item{w}{A window}
+  \item{as.ppp}{Logical flag indicating whether to return the centroid
+    as a point pattern (\code{ppp} object)}
 }
 \value{
-  A list with components \code{x, y} giving the coordinates of the
+  Either a list with components \code{x, y}, or a point pattern (of class
+  \code{ppp}) consisting of a single point, giving the coordinates of the
   centroid of the window \code{w}.
 }
 \details{
@@ -29,7 +32,12 @@
   of polygonal windows.
 
   Note that the centroid of a window is not necessarily inside 
-  the window. If the window is convex then it does contain its centroid.
+  the window, unless the window is convex.
+  If  \code{as.ppp=TRUE} and
+  the centroid of \code{w} lies outside \code{w},
+  then the window of the returned point pattern
+  will be a rectangle containing the
+  original window (using \code{\link{as.rectangle}}. 
 }
 \seealso{
   \code{\link{owin}},
@@ -37,17 +45,16 @@
 }
 \examples{
   w <- owin(c(0,1),c(0,1))
-  centroid.owin(w) 
+  centroid.owin(w)
   # returns 0.5, 0.5
 
   data(demopat)
-  w <- demopat$window
+  w <- as.owin(demopat)
   # an irregular window
+  cent <- centroid.owin(w, as.ppp = TRUE)
   \dontrun{
-  plot(w)
-  # plot the window
-  points(centroid.owin(w))
-  # mark its centroid 
+  plot(cent)
+  # plot the window and its centroid
   }
 
   wapprox <- as.mask(w)
@@ -63,9 +70,10 @@
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
 }
 \keyword{spatial}
 \keyword{math}

@@ -77,10 +77,14 @@
 
   If \code{dummy} is missing, then a pattern of dummy points
   will be generated using \code{\link{default.dummy}}, taking account
-  of the optional arguments \code{...}. Recognised arguments
+  of the optional arguments \code{...}.
+  By default, the dummy points are arranged in a
+  rectangular grid; recognised arguments
   include \code{nd} (the number of grid points
   in the horizontal and vertical directions)
   and \code{eps} (the spacing between dummy points).
+  If \code{random=TRUE}, a systematic random pattern
+  of dummy points is generated instead.
   See \code{\link{default.dummy}} for details. 
   
   If \code{method = "grid"} then the optional arguments (for \code{\dots}) are 

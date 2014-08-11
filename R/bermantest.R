@@ -20,6 +20,7 @@ bermantest.ppp <-
            ...) {
     Xname <- short.deparse(substitute(X))
     covname <- short.deparse(substitute(covariate))
+    if(is.character(covariate)) covname <- covariate
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
@@ -36,6 +37,7 @@ bermantest.ppm <- function(model, covariate,
                            ...) {
   modelname <- short.deparse(substitute(model))
   covname <- short.deparse(substitute(covariate))
+  if(is.character(covariate)) covname <- covariate
   verifyclass(model, "ppm")
   which <- match.arg(which)
   alternative <- match.arg(alternative)
@@ -56,6 +58,7 @@ bermantest.lpp <-
            ...) {
     Xname <- short.deparse(substitute(X))
     covname <- short.deparse(substitute(covariate))
+    if(is.character(covariate)) covname <- covariate
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
@@ -72,6 +75,7 @@ bermantest.lppm <- function(model, covariate,
                            ...) {
   modelname <- short.deparse(substitute(model))
   covname <- short.deparse(substitute(covariate))
+  if(is.character(covariate)) covname <- covariate
   verifyclass(model, "lppm")
   which <- match.arg(which)
   alternative <- match.arg(alternative)
@@ -94,8 +98,10 @@ bermantestEngine <- function(model, covariate,
   csr <- is.poisson(model) && is.stationary(model)
   if(missing(modelname))
     modelname <- if(csr) "CSR" else short.deparse(substitute(model))
-  if(missing(covname))
+  if(missing(covname)) {
     covname <- short.deparse(substitute(covariate))
+    if(is.character(covariate)) covname <- covariate
+  }
 
   which <- match.arg(which)
   alternative <- match.arg(alternative)

@@ -5,7 +5,7 @@
 #
 #  + bandwidth selection rules bw.diggle, bw.scott
 #
-#  $Revision: 1.65 $    $Date: 2014/01/19 11:09:10 $
+#  $Revision: 1.66 $    $Date: 2014/04/02 10:31:39 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -143,7 +143,7 @@ densitypointsEngine <- function(x, sigma, ...,
 #  }
   if(leaveoneout) {
     # ensure each point has its closest neighbours within the cutoff
-    nndmax <- max(nndist(x))
+    nndmax <- maxnndist(x)
     cutoff <- max(2 * nndmax, cutoff)
   }
   # validate weights
@@ -500,3 +500,207 @@ bw.scott <- function(X) {
 }
 
 
+densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
+                               weights=NULL, edge=TRUE, varcov=NULL,
+                               diggle=FALSE,
+                               sorted=FALSE) {
+  if(is.null(varcov)) {
+    const <- 1/(2 * pi * sigma^2)
+  } else {
+    detSigma <- det(varcov)
+    Sinv <- solve(varcov)
+    const <- 1/(2 * pi * sqrt(detSigma))
+  }
+  if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+    weights <- NULL
+  ## Leave-one-out computation
+  ## cutoff: contributions from pairs of distinct points
+  ## closer than 8 standard deviations
+  sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
+  cutoff <- 8 * sd
+  # validate weights
+  if(is.null(weights)) {
+    k <- 1
+  } else if(is.matrix(weights) || is.data.frame(weights)) {
+    k <- ncol(weights)
+    stopifnot(nrow(weights) == npoints(Xdata))
+    weights <- as.data.frame(weights)
+    weightnames <- colnames(weights)
+  } else {
+    k <- 1
+    stopifnot(length(weights) == npoints(Xdata) || length(weights) == 1)
+  }
+  # evaluate edge correction weights at points 
+  if(edge) {
+    win <- Xdata$window
+    if(diggle) {
+      ## edge correction weights are attached to data points
+      xedge <- Xdata
+    } else {
+      ## edge correction weights are applied at query points
+      xedge <- Xquery
+      if(!all(inside.owin(Xquery, , win)))
+        stop(paste("Edge correction is not possible:",
+                   "some query points lie outside the data window"),
+             call.=FALSE)
+    }
+    if(is.null(varcov) && win$type == "rectangle") {
+        ## evaluate Gaussian probabilities directly
+      xr <- win$xrange
+      yr <- win$yrange
+      xx <- xedge$x
+      yy <- xedge$y
+      xprob <-
+        pnorm(xr[2], mean=xx, sd=sigma) - pnorm(xr[1], mean=xx, sd=sigma)
+      yprob <-
+        pnorm(yr[2], mean=yy, sd=sigma) - pnorm(yr[1], mean=yy, sd=sigma)
+      edgeweight <- xprob * yprob
+    } else {
+      edg <- second.moment.calc(Xdata, sigma=sigma,
+                                what="edge", varcov=varcov)
+      edgeweight <- safelookup(edg, xedge, warn=FALSE)
+    }
+    if(diggle) {
+      ## Diggle edge correction
+      ## edgeweight is attached to each data point
+      if(is.null(weights)) {
+        k <- 1
+        weights <- 1/edgeweight
+      } else {
+        weights <- weights/edgeweight
+      }
+    }
+  }
+  
+  ndata <- npoints(Xdata)
+  nquery <- npoints(Xquery)
+  result <- if(k == 1) numeric(nquery) else matrix(, nquery, k)
+  ## coordinates
+  xq <- Xquery$x
+  yq <- Xquery$y
+  xd <- Xdata$x
+  yd <- Xdata$y
+  if(!sorted) {
+    ## sort into increasing order of x coordinate (required by C code)
+    ooq <- fave.order(Xquery$x)
+    xq <- xq[ooq]
+    yq <- yq[ooq]
+    ood <- fave.order(Xdata$x)
+    xd <- xd[ood]
+    yd <- yd[ood]
+  }
+  DUP <- spatstat.options("dupC")
+  if(is.null(varcov)) {
+    ## isotropic kernel
+    if(is.null(weights)) {
+      zz <- .C("crdenspt",
+               nquery  = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               rmaxi   = as.double(cutoff),
+               sig     = as.double(sd),
+               result  = as.double(double(nquery)),
+               DUP     = DUP)
+      if(sorted) result <- zz$result else result[ooq] <- zz$result 
+    } else if(k == 1) {
+      wtsort <- if(sorted) weights else weights[ood]
+      zz <- .C("wtcrdenspt",
+               nquery  = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               wd      = as.double(wtsort),
+               rmaxi   = as.double(cutoff),
+               sig     = as.double(sd),
+               result  = as.double(double(nquery)),
+               DUP     = DUP)
+      if(sorted) result <- zz$result else result[ooq] <- zz$result 
+    } else {
+      ## matrix of weights
+      wtsort <- if(sorted) weights else weights[ood, ]
+      for(j in 1:k) {
+        zz <- .C("wtcrdenspt",
+                 nquery  = as.integer(nquery),
+                 xq      = as.double(xq),
+                 yq      = as.double(yq),
+                 ndata   = as.integer(ndata),
+                 xd      = as.double(xd),
+                 yd      = as.double(yd),
+                 wd      = as.double(wtsort[,j]),
+                 rmaxi   = as.double(cutoff),
+                 sig     = as.double(sd),
+                 result  = as.double(double(nquery)),
+                 DUP     = DUP)
+        if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result
+      }
+    }
+  } else {
+    ## anisotropic kernel
+    flatSinv <- as.vector(t(Sinv))
+    if(is.null(weights)) {
+      zz <- .C("acrdenspt",
+               nquery  = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               rmaxi   = as.double(cutoff),
+               detsigma = as.double(detSigma),
+               sinv    = as.double(flatSinv),
+               result  = as.double(double(nquery)),
+               DUP     = DUP)
+      if(sorted) result <- zz$result else result[ooq] <- zz$result 
+    } else if(k == 1) {
+      ## vector of weights
+      wtsort <- if(sorted) weights else weights[ood]
+      zz <- .C("awtcrdenspt",
+               nquery  = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               wd      = as.double(wtsort),
+               rmaxi   = as.double(cutoff),
+               detsigma = as.double(detSigma),
+               sinv    = as.double(flatSinv),
+               result   = as.double(double(nquery)),
+               DUP     = DUP)
+      if(sorted) result <- zz$result else result[ooq] <- zz$result 
+    } else {
+      ## matrix of weights
+      wtsort <- if(sorted) weights else weights[ood, ]
+      for(j in 1:k) {
+        zz <- .C("awtcrdenspt",
+                 nquery  = as.integer(nquery),
+                 xq      = as.double(xq),
+                 yq      = as.double(yq),
+                 ndata   = as.integer(ndata),
+                 xd      = as.double(xd),
+                 yd      = as.double(yd),
+                 wd      = as.double(wtsort[,j]),
+                 rmaxi   = as.double(cutoff),
+                 detsigma = as.double(detSigma),
+                 sinv    = as.double(flatSinv),
+                 result  = as.double(double(nquery)),
+                 DUP     = DUP)
+        if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result 
+      }
+    }
+  }
+  # ........  Edge correction ........................................
+  if(edge && !diggle) 
+    result <- result/edgeweight
+
+  # tack on bandwidth
+  attr(result, "sigma") <- sigma
+  attr(result, "varcov") <- varcov
+  # 
+  return(result)
+}

@@ -11,13 +11,13 @@
 \usage{
   \method{affine}{lpp}(X, mat=diag(c(1,1)), vec=c(0,0), \dots)
 
-  \method{shift}{lpp}(X, \dots)
+  \method{shift}{lpp}(X, vec=c(0,0), \dots, origin=NULL)
 
-  \method{rotate}{lpp}(X, angle=pi/2, \dots)
+  \method{rotate}{lpp}(X, angle=pi/2, \dots, centre=NULL)
 
   \method{scalardilate}{lpp}(X, f, \dots)
 
-  \method{rescale}{lpp}(X, s)
+  \method{rescale}{lpp}(X, s, unitname)
 }
 \arguments{
   \item{X}{Point pattern on a linear network (object of class \code{"lpp"}).}
@@ -30,6 +30,23 @@
   }
   \item{\dots}{
     Arguments passed to other methods.
+  }
+  \item{origin}{
+    Character string determining a location
+    that will be shifted to the origin. Options are
+    \code{"centroid"}, \code{"midpoint"} and \code{"bottomleft"}.
+    Partially matched. 
+  }
+  \item{centre}{
+    Centre of rotation.
+    Either a vector of length 2, or a character string
+    (partially matched to \code{"centroid"}, \code{"midpoint"}
+    or \code{"bottomleft"}).
+    The default is the coordinate origin \code{c(0,0)}.
+  }
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    A value acceptable to the function \code{\link{unitname<-}}
   }
 }
 \value{

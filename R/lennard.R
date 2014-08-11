@@ -49,7 +49,7 @@ LennardJones <- local({
              # not enough points
              return(self)
            }
-           s0 <- min(nndist(X))
+           s0 <- minnndist(X)
            if(s0 == 0) {
              warning(paste("Pattern contains duplicated points:",
                            "impossible under Lennard-Jones model"))

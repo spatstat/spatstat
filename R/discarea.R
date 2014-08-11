@@ -27,7 +27,7 @@ discpartarea <- function(X, r, W=as.owin(X)) {
   W <- as.polygonal(W)
   
   # convert polygon to line segments
-  Y <- as.psp(W)
+  Y <- edges(W)
   # remove vertical segments (contribution is zero)
   vert <- (Y$ends$x1 == Y$ends$x0)
   Y <- Y[!vert]

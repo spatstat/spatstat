@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.13 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.14 $   $Date: 2014/03/22 07:03:23 $
 #
 #
 
@@ -110,7 +110,7 @@ iplot.ppp <- function(x, ..., xname) {
     else c("Circles proportional to mark", ptlabels)
   }
   pointmap <- ptvalues[1]
-  rp.radiogroup(p, pointmap, values=ptvalues, labels=ptlabels,
+  rp.radiogroup(p, pointmap, vals=ptvalues, labels=ptlabels,
    			  title="how to plot points", action=redraw.iplot.ppp,
                 pos=pozzie(nextrow))
   nextrow <- nextrow+1

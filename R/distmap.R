@@ -51,7 +51,7 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
     else 
       Dist <- Bdry
   } else if(X$type == "polygonal" && !discretise) {
-    Edges <- as.psp(X)
+    Edges <- edges(X)
     Dist <- distmap(Edges, ...)
     Bdry <- attr(Dist, "bdry")
     if(!invert) 

@@ -31,14 +31,14 @@ versionstring.interact <- function(object) {
 # This is now saved in the spatstat cache environment rather than read from file every time
 
 versionstring.spatstat <- function() {
-  get("SpatstatVersion", envir = .spEnv)
+  getSpatstatVariable("SpatstatVersion")
 }
 
 store.versionstring.spatstat <- function() {
   vs <- read.dcf(file=system.file("DESCRIPTION", package="spatstat"),
                  fields="Version")
   vs <- as.character(vs)
-  assign("SpatstatVersion", vs, envir=.spEnv)
+  putSpatstatVariable("SpatstatVersion", vs)
 }
 
 

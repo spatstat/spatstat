@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.41 $	$Date: 2014/02/16 06:42:44 $
+#	$Revision: 1.42 $	$Date: 2014/04/16 05:16:25 $
 #
 #
 # ------------------------------------------------------------------------
@@ -23,6 +23,7 @@ Lcross.inhom <- function(X, i, j, ...) {
                   new.yexp=substitute(L[list(inhom,i,j)](r),
                                       list(i=iname,j=jname)))
   attr(L, "labl") <- attr(K, "labl")
+  attr(L, "dangerous") <- attr(K, "dangerous")
   return(L)  
 }
 
@@ -40,6 +41,7 @@ Ldot.inhom <- function(X, i, ...) {
                   new.yexp=substitute(L[list(inhom, i ~ symbol("\267"))](r),
                     list(i=iname)))
   attr(L, "labl") <- attr(K, "labl")
+  attr(L, "dangerous") <- attr(K, "dangerous")
   return(L)  
 }
 
@@ -64,19 +66,20 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
   J <- (marx == j)
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points with mark j =", j)
-  result <- Kmulti.inhom(X, I, J, lambdaI, lambdaJ, ...,
-                         r=r,breaks=breaks,correction=correction,
-                         sigma=sigma, varcov=varcov,
-                         lambdaIJ=lambdaIJ, Iname=Iname, Jname=Jname)
+  K <- Kmulti.inhom(X, I, J, lambdaI, lambdaJ, ...,
+                    r=r,breaks=breaks,correction=correction,
+                    sigma=sigma, varcov=varcov,
+                    lambdaIJ=lambdaIJ, Iname=Iname, Jname=Jname)
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
   result <-
-    rebadge.fv(result,
+    rebadge.fv(K,
                substitute(K[inhom,i,j](r),
                           list(i=iname,j=jname)),
                c("K", paste0("list", paren(paste("inhom", i, j, sep=",")))),
                new.yexp=substitute(K[list(inhom,i,j)](r),
                                    list(i=iname,j=jname)))
+  attr(result, "dangerous") <- attr(K, "dangerous")
   return(result)
 }
 
@@ -102,18 +105,23 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points")
 	
-  result <- Kmulti.inhom(X, I, J, lambdaI, lambdadot, ...,
-                         r=r,breaks=breaks,correction=correction,
-                         sigma=sigma, varcov=varcov,
-                         lambdaIJ=lambdaIdot,
-                         Iname=Iname, Jname=Jname)
+  K <- Kmulti.inhom(X, I, J, lambdaI, lambdadot, ...,
+                    r=r,breaks=breaks,correction=correction,
+                    sigma=sigma, varcov=varcov,
+                    lambdaIJ=lambdaIdot,
+                    Iname=Iname, Jname=Jname)
   iname <- make.parseable(paste(i))
   result <-
-    rebadge.fv(result,
+    rebadge.fv(K,
                substitute(K[inhom, i ~ dot](r), list(i=iname)),
                c("K", paste0("list(inhom,", iname, "~symbol(\"\\267\"))")),
                new.yexp=substitute(K[list(inhom, i ~ symbol("\267"))](r),
                                    list(i=iname)))
+  if(!is.null(dang <- attr(K, "dangerous"))) {
+    dang[dang == "lambdaJ"] <- "lambdadot"
+    dang[dang == "lambdaIJ"] <- "lambdaIdot"
+    attr(result, "dangerous") <- dang
+  }
   return(result)
 }
 
@@ -179,9 +187,13 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   r <- breaks$r
   rmax <- breaks$max
 
-  # intensity data
+  dangerous <- c("lambdaI", "lambdaJ", "lambdaIJ")
+  dangerI <- dangerJ <- TRUE
+
+  ## intensity data
   if(is.null(lambdaI)) {
     # estimate intensity
+    dangerI <- FALSE
     lambdaI <- density(X[I], ..., sigma=sigma, varcov=varcov,
                        at="points", leaveoneout=TRUE)
   } else if(is.im(lambdaI)) {
@@ -201,6 +213,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
 
   if(is.null(lambdaJ)) {
     # estimate intensity
+    dangerJ <- FALSE
     lambdaJ <- density(X[J], ..., sigma=sigma, varcov=varcov,
                        at="points", leaveoneout=TRUE)
   } else if(is.im(lambdaJ)) {
@@ -220,13 +233,16 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
 
   # Weight for each pair
   if(!is.null(lambdaIJ)) {
+    dangerIJ <- TRUE
     if(!is.matrix(lambdaIJ))
       stop("lambdaIJ should be a matrix")
     if(nrow(lambdaIJ) != nI)
       stop(paste("nrow(lambdaIJ) should equal the number of", Iname))
     if(ncol(lambdaIJ) != nJ)
       stop(paste("ncol(lambdaIJ) should equal the number of", Jname))
-  }
+  } else dangerIJ <- FALSE
+
+  danger <- dangerI || dangerJ || dangerIJ
 
   # Recommended range of r values
   alim <- c(0, min(rmax, rmaxdefault))
@@ -297,40 +313,42 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
     }
     if(any(correction == "bord.modif")) {
       Kbm <- RS$numerator/eroded.areas(W, r)
-            K <- bind.fv(K, data.frame(bord.modif=Kbm),
-                         makefvlabel(NULL, "hat", fname, "bordm"),
-                         "modified border-corrected estimate of %s",
-                         "bord.modif")
-          }
-        }
-        if(any(correction == "translate")) {
-          # translation correction
-            edgewt <- edge.Trans(XI[icloseI], XJ[jcloseJ], paired=TRUE)
-            allweight <- edgewt * weight
-            wh <- whist(dclose, breaks$val, allweight)
-            Ktrans <- cumsum(wh)/area
-            rmax <- diameter(W)/2
-            Ktrans[r >= rmax] <- NA
-            K <- bind.fv(K, data.frame(trans=Ktrans),
-                         makefvlabel(NULL, "hat", fname, "trans"),
-                         "translation-corrected estimate of %s",
-                         "trans")
-        }
-        if(any(correction == "isotropic")) {
-          # Ripley isotropic correction
-            edgewt <- edge.Ripley(XI[icloseI], matrix(dclose, ncol=1))
-            allweight <- edgewt * weight
-            wh <- whist(dclose, breaks$val, allweight)
-            Kiso <- cumsum(wh)/area
-            rmax <- diameter(W)/2
-            Kiso[r >= rmax] <- NA
-            K <- bind.fv(K, data.frame(iso=Kiso), 
-                         makefvlabel(NULL, "hat", fname, "iso"),
-                         "Ripley isotropic correction estimate of %s",
-                         "iso")
-        }
-        # default is to display them all
-        formula(K) <- . ~ r
-        unitname(K) <- unitname(X)
-        return(K)
+      K <- bind.fv(K, data.frame(bord.modif=Kbm),
+                   makefvlabel(NULL, "hat", fname, "bordm"),
+                   "modified border-corrected estimate of %s",
+                   "bord.modif")
+    }
+  }
+  if(any(correction == "translate")) {
+    ## translation correction
+    edgewt <- edge.Trans(XI[icloseI], XJ[jcloseJ], paired=TRUE)
+    allweight <- edgewt * weight
+    wh <- whist(dclose, breaks$val, allweight)
+    Ktrans <- cumsum(wh)/area
+    rmax <- diameter(W)/2
+    Ktrans[r >= rmax] <- NA
+    K <- bind.fv(K, data.frame(trans=Ktrans),
+                 makefvlabel(NULL, "hat", fname, "trans"),
+                 "translation-corrected estimate of %s",
+                 "trans")
+  }
+  if(any(correction == "isotropic")) {
+    ## Ripley isotropic correction
+    edgewt <- edge.Ripley(XI[icloseI], matrix(dclose, ncol=1))
+    allweight <- edgewt * weight
+    wh <- whist(dclose, breaks$val, allweight)
+    Kiso <- cumsum(wh)/area
+    rmax <- diameter(W)/2
+    Kiso[r >= rmax] <- NA
+    K <- bind.fv(K, data.frame(iso=Kiso), 
+                 makefvlabel(NULL, "hat", fname, "iso"),
+                 "Ripley isotropic correction estimate of %s",
+                 "iso")
+  }
+  ## default is to display them all
+  formula(K) <- . ~ r
+  unitname(K) <- unitname(X)
+  if(danger)
+    attr(K, "dangerous") <- dangerous
+  return(K)
 }

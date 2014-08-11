@@ -8,7 +8,7 @@ bronzefilter
 cells
 chicago
 chorley: chorley chorley.extra
-clmfires: clmcov100 clmcov200 clmfires
+clmfires: clmfires clmfires.extra
 copper
 demohyper
 demopat

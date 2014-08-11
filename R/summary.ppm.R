@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.65 $   $Date: 2013/11/12 16:31:54 $
+#    $Revision: 1.67 $   $Date: 2014/04/05 08:06:25 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -152,6 +152,7 @@ summary.ppm <- local({
         # do covariates depend on additional arguments?
         if(y$has.funcs) {
           y$covfunargs <- x$covfunargs
+          y$cfafitter <- attr(x$covfunargs, "fitter")
           funs <- covars[isfun]
           fdescrip <- function(f) {
             if(inherits(f, "distfun")) return("distfun")
@@ -250,7 +251,6 @@ summary.ppm <- local({
              })
     } else {
       # not stationary 
-      y$trend$label <- "Fitted coefficients for trend formula"
       # extract trend terms without trying to understand them much
       if(is.null(Vnames)) 
         trendbits <- COEFS
@@ -259,6 +259,9 @@ summary.ppm <- local({
         whichbits <- apply(!agree, 1, all)
         trendbits <- COEFS[whichbits]
       }
+      y$trend$label <- ngettext(length(trendbits),
+                                "Fitted trend coefficient",
+                                "Fitted trend coefficients")
       y$trend$value <- blankcoefnames(trendbits)
     }
   

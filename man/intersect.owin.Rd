@@ -53,7 +53,7 @@
 \seealso{
   \code{\link{is.subset.owin}},
   \code{\link{overlap.owin}},
-  \code{\link{bounding.box}},
+  \code{\link{boundingbox}},
   \code{\link{owin.object}}
 }
 \examples{
@@ -89,19 +89,19 @@
 # two polygons
    A <- letterR
    B <- rotate(letterR, 0.2)
-   plot(bounding.box(A,B), main="intersection")
+   plot(boundingbox(A,B), main="intersection")
    w <- intersect.owin(A, B)
    plot(w, add=TRUE, col="lightblue")
    plot(A, add=TRUE)
    plot(B, add=TRUE)
 
-   plot(bounding.box(A,B), main="union")
+   plot(boundingbox(A,B), main="union")
    w <- union.owin(A,B)
    plot(w, add=TRUE, col="lightblue")   
    plot(A, add=TRUE)
    plot(B, add=TRUE)
 
-   plot(bounding.box(A,B), main="set minus")
+   plot(boundingbox(A,B), main="set minus")
    w <- setminus.owin(A,B)
    plot(w, add=TRUE, col="lightblue")   
    plot(A, add=TRUE)

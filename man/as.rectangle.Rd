@@ -38,13 +38,13 @@
   a line segment pattern (object of class \code{"psp"}).
   The bounding rectangle of the window of the dataset is extracted.
 
-  Use the function \code{\link{bounding.box}} to compute the \emph{smallest}
+  Use the function \code{\link{boundingbox}} to compute the \emph{smallest}
   bounding rectangle of a dataset.
 }
 \seealso{
   \code{\link{owin}},
   \code{\link{as.owin}},
-  \code{\link{bounding.box}}
+  \code{\link{boundingbox}}
 }
 \examples{
   w <- owin(c(0,10),c(0,10), poly=list(x=c(1,2,3,2,1), y=c(2,3,4,6,7)))

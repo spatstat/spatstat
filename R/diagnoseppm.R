@@ -7,9 +7,10 @@
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
-                              sigma=NULL,
-                              rbord = reach(object), compute.sd=TRUE,
-                              compute.cts=TRUE, rv=NULL, oldstyle=FALSE)
+                                sigma=NULL,
+                                rbord = reach(object), compute.sd=TRUE,
+                                compute.cts=TRUE, rv=NULL, oldstyle=FALSE,
+                                splineargs = list(spar=0.5))
 {
   if(is.marked.ppm(object))
     stop("Sorry, this is not yet implemented for marked models")
@@ -71,7 +72,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
           # all values of `cts' will be equal
           Ydens <- as.im(cts[1], Y$window)
         } else {
-          smallsigma <- max(nndist(Ycts))
+          smallsigma <- maxnndist(Ycts)
           Ujitter <- U
           Ujitter$x <- U$x + runif(U$n, -smallsigma, smallsigma)
           Ujitter$y <- U$y + runif(U$n, -smallsigma, smallsigma)
@@ -160,7 +161,9 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
             typename=typename,
             covname="x coordinate",
             oldstyle=oldstyle,
-            check=FALSE, ...)
+            check=FALSE,
+            splineargs=splineargs,
+            ...)
 
   if(opt$ycumul)
     result$ycumul <- 
@@ -173,7 +176,9 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
             typename=typename,
             covname="y coordinate",
             oldstyle=oldstyle,
-            check=FALSE, ...)
+            check=FALSE,
+            splineargs=splineargs,
+            ...)
 
   # -------------- summary numbers --------------
   
@@ -195,7 +200,8 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                          rbord = reach(object), cumulative=TRUE,
                          plot.it = TRUE, rv = NULL, 
                          compute.sd=TRUE, compute.cts=TRUE,
-                         typename, check=TRUE, repair=TRUE, oldstyle=FALSE)
+                         typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
+                         splineargs=list(spar=0.5))
 {
   if(is.marked.ppm(object))
     stop("Sorry, this is not yet implemented for marked models")
@@ -277,7 +283,9 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                               opt=opt, sigma=sigma, rbord=rbord,
                               compute.sd=compute.sd,
                               compute.cts=compute.cts,
-                              rv=rv, oldstyle=oldstyle, ...)
+                              rv=rv, oldstyle=oldstyle,
+                              splineargs=splineargs,
+                              ...)
 
   RES$typename <- typename
   RES$opt <- opt
@@ -287,19 +295,24 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
   class(RES) <- "diagppm"
 
   # -------  PLOT --------------------------------------------------
-  if(plot.it)
+  if(plot.it) 
     plot(RES, ...)
 
   return(RES)
 }
 
-plot.diagppm <- function(x, ..., which, plot.neg="image",
-                         plot.smooth="imagecontour",
-                         plot.sd=TRUE, spacing=0.1,
-                         srange=NULL, monochrome=FALSE, main=NULL)
+plot.diagppm <-
+  function(x, ..., which,
+           plot.neg=c("image", "discrete", "contour", "imagecontour"),
+           plot.smooth=c("imagecontour", "image", "contour", "persp"),
+           plot.sd=TRUE, spacing=0.1,
+           srange=NULL, monochrome=FALSE, main=NULL)
 {
   opt <- x$opt
-
+  
+  plot.neg <- match.arg(plot.neg)
+  plot.smooth <- match.arg(plot.smooth)
+  
   if(!missing(which)) {
     oldopt <- opt
     newopt <- list()

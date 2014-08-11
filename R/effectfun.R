@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.11 $ $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.13 $ $Date: 2014/04/04 08:00:56 $
 #
 
 effectfun <- function(model, covname, ..., se.fit=FALSE) {
@@ -10,21 +10,21 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
   # determine names of covariates involved
   intern.names <-
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
-  co <- model$covariates
-  extern.names <- names(co)
-  # find the relevant covariate 
+  needed.names <- variablesinformula(rhs.of.formula(formula(model)))
+  ## validate the relevant covariate 
   if(missing(covname))
     stop("covname must be provided")
-  if(!(covname %in% c(intern.names, extern.names)))
-    stop(paste("model does not have a covariate called", sQuote(covname)))
+  if(!(covname %in% c(intern.names, needed.names)))
+    stop(paste("model does not have a covariate called", sQuote(covname)),
+         call.=FALSE)
   # check that fixed values for all other covariates are provided 
   given.covs <- names(dotargs)
-  if(any(uhoh <- !(extern.names %in% c(given.covs, covname)))) {
+  if(any(uhoh <- !(needed.names %in% c(given.covs, covname)))) {
     nuh <- sum(uhoh)
     stop(paste(ngettext(nuh,
                         "A value for the covariate",
                         "Values for the covariates"),
-               commasep(dQuote(extern.names[uhoh])),
+               commasep(dQuote(needed.names[uhoh])),
                "must be provided (as",
                ngettext(nuh, "an argument", "arguments"),
                "to effectfun)"))
@@ -46,8 +46,8 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
     Zvals <- levels(marks(data.ppm(model)))
   } else {
     # covariate is external
-    if(is.data.frame(co)) {
-      Z <- co$covname
+    if(is.data.frame(covdf <- model$covariates)) {
+      Z <- covdf$covname
       covtype <- typeof(Z)
       if(covtype == "double")
         covtype <- "real"
@@ -68,8 +68,13 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
              },
              stop(paste("Cannot handle covariate of type", dQuote(covtype)))
              )
-    } else if(is.list(co)) {
-      Z <- co[[covname]]
+    } else {
+      Z <- getdataobjects(covname,
+                          environment(formula(model)),
+                          model$covariates)[[1]]
+      if(is.null(Z))
+        stop(paste("Cannot find covariate", sQuote(covname)),
+             call.=FALSE)
       # convert to image
       if(!is.im(Z))
         Z <- as.im(Z, W=as.owin(model))
@@ -87,7 +92,7 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
              },
              stop(paste("Cannot handle covariate of type", dQuote(covtype)))
              )
-    } else stop("Unrecognised format for covariates in model")
+    }
   }
   # set up data frames of fake data for predict method
   # First set up default, constant value for each covariate
@@ -143,6 +148,7 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
                           "upper limit of pointwise 95%% CI for trend",
                           "lower limit of pointwise 95%% CI for trend"))
       fvnames(result, ".") <- c("lambda", "hi", "lo")
+      fvnames(result, ".s") <- c("hi", "lo")
       formula(result) <- paste(". ~ ", covname)
     }
   }

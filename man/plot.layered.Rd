@@ -9,7 +9,8 @@ Layered Plot
 }
 \usage{
 \method{plot}{layered}(x, ..., which = NULL, plotargs = NULL,
-                         add=FALSE, show.all=!add, main=NULL)
+                         add=FALSE, show.all=!add, main=NULL,
+                         do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -37,6 +38,7 @@ Layered Plot
      coordinate axes, colour ribbon, and so on). 
   }
   \item{main}{Main title for the plot}
+  \item{do.plot}{Logical value indicating whether to actually do the plotting.}
 }
 \details{
   Layering is a simple mechanism for controlling
@@ -75,7 +77,9 @@ Layered Plot
   entry of \code{plotargs} or \code{\link{layerplotargs}(x)}.
 }
 \value{
-  Null.
+  (Invisibly) a list containing the return values from
+  the plot commands for each layer. This list has
+  an attribute \code{"bbox"} giving a bounding box for the entire plot.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

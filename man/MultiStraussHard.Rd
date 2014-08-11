@@ -6,13 +6,13 @@ Creates an instance of the multitype/hard core Strauss point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  MultiStraussHard(types=NULL, iradii, hradii)
+  MultiStraussHard(iradii, hradii, types=NULL)
 }
 \arguments{
-  \item{types}{Optional; vector of all possible types (i.e. the possible levels
-    of the \code{marks} variable in the data)}
   \item{iradii}{Matrix of interaction radii}
   \item{hradii}{Matrix of hard core radii}
+  \item{types}{Optional; vector of all possible types (i.e. the possible levels
+    of the \code{marks} variable in the data)}
 }
 \value{
   An object of class \code{"interact"}
@@ -65,7 +65,7 @@ which can then be fitted to point pattern data.
 \examples{
    r <- matrix(3, nrow=2,ncol=2)
    h <- matrix(c(1,2,2,1), nrow=2,ncol=2)
-   MultiStraussHard(iradii=r,hradii=h)
+   MultiStraussHard(r,h)
    # prints a sensible description of itself
    r <- 0.04 * matrix(c(1,2,2,1), nrow=2,ncol=2)
    h <- 0.02 * matrix(c(1,NA,NA,1), nrow=2,ncol=2)
@@ -73,9 +73,8 @@ which can then be fitted to point pattern data.
    \testonly{
        X <- X[owin(c(0,0.8), c(0,1))]
    }
-   fit <- ppm(X, ~1, MultiStraussHard(,r,h))
+   fit <- ppm(X ~1, MultiStraussHard(r,h))
    # fit stationary multitype hardcore Strauss process to `amacrine'
-   # Note the comma; needed since "types" is not specified.
 }
 \section{Warnings}{
   In order that \code{\link{ppm}} can fit the multitype/hard core
@@ -85,12 +84,18 @@ which can then be fitted to point pattern data.
   argument \code{types} is specified it is interpreted as a set of
   factor levels and this set must equal \code{levels(marks(X))}.
 }
-
+\section{Changed Syntax}{
+  Before \pkg{spatstat} version \code{1.37-0},
+  the syntax of this function was different:
+  \code{MultiStraussHard(types=NULL, iradii, hradii)}.
+  The new code attempts to handle the old syntax as well.
+}
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
 }
 \keyword{spatial}
 \keyword{models}

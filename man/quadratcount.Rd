@@ -9,8 +9,10 @@
 }
 \usage{
   quadratcount(X, \dots)
+
   \method{quadratcount}{ppp}(X, nx=5, ny=nx, \dots,
                xbreaks=NULL, ybreaks=NULL, tess=NULL)
+
   \method{quadratcount}{splitppp}(X, \dots)
 }
 \arguments{
@@ -111,6 +113,14 @@
 \note{
   To perform a chi-squared test based on the quadrat counts,
   use \code{\link{quadrat.test}}.
+}
+\section{Warning}{
+  If \code{Q} is the result of \code{quadratcount}
+  using rectangular tiles, then \code{as.numeric(Q)}
+  extracts the counts \bold{in the wrong order}.
+  To obtain the quadrat counts in the same order as the
+  tiles of the corresponding tessellation would be listed,
+  use \code{as.vector(t(Q))}, which works in all cases.
 }
 \seealso{
   \code{\link{plot.quadratcount}},

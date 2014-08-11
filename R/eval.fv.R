@@ -23,7 +23,7 @@ eval.fv <- local({
       stop("No variables in this expression")
     # get the actual variables
     if(missing(envir))
-      envir <- sys.parent()
+      envir <- parent.frame()
     vars <- lapply(as.list(varnames), get, envir=envir)
     names(vars) <- varnames
     # find out which ones are fv objects
@@ -58,7 +58,7 @@ eval.fv <- local({
       # insert into list of argument values
       vars[fvs] <- funvalues
       # evaluate
-      result[[yn]] <- eval(e, vars)
+      result[[yn]] <- eval(e, vars, enclos=envir)
     }
     # determine mathematical labels.
     # 'yexp' determines y axis label

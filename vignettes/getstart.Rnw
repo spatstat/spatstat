@@ -31,7 +31,7 @@ options(useFancyQuotes=FALSE)
 @ 
 
 \title{Getting started with \texttt{spatstat}}
-\author{Adrian Baddeley and Rolf Turner}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
 \date{For \spst\ version \texttt{\Sexpr{sversion}}}
 \maketitle
 

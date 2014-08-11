@@ -65,7 +65,7 @@ linearpcf(X, r=NULL, ..., correction="Ang")
   Geometrically corrected second-order analysis of 
   events on a linear network, with applications to
   ecology and criminology.
-  To appear in \emph{Scandinavian Journal of Statistics}.
+  \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
   
   Okabe, A. and Yamada, I. (2001) The K-function method on a network and
   its computational implementation. \emph{Geographical Analysis}

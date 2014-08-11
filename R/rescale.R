@@ -6,26 +6,29 @@
 #
 #
 
-rescale <- function(X, s) {
+rescale <- function(X, s, unitname) {
   UseMethod("rescale")
 }
 
-rescale.ppp <- function(X, s) {
-  if(missing(s)) s <- 1/unitname(X)$multiplier
+rescale.ppp <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
+  if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
   Y <- affine.ppp(X, mat=diag(c(1/s,1/s)))
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
 
-rescale.owin <- function(X, s) {
-  if(missing(s)) s <- 1/unitname(X)$multiplier
+rescale.owin <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
+  if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
   Y <- affine.owin(X, mat=diag(c(1/s,1/s)))
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
 
-rescale.im <- function(X, s) {
-  if(missing(s)) s <- 1/unitname(X)$multiplier
+rescale.im <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
+  if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
   Y <- X
   Y$xrange <- X$xrange/s
   Y$yrange <- X$yrange/s
@@ -33,18 +36,20 @@ rescale.im <- function(X, s) {
   Y$ystep  <- X$ystep/s
   Y$xcol   <- X$xcol/s
   Y$yrow   <- X$yrow/s
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
 
-rescale.psp <- function(X, s) {
-  if(missing(s)) s <- 1/unitname(X)$multiplier
+rescale.psp <- function(X, s, unitname) {
+  if(missing(unitname)) unitname <- NULL
+  if(missing(s) || is.null(s)) s <- 1/unitname(X)$multiplier
   Y <- affine.psp(X, mat=diag(c(1/s,1/s)))
-  unitname(Y) <- rescale(unitname(X), s)
+  unitname(Y) <- rescale(unitname(X), s, unitname)
   return(Y)
 }
   
-rescale.units <- function(X, s) {
+rescale.units <- function(X, s, unitname) {
+  if(!missing(unitname) && !is.null(unitname)) return(as.units(unitname))
   if(summary(X)$vanilla)
     return(X)
   if(missing(s)) {

@@ -9,7 +9,7 @@ oldoptions <- options(warn=-1)
 
 plot(amacrine)
 
-plot(anemones, markscale=0.5)
+plot(anemones, markscale=1)
 
 ants.extra$plotit()
 
@@ -21,18 +21,19 @@ plot(betacells)
 plot(bramblecanes, cols=1:3)
 plot(split(bramblecanes))
 
-plot(bronzefilter,markscale=1)
+plot(bronzefilter,markscale=2)
 
 plot(cells)
 
-plot(as.linnet(chicago), main="Chicago Street Crimes",col="green")
-plot(as.ppp(chicago), add=TRUE, col="red", chars=c(16,2,22,17,24,15,6))
+plot(chicago, main="Chicago Street Crimes", col="grey",
+     cols=c("red", "blue", "black", "blue", "red", "blue", "blue"),
+     chars=c(16,2,22,17,24,15,6), leg.side="left", show.window=FALSE)
 
 chorley.extra$plotit()
 
 plot(clmfires, which.marks="cause", cols=2:5, cex=0.25,
      main="Castilla-La Mancha forest fires")
-plot(clmcov200, main="Covariates for forest fires")
+plot(clmfires.extra$clmcov200, main="Covariates for forest fires")
 
 plot(copper$Points, main="Copper")
 plot(copper$Lines, add=TRUE)
@@ -59,10 +60,7 @@ plot(heather)
 
 plot(humberside)
 
-plot(owin(c(0,25),c(0,20)), type="n", main="Hyytiala")
-plot(hyytiala$window, add=TRUE)
-a <- plot(hyytiala, add=TRUE, cols=2:5)
-legend(22, 20, legend=names(a), pch=a, col=2:5)
+plot(hyytiala, add=TRUE, cols=2:5)
 
 plot(japanesepines)
 
@@ -74,19 +72,21 @@ plot(longleaf)
 plot(mucosa, chars=c(1,3), cols=c("red", "green"))
 plot(mucosa.subwin, add=TRUE, lty=3)
 
+plot(murchison, main="Murchison data")
+
 plot(murchison$greenstone, main="Murchison data", col="lightgreen")
-plot(murchison$gold, add=TRUE, pch="+",col="blue")
+plot(murchison$gold, add=TRUE, pch=3, col="blue")
 plot(murchison$faults, add=TRUE, col="red")
 
 plot(nbfires, use.marks=FALSE, pch=".")
 plot(split(nbfires), use.marks=FALSE, chars=".")
-a <- plot(split(nbfires)$"2000", which.marks="fire.type",
-          main=c("New Brunswick fires 2000", "by fire type"),
-          cols=c("red", "blue", "green", "cyan"))
-legend("bottomleft", title="Fire type",
-       legend=names(a), pch=a, col=c("red", "blue", "green", "cyan"))
+plot(split(nbfires)$"2000", which.marks="fire.type",
+     main=c("New Brunswick fires 2000", "by fire type"),
+     cols=c("blue", "green", "red", "cyan"),
+     leg.side="left")
 
 plot(nztrees)
+plot(trim.rectangle(as.owin(nztrees), c(0,5), 0), add=TRUE, lty=3)
 
 enable3d <- ("scatterplot3d" %in% row.names(installed.packages()))
 if(enable3d) {
@@ -115,14 +115,13 @@ shapley.extra$plotit(main="Shapley")
 
 plot(simdat)
 
-plot(spruces, maxsize=min(nndist(spruces))/2)
+plot(spruces, maxsize=min(nndist(spruces)))
 
 plot(swedishpines)
 
-a <- plot(urkiola, cex=0.5, cols=2:3)
-legend("bottomleft", legend=names(a), pch=a, col=2:3)
+plot(urkiola, cex=0.5, cols=2:3)
 
-plot(waka, markscale=0.02, main=c("Waka national park", "tree diameters"))
+plot(waka, markscale=0.04, main=c("Waka national park", "tree diameters"))
 
 plot(waterstriders)
 

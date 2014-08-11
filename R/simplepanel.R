@@ -94,7 +94,7 @@ grow.simplepanel <- function(P, side=c("right","left","top","bottom"),
                                      horizontal=TRUE)
          })
   with(P, simplepanel(title,
-                      bounding.box(B, extraspace),
+                      boundingbox(B, extraspace),
                       append(boxes, new.boxes),
                       append(clicks, new.clicks),
                       append(redraws, new.redraws),

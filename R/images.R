@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.103 $     $Date: 2013/07/25 09:58:59 $
+#         $Revision: 1.110 $     $Date: 2014/04/21 03:31:59 $
 #
 #      The class "im" of raster images
 #
@@ -147,80 +147,89 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
   X$yrange <- X$yrange + vec[2]
   X$xcol <- X$xcol + vec[1]
   X$yrow <- X$yrow + vec[2]
+  attr(X, "lastshift") <- vec
   return(X)
 }
 
-"[.im" <- 
-function(x, i, j, ..., drop=TRUE, raster=NULL, rescue=is.owin(i)) {
+"[.im" <- local({
 
-  # detect 'blank' arguments like second argument in x[i, ] 
-  ngiven <- length(sys.call())
-  nmatched <- length(match.call())
-  nblank <- ngiven - nmatched
-  itype <- if(missing(i)) "missing" else "given"
-  jtype <- if(missing(j)) "missing" else "given"
-  if(nblank == 1) {
-    if(!missing(i)) jtype <- "blank"
-    if(!missing(j)) itype <- "blank"
-  } else if(nblank == 2) {
-    itype <- jtype <- "blank"
-  }
+  disjoint <- function(r, s) { (r[2] < s[1]) || (r[1] > s[2])  }
+  clip <- function(r, s) { c(max(r[1],s[1]), min(r[2],s[2])) }
+  inrange <- function(x, r) { (x >= r[1]) & (x <= r[2]) }
 
-  if(missing(rescue) && itype != "given")
-    rescue <- FALSE
+  Extract.im <- function(x, i, j, ...,
+                         drop=TRUE, tight=FALSE, raster=NULL,
+                         rescue=is.owin(i)) {
 
-  if(itype == "missing" && jtype == "missing") {
-    # no indices: return entire image 
-    out <- if(is.null(raster)) x else as.im(raster)
-    xy <- expand.grid(y=out$yrow,x=out$xcol)
-    if(!is.null(raster)) {
-      # resample image on new pixel raster
-      values <- lookup.im(x, xy$x, xy$y, naok=TRUE)
-      out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
+    ## detect 'blank' arguments like second argument in x[i, ] 
+    ngiven <- length(sys.call())
+    nmatched <- length(match.call())
+    nblank <- ngiven - nmatched
+    itype <- if(missing(i)) "missing" else "given"
+    jtype <- if(missing(j)) "missing" else "given"
+    if(nblank == 1) {
+      if(!missing(i)) jtype <- "blank"
+      if(!missing(j)) itype <- "blank"
+    } else if(nblank == 2) {
+      itype <- jtype <- "blank"
     }
-    if(!drop)
-      return(out)
-    else {
-      v <- out$v
-      return(v[!is.na(v)])
-    }
-  }
 
-  if(itype == "given") {
-    # .................................................................
-    # Try spatial index
-    # .................................................................
-    if(verifyclass(i, "owin", fatal=FALSE)) {
-
-      if(jtype == "given")
-        warning("Argument j ignored")
-      
-      # 'i' is a window
-      # if drop = FALSE, just set values outside window to NA
-      # if drop = TRUE, extract values for all pixels inside window
-      #                 as an image (if 'i' is a rectangle)
-      #                 or as a vector (otherwise)
-
+    if(missing(rescue) && itype != "given")
+      rescue <- FALSE
+    
+    if(itype == "missing" && jtype == "missing") {
+      ## no indices: return entire image 
       out <- if(is.null(raster)) x else as.im(raster)
       xy <- expand.grid(y=out$yrow,x=out$xcol)
       if(!is.null(raster)) {
-        # resample image on new pixel raster
+        ## resample image on new pixel raster
         values <- lookup.im(x, xy$x, xy$y, naok=TRUE)
         out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
       }
-      inside <- inside.owin(xy$x, xy$y, i)
-      if(!drop) { 
-        out$v[!inside] <- NA
+      if(!drop)
         return(out)
-      } else if(!rescue || i$type != "rectangle") {
-        values <- out$v[inside]
-        return(values)
-      } else {
-        disjoint <- function(r, s) { (r[2] < s[1]) || (r[1] > s[2])  }
-        clip <- function(r, s) { c(max(r[1],s[1]), min(r[2],s[2])) }
-        inrange <- function(x, r) { (x >= r[1]) & (x <= r[2]) }
+      else {
+        v <- out$v
+        return(v[!is.na(v)])
+      }
+    }
+
+    if(itype == "given") {
+      ## .................................................................
+      ## Try spatial index
+      ## .................................................................
+      if(verifyclass(i, "owin", fatal=FALSE)) {
+
+        if(jtype == "given")
+          warning("Argument j ignored")
+      
+        ## 'i' is a window
+        ## if drop = FALSE, just set values outside window to NA
+        ## if drop = TRUE, extract values for all pixels inside window
+        ##                 as an image (if 'i' is a rectangle)
+        ##                 or as a vector (otherwise)
+
+        out <- if(is.null(raster)) x else as.im(raster)
+        xy <- expand.grid(y=out$yrow,x=out$xcol)
+        if(!is.null(raster)) {
+          ## resample image on new pixel raster
+          values <- lookup.im(x, xy$x, xy$y, naok=TRUE)
+          out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
+        }
+        inside <- inside.owin(xy$x, xy$y, i)
+        if(!drop) {
+          ## set other pixels to NA and return image
+          out$v[!inside] <- NA
+          if(!tight)
+            return(out)
+        } else if(!(rescue && i$type == "rectangle")) {
+          ## return pixel values
+          values <- out$v[inside]
+          return(values)
+        }
+        ## return image in smaller rectangle
         if(disjoint(i$xrange, x$xrange) || disjoint(i$yrange, x$yrange))
-          # empty intersection
+          ## empty intersection
           return(numeric(0))
         xr <- clip(i$xrange, x$xrange)
         yr <- clip(i$yrange, x$yrange)
@@ -238,29 +247,112 @@ function(x, i, j, ..., drop=TRUE, raster=NULL, rescue=is.owin(i)) {
           if(nrowsub > 1) list(yrow = out$yrow[rowsub]) else list(yrange=yr)
         result <- do.call("im", c(marg, xarg, yarg))
         return(result)
-      } 
+      }
+      if(verifyclass(i, "im", fatal=FALSE)) {
+        if(jtype == "given")
+          warning("Argument j ignored")
+        ## logical images OK
+        if(i$type == "logical") {
+          ## convert to window
+          w <- as.owin(eval.im(ifelse1NA(i)))
+          return(x[w, drop=drop, ..., raster=raster])
+        } else stop("Subset argument \'i\' is an image, but not of logical type")
+      }
+
+      if(is.ppp(i)) {
+        ## 'i' is a point pattern 
+        if(jtype == "given")
+          warning("Argument j ignored")
+        ## Look up the greyscale values for the points of the pattern
+        values <- lookup.im(x, i$x, i$y, naok=TRUE)
+        if(drop) 
+          values <- values[!is.na(values)]
+        if(length(values) == 0) 
+          ## ensure the zero-length vector is of the right type
+          values <- 
+            switch(x$type,
+                   factor={ factor(, levels=levels(x)) },
+                   integer = { integer(0) },
+                   logical = { logical(0) },
+                   real = { numeric(0) },
+                   complex = { complex(0) },
+                   character = { character(0) },
+                   { values }
+                   )
+        return(values)
+      }
     }
-    if(verifyclass(i, "im", fatal=FALSE)) {
-      if(jtype == "given")
-        warning("Argument j ignored")
-      # logical images OK
-      if(i$type == "logical") {
-        # convert to window
-        w <- as.owin(eval.im(ifelse1NA(i)))
-        return(x[w, drop=drop, ..., raster=raster])
-      } else stop("Subset argument \'i\' is an image, but not of logical type")
+    ## ............... not a spatial index .............................
+
+    ## Try indexing as a matrix
+
+    ## Construct a matrix index call for possible re-use
+    M <- as.matrix(x)
+    ycall <- switch(itype,
+                    given = {
+                      switch(jtype,
+                             given   = quote(M[i, j, drop=FALSE]),
+                             blank   = quote(M[i,  , drop=FALSE]),
+                             missing = quote(M[i,    drop=FALSE]))
+                    },
+                    blank = {
+                      switch(jtype,
+                             given   = quote(M[ , j, drop=FALSE]),
+                             blank   = quote(M[ ,  , drop=FALSE]),
+                             missing = quote(M[ ,    drop=FALSE]))
+                    },
+                    missing = {
+                      switch(jtype,
+                             given   = quote(M[j=j,  drop=FALSE]),
+                             blank   = quote(M[j= ,  drop=FALSE]),
+                             missing = quote(M[      drop=FALSE]))
+                    })
+    ## try it
+    y <- try(eval(as.call(ycall)), silent=TRUE)
+    if(!inherits(y, "try-error")) {
+      ## valid subset index for a matrix
+      if(rescue) {
+        ## check whether it's a rectangular block, in correct order
+        RR <- row(x$v)
+        CC <- col(x$v)
+        rcall <- ycall
+        rcall[[2]] <- quote(RR)
+        ccall <- ycall
+        ccall[[2]] <- quote(CC)
+        rr <- eval(as.call(rcall))
+        cc <- eval(as.call(ccall))
+        rseq <- sort(unique(as.vector(rr)))
+        cseq <- sort(unique(as.vector(cc)))
+        if(all(diff(rseq) == 1) && all(diff(cseq) == 1) &&
+           (length(rr) == length(rseq) * length(cseq)) &&
+           all(rr == RR[rseq, cseq]) && all(cc == CC[rseq,cseq])) {
+          ## yes - make image
+          dim(y) <- c(length(rseq), length(cseq))
+          Y <- x
+          Y$v <- y
+          Y$dim <- dim(y)
+          Y$xcol <- x$xcol[cseq]
+          Y$yrow <- x$yrow[rseq]
+          Y$xrange <- range(Y$xcol) + c(-1,1) * x$xstep/2
+          Y$yrange <- range(Y$yrow) + c(-1,1) * x$ystep/2
+          return(Y)
+        }
+      }
+      ## return pixel values (possibly as matrix)
+      return(y)
     }
 
-    if(is.ppp(i)) {
-      # 'i' is a point pattern 
-      if(jtype == "given")
-        warning("Argument j ignored")
-      # Look up the greyscale values for the points of the pattern
-      values <- lookup.im(x, i$x, i$y, naok=TRUE)
+    ## Last chance!
+    if(itype == "given" &&
+       !is.matrix(i) &&
+       !is.null(ip <- as.ppp(i, W=as.owin(x), fatal=FALSE, check=FALSE))) {
+      ## 'i' is convertible to a point pattern 
+      ## Look up the greyscale values for the points of the pattern
+      values <- lookup.im(x, ip$x, ip$y, naok=TRUE)
       if(drop) 
         values <- values[!is.na(values)]
       if(length(values) == 0) 
-        # ensure the zero-length vector is of the right type
+        ## ensure the zero-length vector is of the right type
         values <- 
           switch(x$type,
                  factor={ factor(, levels=levels(x)) },
@@ -273,93 +365,12 @@ function(x, i, j, ..., drop=TRUE, raster=NULL, rescue=is.owin(i)) {
                  )
       return(values)
     }
-  }
-  # ............... not a spatial index .............................
-
-  # Try indexing as a matrix
-
-  # Construct a matrix index call for possible re-use
-  M <- as.matrix(x)
-  ycall <- switch(itype,
-                  given = {
-                    switch(jtype,
-                           given   = quote(M[i, j, drop=FALSE]),
-                           blank   = quote(M[i,  , drop=FALSE]),
-                           missing = quote(M[i,    drop=FALSE]))
-                  },
-                  blank = {
-                    switch(jtype,
-                           given   = quote(M[ , j, drop=FALSE]),
-                           blank   = quote(M[ ,  , drop=FALSE]),
-                           missing = quote(M[ ,    drop=FALSE]))
-                  },
-                  missing = {
-                    switch(jtype,
-                           given   = quote(M[j=j,  drop=FALSE]),
-                           blank   = quote(M[j= ,  drop=FALSE]),
-                           missing = quote(M[      drop=FALSE]))
-                  })
-  # try it
-  y <- try(eval(as.call(ycall)), silent=TRUE)
-  if(!inherits(y, "try-error")) {
-    # valid subset index for a matrix
-    if(rescue) {
-      # check whether it's a rectangular block, in correct order
-      RR <- row(x$v)
-      CC <- col(x$v)
-      rcall <- ycall
-      rcall[[2]] <- quote(RR)
-      ccall <- ycall
-      ccall[[2]] <- quote(CC)
-      rr <- eval(as.call(rcall))
-      cc <- eval(as.call(ccall))
-      rseq <- sort(unique(as.vector(rr)))
-      cseq <- sort(unique(as.vector(cc)))
-      if(all(diff(rseq) == 1) && all(diff(cseq) == 1) &&
-         (length(rr) == length(rseq) * length(cseq)) &&
-         all(rr == RR[rseq, cseq]) && all(cc == CC[rseq,cseq])) {
-        # yes - make image
-        dim(y) <- c(length(rseq), length(cseq))
-        Y <- x
-        Y$v <- y
-        Y$dim <- dim(y)
-        Y$xcol <- x$xcol[cseq]
-        Y$yrow <- x$yrow[rseq]
-        Y$xrange <- range(Y$xcol) + c(-1,1) * x$xstep/2
-        Y$yrange <- range(Y$yrow) + c(-1,1) * x$ystep/2
-        return(Y)
-      }
-    }
-    # return pixel values (possibly as matrix)
-    return(y)
-  }
-
-  # Last chance!
-  if(itype == "given" &&
-     !is.matrix(i) &&
-     !is.null(ip <- as.ppp(i, W=as.owin(x), fatal=FALSE, check=FALSE))) {
-    # 'i' is convertible to a point pattern 
-    # Look up the greyscale values for the points of the pattern
-    values <- lookup.im(x, ip$x, ip$y, naok=TRUE)
-    if(drop) 
-      values <- values[!is.na(values)]
-    if(length(values) == 0) 
-      # ensure the zero-length vector is of the right type
-      values <- 
-        switch(x$type,
-               factor={ factor(, levels=levels(x)) },
-               integer = { integer(0) },
-               logical = { logical(0) },
-               real = { numeric(0) },
-               complex = { complex(0) },
-               character = { character(0) },
-               { values }
-               )
-    return(values)
-  }
   
-  stop("The subset operation is undefined for this type of index")
-}
+    stop("The subset operation is undefined for this type of index")
+  }
+
+  Extract.im
+})
 
 
 "[<-.im" <- function(x, i, j, value) {
@@ -775,8 +786,15 @@ plot.barplotdata <- function(x, ...) {
 
 cut.im <- function(x, ...) {
   verifyclass(x, "im")
+  typ <- x$type
+  if(typ %in% c("factor", "logical", "character")) 
+    stop(paste0("cut.im is not defined for ", typ, "-valued images"),
+         call.=FALSE)
   vcut <- cut(as.numeric(as.matrix(x)), ...)
-  return(im(vcut, xcol=x$xcol, yrow=x$yrow, unitname=unitname(x)))
+  return(im(vcut,
+            xcol=x$xcol, yrow=x$yrow,
+            xrange=x$xrange, yrange=x$yrange,
+            unitname=unitname(x)))
 }
 
 quantile.im <- function(x, ...) {
@@ -897,19 +915,20 @@ hsvim <- function(H, S, V) {
   eval.im(factor(hsvNA(as.vector(H), as.vector(S), as.vector(V))))
 }
 
-scaletointerval <- function(x, from=0, to=1) {
+scaletointerval <- function(x, from=0, to=1, xrange=range(x)) {
   UseMethod("scaletointerval")
 }
 
-scaletointerval.default <- function(x, from=0, to=1) {
-  rr <- range(x, na.rm=TRUE)
-  b <- (to - from)/diff(rr)
+scaletointerval.default <- function(x, from=0, to=1, xrange=range(x)) {
+  x <- as.numeric(x)
+  rr <- if(missing(xrange)) range(x, na.rm=TRUE) else as.numeric(xrange)
+  b <- as.numeric(to - from)/diff(rr)
   y <- from + b * (x - rr[1])
   return(y)
 }
 
-scaletointerval.im <- function(x, from=0, to=1) {
-  v <- scaletointerval(x$v, from, to)
+scaletointerval.im <- function(x, from=0, to=1, xrange=range(x)) {
+  v <- scaletointerval(x$v, from, to, xrange=xrange)
   y <- im(v, x$xcol, x$yrow, x$xrange, x$yrange, unitname(x))
   return(y)
 }

@@ -1,17 +1,62 @@
 #
-#	$Revision: 1.32 $	$Date: 2013/07/19 03:55:36 $
+#	$Revision: 1.42 $	$Date: 2014/04/17 08:45:26 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
 #
 #
 
-"ppm" <- 
+ppm <- function(Q, ...) {
+  UseMethod("ppm")
+}
+
+
+ppm.formula <- function(Q, interaction=NULL, ..., data=NULL) {
+  ## remember call
+  callstring <- short.deparse(sys.call())
+  ## cl <- match.call()
+
+  ########### INTERPRET FORMULA ##############################
+  
+  if(!inherits(Q, "formula"))
+    stop(paste("Argument 'Q' should be a formula"))
+  formula <- Q
+  
+  if(spatstat.options("expand.polynom"))
+    formula <- expand.polynom(formula)
+
+  ## check formula has LHS and RHS. Extract them
+  if(length(formula) < 3)
+    stop(paste("Formula must have a left hand side"))
+  Yexpr <- lhs <- formula[[2]]
+  trend <- rhs <- formula[c(1,3)]
+  
+  ## FIT #######################################
+  thecall <- call("ppm", Q=Yexpr, trend=trend,
+                  data=data, interaction=interaction)
+  ncall <- length(thecall)
+  argh <- list(...)
+  nargh <- length(argh)
+  if(nargh > 0) {
+    thecall[ncall + 1:nargh] <- argh
+    names(thecall)[ncall + 1:nargh] <- names(argh)
+  }
+  result <- eval(thecall, parent.frame())
+
+  if(!("callstring" %in% names(list(...))))
+    result$callstring <- callstring
+  
+  return(result)
+}
+
+
+ppm.quad <- ppm.ppp <- ppm.default <- 
 function(Q,
          trend = ~1,
 	 interaction = Poisson(),
          ..., 
-         covariates = NULL,
+         covariates = data,
+         data = NULL,
          covfunargs = list(),
 	 correction="border",
 	 rbord = reach(interaction),
@@ -40,15 +85,18 @@ function(Q,
   if(is.ppp(Q) && is.marked(Q) && !is.multitype(Q)) 
     stop(paste("ppm is not yet implemented for marked point patterns,",
                "other than multitype patterns."))
-  if(!(is.ppp(Q) || inherits(Q, "quad")))
+  if(!(is.ppp(Q) ||
+       inherits(Q, "quad") ||
+       checkfields(Q, c("data", "dummy")))) {
     stop("Argument Q must be a point pattern or a quadrature scheme")
+  }
+  X <- if(is.ppp(Q)) Q else Q$data
 
 # Ensure interaction is fully defined  
   if(is.null(interaction)) 
     interaction <- Poisson()
   if(!is.null(ss <- interaction$selfstart)) {
     # invoke selfstart mechanism to fix all parameters
-    X <- if(is.ppp(Q)) Q else Q$data
     interaction <- ss(X, interaction)
   }
   
@@ -70,7 +118,7 @@ function(Q,
     if(is.null(rbord))
       rbord <- reach(interaction)
     infin <- is.infinite(rbord)
-    too.large <- infin || (eroded.areas(as.owin(Q), rbord) == 0)
+    too.large <- infin || (eroded.areas(as.owin(X), rbord) == 0)
     if(too.large) {
       whinge <-
         paste(if(rbord.given) "rbord" else "the reach of this interaction",

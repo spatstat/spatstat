@@ -27,10 +27,28 @@ options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
 
 
 ###################################################
-### code chunk number 4: updates.Rnw:54-56
+### code chunk number 4: updates.Rnw:56-61
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
      main="Spatstat growth")
+lines(srclines/1000 ~ date, data=z)
+text(as.Date("2013-01-01"), 9.5, "C code")
+text(as.Date("2013-01-01"), 50, "R code")
+
+
+###################################################
+### code chunk number 5: updates.Rnw:2494-2498
+###################################################
+nbugs <- nrow(news(grepl("^BUG", Category), 
+                   package="spatstat"))
+nbugssince <- nrow(news(Version > "1.21-2" & grepl("^BUG", Category), 
+                   package="spatstat"))
+
+
+###################################################
+### code chunk number 6: updates.Rnw:2505-2506 (eval = FALSE)
+###################################################
+## news(grepl("^BUG", Category), package="spatstat")
 
 

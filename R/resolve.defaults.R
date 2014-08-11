@@ -36,7 +36,8 @@ resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
 do.call.matched <- function(fun, arglist, funargs,
                             extrargs=NULL,
                             matchfirst=FALSE,
-                            sieve=FALSE) {
+                            sieve=FALSE,
+                            skipargs=NULL) {
   if(!is.function(fun) && !is.character(fun))
     stop("Internal error: wrong argument type in do.call.matched")
   if(is.character(fun)) {
@@ -45,12 +46,14 @@ do.call.matched <- function(fun, arglist, funargs,
     if(!is.function(fun))
       stop(paste("internal error: function", sQuote(fname), "not found",
                  sep=""))
-  } 
+  }
+  ## determine list of argument names to be matched
   if(missing(funargs))
     funargs <- names(formals(fun))
   funargs <- c(funargs, extrargs)
+  funargs <- setdiff(funargs, skipargs)
+  ## identify which arguments in the call actually match a formal argument
   givenargs <- names(arglist)
-  # identify which arguments in the call actually match a formal argument
   matched <- givenargs %in% funargs
   # deem the first argument to be matched?
   if(matchfirst && !nzchar(givenargs[1]))

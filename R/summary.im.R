@@ -3,7 +3,7 @@
 #
 #    summary() method for class "im"
 #
-#    $Revision: 1.15 $   $Date: 2011/05/18 09:15:30 $
+#    $Revision: 1.16 $   $Date: 2014/02/20 02:35:29 $
 #
 #    summary.im()
 #    print.summary.im()
@@ -27,7 +27,7 @@ summary.im <- function(object, ...) {
   
   # factor-valued?
   lev <- levels(x)
-  if(fak <- !is.null(lev))
+  if((fak <- !is.null(lev)) && !is.factor(v))
     v <- factor(v, levels=seq_along(lev), labels=lev)
 
   switch(x$type,
@@ -71,67 +71,55 @@ summary.im <- function(object, ...) {
 
 print.summary.im <- function(x, ...) {
   verifyclass(x, "summary.im")
-  cat(paste(x$type, "-valued pixel image\n", sep=""))
+  cat(paste0(x$type, "-valued"), "pixel image", fill=TRUE)
   unitinfo <- summary(x$units)
   pluralunits <- unitinfo$plural
+  sigdig <- 5
   di <- x$dim
   win <- x$window
-  cat(paste(di[1], "x", di[2], "pixel array (ny, nx)\n"))
-  cat("enclosing rectangle: ")
-  cat(paste("[",
-            paste(win$xrange, collapse=", "),
-            "] x [",
-            paste(win$yrange, collapse=", "),
-            "] ",
-            pluralunits, "\n", sep=""))
-  cat(paste("dimensions of each pixel:",
-            signif(x$xstep, 3), "x", signif(x$ystep, 3),
-            pluralunits, "\n"))
+  cat(di[1], "x", di[2], "pixel array (ny, nx)", fill=TRUE)
+  cat("enclosing rectangle:",
+      prange(signif(x$window$xrange, sigdig)),
+      "x",
+      prange(signif(x$window$yrange, sigdig)),
+      unitinfo$plural,
+      unitinfo$explain,
+      fill=TRUE)
+  cat("dimensions of each pixel:",
+      signif(x$xstep, 3), "x", signif(x$ystep, 3),
+      pluralunits,
+      fill=TRUE)
   if(!is.null(explain <- unitinfo$explain))
     cat(paste(explain, "\n"))
   if(x$fullgrid) {
-    cat("Image is defined on the full rectangular grid\n")
+    cat("Image is", "defined on the",  "full rectangular", "grid", fill=TRUE)
     whatpart <- "Frame"
   } else {
-    cat("Image is defined on a subset of the rectangular grid\n")
+    cat("Image is", "defined on", "a subset of", "the rectangular", "grid",
+        fill=TRUE)
     whatpart <- "Subset"
   }
-  cat(paste(whatpart, "area = ", win$area, "square", pluralunits, "\n"))
-  cat(paste("Pixel values ",
-            if(x$fullgrid) "" else "(inside window)",
-            ":\n", sep=""))
+  cat(whatpart, "area =", win$area, "square", pluralunits, fill=TRUE)
+  if(x$fullgrid) cat("Pixel values:\n") else
+                 cat("Pixel values", "(inside window):", fill=TRUE)
   switch(x$type,
          integer=,
          real={
-           cat(paste(
-                     "\trange = [",
-                     paste(x$range, collapse=","),
-                     "]\n",
-                     "\tintegral = ",
-                     x$integral,
-                     "\n",
-                     "\tmean = ",
-                     x$mean,
-                     "\n",
-                     sep=""))
+           cat("\trange =", prange(signif(x$range, sigdig)), fill=TRUE)
+           cat("\tintegral =", signif(x$integral, sigdig), fill=TRUE)
+           cat("\tmean =", signif(x$mean, sigdig), fill=TRUE)
          },
          factor={
            print(x$table)
          },
          complex={
-           cat(paste(
-                     "\trange: Real [",
-                     paste(x$Re$range, collapse=","),
-                     "], Imaginary [",
-                     paste(x$Im$range, collapse=","),
-                     "]\n",
-                     "\tintegral = ",
-                     x$integral,
-                     "\n",
-                     "\tmean = ",
-                     x$mean,
-                     "\n",
-                     sep=""))
+           cat("\trange: Real",
+               prange(signif(x$Re$range, sigdig)),
+               "Imaginary",
+               prange(signif(x$Im$range, sigdig)),
+               fill=TRUE)
+           cat("\tintegral =", signif(x$integral, sigdig), fill=TRUE)
+           cat("\tmean =", signif(x$mean, sigdig), fill=TRUE)
          },
          {
            print(x$summary)
@@ -140,25 +128,21 @@ print.summary.im <- function(x, ...) {
   return(invisible(NULL))
 }
 
-
-
 print.im <- function(x, ...) {
-  cat(paste(x$type, "-valued pixel image\n", sep=""))
+  cat(paste0(x$type, "-valued"), "pixel image", fill=TRUE)
   if(x$type == "factor") {
     cat("factor levels:\n")
     print(levels(x))
   }
   unitinfo <- summary(unitname(x))
   di <- x$dim
-  cat(paste(di[1], "x", di[2], "pixel array (ny, nx)\n"))
-  cat("enclosing rectangle: ")
-  cat(paste("[",
-            paste(signif(x$xrange, 5), collapse=", "),
-            "] x [",
-            paste(signif(x$yrange, 5), collapse=", "),
-            "] ",
-            unitinfo$plural,
-            " ", unitinfo$explain,
-            "\n", sep=""))
+  cat(di[1], "x", di[2], "pixel array (ny, nx)", fill=TRUE)
+  cat("enclosing rectangle:",
+      prange(signif(x$xrange, 5)),
+      "x",
+      prange(signif(x$yrange, 5)),
+      unitinfo$plural,
+      unitinfo$explain,
+      fill=TRUE)
   return(invisible(NULL))
 }

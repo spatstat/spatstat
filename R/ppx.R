@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.41 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.42 $  $Date: 2014/03/17 05:55:43 $
 #
 
 ppx <- local({
@@ -309,6 +309,14 @@ unitname.ppx <- function(x) { unitname(x$domain) }
   unitname(d) <- value
   x$domain <- d
   return(x)
+}
+
+as.owin.boxx <- function(W, ..., fatal=TRUE) {
+  ra <- W$ranges
+  if(length(ra) == 2) return(owin(ra[[1]], ra[[2]]))
+  if(fatal) stop(paste("Cannot interpret box of dimension",
+                       length(ra), "as a window"))
+  return(NULL)
 }
 
 sidelengths.boxx <- function(x) {

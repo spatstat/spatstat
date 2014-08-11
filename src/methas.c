@@ -59,7 +59,7 @@ SEXP xmethas(
   double *xx, *yy, *xpropose, *ypropose;
   int    *mm,      *mpropose, *pp, *aa;
   SEXP out, xout, yout, mout, pout, aout;
-  int tracking, ntrack;
+  int tracking;
 #ifdef HISTORY_INCLUDES_RATIO
   SEXP numout, denout;
   double *nn, *dd;

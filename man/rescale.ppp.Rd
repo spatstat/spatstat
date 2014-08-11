@@ -6,11 +6,15 @@
   another unit of length.
 }
 \usage{
- \method{rescale}{ppp}(X, s)
+ \method{rescale}{ppp}(X, s, unitname)
 }
 \arguments{
   \item{X}{Point pattern (object of class \code{"ppp"}).}
   \item{s}{Conversion factor: the new units are \code{s} times the old units.}
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    See \code{\link{unitname}}.
+  }
 }
 \value{
   Another point pattern (of class \code{"ppp"}),

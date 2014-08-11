@@ -7,7 +7,7 @@
   Computes the influence measure for a fitted spatial point process model.
 }
 \usage{
-\method{influence}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=list())
+\method{influence}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{
@@ -69,7 +69,8 @@
 }
 \value{
   An object of class \code{"influence.ppm"} that can be plotted
-  by \code{\link{plot.influence.ppm}}.
+  (by \code{\link{plot.influence.ppm}}). There are also methods
+  for \code{print}, \code{[}, \code{as.ppp} and \code{as.owin}.
 }
 \references{
   Baddeley, A. and Chang, Y.M. and Song, Y. (2013)

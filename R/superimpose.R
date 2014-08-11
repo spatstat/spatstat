@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.25 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.26 $ $Date: 2014/04/16 06:36:16 $
 #
 #
 ############################# 
@@ -55,7 +55,7 @@ superimpose.ppp <- superimpose.default <- function(..., W=NULL, check=TRUE) {
       WXY <- switch(pW,
                     convex=ripras(XY),
                     rectangle=ripras(XY, shape="rectangle"),
-                    bbox=bounding.box.xy(XY),
+                    bbox=boundingbox(XY),
                     none=NULL)
       # in these cases we don't need to verify that the points are inside.
       needcheck <- !is.null(WXY)
@@ -118,7 +118,7 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
         WXY <- switch(pW,
                       convex=ripras(XY),
                       rectangle=ripras(XY, shape="rectangle"),
-                      bbox=bounding.box.xy(XY),
+                      bbox=boundingbox(XY),
                       none=NULL)
       # in these cases we don't need to verify that the points are inside.
         needcheck <- !is.null(WXY)
@@ -143,6 +143,10 @@ superimposeMarks <- function(arglist, nobj) {
     # arguments are named: use names as (extra) marks
     newmarx <- factor(rep.int(nama, nobj))
     marx <- markcbind(marx, newmarx)
+    if(ncol(marx) == 2) {
+      ## component marks were not named: call them 'origMarks'
+      colnames(marx) <- c("origMarks", "pattern")
+    } else colnames(marx)[ncol(marx)] <- "pattern"
   }
   return(marx)
 }

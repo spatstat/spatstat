@@ -111,6 +111,7 @@ Performs analysis of deviance for two or more fitted point process models.
  mod0 <- ppm(swedishpines, ~1, Poisson())
  modx <- ppm(swedishpines, ~x, Poisson())
  anova(mod0, modx, test="Chi")
+ anova(modx, test="Chi")
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

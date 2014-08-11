@@ -5,8 +5,9 @@
   Plot a two-dimensional line segment pattern
 }
 \usage{
-  \method{plot}{psp}(x, \dots, add=FALSE, show.all=!add, which.marks=1,
-                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024)
+  \method{plot}{psp}(x, \dots, main, add=FALSE, show.all=!add, which.marks=1,
+                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
+                     do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -20,6 +21,9 @@
     \code{\link{segments}} (to plot the segments)
     and 
     \code{\link{plot.owin}} (to plot the observation window).
+  }
+  \item{main}{
+    Character string giving a title for the plot.
   }
   \item{add}{
     Logical. If \code{TRUE}, the current plot is not erased;
@@ -49,9 +53,14 @@
   \item{ribn}{
     Number of different values to display in the ribbon.
   }
+  \item{do.plot}{
+    Logical value indicating whether to actually perform the plot.
+  }
 }
 \value{
-  \code{NULL}
+  (Invisibly) a colour map object specifying the association between
+  marks and colours, if any. The return value also has an attribute
+  \code{"bbox"} giving a bounding box for the plot.
 }
 \details{
   This is the \code{plot} method for 

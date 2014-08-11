@@ -6,7 +6,7 @@
 }
 \usage{
   \method{update}{ppm}(object, \dots, fixdummy=TRUE, use.internal=NULL,
-                                      envir=parent.frame())
+                                      envir=environment(terms(object)))
 
 }
 \arguments{

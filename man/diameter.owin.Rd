@@ -31,6 +31,7 @@
 \seealso{
   \code{\link{area.owin}},
   \code{\link{perimeter}},
+  \code{\link{edges}},
   \code{\link{owin}},
   \code{\link{as.owin}}
 }

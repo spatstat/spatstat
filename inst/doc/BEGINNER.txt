@@ -1,23 +1,29 @@
         -== Welcome to the 'spatstat' package! ==-
 
+For a friendly introduction to spatstat, type the command
+     vignette('getstart')
+which displays the document "Getting Started with Spatstat".
+
 For an overview of all capabilities, type 
     help(spatstat)
 
-For a friendly introduction to spatstat, please read the document 
-"Getting Started with Spatstat" (called a 'package vignette'). 
-This can be accessed by typing 
-     help.start()
-and clicking on 
-    Packages -> spatstat -> User guides and Vignettes -> Getting started 
+View the documentation for any command/function 'foo' by typing 
+     help(foo)
 
-To handle spatial data in the 'shapefile' format, see the vignette
-"Handling shapefiles in the spatstat package", at the same location.
+Activate the graphical help interface by typing
+     help.start()
+
+To handle spatial data in the 'shapefile' format, see the document
+"Handling shapefiles in the spatstat package", by typing
+     vignette('shapefiles')
 
 For a complete two-day workshop on spatstat, please download the
 workshop notes at <www.csiro.au/resources/pf16h.html>
 
 For news about new features in the latest version of spatstat, type
      latest.news
+or
+     vignette('updates')
 
 (Press 'Q' to exit, on some computers)
 

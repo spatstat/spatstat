@@ -631,6 +631,19 @@ nsim=3, global=TRUE))
   
  # Envelope of INHOMOGENEOUS K-function with fitted trend
 
+ # The following is valid.
+ # Setting lambda=fit means that the fitted model is re-fitted to
+ # each simulated pattern to obtain the intensity estimates for Kinhom.
+ # (lambda=NULL would also be valid)
+
+ fit <- kppm(redwood, ~1, clusters="MatClust")
+ \dontrun{
+    plot(envelope(fit, Kinhom, lambda=fit, nsim=19))
+ }
+ \testonly{
+    envelope(fit, Kinhom, lambda=fit, nsim=3)
+ }
+
  # Note that the principle of symmetry, essential to the validity of
  # simulation envelopes, requires that both the observed and
  # simulated patterns be subjected to the same method of intensity

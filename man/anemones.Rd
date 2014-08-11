@@ -44,7 +44,7 @@
 \examples{
   data(anemones)
   # plot diameters on same scale as x, y
-  plot(anemones, markscale=0.5)
+  plot(anemones, markscale=1)
 }
 \source{
   Table 1.11 on pages 62--63 of Upton and Fingleton (1985),

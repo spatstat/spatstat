@@ -134,15 +134,14 @@
 
     reach(Strauss(r=7))
     # returns 7
-    data(swedishpines)
-    fit <- ppm(swedishpines, ~1, Strauss(r=7))
+    fit <- ppm(swedishpines ~ 1, Strauss(r=7))
     reach(fit)
     # returns 7
 
     reach(OrdThresh(42))
     # returns Inf
     
-    reach(MultiStrauss(1:2, matrix(c(1,3,3,1),2,2)))
+    reach(MultiStrauss(matrix(c(1,3,3,1),2,2)))
     # returns 3
 }
 \author{Adrian Baddeley

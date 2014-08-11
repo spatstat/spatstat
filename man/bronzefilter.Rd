@@ -34,7 +34,7 @@
 \usage{data(bronzefilter)}
 \examples{
   data(bronzefilter)
-  plot(bronzefilter, markscale=1)
+  plot(bronzefilter, markscale=2)
 }
 \source{
   R.\ Bernhardt (section image), H.\ Wendrock (coordinate measurement). 

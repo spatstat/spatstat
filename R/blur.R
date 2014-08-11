@@ -84,7 +84,7 @@ safelookup <- function(Z, X, factor=2, warn=TRUE) {
     # expand domain of Z 
     RX <- as.rectangle(X)
     RZ <- as.rectangle(Z)
-    bb <- bounding.box(RX, RZ)
+    bb <- boundingbox(RX, RZ)
     big <- grow.rectangle(bb, 2 * pixdiam)
     Z <- rebound.im(Z, big)
     # now blur

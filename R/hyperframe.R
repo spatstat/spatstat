@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.46 $  $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.49 $  $Date: 2014/03/22 06:12:35 $
 #
 
 hyperframe <- function(...,
@@ -71,9 +71,17 @@ hyperframe <- function(...,
                    paste(u, collapse=",")))
     }
     ncases <- u
-    if(ncases > 1 && all(heights[dfcolumns] == 1)) 
+    if(ncases > 1 && all(heights[dfcolumns] == 1)) {
       # force the data frame to have 'ncases' rows
       aarg[dfcolumns] <- lapply(aarg[dfcolumns], rep, ncases)
+      heights[dfcolumns] <- ncases
+    }
+    if(any(stubs <- hypercolumns & (heights != ncases))) {
+      ## hypercolumns of height 1 should be hyperatoms
+      aarg[stubs] <- lapply(aarg[stubs], "[[", 1)
+      hypercolumns[stubs] <- FALSE
+      hyperatoms[stubs] <- TRUE
+    }
   }
 
   # Collect the data frame columns into a data frame
@@ -287,6 +295,8 @@ as.list.hyperframe <- function(x, ...) {
   nama <- ux$vname
   names(nama) <- nama
   out <- lapply(nama, function(nam, x) { x[, nam, drop=TRUE] }, x=x)
+  if(ux$ncases == 1)
+    out <- lapply(lapply(out, listof), "names<-", value=row.names(x))
   return(out)
 }
 
@@ -309,9 +319,10 @@ with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
     enclos <- parent.frame()
   n <- nrow(data)
   out <- vector(mode="list", length=n)
+  datalist <- as.list(data)
   for(i in 1:n) {
-    rowi <- data[i,, drop=FALSE]
-    outi <- eval(ee, as.list(rowi), enclos)
+    rowi <- lapply(datalist, "[[", i)  # ensures the result is always a list
+    outi <- eval(ee, rowi, enclos)
     if(!is.null(outi))
       out[[i]] <- outi
   }
@@ -389,8 +400,9 @@ rbind.hyperframe <- function(...) {
     } else {
       # hypercolumns or hyperatoms: extract them
       hdata <- lapply(argh,
-                      function(x,nama) { x[, nama, drop=TRUE] },
+                      function(x,nama) { x[, nama, drop=FALSE] },
                       nama=nama)
+      hdata <- lapply(lapply(hdata, as.list), getElement, name=nama)
       # append them
       hh <- hdata[[1]]
       for(j in 2:nargh) {

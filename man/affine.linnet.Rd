@@ -12,13 +12,13 @@
 \usage{
   \method{affine}{linnet}(X, mat=diag(c(1,1)), vec=c(0,0), \dots)
 
-  \method{shift}{linnet}(X, \dots)
+  \method{shift}{linnet}(X, vec=c(0,0), \dots, origin=NULL)
 
-  \method{rotate}{linnet}(X, angle=pi/2, \dots)
+  \method{rotate}{linnet}(X, angle=pi/2, \dots, centre=NULL)
 
   \method{scalardilate}{linnet}(X, f, \dots)
 
-  \method{rescale}{linnet}(X, s)
+  \method{rescale}{linnet}(X, s, unitname)
 }
 \arguments{
   \item{X}{Linear network (object of class \code{"linnet"}).}
@@ -31,6 +31,23 @@
   }
   \item{\dots}{
     Arguments passed to other methods.
+  }
+  \item{origin}{
+    Character string determining a location
+    that will be shifted to the origin. Options are
+    \code{"centroid"}, \code{"midpoint"} and \code{"bottomleft"}.
+    Partially matched. 
+  }
+  \item{centre}{
+    Centre of rotation.
+    Either a vector of length 2, or a character string
+    (partially matched to \code{"centroid"}, \code{"midpoint"}
+    or \code{"bottomleft"}).
+    The default is the coordinate origin \code{c(0,0)}.
+  }
+  \item{unitname}{
+    Optional. New name for the unit of length.
+    A value acceptable to the function \code{\link{unitname<-}}
   }
 }
 \value{

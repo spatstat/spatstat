@@ -1,7 +1,7 @@
 #
 #  kstest.R
 #
-#  $Revision: 1.58 $  $Date: 2013/01/30 02:12:56 $
+#  $Revision: 1.60 $  $Date: 2014/05/05 09:51:52 $
 #
 #
 
@@ -265,8 +265,9 @@ spatialCDFframe <- function(model, covariate, ...) {
 }
 
 plot.kstest <- function(x, ..., style=c("cdf", "PP", "QQ"),
-                        lwd=par("lwd"), col=par("col"), lty=par("lty"),
-                        lwd0=lwd, col0=col, lty0=lty) {
+                        lwd=par("lwd"), col=1, lty=1,
+                        lwd0=lwd, col0=2, lty0=2,
+                        do.legend=TRUE) {
   style <- match.arg(style)
   fram <- attr(x, "frame")
   if(!is.null(fram)) {
@@ -304,6 +305,10 @@ plot.kstest <- function(x, ..., style=c("cdf", "PP", "QQ"),
                                     list(xlab=info$covname, ylab="probability",
                                          main=main)))
            plot(FZX, add=TRUE, do.points=FALSE, lwd=lwd, col=col, lty=lty)
+           if(do.legend)
+             legend("topleft", c("observed", "expected"),
+                    lwd=c(lwd,lwd0), col=c(col,col0),
+                    lty=c(lty2char(lty),lty2char(lty0)))
          },
          PP={
            # plot FZX o (FZ)^{-1}

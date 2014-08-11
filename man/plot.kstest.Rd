@@ -7,8 +7,9 @@
 \usage{
 \method{plot}{kstest}(x, ...,
                    style=c("cdf", "PP", "QQ"),
-                   lwd=par("lwd"), col=par("col"), lty=par("lty"),
-                   lwd0=lwd, col0=col, lty0=lty)
+                   lwd=par("lwd"), col=1, lty=1,
+                   lwd0=lwd, col0=2, lty0=2,
+                   do.legend)
 }
 \arguments{
   \item{x}{
@@ -29,6 +30,10 @@
   \item{col0,lwd0,lty0}{
     The width, colour and type of lines used to plot the
     reference curve (the predicted distribution, or the diagonal).
+  }
+  \item{do.legend}{
+    Logical value indicating whether to add an
+    explanatory legend. Applies only when \code{style="cdf"}.
   }
 }
 \value{

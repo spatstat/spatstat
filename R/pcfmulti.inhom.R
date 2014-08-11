@@ -1,7 +1,7 @@
 #
 #   pcfmulti.inhom.R
 #
-#   $Revision: 1.11 $   $Date: 2014/02/16 06:42:32 $
+#   $Revision: 1.12 $   $Date: 2014/04/16 05:31:22 $
 #
 #   inhomogeneous multitype pair correlation functions
 #
@@ -27,21 +27,22 @@ pcfcross.inhom <-
   J <- (marx == j)
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points with mark j =", j)
-  result <- pcfmulti.inhom(X, I, J, lambdaI, lambdaJ, ...,
-                           r=r,breaks=breaks,
-                           kernel=kernel, bw=bw, stoyan=stoyan,
-                           correction=correction,
-                           sigma=sigma, varcov=varcov,
-                           Iname=Iname, Jname=Jname)
+  g <- pcfmulti.inhom(X, I, J, lambdaI, lambdaJ, ...,
+                      r=r,breaks=breaks,
+                      kernel=kernel, bw=bw, stoyan=stoyan,
+                      correction=correction,
+                      sigma=sigma, varcov=varcov,
+                      Iname=Iname, Jname=Jname)
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
   result <-
-    rebadge.fv(result,
+    rebadge.fv(g,
                substitute(g[inhom,i,j](r),
                           list(i=iname,j=jname)),
                c("g", paste0("list", paren(paste("inhom", i, j, sep=",")))),
                new.yexp=substitute(g[list(inhom,i,j)](r),
                                    list(i=iname,j=jname)))
+  attr(result, "dangerous") <- attr(g, "dangerous")
   return(result)
 }
 
@@ -66,19 +67,24 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points")
 	
-  result <- pcfmulti.inhom(X, I, J, lambdaI, lambdadot, ...,
-                           r=r,breaks=breaks,
-                           kernel=kernel, bw=bw, stoyan=stoyan,
-                           correction=correction,
-                           sigma=sigma, varcov=varcov,
-                           Iname=Iname, Jname=Jname)
+  g <- pcfmulti.inhom(X, I, J, lambdaI, lambdadot, ...,
+                      r=r,breaks=breaks,
+                      kernel=kernel, bw=bw, stoyan=stoyan,
+                      correction=correction,
+                      sigma=sigma, varcov=varcov,
+                      Iname=Iname, Jname=Jname)
   iname <- make.parseable(paste(i))
   result <-
-    rebadge.fv(result,
+    rebadge.fv(g,
                substitute(g[inhom, i ~ dot](r), list(i=iname)),
                c("g", paste0("list(inhom,", iname, "~symbol(\"\\267\"))")),
                new.yexp=substitute(g[list(inhom, i ~ symbol("\267"))](r),
                  list(i=iname)))
+  if(!is.null(dang <- attr(g, "dangerous"))) {
+    dang[dang == "lambdaJ"] <- "lambdadot"
+    dang[dang == "lambdaIJ"] <- "lambdaIdot"
+    attr(result, "dangerous") <- dang
+  }
   return(result)
 }
 
@@ -146,8 +152,12 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   
   ########## intensity values #########################
 
+  dangerous <- c("lambdaI", "lambdaJ")
+  dangerI <- dangerJ <- TRUE
+  
   if(is.null(lambdaI)) {
       # Estimate density by leave-one-out kernel smoothing
+    dangerI <- FALSE
     lambdaI <- density(XI, ..., sigma=sigma, varcov=varcov,
                       at="points", leaveoneout=TRUE)
   } else {
@@ -164,6 +174,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
 
   if(is.null(lambdaJ)) {
       # Estimate density by leave-one-out kernel smoothing
+    dangerJ <- FALSE
     lambdaJ <- density(XJ, ..., sigma=sigma, varcov=varcov,
                       at="points", leaveoneout=TRUE)
   } else {
@@ -177,6 +188,8 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
     else stop(paste(sQuote("lambdaJ"),
                     "should be a vector, a pixel image, or a function"))
   }
+
+  danger <- dangerI || dangerJ
   
   ########## r values ############################
   # handle arguments r and breaks 
@@ -284,6 +297,9 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
                         paste(corrxns, collapse=","),
                         ") ~ r")))
   unitname(out) <- unitname(X)
+
+  if(danger)
+    attr(out, "dangerous") <- dangerous
   return(out)
 }
 

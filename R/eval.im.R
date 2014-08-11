@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.30 $     $Date: 2013/04/25 06:37:43 $
+#     $Revision: 1.31 $     $Date: 2014/03/21 07:22:33 $
 #
 
 eval.im <- function(expr, envir, harmonize=TRUE) {
@@ -59,7 +59,9 @@ eval.im <- function(expr, envir, harmonize=TRUE) {
   v <- eval(e, append(vars, funs))
   #
   # reshape, etc
-  result <- im(v, template$xcol, template$yrow, 
+  result <- im(v,
+               xcol=template$xcol, yrow=template$yrow,
+               xrange=template$xrange, yrange=template$yrange, 
                unitname=unitname(template))
   return(result)
 }
@@ -101,7 +103,7 @@ harmonize.im <- harmonise.im <- function(...) {
   imgs <- argz[isim]
   # if any windows are present, extract bounding box
   iswin <- unlist(lapply(argz, is.owin))
-  bb0 <- if(!any(iswin)) NULL else do.call("bounding.box", unname(argz[iswin]))
+  bb0 <- if(!any(iswin)) NULL else do.call("boundingbox", unname(argz[iswin]))
   if(length(imgs) == 1 && is.null(bb0)) {
     # only one 'true' image: use it as template.
     result[isim] <- imgs
@@ -117,8 +119,8 @@ harmonize.im <- harmonise.im <- function(...) {
     which.finest <- which.min(xsteps)
     finest <- imgs[[which.finest]]
     # get the bounding box
-    bb <- do.call("bounding.box", lapply(unname(imgs), as.rectangle))
-    if(!is.null(bb0)) bb <- bounding.box(bb, bb0)
+    bb <- do.call("boundingbox", lapply(unname(imgs), as.rectangle))
+    if(!is.null(bb0)) bb <- boundingbox(bb, bb0)
     # determine new raster coordinates
     xcol <- prolongseq(finest$xcol, bb$xrange)
     yrow <- prolongseq(finest$yrow, bb$yrange)
@@ -178,7 +180,7 @@ commonGrid <- local({
       finest <- rasterlist[[which.finest]]
     }
     # determine the bounding box
-    bb <- do.call("bounding.box", lapply(unname(argz[haswin]), as.rectangle))
+    bb <- do.call("boundingbox", lapply(unname(argz[haswin]), as.rectangle))
     # determine new raster coordinates
     xcol <- prolongseq(finest$xcol, bb$xrange)
     yrow <- prolongseq(finest$yrow, bb$yrange)

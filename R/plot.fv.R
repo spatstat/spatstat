@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.97 $    $Date: 2014/02/06 11:42:20 $
+#  $Revision: 1.98 $    $Date: 2014/02/20 07:35:18 $
 #
 #
 
@@ -387,8 +387,8 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     shade2OK <- rhsOK & is.finite(shdata2)
     shadeOK <- shade1OK & shade2OK
     # work out which one is the upper limit
-    up1 <- all(shdata1[shadeOK] > shdata2[shadeOK])
-    # half-infinite intervals
+    up1 <- all((shdata1 >= shdata2)[rhsOK], na.rm=TRUE)
+    # handle half-infinite intervals
     if(!is.null(ylim)) {
       shdata1[shade2OK & !shade1OK] <- if(up1) ylim[2] else ylim[1]
       shdata2[shade1OK & !shade2OK] <- if(up1) ylim[1] else ylim[2]
@@ -571,7 +571,7 @@ findbestlegendpos <- local({
                           preference="float", verbose=FALSE,
                           legendspec=NULL) {
     # find bounding box
-    W <- do.call("bounding.box", lapply(objects, as.rectangle))
+    W <- do.call("boundingbox", lapply(objects, as.rectangle))
     # convert to common box
     objects <- lapply(objects, rebound, rect=W)
     # comp

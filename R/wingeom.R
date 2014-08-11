@@ -39,14 +39,14 @@ perimeter <- function(w) {
            return(2*(diff(w$xrange)+diff(w$yrange)))
          },
          polygonal={
-           return(sum(lengths.psp(as.psp(w))))
+           return(sum(lengths.psp(edges(w))))
          },
          mask={
            p <- as.polygonal(w)
            if(is.null(p)) return(NA)
            delta <- sqrt(w$xstep^2 + w$ystep^2)
            p <- simplify.owin(p, delta * 1.15)
-           return(sum(lengths.psp(as.psp(p))))
+           return(sum(lengths.psp(edges(p))))
          })
   return(NA)
 }
@@ -542,7 +542,7 @@ restrict.mask <- function(M, W) {
 #    stop("f must be > 0")
 #  if(f == 1)
 #    return(W)
-#  bb <- bounding.box(W)
+#  bb <- boundingbox(W)
 #  xr <- bb$xrange
 #  yr <- bb$yrange
 #  fff <- (sqrt(f) - 1)/2
@@ -745,7 +745,7 @@ is.convex <- function(x) {
            v <- vertices(x)
            v <- as.ppp(v, W=as.rectangle(x))
            ch <- convexhull.xy(v)
-           edg <- as.psp(ch)
+           edg <- edges(ch)
            edgedist <- nncross(v, edg, what="dist")
            pixdiam <- sqrt(x$xstep^2 + x$ystep^2)
            return(all(edgedist <= pixdiam))

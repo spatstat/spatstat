@@ -6,7 +6,50 @@
 #  $Revision: 1.21 $   $Date: 2013/09/10 09:57:02 $
 #
 
-lppm <- function(X, ..., eps=NULL, nd=1000) {
+lppm <- function(X, ...) {
+  UseMethod("lppm")
+}
+
+
+lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
+  ## remember call
+  callstring <- short.deparse(sys.call())
+  ## cl <- match.call()
+
+  ########### INTERPRET FORMULA ##############################
+  
+  if(!inherits(X, "formula"))
+    stop(paste("Argument 'X' should be a formula"))
+  formula <- X
+  
+  if(spatstat.options("expand.polynom"))
+    formula <- expand.polynom(formula)
+
+  ## check formula has LHS and RHS. Extract them
+  if(length(formula) < 3)
+    stop(paste("Formula must have a left hand side"))
+  Yexpr <- lhs <- formula[[2]]
+  trend <- rhs <- formula[c(1,3)]
+  
+  ## FIT #######################################
+  thecall <- call("lppm", X=Yexpr, trend=trend,
+                  data=data, interaction=interaction)
+  ncall <- length(thecall)
+  argh <- list(...)
+  nargh <- length(argh)
+  if(nargh > 0) {
+    thecall[ncall + 1:nargh] <- argh
+    names(thecall)[ncall + 1:nargh] <- names(argh)
+  }
+  result <- eval(thecall, parent.frame())
+
+  if(!("callstring" %in% names(list(...))))
+    result$callstring <- callstring
+  
+  return(result)
+}
+
+lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
   Xname <- short.deparse(substitute(X))
   nama <- names(list(...))
   resv <- c("method", "forcefit")

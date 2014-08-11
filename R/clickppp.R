@@ -29,7 +29,7 @@ clickppp <- function(n=NULL, win=square(1), types=NULL, ..., add=FALSE, main=NUL
       warning(paste(nout,
                     ngettext(nout, "point", "points"),
                     "lying outside specified window; window was expanded"))
-      win <- bounding.box(win, bounding.box.xy(xy))
+      win <- boundingbox(win, xy)
     }
     X <- ppp(xy$x, xy$y, window=win)
     return(X)
@@ -57,7 +57,7 @@ clickppp <- function(n=NULL, win=square(1), types=NULL, ..., add=FALSE, main=NUL
       # User has clicked outside original window.
       naughty <- TRUE
       # Use bounding box for simplicity
-      bb <- bounding.box(Xi$window, X$window)
+      bb <- boundingbox(Xi$window, X$window)
       X <- superimpose(X, Xi, W=bb)
     } 
   }

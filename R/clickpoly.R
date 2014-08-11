@@ -2,7 +2,7 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.2 $  $Date: 2007/11/02 18:03:05 $
+# $Revision: 1.4 $  $Date: 2014/03/26 01:19:33 $
 #
 #
 clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
@@ -35,5 +35,21 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
   plot(result, add=TRUE)
   return(result)
 }
-
   
+clickbox <- function(add=TRUE) {
+  cat("Click two corners of a box\n")
+  if(!add) plot(owin(), main="Click two corners of a box") 
+  a <- try(locator(1), silent=TRUE)
+  if(inherits(a, "try-error")) {
+    ## add=TRUE but there is no current plot
+    plot.new()
+    a <- locator(1)
+  }
+  abline(v=a$x)
+  abline(h=a$y)
+  b <- locator(1)
+  abline(v=b$x)
+  abline(h=b$y)
+  ab <- concatxy(a, b)
+  return(owin(range(ab$x), range(ab$y)))
+}

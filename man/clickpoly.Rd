@@ -54,6 +54,7 @@
 }
 \seealso{
   \code{\link{identify.ppp}},
+  \code{\link{clickbox}},
   \code{\link{clickppp}},
   \code{\link{locator}}
 }

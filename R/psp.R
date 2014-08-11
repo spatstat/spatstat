@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.70 $ $Date: 2014/01/29 05:10:59 $
+#  $Revision: 1.74 $ $Date: 2014/04/21 04:41:40 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -120,7 +120,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
     rr <- x$length/2
     dx <- cos(x$angle) * rr
     dy <- sin(x$angle) * rr
-    bb <- bounding.box(window)
+    bb <- boundingbox(window)
     rmax <- max(rr)
     bigbox <- owin(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
     pattern <- psp(x$x - dx, x$y - dy, x$x + dx, x$y + dy,
@@ -171,7 +171,7 @@ as.psp.default <- function(x, ..., window=NULL, marks=NULL,
     dx <- cos(x$angle) * rr
     dy <- sin(x$angle) * rr
     window <- as.owin(window)
-    bb <- bounding.box(window)
+    bb <- boundingbox(window)
     rmax <- max(rr)
     bigbox <- owin(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
     pattern <- psp(x$x - dx, x$y - dy, x$x + dx, x$y + dy,
@@ -184,40 +184,30 @@ as.psp.default <- function(x, ..., window=NULL, marks=NULL,
   return(NULL)
 }
 
-as.psp.owin <- function(x, ..., check=spatstat.options("checksegments"), fatal=TRUE) {
-  verifyclass(x, "owin")
-  # can't use as.rectangle here; still testing validity
-  xframe <- owin(x$xrange, x$yrange)
-  switch(x$type,
-         rectangle = {
-           xx <- x$xrange[c(1,2,2,1)]
-           yy <- x$yrange[c(1,1,2,2)]
-           nxt <- c(2,3,4,1)
-           out <- psp(xx, yy, xx[nxt], yy[nxt], window=x, check=check)
-           return(out)
-         },
-         polygonal = {
-           x0 <- y0 <- x1 <- y1 <- numeric(0)
-           bdry <- x$bdry
-           for(i in seq_along(bdry)) {
-             po <- bdry[[i]]
-             ni <- length(po$x)
-             nxt <- c(2:ni, 1)
-             x0 <- c(x0, po$x)
-             y0 <- c(y0, po$y)
-             x1 <- c(x1, po$x[nxt])
-             y1 <- c(y1, po$y[nxt])
-           }
-           out <- psp(x0, y0, x1, y1,  window=xframe, check=check)
-           return(out)
-         },
-         mask = {
-           if(fatal) stop("x is a mask")
-           else warning("x is a mask - no line segments returned")
-           return(psp(numeric(0), numeric(0), numeric(0), numeric(0),
-                      window=xframe, check=FALSE))
-         })
-  return(NULL)
+as.psp.owin <- function(x, ..., window=NULL,
+                        check=spatstat.options("checksegments"), fatal=TRUE) {
+  .Deprecated("edges", package="spatstat")
+  edges(x, ..., window=window, check=check)
+}
+
+edges <- function(x, ...,
+                  window=NULL, check=spatstat.options("checksegments")) {
+  x <- as.owin(x)
+  if(is.null(window)) window <- as.rectangle(x)
+  x <- as.polygonal(x)
+  x0 <- y0 <- x1 <- y1 <- numeric(0)
+  bdry <- x$bdry
+  for(i in seq_along(bdry)) {
+    po <- bdry[[i]]
+    ni <- length(po$x)
+    nxt <- c(2:ni, 1)
+    x0 <- c(x0, po$x)
+    y0 <- c(y0, po$y)
+    x1 <- c(x1, po$x[nxt])
+    y1 <- c(y1, po$y[nxt])
+  }
+  out <- psp(x0, y0, x1, y1,  window=window, check=check)
+  return(out)
 }
 
 
@@ -327,9 +317,11 @@ unmark.psp <- function(X) {
 #  plot and print methods
 #################################################
 
-plot.psp <- function(x, ..., add=FALSE, show.all=!add, which.marks=1,
-                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024) {
-  xname <- short.deparse(substitute(x))
+plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
+                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
+                     do.plot=TRUE) {
+  if(missing(main) || is.null(main))
+    main <- short.deparse(substitute(x))
   verifyclass(x, "psp")
   #
   n <- nsegments(x)
@@ -338,45 +330,51 @@ plot.psp <- function(x, ..., add=FALSE, show.all=!add, which.marks=1,
   use.colour <- !is.null(marx) && (n != 0)
   do.ribbon <- identical(ribbon, TRUE) && use.colour 
   ##
-  main <- if(show.all) xname else ""
-  #
-  if(!add) {
-    # create plot region
-    if(!do.ribbon) {
-      # window of x
+  ## ....   initialise plot; draw observation window  ......
+  if(!do.ribbon) {
+    ## window of x only
+    bb.all <- as.rectangle(as.owin(x))
+    if(do.plot && show.all)
       do.call.matched("plot.owin", 
-                      resolve.defaults(list(x=x$window),
-                                       list(...),
-                                       list(main=main)))
-    } else {
-      # enlarged window with room for colour ribbon
-      # x at left, ribbon at right
-      bb <- as.rectangle(as.owin(x))
-      xwidth <- diff(bb$xrange)
-      xheight <- diff(bb$yrange)
-      xsize <- max(xwidth, xheight)
-      bb.rib <- owin(bb$xrange[2] + c(ribsep, ribsep+ribwid) * xsize,
-                     bb$yrange)
-      bb.all <- bounding.box(bb.rib, bb)
-      # establish coordinate system
-      do.call.plotfun("plot.default",
-                      resolve.defaults(list(x=0, y=0, type="n",
-                                            axes=FALSE, asp=1,
-                                            xlim=bb.all$xrange,
-                                            ylim=bb.all$yrange),
-                                       list(...),
-                                       list(main=main, xlab="", ylab="")))
-      # now plot window of x
-      do.call.matched("plot.owin", 
-                      resolve.defaults(list(x=x$window, add=TRUE),
-                                       list(...)))
+                      append(list(x=x$window, main=main, add=add),
+                             list(...)))
+  } else {
+    ## enlarged window with room for colour ribbon
+    ## x at left, ribbon at right
+    bb <- as.rectangle(as.owin(x))
+    xwidth <- diff(bb$xrange)
+    xheight <- diff(bb$yrange)
+    xsize <- max(xwidth, xheight)
+    bb.rib <- owin(bb$xrange[2] + c(ribsep, ribsep+ribwid) * xsize,
+                   bb$yrange)
+    bb.all <- boundingbox(bb.rib, bb)
+    if(do.plot) {
+      ## establish coordinate system
+      if(!add)
+        do.call.plotfun("plot.default",
+                        resolve.defaults(list(x=0, y=0, type="n",
+                                              axes=FALSE, asp=1,
+                                              xlim=bb.all$xrange,
+                                              ylim=bb.all$yrange),
+                                         list(...),
+                                         list(main=main, xlab="", ylab="")))
+      ## now plot window of x
+      if(show.all) 
+        do.call.matched("plot.owin", 
+                        resolve.defaults(list(x=x$window,
+                                              add=TRUE,
+                                              main=main,
+                                              show.all=add),
+                                         list(...)))
     }
-  } else if(show.all)
-    fakemaintitle(x, main, ...)
+  }
 
   # plot segments
-  if(n == 0)
-    return(invisible(NULL))
+  if(n == 0) {
+    result <- symbolmap()
+    attr(result, "bbox") <- bb.all
+    return(invisible(result))
+  }
   
   # determine colours if any
   if(!use.colour) {
@@ -403,20 +401,25 @@ plot.psp <- function(x, ..., add=FALSE, show.all=!add, which.marks=1,
     col <- to.grey(col)
     colmap <- to.grey(colmap)
   }
-  
-  # plot segments
-  do.call("segments",
-          resolve.defaults(as.list(x$ends),
-                           list(...),
-                           list(col=col),
-                           .StripNull=TRUE))
-  # plot ribbon
-  if(do.ribbon) 
-    plot(colmap, vertical=TRUE, add=TRUE,
-         xlim=bb.rib$xrange, ylim=bb.rib$yrange)
+
+  if(do.plot) {
+    ## plot segments
+    do.call.matched("segments",
+                    resolve.defaults(as.list(x$ends),
+                                     list(...),
+                                     list(col=col),
+                                     .StripNull=TRUE),
+                    extrargs=names(par()))
+    ## plot ribbon
+    if(do.ribbon) 
+      plot(colmap, vertical=TRUE, add=TRUE,
+           xlim=bb.rib$xrange, ylim=bb.rib$yrange)
+  }
   
   # return colour map
-  return(invisible(colmap))
+  result <- colmap %orifnull% colourmap()
+  attr(result, "bbox") <- bb.all
+  return(invisible(result))
 }
 
 print.psp <- function(x, ...) {
@@ -519,7 +522,7 @@ midpoints.psp <- function(x) {
   if(any(!ok)) {
     warning(paste("Some segment midpoints lie outside the original window;",
                   "window replaced by bounding box"))
-    win <- bounding.box(win)
+    win <- boundingbox(win)
   }
   ppp(x=xm, y=ym, window=win, check=FALSE)
 }
@@ -647,14 +650,22 @@ shift.psp <- function(X, vec=c(0,0), ..., origin=NULL) {
   return(Y)
 }
 
-rotate.psp <- function(X, angle=pi/2, ...) {
+rotate.psp <- function(X, angle=pi/2, ..., centre=NULL) {
   verifyclass(X, "psp")
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   W <- rotate.owin(X$window, angle=angle, ...)
   E <- X$ends
   ends0 <- rotxy(list(x=E$x0,y=E$y0), angle=angle)
   ends1 <- rotxy(list(x=E$x1,y=E$y1), angle=angle)
-  psp(ends0$x, ends0$y, ends1$x, ends1$y, window=W, marks=marks(X, dfok=TRUE),
-      check=FALSE)
+  Y <- psp(ends0$x, ends0$y, ends1$x, ends1$y,
+           window=W, marks=marks(X, dfok=TRUE),
+           check=FALSE)
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
+  return(Y)
 }
 
 is.empty.psp <- function(x) { return(x$n == 0) } 

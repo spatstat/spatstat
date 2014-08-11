@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.140 $	$Date: 2014/01/27 08:27:36 $
+#	$Revision: 4.146 $	$Date: 2014/04/21 03:32:08 $
 #
 #
 #	A window may be either
@@ -390,30 +390,33 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
 }
 
 as.owin.default <- function(W, ..., fatal=TRUE) {
-	# Tries to interpret data as an object of class 'window'
-	# W may be
-	#	a structure with entries xrange, yrange
-	#	a four-element vector (interpreted xmin, xmax, ymin, ymax)
-	#	a structure with entries xl, xu, yl, yu
+  ## Tries to interpret data as an object of class 'owin'
+  ## W may be
+  ##	a structure with entries xrange, yrange
+  ##	a four-element vector (interpreted xmin, xmax, ymin, ymax)
+  ##	a structure with entries xl, xu, yl, yu
+  ##	an object with attribute "bbox"
 
-        if(checkfields(W, c("xrange", "yrange"))) {
-		Z <- owin(W$xrange, W$yrange)
-		return(Z)
-	} else if(is.vector(W) && is.numeric(W) && length(W) == 4) {
-		Z <- owin(W[1:2], W[3:4])
-		return(Z)
-	} else if(checkfields(W, c("xl", "xu", "yl", "yu"))) {
-                W <- as.list(W)
-		Z <- owin(c(W$xl, W$xu),c(W$yl, W$yu))
-		return(Z)
-        } else if(checkfields(W, c("x", "y", "area"))
-                  && checkfields(W$area, c("xl", "xu", "yl", "yu"))) {
-                V <- as.list(W$area)
-                Z <- owin(c(V$xl, V$xu),c(V$yl, V$yu))
-                return(Z)
-	} else if(fatal)
-		stop("Can't interpret W as a window")
-        else return(NULL)
+  if(checkfields(W, c("xrange", "yrange"))) {
+    Z <- owin(W$xrange, W$yrange)
+    return(Z)
+  } else if(is.vector(W) && is.numeric(W) && length(W) == 4) {
+    Z <- owin(W[1:2], W[3:4])
+    return(Z)
+  } else if(checkfields(W, c("xl", "xu", "yl", "yu"))) {
+    W <- as.list(W)
+    Z <- owin(c(W$xl, W$xu),c(W$yl, W$yu))
+    return(Z)
+  } else if(checkfields(W, c("x", "y", "area"))
+            && checkfields(W$area, c("xl", "xu", "yl", "yu"))) {
+    V <- as.list(W$area)
+    Z <- owin(c(V$xl, V$xu),c(V$yl, V$yu))
+    return(Z)
+  } else if(!is.null(Z <- attr(W, "bbox"))) {
+    return(as.owin(Z, ..., fatal=fatal))
+  } else if(fatal)
+    stop("Can't interpret W as a window")
+  else return(NULL)
 }		
 
 #
@@ -426,7 +429,7 @@ as.rectangle <- function(w, ...) {
   else if(inherits(w, "im"))
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
   else if(inherits(w, "layered")) 
-    return(do.call(bounding.box, unname(lapply(w, as.rectangle))))
+    return(do.call(boundingbox, unname(lapply(w, as.rectangle))))
   else {
     w <- as.owin(w, ...)
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
@@ -715,85 +718,6 @@ mask2df <- function(w) {
 
 #------------------------------------------------------------------
 		
-bounding.box <- function(...) {
-        wins <- list(...)
-
-        if(length(wins) == 0)
-          stop("No arguments supplied")
-
-        # trap a particular misuse of this function
-        if(length(wins) == 2) {
-          w1 <- wins[[1]]
-          w2 <- wins[[2]]
-          if(is.vector(w1) && is.numeric(w1) &&
-             is.vector(w2) && is.numeric(w2) &&
-             length(w1) == length(w2)) 
-            stop(paste("bounding.box() was applied to two numeric vectors;",
-                       "you probably wanted bounding.box.xy()"))
-        }
-
-        # remove null objects 
-        isnul <- unlist(lapply(wins, is.null))
-        if(all(isnul))
-          stop("All arguments are NULL")
-        wins <- wins[!isnul]
-        
-        if(length(wins) > 1) {
-          # multiple arguments -- compute bounding box for each argument.
-          # First trap any point patterns and extract bounding boxes of points
-          isppp <- unlist(lapply(wins, is.ppp))
-          if(any(isppp)) 
-            wins[isppp] <- lapply(wins[isppp], bounding.box.xy)
-          # then convert all windows to owin
-          wins <- lapply(wins, as.owin)
-          # then take bounding box of each window
-          boxes <- lapply(wins, bounding.box)
-          # discard NULL values
-          isnull <- unlist(lapply(boxes, is.null))
-          boxes <- boxes[!isnull]
-          # take bounding box of these boxes
-          xrange <- range(unlist(lapply(boxes, function(b){b$xrange})))
-          yrange <- range(unlist(lapply(boxes, function(b){b$yrange})))
-          return(owin(xrange, yrange))
-        }
-
-        # single argument
-        w <- wins[[1]]
-        if(is.null(w))
-          return(NULL)
-
-        # point pattern?
-        if(is.ppp(w))
-          return(bounding.box.xy(w))
-          
-        # convert to window
-        w <- as.owin(w)
-
-        # determine a tight bounding box for the window w
-        switch(w$type,
-               rectangle = {
-                 return(w)
-               },
-               polygonal = {
-                 bdry <- w$bdry
-                 if(length(bdry) == 0)
-                   return(NULL)
-                 xr <- range(unlist(lapply(bdry, function(a) range(a$x))))
-                 yr <- range(unlist(lapply(bdry, function(a) range(a$y))))
-                 return(owin(xr, yr, unitname=unitname(w)))
-               },
-               mask = {
-                 m <- w$m
-                 x <- raster.x(w)
-                 y <- raster.y(w)
-                 xr <- range(x[m]) + c(-1,1) * w$xstep/2
-                 yr <- range(y[m]) + c(-1,1) * w$ystep/2
-                 return(owin(xr, yr, unitname=unitname(w)))
-               },
-               stop("unrecognised window type", w$type)
-               )
-}
-  
 complement.owin <- function(w, frame=as.rectangle(w)) {
   wname <- short.deparse(substitute(w))
   w <- as.owin(w)
@@ -933,30 +857,31 @@ inside.owin <- function(x, y, w) {
 print.owin <- function(x, ...) {
   verifyclass(x, "owin")
   unitinfo <- summary(unitname(x))
-  cat("window: ")
   switch(x$type,
          rectangle={
-           cat("rectangle = ")
+           rectname <- "window: rectangle ="
          },
          polygonal={
-           cat("polygonal boundary\n")
+           cat("window:", "polygonal", "boundary", fill=TRUE)
            if(length(x$bdry) == 0)
              cat("window is empty\n")
-           cat("enclosing rectangle: ")
+           rectname <- "enclosing rectangle:"
          },
          mask={
-           cat("binary image mask\n")
+           cat("window: binary", "image mask", fill=TRUE)
            di <- x$dim
-           cat(paste(di[1], "x", di[2], "pixel array (ny, nx)\n"))
-           cat("enclosing rectangle: ")
+           cat(di[1], "x", di[2], "pixel array (ny, nx)", fill=TRUE)
+           rectname <- "enclosing rectangle:"
          }
          )
-    cat(paste(prange(zapsmall(x$xrange)),
-              "x",
-              prange(zapsmall(x$yrange)),
-              unitinfo$plural,
-              unitinfo$explain,
-              "\n"))
+  cat(rectname,
+      prange(zapsmall(x$xrange)),
+      "x",
+      prange(zapsmall(x$yrange)),
+      unitinfo$plural,
+      unitinfo$explain,
+      fill=TRUE)
+  invisible(NULL)
 }
 
 summary.owin <- function(object, ...) {
@@ -999,34 +924,36 @@ print.summary.owin <- function(x, ...) {
   unitinfo <- summary(x$units)
   pluralunits <- unitinfo$plural
   singularunits <- unitinfo$singular
-  cat("Window: ")
   switch(x$type,
          rectangle={
-           cat("rectangle = ")
+           rectname <- "Window: rectangle ="
          },
          polygonal={
-           cat("polygonal boundary\n")
-           if(x$npoly == 0) {
+           np <- x$npoly
+           cat("Window:", "polygonal", "boundary", fill=TRUE)
+           if(np == 0) {
              cat("window is empty\n")
-           } else if(x$npoly == 1) {
-             cat(paste("single connected closed polygon with",
-                       x$nvertices, 
-                       "vertices\n"))
+           } else if(np == 1) {
+             cat("single connected", "closed polygon",
+                 "with",
+                 x$nvertices, 
+                 "vertices", fill=TRUE)
            } else {
-             cat(paste(x$npoly, "separate polygons ("))
-             if(x$nhole == 0) cat("no holes)\n")
-             else if(x$nhole == 1) cat("1 hole)\n")
-             else cat(paste(x$nhole, "holes)\n"))
-             if(x$npoly > 0)
+             nh <- x$nhole
+             holy <- if(nh == 0) "(no holes)" else
+                     if(nh == 1) "(1 hole)" else
+                     paren(paste(nh, "holes"))
+             cat(np, "separate polygons", holy, fill=TRUE)
+             if(np > 0)
                print(data.frame(vertices=x$nvertices,
                                 area=signif(x$areas, 6),
                                 relative.area=signif(x$areas/x$area,3),
                                 row.names=paste("polygon",
-                                  1:(x$npoly),
+                                  1:np,
                                   ifelse(x$areas < 0, "(hole)", "")
                                   )))
            }
-           cat("enclosing rectangle: ")
+           rectname <- "enclosing rectangle:"
          },
          mask={
            cat("binary image mask\n")
@@ -1035,18 +962,21 @@ print.summary.owin <- function(x, ...) {
            cat(paste("pixel size:",
                      signif(x$xstep,3), "by", signif(x$ystep,3),
                      pluralunits, "\n"))
-           cat("enclosing rectangle: ")
+           rectname <- "enclosing rectangle:"
          }
          )
-  cat(paste(prange(zapsmall(x$xrange)),
-            "x",
-            prange(zapsmall(x$yrange)),
-            pluralunits, "\n"))
+  cat(rectname,
+      prange(zapsmall(x$xrange)),
+      "x",
+      prange(zapsmall(x$yrange)),
+      pluralunits, 
+      fill=TRUE)
   Area <- signif(x$area, 6)
-  cat(paste("Window area = ", Area, "square",
-            if(Area == 1) singularunits else pluralunits, "\n"))
+  cat("Window area =", Area, "square",
+      if(Area == 1) singularunits else pluralunits,
+      fill=TRUE)
   if(!is.null(ledge <- unitinfo$legend))
-    cat(paste(ledge, "\n"))
+    cat(ledge, "\n")
   return(invisible(x))
 }
 
@@ -1067,4 +997,11 @@ discretise <- function(X,eps=NULL,dimyx=NULL,xy=NULL) {
   }
   X$window <- WM
   X
+}
+
+pixelcentres <- function (X, W=NULL,...) {
+  X <- as.mask(as.owin(X), ...)
+  if(is.null(W)) W <- as.rectangle(X)
+  Y <- as.ppp(raster.xy(X,drop=TRUE),W=W)
+  return(Y)
 }

@@ -6,12 +6,12 @@ Creates an instance of the multitype hard core point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  MultiHard(types=NULL, hradii)
+  MultiHard(hradii, types=NULL)
 }
 \arguments{
+  \item{hradii}{Matrix of hard core radii}
   \item{types}{Optional; vector of all possible types (i.e. the possible levels
     of the \code{marks} variable in the data)}
-  \item{hradii}{Matrix of hard core radii}
 }
 \value{
   An object of class \code{"interact"}
@@ -57,13 +57,12 @@ which can then be fitted to point pattern data.
    h <- matrix(c(1,2,2,1), nrow=2,ncol=2)
 
    # prints a sensible description of itself
-   MultiHard(hradii=h)
+   MultiHard(h)
 
    # Fit the stationary multitype hardcore process to `amacrine'
    # with hard core operating only between cells of the same type.
    h <- 0.02 * matrix(c(1, NA, NA, 1), nrow=2,ncol=2)
-   ppm(amacrine, ~1, MultiHard(,h))
-   # Note the comma; needed since "types" is not specified.
+   ppm(amacrine ~1, MultiHard(h))
 }
 \section{Warnings}{
   In order that \code{\link{ppm}} can fit the multitype hard core
@@ -73,11 +72,18 @@ which can then be fitted to point pattern data.
   \code{types} is specified it is interpreted as a set of factor
   levels and this set must equal \code{levels(marks(X))}.
 }
+\section{Changed Syntax}{
+  Before \pkg{spatstat} version \code{1.37-0},
+  the syntax of this function was different:
+  \code{MultiHard(types=NULL, hradii)}.
+  The new code attempts to handle the old syntax as well.
+}
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
 }
 \keyword{spatial}
 \keyword{models}

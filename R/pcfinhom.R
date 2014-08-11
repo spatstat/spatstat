@@ -55,8 +55,12 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
 
   ########## intensity values #########################
 
+  dangerous <- c("lambda", "reciplambda")
+  danger <- TRUE
+  
   if(missing(lambda) && is.null(reciplambda)) {
     # No intensity data provided
+    danger <- FALSE
     # Estimate density by leave-one-out kernel smoothing
     lambda <- density(X, ..., sigma=sigma, varcov=varcov,
                       at="points", leaveoneout=TRUE)
@@ -178,6 +182,8 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
                         paste(corrxns, collapse=","),
                         ") ~ r")))
   unitname(out) <- unitname(X)
+  if(danger)
+    attr(out, "dangerous") <- dangerous
   return(out)
 }
 

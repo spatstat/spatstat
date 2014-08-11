@@ -21,7 +21,7 @@
   }
 }
 \value{
-  Returns the 3D transformation matrix
+  (invisibly) the 3D transformation matrix
   returned by \code{\link{persp.default}}.
 }
 \details{

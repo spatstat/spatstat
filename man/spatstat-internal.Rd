@@ -1,9 +1,5 @@
 \name{spatstat-internal} 
 \title{Internal spatstat functions}
-\alias{[.hyperframe}
-\alias{[<-.hyperframe}
-\alias{$.hyperframe}
-\alias{$<-.hyperframe}
 \alias{[.pp3}
 \alias{[.localpcfmatrix}
 \alias{[.splitppx}
@@ -26,6 +22,7 @@
 \alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
+\alias{as.character.units}
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.im.linim}
@@ -33,12 +30,16 @@
 \alias{as.listof}
 \alias{as.units}
 \alias{as2vector}
+\alias{augment.msr}
 \alias{badprobability}
+\alias{bbEngine}
 \alias{bermantestEngine}
 \alias{bdrylength.xypolygon} 
 \alias{bdry.mask}
 \alias{bind.ratfv}
 \alias{blankcoefnames}
+\alias{blockdiagmatrix}
+\alias{blockdiagarray}
 \alias{bounding.box3}
 \alias{break.holes}
 \alias{breakpts}
@@ -69,6 +70,7 @@
 \alias{clippoly.psp}
 \alias{closethresh}
 \alias{coef.summary.ppm}
+\alias{coerce.marks.numeric}
 \alias{compatible.rat}
 \alias{complaining}
 \alias{compileCDF}
@@ -91,6 +93,7 @@
 \alias{default.ntile}
 \alias{deltasuffstat}
 \alias{dflt.redraw}
+\alias{densitycrossEngine}
 \alias{densitypointsEngine}
 \alias{diagnose.ppm.engine}
 \alias{digital.volume}
@@ -113,6 +116,7 @@
 \alias{do.call.matched}
 \alias{do.call.plotfun}
 \alias{do.istat}
+\alias{doMultiStraussHard}
 \alias{dotexpr.to.call}
 \alias{dropifsingle}
 \alias{emptywindow}
@@ -140,6 +144,8 @@
 \alias{evenly.spaced}
 \alias{exactdt}              
 \alias{exactPdt}
+\alias{expand.polynom}
+\alias{expandwinPerfect}
 \alias{explain.ifnot}
 \alias{extractAIC.slrm}
 \alias{extractAtomicQtests}
@@ -168,6 +174,7 @@
 \alias{g3Cengine}
 \alias{greatest.common.divisor}
 \alias{getdataname}
+\alias{getdataobjects}
 \alias{getfields}
 \alias{getglmdata}
 \alias{getglmfit}
@@ -175,6 +182,8 @@
 \alias{getlambda.lpp}
 \alias{getlastshift}
 \alias{getppmdatasubset}
+\alias{getppmOriginalCovariates}
+\alias{getSpatstatVariable}
 \alias{getSumFun}
 \alias{geyercounts}
 \alias{geyerdelta2}
@@ -186,6 +195,7 @@
 \alias{grow.rectangle}
 \alias{grow.mask}
 \alias{gsubdot}
+\alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
 \alias{ho.engine}
@@ -270,9 +280,14 @@
 \alias{local2lpp}
 \alias{logi.dummy}
 \alias{logi.engine}
+\alias{lty2char}
+\alias{parbreak}
 \alias{passthrough}
 \alias{paste.expr}
+\alias{plan.legend.layout}
 \alias{prettyinside}
+\alias{prettydiscrete}
+\alias{putSpatstatVariable}
 \alias{lookup.im}
 \alias{majorminorversion}
 \alias{make.even.breaks}
@@ -372,8 +387,10 @@
 \alias{plot.qqppm}
 \alias{polynom}
 \alias{ppllengine}
+\alias{ppm.default}
 \alias{ppmCovariates}
-\alias{ppm.influence}
+\alias{ppmDerivatives}
+\alias{ppmInfluence}
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
 \alias{ppsubset}
@@ -396,6 +413,8 @@
 \alias{print.fv}       
 \alias{print.fvfun}       
 \alias{print.funxy}       
+\alias{print.symbolmap}       
+\alias{print.Smoothfun}       
 \alias{print.hyperframe}
 \alias{print.influence.ppm}       
 \alias{print.interact}       
@@ -437,13 +456,16 @@
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
 \alias{print.summary.units}
+\alias{print.texturemap}
 \alias{print.tess}
 \alias{print.timed}
 \alias{prolongseq}
+\alias{putlastshift}
 \alias{quad}
 \alias{quad.mppm}
 \alias{RandomFieldsSafe}
 \alias{ratfv}
+\alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
 \alias{reduceformula}
@@ -516,6 +538,9 @@
 \alias{sensiblevarname}
 \alias{sewpcf}
 \alias{sewsmod}
+\alias{shift.influence.ppm}              
+\alias{shift.leverage.ppm}              
+\alias{shift.msr}              
 \alias{shift.quadratcount}              
 \alias{shift.quadrattest}              
 \alias{shiftxy}              
@@ -527,6 +552,7 @@
 \alias{singlestring}              
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
+\alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}              
 \alias{sort.im}
 \alias{spatstat.rawdata.location}
@@ -534,6 +560,7 @@
 \alias{spatstatRmhInfo}
 \alias{spatialCDFframe}
 \alias{spatialCDFtest}
+\alias{splat}
 \alias{splitHybridInteraction}
 \alias{sp.foundclass}
 \alias{sp.foundclasses}
@@ -541,6 +568,7 @@
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
 \alias{strausscounts}
+\alias{strsplitretain}
 \alias{substringcount}
 \alias{suffloc}
 \alias{suffstat.generic}
@@ -558,20 +586,24 @@
 \alias{summary.rmhexpand}
 \alias{sumsymouter}
 \alias{superimposeMarks}
+\alias{symbolmaptype}
 \alias{sympoly}
 \alias{termsinformula}
 \alias{test.crossing.psp}
 \alias{test.selfcrossing.psp}
 \alias{tilecentroids}        
+\alias{tileindex}        
 \alias{trap.extra.arguments}
 \alias{trianglediameters}
 \alias{trim.mask}        
+\alias{truncline}        
 \alias{tweak.fv.entry}
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unparen}
 \alias{update.interact}
 \alias{update.rmhstart}
+\alias{uptrimat}
 \alias{validradius}        
 \alias{validate.mask}        
 \alias{validate.quad}        
@@ -585,6 +617,8 @@
 \alias{verifyclass}
 \alias{verify.xypolygon}
 \alias{warn.ignored.args}
+\alias{warn.once}
+\alias{waxlyrical}
 \alias{weighted.var}
 \alias{windows.mppm}
 \alias{with.msr}
@@ -600,10 +634,6 @@
   Internal spatstat functions.
 }
 \usage{
-\method{[}{hyperframe}(x, i, j, drop=FALSE, \dots)
-\method{[}{hyperframe}(x, i, j) <- value
-\method{$}{hyperframe}(x, name)
-\method{$}{hyperframe}(x, i) <- value
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
 acedist.show(X, Y, n, d, timelag = 0)
@@ -627,6 +657,7 @@ areaLoss.grid(X, r, \dots, W=as.owin(X), subset=NULL,
 assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
+\method{as.character}{units}(x, \dots)
 \method{as.data.frame}{fv}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.list}{hyperframe}(x, \dots)
@@ -634,12 +665,16 @@ as.breakpts(\dots)
 as.listof(x)
 as.units(s)
 as2vector(x)
+augment.msr(x, \dots, sigma)
 badprobability(x, NAvalue)
+bbEngine(\dots)
 bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
 bdrylength.xypolygon(polly)
 bdry.mask(W)
 bind.ratfv(x, numerator, denominator, labl, desc, preferred, ratio)
 blankcoefnames(x)
+blockdiagmatrix(\dots)
+blockdiagarray(\dots)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)
 breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
@@ -672,6 +707,7 @@ cliprect.psp(x, window)
 clippoly.psp(s, window)
 closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
+coerce.marks.numeric(X, warn)
 \method{compatible}{rat}(A, B, \dots) %DontDeclare
 complaining(whinge, fatal, value)
 compileCDF(D, B, r, \dots, han.denom, check)
@@ -681,7 +717,7 @@ conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
-commasep(x, join)
+commasep(x, join, flatten)
 conform.imagelist(X, Zlist)
 countingweights(id, areas, check = TRUE)
 damaged.ppm(object)
@@ -690,16 +726,19 @@ datagen.runifpointOnLines(n, L)
 datagen.runifpoisppOnLines(lambda, L)
 datagen.rpoisppOnLines(lambda, L, lmax, \dots, check=TRUE)
 default.clipwindow(object, epsilon)
-default.n.tiling(X, nd, ntile, npix, eps, verbose)
+default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force)
 dflt.redraw(button, name, env)
+densitycrossEngine(Xdata, Xquery, sigma, \dots,
+                    weights, edge, varcov,
+                    diggle, sorted)
 densitypointsEngine(x, sigma, \dots,
                     weights, edge, varcov,
                     leaveoneout, diggle, sorted)
-diagnose.ppm.engine(object, \dots, type="eem", typename, opt,
-                         sigma=NULL, rbord = reach(object), compute.sd=TRUE,
-                         compute.cts=TRUE, rv=NULL, oldstyle=FALSE)
+diagnose.ppm.engine(object, \dots, type, typename, opt,
+                         sigma, rbord, compute.sd,
+                         compute.cts, rv, oldstyle, splineargs)
 digital.volume(range, nval, vside)
 dilate.owin(\dots)
 \method{dim}{fasp}(x)
@@ -717,9 +756,10 @@ distributecbind(x)
 dist2dpath(dist, method="C")
 divisors(n)
 do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
-do.call.matched(fun, arglist, funargs, extrargs, matchfirst, sieve)
+do.call.matched(fun, arglist, funargs, extrargs, matchfirst, sieve, skipargs)
 do.call.plotfun(fun, arglist, \dots)
 do.istat(panel)
+doMultiStraussHard(iradii, hradii, types)
 dotexpr.to.call(expr, dot, evaluator)
 dropifsingle(x)
 emptywindow(w)
@@ -763,6 +803,8 @@ even.breaks.owin(w)
 evenly.spaced(x, tol)
 exactdt(X, \dots)              
 exactPdt(w)
+expand.polynom(f)
+expandwinPerfect(W, expand, amount)
 explain.ifnot(expr, context)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
@@ -791,6 +833,7 @@ g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
 greatest.common.divisor(n,m)
 getdataname(defaultvalue, \dots, dataname)
+getdataobjects(nama, envir, datalist)
 getfields(X, L, fatal = TRUE)
 getglmdata(object, drop=FALSE)
 getglmfit(object)
@@ -798,6 +841,8 @@ getglmsubset(object)
 getlambda.lpp(lambda, X, \dots)
 getlastshift(X)
 getppmdatasubset(object)
+getppmOriginalCovariates(object)
+getSpatstatVariable(name)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
 geyerdelta2(X,r,sat)
@@ -809,6 +854,7 @@ grid1index(x, xrange, nx)
 grow.rectangle(W, xmargin=0, ymargin=xmargin)
 grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
+HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, eps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip, edgedefault)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
@@ -898,11 +944,17 @@ logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, correction, rbord, covfunargs, allcovar, 
             vnamebase, vnameprefix, justQ, savecomputed, precomputed)
+lty2char(i)
+parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
+plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
+                   started, map)
 prettyinside(x, \dots)
+prettydiscrete(x, n)
 \method{print}{localpcfmatrix}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
+putSpatstatVariable(name, value)
 \method{[}{localpcfmatrix}(x, i, \dots)
 \method{[}{pp3}(x, i, \dots)
 lookup.im(Z, x, y, naok, strict)
@@ -947,14 +999,14 @@ mpl.engine(Q, trend, interaction, \dots, covariates, covfunargs, correction,
          forcefit, nd, eps, allcovar, callstring,
          precomputed, savecomputed, preponly,
          rename.intercept, justQ, weightfactor)
-mpl.get.covariates(covariates, locations, type, covfunargs)
+mpl.get.covariates(covariates, locations, type, covfunargs, need.deriv)
 mpl.prepare(Q, X, P, trend, interaction, covariates, 
             want.trend, want.inter, correction, rbord, Pname,
             callstring, \dots,
             covfunargs, allcovar, precomputed, savecomputed,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
             weightfactor, skip.border)
-MultiPair.checkmatrix(mat, n, matname, naok, zerook)
+MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
 multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
@@ -1006,8 +1058,8 @@ pcfmulti.inhom(X, I, J, lambdaI = NULL, lambdaJ = NULL, \dots,
                Jname = "points satisfying condition J")
 pickoption(what="option", key, keymap, \dots,
            exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE)
-ploterodewin(W1, W2, col.edge, col.inside, \dots)
-ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ)
+ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
+ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
@@ -1021,8 +1073,14 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ)
            limcol=if(monochrome) "black" else "red")
 polynom(x, \dots)
 ppllengine(X, Y, action="project", check=FALSE)
+\method{ppm}{default}(Q, trend, interaction,
+       \dots, covariates, data, covfunargs, 
+       correction, rbord, use.gam, method, forcefit,
+       project, nd, eps, gcontrol, nsim, nrmh, start, control,
+       verb, callstring)
 ppmCovariates(model)
-ppm.influence(fit, what, \dots, iScore, iHessian, iArgs,
+ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
+ppmInfluence(fit, what, \dots, iScore, iHessian, iArgs,
               drop, method, precomputed)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
@@ -1045,8 +1103,10 @@ primesbelow(nmax)
 \method{print}{ewcdf}(x, digits, \dots)
 \method{print}{fasp}(x, \dots)
 \method{print}{funxy}(x, \dots)
-\method{print}{fv}(x, \dots)
+\method{print}{fv}(x, \dots, tight)
 \method{print}{fvfun}(x, \dots)
+\method{print}{symbolmap}(x, \dots)
+\method{print}{Smoothfun}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)
 \method{print}{interact}(x, \dots, family=TRUE, brief=FALSE)       
@@ -1087,13 +1147,16 @@ primesbelow(nmax)
 \method{print}{summary.splitppp}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.units}(x, \dots)
+\method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
 \method{print}{timed}(x, \dots)
 prolongseq(x, newrange, step)
+putlastshift(X, vec)
 quad(data, dummy, w, param)
 quad.mppm(x)
 RandomFieldsSafe()
 ratfv(df, numer, denom, \dots, ratio)
+recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
@@ -1106,7 +1169,7 @@ rhohatEngine(model, covariate, reference, volume, \dots,
                method, smoother, resolution, 
                n, bw, adjust, from, to, 
                bwref, covname, covunits, confidence, modelcall, callstring)
-rhohatCalc(ZX, Zvalues, lambda, baseline, \dots,
+rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            method, smoother,
            n, bw, adjust, from, to, 
            bwref, covname, confidence,
@@ -1135,12 +1198,14 @@ rebound(x, rect)
 reconcile.fv(\dots)
 repair.old.factor.image(x)
 reincarnate.interact(object)
-resid4plot(RES, plot.neg="image", plot.smooth="imagecontour",
+resid4plot(RES, plot.neg, plot.smooth,
            spacing=0.1, srange=NULL,monochrome=FALSE, main=NULL, \dots)
-resid1plot(RES, opt, plot.neg="image", plot.smooth="imagecontour",
-              srange=NULL, monochrome=FALSE, main=NULL, \dots)
+resid1plot(RES, opt, plot.neg, plot.smooth,
+              srange, monochrome, main,
+              add, show.all, do.plot, \dots)
 resid1panel(observedX, observedV,
-            theoreticalX, theoreticalV, theoreticalSD, xlab,ylab, \dots)
+            theoreticalX, theoreticalV, theoreticalSD,
+            xlab,ylab, \dots, do.plot)
 resolve.defaults(\dots, .MatchNull=TRUE, .StripNull=FALSE)
 resolve.1.default(.A, \dots)
 resolve.2D.kernel(\dots,
@@ -1182,6 +1247,9 @@ second.moment.engine(x, sigma, edge, what, \dots,
 sensiblevarname(guess, fallback, maxlen)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
+\method{shift}{influence.ppm}(X, \dots)
+\method{shift}{leverage.ppm}(X, \dots)
+\method{shift}{msr}(X, \dots)
 \method{shift}{quadratcount}(X, \dots)
 \method{shift}{quadrattest}(X, \dots)
 shiftxy(X, vec = c(0, 0))
@@ -1192,6 +1260,8 @@ simulrecipe(type, expr, envir, csr, pois)
 singlestring(s, coll)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
+smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
+                    weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,
                     weights, varcov, leaveoneout, sorted)
 \method{sort}{im}(x, \dots)
@@ -1202,12 +1272,14 @@ spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
          dimyx, eps, jitter, modelname, covname, dataname)
 sphere.volume(range, nval = 10)
+splat(\dots)
 splitHybridInteraction(coeffs, inte)
 sp.foundclass(cname, inlist, formalname, argsgiven)             
 sp.foundclasses(cnames, inlist, formalname, argsgiven)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
 strausscounts(U,X,r,EqualPairs)
+strsplitretain(x, split)
 substringcount(x,y)
 suffloc(object)
 suffstat.generic(model, X, callstring)
@@ -1225,20 +1297,24 @@ summarise.trend(trend, w, a)
 \method{summary}{splitppx}(object, \dots)
 sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
+symbolmaptype(x)
 sympoly(x, y, n)
 termsinformula(x)
 test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
 tilecentroids(W, nx, ny)
+tileindex(x, y, Z)
 trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
+truncline(x, nc)
 tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
 \method{unitname}{default}(x)  %DontDeclare
 \method{unitname}{default}(x) <- value  %DontDeclare
 unparen(x)
 \method{update}{interact}(object, \dots) 
 \method{update}{rmhstart}(object, \dots)
+uptrimat(x)
 validradius(r, caller)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
@@ -1252,6 +1328,8 @@ versionstring.spatstat()
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 verify.xypolygon(p, fatal=TRUE)
 warn.ignored.args(\dots, context)
+warn.once(key, \dots)
+waxlyrical(type, terse)
 weighted.var(x, w, na.rm)
 windows.mppm(x)
 \method{with}{msr}(data, expr, \dots)

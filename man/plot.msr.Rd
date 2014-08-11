@@ -5,7 +5,9 @@
   Plot a signed measure or vector-valued measure.
 }
 \usage{
-  \method{plot}{msr}(x, \dots)
+  \method{plot}{msr}(x, \dots, add=FALSE,
+                     how=c("image", "contour", "imagecontour"),
+                     do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -19,9 +21,20 @@
     or passed to \code{\link{plot.im}} or \code{\link{plot.ppp}}
     to control the appearance of the plot.
   }
+  \item{add}{
+    Logical flag; if \code{TRUE}, the graphics are added to the existing
+    plot. If \code{FALSE} (the default) a new plot is initialised.
+  }
+  \item{how}{
+    String indicating how to display the continuous density component.
+  }
+  \item{do.plot}{
+    Logical value determining whether to actually perform the plotting.
+  }
 }
 \value{
-  none.
+  (Invisible) colour map (object of class \code{"colourmap"}) for the
+  colour image.
 }
 \details{
   This is the \code{plot} method for the class \code{"msr"}.
@@ -36,6 +49,9 @@
 
   To smooth both the discrete and continuous components,
   use   \code{\link{Smooth.msr}}.
+
+  Use the argument \code{clipwin} to restrict the plot to a subset
+  of the full data.
 }
 \seealso{
   \code{\link{msr}},
@@ -48,6 +64,7 @@
    example(msr)
    plot(rp)
    plot(rs)
+   plot(rs, how="contour")
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

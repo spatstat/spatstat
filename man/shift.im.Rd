@@ -11,7 +11,8 @@
   \item{X}{Pixel image (object of class \code{"im"}).}
   \item{vec}{Vector of length 2 representing a translation.}
   \item{\dots}{Ignored}
-  \item{origin}{Character string determining a location
+  \item{origin}{
+    Character string determining a location
     that will be shifted to the origin. Options are
     \code{"centroid"}, \code{"midpoint"} and \code{"bottomleft"}.
     Partially matched.

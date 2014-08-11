@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.1 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.2 $  $Date: 2014/03/20 08:56:36 $
 #
 
 parres <- function(model, covariate, ...,
@@ -137,10 +137,13 @@ parres <- function(model, covariate, ...,
     isoffset <- (covtype == "offset")
     names(isoffset) <- covname
   } else {
-    # `original' covariate (passed as argument to ppm)
-    # may determine one or more canonical covariates and/or offsets
-    #
-    # Initialise
+    ## `original' covariate (passed as argument to ppm)
+    ## may determine one or more canonical covariates and/or offsets
+    origcovdf <- getppmOriginalCovariates(model)[insubregion, , drop=FALSE]
+    isconstant <- lapply(origcovdf,
+                         function(z) { length(unique(z)) == 1 })
+    ##
+    ## Initialise
     termnames <- character(0)
     termbetas <- numeric(0)
     isoffset <- logical(0)
@@ -148,7 +151,7 @@ parres <- function(model, covariate, ...,
     effect <- 0
     effectFun <- function(x) { effectFun.can(x) + effectFun.off(x) }
     effectFun.can <- effectFun.off <- function(x) { 0 * x }
-    # Identify relevant canonical covariates
+    ## Identify relevant canonical covariates
     dmat <- model.depends(model)
     if(!(covname %in% colnames(dmat)))
       stop("Internal error: cannot match covariate names")
@@ -159,16 +162,24 @@ parres <- function(model, covariate, ...,
       mediator <- "canonical"
       # check whether covariate is separable
       if(any(conflict <- dmat[relevant, othercov, drop=FALSE])) {
-        conflictterms <- apply(conflict, 1, any)
-        conflictcovs  <- apply(conflict, 2, any)
-        stop(paste("The covariate", sQuote(covname),
-                   "cannot be separated from the",
-                   ngettext(sum(conflictcovs), "covariate", "covariates"),
-                   commasep(sQuote(colnames(conflict)[conflictcovs])),
-                   "in the model",
-                   ngettext(sum(conflictterms), "term", "terms"),
-                   commasep(sQuote(rownames(conflict)[conflictterms]))
-                   ))
+        ## identify entangled covariates
+        entangled <- colnames(conflict)[apply(conflict, 2, any)]
+        ## not problematic if constant
+        ok <- unlist(isconstant[entangled])
+        conflict[ , ok] <- FALSE
+        ## re-test
+        if(any(conflict)) {
+          conflictterms <- apply(conflict, 1, any)
+          conflictcovs  <- apply(conflict, 2, any)
+          stop(paste("The covariate", sQuote(covname),
+                     "cannot be separated from the",
+                     ngettext(sum(conflictcovs), "covariate", "covariates"),
+                     commasep(sQuote(colnames(conflict)[conflictcovs])),
+                     "in the model",
+                     ngettext(sum(conflictterms), "term", "terms"),
+                     commasep(sQuote(rownames(conflict)[conflictterms]))
+                     ))
+        }
       }
       # 
       termnames <- rownames(dmat)[relevant]
@@ -222,17 +233,25 @@ parres <- function(model, covariate, ...,
       # covariate appears in a model offset term
       mediator <- c(mediator, "offset")
       # check whether covariate is separable
-      if(any(conflict <- offmat[relevant, othercov, drop=FALSE])) {
-        conflictterms <- apply(conflict, 1, any)
-        conflictcovs  <- apply(conflict, 2, any)
-        stop(paste("The covariate", sQuote(covname),
-                   "cannot be separated from the",
-                   ngettext(sum(conflictcovs), "covariate", "covariates"),
-                   commasep(sQuote(colnames(conflict)[conflictcovs])),
-                   "in the model",
-                   ngettext(sum(conflictterms), "term", "terms"),
-                   commasep(sQuote(rownames(conflict)[conflictterms]))
-                   ))
+      if(any(conflict<- offmat[relevant, othercov, drop=FALSE])) {
+        ## identify entangled covariates
+        entangled <- colnames(conflict)[apply(conflict, 2, any)]
+        ## not problematic if constant
+        ok <- unlist(isconstant[entangled])
+        conflict[ , ok] <- FALSE
+        ## re-test
+        if(any(conflict)) {
+          conflictterms <- apply(conflict, 1, any)
+          conflictcovs  <- apply(conflict, 2, any)
+          stop(paste("The covariate", sQuote(covname),
+                     "cannot be separated from the",
+                     ngettext(sum(conflictcovs), "covariate", "covariates"),
+                     commasep(sQuote(colnames(conflict)[conflictcovs])),
+                     "in the model",
+                     ngettext(sum(conflictterms), "term", "terms"),
+                     commasep(sQuote(rownames(conflict)[conflictterms]))
+                     ))
+        }
       }
       # collect information about relevant offset 
       offnames <- rownames(offmat)[relevant]
@@ -490,6 +509,7 @@ parres <- function(model, covariate, ...,
              fname="h",
              yexp=as.expression(substitute(hat(h)(X), list(X=covname))))
   attr(rslt, "dotnames") <- c("h", "hi", "lo", "fit")
+  fvnames(rslt, ".s") <- c("hi", "lo")
   # add special class data
   class(rslt) <- c("parres", class(rslt))
   attr(rslt, "stuff") <- list(covname       = paste(covname, collapse=""),

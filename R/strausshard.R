@@ -36,7 +36,7 @@ StraussHard <- local({
              return(self)
            }
            r <- self$par$r
-           md <- min(nndist(X))
+           md <- minnndist(X)
            if(md == 0) {
              warning(paste("Pattern contains duplicated points:",
                            "hard core must be zero"))

@@ -30,7 +30,7 @@ sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
 @ 
 
 \title{Handling shapefiles in the \texttt{spatstat} package}
-\author{Adrian Baddeley}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
 \date{
 \Sexpr{sdate} \\ 
 \pkg{spatstat} version \texttt{\Sexpr{sversion}}
@@ -122,6 +122,8 @@ The class may be either \texttt{SpatialPoints} indicating a point pattern,
 \texttt{SpatialLinesDataFrame} or 
 \texttt{SpatialPolygonsDataFrame} indicating that, in addition to the 
 spatial objects, there is a data frame of additional variables.
+The classes \texttt{SpatialPixelsDataFrame} and \texttt{SpatialGridDataFrame}
+represent pixel image data.
 \end{enumerate}
 
 Here are some examples, using the example shapefiles supplied in the
@@ -451,6 +453,31 @@ ch <- cbind.hyperframe(ch, columbus@data)
 
 Then \texttt{ch} is a hyperframe containing a column of \texttt{owin}
 objects followed by the columns of auxiliary data.
+
+\subsubsection{Objects of class \texttt{SpatialGridDataFrame}
+  and \texttt{SpatialPixelsDataFrame}}
+
+An object \texttt{x} of class \texttt{SpatialGridDataFrame} represents
+a pixel image on a rectangular grid. It includes a \texttt{SpatialGrid}
+object \texttt{slot(x, "grid")} defining the full rectangular grid of pixels, 
+and a data frame \texttt{slot(x, "data")} containing the pixel values
+(which may include \texttt{NA} values).
+
+The command \texttt{as(x, "im")} converts \texttt{x} to a pixel image
+of class \texttt{"im"}, taking the pixel values from the \emph{first column}
+of the data frame. If the data frame has multiple columns, these 
+have to be converted to separate pixel images in \pkg{spatstat}.
+For example
+<<eval=FALSE>>=
+  y <- as(x, "im")
+  ylist <- lapply(slot(x, "data"), function(z, y) { y[,] <- z; y }, y=y)
+@ 
+
+An object \texttt{x} of class  \texttt{SpatialPixelsDataFrame} 
+represents a \emph{subset} of a pixel image. 
+To convert this to a \pkg{spatstat} object, it should first be converted to
+a \texttt{SpatialGridDataFrame} by \texttt{as(x, "SpatialGridDataFrame")},
+then handled as described above.
 
 \end{document}
 

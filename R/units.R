@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.18 $   $Date: 2013/09/24 01:13:00 $
+#   $Revision: 1.19 $   $Date: 2014/03/04 10:25:19 $
 #
 #
 
@@ -101,7 +101,12 @@ print.units <- function(x, ...) {
     cat(paste(mul, x$plural, "\n"))
   return(invisible(NULL))
 }
-            
+
+as.character.units <- function(x, ...) {
+  mul <- x$multiplier
+  return(if(mul == 1) x$plural else paste(mul, x$plural))
+}
+
 summary.units <- function(object, ...) {
   x <- object
   scaled <- (x$multiplier != 1)

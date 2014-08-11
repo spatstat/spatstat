@@ -1,7 +1,7 @@
 #
 #	rotate.S
 #
-#	$Revision: 1.18 $	$Date: 2012/10/10 01:20:23 $
+#	$Revision: 1.20 $	$Date: 2014/02/23 13:40:09 $
 #
 
 rotxy <- function(X, angle=pi/2) {
@@ -21,8 +21,13 @@ rotate <- function(X, ...) {
   UseMethod("rotate")
 }
 
-rotate.owin <- function(X, angle=pi/2, ..., rescue=TRUE) {
+rotate.owin <- function(X, angle=pi/2, ..., rescue=TRUE, centre=NULL) {
   verifyclass(X, "owin")
+  if(!is.null(centre)) {
+    ## rotation about designated centre
+    X <- shift(X, origin=centre)
+    negorig <- getlastshift(X)
+  } else negorig <- NULL
   switch(X$type,
          rectangle={
            # convert rectangle to polygon
@@ -31,45 +36,60 @@ rotate.owin <- function(X, angle=pi/2, ..., rescue=TRUE) {
                           y=X$yrange[c(1,1,2,2)]),
                      unitname=unitname(X))
            # call polygonal case
-           return(rotate.owin(P, angle, rescue=rescue))
+           Y <- rotate.owin(P, angle, rescue=rescue)
          },
          polygonal={
            # First rotate the polygonal boundaries
            bdry <- lapply(X$bdry, rotxypolygon, angle=angle)
            # wrap up
-           W <- owin(poly=bdry, check=FALSE, unitname=unitname(X))
+           Y <- owin(poly=bdry, check=FALSE, unitname=unitname(X))
            if(rescue)
-             W <- rescue.rectangle(W)
-           return(W)
+             Y <- rescue.rectangle(Y)
          },
          mask={
-           newframe <- bounding.box.xy(rotxy(corners(X), angle))
-           W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
+           newframe <- boundingbox(rotxy(corners(X), angle))
+           Y <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
                    as.mask(newframe, eps=with(X, min(xstep, ystep)))
-           pixelxy <- raster.xy(W)
+           pixelxy <- raster.xy(Y)
            xybefore <- rotxy(pixelxy, -angle)
-           W$m[] <- with(xybefore, inside.owin(x, y, X))
-           W <- intersect.owin(W, bounding.box(W))
+           Y$m[] <- with(xybefore, inside.owin(x, y, X))
+           Y <- intersect.owin(Y, boundingbox(Y))
            if(rescue)
-             W <- rescue.rectangle(W)
-           unitname(W) <- unitname(X)
-           return(W)
+             Y <- rescue.rectangle(Y)
+           unitname(Y) <- unitname(X)
          },
          stop("Unrecognised window type")
          )
+  if(!is.null(negorig))
+    Y <- shift(Y, -negorig)
+  return(Y)
 }
 
-rotate.ppp <- function(X, angle=pi/2, ...) {
+rotate.ppp <- function(X, angle=pi/2, ..., centre=NULL) {
   verifyclass(X, "ppp")
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   r <- rotxy(X, angle)
   w <- rotate.owin(X$window, angle, ...)
-  return(ppp(r$x, r$y, window=w, marks=marks(X, dfok=TRUE), check=FALSE))
+  Y <- ppp(r$x, r$y, window=w, marks=marks(X, dfok=TRUE), check=FALSE)
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
+  return(Y)
 }
 
-rotate.im <- function(X, angle=pi/2, ...) {
+rotate.im <- function(X, angle=pi/2, ..., centre=NULL) {
+  if(!is.null(centre)) {
+    X <- shift(X, origin=centre)
+    negorigin <- getlastshift(X)
+  } else negorigin <- NULL
   co <- cos(angle)
   si <- sin(angle)
   m <- matrix(c(co,si,-si,co), nrow=2, ncol=2)
-  affine(X, mat=m)
+  Y <- affine(X, mat=m)
+  if(!is.null(negorigin))
+    Y <- shift(Y, -negorigin)
+  return(Y)
 }
 

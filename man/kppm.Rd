@@ -1,15 +1,43 @@
 \name{kppm}
 \alias{kppm}
+\alias{kppm.formula}
+\alias{kppm.ppp}
+\alias{kppm.quad}
 \title{Fit Cluster or Cox Point Process Model}
 \description{
   Fit a homogeneous or inhomogeneous cluster process or
   Cox point process model to a point pattern.
 }
 \usage{
-  kppm(X, trend = ~1,
+  kppm(X, \dots)
+
+  \method{kppm}{formula}(X,
+                clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+                \dots,
+                data=NULL)
+
+  \method{kppm}{ppp}(X,
+       trend = ~1,
        clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
-       covariates = NULL,
+       data = NULL,
        ...,
+       covariates=data,
+       method = c("mincon", "clik"),
+       weightfun=NULL,
+       control=list(),
+       statistic="K",
+       statargs=list(),
+       rmax = NULL,
+       covfunargs=NULL,
+       use.gam=FALSE,
+       nd=NULL, eps=NULL)
+
+\method{kppm}{quad}(X,
+       trend = ~1,
+       clusters = c("Thomas","MatClust","Cauchy","VarGamma","LGCP"),
+       data = NULL,
+       ...,
+       covariates=data,
        method = c("mincon", "clik"),
        weightfun=NULL,
        control=list(),
@@ -22,8 +50,9 @@
 }
 \arguments{
   \item{X}{
-    Point pattern dataset (object of class \code{"ppp"}) to which the model
-    should be fitted. See Details.
+    A point pattern dataset (object of class \code{"ppp"}) to which the model
+    should be fitted, or a \code{formula} in the \R language
+    defining the model. See Details.
   }
   \item{trend}{
     An \R formula, with no left hand side,
@@ -35,10 +64,11 @@
     Options are \code{"Thomas"}, \code{"MatClust"},
     \code{"Cauchy"}, \code{"VarGamma"} and \code{"LGCP"}.
   }
-  \item{covariates}{
-    The values of any spatial covariates (other than the Cartesian
+  \item{data,covariates}{
+    The values of spatial covariates (other than the Cartesian
     coordinates) required by the model.
-    A named list of pixel images, functions, windows or numeric constants.
+    A named list of pixel images, functions, windows,
+    tessellations or numeric constants.
   }
   \item{\dots}{
     Additional arguments. See Details.
@@ -106,6 +136,11 @@
   of the form specified by the formula \code{trend}.
   (See \code{\link{ppm}} for further explanation).
 
+  The argument \code{X} may also be a \code{formula} in the
+  \R language. The right hand side of the formula gives the
+  \code{trend} as described above. The left hand side of the formula
+  gives the point pattern dataset to which the model should be fitted.
+  
   The clustering parameters of the model are then fitted
   either by minimum contrast estimation, or by maximum
   composite likelihood.
@@ -249,16 +284,19 @@
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \examples{
-  data(redwood)
+  # method for point patterns
   kppm(redwood, ~1, "Thomas")
-  kppm(redwood, ~1, "Thomas", method="c")
+  # method for formulas
+  kppm(redwood ~ 1, "Thomas")
+
+  kppm(redwood ~ 1, "Thomas", method="c")
   kppm(redwood, ~x, "MatClust") 
-  kppm(redwood, ~x, "MatClust", statistic="pcf", statargs=list(stoyan=0.2)) 
-  kppm(redwood, ~1, "LGCP", statistic="pcf")
-  kppm(redwood, ~x, cluster="Cauchy", statistic="K")
+  kppm(redwood ~ x, "MatClust", statistic="pcf", statargs=list(stoyan=0.2)) 
+  kppm(redwood ~ 1, "LGCP", statistic="pcf")
+  kppm(redwood ~ x, cluster="Cauchy", statistic="K")
   kppm(redwood, cluster="VarGamma", nu.ker = 0.5, statistic="pcf")
   if(require(RandomFields)) {
-     kppm(redwood, ~x, "LGCP", statistic="pcf",
+     kppm(redwood ~x, "LGCP", statistic="pcf",
            covmodel=list(model="matern", nu=0.3),
            control=list(maxit=10))
   }

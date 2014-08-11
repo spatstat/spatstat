@@ -7,8 +7,9 @@
 }
 \usage{
   \method{plot}{im}(x, \dots,
-                   col=NULL, valuesAreColours=NULL,
-                   add=FALSE, log=FALSE,
+                   main,
+                   add=FALSE, clipwin=NULL,
+                   col=NULL, valuesAreColours=NULL, log=FALSE,
                    ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
@@ -24,6 +25,16 @@
     Extra arguments passed to \code{\link[graphics]{image.default}}
     to control the plot. See Details.
   }
+  \item{main}{Main title for the plot.}
+  \item{add}{
+    Logical value indicating whether to superimpose the image on the
+    existing plot (\code{add=TRUE})
+    or to initialise a new plot (\code{add=FALSE}, the default).
+  }
+  \item{clipwin}{
+    Optional. A window (object of class \code{"owin"}).
+    Only this subset of the image will be displayed.
+  }
   \item{col}{
     Colours for displaying the pixel values.
     Either a character vector of colour values,
@@ -33,11 +44,6 @@
   \item{valuesAreColours}{
     Logical value. If \code{TRUE}, the pixel values of \code{x}
     are to be interpreted as colour values.
-  }
-  \item{add}{
-    Logical value indicating whether to superimpose the image on the
-    existing plot (\code{add=TRUE})
-    or to initialise a new plot (\code{add=FALSE}, the default).
   }
   \item{log}{
     Logical value. If \code{TRUE}, the colour map will be

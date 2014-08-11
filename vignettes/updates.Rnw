@@ -25,7 +25,7 @@ options(useFancyQuotes=FALSE)
 @ 
 
 \title{Summary of recent updates to \spst}
-\author{Adrian Baddeley and Rolf Turner}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
 \date{For \spst\ version \texttt{\Sexpr{sversion}}}
 \maketitle
 
@@ -36,7 +36,7 @@ was published. Those notes covered \spst\ version \texttt{1.21-2}.
 
 The current version of \spst\ is \texttt{\Sexpr{sversion}}. 
 \Spst\ has almost tripled in size since 2010,
-and now contains almost 100,000 lines of code.
+and now contains over 100,000 lines of code.
 
 <<echo=FALSE,results=hide>>=
 z <- read.table("packagesizes.txt", header=TRUE)
@@ -50,12 +50,17 @@ Plot <- function(fmla, ..., dat=z) {
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
 @ 
 \SweaveOpts{eps=TRUE}
-\setkeys{Gin}{width=0.5\textwidth}
+\setkeys{Gin}{width=0.45\textwidth}
+
+\centerline{
 <<fig=TRUE,echo=FALSE,results=hide>>=
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
      main="Spatstat growth")
+lines(srclines/1000 ~ date, data=z)
+text(as.Date("2013-01-01"), 9.5, "C code")
+text(as.Date("2013-01-01"), 50, "R code")
 @ 
-
+}
 
 \tableofcontents
 
@@ -84,6 +89,13 @@ Following is an overview of the most important changes.
 
   \item Improvements to Gibbs models (\texttt{ppm}):
     \begin{itemize}
+   \item 
+     now accepts syntax \verb!ppm(X ~ Z)! 
+     similar to \texttt{lm} and \texttt{glm},
+     as well as old syntax \verb!ppm(X, ~Z)!
+   \item 
+     Covariates no longer have to be passed in the argument 
+     \texttt{covariates} but can be objects in the {\sf R} session;
     \item 
      new 'logistic likelihood' method;
    \item 
@@ -120,6 +132,11 @@ Following is an overview of the most important changes.
      exact simulation for many models;
    \item 
      predict conditional intensity for another point pattern
+   \item 
+     compute confidence intervals and prediction intervals
+     for intensity, and for total number of points in a region.
+   \item 
+     covariates can be tessellations.
     \end{itemize}
 \item 
     Diagnostics for Gibbs models:
@@ -130,10 +147,17 @@ Following is an overview of the most important changes.
 \item 
     Improvements to cluster/Cox models (\texttt{kppm}): 
     \begin{itemize}
+   \item 
+     now accepts syntax \verb!kppm(X ~ Z)! 
+     similar to \texttt{lm} and \texttt{glm},
+     as well as old syntax \verb!kppm(X, ~Z)!
+   \item 
+     Covariates no longer have to be passed in the argument 
+     \texttt{covariates} but can be objects in the {\sf R} session;
     \item 
      Guan's second order composite likelihood;
    \item 
-     new cluster types Cauchy, VarGamma;
+     new cluster types \texttt{"Cauchy"}, \texttt{"VarGamma"};
    \item 
      log-Gaussian Cox processes;
    \item 
@@ -150,6 +174,8 @@ Following is an overview of the most important changes.
      more control over trend (more arguments passed to \texttt{ppm});
    \item 
      confidence intervals using \texttt{confint}
+   \item 
+     covariates can be tessellations.
     \end{itemize}
 \item
     Support for point patterns on a linear network,
@@ -197,7 +223,13 @@ Following is an overview of the most important changes.
     Improvements to plots :
     \begin{itemize}
     \item 
-      colour maps,
+      colour map objects
+    \item 
+      graphics symbol map objects
+    \item 
+      texture map objects
+    \item 
+      automatic legend in \texttt{plot.ppp}
     \item 
       collision avoidance in \texttt{plot.fv}
     \item 
@@ -221,6 +253,8 @@ Following is an overview of the most important changes.
       visual debugger for \texttt{rmh}
     \item 
       exact simulation for many models
+    \item 
+      quasirandom point patterns and sequences
     \end{itemize}
 
 \item envelopes: 
@@ -308,7 +342,18 @@ Important new classes of objects are listed here.
   represents a spatial arrangement of buttons
   that respond to mouse clicks, supporting a simple, robust graphical interface.
 
-  \end{itemize}
+\item \texttt{symbolmap}:
+  An object of class '\texttt{symbolmap}' 
+  represents a mapping from data values to graphical symbols.
+  This makes it easy to ensure that
+  the \emph{same} graphics map is used in two different plots.
+  The graphics map can also be plotted in its own right as a legend
+  to the plots.
+
+\item \texttt{texturemap}:
+  An object of class '\texttt{texturemap}' 
+  represents a mapping from data values to graphical textures.
+\end{itemize}
   
 \section{New datasets}  
 
@@ -370,6 +415,61 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item 
+  \texttt{split.hyperframe}:
+  method for \texttt{split} for hyperframes.
+\item 
+  \texttt{complementarycolour}:
+  Compute the complementary colour value of a given colour value,
+  or the complementary colour map of a given colour map.
+\item 
+  \texttt{dmixpois}, \texttt{pmixpois}, \texttt{qmixpois}, \texttt{rmixpois}:
+  (log-)normal mixture of Poisson distributions.
+\item \texttt{gauss.hermite}:
+   Gauss-Hermite quadrature approximation to the expectation
+   of any function of a normally-distributed random variable.	
+\item 
+  \texttt{minnndist}, \texttt{maxnndist}:
+  faster ways to compute \texttt{min(nndist(X))} and 
+  \texttt{max(nndist(X))}
+\item 
+  \texttt{boundingbox}:
+  Generic function, replaces \texttt{bounding.box}.
+\item 
+  \texttt{Smoothfun}:
+  create a \texttt{function(x,y)} equivalent to the result of
+  \texttt{Smooth.ppp}
+\item
+  \code{vdCorput}, \code{Halton}, \code{Hammersley}, \code{rQuasi}:
+     quasirandom point patterns and sequences.
+\item 
+  \code{ellipse}: create an elliptical window.
+\item 
+  \code{clickbox}: interactively specify a rectangle
+  by point-and-click on a graphics device.
+     
+   \item \code{symbolmap}: Create a graphics symbol map
+     (a mapping from data values to graphical symbols)
+     
+   \item \code{update.symbolmap}: Modify a graphics symbol map
+
+   \item \code{invoke.symbolmap}:
+   Apply graphics symbol map to data values, and plot the symbols
+
+   \item \code{plot.symbolmap}: 
+   Plot the graphics symbol map in the style of a legend
+
+\item \code{add.texture}: Draw a simple texture inside a specified region.
+
+\item \code{textureplot}: 
+  Display a factor-valued pixel image using texture fill.
+
+   \item \code{texturemap}: Create a graphics texture map
+     (a mapping from data values to graphical textures)
+     
+   \item \code{plot.texturemap}: 
+   Plot the graphics texture map in the style of a legend
+
 \item \code{reload.or.compute}: 
   Utility for use in {\sf R} scripts.
   Either reload results from file, or compute them.
@@ -1328,7 +1428,17 @@ the News and Release Notes for each update.
    \item Switch all plots from colour to greyscale using a single command.
 
    \item Change parameters of fitted model before simulating it.
+
+   \item Improvements to layout of printed output.
      
+   \item Plots using texture fill.
+
+   \item Changed default behaviour of perfect simulation algorithms.
+
+   \item New syntax for point process models (\texttt{ppm}, \texttt{kppm},
+     \texttt{lppm}) equivalent to syntax of \texttt{lm}, \texttt{glm}, \ldots
+
+   \item Covariates in \texttt{ppm}, \texttt{kppm} can be tessellations.
   \end{itemize}
   
 \section{Alphabetical list of changes}
@@ -1415,6 +1525,9 @@ listed alphabetically.
   \item \texttt{dclf.test}, \texttt{mad.test}:
    The argument X can now be an object produced by a previous call
    to \texttt{dclf.test} or \texttt{mad.test}.
+
+  \item \texttt{default.dummy}:
+    Can now generate dummy points as a quasirandom sequence.
 
   \item \texttt{default.rmhcontrol}, \texttt{default.expand}:
    These functions now work with models of class \texttt{rmhmodel} 
@@ -1521,6 +1634,8 @@ listed alphabetically.
    The hard core distance \texttt{hc} can now be omitted; 
    it will be estimated from data.
 
+  \item \texttt{identify.ppp}: now handles multivariate marks.
+    
   \item \texttt{im}, \texttt{as.im}:
    The pixel coordinates in an image object are now generated
    more accurately. This avoids a numerical error in \texttt{plot.im}.
@@ -1585,8 +1700,13 @@ listed alphabetically.
      New argument \texttt{normpower} allows different types of renormalisation.
    \item 
      Now accepts \texttt{correction="good"}.
+   \item 
+     New argument \texttt{update}.
+     If \texttt{lambda} is a fitted model (class
+     \texttt{"ppm"} or \texttt{"kppm"}) and \texttt{update=TRUE},
+     the model is re-fitted to the data pattern, before the intensities
+     are computed.
    \end{itemize}
-
 
   \item \texttt{Kmulti}, \texttt{Gmulti}, \texttt{Jmulti}:
    The arguments \texttt{I}, \texttt{J} can now be any kind of subset index
@@ -1603,6 +1723,13 @@ listed alphabetically.
 
   \item \texttt{kppm}
      \begin{itemize}
+   \item 
+     now accepts syntax \verb!kppm(X ~ Z)! 
+     similar to \texttt{lm} and \texttt{glm},
+     as well as old syntax \verb!kppm(X, ~Z)!
+   \item 
+     Covariates no longer have to be passed in the argument 
+     \texttt{covariates} but can be objects in the {\sf R} session;
      \item 
    Now has the option of fitting models using Guan's (2006)
    second order composite likelihood.
@@ -1624,6 +1751,7 @@ listed alphabetically.
    for the Neyman-Scott process with Cauchy or Variance-Gamma cluster kernel.
  \item 
     Can now fit a log-Gaussian Cox process with any covariance function implemented by the \texttt{RandomFields} package.
+  \item Covariates can now be tessellations.
      \end{itemize}
 
   \item \texttt{latest.news}:
@@ -1634,6 +1762,9 @@ listed alphabetically.
      The plotting argument can now be a list of length 1,
      which will be replicated to the correct length.  
 
+   \item \verb!layerplotargs<-!:
+     Now handles any spatial object, converting it to a \texttt{layered} object.
+     
    \item \texttt{Lest}:
    Now handles theoretical variance estimates (using delta method)
    if \texttt{var.approx=TRUE}
@@ -1658,8 +1789,31 @@ listed alphabetically.
    instead of pointwise confidence intervals.
 
   \item \texttt{lppm}:
-   New arguments \texttt{eps} and \texttt{nd} control the quadrature scheme.
-   Stepwise model selection using \texttt{step} now works for lppm objects.
+    \begin{itemize}
+    \item The model-fitting function \texttt{lppm} now accepts 
+      a syntax similar to \texttt{lm} or \texttt{glm}, 
+      for example \verb!lppm(X ~ Z)!, 
+      but still accepts the older syntax \verb!lppm(X, ~Z)!.
+      To support both kinds of syntax, the function \texttt{lppm}
+      is now generic, 
+      with methods for the classes \texttt{formula} and
+      \texttt{lppp}.
+      The \texttt{formula} method handles a syntax like
+      \verb!lppm(X ~ Z)! while the
+      \texttt{lpp} method handles the old syntax \verb!lppm(X, ~Z)!.
+    \item 
+      Covariates no longer have to be passed in the argument 
+      \texttt{covariates}:
+      variable names appearing in the model formula can simply be the names
+      of objects in the {\sf R} session.
+    \item New arguments \texttt{eps} and \texttt{nd} control 
+      the quadrature scheme.
+    \item 
+      Stepwise model selection using \texttt{step} now works 
+      for \texttt{lppm} objects.       
+    \end{itemize}
+
+
 
   \item \texttt{markstat}:
    The arguments \texttt{N} and \texttt{R} may now be specified together.
@@ -1673,8 +1827,14 @@ listed alphabetically.
    Now also recognises 'offset' terms.
 
    \item \texttt{MultiStrauss}, \texttt{MultiHard}, \texttt{MultiStraussHard}:
+     \begin{itemize}
+     \item 
       The argument \texttt{types} can now be omitted or NULL;
       it will be inferred from the point pattern data.
+    \item 
+      The ordering of the arguments has changed. 
+      (The old syntax will still work.)
+     \end{itemize}
 
  \item \texttt{nbfires}:
   For conformity with other datasets, there is now an object 
@@ -1818,7 +1978,7 @@ listed alphabetically.
       Can now plot images whose pixel values are strings representing colours.
       New argument \texttt{valuesAreColours}
     \item  
-      New arguments \code{add} and \code{do.plot}.
+      New arguments \code{add}, \code{do.plot}, \texttt{clipwin}.
     \item 
       More arguments recognised by \code{ribargs}
     \end{itemize}
@@ -1841,14 +2001,29 @@ listed alphabetically.
     \item
       The arguments \texttt{panel.begin} and \texttt{panel.end} 
       can now be objects such as windows.
+    \item 
+      New arguments \texttt{hsep, vsep} allow increased spacing between plots
+      without adding white space around the outer margin.
+    \item 
+      Argument \texttt{mar.panel} may have length 1, 2 or 4.
     \end{itemize}
 
+  \item \texttt{plot.lpp}: New arguments.
+    Automatically plots a legend.
+    
   \item \texttt{plot.owin}:
-   Polygons with holes can now be plotted with filled colours
-   on any device.
-
+    \begin{itemize}
+    \item    Polygons with holes can now be plotted with filled colours
+      on any device.
+    \item The window can now be filled with one of 8 different textures.
+    \end{itemize}
+   
   \item \texttt{plot.ppp}:
     \begin{itemize}
+    \item 
+      Automatically plots a legend
+    \item 
+      Return value is now a graphics map object
     \item 
       Now behaves differently if there are multiple columns of marks.
       Each column of marks is plotted, in a series of separate plots
@@ -1856,7 +2031,8 @@ listed alphabetically.
     \item 
       An `empty' plot can now be generated by setting \texttt{type="n"}.
     \item 
-      New arguments \code{show.window} and \code{show.all}
+      New arguments \code{show.window}, \code{show.all}, \texttt{do.plot},
+      \texttt{clipwin}
    \end{itemize}
 
    \item \texttt{plot.psp}:
@@ -1888,6 +2064,23 @@ listed alphabetically.
 
   \item \texttt{ppm}:
     \begin{itemize}
+    \item 
+      The model-fitting function \texttt{ppm} now accepts 
+      a syntax similar to \texttt{lm} or \texttt{glm}, 
+      for example \verb!ppm(X ~ Z)!, 
+      but still accepts the older syntax \verb!ppm(X, ~Z)!.
+      To support both kinds of syntax, the function \texttt{ppm}
+      is now generic, 
+      with methods for the classes \texttt{formula}, 
+      \texttt{ppp} and \texttt{quad}. 
+      The \texttt{formula} method handles a syntax like
+      \verb!ppm(X ~ Z)! while the
+      \texttt{ppp} method handles the old syntax \verb!ppm(X, ~Z)!.
+    \item 
+      Covariates no longer have to be passed in the argument 
+      \texttt{covariates}:
+      variable names appearing in the model formula can simply be the names
+      of objects in the {\sf R} session.
     \item 
    Can now fit models with 'hybrid' interactions.
  \item 
@@ -1922,6 +2115,7 @@ listed alphabetically.
      The print and summary methods for \texttt{ppm} objects 
      now show standard errors for parameter estimates
      if the model is Poisson.
+   \item Covariates can now be tessellations.
  \end{itemize}
 
 
@@ -1936,14 +2130,34 @@ listed alphabetically.
    as well as 'spatial' and 'temporal' coordinates, and marks.
 
   \item \texttt{predict.ppm}:
-   This function can now calculate the conditional intensity of a model
-   relative to any point pattern X (not just the original data pattern).
-   New argument \texttt{correction} allows choice of edge correction
-   when calculating the conditional intensity.
+    \begin{itemize}
+      \item
+        Can now calculate the conditional intensity of a model
+        relative to any point pattern \texttt{X} 
+        (not just the original data pattern).
+      \item 
+        New argument \texttt{correction} allows choice of edge correction
+        when calculating the conditional intensity.
+      \item 
+        New argument \texttt{interval} allows confidence intervals
+        or prediction intervals
+        to be calculated.
+      \item 
+        New argument \texttt{total} allows for prediction of the
+        total number of points
+        in a specified region.
+      \end{itemize}
 
   \item \texttt{predict.slrm}:
    New argument \texttt{window} 
 
+   \item \texttt{print.ppp}, \texttt{print.summary.ppp}, 
+     \texttt{print.owin}, \texttt{print.summary.owin},
+     \texttt{print.im}, \texttt{print.summary.im}, \texttt{print.fv},
+     \texttt{print.msr}:
+   These functions now avoid over-running the text margin
+   (i.e.\ they respect \texttt{options('width')} where possible).
+   
   \item \texttt{print.ppp}, \texttt{summary.ppp}:
    If the point pattern x was generated by Metropolis-Hastings
    simulation using \texttt{rmh}, then \texttt{print(x)} and 
@@ -1987,6 +2201,9 @@ listed alphabetically.
   \item \texttt{quad.ppm}: Now accepts \texttt{kppm} objects.
     New argument \texttt{clip}.
 
+  \item \texttt{quadscheme}: 
+    Can now generate dummy points from a quasirandom sequence.
+
   \item \texttt{quadrat.test.splitppp}:
    The result is now a single object of class \texttt{quadrattest}
 
@@ -2002,6 +2219,12 @@ listed alphabetically.
   \item \texttt{raster.x}, \texttt{raster.y}, \texttt{raster.xy}:
    These functions have a new argument \texttt{drop}
 
+  \item \texttt{rDiggleGratton}, \texttt{rDGS}, \texttt{rHardcore},
+        \texttt{rStrauss}, \texttt{rStraussHard}:
+        By default the point pattern is now generated on
+	a larger window, and trimmed to the original window.
+	New argument \texttt{expand=TRUE}.
+        
   \item \texttt{redwoodfull} (Full redwood data):
     The function \verb!redwoodfull.extra$plot()! has been renamed 
     \texttt{plotit} 
@@ -2014,9 +2237,14 @@ listed alphabetically.
        corresponds to the cases in a case-control dataset.
 
  \item \texttt{rescale}:
+   \begin{itemize}
+   \item 
   If scale argument \texttt{s} is missing, then the data are rescaled
   to native units. For example if the current unit is 0.1 metres, 
   coordinates will be re-expressed in metres.
+\item New argument \texttt{unitname} makes it possible to change the name of
+  the unit of length.
+   \end{itemize}
 
   \item \texttt{residuals.ppm}:
        New arguments \texttt{new.coef} and \texttt{quad} for advanced use
@@ -2037,6 +2265,9 @@ listed alphabetically.
   \item \texttt{rlabel}:
    Now works for \texttt{lpp}, \texttt{pp3}, \texttt{ppx} objects.
 
+  \item \texttt{rlinegrid}, \texttt{rpoisline}:
+    These functions now handle binary mask windows.
+    
   \item \texttt{rmh}:
       If \texttt{track=TRUE}, 
       the history of transitions of the Metropolis-Hastings
@@ -2096,11 +2327,15 @@ listed alphabetically.
   \item \texttt{rNeymanScott}:
    Argument \texttt{rcluster} may now take a different format.
 
+   \item \texttt{rotate}: 
+     The user can specify the centre of rotation.
+
    \item \texttt{rotate.owin}, \texttt{affine.owin}:
        These functions now handle binary pixel masks.
        New argument \texttt{rescue} determines whether 
        rectangles will be preserved.
 
+ 
   \item \texttt{rSSI}:
    Performs 'Random Sequential Packing' if \texttt{n=Inf}.
 
@@ -2249,7 +2484,201 @@ listed alphabetically.
   \item \verb![.msr!
    Now handles character-valued indices. 
 
+  \item \verb![.psp!
+   Now handles binary mask windows.
+
  \end{itemize}
+
+\section{Serious Bugs Fixed}
+
+<<echo=FALSE,results=hide>>=
+nbugs <- nrow(news(grepl("^BUG", Category), 
+                   package="spatstat"))
+nbugssince <- nrow(news(Version > "1.21-2" & grepl("^BUG", Category), 
+                   package="spatstat"))
+@ 
+
+Hundreds of bugs have been detected and fixed in \spst\ 
+since the version covered by the workshop notes \cite{badd10wshop}. 
+Bugs that may have affected the user are listed in the 
+package \texttt{NEWS} file. To read all these bug reports, type
+<<eval=FALSE>>=
+news(grepl("^BUG", Category), package="spatstat")
+@ 
+which currently produces a list of \Sexpr{nbugs} bugs,
+of which \Sexpr{nbugssince} were detected after publication of the
+workshop notes.
+
+Following is a list of the {\bf most serious bugs} only, in order
+of potential impact.
+
+\newcommand\bugger[4]{%
+  \\  {} %
+  {\small (Bug introduced in \texttt{spatstat {#1}}, {#2}; %
+    fixed in \texttt{spatstat {#3}}, {#4})}%
+}
+  
+\begin{itemize}
+\item \texttt{nncross.ppp}:
+  
+  Results were completely incorrect if $k > 1$.
+  \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
+
+\item \texttt{nncross.pp3}:
+  Results were completely incorrect in some cases.
+  \bugger{1.32-0}{august 2013}{1.34-0}{october 2013}
+
+\item \texttt{rmh}:
+  
+   \begin{itemize}
+   \item Simulation was completely incorrect in the case of 
+     a multitype point process with an interaction that does not depend
+     on the marks, such as \verb!ppm(betacells, ~marks, Strauss(60))!
+     due to a coding error in the \texttt{C} interface.
+     \bugger{1.22-3}{march 2010}{1.22-3}{june 2011}
+   \item 
+     Simulation of the Area-Interaction model was completely incorrect.
+     \bugger{1.23-6}{october 2011}{1.31-0}{january 2013}
+   \item 
+     Simulation of the Geyer saturation process was completely incorrect.
+     \bugger{1.31-0}{january 2013}{1.31-1}{march 2013}
+   \item 
+     Simulation of the Strauss-Hard Core process was partially incorrect,
+     giving point patterns with a slightly lower intensity.
+     \bugger{1.31-0}{january 2013}{1.37-0}{may 2014}
+   \item 
+     Simulation of the Geyer saturation process was 
+     incorrectly initialised, so that the results of a short run 
+     (i.e. small value of \texttt{nrep}) were incorrect, 
+     while long runs were correct.
+     \bugger{1.17-0}{october 2009}{1.31-1}{march 2013}
+   \end{itemize}
+   
+\item \texttt{nncross}, \texttt{distfun}, \texttt{AreaInter}:
+  Results of \texttt{nncross} were possibly incorrect 
+  when \code{X} and \code{Y} did not have the same window. 
+  This bug affected values of \texttt{distfun} and may also 
+  have affected ppm objects with interaction \texttt{AreaInter}.
+  \bugger{1.9-4}{june 2006}{1.25-2}{january 2012}
+
+\item \texttt{envelope.ppm}:
+   If the model was an inhomogeneous Poisson process, 
+   the resulting envelope object was incorrect
+   (the simulations were correct, but the envelopes were calculated
+   assuming the model was CSR). 
+   \bugger{1.23-5}{september 2011}{1.23-6}{october 2011}
+
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were incorrect for non-Poisson processes.  
+   \bugger{1.25-0}{december 2011}{1.34-0}{october 2013}
+   
+\item \texttt{rVarGamma}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{nu.ker}.  
+   \bugger{1.25-0}{december 2011}{1.35-0}{december 2013}
+
+ \item \texttt{rCauchy}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{omega}.
+   \bugger{1.25-0}{december 2011}{1.25-2}{january 2012}
+
+ \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
+    The pair correlation function of the M\'atern Cluster Process
+    was evaluated incorrectly at distances close to 0.
+    This could have affected the fitted parameters 
+    in \texttt{matclust.estpcf()} or \texttt{kppm(clusters="MatClust")}.
+    \bugger{1.20-2}{august 2010}{1.33-0}{september 2013}
+    
+ \item \texttt{ppm}:
+   Results were incorrect for the Geyer saturation model
+   with a non-integer value of the saturation parameter \texttt{sat}.
+   \bugger{1.20-0}{july 2010}{1.31-2}{april 2013}
+   
+ \item \texttt{lppm}:
+   For multitype patterns, the fitted model was completely incorrect
+   due to an error in constructing the quadrature scheme.
+   \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
+   
+ \item \texttt{Geyer}:
+   For point process models with the \texttt{Geyer} interaction, 
+   \texttt{vcov.ppm} and \texttt{suffstat} sometimes gave incorrect answers.
+   \bugger{1.27-0}{may 2012}{1.30-0}{december 2012}
+   
+ \item \texttt{vcov.ppm}, \texttt{suffstat}:
+   These functions sometimes gave incorrect values 
+   for marked point process models.   
+   \bugger{1.27-0}{may 2012}{1.29-0}{october 2012}
+   
+ \item \texttt{linearK}, \texttt{linearKinhom}:
+   If any data points were located exactly at a vertex of the 
+   linear network, the weights for Ang's correction were incorrect, 
+   due to numerical error. This sometimes produced infinite 
+   or NA values of the linear $K$ function.  
+   \bugger{1.23-0}{july 2011}{1.27-0}{may 2012}
+
+ \item \texttt{Kinhom}:
+   the results were not renormalised (even if \texttt{renormalise=TRUE})
+   in some cases.
+   \bugger{1.21-0}{december 2010}{1.37-0}{may 2014}
+     
+ \item \texttt{predict.ppm}
+   Calculation of the conditional intensity omitted the edge correction
+   if \texttt{correction='translate'} or \texttt{correction='periodic'}. 
+   \bugger{1.17-0}{october 2009}{1.31-3}{may 2013}
+   
+ \item \texttt{scan.test}
+   Results were sometimes incorrect due to numerical instability
+   (a 'Gibbs phenomenon').    
+   \bugger{1.24-1}{october 2011}{1.26-1}{april 2012}
+
+ \item \texttt{selfcrossing.psp}:
+   $y$ coordinate values were incorrect.   
+   \bugger{1.23-2}{august 2011}{1.25-3}{february 2012}
+     
+ \item \texttt{predict.slrm}:
+   Results of \texttt{predict(object, newdata)} were incorrect 
+   if the spatial domain of \texttt{newdata}
+   was larger than the original domain.
+   \bugger{1.21-0}{november 2010}{1.25-3}{february 2012}
+   
+ \item \texttt{Lest}:
+   The variance approximations (Lotwick-Silverman and Ripley)
+   obtained with \texttt{var.approx=TRUE} were incorrect for \texttt{Lest}
+   (although they were correct for \texttt{Kest}) due to a coding error.
+   \bugger{1.24-1}{october 2011}{1.24-2}{november 2011}
+ 
+ \item \texttt{bw.diggle}:
+   Bandwidth was too large by a factor of 2.
+   \bugger{1.23-4}{september 2011}{1.23-5}{september 2011}
+ 
+ \item pair correlation functions (\texttt{pcf.ppp}, \texttt{pcfdot}, 
+    \texttt{pcfcross} etc:)
+    The result had a negative bias at the maximum $r$ value,
+    because contributions to the pcf estimate from interpoint distances
+    greater than \texttt{max(r)} were mistakenly omitted. 
+    {\small (Bugs fixed in \texttt{spatstat 1.35-0}, december 2013)}
+    
+ \item \texttt{Kest}, \texttt{Lest}:
+   Gave incorrect values in very large datasets, due to numerical overflow.
+   `Very large' typically means about 1 million points in a random pattern, 
+   or 100,000 points in a tightly clustered pattern.
+   [Overflow cannot occur unless there are at least 46,341 points.]
+   
+ \item \texttt{bw.relrisk}:
+    Implementation of \texttt{method="weightedleastsquares"} was incorrect
+    and was equivalent to \texttt{method="leastsquares"}.
+    \bugger{1.21-0}{november 2010}{1.23-4}{september 2011}
+  
+\item \texttt{bdist.tiles}
+   Values were incorrect in some cases due to numerical error.
+    {\small (Bug fixed in \texttt{spatstat 1.29-0}, october 2012)}
+   
+\item polygon geometry
+    The point-in-polygon test gave the wrong answer in some boundary cases.
+    {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
+    
+\end{itemize}
+
 
 \begin{thebibliography}{1}
 \bibitem{badd10wshop}

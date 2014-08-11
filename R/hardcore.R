@@ -35,7 +35,7 @@ Hardcore <- local({
              # not enough points to make any decisions
              return(self)
            }
-           md <- min(nndist(X))
+           md <- minnndist(X)
            if(md == 0) {
              warning(paste("Pattern contains duplicated points:",
                            "impossible under Hardcore model"))

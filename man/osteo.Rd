@@ -138,7 +138,7 @@
     plot(osteo$pts[[1]], main="animal 1, brick 1")
     ape1 <- osteo[osteo$shortid==4, ]
     plot(ape1, tick.marks=FALSE)
-    with(osteo, summary(pts)$intensity)
+    with(osteo, intensity(pts))
     plot(with(ape1, K3est(pts)))
   }
 }

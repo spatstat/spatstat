@@ -1,7 +1,7 @@
 #
 #  Perfect Simulation 
 #
-#  $Revision: 1.14 $ $Date: 2012/10/13 05:49:28 $
+#  $Revision: 1.16 $ $Date: 2014/04/29 09:29:56 $
 #
 #  rStrauss
 #  rHardcore
@@ -9,12 +9,10 @@
 #  rDiggleGratton
 #  rDGS
 
-rStrauss <- function(beta, gamma=1, R=0, W=owin()) {
-  if(!missing(W)) {
+rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE) {
+
+  if(!missing(W)) 
     verifyclass(W, "owin")
-    if(W$type != "rectangle")
-      stop("W must be a rectangle")
-  }
 
   check.1.real(beta)
   check.1.real(gamma)
@@ -31,8 +29,10 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin()) {
 
   nothing <- runif(1)
 
-  xrange <- W$xrange
-  yrange <- W$yrange
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
   storage.mode(beta) <- storage.mode(gamma) <- storage.mode(R) <- "double"
   storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
@@ -42,7 +42,6 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin()) {
              R,
              xrange,
              yrange)
-#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -53,19 +52,18 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin()) {
     stop("internal error: copying failed in PerfectStrauss")
 
   seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+  if(attr(Wsim, "changed"))
+    P <- P[W]
   attr(P, "times") <- times
   return(P)
 }
 
 #  Perfect Simulation of Hardcore process
 
-rHardcore <- function(beta, R=0, W=owin()) {
-  if(!missing(W)) {
+rHardcore <- function(beta, R=0, W=owin(), expand=TRUE) {
+  if(!missing(W)) 
     verifyclass(W, "owin")
-    if(W$type != "rectangle")
-      stop("W must be a rectangle")
-  }
 
   check.1.real(beta)
   check.1.real(R)
@@ -78,8 +76,10 @@ rHardcore <- function(beta, R=0, W=owin()) {
 
   nothing <- runif(1)
 
-  xrange <- W$xrange
-  yrange <- W$yrange
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
   storage.mode(beta) <- storage.mode(R) <- "double"
   storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
@@ -88,7 +88,6 @@ rHardcore <- function(beta, R=0, W=owin()) {
              R,
              xrange,
              yrange)
-#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -98,7 +97,9 @@ rHardcore <- function(beta, R=0, W=owin()) {
     stop("internal error: copying failed in PerfectHardcore")
 
   seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+  if(attr(Wsim, "changed"))
+    P <- P[W]
   return(P)
 }
 
@@ -107,12 +108,9 @@ rHardcore <- function(beta, R=0, W=owin()) {
 #        provided gamma <= 1
 #
 
-rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
-  if(!missing(W)) {
+rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE) {
+  if(!missing(W)) 
     verifyclass(W, "owin")
-    if(W$type != "rectangle")
-      stop("W must be a rectangle")
-  }
 
   check.1.real(beta)
   check.1.real(gamma)
@@ -134,8 +132,10 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
 
   nothing <- runif(1)
 
-  xrange <- W$xrange
-  yrange <- W$yrange
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
   storage.mode(beta) <- storage.mode(gamma) <-
     storage.mode(R) <- storage.mode(H) <- "double"
   storage.mode(xrange) <- storage.mode(yrange) <- "double"
@@ -147,7 +147,6 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
              H,
              xrange,
              yrange)
-#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -157,7 +156,9 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
     stop("internal error: copying failed in PerfectStraussHard")
 
   seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+  if(attr(Wsim, "changed"))
+    P <- P[W]
   return(P)
 }
 
@@ -166,12 +167,9 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
 #  Perfect Simulation of Diggle-Gratton process
 #
 
-rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
-  if(!missing(W)) {
+rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(), expand=TRUE) {
+  if(!missing(W)) 
     verifyclass(W, "owin")
-    if(W$type != "rectangle")
-      stop("W must be a rectangle")
-  }
 
   check.1.real(beta)
   check.1.real(delta)
@@ -191,8 +189,10 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
 
   nothing <- runif(1)
 
-  xrange <- W$xrange
-  yrange <- W$yrange
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*rho))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
   storage.mode(beta) <- "double"
   storage.mode(delta) <- storage.mode(rho) <- storage.mode(kappa) <- "double"
   storage.mode(xrange) <- storage.mode(yrange) <- "double"
@@ -204,7 +204,6 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
              kappa,
              xrange,
              yrange)
-#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -214,7 +213,9 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
     stop("internal error: copying failed in PerfectDiggleGratton")
 
   seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+  if(attr(Wsim, "changed"))
+    P <- P[W]
   return(P)
 }
 
@@ -223,12 +224,9 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
 #  Perfect Simulation of Diggle-Gates-Stibbard process
 #
 
-rDGS <- function(beta, rho, W=owin()) {
-  if(!missing(W)) {
+rDGS <- function(beta, rho, W=owin(), expand=TRUE) {
+  if(!missing(W)) 
     verifyclass(W, "owin")
-    if(W$type != "rectangle")
-      stop("W must be a rectangle")
-  }
 
   check.1.real(beta)
   check.1.real(rho)
@@ -241,8 +239,10 @@ rDGS <- function(beta, rho, W=owin()) {
 
   nothing <- runif(1)
 
-  xrange <- W$xrange
-  yrange <- W$yrange
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*rho))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
   storage.mode(beta) <- "double"
   storage.mode(rho) <- "double"
   storage.mode(xrange) <- storage.mode(yrange) <- "double"
@@ -252,7 +252,6 @@ rDGS <- function(beta, rho, W=owin()) {
              rho,
              xrange,
              yrange)
-#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -262,8 +261,35 @@ rDGS <- function(beta, rho, W=owin()) {
     stop("internal error: copying failed in PerfectDGS")
 
   seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+  if(attr(Wsim, "changed"))
+    P <- P[W]
   return(P)
 }
 
 
+## .......  utilities .................................
+
+
+expandwinPerfect <- function(W, expand, amount) {
+  ## expand 'W' if expand=TRUE according to default 'amount'
+  ## or expand 'W' using rmhexpand(expand)
+  if(!is.logical(expand)) {
+    amount <- rmhexpand(expand)
+    expand <- TRUE
+  }
+  changed <- FALSE
+  if(expand) {
+    W <- expand.owin(W, amount)
+    changed <- TRUE
+  }
+  if(!is.rectangle(W)) {
+    W <- as.rectangle(W)
+    changed <- TRUE
+    warning(paste("Simulation will be performed in the containing rectangle",
+                  "and clipped to the original window."),
+            call.=FALSE)
+  }
+  attr(W, "changed") <- changed
+  return(W)
+}

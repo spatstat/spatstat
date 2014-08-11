@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.48 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.49 $  $Date: 2014/04/07 04:22:53 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -12,8 +12,9 @@ rhohat <- function(object, covariate, ...) {
   UseMethod("rhohat")
 }
 
-rhohat.ppp <- rhohat.quad <- rhohat.ppm <- 
+rhohat.ppp <- rhohat.quad <- 
   function(object, covariate, ...,
+           baseline=NULL,
            method=c("ratio", "reweight", "transform"),
            smoother=c("kernel", "local"),
            dimyx=NULL, eps=NULL,
@@ -21,29 +22,66 @@ rhohat.ppp <- rhohat.quad <- rhohat.ppm <-
            bwref=bw, covname, confidence=0.95) {
   callstring <- short.deparse(sys.call())
   smoother <- match.arg(smoother)
+  method <- match.arg(method)
   if(missing(covname)) 
     covname <- sensiblevarname(short.deparse(substitute(covariate)), "X")
   if(is.null(adjust))
     adjust <- 1
-  # trap superseded usage
-  argh <- list(...)
-  if(missing(method) && ("transform" %in% names(argh))) {
-    warning(paste("Argument ", sQuote("transform"),
-                  " has been superseded by ", sQuote("method"),
-                  "; see help(rhohat)"))
-    transform <- argh$transform
-    method <- if(transform) "transform" else "ratio"
-  } else method <- match.arg(method)
   # validate model
-  if(is.ppp(object) || inherits(object, "quad")) {
-    model <- ppm(object, ~1)
+  if(is.null(baseline)) {
+    model <- ppm(object ~1)
     reference <- "Lebesgue"
-    modelcall <- NULL
-  } else if(is.ppm(object)) {
-    model <- object
-    reference <- "model"
-    modelcall <- model$call
-  } else stop("object should be a point pattern or a point process model")
+  } else {
+    model <- ppm(object ~ offset(log(baseline)))
+    reference <- "baseline"
+  } 
+  modelcall <- NULL
+
+  if(is.character(covariate) && length(covariate) == 1) {
+    covname <- covariate
+    switch(covname,
+           x={
+             covariate <- function(x,y) { x }
+           }, 
+           y={
+             covariate <- function(x,y) { y }
+           },
+           stop("Unrecognised covariate name")
+         )
+    covunits <- unitname(data.ppm(model))
+  } else {
+    covunits <- NULL
+  }
+
+  area <- area.owin(as.owin(data.ppm(model)))
+  
+  rhohatEngine(model, covariate, reference, area, ...,
+               method=method,
+               smoother=smoother,
+               resolution=list(dimyx=dimyx, eps=eps),
+               n=n, bw=bw, adjust=adjust, from=from, to=to,
+               bwref=bwref, covname=covname, covunits=covunits,
+               confidence=confidence,
+               modelcall=NULL, callstring=callstring)
+}
+
+rhohat.ppm <- function(object, covariate, ...,
+                       method=c("ratio", "reweight", "transform"),
+                       smoother=c("kernel", "local"),
+                       dimyx=NULL, eps=NULL,
+                       n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
+                       bwref=bw, covname, confidence=0.95) {
+  callstring <- short.deparse(sys.call())
+  smoother <- match.arg(smoother)
+  method <- match.arg(method)
+  if(missing(covname)) 
+    covname <- sensiblevarname(short.deparse(substitute(covariate)), "X")
+  if(is.null(adjust))
+    adjust <- 1
+  # validate model
+  model <- object
+  reference <- "model"
+  modelcall <- model$call
 
   if(is.character(covariate) && length(covariate) == 1) {
     covname <- covariate
@@ -129,7 +167,8 @@ rhohat.lpp <- rhohat.lppm <-
 }
 
 rhohatEngine <- function(model, covariate,
-                         reference=c("Lebesgue", "model"), volume,
+                         reference=c("Lebesgue", "model", "baseline"),
+                         volume,
                          ...,
                          method=c("ratio", "reweight", "transform"),
                          smoother=c("kernel", "local"),
@@ -151,12 +190,12 @@ rhohatEngine <- function(model, covariate,
   Zvalues <- values$Zvalues
   lambda  <- values$lambda
   # normalising constants
-  baseline <- if(reference == "Lebesgue") volume else (mean(lambda) * volume)
+  denom <- if(reference == "Lebesgue") volume else (mean(lambda) * volume)
   # info 
   savestuff <- list(reference  = reference,
                     Zimage     = Zimage)
   # calculate rho-hat
-  result <- rhohatCalc(ZX, Zvalues, lambda, baseline,
+  result <- rhohatCalc(ZX, Zvalues, lambda, denom,
                        ...,
                        method=method, smoother=smoother,
                        n=n, bw=bw, adjust=adjust, from=from, to=to,
@@ -170,7 +209,7 @@ rhohatEngine <- function(model, covariate,
 
 # basic calculation of rhohat from covariate values
 
-rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
+rhohatCalc <- function(ZX, Zvalues, lambda, denom, ...,
                        method=c("ratio", "reweight", "transform"),
                        smoother=c("kernel", "local"),
                        n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
@@ -194,10 +233,10 @@ rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
   stopifnot(is.numeric(lambda))
   stopifnot(length(lambda) == length(Zvalues))
   stopifnot(all(is.finite(lambda)))
-  check.1.real(baseline)
+  check.1.real(denom)
   # normalising constants
   nX   <- length(ZX)
-  kappahat <- nX/baseline
+  kappahat <- nX/denom
   # limits
   Zrange <- range(ZX, Zvalues)
   if(is.null(from)) from <- Zrange[1] 
@@ -237,11 +276,11 @@ rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
                                     n=n,from=from, to=to, ...)
              fstarfun <- interpolate(fstar)
              const <- 1/(2 * sigma * sqrt(pi))
-             vvv  <- const * nX * fstarfun(xxx)/(baseline * ghatfun(xxx))^2
+             vvv  <- const * nX * fstarfun(xxx)/(denom * ghatfun(xxx))^2
            },
            reweight={
              # weight Z values by reciprocal of reference
-             wt <- 1/(baseline * ghatfun(ZX))
+             wt <- 1/(denom * ghatfun(ZX))
              rhat <- unnormdensity(ZX, weights=wt, bw=bw,adjust=adjust,
                                    n=n,from=from, to=to, ...)
              rhatfun <- interpolate(rhat)
@@ -277,7 +316,7 @@ rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
                                     n=n,from=0, to=1, ...)
              qstarfun <- interpolate(qstar)
              const <- 1/(2 * sigma * sqrt(pi))
-             vvv  <- const * nX * qstarfun(Gxxx)/(baseline * onefun(Gxxx))^2
+             vvv  <- const * nX * qstarfun(Gxxx)/(denom * onefun(Gxxx))^2
            })
     vvvname <- "Variance of estimator"
     vvvlabel <- paste("bold(Var)~hat(%s)", paren(covname), sep="")
@@ -318,14 +357,14 @@ rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
            },
            reweight={
              # weight Z values by reciprocal of reference
-             wt <- 1/(baseline * predict(ghat,ZX))
+             wt <- 1/(denom * predict(ghat,ZX))
              sumwt <- sum(wt)
              rhat <- LocfitRaw(ZX, weights=(wt/sumwt) * nX,
                                 xlim=xlim, ...)
              rrr <- predict(rhat, xxx)
              yyy <- sumwt * rrr
              # compute approximation to variance of log rho-hat
-             varsumwt <- mean(yyy /(baseline * ggg)) * diff(xlim)
+             varsumwt <- mean(yyy /(denom * ggg)) * diff(xlim)
              varlogsumwt <- varsumwt/sumwt^2
              vvv <- varlog(rhat, xxx) + varlogsumwt
            },
@@ -391,12 +430,16 @@ rhohatCalc <- function(ZX, Zvalues, lambda, baseline, ...,
 
 print.rhohat <- function(x, ...) {
   s <- attr(x, "stuff")
-  cat("Intensity function estimate (class rhohat)\n")
-  cat(paste("for the covariate", s$covname, "\n"))
+  cat("Intensity function", "estimate", "(class rhohat)", fill=TRUE)
+  cat("for the", "covariate", s$covname, fill=TRUE)
   switch(s$reference,
-         area=cat("Function values are absolute intensities\n"),
+         Lebesgue=cat("Function values", "are",
+           "absolute intensities", fill=TRUE),
+         baseline=cat("Function values", "are",
+           "relative to", "baseline", fill=TRUE),
          model={
-           cat("Function values are relative to fitted model\n")
+           cat("Function values", "are", "relative to",
+               "fitted model", fill=TRUE)
            print(s$modelcall)
          })
   cat("Estimation method: ")

@@ -4,7 +4,7 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.19 $ $Date: 2014/02/18 04:54:22 $
+# $Revision: 1.20 $ $Date: 2014/03/05 08:13:13 $
 #
 
 residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
@@ -82,7 +82,7 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
     X <- model.matrix(object)
     if(drop) {
       gs <- getglmsubset(object)
-      ok <- !is.na(gs) && gs
+      ok <- !is.na(gs) & gs
       X <- X[ok,]
     }
   }

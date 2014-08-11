@@ -72,7 +72,8 @@ main=NULL, hook=NULL)
 \seealso{
   \code{\link{identify.ppp}},
   \code{\link{locator}},
-  \code{\link{clickpoly}}
+  \code{\link{clickpoly}},
+  \code{\link{clickbox}}
 }
 \author{Original by Dominic Schuhmacher.
   Adapted by Adrian Baddeley

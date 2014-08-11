@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.53 $  $Date: 2014/02/15 12:37:41 $
+#   $Revision: 2.54 $  $Date: 2014/04/16 05:01:15 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -423,6 +423,18 @@ envelopeEngine <-
     stop(paste("The function", fname,
                "must return an object of class", sQuote("fv")))
 
+  ## warn about 'dangerous' arguments
+  if(!is.null(dang <- attr(funX, "dangerous")) &&
+     any(uhoh <- dang %in% names(list(...)))) {
+    nuh <- sum(uhoh)
+    warning(paste("Envelope may be invalid;",
+                  ngettext(nuh, "argument", "arguments"),
+                  commasep(sQuote(dang[uhoh])),
+                  ngettext(nuh, "appears", "appear"),
+                  "to have been fixed."),
+            call.=FALSE)
+  }
+  
   argname <- fvnames(funX, ".x")
   valname <- fvnames(funX, ".y")
   has.theo <- "theo" %in% fvnames(funX, "*")

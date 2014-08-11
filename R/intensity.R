@@ -79,8 +79,6 @@ intensity.ppm <- function(X, ...) {
     return(predict(X, ...))
   }
   # Gibbs process
-  if(!is.stationary(X))
-    stop("Not yet implemented for non-stationary Gibbs models")
   if(is.multitype(X))
     stop("Not yet implemented for multitype Gibbs processes")
   inte <- as.interact(X)
@@ -99,12 +97,22 @@ intensity.ppm <- function(X, ...) {
   if(G < 0)
     stop(paste("Unable to apply Poisson-saddlepoint approximation:",
                "Mayer cluster integral is negative"))
-  # activity parameter
-  sX <- summary(X, quick="no variances")
-  beta <- sX$trend$value
-  # solve
-  lambda <- if(G == 0) numeric(length(beta)) else LambertW(G * beta)/G
-  if(length(lambda) == 1) lambda <- unname(lambda)
+  ##
+  if(is.stationary(X)) {
+    ## activity parameter
+    sX <- summary(X, quick="no variances")
+    beta <- sX$trend$value
+  } else {
+    ## activity function (or values of it, depending on '...')
+    beta <- predict(X, ...)
+  }
+  ## solve
+  if(is.im(beta)) {
+    lambda <- if(G == 0) eval.im(0 * beta) else eval.im(LambertW(G * beta)/G)
+  } else {
+    lambda <- if(G == 0) numeric(length(beta)) else LambertW(G * beta)/G
+    if(length(lambda) == 1) lambda <- unname(lambda)
+  }
   return(lambda)
 }
 

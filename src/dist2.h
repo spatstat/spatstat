@@ -5,7 +5,7 @@
    and
    In-line cpp macros for similar purposes
 
-   $Revision: 1.18 $ $Date: 2013/02/21 00:24:27 $
+   $Revision: 1.19 $ $Date: 2014/05/08 02:13:22 $
 
 */
 
@@ -22,7 +22,7 @@ int dist2Mthresh(double u, double v, double x, double y, double *period, double 
 */
 
 /* 
-   These must be declared
+   These variables must be declared
    (note: some files e.g. straush.c use 'RESIDUE' explicitly)
 */
 
@@ -36,7 +36,9 @@ int dist2Mthresh(double u, double v, double x, double y, double *period, double 
   ((DX = X - U),			\
    (RESIDUE = R2 - DX * DX),		\
    ((RESIDUE > 0.0) &&			\
-    ((DY = Y - V), (RESIDUE > DY * DY))))
+    ((DY = Y - V),                      \
+     (RESIDUE = RESIDUE - DY * DY),     \
+     (RESIDUE > 0.0))))
 
 #define CLOSE_D2(U,V,X,Y,R2,D2)						\
   ((DX = X - U),							\
@@ -62,7 +64,8 @@ int dist2Mthresh(double u, double v, double x, double y, double *period, double 
 			(DY = (DY < 0.0) ? -DY : DY),			\
 			(DYP = (PERIOD)[1] - DY),			\
 			(DY = (DY < DYP) ? DY : DYP),			\
-			(RESIDUE > DY * DY) )))
+                        (RESIDUE = RESIDUE - DY * DY),                  \
+			(RESIDUE > 0.0) )))
 
 #define CLOSE_PERIODIC_D2(U,V,X,Y,PERIOD,R2,D2)				\
   ((DX = X - U),							\

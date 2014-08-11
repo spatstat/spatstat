@@ -3,14 +3,14 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.31 $  $Date: 2014/01/15 10:04:03 $
+#  $Revision: 1.45 $  $Date: 2014/04/21 02:44:47 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
     stop("qscheme should be a quadrature scheme")
   nquad <- n.quad(qscheme)
   U <- union.quad(qscheme)
-  W <- w.quad(qscheme)
+  wt <- w.quad(qscheme)
   Z <- is.data(qscheme)
   ndata <- sum(Z)
   # ensure conformable vectors/matrices
@@ -68,7 +68,7 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
   #
   #
   # Discretised measure (value of measure for each quadrature tile)
-  val <- discretepad + W * density
+  val <- discretepad + wt * density
   if(is.matrix(density)) colnames(val) <- colnames(density)
   #
   out <- list(loc = U,
@@ -76,7 +76,7 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
               atoms = Z,
               discrete = discretepad,
               density = density,
-              wt = W)
+              wt = wt)
   class(out) <- "msr"
   return(out)
 }
@@ -112,25 +112,27 @@ with.msr <- function(data, expr, ...) {
 print.msr <- function(x, ...) {
   n <- npoints(x$loc)
   d <- ncol(as.matrix(x$val))
-  descrip <- if(d == 1) "Scalar" else paste(d, "dimensional vector", sep="-")
-  cat(paste(descrip, "-valued measure\n", sep=""))
+  splat(paste0(if(d == 1) "Scalar" else paste0(d, "-dimensional vector"),
+               "-valued measure"))
   if(d > 1 && !is.null(cn <- colnames(x$val)))
-    cat(paste("vector components:", commasep(sQuote(cn)), "\n"))
-  cat(paste("Approximated by", n, "quadrature points\n"))
-  print(as.owin(x$loc))
-  cat(paste(sum(x$atoms), "atoms\n"))
-  cat(paste("Total mass:\n"))
-  if(d == 1) {
-    cat(paste("discrete =", signif(sum(with(x, "discrete")), 5),
-              "\tcontinuous =", signif(sum(with(x, "continuous")), 5),
-              "\ttotal =", signif(sum(with(x, "increment")), 5), "\n"))
-  } else {
-    if(is.null(cn)) cn <- paste("component", 1:d)
-    for(j in 1:d) {
-      cat(paste(cn[j], ":\t",
-                "discrete =", signif(sum(with(x, "discrete")[,j]), 5),
-                "\tcontinuous =", signif(sum(with(x, "continuous")[,j]), 5),
-                "\ttotal =", signif(sum(with(x, "increment")[,j]), 5), "\n"))
+    splat("vector components:", commasep(sQuote(cn)))
+  if(waxlyrical("extras")) {
+    splat("Approximated by", n, "quadrature points")
+    print(as.owin(x$loc))
+    splat(sum(x$atoms), "atoms")
+    splat("Total mass:")
+    if(d == 1) {
+      splat("discrete =", signif(sum(with(x, "discrete")), 5),
+            "  continuous =", signif(sum(with(x, "continuous")), 5),
+            "  total =", signif(sum(with(x, "increment")), 5))
+    } else {
+      if(is.null(cn)) cn <- paste("component", 1:d)
+      for(j in 1:d) {
+        splat(paste0(cn[j], ":\t"),
+              "discrete =", signif(sum(with(x, "discrete")[,j]), 5),
+              "  continuous =", signif(sum(with(x, "continuous")[,j]), 5),
+              "  total =", signif(sum(with(x, "increment")[,j]), 5))
+      }
     }
   }
   return(invisible(NULL))
@@ -141,52 +143,132 @@ integral.msr <- function(x, ...) {
   y <- with(x, "increment")
   if(is.matrix(y)) apply(y, 2, sum) else sum(y)
 }
-  
-plot.msr <- function(x, ...) {
-  xname <- short.deparse(substitute(x))
-  d <- ncol(as.matrix(x$val))  
+
+augment.msr <- function(x, ..., sigma) {
+  ## add a pixel image of the smoothed density component
+  stopifnot(inherits(x, "msr"))
+  d <- ncol(as.matrix(x$val))
+  xloc <- x$loc
+  W <- as.owin(xloc)
+  if(missing(sigma)) sigma <- maxnndist(xloc)
+  ## smooth density unless constant
+  xdensity <- as.matrix(x$density)
+  ra <- apply(xdensity, 2, range)
+  varble <- apply(as.matrix(ra), 2, diff) > sqrt(.Machine$double.eps)
+  ##
   if(d == 1) {
-    # smooth the density unless it is flat
-    if(diff(range(x$density)) > sqrt(.Machine$double.eps) ||
-       "sigma" %in% names(list(...))) {
-      sigma0 <- max(nndist(x$loc))
-      smo <- do.call("Smooth",
-                     resolve.defaults(list(X=x$loc %mark% x$density),
-                                      list(...),
-                                      list(sigma=sigma0)))
-    } else {
-      smo <- as.im(mean(x$density), W=as.owin(x$loc))
-    }
-    xtra <- unique(c(names(formals(plot.default)),
-                     names(formals(image.default)),
-                     "box"))
-    do.call.matched("plot.im",
-                    resolve.defaults(list(x=smo),
-                                     list(...),
-                                     list(main=xname)),
-                    extrargs=xtra)
-    xtra <- unique(c(names(formals(plot.owin)),
-                     names(formals(points)),
-                     names(formals(symbols))))
-    xtra <- setdiff(xtra, "box")
-    do.call.matched("plot.ppp",
-                    resolve.defaults(list(x=x$loc %mark% x$discrete),
-                                     list(add=TRUE),
-                                     list(...)),
-                    extrargs=xtra)
+    smo <- if(!varble) as.im(mean(xdensity), W=W) else
+           do.call("Smooth",
+                   resolve.defaults(list(X=xloc %mark% xdensity),
+                                    list(...),
+                                    list(sigma=sigma)))
   } else {
-    # split into a list of real-valued measures
+    smo <- vector(mode="list", length=d)
+    names(smo) <- colnames(x)
+    if(any(varble)) 
+      smo[varble] <-
+        do.call("Smooth",
+                resolve.defaults(list(X=xloc %mark% xdensity[,varble]),
+                                 list(...),
+                                 list(sigma=sigma)))
+    if(any(!varble)) 
+      smo[!varble] <- lapply(apply(xdensity[, !varble], 2, mean),
+                             function(z, W) as.im(z, W=W),
+                             W=W)
+  }
+  attr(x, "smoothdensity") <- smo
+  return(x)
+}
+
+plot.msr <- function(x, ..., add=FALSE,
+                     how=c("image", "contour", "imagecontour"),
+                     do.plot=TRUE) {
+  xname <- short.deparse(substitute(x))
+  how <- match.arg(how)
+  d <- ncol(as.matrix(x$val))
+  xloc <- x$loc
+  if(is.null(smo <- attr(x, "smoothdensity"))) {
+    x <- augment.msr(x, ...)
+    smo <- attr(x, "smoothdensity")
+  }
+  if(d > 1) {
+    ## split into a list of real-valued measures
     lis <- list()
-    for(j in 1:d) 
-      lis[[j]] <- x[,j]
+    for(j in 1:d) {
+      xj <- x[,j]
+      attr(xj, "smoothdensity") <- smo[[j]]
+      lis[[j]] <- xj
+    }
     lis <- as.listof(lis)
     if(!is.null(cn <- colnames(x$val)))
       names(lis) <- cn
-    do.call("plot.listof", resolve.defaults(list(lis),
-                                            list(...),
-                                            list(main=xname)))
+    result <- do.call("plot.listof", resolve.defaults(list(lis),
+                                                      list(...),
+                                                      list(how=how,
+                                                           main=xname)))
+    return(invisible(result))
   }
-  return(invisible(NULL))  
+  ## 
+  xatomic <- (x$loc %mark% x$discrete)[x$atoms]
+  xtra.im <- unique(c(names(formals(plot.default)),
+                      names(formals(image.default)),
+                      "box"))
+  xtra.pp <- unique(c(names(formals(plot.owin)),
+                      "pch", "cex", "lty", "lwd",
+                      names(formals(symbols)),
+                      "etch"))
+  xtra.pp <- setdiff(xtra.pp, "box")
+  ##
+  do.image <-  how %in% c("image", "imagecontour")
+  do.contour <-  how %in% c("contour", "imagecontour")
+  ## allocate space for plot and legend using do.plot=FALSE mechanism
+  pdata <- do.call.matched("plot.ppp",
+                           resolve.defaults(list(x=xatomic,
+                                                 do.plot=FALSE),
+                                            list(...)),
+                           extrargs=xtra.pp)
+  result <- pdata
+  bb <- attr(pdata, "bbox")
+  if(do.image) {
+    idata <- do.call.matched("plot.im",
+                             resolve.defaults(list(x=smo, do.plot=FALSE),
+                                              list(...)),
+                             extrargs=xtra.im)
+    result <- idata
+    bb <- boundingbox(bb, attr(idata, "bbox"))
+  }
+  ##
+  attr(result, "bbox") <- bb
+  ##
+  if(do.plot) {
+    if(!add) 
+      ## initialise plot
+      do.call.matched(plot.owin,
+                      resolve.defaults(list(x=bb, type="n", main="   "),
+                                       list(...)))
+    ## display density
+    if(do.image) 
+      do.call.matched("plot.im",
+                      resolve.defaults(list(x=smo, add=TRUE),
+                                       list(...),
+                                       list(main=xname, show.all=TRUE)),
+                      extrargs=xtra.im)
+    if(do.contour) 
+      do.call.matched("contour.im",
+                      resolve.defaults(list(x=smo, add=TRUE),
+                                       list(...),
+                                       list(main=xname,
+                                            axes=FALSE, show.all=!do.image)),
+                      extrargs=c("zlim", "labels", "labcex",
+                        ## DO NOT ALLOW 'col' 
+                        "drawlabels", "method", "vfont", "lty", "lwd"))
+    ## display atoms
+    do.call.matched("plot.ppp",
+                    resolve.defaults(list(x=xatomic, add=TRUE, main=""),
+                                     list(...)),
+                    extrargs=xtra.pp)
+  }
+  return(invisible(result))
 }
 
 "[.msr" <- function(x, i, j, ...) {
@@ -239,15 +321,15 @@ Smooth.msr <- function(X, ...) {
   verifyclass(X, "msr")
   loc <- X$loc
   val <- X$val
-  d <- ncol(as.matrix(val))
-  if(d == 1) {
-    result <- density(loc, weights=val, ...)
-  } else {
-    result <- list()
-    for(j in 1:d) 
-      result[[j]] <- density(loc, weights=val[,j], ...)
-    result <- as.listof(result)
-    names(result) <- colnames(X)
-  }
+  result <- density(loc, weights=val, ...)
   return(result)
+}
+
+as.owin.msr <- function(W, ..., fatal=TRUE) {
+  as.owin(W$loc, ..., fatal=fatal)
+}
+
+shift.msr <- function(X,  ...) {
+  X$loc <- Xloc <- shift(X$loc, ...)
+  putlastshift(X, getlastshift(Xloc))
 }

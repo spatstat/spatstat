@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.17 $  $Date: 2014/01/19 11:27:11 $
+#  $Revision: 1.20 $  $Date: 2014/04/04 03:04:03 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -22,6 +22,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   verifyclass(X, "ppp")
   if(!is.marked(X, dfok=TRUE))
     stop("X should be a marked point pattern")
+  X <- coerce.marks.numeric(X)
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
@@ -34,7 +35,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   if(diggle && !edge) warning("Option diggle=TRUE overridden by edge=FALSE")
   diggle <- diggle && edge
   ## 
-  if(ker$cutoff < min(nndist(X))) {
+  if(ker$cutoff < minnndist(X)) {
     # very small bandwidth
     leaveoneout <- resolve.1.default("leaveoneout",
                                      list(...), list(leaveoneout=TRUE))
@@ -66,11 +67,8 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   if(weightsgiven && ((mw <- median(abs(weights))) > 0))
     weights <- weights/mw
 
-  ## get marks
-  marx <- marks(X, dfok=TRUE)
-
   ## calculate...
-  
+  marx <- marks(X)
   if(!is.data.frame(marx)) {
     # ........ vector of marks ...................
     values <- marx
@@ -447,3 +445,181 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
                      criterion="Least Squares Cross-Validation")
   return(result)
 }
+
+smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
+                              weights=NULL, varcov=NULL,
+                              sorted=FALSE) {
+  if(is.null(varcov)) {
+    const <- 1/(2 * pi * sigma^2)
+  } else {
+    detSigma <- det(varcov)
+    Sinv <- solve(varcov)
+    const <- 1/(2 * pi * sqrt(detSigma))
+  }
+  if(!is.null(dim(weights)))
+    stop("weights must be a vector")
+
+  if(npoints(Xquery) == 0 || npoints(Xdata) == 0) {
+    if(is.null(dim(values))) return(rep(NA, npoints(Xquery)))
+    nuttin <- matrix(NA, nrow=npoints(Xquery), ncol=ncol(values))
+    colnames(nuttin) <- colnames(values)
+    return(nuttin)
+  }
+  
+  ## Contributions from pairs of distinct points
+  ## closer than 8 standard deviations
+  sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
+  cutoff <- 8 * sd
+
+  ## detect very small bandwidth
+  nnc <- nncross(Xquery, Xdata)
+  if(cutoff < min(nnc$dist)) {
+    if(npoints(Xdata) > 1) {
+      warning("Very small bandwidth; values of nearest neighbours returned")
+      nw <- nnc$which
+      result <- if(is.null(dim(values))) values[nw] else values[nw,,drop=FALSE]
+    } else {
+      warning("Very small bandwidth; original values returned")
+      result <- values
+    }
+    attr(result, "sigma") <- sigma
+    attr(result, "varcov") <- varcov
+    attr(result, "warnings") <- "underflow"
+    return(result)
+  }
+  
+  ## Handle weights that are meant to be null
+  if(length(weights) == 0)
+     weights <- NULL
+     
+  ## handle multiple columns of values
+  if(is.matrix(values) || is.data.frame(values)) {
+    k <- ncol(values)
+    stopifnot(nrow(values) == npoints(Xdata))
+    values <- as.data.frame(values)
+    result <- matrix(, npoints(Xdata), k)
+    colnames(result) <- colnames(values)
+    if(!sorted) {
+      ood <- fave.order(Xdata$x)
+      Xdata <- Xdata[ood]
+      values <- values[ood, ]
+      ooq <- fave.order(Xquery$x)
+      Xquery <- Xquery[ooq]
+    }
+    for(j in 1:k) 
+      result[,j] <- smoothcrossEngine(Xdata, Xquery, values[,j],
+                                      sigma=sigma, varcov=varcov,
+                                      weights=weights, sorted=TRUE,
+                                      ...)
+    if(!sorted) {
+      sortresult <- result
+      result[ooq,] <- sortresult
+    }
+    attr(result, "sigma") <- sigma
+    attr(result, "varcov") <- varcov
+    return(result)
+  }
+
+  ## values must be a vector
+  stopifnot(length(values) == npoints(Xdata) || length(values) == 1)
+  if(length(values) == 1) values <- rep(values, npoints(Xdata))
+
+  ndata <- npoints(Xdata)
+  nquery <- npoints(Xquery)
+  result <- numeric(nquery) 
+  ## coordinates and values
+  xq <- Xquery$x
+  yq <- Xquery$y
+  xd <- Xdata$x
+  yd <- Xdata$y
+  vd <- values
+  if(!sorted) {
+    ## sort into increasing order of x coordinate (required by C code)
+    ooq <- fave.order(Xquery$x)
+    xq <- xq[ooq]
+    yq <- yq[ooq]
+    ood <- fave.order(Xdata$x)
+    xd <- xd[ood]
+    yd <- yd[ood]
+    vd <- vd[ood] 
+  }
+  DUP <- spatstat.options("dupC")
+  if(is.null(varcov)) {
+    ## isotropic kernel
+    if(is.null(weights)) {
+      zz <- .C("crsmoopt",
+               nquery      = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               vd      = as.double(vd),
+               rmaxi   = as.double(cutoff),
+               sig     = as.double(sd),
+               result  = as.double(double(nquery)),
+               DUP     = DUP)
+      if(sorted) result <- zz$result else result[ooq] <- zz$result
+    } else {
+      wtsort <- weights[ood]
+      zz <- .C("wtcrsmoopt",
+               nquery      = as.integer(nquery),
+               xq      = as.double(xq),
+               yq      = as.double(yq),
+               ndata   = as.integer(ndata),
+               xd      = as.double(xd),
+               yd      = as.double(yd),
+               vd      = as.double(vd),
+               wd      = as.double(wtsort),
+               rmaxi   = as.double(cutoff),
+               sig     = as.double(sd),
+               result  = as.double(double(nquery)),
+               DUP     = DUP)
+        if(sorted) result <- zz$result else result[ooq] <- zz$result
+      }
+    } else {
+      # anisotropic kernel
+      flatSinv <- as.vector(t(Sinv))
+      if(is.null(weights)) {
+        zz <- .C("acrsmoopt",
+                 nquery      = as.integer(nquery),
+                 xq      = as.double(xq),
+                 yq      = as.double(yq),
+                 ndata   = as.integer(ndata),
+                 xd      = as.double(xd),
+                 yd      = as.double(yd),
+                 vd      = as.double(vd),
+                 rmaxi   = as.double(cutoff),
+                 sinv    = as.double(flatSinv),
+                 result  = as.double(double(nquery)),
+                 DUP     = DUP)
+        if(sorted) result <- zz$result else result[ooq] <- zz$result
+      } else {
+        wtsort <- weights[ood]
+        zz <- .C("awtcrsmoopt",
+                 nquery      = as.integer(nquery),
+                 xq      = as.double(xq),
+                 yq      = as.double(yq),
+                 ndata   = as.integer(ndata),
+                 xd      = as.double(xd),
+                 yd      = as.double(yd),
+                 vd      = as.double(vd),
+                 wd      = as.double(wtsort),
+                 rmaxi   = as.double(cutoff),
+                 sinv    = as.double(flatSinv),
+                 result  = as.double(double(nquery)),
+                 DUP     = DUP)
+        if(sorted) result <- zz$result else result[ooq] <- zz$result
+      }
+    }
+    if(any(nbg <- (is.infinite(result) | is.nan(result)))) {
+      # NaN or +/-Inf can occur if bandwidth is small
+      # Use mark of nearest neighbour (by l'Hopital's rule)
+      result[nbg] <- values[nnc$which[nbg]]
+    }
+  # pack up and return
+  attr(result, "sigma") <- sigma
+  attr(result, "varcov") <- varcov
+  return(result)
+}
+

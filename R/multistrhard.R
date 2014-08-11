@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.29 $	$Date: 2013/05/01 10:17:22 $
+#    $Revision: 2.30 $	$Date: 2014/04/30 07:57:30 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -14,7 +14,7 @@
 # -------------------------------------------------------------------
 #	
 
-MultiStraussHard <- local({
+doMultiStraussHard <- local({
   
   # ........  define potential ......................
 
@@ -131,6 +131,9 @@ MultiStraussHard <- local({
            iradii <- self$par$iradii
            hradii <- self$par$hradii
            if(!is.null(types)) {
+             if(!is.null(dim(types)))
+               stop(paste("The", sQuote("types"),
+                          "argument should be a vector"))
              if(length(types) == 0)
                stop(paste("The", sQuote("types"),"argument should be",
                           "either NULL or a vector of all possible types"))
@@ -163,7 +166,7 @@ MultiStraussHard <- local({
            cat(paste(nt, "types of points\n"))
            if(!is.null(types)) {
              cat("Possible types: \n")
-             print(types)
+             print(noquote(types))
            } else cat("Possible types:\t not yet determined\n")
            cat("Interaction radii:\n")
            print(iradii)
@@ -269,8 +272,7 @@ MultiStraussHard <- local({
   class(BlankMSHobject) <- "interact"
 
   # Finally define MultiStraussHard function
-
-  MultiStraussHard <- function(types=NULL, iradii, hradii) {
+  doMultiStraussHard <- function(iradii, hradii, types=NULL) {
     out <- instantiate.interact(BlankMSHobject,
                                 list(types=types,
                                      iradii = iradii, hradii = hradii))
@@ -280,7 +282,23 @@ MultiStraussHard <- local({
     return(out)
   }
 
-  MultiStraussHard
+  doMultiStraussHard
 })
 
 
+MultiStraussHard <- function(iradii, hradii, types=NULL) {
+  ## try new syntax
+  newcall <- match.call()
+  newcall[[1]] <- as.name('doMultiStraussHard')
+  out <- try(eval(newcall, parent.frame()), silent=TRUE)
+  if(is.interact(out))
+    return(out)
+  ## try old syntax
+  oldcall <- match.call(function(types=NULL, iradii, hradii) {})
+  oldcall[[1]] <- as.name('doMultiStraussHard')
+  out <- try(eval(oldcall, parent.frame()), silent=TRUE)
+  if(is.interact(out))
+    return(out)
+  ## Syntax is wrong: generate error using new syntax rules
+  doMultiStraussHard(iradii=iradii, hradii=hradii, types=types)
+}

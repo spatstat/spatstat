@@ -42,6 +42,7 @@ Creates a circular window
   point pattern (object of class \code{"ppp"}) containing exactly one point.
 }
 \seealso{
+  \code{\link{ellipse}},
   \code{\link{owin.object}},
   \code{\link{owin}},
   \code{\link{as.mask}}

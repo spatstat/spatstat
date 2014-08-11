@@ -5,7 +5,8 @@
   Extract a subset or subregion of a pixel image.
 }
 \usage{
-  \method{[}{im}(x, i, j, \dots, drop=TRUE, raster=NULL, rescue=is.owin(i))
+  \method{[}{im}(x, i, j, \dots, drop=TRUE, tight=FALSE,
+                                 raster=NULL, rescue=is.owin(i))
 }
 \arguments{
   \item{x}{
@@ -30,6 +31,11 @@
     Locations in \code{w} that lie outside the spatial domain of the
     image \code{x} return a pixel value of \code{NA} if
     \code{drop=FALSE}, and are omitted if \code{drop=TRUE}.
+  }
+  \item{tight}{
+    Logical value. If \code{tight=TRUE}, and if the result of the
+    subset operation is an image, the image will be trimmed
+    to the smallest possible rectangle.
   }
   \item{raster}{
      Optional. An object of class \code{"owin"} or \code{"im"}
@@ -169,10 +175,9 @@
  plot(Y)
 
  # a polygonal subset
- data(letterR)
  R <- affine(letterR, diag(c(1,1)/2), c(-2,-0.7))
- Y <- X[R, drop=FALSE]
- plot(Y)
+ plot(X[R, drop=FALSE])
+ plot(X[R, drop=FALSE, tight=TRUE])
 
  # a point pattern
  P <- rpoispp(20)

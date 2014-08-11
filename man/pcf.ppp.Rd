@@ -77,8 +77,8 @@
   }
   where \eqn{\lambda}{lambda} is the intensity of the point process.
   For a completely random (uniform Poisson) process,
-  \eqn{p(r) = \lambda^2}{p(r) = lambda^2} so \eqn{g(r) = 1}.
-
+  \eqn{p(r) = \lambda^2 \,{\rm d}x \, {\rm d}y}{p(r) = lambda^2 dx dy}
+  so \eqn{g(r) = 1}.
   Formally, the pair correlation function of a stationary point process
   is defined by 
   \deqn{

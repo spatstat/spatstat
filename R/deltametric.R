@@ -9,7 +9,7 @@
 deltametric <- function(A, B, p=2, c=Inf, ...) {
   stopifnot(is.numeric(p) && length(p) == 1 && p > 0)
   # ensure frames are identical
-  bb <- bounding.box(as.rectangle(A), as.rectangle(B))
+  bb <- boundingbox(as.rectangle(A), as.rectangle(B))
   # enforce identical frames
   A <- rebound(A, bb)
   B <- rebound(B, bb)

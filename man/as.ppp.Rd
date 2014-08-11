@@ -9,7 +9,7 @@
 \alias{as.ppp.default}
 \title{Convert Data To Class ppp}
 \description{
-Tries to coerce any reasonable kind of data to a point pattern
+Tries to coerce any reasonable kind of data to a spatial point pattern
 (an object of class \code{"ppp"})
 for use by the \pkg{spatstat} package).
 }

@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.29 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.30 $	$Date: 2014/05/07 04:04:59 $
 #
 #
 # Main functions:
@@ -137,12 +137,8 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
             win <- as.mask(win, dimyx=rev(npix))
 
             if(verbose) {
-              if(!is.null(npix)) 
-                np <- npix
-              else {
-                np <- rev(spatstat.options("npixel"))
-                if(length(np) == 1) np <- rep.int(np, 2)
-              }
+              np <- npix %orifnull% rev(spatstat.options("npixel"))
+              np <- ensure2vector(npix)
               cat(paste("Approximating window by mask (",
                         np[1], " x ", np[2], " pixels)\n", sep=""))
             }

@@ -4,7 +4,7 @@
 #
 #   Functions for manipulating model formulae
 #
-#	$Revision: 1.17 $	$Date: 2014/01/20 07:42:33 $
+#	$Revision: 1.20 $	$Date: 2014/04/14 08:05:01 $
 #
 #   identical.formulae()
 #          Test whether two formulae are identical
@@ -199,3 +199,82 @@ polynom <- function(x, ...) {
   stop("Can't deal with more than 2 variables yet")
 }
 
+expand.polynom <- local({
+  powername <- function(x, n) {
+    ifelse(n == 0, "",
+           ifelse(n == 1,
+                  x,
+                  paste0(x, "^", n)))
+  }
+  power1name <- function(x, n) {
+    px <- powername(x, n)
+    ifelse(n <= 1, px, paste0("I", paren(px)))
+  }
+  power2name <- function(x, y, n, m) {
+    ifelse(n == 0,
+           power1name(y, m),
+           ifelse(m == 0,
+                  power1name(x, n),
+                  paste0("I", paren(paste(powername(x, n),
+                                          powername(y, m), sep="*")))))
+  }
+
+  fiddle <- function(f) {
+    opname <- f[[1]]
+    if(identical(opname, as.name('I'))) {
+      ## expressions enclosed in I() are protected
+      return(f)
+    }
+    if(!identical(opname, as.name('polynom'))) {
+      tbd <- unlist(lapply(f, function(z) { 'polynom' %in% all.names(z) }))
+      if(any(tbd)) {
+        ## descend recursively
+        for(i in which(tbd)) 
+          f[[i]] <- fiddle(f[[i]])
+      }
+      return(f)
+    }
+    ## polynom(..., d)
+    n <- length(f)
+    if(!(n %in% c(3,4)))
+      stop("Syntax of polynom() call not understood")
+    degree <- f[[n]]
+    if (!is.numeric(degree) || length(degree) != 1 ||
+        (degree%%1) != 0 || degree < 1) 
+      stop("degree of polynomial should be a positive integer")
+    if(n == 3) {
+      ## polynom(x, d)
+      xlang <- f[[2]]
+      xstring <- if(length(xlang) == 1) paste(xlang) else paren(format(xlang))
+      xpowers <- power1name(xstring, 1:degree)
+      xpolystring <- paste(xpowers, collapse=" + ")
+      xpolylang <- as.formula(paste("~", xpolystring))[[2]]
+      return(xpolylang)
+    } else if(n == 4) {
+      ## polynom(x, y, d)
+      xlang <- f[[2]]
+      ylang <- f[[3]]
+      xstring <- if(length(xlang) == 1) paste(xlang) else paren(format(xlang))
+      ystring <- if(length(ylang) == 1) paste(ylang) else paren(format(ylang))
+      mat <- matrix(, 1+degree, 1+degree)
+      totdeg <- col(mat) - 1
+      yd <- row(mat) - 1
+      xd <- totdeg - yd
+      xdeg <- xd[xd >= 0]
+      ydeg <- yd[xd >= 0]
+      xypowers <- power2name(xstring, ystring, xdeg, ydeg)[xdeg + ydeg > 0]
+      xypolystring <- paste(xypowers, collapse=" + ")
+      xypolylang <- as.formula(paste("~", xypolystring))[[2]]
+      return(xypolylang)
+    }
+  }
+
+  expand.polynom <- function(f) {
+    ## replaces polynom(...) by x + I(x^2) + ... inside a formula f
+    g <- fiddle(f)
+    environment(g) <- environment(f)
+    return(g)
+  }
+
+  expand.polynom
+})

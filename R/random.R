@@ -99,7 +99,7 @@
              X <- ppp(x, y, window=win)
              #
              # rectangle in which trial points will be generated
-             box <- bounding.box(win)
+             box <- boundingbox(win)
              # 
              ntries <- 0
              repeat {
@@ -135,7 +135,7 @@ function(lambda, win = owin(c(0,1),c(0,1))) {
       return(ppp(numeric(0), numeric(0), window=win))
 
     # generate Poisson process in enclosing rectangle 
-    box <- bounding.box(win)
+    box <- boundingbox(win)
     mean <- lambda * area.owin(box)
     n <- rpois(1, mean)
     X <- runifpoint(n, box)
@@ -196,7 +196,7 @@ rpoint <- function(n, f, fmax=NULL,
     fmax <- summ$max + 0.05 * diff(summ$range)
   }
   irregular <- (win$type != "rectangle")
-  box <- bounding.box(win)
+  box <- boundingbox(win)
   X <- ppp(numeric(0), numeric(0), window=win)
   
   ntries <- 0
@@ -430,7 +430,7 @@ rpoint <- function(n, f, fmax=NULL,
   win <- as.owin(win)
   
   # Generate parents in dilated window
-  frame <- bounding.box(win)
+  frame <- boundingbox(win)
   dilated <- owin(frame$xrange + c(-rmax, rmax),
                   frame$yrange + c(-rmax, rmax))
   if(is.im(kappa) && !is.subset.owin(dilated, as.owin(kappa)))

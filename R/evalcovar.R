@@ -3,7 +3,7 @@
 #
 #   evaluate covariate values at data points and at pixels
 #
-# $Revision: 1.10 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.12 $ $Date: 2014/03/14 09:18:35 $
 #
 
 evalCovar <- function(model, covariate, ...) {
@@ -78,10 +78,13 @@ evalCovar.ppm <- function(model, covariate, ...,
       Z <- as.im(covariate, W=W)
       # collapse function body to single string
       covname <- singlestring(covname)
+    } else if(is.null(covariate)) {
+      stop("The covariate is NULL", call.=FALSE)
     } else stop(paste("The covariate should be",
                       "an image, a function(x,y)",
                       "or one of the characters",
-                      sQuote("x"), "or", sQuote("y")))
+                      sQuote("x"), "or", sQuote("y")),
+                call.=FALSE)
     # values of covariate in window
     Zvalues <- as.vector(Z[W, drop=TRUE])
     # corresponding fitted intensity values
@@ -156,11 +159,14 @@ evalCovar.ppm <- function(model, covariate, ...,
       pixelarea <- unlist(lapply(Z, function(z) {
         with(z, rep.int(xstep * ystep, sum(!is.na(v))))
       }))
+    } else if(is.null(covariate)) {
+      stop("The covariate is NULL", call.=FALSE)
     } else stop(paste("For a multitype point process model,",
                       "the covariate should be an image, a list of images,",
                       "a function(x,y,m)", 
                       "or one of the characters",
-                      sQuote("x"), "or", sQuote("y")))
+                      sQuote("x"), "or", sQuote("y")),
+                call.=FALSE)
   }    
   # ..........................................................
 
@@ -259,10 +265,13 @@ evalCovar.lppm <- function(model, covariate, ...,
       ZX <- Zvalues[isdat]
       # collapse function body to single string
       covname <- singlestring(covname)
+    } else if(is.null(covariate)) {
+      stop("The covariate is NULL", call.=FALSE)
     } else stop(paste("The covariate should be",
                       "an image, a function(x,y)",
                       "or one of the characters",
-                      sQuote("x"), "or", sQuote("y")))
+                      sQuote("x"), "or", sQuote("y")),
+                call.=FALSE)
     # corresponding fitted intensity values
     lambda <- as.vector(predict(model, locations=U))
   } else {
@@ -319,11 +328,14 @@ evalCovar.lppm <- function(model, covariate, ...,
         Zimage[[k]] <- as.linim(g, L=L, m=possmarks[k], f=covariate)
       # collapse function body to single string
       covname <- singlestring(covname)
+    } else if(is.null(covariate)) {
+      stop("The covariate is NULL", call.=FALSE)
     } else stop(paste("For a multitype point process model,",
                       "the covariate should be an image, a list of images,",
                       "a function(x,y,m)", 
                       "or one of the characters",
-                      sQuote("x"), "or", sQuote("y")))
+                      sQuote("x"), "or", sQuote("y")),
+                call.=FALSE)
   }    
   # ..........................................................
 

@@ -7,8 +7,9 @@
 \usage{
  \method{plot}{owin}(x, main, add=FALSE, \dots, box, edge=0.04,
                       type=c("w","n"), show.all=!add, 
-                      hatch=FALSE, angle=45, spacing=diameter(x)/50,
-                      invert=FALSE)
+                      hatch=FALSE,
+                      hatchargs=list(), 
+                      invert=FALSE, do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -48,19 +49,18 @@
   }
   \item{hatch}{
     logical flag; if \code{TRUE}, the interior of the window will
-    be shaded by a grid of parallel lines.
+    be shaded by texture, such as a grid of parallel lines.
   }
-  \item{angle}{
-    orientation of the shading lines (in degrees anticlockwise
-    from the \eqn{x} axis) when \code{hatch=TRUE}.
-  }
-  \item{spacing}{
-    spacing between the shading lines,
-    when \code{hatch=TRUE}.
+  \item{hatchargs}{
+    List of arguments passed to \code{\link{add.texture}}
+    to control the texture shading when \code{hatch=TRUE}. 
   }
   \item{invert}{
     logical flag; when the window is a binary pixel mask,
     the mask colours will be inverted if \code{invert=TRUE}.
+  }
+  \item{do.plot}{
+    Logical value indicating whether to actually perform the plot.
   }
 }
 \value{

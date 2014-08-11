@@ -111,6 +111,8 @@
 \examples{
    fit <- ppm(cells, ~x)
    model.images(fit)
+   B <- owin(c(0.2, 0.4), c(0.3, 0.8))
+   model.images(fit, B)
    fit2 <- ppm(cells, ~cut(x,3))
    model.images(fit2)
    fit3 <- slrm(japanesepines ~ x)

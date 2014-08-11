@@ -14,7 +14,7 @@
 \usage{
   \method{print}{units}(x, ...)
   \method{summary}{units}(object, ...)
-  \method{rescale}{units}(X,s)
+  \method{rescale}{units}(X, s, unitname)
   \method{compatible}{units}(A,B, ..., coerce=TRUE)
 }
 \arguments{
@@ -34,6 +34,8 @@
     Logical. If \code{TRUE}, a null unit of length is compatible with
     any non-null unit.
   }
+  \item{unitname}{Optional new name for the unit. If present, this overrides the
+    rescaling operation and simply substitutes the new name for the old one.}
 }
 \details{
   These are methods for the generic functions

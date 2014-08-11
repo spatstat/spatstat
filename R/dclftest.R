@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.19 $  $Date: 2013/12/17 10:11:05 $
+#  $Revision: 1.21 $  $Date: 2014/02/20 11:47:40 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -190,8 +190,14 @@ envelopeTest <- function(X, ...,
                            data.name = e$Yname),
                       class="htest")
   attr(result, "rinterval") <- rinterval
-  if(save.envelope)
+  if(save.envelope) {
     attr(result, "envelope") <- X
+    attr(result, "statistics") <- list(data=devdata, sim=devsim)
+    attr(result, "info") <- list(power=power,
+                                 nties=nties,
+                                 tie.rule=tie.rule,
+                                 use.theo=use.theo)
+  }
   return(result)
 }
 

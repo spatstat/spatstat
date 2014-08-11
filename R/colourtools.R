@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.6 $   $Date: 2014/01/29 03:59:19 $
+#   $Revision: 1.7 $   $Date: 2014/04/05 08:41:04 $
 #
 
 
@@ -28,6 +28,16 @@ paletteindex <- function(x) {
 }
 
 samecolour <- function(x, y) { col2hex(x) == col2hex(y) }
+
+complementarycolour <- function(x) {
+  if(is.null(x)) return(NULL)
+  if(inherits(x, "colourmap")) {
+    col <- summary(x)[["outputs"]]
+    return(tweak.colourmap(x, complementarycolour(col)))
+  }
+  y <- apply(255 - col2rgb(x), 2, rgb2hex)
+  return(y)
+}
 
 to.grey <- function(x, weights=c(1,1,1)) {
   if(is.null(x)) return(NULL)

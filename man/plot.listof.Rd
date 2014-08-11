@@ -6,7 +6,8 @@
 }
 \usage{
   \method{plot}{listof}(x, \dots, main, arrange=TRUE,
-   nrows=NULL, ncols=NULL, main.panel=NULL, mar.panel=c(2,1,1,2),
+   nrows=NULL, ncols=NULL, main.panel=NULL,
+   mar.panel=c(2,1,1,2), hsep=0, vsep=0,
    panel.begin=NULL, panel.end=NULL, panel.args=NULL, plotcommand="plot",
    adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
    adorn.size=0.2, equal.scales=FALSE)
@@ -39,16 +40,23 @@
     giving the headings for each of the objects.
   }
   \item{mar.panel}{
-    Value of the graphics parameter \code{mar} controlling the size
-    of the margins outside each plot panel.
-    See the help file for \code{\link{par}}.
+    Size of the margins outside each plot panel.
+    A numeric vector of length 4 giving the bottom, left, top,
+    and right margins in that order. (Alternatively the vector
+    may have length 1 or 2 and will be replicated to length 4).
+    See the section on \emph{Spacing between plots}.
+  }
+  \item{hsep,vsep}{
+    Additional horizontal and vertical separation between plot panels,
+    expressed in the same units as \code{mar.panel}. 
   }
   \item{panel.begin,panel.end}{
     Optional. Functions that will be executed before and after each panel is
     plotted. See Details.
   }
   \item{panel.args}{
-    Internal use only.
+    Optional. Function that determines different plot arguments
+    for different panels. See Details.
   }
   \item{plotcommand}{
     Optional.
@@ -87,15 +95,22 @@
   These objects can be plotted in a nice arrangement
   using \code{plot.listof}. See the Examples.
 
-  The arguments \code{panel.begin} and \code{panel.end}
-  may be functions that will be executed before and after each panel is plotted.
-  They will be called as \code{panel.begin(i, y, main=main.panel[i])}
-  and \code{panel.end(i, y, add=TRUE)}.
+  The argument \code{panel.args} determines extra graphics parameters
+  for each panel. It should be a function that will be called
+  as \code{panel.args(i)} where \code{i} is the panel number.
+  Its return value should be a list of graphics parameters that can
+  be passed to the relevant \code{plot} method. These parameters
+  override any parameters specified in the \code{\dots} arguments.
 
-  Alternatively, \code{panel.begin} and \code{panel.end} may be objects
+  The arguments \code{panel.begin} and \code{panel.end}
+  determine graphics that will be plotted before and after
+  each panel is plotted. They may be objects
   of some class that can be plotted
-  with the generic \code{plot} command. They will be plotted before and
-  after each panel is plotted.
+  with the generic \code{plot} command. Alternatively they
+  may be functions that will be
+  called as \code{panel.begin(i, y, main=main.panel[i])}
+  and \code{panel.end(i, y, add=TRUE)} where \code{i} is the panel
+  number and \code{y = x[[i]]}.
 
   If all entries of \code{x} are pixel images,
   the function \code{\link{image.listof}} is called to control
@@ -136,6 +151,29 @@
     \code{adorn.bottom} are all \code{NULL}.
   }
 }
+\section{Spacing between plots}{
+  The spacing between individual plots is controlled by the parameters
+  \code{mar.panel}, \code{hsep} and \code{vsep}.
+
+  If \code{equal.scales=FALSE}, the plot panels are
+  logically separate plots. The margins for each panel are
+  determined by the argument \code{mar.panel} which becomes 
+  the graphics parameter \code{mar}
+  described in the help file for \code{\link{par}}.
+  One unit of \code{mar} corresponds to one line of text in the margin.
+  If \code{hsep} or \code{vsep} are present, \code{mar.panel}
+  is augmented by \code{c(vsep, hsep, vsep, hsep)/2}.
+  
+  If \code{equal.scales=TRUE}, all the plot panels are drawn
+  in the same coordinate system which represents a physical scale.
+  The unit of measurement for \code{mar.panel[1,3]}
+  is one-sixth of the greatest height of any object plotted in the same row
+  of panels, and the unit for \code{mar.panel[2,4]} is one-sixth of the
+  greatest width of any object plotted in the same column of panels.
+  If \code{hsep} or \code{vsep} are present,
+  they are interpreted in the same units as \code{mar.panel[2]}
+  and \code{mar.panel[1]} respectively.
+}
 \seealso{
   \code{\link{print.listof}},
   \code{\link{contour.listof}},
@@ -144,15 +182,26 @@
 }
 \section{Error messages}{
   If the error message \sQuote{Figure margins too large}
-  occurs, ensure that \code{equal.scales=FALSE}
+  occurs, this generally means that one of the
+  objects had a much smaller physical scale than the others.
+  Ensure that \code{equal.scales=FALSE}
   and increase the values of \code{mar.panel}.
 }
 \examples{
-# Multitype point pattern
- data(amacrine)
+# Intensity estimate of multitype point pattern
  plot(D <- density(split(amacrine)))
  plot(D, main="", equal.ribbon=TRUE,
       panel.end=function(i,y,...){contour(y, ...)})
+
+# list of 3D point patterns
+ if(require(scatterplot3d)) {
+   ape1 <- osteo[osteo$shortid==4, "pts", drop=TRUE]
+   class(ape1)
+   plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
+        tick.marks=FALSE, xlab="", ylab="", zlab="",
+        mar=rep(0.7,4), cex.symbols=1.5, pch=16, type="h")
+   # Last two lines are arguments of scatterplot3d
+ }
 }
 
 \author{Adrian Baddeley

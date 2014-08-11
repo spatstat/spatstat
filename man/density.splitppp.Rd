@@ -46,7 +46,6 @@
   \code{\link{im.object}}
 }
 \examples{
-  data(amacrine)
   Z <- density(split(amacrine), 0.05)
   plot(Z)
 }

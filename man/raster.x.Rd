@@ -61,7 +61,8 @@
 }
 \seealso{
   \code{\link{owin}},
-  \code{\link{as.mask}}
+  \code{\link{as.mask}},
+  \code{\link{pixelcentres}}
 }
 \examples{
   u <- owin(c(-1,1),c(-1,1)) # square of side 2
