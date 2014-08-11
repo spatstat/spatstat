@@ -192,6 +192,8 @@ unitname.minconfit <- function(x) {
   return(x)
 }
 
+as.fv.minconfit <- function(x) x$fit
+
 ######  convergence status of 'optim' object
 
 optimStatus <- function(x, call=NULL) {

@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.5 $    $Date: 2011/05/18 08:19:08 $
+#           $Revision: 1.9 $    $Date: 2013/07/26 01:55:24 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -16,49 +16,105 @@ pixellate <- function(x, ...) {
   UseMethod("pixellate")
 }
 
-pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE)
-{
-    verifyclass(x, "ppp")
+pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
+  verifyclass(x, "ppp")
 
-    if(!is.null(W))
-      W <- as.mask(W)
-    else {
-      # determine W using as.mask
-      dotargs <- list(...)
-      namesargs <- names(dotargs)
-      matched <- namesargs %in% names(formals(as.mask))
-      W <- do.call("as.mask", append(list(x$window), dotargs[matched]))
-    } 
-
-    if(x$n == 0) {
-      zeroimage <- as.im(as.double(0), W)
-      if(padzero) # map NA to 0
-        zeroimage <- na.handle.im(zeroimage, 0)
-      return(zeroimage)
-    }
+  if(!is.null(W))
+    W <- as.mask(W)
+  else {
+    # determine W using as.mask
+    dotargs <- list(...)
+    namesargs <- names(dotargs)
+    matched <- namesargs %in% names(formals(as.mask))
+    W <- do.call("as.mask", append(list(x$window), dotargs[matched]))
+  }
+  insideW <- W$m
+  dimW   <- W$dim
+  xcolW <- W$xcol
+  yrowW <- W$yrow
+  xrangeW <- W$xrange
+  yrangeW <- W$yrange
+  unitsW <- unitname(W)
     
-    pixels <- nearest.raster.point(x$x, x$y, W)
-    nr <- W$dim[1]
-    nc <- W$dim[2]
-    if(is.null(weights)) {
-    ta <- table(row = factor(pixels$row, levels = 1:nr), col = factor(pixels$col,
-        levels = 1:nc))
-    } else {
-        ta <- tapply(weights, list(row = factor(pixels$row, levels = 1:nr),
-                    col = factor(pixels$col, levels=1:nc)), sum)
-        ta[is.na(ta)] <- 0
+  # multiple columns of weights?
+  if(is.data.frame(weights) || is.matrix(weights)) {
+    k <- ncol(weights)
+    stopifnot(nrow(weights) == npoints(x))
+    weights <- if(k == 1) as.vector(weights) else as.data.frame(weights)
+  } else {
+    k <- 1
+    if(!is.null(weights))
+      stopifnot(length(weights) == npoints(x) || length(weights) == 1)
+    if(length(weights) == 1)
+      weights <- rep(weights, npoints(x))
+  }
+
+  # handle empty point pattern
+  if(x$n == 0) {
+    zeroimage <- as.im(as.double(0), W)
+    if(padzero) # map NA to 0
+      zeroimage <- na.handle.im(zeroimage, 0)
+    result <- zeroimage
+    if(k > 1) {
+      result <- as.listof(rep(list(zeroimage), k))
+      names(result) <- colnames(weights)
     }
-    if(nr == 1 || nc == 1) {
-      # 1 x 1 image: need to specify xrange, yrange explicitly
-      out <- im(ta, xrange = W$xrange, yrange = W$yrange, unitname=unitname(W))
-    } else {
-      # normal case: use exact xcol, yrow values
-      out <- im(ta, xcol = W$xcol, yrow = W$yrow, unitname=unitname(W))
+    return(result)
+  }
+
+  # perform calculation
+  pixels <- nearest.raster.point(x$x, x$y, W)
+  nr <- dimW[1]
+  nc <- dimW[2]
+  rowfac <- factor(pixels$row, levels=1:nr)
+  colfac <- factor(pixels$col, levels=1:nc)
+  if(is.null(weights)) {
+    ta <- table(row = rowfac, col = colfac)
+  } else if(k == 1) {
+    ta <- tapply(weights, list(row = rowfac, col=colfac), sum)
+    ta[is.na(ta)] <- 0
+  } else {
+    ta <- list()
+    for(j in 1:k) {
+      taj <- tapply(weights[,j], list(row = rowfac, col=colfac), sum)
+      taj[is.na(taj)] <- 0
+      ta[[j]] <- taj
     }
+  }
+
+  # pack up as image(s)
+  if(k == 1) {
+    # single image
     # clip to window of data
     if(!padzero)
-      out <- out[W, drop=FALSE]
-    return(out)
+      ta[!insideW] <- NA
+    out <- im(ta,
+              xcol = xcolW, yrow = yrowW,
+              xrange = xrangeW, yrange = yrangeW,
+              unitname=unitsW)
+  } else {
+    # case k > 1
+    # create template image to reduce overhead
+    template <- im(ta[[1]],
+                   xcol = xcolW, yrow = yrowW,
+                   xrange = xrangeW, yrange = yrangeW,
+                   unitname=unitsW)
+    out <- list()
+    for(j in 1:k) {
+      taj <- ta[[j]]
+      # clip to window of data
+      if(!padzero) 
+        taj[!insideW] <- NA
+      # copy template and reassign pixel values
+      outj <- template
+      outj$v <- taj
+      # store
+      out[[j]] <- outj
+    }
+    out <- as.listof(out)
+    names(out) <- names(weights)
+  }
+  return(out)
 }
 
 pixellate.owin <- function(x, W=NULL, ...) {

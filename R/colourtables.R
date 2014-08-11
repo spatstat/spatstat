@@ -3,12 +3,13 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.23 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.26 $ $Date: 2013/07/14 07:08:20 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
   # validate colour data 
   h <- col2hex(col)
+  # store without conversion
   f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs)
   class(f) <- c("colourmap", class(f))
   f
@@ -266,3 +267,103 @@ plot.colourmap <- local({
 
   plot.colourmap
 })
+
+
+# Interpolate a colourmap or lookup table defined on real numbers
+
+interp.colourmap <- function(m, n=512) {
+  if(!inherits(m, "colourmap"))
+    stop("m should be a colourmap")
+  st <- attr(m, "stuff")
+  if(st$discrete) {
+    # discrete set of input values mapped to colours
+    xknots <- st$inputs
+    # Ensure the inputs are real numbers
+    if(!is.numeric(xknots))
+      stop("Cannot interpolate: inputs are not numerical values")
+  } else {
+    # interval of real line, chopped into intervals, mapped to colours
+    # Find midpoints of intervals
+    bks <- st$breaks
+    nb <- length(bks)
+    xknots <- (bks[-1] + bks[-nb])/2
+  }
+  # corresponding colours in hsv coordinates
+  yknots.hsv <- rgb2hsv(col2rgb(st$outputs))
+  # transform 'hue' from polar to cartesian coordinate
+  # divide domain into n equal intervals
+  xrange <- range(xknots)
+  xbreaks <- seq(xrange[1], xrange[2], length=n+1)
+  xx <- (xbreaks[-1] + xbreaks[-(n+1)])/2
+  # interpolate saturation and value in hsv coordinates
+  yy.sat <- approx(x=xknots, y=yknots.hsv["s", ], xout=xx)$y
+  yy.val <- approx(x=xknots, y=yknots.hsv["v", ], xout=xx)$y
+  # interpolate hue by first transforming polar to cartesian coordinate
+  yknots.hue <- 2 * pi * yknots.hsv["h", ]
+  yy.huex <- approx(x=xknots, y=cos(yknots.hue), xout=xx)$y
+  yy.huey <- approx(x=xknots, y=sin(yknots.hue), xout=xx)$y
+  yy.hue <- (atan2(yy.huey, yy.huex)/(2 * pi)) %% 1
+  # form colours using hue, sat, val
+  yy <- hsv(yy.hue, yy.sat, yy.val)
+  # done
+  f <- colourmap(yy, breaks=xbreaks)
+  return(f)
+}
+
+tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
+  if(!inherits(m, "colourmap"))
+    stop("m should be a colourmap")
+  if(is.null(inputs) && is.null(range))
+    stop("Specify either inputs or range")
+  if(!is.null(inputs) && !is.null(range))
+    stop("Do not specify both inputs and range")
+  # determine indices of colours to be changed
+  if(!is.null(inputs)) {
+    ix <- m(inputs, what="index")
+  } else {
+    if(!(is.numeric(range) && length(range) == 2 && diff(range) > 0))
+      stop("range should be a numeric vector of length 2 giving (min, max)")
+    if(length(col2hex(col)) != 1)
+      stop("When range is given, col should be a single colour value")
+    ixr <- m(range, what="index")
+    ix <- (ixr[1]):(ixr[2])
+  }
+  # reassign colours
+  st <- attr(m, "stuff")
+  outputs <- st$outputs
+  is.hex <- function(z) identical(substr(z, 1, 7), substr(col2hex(z), 1, 7))
+  result.hex <- FALSE
+  if(is.hex(outputs)) {
+    # convert replacement data to hex
+    col <- col2hex(col)
+    result.hex <- TRUE
+  } else if(is.hex(col)) {
+    # convert existing data to hex
+    outputs <- col2hex(outputs)
+    result.hex <- TRUE
+  } else if(!(is.character(outputs) && is.character(col))) {
+    # unrecognised format - convert both to hex
+    outputs <- col2hex(outputs)
+    col <- col2hex(col)
+    result.hex <- TRUE
+  }
+  if(result.hex) {
+    # hex codes may be 7 or 9 characters
+    outlen <- nchar(outputs)
+    collen <- nchar(col)
+    if(length(unique(c(outlen, collen))) > 1) {
+      # convert all to 9 characters
+      if(any(bad <- (outlen == 7))) 
+        outputs[bad] <- paste0(outputs[bad], "FF")
+      if(any(bad <- (collen == 7))) 
+        col[bad] <- paste0(col[bad], "FF")
+    }
+  }
+  # Finally, replace
+  outputs[ix] <- col
+  st$outputs <- outputs
+  attr(m, "stuff") <- st
+  assign("stuff", st, envir=environment(m))
+  return(m)
+}
+

@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.86 $	$Date: 2013/05/23 07:58:41 $
+#	$Revision: 2.88 $	$Date: 2013/06/17 04:01:00 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -185,11 +185,10 @@ quad.ppm <- function(object, drop=FALSE) {
     if(inherits(object, "kppm")) object <- object$po else
     stop("object is not of class ppm")
   }
-  forbid.logi(object)
   Q <- object$Q
   if(!drop || is.null(Q))
     return(Q)
-  ok <- object$internal$glmdata$.mpl.SUBSET
+  ok <- getglmsubset(object)
   if(is.null(ok))
     return(Q)
   return(Q[ok])
@@ -213,7 +212,6 @@ coef.ppm <- function(object, ...) {
 
 getglmfit <- function(object) {
   verifyclass(object, "ppm")
-  forbid.logi(object)
   glmfit <- object$internal$glmfit
   if(is.null(glmfit))
       return(NULL)
@@ -224,15 +222,15 @@ getglmfit <- function(object) {
 
 getglmdata <- function(object, drop=FALSE) {
   verifyclass(object, "ppm")
-  forbid.logi(object)
   gd <- object$internal$glmdata
   if(!drop) return(gd)
-  return(gd[gd$.mpl.SUBSET,])
+  return(gd[getglmsubset(object), , drop=FALSE])
 }
 
 getglmsubset <- function(object) {
-  forbid.logi(object)
   gd <- object$internal$glmdata
+  if(object$method=="logi")
+    return(gd$.logi.ok)
   return(gd$.mpl.SUBSET)
 }
 
@@ -397,7 +395,7 @@ project.ppm <- local({
     correction <- object$correction
     rbord      <- object$rbord
     # apply projection 
-    coef.mpl <- coeffs <- coef(object)
+    coef.orig <- coeffs <- coef(object)
     Vnames   <- object$internal$Vnames
     Icoeffs  <- coeffs[Vnames]
     change <- proj(Icoeffs, inte)
@@ -477,7 +475,7 @@ project.ppm <- local({
       object <- bestobject
     } else stop("Internal error: unrecognised format of update")
     object$projected <- TRUE
-    object$coef.mpl  <- coef.mpl
+    object$coef.orig  <- coef.orig
     leaving(td)
     return(object)
   }
@@ -505,7 +503,7 @@ logLik.ppm <- function(object, ..., warn=TRUE) {
            ll <- sum(log(cifdata[cifdata > 0])) - sum(w * cif)
          },
          logi={
-           forbid.logi(object)
+           ll <- object$maxlogpl
          },
          stop(paste("Internal error: unrecognised ppm method:",
                     dQuote(method)))
@@ -558,7 +556,6 @@ extractAIC.ppm <- function (fit, scale = 0, k = 2, ...)
 
 model.frame.ppm <- function(formula, ...) {
   object <- formula
-  forbid.logi(object)
   gf <- getglmfit(object)
   if(is.null(gf)) {
     warning("Model re-fitted with forcefit=TRUE")
@@ -575,7 +572,6 @@ model.frame.ppm <- function(formula, ...) {
 
 model.matrix.ppm <- function(object, data=model.frame(object),
                              ..., keepNA=TRUE) {
-  forbid.logi(object)
   gf <- getglmfit(object)
   if(is.null(gf)) {
     warning("Model re-fitted with forcefit=TRUE")

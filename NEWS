@@ -1,4 +1,161 @@
 
+	CHANGES IN spatstat VERSION 1.32-0
+
+OVERVIEW
+
+   o We thank Ege Rubak for major contributions.
+
+   o Thanks also to Patrick Donnelly, Andrew Hardegen,
+     Tom Lawrence, Robin Milne, Gopalan Nair and Sean O'Riordan.
+
+   o New 'logistic likelihood' method for fitting Gibbs models.
+
+   o Substantial acceleration of several functions
+     including profile maximum pseudolikelihood
+     and variance calculations for Gibbs models.
+
+   o Nearest neighbours for point patterns in 3D
+
+   o Nearest-neighbour interpolation in 2D
+
+   o New 'progress plots' 
+
+   o Hard core thresholds can be estimated automatically.
+
+   o More support for colour maps
+
+   o More support for 'fv' objects
+
+   o Spatstat now has version nicknames.
+   The current version is "Logistical Nightmare".
+ 
+   o Minor improvements and bug fixes.
+
+NEW FUNCTIONS
+
+   o nncross.pp3
+   Method for 'nncross' for point patterns in 3D
+
+   o nnmark
+   Mark of nearest neighbour - can be used for interpolation
+
+   o dclf.progress, mad.progress
+   Progress plots (envelope representations) for the DCLF and MAD tests.
+
+   o deriv.fv
+   Numerical differentiation for 'fv' objects.
+
+   o interp.colourmap
+   Smooth interpolation of colour map objects - makes it easy to build
+   colour maps with gradual changes in colour
+
+   o tweak.colourmap
+   Change individual colour values in a colour map object
+
+   o beachcolourmap
+   Colour scheme appropriate for `altitudes' (signed numerical values)
+
+   o as.fv
+   Convert various kinds of data to an 'fv' object
+
+   o quadscheme.logi
+   Generates quadrature schemes for the logistic method of ppm.
+
+   o beginner
+   Introduction for beginners.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o ppm
+   New option: method = "logi" 
+   Fits a Gibbs model by the newly developed 'logistic likelihood' method
+   which is often faster and more accurate than maximum pseudolikelihood.
+   Code contributed by Ege Rubak.
+   
+   o profilepl
+   Greatly accelerated, especially for area-interaction models.
+
+   o vcov.ppm
+   Greatly accelerated for higher-order interaction models.
+
+   o smooth.ppp
+   Now handles bandwidths equal to zero (by invoking 'nnmark')
+
+   o Hardcore, StraussHard
+   The hard core distance 'hc' can now be omitted; 
+   it will be estimated from data.
+
+   o plot.ppp
+   Now behaves differently if there are multiple columns of marks.
+   Each column of marks is plotted, in a series of separate plots
+   arranged side-by-side.
+
+   o plot.im
+   Argument 'col' can now be a function
+
+   o lohboot
+   Now computes confidence intervals for L-functions as well
+   (fun="Lest" or fun="Linhom")
+
+   o dclf.test, mad.test
+   The argument X can now be an object produced by a previous call
+   to dclf.test or mad.
+
+   o plot.fv
+   Labelling of plots has been improved in some cases.
+
+   o smooth.fv
+   Further options added.
+
+   o density.ppp
+   The argument 'weights' can now be a matrix.
+
+   o smooth.ppp
+   Accelerated, when there are several columns of marks.
+
+   o density.ppp
+   Accelerated slightly.
+
+   o simulate.ppm, simulate.kppm
+   The total computation time is also returned.
+
+   o simulate.kppm
+   Now catches errors (such as 'insufficient memory').
+   
+   o latest.news, licence.polygons
+   Can now be executed by typing the name of the function without parentheses.
+
+   o latest.news
+   The text is now displayed one page at a time.
+
+BUG FIXES
+
+   o Hest, Gfox, Jfox
+   The 'raw' estimate was not computed correctly (or at least 
+   it was not the raw estimate described in the help files).
+   Spotted by Tom Lawrence.
+   Fixed.
+
+   o edges2vees
+   Format of result was incorrect if there were fewer than 3 edges.
+   Fixed.
+
+   o Jfox
+   The theoretical value (corresponding to independence between X and Y)
+   was erroneously given as 0 instead of 1.
+   Spotted by Patrick Donnelly.
+   Fixed.
+
+   o ppm, quadscheme, default.dummy 
+   If the grid spacing parameter 'eps' was specified,
+   the quadrature scheme was sometimes slightly incorrect
+   (missing a few dummy points near the window boundary).
+   Fixed.
+
+   o print.timed
+   Matrices were printed incorrectly.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.31-3
 
 OVERVIEW
@@ -22,6 +179,7 @@ NEW FUNCTIONS
 
    o edges2vees
    Low-level function for finding triples in a graph.
+
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -502,7 +660,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o dclf.test, mad.test
    The range of distance values ('rinterval') used in the test
    is now printed in the test output, and is saved as an attribute.
-
 
 BUG FIXES
 

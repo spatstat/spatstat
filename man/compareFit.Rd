@@ -121,7 +121,8 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
       ilist <- ilist[c(1,3)]
       iname <- iname[c(1,3)]
    }
-   K <- compareFit(swedishpines, Kcom, interaction=ilist, rbord=9, 
+   K <- compareFit(swedishpines, Kcom, interaction=ilist, rbord=9,
+            correction="isotropic",
             same="iso", different="icom", modelnames=iname, nd=nd)
    K
 }

@@ -1,0 +1,481 @@
+\documentclass[twoside,11pt]{article}
+
+% \VignetteIndexEntry{Handling shapefiles in the spatstat package}
+
+\SweaveOpts{eps=TRUE}
+
+<<echo=FALSE,results=hide,fig=FALSE>>=
+options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
+@ 
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{color}
+
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\bold}[1]{{\textbf {#1}}}
+\newcommand{\R}{{\sf R}}
+
+\begin{document}
+%\bibliographystyle{plain}
+\thispagestyle{empty}
+
+<<echo=FALSE,results=hide>>=
+library(spatstat)
+spatstat.options(gpclib=TRUE)
+options(useFancyQuotes=FALSE)
+sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Date")
+sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Version")
+@ 
+
+\title{Handling shapefiles in the \texttt{spatstat} package}
+\author{Adrian Baddeley}
+\date{
+\Sexpr{sdate} \\ 
+\pkg{spatstat} version \texttt{\Sexpr{sversion}}
+}
+\maketitle
+
+This vignette explains how to read data into the \pkg{spatstat} package
+from files in the popular `shapefile' format. 
+
+This vignette is part of the documentation included in 
+\pkg{spatstat} version \texttt{\Sexpr{sversion}}.
+The information applies to 
+\pkg{spatstat} versions \texttt{1.18-0} and above.
+
+\section{Shapefiles}
+
+A shapefile represents a list of spatial objects 
+--- a list of points, a list of lines, or a list of polygonal regions --- 
+and each object in the list may have additional variables attached to it.
+
+A dataset stored in shapefile format is actually stored in a
+collection of text files, for example
+\begin{verbatim}
+     mydata.shp
+     mydata.prj
+     mydata.sbn
+     mydata.dbf
+\end{verbatim}
+which all have the same base name \texttt{mydata} but different file extensions.
+To refer to this collection you will always use the filename with the 
+extension \texttt{shp}, for example \texttt{mydata.shp}. 
+
+\section{Helper packages}
+\label{S:helpers}
+
+We'll use three other packages to handle shapefile data.
+
+The \pkg{maptools} package is designed specifically for handling
+file formats for spatial data. It contains 
+facilities for reading and writing files in shapefile format.
+
+The \pkg{sp} package supports a standard set of spatial data types
+in \R. These standard data types can be handled by many other packages,
+so it is useful to convert your spatial data into one of the 
+data types supported by \pkg{sp}.
+
+The \pkg{gpclib} package supports geometrical operations 
+on polygons --- such as union and intersection. 
+However, \pkg{gpclib} has a restrictive licence which 
+forbids its use for commercial activities. 
+Type \texttt{licence.polygons()} for more information.
+\underline{
+  {\bf By default,} \pkg{gpclib} {\bf is disabled. It must be
+  enabled }
+}
+by typing \verb!spatstat.options(gpclib=TRUE)! assuming you are
+covered by the licence.
+
+\section{How to read shapefiles into \pkg{spatstat}} 
+
+To read shapefile data into \pkg{spatstat}, you follow two steps:
+\begin{enumerate}
+\item 
+  using the facilities of \pkg{maptools}, read the shapefiles
+  and store the data in one of the standard formats supported by \pkg{sp}.
+\item 
+  convert the \pkg{sp} data type into one of the data types
+  supported by \pkg{spatstat}.
+\end{enumerate}
+
+\subsection{Read shapefiles using \pkg{maptools}} 
+
+Here's how to read shapefile data.
+
+\begin{enumerate}
+\item ensure that the package \pkg{maptools} is installed. You will need
+version \texttt{0.7-16} or later.
+\item start R and load the package: 
+<<eval=FALSE>>=
+library(maptools)
+@ 
+\item read the shapefile into an object in the \pkg{sp} package
+using \texttt{readShapeSpatial}, for example
+<<eval=FALSE>>=
+x <- readShapeSpatial("mydata.shp")
+@ 
+\item 
+To find out what kind of spatial objects are represented by the dataset,
+inspect its class:
+<<eval=FALSE>>=
+class(x)
+@ 
+The class may be either \texttt{SpatialPoints} indicating a point pattern, 
+\texttt{SpatialLines} indicating a list of polygonal lines, or
+\texttt{SpatialPolygons} indicating a list of polygons. It may also be
+\texttt{SpatialPointsDataFrame},
+\texttt{SpatialLinesDataFrame} or 
+\texttt{SpatialPolygonsDataFrame} indicating that, in addition to the 
+spatial objects, there is a data frame of additional variables.
+\end{enumerate}
+
+Here are some examples, using the example shapefiles supplied in the
+\pkg{maptools} package itself.
+
+% fake data because we don't want spatstat to depend on maptools
+<<echo=FALSE,results=hide>>=
+baltim <- columbus <- fylk <- list()
+class(baltim) <- "SpatialPointsDataFrame"
+class(columbus) <- "SpatialPolygonsDataFrame"
+class(fylk) <- "SpatialLinesDataFrame"
+@ 
+<<eval=FALSE>>=
+setwd(system.file("shapes", package="maptools"))
+baltim   <- readShapeSpatial("baltim.shp")
+columbus <- readShapeSpatial("columbus.shp")
+fylk     <- readShapeSpatial("fylk-val.shp")
+@ 
+<<>>=
+class(baltim)
+class(columbus)
+class(fylk)
+@ 
+
+\subsection{Convert data to \pkg{spatstat} format}
+
+To convert the dataset to an object in the
+\pkg{spatstat} package, the procedure depends on the 
+type of data, as explained below. 
+
+\subsubsection{Objects of class \texttt{SpatialPoints}}
+
+An object \texttt{x} of class \texttt{SpatialPoints}
+represents a spatial point pattern.
+Use \verb!as(x, "ppp")! or \texttt{as.ppp(x)} to convert it to a 
+spatial point pattern in \pkg{spatstat}.
+
+The window for the point pattern will be taken from
+the bounding box of the points. You will probably wish to change this window,
+usually by taking another dataset to provide the window information.
+Use \verb![.ppp! to change the window: if \texttt{X} is a point pattern
+object of class \verb!"ppp"! and \texttt{W} is a window object of class
+\verb!"owin"!, type
+<<eval=FALSE>>=
+X <- X[W]
+@ 
+
+\subsubsection{Objects of class \texttt{SpatialPointsDataFrame }}
+
+An object \texttt{x} of class \texttt{SpatialPointsDataFrame}
+represents a pattern of points with additional variables (`marks') attached to
+each point. It includes an object of class \texttt{SpatialPoints} 
+giving the point locations, and a data frame containing the
+additional variables attached to the points. 
+
+Use \verb!as(x, "ppp")! or \texttt{as.ppp(x)} to convert an
+object \texttt{x} of class \texttt{SpatialPointsDataFrame} to a 
+spatial point pattern in \pkg{spatstat}. In this conversion,
+the data frame of additional variables in \texttt{x} will 
+become the \texttt{marks} of the point pattern \texttt{z}.
+
+<<eval=FALSE>>=
+y <- as(x, "ppp")
+@ 
+
+Before the conversion you can extract the
+data frame of auxiliary data by 
+\verb!df <- x@data! or \verb!df <- slot(x, "data")!.
+After the conversion you can extract these data by
+\verb!df <- marks(y)!. 
+
+For example:
+
+<<eval=FALSE>>=
+balt <- as(baltim, "ppp")
+bdata <- slot(baltim, "data")
+@ 
+
+\subsubsection{Objects of class \texttt{SpatialLines}}
+\label{spatiallines.2.psp}
+
+A ``line segment'' is the straight line between two points in the plane.
+
+In the \pkg{spatstat} package, an object of class \texttt{psp}
+(``planar segment pattern'')
+represents a pattern of line segments, which may or may not be
+connected to each other (like matches which have fallen at random
+on the ground). 
+
+In the \pkg{sp} package, an object of class \texttt{SpatialLines}
+represents a \textbf{list of lists} of \textbf{connected curves}, 
+each curve consisting of a sequence of straight 
+line segments that are joined together (like
+several pieces of a broken bicycle chain.) 
+
+So these two data types do not correspond exactly.
+
+The list-of-lists hierarchy in a \texttt{SpatialLines} object 
+is useful when representing internal divisions in a country.
+For example, if \texttt{USA} is an object of class \texttt{SpatialLines}
+representing the borders of the United States
+of America, then \verb!USA@lines! might be a list of length 52, with 
+\verb!USA@lines[[i]]! representing the borders of the \texttt{i}-th State. 
+The borders of each State consist of several different curved lines. Thus 
+\verb!USA@lines[[i]]@Lines[[j]]! would represent the \texttt{j}th 
+piece of the boundary of the \texttt{i}-th State.
+
+If \texttt{x} is an object of class \texttt{SpatialLines},
+there are several things that you might want to do:
+\begin{enumerate}
+\item 
+  collect together all the line segments (all the segments that make up all the
+  connected curves) and store them as a single object of class \texttt{psp}.
+\begin{quote}
+  To do this, 
+  use \verb!as(x, "psp")! or \texttt{as.psp(x)} to convert it to a 
+  spatial line segment pattern. 
+\end{quote}
+\item 
+  convert each connected curve to an object of class \texttt{psp},
+  keeping different connected curves separate.
+
+  To do this, type something like the following:
+<<eval=FALSE>>=
+out <- lapply(x@lines, function(z) { lapply(z@Lines, as.psp) })
+@ 
+
+The result will be a \textbf{list of lists} of objects of class \texttt{psp}.
+Each one of these objects represents a connected curve,
+although the \pkg{spatstat} package does not know that.
+The list structure will reflect the list structure of the original
+\texttt{SpatialLines} object \texttt{x}. If that's not what you want,
+then use \verb!curvelist <- do.call("c", out)! or
+<<eval=FALSE>>=
+curvegroup <- lapply(out, function(z) { do.call("superimposePSP", z)})
+@ 
+to collapse the list-of-lists-of-\texttt{psp}'s 
+into a list-of-\texttt{psp}'s. In the first case, \texttt{curvelist[[i]]}
+is a \texttt{psp} object representing the \texttt{i}-th connected curve. 
+In the second case, \texttt{curvegroup[[i]]}
+is a \texttt{psp} object containing all the line segments in
+the \texttt{i}-th group of connected curves (for example the 
+\texttt{i}-th State in the \texttt{USA} example).
+\end{enumerate}
+
+The window for the spatial line segment pattern can be specified
+as an argument \texttt{window} to the function \texttt{as.psp}.
+
+\subsubsection{Objects of class \texttt{SpatialLinesDataFrame}}
+
+An object \texttt{x} of class \texttt{SpatialLinesDataFrame}
+is a \texttt{SpatialLines} object with additional data.
+The additional data is stored as a data frame \verb!x@data!
+with one row for each entry in \verb!x@lines!, that is,
+one row for each group of connected curves. 
+
+In the \pkg{spatstat} package, an object of class \texttt{psp}
+(representing a collection of line segments)
+may have a data frame of marks. Note that each \emph{line segment}
+in a \texttt{psp} object may have different mark values. 
+
+If \texttt{x} is an object of class \texttt{SpatialLinesDataFrame},
+there are two things that you might want to do:
+\begin{enumerate}
+\item collect together all the line segments that make up all the
+connected lines, and store them as a single object of class \texttt{psp}.
+\begin{quote}
+  To do this, 
+  use \verb!as(x, "psp")! or \texttt{as.psp(x)} to convert it to a 
+  marked spatial line segment pattern. 
+\end{quote}
+\item keep each connected curve separate, and convert each connected
+curve to an object of class \texttt{psp}.
+To do this, type something like the following:
+<<eval=FALSE>>=
+out <- lapply(x@lines, function(z) { lapply(z@Lines, as.psp) })
+dat <- x@data
+for(i in seq(nrow(dat))) 
+  out[[i]] <- lapply(out[[i]], "marks<-", value=dat[i, , drop=FALSE])
+@ 
+The result is a list-of-lists-of-\texttt{psp}'s. 
+See the previous subsection for explanation on how to 
+change this using \texttt{c()} or \texttt{superimposePSP}.
+\end{enumerate}
+
+In either case, 
+the mark variables attached to a particular \emph{group of connected lines}
+in the \texttt{SpatialLinesDataFrame} object, will be duplicated
+and attached to each \emph{line segment} in the resulting \texttt{psp} object.
+
+\subsubsection{Objects of class \texttt{SpatialPolygons}}
+
+First, so that we don't go completely crazy, let's introduce some terminology.
+A \emph{polygon} is a closed curve that is composed of 
+straight line segments. You can draw a polygon
+without lifting your pen from the paper. 
+
+\setkeys{Gin}{width=0.4\textwidth}
+\begin{center}
+<<echo=FALSE,results=hide,fig=TRUE>>=
+data(chorley)
+plot(as.owin(chorley), lwd=3, main="polygon")
+@ 
+\end{center}
+
+A \emph{polygonal region}
+is a region in space whose boundary is composed of straight line segments.
+A polygonal region may consist of several unconnected pieces, and each piece
+may have holes. The boundary of a polygonal region
+consists of one or more polygons. To draw the boundary of a polygonal 
+region, you may need to lift and drop the pen several times.
+
+\setkeys{Gin}{width=0.4\textwidth}
+\begin{center}
+<<echo=FALSE,results=hide,fig=TRUE>>=
+data(demopat)
+plot(as.owin(demopat), col="blue", main="polygonal region")
+@ 
+\end{center}
+
+An object of class \texttt{owin} in \pkg{spatstat}
+represents a polygonal region. It is a region of space that is delimited
+by boundaries made of lines.
+
+An object \texttt{x} of class \texttt{SpatialPolygons}
+represents a \textbf{list of polygonal regions}. For example,
+a single object of class \texttt{SpatialPolygons} could 
+store information about every State in the United States of America
+(or the United States of Malaysia). Each State would be a separate
+polygonal region (and it might contain holes such as lakes).
+
+There are two things
+that you might want to do with an object of class \texttt{SpatialPolygons}:
+\begin{enumerate}
+\item 
+  combine all the polygonal regions together into a single
+  polygonal region, and convert this to a single object of class \texttt{owin}.
+  \begin{quote}
+    For example, you could combine all the States of the USA together
+    and obtain a single object that represents the territory of the USA. 
+
+    To do this, use \verb!as(x, "owin")! or \texttt{as.owin(x)}.
+    The result is a single window (object of class \texttt{"owin"}) 
+    in the \pkg{spatstat} package.
+  \end{quote}
+\item keep the different polygonal regions separate; convert each 
+  one of the polygonal regions to an object of class \texttt{owin}.
+  \begin{quote}
+    For example, you could keep the States of the USA separate,
+    and convert each State to an object of class \texttt{owin}.
+  \end{quote}
+  To do this, type the following:
+<<eval=FALSE>>=
+regions <- slot(x, "polygons")
+regions <- lapply(regions, function(x) { SpatialPolygons(list(x)) })
+windows <- lapply(regions, as.owin)
+@ 
+  The result is a list of objects of class \texttt{owin}. 
+  Often it would make sense to convert this to a 
+  tessellation object, by typing
+<<eval=FALSE>>=
+te <- tess(tiles=windows)
+@ 
+\end{enumerate}
+
+The conversion process may generate an error message, saying
+that some of the polygons intersect each other, or are self-intersecting,
+or violate other geometrical conditions. 
+This happens because an object of class \texttt{SpatialPolygons} 
+is just a list of lists of polygons,
+possibly self-intersecting or mutually intersecting,
+but an object of class \texttt{"owin"} is intended to specify a 
+well-defined region of space. 
+
+If you chose option 1, the conversion process will check whether
+any of the polygons in \texttt{x} intersect each other. This often 
+generates an error with a shapefile representing a division of space
+into states or counties or administrative regions, 
+like the D\'epartements of France, 
+because two adjacent regions have boundaries that
+intersect (even though the intersection has zero area). 
+If you chose option 2, the conversion process will only check 
+whether, for each polygonal region in \texttt{x}, the component polygons
+intersect each other. This will \emph{usually} avoid the checking problem.
+
+If an error occurs, the error message
+will usually specify which component polygons fail the test. 
+The best strategy is usually just to 
+plot the object \texttt{x} (using the plot facilities in \pkg{sp})
+to identify the problem. 
+
+It is possible to suppress the stringent checking of polygons in 
+\pkg{spatstat} during the conversion:
+<<eval=FALSE>>=
+spatstat.options(checkpolygons=FALSE)
+y <- as(x, "owin")
+spatstat.options(checkpolygons=TRUE)
+@ 
+The resulting object \texttt{y} should be inspected carefully and used
+circumspectly; it has not passed the stringent tests
+required for many algorithms in \pkg{spatstat}. 
+
+\subsubsection{Objects of class \texttt{SpatialPolygonsDataFrame}}
+
+What a mouthful!
+
+An object \texttt{x} of class \texttt{SpatialPolygonsDataFrame}
+represents a list of polygonal regions,
+with additional variables attached to
+each region. It includes an object of class \texttt{SpatialPolygons} 
+giving the spatial regions, and a data frame containing the
+additional variables attached to the regions.
+The regions are extracted by
+<<eval=FALSE>>=
+y <- as(x, "SpatialPolygons")
+@ 
+and you then proceed as above to convert the curves to
+\pkg{spatstat} format.
+
+The data frame of auxiliary data is extracted by 
+\verb!df <- x@data! or \verb!df <- slot(x, "data")!.
+
+For example:
+
+<<eval=FALSE>>=
+cp      <- as(columbus, "SpatialPolygons")
+cregions <- slot(cp, "polygons")
+cregions <- lapply(cregions, function(x) { SpatialPolygons(list(x)) })
+cwindows <- lapply(cregions, as.owin)
+@ 
+
+There is currently no facility in \pkg{spatstat} for attaching
+marks to an \texttt{owin} object directly. 
+
+However, \pkg{spatstat} supports objects called \textbf{hyperframes},
+which are like data frames except that the entries can be any type of object.
+Thus we can represent the \texttt{columbus} data in \pkg{spatstat} as
+follows:
+<<eval=FALSE>>=
+ch <- hyperframe(window=cwindows)
+ch <- cbind.hyperframe(ch, columbus@data)
+@ 
+
+Then \texttt{ch} is a hyperframe containing a column of \texttt{owin}
+objects followed by the columns of auxiliary data.
+
+\end{document}
+

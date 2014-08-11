@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.91 $    $Date: 2013/05/08 05:30:37 $
+#  $Revision: 1.93 $    $Date: 2013/07/08 04:54:33 $
 #
 #
 
@@ -103,7 +103,11 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   # reformat
   if(is.vector(lhsdata)) {
     lhsdata <- matrix(lhsdata, ncol=1)
-    colnames(lhsdata) <- paste(short.deparse(lhs), collapse="")
+    lhsvars <- all.vars(as.expression(lhs))
+    lhsvars <- lhsvars[lhsvars %in% names(x)]
+    colnames(lhsdata) <-
+      if(length(lhsvars) == 1) lhsvars else
+      paste(short.deparse(lhs), collapse="")
   }
   # check lhs names exist
   lnames <- colnames(lhsdata)
@@ -113,7 +117,17 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     colnames(lhsdata) <- lnames0
   else if(any(uhoh <- !nzchar(lnames)))
     colnames(lhsdata)[uhoh] <- lnames0[uhoh]
+  lhs.names <- colnames(lhsdata)
 
+  # check whether each lhs column is associated with a single column of 'x'
+  # that is one of the alternative versions of the function.
+  #    This is a bit mysterious as it depends on the
+  #    column names assigned to lhsdata by eval()
+  nmatches <- function(a, b) { sum(all.vars(parse(text=a)) %in% b) }
+  nstar <- unlist(lapply(lhs.names, nmatches, b=fvnames(x, "*")))
+  ndot  <- unlist(lapply(lhs.names, nmatches, b=dotnames))
+  explicit.lhs.names <- ifelse(ndot == 1 & nstar == ndot, lhs.names, "")
+  
   # check rhs data
   if(is.matrix(rhsdata))
     stop("rhs of formula should yield a vector")
@@ -125,7 +139,6 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   
   # ---------- extra plots may be implied by 'shade' -----------------
   extrashadevars <- NULL
-  explicit.lhs.names <- colnames(lhsdata)
   
   if(!is.null(shade)) {
     # select columns by name or number
@@ -275,9 +288,11 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     # replacing 'cbind(.....)' by '.'
     # even if not all columns are included.
     leftside <- paste(as.expression(leftside))
-    cb <- if(length(explicit.lhs.names) == 1) explicit.lhs.names else {
+    eln <- explicit.lhs.names
+    eln <- eln[nzchar(eln)]
+    cb <- if(length(eln) == 1) eln else {
       paste("cbind(",
-            paste(explicit.lhs.names, collapse=", "),
+            paste(eln, collapse=", "),
             ")", sep="")
     }
     compactleftside <- gsub(cb, ".", leftside, fixed=TRUE)

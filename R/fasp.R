@@ -1,7 +1,7 @@
 #
 #	fasp.R
 #
-#	$Revision: 1.31 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.32 $	$Date: 2013/07/05 06:13:00 $
 #
 #
 #-----------------------------------------------------------------------------
@@ -105,6 +105,8 @@ print.fasp <- function(x, ...) {
 }
 
 # other methods
+
+as.fv.fasp <- function(x) do.call("cbind.fv", x$fns)
 
 dimnames.fasp <- function(x) {
   return(dimnames(x$which))

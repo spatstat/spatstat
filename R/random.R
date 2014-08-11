@@ -61,6 +61,10 @@
   function(n, win=owin(c(0,1),c(0,1)), giveup=1000, warn=TRUE)
 {
     win <- as.owin(win)
+    
+    check.1.integer(n)
+    stopifnot(n >= 0)
+
     if(n == 0)
       return(ppp(numeric(0), numeric(0), window=win))
 
@@ -123,8 +127,9 @@
 "runifpoispp" <-
 function(lambda, win = owin(c(0,1),c(0,1))) {
     win <- as.owin(win)
-    if(!is.numeric(lambda) || length(lambda) > 1 || lambda < 0)
-      stop("Intensity lambda must be a single number >= 0")
+    if(!is.numeric(lambda) || length(lambda) > 1 ||
+       !is.finite(lambda) || lambda < 0)
+      stop("Intensity lambda must be a single finite number >= 0")
 
     if(lambda == 0) # return empty pattern
       return(ppp(numeric(0), numeric(0), window=win))

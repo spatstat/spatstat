@@ -29,7 +29,8 @@
 }
 \usage{data(humberside)}
 \examples{
-   data(humberside)
+   humberside
+   summary(humberside)
    plot(humberside)
    plot(humberside.convex$window, add=TRUE, lty=2)
 }
@@ -56,7 +57,10 @@
 
   Coordinates are expressed in units of 100 metres, and the resolution is
   100 metres. At this resolution, there are some duplicated points.
-
+  To determine which points are duplicates,
+  use \code{\link{duplicated.ppp}}.
+  To remove the duplication, use \code{\link{unique.ppp}}.
+  
   Two versions of the dataset are supplied, both containing the
   same point coordinates, but using different windows.
   The dataset \code{humberside} has a polygonal window with 102 edges

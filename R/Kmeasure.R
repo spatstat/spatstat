@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.42 $    $Date: 2013/04/25 06:37:43 $
+#           $Revision: 1.45 $    $Date: 2013/07/26 07:44:42 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -49,32 +49,59 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
                "; available options are:",
                paste(sQuote(choices), collapse=", ")))
   sig <- if(!is.null(sigma)) sigma else max(c(diag(varcov), sqrt(det(varcov))))
-  win <- rescue.rectangle(as.owin(x))
+
+  xtype <- if(is.ppp(x)) "ppp" else
+           if(is.im(x)) "im" else 
+           if(all(unlist(lapply(x, is.im)))) "imlist" else
+           stop("x should be a point pattern or a pixel image")
+
+  nimages <- switch(xtype,
+                    ppp = 1,
+                    im = 1,
+                    imlist = length(x))
+
+  win <- if(nimages == 1) as.owin(x) else as.owin(x[[1]])
+  win <- rescue.rectangle(win)
   rec <- as.rectangle(win)
   across <- min(diff(rec$xrange), diff(rec$yrange))
   # determine whether to expand window
-  if(!expand || (6 * sig < across))
+  if(!expand || (6 * sig < across)) {
     result <- second.moment.engine(x, sigma=sigma, edge=edge,
                                    what=what, debug=debug, ..., varcov=varcov)
-  else {
-    # need to expand window
-    bigger <- grow.rectangle(rec, (7 * sig - across)/2)
-    if(is.ppp(x)) {
-      # pixellate first (to preserve pixel resolution)
-      X <- pixellate(x, ..., padzero=TRUE)
-      np <- npoints(x)
-    } else if(is.im(x)) {
-      X <- x
-      np <- NULL
-    } else stop("x should be an image or a point pattern")
-    # now expand 
+    return(result)
+  }
+  # need to expand window
+  bigger <- grow.rectangle(rec, (7 * sig - across)/2)
+  switch(xtype,
+         ppp = {
+           # pixellate first (to preserve pixel resolution)
+           X <- pixellate(x, ..., padzero=TRUE)
+           np <- npoints(x)
+         },
+         im = {
+           X <- x
+           np <- NULL
+         },
+         imlist = {
+           Xlist <- x
+           np <- NULL
+         })
+
+  # Now expand
+  if(nimages == 1) {
     X <- rebound.im(X, bigger)
     X <- na.handle.im(X, 0)
-    out <- second.moment.engine(X, sigma=sigma, edge=edge,
-                                what=what, debug=debug, ...,
-                                obswin=win, varcov=varcov, npts=np)
-    # now clip it
-    fbox <- shift(rec, origin="midpoint")
+  } else {
+    X <- lapply(X, rebound.im, rect=bigger)
+    X <- lapply(X, na.handle.im, na.replace=0)
+  }
+  # Compute!
+  out <- second.moment.engine(X, sigma=sigma, edge=edge,
+                              what=what, debug=debug, ...,
+                              obswin=win, varcov=varcov, npts=np)
+  # Now clip it
+  fbox <- shift(rec, origin="midpoint")
+  if(nimages == 1) {
     result <- switch(what,
                      kernel   = out[fbox],
                      smooth   = out[win],
@@ -82,45 +109,77 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
                      Bartlett = out[fbox],
                      edge     = out[win],
                      smoothedge = list(smooth=out$smooth[win],
-                                       edge  =out$edge[win]),
+                       edge  =out$edge[win]),
                      all      =
                      list(kernel=out$kernel[fbox],
                           smooth=out$smooth[win],
                           Kmeasure=out$Kmeasure[fbox],
                           Bartlett=out$Bartlett[fbox],
                           edge=out$edge[win]))
+  } else {
+    result <-
+      switch(what,
+             kernel     = out[fbox], 
+             smooth     = lapply(out, "[", i=win),
+             Kmeasure   = lapply(out, "[", i=fbox),
+             Bartlett   = lapply(out, "[", i=fbox),
+             edge       = out[win],
+             smoothedge = list(
+               smooth = lapply(out$smooth, "[", i=win),
+               edge   = out$edge[win]),
+             all        = list(
+               kernel=out$kernel[fbox],
+               smooth=lapply(out$smooth, "[", i=win),
+               Kmeasure=lapply(out$Kmeasure, "[", i=fbox),
+               Bartlett=lapply(out$Bartlett, "[", i=fbox),
+               edge=out$edge[win]))
   }
   return(result)
 }
 
-second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
-                                 what="Kmeasure", debug=FALSE, ...,
-                                 obswin = as.owin(x), varcov=NULL,
-                                 npts=NULL)
+second.moment.engine <-
+  function(x, sigma=NULL, edge=TRUE,
+           what=c("Kmeasure", "kernel", "smooth", 
+             "Bartlett", "edge", "smoothedge", "all"),
+           ...,
+           obswin = as.owin(x), varcov=NULL,
+           npts=NULL, debug=FALSE)
 {
-  stopifnot(what %in% c("kernel", "smooth", "Kmeasure",
-                        "Bartlett", "edge", "all", "smoothedge"))
-  if(is.ppp(x)) 
+  what <- match.arg(what)
+  if(is.ppp(x)) {
     # convert list of points to mass distribution
     X <- pixellate(x, ..., padzero=TRUE)
-  else if(is.im(x))
-    X <- x
-  else stop("internal error: unrecognised format for x")
+    if(is.null(npts))
+      npts <- npoints(x)
+  } else X <- x
+  if(is.im(X)) {
+    Xlist <- list(X)
+    nimages <- 1
+  } else if(all(unlist(lapply(X, is.im)))) {
+    Xlist <- X
+    X <- Xlist[[1]]
+    nimages <- length(Xlist)
+    blanklist <- vector(mode="list", length=nimages)
+    names(blanklist) <- names(Xlist)
+  } else stop("internal error: unrecognised format for x")
+  unitsX <- unitname(X)
   # ensure obswin has same bounding frame as X
   if(!missing(obswin))
     obswin <- rebound.owin(obswin, as.rectangle(X))
-  #
-  if(is.null(npts) && is.ppp(x))
-      npts <- npoints(x)
   # go to work
   Y <- X$v
+  Ylist <- lapply(Xlist, getElement, name="v")
+  #
   xw <- X$xrange
   yw <- X$yrange
   # pad with zeroes
   nr <- nrow(Y)
   nc <- ncol(Y)
   Ypad <- matrix(0, ncol=2*nc, nrow=2*nr)
-  Ypad[1:nr, 1:nc] <- Y
+  Ypadlist <- rep(list(Ypad), nimages)
+  for(i in 1:nimages)
+    Ypadlist[[i]][1:nr, 1:nc] <- Ylist[[i]]
+  Ypad <- Ypadlist[[1]]
   lengthYpad <- 4 * nc * nr
   # corresponding coordinates
   xw.pad <- xw[1] + 2 * c(0, diff(xw))
@@ -130,19 +189,27 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
   # set up Gauss kernel
   xcol.G <- X$xstep * c(0:(nc-1),-(nc:1))
   yrow.G <- X$ystep * c(0:(nr-1),-(nr:1))
-  xx <- matrix(xcol.G[col(Ypad)], ncol=2*nc, nrow=2*nr)
-  yy <- matrix(yrow.G[row(Ypad)], ncol=2*nc, nrow=2*nr)
+  Gpixarea <- X$xstep * X$ystep
   if(!is.null(sigma)) {
-#    if(max(abs(diff(xw)),abs(diff(yw))) < 6 * sigma)
-#      warning("sigma is too large for this window")
-    Kern <- exp(-(xx^2 + yy^2)/(2 * sigma^2))/(2 * pi * sigma^2) * X$xstep * X$ystep
+    densX.G <- dnorm(xcol.G, sd=sigma)
+    densY.G <- dnorm(yrow.G, sd=sigma)
+    Kern <- outer(densY.G, densX.G, "*") * Gpixarea
   } else if(!is.null(varcov)) {
     # anisotropic kernel
     detSigma <- det(varcov)
     Sinv <- solve(varcov)
-    const <- X$xstep * X$ystep/(2 * pi * sqrt(detSigma))
-    Kern <- const * exp(-(xx * (xx * Sinv[1,1] + yy * Sinv[1,2])
-                          + yy * (xx * Sinv[2,1] + yy * Sinv[2,2]))/2)
+    halfSinv <- Sinv/2
+    constG <- Gpixarea/(2 * pi * sqrt(detSigma))
+    xsq <- matrix((xcol.G^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
+    ysq <- matrix((yrow.G^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
+    xy <- outer(yrow.G, xcol.G, "*")
+    Kern <- constG * exp(-(xsq * halfSinv[1,1]
+                           + xy * (halfSinv[1,2]+halfSinv[2,1])
+                           + ysq * halfSinv[2,2]))
+#    xx <- matrix(xcol.G[col(Ypad)], ncol=2*nc, nrow=2*nr)
+#    yy <- matrix(yrow.G[row(Ypad)], ncol=2*nc, nrow=2*nr)
+#    Kern <- const * exp(-(xx * (xx * Sinv[1,1] + yy * Sinv[1,2])
+#                          + yy * (xx * Sinv[2,1] + yy * Sinv[2,2]))/2)
   } else 
     stop("Must specify either sigma or varcov")
 
@@ -160,7 +227,7 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
         cat("something round the twist\n")
     }
     Kermit <- Kern[ rtwist, ctwist]
-    ker <- im(Kermit, xcol.G[ctwist], yrow.G[ rtwist], unitname=unitname(x))
+    ker <- im(Kermit, xcol.G[ctwist], yrow.G[ rtwist], unitname=unitsX)
     if(what == "kernel")
       return(ker)
     else 
@@ -169,58 +236,128 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
   # convolve using fft
   fK <- fft(Kern)
   if(what != "edge") {
-    fY <- fft(Ypad)
-    sm <- fft(fY * fK, inverse=TRUE)/lengthYpad
-    if(debug) {
-      cat(paste("smooth: maximum imaginary part=",
-                signif(max(Im(sm)),3), "\n"))
-      if(!is.null(npts))
-        cat(paste("smooth: mass error=",
-                  signif(sum(Mod(sm))-npts,3), "\n"))
+    if(nimages == 1) {
+      fY <- fft(Ypad)
+      sm <- fft(fY * fK, inverse=TRUE)/lengthYpad
+      if(debug) {
+        cat(paste("smooth: maximum imaginary part=",
+                  signif(max(Im(sm)),3), "\n"))
+        if(!is.null(npts))
+          cat(paste("smooth: mass error=",
+                    signif(sum(Mod(sm))-npts,3), "\n"))
+      }
+    } else {
+      fYlist <- smlist <- blanklist
+      for(i in 1:nimages) {
+        fYlist[[i]] <- fY.i <- fft(Ypadlist[[i]])
+        smlist[[i]] <- sm.i <- fft(fY.i * fK, inverse=TRUE)/lengthYpad
+        if(debug) {
+          cat(paste("smooth component", i, ": maximum imaginary part=",
+                    signif(max(Im(sm.i)),3), "\n"))
+          if(!is.null(npts))
+            cat(paste("smooth component", i, ": mass error=",
+                      signif(sum(Mod(sm.i))-npts,3), "\n"))
+        }
+      }
     }
   }
   if(what %in% c("smooth", "all", "smoothedge")) {
     # return the smoothed point pattern without edge correction
-    smo <- im(Re(sm)[1:nr, 1:nc], xcol.pad[1:nc], yrow.pad[1:nr],
-              unitname=unitname(x))
-    if(what == "smooth")
-      return(smo)
-    else
-      result$smooth <- smo
+    if(nimages == 1) {
+      smo <- im(Re(sm)[1:nr, 1:nc],
+                xcol.pad[1:nc], yrow.pad[1:nr],
+                unitname=unitsX)
+      if(what == "smooth") {
+        return(smo)
+      } else {
+        result$smooth <- smo
+      }
+    } else {
+      smolist <- blanklist
+      for(i in 1:nimages) 
+        smolist[[i]] <- im(Re(smlist[[i]])[1:nr, 1:nc],
+                           xcol.pad[1:nc], yrow.pad[1:nr],
+                           unitname=unitsX)
+      smolist <- as.listof(smolist)
+      if(what == "smooth") {
+        return(smolist)
+      } else {
+        result$smooth <- smolist
+      }
+    }
   }
 
-  if(what != "edge")
-    bart <- Mod(fY)^2 * fK
+  if(what != "edge") {
+    # compute Bartlett spectrum
+    if(nimages == 1) {
+      bart <- Mod(fY)^2 * fK
+    } else {
+      bartlist <- lapply(fYlist, function(z, fK) { Mod(z)^2 * fK}, fK=fK)
+    }
+  }
   
   if(what %in% c("Bartlett", "all")) {
      # return Bartlett spectrum
      # rearrange into spatially sensible order (monotone x and y)
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
-    Bart <- bart[ rtwist, ctwist]
-    Bartlett <- im(Mod(Bart),(-nc):(nc-1), (-nr):(nr-1))
-    if(what == "Bartlett")
-      return(Bartlett)
-    else
-      result$Bartlett <- Bartlett
+    if(nimages == 1) {
+      Bart <- bart[ rtwist, ctwist]
+      Bartlett <- im(Mod(Bart),(-nc):(nc-1), (-nr):(nr-1))
+      if(what == "Bartlett")
+        return(Bartlett)
+      else
+        result$Bartlett <- Bartlett
+    } else {
+      Bartlist <- blanklist
+      for(i in 1:nimages) {
+        Bart <- (bartlist[[i]])[ rtwist, ctwist]
+        Bartlist[[i]] <- im(Mod(Bart),(-nc):(nc-1), (-nr):(nr-1))
+      }
+      Bartlist <- as.listof(Bartlist)
+      if(what == "Bartlett")
+        return(Bartlist)
+      else
+        result$Bartlett <- Bartlist
+    }
   }
   
   #### ------- Second moment measure --------------
   #
   if(what != "edge") {
-    mom <- fft(bart, inverse=TRUE)/lengthYpad
-    if(debug) {
-      cat(paste("2nd moment measure: maximum imaginary part=",
-                signif(max(Im(mom)),3), "\n"))
-      if(!is.null(npts))
-        cat(paste("2nd moment measure: mass error=",
-                  signif(sum(Mod(mom))-npts^2, 3), "\n"))
+    if(nimages == 1) {
+      mom <- fft(bart, inverse=TRUE)/lengthYpad
+      if(debug) {
+        cat(paste("2nd moment measure: maximum imaginary part=",
+                  signif(max(Im(mom)),3), "\n"))
+        if(!is.null(npts))
+          cat(paste("2nd moment measure: mass error=",
+                    signif(sum(Mod(mom))-npts^2, 3), "\n"))
+      }
+      mom <- Mod(mom)
+      # subtract (delta_0 * kernel) * npts
+      if(is.null(npts))
+        stop("Internal error: second moment measure requires npts")
+      mom <- mom - npts* Kern
+    } else {
+      momlist <- blanklist
+      for(i in 1:nimages) {
+        mom.i <- fft(bartlist[[i]], inverse=TRUE)/lengthYpad
+        if(debug) {
+          cat(paste("2nd moment measure: maximum imaginary part=",
+                    signif(max(Im(mom.i)),3), "\n"))
+          if(!is.null(npts))
+            cat(paste("2nd moment measure: mass error=",
+                      signif(sum(Mod(mom.i))-npts^2, 3), "\n"))
+        }
+        mom.i <- Mod(mom.i)
+        # subtract (delta_0 * kernel) * npts
+        if(is.null(npts))
+          stop("Internal error: second moment measure requires npts")
+        mom.i <- mom.i - npts* Kern
+        momlist[[i]] <- mom.i
+      }
     }
-    mom <- Mod(mom)
-    # subtract (delta_0 * kernel) * npts
-    if(is.null(npts))
-      stop("Internal error: second moment measure requires npts")
-    mom <- mom - npts* Kern
   }
   # edge correction
   if(edge || what %in% c("edge", "all", "smoothedge")) {
@@ -232,28 +369,42 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
     lengthMpad <- 4 * nc * nr
     fM <- fft(Mpad)
     if(edge && what != "edge") {
+      # apply edge correction      
       co <- fft(Mod(fM)^2 * fK, inverse=TRUE)/lengthMpad
       co <- Mod(co) 
       a <- sum(M)
       wt <- a/co
       me <- spatstat.options("maxedgewt")
       weight <- matrix(pmin.int(me, wt), ncol=2*nc, nrow=2*nr)
-#      if(debug) browser()
-      #
-      # apply edge correction
-      mom <- mom * weight
-      # set to NA outside 'reasonable' region
-      mom[wt > 10] <- NA
+      # apply edge correction to second moment measure
+      if(nimages == 1) {
+        mom <- mom * weight
+        # set to NA outside 'reasonable' region
+        mom[wt > 10] <- NA
+      } else {
+        wgt10 <- (wt > 10)
+        for(i in 1:nimages) {
+          mom.i <- momlist[[i]]
+          mom.i <- mom.i * weight
+          # set to NA outside 'reasonable' region
+          mom.i[wgt10] <- NA
+          momlist[[i]] <- mom.i
+        }
+      }
     }
   }
   if(what != "edge") {
     # rearrange into spatially sensible order (monotone x and y)
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
-    mom <- mom[ rtwist, ctwist]
+    if(nimages == 1) {
+      mom <- mom[ rtwist, ctwist]
+    } else {
+      momlist <- lapply(momlist, "[", i=rtwist, j=ctwist)
+    }
     if(debug) {
       if(any(fave.order(xcol.G) != rtwist))
-        cat("something round the twist\n")
+        cat("internal error: something round the twist\n")
     }
   }
   if(what %in% c("edge", "all", "smoothedge")) {
@@ -261,7 +412,7 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
     # (evaluated inside window only)
     con <- fft(fM * fK, inverse=TRUE)/lengthMpad
     edg <- Mod(con[1:nr, 1:nc])
-    edg <- im(edg, xcol.pad[1:nc], yrow.pad[1:nr], unitname=unitname(x))
+    edg <- im(edg, xcol.pad[1:nc], yrow.pad[1:nr], unitname=unitsX)
     if(what == "edge") 
       return(edg)
     else
@@ -272,13 +423,30 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
   # Second moment measure, density estimate
   # Divide by number of points * lambda and convert mass to density
   pixarea <- with(X, xstep * ystep)
-  mom <- mom * area.owin(obswin) / (pixarea * npts^2)
-  # this is the second moment measure
-  mm <- im(mom, xcol.G[ctwist], yrow.G[rtwist], unitname=unitname(x))
-  if(what == "Kmeasure")
-    return(mm)
-  else 
-    result$Kmeasure <- mm
+  if(nimages == 1) {
+    mom <- mom * area.owin(obswin) / (pixarea * npts^2)
+    # this is the second moment measure
+    mm <- im(mom, xcol.G[ctwist], yrow.G[rtwist], unitname=unitsX)
+    if(what == "Kmeasure")
+      return(mm)
+    else 
+      result$Kmeasure <- mm
+  } else {
+    ccc <- area.owin(obswin) / (pixarea * npts^2)
+    mmlist <- blanklist
+    for(i in 1:nimages) {
+      mom.i <- momlist[[i]]
+      mom.i <- mom.i * ccc
+      # this is the second moment measure
+      mmlist[[i]] <-
+        im(mom.i, xcol.G[ctwist], yrow.G[rtwist], unitname=unitsX)
+    }
+    mmlist <- as.listof(mmlist)
+    if(what == "Kmeasure")
+      return(mmlist)
+    else 
+      result$Kmeasure <- mmlist
+  }
   # what = "all", so return all computed objects
   return(result)
 }

@@ -6,11 +6,11 @@ Creates an instance of the ``Strauss/ hard core'' point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  StraussHard(r, hc)
+  StraussHard(r, hc=NA)
 }
 \arguments{
   \item{r}{The interaction radius of the Strauss interaction}
-  \item{hc}{The hard core distance}
+  \item{hc}{The hard core distance. Optional.}
 }
 \value{
   An object of class \code{"interact"}
@@ -70,6 +70,12 @@ which can then be fitted to point pattern data.
   The canonical parameter \eqn{\log(\gamma)}{log(gamma)}
   is estimated by \code{\link{ppm}()}, not fixed in
   \code{StraussHard()}. 
+
+  If the hard core distance argument \code{hc} is missing or \code{NA},
+  it will be estimated from the data when \code{\link{ppm}} is called.
+  The estimated value of \code{hc} is the minimum nearest neighbour distance
+  multiplied by \eqn{n/(n+1)}, where \eqn{n} is the
+  number of data points.
 }
 \seealso{
   \code{\link{ppm}},

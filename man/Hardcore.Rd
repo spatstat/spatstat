@@ -6,7 +6,7 @@ Creates an instance of the hard core point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  Hardcore(hc)
+  Hardcore(hc=NA)
 }
 \arguments{
   \item{hc}{The hard core distance}
@@ -19,7 +19,7 @@ which can then be fitted to point pattern data.
 }
 \details{
   A hard core process with 
-  hard core distance \eqn{h < r} and abundance
+  hard core distance \eqn{h} and abundance
   parameter \eqn{\beta}{beta} 
   is a pairwise interaction point process
   in which distinct points are not allowed to come closer
@@ -45,6 +45,12 @@ which can then be fitted to point pattern data.
   The appropriate description of the hard core process
   pairwise interaction is 
   yielded by the function \code{Hardcore()}. See the examples below.
+
+  If the hard core distance argument \code{hc} is missing or \code{NA},
+  it will be estimated from the data when \code{\link{ppm}} is called.
+  The estimated value of \code{hc} is the minimum nearest neighbour distance
+  multiplied by \eqn{n/(n+1)}, where \eqn{n} is the
+  number of data points.
 }
 \seealso{
   \code{\link{Strauss}},
@@ -74,6 +80,8 @@ which can then be fitted to point pattern data.
    ppm(cells, ~1, Hardcore(0.05))
    # fit the stationary hard core process to `cells'
    }
+
+   ppm(cells, ~1, Hardcore())
 
    ppm(cells, ~ polynom(x,y,3), Hardcore(0.05))
    # fit a nonstationary hard core process

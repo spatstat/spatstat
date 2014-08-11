@@ -38,8 +38,7 @@ npfun(X, ..., r)
   \code{\link{psst}}
 }
 \examples{
-  data(cells)
-  fit0 <- ppm(cells, ~1)
+  fit0 <- ppm(cells, ~1, nd=10)
   v <- psst(fit0, npfun)
 }
 \keyword{spatial}

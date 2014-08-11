@@ -14,16 +14,20 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
 }
 \arguments{
   \item{X}{
+    Data for the test.
     Either a point pattern (object of class \code{"ppp"}, \code{"lpp"}
     or other class), a fitted point process model (object of class \code{"ppm"},
-    \code{"kppm"} or other class) or an envelope object (class
-    \code{"envelope"}). 
+    \code{"kppm"} or other class), a simulation envelope (object of class
+    \code{"envelope"}) or a previous result of \code{dclf.test} or
+    \code{mad.test}. 
   }
   \item{\dots}{
     Arguments passed to \code{\link{envelope}}.
     Useful arguments include \code{fun} to determine the summary
     function, \code{nsim} to specify the number of Monte Carlo
-    simulations, and \code{verbose=FALSE} to turn off the messages.
+    simulations, \code{verbose=FALSE} to turn off the messages,
+    and \code{savefuns} or \code{savepatterns} to save the simulation
+    results.
   }
   \item{rinterval}{
     Interval of values of the summary function argument \code{r}
@@ -66,6 +70,14 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
     \code{savepatterns=TRUE} so that it contains simulation results.
     These simulations will be treated as realisations from the null
     hypothesis.
+    \item
+    Alternatively \code{X} could be a previously-performed
+    test of the same kind (i.e. the result of calling
+    \code{dclf.test} or \code{mad.test}).
+    The simulations used to perform the original test
+    will be re-used to perform the new test (provided these simulations
+    were saved in the original test, by setting \code{savefuns=TRUE} or
+    \code{savepatterns=TRUE}).
   }
   In all cases, the algorithm will first call \code{\link{envelope}} to
   generate or extract the simulated summary functions.
@@ -136,7 +148,8 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
   and Andrew Hardegen.
 }
 \seealso{
-  \code{\link{envelope}}
+  \code{\link{envelope}},
+  \code{\link{dclf.progress}}
 }
 \examples{
   dclf.test(cells, Lest, nsim=39)

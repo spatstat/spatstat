@@ -1,14 +1,14 @@
 #
 #	plot.ppp.S
 #
-#	$Revision: 1.50 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.51 $	$Date: 2013/07/25 09:02:06 $
 #
 #
 #--------------------------------------------------------------------------
 
 plot.ppp <-
   function(x, main, ..., chars=NULL, cols=NULL, use.marks=TRUE,
-           which.marks=1, add=FALSE,
+           which.marks=NULL, add=FALSE,
            maxsize=NULL, markscale=NULL, zap=0.01)
 {
 #
@@ -17,6 +17,26 @@ plot.ppp <-
 #
   if(missing(main))
     main <- short.deparse(substitute(x))
+
+# Handle multiple columns of marks as separate plots
+#  (unless add=TRUE or which.marks selects a single column)
+  if(use.marks && is.data.frame(mx <- marks(x))) {
+    implied.all <- is.null(which.marks)
+    do.several <- implied.all || is.data.frame(mx <- mx[,which.marks])
+    if(add && implied.all) {
+      message("Plotting the first column of marks")
+      which.marks <- 1
+    } else if(!add && do.several) {
+      y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      out <- do.call("plot",
+                     resolve.defaults(list(x=y, main=main),
+                                      list(...),
+                                      list(chars=chars, cols=cols,
+                                           maxsize=maxsize, markscale=markscale,
+                                           zap=zap)))
+      if(is.null(out)) return(invisible(NULL)) else return(out)
+    } 
+  }
 
 # First handle `rejected' points
   sick <- inherits(x, "ppp") && !is.null(rejects <- attr(x, "rejects"))

@@ -6,7 +6,7 @@
 }
 \usage{
  \method{plot}{ppp}(x, main, \dots, chars=NULL, cols=NULL,
-use.marks=TRUE, which.marks=1, add=FALSE,
+use.marks, which.marks=NULL, add=FALSE,
 maxsize=NULL, markscale=NULL,zap=0.01)
 }
 \arguments{
@@ -39,8 +39,14 @@ maxsize=NULL, markscale=NULL,zap=0.01)
   \item{which.marks}{
     Index determining which column of marks to use,
     if the marks of \code{x} are a data frame.
-    A character string or an integer.
-    Defaults to \code{1} indicating the first column of marks.
+    A character or integer vector identifying one or more
+    columns of marks. 
+    If \code{add=FALSE} then
+    the default is to plot all columns of marks, in a series of separate
+    plots.
+    If \code{add=TRUE} then only one column of marks can be plotted,
+    and the default is \code{which.marks=1}
+    indicating the first column of marks.
   }
   \item{add}{
     logical flag; if \code{TRUE},
@@ -107,6 +113,21 @@ maxsize=NULL, markscale=NULL,zap=0.01)
       represent the \eqn{i}th smallest mark value by
       \code{points(..., pch=i)}.
     }
+  }
+
+  If there are several columns of marks, and if \code{which.marks} is
+  missing or \code{NULL}, then
+  \itemize{
+    \item 
+    if \code{add=FALSE},
+    the default is to plot all columns of marks, in a series of separate
+    plots, placed side-by-side. The plotting is coordinated by
+    \code{\link{plot.listof}}, which calls \code{plot.ppp} to make each of
+    the individual plots.
+    \item
+    If \code{add=TRUE}, then only one column of marks can be plotted,
+    and the default is \code{which.marks=1}
+    indicating the first column of marks.
   }
 
   Plotting of the window \code{x$window} is performed by

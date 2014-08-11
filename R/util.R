@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.116 $    $Date: 2013/05/06 07:25:21 $
+#    $Revision: 1.118 $    $Date: 2013/08/06 11:13:19 $
 #
 #  (a) for matrices only:
 #
@@ -190,6 +190,20 @@ paren <- function(x, type="(") {
            out <- paste("{", x, "}", sep="")
          })
   out
+}
+
+unparen <- function(x) {
+  x <- as.character(x)
+  firstchar <- substr(x, 1, 1)
+  n <- nchar(x)
+  lastchar <- substr(x, n, n)
+  enclosed <- n > 2 & (
+                       (firstchar == "(" & lastchar == ")") |
+                       (firstchar == "[" & lastchar == "]") |
+                       (firstchar == "{" & lastchar == "}") )
+  if(any(enclosed))
+    x[enclosed] <- substr(x[enclosed], 2, n-1)
+  return(x)
 }
 
 prange <- function(x) {
@@ -627,7 +641,17 @@ check.1.real <- function(x, context="", fatal=TRUE) {
   }
   return(TRUE)
 }
-   
+
+check.1.integer <- function(x, context="", fatal=TRUE) {
+  xname <- deparse(substitute(x))
+  if(!is.numeric(x) || length(x) != 1 || !is.finite(x) || x %% 1 != 0) {
+    whinge <-  paste(sQuote(xname), "should be a single finite integer")
+    if(nzchar(context)) whinge <- paste(context, whinge)
+    return(complaining(whinge, fatal=fatal, value=FALSE))
+  }
+  return(TRUE)
+}
+
 explain.ifnot <- function(expr, context="") {
   ex <- deparse(substitute(expr))
   ans <- expr
@@ -896,7 +920,7 @@ sessionLibs <- function() {
   return(invisible(d))
 }
 
-dropifsingle <- function(x) if(length(list) == 1) x[[1]] else x
+dropifsingle <- function(x) if(length(x) == 1) x[[1]] else x
 
 # timed objects
 
@@ -912,8 +936,13 @@ timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
 }
 
 print.timed <- function(x, ...) {
-  if(is.numeric(x)) print(as.numeric(x), ...) else NextMethod("print")
+  # strip the timing information and print the rest.
   taken <- summary(attr(x, "timetaken"))[[1]]
+  cx <- class(x)
+  attr(x, "timetaken") <- NULL
+  class(x) <- cx[cx != "timed"]
+  NextMethod("print")
+  # Now print the timing info
   cat(paste("\nTime taken:", codetime(taken), "\n"))
   return(invisible(NULL))
 }

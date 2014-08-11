@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.161 $	$Date: 2013/05/23 07:10:47 $
+#	$Revision: 5.165 $	$Date: 2013/07/19 03:56:04 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -95,11 +95,6 @@ function(Q,
 # rbord applies only to border correction
   if(correction != "border") rbord <- 0 
 #
-# Self-starting interaction?
-#
-  if(!is.null(ss <- interaction$selfstart)) 
-    interaction <- ss(X, interaction)
-  
 #
 # Interpret the call
 want.trend <- !is.null(trend) && !identical.formulae(trend, ~1)
@@ -113,7 +108,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2013/05/23 07:10:47 $")
+                    date="$Date: 2013/07/19 03:56:04 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -311,7 +306,8 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
                         vnamebase=c("Interaction", "Interact."),
                         vnameprefix=NULL,
                         warn.illegal=TRUE,
-                        warn.unidentifiable=TRUE) {
+                        warn.unidentifiable=TRUE,
+                        skip.border=FALSE) {
 # Q: quadrature scheme
 # X = data.quad(Q)
 # P = union.quad(Q)
@@ -382,7 +378,23 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
   izdat <- .mpl$Z[.mpl$SUBSET]
   ndata <- sum(izdat)
   ndummy <- sum(!izdat)
-    
+
+  # Determine the domain of integration for the pseudolikelihood.
+ if(correction == "border") {
+
+   if("bdP" %in% names.precomputed)
+      bdP <- precomputed$bdP
+    else
+      bdP <- bdist.points(P)
+
+    if(savecomputed)
+      computed$bdP <- bdP
+  
+    .mpl$DOMAIN <- (bdP >= rbord)
+  }
+
+  skip.border <- skip.border && (correction == "border")
+  
 ####################### T r e n d ##############################
 
   internal.names <- c(".mpl.W", ".mpl.Y", ".mpl.Z", ".mpl.SUBSET",
@@ -490,19 +502,54 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
 
     E <- equalpairs.quad(Q)
 
-    V <- evalInteraction(X, P, E, interaction, correction,
-                         ...,
-                         precomputed=precomputed,
-                         savecomputed=savecomputed)
+    if(!skip.border) {
+      # usual case
+      V <- evalInteraction(X, P, E, interaction, correction,
+                           ...,
+                           precomputed=precomputed,
+                           savecomputed=savecomputed)
+
+    } else {
+      # evaluate only in eroded domain
+      Retain <- .mpl$DOMAIN
+      Psub <- P[Retain]
+      # map serial numbers in 'P[Retain]' to serial numbers in 'Psub'
+      Pmap <- cumsum(Retain)
+      keepE <- Retain[ E[,2] ]
+      # adjust equal pairs matrix
+      Esub <- E[ keepE, , drop=FALSE]
+      Esub[,2] <- Pmap[Esub[,2]]
+      # call evaluator on reduced data
+      # with 'W=NULL' (currently detected only by AreaInter)
+      V <- evalInteraction(X, Psub, Esub, interaction, correction,
+                           ...,
+                           W=NULL,
+                           precomputed=precomputed,
+                           savecomputed=savecomputed)
+    }
+    
     if(!is.matrix(V))
       stop("interaction evaluator did not return a matrix")
+      
+    # extract information about offsets
+    IsOffset <- attr(V, "IsOffset")
+    if(is.null(IsOffset)) IsOffset <- FALSE
+      
+    if(skip.border) {
+      # fill in the values in the border region with zeroes.
+      Vnew <- matrix(0, nrow=npoints(P), ncol=ncol(V))
+      colnames(Vnew) <- colnames(V)
+      Vnew[Retain, ] <- V
+      # retain attributes
+      attr(Vnew, "IsOffset") <- IsOffset
+      attr(Vnew, "computed") <- attr(V, "computed")
+      attr(Vnew, "POT") <- attr(V, "POT")
+      V <- Vnew
+    }
+    
     # extract intermediate computation results 
     if(savecomputed)
       computed <- append(computed, attr(V, "computed"))
-
-    # extract information about offsets
-    IsOffset <- attr(V, "IsOffset")
-    if(is.null(IsOffset)) IsOffset <- FALSE 
   
     # Augment data frame by appending the regression variables for interactions.
     #
@@ -604,21 +651,8 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
   }
 ##################   D a t a    f r a m e   ###################
 
-# Determine the domain of integration for the pseudolikelihood.
-
-  if(correction == "border") {
-
-    if("bdP" %in% names.precomputed)
-      bd <- precomputed$bdP
-    else
-      bd <- bdist.points(P)
-
-    if(savecomputed)
-      computed$bdP <- bd
-  
-    .mpl$DOMAIN <- (bd >= rbord)
+  if(correction == "border") 
     .mpl$SUBSET <- .mpl$DOMAIN & .mpl$SUBSET
-  }
 
   glmdata <- cbind(glmdata,
                    data.frame(.mpl.SUBSET=.mpl$SUBSET,
@@ -756,13 +790,9 @@ print.bt.frame <- function(x, ...) {
     cat("\n")
   }
   edge <- info$correction
-  if(edge == "border") {
-    if(info$rbord==0)
-      edge <- "none"
-    else
-      edge <- paste("border", paren(paste("rbord=", info$rbord)))
-  }
-  cat(paste("Edge correction ($info$correction):\t", edge, "\n"))
+  cat(paste("Edge correction ($info$correction):\t", sQuote(edge), "\n"))
+  if(edge == "border") 
+    cat(paste("\tBorder width ($info$rbord):\t", info$rbord, "\n"))
   if(length(x$problems) > 0) {
     cat("Problems:\n")
     print(x$problems)
@@ -976,7 +1006,7 @@ evalInterEngine <- function(X, P, E,
 
 deltasuffstat <- function(model, restrict=TRUE) {
   stopifnot(is.ppm(model))
-  if(model$method == "logi") return(NULL)
+  ## if(model$method == "logi") return(NULL)
   X <- data.ppm(model)
   nX <- npoints(X)
   ncoef <- length(coef(model))

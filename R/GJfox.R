@@ -3,7 +3,7 @@
 #
 #  Foxall G-function and J-function
 #
-#  $Revision: 1.4 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.6 $   $Date: 2013/07/26 00:43:29 $
 #
 Gfox <- function(X, Y, r=NULL, breaks=NULL,
                  correction=c("km", "rs", "han"), ...) {
@@ -56,7 +56,8 @@ Gfox <- function(X, Y, r=NULL, breaks=NULL,
                       RS=corx$rs,
                       HAN=corx$han,
                       RAW=corx$none,
-                      han.denom=if(corx$han) eroded.areas(WX, rval) else NULL)
+                      han.denom=if(corx$han) eroded.areas(WX, rval) else NULL,
+                      tt=dist)
 # relabel
   Z <- rebadge.fv(Z, substitute(Gfox(r), NULL), "Gfox")
   unitname(Z) <- unitname(Y)
@@ -75,7 +76,7 @@ Jfox <- function(X, Y, r=NULL, breaks=NULL,
   # base labels on 'J' rather than full expression
   attr(J, "labl") <- attr(H, "labl")
   # add column of 1's
-  J <- bind.fv(J, data.frame(theo=rep.int(0, nrow(J))), "%s[theo](r)",
+  J <- bind.fv(J, data.frame(theo=rep.int(1, nrow(J))), "%s[theo](r)",
                "theoretical value of %s for independence")
   # rename 
   J <- rebadge.fv(J, substitute(Jfox(r), NULL), "Jfox")

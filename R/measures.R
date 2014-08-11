@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.24 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.25 $  $Date: 2013/07/04 10:17:31 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -28,9 +28,18 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
     discretepad <- numeric(nquad)
     discretepad[Z] <- discrete
   } else {
-    discrete <- as.matrix(discrete)
-    density <- as.matrix(density)
+    if(length(discrete) == 1 && is.matrix(density)) {
+      # replicate constant 'discrete' component to matrix of correct size
+      discrete <- matrix(discrete, ndata, ncol(density))
+    } else if(length(density) == 1 && is.matrix(discrete)) {
+      # replicate constant 'density' to matrix of correct size
+      density <- matrix(density, nquad, ncol(discrete))
+    } else {
+      discrete <- as.matrix(discrete)
+      density <- as.matrix(density)
+    }
     if(check) {
+      # check numbers of rows
       check.nmatrix(discrete, ndata, things="data points",
                     naok=TRUE, squarematrix=FALSE)
       check.nmatrix(density,  nquad, things="quadrature points",

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.70 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.75 $ $Date: 2013/08/07 02:07:49 $
 #
 
 kppm <- function(X, trend = ~1,
@@ -431,8 +431,10 @@ predict.kppm <- function(object, ...) {
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
-                          verbose=TRUE) {
+                          verbose=TRUE, retry=10) {
+  starttime <- proc.time()
   verbose <- verbose && (nsim > 1)
+  check.1.real(retry)
   # .... copied from simulate.lm ....
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
     runif(1)
@@ -533,8 +535,37 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   if(verbose)
     cat(paste("Generating", nsim, "simulations... "))
   for(i in 1:nsim) {
-    out[[i]] <- eval(cmd)
+    out[[i]] <- try(eval(cmd))
     if(verbose) progressreport(i, nsim)
+  }
+  # detect failures
+  if(any(bad <- unlist(lapply(out, inherits, what="try-error")))) {
+    nbad <- sum(bad)
+    gripe <- paste(nbad,
+                   ngettext(nbad, "simulation was", "simulations were"),
+                   "unsuccessful")
+    if(verbose) cat(paste(gripe, "\n"))
+    if(retry <= 0) {
+      fate <- "returned as NULL"
+      out[bad] <- list(NULL)
+    } else {
+      if(verbose) cat("Retrying...")
+      ntried <- 0
+      while(ntried < retry) {
+        ntried <- ntried + 1
+        for(j in which(bad))
+          out[[j]] <- try(eval(cmd))
+        bad <- unlist(lapply(out, inherits, what="try-error"))
+        nbad <- sum(bad)
+        if(nbad == 0) break
+      }
+      if(verbose) cat("Done.\n")
+      fate <- if(nbad == 0) "all recomputed" else
+              paste(nbad, "simulations still unsuccessful")
+      fate <- paste(fate, "after", ntried,
+                    ngettext(ntried, "further try", "further tries"))
+    }
+    warning(paste(gripe, fate, sep=": "))
   }
   if(verbose)
     cat("Done.\n")
@@ -542,6 +573,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   out <- as.listof(out)
   names(out) <- paste("Simulation", 1:nsim)
   attr(out, "seed") <- RNGstate
+  out <- timed(out, starttime=starttime)
   return(out)
 }
 
@@ -585,6 +617,8 @@ unitname.kppm <- function(x) {
   }
   return(x)
 }
+
+as.fv.kppm <- function(x) x$mcfit
 
 coef.kppm <- function(object, ...) {
   return(coef(object$po))

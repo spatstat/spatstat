@@ -20,7 +20,7 @@
     appropriate value of \code{sigma}.
   }
   \item{weights}{
-    Optional vector of weights to be attached to the points.
+    Optional vector or matrix of weights to be attached to the points.
     May include negative values. 
   }
   \item{\dots}{
@@ -65,6 +65,11 @@
   In either case, the return value has attributes
   \code{"sigma"} and \code{"varcov"} which report the smoothing
   bandwidth that was used.
+
+  If \code{weights} is a matrix with more than one column, then the
+  result is a list of images (if \code{at="pixels"}) or a matrix of
+  numerical values (if \code{at="points"}).
+  
 }
 \details{
   This is a method for the generic function \code{density}.
@@ -78,7 +83,8 @@
   with point masses at each of the data points in \code{x}.
   Anisotropic Gaussian kernels are also supported.
   Each point has unit weight, unless the argument \code{weights} is
-  given (it should be a numeric vector; weights can be negative or zero).
+  given (it should be a numeric vector or matrix;
+  weights can be negative or zero).
 
   If \code{edge=TRUE}, the intensity estimate is corrected for
   edge effect bias in one of two ways:
@@ -184,6 +190,11 @@
   so that the intensity value at a data point includes a contribution
   from the same point.
   
+  If \code{weights} is a matrix with more than one column, then the
+  calculation is effectively repeated for each column of weights. The
+  result is a list of images (if \code{at="pixels"}) or a matrix of
+  numerical values (if \code{at="points"}).
+  
   To select the bandwidth \code{sigma} automatically by
   cross-validation, use \code{\link{bw.diggle}}.
   
@@ -248,6 +259,7 @@
      Z <- density(cells, 0.05)
      Z <- density(cells, 0.05, diggle=TRUE)
      Z <- density(cells, varcov=diag(c(0.05^2, 0.07^2)))
+     Z <- density(cells, 0.05, weights=data.frame(a=1:42,b=42:1))
   }
   # automatic bandwidth selection
   plot(density(cells, sigma=bw.diggle(cells)))

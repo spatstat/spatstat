@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.78 $  $Date: 2013/05/23 08:05:06 $
+#  $Revision: 1.88 $  $Date: 2013/07/19 05:26:02 $
 #
 
 vcov.ppm <- local({
@@ -11,12 +11,14 @@ vcov.ppm <- local({
 vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
                      gam.action=c("warn", "fatal", "silent"),
                      matrix.action=c("warn", "fatal", "silent"),
+                     logi.action=c("warn", "fatal", "silent"),
                      hessian=FALSE) {
   verifyclass(object, "ppm")
   argh <- list(...)
   
   gam.action <- match.arg(gam.action)
   matrix.action <- match.arg(matrix.action)
+  logi.action <- match.arg(logi.action)
 
   stopifnot(length(what) == 1 && is.character(what))
   what.options <- c("vcov", "corr", "fisher", "Fisher", "internals")
@@ -26,8 +28,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   what <- what.map[m]
 
   # nonstandard calculations (hack) 
-  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms",
-                        "parallel")
+  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
   nonstandard <- any(generic.triggers %in% names(argh))
   saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
   
@@ -39,7 +40,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   needguts <-
     (is.null(fisher) && what=="fisher") ||
     (is.null(varcov) && what %in% c("vcov", "corr")) ||
-    (what == "internals") || nonstandard
+    (what == "internals") || nonstandard 
 
   # In general it is not true that varcov = solve(fisher)
   # because we might use different estimators,
@@ -72,19 +73,18 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
       results <- vcalcGibbs(object, ..., what=what,
                             matrix.action=matrix.action)
     }
-    if(is.null(results))
-      return(NULL)
     varcov <- results$varcov
     fisher <- results$fisher
-    other  <- results$other
+    internals  <- results$internals
   }
   
   if(what %in% c("vcov", "corr") && is.null(varcov)) {
     # Need variance-covariance matrix.
-    # Derive from Fisher information
-    varcov <- checksolve(fisher, matrix.action,
-                         "Fisher information matrix",
-                         "variance")
+    if(!is.null(fisher) && is.poisson(object)) 
+      # Derive from Fisher information
+      varcov <- checksolve(fisher, matrix.action,
+                           "Fisher information matrix",
+                           "variance")
     if(is.null(varcov)) return(NULL)
   }
          
@@ -96,7 +96,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
            return(varcov / outer(sd, sd, "*"))
          },
          internals = {
-           return(append(list(fisher=fisher), other))
+           return(internals)
          })
 }
 
@@ -115,8 +115,10 @@ vcalcPois <- function(object, ...,
   what <- match.arg(what)
   method <- match.arg(method)
   matrix.action <- match.arg(matrix.action)
-  nonstandard <- !is.null(matwt) || !is.null(new.coef) || saveterms
-  # compute Fisher information (Poincare information) if not known
+  if(reweighting <- !is.null(matwt)) 
+    stopifnot(is.numeric(matwt) && is.vector(matwt))
+  nonstandard <- reweighting || !is.null(new.coef) || saveterms
+  # compute Fisher information if not known
   if(is.null(fisher) || nonstandard) {
     gf <- getglmfit(object)
     # we need a glm or gam
@@ -149,29 +151,52 @@ vcalcPois <- function(object, ...,
     wt <- wt[ok]
     Z <- Z[ok]
     # apply weights to rows of model matrix - temporary hack
-    if(!is.null(matwt)) {
+    if(reweighting) {
       nwt <- length(matwt)
       if(nwt == nmom) {
         # matwt matches original quadrature scheme - trim it
         matwt <- matwt[ok]
       } else if(nwt != sum(ok))
         stop("Hack argument matwt has incompatible length")
+      mom.orig <- mom
       mom <- matwt * mom
     }
     # compute Fisher information
     switch(method,
            C = {
              fisher <- sumouter(mom, lambda * wt)
+             if(reweighting) {
+               gradient <- sumouter(mom.orig, matwt * lambda * wt)
+             }
            },
            interpreted = {
-             for(i in 1:nrow(mom)) {
-               ro <- mom[i, ]
-               v <- outer(ro, ro, "*") * lambda[i] * wt[i]
-               if(!any(is.na(v)))
-                 fisher <- fisher + v
+             if(!reweighting) {
+               fisher <- 0
+               for(i in 1:nrow(mom)) {
+                 ro <- mom[i, ]
+                 v <- outer(ro, ro, "*") * lambda[i] * wt[i]
+                 if(!any(is.na(v)))
+                   fisher <- fisher + v
+               }
+               momnames <- dimnames(mom)[[2]]
+               dimnames(fisher) <- list(momnames, momnames)
+             } else {
+               fisher <- gradient <- 0
+               for(i in 1:nrow(mom)) {
+                 ro <- mom[i, ]
+                 ro0 <- mom.orig[i,]
+                 ldu <- lambda[i] * wt[i]
+                 v <- outer(ro, ro, "*") * ldu
+                 v0 <- outer(ro0, ro0, "*") * matwt[i] * ldu
+                 if(!any(is.na(v)))
+                   fisher <- fisher + v
+                 if(!any(is.na(v0)))
+                   gradient <- gradient + v0
+               }
+               momnames <- dimnames(mom)[[2]]
+               dn <- list(momnames, momnames)
+               dimnames(fisher) <- dimnames(gradient) <- dn
              }
-             momnames <- dimnames(mom)[[2]]
-             dimnames(fisher) <- list(momnames, momnames)
            })
   }
   switch(what,
@@ -180,14 +205,24 @@ vcalcPois <- function(object, ...,
          },
          corr = ,
          vcov = {
-           # Derive variance-covariance from Fisher info
-           varcov <- checksolve(fisher, matrix.action,
-                                "Fisher information matrix",
-                                "variance")
-           result <- list(fisher=fisher, varcov=varcov)
+           if(!reweighting) {
+             # Derive variance-covariance from Fisher info
+             varcov <- checksolve(fisher, matrix.action,
+                                  "Fisher information matrix",
+                                  "variance")
+           } else {
+             invgrad <- checksolve(gradient, matrix.action,
+                                   "gradient matrix", "variance")
+             varcov <- if(is.null(invgrad)) NULL else
+                       invgrad %*% fisher %*% invgrad
+           }
+             result <- list(fisher=fisher, varcov=varcov)
          },
          internals = {
-           result <- list(fisher=fisher, other=internals)
+           internals$fisher <- fisher
+           if(reweighting)
+             internals$gradient <- gradient
+           result <- list(internals=internals)
          })
   return(result)
 }
@@ -198,11 +233,11 @@ vcalcPois <- function(object, ...,
 vcalcGibbs <- function(fit, ...,
                        what = c("vcov", "corr", "fisher", "internals"),
                        generic=FALSE) {
-  verifyclass(fit, "ppm")
   what <- match.arg(what)
+  
   # decide whether to use the generic, slower algorithm
-  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms",
-                        "parallel")
+  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
+
   use.generic <-
     generic ||
   !is.stationary(fit) ||
@@ -210,72 +245,73 @@ vcalcGibbs <- function(fit, ...,
   (fit$method != "logi" && has.offset(fit)) ||
   (fit$method == "logi" && has.offset.term(fit)) ||
   !(fit$correction == "border" && fit$rbord == reach(fit)) ||
-  any(generic.triggers %in% names(list(...)))
+  any(generic.triggers %in% names(list(...))) ||
   !identical(options("contrasts")[[1]],
              c(unordered="contr.treatment",
                ordered="contr.poly"))
-  #
-  varcov <- if(use.generic) vcovGibbsAJB(fit, ...) else vcovGibbsEgeJF(fit, ...)
-  if(is.null(varcov))
-    return(NULL)
-  # varcov is the variance-covariance matrix, with attributes
-  Alist <- attr(varcov, "A")
-  saved.terms <- attr(varcov, "saved.terms")
-  internals <- append(Alist, saved.terms)
-  # wipe attributes
-  attr(varcov, "A") <- attr(varcov, "saved.terms") <- NULL
-  #
-   if(what %in% c("fisher", "internals")) {
-    # compute fisher information from varcov
-    fisher <- checksolve(varcov, matrix.action,
-                         "variance-covariance matrix",
-                         "Fisher information" )
-   } else fisher <- NULL
-  if(what == "internals") {
-    # ensure sufficient statistic is calculated
-    mom <- saved.terms$mom
-    if(is.null(mom))
-      mom <- model.matrix(fit)
-    internals <- append(internals, list(suff=mom))
-  } 
-  return(list(varcov=varcov, fisher=fisher, other=internals))
+  # compute
+  spill <- (what %in% c("internals", "fisher"))
+  vc <- if(use.generic) vcalcGibbsGeneral(fit, ..., spill=spill) else vcalcGibbsSpecial(fit, ..., spill=spill)
+
+  switch(what,
+         vcov = ,
+         corr = {
+           # vc is the variance-covariance matrix; return it
+           return(list(varcov=vc))
+         },
+         fisher = {
+           # vc is a list of internal data: extract the Fisher info
+           Fmat <- with(vc,
+                        if(fit$method != "logi") Sigma else Sigma1log+Sigma2log)
+           return(list(fisher=Fmat))
+         },
+         internals = {
+           # vc is a list of internal data: return it
+           # (ensure model matrix is included)
+           if(is.null(vc$mom))
+             vc$mom <- model.matrix(fit)
+           return(list(internals=vc))
+         })
+  return(NULL)
 }
 
-## vcovGibbsAJB
-## Adrian's code, modified by Ege to handle logistic case as well
-##                modified by Adrian to handle 'new.coef'
-## 2012/10/26, bugfixes by Ege for the logistic case
+# ...................... general algorithm ...........................
 
-vcovGibbsAJB <- function(model,
+vcalcGibbsGeneral <- function(model,
                          ...,
+                         spill = FALSE, 
                          matrix.action=c("warn", "fatal", "silent"),
+                         logi.action=c("warn", "fatal", "silent"),
                          algorithm=c("vectorclip", "vector", "basic"),
                          A1 = NULL,
                          A1dummy = FALSE,
                          matwt = NULL, new.coef = NULL,
                          saveterms = FALSE,
-                         parallel = FALSE
+                         parallel = TRUE
                          ) {
-  stopifnot(is.ppm(model))
   matrix.action <- match.arg(matrix.action)
+  logi.action <- match.arg(logi.action)
   algorithm <- match.arg(algorithm)
   if(reweighting <- !is.null(matwt)) 
     stopifnot(is.numeric(matwt) && is.vector(matwt))
+  saveterms <- spill && saveterms
   logi <- model$method=="logi"
   old.coef <- coef(model)
   use.coef <- if(!is.null(new.coef)) new.coef else old.coef
   p <- length(old.coef)
   if(p == 0) {
     # this probably can't happen
-    return(matrix(, 0, 0))
+    if(!spill) return(matrix(, 0, 0)) else return(list())
   }
   pnames <- names(old.coef)
   dnames <- list(pnames, pnames)
-  saved.terms <- if(saveterms) list() else NULL
+  
+  internals <- list()
   #
   sumobj <- summary(model, quick="entries")
   correction <- model$correction
   rbord      <- model$rbord
+  R <- reach(model, epsilon=1e-2)
   Q <- quad.ppm(model)
   D <- dummy.ppm(model)
   rho <- model$internal$logistic$rho
@@ -285,6 +321,7 @@ vcovGibbsAJB <- function(model,
   X <- data.ppm(model)
   Z <- is.data(Q)
   W <- as.owin(model)
+  areaW <- if(correction == "border") eroded.areas(W, rbord) else area.owin(W)
   #
   # determine which quadrature points contributed to the
   # sum/integral in the pseudolikelihood
@@ -303,19 +340,29 @@ vcovGibbsAJB <- function(model,
   mall <- model.matrix(model)
   # save
   if(saveterms) 
-    saved.terms <- append(saved.terms,
-                          list(mom=mall, lambda=lamall, Z=Z, ok=okall,
-                               matwt=matwt))
+    internals <- append(internals,
+                        list(mom=mall, lambda=lamall, Z=Z, ok=okall,
+                             matwt=matwt))
   if(reweighting) {
     # each column of the model matrix is multiplied by 'matwt'
     check.nvector(matwt, nrow(mall), things="quadrature points")
-    mall <- mall * matwt
+    mall.orig <- mall
+    mall      <- mall * matwt
   }
+  # subsets of model matrix
   mokall <- mall[okall, , drop=FALSE]
   # data only:
   m <- mall[Z, , drop=FALSE]
   mok <- m[ok, , drop=FALSE]
-  matwtX <- matwt[Z]
+  #
+  if(reweighting) {
+    # save unweighted versions
+    mokall.orig <- mall.orig[okall, , drop=FALSE]
+    m.orig      <- mall.orig[Z, , drop=FALSE]
+    mok.orig    <- m.orig[ok, , drop=FALSE]
+    #
+    matwtX <- matwt[Z]
+  }
 
   # ^^^^^^^^^^^^^^^^ First order (sensitivity) matrices A1, S
   
@@ -329,12 +376,15 @@ vcovGibbsAJB <- function(model,
     dimnames(A1log) <- dnames
   }
   # Sensitivity matrix for MPLE case (= A1)
-  if(is.null(A1)) {
+  if(is.null(A1) || reweighting) {
     if(A1dummy){
-#    A1 <- sumouter(mokall, w = lamall[okall]/(lamall[okall]+rho))
       A1 <- sumouter(mokall, w = (lamall * w.quad(Q))[okall])
+      if(reweighting)
+        gradient <- sumouter(mokall.orig, w=(matwt * lamall * w.quad(Q))[okall])
     } else{
       A1 <- sumouter(mok)
+      if(reweighting)
+        gradient <- sumouter(mok.orig, w=matwtX)
     }
   } else {
     stopifnot(is.matrix(A1))
@@ -349,7 +399,7 @@ vcovGibbsAJB <- function(model,
   # ^^^^^^^^^^^^^^^^^^^^ `parallel' evaluation
 
   need.loop <- TRUE
-  if(parallel && !logi && require(tensor)) {
+  if(parallel && require(tensor)) {
     # compute second order difference
     #  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
     ddS <- deltasuffstat(model, restrict=FALSE)
@@ -362,17 +412,34 @@ vcovGibbsAJB <- function(model,
       # outer(ddS[,i,j], ddS[,j,i])
       ddSok <- ddS[ , ok, ok, drop=FALSE]
       A3 <- sumsymouter(ddSok)
-      # momdif[ ,i,j] = h(X[i] | X[-j])
-      momdif <- array(t(m), dim=c(p, nX, nX)) - ddS
-      # lamdif[i,j] = lambda(X[i] | X[-j])
-      lamdif <- matrix(lam, nX, nX) * exp(tensor(-use.coef, ddS, 1, 1))
-      #   pairweight[i,j] = lamdif[i,j]/lambda[i] - 1 
-      pairweight <- lamdif / lam - 1
+      # mom.array[ ,i,j] = h(X[i] | X)
+      mom.array <- array(t(m), dim=c(p, nX, nX))
+      # momdel[ ,i,j] = h(X[i] | X[-j])
+      momdel <- mom.array - ddS
+      # lamdel[i,j] = lambda(X[i] | X[-j])
+      lamdel <- matrix(lam, nX, nX) * exp(tensor(-use.coef, ddS, 1, 1))
+      #   pairweight[i,j] = lamdel[i,j]/lambda[i] - 1 
+      pairweight <- lamdel / lam - 1
       # now compute sum_{i,j} for i != j
-      # pairweight[i,j] * outer(momdif[,i,j], momdif[,j,i])
+      # pairweight[i,j] * outer(momdel[,i,j], momdel[,j,i])
       # for data points that contributed to the pseudolikelihood
-      momdifok <- momdif[ , ok, ok, drop=FALSE]
-      A2 <- sumsymouter(momdifok, w=pairweight[ok, ok])
+      momdelok <- momdel[ , ok, ok, drop=FALSE]
+      A2 <- sumsymouter(momdelok, w=pairweight[ok, ok])
+      if(logi){
+        # lam.array[ ,i,j] = lambda(X[i] | X)
+        lam.array <- array(lam, c(nX,nX,p))
+        lam.array <- aperm(lam.array, c(3,1,2))
+        # lamdel.array[,i,j] = lambda(X[i] | X[-j])
+        lamdel.array <- array(lamdel, c(nX,nX,p))
+        lamdel.array <- aperm(lamdel.array, c(3,1,2))
+        momdellogi <- rho/(lamdel.array+rho)*momdel
+        momdellogiok <- momdellogi[ , ok, ok, drop=FALSE]
+        A2log <- sumsymouter(momdellogiok, w=pairweight[ok, ok])
+        ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
+        ddSlogiok <- ddSlogi[ , ok, ok, drop=FALSE]
+        A3log <- sumsymouter(ddSlogiok)
+      }
+          
     } else warning("parallel option not available - reverting to loop")
   }
   
@@ -386,17 +453,14 @@ vcovGibbsAJB <- function(model,
     
     if(saveterms) {
       # *initialise* matrices 
-      #  lamdif[i,j] = lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)])
-      lamdif <- matrix(lam, nX, nX)
-      #  momdif[ ,i,j] = h(X[i] | X[-j]) = h(X[i] | X[-c(i,j)])
-      momdif <- array(t(m), dim=c(p, nX, nX))
+      #  lamdel[i,j] = lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)])
+      lamdel <- matrix(lam, nX, nX)
+      #  momdel[ ,i,j] = h(X[i] | X[-j]) = h(X[i] | X[-c(i,j)])
+      momdel <- array(t(m), dim=c(p, nX, nX))
     }
   
     # identify close pairs
-    R <- reach(model, epsilon=1e-2)
     if(is.finite(R)) {
-#    if(R == 0 && !logi) return(A1)    ... redundant
-#    if(R == 0 && logi) return(A1log)  ... redundant
       cl <- closepairs(X, R, what="indices")
       I <- cl$i
       J <- cl$j
@@ -458,10 +522,10 @@ vcovGibbsAJB <- function(model,
                        pmi.j <- pmi.j * matwtX[i]
                      }
                      if(saveterms) {
-                       lamdif[i,j] <- plami.j
-                       momdif[ , i, j] <- pmi.j
-                       lamdif[j,i] <- plamj.i
-                       momdif[ , j, i] <- pmj.i
+                       lamdel[i,j] <- plami.j
+                       momdel[ , i, j] <- pmi.j
+                       lamdel[j,i] <- plamj.i
+                       momdel[ , j, i] <- pmj.i
                      }
                      # increment A2, A3
                      wt <- plami.j / lam[i] - 1
@@ -540,10 +604,10 @@ vcovGibbsAJB <- function(model,
                      pmi <- pmi * matwtX[i]
                    }
                    if(saveterms) {
-                     lamdif[Ji, i] <- plamj
-                     momdif[ , Ji, i] <- t(pmj)
-                     lamdif[i,Ji] <- plami
-                     momdif[ , i, Ji] <- t(pmi)
+                     lamdel[Ji, i] <- plamj
+                     momdel[ , Ji, i] <- t(pmj)
+                     lamdel[i,Ji] <- plami
+                     momdel[ , i, Ji] <- t(pmi)
                    }
                    # increment A2, A3
                    wt <- plami / lam[i] - 1
@@ -631,10 +695,10 @@ vcovGibbsAJB <- function(model,
                      pmi <- pmi * matwtX[i]
                    }
                    if(saveterms) {
-                     lamdif[Ji, i] <- plamj
-                     momdif[ , Ji, i] <- t(pmj)
-                     lamdif[i,Ji] <- plami
-                     momdif[ , i, Ji] <- t(pmi)
+                     lamdel[Ji, i] <- plamj
+                     momdel[ , Ji, i] <- t(pmj)
+                     lamdel[i,Ji] <- plami
+                     momdel[ , i, Ji] <- t(pmi)
                    }
                    # increment A2, A3
                    wt <- plami / lam[i] - 1
@@ -669,62 +733,86 @@ vcovGibbsAJB <- function(model,
   }
   # ......... end of loop computation ...............
 
-  if(saveterms) 
-    saved.terms <- append(saved.terms, list(lamdif=lamdif, momdif=momdif))
-  # Normalise by eroded area
-  areaW <- if(correction == "border") eroded.areas(W, rbord) else area.owin(W)
-  #
-  A1 <- A1/areaW
-  A2 <- A2/areaW
-  A3 <- A3/areaW
-  if(logi){
-    A1log <- A1log/areaW
-    A2log <- A2log/areaW
-    A3log <- A3log/areaW
-    Slog <- Slog/areaW
-  }
-  ## Matrix Sigma (A1+A2+A3):
+  ## Matrix Sigma 
   Sigma <- A1+A2+A3
-  # Enforce exact symmetry of A1 and Sigma
-  A1 <- (A1 + t(A1))/2
-  Sigma <- (Sigma + t(Sigma))/2
-  ## Finally the result is calculated:
-  U <- checksolve(A1, matrix.action, , "variance")
-  if(is.null(U)) {
-    mat <- matrix(NA, p, p)
-  } else {
-    mat <- U %*% Sigma %*% U / areaW
-    dimnames(mat) <- dnames
-  }
-  # Add extra information
-  Alist <- list(A1=A1, A2=A2, A3=A3, areaW=areaW, Sigma=Sigma)
-  if(!logi) {
-    attr(mat, "A") <- Alist    
-    attr(mat, "saved.terms") <- saved.terms
-    return(mat)
-  }
-  ###### Everything below is only computed for logistic fits #######
   
-  Alist <- append(Alist,
-                  list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog))
+  if(spill) {
+    # save internal data (with matrices unnormalised) 
+    internals <-
+      c(internals,
+        list(A1=A1, A2=A2, A3=A3, Sigma=Sigma, areaW=areaW),
+        if(logi)
+           list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog) else NULL,
+        if(reweighting) list(gradient=gradient) else NULL,
+        if(saveterms) list(lamdel=lamdel, momdel=momdel) else NULL)
+    # return internal data if model was fitted by MPL
+    if(!logi)
+      return(internals)
+  }
+    
+  # ........... calculate variance/covariance matrix for MPL .........
+
+  if(!reweighting) {
+    # Normalise
+    A1 <- A1/areaW
+    Sigma <- Sigma/areaW
+    # Enforce exact symmetry 
+    A1 <- (A1 + t(A1))/2
+    Sigma <- (Sigma + t(Sigma))/2
+    # calculate inverse negative Hessian
+    U <- checksolve(A1, matrix.action, , "variance")
+  } else {
+    # Normalise
+    gradient <- gradient/areaW
+    Sigma <- Sigma/areaW
+    # Enforce exact symmetry
+    gradient <- (gradient + t(gradient))/2
+    Sigma <- (Sigma + t(Sigma))/2
+    # calculate inverse negative Hessian
+    U <- checksolve(gradient, matrix.action, , "variance")
+  }
+  
+  # compute variance-covariance
+  vc.mpl <- if(is.null(U)) matrix(NA, p, p) else 
+              U %*% Sigma %*% U / areaW
+  dimnames(vc.mpl) <- dnames
+  
+  # return variance-covariance matrix, if model was fitted by MPL
+  if(!logi)
+      return(vc.mpl)
+  
+  ###### Everything below is only computed for logistic fits #######
 
   ## Matrix Sigma1log (A1log+A2log+A3log):
   Sigma1log <- A1log+A2log+A3log
+  ## Resolving the dummy process type
+  how <- model$internal$logistic$how
+  if(how %in% c("given", "grid", "transgrid")){
+    whinge <- paste("vcov is not implemented for dummy type", sQuote(how))
+    if(logi.action=="fatal")
+      stop(whinge)
+    how <- if(how=="given") "poisson" else "stratrand"
+    if(logi.action=="warn")
+      warning(paste(whinge,"- using", sQuote(how), "formula"), call.=FALSE)
+  }
   ## Matrix Sigma2log (depends on dummy process type)
-  switch(model$internal$logistic$how,
+  switch(how,
          poisson={
            Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)
-           Sigma2log <- Sigma2log/areaW
          },
          binomial={
-           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)/areaW
-           A1vec <- t(mokall) %*% (rho*lamall[okall]/(lamall[okall]+rho)^2/areaW)
-           Sigma2log <- Sigma2log - A1vec%*%t(A1vec)/rho*areaW/sum(1/(lamall[okall]+rho))
+           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)
+           A1vec <- t(mokall) %*% (rho*lamall[okall]/(lamall[okall]+rho)^2)
+           Sigma2log <- Sigma2log - A1vec%*%t(A1vec)/rho*1/sum(1/(lamall[okall]+rho))
          },
          stratrand={
            ### Dirty way of refitting model with new dummy pattern (should probably be done using call, eval, envir, etc.):
-           D2 <- logi.dummy(X = X, type = "stratrand", nd = model$internal$logistic$args)
-           Q2 <- quad(data=X, dummy=D2)
+           ## Changed by ER 2013/06/14 to use the new quadscheme.logi
+           ## D2 <- logi.dummy(X = X, type = "stratrand", nd = model$internal$logistic$args)
+           ## Q2 <- quad(data=X, dummy=D2)
+           ## Q2$dummy$Dinfo <- D2$Dinfo
+           Q2 <- quadscheme.logi(data=X, dummytype = "stratrand", nd = fit$internal$logistic$nd)
+           D2 <- Q2$dummy
            Q2$dummy$Dinfo <- D2$Dinfo
            Z2 <- is.data(Q2)
            arglist <- list(Q=Q2, trend=model$trend, interaction = model$interaction, method = model$method,
@@ -736,10 +824,6 @@ vcovGibbsAJB <- function(model,
            lamall2 <- fitted(model2, check = FALSE, new.coef = new.coef)
            ## New model matrix
            mall2 <- model.matrix(model2)
-# Excised by AJB           
-#           if(reweighting) {
-#             mall2 <- mall2 * matwt
-#           }
            okall2 <- getglmsubset(model2)
 
            # index vectors of stratrand cell indices of dummy points 
@@ -750,9 +834,6 @@ vcovGibbsAJB <- function(model,
            if(is.finite(R) && (correction == "border")){
              ii <- (bdist.points(D) >= R)
              ii2 <- (bdist.points(D2) >= R)
-#  AJB:  faster and more consistent than:             
-#             ii <- inside.owin(D, w = Wminus)
-#             ii2 <- inside.owin(D2, w = Wminus)
            } else{
              ii <- rep.int(TRUE, npoints(D))
              ii2 <- rep.int(TRUE, npoints(D2))
@@ -776,38 +857,45 @@ vcovGibbsAJB <- function(model,
            # finally calculation of Sigma2
            wlam <- mdum * rho*lamdum/(lamdum+rho)
            wlam2 <- mdum2 * rho*lamdum2/(lamdum2+rho)
-           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho*areaW)
+           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
          },
          stop("sorry - unrecognized dummy process in logistic fit")
          )
   ## Attaching to Sigma2log calculated above
   dimnames(Sigma2log) <- dnames
 
-  ## Finally the result is calculated:
-  Ulog <- checksolve(Slog, matrix.action, , "variance")
-  if(is.null(Ulog)) {
-    matlog <- matrix(NA, p, p)
-  } else {
-    matlog <- Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
-    dimnames(matlog) <- dnames
+  
+  if(spill) {
+    # return internal data only (with matrices unnormalised)
+    internals <- c(internals, 
+                   list(Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=vc.mpl))
+    return(internals)
   }
-  #
-  attr(matlog, "A") <-
-    append(Alist,
-           list(Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=mat))
-  attr(matlog, "saved.terms") <- saved.terms
 
-  return(matlog)
+  ## .. Calculate variance-covariance matrix for logistic fit ...........
+  # normalise
+  Slog <- Slog/areaW
+  Sigma1log <- Sigma1log/areaW
+  Sigma2log <- Sigma2log/areaW
+  # evaluate
+  Ulog <- checksolve(Slog, matrix.action, , "variance")
+  vc.logi <- if(is.null(Ulog)) matrix(NA, p, p) else 
+             Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
+  dimnames(vc.logi) <- dnames
+  #
+  return(vc.logi)
 }
 
-# vcovGibbs from Ege Rubak and J-F Coeurjolly
-## 2012/10/26, modified by Ege to handle logistic case as well
+# vcalcGibbs from Ege Rubak and J-F Coeurjolly
+## 2013/06/14, modified by Ege to handle logistic case as well
 
-vcovGibbsEgeJF <- function(fit, ...,
-                           special.alg = TRUE,
-                           matrix.action=c("warn", "fatal", "silent")) {
-  verifyclass(fit, "ppm")
+vcalcGibbsSpecial <- function(fit, ...,
+                              spill=FALSE, 
+                              special.alg = TRUE,
+                              matrix.action=c("warn", "fatal", "silent"),
+                              logi.action=c("warn", "fatal", "silent")) {
   matrix.action <- match.arg(matrix.action)
+  logi.action <- match.arg(logi.action)
   
   ## Interaction name:
   iname <- fit$interaction$name
@@ -836,7 +924,8 @@ vcovGibbsEgeJF <- function(fit, ...,
 	  return(vcovPairPiece(Xplus,
                                reach(fit$interaction),
                                exp(coef(fit)[2]),
-                               matrix.action))
+                               matrix.action,
+                               spill=spill))
       },
            
       "Piecewise constant pairwise interaction process"={
@@ -845,7 +934,8 @@ vcovGibbsEgeJF <- function(fit, ...,
           return(vcovPairPiece(Xplus,
                                fit$interaction$par$r,
                                exp(coef(fit)[-1]),
-                               matrix.action))
+                               matrix.action,
+                               spill=spill))
       },
 
       "Multitype Strauss process"={
@@ -855,9 +945,11 @@ vcovGibbsEgeJF <- function(fit, ...,
         if(ncol(matR)==2 && marx){
           n <- length(theta)
           res <- vcovMultiStrauss(Xplus, R, exp(theta[c(n-2,n-1,n)]),
-                                  matrix.action)
-          res <- contrastmatrix(res, 2)
-          dimnames(res) <- list(names(theta), names(theta))
+                                  matrix.action,spill=spill)
+          if(!spill) {
+            res <- contrastmatrix(res, 2)
+            dimnames(res) <- list(names(theta), names(theta))
+          }
           return(res)
         }
       }
@@ -941,7 +1033,7 @@ vcovGibbsEgeJF <- function(fit, ...,
   I <- D<=R * outer(IntPoints,IntPoints)
   
   ## Matrix A1:
-  A1 <- t(V1[IntPoints,])%*%V1[IntPoints,]/areaW
+  A1 <- t(V1[IntPoints,])%*%V1[IntPoints,]
 
   ## Matrix A2:
   A2 <- matrix(0,p,p)
@@ -950,7 +1042,6 @@ vcovGibbsEgeJF <- function(fit, ...,
       A2[k,l] <- A2[l,k] <- sum(I*V2[,,k]*frac*t(V2[,,l]))
     }
   }
-  A2 <- A2/areaW
   
   ## Matrix A3:
   A3 <- matrix(0,p,p)
@@ -959,36 +1050,42 @@ vcovGibbsEgeJF <- function(fit, ...,
       A3[k,l] <- A3[l,k] <- sum(I*dV[,,k]*t(dV[,,l]))
     }
   }
-  A3 <- A3/areaW
-  
+
   ## Matrix Sigma (A1+A2+A3):
   Sigma<-A1+A2+A3
-  
-  ## Finally the result is calculated:
-  U <- checksolve(A1, matrix.action, , "variance")
-  if(is.null(U)) return(NULL)
 
-  mat <- U%*%Sigma%*%U / areaW
-
-  ## Convert to treatment contrasts
- if(marx){
-    mat <- contrastmatrix(mat, p1)
-    dimnames(mat) <- list(names(theta), names(theta))
+  if(spill) {
+    # save internal data (with matrices unnormalised)
+    dimnames(A1) <- dimnames(A2) <-
+      dimnames(A3) <- list(names(theta), names(theta))
+    internals <- list(A1=A1, A2=A2, A3=A3, Sigma=Sigma, areaW=areaW)
+    # return internal data, if model fitted by MPL
+    if(fit$method != "logi")
+      return(internals)
   }
-  # save A1, A2, A3 
-  dimnames(A1) <- dimnames(A2) <-
-    dimnames(A3) <- list(names(theta), names(theta))
-  attr(mat, "A") <- list(A1=A1, A2=A2, A3=A3)
-  #
-  ## Return result for standard ppm method:
-  if(fit$method!="logi")
-    return(mat)
 
+  # ......... Calculate variance-covariance matrix for MPL ........
+  
+  # normalise
+  A1 <- A1/areaW
+  Sigma <- Sigma/areaW
+  # evaluate
+  U <- checksolve(A1, matrix.action, , "variance")
+  vc.mpl <- if(is.null(U)) matrix(NA, p, p) else U %*% Sigma %*% U / areaW
+  ## Convert to treatment contrasts
+  if(marx)
+    vc.mpl <- contrastmatrix(vc.mpl, p1)
+  dimnames(vc.mpl) <- list(names(theta), names(theta))
+  
+  # Return result for standard ppm method:
+  if(fit$method!="logi")
+    return(vc.mpl)
+  
   ########################################################################
   ###### The remainder is only executed when the method is logistic ######
   ########################################################################
 
-  ### Most of this is copy/pasted from vcovGibbsAJB
+  ### Most of this is copy/pasted from vcalcGibbsGeneral
   correction <- fit$correction
   Q <- quad.ppm(fit)
   D <- dummy.ppm(fit)
@@ -1021,8 +1118,8 @@ vcovGibbsEgeJF <- function(fit, ...,
   ## mok <- m[ok, , drop=FALSE]
 
   # Sensitivity matrix S and A1 matrix for logistic case
-  Slog <- sumouter(mokall, w = lamall[okall]*rho/(lamall[okall]+rho)^2)/areaW
-  A1log <- sumouter(mokall, w = lamall[okall]*rho*rho/(lamall[okall]+rho)^3)/areaW
+  Slog <- sumouter(mokall, w = lamall[okall]*rho/(lamall[okall]+rho)^2)
+  A1log <- sumouter(mokall, w = lamall[okall]*rho*rho/(lamall[okall]+rho)^3)
 
   ## Define W1, W2 and dW for the logistic method based on V1, V2 and dV (frac is unchanged)
   lambda1 <- exp(rowSums(matrix(theta,n,p,byrow=TRUE)*V1))
@@ -1044,27 +1141,40 @@ vcovGibbsEgeJF <- function(fit, ...,
       A3log[k,l] <- A3log[l,k] <- sum(I*dW[,,k]*t(dW[,,l]))
     }
   }
-  A2log <- A2log/areaW
-  A3log <- A3log/areaW
+  A2log <- A2log
+  A3log <- A3log
   
   ## First variance component Sigma1log (A1log+A2log+A3log):
   Sigma1log <- A1log+A2log+A3log
 
+  ## Resolving the dummy process type
+  how <- fit$internal$logistic$how
+  if(how %in% c("given", "grid", "transgrid")){
+    whinge <- paste("vcov is not implemented for dummy type", sQuote(how))
+    if(logi.action=="fatal")
+      stop(whinge)
+    how <- if(how=="given") "poisson" else "stratrand"
+    if(logi.action=="warn")
+      warning(paste(whinge,"- using", sQuote(how), "formula"), call.=FALSE)
+  }
+
   ## Matrix Sigma2log (depends on dummy process type)
-  switch(fit$internal$logistic$how,
+  switch(how,
          poisson={
-           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)/areaW
+           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)
          },
          binomial={
-           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)/areaW
-           A1vec <- t(mokall) %*% (rho*lamall[okall]/(lamall[okall]+rho)^2/areaW)
-           Sigma2log <- Sigma2log - A1vec%*%t(A1vec)/rho*areaW/sum(1/(lamall[okall]+rho))
+           Sigma2log <- sumouter(mokall, w = lamall[okall]*lamall[okall]*rho/(lamall[okall]+rho)^3)
+           A1vec <- t(mokall) %*% (rho*lamall[okall]/(lamall[okall]+rho)^2)
+           Sigma2log <- Sigma2log - A1vec%*%t(A1vec)/rho*1/sum(1/(lamall[okall]+rho))
          },
          stratrand={
            ### Dirty way of refitting model with new dummy pattern (should probably be done using call, eval, envir, etc.):
-           D2 <- logi.dummy(X = X, type = "stratrand", nd = fit$internal$logistic$args)
-           Q2 <- quad(data=X, dummy=D2)
-           Q2$dummy$Dinfo <- D2$Dinfo
+           ## D2 <- logi.dummy(X = X, type = "stratrand", nd = model$internal$logistic$args)
+           ## Q2 <- quad(data=X, dummy=D2)
+           ## Q2$dummy$Dinfo <- D2$Dinfo
+           Q2 <- quadscheme.logi(data=X, dummytype = "stratrand", nd = fit$internal$logistic$nd)
+           D2 <- Q2$dummy
            Z2 <- is.data(Q2)
            arglist <- list(Q=Q2, trend=fit$trend, interaction = fit$interaction, method = fit$method,
                            correction = fit$correction, rbord = fit$rbord, covariates = fit$covariates)
@@ -1108,26 +1218,40 @@ vcovGibbsEgeJF <- function(fit, ...,
            # finally calculation of Sigma2
            wlam <- mdum * rho*lamdum/(lamdum+rho)
            wlam2 <- mdum2 * rho*lamdum2/(lamdum2+rho)
-           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho*areaW)
+           Sigma2log <- t(wlam-wlam2)%*%(wlam-wlam2)/(2*rho*rho)
          },
          stop("sorry - unrecognized dummy process in logistic fit")
          )
 
+
+  if(spill) {
+    ## Attach dimnames to all matrices
+    dimnames(Sigma2log) <- dimnames(Slog) <-
+      dimnames(Sigma1log) <- dimnames(A1log) <-
+        dimnames(A2log) <- dimnames(A3log) <-
+          list(names(theta),names(theta))
+    # return internal data (with matrices unnormalised)
+    internals <- c(internals,
+                   list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog,
+                        Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=vc.mpl))
+    return(internals)
+  }
+
+  # ....... Compute variance-covariance for logistic fit .............
+  # Normalise
+  Slog <- Slog/areaW
+  Sigma1log <- Sigma1log/areaW
+  Sigma2log <- Sigma2log/areaW
   ## Finally the result is calculated:
   Ulog <- checksolve(Slog, matrix.action, , "variance")
-  if(is.null(Ulog)) return(NULL)
-  matlog <- Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
-  
-  ## Attaching dimnames to all matrices
-  dimnames(Sigma2log) <- dimnames(matlog) <- dimnames(Slog) <- dimnames(Sigma1log) <- dimnames(A1log) <- dimnames(A2log) <- dimnames(A3log) <- list(names(theta),names(theta))
-
+  vc.logi <- if(is.null(Ulog)) matrix(NA, p, p) else 
+             Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
   #
-  attr(matlog, "A") <- list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog, Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=mat)
-
-  return(matlog)
+  dimnames(vc.logi) <- list(names(theta), names(theta))
+  return(vc.logi)
 }
 
-vcovPairPiece <- function(Xplus, R, gam, matrix.action){
+vcovPairPiece <- function(Xplus, R, gam, matrix.action, spill=FALSE){
   ## R is  the  vector of breaks (R[length(R)]= range of the pp.
   ## gam is the vector of weights
   Rmax <- R[length(R)]
@@ -1194,24 +1318,29 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action){
     }
 
   }
-  A1<-A1/areaW
-  A2<-A2/areaW
-  A3<-A3/areaW
-  ## browser()
-  Sigma<-A1+A2+A3
-  ## Finally the result is calculated:
-  U <- checksolve(A1, matrix.action, , "variance")
-  if(is.null(U)) return(NULL)
 
-  mat <- U%*%Sigma%*%U / areaW
+  Sigma<-A1+A2+A3
+
   nam <- c("(Intercept)", names(gam))
-  dimnames(mat) <- list(nam, nam)
-  dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- list(nam, nam)
-  attr(mat, "A") <- list(A1=A1, A2=A2, A3=A3)
+  dnam <- list(nam, nam)
+  
+  if(spill) {
+    # return internal data (with matrices unnormalised)
+    dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- dimnames(Sigma) <- dnam
+    return(list(A1=A1, A2=A2, A3=A3, Sigma=Sigma))
+  }
+           
+  ## Calculate variance-covariance
+  # Normalise:
+  A1    <- A1/areaW
+  Sigma <- Sigma/areaW
+  U <- checksolve(A1, matrix.action, , "variance")
+  mat <- if(is.null(U)) matrix(NA, length(nam), length(nam)) else U%*%Sigma%*%U / areaW
+  dimnames(mat) <- dnam
   return(mat)
 }
 
-vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action){
+vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action, spill=FALSE){
   ## Xplus : marked Strauss point process 
   ## with two types 
   ## observed in W+R (R=max(R11,R12,R22))
@@ -1310,24 +1439,23 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action){
   
   A2[4,4]<-gi1*sum(I1*outer(T12plus,T12plus))+gi2*sum(I2*outer(T21plus,T21plus))+ gi12*sum(I12*outer(T12plus-1,T21plus-1))+gi12*sum(I21*outer(T21plus-1,T12plus-1))
   
-  #browser()
-  A1<-A1/areaW
-  A2<-A2/areaW
-  A3<-A3/areaW
-  #browser()
-  
   Sigma<-A1+A2+A3
-  ## Finally the result is calculated:
-  U <- checksolve(A1, matrix.action, , "variance")
-  if(is.null(U)) return(NULL)
-
-  mat <- U%*%Sigma%*%U / areaW
-
   nam <- c(levels(marks(Xplus)), names(vecg))
-  dimnames(mat) <- list(nam, nam)
-  dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- list(nam, nam)
+  dnam <- list(nam, nam)
   
-  attr(mat, "A") <- list(A1=A1, A2=A2, A3=A3)
+  if(spill) {
+    # return internal data (with matrices unnormalised)
+    dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- dimnames(Sigma) <- dnam
+    return(list(A1=A1, A2=A2, A3=A3, Sigma=Sigma))
+  }
+           
+  ## Calculate variance-covariance
+  # Normalise:
+  A1    <- A1/areaW
+  Sigma <- Sigma/areaW
+  U <- checksolve(A1, matrix.action, , "variance")
+  mat <- if(is.null(U)) matrix(NA, length(nam), length(nam)) else U%*%Sigma%*%U / areaW
+  dimnames(mat) <- dnam
   return(mat)
 }
 
@@ -1358,10 +1486,8 @@ checksolve <- function(M, action, descrip, target="") {
   if(!inherits(Minv, "try-error"))
     return(Minv)
   if(missing(descrip))
-    descrip <- paste("the matrix", Mname)
-  whinge <- paste("Cannot compute",
-                  paste(target, ":", sep=""),
-                  descrip, "is singular")
+    descrip <- paste("the matrix", sQuote(Mname))
+  whinge <- paste0("Cannot compute ", target, ": ", descrip, " is singular")
   switch(action,
          fatal=stop(whinge, call.=FALSE),
          warn= warning(whinge, call.=FALSE),

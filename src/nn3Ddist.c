@@ -4,17 +4,20 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.6 $     $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.8 $     $Date: 2013/06/29 04:51:27 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT z IS SORTED IN ASCENDING ORDER 
 
   nnd3D     Nearest neighbour distances 
-  nnw3D     Nearest neighbours and their distances
-  nnXw3D    Nearest neighbour from one list to another
-  nnXx3D    Nearest neighbour from one list to another, with overlaps
+  nnw3D     Nearest neighbours (id)
+  nndw3D     Nearest neighbours (id) and distances
+
+  nnXdw3D    Nearest neighbour from one list to another
+  nnXEdw3D    Nearest neighbour from one list to another, with overlaps
 
   knnd3D    k-th nearest neighbour distances
-  knnw3D    k-th nearest neighbours and their distances
+  knnw3D    k-th nearest neighbours (id)
+  knndw3D    k-th nearest neighbours (id) and distances
 */
 
 #undef SPATSTAT_DEBUG
@@ -28,149 +31,45 @@
 
 double sqrt();
 
-/* THE FOLLOWING CODE ASSUMES THAT z IS SORTED IN ASCENDING ORDER */
+/* .......... Single point pattern ...............................*/
 
-void nnd3D(n, x, y, z, nnd, huge)
-/* inputs */
-     int *n;
-     double *x, *y, *z, *huge;
-     /* output */
-     double *nnd;
-{ 
-  int npoints, i, j, maxchunk;
-  double d2, d2min, xi, yi, zi, dx, dy, dz, dz2, hu, hu2;
+#undef FNAME
+#undef DIST
+#undef WHICH
 
-  hu = *huge;
-  hu2 = hu * hu;
+/* nnd3D: returns nn distance */
 
-  npoints = *n;
+#define FNAME nnd3D
+#define DIST
+#include "nn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
 
-  OUTERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\ni=%d\n", i); 
-#endif
+/* nnw3D: returns id of nearest neighbour */
 
-      d2min = hu2;
-      xi = x[i];
-      yi = y[i];
-      zi = z[i];
-      /* search backward */
-      if(i > 0) {
-	for(j = i - 1; j >= 0; --j) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("L");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min) 
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) 
-	    d2min = d2;
-	}
-      }
-    
-      /* search forward */
-      if(i < npoints - 1) {
-	for(j = i + 1; j < npoints; ++j) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("R");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min) 
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) 
-	    d2min = d2;
-	}
-      }
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\n");
-#endif
+#define FNAME nnw3D
+#define WHICH
+#include "nn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
 
-      nnd[i] = sqrt(d2min);
-    }
-  }
-}
+/* nndw3D: returns nn distance .and. id of nearest neighbour */
+
+#define FNAME nndw3D
+#define DIST
+#define WHICH
+#include "nn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
 
 
-/* nnw3D: same as nnd3D, 
-   but also returns id of nearest neighbour 
-*/
-
-void nnw3D(n, x, y, z, nnd, nnwhich, huge)
-/* inputs */
-     int *n;
-     double *x, *y, *z, *huge;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
-  int npoints, i, j, which, maxchunk;
-  double d2, d2min, xi, yi, zi, dx, dy, dz, dz2, hu, hu2;
-
-  hu = *huge;
-  hu2 = hu * hu;
-
-  npoints = *n;
-
-  OUTERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-      d2min = hu2;
-      which = -1;
-      xi = x[i];
-      yi = y[i];
-      zi = z[i];
-      /* search backward */
-      if(i > 0){
-	for(j = i - 1; j >= 0; --j) {
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min)
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    which = j;
-	  }
-	}
-      }
-
-      /* search forward */
-      if(i < npoints - 1) {
-	for(j = i + 1; j < npoints; ++j) {
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min)
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    which = j;
-	  }
-	}
-      }
-      nnd[i] = sqrt(d2min);
-      nnwhich[i] = which;
-    }
-  }
-}
-
+/* .......... Two point patterns ...............................*/
 
 /* 
-   nnXw3D:  for TWO point patterns X and Y,
+   nnXdw3D:  for TWO point patterns X and Y,
    find the nearest neighbour 
    (from each point of X to the nearest point of Y)
    returning both the distance and the identifier
@@ -178,81 +77,47 @@ void nnw3D(n, x, y, z, nnd, nnwhich, huge)
    Requires both patterns to be sorted in order of increasing z coord
 */
 
-void nnXw3D(n1, x1, y1, z1, n2, x2, y2, z2, nnd, nnwhich, huge)
-/* inputs */
-     int *n1, *n2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
-  int npoints1, npoints2, i, j, jwhich, lastjwhich, maxchunk;
-  double d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
-
-  hu = *huge;
-  hu2 = hu * hu;
-
-  npoints1 = *n1;
-  npoints2 = *n2;
-
-  if(npoints1 == 0 || npoints2 == 0)
-    return;
-
-  lastjwhich = 0;
-
-  OUTERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints1, maxchunk, 16384) {
-      d2min = hu2;
-      jwhich = -1;
-      x1i = x1[i];
-      y1i = y1[i];
-      z1i = z1[i];
-
-      /* search backward from previous nearest neighbour */
-      if(lastjwhich > 0) {
-	for(j = lastjwhich - 1; j >= 0; --j) {
-	  dz = z2[j] - z1i;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min)
-	    break;
-	  dx = x2[j] - x1i;
-	  dy = y2[j] - y1i;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    jwhich = j;
-	  }
-	}
-      }
-
-      /* search forward from previous nearest neighbour  */
-      if(lastjwhich < npoints2) {
-	for(j = lastjwhich; j < npoints2; ++j) {
-	  dz = z2[j] - z1i;
-	  dz2 = dz * dz;
-	  if(dz2 > d2min)
-	    break;
-	  dx = x2[j] - x1i;
-	  dy = y2[j] - y1i;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    jwhich = j;
-	  }
-	}
-      }
-
-      nnd[i] = sqrt(d2min);
-      nnwhich[i] = jwhich;
-      lastjwhich = jwhich;
-    }
-  }
-}
-
+#define FNAME nnXdw3D
+#define DIST
+#define WHICH
+#undef EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
 /* 
-   nnXx3D:  similar to nnXw3D
+   nnXd3D:  returns distance only
+
+*/
+
+#define FNAME nnXd3D
+#define DIST
+#undef EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
+
+/* 
+   nnXw3D:  returns identifier only
+*/
+
+#define FNAME nnXw3D
+#define WHICH
+#undef EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
+
+/* .......... Two point patterns with exclusion ........................*/
+
+/* 
+   nnXEdw3D:  similar to nnXdw3D
    but allows X and Y to include common points
    (which are not to be counted as neighbours)
 
@@ -260,224 +125,80 @@ void nnXw3D(n1, x1, y1, z1, n2, x2, y2, z2, nnd, nnwhich, huge)
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-   Requires both patterns to be sorted in order of increasing y coord
+   Requires both patterns to be sorted in order of increasing z coord
 */
 
-void nnXx3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge)
-/* inputs */
-     int *n1, *n2, *id1, *id2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
-  int npoints1, npoints2, i, j, jwhich, lastjwhich, id1i, maxchunk;
-  double dmin, d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
+#define FNAME nnXEdw3D
+#define DIST
+#define WHICH
+#define EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-  hu = *huge;
-  hu2 = hu * hu;
+/* 
+   nnXEd3D:  returns distances only
 
-  npoints1 = *n1;
-  npoints2 = *n2;
+*/
 
-  if(npoints1 == 0 || npoints2 == 0)
-    return;
+#define FNAME nnXEd3D
+#define DIST
+#define EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-  lastjwhich = 0;
+/* 
+   nnXEw3D:  returns identifiers only
 
-  for(i = 0; i < npoints1; i++) {
-    
-    R_CheckUserInterrupt();
-    
-    dmin = hu;
-    d2min = hu2;
-    jwhich = -1;
-    x1i = x1[i];
-    y1i = y1[i];
-    z1i = z1[i];
-    id1i = id1[i];
+*/
 
-    /* search backward from previous nearest neighbour */
-    if(lastjwhich > 0) {
-      for(j = lastjwhich - 1; j >= 0; --j) {
-	dz = z2[j] - z1i;
-	dz2 = dz * dz;
-	if(dz2 > d2min)
-	  break;
-	/* do not compare identical points */
-	if(id2[j] != id1i) {
-	  dx = x2[j] - x1i;
-	  dy = y2[j] - y1i;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    jwhich = j;
-	  }
-	}
-      }
-    }
+#define FNAME nnXEw3D
+#define WHICH
+#define EXCLUDE
+#include "nn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-    /* search forward from previous nearest neighbour  */
-    if(lastjwhich < npoints2) {
-      for(j = lastjwhich; j < npoints2; ++j) {
-	dz = z2[j] - z1i;
-	dz2 = dz * dz;
-	if(dz2 > d2min)
-	  break;
-	/* do not compare identical points */
-	if(id2[j] != id1i) {
-	  dx = x2[j] - x1i;
-	  dy = y2[j] - y1i;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2min) {
-	    d2min = d2;
-	    jwhich = j;
-	  }
-	}
-      }
-    }
-    nnd[i] = sqrt(d2min);
-    nnwhich[i] = jwhich;
-    lastjwhich = jwhich;
-  }
-}
+/* .......... Single point pattern ...............................*/
+/* .......... k-th nearest neighbours ...............................*/
 
 /* 
    knnd3D
 
-   nearest neighbours 1:kmax
+   nearest neighbour distances 1:kmax
 
 */
 
-void knnd3D(n, kmax, x, y, z, nnd, huge)
-/* inputs */
-     int *n, *kmax;
-     double *x, *y, *z, *huge;
-     /* output matrix (npoints * kmax) in ROW MAJOR order */
-     double *nnd;
-{ 
-  int npoints, nk, nk1, i, j, k, k1, unsorted, maxchunk;
-  double d2, d2minK, xi, yi, zi, dx, dy, dz, dz2, hu, hu2, tmp;
-  double *d2min;
-
-  hu = *huge;
-  hu2 = hu * hu;
-
-  npoints = *n;
-  nk      = *kmax;
-  nk1     = nk - 1;
-
-  /* 
-     create space to store the nearest neighbour distances
-     for the current point
-  */
-
-  d2min = (double *) R_alloc((size_t) nk, sizeof(double));
-
-  /* loop over points */
-
-  OUTERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\ni=%d\n", i); 
-#endif
-
-      /* initialise nn distances */
-
-      d2minK = hu2;
-      for(k = 0; k < nk; k++) 
-	d2min[k] = hu2;
-
-      xi = x[i];
-      yi = y[i];
-      zi = z[i];
-
-      /* search backward */
-      if(i > 0) {
-	for(j = i - 1; j >= 0; --j) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("L");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2minK) 
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2minK) {
-	    /* overwrite last entry */
-	    d2min[nk1] = d2;
-	    /* bubble sort */
-	    unsorted = YES;
-	    for(k = nk1; unsorted && k > 0; k--) {
-	      k1 = k - 1;
-	      if(d2min[k] < d2min[k1]) {
-		/* swap entries */
-		tmp = d2min[k1];
-		d2min[k1] = d2min[k];
-		d2min[k] = tmp;
-	      } else {
-		unsorted = NO;
-	      }
-	    }
-	    /* adjust maximum distance */
-	    d2minK = d2min[nk1];
-	  }
-	}
-      }
-      
-      /* search forward */
-      if(i + 1 < npoints) {
-	for(j = i + 1; j < npoints; ++j) {
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("R");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2minK) 
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2minK) {
-	    /* overwrite last entry */
-	    d2min[nk1] = d2;
-	    /* bubble sort */
-	    unsorted = YES;
-	    for(k = nk1; unsorted && k > 0; k--) {
-	      k1 = k - 1;
-	      if(d2min[k] < d2min[k1]) {
-		/* swap entries */
-		tmp = d2min[k1];
-		d2min[k1] = d2min[k];
-		d2min[k] = tmp;
-	      } else {
-		unsorted = NO;
-	      }
-	    }
-	    /* adjust maximum distance */
-	    d2minK = d2min[nk1];
-	  }
-	}
-      }
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\n");
-#endif
-
-      /* compute nn distances for point i 
-	 and copy to output matrix in ROW MAJOR order
-      */
-      for(k = 0; k < nk; k++) {
-	nnd[nk * i + k] = sqrt(d2min[k]);
-      }
-    }
-  }
-}
+#define FNAME knnd3D
+#define DIST
+#include "knn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
 
 /* 
    knnw3D
+
+   nearest neighbour indices 1:kmax
+
+*/
+
+#define FNAME knnw3D
+#define WHICH
+#include "knn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+
+/* 
+   knndw3D
 
    nearest neighbours 1:kmax
 
@@ -485,149 +206,130 @@ void knnd3D(n, kmax, x, y, z, nnd, huge)
 
 */
 
-void knnw3D(n, kmax, x, y, z, nnd, nnwhich, huge)
-/* inputs */
-     int *n, *kmax;
-     double *x, *y, *z, *huge;
-     /* output matrices (npoints * kmax) in ROW MAJOR order */
-     double *nnd;
-     int    *nnwhich;
-{ 
-  int npoints, nk, nk1, i, j, k, k1, unsorted, itmp, maxchunk;
-  double d2, d2minK, xi, yi, zi, dx, dy, dz, dz2, hu, hu2, tmp;
-  double *d2min; 
-  int *which;
+#define FNAME knndw3D
+#define DIST
+#define WHICH
+#include "knn3Ddist.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
 
-  hu = *huge;
-  hu2 = hu * hu;
+/* .......... Two point patterns ...............................*/
+/* .......... k-th nearest neighbours ...............................*/
 
-  npoints = *n;
-  nk      = *kmax;
-  nk1     = nk - 1;
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-  /* 
-     create space to store the nearest neighbour distances and indices
-     for the current point
-  */
+/* 
+   knnXdw3D
 
-  d2min = (double *) R_alloc((size_t) nk, sizeof(double));
-  which = (int *) R_alloc((size_t) nk, sizeof(int));
+   nearest neighbours 1:kmax between two point patterns
 
-  /* loop over points */
+   returns distances and indices
 
-  OUTERCHUNKLOOP(i, npoints, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, npoints, maxchunk, 16384) {
+*/
 
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\ni=%d\n", i); 
-#endif
+#define FNAME knnXdw3D
+#define DIST
+#define WHICH
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-      /* initialise nn distances and indices */
+/* 
+   knnXd3D
 
-      d2minK = hu2;
-      for(k = 0; k < nk; k++) {
-	d2min[k] = hu2;
-	which[k] = -1;
-      }
+   nearest neighbours 1:kmax between two point patterns
 
-      xi = x[i];
-      yi = y[i];
-      zi = z[i];
+   returns distances
 
-      /* search backward */
-      if(i > 0) {
-	for(j = i - 1; j >= 0; --j) {
+*/
 
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("L");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz; 
-	  if(dz2 > d2minK)
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2minK) {
-	    /* overwrite last entry */
-	    d2min[nk1] = d2;
-	    which[nk1] = j;
-	    /* bubble sort */
-	    unsorted = YES;
-	    for(k = nk1; unsorted && k > 0; k--) {
-	      k1 = k - 1;
-	      if(d2min[k] < d2min[k1]) {
-		/* swap entries */
-		tmp = d2min[k1];
-		d2min[k1] = d2min[k];
-		d2min[k] = tmp;
-		itmp = which[k1];
-		which[k1] = which[k];
-		which[k] = itmp;
-	      } else {
-		unsorted = NO;
-	      }
-	    }
-	    /* adjust maximum distance */
-	    d2minK = d2min[nk1];
-	  }
-	}
-      }
+#define FNAME knnXd3D
+#define DIST
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 
-      /* search forward */
-      if(i + 1 < npoints) {
-	for(j = i + 1; j < npoints; ++j) {
+/* 
+   knnXw3D
 
-#ifdef SPATSTAT_DEBUG
-	  Rprintf("R");
-#endif
-	  dz = z[j] - zi;
-	  dz2 = dz * dz;
-	  if(dz2 > d2minK)
-	    break;
-	  dx = x[j] - xi;
-	  dy = y[j] - yi;
-	  d2 =  dx * dx + dy * dy + dz2;
-	  if (d2 < d2minK) {
-	    /* overwrite last entry */
-	    d2min[nk1] = d2;
-	    which[nk1] = j;
-	    /* bubble sort */
-	    unsorted = YES;
-	    for(k = nk1; unsorted && k > 0; k--) {
-	      k1 = k - 1;
-	      if(d2min[k] < d2min[k1]) {
-		/* swap entries */
-		tmp = d2min[k1];
-		d2min[k1] = d2min[k];
-		d2min[k] = tmp;
-		itmp = which[k1];
-		which[k1] = which[k];
-		which[k] = itmp;
-	      } else {
-		unsorted = NO;
-	      }
-	    }
-	    /* adjust maximum distance */
-	    d2minK = d2min[nk1];
-	  }
-	}
-      }
+   nearest neighbours 1:kmax between two point patterns
 
-#ifdef SPATSTAT_DEBUG
-      Rprintf("\n");
-#endif
+   returns indices
 
-      /* calculate nn distances for point i 
-	 and copy to output matrix in ROW MAJOR order
-      */
-      for(k = 0; k < nk; k++) {
-	nnd[nk * i + k] = sqrt(d2min[k]);
-	nnwhich[nk * i + k] = which[k];
-      }
-	
-    }
-  }
-}
+*/
+
+#define FNAME knnXw3D
+#define WHICH
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
+
+/* .......... Two point patterns with exclusion ..........................*/
+/* .......... k-th nearest neighbours ...............................*/
+
+
+/* 
+   knnXEdw3D
+
+   nearest neighbours 1:kmax between two point patterns with exclusion
+
+   returns distances and indices
+
+*/
+
+#define FNAME knnXEdw3D
+#define DIST
+#define WHICH
+#define EXCLUDE
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
+
+/* 
+   knnXEd3D
+
+   nearest neighbours 1:kmax between two point patterns with exclusion
+
+   returns distances
+
+*/
+
+#define FNAME knnXEd3D
+#define DIST
+#define EXCLUDE
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
+
+/* 
+   knnXEw3D
+
+   nearest neighbours 1:kmax between two point patterns with exclusion
+
+   returns indices
+
+*/
+
+#define FNAME knnXEw3D
+#define WHICH
+#define EXCLUDE
+#include "knn3DdistX.h"
+#undef FNAME
+#undef DIST
+#undef WHICH
+#undef EXCLUDE
 

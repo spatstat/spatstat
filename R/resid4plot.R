@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.16 $    $Date: 2011/05/18 09:03:25 $
+#   $Revision: 1.17 $    $Date: 2013/07/17 02:37:41 $
 #
 #
 
@@ -383,31 +383,6 @@ resid1panel <- function(observedX, observedV,
 
 #
 #
-beachcolours <- function(heightrange, sealevel = 0, monochrome=FALSE,
-                         ncolours=if(monochrome) 16 else 64) {
-  if(monochrome)
-    return(grey(seq(from=0,to=1,length.out=ncolours)))
-  stopifnot(is.numeric(heightrange) && length(heightrange) == 2)
-  stopifnot(all(is.finite(heightrange)))
-  depths <- heightrange[1]
-  peaks <- heightrange[2]
-  dv <- diff(heightrange)/(ncolours - 1)
-  epsilon <- dv/2
-  lowtide <- max(sealevel - epsilon, depths)
-  hightide <-  min(sealevel + epsilon, peaks)
-  countbetween <- function(a, b, delta) { max(0, round((b-a)/delta)) }
-  nsea <- countbetween(depths, lowtide, dv)
-  nbeach <- countbetween(lowtide,  hightide, dv)
-  nland <- countbetween(hightide,  peaks, dv)
-  colours <- character(0)
-  if(nsea > 0)  colours <- rev(rainbow(nsea, start=3/6,end=4/6)) # cyan/blue
-  if(nbeach > 0)  colours <- c(colours,
-                             rev(rainbow(nbeach, start=3/12,end=5/12))) # green
-  if(nland > 0)  colours <- c(colours,
-                              rev(rainbow(nland, start=0, end=1/6)))  # red/yellow
-  return(colours)
-}
-
 ploterodewin <- function(W1, W2, col.edge=grey(0.75), col.inside=rgb(1,0,0),
                          ...) {
   # internal use only

@@ -7,7 +7,7 @@
 }
 \usage{
   lohboot(X,
-          fun=c("pcf", "Kest", "pcfinhom", "Kinhom"),
+          fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
           \dots, nsim=200, confidence=0.95, global=FALSE, type=7)
 }
 \arguments{
@@ -16,7 +16,8 @@
   }
   \item{fun}{
     Name of the summary function to be computed: one of the strings
-    \code{"pcf"}, \code{"Kest"}, \code{"pcfinhom"} or \code{"Kinhom"}.
+    \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
+    \code{"pcfinhom"}, \code{"Kinhom"} or \code{"Linhom"}.
   }
   \item{\dots}{
     Arguments passed to the corresponding local version of the summary
@@ -71,10 +72,15 @@
     \bold{fun} \tab \bold{local version} \cr
     \code{\link{pcf}} \tab \code{\link{localpcf}} \cr
     \code{\link{Kest}} \tab \code{\link{localK}} \cr
+    \code{\link{Lest}} \tab \code{\link{localK}} \cr
     \code{\link{pcfinhom}} \tab \code{\link{localpcfinhom}} \cr
-    \code{\link{Kinhom}} \tab \code{\link{localKinhom}}
+    \code{\link{Kinhom}} \tab \code{\link{localKinhom}} \cr
+    \code{\link{Linhom}} \tab \code{\link{localKinhom}}
   }
-
+  For \code{fun="Lest"}, the calculations are first performed
+  as if \code{fun="Kest"}, and then the square-root transformation is
+  applied to obtain the \eqn{L}-function. 
+  
   An alternative to \code{lohboot} is \code{\link{varblock}}.
 }
 \references{

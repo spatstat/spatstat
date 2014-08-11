@@ -85,9 +85,14 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
   \code{\link[grDevices:colors]{colours}} for information about the colours
   that \R recognises, and how to manipulate them.
   
+  To make a smooth transition between colours, see
+  \code{\link{interp.colourmap}}.
+  To alter individual colour values, see
+  \code{\link{tweak.colourmap}}.
+    
   See \code{\link[spatstat:colourtools]{colourtools}}
-  for more tools to manipulate colours.
-  
+  for more tools to manipulate colour values.
+
   See \code{\link{lut}} for lookup tables.
 }
 \examples{

@@ -82,6 +82,14 @@ markvar(X, ...)
   An alternative to kernel smoothing is inverse-distance weighting,
   which is performed by \code{\link{idw}}.
 }
+\section{Very small bandwidth}{
+  If the chosen bandwidth \code{sigma} is very small,
+  kernel smoothing is mathematically equivalent
+  to nearest-neighbour interpolation; the result will
+  be computed by \code{\link{nnmark}}. This is
+  unless \code{at="points"} and \code{leaveoneout=FALSE},
+  when the original mark values are returned.
+}
 \value{
   \emph{If \code{X} has a single column of marks:}
   \itemize{
@@ -114,6 +122,7 @@ markvar(X, ...)
 \seealso{
   \code{\link{density.ppp}},
   \code{\link{bw.smoothppp}},
+  \code{\link{nnmark}},
   \code{\link{ppp.object}},
   \code{\link{im.object}}.
 

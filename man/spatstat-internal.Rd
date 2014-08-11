@@ -4,6 +4,7 @@
 \alias{[<-.hyperframe}
 \alias{$.hyperframe}
 \alias{$<-.hyperframe}
+\alias{[.pp3}
 \alias{[.localpcfmatrix}
 \alias{[.splitppx}
 \alias{[<-.splitppx}
@@ -26,19 +27,18 @@
 \alias{as.breakpts}
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
-\alias{as.fv}
 \alias{as.im.scan.test}
 \alias{as.im.linim}
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.units}
 \alias{badprobability}
-\alias{beachcolours}
 \alias{bermantestEngine}
 \alias{bdrylength.xypolygon} 
 \alias{bdry.mask}
 \alias{bind.ratfv}
 \alias{blankcoefnames}
+\alias{bounding.box3}
 \alias{breakpts}
 \alias{breakpts.from.r}
 \alias{bt.frame}
@@ -56,6 +56,7 @@
 \alias{check.named.vector}
 \alias{check.nvector}
 \alias{check.nmatrix}
+\alias{check.1.integer}
 \alias{check.1.real}
 \alias{check.range}
 \alias{check.testfun}
@@ -118,6 +119,7 @@
 \alias{emptywindow}
 \alias{ensure2vector}
 \alias{envelopeEngine}
+\alias{envelopeProgressData}
 \alias{envelopeTest}
 \alias{envelope.matrix}
 \alias{equalpairs}          
@@ -251,6 +253,7 @@
 \alias{localpcfengine}
 \alias{localpcfmatrix}
 \alias{local2lpp}
+\alias{logi.dummy}
 \alias{logi.engine}
 \alias{passthrough}
 \alias{paste.expr}
@@ -361,6 +364,7 @@
 \alias{primesbelow}
 \alias{printStatus}
 \alias{print.addvar}    
+\alias{print.autoexec}    
 \alias{print.bt.frame}
 \alias{print.bw.frac}
 \alias{print.bw.optim}
@@ -377,7 +381,6 @@
 \alias{print.layered}
 \alias{print.linim}
 \alias{print.localpcfmatrix}
-\alias{print.logippm}
 \alias{print.lut}
 \alias{print.minconfit}
 \alias{print.msr}
@@ -399,6 +402,7 @@
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
+\alias{print.summary.logiquad}
 \alias{print.summary.lut}
 \alias{print.summary.owin}
 \alias{print.summary.ppp}
@@ -515,7 +519,7 @@
 \alias{summarise.trend}
 \alias{summary.envelope}
 \alias{summary.hyperframe}
-\alias{summary.logippm}
+\alias{summary.logiquad}
 \alias{summary.lut}
 \alias{summary.profilepl}
 \alias{summary.pppmatching}
@@ -536,6 +540,7 @@
 \alias{tweak.fv.entry}
 \alias{unitname.default}
 \alias{unitname<-.default}
+\alias{unparen}
 \alias{update.interact}
 \alias{update.rmhstart}
 \alias{update.slrm}
@@ -594,19 +599,18 @@ AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.data.frame}{fv}(x, ...)
 \method{as.data.frame}{bw.optim}(x, ...)
-as.fv(x)
 \method{as.list}{hyperframe}(x, ...)
 \method{as.im}{scan.test}(X, \dots)
 \method{as.im}{linim}(X, \dots)
 as.listof(x)
 as.units(s)
 badprobability(x, NAvalue)
-beachcolours(heightrange, sealevel, monochrome, ncolours)
 bermantestEngine(model, covariate, which, alternative, ..., modelname, covname, dataname)
 bdrylength.xypolygon(polly)
 bdry.mask(W)
 bind.ratfv(x, numerator, denominator, labl, desc, preferred, ratio)
 blankcoefnames(x)
+bounding.box3(\dots)
 breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
 breakpts.from.r(r)
 bt.frame(Q, trend=~1, interaction=NULL, ..., covariates=NULL,
@@ -615,8 +619,8 @@ bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
 cartesian(pp, markset, fac = TRUE)
 cat.factor(\dots, recursive=FALSE)
 cellmiddles(W, nx, ny, npix, gi)
-censtimeCDFest(o, cc, d, breaks, \dots, KM, RS, HAN, RAW, han.denom,
-pmax)
+censtimeCDFest(o, cc, d, breaks, \dots,
+     KM, RS, HAN, RAW, han.denom, tt, pmax)
 change.default.expand(x, newdefault)
 checkfields(X,L)          
 check.finite(x, context, xname, fatal, usergiven)
@@ -626,6 +630,7 @@ check.named.vector(x, nam, context, namopt)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
 check.nvector(v, npoints, fatal=TRUE, things="data points", naok=FALSE)
 check.nmatrix(m, npoints, fatal=TRUE, things="data points", naok=FALSE, squarematrix=TRUE)
+check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
@@ -700,8 +705,10 @@ envelopeEngine(X, fun, simul,
            nsim2=nsim, VARIANCE=FALSE, nSD=2,
            Yname=NULL, maxnerr=nsim, internal=NULL, cl=NULL,
            envir.user=envir.user, expected.arg="r", do.pwrong=FALSE)
+envelopeProgressData(X, fun, \dots, expo, normalize, deflate)
 envelopeTest(X, \dots,
-            power, rinterval, use.theo, tie.rule, save.envelope,
+            power, rinterval, use.theo, tie.rule,
+            save.envelope, savefuns, savepatterns,
             Xname, verbose, internal)
 \method{envelope}{matrix}(Y, ..., rvals, observed, theory, funX,
       nsim, nsim2, jsim, jsim.mean,
@@ -840,14 +847,17 @@ localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 local2lpp(L, seg, tp, X)
-logi.engine(\dots)
+logi.dummy(X, dummytype, nd, mark.repeat, ...)
+logi.engine(Q, trend, interaction, \dots, 
+            covariates, correction, rbord, covfunargs, allcovar, 
+            vnamebase, vnameprefix, justQ, savecomputed, precomputed)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
 prettyinside(x, \dots)
 \method{print}{localpcfmatrix}(x, \dots)
-\method{print}{logippm}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
 \method{[}{localpcfmatrix}(x, i, ...)
+\method{[}{pp3}(x, i, ...)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
@@ -891,7 +901,8 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             want.trend, want.inter, correction, rbord, Pname,
             callstring, \dots,
             covfunargs, allcovar, precomputed, savecomputed,
-            vnamebase, vnameprefix, warn.illegal, warn.unidentifiable)
+            vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
+            skip.border)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
@@ -965,14 +976,17 @@ ppm.influence(fit,
    what = c("leverage","influence","dfbetas","derivatives"),
    ..., iScore = NULL, iHessian = NULL, iArgs=list(), drop = FALSE,
    method=c("C", "interpreted"))
-pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9, approximation = 10)
-pppdist.prohorov(X, Y, n, dfix, type, cutoff = 1, matching = TRUE, ccode = TRUE, precision = 9, approximation = 10) 
+pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
+            precision = 9, approximation = 10)
+pppdist.prohorov(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
+            ccode = TRUE, precision = 9, approximation = 10) 
 ppsubset(X, I)
 prange(x)
 prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
 primefactors(n, prmax)
 primesbelow(nmax)
 \method{print}{addvar}(x, \dots)
+\method{print}{autoexec}(x, \dots)
 \method{print}{bt.frame}(x, \dots)
 \method{print}{bw.frac}(x, \dots)
 \method{print}{bw.optim}(x, \dots)
@@ -1009,6 +1023,7 @@ primesbelow(nmax)
 \method{print}{splitppx}(x, \dots)
 \method{print}{summary.hyperframe}(x, ...)
 \method{print}{summary.listof}(x, \dots)
+\method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)
 \method{print}{summary.owin}(x, \dots)
 \method{print}{summary.ppp}(x, \dots, dp=3)
@@ -1028,7 +1043,7 @@ rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn)
 rgbNA(red, green, blue, \dots)
-rhs.of.formula(x)
+rhs.of.formula(x, tilde)
 rhohatEngine(model, covariate, reference, volume, \dots,
                method, smoother, resolution, 
                n, bw, adjust, from, to, 
@@ -1041,7 +1056,8 @@ rhohatCalc(ZX, Zvalues, lambda, baseline, \dots,
 RmhExpandRule(nama)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
-quadrat.testEngine(X, nx, ny, alternative, method, conditional, \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)
+quadrat.testEngine(X, nx, ny, alternative, method, conditional,
+     \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)
 quadscheme.replicated(data, dummy, method = "grid", \dots)
 quadscheme.spatial(data, dummy, method = "grid", \dots)
 pointgrid(W, ngrid)
@@ -1067,7 +1083,8 @@ resid1panel(observedX, observedV,
             theoreticalX, theoreticalV, theoreticalSD, xlab,ylab, \dots)
 resolve.defaults(\dots, .MatchNull=TRUE, .StripNull=FALSE)
 resolve.1.default(.A, \dots)
-resolve.2D.kernel(\dots, sigma, varcov, x, mindist, adjust, bwfun)
+resolve.2D.kernel(\dots,
+            sigma, varcov, x, mindist, adjust, bwfun, allow.zero)
 restrict.mask(M, W)
 reverse.xypolygon(p, adjust=FALSE)
 revcumsum(x)
@@ -1101,8 +1118,8 @@ scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 scanLRTS(X, r, \dots, method, baseline, case, alternative)
 second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
 \dots, varcov=NULL, expand=FALSE)
-second.moment.engine(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
-\dots, obswin=as.owin(x), varcov=NULL, npts=NULL)
+second.moment.engine(x, sigma, edge, what, \dots,
+      obswin, varcov, npts, debug)
 sensiblevarname(guess, fallback, maxlen)
 sewpcf(d, w, denargs, lambda2area)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
@@ -1121,7 +1138,8 @@ spatstat.rawdata.location(\dots)
 spatstatClusterModelInfo(name)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)
-spatialCDFtest(model, covariate, test, \dots, dimyx, eps, jitter, modelname, covname, dataname)
+spatialCDFtest(model, covariate, test, \dots,
+         dimyx, eps, jitter, modelname, covname, dataname)
 sphere.volume(range, nval = 10)
 splitHybridInteraction(coeffs, inte)
 sp.foundclass(cname, inlist, formalname, argsgiven)             
@@ -1136,7 +1154,7 @@ suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
 \method{summary}{hyperframe}(object, ..., brief=FALSE)
-\method{summary}{logippm}(object, \dots)
+\method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
 \method{summary}{profilepl}(object, \dots)
 \method{summary}{pppmatching}(object, \dots)
@@ -1157,6 +1175,7 @@ trim.mask(M, R, tolerant)
 tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
 \method{unitname}{default}(x)
 \method{unitname}{default}(x) <- value
+unparen(x)
 \method{update}{interact}(object, \dots)
 \method{update}{rmhstart}(object, \dots)
 \method{update}{slrm}(object, ..., evaluate = TRUE, env = parent.frame())
@@ -1179,7 +1198,8 @@ w.quad(Q)
 x.quad(Q)
 y.quad(Q)
 xy.grid(xr, yr, nx, ny, dx, dy)
-X2testEngine(OBS, EXP, \dots, method, df, nsim, conditional, alternative, testname, dataname)
+X2testEngine(OBS, EXP, \dots, method, df, nsim,
+     conditional, alternative, testname, dataname)
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)

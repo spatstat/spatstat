@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.29 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.32 $	$Date: 2013/07/19 03:55:36 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -37,14 +37,20 @@ function(Q,
   if(is.null(callstring)) 
     callstring <- paste(short.deparse(sys.call()), collapse="")
 
-  if(is.null(interaction))
-    interaction <- Poisson()
-
   if(is.ppp(Q) && is.marked(Q) && !is.multitype(Q)) 
     stop(paste("ppm is not yet implemented for marked point patterns,",
                "other than multitype patterns."))
   if(!(is.ppp(Q) || inherits(Q, "quad")))
     stop("Argument Q must be a point pattern or a quadrature scheme")
+
+# Ensure interaction is fully defined  
+  if(is.null(interaction)) 
+    interaction <- Poisson()
+  if(!is.null(ss <- interaction$selfstart)) {
+    # invoke selfstart mechanism to fix all parameters
+    X <- if(is.ppp(Q)) Q else Q$data
+    interaction <- ss(X, interaction)
+  }
   
   # validate choice of edge correction
   correction <- pickoption("correction", correction,
@@ -95,6 +101,11 @@ function(Q,
                            callstring=callstring,
                            ...)
     fitLOGI$Qname <- Qname
+    fitLOGI$call <- cl
+    fitLOGI$callstring <- callstring
+    fitLOGI$callframe <- parent.frame()
+    if(project && !valid.ppm(fitLOGI))
+      fitLOGI <- project.ppm(fitLOGI)
     return(fitLOGI)
   }
   

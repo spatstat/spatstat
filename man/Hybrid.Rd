@@ -18,7 +18,7 @@ Hybrid(...)
   }
 }
 \details{
-  A \emph{hybrid} (Baddeley, Turner, Mateu and Bevan, 2012)
+  A \emph{hybrid} (Baddeley, Turner, Mateu and Bevan, 2013)
   is a point process model created by combining two or more
   point process models, or an interpoint interaction created by combining
   two or more interpoint interactions.
@@ -63,9 +63,9 @@ Hybrid(...)
   describing an interpoint interaction structure.
 }
 \references{
-  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2012)
+  Baddeley, A., Turner, R., Mateu, J. and Bevan, A. (2013)
   Hybrids of Gibbs point process models and their implementation.
-  Submitted for publication.
+  To appear in \emph{Journal of Statistical Software}.
 }
 \seealso{
   \code{\link{ppm}}

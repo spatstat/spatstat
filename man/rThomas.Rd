@@ -109,6 +109,13 @@
 \code{\link{kppm}}
 }
 \references{
+  Diggle, P. J., Besag, J. and Gleaves, J. T. (1976)
+  Statistical analysis of spatial point patterns by
+  means of distance methods. \emph{Biometrics} \bold{32} 659--667.
+
+  Thomas, M. (1949) A generalisation of Poisson's binomial limit for use
+  in ecology. \emph{Biometrika} \bold{36}, 18--25.
+
   Waagepetersen, R. (2007)
   An estimating function approach to inference for
   inhomogeneous Neyman-Scott processes.

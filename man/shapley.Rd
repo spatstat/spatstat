@@ -58,6 +58,11 @@
   dilated copy of the convex hull of the galaxy positions,
   constructed so that all galaxies lie within the window.
 
+  Note that the data contain duplicated points (two points at the
+  same location). To determine which points are duplicates,
+  use \code{\link{duplicated.ppp}}.
+  To remove the duplication, use \code{\link{unique.ppp}}.
+
   The auxiliary dataset \code{shapley.extra} contains 
   the following components:
   \describe{

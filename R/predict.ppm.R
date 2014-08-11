@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.71 $	$Date: 2013/05/23 10:37:54 $
+#	$Revision: 1.73 $	$Date: 2013/06/17 03:46:56 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -267,6 +267,8 @@ predict.ppm <- local({
 	Vnames <- model$internal$Vnames
         glmdata <- getglmdata(model)
         glmfit <- getglmfit(model)
+        if(object$method=="logi")
+          newdata$.logi.B <- rep(glmdata$.logi.B[1], nrow(newdata))
   }
   
 ############  COMPUTE PREDICTION ##############################
@@ -500,9 +502,23 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
     linkinv <- family(fit)$linkinv
     answer <- linkinv(eta)
   }
+  # Convert from fitted logistic prob. to lambda for logistic fit
+  if(family(fit)$family=="binomial")
+    answer <- fit$data$.logi.B[1] * answer/(1-answer)
   return(answer)
 
 }
+
+# An 'equalpairs' matrix E is needed in the ppm class
+# to determine which quadrature points and data points are identical
+# (not just which quadrature points are data points).
+# It is a two-column matrix specifying all the identical pairs.
+# The first column gives the index of a data point (in the data pattern X)
+# and the second column gives the corresponding index in U.
+
+# The following function determines the equal pair information
+# from the coordinates (and marks) of U and X alone;
+# it should be used only if we can't figure out this information otherwise.
 
 equalpairs <- function(U, X, marked=FALSE) {
   nn <- nncross(U, X)

@@ -5,6 +5,7 @@
 #include "geom3.h"
 #include "functable.h"
 #include "chunkloop.h"
+#include "constants.h"
 
 /*
 	$Revision: 1.7 $	$Date: 2012/03/27 05:01:41 $

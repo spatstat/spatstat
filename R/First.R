@@ -1,20 +1,21 @@
 #  First.R
 #
-#  $Revision: 1.32 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.34 $ $Date: 2013/08/02 05:48:26 $
 #
+
+.spatstat.Nickname <- "Logistical Nightmare"
 
 .onLoad <- function(...) reset.spatstat.options()
 
 .onAttach <- function(libname, pkgname) {
   store.versionstring.spatstat()
-  v <- versionstring.spatstat()
-  msg <- paste("spatstat", v,
-               "\nType", sQuote("help(spatstat)"),
-               "for an overview of spatstat",
-               "\n    ", sQuote("latest.news()"),
-               "for news on latest version",
-               "\n    ", sQuote("licence.polygons()"),
-               "for licence information on polygon calculations")
+  ver <- versionstring.spatstat()
+  nick <- .spatstat.Nickname
+  msg <- paste("\nspatstat", ver,
+               "   ",
+               paren(paste("nickname:", sQuote(nick))),
+               "\nFor an introduction to spatstat, type",
+               sQuote("beginner"))
   packageStartupMessage(msg)
   invisible(NULL)
 }

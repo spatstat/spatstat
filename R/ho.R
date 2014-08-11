@@ -49,7 +49,7 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   # update model
   newmodel <- model
   newmodel$coef <- theta
-  newmodel$coef.mpl <- theta0
+  newmodel$coef.orig <- theta0
   newmodel$method <- "ho"
   newmodel$fitter <- "ho"
   newmodel$fisher <- svar

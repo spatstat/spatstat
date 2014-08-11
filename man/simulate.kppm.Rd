@@ -6,7 +6,7 @@
 }
 \usage{
   \method{simulate}{kppm}(object, nsim = 1, seed=NULL, ...,
-         window=NULL, covariates=NULL, verbose=TRUE)
+         window=NULL, covariates=NULL, verbose=TRUE, retry=10)
 }
 \arguments{
   \item{object}{
@@ -32,6 +32,10 @@
   }
   \item{verbose}{
     Logical. Whether to print progress reports (when \code{nsim > 1}).
+  }
+  \item{retry}{
+    Number of times to repeat the simulation if it fails
+    (e.g. because of insufficient memory).
   }
 }
 \details{

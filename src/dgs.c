@@ -3,7 +3,7 @@
 #include <math.h>
 #include "methas.h"
 #include "dist2.h"
-
+#include "constants.h"
 
 /* Conditional intensity computation for Diggle-Gates-Stibbard process */
 

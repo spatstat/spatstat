@@ -12,12 +12,14 @@ latest.news(package = "spatstat")
 }
 \arguments{
   \item{package}{
-    Name of package for which the news file
+    Name of package for which the latest news should be printed.
   }
 }
 \details{
   By default, this function prints the news documentation about changes in the
   current installed version of the \pkg{spatstat} package.
+  The function can be called simply by typing its
+  name without parentheses (see the Examples).
 
   If \code{package} is given, then the function reads the
   news for the specified package from its \code{NEWS} file (if it has one) 
@@ -40,9 +42,14 @@ latest.news(package = "spatstat")
   \code{\link[utils]{news}}
 }
 \examples{
-  # current news
-  latest.news()
-  # all news
-  news(package="spatstat")
+  if(interactive()) {
+
+    # current news
+    latest.news
+
+    # all news
+    news(package="spatstat")
+
+  }
 }
 \keyword{documentation}

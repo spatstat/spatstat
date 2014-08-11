@@ -72,6 +72,7 @@
   \item{method}{
     The method used to fit the model. Options are 
     \code{"mpl"} for the method of Maximum PseudoLikelihood,
+    \code{"logi"} for the Logistic Likelihood method,
     and \code{"ho"} for the Huang-Ogata approximate maximum likelihood
     method.
   }
@@ -203,8 +204,8 @@
       then the model to be fitted
       has no interpoint interactions, that is, it is a Poisson process
       (stationary or nonstationary according to \code{trend}). In this case
-      the method of maximum pseudolikelihood
-      coincides with maximum likelihood. 
+      the methods of maximum pseudolikelihood and maximum logistic likelihood
+      coincide with maximum likelihood. 
 
       The fitted point process model returned by this function can be printed 
       (by the print method \code{\link{print.ppm}})
@@ -269,7 +270,7 @@
       to have practical uses, as we explain below.
 
       Quadrature schemes are required for our implementation of
-      the method of maximum pseudolikelihood. 
+      the method of maximum pseudolikelihood.
       The definition of the pseudolikelihood involves an integral over
       the spatial window containing the data. In practice this integral
       must be approximated by a finite sum over a set of quadrature points.
@@ -279,6 +280,10 @@
       (points of the observed point pattern) as well as
       additional `dummy' points. 
 
+      Quadrature schemes are also required for 
+      the method of maximum logistic likelihood, which
+      combines the data points with additional `dummy' points.
+      
       A quadrature scheme is an object of class \code{"quad"}
       (see \code{\link{quad.object}})
       which specifies both the data point pattern and the dummy points
@@ -328,26 +333,45 @@
       \code{ppm(Q, ..., covariates)}.
     }
     \item{Model-fitting technique:}{
-      The model may be fitted either by
-      the method of maximum pseudolikelihood (Besag, 1975)
-      or by the approximate maximum likelihood
-      method of Huang and Ogata (1999).
-      Maximum pseudolikelihood is much faster,
-      but has poorer statistical properties. 
-  
-      In either case, the algorithm will begin by fitting the model
-      by maximum pseudolikelihood. By default the algorithm returns
-      the maximum pseudolikelihood fit.
-
-      Maximum pseudolikelihood is equivalent to maximum likelihood
-      for Poisson point processes. 
-      
-      Note that the method of maximum pseudolikelihood is
-      believed to be inefficient and biased for point processes with strong
-      interpoint interactions. In such cases, the Huang-Ogata approximate
-      maximum likelihood method should be used, although
-      maximum pseudolikelihood may also be used profitably for
-      model selection in the initial phases of modelling.
+      There are several choices for the technique used
+      to fit the model.
+      \describe{
+	\item{method="mpl"}{
+	  (the default):
+	  the model will be fitted by maximising the 
+	  pseudolikelihood (Besag, 1975) using the
+	  Berman-Turner computational approximation
+	  (Berman and Turner, 1992; Baddeley and Turner, 2000).
+	  Maximum pseudolikelihood is equivalent to maximum likelihood
+	  if the model is a Poisson process. 
+	  Maximum pseudolikelihood is biased if the
+	  interpoint interaction is very strong, unless there
+	  is a large number of dummy points.
+	  The default settings for \code{method='mpl'}
+	  specify a moderately large number of dummy points,
+	  striking a compromise between speed and accuracy.
+	}
+	\item{method="logi":}{
+	  the model will be fitted by maximising the 
+	  logistic likelihood (Baddeley et al, 2013).
+	  This technique is roughly equivalent in speed to
+	  maximum pseudolikelihood, but is 
+	  believed to be less biased. Because it is less biased,
+	  the default settings for \code{method='logi'}
+	  specify a relatively small number of dummy points,
+	  so that this method is the fastest, in practice.
+	}
+	\item{method="ho":}{
+	  the model will be fitted
+	  by applying the approximate maximum likelihood
+	  method of Huang and Ogata (1999). See below.
+	  The Huang-Ogata method is slower than the other options,
+	  but has better statistical properties.
+	}
+      }
+      Note that \code{method='logi'} and \code{method='ho'}
+      involve randomisation, so that the results are subject to
+      random variation. 
     }
     \item{Huang-Ogata method:}{
       If \code{method="ho"} then the model will be fitted using
@@ -437,6 +461,12 @@
   is implemented in the command \code{\link{profilepl}}.   
 }
 \references{
+  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2013)
+  \emph{A logistic regression estimating function
+    for spatial Gibbs point processes.}
+  Research Report, Centre for Stochastic Geometry and Bioimaging,
+  Denmark. \url{www.csgb.dk}
+  
   Baddeley, A. and Turner, R.
   Practical maximum pseudolikelihood for spatial point patterns.
   \emph{Australian and New Zealand Journal of Statistics}

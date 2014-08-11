@@ -1,14 +1,14 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.6 $   $Date: 2012/08/31 07:14:04 $
+#  $Revision: 1.7 $   $Date: 2013/08/01 09:40:03 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
 
 lohboot <-
   function(X,
-           fun=c("pcf", "Kest", "pcfinhom", "Kinhom"),
+           fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
            ..., nsim=200, confidence=0.95, global=FALSE, type=7) {
   stopifnot(is.ppp(X))
   fun <- match.arg(fun)
@@ -26,14 +26,17 @@ lohboot <-
     warning(paste("confidence level", confidence,
                   "corresponds to a non-integer rank", paren(rank),
                   "so quantiles will be interpolated"))
-  #
   n <- npoints(X)
+  # compute local functions
   localfun <- switch(fun,
                      pcf=localpcf,
                      Kest=localK,
+                     Lest=localK,
                      pcfinhom=localpcfinhom,
-                     Kinhom=localKinhom)
+                     Kinhom=localKinhom,
+                     Linhom=localKinhom)
   f <- localfun(X, ...)
+  theo <- f$theo
   # parse edge correction info
   correction <- attr(f, "correction")
   switch(correction,
@@ -41,7 +44,7 @@ lohboot <-
          border    = { ctag <- "bord";  cadj <- "border-corrected" },
          translate = { ctag <- "trans"; cadj <- "translation-corrected" },
          isotropic = { ctag <- "iso";   cadj <- "Ripley isotropic corrected" })
-  # first n columns are the local pcfs for the n points of X
+  # first n columns are the local pcfs (etc) for the n points of X
   y <- as.matrix(as.data.frame(f))[, 1:n]
   # average them
   ymean <- rowMeans(y, na.rm=TRUE)
@@ -65,9 +68,15 @@ lohboot <-
     crit <- quantile(ydev, probs=probs, na.rm=TRUE, type=type)
     hilo <- rbind(ymean - crit, ymean + crit)
   }
+  # now transform from K to L if required
+  if(fun %in% c("Lest", "Linhom")) {
+    ymean <- sqrt(ymean/pi)
+    theo  <- sqrt(theo/pi)
+    hilo  <- sqrt(hilo/pi)
+  }
   # create fv object
   df <- data.frame(r=f$r,
-                   theo=f$theo,
+                   theo=theo,
                    ymean,
                    lo=hilo[1,],
                    hi=hilo[2,])
@@ -83,8 +92,10 @@ lohboot <-
   switch(fun,
          pcf={ fname <- "g" ; ylab <- quote(g(r)) },
          Kest={ fname <- "K" ; ylab <- quote(K(r)) },
+         Lest={ fname <- "L" ; ylab <- quote(L(r)) },
          pcfinhom={ fname <- "g[inhom]" ; ylab <- quote(g[inhom](r)) },
-         Kinhom={ fname <- "K[inhom]" ; ylab <- quote(K[inhom](r)) })
+         Kinhom={ fname <- "K[inhom]" ; ylab <- quote(K[inhom](r)) },
+         Linhom={ fname <- "L[inhom]" ; ylab <- quote(L[inhom](r)) })
   g <- fv(df, "r", ylab, ctag, , c(0, max(f$r)), labl, desc, fname=fname)
   formula(g) <- . ~ r
   fvnames(g, ".") <- c(ctag, "hi", "lo", "theo")

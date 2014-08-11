@@ -14,6 +14,11 @@
   white oaks, black oaks and miscellaneous trees).
   The original plot size (924 x 924 feet)
   has been rescaled to the unit square.
+  
+  Note that the data contain duplicated points (two points at the
+  same location). To determine which points are duplicates,
+  use \code{\link{duplicated.ppp}}.
+  To remove the duplication, use \code{\link{unique.ppp}}.
 } 
 \format{
   An object of class \code{"ppp"}
@@ -39,6 +44,7 @@
 \examples{
      data(lansing)
      plot(lansing)
+     summary(lansing)
      plot(split(lansing))
      plot(split(lansing)$maple)
 }

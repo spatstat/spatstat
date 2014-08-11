@@ -722,13 +722,15 @@ bounding.box <- function(...) {
             stop(paste("bounding.box() was applied to two numeric vectors;",
                        "you probably wanted bounding.box.xy()"))
         }
-            
+
         if(length(wins) > 1) {
           # multiple arguments -- compute bounding box for each argument.
           # First trap any point patterns and extract bounding boxes of points
           isppp <- unlist(lapply(wins, is.ppp))
           if(any(isppp)) 
             wins[isppp] <- lapply(wins[isppp], bounding.box.xy)
+          # then convert all windows to owin
+          wins <- lapply(wins, as.owin)
           # then take bounding box of each window
           boxes <- lapply(wins, bounding.box)
           # discard NULL values

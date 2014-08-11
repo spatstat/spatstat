@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.9 $  $Date: 2013/05/21 09:40:26 $
+#   $Revision: 1.10 $  $Date: 2013/07/04 00:43:27 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -90,7 +90,10 @@ edges2vees <- function(iedge, jedge, nvert=max(iedge, jedge),
     }
   }
   # zero length data, or not enough to make vees
-  if(length(iedge) < 2) return(matrix(, nrow=0, ncol=3))
+  if(length(iedge) < 2)
+    return(data.frame(i=numeric(0),
+                      j=numeric(0),
+                      k=numeric(0)))
   # call 
   vees <- .Call("graphVees",
                 nv = nvert,

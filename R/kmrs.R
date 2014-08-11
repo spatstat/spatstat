@@ -9,7 +9,7 @@
 #	reduced.sample()
 #       km.rs()
 #
-#	$Revision: 3.25 $	$Date: 2013/05/01 07:21:18 $
+#	$Revision: 3.26 $	$Date: 2013/06/27 08:59:16 $
 #
 #	The functions in this file produce vectors `km' and `rs'
 #	where km[k] and rs[k] are estimates of F(breaks[k+1]),
@@ -157,7 +157,7 @@ function(o, cc, d, breaks, KM=TRUE, RS=TRUE) {
 
 censtimeCDFest <- function(o, cc, d, breaks, ...,
                            KM=TRUE, RS=TRUE, HAN=TRUE, RAW=TRUE,
-                           han.denom=NULL, pmax=0.9) {
+                           han.denom=NULL, tt=NULL, pmax=0.9) {
 # Histogram-based estimation of cumulative distribution function
 # of lifetimes subject to censoring.
 #	o: censored lifetimes min(T_i,C_i)
@@ -165,6 +165,7 @@ censtimeCDFest <- function(o, cc, d, breaks, ...,
 #	d: censoring indicators 1(T_i <= C_i)
 #	breaks: histogram breakpoints (vector or 'breakpts' object)
 #       han.denom: denominator (eroded area) for each value of r
+#       tt: uncensored lifetimes T_i, if known  
   breaks <- as.breakpts(breaks)
   bval <- breaks$val
   rval <- breaks$r
@@ -174,10 +175,10 @@ censtimeCDFest <- function(o, cc, d, breaks, ...,
   # convert to data frame
   out$breaks <- NULL
   df <- as.data.frame(out)
-  # Raw ecdf of observations
-  if(RAW) {
-    h <- whist(o[o <= rmax], breaks=bval)
-    df <- cbind(df, data.frame(raw=cumsum(h)/length(o)))
+  # Raw ecdf of observed lifetimes if available
+  if(RAW && !is.null(tt)) {
+    h <- whist(tt[tt <= rmax], breaks=bval)
+    df <- cbind(df, data.frame(raw=cumsum(h)/length(tt)))
   }
   # Hanisch
   if(HAN) {
@@ -233,6 +234,9 @@ compileCDF <- function(D, B, r, ..., han.denom=NULL, check=TRUE) {
   # censoring indicators
   d <- (D <= B)
   # go
-  result <- censtimeCDFest(o, B, d, breaks, HAN=han, han.denom=han.denom)
+  result <- censtimeCDFest(o, B, d, breaks,
+                           HAN=han, 
+                           han.denom=han.denom,
+                           RAW=TRUE, tt=D)
   result <- rebadge.fv(result, new.fname="compileCDF")
 }

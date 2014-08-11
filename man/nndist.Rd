@@ -124,7 +124,12 @@
   If \code{X} is a multitype point pattern 
   and \code{by=marks(X)}, then the algorithm will compute,
   for each point of \code{X}, the distance to the nearest neighbour
-  of each type. See the Examples. 
+  of each type. See the Examples.
+
+  To find the minimum distance from \emph{any} point of type \code{i}
+  to the nearest point of type \code{j}, for all combinations of \code{i} and
+  \code{j}, use the \R function \code{\link[stats]{aggregate}} as
+  suggested in the Examples.
 }
 \section{Warnings}{
   An infinite or \code{NA} value is returned if the
@@ -157,7 +162,19 @@
    plot(cells \%mark\% (nndist(cells)/2), markscale=1)
 
    # distance to nearest neighbour of each type
-   head(nndist(ants, by=marks(ants)))
+   nnda <- nndist(ants, by=marks(ants)) 
+   head(nnda)
+   # For nest number 1, the nearest Cataglyphis nest is 87.32125 units away
+
+   # Use of 'aggregate':
+   # minimum distance between each pair of types
+   aggregate(nnda, by=list(from=marks(ants)), min)
+   # Always a symmetric matrix
+
+   # mean nearest neighbour distances
+   aggregate(nnda, by=list(from=marks(ants)), mean)
+   # The mean distance from a Messor nest to
+   # the nearest other Messor nest is 59.02549 units
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}

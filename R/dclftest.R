@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.16 $  $Date: 2013/01/09 07:22:18 $
+#  $Revision: 1.17 $  $Date: 2013/08/06 10:16:30 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -27,22 +27,32 @@ envelopeTest <- function(X, ...,
                          power=1, rinterval=NULL,
                          use.theo=FALSE,
                          tie.rule=c("randomise","mean"),
-                         save.envelope=FALSE,
+                         save.envelope = savefuns || savepatterns,
+                         savefuns = FALSE, 
+                         savepatterns = FALSE, 
                          Xname=NULL,
                          verbose=TRUE,
                          internal=NULL) {
   if(is.null(Xname)) Xname <- short.deparse(substitute(X))
   tie.rule <- match.arg(tie.rule)
+  force(save.envelope)
   check.1.real(power)
   explain.ifnot(power >= 0)
-  # compute or extract simulated functions
   if(use.theo) {
     # using theoretical function as reference.
-    # ensure envelope object includes theoretical function.
+    # ensure resulting envelope object includes theoretical function.
     internal <- resolve.defaults(internal, list(csr=TRUE))
   }
-  X <- envelope(X, ..., savefuns=TRUE, Yname=Xname,
-                        internal=internal, verbose=verbose)
+  # case where X is a previous result of dclf.test, etc
+  if(inherits(X, "htest")) {
+    if(is.null(envX <- attr(X, "envelope")))
+      stop(paste(Xname, "does not contain simulation data"))
+    X <- envX
+  }
+  # compute or extract simulated functions
+  X <- envelope(X, ...,
+                savefuns=TRUE, savepatterns=savepatterns,
+                Yname=Xname, internal=internal, verbose=verbose)
   Y <- attr(X, "simfuns")
   # extract values
   r   <- with(X, .x)

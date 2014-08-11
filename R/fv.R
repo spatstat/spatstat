@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.94 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.95 $   $Date: 2013/07/05 06:13:24 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -127,20 +127,25 @@ is.fv <- function(x) {
   inherits(x, "fv")
 }
 
-as.fv <- function(x) {
-  if(is.fv(x))
-    return(x)
-  if(inherits(x, "data.frame"))
-    return(fv(x, names(x)[1], , names(x)[2]))
-  if(inherits(x, "fasp") && length(x$which) == 1)
-    return(x$fns[[1]])
-  if(inherits(x, "minconfit"))
-    return(x$fit)
-  if(inherits(x, "kppm"))
-    return(x$mcfit)
-  stop(paste("Don't know how to convert this to an object of class",
-             sQuote("fv")))
+# 
+
+as.fv <- function(x) { UseMethod("as.fv") }
+
+as.fv.fv <- function(x) x
+
+as.fv.data.frame <- function(x) {
+  if(ncol(x) < 2) stop("Need at least 2 columns")
+  return(fv(x, names(x)[1], , names(x)[2]))
 }
+
+as.fv.matrix <- function(x)  {
+  y <- as.data.frame(x)
+  if(any(bad <- is.na(names(y))))
+    names(y)[bad] <- paste0("V", which(bad))
+  return(as.fv.data.frame(y))
+}
+
+# other methods for as.fv are described in the files for the relevant classes.
 
 vanilla.fv <- function(x) {
   # remove everything except basic fv characteristics

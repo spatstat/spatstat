@@ -122,9 +122,16 @@ thomas.estK(X, startpar=c(kappa=1,sigma2=1), lambda=NULL,
   }
 }
 \references{
+  Diggle, P. J., Besag, J. and Gleaves, J. T. (1976)
+  Statistical analysis of spatial point patterns by
+  means of distance methods. \emph{Biometrics} \bold{32} 659--667.
+
   Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
+
+  Thomas, M. (1949) A generalisation of Poisson's binomial limit for use
+  in ecology. \emph{Biometrika} \bold{36}, 18--25.
 
   Waagepetersen, R. (2007)
   An estimating function approach to inference for

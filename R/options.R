@@ -3,7 +3,7 @@
 #
 #     Spatstat Options
 #
-#    $Revision: 1.46 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.47 $   $Date: 2013/07/17 03:07:17 $
 #
 #
 
@@ -62,7 +62,7 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
          check=function(x) {
            is.function(x) && length(formals(x)) > 0 && all(is.character(x(42)))
          },
-         valid="a function that returns character values"
+         valid="a function f(n) that returns character values"
          ),
        ndummy.min=list(
          default=32,

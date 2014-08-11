@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.56 $    $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.59 $    $Date: 2013/07/26 09:14:46 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -11,6 +11,8 @@ ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
   density.ppp(x, sigma, ..., edge=edge)
 }
 
+density.ppp <- local({
+  
 density.ppp <- function(x, sigma=NULL, ...,
                         weights=NULL, edge=TRUE, varcov=NULL,
                         at="pixels", leaveoneout=TRUE,
@@ -45,16 +47,16 @@ density.ppp <- function(x, sigma=NULL, ...,
     edg <- NULL
     raw <- second.moment.calc(x, sigma, what="smooth", ...,
                               weights=weights, varcov=varcov)
-    raw$v <- raw$v/(raw$xstep * raw$ystep)
+    raw <- divide.by.pixelarea(raw) 
     smo <- raw
   } else if(!diggle) {
     # edge correction e(u)
     both <- second.moment.calc(x, sigma, what="smoothedge", ...,
                               weights=weights, varcov=varcov)
-    raw <- both$smooth
+    raw <- divide.by.pixelarea(both$smooth)
     edg <- both$edge
-    raw$v <- raw$v/(raw$xstep * raw$ystep)
-    smo <- eval.im(raw/edg)
+    smo <- if(is.im(raw)) eval.im(raw/edg) else
+           lapply(raw, function(a,b) eval.im(a/b), b=edg)
   } else {
     # edge correction e(x_i)
     edg <- second.moment.calc(x, sigma, what="edge", ..., varcov=varcov)
@@ -63,17 +65,21 @@ density.ppp <- function(x, sigma=NULL, ...,
     # edge correction becomes weight attached to points
     if(is.null(weights)) {
       newweights <- wi
+    } else if(is.matrix(weights) || is.data.frame(weights)) {
+      stopifnot(nrow(weights) == npoints(x))
+      newweights <- weights * wi
     } else {
       stopifnot(length(weights) == npoints(x))
       newweights <- weights * wi
     }
     raw <- second.moment.calc(x, sigma, what="smooth", ...,
                               weights=newweights, varcov=varcov)
-    raw$v <- raw$v/(raw$xstep * raw$ystep)
+    raw <- divide.by.pixelarea(raw)
     smo <- raw
   }
-  
-  result <- smo[x$window, drop=FALSE]
+
+  result <- if(is.im(smo)) smo[x$window, drop=FALSE]
+            else as.listof(lapply(smo, "[", i=x$window, drop=FALSE))
 
   # internal use only
   spill <- list(...)$spill
@@ -85,6 +91,20 @@ density.ppp <- function(x, sigma=NULL, ...,
   attr(result, "varcov") <- varcov
   return(result)
 }
+
+divide.by.pixelarea <- function(x) {
+  if(is.im(x)) {
+    x$v <- x$v/(x$xstep * x$ystep)
+  } else {
+    for(i in seq_along(x))
+      x[[i]]$v <- with(x[[i]], v/(xstep * ystep))
+  }
+  return(x)
+}
+
+density.ppp
+
+})
 
 densitypointsEngine <- function(x, sigma, ...,
                                 weights=NULL, edge=TRUE, varcov=NULL,
@@ -117,6 +137,18 @@ densitypointsEngine <- function(x, sigma, ...,
     nndmax <- max(nndist(x))
     cutoff <- max(2 * nndmax, cutoff)
   }
+  # validate weights
+  if(is.null(weights)) {
+    k <- 1
+  } else if(is.matrix(weights) || is.data.frame(weights)) {
+    k <- ncol(weights)
+    stopifnot(nrow(weights) == npoints(x))
+    weights <- as.data.frame(weights)
+    weightnames <- colnames(weights)
+  } else {
+    k <- 1
+    stopifnot(length(weights) == npoints(x) || length(weights) == 1)
+  }
   # evaluate edge correction weights at points 
   if(edge) {
     win <- x$window
@@ -139,18 +171,18 @@ densitypointsEngine <- function(x, sigma, ...,
       # Diggle edge correction
       # edgeweight is attached to each point
       if(is.null(weights)) {
+        k <- 1
         weights <- 1/edgeweight
       } else {
-        stopifnot(length(weights) == npoints(x) || length(weights) == 1)
         weights <- weights/edgeweight
       }
     }
   }
   
-  if(spatstat.options("densityC")) {
+  if(spatstat.options("densityC") || k > 1) {
     # .................. new C code ...........................
     npts <- npoints(x)
-    result <- numeric(npts)
+    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
     # sort into increasing order of x coordinate (required by C code)
     if(sorted) {
       xx <- x$x
@@ -172,7 +204,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  result   = as.double(double(npts)),
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
-      } else {
+      } else if(k == 1) {
         wtsort <- if(sorted) weights else weights[oo]
         zz <- .C("wtdenspt",
                  nxy     = as.integer(npts),
@@ -184,7 +216,22 @@ densitypointsEngine <- function(x, sigma, ...,
                  result   = as.double(double(npts)),
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
-       }
+       } else {
+        # matrix of weights
+        wtsort <- if(sorted) weights else weights[oo, ]
+        for(j in 1:k) {
+          zz <- .C("wtdenspt",
+                   nxy     = as.integer(npts),
+                   x       = as.double(xx),
+                   y       = as.double(yy),
+                   rmaxi   = as.double(cutoff),
+                   sig     = as.double(sd),
+                   weight  = as.double(wtsort[,j]),
+                   result   = as.double(double(npts)),
+                   PACKAGE = "spatstat")
+          if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
+        }
+      }
     } else {
       # anisotropic kernel
       flatSinv <- as.vector(t(Sinv))
@@ -199,7 +246,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  result   = as.double(double(npts)),
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
-      } else {
+      } else if(k == 1) {
+        # vector of weights
         wtsort <- if(sorted) weights else weights[oo]
         zz <- .C("awtdenspt",
                  nxy     = as.integer(npts),
@@ -212,6 +260,22 @@ densitypointsEngine <- function(x, sigma, ...,
                  result   = as.double(double(npts)),
                  PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
+      } else {
+        # matrix of weights
+        wtsort <- if(sorted) weights else weights[oo, ]
+        for(j in 1:k) {
+          zz <- .C("awtdenspt",
+                   nxy     = as.integer(npts),
+                   x       = as.double(xx),
+                   y       = as.double(yy),
+                   rmaxi   = as.double(cutoff),
+                   detsigma = as.double(detSigma),
+                   sinv    = as.double(flatSinv),
+                   weight  = as.double(wtsort[,j]),
+                   result   = as.double(double(npts)),
+                   PACKAGE = "spatstat")
+          if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result 
+        }
       }
     }
   } else {
@@ -251,18 +315,36 @@ densitypointsEngine <- function(x, sigma, ...,
     result <- result/edgeweight
 
   # ............. validate .................................
-  result <- as.numeric(result)
   npts <- npoints(x)
-  if(length(result) != npts) 
-    stop(paste("Internal error: incorrect number of lambda values",
-               "in leave-one-out method:",
-               "length(lambda) = ", length(result),
-               "!=", npts, "= npoints"))
-  if(any(is.na(result))) {
-    nwrong <- sum(is.na(result))
-    stop(paste("Internal error:", nwrong, "NA or NaN",
-               ngettext(nwrong, "value", "values"),
-               "generated in leave-one-out method"))
+  if(k == 1) {
+    result <- as.numeric(result)
+    if(length(result) != npts) 
+      stop(paste("Internal error: incorrect number of lambda values",
+                 "in leave-one-out method:",
+                 "length(lambda) = ", length(result),
+                 "!=", npts, "= npoints"))
+    if(any(is.na(result))) {
+      nwrong <- sum(is.na(result))
+      stop(paste("Internal error:", nwrong, "NA or NaN",
+                 ngettext(nwrong, "value", "values"),
+                 "generated in leave-one-out method"))
+    }
+  } else {
+    if(ncol(result) != k)
+      stop(paste("Internal error: incorrect number of columns returned:",
+                 ncol(result), "!=", k))
+    colnames(result) <- weightnames
+    if(nrow(result) != npts) 
+      stop(paste("Internal error: incorrect number of rows of lambda values",
+                 "in leave-one-out method:",
+                 "nrow(lambda) = ", nrow(result),
+                 "!=", npts, "= npoints"))
+    if(any(is.na(result))) {
+      nwrong <- sum(!complete.cases(result))
+      stop(paste("Internal error:", nwrong,
+                 ngettext(nwrong, "row", "rows"),
+                 "of NA values generated in leave-one-out method"))
+    }
   }
   # tack on bandwidth
   attr(result, "sigma") <- sigma
@@ -272,7 +354,7 @@ densitypointsEngine <- function(x, sigma, ...,
 }
 
 resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
-                              adjust=1, bwfun=NULL) {
+                              adjust=1, bwfun=NULL, allow.zero=FALSE) {
   if(is.function(sigma)) {
     bwfun <- sigma
     sigma <- NULL
@@ -285,8 +367,10 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
       stop("bandwidth selector returned a non-numeric result")
     if(length(bw) %in% c(1,2)) {
       sigma <- as.numeric(bw)
-      if(!all(sigma > 0))
-        stop("bandwidth selector returned negative value(s)")
+      if(!all(sigma > 0)) {
+        gripe <- "bandwidth selector returned negative value(s)"
+        if(allow.zero) warning(gripe) else stop(gripe)
+      }
     } else if(is.matrix(bw) && nrow(bw) == 2 && ncol(bw) == 2) {
       varcov <- bw
       if(!all(eigen(varcov)$values > 0))
@@ -298,7 +382,8 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
   if(sigma.given) {
     stopifnot(is.numeric(sigma))
     stopifnot(length(sigma) %in% c(1,2))
-    stopifnot(all(sigma > 0))
+    if(!allow.zero)
+      stopifnot(all(sigma > 0))
   }
   if(varcov.given)
     stopifnot(is.matrix(varcov) && nrow(varcov) == 2 && ncol(varcov)==2 )
@@ -326,7 +411,7 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
   #
   sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
   cutoff <- 8 * sd
-  uhoh <- if(!is.null(mindist) && mindist < cutoff) "underflow" else NULL
+  uhoh <- if(!is.null(mindist) && cutoff < mindist) "underflow" else NULL
   result <- list(sigma=sigma, varcov=varcov, cutoff=cutoff, warnings=uhoh)
   return(result)
 }

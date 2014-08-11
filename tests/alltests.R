@@ -331,6 +331,22 @@ local({
 })
 
 #
+#   tests/ppmtricks.R
+#
+#   Test backdoor exits and hidden options in ppm
+#
+#   $Revision: 1.1 $  $Date: 2013/06/17 06:54:51 $
+#
+require(spatstat)
+local({
+
+  # (1) skip.border
+  
+  fit <- ppm(cells, ~1, Strauss(0.1), skip.border=TRUE)
+
+})
+
+#
 #  tests/rmhAux.R
 #
 #  $Revision: 1.1 $  $Date: 2013/02/18 10:41:27 $
@@ -1767,3 +1783,19 @@ local({
   if(!identical(y,z))
     stop("sumsymouter gives incorrect result")
 })
+#
+#  tests/undoc.R
+#
+#   $Revision: 1.1 $   $Date: 2013/07/25 10:26:09 $
+#
+#  Test undocumented hacks, etc
+
+require(spatstat)
+local({
+  # pixellate.ppp accepts a data frame of weights
+  pixellate(cells, weights=data.frame(a=1:42, b=42:1))
+})
+
+
+
+

@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.25 $	$Date: 2013/05/26 13:41:33 $
+#    $Revision: 1.26 $	$Date: 2013/06/17 08:23:50 $
 #
 #    The area interaction
 #
@@ -17,7 +17,7 @@ AreaInter <- local({
 
   # area-interaction potential function
   areapot <- 
-    function(X,U,EqualPairs,pars,correction, ...) {
+    function(X,U,EqualPairs,pars,correction, ..., W=as.owin(X)) {
       uhoh <- !(correction %in% c("border", "none"))
       if(any(uhoh)) {
         nuh <- sum(uhoh)
@@ -33,10 +33,10 @@ AreaInter <- local({
       if(is.null(r)) stop("internal error: r parameter not found")
       dummies <- !(seq_len(n) %in% EqualPairs[,2])
       if(sum(dummies) > 0)
-        answer[dummies] <- -areaGain(U[dummies], X, r)
+        answer[dummies] <- -areaGain(U[dummies], X, r, W=W)
       ii <- EqualPairs[,1]
       jj <- EqualPairs[,2]
-      answer[jj] <- -areaLoss(X, r, subset=ii)
+      answer[jj] <- -areaLoss(X, r, subset=ii, W=W)
 #    for(k in seq_len(nrow(EqualPairs))) {
 #      i <- EqualPairs[k,1]
 #      j <- EqualPairs[k,2]

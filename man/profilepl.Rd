@@ -139,7 +139,7 @@ profilepl(s, f, \dots, rbord = NULL, verbose = TRUE)
     pg
     if(interactive()) {
       plot(pg)
-      as.ppm(fit)
+      as.ppm(pg)
     }
 
     # multitype pattern with a common interaction radius

@@ -33,7 +33,8 @@
 }
 \usage{data(chorley)}
 \examples{
-    data(chorley)
+    chorley
+    summary(chorley)
     chorley.extra$plotit()
 }
 \source{
@@ -73,6 +74,12 @@
   The dataset \code{chorley} has a polygonal window with 132 edges
   which closely approximates the boundary of the Chorley and South
   Ribble Health Authority. 
+
+  Note that, due to the rounding of spatial coordinates,
+  the data contain duplicated points (two points at the
+  same location). To determine which points are duplicates,
+  use \code{\link{duplicated.ppp}}.
+  To remove the duplication, use \code{\link{unique.ppp}}.
 }
 \references{
   Baddeley, A., Turner, R., Moller, J. and Hazelton, M. (2005)

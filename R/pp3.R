@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.10 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.13 $  $Date: 2013/06/29 04:21:01 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -77,6 +77,15 @@ sidelengths.box3 <- function(x) {
   with(x, c(diff(xrange), diff(yrange), diff(zrange)))
 }
 
+bounding.box3 <- function(...) {
+  wins <- list(...)
+  boxes <- lapply(wins, as.box3)
+  xr <- range(unlist(lapply(boxes, getElement, name="xrange")))
+  yr <- range(unlist(lapply(boxes, getElement, name="yrange")))
+  zr <- range(unlist(lapply(boxes, getElement, name="zrange")))
+  box3(xr, yr, zr)
+}
+
 pp3 <- function(x, y, z, ...) {
   stopifnot(is.numeric(x))
   stopifnot(is.numeric(y))
@@ -147,6 +156,13 @@ plot.pp3 <- function(x, ...) {
                                 zlim=x$domain$zrange)))
 }
 
+"[.pp3" <- function(x, i, ...) {
+  answer <- NextMethod("[")
+  if(is.ppx(answer))
+    class(answer) <- c("pp3", class(answer))
+  return(answer)
+}
+  
 unitname.pp3 <- function(x) { unitname(x$domain) }
 
 "unitname<-.pp3" <- function(x, value) {

@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.17 $	$Date: 2013/05/01 08:03:46 $
+#    $Revision: 2.19 $	$Date: 2013/07/19 02:53:00 $
 #
 #    The Strauss/hard core process
 #
@@ -28,13 +28,43 @@ StraussHard <- local({
          par    = list(r = NULL, hc = NULL), # filled in later
          parnames = c("interaction distance",
                       "hard core distance"), 
+         selfstart = function(X, self) {
+           # self starter for StraussHard
+           nX <- npoints(X)
+           if(nX < 2) {
+             # not enough points to make any decisions
+             return(self)
+           }
+           r <- self$par$r
+           md <- min(nndist(X))
+           if(md == 0) {
+             warning(paste("Pattern contains duplicated points:",
+                           "hard core must be zero"))
+             return(StraussHard(r=r, hc=0))
+           }
+           if(!is.na(hc <- self$par$hc)) {
+             # value fixed by user or previous invocation
+             # check it
+             if(md < hc)
+               warning(paste("Hard core distance is too large;",
+                             "some data points will have zero probability"))
+             return(self)
+           }
+           # take hc = minimum interpoint distance * n/(n+1)
+           hcX <- md * nX/(nX+1)
+           StraussHard(r=r, hc = hcX)
+         },
          init   = function(self) {
            r <- self$par$r
            hc <- self$par$hc
-           if(!is.numeric(hc) || length(hc) != 1 || hc <= 0)
-             stop("hard core distance hc must be a positive number")
-           if(!is.numeric(r) || length(r) != 1 || r <= hc)
-             stop("interaction distance r must be a number greater than hc")
+           if(length(hc) != 1)
+             stop("hard core distance must be a single value")
+           if(!is.na(hc)) {
+             if(!is.numeric(hc) || hc <= 0)
+               stop("hard core distance hc must be a positive number, or NA")
+             if(!is.numeric(r) || length(r) != 1 || r <= hc)
+               stop("interaction distance r must be a number greater than hc")
+           }
          },
          update = NULL,       # default OK
          print = NULL,         # default OK
@@ -95,7 +125,7 @@ StraussHard <- local({
          )
   class(BlankStraussHard) <- "interact"
   
-  StraussHard <- function(r, hc) {
+  StraussHard <- function(r, hc=NA) {
     instantiate.interact(BlankStraussHard, list(r=r, hc=hc))
   }
 

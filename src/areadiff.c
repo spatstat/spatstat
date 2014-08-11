@@ -21,6 +21,7 @@
 #include <R_ext/Utils.h>
 
 #include "chunkloop.h"
+#include "constants.h"
 
 /* 
    Original version areadiff()

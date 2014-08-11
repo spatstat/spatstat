@@ -15,6 +15,7 @@
 
 #include "chunkloop.h"
 #include "yesno.h"
+#include "constants.h"
 
 #undef DEBUG
 

@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.4 $  $Date: 2013/05/01 08:03:17 $
+#  $Revision: 1.8 $  $Date: 2013/07/27 08:29:25 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -14,9 +14,25 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
                    c(pixels="pixels",
                      points="points"))
   # determine smoothing parameters
-  ker <- resolve.2D.kernel(..., x=X, bwfun=bw.smoothppp)
+  ker <- resolve.2D.kernel(..., x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
   sigma <- ker$sigma
   varcov <- ker$varcov
+  # .....
+  if(ker$cutoff < min(nndist(X))) {
+    # very small bandwidth
+    leaveoneout <- resolve.1.default("leaveoneout",
+                                     list(...), list(leaveoneout=TRUE))
+    if(!leaveoneout && at=="points") {
+      warning(paste("Bandwidth is close to zero:",
+                    "original values returned"))
+      Y <- marks(X)
+    } else {
+      warning(paste("Bandwidth is close to zero:",
+                    "nearest-neighbour interpolation performed"))
+      Y <- nnmark(X, ..., k=1, at=at)
+    }
+    return(Y)
+  }
   #
   if(weightsgiven <- !missing(weights)) {
     check.nvector(weights, npoints(X)) 
@@ -79,7 +95,6 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
   } else {
     # ......... data frame of marks ..................
     nmarx <- ncol(marx)
-    result <- list()
     # compute denominator
     denominator <-
       do.call("density.ppp",
@@ -88,63 +103,61 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
                                list(sigma=sigma, varcov=varcov),
                                list(...),
                                list(edge=FALSE)))
+    # compute numerator for each column of marks
+    numerators <-
+      do.call("density.ppp",
+              resolve.defaults(list(x=X, at=at),
+                               list(weights = marx * weights),
+                               list(sigma=sigma, varcov=varcov),
+                               list(...),
+                               list(edge=FALSE)))
+    uhoh <- attr(numerators, "warnings")
+    # calculate ratios
     switch(at,
-           pixels = {
-             # compute nearest neighbour map on same raster
-             distX <- distmap(X, xy=denominator)
-             whichnnX <- attr(distX, "index")
+           points={
+             if(is.null(uhoh)) {
+               # numerators is a matrix
+               ratio <- numerators/denominator
+               if(any(badpoints <- apply(!is.finite(ratio), 1, any))) {
+                 whichnnX <- nnwhich(X)
+                 ratio[badpoints,] <- marx[whichnnX[badpoints], ]
+               }
+             } else {
+               warning("returning original values")
+               ratio <- marx
+             }
+             result <- as.data.frame(ratio)
+             colnames(result) <- colnames(marx)
            },
-           points = {
-             whichnnX <- nnwhich(X)
-           })
-    # smooth each column of marks in turn
-    for(j in 1:nmarx) {
-      values <- marx[,j] 
-      if(is.factor(values)) {
-        warning(paste("Factor valued marks in column", j,
-                      "were converted to integers"))
-        values <- as.numeric(values)
-      }
-      # compute j-th numerator
-      numerator <-
-        do.call("density.ppp",
-                resolve.defaults(list(x=X, at=at),
-                                 list(weights = values * weights),
-                                 list(sigma=sigma, varcov=varcov),
-                                 list(...),
-                                 list(edge=FALSE)))
-      switch(at,
-             points={
-               if(is.null(uhoh <- attr(numerator, "warnings"))) {
-                 ratio <- numerator/denominator
-                 ratio <- ifelseXY(is.finite(ratio), ratio, values[whichnnX])
-               } else {
-                 warning("returning original values")
-                 ratio <- values
+             pixels={
+               ratio <- lapply(numerators,
+                               function(a,b) eval.im(a/b),
+                               b=denominator)
+               if(!is.null(uhoh)) {
+                 # compute nearest neighbour map on same raster
+                 distX <- distmap(X, xy=denominator)
+                 whichnnX <- attr(distX, "index")
+                 # fix images
+                 for(j in 1:length(ratio)) {
+                   ratj <- ratio[[j]]
+                   valj <- marx[,j]
+                   ratio[[j]] <-
+                     eval.im(ifelseXY(is.finite(ratj), ratj, valj[whichnnX]))
+                 }
                  attr(ratio, "warnings") <- uhoh
                }
-             },
-             pixels={
-               ratio <- eval.im(numerator/denominator)
-               ratio <- eval.im(ifelseXY(is.finite(ratio), ratio,
-                                         values[whichnnX]))
-               attr(ratio, "warnings") <- attr(numerator, "warnings")
+               result <- as.listof(ratio)
+               names(result) <- colnames(marx)
            })
-    # store results
-      result[[j]] <- ratio
     }
     # wrap up
-    names(result) <- colnames(marx)
-    result <- switch(at,
-                     pixels=as.listof(result),
-                     points=as.data.frame(result))
-    attr(result, "warnings") <-
-      unlist(lapply(result, function(x){ attr(x, "warnings") }))
-  }
+  attr(result, "warnings") <-
+    unlist(lapply(result, function(x){ attr(x, "warnings") }))
   attr(result, "sigma") <- sigma
   attr(result, "varcov") <- varcov
   return(result)
 }
+
 
 smoothpointsEngine <- function(x, values, sigma, ...,
                                weights=NULL, varcov=NULL,

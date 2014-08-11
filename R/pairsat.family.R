@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.39 $	$Date: 2013/05/01 07:34:58 $
+#    $Revision: 1.40 $	$Date: 2013/06/17 05:47:01 $
 #
 #    The saturated pairwise interaction family of point process models
 #
@@ -105,7 +105,7 @@ if(somemissing) {
   # add the missing data points
   originalrows <- seq_len(nU)
   nmiss <- sum(missingdata)
-  U <- superimpose(U, X[missingdata], W=X$window)
+  U <- superimpose(U, X[missingdata], W=X$window, check=FALSE)
   # correspondingly augment the list of equal pairs
   newXindex <- Xseq[missingdata]
   newUindex <- nU + seq_len(nmiss)

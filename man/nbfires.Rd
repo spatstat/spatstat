@@ -73,6 +73,11 @@ appeared to be outside of the window.  This problem was addressed
 by shifting the location of the \sQuote{outsider} points slightly,
 or deleting them, as seemed appropriate.
 
+Note that the data contain duplicated points (two points at the
+same location). To determine which points are duplicates,
+use \code{\link{duplicated.ppp}}.
+To remove the duplication, use \code{\link{unique.ppp}}.
+
 The columns of the data frame comprising the marks of
 \code{nbfires} are:
 \describe{

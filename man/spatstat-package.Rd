@@ -58,7 +58,7 @@
   start \R, type \code{help.start()} to open the help browser, and
   navigate to \code{Packages > spatstat > Vignettes}).
 
-  For a complete 2-day course on using \code{spatstat}, see the workshop notes
+  For a complete 2-day course on using \pkg{spatstat}, see the workshop notes
   by Baddeley (2010), available on the internet.
 
   Type \code{demo(spatstat)} for a demonstration 
@@ -78,7 +78,7 @@
   Users are advised to update their installation of \pkg{spatstat}
   regularly.
   
-  Type \code{latest.news()} to read the news documentation about
+  Type \code{latest.news} to read the news documentation about
   changes to the current installed version of \pkg{spatstat}. Type
   \code{news(package="spatstat")} to read news documentation about
   all previous versions of the package.
@@ -314,6 +314,8 @@
 	\code{\link{density.ppp}} \tab
 	kernel smoothing of point pattern\cr
 	\code{\link{smooth.ppp}} \tab
+	nearest-neightbour smoothing of point pattern\cr
+	\code{\link{nnmark}} \tab
 	smooth the marks attached to points\cr
 	\code{\link{sharpen.ppp}} \tab
 	data sharpening\cr
@@ -665,6 +667,22 @@
       \code{\link{[.layered}} \tab extract subset of layered object
     }
     
+    \bold{Colour maps}
+
+    A colour map is a mechanism for associating colours with data.
+    It can be regarded as a function, mapping data to colours.
+    Using a \code{colourmap} object in a plot command
+    ensures that the mapping from numbers to colours is
+    the same in different plots. 
+
+     \tabular{ll}{
+      \code{\link{colourmap}} \tab create a colour map  \cr
+      \code{\link{plot.colourmap}} \tab plot the colour map only\cr
+      \code{\link{tweak.colourmap}} \tab alter individual colour values \cr
+      \code{\link{interp.colourmap}} \tab make a smooth transition
+      between colours \cr
+      \code{\link{beachcolourmap}} \tab one special colour map
+    }
 }
   
 \section{II. EXPLORATORY DATA ANALYSIS}{
@@ -756,6 +774,7 @@
     \code{\link{with.fv}} \tab evaluate an expression for a 
     summary function\cr
     \code{\link{smooth.fv}} \tab apply smoothing to a summary function\cr
+    \code{\link{deriv.fv}} \tab calculate derivative of a summary function\cr
     \code{\link{nndist}} \tab nearest neighbour distances \cr
     \code{\link{nnwhich}} \tab find nearest neighbours \cr
     \code{\link{pairdist}} \tab distances between all pairs of points\cr
@@ -892,7 +911,8 @@
     \code{\link{crossdist.pp3}} \tab distances between points in
     two patterns \cr
     \code{\link{nndist.pp3}} \tab nearest neighbour distances \cr
-    \code{\link{nnwhich.pp3}} \tab find nearest neighbours
+    \code{\link{nnwhich.pp3}} \tab find nearest neighbours \cr
+    \code{\link{nncross.pp3}} \tab find nearest neighbours in another pattern
   }
 
   \bold{Computations for multi-dimensional point pattern:}
@@ -1343,9 +1363,11 @@
     \code{\link{bermantest}} \tab Berman's goodness-of-fit tests\cr
     \code{\link{envelope}} \tab critical envelope for Monte Carlo
     test of goodness-of-fit \cr
-    \code{\link{dclf.test}} \tab Diggle(1986)/ Cressie(1991)/ Loosmore and Ford (2006) test \cr
-    \code{\link{mad.test}} \tab Mean Absolute Deviation test \cr
     \code{\link{scan.test}} \tab spatial scan statistic/test \cr
+    \code{\link{dclf.test}} \tab Diggle-Cressie-Loosmore-Ford test \cr
+    \code{\link{mad.test}} \tab Mean Absolute Deviation test \cr
+    \code{\link{dclf.progress}} \tab Progress plot for DCLF test \cr
+    \code{\link{mad.progress}} \tab Progress plot for MAD test \cr
     \code{\link{anova.ppm}} \tab Analysis of Deviance for
     point process models 
   }
@@ -1423,7 +1445,7 @@
   Baddeley and Turner (2005b) is a more detailed explanation of
   how to fit point process models to data.
   Baddeley (2010) is a complete set of notes from a 2-day workshop
-  on the use of \code{spatstat}.
+  on the use of \pkg{spatstat}.
 
   Type \code{citation("spatstat")} to get these references.
 }
@@ -1517,6 +1539,7 @@
   Marcelino de la Cruz,
   Peter Dalgaard,
   Peter Diggle,
+  Patrick Donnelly,
   Ian Dryden,
   Stephen Eglen,
   Olivier Flores,
@@ -1563,6 +1586,7 @@
   Felipe Nunes,
   Jens Oehlschlaegel,
   Thierry Onkelinx,
+  Sean O'Riordan,
   Evgeni Parilov,
   Jeff Picka,
   Nicolas Picard,

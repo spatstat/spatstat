@@ -15,6 +15,11 @@
   of each tree, marked by age (a factor with levels \code{adult} and
   \code{juvenile}. The survey region is a rectangle
   approximately 400 by 525 metres. Coordinates are given in metres.
+
+  Note that the data contain duplicated points (two points at the
+  same location). To determine which points are duplicates,
+  use \code{\link{duplicated.ppp}}.
+  To remove the duplication, use \code{\link{unique.ppp}}.
 }
 \usage{data(paracou)}
 \examples{

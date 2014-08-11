@@ -58,7 +58,8 @@ Hest <- function(X, r=NULL, breaks=NULL,
                       RS=corx$rs,
                       HAN=corx$han,
                       RAW=corx$none,
-                      han.denom=if(corx$han) eroded.areas(W, rval) else NULL)
+                      han.denom=if(corx$han) eroded.areas(W, rval) else NULL,
+                      tt=dist)
 # conditional on d > 0 ?  
   if(conditional && is.owin(X)) {
     zeroadj <- function(x) { (x - x[1])/(1-x[1]) }

@@ -11,7 +11,7 @@
 # /////////////////////////////////////////////
 # AUTHOR: Adrian Baddeley, CWI, Amsterdam, 1991.
 # 
-# MODIFIED BY: Adrian Baddeley, Perth 2009
+# MODIFIED BY: Adrian Baddeley, Perth 2009, 2013
 #
 # This software is distributed free
 # under the conditions that
@@ -27,7 +27,7 @@
 */
 
 #ifdef DEBUG
-#define DBG(X,Y) Rprintf("%s: %f\n", (X), (Y)) 
+#define DBG(X,Y) Rprintf("%s: %f\n", (X), (Y));
 #else
 #define DBG(X,Y) 
 #endif

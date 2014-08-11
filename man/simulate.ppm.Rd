@@ -82,6 +82,9 @@
 \value{
   A list of length \code{nsim} containing simulated point patterns
   (objects of class \code{"ppp"}).
+  It also belongs to the class \code{"listof"}, so that it can be
+  plotted, and the class \code{"timed"}, so that the total computation
+  time is recorded.
 }
 \examples{
   \testonly{op <- spatstat.options(rmh.nrep=10)}

@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.6 $  $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.9 $  $Date: 2013/06/29 03:04:31 $
 
 
 */
@@ -94,6 +94,7 @@ void FNAME(n1, x1, y1, id1,
 
       /* initialise nn distances and indices */
       d2minK = hu2;
+      jwhich = -1;
       for(k = 0; k < nk; k++) {
 	d2min[k] = hu2;
 #ifdef WHICH
@@ -124,6 +125,7 @@ void FNAME(n1, x1, y1, id1,
 	      if (d2 < d2minK) {
 		/* overwrite last entry in list of neighbours */
 		d2min[nk1] = d2;
+		jwhich = jright;
 #ifdef WHICH
 		which[nk1] = jright;
 #endif
@@ -171,8 +173,9 @@ void FNAME(n1, x1, y1, id1,
 	      if (d2 < d2minK) {
 		/* overwrite last entry in list of neighbours */
 		d2min[nk1] = d2;
+		jwhich = jleft;
 #ifdef WHICH
-		which[nk1] = jright;
+		which[nk1] = jleft;
 #endif
 		/* bubble sort */
 		unsorted = YES;
@@ -212,6 +215,8 @@ void FNAME(n1, x1, y1, id1,
 	nnwhich[nk * i + k] = which[k] + 1;  /* R indexing */
 #endif
       }
+      /* save index of last neighbour encountered */
+      lastjwhich = jwhich;
       /* end of loop over points i */
     }
   }

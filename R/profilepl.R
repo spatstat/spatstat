@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.17 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.18 $  $Date: 2013/06/18 01:38:42 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -29,8 +29,8 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
   pseudocall <- match.call()
   pseudocall[[1]] <- as.symbol("ppm")
   namcal <- names(pseudocall)
-  # remove 's' argument
-  retain <- (namcal != "s")
+  # remove arguments 's' and 'verbose'
+  retain <- !(namcal %in% c("s", "verbose"))
   pseudocall <- pseudocall[retain]
   namcal <- namcal[retain]
   # place 'f' argument third 
@@ -80,7 +80,7 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
   }
   
   # fit one model and extract quadscheme
-  if(verbose) message(paste("fitting", n, "models..."))
+  if(verbose) message(paste("Comparing", n, "models..."))
   for(i in 1:n) {
     if(verbose)
       progressreport(i, n)
@@ -95,7 +95,8 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
       arg1 <- list(interaction=fi, ...,
                    rbord=rbord, savecomputed=savecomp,
                    warn.illegal=FALSE,
-                   callstring="")
+                   callstring="",
+                   skip.border=TRUE)
       if(pass.cfa) arg1 <- append(arg1, cfai)
       fiti <- do.call("ppm", arg1)
       # save intermediate computations (pairwise distances, etc)
@@ -103,7 +104,8 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
       savedargs <- list(...,
                         rbord=rbord, precomputed=precomp,
                         warn.illegal=FALSE,
-                        callstring="")
+                        callstring="",
+                        skip.border=TRUE)
     } else {
       # use precomputed data
       argi <- append(savedargs, list(interaction=fi))
@@ -120,15 +122,16 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
     } else
     allcoef <- rbind(allcoef, co)
   }
-  if(verbose) message("done.")
+  if(verbose) message("Fitting optimal model...")
   opti <- which.max(logmpl)
   optint <- do.call("f", as.list(s[opti, is.farg, drop=FALSE]))
   optarg <- list(interaction=optint, ..., rbord=rbord)
   if(pass.cfa) {
     optcfa <- list(covfunargs=as.list(s[opti, !is.farg, drop=FALSE]))
     optarg <- append(optarg, optcfa)
-  } 
+  }
   optfit <- do.call("ppm", optarg)
+  if(verbose) message("done.")
   result <- list(param=s,
                  prof=logmpl,
                  iopt=opti,

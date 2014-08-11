@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.4 $     $Date: 2012/04/06 09:37:15 $
+#      $Revision: 1.7 $     $Date: 2013/06/28 11:16:28 $
 #
 #      Interpoint distances for 3D points
 #
@@ -108,7 +108,8 @@ nndist.pp3 <- function(X, ..., k=1) {
                y= as.double(y[o]),
                z= as.double(z[o]),
                nnd= as.double(nnd),
-               as.double(big),
+               nnwhich = as.integer(integer(1)),
+               huge=as.double(big),
                DUP=DUP,
                PACKAGE="spatstat")
     nnd[o] <- Cout$nnd
@@ -125,6 +126,7 @@ nndist.pp3 <- function(X, ..., k=1) {
                y    = as.double(y[o]),
                z    = as.double(z[o]),
                nnd  = as.double(nnd),
+               nnwhich = as.integer(integer(1)),
                huge = as.double(big),
                DUP=DUP,
                PACKAGE="spatstat")
@@ -200,15 +202,15 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                x = as.double(x[o]),
                y = as.double(y[o]),
                z = as.double(z[o]),
-               nnd = as.double(numeric(n)),
+               nnd = as.double(numeric(1)),
                nnwhich = as.integer(nnw),
                huge = as.double(big),
                DUP=DUP,
                PACKAGE="spatstat")
-    # convert from C to R indexing
-    witch <- Cout$nnwhich + 1L
+    # [sic] Conversion from C to R indexing is done in C code.
+    witch <- Cout$nnwhich
     if(any(witch <= 0))
-      stop("Internal error: non-positive index returned from C code")
+      stop("Internal error: illegal index returned from C code")
     if(any(witch > n))
       stop("Internal error: index returned from C code exceeds n")
     nnw[o] <- o[witch]
@@ -224,16 +226,16 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                x = as.double(x[o]),
                y = as.double(y[o]),
                z = as.double(z[o]),
-               nnd = as.double(numeric(n * kmaxcalc)),
+               nnd = as.double(numeric(1)),
                nnwhich = as.integer(nnw),
                huge = as.double(big),
                DUP=DUP,
                PACKAGE="spatstat")
-    # convert from C to R indexing
-    witch <- Cout$nnwhich + 1L
+    # [sic] Conversion from C to R indexing is done in C code.
+    witch <- Cout$nnwhich 
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
     if(any(witch <= 0))
-      stop("Internal error: non-positive index returned from C code")
+      stop("Internal error: illegal index returned from C code")
     if(any(witch > n))
       stop("Internal error: index returned from C code exceeds n")
     # convert back to original ordering

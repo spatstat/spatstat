@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.102 $     $Date: 2013/05/01 05:51:35 $
+#         $Revision: 1.103 $     $Date: 2013/07/25 09:58:59 $
 #
 #      The class "im" of raster images
 #
@@ -63,32 +63,30 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
     dim(mat) <- c(nr, nc)
 
   # set up coordinates
-  if(miss.xcol && !is.null(xrange)) {
+  if((miss.xcol || length(xcol) <= 1) && !is.null(xrange) ) {
     # use 'xrange' 
     xstep <- diff(xrange)/nc
     xcol <- seq(from=xrange[1] + xstep/2, to=xrange[2] - xstep/2, length.out=nc)
-  } else {
+  } else if(length(xcol) > 1) {
     # use 'xcol'
-    if(length(xcol) <= 1)
-      stop("Only 1 column of pixels - cannot determine pixel width")
     # ensure spacing is constant
     xcol <- seq(from=min(xcol), to=max(xcol), length.out=length(xcol))
     xstep <- diff(xcol)[1]
     xrange <- range(xcol) + c(-1,1) * xstep/2
-  }
-  if(miss.yrow && !is.null(yrange)) {
+  } else stop("Cannot determine pixel width")
+  
+  if((miss.yrow || length(yrow) <= 1) && !is.null(yrange)) {
     # use 'yrange'
     ystep <- diff(yrange)/nr
     yrow <- seq(from=yrange[1] + ystep/2, to=yrange[2] - ystep/2, length.out=nr)
-  } else {
+  } else if(length(yrow) > 1) {
     # use 'yrow'
-    if(length(yrow) <= 1)
-      stop("Only 1 row of pixels - cannot determine pixel height")
     # ensure spacing is constant
     yrow <- seq(from=min(yrow), to=max(yrow), length.out=length(yrow))
     ystep <- diff(yrow)[1]
     yrange <- range(yrow) + c(-1,1) * ystep/2
-  }  
+  }  else stop("Cannot determine pixel height")
+
   unitname <- as.units(unitname)
 
   # get rid of those annoying 8.67e-19 printouts
@@ -921,3 +919,4 @@ zapsmall.im <- function(x, digits) {
     return(eval.im(zapsmall(x)))
   return(eval.im(zapsmall(x, digits=digits)))
 }
+

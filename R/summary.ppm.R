@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.61 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.63 $   $Date: 2013/06/17 03:59:56 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -75,11 +75,12 @@ summary.ppm <- function(object, ..., quick=FALSE) {
   ######  Coefficients were changed after fit? #####################
   
   y$projected <- identical(x$projected, TRUE)
-  y$changedcoef <- y$projected || (y$method != "mpl")
+  y$changedcoef <- y$projected || !is.null(x$coef.orig)
 
   ######  Extract fitted model coefficients #########################
 
   y$entries$coef <- COEFS <- x$coef
+  y$coef.orig <- x$coef.orig
 
   y$entries$Vnames <- Vnames <- x$internal$Vnames
   y$entries$IsOffset <- x$internal$IsOffset
@@ -178,8 +179,8 @@ summary.ppm <- function(object, ..., quick=FALSE) {
   
   ####### Summarise data ############################
 
-  y$data <- summary.ppp(DATA, checkdup=FALSE)
-  y$quad <- summary.quad(QUAD, checkdup=FALSE)
+  y$data <- summary(DATA, checkdup=FALSE)
+  y$quad <- summary(QUAD, checkdup=FALSE)
 
   if(is.character(quick) && (quick == "no prediction"))
     return(y)
@@ -294,15 +295,22 @@ print.summary.ppm <- function(x, ...) {
   methodchosen <-
     if(is.null(x$method))
       "unspecified method"
-    else 
+    else if(fitter == "exact") "maximum likelihood" else 
       switch(x$method,
              mpl={
-               if(!x$poisson) {
+               if(x$poisson) {
+                 # Poisson process
+                 "maximum likelihood (Berman-Turner approximation)"
+               } else {
                  "maximum pseudolikelihood (Berman-Turner approximation)"
+               } 
+             },
+             logi={
+               if(!x$poisson) {
+                 "maximum pseudolikelihood (logistic regression approximation)"
                } else {
                  # Poisson process
-                 if(fitter == "exact") "maximum likelihood" else
-                 "maximum likelihood (Berman-Turner approximation)"
+                 "maximum likelihood (logistic regression approximation)"
                } 
              },
              ho="Huang-Ogata method (approximate maximum likelihood)",

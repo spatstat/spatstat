@@ -13,6 +13,10 @@
   They originate from Strauss (1975);
   the present data are a subset extracted by Ripley (1977) 
   in a subregion that has been rescaled to a unit square.
+
+  The coordinates are rounded to the nearest 0.01 units,
+  except for one point which has an \eqn{x} coordinate
+  of 0.999, presumably to ensure that it is properly inside the window.
  
   There are many further analyses of this dataset. It is often used as a 
   canonical example of a clustered point pattern

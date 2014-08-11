@@ -96,9 +96,10 @@ idw(X, power=2, at="pixels", ...)
   \code{\link{ppp.object}},
   \code{\link{im.object}}.
 
-  See \code{\link{smooth.ppp}} for kernel smoothing.
+  See \code{\link{smooth.ppp}} for kernel smoothing
+  and \code{\link{nnmark}} for nearest-neighbour interpolation.
   
-  To perform interpolation, see also the \code{akima} package.
+  To perform other kinds of interpolation, see also the \code{akima} package.
 }
 \examples{
    # data frame of marks: trees marked by diameter and height

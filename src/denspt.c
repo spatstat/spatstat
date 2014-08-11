@@ -3,7 +3,7 @@
 
 #include "chunkloop.h"
 #include "pairloop.h"
-
+#include "constants.h"
 /*
 
   denspt.c

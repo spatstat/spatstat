@@ -2,6 +2,7 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 #include "chunkloop.h"
+#include "constants.h"
 
 /*
 

@@ -61,16 +61,6 @@ offsetsinformula <- function(x) {
   termnames[offs]
 }
   
-rhs.of.formula <- function(x) {
-  if(!inherits(x, "formula"))
-    stop("x must be a formula")
-  if(length(as.list(x)) == 3) {
-    # formula has a response: strip it
-    x <- x[-2]
-  }
-  return(x)
-}
-
 lhs.of.formula <- function(x) {
   if(!inherits(x, "formula"))
     stop("x must be a formula")
@@ -80,6 +70,19 @@ lhs.of.formula <- function(x) {
   }
   return(NULL)
 }
+
+rhs.of.formula <- function(x, tilde=TRUE) {
+  if(!inherits(x, "formula"))
+    stop("x must be a formula")
+  if(length(as.list(x)) == 3) {
+    # formula has a response: strip it
+    x <- x[-2]
+  }
+  if(!tilde) # remove the "~"
+    x <- x[[2]]
+  return(x)
+}
+
 
 sympoly <- function(x,y,n) {
 

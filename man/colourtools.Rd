@@ -68,6 +68,11 @@ samecolour(x,y)
 \seealso{
   \code{\link{col2rgb}},
   \code{\link{palette}}
+
+  See also the class of colour map objects:
+  \code{\link{colourmap}}, 
+  \code{\link{interp.colourmap}}, 
+  \code{\link{tweak.colourmap}}.
 }
 \examples{
   samecolour("grey", "gray")

@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.27 $ $Date: 2012/08/21 05:20:30 $
+#  $Revision: 1.28 $ $Date: 2013/07/26 05:39:36 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -53,6 +53,8 @@ simulate.ppm <- function(object, nsim=1, ...,
   argh <- list(...)
   if(nsim == 0) return(list())
 
+  starttime = proc.time()
+  
   # set up control parameters
   if(missing(control) || is.null(control)) {
     rcontr <- default.rmhcontrol(object)
@@ -144,5 +146,6 @@ simulate.ppm <- function(object, nsim=1, ...,
   out <- as.listof(out)
   if(nsim > 0)
     names(out) <- paste("Simulation", 1:nsim)
+  out <- timed(out, starttime=starttime)
   return(out)
 }  

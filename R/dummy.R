@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.23 $     $Date: 2013/04/25 06:37:43 $
+#       $Revision: 5.24 $     $Date: 2013/07/16 07:49:22 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -295,7 +295,7 @@ default.n.tiling <- local({
     eps <- ensure2print(eps, verbose)
     Xbox <- as.rectangle(as.owin(X))
     sides <- with(Xbox, c(diff(xrange), diff(yrange)))
-    ndminX <- pmax(ndminX, sides/eps)
+    ndminX <- pmax(ndminX, ceiling(sides/eps))
   }
 
   # range of acceptable values for npix

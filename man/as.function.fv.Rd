@@ -14,7 +14,7 @@
 }
 \arguments{
   \item{x}{
-    Object of class \code{"fv"}
+    Object of class \code{"fv"} or \code{"rhohat"}.
 }
   \item{\dots}{
     Ignored.

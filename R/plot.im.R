@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.63 $   $Date: 2013/05/01 07:39:00 $
+#  $Revision: 1.67 $   $Date: 2013/07/17 05:51:40 $
 #
 #  Plotting code for pixel images
 #
@@ -57,7 +57,7 @@ plot.im <- local({
                      col=NULL, valuesAreColours=NULL, log=FALSE,
                      ribbon=TRUE, ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
-                     ribscale=1, ribargs=list()) {
+                     ribscale=1, ribargs=list(), colargs=list()) {
     main <- short.deparse(substitute(x))
     verifyclass(x, "im")
     dotargs <- list(...)
@@ -158,9 +158,43 @@ plot.im <- local({
     
     imagebreaks <- NULL
     ribbonvalues <- ribbonbreaks <- NULL
-    
+
+    # predetermined colour map?
+    # (i.e. mapping from values to colours)
     colmap <- if(inherits(col, "colourmap")) col else NULL
 
+    # colour map determined by a function?
+    if(is.null(colmap) && (is.null(col) || is.function(col))) {
+      colfun <- if(is.function(col)) col else spatstat.options("image.colfun")
+      colargnames <- names(formals(colfun))
+      if("range" %in% colargnames && xtype %in% c("real", "integer")) {
+        # continuous 
+        vrange <- range(range(x), zlim)
+        cvals <- try(do.call.matched(colfun,
+                                     append(list(range=vrange), colargs)),
+                     silent=TRUE)
+        if(!inherits(cvals, "try-error")) {
+          colmap <- if(inherits(cvals, "colourmap")) cvals else
+            if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
+        }
+      } else if("inputs" %in% colargnames && xtype != "real") {
+        # discrete
+        vpossible <- switch(xtype,
+                            logical = c(FALSE, TRUE),
+                            factor = levels(x),
+                            unique(as.matrix(x)))
+        if(!is.null(vpossible) && length(vpossible) < 256) {
+          cvals <- try(do.call.matched(colfun,
+                                       append(list(inputs=vpossible), colargs)),
+                       silent=TRUE)
+          if(!inherits(cvals, "try-error")) {
+            colmap <- if(inherits(cvals, "colourmap")) cvals else
+            if(is.character(cvals)) colourmap(cvals, inputs=vpossible) else NULL
+          }
+        }
+      }
+    }
+       
     switch(xtype,
            real    = {
              vrange <- range(x)
@@ -173,7 +207,7 @@ plot.im <- local({
                imagebreaks <- s$breaks
                vrange <- range(imagebreaks)
                col <- s$outputs
-             }
+             } 
              trivial <- (diff(vrange) <= .Machine$double.eps)
              if(!trivial) {
                # ribbonvalues: domain of colour map (pixel values)
@@ -291,10 +325,11 @@ plot.im <- local({
       # compile colour information
       # start with default colour values
       colfun <- spatstat.options("image.colfun")
+      # we already know that colfun(n) works
       colourinfo <- if(!is.null(imagebreaks)) {
         list(breaks=imagebreaks, col=colfun(length(imagebreaks)-1))
-      } else list(col=colfun(255))
-      if(!is.null(col)) {
+      } else list(col=colfun(256))
+      if(!is.null(col) && is.character(col)) {
         # overwrite colour info with user-specified colour values
         colourinfo$col <- col
         if(!is.null(colourinfo$breaks)) {
@@ -641,5 +676,6 @@ contour.im <- function (x, ..., main, axes=TRUE, add=FALSE)
                   resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
                                    list(add=TRUE),
                                    list(...)))
+  return(invisible(NULL))
 }
 
