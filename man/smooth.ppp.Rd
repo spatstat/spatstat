@@ -1,5 +1,6 @@
 \name{smooth.ppp}
 \alias{smooth.ppp}
+\alias{Smooth.ppp}
 \alias{markmean}
 \alias{markvar}
 \title{Spatial smoothing of observations at irregular points}
@@ -10,6 +11,9 @@
 }
 \usage{
 smooth.ppp(X, ..., weights = rep(1, npoints(X)), at="pixels")
+
+\method{Smooth}{ppp}(X, ..., weights = rep(1, npoints(X)), at="pixels")
+
 markmean(X, ...)
 markvar(X, ...)
 }
@@ -27,12 +31,17 @@ markvar(X, ...)
   }
 }
 \details{
-  The function \code{smooth.ppp} performs spatial smoothing of numeric values
+  The function \code{smooth.ppp} or \code{Smooth.ppp}
+  performs spatial smoothing of numeric values
   observed at a set of irregular locations. The functions
   \code{markmean} and \code{markvar} are wrappers for \code{smooth.ppp}
   which compute the spatially-varying mean and variance of the marks of
   a point pattern.
 
+  \code{Smooth.ppp} is a method for the generic function
+  \code{\link{Smooth}} for the class \code{"ppp"} of point patterns.
+  Thus you can type simply \code{Smooth(X)}, but not \code{smooth(X)}.
+  
   Smoothing is performed by Gaussian kernel weighting. If the
   observed values are \eqn{v_1,\ldots,v_n}{v[1],...,v[n]}
   at locations \eqn{x_1,\ldots,x_n}{x[1],...,x[n]} respectively,
@@ -55,7 +64,8 @@ markvar(X, ...)
   are taken to be the numeric values \eqn{v_i}{v[i]} observed at these
   locations.
 
-  The marks are allowed to be a data frame (in \code{smooth.ppp}
+  The marks are allowed to be a data frame (in
+  \code{Smooth.ppp}, \code{smooth.ppp}
   and \code{markmean}). Then the smoothing procedure is applied to each
   column of marks. 
   
@@ -120,6 +130,8 @@ markvar(X, ...)
   bandwidth that was used.
 }
 \seealso{
+  \code{\link{Smooth}},
+  
   \code{\link{density.ppp}},
   \code{\link{bw.smoothppp}},
   \code{\link{nnmark}},
@@ -134,14 +146,14 @@ markvar(X, ...)
    # Longleaf data - tree locations, marked by tree diameter
    data(longleaf)
    # Local smoothing of tree diameter (automatic bandwidth selection)
-   Z <- smooth.ppp(longleaf)
+   Z <- Smooth(longleaf)
    # Kernel bandwidth sigma=5
-   plot(smooth.ppp(longleaf, 5))
+   plot(Smooth(longleaf, 5))
    # mark variance
    plot(markvar(longleaf, sigma=5))
    # data frame of marks: trees marked by diameter and height
    data(finpines)
-   plot(smooth.ppp(finpines, sigma=2))
+   plot(Smooth(finpines, sigma=2))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@csiro.au}

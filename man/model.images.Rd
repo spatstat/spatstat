@@ -1,4 +1,4 @@
-\name{model.images}
+\name{model.images}  %DontDeclareMethods
 \alias{model.images}
 \alias{model.images.ppm}
 \alias{model.images.kppm}

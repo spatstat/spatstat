@@ -1,4 +1,4 @@
-\name{bermantest}
+\name{bermantest} %DontDeclareMethods
 \alias{bermantest}
 \alias{bermantest.ppm}
 \alias{bermantest.ppp}

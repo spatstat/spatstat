@@ -1,6 +1,6 @@
 \name{spatstat-package}
-\alias{spatstat-package}
-\alias{spatstat}
+\alias{spatstat-package} 
+\alias{spatstat} 
 \docType{package}
 \title{The Spatstat Package}
 \description{
@@ -313,7 +313,7 @@
 	apply scalar dilation\cr
 	\code{\link{density.ppp}} \tab
 	kernel smoothing of point pattern\cr
-	\code{\link{smooth.ppp}} \tab
+	\code{\link{Smooth.ppp}} \tab
 	nearest-neightbour smoothing of point pattern\cr
 	\code{\link{nnmark}} \tab
 	smooth the marks attached to points\cr
@@ -709,15 +709,17 @@
   \tabular{ll}{
     \code{\link{density.ppp}} \tab kernel smoothed density\cr
     \code{\link{relrisk}} \tab kernel estimate of relative risk\cr
-    \code{\link{smooth.ppp}} \tab spatial interpolation of marks  \cr
+    \code{\link{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link{bw.diggle}} \tab cross-validated bandwidth selection
+                               for \code{\link{density.ppp}}\cr
+    \code{\link{bw.ppl}} \tab likelihood cross-validated bandwidth selection
                                for \code{\link{density.ppp}}\cr
     \code{\link{bw.scott}} \tab Scott's rule of thumb 
                                 for density estimation\cr
     \code{\link{bw.relrisk}} \tab cross-validated bandwidth selection
                                for \code{\link{relrisk}} \cr
     \code{\link{bw.smoothppp}} \tab cross-validated bandwidth selection
-                               for \code{\link{smooth.ppp}} \cr
+                               for \code{\link{Smooth.ppp}} \cr
     \code{\link{bw.frac}} \tab bandwidth selection using window geometry\cr
     \code{\link{bw.stoyan}} \tab Stoyan's rule of thumb for bandwidth
                                for \code{\link{pcf}}
@@ -773,7 +775,7 @@
     an array of functions\cr
     \code{\link{with.fv}} \tab evaluate an expression for a 
     summary function\cr
-    \code{\link{smooth.fv}} \tab apply smoothing to a summary function\cr
+    \code{\link{Smooth.fv}} \tab apply smoothing to a summary function\cr
     \code{\link{deriv.fv}} \tab calculate derivative of a summary function\cr
     \code{\link{nndist}} \tab nearest neighbour distances \cr
     \code{\link{nnwhich}} \tab find nearest neighbours \cr
@@ -784,7 +786,7 @@
     \code{\link{distmap}} \tab distance map image\cr
     \code{\link{distfun}} \tab distance map function\cr
     \code{\link{density.ppp}} \tab kernel smoothed density\cr
-    \code{\link{smooth.ppp}} \tab spatial interpolation of marks  \cr
+    \code{\link{Smooth.ppp}} \tab spatial interpolation of marks  \cr
     \code{\link{relrisk}} \tab kernel estimate of relative risk\cr
     \code{\link{sharpen.ppp}} \tab data sharpening  \cr
     \code{\link{rknn}} \tab theoretical distribution of nearest
@@ -954,6 +956,7 @@
   \tabular{ll}{
     \code{\link{kppm}} \tab  Fit model\cr
     \code{\link{plot.kppm}} \tab  Plot the fitted model\cr
+    \code{\link{fitted.kppm}} \tab Compute fitted intensity \cr
     \code{\link{predict.kppm}} \tab Compute fitted intensity \cr
     \code{\link{update.kppm}} \tab Update the model \cr
     \code{\link{simulate.kppm}} \tab Generate simulated realisations \cr

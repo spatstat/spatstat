@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.88 $	$Date: 2013/06/17 04:01:00 $
+#	$Revision: 2.89 $	$Date: 2013/09/02 10:25:16 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -572,6 +572,7 @@ model.frame.ppm <- function(formula, ...) {
 
 model.matrix.ppm <- function(object, data=model.frame(object),
                              ..., keepNA=TRUE) {
+  data.given <- !missing(data)
   gf <- getglmfit(object)
   if(is.null(gf)) {
     warning("Model re-fitted with forcefit=TRUE")
@@ -580,12 +581,23 @@ model.matrix.ppm <- function(object, data=model.frame(object),
     if(is.null(gf))
       stop("internal error: unable to extract a glm fit")
   }
+  
+  if(data.given) {
+    # new data. Must contain the Berman-Turner variables as well.
+    bt <- list(.mpl.Y=1, .mpl.W=1, .mpl.SUBSET=TRUE)
+    if(any(forgot <- !(names(bt) %in% names(data)))) 
+      data <- do.call("cbind", append(list(data), bt[forgot]))
+    mm <- model.matrix(gf, data=data, ...)
+    return(mm)
+  }
+
   if(!keepNA) {
     # extract model matrix of glm fit object
     # restricting to its 'subset' 
-    mm <- model.matrix(gf, data, ...)
+    mm <- model.matrix(gf, data=data, ...)
     return(mm)
   }
+  
   # extract model matrix for all cases
   mm <- model.matrix(gf, data, ..., subset=NULL)
   cn <- colnames(mm)

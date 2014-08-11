@@ -31,14 +31,14 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
   storage.mode(nvert) <- storage.mode(iedge) <- storage.mode(jedge) <- "integer"
   if(!usefriends) {
     zz <- .Call("triograph",
-                nv=nvert, iedge=iedge, jedge=jedge,
-                PACKAGE="spatstat")
+                nv=nvert, iedge=iedge, jedge=jedge)
+#                PACKAGE="spatstat")
   } else {
     fr <- as.logical(friendly)
     storage.mode(fr) <- "integer"
     zz <- .Call("trioxgraph",
-                nv=nvert, iedge=iedge, jedge=jedge, friendly=fr,
-                PACKAGE="spatstat")
+                nv=nvert, iedge=iedge, jedge=jedge, friendly=fr)
+#                PACKAGE="spatstat")
   }
   mat <- as.matrix(as.data.frame(zz))
   return(mat)
@@ -69,8 +69,8 @@ trianglediameters <- function(iedge, jedge, edgelength, ...,
   storage.mode(nvert) <- storage.mode(iedge) <- storage.mode(jedge) <- "integer"
   storage.mode(edgelength) <- "double"
   zz <- .Call("triDgraph",
-              nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength,
-              PACKAGE="spatstat")
+              nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength)
+#              PACKAGE="spatstat")
   df <- as.data.frame(zz)
   colnames(df) <- c("i", "j", "k", "diam")
   return(df)
@@ -98,8 +98,8 @@ edges2vees <- function(iedge, jedge, nvert=max(iedge, jedge),
   vees <- .Call("graphVees",
                 nv = nvert,
                 iedge = iedge,
-                jedge = jedge,
-                PACKAGE="spatstat")
+                jedge = jedge)
+#                PACKAGE="spatstat")
   names(vees) <- c("i", "j", "k")
   vees <- as.data.frame(vees)
   return(vees)

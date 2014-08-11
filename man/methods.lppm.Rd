@@ -1,5 +1,5 @@
 \name{methods.lppm}
-\alias{methods.lppm}
+\alias{methods.lppm} %DoNotExport
 \alias{coef.lppm}
 \alias{extractAIC.lppm}
 \alias{formula.lppm}

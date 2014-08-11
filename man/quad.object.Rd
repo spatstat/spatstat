@@ -1,5 +1,5 @@
 \name{quad.object}
-\alias{quad.object}
+\alias{quad.object} %DoNotExport
 \title{Class of Quadrature Schemes}
 \description{
   A class \code{"quad"} to represent a quadrature scheme.

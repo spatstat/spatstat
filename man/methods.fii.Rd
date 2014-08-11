@@ -1,5 +1,5 @@
 \name{methods.fii}
-\alias{methods.fii}
+\alias{methods.fii} %DoNotExport
 \Rdversion{1.1}
 \alias{print.fii}
 \alias{plot.fii}

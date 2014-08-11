@@ -24,6 +24,7 @@ DiggleGratton <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
+    DUP <- spatstat.options("dupC")
     out <- .C("Ediggra",
               nnsource = as.integer(nX),
               xsource  = as.double(Xsort$x),
@@ -36,7 +37,8 @@ DiggleGratton <- local({
               ddelta   = as.double(delta),
               rrho     = as.double(rho),
               values   = as.double(double(nX)),
-              PACKAGE  = "spatstat")
+              DUP = DUP)
+#              PACKAGE  = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

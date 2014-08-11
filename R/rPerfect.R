@@ -41,8 +41,8 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin()) {
              gamma,
              R,
              xrange,
-             yrange,
-             PACKAGE="spatstat")
+             yrange)
+#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -87,8 +87,8 @@ rHardcore <- function(beta, R=0, W=owin()) {
              beta,
              R,
              xrange,
-             yrange,
-             PACKAGE="spatstat")
+             yrange)
+#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -146,8 +146,8 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
              R,
              H,
              xrange,
-             yrange,
-             PACKAGE="spatstat")
+             yrange)
+#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -203,8 +203,8 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
              rho,
              kappa,
              xrange,
-             yrange,
-             PACKAGE="spatstat")
+             yrange)
+#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]
@@ -251,8 +251,8 @@ rDGS <- function(beta, rho, W=owin()) {
              beta,
              rho,
              xrange,
-             yrange,
-             PACKAGE="spatstat")
+             yrange)
+#             PACKAGE="spatstat")
 
   X <- z[[1]]
   Y <- z[[2]]

@@ -1,4 +1,4 @@
-\name{pixellate.psp}
+\name{pixellate.psp}  %DontDeclareMethods
 \alias{pixellate.psp}
 \title{
   Convert Line Segment Pattern to Pixel Image

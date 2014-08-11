@@ -253,12 +253,13 @@ printStatus <- function(x, errors.only=FALSE) {
          # Thomas process: par = (kappa, sigma2)
          modelname = "Thomas process",
          isPCP=TRUE,
-         # 
+         # K-function
          K = function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            pi*rvals^2+(1-exp(-rvals^2/(4*par[2])))/par[1]
          },
+         # pair correlation function
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
@@ -287,15 +288,20 @@ printStatus <- function(x, errors.only=FALSE) {
          K = function(par,rvals, ..., funaux){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           hfun <- funaux$Hfun
-           pi * rvals^2 + (1/par[1]) * hfun(rvals/(2 * par[2]))
+           kappa <- par[1]
+           R <- par[2]
+           Hfun <- funaux$Hfun
+           y <- pi * rvals^2 + (1/kappa) * Hfun(rvals/(2 * R))
+           return(y)
          },
          pcf= function(par,rvals, ..., funaux){
              if(any(par <= 0))
                return(rep.int(Inf, length(rvals)))
-             doh <- funaux$DOH
-             y <- (1/(4*pi*rvals * par[1] * par[2])) * doh(rvals/(2 * par[2]))
-             ifelseAX(rvals < .Machine$double.eps, 1, 1+y)
+             kappa <- par[1]
+             R <- par[2]
+             g <- funaux$g
+             y <- 1 + (1/(pi * kappa * R^2)) * g(rvals/(2 * R))
+             return(y)
            },
          funaux=list(
            Hfun=function(zz) {
@@ -317,6 +323,15 @@ printStatus <- function(x, errors.only=FALSE) {
              h[!ok] <- 0
              z <- zz[ok]
              h[ok] <- (16/pi) * (z * acos(z) - (z^2) * sqrt(1 - z^2))
+             return(h)
+           },
+           # g(z) = DOH(z)/z has a limit at z=0.
+           g=function(zz) {
+             ok <- (zz < 1)
+             h <- numeric(length(zz))
+             h[!ok] <- 0
+             z <- zz[ok]
+             h[ok] <- (2/pi) * (acos(z) - z * sqrt(1 - z^2))
              return(h)
            }),
          # sensible starting paramters

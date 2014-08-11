@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.23 $   $Date: 2013/05/01 08:01:42 $
+#  $Revision: 1.24 $   $Date: 2013/09/05 07:44:08 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -542,7 +542,7 @@ anova.slrm <- function(object, ..., test=NULL) {
   if(!all(unlist(lapply(objex, is.slrm))))
     stop("Some arguments are not of class slrm")
   fitz <- lapply(objex, function(z){z$Fit$FIT})
-  do.call("anova.glm", append(fitz, list(test=test)))
+  do.call("anova", append(fitz, list(test=test)))
 }
 
 vcov.slrm <- function(object, ..., what=c("vcov", "corr", "fisher", "Fisher")) {

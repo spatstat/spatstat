@@ -133,8 +133,8 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
                rmaxi=as.double(rmax),
                del=as.double(delta),
                pcf=as.double(double(nr * nY)),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     } else {
       zz <- .C("locWpcfx",
                nn1 = as.integer(nY),
@@ -150,8 +150,8 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
                rmaxi=as.double(rmax),
                del=as.double(delta),
                pcf=as.double(double(nr * nY)),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     }
     out <- matrix(zz$pcf, nr, nY)
     # reorder columns to match original

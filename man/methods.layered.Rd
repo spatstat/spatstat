@@ -1,6 +1,6 @@
-\name{methods.layered}
+\name{methods.layered} %DontDeclareMethods
 \Rdversion{1.1}
-\alias{methods.layered}
+\alias{methods.layered} %DoNotExport
 \alias{shift.layered}
 \alias{reflect.layered}
 \alias{flipxy.layered}

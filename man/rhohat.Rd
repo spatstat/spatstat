@@ -1,4 +1,4 @@
-\name{rhohat}
+\name{rhohat}  %DontDeclareMethods
 \alias{rhohat}
 \alias{rhohat.ppp}
 \alias{rhohat.quad}

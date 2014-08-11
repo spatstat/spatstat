@@ -8,12 +8,13 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.diggle(X)
+   bw.diggle(X, ...)
 }
 \arguments{
   \item{X}{
     A point pattern (object of class \code{"ppp"}).
   }
+  \item{\dots}{Ignored.}
 }
 \details{
   This function selects an appropriate bandwidth \code{sigma}
@@ -52,6 +53,7 @@
 }
 \seealso{
   \code{\link{density.ppp}},
+  \code{\link{bw.ppl}},
   \code{\link{bw.scott}}
 }
 \examples{

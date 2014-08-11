@@ -1,5 +1,5 @@
 \name{colourtools}
-\alias{colourtools}
+\alias{colourtools} %DoNotExport
 \alias{paletteindex}
 \alias{rgb2hex}
 \alias{col2hex}

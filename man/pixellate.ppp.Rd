@@ -1,4 +1,4 @@
-\name{pixellate.ppp}
+\name{pixellate.ppp} %DontDeclareMethods
 \alias{pixellate.ppp}
 \alias{as.im.ppp}
 \title{Convert Point Pattern to Pixel Image}
@@ -73,7 +73,7 @@
 \seealso{
   \code{\link{pixellate}},
   \code{\link{im}}, \code{\link{as.im}},
-  \code{\link{density.ppp}}, \code{\link{smooth.ppp}}.
+  \code{\link{density.ppp}}, \code{\link{Smooth.ppp}}.
 }
 \examples{
   data(humberside)

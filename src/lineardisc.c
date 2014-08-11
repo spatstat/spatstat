@@ -129,7 +129,7 @@ lineardisc(f, seg, /* centre of disc (local coords) */
 /* ------------------------------------------------- */
 
 void 
-countends(np, f, seg, /* centres of discs (local coords) */
+Ccountends(np, f, seg, /* centres of discs (local coords) */
 	  r,                /* radii of discs */
 	  nv, xv, yv,   /* network vertices */
 	  ns, from, to,  /* network segments */

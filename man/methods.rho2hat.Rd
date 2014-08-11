@@ -1,5 +1,5 @@
 \name{methods.rho2hat}
-\alias{methods.rho2hat}
+\alias{methods.rho2hat} %DoNotExport
 \alias{print.rho2hat}
 \alias{plot.rho2hat}
 \title{

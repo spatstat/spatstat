@@ -1,5 +1,5 @@
 \name{methods.linnet}
-\alias{methods.linnet}
+\alias{methods.linnet} %DoNotExport
 \Rdversion{1.1}
 \alias{as.linnet}
 \alias{as.linnet.linnet}

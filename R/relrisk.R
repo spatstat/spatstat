@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.19 $  $Date: 2013/05/01 07:58:42 $
+#  $Revision: 1.20 $  $Date: 2013/08/29 03:57:16 $
 #
 
 relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
@@ -101,7 +101,7 @@ relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
              colnames(dumm) <- lev
              # compute probability of each type
              Z <- X %mark% dumm
-             result <- do.call(smooth.ppp,
+             result <- do.call(Smooth,
                                append(list(Z, sigma=sigma, varcov=varcov,
                                            at="points"),
                                       dargs))
@@ -211,8 +211,8 @@ bw.relrisk <- function(X, method="likelihood",
          leastsquares={
            methodname <- "Least Squares"
            for(i in seq_len(nh)) {
-             phat <- smooth.ppp(X01, sigma=h[i], at="points", leaveoneout=TRUE,
-                                sorted=TRUE)
+             phat <- Smooth(X01, sigma=h[i], at="points", leaveoneout=TRUE,
+                            sorted=TRUE)
              cv[i] <- mean((y01 - phat)^2)
            }
          },
@@ -220,13 +220,13 @@ bw.relrisk <- function(X, method="likelihood",
            methodname <- "Weighted Least Squares"
            # need initial value of h from least squares
            h0 <- bw.relrisk(X, "leastsquares", nh=ceiling(nh/4))
-           phat0 <- smooth.ppp(X01, sigma=h0, at="points", leaveoneout=TRUE,
-                               sorted=TRUE)
+           phat0 <- Smooth(X01, sigma=h0, at="points", leaveoneout=TRUE,
+                           sorted=TRUE)
            var0 <- phat0 * (1-phat0)
            var0 <- pmax.int(var0, 1e-6)
            for(i in seq_len(nh)) {
-             phat <- smooth.ppp(X01, sigma=h[i], at="points", leaveoneout=TRUE,
-                                sorted=TRUE)
+             phat <- Smooth(X01, sigma=h[i], at="points", leaveoneout=TRUE,
+                            sorted=TRUE)
              cv[i] <- mean((y01 - phat)^2/var0)
            }
          })

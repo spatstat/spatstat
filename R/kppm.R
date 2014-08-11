@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.75 $ $Date: 2013/08/07 02:07:49 $
+# $Revision: 1.80 $ $Date: 2013/09/03 01:19:14 $
 #
 
 kppm <- function(X, trend = ~1,
@@ -15,23 +15,31 @@ kppm <- function(X, trend = ~1,
                  control=list(),
                  statistic="K",
                  statargs=list(),
-                 rmax = NULL) {
+                 rmax = NULL,
+                 covfunargs=NULL,
+                 use.gam=FALSE,
+                 nd=NULL, eps=NULL) {
   Xname <- short.deparse(substitute(X))
   clusters <- match.arg(clusters)
   method <- match.arg(method)
   if(method == "mincon")
     statistic <- pickoption("summary statistic", statistic,
                             c(K="K", g="pcf", pcf="pcf"))
-  stopifnot(is.ppp(X))
+  isquad <- inherits(X, "quad")
+  if(!is.ppp(X) && !isquad)
+    stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
   if(is.marked(X))
     stop("Sorry, cannot handle marked point patterns")
-  po <- ppm(X, trend=trend, covariates=covariates, rename.intercept=FALSE)
+  po <- ppm(Q=X, trend=trend, covariates=covariates,
+            forcefit=TRUE, rename.intercept=FALSE,
+            covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps)
+  XX <- if(isquad) X$data else X
   # fit
   out <- switch(method,
-         mincon = kppmMinCon(X=X, Xname=Xname, po=po, clusters=clusters,
+         mincon = kppmMinCon(X=XX, Xname=Xname, po=po, clusters=clusters,
                              statistic=statistic, statargs=statargs,
                              control=control, rmax=rmax, ...),
-         clik   = kppmComLik(X=X, Xname=Xname, po=po, clusters=clusters,
+         clik   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, weightfun=weightfun, 
                              rmax=rmax, ...))
   #
@@ -318,6 +326,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   return(result)
 }
 
+is.kppm <- function(x) { inherits(x, "kppm")}
+
 print.kppm <- function(x, ...) {
 
   isPCP <- x$isPCP
@@ -344,7 +354,8 @@ print.kppm <- function(x, ...) {
              print(wtf)
            }
          },
-         stop(paste("Unrecognised fitting method", sQuote(x$Fit$method))))
+         warning(paste("Unrecognised fitting method", sQuote(x$Fit$method)))
+         )
 
   # ............... trend .........................
 
@@ -428,6 +439,11 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic")) {
 predict.kppm <- function(object, ...) {
   predict(object$po, ...)
 }
+
+fitted.kppm <- function(object, ...) {
+  fitted(object$po, ...)
+}
+
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,

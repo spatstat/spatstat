@@ -15,12 +15,15 @@
        control=list(),
        statistic="K",
        statargs=list(),
-       rmax = NULL)
+       rmax = NULL,
+       covfunargs=NULL,
+       use.gam=FALSE,
+       nd=NULL, eps=NULL)
 }
 \arguments{
   \item{X}{
-    Point pattern (object of class \code{"ppp"}) to which the model
-    should be fitted.
+    Point pattern dataset (object of class \code{"ppp"}) to which the model
+    should be fitted. See Details.
   }
   \item{trend}{
     An \R formula, with no left hand side,
@@ -67,6 +70,9 @@
     Maximum value of interpoint distance
     to use in the composite likelihood.
   }
+  \item{covfunargs,use.gam,nd,eps}{
+    Arguments passed to \code{\link{ppm}} when fitting the intensity.
+  }
 }
 \details{
   This function fits a clustered point process model to the
@@ -86,9 +92,12 @@
   The first four models are Poisson cluster processes.
 
   The algorithm first estimates the intensity function
-  of the point process. The intensity is specified by
+  of the point process using \code{\link{ppm}}.
+  The argument \code{X} may be a point pattern
+  (object of class \code{"ppp"}) or a quadrature scheme
+  (object of class \code{"quad"}). The intensity is specified by
   the \code{trend} argument.
-  If the trend formula is \code{~1}
+  If the trend formula is \code{~1} (the default)
   then the model is \emph{homogeneous}. The algorithm begins by
   estimating the intensity as the number of points divided by
   the area of the window.
@@ -192,6 +201,7 @@
 \seealso{
   methods for \code{kppm} objects:
   \code{\link{plot.kppm}},
+  \code{\link{fitted.kppm}},
   \code{\link{predict.kppm}},
   \code{\link{simulate.kppm}},
   \code{\link{update.kppm}},

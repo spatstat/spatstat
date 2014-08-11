@@ -1,4 +1,4 @@
-\name{flipxy}
+\name{flipxy} %DontDeclareMethods
 \alias{flipxy}
 \alias{flipxy.owin}
 \alias{flipxy.ppp}

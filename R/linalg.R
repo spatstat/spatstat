@@ -24,22 +24,22 @@ sumouter <- function(x, w=NULL) {
   }
   DUP <- spatstat.options("dupC")
   if(is.null(w)) {
-    z <- .C("sumouter",
+    z <- .C("Csumouter",
             x=as.double(tx),
             n=as.integer(n),
             p=as.integer(p),
             y=as.double(numeric(p * p)),
-            DUP=DUP,
-            PACKAGE="spatstat")
+            DUP=DUP)
+#            PACKAGE="spatstat")
   } else {
-    z <- .C("wsumouter",
+    z <- .C("Cwsumouter",
             x=as.double(tx),
             n=as.integer(n),
             p=as.integer(p),
             w=as.double(w),
             y=as.double(numeric(p * p)),
-            DUP=DUP,
-            PACKAGE="spatstat")
+            DUP=DUP)
+#            PACKAGE="spatstat")
   }
   out <- matrix(z$y, p, p)
   if(!is.null(nama))
@@ -68,14 +68,14 @@ quadform <- function(x, v) {
     stopifnot(ncol(x) == nrow(v))
   }
   DUP <- spatstat.options("dupC")  
-  z <- .C("quadform",
+  z <- .C("Cquadform",
           x=as.double(tx),
           n=as.integer(n),
           p=as.integer(p),
           v=as.double(v),
           y=as.double(numeric(n)),
-          DUP=DUP,
-          PACKAGE="spatstat")
+          DUP=DUP)
+#          PACKAGE="spatstat")
   result <- z$y
   names(result) <- nama[ok]
   if(allok)
@@ -100,22 +100,22 @@ sumsymouter <- function(x, w=NULL) {
   n <- dim(x)[2]
   DUP <- spatstat.options("dupC")
   if(is.null(w)) {
-    zz <- .C("sumsymouter",
+    zz <- .C("Csumsymouter",
              x = as.double(x),
              p = as.integer(p),
              n = as.integer(n),
              y = as.double(numeric(p * p)),
-             DUP = DUP,
-             PACKAGE = "spatstat")
+             DUP = DUP)
+#             PACKAGE = "spatstat")
   } else {
-    zz <- .C("wsumsymouter",
+    zz <- .C("Cwsumsymouter",
              x = as.double(x),
              w = as.double(w),
              p = as.integer(p),
              n = as.integer(n),
              y = as.double(numeric(p * p)),
-             DUP = DUP,
-             PACKAGE = "spatstat")
+             DUP = DUP)
+#             PACKAGE = "spatstat")
   }
   matrix(zz$y, p, p)
 }

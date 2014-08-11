@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.118 $    $Date: 2013/08/06 11:13:19 $
+#    $Revision: 1.119 $    $Date: 2013/09/04 07:30:20 $
 #
 #  (a) for matrices only:
 #
@@ -231,14 +231,14 @@ revcumsum <- function(x) {
   if(identical(storage.mode(x), "integer")) {
     z <- .C("irevcumsum",
             x=as.integer(x),
-            as.integer(n),
-            PACKAGE="spatstat")
+            as.integer(n))
+#            PACKAGE="spatstat")
     return(z$x)
   } else {
     z <- .C("drevcumsum",
             x=as.double(x),
-            as.integer(n),
-            PACKAGE="spatstat")
+            as.integer(n))
+#            PACKAGE="spatstat")
     return(z$x)
   }
 }
@@ -461,7 +461,7 @@ check.nvector <- function(v, npoints, fatal=TRUE, things="data points",
 }
 
 check.nmatrix <- function(m, npoints, fatal=TRUE, things="data points",
-                          naok=FALSE, squarematrix=TRUE) {
+                          naok=FALSE, squarematrix=TRUE, matchto="nrow") {
   # matrix of values for each thing or each pair of things
   mname <- sQuote(deparse(substitute(m)))
   whinge <- NULL
@@ -471,8 +471,11 @@ check.nmatrix <- function(m, npoints, fatal=TRUE, things="data points",
     whinge <- paste(mname, "should be a square matrix")
   else if(!naok && any(is.na(m)))
     whinge <- paste("Some values of", mname, "are NA or NaN")
-  else if(nrow(m) != npoints)
+  else if(matchto=="nrow" && nrow(m) != npoints)
     whinge <- paste("Number of rows in", mname,
+               "does not match number of", things)
+  else if(matchto=="ncol" && ncol(m) != npoints)
+    whinge <- paste("Number of columns in", mname,
                "does not match number of", things)
   #
   if(!is.null(whinge)) {

@@ -6,7 +6,8 @@
 \alias{marks<-.ppp}           
 \alias{marks<-.ppx}           
 \alias{setmarks}
-\alias{\%mark\%}
+\alias{\%mark\%}  %DoNotExport 
+%NAMESPACE export("%mark%")
 \title{Marks of a Point Pattern}
 \description{
   Extract or change the marks attached to

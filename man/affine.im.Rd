@@ -1,12 +1,12 @@
-\name{affine.im}
-\alias{affine.im}
+\name{affine.im} %DontDeclareMethods
+\alias{affine.im} 
 \title{Apply Affine Transformation To Pixel Image}
 \description{
   Applies any affine transformation of the plane (linear transformation
   plus vector shift) to a pixel image. 
 }
 \usage{
-  \method{affine}{im}(X, mat=diag(c(1,1)), vec=c(0,0), \dots)
+  \method{affine}{im}(X, mat=diag(c(1,1)), vec=c(0,0), \dots) 
 }
 \arguments{
   \item{X}{Pixel image (object of class \code{"im"}).}

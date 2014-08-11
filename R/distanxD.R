@@ -92,8 +92,8 @@ nndist.ppx <- function(X, ..., k=1) {
                x= as.double(t(coo[o,])),
                nnd= as.double(nnd),
                as.double(big),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     nnd[o] <- Cout$nnd
   } else {
     # case kmaxcalc > 1
@@ -108,8 +108,8 @@ nndist.ppx <- function(X, ..., k=1) {
                x    = as.double(t(coo[o,])),
                nnd  = as.double(nnd),
                huge = as.double(big),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
   }
@@ -185,8 +185,8 @@ nnwhich.ppx <- function(X, ..., k=1) {
                nnd = as.double(numeric(n)),
                nnwhich = as.integer(nnw),
                huge = as.double(big),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     witch <- Cout$nnwhich
     if(any(witch <= 0))
       stop("Internal error: non-positive index returned from C code")
@@ -207,8 +207,8 @@ nnwhich.ppx <- function(X, ..., k=1) {
                nnd = as.double(numeric(n * kmaxcalc)),
                nnwhich = as.integer(nnw),
                huge = as.double(big),
-               DUP=DUP,
-               PACKAGE="spatstat")
+               DUP=DUP)
+#               PACKAGE="spatstat")
     witch <- Cout$nnwhich
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
     if(any(witch <= 0))

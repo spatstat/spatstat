@@ -1,5 +1,5 @@
 \name{methods.lpp}
-\alias{methods.lpp}
+\alias{methods.lpp} %DoNotExport
 \Rdversion{1.1}
 \alias{as.ppp.lpp}
 \alias{as.psp.lpp}

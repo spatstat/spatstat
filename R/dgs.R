@@ -25,6 +25,7 @@ DiggleGatesStibbard <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
+    DUP <- spatstat.options("dupC")
     out <- .C("Ediggatsti",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -36,7 +37,8 @@ DiggleGatesStibbard <- local({
             idtarget = as.integer(idYsort),
             rrho     = as.double(rho),
             values   = as.double(double(nX)),
-            PACKAGE  = "spatstat")
+            DUP = DUP)
+#            PACKAGE  = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

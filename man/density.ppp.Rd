@@ -134,7 +134,8 @@
     an appropriate bandwidth for the isotropic Gaussian kernel
     from the data point pattern by calling \code{sigma(x)}.
     To perform automatic bandwidth selection using cross-validation,
-    it is recommended to use the function \code{\link{bw.diggle}}.
+    it is recommended to use the functions \code{\link{bw.diggle}}
+    or \code{\link{bw.ppl}}.
     \item
     The smoothing kernel may be chosen to be any Gaussian
     kernel, by giving the variance-covariance matrix \code{varcov}.
@@ -196,10 +197,10 @@
   numerical values (if \code{at="points"}).
   
   To select the bandwidth \code{sigma} automatically by
-  cross-validation, use \code{\link{bw.diggle}}.
+  cross-validation, use \code{\link{bw.diggle}} or \code{\link{bw.ppl}}.
   
   To perform spatial interpolation of values that were observed
-  at the points of a point pattern, use \code{\link{smooth.ppp}}.
+  at the points of a point pattern, use \code{\link{Smooth.ppp}}.
 
   For adaptive nonparametric estimation, see
   \code{\link{adaptive.density}}.
@@ -210,7 +211,8 @@
 }
 \seealso{
   \code{\link{bw.diggle}},
-  \code{\link{smooth.ppp}},
+  \code{\link{bw.ppl}},
+  \code{\link{Smooth.ppp}},
   \code{\link{sharpen.ppp}},
   \code{\link{adaptive.density}},
   \code{\link{relrisk}},
@@ -223,7 +225,7 @@
   The result of \code{density.ppp} is not a spatial smoothing 
   of the marks or weights attached to the point pattern.
   To perform spatial interpolation of values that were observed
-  at the points of a point pattern, use \code{\link{smooth.ppp}}.
+  at the points of a point pattern, use \code{\link{Smooth.ppp}}.
 
   The result of \code{density.ppp} is not a probability density.
   It is an estimate of the \emph{intensity function} of the

@@ -11,7 +11,7 @@
   transform=NULL,global=FALSE,ginterval=NULL,
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
-  do.pwrong=FALSE)
+  do.pwrong=FALSE, envir.simul=NULL)
 }
 \arguments{
   \item{Y}{
@@ -106,6 +106,10 @@
     declares the summary function for the data to be significant
     if it lies outside the \emph{pointwise} critical boundary at any
     point). This estimate is printed when the result is printed.
+  }
+  \item{envir.simul}{
+    Environment in which to evaluate the expression \code{simulate},
+    if not the current environment.
   }
 }
 \value{

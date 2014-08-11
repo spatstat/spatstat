@@ -15,7 +15,7 @@
 
 /*  inverse-distance smoothing from data points onto pixel grid */
 
-void idw(x, y, v, n, xstart, xstep, nx, ystart, ystep, ny, power, num, den, rat)
+void Cidw(x, y, v, n, xstart, xstep, nx, ystart, ystep, ny, power, num, den, rat)
      double *x, *y, *v;           /* data points and values */
      int *n;
      double *xstart, *xstep, *ystart, *ystep;   /* pixel grid */

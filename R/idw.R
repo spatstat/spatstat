@@ -33,7 +33,7 @@ idw <- function(X, power=2, at="pixels", ...) {
            npixels <- prod(dim)
            # call C
            DUP <- spatstat.options("dupC")
-           z <- .C("idw",
+           z <- .C("Cidw",
                    x = as.double(X$x),
                    y = as.double(X$y),
                    v = as.double(marx),
@@ -48,8 +48,8 @@ idw <- function(X, power=2, at="pixels", ...) {
                    num    = as.double(numeric(npixels)),
                    den    = as.double(numeric(npixels)),
                    rat    = as.double(numeric(npixels)),
-                   DUP    = DUP,
-                   PACKAGE = "spatstat")
+                   DUP    = DUP)
+#                   PACKAGE = "spatstat")
            out <- as.im(matrix(z$rat, dim[1], dim[2]), W=W)
          },
          points={
@@ -64,8 +64,8 @@ idw <- function(X, power=2, at="pixels", ...) {
                    num    = as.double(numeric(npts)),
                    den    = as.double(numeric(npts)),
                    rat    = as.double(numeric(npts)),
-                   DUP    = DUP,
-                   PACKAGE = "spatstat")
+                   DUP    = DUP)
+#                   PACKAGE = "spatstat")
            out <- z$rat
          })
   return(out)

@@ -1,7 +1,7 @@
 #
 #      sharpen.R
 #
-#      $Revision: 1.5 $  $Date: 2010/11/27 01:52:33 $
+#      $Revision: 1.6 $  $Date: 2013/08/29 03:52:17 $
 #
 
 sharpen <- function(X, ...) {
@@ -11,10 +11,10 @@ sharpen <- function(X, ...) {
 sharpen.ppp <- function(X, sigma=NULL, ..., varcov=NULL,
                         edgecorrect=FALSE) {
   stopifnot(is.ppp(X))
-  Yx <- smooth.ppp(X %mark% X$x,
-                   at="points", sigma=sigma, varcov=varcov, edge=TRUE)
-  Yy <- smooth.ppp(X %mark% X$y,
-                   at="points", sigma=sigma, varcov=varcov, edge=TRUE)
+  Yx <- Smooth(X %mark% X$x,
+               at="points", sigma=sigma, varcov=varcov, edge=TRUE)
+  Yy <- Smooth(X %mark% X$y,
+               at="points", sigma=sigma, varcov=varcov, edge=TRUE)
   # trap NaN etc
   nbad <- sum(!(is.finite(Yx) & is.finite(Yy)))
   if(nbad > 0)

@@ -89,7 +89,7 @@ iHessian=NULL, iArgs=list())
    fit <- ppm(X, ~x+y)
    \testonly{fit <- ppm(X, ~x+y, nd=16)}
    plot(dfbetas(fit))
-   plot(smooth.msr(dfbetas(fit)))
+   plot(Smooth(dfbetas(fit)))
    \testonly{spatstat.options(op)}
 }
 \keyword{spatial}

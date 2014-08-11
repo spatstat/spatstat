@@ -7,11 +7,11 @@
 
    $Revision: 1.6 $ $Date: 2013/04/18 08:22:33 $ 
 
-   sumouter
-   wsumouter
-   quadform
-   sumsymouter
-   wsumsymouter
+   Csumouter
+   Cwsumouter
+   Cquadform
+   Csumsymouter
+   Cwsumsymouter
 */
 
 #include <R.h>
@@ -21,12 +21,12 @@
 /* ............... matrices ..............................*/
 
 /*
-    sumouter
+    Csumouter
     computes the sum of outer products of columns of x
     y = sum[j] (x[,j] %o% x[,j])
 */
 
-void sumouter(x, n, p, y) 
+void Csumouter(x, n, p, y) 
   double *x;    /* p by n matrix */
   int *n, *p;
   double *y;    /* output matrix p by p, initialised to zero */
@@ -53,12 +53,12 @@ void sumouter(x, n, p, y)
 }
 
 /*
-    wsumouter
+    Cwsumouter
     computes the weighted sum of outer products of columns of x
     y = sum[j] (w[j] * x[,j] %o% x[,j])
 */
 
-void wsumouter(x, n, p, w, y) 
+void Cwsumouter(x, n, p, w, y) 
   double *x;    /* p by n matrix */
   int *n, *p;
   double *w;    /* weight vector, length n */
@@ -92,7 +92,7 @@ void wsumouter(x, n, p, w, y)
     y[j] = x[,j] %*% v %*% t(x[,j])
 */
 
-void quadform(x, n, p, v, y) 
+void Cquadform(x, n, p, v, y) 
   double *x;    /* p by n matrix */
   int *n, *p;
   double *v;    /* p by p matrix */
@@ -133,7 +133,7 @@ void quadform(x, n, p, v, y)
   x[,i,j] %o% x[,j,i]  over all pairs i, j
 */
 
-#define FNAME sumsymouter
+#define FNAME Csumsymouter
 #include "sumsymouter.h"
 #undef FNAME
 
@@ -143,7 +143,7 @@ void quadform(x, n, p, v, y)
   w[i,j] * (x[,i,j] %o% x[,j,i])  over all pairs i, j
 */
 
-#define FNAME wsumsymouter
+#define FNAME Cwsumsymouter
 #define WEIGHTED
 #include "sumsymouter.h"
 #undef FNAME

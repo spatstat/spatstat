@@ -1,4 +1,4 @@
-\name{diameter.owin}
+\name{diameter.owin}  %DontDeclareMethods
 \alias{diameter.owin}
 \title{Diameter of a Window}
 \description{

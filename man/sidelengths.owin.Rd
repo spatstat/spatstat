@@ -1,4 +1,4 @@
-\name{sidelengths.owin}
+\name{sidelengths.owin} %DontDeclareMethods
 \alias{sidelengths.owin}
 \alias{shortside.owin}
 \title{Side Lengths of Enclosing Rectangle of a Window}

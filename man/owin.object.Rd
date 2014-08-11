@@ -1,5 +1,5 @@
 \name{owin.object}
-\alias{owin.object}
+\alias{owin.object} %DoNotExport
 \title{Class owin}
 \description{
   A class \code{owin} to define the ``observation window'' of a point pattern

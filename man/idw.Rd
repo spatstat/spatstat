@@ -63,7 +63,7 @@ idw(X, power=2, at="pixels", ...)
   for that point). 
 
   An alternative to  inverse-distance weighting is kernel smoothing,
-  which is performed by \code{\link{smooth.ppp}}.
+  which is performed by \code{\link{Smooth.ppp}}.
 }
 \value{
   \emph{If \code{X} has a single column of marks:}
@@ -96,7 +96,7 @@ idw(X, power=2, at="pixels", ...)
   \code{\link{ppp.object}},
   \code{\link{im.object}}.
 
-  See \code{\link{smooth.ppp}} for kernel smoothing
+  See \code{\link{Smooth.ppp}} for kernel smoothing
   and \code{\link{nnmark}} for nearest-neighbour interpolation.
   
   To perform other kinds of interpolation, see also the \code{akima} package.

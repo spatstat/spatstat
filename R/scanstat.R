@@ -31,6 +31,7 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
            nc <- dimyx[2]
            #
            n <- npoints(X)
+           DUP <- spatstat.options("dupC")
            zz <- .C("scantrans",
                     x=as.double(X$x),
                     y=as.double(X$y),
@@ -43,7 +44,8 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
                     nc=as.integer(nc),
                     R=as.double(r),
                     counts=as.integer(numeric(prod(dimyx))),
-                    PACKAGE="spatstat")
+                    DUP=DUP)
+#                    PACKAGE="spatstat")
            zzz <- matrix(zz$counts, nrow=dimyx[1], ncol=dimyx[2], byrow=TRUE)
            Z <- im(zzz, xrange=xr, yrange=yr, unitname=unitname(X))
          },

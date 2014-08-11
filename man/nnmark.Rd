@@ -91,7 +91,7 @@ nnmark(X, ..., k = 1, at=c("pixels", "points"))
 }
 \author{Adrian Baddeley and Rolf Turner}
 \seealso{
-  \code{\link{smooth.ppp}},
+  \code{\link{Smooth.ppp}},
   \code{\link{marktable}},
   \code{\link{nnwhich}}
 }

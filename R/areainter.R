@@ -152,8 +152,8 @@ areadelta2 <- function(X, r, algorithm=c("C", "nncross", "nnmap")) {
               radius = as.double(r),
               epsilon = as.double(eps),
               pixcount = as.integer(integer(1)),
-              DUP = DUP,
-              PACKAGE = "spatstat")
+              DUP = DUP)
+#              PACKAGE = "spatstat")
       result[i,j] <- result[j,i] <- z$pixcount
     }
     # normalise

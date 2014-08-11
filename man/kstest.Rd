@@ -1,4 +1,4 @@
-\name{kstest.ppm}
+\name{kstest.ppm}  %DontDeclareMethods
 \alias{kstest}
 \alias{kstest.ppm}
 \alias{kstest.lppm}

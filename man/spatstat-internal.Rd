@@ -1,4 +1,4 @@
-\name{spatstat-internal}
+\name{spatstat-internal} 
 \title{Internal spatstat functions}
 \alias{[.hyperframe}
 \alias{[<-.hyperframe}
@@ -113,9 +113,6 @@
 \alias{do.istat}
 \alias{dotexpr.to.call}
 \alias{dropifsingle}
-\alias{edge.Ripley}
-\alias{edge.Trans}
-\alias{edge.Trans.modif}
 \alias{emptywindow}
 \alias{ensure2vector}
 \alias{envelopeEngine}
@@ -178,6 +175,7 @@
 \alias{geyerdelta2}
 \alias{GLMpredict}
 \alias{good.names}
+\alias{good.correction.K}
 \alias{gridindex}            
 \alias{grid1index}
 \alias{grow.rectangle}
@@ -227,7 +225,6 @@
 \alias{is.ppx}
 \alias{is.prime}
 \alias{is.psp}
-\alias{is.slrm}
 \alias{is.tess}
 \alias{k3engine}
 \alias{Kborder.engine}
@@ -274,13 +271,16 @@
 \alias{markspace.integral}
 \alias{marks.default}           
 \alias{marks.quad}           
-\alias{\%mapp\%}
+\alias{\%mapp\%} %DoNotExport
+%NAMESPACE export("%mapp%")
 \alias{markappendop}
 \alias{marksubset}
 \alias{markreplicateop}
-\alias{\%mrep\%}
+\alias{\%mrep\%} %DoNotExport
+%NAMESPACE export("%mrep%")
 \alias{marksubsetop}
-\alias{\%msub\%}
+\alias{\%msub\%} %DoNotExport
+%NAMESPACE export("%msub%")
 \alias{mask2df}
 \alias{matcolall}
 \alias{matcolany}
@@ -322,7 +322,6 @@
 \alias{optimStatus}
 \alias{ordinal}
 \alias{outdated.interact}
-\alias{overlap.owin}
 \alias{overlap.trapezium}
 \alias{overlap.xypolygon}    
 \alias{oversize.quad}    
@@ -511,7 +510,6 @@
 \alias{sphere.volume}
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
-\alias{stratrand}
 \alias{strausscounts}
 \alias{suffloc}
 \alias{suffstat.generic}
@@ -543,7 +541,6 @@
 \alias{unparen}
 \alias{update.interact}
 \alias{update.rmhstart}
-\alias{update.slrm}
 \alias{validradius}        
 \alias{validate.mask}        
 \alias{validate.quad}        
@@ -629,7 +626,8 @@ check.named.list(x, nam, context, namopt)
 check.named.vector(x, nam, context, namopt)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
 check.nvector(v, npoints, fatal=TRUE, things="data points", naok=FALSE)
-check.nmatrix(m, npoints, fatal=TRUE, things="data points", naok=FALSE, squarematrix=TRUE)
+check.nmatrix(m, npoints, fatal=TRUE, things="data points", naok=FALSE,
+              squarematrix=TRUE, matchto="nrow")
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
@@ -642,7 +640,7 @@ clippoly.psp(s, window)
 closepairs(X,rmax,ordered,what)
 closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
-\method{compatible}{rat}(A, B, \dots)
+\method{compatible}{rat}(A, B, \dots) %DontDeclare
 complaining(whinge, fatal, value)
 compileCDF(D, B, r, \dots, han.denom, check)
 compileK(D, r, weights, denom, check, ratio)
@@ -691,9 +689,6 @@ do.call.matched(fun, arglist, funargs, extrargs, sieve)
 do.istat(panel)
 dotexpr.to.call(expr, dot, evaluator)
 dropifsingle(x)
-edge.Ripley(X, r, W, method, maxweight)
-edge.Trans(X, Y, W, exact, paired, trim)
-edge.Trans.modif(X, Y, WX, WY, exact, paired, trim)
 emptywindow(w)
 ensure2vector(x)
 envelopeEngine(X, fun, simul,
@@ -723,7 +718,7 @@ erodemask(w,r,strict)
 erode.owin(\dots)
 evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots,
-          dimyx, eps, jitter, modelname, covname, dataname)
+          dimyx, eps, jitter, modelname, covname, dataname) 
 \method{evalCovar}{lppm}(model, covariate, \dots,
           eps, nd, jitter, modelname, covname, dataname)
 evalCovariate(covariate, locations)
@@ -772,6 +767,7 @@ geyercounts(U,X,r,sat,Xcounts,EqualPairs)
 geyerdelta2(X,r,sat)
 GLMpredict(fit, data, coefs, changecoef)
 good.names(nama, defaults, suffices)
+good.correction.K(X)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
 grow.rectangle(W, xmargin=0, ymargin=xmargin)
@@ -804,8 +800,8 @@ is.atomicQtest(x)
 is.cadlag(s)
 is.data(Q)
 is.expandable(x)
-\method{is.expandable}{ppm}(x)
-\method{is.expandable}{rmhmodel}(x)
+\method{is.expandable}{ppm}(x)  %DontDeclare
+\method{is.expandable}{rmhmodel}(x) %DontDeclare
 is.fv(x)
 is.hole.xypolygon(polly)
 is.hyperframe(x)
@@ -821,7 +817,6 @@ is.pp3(x)
 is.ppx(x)
 is.prime(n)
 is.psp(x)
-is.slrm(x)
 is.tess(x)
 k3engine(x, y, z, box, rmax, nrval, correction)
 Kborder.engine(X, rmax, nr, correction, weights, ratio)
@@ -866,10 +861,10 @@ makeunits(sing, plur, mul)
 markappend(\dots)
 markcbind(\dots)
 markformat(x)
-\method{markformat}{ppp}(x)
-\method{markformat}{ppx}(x)
-\method{markformat}{psp}(x)
-\method{markformat}{default}(x)
+\method{markformat}{ppp}(x) %DontDeclare
+\method{markformat}{ppx}(x) %DontDeclare
+\method{markformat}{psp}(x) %DontDeclare
+\method{markformat}{default}(x) %DontDeclare
 mark.scale.default(marx, w, markscale=NULL, maxsize=NULL)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)
@@ -916,9 +911,9 @@ nncleanEngine(kthNND, k, d, \dots, tol, plothist, verbose, maxit)
 nndcumfun(X, \dots, r)
 no.trend.ppm(x)
 nobjects(x)
-\method{nobjects}{ppp}(x)
-\method{nobjects}{ppx}(x)
-\method{nobjects}{psp}(x)
+\method{nobjects}{ppp}(x) %DontDeclare
+\method{nobjects}{ppx}(x) %DontDeclare
+\method{nobjects}{psp}(x) %DontDeclare
 n.quad(Q)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)
@@ -933,7 +928,6 @@ signalStatus(x, errors.only)
 simplepanel(title, B, boxes, clicks, redraws, exit, env)
 ordinal(k)
 outdated.interact(object)
-overlap.owin(A,B)
 overlap.trapezium(xa, ya, xb, yb, verb = FALSE)
 overlap.xypolygon(P, Q)
 oversize.quad(Q, \dots, nU, nX)
@@ -1068,10 +1062,10 @@ rasterxy.im(x, drop)
 rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
 new.dotnames, new.preferred, new.formula, new.tags)
 rebound(x, rect)
-\method{rebound}{im}(x, rect)
-\method{rebound}{ppp}(x, rect)
-\method{rebound}{psp}(x, rect)
-\method{rebound}{owin}(x, rect)
+\method{rebound}{im}(x, rect)  %DontDeclare
+\method{rebound}{ppp}(x, rect) %DontDeclare
+\method{rebound}{psp}(x, rect) %DontDeclare
+\method{rebound}{owin}(x, rect) %DontDeclare
 reconcile.fv(\dots)
 repair.old.factor.image(x)
 reincarnate.interact(object)
@@ -1095,12 +1089,12 @@ rmhResolveControl(control, model)
 rmhResolveExpansion(win, control, imagelist, itype)
 rmhResolveTypes(model, start, control)
 rmhSnoopEnv(Xinit, Wclip, R)
-\method{rmhcontrol}{rmhcontrol}(\dots)
-\method{rmhcontrol}{list}(\dots)
+\method{rmhcontrol}{rmhcontrol}(\dots)  %DontDeclare
+\method{rmhcontrol}{list}(\dots) %DontDeclare
 rmhEngine(InfoList, \dots, verbose, kitchensink, preponly, snoop) 
-\method{rmhmodel}{rmhmodel}(model, \dots)
-\method{rmhstart}{rmhstart}(start, \dots)
-\method{rmhstart}{list}(start, \dots)
+\method{rmhmodel}{rmhmodel}(model, \dots) %DontDeclare
+\method{rmhstart}{rmhstart}(start, \dots) %DontDeclare
+\method{rmhstart}{list}(start, \dots) %DontDeclare
 rmpoint.I.allim(n, f, types)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
@@ -1111,8 +1105,8 @@ runifrect(n, win = owin(c(0, 1), c(0, 1)))
 safelookup(Z, X, factor, warn)
 samefunction(f, g)
 scanmeasure(X, \dots)
-\method{scanmeasure}{ppp}(X, r, \dots, method)
-\method{scanmeasure}{im}(X, r, \dots)
+\method{scanmeasure}{ppp}(X, r, \dots, method) %DontDeclare
+\method{scanmeasure}{im}(X, r, \dots) %DontDeclare
 scanPoisLRTS(nZ, nG, muZ, muG, alternative)
 scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 scanLRTS(X, r, \dots, method, baseline, case, alternative)
@@ -1146,7 +1140,6 @@ sp.foundclass(cname, inlist, formalname, argsgiven)
 sp.foundclasses(cnames, inlist, formalname, argsgiven)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
-stratrand(window, nx, ny, k = 1)
 strausscounts(U,X,r,EqualPairs)
 suffloc(object)
 suffstat.generic(model, X, callstring)
@@ -1173,12 +1166,11 @@ trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
 tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
-\method{unitname}{default}(x)
-\method{unitname}{default}(x) <- value
+\method{unitname}{default}(x)  %DontDeclare
+\method{unitname}{default}(x) <- value  %DontDeclare
 unparen(x)
-\method{update}{interact}(object, \dots)
+\method{update}{interact}(object, \dots) 
 \method{update}{rmhstart}(object, \dots)
-\method{update}{slrm}(object, ..., evaluate = TRUE, env = parent.frame())
 validradius(r, caller)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)

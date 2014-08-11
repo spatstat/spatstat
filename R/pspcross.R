@@ -52,8 +52,8 @@ crossing.psp <- function(A,B,fatal=TRUE) {
               ta=as.double(numeric(na * nb)),
               tb=as.double(numeric(na * nb)),
               ok=as.integer(integer(na * nb)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
     
     ok <- (matrix(out$ok, na, nb) != 0)
     xx <- matrix(out$xx, na, nb)
@@ -76,8 +76,8 @@ crossing.psp <- function(A,B,fatal=TRUE) {
                  y0b, 
                  dxb, 
                  dyb, 
-    	         eps,
-                 PACKAGE="spatstat")
+    	         eps)
+#                 PACKAGE="spatstat")
     xx <- out[[5]]
     yy <- out[[6]]
   }
@@ -119,8 +119,8 @@ test.crossing.psp <- function(A,B) {
             dyb=as.double(dyb), 
             eps=as.double(eps),
             ok=as.integer(integer(na * nb)),
-     DUP=DUP,
-     PACKAGE="spatstat")
+     DUP=DUP)
+#     PACKAGE="spatstat")
 
   hit <- (matrix(out$ok, na, nb) != 0)
   return(hit)
@@ -161,8 +161,8 @@ anycrossing.psp <- function(A,B) {
             dyb=as.double(dyb), 
             eps=as.double(eps),
             ok=as.integer(integer(1)),
-     DUP=DUP,
-     PACKAGE="spatstat")
+     DUP=DUP)
+#     PACKAGE="spatstat")
   hit <- (out$ok != 0)
   return(hit)
 }
@@ -194,8 +194,8 @@ selfcrossing.psp <- function(A) {
               ti=as.double(numeric(n^2)),
               tj=as.double(numeric(n^2)),
               ok=as.integer(integer(n^2)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
 
     ok <- (matrix(out$ok, n, n) != 0)
     xx <- matrix(out$xx, n, n)
@@ -212,8 +212,8 @@ selfcrossing.psp <- function(A) {
                  y0, 
                  dx, 
                  dy, 
-    	         eps,
-                 PACKAGE="spatstat")
+    	         eps)
+#                 PACKAGE="spatstat")
     xx <- out[[5]]
     yy <- out[[6]]
   }
@@ -242,8 +242,8 @@ test.selfcrossing.psp <- function(A) {
             dy=as.double(dy), 
             eps=as.double(eps),
             ok=as.integer(integer(n*n)),
-     DUP=DUP,
-     PACKAGE="spatstat")
+     DUP=DUP)
+#     PACKAGE="spatstat")
   hit <- (matrix(out$ok, n, n) != 0)
   return(hit)
 }

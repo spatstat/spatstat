@@ -1,5 +1,5 @@
-\name{affine.ppp}
-\alias{affine.ppp}
+\name{affine.ppp} %DontDeclareMethods
+\alias{affine.ppp} 
 \title{Apply Affine Transformation To Point Pattern}
 \description{
   Applies any affine transformation of the plane (linear transformation

@@ -3,10 +3,21 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.8 $  $Date: 2013/07/27 08:29:25 $
+#  $Revision: 1.9 $  $Date: 2013/08/29 04:17:05 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
+  message("smooth.ppp will soon be deprecated: use the generic Smooth with a capital S")
+#  .Deprecated("Smooth.ppp", package="spatstat",
+#     msg="smooth.ppp is deprecated: use the generic Smooth with a capital S")
+  Smooth(X, ..., weights=weights, at=at)
+}
+
+Smooth <- function(X, ...) {
+  UseMethod("Smooth")
+}
+
+Smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
   verifyclass(X, "ppp")
   if(!is.marked(X, dfok=TRUE))
     stop("X should be a marked point pattern")
@@ -211,6 +222,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       yy <- x$y[oo]
       vv <- values[oo]
     }
+    DUP <- spatstat.options("dupC")
     if(is.null(varcov)) {
       # isotropic kernel
       if(is.null(weights)) {
@@ -222,8 +234,9 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result   = as.double(double(npts)),
-                 PACKAGE = "spatstat")
+                 result  = as.double(double(npts)),
+                 DUP     = DUP)
+#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -236,8 +249,9 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
                  weight  = as.double(wtsort),
-                 result   = as.double(double(npts)),
-                 PACKAGE = "spatstat")
+                 result  = as.double(double(npts)),
+                 DUP     = DUP)
+#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     } else {
@@ -252,8 +266,9 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result   = as.double(double(npts)),
-                 PACKAGE = "spatstat")
+                 result  = as.double(double(npts)),
+                 DUP     = DUP)
+#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -266,8 +281,9 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
                  weight  = as.double(wtsort),
-                 result   = as.double(double(npts)),
-                 PACKAGE = "spatstat")
+                 result  = as.double(double(npts)),
+                 DUP     = DUP)
+#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     }
@@ -330,14 +346,14 @@ smoothpointsEngine <- function(x, values, sigma, ...,
 }
 
 
-markmean <- function(X, ...) { smooth.ppp(X, ...) }
+markmean <- function(X, ...) { Smooth(X, ...) }
 
 markvar  <- function(X, ...) {
   if(!is.marked(X, dfok=FALSE))
     stop("X should have (one column of) marks")
-  E1 <- smooth.ppp(X, ...)
+  E1 <- Smooth(X, ...)
   X2 <- X %mark% marks(X)^2
-  E2 <- smooth.ppp(X2, ...)
+  E2 <- Smooth(X2, ...)
   V <- eval.im(E2 - E1^2)
   return(V)
 }
@@ -376,7 +392,7 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   # 
   # compute cross-validation criterion
   for(i in seq_len(nh)) {
-    yhat <- smooth.ppp(X, sigma=h[i], at="points", leaveoneout=TRUE,
+    yhat <- Smooth(X, sigma=h[i], at="points", leaveoneout=TRUE,
                        sorted=TRUE)
     cv[i] <- mean((marx - yhat)^2)
   }

@@ -1,12 +1,22 @@
 #
 #  smoothfv.R
 #
-#   $Revision: 1.8 $   $Date: 2013/08/05 07:08:51 $
+#   $Revision: 1.12 $   $Date: 2013/08/29 05:04:21 $
 #
   
 smooth.fv <- function(x, which="*", ..., 
                       method=c("smooth.spline", "loess"),
                       xinterval=NULL) {
+  message("smooth.fv will soon be deprecated: use the generic Smooth with a capital S")
+#  .Deprecated("Smooth.fv", package="spatstat",
+#     msg="smooth.fv is deprecated: use the generic Smooth with a capital S")
+  Smooth(x, which=which, ..., method=method, xinterval=xinterval)
+}
+  
+Smooth.fv <- function(X, which="*", ..., 
+                      method=c("smooth.spline", "loess"),
+                      xinterval=NULL) {
+  x <- X
   stopifnot(is.character(which))
   method <- match.arg(method)
   if(!is.null(xinterval))

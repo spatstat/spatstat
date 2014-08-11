@@ -1,6 +1,6 @@
 \name{methods.ppx}
 \Rdversion{1.1}
-\alias{methods.ppx}
+\alias{methods.ppx} %DoNotExport
 \alias{print.ppx}
 \alias{plot.ppx}
 \alias{unitname.ppx}

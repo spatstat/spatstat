@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.9 $    $Date: 2013/07/26 01:55:24 $
+#           $Revision: 1.10 $    $Date: 2013/08/30 01:57:20 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -23,10 +23,9 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
     W <- as.mask(W)
   else {
     # determine W using as.mask
-    dotargs <- list(...)
-    namesargs <- names(dotargs)
-    matched <- namesargs %in% names(formals(as.mask))
-    W <- do.call("as.mask", append(list(x$window), dotargs[matched]))
+    W <- do.call.matched("as.mask",
+                         resolve.defaults(list(...),
+                                          list(w=x$window)))
   }
   insideW <- W$m
   dimW   <- W$dim
@@ -161,8 +160,8 @@ pixellate.owin <- function(x, W=NULL, ...) {
              npoly=as.integer(nn),
              out=as.double(numeric(nx * ny)),
              status=as.integer(integer(1)),
-             DUP=DUP,
-             PACKAGE="spatstat")
+             DUP=DUP)
+#             PACKAGE="spatstat")
     if(zz$status != 0)
       stop("Internal error")
     # increment output image

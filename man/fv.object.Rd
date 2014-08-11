@@ -1,5 +1,5 @@
 \name{fv.object}
-\alias{fv.object}
+\alias{fv.object} %DoNotExport
 \title{Function Value Table}
 \description{
   A class \code{"fv"} to support the convenient plotting

@@ -3,10 +3,12 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.8 $ $Date: 2013/05/01 05:58:39 $
+# $Revision: 1.9 $ $Date: 2013/08/21 09:28:16 $
 #
 
-Kcom <- function(object, r=NULL, breaks=NULL, ..., 
+Kcom <- local({
+
+  Kcom <- function(object, r=NULL, breaks=NULL, ..., 
                  correction=c("border", "isotropic", "translate"),
                  conditional=!is.poisson(object),
                  restrict=FALSE,
@@ -386,3 +388,5 @@ edge.Trans.modif <- function(X, Y=X, WX=X$window, WY=Y$window,
   return(weight)
 }
 
+Kcom
+})

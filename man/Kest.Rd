@@ -30,7 +30,7 @@ from a point pattern in a window of arbitrary shape.
     Optional. A character vector containing any selection of the
     options \code{"none"}, \code{"border"}, \code{"bord.modif"},
     \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
-    \code{"translation"}, \code{"none"} or \code{"best"}.
+    \code{"translation"}, \code{"none"}, \code{"good"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
   }
   \item{nlarge}{
@@ -131,12 +131,6 @@ from a point pattern in a window of arbitrary shape.
       Implemented for all window geometries, but slow for
       complex windows. 
     }
-    \item{best}{
-      Selects the best edge correction
-      that is available for the geometry of the window. Currently
-      this is Ripley's isotropic correction for a rectangular
-      or polygonal window, and the translation correction for masks.
-    }
     \item{none}{
       Uncorrected estimate.
       An estimate of the K function \emph{without} edge correction.
@@ -144,6 +138,20 @@ from a point pattern in a window of arbitrary shape.
       This estimate is \bold{biased} and should
       not be used for data analysis, \emph{unless} you have
       an extremely large point pattern (more than 100,000 points).
+    }
+    \item{best}{
+      Selects the best edge correction
+      that is available for the geometry of the window. Currently
+      this is Ripley's isotropic correction for a rectangular
+      or polygonal window, and the translation correction for masks.
+    }
+    \item{good}{
+      Selects the best edge correction
+      that can be computed in a reasonable time.
+      This is the same as \code{"best"} for datasets with fewer
+      than 3000 points; otherwise the selected edge correction
+      is \code{"border"}, unless there are more than 100,000 points, when 
+      it is \code{"none"}.
     }
   }
   

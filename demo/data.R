@@ -39,8 +39,7 @@ plot(copper$Lines, add=TRUE)
 
 plot(demopat)
 
-plot(finpines, which.marks="diameter", main="Finnish pines (diameter)")
-plot(finpines, which.marks="height", main="Finnish pines (height)")
+plot(finpines, main="Finnish pines")
 
 wildM1 <- with(flu, virustype == "wt" & stain == "M2-M1")
 plot(flu[wildM1, 1, drop=TRUE],
@@ -49,7 +48,7 @@ plot(flu[wildM1, 1, drop=TRUE],
 
 plot(gordon, main="People in Gordon Square", pch=16)
 
-plot(gorillas, chars=c(1,3), cols=2:3, main="Gorilla nest sites")
+plot(gorillas, which.marks=1, chars=c(1,3), cols=2:3, main="Gorilla nest sites")
 
 plot(hamster, cols=c(2,4))
 
@@ -77,7 +76,7 @@ plot(murchison$gold, add=TRUE, pch="+",col="blue")
 plot(murchison$faults, add=TRUE, col="red")
 
 plot(nbfires, use.marks=FALSE, pch=".")
-plot(split(nbfires), chars=".")
+plot(split(nbfires), use.marks=FALSE, chars=".")
 a <- plot(split(nbfires)$"2000", which.marks="fire.type",
           main=c("New Brunswick fires 2000", "by fire type"),
           cols=c("red", "blue", "green", "cyan"))

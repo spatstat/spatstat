@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.94 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 5.95 $	$Date: 2013/08/25 10:17:24 $
 #
 #
 # -------- functions ----------------------------------------
@@ -104,9 +104,14 @@ function(X, ..., r=NULL, breaks=NULL,
                              trans="translate",
                              translate="translate",
                              translation="translate",
+                             good="good",
                              best="best"),
                            multi=TRUE)
   best.wanted <- ("best" %in% correction)
+  # replace 'good' by the optimal choice for this size of dataset
+  if("good" %in% correction)
+    correction[correction == "good"] <- good.correction.K(X)
+  # retain only corrections that are implemented for the window
   correction <- implemented.for.K(correction, W$type, correction.given)
   
   # recommended range of r values
@@ -425,8 +430,8 @@ Kborder.engine <- function(X, rmax, nr=100,
                 rmax=as.double(rmax),
                 numer=as.integer(integer(nr)),
                 denom=as.integer(integer(nr)),
-                DUP=DUP,
-                PACKAGE="spatstat")
+                DUP=DUP)
+#                PACKAGE="spatstat")
     } else {
       # no - need double precision storage
       res <- .C("KborderD",
@@ -438,8 +443,8 @@ Kborder.engine <- function(X, rmax, nr=100,
                 rmax=as.double(rmax),
                 numer=as.double(numeric(nr)),
                 denom=as.double(numeric(nr)),
-                DUP=DUP,
-                PACKAGE="spatstat")
+                DUP=DUP)
+#                PACKAGE="spatstat")
     }
     if("bord.modif" %in% correction) {
       denom.area <- eroded.areas(W, r)
@@ -501,8 +506,8 @@ Kborder.engine <- function(X, rmax, nr=100,
               rmax=as.double(rmax),
               numer=as.double(numeric(nr)),
               denom=as.double(numeric(nr)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
     if("border" %in% correction) {
       bord <- res$numer/res$denom
       Kfv <- bind.fv(Kfv, data.frame(border=bord), "hat(%s)[bord](r)",
@@ -608,8 +613,8 @@ Knone.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.integer(integer(nr)),
-                DUP=DUP,
-                PACKAGE="spatstat")
+                DUP=DUP)
+#                PACKAGE="spatstat")
     } else {
       # no - need double precision storage
       res <- .C("KnoneD",
@@ -619,8 +624,8 @@ Knone.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.double(numeric(nr)),
-                DUP=DUP,
-                PACKAGE="spatstat")
+                DUP=DUP)
+#                PACKAGE="spatstat")
     }
 
     numKun <- res$numer
@@ -646,8 +651,8 @@ Knone.engine <- function(X, rmax, nr=100,
               nr=as.integer(nr),
               rmax=as.double(rmax),
               numer=as.double(numeric(nr)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
     numKun <- res$numer
     denKun <- sum(weights)
     Kun <- numKun/denKun
@@ -728,4 +733,15 @@ implemented.for.K <- function(correction, windowtype, explicit) {
     }
   }
   return(correction)
+}
+
+good.correction.K <- function(X) {
+  nX <- npoints(X)
+  W <- as.owin(X)
+  avail <- c("none",
+             if(nX < 1e5) "border" else NULL,
+             if(nX < 3000)"translate" else NULL,
+             if(nX < 1000 && !is.mask(W)) "isotropic" else NULL)
+  chosen <- rev(avail)[1]
+  return(chosen)
 }

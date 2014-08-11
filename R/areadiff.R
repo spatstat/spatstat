@@ -210,8 +210,8 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               nn  = as.integer(nclose),
               ngrid = as.integer(ngrid),
               answer = as.double(numeric(nr)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
       result[i,] <- z$answer
     } else {
       z <- .C("areaBdif",
@@ -226,8 +226,8 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               x1 = as.double(W$xrange[2] - xu),
               y1 = as.double(W$yrange[2] - yu),
               answer = as.double(numeric(nr)),
-              DUP=DUP,
-              PACKAGE="spatstat")
+              DUP=DUP)
+#              PACKAGE="spatstat")
       result[i,] <- z$answer
     }
   }

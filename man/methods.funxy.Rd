@@ -1,5 +1,5 @@
 \name{methods.funxy}
-\alias{methods.funxy}
+\alias{methods.funxy} %DoNotExport
 \alias{contour.funxy}
 \alias{persp.funxy}
 \alias{plot.funxy}

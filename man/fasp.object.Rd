@@ -1,5 +1,5 @@
 \name{fasp.object}
-\alias{fasp.object}
+\alias{fasp.object} %DoNotExport
 \title{Function Arrays for Spatial Patterns}
 \description{
   A class \code{"fasp"} to represent a \dQuote{matrix}

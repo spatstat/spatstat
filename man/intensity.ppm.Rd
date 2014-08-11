@@ -1,4 +1,4 @@
-\name{intensity.ppm}
+\name{intensity.ppm}  %DontDeclareMethods
 \alias{intensity.ppm}
 \title{
   Intensity of Fitted Point Process Model

@@ -38,7 +38,7 @@ stieltjes(f, M, ...)
   The argument \code{M} should be a function value table
   (object of class \code{"fv"}, see \code{\link{fv.object}}).
   Such objects are returned
-  by the commands \code{link{Kest}}, \code{\link{Gest}}, etc.
+  by the commands \code{\link{Kest}}, \code{\link{Gest}}, etc.
 }
 \value{
   A list containing the value of the Stieltjes integral

@@ -12,10 +12,10 @@
 
   duplicatedxy() find duplicated (x,y) pairs
 
-  closepairs()  extract close pairs of coordinates 
+  Fclosepairs()  extract close pairs of coordinates 
                  .C interface - output vectors have Fixed length 
 
-  crosspairs()  extract close pairs in two patterns 
+  Fcrosspairs()  extract close pairs in two patterns 
                  .C interface - output vectors have Fixed length 
 
   Vclosepairs()  extract close pairs of coordinates 
@@ -211,7 +211,7 @@ void duplicatedxy(n, x, y, out)
 
 /* ............... fixed output length .............. */
 
-void closepairs(nxy, x, y, r, noutmax, 
+void Fclosepairs(nxy, x, y, r, noutmax, 
 	      nout, iout, jout, 
 	      xiout, yiout, xjout, yjout, dxout, dyout, dout,
 	      status)
@@ -318,7 +318,7 @@ void closepairs(nxy, x, y, r, noutmax,
   *nout = k;
 }
 
-void crosspairs(nn1, x1, y1, nn2, x2, y2, rmaxi, noutmax, 
+void Fcrosspairs(nn1, x1, y1, nn2, x2, y2, rmaxi, noutmax, 
 	      nout, iout, jout, 
 	      xiout, yiout, xjout, yjout, dxout, dyout, dout,
 	      status)

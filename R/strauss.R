@@ -126,6 +126,7 @@ crosspaircounts <- function(X, Y, r) {
   nX <- npoints(X)
   nY <- npoints(Y)
   # call C routine
+  DUP <- spatstat.options("dupC")
   out <- .C("closepaircounts",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -135,7 +136,8 @@ crosspaircounts <- function(X, Y, r) {
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
             counts   = as.integer(integer(nX)),
-            PACKAGE  = "spatstat")
+            DUP      = DUP)
+#            PACKAGE  = "spatstat")
   answer <- integer(nX)
   answer[oX] <- out$counts
   return(answer)

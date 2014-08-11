@@ -1,5 +1,5 @@
 \name{methods.kppm}
-\alias{methods.kppm}
+\alias{methods.kppm} %DoNotExport
 \alias{coef.kppm}
 \alias{formula.kppm}
 \alias{print.kppm}

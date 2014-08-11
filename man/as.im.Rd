@@ -1,4 +1,4 @@
-\name{as.im}
+\name{as.im}  %DontDeclareMethods
 \alias{as.im}
 \alias{as.im.im}
 \alias{as.im.leverage.ppm}

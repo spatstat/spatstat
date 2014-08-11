@@ -1,5 +1,6 @@
 \name{smooth.msr}
 \alias{smooth.msr}
+\alias{Smooth.msr}
 \title{
   Smooth a Signed or Vector-Valued Measure
 }
@@ -8,6 +9,8 @@
 }
 \usage{
  smooth.msr(X, ...)
+
+ \method{Smooth}{msr}(X, ...)
 }
 \arguments{
   \item{X}{
@@ -48,13 +51,14 @@
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
+  \code{\link{Smooth}},
   \code{\link{msr}},
   \code{\link{plot.msr}}
 }
 \examples{
    example(msr)
-   plot(smooth.msr(rp))
-   plot(smooth.msr(rs))
+   plot(Smooth(rp))
+   plot(Smooth(rs))
 }
 \keyword{spatial}
 \keyword{models}

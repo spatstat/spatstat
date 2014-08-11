@@ -1,5 +1,5 @@
 \name{methods.rhohat}
-\alias{methods.rhohat}
+\alias{methods.rhohat} %DoNotExport
 \alias{print.rhohat}
 \alias{plot.rhohat}
 \alias{predict.rhohat}

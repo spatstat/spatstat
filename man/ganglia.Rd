@@ -1,5 +1,6 @@
 \name{ganglia}
 \alias{ganglia}
+\docType{data}
 \title{Beta Ganglion Cells in Cat Retina, Old Version} 
 \description{
   Point pattern of retinal ganglion cells identified as `on' or `off'.

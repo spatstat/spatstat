@@ -1,4 +1,4 @@
-\name{compatible.fasp}
+\name{compatible.fasp}  %DontDeclareMethods
 \alias{compatible.fasp}
 \title{Test Whether Function Arrays Are Compatible}
 \description{

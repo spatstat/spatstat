@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.73 $	$Date: 2013/06/17 03:46:56 $
+#	$Revision: 1.74 $	$Date: 2013/09/02 10:33:02 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -325,11 +325,12 @@ predict.ppm <- local({
              if((nr <- nrow(mm)) != nrow(newdata))
                stop("Internal error: row mismatch in SE calculation")
              # compute relative variance = diagonal of quadratic form
-             vv <- numeric(nr)
-             for(i in 1:nr) {
-               mmi <- mm[i, ]
-               vv[i] <- mmi %*% vc %*% mmi
-             }
+             vv <- quadform(mm, vc)
+#             vv <- numeric(nr)
+#             for(i in 1:nr) {
+#               mmi <- mm[i, ]
+#               vv[i] <- mmi %*% vc %*% mmi
+#             }
              z <- lambda * sqrt(vv)
            },
            stop("Internal error: unrecognised type"))

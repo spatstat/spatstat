@@ -1,5 +1,5 @@
-\name{affine.owin}
-\alias{affine.owin}
+\name{affine.owin} %DontDeclareMethods
+\alias{affine.owin} 
 \title{Apply Affine Transformation To Window}
 \description{
   Applies any affine transformation of the plane (linear transformation

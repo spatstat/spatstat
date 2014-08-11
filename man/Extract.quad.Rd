@@ -1,6 +1,5 @@
 \name{Extract.quad}
 \alias{[.quad}
-\alias{[<-.quad}
 \title{Subset of Quadrature Scheme}
 \description{
   Extract a subset of a quadrature scheme.

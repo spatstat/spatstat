@@ -12,14 +12,16 @@
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,
   savefuns=FALSE, savepatterns=FALSE,
-  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, do.pwrong=FALSE)
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
+  do.pwrong=FALSE, envir.simul=NULL)
 
 
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,
   savefuns=FALSE, savepatterns=FALSE,
-  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, do.pwrong=FALSE)
+  nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
+  do.pwrong=FALSE, envir.simul=NULL)
 }
 \arguments{
   \item{Y}{
@@ -106,6 +108,10 @@
     declares the summary function for the data to be significant
     if it lies outside the \emph{pointwise} critical boundary at any
     point). This estimate is printed when the result is printed.
+  }
+  \item{envir.simul}{
+    Environment in which to evaluate the expression \code{simulate},
+    if not the current environment.
   }
 }
 \details{

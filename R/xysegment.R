@@ -1,7 +1,7 @@
 #
 #      xysegment.S
 #
-#     $Revision: 1.14 $    $Date: 2013/04/25 06:37:43 $
+#     $Revision: 1.15 $    $Date: 2013/08/22 08:27:19 $
 #
 # Low level utilities for analytic geometry for line segments
 #
@@ -138,8 +138,7 @@ distppll <- function(p, l, mintype=0,
              xmin <- 1
            } 
            n2 <- if(mintype > 1) np else 1
-           temp <- .Fortran(
-                            "dppll",
+           temp <- .Fortran("dppll",
                             x=as.double(xp),
                             y=as.double(yp),
                             l1=as.double(l[,1]),
@@ -152,9 +151,8 @@ distppll <- function(p, l, mintype=0,
                             mint=as.integer(mintype),
                             rslt=double(np*nl),
                             xmin=as.double(xmin),
-                            jmin=integer(n2),
-                            PACKAGE="spatstat"
-                            )
+                            jmin=integer(n2))
+#                            PACKAGE="spatstat")
            d <- matrix(temp$rslt, nrow=np, ncol=nl)
            if(mintype >= 1)
              min.d <- temp$xmin
@@ -164,8 +162,7 @@ distppll <- function(p, l, mintype=0,
          C = {
            eps <- .Machine$double.eps
            DUP <- spatstat.options("dupC")
-           temp <- .C(
-                      "prdist2segs",
+           temp <- .C("prdist2segs",
                       x=as.double(xp),
                       y=as.double(yp),
                       npoints =as.integer(np),
@@ -176,8 +173,8 @@ distppll <- function(p, l, mintype=0,
                       nsegments=as.integer(nl),
                       epsilon=as.double(eps),
                       dist2=as.double(numeric(np * nl)),
-                      DUP=DUP,
-                      PACKAGE="spatstat")
+                      DUP=DUP)
+#                      PACKAGE="spatstat")
            d <- sqrt(matrix(temp$dist2, nrow=np, ncol=nl))
            if(mintype == 2) {
              min.which <- apply(d, 1, which.min)
@@ -221,8 +218,8 @@ distppllmin <- function(p, l, big=NULL) {
           epsilon=as.double(.Machine$double.eps),
           dist2=as.double(dist2),
           index=as.integer(integer(np)),
-          DUP=DUP,
-          PACKAGE="spatstat")
+          DUP=DUP)
+#          PACKAGE="spatstat")
   min.d <- sqrt(z$dist2)
   min.which <- z$index+1L
   return(list(min.d=min.d, min.which=min.which))

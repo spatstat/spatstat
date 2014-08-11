@@ -86,7 +86,7 @@
   
   The class \code{"msr"} has methods for \code{print},
   \code{plot} and \code{[}. 
-  There is also a function \code{\link{smooth.msr}} for smoothing a measure.
+  There is also a function \code{\link{Smooth.msr}} for smoothing a measure.
 }
 \value{
   An object of class \code{"msr"} that can be plotted
@@ -114,7 +114,7 @@
 }
 \seealso{
   \code{\link{plot.msr}},
-  \code{\link{smooth.msr}},
+  \code{\link{Smooth.msr}},
   \code{\link{[.msr}}
 }
 \examples{

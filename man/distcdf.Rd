@@ -70,6 +70,12 @@
   the pixel resolution used to represent the windows: this is controlled
   by the arguments \code{\dots} which are passed to \code{\link{as.mask}}.
   For example use \code{eps=0.1} to specify pixels of size 0.1 units.
+
+  The arguments \code{W} or \code{V} may also be point patterns
+  (objects of class \code{"ppp"}).
+  The result is the cumulative distribution function
+  of the distance from a randomly selected point in the point pattern,
+  to a randomly selected point in the other point pattern or window.
 }
 \seealso{
   \code{\link{setcov}},

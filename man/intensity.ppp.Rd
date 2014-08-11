@@ -1,4 +1,4 @@
-\name{intensity.ppp}
+\name{intensity.ppp}  %DontDeclareMethods
 \alias{intensity.ppp}
 \title{
   Empirical Intensity of Point Pattern

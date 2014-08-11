@@ -33,7 +33,7 @@
 }
 \details{
   This function selects an appropriate bandwidth for the nonparametric
-  smoothing of mark values using \code{\link{smooth.ppp}}.
+  smoothing of mark values using \code{\link{Smooth.ppp}}.
   
   The argument \code{X} must be a marked point pattern
   with a vector or data frame of marks. All mark values must be numeric.
@@ -72,7 +72,7 @@
   which can be plotted.
 }
 \seealso{
-  \code{\link{smooth.ppp}}
+  \code{\link{Smooth.ppp}}
 }
 \examples{
   data(longleaf)

@@ -109,8 +109,8 @@ nndist.default <-
                   n= as.integer(n),
                   x= as.double(x[o]), y= as.double(y[o]), nnd= as.double(nnd),
                   as.double(big),
-                  DUP=DUP,
-                  PACKAGE="spatstat")
+                  DUP=DUP)
+#                  PACKAGE="spatstat")
            nnd[o] <- z$nnd
          },
          stop(paste("Unrecognised method", sQuote(method)))
@@ -150,8 +150,8 @@ nndist.default <-
                     y    = as.double(y[o]),
                     nnd  = as.double(nnd),
                     huge = as.double(big),
-                    DUP=DUP,
-                    PACKAGE="spatstat")
+                    DUP=DUP)
+#                    PACKAGE="spatstat")
              nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
              nnd[o, ] <- matrix(z$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
            },
@@ -292,8 +292,8 @@ nnwhich.default <-
                     y = as.double(y[o]),
                     nnwhich = as.integer(nnw),
                     huge = as.double(big),
-                    DUP=DUP,
-                    PACKAGE="spatstat")
+                    DUP=DUP)
+#                    PACKAGE="spatstat")
              witch <- z$nnwhich # sic 
              if(any(witch <= 0))
                stop("Internal error: non-positive index returned from C code")
@@ -337,8 +337,8 @@ nnwhich.default <-
                     nnd = as.double(numeric(n * kmaxcalc)),
                     nnwhich = as.integer(nnw),
                     huge = as.double(big),
-                    DUP=DUP,
-                    PACKAGE="spatstat")
+                    DUP=DUP)
+#                    PACKAGE="spatstat")
              witch <- z$nnwhich # sic
              witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
              if(any(witch <= 0))

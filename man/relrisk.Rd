@@ -101,7 +101,7 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels", casecontrol=TRUE)
 \seealso{
  \code{\link{bw.relrisk}},
  \code{\link{density.ppp}},
- \code{\link{smooth.ppp}},
+ \code{\link{Smooth.ppp}},
  \code{\link{eval.im}}.
  \code{\link{which.max.im}}.
 }

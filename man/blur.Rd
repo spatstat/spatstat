@@ -71,7 +71,7 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
 \seealso{
   \code{\link{interp.im}} for interpolating a pixel image to a finer resolution,
   \code{\link{density.ppp}} for blurring a point pattern,
-  \code{\link{smooth.ppp}} for interpolating marks attached to points.
+  \code{\link{Smooth.ppp}} for interpolating marks attached to points.
 }
 \examples{
    data(letterR)

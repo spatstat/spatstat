@@ -1,4 +1,4 @@
-\name{dilation}
+\name{dilation} %DontDeclareMethods
 \alias{dilation}
 \alias{dilation.owin}
 \alias{dilation.ppp}

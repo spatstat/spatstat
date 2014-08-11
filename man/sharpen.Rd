@@ -1,4 +1,4 @@
-\name{sharpen}
+\name{sharpen} %DontDeclareMethods
 \alias{sharpen}
 \alias{sharpen.ppp}
 \title{Data Sharpening of Point Pattern}
@@ -69,7 +69,7 @@ sharpen(X, ...)
 }
 \seealso{
   \code{\link{density.ppp}},
-  \code{\link{smooth.ppp}}.
+  \code{\link{Smooth.ppp}}.
 }
 \examples{
    data(shapley)

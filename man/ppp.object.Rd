@@ -1,5 +1,5 @@
 \name{ppp.object}
-\alias{ppp.object}
+\alias{ppp.object} %DoNotExport
 \title{Class of Point Patterns}
 \description{
   A class \code{"ppp"} to represent a two-dimensional point

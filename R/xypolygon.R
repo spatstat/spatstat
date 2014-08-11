@@ -37,7 +37,7 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
   # Check for points (x,y) that coincide with vertices (xp, yp)
   # Handle them separately
   DUP <- spatstat.options("dupC")
-  z <- .C("matchxy",
+  z <- .C("Cmatchxy",
           na=as.integer(npts),
           xa=as.double(x),
           ya=as.double(y),
@@ -45,8 +45,8 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
           xb=as.double(xp),
           yb=as.double(yp),
           match=as.integer(integer(npts)),
-          DUP=DUP,
-          PACKAGE="spatstat")
+          DUP=DUP)
+#          PACKAGE="spatstat")
   is.vertex <- (z$match != 0)
   retain <- !is.vertex
   # Remove vertices from subsequent consideration; replace them later
@@ -72,16 +72,14 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
                         npts=as.integer(npts),
                         nedges=as.integer(nedges),
                         score=as.integer(score),
-                        onbndry=as.integer(on.boundary),
-                        PACKAGE="spatstat"
-                        )
+                        onbndry=as.integer(on.boundary))
+#                        PACKAGE="spatstat")
              score <- temp$score/2
              on.boundary <- as.logical(temp$onbndry)
            },
            Fortran={
              #------------------ call Fortran routine ------------------
-             temp <- .Fortran(
-                              "inxyp",
+             temp <- .Fortran("inxyp",
                               x=as.double(x),
                               y=as.double(y),
                               xp=as.double(xp),
@@ -89,9 +87,8 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
                               npts=as.integer(npts),
                               nedges=as.integer(nedges),
                               score=as.double(score),
-                              onbndry=as.logical(on.boundary),
-                              PACKAGE="spatstat"
-                              )
+                              onbndry=as.logical(on.boundary))
+#                              PACKAGE="spatstat")
              score <- temp$score
              on.boundary <- temp$onbndry
            },
@@ -234,8 +231,8 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
             np=as.integer(np),
             nx=as.integer(nx),
             ny=as.integer(ny),
-            out=as.integer(integer(nx * ny)),
-            PACKAGE="spatstat")
+            out=as.integer(integer(nx * ny)))
+#            PACKAGE="spatstat")
     if(i == 1)
       score <- z$out
     else 
@@ -467,13 +464,13 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
                  eps=as.double(eps),
                  proper=as.integer(proper),
                  answer=as.integer(integer(1)),
-                 DUP=DUP,
-                 PACKAGE="spatstat")$answer
+                 DUP=DUP)$answer
+#                 PACKAGE="spatstat")
     if(verbose)
       cat("]\n")
     return(answer != 0)
   }
-  out <- .C("xypolyselfint",
+  out <- .C("Cxypolyselfint",
             n=as.integer(n),
             x0=as.double(x0),
             y0=as.double(y0),
@@ -485,8 +482,8 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
             ti=as.double(numeric(n^2)),
             tj=as.double(numeric(n^2)),
             ok=as.integer(integer(n^2)),
-     DUP=DUP,
-     PACKAGE="spatstat")
+     DUP=DUP)
+#     PACKAGE="spatstat")
 
   uhoh <- (matrix(out$ok, n, n) != 0)
   if(proper) {

@@ -1,6 +1,6 @@
-\name{affine.lpp}
-\alias{affine.lpp}
-\alias{shift.lpp}
+\name{affine.lpp} %DontDeclareMethods
+\alias{affine.lpp} 
+\alias{shift.lpp} 
 \alias{rotate.lpp}
 \alias{rescale.lpp}
 \alias{scalardilate.lpp}

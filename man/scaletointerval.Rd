@@ -1,4 +1,4 @@
-\name{scaletointerval}
+\name{scaletointerval}  %DontDeclareMethods
 \alias{scaletointerval}
 \alias{scaletointerval.default}
 \alias{scaletointerval.im}

@@ -1,5 +1,6 @@
 \name{smooth.fv}
 \alias{smooth.fv}
+\alias{Smooth.fv}
 \title{
   Apply Smoothing to Function Values
 }
@@ -11,9 +12,13 @@
 smooth.fv(x, which = "*", ...,
           method=c("smooth.spline", "loess"),
           xinterval=NULL)
+
+\method{Smooth}{fv}(X, which = "*", ...,
+          method=c("smooth.spline", "loess"),
+          xinterval=NULL)
 }
 \arguments{
-  \item{x}{
+  \item{x,X}{
     Values to be smoothed.
     A function value table (object of class \code{"fv"},
     see \code{\link{fv.object}}).
@@ -39,9 +44,13 @@ smooth.fv(x, which = "*", ...,
   }
 }
 \details{
-  This command applies smoothing to the function values in
+  The command \code{smooth.fv} or \code{Smooth.fv}
+  applies smoothing to the function values in
   a function value table (object of class \code{"fv"}).
 
+  \code{Smooth.fv} is a method for the generic function
+  \code{\link{Smooth}}.
+  
   The smoothing is performed either by 
   \code{\link[stats]{smooth.spline}} or by
   \code{\link[stats]{loess}}.
@@ -77,6 +86,7 @@ smooth.fv(x, which = "*", ...,
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
+  \code{\link{Smooth}},
   \code{\link{with.fv}},
   \code{\link{fv.object}},
   \code{\link[stats]{smooth.spline}},
@@ -86,7 +96,7 @@ smooth.fv(x, which = "*", ...,
    data(cells)
    G <- Gest(cells)
    plot(G)
-   plot(smooth.fv(G, df=9), add=TRUE)
+   plot(Smooth(G, df=9), add=TRUE)
 }
 \keyword{spatial}
 \keyword{nonparametric}

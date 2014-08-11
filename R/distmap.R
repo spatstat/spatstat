@@ -86,9 +86,8 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
               as.logical(t(mat)),
               distances = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
               boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
-              DUP=DUP,
-              PACKAGE="spatstat"
-              )
+              DUP=DUP)
+#              PACKAGE="spatstat")
   # strip off margins again
     dist <- matrix(res$distances,
                    ncol = nc + 2, byrow = TRUE)[2:(nr + 1), 2:(nc +1)]
@@ -125,8 +124,8 @@ distmap.psp <- function(X, ...) {
           epsilon=as.double(.Machine$double.eps),
           dist2=as.double(dist2),
           index=as.integer(integer(np)),
-          DUP=DUP,
-          PACKAGE="spatstat")
+          DUP=DUP)
+#          PACKAGE="spatstat")
   xc <- W$xcol
   yr <- W$yrow
   Dist <- im(array(sqrt(z$dist2), dim=W$dim), xc, yr, unitname=uni)

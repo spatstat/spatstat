@@ -3,21 +3,41 @@
 #
 # cdf of |X1-X2| when X1,X2 are iid uniform in W, etc
 #
-#  $Revision: 1.3 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.6 $  $Date: 2013/08/26 09:51:51 $
 #
 
 distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
-  if(missing(dW) && missing(dV)) {
-    # uniform distributions
-    g <- if(missing(V)) setcov(W, ...) else setcov(W, V, ...)
+  V.given <- !missing(V)
+  dV.given <- !missing(dV)
+  reflexive <- !V.given && !dV.given
+  uniform <- missing(dW) && missing(dV)
+  Wdud <- is.ppp(W) && missing(dW)
+  Vdud <- V.given && is.ppp(V) && missing(dV) && missing(dW)
+  diffuse <- !Wdud && !Vdud
+  force(dV)
+  # handle case where W or V is a point pattern
+  # interpreted as a discrete uniform distribution
+  if(Wdud) dW <- pixellate(W, ...)
+  if(Vdud) dV <- pixellate(V, ...)
+  # 
+  if(diffuse && uniform) {
+    # uniform distributions on windows 
+    g <- if(reflexive) setcov(W, ...) else setcov(W, V, ...)
   } else {
-    # nonuniform distributions
-    W <- as.mask(as.owin(W), ...)
-    V <- if(!missing(V)) as.mask(as.owin(V), ...) else W
-    dW <- as.im(dW, W=W)
-    if(!missing(V) || !missing(dV))
-      dV <- as.im(dV, W=V)
-    g <- imcov(dW, dV)
+    # nonuniform distribution(s)
+    if(!Wdud) {
+      W <- as.mask(as.owin(W), ...)
+      dW <- as.im(dW, W=W)
+    }
+    if(reflexive) {
+      g <- imcov(dW)
+    } else {
+      if(!Vdud) {
+        V <- if(V.given) as.mask(as.owin(V), ...) else W
+        dV <- as.im(dV, W=V)
+      }
+      g <- imcov(dW, dV)
+    }
   }
   r <- as.im(function(x,y) { sqrt(x^2 + y^2) }, g)
   rvals <- as.vector(as.matrix(r))

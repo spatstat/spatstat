@@ -1,5 +1,5 @@
 \name{im.object}
-\alias{im.object}
+\alias{im.object} %DoNotExport
 \title{Class of Images}
 \description{
   A class \code{"im"} to represent a two-dimensional pixel image.

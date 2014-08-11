@@ -1,4 +1,4 @@
-\name{diameter.box3}
+\name{diameter.box3} %DontDeclareMethods
 \Rdversion{1.1}
 \alias{diameter.box3}
 \alias{volume.box3}

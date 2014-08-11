@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.22 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.23 $  $Date: 2013/08/29 03:55:35 $
 #
 
 leverage <- function(model, ...) {
@@ -193,7 +193,7 @@ ppm.influence <- function(fit,
     # values of leverage (diagonal) at points of 'loc'
     h <- b * lam
     levval <- loc %mark% h
-    levsmo <- smooth.ppp(levval, sigma=max(nndist(loc)))
+    levsmo <- Smooth(levval, sigma=max(nndist(loc)))
     # nominal mean level
     a <- area.owin(loc$window)
     levmean <- p/a

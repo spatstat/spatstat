@@ -1,6 +1,6 @@
 \name{methods.pp3}
 \Rdversion{1.1}
-\alias{methods.pp3}
+\alias{methods.pp3} %DoNotExport
 \alias{print.pp3}
 \alias{summary.pp3}
 \alias{print.summary.pp3}

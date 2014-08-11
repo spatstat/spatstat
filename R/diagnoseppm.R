@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.33 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.34 $ $Date: 2013/08/29 03:55:04 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -75,10 +75,10 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
           Ujitter <- U
           Ujitter$x <- U$x + runif(U$n, -smallsigma, smallsigma)
           Ujitter$y <- U$y + runif(U$n, -smallsigma, smallsigma)
-          Ydens <- smooth.ppp(Ujitter %mark% marks(Ycts),
-                              sigma=smallsigma,
-                              weights=Qweights,
-                              edge=TRUE, ...)
+          Ydens <- Smooth(Ujitter %mark% marks(Ycts),
+                          sigma=smallsigma,
+                          weights=Qweights,
+                          edge=TRUE, ...)
         }
       }
     }

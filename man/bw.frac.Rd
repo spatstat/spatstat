@@ -57,6 +57,7 @@
 \seealso{
   \code{\link{density.ppp}},
   \code{\link{bw.diggle}},
+  \code{\link{bw.ppl}},
   \code{\link{bw.relrisk}},
   \code{\link{bw.scott}},
   \code{\link{bw.smoothppp}},

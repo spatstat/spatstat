@@ -1,4 +1,113 @@
 
+	CHANGES IN spatstat VERSION 1.33-0
+
+OVERVIEW
+
+   o We thank Kurt Hornik and Brian Ripley for advice.
+
+   o The package namespace has been modified.
+
+   o Numerous internal changes.
+
+   o Likelihood cross-validation for smoothing bandwidth.
+
+   o More flexible models of intensity in cluster/Cox processes.
+
+   o New generic function for smoothing.
+
+   o Version nickname: 'Titanic Deckchair'
+
+NEW FUNCTIONS
+
+    o bw.ppl
+    Likelihood cross-validation technique 
+    for bandwidth selection in kernel smoothing.
+
+    o is.lppm, is.kppm, is.slrm
+    Tests whether an object is of class 'lppm', 'kppm' or 'slrm'
+
+    o Smooth
+    New generic function for spatial smoothing.
+
+    o Smooth.ppp, Smooth.fv, Smooth.msr
+    Methods for Smooth
+    (identical to smooth.ppp, smooth.fv, smooth.msr respectively)
+
+    o fitted.kppm
+    Method for 'fitted' for cluster/Cox models
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o namespace
+    The namespace of the spatstat package has been changed.
+
+    o internal functions
+    Some undocumented internal functions are no longer visible,
+    as they are no longer exported in the namespace. These functions
+    can still be accessed using the form spatstat:::functionname.
+    Functions that are not visible are not guaranteed to exist 
+    or to remain the same in future. 
+
+    o methods
+    For some generic functions defined in the spatstat package,
+    it is possible that R may fail to find one of the methods
+    for the generic. This is a temporary problem due to a restriction
+    on the size of the namespace in R 3.0.1. It will be fixed in 
+    future versions of R and spatstat. It only applies to methods
+    for a generic which is a spatstat function (such as nndist)
+    and does not apply to methods for generics defined elsewhere
+    (such as density). In the meantime, if this problem should occur, 
+    it can be avoided by calling the method explicitly, in the form
+    spatstat:::genericname.classname.
+
+    o speed
+    The package should run slightly faster overall, due to the
+    improvement of the namespace, and changes to internal code.
+
+    o envelope
+    New argument 'envir.simul' determines the environment
+    in which to evaluate the expression 'simulate'.
+
+    o kppm
+    More flexible models of the intensity, and greater control over the
+    intensity fitting procedure, are now possible using the arguments
+    'covfunargs', 'use.gam', 'nd', 'eps' passed to ppm.
+    Also the argument 'X' may now be a quadrature scheme.
+
+    o distcdf
+    Arguments W and V can now be point patterns.
+
+    o Kest
+    New option: correction = "good" 
+    selects the best edge correction that can be computed in reasonable time.
+
+    o bw.diggle
+    Accelerated.
+
+    o predict.ppm
+    Calculation of standard error has been accelerated.
+
+    o smooth.ppp, smooth.fv, smooth.msr
+    These functions will soon be 'Deprecated' in favour of
+    the methods Smooth.ppp, Smooth.fv, Smooth.msr respectively.
+
+    o stratrand, overlap.owin, update.slrm, edge.Trans, edge.Ripley
+    These already-existing functions are now documented.
+
+BUG FIXES
+
+    o kppm, matclust.estpcf, pcfmodel
+    The pair correlation function of the Matern Cluster Process
+    was evaluated incorrectly at distances close to 0.
+    This could have affected the fitted parameters 
+    in matclust.estpcf() or kppm(clusters="MatClust").
+    Fixed.
+
+    o anova.ppm
+    Would cause an error in future versions of R
+    when 'anova.glm' is removed from the namespace.
+    Fixed.
+
 	CHANGES IN spatstat VERSION 1.32-0
 
 OVERVIEW

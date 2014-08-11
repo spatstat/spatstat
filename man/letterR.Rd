@@ -1,5 +1,6 @@
 \name{letterR}
 \alias{letterR}
+\docType{data}
 \title{Window in Shape of Letter R}
 \description{
   A window in the shape of the capital letter R,

@@ -1,6 +1,6 @@
 \name{ppm.object}
-\alias{ppm.object}
-\alias{methods.ppm}
+\alias{ppm.object}  %DoNotExport
+\alias{methods.ppm} %DoNotExport
 \title{Class of Fitted Point Process Models}
 \description{
   A class \code{ppm} to represent a fitted stochastic model

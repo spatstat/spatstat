@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.49 $  $Date: 2013/05/07 03:44:50 $
+#   $Revision: 2.50 $  $Date: 2013/08/14 02:50:59 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -48,11 +48,12 @@ envelope.ppp <-
            transform=NULL, global=FALSE, ginterval=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE) {
+           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
+           envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- Kest
-  envir.user <- parent.frame()
+  envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
 
   if(is.null(simulate)) {
@@ -108,11 +109,12 @@ envelope.ppm <-
            transform=NULL, global=FALSE, ginterval=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE) {
+           Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
+           envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- Kest
-  envir.user <- parent.frame()
+  envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
 
   # Extract data pattern X from fitted model Y
@@ -164,12 +166,12 @@ envelope.kppm <-
            transform=NULL, global=FALSE, ginterval=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
-           do.pwrong=FALSE)
+           do.pwrong=FALSE, envir.simul=NULL)
 {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- Kest
-  envir.user <- parent.frame()
+  envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
   
   # Extract data pattern X from fitted model Y

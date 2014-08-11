@@ -13,7 +13,7 @@ envelope.lpp <-
            transform=NULL, global=FALSE, ginterval=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, do.pwrong=FALSE) {
+           Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- linearK
@@ -22,7 +22,7 @@ envelope.lpp <-
     stop(paste("The argument", sQuote("clipdata"),
                "is not available for envelope.lpp"))
   
-  envir.user <- parent.frame()
+  envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
   
   if(is.null(simulate)) {
@@ -67,7 +67,7 @@ envelope.lppm <-
            transform=NULL, global=FALSE, ginterval=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
-           Yname=NULL, do.pwrong=FALSE) {
+           Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
   cl <- short.deparse(sys.call())
   if(is.null(Yname)) Yname <- short.deparse(substitute(Y))
   if(is.null(fun)) fun <- linearK
@@ -76,7 +76,7 @@ envelope.lppm <-
     stop(paste("The argument", sQuote("clipdata"),
                "is not available for envelope.pp3"))
 
-  envir.user <- parent.frame()
+  envir.user <- if(!is.null(envir.simul)) envir.simul else parent.frame()
   envir.here <- sys.frame(sys.nframe())
   
   if(is.null(simulate)) {

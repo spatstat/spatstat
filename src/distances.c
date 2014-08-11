@@ -6,16 +6,16 @@
 
   $Revision: 1.27 $     $Date: 2012/03/27 04:22:13 $
 
-  pairdist      Pairwise distances
-  pair2dist     Pairwise distances squared
-  pairPdist     Pairwise distances with periodic correction
-  pairP2dist    Pairwise distances squared, with periodic correction
+  Cpairdist      Pairwise distances
+  Cpair2dist     Pairwise distances squared
+  CpairPdist     Pairwise distances with periodic correction
+  CpairP2dist    Pairwise distances squared, with periodic correction
 
-  crossdist     Pairwise distances for two sets of points
-  cross2dist    Pairwise distances squared, for two sets of points
-  crossPdist    Pairwise distances for two sets of points, periodic correction
+  Ccrossdist     Pairwise distances for two sets of points
+  Ccross2dist    Pairwise distances squared, for two sets of points
+  CcrossPdist    Pairwise distances for two sets of points, periodic correction
 
-  matchxy       Find matches between two sets of points   
+  Cmatchxy       Find matches between two sets of points   
 
  */
 
@@ -25,7 +25,7 @@
 
 double sqrt();
 
-void pairdist(n, x, y, d)
+void Cpairdist(n, x, y, d)
      /* inputs */
      int *n;
      double *x, *y;
@@ -67,7 +67,7 @@ void pairdist(n, x, y, d)
 
 /* squared distances */
 
-void pair2dist(n, x, y, d)
+void Cpair2dist(n, x, y, d)
      /* inputs */
      int *n;
      double *x, *y;
@@ -107,7 +107,7 @@ void pair2dist(n, x, y, d)
   }
 }
 
-void crossdist(nfrom, xfrom, yfrom, nto, xto, yto, d)
+void Ccrossdist(nfrom, xfrom, yfrom, nto, xto, yto, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *xto, *yto;
@@ -140,7 +140,7 @@ void crossdist(nfrom, xfrom, yfrom, nto, xto, yto, d)
 
 /* squared distances */
 
-void cross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
+void Ccross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *xto, *yto;
@@ -173,7 +173,7 @@ void cross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
 
 /* distances with periodic correction */
 
-void pairPdist(n, x, y, xwidth, yheight, d)
+void CpairPdist(n, x, y, xwidth, yheight, d)
      /* inputs */
      int *n;
      double *x, *y, *xwidth, *yheight;
@@ -227,7 +227,7 @@ void pairPdist(n, x, y, xwidth, yheight, d)
 
 /* same function without the sqrt */
 
-void pairP2dist(n, x, y, xwidth, yheight, d)
+void CpairP2dist(n, x, y, xwidth, yheight, d)
      /* inputs */
      int *n;
      double *x, *y, *xwidth, *yheight;
@@ -279,7 +279,7 @@ void pairP2dist(n, x, y, xwidth, yheight, d)
   }
 }
 
-void crossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
+void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
      /* inputs */
      int *nto, *nfrom;
      double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
@@ -329,7 +329,7 @@ void crossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
 
  */
 
-void matchxy(na, xa, ya, nb, xb, yb, match)
+void Cmatchxy(na, xa, ya, nb, xb, yb, match)
      /* inputs */
      int *na, *nb;
      double *xa, *ya, *xb, *yb;

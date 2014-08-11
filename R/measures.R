@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.25 $  $Date: 2013/07/04 10:17:31 $
+#  $Revision: 1.28 $  $Date: 2013/08/29 04:18:37 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -140,7 +140,7 @@ plot.msr <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   d <- ncol(as.matrix(x$val))  
   if(d == 1) {
-    smo <- smooth.ppp(x$loc %mark% x$density, sigma=max(nndist(x$loc)), ...)
+    smo <- Smooth(x$loc %mark% x$density, sigma=max(nndist(x$loc)), ...)
     xtra <- unique(c(names(formals(plot.default)),
                      names(formals(image.default)),
                      "box"))
@@ -214,6 +214,13 @@ dim.msr <- function(x) { dim(as.matrix(x$val)) }
 dimnames.msr <- function(x) { list(NULL, colnames(x$val)) }
 
 smooth.msr <- function(X, ...) {
+  message("smooth.msr will soon be deprecated: use the generic Smooth with a capital S")
+#  .Deprecated("Smooth.msr", package="spatstat",
+#     msg="smooth.msr is deprecated: use the generic Smooth with a capital S")
+  Smooth(X, ...)
+}
+
+Smooth.msr <- function(X, ...) {
   verifyclass(X, "msr")
   loc <- X$loc
   val <- X$val

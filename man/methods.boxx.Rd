@@ -1,6 +1,6 @@
 \name{methods.boxx}
 \Rdversion{1.1}
-\alias{methods.boxx}
+\alias{methods.boxx}  %DoNotExport
 \alias{print.boxx}
 \alias{unitname.boxx}
 \alias{unitname<-.boxx}

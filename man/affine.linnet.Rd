@@ -1,5 +1,5 @@
-\name{affine.linnet}
-\alias{affine.linnet}
+\name{affine.linnet} %DontDeclareMethods
+\alias{affine.linnet} 
 \alias{shift.linnet}
 \alias{rotate.linnet}
 \alias{rescale.linnet}

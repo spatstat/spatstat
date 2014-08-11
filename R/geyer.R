@@ -173,6 +173,7 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
   Cmap <- rep.int(-1, nU)
   Cmap[Usortindex] <- Xsortindex - 1
   # call C routine
+  DUP <- spatstat.options("dupC")
   zz <- .C("Egeyer",
            nnquad = as.integer(nU),
            xquad  = as.double(Usort$x),
@@ -185,7 +186,8 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
            rrmax  = as.double(r),
            ssat   = as.double(sat),
            result = as.double(numeric(nU)),
-           PACKAGE="spatstat")
+           DUP=DUP)
+#           PACKAGE="spatstat")
   result <- zz$result[rankU]
   return(result)
 }

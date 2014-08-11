@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.2 $  $Date: 2013/06/29 03:30:45 $
+#    $Revision: 1.3 $  $Date: 2013/08/22 08:26:51 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -124,6 +124,18 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
+    # The following lines are captured by a 'sed' script.
+    # They ensure that the namespace file includes the
+    # explicit names of all the function entry points.
+    # ................................................
+    #    .C("nnXd3D",
+    #    .C("nnXw3D",
+    #    .C("nnXdw3D",
+    #    .C("nnXEd3D",
+    #    .C("nnXEw3D",
+    #    .C("nnXEdw3D",
+    # .................................................
+    
     z <- .C(Cfun,
             n1=as.integer(nX),
             x1=as.double(XX[,1]),
@@ -138,8 +150,8 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),
-            DUP=DUP,
-            PACKAGE="spatstat")
+            DUP=DUP)
+#            PACKAGE="spatstat")
 
     if(want.which) {
       nnwcode <- z$nnwhich #sic. C code now increments by 1
@@ -175,6 +187,18 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
+    # The following lines are captured by a 'sed' script.
+    # They ensure that the namespace file includes the
+    # explicit names of all the function entry points.
+    # ................................................
+    #    .C("knnXd3D",
+    #    .C("knnXw3D",
+    #    .C("knnXdw3D",
+    #    .C("knnXEd3D",
+    #    .C("knnXEw3D",
+    #    .C("knnXEdw3D",
+    # .................................................
+
     z <- .C(Cfun,
             n1=as.integer(nX),
             x1=as.double(XX[,1]),
@@ -190,8 +214,8 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),
-            DUP=DUP,
-            PACKAGE="spatstat")
+            DUP=DUP)
+#            PACKAGE="spatstat")
 
     # extract results
     nnD <- z$nnd

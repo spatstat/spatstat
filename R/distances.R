@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.40 $     $Date: 2013/04/25 06:37:43 $
+#      $Revision: 1.41 $     $Date: 2013/08/22 08:26:38 $
 #
 #
 #      Interpoint distances between pairs 
@@ -76,19 +76,25 @@ pairdist.default <-
            d <- numeric( n * n)
            DUP <- spatstat.options("dupC")
            if(!periodic) {
-             z<- .C(if(squared) "pair2dist" else "pairdist",
+             # The following comment lines are captured by a 'sed' script.
+             #    .C("Cpair2dist",
+             #    .C("Cpairdist",
+             z<- .C(if(squared) "Cpair2dist" else "Cpairdist",
                     n = as.integer(n),
                     x= as.double(x), y= as.double(y), d= as.double(d),
-                    DUP=DUP,
-                    PACKAGE="spatstat")
+                    DUP=DUP)
+#                    PACKAGE="spatstat")
            } else {
-             z<- .C(if(squared) "pairP2dist" else "pairPdist",
-                    n = as.integer(n),
-                    x= as.double(x), y= as.double(y),
-                    xwidth=as.double(wide), yheight=as.double(high),
-                    d= as.double(d),
-                    DUP=DUP,
-                    PACKAGE="spatstat")
+             # The following comment lines are captured by a 'sed' script.
+             #    .C("CpairP2dist",
+             #    .C("CpairPdist",
+             z <- .C(if(squared) "CpairP2dist" else "CpairPdist",
+                     n = as.integer(n),
+                     x= as.double(x), y= as.double(y),
+                     xwidth=as.double(wide), yheight=as.double(high),
+                     d= as.double(d),
+                     DUP=DUP)
+#                     PACKAGE="spatstat")
            }
            dout <- matrix(z$d, nrow=n, ncol=n)
          },
@@ -166,7 +172,7 @@ crossdist.default <-
                C = {
                  DUP <- spatstat.options("dupC")
                  if(!periodic) {
-                   z<- .C("crossdist",
+                   z<- .C("Ccrossdist",
                           nfrom = as.integer(n1),
                           xfrom = as.double(x1),
                           yfrom = as.double(y1),
@@ -174,10 +180,10 @@ crossdist.default <-
                           xto = as.double(x2),
                           yto = as.double(y2),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
-                          DUP=DUP,
-                          PACKAGE="spatstat")
+                          DUP=DUP)
+#                          PACKAGE="spatstat")
                  } else {
-                   z<- .C("crossPdist",
+                   z<- .C("CcrossPdist",
                           nfrom = as.integer(n1),
                           xfrom = as.double(x1),
                           yfrom = as.double(y1),
@@ -187,8 +193,8 @@ crossdist.default <-
                           xwidth = as.double(wide),
                           yheight = as.double(high),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
-                          DUP=DUP,
-                          PACKAGE="spatstat")
+                          DUP=DUP)
+#                          PACKAGE="spatstat")
                  }
                  return(matrix(z$d, nrow=n1, ncol=n2))
                },

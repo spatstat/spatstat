@@ -173,7 +173,8 @@ countends <- function(L, x=locator(1), r) {
   from0 <- L$from - 1L
   to0   <- L$to - 1L
   toler <- 0.001 * min(lengths)
-  zz <- .C("countends",
+  DUP <- spatstat.options("dupC")
+  zz <- .C("Ccountends",
            np = as.integer(np),
            f = as.double(startfraction),
            seg = as.integer(seg0),
@@ -188,6 +189,7 @@ countends <- function(L, x=locator(1), r) {
            lengths = as.double(lengths),
            toler=as.double(toler),
            nendpoints = as.integer(integer(np)),
-           PACKAGE="spatstat")
+           DUP=DUP)
+#           PACKAGE="spatstat")
   zz$nendpoints
 }

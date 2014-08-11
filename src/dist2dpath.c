@@ -8,7 +8,7 @@
   Uses dist2dpath.h
 */
 
-#define FNAME dist2dpath
+#define FNAME Ddist2dpath
 #define DTYPE double
 #define FLOATY
 
@@ -18,7 +18,7 @@
 #undef DTYPE
 #undef FLOATY
 
-#define FNAME idist2dpath
+#define FNAME Idist2dpath
 #define DTYPE int
 
 #include "dist2dpath.h"

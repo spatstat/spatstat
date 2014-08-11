@@ -1,4 +1,4 @@
-\name{distmap.psp}
+\name{distmap.psp}  %DontDeclareMethods
 \alias{distmap.psp}
 \title{
   Distance Map of Line Segment Pattern

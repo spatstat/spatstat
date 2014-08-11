@@ -1,5 +1,5 @@
 \name{psp.object}
-\alias{psp.object}
+\alias{psp.object} %DoNotExport
 \title{Class of Line Segment Patterns}
 \description{
   A class \code{"psp"} to represent a spatial pattern of

@@ -1,6 +1,6 @@
 \name{methods.units}
 \Rdversion{1.1}
-\alias{methods.units}
+\alias{methods.units} %DoNotExport
 \alias{print.units}
 \alias{summary.units}
 \alias{rescale.units}

@@ -1,4 +1,4 @@
-\name{scalardilate}
+\name{scalardilate} %DontDeclareMethods
 \alias{scalardilate}
 \alias{scalardilate.im}
 \alias{scalardilate.owin}
@@ -7,7 +7,7 @@
 \alias{scalardilate.default}
 \title{Apply Scalar Dilation}
 \description{
-  Applie scalar dilation to a plane geometrical object,
+  Applies scalar dilation to a plane geometrical object,
   such as a point pattern or a window,
   relative to a specified origin.
 }

@@ -447,7 +447,7 @@ rmh.default <- function(model,start=NULL,
 
 #==+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===
 #
-#     PACKAGE UP
+#     PACK UP
 #
 #==+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===
 
@@ -815,8 +815,8 @@ rmhEngine <- function(InfoList, ...,
                  npts.cond,
                  fixall,
                  track,
-                 snoopenv,
-                 PACKAGE="spatstat")
+                 snoopenv)
+#                 PACKAGE="spatstat")
   
     # Extract the point pattern returned from C
     X <- ppp(x=out[[1]], y=out[[2]], window=w.state, check=FALSE)
@@ -898,8 +898,8 @@ rmhEngine <- function(InfoList, ...,
                    npts.cond,
                    fixall,
                    track,
-                   snoopenv,
-                   PACKAGE="spatstat")
+                   snoopenv)
+#                   PACKAGE="spatstat")
       # Extract the point pattern returned from C
       X <- ppp(x=out[[1]], y=out[[2]], window=w.state, check=FALSE)
       if(mtype) {

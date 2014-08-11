@@ -1,4 +1,4 @@
-\name{intensity.lpp}
+\name{intensity.lpp}  %DontDeclareMethods
 \alias{intensity.lpp}
 \title{
   Empirical Intensity of Point Pattern on Linear Network

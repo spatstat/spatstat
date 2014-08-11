@@ -1,5 +1,5 @@
 \name{pppmatching.object}
-\alias{pppmatching.object}
+\alias{pppmatching.object} %DoNotExport
 \title{Class of Point Matchings}
 \description{
   A class \code{"pppmatching"} to represent a matching of two planar

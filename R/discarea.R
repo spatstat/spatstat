@@ -32,6 +32,7 @@ discpartarea <- function(X, r, W=as.owin(X)) {
   vert <- (Y$ends$x1 == Y$ends$x0)
   Y <- Y[!vert]
   # go
+  DUP <- spatstat.options("dupC")
   z <- .C("discareapoly",
           nc=as.integer(n),
           xc=as.double(X$x),
@@ -45,8 +46,8 @@ discpartarea <- function(X, r, W=as.owin(X)) {
           y1=as.double(Y$ends$y1),
           eps=as.double(.Machine$double.eps),
           out=as.double(numeric(length(r))),
-          PACKAGE="spatstat"
-          )
+          DUP=DUP)
+#          PACKAGE="spatstat")
   areas <- matrix(z$out, n, nr)
   return(areas)
 }

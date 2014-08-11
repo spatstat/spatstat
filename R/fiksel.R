@@ -36,6 +36,7 @@ Fiksel <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
+    DUP <- spatstat.options("dupC")
     out <- .C("Efiksel",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -46,7 +47,8 @@ Fiksel <- local({
             rrmax    = as.double(r),
             kkappa   = as.double(kappa),
             values   = as.double(double(nX)),
-            PACKAGE  = "spatstat")
+              DUP=DUP)
+#            PACKAGE  = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

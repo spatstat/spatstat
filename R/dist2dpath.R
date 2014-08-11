@@ -37,7 +37,8 @@ dist2dpath <- function(dist, method="C") {
            diag(adj) <- TRUE
            d <- dist
            d[!adj] <- -1
-           z <- .C("dist2dpath",
+           DUP <- spatstat.options("dupC")
+           z <- .C("Ddist2dpath",
                    nv=as.integer(n),
                    d=as.double(d),
                    adj=as.integer(adj),
@@ -45,7 +46,8 @@ dist2dpath <- function(dist, method="C") {
                    tol=as.double(tol),
                    niter=as.integer(integer(1)),
                    status=as.integer(integer(1)),
-                   PACKAGE="spatstat")
+                   DUP=DUP)
+#                   PACKAGE="spatstat")
            if(z$status == -1)
              warning(paste("C algorithm did not converge to tolerance", tol,
                            "after", z$niter, "iterations",

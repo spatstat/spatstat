@@ -13,7 +13,7 @@
     An object of class \code{"msr"} (see \code{\link{msr}}).
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link{smooth.ppp}}
+    Extra arguments passed to \code{\link{Smooth.ppp}}
     to control the interpolation of the
     continuous density component of \code{x},
     or passed to \code{\link{plot.im}} or \code{\link{plot.ppp}}
@@ -27,16 +27,20 @@
   This is the \code{plot} method for the class \code{"msr"}.
   
   The continuous density component of \code{x} is interpolated
-  from the existing data by \code{\link{smooth.ppp}},
+  from the existing data by \code{\link{Smooth.ppp}},
   and then displayed as a colour image by \code{\link{plot.im}}.
 
   The discrete atomic component of \code{x} is then superimposed on this
   image by plotting the atoms as circles (for positive mass)
   or squares (for negative mass) by \code{\link{plot.ppp}}.
+
+  To smooth both the discrete and continuous components,
+  use   \code{\link{Smooth.msr}}.
 }
 \seealso{
   \code{\link{msr}},
-  \code{\link{smooth.msr}},
+  \code{\link{Smooth.ppp}},
+  \code{\link{Smooth.msr}},
   \code{\link{plot.im}},
   \code{\link{plot.ppp}}
 }

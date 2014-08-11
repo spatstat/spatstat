@@ -406,7 +406,7 @@ void xysxi(n, x0, y0, dx, dy,
 
 */
 
-void xypolyselfint(n, x0, y0, dx, dy, 
+void Cxypolyselfint(n, x0, y0, dx, dy, 
 	      eps,
               xx, yy, ti, tj, ok)
      /* inputs (vectors of coordinates) */

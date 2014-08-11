@@ -1,6 +1,6 @@
 \name{methods.box3}
 \Rdversion{1.1}
-\alias{methods.box3}
+\alias{methods.box3}  %DoNotExport
 \alias{print.box3}
 \alias{unitname.box3}
 \alias{unitname<-.box3}
@@ -12,7 +12,7 @@
 }
 \usage{
   \method{print}{box3}(x, ...)
-  \method{unitname}{box3}(x)
+  \method{unitname}{box3}(x) 
   \method{unitname}{box3}(x) <- value
 }
 \arguments{

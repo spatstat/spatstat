@@ -1,4 +1,4 @@
-\name{opening}
+\name{opening} %DontDeclareMethods
 \alias{opening}
 \alias{opening.owin}
 \alias{opening.psp}
