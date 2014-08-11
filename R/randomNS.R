@@ -3,7 +3,7 @@
 #
 #   simulating from Neyman-Scott processes
 #
-#   $Revision: 1.7 $  $Date: 2012/01/16 02:59:10 $
+#   $Revision: 1.9 $  $Date: 2013/04/25 06:37:43 $
 #
 #    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 #    Other code and modifications by Adrian Baddeley
@@ -23,7 +23,7 @@
   if(is.function(rcluster))
     return(rPoissonCluster(kappa, rmax, rcluster, win, ..., lmax=lmax))
 
-  #     (2) a list(mu, f) where mu is a numeric value
+  #     (2) a list(mu, f) where mu is a numeric value, function, or pixel image
   #         and f is a function(n, ...) generating n i.i.d. offspring at 0,0
   
   if(!(is.list(rcluster) && length(rcluster) == 2))
@@ -46,8 +46,7 @@
 
   # Generate parents in dilated window
   frame <- bounding.box(win)
-  dilated <- owin(frame$xrange + c(-rmax, rmax),
-                  frame$yrange + c(-rmax, rmax))
+  dilated <- grow.rectangle(frame, rmax)
   if(is.im(kappa) && !is.subset.owin(dilated, as.owin(kappa)))
     stop(paste("The window in which the image",
                sQuote("kappa"),
@@ -55,7 +54,7 @@
                "is not large enough to contain the dilation of the window",
                sQuote("win")))
   parents <- rpoispp(kappa, lmax=lmax, win=dilated)
-  np <- parents$n
+  np <- npoints(parents)
 
   # generate cluster sizes
   if(np == 0) {
@@ -67,8 +66,8 @@
     noff <- sum(csize)
     xparent <- parents$x
     yparent <- parents$y
-    x0 <- rep(xparent, csize)
-    y0 <- rep(yparent, csize)
+    x0 <- rep.int(xparent, csize)
+    y0 <- rep.int(yparent, csize)
     # invoke random generator
     dd <- rdisplace(noff, ...)
     mm <- if(is.ppp(dd)) marks(dd) else NULL
@@ -81,7 +80,7 @@
     # create offspring and offspring-to-parent map
     xoff <- x0 + dx
     yoff <- y0 + dy
-    parentid <- rep(1:np, csize)
+    parentid <- rep.int(1:np, csize)
     # trim to window
     retain <- inside.owin(xoff, yoff, win)
     xoff <- xoff[retain]

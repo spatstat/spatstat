@@ -1,7 +1,7 @@
 #
 #   pcfmulti.inhom.R
 #
-#   $Revision: 1.7 $   $Date: 2013/02/07 09:58:14 $
+#   $Revision: 1.8 $   $Date: 2013/04/25 06:37:43 $
 #
 #   inhomogeneous multitype pair correlation functions
 #
@@ -62,7 +62,7 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
     i <- levels(marx)[1]
 
   I <- (marx == i)
-  J <- rep(TRUE, X$n)  # i.e. all points
+  J <- rep.int(TRUE, X$n)  # i.e. all points
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points")
 	
@@ -184,7 +184,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
 
   # initialise fv object
   
-  df <- data.frame(r=r, theo=rep(1,length(r)))
+  df <- data.frame(r=r, theo=rep.int(1,length(r)))
   out <- fv(df, "r",
             substitute(g[inhom,multi](r), NULL), "theo", ,
             alim,

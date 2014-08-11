@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.19 $   $Date: 2013/01/24 04:02:18 $
+#  $Revision: 1.21 $   $Date: 2013/03/04 13:52:52 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -193,4 +193,103 @@ local2lpp <- function(L, seg, tp, X=NULL) {
   class(out) <- c("lpp", class(out))
   return(out)
 }
-  
+
+####################################################
+# subset extractor
+####################################################
+
+"[.lpp" <- function (x, i, j, ...) {
+  if(!missing(i) && !is.null(i)) {
+    if(is.owin(i)) {
+      # spatial domain: call code for 'j'
+      xi <- x[,i]
+    } else {
+      # usual row-type index
+      da <- x$data
+      daij <- da[i, , drop=FALSE]
+      xi <- ppx(data=daij, domain=x$domain, coord.type=as.character(x$ctype))
+      class(xi) <- c("lpp", class(xi))
+    }
+    x <- xi
+  } 
+  if(missing(j) || is.null(j))
+    return(x)
+  stopifnot(is.owin(j))
+  W <- j
+  L <- x$domain
+  da <- x$data
+  # Find vertices that lie inside 'j'
+  okvert <- inside.owin(L$vertices, w=W)
+  # find segments whose endpoints both lie in 'upper'
+  okedge <- okvert[L$from] & okvert[L$to]
+  # assign new serial numbers to vertices, and recode 
+  newserial <- cumsum(okvert)
+  newfrom <- newserial[L$from[okedge]]
+  newto   <- newserial[L$to[okedge]]
+  # make new linear network
+  Lnew <- linnet(L$vertices[W], edges=cbind(newfrom, newto))
+  # find data points that lie on accepted segments
+  coo <- coords(x)
+  okxy <- okedge[coo$seg]
+  cook <- coo[okxy,]
+  # make new lpp object
+  dfnew <- data.frame(x=cook$x,
+                      y=cook$y,
+                      seg=cook$seg,
+                      tp=cook$tp)
+  ctype <- c(rep("spatial", 2), rep("local", 2))
+  xj <- ppx(data=dfnew, domain=Lnew, coord.type=ctype)
+  class(xj) <- c("lpp", class(xj))
+  marks(xj) <- marks(x[okxy])
+  return(xj)
+}
+
+####################################################
+# affine transformations
+####################################################
+
+scalardilate.lpp <- function(X, f, ...) {
+  trap.extra.arguments(..., .Context="In scalardilate(X,f)")
+  check.1.real(f, "In scalardilate(X,f)")
+  stopifnot(is.finite(f) && f > 0)
+  Y <- X
+  Y$data$x <- f * X$data$x
+  Y$data$y <- f * X$data$y
+  Y$domain <- scalardilate(X$domain, f)
+  return(Y)
+}
+
+affine.lpp <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
+  verifyclass(X, "lpp")
+  Y <- X
+  Y$data[, c("x","y")] <- affinexy(X$data[, c("x","y")], mat=mat, vec=vec)
+  Y$domain <- affine(X$domain, mat=mat, vec=vec, ...)
+  return(Y)
+}
+
+shift.lpp <- function(X, ...) {
+  verifyclass(X, "lpp")
+  Y <- X
+  Y$domain <- shift(X$domain, ...)
+  vec <- attr(Y$domain, "lastshift")
+  Y$data[, c("x","y")] <- shiftxy(X$data[, c("x","y")], vec=vec)
+  # tack on shift vector
+  attr(Y, "lastshift") <- vec
+  return(Y)
+}
+
+rotate.lpp <- function(X, angle=pi/2, ...) {
+  verifyclass(X, "lpp")
+  Y <- X
+  Y <- X
+  Y$data[, c("x","y")] <- rotxy(X$data[, c("x","y")], angle=angle)
+  Y$domain <- rotate(X$domain, angle=angle, ...)
+  return(Y)
+}
+
+rescale.lpp <- function(X, s) {
+  if(missing(s)) s <- 1/unitname(X)$multiplier
+  Y <- scalardilate(X, f=1/s)
+  unitname(Y) <- rescale(unitname(X), s)
+  return(Y)
+}

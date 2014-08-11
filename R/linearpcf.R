@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.8 $ $Date: 2011/07/21 08:01:37 $
+# $Revision: 1.9 $ $Date: 2013/04/25 06:37:43 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -111,7 +111,7 @@ linearpcfengine <- function(X, ..., r=NULL,
   #
   if(np < 2) {
     # no pairs to count: return zero function
-    zeroes <- rep(0, length(r))
+    zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
     g <- fv(df, "r", substitute(linearpcf(r), NULL),
             "est", . ~ r, c(0, rmax),
@@ -145,7 +145,7 @@ linearpcfengine <- function(X, ..., r=NULL,
   # extract bandwidth
   bw <- attr(g, "bw")
   # tack on theoretical value
-  g <- bind.fv(g, data.frame(theo=rep(1,length(r))), "%s[theo](r)",
+  g <- bind.fv(g, data.frame(theo=rep.int(1,length(r))), "%s[theo](r)",
                "theoretical Poisson %s")
   # tweak
   g <- rebadge.fv(g, new.fname="linearpcfengine")

@@ -31,6 +31,7 @@
   \item{correction}{
     Optional. Character string specifying the choice of edge
     correction(s) in \code{\link{Fest}} and \code{\link{Gest}}.
+    See Details.
   }
 }
 \value{
@@ -40,8 +41,6 @@
   Essentially a data frame containing
   \item{r}{the vector of values of the argument \eqn{r} 
     at which the function \eqn{J} has been  estimated}
-  \item{J}{the recommended estimate of \eqn{J(r)}, which is the 
-    Kaplan-Meier estimate \code{km}}
   \item{rs}{the ``reduced sample'' or ``border correction''
               estimator of \eqn{J(r)} computed from
 	      the border-corrected estimates of \eqn{F} and \eqn{G} }
@@ -116,22 +115,37 @@
   These estimates are then combined by simply taking the ratio
   \eqn{J(r) = (1-G(r))/(1-F(r))}.
 
-  In fact three different estimates are computed
+  In fact several different estimates are computed
   using different edge corrections (Baddeley, 1998).
+
   The Kaplan-Meier estimate (returned as \code{km}) is the ratio 
   \code{J = (1-G)/(1-F)} of the Kaplan-Meier estimates of
   \eqn{1-F} and \eqn{1-G} computed by
   \code{\link{Fest}} and \code{\link{Gest}} respectively.
+  This is computed if \code{correction=NULL} or if \code{correction}
+  includes \code{"km"}.
+
+  The Hanisch-style estimate (returned as \code{han}) is the ratio 
+  \code{J = (1-G)/(1-F)} where \code{F} is the Chiu-Stoyan estimate of
+  \eqn{F} and \code{G} is the Hanisch estimate of \eqn{G}.
+  This is computed if \code{correction=NULL} or if \code{correction}
+  includes \code{"cs"} or \code{"han"}.
+
   The reduced-sample or border corrected estimate
   (returned as \code{rs}) is
   the same ratio \code{J = (1-G)/(1-F)}
   of the border corrected estimates. 
-  These estimators are slightly biased for \eqn{J}, 
-  since they are ratios
-  of approximately unbiased estimators. The logarithm of the
-  Kaplan-Meier estimate is unbiased for \eqn{\log J}{log J}.
+  This is computed if \code{correction=NULL} or if \code{correction}
+  includes \code{"rs"} or \code{"border"}.
 
-  The uncorrected estimate (returned as \code{un})
+  These edge-corrected estimators are slightly biased for \eqn{J}, 
+  since they are ratios
+  of approximately unbiased estimators.
+  The logarithm of the
+  Kaplan-Meier estimate is exactly unbiased for \eqn{\log J}{log J}.
+
+  The uncorrected estimate (returned as \code{un}
+  and computed only if \code{correction} includes \code{"none"})
   is the ratio \code{J = (1-G)/(1-F)}
   of the uncorrected (``raw'') estimates of the survival functions
   of \eqn{F} and \eqn{G},
@@ -144,7 +158,7 @@
   is approximately unbiased (if the process is close to Poisson);
   it is insensitive to edge effects, and should be used when
   edge effects are severe (see Baddeley et al, 2000).
-
+  
   The algorithm for \code{\link{Fest}}
   uses two discrete approximations which are controlled
   by the parameter \code{eps} and by the spacing of values of \code{r}
@@ -205,9 +219,9 @@
   Van Lieshout, M.N.M. and Baddeley, A.J.
   A nonparametric measure of spatial interaction in point patterns.
   \emph{Statistica Neerlandica} \bold{50} (1996) 344--361.
-
 }
 \seealso{
+  \code{\link{Jinhom}},
   \code{\link{Fest}},
   \code{\link{Gest}},
   \code{\link{Kest}},

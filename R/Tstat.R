@@ -1,7 +1,7 @@
 #
 #	tstat.R		Estimation of T function
 #
-#	$Revision: 1.6 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.7 $	$Date: 2013/04/25 06:37:43 $
 #
 
 Tstat <- local({
@@ -121,7 +121,7 @@ Tstat <- local({
       stopifnot(identical(colnames(tri), c("i", "j", "k", "diam")))
       # reassemble so each triangle appears 3 times, once for each vertex
       II <- with(tri, c(i, j, k))
-      DD <- with(tri, rep(diam, 3))
+      DD <- with(tri, rep.int(diam, 3))
   
       if(any(correction == "none")) {
         # uncorrected! For demonstration purposes only!

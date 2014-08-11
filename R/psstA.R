@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised F (area-interaction)
 #
-#	$Revision: 1.4 $	$Date: 2013/02/26 04:32:07 $
+#	$Revision: 1.5 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 #
@@ -53,8 +53,8 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
     bX <- bdist.points(X)
     USEDX <- (bX > rbord)
   } else {
-    USED <- rep(TRUE, U$n)
-    USEDX <- rep(TRUE, X$n)
+    USED <- rep.int(TRUE, U$n)
+    USEDX <- rep.int(TRUE, X$n)
   }
   
   # basic statistics
@@ -101,7 +101,7 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
   }
   Rmax <- min(max(rvals), Dmax * 1.1)
   nontrivial <- (rvals <= Rmax)
-  trivialzeroes <- rep(0, sum(!nontrivial))
+  trivialzeroes <- numeric(sum(!nontrivial))
   
   # pseudosum
   Ax <- areaLoss.grid(X, rvals[nontrivial], subset=USEDX, ngrid=ngrid)

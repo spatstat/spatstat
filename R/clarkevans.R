@@ -178,7 +178,7 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
     # compute mean of estimated nearest-neighbour distance distribution G
     G <- Gest(X)
     numer <- stieltjes(function(x){x}, G)$km
-    denom <- stieltjes(function(x){rep(1, length(x))}, G)$km
+    denom <- stieltjes(function(x){rep.int(1, length(x))}, G)$km
     Dcdf <- numer/denom
     Rcdf <- Dcdf/Dpois
     statistic <- c(statistic, cdf=Rcdf)

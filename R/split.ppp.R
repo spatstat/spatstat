@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.18 $ $Date: 2011/08/08 06:21:48 $
+# $Revision: 1.19 $ $Date: 2013/04/25 06:37:43 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -264,7 +264,7 @@ print.summary.splitppp <- function(x, ...) {
     fsplit <- f
   } else if(is.factor(f)) {
     lev <- levels(f)
-    fsplit <- factor(rep(lev, unlist(lapply(x, npoints))), levels=lev)
+    fsplit <- factor(rep.int(lev, unlist(lapply(x, npoints))), levels=lev)
   }
   attr(x, "fsplit") <- fsplit
   x

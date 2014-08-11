@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.68 $	$Date: 2013/02/25 06:31:37 $
+#	$Revision: 1.69 $	$Date: 2013/04/25 06:37:43 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -172,7 +172,7 @@ predict.ppm <- local({
         if(nn < 1 || nn > 2)
           stop("ngrid should be a vector of length 1 or 2")
         if(nn == 1)
-          ngrid <- rep(ngrid,2)
+          ngrid <- rep.int(ngrid,2)
       }
       if(missing(window))
         window <- sumobj$entries$data$window
@@ -218,9 +218,9 @@ predict.ppm <- local({
       # replicate
       nt <- length(types)
       np <- length(xpredict)
-      xpredict <- rep(xpredict,nt)
-      ypredict <- rep(ypredict,nt)
-      mpredict <- rep(types, rep(np, nt))
+      xpredict <- rep.int(xpredict,nt)
+      ypredict <- rep.int(ypredict,nt)
+      mpredict <- rep.int(types, rep.int(np, nt))
       mpredict <- factor(mpredict, levels=types)
       newdata <- data.frame(x = xpredict,
                             y = ypredict,
@@ -252,7 +252,7 @@ predict.ppm <- local({
 # Provide SUBSET variable
 #
         if(is.null(newdata$SUBSET))
-          newdata$SUBSET <- rep(TRUE, nrow(newdata))
+          newdata$SUBSET <- rep.int(TRUE, nrow(newdata))
 #
 # Dig out information used in Berman-Turner device 
 #        Vnames:     the names for the ``interaction variables''
@@ -279,12 +279,12 @@ predict.ppm <- local({
     switch(type,
            cif=,
            trend={
-             z <- rep(lambda, nrow(newdata))
+             z <- rep.int(lambda, nrow(newdata))
            },
            se={
              npts <- npoints(data.ppm(model))
              se.lambda <- lambda/sqrt(npts)
-             z <- rep(se.lambda, nrow(newdata))
+             z <- rep.int(se.lambda, nrow(newdata))
            },
            stop("Internal error: unrecognised type"))
     
@@ -295,7 +295,7 @@ predict.ppm <- local({
 #	
 #   set explanatory variables to zero
 #	
-    zeroes <- rep(0, nrow(newdata))    
+    zeroes <- numeric(nrow(newdata))    
     for(vn in Vnames)    
       newdata[[vn]] <- zeroes
 #

@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.35 $	$Date: 2012/11/13 09:27:56 $
+#	$Revision: 4.36 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 #
@@ -75,7 +75,7 @@ function(X, i, eps=NULL, r=NULL, breaks=NULL, ..., correction=NULL) {
   I <- (marx == i)
   if(sum(I) == 0)
     stop(paste("No points have mark = ", i))          
-  J <- rep(TRUE, X$n)
+  J <- rep.int(TRUE, X$n)
 #  
   result <- Jmulti(X, I, J,
                    eps=eps, r=r, breaks=breaks, disjoint=FALSE,

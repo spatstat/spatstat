@@ -6,7 +6,7 @@
 
   Egeyer.c
 
-  $Revision: 1.4 $     $Date: 2012/03/28 05:56:05 $
+  $Revision: 1.5 $     $Date: 2013/04/18 06:10:06 $
 
   Part of C implementation of 'eval' for Geyer interaction
 
@@ -32,9 +32,9 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
      /* output */
      double *result;
 {
-  int nquad, ndata, maxchunk, j, i, ileft, total, dataindex, isdata;
+  int nquad, ndata, maxchunk, j, i, ileft, dataindex, isdata;
   double xquadj, yquadj, rmax, sat, r2max, xleft, dx, dy, dx2, d2;
-  double tbefore, tafter, satbefore, satafter, delta;
+  double tbefore, tafter, satbefore, satafter, delta, totalchange;
 
   nquad = *nnquad;
   ndata = *nndata;
@@ -51,7 +51,7 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
   OUTERCHUNKLOOP(j, nquad, maxchunk, 65536) {
     R_CheckUserInterrupt();
     INNERCHUNKLOOP(j, nquad, maxchunk, 65536) {
-      total = 0;
+      totalchange = 0.0;
       xquadj = xquad[j];
       yquadj = yquad[j];
       dataindex = quadtodata[j];
@@ -85,11 +85,11 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
 	    satafter  = (double) ((tafter  < sat)? tafter  : sat);
 	    /* sum changes over all i */
 	    delta = satafter - satbefore; 
-	    total += ((isdata) ? -delta : delta);
+	    totalchange += ((isdata) ? -delta : delta);
 	  }
 	}
       }
-      result[j] = total;
+      result[j] = totalchange;
     }
   }
 }

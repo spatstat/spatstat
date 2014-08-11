@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.38 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.39 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 # ------------------------------------------------------------------------
@@ -96,7 +96,7 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
     i <- levels(marx)[1]
 
   I <- (marx == i)
-  J <- rep(TRUE, X$n)  # i.e. all points
+  J <- rep.int(TRUE, X$n)  # i.e. all points
   Iname <- paste("points with mark i =", i)
   Jname <- paste("points")
 	

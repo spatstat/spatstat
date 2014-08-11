@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.87 $    $Date: 2013/02/04 05:04:40 $
+#  $Revision: 1.89 $    $Date: 2013/04/25 07:13:02 $
 #
 #
 
@@ -81,7 +81,9 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   
   # expand "."
   dotnames <- fvnames(x, ".")
-  u <- as.call(lapply(c("cbind", dotnames), as.name))
+  u <- if(length(dotnames) == 1) as.name(dotnames) else {
+    as.call(lapply(c("cbind", dotnames), as.name))
+  }
   ux <- as.name(fvnames(x, ".x"))
   uy <- as.name(fvnames(x, ".y"))
   fmla <- eval(substitute(substitute(fom, list(.=u, .x=ux, .y=uy)),
@@ -233,19 +235,23 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   # ......... label for y axis ...................
 
   leftside <- lhs.original
-  if(ncol(lhsdata) > 1) {
+  if(ncol(lhsdata) > 1 || length(dotnames) == 1) {
     # For labelling purposes only, simplify the LHS by 
     # replacing 'cbind(.....)' by '.'
     # even if not all columns are included.
     leftside <- paste(as.expression(leftside))
-    cb <- paste("cbind(",
-                paste(explicit.lhs.names, collapse=", "),
-                ")", sep="")
+    cb <- if(length(explicit.lhs.names) == 1) explicit.lhs.names else {
+      paste("cbind(",
+            paste(explicit.lhs.names, collapse=", "),
+            ")", sep="")
+    }
     compactleftside <- gsub(cb, ".", leftside, fixed=TRUE)
     # Separately expand "." to cbind(.....) and ".x", ".y" to their real names
-    cball <- paste("cbind(",
-                paste(fvnames(x, "."), collapse=", "),
-                ")", sep="")
+    cball <- if(length(dotnames) == 1) dotnames else {
+      paste("cbind(",
+            paste(dotnames, collapse=", "),
+            ")", sep="")
+    }
     expandleftside <- gsub(".x", fvnames(x, ".x"), leftside, fixed=TRUE)
     expandleftside <- gsub(".y", fvnames(x, ".y"), expandleftside, fixed=TRUE)
     expandleftside <- gsub(".", cball, expandleftside, fixed=TRUE)
@@ -293,7 +299,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     if(is.null(a))
       a <- if(!is.null(a0)) a0 else a00
     if(length(a) == 1)
-      return(rep(a, n))
+      return(rep.int(a, n))
     else if(length(a) != n)
       stop(paste("Length of", short.deparse(substitute(a)),
                  "does not match number of curves to be plotted"))
@@ -365,7 +371,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   mat <- match(key, names(x))
   keyok <- !is.na(mat)
   matok <- mat[keyok]
-  legdesc <- rep("constructed variable", length(key))
+  legdesc <- rep.int("constructed variable", length(key))
   legdesc[keyok] <- attr(x, "desc")[matok]
   leglabl <- lnames0
   leglabl[keyok] <- labl[matok]

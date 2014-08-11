@@ -3,7 +3,7 @@
 #
 #   visual debug mechanism for rmh
 #
-#   $Revision: 1.23 $  $Date: 2013/02/24 03:28:43 $
+#   $Revision: 1.24 $  $Date: 2013/04/25 06:37:43 $
 #
 #   When rmh is called in visual debug mode (snooping = TRUE),
 #   it calls e <- rmhSnoopEnv(...) to create an R environment 'e'

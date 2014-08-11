@@ -1,7 +1,7 @@
 #
 #   plot.fasp.R
 #
-#   $Revision: 1.26 $   $Date: 2013/01/24 11:37:39 $
+#   $Revision: 1.27 $   $Date: 2013/04/25 06:37:43 $
 #
 plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
                       title=NULL, banner=TRUE,
@@ -44,7 +44,7 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
     nf <- length(formule)
     nfun <- length(x$fns)
     if(nf == 1 && nfun > 1)
-      formule <- rep(formule, nfun)
+      formule <- rep.int(formule, nfun)
     else if(nf != nfun)
       stop(paste("Wrong number of entries in", sQuote("formule")))
   }
@@ -83,8 +83,8 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
   n <- nrows * ncols
 # panels 1..n = plot panels
   codes <- matrix(seq_len(n), byrow=TRUE, ncol=ncols, nrow=nrows)
-  heights <- rep(1, nrows)
-  widths  <- rep(1, ncols)
+  heights <- rep.int(1, nrows)
+  widths  <- rep.int(1, ncols)
 # annotation as chosen
   if(outerlabels) {
     # column headings
@@ -119,7 +119,7 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
   ann.def <- par("ann") && (nrc <= 3)
 # determine margin around each panel
   if(is.null(mar.panel)) 
-    mar.panel <- if(nrc > 3 && outerlabels) rep(1/nrc, 4) else par("mar")
+    mar.panel <- if(nrc > 3 && outerlabels) rep.int(1/nrc, 4) else par("mar")
   opa <- par(mar=mar.panel, xpd=TRUE)
 #
 # plot each function  
@@ -148,7 +148,7 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
 #
 # Annotation as selected
   if(outerlabels) {
-    par(mar=rep(0,4), xpd=TRUE)
+    par(mar=rep.int(0,4), xpd=TRUE)
     # Plot the column headers
     for(j in 1:ncols) {
       plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
@@ -163,7 +163,7 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
     }
   }
   if(banner) {
-    par(mar=rep(0,4), xpd=TRUE)
+    par(mar=rep.int(0,4), xpd=TRUE)
     # plot the banner
     plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
          xlim=c(-1,1),ylim=c(-1,1))

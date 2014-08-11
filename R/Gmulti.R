@@ -8,7 +8,7 @@
 #		Gdot		      G_{i\bullet}
 #		Gmulti	              (generic)
 #
-#	$Revision: 4.39 $	$Date: 2012/04/25 02:14:18 $
+#	$Revision: 4.40 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 
@@ -74,7 +74,7 @@ function(X, i, r=NULL, breaks=NULL, ..., correction=c("km","rs","han")) {
   if(missing(i)) i <- levels(marx)[1]
   I <- (marx == i)
   if(sum(I) == 0) stop("No points are of type i")
-  J <- rep(TRUE, X$n)	# i.e. all points
+  J <- rep.int(TRUE, X$n)	# i.e. all points
 # 
   result <- Gmulti(X, I, J, r, breaks, disjoint=FALSE, ...,
                    correction=correction)
@@ -143,7 +143,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
   brks <- breaks$val
   rmax <- breaks$max
   rvals <- breaks$r
-  zeroes <- rep(0, length(rvals))
+  zeroes <- numeric(length(rvals))
 # initialise fv object
   df <- data.frame(r=rvals, theo=1-exp(-lamJ * pi * rvals^2))
   Z <- fv(df, "r", substitute(G[multi](r), NULL), "theo", . ~ r,

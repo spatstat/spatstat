@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.15 $ $Date: 2012/10/22 08:06:42 $
+#  $Revision: 1.16 $ $Date: 2013/04/25 06:37:43 $
 #
 
 .spst.triEnv <- new.env()
@@ -143,8 +143,8 @@ delaunay <- function(X) {
   if(any(bad <- duplicated(triedges))) {
     badedges <- unique(triedges[bad, , drop=FALSE])
     ntri <- nrow(tlist)
-    triid <- rep(seq_len(ntri), 3)
-    illegal <- rep(FALSE, ntri)
+    triid <- rep.int(seq_len(ntri), 3)
+    illegal <- rep.int(FALSE, ntri)
     for(j in seq_len(nrow(badedges))) {
       from <- badedges[j, 1]
       to   <- badedges[j, 2]

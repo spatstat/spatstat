@@ -5,7 +5,7 @@
   Plot method for the class \code{"envelope"}.
 }
 \usage{
- \method{plot}{envelope}(x, \dots, shade=c("hi", "lo"))
+ \method{plot}{envelope}(x, \dots)
 }
 \arguments{
   \item{x}{
@@ -14,11 +14,6 @@
   }
   \item{\dots}{
     Extra arguments passed to \code{\link{plot.fv}}.
-  }
-  \item{shade}{
-    An index that identifies two columns of \code{x}. When the corresponding
-    curves are plotted, the region between the curves will be 
-    shaded in light grey. 
   }
 }
 \value{
@@ -30,13 +25,12 @@
   of simulation envelopes. Objects of this class are
   created by the command \code{\link{envelope}}.
 
-  This plot method is identical to \code{\link{plot.fv}} except that
-  its default behaviour is to shade the region
+  This plot method is currently identical to \code{\link{plot.fv}}.
+
+  Its default behaviour is to shade the region
   between the upper and lower envelopes in a light grey colour.
-  
   To suppress the shading and plot the upper and lower envelopes
   as curves, set \code{shade=NULL}.
-
   To change the colour of the shading, use the argument \code{shadecol}
   which is passed to \code{\link{plot.fv}}. 
   

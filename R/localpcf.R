@@ -1,7 +1,7 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.17 $  $Date: 2012/08/20 02:25:20 $
+#  $Revision: 1.18 $  $Date: 2013/04/25 06:37:43 $
 #
 #
 
@@ -48,14 +48,14 @@ localpcfengine <- function(X, ...,
   delta <- attr(m, "delta")
   nX <- npoints(X)
   if(nX == 0) {
-    df <- data.frame(r=r, theo=rep(1, length(r)))
+    df <- data.frame(r=r, theo=rep.int(1, length(r)))
     nama <- desc <- labl <- NULL
   } else {
     # border correction
     dbord <- bdist.points(X)
     m[r[row(m)] > dbord[col(m)]] <- NA
     #
-    df <- data.frame(m, r=r, theo=rep(1, length(r)))
+    df <- data.frame(m, r=r, theo=rep.int(1, length(r)))
     icode <- unlist(lapply(seq_len(nX), numalign, nmax=nX))
     nama <- paste("est", icode, sep="")
     desc <- paste("estimate of %s for point", icode)

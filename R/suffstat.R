@@ -3,7 +3,7 @@
 #
 # calculate sufficient statistic
 #
-#  $Revision: 1.16 $  $Date: 2012/04/14 07:51:58 $
+#  $Revision: 1.17 $  $Date: 2013/04/25 06:37:43 $
 #
 #
 

@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.19 $    $Date: 2011/03/21 09:08:24 $
+#    $Revision: 1.21 $    $Date: 2013/03/04 11:07:31 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -200,4 +200,82 @@ circumradius <- function(x) {
   mB <- apply(sB, 1, max)
   # min of these
   min(mA, mB)
+}
+
+
+
+####################################################
+# affine transformations
+####################################################
+
+scalardilate.linnet <- function(X, f, ...) {
+  trap.extra.arguments(..., .Context="In scalardilate(X,f)")
+  check.1.real(f, "In scalardilate(X,f)")
+  stopifnot(is.finite(f) && f > 0)
+  Y <- X
+  Y$vertices     <- scalardilate(X$vertices, f=f)
+  Y$lines        <- scalardilate(X$lines, f=f)
+  Y$dpath        <- f * X$dpath
+  Y$circumradius <- f * X$circumradius
+  return(Y)
+}
+
+affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
+  verifyclass(X, "linnet")
+  if(length(unique(eigen(mat)$values)) == 1) {
+    # transformation is an isometry
+    scal <- sqrt(abs(det(mat)))
+    Y <- X
+    Y$vertices     <- affine(X$vertices, mat=mat, vec=vec, ...)
+    Y$lines        <- affine(X$lines,    mat=mat, vec=vec, ...)
+    Y$dpath        <- scal * X$dpath
+    Y$circumradius <- scal * X$circumradius
+    Y <- scalardilate(X, sqrt(abs(det(mat))))
+  } else {
+    # general case
+    vertices <- affine(X$vertices, mat=mat, vec=vec, ...)
+    Y <- linnet(vertices, edges=cbind(X$from, X$to))
+  }
+  return(Y)
+}
+
+shift.linnet <- function(X, ...) {
+  verifyclass(X, "linnet")
+  Y <- X
+  Y$vertices <- shift(X$vertices, ...)
+  Y$lines    <- shift(X$lines, ...)
+  # tack on shift vector
+  attr(Y, "lastshift") <- attr(Y$vertices, "lastshift")
+  return(Y)
+}
+
+rotate.linnet <- function(X, angle=pi/2, ...) {
+  verifyclass(X, "linnet")
+  Y <- X
+  Y$vertices <- rotate(X$vertices, angle=angle, ...)
+  Y$lines    <- rotate(X$lines, angle=angle, ...)
+  return(Y)
+}
+
+rescale.linnet <- function(X, s) {
+  if(missing(s)) s <- 1/unitname(X)$multiplier
+  Y <- scalardilate(X, f=1/s)
+  unitname(Y) <- rescale(unitname(X), s)
+  return(Y)
+}
+
+"[.linnet" <- function(x, i, ...) {
+  if(!is.owin(i))
+    stop("In [.linnet: the index i should be a window", call.=FALSE)
+  # Find vertices that lie inside 'i'
+  okvert <- inside.owin(x$vertices, w=i)
+  # find segments whose endpoints both lie in 'upper'
+  okedge <- okvert[x$from] & okvert[x$to]
+  # assign new serial numbers to vertices, and recode 
+  newserial <- cumsum(okvert)
+  newfrom <- newserial[x$from[okedge]]
+  newto   <- newserial[x$to[okedge]]
+  # make new linear network
+  xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto))
+  return(xnew)
 }

@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.29 $ $Date: 2013/01/31 02:49:14 $
+# $Revision: 1.30 $ $Date: 2013/04/25 06:37:43 $
 #
 # K function for point pattern on linear network
 #
@@ -115,7 +115,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   #
   if(np < 2) {
     # no pairs to count: return zero function
-    zeroes <- rep(0, length(r))
+    zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
     K <- fv(df, "r", substitute(linearK(r), NULL),
             "est", . ~ r, c(0, rmax),

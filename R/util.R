@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.108 $    $Date: 2013/02/28 05:49:57 $
+#    $Revision: 1.112 $    $Date: 2013/04/25 06:37:43 $
 #
 #  (a) for matrices only:
 #
@@ -22,11 +22,11 @@
 #
 #
 matrowsum <- function(x) {
-  x %*% rep(1, ncol(x))
+  x %*% rep.int(1, ncol(x))
 }
 
 matcolsum <- function(x) {
-  rep(1, nrow(x)) %*% x
+  rep.int(1, nrow(x)) %*% x
 }
   
 matrowany <- function(x) {
@@ -69,7 +69,7 @@ apply23sum <- function(x) {
 whist <- function(x, breaks, weights=NULL) {
     N <- length(breaks)
     if(length(x) == 0) 
-      h <- rep(0, N+1)
+      h <- numeric(N+1)
     else {
       # classify data into histogram cells (breaks need not span range of data)
       cell <- findInterval(x, breaks, rightmost.closed=TRUE)
@@ -267,6 +267,27 @@ intersect.ranges <- function(a, b, fatal=TRUE) {
   return(c(lo, hi))
 }
 
+inside.range <- function(x, r) {
+  stopifnot(length(r) == 2 && r[1] < r[2])
+  return(x >= r[1] & x <= r[2])
+}
+
+prettyinside <- function(x, ...) {
+  r <- range(x, na.rm=TRUE)
+  p <- pretty(x, ...)
+  ok <- inside.range(p, r)
+  return(p[ok])
+}
+
+check.range <- function(x, fatal=TRUE) {
+  xname <- deparse(substitute(x))
+  if(identical(x, range(x, na.rm=TRUE)))
+    return(TRUE)
+  if(fatal) 
+    stop(paste(xname, "should be a vector of length 2 giving (min, max)"))
+  return(FALSE)
+}
+                        
 niceround <- function(x, m=c(1,2,5,10)) {
   expo <- 10^as.integer(floor(log10(x)))
   y <- m * expo
@@ -764,6 +785,10 @@ codetime <- local({
   codetime <- function(x, hms=TRUE) {
     sgn <- if(x < 0) "-" else ""
     x <- abs(x)
+    if(x < 60)
+      return(paste(sgn, signif(x, 3), " sec", sep=""))
+    # more than 1 minute: round to whole number of seconds
+    x <- round(x)
     if(hms && (x < 60 * 60 * 24))
       return(paste(sgn, codehms(x), sep=""))
     u <- u1 <- "sec"
@@ -809,7 +834,7 @@ ppsubset <- function(X, I) {
   if(is.logical(I))
     return(I)
   # convert to logical
-  Z <- rep(FALSE, n)
+  Z <- rep.int(FALSE, n)
   Z[I] <- TRUE
   return(Z)
 }
@@ -868,3 +893,24 @@ sessionLibs <- function() {
   return(invisible(d))
 }
 
+dropifsingle <- function(x) if(length(list) == 1) x[[1]] else x
+
+# timed objects
+
+timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
+  if(is.null(starttime)) # time starts now.
+    starttime <- proc.time()
+  # evaluate expression if any
+  object <- x
+  timetaken <- proc.time() - starttime
+  class(object) <- c("timed", class(object))
+  attr(object, "timetaken") <- timetaken
+  return(object)
+}
+
+print.timed <- function(x, ...) {
+  if(is.numeric(x)) print(as.numeric(x), ...) else NextMethod("print")
+  taken <- summary(attr(x, "timetaken"))[[1]]
+  cat(paste("\nTime taken:", codetime(taken), "\n"))
+  return(invisible(NULL))
+}

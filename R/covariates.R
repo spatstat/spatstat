@@ -3,7 +3,7 @@
 #
 # evaluate covariates
 #
-#   $Revision: 1.1 $  $Date: 2010/05/26 08:26:12 $
+#   $Revision: 1.2 $  $Date: 2013/04/25 06:37:43 $
 #
 
 evalCovariate <- function(covariate, locations) {
@@ -15,7 +15,7 @@ evalCovariate <- function(covariate, locations) {
       covariate(locations$x, locations$y)
     else if(is.numeric(covariate) || is.factor(covariate)) {
       if(length(covariate) == 1)
-        rep(covariate, length(locations$x))
+        rep.int(covariate, length(locations$x))
       else if(length(covariate) == length(locations$x))
         covariate
       else stop("Inappropriate length for covariate vector")

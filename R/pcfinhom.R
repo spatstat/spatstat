@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.9 $   $Date: 2013/02/07 09:58:14 $
+#   $Revision: 1.10 $   $Date: 2013/04/25 06:37:43 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -120,7 +120,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
 
   # initialise fv object
   
-  df <- data.frame(r=r, theo=rep(1,length(r)))
+  df <- data.frame(r=r, theo=rep.int(1,length(r)))
   out <- fv(df, "r",
             substitute(g[inhom](r), NULL), "theo", ,
             alim,

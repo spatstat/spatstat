@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.3 $   $Date: 2013/02/11 11:13:07 $
+#   $Revision: 1.5 $   $Date: 2013/04/25 06:37:43 $
 #
 #
 
@@ -14,12 +14,38 @@ iplot.default <- function(x, ..., xname) {
 
 iplot.layered <- local({
 
+  faster.layers <- function(x) {
+    if(any(islinnet <- unlist(lapply(x, inherits, what="linnet")))) {
+      # convert linnet layers to psp, for efficiency
+      x[islinnet] <- lapply(x[islinnet], as.psp)
+    }
+    repeat{
+      islpp <- unlist(lapply(x, inherits, what="lpp"))
+      if(!any(islpp))
+        break
+      # convert an lpp layer to two layers: psp and ppp, for efficiency
+      ii <- min(which(islpp))
+      pl <- layerplotargs(x)
+      n <- length(x)
+      xpre <- if(ii == 1) NULL else x[1:ii]
+      xpost <- if(ii == n) NULL else x[(ii+1):n]
+      ppre <- if(ii == 1) NULL else pl[1:ii]
+      ppost <- if(ii == n) NULL else pl[(ii+1):n]
+      a <- as.psp(as.linnet(x[[ii]]))
+      b <- as.ppp(x[[ii]])
+      x <- layered(LayerList=c(xpre, list(a, b), xpost),
+                   plotargs=unname(c(ppre, pl[ii], pl[ii], ppost)))
+    }
+    return(x)
+  }
+  
 iplot.layered <- function(x, ..., xname) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "layered")
   require(rpanel)
 
+  x <- faster.layers(x)
   x <- freeze.colourmaps(x)
   bb <- as.rectangle(as.owin(x))
   bbmid <- unlist(centroid.owin(bb))
@@ -37,7 +63,7 @@ iplot.layered <- function(x, ..., xname) {
                   bbmid=bbmid,
                   zoomfactor=1,
                   zoomcentre=bbmid,
-                  which = rep(TRUE, length(x)),
+                  which = rep.int(TRUE, length(x)),
                   size=c(700, 400))
 
 # Split panel into three
@@ -70,7 +96,7 @@ iplot.layered <- function(x, ..., xname) {
 
 # select some layers
   nx <- length(x)
-  which <- rep(TRUE, nx)
+  which <- rep.int(TRUE, nx)
   if(nx > 1) {
     rp.checkbox(p, which, labels=lnames,
                 action=redraw.iplot.layered,
@@ -246,7 +272,7 @@ freeze.colourmaps <- function(x) {
     # ensure there are plotargs
     pl <- attr(x, "plotargs")
     if(is.null(pl))
-      pl <- rep(list(list()), length(x))
+      pl <- rep.int(list(list()), length(x))
     # make sure the plotargs include 'zlim'
     for(i in which(isim)) {
       x.i <- x[[i]]

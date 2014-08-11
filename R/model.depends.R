@@ -1,7 +1,7 @@
 #
 # Determine which 'canonical variables' depend on a supplied covariate
 #
-#   $Revision: 1.7 $  $Date: 2012/05/08 03:44:21 $
+#   $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
 #
 
 model.depends <- function(object) {
@@ -60,7 +60,7 @@ model.is.additive <- function(object) {
 model.covariates <- function(object, fitted=TRUE, offset=TRUE) {
   md <- model.depends(object)
   nm <- colnames(md)
-  keep <- rep(FALSE, length(nm))
+  keep <- rep.int(FALSE, length(nm))
   # variables used in formula with coefficients
   if(fitted) keep <- apply(md, 2, any)
   # variables used in offset

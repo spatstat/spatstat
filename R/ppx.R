@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.39 $  $Date: 2013/01/15 09:22:59 $
+#  $Revision: 1.41 $  $Date: 2013/04/25 06:37:43 $
 #
 
 ppx <- local({
@@ -66,9 +66,9 @@ print.ppx <- function(x, ...) {
     cat(paste(sum(istime), "-dimensional time coordinates ",
               paren(paste(nama[istime], collapse=",")), "\n", sep=""))
   if(any(islocal <- (x$ctype == "local"))) 
-    cat(paste(sum(ismark), ngettext(sum(ismark), "column", "columns"),
+    cat(paste(sum(islocal), ngettext(sum(islocal), "column", "columns"),
               "of local coordinates:",
-              commasep(sQuote(nama[ismark])), "\n"))
+              commasep(sQuote(nama[islocal])), "\n"))
   if(any(ismark <- (x$ctype == "mark"))) 
     cat(paste(sum(ismark), ngettext(sum(ismark), "column", "columns"),
               "of marks:",
@@ -92,7 +92,7 @@ plot.ppx <- function(x, ...) {
     ran <- diff(range(coo))
     ylim <- c(-1,1) * ran/20
     do.call("plot.default",
-            resolve.defaults(list(coo, rep(0, length(coo))),
+            resolve.defaults(list(coo, numeric(length(coo))),
                              list(...),
                              list(asp=1, ylim=ylim,
                                   axes=FALSE, xlab="", ylab="")))
@@ -225,7 +225,7 @@ marks.ppx <- function(x, ..., drop=TRUE) {
     } else {
       newdata <- cbind(coorddata, value)
       newctype <- factor(c(as.character(ctype[retain]),
-                           rep("mark", ncol(value))),
+                           rep.int("mark", ncol(value))),
                          levels=levels(ctype))
     }
   }

@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.4 $     $Date: 2012/04/06 09:44:54 $
+#      $Revision: 1.5 $     $Date: 2013/04/25 06:37:43 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -47,9 +47,9 @@ nndist.ppx <- function(X, ..., k=1) {
   if(m == 0) {
     warning("nndist.ppx: Zero-dimensional coordinates: returning NA")
     if(length(k) == 1)
-      return(rep(NA, n))
+      return(rep.int(NA_real_, n))
     else
-      return(matrix(NA, n, length(k)))
+      return(matrix(NA_real_, n, length(k)))
   }
   
   # k can be a single integer or an integer vector
@@ -153,16 +153,16 @@ nnwhich.ppx <- function(X, ..., k=1) {
   if(m == 0) {
     warning("nnwhich.ppx: Zero-dimensional coordinates: returning NA")
     if(length(k) == 1)
-      return(rep(NA, n))
+      return(rep.int(NA_real_, n))
     else
-      return(matrix(NA, n, length(k)))
+      return(matrix(NA_real_, n, length(k)))
   }
   
   # special cases
   if(n <= 1) {
     # empty pattern => return integer(0)
     # or pattern with only 1 point => return NA
-    nnw <- matrix(as.integer(NA), nrow=n, ncol=kmax)
+    nnw <- matrix(NA_integer_, nrow=n, ncol=kmax)
     nnw <- nnw[,k, drop=TRUE]
     return(nnw)
   }
@@ -222,7 +222,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
   # post-processing
   if(kmax > kmaxcalc) {
     # add columns of NA's
-    nas <- matrix(as.integer(NA), nrow=n, ncol=kmax-kmaxcalc)
+    nas <- matrix(NA_integer_, nrow=n, ncol=kmax-kmaxcalc)
     nnw <- cbind(nnw, nas)
   }
 

@@ -2,7 +2,7 @@
 #
 #    pairpiece.S
 #
-#    $Revision: 1.20 $	$Date: 2012/01/18 10:40:05 $
+#    $Revision: 1.21 $	$Date: 2013/04/25 06:37:43 $
 #
 #    A pairwise interaction process with piecewise constant potential
 #

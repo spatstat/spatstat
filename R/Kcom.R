@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.6 $ $Date: 2013/02/07 09:58:14 $
+# $Revision: 1.7 $ $Date: 2013/04/25 06:37:43 $
 #
 
 Kcom <- function(object, r=NULL, breaks=NULL, ..., 
@@ -77,7 +77,7 @@ Kcom <- function(object, r=NULL, breaks=NULL, ...,
   WQ <- w.quad(Q)  # quadrature weights
 
   # quadrature points used 
-  USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep(TRUE, U$n)
+  USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
 
   # basic statistics
   npoints <- X$n
@@ -171,7 +171,7 @@ Kcom <- function(object, r=NULL, breaks=NULL, ...,
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI],
-                  b[Z & USED], rep(1, npoints.used), breaks)
+                  b[Z & USED], rep.int(1, npoints.used), breaks)
 #    lambdaU <- (npoints.used + 1)/area.used
     lambdaU <- (npoints + 1)/area
     Kb <- RSD$numerator/((RSD$denominator + 1) * lambdaU)

@@ -328,10 +328,9 @@
   sample mean, sample variance and other quantities.
 
   Arguments can be passed to the function \code{fun} through
-  \code{...}. This makes it possible to select the edge correction
-  used to calculate the summary statistic. See the Examples.
-  Selecting only a single edge
-  correction will make the code run much faster.
+  \code{...}. In particular, the argument \code{correction}
+  determines the edge correction to be used to calculate the summary statistic.
+  See the section on Edge Corrections, and the Examples.
 
   If \code{Y} is a fitted cluster point process model (object of
   class \code{"kppm"}), and \code{simulate=NULL},
@@ -410,6 +409,70 @@
   of the point process, use \code{\link{lohboot}}.
   See also \code{\link{varblock}}.
 }
+\section{Edge corrections}{
+  It is common to apply a correction for edge effects when
+  calculating a summary function such as the \eqn{K} function.
+  Typically the user has a choice between several possible edge
+  corrections.
+  In a call to \code{envelope}, the user can specify the edge correction
+  to be applied in \code{fun}, using the argument \code{correction}.
+  See the Examples below.
+
+  \describe{
+    \item{Summary functions in \pkg{spatstat}}{
+      Summary functions that are available in \pkg{spatstat}, such as
+      \code{\link{Kest}}, \code{\link{Gest}} and \code{\link{pcf}},
+      have a standard argument called \code{correction} which specifies
+      the name of one or more edge corrections.
+
+      The list of available edge
+      corrections is different for each summary function,
+      and may also depend on the kind of window in which the point pattern is
+      recorded.
+      In the
+      case of \code{Kest} (the default and most frequently used value of
+      \code{fun}) the best edge correction is Ripley's isotropic
+      correction if the window is rectangular or polygonal, 
+      and the translation correction if the window is a binary mask.
+      See the help files for the individual
+      functions for more information.
+      
+      All the summary functions in \pkg{spatstat}
+      recognise the option \code{correction="best"}
+      which gives the \dQuote{best} (most accurate) available edge correction
+      for that function. 
+
+      In a call to \code{envelope}, if \code{fun} is one of the
+      summary functions provided in \pkg{spatstat}, then the default
+      is \code{correction="best"}. This means that
+      \emph{by default, the envelope will be computed
+	using the \dQuote{best} available edge correction}.
+
+      The user can override this default by specifying the argument
+      \code{correction}. For example the computation can be accelerated
+      by choosing another edge correction which is less accurate
+      than the \dQuote{best} one, but faster to compute.
+    }
+    \item{User-written summary functions}{
+      If \code{fun} is a function written by the user,
+      then \code{envelope} has to guess what to do.
+
+      If \code{fun} has an argument
+      called \code{correction}, or has \code{\dots} arguments,
+      then \code{envelope} assumes that the function 
+      can handle a correction argument. To compute the envelope,
+      \code{fun} will be called with a \code{correction} argument.
+      The default is \code{correction="best"}, unless
+      overridden in the call to \code{envelope}.
+
+      Otherwise, if \code{fun} does not have an argument
+      called \code{correction} and does not have \code{\dots} arguments,
+      then \code{envelope} assumes that the function 
+      \emph{cannot} handle a correction argument. To compute the
+      envelope, \code{fun} is called without a correction argument.
+    }
+  }
+}
 \references{
   Cressie, N.A.C. \emph{Statistics for spatial data}.
     John Wiley and Sons, 1991.
@@ -430,7 +493,7 @@
   John Wiley and Sons.
 } 
 \seealso{
-  \code{\link{clf.test}},
+  \code{\link{dclf.test}},
   \code{\link{mad.test}}
   for envelope-based tests.
   

@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.93 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 5.94 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 # -------- functions ----------------------------------------
@@ -273,7 +273,7 @@ function(X, ..., r=NULL, breaks=NULL,
     } else {
       den <- (n-1)^2
       ripnum <- den * rip
-      ripden <- rep(den, length(rip))
+      ripden <- rep.int(den, length(rip))
       K <- bind.ratfv(K,
                       data.frame(rip=ripnum),
                       data.frame(rip=ripden),
@@ -298,7 +298,7 @@ function(X, ..., r=NULL, breaks=NULL,
       } else {
         den <- n*(n-1)
         lsnum <- ls * den
-        lsden <- rep(den, length(ls))
+        lsden <- rep.int(den, length(ls))
         K <- bind.ratfv(K,
                         data.frame(ls=lsnum),
                         data.frame(ls=lsden),

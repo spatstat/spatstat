@@ -14,7 +14,10 @@
      WEIGHTED     #defined for weighted (inhom) K function
 
 
-  $Revision: 1.7 $     $Date: 2012/03/18 11:29:43 $
+  Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2000-2013
+  Licence: GPL >= 2
+
+  $Revision: 1.9 $     $Date: 2013/04/12 06:36:00 $
 
 */
 
@@ -34,8 +37,10 @@ void FNAME(
      OUTTYPE *numer, *denom;
 {
   int i, j, l, n, nt, n1, nt1, lmin, lmax, lup, maxchunk;
-  double dt, tmax, tmax2, xi, yi, bi, bi2, maxsearch, max2search;
+  double dt, tmax, tmax2, xi, yi, bi, maxsearch, max2search;
   double bratio, dratio, dij, dij2, dx, dy, dx2;
+  OUTTYPE *numerLowAccum, *numerHighAccum, *denomAccum;
+  OUTTYPE naccum, daccum;
 #ifdef WEIGHTED
   double wi, wj, wij;
 #endif
@@ -67,8 +72,13 @@ void FNAME(
   tmax2 = tmax * tmax;
 
   /* initialise */
+  numerLowAccum  = (OUTTYPE *) R_alloc(nt, sizeof(OUTTYPE));
+  numerHighAccum = (OUTTYPE *) R_alloc(nt, sizeof(OUTTYPE));
+  denomAccum     = (OUTTYPE *) R_alloc(nt, sizeof(OUTTYPE));
   for(l = 0; l < nt; l++)
-    numer[l] = denom[l] = ZERO;
+    numer[l] = denom[l] = 
+      numerLowAccum[l] = numerHighAccum[l] = 
+      denomAccum[l] = ZERO;
 
   if(n == 0) 
     return;
@@ -92,20 +102,15 @@ void FNAME(
 #endif
       /* increment denominator for all r < b[i] */
       bratio = bi/dt;
-      lmax = (int) floor(bratio);
-      lup = (int) ceil(bratio);
-      if(lmax == lup) --lmax;
       /* lmax is the largest integer STRICTLY less than bratio */
+      lmax = (int) ceil(bratio) - 1;
       lmax = (lmax <= nt1) ? lmax : nt1;
-      /* increment entries 0 to lmax */
-      if(lmax >= 0) {
-	for(l = 0; l <= lmax; l++) 
-	  denom[l] += WI;
-      }
+      /* effectively increment entries 0 to lmax */
+      if(lmax >= 0) 
+	denomAccum[lmax] += WI;
 
       /*  ----------  NUMERATOR -----------*/
       /* scan through points (x[j],y[j]) */
-      bi2 = bi * bi;
       xi = x[i];
       yi = y[i];
       maxsearch = (bi < tmax) ? bi : tmax;
@@ -120,11 +125,11 @@ void FNAME(
 	  /* squared interpoint distance */
 	  dx = x[j] - xi;
 	  dx2 = dx * dx;
-	  if(dx2 > max2search)
+	  if(dx2 >= max2search)
 	    break;
 	  dy = y[j] - yi;
 	  dij2 = dx2 + dy * dy;
-	  if(dij2 < tmax2 && dij2 < bi2) {
+	  if(dij2 < max2search) {
 #ifdef WEIGHTED 
 	    wj = w[j];
 #endif
@@ -138,8 +143,8 @@ void FNAME(
 #ifdef WEIGHTED
 	      wij = wi * wj;
 #endif
-	      for(l = lmin; l <= lmax; l++) 
-		numer[l] += WIJ;
+	      numerLowAccum[lmin] += WIJ;
+	      numerHighAccum[lmax] += WIJ;
 	    }
 	  }
 	}
@@ -155,11 +160,11 @@ void FNAME(
 	  /* squared interpoint distance */
 	  dx = x[j] - xi;
 	  dx2 = dx * dx;
-	  if(dx2 > max2search) 
+	  if(dx2 >= max2search) 
 	    break;
 	  dy = y[j] - yi;
 	  dij2 = dx2 + dy * dy;
-	  if(dij2 < tmax2 && dij2 < bi2) {
+	  if(dij2 < max2search) {
 #ifdef WEIGHTED 
 	    wj = w[j];
 #endif
@@ -173,14 +178,30 @@ void FNAME(
 #ifdef WEIGHTED
 	      wij = wi * wj;
 #endif
-	      for(l = lmin; l <= lmax; l++) 
-		numer[l] += WIJ;
+	      numerLowAccum[lmin] += WIJ;
+	      numerHighAccum[lmax] += WIJ;
 	    }
 	  }
 	}
       }
     }
   }
+  /* 
+     Now use the accumulated values to compute the numerator and denominator.
+     The value of denomAccum[l] should be added to denom[k] for all k <= l.
+     numerHighAccum[l] should be added to numer[k] for all k <=l
+     numerLowAccum[l] should then be subtracted from  numer[k] for k <= l.
+  */
+
+  for(l=nt1, naccum=daccum=ZERO; l>=0; l--) {
+    daccum += denomAccum[l];
+    denom[l] = daccum;
+
+    naccum += numerHighAccum[l];
+    numer[l] = naccum;
+    naccum -= numerLowAccum[l];
+  }
+
 }
 
 #undef ZERO

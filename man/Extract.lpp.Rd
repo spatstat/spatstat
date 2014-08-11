@@ -5,7 +5,7 @@
   Extract a subset of a point pattern on a linear network.
 }
 \usage{
-  \method{[}{lpp}(x, i, ...)
+  \method{[}{lpp}(x, i, j, ...)
 }
 \arguments{
   \item{x}{
@@ -13,7 +13,12 @@
   }
   \item{i}{
     Subset index. A valid subset index in the usual \R sense,
-   indicating which points should be retained.
+   indicating which points should be retained
+  }
+  \item{j}{
+    Spatial window
+   (object of class \code{"owin"}) delineating the region that should
+   be retained.
   }
   \item{\dots}{
     Ignored. 
@@ -37,7 +42,12 @@
   the points \code{(x$x[i], x$y[i])} for which 
   \code{subset[i]=TRUE} will be retained, and the others
   will be deleted.
- 
+
+  The argument \code{j}, if present, should be a spatial window.
+  The pattern inside the region will be retained.
+  \emph{Line segments that cross the boundary of the window
+  are deleted} in the current implementation.
+
   Use the function \code{\link{unmark}} to remove marks from a
   marked point pattern.
 }

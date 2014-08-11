@@ -1,7 +1,7 @@
 #
 # randomOnLines.R
 #
-# $Revision: 1.6 $  $Date: 2012/10/29 12:47:22 $
+# $Revision: 1.7 $  $Date: 2013/04/25 06:37:43 $
 #
 # Generate random points on specified lines
 #
@@ -84,7 +84,7 @@ runifpoisppOnLines <- function(lambda, L) {
 datagen.runifpoisppOnLines <- function(lambda, L) {
   stopifnot(is.psp(L))
   mu <- lambda * sum(lengths.psp(L))
-  n <- rpois(rep(1, length(mu)), mu)
+  n <- rpois(rep.int(1, length(mu)), mu)
   if(length(n) > 1)
     names(n) <- names(lambda)
   df <- datagen.runifpointOnLines(n, L)
@@ -132,7 +132,7 @@ datagen.rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., check=TRUE)  {
     stopifnot(is.numeric(lmax))
     if(length(lmax) != m) {
       if(length(lmax) == 1) {
-        lmax <- rep(lmax, m)
+        lmax <- rep.int(lmax, m)
       } else stop("Length of lmax does not match length of lambda")
     }
   } else {

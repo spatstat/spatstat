@@ -6,11 +6,16 @@
   two line segment patterns.
 }
 \usage{
-  crossing.psp(A,B)
+  crossing.psp(A,B,fatal=TRUE)
 }
 \arguments{
   \item{A,B}{
     Line segment patterns (objects of class \code{"psp"}).
+  }
+  \item{fatal}{
+    Logical value indicating what to do
+    if the windows of \code{A} and \code{B} do not overlap.
+    See Details.
   }
 }
 \value{
@@ -23,6 +28,11 @@
   A crossing point occurs whenever one of the line segments in \code{A}
   intersects one of the line segments in \code{B}, at a nonzero
   angle of intersection.
+
+  If the windows \code{as.owin(A)} and \code{as.owin(B)} do not
+  overlap, then an error will be reported if \code{fatal=TRUE},
+  while if \code{fatal=FALSE} an error will not occur
+  and the result will be \code{NULL}.
 }
 \seealso{
   \code{\link{selfcrossing.psp}},

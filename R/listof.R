@@ -49,34 +49,74 @@ contour.listof <- function(x, ...) {
                            list(main=xname)))
 }
 
-image.listof <- function(x, ..., equal.ribbon = FALSE) {
-  xname <- short.deparse(substitute(x))
-  if(equal.ribbon) {
-    dotargs <- list(...)
-    # all panels will be coded using the same colour map
+image.listof <- local({
+
+  image.listof <- function(x, ..., equal.ribbon = FALSE) {
+    xname <- short.deparse(substitute(x))
+    if(equal.ribbon && !all(unlist(lapply(x, is.im)))) {
+      warning("equal.ribbon is only implemented for objects of class 'im'")
+      equal.ribbon <- FALSE
+    }
+    if(equal.ribbon) imagecommon(x, ..., xname=xname) else 
+      do.call("plot.listof",
+              resolve.defaults(list(x=x, plotcommand="image"),
+                               list(...),
+                               list(main=xname)))
+  }
+
+  imagecommon <- function(x, ...,
+                          xname,
+                          zlim=NULL,
+                          ribbon=TRUE,
+                          ribside=c("right", "left", "bottom", "top"),
+                          ribsep=NULL, ribwid=0.5, ribn=1024,
+                          ribscale=NULL, ribargs=list()) {
+    if(missing(xname))
+      xname <- short.deparse(substitute(x))
+    ribside <- match.arg(ribside)
+    stopifnot(is.list(ribargs))
+    if(!is.null(ribsep))
+      warning("Argument ribsep is not yet implemented for image arrays")
     # determine range of values
-    zlim <- dotargs$zlim
-    # compute colour map 
-    if(!is.null(zlim)) {
-      imcolmap <- plot.im(x[[1]], preponly=TRUE, ...)
-    } else {
+    if(is.null(zlim))
       zlim <- range(unlist(lapply(x, range)))
-      imcolmap <- plot.im(x[[1]], preponly=TRUE, zlim=zlim, ...)
+    # determine common colour map
+    imcolmap <- plot.im(x[[1]], preponly=TRUE, zlim=zlim, ..., ribn=ribn)
+    # plot ribbon?
+    if(!ribbon) {
+      ribadorn <- list()
+    } else {
+      # determine plot arguments for colour ribbon
+      vertical <- (ribside %in% c("right", "left"))
+      scaleinfo <- if(!is.null(ribscale)) list(labelmap=ribscale) else list()
+      sidecode <- match(ribside, c("bottom", "left", "top", "right"))
+      ribstuff <- c(list(x=imcolmap, main="", vertical=vertical),
+                    ribargs,
+                    scaleinfo,
+                    list(side=sidecode))
+      ribmar <- switch(ribside,
+                       left   = c(1, 2, 1, 0),
+                       right  = c(1, 0, 1, 2),
+                       bottom = c(2, 1, 0, 1),
+                       top    = c(0, 1, 2, 1))
+      # function executed to plot colour ribbon
+      do.ribbon <- function() {
+        opa <- par(mar=ribmar)
+        do.call("plot", ribstuff)
+        par(opa)
+      }
+      # encoded as 'adorn' argument
+      ribadorn <- list(adorn=do.ribbon, adorn.size=ribwid)
+      names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     }
-    # assemble arguments for plot.listof
-    rightribbon <- function() {
-      opa <- par(mar=c(1,0,1,2))
-      plot(imcolmap, vertical=TRUE, main="")
-      par(opa)
-    }
-    
-    zz <- list(col=imcolmap, zlim=zlim,
-               ribbon=FALSE,
-               adorn.right=rightribbon)
-  } else zz <- list()
-  do.call("plot.listof",
-          resolve.defaults(list(x=x, plotcommand="image"),
-                           zz,
-                           list(...),
-                           list(main=xname)))
-}
+    #
+    do.call("plot.listof",
+            resolve.defaults(list(x=x, plotcommand="image"),
+                             list(...),
+                             list(main=xname),
+                             list(col=imcolmap, zlim=zlim, ribbon=FALSE),
+                             ribadorn))
+  }
+
+  image.listof
+})

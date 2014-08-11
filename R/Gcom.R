@@ -3,7 +3,7 @@
 #
 #	Model compensator of G 
 #
-#	$Revision: 1.2 $	$Date: 2011/06/26 03:39:11 $
+#	$Revision: 1.3 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 #
@@ -75,7 +75,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   lambda <- npoints/area
   
   # quadrature points used
-  USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep(TRUE, U$n)
+  USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
   
   # adjustments to account for restricted domain 
   if(conditional) {
@@ -140,7 +140,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI], b[Z & USED],
-                  rep(1, npoints.used), breaks)
+                  rep.int(1, npoints.used), breaks)
     Gbcom <- RSD$numerator/(1 + RSD$denominator)
     
     G <- bind.fv(G, data.frame(bcom=Gbcom), "bold(C)~hat(%s)[bord](r)",

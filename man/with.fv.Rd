@@ -6,7 +6,7 @@
   function value table (object of class \code{"fv"}).
 }
 \usage{
-\method{with}{fv}(data, expr, ..., drop = TRUE, enclos=NULL)
+\method{with}{fv}(data, expr, ..., fun = NULL, enclos=NULL)
 }
 \arguments{
   \item{data}{A function value table (object of class \code{"fv"})
@@ -18,11 +18,10 @@
     and global constants or functions.
   }
   \item{\dots}{Ignored.}
-  \item{drop}{Logical value. If the result of evaluating the expression
-    \code{expr} is a vector (rather than a matrix or data frame)
-    then the result will be returned as a vector if \code{drop=TRUE}.
-    Otherwise it will be returned as another function value table
-    (object of class \code{"fv"}).
+  \item{fun}{Logical value, specifying whether the result
+    should be interpreted as another function (\code{fun=TRUE})
+    or simply returned as a numeric vector or array (\code{fun=FALSE}).
+    See Details.
   }
   \item{enclos}{
     An environment in which to search for variables that are
@@ -57,19 +56,31 @@
     \item global constants or functions.
   }
   See the Examples.
+  The expression should be capable of handling
+  vectors and matrices.
 
-  The expression should be capable of handling vectors and matrices. 
-  If the result of evaluating the expression is a matrix or data frame,
-  then it is returned as a new function value table
-  (object of class \code{"fv"}). If the result of evaluation is
-  a vector and \code{drop=TRUE} then the result is returned as a vector.
-
+  The interpretation of the argument \code{fun} is as follows:
+  \itemize{
+    \item
+    If \code{fun=FALSE}, the result of evaluating the expression
+    \code{expr} will be returned as a numeric vector, matrix or 
+    data frame.
+    \item
+    If \code{fun=TRUE}, then the result of evaluating \code{expr}
+    will be interpreted as containing the values of a new function.
+    The return value will be an object of class \code{"fv"}.
+    (This can only happen if the result has the right dimensions.)
+    \item 
+    The default is \code{fun=TRUE} if the result of evaluating
+    \code{expr} has more than one column, and \code{fun=FALSE} otherwise.
+  }
+  
   To perform calculations involving \emph{several} objects of
   class \code{"fv"}, use \code{\link{eval.fv}}.
 }
 \value{
-  Either a function value table (object of class \code{"fv"})
-  or a vector.
+  A function value table (object of class \code{"fv"})
+  or a numeric vector or data frame.
 }
 \seealso{
   \code{\link{with}},

@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.59 $   $Date: 2013/01/31 07:12:56 $
+#    $Revision: 1.61 $   $Date: 2013/04/25 06:37:43 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -68,7 +68,7 @@ summary.ppm <- function(object, ..., quick=FALSE) {
   
   y$problems <- x$problems
 
-  y$fitter <- x$fitter
+  y$fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
   if(y$fitter %in% c("glm", "gam"))
     y$converged <- x$internal$glmfit$converged
 
@@ -144,7 +144,7 @@ summary.ppm <- function(object, ..., quick=FALSE) {
       y$has.xargs <- any(nxargs > 0)
       if(y$has.xargs) {
         # identify which function arguments are fixed in the call
-        fmap <- data.frame(Covariate=rep(names(funs), nxargs),
+        fmap <- data.frame(Covariate=rep.int(names(funs), nxargs),
                                  Argument=unlist(fargs))
         fmap$Given <- (fmap$Argument %in% names(y$covfunargs))
         y$xargmap <- fmap
@@ -216,7 +216,7 @@ summary.ppm <- function(object, ..., quick=FALSE) {
              # Use predict.ppm to evaluate the fitted intensities
              lev <- factor(levels(mrk), levels=levels(mrk))
              nlev <- length(lev)
-             marx <- list(x=rep(0, nlev), y=rep(0, nlev), marks=lev)
+             marx <- list(x=rep.int(0, nlev), y=rep.int(0, nlev), marks=lev)
              betas <- predict(x, locations=marx, type="trend")
              names(betas) <- paste("beta_", as.character(lev), sep="")
              y$trend$value <- betas
@@ -290,6 +290,7 @@ print.summary.ppm <- function(x, ...) {
 
   # otherwise - full details
   cat("Point process model\n")
+  fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
   methodchosen <-
     if(is.null(x$method))
       "unspecified method"
@@ -300,21 +301,21 @@ print.summary.ppm <- function(x, ...) {
                  "maximum pseudolikelihood (Berman-Turner approximation)"
                } else {
                  # Poisson process
-                 if(x$fitter == "exact") "maximum likelihood" else
+                 if(fitter == "exact") "maximum likelihood" else
                  "maximum likelihood (Berman-Turner approximation)"
                } 
              },
              ho="Huang-Ogata method (approximate maximum likelihood)",
              paste("unrecognised method", sQuote(x$method)))
   cat(paste("Fitting method:", methodchosen, "\n"))
-  howfitted <- switch(x$fitter,
+  howfitted <- switch(fitter,
                       exact= "analytically",
                       gam  = "using gam()",
                       glm  = "using glm()",
                       ho   = NULL,
-                      paste("using unrecognised fitter", sQuote(x$fitter)))
+                      paste("using unrecognised fitter", sQuote(fitter)))
   if(!is.null(howfitted)) cat(paste("Model was fitted", howfitted, "\n"))
-  if(x$fitter %in% c("glm", "gam")) {
+  if(fitter %in% c("glm", "gam")) {
     if(x$converged) cat("Algorithm converged\n")
     else cat("*** Algorithm did not converge ***\n")
   }

@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.24 $ $Date: 2011/05/18 09:18:35 $
+# $Revision: 1.25 $ $Date: 2013/04/25 06:37:43 $
 #
 #
 ############################# 
@@ -141,7 +141,7 @@ superimposeMarks <- function(arglist, nobj) {
   nama <- names(arglist)
   if(length(nama) == length(arglist) && all(nzchar(nama))) {
     # arguments are named: use names as (extra) marks
-    newmarx <- factor(rep(nama, nobj))
+    newmarx <- factor(rep.int(nama, nobj))
     marx <- markcbind(marx, newmarx)
   }
   return(marx)

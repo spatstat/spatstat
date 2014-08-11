@@ -1,7 +1,7 @@
 #
 #	fasp.R
 #
-#	$Revision: 1.30 $	$Date: 2013/01/24 07:47:34 $
+#	$Revision: 1.31 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 #-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ fasp <- function(fns, which, formulae=NULL,
     # ensure length matches length of "fns"
     if(length(formulae) == 1 && n > 1)
         # single formula - replicate it
-        formulae <- rep(formulae, n)
+        formulae <- rep.int(formulae, n)
     else 
         stopifnot(length(formulae) == length(which))
   }
@@ -61,7 +61,7 @@ fasp <- function(fns, which, formulae=NULL,
           stop("Subset operator is only implemented for vector indices")
 
         # determine index subset for lists 'fns', 'titles' etc
-        included <- rep(FALSE, length(x$fns))
+        included <- rep.int(FALSE, length(x$fns))
         w <- as.vector(x$which[I,J])
         if(length(w) == 0)
           stop("result is empty")

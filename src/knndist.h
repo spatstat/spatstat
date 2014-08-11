@@ -5,7 +5,7 @@
 
   THE FOLLOWING CODE ASSUMES THAT y IS SORTED IN ASCENDING ORDER
 
-  This code is #included multiple times in nndistance.c 
+  This code is #included multiple times in knndistance.c 
   Variables used:
         FNAME     function name
         DIST      #defined if function returns distance to nearest neighbour
@@ -15,7 +15,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.1 $  $Date: 2012/03/18 07:08:29 $
+  $Revision: 1.2 $  $Date: 2013/03/12 02:38:00 $
 
 */
 

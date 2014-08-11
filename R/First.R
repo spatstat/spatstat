@@ -1,6 +1,6 @@
 #  First.R
 #
-#  $Revision: 1.31 $ $Date: 2011/07/21 06:14:59 $
+#  $Revision: 1.32 $ $Date: 2013/04/25 06:37:43 $
 #
 
 .onLoad <- function(...) reset.spatstat.options()

@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.58 $  $Date: 2013/01/29 02:12:26 $
+#   $Revision: 1.59 $  $Date: 2013/04/25 06:37:43 $
 #
 #
 
@@ -800,7 +800,7 @@ spatstatRmhInfo <- function(cifname) {
               r <- c(0,r)
               nlook <- nlook+1
               deltar <- mean(diff(r))
-              if(identical(all.equal(diff(r),rep(deltar,nlook-1)),TRUE)) {
+              if(identical(all.equal(diff(r),rep.int(deltar,nlook-1)),TRUE)) {
 		par <- list(beta=beta,nlook=nlook,
                             equisp=1,
                             deltar=deltar,rmax=rmax, h=h)
@@ -891,7 +891,7 @@ spatstatRmhInfo <- function(cifname) {
               gamma <- par[["gamma"]]
               r     <- par[["r"]]
               sat   <- par[["sat"]]
-              if(length(sat)==1) sat <- rep(sat,length(gamma))
+              if(length(sat)==1) sat <- rep.int(sat,length(gamma))
               else explain.ifnot(length(sat) == length(gamma), ctxt)
               mmm <- cbind(gamma,r,sat)
               mmm <- mmm[fave.order(r),]

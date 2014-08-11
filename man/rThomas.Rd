@@ -11,14 +11,16 @@
 \arguments{
   \item{kappa}{
     Intensity of the Poisson process of cluster centres.
-    A single positive number.
+    A single positive number, a function, or a pixel image.
   }
   \item{sigma}{
     Standard deviation of random displacement (along each coordinate axis)
     of a point from its cluster centre.
   }
   \item{mu}{
-    Expected number of points per cluster.
+    Mean number of points per cluster (a single positive number)
+    or reference intensity for the cluster points (a function or
+    a pixel image).
   }
   \item{win}{
     Window in which to simulate the pattern.
@@ -34,20 +36,23 @@
   See \code{\link{rNeymanScott}}.
 }
 \details{
-  This algorithm generates a realisation of the
-  Thomas process, a special case of the Neyman-Scott process.
-  
-  The algorithm 
-  generates a uniform Poisson point process of ``parent'' points 
-  with intensity \code{kappa}. Then each parent point is
-  replaced by a random cluster of points, the number of points
-  per cluster being Poisson (\code{mu}) distributed, and their
-  positions being isotropic Gaussian displacements from the
-  cluster parent location.
+  This algorithm generates a realisation of the (`modified')
+  Thomas process, a special case of the Neyman-Scott process,
+  inside the window \code{win}.
 
-  This classical model can be fitted to data by the method of minimum contrast,
-  using \code{\link{thomas.estK}} or \code{\link{kppm}}.
-  
+  In the simplest case, where \code{kappa} and \code{mu}
+  are single numbers, the algorithm 
+  generates a uniform Poisson point process of \dQuote{parent} points 
+  with intensity \code{kappa}. Then each parent point is
+  replaced by a random cluster of \dQuote{offspring} points,
+  the number of points per cluster being Poisson (\code{mu})
+  distributed, and their
+  positions being isotropic Gaussian displacements from the
+  cluster parent location. The resulting point pattern
+  is a realisation of the classical
+  \dQuote{stationary Thomas process} generated inside the window \code{win}.
+  This point process has intensity \code{kappa * mu}.
+
   The algorithm can also generate spatially inhomogeneous versions of
   the Thomas process:
   \itemize{
@@ -60,17 +65,39 @@
     argument \code{mu} is a \code{function(x,y)}
     or a pixel image (object of class \code{"im"}), then it is
     interpreted as the reference density for offspring points,
-    in the sense of Waagepetersen (2006).
+    in the sense of Waagepetersen (2007).
     For a given parent point, the offspring constitute a Poisson process
-    with intensity function equal to \code{mu(x,y) * f(x,y)}
-    where \code{f} is the Gaussian density centred at the parent point.
+    with intensity function equal to \code{mu * f},
+    where \code{f} is the Gaussian probability density
+    centred at the parent point. Equivalently we first generate,
+    for each parent point, a Poisson (\code{mumax}) random number of
+    offspring (where \eqn{M} is the maximum value of \code{mu})
+    with independent Gaussian displacements from the parent
+    location, and then randomly thin the offspring points, with
+    retention probability \code{mu/M}.
+    \item Both the parent points and the offspring points can be
+    spatially inhomogeneous, as described above.
   }
-  When the parents are homogeneous (\code{kappa} is a single number)
-  and the offspring are inhomogeneous (\code{mu} is a
-  function or pixel image), the model can be fitted to data
-  using \code{\link{kppm}}, or 
-  using \code{\link{thomas.estK}} applied to the inhomogeneous
-  \eqn{K} function.
+
+  Note that if \code{kappa} is a pixel image, its domain must be larger
+  than the window \code{win}. This is because an offspring point inside
+  \code{win} could have its parent point lying outside \code{win}.
+  In order to allow this, the simulation algorithm
+  first expands the original window \code{win}
+  by a distance \code{4 * sigma} and generates the Poisson process of
+  parent points on this larger window. If \code{kappa} is a pixel image,
+  its domain must contain this larger window.
+
+  The intensity of the Thomas process is \code{kappa * mu}
+  if either \code{kappa} or \code{mu} is a single number. In the general
+  case the intensity is an integral involving \code{kappa}, \code{mu}
+  and \code{f}.
+
+  The Thomas process with homogeneous parents
+  (i.e. where \code{kappa} is a single number)
+  can be fitted to data using \code{\link{kppm}} or related functions.
+  Currently it is not possible to fit the Thomas model
+  with inhomogeneous parents.
 }
 \seealso{
 \code{\link{rpoispp}},
@@ -78,13 +105,14 @@
 \code{\link{rGaussPoisson}},
 \code{\link{rNeymanScott}},
 \code{\link{thomas.estK}},
+\code{\link{thomas.estpcf}},
 \code{\link{kppm}}
 }
 \references{
-  Waagepetersen, R. (2006)
-  An estimating function approach to inference for inhomogeneous
-  Neyman-Scott processes.
-  Submitted for publication.
+  Waagepetersen, R. (2007)
+  An estimating function approach to inference for
+  inhomogeneous Neyman-Scott processes.
+  \emph{Biometrics} \bold{63}, 252--258.
 }
 \examples{
   #homogeneous

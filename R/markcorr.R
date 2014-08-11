@@ -305,7 +305,7 @@ markcorr <-
   }
   
   # this will be the output data frame
-  result <- data.frame(r=r, theo= rep(theory,length(r)))
+  result <- data.frame(r=r, theo= rep.int(theory,length(r)))
   desc <- c("distance argument r",
             "theoretical value (independent marks) for %s")
   alim <- c(0, min(rmax, rmaxdefault))
@@ -484,10 +484,10 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
            
            # use replication to effect the weights (it's faster)
            nw <- round(nwtsteps * wt/max(wt))
-           drep.w <- rep(d, nw)
+           drep.w <- rep.int(d, nw)
            fw <- ff * wt
            nfw <- round(nwtsteps * fw/max(fw))
-           drep.fw <- rep(d, nfw)
+           drep.fw <- rep.int(d, nfw)
 
            # smooth estimate of kappa_f
            est <- sm.density(drep.fw,

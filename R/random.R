@@ -3,7 +3,7 @@
 #
 #    Functions for generating random point patterns
 #
-#    $Revision: 4.57 $   $Date: 2013/02/01 10:32:08 $
+#    $Revision: 4.59 $   $Date: 2013/04/25 06:37:43 $
 #
 #
 #    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -454,12 +454,12 @@ rpoint <- function(n, f, fmax=NULL,
         if(is.null(result)) {
           # initialise offspring pattern and offspring-to-parent map
           result <- cluster
-          parentid <- rep(1, cluster$n)
+          parentid <- rep.int(1, cluster$n)
         } else {
           # add to pattern
           result <- superimpose(result, cluster, W=win)
           # update offspring-to-parent map
-          parentid <- c(parentid, rep(i, cluster$n))
+          parentid <- c(parentid, rep.int(i, cluster$n))
         }
       }
     }
@@ -604,12 +604,15 @@ rcell <- function(win=square(1), nx=NULL, ny=nx, ..., dx=NULL, dy=dx, N=10) {
 rthin <- function(X, P, ...) {
   verifyclass(X, "ppp")
 
+  nX <- npoints(X)
+  if(nX == 0) return(X)
+
   if(is.numeric(P)) {
     # vector of retention probabilities
     pX <- P
-    if(length(pX) != X$n) {
+    if(length(pX) != nX) {
       if(length(pX) == 1)
-        pX <- rep(pX, X$n)
+        pX <- rep.int(pX, nX)
       else 
         stop("Length of vector P does not match number of points of X")
     }
@@ -618,7 +621,7 @@ rthin <- function(X, P, ...) {
   } else if(is.function(P)) {
     # function - evaluate it at points of X
     pX <- P(X$x, X$y, ...)
-    if(length(pX) != X$n)
+    if(length(pX) != nX)
       stop("Function P returned a vector of incorrect length")
     if(!is.numeric(pX))
       stop("Function P returned non-numeric values")
@@ -655,6 +658,7 @@ rthin <- function(X, P, ...) {
 rjitter <- function(X, radius, retry=TRUE, giveup=10000) {
   verifyclass(X, "ppp")
   nX <- npoints(X)
+  if(nX == 0) return(X)
   W <- X$window
   if(!retry) {
     # points outside window are lost
@@ -665,7 +669,7 @@ rjitter <- function(X, radius, retry=TRUE, giveup=10000) {
     return(ppp(xnew[ok], ynew[ok], window=W))
   }
   # retry = TRUE: condition on points being inside window
-  undone <- rep(TRUE, nX)
+  undone <- rep.int(TRUE, nX)
   while(any(undone)) {
     giveup <- giveup - 1
     if(giveup <= 0)

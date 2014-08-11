@@ -32,6 +32,7 @@ plot.listof <- plot.splitppp <-
                             plotcommand="plot",
                             adorn.left=NULL,
                             adorn.right=NULL,
+                            adorn.top=NULL,
                             adorn.bottom=NULL,
                             adorn.size=0.2) {
     xname <- short.deparse(substitute(x))
@@ -52,7 +53,7 @@ plot.listof <- plot.splitppp <-
       stopifnot(is.character(main.panel) || is.expression(main.panel))
       nmp <- length(main.panel)
       if(nmp == 1)
-        main.panel <- rep(main.panel, n)
+        main.panel <- rep.int(main.panel, n)
       else if(nmp != n)
         stop("Incorrect length for main.panel")
     }
@@ -72,6 +73,8 @@ plot.listof <- plot.splitppp <-
         warning("adorn.left was ignored because arrange=FALSE")
       if(!is.null(adorn.right))
         warning("adorn.right was ignored because arrange=FALSE")
+      if(!is.null(adorn.top))
+        warning("adorn.top was ignored because arrange=FALSE")
       if(!is.null(adorn.bottom))
         warning("adorn.bottom was ignored because arrange=FALSE")
       return(invisible(NULL))
@@ -106,7 +109,7 @@ plot.listof <- plot.splitppp <-
     boxes <- try(lapply(x, as.rectangle), silent=TRUE)
     sizes.known <- !inherits(boxes, "try-error")
     # set up layout
-    mat <- matrix(c(seq_len(n), rep(0, nblank)),
+    mat <- matrix(c(seq_len(n), integer(nblank)),
                   byrow=TRUE, ncol=ncols, nrow=nrows)
     if(sizes.known) {
       xwidths <- unlist(lapply(boxes, function(z) { diff(z$xrange) }))
@@ -114,29 +117,35 @@ plot.listof <- plot.splitppp <-
       heights <- apply(mat, 1, function(j,h) { max(h[j[j>0]]) }, h=xheights)
       widths <- apply(mat, 2, function(i,w) { max(w[i[i>0]]) }, w=xwidths)
     } else {
-      heights <- rep(1, nrows)
-      widths <- rep(1, ncols)
+      heights <- rep.int(1, nrows)
+      widths <- rep.int(1, ncols)
     }
     meanheight <- mean(heights)
     meanwidth  <- mean(widths)
     nall <- n
     if(!is.null(adorn.left)) {
-      # add margin at left, of width 'adorn.size',
+      # add margin at left, of width adorn.size * meanwidth
       nall <- i.left <- n+1
       mat <- cbind(i.left, mat)
       widths <- c(adorn.size * meanwidth, widths)
     } 
     if(!is.null(adorn.right)) {
-      # add margin at right, of width 'adorn.size'
+      # add margin at right, of width adorn.size * meanwidth
       nall <- i.right <- nall+1
       mat <- cbind(mat, i.right)
       widths <- c(widths, adorn.size * meanwidth)
     } 
     if(!is.null(adorn.bottom)) {
-      # add margin at bottom, of height 'adorn.size'
+      # add margin at bottom, of height adorn.size * meanheight
       nall <- i.bottom <- nall+1
       mat <- rbind(mat, i.bottom)
       heights <- c(heights, adorn.size * meanheight)
+    } 
+    if(!is.null(adorn.top)) {
+      # add margin at top, of height adorn.size * meanheight
+      nall <- i.top <- nall + 1
+      mat <- rbind(i.top, mat)
+      heights <- c(adorn.size * meanheight, heights)
     } 
     if(banner) {
       # Increment existing panel numbers
@@ -151,7 +160,7 @@ plot.listof <- plot.splitppp <-
     # start output .....
     # .... plot banner
     if(banner) {
-      opa <- par(mar=rep(0,4), xpd=TRUE)
+      opa <- par(mar=rep.int(0,4), xpd=TRUE)
       plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
            xlim=c(-1,1),ylim=c(-1,1))
       cex <- resolve.defaults(list(...), list(cex.title=2))$cex.title
@@ -171,13 +180,15 @@ plot.listof <- plot.splitppp <-
     }
     # adornments
     if(nall > n) {
-      par(mar=rep(0,4), xpd=TRUE)
+      par(mar=rep.int(0,4), xpd=TRUE)
       if(!is.null(adorn.left))
         adorn.left()
       if(!is.null(adorn.right))
         adorn.right()
       if(!is.null(adorn.bottom))
         adorn.bottom()
+      if(!is.null(adorn.top))
+        adorn.top()
     }
     # revert
     layout(1)

@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.56 $   $Date: 2013/02/25 01:02:12 $
+#  $Revision: 2.57 $   $Date: 2013/04/25 06:37:43 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -330,7 +330,7 @@ rmhmodel.ppm <- function(model, win, ..., verbose=TRUE, project=TRUE,
     } else {
       # trend terms present
       # all first order effects are subsumed in Z$trend
-      beta <- if(!Y$marked) 1 else rep(1, length(Z$types))
+      beta <- if(!Y$marked) 1 else rep.int(1, length(Z$types))
       # predict on window possibly larger than original data window
       Z$trend <- 
         if(wsim$type == "mask")
@@ -355,7 +355,7 @@ rmhmodel.ppm <- function(model, win, ..., verbose=TRUE, project=TRUE,
       Z$par[[absorb]]$beta <- beta
       # other cifs have par$beta = 1 
       for(i in (1:Ncif)[-absorb])
-        Z$par[[i]]$beta <- rep(1, Z$ntypes[i])
+        Z$par[[i]]$beta <- rep.int(1, Z$ntypes[i])
     }
     
     if(verbose)

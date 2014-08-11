@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.5 $	$Date: 2011/11/18 04:24:40 $
+#    $Revision: 1.6 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Hybrid interactions
 #
@@ -39,7 +39,7 @@ hybrid.family <-
          # and set coefficients of offset terms to 1         
          Vnames <- fint$Vnames
          IsOffset <- fint$IsOffset
-         coeff <- rep(1, length(Vnames))
+         coeff <- rep.int(1, length(Vnames))
          names(coeff) <- Vnames
          coeff[!IsOffset] <- fint$coefs[Vnames[!IsOffset]]         
          # extract the component interactions 
@@ -126,7 +126,7 @@ hybrid.family <-
              # handle IsOffset
              offI <- attr(VI, "IsOffset")
              if(is.null(offI))
-               offI <- rep(FALSE, ncol(VI))
+               offI <- rep.int(FALSE, ncol(VI))
              # tack on
              IsOffset <- c(IsOffset, offI)
              # append to matrix V

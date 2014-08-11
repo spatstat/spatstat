@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.23 $  $Date: 2012/10/10 02:28:33 $
+#  $Revision: 1.24 $  $Date: 2013/04/25 06:37:43 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -17,15 +17,15 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
   if(is.vector(discrete) && is.vector(density)) {
     # handle constants
     if(length(discrete) == 1)
-      discrete <- rep(discrete, ndata)
+      discrete <- rep.int(discrete, ndata)
     if(length(density) == 1)
-      density <- rep(density, nquad)
+      density <- rep.int(density, nquad)
     # check lengths
     if(check) {
       check.nvector(discrete, ndata, things="data points", naok=TRUE)
       check.nvector(density,  nquad, things="quadrature points", naok=TRUE)
     }
-    discretepad <- rep(0, nquad)
+    discretepad <- numeric(nquad)
     discretepad[Z] <- discrete
   } else {
     discrete <- as.matrix(discrete)
@@ -41,11 +41,11 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
     if(nd != nc) {
       if(nd == 1) {
         # replicate columns of discrete component
-        discrete <- matrix(rep(discrete, nc), ndata, nc)
+        discrete <- matrix(rep.int(discrete, nc), ndata, nc)
         colnames(discrete) <- colnames(density)
       } else if(nc == 1) {
         # replicate columns of density component
-        density <- matrix(rep(density, nd), nquad, nd)
+        density <- matrix(rep.int(density, nd), nquad, nd)
         colnames(density) <- colnames(discrete)
       } else stop(paste("Incompatible numbers of columns in",
                         sQuote("discrete"), paren(nd), "and",

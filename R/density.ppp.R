@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.53 $    $Date: 2012/10/29 09:30:12 $
+#  $Revision: 1.56 $    $Date: 2013/04/25 06:37:43 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -98,24 +98,24 @@ densitypointsEngine <- function(x, sigma, ...,
     const <- 1/(2 * pi * sqrt(detSigma))
   }
   # Leave-one-out computation
-  # contributions from pairs of distinct points
+  # cutoff: contributions from pairs of distinct points
   # closer than 8 standard deviations
   sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
   cutoff <- 8 * sd
-  # detect very small bandwidth
-  nnd <- nndist(x)
-  nnrange <- range(nnd)
-  if(nnrange[1] > cutoff) {
-    npts <- npoints(x)
-    result <- if(leaveoneout) rep(0, npts) else rep(const, npts)
-    attr(result, "sigma") <- sigma
-    attr(result, "varcov") <- varcov
-    attr(result, "warnings") <- "underflow"
-    return(result)
-  }
+#  nnd <- nndist(x)
+#  nnrange <- range(nnd)
+#  if(nnrange[1] > cutoff) {
+#    npts <- npoints(x)
+#    result <- if(leaveoneout) numeric(npts) else rep.int(const, npts)
+#    attr(result, "sigma") <- sigma
+#    attr(result, "varcov") <- varcov
+#    attr(result, "warnings") <- "underflow"
+#    return(result)
+#  }
   if(leaveoneout) {
-    # ensure at least one neighbour
-    cutoff <- max(1.1 * nnrange[2], cutoff)
+    # ensure each point has its closest neighbours within the cutoff
+    nndmax <- max(nndist(x))
+    cutoff <- max(2 * nndmax, cutoff)
   }
   # evaluate edge correction weights at points 
   if(edge) {
@@ -347,7 +347,7 @@ bw.diggle <- function(X) {
   nr <- length(rvals)
   J <- numeric(nr)
   phi <- function(x,h) { 
-    if(h <= 0) return(rep(0, length(x)))
+    if(h <= 0) return(numeric(length(x)))
     y <- pmax(0, pmin(1, x/(2 * h)))
     4 * pi * h^2 * (acos(y) - y * sqrt(1 - y^2))
   }
@@ -359,9 +359,8 @@ bw.diggle <- function(X) {
   # Convert to standard deviation of (one-dimensional marginal) kernel
   sigma <- rvals/2
   result <- bw.optim(M, sigma,
-                     xlab=expression(sigma),
-                     ylab=expression(M(sigma)),
                      creator="bw.diggle",
+                     criterion="Berman-Diggle Cross-Validation",
                      J=J,
                      lambda=lambda)
   return(result)

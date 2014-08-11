@@ -1,7 +1,7 @@
 #
 #  pickoption.R
 #
-#  $Revision: 1.4 $  $Date: 2009/04/07 23:34:11 $
+#  $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
 #
 
 pickoption <- function(what="option", key, keymap, ...,

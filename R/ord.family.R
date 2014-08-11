@@ -2,7 +2,7 @@
 #
 #    ord.family.S
 #
-#    $Revision: 1.15 $	$Date: 2012/04/26 00:54:59 $
+#    $Revision: 1.16 $	$Date: 2013/04/25 06:37:43 $
 #
 #    The Ord model (family of point process models)
 #
@@ -56,7 +56,7 @@ seqU <- seq_len(nU)
 if(length(EqualPairs) > 0)           
   is.data <- seqU %in% EqualPairs[,2] 
 else
-  is.data <- rep(FALSE, nU)
+  is.data <- rep.int(FALSE, nU)
 
 #############################################################################
 # First compute Dirichlet tessellation of data

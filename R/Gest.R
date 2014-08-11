@@ -3,7 +3,7 @@
 #
 #	Compute estimates of nearest neighbour distance distribution function G
 #
-#	$Revision: 4.27 $	$Date: 2011/04/19 02:14:33 $
+#	$Revision: 4.28 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 #
@@ -21,13 +21,13 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
-  zeroes <- rep(0, length(rvals))
+  zeroes <- numeric(length(rvals))
 
 # choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
-  if(is.null(correction))
+  if(is.null(correction)) {
     correction <- c("rs", "km", "han")
-  correction <- pickoption("correction", correction,
+  } else correction <- pickoption("correction", correction,
                            c(none="none",
                              border="rs",
                              rs="rs",
@@ -36,6 +36,8 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
                              Kaplan="km",
                              han="han",
                              Hanisch="han",
+                             cs="han",
+                             ChiuStoyan="han",
                              best="km"),
                            multi=TRUE)
 

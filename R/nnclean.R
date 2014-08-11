@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.5 $   $Date: 2011/05/18 08:08:21 $
+#  $Revision: 1.6 $   $Date: 2013/04/25 06:37:43 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -115,7 +115,7 @@ nncleanEngine <-
   # First set up starting guesses.
   #
   #
-  probs <- rep(0, n)
+  probs <- numeric(n)
   thresh <- (min(kthNND) + diff(range(kthNND))/3.)
   high <- (kthNND > thresh)
   delta <- ifelse(high, 1, 0)

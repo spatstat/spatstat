@@ -3,7 +3,7 @@
 \title{Simulate Matern Model II}
 \description{
   Generate a random point pattern, a simulated realisation of the
-  Mat\'ern Model II inhibition process.
+  \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process.
 }
 \usage{
  rMaternII(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE)
@@ -31,7 +31,7 @@
   The simulated point pattern (an object of class \code{"ppp"}).
 }
 \details{
-  This algorithm generates a realisation of Mat\'ern's Model II
+  This algorithm generates a realisation of \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model II
   inhibition process 
   inside the window \code{win}.
 
@@ -49,9 +49,9 @@
   A proposal point is deleted if it lies within \code{r} units' distance
   of another proposal point \emph{that has an earlier arrival time}.
   Otherwise it is retained.
-  The retained points constitute Mat\'ern's Model II.
+  The retained points constitute \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model II.
 
-  The difference between Mat\'ern's Model I and II is the italicised
+  The difference between \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model I and II is the italicised
   statement above. Model II has a higher intensity
   for the same parameter values.
 }

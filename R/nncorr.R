@@ -1,7 +1,7 @@
 #
 # nncorr.R
 #
-# $Revision: 1.7 $  $Date: 2011/10/11 10:45:24 $
+# $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
 #
 
 nnmean <- function(X) {
@@ -54,8 +54,8 @@ nncorr <- function(X, f = function(m1,m2) { m1 * m2}, ...,
   # multi-dimensional case
   if(nv > 1) {
     # replicate things
-    if(is.function(f)) f <- rep(list(f), nv)
-    if(length(denominator) <= 1) denominator <- rep(list(denominator), nv)
+    if(is.function(f)) f <- rep.int(list(f), nv)
+    if(length(denominator) <= 1) denominator <- rep.int(list(denominator), nv)
     #
     result <- matrix(NA, nrow=3, ncol=nv)
     outnames <- c("unnormalised", "normalised", "correlation")

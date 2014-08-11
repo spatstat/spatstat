@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.20 $   $Date: 2012/10/14 04:10:53 $
+#  $Revision: 1.22 $   $Date: 2013/04/25 06:37:43 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -74,7 +74,7 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
 
   linkname <- link
   FIT  <- glm(dformula, family=binomial(link=linkname),
-              data=df)
+              data=df, na.action=na.exclude)
 
   result <- list(call     = CallInfo$cl,
                  CallInfo = CallInfo,
@@ -384,10 +384,7 @@ predict.slrm <- function(object, ..., type="intensity",
              }
            }
            )
-    v <- rep(NA, nrow(df))
-    ok <- complete.cases(df)
-    v[ok] <- values[ok]
-    out <- im(v, xcol=W$xcol, yrow=W$yrow, unitname=unitname(W))
+    out <- im(values, xcol=W$xcol, yrow=W$yrow, unitname=unitname(W))
     return(out)
   } else {
     # prediction using new values
@@ -437,7 +434,7 @@ predict.slrm <- function(object, ..., type="intensity",
            }
            )
     # form image
-    v <- rep(NA_real_, npixel)
+    v <- rep.int(NA_real_, npixel)
     v[ok] <- values
     out <- im(v, xcol=newW$xcol, yrow=newW$yrow, unitname=unitname(W))
     return(out)

@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.13 $  $Date: 2013/02/25 04:59:13 $
+#    $Revision: 1.14 $  $Date: 2013/04/25 06:37:43 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -96,7 +96,7 @@ connected.owin <- function(X, ..., method="C") {
         labs <- unique(Z[nbrs], na.rm=TRUE)
         labs <- labs[labs != 0]
         labs <- sort(labs)
-        equiv <- rbind(equiv,c(labs,rep(0,times=4-length(labs))))
+        equiv <- rbind(equiv,c(labs,rep.int(0,times=4-length(labs))))
         Z[parow,pacol] <- labs[1]
         currentlab <- max(Z)+1
         todo[one] <- FALSE

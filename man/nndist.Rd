@@ -10,8 +10,8 @@
 }
 \usage{
   nndist(X, \dots)
-  \method{nndist}{ppp}(X, \dots, k=1, method="C")
-  \method{nndist}{default}(X, Y=NULL, \dots, k=1, method="C")
+  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, method="C")
+  \method{nndist}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
 }
 \arguments{
   \item{X,Y}{
@@ -32,6 +32,11 @@
   \item{k}{
     Integer, or integer vector. The algorithm will compute the distance to the
     \code{k}th nearest neighbour. 
+  }
+  \item{by}{
+    Optional. A factor, which separates \code{X} into groups.
+    The algorithm will compute the distance to
+    the nearest point in each group. 
   }
   \item{method}{String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
@@ -54,6 +59,11 @@
   matrix \code{m} such that \code{m[i,j]} is the
   \code{k[j]}th nearest neighbour distance for the
   \code{i}th data point.
+
+  If the argument \code{by} is given, then the result is a data frame
+  containing the distances described above, from each point of \code{X},
+  to the nearest point in each subset of \code{X}
+  defined by the factor \code{by}.
 }
 \details{
   This function computes the Euclidean distance from each point
@@ -80,6 +90,13 @@
   If it is a vector, then the \eqn{k}th nearest neighbour distances are
   computed for each value of \eqn{k} specified in the vector.
 
+  If the argument \code{by} is given, it should be a \code{factor},
+  of length equal to the number of points in \code{X}.
+  This factor effectively partitions \code{X} into subsets,
+  each subset associated with one of the levels of \code{X}.
+  The algorithm will then compute, for each point of \code{X},
+  the distance to the nearest neighbour \emph{in each subset}.
+
   The argument \code{method} is not normally used. It is
   retained only for checking the validity of the software.
   If \code{method = "interpreted"} then the distances are
@@ -102,6 +119,12 @@
 
   To find the nearest neighbour distances from one point pattern
   to another point pattern, use \code{\link{nncross}}.
+}
+\section{Nearest neighbours of each type}{
+  If \code{X} is a multitype point pattern 
+  and \code{by=marks(X)}, then the algorithm will compute,
+  for each point of \code{X}, the distance to the nearest neighbour
+  of each type. See the Examples. 
 }
 \section{Warnings}{
   An infinite or \code{NA} value is returned if the
@@ -132,6 +155,9 @@
 
    # Stienen diagram
    plot(cells \%mark\% (nndist(cells)/2), markscale=1)
+
+   # distance to nearest neighbour of each type
+   head(nndist(ants, by=marks(ants)))
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}

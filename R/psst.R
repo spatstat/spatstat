@@ -3,7 +3,7 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.4 $	$Date: 2013/02/26 07:03:14 $
+#	$Revision: 1.5 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 #
@@ -42,7 +42,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
     rbord <- fit$rbord
     b <- bdist.points(U)
     USED <- (b > rbord)
-  } else USED <- rep(TRUE, U$n)
+  } else USED <- rep.int(TRUE, U$n)
   
   # basic statistics
   Win <- X$window
@@ -57,7 +57,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
     area.used <- sum(WQ[USED])
     lambda.used <- npoints.used/area.used
   } else {
-    XUSED <- rep(TRUE, npoints)
+    XUSED <- rep.int(TRUE, npoints)
     npoints.used <- npoints
     area.used <- area
     lambda.used <- lambda
@@ -89,7 +89,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   fXunits <- unitname(fX)
   # Extract 'best' estimate only
   fX <- with(fX, .y)
-  zero <- rep(0, length(fX))
+  zero <- numeric(length(fX))
   # sum over all quadrature points
   iused <- seq(U$n)[USED]
   nused <- length(iused)

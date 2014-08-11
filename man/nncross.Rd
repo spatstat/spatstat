@@ -15,6 +15,7 @@
           iX=NULL, iY=NULL,
           what = c("dist", "which"),
           \dots,
+          k = 1,
           sortby=c("range", "var", "x", "y"),
           is.sorted.X = FALSE,
           is.sorted.Y = FALSE)
@@ -35,6 +36,10 @@
     the identifier of the nearest neighbour (\code{"which"}),
     or both.
   }
+  \item{k}{
+    Integer, or integer vector. The algorithm will compute the distance to the
+    \code{k}th nearest neighbour.
+  }
   \item{sortby}{
     Determines which coordinate to use to sort the point patterns.
     See Details.
@@ -50,6 +55,8 @@
   function finds, for each point of \code{X}, 
   the nearest point of \code{Y}. The distance between these points
   is also computed.
+  If the argument \code{k} is specified, then the \code{k}-th nearest
+  neighbours will be found.
 
   Alternatively if \code{X} is a point pattern and \code{Y} is a line
   segment pattern, the function finds the nearest line segment to each point
@@ -64,6 +71,13 @@
   the nearest element in \code{Y}.)
   If \code{what="dist"} then only the vector of distances is returned.
   If \code{what="which"} then only the vector of indices is returned.
+
+  The argument \code{k} may be an integer or an integer vector.
+  If it is a single integer, then the \code{k}-th nearest neighbours
+  are computed. If it is a vector, then the \code{k[i]}-th nearest
+  neighbours are computed for each entry \code{k[i]}. For example, setting
+  \code{k=1:3} will compute the nearest, second-nearest and
+  third-nearest neighbours. The result is a data frame.
 
   Note that this function is not symmetric in \code{X} and \code{Y}.
   To find the nearest neighbour in \code{X} of each point in \code{Y},
@@ -110,14 +124,21 @@
   is sorted.  
 }
 \value{
-  By default (if \code{what=c("dist", "which")})
+  A data frame, or a vector if the data frame would contain only one column.
+  
+  By default (if \code{what=c("dist", "which")} and \code{k=1})
   a data frame with two columns:
   \item{dist}{Nearest neighbour distance}
   \item{which}{Nearest neighbour index in \code{Y}}
 
-  If \code{what="dist"}, a vector of nearest neighbour distances.
+  If \code{what="dist"} and \code{k=1}, a vector of nearest neighbour distances.
 
-  If \code{what="which"}, a vector of nearest neighbour indices.
+  If \code{what="which"} and \code{k=1}, a vector of nearest neighbour
+  indices.
+
+  If \code{k} is specified, the result is a data frame with
+  columns containing the \code{k}-th nearest neighbour distances
+  and/or nearest neighbour indices.
 }
 \seealso{
   \code{\link{nndist}} for nearest neighbour

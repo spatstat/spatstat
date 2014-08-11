@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.132 $	$Date: 2012/12/10 03:55:34 $
+#	$Revision: 4.133 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 #	A window may be either
@@ -809,7 +809,7 @@ complement.owin <- function(w, frame=as.rectangle(w)) {
            # first check whether one of the current boundary polygons
            # is the bounding box itself (with + sign)
            if(reframe)
-             is.box <- rep(FALSE, length(bdry))
+             is.box <- rep.int(FALSE, length(bdry))
            else {
              nvert <- unlist(lapply(bdry, function(a) { length(a$x) }))
              area <- unlist(lapply(bdry, area.xypolygon))
@@ -873,8 +873,8 @@ inside.owin <- function(x, y, w) {
          polygonal = {
            xy <- list(x=x,y=y)
            bdry <- w$bdry
-           total <- rep(0, length(x))
-           on.bdry <- rep(FALSE, length(x))
+           total <- numeric(length(x))
+           on.bdry <- rep.int(FALSE, length(x))
            for(i in seq_along(bdry)) {
              score <- inside.xypolygon(xy, bdry[[i]], test01=FALSE)
              total <- total + score

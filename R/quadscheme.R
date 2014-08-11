@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.25 $    $Date: 2010/03/08 08:23:04 $
+#      $Revision: 4.26 $    $Date: 2013/04/25 06:37:43 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.
@@ -164,16 +164,16 @@ quadscheme.spatial <-
         # -> dummy x {1,..,K}
         
         dumdum <- cartesian(dummy, markset)
-        Wdumdum <- rep(Wdum, nmarks)
+        Wdumdum <- rep.int(Wdum, nmarks)
         
         # also make dummy marked points at same locations as data points
         # but with different marks
 
         dumdat <- cartesian(unmark(data), markset)
-        Wdumdat <- rep(Wdat, nmarks)
+        Wdumdat <- rep.int(Wdat, nmarks)
         Mdumdat <- marks(dumdat)
         
-        Mrepdat <- rep(data.marks, nmarks)
+        Mrepdat <- rep.int(data.marks, nmarks)
 
         ok <- (Mdumdat != Mrepdat)
         dumdat <- dumdat[ok,]
@@ -201,11 +201,11 @@ function(pp, markset, fac=TRUE) {
   # the Cartesian product, consisting of all pairs (u,k)
   # where u is a point of 'pp' and k is a mark in 'markset'
   nmarks <- length(markset)
-  result <- ppp(rep(pp$x, nmarks),
-                rep(pp$y, nmarks),
+  result <- ppp(rep.int(pp$x, nmarks),
+                rep.int(pp$y, nmarks),
                 window=pp$window,
                 check=FALSE)
-  marx <- rep(markset, rep(pp$n, nmarks))
+  marx <- rep.int(markset, rep.int(pp$n, nmarks))
   if(fac)
     marx <- factor(marx, levels=markset)
   marks(result) <- marx

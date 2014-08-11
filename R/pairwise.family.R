@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.36 $	$Date: 2012/11/21 06:05:29 $
+#    $Revision: 1.37 $	$Date: 2013/04/25 06:37:43 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -28,7 +28,7 @@ pairwise.family <-
          # and set coefficients of offset terms to 1
          Vnames <- fint$Vnames
          IsOffset <- fint$IsOffset
-         coeff <- rep(1, length(Vnames))
+         coeff <- rep.int(1, length(Vnames))
          names(coeff) <- Vnames
          coeff[!IsOffset] <- fint$coefs[Vnames[!IsOffset]]
          # 
@@ -88,8 +88,8 @@ pairwise.family <-
              types <- factor(types, levels=types)
            m <- length(types)
            nd <- length(d)
-           dd <- matrix(rep(d, m), nrow=nd * m, ncol=m)
-           tx <- rep(types, rep(nd, m))
+           dd <- matrix(rep.int(d, m), nrow=nd * m, ncol=m)
+           tx <- rep.int(types, rep.int(nd, m))
            ty <- types
            p <- pairpot(dd, tx, ty, potpars)
            if(length(dim(p))==2)

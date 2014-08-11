@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.16 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.17 $	$Date: 2013/04/25 06:37:43 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -229,7 +229,7 @@ pcf3est <- function(X, ...,
   }
 
   # this will be the output data frame
-  g <- data.frame(r=r, theo=rep(1, length(r)))
+  g <- data.frame(r=r, theo=rep.int(1, length(r)))
   desc <- c("distance argument r", "theoretical Poisson %s")
   g <- fv(g, "r", substitute(pcf3(r), NULL),
           "theo", , c(0,rmax/2), c("r","%s[pois](r)"), desc, fname="pcf3")

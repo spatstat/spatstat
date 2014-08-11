@@ -3,7 +3,7 @@
 #
 # cdf of |X1-X2| when X1,X2 are iid uniform in W, etc
 #
-#  $Revision: 1.2 $  $Date: 2012/10/29 10:00:07 $
+#  $Revision: 1.3 $  $Date: 2013/04/25 06:37:43 $
 #
 
 distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
@@ -34,6 +34,7 @@ distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
 }
 
 bw.frac <- function(X, ..., f=1/4) {
+  X <- as.owin(X)
   g <- distcdf(X, ...)
   r <- with(g, .x)
   Fr <- with(g, .y)

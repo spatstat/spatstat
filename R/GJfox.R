@@ -3,7 +3,7 @@
 #
 #  Foxall G-function and J-function
 #
-#  $Revision: 1.3 $   $Date: 2012/06/11 05:07:18 $
+#  $Revision: 1.4 $   $Date: 2013/04/25 06:37:43 $
 #
 Gfox <- function(X, Y, r=NULL, breaks=NULL,
                  correction=c("km", "rs", "han"), ...) {
@@ -75,7 +75,7 @@ Jfox <- function(X, Y, r=NULL, breaks=NULL,
   # base labels on 'J' rather than full expression
   attr(J, "labl") <- attr(H, "labl")
   # add column of 1's
-  J <- bind.fv(J, data.frame(theo=rep(1, nrow(J))), "%s[theo](r)",
+  J <- bind.fv(J, data.frame(theo=rep.int(0, nrow(J))), "%s[theo](r)",
                "theoretical value of %s for independence")
   # rename 
   J <- rebadge.fv(J, substitute(Jfox(r), NULL), "Jfox")

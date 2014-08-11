@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.64 $  $Date: 2013/02/25 06:53:36 $
+#  $Revision: 1.75 $  $Date: 2013/04/25 06:37:43 $
 #
 
 vcov.ppm <- local({
@@ -25,12 +25,10 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
     stop(paste("Unrecognised option: what=", sQuote(what)))
   what <- what.map[m]
 
-  # computation method
-  method <- resolve.1.default("method", argh, list(method="C"))
-
   # nonstandard calculations (hack) 
-  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt")
+  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
   nonstandard <- any(generic.triggers %in% names(argh))
+  saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
   
   # Fisher information *may* be contained in object
   fisher <- object$fisher
@@ -46,12 +44,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   # because we might use different estimators,
   # or the parameters might be a subset of the canonical parameter
 
-  Alist  <- NULL
-
-  ############## guts ##############################
-
   if(needguts) {
-
     # warn if fitted model was obtained using GAM
     if(identical(object$fitter, "gam")) {
       switch(gam.action,
@@ -67,80 +60,23 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
              },
              silent={})
     }
-
-    if(!is.poisson(object) && !hessian) {
-      # Gibbs model - separate code
-      varcov <- vcovGibbs(object, ..., matrix.action=matrix.action)
-      if(is.null(varcov))
-        return(NULL)
-      # varcov is the variance-covariance matrix, with attributes
-      Alist <- attr(varcov, "A")
-      attr(varcov, "A") <- NULL
-      # 
-      if(what == "internals") 
-        mom <- model.matrix(object)
-      if(what %in% c("fisher", "internals")) {
-        # compute fisher information 
-        fisher <- checksolve(varcov, matrix.action,
-                             "variance-covariance matrix",
-                             "Fisher information" )
-      }
-    } else {
+    # ++++ perform main calculation ++++
+    if(is.poisson(object) || hessian) {
       # Poisson model, or Hessian of Gibbs model
-      gf <- getglmfit(object)
-      # we need a glm or gam
-      if(is.null(gf)) {
-        if(verbose) 
-          warning("Refitting the model using GLM/GAM")
-        object <- update(object, forcefit=TRUE)
-        gf <- getglmfit(object)
-        if(is.null(gf))
-          stop("Internal error - refitting did not yield a glm object")
-      }
-      # nonstandard calculations?
-      matwt <- resolve.1.default("matwt", argh)
-      new.coef <- resolve.1.default("new.coef", argh)
-      # compute related stuff
-      fi <- fitted(object, type="trend", new.coef=new.coef,
-                   check=FALSE, drop=TRUE)
-      wt <- quad.ppm(object, drop=TRUE)$w
-      # extract model matrix
-      mom <- model.matrix(object, keepNA=FALSE)
-      # apply weights to rows - temporary hack
-      if(!is.null(matwt)) {
-        nwt <- length(matwt)
-        nmom <- nrow(mom)
-        if(nwt != nmom) {
-          ss <- getglmsubset(object)
-          if(length(ss) == nmom && sum(ss) == nwt) {
-            matwt <- matwt[ss]
-          } else stop("Hack argument matwt has incompatible length")
-        }
-        mom <- matwt * mom
-      }
-      # compute Fisher information if not known
-      if(is.null(fisher) || nonstandard) {
-        switch(method,
-               C = {
-                 fisher <- sumouter(mom, fi * wt)
-               },
-               interpreted = {
-                 for(i in 1:nrow(mom)) {
-                   ro <- mom[i, ]
-                   v <- outer(ro, ro, "*") * fi[i] * wt[i]
-                   if(!any(is.na(v)))
-                     fisher <- fisher + v
-                 }
-                 momnames <- dimnames(mom)[[2]]
-                 dimnames(fisher) <- list(momnames, momnames)
-               })
-      }
-      
+      results <- vcalcPois(object, ..., what=what,
+                           matrix.action=matrix.action,
+                           verbose=verbose, fisher=fisher)
+    } else {
+      # Gibbs model 
+      results <- vcalcGibbs(object, ..., what=what,
+                            matrix.action=matrix.action)
     }
-
+    if(is.null(results))
+      return(NULL)
+    varcov <- results$varcov
+    fisher <- results$fisher
+    other  <- results$other
   }
-  
-  ############## end of guts ####################################
   
   if(what %in% c("vcov", "corr") && is.null(varcov)) {
     # Need variance-covariance matrix.
@@ -153,23 +89,118 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
          
   switch(what,
          fisher = { return(fisher) },
-         vcov   = {
-           return(varcov)
-         },
+         vcov   = { return(varcov) },
          corr={
            sd <- sqrt(diag(varcov))
            return(varcov / outer(sd, sd, "*"))
          },
          internals = {
-           return(append(list(fisher=fisher, suff=mom), Alist))
+           return(append(list(fisher=fisher), other))
          })
 }
 
+# ................  variance calculation for Poisson models  .............
 
-vcovGibbs <- function(fit, ..., generic=FALSE) {
+vcalcPois <- function(object, ...,
+                      what = c("vcov", "corr", "fisher", "internals"),
+                      matrix.action=c("warn", "fatal", "silent"),
+                      method=c("C", "interpreted"),
+                      verbose=TRUE,
+                      fisher=NULL, 
+                      matwt=NULL, new.coef=NULL,
+                      saveterms=FALSE) {
+  # variance-covariance matrix of Poisson model,
+  # or Hessian of Gibbs model
+  what <- match.arg(what)
+  method <- match.arg(method)
+  matrix.action <- match.arg(matrix.action)
+  nonstandard <- !is.null(matwt) || !is.null(new.coef) || saveterms
+  # compute Fisher information (Poincare information) if not known
+  if(is.null(fisher) || nonstandard) {
+    gf <- getglmfit(object)
+    # we need a glm or gam
+    if(is.null(gf)) {
+      if(verbose) 
+        warning("Refitting the model using GLM/GAM")
+      object <- update(object, forcefit=TRUE)
+      gf <- getglmfit(object)
+      if(is.null(gf))
+        stop("Internal error - refitting did not yield a glm object")
+    }
+    # compute fitted intensity and sufficient statistic
+    ltype <- if(is.poisson(object)) "trend" else "lambda"
+    lambda <- fitted(object, type=ltype, new.coef=new.coef, check=FALSE)
+    mom <- model.matrix(object)
+    nmom <- nrow(mom)
+    Q <- quad.ppm(object)
+    wt <- w.quad(Q)
+    ok <- getglmsubset(object)
+    Z  <- is.data(Q)
+    # save them
+    if(what == "internals") {
+      internals <-
+        if(!saveterms) list(suff=mom) else
+      list(suff=mom, mom=mom, lambda=lambda, Z=Z, ok=ok)
+    }
+    # Now restrict all terms to the domain of the pseudolikelihood
+    lambda <- lambda[ok]
+    mom <- mom[ok, , drop=FALSE]
+    wt <- wt[ok]
+    Z <- Z[ok]
+    # apply weights to rows of model matrix - temporary hack
+    if(!is.null(matwt)) {
+      nwt <- length(matwt)
+      if(nwt == nmom) {
+        # matwt matches original quadrature scheme - trim it
+        matwt <- matwt[ok]
+      } else if(nwt != sum(ok))
+        stop("Hack argument matwt has incompatible length")
+      mom <- matwt * mom
+    }
+    # compute Fisher information
+    switch(method,
+           C = {
+             fisher <- sumouter(mom, lambda * wt)
+           },
+           interpreted = {
+             for(i in 1:nrow(mom)) {
+               ro <- mom[i, ]
+               v <- outer(ro, ro, "*") * lambda[i] * wt[i]
+               if(!any(is.na(v)))
+                 fisher <- fisher + v
+             }
+             momnames <- dimnames(mom)[[2]]
+             dimnames(fisher) <- list(momnames, momnames)
+           })
+  }
+  switch(what,
+         fisher = {
+           result <- list(fisher=fisher)
+         },
+         corr = ,
+         vcov = {
+           # Derive variance-covariance from Fisher info
+           varcov <- checksolve(fisher, matrix.action,
+                                "Fisher information matrix",
+                                "variance")
+           result <- list(fisher=fisher, varcov=varcov)
+         },
+         internals = {
+           result <- list(fisher=fisher, other=internals)
+         })
+  return(result)
+}
+
+
+# ...................... vcov calculation for Gibbs models ....................
+
+vcalcGibbs <- function(fit, ...,
+                       what = c("vcov", "corr", "fisher", "internals"),
+                       generic=FALSE) {
   verifyclass(fit, "ppm")
+  what <- match.arg(what)
   # decide whether to use the generic, slower algorithm
-  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt")
+  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
   use.generic <-
     generic ||
   !is.stationary(fit) ||
@@ -182,8 +213,30 @@ vcovGibbs <- function(fit, ..., generic=FALSE) {
              c(unordered="contr.treatment",
                ordered="contr.poly"))
   #
-  vc <- if(use.generic) vcovGibbsAJB(fit, ...) else vcovGibbsEgeJF(fit, ...)
-  return(vc)
+  varcov <- if(use.generic) vcovGibbsAJB(fit, ...) else vcovGibbsEgeJF(fit, ...)
+  if(is.null(varcov))
+    return(NULL)
+  # varcov is the variance-covariance matrix, with attributes
+  Alist <- attr(varcov, "A")
+  saved.terms <- attr(varcov, "saved.terms")
+  internals <- append(Alist, saved.terms)
+  # wipe attributes
+  attr(varcov, "A") <- attr(varcov, "saved.terms") <- NULL
+  #
+   if(what %in% c("fisher", "internals")) {
+    # compute fisher information from varcov
+    fisher <- checksolve(varcov, matrix.action,
+                         "variance-covariance matrix",
+                         "Fisher information" )
+   } else fisher <- NULL
+  if(what == "internals") {
+    # ensure sufficient statistic is calculated
+    mom <- saved.terms$mom
+    if(is.null(mom))
+      mom <- model.matrix(fit)
+    internals <- append(internals, list(suff=mom))
+  } 
+  return(list(varcov=varcov, fisher=fisher, other=internals))
 }
 
 ## vcovGibbsAJB
@@ -197,7 +250,8 @@ vcovGibbsAJB <- function(model,
                          algorithm=c("vectorclip", "vector", "basic"),
                          A1 = NULL,
                          A1dummy = FALSE,
-                         matwt = NULL, new.coef = NULL
+                         matwt = NULL, new.coef = NULL,
+                         saveterms = FALSE
                          ) {
   stopifnot(is.ppm(model))
   matrix.action <- match.arg(matrix.action)
@@ -206,9 +260,13 @@ vcovGibbsAJB <- function(model,
     stopifnot(is.numeric(matwt) && is.vector(matwt))
   logi <- model$method=="logi"
   p <- length(coef(model))
-  if(p == 0) return(matrix(, 0, 0))
+  if(p == 0) {
+    # this probably can't happen
+    return(matrix(, 0, 0))
+  }
   pnames <- names(coef(model))
   dnames <- list(pnames, pnames)
+  saved.terms <- if(saveterms) list() else NULL
   #
   sumobj <- summary(model, quick="entries")
   correction <- model$correction
@@ -223,17 +281,13 @@ vcovGibbsAJB <- function(model,
   Z <- is.data(Q)
   W <- as.owin(model)
   #
-  # determine which data points entered into the sum in the pseudolikelihood
-  # (border correction, nonzero cif)
-  # data and dummy:
+  # determine which quadrature points contributed to the
+  # sum/integral in the pseudolikelihood
+  # (e.g. some points may be excluded by the border correction)
   okall <- getglmsubset(model)
   # data only:
   ok <- okall[Z]
-  #
-  #
   nX <- npoints(X)
-  if(nX == 0)
-    return(matrix(NA, p, p, dimnames=dnames))
   # conditional intensity lambda(X[i] | X) = lambda(X[i] | X[-i])
   # data and dummy:
   lamall <- fitted(model, check = FALSE, new.coef = new.coef)
@@ -242,6 +296,11 @@ vcovGibbsAJB <- function(model,
   # sufficient statistic h(X[i] | X) = h(X[i] | X[-i])
   # data and dummy:
   mall <- model.matrix(model)
+  # save
+  if(saveterms) 
+    saved.terms <- append(saved.terms,
+                          list(mom=mall, lambda=lamall, Z=Z, ok=okall,
+                               matwt=matwt))
   if(reweighting) {
     # each column of the model matrix is multiplied by 'matwt'
     check.nvector(matwt, nrow(mall), things="quadrature points")
@@ -251,6 +310,8 @@ vcovGibbsAJB <- function(model,
   # data only:
   m <- mall[Z, , drop=FALSE]
   mok <- m[ok, , drop=FALSE]
+  matwtX <- matwt[Z]
+  # logistic 
   if(logi){
     # Sensitivity matrix S for logistic case
     Slog <- sumouter(mokall, w = lamall[okall]*rho/(lamall[okall]+rho)^2)
@@ -258,7 +319,6 @@ vcovGibbsAJB <- function(model,
     # A1 matrix for logistic case
     A1log <- sumouter(mokall, w = lamall[okall]*rho*rho/(lamall[okall]+rho)^3)
     dimnames(A1log) <- dnames
-    #
   }
   # Sensitivity matrix for MPLE case (= A1)
   if(is.null(A1)) {
@@ -279,11 +339,18 @@ vcovGibbsAJB <- function(model,
   A2 <- A3 <- matrix(0, p, p, dimnames=dnames)
   if(logi)
     A2log <- A3log <- matrix(0, p, p, dimnames=dnames)
+  #
+  if(saveterms) {
+    #  lamdif[i,j] = lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)])
+    lamdif <- matrix(lam, nX, nX)
+    #  momdif[ ,i,j] = h(X[i] | X[-j]) = h(X[i] | X[-c(i,j)])
+    momdif <- array(t(m), dim=c(p, nX, nX))
+  }
   # identify close pairs
   R <- reach(model, epsilon=1e-2)
   if(is.finite(R)) {
-    if(R == 0 && !logi) return(A1)
-    if(R == 0 && logi) return(A1log)
+#    if(R == 0 && !logi) return(A1)    ... redundant
+#    if(R == 0 && logi) return(A1log)  ... redundant
     cl <- closepairs(X, R, what="indices")
     I <- cl$i
     J <- cl$j
@@ -299,261 +366,288 @@ vcovGibbsAJB <- function(model,
     I2 <- I <- IJ$I
     J2 <- J <- IJ$J
   }
-  # Eroded area
-  areaW <- if(correction == "border") eroded.areas(W, rbord) else area.owin(W)
-  #
-  A1 <- A1/areaW
-  if(logi){
-    A1log <- A1log/areaW
-    Slog <- Slog/areaW
-  }
   # filter:  I and J must both belong to the nominated subset 
   okIJ <- ok[I] & ok[J]
   I <- I[okIJ]
   J <- J[okIJ]
   #
-  if(length(I) == 0 && !logi) return(A1)
-  if(length(I) == 0 && logi) return(A1log)
-  # The following ensures that 'empty' and 'X' have compatible marks 
-  empty <- X[integer(0)]
-  # make an empty 'equalpairs' matrix
-  nonE <- matrix(, nrow=0, ncol=2)
-  # Run through pairs
-  switch(algorithm,
-         basic={
-           for(i in unique(I)) {
-             Xi <- X[i]
-             Ji <- unique(J[I==i])
-             if((nJi <- length(Ji)) > 0) {
-               for(k in 1:nJi) {
-                 j <- Ji[k]
-                 X.ij <- X[-c(i,j)]
+  if(length(I) > 0 && length(J) > 0) {
+    # .............. loop over pairs ........................
+    # The following ensures that 'empty' and 'X' have compatible marks 
+    empty <- X[integer(0)]
+    # make an empty 'equalpairs' matrix
+    nonE <- matrix(, nrow=0, ncol=2)
+    # Run through pairs
+    switch(algorithm,
+           basic={
+             for(i in unique(I)) {
+               Xi <- X[i]
+               Ji <- unique(J[I==i])
+               if((nJi <- length(Ji)) > 0) {
+                 for(k in 1:nJi) {
+                   j <- Ji[k]
+                   X.ij <- X[-c(i,j)]
+                   # compute conditional intensity
+                   #    lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
+                   plamj.i <- predict(model, type="cif",
+                                      locations=X[j], X=X.ij,
+                                      check = FALSE,
+                                      new.coef = new.coef,
+                                      sumobj = sumobj, E=nonE)
+                   # corresponding values of sufficient statistic 
+                   #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
+                   pmj.i <- partialModelMatrix(X.ij, X[j], model)[nX-1, ]
+                   # conditional intensity and sufficient statistic
+                   # in reverse order
+                   #    lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)]
+                   plami.j <- predict(model, type="cif",
+                                      locations=X[i], X=X.ij,
+                                      check = FALSE,
+                                      new.coef = new.coef,
+                                      sumobj = sumobj, E=nonE)
+                   pmi.j <- partialModelMatrix(X.ij, Xi, model)[nX-1, ]
+                   # 
+                   if(reweighting) {
+                     pmj.i <- pmj.i * matwtX[j]
+                     pmi.j <- pmi.j * matwtX[i]
+                   }
+                   if(saveterms) {
+                     lamdif[i,j] <- plami.j
+                     momdif[ , i, j] <- pmi.j
+                     lamdif[j,i] <- plamj.i
+                     momdif[ , j, i] <- pmj.i
+                   }
+                   # increment A2, A3
+                   wt <- plami.j / lam[i] - 1
+                   A2 <- A2 + wt * outer(pmi.j, pmj.i)
+                   if(logi)
+                     A2log <- A2log + wt * rho/(plami.j+rho) * rho/(plamj.i+rho) * outer(pmi.j, pmj.i)
+                   # delta sufficient statistic
+                   # delta_i h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X) - h(X[j] | X[-i])
+                   # delta_j h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X) - h(X[i] | X[-j])
+                   deltaiSj <- m[j, ] - pmj.i
+                   deltajSi <- m[i, ] - pmi.j
+                   A3 <- A3 + outer(deltaiSj, deltajSi)
+                   if(logi){
+                     deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj.i/(plamj.i+rho))
+                     deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi.j/(plami.j+rho))
+                     A3log <- A3log + outer(deltaiSjlog, deltajSilog)
+                   }
+                 }
+               }
+             }
+           },
+           vector={
+             # --------- faster algorithm using vector functions ------------
+             for(i in unique(I)) {
+               Ji <- unique(J[I==i])
+               nJi <- length(Ji)
+               if(nJi > 0) {
+                 Xi <- X[i]
+                 # neighbours of X[i]
+                 XJi <- X[Ji]
+                 # all points other than X[i]
+                 X.i <- X[-i]
+                 # index of XJi in X.i
+                 J.i <- Ji - (Ji > i)
+                 # equalpairs matrix
+                 E.i <- cbind(J.i, seq_len(nJi))
                  # compute conditional intensity
-                 #    lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
-                 plamj.i <- predict(model, type="cif",
-                                    locations=X[j], X=X.ij,
-                                    check = FALSE,
-                                    new.coef = new.coef,
-                                    sumobj = sumobj, E=nonE)
+                 #   lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
+                 # for all j
+                 plamj <- predict(model, type="cif",
+                                  locations=XJi, X=X.i,
+                                  check = FALSE,
+                                  new.coef = new.coef,
+                                  sumobj=sumobj, E=E.i)
                  # corresponding values of sufficient statistic 
                  #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
-                 pmj.i <- partialModelMatrix(X.ij, X[j], model)[nX-1, ]
-                 # conditional intensity and sufficient statistic
-                 # in reverse order
+                 # for all j
+                 pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
+                 #
+                 # conditional intensity & sufficient statistic in reverse order
                  #    lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)]
-                 plami.j <- predict(model, type="cif",
-                                    locations=X[i], X=X.ij,
-                                    check = FALSE,
-                                    new.coef = new.coef,
-                                    sumobj = sumobj, E=nonE)
-                 pmi.j <- partialModelMatrix(X.ij, Xi, model)[nX-1, ]
-                 # 
+                 # for all j
+                 plami <- numeric(nJi)
+                 pmi <- matrix(, nJi, p)
+                 for(k in 1:nJi) {
+                   j <- Ji[k]
+                   X.ij <- X[-c(i,j)]
+                   plami[k] <- predict(model, type="cif",
+                                       locations=Xi, X=X.ij,
+                                       check = FALSE,
+                                       new.coef = new.coef,
+                                       sumobj = sumobj, E=nonE)
+                   pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX-1, ]
+                 }
+                 #
                  if(reweighting) {
-                   pmj.i <- pmj.i * matwt[j]
-                   pmi.j <- pmi.j * matwt[i]
+                   pmj <- pmj * matwtX[Ji]
+                   pmi <- pmi * matwtX[i]
+                 }
+                 if(saveterms) {
+                   lamdif[Ji, i] <- plamj
+                   momdif[ , Ji, i] <- t(pmj)
+                   lamdif[i,Ji] <- plami
+                   momdif[ , i, Ji] <- t(pmi)
                  }
                  # increment A2, A3
-                 wt <- plami.j / lam[i] - 1
-                 A2 <- A2 + wt * outer(pmi.j, pmj.i)
-                 if(logi)
-                   A2log <- A2log + wt * rho/(plami.j+rho) * rho/(plamj.i+rho) * outer(pmi.j, pmj.i)
-                 # delta sufficient statistic
-                 # delta_i h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X) - h(X[j] | X[-i])
-                 # delta_j h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X) - h(X[i] | X[-j])
-                 deltaiSj <- m[j, ] - pmj.i
-                 deltajSi <- m[i, ] - pmi.j
-                 A3 <- A3 + outer(deltaiSj, deltajSi)
-                 if(logi){
-                   deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj.i/(plamj.i+rho))
-                   deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi.j/(plami.j+rho))
-                   A3log <- A3log + outer(deltaiSjlog, deltajSilog)
+                 wt <- plami / lam[i] - 1
+                 for(k in 1:nJi) {
+                   j <- Ji[k]
+                   A2 <- A2 + wt[k] * outer(pmi[k,], pmj[k,])
+                   if(logi)
+                     A2log <- A2log + wt[k] * rho/(plami[k]+rho) * rho/(plamj[k]+rho) * outer(pmi[k,], pmj[k,])
+                   # delta sufficient statistic
+                   # delta_i h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X) - h(X[j] | X[-i])
+                   # delta_j h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X) - h(X[i] | X[-j])
+                   deltaiSj <- m[j, ] - pmj[k,]
+                   deltajSi <- m[i, ] - pmi[k,]
+                   A3 <- A3 + outer(deltaiSj, deltajSi)
+                   if(logi){
+                     deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj[k,]/(plamj[k]+rho))
+                     deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi[k,]/(plami[k]+rho))
+                     A3log <- A3log + outer(deltaiSjlog, deltajSilog)
+                   }
                  }
                }
              }
-           }
-         },
-         vector={
-           # --------- faster algorithm using vector functions ------------
-           for(i in unique(I)) {
-             Ji <- unique(J[I==i])
-             nJi <- length(Ji)
-             if(nJi > 0) {
-               Xi <- X[i]
-               # neighbours of X[i]
-               XJi <- X[Ji]
-               # all points other than X[i]
-               X.i <- X[-i]
-               # index of XJi in X.i
-               J.i <- Ji - (Ji > i)
-               # equalpairs matrix
-               E.i <- cbind(J.i, seq_len(nJi))
-               # compute conditional intensity
-               #   lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
-               # for all j
-               plamj <- predict(model, type="cif",
-                                locations=XJi, X=X.i,
-                                check = FALSE,
-                                new.coef = new.coef,
-                                sumobj=sumobj, E=E.i)
-               # corresponding values of sufficient statistic 
-               #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
-               # for all j
-               pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
-               #
-               # conditional intensity and sufficient statistic in reverse order
-               #    lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)]
-               # for all j
-               plami <- numeric(nJi)
-               pmi <- matrix(, nJi, p)
-               for(k in 1:nJi) {
-                 j <- Ji[k]
-                 X.ij <- X[-c(i,j)]
-                 plami[k] <- predict(model, type="cif",
-                                     locations=Xi, X=X.ij,
-                                     check = FALSE,
-                                     new.coef = new.coef,
-                                     sumobj = sumobj, E=nonE)
-                 pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX-1, ]
-               }
-               #
-               if(reweighting) {
-                 pmj <- pmj * matwt[Ji]
-                 pmi <- pmi * matwt[i]
-               }
-               # increment A2, A3
-               wt <- plami / lam[i] - 1
-               for(k in 1:nJi) {
-                 j <- Ji[k]
-                 A2 <- A2 + wt[k] * outer(pmi[k,], pmj[k,])
-                 if(logi)
-                   A2log <- A2log + wt[k] * rho/(plami[k]+rho) * rho/(plamj[k]+rho) * outer(pmi[k,], pmj[k,])
-                 # delta sufficient statistic
-                 # delta_i h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X) - h(X[j] | X[-i])
-                 # delta_j h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X) - h(X[i] | X[-j])
-                 deltaiSj <- m[j, ] - pmj[k,]
-                 deltajSi <- m[i, ] - pmi[k,]
-                 A3 <- A3 + outer(deltaiSj, deltajSi)
-                 if(logi){
-                   deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj[k,]/(plamj[k]+rho))
-                   deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi[k,]/(plami[k]+rho))
-                   A3log <- A3log + outer(deltaiSjlog, deltajSilog)
+           },
+           vectorclip={
+             # --------- faster version of 'vector' algorithm
+             # --------  by removing non-interacting points of X
+             for(i in unique(I)) {
+               # all points within 2R
+               J2i <- unique(J2[I2==i])
+               # all points within R
+               Ji  <- unique(J[I==i])
+               nJi <- length(Ji)
+               if(nJi > 0) {
+                 Xi <- X[i]
+                 # neighbours of X[i]
+                 XJi <- X[Ji]
+                 # replace X[-i] by X[-i] \cap b(0, 2R)
+                 X.i <- X[J2i]
+                 nX.i <- length(J2i)
+                 # index of XJi in X.i
+                 J.i <- match(Ji, J2i)
+                 if(any(is.na(J.i)))
+                   stop("Internal error: Ji not a subset of J2i")
+                 # equalpairs matrix
+                 E.i <- cbind(J.i, seq_len(nJi))
+                 # compute conditional intensity
+                 #   lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
+                 # for all j
+                 plamj <- predict(model, type="cif",
+                                  locations=XJi, X=X.i,
+                                  check = FALSE,
+                                  new.coef = new.coef,
+                                  sumobj = sumobj, E=E.i)
+                 # corresponding values of sufficient statistic 
+                 #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
+                 # for all j
+                 pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
+                 #
+                 # conditional intensity & sufficient statistic in reverse order
+                 #    lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)]
+                 # for all j
+                 plami <- numeric(nJi)
+                 pmi <- matrix(, nJi, p)
+                 for(k in 1:nJi) {
+                   j <- Ji[k]
+                   # X.ij <- X[-c(i,j)]
+                   X.ij <- X.i[-J.i[k]]
+                   plami[k] <- predict(model, type="cif",
+                                       locations=Xi, X=X.ij,
+                                       check = FALSE,
+                                       new.coef = new.coef,
+                                       sumobj = sumobj, E=nonE)
+                   pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX.i, ]
+                 }
+                 #
+                 if(reweighting) {
+                   pmj <- pmj * matwtX[Ji]
+                   pmi <- pmi * matwtX[i]
+                 }
+                 if(saveterms) {
+                   lamdif[Ji, i] <- plamj
+                   momdif[ , Ji, i] <- t(pmj)
+                   lamdif[i,Ji] <- plami
+                   momdif[ , i, Ji] <- t(pmi)
+                 }
+                 # increment A2, A3
+                 wt <- plami / lam[i] - 1
+                 for(k in 1:nJi) {
+                   j <- Ji[k]
+                   A2 <- A2 + wt[k] * outer(pmi[k,], pmj[k,])
+                   if(logi)
+                     A2log <- A2log + wt[k] * rho/(plami[k]+rho) * rho/(plamj[k]+rho) * outer(pmi[k,], pmj[k,])
+                   # delta sufficient statistic
+                   # delta_i h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
+                   # = h(X[j] | X) - h(X[j] | X[-i])
+                   # delta_j h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
+                   # = h(X[i] | X) - h(X[i] | X[-j])
+                   deltaiSj <- m[j, ] - pmj[k,]
+                   deltajSi <- m[i, ] - pmi[k,]
+                   A3 <- A3 + outer(deltaiSj, deltajSi)
+                   if(logi){
+                     deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj[k,]/(plamj[k]+rho))
+                     deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi[k,]/(plami[k]+rho))
+                     A3log <- A3log + outer(deltaiSjlog, deltajSilog)
+                   }
                  }
                }
              }
-           }
-         },
-         vectorclip={
-           # --------- faster version of 'vector' algorithm
-           # --------  by removing non-interacting points of X
-           for(i in unique(I)) {
-             # all points within 2R
-             J2i <- unique(J2[I2==i])
-             # all points within R
-             Ji  <- unique(J[I==i])
-             nJi <- length(Ji)
-             if(nJi > 0) {
-               Xi <- X[i]
-               # neighbours of X[i]
-               XJi <- X[Ji]
-               # replace X[-i] by X[-i] \cap b(0, 2R)
-               X.i <- X[J2i]
-               nX.i <- length(J2i)
-               # index of XJi in X.i
-               J.i <- match(Ji, J2i)
-               if(any(is.na(J.i)))
-                 stop("Internal error: Ji not a subset of J2i")
-               # equalpairs matrix
-               E.i <- cbind(J.i, seq_len(nJi))
-               # compute conditional intensity
-               #   lambda(X[j] | X[-i]) = lambda(X[j] | X[-c(i,j)]
-               # for all j
-               plamj <- predict(model, type="cif",
-                                locations=XJi, X=X.i,
-                                check = FALSE,
-                                new.coef = new.coef,
-                                sumobj = sumobj, E=E.i)
-               # corresponding values of sufficient statistic 
-               #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
-               # for all j
-               pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
-               #
-               # conditional intensity and sufficient statistic in reverse order
-               #    lambda(X[i] | X[-j]) = lambda(X[i] | X[-c(i,j)]
-               # for all j
-               plami <- numeric(nJi)
-               pmi <- matrix(, nJi, p)
-               for(k in 1:nJi) {
-                 j <- Ji[k]
-                 # X.ij <- X[-c(i,j)]
-                 X.ij <- X.i[-J.i[k]]
-                 plami[k] <- predict(model, type="cif",
-                                     locations=Xi, X=X.ij,
-                                     check = FALSE,
-                                     new.coef = new.coef,
-                                     sumobj = sumobj, E=nonE)
-                 pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX.i, ]
-               }
-               #
-               if(reweighting) {
-                 pmj <- pmj * matwt[Ji]
-                 pmi <- pmi * matwt[i]
-               }
-               # increment A2, A3
-               wt <- plami / lam[i] - 1
-               for(k in 1:nJi) {
-                 j <- Ji[k]
-                 A2 <- A2 + wt[k] * outer(pmi[k,], pmj[k,])
-                 if(logi)
-                   A2log <- A2log + wt[k] * rho/(plami[k]+rho) * rho/(plamj[k]+rho) * outer(pmi[k,], pmj[k,])
-                 # delta sufficient statistic
-                 # delta_i h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X[-j]) - h(X[j] | X[-c(i,j)])
-                 # = h(X[j] | X) - h(X[j] | X[-i])
-                 # delta_j h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X[-i]) - h(X[i] | X[-c(i,j)])
-                 # = h(X[i] | X) - h(X[i] | X[-j])
-                 deltaiSj <- m[j, ] - pmj[k,]
-                 deltajSi <- m[i, ] - pmi[k,]
-                 A3 <- A3 + outer(deltaiSj, deltajSi)
-                 if(logi){
-                   deltaiSjlog <- rho*(m[j, ]/(lam[j]+rho) - pmj[k,]/(plamj[k]+rho))
-                   deltajSilog <- rho*(m[i, ]/(lam[i]+rho) - pmi[k,]/(plami[k]+rho))
-                   A3log <- A3log + outer(deltaiSjlog, deltajSilog)
-                 }
-               }
-             }
-           }
-         })
+           })
+  }
+  # ......... end of loop computation ...............
+
+  if(saveterms) 
+    saved.terms <- append(saved.terms, list(lamdif=lamdif, momdif=momdif))
+  # Normalise by eroded area
+  areaW <- if(correction == "border") eroded.areas(W, rbord) else area.owin(W)
+  #
+  A1 <- A1/areaW
   A2 <- A2/areaW
   A3 <- A3/areaW
   if(logi){
+    A1log <- A1log/areaW
     A2log <- A2log/areaW
     A3log <- A3log/areaW
+    Slog <- Slog/areaW
   }
-
   ## Matrix Sigma (A1+A2+A3):
   Sigma <- A1+A2+A3
   ## Finally the result is calculated:
   U <- checksolve(A1, matrix.action, , "variance")
-  if(is.null(U)) return(NULL)
-  mat <- U %*% Sigma %*% U / areaW
-  dimnames(mat) <- dnames
-  #
-  attr(mat, "A") <- list(A1=A1, A2=A2, A3=A3, Sigma=Sigma)
-
-  if(!logi)
+  if(is.null(U)) {
+    mat <- matrix(NA, p, p)
+  } else {
+    mat <- U %*% Sigma %*% U / areaW
+    dimnames(mat) <- dnames
+  }
+  # Add extra information
+  Alist <- list(A1=A1, A2=A2, A3=A3, areaW=areaW, Sigma=Sigma)
+  if(!logi) {
+    attr(mat, "A") <- Alist    
+    attr(mat, "saved.terms") <- saved.terms
     return(mat)
-
+  }
   ###### Everything below is only computed for logistic fits #######
   
+  Alist <- append(Alist,
+                  list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog))
+
   ## Matrix Sigma1log (A1log+A2log+A3log):
   Sigma1log <- A1log+A2log+A3log
   ## Matrix Sigma2log (depends on dummy process type)
@@ -600,8 +694,8 @@ vcovGibbsAJB <- function(model,
 #             ii <- inside.owin(D, w = Wminus)
 #             ii2 <- inside.owin(D2, w = Wminus)
            } else{
-             ii <- rep(TRUE, npoints(D))
-             ii2 <- rep(TRUE, npoints(D2))
+             ii <- rep.int(TRUE, npoints(D))
+             ii2 <- rep.int(TRUE, npoints(D2))
            }
            # OK points of dummy pattern 1 with a valid point of dummy pattern 2 in same stratrand cell (and vice versa)
            okdum <- okall[!Z]
@@ -631,11 +725,17 @@ vcovGibbsAJB <- function(model,
 
   ## Finally the result is calculated:
   Ulog <- checksolve(Slog, matrix.action, , "variance")
-  if(is.null(Ulog)) return(NULL)
-  matlog <- Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
-  dimnames(matlog) <- dnames
+  if(is.null(Ulog)) {
+    matlog <- matrix(NA, p, p)
+  } else {
+    matlog <- Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
+    dimnames(matlog) <- dnames
+  }
   #
-  attr(matlog, "A") <- list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog, Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=mat)
+  attr(matlog, "A") <-
+    append(Alist,
+           list(Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=mat))
+  attr(matlog, "saved.terms") <- saved.terms
 
   return(matlog)
 }
@@ -705,7 +805,7 @@ vcovGibbsEgeJF <- function(fit, ...,
   }
   
   ## Matrix specifying equal points in the two patterns in the call to eval below:
-  E <- matrix(rep(1:n, 2), ncol = 2)
+  E <- matrix(rep.int(1:n, 2), ncol = 2)
 
   ## Eval. the interaction potential difference at all points (internal spatstat function):
   V1 <- fit$interaction$family$eval(Xplus, Xplus, E, fit$interaction$pot, fit$interaction$par, fit$correction)
@@ -732,7 +832,7 @@ vcovGibbsEgeJF <- function(fit, ...,
   }
 
   ## Matrices for differences of potentials:
-  E <- matrix(rep(1:(n-1), 2), ncol = 2)
+  E <- matrix(rep.int(1:(n-1), 2), ncol = 2)
   dV <- V2 <- array(0,dim=c(n,n,p))
 
   for(k in 1:p1){
@@ -926,8 +1026,8 @@ vcovGibbsEgeJF <- function(fit, ...,
              ii <- inside.owin(D, w = W)
              ii2 <- inside.owin(D2, w = W)
            } else{
-             ii <- rep(TRUE, npoints(D))
-             ii2 <- rep(TRUE, npoints(D2))
+             ii <- rep.int(TRUE, npoints(D))
+             ii2 <- rep.int(TRUE, npoints(D2))
            }
            # OK points of dummy pattern 1 with a valid point of dummy pattern 2 in same stratrand cell (and vice versa)
            okdum <- okall[!Z]

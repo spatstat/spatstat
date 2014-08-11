@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.5 $  $Date: 2010/03/08 08:23:04 $
+#  $Revision: 1.6 $  $Date: 2013/04/25 06:37:43 $
 #
 #
 
@@ -66,13 +66,13 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
   }
   
   if(is.null(weights))
-    weights <- rep(1, nseg)
+    weights <- rep.int(1, nseg)
   else {
     if(!is.numeric(weights)) stop("weights must be numeric")
     if(any(is.na(weights))) stop("weights must not be NA")
     if(!all(is.finite(weights))) stop("weights must not be infinite")
     if(length(weights) == 1)
-      weights <- rep(weights, nseg)
+      weights <- rep.int(weights, nseg)
     else if(length(weights) != nseg)
       stop(paste("weights vector has length", length(weights),
                  "but there are", nseg, "line segments"))

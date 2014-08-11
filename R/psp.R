@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.67 $ $Date: 2013/02/10 03:46:10 $
+#  $Revision: 1.68 $ $Date: 2013/04/25 06:37:43 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -281,9 +281,9 @@ marks.psp <- function(x, ..., dfok = TRUE) {
     nseg <- nsegments(x)
     if (!is.data.frame(m) && !is.matrix(m)) {
         if (length(m) == 1) 
-            m <- rep(m, nseg)
+            m <- rep.int(m, nseg)
         else if (nseg == 0) 
-            m <- rep(m, 0)
+            m <- rep.int(m, 0)
         else if (length(m) != nseg) 
             stop("Number of marks != number of line segments.\n")
         marx <- m
@@ -300,7 +300,7 @@ marks.psp <- function(x, ..., dfok = TRUE) {
             else {
                 if (nrow(m) == 1 || nseg == 0) {
                   marx <- as.data.frame(lapply(as.list(m),function(x,k) {
-                    rep(x, k)}, k = nseg))
+                    rep.int(x, k)}, k = nseg))
                 }
                 else stop("Number of rows of data frame != number of points.\n")
             }
@@ -460,15 +460,15 @@ endpoints.psp <- function(x, which="both") {
   n <- x$n
   switch(which,
          both={
-           first <- second <- rep(TRUE, n)
+           first <- second <- rep.int(TRUE, n)
          },
          first={
-           first <- rep(TRUE, n)
-           second <- rep(FALSE, n)
+           first <- rep.int(TRUE, n)
+           second <- rep.int(FALSE, n)
          },
          second={
-           first <- rep(FALSE, n)
-           second <- rep(TRUE, n)
+           first <- rep.int(FALSE, n)
+           second <- rep.int(TRUE, n)
          },
          left={
            first <- (ends$x0 < ends$x1)

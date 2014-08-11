@@ -1,7 +1,7 @@
 #
 #      xysegment.S
 #
-#     $Revision: 1.13 $    $Date: 2012/04/06 09:56:24 $
+#     $Revision: 1.14 $    $Date: 2013/04/25 06:37:43 $
 #
 # Low level utilities for analytic geometry for line segments
 #
@@ -133,7 +133,7 @@ distppll <- function(p, l, mintype=0,
            eps <- .Machine$double.eps
            if(mintype > 0) {
              big <- sqrt(2)*diff(range(c(p,l)))
-             xmin <- rep(big,np)
+             xmin <- rep.int(big,np)
            } else {
              xmin <- 1
            } 
@@ -206,7 +206,7 @@ distppllmin <- function(p, l, big=NULL) {
     ydif <- diff(range(c(p[,2],l[, c(2,4)])))
     big <- 2 * (xdif^2 + ydif^2)
   }
-  dist2 <- rep(big, np)
+  dist2 <- rep.int(big, np)
   #
   DUP <- spatstat.options("dupC")
   z <- .C("nndist2segs",

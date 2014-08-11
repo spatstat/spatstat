@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.91 $   $Date: 2012/08/31 02:16:31 $
+#    $Revision: 1.94 $   $Date: 2013/04/25 06:37:43 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -598,18 +598,21 @@ rebadge.fv <- function(x, new.ylab, new.fname,
 "[.fv" <-
   function(x, i, j, ..., drop=FALSE)
 {
-  Nindices <- (!missing(i)) + (!missing(j))
-  if(Nindices == 0)
-    return(x)
+  igiven <- !missing(i)
+  jgiven <- !missing(j)
   y <- as.data.frame(x)
-  if(Nindices == 2)
-    z <- y[i, j, drop=FALSE]
-  else if(!missing(i))
-    z <- y[i, , drop=FALSE]
-  else
-    z <- y[ , j, drop=FALSE]
+  if(igiven && jgiven)
+    z <- y[i, j, drop=drop]
+  else if(igiven)
+    z <- y[i, , drop=drop]
+  else if(jgiven)
+    z <- y[ , j, drop=drop]
+  else z <- y
 
-  if(missing(j)) 
+  # return only the selected values as a data frame or vector.
+  if(drop) return(z)
+
+  if(!jgiven) 
     selected <- seq_len(ncol(x))
   else {
     nameindices <- seq_along(names(x))
@@ -673,7 +676,9 @@ formula.fv <- function(x, ...) {
 
 #   method for with()
 
-with.fv <- function(data, expr, ..., drop=TRUE, enclos=NULL) {
+with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
+  if(any(names(list(...)) == "drop"))
+    stop("Outdated argument 'drop' used in with.fv")
   cl <- short.deparse(sys.call())
   verifyclass(data, "fv")
   if(is.null(enclos)) 
@@ -703,28 +708,21 @@ with.fv <- function(data, expr, ..., drop=TRUE, enclos=NULL) {
   datadf <- as.data.frame(data)
   results <- eval(expandelang, as.list(datadf), enclos=enclos)
   # --------------------
-  # make sense of the results
-  #
-  nx <- nrow(datadf)
-  # 
+  # commanded to return numerical values only?
+  if(!is.null(fun) && !fun)
+    return(results)
+
   if(!is.matrix(results) && !is.data.frame(results)) {
     # result is a vector
-    if(length(results) != nx) {
-      # format not understood
-#      warning("Calculation produced a vector of the wrong length")
+    if(is.null(fun)) fun <- FALSE
+    if(!fun || length(results) != nrow(datadf))
       return(results)
-    }
-    # result is a vector of the right length
-    if(drop)
-      return(as.vector(results))
-    else
-      results <- matrix(results, nrow=nx, ncol=1)
-  }
-  # result is a matrix or data frame
-  if(nrow(results) != nx) {
-    # format not understood - dump the values
-#    warning("Calculation yielded a matrix or data frame of the wrong dimensions")
-    return(results)
+    results <- matrix(results, ncol=1)
+  } else {
+    # result is a matrix or data frame
+    if(is.null(fun)) fun <- TRUE
+    if(!fun || nrow(results) != nrow(datadf))
+      return(results)
   }
   # result is a matrix or data frame of the right dimensions
   # make a new fv object
@@ -789,8 +787,6 @@ with.fv <- function(data, expr, ..., drop=TRUE, enclos=NULL) {
   return(out)
 }
 
-
-  
 # stieltjes integration for fv objects
 
 stieltjes <- function(f, M, ...) {

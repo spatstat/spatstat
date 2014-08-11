@@ -1,7 +1,7 @@
 #
 #  dist2dpath.R
 #
-#   $Revision: 1.5 $    $Date: 2011/12/20 06:25:53 $
+#   $Revision: 1.6 $    $Date: 2013/04/25 06:37:43 $
 #
 #       dist2dpath    compute shortest path distances
 #

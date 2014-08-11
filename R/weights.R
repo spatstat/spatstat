@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.28 $	$Date: 2012/10/09 04:18:51 $
+#	$Revision: 4.29 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 # Main functions:
@@ -115,7 +115,7 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
         if(is.null(ntile))
           ntile <- default.ntile(X)
         if(length(ntile) == 1)
-          ntile <- rep(ntile, 2)
+          ntile <- rep.int(ntile, 2)
         nx <- ntile[1]
         ny <- ntile[2]
 
@@ -127,7 +127,7 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
           if(win$type == "rectangle") {
 
             tilearea <- area.owin(win)/(nx * ny)
-            areas <- rep(tilearea, nx * ny)
+            areas <- rep.int(tilearea, nx * ny)
 
           } else {
             # convert window to mask
@@ -139,7 +139,7 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
                 np <- npix
               else {
                 np <- rev(spatstat.options("npixel"))
-                if(length(np) == 1) np <- rep(np, 2)
+                if(length(np) == 1) np <- rep.int(np, 2)
               }
               cat(paste("Approximating window by mask (",
                         np[1], " x ", np[2], " pixels)\n", sep=""))

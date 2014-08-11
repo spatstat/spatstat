@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.22 $     $Date: 2012/09/06 07:42:33 $
+#       $Revision: 5.23 $     $Date: 2013/04/25 06:37:43 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -29,8 +29,8 @@ gridcentres <- function(window, nx, ny) {
 	yr <- window$yrange
 	x <- seq(from=xr[1], to=xr[2], length.out = 2 * nx + 1)[2 * (1:nx)]
 	y <- seq(from=yr[1], to=yr[2], length.out = 2 * ny + 1)[2 * (1:ny)]
-	x <- rep(x, ny)
-	y <- rep(y, rep(nx, ny))
+	x <- rep.int(x, ny)
+	y <- rep.int(y, rep.int(nx, ny))
 	return(list(x=x, y=y))
 }
 
@@ -44,8 +44,8 @@ stratrand <- function(window,nx,ny, k=1) {
 	wide  <- diff(window$xrange)/nx
 	high  <- diff(window$yrange)/ny
         cent <- gridcentres(window, nx, ny)
-	cx <- rep(cent$x, k)
-	cy <- rep(cent$y, k)
+	cx <- rep.int(cent$x, k)
+	cy <- rep.int(cent$y, k)
 	n <- nx * ny * k
 	x <- cx + runif(n, min = -wide/2, max = wide/2)
 	y <- cy + runif(n, min = -high/2, max = high/2)

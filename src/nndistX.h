@@ -5,7 +5,8 @@
 
   Code template for C functions supporting nncross
 
-  THE FOLLOWING CODE ASSUMES THAT y IS SORTED IN ASCENDING ORDER
+  THE FOLLOWING CODE ASSUMES THAT LISTS ARE SORTED
+  IN ASCENDING ORDER OF y COORDINATE
 
   This code is #included multiple times in nndistance.c 
   Variables used:
@@ -23,7 +24,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2012/06/15 01:53:28 $
+  $Revision: 1.4 $  $Date: 2013/03/12 01:29:46 $
 
 
 */

@@ -1,7 +1,7 @@
 #
 #     dg.S
 #
-#    $Revision: 1.15 $	$Date: 2012/01/18 11:32:24 $
+#    $Revision: 1.16 $	$Date: 2013/04/25 06:37:43 $
 #
 #     Diggle-Gratton pair potential
 #
@@ -112,7 +112,7 @@ DiggleGratton <- local({
          delta <- potpars$delta
          rho   <- potpars$rho
          idX <- seq_len(npoints(X))
-         idU <- rep(-1, npoints(U))
+         idU <- rep.int(-1, npoints(U))
          idU[EqualPairs[,2]] <- EqualPairs[,1]
          answer <- diggraterms(U, X, idU, idX, delta, rho)
          answer <- log(pmax(0, answer))

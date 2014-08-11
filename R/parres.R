@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.48 $  $Date: 2011/11/25 03:06:39 $
+#   $Revision: 1.1 $  $Date: 2013/04/25 06:37:43 $
 #
 
 parres <- function(model, covariate, ...,
@@ -44,11 +44,11 @@ parres <- function(model, covariate, ...,
   lam <- fitted(model, type="trend")
   # subset of quadrature points used to fit model
   subQset <- getglmsubset(model)
-  if(is.null(subQset)) subQset <- rep(TRUE, nQ)
+  if(is.null(subQset)) subQset <- rep.int(TRUE, nQ)
   # restriction to subregion
   insubregion <- if(!is.null(subregion)) {
     inside.owin(quadpoints, w=subregion)
-  } else rep(TRUE, nQ)
+  } else rep.int(TRUE, nQ)
 
   ################################################################
   # Inverse lambda residuals
@@ -95,7 +95,7 @@ parres <- function(model, covariate, ...,
     } else if(covname %in% offset.covars) {
       # an offset term only
       covtype <- "offset"
-      mf <- model.frame(model, subset=rep(TRUE, n.quad(Q)))
+      mf <- model.frame(model, subset=rep.int(TRUE, n.quad(Q)))
       if(!(covname %in% colnames(mf)))
         stop(paste("Internal error: offset term", covname,
                    "not found in model frame"))
@@ -172,7 +172,7 @@ parres <- function(model, covariate, ...,
       }
       # 
       termnames <- rownames(dmat)[relevant]
-      isoffset <- rep(FALSE, length(termnames))
+      isoffset <- rep.int(FALSE, length(termnames))
       names(isoffset) <- termnames
       # Extract relevant canonical covariates
       mm <-  model.matrix(model)
@@ -238,11 +238,11 @@ parres <- function(model, covariate, ...,
       offnames <- rownames(offmat)[relevant]
       termnames <- c(termnames, offnames)
       noff <- length(offnames)
-      termbetas <- c(termbetas, rep(1, noff))
-      isoffset  <- c(isoffset, rep(TRUE, noff))
+      termbetas <- c(termbetas, rep.int(1, noff))
+      isoffset  <- c(isoffset, rep.int(TRUE, noff))
       names(termbetas) <- names(isoffset) <- termnames
       # extract values of relevant offset 
-      mf <- model.frame(model, subset=rep(TRUE, n.quad(Q)))
+      mf <- model.frame(model, subset=rep.int(TRUE, n.quad(Q)))
       if(any(nbg <- !(offnames %in% colnames(mf))))
         stop(paste("Internal error:",
                    ngettext(sum(nbg), "offset term", "offset terms"),
@@ -521,7 +521,7 @@ print.parres <- function(x, ...) {
            cancovs <- s$cancovs
            med <- s$mediator
            isoffset <- s$isoffset
-           if(is.null(isoffset)) isoffset <- rep(FALSE, length(cancovs))
+           if(is.null(isoffset)) isoffset <- rep.int(FALSE, length(cancovs))
            ncc <- length(cancovs)
            noff <- sum(isoffset)
            nother <- sum(!isoffset)

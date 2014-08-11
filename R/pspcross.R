@@ -3,12 +3,18 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.11 $   $Date: 2011/08/09 10:55:20 $
+#    $Revision: 1.12 $   $Date: 2013/04/25 06:37:43 $
 #
 #
-crossing.psp <- function(A,B) {
+crossing.psp <- function(A,B,fatal=TRUE) {
   verifyclass(A, "psp")
   verifyclass(B, "psp")
+  
+  # first check for intersection of windows
+  ABW <- intersect.owin(A$window, B$window, fatal=fatal)
+  if(is.null(ABW)) 
+    return(NULL)
+  
   eps <- .Machine$double.eps
 
   na <- A$n
@@ -75,7 +81,7 @@ crossing.psp <- function(A,B) {
     xx <- out[[5]]
     yy <- out[[6]]
   }
-  result <- ppp(xx, yy, window=intersect.owin(A$window, B$window), check=FALSE)
+  result <- ppp(xx, yy, window=ABW, check=FALSE)
   return(result)
 }
 

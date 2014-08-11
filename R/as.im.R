@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.38 $   $Date: 2012/12/03 04:49:34 $
+#    $Revision: 1.39 $   $Date: 2013/04/25 06:37:43 $
 #
 #    as.im()
 #
@@ -122,7 +122,7 @@ as.im.function <- function(X, W=NULL, ...,
         vector(mode=typeof(val), length=msize)
       else {
         lev <- levels(val)
-        factor(rep(lev[1], msize), levels=lev)
+        factor(rep.int(lev[1], msize), levels=lev)
       }
     # copy values, assigning NA outside window
     values[inside] <- val
@@ -168,7 +168,7 @@ as.im.default <- function(X, W=NULL, ...,
   if((is.vector(X) || is.factor(X)) && length(X) == 1) {
     # numerical value: interpret as constant function
     xvalue <- X
-    X <- function(xx, yy, ...) { rep(xvalue, length(xx)) }
+    X <- function(xx, yy, ...) { rep.int(xvalue, length(xx)) }
     return(as.im(X, W, ..., dimyx=dimyx, na.replace=na.replace))
   }
   

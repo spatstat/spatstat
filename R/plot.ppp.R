@@ -1,7 +1,7 @@
 #
 #	plot.ppp.S
 #
-#	$Revision: 1.49 $	$Date: 2011/08/07 01:17:06 $
+#	$Revision: 1.50 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 #--------------------------------------------------------------------------
@@ -250,7 +250,7 @@ plot.ppp <-
                  sQuote("chars"),
                  "is not equal to the number of types"))
     else
-      explicit$chars <- chars <- rep(chars, ntypes)
+      explicit$chars <- chars <- rep.int(chars, ntypes)
   }
 
   if(!is.null(cols) && ((ncols <- length(cols)) != ntypes)) {
@@ -259,7 +259,7 @@ plot.ppp <-
                  sQuote("cols"),
                  "is not equal to the number of types"))
     else
-      explicit$cols <- cols <- rep(cols, ntypes)
+      explicit$cols <- cols <- rep.int(cols, ntypes)
   }
     
   for(i in seq_along(um)) {

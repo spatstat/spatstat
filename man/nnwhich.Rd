@@ -8,8 +8,8 @@
 }
 \usage{
   nnwhich(X, \dots)
-  \method{nnwhich}{ppp}(X, \dots, k=1, method="C")
-  \method{nnwhich}{default}(X, Y=NULL, \dots, k=1, method="C")
+  \method{nnwhich}{ppp}(X, \dots, k=1, by=NULL, method="C")
+  \method{nnwhich}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
 }
 \arguments{
   \item{X,Y}{
@@ -30,6 +30,10 @@
   \item{k}{
     Integer, or integer vector. The algorithm will compute the distance to the
     \code{k}th nearest neighbour. 
+  }
+  \item{by}{
+    Optional. A factor, which separates \code{X} into groups.
+    The algorithm will find the nearest neighbour in each group. 
   }
   \item{method}{String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
@@ -52,6 +56,11 @@
   matrix \code{m} such that \code{m[i,j]} is the
   index of the \code{k[j]}th nearest neighbour for the
   \code{i}th data point.
+
+  If the argument \code{by} is given, then the result is a data frame
+  containing the indices described above, from each point of \code{X},
+  to the nearest point in each subset of \code{X}
+  defined by the factor \code{by}.
 }
 \details{
   For each point in the given point pattern, this function finds
@@ -79,6 +88,13 @@
   If it is a vector, then the \eqn{k}th nearest neighbour distances are
   computed for each value of \eqn{k} specified in the vector.
 
+  If the argument \code{by} is given, it should be a \code{factor},
+  of length equal to the number of points in \code{X}.
+  This factor effectively partitions \code{X} into subsets,
+  each subset associated with one of the levels of \code{X}.
+  The algorithm will then find, for each point of \code{X},
+  the nearest neighbour \emph{in each subset}.
+
   If there are no points (if \code{x} has length zero)
   a numeric vector of length zero is returned.
   If there is only one point (if \code{x} has length 1),
@@ -99,6 +115,12 @@
 
   To find the nearest neighbours from one point pattern
   to another point pattern, use \code{\link{nncross}}.
+}
+\section{Nearest neighbours of each type}{
+  If \code{X} is a multitype point pattern 
+  and \code{by=marks(X)}, then the algorithm will find,
+  for each point of \code{X}, the nearest neighbour
+  of each type. See the Examples. 
 }
 \section{Warnings}{
   A value of \code{NA} is returned if there is only one point
@@ -125,6 +147,9 @@
    B <- cells[m[self]]
    plot(cells)
    segments(A$x, A$y, B$x, B$y)
+
+   # nearest neighbours of each type
+   head(nnwhich(ants, by=marks(ants)))
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}

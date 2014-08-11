@@ -126,7 +126,7 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
 \references{
   Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
   Decomposition of variance for spatial Cox processes.
-  Manuscript submitted for publication.
+  \emph{Scandinavian Journal of Statistics} \bold{40}, 119-137.
 
   Waagepetersen, R. (2007)
   An estimating function approach to inference for

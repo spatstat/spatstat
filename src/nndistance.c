@@ -7,19 +7,25 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.15 $     $Date: 2012/03/18 07:11:23 $
+  $Revision: 1.17 $     $Date: 2013/03/12 01:40:33 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT y IS SORTED IN ASCENDING ORDER 
 
+  SINGLE LIST:
   nndistsort    Nearest neighbour distances 
   nnwhichsort   Nearest neighbours
   nnsort        Nearest neighbours & distances
 
-  nnXwhich      Nearest neighbour from one list to another
-  nnXexclude    Nearest neighbour from one list to another, with overlaps
+  ONE LIST TO ANOTHER LIST:
+  nnXdist       Nearest neighbour distance from one list to another
+  nnXwhich      Nearest neighbour ID from one list to another
+  nnX           Nearest neighbour ID & distance from one list to another
 
-  knndsort      k-th nearest neighbour distances
-  knnsort       k-th nearest neighbours and their distances
+  ONE LIST TO ANOTHER OVERLAPPING LIST:
+  nnXEdist      Nearest neighbour distance from one list to another, overlapping
+  nnXEwhich     Nearest neighbour ID from one list to another, overlapping
+  nnXE          Nearest neighbour ID & distance 
+
 */
 
 #undef SPATSTAT_DEBUG
@@ -166,40 +172,4 @@ double sqrt();
 #define WHICH
 #define EXCLUDE
 #include "nndistX.h"
-
-
-/*    -------------- k-th nearest neighbours ------------------ */
-
-/* 
-   knndsort 
-
-   nearest neighbours 1:kmax
-
-*/
-
-#undef FNAME
-#undef DIST
-#undef WHICH
-#undef EXCLUDE
-#define FNAME knndsort
-#define DIST
-#include "knndist.h"
-
-/* 
-   knnsort 
-
-   nearest neighbours 1:kmax
-
-   returns distances and indices
-
-*/
-
-#undef FNAME
-#undef DIST
-#undef WHICH
-#undef EXCLUDE
-#define FNAME knnsort
-#define DIST
-#define WHICH
-#include "knndist.h"
 

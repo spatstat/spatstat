@@ -1,7 +1,7 @@
 #
 # split.ppx.R
 #
-# $Revision: 1.2 $ $Date: 2012/06/06 02:58:32 $
+# $Revision: 1.3 $ $Date: 2013/04/25 06:37:43 $
 #
 # split.ppx etc
 #
@@ -135,7 +135,7 @@ print.summary.splitppx <- function(x, ...) {
   class(x) <- c("splitppx", class(x))
   if(is.factor(f)) {
     lev <- levels(f)
-    fsplit <- factor(rep(lev, unlist(lapply(x, npoints))), levels=lev)
+    fsplit <- factor(rep.int(lev, unlist(lapply(x, npoints))), levels=lev)
   }
   attr(x, "fsplit") <- fsplit
   x

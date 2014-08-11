@@ -1,13 +1,14 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.13 $ $Date: 2012/12/06 04:34:03 $
+#  $Revision: 1.15 $ $Date: 2013/04/25 06:37:43 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
 #     resolve.defaults(list1, list2, list3, .......)
 # where the earlier lists have priority 
 #
+
 resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
   # Each argument is a list. Append them.
   argue <- c(...)
@@ -80,3 +81,4 @@ passthrough <- function(.Fun, ..., .Fname=NULL) {
   # return the *other* arguments
   return(mcargs[!known])
 }
+

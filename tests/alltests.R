@@ -1195,7 +1195,14 @@ local({
   b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match")
-  
+# ...
+# and again for a non-integer value of 'sat'
+# (spotted by Thordis Linda Thorarinsdottir)  
+  G <- Geyer(0.11, 2.5)
+  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  if(!all(a==b))
+    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat is not an integer")
 })
 
 require(spatstat)
@@ -1724,4 +1731,39 @@ local({
   lamX <- density(redwood, at="points")
   KX <- Kinhom(redwood, lamX)
   
+})
+#
+# tests/slrm.R
+#
+# $Revision: 1.1 $ $Date: 2013/04/19 10:14:52 $
+#
+# Test slrm fitting and prediction when there are NA's
+#
+
+require(spatstat)
+local({
+  X <- copper$SouthPoints
+  W <- owin(poly=list(x=c(0,35,35,1),y=c(1,1,150,150)))
+  Y <- X[W]
+  fit <- slrm(Y ~ x+y)
+  pred <- predict(fit)
+})
+
+
+# tests/linalgeb.R
+# checks validity of linear algebra code
+#  $Revision: 1.2 $ $Date: 2013/04/18 09:14:37 $
+require(spatstat)
+local({
+  p <- 3
+  n <- 4
+  x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
+  w <- matrix(1:(n*n), n, n)
+  y <- matrix(numeric(p * p), p, p)
+  for(i in 1:n)
+    for(j in (1:n)[-i])
+      y <- y + w[i,j] * outer(x[,i,j], x[,j,i])
+  z <- sumsymouter(x, w)
+  if(!identical(y,z))
+    stop("sumsymouter gives incorrect result")
 })

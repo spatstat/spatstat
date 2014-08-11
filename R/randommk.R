@@ -4,7 +4,7 @@
 #
 #   Random generators for MULTITYPE point processes
 #
-#   $Revision: 1.30 $   $Date: 2012/08/20 03:48:56 $
+#   $Revision: 1.31 $   $Date: 2013/04/25 06:37:43 $
 #
 #   rmpoispp()   random marked Poisson pp
 #   rmpoint()    n independent random marked points
@@ -78,7 +78,7 @@
     if(is.null(lmax))
       maxes <- rep(NULL, ntypes)
     else if(is.numvector(lmax) && length(lmax) == 1)
-      maxes <- rep(lmax, ntypes)
+      maxes <- rep.int(lmax, ntypes)
     else if(length(lmax) != ntypes)
       stop(paste("The length of",
                  sQuote("lmax"),
@@ -93,7 +93,7 @@
 
     # Ensure that m can be passed as a single value to function(x,y,m,...)
     slice.fun <- function(x,y,fun,mvalue, ...) {
-      m <- if(length(mvalue) == 1) rep(mvalue, length(x)) else mvalue
+      m <- if(length(mvalue) == 1) rep.int(mvalue, length(x)) else mvalue
       result <- fun(x,y,m, ...)
       return(result)
     }
@@ -205,7 +205,7 @@
   if(is.null(fmax))
     maxes <- rep(NULL, ntypes)
   else if(is.constant(fmax))
-    maxes <- rep(fmax, ntypes)
+    maxes <- rep.int(fmax, ntypes)
   else if(length(fmax) != ntypes)
     stop(paste("The length of", sQuote("fmax"),
                "does not match the number of possible types"))
@@ -241,12 +241,12 @@
     } else {
        #single argument
       if(is.constant(f))
-        ptypes <- rep(1/ntypes, ntypes)
+        ptypes <- rep.int(1/ntypes, ntypes)
       else {
         # f is a function (x,y,m)
         # create a counterpart of f that works when m is a single value
         g <- function(xx, yy, ..., m, f) {
-          mm <- rep(m, length(xx))
+          mm <- rep.int(m, length(xx))
           f(xx, yy, mm, ...)
         }
         # then convert to images and integrate
@@ -271,7 +271,7 @@
     nn <- table(marques)
   } else {
     # multinomial: fixed number n[i] of types[i]
-    repmarks <- factor(rep(types, n), levels=types)
+    repmarks <- factor(rep.int(types, n), levels=types)
     marques <- sample(repmarks)
     nn <- n
   }
@@ -296,7 +296,7 @@
       # want to call f(x,y,m, ...)
       # create a counterpart of f that works when m is a single value
       gg <- function(xx, yy, ..., m, fun) {
-        mm <- rep(m, length(xx))
+        mm <- rep.int(m, length(xx))
         fun(xx, yy, mm, ...)
       }
       Y <- rpoint(nn[i], gg, fmax=maxes[i], win=win,
@@ -327,7 +327,7 @@ rmpoint.I.allim <- function(n, f, types) {
     ppix <- as.vector(imag$v[w$m]) # not normalised - OK
     npix <- length(xpix)
     return(list(xpix=xpix, ypix=ypix, ppix=ppix,
-                dx=rep(dx,npix), dy=rep(dy, npix),
+                dx=rep.int(dx,npix), dy=rep.int(dy, npix),
                 npix=npix))
   }
   stuff <- lapply(f, get.stuff)
@@ -339,7 +339,7 @@ rmpoint.I.allim <- function(n, f, types) {
   dy <- unlist(lapply(stuff, function(z) { z$dy }))
   # replicate types
   numpix <- unlist(lapply(stuff, function(z) { z$npix }))
-  tpix <- rep(seq_along(types), numpix)
+  tpix <- rep.int(seq_along(types), numpix)
   #
   # sample pixels from union of all images
   #

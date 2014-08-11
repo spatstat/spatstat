@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.29 $     $Date: 2012/05/15 07:09:34 $
+#     $Revision: 1.30 $     $Date: 2013/04/25 06:37:43 $
 #
 
 eval.im <- function(expr, envir, harmonize=TRUE) {

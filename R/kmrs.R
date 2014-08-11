@@ -9,7 +9,7 @@
 #	reduced.sample()
 #       km.rs()
 #
-#	$Revision: 3.23 $	$Date: 2012/12/22 11:07:05 $
+#	$Revision: 3.24 $	$Date: 2013/04/25 06:37:43 $
 #
 #	The functions in this file produce vectors `km' and `rs'
 #	where km[k] and rs[k] are estimates of F(breaks[k+1]),

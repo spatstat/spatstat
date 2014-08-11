@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.32 $ $Date: 2011/02/15 07:41:16 $
+# $Revision: 1.33 $ $Date: 2013/04/25 06:37:43 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -134,7 +134,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     if(type == "eem") 
       ExZ <- apply(Z$v, 2, function(column) { sum(!is.na(column)) }) * Z$xstep
     else 
-      ExZ <- rep(0, length(xZ))
+      ExZ <- numeric(length(xZ))
     result$xmargin <- list(x=Z$xcol, xZ=xZ, ExZ=ExZ)
   }
   
@@ -143,7 +143,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     if(type == "eem")
       EyZ <- apply(Z$v, 1, function(roww) { sum(!is.na(roww)) }) * Z$ystep
     else
-      EyZ <- rep(0, length(yZ))
+      EyZ <- numeric(length(yZ))
     result$ymargin <- list(y=Z$yrow, yZ=yZ, EyZ=EyZ)
   }
   

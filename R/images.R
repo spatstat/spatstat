@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.98 $     $Date: 2013/02/11 09:22:14 $
+#         $Revision: 1.101 $     $Date: 2013/04/25 06:37:43 $
 #
 #      The class "im" of raster images
 #
@@ -578,7 +578,7 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
   } else {
     niets <- factor(NA, levels=levels(Z))
   }
-  value <- rep(niets, length(x))
+  value <- rep.int(niets, length(x))
                
   # test whether inside bounding rectangle
   xr <- Z$xrange
@@ -692,13 +692,13 @@ sum.im <- function(x, ...) {
 median.im <- function(x, ...) {
   verifyclass(x, "im")
   xvalues <- x[drop=TRUE]
-  return(median(xvalues))
+  return(median(xvalues, ...))
 }
 
 range.im <- function(x, ...) {
   verifyclass(x, "im")
   xvalues <- x[drop=TRUE]
-  return(range(xvalues))
+  return(range(xvalues, ...))
 }
 
 max.im <- function(x, ...) {
@@ -801,7 +801,7 @@ integral.im <- function(x, ...) {
 
 conform.imagelist <- function(X, Zlist) {
   # determine points of X where all images in Zlist are defined
-  ok <- rep(TRUE, length(X$x))
+  ok <- rep.int(TRUE, length(X$x))
   for(i in seq_along(Zlist)) {
     Zi <- Zlist[[i]]
     ZiX <- Zi[X, drop=FALSE]

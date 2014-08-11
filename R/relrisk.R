@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.17 $  $Date: 2013/02/17 23:48:03 $
+#  $Revision: 1.18 $  $Date: 2013/04/15 07:27:11 $
 #
 
 relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
@@ -194,6 +194,7 @@ bw.relrisk <- function(X, method="likelihood",
   # compute cross-validation criterion
   switch(method,
          likelihood={
+           methodname <- "Likelihood"
            # for efficiency, only compute the estimate of p_j(x_i)
            # when j = m_i = mark of x_i.
            Dthis <- numeric(n)
@@ -208,6 +209,7 @@ bw.relrisk <- function(X, method="likelihood",
            }
          },
          leastsquares={
+           methodname <- "Least Squares"
            for(i in seq_len(nh)) {
              phat <- smooth.ppp(X01, sigma=h[i], at="points", leaveoneout=TRUE,
                                 sorted=TRUE)
@@ -215,6 +217,7 @@ bw.relrisk <- function(X, method="likelihood",
            }
          },
          weightedleastsquares={
+           methodname <- "Weighted Least Squares"
            # need initial value of h from least squares
            h0 <- bw.relrisk(X, "leastsquares", nh=ceiling(nh/4))
            phat0 <- smooth.ppp(X01, sigma=h0, at="points", leaveoneout=TRUE,
@@ -238,8 +241,9 @@ bw.relrisk <- function(X, method="likelihood",
                   "use arguments hmin, hmax to specify a wider interval"))
   #    
   result <- bw.optim(cv, h, iopt,
-                     xlab="sigma", ylab=paste(method, "CV"),
-                     creator="bw.relrisk")
+                     hname="sigma", 
+                     creator="bw.relrisk",
+                     criterion=paste(methodname, "Cross-Validation"))
   return(result)
 }
 

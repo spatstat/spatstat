@@ -14,7 +14,7 @@ fii <- function(interaction=NULL, coefs=numeric(0),
       stop("Coefficients inappropriate for Poisson process")
   }
   if(is.null(IsOffset))
-    IsOffset <- rep(FALSE, length(Vnames))
+    IsOffset <- rep.int(FALSE, length(Vnames))
   else {
     stopifnot(is.logical(IsOffset))
     stopifnot(length(IsOffset) == length(Vnames))

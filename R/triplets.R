@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.11 $	$Date: 2013/02/22 05:43:36 $
+#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
 #
 #    The triplets interaction
 #
@@ -43,10 +43,10 @@ Triplets <- local({
     mapXU <- integer(nX)
     mapXU[iXX] <- iXU
     # construct map from U index to X index 
-    mapUX <- rep(NA, nU)
+    mapUX <- rep.int(NA_integer_, nU)
     mapUX[iXU] <- iXX
     # logical vector identifying which quadrature points are in X
-    isdata <- rep(FALSE, nU)
+    isdata <- rep.int(FALSE, nU)
     isdata[iXU] <- TRUE
     # identify all close pairs u, x
     r <- pars$r
@@ -70,7 +70,7 @@ Triplets <- local({
       cat(paste(nrow(tri), "triangles identified\n"))
     if(nrow(tri) == 0) {
       # there are no triangles; return vector of zeroes
-      return(rep(0, nU-nmiss))
+      return(rep.int(0, nU-nmiss))
     }
     # count triangles containing a given quadrature point
     tcount <- apply(tri, 2,
@@ -88,7 +88,7 @@ Triplets <- local({
       tXcount <- rowSums(tXcount)
     } else {
       # there are no triangles of data points
-      tXcount <- rep(0, nX)
+      tXcount <- rep.int(0, nX)
     }
     #
     answer <- tcount

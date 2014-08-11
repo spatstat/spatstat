@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.2 $ $Date: 2012/11/10 10:56:55 $
+#  $Revision: 1.3 $ $Date: 2013/04/25 06:37:43 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
@@ -122,7 +122,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   # pack up
   Gdf <- data.frame(r=r, theo = 1 - exp(- lmin * pi * r^2))
   desc <- c("distance argument r", "theoretical Poisson %s")
-  theo.denom <- rep(npts, nr)
+  theo.denom <- rep.int(npts, nr)
   G <- ratfv(Gdf, NULL, theo.denom,
              "r", quote(Ginhom(r)),
              "theo", NULL, c(0,rmax),
@@ -271,7 +271,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   # pack up
   Fdf <- data.frame(r=r, theo = 1 - exp(- lmin * pi * r^2))
   desc <- c("distance argument r", "theoretical Poisson %s")
-  theo.denom <- rep(npts, nr)
+  theo.denom <- rep.int(npts, nr)
   FX <- ratfv(Fdf, NULL, theo.denom,
              "r", quote(Finhom(r)),
              "theo", NULL, c(0,rmax),

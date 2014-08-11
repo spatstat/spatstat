@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.12 $   $Date: 2013/02/11 08:58:30 $
+#   $Revision: 1.13 $   $Date: 2013/04/25 06:37:43 $
 #
 #
 

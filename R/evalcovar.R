@@ -3,7 +3,7 @@
 #
 #   evaluate covariate values at data points and at pixels
 #
-# $Revision: 1.9 $ $Date: 2013/01/31 07:55:17 $
+# $Revision: 1.10 $ $Date: 2013/04/25 06:37:43 $
 #
 
 evalCovar <- function(model, covariate, ...) {
@@ -131,7 +131,7 @@ evalCovar.ppm <- function(model, covariate, ...,
       lambda <- predict(model, locations=loc)
       # pixel areas
       pixelarea <- unlist(lapply(Z, function(z) {
-        with(z, rep(xstep * ystep, sum(!is.na(v))))
+        with(z, rep.int(xstep * ystep, sum(!is.na(v))))
       }))
     } else if(is.function(covariate)) {
       type <- "function"
@@ -154,7 +154,7 @@ evalCovar.ppm <- function(model, covariate, ...,
       covname <- singlestring(covname)
       # pixel areas
       pixelarea <- unlist(lapply(Z, function(z) {
-        with(z, rep(xstep * ystep, sum(!is.na(v))))
+        with(z, rep.int(xstep * ystep, sum(!is.na(v))))
       }))
     } else stop(paste("For a multitype point process model,",
                       "the covariate should be an image, a list of images,",

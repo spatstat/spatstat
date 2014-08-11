@@ -4,7 +4,7 @@
 #	S function empty.space()
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.31 $	$Date: 2012/11/13 09:13:34 $
+#	$Revision: 4.32 $	$Date: 2013/04/25 06:37:43 $
 #
 "Fest" <- 	
 "empty.space" <-
@@ -31,9 +31,9 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   
 # choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
-  if(is.null(correction))
+  if(is.null(correction)) {
     correction <- c("rs", "km", "cs")
-  correction <- pickoption("correction", correction,
+  } else correction <- pickoption("correction", correction,
                            c(none="none",
                              border="rs",
                              rs="rs",
@@ -43,6 +43,7 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
                              cs="cs",
                              ChiuStoyan="cs",
                              Hanisch="cs",
+                             han="cs",
                              best="km"),
                            multi=TRUE)
   
@@ -54,7 +55,7 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
           c("distance argument r", "theoretical Poisson %s"),
           fname="F")
   nr <- length(rvals)
-  zeroes <- rep(0, nr)
+  zeroes <- numeric(nr)
 #
 #  compute distances and censoring distances
   if(X$window$type == "rectangle") {

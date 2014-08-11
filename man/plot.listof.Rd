@@ -8,7 +8,8 @@
   \method{plot}{listof}(x, \dots, main, arrange=TRUE,
    nrows=NULL, ncols=NULL, main.panel=NULL, mar.panel=c(2,1,1,2),
    panel.begin=NULL, panel.end=NULL, panel.args=NULL, plotcommand="plot",
-   adorn.left=NULL, adorn.right=NULL, adorn.bottom=NULL, adorn.size=0.2)
+   adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
+   adorn.size=0.2)
 }
 \arguments{
   \item{x}{
@@ -54,9 +55,9 @@
     Character string containing the name of the command that should be
     executed to plot each panel. 
   }
-  \item{adorn.left,adorn.right,adorn.bottom}{
+  \item{adorn.left,adorn.right,adorn.top,adorn.bottom}{
     Optional. Functions (with no arguments) that will be executed to
-    generate additional plots at the margins (left, right, and/or
+    generate additional plots at the margins (left, right, top and/or
     bottom, respectively) of the array of plots.
   }
   \item{adorn.size}{

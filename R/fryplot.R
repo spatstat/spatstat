@@ -1,7 +1,7 @@
 #
 #  fryplot.R
 #
-#  $Revision: 1.5 $ $Date: 2011/10/30 12:19:28 $
+#  $Revision: 1.6 $ $Date: 2013/04/25 06:37:43 $
 #
 
 fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL) {

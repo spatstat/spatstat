@@ -3,7 +3,7 @@
 #
 # Convert a factor to a matrix of dummy variables, etc.
 #
-#  $Revision: 1.3 $  $Date: 2011/10/11 02:36:15 $
+#  $Revision: 1.4 $  $Date: 2013/04/25 06:37:43 $
 #
 
 dummify <- function(x) {

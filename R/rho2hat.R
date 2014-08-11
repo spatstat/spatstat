@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.16 $   $Date: 2012/02/02 10:11:07 $
+#   $Revision: 1.17 $   $Date: 2013/04/25 06:37:43 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -69,7 +69,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
                                   append(list(w=as.owin(X)), list(...)))
              gstarX <- switch(reference,
                               area = {
-                                rep(area.owin(W), npoints(X))
+                                rep.int(area.owin(W), npoints(X))
                               },
                               model = {
                                 lam <- predict(model, locations=W)
@@ -118,7 +118,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     npixel <- length(lambda)
     area <- area.owin(as.owin(model))
     pixelarea <- area/npixel
-    baseline <- if(reference == "area") rep(1, npixel) else lambda
+    baseline <- if(reference == "area") rep.int(1, npixel) else lambda
     wts <- baseline * pixelarea
     switch(method,
            ratio = {

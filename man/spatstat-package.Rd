@@ -165,9 +165,9 @@
 	\code{\link{rjitter}} \tab
 	apply random displacements to points in a pattern\cr
 	\code{\link{rMaternI}}  \tab
-	simulate the Mat\'ern Model I inhibition process\cr
+	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process\cr
 	\code{\link{rMaternII}} \tab
-	simulate the Mat\'ern Model II inhibition process\cr
+	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process\cr
 	\code{\link{rSSI}} \tab
 	simulate Simple Sequential Inhibition process\cr
 	\code{\link{rStrauss}} \tab
@@ -185,7 +185,7 @@
 	\code{\link{rNeymanScott}} \tab
 	simulate a general Neyman-Scott process\cr
 	\code{\link{rMatClust}} \tab
-	simulate the Mat\'ern Cluster process\cr
+	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster process\cr
 	\code{\link{rThomas}} \tab
 	simulate the Thomas process  \cr
 	\code{\link{rGaussPoisson}}  \tab
@@ -248,7 +248,8 @@
 	\code{\link{gorillas}} \tab Gorilla nest sites \cr
 	\code{\link{hamster}} \tab Aherne's hamster tumour data \cr
 	\code{\link{humberside}} \tab North Humberside childhood leukaemia data \cr
-	\code{\link{hyytiala}} \tab Mixed forest in Hyyti{\"a}l{\"a}, Finland\cr
+	\code{\link{hyytiala}} \tab {Mixed forest in
+              \ifelse{latex}{\out{Hyyti{\"a}l{\"a}}}{Hyytiala}, Finland}\cr
 	\code{\link{japanesepines}} \tab Japanese Pines data \cr
 	\code{\link{lansing}} \tab Lansing Woods data \cr
 	\code{\link{longleaf}} \tab Longleaf Pines data \cr
@@ -1241,9 +1242,9 @@
     \code{\link{rsyst}} \tab
     systematic random sample (grid) of points \cr
     \code{\link{rMaternI}}  \tab
-    simulate the Mat\'ern Model I inhibition process\cr
+    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process\cr
     \code{\link{rMaternII}} \tab
-    simulate the Mat\'ern Model II inhibition process\cr
+    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process\cr
     \code{\link{rSSI}} \tab
     simulate Simple Sequential Inhibition process\cr
     \code{\link{rStrauss}} \tab
@@ -1251,7 +1252,7 @@
     \code{\link{rNeymanScott}} \tab
     simulate a general Neyman-Scott process\cr
     \code{\link{rMatClust}} \tab
-    simulate the Mat\'ern Cluster process\cr
+    simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster process\cr
     \code{\link{rThomas}} \tab
     simulate the Thomas process  \cr
     \code{\link{rLGCP}} \tab
@@ -1512,6 +1513,7 @@
   Y.C. Chin,
   Bjarke Christensen,
   Jean-Francois Coeurjolly,
+  Robin Corria Ainslie,
   Marcelino de la Cruz,
   Peter Dalgaard,
   Peter Diggle,
@@ -1521,6 +1523,7 @@
   Neba Funwi-Gabga,
   Agnes Gault,
   Marc Genton,
+  Julian Gilbey,
   Jason Goldstick,
   Pavel Grabarnik,
   C. Graf,
@@ -1546,6 +1549,7 @@
   Li Haitao,
   George Limitsios,
   Ben Madin,
+  Kiran Marchikanti,
   Robert Mark,
   Jorge Mateu Mahiques,
   Monia Mahling,
@@ -1583,6 +1587,7 @@
   Michael Sumner,
   P. Surovy,
   Ben Taylor,
+  Thordis Linda Thorarinsdottir,
   Berwin Turlach,
   Andrew van Burgel,
   Tobias Verbeke,

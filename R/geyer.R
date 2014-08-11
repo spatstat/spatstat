@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.22 $	$Date: 2012/11/06 08:15:58 $
+#    $Revision: 2.23 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Geyer's saturation process
 #
@@ -82,7 +82,7 @@ Geyer <- local({
          Xseq  <- seq_len(nX)
          if(length(EqualPairs) == 0) {
            # no data points currently included 
-           missingdata <- rep(TRUE, nX)
+           missingdata <- rep.int(TRUE, nX)
          } else {
            Xused <- EqualPairs[,1]
            missingdata <- !(Xseq %in% Xused)
@@ -162,7 +162,7 @@ Geyer <- local({
     Xindex <- EqualPairs[,1]
     Xsortindex <- rankX[Xindex]
     Usortindex <- rankU[Uindex]
-    Cmap <- rep(-1, nU)
+    Cmap <- rep.int(-1, nU)
     Cmap[Usortindex] <- Xsortindex - 1
     # call C routine
     zz <- .C("Egeyer",

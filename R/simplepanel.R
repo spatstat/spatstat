@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.5 $  $Date: 2013/02/24 03:10:28 $
+#  $Revision: 1.6 $  $Date: 2013/04/25 06:37:43 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws,
@@ -20,7 +20,7 @@ simplepanel <- function(title, B, boxes, clicks, redraws,
   if(!all(unlist(lapply(clicks, is.function))))
     stop("clicks must be a list of functions")
   if(missing(redraws) || is.null(redraws)) {
-    redraws <- rep(list(dflt.redraw), length(boxes))
+    redraws <- rep.int(list(dflt.redraw), length(boxes))
   } else {
     stopifnot(is.list(redraws) && length(redraws) == length(boxes))
     if(!all(unlist(lapply(redraws, is.function))))
@@ -49,7 +49,7 @@ grow.simplepanel <- function(P, side=c("right","left","top","bottom"),
   if(!all(unlist(lapply(new.clicks, is.function))))
     stop("new.clicks must be a list of functions")
   if(missing(new.redraws) || is.null(new.redraws)) {
-    new.redraws <- rep(list(dflt.redraw), length(new.clicks))
+    new.redraws <- rep.int(list(dflt.redraw), length(new.clicks))
   } else {
     stopifnot(is.list(new.redraws) && length(new.redraws) == length(new.clicks))
     if(!all(unlist(lapply(new.redraws, is.function))))

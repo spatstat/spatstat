@@ -6,12 +6,12 @@
   Calculates certain quadratic forms of matrices.
 }
 \usage{
-  sumouter(x, w)
+  sumouter(x, w=NULL)
   quadform(x, v)
 }
 \arguments{
   \item{x}{A matrix, whose rows are the vectors in the quadratic form.}
-  \item{w}{Vector of weights}
+  \item{w}{Optional vector of weights}
   \item{v}{Matrix determining the quadratic form}
 }
 \value{
@@ -27,7 +27,9 @@
     M = sum[i] (w[i] * outer(x[i,], x[i,]))
   }
   where the sum is over all rows of \code{x}
-  (after removing any rows containing \code{NA} or other non-finite values).
+  (after removing any rows containing \code{NA} or other non-finite
+  values).
+  If \code{w} is missing, the weights will be taken as 1.
   The result is a \eqn{p \times p}{p * p} matrix where
   \code{p = ncol(x)}.
   
@@ -46,6 +48,8 @@
   x <- matrix(1:12, 4, 3)
   dimnames(x) <- list(c("Wilma", "Fred", "Barney", "Betty"), letters[1:3])
   x
+
+  sumouter(x)
 
   w <- 4:1
   sumouter(x, w)

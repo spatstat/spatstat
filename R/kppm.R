@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.68 $ $Date: 2012/12/10 06:45:41 $
+# $Revision: 1.70 $ $Date: 2013/04/25 06:37:43 $
 #
 
 kppm <- function(X, trend = ~1,
@@ -45,9 +45,12 @@ kppmMinCon <- function(X, Xname, po, clusters, statistic, statargs, ...) {
   # compute summary function
   if(stationary) {
     StatFun <- if(statistic == "K") "Kest" else "pcf"
-    StatName <- if(statistic == "K") "K-function" else
-    "pair correlation function"
-    Stat <- do.call(StatFun, append(list(X), statargs))
+    StatName <-
+      if(statistic == "K") "K-function" else "pair correlation function"
+    Stat <- do.call(StatFun,
+                    resolve.defaults(list(X=X),
+                                     statargs,
+                                     list(correction="best")))
     lambda <- summary(po)$trend$value
   } else {
     StatFun <- if(statistic == "K") "Kinhom" else "pcfinhom"
@@ -57,7 +60,10 @@ kppmMinCon <- function(X, Xname, po, clusters, statistic, statargs, ...) {
     w <- as.owin(po, from="covariates")
     if(!is.mask(w)) w <- NULL
     lambda <- predict(po, locations=w)
-    Stat <- do.call(StatFun, append(list(X, lambda), statargs))
+    Stat <- do.call(StatFun,
+                    resolve.defaults(list(X=X, lambda=lambda),
+                                     statargs,
+                                     list(correction="best")))
   }
   # determine initial values of parameters
   selfstart <- spatstatClusterModelInfo(clusters)$selfstart
@@ -172,7 +178,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
     sumweight <- sum(wIJ)
   } else {
     npairs <- length(dIJ)
-    wIJ <- rep(1, npairs)
+    wIJ <- rep.int(1, npairs)
     sumweight <- npairs
   }
   # convert window to mask, saving other arguments for later

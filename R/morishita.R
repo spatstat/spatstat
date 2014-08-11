@@ -1,7 +1,7 @@
 #
 # morishita.R
 #
-#  $Revision: 1.4 $  $Date: 2008/12/11 00:08:09 $
+#  $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
 #
 
 miplot <- function(X, ...) {

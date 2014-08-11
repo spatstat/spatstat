@@ -124,14 +124,14 @@ cauchy.estpcf(X, startpar=c(kappa=1,eta2=1), lambda=NULL,
 Ghorbani, M. (2012) Cauchy cluster process.
 \emph{Metrika}, to appear.
 
+  Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
+  Decomposition of variance for spatial Cox processes.
+  \emph{Scandinavian Journal of Statistics} \bold{40}, 119-137.
+
   Waagepetersen, R. (2007)
   An estimating function approach to inference for
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63}, 252--258.
-
-  Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
-  Decomposition of variance for spatial Cox processes.
-  Manuscript submitted for publication.
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
   Adapted for \pkg{spatstat} by Adrian Baddeley

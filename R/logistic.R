@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.5 $  $Date: 2013/02/07 09:58:14 $
+#   $Revision: 1.6 $  $Date: 2013/04/25 06:37:43 $
 #
 #  Logistic likelihood method - under development
 #
@@ -41,7 +41,7 @@ logi.engine <- local({
   # backdoor stuff
   if(!missing(vnamebase)) {
     if(length(vnamebase) == 1)
-      vnamebase <- rep(vnamebase, 2)
+      vnamebase <- rep.int(vnamebase, 2)
     if(!is.character(vnamebase) || length(vnamebase) != 2)
       stop("Internal error: illegal format of vnamebase")
   }
@@ -74,7 +74,7 @@ logi.engine <- local({
   if(want.trend) {
     tvars <- variablesinformula(trend)
     wantxy <- c("x", "y") %in% tvars
-    wantxy <- wantxy | rep(allcovar, 2)
+    wantxy <- wantxy | rep.int(allcovar, 2)
     cvdf <- data.frame(x=U$x, y=U$y)[, wantxy, drop=FALSE]
     if(!is.null(covariates)) {
       df <- mpl.get.covariates(covariates, U, "quadrature points", covfunargs)
@@ -86,7 +86,7 @@ logi.engine <- local({
   if(!is.matrix(V))
     stop("evalInteraction did not return a matrix")
   IsOffset <- attr(V, "IsOffset")
-  if(is.null(IsOffset)) IsOffset <- rep(FALSE, ncol(V))
+  if(is.null(IsOffset)) IsOffset <- rep.int(FALSE, ncol(V))
   # determine names
   if(ncol(V) > 0) {
     Vnames <- colnames(V)
@@ -103,9 +103,9 @@ logi.engine <- local({
   glmdata <- as.data.frame(V)
   if(!is.null(cvdf)) glmdata <- cbind(glmdata, cvdf)
   # construct response and weights
-  ok <- if(correction == "border") inside.owin(U,,W) else rep(TRUE, npoints(U))
-  wei <- c(rep(1,npoints(Xplus)),rep(B/rho,npoints(D)))
-  resp <- c(rep(1,npoints(Xplus)),rep(0,npoints(D)))
+  ok <- if(correction == "border") inside.owin(U,,W) else rep.int(TRUE, npoints(U))
+  wei <- c(rep.int(1,npoints(Xplus)),rep.int(B/rho,npoints(D)))
+  resp <- c(rep.int(1,npoints(Xplus)),rep.int(0,npoints(D)))
   # add offset, subset and weights to data frame
   # using reserved names beginning with ".logi."
   glmdata <- cbind(glmdata,

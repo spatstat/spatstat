@@ -3,7 +3,7 @@
 #
 # Line transects of pixel images
 #
-#  $Revision: 1.5 $  $Date: 2012/05/16 10:26:35 $
+#  $Revision: 1.6 $  $Date: 2013/03/15 01:28:06 $
 #
 
 transect.im <- local({
@@ -65,8 +65,8 @@ transect.im <- local({
       y <- from$y + u * (to$y - from$y)
       leng <- sqrt( (to$x - from$x)^2 +  (to$y - from$y)^2)
       t <- u * leng
-      # look up pixel values
-      v <- X[list(x=x, y=y)]
+      # look up pixel values (may be NA)
+      v <- X[list(x=x, y=y), drop=FALSE]
       # package into fv object
       df <- data.frame(t=t, v=v)
       colnames(df)[2] <- Xname

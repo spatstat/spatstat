@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.21 $	$Date: 2012/09/03 05:32:36 $
+#	$Revision: 4.22 $	$Date: 2013/04/25 06:37:43 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -60,7 +60,7 @@ quad <- function(data, dummy, w, param=NULL) {
   n <- data$n + dummy$n
 	
   if(missing(w))
-    w <- rep(1, n)
+    w <- rep.int(1, n)
   else {
     w <- as.vector(w)
     if(length(w) != n)
@@ -113,9 +113,9 @@ marks.quad <- function(x, dfok=FALSE, ...) {
   if(is.null(mdat) && is.null(mdum))
     return(NULL)
   if(is.null(mdat))
-    mdat <- rep(NA, dat$n)
+    mdat <- rep.int(NA_integer_, dat$n)
   if(is.null(mdum))
-    mdum <- rep(NA, dum$n)
+    mdum <- rep.int(NA_integer_, dum$n)
   if(is.factor(mdat) && is.factor(mdum)) {
     mall <- cat.factor(mdat, mdum)
   } else mall <- c(mdat, mdum)
@@ -160,8 +160,8 @@ is.multitype.quad <- function(X, na.action="warn", ...) {
 
 is.data <- function(Q) {
   verifyclass(Q, "quad")
-  return(c(rep(TRUE, Q$data$n),
-	   rep(FALSE, Q$dummy$n)))
+  return(c(rep.int(TRUE, Q$data$n),
+	   rep.int(FALSE, Q$dummy$n)))
 }
 
 equals.quad <- function(Q) {
@@ -184,7 +184,7 @@ equalpairs.quad <- function(Q) {
   #     X[E[i,1]] == U[E[i,2]] for all i
   # where X = Q$data and U = union.quad(Q)
   n <- Q$data$n
-  return(matrix(rep(seq_len(n),2), ncol=2))
+  return(matrix(rep.int(seq_len(n),2), ncol=2))
 }
       
 union.quad <- function(Q) {

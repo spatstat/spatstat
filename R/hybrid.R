@@ -2,7 +2,7 @@
 #
 #    hybrid.R
 #
-#    $Revision: 1.3 $	$Date: 2011/10/06 07:14:56 $
+#    $Revision: 1.4 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Hybrid of several interactions
 #
@@ -117,10 +117,10 @@ Hybrid <- function(...) {
            ntypes <- Z$ntypes
            if((Ncif <- length(cifs)) == 1) {
              # single cif
-             pars <- append(pars, list(beta=rep(1, ntypes)))
+             pars <- append(pars, list(beta=rep.int(1, ntypes)))
            } else {
              for(i in 1:Ncif) 
-               pars[[i]] <- append(pars[[i]], list(beta=rep(1, ntypes[i])))
+               pars[[i]] <- append(pars[[i]], list(beta=rep.int(1, ntypes[i])))
            }
            RM <- rmhmodel(cif=cifs, par=pars, types=1:max(ntypes), 
                           stopinvalid=FALSE)

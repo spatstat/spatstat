@@ -609,9 +609,9 @@ trend corresponding to a particular type, there is still a component
    beta <- 0.3
    gmma <- 0.5
    r    <- 45
-   mod17 <- list(cif="strauss",par=list(beta=beta,gamma=gmma,r=r),
-                 w=square(1), trend=tr3)
-   X1.strauss.trend <- rmh(model=mod17,start=list(n.start=ns),
+   modStr <- list(cif="strauss",par=list(beta=beta,gamma=gmma,r=r),
+                 w=square(250), trend=tr)
+   X1.strauss.trend <- rmh(model=modStr,start=list(n.start=ns),
                            control=list(nrep=nr,nverb=nv))
    # Baddeley-Geyer
    r <- seq(0,0.2,length=8)[-1]

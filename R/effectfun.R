@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.10 $ $Date: 2012/08/22 01:33:12 $
+#   $Revision: 1.11 $ $Date: 2013/04/25 06:37:43 $
 #
 
 effectfun <- function(model, covname, ..., se.fit=FALSE) {
@@ -98,8 +98,8 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
     lev <- levels(marks(data.ppm(model)))
     fakeloc$marks <- lev[1]
   }
-  fakeloc <- lapply(fakeloc, function(x,N) { rep(x[1],N)}, N=N)
-  fakecov <- lapply(dotargs, function(x,N) { rep(x[1],N)}, N=N)
+  fakeloc <- lapply(fakeloc, function(x,N) { rep.int(x[1],N)}, N=N)
+  fakecov <- lapply(dotargs, function(x,N) { rep.int(x[1],N)}, N=N)
   # Overwrite value for covariate of interest
   if(covname %in% intern.names)
     fakeloc[[covname]] <- Zvals

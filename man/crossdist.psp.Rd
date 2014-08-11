@@ -16,7 +16,8 @@
     Ignored.
   }
   \item{method}{String specifying which method of calculation to use.
-    Values are \code{"Fortran"} and \code{"interpreted"}.
+    Values are \code{"Fortran"}, \code{"C"} and \code{"interpreted"}.
+    Usually not specified.
   }
   \item{type}{
     Type of distance to be computed. Options are

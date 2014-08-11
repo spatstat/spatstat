@@ -1,7 +1,7 @@
 subroutine dppll(x,y,l1,l2,l3,l4,np,nl,eps,mint,rslt,xmin,jmin)
 implicit double precision(a-h,o-z)
-dimension x(1), y(1), rslt(np,1), xmin(1), jmin(1)
-double precision l1(1), l2(1), l3(1), l4(1)
+dimension x(np), y(np), rslt(np,nl), xmin(np), jmin(np)
+double precision l1(nl), l2(nl), l3(nl), l4(nl)
 one = 1.d0
 zero = 0.d0
 do j = 1,nl {

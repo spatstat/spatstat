@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.81 $	$Date: 2013/03/01 04:02:45 $
+#	$Revision: 2.83 $	$Date: 2013/04/25 06:37:43 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -54,8 +54,11 @@ function(x, ...,
   do.SE <- if(!misswhat) ("se" %in% what) else
            switch(spatstat.options("print.ppm.SE"),
                   always = TRUE,
-                  poisson = is.poisson(x) && (x$fitter != "gam"),
-                  never = FALSE)
+                  never  = FALSE, 
+                  poisson = {
+                    is.poisson(x) &&
+                    !is.null(x$fitter) && (x$fitter != "gam")
+                  })
   
   s <- summary.ppm(x, quick=if(do.SE) FALSE else "no variances")
         
@@ -262,7 +265,7 @@ valid.ppm <- function(object) {
 project.ppm <- local({
   tracemessage <- function(depth, ...) {
     if(depth == 0) return(NULL)
-    spacer <- paste(rep("  ", depth), collapse="")
+    spacer <- paste(rep.int("  ", depth), collapse="")
     marker <- ngettext(depth, "trace", paste("trace", depth))
     marker <- paren(marker, "[")
     cat(paste(spacer, marker, " ", paste(...), "\n", sep=""))
@@ -400,9 +403,12 @@ project.ppm <- local({
         tracemessage(td, "Interaction changed to:")
         print(change)
       }
-      # refit the whole model (using the same edge correction)
+      # refit the whole model 
+      #      (using the same edge correction)
+      #      (and the same quadrature scheme)
       newobject <- update(object, interaction=change,
                           correction=correction, rbord=rbord,
+                          forcefit=TRUE,
                           envir=object$callframe)
       if(trace) {
         tracemessage(td, "Updated model:")
@@ -428,6 +434,7 @@ project.ppm <- local({
         # refit the whole model
         object.i <- update(object, interaction=change.i,
                            correction=correction, rbord=rbord,
+                           forcefit=TRUE,
                            envir=object$callframe)
         if(trace) {
           tracemessage(td, "Considering", ordinal(i),

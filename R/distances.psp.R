@@ -3,7 +3,7 @@
 #
 #  Hausdorff distance and Euclidean separation for psp objects
 #
-#  $Revision: 1.8 $ $Date: 2012/06/11 06:06:11 $
+#  $Revision: 1.9 $ $Date: 2013/04/25 05:13:34 $
 #
 #
 
@@ -118,9 +118,9 @@ nndist.psp <- function(X, ..., k=1, method="Fortran") {
 #     Thus s(A,B) = min(t(A,B), t(B,A)) unless A and B intersect.
 
 
-AsymmDistance.psp <- function(X, Y, metric="Hausdorff", method="Fortran") {
-  if(method != "Fortran" && method != "interpreted")
-    stop(paste("Unrecognised method", sQuote(method)))
+AsymmDistance.psp <- function(X, Y, metric="Hausdorff",
+                              method=c("Fortran", "C", "interpreted")) {
+  method <- match.arg(method)
   # Extract endpoints of X
   EX <- endpoints.psp(X, "both")
   idX <- attr(EX, "id")

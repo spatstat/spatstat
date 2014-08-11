@@ -4,7 +4,7 @@
 #
 #  subset operations for hyperframes
 #
-#  $Revision: 1.7 $    $Date: 2012/01/31 11:00:04 $
+#  $Revision: 1.8 $    $Date: 2013/04/25 06:37:43 $
 #
 #
 
@@ -58,7 +58,7 @@
                # replicate it to make a hypercolumn
                ha <- x$hyperatoms[1]
                names(ha) <- NULL
-               hc <- rep(ha, x$ncases)
+               hc <- rep.int(ha, x$ncases)
                hc <- as.listof(hc)
                names(hc) <- row.names(x$df)
                return(hc)

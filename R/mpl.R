@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.150 $	$Date: 2013/02/25 06:32:31 $
+#	$Revision: 5.154 $	$Date: 2013/04/25 06:37:43 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -113,7 +113,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2013/02/25 06:32:31 $")
+                    date="$Date: 2013/04/25 06:37:43 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -126,9 +126,12 @@ if(want.inter) {
 if(!want.trend && !want.inter && !forcefit && !allcovar) {
   # the model is the uniform Poisson process
   # The MPLE (= MLE) can be evaluated directly
-  npts <- X$n
-  W    <- X$window
-  if(correction == "border" && rbord > 0) W <- erosion(W, rbord)
+  npts <- npoints(X)
+  W    <- as.owin(X)
+  if(correction == "border" && rbord > 0) {
+    W <- erosion(W, rbord)
+    npts <- npoints(X[W])
+  }
   volume <- area.owin(W) * markspace.integral(X)
   lambda <- npts/volume
   # fitted canonical coefficient
@@ -304,7 +307,8 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
                         precomputed=NULL, savecomputed=FALSE,
                         vnamebase=c("Interaction", "Interact."),
                         vnameprefix=NULL,
-                        warn.illegal=TRUE) {
+                        warn.illegal=TRUE,
+                        warn.unidentifiable=TRUE) {
 # Q: quadrature scheme
 # X = data.quad(Q)
 # P = union.quad(Q)
@@ -324,7 +328,7 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
   
   if(!missing(vnamebase)) {
     if(length(vnamebase) == 1)
-      vnamebase <- rep(vnamebase, 2)
+      vnamebase <- rep.int(vnamebase, 2)
     if(!is.character(vnamebase) || length(vnamebase) != 2)
       stop("Internal error: illegal format of vnamebase")
   }
@@ -356,7 +360,7 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
     .mpl$Y <- .mpl$Z/.mpl$W
     .mpl$MARKS <- marks.quad(Q)  # is NULL for unmarked patterns
     n <- n.quad(Q)
-    .mpl$SUBSET <- rep(TRUE, n)
+    .mpl$SUBSET <- rep.int(TRUE, n)
 	
     zeroes <- attr(.mpl$W, "zeroes")
     if(!is.null(zeroes))
@@ -425,7 +429,7 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
     if(!allcovar) 
       needed <- names(covariates.df) %in% trendvariables
     else
-      needed <- rep(TRUE, ncol(covariates.df))
+      needed <- rep.int(TRUE, ncol(covariates.df))
     if(any(needed)) {
       covariates.needed <- covariates.df[, needed, drop=FALSE]
     #  Append to `glmdata'
@@ -539,7 +543,7 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
     # check IsOffset matches Vnames
     if(length(IsOffset) != length(Vnames)) {
       if(length(IsOffset) == 1)
-        IsOffset <- rep(IsOffset, length(Vnames))
+        IsOffset <- rep.int(IsOffset, length(Vnames))
       else
         stop("Internal error: IsOffset has wrong length", call.=FALSE)
     }
@@ -556,23 +560,23 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
     datremain <- .mpl$Z[.mpl$SUBSET]
     somedat <- any(datremain)
     somedum <- !all(datremain)
-    if(!(is.identifiable <- somedat && somedum)) {
+    if(warn.unidentifiable && !(somedat && somedum)) {
       # Model would be unidentifiable if it were fitted.
-      # Exclude cases where mpl.prepare is used without intending to fit.
-      somedat <- somedat || (ndata == 0)
-      somedum <- somedum || (ndummy == 0)
-      if(!(somedat && somedum)) {
-        # register problem
+      # Register problem
+      is.identifiable <- FALSE
+      if(ndata == 0) {
+        complaint <- "model is unidentifiable: data pattern is empty"
+      } else {
         offending <- !c(somedat, somedum)
         offending <- c("all data points", "all dummy points")[offending]
         offending <- paste(offending, collapse=" and ")
         complaint <- paste("model is unidentifiable:",
                            offending, "have zero conditional intensity")
-        details <- list(data=!somedat,
-                        dummy=!somedum,
-                        print=complaint)
-        problems <- append(problems, list(unidentifiable=details))
       }
+      details <- list(data=!somedat,
+                      dummy=!somedum,
+                      print=complaint)
+      problems <- append(problems, list(unidentifiable=details))
     }
 
     # check whether the model has zero likelihood:
@@ -776,6 +780,7 @@ partialModelMatrix <- function(X, D, model, callstring="", ...) {
                        correction=model$correction,
                        rbord=model$rbord,
                        Pname="data points", callstring=callstring,
+                       warn.unidentifiable=FALSE,
                        ...)
   fmla    <- prep$fmla
   glmdata <- prep$glmdata

@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.4 $ $Date: 2013/01/13 04:01:07 $
+#  $Revision: 1.5 $ $Date: 2013/04/25 06:37:43 $
 #
 
 intensity <- function(X, ...) {
@@ -60,7 +60,7 @@ intensity.ppm <- function(X, ...) {
   sX <- summary(X, quick="no variances")
   beta <- sX$trend$value
   # solve
-  lambda <- if(G == 0) rep(0, length(beta)) else LambertW(G * beta)/G
+  lambda <- if(G == 0) numeric(length(beta)) else LambertW(G * beta)/G
   if(length(lambda) == 1) lambda <- unname(lambda)
   return(lambda)
 }
@@ -74,7 +74,7 @@ LambertW <- local({
   W <- function(x) {
     if(require(gsl, quietly=TRUE))
       return(gsl::lambert_W0(x))
-    result <- rep(NA_real_, length(x))
+    result <- rep.int(NA_real_, length(x))
     for(i in which(is.finite(x) & (x >= 0)))
       result[i] <- uniroot(yexpyminusx, c(0, x[i]), x=x[i])$root
   return(result)

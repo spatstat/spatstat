@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.16 $ $Date: 2011/05/18 01:34:03 $
+# $Revision: 1.23 $ $Date: 2013/04/25 06:37:43 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -127,90 +127,142 @@ print.summary.lut <- function(x, ...) {
   print(out)  
 }
 
-plot.colourmap <- function(x, ..., main,
-                           xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE) {
-  if(missing(main))
-    main <- short.deparse(substitute(x))
-  stuff <- attr(x, "stuff")
-  col <- stuff$outputs
-  n   <- stuff$n
-  discrete <- stuff$discrete
-  # determine pixel entries 'v' and colour map breakpoints 'bks'
-  # to be passed to 'image.default'
-  if(!discrete) {
-    bks <- stuff$breaks
-    rr <- range(bks)
-    v <- seq(from=rr[1], to=rr[2], length.out=max(n+1, 1024))
-  } else {
-    v <- (1:n) - 0.5
-    bks <- 0:n
-    rr <- c(0,n)
-  }
-  # determine position of ribbon
-  if(is.null(xlim) && is.null(ylim)) {
-    u <- diff(rr)/10
-    if(!vertical) {
-      xlim <- rr
-      ylim <- c(0,u)
+plot.colourmap <- local({
+
+  # recognised additional arguments to image.default() and axis()
+  
+  imageparams <- c("main", "asp", "sub", "axes", "ann",
+                   "cex", "font", 
+                   "cex.axis", "cex.lab", "cex.main", "cex.sub",
+                   "col.axis", "col.lab", "col.main", "col.sub",
+                   "font.axis", "font.lab", "font.main", "font.sub")
+  axisparams <- c("cex", 
+                  "cex.axis", "cex.lab",
+                  "col.axis", "col.lab",
+                  "font.axis", "font.lab")
+
+  plot.colourmap <- function(x, ..., main,
+                             xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
+                             labelmap=NULL) {
+    if(missing(main))
+      main <- short.deparse(substitute(x))
+    stuff <- attr(x, "stuff")
+    col <- stuff$outputs
+    n   <- stuff$n
+    discrete <- stuff$discrete
+  #
+    if(is.null(labelmap)) {
+      labelmap <- function(x) x
+    } else if(is.numeric(labelmap) && length(labelmap) == 1 && !discrete) {
+      labscal <- labelmap
+      labelmap <- function(x) { x * labscal }
+    } else stopifnot(is.function(labelmap))
+  
+    # determine pixel entries 'v' and colour map breakpoints 'bks'
+    # to be passed to 'image.default'
+    if(!discrete) {
+      bks <- stuff$breaks
+      rr <- range(bks)
+      v <- seq(from=rr[1], to=rr[2], length.out=max(n+1, 1024))
     } else {
-      xlim <- c(0,u)
-      ylim <- rr
+      v <- (1:n) - 0.5
+      bks <- 0:n
+      rr <- c(0,n)
     }
-  } else if(is.null(ylim)) {
-    if(!vertical) 
-      ylim <- c(0, diff(xlim)/10)
-    else 
-      ylim <- c(0, 10 * diff(xlim))
-  } else if(is.null(xlim)) {
-    if(!vertical) 
-      xlim <- c(0, 10 * diff(ylim))
-    else 
-      xlim <- c(0, diff(ylim)/10)
-  }
-  # plot ribbon image
-  linmap <- function(x, from, to) {
-    to[1] + diff(to) * (x - from[1])/diff(from)
-  }
-  if(!vertical) {
-    x <- linmap(v, rr, xlim)
-    y <- ylim
-    z <- matrix(v, ncol=1)
-    do.call("image.default",
-            resolve.defaults(list(x, y, z),
-                             list(...),
-                             list(main=main, xlim=xlim, ylim=ylim, asp=1.0,
-                                  ylab="", xlab="", axes=FALSE,
-                                  breaks=bks, col=col)))
-    if(axis) {
-      if(discrete) {
-        la <- paste(stuff$inputs)
-        at <- linmap(v, rr, xlim)
+    # determine position of ribbon
+    if(is.null(xlim) && is.null(ylim)) {
+      u <- diff(rr)/10
+      if(!vertical) {
+        xlim <- rr
+        ylim <- c(0,u)
       } else {
-        la <- pretty(rr)
-        at <- linmap(la, rr, xlim)
+        xlim <- c(0,u)
+        ylim <- rr
       }
-      axis(1, pos=ylim[1], at=at, labels=la)
+    } else if(is.null(ylim)) {
+      if(!vertical) 
+        ylim <- c(0, diff(xlim)/10)
+      else 
+        ylim <- c(0, 10 * diff(xlim))
+    } else if(is.null(xlim)) {
+      if(!vertical) 
+        xlim <- c(0, 10 * diff(ylim))
+      else 
+        xlim <- c(0, diff(ylim)/10)
     }
-  } else {
-    y <- linmap(v, rr, ylim)
-    z <- matrix(v, nrow=1)
-    x <- xlim
-    do.call("image.default",
-            resolve.defaults(list(x, y, z),
-                             list(...),
-                             list(main=main, ylim=ylim, xlim=xlim, asp=1.0,
-                                  ylab="", xlab="", axes=FALSE,
-                                  breaks=bks, col=col)))
-    if(axis) {
-      if(discrete) {
-        la <- paste(stuff$inputs)
-        at <- linmap(v, rr, ylim)
-      } else {
-        la <- pretty(rr)
-        at <- linmap(la, rr, ylim)
+    # plot ribbon image
+    linmap <- function(x, from, to) {
+      to[1] + diff(to) * (x - from[1])/diff(from)
+    }
+    if(!vertical) {
+      # horizontal colour ribbon
+      x <- linmap(v, rr, xlim)
+      y <- ylim
+      z <- matrix(v, ncol=1)
+      do.call.matched("image.default",
+                      resolve.defaults(list(x=x, y=y, z=z),
+                                       list(...),
+                                       list(main=main,
+                                            xlim=xlim, ylim=ylim, asp=1.0,
+                                            ylab="", xlab="", axes=FALSE,
+                                            breaks=bks, col=col)),
+                      extrargs=imageparams)
+      if(axis) {
+        # add horizontal axis
+        if(discrete) {
+          la <- paste(labelmap(stuff$inputs))
+          at <- linmap(v, rr, xlim)
+        } else {
+          la <- prettyinside(rr)
+          at <- linmap(la, rr, xlim)
+          la <- labelmap(la)
+        }
+        # default axis position is below the ribbon (side=1)
+        sidecode <- resolve.1.default("side", list(...), list(side=1))
+        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        # draw axis
+        do.call.matched("axis",
+                        resolve.defaults(list(...),
+                                         list(side = 1, pos = pos, at = at),
+                                         list(labels=la)),
+                        extrargs=axisparams)
       }
-      axis(4, pos=xlim[2], at=at, labels=la)
+    } else {
+      # vertical colour ribbon
+      y <- linmap(v, rr, ylim)
+      z <- matrix(v, nrow=1)
+      x <- xlim
+      do.call.matched("image.default",
+                      resolve.defaults(list(x=x, y=y, z=z),
+                                       list(...),
+                                       list(main=main,
+                                            ylim=ylim, xlim=xlim, asp=1.0,
+                                            ylab="", xlab="", axes=FALSE,
+                                            breaks=bks, col=col)),
+                      extrargs=imageparams)
+      if(axis) {
+        # add vertical axis
+        if(discrete) {
+          la <- paste(labelmap(stuff$inputs))
+          at <- linmap(v, rr, ylim)
+        } else {
+          la <- prettyinside(rr)
+          at <- linmap(la, rr, ylim)
+          la <- labelmap(la)
+        }
+        # default axis position is to the right of ribbon (side=4)
+        sidecode <- resolve.1.default("side", list(...), list(side=4))
+        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        # draw axis
+        do.call.matched("axis",
+                        resolve.defaults(list(...),
+                                         list(side=4, pos=pos, at=at),
+                                         list(labels=la)),
+                        extrargs=axisparams)
+      }
     }
+    invisible(NULL)
   }
-  invisible(NULL)
-}
+
+  plot.colourmap
+})

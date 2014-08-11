@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.15 $  $Date: 2013/02/25 08:45:04 $
+#  $Revision: 1.17 $  $Date: 2013/04/25 06:37:43 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -20,7 +20,7 @@ layered <- function(..., plotargs=NULL, LayerList=NULL) {
     if(length(plotargs) != length(out))
       stop("plotargs should have one component for each element of the list")
   } else {
-    plotargs <- rep(list(list()), length(out))
+    plotargs <- rep.int(list(list()), length(out))
   }
   names(plotargs) <- names(out)
   attr(out, "plotargs") <- plotargs
@@ -44,6 +44,7 @@ print.layered <- function(x, ...) {
 
 plot.layered <- function(x, ..., which=NULL, plotargs=NULL) {
   xname <- short.deparse(substitute(x))
+  main <- resolve.1.default("main", list(...), list(main=xname))
   xp <- if(is.null(which)) x else x[which]
   if(length(xp) == 0)
     return(invisible(NULL))
@@ -58,22 +59,23 @@ plot.layered <- function(x, ..., which=NULL, plotargs=NULL) {
       stop("plotargs should have one component for each layer to be plotted")
   }
   # determine plot frame 
+  started <- FALSE
   add <- resolve.1.default("add", list(...), list(add=FALSE))
   if(add) {
     started <- TRUE
   } else {
     # new plot
-    # determine bounding frame
-    isnul <- unlist(lapply(x, is.null))
-    boxes <- lapply(x[!isnul],
+    notnul <- !unlist(lapply(x, is.null))
+    if(sum(notnul) > 1) {
+      # more than one non-trivial layer.
+      # Determine bounding frame
+      boxes <- lapply(x[notnul],
                     function(z) { try(as.rectangle(z), silent=TRUE) })
-    if(any(unlist(lapply(boxes, inherits, what="try-error")))) {
-       # failed to determine bounding frame
-      started <- FALSE
-    } else {
-      bb <- do.call("bounding.box", boxes)
-      plot(bb, type="n", main=xname)
-      started <- TRUE
+      if(!any(unlist(lapply(boxes, inherits, what="try-error")))) {
+        bb <- do.call("bounding.box", boxes)
+        plot(bb, type="n", main=main)
+        started <- TRUE
+      }
     }
   }
   # plot the layers
@@ -85,7 +87,7 @@ plot.layered <- function(x, ..., which=NULL, plotargs=NULL) {
       out[[i]] <- NULL
     } else {
       # plot layer i on top of previous layers
-      iargs <- if(!started) list(main=xname) else list(add=TRUE)
+      iargs <- if(!started) list(main=main) else list(add=TRUE)
       out[[i]] <- do.call("plot",
                           resolve.defaults(list(x=xpi),
                                            list(...),

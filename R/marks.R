@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.31 $   $Date: 2012/06/05 01:26:23 $
+#   $Revision: 1.32 $   $Date: 2013/04/25 06:37:43 $
 #
 # stuff for handling marks
 #
@@ -40,8 +40,8 @@ marks.ppp <- function(x, ..., dfok=TRUE) {
   np <- npoints(x)
   if(!is.data.frame(m) && !is.matrix(m)) {
     # vector of marks
-    if(length(m) == 1) m <- rep(m, np)
-    else if(np == 0) m <- rep(m, 0) # ensures marked pattern is obtained
+    if(length(m) == 1) m <- rep.int(m, np)
+    else if(np == 0) m <- rep.int(m, 0) # ensures marked pattern is obtained
     else if(length(m) != np) stop("number of points != number of marks")
     marx <- m
   } else {
@@ -59,7 +59,7 @@ marks.ppp <- function(x, ..., dfok=TRUE) {
         if(nrow(m) == 1 || np == 0) {
           # replicate data frame
           marx <- as.data.frame(lapply(as.list(m),
-                                       function(x, k) { rep(x, k) },
+                                       function(x, k) { rep.int(x, k) },
                                        k=np))
         } else
         stop("number of rows of data frame != number of points")
@@ -206,7 +206,7 @@ marksubset <- function(x, index, format=NULL) {
   switch(format,
          none={return(NULL)},
          listof=,
-         vector={ return(rep(x,n))},
+         vector={ return(rep.int(x,n))},
          dataframe={
            return(as.data.frame(lapply(x, rep, times=n)))
          },
@@ -321,7 +321,7 @@ numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
     if(is.numeric(z)) return(z)
     if(logi && is.logical(z)) return(as.integer(z))
     switch(other,
-           na=rep(NA, length(z)),
+           na=rep.int(NA_real_, length(z)),
            discard=NULL,
            NULL)
   }

@@ -2,7 +2,7 @@
 #
 #    multipair.util.R
 #
-#    $Revision: 1.11 $	$Date: 2009/10/16 20:50:51 $
+#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Utilities for multitype pairwise interactions
 #	
@@ -16,7 +16,7 @@ MultiPair.checkmatrix <-
       matname <- short.deparse(substitute(mat))
     if(!is.matrix(mat))
       stop(paste(matname, "must be a matrix"))
-    if(any(dim(mat) != rep(n,2)))
+    if(any(dim(mat) != rep.int(n,2)))
       stop(paste(matname, "must be a square matrix,",
                  "of size", n, "x", n))
     isna <- is.na(mat)

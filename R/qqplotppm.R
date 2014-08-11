@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.23 $   $Date: 2011/02/07 06:20:06 $
+#  $Revision: 1.24 $   $Date: 2013/04/25 06:37:43 $
 #
 
 qqplot.ppm <-

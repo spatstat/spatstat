@@ -32,9 +32,13 @@ plot(paracou, cols=2:3, chars=c(16,3))
 }
 \references{
   Flores, O. (2005)
-  \emph{D{\'e}terminisme de la r{\'e}g{\'e}n{\'e}ration chez quinze esp{\`e}ces 
-  d'arbres tropicaux en for{\^e}t guyanaise: les effets de l'environnement 
-  et de la limitation par la dispersion.}
+  \emph{\ifelse{latex}{\out{D{\'e}terminisme de la
+  r{\'e}g{\'e}n{\'e}ration chez quinze esp{\`e}ces d'arbres tropicaux
+  en for{\^e}t guyanaise: les effets de l'environnement et de la
+  limitation par la dispersion.}}{ Determinisme de la regeneration
+  chez quinze espces d'arbres tropicaux en foret guyanaise: les
+  effets de l'environnement et de la limitation par la dispersion.}}
+
   PhD Thesis, University of Montpellier 2, Montpellier, France.
 
   Picard, N, Bar-Hen, A., Mortier, F. and Chadoeuf, J. (2009)

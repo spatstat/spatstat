@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.96 2013/02/24 10:35:18 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.97 2013/04/25 06:37:43 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -348,7 +348,7 @@ rmh.default <- function(model,start=NULL,
       # default proposal probabilities
       ptypes <- if(start$given == "x" && (nx <- npoints(x.start)) > 0) {
         table(marks(x.start, dfok=FALSE))/nx
-      } else rep(1/ntypes, ntypes)
+      } else rep.int(1/ntypes, ntypes)
     } else {
       # Validate ptypes
       if(length(ptypes) != ntypes | sum(ptypes) != 1)
@@ -672,7 +672,7 @@ rmhEngine <- function(InfoList, ...,
              n = {
                # n.start given
                if(control$fixing=="n.each.type")
-                 rep(Ctypes,n.start)
+                 rep.int(Ctypes,n.start)
                else
                  sample(Ctypes,npts.free,TRUE,ptypes)
              },
@@ -853,7 +853,7 @@ rmhEngine <- function(InfoList, ...,
     # ////////// Multiple blocks /////////////////////////////////
     # determine length of each block of simulations
     nblocks <- as.integer(1 + ceiling((nrep - nburn)/nsave))
-    block <- c(nburn, rep(nsave, nblocks-1))
+    block <- c(nburn, rep.int(nsave, nblocks-1))
     block[nblocks] <- block[nblocks] - (sum(block)-nrep)
     block <- block[block >= 1]
     nblocks <- length(block)

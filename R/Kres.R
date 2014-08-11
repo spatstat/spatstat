@@ -3,7 +3,7 @@
 #
 #	Residual K
 #
-#	$Revision: 1.2 $	$Date: 2013/02/26 04:32:27 $
+#	$Revision: 1.3 $	$Date: 2013/04/25 06:37:43 $
 #
 #############################################################################
 #
@@ -22,7 +22,7 @@ Kres <- function(object, ...) {
       warning("Extra arguments ignored")
   }
   # initialise fv object
-  df <- data.frame(r=K$r, theo=rep(0, length(K$r)))
+  df <- data.frame(r=K$r, theo=numeric(length(K$r)))
   desc <- c("distance argument r", "value 0 corresponding to perfect fit")
   ans <- fv(df, "r", substitute(bold(R)~hat(K)(r), NULL),
             "theo", . ~ r ,

@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.14 $  $Date: 2012/04/06 09:36:09 $
+#  $Revision: 1.15 $  $Date: 2013/04/25 06:37:43 $
 #
 #
 #  Compute area of intersection between a disc and a window,
@@ -95,7 +95,7 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
   npoints <- X$n
   nr <- length(r)
   if(npoints == 0)
-    return(rep(0, nr))
+    return(numeric(nr))
   else if(npoints == 1) 
     return(discpartarea(X, r, W))
   samebox <- (W$type == "rectangle") &&

@@ -13,8 +13,10 @@
 
   WEIGHTED     #defined for weighted (inhom) K function
 
+  Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2000-2013
+  Licence: GPL >= 2
 
-  $Revision: 1.3 $     $Date: 2012/03/18 11:33:27 $
+  $Revision: 1.5 $     $Date: 2013/04/12 06:42:53 $
 
 */
 
@@ -36,6 +38,7 @@ void FNAME(
   int i, j, l, n, nt, n1, lmin, lmax, maxchunk;
   double dt, tmax, tmax2, xi, yi;
   double xleft, xright, dratio, dij, dij2, dx, dy, dx2;
+  OUTTYPE naccum;
 #ifdef WEIGHTED
   double wi, wj, wij;
 #endif
@@ -68,7 +71,7 @@ void FNAME(
 
   /* initialise */
   for(l = 0; l < nt; l++)
-    numer[l] = ZERO;
+    numer[l] =  ZERO;
 
   if(n == 0) 
     return;
@@ -99,7 +102,7 @@ void FNAME(
 	for(j=i-1; j >= 0; j--) {
 	  dx = x[j] - xi;
 	  dx2 = dx * dx;
-	  if(dx2 > tmax2)
+	  if(dx2 >= tmax2)
 	    break;
 	  dy = y[j] - yi;
 	  dij2 = dx2 + dy * dy;
@@ -112,13 +115,12 @@ void FNAME(
 	    dratio = dij/dt;
 	    /* smallest integer greater than or equal to dratio */
 	    lmin = (int) ceil(dratio);
-	    /* increment entries lmin to lmax inclusive */
+	    /* effectively increment entries lmin to lmax inclusive */
 	    if(lmin <= lmax) {
 #ifdef WEIGHTED
 	      wij = wi * wj;
 #endif
-	      for(l = lmin; l <= lmax; l++) 
-		numer[l] += WIJ;
+	      numer[lmin] += WIJ;
 	    }
 	  }
 	}
@@ -133,7 +135,7 @@ void FNAME(
 	  /* squared interpoint distance */
 	  dx = x[j] - xi;
 	  dx2 = dx * dx;
-	  if(dx2 > tmax2)
+	  if(dx2 >= tmax2)
 	    break;
 	  dy = y[j] - yi;
 	  dij2 = dx2 + dy * dy;
@@ -151,14 +153,21 @@ void FNAME(
 #ifdef WEIGHTED
 	      wij = wi * wj;
 #endif
-	      for(l = lmin; l <= lmax; l++) 
-		numer[l] += WIJ;
+	      numer[lmin] += WIJ;
 	    }
 	  }
 	}
       }
     }
   }
+  /* 
+     Now accumulate the numerator.
+  */
+
+  if(nt > 1)
+    for(l=1; l < nt; l++)
+      numer[l] += numer[l-1];
+
 }
 
 #undef ZERO

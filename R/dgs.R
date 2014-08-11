@@ -2,7 +2,7 @@
 #
 #    dgs.R
 #
-#    $Revision: 1.5 $	$Date: 2012/01/18 10:06:43 $
+#    $Revision: 1.6 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Diggle-Gates-Stibbard process
 #
@@ -90,7 +90,7 @@ DiggleGatesStibbard <- local({
              message("Using fast eval for DiggleGatesStibbard")
            rho <- potpars$rho
            idX <- seq_len(npoints(X))
-           idU <- rep(-1, npoints(U))
+           idU <- rep.int(-1, npoints(U))
            idU[EqualPairs[,2]] <- EqualPairs[,1]
            v <- dgsTerms(U, X, idU, idX, rho)
            v <- matrix(v, ncol=1)

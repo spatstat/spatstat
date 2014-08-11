@@ -3,7 +3,7 @@
 # Function to take a matrix of pairwise distances
 # and compile a 'K' function in the format required by spatstat.
 #
-#   $Revision: 1.4 $  $Date: 2012/03/29 02:55:57 $
+#   $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
 # -------------------------------------------------------------------
 
 compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE) {
@@ -72,7 +72,7 @@ compilepcf <- function(D, r, weights=NULL, denom=1, check=TRUE,
     normwvalues <- wvalues/totwt
   } else {
     nv <- length(Dvalues)
-    normwvalues <- rep(1/nv, nv)
+    normwvalues <- rep.int(1/nv, nv)
     totwt <- nv
   }
   # form kernel estimate

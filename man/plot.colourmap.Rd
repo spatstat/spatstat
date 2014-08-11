@@ -6,11 +6,15 @@
 }
 \usage{
 \method{plot}{colourmap}(x, ...,
-       main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE)
+       main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
+       labelmap=NULL)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
-  \item{\dots}{Graphical arguments passed to \code{\link{image.default}}.}
+  \item{\dots}{
+    Graphical arguments passed to \code{\link{image.default}}
+    or \code{\link{axis}}.
+  }
   \item{main}{Main title for plot. A character string.}
   \item{xlim}{
     Optional range of \code{x} values for the location of the
@@ -25,6 +29,13 @@
     (\code{TRUE}).}
   \item{axis}{Logical flag determining whether an axis should be plotted
     showing the numerical values that are mapped to the colours.
+  }
+  \item{labelmap}{
+    Function. If this is present, then the labels on the plot,
+    which indicate the input values corresponding to particular colours,
+    will be transformed by \code{labelmap} before being displayed
+    on the plot. Typically used to simplify or shorten the
+    labels on the plot.
   }
 }
 \details{
@@ -51,7 +62,7 @@
   plot(co)
   plot(co, vertical=TRUE)
   ca <- colourmap(rainbow(8), inputs=letters[1:8])
-  plot(ca)
+  plot(ca, col.ticks="pink")
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@csiro.au}

@@ -23,6 +23,7 @@
 \alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
+\alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.fv}
 \alias{as.im.scan.test}
@@ -55,6 +56,7 @@
 \alias{check.nvector}
 \alias{check.nmatrix}
 \alias{check.1.real}
+\alias{check.range}
 \alias{check.testfun}
 \alias{clarkevansCalc}
 \alias{clear.simplepanel}
@@ -106,6 +108,7 @@
 \alias{do.call.matched}
 \alias{do.istat}
 \alias{dotexpr.to.call}
+\alias{dropifsingle}
 \alias{edge.Ripley}
 \alias{edge.Trans}
 \alias{edge.Trans.modif}
@@ -180,6 +183,7 @@
 \alias{idorempty}
 \alias{implemented.for.K}
 \alias{inpoint}
+\alias{inside.range}     
 \alias{inside.triangle}     
 \alias{inside.xypolygon}     
 \alias{instantiate.interact}
@@ -238,6 +242,7 @@
 \alias{logi.engine}
 \alias{passthrough}
 \alias{paste.expr}
+\alias{prettyinside}
 \alias{lookup.im}
 \alias{majorminorversion}
 \alias{make.even.breaks}
@@ -300,11 +305,6 @@
 \alias{offsetsinformula}
 \alias{onecolumn}
 \alias{optimStatus}
-\alias{printStatus}
-\alias{redraw.simplepanel}
-\alias{run.simplepanel}
-\alias{signalStatus}
-\alias{simplepanel}
 \alias{ordinal}
 \alias{outdated.interact}
 \alias{overlap.owin}
@@ -348,6 +348,7 @@
 \alias{prefixfv}
 \alias{primefactors}       
 \alias{primesbelow}
+\alias{printStatus}
 \alias{print.addvar}    
 \alias{print.bt.frame}
 \alias{print.bw.frac}
@@ -398,12 +399,14 @@
 \alias{print.summary.splitppx}
 \alias{print.summary.units}
 \alias{print.tess}
+\alias{print.timed}
 \alias{prolongseq}
 \alias{quad}
 \alias{RandomFieldsSafe}
 \alias{ratfv}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
+\alias{redraw.simplepanel}
 \alias{repair.image.xycoords}
 \alias{rgbNA}
 \alias{rhs.of.formula}
@@ -411,6 +414,7 @@
 \alias{rhohatCalc}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
+\alias{run.simplepanel}
 \alias{quadrat.testEngine}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
@@ -474,6 +478,8 @@
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{short.deparse}
+\alias{signalStatus}
+\alias{simplepanel}
 \alias{simplify.xypolygon}              
 \alias{simulrecipe}              
 \alias{singlestring}              
@@ -508,6 +514,7 @@
 \alias{summary.ppx}
 \alias{summary.splitppx}
 \alias{summary.rmhexpand}
+\alias{sumsymouter}
 \alias{superimposeMarks}
 \alias{sympoly}
 \alias{termsinformula}
@@ -573,9 +580,10 @@ areaLoss.grid(X, r, ..., W=as.owin(X), subset=NULL,
                          ngrid = spatstat.options("ngrid.disc"),
                          exact = FALSE)
 assemble.plot.objects(xlim, ylim, ..., lines, polygon)
-AsymmDistance.psp(X, Y, metric="Hausdorff", method="Fortran")
+AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.data.frame}{fv}(x, ...)
+\method{as.data.frame}{bw.optim}(x, ...)
 as.fv(x)
 \method{as.list}{hyperframe}(x, ...)
 \method{as.im}{scan.test}(X, \dots)
@@ -593,7 +601,7 @@ breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
 breakpts.from.r(r)
 bt.frame(Q, trend=~1, interaction=NULL, ..., covariates=NULL,
          correction="border", rbord=0, use.gam=FALSE, allcovar=FALSE)
-bw.optim(cv, h, iopt, \dots, xlab, ylab)
+bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
 cartesian(pp, markset, fac = TRUE)
 cat.factor(\dots, recursive=FALSE)
 cellmiddles(W, nx, ny, npix, gi)
@@ -609,6 +617,7 @@ check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
 check.nvector(v, npoints, fatal=TRUE, things="data points", naok=FALSE)
 check.nmatrix(m, npoints, fatal=TRUE, things="data points", naok=FALSE, squarematrix=TRUE)
 check.1.real(x, context, fatal)
+check.range(x, fatal)
 check.testfun(f, f1, X)
 clarkevansCalc(X, correction, clipregion, working)
 clear.simplepanel(P)
@@ -664,6 +673,7 @@ do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
 do.call.matched(fun, arglist, funargs, extrargs, sieve)
 do.istat(panel)
 dotexpr.to.call(expr, dot, evaluator)
+dropifsingle(x)
 edge.Ripley(X, r, W, method, maxweight)
 edge.Trans(X, Y, W, exact, paired, trim)
 edge.Trans.modif(X, Y, WX, WY, exact, paired, trim)
@@ -752,6 +762,7 @@ identical.formulae(x,y)
 idorempty(w, r, caller)
 implemented.for.K(correction, windowtype, explicit)
 inpoint(W)
+inside.range(x, r)
 inside.triangle(x, y, xx, yy)
 inside.xypolygon(pts, polly, test01, method)
 instantiate.interact(x, par)
@@ -810,6 +821,7 @@ local2lpp(L, seg, tp, X)
 logi.engine(\dots)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
+prettyinside(x, \dots)
 \method{print}{localpcfmatrix}(x, \dots)
 \method{print}{logippm}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
@@ -857,7 +869,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             want.trend, want.inter, correction, rbord, Pname,
             callstring, \dots,
             covfunargs, allcovar, precomputed, savecomputed,
-            vnamebase, vnameprefix, warn.illegal)
+            vnamebase, vnameprefix, warn.illegal, warn.unidentifiable)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
@@ -913,7 +925,7 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
-\method{plot}{bw.optim}(x, \dots, add)
+\method{plot}{bw.optim}(x, \dots, showopt, optargs)
 \method{plot}{fii}(x, \dots)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
@@ -987,6 +999,7 @@ primesbelow(nmax)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.units}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
+\method{print}{timed}(x, \dots)
 prolongseq(x, newrange)
 quad(data, dummy, w, param)
 RandomFieldsSafe()
@@ -1112,6 +1125,7 @@ summarise.trend(trend, w, a)
 \method{summary}{ppx}(object, \dots)
 \method{summary}{rmhexpand}(object, \dots)
 \method{summary}{splitppx}(object, \dots)
+sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
 sympoly(x, y, n)
 termsinformula(x)

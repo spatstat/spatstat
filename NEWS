@@ -1,4 +1,147 @@
 
+	CHANGES IN spatstat VERSION 1.31-2
+
+OVERVIEW
+
+   o We thank Robin Corria Anslie, Julian Gilbey, Kiran Marchikanti,
+   Ege Rubak and Thordis Linda Thorarinsdottir for contributions.
+
+   o More support for linear networks
+
+   o More functionality for nearest neighbours
+
+   o Bug fix in fitting Geyer model
+
+   o Performance improvements and bug fixes
+
+NEW FUNCTIONS
+
+   o affine.lpp, shift.lpp, rotate.lpp, rescale.lpp, scalardilate.lpp
+   Geometrical transformations for point patterns on a linear network
+
+   o affine.linnet, shift.linnet, rotate.linnet, 
+   rescale.linnet, scalardilate.linnet
+   Geometrical transformations for linear networks
+
+   o [.linnet
+   Subset operator for linear networks
+
+   o timed
+   Records the computation time taken
+   
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o nncross
+   nncross.ppp can now find the k-th nearest neighbours, for any k.
+
+   o nndist, nnwhich
+   New argument 'by' makes it possible to find nearest neighbours
+   belonging to specified subsets in a point pattern, for example,
+   the nearest neighbour of each type in a multitype point pattern.
+
+   o [.fv
+   Now handles the argument 'drop'.
+
+   o with.fv
+   Argument 'drop' replaced by new argument 'fun'
+   (with different interpretation).
+
+   o [.lpp
+   Subset index may now be a window (class 'owin')
+
+   o Kest
+   Options correction='border' and correction='none'
+   now run about 4 times faster, thanks to Julian Gilbey.
+
+   o density.ppp
+   Numerical underflow no longer occurs when sigma is very small
+   and 'at="points"'. A warning is no longer issued.
+   Thanks to Robin Corria Anslie.
+
+   o crossing.psp
+   New argument 'fatal' allows the user to handle empty intersections
+
+   o union.owin
+   It is now guaranteed that if A is a subset of B, then union.owin(A,B)=B.
+
+   o plot.colourmap
+   Now passes arguments to axis() to control the plot.
+   Appearance of plot improved.
+
+   o image.listof
+   Now passes arguments to plot.colourmap() if equal.ribbon=TRUE.
+
+   o kppm
+   Accelerated (especially for large datasets).
+
+   o plot.envelope
+   plot.envelope is now equivalent to plot.fv and is essentially redundant.
+
+   o rThomas, rMatClust, rNeymanScott
+   Improved explanations in help files.
+
+   o All functions
+   Many functions have been slightly accelerated.
+
+BUG FIXES
+
+   o ppm
+   Results were incorrect for the Geyer saturation model
+   with a non-integer value of the saturation parameter 'sat'.
+   Spotted by Thordis Linda Thorarinsdottir.
+   Bug introduced in spatstat 1.20-0, July 2010.
+   Fixed.
+
+   o ppm
+   Fitting a stationary Poisson process using a nonzero value of 'rbord',
+   as in "ppm(X, rbord=R)" with R > 0, gave incorrect results.
+   Fixed.
+
+   o predict.slrm
+   Crashed with message 
+   'longer object length is not a multiple of shorter object length' 
+   if the original data window was not a rectangle.
+   Fixed.
+
+   o iplot
+   Main title was sometimes incorrect.
+   Fixed.
+
+   o plot.layered
+   Ignored argument 'main' in some cases.
+   Fixed.
+
+   o plot.listof, image.listof
+   Crashed sometimes with a message 'figure margins too large'
+   when equal.ribbon=TRUE.
+   Fixed.
+
+   o print.ppx
+   Crashed if the object contained local coordinates.
+   Fixed.
+
+   o transect.im
+   Crashed if the transect lay partially outside the image domain.
+   Fixed.
+
+   o rthin
+   Crashed if X was empty.
+   Fixed.
+
+   o max.im, min.im, range.im
+   Ignored additional arguments after the first argument.
+   Fixed.
+
+   o update.lppm
+   Updated object did not remember the name of the original dataset.
+   Fixed.
+
+   o envelope
+   Grey shading disappeared from plots of envelope objects 
+   when the envelopes were transformed using eval.fv or eval.fasp.
+   Fixed.
+
+   
 	CHANGES IN spatstat VERSION 1.31-1
 
 OVERVIEW

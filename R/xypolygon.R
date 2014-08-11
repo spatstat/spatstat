@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.56 $    $Date: 2011/08/13 03:09:12 $
+#    $Revision: 1.57 $    $Date: 2013/04/25 06:37:43 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -57,8 +57,8 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
   }
 
   #-------------   MAIN ALGORITHM -------------------------------
-  score <- rep(0, npts)
-  on.boundary <- rep(FALSE, npts)
+  score <- numeric(npts)
+  on.boundary <- rep.int(FALSE, npts)
 
   if(anyretain<- any(retain)) {
     switch(method,
@@ -158,8 +158,8 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
 
   # replace any polygon vertices that were temporarily removed
   if(vertices.present) {
-    full.score <- rep(0, full.npts)
-    full.on.boundary <- rep(FALSE, full.npts)
+    full.score <- numeric(full.npts)
+    full.on.boundary <- rep.int(FALSE, full.npts)
     if(anyretain) {
       full.score[retain] <- score
       full.on.boundary[retain] <- on.boundary
@@ -208,7 +208,7 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
 
   epsilon <- with(.Machine, double.base^floor(double.ulp.digits/2))
 
-  score <- rep(0, nx*ny)
+  score <- numeric(nx*ny)
   
   for(i in seq_along(bdry)) {
     p <- bdry[[i]]

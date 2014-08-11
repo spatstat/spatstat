@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.43 $   $Date: 2013/02/07 09:58:14 $
+#   $Revision: 1.44 $   $Date: 2013/04/25 06:37:43 $
 #
 #
 #   calculate pair correlation function
@@ -77,7 +77,7 @@ pcf.ppp <- function(X, ..., r=NULL,
 
   # initialise fv object
   
-  df <- data.frame(r=r, theo=rep(1,length(r)))
+  df <- data.frame(r=r, theo=rep.int(1,length(r)))
   out <- fv(df, "r",
             substitute(g(r), NULL), "theo", ,
             alim,
@@ -216,7 +216,7 @@ pcf.fv <- local({
 
     # pack result into "fv" data frame
     Z <- fv(data.frame(r=r,
-                       theo=rep(1, length(r)),
+                       theo=rep.int(1, length(r)),
                        pcf=g),
             "r", substitute(g(r), NULL), "pcf", . ~ r, alim,
             c("r", "%s[pois](r)", "%s(r)"),

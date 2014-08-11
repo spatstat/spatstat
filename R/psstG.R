@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.2 $	$Date: 2011/06/19 06:07:56 $
+#	$Revision: 1.3 $	$Date: 2013/04/25 06:37:43 $
 #
 ################################################################################
 #
@@ -40,7 +40,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
     rbord <- fit$rbord
     b <- bdist.points(U)
     USED <- (b > rbord)
-  } else USED <- rep(TRUE, U$n)
+  } else USED <- rep.int(TRUE, U$n)
   
   # basic statistics
   Win <- X$window
@@ -146,7 +146,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   else
     okE <- okI
   RSD <- Kwtsum(dIJ[okE], nn1J[okE], wcIJ[okE],
-                  nn1, rep(1, length(nn1)), breaks)
+                  nn1, rep.int(1, length(nn1)), breaks)
   Cint <- RSD$numerator
   #
   Cres <- Bres + Csum - Cint

@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.38 $  $Date: 2013/02/27 07:46:34 $
+#   $Revision: 2.41 $  $Date: 2013/04/25 06:37:43 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -713,25 +713,17 @@ envelopeEngine <-
 }
 
 
-plot.envelope <- function(x, ..., shade=c("hi", "lo")) {
-  xname <- short.deparse(substitute(x))
-  argh <- list(...)
-  if(missing(shade) &&
-     length(argh) > 0 &&
-     any(isfo <- unlist(lapply(argh, inherits, what="formula")))) {
-    # the plot is specified by a formula;
-    # check whether columns 'hi' and 'lo' are used
-    fmla <- argh[[min(which(isfo))]]
-    vars <- variablesinformula(fmla)
-    hilo <- c("hi", "lo")
-    dotnames <- fvnames(x, ".")
-    present <- (all(hilo %in% vars) ||
-                (all(hilo %in% dotnames) && ("." %in% vars)))
-    if(!present)
-      shade <- NULL
+plot.envelope <- function(x, ...) {
+  shade.given <- ("shade" %in% names(list(...)))
+  shade.implied <- !is.null(attr(x, "shade"))
+  if(!(shade.given || shade.implied)) {
+    # ensure x has default 'shade' attribute
+    # (in case x was produced by an older version of spatstat)
+    if(all(c("lo", "hi") %in% colnames(x)))
+      attr(x, "shade") <- c("lo", "hi")
+    else warning("Unable to determine shading for envelope")
   }
-  do.call("plot.fv", resolve.defaults(list(x), list(...),
-                                      list(main=xname, shade=shade)))
+  plot.fv(x, ...)
 }
 
 print.envelope <- function(x, ...) {
@@ -943,7 +935,8 @@ envelope.matrix <- function(Y, ...,
     
   restrict.columns <- !is.null(jsim)
   dual <- !is.null(jsim.mean)
-
+  shadenames <- NULL
+  
   switch(type,
          pointwise = {
            # ....... POINTWISE ENVELOPES ...............................
@@ -978,6 +971,7 @@ envelope.matrix <- function(Y, ...,
                                    lo=lo,
                                    hi=hi)
            }
+           shadenames <- c("lo", "hi")
            if(do.pwrong) {
              # estimate the p-value for the 'wrong test'
              dataranks <- t(apply(simvals, 1, rank, ties.method="random"))
@@ -992,7 +986,7 @@ envelope.matrix <- function(Y, ...,
              domain <- (rvals >= ginterval[1]) & (rvals <= ginterval[2])
              funX <- funX[domain, ]
              simvals <- simvals[domain, ]
-           } else domain <- rep(TRUE, length(rvals))
+           } else domain <- rep.int(TRUE, length(rvals))
            simvals[is.infinite(simvals)] <- NA
            if(use.theory) {
              reference <- theory[domain]
@@ -1037,6 +1031,7 @@ envelope.matrix <- function(Y, ...,
                                    mmean=reference,
                                    lo=lo,
                                    hi=hi)
+           shadenames <- c("lo", "hi")
            if(do.pwrong)
              warning(paste("Argument", sQuote("do.pwrong=TRUE"), "ignored;",
                            "it is not relevant to global envelopes"))
@@ -1074,6 +1069,7 @@ envelope.matrix <- function(Y, ...,
                                    theo=theory,
                                    lo=lo,
                                    hi=hi)
+             shadenames <- c("lo", "hi")
              morestuff <- data.frame(mmean=Ef,
                                      var=varf,
                                      res=fX-Ef,
@@ -1096,6 +1092,7 @@ envelope.matrix <- function(Y, ...,
                                    mmean=Ef,
                                    lo=lo,
                                    hi=hi)
+             shadenames <- c("lo", "hi")
              morestuff <- data.frame(var=varf,
                                      res=fX-Ef,
                                      stdres=stdres,
@@ -1157,6 +1154,7 @@ envelope.matrix <- function(Y, ...,
   }
 
   fvnames(result, ".") <- dotty
+  fvnames(result, ".s") <- shadenames
 
   unitname(result) <- unitname(funX)
   class(result) <- c("envelope", class(result))

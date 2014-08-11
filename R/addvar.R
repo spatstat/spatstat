@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.29 $  $Date: 2011/11/25 05:01:24 $
+#   $Revision: 1.1 $  $Date: 2013/04/25 06:37:43 $
 #
 
 
@@ -42,11 +42,11 @@ addvar <- function(model, covariate, ...,
   lam <- fitted(model, type="trend")
   # subset of quadrature points used to fit model
   subQset <- getglmsubset(model)
-  if(is.null(subQset)) subQset <- rep(TRUE, nQ)
+  if(is.null(subQset)) subQset <- rep.int(TRUE, nQ)
   # restriction to subregion
   insubregion <- if(!is.null(subregion)) {
     inside.owin(quadpoints, w=subregion)
-  } else rep(TRUE, nQ)
+  } else rep.int(TRUE, nQ)
 
   ################################################################
   # Pearson residuals from point process model

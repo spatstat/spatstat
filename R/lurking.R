@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.33 $ $Date: 2011/06/16 12:32:48 $
+# $Revision: 1.35 $ $Date: 2013/04/25 06:37:43 $
 #
 
 lurking <- function(object, covariate, type="eem",
@@ -45,7 +45,7 @@ lurking <- function(object, covariate, type="eem",
   wts <- w.quad(Q)
   # subset of quadrature points used to fit model
   subQset <- getglmsubset(object)
-  if(is.null(subQset)) subQset <- rep(TRUE, n.quad(Q))
+  if(is.null(subQset)) subQset <- rep.int(TRUE, n.quad(Q))
   
   #################################################################
   # compute the covariate
@@ -71,7 +71,7 @@ lurking <- function(object, covariate, type="eem",
       Z <- is.data(Q)
       wts <- w.quad(Q)
       subQset <- getglmsubset(object)
-      if(is.null(subQset)) subQset <- rep(TRUE, n.quad(Q))
+      if(is.null(subQset)) subQset <- rep.int(TRUE, n.quad(Q))
       # 
     }
     glmdata <- getglmdata(object)
@@ -204,7 +204,7 @@ lurking <- function(object, covariate, type="eem",
     increm <- tapply(wts, covclass, sum)
     cumarea <- cumsumna(increm)
       # compute theoretical mean (when model is true)
-    mean0 <- if(type == "eem") cumarea else rep(0, length(cumarea))
+    mean0 <- if(type == "eem") cumarea else numeric(length(cumarea))
       # we'll plot(cvalues, mean0) in the cumulative case
 
   # (A'),(B') DERIVATIVES OF (A) AND (B)
@@ -256,7 +256,7 @@ lurking <- function(object, covariate, type="eem",
       Fisher <- asymp$fisher
       # Local sufficient statistic at quadrature points
       suff <- asymp$suff
-#      suff <- suff[ok, ,drop=FALSE]
+      suff <- suff[ok, ,drop=FALSE]
       # Clip if required
       if(clip) {
         lambda <- lambda[clipquad]

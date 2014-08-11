@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.61 $   $Date: 2013/02/11 10:27:16 $
+#  $Revision: 1.62 $   $Date: 2013/04/25 06:37:43 $
 #
 #  Plotting code for pixel images
 #
@@ -14,15 +14,15 @@
 
 plot.im <- local({
 
-  # recognised plot parameters
-  
+  # recognised additional arguments to image.default() and axis()
+
   plotparams <- imageparams <- c("main", "asp", "sub", "axes", "ann",
                    "cex", "font", 
                    "cex.axis", "cex.lab", "cex.main", "cex.sub",
                    "col.axis", "col.lab", "col.main", "col.sub",
                    "font.axis", "font.lab", "font.main", "font.sub")
-  axisparams <- c("pos",
-                  "cex", "font", "col", 
+
+  axisparams <- c("cex", 
                   "cex.axis", "cex.lab",
                   "col.axis", "col.lab",
                   "font.axis", "font.lab")

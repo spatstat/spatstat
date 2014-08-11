@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.36 $    $Date: 2012/01/16 08:09:42 $
+#  $Revision: 1.38 $    $Date: 2013/04/25 06:37:43 $
 #
 #
 #
@@ -33,7 +33,7 @@ update.ppm <- function(object, ...,
     return(eval(call, as.list(envir), enclos=object$callframe))
 
   # (2) model can be updated using existing covariate data frame
-  ismpl <- with(object, method == "mpl" && fitter %in% c("gam", "glm"))
+  ismpl <- with(object, method == "mpl" && !is.null(fitter) && fitter %in% c("gam", "glm"))
   only.fmla <- length(aargh) == 1 && inherits(fmla <- aargh[[1]], "formula")
   if(ismpl && only.fmla) {
     # This is a dangerous hack! 
@@ -115,7 +115,7 @@ update.ppm <- function(object, ...,
   
   # split named and unnamed arguments
   nama <- names(aargh)
-  named <- if(is.null(nama)) rep(FALSE, length(aargh)) else (nama != "")
+  named <- if(is.null(nama)) rep.int(FALSE, length(aargh)) else (nama != "")
   namedargs <- aargh[named]
   unnamedargs <- aargh[!named]
   nama <- names(namedargs)

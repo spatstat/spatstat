@@ -1,7 +1,7 @@
 #
 #  smoothfv.R
 #
-#   $Revision: 1.4 $   $Date: 2010/04/16 12:47:43 $
+#   $Revision: 1.5 $   $Date: 2013/04/25 06:37:43 $
 #
   
 smooth.fv <- function(x, which="*", ...) {

@@ -254,12 +254,12 @@ printStatus <- function(x, errors.only=FALSE) {
          # 
          K = function(par,rvals, ...){
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            pi*rvals^2+(1-exp(-rvals^2/(4*par[2])))/par[1]
          },
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            1 + exp(-rvals^2/(4 * par[2]))/(4 * pi * par[1] * par[2])
          },
          # sensible starting parameters
@@ -284,13 +284,13 @@ printStatus <- function(x, errors.only=FALSE) {
          isPCP=TRUE,
          K = function(par,rvals, ..., funaux){
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            hfun <- funaux$Hfun
            pi * rvals^2 + (1/par[1]) * hfun(rvals/(2 * par[2]))
          },
          pcf= function(par,rvals, ..., funaux){
              if(any(par <= 0))
-               return(rep(Inf, length(rvals)))
+               return(rep.int(Inf, length(rvals)))
              doh <- funaux$DOH
              y <- (1/(4*pi*rvals * par[1] * par[2])) * doh(rvals/(2 * par[2]))
              ifelse(rvals < .Machine$double.eps, 1, 1+y)
@@ -339,12 +339,12 @@ printStatus <- function(x, errors.only=FALSE) {
          isPCP=TRUE,
          K = function(par,rvals, ...){
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            pi*rvals^2 + (1 - 1/sqrt(1 + rvals^2/par[2]))/par[1]
          },
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            1 + ((1 + rvals^2/par[2])^(-1.5))/(2 * pi * par[2] * par[1])
          },
          selfstart = function(X) {
@@ -377,7 +377,7 @@ printStatus <- function(x, errors.only=FALSE) {
            vargammaK <- function(par,rvals, ..., margs){
              # margs = list(.. nu.pcf.. ) 
              if(any(par <= 0))
-               return(rep(Inf, length(rvals)))
+               return(rep.int(Inf, length(rvals)))
              nu.pcf <- margs$nu.pcf
              out <- numeric(length(rvals))
              ok <- (rvals > 0)
@@ -395,7 +395,7 @@ printStatus <- function(x, errors.only=FALSE) {
          pcf= function(par,rvals, ..., margs){
            # margs = list(..nu.pcf..)
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            nu.pcf <- margs$nu.pcf
            sig2 <- 1 / (4 * pi * (par[2]^2) * nu.pcf * par[1])
            denom <- 2^(nu.pcf - 1) * gamma(nu.pcf)
@@ -436,7 +436,7 @@ printStatus <- function(x, errors.only=FALSE) {
          # calls Covariance() from RandomFields package
          K = function(par, rvals, ..., model, margs) {
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
              # For efficiency
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
@@ -472,7 +472,7 @@ printStatus <- function(x, errors.only=FALSE) {
          },
          pcf= function(par, rvals, ..., model, margs) {
            if(any(par <= 0))
-             return(rep(Inf, length(rvals)))
+             return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
              # For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))

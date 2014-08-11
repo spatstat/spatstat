@@ -1,7 +1,7 @@
 #
 # pppmatch.R
 #
-# $Revision: 1.11 $  $Date: 2007/10/26 16:03:17 $
+# $Revision: 1.13 $  $Date: 2013/04/25 07:24:43 $
 #
 # Code by Dominic Schuhmacher
 #
@@ -410,11 +410,11 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
   else if (ccode) {
     res <- .C("dwpure",
              as.integer(d),
-             as.integer(rep(1,n)),
-             as.integer(rep(1,n)),
+             as.integer(rep.int(1,n)),
+             as.integer(rep.int(1,n)),
              as.integer(n),
              as.integer(n),
-             flowmatrix = as.integer(rep(0,n^2)),
+             flowmatrix = as.integer(integer(n^2)),
              PACKAGE="spatstat")
     am <- matrix(res$flowmatrix, n, n)
   }
@@ -530,7 +530,7 @@ maxflow <- function(costm) {
     stop("Each row of the cost matrix must contain a zero")
   
   m <- dim(costm)[1]   # cost matrix is square m * m
-  assignment <- rep(-1, m)   # -1 means no pp2-point assigned to i-th pp1-point
+  assignment <- rep.int(-1, m)   # -1 means no pp2-point assigned to i-th pp1-point
    # initial assignment or rowlabel <- source label (= 0) where not possible
    for (i in 1:m) {
       j <- match(0, costm[i,])
@@ -539,8 +539,8 @@ maxflow <- function(costm) {
    }
    newlabelfound <- TRUE
    while (newlabelfound) {
-     rowlab <- rep(-1, m)   # -1 means no label given, 0 stands for source label
-     collab <- rep(-1, m)
+     rowlab <- rep.int(-1, m)   # -1 means no label given, 0 stands for source label
+     collab <- rep.int(-1, m)
      rowlab <- ifelse(assignment == -1, 0, rowlab)
      # column and row labeling procedure until either breakthrough occurs
      # (which means that there is a better point assignment, i.e. one that
@@ -617,11 +617,11 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
         stop("integer overflow, while rounding the q-th powers of distances")
       res <- .C("dwpure",
                as.integer(d),
-               as.integer(rep(1,n)),
-               as.integer(rep(1,n)),
+               as.integer(rep.int(1,n)),
+               as.integer(rep.int(1,n)),
                as.integer(n),
                as.integer(n),
-               flowmatrix = as.integer(rep(0,n^2)),
+               flowmatrix = as.integer(integer(n^2)),
                PACKAGE="spatstat")
       am <- matrix(res$flowmatrix, n, n)
     }
@@ -647,7 +647,7 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
     res <- .C("dinfty_R",
              as.integer(d),
              as.integer(n),
-             assignment = as.integer(rep(-1,n)),
+             assignment = as.integer(rep.int(-1,n)),
              PACKAGE="spatstat")
     assig <- res$assignment
     am <- matrix(0, n, n)
@@ -704,11 +704,11 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
 
     res <- .C("dwpure",
              as.integer(d),
-             as.integer(rep(mass1,n1)),
-             as.integer(rep(mass2,n2)),
+             as.integer(rep.int(mass1,n1)),
+             as.integer(rep.int(mass2,n2)),
              as.integer(n1),
              as.integer(n2),
-             flowmatrix = as.integer(rep(0,n1*n2)),
+             flowmatrix = as.integer(integer(n1*n2)),
              PACKAGE="spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     resdist <- max(dfix[am > 0])
@@ -731,11 +731,11 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
 
     res <- .C("dwpure",
              as.integer(d),
-             as.integer(rep(mass1,n1)),
-             as.integer(rep(mass2,n2)),
+             as.integer(rep.int(mass1,n1)),
+             as.integer(rep.int(mass2,n2)),
              as.integer(n1),
              as.integer(n2),
-             flowmatrix = as.integer(rep(0,n1*n2)),
+             flowmatrix = as.integer(integer(n1*n2)),
              PACKAGE="spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     # our "adjacency matrix" in this case is standardized to have

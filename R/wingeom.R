@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.76 $	$Date: 2013/02/24 04:12:36 $
+#	$Revision: 4.77 $	$Date: 2013/03/13 08:19:04 $
 #
 #
 #
@@ -346,16 +346,13 @@ union.owin <- function(A, B, ...) {
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
 
-  # Rectangular cases
-  
-  if(Arect && Brect) {
-    if(is.subset.owin(A, B))
-      return(B)
-    else if (is.subset.owin(B,A))
-      return(A)
-  }
+  if(is.subset.owin(A, B))
+    return(B)
+  else if (is.subset.owin(B,A))
+    return(A)
 
-  # Result is not rectangular
+  # Result is not rectangular.
+  # Create a rectangle to contain it.
   
   C <- owin(range(A$xrange, B$xrange),
             range(A$yrange, B$yrange),
@@ -394,9 +391,13 @@ union.owin <- function(A, B, ...) {
   y <- as.vector(raster.y(C))
   ok <- inside.owin(x, y, A) | inside.owin(x, y, B)
 
-  if(!all(ok))
+  if(all(ok)) {
+    # result is a rectangle
+    C <- as.rectangle(C)
+  } else {
+    # result is a mask
     C$m[] <- ok
-
+  }
   return(C)
 }
 

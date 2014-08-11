@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.35 $	$Date: 2012/09/27 07:53:34 $
+#	$Revision: 4.36 $	$Date: 2013/04/25 06:37:43 $
 #
 # -------- functions ----------------------------------------
 #
@@ -38,7 +38,7 @@ function(X)
                },
                polygonal = {
                  xy <- cbind(x,y)
-                 result <- rep(Inf, X$n)
+                 result <- rep.int(Inf, X$n)
                  bdry <- window$bdry
                  for(i in seq_along(bdry)) {
                    polly <- bdry[[i]]
@@ -87,12 +87,12 @@ function(X)
                  # set up pixel raster
                  x <- as.vector(raster.x(masque))
                  y <- as.vector(raster.y(masque))
-                 b <- rep(0, length(x))
+                 b <- numeric(length(x))
                  # test each pixel in/out, analytically
                  inside <- inside.owin(x, y, w)
                  # compute distances for these pixels
                  xy <- cbind(x[inside], y[inside])
-                 dxy <- rep(Inf, sum(inside))
+                 dxy <- rep.int(Inf, sum(inside))
                  bdry <- w$bdry
                  for(i in seq_along(bdry)) {
                    polly <- bdry[[i]]

@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.37 $	$Date: 2012/11/06 07:50:46 $
+#    $Revision: 1.38 $	$Date: 2013/04/25 06:37:43 $
 #
 #    The saturated pairwise interaction family of point process models
 #
@@ -95,7 +95,7 @@ nU <- npoints(U)
 Xseq  <- seq_len(nX)
 if(length(EqualPairs) == 0) {
   # no data points currently included 
-  missingdata <- rep(TRUE, nX)
+  missingdata <- rep.int(TRUE, nX)
 } else {
   Xused <- EqualPairs[,1]
   missingdata <- !(Xseq %in% Xused)
@@ -135,7 +135,7 @@ computed <- attr(V, "computed")   # could be NULL
 ns <- length(saturate)
 np <- ncol(V)
 if(ns == 1 && np > 1)
-  saturate <- rep(saturate, np)
+  saturate <- rep.int(saturate, np)
 else if(ns != np)
   stop("Length of vector of saturation parameters is incompatible with the pair potential", call.=FALSE)
 

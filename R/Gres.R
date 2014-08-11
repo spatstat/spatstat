@@ -3,7 +3,7 @@
 #
 #	Residual G 
 #
-#	$Revision: 1.2 $	$Date: 2013/02/26 04:32:21 $
+#	$Revision: 1.3 $	$Date: 2013/04/25 06:37:43 $
 #
 #############################################################################
 #
@@ -22,7 +22,7 @@ Gres <- function(object, ...) {
       warning("Extra arguments ignored")
   }
   # initialise fv object
-  df <- data.frame(r=G$r, theo=rep(0, length(G$r)))
+  df <- data.frame(r=G$r, theo=numeric(length(G$r)))
   desc <- c("distance argument r", "value 0 corresponding to perfect fit")
   ans <- fv(df, "r", substitute(bold(R)~hat(G)(r), NULL),
             "theo", . ~ r,

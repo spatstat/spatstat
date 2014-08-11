@@ -6,7 +6,7 @@
 }
 \description{
   This dataset is a spatial point pattern of trees recorded at
-  Hyyti{\"a}l{\"a}, Finland. 
+  \ifelse{latex}{\out{Hyyti\"{a}l\"{a}}}{Hyytiala}, Finland. 
   The majority of the trees are Scots pines.
   See Kokkila et al (2002).
 
@@ -26,7 +26,8 @@ plot(hyytiala, cols=2:5)
   Nicolas Picard
 }
 \references{
-  Kokkila, T., M{\"a}kel{\"a}, A. and Nikinmaa E. (2002)
+  Kokkila, T., \ifelse{latex}{\out{M{\"a}kel{\"a}}}{Makela}, A. and
+  Nikinmaa E. (2002)
   A method for generating stand structures using Gibbs marked point
   process. 
   \emph{Silva Fennica} \bold{36} 265--277.

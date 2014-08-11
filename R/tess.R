@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.43 $ $Date: 2012/09/05 08:17:17 $
+#   $Revision: 1.44 $ $Date: 2013/04/25 06:37:43 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {

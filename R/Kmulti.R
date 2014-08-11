@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.41 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 5.42 $	$Date: 2013/04/25 06:37:43 $
 #
 #
 # -------- functions ----------------------------------------
@@ -136,7 +136,7 @@ function(X, i, r=NULL, breaks=NULL,
     i <- levels(marx)[1]
         
   I <- (marx == i)
-  J <- rep(TRUE, X$n)  # i.e. all points
+  J <- rep.int(TRUE, X$n)  # i.e. all points
 	
   if(!any(I)) stop(paste("No points have mark i =", i))
 	

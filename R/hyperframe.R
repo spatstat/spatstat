@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.45 $  $Date: 2012/06/06 02:08:03 $
+# $Revision: 1.46 $  $Date: 2013/04/25 06:37:43 $
 #
 
 hyperframe <- function(...,
@@ -61,7 +61,7 @@ hyperframe <- function(...,
   if(!any(columns)) 
     ncases <- 1
   else {
-    heights <- rep(1, nvars)
+    heights <- rep.int(1, nvars)
     heights[columns] <-  unlist(lapply(aarg[columns], length))
     u <- unique(heights)
     if(length(u) > 1) {
@@ -276,7 +276,7 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
     vclassstring <- paste("(", vclass, ")", sep="")
     if(any(!dfcol)) 
       lx[!dfcol] <- lapply(as.list(vclassstring[!dfcol]),
-                           function(x,n) { rep(x,n)}, n=nrows)
+                           function(x,n) { rep.int(x,n)}, n=nrows)
     df <- do.call("data.frame", append(lx, list(row.names=row.names)))
   }
   return(df)
@@ -339,7 +339,7 @@ cbind.hyperframe <- function(...) {
     return(hyperframe())
   namarg <- names(aarg)
   if(is.null(namarg))
-    namarg <- rep("", narg)
+    namarg <- rep.int("", narg)
   ishyper <- unlist(lapply(aarg, inherits, what="hyperframe"))
   isdf <- unlist(lapply(aarg, inherits, what="data.frame"))
   columns <- list()
@@ -456,22 +456,22 @@ plot.hyperframe <- function(x, e, ..., main, arrange=TRUE,
   else stopifnot(nrows * ncols >= length(x))
   nblank <- ncols * nrows - n
   # declare layout
-  mat <- matrix(c(seq_len(n), rep(0, nblank)),
+  mat <- matrix(c(seq_len(n), numeric(nblank)),
                 byrow=TRUE, ncol=ncols, nrow=nrows)
-  heights <- rep(1, nrows)
+  heights <- rep.int(1, nrows)
   if(banner) {
     # Increment existing panel numbers
     # New panel 1 is the banner
     panels <- (mat > 0)
     mat[panels] <- mat[panels] + 1
-    mat <- rbind(rep(1,ncols), mat)
+    mat <- rbind(rep.int(1,ncols), mat)
     heights <- c(0.1 * (1 + nlines), heights)
   }
   # initialise plot
   layout(mat, heights=heights)
   # plot banner
   if(banner) {
-    opa <- par(mar=rep(0,4), xpd=TRUE)
+    opa <- par(mar=rep.int(0,4), xpd=TRUE)
     plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
          xlim=c(-1,1),ylim=c(-1,1))
     cex <- resolve.defaults(list(...), list(cex.title=2))$cex.title
@@ -502,7 +502,7 @@ str.hyperframe <- function(object, ...) {
     vname <- x$vname
     vclass <- x$vclass
     vtype  <- as.character(x$vtype)
-    indentstring <- with(argh, paste(rep(indent.str, nest.lev), collapse=""))
+    indentstring <- with(argh, paste(rep.int(indent.str, nest.lev), collapse=""))
     for(j in 1:nc) {
       tag <- paste("$", vname[j])
       switch(vtype[j],

@@ -3,7 +3,7 @@
 #
 #   Allard-Fraley estimator of cluster region
 #
-#   $Revision: 1.4 $  $Date: 2012/10/11 10:30:52 $
+#   $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
 #
 
 clusterset <- function(X, result=c("marks", "domain"),
@@ -59,7 +59,7 @@ clusterset <- function(X, result=c("marks", "domain"),
            # map tiles to points
            if(!fast) picked <- id[picked]
            # label points
-           is.picked <- rep("no", n)
+           is.picked <- rep.int("no", n)
            is.picked[picked] <- "yes"
            is.picked <- factor(is.picked, levels=c("no", "yes"))
            out <- X %mark% is.picked
@@ -68,7 +68,7 @@ clusterset <- function(X, result=c("marks", "domain"),
            if(exact) {
              out <- do.call("union.owin", unname(D[picked]))
            } else {
-             is.picked <- rep(FALSE, n)
+             is.picked <- rep.int(FALSE, n)
              is.picked[picked] <- TRUE
              out <- eval.im(is.picked[cellid])
            }

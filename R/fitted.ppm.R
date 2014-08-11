@@ -3,7 +3,7 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.9 $   $Date: 2012/09/11 13:26:54 $
+#   $Revision: 1.10 $   $Date: 2013/04/25 06:37:43 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
@@ -41,7 +41,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
   if(uniform) {
     lambda <- exp(coeffs[[1]])
     Q <- quad.ppm(object, drop=drop)
-    lambda <- rep(lambda, n.quad(Q))
+    lambda <- rep.int(lambda, n.quad(Q))
   } else {
     glmdata <- getglmdata(object, drop=drop)
     glmfit  <- getglmfit(object)

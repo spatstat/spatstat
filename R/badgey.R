@@ -2,7 +2,7 @@
 #
 #    badgey.S
 #
-#    $Revision: 1.11 $	$Date: 2012/11/06 08:48:17 $
+#    $Revision: 1.12 $	$Date: 2013/04/25 06:37:43 $
 #
 #    Hybrid Geyer process
 #
@@ -137,9 +137,9 @@ BadGey <- local({
          # ensure r and sat have equal length
          if(length(r) != length(sat)) {
            if(length(r) == 1)
-             r <- rep(r, length(sat))
+             r <- rep.int(r, length(sat))
            else if(length(sat) == 1)
-             sat <- rep(sat, length(r))
+             sat <- rep.int(sat, length(r))
            else stop("lengths or r and sat do not match")
          }
          # first ensure all data points are in U
@@ -148,7 +148,7 @@ BadGey <- local({
          Xseq  <- seq_len(nX)
          if(length(EqualPairs) == 0) {
            # no data points currently included 
-           missingdata <- rep(TRUE, nX)
+           missingdata <- rep.int(TRUE, nX)
          } else {
            Xused <- EqualPairs[,1]
            missingdata <- !(Xseq %in% Xused)

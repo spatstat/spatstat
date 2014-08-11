@@ -22,10 +22,19 @@
     any appropriate subset index for the columns of the data frame.
     Selects some of the functions present in \code{x}.
   }
-  \item{drop, \dots}{Ignored.}
+  \item{\dots}{
+    Ignored.
+  }
+  \item{drop}{
+     Logical. If \code{TRUE}, the result is a data frame or vector
+     containing the selected rows and columns of data.
+     If \code{FALSE} (the default),
+     the result is another object of class \code{"fv"}.
+  }
 } 
 \value{
-  A function value object (of class \code{"fv"}).
+  If \code{drop=FALSE}, a function value object (of class \code{"fv"}).
+  If \code{drop=TRUE}, a data frame or vector.
 }
 \details{
   This is a method for \code{"["} for the class \code{"fv"}.
@@ -36,7 +45,6 @@
   \code{\link{fv.object}}
 }
 \examples{
- data(cells)
  K <- Kest(cells)
 
  # discard the estimates of K(r) for r  > 0.1
@@ -44,7 +52,9 @@
 
  # discard the border method estimator
  Ksub <- K[ , names(K) != "border"]
- 
+
+ # read some values
+ K[5, ,drop=TRUE]
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@csiro.au}

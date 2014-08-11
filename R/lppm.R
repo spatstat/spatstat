@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.17 $   $Date: 2013/01/29 06:46:49 $
+#  $Revision: 1.18 $   $Date: 2013/03/08 04:08:05 $
 #
 
 lppm <- function(X, ...) {
@@ -117,6 +117,7 @@ update.lppm <- function(object, ...) {
   stopifnot(inherits(object, "lppm"))
   X <- object$X
   fit <- object$fit
+  Xname <- object$Xname
   aargh <- list(...)
   islpp <- unlist(lapply(aargh, inherits, what="lpp"))
   if(!any(islpp)) {
@@ -134,7 +135,7 @@ update.lppm <- function(object, ...) {
   } 
   if(!is.poisson.ppm(newfit))
     warning("Non-Poisson models currently use Euclidean distance")
-  out <- list(X=newX, fit=newfit)
+  out <- list(X=newX, fit=newfit, Xname=Xname)
   class(out) <- "lppm"
   return(out)
 }

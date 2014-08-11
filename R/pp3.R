@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.9 $  $Date: 2010/05/02 00:49:42 $
+#  $Revision: 1.10 $  $Date: 2013/04/25 06:37:43 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
