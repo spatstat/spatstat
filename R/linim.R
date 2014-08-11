@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.7 $   $Date: 2013/01/15 04:57:55 $
+#  $Revision: 1.10 $   $Date: 2013/10/20 01:05:35 $
 #
 #  Image/function on a linear network
 #
@@ -138,4 +138,62 @@ as.linim.linim <- function(X, ...) {
   return(Y)
 }
 
+# analogue of eval.im
+
+eval.linim <- function(expr, envir, harmonize=TRUE) {
+  sc <- sys.call()
+  # Get names of all variables in the expression
+  e <- as.expression(substitute(expr))
+  varnames <- all.vars(e)
+  allnames <- all.names(e, unique=TRUE)
+  funnames <- allnames[!(allnames %in% varnames)]
+  if(length(varnames) == 0)
+    stop("No variables in this expression")
+  # get the values of the variables
+  if(missing(envir))
+    envir <- sys.parent()
+  vars <- lapply(as.list(varnames), function(x, e) get(x, envir=e), e=envir)
+  names(vars) <- varnames
+  funs <- lapply(as.list(funnames), function(x, e) get(x, envir=e), e=envir)
+  names(funs) <- funnames
+  # Find out which variables are (linear) images
+  islinim <- unlist(lapply(vars, inherits, what="linim"))
+  if(!any(islinim))
+    stop("There are no linear images (class linim) in this expression")
+  # ....................................
+  # Evaluate the pixel values using eval.im
+  # ....................................
+  sc[[1]] <- as.name('eval.im')
+  Y <- eval(sc)
+  # .........................................
+  # Then evaluate data frame entries if feasible
+  # .........................................
+  dfY <- NULL
+  linims <- vars[islinim]
+  nlinims <- length(linims)
+  dframes <- lapply(linims, attr, which="df")
+  nets <- lapply(linims, attr, which="L")
+  isim <- unlist(lapply(vars, is.im))
+  if(!any(isim & !islinim)) {
+    # all images are 'linim' objects
+    # Check that the images refer to the same linear network
+    if(nlinims > 1) {
+      agree <- unlist(lapply(nets[-1], identical, y=nets[[1]]))
+      if(!all(agree))
+        stop(paste("Images do not refer to the same linear network"))
+    }
+    dfempty <- unlist(lapply(dframes, is.null))
+    if(!any(dfempty)) {
+      # replace each image variable by its data frame column of values
+      vars[islinim] <- lapply(dframes, getElement, "values")
+      # now evaluate expression
+      Yvalues <- eval(e, append(vars, funs))
+      # pack up
+      dfY <- dframes[[1]]
+      dfY$values <- Yvalues
+    }
+  }
+  result <- linim(nets[[1]], Y, df=dfY)
+  return(result)
+}
     

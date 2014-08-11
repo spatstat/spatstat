@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.38 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.41 $	$Date: 2013/10/09 00:50:18 $
 #
 #
 #
@@ -137,45 +137,35 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
               # Try using polypath():
              lucy <- names(dev.cur())
              if(!(lucy %in% c("xfig","pictex","X11"))) {
-               xx <- do.call(c, lapply(p, function(a) {c(NA, a$x)}))[-1]
-               yy <- do.call(c, lapply(p, function(a) {c(NA, a$y)}))[-1]
+               xx <- unlist(lapply(p, function(a) {c(NA, a$x)}))[-1]
+               yy <- unlist(lapply(p, function(a) {c(NA, a$y)}))[-1]
                do.call.matched("polypath",
                                resolve.defaults(list(x=xx,y=yy),
                                                 list(border=col.poly),
                                                 list(...)))
              } else {
-	      # Try using gpclib:
-               if(!(spatstat.options("gpclib") && require(gpclib)))
-                 warning(paste("Can't plot filled polygons. ",
-                               "Cannot use polypath() with device ",
-                               paste(dQuote(lucy), collapse=" : "), 
-                               ", and gpclib is unavailable.\n",
-                               sep=""))
-               else {
-                 # First fill the polygon's interior with colour
-                 # Use gpclib to triangulate
-                 Triangulate <- gpcmethod("triangulate", list(x="gpc.poly"))
-                 txy <- Triangulate(owin2gpc(W))
-                 ntri <- floor(nrow(txy)/3)
-                 # Fill triangles with colour
-                 for(i in seq_len(ntri)) {
-                   ri <- 3 * (i - 1) + 1:3
+               # decompose window into simply-connected pieces
+               broken <- try(break.holes(W))
+               if(inherits(broken, "try-error")) {
+                 warning("Unable to plot filled polygons")
+               } else {
+                 # Fill pieces with colour (and draw border in same colour)
+                 pp <- broken$bdry
+                 for(i in seq_len(length(pp)))
                    do.call.matched("polygon",
-                                   resolve.defaults(
-                                                    list(x=txy[ri,]),
-                                                    list(border=col.poly),
+                                   resolve.defaults(list(x=pp[[i]],
+                                                         border=col.poly),
                                                     list(...)))
-                 }
                }
-               # Now draw polygon boundaries
-               for(i in seq_along(p))
-                 do.call.matched("polygon",
-                                 resolve.defaults(
-                                                  list(x=p[[i]]),
-                                                  list(density=0, col=NA),
-                                                  list(...)),
-                                 extrargs="lwd")
              }
+             # Now draw polygon boundaries
+             for(i in seq_along(p))
+               do.call.matched("polygon",
+                               resolve.defaults(
+                                                list(x=p[[i]]),
+                                                list(density=0, col=NA),
+                                                list(...)),
+                               extrargs="lwd")
            }
            if(hatch) {
              L <- rlinegrid(angle, spacing, W)
@@ -219,7 +209,44 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   invisible()
 }
 
-
-
-
-
+break.holes <- function(x, splitby=NULL, depth=0, maxdepth=100) {
+  if(is.null(splitby)) {
+    # first call: validate x
+    stopifnot(is.owin(x))
+    splitby <- "x"
+  }
+  if(depth > maxdepth)
+    stop("Unable to divide window into simply-connected pieces")
+  p <- x$bdry
+  holes <- unlist(lapply(p, is.hole.xypolygon))
+  if(!any(holes)) return(x)
+  nholes <- sum(holes)
+  i <- min(which(holes))
+  p.i <- p[[i]]
+  b <- as.rectangle(x)
+  xr <- b$xrange
+  yr <- b$yrange
+  switch(splitby,
+         x = {
+           xsplit <- mean(range(p.i$x))
+           left <- c(xr[1], xsplit)
+           right <- c(xsplit, xr[2])
+           pleft <- intersect.owin(x, owin(left, yr))$bdry
+           pright <- intersect.owin(x, owin(right, yr))$bdry
+           xnew <- owin(poly=c(pleft, pright), check=FALSE)
+           nextsplit <- "y"
+         },
+         y = {
+           ysplit <- mean(range(p.i$y))
+           lower <- c(yr[1], ysplit)
+           upper <- c(ysplit, yr[2])
+           plower <- intersect.owin(x, owin(xr, lower))$bdry
+           pupper <- intersect.owin(x, owin(xr, upper))$bdry
+           xnew <- owin(poly=c(plower, pupper), check=FALSE)
+           nextsplit <- "x"
+         })
+  # recurse
+  xnew <- break.holes(xnew, splitby=nextsplit,
+                      depth=depth+1, maxdepth=max(maxdepth, 4*nholes))
+  return(xnew)
+}

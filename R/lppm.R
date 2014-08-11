@@ -3,10 +3,10 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.19 $   $Date: 2013/08/14 04:08:30 $
+#  $Revision: 1.21 $   $Date: 2013/09/10 09:57:02 $
 #
 
-lppm <- function(X, ...) {
+lppm <- function(X, ..., eps=NULL, nd=1000) {
   Xname <- short.deparse(substitute(X))
   nama <- names(list(...))
   resv <- c("method", "forcefit")
@@ -15,7 +15,7 @@ lppm <- function(X, ...) {
                   commasep(sQuote(resv[clash])),
                   "must not be used"))
   stopifnot(inherits(X, "lpp"))
-  Q <- linequad(X)
+  Q <- linequad(X, eps=eps, nd=nd)
   fit <- ppm(Q, ..., method="mpl", forcefit=TRUE)
   if(!is.poisson.ppm(fit))
     warning("Non-Poisson models currently use Euclidean distance")
@@ -206,4 +206,8 @@ is.multitype.lppm <- function(X, ...) { is.multitype(X$fit) }
 
 is.marked.lppm <- function(X, ...) { is.marked(X$fit) }
 
-
+vcov.lppm <- function(object, ...) {
+  if(!is.poisson(object))
+    stop("vov.lppm is only implemented for Poisson models")
+  vcov(object$fit, ...)
+}

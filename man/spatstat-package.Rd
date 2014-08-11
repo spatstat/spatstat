@@ -869,6 +869,7 @@
   \bold{Summary statistics for a point pattern on a linear network:}
 
   These are for point patterns on a linear network (class \code{lpp}).
+  For unmarked patterns:
   
   \tabular{ll}{
     \code{\link{linearK}} \tab
@@ -878,14 +879,43 @@
     \code{\link{linearpcf}} \tab
     pair correlation function on linear network \cr
     \code{\link{linearpcfinhom}} \tab
-    inhomogeneous pair correlation on linear network 
+    inhomogeneous pair correlation on linear network
+  }
+
+  For multitype patterns:
+  \tabular{ll}{
+    \code{\link{linearKcross}} \tab
+    \eqn{K} function between two types of points \cr
+    \code{\link{linearKdot}} \tab
+    \eqn{K} function from one type to any type \cr
+    \code{\link{linearKcross.inhom}} \tab
+    Inhomogeneous version of \code{\link{linearKcross}} \cr
+    \code{\link{linearKdot.inhom}} \tab
+    Inhomogeneous version of \code{\link{linearKdot}} \cr
+    \code{\link{linearmarkconnect}} \tab
+    Mark connection function  on linear network \cr
+    \code{\link{linearmarkequal}} \tab
+    Mark equality function on linear network \cr
+    \code{\link{linearpcfcross}} \tab
+    Pair correlation between two types of points \cr
+    \code{\link{linearpcfdot}} \tab
+    Pair correlation from one type to any type \cr
+    \code{\link{linearpcfcross.inhom}} \tab
+    Inhomogeneous version of \code{\link{linearpcfcross}} \cr
+    \code{\link{linearpcfdot.inhom}} \tab
+    Inhomogeneous version of \code{\link{linearpcfdot}} 
   }
 
   Related facilities:
   
   \tabular{ll}{
-    \code{\link{pairdist.lpp}} \tab shortest path distances  \cr
-    \code{\link{crossdist.lpp}} \tab shortest path distances  \cr
+    \code{\link{pairdist.lpp}} \tab distances between pairs  \cr
+    \code{\link{crossdist.lpp}} \tab distances between pairs \cr
+    \code{\link{nndist.lpp}} \tab nearest neighbour distances  \cr
+    \code{\link{nncross.lpp}} \tab nearest neighbour distances  \cr
+    \code{\link{nnwhich.lpp}} \tab find nearest neighbours  \cr
+    \code{\link{nnfun.lpp}} \tab find nearest data point  \cr
+    \code{\link{distfun.lpp}} \tab distance transform  \cr
     \code{\link{envelope.lpp}} \tab simulation envelopes  \cr
     \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
     \code{\link{runiflpp}} \tab simulate random points on a linear network 
@@ -1170,7 +1200,10 @@
     \tab point process model on linear network \cr
     \code{\link{predict.lppm}} \tab model prediction on linear network \cr
     \code{\link{linim}} \tab pixel image on linear network \cr
-    \code{\link{plot.linim}} \tab plot a pixel image on linear network
+    \code{\link{plot.linim}} \tab plot a pixel image on linear network \cr
+    \code{\link{eval.linim}} \tab evaluate expression involving images \cr
+    \code{\link{linfun}} \tab function defined on linear network \cr
+    \code{\link{methods.linfun}} \tab conversion facilities
   }
 }
 
@@ -1529,6 +1562,7 @@
   Andrew Bevan,
   Brad Biggerstaff,
   Roger Bivand,
+  Jose M. Blanco Moreno,
   Florent Bonneu,
   Julian Burgos,
   Simon Byers,
@@ -1576,6 +1610,7 @@
   George Limitsios,
   Ben Madin,
   Kiran Marchikanti,
+  Jeff Marcus,
   Robert Mark,
   Jorge Mateu Mahiques,
   Monia Mahling,

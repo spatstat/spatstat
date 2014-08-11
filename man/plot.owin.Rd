@@ -121,15 +121,11 @@
       See \code{\link{X11}} and the section on Cairo below.
 #endif
     }
-    \item{gpclib package:}{
-      The other workaround requires use of the \pkg{gpclib} package which
-      effects a triangulation of the polygonal window in question which
-      in turn permits the plotting of the window, filled with a solid
-      colour, without filling the holes.  Type \code{licence.polygons()}
-      for information about the licence under which \pkg{gpclib} operates.
-      To make use of this workaround you need to have the package{gpclib}
-      installed and to set \code{spatstat.options(gpclib=TRUE)} (and to be
-      working under circumstances permitted by the \pkg{gpclib} licence).
+    \item{polygon decomposition:}{
+      The other workaround involves decomposing the polygonal window
+      into pieces which do not have holes. This code is experimental
+      but works in all our test cases. If this code fails, a warning
+      will be issued, and the filled colours will not be plotted.
     }
   }
 }
@@ -164,19 +160,17 @@
 }
 \examples{
   # rectangular window
-   data(nztrees)
-   plot(nztrees$window)
+   plot(as.owin(nztrees))
    abline(v=148, lty=2)
 
   # polygonal window
-  data(demopat)
-  w <- demopat$window
+  w <- as.owin(demopat)
   plot(w)
   plot(w, col="red", border="green", lwd=2)
   plot(w, hatch=TRUE, lwd=2)
 
   # binary mask
-  we <- as.mask(erosion(w, 400, FALSE))
+  we <- as.mask(w)
   plot(we)
   op <- spatstat.options(par.binary=list(col=grey(c(0.5,1))))
   plot(we)

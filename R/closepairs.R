@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.24 $   $Date: 2013/05/23 01:11:30 $
+#   $Revision: 1.25 $   $Date: 2013/09/21 08:56:11 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -411,4 +411,19 @@ closethresh <- function(X, R, S, ordered=TRUE) {
   return(list(i=i, j=j, th=th))
 }
 
-                        
+crosspairquad <- function(Q, rmax, what=c("all", "indices")) {
+  # find all close pairs X[i], U[j]
+  stopifnot(inherits(Q, "quad"))
+  what <- match.arg(what)
+  X <- Q$data
+  D <- Q$dummy
+  clX <- closepairs(X=X, rmax=rmax, what=what)
+  clXD <- crosspairs(X=X, Y=D, rmax=rmax, what=what)
+  # convert all indices to serial numbers in union.quad(Q)
+  # assumes data are listed first
+  clXD$j <- npoints(X) + clXD$j
+  result <- list(rbind(as.data.frame(clX), as.data.frame(clXD)))
+  return(result)
+}
+
+  

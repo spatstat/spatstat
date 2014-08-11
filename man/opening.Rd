@@ -32,7 +32,6 @@
     Logical flag indicating whether to compute a polygonal
     approximation to the erosion (\code{polygonal=TRUE}) or
     a pixel grid approximation (\code{polygonal=FALSE}).
-    Ignored if \code{gpclib} is disabled.
   }
 }
 \value{
@@ -57,11 +56,6 @@
 
   The algorithm applies \code{\link{erosion}} followed by
   \code{\link{dilation}}.
-
-  Polygonal calculations require the \code{gpclib}
-  package which is subject to licence restrictions.
-  It is enabled by \code{spatstat.options(gpclib=TRUE)}.
-  See \code{\link{licence.polygons}}.
 }
 \seealso{
   \code{\link{closing}} for the opposite operation.
@@ -73,11 +67,7 @@
   \code{\link{as.owin}} for information about windows.
 }
 \examples{
-  if(spatstat.options("gpclib")) {
-    v <- opening(letterR, 0.3)
-  } else {
-    v <- opening(letterR, 0.3, dimyx=256, polygonal=FALSE)
-  }
+  v <- opening(letterR, 0.3, polygonal=interactive())
   plot(letterR, type="n", main="opening")
   plot(v, add=TRUE, col="grey")
   plot(letterR, add=TRUE)

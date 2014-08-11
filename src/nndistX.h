@@ -24,7 +24,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.4 $  $Date: 2013/03/12 01:29:46 $
+  $Revision: 1.5 $  $Date: 2013/09/18 04:49:18 $
 
 
 */
@@ -44,7 +44,7 @@ void FNAME(n1, x1, y1, id1,
      /* some inputs + outputs are not used in all functions */
 { 
   int npoints1, npoints2, maxchunk, i, jleft, jright, jwhich, lastjwhich;
-  double lastd2min, d2, d2min, x1i, y1i, dx, dy, dy2, hu, hu2;
+  double d2, d2min, x1i, y1i, dx, dy, dy2, hu, hu2;
 #ifdef EXCLUDE
   int id1i;
 #endif

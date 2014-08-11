@@ -18,7 +18,6 @@
 
 */
 
-
 SEXP CLOSEFUN(SEXP xx,
 	      SEXP yy,
 	      SEXP rr,
@@ -28,7 +27,7 @@ SEXP CLOSEFUN(SEXP xx,
 	      SEXP nguess) 
 {
   double *x, *y;
-  double xi, yi, rmax, r2max, dx, dy, dx2, d2;
+  double xi, yi, rmax, r2max, dx, dy, d2;
   int n, k, kmax, kmaxold, maxchunk, i, j, m;
   /* local storage */
   int *iout, *jout;
@@ -115,11 +114,10 @@ SEXP CLOSEFUN(SEXP xx,
 	  /* scan backward */
 	  for(j = i - 1; j >= 0; j--) {
 	    dx = x[j] - xi;
-	    dx2 = dx * dx;
-	    if(dx2 > r2max)
+	    if(dx < -rmax) 
 	      break;
 	    dy = y[j] - yi;
-	    d2 = dx2 + dy * dy;
+	    d2 = dx * dx + dy * dy;
 	    if(d2 <= r2max) {
 	      /* add this (i, j) pair to output */
 	      if(k >= kmax) {
@@ -164,11 +162,10 @@ SEXP CLOSEFUN(SEXP xx,
 	  /* scan forward */
 	  for(j = i + 1; j < n; j++) {
 	    dx = x[j] - xi;
-	    dx2 = dx * dx;
-	    if(dx2 > r2max)
+	    if(dx > rmax) 
 	      break;
 	    dy = y[j] - yi;
-	    d2 = dx2 + dy * dy;
+	    d2 = dx * dx + dy * dy;
 	    if(d2 <= r2max) {
 	      /* add this (i, j) pair to output */
 	      if(k >= kmax) {
@@ -403,6 +400,7 @@ SEXP CROSSFUN(SEXP xx1,
       if(maxchunk > n1) maxchunk = n1;
 
       for( ; i < maxchunk; i++) {
+
 	x1i = x1[i];
 	y1i = y1[i];
 
@@ -417,11 +415,12 @@ SEXP CROSSFUN(SEXP xx1,
 	   process from j = jleft until dx > rmax
 	*/
 	for(j=jleft; j < n2; j++) {
+
 	  /* squared interpoint distance */
 	  dx = x2[j] - x1i;
-	  dx2 = dx * dx;
-	  if(dx2 > r2max)
+	  if(dx > rmax)
 	    break;
+	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;
 	  d2 = dx2 + dy * dy;
 	  if(d2 <= r2max) {

@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.16 $   $Date: 2013/05/01 05:47:23 $
+#   $Revision: 1.17 $   $Date: 2013/10/06 04:38:18 $
 #
 
 distfun <- function(X, ...) {
@@ -40,18 +40,10 @@ distfun.owin <- function(X, ..., invert=FALSE) {
   # this line forces X to be bound
   stopifnot(is.owin(X))
   #
-  if(X$type == "mask" && (!(spatstat.options("gpclib") && require(gpclib)))) {
-    warning("Polygon calculations unavailable; using distmap")
-    discrete <- TRUE
-    D <- if(!invert) distmap(X) else distmap(complement.owin(X))
-  } else {
-    discrete <- FALSE
-    P <- as.psp(as.polygonal(X))
-  }
+  P <- as.psp(as.polygonal(X))
+  #
   g <- function(x,y=NULL) {
     Y <-  xy.coords(x, y)
-    if(discrete)
-      return(D[Y])
     inside <- inside.owin(Y$x, Y$y, X)
     D <- nncross(Y, P, what="dist")
     out <- if(!invert) ifelseAX(inside, 0, D) else ifelseXB(inside, D, 0)

@@ -1,12 +1,14 @@
 #  First.R
 #
-#  $Revision: 1.34 $ $Date: 2013/08/02 05:48:26 $
+#  $Revision: 1.36 $ $Date: 2013/09/23 08:37:30 $
 #
 
-.spatstat.Nickname <- "Titanic Deckchair"
+.spatstat.Nickname <- "Window Cleaner"
 
 # previous nicknames:
 # 1.32-0: "Logistical Nightmare"
+# 1.33-0: "Titanic Deckchair"
+
 
 .onLoad <- function(...) reset.spatstat.options()
 

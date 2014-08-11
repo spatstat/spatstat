@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.15 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.16 $  $Date: 2013/10/06 04:36:07 $
 #
 #
 #  Compute area of intersection between a disc and a window,
@@ -67,10 +67,6 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
   if(exact && !is.ppp(X)) {
     exact <- FALSE
     warning("Option exact=TRUE is only available for ppp objects")
-  }
-  if(exact && !spatstat.options("gpclib")) {
-    exact <- FALSE
-    warning("Option exact=TRUE is unavailable without gpclib")
   }
   if(!constrained) {
     # unconstrained dilation

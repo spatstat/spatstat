@@ -7,7 +7,7 @@
   Fit a point process model to a point pattern dataset on a linear network
 }
 \usage{
-lppm(X, ...)
+lppm(X, ..., eps=NULL, nd=1000)
 }
 \arguments{
   \item{X}{
@@ -16,6 +16,14 @@ lppm(X, ...)
   }
   \item{\dots}{
     Arguments passed to \code{\link[spatstat]{ppm}}.
+  }
+  \item{eps}{
+    Optional. Spacing between dummy points along each segment of the
+    network. 
+  }
+  \item{nd}{
+    Optional. Number of dummy points equally spaced along each segment
+    of the network. Ignored if \code{eps} is given.
   }
 }
 \details{

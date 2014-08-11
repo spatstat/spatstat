@@ -11,7 +11,6 @@
 \alias{as.owin.tess}
 \alias{as.owin.im}
 \alias{as.owin.layered}
-\alias{as.owin.gpc.poly}
 \alias{as.owin.data.frame}
 \alias{as.owin.distfun}
 \alias{as.owin.nnfun}
@@ -47,8 +46,6 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{im}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{layered}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{gpc.poly}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{data.frame}(W, \dots, fatal=TRUE)
 
@@ -103,9 +100,6 @@ in any of several formats, into an object of class \code{"owin"}.
     \code{(ymin, ymax) = (yl, yu)}. This will accept objects of
     class \code{spp} used in the Venables and Ripley \pkg{spatial}
     library.
-    \item
-    an object of class \code{"gpc.poly"} from the \pkg{gpclib} package,
-    representing a polygonal window.
     \item
     an object of class \code{"ppp"} representing a point pattern.
     In this case, the object's \code{window} structure will be

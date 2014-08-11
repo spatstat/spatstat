@@ -81,7 +81,7 @@ double multihardcif(prop, state, cdata)
   int *marks;
   double *x, *y;
   double u, v;
-  double d2, range2, a, cifval;
+  double d2, range2, cifval;
   double *period;
   MultiHard *multihard;
   DECLARE_CLOSE_D2_VARS;

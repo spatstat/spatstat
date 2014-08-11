@@ -6,9 +6,9 @@
 \alias{logLik.lppm}
 \alias{nobs.lppm}
 \alias{print.lppm}
-\alias{plot.lppm}
 \alias{terms.lppm}
 \alias{update.lppm}
+\alias{vcov.lppm}
 \alias{as.linnet.lppm}
 \title{
   Methods for Fitted Point Process Models on a Linear Network
@@ -28,13 +28,13 @@
 
   \method{nobs}{lppm}(object, ...)
 
-  \method{plot}{lppm}(x, ..., type="trend")
-
   \method{print}{lppm}(x, ...)
 
   \method{terms}{lppm}(x, ...)
 
   \method{update}{lppm}(object, ...)
+
+  \method{vcov}{lppm}(object, ...)
 
   \method{as.linnet}{lppm}(X, ...)
 }
@@ -47,11 +47,6 @@
     Arguments passed to other methods, usually the
     method for the class \code{"ppm"}.
   }
-  \item{type}{
-    Character string (either \code{"trend"} or \code{"cif"})
-    determining whether to plot the fitted first order trend
-    or the conditional intensity.
-  }
 }
 \details{
   These are methods for the generic commands
@@ -60,10 +55,10 @@
   \code{\link{formula}},
   \code{\link{logLik}},
   \code{\link{nobs}},
-  \code{\link{plot}},
   \code{\link{print}}, 
-  \code{\link{terms}} and
-  \code{\link{update}}
+  \code{\link{terms}},
+  \code{\link{update}} and
+  \code{\link{vcov}}
   for the class \code{"lppm"}. 
 }
 \value{
@@ -75,13 +70,13 @@
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
-  \code{\link{lppm}}
+  \code{\link{lppm}},
+  \code{\link{plot.lppm}}.
 }
 \examples{
   example(lpp)
   fit <- lppm(X, ~x)
   print(fit)
-  plot(fit)
   coef(fit)
   formula(fit)
   terms(fit)
@@ -89,6 +84,7 @@
   nobs(fit)
   extractAIC(fit)
   update(fit, ~1)
+  vcov(fit)
 }
 \keyword{spatial}
 \keyword{models}

@@ -8,7 +8,7 @@
 
   denspt.c
 
-  $Revision: 1.11 $     $Date: 2012/03/27 04:07:53 $
+  $Revision: 1.12 $     $Date: 2013/09/18 04:16:50 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
@@ -23,12 +23,12 @@ double sqrt(), exp();
 
 #define STD_DECLARATIONS				\
   int n, i, j, maxchunk;				\
-  double xi, yi, rmax, r2max, dx, dy, dx2, d2, resulti, coef;	
+  double xi, yi, rmax, r2max, dx, dy, dx2, d2	
 
 #define STD_INITIALISE				\
   n = *nxy;					\
   rmax = *rmaxi;				\
-  r2max = rmax * rmax;
+  r2max = rmax * rmax
 
 
 /* ----------------- density estimation -------------------- */
@@ -43,6 +43,7 @@ void denspt(nxy, x, y, rmaxi, sig, result)
      double *result;   /* vector of computed density values */
 {
   STD_DECLARATIONS;
+  double resulti, coef;	
   double sigma, twosig2; 
   STD_INITIALISE;
 
@@ -71,6 +72,7 @@ void wtdenspt(nxy, x, y, rmaxi, sig, weight, result)
      double *result;    /* vector of weighted density values */
 {
   STD_DECLARATIONS;
+  double resulti, coef;	
   double sigma, twosig2; 
   STD_INITIALISE;
 
@@ -100,6 +102,7 @@ void adenspt(nxy, x, y, rmaxi, detsigma, sinv, result)
      double *result;   /* vector of density values */
 {
   STD_DECLARATIONS;
+  double resulti, coef;	
   double detsig, s11, s12, s21, s22;
   STD_INITIALISE;
   detsig = *detsigma;
@@ -128,6 +131,7 @@ void awtdenspt(nxy, x, y, rmaxi, detsigma, sinv, weight, result)
      double *result;    /* vector of weighted density values */
 {
   STD_DECLARATIONS;
+  double resulti, coef;	
   double detsig, s11, s12, s21, s22;
   STD_INITIALISE;
   detsig = *detsigma;

@@ -32,7 +32,6 @@
     Logical flag indicating whether to compute a polygonal
     approximation to the erosion (\code{polygonal=TRUE}) or
     a pixel grid approximation (\code{polygonal=FALSE}).
-    Ignored if \code{gpclib} is disabled.
   }
 }
 \value{
@@ -63,11 +62,6 @@
   is to compute a polygonal approximation if
   \code{w} is a rectangle or polygonal window, and to compute a
   pixel approximation if \code{w} is a window of type \code{"mask"}.
-
-  Polygonal calculations require the \code{gpclib}
-  package which is subject to licence restrictions.
-  It is enabled by \code{spatstat.options(gpclib=TRUE)}.
-  See \code{\link{licence.polygons}}.
 
   If \code{shrink.frame} is false, the resulting window is given the
   same outer, bounding rectangle as the original window \code{w}.

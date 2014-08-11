@@ -67,7 +67,7 @@ double diggracif(prop, state, cdata)
   double *x, *y;
   double u, v;
   double d2, pairprod, cifval;
-  double rho, rho2, delta, delta2, fac;
+  double rho2, delta, delta2, fac;
   double *period;
   DECLARE_CLOSE_D2_VARS;
 
@@ -75,7 +75,6 @@ double diggracif(prop, state, cdata)
 
   diggra = (Diggra *) cdata;
   period = diggra->period;
-  rho    = diggra->rho;
   rho2   = diggra->rho2;
   delta  = diggra->delta;
   delta2 = diggra->delta2;

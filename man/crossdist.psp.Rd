@@ -1,4 +1,4 @@
-\name{crossdist.psp}
+\name{crossdist.psp} %DontDeclareMethods
 \alias{crossdist.psp}
 \title{Pairwise distances between two different line segment patterns}
 \description{

@@ -55,7 +55,7 @@ double strausscif(prop, state, cdata)
   int npts, kount, ix, ixp1, j;
   double *x, *y;
   double u, v;
-  double r2, d2, a, cifval;
+  double r2, cifval;
   Strauss *strauss;
   DECLARE_CLOSE_VARS;
 

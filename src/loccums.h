@@ -5,7 +5,7 @@
 
   data-to-data functions
 
-  $Revision: 1.4 $ $Date: 2012/11/10 06:13:43 $
+  $Revision: 1.5 $ $Date: 2013/09/18 04:28:45 $
 
   macros: 
 
@@ -28,7 +28,7 @@ void FNAME(n, x, y, v,
   int N, Nr, Nans;
   double Rmax;
 
-  int i, j, k, jleft, kmin, maxchunk, columnstart;
+  int i, j, k, kmin, maxchunk, columnstart;
   double Rmax2, rstep, xi, yi;
   double dx, dy, dx2, d2, d, contrib;
 
@@ -51,8 +51,6 @@ void FNAME(n, x, y, v,
     }
   }
    
-  jleft = 0;
-
   OUTERCHUNKLOOP(i, N, maxchunk, 8196) {
     R_CheckUserInterrupt();
     INNERCHUNKLOOP(i, N, maxchunk, 8196) {

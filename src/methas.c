@@ -59,7 +59,7 @@ SEXP xmethas(
   double *xx, *yy, *xpropose, *ypropose;
   int    *mm,      *mpropose, *pp, *aa;
   SEXP out, xout, yout, mout, pout, aout;
-  int tracking;
+  int tracking, ntrack;
 #ifdef HISTORY_INCLUDES_RATIO
   SEXP numout, denout;
   double *nn, *dd;
@@ -211,16 +211,15 @@ SEXP xmethas(
   /* ============= Initialise transition history ========== */
 
   tracking = (*(INTEGER_POINTER(track)) != 0);
-  if(tracking) {
-    history.nmax = algo.nrep;
-    history.n = 0;
-    history.proptype = (int *) R_alloc(algo.nrep, sizeof(int));
-    history.accepted = (int *) R_alloc(algo.nrep, sizeof(int));
+  /* Initialise even if not needed, to placate the compiler */
+  if(tracking) { history.nmax = algo.nrep; } else { history.nmax = 1; }
+  history.n = 0;
+  history.proptype = (int *) R_alloc(history.nmax, sizeof(int));
+  history.accepted = (int *) R_alloc(history.nmax, sizeof(int));
 #ifdef HISTORY_INCLUDES_RATIO
-    history.numerator   = (double *) R_alloc(algo.nrep, sizeof(double));
-    history.denominator = (double *) R_alloc(algo.nrep, sizeof(double));
+  history.numerator   = (double *) R_alloc(history.nmax, sizeof(double));
+  history.denominator = (double *) R_alloc(history.nmax, sizeof(double));
 #endif
-  }
 
   /* ============= Visual debugging ========== */
 

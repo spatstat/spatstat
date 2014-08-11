@@ -7,37 +7,54 @@
 #
 
 distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
-  V.given <- !missing(V)
-  dV.given <- !missing(dV)
-  reflexive <- !V.given && !dV.given
-  uniform <- missing(dW) && missing(dV)
-  Wdud <- is.ppp(W) && missing(dW)
-  Vdud <- V.given && is.ppp(V) && missing(dV) && missing(dW)
-  diffuse <- !Wdud && !Vdud
-  force(dV)
-  # handle case where W or V is a point pattern
-  # interpreted as a discrete uniform distribution
-  if(Wdud) dW <- pixellate(W, ...)
-  if(Vdud) dV <- pixellate(V, ...)
-  # 
+  reflexive <- missing(V) && missing(dV)
+  diffuse <- is.owin(W) && is.owin(V)
+  uniformW <- identical(dW, 1)
+  uniformV <- identical(dV, 1)
+  uniform <- uniformW && uniformV
+  
+  if(is.owin(W)) {
+    W <- as.mask(as.owin(W), ...)
+    dW <- as.im(dW, W=W)
+  } else if(is.ppp(W)) {
+    if(uniformW) {
+      # discrete uniform distribution on W
+      dW <- pixellate(W, ...)
+    } else {
+      # dW should be a weight or vector of weights
+      if(!is.vector(dW) || !is.numeric(dW))
+        stop("If W is a point pattern, dW should be a vector of weights")
+      if(length(dW) == 1) {
+        dW <- rep(dW, npoints(W))
+      } else stopifnot(length(dW) == npoints(W))
+      dW <- pixellate(W, weights=dW, ...)
+    }
+  } else stop("W should be a point pattern or a window")
+  
+   if(is.owin(V)) {
+    V <- as.mask(as.owin(V), ...)
+    dV <- as.im(dV, W=V)
+  } else if(is.ppp(V)) {
+    if(uniformV) {
+      # discrete uniform distribution on V
+      dV <- pixellate(V, ...)
+    } else {
+      # dV should be a weight or vector of weights
+      if(!is.vector(dV) || !is.numeric(dV))
+        stop("If V is a point pattern, dV should be a vector of weights")
+      if(length(dV) == 1) {
+        dV <- rep(dV, npoints(V))
+      } else stopifnot(length(dV) == npoints(V))
+      dV <- pixellate(V, weights=dV, ...)
+    }
+  } else stop("V should be a point pattern or a window")
+
+  # compute
   if(diffuse && uniform) {
     # uniform distributions on windows 
     g <- if(reflexive) setcov(W, ...) else setcov(W, V, ...)
   } else {
-    # nonuniform distribution(s)
-    if(!Wdud) {
-      W <- as.mask(as.owin(W), ...)
-      dW <- as.im(dW, W=W)
-    }
-    if(reflexive) {
-      g <- imcov(dW)
-    } else {
-      if(!Vdud) {
-        V <- if(V.given) as.mask(as.owin(V), ...) else W
-        dV <- as.im(dV, W=V)
-      }
-      g <- imcov(dW, dV)
-    }
+    g <- if(reflexive) imcov(dW) else imcov(dW, dV)
   }
   r <- as.im(function(x,y) { sqrt(x^2 + y^2) }, g)
   rvals <- as.vector(as.matrix(r))

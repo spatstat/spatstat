@@ -114,7 +114,7 @@ double straushmcif(prop, state, cdata)
   int *marks;
   double *x, *y;
   double u, v, lg;
-  double d2, a, cifval;
+  double d2, cifval;
   double range2;
   double *period;
   MultiStraussHard *multistrausshard;

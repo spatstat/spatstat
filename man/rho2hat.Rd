@@ -99,7 +99,7 @@ rho2hat(object, cov1, cov2, ..., method=c("ratio", "reweight"))
   data(bei)
   attach(bei.extra)
   plot(rho2hat(bei, elev, grad))
-  fit <- ppm(bei, ~polynom(elev, 3), covariates=bei.extra)
+  fit <- ppm(bei, ~elev, covariates=bei.extra)
   \dontrun{
   plot(rho2hat(fit, elev, grad))
   }

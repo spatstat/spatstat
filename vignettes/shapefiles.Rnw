@@ -22,7 +22,6 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 
 <<echo=FALSE,results=hide>>=
 library(spatstat)
-spatstat.options(gpclib=TRUE)
 options(useFancyQuotes=FALSE)
 sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
          fields = "Date")
@@ -67,7 +66,11 @@ extension \texttt{shp}, for example \texttt{mydata.shp}.
 \section{Helper packages}
 \label{S:helpers}
 
-We'll use three other packages to handle shapefile data.
+We'll use two other packages%
+\footnote{In previous versions of \pkg{spatstat},
+  the package \pkg{gpclib} was also needed for some tasks.
+  This is no longer required.}
+ to handle shapefile data.
 
 The \pkg{maptools} package is designed specifically for handling
 file formats for spatial data. It contains 
@@ -77,18 +80,6 @@ The \pkg{sp} package supports a standard set of spatial data types
 in \R. These standard data types can be handled by many other packages,
 so it is useful to convert your spatial data into one of the 
 data types supported by \pkg{sp}.
-
-The \pkg{gpclib} package supports geometrical operations 
-on polygons --- such as union and intersection. 
-However, \pkg{gpclib} has a restrictive licence which 
-forbids its use for commercial activities. 
-Type \texttt{licence.polygons()} for more information.
-\underline{
-  {\bf By default,} \pkg{gpclib} {\bf is disabled. It must be
-  enabled }
-}
-by typing \verb!spatstat.options(gpclib=TRUE)! assuming you are
-covered by the licence.
 
 \section{How to read shapefiles into \pkg{spatstat}} 
 

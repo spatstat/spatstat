@@ -31,8 +31,7 @@ dirichlet(X)
   \code{X <- unique(X, rule="deldir")}. 
   
   The tiles of the tessellation will be computed as polygons
-  if the original window is a rectangle, or if the original window
-  is a polygon and \code{\link{spatstat.options}("gpclib") = TRUE}.
+  if the original window is a rectangle or a polygon.
   Otherwise the tiles will be computed as binary masks. 
 }
 \value{

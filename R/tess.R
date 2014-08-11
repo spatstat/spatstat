@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.45 $ $Date: 2013/05/01 08:05:50 $
+#   $Revision: 1.47 $ $Date: 2013/10/06 07:59:38 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -280,6 +280,21 @@ tilenames <- function(x) {
   return(nam)
 }
 
+"tilenames<-" <- function(x, value) {
+  stopifnot(is.tess(x))
+  switch(x$type,
+         rect = {
+           warning("Cannot change names of the tiles in a rectangular grid")
+         },
+         tiled = {
+           names(x$tiles) <- value
+         },
+         image = {
+           levels(x$image) <- value
+         })
+  return(x)
+}
+
 tile.areas <- function(x) {
   stopifnot(is.tess(x))
   switch(x$type,
@@ -336,7 +351,7 @@ as.im.tess <- function(X, W=NULL, ...,
                outv <- pmin.int(outv, tag$v, na.rm=TRUE)
              }
            }
-           out <- im(factor(outv, levels=nama),
+           out <- im(factor(outv, levels=seq_len(ntil), labels=nama),
                      out$xcol, out$yrow)
            unitname(out) <- unitname(W)
          },

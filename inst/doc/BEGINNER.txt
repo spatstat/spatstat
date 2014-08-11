@@ -19,9 +19,6 @@ workshop notes at <www.csiro.au/resources/pf16h.html>
 For news about new features in the latest version of spatstat, type
      latest.news
 
-For licence information, please type
-     licence.polygons
-
 (Press 'Q' to exit, on some computers)
 
 

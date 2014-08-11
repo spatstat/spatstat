@@ -7,7 +7,7 @@ evaluate the spatial trend or the conditional intensity of the model
 at new locations.
 }
 \usage{
-   \method{predict}{ppm}(object, window, ngrid=NULL, locations=NULL,
+   \method{predict}{ppm}(object, window=NULL, ngrid=NULL, locations=NULL,
    covariates=NULL, type="trend", X=data.ppm(object), correction, 
    \dots, new.coef=NULL, check=TRUE, repair=TRUE)
 }

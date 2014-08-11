@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.93 $    $Date: 2013/07/08 04:54:33 $
+#  $Revision: 1.94 $    $Date: 2013/10/03 03:35:23 $
 #
 #
 
@@ -305,7 +305,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     }
     expandleftside <- gsub(".x", fvnames(x, ".x"), leftside, fixed=TRUE)
     expandleftside <- gsub(".y", fvnames(x, ".y"), expandleftside, fixed=TRUE)
-    expandleftside <- gsub(".", cball, expandleftside, fixed=TRUE)
+    expandleftside <- gsubdot(cball, expandleftside)
     # convert back to language
     compactleftside <- parse(text=compactleftside)[[1]]
     expandleftside <- parse(text=expandleftside)[[1]]

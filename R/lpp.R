@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.21 $   $Date: 2013/03/04 13:52:52 $
+#  $Revision: 1.22 $   $Date: 2013/10/20 00:51:27 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -117,6 +117,33 @@ intensity.lpp <- function(X, ...) {
 
 is.lpp <- function(x) {
   inherits(x, "lpp")
+}
+
+as.lpp <- function(x, y=NULL, seg=NULL, tp=NULL, ...,
+                   marks=NULL, L=NULL, check=FALSE) {
+  nomore <- is.null(y) && is.null(seg) && is.null(tp)
+  if(inherits(x, "lpp") && nomore) {
+    X <- x
+  } else {
+    if(!inherits(L, "linnet"))
+      stop("L should be a linear network")
+    if(is.ppp(x) && nomore) {
+      X <- lpp(x, L)
+    } else {
+      xy <- xy.coords(x,y)[c("x", "y")]
+      if(!is.null(seg) && !is.null(tp)) {
+        # add segment map information
+        xy <- append(xy, list(seg=seg, tp=tp))
+      } else {
+        # convert to ppp, typically suppressing check mechanism
+        xy <- as.ppp(xy, W=as.owin(L), check=check)
+      }
+      X <- lpp(xy, L)
+    }
+  }
+  if(!is.null(marks))
+    marks(X) <- marks
+  return(X)
 }
 
 as.ppp.lpp <- function(X, ..., fatal=TRUE) {

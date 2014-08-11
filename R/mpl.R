@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.165 $	$Date: 2013/07/19 03:56:04 $
+#	$Revision: 5.172 $	$Date: 2013/10/16 07:35:44 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -46,7 +46,8 @@ function(Q,
          savecomputed=FALSE,
          preponly=FALSE,
          rename.intercept=TRUE,
-         justQ = FALSE
+         justQ = FALSE,
+         weightfactor = NULL
 ) {
 #
 # Extract precomputed data if available
@@ -108,7 +109,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2013/07/19 03:56:04 $")
+                    date="$Date: 2013/10/16 07:35:44 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -180,6 +181,7 @@ if(!want.trend && !want.inter && !forcefit && !allcovar) {
                       allcovar=allcovar,
                       precomputed=precomputed, savecomputed=savecomputed,
                       covfunargs=covfunargs,
+                      weightfactor=weightfactor,
                       ...)
   # back door
 if(preponly) {
@@ -307,6 +309,7 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
                         vnameprefix=NULL,
                         warn.illegal=TRUE,
                         warn.unidentifiable=TRUE,
+                        weightfactor=NULL,
                         skip.border=FALSE) {
 # Q: quadrature scheme
 # X = data.quad(Q)
@@ -361,6 +364,10 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
     yQ[zQ] <- 1/wQ[zQ]
     zeroes <- attr(wQ, "zeroes")
     sQ <- if(is.null(zeroes)) rep.int(TRUE, nQ) else !zeroes
+    # tweak weights ONLY
+    if(!is.null(weightfactor))
+      wQ <- wQ * weightfactor
+    # pack up
     .mpl <- list(W      = wQ,
                  Z      = zQ,
                  Y      = yQ,
@@ -981,6 +988,7 @@ evalInterEngine <- function(X, P, E,
   if(is.null(V)) {
     # use generic evaluator for family
     evaluate <- interaction$family$eval
+    Reach <- reach(interaction)
     if("precomputed" %in% names(formals(evaluate))) {
       # Use precomputed data
       # version 1.9-3 onward (pairwise and pairsat families)
@@ -988,6 +996,7 @@ evalInterEngine <- function(X, P, E,
                     interaction$pot,
                     interaction$par,
                     correction, ...,
+                    Reach=Reach, 
                     precomputed=precomputed,
                     savecomputed=savecomputed)
     } else {
@@ -997,66 +1006,307 @@ evalInterEngine <- function(X, P, E,
       V <- evaluate(X, P, E,
                     interaction$pot,
                     interaction$par,
-                    correction, ...)
+                    correction, ..., Reach=Reach)
     }
   }
 
   return(V)
 }
 
-deltasuffstat <- function(model, restrict=TRUE) {
-  stopifnot(is.ppm(model))
-  ## if(model$method == "logi") return(NULL)
-  X <- data.ppm(model)
-  nX <- npoints(X)
-  ncoef <- length(coef(model))
-  inte <- as.interact(model)
-  zeroes <- array(0, dim=c(nX, nX, ncoef)) 
-  if(is.poisson(inte))
-    return(zeroes)
-  # look for $delta2 function for the interaction
-  v <- NULL
-  if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
-    v <- delta2(X, inte, model$correction)
-  }
-  # look for generic $delta2 function for the family
-  if(is.null(v) &&
-     !is.null(delta2 <- inte$family$delta2) &&
-     is.function(delta2))
-    v <- delta2(X, inte, model$correction)
-
-  # no luck?
-  if(is.null(v))
-    return(NULL)
-
-  # make it a 3D array
-  if(length(dim(v)) == 2)
-    v <- array(v, dim=c(dim(v), 1))
+deltasuffstat <- local({
   
-  if(restrict) {
-    # kill contributions from points outside the domain of pseudolikelihood
-    # (e.g. points in the border region)
-    use <- getppmdatasubset(model)
-    if(any(kill <- !use)) {
-      kill <- array(outer(kill, kill, "&"), dim=dim(v))
-      v[kill] <- 0
+  deltasuffstat <- function(model, ...,
+                            restrict=TRUE, dataonly=TRUE, force=FALSE) {
+    stopifnot(is.ppm(model))
+    if(dataonly) {
+      X <- data.ppm(model)
+      nX <- npoints(X)
+    } else {
+      X <- quad.ppm(model)
+      nX <- n.quad(X)
     }
+    ncoef <- length(coef(model))
+    inte <- as.interact(model)
+    zeroes <- array(0, dim=c(nX, nX, ncoef)) 
+    if(is.poisson(inte))
+      return(zeroes)
+    # look for member function $delta2 in the interaction
+    v <- NULL
+    if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
+      v <- delta2(X, inte, model$correction)
+    }
+    # look for generic $delta2 function for the family
+    if(is.null(v) &&
+       !is.null(delta2 <- inte$family$delta2) &&
+       is.function(delta2))
+      v <- delta2(X, inte, model$correction)
+
+    # no luck?
+    if(is.null(v)) {
+      if(!force)
+        return(NULL)
+      # use brute force algorithm
+      v <- if(dataonly) deltasufX(model) else deltasufQ(model)
+    }
+
+    # make it a 3D array
+    if(length(dim(v)) == 2)
+      v <- array(v, dim=c(dim(v), 1))
+  
+    if(restrict) {
+      # kill contributions from points outside the domain of pseudolikelihood
+      # (e.g. points in the border region)
+      use <- if(dataonly) getppmdatasubset(model) else getglmsubset(model)
+      if(any(kill <- !use)) {
+        kill <- array(outer(kill, kill, "&"), dim=dim(v))
+        v[kill] <- 0
+      }
+    }
+
+    if(all(dim(v) == dim(zeroes)))
+      return(v)
+  
+    # Pad to correct dimensions
+    # Determine which coefficients correspond to interaction terms
+    f <- fitin(model)
+    Inames <- f$Vnames[!f$IsOffset]
+    Imap <- match(Inames, names(coef(model)))
+    if(length(Imap) == 0)
+      return(v)
+    if(any(is.na(Imap)))
+      stop("Internal error: cannot match interaction coefficients")
+    # insert 'v' into array
+    result <- zeroes
+    result[ , , Imap] <- v
+    return(result)
   }
 
-  if(all(dim(v) == dim(zeroes)))
-    return(v)
+  # compute deltasuffstat using partialModelMatrix
+
+  deltasufX <- function(model) {
+    stopifnot(is.ppm(model))
+    X <- data.ppm(model)
   
-  # Pad to correct dimensions
-  # Determine which coefficients correspond to interaction terms
-  f <- fitin(model)
-  Inames <- f$Vnames[!f$IsOffset]
-  Imap <- match(Inames, names(coef(model)))
-  if(length(Imap) == 0)
-    return(v)
-  if(any(is.na(Imap)))
-      stop("Internal error: cannot match interaction coefficients")
-  # insert 'v' into array
-  result <- zeroes
-    result[ , , Imap] <- v
-  return(result)
-}
+    nX <- npoints(X)
+    p <- length(coef(model))
+
+    isdata <- is.data(quad.ppm(model))
+    m <- model.matrix(model)[isdata, ]
+    ok <- getppmdatasubset(model)
+
+    # canonical statistic before and after deleting X[j]
+    # mbefore[ , i, j] = h(X[i] | X)
+    # mafter[ , i, j] = h(X[i] | X[-j])
+    mafter <- mbefore <- array(t(m), dim=c(p, nX, nX))
+  
+    # identify close pairs
+    R <- reach(model)
+    if(is.finite(R)) {
+      cl <- closepairs(X, R, what="indices")
+      I <- cl$i
+      J <- cl$j
+      cl2 <- closepairs(X, 2*R, what="indices")
+      I2 <- cl2$i
+      J2 <- cl2$j
+    } else {
+      # either infinite reach, or something wrong
+      IJ <- expand.grid(I=1:nX, J=1:nX)
+      IJ <- subset(IJ, I != J)
+      I2 <- I <- IJ$I
+      J2 <- J <- IJ$J
+    }
+    # filter:  I and J must both belong to the nominated subset 
+    okIJ <- ok[I] & ok[J]
+    I <- I[okIJ]
+    J <- J[okIJ]
+    #
+    if(length(I) > 0 && length(J) > 0) {
+      # .............. loop over pairs ........................
+      # The following ensures that 'empty' and 'X' have compatible marks 
+      empty <- X[integer(0)]
+      # Run through pairs
+      for(i in unique(I)) {
+        # all points within 2R
+        J2i <- unique(J2[I2==i])
+        # all points within R
+        Ji  <- unique(J[I==i])
+        nJi <- length(Ji)
+        if(nJi > 0) {
+          Xi <- X[i]
+          # neighbours of X[i]
+          XJi <- X[Ji]
+          # replace X[-i] by X[-i] \cap b(0, 2R)
+          X.i <- X[J2i]
+          nX.i <- length(J2i)
+          # index of XJi in X.i
+          J.i <- match(Ji, J2i)
+          if(any(is.na(J.i)))
+            stop("Internal error: Ji not a subset of J2i")
+          # equalpairs matrix
+          E.i <- cbind(J.i, seq_len(nJi))
+          # values of sufficient statistic 
+          #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
+          # for all j
+          pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
+          # sufficient statistic in reverse order
+          #    h(X[i] | X[-j]) = h(X[i] | X[-c(i,j)]
+          # for all j
+          pmi <- matrix(, nJi, p)
+          for(k in 1:nJi) {
+            j <- Ji[k]
+            # X.ij <- X[-c(i,j)]
+            X.ij <- X.i[-J.i[k]]
+            pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX.i, ]
+          }
+          #
+          mafter[ , Ji, i] <- t(pmj)
+          mafter[ , i, Ji] <- t(pmi)
+        }
+      }
+    }
+        
+    #  delta[ ,i,j] = h(X[i] | X) - h(X[i] | X[-j])
+    delta <- mbefore - mafter
+    # delta[i, j, ] = h(X[i] | X) - h(X[i] | X[-j])
+    delta <- aperm(delta, c(2,3,1))
+    return(delta)
+  }
+
+  deltasufQ <- function(model) {
+    stopifnot(is.ppm(model))
+
+    Q <- quad.ppm(model)
+    X <- data.ppm(model)
+    U <- union.quad(Q)
+    nU <- npoints(U)
+    nX <- npoints(X)
+    isdata <- is.data(Q)
+    isdummy <- !isdata
+  
+    p <- length(coef(model))
+    
+    m <- model.matrix(model)[isdata, ]
+    ok <- getglmsubset(model)
+
+    # canonical statistic before and after adding/deleting U[j]
+    mafter <- mbefore <- array(t(m), dim=c(p, nU, nU))
+    delta <- array(0, dim=dim(mafter))
+    #   mbefore[ , i, j] = h(U[i] | X)
+    # For data points X[j]
+    #   mafter[ , i, j] = h(U[i] | X[-j])
+    #   delta[ , i, j] = h(U[i] | X) - h(U[i] | X[-j])
+    # For dummy points X[j]
+    #   mafter[ , i, j] = h(U[i] | X \cup U[j])
+    #   delta[ , i, j] = h(U[i] | X \cup U[j]) - h(U[i] | X)
+
+    changesign <- ifelseAB(isdata, -1, 1)
+  
+    # identify close pairs of quadrature points
+    R <- reach(model)
+    if(is.finite(R)) {
+      cl <- closepairs(U, R, what="indices")
+      I <- cl$i
+      J <- cl$j
+      cl2 <- closepairs(U, 2*R, what="indices")
+      I2 <- cl2$i
+      J2 <- cl2$j
+    } else {
+      # either infinite reach, or something wrong
+      IJ <- expand.grid(I=1:nU, J=1:nX)
+      IJ <- IJ[ with(IJ, I != J), ]
+      I2 <- I <- IJ$I
+      J2 <- J <- IJ$J
+    }
+
+    # filter:  I and J must both belong to the nominated subset 
+    okIJ <- ok[I] & ok[J]
+    I <- I[okIJ]
+    J <- J[okIJ]
+    #
+    if(length(I) > 0 && length(J) > 0) {
+      # .............. loop over pairs of quadrature points ...............
+      # Run through pairs
+      uI <- unique(I)
+      zI <- isdata[uI]
+      uIdata <- uI[zI]
+      uIdummy <- uI[!zI]
+      # Run through pairs i, j where 'i' is a data point
+      for(i in uIdata) {
+        # all DATA points within 2R of X[i]
+        # This represents X[-i] 
+        J2i <- unique(J2[I2==i])
+        J2i <- J2i[isdata[J2i]]
+        # all QUADRATURE points within R of X[i]
+        Ji  <- unique(J[I==i])
+        nJi <- length(Ji)
+        if(nJi > 0) {
+          isd <- isdata[Ji]
+          # data points which are neighbours of X[i]
+          XJi <- X[Ji[isd]]
+          # dummy points which are neighbours of X[i]
+          DJi <- U[Ji[!isd]]
+          # replace X[-i] by X[-i] \cap b(0, 2R)
+          X.i <- X[J2i]
+          nX.i <- length(J2i)
+          # index of XJi in X.i 
+          J.i <- match(Ji[isd], J2i)
+          if(any(is.na(J.i)))
+            stop("Internal error: Ji[isd] not a subset of J2i")
+          # index of DJi in superimpose(X.i, DJi)
+          JDi <- nX.i + seq_len(sum(!isd))
+          # values of sufficient statistic 
+          #    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
+          # for all j
+          pmj <- partialModelMatrix(X.i, DJi, model)[c(J.i, JDi), , drop=FALSE]
+          #
+          mafter[ , Ji, i] <- t(pmj)
+        }
+      }
+      # Run through pairs i, j where 'i' is a dummy point
+      for(i in uIdummy) {
+        # all DATA points within 2R of U[i]
+        J2i <- unique(J2[I2==i])
+        J2i <- J2i[isdata[J2i]]
+        # all QUADRATURE points within R of U[i]
+        Ji  <- unique(J[I==i])
+        nJi <- length(Ji)
+        if(nJi > 0) {
+          isd <- isdata[Ji]
+          JiData <- Ji[isd]
+          JiDummy <- Ji[!isd]
+          # data points which are neighbours of U[i]
+          XJi <- X[JiData]
+          # dummy points which are neighbours of U[i]
+          DJi <- U[JiDummy]
+          # replace X \cup U[i] by (X \cap b(0, 2R)) \cup U[i]
+          J2Ui <- c(J2i, i)
+          XUi <- U[J2Ui]
+          nXUi <- length(J2Ui)
+          # index of XJi in X.i 
+          J.i <- match(JiData, J2Ui)
+          if(any(is.na(J.i)))
+            stop("Internal error: Ji[isd] not a subset of J2i")
+          # index of DJi in superimpose(X.i, DJi)
+          JDi <- nXUi + seq_len(length(JiDummy))
+          # values of sufficient statistic 
+          #    h(X[j] | X \cup U[i]) 
+          # for all j
+          pmj <- partialModelMatrix(XUi, DJi, model)[c(J.i, JDi), , drop=FALSE]
+          #
+          mafter[ , c(JiData, JiDummy), i] <- t(pmj)
+        }
+      }
+    }
+        
+    #  delta[ ,i,j] = h(X[i] | X) - h(X[i] | X[-j])
+    delta[ , , isdata] <- mbefore[, , isdata] - mafter[ , , isdata]
+    #  delta[ ,i,j] = h(X[i] | X \cup U[j]) - h(X[i] | X)
+    delta[ , , isdummy] <- mafter[, , isdummy] - mbefore[ , , isdummy]
+    # rearrange: new delta[i,j,] = old delta[, i, j]
+    delta <- aperm(delta, c(2,3,1))
+    return(delta)
+  }
+
+  deltasuffstat
+})
+

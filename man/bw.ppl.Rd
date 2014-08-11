@@ -73,7 +73,7 @@
     plot(density(redwood, b))
   }
   \testonly{
-    b <- bw.ppl(redwood, 8)
+    b <- bw.ppl(redwood, srange=c(0.03, 0.07), ns=2)
   }
 }
 \references{

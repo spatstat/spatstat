@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.40 $	$Date: 2013/06/17 05:47:01 $
+#    $Revision: 1.42 $	$Date: 2013/09/26 03:47:38 $
 #
 #    The saturated pairwise interaction family of point process models
 #
@@ -22,7 +22,8 @@ pairsat.family <-
                       cat("Saturated pairwise interaction family\n")
          },
          eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
-                          ..., precomputed=NULL, savecomputed=FALSE,
+                          ..., Reach=NULL,
+                               precomputed=NULL, savecomputed=FALSE,
                                halfway=FALSE) {
   #
   # This is the eval function for the `pairsat' family.
@@ -80,10 +81,14 @@ U <- as.ppp(U, X$window)   # i.e. X$window is DEFAULT window
 # saturation parameter(s)
 saturate <- potpars$sat
 
+# interaction distance of corresponding pairwise interaction
+PairReach <- if(!is.null(Reach) && is.finite(Reach)) Reach/2 else NULL
+
 if(is.null(saturate)) {
   # pairwise interaction 
   V <- pairwise.family$eval(X, U, EqualPairs,
                             pairpot, potpars, correction, ...,
+                            Reach=PairReach,
                             precomputed=precomputed,
                             savecomputed=savecomputed)
   return(V)
@@ -115,7 +120,8 @@ if(somemissing) {
 
 # compute the pair potentials POT and the unsaturated potential sums V
 
-V <- pairwise.family$eval(X, U, EqualPairs, pairpot, potpars, correction, ...)
+V <- pairwise.family$eval(X, U, EqualPairs, pairpot, potpars, correction,
+                          ..., Reach=PairReach)
 POT <- attr(V, "POT")
 
 computed <- attr(V, "computed")   # could be NULL

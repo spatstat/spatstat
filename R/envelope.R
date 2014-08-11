@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.50 $  $Date: 2013/08/14 02:50:59 $
+#   $Revision: 2.51 $  $Date: 2013/10/21 01:39:54 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -257,7 +257,6 @@ envelopeEngine <-
     
   # Undocumented option to generate patterns only.
   patterns.only <- identical(internal$eject, "patterns")
-  evaluate.fun <- !patterns.only
 
   # Undocumented option to evaluate 'something' for each pattern
   if(savevalues <- !is.null(saveresultof)) {
@@ -350,31 +349,29 @@ envelopeEngine <-
   # Summary function to be applied 
   # ------------------------------------------------------------------
 
-  if(evaluate.fun) {
-    if(is.null(fun))
-      stop("Internal error: fun is NULL")
+  if(is.null(fun))
+    stop("Internal error: fun is NULL")
 
-    # Name of function, for error messages
-    fname <- if(is.name(substitute(fun))) short.deparse(substitute(fun)) else
-             if(is.character(fun)) fun else "fun"
-    fname <- sQuote(fname)
+  # Name of function, for error messages
+  fname <- if(is.name(substitute(fun))) short.deparse(substitute(fun)) else
+  if(is.character(fun)) fun else "fun"
+  fname <- sQuote(fname)
 
-    # R function to apply
-    if(is.character(fun)) {
-      gotfun <- try(get(fun, mode="function"))
-      if(inherits(gotfun, "try-error"))
-        stop(paste("Could not find a function named", sQuote(fun)))
-      fun <- gotfun
-    } else if(!is.function(fun)) 
-      stop(paste("unrecognised format for function", fname))
-    fargs <- names(formals(fun))
-    if(!any(c(expected.arg, "...") %in% fargs))
-      stop(paste(fname, "should have",
-                 ngettext(length(expected.arg), "an argument", "arguments"),
-                 "named", commasep(sQuote(expected.arg)),
-                 "or a", sQuote("..."), "argument"))
-    usecorrection <- any(c("correction", "...") %in% fargs)
-  }
+  # R function to apply
+  if(is.character(fun)) {
+    gotfun <- try(get(fun, mode="function"))
+    if(inherits(gotfun, "try-error"))
+      stop(paste("Could not find a function named", sQuote(fun)))
+    fun <- gotfun
+  } else if(!is.function(fun)) 
+    stop(paste("unrecognised format for function", fname))
+  fargs <- names(formals(fun))
+  if(!any(c(expected.arg, "...") %in% fargs))
+    stop(paste(fname, "should have",
+               ngettext(length(expected.arg), "an argument", "arguments"),
+               "named", commasep(sQuote(expected.arg)),
+               "or a", sQuote("..."), "argument"))
+  usecorrection <- any(c("correction", "...") %in% fargs)
   
   # ---------------------------------------------------------------------
   # validate other arguments
@@ -415,41 +412,39 @@ envelopeEngine <-
   # ---------------------------------------------------------------------
   # Evaluate function for data pattern X
   # ------------------------------------------------------------------
-  if(evaluate.fun) {
-    Xarg <- if(!clipdata) X else X[clipwin]
-    corrx <- if(usecorrection) list(correction="best") else NULL
-    funX <- do.call(fun,
-                    resolve.defaults(list(Xarg),
-                                     list(...),
-                                     corrx))
+  Xarg <- if(!clipdata) X else X[clipwin]
+  corrx <- if(usecorrection) list(correction="best") else NULL
+  funX <- do.call(fun,
+                  resolve.defaults(list(Xarg),
+                                   list(...),
+                                   corrx))
                                      
-    if(!inherits(funX, "fv"))
-      stop(paste("The function", fname,
-                 "must return an object of class", sQuote("fv")))
+  if(!inherits(funX, "fv"))
+    stop(paste("The function", fname,
+               "must return an object of class", sQuote("fv")))
 
-    argname <- fvnames(funX, ".x")
-    valname <- fvnames(funX, ".y")
-    has.theo <- "theo" %in% fvnames(funX, "*")
-    csr.theo <- csr && has.theo
+  argname <- fvnames(funX, ".x")
+  valname <- fvnames(funX, ".y")
+  has.theo <- "theo" %in% fvnames(funX, "*")
+  csr.theo <- csr && has.theo
 
-    if(tran) {
-      # extract only the recommended value
-      if(csr.theo) 
-        funX <- funX[, c(argname, valname, "theo")]
-      else
-        funX <- funX[, c(argname, valname)]
-      # apply the transformation to it
-      funX <- eval(transform.funX)
-    }
-    
-    rvals <- funX[[argname]]
-    fX    <- funX[[valname]]
-
-    # default domain over which to maximise
-    alim <- attr(funX, "alim")
-    if(global && is.null(ginterval))
-      ginterval <- if(rgiven) range(rvals) else alim
+  if(tran) {
+    # extract only the recommended value
+    if(csr.theo) 
+      funX <- funX[, c(argname, valname, "theo")]
+    else
+      funX <- funX[, c(argname, valname)]
+    # apply the transformation to it
+    funX <- eval(transform.funX)
   }
+    
+  rvals <- funX[[argname]]
+  fX    <- funX[[valname]]
+
+  # default domain over which to maximise
+  alim <- attr(funX, "alim")
+  if(global && is.null(ginterval))
+    ginterval <- if(rgiven) range(rvals) else alim
   
   #--------------------------------------------------------------------
   # Determine number of simulations

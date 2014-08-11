@@ -126,6 +126,7 @@ Geyer <- local({
        },
        delta2 = function(X,inte,correction, ...) {
          # Sufficient statistic for second order conditional intensity
+         # h(X[i] | X) - h(X[i] | X[-j])
          # Geyer interaction
          r   <- inte$par$r
          sat <- inte$par$sat
@@ -192,45 +193,120 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
   return(result)
 }
 
-geyerdelta2 <- function(X, r, sat) {
-  # Sufficient statistic for second order conditional intensity
-  # Geyer model
-  # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
-  # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
-  stopifnot(is.numeric(sat) && length(sat) == 1 && sat >= 0)
-  # initialise
-  nX <- npoints(X)
-  result <- matrix(0, nX, nX)
-  # identify all r-close pairs (ordered pairs i ~ j)
-  a <- closepairs(X, r, what="indices")
-  I <- a$i
-  J <- a$j
-  IJ <- cbind(I,J)
-  # count number of r-neighbours for each point
-  # (consistently with the above)
-  tvals <- table(factor(I, levels=1:nX))
-  # Compute direct part
-  # (arising when i~j) 
-  tI <- tvals[I]
-  tJ <- tvals[J]
-  result[IJ] <-
-    pmin(sat, tI) - pmin(sat, tI - 1) + pmin(sat, tJ) - pmin(sat, tJ - 1)
-  # Compute indirect part
-  # (arising when i~k and j~k for another point k)
-  # First find all such triples 
-  ord <- (I < J)
-  vees <- edges2vees(I[ord], J[ord], nX)
-  # evaluate contribution of (k, i, j)
-  KK <- vees$i
-  II <- factor(vees$j, levels=1:nX)
-  JJ <- factor(vees$k, levels=1:nX)
-  tKK <- tvals[KK]
-  contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1) + pmin(sat, tKK-2)
-  # for each (i, j), sum the contributions over k 
-  delta3 <- tapply(contribKK, list(I=II, J=JJ), sum)
-  delta3[is.na(delta3)] <- 0
-  # symmetrise and combine
-  result <- result + delta3 + t(delta3)
-  # finish
-  return(result)
-}
+geyerdelta2 <- local({
+
+  geyerdelta2 <- function(X, r, sat) {
+    # Sufficient statistic for second order conditional intensity
+    # Geyer model
+    stopifnot(is.numeric(sat) && length(sat) == 1 && sat >= 0)
+    # X could be a ppp or quad.
+    if(is.ppp(X)) {
+      # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
+      # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
+      return(geydelppp(X, r, sat))
+    } else if(inherits(X, "quad")) {
+      # evaluate \Delta_{u_i} \Delta_{u_j} S(x) for quadrature points u_i, u_j
+      return(geydelquad(X, r, sat))
+    } else stop("Internal error: X should be a ppp or quad object")
+  }
+
+  geydelppp <- function(X, r, sat) {
+    # initialise
+    nX <- npoints(X)
+    result <- matrix(0, nX, nX)
+    # identify all r-close pairs (ordered pairs i ~ j)
+    a <- closepairs(X, r, what="indices")
+    I <- a$i
+    J <- a$j
+    IJ <- cbind(I,J)
+    # count number of r-neighbours for each point
+    # (consistently with the above)
+    tvals <- table(factor(I, levels=1:nX))
+    # Compute direct part
+    # (arising when i~j) 
+    tI <- tvals[I]
+    tJ <- tvals[J]
+    result[IJ] <-
+      pmin(sat, tI) - pmin(sat, tI - 1) + pmin(sat, tJ) - pmin(sat, tJ - 1)
+    # Compute indirect part
+    # (arising when i~k and j~k for another point k)
+    # First find all such triples 
+    ord <- (I < J)
+    vees <- edges2vees(I[ord], J[ord], nX)
+    # evaluate contribution of (k, i, j)
+    KK <- vees$i
+    II <- factor(vees$j, levels=1:nX)
+    JJ <- factor(vees$k, levels=1:nX)
+    tKK <- tvals[KK]
+    contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1) + pmin(sat, tKK-2)
+    # for each (i, j), sum the contributions over k 
+    delta3 <- tapply(contribKK, list(I=II, J=JJ), sum)
+    delta3[is.na(delta3)] <- 0
+    # symmetrise and combine
+    result <- result + delta3 + t(delta3)
+    # if X is a ppp, return now
+    if(is.null(D))
+      return(result)
+  }
+
+  geydelquad <- function(Q, r, sat) {
+    Z <- is.data(Q)
+    U <- union.quad(Q)
+    nU <- npoints(U)
+    nX <- npoints(Q$data)
+    result <- matrix(0, nU, nU)
+    # identify all r-close pairs U[i], U[j]
+    a <- closepairs(U, r, what="indices")
+    I <- a$i
+    J <- a$j
+    IJ <- cbind(I, J)
+    # tag which ones are data points
+    zI <- Z[I]
+    zJ <- Z[J]
+    # count t(U[i], X)
+    IzJ <- I[zJ]
+    JzJ <- J[zJ]
+    tvals <- table(factor(IzJ, levels=1:nU))
+    # Compute direct part
+    # (arising when U[i]~U[j]) 
+    tI <- tvals[I]
+    tJ <- tvals[J]
+    tIJ <- tI - zJ
+    tJI <- tJ - zI
+    result[IJ] <-  pmin(sat, tIJ + 1) - pmin(sat, tIJ) +
+                   pmin(sat, tJI + 1) - pmin(sat, tJI) 
+    # Compute indirect part
+    # (arising when U[i]~X[k] and U[j]~X[k] for another point X[k])
+    # First find all such triples
+    # Group close pairs X[k] ~ U[j] by index k
+    spl <- split(IzJ, factor(JzJ, levels=1:nX))
+    grlen <- unlist(lapply(spl, length))
+    # Assemble list of triples U[i], X[k], U[j]
+    # by expanding each pair U[i], X[k]
+    JJ <- unlist(spl[JzJ])
+    II <- rep(IzJ, grlen[JzJ])
+    KK <- rep(JzJ, grlen[JzJ])
+    # remove identical pairs i = j
+    ok <- II != JJ
+    II <- II[ok]
+    JJ <- JJ[ok]
+    KK <- KK[ok]
+    # evaluate contribution of each triple
+    tKK <- tvals[KK]
+    zII <- Z[II]
+    zJJ <- Z[JJ]
+    tKIJ <- tKK - zII - zJJ 
+    contribKK <-
+      pmin(sat, tKIJ + 2) - 2 * pmin(sat, tKIJ + 1) + pmin(sat, tKIJ)
+    # for each (i, j), sum the contributions over k 
+    II <- factor(II, levels=1:nU)
+    JJ <- factor(JJ, levels=1:nU)
+    delta4 <- tapply(contribKK, list(I=II, J=JJ), sum)
+    delta4[is.na(delta4)] <- 0
+    # combine
+    result <- result + delta4
+    return(result)
+  }
+
+  geyerdelta2
+})

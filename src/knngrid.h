@@ -19,11 +19,13 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.2 $  $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.5 $  $Date: 2013/10/22 01:33:12 $
 
 
 */
 #endif
+
+#undef PRINTALOT
 
 void FNAME(nx, x0, xstep,  
 	   ny, y0, ystep,   /* pixel grid dimensions */
@@ -87,7 +89,15 @@ void FNAME(nx, x0, xstep,
 
     R_CheckUserInterrupt();
     
+#ifdef PRINTALOT
+    Rprintf("j=%d, xj=%lf\n", j, xj); 
+#endif
+
     for(i = 0, yi = Y0; i < Nyrow; i++, yi += Ystep) {
+
+#ifdef PRINTALOT
+      Rprintf("\ti=%d, yi = %lf\n", i, yi); 
+#endif
 
       /* initialise nn distances and indices */
       d2minK = hu2;
@@ -104,13 +114,20 @@ void FNAME(nx, x0, xstep,
 	  {
 	    dx = xp[mright] - xj;
 	    dx2 = dx * dx; 
+#ifdef PRINTALOT
+	    Rprintf("\t\t%d\n", mright);
+#endif
 	    if(dx2 > d2minK) /* note that dx2 >= d2minK could break too early */
 	      break;
 	    dy = yp[mright] - yi;
 	    d2 =  dy * dy + dx2;
 	    if (d2 < d2minK) {
+#ifdef PRINTALOT
+	    Rprintf("\t\t\tNeighbour: d2=%lf\n", d2);
+#endif
 	      /* overwrite last entry in list of neighbours */
 	      d2min[Nk1] = d2;
+	      mwhich = mright;
 #ifdef WHICH
 	      which[Nk1] = mright;
 #endif
@@ -134,6 +151,15 @@ void FNAME(nx, x0, xstep,
 	      }
 	      /* adjust maximum distance */
 	      d2minK = d2min[Nk1];
+#ifdef PRINTALOT
+	      Rprintf("\t\t\tUpdated d2minK=%lf\n", d2minK);
+	      for(k = 0; k < Nk; k++)
+		Rprintf("\t\t\t\td2min[%d]=%lf\n", k, d2min[k]);
+#ifdef WHICH
+	      for(k = 0; k < Nk; k++) 
+		Rprintf("\t\t\t\twhich[%d]=%d\n", k, which[k]);
+#endif
+#endif
 	    }
 	  }
 	/* end forward search */
@@ -144,15 +170,22 @@ void FNAME(nx, x0, xstep,
 	  {
 	    dx = xj - xp[mleft];
 	    dx2 = dx * dx;
+#ifdef PRINTALOT
+	    Rprintf("\t\t%d\n", mleft);
+#endif
 	    if(dx2 > d2minK) /* note that dx2 >= d2minK could break too early */
 	      break;
 	    dy = yp[mleft] - yi;
 	    d2 =  dy * dy + dx2;
 	    if (d2 < d2minK) {
+#ifdef PRINTALOT
+	    Rprintf("\t\t\tNeighbour: d2=%lf\n", d2);
+#endif
 	      /* overwrite last entry in list of neighbours */
+	      mwhich = mleft;
 	      d2min[Nk1] = d2;
 #ifdef WHICH
-	      which[Nk1] = mright;
+	      which[Nk1] = mleft;
 #endif
 	      /* bubble sort */
 	      unsorted = YES;
@@ -174,10 +207,24 @@ void FNAME(nx, x0, xstep,
 	      }
 	      /* adjust maximum distance */
 	      d2minK = d2min[Nk1];
+#ifdef PRINTALOT
+	      Rprintf("\t\t\tUpdated d2minK=%lf\n", d2minK);
+	      for(k = 0; k < Nk; k++) 
+		Rprintf("\t\t\t\td2min[%d]=%lf\n", k, d2min[k]);
+#ifdef WHICH
+	      for(k = 0; k < Nk; k++) 
+		Rprintf("\t\t\t\twhich[%d]=%d\n", k, which[k]);
+#endif
+#endif
 	    }
 	  }
 	/* end backward search */
       }
+      /* remember index of most recently-encountered neighbour */
+      lastmwhich = mwhich;
+#ifdef PRINTALOT
+      Rprintf("\t\tlastmwhich=%d\n", lastmwhich);
+#endif
       /* copy nn distances for grid point (i, j)
 	 to output array nnd[ , i, j] 
       */

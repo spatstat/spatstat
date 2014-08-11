@@ -24,7 +24,7 @@
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  $Revision: 1.3 $ $Date: 2013/06/28 10:38:34 $
+  $Revision: 1.5 $ $Date: 2013/09/20 10:01:25 $
 
 */
 
@@ -38,8 +38,11 @@ void FNAME(n1, x1, y1, z1, id1,
      double *nnd;
      int *nnwhich;
 { 
-  int npoints1, npoints2, i, j, jwhich, lastjwhich, id1i, maxchunk;
-  double dmin, d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
+  int npoints1, npoints2, i, j, jwhich, lastjwhich;
+  double d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
+#ifdef EXCLUDE
+  int id1i;
+#endif
 
   hu = *huge;
   hu2 = hu * hu;
@@ -56,13 +59,14 @@ void FNAME(n1, x1, y1, z1, id1,
     
     R_CheckUserInterrupt();
     
-    dmin = hu;
     d2min = hu2;
     jwhich = -1;
     x1i = x1[i];
     y1i = y1[i];
     z1i = z1[i];
+#ifdef EXCLUDE
     id1i = id1[i];
+#endif
 
     /* search backward from previous nearest neighbour */
     if(lastjwhich > 0) {
@@ -116,7 +120,7 @@ void FNAME(n1, x1, y1, z1, id1,
 #endif
 #ifdef WHICH
     /* convert to R indexing */
-    nnwhich[i] = jwhich;
+    nnwhich[i] = jwhich + 1;
 #endif
     lastjwhich = jwhich;
   }

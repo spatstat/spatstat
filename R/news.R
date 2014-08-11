@@ -14,11 +14,3 @@ latest.news <- function(package="spatstat") {
 
 class(latest.news) <- "autoexec"
 
-licence.polygons <- function() {
-  RShowDoc("POLYGONS.txt", type="txt", package="spatstat")
-}
-
-class(licence.polygons) <- "autoexec"
-
-license.polygons <- licence.polygons
-

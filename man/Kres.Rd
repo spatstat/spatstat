@@ -84,10 +84,12 @@
     fit1 <- ppm(cells, ~1, Strauss(0.08))
     \testonly{fit1 <- ppm(cells, ~1, Strauss(0.08), nd=16)}
     K1 <- Kres(fit1)
-    plot(K1, ires ~ r)
-# fit looks approximately OK; try adjusting interaction distance
 
-    plot(Kres(cells, interaction=Strauss(0.12)))
+    if(interactive()) {
+      plot(K1, ires ~ r)
+   # fit looks approximately OK; try adjusting interaction distance
+      plot(Kres(cells, interaction=Strauss(0.12)))
+    }
 
 # How to make envelopes
     \dontrun{

@@ -17,7 +17,7 @@
   Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.9 $     $Date: 2013/04/12 06:36:00 $
+  $Revision: 1.11 $     $Date: 2013/09/18 04:06:59 $
 
 */
 
@@ -36,8 +36,8 @@ void FNAME(
      /* outputs */
      OUTTYPE *numer, *denom;
 {
-  int i, j, l, n, nt, n1, nt1, lmin, lmax, lup, maxchunk;
-  double dt, tmax, tmax2, xi, yi, bi, maxsearch, max2search;
+  int i, j, l, n, nt, n1, nt1, lmin, lmax, maxchunk;
+  double dt, tmax, xi, yi, bi, maxsearch, max2search;
   double bratio, dratio, dij, dij2, dx, dy, dx2;
   OUTTYPE *numerLowAccum, *numerHighAccum, *denomAccum;
   OUTTYPE naccum, daccum;
@@ -69,7 +69,6 @@ void FNAME(
 
   dt = (*rmax)/(nt-1);
   tmax = *rmax;
-  tmax2 = tmax * tmax;
 
   /* initialise */
   numerLowAccum  = (OUTTYPE *) R_alloc(nt, sizeof(OUTTYPE));

@@ -16,7 +16,7 @@
   Copyright (C) Adrian Baddeley, Julian Gilbey and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.5 $     $Date: 2013/04/12 06:42:53 $
+  $Revision: 1.6 $     $Date: 2013/09/18 04:08:26 $
 
 */
 
@@ -37,8 +37,7 @@ void FNAME(
 {
   int i, j, l, n, nt, n1, lmin, lmax, maxchunk;
   double dt, tmax, tmax2, xi, yi;
-  double xleft, xright, dratio, dij, dij2, dx, dy, dx2;
-  OUTTYPE naccum;
+  double dratio, dij, dij2, dx, dy, dx2;
 #ifdef WEIGHTED
   double wi, wj, wij;
 #endif

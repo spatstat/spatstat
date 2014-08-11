@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.80 $ $Date: 2013/09/03 01:19:14 $
+# $Revision: 1.81 $ $Date: 2013/09/16 06:34:20 $
 #
 
 kppm <- function(X, trend = ~1,
@@ -634,7 +634,7 @@ unitname.kppm <- function(x) {
   return(x)
 }
 
-as.fv.kppm <- function(x) x$mcfit
+as.fv.kppm <- function(x) as.fv(x$Fit$mcfit)
 
 coef.kppm <- function(object, ...) {
   return(coef(object$po))

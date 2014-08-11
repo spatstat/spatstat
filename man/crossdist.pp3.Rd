@@ -1,4 +1,4 @@
-\name{crossdist.pp3}
+\name{crossdist.pp3} %DontDeclareMethods
 \alias{crossdist.pp3}
 \title{Pairwise distances between two different three-dimensional point patterns}
 \description{

@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.23 $  $Date: 2013/08/29 03:55:35 $
+#  $Revision: 1.32 $  $Date: 2013/09/25 06:00:07 $
 #
 
 leverage <- function(model, ...) {
@@ -36,7 +36,8 @@ influence.ppm <- function(model, ...,
   return(a)
 }
 
-dfbetas.ppm <- function(model, ..., drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=list()) {
+dfbetas.ppm <- function(model, ...,
+                        drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=list()) {
   fitname <- short.deparse(substitute(model))
   u <- list(fit=model,fitname=fitname)
   s <- ppm.influence(model, what="dfbetas", drop=drop,
@@ -48,12 +49,14 @@ dfbetas.ppm <- function(model, ..., drop=FALSE, iScore=NULL, iHessian=NULL, iArg
 }
 
 ppm.influence <- function(fit,
-           what=c("leverage", "influence", "dfbetas", "derivatives"),
-           ..., iScore=NULL, iHessian=NULL, iArgs=list(), drop=FALSE,
-           method=c("C", "interpreted")) {
+                          what=c("leverage", "influence", "dfbetas",
+                            "derivatives", "increments"),
+                          ..., iScore=NULL, iHessian=NULL, iArgs=list(),
+                          drop=FALSE,
+                          method=c("C", "interpreted"),
+                          precomputed=list()) {
   stopifnot(is.ppm(fit))
-#  stopifnot(is.poisson.ppm(fit))
-  what <- match.arg(what)
+  what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
   #
   gotScore <- !is.null(iScore)
@@ -62,11 +65,14 @@ ppm.influence <- function(fit,
   if(!gotHess && needHess)
     stop("Must supply iHessian")
   #
-  p <- length(coef(fit))
+  # extract precomputed values if given
+  theta  <- precomputed$coef   %orifnull% coef(fit)
+  lam    <- precomputed$lambda %orifnull% fitted(fit, check=FALSE)
+  mom    <- precomputed$mom    %orifnull% model.matrix(fit)
+  # 
+  p <- length(theta)
   vc <- vcov(fit, hessian=TRUE)
   fush <- hess <- solve(vc)
-  lam <- fitted(fit, check=FALSE)
-  mom <- model.matrix(fit)
   Q <- quad.ppm(fit)
   # hess = negative hessian of log (pseudo) likelihood
   # fush = E(hess)
@@ -80,7 +86,17 @@ ppm.influence <- function(fit,
   if(length(w) != length(lam))
     stop(paste("Internal error: length(w) = ", length(w),
                "!=", length(lam), "= length(lam)\n"))
+  # 
+  # second order interaction terms
+  # ddS[i,j, ] = Delta_i Delta_j S(x)
+  ddS <- NULL
+  if(!all(what == "derivatives") && !is.poisson(fit)) {
+    ddS <- deltasuffstat(fit, dataonly=FALSE)
+    if(is.null(ddS))
+      warning("Second order interaction terms are not implemented for this model; they are treated as zero")
+  }
   #
+  # 
   if(!is.null(iScore)) {
     # evaluate additional (`irregular') components of score
     iscoredf <- mpl.get.covariates(iScore, loc, covfunargs=iArgs)
@@ -90,6 +106,12 @@ ppm.influence <- function(fit,
     nirr <- ncol(iscoremat)
     # add extra columns to model matrix
     mom <- cbind(mom, iscoremat)
+    # add extra planes of zeroes to second-order model matrix
+    # (zero because the irregular components are part of the trend)
+    if(!is.null(ddS)) {
+      paddim <- c(dim(ddS)[1:2], nirr)
+      ddS <- abind(ddS, array(0, dim=paddim), along=3)
+    }
     # evaluate additional (`irregular') entries of Hessian
     if(gotHess) {
       ihessdf <- mpl.get.covariates(iHessian, loc, covfunargs=iArgs)
@@ -162,14 +184,17 @@ ppm.influence <- function(fit,
   if(drop) {
     ok <- complete.cases(mom)
     Q <- Q[ok]
-    mom <- mom[ok,]
+    mom <- mom[ok, , drop=FALSE]
     loc <- loc[ok]
     lam <- lam[ok]
     w   <- w[ok]
     isdata <- isdata[ok]
+    if(!is.null(ddS)) ddS <- ddS[ok, ok, , drop=FALSE]
   }
-  #
+  # ........  start assembling results .....................
+  # 
   result <- list()
+  # 
   if("derivatives" %in% what) {
     rawresid <- isdata - lam * w
     score <- matrix(rawresid, nrow=1) %*% mom
@@ -177,18 +202,64 @@ ppm.influence <- function(fit,
                          fush=fush, vc=vc,
                          hess=hess, invhess=invhess)
   }
+  if(all(what == "derivatives"))
+    return(result)
+
+  # compute effect of adding/deleting each quadrature point
+  #    columns index the point being added/deleted
+  #    rows index the points affected
+  eff <- mom
+  if(!is.poisson(fit) && !is.null(ddS)) {
+    # effect of addition/deletion of U[j] on score contribution from data points
+    ddSX <- ddS[isdata, , , drop=FALSE]
+    eff.data <- apply(ddSX, c(2,3), sum)
+    # model matrix after addition/deletion of each U[j]
+    # mombefore[i,j,] <- mom[i,]
+    di <- dim(ddS)
+    mombefore <- array(apply(mom, 2, rep, times=di[2]), dim=di)
+    changesign <- ifelse(isdata, -1, 1)
+    momchange <- ddS
+    momchange[ , isdata, ] <- - momchange[, isdata, ]
+    momafter <- mombefore + momchange
+    # effect of addition/deletion of U[j] on lambda(U[i], X)
+    lamratio <- exp(tensor(momchange, theta, 3, 1))
+    lamratio <- array(lamratio, dim=dim(momafter))
+    # integrate 
+    ddSintegrand <- lam * (momafter * lamratio - mombefore)
+    eff.back <- changesign * tensor(ddSintegrand, w, 1, 1)
+    # total
+    eff <- eff + eff.data - eff.back
+  } else ddSintegrand <- NULL
+
+  # 
+  if("increments" %in% what) {
+    result$increm <- list(ddS=ddS,
+                          ddSintegrand=ddSintegrand,
+                          isdata=isdata,
+                          wQ=w)
+  }
+  if(!any(c("leverage", "influence", "dfbetas") %in% what))
+    return(result)
+
+  # ............ compute leverage, influence, dfbetas ..............
+  
+  # compute basic contribution from each quadrature point
   nloc <- npoints(loc)
   switch(method,
          interpreted = {
            b <- numeric(nloc)
            for(i in seq(nloc)) {
+             effi <- eff[i,, drop=FALSE]
              momi <- mom[i,, drop=FALSE]
-             b[i] <- momi %*% invhess %*% t(momi)
+             b[i] <- momi %*% invhess %*% t(effi)
            }
          },
          C = {
-           b <- quadform(mom, invhess)
+           b <- bilinearform(mom, invhess, eff)
          })
+  
+  # .......... leverage .............
+  
   if("leverage" %in% what) {
     # values of leverage (diagonal) at points of 'loc'
     h <- b * lam
@@ -200,6 +271,7 @@ ppm.influence <- function(fit,
     lev <- list(val=levval, smo=levsmo, ave=levmean)
     result$lev <- lev
   }
+  # .......... influence .............
   if("influence" %in% what) {
     # values of influence at data points
     X <- loc[isdata]
@@ -207,8 +279,9 @@ ppm.influence <- function(fit,
     V <- X %mark% M
     result$infl <- V
   }
+  # .......... dfbetas .............
   if("dfbetas" %in% what) {
-    vex <- invhess %*% t(mom)
+    vex <- invhess %*% t(eff)
     switch(method,
            interpreted = {
              dis <- con <- matrix(0, nloc, ncol(mom))
@@ -257,4 +330,27 @@ as.im.leverage.ppm <- function(X, ...) {
 
 as.ppp.influence.ppm <- function(X, ...) {
   return(X$infl)
+}
+
+print.leverage.ppm <- function(x, ...) {
+  cat("Point process leverage function\n")
+  fitname <- x$fitname
+  cat(paste("for model:", fitname, "\n"))
+  lev <- x$lev
+  cat("\nExact values:\n")
+  print(lev$val)
+  cat("\nSmoothed values:\n")
+  print(lev$smo)
+  if(is.poisson(x$fit))
+    cat(paste("\nAverage value:", lev$ave, "\n"))
+  return(invisible(NULL))
+}
+
+print.influence.ppm <- function(x, ...) {
+  cat("Point process influence measure\n")  
+  fitname <- x$fitname
+  cat(paste("for model:", fitname, "\n"))
+  cat("\nExact values:\n")
+  print(x$infl)
+  return(invisible(NULL))
 }

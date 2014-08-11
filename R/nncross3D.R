@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.3 $  $Date: 2013/08/22 08:26:51 $
+#    $Revision: 1.5 $  $Date: 2013/09/20 10:34:29 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -98,7 +98,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
   # sort only if needed
   if(!is.sorted.X){
     oX <- fave.order(XX[,3])
-    XX[oX, , drop=FALSE]
+    XX <- XX[oX, , drop=FALSE]
     if(exclude) iX <- iX[oX]
   }
   if (!is.sorted.Y){
@@ -154,9 +154,10 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
 #            PACKAGE="spatstat")
 
     if(want.which) {
-      nnwcode <- z$nnwhich #sic. C code now increments by 1
+      # conversion to R indexing is done in C code
+      nnwcode <- z$nnwhich
       if(any(uhoh <- (nnwcode == 0))) {
-        warning("NA's produced in nncross()$which")
+        warning("Internal error: NA's produced in nncross()$which")
         nnwcode[uhoh] <- NA
       }
     }

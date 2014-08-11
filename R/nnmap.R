@@ -1,9 +1,9 @@
 #
 #  nnmap.R
 #
-#    k-th nearest neighbour of each pixel
+#    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.3 $  $Date: 2013/09/04 02:41:06 $
+#  $Revision: 1.4 $  $Date: 2013/09/29 09:02:32 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -92,32 +92,64 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
     # number of neighbours that are well-defined
     kmaxcalc <- min(nX, kmax)
 
-    # call C code
-    Cfun <- paste0("knnG",
-                   if(want.dist) "d" else "",
-                   if(want.which) "w" else "")
+    # prepare to call C code
     nndv <- if(want.dist) numeric(npixel * kmaxcalc) else numeric(1)
     nnwh <- if(want.which) integer(npixel * kmaxcalc) else integer(1)
 
     DUP <- spatstat.options("dupC")
-   
-    zz <- .C(Cfun,
-             nx = as.integer(nxcol),
-             x0 = as.double(M$xcol[1]),
-             xstep = as.double(M$xstep),
-             ny = as.integer(nyrow),
-             y0 = as.double(M$yrow[1]),
-             ystep = as.double(M$ystep),
-             np = as.integer(nX),
-             xp = as.double(xx),
-             yp = as.double(yy),
-             kmax = as.integer(kmaxcalc),
-             nnd = as.double(nndv),
-             nnwhich = as.integer(nnwh),
-             huge = as.double(huge),
-             DUP = DUP)
-#             PACKAGE = "spatstat")
 
+    # The following lines are captured by a 'sed' script.
+    # They ensure that the namespace file includes the
+    # explicit names of all the function entry points.
+    # ................................................
+    #    .C("nnGd",
+    #    .C("nnGw",
+    #    .C("nnGdw",
+    #    .C("knnGd",
+    #    .C("knnGw",
+    #    .C("knnGdw",
+
+    # ............. call C code ............................
+    
+    if(kmaxcalc == 1) {
+      Cfun <- paste0("nnG",
+                     if(want.dist) "d" else "",
+                     if(want.which) "w" else "")
+      zz <- .C(Cfun,
+               nx = as.integer(nxcol),
+               x0 = as.double(M$xcol[1]),
+               xstep = as.double(M$xstep),
+               ny = as.integer(nyrow),
+               y0 = as.double(M$yrow[1]),
+               ystep = as.double(M$ystep),
+               np = as.integer(nX),
+               xp = as.double(xx),
+               yp = as.double(yy),
+               nnd = as.double(nndv),
+               nnwhich = as.integer(nnwh),
+               huge = as.double(huge),
+               DUP = DUP)
+    } else {
+      Cfun <- paste0("knnG",
+                     if(want.dist) "d" else "",
+                     if(want.which) "w" else "")
+      zz <- .C(Cfun,
+               nx = as.integer(nxcol),
+               x0 = as.double(M$xcol[1]),
+               xstep = as.double(M$xstep),
+               ny = as.integer(nyrow),
+               y0 = as.double(M$yrow[1]),
+               ystep = as.double(M$ystep),
+               np = as.integer(nX),
+               xp = as.double(xx),
+               yp = as.double(yy),
+               kmax = as.integer(kmaxcalc),
+               nnd = as.double(nndv),
+               nnwhich = as.integer(nnwh),
+               huge = as.double(huge),
+               DUP = DUP)
+    }
+    
     # extract results
     nnW <- zz$nnwhich
     nnD <- zz$nnd

@@ -83,7 +83,9 @@
   \bold{42}, 283--322.
 
   Baddeley, A. and Turner, R. (2013)
-  Manuscript in preparation.  
+  Bias correction for parameter estimates of spatial point process models.
+  \emph{Journal of Statistical Computation and Simulation}
+  \bold{2012}. {doi: 10.1080/00949655.2012.755976}
 
   Kelly, F.P. and Ripley, B.D. (1976)
   On Strauss's model for clustering.

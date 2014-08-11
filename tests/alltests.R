@@ -118,6 +118,12 @@ local({
   if(any(ncw != cdw))
     stop("For sorted data, nncross()$which does not agree with apply(crossdist(), 1, which.min)")
 
+  # test of nngrid.h and knngrid.h
+  #    dimyx=23 (found by trial-and-error) ensures that there are no ties 
+  a <- as.matrix(nnmap(cells, what="which", dimyx=23))
+  b <- as.matrix(nnmap(cells, what="which", dimyx=23, k=1:2)[[1]])
+  if(any(a != b))
+    stop("algorithms in nngrid.h and knngrid.h disagree")
 })
 
 
@@ -941,7 +947,7 @@ m <- rmhmodel(f)
 m <- rmhmodel(f, control=list(p=1))
 
 Zim <- as.im(Z, as.owin(cells))
-f <- ppm(amacrine, ~z, covariates=list(z=Zim))
+f <- ppm(cells, ~z, covariates=list(z=Zim))
 m <- rmhmodel(f)
 
 Z <- as.im(function(x,y){ x^2+y }, as.owin(amacrine))
@@ -1438,36 +1444,16 @@ local({
 
 
 #
-# tests/gpclib.R
-#
-#  Test whether polygon geometry works with gpclib enabled
-#  (only testable when gpclib is installed!)
-#
-#  $Revision: 1.3 $  $Date: 2011/12/05 07:29:16 $
-#
-require(spatstat)
-local({
-  if(require(gpclib)) {
-    spot <- spatstat.options()
-    spatstat.options(gpclib=TRUE)
-    example(intersect.owin)
-    example(plot.owin)
-    spatstat.options(spot)
-  }
-})
-
-#
 #  tests/splitpea.R
 #
 #  Check behaviour of split.ppp etc
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.7 $  $Date: 2011/12/05 07:29:16 $
+#  $Revision: 1.8 $  $Date: 2013/10/06 08:44:28 $
 #
 
 require(spatstat)
-if(require(gpclib)) spatstat.options(gpclib=TRUE)
 
 local({
 W <- square(8)
@@ -1605,7 +1591,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.3 $  $Date: 2012/11/06 08:46:01 $
+#  $Revision: 1.4 $  $Date: 2013/09/20 09:01:34 $
 #
 
 require(spatstat)
@@ -1661,6 +1647,13 @@ local({
     stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' for Geyer model")
   if(disagree(v, vc))
     stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' for Geyer model")
+
+  # test of pairwise.family$delta2
+  modelZ <- ppm(amacrine, ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
+  b <- vcov(modelZ)
+  g <- vcov(modelZ, generic=TRUE)
+  if(disagree(b, g))
+    stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
   
 })
 # tests/windows.R
@@ -1668,13 +1661,11 @@ local({
 
 require(spatstat)
 local({
-  spatstat.options(gpclib=TRUE)
   # Ege Rubak spotted this problem in 1.28-1
   A <- as.owin(ants)
   B <- dilation(A, 140)
   if(!is.subset.owin(A, B))
     stop("is.subset.owin fails in polygonal case")
-  spatstat.options(gpclib=FALSE)
 })
 
 #

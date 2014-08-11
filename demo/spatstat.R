@@ -187,7 +187,6 @@ Z <- density(cells, 0.07)
 plot(Z, main="Kernel smoothed intensity of point pattern")
 plot(cells, add=TRUE)
 
-
 plot(redwood, main="Redwood data")
 te <- scan.test(redwood, 0.1, method="poisson")
 plot(te, main=c("Scan Statistic for redwood data",
@@ -227,8 +226,9 @@ plot(X, add=TRUE)
 
 parsave <- par(mfrow=c(1,3))
 plot(longleaf, main="Longleaf Pines data")
-plot(smooth.ppp(longleaf, 10), main="Kernel smoothing")
-plot(idw(longleaf), main="Inverse distance weighted smoothing")
+plot(nnmark(longleaf), main="Nearest mark")
+plot(Smooth(longleaf, 10), main="Kernel smoothing of marks")
+plot(idw(longleaf), main="Inverse distance weighted smoothing of marks")
 par(parsave)
 
 fryplot(cells, main=c("Fry plot","cells data"), pch="+")
@@ -324,7 +324,7 @@ plot(L, iso007 ~ r, main="point B")
 ponderosa.extra$plotit()
 L12 <- localL(ponderosa, rvalue=12)
 P12 <- ponderosa %mark% L12
-Z12 <- smooth.ppp(P12, sigma=5, dimyx=128)
+Z12 <- Smooth(P12, sigma=5, dimyx=128)
 plot(Z12, col=topo.colors(128), main="smoothed neighbourhood density")
 contour(Z12, add=TRUE)
 points(ponderosa, pch=16, cex=0.5)

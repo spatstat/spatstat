@@ -11,7 +11,7 @@
   clusterset(X, result=c("marks", "domain"),
             \dots, verbose=TRUE,
             fast=FALSE,
-            exact=!fast && spatstat.options("gpclib"))
+            exact=!fast)
 }
 \arguments{
   \item{X}{
@@ -81,13 +81,11 @@
     \item
     If \code{exact=TRUE}, the Allard-Fraley set estimator
     will be computed exactly using polygonal geometry.
-    This requires the package \pkg{gpclib} which has a restricted
-    licence: see \code{\link{licence.polygons}}. 
     The result is a polygonal window.
     \item
     If \code{exact=FALSE}, the Allard-Fraley set estimator
     will be approximated by a binary pixel mask.
-    This is much faster than the exact computation.
+    This is faster than the exact computation.
     The result is a binary mask.
   }
   When \pkg{spatstat} is initialised, the default is

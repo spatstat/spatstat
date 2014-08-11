@@ -116,8 +116,8 @@ double areaintCif(prop, state, cdata)
   int npts, ix, ixp1, j;
   double *period, *x, *y;
   double u, v;
-  double r2, d2, dx, dy, a, range2;
-  double xgrid, ygrid, xgrid0, ygrid0, covfrac, cifval;
+  double r2, dx, dy, a, range2;
+  double xgrid, ygrid, xgrid0, covfrac, cifval;
   int kount, kdisc, kx, my, ky;
   int *neighbour;
   int nn, k;

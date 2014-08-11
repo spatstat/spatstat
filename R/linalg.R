@@ -1,7 +1,7 @@
 #
 # linalg.R
 #
-# $Revision: 1.6 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.7 $ $Date: 2013/09/25 05:55:41 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -77,6 +77,49 @@ quadform <- function(x, v) {
           DUP=DUP)
 #          PACKAGE="spatstat")
   result <- z$y
+  names(result) <- nama[ok]
+  if(allok)
+    return(result)
+  fullresult <- rep.int(NA_real_, length(ok))
+  fullresult[ok] <- result
+  names(fullresult) <- nama
+  return(fullresult)
+}
+
+bilinearform <- function(x, v, y) {
+  stopifnot(is.matrix(x))
+  stopifnot(is.matrix(y))
+  stopifnot(identical(dim(x), dim(y)))
+  p <- ncol(x)
+  n <- nrow(x)
+  nama <- rownames(x)
+  # transpose (evaluate quadratic form for each column)
+  tx <- t(x)
+  ty <- t(y)
+  ok <- apply(is.finite(tx), 2, all) & apply(is.finite(ty), 2, all)
+  allok <- all(ok)
+  if(!allok) {
+    tx <- tx[ , ok, drop=FALSE]
+    ty <- ty[ , ok, drop=FALSE]
+    n <- ncol(tx)
+  }
+  if(missing(v)) {
+    v <- diag(rep.int(1, p))
+  } else {
+    stopifnot(is.matrix(v))
+    if(nrow(v) != ncol(v)) stop("v should be a square matrix")
+    stopifnot(ncol(x) == nrow(v))
+  }
+  DUP <- spatstat.options("dupC")  
+  z <- .C("Cbiform",
+          x=as.double(tx),
+          y=as.double(ty),
+          n=as.integer(n),
+          p=as.integer(p),
+          v=as.double(v),
+          z=as.double(numeric(n)),
+          DUP=DUP)
+  result <- z$z
   names(result) <- nama[ok]
   if(allok)
     return(result)

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.67 $   $Date: 2013/07/17 05:51:40 $
+#  $Revision: 1.68 $   $Date: 2013/10/02 05:35:12 $
 #
 #  Plotting code for pixel images
 #
@@ -135,7 +135,7 @@ plot.im <- local({
     
     # transform pixel values to log scale?
     if(do.log) {
-      rx <- range(x)
+      rx <- range(x, finite=TRUE)
       if(all(rx > 0)) {
         x <- eval.im(log10(x))
       } else {
@@ -169,7 +169,7 @@ plot.im <- local({
       colargnames <- names(formals(colfun))
       if("range" %in% colargnames && xtype %in% c("real", "integer")) {
         # continuous 
-        vrange <- range(range(x), zlim)
+        vrange <- range(range(x, finite=TRUE), zlim)
         cvals <- try(do.call.matched(colfun,
                                      append(list(range=vrange), colargs)),
                      silent=TRUE)
@@ -197,7 +197,7 @@ plot.im <- local({
        
     switch(xtype,
            real    = {
-             vrange <- range(x)
+             vrange <- range(x, finite=TRUE)
              vrange <- range(zlim, vrange)
              if(!is.null(colmap)) {
                # explicit colour map
@@ -229,7 +229,7 @@ plot.im <- local({
              values <- as.vector(x$v)
              values <- values[!is.na(values)]
              uv <- unique(values)
-             vrange <- range(uv)
+             vrange <- range(uv, finite=TRUE)
              vrange <- range(zlim, vrange)
              nvalues <- length(uv)
              trivial <- (nvalues < 2)

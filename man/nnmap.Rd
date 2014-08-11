@@ -92,6 +92,17 @@
   equal to \code{"x"} or \code{"y"} to indicate which coordinate
   is sorted.
 }
+\section{Warning About Ties}{
+  Ties are possible: there may be two data points
+  which lie exactly the same distance away from a particular pixel.
+  This affects the results from \code{nnmap(what="which")}.
+  The handling of ties is not well-defined: it is not consistent
+  between different computers and different installations of \R.
+  If there are ties, then different calls to \code{nnmap(what="which")}
+  may give inconsistent results. For example, you may get a different answer
+  from \code{nnmap(what="which",k=1)}
+  and \code{nnmap(what="which", k=1:2)[[1]]}.
+}
 \value{
   A pixel image, or a list of pixel images.
 

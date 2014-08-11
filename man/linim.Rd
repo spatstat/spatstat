@@ -61,7 +61,8 @@
 \seealso{
   \code{\link{plot.linim}},
   \code{\link{linnet}},
-  \code{\link[spatstat]{im}}.
+%  \code{\link{eval.linim}},
+  \code{\link{im}}.
 }
 \examples{
   example(linnet)

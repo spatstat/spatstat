@@ -1,4 +1,179 @@
 
+	CHANGES IN spatstat VERSION 1.34-0
+
+OVERVIEW
+
+   o We thank Andrew Bevan, Ege Rubak, Aruna Jammalamadaka, 
+   Greg McSwiggan, Jeff Marcus, Jose M Blanco Moreno,
+   and Brian Ripley for contributions.
+
+   o spatstat and all its dependencies are now Free Open Source.
+
+   o spatstat does not require the package 'gpclib' any more.
+   
+   o spatstat now depends on the packages 'tensor', 'abind' and 'polyclip'
+
+   o polygon clipping is now enabled always.
+
+   o Substantially more support for point patterns on linear networks.
+
+   o Faster computations for pairwise interaction models.
+
+   o Bug fixes in nearest neighbour calculations.
+
+   o Bug fix in leverage and influence diagnostics.
+
+   o Version nickname: "Window Cleaner"
+
+   o spatstat now requires R version 3.0.2 or later
+
+NEW FUNCTIONS
+
+   o as.lpp
+   Convert data to a point pattern on a linear network.
+
+   o distfun.lpp
+   Distance function for point pattern on a linear network.
+
+   o eval.linim
+   Evaluate expression involving pixel images on a linear network.
+
+   o linearKcross, linearKdot, linearKcross.inhom, linearKdot.inhom
+   Multitype K functions for point patterns on a linear network
+
+   o linearmarkconnect, linearmarkequal
+   Mark connection function and mark equality function 
+   for multitype point patterns on a linear network
+
+   o linearpcfcross, linearpcfdot, linearpcfcross.inhom, linearpcfdot.inhom
+   Multitype pair correlation functions for point patterns on a linear network
+
+   o linfun
+   New class of functions defined on a linear network
+
+   o nndist.lpp, nnwhich.lpp, nncross.lpp
+   Methods for nndist, nnwhich, nncross for point patterns on a linear network
+
+   o nnfun.lpp
+   Method for nnfun for point patterns on a linear network
+
+   o vcov.lppm
+   Variance-covariance matrix for parameter estimates of a fitted
+   point process model on a linear network.
+
+   o bilinearform
+   Computes a bilinear form 
+
+   o tilenames, tilenames<-
+   Extract or change the names of tiles in a tessellation.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o package dependencies 
+   Previous versions of spatstat used the package 'gpclib' 
+   to perform geometrical calculations on polygons.
+   Spatstat now uses the package 'polyclip' for polygon calculations instead.
+
+   o free open-source licence
+   The restrictive licence conditions of 'gpclib' no longer apply 
+   to users of spatstat. Spatstat and all its dependencies are now
+   covered by a free open-source licence.
+
+   o polygon clipping
+   In previous versions of spatstat, geometrical calculations
+   on polygons could be performed 'exactly' using gpclib
+   or 'approximately' using pixel discretisation. 
+   Polygon calculations are now always performed 'exactly'.
+   
+   o intersect.owin, union.owin, setminus.owin
+   If A and B are polygons, the result is a polygon.
+
+   o erosion, dilation, opening, closing
+   If the original set is a polygon, the result is a polygon.
+
+   o intersect.tess, dirichlet
+   The tiles of the resulting tessellation are polygons 
+   if the input was polygonal.
+
+   o plot.owin
+   Polygons with holes can now be plotted with filled colours
+   on any device.
+
+   o lppm
+   New arguments 'eps' and 'nd' control the quadrature scheme.
+
+   o pairwise interaction Gibbs models
+   Many calculations for these models have been accelerated.
+
+BUG FIXES
+
+   o nncross.pp3
+   Values were completely incorrect in some cases.
+   Usually accompanied by a warning about NA values.
+   (Spotted by Andrew Bevan.)
+   Fixed.
+
+   o nnmap, nnmark
+   A small proportion of pixels had incorrect values.
+   [These were the pixels lying on the boundary of a Dirichlet cell.]
+   Fixed. 
+
+   o leverage.ppm, influence.ppm, dfbetas.ppm
+   Results were incorrect for non-Poisson processes.
+   Fixed.
+
+   o distcdf
+   Results were incorrect in some cases
+   when W was a window and V was a point pattern.
+   Fixed.
+
+   o Kcross, Kdot, pcfcross, pcfdot
+   Results were incorrect in some rare cases.
+   Fixed.
+
+   o as.fv.kppm
+   Erroneously returned a NULL value.
+   Fixed.
+
+   o vcov.ppm
+   For point process models fitted with method = 'logi',
+   sometimes crashed with error "object 'fit' not found".
+   (Spotted by Ege Rubak).
+   Fixed.
+
+   o vcov.ppm
+   For multitype point process models, sometimes crashed
+   with error "argument 'par' is missing".
+   Fixed.
+
+   o plot.im
+   Crashed if some of the pixel values were infinite.
+   Fixed.
+
+   o owin 
+   owin(poly=..) crashed if there were NA's in the polygon coordinates.
+   Spotted by Jeff Marcus.
+   Fixed.
+
+   o plot.fv
+   Crashed, giving an incomprehensible error,
+   if the plot formula contained a number with a decimal point.
+   Fixed.
+
+   o alltypes
+   Crashed if envelopes=TRUE and global=TRUE, 
+   with error message 'csr.theo not found'.
+   Spotted by Jose M Blanco Moreno.
+   Fixed.
+
+   o chop.tess, rMosaicField
+   Format of result was garbled in some cases.
+   Fixed.
+
+   o vcov.ppm
+   Sometimes gave an irrelevant warning "parallel option not available".
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.33-0
 
 OVERVIEW

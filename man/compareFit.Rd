@@ -122,8 +122,8 @@ compareFit(object, Fun, r = NULL, breaks = NULL, ...,
       iname <- iname[c(1,3)]
    }
    K <- compareFit(swedishpines, Kcom, interaction=ilist, rbord=9,
-            correction="isotropic",
-            same="iso", different="icom", modelnames=iname, nd=nd)
+            correction="translate",
+            same="trans", different="tcom", modelnames=iname, nd=nd)
    K
 }
 \keyword{spatial}

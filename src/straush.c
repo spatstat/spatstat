@@ -57,7 +57,7 @@ double straushcif(prop, state, cdata)
   int npts, kount, ix, ixp1, j;
   double *x, *y;
   double u, v;
-  double r2, d2, h2, r2h2, cifval;
+  double r2, r2h2, cifval;
   StraussHard *strausshard;
   double *period;
   DECLARE_CLOSE_VARS;
@@ -65,7 +65,6 @@ double straushcif(prop, state, cdata)
   strausshard = (StraussHard *) cdata;
 
   r2     = strausshard->r2;
-  h2     = strausshard->h2;
   r2h2   = strausshard->r2h2;
   period = strausshard->period;
 

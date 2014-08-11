@@ -189,9 +189,6 @@ kstest(...)
   \emph{Applied Statistics} \bold{35}, 54--62.
 }
 \examples{
-   # real data: NZ trees
-   data(nztrees)
-
    # test of CSR using x coordinate
    kstest(nztrees, "x")
 
@@ -223,7 +220,6 @@ kstest(...)
    }
 
    # multitype point pattern
-   data(amacrine)
    kstest(amacrine, "x")
    yimage <- as.im(function(x,y){y}, W=as.owin(amacrine))
    kstest(ppm(amacrine, ~marks+y), yimage)

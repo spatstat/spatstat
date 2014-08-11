@@ -38,11 +38,7 @@ perimeter(w)
   perimeter(square(3))
   data(letterR)
   perimeter(letterR)
-  if(spatstat.options("gpclib")) {
-     if(interactive()) {
-     print(perimeter(as.mask(letterR)))
-    } else print(perimeter(as.mask(letterR, dimyx=32)))
-  }
+  if(interactive()) print(perimeter(as.mask(letterR)))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@csiro.au}

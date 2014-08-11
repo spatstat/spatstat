@@ -202,23 +202,22 @@
 }
 \examples{
    # bramblecanes (3 marks).
-   data(bramblecanes)
    \testonly{
       bramblecanes <- bramblecanes[c(seq(1, 744, by=20), seq(745, 823, by=4))]
    }
    bF <- alltypes(bramblecanes,"F",verb=TRUE)
-   plot(bF) 
-   plot(alltypes(bramblecanes,"G"))
-   plot(alltypes(bramblecanes,"Gdot"))
+   plot(bF)
+   if(interactive()) {
+     plot(alltypes(bramblecanes,"G"))
+     plot(alltypes(bramblecanes,"Gdot"))
+   }
    
    # Swedishpines (unmarked).
-   data(swedishpines)
    \testonly{
      swedishpines <- swedishpines[1:25]
    }
    plot(alltypes(swedishpines,"K"))
 
-   data(amacrine)
    plot(alltypes(amacrine, "pcf"), ylim=c(0,1.3))
 
    # A setting where you might REALLY want to use dataname:

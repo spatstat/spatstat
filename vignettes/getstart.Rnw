@@ -22,7 +22,6 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 
 <<echo=FALSE,results=hide>>=
 library(spatstat)
-spatstat.options(gpclib=TRUE)
 spatstat.options(image.colfun=function(n) { grey(seq(0,1,length=n)) })
 sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
          fields = "Date")

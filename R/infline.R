@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.16 $ $Date: 2013/05/01 05:54:38 $
+# $Revision: 1.19 $ $Date: 2013/10/06 08:26:59 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -107,12 +107,6 @@ chop.tess <- function(X, L) {
   stopifnot(is.tess(X)||is.owin(X))
   X <- as.tess(X)
 
-  if(!spatstat.options("gpclib")) {
-    # polygonal computations unavailable
-    # convert to image tessellation
-    X <- tess(image=as.im(X))
-  }
-  
   if(X$type == "image") {
     Xim <- X$image
     xr <- Xim$xrange
@@ -189,8 +183,10 @@ chop.tess <- function(X, L) {
       Z <- tess(tiles=list(lower,upper), window=Bplus)
     }
     # intersect this simple tessellation with X
-    if(!is.null(Z))
+    if(!is.null(Z)) {
       X <- intersect.tess(X, Z)
+      tilenames(X) <- paste("Tile", seq_len(length(tiles(X))))
+    }
   }
   return(X)
 }

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.133 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.134 $	$Date: 2013/10/06 04:28:29 $
 #
 #
 #	A window may be either
@@ -338,13 +338,6 @@ as.owin.psp <- function(W, ..., fatal=TRUE) {
   return(W$window)
 }
 
-
-as.owin.gpc.poly <- function(W, ..., fatal=TRUE) {
-  if(!verifyclass(W, "gpc.poly", fatal=fatal))
-    return(NULL)
-  gpc2owin(W)
-}
-
 as.owin.tess <- function(W, ..., fatal=TRUE) {
   if(!verifyclass(W, "tess", fatal=fatal))
     return(NULL)
@@ -585,11 +578,6 @@ as.polygonal <- function(W) {
            return(W)
          },
          mask = {
-           if(!(spatstat.options("gpclib") && require(gpclib))) {
-             warning(paste("Can't convert mask to polygon:",
-                        "gpclib is disabled/unavailable"))
-             return(W)
-           }
            # This could take a while
            M <- W$m
            nr <- nrow(M)

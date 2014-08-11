@@ -33,7 +33,7 @@
 \details{
   Given a fitted spatial point process model \code{model},
   this function computes the influence measure
-  described in Baddeley, Chang and Song (2011).
+  described in Baddeley, Chang and Song (2013).
    
   The function \code{\link[stats]{influence}} is generic,
   and \code{influence.ppm} is the method for objects of class
@@ -72,9 +72,9 @@
   by \code{\link{plot.influence.ppm}}.
 }
 \references{
-  Baddeley, A. and Chang, Y.M. and Song, Y. (2011)
+  Baddeley, A. and Chang, Y.M. and Song, Y. (2013)
   Leverage and influence diagnostics for spatial point process models.
-  \emph{Scandinavian Journal of Statistics}, in press.
+  \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
 }
 \author{
   Adrian Baddeley

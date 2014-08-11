@@ -56,7 +56,7 @@ double tripletscif(prop, state, cdata)
      State state;
      Cdata *cdata;
 {
-  int npts, kount, ix, ixp1, j, k, nj, nk, N, Nmax, Nmore, N1;
+  int npts, kount, ix, j, k, nj, nk, N, Nmax, Nmore, N1;
   int *neighbour;
   double *x, *y;
   double u, v;

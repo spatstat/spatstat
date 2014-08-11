@@ -1,24 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.119 $    $Date: 2013/09/04 07:30:20 $
-#
-#  (a) for matrices only:
-#
-#    matrowany(X) is equivalent to apply(X, 1, any)
-#    matrowall(X) "   "  " "  "  " apply(X, 1, all)
-#    matcolany(X) "   "  " "  "  " apply(X, 2, any)
-#    matcolall(X) "   "  " "  "  " apply(X, 2, all)
-#
-#  (b) for 3D arrays only:
-#    apply23sum(X)  "  "   "  " apply(X, c(2,3), sum)
-#
-#  (c) weighted histogram
-#    whist()
-#
-#  (d) for matrices:
-#    matrixsample()
-#           subsamples or supersamples a matrix
+#    $Revision: 1.122 $    $Date: 2013/10/03 03:34:54 $
 #
 #
 matrowsum <- function(x) {
@@ -439,6 +422,21 @@ ensure2vector <- function(x) {
   return(x)
 }
 
+ensure3Darray <- function(x) {
+  nd <- length(dim(x))
+  if(nd == 0) {
+    x <- array(x, dim=c(length(x), 1, 1))
+  } else if(nd == 2) {
+    x <- array(x, dim=c(dim(x), 1))
+  } else if(nd > 3) {
+    laterdims <- dim(x)[-(1:3)]
+    if(any(laterdims != 1))
+      stop("Higher-dimensional array cannot be reduced to 3 dimensions")
+    x <- array(x, dim=dim(x)[1:3])
+  }
+  return(x)
+}
+
 check.nvector <- function(v, npoints, fatal=TRUE, things="data points",
                           naok=FALSE) {
   # vector of numeric values for each point/thing
@@ -779,6 +777,30 @@ paste.expr <- function(x) {
   unlist(lapply(x, function(z) { paste(deparse(z), collapse="") }))
 }
 
+#   gsub(".", replacement, x) but only when "." appears as a variable
+
+gsubdot <- function(replacement, x) {
+  x <- as.character(x)
+  stopifnot(length(x) == 1)
+  # find all positions of "." in x
+  dotpos <- gregexpr("\\.", x)[[1]]
+  if(all(dotpos == -1)) return(x)
+  # find all positions of "." preceded or followed by alphanumeric
+  dotbefore <- gregexpr("\\.[0-9A-Za-z]", x)[[1]]
+  dotafter <- gregexpr("[0-9A-Za-z]\\.", x)[[1]] - 1
+  # exclude them
+  dotpos <- setdiff(dotpos, union(dotbefore, dotafter))
+  #
+  if(length(dotpos) == 0) return(x)
+  lenrep <-length(replacement)
+  while(length(dotpos) > 0) {
+    dp <- dotpos[1]
+    x <- paste0(substr(x, 0, dp-1), replacement, substr(x, dp+1, nchar(x)))
+    dotpos <- dotpos[-1] + lenrep-1
+  }
+  return(x)
+}
+
 badprobability <- function(x, NAvalue=NA) {
   ifelse(is.na(x), NAvalue, !is.finite(x) | x < 0 | x > 1)
 }
@@ -1021,7 +1043,10 @@ ifelseNegPos <- function(test, x) {
   return(y)
 }
 
+# ..................
 
-  
-  
-  
+"%orifnull%" <- function(a, b) {
+  if(!is.null(a)) return(a)
+  # b is evaluated only now
+  return(b)
+}

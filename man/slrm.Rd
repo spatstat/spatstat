@@ -170,13 +170,13 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
      slrm(X ~ x+y)
 
      slrm(X ~ x+y, link="cloglog")
-     # specify a grid of 1 km square pixels
-     slrm(X ~ 1, eps=1)
+     # specify a grid of 2-km-square pixels
+     slrm(X ~ 1, eps=2)
 
      Y <- copper$SouthLines
      Z <- distmap(Y)
      slrm(X ~ Z)
-     slrm(X ~ Z, dataAtPoints=list(Z=nncross(X,Y)$dist))
+     slrm(X ~ Z, dataAtPoints=list(Z=nncross(X,Y,what="dist")))
 
      dat <- list(A=X, V=Z)
      slrm(A ~ V, data=dat)

@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.74 $	$Date: 2013/09/02 10:33:02 $
+#	$Revision: 1.75 $	$Date: 2013/10/04 05:10:11 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -23,7 +23,7 @@ predict.ppm <- local({
     return(list(sumobj=sumobj, E=E))
   }
 
-  predict.ppm <- function(object, window, ngrid=NULL, locations=NULL,
+  predict.ppm <- function(object, window=NULL, ngrid=NULL, locations=NULL,
                           covariates=NULL, type="trend", X=data.ppm(object),
                           correction,
                           ..., new.coef=NULL, check=TRUE, repair=TRUE) {
@@ -36,6 +36,7 @@ predict.ppm <- local({
   xarg <- xtract(...)
   sumobj <- xarg$sumobj
   E      <- xarg$E
+#
 #
 #	'object' is the output of ppm()
 #
@@ -101,8 +102,15 @@ predict.ppm <- local({
 #      (arguments present)    (output)  
 #         window, ngrid    ->   image
 #         locations (mask) ->   image
+#         locations (rectangle) ->  treat locations as 'window'
+#         locations (polygonal) ->  treat locations as 'window'
 #         locations (other) ->  data frame
 #
+  if(is.null(window) && is.owin(locations) && !is.mask(locations)) {
+    window <- locations
+    locations <- NULL
+  }
+  
   if(!is.null(ngrid) && !is.null(locations))
     stop(paste("Only one of",
                sQuote("ngrid"), "and", sQuote("locations"),
@@ -112,8 +120,7 @@ predict.ppm <- local({
     # use regular grid
     ngrid <- rev(spatstat.options("npixel"))
     
-  want.image <- is.null(locations) ||
-                    (is.owin(locations) && locations$type == "mask")
+  want.image <- is.null(locations) || is.mask(locations)
   make.grid <- !is.null(ngrid)
 #
 #
@@ -178,7 +185,7 @@ predict.ppm <- local({
         if(nn == 1)
           ngrid <- rep.int(ngrid,2)
       }
-      if(missing(window))
+      if(is.null(window))
         window <- sumobj$entries$data$window
       masque <- as.mask(window, dimyx=ngrid)
     }

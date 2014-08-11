@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.88 $  $Date: 2013/07/19 05:26:02 $
+#  $Revision: 1.94 $  $Date: 2013/10/23 04:48:43 $
 #
 
 vcov.ppm <- local({
@@ -296,6 +296,8 @@ vcalcGibbsGeneral <- function(model,
     stopifnot(is.numeric(matwt) && is.vector(matwt))
   saveterms <- spill && saveterms
   logi <- model$method=="logi"
+  asked.parallel <- !missing(parallel)
+  
   old.coef <- coef(model)
   use.coef <- if(!is.null(new.coef)) new.coef else old.coef
   p <- length(old.coef)
@@ -399,11 +401,14 @@ vcalcGibbsGeneral <- function(model,
   # ^^^^^^^^^^^^^^^^^^^^ `parallel' evaluation
 
   need.loop <- TRUE
-  if(parallel && require(tensor)) {
+  if(parallel) {
     # compute second order difference
     #  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
-    ddS <- deltasuffstat(model, restrict=FALSE)
-    if(!is.null(ddS)) {
+    ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE)
+    if(is.null(ddS)) {
+      if(asked.parallel)
+        warning("parallel option not available - reverting to loop")
+    } else {
       need.loop <- FALSE
       # rearrange so that
       #  ddS[ ,i,j] = h(X[i] | X) - h(X[i] | X[-j])
@@ -439,8 +444,7 @@ vcalcGibbsGeneral <- function(model,
         ddSlogiok <- ddSlogi[ , ok, ok, drop=FALSE]
         A3log <- sumsymouter(ddSlogiok)
       }
-          
-    } else warning("parallel option not available - reverting to loop")
+    }
   }
   
   # ^^^^^^^^^^^^^^^^^^^^ loop evaluation
@@ -811,7 +815,8 @@ vcalcGibbsGeneral <- function(model,
            ## D2 <- logi.dummy(X = X, type = "stratrand", nd = model$internal$logistic$args)
            ## Q2 <- quad(data=X, dummy=D2)
            ## Q2$dummy$Dinfo <- D2$Dinfo
-           Q2 <- quadscheme.logi(data=X, dummytype = "stratrand", nd = fit$internal$logistic$nd)
+           Q2 <- quadscheme.logi(data=X, dummytype = "stratrand",
+                                 nd = model$internal$logistic$nd)
            D2 <- Q2$dummy
            Q2$dummy$Dinfo <- D2$Dinfo
            Z2 <- is.data(Q2)
@@ -960,7 +965,8 @@ vcalcGibbsSpecial <- function(fit, ...,
   E <- matrix(rep.int(1:n, 2), ncol = 2)
 
   ## Eval. the interaction potential difference at all points (internal spatstat function):
-  V1 <- fit$interaction$family$eval(Xplus, Xplus, E, fit$interaction$pot, fit$interaction$par, fit$correction)
+#  V1 <- fit$interaction$family$eval(Xplus, Xplus, E, fit$interaction$pot, fit$interaction$par, fit$correction)
+  V1 <- evalInteraction(Xplus, Xplus, E, as.interact(fit), fit$correction)
 
   ## Calculate parameter dimensions and correct the contrast type parameters:
   p2 <- ncol(V1)
@@ -1030,7 +1036,7 @@ vcalcGibbsSpecial <- function(fit, ...,
   ## Making a logical matrix, I, indicating R-close pairs which are in the interior:
   D <- pairdist(Xplus)
   diag(D) <- Inf
-  I <- D<=R * outer(IntPoints,IntPoints)
+  I <- (D<=R) & outer(IntPoints,IntPoints, "&")
   
   ## Matrix A1:
   A1 <- t(V1[IntPoints,])%*%V1[IntPoints,]

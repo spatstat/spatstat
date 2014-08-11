@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.78 $	$Date: 2013/05/01 08:08:11 $
+#	$Revision: 4.81 $	$Date: 2013/10/06 06:47:42 $
 #
 #
 #
@@ -238,16 +238,19 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     return(C)
 
   if(!Amask && !Bmask) {
-    if(spatstat.options("gpclib") && require(gpclib)) {
-      ####### Result is polygonal ############
-      Ag <- owin2gpc(A)
-      Bg <- owin2gpc(B)
-      ABg <- (gpcmethod("intersect"))(Ag, Bg)
-      AB <- gpc2owin(ABg)
-      if(is.null(AB))
-        return(emptywindow(C))
-      return(AB)
-    } 
+    ####### Result is polygonal ############
+    a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
+    b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
+    ab <- polyclip(a, b, "intersection", fillA="nonzero", fillB="nonzero")
+    if(length(ab)==0)
+      return(emptywindow(C))
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    if(totarea < 0)
+      ab <- lapply(ab, reverse.xypolygon)
+    AB <- owin(poly=ab, check=FALSE)
+    AB <- rescue.rectangle(AB)
+    return(AB)
   }
 
   ######### Result is a mask ##############
@@ -359,14 +362,19 @@ union.owin <- function(A, B, ...) {
             unitname=unitname(A))
 
   if(!Amask && !Bmask) {
-    if(spatstat.options("gpclib") && require(gpclib)) {
-      ####### Result is polygonal ############
-      Ag <- owin2gpc(A)
-      Bg <- owin2gpc(B)
-      ABg <- (gpcmethod("union"))(Ag, Bg)
-      AB <- gpc2owin(ABg)
-      return(AB)
-    }
+    ####### Result is polygonal ############
+    a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
+    b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
+    ab <- polyclip(a, b, "union", fillA="nonzero", fillB="nonzero")
+    if(length(ab) == 0)
+      return(emptywindow(C))
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    if(totarea < 0)
+      ab <- lapply(ab, reverse.xypolygon)
+    AB <- owin(poly=ab, check=FALSE)
+    AB <- rescue.rectangle(AB)
+    return(AB)
   }
 
   ####### Result is a mask ############
@@ -433,16 +441,19 @@ setminus.owin <- function(A, B, ...) {
   # Polygonal case
 
   if(!Amask && !Bmask) {
-    if(spatstat.options("gpclib") && require(gpclib)) {
-      Ap <- as.polygonal(A)
-      Bp <- as.polygonal(B)
-      Ag <- owin2gpc(Ap)
-      Bg <- owin2gpc(Bp)
-      ABg <- (gpcmethod("setdiff"))(Ag, Bg)
-      AB <- gpc2owin(ABg)
-      AB <- rescue.rectangle(AB)
-      return(AB)
-    }
+    ####### Result is polygonal ############
+    a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
+    b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
+    ab <- polyclip(a, b, "minus", fillA="nonzero", fillB="nonzero")
+    if(length(ab) == 0)
+      return(emptywindow(C))
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    if(totarea < 0)
+      ab <- lapply(ab, reverse.xypolygon)
+    AB <- owin(poly=ab, check=FALSE)
+    AB <- rescue.rectangle(AB)
+    return(AB)
   }
 
   ####### Result is a mask ############
@@ -694,56 +705,6 @@ simplify.owin <- function(W, dmin) {
 }
 
   
-#
-# interface to gpclib
-#
-
-gpc2owin <- function(x) {
-  if(!require("gpclib")) {
-    warning("Package gpclib is not available")
-    return(NULL)
-  }
-  verifyclass(x, "gpc.poly")
-  bb <- get.bbox(x)
-  pts <- get.pts(x)
-  if(length(pts) == 0 || sum(unlist(lapply(pts, length))) == 0)
-    return(NULL)
-  processpolygon <- 
-    function(p) {
-      area <- area.xypolygon(p)
-      neg  <- (area < 0)
-      if(p$hole != neg) {
-        p <- reverse.xypolygon(p)
-        area <- -area
-      }
-      p$area <- area
-      return(p)
-    }
-  pts <- lapply(pts, processpolygon)
-  w <- owin(bb$x, bb$y, poly=pts, check=FALSE)
-  return(w)
-}
-
-owin2gpc <- function(x) {
-  if(!require("gpclib")) {
-    warning("Package gpclib is not available")
-    return(NULL)
-  }
-  x <- as.polygonal(x)
-  b <- x$bdry
-  g <- lapply(b, function(p) {
-    p$hole <- is.hole.xypolygon(p) 
-    return(p)
-  })
-  new("gpc.poly", pts=g)
-}
-
-# hack required since gpclib namespace is not automatically imported
-gpcmethod <- function(fname,
-                      signature = list(x="gpc.poly", y="gpc.poly")) {
-  getMethod(fname, signature=signature)
-}
-
 is.convex <- function(x) {
   verifyclass(x, "owin")
   if(is.empty(x))

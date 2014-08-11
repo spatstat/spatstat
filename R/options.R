@@ -102,12 +102,7 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
        gpclib=list(
          default=FALSE,
          check=function(x) {
-           if(!(is.logical(x) && length(x) == 1))
-             return(FALSE)
-           if(x && !require(gpclib)) {
-             warning("Cannot set gpclib=TRUE: package gpclib is not installed")
-             return(FALSE)
-           }
+           message("gpclib is no longer needed")
            return(TRUE)
          },
          valid="a single logical value"

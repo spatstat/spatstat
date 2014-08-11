@@ -3,22 +3,17 @@
 #
 #   Allard-Fraley estimator of cluster region
 #
-#   $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.6 $  $Date: 2013/10/06 04:35:24 $
 #
 
 clusterset <- function(X, result=c("marks", "domain"),
                        ...,
                        verbose=TRUE,
                        fast=FALSE,
-                       exact=!fast && spatstat.options("gpclib")) {
+                       exact=!fast) {
   stopifnot(is.ppp(X))
   result <- match.arg(result)
-  if(!missing(exact)) {
-    stopifnot(is.logical(exact))
-    if(exact && result == "domain" && !spatstat.options("gpclib"))
-      stop(paste("Cannot perform exact calculation because gpclib is disabled;",
-                 "see help(licence.polygons)"))
-  }
+  if(!missing(exact)) stopifnot(is.logical(exact))
   if(fast && exact)
     stop("fast=TRUE is incompatible with exact=TRUE")
   # compute duplication exactly as in deldir, or the universe will explode

@@ -6,7 +6,7 @@
 
   xysegint     compute intersections between line segments
 
-  $Revision: 1.17 $     $Date: 2012/05/07 06:15:11 $
+  $Revision: 1.19 $     $Date: 2013/09/18 04:59:17 $
 
  */
 
@@ -557,7 +557,7 @@ SEXP Cxysegint(SEXP x0a,
 	       SEXP eps) 
 {
   int i, j, k, na, nb;
-  double determinant, absdet, diffx, diffy, tta, ttb, xx, yy;
+  double determinant, absdet, diffx, diffy, tta, ttb;
 
   int nout, noutmax, newmax, maxchunk;
   double epsilon;
@@ -711,7 +711,7 @@ SEXP CxysegXint(SEXP x0,
 		SEXP dy,
 		SEXP eps)
 { 
-  int i, j, k, n, n1, ijpos, jipos, iipos;
+  int i, j, k, n, n1;
   double determinant, absdet, diffx, diffy, tti, ttj;
 
   int nout, noutmax, newmax, maxchunk;

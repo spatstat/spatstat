@@ -35,7 +35,7 @@ iHessian=NULL, iArgs=list())
 \details{
   Given a fitted spatial point process \code{model},
   this function computes the influence measure for each parameter,
-  as described in Baddeley, Chang and Song (2011).
+  as described in Baddeley, Chang and Song (2013).
   
   This is a method for the generic function \code{\link[stats]{dfbetas}}.
 
@@ -70,9 +70,9 @@ iHessian=NULL, iArgs=list())
   measure. 
 }
 \references{
-  Baddeley, A. and Chang, Y.M. and Song, Y. (2011)
+  Baddeley, A. and Chang, Y.M. and Song, Y. (2013)
   Leverage and influence diagnostics for spatial point process models.
-  \emph{Scandinavian Journal of Statistics}, in press.
+  \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
 }
 \author{
   Adrian Baddeley

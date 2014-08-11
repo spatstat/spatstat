@@ -84,8 +84,6 @@ varblock(X, fun = Kest, blocks = quadrats(X, nx = nx, ny = ny), ...,
   edge correction depends on the number of points). To prevent
   this, specify the choice of edge correction,
   in the \code{correction} argument to \code{fun}, if it has one.
-  Some edge corrections are only available if you have set
-  \code{spatstat.options(gpclib=TRUE)}.
 
   An alternative to \code{varblock} is Loh's mark bootstrap
   \code{\link{lohboot}}.

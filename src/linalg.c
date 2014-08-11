@@ -5,7 +5,7 @@
 
    Yes, really
 
-   $Revision: 1.6 $ $Date: 2013/04/18 08:22:33 $ 
+   $Revision: 1.9 $ $Date: 2013/09/25 06:07:24 $ 
 
    Csumouter
    Cwsumouter
@@ -100,7 +100,7 @@ void Cquadform(x, n, p, v, y)
 {
   int N, P;
   register int i, j, k, maxchunk;
-  register double xij, wjxij, xkj, vik, yj;
+  register double xij, xkj, vik, yj;
   register double *xcolj;
   N = *n; 
   P = *p;
@@ -118,6 +118,42 @@ void Cquadform(x, n, p, v, y)
 	}
       }
       y[j] = yj;
+    }
+  }
+}
+
+/*
+    computes the bilinear form values
+    z[j] = x[,j] %*% v %*% t(y[,j])
+*/
+
+void Cbiform(x, y, n, p, v, z) 
+     double *x, *y;    /* p by n matrices */
+     int *n, *p;
+     double *v;    /* p by p matrix */
+     double *z;    /* output vector, length n */
+{
+  int N, P;
+  register int i, j, k, maxchunk;
+  register double xij, vik, ykj, zj;
+  register double *xcolj, *ycolj;
+  N = *n; 
+  P = *p;
+  OUTERCHUNKLOOP(j, N, maxchunk, 2048) {
+    R_CheckUserInterrupt();
+    INNERCHUNKLOOP(j, N, maxchunk, 2048) {
+      xcolj = x + j * P;
+      ycolj = y + j * P;
+      zj = 0;
+      for(i = 0; i < P; i++) {
+	xij = xcolj[i];
+	for(k = 0; k < P; k++) {
+	  ykj = ycolj[k];
+	  vik = v[k * P + i];
+	  zj += xij * vik * ykj;
+	}
+      }
+      z[j] = zj;
     }
   }
 }

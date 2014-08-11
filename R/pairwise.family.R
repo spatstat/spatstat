@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.40 $	$Date: 2013/05/23 07:26:11 $
+#    $Revision: 1.59 $	$Date: 2013/10/24 04:21:59 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -136,7 +136,8 @@ pairwise.family <-
        # end of function `plot'
        # ----------------------------------------------------
        eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
-           ..., precomputed=NULL, savecomputed=FALSE, pot.only=FALSE) {
+           ..., Reach=NULL, precomputed=NULL, savecomputed=FALSE,
+           pot.only=FALSE) {
   #
   # This is the eval function for the `pairwise' family.
   # 
@@ -204,7 +205,15 @@ if(length(correction) > 1)
 if(!any(correction == c("periodic", "border", "translate", "translation", "isotropic", "Ripley", "none")))
   stop(paste("Unrecognised edge correction", sQuote(correction)))
 
+ no.correction <- 
+
 #### Compute basic data
+
+   # Decide whether to apply faster algorithm using 'closepairs'
+   use.closepairs <-
+     (correction %in% c("none", "border", "translate", "translation")) &&
+     !is.null(Reach) && is.finite(Reach) &&
+     is.null(precomputed) && !savecomputed 
 
 if(!is.null(precomputed)) {
   # precomputed
@@ -214,13 +223,20 @@ if(!is.null(precomputed)) {
   M <- precomputed$M
 } else {
   U <- as.ppp(U, X$window)   # i.e. X$window is DEFAULT window
-  # Form the matrix of distances
-  M <- crossdist(X, U, periodic=(correction=="periodic"))
+  if(!use.closepairs) 
+    # Form the matrix of distances
+    M <- crossdist(X, U, periodic=(correction=="periodic"))
 }
 
-# Evaluate the pairwise potential 
+nX <- npoints(X)
+nU <- npoints(U)
+dimM <- c(nX, nU)
 
-if(!marx) 
+# Evaluate the pairwise potential without edge correction
+
+if(use.closepairs)
+  POT <- evalPairPotential(X,U,EqualPairs,pairpot,potpars,Reach)
+else if(!marx) 
   POT <- pairpot(M, potpars)
 else
   POT <- pairpot(M, marks(X), marks(U), potpars)
@@ -233,16 +249,16 @@ else
 
 if(!is.matrix(POT) && !is.array(POT)) {
   if(length(POT) == 0 && X$n ==  0) # empty pattern
-    POT <- array(POT, dim=c(dim(M),1))
+    POT <- array(POT, dim=c(dimM,1))
   else
     stop("Pair potential did not return a matrix or array")
 }
 
-if(length(dim(POT)) == 1 || any(dim(POT)[1:2] != dim(M))) {
-        whinge <- paste(
+if(length(dim(POT)) == 1 || any(dim(POT)[1:2] != dimM)) {
+        whinge <- paste0(
            "The pair potential function ",short.deparse(substitute(pairpot)),
-           "must produce a matrix or array with its first two dimensions\n",
-           "the same as the dimensions of its input.\n", sep="")
+           " must produce a matrix or array with its first two dimensions\n",
+           "the same as the dimensions of its input.\n")
 	stop(whinge)
 }
 
@@ -353,45 +369,18 @@ return(V)
   },
 ######### end of function $suffstat
   delta2 = function(X, inte, correction, ...) {
-    # Sufficient statistic for second order conditional intensity
-    # Evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
-    # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
+  # Sufficient statistic for second order conditional intensity
+  # for pairwise interaction processes
+  # Equivalent to evaluating pair potential.
+    X <- as.ppp(X)
     nX <- npoints(X)
-    if(!(correction %in% c("border", "none"))) {
-      # calculation involves edge correction.
-      # Use generic evaluator
-      E <- cbind(1:nX, 1:nX)
-      result <- pairwise.family$eval(X,X,E,inte$pot,inte$par,correction,
-                                     pot.only=TRUE)
-    } else {
-      # No edge correction weights
-      R <- reach(inte)
-      # identify close pairs (without repetition)
-      cl <- closepairs(X, R, ordered=FALSE)
-      I <- cl$i
-      J <- cl$j
-      D <- matrix(cl$d, ncol=1)
-      # evaluate potential for these pairs
-      POT <- inte$pot(D, inte$par)
-      # ensure 3D array
-      nd <- length(dim(POT))
-      if(nd == 0) {
-        POT <- array(POT, dim=c(length(POT), 1, 1))
-      } else if(nd == 2) {
-        POT <- array(POT, dim=c(dim(POT), 1))
-      }
-      p <- dim(POT)[3]
-      # create result array
-      result <- array(0, dim=c(nX, nX, p))
-      # insert results
-      II <- rep(I, p)
-      JJ <- rep(J, p)
-      KK <- rep(1:p, each=length(I))
-      result[cbind(II,JJ,KK)] <- POT
-      result[cbind(JJ,II,KK)] <- POT
-    }
-    #
-    return(result)
+    E <- cbind(1:nX, 1:nX)
+    R <- reach(inte)
+    result <- pairwise.family$eval(X,X,E,
+                                 inte$pot,inte$par,
+                                 correction,
+                                 pot.only=TRUE,
+                                 Reach=R)
   }
 ######### end of function $delta2
 )
@@ -400,3 +389,92 @@ return(V)
 class(pairwise.family) <- "isf"
 
 
+# externally visible
+
+evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
+  # Evaluate pair potential without edge correction weights
+  nX <- npoints(X)
+  nP <- npoints(P)
+  stopifnot(is.function(pairpot))
+  fop <- names(formals(pairpot))
+  if(identical(all.equal(fop, c("d", "par")), TRUE)) {
+    unmarked <- TRUE
+  } else if(identical(all.equal(fop, c("d", "tx", "tu", "par")), TRUE)) {
+    unmarked <- FALSE
+  } else 
+  stop("Formal arguments of pair potential function are not understood")
+  # determine dimension of potential, etc
+  fakePOT <- if(unmarked) pairpot(matrix(, 0, 0), potpars) else 
+                          pairpot(matrix(, 0, 0),
+                                  marks(X)[integer(0)],
+                                  marks(P)[integer(0)],
+                                  potpars)
+  IsOffset <- attr(fakePOT, "IsOffset")
+  fakePOT <- ensure3Darray(fakePOT)
+  Vnames <- dimnames(fakePOT)[[3]]
+  p <- dim(fakePOT)[3]
+  # Identify close pairs X[i], P[j]
+  cl <- crosspairs(X, P, R)
+  I <- cl$i
+  J <- cl$j
+  D <- matrix(cl$d, ncol=1)
+  # deal with empty cases
+  if(nX == 0 || nP == 0 || length(I) == 0) {
+    result <- array(0, dim=c(nX, nP, p), dimnames=list(NULL, NULL, Vnames))
+    attr(result, "IsOffset") <- IsOffset
+    return(result)
+  }
+  # evaluate potential for close pairs
+  # POT is a 1-column matrix or array, with rows corresponding to close pairs
+  if(unmarked) {
+    # unmarked
+    POT <- pairpot(D, potpars)
+    IsOffset <- attr(POT, "IsOffset")
+  } else {
+    # marked
+    marX <- marks(X)
+    marP <- marks(P)
+    if(!identical(levels(marX), levels(marP)))
+      stop("Internal error: marks of X and P have different levels")
+    types <- levels(marX)
+    mI <- marX[I]
+    mJ <- marP[J]
+    POT <- NULL
+    # split data by type of P[j]
+    for(k in types) {
+      relevant <- which(mJ == k)
+      if(length(relevant) > 0) {
+        fk <- factor(k, levels=types)
+        POTk <- pairpot(D[relevant,  , drop=FALSE], mI[relevant], fk, potpars)
+        POTk <- ensure3Darray(POTk)
+        if(is.null(POT)) {
+          # use first result of 'pairpot' to determine dimension
+          POT <- array(, dim=c(length(I), 1, dim(POTk)[3]))
+          # capture information about offsets, and names of interaction terms
+          IsOffset <- attr(POTk, "IsOffset")
+          Vnames <- dimnames(POTk)[[3]]
+        }
+        # insert values just computed
+        POT[relevant, , ] <- POTk
+      }
+    }
+  }
+  POT <- ensure3Darray(POT)
+  p <- dim(POT)[3]
+  # create result array
+  result <- array(0, dim=c(npoints(X), npoints(P), p),
+                  dimnames=list(NULL, NULL, Vnames))
+  # insert results
+  II <- rep(I, p)
+  JJ <- rep(J, p)
+  KK <- rep(1:p, each=length(I))
+  result[cbind(II,JJ,KK)] <- POT
+  # finally identify identical pairs and set value to 0
+  if(length(E) > 0) {
+    E.rep <- apply(E, 2, rep, times=p)
+    p.rep <- rep(1:p, each=nrow(E))
+    result[cbind(E.rep, p.rep)] <- 0
+  }
+  attr(result, "IsOffset") <- IsOffset
+  return(result)
+}

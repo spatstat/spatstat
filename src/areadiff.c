@@ -4,7 +4,7 @@
 
   Area difference function
 
-  $Revision: 1.13 $ $Date: 2012/03/27 01:38:58 $
+  $Revision: 1.14 $ $Date: 2013/09/18 04:09:24 $
 
   A(x,r) = area of disc b(0,r) not covered by discs b(x_i,r) for x_i in x
   
@@ -114,7 +114,7 @@ areadifs(rad,nrads,x,y,nxy,ngrid,answer)
      /* output */
      double *answer;   /* computed areas (vector of length 'nrads') */
 {
-  double dx, dy, xg, yg, xg2, r, r2, a2, b2, xdif, ydif;
+  double dx, dy, xg, yg, r, r2, a2, b2, xdif, ydif;
   int i, j, k, l, m, n, nr, m0, count, covered, maxchunk;
 
   n  = *nxy;

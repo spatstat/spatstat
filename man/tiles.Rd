@@ -23,6 +23,7 @@ tiles(x)
 }
 \seealso{
   \code{\link{tess}},
+  \code{\link{tilenames}},
   \code{\link{tile.areas}}
 }
 \examples{

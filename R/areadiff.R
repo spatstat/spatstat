@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.26 $  $Date: 2013/05/01 05:41:06 $
+#  $Revision: 1.27 $  $Date: 2013/10/06 04:33:24 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -12,10 +12,6 @@
 areaLoss <- function(X, r, ..., W=as.owin(X),
                      subset=NULL, exact=FALSE,
                      ngrid=spatstat.options("ngrid.disc")) {
-  if(exact && !spatstat.options("gpclib")) {
-    exact <- FALSE
-    warning("Option exact=TRUE is unavailable without gpclib")
-  }
   if(exact)
     areaLoss.diri(X, r, ..., W=W, subset=subset)
   else
@@ -26,10 +22,6 @@ areaLoss <- function(X, r, ..., W=as.owin(X),
 
 areaGain <- function(u, X, r, ..., W=as.owin(X), exact=FALSE,
                      ngrid=spatstat.options("ngrid.disc")) {
-  if(exact && !spatstat.options("gpclib")) {
-    exact <- FALSE
-    warning("Option exact=TRUE is unavailable without gpclib")
-  }
   if(exact)
     areaGain.diri(u, X, r, ..., W=W)
   else
@@ -66,7 +58,6 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
   dd <- deldir(X$x, X$y, rw=c(w$xrange, w$yrange))
   a <- dd$delsgs[,5]
   b <- dd$delsgs[,6]
-  exact <- spatstat.options("gpclib")
   for(k in seq_along(indices)) {
     i <- indices[k]
     # find all Delaunay neighbours of i 
@@ -76,8 +67,8 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
     Yminus <- X[jj]
     Yplus  <- X[c(jj, i)]
     # dilate
-    aplus <- dilated.areas(Yplus, r, W, exact=exact)
-    aminus <- dilated.areas(Yminus, r, W, exact=exact)
+    aplus <- dilated.areas(Yplus, r, W, exact=TRUE)
+    aminus <- dilated.areas(Yminus, r, W, exact=TRUE)
     areas <- aplus - aminus
     # area/(pi * r^2) must be positive and nonincreasing
     y <- ifelseAX(r == 0, 1, areas/pir2)
@@ -110,7 +101,6 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X)) {
   out <- matrix(0, nrow=nY, ncol=nr)
   pir2 <- pi * r^2
   wbox <- as.rectangle(as.owin(X))
-  exact <- spatstat.options("gpclib")
   #
   for(i in 1:nY) {
     progressreport(i, nY)
@@ -126,8 +116,8 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X)) {
     Zminus <- V[jj]
     Zplus  <- V[c(1, jj)]
     # dilate
-    aplus <- dilated.areas(Zplus, r, W, exact=exact)
-    aminus <- dilated.areas(Zminus, r, W, exact=exact)
+    aplus <- dilated.areas(Zplus, r, W, exact=TRUE)
+    aminus <- dilated.areas(Zminus, r, W, exact=TRUE)
     areas <- aplus - aminus
     # area/(pi * r^2) must be in [0,1] and nonincreasing
     y <- ifelseAX(r == 0, 1, areas/pir2)

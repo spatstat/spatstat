@@ -6,7 +6,7 @@
   NB: relative to other versions, 'score' is multiplied by 2
   (and is an integer)
 
-  $Revision: 1.6 $   $Date: 2012/04/06 07:37:07 $
+  $Revision: 1.7 $   $Date: 2013/09/18 04:20:13 $
 
  */
 
@@ -23,7 +23,7 @@ void inxyp(x,y,xp,yp,npts,nedges,score,onbndry)
   int *score;
   int *onbndry;
 {
-  int i, j, Npts, Nedges, Ne1, first, contrib, maxchunk;
+  int i, j, Npts, Nedges, Ne1, contrib, maxchunk;
   double x0, y0, x1, y1, dx, dy, xj, yj, xcrit, ycrit;
   
   Npts = *npts;
