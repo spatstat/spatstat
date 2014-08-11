@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.21 $    $Date: 2013/03/04 11:07:31 $
+#    $Revision: 1.22 $    $Date: 2013/05/14 06:04:02 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -215,6 +215,7 @@ scalardilate.linnet <- function(X, f, ...) {
   Y <- X
   Y$vertices     <- scalardilate(X$vertices, f=f)
   Y$lines        <- scalardilate(X$lines, f=f)
+  Y$window       <- scalardilate(X$window, f=f)
   Y$dpath        <- f * X$dpath
   Y$circumradius <- f * X$circumradius
   return(Y)
@@ -228,9 +229,9 @@ affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
     Y <- X
     Y$vertices     <- affine(X$vertices, mat=mat, vec=vec, ...)
     Y$lines        <- affine(X$lines,    mat=mat, vec=vec, ...)
+    Y$window       <- affine(X$window,   mat=mat, vec=vec, ...)
     Y$dpath        <- scal * X$dpath
     Y$circumradius <- scal * X$circumradius
-    Y <- scalardilate(X, sqrt(abs(det(mat))))
   } else {
     # general case
     vertices <- affine(X$vertices, mat=mat, vec=vec, ...)
@@ -244,6 +245,7 @@ shift.linnet <- function(X, ...) {
   Y <- X
   Y$vertices <- shift(X$vertices, ...)
   Y$lines    <- shift(X$lines, ...)
+  Y$window   <- shift(X$window, ...)
   # tack on shift vector
   attr(Y, "lastshift") <- attr(Y$vertices, "lastshift")
   return(Y)
@@ -254,6 +256,7 @@ rotate.linnet <- function(X, angle=pi/2, ...) {
   Y <- X
   Y$vertices <- rotate(X$vertices, angle=angle, ...)
   Y$lines    <- rotate(X$lines, angle=angle, ...)
+  Y$window   <- rotate(X$window, angle=angle, ...)
   return(Y)
 }
 

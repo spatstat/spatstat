@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.22 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.23 $   $Date: 2013/05/01 08:01:42 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -234,7 +234,7 @@ slr.prepare <- function(CallInfo, envir, data,
     serial <- c(serialIN, serialOUT)
     # sum of log pixel areas associated with points
     Ysplit <- pixsplit[Y]
-    sumYloga <- sum(log(ifelse(ins, Ysplit, basepixelarea - Ysplit)))
+    sumYloga <- sum(log(ifelseXY(ins, Ysplit, basepixelarea - Ysplit)))
   }
   
   # tack on any numeric values

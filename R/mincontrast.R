@@ -293,7 +293,7 @@ printStatus <- function(x, errors.only=FALSE) {
                return(rep.int(Inf, length(rvals)))
              doh <- funaux$DOH
              y <- (1/(4*pi*rvals * par[1] * par[2])) * doh(rvals/(2 * par[2]))
-             ifelse(rvals < .Machine$double.eps, 1, 1+y)
+             ifelseAX(rvals < .Machine$double.eps, 1, 1+y)
            },
          funaux=list(
            Hfun=function(zz) {
@@ -401,7 +401,7 @@ printStatus <- function(x, errors.only=FALSE) {
            denom <- 2^(nu.pcf - 1) * gamma(nu.pcf)
            rr <- rvals / par[2]
            # Matern correlation function
-           fr <- ifelse(rr > 0,
+           fr <- ifelseXB(rr > 0,
                         (rr^nu.pcf) * besselK(rr, nu.pcf) / denom,
                         1)
            return(1 + sig2 * fr)
@@ -487,7 +487,7 @@ printStatus <- function(x, errors.only=FALSE) {
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             if(!(require(RandomFields) && RandomFieldsSafe()))
+             if(!require(RandomFields))
                stop("The package RandomFields is required")
              # check validity
              ok <- try(Covariance(0, model=model,param=c(0,1,0,1,margs)))

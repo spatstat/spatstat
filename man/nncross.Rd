@@ -95,10 +95,16 @@
   identifier. See the Examples.
 }
 \section{Sorting data and pre-sorted data}{
+  Read this section if you care about the speed of computation.
+  
   For efficiency, the algorithm sorts the point patterns \code{X} and \code{Y}
   into increasing order of the \eqn{x} coordinate
-  or increasing order of the the \eqn{y} coordinate. By default
-  (if \code{sortby="range"}),
+  or increasing order of the the \eqn{y} coordinate.
+  Sorting is only an intermediate step;
+  it does not affect the output, which is always given in the same
+  order as the original data.
+  
+  By default (if \code{sortby="range"}),
   the sorting will occur on the coordinate that has the larger range of
   values (according to the frame of the enclosing window of \code{Y}).
   If \code{sortby = "var"}), sorting will occur on the coordinate that

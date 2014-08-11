@@ -311,7 +311,7 @@ shortside.boxx <- function(x) {
 
 eroded.volumes.boxx <- function(x, r) {
   len <- sidelengths(x)
-  ero <- sapply(as.list(len), function(z, r) { pmax(0, z - 2 * r)}, r=r)
+  ero <- sapply(as.list(len), function(z, r) { pmax.int(0, z - 2 * r)}, r=r)
   apply(ero, 1, prod)
 }
 

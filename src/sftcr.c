@@ -108,5 +108,5 @@ double sftcrcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns SoftcoreCifns = { &sftcrinit, &sftcrcif, (updafunptr) NULL, FALSE};
+Cifns SoftcoreCifns = { &sftcrinit, &sftcrcif, (updafunptr) NULL, NO};
 

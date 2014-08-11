@@ -1,8 +1,7 @@
 # include <math.h>
 #include <R.h>
 
-#define YES 1
-#define NO 0
+#include "yesno.h"
 
 /* 
 

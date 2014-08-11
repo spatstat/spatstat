@@ -117,7 +117,10 @@ print.summary.fii <- function(x, ...) {
     }
   }
   return(invisible(NULL))
-  
+}
+
+coef.summary.fii <- function(object, ...) {
+  object$printable
 }
 
 reach.fii <- function(x, ..., epsilon=0) {
@@ -183,4 +186,9 @@ fitin.ppm <- function(object) {
 as.interact.fii <- function(object) {
   verifyclass(object, "fii")
   return(object$interaction)
+}
+
+coef.fii <- function(object, ...) {
+  verifyclass(object, "fii")
+  return(object$coefs)
 }

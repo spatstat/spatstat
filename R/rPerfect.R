@@ -99,6 +99,7 @@ rHardcore <- function(beta, R=0, W=owin()) {
 
   seqn <- seq_len(nout)
   P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  return(P)
 }
 
 #
@@ -157,6 +158,7 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin()) {
 
   seqn <- seq_len(nout)
   P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  return(P)
 }
 
 
@@ -213,6 +215,7 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin()) {
 
   seqn <- seq_len(nout)
   P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  return(P)
 }
 
 
@@ -260,6 +263,7 @@ rDGS <- function(beta, rho, W=owin()) {
 
   seqn <- seq_len(nout)
   P <- ppp(X[seqn], Y[seqn], window=W, check=FALSE)
+  return(P)
 }
 
 

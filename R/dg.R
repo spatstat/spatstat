@@ -115,7 +115,7 @@ DiggleGratton <- local({
          idU <- rep.int(-1, npoints(U))
          idU[EqualPairs[,2]] <- EqualPairs[,1]
          answer <- diggraterms(U, X, idU, idX, delta, rho)
-         answer <- log(pmax(0, answer))
+         answer <- log(pmax.int(0, answer))
          return(matrix(answer, ncol=1))
        },
        Mayer=function(coeffs, self) {

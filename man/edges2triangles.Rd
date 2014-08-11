@@ -45,6 +45,9 @@ edges2triangles(iedge, jedge, nvert=max(iedge, jedge), \dots,
 \value{
   A 3-column matrix of integers, in which each row represents a triangle.
 }
+\seealso{
+  \code{\link{edges2vees}}
+}
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@csiro.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}

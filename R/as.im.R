@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.39 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.40 $   $Date: 2013/05/01 05:42:10 $
 #
 #    as.im()
 #
@@ -66,7 +66,7 @@ as.im.owin <- function(X, W=NULL, ...,
       out <- Z
     } else {
       # map {0, 1} to {na.replace, value}
-      v <- matrix(ifelse(Z$v == 0, na.replace, value), d[1], d[2])
+      v <- matrix(ifelseAB(Z$v == 0, na.replace, value), d[1], d[2])
       out <- im(v, W$xcol, W$yrow, unitname=unitname(X))
     }
     return(out)

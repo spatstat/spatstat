@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.15 $ $Date: 2011/05/18 07:57:31 $
+# $Revision: 1.16 $ $Date: 2013/05/01 05:54:38 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -14,18 +14,17 @@ infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
   if(!is.null(h)) 
     out <- data.frame(a=h, b=0, h=h, v=NA, p=h, theta=pi/2)
   else if(!is.null(v)) 
-    out <- data.frame(a=NA,b=NA,h=NA,v=v,p=v,theta=ifelse(v < 0, pi, 0))
+    out <- data.frame(a=NA,b=NA,h=NA,v=v,p=v,theta=ifelseAB(v < 0, pi, 0))
   else if(!is.null(a)) {
     # a, b specified
     z <- data.frame(a=a,b=b)
     a <- z$a
     b <- z$b
-    theta <- ifelse(b == 0, pi/2, atan(-1/b))
-    theta <- theta %% (2*pi)
-    theta <- ifelse(theta > pi, theta - pi, theta)
+    theta <- ifelseAX(b == 0, pi/2, atan(-1/b))
+    theta <- theta %% pi
     p <- a * sin(theta)
     out <- data.frame(a=a, b=b,
-                      h=ifelse(b==0, a, NA),
+                      h=ifelseXB(b==0, a, NA),
                       v=NA, p=p, theta=theta)
   } else if(!is.null(p)) {
     # p, theta specified
@@ -40,10 +39,10 @@ infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
     vert <- (theta == 0)
     horz <- (cos(theta) == 0)
     gene <- !(vert | horz)
-    v <- ifelse(vert, p, NA)
-    h <- ifelse(horz, p, NA)
-    a <- ifelse(gene, p/sin(theta), NA)
-    b <- ifelse(gene, -cos(theta)/sin(theta), NA)
+    v <- ifelseXB(vert, p, NA)
+    h <- ifelseXB(horz, p, NA)
+    a <- ifelseXB(gene, p/sin(theta), NA)
+    b <- ifelseXB(gene, -cos(theta)/sin(theta), NA)
     out <- data.frame(a=a,b=b,h=h,v=v,p=p,theta=theta)
   } else stop("No data given!")
   class(out) <- c("infline", class(out))

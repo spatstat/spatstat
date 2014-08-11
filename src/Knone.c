@@ -20,7 +20,7 @@
   Functions require (x,y) data to be sorted in ascending order of x
   and expect r values to be equally spaced and starting at zero
    
-  $Revision: 1.1 $ $Date: 2012/02/29 02:03:57 $
+  $Revision: 1.2 $ $Date: 2013/05/27 02:09:10 $
 
 */
 

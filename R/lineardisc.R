@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.16 $ $Date: 2012/04/20 04:45:17 $
+#   $Revision: 1.17 $ $Date: 2013/05/01 07:22:48 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -44,7 +44,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   # going through B:
   dxBv <- dxB + L$dpath[B,]
   # going either through A or through B:
-  dxv <- pmin(dxAv, dxBv)
+  dxv <- pmin.int(dxAv, dxBv)
   # Thus dxv[j] is the shortest path distance from x to vertex j.
   #
   # Determine which vertices are inside the disc of radius r
@@ -61,8 +61,8 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   allinside <- (dxv[from] + lengths <= r) | (dxv[to] + lengths <= r)
   #   ... or alternatively, if the sum of the
   #   two residual distances exceeds the length of the segment )
-  residfrom <- pmax(0, r - dxv[from])
-  residto   <- pmax(0, r - dxv[to])
+  residfrom <- pmax.int(0, r - dxv[from])
+  residto   <- pmax.int(0, r - dxv[to])
   allinside <- allinside | (residfrom + residto >= lengths)
   # start segment is special
   allinside[startsegment] <- startfilled
@@ -74,8 +74,8 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   # Determine which line segments cross the boundary of the disc
   boundary <- (covered[from] | covered[to]) & !allinside
   # For each of these, calculate the remaining distance at each end
-  resid.from <- ifelse(boundary, pmax(r - dxv[from], 0), 0)
-  resid.to   <- ifelse(boundary, pmax(r - dxv[to],   0), 0)
+  resid.from <- ifelseXB(boundary, pmax.int(r - dxv[from], 0), 0)
+  resid.to   <- ifelseXB(boundary, pmax.int(r - dxv[to],   0), 0)
   # Where the remaining distance is nonzero, create segment and endpoint
   okfrom <- (resid.from > 0)
   okfrom[startsegment] <- FALSE
@@ -106,8 +106,8 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
     vA <- vertices[A]
     vB <- vertices[B]
     rfrac <- r/lengths[startsegment]
-    tleft <- pmax(startfraction-rfrac, 0)
-    tright <- pmin(startfraction+rfrac, 1)
+    tleft <- pmax.int(startfraction-rfrac, 0)
+    tright <- pmin.int(startfraction+rfrac, 1)
     vleft <- ppp((1-tleft) * vA$x + tleft * vB$x,
                  (1-tleft) * vA$y + tleft * vB$y,
                  window=win)

@@ -108,7 +108,7 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
          )
   # clip high values
   if(length(weight) > 0)
-    weight <- pmin(weight, trim)
+    weight <- pmin.int(weight, trim)
   if(!paired) 
     weight <- matrix(weight, nrow=nX, ncol=nY)
   return(weight)

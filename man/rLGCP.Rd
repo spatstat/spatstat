@@ -88,7 +88,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
 }
 \examples{
-  if(require(RandomFields) && RandomFieldsSafe()) {
+  if(require(RandomFields)) {
     # homogeneous LGCP with exponential covariance function
     X <- rLGCP("exp", 3, c(0, variance=0.2, nugget=0, scale=.1 ))
 

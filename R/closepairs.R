@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.20 $   $Date: 2013/02/22 05:28:27 $
+#   $Revision: 1.24 $   $Date: 2013/05/23 01:11:30 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -10,7 +10,9 @@
 closepairs <- function(X, rmax, ordered=TRUE, what=c("all", "indices")) {
   verifyclass(X, "ppp")
   what <- match.arg(what)
-  stopifnot(is.numeric(rmax) && length(rmax) == 1 && rmax >= 0)
+  stopifnot(is.numeric(rmax) && length(rmax) == 1)
+  stopifnot(is.finite(rmax))
+  stopifnot(rmax >= 0)
   npts <- npoints(X)
   null.answer <- switch(what,
                         all = {
@@ -359,3 +361,54 @@ crosspairs <- function(X, Y, rmax, what=c("all", "indices")) {
          })
   return(answer)
 }
+
+closethresh <- function(X, R, S, ordered=TRUE) {
+  # list all R-close pairs
+  # and indicate which of them are S-close (S < R)
+  # so that results are consistent with closepairs(X,S)
+  verifyclass(X, "ppp")
+  stopifnot(is.numeric(R) && length(R) == 1 && R >= 0)
+  stopifnot(is.numeric(S) && length(S) == 1 && S >= 0)
+  stopifnot(S < R)
+  npts <- npoints(X)
+   if(npts == 0)
+     return(list(i=integer(0), j=integer(0), t=logical(0)))
+  # sort points by increasing x coordinate
+  oo <- fave.order(X$x)
+  Xsort <- X[oo]
+  # First make an OVERESTIMATE of the number of pairs
+  nsize <- ceiling(4 * pi * (npts^2) * (R^2)/area.owin(X$window))
+  nsize <- max(1024, nsize)
+  # Now extract pairs
+  x <- Xsort$x
+  y <- Xsort$y
+  r <- R
+  ng <- nsize
+  storage.mode(x) <- "double"
+  storage.mode(y) <- "double"
+  storage.mode(r) <- "double"
+  storage.mode(ng) <- "integer"
+  z <- .Call("Vclosethresh",
+             xx=x, yy=y, rr=r, ss=s, nguess=ng,
+             PACKAGE="spatstat")
+  if(length(z) != 3)
+    stop("Internal error: incorrect format returned from Vclosethresh")
+  i  <- z[[1]]  # NB no increment required
+  j  <- z[[2]]
+  th <- as.logical(z[[3]])
+  
+  # convert i,j indices to original sequence
+  i <- oo[i]
+  j <- oo[j]
+  # are (i, j) and (j, i) equivalent?
+  if(!ordered) {
+    ok <- (i < j)
+    i  <-  i[ok]
+    j  <-  j[ok]
+    th <- th[ok]
+  }
+  # done
+  return(list(i=i, j=j, th=th))
+}
+
+                        

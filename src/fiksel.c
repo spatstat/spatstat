@@ -149,5 +149,5 @@ double fikselcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns FikselCifns = { &fikselinit, &fikselcif, (updafunptr) NULL, FALSE};
+Cifns FikselCifns = { &fikselinit, &fikselcif, (updafunptr) NULL, NO};
 

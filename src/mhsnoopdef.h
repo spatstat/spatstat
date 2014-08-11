@@ -4,7 +4,7 @@
 
    Define structure 'Snoop' containing visual debugger parameters and state
 
-   $Revision: 1.1 $  $Date: 2013/02/12 05:27:59 $
+   $Revision: 1.2 $  $Date: 2013/05/27 02:09:10 $
 
 */
 

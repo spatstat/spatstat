@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.89 $    $Date: 2013/04/25 07:13:02 $
+#  $Revision: 1.91 $    $Date: 2013/05/08 05:30:37 $
 #
 #
 
@@ -78,6 +78,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   
   # Extract left hand side as given
   lhs.original <- fmla[[2]]
+  fmla.original <- fmla
   
   # expand "."
   dotnames <- fvnames(x, ".")
@@ -122,7 +123,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
   allind <- 1:nplots
 
   
-  # extra plots may be implied by 'shade'
+  # ---------- extra plots may be implied by 'shade' -----------------
   extrashadevars <- NULL
   explicit.lhs.names <- colnames(lhsdata)
   
@@ -133,20 +134,55 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     if(inherits(shind, "try-error")) 
       stop("The argument shade should be a valid subset index for columns of x")
     if(any(nbg <- is.na(shind))) {
-      # columns not included in formula; get them
+      # columns not included in formula: add them
       morelhs <- try(as.matrix(indata[ , shade[nbg], drop=FALSE]))
       if(inherits(morelhs, "try-error")) 
         stop("The argument shade should be a valid subset index for columns of x")
       nmore <- ncol(morelhs)
-      lhsdata <- cbind(lhsdata, morelhs)
-      shind[nbg] <- nplots + seq_len(nmore)
-      nplots <- nplots + nmore
-      lty <- c(lty, rep(lty[1], nmore))
-      col <- c(col, rep(col[1], nmore))
-      lwd <- c(lwd, rep(lwd[1], nmore))
       extrashadevars <- colnames(morelhs)
-    } 
+      if(defaultplot) {
+        success <- TRUE
+      } else if("." %in% variablesinformula(fmla.original)) {
+        # evaluate lhs of formula, expanding "." to shade names
+        u <- if(length(extrashadevars) == 1) as.name(extrashadevars) else {
+          as.call(lapply(c("cbind", extrashadevars), as.name))
+        }
+        ux <- as.name(fvnames(x, ".x"))
+        uy <- as.name(fvnames(x, ".y"))
+        foo <- eval(substitute(substitute(fom, list(.=u, .x=ux, .y=uy)),
+                                list(fom=fmla.original)))
+        lhsnew <- foo[[2]]
+        morelhs <- eval(lhsnew, envir=indata)
+        success <- identical(colnames(morelhs), extrashadevars)
+      } else {
+        success <- FALSE
+      }
+      if(success) {
+        # add these columns to the plotting data
+        lhsdata <- cbind(lhsdata, morelhs)
+        shind[nbg] <- nplots + seq_len(nmore)
+        extendifvector <- function(a, n, nmore) {
+          if(is.null(a)) return(a)
+          if(length(a) == 1) return(a)
+          return(c(a, rep(a[1], nmore)))
+        }
+        lty <- extendifvector(lty, nplots, nmore)
+        col <- extendifvector(col, nplots, nmore)
+        lwd <- extendifvector(lwd, nplots, nmore)
+        nplots <- nplots + nmore
+      } else {
+        # cannot add columns
+        warning(paste("Shade",
+                      ngettext(sum(nbg), "column", "columns"),
+                      commasep(sQuote(shade[nbg])),
+                      "were missing from the plot formula, and were omitted"))
+        shade <- NULL
+        extrashadevars <- NULL
+      }
+    }
   }
+
+  # -------------------- determine plotting limits ----------------------
   
   # restrict data to subset if desired
   if(!is.null(subset)) {
@@ -156,9 +192,7 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
                 eval(subset, envir=indata)
     lhsdata <- lhsdata[keep, , drop=FALSE]
     rhsdata <- rhsdata[keep]
-  } 
-
-  # -------------------- determine plotting limits ----------------------
+  }
   
   # determine x and y limits and clip data to these limits
   if(is.null(xlim) && add) {
@@ -223,7 +257,8 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
       # the x axis is the default function argument.
       # Add name of unit of length 
       ax <- summary(unitname(x))$axis
-      xlab <- if(!is.null(ax)) paste(argname, ax) else as.expression(as.name(argname)) 
+      xlab <- if(!is.null(ax)) paste(argname, ax) else
+              as.expression(as.name(argname)) 
     } else {
       # map ident to label
       xlab <- eval(substitute(substitute(rh, mp), list(rh=rhs, mp=map)))
@@ -247,17 +282,16 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     }
     compactleftside <- gsub(cb, ".", leftside, fixed=TRUE)
     # Separately expand "." to cbind(.....) and ".x", ".y" to their real names
-    cball <- if(length(dotnames) == 1) dotnames else {
+    dotdot <- c(dotnames, extrashadevars)
+    cball <- if(length(dotdot) == 1) dotdot else {
       paste("cbind(",
-            paste(dotnames, collapse=", "),
+            paste(dotdot, collapse=", "),
             ")", sep="")
     }
     expandleftside <- gsub(".x", fvnames(x, ".x"), leftside, fixed=TRUE)
     expandleftside <- gsub(".y", fvnames(x, ".y"), expandleftside, fixed=TRUE)
     expandleftside <- gsub(".", cball, expandleftside, fixed=TRUE)
     # convert back to language
-#    compactleftside <- as.formula(paste(compactleftside, "~1"))[[2]]
-#    expandleftside <- as.formula(paste(expandleftside, "~1"))[[2]]
     compactleftside <- parse(text=compactleftside)[[1]]
     expandleftside <- parse(text=expandleftside)[[1]]
   } else {
@@ -393,18 +427,8 @@ plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
     } else {
       # try to navigate the parse tree
       fancy <- try(fvlegend(x, expandleftside), silent=TRUE)
-      if(!inherits(fancy, "try-error")) {
-        if(is.null(extrashadevars)) {
-          legtxt <- fancy
-        } else {
-          # some shade variables were not included in left side of formula
-          mat <- match(extrashadevars, colnames(x))
-          extrashadelabl <- labl[mat]
-          fancy2 <- try(parse(text=extrashadelabl), silent=TRUE)
-          if(!inherits(fancy2, "try-error"))
-            legtxt <- c(fancy, fancy2)
-        }
-      }
+      if(!inherits(fancy, "try-error"))
+        legtxt <- fancy
     }
   }
 
@@ -542,11 +566,11 @@ findbestlegendpos <- local({
     D1 <- distmap(pix.scal.objects[[1]])
     Dlist <- lapply(pix.scal.objects, distmap, xy=list(x=D1$xcol, y=D1$yrow))
     # distance transform of superposition
-    D <- Reduce(function(A,B){ eval.im(pmin(A,B)) }, Dlist)
+    D <- Reduce(function(A,B){ eval.im(pmin.int(A,B)) }, Dlist)
     if(!bdryok) {
       # include distance to boundary
       B <- attr(D1, "bdry")
-      D <- eval.im(pmin(D, B))
+      D <- eval.im(pmin.int(D, B))
     }
     if(show) {
       plot(affine(D, mat=invmat), add=TRUE)

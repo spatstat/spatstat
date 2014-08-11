@@ -125,7 +125,7 @@ Fiksel <- local({
          kappa <- potpars$kappa
          hclose <- strausscounts(U, X, hc, EqualPairs)
          fikselbit <- fikselterms(U, X, r, kappa, EqualPairs)
-         answer <- ifelse(hclose == 0, fikselbit, -Inf)
+         answer <- ifelseXB(hclose == 0, fikselbit, -Inf)
          return(matrix(answer, ncol=1))
        },
        Mayer=function(coeffs, self) {

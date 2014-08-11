@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.57 $    $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.58 $    $Date: 2013/05/01 08:08:39 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -113,7 +113,7 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
                      y[consider] * dx - x[consider] * dy +  x0 * dy - y0 * dx
                    # closed inequality
                    contrib <- (ycriterion >= 0) *
-                     ifelse(xcriterion[consider] == 0, 1/2, 1)
+                     ifelseAB(xcriterion[consider] == 0, 1/2, 1)
                    # positive edge sign
                    score[consider] <- score[consider] + contrib
                    # detect whether any point lies on this segment
@@ -129,7 +129,7 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
                      y[consider] * dx - x[consider] * dy + x0 * dy - y0 * dx
                    # open inequality
                    contrib <- (ycriterion < 0) *
-                     ifelse(xcriterion[consider] == 0, 1/2, 1)
+                     ifelseAB(xcriterion[consider] == 0, 1/2, 1)
                    # negative edge sign
                    score[consider] <- score[consider] - contrib
                    # detect whether any point lies on this segment

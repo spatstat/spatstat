@@ -6,7 +6,7 @@
   Convenient for divide-and-recombine,
   and reducing calls to R_CheckUserInterrupt, etc.
 
-  $Revision: 1.1 $  $Date: 2012/03/27 01:34:42 $
+  $Revision: 1.2 $  $Date: 2013/05/27 02:09:10 $
   
 */
 

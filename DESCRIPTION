@@ -1,8 +1,8 @@
 Package: spatstat
-Version: 1.31-2
-Date: 2013-04-25
+Version: 1.31-3
+Date: 2013-05-27
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
-Author: Adrian Baddeley <Adrian.Baddeley@csiro.au> and Rolf Turner
+Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au> and Rolf Turner
         <r.turner@auckland.ac.nz> with substantial contributions of
         code by Kasper Klitgaard Berthelsen; Abdollah Jalilian;
         Marie-Colette van Lieshout; Ege Rubak; Dominic Schuhmacher; and
@@ -28,11 +28,11 @@ Author: Adrian Baddeley <Adrian.Baddeley@csiro.au> and Rolf Turner
         Taylor; T. Thorarinsdottir; B. Turlach; A. van Burgel; T.
         Verbeke; A. Villers; F. Vinatier; H. Wang; H. Wendrock; J.
         Wild; S. Wong and M.E. Zamboni.
-Maintainer: Adrian Baddeley <Adrian.Baddeley@csiro.au>
-Depends: R (>= 2.14.0), stats, graphics, grDevices, utils, mgcv, deldir
+Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
+Depends: R (>= 3.0.0), stats, graphics, grDevices, utils, mgcv, deldir
         (>= 0.0-21)
-Suggests: gpclib, sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
-        scatterplot3d, RandomFields (>= 2.0)
+Suggests: gpclib, sm, maptools, gsl, locfit, tensor, spatial, rpanel,
+        tkrplot, scatterplot3d, RandomFields (>= 2.0.60)
 Description: A package for analysing spatial data, mainly Spatial Point
         Patterns, including multitype/marked points and spatial
         covariates, in any two-dimensional spatial region. Also
@@ -60,7 +60,7 @@ URL: http://www.spatstat.org
 LazyData: true
 LazyLoad: true
 ByteCompile: true
-Packaged: 2013-04-25 07:58:13 UTC; adrian
+Packaged: 2013-05-27 04:08:21 UTC; adrian
 NeedsCompilation: yes
 Repository: CRAN
-Date/Publication: 2013-04-26 07:28:25
+Date/Publication: 2013-05-27 07:54:27

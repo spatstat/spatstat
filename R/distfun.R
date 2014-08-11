@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.15 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.16 $   $Date: 2013/05/01 05:47:23 $
 #
 
 distfun <- function(X, ...) {
@@ -54,7 +54,7 @@ distfun.owin <- function(X, ..., invert=FALSE) {
       return(D[Y])
     inside <- inside.owin(Y$x, Y$y, X)
     D <- nncross(Y, P, what="dist")
-    out <- if(!invert) ifelse(inside, 0, D) else ifelse(inside, D, 0)
+    out <- if(!invert) ifelseAX(inside, 0, D) else ifelseXB(inside, D, 0)
     return(out)
   }
   attr(g, "Xclass") <- "owin"

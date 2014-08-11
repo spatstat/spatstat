@@ -1,10 +1,74 @@
 
+	CHANGES IN spatstat VERSION 1.31-3
+
+OVERVIEW
+
+   o spatstat now 'Suggests' the package 'tensor'
+
+   o Code slightly accelerated.
+
+   o More support for pooling of envelopes.
+
+   o Bug fixes.
+
+NEW FUNCTIONS
+
+   o nnmap
+   Given a point pattern, finds the k-th nearest point in the pattern
+   from each pixel in a raster.
+
+   o coef.fii, coef.summary.fii
+   Extract the interaction coefficients of a fitted interpoint interaction
+
+   o edges2vees
+   Low-level function for finding triples in a graph.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o predict.ppm
+   New argument 'correction' allows choice of edge correction
+   when calculating the conditional intensity.
+
+   o pool.envelope
+   New arguments 'savefuns' and 'savepatterns'.
+
+   o pool.envelope
+   Envelopes generated with VARIANCE=TRUE can now be pooled.
+
+   o pool.envelope
+   The plot settings of the input data are now respected.
+
+   o Numerous functions have been slightly accelerated.
+
+BUG FIXES
+
+   o predict.ppm
+   Calculation of the conditional intensity omitted the edge correction
+   if correction='translate' or correction='periodic'.
+   Fixed.
+
+   o shift.lpp, rotate.lpp, scalardilate.lpp, affine.lpp,
+    shift.linnet, rotate.linnet, scalardilate.linnet, affine.linnet
+   The enclosing window was not correctly transformed. 
+   Fixed.
+
+   o rHardcore, rStraussHard, rDiggleGratton, rDGS
+   The return value was invisible.
+   Fixed.
+
+   o ppm
+   In rare cases the results obtained with forcefit=FALSE and forcefit=TRUE
+   were different, due to numerical rounding effects.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.31-2
 
 OVERVIEW
 
    o We thank Robin Corria Anslie, Julian Gilbey, Kiran Marchikanti,
    Ege Rubak and Thordis Linda Thorarinsdottir for contributions.
+
+   o spatstat now depends on R 3.0.0
 
    o More support for linear networks
 

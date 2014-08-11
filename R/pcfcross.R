@@ -47,7 +47,7 @@ pcfcross <- function(X, i, j, ...) {
                                     list(...),
                                     list(r=rr)))
   # differencing
-  p.ij <- eval.fv(pmax(0,
+  p.ij <- eval.fv(pmax.int(0,
                         (p.all * lambda.all^2
                          - p.ii * lambda.i^2
                          - p.jj * lambda.j^2)/(2 * lambda.i * lambda.j)))

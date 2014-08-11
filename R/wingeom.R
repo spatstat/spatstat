@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.77 $	$Date: 2013/03/13 08:19:04 $
+#	$Revision: 4.78 $	$Date: 2013/05/01 08:08:11 $
 #
 #
 #
@@ -172,7 +172,7 @@ function(x, i, ...) {
   if(!missing(i) && !is.null(i)) {
     if(is.im(i) && i$type == "logical") {
       # convert to window
-      i <- as.owin(eval.im(ifelse(i, 1, NA)))
+      i <- as.owin(eval.im(ifelse1NA(i)))
     } else stopifnot(is.owin(i))
     x <- intersect.owin(x, i, fatal=FALSE)
   }

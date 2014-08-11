@@ -2,6 +2,7 @@
 \alias{reach}
 \alias{reach.ppm}
 \alias{reach.interact}
+\alias{reach.fii}
 \alias{reach.rmhmodel}
 \title{Interaction Distance of a Point Process}
 \description{
@@ -9,14 +10,20 @@
 }
 \usage{
   reach(x, \dots)
+
   \method{reach}{ppm}(x, \dots, epsilon=0)
+
   \method{reach}{interact}(x, \dots)
+
   \method{reach}{rmhmodel}(x, \dots)
+
+  \method{reach}{fii}(x, \dots, epsilon)
 }
 \arguments{
   \item{x}{Either a fitted point process model (object of class
     \code{"ppm"}), an interpoint interaction (object of class
-    \code{"interact"}) or a point process model for simulation
+    \code{"interact"}), a fitted interpoint interaction (object of
+    class \code{"fii"}) or a point process model for simulation
     (object of class \code{"rmhmodel"}).
   }
   \item{epsilon}{
@@ -73,6 +80,10 @@
     \code{\link{OrdThresh}}
     or
     \code{\link{Ord}};
+    \item
+    a fitted interpoint interaction (object of class
+    \code{"fii"}) extracted from a fitted point process model
+    by the command \code{\link{fitin}};
     \item
     a point process model for simulation (object of class
     \code{"rmhmodel"}), usually obtained from \code{\link{rmhmodel}}.

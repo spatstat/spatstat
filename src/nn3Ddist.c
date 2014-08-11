@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.5 $     $Date: 2012/03/27 09:32:53 $
+  $Revision: 1.6 $     $Date: 2013/05/27 02:09:10 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT z IS SORTED IN ASCENDING ORDER 
 
@@ -24,10 +24,7 @@
 #include <math.h>
 #include "chunkloop.h"
 
-#ifndef FALSE
-#define TRUE 1
-#define FALSE 0
-#endif
+#include "yesno.h"
 
 double sqrt();
 
@@ -413,7 +410,7 @@ void knnd3D(n, kmax, x, y, z, nnd, huge)
 	    /* overwrite last entry */
 	    d2min[nk1] = d2;
 	    /* bubble sort */
-	    unsorted = TRUE;
+	    unsorted = YES;
 	    for(k = nk1; unsorted && k > 0; k--) {
 	      k1 = k - 1;
 	      if(d2min[k] < d2min[k1]) {
@@ -422,7 +419,7 @@ void knnd3D(n, kmax, x, y, z, nnd, huge)
 		d2min[k1] = d2min[k];
 		d2min[k] = tmp;
 	      } else {
-		unsorted = FALSE;
+		unsorted = NO;
 	      }
 	    }
 	    /* adjust maximum distance */
@@ -448,7 +445,7 @@ void knnd3D(n, kmax, x, y, z, nnd, huge)
 	    /* overwrite last entry */
 	    d2min[nk1] = d2;
 	    /* bubble sort */
-	    unsorted = TRUE;
+	    unsorted = YES;
 	    for(k = nk1; unsorted && k > 0; k--) {
 	      k1 = k - 1;
 	      if(d2min[k] < d2min[k1]) {
@@ -457,7 +454,7 @@ void knnd3D(n, kmax, x, y, z, nnd, huge)
 		d2min[k1] = d2min[k];
 		d2min[k] = tmp;
 	      } else {
-		unsorted = FALSE;
+		unsorted = NO;
 	      }
 	    }
 	    /* adjust maximum distance */
@@ -557,7 +554,7 @@ void knnw3D(n, kmax, x, y, z, nnd, nnwhich, huge)
 	    d2min[nk1] = d2;
 	    which[nk1] = j;
 	    /* bubble sort */
-	    unsorted = TRUE;
+	    unsorted = YES;
 	    for(k = nk1; unsorted && k > 0; k--) {
 	      k1 = k - 1;
 	      if(d2min[k] < d2min[k1]) {
@@ -569,7 +566,7 @@ void knnw3D(n, kmax, x, y, z, nnd, nnwhich, huge)
 		which[k1] = which[k];
 		which[k] = itmp;
 	      } else {
-		unsorted = FALSE;
+		unsorted = NO;
 	      }
 	    }
 	    /* adjust maximum distance */
@@ -597,7 +594,7 @@ void knnw3D(n, kmax, x, y, z, nnd, nnwhich, huge)
 	    d2min[nk1] = d2;
 	    which[nk1] = j;
 	    /* bubble sort */
-	    unsorted = TRUE;
+	    unsorted = YES;
 	    for(k = nk1; unsorted && k > 0; k--) {
 	      k1 = k - 1;
 	      if(d2min[k] < d2min[k1]) {
@@ -609,7 +606,7 @@ void knnw3D(n, kmax, x, y, z, nnd, nnwhich, huge)
 		which[k1] = which[k];
 		which[k] = itmp;
 	      } else {
-		unsorted = FALSE;
+		unsorted = NO;
 	      }
 	    }
 	    /* adjust maximum distance */

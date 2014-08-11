@@ -132,4 +132,4 @@ if(triplets->hard) {
   return cifval;
 }
 
-Cifns TripletsCifns = { &tripletsinit, &tripletscif, (updafunptr) NULL, FALSE};
+Cifns TripletsCifns = { &tripletsinit, &tripletscif, (updafunptr) NULL, NO};

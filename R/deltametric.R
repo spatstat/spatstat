@@ -17,8 +17,8 @@ deltametric <- function(A, B, p=2, c=Inf, ...) {
   dA <- distmap(A, ...)
   dB <- distmap(B, ...)
   if(!is.infinite(c)) {
-    dA <- eval.im(pmin(dA, c))
-    dB <- eval.im(pmin(dB, c))
+    dA <- eval.im(pmin.int(dA, c))
+    dB <- eval.im(pmin.int(dB, c))
   }
   if(is.infinite(p)) {
     # L^infinity

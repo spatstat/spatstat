@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.18 $  $Date: 2013/04/15 07:27:11 $
+#  $Revision: 1.19 $  $Date: 2013/05/01 07:58:42 $
 #
 
 relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
@@ -223,7 +223,7 @@ bw.relrisk <- function(X, method="likelihood",
            phat0 <- smooth.ppp(X01, sigma=h0, at="points", leaveoneout=TRUE,
                                sorted=TRUE)
            var0 <- phat0 * (1-phat0)
-           var0 <- pmax(var0, 1e-6)
+           var0 <- pmax.int(var0, 1e-6)
            for(i in seq_len(nh)) {
              phat <- smooth.ppp(X01, sigma=h[i], at="points", leaveoneout=TRUE,
                                 sorted=TRUE)
@@ -256,12 +256,12 @@ which.max.im <- function(x) {
     stop("x should be a list of images")
   nama <- names(x)
   xmax <- x[[1]]
-  wmax <- eval.im(as.integer(xmax == xmax))
+  wmax <- as.im(1L, xmax)
   if(n > 1) {
     for(i in 2:n) {
       xi <- x[[i]]
-      xmaxnew <- eval.im(pmax(xi, xmax))
-      wmaxnew <- eval.im(ifelse(xi > xmax, i, wmax))
+      xmaxnew <- eval.im(pmax.int(xi, xmax))
+      wmaxnew <- eval.im(ifelseAX(xi > xmax, i, wmax))
       xmax <- xmaxnew
       wmax <- wmaxnew
     }

@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.7 $ $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.8 $ $Date: 2013/05/01 05:58:39 $
 #
 
 Kcom <- function(object, r=NULL, breaks=NULL, ..., 
@@ -148,7 +148,7 @@ Kcom <- function(object, r=NULL, breaks=NULL, ...,
     okI <- okI & !EIJ
   
   # residual weights
-  wIJ <- ifelse(EIJ, rescts[I], resval[I])
+  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
   # absolute weight for continuous integrals
   wc   <- -rescts
   wcIJ <- -rescts[I]
@@ -322,8 +322,8 @@ edge.Trans.modif <- function(X, Y=X, WX=X$window, WY=Y$window,
     a <- WY$xrange 
     b <- WY$yrange
     # compute width and height of intersection
-    wide  <- pmin(a[2], A[2]+DX) - pmax(a[1], A[1]+DX)
-    high  <- pmin(b[2], B[2]+DY) - pmax(b[1], B[1]+DY)
+    wide  <- pmin.int(a[2], A[2]+DX) - pmax(a[1], A[1]+DX)
+    high  <- pmin.int(b[2], B[2]+DY) - pmax(b[1], B[1]+DY)
     # edge correction weight
     weight <- diff(a) * diff(b) / (wide * high)
     if(!paired)
@@ -380,7 +380,7 @@ edge.Trans.modif <- function(X, Y=X, WX=X$window, WY=Y$window,
 
   # clip high values
   if(length(weight) > 0)
-    weight <- pmin(weight, trim)
+    weight <- pmin.int(weight, trim)
   if(!paired) 
     weight <- matrix(weight, nrow=X$n, ncol=Y$n)
   return(weight)

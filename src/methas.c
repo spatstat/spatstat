@@ -9,10 +9,10 @@ void fexitc(const char *msg);
 
 
 /* To switch on debugging code, 
-   insert the line: #define MH_DEBUG TRUE
+   insert the line: #define MH_DEBUG YES
 */
 #ifndef MH_DEBUG
-#define MH_DEBUG FALSE
+#define MH_DEBUG NO
 #endif
 
 /* 
@@ -60,7 +60,7 @@ SEXP xmethas(
   int    *mm,      *mpropose, *pp, *aa;
   SEXP out, xout, yout, mout, pout, aout;
   int tracking;
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
   SEXP numout, denout;
   double *nn, *dd;
 #endif
@@ -197,13 +197,13 @@ SEXP xmethas(
     cif[0] = thecif;
     needupd[0] = mustupdate;
   } else {
-    mustupdate = FALSE;
+    mustupdate = NO;
     for(k = 0; k < Ncif; k++) {
       cifstring = (char *) CHAR(STRING_ELT(cifname, k));
       cif[k] = getcif(cifstring);
       needupd[k] = NEED_UPDATE(cif[k]);
       if(needupd[k])
-	mustupdate = TRUE;
+	mustupdate = YES;
       if(cif[k].marked && !marked)
 	fexitc("component cif is for a marked point process, but proposal data are not marked points; bailing out.");
     }
@@ -216,7 +216,7 @@ SEXP xmethas(
     history.n = 0;
     history.proptype = (int *) R_alloc(algo.nrep, sizeof(int));
     history.accepted = (int *) R_alloc(algo.nrep, sizeof(int));
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
     history.numerator   = (double *) R_alloc(algo.nrep, sizeof(double));
     history.denominator = (double *) R_alloc(algo.nrep, sizeof(double));
 #endif
@@ -326,7 +326,7 @@ SEXP xmethas(
       pp[j] = history.proptype[j];
       aa[j] = history.accepted[j];
     }
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
     PROTECT(numout = NEW_NUMERIC(algo.nrep));
     PROTECT(denout = NEW_NUMERIC(algo.nrep));
     nn = NUMERIC_POINTER(numout);
@@ -343,7 +343,7 @@ SEXP xmethas(
     pp = INTEGER_POINTER(pout);
     aa = INTEGER_POINTER(aout);
     pp[0] = aa[0] = 0;
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
     PROTECT(numout = NEW_NUMERIC(1));
     PROTECT(denout = NEW_NUMERIC(1));
     nn = NUMERIC_POINTER(numout);
@@ -368,7 +368,7 @@ SEXP xmethas(
   } else {
     /* transition history */
     if(!marked) {
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
       PROTECT(out = NEW_LIST(6));
 #else
       PROTECT(out = NEW_LIST(4));
@@ -377,12 +377,12 @@ SEXP xmethas(
       SET_VECTOR_ELT(out, 1, yout);
       SET_VECTOR_ELT(out, 2, pout);
       SET_VECTOR_ELT(out, 3, aout);
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
       SET_VECTOR_ELT(out, 4, numout);
       SET_VECTOR_ELT(out, 5, denout);
 #endif
       } else {
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
       PROTECT(out = NEW_LIST(7));
 #else
       PROTECT(out = NEW_LIST(5)); 
@@ -392,13 +392,13 @@ SEXP xmethas(
       SET_VECTOR_ELT(out, 2, mout);
       SET_VECTOR_ELT(out, 3, pout);
       SET_VECTOR_ELT(out, 4, aout);
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
       SET_VECTOR_ELT(out, 5, numout);
       SET_VECTOR_ELT(out, 6, denout);
 #endif
     }
   }
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
   UNPROTECT(29);  /* 21 arguments plus xout, yout, mout, pout, aout, out,
                             numout, denout */
 #else

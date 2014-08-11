@@ -35,8 +35,8 @@ unnormdensity <- function(x, ..., weights=NULL) {
     # mixture of positive and negative masses
     w <- weights
     wabs <- abs(w)
-    wpos <- pmax(0, w)
-    wneg <- - pmin(0, w)
+    wpos <- pmax.int(0, w)
+    wneg <- - pmin.int(0, w)
     # determine bandwidth using absolute masses
     dabs <- do.call.matched("density.default",
                             c(list(x=x),

@@ -170,7 +170,7 @@ BadGey <- local({
          for(k in 1:nterms) {
            # first determine saturated pair counts
            counts <- strausscounts(U, X, r[k], EqualPairs) 
-           satcounts <- pmin(sat[k], counts)
+           satcounts <- pmin.int(sat[k], counts)
            # trapdoor used by suffstat() 
            if(halfway) 
              answer[,k] <- satcounts

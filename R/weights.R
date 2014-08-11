@@ -44,14 +44,15 @@ countingweights <- function(id, areas, check=TRUE) {
 	# areas:     areas of k cells 
 	#                     (length k)
 	#
-    id <- as.integer(id)
-    fid <- factor(id, levels=seq_along(areas))
-    counts <- table(fid)
-    w <- areas[id] / counts[id]     # ensures denominator > 0
-    w <- as.vector(w)
+  id <- as.integer(id)
+  fid <- factor(id, levels=seq_along(areas))
+  counts <- table(fid)
+  w <- areas[id] / counts[id]     # ensures denominator > 0
+  w <- as.vector(w)
 #	
 # that's it; but check for funny business
 #
+  if(check) {
     zerocount <- (counts == 0)
     zeroarea <- (areas == 0)
     if(any(uhoh <- !zeroarea & zerocount)) {
@@ -64,9 +65,10 @@ countingweights <- function(id, areas, check=TRUE) {
 	warning("Some weights are zero")
 	attr(w, "zeroes") <- zeroarea[id]
     }
+  }
 #
-    names(w) <- NULL
-    w
+  names(w) <- NULL
+  return(w)
 }
 
 gridindex <- function(x, y, xrange, yrange, nx, ny) {
@@ -85,8 +87,8 @@ gridindex <- function(x, y, xrange, yrange, nx, ny) {
 
 grid1index <- function(x, xrange, nx) {
 	i <- ceiling( nx * (x - xrange[1])/diff(xrange))
-	i <- pmax(1, i)
-	i <- pmin(i, nx)
+	i <- pmax.int(1, i)
+	i <- pmin.int(i, nx)
 	i
 }
 

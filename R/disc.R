@@ -1,7 +1,7 @@
 #
 # disc.R
 #
-# $Revision: 1.4 $ $Date: 2011/05/18 01:43:54 $
+# $Revision: 1.5 $ $Date: 2013/05/01 05:46:37 $
 #
 #
 
@@ -19,7 +19,7 @@ disc <- function(radius=1, centre=c(0,0), ..., mask=FALSE, npoly=128) {
   } else {
     B <- owin(c(-1,1),c(-1,1))
     B <- as.mask(B, ...)
-    indic <- function(x,y,x0,y0,r) ifelse((x-x0)^2 + (y-y0)^2 < r^2, 1, 0)
+    indic <- function(x,y,x0,y0,r) as.integer((x-x0)^2 + (y-y0)^2 < r^2)
     IW <- as.im(indic, B, x0=centre[1], y0=centre[2], r=radius)
     W <- levelset(IW, 1, "==")
   }

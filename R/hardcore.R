@@ -63,7 +63,7 @@ Hardcore <- local({
          # call evaluator for Strauss process
          counts <- strausscounts(U, X, hc, EqualPairs)
          # all counts should be zero
-         v <- matrix(ifelse(counts > 0, -Inf, 0), ncol=1)
+         v <- matrix(ifelseAB(counts > 0, -Inf, 0), ncol=1)
          attr(v, "IsOffset") <- TRUE
          return(v)
        },

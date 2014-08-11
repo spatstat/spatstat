@@ -348,7 +348,7 @@ bw.diggle <- function(X) {
   J <- numeric(nr)
   phi <- function(x,h) { 
     if(h <= 0) return(numeric(length(x)))
-    y <- pmax(0, pmin(1, x/(2 * h)))
+    y <- pmax.int(0, pmin.int(1, x/(2 * h)))
     4 * pi * h^2 * (acos(y) - y * sqrt(1 - y^2))
   }
   for(i in 1:nr) 

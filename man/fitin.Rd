@@ -31,6 +31,9 @@ fitin(object)
 
   Users may find this a convenient way to plot the
   fitted interpoint interaction term, as shown in the Examples.
+
+  The fitted interaction coefficients can also be extracted
+  from this object using \code{\link{coef}}.
 }
 \value{
   An object of class \code{"fii"} representing the fitted
@@ -43,9 +46,13 @@ fitin(object)
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
+  Methods for handling fitted interactions: 
+  \code{\link{methods.fii}}, \code{\link{reach.fii}},
+  \code{\link{as.interact.fii}}.
+
+  Background:
   \code{\link{ppm}},
-  \code{\link{ppm.object}},
-  \code{\link{as.interact}}.
+  \code{\link{ppm.object}}.
 }
 \examples{
    # unmarked 
@@ -53,6 +60,9 @@ fitin(object)
    f <- fitin(model)
    f
    plot(f)
+
+# extract fitted interaction coefficients
+   coef(f)
 
    # multitype
    # fit the stationary multitype Strauss process to `amacrine'

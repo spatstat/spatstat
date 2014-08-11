@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.16 $	$Date: 2012/06/28 04:20:40 $
+#    $Revision: 2.17 $	$Date: 2013/05/01 08:03:46 $
 #
 #    The Strauss/hard core process
 #
@@ -82,7 +82,7 @@ StraussHard <- local({
          hc <- potpars$hc
          hclose <- strausscounts(U, X, hc, EqualPairs)
          rclose <- strausscounts(U, X, r,  EqualPairs)
-         answer <- ifelse(hclose == 0, rclose, -Inf)
+         answer <- ifelseXB(hclose == 0, rclose, -Inf)
          return(matrix(answer, ncol=1))
        },
        Mayer=function(coeffs, self) {

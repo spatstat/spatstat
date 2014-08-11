@@ -17,7 +17,7 @@ rLGCP <-
     if (is.numeric(mu) && !(length(mu) == 1)) 
       stop(paste(sQuote("mu"), "must be a single number"))
   }
-  if(!(require(RandomFields) && RandomFieldsSafe()))
+  if(!require(RandomFields))
     stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
   win.given <- !is.null(win)
   mu.image <- is.im(mu)

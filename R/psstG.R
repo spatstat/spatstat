@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.3 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.4 $	$Date: 2013/05/01 07:39:38 $
 #
 ################################################################################
 #
@@ -125,7 +125,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   okI <- USED[I]
   
   # residual weights
-  wIJ <- ifelse(EIJ, rescts[I], resval[I])
+  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
   # absolute weight for continuous integrals
   wc   <- -rescts
   wcIJ <- -rescts[I]

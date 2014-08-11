@@ -106,4 +106,4 @@ double hardcorecif(prop, state, cdata)
   return ((double) 1.0);
 }
 
-Cifns HardcoreCifns = { &hardcoreinit, &hardcorecif, (updafunptr) NULL, FALSE};
+Cifns HardcoreCifns = { &hardcoreinit, &hardcorecif, (updafunptr) NULL, NO};

@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.7 $	$Date: 2012/08/30 02:13:06 $
+#    $Revision: 1.9 $	$Date: 2013/05/01 10:17:27 $
 #
 #    The Hard core process
 #
@@ -72,7 +72,8 @@ MultiHard <- local({
        forbid <- (d < hxu)
        forbid[is.na(forbid)] <- FALSE
        # form the potential 
-       value <- ifelse(forbid, -Inf, 0)
+       value <- array(0, dim=dim(d))
+       value[forbid] <- -Inf
        # assign value[i,j] -> z[i,j,k] where k is relevant interaction code
        for(i in 1:nordpairs) {
          # data points with mark m1

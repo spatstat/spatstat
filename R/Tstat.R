@@ -21,7 +21,7 @@ Tstat <- local({
     wide <- diff(W$xrange)
     high <- diff(W$yrange)
     weight <- wide * high/((wide - dx) * (high - dy))
-    weight <- pmin(trim, weight)
+    weight <- pmin.int(trim, weight)
     return(weight)
   }
   # helper function

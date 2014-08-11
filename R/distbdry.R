@@ -34,7 +34,7 @@ function(X)
 		xmax <- max(window$xrange)
 		ymin <- min(window$yrange)
 		ymax <- max(window$yrange)
-		result <- pmin(x - xmin, xmax - x, y - ymin, ymax - y)
+		result <- pmin.int(x - xmin, xmax - x, y - ymin, ymax - y)
                },
                polygonal = {
                  xy <- cbind(x,y)
@@ -49,7 +49,7 @@ function(X)
                      j1 <- if(j < nsegs) j + 1 else 1
                      seg <- c(px[j],  py[j],
                               px[j1], py[j1])
-                     result <- pmin(result, distppl(xy, seg))
+                     result <- pmin.int(result, distppl(xy, seg))
                    }
                  }
                },
@@ -72,7 +72,7 @@ function(X)
                mask = {
                  neg <- complement.owin(masque)
                  m <- exactPdt(neg)
-                 b <- pmin(m$d,m$b)
+                 b <- pmin.int(m$d,m$b)
                },
                rectangle = {
                  x <- raster.x(masque)
@@ -81,7 +81,7 @@ function(X)
                  xmax <- w$xrange[2]
                  ymin <- w$yrange[1]
                  ymax <- w$yrange[2]
-                 b <- pmin(x - xmin, xmax - x, y - ymin, ymax - y)
+                 b <- pmin.int(x - xmin, xmax - x, y - ymin, ymax - y)
                },
                polygonal = {
                  # set up pixel raster
@@ -101,7 +101,7 @@ function(X)
                      j1 <- if(j < nsegs) j + 1 else 1
                      seg <- c(polly$x[j],  polly$y[j],
                               polly$x[j1], polly$y[j1])
-                     dxy <- pmin(dxy, distppl(xy, seg))
+                     dxy <- pmin.int(dxy, distppl(xy, seg))
                    }
                  }
                  b[inside] <- dxy

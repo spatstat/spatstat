@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.101 $     $Date: 2013/04/25 06:37:43 $
+#         $Revision: 1.102 $     $Date: 2013/05/01 05:51:35 $
 #
 #      The class "im" of raster images
 #
@@ -92,7 +92,7 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
   unitname <- as.units(unitname)
 
   # get rid of those annoying 8.67e-19 printouts
-  swat <- function(x) {ifelse(abs(x) < .Machine$double.eps, 0, x)}
+  swat <- function(x) {ifelseAX(abs(x) < .Machine$double.eps, 0, x)}
   xrange <- swat(xrange)
   yrange <- swat(yrange)
   
@@ -248,7 +248,7 @@ function(x, i, j, ..., drop=TRUE, raster=NULL, rescue=is.owin(i)) {
       # logical images OK
       if(i$type == "logical") {
         # convert to window
-        w <- as.owin(eval.im(ifelse(i, 1, NA)))
+        w <- as.owin(eval.im(ifelse1NA(i)))
         return(x[w, drop=drop, ..., raster=raster])
       } else stop("Subset argument \'i\' is an image, but not of logical type")
     }
@@ -410,7 +410,7 @@ function(x, i, j, ..., drop=TRUE, raster=NULL, rescue=is.owin(i)) {
     if(verifyclass(i, "im", fatal=FALSE) && i$type == "logical") {
       if(jtype == "given") warning("Index j ignored")
       # convert logical vector to window where entries are TRUE
-      i <- as.owin(eval.im(ifelse(i, 1, NA)))
+      i <- as.owin(eval.im(ifelse1NA(i)))
       # continue as above
       xx <- as.vector(raster.x(W))
       yy <- as.vector(raster.y(W))
@@ -515,8 +515,8 @@ nearest.pixel <- function(x,y,im) {
     nc <- im$dim[2]
     cc <- round(1 + (x - im$xcol[1])/im$xstep)
     rr <- round(1 + (y - im$yrow[1])/im$ystep)
-    cc <- pmax(1,pmin(cc, nc))
-    rr <- pmax(1,pmin(rr, nr))
+    cc <- pmax.int(1,pmin.int(cc, nc))
+    rr <- pmax.int(1,pmin.int(rr, nr))
   } else cc <- rr <- integer(0)
   return(list(row=rr, col=cc))
 }
@@ -541,8 +541,8 @@ nearest.valid.pixel <- function(x,y,im) {
   for(i in which(miss)) {
     rows <- rr[i] + c(-1,0,1)
     cols <- cc[i] + c(-1,0,1)
-    rows <- unique(pmax(1, pmin(rows, nr)))
-    cols <- unique(pmax(1, pmin(cols, nc)))
+    rows <- unique(pmax.int(1, pmin.int(rows, nr)))
+    cols <- unique(pmax.int(1, pmin.int(cols, nc)))
     rcp <- expand.grid(row=rows, col=cols)
     ok <- !outside[as.matrix(rcp)]
     if(any(ok)) {

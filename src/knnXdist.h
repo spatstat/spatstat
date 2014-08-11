@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.5 $  $Date: 2013/03/12 05:56:12 $
+  $Revision: 1.6 $  $Date: 2013/05/27 02:09:10 $
 
 
 */
@@ -128,7 +128,7 @@ void FNAME(n1, x1, y1, id1,
 		which[nk1] = jright;
 #endif
 		/* bubble sort */
-		unsorted = TRUE;
+		unsorted = YES;
 		for(k = nk1; unsorted && k > 0; k--) {
 		  k1 = k - 1;
 		  if(d2min[k] < d2min[k1]) {
@@ -142,7 +142,7 @@ void FNAME(n1, x1, y1, id1,
 		    which[k] = itmp;
 #endif
 		  } else {
-		    unsorted = FALSE;
+		    unsorted = NO;
 		  }
 		}
 		/* adjust maximum distance */
@@ -175,7 +175,7 @@ void FNAME(n1, x1, y1, id1,
 		which[nk1] = jright;
 #endif
 		/* bubble sort */
-		unsorted = TRUE;
+		unsorted = YES;
 		for(k = nk1; unsorted && k > 0; k--) {
 		  k1 = k - 1;
 		  if(d2min[k] < d2min[k1]) {
@@ -189,7 +189,7 @@ void FNAME(n1, x1, y1, id1,
 		    which[k] = itmp;
 #endif
 		  } else {
-		    unsorted = FALSE;
+		    unsorted = NO;
 		  }
 		}
 		/* adjust maximum distance */

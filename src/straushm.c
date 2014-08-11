@@ -247,4 +247,4 @@ double straushmcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns MultiStraussHardCifns = { &straushminit, &straushmcif, (updafunptr) NULL, TRUE};
+Cifns MultiStraussHardCifns = { &straushminit, &straushmcif, (updafunptr) NULL, YES};

@@ -46,7 +46,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
 #  distance to boundary
         bdry <- bdist.points(X)
 #  observations
-	o <- pmin(nnd,bdry)
+	o <- pmin.int(nnd,bdry)
 #  censoring indicators
 	d <- (nnd <= bdry)
 

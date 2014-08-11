@@ -47,6 +47,10 @@
 #                via default.dummy();
 #                or NULL if the dummy pattern was provided externally
 #
+#           $param$sourceid
+#                vector mapping the quadrature points to the
+#                original data and dummy points.
+#
 #   If you constructed the quadrature scheme manually, this
 #   structure may not be present.
 #

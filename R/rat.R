@@ -73,7 +73,7 @@ pool.rat <- function(...) {
   sumXY <- Reduce(Add, XY)
   covXY <- eval.fv((sumXY - n * meanX * meanY)/(n-1))
   # variance by delta method
-  relvar <- eval.fv(pmax(0, varY/meanY^2 + varX/meanX^2
+  relvar <- eval.fv(pmax.int(0, varY/meanY^2 + varX/meanX^2
                             - 2 * covXY/(meanX * meanY)))
   Variance <- eval.fv(Ratio^2 * relvar/n)
   # two sigma CI

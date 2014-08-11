@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.44 $ $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.45 $ $Date: 2013/05/01 08:05:50 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -212,8 +212,7 @@ plot.tess <- function(x, ..., main, add=FALSE, col=NULL) {
            img <- x$image
            oldlev <- levels(img)
            newlev <- unique(oldlev[...])
-           img <- eval.im(factor(ifelse(img %in% newlev, img, NA)))
-           levels(img) <- newlev
+           img <- eval.im(factor(img, levels=newlev))
            return(tess(image=img))
          })
 }
@@ -334,7 +333,7 @@ as.im.tess <- function(X, W=NULL, ...,
                out <- tag
                outv <- out$v
              } else {
-               outv <- pmin(outv, tag$v, na.rm=TRUE)
+               outv <- pmin.int(outv, tag$v, na.rm=TRUE)
              }
            }
            out <- im(factor(outv, levels=nama),

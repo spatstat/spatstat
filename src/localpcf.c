@@ -8,7 +8,7 @@
 
   localpcf.c
 
-  $Revision: 1.2 $     $Date: 2011/07/25 07:34:28 $
+  $Revision: 1.3 $     $Date: 2013/05/27 02:09:10 $
 
   Assumes point patterns are sorted in increasing order of x coordinate
 

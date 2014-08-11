@@ -21,11 +21,11 @@ pairdist.psp <- function(X, ..., method="Fortran", type="Hausdorff") {
   switch(type,
          Hausdorff={
            # maximum is Hausdorff metric
-           D <- array(pmax(D12, t(D12)), dim=dim(D12))
+           D <- array(pmax.int(D12, t(D12)), dim=dim(D12))
          },
          separation={
            # Take minimum of endpoint-to-segment distances
-           D <- array(pmin(D12, t(D12)), dim=dim(D12))
+           D <- array(pmin.int(D12, t(D12)), dim=dim(D12))
            # Identify any pairs of segments which cross
            cross <- test.selfcrossing.psp(X)
            # Assign separation = 0 to such pairs
@@ -51,11 +51,11 @@ crossdist.psp <- function(X, Y, ..., method="Fortran", type="Hausdorff") {
   switch(type,
          Hausdorff={
            # maximum is Hausdorff metric
-           D <- array(pmax(DXY, t(DYX)), dim=dim(DXY))
+           D <- array(pmax.int(DXY, t(DYX)), dim=dim(DXY))
          },
          separation={
            # Take minimum of endpoint-to-segment distances
-           D <- array(pmin(DXY, t(DYX)), dim=dim(DXY))
+           D <- array(pmin.int(DXY, t(DYX)), dim=dim(DXY))
            # Identify pairs of segments which cross
            cross <- test.crossing.psp(X, Y)
            # Assign separation = 0 to such pairs

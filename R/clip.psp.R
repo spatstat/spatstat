@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.14 $   $Date: 2011/05/18 01:30:59 $
+#    $Revision: 1.15 $   $Date: 2013/05/01 05:45:01 $
 #
 #
  
@@ -58,13 +58,14 @@ cliprect.psp <- function(x, window) {
   tvalue <- function(z0, z1, zt) {
     y1 <- z1 - z0
     yt <- zt - z0
-    tval <- ifelse(small(y1), 0.5, yt/y1)
+    tval <- ifelseAX(small(y1), 0.5, yt/y1)
     betwee <- (yt * (zt - z1)) <= 0
-    return(ifelse(betwee, tval, NA))
+    result <- ifelseXB(betwee, tval, NA)
+    return(result)
   }
   between <- function(x, r) { ((x-r[1]) * (x-r[2])) <= 0 }
-  tx <- cbind(ifelse(between(ends$x0, window$xrange), 0, NA),
-              ifelse(between(ends$x1, window$xrange), 1, NA),
+  tx <- cbind(ifelse0NA(between(ends$x0, window$xrange)),
+              ifelse1NA(between(ends$x1, window$xrange)),
               tvalue(ends$x0, ends$x1, window$xrange[1]),
               tvalue(ends$x0, ends$x1, window$xrange[2]))
   # discard segments which do not lie in the x range 
@@ -90,8 +91,8 @@ cliprect.psp <- function(x, window) {
   ends <- ends.xclipped
   in0 <- inside.owin(ends$x0, ends$y0, window)
   in1 <- inside.owin(ends$x1, ends$y1, window)
-  ty <- cbind(ifelse(in0, 0, NA),
-              ifelse(in1, 1, NA),
+  ty <- cbind(ifelse0NA(in0),
+              ifelse1NA(in1),
               tvalue(ends$y0, ends$y1, window$yrange[1]),
               tvalue(ends$y0, ends$y1, window$yrange[2]))
   # discard segments which do not lie in the y range 

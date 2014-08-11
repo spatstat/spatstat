@@ -77,7 +77,7 @@ least.common.multiple <- function(n, m) {
   p <- sort(unique(c(nf,mf)))
   nfac <- table(factor(nf, levels=p))
   mfac <- table(factor(mf, levels=p))
-  prod(p^pmax(nfac,mfac))
+  prod(p^pmax.int(nfac,mfac))
 }
 
 greatest.common.divisor <- function(n, m) {
@@ -86,7 +86,7 @@ greatest.common.divisor <- function(n, m) {
   p <- sort(unique(c(nf,mf)))
   nfac <- table(factor(nf, levels=p))
   mfac <- table(factor(mf, levels=p))
-  prod(p^pmin(nfac,mfac))
+  prod(p^pmin.int(nfac,mfac))
 }
   
 divisors <- function(n) {

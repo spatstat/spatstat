@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.2 $     $Date: 2013/03/12 02:46:23 $
+  $Revision: 1.3 $     $Date: 2013/05/27 02:09:10 $
 
   Function definitions are #included from knndist.h and knnXdist.h
 
@@ -37,10 +37,7 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 
-#ifndef FALSE
-#define TRUE 1
-#define FALSE 0
-#endif
+#include "yesno.h"
 
 double sqrt();
 

@@ -6,7 +6,7 @@
 
 "Lscaled" <- function(...) {
   K <- Kscaled(...)
-  L <- eval.fv(sqrt(pmax(K,0)/pi))
+  L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
   L <- rebadge.fv(L, substitute(Lscaled(r), NULL), "Lscaled")
   return(L)  

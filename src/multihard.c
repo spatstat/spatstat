@@ -171,4 +171,4 @@ double multihardcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns MultiHardCifns = { &multihardinit, &multihardcif, (updafunptr) NULL, TRUE};
+Cifns MultiHardCifns = { &multihardinit, &multihardcif, (updafunptr) NULL, YES};

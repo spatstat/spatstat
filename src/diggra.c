@@ -151,5 +151,5 @@ double diggracif(prop, state, cdata)
   return cifval;
 }
 
-Cifns DiggraCifns = { &diggrainit, &diggracif, (updafunptr) NULL, FALSE};
+Cifns DiggraCifns = { &diggrainit, &diggracif, (updafunptr) NULL, NO};
 

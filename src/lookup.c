@@ -215,4 +215,4 @@ double lookupcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns LookupCifns = { &lookupinit, &lookupcif, (updafunptr) NULL, FALSE};
+Cifns LookupCifns = { &lookupinit, &lookupcif, (updafunptr) NULL, NO};

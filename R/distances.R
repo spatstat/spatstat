@@ -63,8 +63,8 @@ pairdist.default <-
            } else {
              dx <- xx - t(xx)
              dy <- yy - t(yy)
-             dx2 <- pmin(dx^2, (dx + wide)^2, (dx - wide)^2)
-             dy2 <- pmin(dy^2, (dy + high)^2, (dy - high)^2)
+             dx2 <- pmin.int(dx^2, (dx + wide)^2, (dx - wide)^2)
+             dy2 <- pmin.int(dy^2, (dy + high)^2, (dy - high)^2)
              d2 <- dx2 + dy2
            }
            if(squared)
@@ -157,8 +157,8 @@ crossdist.default <-
                  else {
                    dx <- X1 - t(X2)
                    dy <- Y1 - t(Y2)
-                   dx2 <- pmin(dx^2, (dx + wide)^2, (dx - wide)^2)
-                   dy2 <- pmin(dy^2, (dy + high)^2, (dy - high)^2)
+                   dx2 <- pmin.int(dx^2, (dx + wide)^2, (dx - wide)^2)
+                   dy2 <- pmin.int(dy^2, (dy + high)^2, (dy - high)^2)
                    d <- sqrt(dx2 + dy2)
                  }
                  return(d)

@@ -3,7 +3,7 @@
 #
 # version numbers
 #
-# $Revision: 1.7 $  $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.9 $  $Date: 2013/04/30 04:21:50 $
 #
 #####################
 
@@ -49,16 +49,6 @@ majorminorversion <- function(v) {
   return(package_version(paste(vp$major, vp$minor, sep=".")))
 }
 
-# temporary test for version of RandomFields
+# legacy function
 
-RandomFieldsSafe <- function() {
-  # The current version of RandomFields crashes in R-devel
-  if(package_version(R.Version()) <= "2.15.0") return(TRUE)
-  v <- read.dcf(file=system.file("DESCRIPTION", package="RandomFields"),
-                fields="Version")
-  v <- package_version(as.character(v))
-  # Presumably it will be fixed in the next version of RandomFields
-  if(v > "2.0.54") return(TRUE)
-  message("RandomFields is disabled due to a bug")
-  return(FALSE)
-}
+RandomFieldsSafe <- function() { TRUE }

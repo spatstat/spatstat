@@ -8,7 +8,7 @@
   DTYPE   declaration for distance values ('double' or 'int')
   FLOATY  (DTYPE == 'double')
 
-  $Revision: 1.2 $   $Date: 2012/10/22 07:31:54 $
+  $Revision: 1.3 $   $Date: 2013/05/27 02:09:10 $
 
  */
 

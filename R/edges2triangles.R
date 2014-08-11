@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.9 $  $Date: 2013/05/21 09:40:26 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -21,8 +21,8 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
       usefriends <- !all(friendly)
     }
   }
-  # zero length data
-  if(length(iedge) == 0) return(matrix(, nrow=0, ncol=3))
+  # zero length data, or not enough to make triangles
+  if(length(iedge) < 3) return(matrix(, nrow=0, ncol=3))
   # sort in increasing order of 'iedge'
   oi <- fave.order(iedge)
   iedge <- iedge[oi]
@@ -75,3 +75,31 @@ trianglediameters <- function(iedge, jedge, edgelength, ...,
   colnames(df) <- c("i", "j", "k", "diam")
   return(df)
 }
+
+# extract 'vees', i.e. triples (i, j, k) where i ~ j and i ~ k
+
+edges2vees <- function(iedge, jedge, nvert=max(iedge, jedge),
+                            ..., check=TRUE) {
+  if(check) {
+    stopifnot(length(iedge) == length(jedge))
+    stopifnot(all(iedge > 0))
+    stopifnot(all(jedge > 0))
+    if(!missing(nvert)) {
+      stopifnot(all(iedge <= nvert))
+      stopifnot(all(jedge <= nvert))
+    }
+  }
+  # zero length data, or not enough to make vees
+  if(length(iedge) < 2) return(matrix(, nrow=0, ncol=3))
+  # call 
+  vees <- .Call("graphVees",
+                nv = nvert,
+                iedge = iedge,
+                jedge = jedge,
+                PACKAGE="spatstat")
+  names(vees) <- c("i", "j", "k")
+  vees <- as.data.frame(vees)
+  return(vees)
+}
+
+  

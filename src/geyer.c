@@ -398,9 +398,9 @@ void geyerupd(state, prop, cdata)
     if(geyer->per) {
       for(j=0; j<npts; j++) {
 	if(j == ix) continue;
-	newclose = oldclose = FALSE;
-	if(CLOSE_PERIODIC(u,v,x[j],y[j],period,r2)) newclose = TRUE;
-	if(CLOSE_PERIODIC(xix,yix,x[j],y[j],period,r2)) oldclose = TRUE;
+	newclose = oldclose = NO;
+	if(CLOSE_PERIODIC(u,v,x[j],y[j],period,r2)) newclose = YES;
+	if(CLOSE_PERIODIC(xix,yix,x[j],y[j],period,r2)) oldclose = YES;
 	if(newclose) {
 	  /* increment neighbour count for new point */
 	  aux[ix] += 1;
@@ -413,9 +413,9 @@ void geyerupd(state, prop, cdata)
       /* Euclidean distance */
       for(j=0; j<npts; j++) {
 	if(j == ix) continue;
-	newclose = oldclose = FALSE;
-	if(CLOSE(u,v,x[j],y[j],r2)) newclose = TRUE;
-	if(CLOSE(xix,yix,x[j],y[j],r2)) oldclose = TRUE;
+	newclose = oldclose = NO;
+	if(CLOSE(u,v,x[j],y[j],r2)) newclose = YES;
+	if(CLOSE(xix,yix,x[j],y[j],r2)) oldclose = YES;
 	if(newclose) {
 	  /* increment neighbour count for new point */
 	  aux[ix] += 1;
@@ -430,4 +430,4 @@ void geyerupd(state, prop, cdata)
   return;
 }
 
-Cifns GeyerCifns = { &geyerinit, &geyercif, &geyerupd, FALSE};
+Cifns GeyerCifns = { &geyerinit, &geyercif, &geyerupd, NO};

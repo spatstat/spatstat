@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.112 $    $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.116 $    $Date: 2013/05/06 07:25:21 $
 #
 #  (a) for matrices only:
 #
@@ -648,7 +648,10 @@ warn.ignored.args <- function(..., context=NULL) {
 multiply.only.finite.entries <- function(x, a) {
   # In ppm a potential value that is -Inf must remain -Inf
   # and a potential value that is 0 multiplied by NA remains 0
-  ifelse(is.finite(x) & x != 0, x * a, x)
+  y <- x
+  ok <- is.finite(x) & (x != 0)
+  y[ok] <- a * x[ok]
+  return(y)
 }
 
 singlestring <- function(s, coll="") {
@@ -914,3 +917,79 @@ print.timed <- function(x, ...) {
   cat(paste("\nTime taken:", codetime(taken), "\n"))
   return(invisible(NULL))
 }
+
+# wrapper for computing weighted variance of a vector
+# Note: this includes a factor 1 - sum(v^2) in the denominator
+# where v = w/sum(w). See help(cov.wt)
+
+weighted.var <- function(x, w, na.rm=FALSE) {
+  bad <- is.na(w) | is.na(x)
+  if(any(bad)) {
+    if(!na.rm) return(NA_real_)
+    ok <- !bad
+    x <- x[ok]
+    w <- w[ok]
+  }
+  cov.wt(matrix(x, ncol=1),w)$cov[]
+}
+
+# efficient replacements for ifelse()
+# 'a' and 'b' are single values
+# 'x' and 'y' are vectors of the same length as 'test'
+
+# ifelse(test, a, b)
+ifelseAB <- function(test,  a, b) {
+  y <- rep.int(b, length(test))
+  y[test] <- a
+  return(y)
+}
+
+# ifelse(test, a, x)
+ifelseAX <- function(test, a, x) {
+  y <- x
+  y[test] <- a
+  return(y)
+}
+
+# ifelse(test, x, b)
+ifelseXB <- function(test, x, b) {
+  y <- rep.int(b, length(test))
+  y[test] <- x[test]
+  return(y)
+}
+  
+# ifelse(test, x, y)
+ifelseXY <- function(test, x, y) {
+  z <- y
+  z[test] <- x[test]
+  return(z)
+}
+
+#.... very special cases ......
+
+# ifelse(test, 1, NA)
+ifelse1NA <- function(test) {
+  y <- as.integer(test)
+  y[!test] <- NA
+  return(y)
+}
+
+# ifelse(test, 0, NA)
+ifelse0NA <- function(test) {
+  nyet <- !test
+  y <- as.integer(nyet)
+  y[nyet] <- NA
+  return(y)
+}
+
+# ifelse(test, -x, x)
+ifelseNegPos <- function(test, x) {
+  y <- x
+  y[test] <- -x[test]
+  return(y)
+}
+
+
+  
+  
+  

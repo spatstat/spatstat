@@ -3,7 +3,7 @@
 #include "geom3.h"
 /*
 
-	$Revision: 1.1 $ 	$Date: 2009/11/04 23:54:15 $
+	$Revision: 1.2 $ 	$Date: 2013/05/27 02:09:10 $
 
 	Routine for calculating ABSOLUTE volume of intersection 
 	between sphere and box
@@ -35,8 +35,7 @@
 #define DBG(X,Y) 
 #endif
 
-#define TRUE (0 == 0)
-#define FALSE (!TRUE)
+#include "yesno.h"
 #define ABS(X) ((X >= 0.0) ? (X) : -(X))
 
 static	double	rcubed, spherevol;

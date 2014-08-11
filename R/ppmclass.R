@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.83 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 2.86 $	$Date: 2013/05/23 07:58:41 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -235,6 +235,25 @@ getglmsubset <- function(object) {
   gd <- object$internal$glmdata
   return(gd$.mpl.SUBSET)
 }
+
+getppmdatasubset <- function(object) {
+  # Equivalent to getglmsubset(object)[is.data(quad.ppm(object))]
+  # but also works for models fitted exactly, etc
+  #
+  if(object$method %in% c("mpl", "ho")) {
+    sub <- getglmsubset(object)
+    if(!is.null(sub)) {
+      Z <- is.data(quad.ppm(object))
+      return(sub[Z])
+    }
+  }
+  X <- data.ppm(object)
+  sub <- if(object$correction == "border") {
+    (bdist.points(X) >= object$rbord)
+  } else rep(TRUE, npoints(X))
+  return(sub)
+}
+
 
 # ??? method for 'effects' ???
 

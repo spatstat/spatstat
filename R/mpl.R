@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.154 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 5.161 $	$Date: 2013/05/23 07:10:47 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -113,7 +113,7 @@ spv <- package_version(versionstring.spatstat())
 the.version <- list(major=spv$major,
                     minor=spv$minor,
                     release=spv$patchlevel,
-                    date="$Date: 2013/04/25 06:37:43 $")
+                    date="$Date: 2013/05/23 07:10:47 $")
 
 if(want.inter) {
   # ensure we're using the latest version of the interaction object
@@ -129,10 +129,13 @@ if(!want.trend && !want.inter && !forcefit && !allcovar) {
   npts <- npoints(X)
   W    <- as.owin(X)
   if(correction == "border" && rbord > 0) {
-    W <- erosion(W, rbord)
-    npts <- npoints(X[W])
+    npts <- sum(bdist.points(X) >= rbord)
+    areaW <- eroded.areas(W, rbord)
+  } else {
+    npts <- npoints(X)
+    areaW <- area.owin(W)
   }
-  volume <- area.owin(W) * markspace.integral(X)
+  volume <- areaW * markspace.integral(X)
   lambda <- npts/volume
   # fitted canonical coefficient
   co <- log(lambda)
@@ -354,17 +357,19 @@ mpl.prepare <- function(Q, X, P, trend, interaction, covariates,
   if("dotmplbase" %in% names.precomputed) 
     .mpl <- precomputed$dotmplbase
   else {
-    .mpl <- list()
-    .mpl$W <- w.quad(Q)
-    .mpl$Z <- is.data(Q)
-    .mpl$Y <- .mpl$Z/.mpl$W
-    .mpl$MARKS <- marks.quad(Q)  # is NULL for unmarked patterns
-    n <- n.quad(Q)
-    .mpl$SUBSET <- rep.int(TRUE, n)
-	
-    zeroes <- attr(.mpl$W, "zeroes")
-    if(!is.null(zeroes))
-      .mpl$SUBSET <-  !zeroes
+    nQ <- n.quad(Q)
+    wQ <- w.quad(Q)
+    mQ <- marks.quad(Q)   # is NULL for unmarked patterns
+    zQ <- is.data(Q)
+    yQ <- numeric(nQ)
+    yQ[zQ] <- 1/wQ[zQ]
+    zeroes <- attr(wQ, "zeroes")
+    sQ <- if(is.null(zeroes)) rep.int(TRUE, nQ) else !zeroes
+    .mpl <- list(W      = wQ,
+                 Z      = zQ,
+                 Y      = yQ,
+                 MARKS  = mQ, 
+                 SUBSET = sQ)
   }
 
   if(savecomputed)
@@ -969,4 +974,59 @@ evalInterEngine <- function(X, P, E,
   return(V)
 }
 
+deltasuffstat <- function(model, restrict=TRUE) {
+  stopifnot(is.ppm(model))
+  if(model$method == "logi") return(NULL)
+  X <- data.ppm(model)
+  nX <- npoints(X)
+  ncoef <- length(coef(model))
+  inte <- as.interact(model)
+  zeroes <- array(0, dim=c(nX, nX, ncoef)) 
+  if(is.poisson(inte))
+    return(zeroes)
+  # look for $delta2 function for the interaction
+  v <- NULL
+  if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
+    v <- delta2(X, inte, model$correction)
+  }
+  # look for generic $delta2 function for the family
+  if(is.null(v) &&
+     !is.null(delta2 <- inte$family$delta2) &&
+     is.function(delta2))
+    v <- delta2(X, inte, model$correction)
 
+  # no luck?
+  if(is.null(v))
+    return(NULL)
+
+  # make it a 3D array
+  if(length(dim(v)) == 2)
+    v <- array(v, dim=c(dim(v), 1))
+  
+  if(restrict) {
+    # kill contributions from points outside the domain of pseudolikelihood
+    # (e.g. points in the border region)
+    use <- getppmdatasubset(model)
+    if(any(kill <- !use)) {
+      kill <- array(outer(kill, kill, "&"), dim=dim(v))
+      v[kill] <- 0
+    }
+  }
+
+  if(all(dim(v) == dim(zeroes)))
+    return(v)
+  
+  # Pad to correct dimensions
+  # Determine which coefficients correspond to interaction terms
+  f <- fitin(model)
+  Inames <- f$Vnames[!f$IsOffset]
+  Imap <- match(Inames, names(coef(model)))
+  if(length(Imap) == 0)
+    return(v)
+  if(any(is.na(Imap)))
+      stop("Internal error: cannot match interaction coefficients")
+  # insert 'v' into array
+  result <- zeroes
+    result[ , , Imap] <- v
+  return(result)
+}

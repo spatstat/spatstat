@@ -510,4 +510,4 @@ void badgeyupd(state, prop, cdata)
   fexitc("Unrecognised transition type; bailing out.\n");
 }
 
-Cifns BadGeyCifns = { &badgeyinit, &badgeycif, &badgeyupd, FALSE};
+Cifns BadGeyCifns = { &badgeyinit, &badgeycif, &badgeyupd, NO};

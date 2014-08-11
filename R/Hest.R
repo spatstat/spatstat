@@ -51,7 +51,7 @@ Hest <- function(X, r=NULL, breaks=NULL,
 # censoring indicators
   d <- (dist <= bdry)
 #  observed distances
-  o <- pmin(dist, bdry)
+  o <- pmin.int(dist, bdry)
 # calculate estimates
   Z <- censtimeCDFest(o, bdry, d, breaks,
                       KM=corx$km,

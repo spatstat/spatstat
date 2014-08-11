@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.24 $	$Date: 2012/06/28 04:20:49 $
+#    $Revision: 2.26 $	$Date: 2013/05/23 07:44:57 $
 #
 #    The Strauss process
 #
@@ -78,6 +78,17 @@ Strauss <- local({
          gamma <- exp(as.numeric(coeffs[1]))
          r <- self$par$r
          return((1-gamma) * pi * r^2)
+       },
+       delta2 = function(X, inte, correction, ...) {
+         if(!(correction %in% c("border", "none")))
+           return(NULL)
+         nX <- npoints(X)
+         r <- inte$par$r
+         cl <- closepairs(X, r, what="indices")
+         I <- factor(cl$i, levels=1:nX)
+         J <- factor(cl$j, levels=1:nX)
+         v <- table(I, J)
+         return(v)
        }
        )
   class(BlankStrauss) <- "interact"
@@ -96,9 +107,9 @@ Strauss <- local({
       
 strausscounts <- function(U, X, r, EqualPairs=NULL) {
   answer <- crosspaircounts(U,X,r)
-  nU <- npoints(U)
   # subtract counts of identical pairs
   if(length(EqualPairs) > 0) {
+    nU <- npoints(U)
     idcount <- as.integer(table(factor(EqualPairs[,2], levels=1:nU)))
     answer <- answer - idcount
   }

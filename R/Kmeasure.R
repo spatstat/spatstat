@@ -237,7 +237,7 @@ second.moment.engine <- function(x, sigma=NULL, edge=TRUE,
       a <- sum(M)
       wt <- a/co
       me <- spatstat.options("maxedgewt")
-      weight <- matrix(pmin(me, wt), ncol=2*nc, nrow=2*nr)
+      weight <- matrix(pmin.int(me, wt), ncol=2*nc, nrow=2*nr)
 #      if(debug) browser()
       #
       # apply edge correction

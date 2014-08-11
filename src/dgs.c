@@ -121,5 +121,5 @@ double dgscif(prop, state, cdata)
   return cifval;
 }
 
-Cifns DgsCifns = { &dgsinit, &dgscif, (updafunptr) NULL, FALSE};
+Cifns DgsCifns = { &dgsinit, &dgscif, (updafunptr) NULL, NO};
 

@@ -8,7 +8,7 @@ at new locations.
 }
 \usage{
    \method{predict}{ppm}(object, window, ngrid=NULL, locations=NULL,
-   covariates=NULL, type="trend", X=data.ppm(object),
+   covariates=NULL, type="trend", X=data.ppm(object), correction, 
    \dots, new.coef=NULL, check=TRUE, repair=TRUE)
 }
 \arguments{
@@ -53,6 +53,14 @@ at new locations.
     to be taken as the data point pattern when calculating the
     conditional intensity. The default is to use the original data
     to which the model was fitted.
+  }
+  \item{correction}{
+    Name of the edge correction to be used
+    in calculating the conditional intensity.
+    Options include \code{"border"} and \code{"none"}.
+    Other options may include \code{"periodic"},
+    \code{"isotropic"} and \code{"translate"} depending on the model.
+    The default correction is the one that was used to fit \code{object}.
   }
   \item{\dots}{
     Ignored.

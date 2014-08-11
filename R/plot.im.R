@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.62 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.63 $   $Date: 2013/05/01 07:39:00 $
 #
 #  Plotting code for pixel images
 #
@@ -43,6 +43,13 @@ plot.im <- local({
   cellbreaks <- function(x, dx) {
     nx <- length(x)
     seq(x[1] - dx/2, x[nx] + dx/2, length.out=nx+1)
+  }
+
+  log10orNA <- function(x) {
+    y <- rep(NA_real_, length(x))
+    ok <- (x > 0)
+    y[ok] <- log10(x[ok])
+    return(y)
   }
   
   # main function
@@ -140,7 +147,7 @@ plot.im <- local({
         if(!all(rx < 0))
           warning("Zero pixel values omitted from logarithmic colour map",
                   call.=FALSE)
-        x <- eval.im(log10(ifelse(x > 0, x, NA)))
+        x <- eval.im(log10orNA(x))
       } 
       xtype <- x$type
       Log <- log10

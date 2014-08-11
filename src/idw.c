@@ -3,7 +3,7 @@
 
   Inverse-distance weighted smoothing
 
-  $Revision: 1.7 $ $Date: 2012/03/27 04:30:54 $
+  $Revision: 1.8 $ $Date: 2013/05/27 02:09:10 $
 
 */
 

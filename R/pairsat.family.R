@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.38 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.39 $	$Date: 2013/05/01 07:34:58 $
 #
 #    The saturated pairwise interaction family of point process models
 #
@@ -144,7 +144,7 @@ saturate2 <- array(saturate[slice.index(V, 2)], dim=dim(V))
 saturate3 <- array(saturate[slice.index(POT, 3)], dim=dim(POT))
 #
 # (a) compute SATURATED potential sums
-V.sat <- pmin(V, saturate2)
+V.sat <- pmin.int(V, saturate2)
 
 if(halfway)
   return(V.sat)
@@ -166,20 +166,22 @@ col.is.data <- array(is.data[slice.index(POT, 2)], dim=dim(POT))
 
 # compute value of unsaturated potential sum for each data point i
 # obtained after addition/deletion of each dummy/data point j
-                                  
-V.after <- V.dat.rep + ifelse(col.is.data, -POT, POT)
+
+V.after <- V.dat.rep + ifelseNegPos(col.is.data, POT)
+#            The call to ifelseNegPos() is equivalent to
+#                     ifelse(col.is.data, -POT, POT)
 #
 #
 # (c) difference of SATURATED potential sums for each data point i
 # before & after increment/decrement of each dummy/data point j
 #
 # saturated values after increment/decrement
-V.after.sat <- array(pmin(saturate3, V.after), dim=dim(V.after))
+V.after.sat <- array(pmin.int(saturate3, V.after), dim=dim(V.after))
 # saturated values before
-V.dat.rep.sat <- array(pmin(saturate3, V.dat.rep), dim=dim(V.dat.rep))
+V.dat.rep.sat <- array(pmin.int(saturate3, V.dat.rep), dim=dim(V.dat.rep))
 # difference
 V.delta <- V.after.sat - V.dat.rep.sat
-V.delta <- ifelse(col.is.data, -V.delta, V.delta)
+V.delta <- ifelseNegPos(col.is.data, V.delta)
 #
 # (d) Sum (c) over all data points i
 V.delta.sum <- apply(V.delta, c(2,3), sum)

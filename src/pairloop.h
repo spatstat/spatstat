@@ -17,7 +17,7 @@
        double xi, yi, dx, dy, dx2, d2, r2max;
        double *x, *y;
 
-  $Revision: 1.2 $  $Date: 2012/03/27 02:47:50 $
+  $Revision: 1.3 $  $Date: 2013/05/27 02:09:10 $
 
 */
 

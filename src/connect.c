@@ -9,7 +9,7 @@
        cocoGraph: connected component labels for a discrete graph
                    specified by a list of edges
        
-       $Revision: 1.7 $ $Date: 2013/02/24 03:19:10 $
+       $Revision: 1.8 $ $Date: 2013/05/27 02:09:10 $
 
        
 */
@@ -22,10 +22,7 @@
 #include "raster.h"
 void   shape_raster();
 
-#ifndef TRUE
-#define TRUE (0 == 0)
-#define FALSE (!TRUE)
-#endif
+#include "yesno.h"
 
 
 /* workhorse function for cocoImage */
@@ -120,7 +117,7 @@ void cocoGraph(nv, ne, ie, je, label, status)
 
   for(niter = 0; niter < Nv; niter++) {
     R_CheckUserInterrupt();
-    changed = FALSE;
+    changed = NO;
     for(k = 0; k < Ne; k++) {
       i = ie[k];
       j = je[k];
@@ -128,10 +125,10 @@ void cocoGraph(nv, ne, ie, je, label, status)
       labj = label[j];
       if(labi < labj) {
 	label[j] = labi;
-	changed = TRUE;
+	changed = YES;
       } else if(labj < labi) {
 	label[i] = labj;
-	changed = TRUE;
+	changed = YES;
       } 
     }
     if(!changed) {

@@ -3,7 +3,7 @@
 #
 #   random shift with optional toroidal boundary
 #
-#   $Revision: 1.15 $   $Date: 2011/08/06 11:40:01 $
+#   $Revision: 1.16 $   $Date: 2013/05/01 08:00:33 $
 #
 #
 rshift <- function(X, ...) {
@@ -106,8 +106,8 @@ rshift.ppp <- function(X, ..., which=NULL, group)
     yr <- W$yrange
     Wide <- diff(xr)
     High <- diff(yr)
-    x <- ifelse(x < xr[1], x + Wide,  ifelse(x > xr[2], x - Wide, x))
-    y <- ifelse(y < yr[1], y + High, ifelse(y > yr[2], y - High, y))
+    x <- xr[1] + (x - xr[1]) %% Wide
+    y <- yr[1] + (y - yr[1]) %% High
   }
 
   # put back into point pattern

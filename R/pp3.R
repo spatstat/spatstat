@@ -59,9 +59,9 @@ eroded.volumes <- function(x, r) { UseMethod("eroded.volumes") }
 
 eroded.volumes.box3 <- function(x, r) {
   b <- as.box3(x)
-  ax <- pmax(0, diff(b$xrange) - 2 * r)
-  ay <- pmax(0, diff(b$yrange) - 2 * r)
-  az <- pmax(0, diff(b$zrange) - 2 * r)
+  ax <- pmax.int(0, diff(b$xrange) - 2 * r)
+  ay <- pmax.int(0, diff(b$yrange) - 2 * r)
+  az <- pmax.int(0, diff(b$zrange) - 2 * r)
   ax * ay * az
 }
 

@@ -7,7 +7,7 @@
 
   loccum.c
 
-  $Revision: 1.2 $     $Date: 2011/07/25 07:34:28 $
+  $Revision: 1.1 $     $Date: 2013/05/27 02:09:10 $
 
   Compute local cumulative sums or products of weights
 

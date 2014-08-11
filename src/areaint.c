@@ -305,4 +305,4 @@ double areaintCif(prop, state, cdata)
 }
 
 
-Cifns AreaIntCifns = { &areaintInit, &areaintCif, (updafunptr) NULL, FALSE};
+Cifns AreaIntCifns = { &areaintInit, &areaintCif, (updafunptr) NULL, NO};

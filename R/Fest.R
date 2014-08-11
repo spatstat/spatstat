@@ -78,7 +78,7 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
 # censoring indicators
   d <- (dist <= bdry)
 #  observed distances
-  o <- pmin(dist, bdry)
+  o <- pmin.int(dist, bdry)
 
 ### start calculating estimates of F
   

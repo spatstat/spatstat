@@ -9,7 +9,7 @@
 #	reduced.sample()
 #       km.rs()
 #
-#	$Revision: 3.24 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 3.25 $	$Date: 2013/05/01 07:21:18 $
 #
 #	The functions in this file produce vectors `km' and `rs'
 #	where km[k] and rs[k] are estimates of F(breaks[k+1]),
@@ -35,13 +35,15 @@ function(obs, nco, breaks, upperobs=0) {
 	d <- revcumsum(obs) + upperobs
 #
 #  product integrand
-	s <- ifelse(d > 0, 1 - nco/d, 1)
+	s <- ifelseXB(d > 0, 1 - nco/d, 1)
 #
 	km <- 1 - cumprod(s)
 #  km has length n;  km[i] is an estimate of F(r) for r=breaks[i+1]
 #	
 	widths <- diff(breaks$val)
-	lambda <-  - log(ifelse(s > 0, s, 1))/widths 
+        lambda <- numeric(n)
+        pos <- (s > 0)
+        lambda[pos] <- -log(s[pos])/widths[pos]
 #  lambda has length n; lambda[i] is an estimate of
 #  the average of \lambda(r) over the interval (breaks[i],breaks[i+1]).
 #	
@@ -227,7 +229,7 @@ compileCDF <- function(D, B, r, ..., han.denom=NULL, check=TRUE) {
   D <- as.vector(D)
   B <- as.vector(B)
   # observed (censored) lifetimes
-  o <- pmin(D, B)
+  o <- pmin.int(D, B)
   # censoring indicators
   d <- (D <= B)
   # go

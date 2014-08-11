@@ -154,5 +154,5 @@ double lennardcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns LennardCifns = { &lennardinit, &lennardcif, (updafunptr) NULL, FALSE};
+Cifns LennardCifns = { &lennardinit, &lennardcif, (updafunptr) NULL, NO};
 

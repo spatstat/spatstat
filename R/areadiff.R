@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.25 $  $Date: 2012/04/14 06:02:39 $
+#  $Revision: 1.26 $  $Date: 2013/05/01 05:41:06 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -80,11 +80,11 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
     aminus <- dilated.areas(Yminus, r, W, exact=exact)
     areas <- aplus - aminus
     # area/(pi * r^2) must be positive and nonincreasing
-    y <- ifelse(r == 0, 1, areas/pir2)
-    y <- pmin(1, y)
+    y <- ifelseAX(r == 0, 1, areas/pir2)
+    y <- pmin.int(1, y)
     ok <- is.finite(y)
     y[ok] <- rev(cummax(rev(y[ok])))
-    areas <- pmax(0, y * pir2)
+    areas <- pmax.int(0, y * pir2)
     # save
     out[k, ] <- areas
   }
@@ -130,11 +130,11 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X)) {
     aminus <- dilated.areas(Zminus, r, W, exact=exact)
     areas <- aplus - aminus
     # area/(pi * r^2) must be in [0,1] and nonincreasing
-    y <- ifelse(r == 0, 1, areas/pir2)
-    y <- pmin(1, y)
+    y <- ifelseAX(r == 0, 1, areas/pir2)
+    y <- pmin.int(1, y)
     ok <- is.finite(y)
     y[ok] <- rev(cummax(rev(y[ok])))
-    areas <- pmax(0, y * pir2)
+    areas <- pmax.int(0, y * pir2)
     # save
     out[i,] <- areas
   }
@@ -269,7 +269,8 @@ areaLoss.grid <- function(X, r, ...,
              i <- indices[k]
              Di <- distmap(X[-i], ...)
              FiW <- ecdf(Di[W, drop=TRUE])
-             answer[k, ] <- ifelse(r > rcrit[i], a * (FW(r) - FiW(r)), pi * r^2)
+             answer[k, ] <-
+               ifelseXB(r > rcrit[i], a * (FW(r) - FiW(r)), pi * r^2)
            }
          })
   return(answer)

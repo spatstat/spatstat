@@ -22,6 +22,7 @@
 
  */
 
+
 /* Current state of point pattern */
 typedef struct State { 
   double *x;     /* vectors of Cartesian coordinates */
@@ -75,7 +76,7 @@ typedef struct Propo {
 #define DEATH 2
 #define SHIFT 3
 
-#define HISTORY_INCLUDES_RATIO TRUE
+#define HISTORY_INCLUDES_RATIO
 
 /* Record of transition history */
 typedef struct History {
@@ -83,7 +84,7 @@ typedef struct History {
   int n;                 /* number of events recorded */
   int *proptype;         /* vector: proposal type */
   int *accepted;         /* vector: 0 for reject, 1 for accept */
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
   double *numerator;     /* vectors: Hastings ratio numerator & denominator  */
   double *denominator;
 #endif
@@ -104,16 +105,11 @@ typedef struct Cifns {
 
 #define NEED_UPDATE(X) ((X).update != (updafunptr) NULL)
 
-#define NULL_CIFNS { (initfunptr) NULL, (evalfunptr) NULL, (updafunptr) NULL, FALSE}
+#define NULL_CIFNS { (initfunptr) NULL, (evalfunptr) NULL, (updafunptr) NULL, NO}
 
 /* miscellaneous macros */
 
-#ifndef TRUE
-#define TRUE (0==0)
-#endif
-#ifndef FALSE
-#define FALSE (!TRUE)
-#endif
+#include "yesno.h"
 
 # define MAT(X,I,J,M) (X[(I)+(J)*(M)])
 

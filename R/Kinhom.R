@@ -46,7 +46,7 @@
 
 "Linhom" <- function(...) {
   K <- Kinhom(...)
-  L <- eval.fv(sqrt(pmax(K,0)/pi))
+  L <- eval.fv(sqrt(pmax.int(K,0)/pi))
   # relabel the fv object
   L <- rebadge.fv(L, quote(Linhom(r)), "Linhom",
                   names(K), new.labl=attr(K, "labl"))

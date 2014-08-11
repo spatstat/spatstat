@@ -4,7 +4,7 @@
 
   Edge corrections
 
-  $Revision: 1.11 $     $Date: 2012/03/27 01:47:07 $
+  $Revision: 1.12 $     $Date: 2013/05/27 02:09:10 $
 
  */
 
@@ -14,6 +14,7 @@
 #include <R_ext/Utils.h>
 
 #include "chunkloop.h"
+#include "yesno.h"
 
 #undef DEBUG
 
@@ -22,8 +23,6 @@
 #define TWOPI M_2PI
 
 #define MIN(A,B) (((A) < (B)) ? (A) : (B))
-#define YES (0 == 0)
-#define NO  (0 == 1)
 
 #define BETWEEN(X,X0,X1) (((X) - (X0)) * ((X) - (X1)) <= 0)
 

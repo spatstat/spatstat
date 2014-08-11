@@ -57,7 +57,7 @@
     The name of the edge correction to be used. The default 
     is \code{"border"} indicating the border correction.
     Other possibilities may include \code{"Ripley"}, \code{"isotropic"},
-    \code{"translate"} and \code{"none"}, depending on the 
+    \code{"periodic"}, \code{"translate"} and \code{"none"}, depending on the 
     \code{interaction}.
   }
   \item{rbord}{

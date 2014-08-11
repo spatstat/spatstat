@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.37 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.40 $	$Date: 2013/05/23 07:26:11 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -136,7 +136,7 @@ pairwise.family <-
        # end of function `plot'
        # ----------------------------------------------------
        eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
-           ..., precomputed=NULL, savecomputed=FALSE) {
+           ..., precomputed=NULL, savecomputed=FALSE, pot.only=FALSE) {
   #
   # This is the eval function for the `pairwise' family.
   # 
@@ -275,6 +275,10 @@ if(length(EqualPairs) > 0) {
     POT[cbind(EqualPairs, k)] <- 0
 }
 
+# Return just the pair potential?
+if(pot.only)
+  return(POT)
+
 # Sum the pairwise potentials 
 
 V <- apply(POT, c(2,3), sum)
@@ -346,8 +350,50 @@ return(V)
   }
 
   return(result)
-  }
+  },
 ######### end of function $suffstat
+  delta2 = function(X, inte, correction, ...) {
+    # Sufficient statistic for second order conditional intensity
+    # Evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
+    # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
+    nX <- npoints(X)
+    if(!(correction %in% c("border", "none"))) {
+      # calculation involves edge correction.
+      # Use generic evaluator
+      E <- cbind(1:nX, 1:nX)
+      result <- pairwise.family$eval(X,X,E,inte$pot,inte$par,correction,
+                                     pot.only=TRUE)
+    } else {
+      # No edge correction weights
+      R <- reach(inte)
+      # identify close pairs (without repetition)
+      cl <- closepairs(X, R, ordered=FALSE)
+      I <- cl$i
+      J <- cl$j
+      D <- matrix(cl$d, ncol=1)
+      # evaluate potential for these pairs
+      POT <- inte$pot(D, inte$par)
+      # ensure 3D array
+      nd <- length(dim(POT))
+      if(nd == 0) {
+        POT <- array(POT, dim=c(length(POT), 1, 1))
+      } else if(nd == 2) {
+        POT <- array(POT, dim=c(dim(POT), 1))
+      }
+      p <- dim(POT)[3]
+      # create result array
+      result <- array(0, dim=c(nX, nX, p))
+      # insert results
+      II <- rep(I, p)
+      JJ <- rep(J, p)
+      KK <- rep(1:p, each=length(I))
+      result[cbind(II,JJ,KK)] <- POT
+      result[cbind(JJ,II,KK)] <- POT
+    }
+    #
+    return(result)
+  }
+######### end of function $delta2
 )
 ######### end of list
 

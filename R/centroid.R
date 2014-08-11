@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.1 $	$Date: 2002/04/07 09:15:39 $
+#	$Revision: 1.2 $	$Date: 2013/05/01 05:42:54 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	
@@ -35,7 +35,7 @@ intX.xypolygon <- function(polly) {
   # slope
   dx <- diff(xr)
   dy <- diff(yr)
-  slope <- ifelse(dx == 0, 0, dy/dx)
+  slope <- ifelseAX(dx == 0, 0, dy/dx)
 
   # integrate
   integrals <- x * y * dx + (y + slope * x) * (dx^2)/2 + slope * (dx^3)/3
@@ -108,7 +108,7 @@ intY.xypolygon <- function(polly) {
   # slope
   dx <- diff(xr)
   dy <- diff(yr)
-  slope <- ifelse(dx == 0, 0, dy/dx)
+  slope <- ifelseAX(dx == 0, 0, dy/dx)
 
   # integrate
   integrals <- (1/2) * (dx * y^2 + slope * y * dx^2 + slope^2 * dx^3/3)

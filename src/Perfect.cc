@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <R.h>
-#include <Rmath.h>
 #include <Rdefines.h>
+#include <Rmath.h>
 #include <R_ext/Utils.h>
 
 // #include <stdio.h>

@@ -8,17 +8,17 @@
 /*
   mhsnoop.c
 
-  $Revision: 1.7 $  $Date: 2013/02/13 09:40:45 $
+  $Revision: 1.8 $  $Date: 2013/05/27 02:09:10 $
 
   support for visual debugger in RMH
 
 */
 
 /* To switch on debugging code, 
-   insert the line: #define MH_DEBUG TRUE
+   insert the line: #define MH_DEBUG YES
 */
 #ifndef MH_DEBUG
-#define MH_DEBUG FALSE
+#define MH_DEBUG NO
 #endif
 
 

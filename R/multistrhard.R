@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.27 $	$Date: 2012/08/30 02:10:53 $
+#    $Revision: 2.29 $	$Date: 2013/05/01 10:17:22 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -77,8 +77,9 @@ MultiStraussHard <- local({
        hxu <- h[ tx, tu ]
        forbid <- (d < hxu)
        forbid[is.na(forbid)] <- FALSE
-       # form the potential 
-       value <- ifelse(forbid, -Inf, str)
+       # form the potential
+       value <- str
+       value[forbid] <- -Inf
        # assign value[i,j] -> z[i,j,k] where k is relevant interaction code
        for(i in 1:nordpairs) {
          # data points with mark m1

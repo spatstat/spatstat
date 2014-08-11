@@ -215,4 +215,4 @@ double straussmcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns MultiStraussCifns = { &straussminit, &straussmcif, (updafunptr) NULL, TRUE};
+Cifns MultiStraussCifns = { &straussminit, &straussmcif, (updafunptr) NULL, YES};

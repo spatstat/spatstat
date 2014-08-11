@@ -130,4 +130,4 @@ double straushcif(prop, state, cdata)
   return cifval;
 }
 
-Cifns StraussHardCifns = { &straushinit, &straushcif, (updafunptr) NULL, FALSE};
+Cifns StraussHardCifns = { &straushinit, &straushcif, (updafunptr) NULL, NO};

@@ -107,10 +107,10 @@ edge.Ripley <- local({
              # apply maxima
              # note: a* are matrices; b** are vectors;
              # b** are implicitly replicated over j index
-             cL <- pmin(aL, bLU) + pmin(aL, bLD)
-             cR <- pmin(aR, bRU) + pmin(aR, bRD)
-             cU <- pmin(aU, bUL) + pmin(aU, bUR)
-             cD <- pmin(aD, bDL) + pmin(aD, bDR)
+             cL <- pmin.int(aL, bLU) + pmin.int(aL, bLD)
+             cR <- pmin.int(aR, bRU) + pmin.int(aR, bRD)
+             cU <- pmin.int(aU, bUL) + pmin.int(aU, bUR)
+             cD <- pmin.int(aD, bDL) + pmin.int(aD, bDR)
 
              # total exterior angle
              ext <- cL + cR + cU + cD
@@ -168,7 +168,7 @@ edge.Ripley <- local({
            }
     )
     # eliminate wild values
-    weight <- matrix(pmax(0, pmin(maxweight, weight)),
+    weight <- matrix(pmax.int(0, pmin.int(maxweight, weight)),
                      nrow=Nr, ncol=Nc)
     return(weight)
   }

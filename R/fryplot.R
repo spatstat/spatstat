@@ -16,7 +16,7 @@ fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL) {
   halfspan <- with(b, c(diff(xrange), diff(yrange)))/2
   if(!is.null(width)) {
     halfwidth <- ensure2vector(width)/2
-    halfspan <- pmin(halfspan, halfwidth)
+    halfspan <- pmin.int(halfspan, halfwidth)
   }
   bb <- owin(c(-1,1) * halfspan[1], c(-1,1) * halfspan[2])
   do.call("plot.owin",

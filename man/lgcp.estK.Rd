@@ -220,7 +220,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
     if(interactive()) plot(u)
 
     \testonly{
-      if(require(RandomFields) && RandomFieldsSafe()) {
+      if(require(RandomFields)) {
       K <- Kest(redwood, r=seq(0, 0.1, length=9))
       op <- spatstat.options(fastK.lgcp=TRUE)
       lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
@@ -229,7 +229,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
       }
     }
     \donttest{
-      if(require(RandomFields) && RandomFieldsSafe()) {
+      if(require(RandomFields)) {
       lgcp.estK(redwood, covmodel=list(model="matern", nu=0.3))
       }
     }

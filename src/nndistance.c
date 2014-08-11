@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.17 $     $Date: 2013/03/12 01:40:33 $
+  $Revision: 1.18 $     $Date: 2013/05/27 02:09:10 $
 
   THE FOLLOWING FUNCTIONS ASSUME THAT y IS SORTED IN ASCENDING ORDER 
 
@@ -34,10 +34,7 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 
-#ifndef FALSE
-#define TRUE 1
-#define FALSE 0
-#endif
+#include "yesno.h"
 
 double sqrt();
 

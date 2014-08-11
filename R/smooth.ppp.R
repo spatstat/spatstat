@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.3 $  $Date: 2013/04/15 07:27:29 $
+#  $Revision: 1.4 $  $Date: 2013/05/01 08:03:17 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -117,7 +117,7 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
              points={
                if(is.null(uhoh <- attr(numerator, "warnings"))) {
                  ratio <- numerator/denominator
-                 ratio <- ifelse(is.finite(ratio), ratio, values[whichnnX])
+                 ratio <- ifelseXY(is.finite(ratio), ratio, values[whichnnX])
                } else {
                  warning("returning original values")
                  ratio <- values
@@ -126,8 +126,8 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
              },
              pixels={
                ratio <- eval.im(numerator/denominator)
-               ratio <- eval.im(ifelse(is.finite(ratio), ratio,
-                                       values[whichnnX]))
+               ratio <- eval.im(ifelseXY(is.finite(ratio), ratio,
+                                         values[whichnnX]))
                attr(ratio, "warnings") <- attr(numerator, "warnings")
            })
     # store results
@@ -303,7 +303,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     }
     if(is.null(uhoh <- attr(numerator, "warnings"))) {
       result <- numerator/denominator
-      result <- ifelse(is.finite(result), result, NA)
+      result <- ifelseXB(is.finite(result), result, NA)
     } else {
       warning("returning original values")
       result <- values

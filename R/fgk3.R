@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.17 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.18 $	$Date: 2013/05/01 05:48:28 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -225,7 +225,7 @@ pcf3est <- function(X, ...,
   if(biascorrect) {
     # bias correction
     rondel <- r/delta
-    biasbit <- ifelse(rondel > 1, 1, (3/4)*(rondel + 2/3 - (1/3)*rondel^3))
+    biasbit <- ifelseAX(rondel > 1, 1, (3/4)*(rondel + 2/3 - (1/3)*rondel^3))
   }
 
   # this will be the output data frame
@@ -341,7 +341,7 @@ f3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
                   PACKAGE="spatstat"
 	)
 	r <- seq(from=range[1], to=range[2], length.out=nval)
-	f <- ifelse(res$denom > 0, res$num/res$denom, 1)
+	f <- with(res, ifelseXB(denom > 0, num/denom, 1))
 
 	return(list(r = r, f = f, num=res$num, denom=res$denom, 
 		correction=correction))

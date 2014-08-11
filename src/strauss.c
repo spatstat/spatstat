@@ -114,4 +114,4 @@ double strausscif(prop, state, cdata)
   return cifval;
 }
 
-Cifns StraussCifns = { &straussinit, &strausscif, (updafunptr) NULL, FALSE};
+Cifns StraussCifns = { &straussinit, &strausscif, (updafunptr) NULL, NO};

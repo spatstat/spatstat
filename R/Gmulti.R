@@ -165,7 +165,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
 #  distance to boundary from each type i point
   bdry <- bdist.points(XI)
 #  observations
-  o <- pmin(nnd,bdry)
+  o <- pmin.int(nnd,bdry)
 #  censoring indicators
   d <- (nnd <= bdry)
 #

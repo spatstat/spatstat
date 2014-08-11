@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.6 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.7 $   $Date: 2013/05/01 07:27:35 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -118,7 +118,7 @@ nncleanEngine <-
   probs <- numeric(n)
   thresh <- (min(kthNND) + diff(range(kthNND))/3.)
   high <- (kthNND > thresh)
-  delta <- ifelse(high, 1, 0)
+  delta <- as.integer(high)
   p <- 0.5
   lambda1 <- k/(alpha.d * mean(kNNDpowd[!high]))
   lambda2 <- k/(alpha.d * mean(kNNDpowd[ high]))

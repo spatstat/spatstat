@@ -101,7 +101,7 @@ Geyer <- local({
          }
          # determine saturated pair counts
          counts <- strausscounts(U, X, r, EqualPairs) 
-         satcounts <- pmin(sat, counts)
+         satcounts <- pmin.int(sat, counts)
          satcounts <- matrix(satcounts, ncol=1)
          if(halfway) {
            # trapdoor used by suffstat()
@@ -123,6 +123,14 @@ Geyer <- local({
          if(somemissing)
            answer <- answer[originalrows, , drop=FALSE]
          return(answer)
+       },
+       delta2 = function(X,inte,correction, ...) {
+         # Sufficient statistic for second order conditional intensity
+         # Geyer interaction
+         r   <- inte$par$r
+         sat <- inte$par$sat
+         result <- geyerdelta2(X,r,sat)
+         return(result)
        }
   )
   class(BlankGeyer) <- "interact"
@@ -136,49 +144,91 @@ Geyer <- local({
 
   # ........... externally visible auxiliary functions .........
   
-  geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
-    # evaluate effect of adding dummy point or deleting data point
-    # on saturated counts of other data points
-    stopifnot(is.numeric(r))
-    stopifnot(is.numeric(sat))
-    # for C calls we need finite numbers
-    stopifnot(is.finite(r))
-    stopifnot(is.finite(sat))
-    # sort in increasing order of x coordinate
-    oX <- fave.order(X$x)
-    oU <- fave.order(U$x)
-    Xsort <- X[oX]
-    Usort <- U[oU]
-    nX <- npoints(X)
-    nU <- npoints(U)
-    Xcountsort <- Xcounts[oX]
-    # inverse: data point i has sorted position i' = rankX[i]
-    rankX <- integer(nX)
-    rankX[oX] <- seq_len(nX)
-    rankU <- integer(nU)
-    rankU[oU] <- seq_len(nU)
-    # map from quadrature points to data points
-    Uindex <- EqualPairs[,2]
-    Xindex <- EqualPairs[,1]
-    Xsortindex <- rankX[Xindex]
-    Usortindex <- rankU[Uindex]
-    Cmap <- rep.int(-1, nU)
-    Cmap[Usortindex] <- Xsortindex - 1
-    # call C routine
-    zz <- .C("Egeyer",
-             nnquad = as.integer(nU),
-             xquad  = as.double(Usort$x),
-             yquad  = as.double(Usort$y),
-             quadtodata = as.integer(Cmap),
-             nndata = as.integer(nX),
-             xdata  = as.double(Xsort$x),
-             ydata  = as.double(Xsort$y),
-             tdata  = as.integer(Xcountsort),
-             rrmax  = as.double(r),
-             ssat   = as.double(sat),
-             result = as.double(numeric(nU)),
-             PACKAGE="spatstat")
-    result <- zz$result[rankU]
-    return(result)
-  }
+geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
+  # evaluate effect of adding dummy point or deleting data point
+  # on saturated counts of other data points
+  stopifnot(is.numeric(r))
+  stopifnot(is.numeric(sat))
+  # for C calls we need finite numbers
+  stopifnot(is.finite(r))
+  stopifnot(is.finite(sat))
+  # sort in increasing order of x coordinate
+  oX <- fave.order(X$x)
+  oU <- fave.order(U$x)
+  Xsort <- X[oX]
+  Usort <- U[oU]
+  nX <- npoints(X)
+  nU <- npoints(U)
+  Xcountsort <- Xcounts[oX]
+  # inverse: data point i has sorted position i' = rankX[i]
+  rankX <- integer(nX)
+  rankX[oX] <- seq_len(nX)
+  rankU <- integer(nU)
+  rankU[oU] <- seq_len(nU)
+  # map from quadrature points to data points
+  Uindex <- EqualPairs[,2]
+  Xindex <- EqualPairs[,1]
+  Xsortindex <- rankX[Xindex]
+  Usortindex <- rankU[Uindex]
+  Cmap <- rep.int(-1, nU)
+  Cmap[Usortindex] <- Xsortindex - 1
+  # call C routine
+  zz <- .C("Egeyer",
+           nnquad = as.integer(nU),
+           xquad  = as.double(Usort$x),
+           yquad  = as.double(Usort$y),
+           quadtodata = as.integer(Cmap),
+           nndata = as.integer(nX),
+           xdata  = as.double(Xsort$x),
+           ydata  = as.double(Xsort$y),
+           tdata  = as.integer(Xcountsort),
+           rrmax  = as.double(r),
+           ssat   = as.double(sat),
+           result = as.double(numeric(nU)),
+           PACKAGE="spatstat")
+  result <- zz$result[rankU]
+  return(result)
+}
 
+geyerdelta2 <- function(X, r, sat) {
+  # Sufficient statistic for second order conditional intensity
+  # Geyer model
+  # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
+  # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
+  stopifnot(is.numeric(sat) && length(sat) == 1 && sat >= 0)
+  # initialise
+  nX <- npoints(X)
+  result <- matrix(0, nX, nX)
+  # identify all r-close pairs (ordered pairs i ~ j)
+  a <- closepairs(X, r, what="indices")
+  I <- a$i
+  J <- a$j
+  IJ <- cbind(I,J)
+  # count number of r-neighbours for each point
+  # (consistently with the above)
+  tvals <- table(factor(I, levels=1:nX))
+  # Compute direct part
+  # (arising when i~j) 
+  tI <- tvals[I]
+  tJ <- tvals[J]
+  result[IJ] <-
+    pmin(sat, tI) - pmin(sat, tI - 1) + pmin(sat, tJ) - pmin(sat, tJ - 1)
+  # Compute indirect part
+  # (arising when i~k and j~k for another point k)
+  # First find all such triples 
+  ord <- (I < J)
+  vees <- edges2vees(I[ord], J[ord], nX)
+  # evaluate contribution of (k, i, j)
+  KK <- vees$i
+  II <- factor(vees$j, levels=1:nX)
+  JJ <- factor(vees$k, levels=1:nX)
+  tKK <- tvals[KK]
+  contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1) + pmin(sat, tKK-2)
+  # for each (i, j), sum the contributions over k 
+  delta3 <- tapply(contribKK, list(I=II, J=JJ), sum)
+  delta3[is.na(delta3)] <- 0
+  # symmetrise and combine
+  result <- result + delta3 + t(delta3)
+  # finish
+  return(result)
+}

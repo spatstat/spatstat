@@ -685,8 +685,8 @@ nearest.raster.point <- function(x,y,w, indices=TRUE) {
         else {
           cc <- 1 + round((x - w$xcol[1])/w$xstep)
           rr <- 1 + round((y - w$yrow[1])/w$ystep)
-          cc <- pmax(1,pmin(cc, nc))
-          rr <- pmax(1,pmin(rr, nr))
+          cc <- pmax.int(1,pmin.int(cc, nc))
+          rr <- pmax.int(1,pmin.int(rr, nr))
         }
         if(indices) 
           return(list(row=rr, col=cc))

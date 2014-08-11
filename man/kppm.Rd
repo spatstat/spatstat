@@ -247,7 +247,7 @@
   kppm(redwood, ~1, "LGCP", statistic="pcf")
   kppm(redwood, ~x, cluster="Cauchy", statistic="K")
   kppm(redwood, cluster="VarGamma", nu.ker = 0.5, statistic="pcf")
-  if(require(RandomFields) && RandomFieldsSafe()) {
+  if(require(RandomFields)) {
      kppm(redwood, ~x, "LGCP", statistic="pcf",
            covmodel=list(model="matern", nu=0.3),
            control=list(maxit=10))

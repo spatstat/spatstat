@@ -1,6 +1,6 @@
 # levelset.R
 #
-#  $Revision: 1.3 $  $Date: 2008/07/16 17:39:32 $
+#  $Revision: 1.4 $  $Date: 2013/05/01 07:22:05 $
 #
 # level set of an image
 
@@ -16,7 +16,7 @@ levelset <- function(X, thresh, compare="<=") {
          "==" = { A <- eval.im(X == thresh) },
          "!=" = { A <- eval.im(X != thresh) },
          stop(paste("unrecognised comparison operator", sQuote(compare))))
-  W <- as.owin(eval.im(ifelse(A, 1, NA)))
+  W <- as.owin(eval.im(ifelse1NA(A)))
   return(W)
 }
 
@@ -28,7 +28,7 @@ solutionset <- function(..., envir) {
   A <- eval.im(..., envir=envir)
   if(A$type != "logical")
     stop("Evaluating the expression did not yield a logical-valued image")
-  W <- as.owin(eval.im(ifelse(A, 1, NA)))
+  W <- as.owin(eval.im(ifelse1NA(A)))
   return(W)
 }
 

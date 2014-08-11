@@ -63,7 +63,7 @@ distppl <- function(p, l) {
   # distance from p to 1st & 2nd endpoints
   d1 <- sqrt(xpl^2 + ypl^2)
   d2 <- sqrt((xp-l[3])^2 + (yp-l[4])^2)
-  dmin <- pmin(d1,d2)
+  dmin <- pmin.int(d1,d2)
   # test for zero length
   if(leng < .Machine$double.eps)
     return(dmin)
@@ -77,7 +77,7 @@ distppl <- function(p, l) {
   # Applies only when xp, yp in the middle
   middle <- (xpr >= 0 & xpr <= leng)
   if(any(middle))
-    dmin[middle] <- pmin(dmin[middle], abs(ypr[middle]))
+    dmin[middle] <- pmin.int(dmin[middle], abs(ypr[middle]))
   
   return(dmin)
 }
@@ -122,7 +122,7 @@ distppll <- function(p, l, mintype=0,
            if(any(outside))
              d3[outside] <- Inf
 
-           dsq <- matrix(pmin(d1, d2, d3),nrow=np, ncol=nl)
+           dsq <- matrix(pmin.int(d1, d2, d3),nrow=np, ncol=nl)
            d <- sqrt(dsq)
            if(mintype >= 1)
              min.d <- apply(d, 1, min)

@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.1 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.2 $  $Date: 2013/05/01 05:39:46 $
 #
 
 
@@ -243,7 +243,7 @@ addvar <- function(model, covariate, ...,
   numfun <- interpolate(numer)
   denfun <- interpolate(denom)
   xxx <- numer$x
-  ratio <- function(y, x) { ifelse(x != 0, y/x, NA) }
+  ratio <- function(y, x) { ifelseXB(x != 0, y/x, NA) }
   yyy <- ratio(numfun(xxx), denfun(xxx))
   # Null variance estimation
   # smooth with weight 1 and smaller bandwidth
@@ -255,7 +255,9 @@ addvar <- function(model, covariate, ...,
   vvv <- ratio(varnumfun(xxx), 2 * sigma * sqrt(pi) * denfun(xxx)^2)
   safesqrt <- function(x) {
     ok <- is.finite(x) & (x >= 0)
-    ifelse(ok, sqrt(ifelse(ok, x, 0)), NA)
+    y <- rep.int(NA_real_, length(x))
+    y[ok] <- sqrt(x[ok])
+    return(y)
   }
   twosd <- 2 * safesqrt(vvv)
   # pack into fv object

@@ -33,7 +33,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
                       at="points", leaveoneout=TRUE)
     lambdaX <- as.numeric(lamX)
     # negative or zero values are due to numerical error
-    lambdaX <- pmax(lambdaX, .Machine$double.eps)
+    lambdaX <- pmax.int(lambdaX, .Machine$double.eps)
   } else {
     # lambda values provided
     if(is.im(lambda)) 
@@ -175,7 +175,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
                       at="points", leaveoneout=TRUE)
     lambdaX <- as.numeric(lamX)
     # negative or zero values are due to numerical error
-    lambdaX <- pmax(lambdaX, .Machine$double.eps)
+    lambdaX <- pmax.int(lambdaX, .Machine$double.eps)
   } else {
     # lambda values provided
     if(is.im(lambda)) 

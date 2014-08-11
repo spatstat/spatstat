@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.69 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.71 $	$Date: 2013/05/23 10:37:54 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -24,7 +24,8 @@ predict.ppm <- local({
   }
 
   predict.ppm <- function(object, window, ngrid=NULL, locations=NULL,
-                          covariates=NULL, type="trend", X=data.ppm(object),  
+                          covariates=NULL, type="trend", X=data.ppm(object),
+                          correction,
                           ..., new.coef=NULL, check=TRUE, repair=TRUE) {
 #
 #  options for `type'
@@ -48,6 +49,9 @@ predict.ppm <- local({
     object <- update(object, use.internal=TRUE)
   }
 
+  if(missing(correction) || is.null(correction))
+    correction <- object$correction
+  
   fitcoef <- coef(object)
   if(!is.null(new.coef)) {
     # validate coefs
@@ -75,7 +79,7 @@ predict.ppm <- local({
   need.covariates <- sumobj$has.covars
 
   if(sumobj$antiquated)
-    warning("The model was fitted by an out-of-date version of spatstat")
+    warning("The model was fitted by an out-of-date version of spatstat")  
 #
 #       determine mark space
 #  
@@ -345,7 +349,7 @@ predict.ppm <- local({
       E <- equalpairs(U, X, marked)
     
     # evaluate interaction
-    Vnew <- evalInteraction(X, U, E, inter, correction="none", check=check)
+    Vnew <- evalInteraction(X, U, E, inter, correction=correction, check=check)
 
   # Negative infinite values signify cif = zero
     cif.equals.zero <- matrowany(Vnew == -Inf)

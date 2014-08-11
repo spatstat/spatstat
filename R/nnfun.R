@@ -65,7 +65,7 @@ print.nnfun <- function(x, ...) {
                        psp="line segment pattern",
                        owin="window",
                        "unrecognised object")
-  cat(paste("Distance function for", typestring, "\n"))
+  cat(paste("Nearest Neighbour Index function for", typestring, "\n"))
   X <- get("X", envir=environment(x))
   print(X)
   return(invisible(NULL))

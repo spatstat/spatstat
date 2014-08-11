@@ -16,6 +16,7 @@
 \alias{apply23sum}
 \alias{applytolayers}
 \alias{area.xypolygon}       
+\alias{areadelta2}       
 \alias{areaGain.diri}       
 \alias{areaGain.grid}       
 \alias{areaLoss.diri}       
@@ -64,6 +65,7 @@
 \alias{cliprect.psp}
 \alias{clippoly.psp}
 \alias{closepairs}
+\alias{closethresh}
 \alias{coef.summary.ppm}
 \alias{compatible.rat}
 \alias{complaining}
@@ -85,6 +87,7 @@
 \alias{default.clipwindow}
 \alias{default.n.tiling}
 \alias{default.ntile}
+\alias{deltasuffstat}
 \alias{dflt.redraw}
 \alias{densitypointsEngine}
 \alias{diagnose.ppm.engine}
@@ -167,8 +170,10 @@
 \alias{getglmfit}
 \alias{getglmsubset}
 \alias{getlambda.lpp}
+\alias{getppmdatasubset}
 \alias{getSumFun}
 \alias{geyercounts}
+\alias{geyerdelta2}
 \alias{GLMpredict}
 \alias{good.names}
 \alias{gridindex}            
@@ -181,6 +186,13 @@
 \alias{hsvNA}
 \alias{identical.formulae}
 \alias{idorempty}
+\alias{ifelseAB}
+\alias{ifelseAX}
+\alias{ifelseXB}
+\alias{ifelseXY}
+\alias{ifelse1NA}
+\alias{ifelse0NA}
+\alias{ifelseNegPos}
 \alias{implemented.for.K}
 \alias{inpoint}
 \alias{inside.range}     
@@ -326,7 +338,6 @@
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
 \alias{plot.bw.optim}
-\alias{plot.fii}
 \alias{plot.localpcfmatrix}
 \alias{plot.minconfit}
 \alias{plot.parres}
@@ -358,7 +369,6 @@
 \alias{print.distfun}
 \alias{print.envelope}
 \alias{print.fasp}       
-\alias{print.fii}       
 \alias{print.fv}       
 \alias{print.funxy}       
 \alias{print.hyperframe}
@@ -387,7 +397,6 @@
 \alias{print.rmhInfoList}
 \alias{print.splitppp}
 \alias{print.splitppx}
-\alias{print.summary.fii}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
 \alias{print.summary.lut}
@@ -408,6 +417,7 @@
 \alias{rectquadrat.countEngine}
 \alias{redraw.simplepanel}
 \alias{repair.image.xycoords}
+\alias{resolveEinfo}
 \alias{rgbNA}
 \alias{rhs.of.formula}
 \alias{rhohatEngine}
@@ -423,7 +433,6 @@
 \alias{rasterx.im}
 \alias{rastery.im}
 \alias{rasterxy.im}
-\alias{reach.fii}
 \alias{rebadge.fv}
 \alias{rebound}
 \alias{rebound.im}
@@ -505,7 +514,6 @@
 \alias{suffstat.poisson}
 \alias{summarise.trend}
 \alias{summary.envelope}
-\alias{summary.fii}
 \alias{summary.hyperframe}
 \alias{summary.logippm}
 \alias{summary.lut}
@@ -544,6 +552,7 @@
 \alias{verifyclass}
 \alias{verify.xypolygon}
 \alias{warn.ignored.args}
+\alias{weighted.var}
 \alias{with.msr}
 \alias{w.quad}               
 \alias{x.quad}
@@ -572,6 +581,7 @@ anycrossing.psp(A,B)
 apply23sum(x)
 applytolayers(L, FUN, ...)
 area.xypolygon(polly)
+areadelta2(X, r, algorithm)
 areaGain.diri(u, X, r, ..., W=as.owin(X))
 areaGain.grid(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.disc"))
 areaLoss.diri(X, r, ..., W=as.owin(X), subset=NULL)
@@ -625,6 +635,7 @@ clip.psp(x, window, check=TRUE)
 cliprect.psp(x, window)
 clippoly.psp(s, window)
 closepairs(X,rmax,ordered,what)
+closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
 \method{compatible}{rat}(A, B, \dots)
 complaining(whinge, fatal, value)
@@ -646,6 +657,7 @@ datagen.rpoisppOnLines(lambda, L, lmax, \dots, check=TRUE)
 default.clipwindow(object, epsilon)
 default.n.tiling(X, nd, ntile, npix, eps, verbose)
 default.ntile(X)
+deltasuffstat(model, restrict)
 dflt.redraw(button, name, env)
 densitypointsEngine(x, sigma, \dots,
                     weights, edge, varcov,
@@ -683,8 +695,9 @@ envelopeEngine(X, fun, simul,
            nsim=99, nrank=1, \dots, 
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL,
-           savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
-           VARIANCE=FALSE, nSD=2,
+           savefuns=FALSE, savepatterns=FALSE, saveresultof=NULL,
+           weights=NULL,
+           nsim2=nsim, VARIANCE=FALSE, nSD=2,
            Yname=NULL, maxnerr=nsim, internal=NULL, cl=NULL,
            envir.user=envir.user, expected.arg="r", do.pwrong=FALSE)
 envelopeTest(X, \dots,
@@ -693,7 +706,7 @@ envelopeTest(X, \dots,
 \method{envelope}{matrix}(Y, ..., rvals, observed, theory, funX,
       nsim, nsim2, jsim, jsim.mean,
       type, csr, use.theory, nrank, ginterval, nSD,
-      savefuns, check, Yname, do.pwrong)
+      savefuns, check, Yname, do.pwrong, weights, precomputed)
 equalpairs(U, X, marked=FALSE)
 equalpairs.quad(Q)
 equals.quad(Q)          
@@ -746,8 +759,10 @@ getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
 getlambda.lpp(lambda, X, \dots)
+getppmdatasubset(object)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
+geyerdelta2(X,r,sat)
 GLMpredict(fit, data, coefs, changecoef)
 good.names(nama, defaults, suffices)
 gridindex(x, y, xrange, yrange, nx, ny)            
@@ -760,6 +775,13 @@ ho.engine(model, \dots, nsim, nrmh, start, control, verb)
 hsvNA(h, s, v, \dots)
 identical.formulae(x,y)
 idorempty(w, r, caller)
+ifelseAB(test, a, b)
+ifelseAX(test, a, x)
+ifelseXB(test, x, b)
+ifelseXY(test, x, y)
+ifelse1NA(test)
+ifelse0NA(test)
+ifelseNegPos(test, x)
 implemented.for.K(correction, windowtype, explicit)
 inpoint(W)
 inside.range(x, r)
@@ -926,7 +948,6 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
 \method{plot}{bw.optim}(x, \dots, showopt, optargs)
-\method{plot}{fii}(x, \dots)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
 \method{plot}{pppmatching}(x, addmatch = NULL, main = NULL, \dots)
@@ -960,7 +981,6 @@ primesbelow(nmax)
 \method{print}{distfun}(x, \dots)
 \method{print}{envelope}(x, \dots)
 \method{print}{fasp}(x, \dots)
-\method{print}{fii}(x, \dots)
 \method{print}{funxy}(x, \dots)
 \method{print}{fv}(x, \dots)
 \method{print}{hyperframe}(x, ...)
@@ -987,7 +1007,6 @@ primesbelow(nmax)
 \method{print}{rmhInfoList}(x, \dots)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
-\method{print}{summary.fii}(x, \dots)
 \method{print}{summary.hyperframe}(x, ...)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.lut}(x, \dots)
@@ -1007,6 +1026,7 @@ ratfv(df, numer, denom, \dots, ratio)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 repair.image.xycoords(x)
+resolveEinfo(x, what, fallback, warn)
 rgbNA(red, green, blue, \dots)
 rhs.of.formula(x)
 rhohatEngine(model, covariate, reference, volume, \dots,
@@ -1029,7 +1049,6 @@ rastersample(X, Y)
 rasterx.im(x)
 rastery.im(x)
 rasterxy.im(x, drop)
-\method{reach}{fii}(x, \dots, epsilon)
 rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
 new.dotnames, new.preferred, new.formula, new.tags)
 rebound(x, rect)
@@ -1116,7 +1135,6 @@ suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
-\method{summary}{fii}(object,\dots)
 \method{summary}{hyperframe}(object, ..., brief=FALSE)
 \method{summary}{logippm}(object, \dots)
 \method{summary}{lut}(object, \dots)
@@ -1155,6 +1173,7 @@ versionstring.spatstat()
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 verify.xypolygon(p, fatal=TRUE)
 warn.ignored.args(\dots, context)
+weighted.var(x, w, na.rm)
 \method{with}{msr}(data, expr, \dots)
 w.quad(Q)               
 x.quad(Q)

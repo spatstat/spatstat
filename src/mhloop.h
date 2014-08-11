@@ -20,12 +20,12 @@
    
    MH_SNOOP     whether to run visual debugger
 
-   $Revision: 1.17 $  $Date: 2013/02/13 09:35:40 $ 
+   $Revision: 1.18 $  $Date: 2013/05/27 02:09:10 $ 
 
 */
 
 #ifndef MH_DEBUG
-#define MH_DEBUG FALSE
+#define MH_DEBUG NO
 #endif
 
 OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
@@ -107,7 +107,7 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	  history.n++;
 	  history.proptype[irep] = BIRTH;
 	  history.accepted[irep] = (itype == REJECT) ? 0 : 1;
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
 	  history.numerator[irep] = anumer;
 	  history.denominator[irep] = adenom;
 #endif
@@ -169,7 +169,7 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	  history.n++;
 	  history.proptype[irep] = DEATH;
 	  history.accepted[irep] = (itype == REJECT) ? 0 : 1;
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
 	  history.numerator[irep] = anumer;
 	  history.denominator[irep] = adenom;
 #endif
@@ -247,7 +247,7 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	history.n++;
 	history.proptype[irep] = SHIFT;
 	history.accepted[irep] = (itype == REJECT) ? 0 : 1;
-#if HISTORY_INCLUDES_RATIO
+#ifdef HISTORY_INCLUDES_RATIO
 	  history.numerator[irep] = cvn;
 	  history.denominator[irep] = cvd;
 #endif

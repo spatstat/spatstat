@@ -215,7 +215,7 @@ lgcp.estpcf(X,
     u <- lgcp.estpcf(redwood, c(sigma2=0.1, alpha=1))
     u
     plot(u)
-    if(require(RandomFields) && RandomFieldsSafe()) {
+    if(require(RandomFields)) {
       lgcp.estpcf(redwood, covmodel=list(model="matern", nu=0.3))
     }
 }

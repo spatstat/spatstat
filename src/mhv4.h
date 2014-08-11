@@ -9,12 +9,12 @@
 
 if(snooper.active) {
   /* visual debugger */
-#define MH_SNOOP TRUE
+#define MH_SNOOP YES
 #include "mhloop.h"
 #undef MH_SNOOP
 } else {
   /* no visual debugger */
-#define MH_SNOOP FALSE
+#define MH_SNOOP NO
 #include "mhloop.h"
 #undef MH_SNOOP
 } 

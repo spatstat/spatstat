@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in m dimensions
 
-  $Revision: 1.7 $     $Date: 2012/04/06 09:45:37 $
+  $Revision: 1.8 $     $Date: 2013/05/27 02:09:10 $
 
   Argument x is an m * n matrix 
   with columns corresponding to points
@@ -31,10 +31,7 @@
 #include <math.h>
 #include "chunkloop.h"
 
-#ifndef FALSE
-#define TRUE 1
-#define FALSE 0
-#endif
+#include "yesno.h"
 
 double sqrt();
 
@@ -522,7 +519,7 @@ void knndMD(n, m, kmax, x, nnd, huge)
 	    Rprintf("%lf, ", d2min[k]);
 	  Rprintf("\n");
 #endif
-	  unsorted = TRUE;
+	  unsorted = YES;
 	  for(k = nk1; unsorted && k > 0; k--) {
 	    k1 = k - 1;
 	    if(d2min[k] < d2min[k1]) {
@@ -531,7 +528,7 @@ void knndMD(n, m, kmax, x, nnd, huge)
 	      d2min[k1] = d2min[k];
 	      d2min[k] = tmp;
 	    } else {
-	      unsorted = FALSE;
+	      unsorted = NO;
 	    }
 	  }
 #ifdef SPATSTAT_DEBUG
@@ -580,7 +577,7 @@ void knndMD(n, m, kmax, x, nnd, huge)
 	    Rprintf("%lf, ", d2min[k]);
 	  Rprintf("\n");
 #endif
-	  unsorted = TRUE;
+	  unsorted = YES;
 	  for(k = nk1; unsorted && k > 0; k--) {
 	    k1 = k - 1;
 	    if(d2min[k] < d2min[k1]) {
@@ -589,7 +586,7 @@ void knndMD(n, m, kmax, x, nnd, huge)
 	      d2min[k1] = d2min[k];
 	      d2min[k] = tmp;
 	    } else {
-	      unsorted = FALSE;
+	      unsorted = NO;
 	    }
 	  }
 #ifdef SPATSTAT_DEBUG
@@ -729,7 +726,7 @@ void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
 	    Rprintf("%d, ", which[k]);
 	  Rprintf("\n");
 #endif
-	  unsorted = TRUE;
+	  unsorted = YES;
 	  for(k = nk1; unsorted && k > 0; k--) {
 	    k1 = k - 1;
 	    if(d2min[k] < d2min[k1]) {
@@ -741,7 +738,7 @@ void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
 	      which[k1] = which[k];
 	      which[k] = itmp;
 	    } else {
-	      unsorted = FALSE;
+	      unsorted = NO;
 	    }
 	  }
 #ifdef SPATSTAT_DEBUG
@@ -796,7 +793,7 @@ void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
 	    Rprintf("%d, ", which[k]);
 	  Rprintf("\n");
 #endif
-	  unsorted = TRUE;
+	  unsorted = YES;
 	  for(k = nk1; unsorted && k > 0; k--) {
 	    k1 = k - 1;
 	    if(d2min[k] < d2min[k1]) {
@@ -808,7 +805,7 @@ void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
 	      which[k1] = which[k];
 	      which[k] = itmp;
 	    } else {
-	      unsorted = FALSE;
+	      unsorted = NO;
 	    }
 	  }
 #ifdef SPATSTAT_DEBUG

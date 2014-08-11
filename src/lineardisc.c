@@ -7,14 +7,13 @@
 
    Disc of radius r in linear network
 
-   $Revision: 1.9 $  $Date: 2012/04/20 04:46:17 $
+   $Revision: 1.10 $  $Date: 2013/05/27 02:09:10 $
 
 */
 
 #define DPATH(I,J) dpath[(J) + Nv * (I)]
 
-#define TRUE (0 == 0)
-#define FALSE (!TRUE)
+#include "yesno.h"
 
 #undef DEBUG
 
@@ -112,7 +111,7 @@ lineardisc(f, seg, /* centre of disc (local coords) */
 	  allin = covered[fromi] && covered[toi] && 
                      (resid[fromi] + resid[toi] >= lengths[i]);
 	  bdry = !allin;
-	} else allin = bdry = FALSE;
+	} else allin = bdry = NO;
 	if(bdry) {
 	  if(covered[fromi]) nends++;
 	  if(covered[toi]) nends++;
@@ -204,17 +203,17 @@ countends(np, f, seg, /* centres of discs (local coords) */
 	residue = rad - dxvi;
 	if(residue > tol) {
 	  resid[i] = residue;
-	  covered[i] = TRUE;
-	  terminal[i] = FALSE;
+	  covered[i] = YES;
+	  terminal[i] = NO;
 	} else if(residue < -tol) {
 	  resid[i] = 0;
-	  covered[i] = terminal[i] = FALSE;
+	  covered[i] = terminal[i] = NO;
 	} else {
 	  /* vertex is within 'tol' of an endpoint 
 	   - deem it to be one 
 	  */
 	  resid[i] = 0;
-	  covered[i] = terminal[i] = TRUE;
+	  covered[i] = terminal[i] = YES;
 	  /* vertex is an endpoint of disc */
 	  ++nends;  
 	}
