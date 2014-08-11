@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.5 $  $Date: 2013/11/03 03:27:32 $
+#  $Revision: 1.6 $  $Date: 2013/12/03 10:15:30 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -38,6 +38,9 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   k <- as.integer(k)
   kmax <- max(k)
   nk <- length(k)
+
+  # note whether W is `really' a rectangle
+  isrect <- is.rectangle(rescue.rectangle(W))
 
   # set up pixel array
   M <- do.call.matched("as.mask",
@@ -195,15 +198,21 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   result <- list()
   if(want.dist) {
     dlist <- list()
-    for(i in 1:nk)
-      dlist[[i]] <- as.im(NND[i,,], M)
+    for(i in 1:nk) {
+      DI <- as.im(NND[i,,], M)
+      if(!isrect) DI <- DI[M, drop=FALSE]
+      dlist[[i]] <- DI
+    }
     names(dlist) <- k
     result[["dist"]] <- if(nk > 1) dlist else dlist[[1]]
   }
   if(want.which) {
     wlist <- list()
-    for(i in 1:nk)
-      wlist[[i]] <- as.im(NNW[i,,], M)
+    for(i in 1:nk) {
+      WI <- as.im(NNW[i,,], M)
+      if(!isrect) WI <- WI[M, drop=FALSE]
+      wlist[[i]] <- WI
+    }
     names(wlist) <- k
     result[["which"]] <- if(nk > 1) wlist else wlist[[1]]
   }

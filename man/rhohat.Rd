@@ -241,6 +241,8 @@ rhohat(object, covariate, ...)
   rhoB <- rhohat(X, "x", method="reweight")
   rhoC <- rhohat(X, "x", method="transform")
 
+  \testonly{rh <- rhohat(X, "x", dimyx=32)}
+
   fit <- ppm(X, ~x)
   rr <- rhohat(fit, "y")
 

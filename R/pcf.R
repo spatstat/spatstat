@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.44 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.47 $   $Date: 2013/12/11 02:12:43 $
 #
 #
 #   calculate pair correlation function
@@ -16,7 +16,8 @@ pcf <- function(X, ...) {
 
 pcf.ppp <- function(X, ..., r=NULL,
                     kernel="epanechnikov", bw=NULL, stoyan=0.15,
-                    correction=c("translate", "Ripley"))
+                    correction=c("translate", "Ripley"),
+                    divisor=c("r", "d"))
 {
   verifyclass(X, "ppp")
   r.override <- !is.null(r)
@@ -37,12 +38,23 @@ pcf.ppp <- function(X, ..., r=NULL,
                            multi=TRUE)
 
   correction <- implemented.for.K(correction, win$type, correction.given)
+
+  divisor <- match.arg(divisor)
   
+  # bandwidth
   if(is.null(bw) && kernel=="epanechnikov") {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
     h <- stoyan /sqrt(lambda)
+    hmax <- h
     # conversion to standard deviation
     bw <- h/sqrt(5)
+  } else if(is.numeric(bw)) {
+    # standard deviation of kernel specified
+    # upper bound on half-width
+    hmax <- 3 * bw
+  } else {
+    # data-dependent bandwidth selection: guess upper bound on half-width
+    hmax <- 2 * stoyan /sqrt(lambda)
   }
 
   ########## r values ############################
@@ -59,19 +71,15 @@ pcf.ppp <- function(X, ..., r=NULL,
   alim <- c(0, min(rmax, rmaxdefault))
 
   # arguments for 'density'
-  from <- 0
-  to <- max(r)
-  nr <- length(r)
-  
   denargs <- resolve.defaults(list(kernel=kernel, bw=bw),
                               list(...),
-                              list(n=nr, from=from, to=to))
+                              list(n=length(r), from=0, to=rmax))
   
   #################################################
   
   # compute pairwise distances
   
-  close <- closepairs(X, max(r))
+  close <- closepairs(X, rmax + hmax)
   dIJ <- close$d
   XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
 
@@ -91,7 +99,7 @@ pcf.ppp <- function(X, ..., r=NULL,
     # translation correction
     XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
     edgewt <- edge.Trans(XI, XJ, paired=TRUE)
-    gT <- sewpcf(dIJ, edgewt, denargs, lambda2area)$g
+    gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     out <- bind.fv(out,
                    data.frame(trans=gT),
                    "hat(%s)[Trans](r)",
@@ -101,7 +109,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
     edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
-    gR <- sewpcf(dIJ, edgewt, denargs, lambda2area)$g
+    gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     out <- bind.fv(out,
                    data.frame(iso=gR),
                    "hat(%s)[Ripley](r)",
@@ -128,13 +136,27 @@ pcf.ppp <- function(X, ..., r=NULL,
 # denargs = arguments to density.default
 # lambda2area = constant lambda^2 * area (in normal use)
 
-sewpcf <- function(d, w, denargs, lambda2area) {
+sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
+  divisor <- match.arg(divisor)
+  if(divisor == "d") {
+    w <- w/d
+    if(!all(good <- is.finite(w))) {
+      nbad <- sum(!good)
+      warning(paste(nbad, "infinite or NA",
+                    ngettext(nbad, "contribution was", "contributions were"),
+                    "deleted from pcf estimate"))
+      d <- d[good]
+      w <- w[good]
+    }
+  }
   wtot <- sum(w)
   kden <- do.call.matched("density.default",
                   append(list(x=d, weights=w/wtot), denargs))
   r <- kden$x
   y <- kden$y * wtot
-  g <- y/(2 * pi * r * lambda2area)
+  if(divisor == "r")
+    y <- y/r
+  g <- y/(2 * pi * lambda2area)
   return(data.frame(r=r,g=g))
 }
 

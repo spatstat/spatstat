@@ -149,6 +149,9 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
   Dpois <- 1/(2*sqrt(intensity))
 
   statistic <- NULL
+  if(working) 
+    work <- list(area=area, npts=npts, intensity=intensity,
+                 Dobs=Dobs, Dpois=Dpois)
   
   # Naive uncorrected value
   if("none" %in% correction) {
@@ -162,6 +165,7 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
       perim <- perimeter(W)
       Dkevin  <- Dpois + (0.0514+0.0412/sqrt(npts))*perim/npts
       Rkevin <- Dobs/Dkevin
+      if(working) work <- append(work, list(perim=perim, Dkevin=Dkevin))
     } else 
       Rkevin <- NA
     statistic <- c(statistic, Donnelly=Rkevin)
@@ -172,6 +176,7 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
     ok <- inside.owin(X, , clipregion)
     Dguard <- mean(nndistX[ok])
     Rguard <- Dguard/Dpois
+    if(working) work <- append(work, list(Dguard=Dguard))
     statistic <- c(statistic, guard=Rguard)
   }
   if("cdf" %in% correction) {
@@ -181,11 +186,10 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
     denom <- stieltjes(function(x){rep.int(1, length(x))}, G)$km
     Dcdf <- numer/denom
     Rcdf <- Dcdf/Dpois
+    if(working) work <- append(work, list(Dcdf=Dcdf))
     statistic <- c(statistic, cdf=Rcdf)
   }
-  if(working)
-    attr(statistic, "working") <-
-      list(area=area, npts=npts, intensity=intensity, Dpois=Dpois, Dobs=Dobs)
+  if(working) attr(statistic, "working") <- work
 
   return(statistic)
 }

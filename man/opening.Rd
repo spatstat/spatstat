@@ -67,7 +67,7 @@
   \code{\link{as.owin}} for information about windows.
 }
 \examples{
-  v <- opening(letterR, 0.3, polygonal=interactive())
+  v <- opening(letterR, 0.3)
   plot(letterR, type="n", main="opening")
   plot(v, add=TRUE, col="grey")
   plot(letterR, add=TRUE)

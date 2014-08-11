@@ -33,7 +33,6 @@ Ord <- function(pot, name) {
                                     list(pot=self$pot, name=self$name)))
          } , 
          print = function(self) {
-           cat(paste(self$name, "\n"))
            cat("Potential function:\n")
            print(self$pot)
            invisible()

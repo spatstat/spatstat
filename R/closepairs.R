@@ -197,7 +197,6 @@ closepairs <- function(X, rmax, ordered=TRUE, what=c("all", "indices")) {
   return(answer)
 }
 
-
 #######################
 
 crosspairs <- function(X, Y, rmax, what=c("all", "indices")) {

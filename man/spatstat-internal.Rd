@@ -10,6 +10,7 @@
 \alias{[<-.splitppx}
 \alias{acedist.show}
 \alias{acedist.noshow}
+\alias{active.interactions}
 \alias{adjustthinrange}
 \alias{affinexy}
 \alias{affinexypolygon}
@@ -44,6 +45,7 @@
 \alias{breakpts.from.r}
 \alias{bt.frame}
 \alias{bw.optim}
+\alias{cannot.update}
 \alias{cartesian}
 \alias{cat.factor}
 \alias{cellmiddles}
@@ -62,11 +64,9 @@
 \alias{check.range}
 \alias{check.testfun}
 \alias{clarkevansCalc}
-\alias{clear.simplepanel}
 \alias{clip.psp}
 \alias{cliprect.psp}
 \alias{clippoly.psp}
-\alias{closepairs}
 \alias{closethresh}
 \alias{coef.summary.ppm}
 \alias{compatible.rat}
@@ -75,8 +75,6 @@
 \alias{compileK}
 \alias{compilepcf}
 \alias{conform.ratfv}
-\alias{crosspairs}
-\alias{crosspaircounts}
 \alias{crosspairquad}
 \alias{cobble.xy}
 \alias{codetime}
@@ -84,6 +82,7 @@
 \alias{conform.imagelist}
 \alias{countingweights}
 \alias{damaged.ppm}
+\alias{data.mppm}
 \alias{datagen.runifpointOnLines}
 \alias{datagen.runifpoisppOnLines}
 \alias{datagen.rpoisppOnLines}
@@ -143,6 +142,7 @@
 \alias{explain.ifnot}
 \alias{extractAIC.slrm}
 \alias{extractAtomicQtests}
+\alias{fakecallstring}
 \alias{fave.order}
 \alias{f3engine}
 \alias{f3Cengine}
@@ -161,8 +161,6 @@
 \alias{fvlabels<-}
 \alias{fvlabelmap}
 \alias{fvlegend}
-\alias{fvnames}
-\alias{fvnames<-}
 \alias{g3engine}
 \alias{g3Cengine}
 \alias{greatest.common.divisor}
@@ -182,7 +180,6 @@
 \alias{gridindex}            
 \alias{grid1index}
 \alias{grow.rectangle}
-\alias{grow.simplepanel}
 \alias{gsubdot}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
@@ -197,7 +194,10 @@
 \alias{ifelse1NA}
 \alias{ifelse0NA}
 \alias{ifelseNegPos}
+\alias{illegal.iformula}
 \alias{implemented.for.K}
+\alias{impliedpresence}
+\alias{impliedcoefficients}
 \alias{inpoint}
 \alias{inside.range}     
 \alias{inside.triangle}     
@@ -221,10 +221,12 @@
 \alias{is.interact}
 \alias{is.marked.default}    
 \alias{is.marked.psp}    
-\alias{is.marked.quad}    
+\alias{is.marked.quad}
+\alias{is.mppm}
 \alias{is.multitype.quad}    
 \alias{is.multitype.default}    
 \alias{is.parseable}
+\alias{is.poisson.mppm}
 \alias{is.pp3}
 \alias{is.ppx}
 \alias{is.prime}
@@ -241,7 +243,6 @@
 \alias{kppmMinCon}
 \alias{kppmComLik}
 \alias{labels.ppm}
-\alias{layout.boxes}
 \alias{least.common.multiple}
 \alias{levels.im}
 \alias{levels<-.im}
@@ -309,6 +310,7 @@
 \alias{mpl.prepare}
 \alias{MultiPair.checkmatrix}
 \alias{multiply.only.finite.entries}
+\alias{multiplicity.data.frame}
 \alias{na.handle.im}
 \alias{names.hyperframe}
 \alias{names<-.hyperframe}
@@ -327,6 +329,7 @@
 \alias{numalign}
 \alias{numeric.columns}
 \alias{nzpaste}
+\alias{objsurfEngine}
 \alias{offsetsinformula}
 \alias{onecolumn}
 \alias{optimStatus}
@@ -385,6 +388,7 @@
 \alias{print.envelope}
 \alias{print.fasp}       
 \alias{print.fv}       
+\alias{print.fvfun}       
 \alias{print.funxy}       
 \alias{print.hyperframe}
 \alias{print.influence.ppm}       
@@ -396,6 +400,7 @@
 \alias{print.localpcfmatrix}
 \alias{print.lut}
 \alias{print.minconfit}
+\alias{print.mppm}
 \alias{print.msr}
 \alias{print.nnfun}
 \alias{print.parres}
@@ -412,11 +417,13 @@
 \alias{print.rmhstart}
 \alias{print.rmhInfoList}
 \alias{print.splitppp}
+\alias{print.simplepanel}
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
+\alias{print.summary.mppm}
 \alias{print.summary.owin}
 \alias{print.summary.ppp}
 \alias{print.summary.psp}
@@ -428,20 +435,21 @@
 \alias{print.timed}
 \alias{prolongseq}
 \alias{quad}
+\alias{quad.mppm}
 \alias{RandomFieldsSafe}
 \alias{ratfv}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
-\alias{redraw.simplepanel}
+\alias{reduceformula}
 \alias{repair.image.xycoords}
 \alias{resolveEinfo}
+\alias{resolve.vargamma.shape}
 \alias{rgbNA}
 \alias{rhs.of.formula}
 \alias{rhohatEngine}
 \alias{rhohatCalc}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
-\alias{run.simplepanel}
 \alias{quadrat.testEngine}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
@@ -505,7 +513,6 @@
 \alias{shiftxypolygon}              
 \alias{short.deparse}
 \alias{signalStatus}
-\alias{simplepanel}
 \alias{simplify.xypolygon}              
 \alias{simulrecipe}              
 \alias{singlestring}              
@@ -533,6 +540,7 @@
 \alias{summary.hyperframe}
 \alias{summary.logiquad}
 \alias{summary.lut}
+\alias{summary.mppm}
 \alias{summary.profilepl}
 \alias{summary.pppmatching}
 \alias{summary.ppx}
@@ -568,6 +576,7 @@
 \alias{verify.xypolygon}
 \alias{warn.ignored.args}
 \alias{weighted.var}
+\alias{windows.mppm}
 \alias{with.msr}
 \alias{w.quad}               
 \alias{x.quad}
@@ -589,6 +598,7 @@
 \method{[}{splitppx}(x, \dots) <- value
 acedist.show(X, Y, n, d, timelag = 0)
 acedist.noshow(X, Y, n, d)
+active.interactions(object)
 adjustthinrange(ur,vstep,vr)
 affinexy(X, mat = diag(c(1, 1)), vec = c(0, 0), invert=FALSE)
 affinexypolygon(p, mat, vec, detmat)
@@ -627,6 +637,7 @@ breakpts.from.r(r)
 bt.frame(Q, trend=~1, interaction=NULL, \dots, covariates=NULL,
          correction="border", rbord=0, use.gam=FALSE, allcovar=FALSE)
 bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
+cannot.update(\dots)
 cartesian(pp, markset, fac = TRUE)
 cat.factor(\dots, recursive=FALSE)
 cellmiddles(W, nx, ny, npix, gi)
@@ -647,11 +658,9 @@ check.1.real(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
 clarkevansCalc(X, correction, clipregion, working)
-clear.simplepanel(P)
 clip.psp(x, window, check=TRUE)
 cliprect.psp(x, window)
 clippoly.psp(s, window)
-closepairs(X,rmax,ordered,what)
 closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
 \method{compatible}{rat}(A, B, \dots) %DontDeclare
@@ -660,15 +669,14 @@ compileCDF(D, B, r, \dots, han.denom, check)
 compileK(D, r, weights, denom, check, ratio)
 compilepcf(D, r, weights, denom, check, endcorrect, \dots)
 conform.ratfv(x)
-crosspairs(X,Y,rmax,what)
-crosspaircounts(X,Y,r)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
-codetime(x, hms)
+codetime(x, hms, what)
 commasep(x, join)
 conform.imagelist(X, Zlist)
 countingweights(id, areas, check = TRUE)
 damaged.ppm(object)
+data.mppm(x)
 datagen.runifpointOnLines(n, L)
 datagen.runifpoisppOnLines(lambda, L)
 datagen.rpoisppOnLines(lambda, L, lmax, \dots, check=TRUE)
@@ -748,6 +756,7 @@ exactPdt(w)
 explain.ifnot(expr, context)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
+fakecallstring(fname, parlist)
 fave.order(x)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
@@ -766,8 +775,6 @@ fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
 fvlabelmap(x, dot=TRUE)
 fvlegend(object, elang)
-fvnames(X, a)
-fvnames(X, a) <- value
 g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
 greatest.common.divisor(n,m)
@@ -787,7 +794,6 @@ good.correction.K(X)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
 grow.rectangle(W, xmargin=0, ymargin=xmargin)
-grow.simplepanel(P, side, len, new.clicks, new.redraws, \dots, aspect)
 gsubdot(replacement, x)
 handle.r.b.args(r = NULL, breaks = NULL, window, eps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip, edgedefault)
@@ -802,7 +808,10 @@ ifelseXY(test, x, y)
 ifelse1NA(test)
 ifelse0NA(test)
 ifelseNegPos(test, x)
+illegal.iformula(ifmla, itags, dfvarnames)
 implemented.for.K(correction, windowtype, explicit)
+impliedpresence(tags, formula, df, extranames=character(0))
+impliedcoefficients(object, tag)
 inpoint(W)
 inside.range(x, r)
 inside.triangle(x, y, xx, yy)
@@ -827,9 +836,11 @@ is.interact(x)
 \method{is.marked}{default}(\dots)  
 \method{is.marked}{psp}(X, \dots)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
+is.mppm(x)
 \method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
 is.parseable(x)
+\method{is.poisson}{mppm}(x)
 is.pp3(x)
 is.ppx(x)
 is.prime(n)
@@ -846,7 +857,6 @@ km.rs.opt(o, cc, d, breaks, KM, RS)
 kppmMinCon(X, Xname, po, clusters, statistic, statargs, \dots)
 kppmComLik(X, Xname, po, clusters, control, weightfun, rmax, \dots)
 \method{labels}{ppm}(object, \dots)
-layout.boxes(B, n, horizontal, aspect, usefrac)
 least.common.multiple(n,m)
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
@@ -928,6 +938,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
             weightfactor, skip.border)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook)
+\method{multiplicity}{data.frame}(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
 \method{names}{hyperframe}(x)
@@ -947,14 +958,14 @@ n.quad(Q)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)
 nzpaste(\dots, sep, collapse)
+objsurfEngine(objfun, optpar, objargs,
+              \dots, dotargs, objname,
+              ngrid, ratio, verbose)
 offsetsinformula(x)
 onecolumn(m)
 optimStatus(x, call)
 printStatus(x, errors.only)
-redraw.simplepanel(P, verbose)
-run.simplepanel(P, verbose)
 signalStatus(x, errors.only)
-simplepanel(title, B, boxes, clicks, redraws, exit, env)
 ordinal(k)
 a \%orifnull\% b
 outdated.interact(object)
@@ -1019,6 +1030,7 @@ primesbelow(nmax)
 \method{print}{fasp}(x, \dots)
 \method{print}{funxy}(x, \dots)
 \method{print}{fv}(x, \dots)
+\method{print}{fvfun}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)
 \method{print}{interact}(x, \dots, family=TRUE, brief=FALSE)       
@@ -1028,6 +1040,7 @@ primesbelow(nmax)
 \method{print}{linim}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
+\method{print}{mppm}(x, \dots)
 \method{print}{msr}(x, \dots)
 \method{print}{nnfun}(x, \dots)
 \method{print}{parres}(x, \dots)
@@ -1043,12 +1056,14 @@ primesbelow(nmax)
 \method{print}{rmhmodel}(x, \dots)
 \method{print}{rmhstart}(x, \dots)
 \method{print}{rmhInfoList}(x, \dots)
+\method{print}{simplepanel}(x, \dots)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)
+\method{print}{summary.mppm}(x, \dots, brief)
 \method{print}{summary.owin}(x, \dots)
 \method{print}{summary.ppp}(x, \dots, dp=3)
 \method{print}{summary.psp}(x, \dots)
@@ -1060,12 +1075,15 @@ primesbelow(nmax)
 \method{print}{timed}(x, \dots)
 prolongseq(x, newrange)
 quad(data, dummy, w, param)
+quad.mppm(x)
 RandomFieldsSafe()
 ratfv(df, numer, denom, \dots, ratio)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
+reduceformula(fmla, deletevar, verbose)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn)
+resolve.vargamma.shape(\dots, nu.ker, nu.pcf)
 rgbNA(red, green, blue, \dots)
 rhs.of.formula(x, tilde)
 rhohatEngine(model, covariate, reference, volume, \dots,
@@ -1145,7 +1163,7 @@ second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
 second.moment.engine(x, sigma, edge, what, \dots,
       obswin, varcov, npts, debug)
 sensiblevarname(guess, fallback, maxlen)
-sewpcf(d, w, denargs, lambda2area)
+sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
@@ -1179,6 +1197,7 @@ summarise.trend(trend, w, a)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
+\method{summary}{mppm}(object, \dots, brief=FALSE)
 \method{summary}{profilepl}(object, \dots)
 \method{summary}{pppmatching}(object, \dots)
 \method{summary}{ppx}(object, \dots)
@@ -1214,6 +1233,7 @@ verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 verify.xypolygon(p, fatal=TRUE)
 warn.ignored.args(\dots, context)
 weighted.var(x, w, na.rm)
+windows.mppm(x)
 \method{with}{msr}(data, expr, \dots)
 w.quad(Q)               
 x.quad(Q)

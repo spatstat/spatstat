@@ -3,7 +3,7 @@
 #
 #   simulating from Neyman-Scott processes
 #
-#   $Revision: 1.9 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.11 $  $Date: 2013/12/10 06:11:43 $
 #
 #    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 #    Other code and modifications by Adrian Baddeley
@@ -210,17 +210,24 @@ rVarGamma <- local({
   }
 
   # kernel function in polar coordinates
+  kernfun.old <- function(r, nu.ker, omega, eps) {
+    numer <- ((r/omega)^(nu.ker+1)) * besselK(r/omega, nu.ker)
+    denom <- (2^nu.ker) * omega * gamma(nu.ker + 1)
+    numer/denom - eps
+  }
   kernfun <- function(r, nu.ker, omega, eps) {
-    nuhi <- (nu.ker + 1)
-    numer <- ((r/omega)^nuhi) * besselK(r/omega, nu.ker)
-    denom <- (2^nu.ker) * omega * gamma(nuhi)
+    numer <- ((r/omega)^(nu.ker + 1)) * besselK(r/omega, nu.ker)
+    denom <- pi * (2^(nu.ker+1)) * omega^2 * gamma(nu.ker + 1)
     numer/denom - eps
   }
   
   # main function
-  rVarGamma <- function (kappa, nu.ker, omega, mu, win = owin(), eps = 0.001) {
+  rVarGamma <- function (kappa, nu.ker=NULL, omega, mu, win = owin(),
+                         eps = 0.001, nu.pcf=NULL) {
     # nu.ker: smoothness parameter of Variance Gamma kernel function
     # omega: scale parameter of kernel function
+
+    nu.ker <- resolve.vargamma.shape(nu.ker=nu.ker, nu.pcf=nu.pcf)$nu.ker
     
     # determine the maximum radius of clusters
     rmax <- uniroot(kernfun,
@@ -229,7 +236,9 @@ rVarGamma <- local({
     # simulate
     result <- rNeymanScott(kappa, rmax,
                            list(mu, rnmix.gamma), win,
-                           shape = 2 * (nu.ker + 1), rate = 1/(2 * omega^2))
+#                          WAS:  shape = 2 * (nu.ker + 1)
+                           shape = nu.ker + 1,
+                           rate = 1/(2 * omega^2))
     return(result)
   }
 

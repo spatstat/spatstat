@@ -1,24 +1,19 @@
 #  First.R
 #
-#  $Revision: 1.36 $ $Date: 2013/09/23 08:37:30 $
+#  $Revision: 1.37 $ $Date: 2013/11/13 17:18:17 $
 #
-
-.spatstat.Nickname <- "Window Cleaner"
-
-# previous nicknames:
-# 1.32-0: "Logistical Nightmare"
-# 1.33-0: "Titanic Deckchair"
-
 
 .onLoad <- function(...) reset.spatstat.options()
 
 .onAttach <- function(libname, pkgname) {
   store.versionstring.spatstat()
   ver <- versionstring.spatstat()
-  nick <- .spatstat.Nickname
+  ni <- read.dcf(file=system.file("DESCRIPTION", package="spatstat"),
+                 fields="Nickname")
+  ni <- as.character(ni)
   msg <- paste("\nspatstat", ver,
                "     ",
-               paren(paste("nickname:", sQuote(nick))),
+               paren(paste("nickname:", sQuote(ni))),
                "\nFor an introduction to spatstat, type",
                sQuote("beginner"))
   packageStartupMessage(msg)

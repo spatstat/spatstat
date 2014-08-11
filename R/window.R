@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.134 $	$Date: 2013/10/06 04:28:29 $
+#	$Revision: 4.135 $	$Date: 2013/11/12 09:30:10 $
 #
 #
 #	A window may be either
@@ -711,6 +711,12 @@ bounding.box <- function(...) {
                        "you probably wanted bounding.box.xy()"))
         }
 
+        # remove null objects 
+        isnul <- unlist(lapply(wins, is.null))
+        if(all(isnul))
+          stop("All arguments are NULL")
+        wins <- wins[!isnul]
+        
         if(length(wins) > 1) {
           # multiple arguments -- compute bounding box for each argument.
           # First trap any point patterns and extract bounding boxes of points

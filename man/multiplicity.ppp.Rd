@@ -1,17 +1,24 @@
 \name{multiplicity.ppp}
+\alias{multiplicity}
 \alias{multiplicity.ppp}
+\alias{multiplicity.ppx}
 \title{Count Multiplicity of Duplicate Points}
 \description{
   Counts the number of duplicates for each point
   in a spatial point pattern.
 }
 \usage{
- multiplicity.ppp(x)
+ multiplicity(x)
+
+ \method{multiplicity}{ppp}(x)
+
+ \method{multiplicity}{ppx}(x)
 }
 \arguments{
   \item{x}{
     A spatial point pattern
-    (object of class \code{"ppp"}).
+    (object of class \code{"ppp"} or \code{"ppx"})
+    or some other type of spatial object.
   }
 }
 \value{
@@ -35,7 +42,7 @@
 }
 \examples{
    X <- ppp(c(1,1,0.5), c(2,2,1), window=square(3))
-   m <- multiplicity.ppp(X)
+   m <- multiplicity(X)
 
    # unique points in X, marked by multiplicity
    first <- !duplicated(X)

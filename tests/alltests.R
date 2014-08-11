@@ -34,6 +34,8 @@ local({
   if(any(nw5 != nw5P))
     stop("nnwhich.ppp(k=5) does not agree with pairdist")
 
+  # Three dimensions
+
   X <- runifpoint3(42)
 
   nn <- nndist(X)
@@ -118,7 +120,22 @@ local({
   if(any(ncw != cdw))
     stop("For sorted data, nncross()$which does not agree with apply(crossdist(), 1, which.min)")
 
-  # test of nngrid.h and knngrid.h
+  # sanity check for nncross with k > 1
+  ndw <- nncross(X, Y, k=1:4)$which
+  if(any(is.na(ndw)))
+    stop("NA's returned by nncross.ppp(k > 1)$which")
+  ndw <- nncross(X, Y, k=1:4, what="which")
+  if(any(is.na(ndw)))
+    stop("NA's returned by nncross.ppp(k > 1, what='which')")
+  
+  # test of correctness for nncross with k > 1
+  flipcells <- flipxy(cells)
+  calcwhich <- nncross(cells, flipcells, k=1:4, what="which")
+  truewhich <- t(apply(crossdist(cells,flipcells), 1, order))[,1:4]
+  if(any(calcwhich != truewhich))
+    stop("nncross(k > 1) gives wrong answer")
+  
+  # test of agreement between nngrid.h and knngrid.h
   #    dimyx=23 (found by trial-and-error) ensures that there are no ties 
   a <- as.matrix(nnmap(cells, what="which", dimyx=23))
   b <- as.matrix(nnmap(cells, what="which", dimyx=23, k=1:2)[[1]])
@@ -282,6 +299,14 @@ local({
   ss <- summary(ljtrmod)
 })
 
+local({
+  # From Ege
+  # Degenerate but non-null argument 'covariates'
+  xx <- list()
+  names(xx) <- character(0)
+  fit <- ppm(cells, ~x, covariates = xx)
+  st <- summary(fit) 
+})
 #
 #   tests/ppmgam.R
 #
@@ -298,6 +323,31 @@ local({
   v <- vcov(fit)
 })
 
+#
+#  ppmlogi.R
+#
+# Tests of ppm(method='logi')
+#
+# $Revision: 1.2 $  Date$
+#
+
+require(spatstat)
+local({
+  fit <- ppm(cells, ~x, method="logi")
+  f <- fitted(fit)
+  p <- predict(fit)
+  fitS <- ppm(cells, ~x, Strauss(0.08), method="logi")
+  fS <- fitted(fitS)
+  pS <- predict(fitS)
+  if(spatstat.options("allow.logi.influence")) {
+    a <- leverage(fit)
+    b <- influence(fit)
+    d <- dfbetas(fit)
+    aS <- leverage(fitS)
+    bS <- influence(fitS)
+    dS <- dfbetas(fitS)
+  }
+})
 # ppmmarkorder.R
 # $Revision: 1.2 $  $Date: 2011/12/05 07:29:16 $
 # Test that predict.ppm, plot.ppm and plot.fitin
@@ -350,6 +400,23 @@ local({
   
   fit <- ppm(cells, ~1, Strauss(0.1), skip.border=TRUE)
 
+})
+
+#
+# tests/prediction.R
+#
+# Things that might go wrong with predict()
+#
+#  $Revision: 1.1 $ $Date: 2013/11/12 16:06:11 $
+#
+
+require(spatstat)
+
+local({
+  # test of 'covfunargs'
+  f <- function(x,y,a){ y - a }
+  fit <- ppm(cells, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
+  p <- predict(fit)
 })
 
 #
@@ -1798,3 +1865,50 @@ local({
 
 
 
+#
+# tests/mppm.R
+#
+# Basic tests of mppm
+#
+# $Revision: 1.1 $ $Date: 2013/11/10 08:59:08 $
+# 
+
+require(spatstat)
+
+local({
+# test interaction formulae and subfits
+fit1 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
+            iformula=~ifelse(group=="control", po, str))
+fit2 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
+            iformula=~id * str)
+fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))), iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
+fit1
+fit2
+fit3
+subfits(fit1)
+subfits(fit2)
+subfits(fit3)
+
+# test handling of offsets and zero cif values in mppm
+
+ data(waterstriders)
+ H <- hyperframe(Y = waterstriders)
+ mppm(Y ~ 1,  data=H, Hardcore(1.5))
+ mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+})
+# tests/ppx.R
+#
+# Test operations for ppx objects
+#
+#  $Revision: 1.1 $ $Date: 2013/11/19 03:36:27 $
+#
+
+require(spatstat)
+
+local({
+  df <- data.frame(x=c(1,2,2,1), y=c(1,2,3,1), z=c(2,3,4,2))
+  X <- ppx(data=df, coord.type=rep("s", 3), domain=box3())
+  unique(X)
+  duplicated(X)
+  multiplicity(X)
+})

@@ -191,7 +191,6 @@ volume.box3 <- function(x) {
   with(x, prod(diff(xrange), diff(yrange), diff(zrange)))
 }
 
-
 runifpoint3 <- function(n, domain=box3()) {
   domain <- as.box3(domain)
   x <- with(domain, runif(n, min=xrange[1], max=xrange[2]))
@@ -208,3 +207,6 @@ rpoispp3 <- function(lambda, domain=box3()) {
   n <- rpois(1, lambda * v)
   runifpoint3(n, domain=domain)
 }
+
+
+

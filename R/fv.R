@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.95 $   $Date: 2013/07/05 06:13:24 $
+#    $Revision: 1.97 $   $Date: 2013/11/16 08:02:00 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -875,12 +875,58 @@ reconcile.fv <- function(...) {
   return(z)
 }
 
-as.function.fv <- function(x, ..., value, extrapolate=FALSE) {
+as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
+  trap.extra.arguments(...)
+  # extract function argument
   xx <- with(x, .x)
-  yy <- if(!missing(value) && value %in% names(x)) x[[value]] else with(x, .y)
-  endrule <- if(!extrapolate) 1 else 2
-  f <- approxfun(xx, yy, rule=endrule)
+  # extract all function values 
+  yy <- as.data.frame(x)[, fvnames(x, "*"), drop=FALSE]
+  # determine which value(s) to supply
+  if(!is.character(value))
+    stop("value should be a character string or vector specifying columns of x")
+  if(!all(value %in% colnames(yy))) {
+    expandvalue <- try(fvnames(x, value))
+    if(!inherits(expandvalue, "try-error")) {
+      value <- expandvalue
+    } else stop("Unable to determine columns of x")
+  }
+  yy <- yy[,value]
+  argname <- fvnames(x, ".x")
+  endrule <- if(extrapolate) 1 else 2
+  if(length(value) == 1) {
+    # make a single 'approxfun' and return it
+    f <- approxfun(xx, yy, rule=endrule)
+    # magic
+    names(formals(f))[1] <- argname
+    body(f)[[4]] <- as.name(argname)
+  } else {
+    # make a list of 'approxfuns' 
+    funs <- lapply(yy,
+                   function(z, u, endrule) { approxfun(x=u, y=z, rule=endrule)},
+                   u=xx,
+                   endrule=endrule)
+    # return a function which selects the appropriate 'approxfun' and executes
+    f <- function(x, what=value) {
+      what <- match.arg(what)
+      funs[[what]](x)
+    }
+    # magic
+    formals(f)[[2]] <- value
+    names(formals(f))[1] <- argname
+    body(f)[[3]][[2]] <- as.name(argname)
+  }
+  class(f) <- c("fvfun", class(f))
+  attr(f, "fname") <- attr(x, "fname")
+  attr(f, "yexp") <- attr(x, "yexp")
   return(f)
+}
+
+print.fvfun <- function(x, ...) {
+  y <- args(x)
+  yexp <- as.expression(attr(x, "yexp"))
+  body(y) <- as.name(paste("Returns interpolated value of", yexp))
+  print(y, ...)
+  return(invisible(NULL))
 }
 
 findcbind <- function(root, depth=0, maxdepth=1000) {

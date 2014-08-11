@@ -146,13 +146,13 @@
   Convenient abbreviations which can be used in the formula
   are 
   \itemize{
-    \item the symbol \code{.} which represents all
-    the variables in the data frame (other than the function argument
-    itself);
+    \item the symbol \code{.} which represents all the
+    columns in the data frame that will be plotted by default;
     \item the symbol \code{.x} which represents the function argument;
     \item the symbol \code{.y} which represents the recommended value
     of the function.
   }
+  For further information, see \code{\link{fvnames}}.
 
   The value returned by this plot function indicates the
   meaning of the line types and colours in the plot. It can be used

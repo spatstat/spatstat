@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.28 $  $Date: 2013/08/29 04:18:37 $
+#  $Revision: 1.30 $  $Date: 2013/11/11 15:19:52 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -136,11 +136,27 @@ print.msr <- function(x, ...) {
   return(invisible(NULL))
 }
 
+integral.msr <- function(x, ...) {
+  stopifnot(inherits(x, "msr"))
+  y <- with(x, "increment")
+  if(is.matrix(y)) apply(y, 2, sum) else sum(y)
+}
+  
 plot.msr <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   d <- ncol(as.matrix(x$val))  
   if(d == 1) {
-    smo <- Smooth(x$loc %mark% x$density, sigma=max(nndist(x$loc)), ...)
+    # smooth the density unless it is flat
+    if(diff(range(x$density)) > sqrt(.Machine$double.eps) ||
+       "sigma" %in% names(list(...))) {
+      sigma0 <- max(nndist(x$loc))
+      smo <- do.call("Smooth",
+                     resolve.defaults(list(X=x$loc %mark% x$density),
+                                      list(...),
+                                      list(sigma=sigma0)))
+    } else {
+      smo <- as.im(mean(x$density), W=as.owin(x$loc))
+    }
     xtra <- unique(c(names(formals(plot.default)),
                      names(formals(image.default)),
                      "box"))

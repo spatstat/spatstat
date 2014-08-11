@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.26 $ $Date: 2013/07/14 07:08:20 $
+# $Revision: 1.28 $ $Date: 2013/12/12 05:17:44 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -140,39 +140,65 @@ plot.colourmap <- local({
   axisparams <- c("cex", 
                   "cex.axis", "cex.lab",
                   "col.axis", "col.lab",
-                  "font.axis", "font.lab")
+                  "font.axis", "font.lab",
+                  "las", "mgp", "xaxp", "yaxp",
+                  "tck", "tcl", "xpd")
+
+  linmap <- function(x, from, to) {
+    to[1] + diff(to) * (x - from[1])/diff(from)
+  }
+
+  # rules to determine the ribbon dimensions when one dimension is given
+  widthrule <- function(heightrange, separate, n, gap) {
+    if(separate) 1 else diff(heightrange)/10
+  }
+  heightrule <- function(widthrange, separate, n, gap) {
+    (if(separate) (n + (n-1)*gap) else 10) * diff(widthrange) 
+  }
 
   plot.colourmap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
-                             labelmap=NULL) {
+                             labelmap=NULL, gap=0.25, add=FALSE) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     stuff <- attr(x, "stuff")
     col <- stuff$outputs
     n   <- stuff$n
     discrete <- stuff$discrete
-  #
+    if(discrete) {
+      check.1.real(gap, "In plot.colourmap")
+      explain.ifnot(gap >= 0, "In plot.colourmap")
+    }
+    separate <- discrete && (gap > 0)
     if(is.null(labelmap)) {
       labelmap <- function(x) x
     } else if(is.numeric(labelmap) && length(labelmap) == 1 && !discrete) {
       labscal <- labelmap
       labelmap <- function(x) { x * labscal }
     } else stopifnot(is.function(labelmap))
-  
+
     # determine pixel entries 'v' and colour map breakpoints 'bks'
     # to be passed to 'image.default'
     if(!discrete) {
+      # real numbers: continuous ribbon
       bks <- stuff$breaks
       rr <- range(bks)
       v <- seq(from=rr[1], to=rr[2], length.out=max(n+1, 1024))
-    } else {
+    } else if(!separate) {
+      # discrete values: blocks of colour, run together
       v <- (1:n) - 0.5
       bks <- 0:n
       rr <- c(0,n)
+    } else {
+      # discrete values: separate blocks of colour
+      vleft <- (1+gap) * (0:(n-1))
+      vright <- vleft + 1
+      v <- vleft + 0.5
+      rr <- c(0, n + (n-1)*gap)
     }
-    # determine position of ribbon
+    # determine position of ribbon or blocks of colour
     if(is.null(xlim) && is.null(ylim)) {
-      u <- diff(rr)/10
+      u <- widthrule(rr, separate, n, gap)
       if(!vertical) {
         xlim <- rr
         ylim <- c(0,u)
@@ -182,34 +208,81 @@ plot.colourmap <- local({
       }
     } else if(is.null(ylim)) {
       if(!vertical) 
-        ylim <- c(0, diff(xlim)/10)
+        ylim <- c(0, widthrule(xlim, separate, n, gap))
       else 
-        ylim <- c(0, 10 * diff(xlim))
+        ylim <- c(0, heightrule(xlim, separate, n, gap))
     } else if(is.null(xlim)) {
       if(!vertical) 
-        xlim <- c(0, 10 * diff(ylim))
+        xlim <- c(0, heightrule(ylim, separate, n, gap))
       else 
-        xlim <- c(0, diff(ylim)/10)
-    }
-    # plot ribbon image
-    linmap <- function(x, from, to) {
-      to[1] + diff(to) * (x - from[1])/diff(from)
-    }
-    if(!vertical) {
-      # horizontal colour ribbon
-      x <- linmap(v, rr, xlim)
-      y <- ylim
-      z <- matrix(v, ncol=1)
-      do.call.matched("image.default",
-                      resolve.defaults(list(x=x, y=y, z=z),
+        xlim <- c(0, widthrule(ylim, separate, n, gap))
+    } 
+
+    # .......... initialise plot ...............................
+    if(!add)
+      do.call.matched("plot.default",
+                      resolve.defaults(list(x=xlim, y=ylim,
+                                            type="n", main=main,
+                                            axes=FALSE, xlab="", ylab="",
+                                            asp=1.0),
+                                       list(...)))
+    
+    if(separate) {
+      # ................ plot separate blocks of colour .................
+      if(!vertical) {
+        # horizontal arrangement of blocks
+        xleft <- linmap(vleft, rr, xlim)
+        xright <- linmap(vright, rr, xlim)
+        y <- ylim
+        z <- matrix(1, 1, 1)
+        for(i in 1:n) {
+          x <- c(xleft[i], xright[i])
+          do.call.matched("image.default",
+                      resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
-                                       list(main=main,
-                                            xlim=xlim, ylim=ylim, asp=1.0,
-                                            ylab="", xlab="", axes=FALSE,
-                                            breaks=bks, col=col)),
+                                       list(col=col[i])),
                       extrargs=imageparams)
-      if(axis) {
-        # add horizontal axis
+                          
+        }
+      } else {
+        # vertical arrangement of blocks
+        x <- xlim 
+        ylow <- linmap(vleft, rr, ylim)
+        yupp <- linmap(vright, rr, ylim)
+        z <- matrix(1, 1, 1)
+        for(i in 1:n) {
+          y <- c(ylow[i], yupp[i])
+          do.call.matched("image.default",
+                      resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
+                                       list(...),
+                                       list(col=col[i])),
+                      extrargs=imageparams)
+                          
+        }
+      }
+    } else {
+      # ................... plot ribbon image .............................
+      if(!vertical) {
+        # horizontal colour ribbon
+        x <- linmap(v, rr, xlim)
+        y <- ylim
+        z <- matrix(v, ncol=1)
+      } else {
+        # vertical colour ribbon
+        y <- linmap(v, rr, ylim)
+        z <- matrix(v, nrow=1)
+        x <- xlim
+      }
+      do.call.matched("image.default",
+                      resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
+                                       list(...),
+                                       list(breaks=bks, col=col)),
+                      extrargs=imageparams)
+    }
+    if(axis) {
+      # ................. draw annotation ..................
+      if(!vertical) {
+          # add horizontal axis/annotation
         if(discrete) {
           la <- paste(labelmap(stuff$inputs))
           at <- linmap(v, rr, xlim)
@@ -220,28 +293,19 @@ plot.colourmap <- local({
         }
         # default axis position is below the ribbon (side=1)
         sidecode <- resolve.1.default("side", list(...), list(side=1))
+        if(!(sidecode %in% c(1,3)))
+          warning(paste("side =", sidecode,
+                        "is not consistent with horizontal orientation"))
         pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        # don't draw axis lines if plotting separate blocks
+        lwd0 <- if(separate) 0 else 1
         # draw axis
         do.call.matched("axis",
                         resolve.defaults(list(...),
                                          list(side = 1, pos = pos, at = at),
-                                         list(labels=la)),
+                                         list(labels=la, lwd=lwd0)),
                         extrargs=axisparams)
-      }
-    } else {
-      # vertical colour ribbon
-      y <- linmap(v, rr, ylim)
-      z <- matrix(v, nrow=1)
-      x <- xlim
-      do.call.matched("image.default",
-                      resolve.defaults(list(x=x, y=y, z=z),
-                                       list(...),
-                                       list(main=main,
-                                            ylim=ylim, xlim=xlim, asp=1.0,
-                                            ylab="", xlab="", axes=FALSE,
-                                            breaks=bks, col=col)),
-                      extrargs=imageparams)
-      if(axis) {
+      } else {
         # add vertical axis
         if(discrete) {
           la <- paste(labelmap(stuff$inputs))
@@ -253,12 +317,19 @@ plot.colourmap <- local({
         }
         # default axis position is to the right of ribbon (side=4)
         sidecode <- resolve.1.default("side", list(...), list(side=4))
+        if(!(sidecode %in% c(2,4)))
+          warning(paste("side =", sidecode,
+                        "is not consistent with vertical orientation"))
         pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        # don't draw axis lines if plotting separate blocks
+        lwd0 <- if(separate) 0 else 1
+        # draw labels horizontally if plotting separate blocks
+        las0 <- if(separate) 1 else 0
         # draw axis
         do.call.matched("axis",
                         resolve.defaults(list(...),
                                          list(side=4, pos=pos, at=at),
-                                         list(labels=la)),
+                                         list(labels=la, lwd=lwd0, las=las0)),
                         extrargs=axisparams)
       }
     }

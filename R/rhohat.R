@@ -490,10 +490,6 @@ predict.rhohat <- function(object, ..., relative=FALSE) {
   return(Y)
 }
 
-as.function.rhohat <- function(x, ..., value, extrapolate=TRUE) {
-  xx <- with(x, .x)
-  yy <- if(!missing(value) && value %in% names(x)) x[[value]] else with(x, .y)
-  endrule <- if(!extrapolate) 1 else 2
-  f <- approxfun(xx, yy, rule=endrule)
-  return(f)
+as.function.rhohat <- function(x, ..., value=".y", extrapolate=TRUE) {
+  NextMethod("as.function")
 }

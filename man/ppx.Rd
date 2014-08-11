@@ -9,7 +9,7 @@
   with any kind of coordinates and marks.
 }
 \usage{
-ppx(data, domain=NULL, coord.type=NULL)
+ppx(data, domain=NULL, coord.type=NULL, simplify=FALSE)
 }
 \arguments{
   \item{data}{
@@ -29,6 +29,16 @@ ppx(data, domain=NULL, coord.type=NULL)
     \code{"temporal"},
     \code{"local"} and
     \code{"mark"}.
+  }
+  \item{simplify}{
+    Logical value indicating whether to simplify the result
+    in special cases.
+    If \code{simplify=TRUE}, a two-dimensional point pattern
+    will be returned as an object of class \code{"ppp"},
+    and a three-dimensional point pattern will be returned as
+    an object of class \code{"pp3"}.
+    If \code{simplify=FALSE} (the default) then the result is always
+    an object of class \code{"ppx"}.
   }
 }
 \details{
@@ -59,7 +69,9 @@ ppx(data, domain=NULL, coord.type=NULL)
   spatial coordinates, while other columns are assumed to be marks.
 }
 \value{
-  An object of class \code{"ppx"}.
+  Usually an object of class \code{"ppx"}.
+  If \code{simplify=TRUE} the result may be an object of
+  class \code{"ppp"} or \code{"pp3"}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

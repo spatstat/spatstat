@@ -10,6 +10,7 @@ chicago
 chorley: chorley chorley.extra
 clmfires: clmcov100 clmcov200 clmfires
 copper
+demohyper
 demopat
 finpines
 flu
@@ -31,13 +32,16 @@ nztrees
 osteo
 paracou
 ponderosa: ponderosa ponderosa.extra
+pyramidal
 redwood
 redwoodfull: redwoodfull redwoodfull.extra
 residualspaper
 shapley: shapley shapley.extra
+simba
 simdat
 simplenet
 spruces
 swedishpines
 urkiola
 waka
+waterstriders

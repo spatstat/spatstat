@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.28 $	$Date: 2013/09/22 05:49:03 $
+#    $Revision: 2.29 $	$Date: 2013/11/22 01:01:39 $
 #
 #    The Strauss process
 #
@@ -118,7 +118,10 @@ strausscounts <- function(U, X, r, EqualPairs=NULL) {
 }
 
 crosspaircounts <- function(X, Y, r) {
-  stopifnot(is.numeric(r))
+  stopifnot(is.ppp(X))
+  stopifnot(is.numeric(r) && length(r) == 1)
+  stopifnot(is.finite(r))
+  stopifnot(r >= 0)
   # sort in increasing order of x coordinate
   oX <- fave.order(X$x)
   oY <- fave.order(Y$x)
@@ -128,7 +131,7 @@ crosspaircounts <- function(X, Y, r) {
   nY <- npoints(Y)
   # call C routine
   DUP <- spatstat.options("dupC")
-  out <- .C("closepaircounts",
+  out <- .C("Ccrosspaircounts",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
             ysource  = as.double(Xsort$y),
@@ -143,3 +146,27 @@ crosspaircounts <- function(X, Y, r) {
   answer[oX] <- out$counts
   return(answer)
 }
+
+closepaircounts <- function(X, r) {
+  stopifnot(is.ppp(X))
+  stopifnot(is.numeric(r) && length(r) == 1)
+  stopifnot(is.finite(r))
+  stopifnot(r >= 0)
+  # sort in increasing order of x coordinate
+  oX <- fave.order(X$x)
+  Xsort <- X[oX]
+  nX <- npoints(X)
+  # call C routine
+  DUP <- spatstat.options("dupC")
+  out <- .C("Cclosepaircounts",
+            nxy    = as.integer(nX),
+            x      = as.double(Xsort$x),
+            y      = as.double(Xsort$y),
+            rmaxi  = as.double(r),
+            counts = as.integer(integer(nX)),
+            DUP    = DUP)
+  answer <- integer(nX)
+  answer[oX] <- out$counts
+  return(answer)
+}
+

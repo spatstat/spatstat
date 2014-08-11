@@ -1,7 +1,7 @@
 #
 #   pcfmulti.inhom.R
 #
-#   $Revision: 1.8 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.10 $   $Date: 2013/12/06 09:15:30 $
 #
 #   inhomogeneous multitype pair correlation functions
 #
@@ -112,11 +112,20 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
 
   correction <- implemented.for.K(correction, win$type, correction.given)
   
+  # bandwidth  
   if(is.null(bw) && kernel=="epanechnikov") {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
     h <- stoyan /sqrt(npts/area)
+    hmax <- h
     # conversion to standard deviation
     bw <- h/sqrt(5)
+  } else if(is.numeric(bw)) {
+    # standard deviation of kernel specified
+    # upper bound on half-width
+    hmax <- 3 * bw
+  } else {
+    # data-dependent bandwidth selection: guess upper bound on half-width
+    hmax <- 2 * stoyan /sqrt(npts/area)
   }
 
   ##########  indices I and J  ########################
@@ -195,20 +204,16 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   ########## smoothing parameters for pcf ############################  
   # arguments for 'density'
 
-  from <- 0
-  to <- max(r)
-  nr <- length(r)
-  
   denargs <- resolve.defaults(list(kernel=kernel, bw=bw),
                               list(...),
-                              list(n=nr, from=from, to=to))
+                              list(n=length(r), from=0, to=rmax))
   
   #################################################
   
   # compute pairwise distances
   
 # identify close pairs of points
-  close <- crosspairs(XI, XJ, max(r))
+  close <- crosspairs(XI, XJ, rmax+hmax)
 # map (i,j) to original serial numbers in X
   orig <- seq_len(npts)
   imap <- orig[I]

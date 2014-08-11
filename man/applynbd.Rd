@@ -6,7 +6,7 @@
   and apply a given function to them.
 }
 \usage{
-   applynbd(X, FUN, N, R, criterion, exclude=FALSE, \dots)
+   applynbd(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, \dots)
 }
 \arguments{
   \item{X}{
@@ -23,20 +23,17 @@
     Integer. If this argument is present,
     the neighbourhood of a point of \code{X} is defined to consist of the
     \code{N} points of \code{X} which are closest to it.
-    This argument is incompatible with \code{R} and \code{criterion}.
   }
   \item{R}{
     Nonnegative numeric value. If this argument is present,
     the neighbourhood of a point of \code{X} is defined to consist of
     all points of \code{X} which lie within a distance \code{R}
     of it.
-    This argument is incompatible with \code{N} and \code{criterion}.
   }
   \item{criterion}{
     Function. If this argument is present, 
     the neighbourhood of a point of \code{X} is determined by
     evaluating this function. See under \bold{Details}.
-    This argument is incompatible with \code{N} and \code{R}.
   }
   \item{exclude}{
     Logical. If \code{TRUE} then the point currently being visited
@@ -67,8 +64,7 @@
   and collects the values returned by \code{FUN}.
 
   The definition of ``neighbours'' depends on the arguments
-  \code{N}, \code{R} and \code{criterion}, exactly one of which
-  must be given.
+  \code{N}, \code{R} and \code{criterion}.
   Also the argument \code{exclude} determines whether
   the current point is excluded from its own neighbourhood.
 
@@ -94,6 +90,14 @@
     as \code{dist} and \code{drank} whose \code{i}-th entry is
     \code{TRUE} if the corresponding point should be included in
     the neighbourhood. See the examples below.
+    \item
+    If more than one of the arguments \code{N}, \code{R} and
+    \code{criterion} is given, the neighbourhood is defined as
+    the \emph{intersection} of the neighbourhoods specified by these arguments.
+    For example if \code{N=3} and \code{R=5} then the neighbourhood
+    is formed by finding the 3 nearest neighbours of current point,
+    and retaining only those neighbours which lie closer than 5 units
+    from the current point.
   }
 
   When \code{applynbd} is executed, 

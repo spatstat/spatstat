@@ -9,6 +9,7 @@
 #
 
 plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
+                      type = c("w", "n"), 
                       hatch=FALSE, angle=45, spacing=diameter(x)/50,
                       invert=FALSE)
 {
@@ -19,8 +20,10 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
     main <- short.deparse(substitute(x))
   W <- x
   verifyclass(W, "owin")
-  if(missing(box))
-    box <- (W$type == "mask")
+  type <- match.arg(type)
+  
+  if(missing(box) || is.null(box))
+    box <- is.mask(W)
   else
     stopifnot(is.logical(box) && length(box) == 1)
 
@@ -81,8 +84,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                      list(...)))
   
 # If type = "n", do not plot the window.
-    type <- resolve.defaults(list(...), list(type=NULL))$type
-    if(!is.null(type) && type == "n")
+    if(type == "n")
       return(invisible(NULL))
 
   

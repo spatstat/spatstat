@@ -405,14 +405,14 @@ rbind.hyperframe <- function(...) {
   return(out)
 }
 
-plot.hyperframe <- function(x, e, ..., main, arrange=TRUE,
-                            nrows=NULL, ncols=NULL,
-                            parargs=list(mar=c(1,1,3,1) * marsize),
-                            marsize=0.1) {
+plot.hyperframe <-
+  function(x, e, ..., main, arrange=TRUE,
+           nrows=NULL, ncols=NULL,
+           parargs=list(mar=c(1,1,3,1) * marsize),
+           marsize=0.1) {
   xname <- short.deparse(substitute(x))
   main <- if(!missing(main)) main else xname
-  ee <- as.expression(substitute(e))
-  
+
   if(missing(e)) {
     # default: plot first column that contains objects
     ok <- (summary(x)$storage %in% c("hypercolumn", "hyperatom"))
@@ -431,8 +431,13 @@ plot.hyperframe <- function(x, e, ..., main, arrange=TRUE,
     }
   }
 
-  # No arrangement: just evaluate the plot expression 'nr' times
+  if(!is.language(e))
+    stop(paste("Argument e should be a call or an expression;",
+               "use quote(...) or expression(...)"))
+  ee <- as.expression(e)
+
   if(!arrange) {
+    # No arrangement specified: just evaluate the plot expression 'nr' times
     with(x, ee=ee)
     return(invisible(NULL))
   }
@@ -486,7 +491,8 @@ plot.hyperframe <- function(x, e, ..., main, arrange=TRUE,
   par(opa)
   return(invisible(NULL))
 }
-  
+
+
 str.hyperframe <- function(object, ...) {
   d <- dim(object)
   x <- unclass(object)

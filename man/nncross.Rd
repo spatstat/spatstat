@@ -159,6 +159,13 @@
   plot(superimpose(X=X,Y=Y), main="nncross", cols=c("red","blue"))
   arrows(X$x, X$y, Y[N]$x, Y[N]$y, length=0.15)
 
+  # third-nearest neighbour
+  NXY <- nncross(X, Y, k=3)
+  NXY[1:3,]
+  # second and third nearest neighbours
+  NXY <- nncross(X, Y, k=2:3)
+  NXY[1:3,]
+
   # two patterns with some points in common
   Z <- runifpoint(50)
   X <- Z[1:30]

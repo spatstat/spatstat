@@ -3,276 +3,303 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.63 $   $Date: 2013/06/17 03:59:56 $
+#    $Revision: 1.65 $   $Date: 2013/11/12 16:31:54 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
 #
-summary.ppm <- function(object, ..., quick=FALSE) {
-  verifyclass(object, "ppm")
 
-  x <- object
-  y <- list()
+summary.ppm <- local({
   
-  #######  Extract main data components #########################
-
-  QUAD <- object$Q
-  DATA <- QUAD$data
-  TREND <- x$trend
-
-  INTERACT <- x$interaction
-  if(is.null(INTERACT)) INTERACT <- Poisson()
+  covtype <- function(x) {
+    if(is.im(x)) "im" else
+    if(is.function(x)) "function" else
+    if(is.owin(x)) "owin" else
+    if(is.numeric(x) && length(x) == 1) "number" else
+    if(is.factor(x)) "factor" else
+    if(is.integer(x)) "integer" else
+    if(is.numeric(x)) "numeric" else storage.mode(x)
+  }
   
-  #######  Check version #########################
+  xargs <- function(f) {
+    ar <- names(formals(f))[-(1:2)]
+    return(ar[ar != "..."])
+  }
 
-  mpl.ver <- versionstring.ppm(object)
-  int.ver <- versionstring.interact(INTERACT)
-  current <- versionstring.spatstat()
+  summary.ppm <- function(object, ..., quick=FALSE) {
+    verifyclass(object, "ppm")
 
-  virgin <- min(package_version(c(mpl.ver, int.ver)))
-
-  y$antiquated <- antiquated <- (virgin <= package_version("1.5"))
-  y$old        <- old        <- (virgin < majorminorversion(current))
-
-  y$version    <- as.character(virgin)
-                
-  ####### Determine type of model ############################
+    x <- object
+    y <- list()
   
-  y$entries <- list()
-  y$no.trend <- identical.formulae(TREND, NULL) || identical.formulae(TREND, ~1)
-  y$trendvar <- trendvar <- variablesinformula(TREND)
-  y$stationary <- y$no.trend || all(trendvar == "marks")
+    #######  Extract main data components #########################
 
-  y$poisson <- is.poisson.interact(INTERACT)
+    QUAD <- object$Q
+    DATA <- QUAD$data
+    TREND <- x$trend
 
-  y$marked <- is.marked.ppp(DATA)
-  y$multitype <- is.multitype.ppp(DATA)
-  y$marktype <- if(y$multitype) "multitype" else
-                if(y$marked) "marked" else "unmarked"
-
-  if(y$marked) y$entries$marks <- marks(DATA)
-
-  y$name <- paste(
-          if(y$stationary) "Stationary " else "Nonstationary ",
-          if(y$poisson) {
-            if(y$multitype) "multitype "
-            else if(y$marked) "marked "
-            else ""
-          },
-          INTERACT$name,
-          sep="")
-
-  ######  Fitting algorithm ########################################
-
-  y$method <- x$method
+    INTERACT <- x$interaction
+    if(is.null(INTERACT)) INTERACT <- Poisson()
   
-  y$problems <- x$problems
-
-  y$fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
-  if(y$fitter %in% c("glm", "gam"))
-    y$converged <- x$internal$glmfit$converged
-
-  ######  Coefficients were changed after fit? #####################
-  
-  y$projected <- identical(x$projected, TRUE)
-  y$changedcoef <- y$projected || !is.null(x$coef.orig)
-
-  ######  Extract fitted model coefficients #########################
-
-  y$entries$coef <- COEFS <- x$coef
-  y$coef.orig <- x$coef.orig
-
-  y$entries$Vnames <- Vnames <- x$internal$Vnames
-  y$entries$IsOffset <- x$internal$IsOffset
-
-  ###### Extract fitted interaction and summarise  #################
-  
-  FITIN <- fitin(x)
-  y$interaction <- summary(FITIN)
-
-  # Exit here if quick=TRUE
+    #######  Check version #########################
     
-  if(identical(quick, TRUE)) {
+    mpl.ver <- versionstring.ppm(object)
+    int.ver <- versionstring.interact(INTERACT)
+    current <- versionstring.spatstat()
+
+    virgin <- min(package_version(c(mpl.ver, int.ver)))
+    
+    y$antiquated <- antiquated <- (virgin <= package_version("1.5"))
+    y$old        <- old        <- (virgin < majorminorversion(current))
+
+    y$version    <- as.character(virgin)
+    
+    ####### Determine type of model ############################
+  
+    y$entries <- list()
+    y$no.trend <- identical.formulae(TREND, NULL) ||
+                  identical.formulae(TREND, ~1)
+    y$trendvar <- trendvar <- variablesinformula(TREND)
+    y$stationary <- y$no.trend || all(trendvar == "marks")
+
+    y$poisson <- is.poisson.interact(INTERACT)
+
+    y$marked <- is.marked.ppp(DATA)
+    y$multitype <- is.multitype.ppp(DATA)
+    y$marktype <- if(y$multitype) "multitype" else
+                  if(y$marked) "marked" else "unmarked"
+
+    if(y$marked) y$entries$marks <- marks(DATA)
+
+    y$name <- paste(if(y$stationary) "Stationary " else "Nonstationary ",
+                    if(y$poisson) {
+                      if(y$multitype) "multitype "
+                      else if(y$marked) "marked "
+                      else ""
+                    },
+                    INTERACT$name,
+                    sep="")
+
+    ######  Fitting algorithm ########################################
+
+    y$method <- x$method
+  
+    y$problems <- x$problems
+
+    y$fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
+    if(y$fitter %in% c("glm", "gam"))
+      y$converged <- x$internal$glmfit$converged
+
+    ######  Coefficients were changed after fit? #####################
+  
+    y$projected <- identical(x$projected, TRUE)
+    y$changedcoef <- y$projected || !is.null(x$coef.orig)
+
+    ######  Extract fitted model coefficients #########################
+
+    y$entries$coef <- COEFS <- x$coef
+    y$coef.orig <- x$coef.orig
+
+    y$entries$Vnames <- Vnames <- x$internal$Vnames
+    y$entries$IsOffset <- x$internal$IsOffset
+
+    ###### Extract fitted interaction and summarise  #################
+  
+    FITIN <- fitin(x)
+    y$interaction <- summary(FITIN)
+
+    # Exit here if quick=TRUE
+    
+    if(identical(quick, TRUE)) {
+      class(y) <- "summary.ppm"
+      return(y)
+    }
+
+    ######  Does it have external covariates?  ####################
+
+    # defaults
+    y <- append(y,
+                list(has.covars    = FALSE,
+                     covnames      = character(0),
+                     covars.used   = character(0),
+                     uses.covars   = FALSE,
+                     covars.are.df = FALSE,
+                     expandable    = TRUE,
+                     covar.type    = character(0),
+                     covar.descrip = character(0),
+                     has.funcs     = FALSE,
+                     covfunargs    = NULL,
+                     has.xargs     = FALSE,
+                     xargmap       = NULL))
+
+    if(!antiquated) {
+      covars <- x$covariates
+      y$has.covars <- hc <- !is.null(covars) && (length(covars) > 0)
+      if(hc) {
+        y$covnames <- names(covars)
+        used <- (y$trendvar %in% names(covars))
+        y$covars.used <- y$trendvar[used]
+        y$uses.covars <- any(used)
+        y$covars.are.df <- is.data.frame(covars)
+        # describe covariates
+        ctype <- unlist(lapply(covars, covtype))
+        y$expandable <- all(ctype[used] %in%c("function", "number"))
+        names(ctype) <- names(covars)
+        y$covar.type <- ctype
+        y$covar.descrip <- ctype
+        # are there any functions?
+        y$has.funcs <- any(isfun <- (ctype == "function"))
+        # do covariates depend on additional arguments?
+        if(y$has.funcs) {
+          y$covfunargs <- x$covfunargs
+          funs <- covars[isfun]
+          fdescrip <- function(f) {
+            if(inherits(f, "distfun")) return("distfun")
+            alist <- paste(names(formals(f)), collapse=", ")
+            paste("function(", alist, ")", sep="")
+          }
+          y$covar.descrip[isfun] <- unlist(lapply(funs, fdescrip))
+          # find any extra arguments (after args 1 & 2) explicitly named
+          fargs <- lapply(funs, xargs)
+          nxargs <- unlist(lapply(fargs, length))
+          y$has.xargs <- any(nxargs > 0)
+          if(y$has.xargs) {
+            # identify which function arguments are fixed in the call
+            fmap <- data.frame(Covariate=rep.int(names(funs), nxargs),
+                               Argument=unlist(fargs))
+            fmap$Given <- (fmap$Argument %in% names(y$covfunargs))
+            y$xargmap <- fmap
+          }
+        }
+      } 
+    } else {
+      # Antiquated format
+      # Interpret the function call instead
+      callexpr <- parse(text=x$call)
+      callargs <- names(as.list(callexpr[[1]]))
+      # Data frame of covariates was called 'data' in versions up to 1.4-x
+      y$has.covars <- !is.null(callargs) && !is.na(pmatch("data", callargs))
+      # conservative guess
+      y$uses.covars <- y$has.covars
+      y$covfunargs <- NULL
+    }
+    
+    ######  Arguments in call ####################################
+  
+    y$args <- x[c("call", "correction", "rbord")]
+  
+    #######  Main data components #########################
+
+    y$entries <- append(list(quad=QUAD,
+                             data=DATA,
+                             interaction=INTERACT),
+                        y$entries)
+
+    if(is.character(quick) && (quick == "entries"))
+      return(y)
+  
+    ####### Summarise data ############################
+
+    y$data <- summary(DATA, checkdup=FALSE)
+    y$quad <- summary(QUAD, checkdup=FALSE)
+
+    if(is.character(quick) && (quick == "no prediction"))
+      return(y)
+  
+    ######  Trend component #########################
+
+    y$trend <- list()
+
+    y$trend$name <- if(y$poisson) "Intensity" else "Trend"
+
+    y$trend$formula <- if(y$no.trend) NULL else TREND
+
+    if(y$poisson && y$no.trend) {
+      # uniform Poisson process
+      y$trend$value <- lambda <- exp(COEFS[[1]])
+      y$trend$label <- switch(y$marktype,
+                              unmarked="Uniform intensity",
+                              multitype="Uniform intensity for each mark level",
+                              marked="Uniform intensity in product space",
+                              "")
+    } else if(y$stationary) {
+      # stationary
+      switch(y$marktype,
+             unmarked={
+               # stationary non-poisson non-marked
+               y$trend$label <- "First order term"
+               y$trend$value <- c(beta=exp(COEFS[[1]]))
+             },
+             multitype={
+               # stationary, multitype
+               mrk <- marks(DATA)
+               y$trend$label <-
+                 if(y$poisson) "Intensities" else "First order terms"
+               # Use predict.ppm to evaluate the fitted intensities
+               lev <- factor(levels(mrk), levels=levels(mrk))
+               nlev <- length(lev)
+               marx <- list(x=rep.int(0, nlev), y=rep.int(0, nlev), marks=lev)
+               betas <- predict(x, locations=marx, type="trend")
+               names(betas) <- paste("beta_", as.character(lev), sep="")
+               y$trend$value <- betas
+             },
+             marked={
+               # stationary, marked
+               y$trend$label <- "Fitted intensity coefficients"
+               y$trend$value <- blankcoefnames(COEFS)
+             })
+    } else {
+      # not stationary 
+      y$trend$label <- "Fitted coefficients for trend formula"
+      # extract trend terms without trying to understand them much
+      if(is.null(Vnames)) 
+        trendbits <- COEFS
+      else {
+        agree <- outer(names(COEFS), Vnames, "==")
+        whichbits <- apply(!agree, 1, all)
+        trendbits <- COEFS[whichbits]
+      }
+      y$trend$value <- blankcoefnames(trendbits)
+    }
+  
+    # ----- parameters with SE --------------------------
+
+    if(is.character(quick) && (quick == "no variances"))
+      return(y)
+
+    if(length(COEFS) > 0) {
+      # compute standard errors
+      se <- x$internal$se
+      if(is.null(se)) {
+        vc <- vcov(x, matrix.action="warn")
+        if(!is.null(vc)) {
+          se <- if(is.matrix(vc)) sqrt(diag(vc)) else
+                if(length(vc) == 1) sqrt(vc) else NULL
+        }
+      }
+      if(!is.null(se)) {
+        two <- qnorm(0.975)
+        lo <- COEFS - two * se
+        hi <- COEFS + two * se
+        pval <- 2 * pnorm(abs(COEFS)/se, lower.tail=FALSE)
+        psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1, Inf),
+                    labels=c("***", "**", "*", "  ", "na"),
+                    include.lowest=TRUE)
+        notapplic <- names(COEFS) %in% c("(Intercept)", "log(lambda)")
+        psig[notapplic] <- "na"
+        # table of coefficient estimates with SE and 95% CI
+        y$coefs.SE.CI <- data.frame(Estimate=COEFS, S.E.=se, Ztest=psig,
+                                    CI95.lo=lo, CI95.hi=hi)
+      }
+    }
+  
     class(y) <- "summary.ppm"
     return(y)
   }
   
+  summary.ppm
+})
 
-  ######  Does it have external covariates?  ####################
-
-  if(!antiquated) {
-    covars <- x$covariates
-    y$has.covars <- !is.null(covars) && (length(covars) > 0)
-    y$covnames <- names(covars)
-    used <- (y$trendvar %in% names(covars))
-    y$covars.used <- y$trendvar[used]
-    y$uses.covars <- any(used)
-    y$covars.are.df <- is.data.frame(covars)
-    # describe covariates
-    covtype <- function(x) {
-      if(is.im(x)) "im" else
-      if(is.function(x)) "function" else
-      if(is.owin(x)) "owin" else
-      if(is.numeric(x) && length(x) == 1) "number" else
-      if(is.factor(x)) "factor" else
-      if(is.integer(x)) "integer" else
-      if(is.numeric(x)) "numeric" else storage.mode(x)
-    }
-    ctype <- unlist(lapply(covars, covtype))
-    y$expandable <- all(ctype[used] %in%c("function", "number"))
-    names(ctype) <- names(covars)
-    y$covar.type <- ctype
-    y$covar.descrip <- ctype
-    # are there any functions?
-    y$has.funcs <- any(isfun <- (ctype == "function"))
-    # do covariates depend on additional arguments?
-    if(y$has.funcs) {
-      y$covfunargs <- x$covfunargs
-      funs <- covars[isfun]
-      fdescrip <- function(f) {
-        if(inherits(f, "distfun")) return("distfun")
-        alist <- paste(names(formals(f)), collapse=", ")
-        paste("function(", alist, ")", sep="")
-      }
-      y$covar.descrip[isfun] <- unlist(lapply(funs, fdescrip))
-      # find any extra arguments (after args 1 & 2) explicitly named
-      xargs <- function(f) {
-        ar <- names(formals(f))[-(1:2)]
-        return(ar[ar != "..."])
-      }
-      fargs <- lapply(funs, xargs)
-      nxargs <- unlist(lapply(fargs, length))
-      y$has.xargs <- any(nxargs > 0)
-      if(y$has.xargs) {
-        # identify which function arguments are fixed in the call
-        fmap <- data.frame(Covariate=rep.int(names(funs), nxargs),
-                                 Argument=unlist(fargs))
-        fmap$Given <- (fmap$Argument %in% names(y$covfunargs))
-        y$xargmap <- fmap
-      }
-    } 
-  } else {
-    # Antiquated format
-    # Interpret the function call instead
-    callexpr <- parse(text=x$call)
-    callargs <- names(as.list(callexpr[[1]]))
-    # Data frame of covariates was called 'data' in versions up to 1.4-x
-    y$has.covars <- !is.null(callargs) && !is.na(pmatch("data", callargs))
-    # conservative guess
-    y$uses.covars <- y$has.covars
-    y$covfunargs <- NULL
-  }
-    
-  ######  Arguments in call ####################################
-  
-  y$args <- x[c("call", "correction", "rbord")]
-  
-  #######  Main data components #########################
-
-  y$entries <- append(list(quad=QUAD,
-                           data=DATA,
-                           interaction=INTERACT),
-                      y$entries)
-
-  if(is.character(quick) && (quick == "entries"))
-    return(y)
-  
-  ####### Summarise data ############################
-
-  y$data <- summary(DATA, checkdup=FALSE)
-  y$quad <- summary(QUAD, checkdup=FALSE)
-
-  if(is.character(quick) && (quick == "no prediction"))
-    return(y)
-  
-  ######  Trend component #########################
-
-  y$trend <- list()
-
-  y$trend$name <- if(y$poisson) "Intensity" else "Trend"
-
-  y$trend$formula <- if(y$no.trend) NULL else TREND
-
-  if(y$poisson && y$no.trend) {
-    # uniform Poisson process
-    y$trend$value <- lambda <- exp(COEFS[[1]])
-    y$trend$label <- switch(y$marktype,
-                            unmarked="Uniform intensity",
-                            multitype="Uniform intensity for each mark level",
-                            marked="Uniform intensity in product space",
-                            "")
-  } else if(y$stationary) {
-    # stationary
-    switch(y$marktype,
-           unmarked={
-             # stationary non-poisson non-marked
-             y$trend$label <- "First order term"
-             y$trend$value <- c(beta=exp(COEFS[[1]]))
-           },
-           multitype={
-             # stationary, multitype
-             mrk <- marks(DATA)
-             y$trend$label <-
-               if(y$poisson) "Intensities" else "First order terms"
-             # Use predict.ppm to evaluate the fitted intensities
-             lev <- factor(levels(mrk), levels=levels(mrk))
-             nlev <- length(lev)
-             marx <- list(x=rep.int(0, nlev), y=rep.int(0, nlev), marks=lev)
-             betas <- predict(x, locations=marx, type="trend")
-             names(betas) <- paste("beta_", as.character(lev), sep="")
-             y$trend$value <- betas
-           },
-           marked={
-             # stationary, marked
-             y$trend$label <- "Fitted intensity coefficients"
-             y$trend$value <- blankcoefnames(COEFS)
-           })
-  } else {
-    # not stationary 
-    y$trend$label <- "Fitted coefficients for trend formula"
-    # extract trend terms without trying to understand them much
-    if(is.null(Vnames)) 
-      trendbits <- COEFS
-    else {
-      agree <- outer(names(COEFS), Vnames, "==")
-      whichbits <- apply(!agree, 1, all)
-      trendbits <- COEFS[whichbits]
-    }
-    y$trend$value <- blankcoefnames(trendbits)
-  }
-  
-  # ----- parameters with SE --------------------------
-
-  if(is.character(quick) && (quick == "no variances"))
-    return(y)
-
-  if(length(COEFS) > 0) {
-    # compute standard errors
-    se <- x$internal$se
-    if(is.null(se)) {
-      vc <- vcov(x, matrix.action="warn")
-      if(!is.null(vc))
-        se <- sqrt(diag(vc))
-    }
-    if(!is.null(se)) {
-      two <- qnorm(0.975)
-      lo <- COEFS - two * se
-      hi <- COEFS + two * se
-      pval <- 2 * pnorm(abs(COEFS)/se, lower.tail=FALSE)
-      psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1, Inf),
-                  labels=c("***", "**", "*", "  ", "na"),
-                  include.lowest=TRUE)
-      notapplic <- names(COEFS) %in% c("(Intercept)", "log(lambda)")
-      psig[notapplic] <- "na"
-      # table of coefficient estimates with SE and 95% CI
-      y$coefs.SE.CI <- data.frame(Estimate=COEFS, S.E.=se, Ztest=psig,
-                                  CI95.lo=lo, CI95.hi=hi)
-    }
-  }
-  
-  class(y) <- "summary.ppm"
-  return(y)
-}
 
 coef.summary.ppm <- function(object, ...) {
   object$coefs.SE.CI

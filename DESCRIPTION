@@ -1,6 +1,7 @@
 Package: spatstat
-Version: 1.34-1
-Date: 2013-11-03
+Version: 1.35-0
+Nickname: Multiple Personality
+Date: 2013-12-12
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au> 
 	and Rolf Turner <r.turner@auckland.ac.nz> 
@@ -16,10 +17,12 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	by Q.W. Ang; 
 	S. Azaele; 
 	C. Beale; 
+	M. Bell;
 	R. Bernhardt; 
 	T. Bendtsen;
 	A. Bevan;
 	B. Biggerstaff;
+	L. Bischof;
 	R. Bivand;
 	J.M. Blanco Moreno;
 	F. Bonneu;
@@ -40,6 +43,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	S. Eglen; 
         O. Flores;
 	N. Funwi-Gabga;
+	O. Garcia;
 	A. Gault; 
 	M. Genton;
 	J. Gilbey;
@@ -123,21 +127,20 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 Depends: R (>= 3.0.2), stats, graphics, grDevices, utils, mgcv, deldir
-        (>= 0.0-21), abind, tensor, polyclip
+        (>= 0.0-21), abind, tensor, polyclip (>= 1.2-0)
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
-        scatterplot3d, RandomFields (>= 2.0.60)
+        scatterplot3d, RandomFields (>= 3.0.0)
 Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, and space-time point patterns in any number of dimensions. 
-	Contains over 1000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
+	Contains over 1500 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
 	Data types include point patterns, line segment patterns, spatial windows, pixel images and tessellations. 
-	Exploratory methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Dao-Genton) are also supported.
-	Point process models can be fitted to point pattern data using the functions ppm, kppm, slrm similar to glm. Models may involve dependence on covariates, interpoint interaction, cluster formation and dependence on marks. Models are fitted by maximum likelihood, logistic regression, minimum contrast, and various composite likelihood methods. 
-	Fitted point process models can be simulated, automatically. Formal hypothesis tests of a fitted model are supported. Tools for validating the fitted model include simulation envelopes, residuals, residual plots and Q-Q plots, and leverage and influence diagnostics.
+	Exploratory methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Diggle-Cressie-Loosmore-Ford, Dao-Genton) and tests for covariate effects (Cox-Berman-Waller-Lawson, Kolmogorov-Smirnov) are also supported.
+	Parametric models can be fitted to point pattern data using the functions ppm, kppm, slrm similar to glm. Types of models include Poisson, Gibbs, Cox and cluster point processes. Models may involve dependence on covariates, interpoint interaction, cluster formation and dependence on marks. Models are fitted by maximum likelihood, logistic regression, minimum contrast, and composite likelihood methods. 
+	Fitted point process models can be simulated, automatically. Formal hypothesis tests of a fitted model are supported (likelihood ratio test, analysis of deviance, Monte Carlo tests) along with basic tools for model selection (stepwise, AIC). Tools for validating the fitted model include simulation envelopes, residuals, residual plots and Q-Q plots, leverage and influence diagnostics, partial residuals, and added variable plots.
 License: GPL (>= 2)
 URL: http://www.spatstat.org
 LazyData: true
-LazyLoad: true
-ByteCompile: true
-Packaged: 2013-11-03 05:22:24 UTC; adrian
 NeedsCompilation: yes
+ByteCompile: true
+Packaged: 2013-12-12 12:12:12 UTC; adrian
 Repository: CRAN
-Date/Publication: 2013-11-03 10:34:29
+Date/Publication: 2013-12-12 17:47:25

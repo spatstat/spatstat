@@ -6,8 +6,10 @@
   a point pattern using kernel methods.
 }
 \usage{
-  \method{pcf}{ppp}(X, \dots, r = NULL, kernel="epanechnikov", bw=NULL, stoyan=0.15,
-                    correction=c("translate", "Ripley"))
+  \method{pcf}{ppp}(X, \dots, r = NULL, kernel="epanechnikov", bw=NULL,
+                    stoyan=0.15,
+                    correction=c("translate", "Ripley"),
+                    divisor = c("r", "d"))
 }
 \arguments{
   \item{X}{
@@ -33,6 +35,10 @@
   }
   \item{correction}{
     Choice of edge correction.
+  }
+  \item{divisor}{
+    Choice of divisor in the estimation formula:
+    either \code{"r"} (the default) or \code{"d"}. See Details.
   }
 } 
 \value{
@@ -86,22 +92,42 @@
   values greater than 1 suggest clustering.
 
   This routine computes an estimate of \eqn{g(r)}
-  by the kernel smoothing method (Stoyan and Stoyan (1994),
-  pages 284--285). By default, their recommendations
-  are followed exactly.
+  by kernel smoothing. 
 
-  If \code{correction="translate"} or \code{correction="translation"}
-  then the translation correction
-  is used. The estimate is given in equation (15.15), page 284 of
-  Stoyan and Stoyan (1994).
+  \itemize{
+    \item
+    If \code{divisor="r"} (the default), then the standard
+    kernel estimator (Stoyan and Stoyan, 1994, pages 284--285)
+    is used. By default, the recommendations of Stoyan and Stoyan (1994)
+    are followed exactly. 
+    \item
+    If \code{divisor="d"} then a modified estimator is used:
+    the contribution from
+    an interpoint distance \eqn{d_{ij}}{d[ij]} to the
+    estimate of \eqn{g(r)} is divided by \eqn{d_{ij}}{d[ij]}
+    instead of dividing by \eqn{r}. This usually improves the
+    bias of the estimator when \eqn{r} is close to zero.
+  }
 
-  If \code{correction="Ripley"} then Ripley's isotropic edge correction
-  is used; the estimate is given in equation (15.18), page 285
-  of Stoyan and Stoyan (1994).
+  There is also a choice of spatial edge corrections
+  (which are needed to avoid bias due to edge effects
+  associated with the boundary of the spatial window):
 
-  If \code{correction=c("translate", "Ripley")} then both estimates
-  will be computed.
-
+  \itemize{
+    \item
+    If \code{correction="translate"} or \code{correction="translation"}
+    then the translation correction
+    is used. For \code{divisor="r"} the translation-corrected estimate
+    is given in equation (15.15), page 284 of Stoyan and Stoyan (1994).
+    \item
+    If \code{correction="Ripley"} then Ripley's isotropic edge correction
+    is used. For \code{divisor="r"} the isotropic-corrected estimate
+    is given in equation (15.18), page 285 of Stoyan and Stoyan (1994). 
+    \item
+    If \code{correction=c("translate", "Ripley")} then both estimates
+    will be computed.
+  }
+  
   The choice of smoothing kernel is controlled by the 
   argument \code{kernel} which is passed to \code{\link{density}}.
   The default is the Epanechnikov kernel, recommended by
@@ -153,12 +179,22 @@
   p <- pcf(simdat)
   plot(p, main="pair correlation function for simdat")
   # indicates inhibition at distances r < 0.3
+
+  pd <- pcf(simdat, divisor="d")
+
+  # compare estimates
+  plot(p, cbind(iso, theo) ~ r, col=c("blue", "red"),
+         ylim.covers=0, main="", lwd=c(2,1), lty=c(1,3), legend=FALSE)
+  plot(pd, iso ~ r, col="green", lwd=2, add=TRUE)
+  legend("center", col=c("blue", "green"), lty=1, lwd=2,
+         legend=c("divisor=r","divisor=d"))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Martin Hazelton.
 }
 \keyword{spatial}
 \keyword{nonparametric}

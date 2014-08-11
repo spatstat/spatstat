@@ -2,7 +2,7 @@
 #	interact.S
 #
 #
-#	$Revision: 1.21 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.22 $	$Date: 2013/11/27 13:16:35 $
 #
 #	Class 'interact' representing the interpoint interaction
 #               of a point process model
@@ -114,6 +114,7 @@
 # --------------------------------------------------------------------------
 
 print.isf <- function(x, ...) {
+  if(is.null(x)) return(invisible(NULL))
   verifyclass(x, "isf")
   if(!is.null(x$print))
     (x$print)(x)
@@ -122,15 +123,16 @@ print.isf <- function(x, ...) {
 
 print.interact <- function(x, ..., family=TRUE, brief=FALSE) {
   verifyclass(x, "interact")
-  if(!is.null(x$print))
+  if(family && !brief && !is.null(xf <- x$family))
+    print.isf(xf)
+  if(!brief)
+    cat("Interaction:")
+  cat(paste(x$name, "\n"))
+  # Now print the parameters
+  if(!is.null(x$print)) {
      (x$print)(x)
-  else {
+  } else {
     # default
-    if(family && !brief) 
-      print.isf(x$family)
-    if(!brief)
-      cat("Interaction:")
-    cat(paste(x$name, "\n"))
     # just print the parameter names and their values
     cat(paste(x$parnames, ":\t", x$par, "\n", sep=""))
   }

@@ -47,11 +47,12 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
 
   \code{dclf.test} performs the test advocated by Loosmore and Ford (2006)
   which is also described in Diggle (1986), Cressie (1991, page 667, equation
-  (8.5.42)) and Diggle (2003, page 14).
+  (8.5.42)) and Diggle (2003, page 14). See Baddeley et al (2014).
 
   \code{mad.test} performs the \sQuote{global} or
   \sQuote{Maximum Absolute Deviation} test described by Ripley (1977, 1981).
-
+  See Baddeley et al (2014).
+  
   The type of test depends on the type of argument \code{X}.
   \itemize{
     \item 
@@ -110,6 +111,10 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
   The \eqn{p}-value is contained in the component \code{p.value}.
 }
 \references{
+  Baddeley, A., Diggle, P.J., Hardegen, A., Lawrence, T., Milne,
+  R.K. and Nair, G. (2014) On tests of spatial pattern based on
+  simulation envelopes. \emph{Ecological Monographs}, to appear.
+  
   Besag, J. (1977) 
   Discussion of Dr Ripley's paper.
   \emph{Journal of the Royal Statistical Society, Series B},

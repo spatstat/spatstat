@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.32 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.35 $   $Date: 2013/11/18 13:50:49 $
 #
 # stuff for handling marks
 #
@@ -30,42 +30,47 @@ marks.ppp <- function(x, ..., dfok=TRUE) {
 }
 
 "marks<-.ppp" <- function(x, ..., dfok=TRUE, value) {
-  if((is.data.frame(value) || is.matrix(value)) && !dfok)
-    stop("Sorry, data frames of marks are not yet implemented")
-  if(is.null(value))
-    return(unmark(x))
-  m <- value
-  if(is.hyperframe(m)) 
-    stop("Hyperframes of marks are not supported in ppp objects")
   np <- npoints(x)
-  if(!is.data.frame(m) && !is.matrix(m)) {
-    # vector of marks
-    if(length(m) == 1) m <- rep.int(m, np)
-    else if(np == 0) m <- rep.int(m, 0) # ensures marked pattern is obtained
-    else if(length(m) != np) stop("number of points != number of marks")
-    marx <- m
-  } else {
-    m <- as.data.frame(m)
-    # data frame of marks
-    if(ncol(m) == 0) {
-      # no mark variables
-      marx <- NULL
-    } else {
-      # marks to be attached
-      if(nrow(m) == np) {
-        marx <- m
-      } else {
-        # lengths do not match
-        if(nrow(m) == 1 || np == 0) {
-          # replicate data frame
-          marx <- as.data.frame(lapply(as.list(m),
-                                       function(x, k) { rep.int(x, k) },
-                                       k=np))
-        } else
-        stop("number of rows of data frame != number of points")
-      }
-    }
-  }
+  m <- value
+  switch(markformat(m),
+         none = {
+           return(unmark(x))
+         },
+         vector = {
+           # vector of marks
+           if(length(m) == 1) m <- rep.int(m, np)
+           else if(np == 0) m <- rep.int(m, 0) # ensures marked pattern obtained
+           else if(length(m) != np) stop("number of points != number of marks")
+           marx <- m
+         },
+         dataframe = {
+           if(!dfok)
+             stop("Sorry, data frames of marks are not yet implemented")
+           m <- as.data.frame(m)
+           # data frame of marks
+           if(ncol(m) == 0) {
+             # no mark variables
+             marx <- NULL
+           } else {
+             # marks to be attached
+             if(nrow(m) == np) {
+               marx <- m
+             } else {
+               # lengths do not match
+               if(nrow(m) == 1 || np == 0) {
+               # replicate data frame
+                 marx <- as.data.frame(lapply(as.list(m),
+                                              function(x, k) { rep.int(x, k) },
+                                              k=np))
+               } else
+               stop("number of rows of data frame != number of points")
+             }
+           }
+         },
+         hyperframe = 
+         stop("Hyperframes of marks are not supported in ppp objects; use ppx"),
+         stop("Format of marks is not understood")
+         )
   # attach/overwrite marks
   Y <- ppp(x$x,x$y,window=x$window,marks=marx, check=FALSE)
   return(Y)
@@ -92,7 +97,8 @@ markformat.ppp <- function(x) {
 markformat.default <- function(x) {
   if(is.null(x)) return("none")
   if(is.vector(x) || is.factor(x)) return("vector")
-  if(is.data.frame(x)) return("dataframe")
+  if(is.null(dim(x)) && is.atomic(x)) return("vector")
+  if(is.data.frame(x) || is.matrix(x)) return("dataframe")
   if(is.hyperframe(x)) return("hyperframe")
   if(inherits(x, "listof")) return("listof")
   stop("Mark format not understood")

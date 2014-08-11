@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.25 $  $Date: 2013/11/03 02:42:48 $
+#    $Revision: 1.26 $  $Date: 2013/12/11 08:42:46 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -235,6 +235,8 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     }
 
     result <- as.data.frame(list(dist=NND, which=NNW)[what])
+    colnames(result) <- c(if(want.dist) paste0("dist.", k) else NULL,
+                          if(want.which) paste0("which.",k) else NULL)
     if(ncol(result) == 1)
       result <- result[, , drop=TRUE]
     return(result)

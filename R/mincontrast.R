@@ -6,108 +6,122 @@
 
 ##################  base ################################
 
-mincontrast <- function(observed, theoretical, startpar,
-                        ...,
-                        ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
-                        fvlab=list(label=NULL, desc="minimum contrast fit"),
-                        explain=list(dataname=NULL, modelname=NULL, fname=NULL)) {
-  verifyclass(observed, "fv")
-  stopifnot(is.function(theoretical))
-  if(!any("par" %in% names(formals(theoretical))))
-    stop(paste("Theoretical function does not include an argument called",
-               sQuote("par")))
+mincontrast <- local({
 
-  # enforce defaults
-  ctrl <- resolve.defaults(ctrl, list(q = 1/4, p = 2, rmin=NULL, rmax=NULL))
-  fvlab <- resolve.defaults(fvlab,
-                            list(label=NULL, desc="minimum contrast fit"))
-  explain <- resolve.defaults(explain,
-                              list(dataname=NULL, modelname=NULL, fname=NULL))
-  
-  # determine range of r values
-  rmin <- ctrl$rmin
-  rmax <- ctrl$rmax
-  if(!is.null(rmin) && !is.null(rmax)) 
-    stopifnot(rmin < rmax && rmin >= 0)
-  else {
-    alim <- attr(observed, "alim")
-    if(is.null(rmin)) rmin <- alim[1]
-    if(is.null(rmax)) rmax <- alim[2]
+  # objective function (in a format that is re-usable by other code)
+  contrast.objective <- function(par, objargs, ...) {
+    with(objargs, {
+      theo <- theoretical(par=par, rvals, ...)
+      if(!is.vector(theo) || !is.numeric(theo))
+        stop("theoretical function did not return a numeric vector")
+      if(length(theo) != nrvals)
+        stop("theoretical function did not return the correct number of values")
+      discrep <- (abs(theo^qq - obsq))^pp
+      return(sum(discrep))
+    })
   }
-  # extract vector of r values
-  argu <- fvnames(observed, ".x")
-  rvals <- observed[[argu]]
-  # extract vector of observed values of statistic
-  valu <- fvnames(observed, ".y")
-  obs <- observed[[valu]]
-  # restrict to [rmin, rmax]
-  if(max(rvals) < rmax)
-    stop(paste("rmax=", signif(rmax,4),
-               "exceeds the range of available data",
-               "= [", signif(min(rvals),4), ",", signif(max(rvals),4), "]"))
-  sub <- (rvals >= rmin) & (rvals <= rmax)
-  rvals <- rvals[sub]
-  obs <- obs[sub]
-  # sanity clause
-  if(!all(ok <- is.finite(obs))) {
-    whinge <- paste("Some values of the empirical function",
-                    sQuote(explain$fname),
-                    "were infinite or NA.")
-    iMAX <- max(which(ok))
-    iMIN <- min(which(!ok)) + 1
-    if(iMAX > iMIN && all(ok[iMIN:iMAX])) {
-      rmin <- rvals[iMIN]
-      rmax <- rvals[iMAX]
-      obs   <- obs[iMIN:iMAX]
-      rvals <- rvals[iMIN:iMAX]
-      sub[sub] <- ok
-      warning(paste(whinge,
-                    "Range of r values was reset to",
-                    prange(c(rmin, rmax))),
-              call.=FALSE)
-    } else stop(paste(whinge, "Please choose a narrower range [rmin, rmax]"),
+
+  mincontrast <- function(observed, theoretical, startpar,
+                          ...,
+                          ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
+                          fvlab=list(label=NULL, desc="minimum contrast fit"),
+                          explain=list(dataname=NULL,
+                            modelname=NULL, fname=NULL)) {
+    verifyclass(observed, "fv")
+    stopifnot(is.function(theoretical))
+    if(!any("par" %in% names(formals(theoretical))))
+      stop(paste("Theoretical function does not include an argument called",
+                 sQuote("par")))
+
+    # enforce defaults
+    ctrl <- resolve.defaults(ctrl, list(q = 1/4, p = 2, rmin=NULL, rmax=NULL))
+    fvlab <- resolve.defaults(fvlab,
+                              list(label=NULL, desc="minimum contrast fit"))
+    explain <- resolve.defaults(explain,
+                                list(dataname=NULL, modelname=NULL, fname=NULL))
+  
+    # determine range of r values
+    rmin <- ctrl$rmin
+    rmax <- ctrl$rmax
+    if(!is.null(rmin) && !is.null(rmax)) 
+      stopifnot(rmin < rmax && rmin >= 0)
+    else {
+      alim <- attr(observed, "alim")
+      if(is.null(rmin)) rmin <- alim[1]
+      if(is.null(rmax)) rmax <- alim[2]
+    }
+    # extract vector of r values
+    argu <- fvnames(observed, ".x")
+    rvals <- observed[[argu]]
+    # extract vector of observed values of statistic
+    valu <- fvnames(observed, ".y")
+    obs <- observed[[valu]]
+    # restrict to [rmin, rmax]
+    if(max(rvals) < rmax)
+      stop(paste("rmax=", signif(rmax,4),
+                 "exceeds the range of available data",
+                 "= [", signif(min(rvals),4), ",", signif(max(rvals),4), "]"))
+    sub <- (rvals >= rmin) & (rvals <= rmax)
+    rvals <- rvals[sub]
+    obs <- obs[sub]
+    # sanity clause
+    if(!all(ok <- is.finite(obs))) {
+      whinge <- paste("Some values of the empirical function",
+                      sQuote(explain$fname),
+                      "were infinite or NA.")
+      iMAX <- max(which(ok))
+      iMIN <- min(which(!ok)) + 1
+      if(iMAX > iMIN && all(ok[iMIN:iMAX])) {
+        rmin <- rvals[iMIN]
+        rmax <- rvals[iMAX]
+        obs   <- obs[iMIN:iMAX]
+        rvals <- rvals[iMIN:iMAX]
+        sub[sub] <- ok
+        warning(paste(whinge,
+                      "Range of r values was reset to",
+                      prange(c(rmin, rmax))),
                 call.=FALSE)
+      } else stop(paste(whinge, "Please choose a narrower range [rmin, rmax]"),
+                  call.=FALSE)
+    }
+    # pack data into a list
+    objargs <- list(theoretical = theoretical,
+                    rvals       = rvals,
+                    nrvals      = length(rvals),
+                    obsq        = obs^(ctrl$q),   # for efficiency
+                    qq          = ctrl$q,
+                    pp          = ctrl$p,
+                    rmin        = rmin,
+                    rmax        = rmax)
+    # go
+    minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
+    # if convergence failed, issue a warning 
+    signalStatus(optimStatus(minimum), errors.only=TRUE)
+    # evaluate the fitted theoretical curve
+    fittheo <- theoretical(minimum$par, rvals, ...)
+    # pack it up as an `fv' object
+    label <- fvlab$label
+    desc  <- fvlab$desc
+    if(is.null(label))
+      label <- paste("fit(", argu, ")", collapse="")
+    fitfv <- bind.fv(observed[sub, ],
+                     data.frame(fit=fittheo),
+                     label, desc)
+    result <- list(par      = minimum$par,
+                   fit      = fitfv,
+                   opt      = minimum,
+                   ctrl     = list(p=ctrl$p,q=ctrl$q,rmin=rmin,rmax=rmax),
+                   info     = explain,
+                   startpar = startpar,
+                   objfun   = contrast.objective,
+                   objargs  = objargs,
+                   dotargs  = list(...))
+    class(result) <- c("minconfit", class(result))
+    return(result)
   }
-  # for efficiency
-  obsq <- obs^(ctrl$q)
-  # define objective function
-  objective <- function(par, obsq, theoretical, rvals, qq, pp, rmin, rmax, ...) {
-    theo <- theoretical(par=par, rvals, ...)
-    if(!is.vector(theo) || !is.numeric(theo))
-      stop("theoretical function did not return a numeric vector")
-    if(length(theo) != length(obs))
-      stop("theoretical function did not return the correct number of values")
-    discrep <- (abs(theo^qq - obsq))^pp
-    return(sum(discrep))
-  }
-  # go
-  minimum <- optim(startpar, fn=objective,
-                   obsq=obsq, theoretical=theoretical,
-                   rvals=rvals,
-                   qq=ctrl$q, pp=ctrl$p, rmin=rmin, rmax=rmax, ...)
-  # if convergence failed, issue a warning 
-  signalStatus(optimStatus(minimum), errors.only=TRUE)
-  # evaluate the fitted theoretical curve
-  fittheo <- theoretical(minimum$par, rvals, ...)
-  # pack it up as an `fv' object
-  label <- fvlab$label
-  desc  <- fvlab$desc
-  if(is.null(label))
-    label <- paste("fit(", argu, ")", collapse="")
-  fitfv <- bind.fv(observed[sub, ],
-                   data.frame(fit=fittheo),
-                   label, desc)
-  result <- list(par=minimum$par,
-                 fit=fitfv,
-                 opt=minimum,
-                 ctrl=list(p=ctrl$p,q=ctrl$q,rmin=rmin,rmax=rmax),
-                 info=explain,
-                 startpar=startpar
-                 )
-  
-  class(result) <- c("minconfit", class(result))
-  return(result)
-}
+
+  mincontrast
+})
 
 print.minconfit <- function(x, ...) {
   # explanatory
@@ -457,11 +471,13 @@ printStatusList <- function(stats) {
            return(1 + sig2 * fr)
          },
          parhandler = function(..., nu.ker = -1/4) {
+           check.1.real(nu.ker)
            stopifnot(nu.ker > -1/2)
+           nu.pcf <- 2 * nu.ker + 1
            return(list(type="Kernel",
                        model="VarGamma",
                        margs=list(nu.ker=nu.ker,
-                                  nu.pcf=2*nu.ker+1)))
+                                  nu.pcf=nu.pcf)))
          },
          # sensible starting values
          selfstart = function(X) {
@@ -964,9 +980,28 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,eta2=1),
   return(result)
 }
 
+# user-callable
+resolve.vargamma.shape <- function(..., nu.ker=NULL, nu.pcf=NULL) {
+  if(is.null(nu.ker) && is.null(nu.pcf))
+    stop("Must specify either nu.ker or nu.pcf", call.=FALSE)
+  if(!is.null(nu.ker) && !is.null(nu.pcf))
+    stop("Only one of nu.ker and nu.pcf should be specified",
+         call.=FALSE)
+  if(!is.null(nu.ker)) {
+    check.1.real(nu.ker)
+    stopifnot(nu.ker > -1/2)
+    nu.pcf <- 2 * nu.ker + 1
+  } else {
+    check.1.real(nu.pcf)
+    stopifnot(nu.pcf > 0)
+    nu.ker <- (nu.pcf - 1)/2
+  }
+  return(list(nu.ker=nu.ker, nu.pcf=nu.pcf))
+}
 
 vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
-                        lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, ...) {
+                        lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL,
+                          nu.pcf=NULL, ...) {
 
 # nu.ker: smoothness parameter of Variance Gamma kernel function
 # omega: scale parameter of kernel function
@@ -977,6 +1012,8 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
 
+  if(missing(nu.ker) && !is.null(nu.pcf)) nu.ker <- NULL
+  
   if(inherits(X, "fv")) {
     K <- X
     if(!(attr(K, "fname") %in% c("K", "K[inhom]")))
@@ -996,7 +1033,7 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
   
   # test validity of parameter nu and digest
   ph <- info$parhandler
-  cmodel <- ph(nu.ker=nu.ker)
+  cmodel <- ph(nu.ker=nu.ker, nu.pcf=nu.pcf)
   margs <- cmodel$margs
 
   desc <- "minimum contrast fit of Neyman-Scott process with Variance Gamma kernel"
@@ -1020,8 +1057,8 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
 
 
 vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4, 
-                          lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, ...,
-                          pcfargs=list()) {
+                          lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, 
+                          nu.pcf=NULL, ..., pcfargs=list()) {
 
 # nu.ker: smoothness parameter of Variance Gamma kernel function
 # omega: scale parameter of kernel function
@@ -1031,6 +1068,8 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
 
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
+
+  if(missing(nu.ker) && !is.null(nu.pcf)) nu.ker <- NULL
 
   if(inherits(X, "fv")) {
     g <- X
@@ -1051,7 +1090,7 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
 
   # test validity of parameter nu and digest 
   ph <- info$parhandler
-  cmodel <- ph(nu.ker=nu.ker)
+  cmodel <- ph(nu.ker=nu.ker, nu.pcf=nu.pcf)
   margs <- cmodel$margs
   
   # avoid using g(0) as it may be infinite

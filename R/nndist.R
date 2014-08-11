@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.4 $ $Date: 2013/11/03 02:22:24 $
+#   $Revision: 1.5 $ $Date: 2013/12/12 10:55:33 $
 #
 
 nndist <- function(X, ...) {
@@ -160,10 +160,13 @@ nndist.default <-
   # post-processing
   if(kmax > kmaxcalc) {
     # add columns of Inf
-    nas <- matrix(Inf, nrow=n, ncol=kmax-kmaxcalc)
-    nnd <- cbind(nnd, nas)
+    infs <- matrix(Inf, nrow=n, ncol=kmax-kmaxcalc)
+    nnd <- cbind(nnd, infs)
   }
 
+  if(kmax > 1)
+    colnames(nnd) <- paste0("dist.", 1:kmax)
+  
   if(length(k) < kmax) {
     # select only the specified columns
     nnd <- nnd[, k, drop=TRUE]
@@ -354,6 +357,9 @@ nnwhich.default <-
     nas <- matrix(as.numeric(NA), nrow=n, ncol=kmax-kmaxcalc)
     nnw <- cbind(nnw, nas)
   }
+
+  if(kmax > 1)
+    colnames(nnw) <- paste0("which.", 1:kmax)
 
   if(length(k) < kmax) {
     # select only the specified columns

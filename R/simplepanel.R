@@ -4,12 +4,10 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.6 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.11 $  $Date: 2013/12/08 00:08:23 $
 #
 
-simplepanel <- function(title, B, boxes, clicks, redraws,
-                        exit=function(...) { NULL},
-                        env) {
+simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {
   stopifnot(is.rectangle(B))
   stopifnot(is.list(boxes))
   if(!all(unlist(lapply(boxes, is.rectangle))))
@@ -19,14 +17,18 @@ simplepanel <- function(title, B, boxes, clicks, redraws,
   stopifnot(is.list(clicks) && length(clicks) == length(boxes))
   if(!all(unlist(lapply(clicks, is.function))))
     stop("clicks must be a list of functions")
-  if(missing(redraws) || is.null(redraws)) {
+  if(is.null(redraws)) {
     redraws <- rep.int(list(dflt.redraw), length(boxes))
   } else {
     stopifnot(is.list(redraws) && length(redraws) == length(boxes))
+    if(any(isnul <- unlist(lapply(redraws, is.null))))
+      redraws[isnul] <- rep.int(list(dflt.redraw), sum(isnul))
     if(!all(unlist(lapply(redraws, is.function))))
       stop("redraws must be a list of functions")
   }
-  stopifnot(is.function(exit))
+  if(is.null(exit)) {
+    exit <- function(...) { NULL}
+  } else stopifnot(is.function(exit))
   stopifnot(is.environment(env))
   n <- length(boxes)
   got.boxnames <- (sum(nzchar(names(boxes))) == n)
@@ -43,12 +45,13 @@ simplepanel <- function(title, B, boxes, clicks, redraws,
 
 grow.simplepanel <- function(P, side=c("right","left","top","bottom"),
                              len=NULL,
-                             new.clicks, new.redraws, ..., aspect) {
+                             new.clicks, new.redraws=NULL, ..., aspect) {
+  verifyclass(P, "simplepanel")
   side <- match.arg(side)
   stopifnot(is.list(new.clicks))
   if(!all(unlist(lapply(new.clicks, is.function))))
     stop("new.clicks must be a list of functions")
-  if(missing(new.redraws) || is.null(new.redraws)) {
+  if(is.null(new.redraws)) {
     new.redraws <- rep.int(list(dflt.redraw), length(new.clicks))
   } else {
     stopifnot(is.list(new.redraws) && length(new.redraws) == length(new.clicks))
@@ -100,6 +103,7 @@ grow.simplepanel <- function(P, side=c("right","left","top","bottom"),
 
                              
 redraw.simplepanel <- function(P, verbose=FALSE) {
+  verifyclass(P, "simplepanel")
   if(verbose)
     cat("Redrawing entire panel\n")
   with(P, {
@@ -112,13 +116,16 @@ redraw.simplepanel <- function(P, verbose=FALSE) {
 }
 
 clear.simplepanel <- function(P) {
+  verifyclass(P, "simplepanel")
   plot(P$B, main="")
   invisible(NULL)
 }
                              
-run.simplepanel <- function(P, verbose=FALSE) {
+run.simplepanel <- function(P, popup=TRUE, verbose=FALSE) {
+  verifyclass(P, "simplepanel")
+  if(popup) dev.new()
   ntitle <- sum(nzchar(P$title))
-  opa <- par(mar=c(0,0,ntitle+0.2,0))
+  opa <- par(mar=c(0,0,ntitle+0.2,0),ask=FALSE)
   with(P, {
     # interaction loop
     more <- TRUE
@@ -135,6 +142,13 @@ run.simplepanel <- function(P, verbose=FALSE) {
           found <- TRUE
           if(verbose) cat(paste("Caught click on", sQuote(nama[j]), "\n"))
           more <- (clicks[[j]])(env, xy)
+          if(!is.logical(more) || length(more) != 1) {
+            warning(paste("Click function for",
+                          sQuote(nama[j]),
+                          "did not return TRUE/FALSE"))
+            more <- FALSE
+          }
+          if(verbose) cat(if(more) "Continuing\n" else "Terminating\n")
           break
         }
       }
@@ -150,6 +164,8 @@ run.simplepanel <- function(P, verbose=FALSE) {
   
   # revert to original graphics parameters
   par(opa)
+  # close popup window?
+  if(popup) dev.off()
   
   # return value of 'exit' function
   return(rslt)
@@ -190,3 +206,15 @@ dflt.redraw <- function(button, name, env) {
   text(centroid.owin(button), labels=name)
 }
 
+print.simplepanel <- function(x, ...) {
+  nama <- x$nama
+  cat("simplepanel object\n")
+  cat(paste("\tTitle:", sQuote(x$title), "\n"))
+  cat("\tPanel names:")
+  for(i in seq_along(nama)) {
+    if(i %% 6 == 1) cat("\n\t")
+    cat(paste0(sQuote(nama[i]), "  "))
+  }
+  cat("\n")
+  return(invisible(NULL))
+}

@@ -19,7 +19,7 @@
 
 double sqrt();
 
-void closepaircounts(nnsource, xsource, ysource, 
+void Ccrosspaircounts(nnsource, xsource, ysource, 
 		     nntarget, xtarget, ytarget, 
 		     rrmax, counts) 
 /* inputs */
@@ -71,3 +71,4 @@ void closepaircounts(nnsource, xsource, ysource,
     }
   }
 }
+

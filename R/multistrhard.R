@@ -156,8 +156,6 @@ MultiStraussHard <- local({
          },
          update = NULL,  # default OK
          print = function(self) {
-           print.isf(self$family)
-           cat(paste("Interaction:\t", self$name, "\n"))
            types <- self$par$types
            iradii <- self$par$iradii
            hradii <- self$par$hradii

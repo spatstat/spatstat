@@ -37,6 +37,9 @@ plot(clmcov200, main="Covariates for forest fires")
 plot(copper$Points, main="Copper")
 plot(copper$Lines, add=TRUE)
 
+plot(demohyper, quote({ plot(Image, main=""); plot(Points, add=TRUE) }),
+      parargs=list(mar=rep(1,4)))
+
 plot(demopat)
 
 plot(finpines, main="Finnish pines")
@@ -94,6 +97,11 @@ ponderosa.extra$plotit()
 
 plot(paracou, cols=2:3, chars=c(16,3))
 
+pyr <- pyramidal
+pyr$grp <- abbreviate(pyramidal$group, minlength=7)
+plot(pyr, quote(plot(Neurons, pch=16, main=grp)), main="Pyramidal Neurons")
+rm(pyr)
+
 plot(redwood)
 
 redwoodfull.extra$plotit()
@@ -115,6 +123,8 @@ a <- plot(urkiola, cex=0.5, cols=2:3)
 legend("bottomleft", legend=names(a), pch=a, col=2:3)
 
 plot(waka, markscale=0.02, main=c("Waka national park", "tree diameters"))
+
+plot(waterstriders)
 
 par(oldpar)
 options(oldoptions)

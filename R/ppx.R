@@ -11,7 +11,7 @@ ppx <- local({
   ctype.table <- c("spatial", "temporal", "local", "mark")
   ctype.real  <- c(TRUE,      TRUE,       FALSE,   FALSE)
 
-  ppx <- function(data, domain=NULL, coord.type=NULL) {
+  ppx <- function(data, domain=NULL, coord.type=NULL, simplify=FALSE) {
     data <- as.hyperframe(data)
     # columns suitable for spatial coordinates
     suitable <- with(unclass(data),
@@ -40,6 +40,27 @@ ppx <- local({
       ctype <- ctype.table[ctypeid]
     }
     ctype <- factor(ctype, levels=ctype.table)
+    #
+    if(simplify && all(ctype == "spatial")) {
+       # attempt to reduce to ppp or pp3
+      d <- length(ctype)
+      if(d == 2) {
+        ow <- try(as.owin(domain), silent=TRUE)
+        if(!inherits(ow, "try-error")) {
+          X <- try(as.ppp(as.data.frame(data), W=ow))
+          if(!inherits(X, "try-error"))
+            return(X)
+        }
+      } else if(d == 3) {
+        bx <- try(as.box3(domain), silent=TRUE)
+        if(!inherits(bx, "try-error")) {
+          m <- as.matrix(as.data.frame(data))
+          X <- try(pp3(m[,1], m[,2], m[,3], bx))
+          if(!inherits(X, "try-error"))
+            return(X)
+        }
+      }
+    }
     out <- list(data=data, ctype=ctype, domain=domain)
     class(out) <- "ppx"
     return(out)
@@ -330,5 +351,24 @@ rpoisppx <- function(lambda, domain) {
   stopifnot(is.numeric(lambda) && length(lambda) == 1 && lambda >= 0)
   n <- rpois(1, lambda * vol)
   runifpointx(n, domain)
+}
+
+unique.ppx <- function(x, ..., warn=FALSE) {
+  dup <- duplicated(x, ...)
+  if(!any(dup)) return(x)
+  if(warn) warning(paste(sum(dup), "duplicated points were removed"),
+                   call.=FALSE)
+  y <- x[!dup]
+  return(y)
+}
+
+duplicated.ppx <- function(x, ...) {
+  dup <- duplicated(as.data.frame(x), ...)
+  return(dup)
+}
+
+multiplicity.ppx <- function(x) {
+  mul <- multiplicity(as.data.frame(x))
+  return(mul)
 }
 

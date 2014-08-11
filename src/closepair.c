@@ -2,13 +2,18 @@
 
   closepair.c
 
-  $Revision: 1.30 $     $Date: 2013/05/22 09:29:54 $
+  $Revision: 1.31 $     $Date: 2013/11/22 01:01:12 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
-  paircount()    count the number of pairs (i, j) with distance < rmax
+  paircount()    count the total number of pairs (i, j) with distance < rmax
+
+  Cclosepaircounts
+                count for each i the number of j with distance < rmax
 
   crosscount()   count number of close pairs in two patterns
+
+  (note: Ccrosspaircounts is defined in Estrauss.c)
 
   duplicatedxy() find duplicated (x,y) pairs
 
@@ -43,6 +48,8 @@
   (double *) S_realloc((char *) PTR, NEWLENGTH, OLDLENGTH, sizeof(double))
 
 double sqrt();
+
+/* count TOTAL number of close pairs */
 
 void paircount(nxy, x, y, rmaxi, count) 
      /* inputs */
@@ -110,6 +117,73 @@ void paircount(nxy, x, y, rmaxi, count)
   } 
 
   *count = counted;
+}
+
+/* count for each i the number of j closer than distance r */
+
+void Cclosepaircounts(nxy, x, y, rmaxi, counts) 
+     /* inputs */
+     int *nxy;         /* number of (x,y) points */
+     double *x, *y;    /* (x,y) coordinates */
+     double *rmaxi;    /* maximum distance */
+     /* output VECTOR, assumed initialised to 0 */
+     int *counts;
+{
+  int n, maxchunk, i, j;
+  double xi, yi, rmax, r2max, dx, dy, a;
+
+  n = *nxy;
+  rmax = *rmaxi;
+  r2max = rmax * rmax;
+
+  if(n == 0) 
+    return;
+
+  /* loop in chunks of 2^16 */
+
+  i = 0; maxchunk = 0; 
+
+  while(i < n) {
+
+    R_CheckUserInterrupt();
+
+    maxchunk += 65536; 
+    if(maxchunk > n) maxchunk = n;
+
+    for(; i < maxchunk; i++) {
+
+      xi = x[i];
+      yi = y[i];
+
+      if(i > 0) { 
+	/* scan backwards from i */
+	for(j = i - 1; j >= 0; j--) {
+	  dx = x[j] - xi;
+	  a = r2max - dx * dx;
+	  if(a < 0) 
+	    break;
+	  dy = y[j] - yi;
+	  a -= dy * dy;
+	  if(a >= 0)
+	    (counts[i])++;
+	}
+      }
+      if(i + 1 < n) {
+	/* scan forwards from i */
+	for(j = i + 1; j < n; j++) {
+	  dx = x[j] - xi;
+	  a = r2max - dx * dx;
+	  if(a < 0) 
+	    break;
+	  dy = y[j] - yi;
+	  a -= dy * dy;
+	  if(a >= 0)
+	    (counts[i])++;
+	}
+      } 
+      /* end loop over i */
+    }
+  } 
 }
 
 

@@ -6,7 +6,7 @@
   and summarise their marks
 }
 \usage{
-   markstat(X, fun, N, R, \dots)
+   markstat(X, fun, N=NULL, R=NULL, \dots)
 }
 \arguments{
   \item{X}{
@@ -20,14 +20,12 @@
     Integer. If this argument is present,
     the neighbourhood of a point of \code{X} is defined to consist of the
     \code{N} points of \code{X} which are closest to it.
-    This argument is incompatible with \code{R}.
   }
   \item{R}{
     Nonnegative numeric value. If this argument is present,
     the neighbourhood of a point of \code{X} is defined to consist of
     all points of \code{X} which lie within a distance \code{R}
     of it.
-    This argument is incompatible with \code{N}.
   }
   \item{\dots}{
     extra arguments passed to the function \code{fun}.

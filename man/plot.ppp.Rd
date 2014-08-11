@@ -6,7 +6,7 @@
 }
 \usage{
  \method{plot}{ppp}(x, main, \dots, chars=NULL, cols=NULL,
-use.marks, which.marks=NULL, add=FALSE,
+use.marks, which.marks=NULL, add=FALSE, type=c("p","n"),
 maxsize=NULL, markscale=NULL,zap=0.01)
 }
 \arguments{
@@ -53,6 +53,11 @@ maxsize=NULL, markscale=NULL,zap=0.01)
     just the points are plotted, over the existing plot.
     A new plot is not created, and
     the window is not plotted.
+  }
+  \item{type}{
+    Type of plot: either \code{"p"} or \code{"n"}.
+    If \code{type="p"} (the default), both the points and the observation window
+    are plotted. If \code{type="n"}, only the window is plotted.
   }
   \item{maxsize}{
     maximum size of the circles/squares plotted

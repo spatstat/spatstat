@@ -34,7 +34,10 @@ summary.fii <- function(object, ...) {
   Vnames   <- object$Vnames
   IsOffset <- object$IsOffset
   y$poisson <- is.poisson.interact(INTERACT)
-  if(!y$poisson) {
+  thumbnail <- NULL
+  if(y$poisson) {
+    thumbnail <- "Poisson()"
+  } else {
     if(!is.null(INTERACT$interpret)) {
       # invoke auto-interpretation feature
       sensible <-  
@@ -45,10 +48,20 @@ summary.fii <- function(object, ...) {
       if(!is.null(sensible)) {
         header <- paste("Fitted", sensible$inames)
         printable <- sensible$printable
+        # Try to make a thumbnail description
+        param <- sensible$param
+        ipar <- INTERACT$par
+        if(all(unlist(lapply(param, length)) == 1) &&
+           all(unlist(lapply(ipar, length)) == 1)) {
+          allargs <- append(ipar, param)
+          allargs <- lapply(allargs, signif, digits=4)
+          thumbnail <- fakecallstring(INTERACT$creator, allargs)
+        } 
       } else {
         # no fitted interaction parameters (e.g. Hard Core)
         header <- NULL
         printable <- NULL
+        thumbnail <- paste0(INTERACT$creator, "()")
       }
     } else {
       # fallback
@@ -56,22 +69,28 @@ summary.fii <- function(object, ...) {
       VN <- Vnames[!IsOffset]
       if(length(VN) > 0) {
         header <- "Fitted interaction terms"
-        printable <-  exp(unlist(coefs[VN]))
+        icoef <- coefs[VN]
+        printable <-  exp(unlist(icoef))
+        ricoef <- lapply(icoef, signif, digits=4)
+        thumbnail <- fakecallstring(INTERACT$creator, ricoef)
       } else {
         header <- NULL
         printable <- NULL
+        thumbnail <- paste0(INTERACT$creator, "()")
       }
     }
     y <- append(y, list(sensible=sensible,
                         header=header,
-                        printable=printable))
+                        printable=printable,
+                        thumbnail=thumbnail))
   }
   class(y) <- c("summary.fii", class(y))
   return(y)
 }
 
 print.fii <- function(x, ...) {
-  print(summary(x), brief=TRUE)
+  tiny <- resolve.1.default("tiny", list(...), list(tiny=FALSE))
+  print(summary(x), brief=TRUE, tiny=tiny)
   return(invisible(NULL))
 }
 
@@ -79,7 +98,16 @@ print.summary.fii <- function(x, ...) {
   secret <- resolve.defaults(list(...),
                              list(prefix="Interaction: ",
                                   family=TRUE,
-                                  brief=FALSE))
+                                  brief=FALSE,
+                                  tiny=FALSE))
+  if(secret$tiny) {
+    # use thumbnail if available
+    thumbnail <- x$thumbnail
+    if(!is.null(thumbnail)) {
+      cat(paste(thumbnail, "\n"))
+      return(invisible(NULL))
+    }
+  }
   brief <- secret$brief
   if(!brief)
     cat(secret$prefix)

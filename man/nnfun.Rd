@@ -4,14 +4,17 @@
 \alias{nnfun.ppp}
 \alias{nnfun.psp}
 \title{
-  Nearest Neighbour Map as a Function 
+  Nearest Neighbour Index Map as a Function 
 }
 \description{
-  Compute the nearest neighbour map of an object, and return it as a function.
+  Compute the nearest neighbour index map of an object,
+  and return it as a function.
 }
 \usage{
   nnfun(X, ...)
-  \method{nnfun}{ppp}(X, ...)
+
+  \method{nnfun}{ppp}(X, ..., k=1)
+
   \method{nnfun}{psp}(X, ...)
 }
 \arguments{
@@ -21,6 +24,9 @@
     such as a point pattern (object of class \code{"ppp"})
     or a line segment pattern (object of class \code{"psp"}).
   }
+  \item{k}{
+    A single integer. The \code{k}th nearest neighbour will be found.
+  }
   \item{\dots}{
     Extra arguments are ignored. 
   }
@@ -28,7 +34,7 @@
 \details{
   For a collection \eqn{X} of two dimensional objects
   (such as a point pattern or a line segment pattern),
-  the \dQuote{nearest neighbour function}
+  the \dQuote{nearest neighbour index function}
   of \eqn{X} is the mathematical function \eqn{f} such that, for any 
   two-dimensional spatial location \eqn{(x,y)},
   the function value \code{f(x,y)}
@@ -38,11 +44,14 @@
   
   The command \code{f <- nnfun(X)} returns a \emph{function}
   in the \R language, with arguments \code{x,y}, that represents the
-  nearest neighbour function of \code{X}. Evaluating the function \code{f}
+  nearest neighbour index function of \code{X}. Evaluating the function \code{f}
   in the form \code{v <- f(x,y)}, where \code{x} and \code{y}
   are any numeric vectors of equal length containing coordinates of
-  spatial locations, yields the values of the distance function at these
-  locations.
+  spatial locations, yields the indices of the nearest neighbours
+  to these locations.
+
+  If the argument \code{k} is specified then the \code{k}-th nearest
+  neighbour will be found.
 
   The result of \code{f <- nnfun(X)} also belongs to the class
   \code{"funxy"} and to the special class \code{"nnfun"}.
@@ -67,6 +76,13 @@
    f
    plot(f)
    f(0.2, 0.3)
+
+   g <- nnfun(cells, k=2)
+   g(0.2, 0.3)
+
+   L <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
+   h <- nnfun(L)
+   h(0.2, 0.3)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.19 $   $Date: 2013/02/14 01:41:13 $
+#  $Revision: 1.23 $   $Date: 2013/11/20 09:18:50 $
 #
 
 # ............ generic  ............................
@@ -33,16 +33,19 @@ erosion.owin <-
   validradius(r, "erosion")
   if(r == 0 && !strict)
     return(w)
+
+  xr <- w$xrange
+  yr <- w$yrange
   
-  if(2 * r >= max(diff(w$xrange), diff(w$yrange)))
+  if(2 * r >= max(diff(xr), diff(yr)))
     stop("erosion distance r too large for frame of window")
 
   # compute the dimensions of the eroded frame
-  exr <- w$xrange + c(r, -r)
-  eyr <- w$yrange + c(r, -r)
+  exr <- xr + c(r, -r)
+  eyr <- yr + c(r, -r)
   ebox <- list(x=exr[c(1,2,2,1)], y=eyr[c(1,1,2,2)])
 
-  ismask <- (w$type == "mask")
+  ismask <- is.mask(w)
   if(is.empty(w))
     return(emptywindow(ebox))
 
@@ -54,26 +57,32 @@ erosion.owin <-
     if(polygonal && ismask) {
       # try to convert
       w <- as.polygonal(w)
-      if(w$type == "mask")
+      if(is.mask(w))
         polygonal <- FALSE
     }
   }
   
-  if(w$type == "rectangle" && polygonal) {
+  if(is.rectangle(w) && polygonal) {
     # result is a smaller rectangle
-    if(shrink.frame)
+    if(shrink.frame) {
       return(owin(exr, eyr))  # type 'rectangle' 
-    else
-      return(owin(w$xrange, w$yrange, poly=ebox)) # type 'polygonal'
+    } else {
+      return(owin(xr, yr, poly=ebox, check=FALSE)) # type 'polygonal'
+    }
   }
 
   if(polygonal) {
-    # compute polygonal region
-    cw <- complement.owin(w)
-    dcw <- dilation.owin(cw, r, polygonal=TRUE, ...)
-    cdcw <- complement.owin(dcw)
-    wnew <- intersect.owin(cdcw, w)
-    return(wnew)
+    # compute polygonal region using polyclip package
+    pnew <- polyoffset(w$bdry, -r, jointype="round")
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    if(totarea < 0)
+      pnew <- lapply(pnew, reverse.xypolygon)
+    if(shrink.frame) {
+      return(owin(poly=pnew, check=FALSE))
+    } else {
+      return(owin( xr,  yr, poly=pnew, check=FALSE))
+    }
   }
   
   # otherwise erode the window in pixel image form
@@ -112,23 +121,21 @@ dilation.owin <-
   if(r == 0)
     return(w)
 
-  ismask <- (w$type == "mask")
+  ismask <- is.mask(w)
   if(is.empty(w))
     return(w)
 
   # determine type of computation
-  if(is.null(polygonal))
+  if(is.null(polygonal)) {
     polygonal <- !ismask
-  else {
-    stopifnot(is.logical(polygonal))
-    if(polygonal && ismask) {
-      # try to convert
-      w <- as.polygonal(w)
-      if(w$type == "mask")
-        polygonal <- FALSE
-    }
-  }
+  } else stopifnot(is.logical(polygonal))
   
+  if(polygonal) {
+    # convert to polygonal 
+    w <- as.polygonal(w)
+    if(!is.polygonal(w))
+      polygonal <- FALSE
+  }
   
   # bounding frame
   bb <- if(tight) bounding.box(w) else as.rectangle(w)
@@ -144,14 +151,18 @@ dilation.owin <-
     dil <- levelset(distant, r, "<=")
     return(dil)
   } else {
-    # compute polygonal approximation
-    # extract individual edges
-    w <- as.polygonal(w)
-    edges <- as.psp(w)
-    # dilate edges
-    edgesplus <- dilation(edges, r, ..., polygonal=polygonal, tight=tight)
-    # add interior of w
-    out <- union.owin(w, edgesplus)
+    # compute polygonal region using polyclip package
+    pnew <- polyoffset(w$bdry, r, jointype="round")
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    if(totarea < 0)
+      pnew <- lapply(pnew, reverse.xypolygon)
+    # determine bounding frame, convert to owin
+    if(tight) {
+      out <- owin(poly=pnew, check=FALSE)
+    } else {
+      out <- owin(newbox$xrange, newbox$yrange, poly=pnew, check=FALSE)
+    }
     return(out)
   }
 }
@@ -163,8 +174,6 @@ closing.owin <- function(w, r, ..., polygonal=NULL) {
   wplus <- dilation.owin(w, r, ..., polygonal=polygonal, tight=FALSE)
   if(is.empty(wplus))
     return(wplus)
-  if(wplus$type == "polygonal")
-    wplus <- simplify.owin(wplus, r/10)
   wclose <- erosion.owin(wplus, r, strict=TRUE)
   wclose <- rebound.owin(wclose, as.rectangle(w))
   return(wclose)
@@ -177,8 +186,6 @@ opening.owin <- function(w, r, ..., polygonal=NULL) {
   wminus <- erosion.owin(w, r, ..., polygonal=polygonal, shrink.frame=FALSE)
   if(is.empty(wminus))
     return(wminus)
-  if(wminus$type == "polygonal")
-    wminus <- simplify.owin(wminus, r/10)
   wopen <- dilation.owin(wminus, r, tight=FALSE)
   wopen <- rebound.owin(wopen, as.rectangle(w))
   return(wopen)
@@ -220,7 +227,8 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     distant <- distmap(x, ...)
     dil <- levelset(distant, r, "<=")
     return(dil)
-  } else {
+  } else if(spatstat.options("old.morpho.psp")) {
+    # old code for polygonal case
     ends   <- x$ends
     angles <- angles.psp(x, directed=TRUE)
     lengths <- lengths.psp(x)
@@ -242,10 +250,28 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
       leftcircle <- angles[i] + pi/2 + halfcircle
       xx <- c(xx, seg$x0 + r * cos(leftcircle))
       yy <- c(yy, seg$y0 + r * sin(leftcircle))
-      sausage <- owin(newbox$xrange, newbox$yrange, poly=list(x=xx, y=yy))
+      sausage <- owin(newbox$xrange, newbox$yrange, poly=list(x=xx, y=yy), check=FALSE)
       # add to set
       out <- union.owin(out, sausage, ...)
     }
+    return(out)
+  } else {
+    # new code using 'polyclip' package
+    # convert to list of list(x,y)
+    ends   <- as.matrix(x$ends)
+    n <- nrow(ends)
+    plines <- vector(mode="list", length=n)
+    for(i in 1:n) plines[[i]] <- list(x=ends[i, c("x0","x1")],
+                                      y=ends[i, c("y0","y1")])
+    # call
+    pnew <- polylineoffset(plines, r, jointype="round", endtype="round")
+    # ensure correct polarity
+    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    if(totarea < 0)
+      pnew <- lapply(pnew, reverse.xypolygon)
+    # convert to owin object
+    out <- if(tight) owin(poly=pnew, check=FALSE) else
+            owin(newbox$xrange, newbox$yrange, poly=pnew, check=FALSE)
     return(out)
   }
 }
@@ -257,8 +283,6 @@ closing.psp <- function(w, r, ..., polygonal=TRUE) {
   wplus <- dilation.psp(w, r, ..., polygonal=polygonal, tight=FALSE)
   if(is.empty(wplus))
     return(emptywindow(as.owin(w)))
-  if(wplus$type == "polygonal")
-    wplus <- simplify.owin(wplus, r/10)
   wclose <- erosion.owin(wplus, r, strict=TRUE)
   wclose <- rebound.owin(wclose, as.rectangle(w))
   return(wclose)
@@ -322,8 +346,6 @@ closing.ppp <- function(w, r, ..., polygonal=TRUE) {
   w <- w[ok]
   # dilate
   wplus <- dilation.ppp(w, r, ..., polygonal=polygonal, tight=FALSE)
-  if(wplus$type == "polygonal")
-    wplus <- simplify.owin(wplus, r/10)
   wclose <- erosion.owin(wplus, r, strict=TRUE)
   wclose <- rebound.owin(wclose, as.rectangle(w))
   return(wclose)

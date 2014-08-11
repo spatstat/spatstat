@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.75 $	$Date: 2013/10/04 05:10:11 $
+#	$Revision: 1.77 $	$Date: 2013/11/12 14:11:10 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -252,8 +252,12 @@ predict.ppm <- local({
                     "Prediction is not possible at new locations"))
        covariates <- oldcov
      }
-     covariates.df <-  mpl.get.covariates(covariates,
-                       list(x=xpredict, y=ypredict), "prediction points")
+     covfunargs <- model$covfunargs
+     covariates.df <-
+       mpl.get.covariates(covariates,
+                          list(x=xpredict, y=ypredict),
+                          "prediction points",
+                          covfunargs)
      newdata <- cbind(newdata, covariates.df)
    }
 #
@@ -498,7 +502,7 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
     fram <- model.frame(fmla, data=data)
     # linear predictor
     mm <- model.matrix(fmla, data=fram)
-    eta <- mm %*% coefs
+    eta <- as.vector(mm %*% coefs)
     # offset
     mo <- model.offset(fram)
     if(!is.null(mo)) {

@@ -98,7 +98,7 @@
   Ghorbani, M. (2012) Cauchy cluster process.
   \emph{Metrika}, to appear.
 
-  Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
+  Jalilian, A., Guan, Y. and Waagepetersen, R. (2013)
   Decomposition of variance for spatial Cox processes.
   \emph{Scandinavian Journal of Statistics} \bold{40}, 119-137.
 

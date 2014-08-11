@@ -62,14 +62,14 @@ cauchy.estK(X, startpar=c(kappa=1,eta2=1), lambda=NULL,
   For a more detailed explanation of the Method of Minimum Contrast,
   see \code{\link{mincontrast}}.
   
-  The model is described in Jalilian et al (2011).
+  The model is described in Jalilian et al (2013).
   It is a cluster process formed by taking a 
   pattern of parent points, generated according to a Poisson process
   with intensity \eqn{\kappa}{kappa}, and around each parent point,
   generating a random number of offspring points, such that the
   number of offspring of each parent is a Poisson random variable with mean
   \eqn{\mu}{mu}, and the locations of the offspring points of one parent
-  follow a common distribution described in Jalilian et al (2011).
+  follow a common distribution described in Jalilian et al (2013).
 
   If the argument \code{lambda} is provided, then this is used
   as the value of the point process intensity \eqn{\lambda}{lambda}.
@@ -114,10 +114,10 @@ cauchy.estK(X, startpar=c(kappa=1,eta2=1), lambda=NULL,
   }
 }
 \references{
-Ghorbani, M. (2012) Cauchy cluster process.
-\emph{Metrika}, to appear.
+  Ghorbani, M. (2012) Cauchy cluster process.
+  \emph{Metrika}, to appear.
 
-  Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
+  Jalilian, A., Guan, Y. and Waagepetersen, R. (2013)
   Decomposition of variance for spatial Cox processes.
   \emph{Scandinavian Journal of Statistics} \bold{40}, 119-137.
 

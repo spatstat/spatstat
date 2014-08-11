@@ -1,5 +1,6 @@
 \name{unique.ppp}
 \alias{unique.ppp}
+\alias{unique.ppx}
 \title{Extract Unique Points from a Spatial Point Pattern}
 \description{
   Removes any points that are identical to other points
@@ -7,14 +8,17 @@
 }
 \usage{
  \method{unique}{ppp}(x, \dots, warn=FALSE)
+
+ \method{unique}{ppx}(x, \dots, warn=FALSE)
 }
 \arguments{
   \item{x}{
     A spatial point pattern
-    (object of class \code{"ppp"}).
+    (object of class \code{"ppp"} or \code{"ppx"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{duplicated.ppp}}.
+    Arguments passed to \code{\link{duplicated.ppp}}
+    or \code{\link{duplicated.data.frame}}.
   }
   \item{warn}{
     Logical. If \code{TRUE}, issue a warning message if any
@@ -25,8 +29,9 @@
   Another point pattern object.
 }
 \details{
-  This is a method for the generic function \code{unique} for 
-  point pattern datasets (of class \code{"ppp"}, see \code{\link{ppp.object}}).
+  These are methods for the generic function \code{unique} for 
+  point pattern datasets (of class \code{"ppp"}, see
+  \code{\link{ppp.object}}, or class \code{"ppx"}).
 
   Two points in a point pattern are deemed to be identical
   if their \eqn{x,y} coordinates are the same,

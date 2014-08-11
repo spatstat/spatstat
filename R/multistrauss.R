@@ -125,11 +125,9 @@ MultiStrauss <- local({
        },
        update = NULL, # default OK
        print = function(self) {
-         print.isf(self$family)
-         cat(paste("Interaction:\t", self$name, "\n"))
          radii <- self$par$radii
-         cat(paste(nrow(radii), "types of points\n"))
          types <- self$par$types
+         cat(paste(nrow(radii), "types of points\n"))
          if(!is.null(types)) {
            cat("Possible types: \n")
            print(types)

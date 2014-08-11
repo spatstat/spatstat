@@ -1,5 +1,6 @@
 \name{duplicated.ppp}
 \alias{duplicated.ppp}
+\alias{duplicated.ppx}
 \title{Determine Duplicated Points in a Spatial Point Pattern}
 \description{
   Determines which points in a spatial point pattern
@@ -7,11 +8,13 @@
 }
 \usage{
  \method{duplicated}{ppp}(x, \dots, rule=c("spatstat", "deldir"))
+
+ \method{duplicated}{ppx}(x, \dots)
 }
 \arguments{
   \item{x}{
     A spatial point pattern
-    (object of class \code{"ppp"}).
+    (object of class \code{"ppp"} or \code{"ppx"}).
   }
   \item{\dots}{
     Ignored.
@@ -25,8 +28,9 @@
   A logical vector of length equal to the number of points in \code{x}.
 }
 \details{
-  This is a method for the generic function \code{duplicated} for 
-  point pattern datasets (of class \code{"ppp"}, see \code{\link{ppp.object}}).
+  These are methods for the generic function \code{duplicated} for 
+  point pattern datasets (of class \code{"ppp"}, see
+  \code{\link{ppp.object}}, or class \code{"ppx"}).
 
   Two points in a point pattern are deemed to be identical
   if their \eqn{x,y} coordinates are the same,

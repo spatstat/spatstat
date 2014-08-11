@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.81 $ $Date: 2013/09/16 06:34:20 $
+# $Revision: 1.82 $ $Date: 2013/11/12 14:17:38 $
 #
 
 kppm <- function(X, trend = ~1,
@@ -308,7 +308,9 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   Fit <- list(method    = "clik",
               clfit     = opt,
               weightfun = weightfun,
-              rmax      = rmax)
+              rmax      = rmax,
+              objfun    = obj,
+              objargs   = objargs)
   # pack up
   result <- list(Xname      = Xname,
                  X          = X,

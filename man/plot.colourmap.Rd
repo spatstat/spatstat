@@ -7,7 +7,7 @@
 \usage{
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
-       labelmap=NULL)
+       labelmap=NULL, gap=0.25, add=FALSE)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
@@ -37,6 +37,15 @@
     on the plot. Typically used to simplify or shorten the
     labels on the plot.
   }
+  \item{gap}{
+    Distance between separate blocks of colour, as a fraction of
+    the width of one block, if the colourmap is discrete.
+  }
+  \item{add}{
+    Logical value indicating whether to add the colourmap to the
+    existing plot (\code{add=TRUE}), or to start a new plot
+    (\code{add=FALSE}, the default).
+  }
 }
 \details{
   This is the plot method for the class \code{"colourmap"}.
@@ -46,12 +55,25 @@
   colour lookup table associating colours with each data value.
 
   The command \code{plot.colourmap} displays the colour map as a colour
-  ribbon. This plot can be useful on its own to inspect the colour map.
+  ribbon or as a colour legend (a sequence of blocks of colour).
+  This plot can be useful on its own to inspect the colour map.
 
-  To annotate an existing plot with an explanatory colour ribbon,
+  If the domain of the colourmap is an interval of real numbers,
+  the colourmap is displayed as a continuous ribbon of colour.
+  If the domain of the colourmap is a finite set of inputs,
+  the colours are displayed as separate blocks of colour.
+  The separation between blocks is equal to \code{gap} times
+  the width of one block. 
+
+  To annotate an existing plot with an explanatory colour ribbon
+  or colour legend,
   specify \code{add=TRUE} and use the arguments \code{xlim}
   and/or \code{ylim} to control the physical position of the ribbon
   on the plot.
+
+  Labels explaining the colour map are
+  drawn by \code{\link[graphics]{axis}} and can be modified by
+  specifying arguments that will be passed to this function.
 }
 \value{
   None.
@@ -60,9 +82,9 @@
 \examples{
   co <- colourmap(rainbow(100), breaks=seq(-1,1,length=101))
   plot(co)
-  plot(co, vertical=TRUE)
+  plot(co, col.ticks="pink")
   ca <- colourmap(rainbow(8), inputs=letters[1:8])
-  plot(ca, col.ticks="pink")
+  plot(ca, vertical=TRUE)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -28,7 +28,6 @@ Pairwise <- function(pot, name = "user-defined pairwise interaction process",
   }
   if(missing(printfun))
     printfun <- function(self) {
-           cat(paste(self$name, "\n"))
            cat("Potential function:\n")
            print(self$pot)
            if(!is.null(parnames <- self$parnames)) {

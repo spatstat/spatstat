@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.123 $    $Date: 2013/10/31 08:05:45 $
+#    $Revision: 1.125 $    $Date: 2013/11/29 01:50:26 $
 #
 #
 matrowsum <- function(x) {
@@ -189,6 +189,11 @@ unparen <- function(x) {
   if(any(enclosed))
     x[enclosed] <- substr(x[enclosed], 2, n-1)
   return(x)
+}
+
+fakecallstring <- function(fname, parlist) {
+  cl <- do.call("call", append(list(name = fname), parlist))
+  return(format(cl))
 }
 
 prange <- function(x) {
@@ -836,7 +841,10 @@ codetime <- local({
     if(!started) s <- paste(s, "sec")
     paste(sgn, h, m, s, sep="")
   }
-  codetime <- function(x, hms=TRUE) {
+  codetime <- function(x, hms=TRUE, what=c("elapsed","user","system")) {
+    if(inherits(x, "proc_time")) x <- summary(x)[[match.arg(what)]] 
+    if(!is.numeric(x) || length(x) != 1)
+      stop("codetime: x must be a proc_time object or a single number")
     sgn <- if(x < 0) "-" else ""
     x <- abs(x)
     if(x < 60)
@@ -964,7 +972,7 @@ timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
 
 print.timed <- function(x, ...) {
   # strip the timing information and print the rest.
-  taken <- summary(attr(x, "timetaken"))[[1]]
+  taken <- attr(x, "timetaken")
   cx <- class(x)
   attr(x, "timetaken") <- NULL
   class(x) <- cx[cx != "timed"]

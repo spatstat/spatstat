@@ -6,7 +6,7 @@
   panels, one panel for each row of the hyperframe.
 }
 \usage{
-   \method{plot}{hyperframe}(x, e, ..., main, arrange=TRUE,
+   \method{plot}{hyperframe}(x, e, \dots, main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
                             parargs=list(mar=c(1,1,3,1) * marsize),
                             marsize=0.1)
@@ -17,7 +17,8 @@
     \code{\link{hyperframe}}).
   }
   \item{e}{
-    How to plot each row. Optional. \R language expression that will be
+    How to plot each row. Optional. An \R language call or expression
+    (typically enclosed in \code{\link{quote}()} that will be
     evaluated in each row of the hyperframe to generate the plots.
   }
   \item{\dots}{
@@ -65,6 +66,8 @@
 
   If \code{e} is present, it should be an \R language expression
   involving the column names of \code{x}.
+  (It is typically created using \code{\link{quote}} or
+  \code{\link{expression}}.)
   The expression will be evaluated once for each row of \code{x}.
   It will be evaluated in an environment where each column name of
   \code{x} is interpreted as meaning the object in that column
@@ -84,10 +87,9 @@
    H$D <- with(H, distmap(X))
    # points only
    plot(H[,"X"])
-   plot(H, plot(X, main=id))
+   plot(H, quote(plot(X, main=id)))
    # points superimposed on images
-   plot(H, {plot(D, main=id); plot(X, add=TRUE)})
-   
+   plot(H, quote({plot(D, main=id); plot(X, add=TRUE)}))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -42,7 +42,7 @@ dfbetas.ppm <- function(model, ...,
   u <- list(fit=model,fitname=fitname)
   s <- ppm.influence(model, what="dfbetas", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
-                         ...)
+                     ...)
   a <- s$dfbetas
   attr(a, "info") <- u
   return(a)
@@ -58,12 +58,14 @@ ppm.influence <- function(fit,
   stopifnot(is.ppm(fit))
   what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
-  #
   gotScore <- !is.null(iScore)
   gotHess <- !is.null(iHessian)
   needHess <- gotScore && any(what %in% c("leverage", "influence", "dfbetas"))
   if(!gotHess && needHess)
     stop("Must supply iHessian")
+  #
+  if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
+    stop("ppm influence measures are not yet implemented for method=logi")
   #
   # extract precomputed values if given
   theta  <- precomputed$coef   %orifnull% coef(fit)

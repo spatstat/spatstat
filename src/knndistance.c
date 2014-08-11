@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.5 $     $Date: 2013/11/03 03:37:39 $
+  $Revision: 1.8 $     $Date: 2013/12/10 03:29:45 $
 
   Function definitions are #included from knndist.h and knnXdist.h
 
@@ -125,24 +125,27 @@ void knnXinterface(n1, x1, y1, id1,
   ex = (*exclude != 0);
   di = (*wantdist != 0);
   wh = (*wantwhich != 0);
-  if(ex) {
+  if(!ex) {
     if(di && wh) {
-      knnX(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnX(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } else if(di) {
-      knnXdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnXdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } else if(wh) {
-      knnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } 
   } else {
     if(di && wh) {
-      knnXE(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnXE(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } else if(di) {
-      knnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } else if(wh) {
-      knnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+      knnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
     } 
   }
 }
+
+/* Turn off the debugging tracer in knnXdist.h */
+#undef TRACER
 
 /* 
    knnXdist

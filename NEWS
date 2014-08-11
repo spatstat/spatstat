@@ -1,4 +1,249 @@
 
+	CHANGES IN spatstat VERSION 1.35-0
+
+OVERVIEW
+
+   o We thank Melanie Bell, Leanne Bischof, Ida-Maria Sintorn,
+     Ege Rubak, Martin Hazelton, Oscar Garcia, 
+     Rasmus Waagepetersen, Abdollah Jalilian
+     and Jens Oehlschlaegel for contributions.
+
+   o Support for analysing replicated spatial point patterns.
+
+   o New vignette on analysing replicated spatial point patterns.
+
+   o Objective function surface plots.
+
+   o Estimator of point process intensity using nearest neighbour distances.
+
+   o Improved estimator of pair correlation function.
+
+   o Four new datasets. 
+
+   o Simple point-and-click interface functions for general use.
+
+   o More support for fv objects.
+
+   o More support for ppx objects.
+
+   o Extensions to nearest neighbour functions.
+
+   o Morphological operations accelerated.
+
+   o Bug fix to pair correlation functions.
+
+   o Bug fix to k-th nearest neighbour distances
+
+   o Version nickname: 'Multiple Personality'
+
+NEW CLASSES
+
+  o mppm
+  An object of class 'mppm' represents a Gibbs point process model
+  fitted to several point pattern datasets. The point patterns may
+  be treated as independent replicates of the same point process,
+  or as the responses in an experimental design, so that the 
+  model may depend on covariates associated with the design.
+  Methods for this class include print, plot, predict, anova and so on.
+
+  o objsurf
+  An object of class 'objsurf' contains values of the likelihood 
+  or objective function in a neighbourhood of the maximum.
+
+  o simplepanel
+  An object of class 'simplepanel' represents a spatial arrangement of buttons
+  that respond to mouse clicks, supporting a simple, robust graphical interface.
+  
+NEW FUNCTIONS
+
+  o mppm
+  Fit a Gibbs model to several point patterns.
+  The point pattern data may be organised as a designed experiment
+  and the model may depend on covariates associated with the design.
+
+  o anova.mppm
+  Analysis of Deviance for models of class mppm
+
+  o coef.mppm
+  Extract fitted coefficients from a model of class mppm
+
+  o fitted.mppm
+  Fitted intensity or conditional intensity for a model of class mppm
+
+  o kstest.mppm
+  Kolmogorov-Smirnov test of goodness-of-fit for a model of class mppm
+
+  o logLik.mppm
+  log likelihood or log pseudolikelihood for a model of class mppm
+
+  o plot.mppm
+  Plot the fitted  intensity or conditional intensity of a model of class mppm
+
+  o predict.mppm
+  Compute the fitted  intensity or conditional intensity 
+  of a model of class mppm
+
+  o quadrat.test
+  Quadrat counting test of goodness-of-fit for a model of class mppm
+
+  o residuals.mppm
+  Point process residuals for a model of class mppm
+
+  o subfits
+  Extract point process models for each individual point pattern dataset,
+  from a model of class mppm
+
+  o vcov.mppm
+  Variance-covariance matrix for a model of class mppm
+
+  o integral.msr
+  Integral of a measure.
+
+  o objsurf
+  For a model fitted by optimising an objective function, this command
+  computes the objective function in a neighbourhood of the optimal value.
+
+  o contour.objsurf, image.objsurf, persp.objsurf, plot.objsurf
+  Plot an 'objsurf' object.
+
+  o fvnames
+  Define groups of columns in a function value table, for use in plot.fv, etc
+
+  o multiplicity
+  New generic function for which multiplicity.ppp is a method.
+
+  o unique.ppx, duplicated.ppx, multiplicity.ppx
+  Methods for unique(), duplicated() and multiplicity() for 'ppx' objects.
+  These also work for 'pp3' and 'lpp' objects.
+
+  o closepairs, crosspairs, closepaircounts, crosspaircounts
+  Low-level functions for finding all close pairs of points 
+
+  o nndensity 
+  Estimate point process intensity using k-th nearest neighbour distances
+
+  o simplepanel, run.simplepanel
+  Support for a simple point-and-click interface for general use.
+
+NEW DATASETS
+
+   o pyramidal
+   Diggle-Lange-Benes data on pyramidal neurons in cingulate cortex.
+   31 point patterns divided into 3 groups.
+   
+   o waterstriders
+   Nummelin-Penttinen waterstriders data.
+   Three independent replicates of a point pattern formed by insects.
+
+   o simba
+   Simulated data example for mppm.
+   Two groups of point patterns with different interpoint interactions.
+
+   o demohyper
+   Simulated data example for mppm.
+   Point patterns and pixel image covariates, in two groups
+   with different regression coefficients.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o plot.hyperframe
+   The argument 'e' now has a different format.
+   Instead of plot(h, plot(XYZ)) one must now type plot(h, quote(plot(XYZ)))
+   This is necessary in order to avoid problems with 'S4 method dispatch'.
+   
+   o pcf.ppp, pcfinhom
+   New argument 'divisor' enables better performance of the estimator
+   of pair correlation function for distances close to zero.
+   
+   o applynbd
+   The arguments N, R and criterion may now be specified together.
+
+   o markstat
+   The arguments N and R may now be specified together.
+
+   o ppx
+   New argument 'simplify' allows the result to be converted to
+   an object of class 'ppp' or 'pp3' if appropriate.
+
+   o as.function.fv
+   Now allows multiple columns to be interpolated
+
+   o multiplicity.ppp
+   This function is now a method for the generic 'multiplicity'.
+   It has also been accelerated.
+
+   o nnfun.ppp, distfun.ppp
+   New argument 'k' allows these functions to compute k-th nearest neighbours.
+
+   o rVarGamma, kppm, vargamma.estK, vargamma.estpcf
+   New argument 'nu.pcf' provides an alternative way to specify
+   the kernel shape in the VarGamma model, instead of the existing
+   argument 'nu.ker'. Function calls that use the ambiguous argument
+   name 'nu' will no longer be accepted.
+
+   o nnmap
+   Image is now clipped to the original window.
+
+   o dilation, erosion, opening, closing
+   Polygonal computations greatly accelerated.
+
+   o plot.colourmap
+   Improved appearance and increased options, for discrete colourmaps.
+
+   o plot.msr
+   Improved appearance
+
+   o plot.ppp, plot.owin
+   An `empty' plot can now be generated by setting type="n"
+
+   o nndist.ppp, nnwhich.ppp, nncross.ppp
+   Column names of the result are now more informative.
+
+BUG FIXES
+
+   o nncross.ppp
+   Results were completely incorrect when k > 1.
+   Spotted by Jens Oehschlaegel. 
+   Bug was introduced in spatstat 1.34-1. 
+   Fixed.
+
+   o rVarGamma
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter 'nu.ker'. Spotted by Rasmus Waagepetersen and
+   Abdollah Jalilian. Bug was always present.		    
+   Fixed.
+   
+   o pair correlation functions (pcf.ppp, pcfdot, pcfcross, pcfinhom, ...)
+   The result had a negative bias at the maximum 'r' value,
+   because contributions to the pcf estimate from interpoint distances
+   greater than max(r) were mistakenly omitted. 
+   Spotted by Rasmus Waagepetersen and Abdollah Jalilian. 
+   Bug was always present.
+   Fixed.
+
+   o demo(spatstat)
+   This demonstration script had some unwanted side-effects, such as
+   rescaling the coordinates of standard datasets 'bramblecanes', 
+   'amacrine' and 'demopat', which caused the demonstration to crash 
+   when it was repeated several times, and caused errors in demo(data).
+   Fixed.
+
+   o rmh
+   Visual debugger crashed sometimes with message 'XI not found'.
+   Fixed.
+
+   o predict.ppm
+   Crashed if the model was fitted using 'covfunargs'.
+   Fixed.
+
+   o bounding.box
+   Crashed if one of the arguments was NULL.
+   Fixed.
+
+   o multiplicity.ppp
+   Did not handle data frames of marks. 
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.34-1
 
 OVERVIEW

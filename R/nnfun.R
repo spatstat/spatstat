@@ -3,19 +3,20 @@
 #
 #   nearest neighbour function (returns a function of x,y)
 #
-#   $Revision: 1.1 $   $Date: 2012/10/13 10:09:55 $
+#   $Revision: 1.4 $   $Date: 2013/12/11 09:22:56 $
 #
 
 nnfun <- function(X, ...) {
   UseMethod("nnfun")
 }
 
-nnfun.ppp <- function(X, ...) {
+nnfun.ppp <- function(X, ..., k=1) {
   # this line forces X to be bound
   stopifnot(is.ppp(X))
+  if(length(k) != 1) stop("k should be a single integer")
   g <- function(x,y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
-    nncross(Y, X, what="which")
+    nncross(Y, X, what="which", k=k)
   }
   attr(g, "Xclass") <- "ppp"
   g <- funxy(g, as.rectangle(as.owin(X)))
@@ -45,11 +46,10 @@ as.im.nnfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            na.replace=NULL) {
   if(is.null(W)) {
-    # use 'distmap' for speed
     env <- environment(X)
-    Xdata  <- get("X",      envir=env)
-    D <- distmap(Xdata, eps=eps, dimyx=dimyx, xy=xy)
-    Z <- attr(D, "index") 
+    Xdata  <- get("X", envir=env)
+    k <- mget("k", envir=env, inherits=FALSE, ifnotfound=list(1))[[1]]
+    Z <- nnmap(Xdata, k=k, what="which", eps=eps, dimyx=dimyx, xy=xy)
     if(!is.null(na.replace))
       Z$v[is.null(Z$v)] <- na.replace
     return(Z)
@@ -59,14 +59,16 @@ as.im.nnfun <- function(X, W=NULL, ...,
 }
 
 print.nnfun <- function(x, ...) {
+  env <- environment(x)
+  X <- get("X", envir=env)
+  k <- mget("k", envir=env, inherits=FALSE, ifnotfound=list(1))[[1]]
   xtype <- attr(x, "Xclass")
   typestring <- switch(xtype,
                        ppp="point pattern",
                        psp="line segment pattern",
-                       owin="window",
-                       "unrecognised object")
-  cat(paste("Nearest Neighbour Index function for", typestring, "\n"))
-  X <- get("X", envir=environment(x))
+                       paste("object of class", sQuote(xtype)))
+  Kth <- if(k == 1) "Nearest" else paste0(ordinal(k), "-Nearest")
+  cat(paste(Kth, "Neighbour Index function for ", typestring, "\n"))
   print(X)
   return(invisible(NULL))
 }

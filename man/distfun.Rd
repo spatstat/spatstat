@@ -12,8 +12,11 @@
 }
 \usage{
   distfun(X, ...)
-  \method{distfun}{ppp}(X, ...)
+
+  \method{distfun}{ppp}(X, ..., k=1)
+
   \method{distfun}{psp}(X, ...)
+
   \method{distfun}{owin}(X, ..., invert=FALSE)
 }
 \arguments{
@@ -24,6 +27,10 @@
   }
   \item{\dots}{
     Extra arguments are ignored. 
+  }
+  \item{k}{
+    An integer. The distance to the \code{k}th nearest point
+    will be computed.
   }
   \item{invert}{
     If \code{TRUE}, compute the distance transform of the
@@ -74,6 +81,13 @@
    f
    plot(f)
    f(0.2, 0.3)
+
+   plot(distfun(letterR, invert=TRUE), eps=0.1)
+
+   d <- distfun(cells)
+   d2 <- distfun(cells, k=2)
+   d(0.5, 0.5)
+   d2(0.5, 0.5)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

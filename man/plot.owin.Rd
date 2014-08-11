@@ -6,6 +6,7 @@
 }
 \usage{
  \method{plot}{owin}(x, main, add=FALSE, \dots, box, edge=0.04,
+                      type=c("w","n"),
                       hatch=FALSE, angle=45, spacing=diameter(x)/50,
                       invert=FALSE)
 }
@@ -34,6 +35,12 @@
     that are \code{1 + edge}
     times as large as the limits of the rectangular box
     that encloses the pattern.
+  }
+  \item{type}{
+    Type of plot: either \code{"w"} or \code{"n"}.
+    If \code{type="w"} (the default), the window is plotted.
+    If \code{type="n"} and \code{add=TRUE}, a new plot is initialised
+    and the coordinate system is established, but nothing is drawn.
   }
   \item{hatch}{
     logical flag; if \code{TRUE}, the interior of the window will

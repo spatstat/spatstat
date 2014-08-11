@@ -3,7 +3,7 @@
 # and Fisher information matrix
 # for ppm objects
 #
-#  $Revision: 1.94 $  $Date: 2013/10/23 04:48:43 $
+#  $Revision: 1.98 $  $Date: 2013/11/27 09:27:15 $
 #
 
 vcov.ppm <- local({
@@ -21,8 +21,8 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   logi.action <- match.arg(logi.action)
 
   stopifnot(length(what) == 1 && is.character(what))
-  what.options <- c("vcov", "corr", "fisher", "Fisher", "internals")
-  what.map     <- c("vcov", "corr", "fisher", "fisher", "internals")
+  what.options <- c("vcov", "corr", "fisher", "Fisher", "internals", "all")
+  what.map     <- c("vcov", "corr", "fisher", "fisher", "internals", "all")
   if(is.na(m <- pmatch(what, what.options)))
     stop(paste("Unrecognised option: what=", sQuote(what)))
   what <- what.map[m]
@@ -37,10 +37,10 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   varcov <- object$varcov
   
   # Do we need to go into the guts?
-  needguts <-
+  needguts <- nonstandard ||
     (is.null(fisher) && what=="fisher") ||
     (is.null(varcov) && what %in% c("vcov", "corr")) ||
-    (what == "internals") || nonstandard 
+    (what %in% c("internals", "all")) 
 
   # In general it is not true that varcov = solve(fisher)
   # because we might use different estimators,
@@ -85,25 +85,26 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
       varcov <- checksolve(fisher, matrix.action,
                            "Fisher information matrix",
                            "variance")
-    if(is.null(varcov)) return(NULL)
   }
-         
-  switch(what,
-         fisher = { return(fisher) },
-         vcov   = { return(varcov) },
-         corr={
-           sd <- sqrt(diag(varcov))
-           return(varcov / outer(sd, sd, "*"))
-         },
-         internals = {
-           return(internals)
-         })
+
+  out <- switch(what,
+                fisher = fisher,
+                vcov   = varcov,
+                corr   = {
+                  if(is.null(varcov)) return(NULL)
+                  sd <- sqrt(diag(varcov))
+                  varcov / outer(sd, sd, "*")
+                },
+                internals = internals,
+                all = results
+                )
+  return(out)
 }
 
 # ................  variance calculation for Poisson models  .............
 
 vcalcPois <- function(object, ...,
-                      what = c("vcov", "corr", "fisher", "internals"),
+                      what = c("vcov", "corr", "fisher", "internals", "all"),
                       matrix.action=c("warn", "fatal", "silent"),
                       method=c("C", "interpreted"),
                       verbose=TRUE,
@@ -117,6 +118,7 @@ vcalcPois <- function(object, ...,
   matrix.action <- match.arg(matrix.action)
   if(reweighting <- !is.null(matwt)) 
     stopifnot(is.numeric(matwt) && is.vector(matwt))
+  internals <- NULL
   nonstandard <- reweighting || !is.null(new.coef) || saveterms
   # compute Fisher information if not known
   if(is.null(fisher) || nonstandard) {
@@ -198,32 +200,40 @@ vcalcPois <- function(object, ...,
                dimnames(fisher) <- dimnames(gradient) <- dn
              }
            })
+  } 
+
+  if(what %in% c("all", "internals")) {
+    # Internals needed
+    if(is.null(internals))
+      internals <- list(suff = model.matrix(object))
+    internals$fisher <- fisher
+    if(reweighting)
+      internals$gradient <- gradient
+    ilist <- list(internals=internals)
   }
-  switch(what,
-         fisher = {
-           result <- list(fisher=fisher)
-         },
-         corr = ,
-         vcov = {
-           if(!reweighting) {
-             # Derive variance-covariance from Fisher info
-             varcov <- checksolve(fisher, matrix.action,
-                                  "Fisher information matrix",
-                                  "variance")
-           } else {
-             invgrad <- checksolve(gradient, matrix.action,
-                                   "gradient matrix", "variance")
-             varcov <- if(is.null(invgrad)) NULL else
-                       invgrad %*% fisher %*% invgrad
-           }
-             result <- list(fisher=fisher, varcov=varcov)
-         },
-         internals = {
-           internals$fisher <- fisher
-           if(reweighting)
-             internals$gradient <- gradient
-           result <- list(internals=internals)
-         })
+
+  if(what %in% c("all", "vcov", "corr")) {
+    # Variance-covariance matrix needed
+    if(!reweighting) {
+      # Derive variance-covariance from Fisher info
+      varcov <- checksolve(fisher, matrix.action,
+                           "Fisher information matrix",
+                           "variance")
+      vcovlist <- list(fisher=fisher, varcov=varcov)
+    } else {
+      invgrad <- checksolve(gradient, matrix.action,
+                            "gradient matrix", "variance")
+      varcov <- if(is.null(invgrad)) NULL else
+      invgrad %*% fisher %*% invgrad
+      vcovlist <- list(fisher=fisher, varcov=varcov, invgrad=invgrad)
+    }
+  }
+  result <- switch(what,
+                   fisher    = list(fisher=fisher),
+                   vcov      = vcovlist,
+                   corr      = vcovlist,
+                   internals = ilist,
+                   all       = append(ilist, vcovlist))
   return(result)
 }
 
@@ -231,7 +241,7 @@ vcalcPois <- function(object, ...,
 # ...................... vcov calculation for Gibbs models ....................
 
 vcalcGibbs <- function(fit, ...,
-                       what = c("vcov", "corr", "fisher", "internals"),
+                       what = c("vcov", "corr", "fisher", "internals", "all"),
                        generic=FALSE) {
   what <- match.arg(what)
   
@@ -250,28 +260,39 @@ vcalcGibbs <- function(fit, ...,
              c(unordered="contr.treatment",
                ordered="contr.poly"))
   # compute
-  spill <- (what %in% c("internals", "fisher"))
-  vc <- if(use.generic) vcalcGibbsGeneral(fit, ..., spill=spill) else vcalcGibbsSpecial(fit, ..., spill=spill)
+  spill <- (what %in% c("all", "internals", "fisher"))
+  spill.vc <- (what == "all")
+  out <- if(use.generic)
+    vcalcGibbsGeneral(fit, ..., spill=spill, spill.vc=spill.vc) else
+    vcalcGibbsSpecial(fit, ..., spill=spill, spill.vc=spill.vc)
 
   switch(what,
          vcov = ,
          corr = {
-           # vc is the variance-covariance matrix; return it
-           return(list(varcov=vc))
+           # out is the variance-covariance matrix; return it
+           return(list(varcov=out))
          },
          fisher = {
-           # vc is a list of internal data: extract the Fisher info
-           Fmat <- with(vc,
+           # out is a list of internal data: extract the Fisher info
+           Fmat <- with(out,
                         if(fit$method != "logi") Sigma else Sigma1log+Sigma2log)
            return(list(fisher=Fmat))
          },
          internals = {
-           # vc is a list of internal data: return it
+           # out is a list of internal data: return it
            # (ensure model matrix is included)
-           if(is.null(vc$mom))
-             vc$mom <- model.matrix(fit)
-           return(list(internals=vc))
-         })
+           if(is.null(out$mom))
+             out$mom <- model.matrix(fit)
+           return(list(internals=out))
+         },
+         all = {
+           # out is a list(internals, vc): return it
+           # (ensure model matrix is included)
+           if(is.null(out$internals$mom))
+             out$internals$mom <- model.matrix(fit)
+           return(out)
+         },
+         )
   return(NULL)
 }
 
@@ -279,7 +300,8 @@ vcalcGibbs <- function(fit, ...,
 
 vcalcGibbsGeneral <- function(model,
                          ...,
-                         spill = FALSE, 
+                         spill = FALSE,
+                         spill.vc = FALSE,
                          matrix.action=c("warn", "fatal", "silent"),
                          logi.action=c("warn", "fatal", "silent"),
                          algorithm=c("vectorclip", "vector", "basic"),
@@ -294,6 +316,7 @@ vcalcGibbsGeneral <- function(model,
   algorithm <- match.arg(algorithm)
   if(reweighting <- !is.null(matwt)) 
     stopifnot(is.numeric(matwt) && is.vector(matwt))
+  spill <- spill || spill.vc
   saveterms <- spill && saveterms
   logi <- model$method=="logi"
   asked.parallel <- !missing(parallel)
@@ -749,8 +772,8 @@ vcalcGibbsGeneral <- function(model,
            list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog) else NULL,
         if(reweighting) list(gradient=gradient) else NULL,
         if(saveterms) list(lamdel=lamdel, momdel=momdel) else NULL)
-    # return internal data if model was fitted by MPL
-    if(!logi)
+    # return internal data if no further calculation needed
+    if(!spill.vc && !logi)
       return(internals)
   }
     
@@ -780,10 +803,12 @@ vcalcGibbsGeneral <- function(model,
   vc.mpl <- if(is.null(U)) matrix(NA, p, p) else 
               U %*% Sigma %*% U / areaW
   dimnames(vc.mpl) <- dnames
-  
+
   # return variance-covariance matrix, if model was fitted by MPL
-  if(!logi)
-      return(vc.mpl)
+  if(!logi) {
+    if(spill.vc) return(list(varcov=vc.mpl, internals=internals))
+    return(vc.mpl)
+  }
   
   ###### Everything below is only computed for logistic fits #######
 
@@ -874,7 +899,8 @@ vcalcGibbsGeneral <- function(model,
     # return internal data only (with matrices unnormalised)
     internals <- c(internals, 
                    list(Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=vc.mpl))
-    return(internals)
+    if(!spill.vc)
+      return(internals)
   }
 
   ## .. Calculate variance-covariance matrix for logistic fit ...........
@@ -888,6 +914,7 @@ vcalcGibbsGeneral <- function(model,
              Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
   dimnames(vc.logi) <- dnames
   #
+  if(spill.vc) return(list(varcov=vc.logi, internals=internals))
   return(vc.logi)
 }
 
@@ -895,12 +922,14 @@ vcalcGibbsGeneral <- function(model,
 ## 2013/06/14, modified by Ege to handle logistic case as well
 
 vcalcGibbsSpecial <- function(fit, ...,
-                              spill=FALSE, 
+                              spill=FALSE,
+                              spill.vc=FALSE,
                               special.alg = TRUE,
                               matrix.action=c("warn", "fatal", "silent"),
                               logi.action=c("warn", "fatal", "silent")) {
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
+  spill <- spill || spill.vc
   
   ## Interaction name:
   iname <- fit$interaction$name
@@ -930,7 +959,8 @@ vcalcGibbsSpecial <- function(fit, ...,
                                reach(fit$interaction),
                                exp(coef(fit)[2]),
                                matrix.action,
-                               spill=spill))
+                               spill=spill,
+                               spill.vc=spill.vc))
       },
            
       "Piecewise constant pairwise interaction process"={
@@ -940,7 +970,8 @@ vcalcGibbsSpecial <- function(fit, ...,
                                fit$interaction$par$r,
                                exp(coef(fit)[-1]),
                                matrix.action,
-                               spill=spill))
+                               spill=spill,
+                               spill.vc=spill.vc))
       },
 
       "Multitype Strauss process"={
@@ -950,7 +981,7 @@ vcalcGibbsSpecial <- function(fit, ...,
         if(ncol(matR)==2 && marx){
           n <- length(theta)
           res <- vcovMultiStrauss(Xplus, R, exp(theta[c(n-2,n-1,n)]),
-                                  matrix.action,spill=spill)
+                                  matrix.action,spill=spill,spill.vc=spill.vc)
           if(!spill) {
             res <- contrastmatrix(res, 2)
             dimnames(res) <- list(names(theta), names(theta))
@@ -1066,7 +1097,7 @@ vcalcGibbsSpecial <- function(fit, ...,
       dimnames(A3) <- list(names(theta), names(theta))
     internals <- list(A1=A1, A2=A2, A3=A3, Sigma=Sigma, areaW=areaW)
     # return internal data, if model fitted by MPL
-    if(fit$method != "logi")
+    if(!spill.vc && fit$method != "logi")
       return(internals)
   }
 
@@ -1084,8 +1115,10 @@ vcalcGibbsSpecial <- function(fit, ...,
   dimnames(vc.mpl) <- list(names(theta), names(theta))
   
   # Return result for standard ppm method:
-  if(fit$method!="logi")
+  if(fit$method!="logi") {
+    if(spill.vc) return(list(varcov=vc.mpl, internals=internals))
     return(vc.mpl)
+  }
   
   ########################################################################
   ###### The remainder is only executed when the method is logistic ######
@@ -1240,7 +1273,8 @@ vcalcGibbsSpecial <- function(fit, ...,
     internals <- c(internals,
                    list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog,
                         Sigma1log=Sigma1log, Sigma2log=Sigma2log, mple=vc.mpl))
-    return(internals)
+    if(!spill.vc)
+      return(internals)
   }
 
   # ....... Compute variance-covariance for logistic fit .............
@@ -1254,10 +1288,12 @@ vcalcGibbsSpecial <- function(fit, ...,
              Ulog %*% (Sigma1log+Sigma2log) %*% Ulog / areaW
   #
   dimnames(vc.logi) <- list(names(theta), names(theta))
+  if(spill.vc) return(list(varcov=vc.logi, internals=internals))
   return(vc.logi)
 }
 
-vcovPairPiece <- function(Xplus, R, gam, matrix.action, spill=FALSE){
+vcovPairPiece <- function(Xplus, R, gam, matrix.action,
+                          spill=FALSE, spill.vc=FALSE){
   ## R is  the  vector of breaks (R[length(R)]= range of the pp.
   ## gam is the vector of weights
   Rmax <- R[length(R)]
@@ -1333,7 +1369,8 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action, spill=FALSE){
   if(spill) {
     # return internal data (with matrices unnormalised)
     dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- dimnames(Sigma) <- dnam
-    return(list(A1=A1, A2=A2, A3=A3, Sigma=Sigma))
+    internals <- list(A1=A1, A2=A2, A3=A3, Sigma=Sigma)
+    if(!spill.vc) return(internals)
   }
            
   ## Calculate variance-covariance
@@ -1343,10 +1380,13 @@ vcovPairPiece <- function(Xplus, R, gam, matrix.action, spill=FALSE){
   U <- checksolve(A1, matrix.action, , "variance")
   mat <- if(is.null(U)) matrix(NA, length(nam), length(nam)) else U%*%Sigma%*%U / areaW
   dimnames(mat) <- dnam
+
+  if(spill.vc) return(list(varcov=mat, internals=internals))
   return(mat)
 }
 
-vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action, spill=FALSE){
+vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action,
+                             spill=FALSE, spill.vc=FALSE){
   ## Xplus : marked Strauss point process 
   ## with two types 
   ## observed in W+R (R=max(R11,R12,R22))
@@ -1452,7 +1492,8 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action, spill=FALSE){
   if(spill) {
     # return internal data (with matrices unnormalised)
     dimnames(A1) <- dimnames(A2) <- dimnames(A3) <- dimnames(Sigma) <- dnam
-    return(list(A1=A1, A2=A2, A3=A3, Sigma=Sigma))
+    internals <- list(A1=A1, A2=A2, A3=A3, Sigma=Sigma)
+    if(!spill.vc) return(internals)
   }
            
   ## Calculate variance-covariance
@@ -1462,6 +1503,8 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action, spill=FALSE){
   U <- checksolve(A1, matrix.action, , "variance")
   mat <- if(is.null(U)) matrix(NA, length(nam), length(nam)) else U%*%Sigma%*%U / areaW
   dimnames(mat) <- dnam
+
+  if(spill.vc) return(list(varcov=mat, internals=internals))
   return(mat)
 }
 

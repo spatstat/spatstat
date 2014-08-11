@@ -125,8 +125,6 @@ MultiHard <- local({
        },
        update = NULL,  # default OK
        print = function(self) {
-         print.isf(self$family)
-         cat(paste("Interaction:\t", self$name, "\n"))
          h <- self$par$hradii
          cat(paste(nrow(h), "types of points\n"))
          types <- self$par$types

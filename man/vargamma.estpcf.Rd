@@ -8,7 +8,8 @@
 }
 \usage{
 vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
-            q = 1/4, p = 2, rmin = NULL, rmax = NULL, ..., pcfargs = list())
+            q = 1/4, p = 2, rmin = NULL, rmax = NULL, nu.pcf=NULL,
+            ..., pcfargs = list())
 }
 \arguments{
   \item{X}{
@@ -32,6 +33,9 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   \item{rmin, rmax}{
     Optional. The interval of \eqn{r} values for the contrast criterion.
   }
+  \item{nu.pcf}{
+    Alternative specification of the shape parameter. See Details.
+  }
   \item{\dots}{
     Optional arguments passed to \code{\link[stats]{optim}}
     to control the optimisation algorithm. See Details.
@@ -44,7 +48,7 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
 }
 \details{
   This algorithm fits the Neyman-Scott Cluster point process model
-  with Variance Gamma kernel (Jalilian et al, 2011)
+  with Variance Gamma kernel (Jalilian et al, 2013)
   to a point pattern dataset
   by the Method of Minimum Contrast, using the pair correlation function.
 
@@ -74,15 +78,26 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   see \code{\link{mincontrast}}.
   
   The Neyman-Scott cluster point process with Variance Gamma
-  kernel is described in Jalilian et al (2011).
+  kernel is described in Jalilian et al (2013).
   It is a cluster process formed by taking a 
   pattern of parent points, generated according to a Poisson process
   with intensity \eqn{\kappa}{kappa}, and around each parent point,
   generating a random number of offspring points, such that the
   number of offspring of each parent is a Poisson random variable with mean
   \eqn{\mu}{mu}, and the locations of the offspring points of one parent
-  have a common distribution described in Jalilian et al (2011).
+  have a common distribution described in Jalilian et al (2013).
 
+  The shape of the kernel is determined by the dimensionless
+  index \code{nu.ker}. This is the parameter
+  \eqn{\nu^\prime = \alpha/2-1}{nu' = alpha/2 - 1} appearing in
+  equation (12) on page 126 of Jalilian et al (2013).
+  Instead of specifying \code{nu.ker} the user can specify
+  \code{nu.pcf} which is the parameter \eqn{\nu=\alpha-1}{nu = alpha-1}
+  appearing in equation (13), page 127 of Jalilian et al (2013).
+  These are related by \code{nu.pcf = 2 * nu.ker + 1}
+  and \code{nu.ker = (nu.pcf - 1)/2}.
+  Exactly one of \code{nu.ker} or \code{nu.pcf} must be specified.
+  
   If the argument \code{lambda} is provided, then this is used
   as the value of the point process intensity \eqn{\lambda}{lambda}.
   Otherwise, if \code{X} is a
@@ -124,7 +139,7 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   }
 }
 \references{
-  Jalilian, A., Guan, Y. and Waagepetersen, R. (2011)
+  Jalilian, A., Guan, Y. and Waagepetersen, R. (2013)
   Decomposition of variance for spatial Cox processes.
   \emph{Scandinavian Journal of Statistics} \bold{40}, 119-137.
 

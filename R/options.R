@@ -235,6 +235,16 @@ assign(".Spatstat.Options", list(), envir = .spEnv)
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       allow.logi.influence=list(
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       old.morpho.psp=list(
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
        )
 # end of options list

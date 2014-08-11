@@ -3,7 +3,7 @@
 #
 #   visual debug mechanism for rmh
 #
-#   $Revision: 1.24 $  $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.25 $  $Date: 2013/12/08 00:38:05 $
 #
 #   When rmh is called in visual debug mode (snooping = TRUE),
 #   it calls e <- rmhSnoopEnv(...) to create an R environment 'e'
@@ -186,15 +186,16 @@ rmhsnoop <- local({
              Shift = 
              {
                propname <- "shift proposal"
+               # convert from C to R indexing
+               propindx <- propindx + 1
+               # make objects
+               XminI <- X[-propindx]
+               XI <- X[propindx]
                U <- ppp(proplocn[1], proplocn[2], window=Wsim)
                if(is.finite(R) && R > 0) {
                  DU <- as.psp(disc(R, proplocn))[Wsim]
                  DXI <- as.psp(disc(R, c(XI$x, XI$y)))[Wsim]
                } else { DU <- DXI <- NULL }
-               # convert from C to R indexing
-               propindx <- propindx + 1
-               XminI <- X[-propindx]
-               XI <- X[propindx]
                # make layers
                L <- layered(Wsim=Wsim,
                             Wclip=Wclip,
@@ -290,7 +291,7 @@ rmhsnoop <- local({
     maxchars <- max(4, nchar(names(jump.clicks)))
     P <- grow.simplepanel(P, "left", panelwidth * maxchars/6, jump.clicks)
     # go
-    rslt <- run.simplepanel(P)
+    rslt <- run.simplepanel(P, popup=FALSE)
     clear.simplepanel(P)
     rm(en)
     return(rslt)

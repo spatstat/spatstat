@@ -11,6 +11,7 @@
 pcfinhom(X, lambda = NULL, ..., r = NULL,
          kernel = "epanechnikov", bw = NULL, stoyan = 0.15,
          correction = c("translate", "Ripley"),
+         divisor = c("r", "d"),
          renormalise = TRUE, normpower=1,
          reciplambda = NULL,
          sigma = NULL, varcov = NULL)
@@ -48,6 +49,11 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
   }
   \item{correction}{
     Choice of edge correction.
+  }
+  \item{divisor}{
+    Choice of divisor in the estimation formula:
+    either \code{"r"} (the default) or \code{"d"}.
+    See \code{\link{pcf.ppp}}.
   }
   \item{renormalise}{
     Logical. Whether to renormalise the estimate. See Details.

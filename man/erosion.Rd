@@ -79,13 +79,8 @@
   \code{\link{eroded.areas}}
 }
 \examples{
-  w <- owin(c(0,1),c(0,1))
-  v <- erosion(w, 0.1) 
-  # returns rectangle [0.1, 0.9] x [0.1,0.9]
-  \dontrun{
-  v <- erosion(w, 0.6)
-  # erosion is empty
-  }
+  plot(letterR, main="erosion(letterR, 0.2)")
+  plot(erosion(letterR, 0.2), add=TRUE, col="red")
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

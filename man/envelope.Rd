@@ -480,6 +480,10 @@
   }
 }
 \references{
+  Baddeley, A., Diggle, P.J., Hardegen, A., Lawrence, T., Milne,
+  R.K. and Nair, G. (2014) On tests of spatial pattern based on
+  simulation envelopes. \emph{Ecological Monographs}, to appear.
+  
   Cressie, N.A.C. \emph{Statistics for spatial data}.
     John Wiley and Sons, 1991.
 

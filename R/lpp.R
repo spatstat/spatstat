@@ -320,3 +320,4 @@ rescale.lpp <- function(X, s) {
   unitname(Y) <- rescale(unitname(X), s)
   return(Y)
 }
+

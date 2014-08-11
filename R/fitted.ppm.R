@@ -3,7 +3,7 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.10 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.11 $   $Date: 2013/11/08 15:56:58 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
@@ -46,7 +46,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
     glmdata <- getglmdata(object, drop=drop)
     glmfit  <- getglmfit(object)
     Vnames <- object$internal$Vnames
-    interacting <- !is.null(Vnames)
+    interacting <- (length(Vnames) != 0)
     
     # Modification of `glmdata' may be required
     if(interacting) 

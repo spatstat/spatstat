@@ -1,23 +1,30 @@
 #
-#	plot.ppp.S
+#	plot.ppp.R
 #
-#	$Revision: 1.51 $	$Date: 2013/07/25 09:02:06 $
+#	$Revision: 1.52 $	$Date: 2013/12/04 11:10:17 $
 #
 #
 #--------------------------------------------------------------------------
 
 plot.ppp <-
   function(x, main, ..., chars=NULL, cols=NULL, use.marks=TRUE,
-           which.marks=NULL, add=FALSE,
+           which.marks=NULL, add=FALSE, type=c("p", "n"), 
            maxsize=NULL, markscale=NULL, zap=0.01)
 {
-#
-# Function plot.ppp.
-# A plot() method for the class 'ppp'
-#
   if(missing(main))
     main <- short.deparse(substitute(x))
 
+  type <- match.arg(type)
+  
+  if(type == "n") {
+    # plot the window only
+    do.call("plot.owin",
+            resolve.defaults(list(x$window),
+                             list(...),
+                             list(main=main, invert=TRUE, add=add)))
+    return(invisible(NULL))
+  }
+  
 # Handle multiple columns of marks as separate plots
 #  (unless add=TRUE or which.marks selects a single column)
   if(use.marks && is.data.frame(mx <- marks(x))) {

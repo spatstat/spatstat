@@ -3,22 +3,24 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.17 $   $Date: 2013/10/06 04:38:18 $
+#   $Revision: 1.20 $   $Date: 2013/12/12 05:38:59 $
 #
 
 distfun <- function(X, ...) {
   UseMethod("distfun")
 }
 
-distfun.ppp <- function(X, ...) {
+distfun.ppp <- function(X, ..., k=1) {
   # this line forces X to be bound
   stopifnot(is.ppp(X))
+  stopifnot(length(k) == 1)
   g <- function(x,y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
-    nncross(Y, X, what="dist")
+    nncross(Y, X, what="dist", k=k)
   }
   attr(g, "Xclass") <- "ppp"
   g <- funxy(g, as.rectangle(as.owin(X)))
+  attr(g, "k") <- k
   class(g) <- c("distfun", class(g))
   return(g)
 }
@@ -57,13 +59,15 @@ distfun.owin <- function(X, ..., invert=FALSE) {
 
 as.owin.distfun <- function(W, ..., fatal=TRUE) {
   X <- get("X", envir=environment(W))
-  as.owin(X, ..., fatal=fatal)
+  result <- if(is.owin(X)) as.rectangle(X) else as.owin(X, ..., fatal=fatal)
+  return(result)
 }
 
 as.im.distfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            na.replace=NULL) {
-  if(is.null(W)) {
+  k <- attr(X, "k")
+  if(is.null(W) && (is.null(k) || (k == 1))) {
     # use 'distmap' for speed
     env <- environment(X)
     Xdata  <- get("X",      envir=env)
@@ -75,10 +79,19 @@ as.im.distfun <- function(X, W=NULL, ...,
     D <- distmap(Xdata, eps=eps, dimyx=dimyx, xy=xy)
     if(!is.null(na.replace))
       D$v[is.null(D$v)] <- na.replace
-    return(D)
+  } else if(identical(attr(X, "Xclass"), "ppp")) {
+    # point pattern --- use nngrid/knngrid
+    env <- environment(X)
+    Xdata  <- get("X",      envir=env)
+    D <- nnmap(Xdata, W=W, what="dist", k=k, 
+               eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace,
+               ...)
+  } else {
+    # evaluate function at pixel centres
+    D <- as.im.function(X, W=W,
+                        eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace)
   }
-  # use as.im.function
-  NextMethod("as.im")
+  return(D)
 }
 
 print.distfun <- function(x, ...) {
@@ -88,9 +101,16 @@ print.distfun <- function(x, ...) {
                        psp="line segment pattern",
                        owin="window",
                        "unrecognised object")
+  objname <- switch(xtype,
+                    ppp="point",
+                    psp="line segment",
+                    "object")
   cat(paste("Distance function for", typestring, "\n"))
   X <- get("X", envir=environment(x))
   print(X)
+  if(!is.null(k <- attr(x, "k")) && k > 1)
+    cat(paste("Distance to", ordinal(k), "nearest", objname,
+              "will be computed\n"))
   return(invisible(NULL))
 }
 

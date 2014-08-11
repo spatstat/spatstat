@@ -23,6 +23,8 @@ plot(demopat, cols=c("green", "blue"), main="Multitype point pattern")
 
 plot(longleaf, fg="blue", main="Marked point pattern")
 
+plot(finpines, main="Point pattern with multivariate marks")
+
 a <- psp(runif(20),runif(20),runif(20),runif(20), window=owin())
 plot(a, main="Line segment pattern")
 marks(a) <- sample(letters[1:4], 20, replace=TRUE)
@@ -224,11 +226,11 @@ plot(X, add=TRUE)
 plot(delaunay(X))
 plot(X, add=TRUE)
 
-parsave <- par(mfrow=c(1,3))
+parsave <- par(mfrow=c(2,2))
 plot(longleaf, main="Longleaf Pines data")
 plot(nnmark(longleaf), main="Nearest mark")
 plot(Smooth(longleaf, 10), main="Kernel smoothing of marks")
-plot(idw(longleaf), main="Inverse distance weighted smoothing of marks")
+plot(idw(longleaf), main=c("Inverse distance weighted","smoothing of marks"))
 par(parsave)
 
 fryplot(cells, main=c("Fry plot","cells data"), pch="+")
@@ -304,11 +306,11 @@ contour(density(split(urkiola)), panel.begin=as.owin(urkiola))
 plot(relrisk(urkiola), main="Relative risk (cross-validated)")
 
 plot(bramblecanes)
-bramblecanes <- rescale(bramblecanes, 1/9)
-plot(alltypes(bramblecanes, "K"), mar.panel=c(4,5,2,2)+0.1)
+br <- rescale(bramblecanes)
+plot(alltypes(br, "K"), mar.panel=c(4,5,2,2)+0.1)
 
-amacrine <- rescale(amacrine, 1/662)
-plot(alltypes(amacrine, Lcross, envelope=TRUE, nsim=9), . - r ~ r, ylim=c(-25, 5))
+ama <- rescale(amacrine)
+plot(alltypes(ama, Lcross, envelope=TRUE, nsim=9), . - r ~ r, ylim=c(-25, 5))
 
 ponderosa.extra$plotit(main="Ponderosa Pines")
 
@@ -399,11 +401,14 @@ legend("bottomleft", legend=c("partial residual", "loglinear fit"), col=c(1,4), 
 parsave <- par(mfrow=c(1,2))
 plot(redwood)
 fitT <- kppm(redwood, ~1, clusters="Thomas")
-oop <- par(pty="s")
-plot(fitT, main=c("Thomas model","fit by minimum contrast"))
-
-plot(redwood)
 plot(simulate(fitT)[[1]], main="simulation from fitted Thomas model")
+
+oop <- par(pty="s")
+plot(fitT, main=c("Thomas model","minimum contrast fit"))
+os <- objsurf(fitT)
+plot(os, main="Minimum contrast objective function", col=terrain.colors(128))
+contour(os, add=TRUE)
+par(oop)
 
 plot(swedishpines)
 fit <- ppm(swedishpines, ~1, Strauss(r=7))
@@ -437,12 +442,12 @@ legend("topleft", legend=c("empirical K function",
 par(parsave)
 
 # Multitype data
-demopat <- rescale(demopat, 8)
-unitname(demopat) <- c("mile", "miles")
-demopat
+dpat <- rescale(demopat, 8)
+unitname(dpat) <- c("mile", "miles")
+dpat
 
-plot(demopat, cols=c("red", "blue"))
-fit <- ppm(demopat, ~marks + polynom(x,y,2), Poisson())
+plot(dpat, cols=c("red", "blue"))
+fit <- ppm(dpat, ~marks + polynom(x,y,2), Poisson())
 plot(fit, trend=TRUE, se=TRUE)
 
 fanfare("VII. Simulation")
