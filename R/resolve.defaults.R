@@ -152,7 +152,8 @@ graphicsPars <- local({
            "border",
            "cex.main", "cex.sub",
            "col.main", "col.sub",
-           "font.main", "font.sub"))
+           "font.main", "font.sub",
+           "xaxs", "yaxs"))
 
   graphicsPars <- function(key) {
     n <- pmatch(key, names(TheTable))

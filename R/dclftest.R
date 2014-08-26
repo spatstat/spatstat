@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.23 $  $Date: 2014/07/18 02:39:31 $
+#  $Revision: 1.24 $  $Date: 2014/08/20 10:39:43 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -214,7 +214,8 @@ envelopeTest <- local({
       uname <- with(summary(unitname(X)),
                     if(!vanilla) paste(plural, explain) else NULL)
       testname <- c(paste(testname, "of", nullmodel),
-                    paste("Monte Carlo test based on", nsim, "simulations"),
+                    paste("Monte Carlo test based on", nsim,
+                          "simulations", e$constraints), 
                     paste("Summary function:", fname),
                     paste("Reference function:",
                           if(used.theo) "theoretical" else "sample mean"),

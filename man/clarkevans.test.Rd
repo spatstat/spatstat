@@ -72,7 +72,8 @@ clarkevans.test(X, ...,
 
   Otherwise, the \eqn{p}-value for the test is computed
   by Monte Carlo simulation of \code{nsim} realisations of
-  Complete Spatial Randomness.
+  Complete Spatial Randomness conditional on the
+  observed number of points.
 }
 \value{
   An object of class \code{"htest"} representing the result of the test.
@@ -80,7 +81,7 @@ clarkevans.test(X, ...,
 \references{
   Clark, P.J. and Evans, F.C. (1954)
   Distance to nearest neighbour as a measure of spatial
-  relationships in populations \emph{Ecology} \bold{35},
+  relationships in populations. \emph{Ecology} \bold{35},
   445--453.
   
   Donnelly, K. (1978) Simulations to determine the variance

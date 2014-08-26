@@ -195,7 +195,7 @@ from a point pattern in a window of arbitrary shape.
   (Ripley, 1988; Lotwick and Silverman, 1982; Diggle, 2003, pp 51-53).
   If \code{var.approx=TRUE}, then the result of
   \code{Kest} also has a column named \code{rip} 
-  values of Ripley's (1988) approximation to
+  giving values of Ripley's (1988) approximation to
   \eqn{\mbox{var}(\hat K(r))}{var(Kest(r))},
   and (if the window is a rectangle) a column named \code{ls} giving
   values of Lotwick and Silverman's (1982) approximation.

@@ -1729,7 +1729,7 @@ local({
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.2 $  $Date: 2012/01/31 11:04:44 $
+#  $Revision: 1.3 $  $Date: 2014/08/25 04:43:07 $
 #
 
   lambda <- runif(4, min=50, max=100)
@@ -1740,6 +1740,10 @@ local({
   h[, "Y"] <- X
   h[, "X"] <- lapply(X, flipxy)
   h[, c("X", "Y")] <- hyperframe(X=X, Y=X)
+
+  names(h) <- LETTERS[1:5]
+  print(h)
+
 
 # check fast code for Kest
 require(spatstat)
@@ -2171,4 +2175,87 @@ local({
   g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
   invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
 
+})
+##
+##  tests/updateppm.R
+##
+##  Check validity of update.ppm
+##
+##  $Revision: 1.2 $ $Date: 2014/08/24 04:55:27 $
+
+local({
+    require(spatstat)
+    h <- function(m1, m2) {
+        mc <- deparse(sys.call())
+        cat(paste(mc, "\t... "))
+        m1name <- deparse(substitute(m1))
+        m2name <- deparse(substitute(m2))
+        if(!identical(names(coef(m1)), names(coef(m2))))
+            stop(paste("Differing results for", m1name, "and", m2name,
+                       "in updateppm.R"),
+                 call.=FALSE)
+        cat("OK\n")
+    }
+    X <- redwood[c(TRUE,FALSE)]
+    Y <- redwood[c(FALSE,TRUE)]
+    fit0f <- ppm(X ~ 1, nd=8)
+    fit0p <- ppm(X, ~1, nd=8)
+    fitxf <- ppm(X ~ x, nd=8)
+    fitxp <- ppm(X, ~x, nd=8)
+
+    cat("Basic consistency ...\n")
+    h(fit0f, fit0p)
+    h(fitxf, fitxp)
+
+    cat("\nTest correct handling of model formulas ...\n")
+    h(update(fitxf, Y), fitxf)
+    h(update(fitxf, Q=Y), fitxf)
+    h(update(fitxf, Y~x), fitxf)
+    h(update(fitxf, Q=Y~x), fitxf)
+    h(update(fitxf, ~x), fitxf)
+
+    h(update(fitxf, Y~1), fit0f)
+    h(update(fitxf, ~1), fit0f)
+    h(update(fit0f, Y~x), fitxf)
+    h(update(fit0f, ~x), fitxf)
+
+    h(update(fitxp, Y), fitxp)
+    h(update(fitxp, Q=Y), fitxp)
+    h(update(fitxp, Y~x), fitxp)
+    h(update(fitxp, Q=Y~x), fitxp)
+    h(update(fitxp, ~x), fitxp)
+
+    h(update(fitxp, Y~1), fit0p)
+    h(update(fitxp, ~1), fit0p)
+    h(update(fit0p, Y~x), fitxp)
+    h(update(fit0p, ~x), fitxp)
+
+    cat("\nTest scope handling for left hand side ...\n")
+    X <- Y
+    h(update(fitxf), fitxf)
+
+    cat("\nTest scope handling for right hand side ...\n")
+    Z <- distmap(X)
+    fitZf <- ppm(X ~ Z)
+    fitZp <- ppm(X, ~ Z)
+    h(update(fitxf, X ~ Z), fitZf)
+    h(update(fitxp, X ~ Z), fitZp)
+    h(update(fitxf, . ~ Z), fitZf)
+    h(update(fitZf, . ~ x), fitxf)
+    h(update(fitZf, . ~ . - Z), fit0f)
+    h(update(fitxp, . ~ Z), fitZp)
+    h(update(fitZp, . ~ . - Z), fit0p)
+    h(update(fit0p, . ~ . + Z), fitZp)
+    h(update(fitZf, . ~ . ), fitZf)
+    h(update(fitZp, . ~ . ), fitZp)
+
+    cat("\nTest use of internal data ...\n")
+    h(update(fitZf, ~ x, use.internal=TRUE), fitxf)
+    fitsin <- update(fitZf, X~sin(Z))
+    h(update(fitZf, ~ sin(Z), use.internal=TRUE), fitsin)
+
+    cat("\nTest step() ... ")
+    fut <- ppm(X ~ Z + x + y, nd=8)
+    fut0 <- step(fut, trace=0)
+    cat("OK\n")
 })

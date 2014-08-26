@@ -439,6 +439,8 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \verb![<-.fv!, \verb!$<-.fv!: %$
+  subset replacement operators for \texttt{fv} objects.
 \item \texttt{Ksector}: directional version of $K$-function.
 \item \texttt{pairorient}: point pair orientation distribution.
 \item \texttt{range.fv}, \texttt{min.fv}, \texttt{max.fv}:
@@ -2683,6 +2685,11 @@ of potential impact.
   have affected ppm objects with interaction \texttt{AreaInter}.
   \bugger{1.9-4}{june 2006}{1.25-2}{january 2012}
 
+ \item \texttt{update.ppm}:
+   If the argument \texttt{Q} was given,
+   the results were usually incorrect, or an error was generated.
+   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
+     
 \item \texttt{envelope.ppm}:
    If the model was an inhomogeneous Poisson process, 
    the resulting envelope object was incorrect
@@ -2738,10 +2745,15 @@ of potential impact.
    or NA values of the linear $K$ function.  
    \bugger{1.23-0}{july 2011}{1.27-0}{may 2012}
 
- \item \texttt{Kinhom}:
+ \item \texttt{Kinhom}, \texttt{Linhom}:
    the results were not renormalised (even if \texttt{renormalise=TRUE})
    in some cases.
    \bugger{1.21-0}{december 2010}{1.37-0}{may 2014}
+     
+ \item \texttt{Kinhom}, \texttt{Linhom}:
+   Calculations were incorrect if \texttt{lambda} was a fitted point
+   process model.
+   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
      
  \item \texttt{predict.ppm}
    Calculation of the conditional intensity omitted the edge correction

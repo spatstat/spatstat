@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.50 $  $Date: 2014/05/10 04:31:19 $
+# $Revision: 1.51 $  $Date: 2014/08/25 04:03:45 $
 #
 
 hyperframe <- function(...,
@@ -201,8 +201,11 @@ names.hyperframe <- function(x) { unclass(x)$vname }
   value <- make.names(value)
   if(length(value) != x$nvars)
     stop("Incorrect length for vector of names")
+  vtype <- x$vtype
+  names(x$df)           <- value[vtype == "dfcolumn"]
+  names(x$hyperatoms)   <- value[vtype == "hyperatom"]
+  names(x$hypercolumns) <- value[vtype == "hypercolumn"]
   x$vname <- value
-  names(x$df) <- value[x$vtype == "dfcolumn"]
   class(x) <- c("hyperframe", class(x))
   return(x)
 }

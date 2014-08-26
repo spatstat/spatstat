@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.56 $ $Date: 2014/07/20 05:52:17 $
+#   $Revision: 1.57 $ $Date: 2014/08/26 03:03:19 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -400,8 +400,10 @@ tileindex <- function(x, y, Z) {
          rect={
            jx <- findInterval(x, Z$xgrid, rightmost.closed=TRUE)
            iy <- findInterval(y, Z$ygrid, rightmost.closed=TRUE)
-           nrows    <- length(Z$ygrid) - 1
+           nrows <- length(Z$ygrid) - 1
            ncols <- length(Z$xgrid) - 1
+           iy[iy < 1 | iy > nrows] <- NA
+           jx[jx < 1 | jx > ncols] <- NA
            jcol <- jx
            irow <- nrows - iy + 1
            ktile <- jcol + ncols * (irow - 1)

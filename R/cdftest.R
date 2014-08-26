@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.7 $  $Date: 2014/06/25 11:00:10 $
+#  $Revision: 2.9 $  $Date: 2014/08/18 09:59:51 $
 #
 #
 
@@ -193,8 +193,8 @@ cdf.test.slrm <- function(model, covariate,
                          "in two dimensions")
   result$data.name <-
     paste("covariate", sQuote(paste(covname, collapse="")),
-          "evaluated at points of", sQuote(dataname), "\n\t",
-          "and transformed to uniform distribution under model",
+          "evaluated at points of", sQuote(dataname),
+          "\n     and transformed to uniform distribution under",
           sQuote(modelname))
   # additional class 'cdftest'
   class(result) <- c("cdftest", class(result))
@@ -240,8 +240,8 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                          "in", info$spacename)
   result$data.name <-
     paste("covariate", sQuote(singlestring(info$covname)),
-          "evaluated at points of", sQuote(info$dataname), "\n\t",
-          "and transformed to uniform distribution under",
+          "evaluated at points of", sQuote(info$dataname), 
+          "\n     and transformed to uniform distribution under",
           if(csr) info$modelname else sQuote(info$modelname))
   
   # additional class 'cdftest'

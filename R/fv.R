@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.111 $   $Date: 2014/07/30 10:10:12 $
+#    $Revision: 1.113 $   $Date: 2014/08/26 04:28:09 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -167,13 +167,17 @@ print.fv <- local({
     showextras <- waxlyrical('extras', terselevel)
     nama <- names(x)
     a <- attributes(x)
-    splat("Function value object",
-        paren(paste("class", sQuote("fv"))))
     if(!is.null(ylab <- a$ylab)) {
       if(is.language(ylab))
         ylab <- flat.deparse(ylab)
-      xlab <- fvlabels(x)[[a$argu]]
-      splat("for the function", xlab, "->", ylab)
+    }
+    if(!inherits(x, "envelope")) {
+      splat("Function value object",
+            paren(paste("class", sQuote("fv"))))
+      if(!is.null(ylab)) {
+        xlab <- fvlabels(x)[[a$argu]]
+        splat("for the function", xlab, "->", ylab)
+      }
     }
     ## Descriptions ..
     desc <- a$desc
@@ -768,6 +772,39 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
     fvnames(result, ".s") <- shad
   return(result)
 }  
+
+## Subset and column replacement methods
+## to guard against deletion of columns
+
+"[<-.fv" <- function(x, i, j, value) {
+  if(!missing(j)) {
+    # check for alterations to structure of object
+    if((is.character(j) && !all(j %in% colnames(x))) ||
+       (is.numeric(j) && any(j > ncol(x))))
+      stop("Use bind.fv to add new columns to an object of class fv")
+    if(is.null(value) && missing(i)) {
+      ## column(s) will be removed
+      co <- seq_len(ncol(x))
+      names(co) <- colnames(x)
+      keepcol <- setdiff(co, co[j])
+      return(x[ , keepcol, drop=FALSE])
+    }
+  }
+  NextMethod("[<-")
+}
+
+"$<-.fv" <- function(x, name, value) {
+  j <- which(colnames(x) == name)
+  if(is.null(value)) {
+    ## column will be removed
+    if(length(j) != 0)
+      return(x[, -j, drop=FALSE])
+    return(x)
+  }
+  if(length(j) == 0)
+    stop("Use bind.fv to add new columns to an object of class fv")
+  NextMethod("$<-")
+}
 
 # method for 'formula'
 

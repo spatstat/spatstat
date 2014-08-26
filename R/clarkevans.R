@@ -32,7 +32,9 @@ clarkevans <- function(X, correction=c("none", "Donnelly", "cdf"),
   } else if(gaveguard && !askguard) 
     correction <- c(correction, "guard")
 
-  return(clarkevansCalc(X, correction, clipregion))
+  result <- clarkevansCalc(X, correction, clipregion)
+  if(length(result) == 1) result <- unname(result)
+  return(result)
 }
 
 clarkevans.test <- function(X, ..., 
@@ -46,8 +48,9 @@ clarkevans.test <- function(X, ...,
   miss.nsim <- missing(nsim)
 
   verifyclass(X, "ppp")
-  W <- X$window
-
+  W <- Window(X)
+  nX <- npoints(X)
+  
   # validate SINGLE correction
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -109,7 +112,7 @@ clarkevans.test <- function(X, ...,
     sims <- numeric(nsim)
     intensity <- working$intensity
     for(i in 1:nsim) {
-      Xsim <- rpoispp(intensity, win=W)
+      Xsim <- runifpoint(nX, win=W)
       sims[i] <- clarkevansCalc(Xsim, correction=correction,
                                 clipregion=clipregion)
     }
@@ -121,7 +124,7 @@ clarkevans.test <- function(X, ...,
                       two.sided=2*min(p.lower, p.upper))
     
     pvblurb <- paste("Monte Carlo test based on",
-                     nsim, "simulations of CSR")
+                     nsim, "simulations of CSR with fixed n")
   }
 
   statistic <- as.numeric(statistic)

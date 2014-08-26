@@ -79,7 +79,7 @@ clarkevans(X, correction=c("none", "Donnelly", "cdf"),
   see \code{\link{clarkevans.test}}.
 }
 \value{
-  A numeric value or numeric vector, with named components
+  A numeric value, or a numeric vector with named components
   \item{naive}{\eqn{R} without edge correction}
   \item{Donnelly}{\eqn{R} using Donnelly edge correction}
   \item{guard}{\eqn{R} using guard region}
@@ -113,11 +113,9 @@ with modifications by
 }
 \examples{
   # Example of a clustered pattern
-  data(redwood)
   clarkevans(redwood)
 
   # Example of an ordered pattern
-  data(cells)
   clarkevans(cells)
 
   # Random pattern

@@ -2,29 +2,41 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.49 $    $Date: 2014/06/24 10:05:54 $
+#  $Revision: 1.54 $    $Date: 2014/08/24 04:55:35 $
 #
 #
 #
 
 update.ppm <- local({
 
+  ## update formula and expand polynomial
   newformula <- function(old, change, eold, enew) {
     old <- if(is.null(old)) ~1 else eval(old, eold)
     change <- if(is.null(change)) ~1 else eval(change, enew)
     old <- as.formula(old, env=eold)
     change <- as.formula(change, env=enew)
-    update.formula(old, change)
+    answer <- update.formula(old, change)
+    if(spatstat.options("expand.polynom")) 
+      answer <- expand.polynom(answer)
+    return(answer)
+  }
+
+  ## update point pattern dataset using either data or formula
+  newpattern <- function(oldpattern, lhs, callframe, envir) {
+    eval(eval(substitute(substitute(l, list("."=Q)),
+                         list(l=lhs,
+                              Q=oldpattern)),
+              envir=as.list(envir), enclos=callframe),
+         envir=as.list(envir), enclos=callframe)
   }
   
   update.ppm <- function(object, ...,
                          fixdummy=TRUE, use.internal=NULL,
                          envir=environment(terms(object))) {
     verifyclass(object, "ppm")
-    aargh <- list(...)
-
     new.callstring <- short.deparse(sys.call())
-
+    aargh <- list(...)
+    
     if(inherits(object, "ippm")) {
       call <- object$dispatched$call
       callframe <- object$dispatched$callframe
@@ -48,36 +60,7 @@ update.ppm <- local({
       return(result)
     }
 
-    ## (2) formula with left-hand side
-    isfmla <- unlist(lapply(aargh, inherits, what="formula"))
-    if(any(isfmla)) {
-      i <- min(which(isfmla))
-      if(sum(isfmla) > 1) {
-        if("trend" %in% names(aargh)[isfmla]) {
-          i <- min(which(names(aargh) == "trend"))
-        } else stop("I'm confused: there are several 'formula' arguments")
-      }
-      thefmla <- aargh[[i]]
-      otherargs <- aargh[-i]
-      if(!is.null(lhs <- lhs.of.formula(thefmla)) && oldstyle) {
-        ## formula with left-hand side must be parlayed for ppm.ppp or ppm.quad
-        ## evaluate LHS using "." for original data
-        if(identical(use.internal, TRUE))
-          warning(paste("use.internal=TRUE was ignored, because",
-                        "a new point pattern was computed"), call.=FALSE)
-        newQ <- eval(eval(substitute(substitute(l, list("."=Q)),
-                                     list(l=lhs,
-                                          Q=call$Q))),
-                     envir=envir)
-        newtrend <- newformula(object$trend, rhs.of.formula(thefmla),
-                               callframe, envir)
-        newtrend <- rhs.of.formula(newtrend)
-        ## tweak argument list
-        aargh <- append(list(Q=newQ, trend=newtrend), otherargs)
-      }
-    }
-
-    ## (3) model can be updated using existing covariate data frame
+    ## (2) model can be updated using existing covariate data frame
     if(!identical(use.internal, FALSE) &&
        ## single argument which is a formula
        (length(aargh) == 1) &&
@@ -137,48 +120,154 @@ update.ppm <- local({
         if(!is.null(inter <- object$interaction) && !is.poisson(inter)) 
           object$fitin <-
             fii(inter, co, object$internal$Vnames, object$internal$IsOffset)
+        ##
+        if(is.stationary(object) && !is.marked(object)) {
+          ## uniform Poisson
+          if(eval(call$rename.intercept) %orifnull% TRUE) {
+             names(object$coef) <- "log(lambda)"
+          }
+        }
         return(object)
       }
     }
-  
-    ## general case.
-    ## ... The call will be converted into the 'old' style........
-    undecided <- is.null(use.internal) || !is.logical(use.internal)
-    force.int   <- !undecided && use.internal
-    force.ext   <- !undecided && !use.internal
-    if(!force.int) {
-      ## check for validity of format
-      badformat <- damaged.ppm(object)
+
+    ## (3) Need to use internal data   
+    if(oldstyle) {
+      ## decide whether to use internal data
+      undecided <- is.null(use.internal) || !is.logical(use.internal)
+      force.int   <- !undecided && use.internal
+      force.ext   <- !undecided && !use.internal
+      if(!force.int) {
+        ## check for validity of format
+        badformat <- damaged.ppm(object)
+      }
+      if(undecided) {
+        use.internal <- badformat
+        if(badformat)
+          message("object format corrupted; repairing it")
+      } else if(force.ext && badformat)
+        warning("object format corrupted; try update(object, use.internal=TRUE)")
+      if(use.internal) {
+        ## reset the main arguments in the call using the internal data
+        call$Q <- quad.ppm(object)
+        namobj <- names(call)
+        if("trend" %in% namobj)
+          call$trend <- newformula(call$trend, object$trend, callframe, envir)
+        if("interaction" %in% namobj) call$interaction <- object$interaction
+        if("covariates" %in% namobj) call$covariates <- object$covariates
+      }
     }
-    if(undecided) {
-      use.internal <- badformat
-      if(badformat)
-        message("object format corrupted; repairing it")
-    } else if(force.ext && badformat)
-      warning("object format corrupted; try update(object, use.internal=TRUE)")
-  
-    if(use.internal && oldstyle) {
-      ## reset the main arguments in the call using the internal data
-      call$Q <- quad.ppm(object)
-      namobj <- names(call)
-      if("trend" %in% namobj)
-        call$trend <- newformula(call$trend, object$trend, callframe, envir)
-      if("interaction" %in% namobj) call$interaction <- object$interaction
-      if("covariates" %in% namobj) call$covariates <- object$covariates
-    }
-  
-    Q.is.new <- FALSE
-  
-    ## split named and unnamed arguments
+
+    ## General case.
+    X.is.new <- FALSE
+    
+    ## First split named and unnamed arguments
     nama <- names(aargh)
     named <- if(is.null(nama)) rep.int(FALSE, length(aargh)) else nzchar(nama)
     namedargs <- aargh[named]
     unnamedargs <- aargh[!named]
     nama <- names(namedargs)
-  
-    if(any(named)) {
-      ## any named arguments that were also present in the original call
-      ## override their original values
+
+    ## Find the argument 'Q' by name or implicitly by class
+    ##   (including detection of conflicts)
+    argQ <- NULL
+    if(n <- sp.foundclasses(c("ppp", "quad"), unnamedargs, "Q", nama)) {
+      argQ <- unnamedargs[[n]]
+      unnamedargs <- unnamedargs[-n]
+    }
+    if("Q" %in% nama) {
+      argQ <- namedargs$Q
+      nama <- setdiff(nama, "Q")
+      namedargs <- namedargs[nama]
+    }
+    ## Deal with argument 'Q' which has several possible forms
+    if(!is.null(argQ)) {
+      X.is.new <- TRUE
+      if(inherits(argQ, "formula")) {
+        ## Q = X ~ trend
+        if(newstyle) {
+          ## update the formula
+          call$Q <- newformula(call$Q, argQ, callframe, envir)
+        } else {
+          ## split into Q = X and trend = ~trend
+          if(!is.null(lhs <- lhs.of.formula(argQ)))
+            call$Q <- newpattern(call$Q, lhs, callframe, envir)
+          call$trend <- newformula(call$trend,
+                                   rhs.of.formula(eval(argQ)),
+                                   callframe, envir)
+        }
+      } else {
+        ## Q = X
+        if(newstyle) {
+          ## convert old call to old style
+          fo <- as.formula(call$Q)
+          Yexpr <- lhs.of.formula(fo)
+          trend <- rhs.of.formula(fo)
+          newcall <- call("ppm", Q=Yexpr, trend=trend)
+          if(length(call) > 2) {
+            whichQ <- which(names(call) == "Q")
+            morecall <- call[-c(1, whichQ)]
+            if((mc <- length(morecall)) > 0) {
+              newcall[3 + 1:mc] <- morecall
+              names(newcall)[3 + 1:mc] <- names(call)[-c(1, whichQ)]
+            }
+          }
+          call <- newcall
+          newstyle <- FALSE
+          oldstyle <- TRUE
+        }
+        ## Now update the dataset
+        call$Q <- argQ
+      }
+    }
+
+    ## Find any formula arguments 
+    ##   (including detection of conflicts)
+    argfmla <- NULL
+    if(n <- sp.foundclass("formula", unnamedargs, "trend", nama)) {
+      argfmla <- unnamedargs[[n]]
+      unnamedargs <- unnamedargs[-n]
+    } else if(n <- sp.foundclass("character", unnamedargs, "trend", nama)) {
+      ## string that might be interpreted as a formula
+      strg <- unnamedargs[[n]]
+      if(!is.na(charmatch("~", strg))) {
+        argfmla <- as.formula(strg)
+        unnamedargs <- unnamedargs[-n]
+      }
+    }
+    if("trend" %in% nama) {
+      argfmla <- namedargs$trend
+      nama <- setdiff(nama, "trend")
+      namedargs <- namedargs[nama]
+    }
+    ## Handle new formula
+    if(!is.null(argfmla)) {
+      lhs <- lhs.of.formula(argfmla)
+      if(newstyle) {
+        ## ppm.formula: update the formula
+        if(is.null(lhs)) {
+          argfmla <- as.formula(paste(".", deparse(argfmla)))
+        } else X.is.new <- TRUE
+        call$Q <- newformula(call$Q, argfmla, callframe, envir)
+      } else {
+        ## ppm.ppp: update the trend and possibly the data
+        if(is.null(lhs)) {
+          ## assign new trend
+          call$trend <- newformula(call$trend, argfmla, callframe, envir)
+        } else {
+          ## split into Q = X and trend = ~trend
+          X.is.new <- TRUE
+          call$Q <- newpattern(call$Q, lhs, callframe, envir)
+          call$trend <- newformula(call$trend,
+                                   rhs.of.formula(argfmla),
+                                   callframe, envir)
+        }
+      } 
+    }
+    
+    if(length(namedargs) > 0) {
+      ## any other named arguments that were also present in the original call
+      ## override their original values.
       existing <- !is.na(match(nama, names(call)))
       for (a in nama[existing]) call[[a]] <- aargh[[a]]
 
@@ -187,12 +276,9 @@ update.ppm <- local({
         call <- c(as.list(call), namedargs[!existing])
         call <- as.call(call)
       }
-      ## is the point pattern or quadscheme new ?
-      if("Q" %in% nama)
-        Q.is.new <- TRUE
     }
-    if(any(!named)) {
-      ## some objects identified by their class
+    if(length(unnamedargs) > 0) {
+      ## some further objects identified by their class
       if(n<- sp.foundclass("interact", unnamedargs, "interaction", nama)) {
         call$interaction <- unnamedargs[[n]]
         unnamedargs <- unnamedargs[-n]
@@ -202,50 +288,13 @@ update.ppm <- local({
         call$covariates <- unnamedargs[[n]]
         unnamedargs <- unnamedargs[-n]
       }
-      new.formula <- NULL
-      if(n <- sp.foundclass("formula", unnamedargs, "trend", nama)) {
-        new.formula <- unnamedargs[[n]]
-        unnamedargs <- unnamedargs[-n]
-      } else if(n <- sp.foundclass("character", unnamedargs, "trend", nama)) {
-        ## string that might be interpreted as a formula
-        strg <- unnamedargs[[n]]
-        if(!is.na(charmatch("~", strg))) {
-          new.formula <- as.formula(strg)
-          unnamedargs <- unnamedargs[-n]
-        }
-      }
-      if(!is.null(new.formula)) {
-        old.formula <- if(newstyle) as.formula(call$Q) else formula(object)
-        ## expand polynomials
-        if(spatstat.options("expand.polynom"))
-          old.formula <- expand.polynom(old.formula)
-        ## apply formula update rules 
-        new.formula <- newformula(old.formula, new.formula, callframe, envir)
-        ## expand polynomials
-        if(spatstat.options("expand.polynom"))
-          new.formula <- expand.polynom(new.formula)
-        ## put into call
-        if(oldstyle) {
-          call$trend <- new.formula
-        } else {
-          fo <- y ~ x
-          fo[[2]] <- lhs.of.formula(old.formula)
-          fo[[3]] <- rhs.of.formula(new.formula, tilde=FALSE)
-          environment(fo) <- envir
-          call$Q <- fo
-        }
-      }
-      if(n <- sp.foundclasses(c("ppp", "quad"), unnamedargs, "Q", nama)) {
-        call$Q <- unnamedargs[[n]]
-        unnamedargs <- unnamedargs[-n]
-        Q.is.new <- TRUE
-      }
     }
   
     ## *************************************************************
     ## ****** Special action when Q is a point pattern *************
     ## *************************************************************
-    if(Q.is.new && fixdummy && inherits((X <- eval(call$Q)), "ppp")) {
+    if(X.is.new && fixdummy && oldstyle &&
+       inherits((X <- eval(call$Q, as.list(envir), enclos=callframe)), "ppp")) {
       ## Instead of allowing default.dummy(X) to occur,
       ## explicitly create a quadrature scheme from X,
       ## using the same dummy points and weight parameters

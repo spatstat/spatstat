@@ -1,11 +1,17 @@
 \name{Extract.fv}
 \alias{[.fv}
-\title{Extract Subset of Function Values}
+\alias{[<-.fv}
+\alias{$<-.fv}
+\title{Extract or Replace Subset of Function Values}
 \description{
-  Extract a subset of an object of class \code{"fv"}.
+  Extract or replace a subset of an object of class \code{"fv"}.
 }
 \usage{
   \method{[}{fv}(x, i, j, \dots, drop=FALSE)
+
+  \method{[}{fv}(x, i, j) <- value
+
+  \method{$}{fv}(x, name) <- value
 }
 \arguments{
   \item{x}{
@@ -22,6 +28,9 @@
     any appropriate subset index for the columns of the data frame.
     Selects some of the functions present in \code{x}.
   }
+  \item{name}{
+    the name of a column of the data frame.
+  }
   \item{\dots}{
     Ignored.
   }
@@ -31,15 +40,48 @@
      If \code{FALSE} (the default),
      the result is another object of class \code{"fv"}.
   }
+  \item{value}{
+     Replacement value for the column or columns selected by
+     \code{name} or \code{j}.
+  }
 } 
 \value{
-  If \code{drop=FALSE}, a function value object (of class \code{"fv"}).
-  If \code{drop=TRUE}, a data frame or vector.
+  The result of \code{[.fv} with \code{drop=TRUE}
+  is a data frame or vector. 
+
+  Otherwise, the result is another object of class \code{"fv"}.
 }
 \details{
-  This is a method for \code{"["} for the class \code{"fv"}.
-  It is very similar to \code{\link{[.data.frame}}
-  except for a few extra checks on the sanity of the result.
+  These functions extract a designated subset of an object of class
+  \code{"fv"}, or replace the designated subset with other data,
+  or delete the designated subset.
+
+  The subset is specified by the 
+  row index \code{i} and column index \code{j}, or
+  by the column name \code{name}. Either \code{i} or \code{j}
+  may be missing, or both may be missing.
+
+  The function \code{[.fv} is a method for the generic operator
+  \code{\link{[}} for the class \code{"fv"}. It extracts the
+  designated subset of \code{x}, and returns it as
+  another object of class \code{"fv"} (if \code{drop=FALSE})
+  or as a data frame or vector (if \code{drop=TRUE}).
+
+  The function \code{[<-.fv} is a method for the generic operator
+  \code{\link{[<-}} for the class \code{"fv"}.
+  If \code{value} is \code{NULL}, the designated subset of \code{x} will be
+  deleted from \code{x}.
+  Otherwise, the designated subset of \code{x} will be
+  replaced by the data contained in \code{value}.
+  The return value is the modified object \code{x}.
+
+  The function \code{$<-.fv} is a method for the generic operator
+  \code{\link{$<-}} for the class \code{"fv"}.
+  If \code{value} is \code{NULL}, the designated column of \code{x} will be
+  deleted from \code{x}.
+  Otherwise, the designated column of \code{x} will be
+  replaced by the data contained in \code{value}.
+  The return value is the modified object \code{x}.
 }
 \seealso{
   \code{\link{fv.object}}
@@ -50,11 +92,14 @@
  # discard the estimates of K(r) for r  > 0.1
  Ksub <- K[K$r <= 0.1, ]
 
- # discard the border method estimator
- Ksub <- K[ , names(K) != "border"]
+ # extract the border method estimates
+ bor <- K[ , "border", drop=TRUE]
+ # or equivalently
+ bor <- K$border
 
- # read some values
- K[5, ,drop=TRUE]
+ # remove the border-method estimates
+ K$border <- NULL
+ K
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

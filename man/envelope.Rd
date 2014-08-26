@@ -227,8 +227,11 @@
   
   The \code{envelope} function is generic, with methods for
   the classes \code{"ppp"}, \code{"ppm"} and \code{"kppm"}
-  described here. There is also a method for the class \code{"pp3"}
-  which is described separately as \code{\link{envelope.pp3}}.
+  described here. There are also methods for the classes \code{"pp3"},
+  \code{"lpp"} and \code{"lppm"} which are described separately
+  under \code{\link{envelope.pp3}} and \code{\link{envelope.lpp}}.
+  Envelopes can also be computed from other envelopes, using
+  \code{\link{envelope.envelope}}.
   
   To create simulation envelopes, the command \code{envelope(Y, ...)} 
   first generates \code{nsim} random point patterns

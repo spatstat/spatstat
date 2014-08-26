@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.38-0
-Nickname: Wicked Plot
-Date: 2014-08-15
+Version: 1.38-1
+Nickname: Le Hardi
+Date: 2014-08-26
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -102,6 +102,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	A. Raftery; 
 	S. Rakshit; 
 	P. Ramon;
+	X. Raynaud,
 	M. Reiter; 
 	T.O. Richardson;  
 	B.D. Ripley;  
@@ -157,6 +158,4 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2014-08-15 10:58:26 UTC; adrian
-Repository: CRAN
-Date/Publication: 2014-08-15 17:39:22
+Packaged: 2014-08-26 04:32:12 UTC; adrian
