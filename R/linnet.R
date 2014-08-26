@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.22 $    $Date: 2013/05/14 06:04:02 $
+#    $Revision: 1.23 $    $Date: 2014/08/05 08:30:01 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -37,7 +37,9 @@ linnet <- function(vertices, m, edges) {
     stop("do not specify both m and edges")
   # validate inputs
   stopifnot(is.ppp(vertices))
-  if(!missing(m)) {
+  if((nv <- npoints(vertices)) <= 1) {
+    m <- matrix(FALSE, nv, nv)
+  } else if(!missing(m)) {
     # check logical matrix
     stopifnot(is.matrix(m) && is.logical(m) && isSymmetric(m))
     if(nrow(m) != vertices$n)
@@ -84,10 +86,14 @@ linnet <- function(vertices, m, edges) {
 }
 
 print.linnet <- function(x, ...) {
-  cat(paste("Linear network with",
-            x$vertices$n, "vertices,",
-            x$lines$n, "lines and",
-            sum(x$m/2), "edges\n"))
+  nv <- x$vertices$n
+  nl <- x$lines$n
+  ne <- sum(x$m)/2
+  splat("Linear network with",
+        nv, ngettext(nv, "vertex,", "vertices,"), 
+        nl, ngettext(nl, "line", "lines"),
+        "and",
+        ne, ngettext(ne, "edge", "edges"))
   return(invisible(NULL))
 }
 
@@ -154,7 +160,11 @@ unitname.linnet <- function(x) {
 
 diameter.linnet <- function(x) {
   stopifnot(inherits(x, "linnet"))
-  max(x$dpath)
+  max(0, x$dpath)
+}
+
+volume.linnet <- function(x) {
+  sum(lengths.psp(x$lines))
 }
 
 circumradius <- function(x) {
@@ -163,6 +173,8 @@ circumradius <- function(x) {
   if(!is.null(cr))
     return(cr)
   dpath <- x$dpath
+  if(nrow(dpath) <= 1)
+    return(max(0,dpath))
   from  <- x$from
   to    <- x$to
   lines <- x$lines
@@ -280,7 +292,7 @@ rescale.linnet <- function(X, s, unitname) {
     stop("In [.linnet: the index i should be a window", call.=FALSE)
   # Find vertices that lie inside 'i'
   okvert <- inside.owin(x$vertices, w=i)
-  # find segments whose endpoints both lie in 'upper'
+  # find segments whose endpoints both lie in 'i'
   okedge <- okvert[x$from] & okvert[x$to]
   # assign new serial numbers to vertices, and recode 
   newserial <- cumsum(okvert)

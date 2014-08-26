@@ -2,16 +2,29 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  Revision$  $Date: 2014/03/21 03:05:43 $
+##  $Revision: 1.4 $  $Date: 2014/08/14 07:48:40 $
 ##
 
 ## 'split cat'
-## Replacement for 'cat' ensuring a multi-word output string
+## Replacement for 'cat(paste(...))' ensuring a multi-word output string
 ## doesn't extend over text margin
+
 splat <- function(...) {
   s <- paste(...)
-  cat(unlist(strsplit(s, " ")), fill=TRUE)
+  ## split at newline characters, if present
+  ss <- unlist(strsplit(s, "\n"))
+  for(ssi in ss) 
+    cat(unlist(strsplit(ssi, " ")), fill=TRUE)
   return(invisible(NULL))
+}
+
+pasteFormula <- function(f) {
+  ## convert formula to a single string
+  sf <- paste(format(f), collapse=" ")
+  ## remove excessive blanks
+  sf <- gsub("   ", " ", sf)
+  sf <- gsub("  ", " ", sf)
+  return(sf)
 }
 
 ## paragraph break in long output e.g. ppm

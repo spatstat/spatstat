@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.15 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.16 $   $Date: 2014/06/11 09:41:10 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -11,6 +11,7 @@ envelope.lpp <-
   function(Y, fun=linearK, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL,
+           alternative=c("two.sided", "less", "greater"),
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
@@ -55,6 +56,7 @@ envelope.lpp <-
                  nsim=nsim, nrank=nrank, ..., 
                  verbose=verbose, clipdata=FALSE,
                  transform=transform, global=global, ginterval=ginterval,
+                 alternative=alternative,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, cl=cl,
@@ -65,6 +67,7 @@ envelope.lppm <-
   function(Y, fun=linearK, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL,
+           alternative=c("two.sided", "less", "greater"),
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
@@ -110,6 +113,7 @@ envelope.lppm <-
                  nsim=nsim, nrank=nrank, ..., 
                  verbose=verbose, clipdata=FALSE,
                  transform=transform, global=global, ginterval=ginterval,
+                 alternative=alternative,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, cl=cl,

@@ -206,7 +206,7 @@ local({
 
 
 # tests for agreement between C and interpreted code
-# for interpoint distances
+# for interpoint distances etc.
 
 require(spatstat)
 
@@ -258,6 +258,19 @@ local({
   nw3I <- nnwhich(X, k=3, method="interpreted")
   if(any(nw3C != nw3I))
     stop("Algorithms for nnwhich(k=3) do not agree")
+
+  # whist
+  set.seed(98123)
+  x <- runif(1000)
+  w <- sample(1:5, 1000, replace=TRUE)
+  b <- seq(0,1,length=101)
+  op <- spatstat.options(Cwhist=TRUE)
+  aT <- whist(x,b,w)
+  spatstat.options(Cwhist=FALSE)
+  aF <- whist(x,b,w)
+  if(!all(aT == aF))
+    stop("Algorithms for whist disagree")
+  spatstat.options(op)
 })
 # ppmBadData.R
 # $Revision: 1.4 $ $Date: 2011/12/05 07:29:16 $
@@ -420,6 +433,13 @@ local({
   
   fit <- ppm(cells, ~1, Strauss(0.1), skip.border=TRUE)
 
+  # (2) subset arguments of different kinds
+  fut <- ppm(cells ~ x, subset=(x > 0.5))
+  fot <- ppm(cells ~ x, subset=(x > 0.5), method="logi")
+  W <- owin(c(0.4, 0.8), c(0.2, 0.7))
+  fut <- ppm(cells ~ x, subset=W)
+  fot <- ppm(cells ~ x, subset=W, method="logi")
+  
 })
 
 #
@@ -1484,7 +1504,8 @@ local({
 })
 
 
-# check kstest with strange data
+## tests/cdf.test.R
+## check cdf.test with strange data
 require(spatstat)
 local({
   # Marked point patterns with some marks not represented
@@ -1492,13 +1513,18 @@ local({
   AM <- split(ants, un=FALSE)$Messor
   DM <- distmap(AM)
   # should produce a warning, rather than a crash:
-  kstest(AC, DM)
+  cdf.test(AC, DM)
   # should be OK:
-  kstest(unmark(AC), DM)
+  cdf.test(unmark(AC), DM)
+  cdf.test(unmark(AC), DM, "cvm")
+  cdf.test(unmark(AC), DM, "ad")
   # linear networks
+  set.seed(42)
   X <- runiflpp(20, simplenet)
   fit <- lppm(X, ~1)
-  kstest(fit, "y")
+  cdf.test(fit, "y")
+  cdf.test(fit, "y", "cvm")
+  cdf.test(fit, "y", "ad")
 })
 
 #
@@ -1560,6 +1586,11 @@ local({
   #  and apply quadratcount
   V <- tess(image = Z)
   quadratcount(X, tess=V)
+  # (d) pad image
+  Y <- padimage(Z, factor("b", levels=levels(Z)))
+  stopifnot(Y$type == "factor")
+  U <- padimage(Z, "b")
+  stopifnot(U$type == "factor")
 })
 
 
@@ -1786,19 +1817,21 @@ local({
 
   ## tests of 'deltasuffstat' code
   ##     Handling of offset terms
-  modelH <- ppm(cells, ~x, Hardcore(0.05))
+  modelH <- ppm(cells ~x, Hardcore(0.05))
   a <- vcov(modelH, generic=TRUE) ## may fall over
   b <- vcov(modelH, generic=FALSE)
   if(disagree(a, b))
     stop("Disagreement between vcov.ppm algorithms for Hardcore model")
   
   ##     Correctness of pairwise.family$delta2
-  modelZ <- ppm(amacrine, ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
+  modelZ <- ppm(amacrine ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
   b <- vcov(modelZ, generic=FALSE)
   g <- vcov(modelZ, generic=TRUE)
   if(disagree(b, g))
     stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
-  
+
+  ## Test that 'deltasuffstat' works for Hybrids
+  modHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
 })
 # tests/windows.R
 # Tests of owin geometry code
@@ -2018,4 +2051,124 @@ local({
   a <- MultiStraussHard( , r, h)
 
   NULL
+})
+#
+#  tests/envelopes.R
+#
+#  Test validity of envelope data
+#
+#  $Revision: 1.3 $  $Date: 2013/10/21 01:51:07 $
+#
+
+require(spatstat)
+
+local({
+checktheo <- function(fit) {
+  fitname <- deparse(substitute(fit))
+  en <- envelope(fit, nsim=4, verbose=FALSE, nrep=1e3)
+  nama <- names(en)
+  expecttheo <- is.poisson(fit) && is.stationary(fit)
+  context <- paste("Envelope of", fitname)
+  if(expecttheo) {
+    if(!("theo" %in% nama))
+      stop(paste(context, "did not contain", sQuote("theo")))
+    if("mmean" %in% nama)
+      stop(paste(context, "unexpectedly contained", sQuote("mmean")))
+  } else {
+    if("theo" %in% nama)
+      stop(paste(context, "unexpectedly contained", sQuote("theo")))
+    if(!("mmean" %in% nama))
+      stop(paste(context, "did not contain", sQuote("mmean")))
+  }
+  cat(paste(context, "has correct format\n"))
+}
+  
+checktheo(ppm(cells))
+checktheo(ppm(cells, ~x))
+checktheo(ppm(cells, ~1, Strauss(0.1)))
+
+# check envelope calls from 'alltypes'
+a <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE)
+b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
+
+# check 'transform' idioms
+A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
+B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
+
+# check conditional simulation
+e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
+e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
+e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
+fit <- ppm(japanesepines ~ 1, Strauss(0.04))
+e4 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
+fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
+e5 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+})
+## tests/rhohat.R
+## Test all combinations of options for rhohatCalc
+## $Revision: 1.1 $ $Date: 2014/05/16 06:13:25 $
+
+local({
+  require(spatstat)
+  X <-  rpoispp(function(x,y){exp(3+3*x)})
+  ## done in example(rhohat):
+  ## rhoA <- rhohat(X, "x")
+  ## rhoB <- rhohat(X, "x", method="reweight")
+  ## rhoC <- rhohat(X, "x", method="transform")
+  fit <- ppm(X, ~x)
+  rhofitA <- rhohat(fit, "x")
+  rhofitB <- rhohat(fit, "x", method="reweight")
+  rhofitC <- rhohat(fit, "x", method="transform")
+
+  ## Baseline
+  lam <- predict(fit)
+  rhoAb <- rhohat(X, "x", baseline=lam)
+  rhoBb <- rhohat(X, "x", method="reweight", baseline=lam)
+  rhoCb <- rhohat(X, "x", method="transform", baseline=lam)
+
+  ## Horvitz-Thompson
+  rhoAH <- rhohat(X, "x", horvitz=TRUE) 
+  rhoBH <- rhohat(X, "x", method="reweight", horvitz=TRUE)
+  rhoCH <- rhohat(X, "x", method="transform", horvitz=TRUE)
+  rhofitAH <- rhohat(fit, "x", horvitz=TRUE)
+  rhofitBH <- rhohat(fit, "x", method="reweight", horvitz=TRUE)
+  rhofitCH <- rhohat(fit, "x", method="transform", horvitz=TRUE)
+})
+## tests/pixelgripes.R
+##     Problems related to pixellation of windows
+##
+## $Revision: 1.2 $ $Date: 2014/07/08 02:28:33 $
+
+require(spatstat)
+local({
+  ## From Philipp Hunziker: bug in rNeymanScott (etc)
+  ## Create an irregular window
+  PM <- matrix(c(1,0,0.5,1,0,0), 3, 2, byrow=TRUE)
+  P <- owin(poly=PM)
+  ## Generate Matern points
+  X <- rMatClust(50, 0.05, 5, win=P)
+  ## Some distance function as a covariate
+  distorigin <- function(x, y) { sqrt(x^2 + y^2) }
+  ## No covariates: works fine
+  fit0 <- kppm(X ~ 1, clusters="MatClust")
+  Y0 <- simulate(fit0, retry=0)
+  ## Covariates: Simulation fails
+  fit1 <- kppm(X ~ distorigin, clusters="MatClust")
+  Y1 <- simulate(fit1, retry=0)
+})
+## tests/symbolmaps.R
+##   Quirks associated with symbolmaps, etc.
+## $Revision: 1.2 $ $Date: 2014/07/21 07:30:38 $
+
+local({
+  require(spatstat)
+  set.seed(100)
+  
+  ## spacing too large for tiles - upsets various pieces of code
+  V <- as.im(dirichlet(runifpoint(8)))
+  textureplot(V, spacing=2)
+
+  g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
+  invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
+
 })

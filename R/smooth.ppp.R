@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.20 $  $Date: 2014/04/04 03:04:03 $
+#  $Revision: 1.21 $  $Date: 2014/07/05 02:30:17 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -76,101 +76,124 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
       warning("Factor valued marks were converted to integers")
       values <- as.numeric(values)
     }
-    switch(at,
-           points={
-             result <-
-               do.call("smoothpointsEngine",
-                       resolve.defaults(list(x=X,
-                                             values=values, weights=weights,
-                                             sigma=sigma, varcov=varcov,
-                                             edge=FALSE),
-                                        list(...)))
-           },
-           pixels={
-             values.weights <- if(weightsgiven) values * weights else values
-             numerator <-
-               do.call("density.ppp",
-                       resolve.defaults(list(x=X,
-                                             at="pixels",
-                                             weights = values.weights,
-                                             sigma=sigma, varcov=varcov,
-                                             edge=FALSE),
-                                        list(...)))
-             denominator <-
-               do.call("density.ppp",
-                       resolve.defaults(list(x=X,
-                                             at="pixels",
-                                             weights = weights,
-                                             sigma=sigma,
-                                             varcov=varcov,
-                                             edge=FALSE),
-                                        list(...)))
-             result <- eval.im(numerator/denominator)
-             # trap small values of denominator
-             # trap NaN and +/- Inf values of result, but not NA
-             eps <- .Machine$double.eps
-             nbg <- eval.im(is.infinite(result)
-                            | is.nan(result)
-                            | (denominator < eps))
-             if(any(as.matrix(nbg), na.rm=TRUE)) {
-               warning("Numerical underflow detected: sigma is probably too small")
-               # l'Hopital's rule
-               distX <- distmap(X, xy=numerator)
-               whichnn <- attr(distX, "index")
-               nnvalues <- eval.im(values[whichnn])
-               result[nbg] <- nnvalues[nbg]
-             }
-             attr(result, "warnings") <- attr(numerator, "warnings")
-           })
-  } else {
-    # ......... data frame of marks ..................
-    nmarx <- ncol(marx)
-    # compute denominator
-    denominator <-
-      do.call("density.ppp",
-              resolve.defaults(list(x=X,
-                                    at=at,
-                                    weights = weights,
-                                    sigma=sigma, varcov=varcov,
-                                    edge=FALSE),
-                               list(...)))
-    # compute numerator for each column of marks
-    marx.weights <- if(weightsgiven) marx * weights else marx
-    numerators <-
-      do.call("density.ppp",
-              resolve.defaults(list(x=X,
-                                    at=at,
-                                    weights = marx.weights,
-                                    sigma=sigma, varcov=varcov,
-                                    edge=FALSE),
-                               list(...)))
-    uhoh <- attr(numerators, "warnings")
-    # calculate ratios
-    switch(at,
-           points={
-             if(is.null(uhoh)) {
-               # numerators is a matrix
-               ratio <- numerators/denominator
-               if(any(badpoints <- apply(!is.finite(ratio), 1, any))) {
-                 whichnnX <- nnwhich(X)
-                 ratio[badpoints,] <- marx[whichnnX[badpoints], ]
+    ## detect constant values
+    ra <- range(values, na.rm=TRUE)
+    if(diff(ra) == 0) {
+      switch(at,
+             points = {
+               result <- values
+             },
+             pixels = {
+               M <- do.call.matched(as.mask, list(w=as.owin(X), ...))
+               result <- as.im(ra[1], M)
+             })
+    } else {
+      switch(at,
+             points={
+               result <-
+                 do.call("smoothpointsEngine",
+                         resolve.defaults(list(x=X,
+                                               values=values, weights=weights,
+                                               sigma=sigma, varcov=varcov,
+                                               edge=FALSE),
+                                          list(...)))
+             },
+             pixels={
+               values.weights <- if(weightsgiven) values * weights else values
+               numerator <-
+                 do.call("density.ppp",
+                         resolve.defaults(list(x=X,
+                                               at="pixels",
+                                               weights = values.weights,
+                                               sigma=sigma, varcov=varcov,
+                                               edge=FALSE),
+                                          list(...)))
+               denominator <-
+                 do.call("density.ppp",
+                         resolve.defaults(list(x=X,
+                                               at="pixels",
+                                               weights = weights,
+                                               sigma=sigma,
+                                               varcov=varcov,
+                                               edge=FALSE),
+                                          list(...)))
+               result <- eval.im(numerator/denominator)
+               ## trap small values of denominator
+               ## trap NaN and +/- Inf values of result, but not NA
+               eps <- .Machine$double.eps
+               nbg <- eval.im(is.infinite(result)
+                              | is.nan(result)
+                              | (denominator < eps))
+               if(any(as.matrix(nbg), na.rm=TRUE)) {
+                 warning(paste("Numerical underflow detected:",
+                               "sigma is probably too small"))
+                 ## l'Hopital's rule
+                 distX <- distmap(X, xy=numerator)
+                 whichnn <- attr(distX, "index")
+                 nnvalues <- eval.im(values[whichnn])
+                 result[nbg] <- nnvalues[nbg]
                }
-             } else {
-               warning("returning original values")
-               ratio <- marx
-             }
-             result <- as.data.frame(ratio)
-             colnames(result) <- colnames(marx)
-           },
+               attr(result, "warnings") <- attr(numerator, "warnings")
+             })
+    }
+  } else {
+    ## ......... data frame of marks ..................
+    ## detect constant columns
+    ra <- apply(marx, 2, range, na.rm=TRUE)
+    isconst <- (apply(ra, 2, diff) == 0)
+    if(anyisconst <- any(isconst)) {
+      oldmarx <- marx
+      oldX <- X
+      marx <- marx[, !isconst]
+      X <- X %mark% marx
+    }
+    if(any(!isconst)) {
+      ## compute denominator
+      denominator <-
+        do.call("density.ppp",
+                resolve.defaults(list(x=X,
+                                      at=at,
+                                      weights = weights,
+                                      sigma=sigma, varcov=varcov,
+                                      edge=FALSE),
+                                 list(...)))
+      ## compute numerator for each column of marks
+      marx.weights <- if(weightsgiven) marx * weights else marx
+      numerators <-
+        do.call("density.ppp",
+                resolve.defaults(list(x=X,
+                                      at=at,
+                                      weights = marx.weights,
+                                      sigma=sigma, varcov=varcov,
+                                      edge=FALSE),
+                                 list(...)))
+      uhoh <- attr(numerators, "warnings")
+      ## calculate ratios
+      switch(at,
+             points={
+               if(is.null(uhoh)) {
+                 ## numerators is a matrix
+                 ratio <- numerators/denominator
+                 if(any(badpoints <- apply(!is.finite(ratio), 1, any))) {
+                   whichnnX <- nnwhich(X)
+                   ratio[badpoints,] <- marx[whichnnX[badpoints], ]
+                 }
+               } else {
+                 warning("returning original values")
+                 ratio <- marx
+               }
+               result <- as.data.frame(ratio)
+               colnames(result) <- colnames(marx)
+             },
              pixels={
                ratio <- lapply(numerators,
                                function(a,b) eval.im(a/b),
                                b=denominator)
                if(!is.null(uhoh)) {
-                 # compute nearest neighbour map on same raster
+                 ## compute nearest neighbour map on same raster
                  distX <- distmap(X, xy=denominator)
                  whichnnX <- attr(distX, "index")
-                 # fix images
+                 ## fix images
                  for(j in 1:length(ratio)) {
                    ratj <- ratio[[j]]
                    valj <- marx[,j]
@@ -181,9 +204,34 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                }
                result <- as.listof(ratio)
                names(result) <- colnames(marx)
-           })
+             })
+    } else result <- NULL 
+    if(anyisconst) {
+      partresult <- result
+      switch(at,
+             points = {
+               nX <- npoints(X)
+               result <- matrix(, nX, ncol(oldmarx))
+               if(length(partresult) > 0)
+                 result[,!isconst] <- partresult
+               result[,isconst] <- rep(ra[1,isconst], each=nX)
+               colnames(result) <- colnames(oldmarx)
+             },
+             pixels = {
+               result <- vector(mode="list", length=ncol(oldmarx))
+               if(length(partresult) > 0) {
+                 result[!isconst] <- partresult
+                 M <- as.owin(partresult[[1]])
+               } else {
+                 M <- do.call.matched(as.mask, list(w=as.owin(X), ...))
+               }
+               result[isconst] <- lapply(ra[1, isconst], as.im, W=M)
+               result <- as.listof(result)
+               names(result) <- colnames(oldmarx)
+             })
     }
-    # wrap up
+  }
+  ## wrap up
   attr(result, "warnings") <-
     unlist(lapply(result, function(x){ attr(x, "warnings") }))
   attr(result, "sigma") <- sigma
@@ -203,6 +251,13 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     detSigma <- det(varcov)
     Sinv <- solve(varcov)
     const <- 1/(2 * pi * sqrt(detSigma))
+  }
+  # detect constant values
+  if(diff(range(values, na.rm=TRUE)) == 0) { 
+    result <- values
+    attr(result, "sigma") <- sigma
+    attr(result, "varcov") <- varcov
+    return(result)
   }
   # Contributions from pairs of distinct points
   # closer than 8 standard deviations

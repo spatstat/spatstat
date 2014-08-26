@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.10 $   $Date: 2013/11/01 06:49:39 $
+#  $Revision: 1.11 $   $Date: 2014/08/04 09:58:56 $
 #
 #  Determine whether a window is a subset of another window
 #
@@ -69,8 +69,9 @@ is.subset.owin <- local({
    # Discretise
     a <- as.mask(A)
     b <- as.mask(B)
-    xx <- as.vector(raster.x(a)[a$m])
-    yy <- as.vector(raster.y(a)[a$m])
+    rxy <- rasterxy.mask(a, drop=TRUE)
+    xx <- rxy$x
+    yy <- rxy$y
     ok <- inside.owin(xx, yy, b)
     return(all(ok))
     

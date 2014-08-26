@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.39 $   $Date: 2014/04/16 01:17:56 $
+#   $Revision: 1.40 $   $Date: 2014/06/14 01:51:07 $
 #
 # stuff for handling marks
 #
@@ -79,7 +79,7 @@ marks.ppp <- function(x, ..., dfok=TRUE, drop=TRUE) {
          stop("Format of marks is not understood")
          )
   # attach/overwrite marks
-  Y <- ppp(x$x,x$y,window=x$window,marks=marx, check=FALSE)
+  Y <- ppp(x$x,x$y,window=x$window,marks=marx, check=FALSE, drop=drop)
   return(Y)
 }
 

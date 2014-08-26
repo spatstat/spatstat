@@ -298,6 +298,12 @@ plot.quad <- function(x, ..., main, add=FALSE, dum=list(), tiles=FALSE) {
   quad(U[Z], U[!Z], w)
 }
 
+domain.quad <- Window.quad <- function(X, ...) { as.owin(X) }
+
+"Window<-.quad" <- function(X, ..., value) {
+  verifyclass(value, "owin")
+  return(X[value])
+}
 
 unitname.quad <- function(x) {
   return(unitname(x$data))

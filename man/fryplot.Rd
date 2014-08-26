@@ -6,21 +6,31 @@
   Displays the Fry plot (Patterson plot) of a spatial point pattern. 
 }
 \usage{
-fryplot(X, ..., width=NULL, from=NULL, to=NULL)
-frypoints(X)
+fryplot(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE)
+frypoints(X, from=NULL, to=NULL, dmax=Inf)
 }
 \arguments{
   \item{X}{
     A point pattern (object of class \code{"ppp"}) or something
     acceptable to \code{\link{as.ppp}}.
   }
-  \item{\dots}{Optional arguments to control the appearance of the plot.}
+  \item{\dots}{Optional arguments to control the appearance of the
+    plot.}
   \item{width}{Optional parameter indicating the width of a box
     for a zoomed-in view of the Fry plot near the origin.}
   \item{from,to}{
     Optional. Subset indices specifying which points of \code{X}
     will be considered when forming the vectors (drawn from each point of
     \code{from}, to each point of \code{to}.)
+  }
+  \item{axes}{
+    Logical value indicating whether to draw axes,
+    crossing at the origin.
+  }
+  \item{dmax}{
+    Maximum distance between points. Pairs at greater distances
+    do not contribute to the result. The default means there is
+    no maximum distance.
   }
 }
 \details{
@@ -115,10 +125,14 @@ frypoints(X)
   \code{\link{Kest}}
 }
 \examples{
-data(cells)
+## unmarked data
 fryplot(cells)
 Y <- frypoints(cells)
-data(amacrine)
+
+## numerical marks
+fryplot(longleaf, width=4, axes=TRUE)
+
+## multitype points
 fryplot(amacrine, width=0.2,
                   from=(marks(amacrine) == "on"),
                   chars=c(3,16), cols=2:3,

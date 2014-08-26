@@ -12,7 +12,8 @@
                     legend=TRUE,
                     leg.side=c("left", "bottom", "top", "right"),
                     leg.args=list(),
-                    symap=NULL, maxsize=NULL, markscale=NULL, zap=0.01,
+                    symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
+                    zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
                     multiplot=TRUE)
 }
@@ -78,8 +79,14 @@
     Position of legend relative to main plot.
   }
   \item{leg.args}{
-    Additional arguments passed to \code{\link{plot.symbolmap}}
-    to control the legend.
+    List of additional arguments passed to \code{\link{plot.symbolmap}}
+    or \code{\link{symbolmap}} to control the legend.
+    In addition to arguments documented under
+    \code{\link{plot.symbolmap}}, and graphical arguments recognised
+    by \code{\link{symbolmap}}, the list may also include the argument
+    \code{sep} giving the separation between the main plot and the
+    legend, or \code{sep.frac} giving the separation as a fraction
+    of the relevant dimension (width or height) of the main plot.
   }
   \item{symap}{
     Optional. The graphical symbol map to be applied to the marks.
@@ -87,16 +94,25 @@
     \code{\link{symbolmap}}.
   }
   \item{maxsize}{
-    Maximum size of the circles/squares plotted
+    \emph{Maximum} physical size of the circles/squares plotted
     when \code{x} is a marked point pattern with 
     numerical marks.
-    Incompatible with \code{markscale}.
+    Incompatible with \code{meansize} and \code{markscale}.
+    Ignored if \code{symap} is given.
+  }
+  \item{meansize}{
+    \emph{Average} physical size of the circles/squares plotted
+    when \code{x} is a marked point pattern with 
+    numerical marks.
+    Incompatible with \code{maxsize} and \code{markscale}.
     Ignored if \code{symap} is given.
   }
   \item{markscale}{
     physical scale factor determining the sizes of the
     circles/squares plotted when \code{x} is a marked point pattern with 
-    numerical marks. Incompatible with \code{maxsize}.
+    numerical marks. Mark value will be multiplied by \code{markscale}
+    to determine physical size.
+    Incompatible with \code{maxsize} and \code{meansize}.
     Ignored if \code{symap} is given.
   }
   \item{zap}{
@@ -221,7 +237,7 @@
   (for all other cases). Note that \code{col} will also reset the
   colour of the window.
 
-  The arguments \code{maxsize} and \code{markscale} 
+  The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
   incompatible. They control the physical size of the circles and
   squares which represent the marks in a point pattern with continuous
   marks. The size of a circle is defined as its \emph{diameter};
@@ -230,8 +246,11 @@
   is plotted as a circle of diameter \code{m * markscale}
   (if \code{m} is positive) or a square of side \code{abs(m) * markscale}
   (if \code{m} is negative). If \code{maxsize} is given, then the
-  largest mark in absolute value, \code{mmax=max(abs(x$marks))},
+  largest mark in absolute value, \code{mmax=max(abs(marks(x)))},
   will be scaled to have physical size \code{maxsize}.
+  If \code{meansize} is given, then the
+  average absolute mark value, \code{mmean=mean(abs(marks(x)))},
+  will be scaled to have physical size \code{meansize}.
 
   The user can set the default values of these plotting parameters
   using \code{\link{spatstat.options}("par.points")}.
@@ -308,6 +327,8 @@
 
    # controlling MARK SCALE
    plot(longleaf, markscale=0.1)
+   plot(longleaf, maxsize=5)
+   plot(longleaf, meansize=2)
 
    # draw circles of diameter equal to nearest neighbour distance
    plot(cells \%mark\% nndist(cells), markscale=1, legend=FALSE)
@@ -315,6 +336,9 @@
    # inspecting the symbol map
    v <- plot(amacrine)
    v
+
+   ## variable colours ('cols' not 'col')
+   plot(longleaf, cols=function(x) ifelse(x < 30, "red", "black"))
 
    ## re-using the same mark scale
    a <- plot(longleaf)

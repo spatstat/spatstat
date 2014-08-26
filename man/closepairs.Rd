@@ -1,6 +1,8 @@
 \name{closepairs}
 \alias{closepairs}
 \alias{crosspairs}
+\alias{closepairs.ppp}
+\alias{crosspairs.ppp}
 \alias{closepaircounts}
 \alias{crosspaircounts}
 \title{
@@ -14,9 +16,14 @@ closepaircounts(X, r)
 
 crosspaircounts(X, Y, r)
 
-closepairs(X, rmax, ordered=TRUE, what=c("all", "indices"))
+closepairs(X, rmax, \dots)
 
-crosspairs(X, Y, rmax, what=c("all", "indices")) 
+\method{closepairs}{ppp}(X, rmax, ordered=TRUE,
+                         what=c("all","indices"), \dots)
+
+crosspairs(X, Y, rmax, \dots)
+
+\method{crosspairs}{ppp}(X, Y, rmax, what=c("all", "indices"), \dots)
 }
 \arguments{
   \item{X,Y}{
@@ -39,6 +46,7 @@ crosspairs(X, Y, rmax, what=c("all", "indices"))
     their \code{x,y} coordinates, and the distance between them.
     If \code{what="indices"} then only the indices \code{i,j} are returned.
   }
+  \item{\dots}{Extra arguments, ignored by methods.}
 }
 \details{
   These are the efficient low-level functions used by \pkg{spatstat}
@@ -113,9 +121,13 @@ crosspairs(X, Y, rmax, what=c("all", "indices"))
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
+  \code{\link{closepairs.pp3}} for the corresponding
+  functions for 3D point patterns.
+  
   \code{\link{Kest}}, \code{\link{Kcross}},
   \code{\link{nndist}}, \code{\link{nncross}},
-  \code{\link{applynbd}}, \code{\link{markstat}}.
+  \code{\link{applynbd}}, \code{\link{markstat}}
+  for functions which use these capabilities.
 }
 \examples{
    a <- closepaircounts(cells, 0.1)
@@ -123,6 +135,9 @@ crosspairs(X, Y, rmax, what=c("all", "indices"))
 
    Y <- split(amacrine)
    b <- crosspaircounts(Y$on, Y$off, 0.1)
+
+   d <- closepairs(cells, 0.1)
+   e <- crosspairs(Y$on, Y$off, 0.1)
 }
 \keyword{spatial}
 \keyword{math}

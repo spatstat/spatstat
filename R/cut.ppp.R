@@ -41,6 +41,11 @@ cut.ppp <- function(x, z=marks(x), ...) {
   if(is.im(z)) 
     return(cut(x, z[x, drop=FALSE], ...))
 
+  if(is.owin(z)) {
+    marks(x) <- factor(inside.owin(x$x, x$y, z), levels=c(FALSE, TRUE))
+    return(x)
+  }
+  
   if(is.tess(z)) {
     marks(x) <- tileindex(x$x, x$y, z)
     return(x)

@@ -15,8 +15,8 @@
     A point pattern (object of class \code{"ppp"}).
   }
   \item{fun}{
-    Name of the summary function to be computed: one of the strings
-    \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
+    Name of the summary function for which confidence intervals are
+    desired: one of the strings \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
     \code{"pcfinhom"}, \code{"Kinhom"} or \code{"Linhom"}.
   }
   \item{\dots}{
@@ -48,23 +48,27 @@
 }
 \details{
   This algorithm computes 
-  confidence bands for the true value of the summary statistic
+  confidence bands for the true value of the summary function
   \code{fun} using the bootstrap method of Loh (2008).
 
   If \code{fun="pcf"}, for example, the algorithm computes a pointwise
   \code{(100 * confidence)}\% confidence interval for the true value of
-  the pair correlation function \code{\link{pcf}} for the point
-  process. It starts by computing the array of
+  the pair correlation function for the point process,
+  normally estimated by \code{\link{pcf}}.
+  It starts by computing the array of
   \emph{local} pair correlation functions,
   \code{\link{localpcf}}, of the data pattern \code{X}.
-  This array consists of the contributions to \code{\link{pcf}} from each
+  This array consists of the contributions to the estimate of the
+  pair correlation function from each
   data point. Then these contributions are resampled \code{nsim} times
   with replacement; from each resampled dataset the total contribution
   is computed, yielding \code{nsim} random pair correlation functions.
   The pointwise \code{alpha/2} and \code{1 - alpha/2} quantiles of
   these functions are computed, where \code{alpha = 1 - confidence}.
+  The average of the local functions is also computed as an estimate
+  of the pair correlation function.
 
-  To control the smoothing and estimation algorithm, use the 
+  To control the estimation algorithm, use the 
   arguments \code{\dots}, which are passed to the local version
   of the summary function, as shown below:
   
@@ -80,6 +84,24 @@
   For \code{fun="Lest"}, the calculations are first performed
   as if \code{fun="Kest"}, and then the square-root transformation is
   applied to obtain the \eqn{L}-function. 
+
+  Note that the confidence bands computed by 
+  \code{lohboot(fun="pcf")} may not contain the estimate of the
+  pair correlation function computed by \code{\link{pcf}},
+  because of differences between the algorithm parameters
+  (such as the choice of edge correction)
+  in \code{\link{localpcf}} and \code{\link{pcf}}.
+  If you are using \code{lohboot}, the
+  appropriate point estimate of the pair correlation itself is
+  the pointwise mean of the local estimates, which is provided
+  in the result of \code{lohboot} and is shown in the default plot.
+
+  If the confidence bands seem unbelievably narrow,
+  this may occur because the point pattern has a hard core
+  (the true pair correlation function is zero for certain values of
+  distance) or because of an optical illusion when the
+  function is steeply sloping (remember the width of the confidence
+  bands should be measured \emph{vertically}).
   
   An alternative to \code{lohboot} is \code{\link{varblock}}.
 }

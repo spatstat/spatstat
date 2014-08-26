@@ -24,7 +24,7 @@ nndensity.ppp <- function(x, k, ..., verbose=TRUE) {
   # handle edge effects
   edge <- solutionset(B < D)
   # centres of all pixels where edge effect occurs
-  xy <- raster.xy(edge, drop=TRUE)
+  xy <- rasterxy.mask(edge, drop=TRUE)
   # corresponding values of distance
   rr <- D[edge, drop=TRUE]
   # compute actual search area

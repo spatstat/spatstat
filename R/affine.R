@@ -80,7 +80,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
            newframe <- boundingbox(affinexy(corners(X), mat, vec))
            W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
                    as.mask(newframe, eps=with(X, min(xstep, ystep)))
-           pixelxy <- raster.xy(W)
+           pixelxy <- rasterxy.mask(W)
            xybefore <- affinexy(pixelxy, mat, vec, invert=TRUE)
            W$m[] <- with(xybefore, inside.owin(x, y, X))
            W <- intersect.owin(W, boundingbox(W))

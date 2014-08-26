@@ -3,17 +3,49 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.14 $  $Date: 2014/02/07 09:09:38 $
+#  $Revision: 1.16 $  $Date: 2014/06/22 03:07:20 $
 #
 #
+
+# --------- outdated --------
+
+bermantest <- function(...) {
+  message("bermantest is out of date; use berman.test")
+#  .Deprecated("berman.test", package="spatstat")
+  berman.test(...)
+}
+
+bermantest.ppp <- function(...) {
+    message("bermantest.ppp is out of date; use berman.test.ppp")
+#  .Deprecated("berman.test.ppp", package="spatstat")
+  berman.test.ppp(...)
+}
+
+bermantest.ppm <- function(...) {
+    message("bermantest.ppm is out of date; use berman.test.ppm")
+#  .Deprecated("berman.test.ppm", package="spatstat")
+  berman.test.ppm(...)
+}
+
+bermantest.lpp <- function(...) {
+    message("bermantest.lpp is out of date; use berman.test.lpp")
+#  .Deprecated("berman.test.lpp", package="spatstat")
+  berman.test.lpp(...)
+}
+
+bermantest.lppm <- function(...) {
+    message("bermantest.lppm is out of date; use berman.test.lppm")
+#  .Deprecated("berman.test.lppm", package="spatstat")
+  berman.test.lppm(...)
+}
 
 # ---------------------------
 
-bermantest <- function(...) {
-  UseMethod("bermantest")
+berman.test <- function(...) {
+  UseMethod("berman.test")
 }
 
-bermantest.ppp <-
+berman.test.ppp <-
   function(X, covariate,
            which=c("Z1", "Z2"),
            alternative=c("two.sided", "less", "greater"),
@@ -31,7 +63,7 @@ bermantest.ppp <-
                                   covname=covname, dataname=Xname)))
 }
 
-bermantest.ppm <- function(model, covariate,
+berman.test.ppm <- function(model, covariate,
                            which=c("Z1", "Z2"),
                            alternative=c("two.sided", "less", "greater"),
                            ...) {
@@ -51,7 +83,7 @@ bermantest.ppm <- function(model, covariate,
                                 dataname=model$Qname)))
 }
 
-bermantest.lpp <-
+berman.test.lpp <-
   function(X, covariate,
            which=c("Z1", "Z2"),
            alternative=c("two.sided", "less", "greater"),
@@ -69,7 +101,7 @@ bermantest.lpp <-
                                   covname=covname, dataname=Xname)))
 }
 
-bermantest.lppm <- function(model, covariate,
+berman.test.lppm <- function(model, covariate,
                            which=c("Z1", "Z2"),
                            alternative=c("two.sided", "less", "greater"),
                            ...) {
@@ -199,8 +231,9 @@ bermantestEngine <- function(model, covariate,
 }
 
 plot.bermantest <-
-  function(x, ..., lwd=par("lwd"), col=par("col"), lty=par("lty"),
-           lwd0=lwd, col0=col, lty0=lty)
+  function(x, ...,
+           lwd=par("lwd"), col=par("col"), lty=par("lty"),
+           lwd0=lwd, col0=2, lty0=2)
 {
   fram <- x$fram
   if(!is.null(fram)) {

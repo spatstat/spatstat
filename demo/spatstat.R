@@ -49,7 +49,9 @@ if(enable3d)
 plot(simplenet, main="Linear network (linnet)")
 
 X <- rpoislpp(20, simplenet)
-plot(X, main="Point pattern on linear network (lpp)")
+plot(X,
+     main="Point pattern on linear network (lpp)",
+     show.window=FALSE)
 
 fanfare("II. Graphics")
 
@@ -102,8 +104,14 @@ D <- scaletointerval(density(runifpoint(30, W), adjust=0.3))
 X <- scaletointerval(as.im(function(x,y){ x }, W=W))
 plot(listof(L=L, D=D, X=X), main="Multiple images")
 pairs(L, D, X, main="Multiple images: pairs plot")
-plot(rgbim(D,X,L,maxColorValue=1), valuesAreColours=TRUE, main="Three images: RGB display")
-plot(hsvim(D,L,X), valuesAreColours=TRUE, main="Three images: HSV display")
+persp(L, colin=D,
+      theta=-24, phi=35, box=FALSE, apron=TRUE, 
+      main="Two images:\nperspective + colours",
+      shade=0.4, ltheta=225, lphi=10)
+plot(rgbim(D,X,L,maxColorValue=1), valuesAreColours=TRUE,
+     main="Three images: RGB display")
+plot(hsvim(D,L,X), valuesAreColours=TRUE,
+     main="Three images: HSV display")
 
 fanfare("III. Conversion between types")
 
@@ -139,7 +147,9 @@ subwindow <- owin(poly=list(x=c(0,96,96,40,40),y=c(0,0,100,100,50)))
 plot(X[subwindow], main="subset operation: X[subwindow]")
 
 plot(lansing, "Lansing Woods data")
-plot(split(lansing), main="split operation: split(X)")
+plot(split(lansing),
+     main="split operation: split(X)",
+     mar.panel=c(0,0,2,0), hsep=1, pch=3)
 
 plot(longleaf, main="Longleaf Pines data")
 plot(cut(longleaf, breaks=3),
@@ -151,7 +161,9 @@ X <- runifpoint(100)
 plot(cut(X,Z), main="points cut by tessellation", leg.side="left")
 plot(Z, add=TRUE)
 
-plot(split(X, Z), main="points split by tessellation")
+plot(split(X, Z),
+     main="points split by tessellation",
+     mar.panel=c(0,0,2,2), hsep=1)
 
 W <- square(1)
 X <- as.im(function(x,y){sqrt(x^2+y^2)}, W)
@@ -177,7 +189,7 @@ title(sub=paste("p-value =", signif(tes$p.value,3)), cex.sub=1.4)
 
 par(mar=c(4,4,3,2)+0.1)
 
-tesk <- kstest(nztrees, "x")
+tesk <- cdf.test(nztrees, "x")
 tesk
 plot(tesk)
 
@@ -208,13 +220,15 @@ te
 
 X <- unique(unmark(shapley))
 plot(X, "Shapley galaxy concentration", pch=".")
+coco <-colourmap(rev(rainbow(128, end=2/3)), range=c(0,1))
 pa <- function(i, ...) {
   if(i == 1) list(chars=c(".", "+"), cols=1:2) else
-             list(size=0.5, pch=21,
-                  bg=colourmap(topo.colors(128), range=c(0,1)))
+             list(size=0.5, pch=16, col=coco)
 }
 plot(nnclean(X, k=17), panel.args=pa,
-     main="Byers-Raftery nearest neighbour cleaning")
+     mar.panel=c(0,1,1,0), nrows=2,
+     main="Byers-Raftery nearest neighbour cleaning",
+     cex.title=1.2)
 Y <- sharpen(X, sigma=0.5, edgecorrect=TRUE)
 plot(Y, main="Choi-Hall data sharpening", pch=".")
 
@@ -241,11 +255,13 @@ plot(X, add=TRUE)
 plot(delaunay(X))
 plot(X, add=TRUE)
 
-parsave <- par(mfrow=c(2,2))
-plot(longleaf, main="Longleaf Pines data")
-plot(nnmark(longleaf), main="Nearest mark")
-plot(Smooth(longleaf, 10), main="Kernel smoothing of marks")
-plot(idw(longleaf), main=c("Inverse distance weighted","smoothing of marks"))
+parsave <- par(mfrow=c(1,1), mar=0.2+c(0,1,3,1))
+plot(listof("Longleaf Pines data"=longleaf,
+            "Nearest mark"=nnmark(longleaf),
+            "Kernel smoothing of marks"=Smooth(longleaf,10),
+            "Inverse distance weighted\nsmoothing of marks"=idw(longleaf)),
+     equal.scales=TRUE, halign=TRUE, valign=TRUE,
+     main="", mar.panel=0.2+c(0,0,2,2))
 par(parsave)
 
 fryplot(cells, main=c("Fry plot","cells data"), pch="+")
@@ -316,7 +332,7 @@ lam <- predict(ppm(X ~x))
 plot(Kscaled(X, lam), xlim=c(0, 1.5), main="Locally-scaled K function")
 
 plot(urkiola)
-plot(split(urkiola))
+plot(split(urkiola), cex=0.5)
 plot(density(split(urkiola)))
 contour(density(split(urkiola)), panel.begin=as.owin(urkiola))
 plot(relrisk(urkiola), main="Relative risk (cross-validated)")
@@ -332,44 +348,54 @@ ponderosa.extra$plotit(main="Ponderosa Pines")
 
 L <- localL(ponderosa)
 pL <- plot(L, lty=1, col=1, legend=FALSE,
-           main="neighbourhood density functions for Ponderosa Pines")
+           main=c("neighbourhood density functions",
+             "for Ponderosa Pines"), cex.main=0.8)
 
 parsave <- par(mfrow=c(1,2))
 ponderosa.extra$plotit()
 par(pty="s")
 plot(L, iso007 ~ r, main="point B")
 
+par(mar=0.2+c(1,1,3,1))
 ponderosa.extra$plotit()
 L12 <- localL(ponderosa, rvalue=12)
 P12 <- ponderosa %mark% L12
 Z12 <- Smooth(P12, sigma=5, dimyx=128)
-plot(Z12, col=topo.colors(128), main="smoothed neighbourhood density")
+plot(Z12, col=topo.colors(128),
+     main=c("smoothed", "neighbourhood density"),
+     cex.main=0.8)
 contour(Z12, add=TRUE)
 points(ponderosa, pch=16, cex=0.5)
 
-plot(amacrine, main="Amacrine cells data")
+plot(amacrine, main="Amacrine cells data", cex.main=0.8)
 par(pty="s")
 mkc <- markcorr(amacrine, 
                 correction="translate", method="density",
                 kernel="epanechnikov")
-plot(mkc, main="Mark correlation function", legend=FALSE)
+plot(mkc, main="Mark correlation function", legend=FALSE, cex.main=0.8)
 par(parsave)
 
+par(mar=0.2+c(4,4,3,1))
 plot(alltypes(amacrine, markconnect), 
      title="Mark connection functions for amacrine cells")
 
 parsave <- par(mfrow=c(1,2))
-plot(spruces, cex.main=0.75)
-par(pty="s")
+
+parspruce2 <- par(mar=0.2+c(0,2,2,0))
+plot(spruces, cex.main=0.8, markscale=10)
+par(pty="s", mar=0.2+c(2,3,2,0))
 plot(markcorr(spruces), main="Mark correlation", legendpos="bottomright")
 
-plot(spruces, cex.main=0.75)
+par(parspruce2)
+plot(spruces, cex.main=0.8, markscale=10)
+par(pty="s", mar=0.2+c(2,3,2,0))
 plot(markvario(spruces), main="Mark variogram", legendpos="topright")
 par(parsave)
 
-plot(as.listof(list("Emark(spruces)"=Emark(spruces),
-                    "Vmark(spruces)"=Vmark(spruces))),
-     main="Independence diagnostics", ylim.covers=0, legendpos="bottom")
+plot(listof("Emark(spruces)"=Emark(spruces),
+            "Vmark(spruces)"=Vmark(spruces)),
+     main="Independence diagnostics", ylim.covers=0,
+     legendpos="bottom")
 
 if(enable3d) {
   par3 <- par(mfrow=c(1,2))
@@ -381,16 +407,19 @@ if(enable3d) {
   par(par3)
 }
 
-par2 <- par(mfrow=c(1,3))
+par(mfrow=c(1,3))
 X <- unmark(chicago)
-plot(as.linnet(X), main="Chicago Street Crimes",col="green")
-plot(as.ppp(X), add=TRUE, col="red")
-plot(linearK(X, correction="none"), main="Network K-function")
-plot(linearK(X, correction="Ang"), main="Corrected K-function")
-par(par2)
+plot(X, col="green", cols="red", pch=16,
+     main="Chicago Street Crimes", cex.main=0.75,
+     show.window=FALSE)
+plot(linearK(X, correction="none"), main="Network K-function", cex.main=0.75)
+plot(linearK(X, correction="Ang"), main="Corrected K-function", cex.main=0.75)
+
+par(mfrow=c(1,1))
 
 fanfare("VI. Model-fitting")
 
+parsave <- par(mar=0.2+c(1,1,3,2))
 plot(japanesepines)
 fit <- ppm(japanesepines ~1)
 print(fit)
@@ -400,7 +429,7 @@ plot(fit, how="image", se=FALSE, main=c("Inhomogeneous Poisson model",
                                "fit by maximum likelihood",
                                "Fitted intensity"))
 plot(fit, how="image", trend=FALSE,
-     main="Standard error of fitted intensity")
+     main=c("Standard error", "of fitted intensity"))
 
 plot(leverage(fit))
 plot(influence(fit))
@@ -408,24 +437,29 @@ plot(influence(fit))
 plot(mur$gold, main="Murchison gold deposits", cols="blue")
 plot(mur$faults, add=TRUE, col="red")
 fit <- ppm(mur$gold ~D, covariates=list(D=distfun(mur$faults)))
+par(mar=0.2+c(4,4,4,2))
 plot(parres(fit, "D"),
      main="Partial residuals from loglinear Poisson model",
      xlab="Distance to nearest fault (km)",
      ylab="log intensity of gold", legend=FALSE)
-legend("bottomleft", legend=c("partial residual", "loglinear fit"), col=c(1,4), lty=c(1,4))
+legend("bottomleft", legend=c("partial residual", "loglinear fit"),
+       col=c(1,4), lty=c(1,4))
 
-parsave <- par(mfrow=c(1,2))
-plot(redwood)
+par(mar=rep(0.2, 4), mfrow=c(1,1))
 fitT <- kppm(redwood ~1, clusters="Thomas")
-plot(simulate(fitT)[[1]], main="simulation from fitted Thomas model")
+simT <- simulate(fitT)[[1]]
+plot(listof(redwood, simT),
+     main.panel=c("Redwood", "simulation from\nfitted Thomas model"),
+     main="", mar.panel=0.2, equal.scales=TRUE)
 
-oop <- par(pty="s")
+oop <- par(pty="s", mar=0.2+c(4,4,4,2))
 plot(fitT, main=c("Thomas model","minimum contrast fit"))
 os <- objsurf(fitT)
 plot(os, main="Minimum contrast objective function", col=terrain.colors(128))
 contour(os, add=TRUE)
 par(oop)
 
+parra <- par(mfrow=c(1,2), mar=0.2+c(3,3,4,2))
 plot(swedishpines)
 fit <- ppm(swedishpines ~1, Strauss(r=7))
 print(fit)
@@ -440,13 +474,19 @@ plot(fitin(fit), legend=FALSE,
             "fit by maximum pseudolikelihood"))
 
 # simulation
-plot(swedishpines)
+par(mfrow=c(1,1), mar=0.5+c(0,0,2,0))
 Xsim <- rmh(model=fit,
             start=list(n.start=80),
             control=list(nrep=100))
-plot(Xsim, main="Simulation from fitted Strauss model")
+plot(listof(swedishpines, Xsim),
+     main="",
+     main.panel=c("Swedish Pines",
+       "Simulation from\nfitted Strauss model"),
+     mar.panel=c(0,0,3,0),hsep=1,equal.scales=TRUE)
 
 # model compensator
+par(parra)
+par(mar=0.2+c(4,4,3,1))
 plot(swedishpines)
 fit <- ppm(swedishpines ~1, Strauss(r=7))
 plot(Kcom(fit), cbind(iso, icom, pois) ~ r,
@@ -474,7 +514,8 @@ points(rpoispp(lambda, win=letterR))
 points(rpoispp(9 * lambda, win=letterR))
 points(rpoispp(90 * lambda, win=letterR))
 plot(rpoispp(100))
-plot(rpoispp(function(x,y){1000 * exp(-3*x)}, 1000))
+plot(rpoispp(function(x,y){1000 * exp(-3*x)}, 1000),
+     main="rpoispp(function)")
 
 plot(rMaternII(200, 0.05))
 plot(rSSI(0.05, 200))
@@ -485,10 +526,7 @@ plot(rVarGamma(30, 2, 0.02, 5))
 plot(rGaussPoisson(30, 0.05, 0.5))
 
 if(require(RandomFields) && RandomFieldsSafe()) {
-  param <- c(0, variance=0.2, nugget=0, scale=.1)
-  mu <- 4
-  plot(rLGCP("exp", mu, param))
-  X <- rLGCP("exp", mu, param)
+  X <- rLGCP("exp", 4, var=0.2, scale=0.1)
   plot(attr(X, "Lambda"), main="log-Gaussian Cox process")
   plot(X, add=TRUE, pch=16)
 }
@@ -588,18 +626,18 @@ arrows(b$x, b$y, Xproj$x, Xproj$y, angle=10, length=0.15, col="red")
 plot(a, main="pointsOnLines(L)")
 plot(pointsOnLines(a, np=100), add=TRUE, pch="+")
 
-parry <- par(mfrow=c(1,3))
+parry <- par(mfrow=c(1,3), mar=0.3+c(1,1,3,1))
 X <- tess(xgrid=seq(2, 4, length=10), ygrid=seq(0, 3.5, length=8))
-plot(X)
-plot(letterR)
-plot(intersect.tess(X, letterR))
+plot(X, cex.main=0.75)
+plot(letterR, cex.main=0.75)
+plot(intersect.tess(X, letterR), cex.main=0.75)
 
 X <- dirichlet(runifpoint(10))
 plot(X)
 L <- infline(0.3,0.5)
-plot(owin(), main="L")
-plot(L, col="red", lwd=2)
-plot(chop.tess(X,L))
+plot(owin(), main="L", cex.main=0.75)
+plot(L, col="red", lwd=2, cex.main=0.75)
+plot(chop.tess(X,L), cex.main=0.75)
 par(parry)
 
 W <- chorley$window

@@ -12,7 +12,7 @@
     to \code{\link{as.owin}}.}
   \item{eps}{(optional) width and height of pixels.}
   \item{dimyx}{(optional) pixel array dimensions}
-  \item{xy}{(optional) pixel coordinates}
+  \item{xy}{(optional) data containing pixel coordinates}
 }
 \value{
   A window (object of class \code{"owin"})
@@ -51,11 +51,22 @@
   pixels in the \eqn{y} direction, and \code{dimyx[2]} is the number
   in the \eqn{x} direction. 
 
-  If \code{xy} is given, then this should be a structure
-  containing two elements \code{x} and \code{y} which are the
-  vectors of \eqn{x} and \code{y} coordinates of the margins
-  of the grid. The pixel coordinates will be generated
-  from these two vectors. In this case \code{w} may be omitted.
+  If \code{xy} is given, then this should be some kind of
+  data specifing the coordinates of a pixel grid. It may be
+  \itemize{
+    \item 
+    a list or structure containing elements \code{x} and \code{y}
+    which are numeric vectors of equal length. These will be taken as
+    \eqn{x} and \code{y} coordinates of the margins
+    of the grid. The pixel coordinates will be generated
+    from these two vectors.
+    \item
+    a pixel image (object of class \code{"im"}).
+    \item
+    a window (object of class \code{"owin"}) which is
+    of type \code{"mask"} so that it contains pixel coordinates.
+  }
+  If \code{xy} is given, \code{w} may be omitted.
   
   If neither \code{eps} nor \code{dimyx} nor \code{xy} is given,
   the pixel raster dimensions are obtained from

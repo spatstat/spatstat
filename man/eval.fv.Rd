@@ -10,8 +10,11 @@
 }
 \arguments{
   \item{expr}{An expression.}
-  \item{envir}{Optional. The environment in which to evaluate the
-    expression.}
+  \item{envir}{
+    Optional. The environment in which to evaluate the
+    expression, or a named list containing \code{"fv"} objects to be
+    used in the expression.
+  }
   \item{dotonly}{Logical. See Details.}
 }
 \details{
@@ -92,6 +95,9 @@
   
   Kdif <- eval.fv(Ks - Kr)
   Z <- eval.fv(sqrt(Ks/pi) - sqrt(Kr/pi))
+
+  ## Use of 'envir'
+  U <- eval.fv(sqrt(K), list(K=Kest(cells)))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

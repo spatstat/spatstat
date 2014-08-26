@@ -274,6 +274,7 @@
 	\code{\link{residualspaper}} \tab Data from Baddeley et al (2005) \cr
 	\code{\link{shapley}} \tab Galaxies in an astronomical survey \cr
 	\code{\link{simdat}} \tab Simulated point pattern (inhomogeneous, with interaction) \cr
+	\code{\link{sporophores}} \tab Mycorrhizal fungi around a tree \cr
 	\code{\link{spruces}} \tab Spruce trees in Saxonia \cr
 	\code{\link{swedishpines}} \tab Strand-Ripley Swedish pines data \cr
 	\code{\link{urkiola}} \tab Urkiola Woods data \cr
@@ -291,12 +292,16 @@
 	\code{\link{[.ppp}} \tab
 	extract or replace a subset of a point pattern \cr
         \tab \code{pp[subset]} or \code{pp[subwindow]} \cr
+	\code{\link{subset.ppp}} \tab
+	extract subset of point pattern satisfying a condition \cr
 	\code{\link{superimpose}} \tab
 	combine several point patterns  \cr
 	\code{\link{by.ppp}} \tab
 	apply a function to sub-patterns of a point pattern \cr
 	\code{\link{cut.ppp}} \tab
 	classify the points in a point pattern \cr
+	\code{\link{split.ppp}} \tab
+	divide pattern into sub-patterns \cr
 	\code{\link{unmark}} \tab
 	remove marks  \cr
 	\code{\link{npoints}} \tab
@@ -305,8 +310,6 @@
 	extract coordinates, change coordinates  \cr
 	\code{\link{marks}} \tab
 	extract marks, change marks or attach marks  \cr
-	\code{\link{split.ppp}} \tab
-	divide pattern into sub-patterns \cr
 	\code{\link{rotate}} \tab
 	rotate pattern  \cr
 	\code{\link{shift} } \tab
@@ -361,6 +364,10 @@
 	\tab \code{owin(xlim, ylim)} for rectangular window \cr
 	\tab \code{owin(poly)} for polygonal window \cr
 	\tab \code{owin(mask)} for binary image window \cr
+	\code{\link{Window}}	\tab
+	Extract window of another object \cr
+	\code{\link{Frame}}	\tab
+	Extract the containing rectangle ('frame') of another object \cr
 	\code{\link{as.owin}}	\tab
 	Convert other data to a window object \cr
 	\code{\link{square}}    \tab	make a square window \cr
@@ -599,6 +606,7 @@
       \code{\link{plot.pp3}} \tab plot a 3-D point pattern \cr
       \code{\link{coords}} \tab extract coordinates \cr
       \code{\link{as.hyperframe}} \tab extract coordinates \cr
+      \code{\link{subset.pp3}} \tab extract subset of 3-D point pattern \cr
       \code{\link{unitname.pp3}} \tab name of unit of length \cr
       \code{\link{npoints}} \tab count the number of points  \cr
       \code{\link{runifpoint3}} \tab generate uniform random points in 3-D \cr
@@ -623,6 +631,7 @@
       \code{\link{ppx}} \tab create a multidimensional space-time point pattern \cr
       \code{\link{coords}} \tab extract coordinates \cr
       \code{\link{as.hyperframe}} \tab extract coordinates \cr
+      \code{\link{subset.ppx}} \tab extract subset \cr
       \code{\link{unitname.ppx}} \tab name of unit of length \cr
       \code{\link{npoints}} \tab count the number of points  \cr
       \code{\link{runifpointx}} \tab generate uniform random points \cr
@@ -654,6 +663,7 @@
     \tabular{ll}{
       \code{\link{lpp}} \tab create a point pattern on a linear network \cr
       \code{\link{methods.lpp}} \tab methods for \code{lpp} objects \cr
+      \code{\link{subset.lpp}} \tab method for \code{subset} \cr
       \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
       \code{\link{chicago}} \tab Chicago street crime data \cr
@@ -722,7 +732,7 @@
   \tabular{ll}{
     \code{\link{clarkevans}} \tab Clark and Evans aggregation index \cr
     \code{\link{fryplot}} \tab Fry plot \cr
-    \code{\link{miplot}} \tab Morishita Index plot
+    \code{\link{miplot}} \tab Morisita Index plot
   }
 
   \bold{Smoothing:}
@@ -751,7 +761,8 @@
     \code{\link{nnclean}} \tab Byers-Raftery feature detection  \cr
     \code{\link{sharpen.ppp}} \tab Choi-Hall data sharpening \cr
     \code{\link{rhohat}} \tab Kernel estimate of covariate effect\cr
-    \code{\link{rho2hat}} \tab Kernel estimate of covariate effect
+    \code{\link{rho2hat}} \tab Kernel estimate of covariate effect\cr
+    \code{\link{spatialcdf}} \tab Spatial cumulative distribution function
   }
 
   \bold{Summary statistics for a point pattern:}
@@ -781,6 +792,8 @@
     \code{\link{localKinhom}} \tab local \eqn{K} for inhomogeneous point patterns \cr
     \code{\link{localLinhom}} \tab local \eqn{L} for inhomogeneous point patterns \cr
     \code{\link{localpcfinhom}} \tab local pair correlation for inhomogeneous patterns\cr
+    \code{\link{Ksector}} \tab Directional \eqn{K}-function\cr
+    \code{\link{Kscaled}} \tab locally scaled \eqn{K}-function \cr
     \code{\link{Kest.fft}} \tab fast \eqn{K}-function using FFT for large datasets \cr
     \code{\link{Kmeasure}} \tab reduced second moment measure \cr
     \code{\link{envelope}} \tab simulation envelopes for a summary
@@ -795,6 +808,7 @@
     \code{\link{plot.fv}} \tab plot a summary function\cr
     \code{\link{eval.fv}} \tab evaluate any expression involving
     summary functions\cr
+    \code{\link{harmonise.fv}} \tab make functions compatible \cr
     \code{\link{eval.fasp}} \tab evaluate any expression involving
     an array of functions\cr
     \code{\link{with.fv}} \tab evaluate an expression for a 
@@ -1017,6 +1031,7 @@
     \code{\link{fitted.kppm}} \tab Compute fitted intensity \cr
     \code{\link{predict.kppm}} \tab Compute fitted intensity \cr
     \code{\link{update.kppm}} \tab Update the model \cr
+    \code{\link{improve.kppm}} \tab Refine the estimate of trend \cr
     \code{\link{simulate.kppm}} \tab Generate simulated realisations \cr
     \code{\link{vcov.kppm}} \tab Variance-covariance matrix of coefficients \cr
     \code{\link{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
@@ -1426,8 +1441,8 @@
     \code{\link{quadrat.test}} \tab \eqn{\chi^2}{chi^2} goodness-of-fit
     test on quadrat counts \cr
     \code{\link{clarkevans.test}} \tab Clark and Evans test \cr
-    \code{\link{kstest}} \tab Kolmogorov-Smirnov goodness-of-fit test\cr
-    \code{\link{bermantest}} \tab Berman's goodness-of-fit tests\cr
+    \code{\link{cdf.test}} \tab Spatial distribution goodness-of-fit test\cr
+    \code{\link{berman.test}} \tab Berman's goodness-of-fit tests\cr
     \code{\link{envelope}} \tab critical envelope for Monte Carlo
     test of goodness-of-fit \cr
     \code{\link{scan.test}} \tab spatial scan statistic/test \cr
@@ -1593,6 +1608,7 @@
   Additional contributions by
   Ang Qi Wei,
   Sandro Azaele,
+  Malissa Baddeley,
   Colin Beale,
   Melanie Bell,
   Thomas Bendtsen,
@@ -1620,7 +1636,9 @@
   Ian Dryden,
   Stephen Eglen,
   Olivier Flores,
+  David Ford,
   Peter Forbes,
+  Janet Franklin,
   Funwi-Gabga Neba,
   Oscar Garcia,
   Agnes Gault,
@@ -1629,7 +1647,6 @@
   Jason Goldstick,
   Pavel Grabarnik,
   C. Graf,
-  Janet Franklin,
   Ute Hahn,
   Andrew Hardegen,
   Mandy Hering, 
@@ -1637,6 +1654,7 @@
   Martin Hazelton,
   Juha Heikkinen,
   Kurt Hornik,
+  Philipp Hunziker,
   Ross Ihaka,
   Aruna Jammalamadaka,
   Robert John-Chandran,
@@ -1654,12 +1672,14 @@
   Kiran Marchikanti,
   Jeff Marcus,
   Robert Mark,
-  Jorge Mateu Mahiques,
-  Monia Mahling,
   Peter McCullagh,
+  Monia Mahling,
+  Jorge Mateu Mahiques,
   Ulf Mehlig,
   Sebastian Wastl Meyer,
   Mi Xiangcheng,
+  Lore De Middeleer,
+  Robin Milne,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
   Erika Mudrak,
   Linda Stougaard Nielsen,
@@ -1670,14 +1690,19 @@
   Evgeni Parilov,
   Jeff Picka,
   Nicolas Picard,
+  Mike Porter,
   Sergiy Protsiv,
   Adrian Raftery,
+  Suman Rakshit,
+  Pablo Ramon, 
   Matt Reiter,
   Tom Richardson,
   Brian Ripley,
   Ted Rosenbaum,
   Barry Rowlingson,
+  Jason Rudokas,
   John Rudge,
+  Christopher Ryan,
   Farzaneh Safavimanesh,
   Aila \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka},
   Katja Schladitz,
@@ -1695,6 +1720,7 @@
   Thordis Linda Thorarinsdottir,
   Berwin Turlach,
   Kevin Ummer,
+  Medha Uppala,
   Andrew van Burgel,
   Tobias Verbeke,
   Mikko Vihtakari,

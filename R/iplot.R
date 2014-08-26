@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.14 $   $Date: 2014/03/22 07:03:23 $
+#   $Revision: 1.17 $   $Date: 2014/07/23 03:57:41 $
 #
 #
 
@@ -153,7 +153,7 @@ iplot.ppp <- function(x, ..., xname) {
               height <- sidelengths(bb)[2]
               stepsize <- (height/4)/zo
               panel$zoomcentre <- ce + c(0, stepsize)
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -165,7 +165,7 @@ iplot.ppp <- function(x, ..., xname) {
               width <- sidelengths(bb)[1]
               stepsize <- (width/4)/zo
               panel$zoomcentre <- ce - c(stepsize, 0)
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
@@ -176,7 +176,7 @@ iplot.ppp <- function(x, ..., xname) {
               width <- sidelengths(bb)[1]
               stepsize <- (width/4)/zo
               panel$zoomcentre <- ce + c(stepsize, 0)
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -188,7 +188,7 @@ iplot.ppp <- function(x, ..., xname) {
               height <- sidelengths(bb)[2]
               stepsize <- (height/4)/zo
               panel$zoomcentre <- ce - c(0, stepsize)
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -196,14 +196,14 @@ iplot.ppp <- function(x, ..., xname) {
   rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
             action=function(panel) {
               panel$zoomfactor <- panel$zoomfactor * 2
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
   rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
             action=function(panel) {
               panel$zoomfactor <- panel$zoomfactor / 2
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -211,7 +211,7 @@ iplot.ppp <- function(x, ..., xname) {
             action=function(panel) {
               panel$zoomfactor <- 1
               panel$zoomcentre <- panel$bbmid
-              redraw.iplot.ppp(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -242,7 +242,7 @@ iplot.ppp <- function(x, ..., xname) {
     } else {
       panel$zoomcentre <- panel$zoomcentre +
         (c(x,y) - panel$bbmid)/panel$zoomfactor
-      redraw.iplot.ppp(panel)
+      CommitAndRedraw(panel)
     }
     return(panel)
   }
@@ -277,8 +277,8 @@ do.iplot.ppp <- function(panel) {
   ce    <- panel$zoomcentre
   bb    <- panel$bb
   bbmid <- panel$bbmid
-  scalex <- shift(affine(shift(x, -ce), diag(c(z,z))), bbmid)
-  scalew <- shift(affine(shift(w, -ce), diag(c(z,z))), bbmid)
+  scalex <- shift(scalardilate(shift(x, -ce), z), bbmid)
+  scalew <- shift(scalardilate(shift(w, -ce), z), bbmid)
   scalex <- scalex[, bb]
   scalew <- intersect.owin(scalew, bb, fatal=FALSE)
   # determine what is plotted under the clipped pattern
@@ -307,8 +307,7 @@ do.iplot.ppp <- function(panel) {
     }
 
   # draw it
-  
-  opa <- par(ask=FALSE)
+#  opa <- par(ask=FALSE)
   if(panel$mtype == "multitype" && panel$split) {
     scalex <- split(scalex, un=(panel$pointmap != "marks"))
     plot(scalex, main=panel$xname, 
@@ -324,8 +323,16 @@ do.iplot.ppp <- function(panel) {
       plot(scalex, add=TRUE, use.marks=use.marks, pch=pch, cex=panel$charsize)
     }
   }
-  par(opa)
+#  par(opa)
   panel
+}
+
+CommitAndRedraw <- function(panel) {
+  # hack to ensure that panel is immediately updated in rpanel
+  require(rpanel)
+  rpanel:::rp.control.put(panel$panelname, panel)
+  # now redraw it
+  redraw.iplot.ppp(panel)
 }
 
 iplot.ppp

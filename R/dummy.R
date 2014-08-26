@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.27 $     $Date: 2014/05/07 04:38:34 $
+#       $Revision: 5.28 $     $Date: 2014/08/04 09:56:52 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -60,8 +60,9 @@ tilecentroids <- function (W, nx, ny)
   else {
     # approximate
     W   <- as.mask(W)
-    xx  <- as.vector(raster.x(W)[W$m])
-    yy  <- as.vector(raster.y(W)[W$m])
+    rxy <- rasterxy.mask(W, drop=TRUE)
+    xx  <- rxy$x
+    yy  <- rxy$y
     pid <- gridindex(xx,yy,W$xrange,W$yrange,nx,nx)$index
     x   <- tapply(xx,pid,mean)
     y   <- tapply(yy,pid,mean)
@@ -93,8 +94,8 @@ cellmiddles <- local({
     # that have nonzero digital area
     M   <- as.mask(W, dimyx=rev(npix))
     Mm <- M$m
-    xx <- as.vector(raster.x(M)[Mm])
-    yy <- as.vector(raster.y(M)[Mm])
+    xx <- as.vector(rasterx.mask(M, drop=TRUE))
+    yy <- as.vector(rastery.mask(M, drop=TRUE))
     pid <- gridindex(xx,yy,W$xrange,W$yrange,nx,ny)$index
 
     # compute tile centroids

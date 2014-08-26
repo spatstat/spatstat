@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.25 $  $Date: 2014/02/27 10:00:57 $
+#  $Revision: 1.30 $  $Date: 2014/08/09 10:41:11 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -32,7 +32,8 @@ layered <- function(..., plotargs=NULL, LayerList=NULL) {
 }
 
 print.layered <- function(x, ...) {
-  cat("Layered object\n")
+  splat("Layered object")
+  if(length(x) == 0) splat("(no entries)")
   for(i in seq_along(x)) {
     cat(paste("\n", names(x)[i], ":\n", sep=""))
     print(x[[i]])
@@ -40,8 +41,7 @@ print.layered <- function(x, ...) {
   pl <- layerplotargs(x)
   hasplot <- (unlist(lapply(pl, length)) > 0)
   if(any(hasplot)) 
-    cat(paste("\nIncludes plot arguments for",
-              commasep(names(pl)[hasplot]), "\n"))
+    splat("Includes plot arguments for", commasep(names(pl)[hasplot]))
   invisible(NULL)
 }
 
@@ -92,25 +92,26 @@ plot.layered <- function(x, ..., which=NULL, plotargs=NULL,
   ## Determine bounding box
   a <- plotEachLayer(x, ..., plotargs=plotargs, add=add,
                      show.all=show.all, do.plot=FALSE)
-  bb <- attr(a, "bbox")
   if(!do.plot)
     return(a)
+  bb <- as.rectangle(as.owin(a))
   ## Start plotting
-  titled <- FALSE
-  if(add) {
-    if(show.all && !is.null(bb)) 
-      fakemaintitle(bb, main, ...)
-  } else if(!is.null(bb)) {
+  if(!add && !is.null(bb)) {
     ## initialise new plot using bounding box
-    plot(bb, type="n", main=if(show.all) main else "")
+    pt <- prepareTitle(main)
+    plot(bb, type="n", main=pt$blank)
+    add <- TRUE
   }
   # plot the layers
-  out <- plotEachLayer(x, ..., plotargs=plotargs, add=add,
+  out <- plotEachLayer(x, ..., main=main,
+                       plotargs=plotargs, add=add,
                        show.all=show.all, do.plot=TRUE)
   return(invisible(out))
 }
 
-plotEachLayer <- function(x, ..., plotargs, add, show.all, do.plot=TRUE) {
+plotEachLayer <- function(x, ..., main,
+                          plotargs, add, show.all, do.plot=TRUE) {
+  main.given <- !missing(main)
   ## do.plot=TRUE    =>   plot the layers 
   ## do.plot=FALSE   =>   determine bounding boxes
   out <- boxes <- list()
@@ -123,33 +124,51 @@ plotEachLayer <- function(x, ..., plotargs, add, show.all, do.plot=TRUE) {
       out[[i]] <- boxes[[i]] <- NULL
     } else {
       ## plot layer i on top of previous layers if any.
-      ## By default, show all graphic elements of the first component only;
-      ## but do not display the names of any components.
-      show.name.i <- resolve.1.default(list(show.all=FALSE),
-                                       list(...), 
-                                       plotargs[[i]])
-      dflt <- list(main=if(show.name.i) nama[i] else "",
+      ## By default,
+      ##    - show all graphic elements of the first component only;
+      ##    - show title 'firstmain' on first component;
+      ##    - do not show any component names.
+      add.i <- add || !firstlayer
+      if(main.given) {
+        main.i <- if(firstlayer) main else ""
+      } else {
+        show.all.i <- resolve.1.default(list(show.all=FALSE),
+                                         list(...), 
+                                         plotargs[[i]])
+        main.i <- if(show.all.i) nama[i] else ""
+      }
+      dflt <- list(main=main.i,
                    show.all=show.all && firstlayer)
+      pla.i <- plotargs[[i]]
+      defaultplot <- !(".plot" %in% names(pla.i))
       ## plot layer i, or just determine bounding box
-      if(inherits(xi, c("ppp", "im", "msr", "layered"))) {
+      if(defaultplot &&
+         inherits(xi, c("ppp", "psp", "owin", "im", "msr", "layered"))) {
         ## plot method for 'xi' has argument 'do.plot'.
         out[[i]] <- outi <- do.call("plot",
                                     resolve.defaults(list(x=xi,
-                                                          add=TRUE,
+                                                          add=add.i,
                                                           do.plot=do.plot),
                                                      list(...),
-                                                     plotargs[[i]],
+                                                     pla.i,
                                                      dflt))
-        boxes[[i]] <- attr(outi, "bbox")
+        boxes[[i]] <- as.rectangle(as.owin(outi))
       } else {
         ## plot method for 'xi' does not have argument 'do.plot'
-        if(do.plot)
-          out[[i]] <- outi <- do.call("plot",
+        if(do.plot) {
+          if(defaultplot) {
+            plotfun <- "plot"
+          } else {
+            plotfun <- pla.i[[".plot"]]
+            pla.i <- pla.i[names(pla.i) != ".plot"]
+          }
+          out[[i]] <- outi <- do.call(plotfun,
                                       resolve.defaults(list(x=xi,
-                                                            add=TRUE),
+                                                            add=add.i),
                                                        list(...),
-                                                       plotargs[[i]],
+                                                       pla.i,
                                                        dflt))
+        }
         ## convert layer i to box
         boxi <- try(as.rectangle(xi), silent=TRUE)
         boxes[[i]] <- if(!inherits(boxi, "try-error")) boxi else NULL
@@ -212,8 +231,10 @@ applytolayers <- function(L, FUN, ...) {
   # Apply FUN to each **non-null** layer,
   # preserving the plot arguments
   pla <- layerplotargs(L)
-  ok <- !unlist(lapply(L, is.null))
-  L[ok] <- lapply(L[ok], FUN, ...)
+  if(length(L) > 0) {
+    ok <- !unlist(lapply(L, is.null))
+    L[ok] <- lapply(L[ok], FUN, ...)
+  }
   Z <- layered(LayerList=L, plotargs=pla)
   return(Z)
 }
@@ -288,3 +309,27 @@ as.owin.layered <- function(W, ..., fatal=TRUE) {
   return(Z)
 }
 
+domain.layered <- Window.layered <- function(X, ...) { as.owin(X) }
+
+as.layered <- function(X) {
+  UseMethod("as.layered")
+}
+
+as.layered.default <- function(X) {
+  layered(X)
+}
+
+as.layered.ppp <- function(X) {
+  if(!is.marked(X)) return(layered(X))
+  if(is.multitype(X)) return(layered(LayerList=split(X)))
+  mX <- marks(X)
+  if(!is.null(d <- dim(mX)) && d[2] > 1) {
+    mx <- as.data.frame(marks(X))
+    Y <- lapply(mx, function(z, P) setmarks(P,z), P=X)
+    return(layered(LayerList=Y))
+  }
+  return(layered(X))
+}
+
+
+  

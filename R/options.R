@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.53 $   $Date: 2014/04/25 07:15:10 $
+#    $Revision: 1.54 $   $Date: 2014/05/18 01:47:48 $
 #
 #
 
@@ -97,6 +97,12 @@ warn.once <- function(key, ...) {
            is.numeric(x) && length(x) == 1 && x > 1
          },
          valid="a single numeric value, greater than 1"
+       ),
+       expand.polynom=list(
+         ## whether to expand polynom() in ppm formulae
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        ),
        fasteval=list(
          ## whether to use 'fasteval' code if available
@@ -226,18 +232,6 @@ warn.once <- function(key, ...) {
          check=is.list,
          valid="a list"
          ),
-       par.persp=list(
-         ## default graphics parameters for 'persp' plots
-         default=list(),
-         check=is.list,
-         valid="a list"
-         ),
-       par.points=list(
-         ## default graphics parameters for 'points'
-         default=list(),
-         check=is.list,
-         valid="a list"
-         ),
        par.contour=list(
          ## default graphics parameters for 'contour'
          default=list(),
@@ -246,6 +240,18 @@ warn.once <- function(key, ...) {
          ),
        par.fv=list(
          ## default graphics parameters for 'plot.fv'
+         default=list(),
+         check=is.list,
+         valid="a list"
+         ),
+       par.persp=list(
+         ## default graphics parameters for 'persp' plots
+         default=list(),
+         check=is.list,
+         valid="a list"
+         ),
+       par.points=list(
+         ## default graphics parameters for 'points'
          default=list(),
          check=is.list,
          valid="a list"
@@ -270,12 +276,6 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
-       psstG.remove.zeroes=list(
-         ## whether to remove zero distances in psstG
-         default=TRUE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
        psstA.ngrid=list(
          ## size of point grid for computing areas in psstA
          default=32,
@@ -292,6 +292,20 @@ warn.once <- function(key, ...) {
          },
          valid="a single integer, greater than or equal to 4"
        ),
+       psstG.remove.zeroes=list(
+         ## whether to remove zero distances in psstG
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       rmh.nrep=list(
+         ## default value of parameter 'nrep' in rmh
+         default=5e5, 
+         check=function(x) {
+           is.numeric(x) && length(x) == 1 && (x == ceiling(x)) && x > 0
+         },
+         valid="a single integer, greater than 0"
+       ),
        rmh.p=list(
          ## default value of parameter 'p' in rmh
          default=0.9,
@@ -305,14 +319,6 @@ warn.once <- function(key, ...) {
          check=function(x) { is.numeric(x) && length(x) == 1 &&
                              x > 0 && x < 1 },
          valid="a single numerical value, strictly between 0 and 1"
-       ),
-       rmh.nrep=list(
-         ## default value of parameter 'nrep' in rmh
-         default=5e5, 
-         check=function(x) {
-           is.numeric(x) && length(x) == 1 && (x == ceiling(x)) && x > 0
-         },
-         valid="a single integer, greater than 0"
        ),
        scalable = list(
          ## whether certain calculations in ppm should be scalable
@@ -329,8 +335,8 @@ warn.once <- function(key, ...) {
        terse = list(
          ## Level of terseness in printed output (higher => more terse)
          default=0,
-         check=function(x) { length(x) == 1 && (x %in% 0:3) },
-         valid="an integer between 0 and 3"
+         check=function(x) { length(x) == 1 && (x %in% 0:4) },
+         valid="an integer between 0 and 4"
        ),
        use.Krect=list(
          ## whether to use function Krect in Kest(X) when window is rectangle
@@ -338,8 +344,8 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
-       expand.polynom=list(
-         ## whether to expand polynom() in ppm formulae
+       Cwhist=list(
+         ## whether to use C code for whist
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
@@ -409,7 +415,7 @@ function (...)
       nama <- assignto[i]
       valo <- called[[i]]
       entry <- .Spat.Stat.Opt.Table[[nama]]
-      ok <- do.call(entry$check, list(valo))
+      ok <- entry$check(valo)
       if(!ok)
         stop(paste("Parameter", dQuote(nama), "should be",
                    entry$valid))

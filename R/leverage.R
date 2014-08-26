@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.43 $  $Date: 2014/03/31 04:14:23 $
+#  $Revision: 1.44 $  $Date: 2014/07/05 02:29:54 $
 #
 
 leverage <- function(model, ...) {
@@ -353,7 +353,7 @@ plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
           resolve.defaults(list(y$smo),
                            list(...),
                            list(main=defaultmain)))
-  if(showcut) 
+  if(showcut && diff(range(y$smo)) != 0) 
     do.call.matched("contour.im",
                     resolve.defaults(list(x=y$smo, levels=y$ave,
                                           add=TRUE, col=col.cut),
@@ -388,6 +388,10 @@ as.owin.leverage.ppm <- function(W, ..., fatal=TRUE) {
 as.owin.influence.ppm <- function(W, ..., fatal=TRUE) {
   as.owin(as.ppp(W), ..., fatal=fatal)
 }
+
+domain.leverage.ppm <- domain.influence.ppm <-
+  Window.leverage.ppm <- Window.influence.ppm <-
+  function(X, ...) { as.owin(X) } 
 
 print.leverage.ppm <- function(x, ...) {
   cat("Point process leverage function\n")

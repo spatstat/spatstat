@@ -10,7 +10,7 @@
    mar.panel=c(2,1,1,2), hsep=0, vsep=0,
    panel.begin=NULL, panel.end=NULL, panel.args=NULL, plotcommand="plot",
    adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
-   adorn.size=0.2, equal.scales=FALSE)
+   adorn.size=0.2, equal.scales=FALSE, halign=FALSE, valign=FALSE)
 }
 \arguments{
   \item{x}{
@@ -76,6 +76,13 @@
     Logical value indicating whether the components
     should be plotted at (approximately) the same physical scale. 
   }
+  \item{halign,valign}{
+    Logical values indicating whether panels in a column
+    should be aligned to the same \eqn{x} coordinate system
+    (\code{halign=TRUE}) and whether panels in a row should
+    be aligned to the same \eqn{y} coordinate system (\code{valign=TRUE}).
+    These are applicable only if \code{equal.scales=TRUE}.
+  }
 }
 \value{
   Null.
@@ -86,7 +93,8 @@
   An object of class \code{"listof"} (defined in the base R package) represents
   a list of objects, all belonging to a common class.
   The base R package defines a method for printing these objects,
-  \code{\link{print.listof}}, but does not define a method for \code{plot}.
+  \code{\link[base]{print.listof}},
+  but does not define a method for \code{plot}.
   So here we have provided a method for \code{plot}.
 
   In the \pkg{spatstat} package, various functions produce
@@ -150,6 +158,12 @@
     \code{adorn.top} and 
     \code{adorn.bottom} are all \code{NULL}.
   }
+
+  Another special case is when every component of \code{x} is an
+  object of class \code{"fv"} representing a function.
+  If \code{equal.scales=TRUE} then all these functions will 
+  be plotted with the same axis scales
+  (i.e. with the same \code{xlim} and the same \code{ylim}).
 }
 \section{Spacing between plots}{
   The spacing between individual plots is controlled by the parameters
@@ -175,7 +189,7 @@
   and \code{mar.panel[1]} respectively.
 }
 \seealso{
-  \code{\link{print.listof}},
+  \code{\link[base]{print.listof}},
   \code{\link{contour.listof}},
   \code{\link{image.listof}},
   \code{\link{density.splitppp}}

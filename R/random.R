@@ -3,7 +3,7 @@
 #
 #    Functions for generating random point patterns
 #
-#    $Revision: 4.59 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 4.62 $   $Date: 2014/08/04 11:26:15 $
 #
 #
 #    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -82,8 +82,9 @@
              dx <- win$xstep
              dy <- win$ystep
              # extract pixel coordinates and probabilities
-             xpix <- as.vector(raster.x(win)[win$m])
-             ypix <- as.vector(raster.y(win)[win$m])
+             rxy <- rasterxy.mask(win, drop=TRUE)
+             xpix <- rxy$x
+             ypix <- rxy$y
              # select pixels with equal probability
              id <- sample(seq_along(xpix), n, replace=TRUE)
              # extract pixel centres and randomise within pixels
@@ -171,8 +172,9 @@ rpoint <- function(n, f, fmax=NULL,
     dx <- w$xstep
     dy <- w$ystep
     # extract pixel coordinates and probabilities
-    xpix <- as.vector(raster.x(w)[M])
-    ypix <- as.vector(raster.y(w)[M])
+    rxy <- rasterxy.mask(w, drop=TRUE)
+    xpix <- rxy$x
+    ypix <- rxy$y
     ppix <- as.vector(f$v[M]) # not normalised - OK
     # select pixels
     id <- sample(length(xpix), n, replace=TRUE, prob=ppix)
@@ -662,6 +664,8 @@ rthin <- function(X, P, ...) {
 
 rjitter <- function(X, radius, retry=TRUE, giveup=10000) {
   verifyclass(X, "ppp")
+  if(missing(radius) || is.null(radius))
+    radius <- bw.stoyan(X)
   nX <- npoints(X)
   if(nX == 0) return(X)
   W <- X$window

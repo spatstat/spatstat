@@ -1,26 +1,27 @@
 #
 #  dist2dpath.R
 #
-#   $Revision: 1.6 $    $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.7 $    $Date: 2014/08/05 08:21:29 $
 #
 #       dist2dpath    compute shortest path distances
 #
 
 dist2dpath <- function(dist, method="C") {
-  # given a matrix of distances between adjacent vertices
-  # (value = Inf if not adjacent)
-  # compute the matrix of shortest path distances
+  ## given a matrix of distances between adjacent vertices
+  ## (value = Inf if not adjacent)
+  ## compute the matrix of shortest path distances
   stopifnot(is.matrix(dist) && isSymmetric(dist))
   stopifnot(all(diag(dist) == 0))
   stopifnot(all(dist[is.finite(dist)] >= 0))
-  #
+  ##
   n <- nrow(dist)
+  if(n <= 1) return(dist)
   cols <- col(dist)
-  #
+  ##
   shortest <- min(dist[is.finite(dist) & dist > 0])
   tol <- shortest/max(n,1024)
   tol <- max(tol, .Machine$double.eps)
-  #
+  ##
   switch(method,
          interpreted={
            dpathnew <- dpath <- dist
@@ -47,14 +48,13 @@ dist2dpath <- function(dist, method="C") {
                    niter=as.integer(integer(1)),
                    status=as.integer(integer(1)),
                    DUP=DUP)
-#                   PACKAGE="spatstat")
            if(z$status == -1)
              warning(paste("C algorithm did not converge to tolerance", tol,
                            "after", z$niter, "iterations",
                            "on", n, "vertices and",
                            sum(adj) - n, "edges"))
            dpath <- matrix(z$dpath, n, n)
-           # value=-1 implies unreachable
+           ## value=-1 implies unreachable
            dpath[dpath < 0] <- Inf
          },
          stop(paste("Unrecognised method", sQuote(method))))

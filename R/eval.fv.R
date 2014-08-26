@@ -22,8 +22,11 @@ eval.fv <- local({
     if(length(varnames) == 0)
       stop("No variables in this expression")
     # get the actual variables
-    if(missing(envir))
+    if(missing(envir)) {
       envir <- parent.frame()
+    } else if(is.list(envir)) {
+      envir <- list2env(envir, parent=parent.frame())
+    }
     vars <- lapply(as.list(varnames), get, envir=envir)
     names(vars) <- varnames
     # find out which ones are fv objects
@@ -155,7 +158,10 @@ compatible <- function(A, B, ...) {
 
 compatible.fv <- function(A, B, ...) {
   verifyclass(A, "fv")
-  if(missing(B)) return(TRUE)
+  if(missing(B)) {
+    answer <- if(length(...) == 0) TRUE else compatible(A, ...)
+    return(answer)
+  }
   verifyclass(B, "fv")
   # are columns the same?
   namesmatch <-
@@ -178,3 +184,48 @@ compatible.fv <- function(A, B, ...) {
   return(compatible.fv(B, ...))
 }
 
+# force a list of images to be compatible with regard to 'x' values
+
+harmonize.fv <- harmonise.fv <- function(...) {
+  argh <- list(...)
+  n <- length(argh)
+  if(n < 2) return(argh)
+  isfv <- unlist(lapply(argh, is.fv))
+  if(!all(isfv))
+    stop("All arguments must be fv objects")
+  ## determine range of argument
+  ranges <- lapply(argh, function(f) { range(with(f, .x)) })
+  xrange <- c(max(unlist(lapply(ranges, min))),
+              min(unlist(lapply(ranges, max))))
+  if(diff(xrange) < 0)
+    stop("No overlap in ranges of argument")
+  ## determine finest resolution
+  xsteps <- unlist(lapply(argh, function(f) { mean(diff(with(f, .x))) }))
+  finest <- which.min(xsteps)
+  ## extract argument values
+  xx <- with(argh[[finest]], .x)
+  xx <- xx[xrange[1] <= xx & xx <= xrange[2]]
+  ## convert each fv object to a function
+  funs <- lapply(argh, as.function, value="*")
+  ## evaluate at common argument
+  result <- vector(mode="list", length=n)
+  for(i in 1:n) {
+    ai <- argh[[i]]
+    fi <- funs[[i]]
+    ri <- ai
+    xxval <- list(xx=xx)
+    names(xxval) <- fvnames(ai, ".x")
+    starnames <- fvnames(ai, "*")
+    ## ensure they are given in same order as current columns
+    starnames <- colnames(ai)[colnames(ai) %in% starnames]
+    yyval <- lapply(starnames,
+                    function(v,xx,fi) fi(xx, v),
+                    xx=xx, fi=fi)
+    names(yyval) <- starnames
+    ri[,] <- do.call("data.frame", append(xxval, yyval))
+    attr(ri, "alim") <- intersect.ranges(attr(ri, "alim"), xrange)
+    result[[i]] <- ri
+  }
+  names(result) <- names(argh)
+  return(result)
+}

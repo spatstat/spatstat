@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.29 $    $Date: 2013/05/20 00:55:25 $
+#      $Revision: 4.30 $    $Date: 2014/08/04 10:01:28 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.
@@ -280,8 +280,9 @@ pixelquad <- function(X, W=as.owin(X)) {
   pixelarea <- M$xstep * M$ystep
   
   # create pixel coordinates and corresponding row, column indices
-  xx <- as.vector(raster.x(M)[MM])
-  yy <- as.vector(raster.y(M)[MM])
+  rxy <- rasterxy.mask(M, drop=TRUE)
+  xx <- rxy$x
+  yy <- rxy$y
   cc <- as.vector(col(MM)[MM])
   rr <- as.vector(row(MM)[MM])
   Nr <- M$dim[1]

@@ -51,6 +51,10 @@ layered(..., plotargs = NULL, LayerList=NULL)
   should be a list of arguments in the form \code{name=value}, which are
   recognised by the \code{plot} method for the relevant layer.
 
+  The \code{plotargs} can also include an argument named \code{.plot}
+  specifying (the name of) a function to perform the plotting
+  instead of the generic \code{plot}.
+
   The length of \code{plotargs} should either be equal to the
   number of layers, or equal to 1. In the latter case it will be
   replicated to the appropriate length.
@@ -69,16 +73,19 @@ layered(..., plotargs = NULL, LayerList=NULL)
 \seealso{
   \code{\link{plot.layered}},
   \code{\link{methods.layered}},
+  \code{\link{as.layered}},
   \code{\link{[.layered}},
   \code{\link{layerplotargs}}.
 }
 \examples{
-   data(cells)
    D <- distmap(cells)
    L <- layered(D, cells)
    L
    L <- layered(D, cells,
     plotargs=list(list(ribbon=FALSE), list(pch=16)))
+   plot(L)
+
+   layerplotargs(L)[[1]] <- list(.plot="contour")
    plot(L)
 }
 \keyword{spatial}

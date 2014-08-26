@@ -50,7 +50,7 @@ rotate.owin <- function(X, angle=pi/2, ..., rescue=TRUE, centre=NULL) {
            newframe <- boundingbox(rotxy(corners(X), angle))
            Y <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
                    as.mask(newframe, eps=with(X, min(xstep, ystep)))
-           pixelxy <- raster.xy(Y)
+           pixelxy <- rasterxy.mask(Y)
            xybefore <- rotxy(pixelxy, -angle)
            Y$m[] <- with(xybefore, inside.owin(x, y, X))
            Y <- intersect.owin(Y, boundingbox(Y))

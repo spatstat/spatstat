@@ -7,7 +7,7 @@
   are duplicates of previous points, and returns a logical vector.
 }
 \usage{
- \method{duplicated}{ppp}(x, \dots, rule=c("spatstat", "deldir"))
+ \method{duplicated}{ppp}(x, \dots, rule=c("spatstat", "deldir", "unmark"))
 
  \method{duplicated}{ppx}(x, \dots)
 }
@@ -44,11 +44,16 @@
   for duplicated points and \code{FALSE} for unique (non-duplicated)
   points.
 
-  If \code{rule="spatstat"} (the default), duplicated points are
-  determined by testing equality of their coordinates and marks
-  using \code{==}. This is the most stringent possible test.
+  If \code{rule="spatstat"} (the default), two points are deemed
+  identical if their coordinates are equal according to \code{==},
+  \emph{and} their marks are equal according to \code{==}.
+  This is the most stringent possible test.
+  If \code{rule="unmark"}, duplicated points are
+  determined by testing equality of their coordinates only,
+  using \code{==}.
   If \code{rule="deldir"}, duplicated points are
-  determined using the function \code{\link[deldir]{duplicatedxy}}
+  determined by testing equality of their coordinates only,
+  using the function \code{\link[deldir]{duplicatedxy}}
   in the package \pkg{deldir}, which currently uses
   \code{\link{duplicated.data.frame}}. Setting \code{rule="deldir"}
   will ensure consistency with functions in the \pkg{deldir} package.

@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.9 $  $Date: 2014/04/17 08:45:16 $
+#   $Revision: 1.15 $  $Date: 2014/07/25 07:38:12 $
 #
 #  Logistic likelihood method - under development
 #
@@ -11,6 +11,7 @@ logi.engine <- function(Q,
                         interaction,
                         ...,
                         covariates=NULL,
+                        subsetexpr=NULL,
                         correction="border",
                         rbord=reach(interaction),
                         covfunargs=list(),
@@ -25,6 +26,7 @@ logi.engine <- function(Q,
   if(is.null(interaction)) interaction <- Poisson()
   want.trend <- !identical.formulae(trend, ~1)
   want.inter <- !is.poisson(interaction)
+  want.subset <- !is.null(subsetexpr)
   # validate choice of edge correction
   correction <- pickoption("correction", correction,
                            c(border="border",
@@ -93,8 +95,15 @@ logi.engine <- function(Q,
 #  
   computed <- if (savecomputed) list(X = Xplus, Q = Q, U = U) else list()
   # assemble covariate data frame
-  if(want.trend) {
+  if(want.trend || want.subset) {
     tvars <- variablesinformula(trend)
+    if(want.subset)
+      tvars <- union(tvars, all.vars(subsetexpr))
+    ## resolve 'external' covariates
+    externalvars <- setdiff(tvars, c("x", "y", "marks"))
+    tenv <- environment(trend)
+    covariates <- getdataobjects(externalvars, tenv, covariates, fatal=TRUE)
+    ## 
     wantxy <- c("x", "y") %in% tvars
     wantxy <- wantxy | rep.int(allcovar, 2)
     cvdf <- data.frame(x=U$x, y=U$y)[, wantxy, drop=FALSE]
@@ -138,6 +147,11 @@ logi.engine <- function(Q,
   ok <- ok & KEEP
   wei <- c(rep.int(1,npoints(Xplus)),rep.int(B/rho,npoints(D)))
   resp <- c(rep.int(1,npoints(Xplus)),rep.int(0,npoints(D)))
+  ## User-defined subset:
+  if(!is.null(subsetexpr)) {
+    USERSUBSET <- eval(subsetexpr, glmdata, environment(trend))
+    ok <- ok & USERSUBSET
+  }
   # add offset, subset and weights to data frame
   # using reserved names beginning with ".logi."
   glmdata <- cbind(glmdata,
@@ -168,6 +182,7 @@ logi.engine <- function(Q,
   # go
   fit <- glm(fmla, data=glmdata,
              family=binomial(), subset = .logi.ok, weights = .logi.w)
+  environment(fit$terms) <- sys.frame(sys.nframe())
   ## Fitted coeffs
   co <- coef(fit)
   fitin <- fii(interaction, co, Vnames, IsOffset)
@@ -180,7 +195,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/04/17 08:45:16 $")
+                      date="$Date: 2014/07/25 07:38:12 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -192,9 +207,11 @@ logi.engine <- function(Q,
               Q           = Q,
               correction  = correction,
               rbord       = rbord,
+              terms       = terms(trend),
               version     = the.version,
               fitin       = fitin,
               maxlogpl    = maxlogpl,
+              covariates  = mpl.usable(covariates),
               internal    = list(Vnames  = Vnames,
                                  IsOffset=IsOffset,
                                  glmdata = glmdata,
@@ -296,7 +313,10 @@ quadscheme.logi <- function(data, dummy, dummytype = "stratrand", nd = NULL, mar
   D <- as.ppp(dummy)
   if(is.null(Dinfo))
     Dinfo <- list(how="given", rho=npoints(D)/(area.owin(D)*markspace.integral(D)))
-  Q <- quad(data, D, param=Dinfo)
+  ## Weights:
+  n <- npoints(data)+npoints(D)
+  w <- area.owin(as.owin(data))/n
+  Q <- quad(data, D, rep(w,n), param=Dinfo)
   class(Q) <- c("logiquad", class(Q))
   return(Q)
 }

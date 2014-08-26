@@ -208,7 +208,8 @@ default.rmhcontrol <- function(model) {
 
 update.rmhcontrol <- function(object, ...) {
   do.call.matched("rmhcontrol.default",
-                  resolve.defaults(list(...), as.list(object)))
+                  resolve.defaults(list(...), as.list(object),
+                                   .StripNull=TRUE))
 }
 
 rmhResolveControl <- function(control, model) {

@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.74 $ $Date: 2014/04/21 04:41:40 $
+#  $Revision: 1.76 $ $Date: 2014/08/08 10:13:47 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -123,7 +123,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
     bb <- boundingbox(window)
     rmax <- max(rr)
     bigbox <- owin(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
-    pattern <- psp(x$x - dx, x$y - dy, x$x + dx, x$y + dy,
+    pattern <- psp(x$xmid - dx, x$ymid - dy, x$xmid + dx, x$ymid + dy,
                    window=bigbox,check=FALSE)
     out <- pattern[window]
     x <- x[-match(c("xmid","ymid","length","angle"),names(x))]
@@ -134,7 +134,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
     x <- x[-(1:4)]
   }
   else if(fatal)
-    stop("Unable to interpret x as a line segment pattern.\n")
+    stop("Unable to interpret x as a line segment pattern.", call.=FALSE)
   else out <- NULL
 
   if(!is.null(out)) {
@@ -331,13 +331,15 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
   do.ribbon <- identical(ribbon, TRUE) && use.colour 
   ##
   ## ....   initialise plot; draw observation window  ......
+  owinpars <- setdiff(graphicsPars("owin"), "col")
   if(!do.ribbon) {
     ## window of x only
     bb.all <- as.rectangle(as.owin(x))
     if(do.plot && show.all)
-      do.call.matched("plot.owin", 
-                      append(list(x=x$window, main=main, add=add),
-                             list(...)))
+      do.call.plotfun("plot.owin", 
+                      resolve.defaults(list(x=x$window, main=main, add=add),
+                                       list(...)),
+                      extrargs=owinpars)
   } else {
     ## enlarged window with room for colour ribbon
     ## x at left, ribbon at right
@@ -349,23 +351,28 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
                    bb$yrange)
     bb.all <- boundingbox(bb.rib, bb)
     if(do.plot) {
+      pt <- prepareTitle(main)
       ## establish coordinate system
       if(!add)
-        do.call.plotfun("plot.default",
-                        resolve.defaults(list(x=0, y=0, type="n",
-                                              axes=FALSE, asp=1,
-                                              xlim=bb.all$xrange,
-                                              ylim=bb.all$yrange),
-                                         list(...),
-                                         list(main=main, xlab="", ylab="")))
+      do.call.plotfun("plot.owin",
+                      resolve.defaults(list(x=bb.all,
+                                            type="n",
+                                            main=pt$blank),
+                                       list(...)),
+                      extrargs=owinpars)
       ## now plot window of x
-      if(show.all) 
-        do.call.matched("plot.owin", 
+      ## with title centred on this window
+      if(show.all) {
+        do.call.plotfun("plot.owin", 
                         resolve.defaults(list(x=x$window,
                                               add=TRUE,
                                               main=main,
-                                              show.all=add),
-                                         list(...)))
+                                              show.all=TRUE),
+                                         list(...)),
+                        extrargs=owinpars)
+        ## title done. 
+        main <- ""
+      }
     }
   }
 
@@ -404,7 +411,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
 
   if(do.plot) {
     ## plot segments
-    do.call.matched("segments",
+    do.call.plotfun("segments",
                     resolve.defaults(as.list(x$ends),
                                      list(...),
                                      list(col=col),
@@ -423,33 +430,30 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
 }
 
 print.psp <- function(x, ...) {
-   verifyclass(x, "psp")
-    ism <- is.marked(x, dfok = TRUE)
-    cat(paste(if(ism)
-        "marked"
-    else NULL, "planar line segment pattern:", x$n, "line", ngettext(x$n, "segment",
-        "segments"), "\n"))
-    if (ism) {
-        mks <- marks(x, dfok = TRUE)
-        if (is.data.frame(mks)) {
-            cat(paste("Mark variables: ", paste(names(mks), collapse = ", "),
-                "\n"))
-        }
-        else {
-            if (is.factor(mks)) {
-                cat("multitype, with ")
-                cat(paste("levels =", paste(levels(mks), collapse = "\t"), 
-                  "\n"))
-            }
-            else {
-                cat(paste("marks are", if (is.numeric(mks)) 
-                  "numeric,", "of type", sQuote(typeof(mks)), 
-                  "\n"))
-            }
-        }
+  verifyclass(x, "psp")
+  n <- x$n
+  ism <- is.marked(x, dfok = TRUE)
+  splat(if(ism) "marked" else NULL,
+        "planar line segment pattern:",
+        n, ngettext(n, "line segment", "line segments"))
+  if(ism) {
+    mks <- marks(x, dfok = TRUE)
+    if(is.data.frame(mks)) {
+      splat("Mark variables: ",
+            paste(names(mks), collapse = ", "))
+    } else {
+      if(is.factor(mks)) {
+        splat("multitype, with levels =",
+              paste(levels(mks), collapse = "\t"))
+      } else {
+        splat("marks are",
+              if(is.numeric(mks)) "numeric," else NULL,
+              "of type", sQuote(typeof(mks)))
+      }
     }
-    print(x$window)
-    return(invisible(NULL))
+  }
+  print(x$window)
+  return(invisible(NULL))
 }
 
 unitname.psp <- function(x) {
@@ -718,3 +722,9 @@ as.ppp.psp <- function (X, ..., fatal=TRUE)
   return(Y)
 }
 
+domain.psp <- Window.psp <- function(X, ...) { as.owin(X) }
+
+"Window<-.psp" <- function(X, ..., value) {
+  verifyclass(value, "owin")
+  X[value]
+}

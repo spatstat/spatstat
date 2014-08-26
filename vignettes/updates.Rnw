@@ -29,6 +29,8 @@ options(useFancyQuotes=FALSE)
 \date{For \spst\ version \texttt{\Sexpr{sversion}}}
 \maketitle
 
+\thispagestyle{empty}
+
 This is a summary of changes that have been made 
 to the \spst\  package since 2010, when the 
 last set of workshop notes \cite{badd10wshop} 
@@ -72,16 +74,16 @@ Following is an overview of the most important changes.
 \begin{itemize}
   \item \spst\ and all its dependencies are now Free Open Source.
     
- \item polygon clipping is now performed
-   by the Free Open Source library \pkg{polyclip}.
-   The library \pkg{gpclib} is no longer used.
-
   \item \spst\ now `Imports' (rather than `Depends' on) 
    the libraries \pkg{mgcv}, \pkg{deldir}, \pkg{abind}, \pkg{tensor}, 
    \pkg{polyclip}.
    This means that these libraries are not accessible to the user
    unless the user explicitly loads them by typing \code{library(mgcv)}
    and so on.
+
+ \item polygon clipping is now performed
+   by the Free Open Source library \pkg{polyclip}.
+   The library \pkg{gpclib} is no longer used.
 
  \item polygon calculations are now enabled, always. 
    
@@ -96,6 +98,12 @@ Following is an overview of the most important changes.
    \item 
      Covariates no longer have to be passed in the argument 
      \texttt{covariates} but can be objects in the {\sf R} session;
+   \item 
+     A command like \verb!ppm(X ~ . , data=df)! 
+     will fit the additive model involving all the covariates in 
+     \texttt{data};
+   \item New argument \texttt{subset} makes it possible to fit the
+     model in a subset of the spatial domain defined by an expression;
     \item 
      new 'logistic likelihood' method;
    \item 
@@ -155,7 +163,11 @@ Following is an overview of the most important changes.
      Covariates no longer have to be passed in the argument 
      \texttt{covariates} but can be objects in the {\sf R} session;
     \item 
-     Guan's second order composite likelihood;
+     Fit models by Guan's second order composite likelihood;
+    \item 
+     Fit models by Palm likelihood;
+   \item 
+     Re-fit intensity using quasi-likelihood or weighted composite likelihood;
    \item 
      new cluster types \texttt{"Cauchy"}, \texttt{"VarGamma"};
    \item 
@@ -204,6 +216,13 @@ Following is an overview of the most important changes.
       $k$-th nearest neighbours (\texttt{nndist}, \texttt{nncross}, \texttt{nnwhich})
      \item more methods for \code{intensity}.
     \end{itemize}
+\item
+  Hypothesis tests:
+  \begin{itemize}
+  \item Cram\'er-von Mises and Anderson-Darling tests
+    of goodness-of-fit for Poisson process models
+  \item Cressie-Read statistic for quadrat counting tests
+  \end{itemize}
 \item
     Statistical tools e.g.
     \begin{itemize}
@@ -260,6 +279,7 @@ Following is an overview of the most important changes.
 \item envelopes: 
        Extended functionality;
        Envelopes can be pooled and transformed.
+       One-sided envelopes are available.
 
 \item Many, many, many bug fixes.
 
@@ -360,6 +380,10 @@ Important new classes of objects are listed here.
 The following datasets have been added to the package.
 
 \begin{itemize}
+\item \texttt{sporophores}:
+  Spatial pattern of three species of mycorrhizal fungi around a tree.
+  Multitype point pattern in circular window.
+   
 \item \texttt{pyramidal}:
    Diggle-Lange-Benes data on pyramidal neurons in cingulate cortex.
    31 point patterns divided into 3 groups.
@@ -415,6 +439,55 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{Ksector}: directional version of $K$-function.
+\item \texttt{pairorient}: point pair orientation distribution.
+\item \texttt{range.fv}, \texttt{min.fv}, \texttt{max.fv}:
+  Range, minimum and maximum of function values.
+\item \texttt{panel.contour}, \texttt{panel.image}, \texttt{panel.histogram}:
+  Panel functions for \texttt{pairs} plots.
+\item \texttt{as.layered}:
+  Convert spatial data to a \texttt{layered} object.
+\item \texttt{padimage}:
+  Pad the border of a pixel image.
+\item \texttt{Window}, \verb!Window<-!:
+  generic functions to extract or change the spatial window
+  of a spatial object in two dimensions. 
+\item \texttt{Frame}, \verb!Frame<-!:
+  generic functions to extract or change the containing rectangle ('frame')
+  of a spatial object in two dimensions. 
+\item \texttt{domain}:
+  generic function to extract the spatial domain of 
+  a spatial object in any number of dimensions.
+\item 
+  \texttt{subset.ppp}, 
+  \texttt{subset.lpp}, 
+  \texttt{subset.pp3}, 
+  \texttt{subset.ppx}:
+  Methods for \texttt{subset}, for point patterns.
+\item \texttt{spatialcdf}:
+  Compute the spatial cumulative distribution of a spatial covariate,
+  optionally using spatially-varying weights.
+\item \texttt{closepairs.pp3}, \texttt{crosspairs.pp3}:
+   Low-level functions to find all close pairs of points in three dimensions.
+\item 
+  \texttt{improve.kppm}:
+  Quasi-likelihood and weighted composite likelihood methods
+  for estimating trend in cluster processes and Cox processes.
+\item 
+  \texttt{berman.test}:
+  Replaces \texttt{bermantest}.
+\item 
+  \texttt{cdf.test}:
+  Spatial distribution test of goodness-of-fit of a 
+  Poisson point process model, using the Kolmogorov-Smirnov,
+  Cram\'er-von Mises test or Anderson-Darling test.
+  Replaces \texttt{kstest}.
+\item 
+  \texttt{simulate.lppm}:
+  Simulate a fitted point process model on a linear network.
+\item 
+  \texttt{harmonise.fv}:
+  Make several functions compatible.
 \item 
   \texttt{split.hyperframe}:
   method for \texttt{split} for hyperframes.
@@ -513,8 +586,10 @@ Following is a list of all the functions that have been added.
 \item \texttt{fitted.mppm}:
   Fitted intensity or conditional intensity for a model of class \texttt{mppm}
 
-\item \texttt{kstest.mppm}:
-  Kolmogorov-Smirnov test of goodness-of-fit for a model of class \texttt{mppm}
+\item \texttt{cdf.test.mppm}:
+  Kolmogorov-Smirnov,
+  Cram\'er-von Mises test or Anderson-Darling
+  test of goodness-of-fit for a model of class \texttt{mppm}
 
 \item \texttt{logLik.mppm}:
   log likelihood or log pseudolikelihood for a model of class \texttt{mppm}
@@ -693,12 +768,14 @@ Following is a list of all the functions that have been added.
   \item \texttt{connected.ppp}:
    Find clumps in a point pattern.
 
-  \item \texttt{kstest.lpp}, \texttt{kstest.lppm}:
-   The spatial Kolmogorov-Smirnov test can now be applied 
+  \item \texttt{cdf.test.lpp}, \texttt{cdf.test.lppm}:
+   The spatial Kolmogorov-Smirnov test,
+   Cram\'er-von Mises test or Anderson-Darling test
+   can now be applied 
    to point patterns on a linear network (class \texttt{lpp}) and 
    point processes on a linear network (class \texttt{lppm}).
 
-  \item \texttt{bermantest.lpp}, \texttt{bermantest.lppm}:
+  \item \texttt{berman.test.lpp}, \texttt{berman.test.lppm}:
    Berman's Z1 and Z2 tests can now be applied to point patterns
    on a linear network (class \texttt{lpp}) and point processes on a linear
    network (class \texttt{lppm}).
@@ -1284,6 +1361,8 @@ the News and Release Notes for each update.
 
   \item quadrat.test can now perform Monte Carlo tests and one/two-sided tests
 
+  \item quadrat.test can now compute the Cressie-Read test statistic
+
   \item improvements to 'plot.fv'
 
   \item improvement to 'rescale'
@@ -1439,6 +1518,9 @@ the News and Release Notes for each update.
      \texttt{lppm}) equivalent to syntax of \texttt{lm}, \texttt{glm}, \ldots
 
    \item Covariates in \texttt{ppm}, \texttt{kppm} can be tessellations.
+
+   \item One-sided tests and envelopes of summary functions
+
   \end{itemize}
   
 \section{Alphabetical list of changes}
@@ -1526,6 +1608,9 @@ listed alphabetically.
    The argument X can now be an object produced by a previous call
    to \texttt{dclf.test} or \texttt{mad.test}.
 
+  \item \texttt{dclf.test}, \texttt{mad.test}:
+    One-sided tests can be selected by argument \texttt{alternative}.
+
   \item \texttt{default.dummy}:
     Can now generate dummy points as a quasirandom sequence.
 
@@ -1564,11 +1649,19 @@ listed alphabetically.
    Now has argument \texttt{se.fit} allowing calculation of standard errors
    and confidence intervals.
 
+   \item \texttt{envelope}: 
+     One-sided envelopes can be selected by new argument \texttt{alternative}.
+     
    \item \texttt{envelope}:
     All methods for \texttt{envelope} now handle \texttt{fun=NULL}.
     New argument \texttt{envir.simul} determines the environment
     in which to evaluate the expression \texttt{simulate}.
 
+   \item \texttt{envelope.ppp}, \texttt{envelope.ppm}:
+    New arguments \texttt{fix.n} and \texttt{fix.marks} make it easy to
+    generate simulated patterns conditional on the total number of points
+    or on the number of points of each type.
+    
   \item \texttt{envelope.lpp}:
    Now handles multitype point patterns.
 
@@ -1717,6 +1810,10 @@ listed alphabetically.
    over choice of edge correction in compensator.
    Simplified defaults for edge correction.  
 
+  \item \texttt{Kcom}, \texttt{Gcom}:
+   New argument \texttt{model} makes it easier to generate
+   simulation envelopes.
+
   \item \texttt{Kscaled}, \texttt{Lscaled}:
     Argument \texttt{lambda} can now be a fitted model object
     (class \texttt{"ppm"}).
@@ -1733,6 +1830,8 @@ listed alphabetically.
      \item 
    Now has the option of fitting models using Guan's (2006)
    second order composite likelihood.
+     \item 
+   Now has the option of fitting models by Palm likelihood.
  \item 
     More flexible models of the intensity, and greater control over the
     intensity fitting procedure, are now possible using the arguments
@@ -1885,7 +1984,15 @@ listed alphabetically.
      Default behaviour changed - estimates are now renormalised by default.
 
    \item \texttt{persp.im}:
-	The \texttt{colmap} argument can now be a \texttt{colourmap} object
+     \begin{itemize}
+     \item 
+	The \texttt{colmap} argument can now be a \texttt{colourmap} object.
+      \item 
+        Option to draw a grey apron around the sides of the perspective plot.
+      \item 
+        The surface heights and colours can be controlled by
+        two different pixel images.
+      \end{itemize}
 
   \item  pixel images and grids:
       The default size of a pixel grid, given by 
@@ -1983,7 +2090,7 @@ listed alphabetically.
       More arguments recognised by \code{ribargs}
     \end{itemize}
   
-  \item \texttt{plot.kstest}:
+  \item \texttt{plot.cdftest}:
    Can now perform P-P and Q-Q plots as well.
 
    \item \texttt{plot.layered}:
@@ -2081,6 +2188,12 @@ listed alphabetically.
       \texttt{covariates}:
       variable names appearing in the model formula can simply be the names
       of objects in the {\sf R} session.
+   \item 
+     A command like \verb!ppm(X ~ . , data=df)! 
+     will fit the additive model involving all the covariates in 
+     \texttt{data}.
+   \item New argument \texttt{subset} makes it possible to fit the
+     model in a subset of the spatial domain defined by an expression.
     \item 
    Can now fit models with 'hybrid' interactions.
  \item 
@@ -2119,7 +2232,7 @@ listed alphabetically.
  \end{itemize}
 
 
-\item \item \texttt{ppp}: 
+\item \texttt{ppp}: 
     New argument \texttt{drop} determines whether a 
     data frame of marks with only one column will be
     converted to a vector.
@@ -2194,7 +2307,11 @@ listed alphabetically.
         A line segment pattern (object of class 'psp') can now have a 
 	data frame of marks. 
 
-  \item \texttt{psst}:
+  \item \texttt{psst}, \texttt{psstA}, \texttt{psstG}:
+   New argument \texttt{model} makes it easier to generate
+   simulation envelopes.
+
+ \item \texttt{psst}:
    Argument \texttt{funcorrection} changed to 
    \texttt{funargs} allowing greater flexibility.
 
@@ -2206,7 +2323,11 @@ listed alphabetically.
 
   \item \texttt{quadrat.test.splitppp}:
    The result is now a single object of class \texttt{quadrattest}
-
+   
+   \item \texttt{quadrat.test}:
+     Can now compute the Cressie-Read test statistic $2nI^\lambda$
+     instead of the Pearson $X^2$ statistic.
+     
    \item \texttt{quadrat.test}:
        Can now perform Monte Carlo test as well 
        (for use in small samples where the $\chi^2$ approximation is inaccurate)
@@ -2217,7 +2338,8 @@ listed alphabetically.
 	now displays information about the quadrats.
 
   \item \texttt{raster.x}, \texttt{raster.y}, \texttt{raster.xy}:
-   These functions have a new argument \texttt{drop}
+   These functions have a new argument \texttt{drop}.
+   They can now handle images as well as masks.
 
   \item \texttt{rDiggleGratton}, \texttt{rDGS}, \texttt{rHardcore},
         \texttt{rStrauss}, \texttt{rStraussHard}:
@@ -2669,11 +2791,15 @@ of potential impact.
     and was equivalent to \texttt{method="leastsquares"}.
     \bugger{1.21-0}{november 2010}{1.23-4}{september 2011}
   
-\item \texttt{bdist.tiles}
+\item \texttt{bdist.tiles}:
    Values were incorrect in some cases due to numerical error.
     {\small (Bug fixed in \texttt{spatstat 1.29-0}, october 2012)}
    
-\item polygon geometry
+\item \texttt{crossdist.ppp}:
+  Ignored argument \texttt{squared} if \texttt{periodic=FALSE}.
+    {\small (Bug fixed in \texttt{spatstat 1.38-0}, july 2014)}
+   
+\item polygon geometry:
     The point-in-polygon test gave the wrong answer in some boundary cases.
     {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
     

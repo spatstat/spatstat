@@ -19,8 +19,11 @@ eval.fasp <- function(expr, envir, dotonly=TRUE) {
   if(length(varnames) == 0)
     stop("No variables in this expression")
   # get the actual variables
-  if(missing(envir))
+  if(missing(envir)) {
     envir <- sys.parent()
+  } else if(is.list(envir)) {
+    envir <- list2env(envir, parent=parent.frame())
+  }
   vars <- lapply(as.list(varnames), get, envir=envir)
   names(vars) <- varnames
   # find out which ones are fasp objects

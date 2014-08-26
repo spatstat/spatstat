@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.22 $   $Date: 2013/10/20 00:51:27 $
+#  $Revision: 1.25 $   $Date: 2014/08/09 01:56:29 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -102,14 +102,18 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   P <- as.ppp(x)
   a <- plot(P, ..., do.plot=FALSE)
   if(!do.plot) return(a)
-  b <- attr(a, "bbox")
-  ## initialise
-  plot(b, type="n", main="  ", add=add)
+  ## initialise graphics space
+  if(!add) {
+    b <- attr(a, "bbox")
+    plot(b, type="n", main=main, ..., show.all=FALSE)
+  }
+  ## plot linear network
   L <- as.linnet(x)
   do.call.matched("plot.linnet",
                   resolve.defaults(list(x=L, add=TRUE),
                                    list(...)),
                   extrargs=c("col", "lty", "lwd"))
+  ## plot points, legend, title
   ans <- do.call.matched("plot.ppp",
                          c(list(x=P, add=TRUE, main=main,
                                 show.all=show.all),
@@ -200,9 +204,13 @@ as.ppp.lpp <- function(X, ..., fatal=TRUE) {
   return(Y)
 }
 
+Window.lpp <- function(X, ...) { as.owin(X) }
+
 as.owin.lpp <- function(W,  ..., fatal=TRUE) {
   as.owin(as.ppp(W, ..., fatal=fatal))
 }
+
+domain.lpp <- function(X, ...) { as.linnet(X) }
 
 as.linnet.lpp <- function(X, ..., fatal=TRUE) {
   verifyclass(X, "lpp", fatal=fatal)
@@ -369,6 +377,40 @@ rescale.lpp <- function(X, s, unitname) {
   if(missing(s)) s <- 1/unitname(X)$multiplier
   Y <- scalardilate(X, f=1/s)
   unitname(Y) <- rescale(unitname(X), s, unitname)
+  return(Y)
+}
+
+superimpose.lpp <- function(..., L=NULL) {
+  objects <- list(...)
+  if(!is.null(L) && !inherits(L, "linnet"))
+    stop("L should be a linear network")
+  if(length(objects) == 0) {
+    if(is.null(L)) return(NULL)
+    emptyX <- lpp(list(x=numeric(0), y=numeric(0)), L)
+    return(emptyX)
+  }
+  islpp <- unlist(lapply(objects, is.lpp))
+  if(is.null(L) && !any(islpp))
+    stop("Cannot determine linear network: no lpp objects given")
+  nets <- unique(lapply(objects[islpp], as.linnet))
+  if(length(nets) > 1)
+    stop("Point patterns are defined on different linear networks")
+  if(!is.null(L)) {
+    nets <- unique(append(nets, list(L)))
+    if(length(nets) > 1)
+      stop("Argument L is a different linear network")
+  }
+  L <- nets[[1]]
+  ## convert list(x,y) to linear network, etc
+  if(any(!islpp))
+    objects[!islpp] <- lapply(objects[!islpp], lpp, L=L)
+  ## concatenate coordinates 
+  locns <- do.call("rbind", lapply(objects, coords))
+  ## concatenate marks (or use names of arguments)
+  marx <- superimposeMarks(objects, sapply(objects, npoints))
+  ## make combined pattern
+  Y <- lpp(locns, L)
+  marks(Y) <- marx
   return(Y)
 }
 

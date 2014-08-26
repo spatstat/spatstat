@@ -7,7 +7,7 @@
   Apply kernel smoothing to a signed measure or vector-valued measure.
 }
 \usage{
- \method{Smooth}{msr}(X, ...)
+ \method{Smooth}{msr}(X, ..., drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -18,6 +18,12 @@
     Arguments passed to \code{\link{density.ppp}} controlling the
     smoothing bandwidth and the pixel resolution.
   }
+  \item{drop}{
+    Logical. If \code{TRUE} (the default), the result of smoothing
+    a scalar-valued measure is a pixel image. If \code{FALSE}, the
+    result of smoothing a scalar-valued measure is a list
+    containing one pixel image.
+  }
 }
 \details{
   This function applies kernel smoothing to a signed measure or
@@ -27,12 +33,16 @@
   \code{\link{residuals.ppm}} or \code{\link{msr}}.
 }
 \value{
-  For signed measures, a pixel image (object of class \code{"im"}).
-  For vector-valued measures, a list of pixel images; the list also
+  A pixel image or a list of pixel images.
+  For scalar-valued measures, a pixel image (object of class
+  \code{"im"}) provided \code{drop=TRUE}.
+  For vector-valued measures (or if \code{drop=FALSE}),
+  a list of pixel images; the list also
   belongs to the class \code{"listof"} so that it can be printed and plotted.
 }
 \references{
-  Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)
+  Baddeley, A., Turner, R.,
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.

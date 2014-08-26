@@ -14,6 +14,7 @@
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), colargs=list(),
+                   useRaster=NULL,
                    do.plot=TRUE) 
 }
 \arguments{
@@ -86,6 +87,14 @@
   \item{colargs}{
     List of additional arguments passed to
     \code{col} if it is a function.
+  }
+  \item{useRaster}{
+    Logical value, passed to \code{\link[graphics]{image.default}}.
+    Images are plotted using a bitmap raster if \code{useRaster=TRUE}
+    or by drawing polygons if \code{useRaster=FALSE}.
+    Bitmap raster display tends to produce better results,
+    but is not supported on all graphics devices.
+    The default is to use bitmap raster display if it is supported.
   }
   \item{do.plot}{
     Logical value indicating whether to actually plot the image
@@ -213,8 +222,12 @@
     \item the argument \code{box}, a logical value specifying whether
     a box should be drawn.
   }
-  By default, images are plotted using image rasters rather than
-  polygons, by setting \code{useRaster=TRUE} in \code{image.default}.
+  Images are plotted using a bitmap raster if \code{useRaster=TRUE}
+  or by drawing polygons if \code{useRaster=FALSE}.
+  Bitmap raster display (performed by \code{\link[graphics]{rasterImage}})
+  tends to produce better results, but is not supported on all graphics devices.
+  The default is to use bitmap raster display if it is
+  supported according to \code{\link[grDevices]{dev.capabilities}}.
 
   Alternatively, the pixel values could be directly 
   interpretable as colour values in \R. That is, the pixel values
@@ -251,12 +264,18 @@
   \code{\link{ps.options}} or \code{\link{pdf.options}}.
 }
 \section{Image Rendering Errors and Problems}{
-  The help for \code{\link[graphics]{image.default}} explains that
+  The help for \code{\link[graphics]{image.default}}
+  and \code{\link[graphics]{rasterImage}} explains that
   errors may occur, or images may be rendered incorrectly, on some
   devices, depending on the availability of colours and other
   device-specific constraints.
+
+  If the image is not displayed at all,
+  try setting \code{useRaster=FALSE} in the call to \code{plot.im}.
+  If the ribbon colours are not displayed, set
+  \code{ribargs=list(useRaster=FALSE)}.
   
-  An error may occur on some graphics devices if the image is very
+  Errors may occur on some graphics devices if the image is very
   large. If this happens, try setting \code{useRaster=FALSE} in the
   call to \code{plot.im}.
 

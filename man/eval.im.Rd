@@ -11,7 +11,8 @@
 \arguments{
   \item{expr}{An expression.}
   \item{envir}{Optional. The environment in which to evaluate the
-    expression.}
+    expression, or a named list containing pixel images to be used
+    in the expression.}
   \item{harmonize}{
     Logical. Whether to resolve inconsistencies between
     the pixel grids.
@@ -74,6 +75,9 @@
   eval.im(X - Y)
   eval.im(abs(X - Y))
   Z <- eval.im(sin(X * pi) + Y)
+
+  ## Use of 'envir'
+  W <- eval.im(sin(U), list(U=density(cells)))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

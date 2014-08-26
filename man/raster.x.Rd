@@ -5,7 +5,7 @@
 \title{Cartesian Coordinates for a Pixel Raster}
 \description{
   Return the \eqn{x} and \eqn{y} coordinates
-  of each pixel in a binary pixel image.
+  of each pixel in a pixel image or binary mask.
 }
 \usage{
  raster.x(w, drop=FALSE)
@@ -14,8 +14,9 @@
 }
 \arguments{
   \item{w}{
-    A window (object of class \code{"owin"})
-    of type \code{"mask"} representing a binary pixel image.
+    A pixel image (object of class \code{"im"}) or a 
+    mask window (object of class \code{"owin"}
+    of type \code{"mask"}).
   }
   \item{drop}{
     Logical.
@@ -39,19 +40,21 @@
   \code{raster.x} and \code{raster.y} return numeric vectors.
 }
 \details{
-  The argument \code{w} should be a window (an object of class
-  \code{"owin"}, see \code{\link{owin.object}} for details).
-  A window of type \code{"mask"} represents a binary pixel image.
+  The argument \code{w} should be either
+  a pixel image (object of class \code{"im"})
+  or a mask window (an object of class
+  \code{"owin"} of type \code{"mask"}).
 
   If \code{drop=FALSE} (the default), the 
-  functions   \code{raster.x} and \code{raster.y} return
+  functions \code{raster.x} and \code{raster.y} return
   a matrix of the same dimensions as the
-  binary pixel image itself, with entries giving the \eqn{x} coordinate
+  pixel image or mask itself, with entries giving the \eqn{x} coordinate
   (for \code{raster.x}) or \eqn{y} coordinate (for \code{raster.y})
-  of each pixel in the binary image.
+  of each pixel in the pixel grid.
 
   If \code{drop=TRUE}, pixels that lie outside the
-  window \code{w} are removed, and \code{raster.x} and \code{raster.y} 
+  window \code{w} (or outside the domain of the image \code{w})
+  are removed, and \code{raster.x} and \code{raster.y} 
   return numeric vectors containing the coordinates of the
   pixels that are inside the window \code{w}.
 
@@ -74,10 +77,11 @@
   # approximation to the unit disc
 }
 \author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \email{Adrian.Baddeley@uwa.edu.au},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.3 $ $Date: 2014/03/27 10:13:47 $
+##  $Revision: 1.4 $ $Date: 2014/07/21 09:17:58 $
 
 ### .................. basic graphics .............................
 
@@ -62,7 +62,7 @@ add.texture <- function(W, texture=4, spacing=NULL, ...) {
          },
          {
            ## texture 8: hexagons
-           H <- hextess(W, spacing, offset=runif(2, max=spacing))
+           H <- hextess(W, spacing, offset=runifpoint(1, W))
            H <- intersect.tess(H, W)
            do.call.matched("plot.tess",
                            resolve.defaults(list(x=H, add=TRUE),

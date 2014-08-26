@@ -33,14 +33,14 @@
   point pattern datasets (of class \code{"ppp"}, see
   \code{\link{ppp.object}}, or class \code{"ppx"}).
 
-  Two points in a point pattern are deemed to be identical
-  if their \eqn{x,y} coordinates are the same,
-  and their marks are also the same (if they carry marks).
-  The Examples section illustrates how it is possible for
-  a point pattern to contain a pair of identical points.
-
   This function removes duplicate points in \code{x},
   and returns a point pattern.
+
+  Two points in a point pattern are deemed to be identical
+  if their \eqn{x,y} coordinates are the same,
+  \emph{and} their marks are the same (if they carry marks).
+  This is the default rule: see \code{\link{duplicated.ppp}}
+  for other options. 
 }
 \seealso{
   \code{\link{ppp.object}},

@@ -1,19 +1,27 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.5 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.6 $   $Date: 2014/07/27 08:19:17 $
 #
 #
 
 iplot.default <- function(x, ..., xname) {
  if(missing(xname))
     xname <- short.deparse(substitute(x))
- x <- layered(x)
+ x <- as.layered(x)
  iplot(x, ..., xname=xname)
 }
 
 iplot.layered <- local({
 
+  CommitAndRedraw <- function(panel) {
+    ## hack to ensure that panel is immediately updated in rpanel
+    require(rpanel)
+    rpanel:::rp.control.put(panel$panelname, panel)
+    ## now redraw it
+    redraw.iplot.layered(panel)
+  }
+  
   faster.layers <- function(x) {
     if(any(islinnet <- unlist(lapply(x, inherits, what="linnet")))) {
       # convert linnet layers to psp, for efficiency
@@ -126,7 +134,7 @@ iplot.layered <- function(x, ..., xname) {
               height <- sidelengths(bb)[2]
               stepsize <- (height/4)/zo
               panel$zoomcentre <- ce + c(0, stepsize)
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -138,7 +146,7 @@ iplot.layered <- function(x, ..., xname) {
               width <- sidelengths(bb)[1]
               stepsize <- (width/4)/zo
               panel$zoomcentre <- ce - c(stepsize, 0)
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
@@ -149,7 +157,7 @@ iplot.layered <- function(x, ..., xname) {
               width <- sidelengths(bb)[1]
               stepsize <- (width/4)/zo
               panel$zoomcentre <- ce + c(stepsize, 0)
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -161,7 +169,7 @@ iplot.layered <- function(x, ..., xname) {
               height <- sidelengths(bb)[2]
               stepsize <- (height/4)/zo
               panel$zoomcentre <- ce - c(0, stepsize)
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -169,14 +177,14 @@ iplot.layered <- function(x, ..., xname) {
   rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
             action=function(panel) {
               panel$zoomfactor <- panel$zoomfactor * 2
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
   rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
             action=function(panel) {
               panel$zoomfactor <- panel$zoomfactor / 2
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -184,7 +192,7 @@ iplot.layered <- function(x, ..., xname) {
             action=function(panel) {
               panel$zoomfactor <- 1
               panel$zoomcentre <- panel$bbmid
-              redraw.iplot.layered(panel)
+              CommitAndRedraw(panel)
               return(panel)
             })
   nextrow <- nextrow + 1
@@ -212,7 +220,7 @@ iplot.layered <- function(x, ..., xname) {
   click.iplot.layered <- function(panel, x, y) {
     panel$zoomcentre <- panel$zoomcentre +
       (c(x,y) - panel$bbmid)/panel$zoomfactor
-    redraw.iplot.layered(panel)
+    CommitAndRedraw(panel)
     return(panel)
   }
 
@@ -227,8 +235,8 @@ do.iplot.layered <- function(panel) {
   ce    <- panel$zoomcentre
   bb    <- panel$bb
   bbmid <- panel$bbmid
-  scalex <- shift(affine(shift(x, -ce), diag(c(z,z))), bbmid)
-  scalew <- shift(affine(shift(w, -ce), diag(c(z,z))), bbmid)
+  scalex <- shift(scalardilate(shift(x, -ce), z), bbmid)
+  scalew <- shift(scalardilate(shift(w, -ce), z), bbmid)
   scalex <- scalex[, bb]
   scalew <- intersect.owin(scalew, bb, fatal=FALSE)
   # determine what is plotted under the clipped pattern

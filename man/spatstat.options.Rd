@@ -33,8 +33,8 @@
   The function \code{reset.spatstat.options} resets all the
   global parameters in \pkg{spatstat} to their original,
   default values.
-  
-  The global parameters are:
+
+  The global parameters of interest to the user are:
   \describe{
     \item{checkpolygons}{
       Logical flag indicating whether the functions
@@ -51,27 +51,17 @@
       the endpoints of the line segments are inside the specified
       window). It is advisable to leave this flag set to \code{TRUE}. 
     }
-    \item{density}{
-      Logical. Indicates whether to use accelerated C code
-      to evaluate \code{density.ppp(X, at="points")}
-      Initialised to \code{TRUE}.
-    }
     \item{expand}{
       The default expansion factor (area inflation factor)
       for expansion of the simulation window in
       \code{\link{rmh}} (see \code{\link{rmhcontrol}}).
       Initialised to \code{2}.
     }
-    \item{exactdt.checks.data,closepairs.newcode}{
-      Logical. For software development purposes only.
-      Do not change these values, unless you are
-      Adrian Baddeley. 
-    }
-    \item{fasteval}{
-      One of the strings \code{'off'}, \code{'on'} or
-      \code{'test'} determining whether to use accelerated C code
-      to evaluate the conditional intensity of a Gibbs model.
-      Initialised to \code{'on'}.
+    \item{expand.polynom}{
+      Logical. Whether expressions involving \code{\link{polynom}}
+      in a model formula should be expanded, so that
+      \code{polynom(x,2)} is replaced by \code{x + I(x^2)} and so on.
+      Initialised to \code{TRUE}.
     }
     \item{fastK.lgcp}{
       Logical. Whether to use fast or slow algorithm to compute the
@@ -88,6 +78,11 @@
       repair errors in polygon data. For example,
       self-intersecting polygons and overlapping polygons will
       be repaired. The default is \code{fixpolygons=TRUE}.
+    }
+    \item{gpclib}{
+      Defunct. This parameter was used to permit or forbid the use of the
+      package \pkg{gpclib}, because of its restricted software licence.
+      This package is no longer needed.
     }
     \item{huge.npoints}{
       The maximum value of \code{n} for which \code{runif(n)} will
@@ -242,6 +237,21 @@
       \code{FALSE}.  See the \dQuote{Warning} section in the help for
       \code{\link{rmh}()} for more detail.
     }
+    \item{terse}{
+      Integer between 0 and 4.
+      The level of terseness (brevity) in printed output
+      from many functions in \pkg{spatstat}.
+      Higher values mean shorter output.
+      A rough guide is the following:
+      \tabular{ll}{
+	0 \tab Full output\cr
+        1 \tab Avoid wasteful output \cr
+        2 \tab Remove space between paragraphs\cr
+        3 \tab Suppress extras such as standard errors \cr
+        4 \tab Suppress internal warnings
+      }
+      The value of \code{terse} is initialised to 0.
+    }
   }
   If no arguments are given, 
   the current values of all parameters are returned,
@@ -256,6 +266,74 @@
   If \code{name=value} pairs are given, the named parameters
   are reset to the given values, and the \bold{previous} values of
   these parameters are returned, in a list.
+}
+\section{Internal parameters}{
+  The following parameters may also be specified to
+  \code{spatstat.options} but are intended for
+  software development or testing purposes.
+  \describe{
+    \item{allow.logi.influence}{
+      Logical. For software development purposes only:
+      prevents \pkg{spatstat} from performing incorrect calculations
+      in cases which are not yet supported.
+      Initialised to \code{FALSE}.
+    }
+    \item{closepairs.newcode}{
+      Logical. Whether to use new version of the
+      code for \code{\link{closepairs}}.
+      Initialised to \code{TRUE}.
+    }
+    \item{crossing.psp.useCall}{
+      Logical. Whether to use new version of the
+      code for \code{\link{crossing.psp}}.
+      Initialised to \code{TRUE}.
+    }
+    \item{crosspairs.newcode}{
+      Logical. Whether to use new version of the
+      code for \code{\link{crosspairs}}.
+      Initialised to \code{TRUE}.
+    }
+    \item{densityC}{
+      Logical. 
+      Indicates whether to use accelerated C code
+      (\code{densityC=TRUE}) or interpreted R code (\code{densityC=FALSE})
+      to evaluate \code{density.ppp(X, at="points")}.
+      Initialised to \code{TRUE}.
+    }
+    \item{dupC}{
+      Logical. 
+      Value of the argument \code{DUP} 
+      passed to \code{\link[base:Foreign]{.C}}
+      when calling the \pkg{spatstat} internal C code.
+      Initialised to \code{FALSE}. 
+    }
+    \item{exactdt.checks.data}{
+      Logical.
+      Do not change this value, unless you are
+      Adrian Baddeley. 
+    }
+    \item{fasteval}{
+      One of the strings \code{'off'}, \code{'on'} or
+      \code{'test'} determining whether to use accelerated C code
+      to evaluate the conditional intensity of a Gibbs model.
+      Initialised to \code{'on'}.
+    }
+    \item{old.morpho.psp}{
+      Logical. Whether to use old R code for
+      morphological operations.
+      Initialise to \code{FALSE}.
+    }
+    \item{selfcrossing.psp.useCall}{
+      Logical. Whether to use new version of the
+      code for \code{\link{selfcrossing.psp}}.
+      Initialised to \code{TRUE}.
+    }
+    \item{use.Krect}{
+      Logical. Whether to use new code for the
+      K-function in a rectangular window.
+      Initialised to \code{TRUE}.
+    }
+  }
 }
 \seealso{
   \code{\link{options}}

@@ -166,14 +166,14 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
                          list(add=FALSE, axes=!s$isxy,
                               xlab=s$cov1name, ylab=s$cov2name))
   # plot image
-  plotparams <- get("plotparams", environment(plot.im))
+  plotparams <- graphicsPars("plot")
   do.call.matched("plot.im",
                   resolve.defaults(list(x=x, axes=FALSE),
                                    list(...), list(main=xname)),
                   extrargs=c(plotparams, "add", "zlim", "breaks"))
   # add axes 
   if(rd$axes) {
-    axisparams <- get("axisparams", environment(plot.im))
+    axisparams <- graphicsPars("axis")
     Axis <- function(..., extrargs=axisparams) {
       do.call.matched("axis", resolve.defaults(list(...)), extrargs=extrargs)
     }

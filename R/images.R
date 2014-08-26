@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.110 $     $Date: 2014/04/21 03:31:59 $
+#         $Revision: 1.118 $     $Date: 2014/08/04 11:58:44 $
 #
 #      The class "im" of raster images
 #
@@ -151,6 +151,16 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
   return(X)
 }
 
+"Frame<-.im" <- function(X, value) {
+  stopifnot(is.rectangle(value))
+  if(!is.subset.owin(value, Frame(X))) {
+    ## first expand
+    X <- X[value, drop=FALSE]
+  }
+  X[value, drop=TRUE]
+}
+
+
 "[.im" <- local({
 
   disjoint <- function(r, s) { (r[2] < s[1]) || (r[1] > s[2])  }
@@ -209,9 +219,24 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         ##                 as an image (if 'i' is a rectangle)
         ##                 or as a vector (otherwise)
 
-        out <- if(is.null(raster)) x else as.im(raster)
-        xy <- expand.grid(y=out$yrow,x=out$xcol)
+        ## determine pixel raster for output
         if(!is.null(raster)) {
+          out <- as.im(raster)
+          do.resample <- TRUE
+        } else if(is.subset.owin(i, as.owin(x))) {
+          out <- x
+          do.resample <- FALSE
+        } else {
+          ## new window does not contain data window: expand it
+          bb <- boundingbox(as.rectangle(i), as.rectangle(x))
+          rr <- if(is.mask(i)) i else x
+          xcol <- prolongseq(rr$xcol, bb$xrange, rr$xstep)
+          yrow <- prolongseq(rr$yrow, bb$yrange, rr$ystep)
+          out <- list(xcol=xcol, yrow=yrow)
+          do.resample <- TRUE
+        }
+        xy <- expand.grid(y=out$yrow,x=out$xcol)
+        if(do.resample) {
           ## resample image on new pixel raster
           values <- lookup.im(x, xy$x, xy$y, naok=TRUE)
           out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
@@ -372,7 +397,6 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
   Extract.im
 })
 
-
 "[<-.im" <- function(x, i, j, value) {
   
   # detect 'blank' arguments like second argument of x[i, ] 
@@ -410,8 +434,9 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
       # 'i' is a window
       if(is.empty(i))
         return(X)
-      xx <- as.vector(raster.x(W))
-      yy <- as.vector(raster.y(W))
+      rxy <- rasterxy.mask(W)
+      xx <- rxy$x
+      yy <- rxy$y
       ok <- inside.owin(xx, yy, i)
       X$v[ok] <- value
       return(X)
@@ -421,8 +446,9 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
       # convert logical vector to window where entries are TRUE
       i <- as.owin(eval.im(ifelse1NA(i)))
       # continue as above
-      xx <- as.vector(raster.x(W))
-      yy <- as.vector(raster.y(W))
+      rxy <- rasterxy.mask(W)
+      xx <- rxy$x
+      yy <- rxy$y
       ok <- inside.owin(xx, yy, i)
       X$v[ok] <- value
       return(X)
@@ -624,33 +650,63 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
 }
   
 
+## low level
+
 rasterx.im <- function(x) {
   verifyclass(x, "im")
-  v <- x$v
   xx <- x$xcol
-  matrix(xx[col(v)], ncol=ncol(v), nrow=nrow(v))
+  matrix(xx[col(x)], ncol=ncol(x), nrow=nrow(x))
 }
 
 rastery.im <- function(x) {
   verifyclass(x, "im")
-  v <- x$v
   yy <- x$yrow
-  matrix(yy[row(v)], ncol=ncol(v), nrow=nrow(v))
+  matrix(yy[row(x)], ncol=ncol(x), nrow=nrow(x))
 }
 
 rasterxy.im <- function(x, drop=FALSE) {
   verifyclass(x, "im")
-  v <- x$v
   xx <- x$xcol
   yy <- x$yrow
-  if(!drop) {
-    ans <- cbind(as.vector(xx[col(v)]), as.vector(yy[row(v)]))
-  } else {
-    ok <- !is.null(x$v)
-    ans <- cbind(as.vector(xx[col(v)[ok]]), as.vector(yy[row(v)[ok]]))
+  ans <- cbind(x=as.vector(xx[col(x)]),
+               y=as.vector(yy[row(x)]))
+  if(drop) {
+    ok <- as.vector(!is.na(x$v))
+    ans <- ans[ok, , drop=FALSE]
   }
-  colnames(ans) <- c("x", "y")
   return(ans)
+}
+
+## user interface 
+
+raster.x <- function(w, drop=FALSE) {
+  if(is.owin(w)) return(rasterx.mask(w, drop=drop))
+  if(!is.im(w)) stop("w should be a window or an image")
+  x <- w$xcol[col(w)]
+  x <- if(drop) x[!is.na(w$v), drop=TRUE] else array(x, dim=w$dim)
+  return(x)
+}
+  
+raster.y <- function(w, drop=FALSE) {
+  if(is.owin(w)) return(rastery.mask(w, drop=drop))
+  if(!is.im(w)) stop("w should be a window or an image")
+  y <- w$yrow[row(w)]
+  y <- if(drop) y[!is.na(w$v), drop=TRUE] else array(y, dim=w$dim)
+  return(y)
+}
+
+raster.xy <- function(w, drop=FALSE) {
+  if(is.owin(w)) return(rasterxy.mask(w, drop=drop))
+  if(!is.im(w)) stop("w should be a window or an image")
+  y <- w$xcol[col(w)]
+  y <- w$yrow[row(w)]
+  if(drop) {
+    ok <- !is.na(w$v)
+    x <- x[ok, drop=TRUE]
+    y <- y[ok, drop=TRUE]
+  }
+  return(list(x=as.numeric(x),
+              y=as.numeric(y)))
 }
 
 ##############
@@ -721,6 +777,12 @@ min.im <- function(x, ...) {
   xvalues <- x[drop=TRUE]
   return(min(xvalues, ...))
 }
+
+## the following ensures that 'sd' works
+
+as.double.im <- function(x, ...) { as.double(x[], ...) }
+
+##
 
 hist.im <- function(x, ..., probability=FALSE) {
   xname <- short.deparse(substitute(x))
@@ -906,12 +968,22 @@ sort.im <- function(x, ...) {
 dim.im <- function(x) { x$dim }
 
 # colour images
-rgbim <- function(R, G, B, maxColorValue=255) {
+rgbim <- function(R, G, B, maxColorValue=255, autoscale=FALSE) {
+  if(autoscale) {
+    R <- scaletointerval(R, 0, maxColorValue)
+    G <- scaletointerval(G, 0, maxColorValue)
+    B <- scaletointerval(B, 0, maxColorValue)
+  }
   eval.im(factor(rgbNA(as.vector(R), as.vector(G), as.vector(B),
                      maxColorValue=maxColorValue)))
 }
 
-hsvim <- function(H, S, V) {
+hsvim <- function(H, S, V, autoscale=FALSE) {
+  if(autoscale) {
+    H <- scaletointerval(H, 0, 1)
+    S <- scaletointerval(S, 0, 1)
+    V <- scaletointerval(V, 0, 1)
+  }
   eval.im(factor(hsvNA(as.vector(H), as.vector(S), as.vector(V))))
 }
 
@@ -923,7 +995,11 @@ scaletointerval.default <- function(x, from=0, to=1, xrange=range(x)) {
   x <- as.numeric(x)
   rr <- if(missing(xrange)) range(x, na.rm=TRUE) else as.numeric(xrange)
   b <- as.numeric(to - from)/diff(rr)
-  y <- from + b * (x - rr[1])
+  if(is.finite(b)) {
+    y <- from + b * (x - rr[1])
+  } else {
+    y <- (from+to)/2 + 0 * x
+  }
   return(y)
 }
 
@@ -937,5 +1013,51 @@ zapsmall.im <- function(x, digits) {
   if(missing(digits))
     return(eval.im(zapsmall(x)))
   return(eval.im(zapsmall(x, digits=digits)))
+}
+
+domain.im <- Window.im <- function(X, ...) { as.owin(X) }
+
+"Window<-.im" <- function(X, ..., value) {
+  verifyclass(value, "owin")
+  X[value, drop=FALSE]
+}
+
+padimage <- function(X, value, n=1) {
+  stopifnot(is.im(X))
+  if(missing(value) || n <= 0)
+    return(X)
+  stopifnot(length(value) == 1)
+  if(isfac <- (X$type == "factor")) {
+    ## handle factors
+    levX <- levels(X)
+    if(is.factor(value)) {
+      stopifnot(identical(levels(X), levels(value)))
+    } else {
+      value <- factor(value, levels=levX)
+    }
+    X <- eval.im(as.integer(X))
+    value <- as.integer(value)
+  }
+  value <- rep(value, n)
+  sv <- 1:n
+  mX <- as.matrix(X)
+  dd <- dim(mX)
+  mX <- cbind(matrix(rev(value), dd[1], n, byrow=TRUE),
+              as.matrix(X),
+              matrix(value, dd[1], n, byrow=TRUE))
+  dd <- dim(mX)
+  mX <- rbind(matrix(rev(value), n, dd[2]),
+              mX,
+              matrix(value, n, dd[2]))
+  xcol <- with(X, c(xcol[1] - rev(sv) * xstep, xcol, xcol[dim[2]] + sv* xstep))
+  yrow <- with(X, c(yrow[1] - rev(sv) * ystep, yrow, yrow[dim[1]] + sv* ystep))
+  xr <- with(X, xrange + c(-1,1) * n * xstep)
+  yr <- with(X, yrange + c(-1,1) * n * ystep)
+  Y <- im(mX,
+          xcol=xcol, yrow=yrow, xrange=xr, yrange=yr,
+          unitname=unitname(X))
+  if(isfac)
+    Y <- eval.im(factor(Y, levels=seq_along(levX), labels=levX))
+  return(Y)
 }
 

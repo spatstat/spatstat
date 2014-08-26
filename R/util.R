@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.148 $    $Date: 2014/05/06 15:32:53 $
+#    $Revision: 1.159 $    $Date: 2014/08/08 07:10:09 $
 #
 #
 matrowsum <- function(x) {
@@ -56,12 +56,21 @@ whist <- function(x, breaks, weights=NULL) {
     else {
       # classify data into histogram cells (breaks need not span range of data)
       cell <- findInterval(x, breaks, rightmost.closed=TRUE)
-      cell <- factor(cell, levels=0:N)
-      # compute weighted histogram
-      if(is.null(weights))
-        h <- table(cell)
-      else 
-        h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
+      # values of 'cell' range from 0 to N.
+      nb <- N + 1L
+      if(is.null(weights)) {
+        ## histogram
+        h <- tabulate(cell+1L, nbins=nb)
+      } else {
+        ##  weighted histogram
+        if(!spatstat.options("Cwhist")) {
+          cell <- factor(cell, levels=0:N)
+          h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
+        } else {
+          h <- .Call("Cwhist",
+                     as.integer(cell), as.double(weights), as.integer(nb))
+        }
+      }
     }
     h <- as.numeric(h)
     y <- h[2:N]
@@ -142,10 +151,9 @@ rastersample <- function(X, Y) {
 pointgrid <- function(W, ngrid) {
   W <- as.owin(W)
   masque <- as.mask(W, dimyx=ngrid)
-  xx <- raster.x(masque)
-  yy <- raster.y(masque)
-  xx <- xx[masque$m]
-  yy <- yy[masque$m]
+  rxy <- rasterxy.mask(masque, drop=TRUE)
+  xx <- rxy$x
+  yy <- rxy$y
   return(ppp(xx, yy, W))
 }
 
@@ -320,7 +328,7 @@ prolongseq <- function(x, newrange, step=NULL) {
 intersect.ranges <- function(a, b, fatal=TRUE) {
   lo <- max(a[1],b[1])
   hi <- min(a[2],b[2])
-  if(lo >= hi) {
+  if(lo > hi) {
     if(fatal) stop("Intersection is empty")
     else return(NULL)
   }
@@ -328,8 +336,28 @@ intersect.ranges <- function(a, b, fatal=TRUE) {
 }
 
 inside.range <- function(x, r) {
-  stopifnot(length(r) == 2 && r[1] < r[2])
+  stopifnot(length(r) == 2 && r[1] <= r[2])
   return(x >= r[1] & x <= r[2])
+}
+
+check.in.range <- function(x, r, fatal=TRUE) {
+  xname <- deparse(substitute(x))
+  if(inside.range(x, r))
+    return(TRUE)
+  if(fatal) 
+    stop(paste(xname, "should be a number between",
+               r[1], "and", r[2]),
+         call.=FALSE)
+  return(FALSE)
+}
+
+startinrange <- function(x0, dx, r) {
+  ## find y = x0 + n * dx such that y \in r
+  if(all(inside.range(x0, r))) return(x0)
+  stopifnot(is.numeric(dx) && length(dx) == 1)
+  y <- x0 + dx * round((mean(r) - x0)/dx)
+  y[!inside.range(y, r)] <- NA
+  return(y)
 }
 
 prettyinside <- function(x, ...) {
@@ -351,7 +379,7 @@ prettydiscrete <- function(x, n=10) {
 
 check.range <- function(x, fatal=TRUE) {
   xname <- deparse(substitute(x))
-  if(identical(x, range(x, na.rm=TRUE)))
+  if(is.numeric(x) && identical(x, range(x, na.rm=TRUE)))
     return(TRUE)
   if(fatal) 
     stop(paste(xname, "should be a vector of length 2 giving (min, max)"))
@@ -826,12 +854,16 @@ sensiblevarname <- function(guess, fallback, maxlen=12) {
   return(out)
 }
 
+## deparse() can sometimes be equivalent to dumping the whole object
 short.deparse <- function(x, maxlen=60) {
   deparse(x,
           nlines=1,
           width.cutoff=maxlen,
           control="delayPromises")
 }
+
+## deparse() can produce multiple lines of text
+flat.deparse <- function(x) { paste(deparse(x), collapse=" ") }
 
 good.names <- function(nama, defaults, suffices) {
   # ensure sensible, unique names 
@@ -1045,8 +1077,15 @@ dotexpr.to.call <- function(expr, dot="funX", evaluator="eval.fv") {
   return(cc)
 }
 
+inject.expr <- function(base, expr) {
+  ## insert an expression inside a call and parse it
+  txt <- sub(".", as.character(expr), as.character(base), fixed=TRUE)
+  parse(text=txt)
+}
+
+  
 ## Match variable names to objects in 'data' list or environment
-getdataobjects <- function(nama, envir, datalist=NULL) {
+getdataobjects <- function(nama, envir, datalist=NULL, fatal=FALSE) {
   if(is.null(nama)) return(NULL)
   stopifnot(is.character(nama))
   n <- length(nama)
@@ -1056,12 +1095,19 @@ getdataobjects <- function(nama, envir, datalist=NULL) {
     hit <- nama %in% names(datalist)
     if(any(hit))
       y[hit] <- as.list(datalist)[nama[hit]]
-    needed <- unlist(lapply(y, is.null))
-  } else needed <- rep(TRUE, n)
-  y[needed] <- mget(nama[needed], envir=envir,
+    external <- unlist(lapply(y, is.null))
+  } else external <- rep(TRUE, n)
+  y[external] <- mget(nama[external], envir=envir,
                     ifnotfound=list(NULL), inherits=TRUE)
+  if(fatal && any(bad <- unlist(lapply(y, is.null)))) {
+    nbad <- sum(bad)
+    stop(paste(ngettext(nbad, "Covariate", "Covariates"),
+               commasep(sQuote(nama[bad])),
+               ngettext(nbad, "was not found", "were not found")),
+         call.=FALSE)
+  }
   names(y) <- nama
-  attr(y, "external") <- needed
+  attr(y, "external") <- external
   return(y)
 }
  
@@ -1239,4 +1285,26 @@ uptrimat <- function(x) {
   return(noquote(x))
 }
 
-                  
+asNumericMatrix <- function(x) {
+  ## workaround for strange artefact of as.matrix.data.frame
+  x <- as.matrix(x)
+  storage.mode(x) <- "double"
+  x
+}
+
+prepareTitle <- function(main) {
+  ## Count the number of lines in a main title
+  ## Convert title to a form usable by plot.owin
+  if(is.expression(main)) {
+    nlines <- 1
+  } else {
+    main <- paste(main)
+    ## break at newline 
+    main <- unlist(strsplit(main, "\n"))
+    nlines <- if(sum(nchar(main)) == 0) 0 else length(main)
+  }
+  return(list(main=main,
+              nlines=nlines,
+              blank=rep('  ', nlines)))
+}
+

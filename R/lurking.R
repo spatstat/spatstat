@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.36 $ $Date: 2013/05/01 07:23:21 $
+# $Revision: 1.37 $ $Date: 2014/05/17 09:15:12 $
 #
 
 lurking <- function(object, covariate, type="eem",
@@ -12,7 +12,13 @@ lurking <- function(object, covariate, type="eem",
                     typename,
                     covname, oldstyle=FALSE,
                     check=TRUE, ..., splineargs=list(spar=0.5)) {
-  
+  # default name for covariate
+  if(missing(covname)) {
+    cl <- match.call()
+    covname <- if(is.name(cl$covariate)) as.character(cl$covariate) else
+               if(is.language(cl$covariate)) format(cl$covariate) else NULL
+  } 
+    
   # validate object
   if(is.ppp(object)) {
     X <- object
@@ -152,7 +158,7 @@ lurking <- function(object, covariate, type="eem",
 
   # NAMES OF THINGS
   # name of the covariate
-  if(missing(covname)) 
+  if(is.null(covname)) 
     covname <- if(is.expression(covariate)) covariate else "covariate"
   # type of residual/mark
   if(missing(typename)) 

@@ -19,7 +19,7 @@ quadrat.test(X, ...)
 \method{quadrat.test}{ppp}(X, nx=5, ny=nx,
                           alternative=c("two.sided", "regular", "clustered"),
                            method=c("Chisq", "MonteCarlo"),
-                           conditional=TRUE,
+                           conditional=TRUE, CR=1, 
                            ..., 
                            xbreaks=NULL, ybreaks=NULL, tess=NULL,
                            nsim=1999)
@@ -27,7 +27,7 @@ quadrat.test(X, ...)
 \method{quadrat.test}{ppm}(X, nx=5, ny=nx, 
                           alternative=c("two.sided", "regular", "clustered"),
                            method=c("Chisq", "MonteCarlo"),
-                           conditional=TRUE,
+                           conditional=TRUE, CR=1, 
                            ..., 
                            xbreaks=NULL, ybreaks=NULL, tess=NULL,
                            nsim=1999)
@@ -35,7 +35,7 @@ quadrat.test(X, ...)
 \method{quadrat.test}{quadratcount}(X,
                           alternative=c("two.sided", "regular", "clustered"),
                           method=c("Chisq", "MonteCarlo"),
-                          conditional=TRUE,
+                          conditional=TRUE, CR=1, 
                           ...,
                           nsim=1999)
 }
@@ -62,9 +62,13 @@ quadrat.test(X, ...)
     or \code{method="MonteCarlo"} for a Monte Carlo test.
   }
   \item{conditional}{
-   Logical.  Should the Monte Carlo test be conducted
-   conditionally upon the observed number of points of the pattern?
-   Ignored if \code{method="Chisq"}.
+    Logical.  Should the Monte Carlo test be conducted
+    conditionally upon the observed number of points of the pattern?
+    Ignored if \code{method="Chisq"}.
+  }
+  \item{CR}{
+    Optional. Numerical value of the index \eqn{\lambda}{lambda}
+    for the Cressie-Read test statistic. 
   }
   \item{\dots}{Ignored.}
   \item{xbreaks}{
@@ -121,17 +125,16 @@ quadrat.test(X, ...)
   specified by the argument \code{tess}.
   The expected number of points in each quadrat is also calculated,
   as determined by CSR (in the first case) or by the fitted model
-  (in the second case). Then we perform either the 
-  \eqn{\chi^2}{chi^2} test of goodness-of-fit to the quadrat counts
-  (if \code{method="Chisq"})
-  or a Monte Carlo test (if \code{method="MonteCarlo"}).
-
-  If \code{method="Chisq"} then the \eqn{\chi^2}{chi^2} test of
-  goodness-of-fit is performed. The Pearson \eqn{X^2} statistic
+  (in the second case).
+  Then the Pearson \eqn{X^2} statistic 
   \deqn{
     X^2 = sum((observed - expected)^2/expected)
   }
-  is computed, and compared to the \eqn{\chi^2}{chi^2} distribution
+  is computed.
+  
+  If \code{method="Chisq"} then a \eqn{\chi^2}{chi^2} test of
+  goodness-of-fit is performed by comparing the test statistic
+  to the \eqn{\chi^2}{chi^2} distribution
   with \eqn{m-k} degrees of freedom, where \code{m} is the number of
   quadrats and \eqn{k} is the number of fitted parameters
   (equal to 1 for \code{quadrat.test.ppp}). The default is to
@@ -159,6 +162,26 @@ quadrat.test(X, ...)
   Otherwise the simulated samples are independent Poisson counts, with
   means equal to the expected counts.
 
+  If the argument \code{CR} is given, then instead of the
+  Pearson \eqn{X^2} statistic, the Cressie-Read (1984) power divergence
+  test statistic
+  \deqn{
+    2nI = \frac{2}{\lambda(\lambda+1)}
+           \sum_i \left[ \left( \frac{X_i}{E_i} \right)^\lambda - 1 \right]
+  }{
+    2nI = (2/(lambda * (lambda+1))) * sum((X[i]/E[i])^lambda - 1)
+  }
+  is computed, where \eqn{X_i}{X[i]} is the \eqn{i}th observed count
+  and \eqn{E_i}{E[i]} is the corresponding expected count,
+  and the exponent \eqn{\lambda}{lambda} is equal to \code{CR}.
+  The value \code{CR=1} gives the Pearson \eqn{X^2} statistic;
+  \code{CR=0} gives the likelihood ratio test statistic \eqn{G^2};
+  \code{CR=-1/2} gives the Freeman-Tukey statistic \eqn{T^2};
+  \code{CR=-1} gives the modified likelihood ratio test statistic \eqn{GM^2};
+  and \code{CR=-2} gives Neyman's modified statistic \eqn{NM^2}.
+  In all cases the asymptotic distribution of this test statistic is
+  the same \eqn{\chi^2}{chi^2} distribution as above.
+
   The return value is an object of class \code{"htest"}.
   Printing the object gives comprehensible output
   about the outcome of the test.
@@ -174,7 +197,7 @@ quadrat.test(X, ...)
   \code{\link{quadrats}},
   \code{\link{quadratresample}},
   \code{\link{chisq.test}},
-  \code{\link{kstest}}.
+  \code{\link{cdf.test}}.
 
   To test a Poisson point process model against a specific alternative,
   use \code{\link{anova.ppm}}.
@@ -186,6 +209,12 @@ quadrat.test(X, ...)
   The return value is also an object of the special class
   \code{"quadrattest"}, and there is a plot method for this class.
   See the examples.
+}
+\references{
+  Cressie, N. and Read, T.R.C. (1984)
+  Multinomial goodness-of-fit tests.
+  \emph{Journal of the Royal Statistical Society, Series B}
+  \bold{46}, 440--464. 
 }
 \examples{
   data(simdat)

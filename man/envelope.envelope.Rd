@@ -82,7 +82,6 @@
    \code{\link{envelope}}
 }
 \examples{
-  data(cells)
   E <- envelope(cells, Kest, nsim=19, savefuns=TRUE, savepatterns=TRUE)
   E2 <- envelope(E, nrank=2)
   Eg <- envelope(E, global=TRUE)

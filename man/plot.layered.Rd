@@ -61,6 +61,10 @@ Layered Plot
   Graphics parameters for each layer are determined by (in order of precedence)
   \code{\dots}, \code{plotargs}, and \code{\link{layerplotargs}(x)}.
 
+  The graphics parameters may also include the special argument
+  \code{.plot} specifying (the name of) a function which will be used to
+  perform the plotting instead of the generic \code{plot}.
+  
   The argument \code{show.all} is recognised by many plot methods
   in \pkg{spatstat}. It determines whether a plot is drawn
   with all its additional components such as the main title, bounding window,

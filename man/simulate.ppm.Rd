@@ -30,7 +30,7 @@
   \item{start}{Data determining the initial state
     of the Metropolis-Hastings algorithm.  See
     \code{\link{rmhstart}} for description of these arguments.
-    Defaults to \code{list(n.start=npoints(data.ppm(model)))}
+    Defaults to \code{list(n.start=npoints(data.ppm(object)))}
     meaning that the initial state of the algorithm
     has the same number of points as the original dataset.
   }
@@ -60,7 +60,7 @@
   }
   \item{new.coef}{
     New values for the canonical parameters of the model.
-    A numeric vector of the same length as \code{coef(model)}.
+    A numeric vector of the same length as \code{coef(object)}.
   }
 }
 \details{

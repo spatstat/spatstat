@@ -3,24 +3,30 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.4 $	$Date: 2013/05/01 07:39:38 $
+#	$Revision: 1.5 $	$Date: 2014/06/17 05:16:39 $
 #
 ################################################################################
 #
 
 psstG <- function(object, r=NULL, breaks=NULL, ...,
+                  model=NULL, 
                   trend=~1, interaction=Poisson(),
                   rbord=reach(interaction),
                   truecoef=NULL, hi.res=NULL) {
   if(inherits(object, "ppm")) 
     fit <- object
-  else if(inherits(object, "ppp")) 
-    fit <- ppm(quadscheme(object, ...),
-               trend=trend, interaction=interaction, rbord=rbord)
-  else if(inherits(object, "quad")) 
-    fit <- ppm(object,
-               trend=trend, interaction=interaction, rbord=rbord)
-  else 
+  else if(inherits(object, "ppp") || inherits(object, "quad")) {
+    # convert to quadscheme
+    if(inherits(object, "ppp"))
+      object <- quadscheme(object, ...)
+    # fit model
+    if(!is.null(model))
+      fit <- update(model, Q=object, forcefit=TRUE)
+    else 
+      fit <- ppm(object,
+                 trend=trend, interaction=interaction,
+                 rbord=rbord, forcefit=TRUE)
+  } else 
     stop("object should be a fitted point process model or a point pattern")
 
   rfixed <- !is.null(r) || !is.null(breaks)

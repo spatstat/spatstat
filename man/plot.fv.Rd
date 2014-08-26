@@ -9,7 +9,8 @@
            xlim=NULL, ylim=NULL, xlab=NULL, ylab=NULL, ylim.covers=NULL,
            legend=!add, legendpos="topleft", legendavoid=missing(legendpos),
            legendmath=TRUE, legendargs=list(),
-           shade=NULL, shadecol="grey", add=FALSE, log="", limitsonly=FALSE)
+           shade=fvnames(x, ".s"), shadecol="grey",
+           add=FALSE, log="", limitsonly=FALSE)
 }
 \arguments{
   \item{x}{
@@ -88,11 +89,14 @@
     \code{\link{legend}} controlling the appearance of the legend.
   }
   \item{shade}{
-    An index that identifies two columns of \code{x}. When the corresponding
-    curves are plotted, the region between the curves will be 
-    shaded in light grey. 
-    Often used for displaying simulation envelopes, by setting
-    \code{shade=c("hi", "lo")}.
+    A character vector giving the names of two columns of \code{x},
+    or another type of index that identifies two columns.
+    When the corresponding curves are plotted,
+    the region between the curves will be shaded in light grey.
+    The object \code{x} may or may not contain two columns which are designated
+    as boundaries for shading; they are identified by \code{fvnames(x, ".s")}.
+    The default is to shade between these two curves
+    if they exist. To suppress this behaviour, set \code{shade=NULL}.
   }
   \item{shadecol}{
     The colour to be used in the \code{shade} plot.

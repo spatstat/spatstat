@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.3 $	$Date: 2014/04/14 09:57:01 $
+#	$Revision: 1.4 $	$Date: 2014/08/04 09:47:43 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	
@@ -56,10 +56,8 @@ intX.owin <- function(w) {
                },
                mask = {
                  pixelarea <- abs(w$xstep * w$ystep)
-		 npixels <- sum(w$m)
-		 area <- npixels * pixelarea
-		 x <- raster.x(w)[w$m]
-                 answer <- area * mean(x)
+		 x <- rasterx.mask(w, drop=TRUE)
+                 answer <- (pixelarea * length(x)) * mean(x)
                },
                stop("Unrecognised window type")
         )
@@ -78,7 +76,7 @@ meanX.owin <- function(w) {
 		 answer <- integrated/area
                },
                mask = {
-		 x <- raster.x(w)[w$m]
+		 x <- rasterx.mask(w, drop=TRUE)
                  answer <- mean(x)
                },
                stop("Unrecognised window type")
@@ -131,10 +129,8 @@ intY.owin <- function(w) {
                },
                mask = {
                  pixelarea <- abs(w$xstep * w$ystep)
-		 npixels <- sum(w$m)
-		 area <- npixels * pixelarea
-		 y <- raster.y(w)[w$m]
-                 answer <- area * mean(y)
+		 y <- rastery.mask(w, drop=TRUE)
+                 answer <- (pixelarea * length(y)) * mean(y)
                },
                stop("Unrecognised window type")
         )
@@ -153,7 +149,7 @@ meanY.owin <- function(w) {
 		 answer <- integrated/area
                },
                mask = {
-		 y <- raster.y(w)[w$m]
+		 y <- rastery.mask(w, drop=TRUE)
                  answer <- mean(y)
                },
                stop("Unrecognised window type")

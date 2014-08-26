@@ -7,7 +7,7 @@
 
   poly2imA     pixel value = area of intersection between pixel and polygon
 
-  $Revision: 1.8 $ $Date: 2013/09/18 04:50:36 $
+  $Revision: 1.9 $ $Date: 2014/06/27 06:14:49 $
 
 */
 #undef DEBUG
@@ -17,8 +17,6 @@
 #include <math.h>
 
 #include "chunkloop.h"
-
-#define OUT(I,J) out[I + (J) * Ny]
 
 void 
 poly2imI(xp, yp, np, nx, ny, out) 
@@ -108,7 +106,7 @@ poly2imA(ncol, nrow, xpoly, ypoly, npoly, out, status)
      int *status;
 {
   double *xp, *yp;
-  int nx, ny, np, np1, maxchunk; 
+  int nx, ny, nxy, np, np1, maxchunk; 
   int i, j, k;
   double xcur, ycur, xnext, ynext, xleft, yleft, xright, yright;
   int sgn, jmin, jmax, imin, imax;
@@ -125,9 +123,9 @@ poly2imA(ncol, nrow, xpoly, ypoly, npoly, out, status)
   *status = 0;
 
   /* initialise output array */
-  for(i = 0; i < ny; i++)
-    for(j = 0; j < nx; j++)
-      out[j + ny * i] = 0;
+  nxy = nx * ny;
+  for(k = 0; k < nxy; k++) 
+    out[k] = 0;
 
   /* ............ loop over polygon edges ...................*/
   np1 = np - 1;
@@ -247,7 +245,7 @@ poly2imA(ncol, nrow, xpoly, ypoly, npoly, out, status)
 #ifdef DEBUG
 		Rprintf( "\tIncrementing area by %lf\n", sgn * area);
 #endif
-		out[j + ny * i] += sgn * area;
+		out[i + ny * j] += sgn * area;
 	      }
 	    }
 	    /* second part */
@@ -321,7 +319,7 @@ poly2imA(ncol, nrow, xpoly, ypoly, npoly, out, status)
 #ifdef DEBUG
 	      Rprintf( "\tIncrementing area by %lf\n", sgn * area);
 #endif
-	      out[j + ny * i] += sgn * area;
+	      out[i + ny * j] += sgn * area;
 	    }
 	    /* ............ end of loop over pixels within column ......... */
 	  }

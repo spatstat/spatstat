@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.19 $ $Date: 2014/01/29 05:04:47 $
+#  $Revision: 1.20 $ $Date: 2014/08/08 10:02:24 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -31,6 +31,14 @@ resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
     argue <- argue[!isnull]
   }
   return(argue)
+}
+
+do.call.without <- function(fun, ..., avoid) {
+  argh <- list(...)
+  nama <- names(argh)
+  if(!is.null(nama))
+    argh <- argh[!(nama %in% avoid)]
+  do.call(fun, argh)
 }
 
 do.call.matched <- function(fun, arglist, funargs,
@@ -117,3 +125,40 @@ passthrough <- function(.Fun, ..., .Fname=NULL) {
   return(mcargs[!known])
 }
 
+graphicsPars <- local({
+  ## recognised additional arguments to image.default(), axis() etc
+  TheTable <- 
+    list(plot = c(
+           "main", "asp", "sub", "axes", "ann",
+           "cex", "font", 
+           "cex.axis", "cex.lab", "cex.main", "cex.sub",
+           "col.axis", "col.lab", "col.main", "col.sub",
+           "font.axis", "font.lab", "font.main", "font.sub"),
+         image = c(
+           "main", "asp", "sub", "axes", "ann",
+           "cex", "font", 
+           "cex.axis", "cex.lab", "cex.main", "cex.sub",
+           "col.axis", "col.lab", "col.main", "col.sub",
+           "font.axis", "font.lab", "font.main", "font.sub"),
+         axis = c(
+           "cex", 
+           "cex.axis", "cex.lab",
+           "col.axis", "col.lab",
+           "font.axis", "font.lab",
+           "mgp", "xaxp", "yaxp", "tck", "tcl", "las", "fg", "xpd"),
+         owin = c(
+           "sub",
+           "cex", "font", "col",
+           "border",
+           "cex.main", "cex.sub",
+           "col.main", "col.sub",
+           "font.main", "font.sub"))
+
+  graphicsPars <- function(key) {
+    n <- pmatch(key, names(TheTable))
+    if(is.na(n)) return(NULL)
+    return(TheTable[[n]])
+  }
+
+  graphicsPars
+})

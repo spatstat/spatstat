@@ -42,6 +42,8 @@ as.owin.nnfun <- function(W, ..., fatal=TRUE) {
   as.owin(X, ..., fatal=fatal)
 }
 
+domain.nnfun <- Window.nnfun <- function(X, ...) { as.owin(X) }
+
 as.im.nnfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            na.replace=NULL) {

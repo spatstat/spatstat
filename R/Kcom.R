@@ -9,17 +9,24 @@
 Kcom <- local({
 
   Kcom <- function(object, r=NULL, breaks=NULL, ..., 
-                 correction=c("border", "isotropic", "translate"),
-                 conditional=!is.poisson(object),
-                 restrict=FALSE,
-                 trend=~1, interaction=Poisson(), rbord=reach(interaction),
-                 compute.var=TRUE,
-                 truecoef=NULL, hi.res=NULL) {
-  if(inherits(object, "ppm"))
+                   correction=c("border", "isotropic", "translate"),
+                   conditional=!is.poisson(object),
+                   restrict=FALSE,
+                   model=NULL, 
+                   trend=~1, interaction=Poisson(), rbord=reach(interaction),
+                   compute.var=TRUE,
+                   truecoef=NULL, hi.res=NULL) {
+  if(inherits(object, "ppm")) {
     fit <- object
-  else if(inherits(object, "ppp") || inherits(object, "quad")) 
-    fit <- ppm(object, trend=trend, interaction=interaction, rbord=rbord)
-  else 
+  } else if(is.ppp(object) || inherits(object, "quad")) {
+    if(is.ppp(object)) object <- quadscheme(object, ...)
+    if(!is.null(model)) {
+      fit <- update(model, Q=object, forcefit=TRUE)
+    } else {
+      fit <- ppm(object, trend=trend, interaction=interaction, rbord=rbord,
+                 forcefit=TRUE)
+    }
+  } else 
     stop("object should be a fitted point process model or a point pattern")
   
   if(missing(conditional) || is.null(conditional))

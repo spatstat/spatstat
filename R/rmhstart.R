@@ -2,7 +2,7 @@
 #
 #   rmhstart.R
 #
-#   $Revision: 1.10 $  $Date: 2012/08/14 06:39:11 $
+#   $Revision: 1.11 $  $Date: 2014/06/06 09:37:45 $
 #
 #
 
@@ -85,6 +85,7 @@ print.rmhstart <- function(x, ...) {
 
 update.rmhstart <- function(object, ...) {
   do.call.matched("rmhstart.default",
-                  resolve.defaults(list(...), as.list(object)))
+                  resolve.defaults(list(...), as.list(object),
+                                   .StripNull=TRUE))
 }
 

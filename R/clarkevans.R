@@ -38,10 +38,13 @@ clarkevans <- function(X, correction=c("none", "Donnelly", "cdf"),
 clarkevans.test <- function(X, ..., 
                             correction="none",
                             clipregion=NULL,
-                            alternative=c("two.sided", "less", "greater"),
-                            nsim=1000
+                            alternative=c("two.sided", "less", "greater",
+                                          "clustered", "regular"),
+                            nsim=999
                             ) {
   Xname <- short.deparse(substitute(X))
+  miss.nsim <- missing(nsim)
+
   verifyclass(X, "ppp")
   W <- X$window
 
@@ -84,15 +87,15 @@ clarkevans.test <- function(X, ...,
   altblurb <-
     switch(alternative,
            two.sided="two-sided",
-           less="mean nn distance less than expected under CSR (clustered)",
-           greater="mean nn distance greater than expected under CSR (regular)")
+           less="clustered (R < 1)",
+           greater="regular (R > 1)")
 
   # compute observed value
   statistic <- clarkevansCalc(X, correction=correction, clipregion=clipregion,
                               working=TRUE)
   working <- attr(statistic, "working")
   #
-  if(correction == "none") {
+  if(correction == "none" && miss.nsim) {
     # standard Normal p-value
     SE <- with(working, sqrt(((4-pi)*area)/(4 * pi))/npts)
     Z <- with(working, (Dobs - Dpois)/SE)
@@ -110,11 +113,12 @@ clarkevans.test <- function(X, ...,
       sims[i] <- clarkevansCalc(Xsim, correction=correction,
                                 clipregion=clipregion)
     }
-    prob <- mean(sims <= statistic)
+    p.upper <- (1 + sum(sims >= statistic))/(1 + nsim)
+    p.lower <- (1 + sum(sims <= statistic))/(1 + nsim)
     p.value <- switch(alternative,
-                      less=prob,
-                      greater=1 - prob,
-                      two.sided= 2*min(prob, 1-prob))
+                      less=p.lower,
+                      greater=p.upper,
+                      two.sided=2*min(p.lower, p.upper))
     
     pvblurb <- paste("Monte Carlo test based on",
                      nsim, "simulations of CSR")

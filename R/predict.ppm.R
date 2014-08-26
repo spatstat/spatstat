@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.80 $	$Date: 2014/05/04 02:12:00 $
+#	$Revision: 1.83 $	$Date: 2014/08/04 09:59:56 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -101,7 +101,8 @@ predict.ppm <- local({
     changedcoef <- sumobj$changedcoef || !is.null(new.coef)
     trivial     <- poisson && notrend
   
-    need.covariates <- sumobj$has.covars
+    need.covariates <- sumobj$uses.covars
+    covnames.needed <- sumobj$covars.used
 
     if(sumobj$antiquated)
       warning("The model was fitted by an out-of-date version of spatstat")  
@@ -190,10 +191,15 @@ predict.ppm <- local({
     ##      (arguments present)    (output)  
     ##         window, ngrid    ->   image
     ##         locations (mask) ->   image
+    ##         locations (image) ->   image
     ##         locations (rectangle) ->  treat locations as 'window'
     ##         locations (polygonal) ->  treat locations as 'window'
     ##         locations (other) ->  data frame
     ##
+
+    if(is.im(locations))
+      locations <- as.owin(locations)
+    
     if(is.null(window) && is.owin(locations) && !is.mask(locations)) {
       window <- locations
       locations <- NULL
@@ -290,10 +296,9 @@ predict.ppm <- local({
       ## ------------------------------------ End Hack
       ##
       ## Finally, determine x and y vectors for grid
-      xx <- raster.x(masque)
-      yy <- raster.y(masque)
-      xpredict <- xx[masque$m]
-      ypredict <- yy[masque$m]
+      rxy <- rasterxy.mask(masque, drop=TRUE)
+      xpredict <- rxy$x
+      ypredict <- rxy$y 
     }
 
     ## ################  CREATE DATA FRAME  ##########################
@@ -332,6 +337,10 @@ predict.ppm <- local({
                      "Prediction is not possible at new locations"))
         covariates <- oldcov
       }
+      ## restrict to covariates actually required for formula
+      covariates <- if(is.data.frame(covariates)) {
+        covariates[,covnames.needed, drop=FALSE]
+      } else covariates[covnames.needed]
       covfunargs <- model$covfunargs
       covariates.df <-
         mpl.get.covariates(covariates,

@@ -6,14 +6,14 @@
   log-Gaussian Cox process.
 }
 \usage{
- rLGCP(model="exponential", mu = 0, param = NULL, ..., win=NULL)
+ rLGCP(model="exp", mu = 0, param = NULL, ..., win=NULL, saveLambda=TRUE)
 }
 \arguments{
   \item{model}{
-    character string: the name of a covariance model for
-    the Gaussian random field, as recognised by the function
-    \code{\link[RandomFields]{GaussRF}} in the
-    \pkg{RandomFields} package. 
+    character string: the short name of a covariance model for
+    the Gaussian random field. After adding the prefix \code{"RM"},
+    the code will search for a function of this name
+    in the \pkg{RandomFields} package.
   }
   \item{mu}{
     mean function of the Gaussian random field. Either a
@@ -21,26 +21,30 @@
     image (object of class \code{"im"}).
   }
   \item{param}{
-    Numeric vector of parameters for the covariance,
-    as understood by the function 
-    \code{\link[RandomFields]{GaussRF}} in the
-    \pkg{RandomFields} package.
+    List of parameters for the covariance.
+    Standard arguments are \code{var} and \code{scale}.
   }
-  \item{\ldots}{
-    Further arguments passed to the function
-    \code{\link[RandomFields]{GaussRF}} in the
-    \pkg{RandomFields} package.
+  \item{\dots}{
+    Additional parameters for the covariance,
+    or arguments passed to \code{\link{as.mask}} to determine
+    the pixel resolution.
   }
   \item{win}{
     Window in which to simulate the pattern.
     An object of class \code{"owin"}.
+  }
+  \item{saveLambda}{
+    Logical. If \code{TRUE} (the default) then the
+    simulated random intensity will also be saved,
+    and returns as an attribute of the point pattern.
   }
 }
 \value{
   The simulated point pattern (an object of class \code{"ppp"}).
 
   Additionally, the simulated intensity function is
-  returned as an attribute \code{"Lambda"}.
+  returned as an attribute \code{"Lambda"},
+  if \code{saveLambda=TRUE}.
 }
 \details{
   This function generates a realisation of a log-Gaussian Cox
@@ -50,15 +54,29 @@
   \eqn{c(r)}. Conditional on the random intensity, the point process
   is a Poisson process with this intensity.
 
-  The arguments \code{model} and \code{param} specify the covariance 
-  function of the Gaussian random field, in the format expected by the
-  \pkg{RandomFields} package. See 
-  \code{\link[RandomFields]{GaussRF}} or
-  \code{\link[RandomFields:CovarianceFct]{Covariance}}
-  for information about this format. A list of all implemented
-  models is available by typing \code{PrintModelList()}. 
-  
-  This algorithm uses the function \code{\link[RandomFields]{GaussRF}} in the
+  The string \code{model} specifies the covariance 
+  function of the Gaussian random field, and the parameters
+  of the covariance are determined by \code{param} and \code{\dots}.
+
+  To determine the covariance model, the string \code{model}
+  is prefixed by \code{"RM"}, and a function of this name is
+  sought in the \pkg{RandomFields} package. 
+  For a list of available models see 
+  \code{\link[RandomFields]{RMmodel}} in the
+  \pkg{RandomFields} package. For example the
+  \ifelse{latex}{\out{Mat\'ern}}{Matern}
+  covariance is specified by \code{model="matern"}, corresponding
+  to the function \code{RMmatern} in the \pkg{RandomFields} package.
+
+  Standard variance parameters (for all functions beginning with
+  \code{"RM"} in the \pkg{RandomFields} package) are \code{var}
+  for the variance at distance zero, and \code{scale} for the scale
+  parameter. Other parameters are specified in the help files
+  for the individual functions beginning with \code{"RM"}. For example
+  the help file for \code{RMmatern} states that \code{nu} is a parameter
+  for this model.
+
+  This algorithm uses the function \code{\link[RandomFields]{RFsimulate}} in the
   \pkg{RandomFields} package to generate values of
   a Gaussian random field, with the specified mean function \code{mu}
   and the covariance specified by the arguments \code{model} and
@@ -90,18 +108,18 @@
 \examples{
   if(require(RandomFields)) {
     # homogeneous LGCP with exponential covariance function
-    X <- rLGCP("exp", 3, c(0, variance=0.2, nugget=0, scale=.1 ))
+    X <- rLGCP("exp", 3, var=0.2, scale=.1)
 
     # inhomogeneous LGCP with Gaussian covariance function
     m <- as.im(function(x, y){5 - 1.5 * (x - 0.5)^2 + 2 * (y - 0.5)^2}, W=owin())
-    X <- rLGCP("gauss", m, c(0, variance=0.15, nugget = 0, scale =0.5))
+    X <- rLGCP("gauss", m, var=0.15, scale =0.5)
     plot(attr(X, "Lambda"))
     points(X)
 
     # inhomogeneous LGCP with Matern covariance function
     X <- rLGCP("matern", function(x, y){ 1 - 0.4 * x},
-             c(0, variance=2, nugget=0, scale=0.7, a = 0.5),
-             win = owin(c(0, 10), c(0, 10)))
+               var=2, scale=0.7, nu=0.5,
+               win = owin(c(0, 10), c(0, 10)))
     plot(X)
   } else message("Simulation requires the RandomFields package")
 }

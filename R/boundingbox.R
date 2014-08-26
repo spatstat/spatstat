@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.3 $ $Date: 2014/04/20 10:47:49 $
+## $Revision: 1.5 $ $Date: 2014/08/06 01:12:38 $
 
 bounding.box <- function(...) {
   .Deprecated("boundingbox", "spatstat")
@@ -44,19 +44,129 @@ recognise.spatstat.type <- local({
   }
 })
 
-bbEngine <- function(...) {
-  wins <- list(...)
-  ## first detect any numeric vector arguments
-  if(any(isnumvec <- unlist(lapply(wins, is.vector)) &
-         unlist(lapply(wins, is.numeric)))) {
-    ## invoke default method on these arguments
-    bb <- do.call("boundingbox", wins[isnumvec])
-    ## repack
-    wins <- append(wins[!isnumvec], list(bb))
+bbEngine <- local({
+
+  bb.listxy <- function(X) owin(range(X$x), range(X$y))
+
+  bbEngine <- function(...) {
+    wins <- list(...)
+    ## first detect any numeric vector arguments
+    if(any(isnumvec <- unlist(lapply(wins, is.vector)) &
+           unlist(lapply(wins, is.numeric)))) {
+      ## invoke default method on these arguments
+      bb <- do.call("boundingbox", wins[isnumvec])
+      ## repack
+      wins <- append(wins[!isnumvec], list(bb))
+    }
+    if(length(wins) > 1) {
+      ## multiple arguments -- compute bounding box for each argument.
+      objtype <- unlist(lapply(wins, recognise.spatstat.type))
+      nbad <- sum(objtype == "unknown")
+      if(nbad > 0) {
+        whinge <- paste("Function boundingbox called with",
+                        nbad,"unrecognised",
+                        ngettext(nbad,"argument","arguments"))
+        stop(whinge, call.=FALSE)
+      }
+      if(any(isppp <- (objtype == "ppp"))) 
+        wins[isppp] <- lapply(wins[isppp], boundingbox)
+      if(any(islistxy <- (objtype == "listxy")))
+        wins[islistxy] <- lapply(wins[islistxy], bb.listxy)
+      ## then convert all windows to owin
+      wins <- lapply(wins, as.owin)
+      ## then take bounding box of each window
+      boxes <- lapply(wins, boundingbox)
+      ## discard NULL values
+      isnull <- unlist(lapply(boxes, is.null))
+      boxes <- boxes[!isnull]
+      ## take bounding box of these boxes
+      xrange <- range(unlist(lapply(boxes, getElement, name="xrange")))
+      yrange <- range(unlist(lapply(boxes, getElement, name="yrange")))
+      W <- owin(xrange, yrange)
+      ## If all of the windows have a common unit name, give
+      ## that unit name to the bounding box.
+      youse <- unique(t(sapply(boxes,unitname)))
+      if(nrow(youse)==1) {
+        ute <- unlist(youse[1,])
+        unitname(W) <- ute
+      }
+      return(W)
+    }
+
+    ## single argument
+    w <- wins[[1]]
+    if(is.null(w))
+      return(NULL)
+    
+    wtype <- recognise.spatstat.type(w)
+    ## point pattern?
+    if(wtype == "ppp")
+      return(boundingbox(coords(w)))
+    
+    ## list(x,y)
+    if(wtype == "listxy")
+      return(bb.listxy(w))
+          
+    ## convert to window
+    w <- as.owin(w)
+
+    ## determine a tight bounding box for the window w
+    switch(w$type,
+           rectangle = {
+             return(w)
+           },
+           polygonal = {
+             bdry <- w$bdry
+             if(length(bdry) == 0)
+               return(NULL)
+             xr <- range(unlist(lapply(bdry, function(a) range(a$x))))
+             yr <- range(unlist(lapply(bdry, function(a) range(a$y))))
+             return(owin(xr, yr, unitname=unitname(w)))
+           },
+           mask = {
+             m <- w$m
+             x <- rasterx.mask(w)
+             y <- rastery.mask(w)
+             xr <- range(x[m]) + c(-1,1) * w$xstep/2
+             yr <- range(y[m]) + c(-1,1) * w$ystep/2
+             return(owin(xr, yr, unitname=unitname(w)))
+           },
+           stop("unrecognised window type", w$type)
+           )
   }
-  if(length(wins) > 1) {
-    ## multiple arguments -- compute bounding box for each argument.
-    objtype <- unlist(lapply(wins, recognise.spatstat.type))
+
+  bbEngine
+})
+
+
+boundingbox.default <- local({
+
+  bb.listxy <- function(X) owin(range(X$x), range(X$y))
+
+  boundingbox.default <- function(...) {
+    arglist <- list(...)
+    bb <- NULL
+    if(length(arglist) == 0)
+      return(bb)
+    ## handle numeric vector arguments
+    if(any(isnumvec <- unlist(lapply(arglist, is.vector)) &
+           unlist(lapply(arglist, is.numeric)))) {
+      nvec <- sum(isnumvec)
+      if(nvec != 2)
+        stop(paste("boundingbox.default expects 2 numeric vectors:",
+                   nvec, "were supplied"),
+             call.=FALSE)
+      vecs <- arglist[isnumvec]
+      x <- vecs[[1]]
+      y <- vecs[[2]]
+      bb <- if(length(x) == length(y)) owin(range(x), range(y)) else NULL
+      arglist <- arglist[!isnumvec]
+    }
+    if(length(arglist) == 0)
+      return(bb)
+    ## other objects are present
+    objtype <- unlist(lapply(arglist, recognise.spatstat.type))
+    ## Unrecognised?
     nbad <- sum(objtype == "unknown")
     if(nbad > 0) {
       whinge <- paste("Function boundingbox called with",
@@ -64,101 +174,20 @@ bbEngine <- function(...) {
                       ngettext(nbad,"argument","arguments"))
       stop(whinge, call.=FALSE)
     }
-    if(any(isppp <- (objtype == "ppp"))) 
-      wins[isppp] <- lapply(wins[isppp], boundingbox)
-    if(any(islistxy <- (objtype == "listxy")))
-      wins[islistxy] <- lapply(wins[islistxy], boundingbox)
-    ## then convert all windows to owin
-    wins <- lapply(wins, as.owin)
-    ## then take bounding box of each window
-    boxes <- lapply(wins, boundingbox)
-    ## discard NULL values
-    isnull <- unlist(lapply(boxes, is.null))
-    boxes <- boxes[!isnull]
-    ## take bounding box of these boxes
-    xrange <- range(unlist(lapply(boxes, getElement, name="xrange")))
-    yrange <- range(unlist(lapply(boxes, getElement, name="yrange")))
-    W <- owin(xrange, yrange)
-    ## If all of the windows have a common unit name, give
-    ## that unit name to the bounding box.
-    youse <- unique(t(sapply(boxes,unitname)))
-    if(nrow(youse)==1) {
-      ute <- unlist(youse[1,])
-      unitname(W) <- ute
+    if(any(aso <- (objtype == "as.owin"))) {
+      ## promote objects to owin (to avoid infinite recursion!)
+      arglist[aso] <- lapply(arglist[aso], as.owin)
     }
-    return(W)
+    if(any(lxy <- (objtype == "listxy"))) {
+      ## handle list(x,y) objects 
+      arglist[lxy] <- lapply(arglist[lxy], bb.listxy)
+    }
+    result <- do.call("boundingbox",
+                      if(is.null(bb)) arglist else append(list(bb), arglist))
+    return(result)
   }
 
-  ## single argument
-  w <- wins[[1]]
-  if(is.null(w))
-    return(NULL)
-  
-  wtype <- recognise.spatstat.type(w)
-  ## point pattern?
-  if(wtype == "ppp")
-    return(boundingbox(coords(w)))
-    
-  ## list(x,y)
-  if(wtype == "listxy")
-    return(boundingbox(w$x,w$y))
-          
-  ## convert to window
-  w <- as.owin(w)
+  boundingbox.default
+})
 
-  ## determine a tight bounding box for the window w
-  switch(w$type,
-         rectangle = {
-           return(w)
-         },
-         polygonal = {
-           bdry <- w$bdry
-           if(length(bdry) == 0)
-             return(NULL)
-           xr <- range(unlist(lapply(bdry, function(a) range(a$x))))
-           yr <- range(unlist(lapply(bdry, function(a) range(a$y))))
-           return(owin(xr, yr, unitname=unitname(w)))
-         },
-         mask = {
-           m <- w$m
-           x <- raster.x(w)
-           y <- raster.y(w)
-           xr <- range(x[m]) + c(-1,1) * w$xstep/2
-           yr <- range(y[m]) + c(-1,1) * w$ystep/2
-           return(owin(xr, yr, unitname=unitname(w)))
-         },
-         stop("unrecognised window type", w$type)
-         )
-}
-
-boundingbox.default <- function(...) {
-  arglist <- list(...)
-  bb <- NULL
-  if(length(arglist) == 0)
-    return(bb)
-  ## handle numeric vector arguments
-  if(any(isnumvec <- unlist(lapply(arglist, is.vector)) &
-         unlist(lapply(arglist, is.numeric)))) {
-    nvec <- sum(isnumvec)
-    if(nvec != 2)
-      stop(paste("boundingbox.default expects 2 numeric vectors:",
-                 nvec, "were supplied"),
-           call.=FALSE)
-    vecs <- arglist[isnumvec]
-    x <- vecs[[1]]
-    y <- vecs[[2]]
-    bb <- if(length(x) == length(y)) owin(range(x), range(y)) else NULL
-    arglist <- arglist[!isnumvec]
-  }
-  if(length(arglist) == 0)
-    return(bb)
-  ## other objects are present
-  objtype <- unlist(lapply(arglist, recognise.spatstat.type))
-  if(any(aso <- (objtype == "as.owin"))) {
-    ## promote objects to owin (to avoid infinite recursion!)
-    arglist[aso] <- lapply(arglist[aso], as.owin)
-  }
-  result <- do.call("boundingbox", append(list(bb), arglist))
-  return(result)
-}
 

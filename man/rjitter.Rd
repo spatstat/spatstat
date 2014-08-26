@@ -15,6 +15,7 @@ rjitter(X, radius, retry=TRUE, giveup = 10000)
     Scale of perturbations. A positive numerical value.
     The displacement vectors will be uniformly
     distributed in a circle of this radius.
+    There is a sensible default.
   }
   \item{retry}{
     What to do when a perturbed point lies outside the window
@@ -50,6 +51,7 @@ rjitter(X, radius, retry=TRUE, giveup = 10000)
    X <- rsyst(owin(), 10, 10)
    Y <- rjitter(X, 0.02)
    plot(Y)
+   Z <- rjitter(X)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

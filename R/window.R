@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.146 $	$Date: 2014/04/21 03:32:08 $
+#	$Revision: 4.152 $	$Date: 2014/08/04 09:35:50 $
 #
 #
 #	A window may be either
@@ -423,6 +423,14 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
 #-----------------------------------------------------------------------------
 #
 #
+Frame <- function(X) { UseMethod("Frame") }
+
+"Frame<-" <- function(X, value) { UseMethod("Frame<-") }
+
+Frame.default <- function(X) { as.rectangle(X) }
+
+## .........................................................
+
 as.rectangle <- function(w, ...) {
   if(inherits(w, "owin"))
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
@@ -666,26 +674,36 @@ validate.mask <- function(w, fatal=TRUE) {
       return(FALSE)
   }
 }
-             
-raster.x <- function(w, drop=FALSE) {
+
+dim.owin <- function(x) { return(x$dim) } ## NULL unless it's a mask
+
+## internal use only:
+
+rasterx.mask <- function(w, drop=FALSE) {
   validate.mask(w)
-  m <- w$m
-  x <- w$xcol[col(m)]
-  x <- if(drop) x[m, drop=TRUE] else array(x, dim=w$dim)
+  x <- w$xcol[col(w)]
+  x <- if(drop) x[w$m, drop=TRUE] else array(x, dim=w$dim)
   return(x)
 }
 
-raster.y <- function(w, drop=FALSE) {
+rastery.mask <- function(w, drop=FALSE) {
   validate.mask(w)
-  m <- w$m
-  y <- w$yrow[row(m)]
-  y <- if(drop) y[m, drop=TRUE] else array(y, dim=w$dim)
+  y <- w$yrow[row(w)]
+  y <- if(drop) y[w$m, drop=TRUE] else array(y, dim=w$dim)
   return(y)
 }
 
-raster.xy <- function(w, drop=FALSE) {
-  list(x=as.numeric(raster.x(w, drop=drop)),
-       y=as.numeric(raster.y(w, drop=drop)))
+rasterxy.mask <- function(w, drop=FALSE) {
+  validate.mask(w)
+  x <- w$xcol[col(w)]
+  y <- w$yrow[row(w)]
+  if(drop) {
+    m <- w$m
+    x <- x[m, drop=TRUE] 
+    y <- y[m, drop=TRUE]
+  }
+  return(list(x=as.numeric(x),
+              y=as.numeric(y)))
 }
   
 nearest.raster.point <- function(x,y,w, indices=TRUE) {
@@ -803,7 +821,7 @@ inside.owin <- function(x, y, w) {
   frameok <- (x >= xr[1] - eps) & (x <= xr[2] + eps) & 
              (y >= yr[1] - eps) & (y <= yr[2] + eps)
  
-  if(all(!frameok))  # all points OUTSIDE window - no further work needed
+  if(!any(frameok))  # all points OUTSIDE window - no further work needed
     return(frameok)
 
   ok <- frameok
@@ -1005,3 +1023,9 @@ pixelcentres <- function (X, W=NULL,...) {
   Y <- as.ppp(raster.xy(X,drop=TRUE),W=W)
   return(Y)
 }
+
+## generics which extract and assign the window of some object
+
+Window <- function(X, ...) { UseMethod("Window") }
+
+"Window<-" <- function(X, ..., value) { UseMethod("Window<-") }

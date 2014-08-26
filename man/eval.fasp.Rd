@@ -13,7 +13,9 @@
     An expression involving the names of objects of class \code{"fasp"}.
   }
   \item{envir}{
-    Optional. The environment in which to evaluate the expression.
+    Optional. The environment in which to evaluate the expression,
+    or a named list containing \code{"fasp"} objects to be used in
+    the expression.
   }
   \item{dotonly}{Logical. Passed to \code{\link{eval.fv}}.}
 }
@@ -79,6 +81,9 @@
   # subtracting the unmarked K function from the cross-type K functions
   K0 <- Kest(unmark(amacrine))
   DK <- eval.fasp(K - K0)
+
+  ## Use of 'envir'
+  S <- eval.fasp(1-G, list(G=alltypes(amacrine, "G")))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -10,7 +10,7 @@ options(useFancyQuotes=FALSE)
 
 
 ###################################################
-### code chunk number 2: updates.Rnw:41-47
+### code chunk number 2: updates.Rnw:43-49
 ###################################################
 z <- read.table("packagesizes.txt", header=TRUE)
 z$date <- as.Date(z$date)
@@ -21,13 +21,13 @@ Plot <- function(fmla, ..., dat=z) {
 
 
 ###################################################
-### code chunk number 3: updates.Rnw:49-50
+### code chunk number 3: updates.Rnw:51-52
 ###################################################
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
 
 
 ###################################################
-### code chunk number 4: updates.Rnw:56-61
+### code chunk number 4: updates.Rnw:58-63
 ###################################################
 getOption("SweaveHooks")[["fig"]]()
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
@@ -38,7 +38,7 @@ text(as.Date("2013-01-01"), 50, "R code")
 
 
 ###################################################
-### code chunk number 5: updates.Rnw:2494-2498
+### code chunk number 5: updates.Rnw:2616-2620
 ###################################################
 nbugs <- nrow(news(grepl("^BUG", Category), 
                    package="spatstat"))
@@ -47,7 +47,7 @@ nbugssince <- nrow(news(Version > "1.21-2" & grepl("^BUG", Category),
 
 
 ###################################################
-### code chunk number 6: updates.Rnw:2505-2506 (eval = FALSE)
+### code chunk number 6: updates.Rnw:2627-2628 (eval = FALSE)
 ###################################################
 ## news(grepl("^BUG", Category), package="spatstat")
 

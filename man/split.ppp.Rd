@@ -17,7 +17,7 @@
   }
   \item{f}{
     Data determining the grouping. Either a factor, 
-    a pixel image with factor values, a tessellation,
+    a pixel image with factor values, a tessellation, a window,
     or the name of one of the columns of marks.
   }
   \item{drop}{
@@ -66,6 +66,10 @@
     a tessellation (object of class \code{"tess"}).
     Each point of \code{x} will be classified according to
     the tile of the tessellation into which it falls.
+    \item
+    a window (object of class \code{"owin"}).
+    Each point of \code{x} will be classified according to
+    whether it falls inside or outside this window.
     \item
     a character string, matching the name of one of the columns of
     marks, if \code{marks(x)} is a data frame. This column should

@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.80 $	$Date: 2014/04/25 11:12:53 $
+#	$Revision: 1.81 $	$Date: 2014/06/21 05:34:07 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -155,7 +155,7 @@
         # lambda values provided
         if(is.im(lambda)) 
           lambda <- safelookup(lambda, X)
-        else if(is.ppm(lambda) || is.kppm(lambda)) {
+        else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) {
           model <- lambda
           if(!update) {
             ## just use intensity of fitted model

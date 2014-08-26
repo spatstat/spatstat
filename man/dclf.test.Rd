@@ -9,8 +9,11 @@
   test or the Maximum Absolute Deviation test for a spatial point pattern.
 }
 \usage{
-dclf.test(X, ..., rinterval = NULL, use.theo=FALSE)
-mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
+dclf.test(X, ..., alternative=c("two.sided", "less", "greater"),
+                      rinterval = NULL, use.theo=FALSE)
+
+mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
+                      rinterval = NULL, use.theo=FALSE)
 }
 \arguments{
   \item{X}{
@@ -28,6 +31,10 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
     simulations, \code{verbose=FALSE} to turn off the messages,
     and \code{savefuns} or \code{savepatterns} to save the simulation
     results.
+  }
+  \item{alternative}{
+    The alternative hypothesis. A character string.
+    The default is a two-sided alternative. See Details.
   }
   \item{rinterval}{
     Interval of values of the summary function argument \code{r}
@@ -80,6 +87,18 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
     were saved in the original test, by setting \code{savefuns=TRUE} or
     \code{savepatterns=TRUE}).
   }
+
+  The argument \code{alternative} specifies the alternative hypothesis,
+  that is, the direction of deviation that will be considered
+  statistically significant. If \code{alternative="two.sided"} (the
+  default), both positive and negative deviations (between
+  the observed summary function and the theoretical function)
+  are significant. If \code{alternative="less"}, then only negative
+  deviations (where the observed summary function is lower than the
+  theoretical function) are considered. If \code{alternative="greater"},
+  then only positive deviations (where the observed summary function is
+  higher than the theoretical function) are considered.
+  
   In all cases, the algorithm will first call \code{\link{envelope}} to
   generate or extract the simulated summary functions.
   The number of simulations that will be generated or extracted,
@@ -99,6 +118,21 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
   Fisher's variance-stabilising transformation
   \eqn{\sin^{-1}\sqrt x}{asin(sqrt(x))} using the argument
   \code{transform}. See the Examples.
+
+  The argument \code{rinterval} specifies the interval of
+  distance values \eqn{r} which will contribute to the
+  test statistic (either maximising over this range of values
+  for \code{mad.test}, or integrating over this range of values
+  for \code{dclf.test}). This affects the power of the test.
+  General advice and experiments in Baddeley et al (2014) suggest
+  that the maximum \eqn{r} value should be slightly larger than
+  the maximum possible range of interaction between points. The
+  \code{dclf.test} is quite sensitive to this choice, while the
+  \code{mad.test} is relatively insensitive.
+
+  It is also possible to specify a pointwise test (i.e. taking
+  a single, fixed value of distance \eqn{r}) by specifing
+  \code{rinterval = c(r,r)}.
 }
 \section{Handling Ties}{
   If the observed value of the test statistic is equal to one or more of the
@@ -114,6 +148,9 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
   Baddeley, A., Diggle, P.J., Hardegen, A., Lawrence, T., Milne,
   R.K. and Nair, G. (2014) On tests of spatial pattern based on
   simulation envelopes. \emph{Ecological Monographs}, to appear.
+  
+  Baddeley, A., Hardegen, A., Lawrence, T., Milne, R.K. and Nair,
+  G. (2015) \emph{Pushing the envelope}. In preparation.
   
   Besag, J. (1977) 
   Discussion of Dr Ripley's paper.
@@ -165,6 +202,9 @@ mad.test(X, ..., rinterval = NULL, use.theo=FALSE)
   # variance stabilised G function
   dclf.test(cells, Gest, transform=expression(asin(sqrt(.))),
                    verbose=FALSE, nsim=19)
+
+  ## one-sided test
+  ml <- mad.test(cells, Lest, verbose=FALSE, nsim=19, alternative="less")
 }
 \keyword{spatial}
 \keyword{htest}

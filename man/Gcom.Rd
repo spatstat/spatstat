@@ -19,6 +19,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
      correction = c("border", "Hanisch"),
      conditional = !is.poisson(object),
      restrict=FALSE,
+     model=NULL,
      trend = ~1, interaction = Poisson(),
      rbord = reach(interaction),
      ppmcorrection="border",
@@ -53,6 +54,12 @@ Gcom(object, r = NULL, breaks = NULL, ...,
     the restriction estimator (\code{restrict=TRUE}) or
     the reweighting estimator (\code{restrict=FALSE}, the default).
     Applies only if \code{conditional=TRUE}.  See Details.
+  }
+  \item{model}{
+    Optional. A fitted point process model (object of
+    class \code{"ppm"}) to be re-fitted to the data
+    using \code{\link{update.ppm}}, if \code{object} is a point pattern.
+    Overrides the arguments \code{trend,interaction,rbord,ppmcorrection}.
   }
   \item{trend,interaction,rbord}{
     Optional. Arguments passed to \code{\link{ppm}}

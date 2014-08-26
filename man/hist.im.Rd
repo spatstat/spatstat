@@ -47,9 +47,14 @@
   midpoints of the bars in the barplot). 
 }
 \seealso{
+  \code{\link{spatialcdf}} for the cumulative distribution function
+  of an image.
+  
   \code{\link{hist}},
   \code{\link{hist.default}},
-  \code{\link{barplot}},
+  \code{\link{barplot}}.
+
+  For information about pixel images see
   \code{\link{im.object}},
   \code{\link{summary.im}}.
 }

@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.18 $  $Date: 2014/04/20 03:37:22 $
+##   $Revision: 1.19 $  $Date: 2014/05/28 08:24:16 $
 ##
 
 symbolmap <- local({
@@ -122,8 +122,9 @@ symbolmap <- local({
 symbolmaptype <- function(x) { attr(x, "stuff")$type }
 
 update.symbolmap <- function(object, ...) {
-  parlist <- attr(object, "stuff")[["parlist"]]
-  do.call("symbolmap", resolve.defaults(list(...), parlist))
+  y <- attr(object, "stuff")
+  oldargs <- append(y[["parlist"]], y[c("inputs", "range")])
+  do.call("symbolmap", resolve.defaults(list(...), oldargs))
 }
 
 print.symbolmap <- function(x, ...) {
@@ -277,6 +278,8 @@ invoke.symbolmap <- local({
                                  started = add && do.plot) {
     if(!inherits(map, "symbolmap"))
       stop("map should be an object of class 'symbolmap'")
+    ## function will return maximum size of symbols plotted.
+    maxsize <- 0
     if(do.plot) {
       xy <- xy.coords(x, y)
       x <- xy$x
@@ -286,9 +289,10 @@ invoke.symbolmap <- local({
     force(values)
     g <- map(values)
     parnames <- colnames(g)
-    maxsize <- 0
     if(do.plot) {
       xydf <- data.frame(x=x, y=y)
+      if(nrow(xydf) == 0)
+        return(invisible(maxsize))
       g <- if(prod(dim(g)) == 0) xydf else 
            do.call("data.frame",
                    c(as.list(g), as.list(xydf), list(stringsAsFactors=FALSE)))

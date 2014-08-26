@@ -44,7 +44,6 @@ rpoislpp(lambda, L, ...)
  \code{\link{linnet}}
 }
 \examples{
-   data(simplenet)
    X <- rpoislpp(5, simplenet)
    plot(X)
    # multitype

@@ -8,7 +8,8 @@
   compute the fitted intensity or conditional intensity of the model.
 }
 \usage{
-\method{predict}{lppm}(object, ..., type = "trend", locations = NULL)
+\method{predict}{lppm}(object, ...,
+                       type = "trend", locations = NULL, new.coef=NULL)
 }
 \arguments{
   \item{object}{
@@ -23,6 +24,12 @@
     Optional. Locations at which predictions should be computed.
     Either a data frame with two columns of coordinates,
     or a binary image mask.
+  }
+  \item{new.coef}{
+    Optional. Numeric vector of model coefficients,
+    to be used instead of the fitted coefficients
+    \code{coef(object)} when calculating
+    the prediction.
   }
   \item{\dots}{
     Optional arguments passed to \code{\link[spatstat]{as.mask}}

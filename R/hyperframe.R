@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.49 $  $Date: 2014/03/22 06:12:35 $
+# $Revision: 1.50 $  $Date: 2014/05/10 04:31:19 $
 #
 
 hyperframe <- function(...,
@@ -281,11 +281,12 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
   } else {
     lx <- as.list(x)
     nrows <- ux$ncases
-    vclassstring <- paste("(", vclass, ")", sep="")
+    vclassstring <- paren(vclass)
     if(any(!dfcol)) 
       lx[!dfcol] <- lapply(as.list(vclassstring[!dfcol]),
-                           function(x,n) { rep.int(x,n)}, n=nrows)
+                           rep.int, times=nrows)
     df <- do.call("data.frame", append(lx, list(row.names=row.names)))
+    colnames(df) <- ux$vname
   }
   return(df)
 }
@@ -296,7 +297,8 @@ as.list.hyperframe <- function(x, ...) {
   names(nama) <- nama
   out <- lapply(nama, function(nam, x) { x[, nam, drop=TRUE] }, x=x)
   if(ux$ncases == 1)
-    out <- lapply(lapply(out, listof), "names<-", value=row.names(x))
+    out <- lapply(out, listof)
+  out <- lapply(out, "names<-", value=row.names(x))
   return(out)
 }
 

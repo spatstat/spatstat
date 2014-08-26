@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.37-0
-Nickname: Model Prisoner
-Date: 2014-05-09
+Version: 1.38-0
+Nickname: Wicked Plot
+Date: 2014-08-15
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -16,6 +16,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Additional contributions 
 	by Q.W. Ang; 
 	S. Azaele; 
+	M. Baddeley;
 	C. Beale; 
 	M. Bell;
 	R. Bernhardt; 
@@ -43,7 +44,9 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	I. Dryden; 
 	S. Eglen; 
         O. Flores;
+	E.D. Ford;
         P. Forbes;
+	J. Franklin; 
 	N. Funwi-Gabga;
 	O. Garcia;
 	A. Gault; 
@@ -52,7 +55,6 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	J. Goldstick;
 	P. Grabarnik; 
 	C. Graf; 
-	J. Franklin; 
 	U. Hahn; 
 	A. Hardegen; 
 	M. Hering; 
@@ -60,6 +62,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	M. Hazelton; 
 	J. Heikkinen; 
 	K. Hornik; 
+	P. Hunziker; 
 	R. Ihaka; 
 	A. Jammalamadaka;
 	R. John-Chandran; 
@@ -82,6 +85,8 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	U. Mehlig;
 	S. Meyer; 
 	X.C. Mi;
+	L. De Middeleer;
+	R.K. Milne; 
 	J. Moller; 
 	E. Mudrak;
 	L.S. Nielsen; 
@@ -92,14 +97,19 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	E. Parilov; 
 	J. Picka; 
 	N. Picard; 
+	M. Porter;
 	S. Protsiv;
 	A. Raftery; 
+	S. Rakshit; 
+	P. Ramon;
 	M. Reiter; 
 	T.O. Richardson;  
 	B.D. Ripley;  
 	E. Rosenbaum; 
 	B. Rowlingson; 
-	J. Rudge; 
+	J. Rudokas;
+	J. Rudge;
+	C. Ryan; 
 	F. Safavimanesh;
 	A. Sarkka; 
 	K. Schladitz; 
@@ -117,6 +127,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	T. Thorarinsdottir;
 	B. Turlach; 
         K. Ummer;
+	M. Uppala;
 	A. van Burgel; 
 	T. Verbeke; 
         M. Vihtakari;
@@ -131,11 +142,12 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 Depends: R (>= 3.0.2), stats, graphics, grDevices, utils
-Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.3-0)
+Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.3-0),
+        goftest
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
-        scatterplot3d, RandomFields (>= 3.0.0)
+        scatterplot3d, RandomFields (>= 3.0.0), Matrix
 Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, and point patterns on a linear network. 
-	Contains over 1500 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
+	Contains about 2000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
 	Data types include point patterns, line segment patterns, spatial windows, pixel images, tessellations, and linear networks. 
 	Exploratory methods include quadrat counts, K-functions and their simulation envelopes, nearest neighbour distance and empty space statistics, Fry plots, pair correlation function, kernel smoothed intensity, relative risk estimation with cross-validated bandwidth selection, mark correlation functions, segregation indices, mark dependence diagnostics, and kernel estimates of covariate effects. Formal hypothesis tests of random pattern (chi-squared, Kolmogorov-Smirnov, Diggle-Cressie-Loosmore-Ford, Dao-Genton) and tests for covariate effects (Cox-Berman-Waller-Lawson, Kolmogorov-Smirnov) are also supported.
 	Parametric models can be fitted to point pattern data using the functions ppm, kppm, slrm similar to glm. Types of models include Poisson, Gibbs, Cox and cluster point processes. Models may involve dependence on covariates, interpoint interaction, cluster formation and dependence on marks. Models are fitted by maximum likelihood, logistic regression, minimum contrast, and composite likelihood methods. 
@@ -145,6 +157,6 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2014-05-09 02:56:49 UTC; adrian
+Packaged: 2014-08-15 10:58:26 UTC; adrian
 Repository: CRAN
-Date/Publication: 2014-05-09 11:24:31
+Date/Publication: 2014-08-15 17:39:22

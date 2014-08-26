@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.20 $   $Date: 2013/12/12 05:38:59 $
+#   $Revision: 1.21 $   $Date: 2014/07/04 10:15:33 $
 #
 
 distfun <- function(X, ...) {
@@ -63,6 +63,8 @@ as.owin.distfun <- function(W, ..., fatal=TRUE) {
   return(result)
 }
 
+domain.distfun <- Window.distfun <- function(X, ...) { as.owin(X) }
+
 as.im.distfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            na.replace=NULL) {
@@ -71,12 +73,11 @@ as.im.distfun <- function(X, W=NULL, ...,
     # use 'distmap' for speed
     env <- environment(X)
     Xdata  <- get("X",      envir=env)
+    args <- list(X=Xdata, eps=eps, dimyx=dimyx, xy=xy)
     if(is.owin(Xdata)) {
-      invert <- get("invert", envir=env)
-      if(invert)
-        Xdata <- complement.owin(Xdata)
+      args <- append(args, list(invert = get("invert", envir=env)))
     }
-    D <- distmap(Xdata, eps=eps, dimyx=dimyx, xy=xy)
+    D <- do.call(distmap, args = args)
     if(!is.null(na.replace))
       D$v[is.null(D$v)] <- na.replace
   } else if(identical(attr(X, "Xclass"), "ppp")) {

@@ -24,6 +24,8 @@ as.owin.funxy <- function(W, ..., fatal=TRUE) {
   as.owin(W, ..., fatal=fatal)
 }
 
+domain.funxy <- Window.funxy <- function(X, ...) { as.owin(X) }
+
 #   Note that 'distfun' (and other classes inheriting from funxy)
 #   has a method for as.owin that takes precedence over as.owin.funxy
 #   and this will affect the behaviour of the following plot methods

@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.22 $ $Date: 2014/04/21 10:45:34 $
+# $Revision: 1.23 $ $Date: 2014/07/11 07:38:15 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -40,8 +40,15 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
       # f is a tessellation: determine the grouping
       f <- marks(cut(x, fsplit))
       splittype <- "tess"
+    } else if(is.owin(f)) {
+      # f is a window: coerce to a tessellation
+      W <- as.owin(x)
+      fsplit <- tess(tiles=list(fsplit, setminus.owin(W, fsplit)),
+                     window=W)
+      f <- marks(cut(x, fsplit))
+      splittype <- "tess"
     } else if(is.im(f)) {
-      # f is an image: determine the grouping
+      # f is an image: coerce to a tessellation
       fsplit <- tess(image=f)
       f <- marks(cut(x, fsplit))
       splittype <- "tess"
@@ -281,3 +288,6 @@ plot.splitppp <- function(x, ..., main) {
                            list(...),
                            list(equal.scales=TRUE)))
 }
+
+as.layered.splitppp <- function(X) { do.call("layered", X) }
+

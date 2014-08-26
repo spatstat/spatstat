@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.31 $     $Date: 2014/03/21 07:22:33 $
+#     $Revision: 1.32 $     $Date: 2014/07/29 09:04:19 $
 #
 
 eval.im <- function(expr, envir, harmonize=TRUE) {
@@ -20,8 +20,11 @@ eval.im <- function(expr, envir, harmonize=TRUE) {
   if(length(varnames) == 0)
     stop("No variables in this expression")
   # get the values of the variables
-  if(missing(envir))
+  if(missing(envir)) {
     envir <- sys.parent()
+  } else if(is.list(envir)) {
+    envir <- list2env(envir, parent=parent.frame())
+  }
   vars <- lapply(as.list(varnames), function(x, e) get(x, envir=e), e=envir)
   names(vars) <- varnames
   funs <- lapply(as.list(funnames), function(x, e) get(x, envir=e), e=envir)
@@ -219,6 +222,7 @@ im.apply <- function(X, FUN, ...) {
   d <- dim(template)
   resultmat <- matrix(resultok[1], d[1], d[2])
   resultmat[ok] <- resultok
+  resultmat[!ok] <- NA
   result <- as.im(resultmat, W=X[[1]])
   if(is.factor(resultok)) levels(result) <- levels(resultok)
   return(result)

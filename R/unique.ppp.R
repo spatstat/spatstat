@@ -1,25 +1,28 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.28 $  $Date: 2013/12/17 09:23:40 $
+# $Revision: 1.29 $  $Date: 2014/06/30 03:53:09 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
 
 unique.ppp <- function(x, ..., warn=FALSE) {
   verifyclass(x, "ppp")
-  dupe <- duplicated.ppp(x, ...)
+  dupe <- duplicated.ppp(x, ...) 
   if(!any(dupe)) return(x)
   if(warn) warning(paste(sum(dupe), "duplicated points were removed"),
                    call.=FALSE)
   return(x[!dupe])
 }
 
-duplicated.ppp <- function(x, ..., rule=c("spatstat", "deldir")) {
+duplicated.ppp <- function(x, ...,
+                           rule=c("spatstat", "deldir", "unmark")) {
   verifyclass(x, "ppp")
   rule <- match.arg(rule)
   if(rule == "deldir")
     return(deldir::duplicatedxy(x))
+  if(rule == "unmark")
+    x <- unmark(x)
   n <- npoints(x)
   switch(markformat(x),
          none = {

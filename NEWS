@@ -1,4 +1,503 @@
 
+	CHANGES IN spatstat VERSION 1.38-0
+
+OVERVIEW
+
+   o We thank Malissa Baddeley, Colin Beale, Oscar Garcia, Daniel Esser, 
+     David Ford, Eric Gilleland, Andrew Hardegen, Philipp Hunziker, 
+     Abdollah Jalilian, Tom Lawrence, Lore De Middeleer, Robin Milne, 
+     Mike Porter, Suman Rakshit, Pablo Ramon, Jason Rudokas, 
+     Christopher Ryan, Dominic Schuhmacher, Medha Uppala 
+     and Rasmus Waagepetersen for contributions.
+
+   o spatstat now Requires the package 'goftest' 
+     and Suggests the package 'Matrix'.
+
+   o New dataset: 'sporophores'
+
+   o Palm likelihood method for fitting cluster processes and Cox processes.
+
+   o Quasi-likelihood and weighted composite likelihood methods
+     for estimating trend in cluster processes and Cox processes.
+
+   o Further extensions to model formulas in ppm and kppm.
+
+   o Faster variance calculations for ppm objects.
+
+   o One-sided tests and one-sided envelopes of summary functions.
+
+   o Cramer-Von Mises and Anderson-Darling tests of spatial distribution.
+
+   o Cressie-Read test statistic in quadrat counting tests.
+
+   o Spatial cumulative distribution functions.
+
+   o Faster algorithm for point pattern matching.
+
+   o Improvements to plots.
+
+   o Increased support for envelopes.
+
+   o New generic functions 'Window', 'Frame' and 'domain'.
+
+   o Directional K-function and directional distribution.
+
+   o Raster calculations accelerated.
+
+   o Summary functions accelerated.
+
+   o Many improvements and bug fixes.
+
+   o Version nickname: 'Wicked Plot'
+
+NEW DATASETS
+
+   o sporophores
+   Spatial pattern of three species of mycorrhizal fungi around a tree.
+   [Contributed by E. David Ford.]
+
+NEW FUNCTIONS
+
+   o improve.kppm
+   Re-estimate the trend in a kppm (cluster or Cox) model
+   using quasi-likelihood or weighted first-order composite likelihood.
+   [Contributed by Abdollah Jalilian and Rasmus Waagepetersen.]
+
+   o Window, Window<-
+   Generic functions to extract and change the window of a spatial object
+   in two dimensions. Methods for ppp, psp, im, and many others.
+
+   o Frame, Frame<-
+   Generic functions to extract and change the containing rectangle ('frame')
+   of a spatial object in two dimensions. 
+
+   o domain
+   Generic function to extract the spatial domain of a spatial object
+   in any number of dimensions. 
+
+   o Ksector
+   Directional version of the K-function.
+
+   o pairorient
+   Point pair orientation distribution.
+
+   o spatialcdf
+   Compute the spatial cumulative distribution of a spatial covariate,
+   optionally using spatially-varying weights.
+
+   o cdf.test 
+   [Supersedes 'kstest'.]
+   Test of goodness-of-fit of a Poisson point process model.
+   The observed and predicted distributions of the values of a 
+   spatial covariate are compared using either the
+   Kolmogorov-Smirnov, Cramer-Von Mises or Anderson-Darling test.
+
+   o berman.test
+   Replaces 'bermantest'.
+
+   o harmonise.fv
+   Make several functions compatible.
+
+   o simulate.lppm
+   Simulate a fitted point process model on a linear network.
+
+   o subset.ppp, subset.lpp, subset.pp3, subset.ppx
+   Methods for 'subset', for point patterns.
+
+   o closepairs.pp3, crosspairs.pp3
+   Low-level functions to find all close pairs of points in three dimensions
+
+   o volume.linnet
+   Method for the generic 'volume'. Returns the length of the linear network.
+
+   o padimage
+   Pad the border of a pixel image.
+ 
+   o as.layered
+   Convert spatial data to a layered object.
+
+   o panel.contour, panel.image, panel.histogram
+   Panel functions for 'pairs' plots.
+
+   o range.fv, min.fv, max.fv
+   Range, minimum and maximum of function values.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o ppm.formula
+   The left hand side of the formula can now be the name of 
+   an object in the list 'data', or an expression involving such objects.
+
+   o ppm
+   The right hand side of the formula can now include 
+   the symbol '.' representing all covariates in the list 'data'.
+
+   o ppm
+   New argument 'subset' makes it possible to fit the model
+   in a subset of the spatial domain defined by an expression.
+
+   o kppm
+   New option: method="palm", will fit the model by maximising Palm likelihood.
+
+   o pppdist
+   Substantially accelerated. 
+   New argument 'auction' controls choice of algorithm.
+
+   o rhohat
+   New arguments 'weights' and 'horvitz' for weighted calculations.
+
+   o persp.im
+   Surface heights and colours can now be controlled by different images.
+   Option to draw a grey apron around the sides of the perspective plot. 
+   Return value has a new attribute 'expand'.
+
+   o plot.listof
+   New arguments 'halign' and 'valign' give improved control
+   over the alignment of panels.
+
+   o plot.listof
+   If all components of the list are objects of class 'fv' 
+   representing functions, then if equal.scales=TRUE, these
+   functions will all be plotted with the same axes 
+   (i.e. the same xlim and the same ylim).
+
+   o envelope
+   The argument 'transform' is now processed by 'with.fv'
+   giving more options, such as 'transform=expression(. - r)'
+
+   o envelope, dclf.test, mad.test
+   One-sided tests and one-sided envelopes can now be produced, 
+   by specifying the argument 'alternative'.
+
+   o dclf.test, mad.test
+   A pointwise test at fixed distance 'r' can now be performed
+   by setting rinterval = c(r,r).
+
+   o envelope
+   New arguments 'fix.n' and 'fix.marks' for envelope.ppp and envelope.ppm
+   make it easy to generate simulated patterns conditional on the
+   total number of points, or on the number of points of each type.
+
+   o quadrat.test
+   Can now calculate the Cressie-Read test statistic
+   instead of the Pearson X2 statistic.
+
+   o Kres, Gres, Kcom, Gcom, psst, psstA, psstG
+   New argument 'model' makes it easier to generate simulation envelopes
+   of the residual summary functions.
+
+   o layered, plot.layered
+   The layer plot arguments can include the argument '.plot'
+   specifying a function to perform the plotting instead of the
+   generic 'plot'.
+
+   o deriv.fv
+   New arguments make it possible to differentiate a periodic function.
+
+   o ppm
+   Argument 'data' or 'covariates' can now include entries
+   which are not spatial covariates, provided they do not appear 
+   in the model formula.
+
+   o closepairs, crosspairs
+   These functions are now generic, with methods for 'ppp' and 'pp3'
+
+   o rLGCP
+   Updated to conform to new usage of RandomFields package.
+   Argument syntax has changed.
+   Now allows control over pixel resolution.
+
+   o bw.diggle
+   New arguments 'correction' and 'hmax' for controlling the calculation.
+
+   o predict.lppm
+   New argument 'new.coef' for computing predictions with a 
+   different vector of model coefficients.
+
+   o predict.ppm
+   If 'locations' is a pixel image, its pixels determine the
+   spatial locations for prediction.
+
+   o cut.ppp
+   Argument 'z' can now be a window.
+
+   o split.ppp
+   Argument 'f' can now be a window.
+
+   o print.ppm, summary.ppm, coef.summary.ppm
+   The table of parameter estimates, standard errors and confidence intervals
+   now also includes the value of the (signed square root) Wald test statistic.
+
+   o plot.im
+   Now automatically detects problems in some Windows graphics displays
+   and tries to avoid them.
+
+   o plot.im
+   The position of axis tick marks alongside the colour ribbon
+   can now be controlled using the parameter 'at' in the argument 'ribargs'.
+
+   o plot.ppp
+   Can now plot numeric marks using characters chosen by 'pch' or 'chars'
+   with size determined by mark value.
+
+   o plot.ppp
+   New argument 'meansize' for controlling mark scale.
+
+   o hsvim, rgbim
+   New argument 'autoscale' causes automatic scaling of colour channel values.
+
+   o plot.ppp
+   If type='n', a legend is now displayed when x is a marked point pattern.
+
+   o whist
+   Accelerated by a factor of 5.
+
+   o Fest, Jest
+   Accelerated by a factor of 2 to 3.
+
+   o fryplot
+   Accelerated.
+   Now displays a legend if the point pattern is marked.
+   Now handles numerical marks nicely.
+   New argument 'axes'.
+
+   o frypoints
+   Accelerated.
+   New arguments 'to', 'from' and 'dmax'.
+
+   o duplicated.ppp
+   New option: rule = 'unmark'
+
+   o rjitter
+   Argument 'radius' now has a default.
+
+   o Smooth.msr
+   New argument 'drop'
+
+   o LambertW
+   Now handles NA and infinite values.
+
+   o update.ppm
+   Now handles formulae with a left-hand side.
+
+   o raster.x, raster.y, raster.xy
+   These functions can now handle images, as well as masks.
+
+   o Smooth.ppp
+   If the mark values are exactly constant, the resulting smoothed values
+   are now exactly constant.
+
+   o eval.im, eval.fv, eval.fasp
+   Argument 'envir' can now be a list, instead of an environment.
+
+   o plot.ppp
+   The printout (of the resulting symbol map object)
+   now displays the numerical value of the mark scale.
+
+   o with.fv
+   Improved mathematical labels.
+
+   o plot.fv
+   Improved mathematical labels on x axis.
+
+   o ppm
+   Improved error messages.
+
+   o vcov.ppm
+   Computations greatly accelerated for Hybrid interactions
+   and for Area-interaction models.
+
+   o vcov.kppm
+   Computations greatly accelerated (when fast=TRUE)   
+
+   o interp.im
+   Argument 'x' can now be a point pattern.
+
+   o pool.envelope
+   Improved handling of text information.
+
+   o miplot
+   Improved layout.
+
+   o print.summary.ppp
+   Improved layout. 
+   Now respects spatstat.options('terse')
+
+   o print.profilepl
+   Improved layout. 
+   Now respects spatstat.options('terse')
+
+   o anova.ppm
+   Now respects spatstat.options('terse')
+
+   o print.fv, print.envelope
+   Now respect spatstat.options('terse') and options('width')
+   
+   o summary.envelope
+   Now respects options('width')
+   
+   o kstest, bermantest
+   These functions will soon be Deprecated.
+   They are retained only for backward compatibility.
+
+BUG FIXES
+
+   o vcov.ppm
+   Sometimes gave wrong answers for Poisson models fitted by method='logi'.
+   Fixed.
+
+   o unnormdensity
+   If weights were missing, the density was normalised,
+   contrary to the documentation.
+   Fixed.
+
+   o logLik.ppm, anova.ppm, AIC
+   For models fitted by 'ippm', the number of degrees of freedom was incorrect.
+   Fixed.
+
+   o im.apply
+   Pixels outside the window were not assigned the value NA as they should.
+   Fixed.
+
+   o pixellate.owin
+   Crashed, unpredictably, if the pixel raster had unequal numbers
+   of rows and columns.
+   [Spotted by Rasmus Waagepetersen.]
+   Fixed.
+
+   o vcov.ppm
+   Crashed for pairwise interaction models fitted by method="logi".
+   Fixed.
+
+   o predict.ppm
+   Crashed for models fitted by method="logi"
+   if the model included external covariates.
+   Fixed.
+
+   o predict.ppm
+   Crashed if the argument 'covariates' or 'data' in the original call to 'ppm'
+   included entries that were not spatial covariates. [These entries were
+   ignored by ppm but caused predict.ppm to crash.]
+   Fixed.
+
+   o simulate.kppm, rNeymanScott, rThomas, rMatClust
+   Crashed randomly when simulating an inhomogeneous model.
+   [Spotted by Philipp Hunziker.]
+   Fixed.
+   
+   o bw.diggle
+   In some extreme cases, generated an error message
+   about `NaN values in Foreign function call.'
+   [Spotted by Colin Beale.]
+   Fixed.
+
+   o textureplot
+   Crashed if 'spacing' was too large.
+   Fixed.
+
+   o superimpose.psp
+   Crashed if the result was empty.
+   Fixed.
+
+   o istat
+   Crashed with an error message about 'vars'.
+   Fixed.
+
+   o dirichlet, delaunay, delaunay.distance
+   Crashed in rare cases due to a problem in package 'deldir'. 
+   [Spotted by Pierre Legendre.]
+   Fixed.
+
+   o rgbim, hsvim
+   Crashed if any argument was constant.
+   Fixed.
+
+   o scaletointerval
+   Crashed if x was constant.
+   Fixed.
+
+   o linnet, [.linnet
+   Crashed if the result contained only a single vertex.
+   [Spotted by Daniel Esser.]
+   Fixed.
+
+   o plot.fv
+   If some of the function values were NA,
+   they were replaced by fictitious values
+   (by linearly interpolating).
+   Fixed.
+
+   o crossdist.ppp
+   Ignored argument 'squared' if periodic=FALSE.
+   [Spotted by Mike Porter.]
+   Fixed.
+
+   o marks<-.ppp
+   Ignored argument 'drop'.
+   [Spotted by Oscar Garcia.]
+   Fixed.
+ 
+   o update.ppm
+   Sometimes did not respect the argument 'use.internal'.
+   Fixed.
+
+   o plot.rhohat
+   Did not respect the argument 'limitsonly'.
+   Fixed.
+
+   o contour.im
+   Argument 'axes' defaulted to TRUE, but FALSE was intended.
+   Fixed.
+
+   o print.hyperframe, as.data.frame.hyperframe
+   Column names were mangled if the hyperframe had a single row.
+   Fixed.
+
+   o as.psp.data.frame
+   Generated a warning about partially-matched names in a data frame.
+   [Spotted by Eric Gilleland.]
+   Fixed.
+
+   o plot.leverage.ppm
+   Generated a warning from 'contour.default'
+   if the leverage function was constant.
+   Fixed.
+
+   o plot.diagppm
+   Issued warnings about unrecognised graphics parameters.
+   Fixed.
+
+   o update.symbolmap
+   Discarded information about the range of input values.
+   Fixed.
+
+   o plot.fv
+   Label for y axis was garbled, if argument 'shade' was given.
+   Fixed.
+
+   o plot.ppp
+   The legend was sometimes plotted when it should not have been 
+   (e.g. when add=TRUE).
+   Fixed.
+
+   o plot.listof, plot.im
+   In an array of plots, containing both images and other spatial objects,
+   the titles of the panels were not correctly aligned.
+   Fixed.
+
+   o plot.tess, plot.quadratcount
+   Ignored arguments like 'cex.main'.
+   Fixed.
+
+   o iplot
+   Navigation buttons (Left, Right, Up, Down, Zoom In, Zoom Out)
+   did not immediately refresh the plot.
+   Fixed.
+
+   o iplot.layered
+   Reported an error 'invalid argument type' if all layers were deselected.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.37-0
 
 OVERVIEW
@@ -353,7 +852,6 @@ BUG FIXES
    (intensity of the simulated process was about 15% too low).
    Bug introduced in spatstat 1.31-0 (January 2013).
 
-   because of a 
    o intensity.quadratcount
    Crashed for a rectangular tessellation with only a single row or column.
    Fixed.
@@ -412,6 +910,11 @@ BUG FIXES
 
    o vcov.ppm
    Gave an error message if the coefficient vector had length zero.
+   Fixed.
+
+   o plot.distfun, as.im.distfun
+   These functions effectively ignored the argument 'invert' 
+   in the original call to distfun.
    Fixed.
 
    o plot.msr

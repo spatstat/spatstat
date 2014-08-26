@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.104 $	$Date: 2014/04/16 02:54:35 $
+#	$Revision: 2.105 $	$Date: 2014/08/14 08:28:03 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -102,8 +102,8 @@ function(x, ...,
     ## ----- trend --------------------------
     if("trend" %in% what) {
       if(!notrend) {
-        cat("Trend formula: ")
-        print(s$trend$formula, showEnv=FALSE)
+        splat("Trend formula: ",
+              pasteFormula(s$trend$formula))
         parbreak(terselevel)
       }
 
@@ -530,10 +530,15 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
   if(!is.poisson.ppm(object) && warn) 
     warning(paste("log likelihood is not available for non-Poisson model;",
                   "log-pseudolikelihood returned"))
+  ## degrees of freedom
+  nip <- if(!inherits(object, "ippm")) 0 else
+           length(attr(object$covfunargs, "free"))
+  df <- length(coef(object)) + nip
+  ##
   if(is.null(new.coef)) {
     ## extract from object
     ll <- object$maxlogpl
-    attr(ll, "df") <- length(coef(object))
+    attr(ll, "df") <- df
     class(ll) <- "logLik"
     return(ll)
   } 
@@ -560,7 +565,7 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
          stop(paste("Internal error: unrecognised ppm method:",
                     dQuote(method)))
          )
-  attr(ll, "df") <- length(coef(object))
+  attr(ll, "df") <- df
   class(ll) <- "logLik"
   return(ll)
 }
@@ -744,5 +749,10 @@ as.owin.ppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
   covwin <- do.call("intersect.owin", unname(cwins))
   result <- intersect.owin(covwin, datawin)
   return(result)
+}
+
+domain.ppm <- Window.ppm <- function(X, ..., from=c("points", "covariates")) {
+  from <- match.arg(from)
+  as.owin(X, ..., from=from)
 }
 

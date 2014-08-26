@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.82 $ $Date: 2013/11/12 14:17:38 $
+# $Revision: 1.87 $ $Date: 2014/06/27 06:28:14 $
 #
 
 kppm <- function(X, ...) {
@@ -57,7 +57,9 @@ kppm.ppp <- kppm.quad <-
            data=NULL,
            ...,
            covariates = data,
-           method = c("mincon", "clik"),
+           method = c("mincon", "clik2", "palm"),
+           improve.type = c("none", "clik1", "wclik1", "quasi"),
+           improve.args = list(),
            weightfun=NULL,
            control=list(),
            statistic="K",
@@ -68,6 +70,7 @@ kppm.ppp <- kppm.quad <-
            nd=NULL, eps=NULL) {
   Xname <- short.deparse(substitute(X))
   clusters <- match.arg(clusters)
+  improve.type <- match.arg(improve.type)
   method <- match.arg(method)
   if(method == "mincon")
     statistic <- pickoption("summary statistic", statistic,
@@ -86,11 +89,20 @@ kppm.ppp <- kppm.quad <-
          mincon = kppmMinCon(X=XX, Xname=Xname, po=po, clusters=clusters,
                              statistic=statistic, statargs=statargs,
                              control=control, rmax=rmax, ...),
-         clik   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
+         clik2   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
+                             control=control, weightfun=weightfun, 
+                             rmax=rmax, ...),
+         palm   = kppmPalmLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, weightfun=weightfun, 
                              rmax=rmax, ...))
   #
   class(out) <- c("kppm", class(out))
+
+  # Update intensity estimate with improve.kppm if necessary:
+  if(improve.type != "none")
+    out <- do.call(improve.kppm,
+                   append(list(object = out, type = improve.type),
+                          improve.args))
   return(out)
 }
 
@@ -352,7 +364,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
           eval.im(log(lambda) - sigma2/2)    
   }
   # all info that depends on the fitting method:
-  Fit <- list(method    = "clik",
+  Fit <- list(method    = "clik2",
               clfit     = opt,
               weightfun = weightfun,
               rmax      = rmax,
@@ -375,6 +387,338 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   return(result)
 }
 
+kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
+  W <- as.owin(X)
+  if(is.null(rmax))
+    rmax <- rmax.rule("K", W, intensity(X))
+  # identify pairs of points that contribute
+  cl <- closepairs(X, rmax)
+  I <- cl$i
+  J <- cl$j
+  dIJ <- cl$d
+  # compute weights for pairs of points
+  if(is.function(weightfun)) {
+    wIJ <- weightfun(dIJ)
+    sumweight <- sum(wIJ)
+  } else {
+    npairs <- length(dIJ)
+    wIJ <- rep.int(1, npairs)
+    sumweight <- npairs
+  }
+  # convert window to mask, saving other arguments for later
+  dcm <- do.call.matched("as.mask",
+                         append(list(w=W), list(...)),
+                         sieve=TRUE)
+  M         <- dcm$result
+  otherargs <- dcm$otherargs
+  # compute intensity at data points
+  # and c.d.f. of interpoint distance in window
+  if(stationary <- is.stationary(po)) {
+    # stationary unmarked Poisson process
+    lambda <- intensity(X)
+    lambdaJ <- rep(lambda, length(J))
+    # compute cdf of distance between a uniform random point in W
+    # and a randomly-selected point in X 
+    g <- distcdf(X, M)
+    # scaling constant is (integral of intensity) * (number of points)
+    gscale <- npoints(X)^2
+  } else {
+    # compute fitted intensity at data points and in window
+    lambdaX <- fitted(po, dataonly=TRUE)
+    lambda <- lambdaM <- predict(po, locations=M)
+    lambdaJ <- lambdaX[J] 
+    # compute cdf of distance between a uniform random point in X 
+    # and a random point in W with density proportional to intensity function
+    g <- distcdf(X, M, dV=lambdaM)
+    # scaling constant is (integral of intensity) * (number of points)
+    gscale <- integral.im(lambdaM) * npoints(X)
+  }
+  # trim 'g' to [0, rmax] 
+  g <- g[with(g, .x) <= rmax,]
+  # get pair correlation function (etc) for model
+  info <- spatstatClusterModelInfo(clusters)
+  pcfun      <- info$pcf
+  funaux     <- info$funaux
+  selfstart  <- info$selfstart
+  isPCP      <- info$isPCP
+  parhandler <- info$parhandler
+  modelname  <- info$modelname
+  # Assemble information required for computing pair correlation
+  pcfunargs <- list(funaux=funaux)
+  if(is.function(parhandler)) {
+    # Additional parameters of cluster model are required.
+    # These may be given as individual arguments,
+    # or in a list called 'covmodel'
+    clustargs <- if("covmodel" %in% names(otherargs))
+                 otherargs[["covmodel"]] else otherargs
+    clargs <- do.call(parhandler, clustargs)
+    pcfunargs <- append(clargs, pcfunargs)
+  } else clargs <- NULL
+  # determine starting parameter values
+  startpar <- selfstart(X)
+  # create local function to evaluate pair correlation
+  #  (with additional parameters 'pcfunargs' in its environment)
+  paco <- function(d, par) {
+    do.call(pcfun, append(list(par=par, rvals=d), pcfunargs))
+  }
+  # define objective function 
+  if(!is.function(weightfun)) {
+    # pack up necessary information
+    objargs <- list(dIJ=dIJ, g=g, gscale=gscale,
+                    sumloglam=sum(log(lambdaJ)),
+                    envir=environment(paco))
+    # define objective function (with 'paco' in its environment)
+    # This is the log Palm likelihood
+    obj <- function(par, objargs) {
+      with(objargs,
+           sumloglam + sum(log(paco(dIJ, par)))
+           - gscale * unlist(stieltjes(paco, g, par=par)),
+           enclos=objargs$envir)
+    }
+  } else {
+    # create local function to evaluate  pair correlation(d) * weight(d)
+    #  (with additional parameters 'pcfunargs', 'weightfun' in its environment)
+    force(weightfun)
+    wpaco <- function(d, par) {
+      y <- do.call(pcfun, append(list(par=par, rvals=d), pcfunargs))
+      w <- weightfun(d)
+      return(y * w)
+    }
+    # pack up necessary information
+    objargs <- list(dIJ=dIJ, wIJ=wIJ, g=g, gscale=gscale,
+                    wsumloglam=sum(wIJ * log(lambdaJ)),
+                    envir=environment(wpaco))
+    # define objective function (with 'paco', 'wpaco' in its environment)
+    # This is the log Palm likelihood
+    obj <- function(par, objargs) {
+      with(objargs,
+           wsumloglam + sum(wIJ * log(paco(dIJ, par)))
+           - gscale * unlist(stieltjes(wpaco, g, par=par)),
+           enclos=objargs$envir)
+    }
+  }    
+  # optimize it
+  ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
+  opt <- optim(startpar, obj, objargs=objargs, control=ctrl)
+  # raise warning/error if something went wrong
+  signalStatus(optimStatus(opt), errors.only=TRUE)
+  # meaningful model parameters
+  optpar <- opt$par
+  modelpar <- info$interpret(optpar, lambda)
+  # infer parameter 'mu'
+  if(isPCP) {
+    # Poisson cluster process: extract parent intensity kappa
+    kappa <- optpar[["kappa"]]
+    # mu = mean cluster size
+    mu <- if(stationary) lambda/kappa else eval.im(lambda/kappa)
+  } else {
+    # LGCP: extract variance parameter sigma2
+    sigma2 <- optpar[["sigma2"]]
+    # mu = mean of log intensity 
+    mu <- if(stationary) log(lambda) - sigma2/2 else
+          eval.im(log(lambda) - sigma2/2)    
+  }
+  # all info that depends on the fitting method:
+  Fit <- list(method    = "palm",
+              clfit     = opt,
+              weightfun = weightfun,
+              rmax      = rmax)
+  # pack up
+  result <- list(Xname      = Xname,
+                 X          = X,
+                 stationary = stationary,
+                 clusters   = clusters,
+                 modelname  = modelname,
+                 isPCP      = isPCP,
+                 po         = po,
+                 lambda     = lambda,
+                 mu         = mu,
+                 par        = optpar,
+                 modelpar   = modelpar,
+                 covmodel   = clargs,
+                 Fit        = Fit)
+  return(result)
+}
+
+improve.kppm <- local({
+
+  fnc <- function(r, eps, g){ (g(r) - 1)/(g(0) - 1) - eps}
+
+  improve.kppm <- function(object, type=c("quasi", "wclik1", "clik1"),
+                           rmax = NULL, eps.rmax = 0.01,
+                           dimyx = 50, maxIter = 100, tolerance = 1e-06,
+                           fast = TRUE, vcov = FALSE, fast.vcov = FALSE,
+                           verbose = FALSE,
+                           save.internals = FALSE) {
+    verifyclass(object, "kppm")
+    type <- match.arg(type)
+    if(((type == "quasi" && fast) || (vcov && fast.vcov)) && !require(Matrix))
+      stop(paste("Package Matrix must be installed in order for",
+                 "the fast option of quasi-likelihood estimation",
+                 "for cluster models to work."),
+           call.=FALSE)
+    gfun <- pcfmodel(object)
+    X <- object$X
+    win <- as.owin(X)
+    ## simple (rectangular) grid quadrature scheme
+    ## (using pixels with centers inside owin only)
+    mask <- as.mask(win, dimyx = dimyx)
+    wt <- pixellate(win, W = mask)
+    wt <- wt[mask]
+    Uxy <- rasterxy.mask(mask)
+    U <- ppp(Uxy$x, Uxy$y, window = win, check=FALSE)
+    nU <- npoints(U)
+    Yu <- pixellate(X, W = mask)
+    Yu <- Yu[mask]
+    
+    ## covariates at quadrature points
+    po <- object$po
+    Z <- model.images(po, mask)
+    Z <- sapply(Z, "[", i=U)
+
+    ##obtain initial beta estimate using composite likelihood
+    beta0 <- coef(po)
+    
+    ## determining the dependence range
+    if (type != "clik1" && is.null(rmax))
+      {
+        diamwin <- diameter(win)
+        rmax <- if(fnc(diamwin, eps.rmax, gfun) >= 0) diamwin else
+                uniroot(fnc, lower = 0, upper = diameter(win),
+                        eps=eps.rmax, g=gfun)$root
+        if(verbose)
+          splat(paste0("type: ", type, ", ",
+                       "dependence range: ", rmax, ", ",
+                       "dimyx: ", dimyx, ", g(0) - 1:", gfun(0) -1))
+      }
+    ## preparing the WCL case
+    if (type == "wclik1")
+      Kmax <- 2*pi * integrate(function(r){r * (gfun(r) - 1)},
+                               lower=0, upper=rmax)$value * exp(c(Z %*% beta0))
+    ## the g()-1 matrix without tapering
+    if (!fast){
+      if (verbose)
+        cat("computing the g(u_i,u_j)-1 matrix ...")
+      gminus1 <- matrix(gfun(c(pairdist(U))) - 1, U$n, U$n)
+      if (verbose)
+        cat("..Done.\n")
+    }
+    
+    if ( (fast && type == "quasi") | fast.vcov ){
+      if (verbose)
+        cat("computing the sparse G-1 matrix ...\n")
+      ## Non-zero gminus1 entries (when using tapering)
+      cp <- crosspairs(U,U,rmax)
+      if (verbose)
+        cat("crosspairs done\n")
+      Gtap <- (gfun(cp$d) - 1)
+      if(vcov){
+        if(fast.vcov){
+          gminus1 <- sparseMatrix(i=cp$i, j=cp$j, x=Gtap, dims=c(U$n, U$n))
+        } else{
+          if(fast)
+            gminus1 <- matrix(gfun(c(pairdist(U))) - 1, U$n, U$n)
+        }
+      }
+      if (verbose & type!="quasi")
+        cat("..Done.\n")
+    }
+       
+    if (type == "quasi" && fast){
+      mu0 <- exp(c(Z %*% beta0)) * wt
+      mu0root <- sqrt(mu0)
+      sparseG <- sparseMatrix(i=cp$i, j=cp$j,
+                              x=mu0root[cp$i] * mu0root[cp$j] * Gtap,
+                              dims=c(U$n, U$n))
+      Rroot <- Cholesky(sparseG, perm = TRUE, Imult = 1)
+      ##Imult=1 means that we add 1*I
+      if (verbose)
+        cat("..Done.\n")
+    }
+    
+    ## iterative weighted least squares/Fisher scoring
+    bt <- beta0
+    noItr <- 1
+    repeat {
+      mu <- exp(c(Z %*% bt)) * wt
+      mu.root <- sqrt(mu)
+      ## the core of estimating equation: ff=phi
+      ## in case of ql, \phi=V^{-1}D=V_\mu^{-1/2}x where (G+I)x=V_\mu^{1/2} Z
+      ff <- switch(type,
+                   clik1 = Z,
+                   wclik1= Z/(1 + Kmax),
+                   quasi = if(fast){
+                     Matrix::solve(Rroot, mu.root * Z)/mu.root
+                   } else{
+                     solve(diag(U$n) + t(gminus1 * mu), Z)
+                   }
+                   )
+      ##alternative
+      ##R=chol(sparseG+sparseMatrix(i=c(1:U$n),j=c(1:U$n),
+      ##                            x=rep(1,U$n),dims=c(U$n,U$n)))
+      ##ff2 <- switch(type,
+      ##              clik1 = Z,
+      ##              wclik1= Z/(1 + Kmax),
+      ##              quasi = if (fast)
+      ##                         solve(R,solve(t(R), mu.root * Z))/mu.root
+      ##                      else solve(diag(U$n) + t(gminus1 * mu), Z))
+      ## print(summary(as.numeric(ff)-as.numeric(ff2)))
+      ## the estimating equation: u_f(\beta)
+      uf <- (Yu - mu) %*% ff
+      ## inverse of minus expectation of Jacobian matrix: I_f
+      Jinv <- solve(t(Z * mu) %*% ff)
+      if(maxIter==0){
+        ## This is a built-in early exit for vcov internal calculations
+        break
+      }
+      deltabt <- as.numeric(uf %*% Jinv)
+      if (any(!is.finite(deltabt))) {
+        warning(paste("Infinite value, NA or NaN appeared",
+                      "in the iterative weighted least squares algorithm.",
+                      "Returning the initial intensity estimate unchanged."),
+                call.=FALSE)
+        return(object)
+      }
+      ## updating the present estimate of \beta
+      bt <- bt + deltabt
+      if (verbose)
+        splat(paste0("itr: ", noItr, ",\nu_f: ", as.numeric(uf),
+                     "\nbeta:", bt, "\ndeltabeta:", deltabt))
+      if (max(abs(deltabt/bt)) <= tolerance || max(abs(uf)) <= tolerance)
+        break
+      if (noItr > maxIter)
+        stop("Maximum number of iterations reached without convergence.")
+      noItr <- noItr + 1
+    }
+    out <- object
+    out$po$coef.orig <- beta0
+    out$po$coef <- bt
+    out$lambda <- predict(out$po, locations = as.mask(out$lambda))
+    out$improve <- list(type = type,
+                        rmax = rmax,
+                        dimyx = dimyx,
+                        fast = fast,
+                        fast.vcov = fast.vcov)
+    if(save.internals){
+      out$improve <- append(out$improve, list(ff=ff, uf=uf, J.inv=Jinv))
+    }
+    if(vcov){
+      if (verbose)
+        cat("computing the asymptotic variance ...\n")
+      ## variance of the estimation equation: Sigma_f = Var(u_f(bt))
+      trans <- if(fast) Matrix::t else t
+      Sig <- trans(ff) %*% (ff * mu) + trans(ff * mu) %*% gminus1 %*% (ff * mu)
+      ## note Abdollah's G does not have mu.root inside...
+      ## the asymptotic variance of \beta:
+      ##         inverse of the Godambe information matrix
+      out$vcov <- as.matrix(Jinv %*% Sig %*% Jinv)
+    }
+    return(out)
+  }
+  improve.kppm
+})
+
+
 is.kppm <- function(x) { inherits(x, "kppm")}
 
 print.kppm <- function(x, ...) {
@@ -395,8 +739,17 @@ print.kppm <- function(x, ...) {
            cat("Fitted by minimum contrast\n")
            cat(paste("\tSummary statistic:", x$Fit$StatName, "\n"))
          },
-         clik = {
+         clik  =,
+         clik2 = {
            cat("Fitted by maximum second order composite likelihood\n")
+           cat(paste("\trmax =", x$Fit$rmax, "\n"))
+           if(!is.null(wtf <- x$Fit$weightfun)) {
+             cat("\tweight function: ")
+             print(wtf)
+           }
+         },
+         palm = {
+           cat("Fitted by maximum Palm likelihood\n")
            cat(paste("\trmax =", x$Fit$rmax, "\n"))
            if(!is.null(wtf <- x$Fit$weightfun)) {
              cat("\tweight function: ")
@@ -756,6 +1109,11 @@ as.ppm.kppm <- function(object) {
 as.owin.kppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
   from <- match.arg(from)
   as.owin(as.ppm(W), ..., from=from, fatal=fatal)
+}
+
+domain.kppm <- Window.kppm <- function(X, ..., from=c("points", "covariates")) {
+  from <- match.arg(from)
+  as.owin(X, from=from)
 }
 
 model.images.kppm <- function(object, W=as.owin(object), ...) {

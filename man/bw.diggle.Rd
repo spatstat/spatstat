@@ -8,13 +8,21 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.diggle(X, ...)
+   bw.diggle(X, ..., correction="good", hmax=NULL)
 }
 \arguments{
   \item{X}{
     A point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{Ignored.}
+  \item{correction}{
+    Character string passed to \code{\link{Kest}}
+    determining the edge correction to be used to
+    calculate the \eqn{K} function.
+  }
+  \item{hmax}{
+    Numeric. Maximum value of bandwidth that should be considered.
+  }
 }
 \details{
   This function selects an appropriate bandwidth \code{sigma}

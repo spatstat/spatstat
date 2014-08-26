@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.26 $ $Date: 2014/04/16 06:36:16 $
+# $Revision: 1.28 $ $Date: 2014/07/21 06:40:11 $
 #
 #
 ############################# 
@@ -13,7 +13,14 @@ superimpose <- function(...) {
   UseMethod("superimpose")
 }
 
-superimpose.ppp <- superimpose.default <- function(..., W=NULL, check=TRUE) {
+superimpose.default <- function(...) {
+  argh <- list(...)
+  if(any(sapply(argh, is.lpp)) || any(sapply(argh, inherits, what="linnet")))
+    return(superimpose.lpp(...))
+  return(superimpose.ppp(...))
+}
+
+superimpose.ppp <- function(..., W=NULL, check=TRUE) {
   arglist <- list(...)
   # Check that all "..." arguments have x, y coordinates
   hasxy <- unlist(lapply(arglist, checkfields, L=c("x", "y")))
@@ -73,8 +80,6 @@ superimpose.ppp <- superimpose.default <- function(..., W=NULL, check=TRUE) {
   ppp(XY$x, XY$y, window=W, marks=marx, check=check & needcheck)
 }
 
-
-
 superimpose.psp <- function(..., W=NULL, check=TRUE) {
   # superimpose any number of line segment patterns
   arglist <- list(...)
@@ -83,7 +88,9 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
     stop("Patterns to be superimposed must all be psp objects")
 
   # extract segment coordinates
-  matlist <- lapply(arglist, function(x) { as.matrix(x$ends) })
+  matlist <- lapply(lapply(arglist, getElement, name="ends"),
+                    asNumericMatrix)
+  
   # tack them together
   mat <- do.call("rbind", matlist)
 

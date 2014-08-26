@@ -1,7 +1,7 @@
 #
 # morishita.R
 #
-#  $Revision: 1.5 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.6 $  $Date: 2014/06/03 02:58:09 $
 #
 
 miplot <- function(X, ...) {
@@ -21,13 +21,18 @@ miplot <- function(X, ...) {
     tt <- as.vector(as.table(qq))
     mindex[nquad] <- length(tt) * sum(tt * (tt-1))/(N*(N-1))
   }
+
   quadsize <- diameter(W)/(1:maxnquad)
+  ok <- (quadsize <= a)
+  quadsize <- quadsize[ok]
+  mindex   <- mindex[ok]
+  
   unitinfo <- summary(unitname(W))$axis
   do.call("plot.default",
           resolve.defaults(list(quadsize, mindex),
                            list(...),
-                           list(xlim=c(0,a),
-                                ylim=c(0,max(mindex)),
+                           list(xlim=c(0,max(quadsize)),
+                                ylim=c(0,max(1, mindex)),
                                 xlab=paste("Diameter of quadrat", unitinfo),
                                 ylab="Morishita index",
                                 main=paste("Morishita plot for", Xname))))

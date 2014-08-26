@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.20 $  $Date: 2014/04/05 08:09:59 $
+#  $Revision: 1.22 $  $Date: 2014/08/07 02:25:27 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -151,27 +151,35 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
 #
 
 print.profilepl <- function(x, ...) {
-  cat("Profile", "log pseudolikelihood", "values", fill=TRUE)
-  cat("for model:\t")
-  psc <- unlist(strsplitretain(format(x$pseudocall)))
-  cat(psc, fill=TRUE)
-  cat("fitted with", "rbord =", x$rbord, fill=TRUE)
-  nparm <- ncol(x$param)
-  cat("Interaction:", x$fname, fill=TRUE)
-  cat("Irregular", ngettext(nparm, "parameter ", "parameters\n"))
-  for(na in names(x$param)) {
-    ra <- range(x$param[[na]])
-    cat(paste(sQuote(na), "in",
-              paste("[",ra[1],", ",ra[2],"]",sep=""),
-              "\n"))
+  head1 <- "Profile log pseudolikelihood"
+  head2 <- "for model: "
+  psc <- paste(unlist(strsplitretain(format(x$pseudocall))),
+               collapse=" ")
+  if(nchar(psc) + nchar(head2) + 1 <= getOption('width')) {
+    splat(head1)
+    splat(head2, psc)
+  } else {
+    splat(head1, head2)
+    splat(psc)
   }
-  cat("Optimum",
-      ngettext(nparm, "value", "values"),
-      "of irregular",
-      ngettext(nparm, "parameter: ", "parameters:\n"))
+  nparm <- ncol(x$param)
+  if(waxlyrical('extras')) {
+    splat("fitted with rbord =", x$rbord)
+    splat("Interaction:", x$fname)
+    splat("Irregular",
+          ngettext(nparm, "parameter:", "parameters:\n"),
+          paste(names(x$param),
+                "in",
+                unlist(lapply(lapply(as.list(x$param), range), prange)),
+                collapse="\n"))
+  }
   popt <- x$param[x$iopt,, drop=FALSE]
-  cat(commasep(paste(names(popt), "=", popt)))
-  cat("\n")
+  splat("Optimum",
+        ngettext(nparm, "value", "values"),
+        "of irregular",
+        ngettext(nparm, "parameter: ", "parameters:\n"),
+        commasep(paste(names(popt), "=", popt)))
+  invisible(NULL)
 }
 
 #

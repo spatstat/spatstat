@@ -41,7 +41,7 @@
   \code{\link{quadrats}},
   \code{\link{quadratresample}},
   \code{\link{chisq.test}},
-  \code{\link{kstest}}.
+  \code{\link{cdf.test}}.
 
   To test a Poisson point process model against a specific Poisson alternative,
   use \code{\link{anova.ppm}}.

@@ -5,11 +5,11 @@
   Displays a perspective plot of a pixel image.
 }
 \usage{
-  \method{persp}{im}(x, \dots, colmap=NULL)
+  \method{persp}{im}(x, \dots, colmap=NULL, colin=x, apron=FALSE)
 }
 \arguments{
   \item{x}{
-    The pixel image to be plotted.
+    The pixel image to be plotted as a surface.
     An object of class \code{"im"} (see \code{\link{im.object}}).
   }
   \item{\dots}{
@@ -19,10 +19,20 @@
   \item{colmap}{
     Optional data controlling the colour map. See Details.
   }
+  \item{colin}{
+    Optional. Colour input. Another pixel image (of the same dimensions
+    as \code{x}) containing the values that will be mapped to colours. 
+  }
+  \item{apron}{
+    Logical. If \code{TRUE}, a grey apron is placed
+    around the sides of the perspective plot.
+  }
 }
 \value{
   (invisibly) the 3D transformation matrix
-  returned by \code{\link{persp.default}}.
+  returned by \code{\link{persp.default}},
+  together with an attribute \code{"expand"} which gives the
+  relative scale of the \eqn{z} coordinate.
 }
 \details{
   This is the \code{persp} method for the class \code{"im"}.
@@ -49,12 +59,28 @@
     then \code{colmap$breaks} determines the breakpoints of the altitude
     intervals, and \code{colmap$col} provides the corresponding colours.
   }
+  Alternatively, if the argument \code{colin} (\emph{colour input}) is present,
+  then the colour map \code{colmap} will be applied to
+  the pixel values of \code{colin} instead of the pixel values of
+  \code{x}. The result is a perspective view of a surface with
+  heights determined by \code{x} and colours determined by \code{colin}
+  (mapped by \code{colmap}).  
   
+  If \code{apron=TRUE}, vertical surface is drawn around the boundary
+  of the perspective plot, so that the terrain appears to have been
+  cut out of a solid material. If colour data were supplied, then
+  the apron is coloured light grey.
+
   Graphical parameters controlling the perspective plot
   are passed through the \code{...} arguments
   directly to the function \code{\link{persp.default}}.
   See the examples in \code{\link{persp.default}} or in
   \code{demo(persp)}.
+
+  The vertical scale is controlled by the argument \code{expand}:
+  setting \code{expand=1} will interpret the pixel values as being in
+  the same units as the spatial coordinates \eqn{x} and \eqn{y} and
+  represent them at the same scale.  
 }
 \seealso{
   \code{\link{im.object}},
@@ -67,12 +93,20 @@
    persp(Z, colmap=terrain.colors(128))
    co <- colourmap(range=c(0,1), col=rainbow(128))
    persp(Z, colmap=co, axes=FALSE, shade=0.3)
+
+   ## Terrain elevation
+   persp(bei.extra$elev, colmap=terrain.colors(128),
+       apron=TRUE, theta=-30, phi=20,
+       zlab="Elevation", main="", ticktype="detailed",
+       expand=6)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
  

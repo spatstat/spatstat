@@ -90,6 +90,8 @@
   in a marked point pattern which have a specified mark.
 }
 \seealso{
+  \code{\link{subset.ppp}}.
+
   \code{\link{ppp.object}},
   \code{\link{owin.object}},
   \code{\link{unmark}},

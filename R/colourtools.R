@@ -53,20 +53,24 @@ to.grey <- function(x, weights=c(1,1,1)) {
 # versions of rgb() and hsv() that work with NA values
 
 rgbNA <- function(red, green, blue, ...) {
-  ok <- !(is.na(red) | is.na(green) | is.na(blue))
-  values <- rgb(red[ok], green[ok], blue[ok], ...)
-  result <- character(length(red))
-  result[ok] <- values
-  result[!ok] <- NA
-  return(result)
+  with(data.frame(red=red, green=green, blue=blue), {
+    ok <- !(is.na(red) | is.na(green) | is.na(blue))
+    values <- rgb(red[ok], green[ok], blue[ok], ...)
+    result <- character(length(red))
+    result[ok] <- values
+    result[!ok] <- NA
+    return(result)
+  })
 }
 
 hsvNA <- function(h, s, v, ...) {
-  ok <- !(is.na(h) | is.na(s) | is.na(v))
-  values <- hsv(h[ok], s[ok], v[ok], ...)
-  result <- character(length(h))
-  result[ok] <- values
-  result[!ok] <- NA
-  return(result)
+  with(data.frame(h=h, s=s, v=v), {
+    ok <- !(is.na(h) | is.na(s) | is.na(v))
+    values <- hsv(h[ok], s[ok], v[ok], ...)
+    result <- character(length(h))
+    result[ok] <- values
+    result[!ok] <- NA
+    return(result)
+  })
 }
 

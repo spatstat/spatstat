@@ -15,7 +15,9 @@ deriv.fv <- local({
   
   deriv.fv <- function(expr, which="*", ...,
                        method=c("spline", "numeric"),
-                       kinks=NULL) {
+                       kinks=NULL,
+                       periodic=FALSE,
+                       Dperiodic=periodic) {
     f <- expr
     method <- match.arg(method)
 
@@ -40,11 +42,36 @@ deriv.fv <- local({
     rvals <- df[,rpos]
     yvals <- df[,relevant,drop=FALSE]
     nr <- length(rvals)
+    ##
+    if(Dperiodic) {
+      ## Derivative should be periodic
+      ## Recycle data to imitate periodicity
+      DR <- diff(range(rvals))
+      rvals <- c(rvals[-nr] - DR, rvals, rvals[-1] + DR)
+      yleft <- yvals[-nr, , drop=FALSE]
+      yright <-  yvals[-1, , drop=FALSE]
+      if(!periodic) {
+        ## original data are not periodic (e.g. cdf of angular variable)
+        ## but derivative must be periodic
+        jump <- matrix(as.numeric(yvals[nr,] - yvals[1, ]),
+                       nr-1, ncol(yvals), byrow=TRUE)
+        yleft <- yleft - jump
+        yright <- yright + jump
+      }
+      yvals <- rbind(yleft, yvals, yright)
+      actual <- nr:(2*nr - 1)
+      NR <- length(rvals)
+    } else {
+      NR <- nr
+      actual <- 1:nr
+    }
     ## cut x axis into intervals?
     if(is.null(kinks)) {
-      cutx <- factor(rep(1, nr))
+      cutx <- factor(rep(1, NR))
     } else {
       rr <- range(rvals)
+      if(periodic) 
+        kinks <- c(kinks-DR, kinks, kinks+DR)
       breaks <- sort(unique(kinks))
       if(breaks[1] > rr[1]) breaks <- c(rr[1], breaks)
       if(max(breaks) < rr[2]) breaks <- c(breaks, rr[2])
@@ -64,7 +91,7 @@ deriv.fv <- local({
                dydx <- apply(yy, 2, derivative, 
                              r=rvals[ii], ...)
          })
-      df[ii, relevant] <- dydx
+      df[ii[actual], relevant] <- dydx[ actual, ]
     }
     ## pack up
     result <- f

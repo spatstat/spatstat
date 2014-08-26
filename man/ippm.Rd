@@ -9,14 +9,16 @@
   point process model.
 }
 \usage{
-ippm(..., iScore=NULL,
+ippm(Q, \dots,
+          iScore=NULL,
           start=list(),
           covfunargs=start,
           nlm.args=list(),
-          silent=FALSE)
+          silent=FALSE,
+          warn.unused=TRUE)
 }
 \arguments{
-  \item{\dots}{
+  \item{Q,\dots}{
     Arguments passed to \code{\link{ppm}}
     to fit the point process model.
   }
@@ -42,6 +44,10 @@ ippm(..., iScore=NULL,
   \item{silent}{
     Logical. Whether to print warnings if the optimization algorithm
     fails to converge.
+  }
+  \item{warn.unused}{
+    Logical. Whether to print a warning if some of the parameters
+    in \code{start} are not used in the model.
   }
 }
 \details{

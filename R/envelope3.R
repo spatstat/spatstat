@@ -3,13 +3,14 @@
 #
 #   simulation envelopes for pp3 
 #
-#   $Revision: 1.7 $  $Date: 2013/08/14 02:50:32 $
+#   $Revision: 1.8 $  $Date: 2014/06/11 09:41:10 $
 #
 
 envelope.pp3 <-
   function(Y, fun=K3est, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL,
+           alternative=c("two.sided", "less", "greater"),
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, maxnerr=nsim,
@@ -61,6 +62,7 @@ envelope.pp3 <-
                    nsim=nsim, nrank=nrank, ..., 
                    verbose=verbose, clipdata=FALSE,
                    transform=transform, global=global, ginterval=ginterval,
+                   alternative=alternative,
                    savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                    VARIANCE=VARIANCE, nSD=nSD,
                    Yname=Yname, maxnerr=maxnerr, cl=cl,

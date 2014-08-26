@@ -90,7 +90,7 @@
 
 # How to make envelopes
     \dontrun{
-    E <- envelope(fit1, Gres, interaction=as.interact(fit1), nsim=39)
+    E <- envelope(fit1, Gres, model=fit1, nsim=39)
     plot(E)
     }
 # For computational efficiency

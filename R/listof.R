@@ -120,3 +120,7 @@ image.listof <- local({
 
   image.listof
 })
+
+as.layered.listof <- function(X) {
+  layered(LayerList=X)
+}

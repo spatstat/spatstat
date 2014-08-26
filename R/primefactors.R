@@ -39,7 +39,7 @@ eratosthenes <- function(nmax, startset=2:nmax) {
   # The Sieve of Eratosthenes
   if(nmax < 2) return(numeric(0))
   numbers <- startset
-  prime <- 2
+  prime <- startset[1]
   repeat{
     retain <-  (numbers <= prime) | (numbers %% prime != 0)
     numbers <- numbers[retain]
@@ -107,4 +107,3 @@ divisors <- function(n) {
   return(rest(k, up))
 }
 
-    

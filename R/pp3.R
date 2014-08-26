@@ -103,6 +103,8 @@ pp3 <- function(x, y, z, ...) {
   return(out)
 }
 
+domain.pp3 <- function(X, ...) { X$domain }
+
 is.pp3 <- function(x) { inherits(x, "pp3") }
 
 npoints.pp3 <- function(x) { nrow(x$data) }

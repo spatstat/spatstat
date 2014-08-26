@@ -9,12 +9,13 @@
 #
 
 psstA <- function(object, r=NULL, breaks=NULL, ...,
-                    trend=~1, interaction=Poisson(),
-                    rbord=reach(interaction), ppmcorrection="border",
-                    correction="all",
-                    truecoef=NULL, hi.res=NULL,
-                    nr=spatstat.options("psstA.nr"),
-                    ngrid=spatstat.options("psstA.ngrid")) {
+                  model=NULL,
+                  trend=~1, interaction=Poisson(),
+                  rbord=reach(interaction), ppmcorrection="border",
+                  correction="all",
+                  truecoef=NULL, hi.res=NULL,
+                  nr=spatstat.options("psstA.nr"),
+                  ngrid=spatstat.options("psstA.ngrid")) {
   if(inherits(object, "ppm")) 
     fit <- object
   else if(inherits(object, "ppp") || inherits(object, "quad")) {
@@ -22,14 +23,16 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
     if(inherits(object, "ppp"))
       object <- quadscheme(object, ...)
     # fit model
-    if(ppmcorrection == "border")
+    if(!is.null(model))
+      fit <- update(model, Q=object, forcefit=TRUE)
+    else if(ppmcorrection == "border")
       fit <- ppm(object,
                  trend=trend, interaction=interaction,
-                 rbord=rbord)
+                 rbord=rbord, forcefit=TRUE)
     else
       fit <- ppm(object,
                  trend=trend, interaction=interaction,
-                 correction=ppmcorrection)
+                 correction=ppmcorrection, forcefit=TRUE)
   } else 
     stop("object should be a fitted point process model or a point pattern")
 

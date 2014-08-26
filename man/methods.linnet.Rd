@@ -10,6 +10,7 @@
 \alias{summary.linnet}
 \alias{unitname.linnet}
 \alias{unitname<-.linnet}
+\alias{volume.linnet}
 \title{
   Methods for Linear Networks
 }
@@ -18,14 +19,24 @@
 }
 \usage{
 as.linnet(X, ...)
+
 \method{as.linnet}{linnet}(X, ...)
+
 \method{as.linnet}{lpp}(X, ..., fatal=TRUE)
+
 \method{as.owin}{linnet}(W, ...)
+
 \method{as.psp}{linnet}(x, ..., fatal=TRUE)
+
 \method{print}{linnet}(x, ...)
+
 \method{summary}{linnet}(object, ...)
+
 \method{unitname}{linnet}(x)
+
 \method{unitname}{linnet}(x) <- value
+
+\method{volume}{linnet}(x)
 }
 \arguments{
   \item{x,X,object,W}{
@@ -57,8 +68,9 @@ as.linnet(X, ...)
   \code{\link{as.psp}},
   \code{\link{print}},
   \code{\link{summary}},
-  \code{\link{unitname}} and
+  \code{\link{unitname}},
   \code{\link{unitname<-}}
+  and \code{\link{volume}}
   for the class \code{"linnet"}.
 
   The method \code{as.owin.linnet} extracts the window containing
@@ -85,6 +97,7 @@ as.linnet(X, ...)
   data(simplenet)
   simplenet
   summary(simplenet)
+  volume(simplenet)
   unitname(simplenet) <- c("cubit", "cubits")
 }
 \keyword{spatial}

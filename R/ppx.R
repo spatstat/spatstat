@@ -168,6 +168,10 @@ plot.ppx <- function(x, ...) {
   return(out)
 }
 
+domain <- function(X, ...) { UseMethod("domain") }
+
+domain.ppx <- function(X, ...) { X$domain }
+
 coords <- function(x, ...) {
   UseMethod("coords")
 }

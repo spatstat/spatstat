@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.67 $   $Date: 2014/04/05 08:06:25 $
+#    $Revision: 1.70 $   $Date: 2014/08/14 08:27:54 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -284,15 +284,16 @@ summary.ppm <- local({
         two <- qnorm(0.975)
         lo <- COEFS - two * se
         hi <- COEFS + two * se
-        pval <- 2 * pnorm(abs(COEFS)/se, lower.tail=FALSE)
-        psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1, Inf),
-                    labels=c("***", "**", "*", "  ", "na"),
+        zval <- COEFS/se
+        pval <- 2 * pnorm(abs(zval), lower.tail=FALSE)
+        psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1),
+                    labels=c("***", "**", "*", "  "),
                     include.lowest=TRUE)
-        notapplic <- names(COEFS) %in% c("(Intercept)", "log(lambda)")
-        psig[notapplic] <- "na"
         # table of coefficient estimates with SE and 95% CI
-        y$coefs.SE.CI <- data.frame(Estimate=COEFS, S.E.=se, Ztest=psig,
-                                    CI95.lo=lo, CI95.hi=hi)
+        y$coefs.SE.CI <- data.frame(Estimate=COEFS, S.E.=se,
+                                    CI95.lo=lo, CI95.hi=hi,
+                                    Ztest=psig,
+                                    Zval=zval)
       }
     }
   
@@ -406,8 +407,8 @@ print.summary.ppm <- function(x, ...) {
   cat(paste("\n\n ---- ", x$trend$name, ": ----\n\n", sep=""))
 
   if(!notrend) {
-    cat("Trend formula: ")
-    print(x$trend$formula)
+    splat("Trend formula: ",
+          pasteFormula(x$trend$formula))
     if(x$uses.covars) 
       cat(paste("Model depends on external",
                 ngettext(length(x$covars.used), "covariate", "covariates"),

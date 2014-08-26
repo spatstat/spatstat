@@ -11,13 +11,14 @@
   clustered or moderately inhibited alternatives of area-interaction type.
 }
 \usage{
-psstA(object, r = NULL, breaks = NULL, ...,
-        trend = ~1, interaction = Poisson(),
-        rbord = reach(interaction), ppmcorrection = "border",
-        correction = "all",
-        truecoef = NULL, hi.res = NULL,
-        nr=spatstat.options("psstA.nr"),
-        ngrid=spatstat.options("psstA.ngrid"))
+psstA(object, r = NULL, breaks = NULL, \dots,
+      model = NULL, 
+      trend = ~1, interaction = Poisson(),
+      rbord = reach(interaction), ppmcorrection = "border",
+      correction = "all",
+      truecoef = NULL, hi.res = NULL,
+      nr=spatstat.options("psstA.nr"),
+      ngrid=spatstat.options("psstA.ngrid"))
 }
 \arguments{
   \item{object}{
@@ -36,7 +37,14 @@ psstA(object, r = NULL, breaks = NULL, ...,
 	This argument is for internal use only.
   }
   \item{\dots}{
-    Ignored.
+    Extra arguments passed to \code{\link{quadscheme}} to determine
+    the quadrature scheme, if \code{object} is a point pattern.
+  }
+  \item{model}{
+    Optional. A fitted point process model (object of
+    class \code{"ppm"}) to be re-fitted to the data
+    using \code{\link{update.ppm}}, if \code{object} is a point pattern.
+    Overrides the arguments \code{trend,interaction,rbord,ppmcorrection}.
   }
   \item{trend,interaction,rbord}{
     Optional. Arguments passed to \code{\link{ppm}}

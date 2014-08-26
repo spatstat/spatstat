@@ -1,22 +1,36 @@
 #
 # ippm.R
 #
-#   $Revision: 2.11 $   $Date: 2014/04/05 08:09:48 $
+#   $Revision: 2.15 $   $Date: 2014/06/24 02:44:07 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
 
 ippm <- local({
+
+  chucknames <- c("iScore", "start", "nlm.args", "silent", "warn.unused")
   
-  ippm <- function(...,
+  ippm <- function(Q, ...,
                    iScore=NULL, 
                    start=list(),
                    covfunargs=start,
                    nlm.args=list(),
-                   silent=FALSE) {
+                   silent=FALSE,
+                   warn.unused=TRUE) {
+    ## remember call
+    cl <- match.call()
+    callframe <- parent.frame()
+    callstring <- short.deparse(sys.call())
+    ##
+    ppmcall <- cl[!(names(cl) %in% chucknames)]
+    ppmcall[[1]] <- as.name('ppm')
     ## validate
-    if(!is.list(start) || length(start) == 0)
+    if(!is.list(start))
       stop("start should be a list of initial values for irregular parameters")
+    if(length(start) == 0) {
+      ppmcall <- ppmcall[names(ppmcall) != "covfunargs"]
+      return(eval(ppmcall, callframe))
+    }
     if(!is.null(iScore)) {
       if(!is.list(iScore) || length(iScore) != length(start))
         stop("iScore should be a list of the same length as start")
@@ -30,7 +44,8 @@ ippm <- local({
       stop("variables in start should be a subset of variables in covfunargs")
     covfunargs[smap] <- start
     ## fit the initial model and extract information
-    fit0 <- ppm(..., covfunargs=covfunargs)
+    ppmcall$covfunargs <- covfunargs
+    fit0 <- eval(ppmcall, callframe)
     lpl0 <- fit0$maxlogpl
     p <- length(coef(fit0))
     ## examine covariates and trend
@@ -58,51 +73,38 @@ ippm <- local({
     covfun.names.offset <- intersect(cov.names.offset, names(covfuns))
     usearg <- apply(depmat[covfun.names.offset, , drop=FALSE], 2, any)
     if(!all(usearg)) {
-      nbad <- sum(!usearg)
-      warning(paste("Cannot maximise over the irregular",
-                    ngettext(nbad, "parameter", "parameters"),
-                    commasep(sQuote(names(usearg)[!usearg])),
-                    ngettext(nbad, "because it is", "because they are"),
-                    "not used in any term of the model"))
+      if(warn.unused) {
+        nbad <- sum(!usearg)
+        warning(paste("Cannot maximise over the irregular",
+                      ngettext(nbad, "parameter", "parameters"),
+                      commasep(sQuote(names(usearg)[!usearg])),
+                      ngettext(nbad, "because it is", "because they are"),
+                      "not used in any term of the model"))
+      }
       ## restrict 
       start <- start[usearg]
       if(!is.null(iScore)) iScore <- iScore[usearg]
       pnames <- names(start)
     }
-    ## define objective function
+    if(length(start) == 0) {
+      ppmcall <- ppmcall[names(ppmcall) != "covfunargs"]
+      return(eval(ppmcall, callframe))
+    }
+    ## parameters for objective function
     fdata <- list(fit0=fit0,
                   nreg=length(coef(fit0)),
                   covfunargs=covfunargs,
                   smap=smap,
                   pnames=pnames,
                   iScore=iScore)
-    f <- function(param, thedata=fdata) {
-      with(thedata, {
-        ## fit model with current irregular parameters
-        param <- as.list(param)
-        names(param) <- pnames
-        covfunargs[smap] <- param
-        fit <- update(fit0, covfunargs=covfunargs, use.internal=TRUE)
-        lpl <- logLik(fit, warn=FALSE)
-        ## return negative logL because nlm performs *minimisation*
-        value <- -as.numeric(lpl)
-        ## compute derivatives
-        stuff <- ppmInfluence(fit, what="derivatives",
-                               iScore=iScore,
-                               iArgs=param)
-        score <- stuff$deriv$score
-        if(length(score) == length(coef(fit)) + length(param)) 
-          attr(value, "gradient") <- -score[-(1:nreg), drop=FALSE]
-        ## attr(value, "hessian") <- -hess[-(1:nreg), -(1:nreg), drop=FALSE]
-        return(value)
-      })
-    }
     ## minimise objective
     startvec <- unlist(start)
     typsize <- abs(startvec)
     typsize <- pmax(typsize, min(typsize[typsize > 0]))
     g <- do.call("nlm",
-                 resolve.defaults(list(f=f, p=startvec, thedata=fdata),
+                 resolve.defaults(list(f=objectivefun,
+                                       p=startvec,
+                                       thedata=fdata),
                                   nlm.args,
                                   list(stepmax=1/2, typsize=typsize)))
     popt <- g$estimate
@@ -117,8 +119,37 @@ ippm <- local({
     ## return optimised model
     covfunargs[smap] <- popt
     attr(covfunargs, "fitter") <- "ippm"
-    fit <- update(fit0, covfunargs=covfunargs, use.internal=TRUE)  
+    attr(covfunargs, "free") <- names(start)
+    fit <- update(fit0, covfunargs=covfunargs, use.internal=TRUE)
+    fit$dispatched <- fit[c("call", "callstring", "callframe")]
+    fit$call <- cl
+    fit$callstring <- callstring
+    fit$callframe <- callframe
+    class(fit) <- c("ippm", class(fit))
     return(fit)
+  }
+
+  ## define objective function
+  objectivefun <- function(param, thedata) {
+    with(thedata, {
+      ## fit model with current irregular parameters
+      param <- as.list(param)
+      names(param) <- pnames
+      covfunargs[smap] <- param
+      fit <- update(fit0, covfunargs=covfunargs, use.internal=TRUE)
+      lpl <- logLik(fit, warn=FALSE)
+      ## return negative logL because nlm performs *minimisation*
+      value <- -as.numeric(lpl)
+      ## compute derivatives
+      stuff <- ppmInfluence(fit, what="derivatives",
+                            iScore=iScore,
+                            iArgs=param)
+      score <- stuff$deriv$score
+      if(length(score) == length(coef(fit)) + length(param)) 
+        attr(value, "gradient") <- -score[-(1:nreg), drop=FALSE]
+      ## attr(value, "hessian") <- -hess[-(1:nreg), -(1:nreg), drop=FALSE]
+      return(value)
+    })
   }
 
   ## from help(nlm)
@@ -141,3 +172,83 @@ ippm <- local({
 
   ippm
 })
+
+
+update.ippm <- local({
+
+  newformula <- function(old, change, eold, enew) {
+    old <- eval(old, eold)
+    change <- eval(change, enew)
+    old <- as.formula(old, env=eold)
+    change <- as.formula(change, env=enew)
+    update.formula(old, change)
+  }
+
+  update.ippm <- function(object, ..., envir=environment(terms(object))) {
+    call <- match.call()
+    new.call <- old.call <- object$call
+    old.callframe <- object$callframe
+    Qold <- eval(old.call$Q, as.list(envir), enclos=old.callframe)
+    argh <- list(...)
+    if(any(isfmla <- unlist(lapply(argh, inherits, what="formula")))) {
+      if(sum(isfmla) > 1)
+        stop("Syntax not understood: several arguments are formulas")
+      i <- min(which(isfmla))
+      new.fmla <- argh[[i]]
+      argh <- argh[-i]
+      if(inherits(Qold, "formula")) {
+        ## formula will replace 'Q'
+        if(is.null(lhs.of.formula(new.fmla))) {
+          f <- (. ~ x)
+          f[[3]] <- new.fmla[[2]]
+          new.fmla <- f
+        }
+        new.call$Q <- newformula(Qold, new.fmla, old.callframe, envir)
+      } else if(inherits(Qold, c("ppp", "quad"))) {
+        ## formula will replace 'trend' and may replace 'Q'
+        new.fmla <- newformula(formula(object), new.fmla, old.callframe, envir)
+        if(!is.null(lhs <- lhs.of.formula(new.fmla))) {
+          newQ <- eval(eval(substitute(substitute(l, list("."=Q)),
+                                       list(l=lhs,
+                                            Q=Qold))),
+                       envir=as.list(envir), enclos=old.callframe)
+          new.call$Q <- newQ
+        }
+        new.fmla <- rhs.of.formula(new.fmla)
+        if("trend" %in% names(old.call)) {
+          new.call$trend <- new.fmla
+        } else {
+          ## find which argument in the original call was a formula
+          wasfmla <- unlist(lapply(old.call,
+                                   function(z) {
+                                     u <- try(eval(z,
+                                                   as.list(envir),
+                                                   enclos=old.callframe))
+                                     inherits(u, "formula")
+                                   }))
+          if(any(wasfmla)) {
+            new.call[[min(which(wasfmla))]] <- new.fmla
+          } else {
+            new.call$trend <- new.fmla
+          }
+        }
+      }
+    }
+    ## silence the warnings about unused covfunargs (unless overruled)
+    new.call$warn.unused <- FALSE
+    ## other arguments
+    if(length(argh) > 0) {
+      nama <- names(argh)
+      named <- if(is.null(nama)) rep(FALSE, length(argh)) else nzchar(nama)
+      if(any(named))
+        new.call[nama[named]] <- argh[named]
+      if(any(!named))
+        new.call[length(new.call) + 1:sum(!named)] <- argh[!named]
+    }
+    result <- eval(new.call, as.list(envir), enclos=old.callframe)
+    return(result)
+  }
+
+  update.ippm
+})
+

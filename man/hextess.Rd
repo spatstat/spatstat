@@ -9,9 +9,9 @@
   or a hexagonal tessellation.
 }
 \usage{
-hexgrid(W, s, offset = c(0, 0), trim = TRUE)
+hexgrid(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
 
-hextess(W, s, offset = c(0, 0), trim = TRUE)
+hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
 }
 
 \arguments{
@@ -25,6 +25,11 @@ hextess(W, s, offset = c(0, 0), trim = TRUE)
   \item{offset}{
     Numeric vector of length 2 specifying a shift of the
     hexagonal grid. See Details.
+  }
+  \item{origin}{
+    Numeric vector of length 2 specifying the initial origin
+    of the hexagonal grid, before the offset is applied.
+    See Details.
   }
   \item{trim}{
     Logical value indicating whether to restrict the result to
@@ -50,9 +55,10 @@ hextess(W, s, offset = c(0, 0), trim = TRUE)
   in the same order.
   
   In the initial position of the grid or tessellation,
-  one of the grid points (tile centres) is placed at the midpoint
-  of the bounding rectangle of \code{W}. The grid can be shifted
-  by specifing the \code{offset}.
+  one of the grid points (tile centres) is placed at the 
+  \code{origin}, which defaults to the midpoint of the
+  bounding rectangle of \code{W}. The grid can be shifted
+  relative to this origin by specifing the \code{offset}.
 }
 \value{
   The value of \code{hexgrid} is a point pattern (object of class

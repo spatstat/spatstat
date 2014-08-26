@@ -7,7 +7,8 @@
   Pool several quadrat tests into a single quadrat test.
 }
 \usage{
-\method{pool}{quadrattest}(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL)
+\method{pool}{quadrattest}(..., df=NULL, df.est=NULL, nsim=1999,
+                                Xname=NULL, CR=NULL)
 }
 \arguments{
   \item{\dots}{
@@ -31,6 +32,10 @@
   }
   \item{Xname}{
     Optional. Name of the original data.
+  }
+  \item{CR}{
+    Optional. Numeric value of the Cressie-Read exponent \code{CR}
+    overriding the value used in the tests.
   }
 }
 \details{

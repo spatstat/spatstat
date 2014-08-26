@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.18 $     $Date: 2013/04/25 06:37:43 $
+#      $Revision: 1.19 $     $Date: 2014/08/04 09:55:52 $
 #
 #
 #     Distance transforms
@@ -105,8 +105,9 @@ distmap.psp <- function(X, ...) {
   verifyclass(X, "psp")
   W <- as.mask(X$window, ...)
   uni <- unitname(W)
-  xp <- as.vector(raster.x(W))
-  yp <- as.vector(raster.y(W))
+  rxy <- rasterxy.mask(W)
+  xp <- rxy$x
+  yp <- rxy$y
   np <- length(xp)
   E <- X$ends
   big <- 2 * diameter(as.rectangle(W))^2

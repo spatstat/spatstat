@@ -32,6 +32,9 @@ LambertW(x)
   function \code{\link[stats]{uniroot}}.
 
   Computation using \pkg{gsl} is about 100 times faster.
+
+  If any entries of \code{x} are infinite or \code{NA}, the corresponding
+  results are \code{NA}.
 }
 \value{
   Numeric vector.

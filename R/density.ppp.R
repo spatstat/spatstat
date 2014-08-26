@@ -3,9 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  + bandwidth selection rules bw.diggle, bw.scott
-#
-#  $Revision: 1.66 $    $Date: 2014/04/02 10:31:39 $
+#  $Revision: 1.69 $    $Date: 2014/05/20 09:30:40 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -213,7 +211,6 @@ densitypointsEngine <- function(x, sigma, ...,
                  sig     = as.double(sd),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1) {
         wtsort <- if(sorted) weights else weights[oo]
@@ -226,7 +223,6 @@ densitypointsEngine <- function(x, sigma, ...,
                  weight  = as.double(wtsort),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
        } else {
         # matrix of weights
@@ -241,7 +237,6 @@ densitypointsEngine <- function(x, sigma, ...,
                    weight  = as.double(wtsort[,j]),
                    result  = as.double(double(npts)),
                    DUP     = DUP)
-#                   PACKAGE = "spatstat")
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
         }
       }
@@ -258,7 +253,6 @@ densitypointsEngine <- function(x, sigma, ...,
                  sinv    = as.double(flatSinv),
                  result  = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1) {
         # vector of weights
@@ -273,7 +267,6 @@ densitypointsEngine <- function(x, sigma, ...,
                  weight  = as.double(wtsort),
                  result   = as.double(double(npts)),
                  DUP     = DUP)
-#                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else {
         # matrix of weights
@@ -289,7 +282,6 @@ densitypointsEngine <- function(x, sigma, ...,
                    weight  = as.double(wtsort[,j]),
                    result  = as.double(double(npts)),
                    DUP     = DUP)
-#                   PACKAGE = "spatstat")
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result 
         }
       }
@@ -430,73 +422,6 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
   uhoh <- if(!is.null(mindist) && cutoff < mindist) "underflow" else NULL
   result <- list(sigma=sigma, varcov=varcov, cutoff=cutoff, warnings=uhoh)
   return(result)
-}
-
-bw.diggle <- function(X, ...) {
-  stopifnot(is.ppp(X))
-  # secret option for debugging
-  mf <- function(..., method=c("C", "interpreted")) match.arg(method)
-  method <- mf(...)
-  #
-  lambda <- npoints(X)/area.owin(X)
-  K <- Kest(X, correction="good")
-  yname <- fvnames(K, ".y")
-  K <- K[, c("r", yname)]
-  rvals <- K$r
-  # evaluation of M(r) requires K(2r)
-  rmax2 <- max(rvals)/2
-  if(!is.null(alim <- attr(K, "alim"))) rmax2 <- min(alim[2], rmax2)
-  ok <- (rvals <= rmax2)
-  switch(method,
-         interpreted = {
-           rvals <- rvals[ok]
-           nr <- length(rvals)
-           J <- numeric(nr)
-           phi <- function(x,h) { 
-             if(h <= 0) return(numeric(length(x)))
-             y <- pmax.int(0, pmin.int(1, x/(2 * h)))
-             4 * pi * h^2 * (acos(y) - y * sqrt(1 - y^2))
-           }
-           for(i in 1:nr) 
-             J[i] <- stieltjes(phi, K, h=rvals[i])[[yname]]/(2 * pi)
-         },
-         C = {
-           nr <- length(rvals)
-           nrmax <- sum(ok)
-           dK <- diff(K[[yname]])
-           ndK <- length(dK)
-           DUP <- spatstat.options("dupC")
-           z <- .C("digberJ",
-                   r=as.double(rvals),
-                   dK=as.double(dK),
-                   nr=as.integer(nr),
-                   nrmax=as.integer(nrmax),
-                   ndK=as.integer(ndK),
-                   J=as.double(numeric(nrmax)),
-                   DUP=DUP)
-#                  PACKAGE="spatstat"              
-           J <- z$J
-           rvals <- rvals[ok]
-         })
-  pir2 <- pi * rvals^2
-  M <- (1/lambda - 2 * K[[yname]][ok])/pir2 + J/pir2^2
-  # This calculation was for the uniform kernel on B(0,h)
-  # Convert to standard deviation of (one-dimensional marginal) kernel
-  sigma <- rvals/2
-  result <- bw.optim(M, sigma,
-                     creator="bw.diggle",
-                     criterion="Berman-Diggle Cross-Validation",
-                     J=J,
-                     lambda=lambda)
-  return(result)
-}
-
-bw.scott <- function(X) {
-  stopifnot(is.ppp(X))
-  n <- npoints(X)
-  sdx <- sqrt(var(X$x))
-  sdy <- sqrt(var(X$y))
-  return(c(sdx, sdy) * n^(-1/6))
 }
 
 

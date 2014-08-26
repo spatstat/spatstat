@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.14 $    $Date: 2014/03/22 03:58:43 $
+##  $Revision: 1.15 $    $Date: 2014/05/10 04:31:48 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -37,7 +37,7 @@
     ncols <- x$nvars
     if(nrows == 1 && ncols == 1 && strip) {
       ## return a single object 
-      y <- switch(x$vtype,
+      y <- switch(as.character(x$vtype),
                   dfcolumn    = x$df[, , drop=TRUE],
                   hypercolumn = (x$hypercolumns[[1]])[[1]],
                   hyperatom   = x$hyperatoms[[1]])
@@ -60,7 +60,7 @@
       return(y)
     } else if(ncols == 1) {
       ## return a column as a 'listof' or a vector
-      switch(x$vtype,
+      switch(as.character(x$vtype),
              dfcolumn = {
                return(x$df[, , drop=TRUE])
              },

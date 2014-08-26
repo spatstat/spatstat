@@ -59,7 +59,8 @@ which.max.im(x)
 
   \code{mpl} has been replaced by \code{\link{ppm}}.
 
-  \code{ks.test.ppm} has been replaced by \code{\link{kstest.ppm}}.
+  \code{ks.test.ppm} has been replaced by
+  \code{\link{cdf.test}}.
   
   \code{rtoro} has been replaced by \code{\link{rshift}}.
 

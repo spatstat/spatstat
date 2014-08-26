@@ -31,6 +31,8 @@
   rectangular window. Unequal margins can also be trimmed.
 }
 \seealso{
+  \code{\link{grow.rectangle}},
+  \code{\link{erosion}},
   \code{\link{owin.object}}
 }
 \examples{

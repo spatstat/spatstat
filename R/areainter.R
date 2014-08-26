@@ -210,7 +210,7 @@ areadelta2 <- local({
       if(algorithm == "nncross") {
         # Trusted, slow algorithm using nncross
         Z <- as.mask(Wi, eps=eps)
-        G <- as.ppp(raster.xy(Z), U, check=FALSE)
+        G <- as.ppp(rasterxy.mask(Z), U, check=FALSE)
         # compute 3 nearest neighbours in X of each grid point
         v <- nncross(G, X, k=1:3)
         # select pixels which have exactly 2 neighbours within distance r

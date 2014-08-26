@@ -1,7 +1,7 @@
 #
 # interactive analysis of point patterns
 #
-#   $Revision: 1.15 $   $Date: 2013/04/25 06:37:43 $
+#   $Revision: 1.16 $   $Date: 2014/07/22 05:36:15 $
 #
 #
 
@@ -27,8 +27,8 @@ istat <- function(x, xname) {
 # Split panel into two halves  
 # Left half of panel: display
 # Right half of panel: controls
-  rp.grid(p, "gdisplay", pos=list(row=0,column=0))
-  rp.grid(p, "gcontrols", pos=list(row=0,column=1))
+  rp.grid(p, "gdisplay", pos=list(row=0,column=0), width=400, height=400)
+  rp.grid(p, "gcontrols", pos=list(row=0,column=1), width=200, height=400)
 
 #----- Display side ------------
 
@@ -61,7 +61,7 @@ istat <- function(x, xname) {
   fvals <- names(ftable)
   flabs <- as.character(ftable)
   stat <- NULL
-  rp.radiogroup(p, stat, values=fvals, labels=flabs,
+  rp.radiogroup(p, stat, vals=fvals, labels=flabs,
    			  title="statistic", action=redraw,
                 pos=pozzie(0))
   nextrow <- 1
@@ -71,7 +71,7 @@ istat <- function(x, xname) {
   elabs <- c("No simulation envelopes",
              "Pointwise envelopes under CSR",
              "Simultaneous envelopes under CSR")
-  rp.radiogroup(p, envel, values=evals, labels=elabs,
+  rp.radiogroup(p, envel, vals=evals, labels=elabs,
                 title="Simulation envelopes", action=redraw,
                 pos=pozzie(nextrow))
   nextrow <- nextrow + 1

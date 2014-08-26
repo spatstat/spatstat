@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.84 $   $Date: 2014/05/08 05:23:48 $
+#  $Revision: 1.96 $   $Date: 2014/08/09 10:34:49 $
 #
 #  Plotting code for pixel images
 #
@@ -14,25 +14,22 @@
 
 plot.im <- local({
 
-  # recognised additional arguments to image.default() and axis()
+  ## auxiliary functions
 
-  plotparams <- imageparams <- c("main", "asp", "sub", "axes", "ann",
-                   "cex", "font", 
-                   "cex.axis", "cex.lab", "cex.main", "cex.sub",
-                   "col.axis", "col.lab", "col.main", "col.sub",
-                   "font.axis", "font.lab", "font.main", "font.sub")
-
-  axisparams <- c("cex", 
-                  "cex.axis", "cex.lab",
-                  "col.axis", "col.lab",
-                  "font.axis", "font.lab",
-                  "mgp", "xaxp", "yaxp", "tck", "tcl", "las", "fg", "xpd")
-  
-  # auxiliary functions
-
-  image.doit <- function(..., extrargs=imageparams) {
+  image.doit <- function(imagedata, ...,
+                         extrargs=graphicsPars("image"), W) {
+    aarg <- resolve.defaults(...)
+    add      <- resolve.1.default(list(add=FALSE),     aarg)
+    show.all <- resolve.1.default(list(show.all=!add), aarg)
+    if(add && show.all) {
+      ## set up the window space *with* the main title
+      ## using the same code as plot.owin, for consistency
+      do.call.matched("plot.owin",
+                      resolve.defaults(list(x=W, type="n"), aarg), 
+                      extrargs=graphicsPars("owin"))
+    }
     do.call.matched("image.default",
-                    resolve.defaults(...),
+                    append(imagedata, aarg),
                     extrargs=extrargs)
   }
 
@@ -62,6 +59,7 @@ plot.im <- local({
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), colargs=list(),
+                     useRaster=NULL,
                      do.plot=TRUE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
@@ -70,18 +68,20 @@ plot.im <- local({
     dotargs <- list(...)
 
     stopifnot(is.list(ribargs))
-
+    user.ticks <- ribargs$at
+    
     if(!is.null(clipwin)) {
       x <- x[as.rectangle(clipwin)]
       if(!is.rectangle(clipwin)) x <- x[clipwin, drop=FALSE]
     }
-    
+
     zlim <- dotargs$zlim
 
     x <- repair.image.xycoords(x)
 
     xtype <- x$type
-
+    xbox <- as.rectangle(x)
+    
     do.log <- identical(log, TRUE)
     if(do.log && !(x$type %in% c("real", "integer")))
       stop(paste("Log transform is undefined for an image of type",
@@ -243,7 +243,8 @@ plot.im <- local({
                                    length.out=ribn)
                ribbonrange <- vrange
                nominalrange <- Log(ribscale * Exp(ribbonrange))
-               nominalmarks <- axisTicks(nominalrange, log=do.log)
+               nominalmarks <-
+                 user.ticks %orifnull% axisTicks(nominalrange, log=do.log)
                ribbonticks <- Log(nominalmarks/ribscale)
                ribbonlabels <- paste(nominalmarks)
              }
@@ -258,8 +259,12 @@ plot.im <- local({
              trivial <- (nvalues < 2)
              if(!trivial){
                nominalrange <- Log(ribscale * Exp(vrange))
-               nominalmarks <- axisTicks(nominalrange, log=do.log)
-               nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
+               if(!is.null(user.ticks)) {
+                 nominalmarks <- user.ticks
+               } else {
+                 nominalmarks <- axisTicks(nominalrange, log=do.log)
+                 nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
+               }
                ribbonticks <- Log(nominalmarks/ribscale)
                ribbonlabels <- paste(nominalmarks)
                if(!do.log && identical(all.equal(ribbonticks,
@@ -297,7 +302,7 @@ plot.im <- local({
              ribbonvalues <- c(0,1)
              ribbonrange <- range(imagebreaks)
              ribbonbreaks <- imagebreaks
-             ribbonticks <- ribbonvalues
+             ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- c("FALSE", "TRUE")
              if(!is.null(colmap)) 
                col <- colmap(c(FALSE,TRUE))
@@ -313,7 +318,7 @@ plot.im <- local({
              ribbonvalues <- intlev
              ribbonrange <- range(imagebreaks)
              ribbonbreaks <- imagebreaks
-             ribbonticks <- ribbonvalues
+             ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- paste(lev)
              vrange <- range(intlev)
              if(!is.null(colmap) && !valuesAreColours) 
@@ -331,7 +336,7 @@ plot.im <- local({
              ribbonvalues <- intlev
              ribbonrange <- range(imagebreaks)
              ribbonbreaks <- imagebreaks
-             ribbonticks <- ribbonvalues
+             ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- paste(lev)
              vrange <- range(intlev)
              if(!is.null(colmap)) 
@@ -393,7 +398,29 @@ plot.im <- local({
              },
              NULL)
 
-    # ........ start plotting .................
+    ##  ........ decide whether to use rasterImage .........
+    
+    ## get device capabilities
+    ##      (this will start a graphics device if none is active)
+    rasterable <- dev.capabilities()$rasterImage
+    if(is.null(rasterable)) rasterable <- "no"
+    ##
+    can.use.raster <-
+      switch(rasterable,
+             yes=TRUE,
+             no=FALSE,
+             "non-missing"=!any(is.na(x$v)),
+             FALSE)
+    if(is.null(useRaster)) {
+      useRaster <- can.use.raster
+    } else if(useRaster && !can.use.raster) {
+        whinge <- "useRaster=TRUE is not supported by the graphics device"
+        if(rasterable == "non-missing")
+          whinge <- paste(whinge, "for images with NA values")
+        warning(whinge, call.=FALSE)
+    } 
+    
+    ## ........ start plotting .................
 
     if(!identical(ribbon, TRUE) || trivial) {
       ## no ribbon wanted
@@ -403,17 +430,17 @@ plot.im <- local({
         return(output.colmap)
 
       ## plot image without ribbon
-      image.doit(list(x=cellbreaks(x$xcol, x$xstep),
-                      y=cellbreaks(x$yrow, x$ystep),
-                      z=t(x$v)),
+      image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),
+                                y=cellbreaks(x$yrow, x$ystep),
+                                z=t(x$v)),
+                 W=xbox,
                  dotargs,
-                 list(useRaster=TRUE, add=add),
+                 list(useRaster=useRaster, add=add, show.all=show.all),
                  colourinfo,
                  list(xlab = "", ylab = ""),
-                 list(asp = 1, main = main, axes=FALSE)
-                 )
-      if(add && show.all)
-        fakemaintitle(x, main, dotargs)
+                 list(asp = 1, main = main, axes=FALSE))
+##      if(add && show.all)
+##        fakemaintitle(x, main, dotargs)
       return(invisible(output.colmap))
     }
     
@@ -452,30 +479,44 @@ plot.im <- local({
     attr(output.colmap, "bbox") <- bb.all
     if(!do.plot)
       return(output.colmap)
+
+    pt <- prepareTitle(main)
     
-    # establish coordinate system
-    if(!add)
-      do.call.plotfun("plot.default",
-                      resolve.defaults(list(x=0, y=0,  type="n", 
-                                            axes=FALSE, asp=1,
-                                            xlim=bb.all$xrange,
-                                            ylim=bb.all$yrange),
-                                       dotargs,
-                                       list(main=main, xlab="", ylab="")),
-                      extrargs=plotparams)
+    if(!add) {
+      ## establish coordinate system
+      do.call.plotfun("plot.owin",
+                      resolve.defaults(list(x=bb.all,
+                                            type="n",
+                                            main=pt$blank),
+                                       dotargs),
+                      extrargs=graphicsPars("owin"))
+    }
+    if(show.all) {
+      ## plot title centred over main image area 'bb'
+      do.call.plotfun("plot.owin",
+                      resolve.defaults(list(x=bb,
+                                            type="n",
+                                            main=main,
+                                            add=TRUE,
+                                            show.all=TRUE),
+                                       dotargs),
+                      extrargs=graphicsPars("owin"))
+      main <- ""
+    }
     # plot image
-    image.doit(list(x=cellbreaks(x$xcol, x$xstep),
-                    y=cellbreaks(x$yrow, x$ystep),
-                    z=t(x$v)),
-               list(add=TRUE),
+    image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),
+                              y=cellbreaks(x$yrow, x$ystep),
+                              z=t(x$v)),
+               W=xbox,
+               list(add=TRUE, show.all=show.all),
                dotargs,
-               list(useRaster=TRUE),
+               list(useRaster=useRaster),
                colourinfo,
                list(xlab = "", ylab = ""),
                list(asp = 1, main = main))
 
-    if(add && show.all)
-      fakemaintitle(bb.all, main, ...)
+##    if(add && show.all)
+##      fakemaintitle(bb.all, main, ...)
     
     # axes for image
     imax <- identical(dotargs$axes, TRUE)
@@ -490,13 +531,13 @@ plot.im <- local({
                                        list(side=1, at=px), 
                                        dotargs,
                                        list(pos=bb$yrange[1])),
-                      extrargs=axisparams)
+                      extrargs=graphicsPars("axis"))
       do.call.plotfun("axis",
                       resolve.defaults(
                                        list(side=2, at=py), 
                                        dotargs,
                                        list(pos=bb$xrange[1])),
-                      extrargs=axisparams)
+                      extrargs=graphicsPars("axis"))
     }
     # plot ribbon image containing the range of image values
     rib.npixel <- length(ribbonvalues) + 1
@@ -509,7 +550,7 @@ plot.im <- local({
                                 to=bb.rib$yrange[2],
                                 length.out=rib.npixel)
              rib.z <- matrix(ribbonvalues, ncol=1)
-             rib.useRaster <- TRUE
+             rib.useRaster <- useRaster
            },
            top=,
            bottom={
@@ -522,9 +563,12 @@ plot.im <- local({
              # bug workaround
              rib.useRaster <- FALSE 
            })
-    image.doit(list(x=rib.xcoords, y=rib.ycoords,
-                    z=t(rib.z),
-                    add=TRUE),
+    image.doit(imagedata=list(x=rib.xcoords,
+                              y=rib.ycoords,
+                              z=t(rib.z)),
+               W=bb.rib,
+               list(add=TRUE,
+                    show.all=show.all),
                ribargs,
                list(useRaster=rib.useRaster),
                list(main="", sub=""),
@@ -571,7 +615,7 @@ plot.im <- local({
                       resolve.defaults(axisargs,
                                        ribargs, dotargs,
                                        posargs),
-                      extrargs=axisparams)
+                      extrargs=graphicsPars("axis"))
     }
     #
     return(invisible(output.colmap))
@@ -588,23 +632,33 @@ image.im <- plot.im
 
 ########################################################################
 
-persp.im <- function(x, ..., colmap=NULL) {
+persp.im <- function(x, ..., colmap=NULL, colin=x, apron=FALSE) {
   xname <- deparse(substitute(x))
   xinfo <- summary(x)
   if(xinfo$type == "factor")
     stop("Perspective plot is inappropriate for factor-valued image")
-  pop <- spatstat.options("par.persp")
   ## check whether 'col' was specified when 'colmap' was intended
   Col <- list(...)$col
   if(is.null(colmap) && !is.null(Col) && !is.matrix(Col) && length(Col) != 1)
     warning("Argument col is not a matrix. Did you mean colmap?")
+  if(!missing(colin)) {
+    ## separate image to determine colours
+    verifyclass(colin, "im")
+    if(!compatible(colin, x)) {
+      ## resample 'colin' onto grid of 'x'
+      colin <- as.im(colin, W=x)
+    }
+    if(is.null(colmap))
+      colmap <- spatstat.options("image.colfun")(128)
+  }
+  pop <- spatstat.options("par.persp")
   # colour map?
   if(is.null(colmap)) {
     colinfo <- list(col=NULL)
   } else if(inherits(colmap, "colourmap")) {
     # colour map object
     # apply colour function to image data
-    colval <- eval.im(colmap(x))
+    colval <- eval.im(colmap(colin))
     colval <- t(as.matrix(colval))
     # strip one row and column for input to persp.default
     colval <- colval[-1, -1]
@@ -624,22 +678,37 @@ persp.im <- function(x, ..., colmap=NULL) {
       colvalues <- colmap$col
     } else if(is.vector(colmap)) {
       colvalues <- colmap
-      breaks <- quantile(x, seq(from=0,to=1,length.out=length(colvalues)+1))
+      breaks <- quantile(colin, seq(from=0,to=1,length.out=length(colvalues)+1))
       if(!all(ok <- !duplicated(breaks))) {
         breaks <- breaks[ok]
         colvalues <- colvalues[ok[-1]]
       }
     } else warning("Unrecognised format for colour map")
     # apply colour map to image values
-    colid <- cut.im(x, breaks=breaks, include.lowest=TRUE)
+    colid <- cut.im(colin, breaks=breaks, include.lowest=TRUE)
     colval <- eval.im(colvalues[unclass(colid)])
     colval <- t(as.matrix(colval))
     nr <- nrow(colval)
     nc <- ncol(colval)
+    # strip one row and column for input to persp.default
     colval <- colval[-1, -1]
     colval[is.na(colval)] <- colvalues[1]
     # pass colour matrix (and suppress lines)
     colinfo <- list(col=colval, border=NA)
+  }
+
+  if(apron) {
+    ## add an 'apron'
+    minx <- min(x)
+    x <- na.handle.im(x, na.replace=minx)
+    x <- padimage(x, minx)
+    xinfo <- summary(x)
+    if(is.matrix(colval <- colinfo$col)) {
+      colval <- matrix(col2hex(colval), nrow(colval), ncol(colval))
+      grijs <- col2hex("lightgrey")
+      colval <- cbind(grijs, rbind(grijs, colval, grijs), grijs)
+      colinfo$col <- colval
+    }
   }
 
   if(spatstat.options("monochrome"))
@@ -659,18 +728,20 @@ persp.im <- function(x, ..., colmap=NULL) {
   } else 
     zscale <- zlim <- NULL
 
-  jawab <-
-    do.call.matched("persp",
-                    resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
-                                     list(...),
-                                     pop,
-                                     colinfo,
-                                     list(xlab="x", ylab="y", zlab=xname),
-                                     list(scale=FALSE, expand=zscale,
-                                          zlim=zlim),
-                                     list(main=xname),
-                                     .StripNull=TRUE),
-                    funargs=.Spatstat.persp.args)
+  yargh <- resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+                            list(...),
+                            pop,
+                            colinfo,
+                            list(xlab="x", ylab="y", zlab=xname),
+                            list(scale=FALSE, expand=zscale,
+                                 zlim=zlim),
+                            list(main=xname),
+                            .StripNull=TRUE)
+
+  jawab <- do.call.matched("persp", yargh, 
+                           funargs=.Spatstat.persp.args)
+
+  attr(jawab, "expand") <- yargh$expand
   return(invisible(jawab))
 }
 
@@ -696,11 +767,15 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   ## 
   sop <- spatstat.options("par.contour")
   if(missing(main)) 
-    main <- resolve.defaults(sop, list(main=defaultmain))$main
-  if(missing(add))
-    add <- resolve.defaults(sop, list(add=FALSE))$add
-  if(missing(axes))
-     axes <- resolve.defaults(sop, list(axes=TRUE))$axes
+    main <- resolve.1.default(list(main=defaultmain), sop)
+  if(missing(add)) {
+    force(add) ## use default in formal arguments, unless overridden
+    add <- resolve.1.default(list(add=add), sop)
+  }
+  if(missing(axes)) {
+    force(axes)
+    axes <- resolve.1.default(list(axes=axes), sop)
+  }
   if(!is.null(clipwin))
     x <- x[clipwin, drop=FALSE]
   if(show.all) {
@@ -716,7 +791,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
     else { # box without axes
       rec <- owin(x$xrange, x$yrange)
       do.call.matched("plot.owin",
-                      resolve.defaults(list(x=rec, add=add),
+                      resolve.defaults(list(x=rec, add=add, show.all=TRUE),
                                        list(...),
                                        list(main=main)))
     }

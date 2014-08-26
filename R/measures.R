@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.45 $  $Date: 2014/04/21 02:44:47 $
+#  $Revision: 1.47 $  $Date: 2014/07/28 08:26:13 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -317,11 +317,13 @@ smooth.msr <- function(X, ...) {
   Smooth(X, ...)
 }
 
-Smooth.msr <- function(X, ...) {
+Smooth.msr <- function(X, ..., drop=TRUE) {
   verifyclass(X, "msr")
   loc <- X$loc
   val <- X$val
   result <- density(loc, weights=val, ...)
+  if(!drop && is.im(result))
+    result <- listof(result)
   return(result)
 }
 
@@ -329,7 +331,23 @@ as.owin.msr <- function(W, ..., fatal=TRUE) {
   as.owin(W$loc, ..., fatal=fatal)
 }
 
+domain.msr <- Window.msr <- function(X, ...) { as.owin(X) } 
+
 shift.msr <- function(X,  ...) {
   X$loc <- Xloc <- shift(X$loc, ...)
+  putlastshift(X, getlastshift(Xloc))
+}
+
+as.layered.msr <- function(X) {
+  nc <- ncol(X)
+  if(nc == 0) return(layered())
+  if(nc == 1) return(layered(X))
+  Y <- lapply(seq_len(nc), function(j,x) x[,j], x=X)
+  names(Y) <- colnames(X)
+  return(layered(LayerList=Y))
+}
+
+scalardilate.msr <- function(X, f, ...) {
+  X$loc <- Xloc <- scalardilate(X$loc, f, ...)
   putlastshift(X, getlastshift(Xloc))
 }

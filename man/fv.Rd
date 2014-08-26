@@ -162,9 +162,15 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   Use \code{\link{bind.fv}} to glue additional columns onto an existing
   \code{"fv"} object.
 
+  Use \code{\link{range.fv}} to compute the range of \eqn{y} values
+  for a function, and \code{\link{with.fv}} for more complicated
+  calculations.
+  
+  The functions \code{fvnames}, \code{fvnames<-} allow the user to
+  use standard abbreviations to refer to columns of an \code{"fv"} object.
+  
   \emph{Undocumented} functions for modifying an \code{"fv"} object
-  include \code{fvnames}, \code{fvnames<-},
-  \code{tweak.fv.entry} and \code{rebadge.fv}.
+  include \code{tweak.fv.entry} and \code{rebadge.fv}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

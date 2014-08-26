@@ -3,10 +3,11 @@ plot.listof <-
   local({
 
   # auxiliary functions
-  extraplot <- function(nnn, x, ..., add=FALSE,
+  extraplot <- function(nnn, x, ..., add=FALSE, extrargs=list(),
                         panel.args=NULL, plotcommand="plot") {
     argh <- list(...)
-    if(is.ppp(x)) argh <- c(argh, list(multiplot=FALSE))
+    if(is.ppp(x) && identical(plotcommand,"plot"))
+      argh <- c(argh, list(multiplot=FALSE))
     if(!is.null(panel.args)) {
       xtra <- if(is.function(panel.args)) panel.args(nnn) else panel.args
       if(!is.list(xtra))
@@ -15,57 +16,48 @@ plot.listof <-
                     " should be a list"))
       argh <- resolve.defaults(xtra, argh)
     }
+    if(length(extrargs) > 0)
+      argh <- resolve.defaults(argh, extrargs)
     # some plot commands don't recognise 'add'
     if(add)
       argh <- append(argh, list(add=TRUE))
     do.call(plotcommand, append(list(x=x), argh))
   }
 
-  exec.or.plot <- function(cmd, i, xi, ..., add=FALSE) {
+  exec.or.plot <- function(cmd, i, xi, ..., extrargs=list(), add=FALSE) {
     if(is.null(cmd)) return(NULL)
-    if(!add) {
-      # some plot commands don't recognise 'add'
-      if(is.function(cmd)) {
-        do.call(cmd, resolve.defaults(list(i, xi, ...)))
-      } else {
-        do.call(plot, resolve.defaults(list(cmd, ...)))
-      }
-    } else {
-      if(is.function(cmd)) {
-        do.call(cmd, resolve.defaults(list(i, xi, ..., add=add)))
-      } else {
-        do.call(plot, resolve.defaults(list(cmd, ..., add=add)))
-      }
-    }
-    
+    argh <- resolve.defaults(list(...),
+                             extrargs,
+                             ## some plot commands don't recognise 'add' 
+                             if(add) list(add=TRUE) else NULL)
+    if(is.function(cmd)) 
+      do.call(cmd, resolve.defaults(list(i, xi), argh))
+    else
+      do.call(plot, resolve.defaults(list(cmd), argh))
   }
 
-  exec.or.plotshift <- function(cmd, i, xi, ..., vec=vec, add=FALSE) {
+  exec.or.plotshift <- function(cmd, i, xi, ..., vec=vec,
+                                extrargs=list(), add=FALSE) {
     if(is.null(cmd)) return(NULL)
-    if(!add) {
-      # some plot commands don't recognise 'add'
-      if(is.function(cmd)) {
-        do.call(cmd, resolve.defaults(list(i, xi, ...)))
-      } else {
-        cmd <- shift(cmd, vec)
-        do.call(plot, resolve.defaults(list(cmd, ...)))
-      }
+    argh <- resolve.defaults(list(...),
+                             extrargs,
+                             ## some plot commands don't recognise 'add' 
+                             if(add) list(add=TRUE) else NULL)
+    if(is.function(cmd)) {
+      do.call(cmd, resolve.defaults(list(i, xi), argh))
     } else {
-      if(is.function(cmd)) {
-        do.call(cmd, resolve.defaults(list(i, xi, ..., add=TRUE)))
-      } else {
-        cmd <- shift(cmd, vec)
-        do.call(plot, resolve.defaults(list(cmd, ..., add=TRUE)))
-      }
+      cmd <- shift(cmd, vec)
+      do.call(plot, resolve.defaults(list(cmd), argh))
     }
   }
 
   ## bounding box, including ribbon for images, legend for point patterns
   getplotbox <- function(x, ..., do.plot) {
-    if(!inherits(x, c("im", "ppp", "psp", "msr", "layered")))
-      return(as.rectangle(x))
-    y <- plot(x, ..., do.plot=FALSE)
-    return(attr(y, "bbox"))
+    if(inherits(x, c("im", "ppp", "psp", "msr", "layered"))) {
+      y <- plot(x, ..., do.plot=FALSE)      
+      return(as.owin(y))
+    }
+    return(as.rectangle(x))
   }
 
   is.shiftable <- function(x) {
@@ -90,7 +82,8 @@ plot.listof <-
                             adorn.top=NULL,
                             adorn.bottom=NULL,
                             adorn.size=0.2,
-                            equal.scales=FALSE) {
+                            equal.scales=FALSE,
+                            halign=FALSE, valign=FALSE) {
     xname <- short.deparse(substitute(x))
     
     ## `boomerang despatch'
@@ -101,13 +94,16 @@ plot.listof <-
       return(eval(cl, envir=parenv))
     }
 
+    isfv <- unlist(lapply(x, is.fv))
+    allfv <- all(isfv)
+    
     ## panel margins
     if(!missing(mar.panel)) {
       nm <- length(mar.panel)
       if(nm == 1) mar.panel <- rep(mar.panel, 4) else
       if(nm == 2) mar.panel <- rep(mar.panel, 2) else
       if(nm != 4) stop("mar.panel should have length 1, 2 or 4")
-    } else if(any(unlist(lapply(x, is.fv)))) {
+    } else if(any(isfv)) {
       ## change default
       mar.panel <- 0.25+c(4,4,2,2)
     }
@@ -125,16 +121,27 @@ plot.listof <-
         stop("Incorrect length for main.panel")
     }
 
+    if(allfv && equal.scales) {
+      ## all entries are 'fv' objects: determine their plot limits
+      fvlims <- lapply(x, plot, ..., limitsonly=TRUE)
+      ## establish common x,y limits for all panels
+      xlim <- range(unlist(lapply(fvlims, getElement, name="xlim")))
+      ylim <- range(unlist(lapply(fvlims, getElement, name="ylim")))
+      extrargs <- list(xlim=xlim, ylim=ylim)
+    } else extrargs <- list()
+    
     if(!arrange) {
       # sequence of plots
       for(i in 1:n) {
         xi <- x[[i]]
-        exec.or.plot(panel.begin, i, xi, main=main.panel[i])
+        exec.or.plot(panel.begin, i, xi, main=main.panel[i],
+                     extrargs=extrargs)
         extraplot(i, xi, ...,
                   add=!is.null(panel.begin),
                   main=main.panel[i],
-                  panel.args=panel.args, plotcommand=plotcommand)
-        exec.or.plot(panel.end, i, xi, add=TRUE)
+                  panel.args=panel.args, extrargs=extrargs,
+                  plotcommand=plotcommand)
+        exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs)
       }
       if(!is.null(adorn.left))
         warning("adorn.left was ignored because arrange=FALSE")
@@ -172,26 +179,58 @@ plot.listof <-
       nrows <- as.integer(ceiling(n/ncols))
     else stopifnot(nrows * ncols >= length(x))
     nblank <- ncols * nrows - n
-    ## determine dimensions of objects
-    ##     (including space for colour ribbons, if they are images)
-    boxes <- try(lapply(x, getplotbox, ...), silent=TRUE)
-    sizes.known <- !inherits(boxes, "try-error")
-    if(equal.scales && !sizes.known) {
-      warning("Ignored equal.scales=TRUE; scales could not be determined")
-      equal.scales <- FALSE
+    if(allfv) {
+      ## Function plots do not have physical 'size'
+      sizes.known <- FALSE
+    } else {
+      ## Determine dimensions of objects
+      ##     (including space for colour ribbons, if they are images)
+      boxes <- try(lapply(x, getplotbox, ...), silent=TRUE)
+      sizes.known <- !inherits(boxes, "try-error")
+      if(equal.scales && !sizes.known) {
+        warning("Ignored equal.scales=TRUE; scales could not be determined")
+        equal.scales <- FALSE
+      }
     }
-    ## rescale?
-    if(sizes.known && !equal.scales) {
-      sides <- lapply(boxes, sidelengths)
-      bwidths <- unlist(lapply(sides, "[", 1))
-      bheights <- unlist(lapply(sides, "[", 2))
-      ## Force equal heights, unless there is only one column
-      scales <- if(ncols > 1) 1/bheights else 1/bwidths
-      scaledboxes <- vector(mode="list", length=n)
-      for(i in 1:n)
-        scaledboxes[[i]] <- scalardilate(boxes[[i]], scales[i])
-    } else scaledboxes <- boxes
-    # set up layout
+    if(sizes.known) {
+      ## determine size of each panel
+      if(equal.scales) {
+        ## do not rescale panels
+        scaledboxes <- boxes
+      } else {
+        ## rescale panels
+        sides <- lapply(boxes, sidelengths)
+        bwidths <- unlist(lapply(sides, "[", 1))
+        bheights <- unlist(lapply(sides, "[", 2))
+        ## Force equal heights, unless there is only one column
+        scales <- if(ncols > 1) 1/bheights else 1/bwidths
+        scaledboxes <- vector(mode="list", length=n)
+        for(i in 1:n)
+          scaledboxes[[i]] <- scalardilate(boxes[[i]], scales[i])
+      }
+    }
+    ## determine whether to display all objects in one enormous plot
+    ## Precondition is that everything has a spatial bounding box
+    single.plot <- equal.scales && sizes.known
+    if(equal.scales && !single.plot && !allfv)
+      warning("equal.scales=TRUE ignored ", "because bounding boxes ",
+              "could not be determined", call.=FALSE)
+    ## enforce alignment by expanding boxes
+    if(halign) {
+      if(!equal.scales)
+        warning("halign=TRUE ignored because equal.scales=FALSE")
+      ## x coordinates align in each column
+      xr <- range(sapply(scaledboxes, getElement, name="xrange"))
+      scaledboxes <- lapply(scaledboxes, "[[<-", i="xrange", value=xr)
+    }
+    if(valign) {
+      if(!equal.scales)
+        warning("valign=TRUE ignored because equal.scales=FALSE")
+      ## y coordinates align in each column
+      yr <- range(sapply(scaledboxes, getElement, name="yrange"))
+      scaledboxes <- lapply(scaledboxes, "[[<-", i="yrange", value=yr)
+    }
+    ## set up layout
     mat <- matrix(c(seq_len(n), integer(nblank)),
                   byrow=TRUE, ncol=ncols, nrow=nrows)
     if(sizes.known) {
@@ -207,12 +246,6 @@ plot.listof <-
     meanheight <- mean(heights)
     meanwidth  <- mean(widths)
     nall <- n
-    ## determine whether to display all objects in one enormous plot
-    ## Precondition is that everything has a spatial bounding box
-    single.plot <- equal.scales && sizes.known
-    if(equal.scales && !single.plot)
-      warning("equal.scales=TRUE ignored", "because bounding boxes",
-              "could not be determined", call.=FALSE)
     ##
     if(single.plot) {
       ## .........  create a single plot ..................
@@ -232,7 +265,7 @@ plot.listof <-
       oy <- marpar[1] + cumsum(c(0, rev(eheights) + vsep))[nrows:1]
       panelorigin <- as.matrix(expand.grid(x=ox, y=oy))
       ## initialise, with banner
-      cex <- resolve.1.default(list(cex.title=1.5), list(...))
+      cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex.main')
       plot(bigbox, type="n", main=main, cex.main=cex)
       ## plot individual objects
       for(i in 1:n) {
@@ -247,12 +280,16 @@ plot.listof <-
           exec.or.plotshift(panel.begin, i, xishift,
                             add=TRUE,
                             main=main.panel[i], show.all=TRUE,
+                            extrargs=extrargs,
                             vec=vec)
         extraplot(i, xishift, ...,
                   add=TRUE, show.all=is.null(panel.begin),
                   main=main.panel[i],
+                  extrargs=extrargs,
                   panel.args=panel.args, plotcommand=plotcommand)
-        exec.or.plotshift(panel.end, i, xishift, add=TRUE, vec=vec)
+        exec.or.plotshift(panel.end, i, xishift, add=TRUE,
+                          extrargs=extrargs,
+                          vec=vec)
       }
       return(invisible(NULL))
     }
@@ -300,7 +337,7 @@ plot.listof <-
       opa <- par(mar=rep.int(0,4), xpd=TRUE)
       plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
            xlim=c(-1,1),ylim=c(-1,1))
-      cex <- resolve.1.default(list(cex.title=2), list(...))
+      cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex')
       text(0,0,main, cex=cex)
     }
     # plot panels
@@ -308,12 +345,13 @@ plot.listof <-
     if(!banner) opa <- npa
     for(i in 1:n) {
       xi <- x[[i]]
-      exec.or.plot(panel.begin, i, xi, main=main.panel[i])
+      exec.or.plot(panel.begin, i, xi, main=main.panel[i], extrargs=extrargs)
       extraplot(i, xi, ...,
                 add = !is.null(panel.begin), 
                 main = main.panel[i],
+                extrargs=extrargs,
                 panel.args=panel.args, plotcommand=plotcommand)
-      exec.or.plot(panel.end, i, xi, add=TRUE)
+      exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs)
     }
     # adornments
     if(nall > n) {

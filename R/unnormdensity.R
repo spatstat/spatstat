@@ -1,7 +1,7 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.3 $  $Date: 2011/10/22 04:47:10 $
+#  $Revision: 1.4 $  $Date: 2014/05/15 10:09:09 $
 #
 
 unnormdensity <- function(x, ..., weights=NULL) {
@@ -9,6 +9,7 @@ unnormdensity <- function(x, ..., weights=NULL) {
     stop("All arguments must be named (tag=value)")
   if(is.null(weights)) {
     out <- do.call.matched("density.default", c(list(x=x), list(...)))
+    out$y <- length(x) * out$y
   } else if(all(weights == 0)) {
     # result is zero
     out <- do.call.matched("density.default", c(list(x=x), list(...)))

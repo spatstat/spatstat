@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.36 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.38 $	$Date: 2014/08/04 09:55:14 $
 #
 # -------- functions ----------------------------------------
 #
@@ -75,8 +75,9 @@ function(X)
                  b <- pmin.int(m$d,m$b)
                },
                rectangle = {
-                 x <- raster.x(masque)
-                 y <- raster.y(masque)
+                 rxy <- rasterxy.mask(masque)
+                 x <- rxy$x
+                 y <- rxy$y
                  xmin <- w$xrange[1]
                  xmax <- w$xrange[2]
                  ymin <- w$yrange[1]
@@ -85,8 +86,9 @@ function(X)
                },
                polygonal = {
                  # set up pixel raster
-                 x <- as.vector(raster.x(masque))
-                 y <- as.vector(raster.y(masque))
+                 rxy <- rasterxy.mask(masque)
+                 x <- rxy$x
+                 y <- rxy$y
                  b <- numeric(length(x))
                  # test each pixel in/out, analytically
                  inside <- inside.owin(x, y, w)
@@ -151,7 +153,14 @@ erodemask <- function(w, r, strict=FALSE) {
   return(w)
 }
 
-        
+"Frame<-.owin" <- function(X, value) {
+  stopifnot(is.rectangle(value))
+  W <- Frame(X)
+  if(!is.subset.owin(W, value))
+    W <- intersect.owin(W, value)
+  rebound.owin(X, value)
+}
+
 rebound.owin <- function(x, rect) {
   w <- x
   verifyclass(rect, "owin")
@@ -189,8 +198,8 @@ rebound.owin <- function(x, rect) {
            xcol <- newseq(w$xcol, xr, mean(diff(w$xcol)))
            yrow <- newseq(w$yrow, yr, mean(diff(w$yrow)))
            newmask <- as.mask(xy=list(x=xcol, y=yrow))
-           xx <- raster.x(newmask)
-           yy <- raster.y(newmask)
+           xx <- rasterx.mask(newmask)
+           yy <- rastery.mask(newmask)
            newmask$m <- inside.owin(xx, yy, w)
            return(newmask)
          }

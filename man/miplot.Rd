@@ -1,8 +1,8 @@
 \name{miplot}
 \alias{miplot}
-\title{Morishita Index Plot}
+\title{Morisita Index Plot}
 \description{
-  Displays the Morishita Index Plot of a spatial point pattern.
+  Displays the Morisita Index Plot of a spatial point pattern.
 }
 \usage{
 miplot(X, ...)
@@ -15,11 +15,11 @@ miplot(X, ...)
   \item{\dots}{Optional arguments to control the appearance of the plot.}
 }
 \details{
-  Morishita (1959) defined an index of spatial aggregation for a spatial
+  Morisita (1959) defined an index of spatial aggregation for a spatial
   point pattern based on quadrat counts. The spatial domain of the point
   pattern is first divided into \eqn{Q} subsets (quadrats) of equal size and
   shape. The numbers of points falling in each quadrat are counted.
-  Then the Morishita Index is computed as
+  Then the Morisita Index is computed as
   \deqn{
     \mbox{MI} = Q \frac{\sum_{i=1}^Q n_i (n_i - 1)}{N(N-1)}
   }{
@@ -30,21 +30,21 @@ miplot(X, ...)
   If the pattern is completely random, \code{MI} should be approximately
   equal to 1. Values of \code{MI} greater than 1 suggest clustering.
 
-  The \emph{Morishita Index plot} is a plot of the Morishita Index
+  The \emph{Morisita Index plot} is a plot of the Morisita Index
   \code{MI} against the linear dimension of the quadrats. 
   The point pattern dataset is divided into \eqn{2 \times 2}{2 * 2}
   quadrats, then \eqn{3 \times 3}{3 * 3} quadrats, etc, and the
-  Morishita Index is computed each time. This plot is an attempt to
+  Morisita Index is computed each time. This plot is an attempt to
   discern different scales of dependence in the point pattern data.
 }
 \value{
   None.
 }
 \references{
-  M. Morishita (1959) Measuring of the dispersion of individuals and
+  M. Morisita (1959) Measuring of the dispersion of individuals and
   analysis of the distributional patterns.
-  Memoir of the Faculty of Science, Series E2, Kyushu University.
-  Pages 215--235. 
+  Memoir of the Faculty of Science, Kyushu University, Series E: Biology. 
+  \bold{2}: 215--235. 
 }
 \seealso{
   \code{\link{quadratcount}}

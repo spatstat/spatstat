@@ -9,9 +9,12 @@
 }
 \usage{
   superimpose(\dots)
+
   \method{superimpose}{ppp}(\dots, W=NULL, check=TRUE)
+
   \method{superimpose}{psp}(\dots, W=NULL, check=TRUE)
-  \method{superimpose}{default}(\dots, W=NULL, check=TRUE)
+
+  \method{superimpose}{default}(\dots)
 }
 \arguments{
   \item{\dots}{
@@ -44,8 +47,11 @@
   
   The function \code{superimpose} is generic, with methods
   for the class \code{ppp} of point patterns, the class \code{psp}
-  of line segment patterns, and a default method. The dispatch to a 
-  method is determined by the class of the first argument in \code{\dots}.
+  of line segment patterns, and a default method. There is also
+  a method for \code{lpp}, described separately in
+  \code{\link{superimpose.lpp}}.
+  The dispatch to a method is determined by the class of the first
+  argument in \code{\dots}. 
   \itemize{
     \item \code{default}:  If the first argument is 
     \emph{not} an object of class \code{ppp} or \code{psp}, then the
@@ -140,6 +146,7 @@
 }
 
 \seealso{
+  \code{\link{superimpose.lpp}},
   \code{\link{concatxy}}, \code{\link{quadscheme}}.
 }
 \examples{

@@ -11,7 +11,8 @@
   clustered or moderately inhibited alternatives of saturation type.
 }
 \usage{
-psstG(object, r = NULL, breaks = NULL, ...,
+psstG(object, r = NULL, breaks = NULL, \dots,
+      model=NULL,
       trend = ~1, interaction = Poisson(), rbord = reach(interaction),
       truecoef = NULL, hi.res = NULL)
 }
@@ -33,6 +34,12 @@ psstG(object, r = NULL, breaks = NULL, ...,
   }
   \item{\dots}{
     Ignored.
+  }
+  \item{model}{
+    Optional. A fitted point process model (object of
+    class \code{"ppm"}) to be re-fitted to the data
+    using \code{\link{update.ppm}}, if \code{object} is a point pattern.
+    Overrides the arguments \code{trend,interaction,rbord,ppmcorrection}.
   }
   \item{trend,interaction,rbord}{
     Optional. Arguments passed to \code{\link{ppm}}

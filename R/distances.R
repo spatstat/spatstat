@@ -111,7 +111,8 @@ crossdist.ppp <- function(X, Y, ...,
   verifyclass(X, "ppp")
   Y <- as.ppp(Y)
   if(!periodic)
-    return(crossdist.default(X$x, X$y, Y$x, Y$y, method=method))
+    return(crossdist.default(X$x, X$y, Y$x, Y$y,
+                             method=method, squared=squared))
   # periodic case
   WX <- X$window
   WY <- Y$window
@@ -124,7 +125,8 @@ crossdist.ppp <- function(X, Y, ...,
   wide <- diff(WX$xrange)
   high <- diff(WX$yrange)
   return(crossdist.default(X$x, X$y, Y$x, Y$y,
-                           period=c(wide,high), method=method, squared=squared))
+                           period=c(wide,high),
+                           method=method, squared=squared))
 }
 
 crossdist.default <-

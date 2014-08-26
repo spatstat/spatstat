@@ -9,12 +9,29 @@
 #
 #
 
-resid4plot <-
-  function(RES,
-           plot.neg=c("image", "discrete", "contour", "imagecontour"),
-           plot.smooth=c("imagecontour", "image", "contour", "persp"),
-           spacing=0.1, srange=NULL, monochrome=FALSE, main=NULL,
-           ...)
+resid4plot <- local({
+  
+  do.clean <- function(fun, ..., 
+                       pch, chars, cols, etch, size,
+                       maxsize, meansize, markscale, symap, zap,
+                       legend, leg.side, leg.args) {
+    ## avoid passing arguments of plot.ppp to image()
+    do.call(fun, list(...))
+  }
+
+  do.lines <- function(x, y, defaulty=1, ...) {
+    do.call("lines",
+            resolve.defaults(list(x, y),
+                             list(...),
+                             list(lty=defaulty)))
+  }
+
+  resid4plot <-
+    function(RES,
+             plot.neg=c("image", "discrete", "contour", "imagecontour"),
+             plot.smooth=c("imagecontour", "image", "contour", "persp"),
+             spacing=0.1, srange=NULL, monochrome=FALSE, main=NULL,
+             ...)
 {
   plot.neg <- match.arg(plot.neg)
   clip     <- RES$clip
@@ -36,7 +53,7 @@ resid4plot <-
   plot(c(0, width) + outerspace * c(-1,1),
        c(0, height) + outerspace * c(-1,1),
        type="n", asp=1.0, axes=FALSE, xlab="", ylab="")
-  # determine colour map
+  # determine colour map for background
   if(is.null(srange)) {
     Yrange <- if(!is.null(Ydens)) summary(Ydens)$range else NULL
     Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
@@ -45,7 +62,7 @@ resid4plot <-
     stopifnot(is.numeric(srange) && length(srange) == 2)
     stopifnot(all(is.finite(srange)))
   }
-  cols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
+  backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
                       
   # ------ plot residuals/marks (in top left panel) ------------
   Xlowleft <- c(W$xrange[1],W$yrange[1])
@@ -62,9 +79,9 @@ resid4plot <-
   # pre-plot the window(s)
   if(!redundant) {
     if(!clip) 
-      plot(Ys$window, add=TRUE, ...)
+      do.clean(plot, Ys$window, add=TRUE, ...)
     else
-      ploterodewin(Ws, Ys$window, add=TRUE, ...)
+      do.clean(ploterodewin, Ws, Ys$window, add=TRUE, ...)
   }
 
   ## adjust position of legend associated with eroded window
@@ -77,24 +94,25 @@ resid4plot <-
          discrete={
            neg <- (Ys$marks < 0)
            ## plot negative masses of discretised measure as squares
-           if(any(c("maxsize", "markscale") %in% names(list(...))))
-             plot(Ys[neg], add=TRUE, ..., legend=FALSE)
-           else {
+           if(any(c("maxsize","meansize","markscale") %in% names(list(...)))) {
+             plot(Ys[neg], add=TRUE, legend=FALSE, ...)
+           } else {
              hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
-             plot(Ys[neg], add=TRUE, maxsize=hackmax, ..., legend=FALSE)
+             plot(Ys[neg], add=TRUE, legend=FALSE, maxsize=hackmax, ...)
            }
            ## plot positive masses at atoms
            plot(Ys[!neg], add=TRUE,
                 leg.side="left", leg.args=list(sep=sep),
-                show.all=TRUE, main="", ...)
+                show.all=TRUE, main="",
+                ...)
          },
          contour = {
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
-           contour(Yds, add=TRUE, ...)
+           do.clean(contour, Yds, add=TRUE, ...)
            do.call("plot",
                    resolve.defaults(list(x=Yms, add=TRUE),
-                                    list(...),
+                                    list(...), 
                                     list(use.marks=showscale,
                                          leg.side="left", show.all=TRUE,
                                          main="", leg.args=list(sep=sep))))
@@ -104,11 +122,16 @@ resid4plot <-
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
            if(redundant)
-             ploterodeimage(Ws, Yds, rangeZ=srange, colsZ=cols, ...)
-           else if(type != "eem") 
-             image(Yds, add=TRUE, ribbon=FALSE, col=cols, zlim=srange, ...)
+             do.clean(ploterodeimage,
+                      Ws, Yds, rangeZ=srange, colsZ=backcols,
+                      ...)
+           else if(type != "eem")
+             do.clean(image,
+                      Yds, add=TRUE, ribbon=FALSE,
+                      col=backcols, zlim=srange,
+                      ...)
            if(plot.neg == "imagecontour")
-             contour(Yds, add=TRUE, ...)
+             do.clean(contour, Yds, add=TRUE, ...)
            ## plot positive masses at atoms
            do.call("plot",
                    resolve.defaults(list(x=Yms, add=TRUE),
@@ -123,23 +146,24 @@ resid4plot <-
   Zs <- shift.im(Z, vec)
   switch(plot.smooth,
          image={
-           image(Zs, add=TRUE, col=cols, zlim=srange, ribbon=FALSE, ...)},
-         contour={contour(Zs, add=TRUE, ...)},
+           do.clean(image,
+                    Zs, add=TRUE, col=backcols,
+                    zlim=srange, ribbon=FALSE,
+                    ...)
+         },
+         contour={
+           do.clean(contour, Zs, add=TRUE, ...)
+         },
          persp={ warning("persp not available in 4-panel plot") },
          imagecontour={
-             image(Zs, add=TRUE, col=cols, zlim=srange, ribbon=FALSE, ...)
-             contour(Zs, add=TRUE, ...)
+             do.clean(image,
+                      Zs, add=TRUE, col=backcols, zlim=srange, ribbon=FALSE,
+                      ...)
+             do.clean(contour, Zs, add=TRUE, ...)
            }
-         )  
+         )
   lines(Zs$xrange[c(1,2,2,1,1)], Zs$yrange[c(1,1,2,2,1)])
   # -------------- lurking variable plots -----------------------
-  do.lines <-
-    function(x, y, defaulty=1, ...) {
-      do.call("lines",
-              resolve.defaults(list(x, y),
-                               list(...),
-                               list(lty=defaulty)))
-    }
   # --------- lurking variable plot for x coordinate ------------------
   #           (cumulative or marginal)
   #           in bottom left panel
@@ -172,13 +196,15 @@ resid4plot <-
   rr <- range(c(0, observedV, theoreticalV, pV))
   yscale <- function(y) { high * (y - rr[1])/diff(rr) }
   xscale <- function(x) { x - W$xrange[1] }
-  do.lines(xscale(observedX), yscale(observedV), 1, ...)
-  do.lines(xscale(theoreticalX), yscale(theoreticalV), 2, ...)
+  do.clean(do.lines, xscale(observedX), yscale(observedV), 1, ...)
+  do.clean(do.lines, xscale(theoreticalX), yscale(theoreticalV), 2, ...)
   if(!is.null(theoreticalSD)) {
-    do.lines(xscale(theoreticalX),
+    do.clean(do.lines,
+             xscale(theoreticalX),
              yscale(theoreticalV + 2 * theoreticalSD),
              3, ...)
-    do.lines(xscale(theoreticalX),
+    do.clean(do.lines,
+             xscale(theoreticalX),
              yscale(theoreticalV - 2 * theoreticalSD),
              3, ...)
   }
@@ -219,13 +245,15 @@ resid4plot <-
   rr <- range(c(0, observedV, theoreticalV, pV))
   yscale <- function(y) { y - W$yrange[1] + high + space}
   xscale <- function(x) { wide + space + wide * (rr[2] - x)/diff(rr) }
-  do.lines(xscale(observedV), yscale(observedY), 1, ...)
-  do.lines(xscale(theoreticalV), yscale(theoreticalY), 2, ...)
+  do.clean(do.lines, xscale(observedV), yscale(observedY), 1, ...)
+  do.clean(do.lines, xscale(theoreticalV), yscale(theoreticalY), 2, ...)
   if(!is.null(theoreticalSD)) {
-    do.lines(xscale(theoreticalV+2*theoreticalSD),
+    do.clean(do.lines,
+             xscale(theoreticalV+2*theoreticalSD),
              yscale(theoreticalY),
              3, ...)
-    do.lines(xscale(theoreticalV-2*theoreticalSD),
+    do.clean(do.lines,
+             xscale(theoreticalV-2*theoreticalSD),
              yscale(theoreticalY),
              3, ...)
   }
@@ -238,6 +266,9 @@ resid4plot <-
     title(main=main)
   invisible(NULL)
 }
+
+  resid4plot
+})
 
 #
 #
@@ -285,7 +316,7 @@ resid1plot <-
         Zrange <- if(!is.null(Z)) summary(Z)$range else NULL
         srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
       }
-      cols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
+      backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
     }
     ## determine main heading
     if(is.null(main)) {
@@ -340,11 +371,11 @@ resid1plot <-
            imagecontour=,
            image={
              if(redundant) {
-               z <- ploterodeimage(W, Ydens, rangeZ=srange, colsZ=cols,
+               z <- ploterodeimage(W, Ydens, rangeZ=srange, colsZ=backcols,
                                    add=add, show.all=show.all, main="", 
                                    do.plot=do.plot, ...)
              } else if(type != "eem") {
-               z <- image(Ydens, col=cols, zlim=srange, ribbon=FALSE,
+               z <- image(Ydens, col=backcols, zlim=srange, ribbon=FALSE,
                           add=TRUE, show.all=show.all, do.plot=do.plot,
                           main="", ...)
              }
@@ -373,7 +404,7 @@ resid1plot <-
       switch(plot.smooth,
            image={
              z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
-                        col=cols, zlim=srange, ribbon=FALSE,
+                        col=backcols, zlim=srange, ribbon=FALSE,
                         do.plot=do.plot, add=add, show.all=show.all, ...)
              bb <- as.owin(z)
            },
@@ -389,7 +420,7 @@ resid1plot <-
            },
            imagecontour={
              z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
-                        col=cols, zlim=srange, ribbon=FALSE,
+                        col=backcols, zlim=srange, ribbon=FALSE,
                         do.plot=do.plot, add=add, show.all=show.all, ...)
              contour(Z, add=TRUE, do.plot=do.plot, ...)
              bb <- as.owin(z)
@@ -401,7 +432,7 @@ resid1plot <-
              image={
                plot(as.rectangle(W), box=FALSE, main=main,
                     do.plot=do.plot, ...)
-               z <- ploterodeimage(W, Z, colsZ=cols, rangeZ=srange,
+               z <- ploterodeimage(W, Z, colsZ=backcols, rangeZ=srange,
                                    do.plot=do.plot, ...)
                bb <- boundingbox(as.rectangle(W), z)
              },
@@ -420,7 +451,7 @@ resid1plot <-
              imagecontour={
                plot(as.rectangle(W), box=FALSE, main=main,
                     do.plot=do.plot, ...)
-               z <- ploterodeimage(W, Z, colsZ=cols, rangeZ=srange,
+               z <- ploterodeimage(W, Z, colsZ=backcols, rangeZ=srange,
                                    do.plot=do.plot, ...)
                contour(Z, add=TRUE, do.plot=do.plot, ...)
                bb <- as.owin(z)
@@ -524,8 +555,8 @@ ploterodewin <- function(W1, W2, col.edge=grey(0.75), col.inside=rgb(1,0,0),
          },
          mask={
            Z <- as.im(W1)
-           x <- as.vector(raster.x(W1))
-           y <- as.vector(raster.y(W1))
+           x <- as.vector(rasterx.mask(W1))
+           y <- as.vector(rastery.mask(W1))
            ok <- inside.owin(x, y, W2)
            Z$v[ok] <- 2
            z <- plot(Z, ..., col=c(col.edge, col.inside),
@@ -560,8 +591,8 @@ ploterodeimage <- function(W, Z, ..., Wcol=grey(0.75), rangeZ, colsZ,
   # (with W-pixels initialised to Wvalue)
   X <- as.im(Wvalue, W)
   # Look up Z-values of W-pixels
-  xx <- as.vector(raster.x(W))
-  yy <- as.vector(raster.y(W))
+  xx <- as.vector(rasterx.mask(W))
+  yy <- as.vector(rastery.mask(W))
   Zvalues <- lookup.im(Z, xx, yy, naok = TRUE, strict=FALSE)
   # Overwrite pixels in Z
   inZ <- !is.na(Zvalues)

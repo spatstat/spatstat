@@ -339,6 +339,8 @@ as.owin.rmhmodel <- function(W, ..., fatal=FALSE) {
   return(NULL)
 }
 
+domain.rmhmodel <- Window.rmhmodel <- function(X, ...) { as.owin(X) }
+
 is.expandable.rmhmodel <- function(x) {
   tren <- x$tren
   ok <- function(z) { is.null(z) || is.numeric(z) || is.function(z) }

@@ -9,8 +9,9 @@
 clarkevans.test(X, ...,
                correction="none",
                clipregion=NULL,
-               alternative=c("two.sided", "less", "greater"),
-               nsim=1000)
+               alternative=c("two.sided", "less", "greater",
+                             "clustered", "regular"),
+               nsim=999)
 }
 \arguments{
   \item{X}{
@@ -29,7 +30,7 @@ clarkevans.test(X, ...,
   }
   \item{alternative}{
     String indicating the type of alternative for the
-    hypothesis test.
+    hypothesis test. Partially matched.
   }
   \item{nsim}{
     Number of Monte Carlo simulations to perform, if a Monte Carlo
@@ -64,12 +65,12 @@ clarkevans.test(X, ...,
   The Clark-Evans index \eqn{R} is computed for the data
   as described in \code{\link{clarkevans}}.
 
-  If \code{correction="none"}, 
+  If \code{correction="none"} and \code{nsim} is missing,
   the \eqn{p}-value for the test is computed by standardising
   \eqn{R} as proposed by Clark and Evans (1954) and referring the
   statistic to the standard Normal distribution.
 
-  For other edge corrections, the \eqn{p}-value for the test is computed
+  Otherwise, the \eqn{p}-value for the test is computed
   by Monte Carlo simulation of \code{nsim} realisations of
   Complete Spatial Randomness.
 }
@@ -96,10 +97,9 @@ clarkevans.test(X, ...,
   \code{\link{clarkevans}}
 }
 \examples{
-  # Example of a clustered pattern
-  data(redwood)
+  # Redwood data - clustered
   clarkevans.test(redwood)
-  clarkevans.test(redwood, alternative="less")
+  clarkevans.test(redwood, alternative="clustered")
 }
 \keyword{spatial}
 \keyword{nonparametric}

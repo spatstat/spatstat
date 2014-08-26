@@ -7,12 +7,12 @@
 \usage{
 \method{plot}{bermantest}(x, ...,
                    lwd=par("lwd"), col=par("col"), lty=par("lty"),
-                   lwd0=lwd, col0=col, lty0=lty)
+                   lwd0=lwd, col0=2, lty0=2)
 }
 \arguments{
   \item{x}{
     Object to be plotted. An object of class \code{"bermantest"}
-    produced by \code{\link{bermantest}}.
+    produced by \code{\link{berman.test}}.
   }
   \item{\dots}{
     extra arguments that will be passed to the plotting function
@@ -34,10 +34,10 @@
   This is the \code{plot} method for the class \code{"bermantest"}.
   An object of this class represents the outcome of Berman's test
   of goodness-of-fit of a spatial Poisson point process model,
-  computed by \code{\link{bermantest}}.
+  computed by \code{\link{berman.test}}.
 
   For the \emph{Z1} test (i.e. if \code{x} was computed using
-  \code{bermantest( ,which="Z1")}), 
+  \code{berman.test( ,which="Z1")}), 
   the plot displays the two cumulative distribution functions
   that are compared by the test: namely the empirical cumulative distribution
   function of the covariate at the data points, \eqn{\hat F}{Fhat},
@@ -49,7 +49,7 @@
   based on comparing the two vertical lines.
 
   For the \emph{Z2} test (i.e. if \code{x} was computed using
-  \code{bermantest( ,which="Z2")}), the plot displays the empirical
+  \code{berman.test( ,which="Z2")}), the plot displays the empirical
   cumulative distribution function of the values
   \eqn{U_i = F_0(Y_i)}{U[i] = F0(Y[i])} where \eqn{Y_i}{Y[i]} is the
   value of the covariate at the \eqn{i}-th data point. The diagonal line
@@ -59,7 +59,7 @@
   comparing the two vertical lines. 
 }
 \seealso{
-  \code{\link{bermantest}}
+  \code{\link{berman.test}}
 }
 \examples{
    # synthetic data: nonuniform Poisson process
@@ -72,7 +72,7 @@
    xcoord <- function(x,y) { x }
 
    # test wrong model
-   k <- bermantest(fit0, xcoord, "Z1")
+   k <- berman.test(fit0, xcoord, "Z1")
 
    # plot result of test
    plot(k, col="red", col0="green")
@@ -80,9 +80,10 @@
 
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
 }
 \keyword{spatial}
 \keyword{hplot}

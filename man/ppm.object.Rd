@@ -75,7 +75,7 @@
     \tab Interpoint interaction structure \cr
     \code{\link{as.owin}} \tab \code{\link{as.owin.ppm}}
     \tab Observation window of data \cr
-    \code{\link{bermantest}} \tab \code{\link{bermantest.ppm}}
+    \code{\link{berman.test}} \tab \code{\link{berman.test.ppm}}
     \tab Berman's test \cr
     \code{\link{envelope}} \tab \code{\link{envelope.ppm}}
     \tab Simulation envelopes \cr
@@ -89,8 +89,8 @@
     \tab Determine whether the model is Poisson \cr
     \code{\link{is.stationary}} \tab \code{\link{is.stationary.ppm}}
     \tab Determine whether the model is stationary \cr
-    \code{\link{kstest}} \tab \code{\link{kstest.ppm}}
-    \tab Kolmogorov-Smirnov test \cr
+    \code{\link{cdf.test}} \tab \code{\link{cdf.test.ppm}}
+    \tab Spatial distribution test \cr
     \code{\link{quadrat.test}} \tab \code{\link{quadrat.test.ppm}}
     \tab Quadrat counting test \cr
     \code{\link{reach}} \tab \code{\link{reach.ppm}}

@@ -170,6 +170,8 @@ as.owin.quadratcount <- function(W, ..., fatal=TRUE) {
   return(as.owin(as.tess(W), ..., fatal=fatal))
 }
 
+domain.quadratcount <- Window.quadratcount <- function(X, ...) { as.owin(X) }
+
 intensity.quadratcount <- function(X, ..., image=FALSE) {
   Y <- as.tess(X)
   a <- tile.areas(Y)

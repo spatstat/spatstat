@@ -11,6 +11,7 @@
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -19,6 +20,7 @@
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -75,6 +77,13 @@
     the interval of \eqn{r} values for the simultaneous critical
     envelopes. Only relevant if \code{global=TRUE}.
   }
+  \item{alternative}{
+    Character string determining whether the envelope corresponds
+    to a two-sided test (\code{side="two.sided"}, the default)
+    or a one-sided test with a lower critical boundary
+    (\code{side="less"}) or a one-sided test
+    with an upper critical boundary (\code{side="greater"}).
+  }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated
     function values.
@@ -116,7 +125,7 @@
 }
 \details{
   This is a method for the generic
-  function \code{\link[spatstat]{envelope}} 
+  function \code{\link{envelope}} 
   applicable to point patterns on a linear network.
   
   The argument \code{Y} can be either a point pattern on a linear
@@ -126,7 +135,7 @@
   patterns on the same linear network.
   The upper and lower
   envelopes of these evaluated functions will be computed
-  as described in \code{\link[spatstat]{envelope}}.
+  as described in \code{\link{envelope}}.
   
   The type of simulation is determined as follows.
   \itemize{
@@ -155,7 +164,7 @@
 \value{
   Function value table (object of class \code{"fv"})
   with additional information,
-  as described in \code{\link[spatstat]{envelope}}.
+  as described in \code{\link{envelope}}.
 }
 \author{
    Ang Qi Wei \email{aqw07398@hotmail.com} and
@@ -164,7 +173,7 @@
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
-   \code{\link[spatstat]{envelope}},
+   \code{\link{envelope}},
    \code{\link{linearK}}
 }
 \references{
@@ -177,7 +186,7 @@
   Geometrically corrected second-order analysis of 
   events on a linear network, with applications to
   ecology and criminology.
-  \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
+\emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
   
   Okabe, A. and Yamada, I. (2001) The K-function method on a network and
   its computational implementation. \emph{Geographical Analysis}

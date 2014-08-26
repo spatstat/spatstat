@@ -22,7 +22,9 @@
        data = NULL,
        ...,
        covariates=data,
-       method = c("mincon", "clik"),
+       method = c("mincon", "clik2", "palm"),
+       improve.type = c("none", "clik1", "wclik1", "quasi"),
+       improve.args = list(),
        weightfun=NULL,
        control=list(),
        statistic="K",
@@ -38,7 +40,9 @@
        data = NULL,
        ...,
        covariates=data,
-       method = c("mincon", "clik"),
+       method = c("mincon", "clik2", "palm"),
+       improve.type = c("none", "clik1", "wclik1", "quasi"),
+       improve.args = list(),
        weightfun=NULL,
        control=list(),
        statistic="K",
@@ -76,12 +80,31 @@
   \item{method}{
     The fitting method. Either 
     \code{"mincon"} for minimum contrast,
-    or \code{"clik"} for composite likelihood.
+    \code{"clik2"} for second order composite likelihood,
+    or \code{"palm"} for Palm likelihood.
     Partially matched.
+  }
+  \item{improve.type}{
+    Method for updating the initial estimate of the trend.
+    Initially the trend is estimated as if the process
+    is an inhomogeneous Poisson process.
+    The default, \code{improve.type = "none"}, is to use this initial estimate.
+    Otherwise, the trend estimate is
+    updated by \code{\link{improve.kppm}}, using information
+    about the pair correlation function.
+    Options are \code{"clik1"}
+    (first order composite likelihood, essentially equivalent to \code{"none"}),
+    \code{"wclik1"} (weighted first order composite likelihood) and
+    \code{"quasi"} (quasi likelihood).
+  }
+  \item{improve.args}{
+    Additional arguments passed to \code{\link{improve.kppm}} when
+    \code{improve.type != "none"}. See Details.
   }
   \item{weightfun}{
     Optional weighting function \eqn{w}
-    in the composite likelihood. A \code{function} in the \R language.
+    in the composite likelihood or Palm likelihood.
+    A \code{function} in the \R language.
     See Details.
   }
   \item{control}{
@@ -108,7 +131,7 @@
   This function fits a clustered point process model to the
   point pattern dataset \code{X}. 
 
-  The model may be either a \emph{Poisson cluster process}
+  The model may be either a \emph{Neyman-Scott cluster process}
   or another \emph{Cox process}.
   The type of model is determined by the argument \code{clusters}.
   Currently the options 
@@ -119,7 +142,7 @@
   \code{clusters="VarGamma"} for the Neyman-Scott cluster process
   with Variance Gamma kernel,
   and \code{clusters="LGCP"} for the log-Gaussian Cox process.
-  The first four models are Poisson cluster processes.
+  The first four models are Neyman-Scott cluster processes.
 
   The algorithm first estimates the intensity function
   of the point process using \code{\link{ppm}}.
@@ -140,6 +163,12 @@
   \R language. The right hand side of the formula gives the
   \code{trend} as described above. The left hand side of the formula
   gives the point pattern dataset to which the model should be fitted.
+
+  If \code{improve.type="none"} this is the final estimate of the
+  intensity. Otherwise, the intensity estimate is updated, as explained in
+  \code{\link{improve.kppm}}. Additional arguments to
+  \code{\link{improve.kppm}} are passed as a named list in
+  \code{improve.args}.
   
   The clustering parameters of the model are then fitted
   either by minimum contrast estimation, or by maximum
@@ -191,7 +220,7 @@
       to control the minimum contrast fitting algorithm.
     }
     \item{Composite likelihood:}{
-      If \code{method = "clik"} the clustering parameters of the
+      If \code{method = "clik2"} the clustering parameters of the
       model will be fitted by maximising the second-order composite likelihood
       (Guan, 2006). The log composite likelihood is
       \deqn{
@@ -219,8 +248,23 @@
       If this is missing or \code{NULL} then \eqn{w} is taken to
       equal 1.
     }
+    \item{Palm likelihood:}{
+      If \code{method = "palm"} the clustering parameters of the
+      model will be fitted by maximising the Palm loglikelihood
+      (Tanaka et al, 2008)
+      \deqn{
+	\sum_{i,j} w(x_i, x_j) \log \lambda_P(x_j \mid x_i; \theta)
+	- \int_D w(x_i, u) \lambda_P(u \mid x_i; \theta) {\rm d} u
+      }{
+	sum[i,j] w(x[i], x[j]) log(lambdaP(x[j] | x[i]; theta)
+	- integral[D] w(x[i], u) lambdaP(u | x[i]; theta) du
+      }
+      with the same notation as above. Here
+      \eqn{\lambda_P(u|v;\theta}{lambdaP(u|v;theta)} is the Palm intensity of
+      the model at location \eqn{u} given there is a point at \eqn{v}.
+    }
   }
-  In both methods, the optimisation is performed by the generic
+  In all three methods, the optimisation is performed by the generic
   optimisation algorithm \code{\link[stats]{optim}}.
   The behaviour of this algorithm can be modified using the
   argument \code{control}.
@@ -278,6 +322,11 @@
   Decomposition of variance for spatial Cox processes.
   \emph{Scandinavian Journal of Statistics}, in press.
 
+  Tanaka, U. and Ogata, Y. and Stoyan, D. (2008)
+  Parameter estimation and model selection for
+  Neyman-Scott point processes. 
+  \emph{Biometrical Journal} \bold{50}, 43--57.
+
   Waagepetersen, R. (2007)
   An estimating function approach to inference for
   inhomogeneous Neyman-Scott processes.
@@ -290,22 +339,29 @@
   kppm(redwood ~ 1, "Thomas")
 
   kppm(redwood ~ 1, "Thomas", method="c")
-  kppm(redwood, ~x, "MatClust") 
+  kppm(redwood ~ 1, "Thomas", method="p")
+
+  kppm(redwood ~ x, "MatClust") 
   kppm(redwood ~ x, "MatClust", statistic="pcf", statargs=list(stoyan=0.2)) 
   kppm(redwood ~ 1, "LGCP", statistic="pcf")
   kppm(redwood ~ x, cluster="Cauchy", statistic="K")
   kppm(redwood, cluster="VarGamma", nu.ker = 0.5, statistic="pcf")
   if(require(RandomFields)) {
-     kppm(redwood ~x, "LGCP", statistic="pcf",
+     kppm(redwood ~ x, "LGCP", statistic="pcf",
            covmodel=list(model="matern", nu=0.3),
            control=list(maxit=10))
   }
+
+  # fit intensity with quasi-likelihood method
+  kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/},
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
   with contributions from Abdollah Jalilian and Rasmus Waagepetersen.
 }
 \keyword{spatial}

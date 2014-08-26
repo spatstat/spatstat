@@ -8,8 +8,8 @@
   whose pixel values are colours.
 }
 \usage{
-  rgbim(R, G, B, maxColorValue=255)
-  hsvim(H, S, V)
+  rgbim(R, G, B, maxColorValue=255, autoscale=FALSE)
+  hsvim(H, S, V, autoscale=FALSE)
 }
 \arguments{
   \item{R,G,B}{
@@ -17,12 +17,18 @@
     giving the red, green, and blue components of a colour, respectively.
   }
   \item{maxColorValue}{
-    Maximum colour value for \code{R,G,B}.
+    Maximum colour channel value for \code{R,G,B}.
   }
   \item{H,S,V}{
     Pixel images (objects of class \code{"im"}) or constants
     giving the hue, saturation, and value components of
     a colour, respectively.
+  }
+  \item{autoscale}{
+    Logical. If \code{TRUE}, input values are automatically rescaled
+    to fit the permitted range. RGB values are scaled to lie between
+    0 and \code{maxColorValue}. HSV values are scaled to lie between 0
+    and 1.
   }
 }
 \details{

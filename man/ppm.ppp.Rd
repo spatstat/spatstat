@@ -13,6 +13,7 @@
        covariates=data,
        data=NULL,
        covfunargs = list(),
+       subset,
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
@@ -31,6 +32,7 @@
        covariates=data,
        data=NULL,
        covfunargs = list(),
+       subset,
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
@@ -68,6 +70,12 @@
     coordinates) required by the model.
     Either a data frame, or a list whose entries are images,
     functions, windows, tessellations or single numbers. See Details.
+  }
+  \item{subset}{
+    Optional. An expression (typically involving the Cartesian coordinates
+    \code{x} and \code{y} or the names of entries in \code{data})
+    defining a subset of the spatial domain,
+    to which the model-fitting should be restricted.
   }
   \item{covfunargs}{
     A named list containing the values of any additional arguments
@@ -196,6 +204,11 @@
       the model to be fitted is stationary (or at least, its first order 
       potential is constant). 
  
+      The symbol \code{.} in the trend expression stands for
+      all the covariates supplied in the argument \code{data}.
+      For example the formula \code{~ .} indicates an additive
+      model with a main effect for each covariate in \code{data}.
+  
       Stochastic interactions between random points of the point process
       are defined by the argument \code{interaction}. This is an object of
       class \code{"interact"} which is initialised in a very similar way to the
@@ -399,7 +412,7 @@
 	}
 	\item{method="logi":}{
 	  the model will be fitted by maximising the 
-	  logistic likelihood (Baddeley et al, 2013).
+	  logistic likelihood (Baddeley et al, 2014).
 	  This technique is roughly equivalent in speed to
 	  maximum pseudolikelihood, but is 
 	  believed to be less biased. Because it is less biased,
@@ -507,12 +520,10 @@
   is implemented in the command \code{\link{profilepl}}.   
 }
 \references{
-  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2013)
-  \emph{A logistic regression estimating function
-    for spatial Gibbs point processes.}
-  Research Report, Centre for Stochastic Geometry and Bioimaging,
-  Denmark. \url{www.csgb.dk}
-  
+  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)
+  Logistic regression for spatial Gibbs point processes.
+  \emph{Biometrika} \bold{101} (2) 377--392.
+
   Baddeley, A. and Turner, R.
   Practical maximum pseudolikelihood for spatial point patterns.
   \emph{Australian and New Zealand Journal of Statistics}
@@ -773,12 +784,15 @@ ppm(X, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
  # fit stationary marked Poisson process
  # with different intensity for each species
 \dontrun{ppm(lansing, ~ marks, Poisson())}
-\testonly{a <- ppm(amacrine, ~ marks, Poisson(), nd=16)}
+\testonly{
+   ama <- amacrine[square(0.7)]
+   a <- ppm(ama, ~ marks, Poisson(), nd=16)
+}
 
  # fit nonstationary marked Poisson process
  # with different log-cubic trend for each species
 \dontrun{ppm(lansing, ~ marks * polynom(x,y,3), Poisson())}
-\testonly{ppm(amacrine, ~ marks * polynom(x,y,2), Poisson(), nd=16)}
+\testonly{b <- ppm(ama, ~ marks * polynom(x,y,2), Poisson(), nd=16)}
 
 }
 \author{Adrian Baddeley

@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.108 $   $Date: 2014/04/24 01:23:27 $
+#    $Revision: 1.111 $   $Date: 2014/07/30 10:10:12 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -60,7 +60,7 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
     fmla <- paste(valu, "~", argu)
   else if(inherits(fmla, "formula")) {
     # convert formula to string
-    fmla <- deparse(fmla)
+    fmla <- flat.deparse(fmla)
   } else if(!is.character(fmla))
     stop(paste(sQuote("fmla"), "should be a formula or a string"))
 
@@ -160,76 +160,81 @@ print.fv <- local({
   maxwords <- function(z, m) { max(0, which(cumsum(nchar(z) + 1) <= m+1)) }
   usewords <- function(z, n) paste(z[1:n], collapse=" ")
 
-  function(x, ..., tight=FALSE) {
-  verifyclass(x, "fv")
-  nama <- names(x)
-  a <- attributes(x)
-  cat("Function value", "object",
-      paren(paste("class", sQuote("fv"))),
-      fill=TRUE)
-  if(!is.null(ylab <- a$ylab)) {
-    if(is.language(ylab))
-      ylab <- paste(deparse(ylab), collapse=" ")
-    xlab <- fvlabels(x)[[a$argu]]
-    cat("for the", "function", xlab, "->", ylab, fill=TRUE)
-  }
-  # Descriptions ..
-  desc <- a$desc
-  # .. may require insertion of ylab
-  if(!is.null(ylab))
-    desc <- sprintf(desc, ylab)
-  # Labels ..
-  labl <- fvlabels(x, expand=TRUE)
-  ## Avoid overrunning text margin
-  maxlinewidth <- options('width')[[1]]
-  key.width <- max(nchar(nama))
-  labl.width <- max(nchar(labl), nchar("Math.label"))
-  desc.width <- max(nchar(desc), nchar("Description"))
-  fullwidth <- key.width + labl.width + desc.width + 2
-  if(fullwidth > maxlinewidth && tight) {
-    ## try shortening the descriptions so that it all fits on one line
-    spaceleft <- maxlinewidth - (key.width + labl.width + 2)
-    desc <- truncline(desc, spaceleft)
-    desc.width <- max(nchar(desc), nchar("Description"))    
+  print.fv <- function(x, ..., tight=FALSE) {
+    verifyclass(x, "fv")
+    terselevel <- spatstat.options("terse")
+    showlabels <- waxlyrical('space', terselevel)
+    showextras <- waxlyrical('extras', terselevel)
+    nama <- names(x)
+    a <- attributes(x)
+    splat("Function value object",
+        paren(paste("class", sQuote("fv"))))
+    if(!is.null(ylab <- a$ylab)) {
+      if(is.language(ylab))
+        ylab <- flat.deparse(ylab)
+      xlab <- fvlabels(x)[[a$argu]]
+      splat("for the function", xlab, "->", ylab)
+    }
+    ## Descriptions ..
+    desc <- a$desc
+    ## .. may require insertion of ylab
+    if(!is.null(ylab))
+      desc <- sprintf(desc, ylab)
+    ## Labels ..
+    labl <- fvlabels(x, expand=TRUE)
+    ## Avoid overrunning text margin
+    maxlinewidth <- options('width')[[1]]
+    key.width <- max(nchar(nama))
+    labl.width <- if(showlabels) max(nchar(labl), nchar("Math.label")) else 0
+    desc.width <- max(nchar(desc), nchar("Description"))
     fullwidth <- key.width + labl.width + desc.width + 2
-  }
-  spaceleft <- maxlinewidth - (key.width + 1)
-  if(desc.width > spaceleft) {
-    ## Descriptions need to be truncated to max line width
-    desc <- truncline(desc, spaceleft)
-    desc.width <- max(nchar(desc), nchar("Description"))    
-    fullwidth <- key.width + labl.width + desc.width + 2
-  }
-  fullwidth <- pmin(maxlinewidth, fullwidth)
-  fullline <- paste0(rep(".", fullwidth), collapse="")
-  cat(fullline, fill=TRUE)
-  df <- data.frame(Math.label=labl,
-                   Description=desc,
-                   row.names=nama)
-  print(df, right=FALSE)
-  cat(fullline, fill=TRUE)
+    if(fullwidth > maxlinewidth && tight) {
+      ## try shortening the descriptions so that it all fits on one line
+      spaceleft <- maxlinewidth - (key.width + labl.width + 2)
+      desc <- truncline(desc, spaceleft)
+      desc.width <- max(nchar(desc), nchar("Description"))    
+      fullwidth <- key.width + labl.width + desc.width + 2
+    }
+    spaceleft <- maxlinewidth - (key.width + 1)
+    if(desc.width > spaceleft) {
+      ## Descriptions need to be truncated to max line width
+      desc <- truncline(desc, spaceleft)
+      desc.width <- max(nchar(desc), nchar("Description"))    
+      fullwidth <- key.width + labl.width + desc.width + 2
+    }
+    if(showextras) {
+      fullwidth <- pmin(maxlinewidth, fullwidth)
+      fullline <- paste0(rep(".", fullwidth), collapse="")
+      cat(fullline, fill=TRUE)
+    }
+    df <- data.frame(Math.label=labl,
+                     Description=desc,
+                     row.names=nama,
+                     stringsAsFactors=FALSE)
+    if(!showlabels) df <- df[,-1,drop=FALSE]
+    print(df, right=FALSE)
   ##
-  cat("Default plot formula:\t",
-      deparse(as.formula(a$fmla)),
-      fill=TRUE)
-  if(!is.null(a$shade)) 
-    cat("Columns",
-        commasep(sQuote(a$shade), flatten=FALSE),
-        "will be plotted as shading (by default)",
-        fill=TRUE)
-  alim <- signif(a$alim, 5)
-  rang <- signif(range(with(x, .x)), 5)
-  cat("Recommended range", "of argument",
-      paste0(a$argu, ":"), prange(alim),
-      fill=TRUE)
-  cat("Available range", "of argument",
-      paste0(a$argu, ":"), prange(rang),
-      fill=TRUE)
-  ledge <- summary(unitname(x))$legend
-  if(!is.null(ledge))
-    cat(paste(ledge, "\n"))
-  invisible(NULL)
-}
+    if(showextras) {
+      cat(fullline, fill=TRUE)
+      splat("Default plot formula:\t",
+            flat.deparse(as.formula(a$fmla)))
+      if(!is.null(a$shade)) 
+        splat("Columns", commasep(sQuote(a$shade)), 
+              "will be plotted as shading (by default)")
+      alim <- signif(a$alim, 5)
+      rang <- signif(range(with(x, .x)), 5)
+      splat("Recommended range", "of argument",
+            paste0(a$argu, ":"), prange(alim))
+      splat("Available range", "of argument",
+            paste0(a$argu, ":"), prange(rang))
+      ledge <- summary(unitname(x))$legend
+      if(!is.null(ledge))
+        splat(ledge)
+    }
+    return(invisible(NULL))
+  }
+
+  print.fv
 })
 
 
@@ -778,7 +783,7 @@ formula.fv <- function(x, ...) {
     value <- paste(fvnames(x, ".y"), "~", fvnames(x, ".x"))
   else if(inherits(value, "formula")) {
     # convert formula to string
-    value <- deparse(value)
+    value <- flat.deparse(value)
   } else if(!is.character(value))
     stop("Assignment value should be a formula or a string")
   attr(x, "fmla") <- value
@@ -787,6 +792,7 @@ formula.fv <- function(x, ...) {
 
 #   method for with()
 
+  
 with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   if(any(names(list(...)) == "drop"))
     stop("Outdated argument 'drop' used in with.fv")
@@ -859,30 +865,36 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   # decide which of the columns should be the preferred value
   newyname <- if(yname %in% resultnames) yname else resultnames[1]
   # construct default plot formula
-  fmla <- deparse(as.formula(paste(". ~", xname)))
+  fmla <- flat.deparse(as.formula(paste(". ~", xname)))
   dotnames <- resultnames
   # construct description strings
   desc <- character(ncol(results))
   desc[okmap] <- attr(data, "desc")[namemap[okmap]]
   desc[!okmap] <- paste("Computed value", resultnames[!okmap])
-  # function name
-  fname <- cl
-  # construct mathematical expression for function (yexp)
+  ## function name (fname) and mathematical expression for function (yexp)
   oldyexp <- attr(data, "yexp")
-  if(is.null(oldyexp))
+  oldfname <- attr(data, "fname")
+  if(is.null(oldyexp)) {
+    fname <- cl
     yexp <- substitute(f(xname), list(f=as.name(fname), xname=as.name(xname)))
-  else {
+  } else {
     # map 'cbind(....)' to "." for name of function only
     cb <- paste("cbind(",
                 paste(used.dotnames, collapse=", "),
                 ")", sep="")
-    compresselang <- gsub(cb, ".", deparse(expandelang), fixed=TRUE)
+    compresselang <- gsub(cb, ".", flat.deparse(expandelang), fixed=TRUE)
     compresselang <- as.formula(paste(compresselang, "~1"))[[2]]
     # construct mapping using original function name
     labmap <- fvlabelmap(data, dot=TRUE)
     labmap[["."]] <- oldyexp
     yexp <- eval(substitute(substitute(ee, ff), 
                             list(ee=compresselang, ff=labmap)))
+    labmap2 <- labmap
+    labmap2[["."]] <- as.name(oldfname)
+    fname <- eval(substitute(substitute(ee, ff), 
+                             list(ee=compresselang,
+                                  ff=labmap2)))
+    fname <- paren(flat.deparse(fname))
   }
   # construct mathematical labels
   mathlabl <- as.character(fvlegend(data, expandelang))
@@ -899,6 +911,37 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   return(out)
 }
 
+# method for 'range'
+
+range.fv <- local({
+
+  range1fv <- function(x, na.rm=TRUE, finite=na.rm) {
+    xdat <- as.matrix(as.data.frame(x))
+    yall <- fvnames(x, ".")
+    ydat <- xdat[, yall]
+    range(ydat, na.rm=na.rm, finite=finite)
+  }
+  
+  range.fv <- function(..., na.rm=TRUE, finite=na.rm) {
+    aarg <- list(...)
+    isfun <- sapply(aarg, is.fv)
+    if(any(isfun)) 
+      aarg[isfun] <- lapply(aarg[isfun], range1fv, na.rm=na.rm, finite=finite)
+    do.call("range", append(aarg, list(na.rm=na.rm, finite=finite)))
+  }
+
+  range.fv
+})
+
+min.fv <- function(..., na.rm=TRUE, finite=na.rm) {
+  range(..., na.rm=TRUE, finite=na.rm)[1]
+}
+
+max.fv <- function(..., na.rm=TRUE, finite=na.rm) {
+  range(..., na.rm=TRUE, finite=na.rm)[2]
+}
+
+  
 # stieltjes integration for fv objects
 
 stieltjes <- function(f, M, ...) {
@@ -1017,7 +1060,8 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
       what <- match.arg(what)
       funs[[what]](x)
     }
-    # magic
+    ## recast function definition
+    ## ('any sufficiently advanced technology...')
     formals(f)[[2]] <- value
     names(formals(f))[1] <- argname
     body(f)[[3]][[2]] <- as.name(argname)

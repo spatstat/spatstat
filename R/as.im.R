@@ -105,8 +105,8 @@ as.im.function <- function(X, W=NULL, ...,
   m <- W$m
   funnywindow <- !all(m)
 
-  xx <- as.vector(raster.x(W))
-  yy <- as.vector(raster.y(W))
+  xx <- as.vector(rasterx.mask(W))
+  yy <- as.vector(rastery.mask(W))
 
   # evaluate function value at each pixel 
   if(!funnywindow) 

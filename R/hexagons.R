@@ -1,23 +1,35 @@
 ## hexagons.R
-## $Revision: 1.3 $ $Date: 2014/01/09 06:53:01 $
+## $Revision: 1.4 $ $Date: 2014/07/21 09:12:05 $
 
-hexgrid <- function(W, s, offset=c(0,0), trim=TRUE) {
+hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   W <- as.owin(W)
   check.1.real(s)
   stopifnot(s > 0)
-  R <- grow.rectangle(as.rectangle(W), s)
-  p0 <- centroid.owin(R)
-  p0 <- shiftxy(p0, offset)
-  ## 'even' points
   hstep <- 3 * s
   vstep <- sqrt(3) * s
-  xeven <- prolongseq(p0$x, R$xrange, step=hstep)
-  yeven <- prolongseq(p0$y, R$yrange, step=vstep)
-  xyeven <- expand.grid(x=xeven, y=yeven)
+  R <- grow.rectangle(as.rectangle(W), hstep)
+  xr <- R$xrange
+  yr <- R$yrange
+  ## initial positions for 'odd' and 'even grids
+  p0 <- as2vector(origin %orifnull% centroid.owin(R))
+  p0 <- p0 + as2vector(offset)
+  q0 <- p0 + c(hstep, vstep)/2
+  ## 'even' points
+  p0 <- c(startinrange(p0[1], hstep, xr),
+          startinrange(p0[2], vstep, yr))
+  if(!any(is.na(p0))) {
+    xeven <- prolongseq(p0[1], xr, step=hstep)
+    yeven <- prolongseq(p0[2], yr, step=vstep)
+    xyeven <- expand.grid(x=xeven, y=yeven)
+  } else xyeven <- list(x=numeric(0), y=numeric(0))
   ## 'odd' points
-  xodd <- prolongseq(p0$x + hstep/2, R$xrange, step=hstep)
-  yodd <- prolongseq(p0$y + vstep/2, R$yrange, step=vstep)
-  xyodd <- expand.grid(x=xodd, y=yodd)
+  q0 <- c(startinrange(q0[1], hstep, xr),
+          startinrange(q0[2], vstep, yr))
+  if(!any(is.na(q0))) {
+    xodd <- prolongseq(q0[1], xr, step=hstep)
+    yodd <- prolongseq(q0[2], yr, step=vstep)
+    xyodd <- expand.grid(x=xodd, y=yodd)
+  } else xyodd <- list(x=numeric(0), y=numeric(0))
   ##
   xy <- concatxy(xyeven, xyodd)
   XY <- as.ppp(xy, W=R)
@@ -27,9 +39,9 @@ hexgrid <- function(W, s, offset=c(0,0), trim=TRUE) {
   return(XY[ok])
 }
 
-hextess <- function(W, s, offset=c(0,0), trim=TRUE) {
+hextess <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   W <- as.owin(W)
-  G <- hexgrid(W, s, offset, trim=FALSE)
+  G <- hexgrid(W=W, s=s, offset=offset, origin=origin, trim=FALSE)
   if(trim && is.mask(W)) {
     ## Result is a pixel image tessellation
     ## Determine pixel resolution by extending 'W' to larger domain of 'G'

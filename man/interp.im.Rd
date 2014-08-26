@@ -6,7 +6,7 @@
   desired location in the frame.
 }
 \usage{
-interp.im(Z, x, y)
+interp.im(Z, x, y=NULL)
 }
 \arguments{
   \item{Z}{
@@ -15,6 +15,7 @@ interp.im(Z, x, y)
   }
   \item{x,y}{
     Vectors of Cartesian coordinates.
+    Alternatively \code{x} can be a point pattern and \code{y} can be missing.
   }
 }
 \details{
@@ -25,6 +26,9 @@ interp.im(Z, x, y)
   At the boundary (where \code{(x[i],y[i])} is not surrounded by
   four pixel centres) the value at the nearest pixel
   is taken.
+
+  The arguments \code{x,y} can be anything acceptable to
+  \code{\link[grDevices]{xy.coords}}.
 }
 \value{
   Vector of interpolated values, with \code{NA} for points that lie

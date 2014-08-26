@@ -83,6 +83,8 @@
     parentid <- rep.int(1:np, csize)
     # trim to window
     retain <- inside.owin(xoff, yoff, win)
+    if(is.im(mu))
+      retain[retain] <- inside.owin(xoff[retain], yoff[retain], as.owin(mu))
     xoff <- xoff[retain]
     yoff <- yoff[retain]
     parentid <- parentid[retain]

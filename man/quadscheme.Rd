@@ -89,7 +89,7 @@
   
   If \code{method = "grid"} then the optional arguments (for \code{\dots}) are 
   \code{(nd, ntile, eps)}.
-  The quadrature region (see below) is divided into
+  The quadrature region (defined above) is divided into
   an \code{ntile[1]} by \code{ntile[2]} grid of rectangular tiles.
   The weight for each
   quadrature point is the area of a tile divided by the number of

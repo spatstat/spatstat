@@ -70,7 +70,8 @@ lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
 is.lppm <- function(x) { inherits(x, "lppm") }
 
 predict.lppm <- function(object, ..., 
-                         type="trend", locations=NULL) {
+                         type="trend", locations=NULL,
+                         new.coef=NULL) {
   type <- pickoption("type", type,
                      c(trend="trend", cif="cif", lambda="cif"))
   X <- object$X
@@ -79,7 +80,7 @@ predict.lppm <- function(object, ...,
 
   if(!is.null(locations)) {
     # locations given; return a vector of predicted values
-    values <- predict(fit, locations=locations, type=type)
+    values <- predict(fit, locations=locations, type=type, new.coef=new.coef)
     return(values)
   }
   
@@ -89,8 +90,8 @@ predict.lppm <- function(object, ...,
   linemask <- as.mask.psp(Llines, ...)
   lineimage <- as.im(linemask)
   # extract pixel centres
-  xx <- raster.x(linemask)
-  yy <- raster.y(linemask)
+  xx <- rasterx.mask(linemask)
+  yy <- rastery.mask(linemask)
   mm <- linemask$m
   xx <- as.vector(xx[mm])
   yy <- as.vector(yy[mm])
@@ -103,7 +104,7 @@ predict.lppm <- function(object, ...,
   projdata <- cbind(pixdf, projloc, projmap)
   # predict at the projected points
   if(!is.multitype(fit)) {
-    values <- predict(fit, locations=projloc, type=type)
+    values <- predict(fit, locations=projloc, type=type, new.coef=new.coef)
     # map to nearest pixels
     Z <- lineimage
     Z[pixelcentres] <- values
@@ -117,7 +118,7 @@ predict.lppm <- function(object, ...,
     for(k in seq(length(lev))) {
       markk <- factor(lev[k], levels=lev)
       locnk <- cbind(projloc, data.frame(marks=markk))
-      values <- predict(fit, locations=locnk, type=type)
+      values <- predict(fit, locations=locnk, type=type, new.coef=new.coef)
       Z <- lineimage
       Z[pixelcentres] <- values
       df <- cbind(projdata, values)
@@ -206,6 +207,9 @@ as.owin.lppm <- function(W, ..., fatal=TRUE) {
   as.owin(as.linnet(W), ..., fatal=fatal)
 }
 
+Window.lppm <- function(X, ...) { as.owin(X) }
+
+
 model.images.lppm <- function(object, L=as.linnet(object), ...) {
   stopifnot(inherits(object, "lppm"))
   stopifnot(inherits(L, "linnet"))
@@ -233,7 +237,7 @@ model.frame.lppm <- function(formula, ...) {
   model.frame(formula$fit, ...)
 }
 
-as.linnet.lppm <- function(X, ...) {
+domain.lppm <- as.linnet.lppm <- function(X, ...) {
   as.linnet(X$X, ...)
 }
 

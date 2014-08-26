@@ -41,7 +41,16 @@
   Any arguments in \code{\dots} which are not pixel images will be
   passed to \code{\link{pairs.default}} to control the plot.
 }
-\note{
+\section{Image or Contour Plots}{
+  Since the scatterplots may show very dense concentrations of points,
+  it may be useful to set \code{panel=panel.image}
+  or \code{panel=panel.contour} to draw a colour image or contour plot
+  of the kernel-smoothed density of the scatterplot in each panel.
+  The argument \code{panel} is passed
+  to \code{\link{pairs.default}}. See the help for 
+  \code{\link{panel.image}} and \code{\link{panel.contour}}.
+}
+\section{Low Level Control of Graphics}{
   To control the appearance of the individual scatterplot panels,
   see \code{\link{pairs.default}}, \code{\link{points}}
   or \code{\link{par}}.
@@ -61,6 +70,8 @@
 \seealso{
   \code{\link{pairs}},
   \code{\link{pairs.default}},
+  \code{\link{panel.contour}},
+  \code{\link{panel.image}},
   \code{\link{plot.im}},
   \code{\link{im}},
   \code{\link{par}}

@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.54 $ $Date: 2014/03/12 03:41:01 $
+#   $Revision: 1.56 $ $Date: 2014/07/20 05:52:17 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -138,56 +138,68 @@ print.tess <- function(x, ..., brief=FALSE) {
   invisible(NULL)
 }
 
-plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL) {
-  if(missing(main) || is.null(main))
-    main <- short.deparse(substitute(x))
-  switch(x$type,
-         rect={
-           win <- x$window
-           do.call.matched("plot.owin",
-                           resolve.defaults(list(x=win, main=main,
-                                                 add=add, show.all=show.all),
-                                            list(...)),
-                           extrargs=c("sub", "lty", "lwd"))
-           xg <- x$xgrid
-           yg <- x$ygrid
-           do.call.matched("segments",
-                           resolve.defaults(list(x0=xg, y0=win$yrange[1],
-                                                 x1=xg, y1=win$yrange[2]),
-                                            list(col=col),
-                                            list(...),
-                                            .StripNull=TRUE))
-           do.call.matched("segments",
-                           resolve.defaults(list(x0=win$xrange[1], y0=yg,
-                                                 x1=win$xrange[2], y1=yg),
-                                            list(col=col),
-                                            list(...),
-                                            .StripNull=TRUE))
-         },
-         tiled={
-           do.call.matched("plot.owin",
-                           resolve.defaults(list(x=x$window, main=main,
-                                                 add=add, show.all=show.all),
-                                            list(...)))
-           til <- tiles(x)
-           plotem <- function(z, ..., col=NULL) {
-             if(is.null(col))
-               plot(z, ..., add=TRUE)
-             else if(z$type != "mask")
-               plot(z, ..., border=col, add=TRUE)
-             else plot(z, ..., col=col, add=TRUE)
-           }
-           lapply(til, plotem, ..., col=col)
-         },
-         image={
-           do.call("plot",
-                   resolve.defaults(list(x$image, add=add, main=main,
-                                         show.all=show.all),
-                                    list(...),
-                                    list(valuesAreColours=FALSE)))
-         })
-  return(invisible(NULL))
-}
+plot.tess <- local({
+
+  plotem <- function(z, ..., col=NULL) {
+    if(is.null(col))
+      plot(z, ..., add=TRUE)
+    else if(z$type != "mask")
+      plot(z, ..., border=col, add=TRUE)
+    else plot(z, ..., col=col, add=TRUE)
+  }
+
+  plotpars <- c("sub", "lty", "lwd",
+                "cex.main", "col.main", "font.main",
+                "cex.sub", "col.sub", "font.sub", "border")
+
+  plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL) {
+    if(missing(main) || is.null(main))
+      main <- short.deparse(substitute(x))
+    switch(x$type,
+           rect={
+             win <- x$window
+             do.call.matched("plot.owin",
+                             resolve.defaults(list(x=win, main=main,
+                                                   add=add, show.all=show.all),
+                                              list(...)),
+                             extrargs=plotpars)
+             xg <- x$xgrid
+             yg <- x$ygrid
+             do.call.matched("segments",
+                             resolve.defaults(list(x0=xg, y0=win$yrange[1],
+                                                   x1=xg, y1=win$yrange[2]),
+                                              list(col=col),
+                                              list(...),
+                                              .StripNull=TRUE))
+             do.call.matched("segments",
+                             resolve.defaults(list(x0=win$xrange[1], y0=yg,
+                                                   x1=win$xrange[2], y1=yg),
+                                              list(col=col),
+                                              list(...),
+                                              .StripNull=TRUE))
+           },
+           tiled={
+             do.call.matched("plot.owin",
+                             resolve.defaults(list(x=x$window, main=main,
+                                                   add=add, show.all=show.all),
+                                              list(...)),
+                             extrargs=plotpars)
+             til <- tiles(x)
+             lapply(til, plotem, ..., col=col)
+           },
+           image={
+             do.call("plot",
+                     resolve.defaults(list(x$image, add=add, main=main,
+                                           show.all=show.all),
+                                      list(...),
+                                      list(valuesAreColours=FALSE)))
+           })
+    return(invisible(NULL))
+  }
+
+  plot.tess
+})
+
 
 "[<-.tess" <- function(x, ..., value) {
   switch(x$type,
@@ -455,6 +467,8 @@ as.tess.list <- function(X) {
 as.tess.owin <- function(X) {
   return(tess(tiles=list(X)))
 }
+
+domain.tess <- Window.tess <- function(X, ...) { as.owin(X) } 
 
 intersect.tess <- function(X, Y, ...) {
   X <- as.tess(X)

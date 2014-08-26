@@ -7,7 +7,8 @@
 }
 \usage{
    \method{vcov}{kppm}(object, ...,
-          what=c("vcov", "corr", "fisher", "internals"))
+          what=c("vcov", "corr", "fisher", "internals"),
+          fast = NULL, rmax = NULL, eps.rmax = 0.01)
 }
 \arguments{
   \item{object}{
@@ -23,6 +24,26 @@
     Options are \code{"vcov"} for the variance-covariance matrix,
     \code{"corr"} for the correlation matrix, and
     \code{"fisher"} for the Fisher information matrix.
+  }
+  \item{fast}{
+    Logical specifying whether tapering (using sparse matrices from
+    \pkg{Matrix}) should be used to speed up calculations. Warning: This
+    is expected to underestimate the true asymptotic
+    variances/covariances.
+  }  
+  \item{rmax}{
+    Optional. The dependence range. Not usually specified by the
+    user. Only used when \code{fast=TRUE}.
+  }
+  \item{eps.rmax}{
+    Numeric. A small positive number which is used to determine \code{rmax}
+    from the tail behaviour of the pair correlation function when fast
+    option (\code{fast=TRUE}) is used. Namely
+    \code{rmax} is the smallest value of \eqn{r}
+    at which \eqn{(g(r)-1)/(g(0)-1)}
+    falls below \code{eps.rmax}.
+    Only used when \code{fast=TRUE}.
+    Ignored if \code{rmax} is provided.
   }
 }
 \details{
@@ -50,6 +71,7 @@
   Abdollah Jalilian and Rasmus Waagepetersen.
   Ported to \pkg{spatstat} by Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
+  and Ege Rubak.
 }
 \seealso{
   \code{\link{kppm}}, 
@@ -58,7 +80,7 @@
 }
 \examples{
    data(redwood)
-   fit <- kppm(redwood, ~ x + y)
+   fit <- kppm(redwood ~ x + y)
    vcov(fit)
    vcov(fit, what="corr")
 

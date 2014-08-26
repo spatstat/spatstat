@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.6 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.7 $	$Date: 2014/05/21 03:27:15 $
 #
 #    Hybrid interactions
 #
@@ -136,6 +136,28 @@ hybrid.family <-
          if(any(IsOffset))
            attr(V, "IsOffset") <- IsOffset
          return(V)
+       },
+       delta2 = function(X, inte, correction, ...) {
+         ## Sufficient statistic for second order conditional intensity
+         result <- NULL
+         interlist <- inte$par
+         for(ii in interlist) {
+           v <- NULL
+           ## look for 'delta2' in component interaction 'ii'
+           if(!is.null(delta2 <- ii$delta2) && is.function(delta2)) 
+             v <- delta2(X, ii, correction)
+           ## look for 'delta2' in family of component 'ii'
+           if(is.null(v) &&
+              !is.null(delta2 <- ii$family$delta2) &&
+              is.function(delta2))
+             v <- delta2(X, ii, correction)
+           if(is.null(v)) {
+             ## no special algorithm available: generic algorithm needed
+             return(NULL)
+           }
+           result <- abind(result, v, along=3)
+         }
+         return(result)
        },
        suffstat = NULL
 )

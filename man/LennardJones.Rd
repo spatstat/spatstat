@@ -124,13 +124,9 @@
   \code{\link{ppm.object}}
 }
 \examples{
-   data(demopat)
-   demopat
-   X <- unmark(demopat)
-   X
-   fit <- ppm(X, ~1, LennardJones(), rbord=500)
+   fit <- ppm(cells ~1, LennardJones(), rbord=0.1)
    fit
-   plot(fitin(fit), xlim=c(0,50))
+   plot(fitin(fit))
 }
 \references{
   Lennard-Jones, J.E. (1924) On the determination of molecular fields.

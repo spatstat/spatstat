@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.42 $	$Date: 2014/04/17 08:45:26 $
+#	$Revision: 1.47 $	$Date: 2014/07/25 07:18:31 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -11,10 +11,10 @@ ppm <- function(Q, ...) {
 }
 
 
-ppm.formula <- function(Q, interaction=NULL, ..., data=NULL) {
+ppm.formula <- function(Q, interaction=NULL, ..., data=NULL, subset) {
   ## remember call
   callstring <- short.deparse(sys.call())
-  ## cl <- match.call()
+  cl <- match.call()
 
   ########### INTERPRET FORMULA ##############################
   
@@ -22,9 +22,6 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL) {
     stop(paste("Argument 'Q' should be a formula"))
   formula <- Q
   
-  if(spatstat.options("expand.polynom"))
-    formula <- expand.polynom(formula)
-
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
@@ -32,8 +29,12 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL) {
   trend <- rhs <- formula[c(1,3)]
   
   ## FIT #######################################
-  thecall <- call("ppm", Q=Yexpr, trend=trend,
-                  data=data, interaction=interaction)
+  thecall <- if(missing(subset)) {
+    call("ppm", Q=Yexpr, trend=trend, data=data, interaction=interaction)
+  } else {
+    call("ppm", Q=Yexpr, trend=trend, data=data, interaction=interaction,
+         subset=substitute(subset))
+  }
   ncall <- length(thecall)
   argh <- list(...)
   nargh <- length(argh)
@@ -41,10 +42,13 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL) {
     thecall[ncall + 1:nargh] <- argh
     names(thecall)[ncall + 1:nargh] <- names(argh)
   }
-  result <- eval(thecall, parent.frame())
+  callenv <- parent.frame()
+  if(!is.null(data)) callenv <- list2env(data, parent=callenv)
+  result <- eval(thecall, envir=callenv)
 
-  if(!("callstring" %in% names(list(...))))
-    result$callstring <- callstring
+  result$call <- cl
+  result$callstring <- callstring
+  result$callframe <- parent.frame()
   
   return(result)
 }
@@ -58,6 +62,7 @@ function(Q,
          covariates = data,
          data = NULL,
          covfunargs = list(),
+         subset,
 	 correction="border",
 	 rbord = reach(interaction),
          use.gam=FALSE,
@@ -75,9 +80,18 @@ function(Q,
          callstring=NULL
 ) {
   Qname <- short.deparse(substitute(Q))
-  
+
+  subsetexpr <- if(!missing(subset)) substitute(subset) else NULL
+
   if(!(method %in% c("mpl", "ho", "logi")))
     stop(paste("Unrecognised fitting method", sQuote(method)))
+  if(inherits(Q, "logiquad")){
+    if(missing(method))
+      method <- "logi"
+    if(method != "logi")
+      stop(paste("Only method =", sQuote("logi"),
+                 "makes sense when Q is of type", sQuote("logiquad")))
+  }
   cl <- match.call()
   if(is.null(callstring)) 
     callstring <- paste(short.deparse(sys.call()), collapse="")
@@ -92,12 +106,27 @@ function(Q,
   }
   X <- if(is.ppp(Q)) Q else Q$data
 
-# Ensure interaction is fully defined  
+  ## Ensure interaction is fully defined  
   if(is.null(interaction)) 
     interaction <- Poisson()
   if(!is.null(ss <- interaction$selfstart)) {
     # invoke selfstart mechanism to fix all parameters
     interaction <- ss(X, interaction)
+  }
+
+  if(inherits(trend, "formula")) {
+    ## handle "." in formula, representing all variables in 'data'
+    if("." %in% variablesinformula(trend)) {
+      if(is.null(covariates))
+        stop("Cannot expand '.' since 'data' is not present", call.=FALSE)
+      rhs <- paste(names(covariates), collapse=" + ")
+      allmaineffects <- as.formula(paste("~", rhs))
+      environment(allmaineffects) <- environment(trend)
+      trend <- update(allmaineffects, trend)
+    }
+    ## expand polynom() in formula
+    if(spatstat.options("expand.polynom"))
+      trend <- expand.polynom(trend)
   }
   
   # validate choice of edge correction
@@ -140,6 +169,7 @@ function(Q,
                            interaction=interaction,
                            covariates=covariates,
                            covfunargs=covfunargs,
+                           subsetexpr=subsetexpr,
                            correction=correction,
                            rbord=rbord,
                            use.gam=use.gam,
@@ -162,6 +192,7 @@ function(Q,
                        interaction=interaction,
                        covariates=covariates,
                        covfunargs=covfunargs,
+                       subsetexpr=subsetexpr,
                        correction=correction,
                        rbord=rbord,
                        use.gam=use.gam,

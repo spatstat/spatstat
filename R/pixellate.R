@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.11 $    $Date: 2014/01/19 05:58:35 $
+#           $Revision: 1.12 $    $Date: 2014/06/27 06:32:02 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -165,7 +165,7 @@ pixellate.owin <- function(x, W=NULL, ...) {
     if(zz$status != 0)
       stop("Internal error")
     # increment output image
-    Z$v <- Z$v + matrix(zz$out, ny, nx, byrow=TRUE)
+    Z$v <- Z$v + matrix(zz$out, ny, nx)
   }
   # revert to original scale
   pixelarea <- dx * dy

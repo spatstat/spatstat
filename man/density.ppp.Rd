@@ -24,7 +24,8 @@
     A numeric vector, numeric matrix, or an \code{expression}.
   }
   \item{\dots}{
-    Additional arguments passed to \code{\link{as.mask}} to determine
+    Additional arguments passed to \code{\link{pixellate.ppp}}
+    and \code{\link{as.mask}} to determine
     the pixel resolution, or passed to \code{sigma} if it is a function.
   }
   \item{edge}{

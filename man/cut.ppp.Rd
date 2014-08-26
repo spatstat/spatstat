@@ -16,7 +16,7 @@
   }
   \item{z}{
     Data determining the classification. A numeric vector,
-    a factor, a pixel image, a tessellation, or a string
+    a factor, a pixel image, a window, a tessellation, or a string
     giving the name of a column of marks.
   }
   \item{\dots}{
@@ -53,6 +53,10 @@
     a tessellation (object of class \code{"tess"}, see
     \code{\link{tess}}). Each point of \code{x} will be classified
     according to the tile of the tessellation into which it falls.
+    \item
+    a window (object of class \code{"owin"}).
+    Each point of \code{x} will be classified
+    according to whether it falls inside or outside this window.
     \item
     a character string, giving the name of one of the columns
     of \code{marks(x)}, if this is a data frame.

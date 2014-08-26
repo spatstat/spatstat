@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.7 $ $Date: 2014/05/07 00:49:03 $
+#  $Revision: 1.8 $ $Date: 2014/06/21 05:33:58 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
@@ -43,7 +43,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     # lambda values provided
     if(is.im(lambda)) 
       lambdaX <- safelookup(lambda, X)
-    else if(is.ppm(lambda) || is.kppm(lambda)) {
+    else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) {
           model <- lambda
           if(!update) {
             ## just use intensity of fitted model
@@ -92,7 +92,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
     } else {
       if(is.im(lambda)) 
         lmin <- min(lambda)
-      else if(is.ppm(lambda) || is.kppm(lambda)) 
+      else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) 
         lmin <- min(predict(lambda))
       else if(is.function(lambda)) 
         lmin <- min(as.im(lambda, W))
@@ -211,7 +211,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     # lambda values provided
     if(is.im(lambda)) 
       lambdaX <- safelookup(lambda, X)
-    else if(is.ppm(lambda) || is.kppm(lambda)) {
+    else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) {
           model <- lambda
           if(!update) {
             ## just use intensity of fitted model
@@ -260,7 +260,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
     } else {
       if(is.im(lambda)) 
         lmin <- min(lambda)
-      else if(is.ppm(lambda) || is.kppm(lambda)) 
+      else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) 
         lmin <- min(predict(lambda))
       else if(is.function(lambda)) 
         lmin <- min(as.im(lambda, W))
@@ -292,8 +292,8 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   bM <- bdist.pixels(M, style="matrix")
   bM <- as.vector(bM)
   # x, y coordinates of pixels are already sorted by increasing x
-  xM <- as.vector(raster.x(M))
-  yM <- as.vector(raster.y(M))
+  xM <- as.vector(rasterx.mask(M))
+  yM <- as.vector(rastery.mask(M))
   nM <- length(xM)
   # compute local cumulative products
   DUP <- spatstat.options("dupC")
@@ -349,7 +349,7 @@ Jinhom <- function(X, lambda=NULL, lmin=NULL,
                    ...,
                    sigma=NULL, varcov=NULL,
                    r=NULL, breaks=NULL, update = TRUE) {
-  if(missing(update) & (is.ppm(lambda) || is.kppm(lambda)))
+  if(missing(update) & (is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)))
     warn.once(key="Jinhom.update",
               "The behaviour of Jinhom when lambda is a ppm object",
               "has changed (in spatstat 1.37-0 and later).",

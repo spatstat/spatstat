@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.16 $ $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.19 $ $Date: 2014/08/01 09:00:16 $
 #
 
 .spst.triEnv <- new.env()
@@ -16,7 +16,8 @@ dirichlet <- function(X) {
   stopifnot(is.ppp(X))
   X <- unique(X, rule="deldir", warn=TRUE)
   w <- X$window
-  dd <- deldir(X$x, X$y, rw=c(w$xrange,w$yrange))
+  dd <- safedeldir(X)
+  if(is.null(dd)) return(NULL)
   pp <- lapply(tile.list(dd), function(z) { owin(poly=z[c("x","y")]) })
   if(length(pp) == npoints(X))
     names(pp) <- seq_len(npoints(X))
@@ -32,7 +33,8 @@ delaunay <- function(X) {
   nX <- npoints(X)
   if(nX < 3) return(NULL)
   w <- X$window
-  dd <- deldir(X$x, X$y, rw=c(w$xrange, w$yrange))
+  dd <- safedeldir(X)
+  if(is.null(dd)) return(NULL)
   a <- dd$delsgs[,5]
   b <- dd$delsgs[,6]
   use.trigraf  <- get("use.trigraf", envir=.spst.triEnv)
@@ -65,7 +67,6 @@ delaunay <- function(X) {
             jt = as.integer(integer(ne)),
             kt = as.integer(integer(ne)),
             status = as.integer(integer(1)))
-#            PACKAGE="spatstat")
     if(z$status != 0)
       stop("Internal error: overflow in trigrafS")
     tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
@@ -84,7 +85,6 @@ delaunay <- function(X) {
             jt = as.integer(integer(ntmax)),
             kt = as.integer(integer(ntmax)),
             status = as.integer(integer(1)))
-#            PACKAGE="spatstat")
     if(z$status != 0)
       stop("Internal error: overflow in trigraf")
     tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
@@ -205,6 +205,7 @@ delaunay.distance <- function(X) {
   if(nY < 3) 
     return(matrix(Inf, nX, nX))
   dd <- deldir(Y$x, Y$y, rw=c(w$xrange,w$yrange))
+  if(is.null(dd)) return(NULL)
   joins <- as.matrix(dd$delsgs[,5:6])
   joins <- rbind(joins, joins[,2:1])
   d <- matrix(-1L, nY, nY)
@@ -221,7 +222,6 @@ delaunay.distance <- function(X) {
           tol = as.integer(0),
           niter = as.integer(integer(1)), 
           status = as.integer(integer(1)))
-#          PACKAGE = "spatstat")
   if (z$status == -1)
     warning(paste("graph connectivity algorithm did not converge after", 
                   z$niter, "iterations", "on", nY, "vertices and", 
@@ -234,4 +234,19 @@ delaunay.distance <- function(X) {
     dpathX[ok, ok] <- dpathY
   }
   return(dpathX)
+}
+
+safedeldir <- function(X) {
+  rw <- with(X$window, c(xrange,yrange))
+  dd <- try(deldir(X$x, X$y, rw=rw))
+  if(!inherits(dd, "try-error") && inherits(dd, "deldir"))
+    return(dd)
+  warning("deldir failed; re-trying with slight perturbation of coordinates.",
+          call.=FALSE)
+  Y <- rjitter(X, mean(nndist(X))/100)
+  dd <- try(deldir(Y$x, Y$y, rw=rw))
+  if(!inherits(dd, "try-error") && inherits(dd, "deldir"))
+    return(dd)
+  warning("deldir failed even after perturbation of coordinates.", call.=FALSE)
+  return(NULL)
 }

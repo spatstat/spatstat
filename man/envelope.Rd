@@ -10,24 +10,30 @@
 \usage{
   envelope(Y, fun, ...)
 
-  \method{envelope}{ppp}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  simulate=NULL, verbose=TRUE, clipdata=TRUE,
+  \method{envelope}{ppp}(Y, fun=Kest, nsim=99, nrank=1, \dots,
+  simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
+  verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{ppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  simulate=NULL, verbose=TRUE, clipdata=TRUE,
+  simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
+  verbose=TRUE, clipdata=TRUE,
   start=NULL, control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5,
   transform=NULL, global=FALSE, ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{kppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  simulate=NULL, verbose=TRUE, clipdata=TRUE,
+  simulate=NULL,
+  verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -67,6 +73,19 @@
     Alternatively \code{simulate} may be an object produced by the
     \code{envelope} command: see Details.
   }
+  \item{fix.n}{
+    Logical. If \code{TRUE}, simulated patterns will have the
+    same number of points as the original data pattern.
+    This option is currently not available for \code{envelope.kppm}.
+  }
+  \item{fix.marks}{
+    Logical. If \code{TRUE}, simulated patterns will have the
+    same number of points \emph{and} the same marks as the
+    original data pattern. In a multitype point pattern this means that
+    the simulated patterns will have the same number of points
+    \emph{of each type} as the original data.
+    This option is currently not available for \code{envelope.kppm}.
+  }
   \item{verbose}{
     Logical flag indicating whether to print progress reports
     during the simulations.
@@ -103,6 +122,13 @@
     A vector of length 2 specifying
     the interval of \eqn{r} values for the simultaneous critical
     envelopes. Only relevant if \code{global=TRUE}.
+  }
+  \item{alternative}{
+    Character string determining whether the envelope corresponds
+    to a two-sided test (\code{side="two.sided"}, the default)
+    or a one-sided test with a lower critical boundary
+    (\code{side="less"}) or a one-sided test
+    with an upper critical boundary (\code{side="greater"}).
   }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated
@@ -363,15 +389,18 @@
     }
     \item{\code{transform}}{specifies a transformation of the
       summary function \code{fun} that will be carried out before the
-      deviations are computed. It must be an expression object
-      using the symbol \code{.} to represent the function value.
+      deviations are computed.
+      Such transforms are useful if \code{global=TRUE} or
+      \code{VARIANCE=TRUE}.
+      The \code{transform} must be an expression object
+      using the symbol \code{.} to represent the function value
+      (and possibly other symbols recognised by \code{\link{with.fv}}).
       For example, 
       the conventional way to normalise the \eqn{K} function
       (Ripley, 1981) is to transform it to the \eqn{L} function
       \eqn{L(r) = \sqrt{K(r)/\pi}}{L(r) = sqrt(K(r)/pi)}
       and this is implemented by setting
       \code{transform=expression(sqrt(./pi))}.
-      Such transforms are useful if \code{global=TRUE}.
     }
   }
 
@@ -593,6 +622,14 @@
                transform=expression(sqrt(./pi)), global=TRUE)
  }
 
+ ## One-sided envelope
+ \dontrun{
+  plot(envelope(X, Lest, alternative="less"))
+ }
+ \testonly{
+  E <- envelope(X, Lest, nsim=3, alternative="less")
+ }
+ 
  # How to pass arguments needed to compute the summary functions:
  # We want envelopes for Jcross(X, "A", "B") 
  # where "A" and "B" are types of points in the dataset 'demopat'

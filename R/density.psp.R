@@ -2,7 +2,7 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.5 $    $Date: 2011/05/18 01:42:11 $
+#  $Revision: 1.6 $    $Date: 2014/08/04 09:49:22 $
 #
 #
 
@@ -20,8 +20,9 @@ density.psp <- function(x, sigma, ..., edge=TRUE) {
   ang <- angles.psp(x, directed=TRUE)
   coz <- cos(ang)
   zin <- sin(ang)
-  xx <- as.vector(raster.x(w))
-  yy <- as.vector(raster.y(w))
+  xy <- rasterxy.mask(w)
+  xx <- xy$x
+  yy <- xy$y
   # compute matrix contribution from each segment 
   for(i in seq_len(n)) {
     en <- x$ends[i,]

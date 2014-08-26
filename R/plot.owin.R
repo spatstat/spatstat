@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.46 $	$Date: 2014/05/05 06:37:17 $
+#	$Revision: 1.50 $	$Date: 2014/08/08 07:56:15 $
 #
 #
 #
@@ -32,27 +32,30 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   } else stopifnot(is.logical(box) && length(box) == 1)
 
 ####
-  if(is.expression(main)) 
-    nlines <- 1
-  else {
-    # convert to string and count number of lines
-    main <- paste(main)
-    if(length(main) > 1)
-      main <- paste(main, collapse="\n")
-    if(nchar(main) == 0)
-      nlines <- 0
-    else
-      nlines <- length(strsplit(main, "\n")[[1]])
-  }
+  pt <- prepareTitle(main)
+  main <- pt$main
+  nlines <- pt$nlines
 #########        
   xlim <- xr <- W$xrange
   ylim <- yr <- W$yrange
 
-####################################################  
+####################################################
+
+  ## graphics parameters that can be overridden by user
+  gparam <- resolve.defaults(list(...), par())
+  ## character expansion factors
+  ##     main title size = 'cex.main' * par(cex.main) * par(cex)
+  ## user's graphics expansion factor (*multiplies* par)
+  cex.main.user <- resolve.1.default(list(cex.main=1), list(...))
+  ## size of main title as multiple of par('cex')
+  cex.main.rela <- cex.main.user * par('cex.main') 
+  ## absolute size
+  cex.main.absol <- cex.main.rela * par('cex')
+    
   if(!add) {
     # new plot
     # allow space for main title
-    guesslinespace <- 0.08 * diff(yr)
+    guesslinespace <- 0.08 * diff(yr) * cex.main.absol
     ylim[2] <- ylim[2] + nlines * guesslinespace
     # set up plot with equal scales
     do.call.plotfun("plot.default",
@@ -66,14 +69,15 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   if(show.all) {
     ## add title in a reasonable place!
     if(nlines > 0) {
-      parval <- resolve.defaults(list(...), par())
-      mainheight <- strheight(main, units="user", cex=parval$cex.main)
-      gapheight <- (strheight("b\nb", units="user", cex=parval$cex.main)
-                    - 2 * strheight("b", units="user", cex=parval$cex.main))
+      mainheight <- sum(strheight(main, units="user", cex=cex.main.rela))
+      gapheight <- (strheight("b\nb", units="user", cex=cex.main.rela)
+                    - 2 * strheight("b", units="user", cex=cex.main.rela))
+      if(nlines > 1 && !is.expression(main))
+        main <- paste(main, collapse="\n")
       text(x=mean(xr), y=yr[2] + mainheight + 0.5 * gapheight, labels=main,
-           cex=parval$cex.main,
-           col=parval$col.main,
-           font=parval$font.main)
+           cex=cex.main.rela,
+           col=gparam$col.main,
+           font=gparam$font.main)
     }
   }
   

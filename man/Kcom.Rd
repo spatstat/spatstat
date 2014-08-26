@@ -18,6 +18,7 @@ Kcom(object, r = NULL, breaks = NULL, ...,
      correction = c("border", "isotropic", "translate"),
      conditional = !is.poisson(object),
      restrict = FALSE,
+     model = NULL,
      trend = ~1, interaction = Poisson(), rbord = reach(interaction),
      compute.var = TRUE,
      truecoef = NULL, hi.res = NULL)
@@ -55,6 +56,12 @@ Kcom(object, r = NULL, breaks = NULL, ...,
     the reweighting estimator (\code{restrict=FALSE}, the default).
     Applies only if \code{conditional=TRUE}.
     See Details.
+  }
+  \item{model}{
+    Optional. A fitted point process model (object of
+    class \code{"ppm"}) to be re-fitted to the data
+    using \code{\link{update.ppm}}, if \code{object} is a point pattern.
+    Overrides the arguments \code{trend,interaction,rbord}.
   }
   \item{trend,interaction,rbord}{
     Optional. Arguments passed to \code{\link{ppm}}

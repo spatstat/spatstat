@@ -1,7 +1,7 @@
 #
 # pppmatch.R
 #
-# $Revision: 1.13 $  $Date: 2013/04/25 07:24:43 $
+# $Revision: 1.21 $  $Date: 2014/07/23 07:36:03 $
 #
 # Code by Dominic Schuhmacher
 #
@@ -32,7 +32,6 @@ pppmatching <- function(X, Y, am, type = NULL, cutoff = NULL,
    n1 <- X$n
    n2 <- Y$n
    am <- as.matrix(am)
-   am <- apply(am, c(1,2), as.numeric)
    if (length(am) == 0) {
       if (min(n1,n2) == 0) 
          am <- matrix(am, nrow=n1, ncol=n2)
@@ -41,6 +40,8 @@ pppmatching <- function(X, Y, am, type = NULL, cutoff = NULL,
    }
    if (dim(am)[1] != n1 || dim(am)[2] != n2)
       stop("Adjacency matrix does not have the right dimensions")
+   am <- matrix(as.numeric(am), n1, n2)
+   #am <- apply(am, c(1,2), as.numeric)
    res <- list("pp1" = X, "pp2" = Y, "matrix" = am, "type" = type, "cutoff" = cutoff, 
       "q" = q, "distance" = mdist)
    class(res) <- "pppmatching"
@@ -117,8 +118,8 @@ summary.pppmatching <- function(object, ...) {
      }
      else {
        cat("point matching,", npair, ngettext(npair, "line", "lines"), "\n")
-       rowsum <- apply(object$matrix, 1, "sum")
-       colsum <- apply(object$matrix, 2, "sum")
+       rowsum <- rowSums(object$matrix)
+       colsum <- colSums(object$matrix)
        lt <- ifelse(min(rowsum) >= 1, TRUE, FALSE)
        ru <- ifelse(max(rowsum) <= 1, TRUE, FALSE)
        rt <- ifelse(min(colsum) >= 1, TRUE, FALSE)
@@ -187,7 +188,8 @@ matchingdist <- function(matching, type = NULL, cutoff = NULL, q = NULL) {
     shortsum <- apply(matching$matrix, shortdim, sum)
     if (any(shortsum != 1))
       warning("matching does not attribute mass 1 to each point of point pattern with smaller cardinality")
-    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+#    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+    dfix <- pmin(crossdist(X,Y), cutoff)
     if (is.finite(q))
       resdist <- (Lpexpect(dfix, matching$matrix/n, q)^q + abs(n2-n1)/n * cutoff^q)^(1/q)
     else
@@ -199,11 +201,12 @@ matchingdist <- function(matching, type = NULL, cutoff = NULL, q = NULL) {
       return(cutoff)
     if (n == 0)
       return(0)
-    rowsum <- apply(matching$matrix, 1, sum)
-    colsum <- apply(matching$matrix, 2, sum)
+    rowsum <- rowSums(matching$matrix)
+    colsum <- colSums(matching$matrix)
     if (any(c(rowsum, colsum) != 1))
       warning("matching is not 1-1")
-    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+#    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+    dfix <- pmin(crossdist(X,Y), cutoff)
     if (is.finite(q))
       resdist <- Lpexpect(dfix, matching$matrix/n, q)
     else
@@ -217,7 +220,8 @@ matchingdist <- function(matching, type = NULL, cutoff = NULL, q = NULL) {
     shortsum <- apply(matching$matrix, shortdim, sum)
     if (any(shortsum != 1))
       warning("matching does not attribute mass 1 to each point of point pattern with smaller cardinality")
-    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+#    dfix <- apply(crossdist(X,Y), c(1,2), function(x) { min(x,cutoff) })
+    dfix <- pmin(crossdist(X,Y), cutoff)
     if (is.finite(q))
       resdist <- Lpexpect(dfix, matching$matrix/n, q)
     else
@@ -270,7 +274,7 @@ matchingdist <- function(matching, type = NULL, cutoff = NULL, q = NULL) {
 # -----------------------------------------------------------------
 
 pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
-  ccode = TRUE, precision = NULL, approximation = 10, show.rprimal = FALSE, timelag = 0) {
+  ccode = TRUE, auction = TRUE, precision = NULL, approximation = 10, show.rprimal = FALSE, timelag = 0) {
 
   verifyclass(X, "ppp")
   verifyclass(Y, "ppp")
@@ -296,6 +300,7 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
   }
   if (show.rprimal) {
     ccode <- FALSE
+    auction <- FALSE
       if (type != "ace"){
         warning("show.rprimal = TRUE not available for type = ",
         dQuote(type), ". Type is changed to ", dQuote("ace"))
@@ -330,11 +335,12 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
     dfix <- matrix(cutoff,n,n)
     if (min(n1,n2) > 0)
       dfix[1:n1,1:n2] <- crossdist(X,Y)
-    d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+#    d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+    d <- dfix <- pmin(dfix,cutoff)
     if (is.infinite(q)) {
       if (n1 == n2 || matching)
         return(pppdist.prohorov(X, Y, n, d, type, cutoff, matching, ccode,
-        precision, approximation))
+        auction, precision, approximation))
       else
         return(cutoff)
       # in the case n1 != n2 the distance is clear, and in a sense any
@@ -367,14 +373,17 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
     }
     n <- n1 <- n2 <- X$n
     dfix <- crossdist(X,Y)
-    d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+#    d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+    d <- dfix <- pmin(dfix, cutoff)
     if (is.infinite(q))
       return(pppdist.prohorov(X, Y, n, d, type, cutoff, matching, ccode,
-      precision, approximation))
+      auction, precision, approximation))
   }
   else if (type == "mat") {
     if (!ccode)
       warning("R code is not available for type = ", dQuote("mat"), ". C code is used instead")
+    if (auction)
+      warning("Auction algorithm is not available for type = ", dQuote("mat"), ". Primal-dual algorithm is used instead")
     return(pppdist.mat(X, Y, cutoff, q, matching, precision, approximation))
   }
   else stop(paste("Unrecognised type", sQuote(type)))
@@ -408,15 +417,42 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
     am[cbind(1:n, assig[1:n])] <- 1
   }
   else if (ccode) {
-    res <- .C("dwpure",
+  	if (auction) {
+  	  dupper <- max(d)/10	
+  	  lasteps <- 1/(n+1)
+  	  epsfac <- 10
+      epsvec <- lasteps
+      # Bertsekas: from dupper/2 to 1/(n+1) divide repeatedly by a constant
+      while (lasteps < dupper) {
+        lasteps <- lasteps*epsfac
+        epsvec <- c(epsvec,lasteps)
+      }
+      epsvec <- rev(epsvec)[-1]
+      neps <- length(epsvec)
+      stopifnot(neps >= 1)
+  	  d <- max(d)-d
+  	  # auctionbf uses a "desire matrix"
+  	  res <- .C("auctionbf",
+                    as.integer(d),
+                    as.integer(n),
+                    pers_to_obj = as.integer(rep(-1,n)),
+                    price = as.double(rep(0,n)),
+                    profit = as.double(rep(0,n)),
+                    as.integer(neps),
+                    as.double(epsvec))
+      am <- matrix(0, n, n)
+      am[cbind(1:n,res$pers_to_obj+1)] <- 1
+    }
+    else {           
+      res <- .C("dwpure",
              as.integer(d),
              as.integer(rep.int(1,n)),
              as.integer(rep.int(1,n)),
              as.integer(n),
              as.integer(n),
              flowmatrix = as.integer(integer(n^2)))
-#             PACKAGE="spatstat")
-    am <- matrix(res$flowmatrix, n, n)
+      am <- matrix(res$flowmatrix, n, n)
+    }
   }
   else {
     assig <- acedist.noshow(X, Y, n, d)
@@ -602,7 +638,7 @@ maxflow <- function(costm) {
 #
 
 pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
-  ccode = TRUE, precision = 9, approximation = 10) {
+  ccode = TRUE, auction = TRUE, precision = 9, approximation = 10) {
   n1 <- X$n
   n2 <- Y$n
   d <- dfix/max(dfix)
@@ -615,15 +651,42 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
     if (ccode) {
       if (any(d > .Machine$integer.max))
         stop("integer overflow, while rounding the q-th powers of distances")
-      res <- .C("dwpure",
-               as.integer(d),
-               as.integer(rep.int(1,n)),
-               as.integer(rep.int(1,n)),
-               as.integer(n),
-               as.integer(n),
-               flowmatrix = as.integer(integer(n^2)))
-#               PACKAGE="spatstat")
-      am <- matrix(res$flowmatrix, n, n)
+      if (auction) {
+      	dupper <- max(d)/10
+  	    lasteps <- 1/(n+1)
+  	    epsfac <- 10
+        epsvec <- lasteps
+        # Bertsekas: from dupper/2 to 1/(n+1) divide repeatedly by a constant
+        while (lasteps < dupper) {
+          lasteps <- lasteps*epsfac
+          epsvec <- c(epsvec,lasteps)
+        }
+        epsvec <- rev(epsvec)[-1]
+        neps <- length(epsvec)
+        stopifnot(neps >= 1)
+  	    d <- max(d)-d
+  	    # auctionbf uses a "desire matrix"
+  	    res <- .C("auctionbf",
+                      as.integer(d),
+                      as.integer(n),
+                      pers_to_obj = as.integer(rep(-1,n)),
+                      price = as.double(rep(0,n)),
+                      profit = as.double(rep(0,n)),
+                      as.integer(neps),
+                      as.double(epsvec))
+        am <- matrix(0, n, n)
+        am[cbind(1:n,res$pers_to_obj+1)] <- 1
+      }
+      else {           
+        res <- .C("dwpure",
+                 as.integer(d),
+                 as.integer(rep.int(1,n)),
+                 as.integer(rep.int(1,n)),
+                 as.integer(n),
+                 as.integer(n),
+                 flowmatrix = as.integer(integer(n^2)))
+        am <- matrix(res$flowmatrix, n, n)
+      }
     }
     else {
       if (any(is.infinite(d)))
@@ -648,7 +711,6 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
              as.integer(d),
              as.integer(n),
              assignment = as.integer(rep.int(-1,n)))
-#             PACKAGE="spatstat")
     assig <- res$assignment
     am <- matrix(0, n, n)
     am[cbind(1:n, assig[1:n])] <- 1
@@ -686,7 +748,8 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
   }
 
   dfix <- crossdist(X,Y)
-  d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+#  d <- dfix <- apply(dfix, c(1,2), function(x) { min(x,cutoff) })
+  d <- dfix <- pmin(dfix, cutoff)
   d <- d/max(d)
   if (is.infinite(q)) {
     if (is.infinite(approximation))
@@ -709,7 +772,6 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
              as.integer(n1),
              as.integer(n2),
              flowmatrix = as.integer(integer(n1*n2)))
-#             PACKAGE="spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     resdist <- max(dfix[am > 0])
   }
@@ -736,7 +798,6 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
              as.integer(n1),
              as.integer(n2),
              flowmatrix = as.integer(integer(n1*n2)))
-#             PACKAGE="spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     # our "adjacency matrix" in this case is standardized to have
     # rowsum 1 if n1 <= n2 and colsum 1 if n1 >= n2

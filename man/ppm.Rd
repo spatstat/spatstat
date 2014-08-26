@@ -10,7 +10,7 @@
 \usage{
    ppm(Q, \dots)
 
-   \method{ppm}{formula}(Q, interaction=NULL, \dots, data=NULL)
+   \method{ppm}{formula}(Q, interaction=NULL, \dots, data=NULL, subset)
 }
 \arguments{
   \item{Q}{
@@ -32,6 +32,12 @@
     coordinates) required by the model.
     Either a data frame, or a list whose entries are images,
     functions, windows, tessellations or single numbers. See Details.
+  }
+  \item{subset}{
+    Optional. An expression (typically involving the Cartesian coordinates
+    \code{x} and \code{y} or the names of entries in \code{data})
+    defining a subset of the spatial domain,
+    to which the model-fitting should be restricted.
   }
 }
 \value{
@@ -75,8 +81,13 @@
   as these are reserved for internal use.
   If the formula is \code{pattern~1}, then
   the model to be fitted is stationary (or at least, its first order 
-  potential is constant). 
- 
+  potential is constant).
+  
+  The symbol \code{.} in the trend expression stands for
+  all the covariates supplied in the argument \code{data}.
+  For example the formula \code{pattern ~ .} indicates an additive
+  model with a main effect for each covariate in \code{data}.
+  
   Stochastic interactions between random points of the point process
   are defined by the argument \code{interaction}. This is an object of
   class \code{"interact"} which is initialised in a very similar way to the
@@ -230,15 +241,9 @@
   experimental command \code{\link{ippm}}.
 }
 \references{
-  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2013)
-  \emph{A logistic regression estimating function
-    for spatial Gibbs point processes.}
-  Research Report, Centre for Stochastic Geometry and Bioimaging,
-  Denmark. \url{www.csgb.dk}
-  
   Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)
   Logistic regression for spatial Gibbs point processes.
-  \emph{Biometrika}, in press.
+  \emph{Biometrika} \bold{101} (2) 377--392.
 
   Baddeley, A. and Turner, R. (2000)
   Practical maximum pseudolikelihood for spatial point patterns.
@@ -415,19 +420,24 @@ ppm(X ~ x + f, covfunargs=list(a=1/2))
  # fit stationary marked Poisson process
  # with different intensity for each species
 \dontrun{ppm(lansing ~  marks, Poisson())}
-\testonly{a <- ppm(amacrine ~  marks, Poisson(), nd=16)}
+\testonly{
+  ama <- amacrine[square(0.7)]
+  a <- ppm(ama ~  marks, Poisson(), nd=16)
+}
 
  # fit nonstationary marked Poisson process
  # with different log-cubic trend for each species
 \dontrun{ppm(lansing ~  marks * polynom(x,y,3), Poisson())}
-\testonly{ppm(amacrine ~  marks * polynom(x,y,2), Poisson(), nd=16)}
+\testonly{b <- ppm(ama ~  marks * polynom(x,y,2), Poisson(), nd=16)}
 
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

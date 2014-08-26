@@ -3,26 +3,29 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.5 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.6 $	$Date: 2014/06/17 04:43:13 $
 #
 ################################################################################
 #
 
 psst <- function(object, fun, r=NULL, breaks=NULL, ...,
+                 model=NULL,
                  trend=~1, interaction=Poisson(),
                  rbord=reach(interaction),
                  truecoef=NULL, hi.res=NULL,
                  funargs=list(correction="best"),
                  verbose=TRUE) {
-  if(inherits(object, "ppm")) 
+  if(inherits(object, "ppm")) {
     fit <- object
-  else if(inherits(object, "ppp"))
-    fit <- ppm(quadscheme(object, ...),
-               trend=trend, interaction=interaction, rbord=rbord)
-  else if(inherits(object, "quad")) 
-    fit <- ppm(object, 
-               trend=trend, interaction=interaction, rbord=rbord)
-  else 
+  } else if(is.ppp(object) || inherits(object, "quad")) {
+    if(is.ppp(object)) object <- quadscheme(object, ...)
+    if(!is.null(model)) {
+      fit <- update(model, Q=object, forcefit=TRUE)
+    } else {
+      fit <- ppm(object, trend=trend, interaction=interaction, rbord=rbord,
+                 forcefit=TRUE)
+    }
+  } else 
     stop("object should be a fitted point process model or a point pattern")
 
   rfixed <- !is.null(r) || !is.null(breaks)

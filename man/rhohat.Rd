@@ -16,8 +16,9 @@
 rhohat(object, covariate, ...)
 
 \method{rhohat}{ppp}(object, covariate, ...,
-       baseline=NULL,
+       baseline=NULL, weights=NULL,
        method=c("ratio", "reweight", "transform"),
+       horvitz=FALSE,
        smoother=c("kernel", "local"),
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -25,8 +26,9 @@ rhohat(object, covariate, ...)
        covname, confidence=0.95)
 
 \method{rhohat}{quad}(object, covariate, ...,
-       baseline=NULL,
+       baseline=NULL, weights=NULL,
        method=c("ratio", "reweight", "transform"),
+       horvitz=FALSE,
        smoother=c("kernel", "local"),
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -34,7 +36,9 @@ rhohat(object, covariate, ...)
        covname, confidence=0.95)
 
 \method{rhohat}{ppm}(object, covariate, ...,
+       weights=NULL,
        method=c("ratio", "reweight", "transform"),
+       horvitz=FALSE,
        smoother=c("kernel", "local"),
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -42,7 +46,9 @@ rhohat(object, covariate, ...)
        covname, confidence=0.95)
 
 \method{rhohat}{lpp}(object, covariate, ...,
+       weights=NULL,
        method=c("ratio", "reweight", "transform"),
+       horvitz=FALSE,
        smoother=c("kernel", "local"),
        nd=1000, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
@@ -50,13 +56,14 @@ rhohat(object, covariate, ...)
        covname, confidence=0.95)
 
 \method{rhohat}{lppm}(object, covariate, ...,
+       weights=NULL,
        method=c("ratio", "reweight", "transform"),
+       horvitz=FALSE,
        smoother=c("kernel", "local"),
        nd=1000, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
        covname, confidence=0.95)
-
 }
 \arguments{
   \item{object}{
@@ -72,6 +79,12 @@ rhohat(object, covariate, ...)
     Alternatively one of the strings \code{"x"} or \code{"y"}
     signifying the Cartesian coordinates.
   }
+  \item{weights}{
+    Optional weights attached to the data points.
+    Either a numeric vector of weights for each data point,
+    or a pixel image (object of class \code{"im"}) or
+    a \code{function(x,y)} providing the weights.
+  }
   \item{baseline}{
     Optional baseline for intensity function.
     A \code{function(x,y)} or a pixel image (object of
@@ -80,6 +93,10 @@ rhohat(object, covariate, ...)
   }
   \item{method}{
     Character string determining the smoothing method. See Details.
+  }
+  \item{horvitz}{
+    Logical value indicating whether to use Horvitz-Thompson weights.
+    See Details.
   }
   \item{smoother}{
     Character string determining the smoothing algorithm. See Details.
@@ -153,7 +170,7 @@ rhohat(object, covariate, ...)
   \code{object}. A smoothing estimator of \eqn{\rho(z)}{rho(z)} is computed.
 
   The estimation procedure is determined by the character strings
-  \code{method} and \code{smoother}.
+  \code{method} and \code{smoother} and the argument \code{horvitz}.
   The estimation procedure involves computing several density estimates
   and combining them. 
   The algorithm used to compute density estimates is 
@@ -192,7 +209,13 @@ rhohat(object, covariate, ...)
     then applying edge-corrected density estimation on the interval
     \eqn{[0,1]}, and back-transforming.
   }
-
+  If \code{horvitz=TRUE}, then the calculations described above
+  are modified by using Horvitz-Thompson weighting.
+  The contribution to the numerator from 
+  each data point is weighted by the reciprocal of the
+  baseline value or fitted intensity value at that data point;
+  and a corresponding adjustment is made to the denominator.
+  
   The covariate will be evaluated on a fine grid of locations,
   with spatial resolution controlled by the arguments
   \code{dimyx,eps,nd}. 
@@ -204,7 +227,11 @@ rhohat(object, covariate, ...)
   \code{"lpp"} or \code{"lppm"}) the argument \code{nd} specifies the
   total number of test locations on the linear
   network, and \code{eps} specifies the linear separation between test
-  locations. 
+  locations.
+
+  If the argument \code{weights} is present, then the contribution
+  from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is
+  multiplied by \code{weights[i]}.
 }
 \value{
   A function value table (object of class \code{"fv"})
@@ -219,7 +246,8 @@ rhohat(object, covariate, ...)
   It is not applicable to covariates with categorical (factor) values
   or discrete values such as small integers.
   For a categorical covariate, use
-  \code{\link{quadratcount}(X, tess=covariate)}
+  \code{\link{intensity.quadratcount}} applied to the result of
+  \code{\link{quadratcount}(X, tess=covariate)}.
 }
 \references{
   Baddeley, A., Chang, Y.-M., Song, Y. and Turner, R. (2012)

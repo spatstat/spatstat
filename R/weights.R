@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.30 $	$Date: 2014/05/07 04:04:59 $
+#	$Revision: 4.31 $	$Date: 2014/08/04 10:32:45 $
 #
 #
 # Main functions:
@@ -144,8 +144,9 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
             }
                 
             # extract pixel coordinates inside window
-            xx <- as.vector(raster.x(win)[win$m])
-            yy <- as.vector(raster.y(win)[win$m])
+            rxy <- rasterxy.mask(win, drop=TRUE)
+            xx <- rxy$x
+            yy <- rxy$y
                                 
 	    # classify all pixels into tiles
             pixelid <- gridindex(xx, yy, 

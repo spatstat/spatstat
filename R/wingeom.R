@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.85 $	$Date: 2014/01/27 07:54:55 $
+#	$Revision: 4.86 $	$Date: 2014/08/04 10:40:04 $
 #
 #
 #
@@ -147,16 +147,18 @@ overlap.owin <- function(A, B) {
   if(At=="mask") {
     # count pixels in A that belong to B
     pixelarea <- abs(A$xstep * A$ystep)
-    x <- as.vector(raster.x(A)[A$m])
-    y <- as.vector(raster.y(A)[A$m])
+    rxy <- rasterxy.mask(A, drop=TRUE)
+    x <- rxy$x
+    y <- rxy$y
     ok <- inside.owin(x, y, B) 
     return(pixelarea * sum(ok))
   }
   if(Bt== "mask") {
     # count pixels in B that belong to A
     pixelarea <- abs(B$xstep * B$ystep)
-    x <- as.vector(raster.x(B)[B$m])
-    y <- as.vector(raster.y(B)[B$m])
+    rxy <- rasterxy.mask(B, drop=TRUE)
+    x <- rxy$x
+    y <- rxy$y
     ok <- inside.owin(x, y, A)
     return(pixelarea * sum(ok))
   }
@@ -390,9 +392,10 @@ union.owin <- function(A, B, ...) {
 
   # Convert C to mask
   C <- do.call("as.mask", append(list(w=C), rasterinfo))
-      
-  x <- as.vector(raster.x(C))
-  y <- as.vector(raster.y(C))
+
+  rxy <- rasterxy.mask(C)
+  x <- rxy$x
+  y <- rxy$y
   ok <- inside.owin(x, y, A) | inside.owin(x, y, B)
 
   if(all(ok)) {
@@ -469,9 +472,10 @@ setminus.owin <- function(A, B, ...) {
 
   # Convert A to mask
   AB <- do.call("as.mask", append(list(w=A), rasterinfo))
-      
-  x <- as.vector(raster.x(AB))
-  y <- as.vector(raster.y(AB))
+
+  rxy <- rasterxy.mask(AB)
+  x <- rxy$x
+  y <- rxy$y
   ok <- inside.owin(x, y, A) & !inside.owin(x, y, B)
 
   if(!all(ok))
@@ -517,17 +521,18 @@ trim.mask <- function(M, R, tolerant=TRUE) {
 }
 
 restrict.mask <- function(M, W) {
-  # M is a mask, W is any window
+  ## M is a mask, W is any window
   stopifnot(is.mask(M))
   stopifnot(inherits(W, "owin"))
-  if(is.rectangle(W) == "rectangle")
+  if(is.rectangle(W))
     return(trim.mask(M, W))
   M <- trim.mask(M, as.rectangle(W))
-  # Determine which pixels of M are inside W
-  Mm <- M$m
-  x <- as.vector(raster.x(M)[Mm])
-  y <- as.vector(raster.y(M)[Mm])
+  ## Determine which pixels of M are inside W
+  rxy <- rasterxy.mask(M, drop=TRUE)
+  x <- rxy$x
+  y <- rxy$y
   ok <- inside.owin(x, y, W)
+  Mm <- M$m
   Mm[Mm] <- ok
   M$m <- Mm
   return(M)
@@ -631,11 +636,12 @@ vertices <- function(w) {
            vert <- do.call("concatxy",w$bdry)
          },
          mask={
-           b <- bdry.mask(w)
-           xx <- raster.x(w)
-           yy <- raster.y(w)
-           vert <- list(x=as.vector(xx[b$m]),
-                        y=as.vector(yy[b$m]))
+           bm <- bdry.mask(w)$m
+           rxy <- rasterxy.mask(w)
+           xx <- rxy$x
+           yy <- rxy$y
+           vert <- list(x=as.vector(xx[bm]),
+                        y=as.vector(yy[bm]))
          })
   return(vert)
 }

@@ -22,7 +22,7 @@ at new locations.
   }
   \item{window}{
     Optional. A window (object of class \code{"owin"})
-    delimiting the locations where predictions
+    \emph{delimiting} the locations where predictions
     should be computed. Defaults to the window of the
     original data used to fit the model \code{object}.
   }
@@ -34,10 +34,12 @@ at new locations.
     directions. (Incompatible with \code{locations})
   }
   \item{locations}{
-    Optional. Data giving the \eqn{x,y} coordinates (and marks, if required)
+    Optional. Data giving the exact
+    \eqn{x,y} coordinates (and marks, if required)
     of locations at which predictions should be computed.
     Either a point pattern, or a data frame with columns named \code{x} and
-    \code{y}, or a binary image mask. (Incompatible with \code{ngrid})
+    \code{y}, or a binary image mask, or a pixel image.
+    (Incompatible with \code{ngrid})
   }
   \item{covariates}{
     Values of external covariates required by the model.
@@ -110,7 +112,7 @@ at new locations.
   (and marks, if required) given in \code{locations}.
 
   \emph{If \code{ngrid} is given, or if \code{locations} is given
-    and is a binary image mask:}
+    and is a binary image mask or a pixel image:}
   If \code{object} is an unmarked point process,
   the result is a pixel image object (of class \code{"im"}, see
   \code{\link{im.object}}) containing the predictions. 
@@ -197,69 +199,76 @@ at new locations.
   The argument \code{locations} may be a point pattern,
   a data frame or a list specifying arbitrary locations;
   or it may be a binary image mask (an object of class \code{"owin"}
-  with type \code{"mask"}) specifying (a subset of) a rectangular
+  with type \code{"mask"}) or a pixel image (object of class
+  \code{"im"}) specifying (a subset of) a rectangular
   grid of locations. 
-
-  If \code{locations} is a point pattern (object of class \code{"ppp"}),
-  then prediction will be performed at the points of the point pattern.
-  The result of prediction will be a vector of predicted values,
-  one value for each point.
-  If the model is a marked point process, then
-  \code{locations} should be a marked point pattern, with marks of the
-  same kind as the model; prediction will be performed at these
-  marked points.
-  The result of prediction will be a vector of predicted values,
-  one value for each (marked) point.
-
-  If \code{locations} is a data frame or list, then it must contain
-  vectors \code{locations$x} and \code{locations$y} specifying the
-  \eqn{x,y} coordinates of the prediction locations. Additionally, if
-  the model is a marked point process, then \code{locations} must also contain
-  a factor \code{locations$marks} specifying the marks of the
-  prediction locations. These vectors must have equal length.
-  The result of prediction will be a vector of predicted values,
-  of the same length.
-  
-  If \code{locations} is a binary image mask, then prediction will be
-  performed at each pixel in this binary image where the pixel value
-  is \code{TRUE} (in other words, at each pixel that is inside the
-  window). If the fitted model is an unmarked point process, then the
-  result of prediction will be an image. If the fitted model is a
-  marked point process, then prediction will
-  be performed for each possible value of the mark at each such
-  location, and the result of prediction will be a 
-  list of images, one for each mark value.
-  
+  \itemize{
+    \item 
+    If \code{locations} is a point pattern (object of class \code{"ppp"}),
+    then prediction will be performed at the points of the point pattern.
+    The result of prediction will be a vector of predicted values,
+    one value for each point.
+    If the model is a marked point process, then
+    \code{locations} should be a marked point pattern, with marks of the
+    same kind as the model; prediction will be performed at these
+    marked points.
+    The result of prediction will be a vector of predicted values,
+    one value for each (marked) point.
+    \item 
+    If \code{locations} is a data frame or list, then it must contain
+    vectors \code{locations$x} and \code{locations$y} specifying the
+    \eqn{x,y} coordinates of the prediction locations. Additionally, if
+    the model is a marked point process, then \code{locations} must also contain
+    a factor \code{locations$marks} specifying the marks of the
+    prediction locations. These vectors must have equal length.
+    The result of prediction will be a vector of predicted values,
+    of the same length.
+    \item 
+    If \code{locations} is a binary image mask, then prediction will be
+    performed at each pixel in this binary image where the pixel value
+    is \code{TRUE} (in other words, at each pixel that is inside the
+    window). If the fitted model is an unmarked point process, then the
+    result of prediction will be an image. If the fitted model is a
+    marked point process, then prediction will
+    be performed for each possible value of the mark at each such
+    location, and the result of prediction will be a 
+    list of images, one for each mark value.
+    \item 
+    If \code{locations} is a pixel image (object of class \code{"im"}),
+    then prediction will be performed at each pixel in this image where
+    the pixel value is defined (i.e.\ where the pixel value is not
+    \code{NA}).
+  }
   The argument \code{covariates} gives the values of any spatial covariates
   at the prediction locations.
   If the trend formula in the fitted model 
   involves spatial covariates (other than
   the Cartesian coordinates \code{x}, \code{y})
   then \code{covariates} is required.
-
   The format and use of \code{covariates} are analogous to those of the
   argument of the same name in \code{\link{ppm}}.
   It is either a data frame or a list of images.
-  
-  If \code{covariates} is a list of images, then
-  the names of the entries should correspond to
-  the names of covariates in the model formula \code{trend}.
-  Each entry in the list must be an image object (of class \code{"im"},
-  see \code{\link{im.object}}).
-  The software will look up
-  the pixel values of each image at the quadrature points.
-
-  If \code{covariates} is a data frame, then the
-  \code{i}th row of \code{covariates}
-  is assumed to contain covariate data for the \code{i}th location.
-  When \code{locations} is a data frame,
-  this just means that each row of \code{covariates} contains the
-  covariate data for the location specified in the corresponding row of
-  \code{locations}. When \code{locations} is a binary image
-  mask, the row \code{covariates[i,]} must correspond to the location
-  \code{x[i],y[i]} where \code{x = as.vector(raster.x(locations))}
-  and \code{y = as.vector(raster.y(locations))}.
-
+  \itemize{
+    \item
+    If \code{covariates} is a list of images, then
+    the names of the entries should correspond to
+    the names of covariates in the model formula \code{trend}.
+    Each entry in the list must be an image object (of class \code{"im"},
+    see \code{\link{im.object}}).
+    The software will look up
+    the pixel values of each image at the quadrature points.
+    \item 
+    If \code{covariates} is a data frame, then the
+    \code{i}th row of \code{covariates}
+    is assumed to contain covariate data for the \code{i}th location.
+    When \code{locations} is a data frame,
+    this just means that each row of \code{covariates} contains the
+    covariate data for the location specified in the corresponding row of
+    \code{locations}. When \code{locations} is a binary image
+    mask, the row \code{covariates[i,]} must correspond to the location
+    \code{x[i],y[i]} where \code{x = as.vector(raster.x(locations))}
+    and \code{y = as.vector(raster.y(locations))}.
+  }
   Note that if you only want to use prediction in order to
   generate a plot of the predicted values,
   it may be easier to use \code{\link{plot.ppm}} which calls

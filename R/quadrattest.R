@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.43 $  $Date: 2014/01/16 05:41:24 $
+#   $Revision: 1.45 $  $Date: 2014/06/10 04:27:41 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -12,8 +12,8 @@ quadrat.test.ppp <-
   function(X, nx=5, ny=nx,
            alternative = c("two.sided", "regular", "clustered"),
            method = c("Chisq", "MonteCarlo"),
-           conditional=TRUE,
-           ..., 
+           conditional=TRUE, CR=1,
+           ...,
            xbreaks=NULL, ybreaks=NULL,
            tess=NULL, nsim=1999)
 {
@@ -25,6 +25,7 @@ quadrat.test.ppp <-
                                 alternative=alternative,
                                 method=method,
                                 conditional=conditional,
+                                CR=CR,
                                 xbreaks=xbreaks, ybreaks=ybreaks,
                                 tess=tess,
                                 nsim=nsim),
@@ -44,7 +45,7 @@ quadrat.test.ppm <-
   function(X, nx=5, ny=nx,
            alternative = c("two.sided", "regular", "clustered"),      
            method=c("Chisq", "MonteCarlo"),
-           conditional=TRUE, ...,
+           conditional=TRUE, CR=1, ...,
            xbreaks=NULL, ybreaks=NULL,
            tess=NULL, nsim=1999)
 {
@@ -60,7 +61,7 @@ quadrat.test.ppm <-
           resolve.defaults(list(data.ppm(X), nx=nx, ny=ny,
                                 alternative=alternative,
                                 method=method,
-                                conditional=conditional,
+                                conditional=conditional, CR=CR,
                                 xbreaks=xbreaks, ybreaks=ybreaks,
                                 tess=tess,
                                 nsim=nsim, 
@@ -73,7 +74,7 @@ quadrat.test.quadratcount <-
   function(X,
            alternative = c("two.sided", "regular", "clustered"),
            method=c("Chisq", "MonteCarlo"),
-           conditional=TRUE,
+           conditional=TRUE, CR=1,
            ...,
            nsim=1999) {
    trap.extra.arguments(...)
@@ -81,14 +82,14 @@ quadrat.test.quadratcount <-
    alternative <- match.arg(alternative)
    quadrat.testEngine(Xcount=X,
                       alternative=alternative,
-                      method=method, conditional=conditional, nsim=nsim)
+                      method=method, conditional=conditional, CR=CR, nsim=nsim)
 }
 
 quadrat.testEngine <- function(X, nx, ny,
                                alternative = c("two.sided",
                                                 "regular", "clustered"),
                                method=c("Chisq", "MonteCarlo"),
-                               conditional=TRUE, ...,
+                               conditional=TRUE, CR=1, ...,
                                nsim=1999,
                                Xcount=NULL,
                                xbreaks=NULL, ybreaks=NULL, tess=NULL,
@@ -162,9 +163,12 @@ quadrat.testEngine <- function(X, nx, ny,
   EXP <- as.vector(fitmeans)
   testname <- paste(testname, "of", nullname, "using quadrat counts")
 
+  testname <- c(testname, CressieReadName(CR))
+
   result <- X2testEngine(OBS, EXP,
                          method=method, df=df, nsim=nsim,
-                         conditional=conditional, alternative=alternative,
+                         conditional=conditional, CR=CR,
+                         alternative=alternative,
                          testname=testname, dataname=Xname)
 
   class(result) <- c("quadrattest", class(result))
@@ -172,8 +176,39 @@ quadrat.testEngine <- function(X, nx, ny,
   return(result)
 }
 
+CressieReadStatistic <- function(OBS, EXP, lambda=1) {
+  y <- if(lambda == 1) sum((OBS - EXP)^2/EXP) else
+       if(lambda == 0) 2 * sum(OBS * log(OBS/EXP)) else
+       if(lambda == -1) 2 * sum(EXP * log(EXP/OBS)) else
+       (2/(lambda * (lambda + 1))) * sum(OBS * ((OBS/EXP)^lambda - 1))
+  names(y) <- CressieReadSymbol(lambda)
+  return(y)
+}
+
+CressieReadSymbol <- function(lambda) {
+  if(lambda == 1) "X2" else
+  if(lambda == 0) "G2" else
+  if(lambda == -1/2) "T2" else
+  if(lambda == -1) "GM2" else
+  if(lambda == -2) "NM2" else "CR"
+}
+
+CressieReadName <- function(lambda) {
+  if(lambda == 1) "Pearson X2 statistic" else
+  if(lambda == 0) "likelihood ratio test statistic G2" else
+  if(lambda == -1/2) "Freeman-Tukey statistic T2" else
+  if(lambda == -1) "modified likelihood ratio test statistic GM2" else
+  if(lambda == -2) "Neyman modified X2 statistic NM2" else
+  paste("Cressie-Read statistic",
+        paren(paste("lambda =",
+                    if(abs(lambda - 2/3) < 1e-7) "2/3" else lambda)
+              )
+        )
+}
+
 X2testEngine <- function(OBS, EXP, ...,
                          method=c("Chisq", "MonteCarlo"),
+                         CR=1,
                          df=NULL, nsim=NULL, 
                          conditional, alternative, testname, dataname) {
   method <- match.arg(method)
@@ -181,8 +216,7 @@ X2testEngine <- function(OBS, EXP, ...,
     warning(paste("Some expected counts are small;",
                   "chi^2 approximation may be inaccurate"),
             call.=FALSE)
-  X2 <- sum((OBS - EXP)^2/EXP)
-  names(X2) <- "X-squared"
+  X2 <- CressieReadStatistic(OBS, EXP, CR)
   # conduct test
   switch(method,
          Chisq = {
@@ -205,7 +239,7 @@ X2testEngine <- function(OBS, EXP, ...,
              ne <- length(EXP)
              SIM  <- matrix(rpois(nsim*ne,EXP),nrow=ne)
            }
-           simstats <- apply((SIM-EXP)^2/EXP,2,sum)
+           simstats <- apply(SIM, 2, CressieReadStatistic, EXP=EXP)
            if(any(duplicated(simstats)))
              simstats <- jitter(simstats)
            phi <- (1 + sum(simstats >= X2))/(1+nsim)
@@ -224,6 +258,7 @@ X2testEngine <- function(OBS, EXP, ...,
                              observed = OBS,
                              expected = EXP,
                              residuals = (OBS - EXP)/sqrt(EXP),
+                             CR = CR,
                              method.key = method),
                         class = "htest")
 }
@@ -304,7 +339,9 @@ plot.quadrattest <- local({
 
 ########  pooling multiple quadrat tests into a quadrat test
 
-pool.quadrattest <- function(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL) {
+pool.quadrattest <- function(...,
+                             df=NULL, df.est=NULL, nsim=1999, Xname=NULL,
+                             CR=NULL) {
   argh <- list(...)
   if(!is.null(df) + !is.null(df.est))
     stop("Arguments df and df.est are incompatible")
@@ -327,7 +364,7 @@ pool.quadrattest <- function(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL) {
 
   # information about each test
   Mkey <- unlist(lapply(tests, getElement, name="method.key"))
-  Testname <- unlist(lapply(tests, getElement, name="method"))
+  Testname <- lapply(tests, getElement, name="method")
   Alternative <- unlist(lapply(tests, getElement, name="alternative"))
   Conditional <- unlist(lapply(tests, getElement, name="conditional"))
   
@@ -342,7 +379,8 @@ pool.quadrattest <- function(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL) {
   method.key <- unique(Mkey)
   if(length(testname) > 1)
     stop(paste("Cannot combine different types of tests:",
-               commasep(sQuote(testname))))
+               commasep(sQuote(method.key))))
+  testname <- testname[[1]]
 
   # alternative hypothesis
   alternative <- unique(Alternative)
@@ -355,6 +393,16 @@ pool.quadrattest <- function(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL) {
   if(conditional)
     stop("Sorry, not implemented for conditional tests")
 
+  # Cressie-Read exponent
+  if(is.null(CR)) {
+    CR <- unlist(lapply(tests, getElement, name="CR"))
+    CR <- unique(CR)
+    if(length(CR) > 1) {
+      warning("Tests used different values of CR; assuming CR=1")
+      CR <- 1
+    }
+  }
+                 
   if(method.key == "Chisq") {
     # determine degrees of freedom
     if(is.null(df)) {
@@ -377,7 +425,8 @@ pool.quadrattest <- function(..., df=NULL, df.est=NULL, nsim=1999, Xname=NULL) {
   # perform test
   result <- X2testEngine(OBS, EXP,
                          method=method.key, df=df, nsim=nsim,
-                         conditional=conditional, alternative=alternative,
+                         conditional=conditional, CR=CR,
+                         alternative=alternative,
                          testname=testname, dataname=Xname)
   # add info
   class(result) <- c("quadrattest", class(result))
@@ -417,6 +466,8 @@ as.owin.quadrattest <- function(W, ..., fatal=TRUE) {
   if(fatal) stop(gezeur) else warning(gezeur)
   return(NULL)
 }
+
+domain.quadrattest <- Window.quadrattest <- function(X, ...) { as.owin(X) }
 
 ## The shift method is undocumented.
 ## It is only needed in plot.listof

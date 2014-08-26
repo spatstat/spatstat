@@ -9,6 +9,7 @@
   \method{envelope}{pp3}(Y, fun=K3est, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,
+  alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -64,6 +65,13 @@
     A vector of length 2 specifying
     the interval of \eqn{r} values for the simultaneous critical
     envelopes. Only relevant if \code{global=TRUE}.
+  }
+  \item{alternative}{
+    Character string determining whether the envelope corresponds
+    to a two-sided test (\code{side="two.sided"}, the default)
+    or a one-sided test with a lower critical boundary
+    (\code{side="less"}) or a one-sided test
+    with an upper critical boundary (\code{side="greater"}).
   }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated

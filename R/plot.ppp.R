@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.67 $	$Date: 2014/04/26 01:01:31 $
+#	$Revision: 1.76 $	$Date: 2014/08/02 06:58:07 $
 #
 #
 #--------------------------------------------------------------------------
@@ -11,7 +11,7 @@ plot.ppp <- local({
   ## determine symbol map for marks of points
   default.symap.points <- function(x, ..., 
                                   chars=NULL, cols=NULL, 
-                                  maxsize=NULL, markscale=NULL) {
+                                  maxsize=NULL, meansize=NULL, markscale=NULL) {
     marx <- marks(x)
     if(is.null(marx)) {
       ## null or constant map
@@ -30,11 +30,12 @@ plot.ppp <- local({
     if(inherits(marx, c("Date", "POSIXt"))) {
       ## ......... marks are dates or date/times .....................
       timerange <- range(marx, na.rm=TRUE)
+      shapedefault <- if(!assumecircles) list() else list(shape="circles")
       if(sizegiven) {
         g <- do.call("symbolmap",
           resolve.defaults(list(range=timerange),
                            list(...),
-                           if(assumecircles) list(shape="circles") else list(),
+                           shapedefault,
                            list(chars=chars, cols=cols)))
         return(g)
       }
@@ -43,15 +44,21 @@ plot.ppp <- local({
       y <- y[is.finite(y)]
       if(length(y) == 0) return(symbolmap(..., chars=chars, cols=cols))
       scal <- mark.scale.default(y, as.owin(x), 
-                                 markscale=markscale, maxsize=maxsize)
+                                 markscale=markscale, maxsize=maxsize,
+                                 meansize=meansize, 
+                                 characters=chargiven)
       if(is.na(scal)) return(symbolmap(..., chars=chars, cols=cols))
       ## scale determined
-      sizefun <- function(x) { (scal/2) * scaletointerval(x, 0, 1, timerange)} 
+      sizefun <- function(x, scal=1) {
+        (scal/2) * scaletointerval(x, 0, 1, timerange)
+      }
+      formals(sizefun)[[2]] <- scal  ## ensures value of 'scal' is printed
+      ##
       g <- do.call("symbolmap",
                    resolve.defaults(list(range=timerange),
                                     list(...),
-                                    list(shape="circles",
-                                         size=sizefun)))
+                                    shapedefault,
+                                    list(size=sizefun)))
       return(g)
     }
     if(is.numeric(marx)) {
@@ -73,24 +80,39 @@ plot.ppp <- local({
       if(all(markrange == 0))
         return(symbolmap(..., chars=chars, cols=cols))
       scal <- mark.scale.default(marx, as.owin(x), 
-                                 markscale=markscale, maxsize=maxsize)
+                                 markscale=markscale, maxsize=maxsize,
+                                 meansize=meansize,
+                                 characters=chargiven)
       if(is.na(scal)) return(symbolmap(..., chars=chars, cols=cols))
       ## scale determined
       if(markrange[1] >= 0) {
         ## all marks are nonnegative
-        g <- symbolmap(range=markrange,
-                         ...,
-                         shape="circles",
-                         size=function(x) { scal * x/2 },
-                         cols=cols)
+        shapedefault <-
+          if(!assumecircles) list() else list(shape="circles")
+        cexfun <- function(x, scal=1) { scal * x }
+        circfun <- function(x, scal=1) { scal * x/2 }
+        formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
+        sizedefault <-
+          if(sizegiven) list() else
+          if(chargiven) list(cex=cexfun) else list(size=circfun)
       } else {
         ## some marks are negative
-        g <- symbolmap(range=markrange,
-                         ...,
-                         shape=function(x) ifelse(x >= 0, "circles", "squares"),
-                         size=function(x) { scal * ifelse(x >= 0, x/2, -x) },
-                         cols=cols)
+        shapedefault <-
+          if(!assumecircles) list() else
+          list(shape=function(x) { ifelse(x >= 0, "circles", "squares") })
+        cexfun <- function(x, scal=1) { scal * abs(x) }
+        circfun <- function(x, scal=1) { scal * ifelse(x >= 0, x/2, -x) }
+        formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
+        sizedefault <-
+          if(sizegiven) list() else
+          if(chargiven) list(cex=cexfun) else list(size=circfun)
       }
+      g <- do.call("symbolmap",
+                   resolve.defaults(list(range=markrange),
+                                    list(...),
+                                    shapedefault,
+                                    sizedefault,
+                                    chars=chars, cols=cols))
       return(g)
     }
     ##  ...........  non-numeric marks .........................
@@ -124,7 +146,7 @@ plot.ppp <- local({
              which.marks=NULL, add=FALSE, type=c("p", "n"), 
              legend=TRUE, leg.side=c("left", "bottom", "top", "right"),
              leg.args=list(),
-             symap=NULL, maxsize=NULL, markscale=NULL, zap=0.01, 
+             symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL, zap=0.01, 
              show.window=show.all, show.all=!add, do.plot=TRUE,
              multiplot=TRUE)
 {
@@ -133,7 +155,7 @@ plot.ppp <- local({
 
   type <- match.arg(type)
 
-  if(!missing(maxsize) || !missing(markscale))
+  if(!missing(maxsize) || !missing(markscale) || !missing(meansize))
     warn.once("circlescale",
               "Interpretation of arguments maxsize and markscale",
               "has changed (in spatstat version 1.37-0 and later).",
@@ -143,24 +165,25 @@ plot.ppp <- local({
     x <- x[clipwin]
   
   ## sensible default position
+  legend <- legend && show.all
   if(legend) {
     leg.side <- match.arg(leg.side)
     vertical <- (leg.side %in% c("left", "right"))
   }
   
-  if(type == "n" || npoints(x) == 0) {
-    ## plot the window only
-    xwindow <- x$window
-    if(do.plot) 
-      do.call("plot.owin",
-              resolve.defaults(list(xwindow),
-                               list(...),
-                               list(main=main, invert=TRUE, add=add,
-                                    type=if(show.window) "w" else "n")))
-    if(is.null(symap)) symap <- symbolmap()
-    attr(symap, "bbox") <- as.rectangle(xwindow)
-    return(invisible(symap))
-  }
+#  if(type == "n" || npoints(x) == 0) {
+#    ## plot the window only
+#    xwindow <- x$window
+#    if(do.plot) 
+#      do.call("plot.owin",
+#              resolve.defaults(list(xwindow),
+#                               list(...),
+#                               list(main=main, invert=TRUE, add=add,
+#                                    type=if(show.window) "w" else "n")))
+#    if(is.null(symap)) symap <- symbolmap()
+#    attr(symap, "bbox") <- as.rectangle(xwindow)
+#    return(invisible(symap))
+#  }
 
   ## ................................................................
   ## Handle multiple columns of marks as separate plots
@@ -176,14 +199,17 @@ plot.ppp <- local({
       out <- do.call("plot",
                      resolve.defaults(list(x=y, main=main,
                                            show.window=show.window,
-                                           do.plot=do.plot),
+                                           do.plot=do.plot,
+                                           type=type),
                                       list(...),
                                       list(equal.scales=TRUE), 
                                       list(legend=legend,
                                            leg.side=leg.side,
                                            leg.args=leg.args),
                                       list(chars=chars, cols=cols,
-                                           maxsize=maxsize, markscale=markscale,
+                                           maxsize=maxsize,
+                                           meansize=meansize,
+                                           markscale=markscale,
                                            zap=zap)))
       return(invisible(out))
     } 
@@ -209,22 +235,25 @@ plot.ppp <- local({
       marx <- marx[, which.marks]
       y <- setmarks(y, marx)
     }
-    ok <- complete.cases(as.data.frame(x))
-    if(!any(ok)) {
-      warning("All mark values are NA; plotting locations only.")
-      if(is.null(symap)) symap <- symbolmap()
-    } else if(any(!ok)) {
-      warning(paste("Some marks are NA;",
-                    "corresponding points are omitted."))
-      x <- x[ok]
-      y <- y[ok]
-      marx <- marks(y)
+    if(npoints(y) > 0) {
+      ok <- complete.cases(as.data.frame(x))
+      if(!any(ok)) {
+        warning("All mark values are NA; plotting locations only.")
+        if(is.null(symap)) symap <- symbolmap()
+      } else if(any(!ok)) {
+        warning(paste("Some marks are NA;",
+                      "corresponding points are omitted."))
+        x <- x[ok]
+        y <- y[ok]
+        marx <- marks(y)
+      }
     }
     ## apply default symbol map
     if(is.null(symap))
       symap <- default.symap.points(y, chars=chars, cols=cols, 
-                                  maxsize=maxsize, markscale=markscale,
-                                  ...)
+                                    maxsize=maxsize, meansize=meansize,
+                                    markscale=markscale,
+                                    ...)
   }
   gtype <- symbolmaptype(symap)
 
@@ -234,7 +263,7 @@ plot.ppp <- local({
   if(sick) {
     ## Get relevant parameters
     par.direct <- list(main=main, use.marks=use.marks,
-                   maxsize=maxsize, markscale=markscale)
+                   maxsize=maxsize, meansize=meansize, markscale=markscale)
     par.rejects <- resolve.1.default(list(par.rejects=list(pch="+")),
                                      list(...))
     par.all <- resolve.defaults(par.rejects, par.direct)
@@ -263,12 +292,13 @@ plot.ppp <- local({
   if(legend) {
     ## guess maximum size of symbols
     maxsize <- invoke.symbolmap(symap, marx,
-                                  corners(as.rectangle(x)),
-                                  add=add, do.plot=FALSE)
+                                corners(as.rectangle(x)),
+                                add=add, do.plot=FALSE)
+    sizeguess <- if(maxsize <= 0) NULL else (1.5 * maxsize)
     leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
     ## draw up layout
     legbox <- do.call.matched(plan.legend.layout,
-                              append(list(B=BB, size = 1.5 * maxsize,
+                              append(list(B=BB, size = sizeguess,
                                           started=FALSE, map=symap),
                                      leg.args))
     ## bounding box for everything
@@ -281,7 +311,13 @@ plot.ppp <- local({
     return(invisible(symap))
     
   ## ............. start plotting .......................
-  plot(BB, type="n", add=add, main="           ", show.all=show.all)
+  pt <- prepareTitle(main)
+  main <- pt$main
+  nlines <- pt$nlines
+  blankmain <- if(nlines == 0) "" else rep("  ", nlines)
+  cex.main <- resolve.1.default(list(cex.main=1), list(...))
+  plot(BB, type="n", add=add, main=blankmain, show.all=show.all,
+       cex.main=cex.main)
 
   if(sick) {
     if(show.window) {
@@ -299,9 +335,11 @@ plot.ppp <- local({
                                list(...),
                                list(invert=TRUE)))
     }
-    ## plot reject points
-    do.call("plot.ppp", append(list(rejects, add=TRUE), par.all))
-    warning(paste(rejects$n, "illegal points also plotted"))
+    if(type != "n") {
+      ## plot reject points
+      do.call("plot.ppp", append(list(rejects, add=TRUE), par.all))
+      warning(paste(rejects$n, "illegal points also plotted"))
+    }
     ## the rest is added
     add <- TRUE
   }
@@ -310,23 +348,29 @@ plot.ppp <- local({
   x <- as.ppp(x)
   xwindow <- x$window
 
-  ## Plot observation window
-  if(show.window) {
-    do.call("plot.owin",
-            resolve.defaults(list(x=xwindow, add=TRUE),
+  ## Plot observation window (or at least the main title)
+  do.call("plot.owin",
+          resolve.defaults(list(x=xwindow,
+                                add=TRUE,
+                                main=main,
+                                type=if(show.window) "w" else "n",
+                                show.all=show.all),
                            list(...),
-                           list(invert=TRUE,
-                                main=main, show.all=show.all)))
-  } else if(show.all) fakemaintitle(as.rectangle(xwindow), main, ...)
-  
-  ## plot symbols ##
-  invoke.symbolmap(symap, marx, x, add=TRUE)
+                           list(invert=TRUE)))
+  # else if(show.all) fakemaintitle(as.rectangle(xwindow), main, ...)
 
+  if(type != "n") {
+    ## plot symbols ##
+    invoke.symbolmap(symap, marx, x, add=TRUE)
+  }
+  
   ## add legend
   if(legend) {
     b <- legbox$b
+    legendmap <- if(length(leg.args) == 0) symap else 
+                 do.call("update", append(list(object=symap), leg.args))
     do.call("plot",
-            append(list(x=symap, main="", add=TRUE,
+            append(list(x=legendmap, main="", add=TRUE,
                         xlim=b$xrange, ylim=b$yrange),
                    leg.args))
   }
@@ -339,39 +383,62 @@ plot.ppp
 })
 
 
-mark.scale.default <- function(marx, w, markscale=NULL, maxsize=NULL) {
-  ## establish values of markscale, maxsize
-  if(!is.null(maxsize) && !is.null(markscale))
-    stop("Only one of maxsize and markscale should be given")
-  if(is.null(maxsize) && is.null(markscale)) {
-    ## if BOTH are absent, enforce the spatstat defaults
+mark.scale.default <- function(marx, w, markscale=NULL,
+                               maxsize=NULL, meansize=NULL,
+                               characters=FALSE) {
+  ## establish values of markscale, maxsize, meansize
+  ngiven <- (!is.null(markscale)) +
+            (!is.null(maxsize)) +
+            (!is.null(meansize))
+  if(ngiven > 1)
+     stop("Only one of the arguments markscale, maxsize, meansize",
+          " should be given", call.=FALSE)
+  if(ngiven == 0) {
+    ## if ALL are absent, enforce the spatstat defaults
     ## (which could also be null)
     pop <- spatstat.options("par.points")
     markscale <- pop$markscale
     maxsize   <- pop$maxsize
+    meansize <- pop$meansize
   }
-  # Now check whether markscale is fixed
+  ## Now check whether markscale is fixed
   if(!is.null(markscale)) {
     stopifnot(markscale > 0)
     return(markscale)
   }
-  # Usual case: markscale is to be determined from maximum physical size
-  if(is.null(maxsize)) {
+  # Usual case: markscale is to be determined from maximum/mean physical size
+  if(is.null(maxsize) && is.null(meansize)) {
+    ## compute default value of 'maxsize'
     ## guess appropriate max physical size of symbols
     bb <- as.rectangle(w)
     maxsize <- 1.4/sqrt(pi * length(marx)/area.owin(bb))
     maxsize <- min(maxsize, diameter(bb) * 0.07)
     ## updated: maxsize now represents *diameter*
     maxsize <- 2 * maxsize
-  } else stopifnot(maxsize > 0)
+  } else {
+    if(!is.null(maxsize)) stopifnot(maxsize > 0) else stopifnot(meansize > 0)
+  }
   
   # Examine mark values
-  maxabs <- max(abs(marx))
+  absmarx <- abs(marx)
+  maxabs <- max(absmarx)
   tiny <- (maxabs < 4 * .Machine$double.eps)
   if(tiny)
     return(NA)
-  else 
-   return(maxsize/maxabs)
+
+  ## finally determine physical scale for symbols
+  if(!is.null(maxsize)) {
+    scal <- maxsize/maxabs
+  } else {
+    meanabs <- mean(absmarx)
+    scal <- meansize/meanabs
+  }
+  if(!characters) return(scal)
+
+  ## if using characters ('pch') we need to
+  ## convert physical sizes to 'cex' values
+  charsize <- max(sidelengths(as.rectangle(w)))/40
+  return(scal/charsize)
 }
 
 fakemaintitle <- function(bb, main, ...) {
