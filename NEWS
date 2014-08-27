@@ -62,7 +62,13 @@ BUG FIXES
    [Spotted by Ute Hahn.]
    Fixed.
    
+   o plot.fv
+   y axis label was incorrect in some cases when the 'fv' object
+   had only a single column of function values.
+   [Spotted by Ute Hahn.]
+   Fixed.
 
+   
 	CHANGES IN spatstat VERSION 1.38-0
 
 OVERVIEW

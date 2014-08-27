@@ -1,6 +1,6 @@
-3b05f554126598c2153acd5e060ddd7d *DESCRIPTION
+c77b166116e6723937faeb4b803d1e41 *DESCRIPTION
 c879be6d24a2a72837db6ec225d5a3f2 *NAMESPACE
-b52e60c989b05475d635af05dca475e4 *NEWS
+c3a32bae5291bbcdfa180bcd26b37a77 *NEWS
 fd3079d885f1921a2e13afc804ac998d *R/Fest.R
 181f8b11faf4d789f91fec7ebf20f226 *R/First.R
 6ed249717d3f5d354d859e45642dc020 *R/GJfox.R
@@ -219,7 +219,7 @@ dfb884749a05ca2792358f6d1ff35f0e *R/percy.R
 caf3ce651abd72af3005240d406797f8 *R/pickoption.R
 cf54b268cb0fe81f101feffa9c187fd2 *R/pixellate.R
 d1c6192177be9b868ef0ed5fea15dd24 *R/plot.fasp.R
-36934492bc14c7956a8c288a28c84959 *R/plot.fv.R
+2dbddebce2413f9f025431aeac1a7875 *R/plot.fv.R
 8b1496a4ad156025f4831c32382004ec *R/plot.im.R
 1b5f522e4ff910ea73d2b3e5292aed1c *R/plot.listof.R
 042d4df7ab031933cdeddaf24f25201a *R/plot.mppm.R
@@ -400,16 +400,16 @@ c886a9a9ca2e3ec20e887a43e25e3f31 *demo/spatstat.R
 404870ab93f27c73e7da85264b8603bc *inst/doc/BEGINNER.txt
 61f1a81418830c9fee55e2a9305a4dbd *inst/doc/getstart.R
 8f5fb3d469e4b77230ced2922c18abc2 *inst/doc/getstart.Rnw
-7b8829e6a854ebbcadb58d87dcffff2c *inst/doc/getstart.pdf
+710df637c748f5352e679543790ea548 *inst/doc/getstart.pdf
 62df8ca90a236a4300b427942f78ac39 *inst/doc/replicated.R
 e12cbd8f919c23ce3940157cb54fb6b6 *inst/doc/replicated.Rnw
-f12d8f4a8376fa098c119c5ce985ae9e *inst/doc/replicated.pdf
+a6ad4b5b4c02225d6e0d8f5dfa7ab137 *inst/doc/replicated.pdf
 e4fe213f82867ba5d372a45af3cffd34 *inst/doc/shapefiles.R
 f3ad830dae5a96b3bed7f5154109eb0b *inst/doc/shapefiles.Rnw
-766dd85239afb7d0ab6899b9aa5df273 *inst/doc/shapefiles.pdf
+e4f083cb6ff554b362ea3a7a101380c1 *inst/doc/shapefiles.pdf
 1e7ac86d564a0f8ea68bc96b1c1adb92 *inst/doc/updates.R
 de118d846dcb6553bc602a22647096f3 *inst/doc/updates.Rnw
-828d9fcd2dcd987ff243b3e0e1b33360 *inst/doc/updates.pdf
+86c9a13a335ed042d9e217979950e202 *inst/doc/updates.pdf
 12e68895fef0d3aa0bde45a0ddbadfa4 *inst/ratfor/Makefile
 22e8a5189942ba190c13475b35459c7f *inst/ratfor/dppll.r
 6d471ec061ea91398ba16323de56b9db *inst/ratfor/inxypOld.r
@@ -1354,7 +1354,7 @@ fe9fc67b16d661cec7a1cae2a41daff4 *src/whist.c
 5662cc3feeb8b25a9e413547d82f4074 *tests/badwindow.txt
 c1624129ac630ef4653e3119d70ffa5b *tests/selfcross.txt
 8f5fb3d469e4b77230ced2922c18abc2 *vignettes/getstart.Rnw
-58fb082781f78590842a33d3751db7f7 *vignettes/packagesizes.txt
+8198832eefb0d024592eb9625b48efd1 *vignettes/packagesizes.txt
 e12cbd8f919c23ce3940157cb54fb6b6 *vignettes/replicated.Rnw
 f3ad830dae5a96b3bed7f5154109eb0b *vignettes/shapefiles.Rnw
 de118d846dcb6553bc602a22647096f3 *vignettes/updates.Rnw

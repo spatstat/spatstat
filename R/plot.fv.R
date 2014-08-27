@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.103 $    $Date: 2014/08/09 03:58:02 $
+#  $Revision: 1.104 $    $Date: 2014/08/27 02:00:06 $
 #
 #
 
@@ -107,6 +107,7 @@ plot.fv <- local({
   
     ## expand "."
     dotnames <- fvnames(x, ".")
+    starnames <- fvnames(x, "*")
     u <- if(length(dotnames) == 1) as.name(dotnames) else {
       as.call(lapply(c("cbind", dotnames), as.name))
     }
@@ -132,7 +133,8 @@ plot.fv <- local({
       lhsvars <- lhsvars[lhsvars %in% names(x)]
       colnames(lhsdata) <-
         if(length(lhsvars) == 1) lhsvars else
-      paste(short.deparse(lhs), collapse="")
+        if(length(starnames) == 1 && (starnames %in% lhsvars)) starnames else 
+        paste(short.deparse(lhs), collapse="")
     }
     ## check lhs names exist
     lnames <- colnames(lhsdata)

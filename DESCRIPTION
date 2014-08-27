@@ -1,7 +1,7 @@
 Package: spatstat
 Version: 1.38-1
 Nickname: Le Hardi
-Date: 2014-08-26
+Date: 2014-08-27
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -158,4 +158,4 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2014-08-26 04:32:12 UTC; adrian
+Packaged: 2014-08-27 02:07:29 UTC; adrian
