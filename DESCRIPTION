@@ -89,6 +89,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	R.K. Milne; 
 	J. Moller; 
 	E. Mudrak;
+        G.M. Nair;
 	L.S. Nielsen; 
 	F. Nunes; 
 	J. Oehlschlaegel;
@@ -143,10 +144,8 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>
 Depends: R (>= 3.0.2), stats, graphics, grDevices, utils
-Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.3-0),
-        goftest
-Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot,
-        scatterplot3d, RandomFields (>= 3.0.0), Matrix
+Imports: mgcv, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.3-0), goftest
+Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot, scatterplot3d, RandomFields (>= 3.0.0), Matrix
 Description: A package for analysing spatial data, mainly Spatial Point	Patterns, including multitype/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, and point patterns on a linear network. 
 	Contains about 2000 functions for plotting spatial data, exploratory data analysis, model-fitting, simulation, spatial sampling, model diagnostics, and formal inference. 
 	Data types include point patterns, line segment patterns, spatial windows, pixel images, tessellations, and linear networks. 
@@ -158,4 +157,3 @@ URL: http://www.spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
-Packaged: 2014-08-27 02:07:29 UTC; adrian

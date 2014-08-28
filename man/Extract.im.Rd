@@ -67,7 +67,7 @@
     \code{i,j} are indices for the matrix \code{as.matrix(x)}; or
     \item
     \code{i} can be converted to a point pattern
-    by \code{\link{as.ppp}(i, W=as.owin(x))},
+    by \code{\link{as.ppp}(i, W=Window(x))},
     and \code{i} is not a matrix.
   }
     
@@ -141,7 +141,7 @@
   Finally, if none of the above conditions is met,
   the object \code{i} may also be a data frame or list of \code{x,y}
   coordinates which will be converted to a point pattern, taking the
-  observation window to be \code{as.owin(x)}. Then the pixel values
+  observation window to be \code{Window(x)}. Then the pixel values
   at these points will be extracted as a vector.
 }
 \section{Warnings}{

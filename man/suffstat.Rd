@@ -101,7 +101,7 @@
 }
 \examples{
     fitS <- ppm(swedishpines, ~1, Strauss(7))
-    X <- rpoispp(intensity(swedishpines), win=as.owin(swedishpines))
+    X <- rpoispp(intensity(swedishpines), win=Window(swedishpines))
     suffstat(fitS, X)
 }
 \author{Adrian Baddeley

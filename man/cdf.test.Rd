@@ -223,7 +223,7 @@ cdf.test(...)
    cdf.test(nztrees, fun)
 
    # test of CSR using an image covariate
-   funimage <- as.im(fun, W=as.owin(nztrees))
+   funimage <- as.im(fun, W=Window(nztrees))
    cdf.test(nztrees, funimage)
 
    # fit inhomogeneous Poisson model and test
@@ -247,7 +247,7 @@ cdf.test(...)
 
    # multitype point pattern
    cdf.test(amacrine, "x")
-   yimage <- as.im(function(x,y){y}, W=as.owin(amacrine))
+   yimage <- as.im(function(x,y){y}, W=Window(amacrine))
    cdf.test(ppm(amacrine, ~marks+y), yimage)
 }
 \keyword{htest}

@@ -231,7 +231,7 @@
     the simulated pattern should agree with a specified point pattern
     \eqn{y}.To do this, set \code{control$x.cond} to equal the
     specified point pattern \eqn{y}, making sure that it is an object of class
-    \code{"ppp"} and that the window \code{as.owin(control$x.cond)}
+    \code{"ppp"} and that the window \code{Window(control$x.cond)}
     is the conditioning window \eqn{V}.
     \item
     Simulation \emph{conditional on the presence of specified points},

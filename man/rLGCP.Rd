@@ -87,7 +87,7 @@
   
   If the simulation window \code{win} is missing or \code{NULL},
   then it defaults to 
-  \code{as.owin(mu)} if \code{mu} is a pixel image,
+  \code{Window(mu)} if \code{mu} is a pixel image,
   and it defaults to the unit square otherwise.
   
   The LGCP model can be fitted to data using \code{\link{kppm}}.

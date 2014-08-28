@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.9 $    $Date: 2014/05/30 09:26:09 $
+#  $Revision: 1.10 $    $Date: 2014/08/27 09:50:07 $
 #
 
 rLGCP <- function(model="exp", mu = 0, param = NULL, ...,
@@ -59,10 +59,10 @@ rLGCP <- function(model="exp", mu = 0, param = NULL, ...,
   rfmodel <- do.call(modgen, append(plist, dotargs))
   
   ## generate zero-mean Gaussian random field
-  spc <- RFoptions()$general$spConform
-  if(spc) RFoptions(spConform=FALSE)
+  spc <- RandomFields::RFoptions()$general$spConform
+  if(spc) RandomFields::RFoptions(spConform=FALSE)
   z <- RandomFields::RFsimulate(rfmodel, xcol, yrow, grid = TRUE)
-  if(spc) RFoptions(spConform=TRUE)
+  if(spc) RandomFields::RFoptions(spConform=TRUE)
 
   ## convert to log-Gaussian image
   logLambda <- muxy + z

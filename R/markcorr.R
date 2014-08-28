@@ -2,7 +2,7 @@
 #
 #     markcorr.R
 #
-#     $Revision: 1.63 $ $Date: 2014/02/07 05:34:47 $
+#     $Revision: 1.64 $ $Date: 2014/08/27 09:55:28 $
 #
 #    Estimate the mark correlation function
 #    and related functions 
@@ -459,14 +459,14 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
 
            # smooth estimate of kappa_f
            fw <- ff * wt
-           est <- sm.density(d, weights=fw,
-                             eval.points=rvals,
-                             display="none", nbins=0, ...)$estimate
+           est <- sm::sm.density(d, weights=fw,
+                                 eval.points=rvals,
+                                 display="none", nbins=0, ...)$estimate
            numerator <- est * sum(fw)/sum(est)
            # smooth estimate of kappa_1
-           est0 <- sm.density(d, weights=wt,
-                              eval.points=rvals,
-                              display="none", nbins=0, ...)$estimate
+           est0 <- sm::sm.density(d, weights=wt,
+                                  eval.points=rvals,
+                                  display="none", nbins=0, ...)$estimate
            denominator <- est0 * (sum(wt)/ sum(est0)) * Ef
            result <- numerator/denominator
          },
@@ -490,14 +490,14 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
            drep.fw <- rep.int(d, nfw)
 
            # smooth estimate of kappa_f
-           est <- sm.density(drep.fw,
-                             eval.points=rvals,
-                             display="none", ...)$estimate
+           est <- sm::sm.density(drep.fw,
+                                 eval.points=rvals,
+                                 display="none", ...)$estimate
            numerator <- est * sum(fw)/sum(est)
            # smooth estimate of kappa_1
-           est0 <- sm.density(drep.w,
-                              eval.points=rvals,
-                              display="none", ...)$estimate
+           est0 <- sm::sm.density(drep.w,
+                                  eval.points=rvals,
+                                  display="none", ...)$estimate
            denominator <- est0 * (sum(wt)/ sum(est0)) * Ef
            result <- numerator/denominator
          },

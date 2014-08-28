@@ -51,7 +51,7 @@
     \code{i,j} are indices for the matrix \code{as.matrix(x)}; or
     \item
     \code{i} can be converted to a point pattern
-    by \code{\link{as.ppp}(i, W=as.owin(x))},
+    by \code{\link{as.ppp}(i, W=Window(x))},
     and \code{i} is not a matrix.
   }
 
@@ -68,7 +68,7 @@
 
   If none of the conditions above are met, and if \code{i} is not
   a matrix, then \code{i} is converted into a point pattern
-  by \code{\link{as.ppp}(i, W=as.owin(x))}.
+  by \code{\link{as.ppp}(i, W=Window(x))}.
   Again the values of the pixel image at the points of
   this pattern are changed.
 }

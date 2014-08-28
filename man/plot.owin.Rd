@@ -171,11 +171,11 @@
 }
 \examples{
   # rectangular window
-   plot(as.owin(nztrees))
+   plot(Window(nztrees))
    abline(v=148, lty=2)
 
   # polygonal window
-  w <- as.owin(demopat)
+  w <- Window(demopat)
   plot(w)
   plot(w, col="red", border="green", lwd=2)
   plot(w, hatch=TRUE, lwd=2)

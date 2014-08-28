@@ -71,7 +71,7 @@ hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
 }
 \examples{
   if(interactive()) {
-    W <- as.owin(chorley)
+    W <- Window(chorley)
     s <- 0.7
   } else {
     W <- letterR

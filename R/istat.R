@@ -1,7 +1,7 @@
 #
 # interactive analysis of point patterns
 #
-#   $Revision: 1.16 $   $Date: 2014/07/22 05:36:15 $
+#   $Revision: 1.17 $   $Date: 2014/08/27 09:48:23 $
 #
 #
 
@@ -16,29 +16,32 @@ istat <- function(x, xname) {
   sigma0 <- with(x$window, min(diff(xrange),diff(yrange)))/8
   # create panel
   require(rpanel)
-  p <- rp.control(paste("istat(", xname, ")", sep=""),
-                  x=x,           # point pattern
-                  xname=xname,   # name of point pattern
-                  simx=simx,   # simulated realisations of CSR
-                  stat="data",
-                  envel="none",
-                  sigma=sigma0,
-                  size=c(600, 400))
+  p <- rpanel::rp.control(paste("istat(", xname, ")", sep=""),
+                          x=x,           # point pattern
+                          xname=xname,   # name of point pattern
+                          simx=simx,   # simulated realisations of CSR
+                          stat="data",
+                          envel="none",
+                          sigma=sigma0,
+                          size=c(600, 400))
 # Split panel into two halves  
 # Left half of panel: display
 # Right half of panel: controls
-  rp.grid(p, "gdisplay", pos=list(row=0,column=0), width=400, height=400)
-  rp.grid(p, "gcontrols", pos=list(row=0,column=1), width=200, height=400)
+  rpanel::rp.grid(p, "gdisplay",
+                  pos=list(row=0,column=0), width=400, height=400)
+  rpanel::rp.grid(p, "gcontrols",
+                  pos=list(row=0,column=1), width=200, height=400)
 
 #----- Display side ------------
 
   # This line is to placate the package checker
   mytkr2 <- NULL
   
-  rp.tkrplot(p, mytkr2, do.istat, pos=list(row=0,column=0,grid="gdisplay"))
+  rpanel::rp.tkrplot(p, mytkr2, do.istat,
+                     pos=list(row=0,column=0,grid="gdisplay"))
 
   redraw <- function(panel) {
-    rp.tkrreplot(panel, mytkr2)
+    rpanel::rp.tkrreplot(panel, mytkr2)
     panel
   }
   
@@ -61,9 +64,9 @@ istat <- function(x, xname) {
   fvals <- names(ftable)
   flabs <- as.character(ftable)
   stat <- NULL
-  rp.radiogroup(p, stat, vals=fvals, labels=flabs,
-   			  title="statistic", action=redraw,
-                pos=pozzie(0))
+  rpanel::rp.radiogroup(p, stat, vals=fvals, labels=flabs,
+                        title="statistic", action=redraw,
+                        pos=pozzie(0))
   nextrow <- 1
 # envelopes?
   envel <- NULL
@@ -71,31 +74,31 @@ istat <- function(x, xname) {
   elabs <- c("No simulation envelopes",
              "Pointwise envelopes under CSR",
              "Simultaneous envelopes under CSR")
-  rp.radiogroup(p, envel, vals=evals, labels=elabs,
-                title="Simulation envelopes", action=redraw,
-                pos=pozzie(nextrow))
+  rpanel::rp.radiogroup(p, envel, vals=evals, labels=elabs,
+                        title="Simulation envelopes", action=redraw,
+                        pos=pozzie(nextrow))
   nextrow <- nextrow + 1
 # smoothing parameters
   sigma <- NULL
   rect <- as.rectangle(x$window)
   winwid  <- min(abs(diff(rect$xrange)), abs(diff(rect$yrange)))
-  rp.slider(p, sigma, winwid/80, winwid/2, action=redraw, 
-            title="sigma",
-            initval=winwid/8, showvalue=TRUE, pos=pozzie(nextrow, ''))
+  rpanel::rp.slider(p, sigma, winwid/80, winwid/2, action=redraw, 
+                    title="sigma",
+                    initval=winwid/8, showvalue=TRUE, pos=pozzie(nextrow, ''))
   nextrow <- nextrow + 1
   pcfbw <- pcfbwinit <- 0.15/sqrt(5 * x$n/area.owin(x$window))
-  rp.slider(p, pcfbw, pcfbwinit/10, 4 * pcfbwinit, action=redraw, 
-            title="bw", initval=pcfbwinit,
-            showvalue=TRUE, pos=pozzie(nextrow, ''))
+  rpanel::rp.slider(p, pcfbw, pcfbwinit/10, 4 * pcfbwinit, action=redraw, 
+                    title="bw", initval=pcfbwinit,
+                    showvalue=TRUE, pos=pozzie(nextrow, ''))
   nextrow <- nextrow + 1
 # button to print a summary at console
-  rp.button(p, title="Print summary information",
-            action=function(panel) { print(summary(panel$x)); panel},
-            pos=pozzie(nextrow))
+  rpanel::rp.button(p, title="Print summary information",
+                    action=function(panel) { print(summary(panel$x)); panel},
+                    pos=pozzie(nextrow))
   nextrow <- nextrow + 1
 # quit button 
-  rp.button(p, title="Quit", quitbutton=TRUE,
-            action= function(panel) { panel }, pos=pozzie(nextrow))
+  rpanel::rp.button(p, title="Quit", quitbutton=TRUE,
+                    action= function(panel) { panel }, pos=pozzie(nextrow))
 
   invisible(NULL)
 }

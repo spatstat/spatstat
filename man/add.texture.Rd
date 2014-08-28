@@ -69,7 +69,7 @@ add.texture(W, texture = 4, spacing = NULL, ...)
   \code{\link{texturemap}}.
 }
 \examples{
-  W <- as.owin(chorley)
+  W <- Window(chorley)
   plot(W, main="")
   add.texture(W, 7)
 }

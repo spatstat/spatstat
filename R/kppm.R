@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.87 $ $Date: 2014/06/27 06:28:14 $
+# $Revision: 1.88 $ $Date: 2014/08/27 09:39:08 $
 #
 
 kppm <- function(X, ...) {
@@ -614,7 +614,8 @@ improve.kppm <- local({
       Gtap <- (gfun(cp$d) - 1)
       if(vcov){
         if(fast.vcov){
-          gminus1 <- sparseMatrix(i=cp$i, j=cp$j, x=Gtap, dims=c(U$n, U$n))
+          gminus1 <- Matrix::sparseMatrix(i=cp$i, j=cp$j,
+                                          x=Gtap, dims=c(U$n, U$n))
         } else{
           if(fast)
             gminus1 <- matrix(gfun(c(pairdist(U))) - 1, U$n, U$n)
@@ -627,10 +628,10 @@ improve.kppm <- local({
     if (type == "quasi" && fast){
       mu0 <- exp(c(Z %*% beta0)) * wt
       mu0root <- sqrt(mu0)
-      sparseG <- sparseMatrix(i=cp$i, j=cp$j,
-                              x=mu0root[cp$i] * mu0root[cp$j] * Gtap,
-                              dims=c(U$n, U$n))
-      Rroot <- Cholesky(sparseG, perm = TRUE, Imult = 1)
+      sparseG <- Matrix::sparseMatrix(i=cp$i, j=cp$j,
+                                      x=mu0root[cp$i] * mu0root[cp$j] * Gtap,
+                                      dims=c(U$n, U$n))
+      Rroot <- Matrix::Cholesky(sparseG, perm = TRUE, Imult = 1)
       ##Imult=1 means that we add 1*I
       if (verbose)
         cat("..Done.\n")

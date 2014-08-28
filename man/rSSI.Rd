@@ -88,7 +88,7 @@
   
   The default window is the unit square, \code{win = square(1)},
   unless \code{x.init} is specified, when the default
-  is \code{win=as.owin(x.init)}, the window of \code{x.init}.
+  is \code{win=Window(x.init)}, the window of \code{x.init}.
 
   If both \code{win} and \code{x.init} are specified, and if the
   two windows are different, then a warning will be issued.

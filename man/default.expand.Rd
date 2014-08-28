@@ -51,14 +51,14 @@
   If the model is Poisson, then no expansion is necessary.
   No expansion is performed by default,
   and \code{default.expand} returns a rule representing no expansion.
-  The simulation window is the original window \code{w = as.owin(object)}.
+  The simulation window is the original window \code{w = Window(object)}.
   
   If the model depends on external covariates (i.e.\ covariates other than
   the Cartesian covariates \code{x} and \code{y} and the \code{marks})
   then no expansion is feasible, in general, because the spatial domain
   of the covariates is not guaranteed to be large enough.
   \code{default.expand} returns a rule representing no expansion.
-  The simulation window is the original window \code{w = as.owin(object)}.
+  The simulation window is the original window \code{w = Window(object)}.
 
   If the model depends on the Cartesian covariates \code{x} and \code{y},
   it would be feasible to expand the simulation window, and this was the
@@ -72,7 +72,7 @@
   Again \code{default.expand} returns a rule representing no expansion.
   
   Otherwise, expansion will occur.
-  The original window \code{w = as.owin(object)} is expanded by
+  The original window \code{w = Window(object)} is expanded by
   a distance \code{m * rr}, where
   \code{rr} is the interaction range of the model, computed by
   \code{\link{reach}}. If \code{w} is a rectangle then

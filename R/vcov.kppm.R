@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.3 $  $Date: 2014/06/30 02:50:49 $
+#   $Revision: 1.4 $  $Date: 2014/08/27 09:51:02 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -53,7 +53,8 @@ vcov.kppm <- function(object, ...,
                           eps=eps.rmax, g=g)$root
     }
     cp <- crosspairs(U,U,rmax)
-    gminus1 <- sparseMatrix(i=cp$i, j=cp$j, x=g(cp$d) - 1, dims=c(nU, nU))
+    gminus1 <- Matrix::sparseMatrix(i=cp$i, j=cp$j,
+                                    x=g(cp$d) - 1, dims=c(nU, nU))
   } else{
     gminus1 <- matrix(g(c(pairdist(U))) - 1, nU, nU)
   }

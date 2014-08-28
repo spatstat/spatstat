@@ -329,7 +329,7 @@ at new locations.
   # prediction at arbitrary locations
   predict(mj, locations=data.frame(x=0.3, y=0.4))
 
-  X <- runifpoint(5, as.owin(japanesepines))
+  X <- runifpoint(5, Window(japanesepines))
   predict(mj, locations=X)
   predict(mj, locations=X, type="se")
 

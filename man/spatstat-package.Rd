@@ -1092,11 +1092,11 @@
   \tabular{ll}{
     \emph{command} \tab \emph{model} \cr
     \code{ppm(X)} \tab Complete Spatial Randomness \cr
-    \code{ppm(X, ~1)} \tab Complete Spatial Randomness \cr
-    \code{ppm(X, ~x)} \tab Poisson process with \cr
+    \code{ppm(X ~ 1)} \tab Complete Spatial Randomness \cr
+    \code{ppm(X ~ x)} \tab Poisson process with \cr
                              \tab intensity loglinear in \eqn{x} coordinate \cr
-    \code{ppm(X, ~1, Strauss(0.1))} \tab Stationary Strauss process \cr
-    \code{ppm(X, ~x, Strauss(0.1))} \tab Strauss process with \cr
+    \code{ppm(X ~ 1, Strauss(0.1))} \tab Stationary Strauss process \cr
+    \code{ppm(X ~ x, Strauss(0.1))} \tab Strauss process with \cr
                               \tab conditional intensity loglinear in \eqn{x}
   }
   It is also possible to fit models that depend on
@@ -1147,12 +1147,14 @@
   \emph{logarithm} of the trend.
   
   \tabular{ll}{
-    \code{~1}  \tab No trend (stationary) \cr
-    \code{~x}   \tab Loglinear trend
+    \code{X ~ 1}  \tab No trend (stationary) \cr
+    \code{X ~ x}   \tab Loglinear trend
       \eqn{\lambda(x,y) = \exp(\alpha + \beta x)}{lambda(x,y) =	exp(alpha + beta * x)} \cr
     \tab where \eqn{x,y} are Cartesian coordinates \cr
-    \code{~polynom(x,y,3)}  \tab Log-cubic polynomial trend  \cr
-    \code{~harmonic(x,y,2)}  \tab Log-harmonic polynomial trend 
+    \code{X ~ polynom(x,y,3)}  \tab Log-cubic polynomial trend  \cr
+    \code{X ~ harmonic(x,y,2)}  \tab Log-harmonic polynomial trend \cr
+    \code{X ~ Z}   \tab Loglinear function of covariate \code{Z} \cr
+    \tab  \eqn{\lambda(x,y) = \exp(\alpha + \beta Z(x,y))}{lambda(x,y) =	exp(alpha + beta * Z(x,y))} 
   }
 
   The higher order (``interaction'') components are described by
@@ -1682,6 +1684,7 @@
   Robin Milne,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
   Erika Mudrak,
+  Gopalan Nair,
   Linda Stougaard Nielsen,
   Felipe Nunes,
   Jens \ifelse{latex}{\out{Oehlschl\"{a}gel}}{Oehlschlaegel},

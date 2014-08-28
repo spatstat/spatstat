@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.17 $   $Date: 2014/07/23 03:57:41 $
+#   $Revision: 1.18 $   $Date: 2014/08/27 09:46:17 $
 #
 #
 
@@ -51,26 +51,26 @@ iplot.ppp <- function(x, ..., xname) {
   bb <- as.rectangle(as.owin(x))
   bbmid <- unlist(centroid.owin(bb))
   ##
-  p <- rp.control(paste("iplot(", xname, ")", sep=""), 
-                  x=x,
-                  w=as.owin(x),
-                  xname=xname,
-                  mtype=mtype,
-                  bb=bb,
-                  bbmid=bbmid,
-                  split=FALSE,
-                  pointmap=if(is.marked(x)) "marks" else "o",
-                  zoomfactor=1,
-                  zoomcentre=bbmid,
-                  size=c(700, 400))
+  p <- rpanel::rp.control(paste("iplot(", xname, ")", sep=""), 
+                          x=x,
+                          w=as.owin(x),
+                          xname=xname,
+                          mtype=mtype,
+                          bb=bb,
+                          bbmid=bbmid,
+                          split=FALSE,
+                          pointmap=if(is.marked(x)) "marks" else "o",
+                          zoomfactor=1,
+                          zoomcentre=bbmid,
+                          size=c(700, 400))
 
 # Split panel into three
 # Left: plot controls
 # Middle: data
 # Right: navigation/zoom
-  rp.grid(p, "gcontrols", pos=list(row=0,column=0))
-  rp.grid(p, "gdisplay",  pos=list(row=0,column=1))
-  rp.grid(p, "gnavigate", pos=list(row=0,column=2))
+  rpanel::rp.grid(p, "gcontrols", pos=list(row=0,column=0))
+  rpanel::rp.grid(p, "gdisplay",  pos=list(row=0,column=1))
+  rpanel::rp.grid(p, "gnavigate", pos=list(row=0,column=2))
 
 #----- Data display ------------
 
@@ -78,8 +78,8 @@ iplot.ppp <- function(x, ..., xname) {
   mytkr <- NULL
 
   # Create data display panel 
-  rp.tkrplot(p, mytkr, plotfun=do.iplot.ppp, action=click.iplot.ppp,
-             pos=list(row=0,column=0,grid="gdisplay"))
+  rpanel::rp.tkrplot(p, mytkr, plotfun=do.iplot.ppp, action=click.iplot.ppp,
+                     pos=list(row=0,column=0,grid="gdisplay"))
 
   
 #----- Plot controls ------------
@@ -88,15 +88,16 @@ iplot.ppp <- function(x, ..., xname) {
     append(list(row=n,column=0,grid="gcontrols"), list(...))
   
 # main title
-  rp.textentry(p, xname, action=redraw.iplot.ppp, title="Plot title",
-               pos=pozzie(0))
+  rpanel::rp.textentry(p, xname, action=redraw.iplot.ppp, title="Plot title",
+                       pos=pozzie(0))
   nextrow <- 1
 
 # split ?
   if(mtype == "multitype") {
-    rp.checkbox(p, split, initval=FALSE, 
-                title="Split according to marks", action=redraw.iplot.ppp,
-                pos=pozzie(1))
+    rpanel::rp.checkbox(p, split, initval=FALSE, 
+                        title="Split according to marks",
+                        action=redraw.iplot.ppp,
+                        pos=pozzie(1))
     nextrow <- 2
   }
 
@@ -110,16 +111,17 @@ iplot.ppp <- function(x, ..., xname) {
     else c("Circles proportional to mark", ptlabels)
   }
   pointmap <- ptvalues[1]
-  rp.radiogroup(p, pointmap, vals=ptvalues, labels=ptlabels,
-   			  title="how to plot points", action=redraw.iplot.ppp,
-                pos=pozzie(nextrow))
+  rpanel::rp.radiogroup(p, pointmap, vals=ptvalues, labels=ptlabels,
+                        title="how to plot points", action=redraw.iplot.ppp,
+                        pos=pozzie(nextrow))
   nextrow <- nextrow+1
 
 # plot character size
   charsize <- 1
-  rp.slider(p, charsize, 0, 5, action=redraw.iplot.ppp, 
-            title="symbol expansion factor (cex)", initval=1, showvalue=TRUE,
-            pos=pozzie(nextrow, sticky=""))
+  rpanel::rp.slider(p, charsize, 0, 5, action=redraw.iplot.ppp, 
+                    title="symbol expansion factor (cex)",
+                    initval=1, showvalue=TRUE,
+                    pos=pozzie(nextrow, sticky=""))
   nextrow <- nextrow+1
   
 # mark scale
@@ -128,100 +130,103 @@ iplot.ppp <- function(x, ..., xname) {
     marx <- marx[is.finite(marx)]
     scal <- mark.scale.default(marx, x$window)
     markscale <- scal
-    rp.slider(p, markscale, from=scal/10, to = 10*scal, action=redraw.iplot.ppp,
-              initval=scal,
-              title="mark scale factor (markscale)", showvalue=TRUE,
-              pos=pozzie(nextrow))
+    rpanel::rp.slider(p, markscale,
+                      from=scal/10, to = 10*scal,
+                      action=redraw.iplot.ppp,
+                      initval=scal,
+                      title="mark scale factor (markscale)",
+                      showvalue=TRUE,
+                      pos=pozzie(nextrow))
     nextrow <- nextrow+1
   }
 
 # button to print a summary at console
-  rp.button(p, title="Print summary information",
-            pos=pozzie(nextrow),
-            action=function(panel) { print(summary(panel$x)); panel} )
+  rpanel::rp.button(p, title="Print summary information",
+                    pos=pozzie(nextrow),
+                    action=function(panel) { print(summary(panel$x)); panel} )
 #  
 #----- Navigation controls ------------
   nextrow <- 0
   navpos <- function(n=nextrow,cc=0, ...)
     append(list(row=n,column=cc,grid="gnavigate"), list(...))
 
-  rp.button(p, title="Up", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              height <- sidelengths(bb)[2]
-              stepsize <- (height/4)/zo
-              panel$zoomcentre <- ce + c(0, stepsize)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Up", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        height <- sidelengths(bb)[2]
+                        stepsize <- (height/4)/zo
+                        panel$zoomcentre <- ce + c(0, stepsize)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Left", pos=navpos(nextrow,0,sticky="w"),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              width <- sidelengths(bb)[1]
-              stepsize <- (width/4)/zo
-              panel$zoomcentre <- ce - c(stepsize, 0)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
-  rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              width <- sidelengths(bb)[1]
-              stepsize <- (width/4)/zo
-              panel$zoomcentre <- ce + c(stepsize, 0)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Left", pos=navpos(nextrow,0,sticky="w"),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        width <- sidelengths(bb)[1]
+                        stepsize <- (width/4)/zo
+                        panel$zoomcentre <- ce - c(stepsize, 0)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
+  rpanel::rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        width <- sidelengths(bb)[1]
+                        stepsize <- (width/4)/zo
+                        panel$zoomcentre <- ce + c(stepsize, 0)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Down", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              height <- sidelengths(bb)[2]
-              stepsize <- (height/4)/zo
-              panel$zoomcentre <- ce - c(0, stepsize)
-              CommitAndRedraw(panel)
-              return(panel)
+  rpanel::rp.button(p, title="Down", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        height <- sidelengths(bb)[2]
+                        stepsize <- (height/4)/zo
+                        panel$zoomcentre <- ce - c(0, stepsize)
+                        CommitAndRedraw(panel)
+                        return(panel)
             })
   nextrow <- nextrow + 1
 
-  rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- panel$zoomfactor * 2
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- panel$zoomfactor * 2
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- panel$zoomfactor / 2
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- panel$zoomfactor / 2
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Reset", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- 1
-              panel$zoomcentre <- panel$bbmid
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Reset", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- 1
+                        panel$zoomcentre <- panel$bbmid
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Redraw", pos=navpos(nextrow,1,sticky=""),
-            action=redraw.iplot.ppp)
+  rpanel::rp.button(p, title="Redraw", pos=navpos(nextrow,1,sticky=""),
+                    action=redraw.iplot.ppp)
   nextrow <- nextrow+1
 # quit button 
-  rp.button(p, title="Quit", quitbutton=TRUE,
-            pos=navpos(nextrow, 1, sticky=""),
-            action= function(panel) { panel })
+  rpanel::rp.button(p, title="Quit", quitbutton=TRUE,
+                    pos=navpos(nextrow, 1, sticky=""),
+                    action= function(panel) { panel })
 
   invisible(NULL)
 }
@@ -229,7 +234,7 @@ iplot.ppp <- function(x, ..., xname) {
 
   # Function to redraw the whole shebang
   redraw.iplot.ppp <- function(panel) {
-    rp.tkrreplot(panel, mytkr)
+    rpanel::rp.tkrreplot(panel, mytkr)
     panel
   }
 
@@ -330,6 +335,7 @@ do.iplot.ppp <- function(panel) {
 CommitAndRedraw <- function(panel) {
   # hack to ensure that panel is immediately updated in rpanel
   require(rpanel)
+  ## This is really a triple-colon!
   rpanel:::rp.control.put(panel$panelname, panel)
   # now redraw it
   redraw.iplot.ppp(panel)

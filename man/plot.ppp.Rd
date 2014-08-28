@@ -197,7 +197,7 @@
     indicating the first column of marks.
   }
 
-  Plotting of the window \code{as.owin(x)} is performed by
+  Plotting of the window \code{Window(x)} is performed by
   \code{\link{plot.owin}}. This plot may be modified 
   through the \code{...} arguments. In particular the
   extra argument \code{border} determines

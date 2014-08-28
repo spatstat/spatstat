@@ -159,7 +159,7 @@ from a point pattern in a window of arbitrary shape.
  # shows peaks at several places, reflecting clustering and ?periodicity
  M <- Kmeasure(cells, 0.05)
  # evaluate measure on a sector
- W <- as.owin(M)
+ W <- Window(M)
  ang <- as.im(atan2, W)
  rad <- as.im(function(x,y){sqrt(x^2+y^2)}, W)
  sector <- solutionset(ang > 0 & ang < 1 & rad < 0.6)

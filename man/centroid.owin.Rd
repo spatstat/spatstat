@@ -49,7 +49,7 @@
   # returns 0.5, 0.5
 
   data(demopat)
-  w <- as.owin(demopat)
+  w <- Window(demopat)
   # an irregular window
   cent <- centroid.owin(w, as.ppp = TRUE)
   \dontrun{

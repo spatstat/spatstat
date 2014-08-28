@@ -17,6 +17,7 @@ iplot.layered <- local({
   CommitAndRedraw <- function(panel) {
     ## hack to ensure that panel is immediately updated in rpanel
     require(rpanel)
+    ## This is really a triple-colon!
     rpanel:::rp.control.put(panel$panelname, panel)
     ## now redraw it
     redraw.iplot.layered(panel)
@@ -62,25 +63,25 @@ iplot.layered <- function(x, ..., xname) {
   if(sum(nzchar(lnames)) != length(x))
     lnames <- paste("Layer", seq_len(length(x)))
   ##
-  p <- rp.control(paste("iplot(", xname, ")", sep=""), 
-                  x=x,
-                  w=as.owin(x),
-                  xname=xname,
-                  layernames=lnames,
-                  bb=bb,
-                  bbmid=bbmid,
-                  zoomfactor=1,
-                  zoomcentre=bbmid,
-                  which = rep.int(TRUE, length(x)),
-                  size=c(700, 400))
+  p <- rpanel::rp.control(paste("iplot(", xname, ")", sep=""), 
+                          x=x,
+                          w=as.owin(x),
+                          xname=xname,
+                          layernames=lnames,
+                          bb=bb,
+                          bbmid=bbmid,
+                          zoomfactor=1,
+                          zoomcentre=bbmid,
+                          which = rep.int(TRUE, length(x)),
+                          size=c(700, 400))
 
 # Split panel into three
 # Left: plot controls
 # Middle: data
 # Right: navigation/zoom
-  rp.grid(p, "gcontrols", pos=list(row=0,column=0))
-  rp.grid(p, "gdisplay",  pos=list(row=0,column=1))
-  rp.grid(p, "gnavigate", pos=list(row=0,column=2))
+  rpanel::rp.grid(p, "gcontrols", pos=list(row=0,column=0))
+  rpanel::rp.grid(p, "gdisplay",  pos=list(row=0,column=1))
+  rpanel::rp.grid(p, "gnavigate", pos=list(row=0,column=2))
 
 #----- Data display ------------
 
@@ -88,8 +89,9 @@ iplot.layered <- function(x, ..., xname) {
   mytkr <- NULL
 
   # Create data display panel 
-  rp.tkrplot(p, mytkr, plotfun=do.iplot.layered, action=click.iplot.layered,
-             pos=list(row=0,column=0,grid="gdisplay"))
+  rpanel::rp.tkrplot(p, mytkr, plotfun=do.iplot.layered,
+                     action=click.iplot.layered,
+                     pos=list(row=0,column=0,grid="gdisplay"))
 
   
 #----- Plot controls ------------
@@ -98,109 +100,110 @@ iplot.layered <- function(x, ..., xname) {
     append(list(row=n,column=0,grid="gcontrols"), list(...))
   
 # main title
-  rp.textentry(p, xname, action=redraw.iplot.layered, title="Plot title",
-               pos=pozzie(0))
+  rpanel::rp.textentry(p, xname, action=redraw.iplot.layered,
+                       title="Plot title",
+                       pos=pozzie(0))
   nextrow <- 1
 
 # select some layers
   nx <- length(x)
   which <- rep.int(TRUE, nx)
   if(nx > 1) {
-    rp.checkbox(p, which, labels=lnames,
-                action=redraw.iplot.layered,
-                title="Select layers to plot",
-                pos=pozzie(nextrow), sticky="")
+    rpanel::rp.checkbox(p, which, labels=lnames,
+                        action=redraw.iplot.layered,
+                        title="Select layers to plot",
+                        pos=pozzie(nextrow), sticky="")
     nextrow <- nextrow + 1
   }
   
 # button to print a summary at console
-  rp.button(p, title="Print summary information",
-            pos=pozzie(nextrow),
-            action=function(panel) {
-              lapply(panel$x, function(z) print(summary(z)))
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Print summary information",
+                    pos=pozzie(nextrow),
+                    action=function(panel) {
+                        lapply(panel$x, function(z) print(summary(z)))
+                        return(panel)
+                    })
 #  
 #----- Navigation controls ------------
   nextrow <- 0
   navpos <- function(n=nextrow,cc=0, ...)
     append(list(row=n,column=cc,grid="gnavigate"), list(...))
 
-  rp.button(p, title="Up", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              height <- sidelengths(bb)[2]
-              stepsize <- (height/4)/zo
-              panel$zoomcentre <- ce + c(0, stepsize)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Up", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        height <- sidelengths(bb)[2]
+                        stepsize <- (height/4)/zo
+                        panel$zoomcentre <- ce + c(0, stepsize)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Left", pos=navpos(nextrow,0,sticky="w"),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              width <- sidelengths(bb)[1]
-              stepsize <- (width/4)/zo
-              panel$zoomcentre <- ce - c(stepsize, 0)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
-  rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              width <- sidelengths(bb)[1]
-              stepsize <- (width/4)/zo
-              panel$zoomcentre <- ce + c(stepsize, 0)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Left", pos=navpos(nextrow,0,sticky="w"),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        width <- sidelengths(bb)[1]
+                        stepsize <- (width/4)/zo
+                        panel$zoomcentre <- ce - c(stepsize, 0)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
+  rpanel::rp.button(p, title="Right", pos=navpos(nextrow,2,sticky="e"),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        width <- sidelengths(bb)[1]
+                        stepsize <- (width/4)/zo
+                        panel$zoomcentre <- ce + c(stepsize, 0)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Down", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              zo <- panel$zoomfactor
-              ce <- panel$zoomcentre
-              bb <- panel$bb
-              height <- sidelengths(bb)[2]
-              stepsize <- (height/4)/zo
-              panel$zoomcentre <- ce - c(0, stepsize)
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Down", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        zo <- panel$zoomfactor
+                        ce <- panel$zoomcentre
+                        bb <- panel$bb
+                        height <- sidelengths(bb)[2]
+                        stepsize <- (height/4)/zo
+                        panel$zoomcentre <- ce - c(0, stepsize)
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
 
-  rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- panel$zoomfactor * 2
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Zoom In", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- panel$zoomfactor * 2
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- panel$zoomfactor / 2
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Zoom Out", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- panel$zoomfactor / 2
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Reset", pos=navpos(nextrow,1,sticky=""),
-            action=function(panel) {
-              panel$zoomfactor <- 1
-              panel$zoomcentre <- panel$bbmid
-              CommitAndRedraw(panel)
-              return(panel)
-            })
+  rpanel::rp.button(p, title="Reset", pos=navpos(nextrow,1,sticky=""),
+                    action=function(panel) {
+                        panel$zoomfactor <- 1
+                        panel$zoomcentre <- panel$bbmid
+                        CommitAndRedraw(panel)
+                        return(panel)
+                    })
   nextrow <- nextrow + 1
-  rp.button(p, title="Redraw", pos=navpos(nextrow,1,sticky=""),
-            action=redraw.iplot.layered)
+  rpanel::rp.button(p, title="Redraw", pos=navpos(nextrow,1,sticky=""),
+                    action=redraw.iplot.layered)
   nextrow <- nextrow+1
 # quit button 
-  rp.button(p, title="Quit", quitbutton=TRUE,
+  rpanel::rp.button(p, title="Quit", quitbutton=TRUE,
             pos=navpos(nextrow, 1, sticky=""),
             action= function(panel) { panel })
 
@@ -210,7 +213,7 @@ iplot.layered <- function(x, ..., xname) {
 
   # Function to redraw the whole shebang
   redraw.iplot.layered <- function(panel) {
-    rp.tkrreplot(panel, mytkr)
+    rpanel::rp.tkrreplot(panel, mytkr)
     panel
   }
 
