@@ -1,5 +1,6 @@
 \name{edge.Trans}
 \alias{edge.Trans}
+\alias{rmax.Trans}
 \title{
   Translation Edge Correction
 }
@@ -12,7 +13,10 @@ edge.Trans(X, Y = X, W = X$window,
       exact = FALSE, paired = FALSE,
       ..., 
       trim = spatstat.options("maxedgewt"),
-      dx=NULL, dy=NULL)
+      dx=NULL, dy=NULL,
+      give.rmax=FALSE)
+
+rmax.Trans(W, g=setcov(W))
 }
 \arguments{
   \item{X,Y}{
@@ -44,12 +48,25 @@ edge.Trans(X, Y = X, W = X$window,
     of the vector differences between the points.
     Incompatible with \code{X} and \code{Y}. See Details.
   }
+  \item{give.rmax}{
+    Logical. If \code{TRUE}, also compute the value of
+    \code{rmax.Trans(W)} and return it as an attribute
+    of the result.
+  }
+  \item{g}{
+    Optional. Set covariance of \code{W}.
+  }
 }
 \details{
-  This function computes Ohser and Stoyan's translation edge correction
+  The function \code{edge.Trans}
+  computes Ohser and Stoyan's translation edge correction
   weight, which is used in estimating the \eqn{K} function and in many
   other contexts.
 
+  The function \code{rmax.Trans} computes the maximum value of
+  distance \eqn{r} for which the translation edge correction
+  estimate of \eqn{K(r)} is valid.
+  
   For a pair of points \eqn{x} and \eqn{y} in a window \eqn{W},
   the translation edge correction weight
   is
@@ -93,6 +110,13 @@ edge.Trans(X, Y = X, W = X$window,
   \code{dx,dy} should be matrices of the same dimensions,
   such that the vector difference between \code{X[i]} and \code{Y[j]} is
   \code{c(dx[i,j], dy[i,j])}. The argument \code{W} is needed.
+
+  The value of \code{rmax.Trans} is the shortest distance from the
+  origin \eqn{(0,0)} to the boundary of the support of
+  the set covariance function of \code{W}. It is computed by pixel
+  approximation using \code{\link{setcov}}, unless \code{W} is a
+  rectangle, when \code{rmax.Trans(W)} is the length of the
+  shortest side of the rectangle.
 }
 \value{
   Numeric vector or matrix.
@@ -104,12 +128,14 @@ edge.Trans(X, Y = X, W = X$window,
   Statistik, series Statistics}, \bold{14}, 63 -- 71.
 }
 \seealso{
+  \code{\link{rmax.Trans}},
   \code{\link{edge.Ripley}},
   \code{\link{setcov}},
   \code{\link{Kest}}
 }
 \examples{
   v <- edge.Trans(cells)
+  rmax.Trans(Window(cells))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

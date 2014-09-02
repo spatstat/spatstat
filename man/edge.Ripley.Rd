@@ -1,5 +1,6 @@
 \name{edge.Ripley}
 \alias{edge.Ripley}
+\alias{rmax.Ripley}
 \title{
   Ripley's Isotropic Edge Correction 
 }
@@ -9,6 +10,8 @@
 }
 \usage{
 edge.Ripley(X, r, W = X$window, method = "C", maxweight = 100)
+
+rmax.Ripley(W)
 }
 \arguments{
   \item{X}{
@@ -30,10 +33,15 @@ edge.Ripley(X, r, W = X$window, method = "C", maxweight = 100)
   }
 }
 \details{
-  This function computes Ripley's (1977) isotropic edge correction
+  The function \code{edge.Ripley}
+  computes Ripley's (1977) isotropic edge correction
   weight, which is used in estimating the \eqn{K} function and in many
   other contexts.
 
+  The function \code{rmax.Ripley} computes the maximum value of
+  distance \eqn{r} for which the isotropic edge correction
+  estimate of \eqn{K(r)} is valid.
+    
   For a single point \eqn{x} in a window \eqn{W},
   and a distance \eqn{r > 0}, the isotropic edge correction weight
   is
@@ -61,7 +69,12 @@ edge.Ripley(X, r, W = X$window, method = "C", maxweight = 100)
   edge corrections required for the \eqn{K}-function.
 
   If any value of the edge correction weight exceeds \code{maxwt},
-  it is set to \code{maxwt}. 
+  it is set to \code{maxwt}.
+
+  The function \code{rmax.Ripley} computes the smallest distance \eqn{r}
+  such that it is possible to draw a circle of radius \eqn{r}, centred
+  at a point of \code{W}, such that the circle does not intersect the
+  interior of \code{W}. 
 }
 \value{
   A numeric vector or matrix.
@@ -74,10 +87,13 @@ edge.Ripley(X, r, W = X$window, method = "C", maxweight = 100)
 }
 \seealso{
   \code{\link{edge.Trans}},
+  \code{\link{rmax.Trans}},
   \code{\link{Kest}}
 }
 \examples{
   v <- edge.Ripley(cells, pairdist(cells))
+
+  rmax.Ripley(Window(cells))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

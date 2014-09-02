@@ -29,6 +29,7 @@ useDynLib(spatstat,
 "awtcrsmoopt",
 "awtdenspt",
 "awtsmoopt",
+"bdrymask",
 "Cbiform",
 "Cclosepaircounts",
 "Ccountends",
@@ -77,6 +78,8 @@ useDynLib(spatstat,
 "Efiksel",
 "Egeyer",
 "exact_dt_R",
+"fardist2grid",
+"fardistgrid",
 "Fclosepairs",
 "Fcrosspairs",
 "graphVees",
@@ -431,6 +434,8 @@ export("check.range")
 export("check.testfun")
 export("chop.tess")
 export("circumradius")
+export("circumradius.linnet")
+export("circumradius.owin")
 export("clarkevans")
 export("clarkevansCalc")
 export("clarkevans.test")
@@ -708,6 +713,9 @@ export("f3engine")
 export("F3est")
 export("fakecallstring")
 export("fakemaintitle")
+export("fardist")
+export("fardist.owin")
+export("fardist.ppp")
 export("[.fasp")
 export("fasp")
 export("fave.order")
@@ -1676,7 +1684,9 @@ export("rlinegrid")
 export("rMatClust")
 export("rMaternI")
 export("rMaternII")
+export("rmax.Ripley")
 export("rmax.rule")
+export("rmax.Trans")
 export("rmh")
 export("rmhcontrol")
 export("rmhcontrol.default")
@@ -1717,6 +1727,7 @@ export("rotate.owin")
 export("rotate.ppp")
 export("rotate.psp")
 export("rotate.tess") 
+export("rotmean")
 export("rotxy")
 export("rotxypolygon")
 export("rounding")
@@ -2248,6 +2259,8 @@ S3method("cdf.test", "mppm")
 S3method("cdf.test", "ppm")
 S3method("cdf.test", "ppp")
 S3method("cdf.test", "slrm")
+S3method("circumradius", "linnet")
+S3method("circumradius", "owin")
 S3method("closepairs", "pp3")
 S3method("closepairs", "ppp")
  S3method("closing", "owin")
@@ -2353,6 +2366,8 @@ S3method("evalCovar", "ppm")
   S3method("extractAIC", "lppm")
 S3method("extractAIC", "ppm")
 S3method("extractAIC", "slrm")
+  S3method("fardist", "owin")
+  S3method("fardist", "ppp")
   S3method("[", "fasp")
 S3method("fitin", "ppm")
   S3method("fitted", "kppm")

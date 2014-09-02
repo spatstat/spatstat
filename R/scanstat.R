@@ -3,7 +3,7 @@
 ##
 ##  Spatial scan statistics
 ##
-##  $Revision: 1.11 $  $Date: 2014/01/08 03:43:29 $
+##  $Revision: 1.12 $  $Date: 2014/09/01 03:34:08 $
 ##
 
 scanmeasure <- function(X, ...){
@@ -66,6 +66,7 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
 scanmeasure.im <- function(X, r, ...) {
   D <- disc(radius=r)
   eps <- with(X, c(xstep,ystep))
+  if(any(eps >= 2 * r)) return(eval.im(X * pi * r^2))
   D <- as.im(as.mask(D, eps=eps))
   Z <- imcov(X, D)
   return(Z)

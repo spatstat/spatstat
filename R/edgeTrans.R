@@ -17,14 +17,15 @@
 #                        compute translation correction weights
 #                        for each corresponding pair X[i], Y[i].
 #
-#  To estimate the K-function see the idiom in "Kest.S"
+#  To estimate the K-function see the idiom in "Kest.R"
 #
 #######################################################################
 
 edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
                        ..., 
                        trim=spatstat.options("maxedgewt"),
-                       dx=NULL, dy=NULL) {
+                       dx=NULL, dy=NULL,
+                       give.rmax=FALSE) {
   given.dxdy <- !is.null(dx) && !is.null(dy)
   if(!given.dxdy) {
     ## dx, dy will be computed from X, Y
@@ -76,34 +77,54 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
            wide <- diff(W$xrange)
            high <- diff(W$yrange)
            weight <- wide * high / ((wide - abs(dx)) * (high - abs(dy)))
-           },
+           g <- NULL
+         },
          polygonal={
            ## This code is SLOW
            n <- length(dx)
            weight <- numeric(n)
            if(n > 0) {
-               for(i in seq_len(n)) {
-                 Wshift <- shift(W, c(dx[i], dy[i]))
-                 weight[i] <- overlap.owin(W, Wshift)
-               }
-               weight <- area.owin(W)/weight
+             for(i in seq_len(n)) {
+               Wshift <- shift(W, c(dx[i], dy[i]))
+               weight[i] <- overlap.owin(W, Wshift)
              }
-           },
-           mask={
-             ## compute set covariance of window
-             g <- setcov(W)
-             ## evaluate set covariance at these vectors
-             gvalues <- lookup.im(g, dx, dy, naok=TRUE, strict=FALSE)
-             weight <- area.owin(W)/gvalues
+             weight <- area.owin(W)/weight
            }
-           )
+           g <- NULL
+         },
+         mask={
+           ## compute set covariance of window
+           g <- setcov(W)
+           ## evaluate set covariance at these vectors
+           gvalues <- lookup.im(g, dx, dy, naok=TRUE, strict=FALSE)
+           weight <- area.owin(W)/gvalues
+         }
+         )
   
   ## clip high values
   if(length(weight) > 0)
     weight <- pmin.int(weight, trim)
-  
+
   if(!paired) 
     weight <- matrix(weight, nrow=nX, ncol=nY)
+
+  if(give.rmax) 
+    attr(weight, "rmax") <- rmax.Trans(W, g)
   return(weight)
 }
 
+rmax.Trans <- function(W, g=setcov(W)) {
+  W <- as.owin(W)
+  ## calculate maximum permissible 'r' value
+  ## for validity of translation correction
+  if(is.rectangle(W)) 
+    return(min(sidelengths(W)))
+  ## find support of set covariance
+  if(is.null(g)) g <- setcov(W)
+  eps <- 2 * max(1, max(g)) * .Machine$double.eps
+  gsupport <- solutionset(g > eps)
+  gboundary <- bdry.mask(gsupport)
+  xy <- rasterxy.mask(gboundary, drop=TRUE)
+  rmax <- with(xy, sqrt(min(x^2 + y^2)))
+  return(rmax)
+}

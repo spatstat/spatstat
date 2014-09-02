@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.40 $   $Date: 2013/05/01 05:42:10 $
+#    $Revision: 1.41 $   $Date: 2014/08/30 10:30:05 $
 #
 #    as.im()
 #
@@ -78,7 +78,8 @@ as.im.owin <- function(X, W=NULL, ...,
     v <- matrix(value, d[1], d[2])
     m <- X$m
     v[!m] <- if(is.null(na.replace)) NA else na.replace
-    out <- im(v, X$xcol, X$yrow, unitname=unitname(X))
+    out <- im(v, xcol=X$xcol, yrow=X$yrow,
+              xrange=X$xrange, yrange=X$yrange, unitname=unitname(X))
     return(out)
   }
   # X is not a mask.

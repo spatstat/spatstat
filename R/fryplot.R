@@ -9,7 +9,7 @@ fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
   X <- as.ppp(X)
   n <- npoints(X)
   b <- as.rectangle(X)
-  halfspan <- with(b, c(diff(xrange), diff(yrange)))/2
+  halfspan <- with(b, c(diff(xrange), diff(yrange)))
   if(!is.null(width)) {
     halfwidth <- ensure2vector(width)/2
     halfspan <- pmin.int(halfspan, halfwidth)

@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.23 $    $Date: 2014/08/05 08:30:01 $
+#    $Revision: 1.24 $    $Date: 2014/08/31 03:36:16 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -167,7 +167,7 @@ volume.linnet <- function(x) {
   sum(lengths.psp(x$lines))
 }
 
-circumradius <- function(x) {
+circumradius.linnet <- function(x, ...) {
   stopifnot(inherits(x, "linnet"))
   cr <- x$circumradius
   if(!is.null(cr))

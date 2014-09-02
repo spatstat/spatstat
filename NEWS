@@ -1,4 +1,41 @@
 
+	CHANGES IN spatstat VERSION 1.38-2
+
+OVERVIEW
+
+   o Geometry with windows and images.
+
+NEW FUNCTIONS
+
+   o rotmean
+   Rotational average of pixel values in an image
+
+   o fardist
+   Distance from each pixel/data point to farthest part of window boundary
+
+   o circumradius.owin
+   Circumradius of a window
+
+   o rmax.Trans, rmax.Ripley
+   Compute the maximum distance 'r' for which the 
+   translation edge correction and isotropic edge correction   
+   are valid.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o circumradius
+   The function 'circumradius' is now generic, with methods
+   for the classes 'owin' and 'linnet'.
+
+   o edge.Trans
+   New argument 'give.rmax' 
+
+BUG FIXES
+
+   o as.im.owin
+   Crashed if X was a 1 x 1 pixel array.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.38-1
 
 OVERVIEW

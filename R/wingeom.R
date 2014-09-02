@@ -614,10 +614,23 @@ bdry.mask <- function(W) {
   m <- W$m
   nr <- nrow(m)
   nc <- ncol(m)
-  b <-     (m != rbind(FALSE,       m[-nr, ]))
-  b <- b | (m != rbind(m[-1, ], FALSE))
-  b <- b | (m != cbind(FALSE,       m[, -nc]))
-  b <- b | (m != cbind(m[, -1], FALSE))
+  if(!spatstat.options('Cbdrymask')) {
+    ## old interpreted code
+    b <-     (m != rbind(FALSE,       m[-nr, ]))
+    b <- b | (m != rbind(m[-1, ], FALSE))
+    b <- b | (m != cbind(FALSE,       m[, -nc]))
+    b <- b | (m != cbind(m[, -1], FALSE))
+  } else {
+    b <- integer(nr * nc)
+    DUP <- spatstat.options("dupC")
+    z <- .C("bdrymask",
+            nx = as.integer(nc),
+            ny = as.integer(nr),
+            m = as.integer(m),
+            b = as.integer(b),
+            DUP=DUP)
+    b <- matrix(as.logical(b), nr, nc)
+  }
   W$m <- b
   return(W)
 }

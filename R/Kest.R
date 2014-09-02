@@ -104,6 +104,7 @@ function(X, ..., r=NULL, breaks=NULL,
                              trans="translate",
                              translate="translate",
                              translation="translate",
+                             rigid="rigid",
                              good="good",
                              best="best"),
                            multi=TRUE)
@@ -164,7 +165,8 @@ function(X, ..., r=NULL, breaks=NULL,
   # Fast code for rectangular window
   ###########################################
 
-  if(can.do.fast && is.rectangle(W) && spatstat.options("use.Krect")) {
+  if(can.do.fast && is.rectangle(W) &&
+     spatstat.options("use.Krect") && !any(correction == "rigid")) {
     Kr <-  Krect.engine(X, rmax, length(r), correction, ratio=ratio)
     attr(Kr, "alim") <- alim
     return(Kr)
@@ -251,6 +253,23 @@ function(X, ..., r=NULL, breaks=NULL,
                     "hat(%s)[trans](r)",
                     "translation-corrected estimate of %s",
                     "trans",
+                    ratio=ratio)
+  }
+  if(any(correction == "rigid")) {
+    ## Ohser-Stoyan rigid motion correction
+    CW <- rotmean(setcov(W))
+    edgewt <- area/as.function(CW)(DIJ)
+    wh <- whist(DIJ, breaks$val, edgewt)
+    numKrigid <- cumsum(wh)
+    denKrigid <- lambda2 * area
+    h <- diameter(as.rectangle(W))
+    numKrigid[r >= h] <- NA
+    K <- bind.ratfv(K,
+                    data.frame(rigid=numKrigid),
+                    denKrigid,
+                    "hat(%s)[rigid](r)",
+                    "rigid motion-corrected estimate of %s",
+                    "rigid",
                     ratio=ratio)
   }
   if(any(correction == "isotropic")) {

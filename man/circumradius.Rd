@@ -1,34 +1,32 @@
 \name{circumradius}
 \alias{circumradius}
-\alias{diameter.linnet}
+\alias{circumradius.owin}
 \title{
-  Circumradius and Diameter of a Linear Network
+  Circumradius of a Window
 }
 \description{
-  Compute the circumradius or diameter of a linear network
-  measured using the shortest path distance.
+  Compute the circumradius of a window or other spatial object.
 }
 \usage{
-circumradius(x)
-\method{diameter}{linnet}(x)
+circumradius(x, \dots)
+
+\method{circumradius}{owin}(x, \dots)
 }
 \arguments{
   \item{x}{
-    Linear network (object of class \code{"linnet"}).
+    A window (object of class \code{"owin"}), or another spatial object. 
+  }
+  \item{\dots}{
+    Arguments passed to \code{\link{as.mask}} to determine the
+    pixel resolution for the calculation.
   }
 }
 \details{
-  The diameter of a linear network (in the shortest path distance)
-  is the maximum value of the shortest-path distance between any
-  two points \eqn{u} and \eqn{v} on the network.
-
-  The circumradius of a linear network (in the shortest path distance)
-  is the minimum value, over all points \eqn{u} on the network,
-  of the maximum shortest-path distance from \eqn{u} to another point
-  \eqn{v} on the network.
+  The circumradius of a spatial region \eqn{W} is the radius of the
+  smallest circle that contains \eqn{W}. 
   
-  The function \code{diameter} is generic; the function
-  \code{diameter.linnet} is the method for objects of class \code{linnet}.
+  The function \code{circumradius} is generic, with methods
+  for objects of class \code{"owin"} and \code{"linnet"}.
 }
 \value{
   A single numeric value.
@@ -38,12 +36,10 @@ circumradius(x)
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
- \code{\link{linnet}}
+ \code{\link{circumradius.linnet}}
 }
 \examples{
-   data(simplenet)
-   diameter(simplenet)
-   circumradius(simplenet)
+  circumradius(letterR)
 }
 \keyword{spatial}
 \keyword{math}

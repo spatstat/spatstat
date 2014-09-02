@@ -349,6 +349,12 @@ warn.once <- function(key, ...) {
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       Cbdrymask=list(
+         ## whether to use C code for bdry.mask
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
        )
 # end of options list

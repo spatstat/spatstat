@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.10 $    $Date: 2012/08/17 10:27:05 $
+#    $Revision: 1.11 $    $Date: 2014/08/31 10:39:18 $
 #
 #    Ripley isotropic edge correction weights
 #
@@ -142,7 +142,6 @@ edge.Ripley <- local({
                               epsilon=as.double(.Machine$double.eps),
                               out=as.double(numeric(Nr * Nc)),
                               DUP=DUP)
-#                              PACKAGE="spatstat")
                       weight <- matrix(z$out, nrow=Nr, ncol=Nc)
                     },
                     polygonal={
@@ -160,7 +159,6 @@ edge.Ripley <- local({
                               y1=as.double(Y$ends$y1),
                               out=as.double(numeric(Nr * Nc)),
                               DUP=DUP)
-#                              PACKAGE="spatstat")
                       angles <- matrix(z$out, nrow = Nr, ncol = Nc)
                       weight <- 2 * pi/angles
                     }
@@ -176,3 +174,14 @@ edge.Ripley <- local({
   edge.Ripley
 })
 
+rmax.Ripley <- function(W) {
+  W <- as.owin(W)
+  if(is.rectangle(W))
+    return(circumradius(W))
+  if(is.polygonal(W) && length(W$bdry) == 1)
+    return(circumradius(W))
+  ## could have multiple connected components
+  pieces <- tiles(tess(image=connected(W)))
+  answer <- sapply(pieces, circumradius)
+  return(as.numeric(answer))
+}

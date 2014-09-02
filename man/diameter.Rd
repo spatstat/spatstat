@@ -24,13 +24,15 @@
 
   The function \code{diameter} is generic, with methods for
   the class \code{"owin"} (two-dimensional windows),
-  \code{"box3"} (three-dimensional boxes) and
-  \code{"boxx"} (multi-dimensional boxes).
+  \code{"box3"} (three-dimensional boxes),
+  \code{"boxx"} (multi-dimensional boxes)
+  and \code{"linnet"} (linear networks).
 }
 \seealso{
   \code{\link{diameter.owin}},
   \code{\link{diameter.box3}},
-  \code{\link{diameter.boxx}}
+  \code{\link{diameter.boxx}},
+  \code{\link{diameter.linnet}}
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
