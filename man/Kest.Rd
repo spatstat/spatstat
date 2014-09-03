@@ -29,7 +29,8 @@ from a point pattern in a window of arbitrary shape.
     Optional. A character vector containing any selection of the
     options \code{"none"}, \code{"border"}, \code{"bord.modif"},
     \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
-    \code{"translation"}, \code{"none"}, \code{"good"} or \code{"best"}.
+    \code{"translation"}, \code{"rigid"},
+    \code{"none"}, \code{"good"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
   }
   \item{nlarge}{
@@ -127,6 +128,10 @@ from a point pattern in a window of arbitrary shape.
       (not for binary masks).
     }
     \item{translate/translation}{Translation correction (Ohser, 1983).
+      Implemented for all window geometries, but slow for
+      complex windows. 
+    }
+    \item{rigid}{Rigid motion correction (Ohser and Stoyan, 1981).
       Implemented for all window geometries, but slow for
       complex windows. 
     }
@@ -252,7 +257,12 @@ Baddeley, A.J. Spatial sampling and censoring.
   On estimators for the reduced second moment measure of
   point processes. \emph{Mathematische Operationsforschung und
   Statistik, series Statistics}, \bold{14}, 63 -- 71.
-    
+  
+  Ohser, J. and Stoyan, D. (1981)
+  On the second-order and orientation analysis of
+  planar stationary point processes.
+  \emph{Biometrical Journal} \bold{23}, 523--533.
+
   Ripley, B.D. (1977)
   Modelling spatial patterns (with discussion).
   \emph{Journal of the Royal Statistical Society, Series B},

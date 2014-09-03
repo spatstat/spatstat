@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.9 $   $Date: 2013/12/17 10:14:24 $
+#  $Revision: 1.10 $   $Date: 2014/09/03 02:46:11 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -99,7 +99,7 @@ lohboot <-
          Linhom={ fname <- "L[inhom]" ; ylab <- quote(L[inhom](r)) })
   g <- fv(df, "r", ylab, ctag, , c(0, max(f$r)), labl, desc, fname=fname)
   formula(g) <- . ~ r
-  fvnames(g, ".") <- c(ctag, "hi", "lo", "theo")
+  fvnames(g, ".") <- c(ctag, "theo", "hi", "lo")
   fvnames(g, ".s") <- c("hi", "lo")
   unitname(g) <- unitname(X)
   g

@@ -53,7 +53,8 @@
 
   The expression \code{expr} must be vectorised.
   There must be at least one object of class \code{"fv"} in the expression.
-  All such objects must be compatible.
+  If the objects are not compatible, they will be made compatible
+  by \code{\link{harmonise.fv}}.
 
   If \code{dotonly=TRUE} (the default), the expression will be
   evaluated only for those columns of an \code{"fv"} object

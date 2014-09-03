@@ -44,18 +44,23 @@ fvnames(X, a = ".") <- value
   \tabular{ll}{
     \code{".x"} \tab the function argument \cr
     \code{".y"} \tab the recommended value of the function \cr
+    \code{"."}  \tab all function values to be plotted by default \cr
+                \tab (in order of plotting) \cr
     \code{".s"} \tab the upper and lower limits of shading \cr
                 \tab (for envelopes and confidence intervals)\cr
-    \code{"*"}  \tab all columns except the function argument\cr
-    \code{"."}  \tab all columns plotted by default.\cr
+    \code{".a"} \tab all function values
   }
-
   The command \code{fvnames(X, a)} expands the abbreviation \code{a} and returns
   a character vector containing the names of the columns.
 
   The assignment \code{fvnames(X, a) <- value} changes the
   definition of the abbreviation \code{a} to the character vector
-  \code{value}.   
+  \code{value}. It does not change the labels of any columns.
+
+  Note that \code{fvnames(x, ".")} lists the columns of values that will
+  be plotted by default, in the order that they would be plotted, not in
+  order of the column position. The order in which curves are plotted
+  affects the colours and line styles associated with the curves.
 }
 \value{
   For \code{fvnames}, a character vector.

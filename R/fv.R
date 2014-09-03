@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.113 $   $Date: 2014/08/26 04:28:09 $
+#    $Revision: 1.115 $   $Date: 2014/09/03 05:30:09 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -250,7 +250,8 @@ print.fv <- local({
                         ".y",
                         ".s",
                         ".",
-                        "*")
+                        "*",
+                        ".a")
 
 fvnames <- function(X, a=".") {
   verifyclass(X, "fv")
@@ -273,7 +274,8 @@ fvnames <- function(X, a=".") {
              dn <- fvnames(X, "*")
            return(dn)
          },
-         "*"={
+         "*"=,
+         ".a"={
            # all column names other than the function argument
            allvars <- names(X)
            argu <- attr(X, "argu")
@@ -289,16 +291,18 @@ fvnames <- function(X, a=".") {
   verifyclass(X, "fv")
   if(!is.character(a) || length(a) > 1)
     stop(paste("argument", sQuote("a"), "must be a character string"))
-  if(a == "*") {
-    warning(paste("Cannot reset fvnames(x,", dQuote("*"), ")"))
-    return(X)
-  }
+  ## special cases
   if(a == "." && length(value) == 0) {
-    # clear the dotnames
+    ## clear the dotnames
     attr(X, "dotnames") <- NULL
     return(X)
   }
-  # validate the names
+  if(a == ".a" || a == "*") {
+    warning("Column names unchanged: use names(x) <- value to change them")
+    return(X)
+  }
+
+  ## validate the names
   switch(a,
          ".x"=,
          ".y"={
@@ -338,6 +342,23 @@ fvnames <- function(X, a=".") {
            attr(X, "dotnames") <- value
          })
   return(X)
+}
+
+"names<-.fv" <- function(x, value) {
+  nama <- colnames(x)
+  indx <- which(nama == fvnames(x, ".x"))
+  indy <- which(nama == fvnames(x, ".y"))
+  inds <- which(nama %in% fvnames(x, ".s"))
+  ind. <- which(nama %in% fvnames(x, "."))
+  ## rename columns of data frame
+  x <- NextMethod("names<-")
+  ## adjust other tags
+  fvnames(x, ".x") <- value[indx]
+  fvnames(x, ".y") <- value[indy]
+  fvnames(x, ".")  <- value[ind.]
+  if(length(inds) > 0)
+    fvnames(x, ".s") <- value[inds]
+  return(x)
 }
 
 fvlabels <- function(x, expand=FALSE) {
@@ -413,9 +434,9 @@ fvlabelmap <- local({
     map <- lapply(map, magic)
     names(map) <- colnames(x)
     if(dot) {
-      # also map "." to name of target function
+      # also map "." and ".a" to name of target function
       if(!is.null(ye <- attr(x, "yexp")))
-        map <- append(map, list("."=ye))
+        map <- append(map, list("."=ye, ".a"=ye))
       # map other fvnames to their corresponding labels
       map <- append(map, list(".x"=map[[fvnames(x, ".x")]],
                               ".y"=map[[fvnames(x, ".y")]]))
@@ -849,12 +870,14 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   uy <- as.name(yname)
   dnames <- datanames[datanames %in% fvnames(data, ".")]
   ud <- as.call(lapply(c("cbind", dnames), as.name))
+  anames <- datanames[datanames %in% fvnames(data, ".a")]
+  ua <- as.call(lapply(c("cbind", anames), as.name))
   if(!is.null(fvnames(data, ".s"))) {
     snames <- datanames[datanames %in% fvnames(data, ".s")]
     us <- as.call(lapply(c("cbind", snames), as.name))
   } else us <- NULL
   expandelang <- eval(substitute(substitute(ee,
-                                      list(.=ud, .x=ux, .y=uy, .s=us)),
+                                      list(.=ud, .x=ux, .y=uy, .s=us, .a=ua)),
                            list(ee=elang)))
   evars <- all.vars(expandelang)
   used.dotnames <- evars[evars %in% dnames]

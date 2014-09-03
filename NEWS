@@ -5,6 +5,10 @@ OVERVIEW
 
    o Geometry with windows and images.
 
+   o More edge corrections for K-function.
+
+   o Nickname: ???????????????????
+
 NEW FUNCTIONS
 
    o rotmean
@@ -23,6 +27,13 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+   o Kest
+   New option: correction="rigid" computes the rigid motion correction.
+
+   o eval.fv
+   Functions no longer need to have exactly the same sequence of 'r' values.
+   They will now be made compatible using 'harmonise.fv'.
+
    o circumradius
    The function 'circumradius' is now generic, with methods
    for the classes 'owin' and 'linnet'.
@@ -30,10 +41,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o edge.Trans
    New argument 'give.rmax' 
 
+   o fvnames, plot.fv
+   The symbol '.a' is now recognised. It stands for 'all function values'.
+
 BUG FIXES
 
    o as.im.owin
    Crashed if X was a 1 x 1 pixel array.
+   Fixed.
+
+   o objects of class 'fv'
+   Assigning a new value to names(x) or colnames(x) or dimnames(x)
+   caused the internal data format to become corrupted.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.38-1

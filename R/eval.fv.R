@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.24 $     $Date: 2014/02/09 05:24:30 $
+#     $Revision: 1.25 $     $Date: 2014/09/03 08:15:29 $
 #
 
 eval.fv <- local({
@@ -40,11 +40,13 @@ eval.fv <- local({
     if(dotonly) 
       funs <- lapply(funs, restrict.to.dot)
     # test whether the fv objects are compatible
-    if(nfuns > 1 && !(ok <- do.call("compatible", unname(funs))))
-      stop(paste(if(nfuns > 2) "some of" else NULL,
-                 "the functions",
-                 commasep(sQuote(names(funs))),
-                 "are not compatible"))
+    if(nfuns > 1 && !(ok <- do.call("compatible", unname(funs)))) {
+      warning(paste(if(nfuns > 2) "some of" else NULL,
+                    "the functions",
+                    commasep(sQuote(names(funs))),
+                    "were not compatible: enforcing compatibility"))
+      funs <- do.call(harmonise.fv, funs)
+    }
     # copy first object as template
     result <- funs[[1]]
     labl <- attr(result, "labl")
@@ -205,6 +207,7 @@ harmonize.fv <- harmonise.fv <- function(...) {
   ## extract argument values
   xx <- with(argh[[finest]], .x)
   xx <- xx[xrange[1] <= xx & xx <= xrange[2]]
+  xrange <- range(xx)
   ## convert each fv object to a function
   funs <- lapply(argh, as.function, value="*")
   ## evaluate at common argument
@@ -212,7 +215,6 @@ harmonize.fv <- harmonise.fv <- function(...) {
   for(i in 1:n) {
     ai <- argh[[i]]
     fi <- funs[[i]]
-    ri <- ai
     xxval <- list(xx=xx)
     names(xxval) <- fvnames(ai, ".x")
     starnames <- fvnames(ai, "*")
@@ -222,8 +224,11 @@ harmonize.fv <- harmonise.fv <- function(...) {
                     function(v,xx,fi) fi(xx, v),
                     xx=xx, fi=fi)
     names(yyval) <- starnames
-    ri[,] <- do.call("data.frame", append(xxval, yyval))
-    attr(ri, "alim") <- intersect.ranges(attr(ri, "alim"), xrange)
+    ri <- do.call("data.frame", append(xxval, yyval))
+    fva <- .Spatstat.FvAttrib
+    attributes(ri)[fva] <- attributes(ai)[fva]
+    class(ri) <- c("fv", class(ri))
+    attr(ri, "alim") <- intersect.ranges(attr(ai, "alim"), xrange)
     result[[i]] <- ri
   }
   names(result) <- names(argh)

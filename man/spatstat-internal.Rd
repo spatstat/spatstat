@@ -348,6 +348,7 @@
 \alias{multiplicityNumeric}
 \alias{na.handle.im}
 \alias{names.hyperframe}
+\alias{names<-.fv}
 \alias{names<-.hyperframe}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
@@ -1048,6 +1049,7 @@ MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
 multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
+\method{names}{fv}(x) <- value
 \method{names}{hyperframe}(x)
 \method{names}{hyperframe}(x) <- value
 nearest.pixel(x, y, im)
