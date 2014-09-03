@@ -83,6 +83,8 @@
 \alias{crosspairquad}
 \alias{cobble.xy}
 \alias{codetime}
+\alias{colouroutputs}
+\alias{colouroutputs<-}
 \alias{commasep}
 \alias{conform.imagelist}
 \alias{countingweights}
@@ -744,6 +746,8 @@ conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
+colouroutputs(x)
+colouroutputs(x) <- value
 commasep(x, join, flatten)
 conform.imagelist(X, Zlist)
 countingweights(id, areas, check = TRUE)

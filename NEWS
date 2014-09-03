@@ -55,6 +55,10 @@ BUG FIXES
    caused the internal data format to become corrupted.
    Fixed.
 
+   o to.grey, complementarycolour
+   Did not work properly on 'colourmap' objects.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.38-1
 
 OVERVIEW

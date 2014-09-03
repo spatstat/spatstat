@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.7 $   $Date: 2014/04/05 08:41:04 $
+#   $Revision: 1.8 $   $Date: 2014/09/03 12:03:05 $
 #
 
 
@@ -32,8 +32,8 @@ samecolour <- function(x, y) { col2hex(x) == col2hex(y) }
 complementarycolour <- function(x) {
   if(is.null(x)) return(NULL)
   if(inherits(x, "colourmap")) {
-    col <- summary(x)[["outputs"]]
-    return(tweak.colourmap(x, complementarycolour(col)))
+    colouroutputs(x) <- complementarycolour(colouroutputs(x))
+    return(x)
   }
   y <- apply(255 - col2rgb(x), 2, rgb2hex)
   return(y)
@@ -42,8 +42,8 @@ complementarycolour <- function(x) {
 to.grey <- function(x, weights=c(1,1,1)) {
   if(is.null(x)) return(NULL)
   if(inherits(x, "colourmap")) {
-    col <- summary(x)[["outputs"]]
-    return(tweak.colourmap(x, to.grey(col, weights)))
+    colouroutputs(x) <- to.grey(colouroutputs(x))
+    return(x)
   }
   y <- col2rgb(x)
   z <- (weights %*% y)/(255 * sum(weights))

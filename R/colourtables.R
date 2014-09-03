@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.31 $ $Date: 2014/04/17 03:58:58 $
+# $Revision: 1.32 $ $Date: 2014/09/03 12:04:17 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -433,7 +433,7 @@ interp.colourmap <- function(m, n=512) {
 tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
   if(!inherits(m, "colourmap"))
     stop("m should be a colourmap")
-  if(is.null(inputs) && is.null(range))
+  if(is.null(inputs) && is.null(range)) 
     stop("Specify either inputs or range")
   if(!is.null(inputs) && !is.null(range))
     stop("Do not specify both inputs and range")
@@ -485,5 +485,20 @@ tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
   attr(m, "stuff") <- st
   assign("stuff", st, envir=environment(m))
   return(m)
+}
+
+colouroutputs <- function(x) {
+  stopifnot(inherits(x, "colourmap"))
+  attr(x, "stuff")$outputs
+}
+
+"colouroutputs<-" <- function(x, value) {
+  stopifnot(inherits(x, "colourmap"))
+  st <- attr(x, "stuff")
+  h <- col2hex(value) # validates colours
+  st$outputs[] <- value
+  attr(x, "stuff") <- st
+  assign("stuff", st, envir=environment(x))
+  return(x)
 }
 
