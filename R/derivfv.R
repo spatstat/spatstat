@@ -110,3 +110,35 @@ deriv.fv <- local({
   deriv.fv
 })
 
+
+increment.fv <- function(f, delta) {
+  stopifnot(is.fv(f))
+  check.1.real(delta)
+  stopifnot(delta > 0)
+  half <- delta/2
+  xx <- with(f, .x)
+  ynames <- fvnames(f, ".")
+  yy <- as.data.frame(lapply(ynames,
+                             function(a, xx, f, h) {
+                               g <- as.function(f, value=a)
+                               g(xx+h)-g(xx-h)
+                             },
+                             xx=xx, f=f, h=half))
+  Y <- f
+  Y[,ynames] <- yy
+  ## tweak name of function
+  if(!is.null(yl <- attr(f, "ylab")))
+    attr(Y, "ylab") <- substitute(Delta~Fx, list(Fx=yl))
+  if(!is.null(ye <- attr(f, "yexp")))
+    attr(Y, "yexp") <- substitute(Delta~Fx, list(Fx=ye))
+  ## tweak mathematical labels
+  relevant <- colnames(Y) %in% ynames
+  attr(Y, "labl")[relevant]  <-
+      paste0("Delta~", attr(f, "labl")[relevant])
+  ## tweak recommended range
+  attr(Y, "alim") <- intersect.ranges(attr(f, "alim"),
+                                      range(xx) + c(1,-1)*half)
+  return(Y)
+}
+
+  

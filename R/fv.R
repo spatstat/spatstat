@@ -1102,7 +1102,11 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
   }
   yy <- yy[,value]
   argname <- fvnames(x, ".x")
-  endrule <- if(extrapolate) 1 else 2
+  ## determine extrapolation rule (1=NA, 2=most extreme value)
+  stopifnot(is.logical(extrapolate))
+  stopifnot(length(extrapolate) %in% 1:2)
+  endrule <- 1 + extrapolate
+  ## make function(s)
   if(length(value) == 1) {
     # make a single 'approxfun' and return it
     f <- approxfun(xx, yy, rule=endrule)

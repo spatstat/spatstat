@@ -52,7 +52,9 @@
   yield an \code{NA} value (if \code{extrapolate=FALSE})
   or the function value at the nearest endpoint of the range
   (if \code{extrapolate = TRUE}).
-
+  To apply different rules to the left and right extremes,
+  use \code{extrapolate=c(TRUE,FALSE)} and so on.
+  
   Typically the table \code{x} contains several columns of
   function values corresponding to different edge corrections.
   Auxiliary information for the table identifies one of these

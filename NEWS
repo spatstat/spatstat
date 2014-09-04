@@ -7,9 +7,14 @@ OVERVIEW
 
    o More edge corrections for K-function.
 
+   o Bug fixes.
+
    o Nickname: ???????????????????
 
 NEW FUNCTIONS
+
+   o increment.fv
+   Increments of a summary function: g(x) = f(x+h)-f(x-h).
 
    o rotmean
    Rotational average of pixel values in an image
@@ -44,6 +49,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o fvnames, plot.fv
    The symbol '.a' is now recognised. It stands for 'all function values'.
 
+   o as.function.fv
+   Argument 'extrapolate' can have length 1 or 2.
+
 BUG FIXES
 
    o as.im.owin
@@ -57,6 +65,10 @@ BUG FIXES
 
    o to.grey, complementarycolour
    Did not work properly on 'colourmap' objects.
+   Fixed.
+
+   o as.function.fv
+   The meanings of 'extrapolate=TRUE' and 'extrapolate=FALSE' were swapped.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.38-1

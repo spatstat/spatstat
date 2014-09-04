@@ -110,5 +110,6 @@
    DA <- deriv(A, spar=0.6, Dperiodic=TRUE)
 }
 \keyword{spatial}
+\keyword{math}
 \keyword{nonparametric}
 
