@@ -1,7 +1,7 @@
 Package: spatstat
 Version: 1.38-2
 Nickname: Watch This Space
-Date: 2014-09-04
+Date: 2014-09-05
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -46,6 +46,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
         O. Flores;
 	E.D. Ford;
         P. Forbes;
+	S. Frank; 
 	J. Franklin; 
 	N. Funwi-Gabga;
 	O. Garcia;

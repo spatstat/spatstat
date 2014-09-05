@@ -11,7 +11,7 @@
   or the point pattern \code{X} itself.
 }
 \usage{
-nnmark(X, ..., k = 1, at=c("pixels", "points"))
+nnmark(X, \dots, k = 1, at=c("pixels", "points"))
 }
 \arguments{
   \item{X}{
@@ -89,7 +89,14 @@ nnmark(X, ..., k = 1, at=c("pixels", "points"))
     nearest neighbours of each point of \code{X}.
   }
 }
-\author{Adrian Baddeley and Rolf Turner}
+\author{Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
+}
 \seealso{
   \code{\link{Smooth.ppp}},
   \code{\link{marktable}},
@@ -97,7 +104,11 @@ nnmark(X, ..., k = 1, at=c("pixels", "points"))
 }
 \examples{
   plot(nnmark(ants))
+  v <- nnmark(ants, at="points")
+  v[1:10]
   plot(nnmark(finpines))
+  vf <- nnmark(finpines, at="points")
+  vf[1:5,]
 }
 \keyword{spatial}
 \keyword{methods}

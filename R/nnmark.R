@@ -1,7 +1,7 @@
 #
 # nnmark.R
 #
-# $Revision: 1.3 $ $Date: 2013/07/04 09:17:14 $
+# $Revision: 1.5 $ $Date: 2014/09/05 06:08:49 $
 
 nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
   stopifnot(is.ppp(X))
@@ -24,10 +24,11 @@ nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
            Y <- nnwhich(X, k=k)
            switch(markformat(X),
                   vector={
-                    result <- eval.im(mX[Y])
+                    result <- mX[Y]
                   },
                   dataframe = {
                     result <- mX[Y,, drop=FALSE]
+                    row.names(result) <- NULL
                   },
                   stop("Marks must be a vector or dataframe"))
          })

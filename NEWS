@@ -3,6 +3,8 @@
 
 OVERVIEW
 
+   o We thank Shane Frank for contributions.
+
    o Geometry with windows and images.
 
    o More edge corrections for K-function.
@@ -53,6 +55,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Argument 'extrapolate' can have length 1 or 2.
 
 BUG FIXES
+
+   o nnmark
+   Crashed when at="points" if there was only a single column of marks.
+   [Spotted by Shane Frank.]
+   Fixed.
 
    o as.im.owin
    Crashed if X was a 1 x 1 pixel array.
