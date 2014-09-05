@@ -1,7 +1,7 @@
 #
 # nnmark.R
 #
-# $Revision: 1.3 $ $Date: 2013/07/04 09:17:14 $
+# $Revision: 1.4 $ $Date: 2014/09/05 02:03:28 $
 
 nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
   stopifnot(is.ppp(X))
@@ -24,7 +24,7 @@ nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
            Y <- nnwhich(X, k=k)
            switch(markformat(X),
                   vector={
-                    result <- eval.im(mX[Y])
+                    result <- mX[Y]
                   },
                   dataframe = {
                     result <- mX[Y,, drop=FALSE]
