@@ -1,7 +1,7 @@
 #
 # nnmark.R
 #
-# $Revision: 1.4 $ $Date: 2014/09/05 02:03:28 $
+# $Revision: 1.5 $ $Date: 2014/09/05 06:08:49 $
 
 nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
   stopifnot(is.ppp(X))
@@ -28,6 +28,7 @@ nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
                   },
                   dataframe = {
                     result <- mX[Y,, drop=FALSE]
+                    row.names(result) <- NULL
                   },
                   stop("Marks must be a vector or dataframe"))
          })

@@ -105,8 +105,10 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
 \examples{
   plot(nnmark(ants))
   v <- nnmark(ants, at="points")
+  v[1:10]
   plot(nnmark(finpines))
   vf <- nnmark(finpines, at="points")
+  vf[1:5,]
 }
 \keyword{spatial}
 \keyword{methods}
