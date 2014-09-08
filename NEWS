@@ -54,7 +54,28 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o as.function.fv
    Argument 'extrapolate' can have length 1 or 2.
 
+   o varblock
+   New argument 'confidence' determines the confidence level.
+
+   o $<-.fv
+   This can now be used to add an extra column to an 'fv' object
+   (previously it refused).
+
 BUG FIXES
+
+   o varblock
+   Calculations were incorrect if more than one column of 
+   edge corrections was computed. 
+   [Bug introduced in spatstat 1.21-1, november 2010.]
+   Fixed.
+
+   o varblock
+   Crashed if one of the quadrats contained no data points.
+   Fixed.
+
+   o lohboot
+   Interval was calculated wrongly when global=TRUE and fun="Lest" or "Linhom".
+   Fixed.
 
    o nnmark
    Crashed when at="points" if there was only a single column of marks.
@@ -72,6 +93,10 @@ BUG FIXES
 
    o to.grey, complementarycolour
    Did not work properly on 'colourmap' objects.
+   Fixed.
+
+   o Kest
+   Ignored 'var.approx' if the window was a rectangle.
    Fixed.
 
    o as.function.fv

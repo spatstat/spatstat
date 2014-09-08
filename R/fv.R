@@ -822,8 +822,13 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
       return(x[, -j, drop=FALSE])
     return(x)
   }
-  if(length(j) == 0)
-    stop("Use bind.fv to add new columns to an object of class fv")
+  if(length(j) == 0) {
+    ## new column
+    df <- data.frame(1:nrow(x), value)[,-1,drop=FALSE]
+    colnames(df) <- name
+    y <- bind.fv(x, df, desc=paste("Additional variable", sQuote(name)))
+    return(y)
+  }
   NextMethod("$<-")
 }
 

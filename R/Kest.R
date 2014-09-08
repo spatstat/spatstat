@@ -161,141 +161,145 @@ function(X, ..., r=NULL, breaks=NULL,
     if(none) return(Kn) 
   }
 
-  ###########################################
-  # Fast code for rectangular window
-  ###########################################
+  do.fast.rectangle <-
+    can.do.fast && is.rectangle(W) &&
+      spatstat.options("use.Krect") && !any(correction == "rigid")
+  
+  if(do.fast.rectangle) {
+    ###########################################
+    ## Fast code for rectangular window
+    ###########################################
+    K <-  Krect.engine(X, rmax, length(r), correction, ratio=ratio)
+    attr(K, "alim") <- alim
+  } else {
+    ###########################################
+    ## Slower code
+    ###########################################
 
-  if(can.do.fast && is.rectangle(W) &&
-     spatstat.options("use.Krect") && !any(correction == "rigid")) {
-    Kr <-  Krect.engine(X, rmax, length(r), correction, ratio=ratio)
-    attr(Kr, "alim") <- alim
-    return(Kr)
-  }
+    ## this will be the output data frame
+    Kdf <- data.frame(r=r, theo = pi * r^2)
+    desc <- c("distance argument r", "theoretical Poisson %s")
+    denom <- lambda2 * area
+    K <- ratfv(Kdf, NULL, denom,
+               "r", quote(K(r)),
+               "theo", NULL, alim, c("r","%s[pois](r)"), desc, fname="K",
+               ratio=ratio)
   
-  ###########################################
-  # Slower code
-  ###########################################
-        
-        
-  # this will be the output data frame
-  Kdf <- data.frame(r=r, theo = pi * r^2)
-  desc <- c("distance argument r", "theoretical Poisson %s")
-  denom <- lambda2 * area
-  K <- ratfv(Kdf, NULL, denom,
-             "r", quote(K(r)),
-             "theo", NULL, alim, c("r","%s[pois](r)"), desc, fname="K",
-             ratio=ratio)
-  
-  # identify all close pairs
-  rmax <- max(r)
-  close <- closepairs(X, rmax)
-  DIJ <- close$d
+    ## identify all close pairs
+    rmax <- max(r)
+    close <- closepairs(X, rmax)
+    DIJ <- close$d
 
-  if(any(correction == "none")) {
-    # uncorrected! For demonstration purposes only!
-    wh <- whist(DIJ, breaks$val)  # no weights
-    numKun <- cumsum(wh)
-    denKun <- lambda2 * area
-    # uncorrected estimate of K
-    K <- bind.ratfv(K,
-                    data.frame(un=numKun), denKun,
-                    "hat(%s)[un](r)",
-                    "uncorrected estimate of %s",
-                    "un",
-                    ratio=ratio)
-  }
-  
-  if(any(correction == "border" | correction == "bord.modif")) {
-  # border method
-  # Compute distances to boundary
-    b <- bdist.points(X)
-    I <- close$i
-    bI <- b[I]
-  # apply reduced sample algorithm
-    RS <- Kount(DIJ, bI, b, breaks)
-    if(any(correction == "bord.modif")) {
-      # modified border correction
-      denom.area <- eroded.areas(W, r)
-      numKbm <- RS$numerator
-      denKbm <- lambda2 * denom.area
+    if(any(correction == "none")) {
+      ## uncorrected! For demonstration purposes only!
+      wh <- whist(DIJ, breaks$val)  # no weights
+      numKun <- cumsum(wh)
+      denKun <- lambda2 * area
+      ## uncorrected estimate of K
       K <- bind.ratfv(K,
-                      data.frame(bord.modif=numKbm),
-                      data.frame(bord.modif=denKbm),
-                      "hat(%s)[bordm](r)",
-                      "modified border-corrected estimate of %s",
-                      "bord.modif",
+                      data.frame(un=numKun), denKun,
+                      "hat(%s)[un](r)",
+                      "uncorrected estimate of %s",
+                      "un",
                       ratio=ratio)
     }
-    if(any(correction == "border")) {
-      numKb <- RS$numerator
-      denKb <- lambda * RS$denom.count
+  
+    if(any(correction == "border" | correction == "bord.modif")) {
+      ## border method
+      ## Compute distances to boundary
+      b <- bdist.points(X)
+      I <- close$i
+      bI <- b[I]
+      ## apply reduced sample algorithm
+      RS <- Kount(DIJ, bI, b, breaks)
+      if(any(correction == "bord.modif")) {
+        ## modified border correction
+        denom.area <- eroded.areas(W, r)
+        numKbm <- RS$numerator
+        denKbm <- lambda2 * denom.area
+        K <- bind.ratfv(K,
+                        data.frame(bord.modif=numKbm),
+                        data.frame(bord.modif=denKbm),
+                        "hat(%s)[bordm](r)",
+                        "modified border-corrected estimate of %s",
+                        "bord.modif",
+                        ratio=ratio)
+      }
+      if(any(correction == "border")) {
+        numKb <- RS$numerator
+        denKb <- lambda * RS$denom.count
+        K <- bind.ratfv(K,
+                        data.frame(border=numKb), 
+                        data.frame(border=denKb), 
+                        "hat(%s)[bord](r)",
+                        "border-corrected estimate of %s",
+                        "border",
+                        ratio=ratio)
+      }
+    }
+
+    if(any(correction == "translate")) {
+      ## Ohser-Stoyan translation correction
+      edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
+      wh <- whist(DIJ, breaks$val, edgewt)
+      numKtrans <- cumsum(wh)
+      denKtrans <- lambda2 * area
+      h <- diameter(as.rectangle(W))/2
+      numKtrans[r >= h] <- NA
       K <- bind.ratfv(K,
-                      data.frame(border=numKb), 
-                      data.frame(border=denKb), 
-                      "hat(%s)[bord](r)",
-                      "border-corrected estimate of %s",
-                      "border",
+                      data.frame(trans=numKtrans),
+                      denKtrans,
+                      "hat(%s)[trans](r)",
+                      "translation-corrected estimate of %s",
+                      "trans",
+                      ratio=ratio)
+    }
+    if(any(correction == "rigid")) {
+      ## Ohser-Stoyan rigid motion correction
+      CW <- rotmean(setcov(W))
+      edgewt <- area/as.function(CW)(DIJ)
+      wh <- whist(DIJ, breaks$val, edgewt)
+      numKrigid <- cumsum(wh)
+      denKrigid <- lambda2 * area
+      h <- diameter(as.rectangle(W))
+      numKrigid[r >= h] <- NA
+      K <- bind.ratfv(K,
+                      data.frame(rigid=numKrigid),
+                      denKrigid,
+                      "hat(%s)[rigid](r)",
+                      "rigid motion-corrected estimate of %s",
+                      "rigid",
+                      ratio=ratio)
+    }
+    if(any(correction == "isotropic")) {
+      ## Ripley isotropic correction
+      XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
+      edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
+      wh <- whist(DIJ, breaks$val, edgewt)
+      numKiso <- cumsum(wh)
+      denKiso <- lambda2 * area
+      h <- diameter(W)/2
+      numKiso[r >= h] <- NA
+      K <- bind.ratfv(K,
+                      data.frame(iso=numKiso),
+                      denKiso,
+                      "hat(%s)[iso](r)",
+                      "Ripley isotropic correction estimate of %s",
+                      "iso",
                       ratio=ratio)
     }
   }
 
-  if(any(correction == "translate")) {
-    ## Ohser-Stoyan translation correction
-    edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
-    wh <- whist(DIJ, breaks$val, edgewt)
-    numKtrans <- cumsum(wh)
-    denKtrans <- lambda2 * area
-    h <- diameter(as.rectangle(W))/2
-    numKtrans[r >= h] <- NA
-    K <- bind.ratfv(K,
-                    data.frame(trans=numKtrans),
-                    denKtrans,
-                    "hat(%s)[trans](r)",
-                    "translation-corrected estimate of %s",
-                    "trans",
-                    ratio=ratio)
-  }
-  if(any(correction == "rigid")) {
-    ## Ohser-Stoyan rigid motion correction
-    CW <- rotmean(setcov(W))
-    edgewt <- area/as.function(CW)(DIJ)
-    wh <- whist(DIJ, breaks$val, edgewt)
-    numKrigid <- cumsum(wh)
-    denKrigid <- lambda2 * area
-    h <- diameter(as.rectangle(W))
-    numKrigid[r >= h] <- NA
-    K <- bind.ratfv(K,
-                    data.frame(rigid=numKrigid),
-                    denKrigid,
-                    "hat(%s)[rigid](r)",
-                    "rigid motion-corrected estimate of %s",
-                    "rigid",
-                    ratio=ratio)
-  }
-  if(any(correction == "isotropic")) {
-    ## Ripley isotropic correction
-    XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
-    edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
-    wh <- whist(DIJ, breaks$val, edgewt)
-    numKiso <- cumsum(wh)
-    denKiso <- lambda2 * area
-    h <- diameter(W)/2
-    numKiso[r >= h] <- NA
-    K <- bind.ratfv(K,
-                 data.frame(iso=numKiso),
-                 denKiso,
-                 "hat(%s)[iso](r)",
-                 "Ripley isotropic correction estimate of %s",
-                 "iso",
-                 ratio=ratio)
-  }
-  #
+  #############################
+  ##  VARIANCE APPROXIMATION
+  #############################
+
   if(var.approx) {
-    # Compute variance approximations
+    ## Compute variance approximations
     A <- area
     P <- perimeter(W)
     n <- npts
-    # Ripley asymptotic approximation
+    ## Ripley asymptotic approximation
     rip <- 2 * ((A/(n-1))^2) * (pi * r^2/A + 0.96 * P * r^3/A^2
                                 + 0.13 * (n/A) * P * r^5/A^2)
     if(!ratio) {
@@ -341,7 +345,9 @@ function(X, ..., r=NULL, breaks=NULL,
       }
     }
   }
-  # default plot will display all edge corrections
+
+  ### FINISH OFF #####
+  ## default plot will display all edge corrections
   formula(K) <- . ~ r
   nama <- rev(colnames(K))
   nama <- nama[!(nama %in% c("r", "rip", "ls"))]

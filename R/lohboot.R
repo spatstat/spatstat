@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.10 $   $Date: 2014/09/03 02:46:11 $
+#  $Revision: 1.11 $   $Date: 2014/09/08 08:38:28 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -31,10 +31,10 @@ lohboot <-
   localfun <- switch(fun,
                      pcf=localpcf,
                      Kest=localK,
-                     Lest=localK,
+                     Lest=localL,
                      pcfinhom=localpcfinhom,
                      Kinhom=localKinhom,
-                     Linhom=localKinhom)
+                     Linhom=localLinhom)
   f <- localfun(X, ...)
   theo <- f$theo
   # parse edge correction info
@@ -68,12 +68,6 @@ lohboot <-
     ydev <- apply(abs(ydif), 2, max, na.rm=TRUE)
     crit <- quantile(ydev, probs=probs, na.rm=TRUE, type=type)
     hilo <- rbind(ymean - crit, ymean + crit)
-  }
-  # now transform from K to L if required
-  if(fun %in% c("Lest", "Linhom")) {
-    ymean <- sqrt(ymean/pi)
-    theo  <- sqrt(theo/pi)
-    hilo  <- sqrt(hilo/pi)
   }
   # create fv object
   df <- data.frame(r=f$r,

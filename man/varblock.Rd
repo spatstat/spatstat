@@ -9,8 +9,11 @@
   by spatial subdivision of a single point pattern dataset.
 }
 \usage{
-varblock(X, fun = Kest, blocks = quadrats(X, nx = nx, ny = ny), ...,
-         nx = 3, ny = nx)
+varblock(X, fun = Kest,
+         blocks = quadrats(X, nx = nx, ny = ny),
+         \dots,
+         nx = 3, ny = nx,
+         confidence=0.95)
 }
 \arguments{
   \item{X}{
@@ -31,6 +34,9 @@ varblock(X, fun = Kest, blocks = quadrats(X, nx = nx, ny = ny), ...,
     in the \eqn{x} and \eqn{y} directions.
     Incompatible with \code{blocks}.
   }
+  \item{confidence}{
+    Confidence level, as a fraction between 0 and 1.
+  }
 }
 \details{
   This command computes an estimate of the variance of
@@ -47,8 +53,9 @@ varblock(X, fun = Kest, blocks = quadrats(X, nx = nx, ny = ny), ...,
   corresponding sub-patterns of \code{X} as described below.
   Then the pointwise
   sample mean, sample variance and sample standard deviation
-  of these summary statistics are computed. The two-standard-deviation
-  confidence intervals are computed.
+  of these summary statistics are computed. Then
+  pointwise confidence intervals are computed, for the specified level
+  of confidence, defaulting to 95 percent.
 
   The variance is estimated by equation (4.21) of Diggle (2003, page 52).
   This assumes that the point pattern \code{X} is stationary.

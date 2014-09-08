@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.11 $  $Date: 2014/02/15 04:08:01 $
+#   $Revision: 1.12 $  $Date: 2014/09/08 05:21:22 $
 #
 
 varblock <- local({
@@ -14,19 +14,31 @@ varblock <- local({
 
   varblock <- function(X, fun=Kest,
                        blocks=quadrats(X, nx=nx, ny=ny), ..., 
-                       nx=3, ny=nx) {
+                       nx=3, ny=nx,
+                       confidence=0.95) {
     stopifnot(is.ppp(X))
     stopifnot(is.tess(blocks))
     stopifnot(is.function(fun) || is.character(fun))
     if(is.character(fun)) 
       fun <- get(fun, mode="function")
+    ## validate confidence level
+    stopifnot(confidence > 0.5 && confidence < 1)
+    alpha <- 1 - confidence
+    probs <- c(alpha/2, 1-alpha/2)
     ## need method rather than generic, to detect 'domain' argument
     if(samefunction(fun, pcf))
       fun <- pcf.ppp
     canrestrict <- "domain" %in% names(formals(fun))
+    ## check there's at least one point in each block
+    Y <- split(X, blocks)
+    nums <- sapply(Y, npoints)
+    blockok <- (nums > 0)
+    if(some.zeroes <- any(!blockok)) 
+      warning("Some tiles contain no data: they are discarded")
     if(!canrestrict) {
       ## divide data into disjoint blocks
-      Y <- split(X, blocks)
+      if(some.zeroes)
+        Y <- Y[blockok]
       n <- length(Y)
       if(n <= 1) stop("Need at least 2 blocks")
       ## apply 'fun' to each block
@@ -46,6 +58,8 @@ varblock <- local({
     } else {
       ## use 'domain' argument of 'fun' to compute contributions from each tile
       B <- tiles(blocks)
+      if(some.zeroes)
+        B <- B[blockok]
       n <- length(B)
       if(any(c("r", "breaks") %in% names(list(...)))) {
         ## r vector specified
@@ -75,23 +89,28 @@ varblock <- local({
     sd <- eval.fv(sqrt(v))
     ## upper and lower limits
     sem <- eval.fv(sd/sqrt(n))
-    upper <- eval.fv(fX + 2 * sem)
-    lower <- eval.fv(fX - 2 * sem)
+    zcrit <- qnorm(probs)
+    lower <- eval.fv(fX + zcrit[1] * sem)
+    upper <- eval.fv(fX + zcrit[2] * sem)
     ## rebadge
     attributes(m) <- attributes(v) <- attributes(sd) <- attributes(fX)
     attributes(upper) <- attributes(lower) <- attributes(fX)
     m <- prefixfv(m, "mean", "sample mean of", "bold(mean)~")
     v <- prefixfv(v, "var", "estimated variance of", "bold(var)~")
     sd <- prefixfv(sd, "sd", "estimated standard deviation of", "bold(sd)~")
-    upper <- prefixfv(upper, "hi", "upper CI limit for", "bold(hi)~")
-    lower <- prefixfv(lower, "lo", "lower CI limit for", "bold(lo)~")
+    CItext <- paste(c("lower", "upper"),
+                    paste0(100 * confidence, "%%"),
+                    "CI limit for")
+    lower <- prefixfv(lower, "lo", CItext[1], "bold(lo)~")
+    upper <- prefixfv(upper, "hi", CItext[2], "bold(hi)~")
     ## tack together 
     out <- cbind(fX,m,v,sd,upper,lower)
     ## restrict r domain
-    ok <- apply(is.finite(as.matrix(as.data.frame(out))), 1, all)
-    rmax <- max(rvalues(out)[ok])
-    alim <- attr(out, "alim")
-    attr(out, "alim") <- c(0, min(rmax, alim[2]))
+    bad <- apply(!is.finite(as.matrix(as.data.frame(out))), 1, all)
+    rmax <- max(rvalues(out)[!bad])
+    alim <- c(0, rmax)
+    if(!canrestrict) alim <- intersect.ranges(attr(out, "alim"), alim)
+    attr(out, "alim") <- alim
     return(out)
   }
 
@@ -99,20 +118,30 @@ varblock <- local({
 })
 
 
-meanlistfv <- function(z) {
-  # compute sample mean of a list of fv objects
-  if(!is.list(z) || !all(unlist(lapply(z, is.fv))))
-    stop("z should be a list of fv objects")
-  if(!do.call("compatible", unname(z)))
-    stop("Objects are not compatible")
-  result <- template <- z[[1]]
-  ynames <- fvnames(template, "*")
-  f <- function(x, ynames=ynames) { as.matrix(as.data.frame(x))[,ynames] }
-  y <- array(unlist(lapply(z, f)),
-             dim=c(nrow(result), ncol(result)-1, length(z)))
-  ymean <- apply(y, 1:2, mean)
-  result[,ynames] <- ymean
-  return(result)
-}
+meanlistfv <- local({
+
+  getYmatrix <- function(x, yn=ynames) { as.matrix(as.data.frame(x)[,yn]) }
+
+  meanlistfv <- function(z, ...) {
+    ## compute sample mean of a list of fv objects
+    if(!is.list(z) || !all(unlist(lapply(z, is.fv))))
+      stop("z should be a list of fv objects")
+    if(!do.call("compatible", unname(z)))
+      stop("Objects are not compatible")
+    result <- template <- z[[1]]
+    ## extract each object's function values as a matrix
+    ynames <- fvnames(template, "*")
+    matlist <- unname(lapply(z, getYmatrix, yn=ynames))
+    ## stack matrices into an array
+    y <- do.call("abind", append(matlist, list(along=3)))
+    ## take mean 
+    ymean <- apply(y, 1:2, mean, ...)
+    result[,ynames] <- ymean
+    return(result)
+  }
+
+  meanlistfv
+})
+
 
   
