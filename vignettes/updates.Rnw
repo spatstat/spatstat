@@ -2759,10 +2759,15 @@ of potential impact.
    process model.
    \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
      
- \item \texttt{predict.ppm}
+ \item \texttt{predict.ppm}:
    Calculation of the conditional intensity omitted the edge correction
    if \texttt{correction='translate'} or \texttt{correction='periodic'}. 
    \bugger{1.17-0}{october 2009}{1.31-3}{may 2013}
+
+ \item \texttt{varblock}:
+   Calculations were incorrect if more than one column of 
+   edge corrections was computed. 
+   \bugger{1.21-1}{november 2010}{1.38-2}{october 2014}
    
  \item \texttt{scan.test}
    Results were sometimes incorrect due to numerical instability
