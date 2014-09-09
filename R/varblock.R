@@ -25,10 +25,10 @@ varblock <- local({
     stopifnot(confidence > 0.5 && confidence < 1)
     alpha <- 1 - confidence
     probs <- c(alpha/2, 1-alpha/2)
-    ## need method rather than generic, to detect 'domain' argument
-    if(samefunction(fun, pcf))
-      fun <- pcf.ppp
-    canrestrict <- "domain" %in% names(formals(fun))
+    ## determine whether 'fun' has an argument called 'domain'
+    canrestrict <- ("domain" %in% names(formals(fun))) ||
+                   samefunction(fun, pcf) ||
+                   samefunction(fun, Lest)
     ## check there's at least one point in each block
     Y <- split(X, blocks)
     nums <- sapply(Y, npoints)

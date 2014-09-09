@@ -11,7 +11,7 @@ OVERVIEW
 
    o Bug fixes.
 
-   o Nickname: ???????????????????
+   o Nickname: Smoke and Mirrors
 
 NEW FUNCTIONS
 
@@ -61,6 +61,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    This can now be used to add an extra column to an 'fv' object
    (previously it refused).
 
+   o plot.fv
+   Improved handling of 'shade' argument.
+
+
 BUG FIXES
 
    o varblock
@@ -88,7 +92,7 @@ BUG FIXES
 
    o objects of class 'fv'
    Assigning a new value to names(x) or colnames(x) or dimnames(x)
-   caused the internal data format to become corrupted.
+   would cause the internal data format to become corrupted.
    Fixed.
 
    o to.grey, complementarycolour
@@ -96,12 +100,16 @@ BUG FIXES
    Fixed.
 
    o Kest
-   Ignored 'var.approx' if the window was a rectangle.
+   Ignored argument 'var.approx' if the window was a rectangle.
    Fixed.
 
    o as.function.fv
    The meanings of 'extrapolate=TRUE' and 'extrapolate=FALSE' were swapped.
    Fixed.
+
+   o varblock
+   Handled the case 'fun=Lest' incorrectly.
+
 
 	CHANGES IN spatstat VERSION 1.38-1
 

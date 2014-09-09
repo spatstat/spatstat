@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.104 $    $Date: 2014/08/27 02:00:06 $
+#  $Revision: 1.105 $    $Date: 2014/09/09 03:44:47 $
 #
 #
 
@@ -204,9 +204,19 @@ plot.fv <- local({
                       "~ 1")
           lhs <- lhs.of.formula(as.formula(ff))
           success <- TRUE
-        } else {
-          success <- FALSE
-        }
+        } else if(length(explicit.lhs.dotnames) > 1) {
+          ## lhs = cbind(...) where ... are dotnames
+          cbound <- paste0("cbind",
+                           paren(paste(explicit.lhs.dotnames, collapse=", ")))
+          if(identical(deparse(lhs), cbound)) {
+            success <- TRUE
+            explicit.lhs.names <- union(explicit.lhs.names, extrashadevars)
+            ff <- paste("cbind",
+                        paren(paste(explicit.lhs.names, collapse=", ")),
+                        "~ 1")
+            lhs <- lhs.of.formula(as.formula(ff))
+          }
+        } else success <- FALSE
         if(success) {
           ## add these columns to the plotting data
           lhsdata <- cbind(lhsdata, morelhs)
