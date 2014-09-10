@@ -14,11 +14,15 @@
 }
 
 "Kscaled"<-
-  function (X, lambda=NULL, ..., r = NULL, breaks = NULL, 
-         correction=c("border", "isotropic", "translate"),
-            sigma=NULL, varcov=NULL)
+  function (X, lambda=NULL, ..., r = NULL, #breaks = NULL, 
+            correction=c("border", "isotropic", "translate"),
+            renormalise=FALSE,
+            normpower=1,
+            sigma=NULL, varcov=NULL,
+            r.max = 10)
 {
     verifyclass(X, "ppp")
+    breaks <- NULL
     rfixed <- !missing(r) || !missing(breaks)
 
     # determine basic parameters
@@ -26,11 +30,14 @@
     npts <- X$n
     area <- area.owin(W)
 
-    rmaxdefault <- rmax.rule("K", W, npts/area) * sqrt(npts/area)
-    breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
-    r <- breaks$r
-    rmax <- breaks$max
-
+  ################ CHANGE (U, 01.08.2013)   ####################
+  # changed handling of rmax and breaks, according to lambda
+  #  rmaxdefault <- rmax.rule("K", W, npts/area) * sqrt(npts/area)
+  #  breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
+  #  r <- breaks$r
+  #  rmax <- breaks$max
+  ################ END CHANGE ##################################
+  
     # match corrections
     correction.given <- !missing(correction) && !is.null(correction)
     correction <- pickoption("correction", correction,
@@ -68,11 +75,45 @@
       else if(!is.numeric(lambda) || !is.null(dim(lambda)))
         stop(paste(sQuote("lambda"),
                    "should be a vector, a pixel image, a function or a ppm"))
-      check.nvector(lambda, npts)
+        check.nvector(lambda, npts)
     }
+  
+    ################ CHANGE (U, 01.08.2013)   ####################
+    # renormalise. Here we only need half the power ;-)
+      if(renormalise) {
+        check.1.real(normpower)
+        stopifnot (r %in% 1:2) #((0.5 <= normpower) & (normpower <= 1))
+        renorm.factor <- (area/sum(1 / lambda))^(normpower /2)
+        lambda <- lambda / renorm.factor
+      } 
+  ################ CHANGE (U, 01.08.2013)   ####################
+  # recommended range of r values
+  # use max lambda instead of npts/area 
+  # calculate recommended arguments r differently
+  # 
+    area <- area.owin(W)
+     
+    maxrescale <- sqrt(max(lambda))
+    minrescale <- sqrt(min(lambda))
     
-    # recommended range of r values
-    alim <- c(0, min(rmax, rmaxdefault))
+    rmaxdefault <- rmax.rule("K", W) 
+    if(!is.null(r)) suggested.absr <- r/maxrescale 
+      else suggested.absr <-NULL
+    breaks <- handle.r.b.args(suggested.absr, breaks, W, 
+                    rmaxdefault=rmaxdefault)
+    absrmax <- breaks$max
+    breaks$val <- breaks$val * maxrescale
+    breaks$r <- breaks$r * maxrescale
+    r <- breaks$r
+    if (max(r)> r.max) 
+    {r <- seq(0, r.max, length.out=513); breaks$val <-c(-r[2],r)}
+    
+    
+    alim <- c(0, min(absrmax*maxrescale, rmaxdefault* maxrescale, r.max))
+    rlim <- diameter(W)/2 * minrescale
+    
+    ############### END CHANGE ##################################
+ 
         
     # this will be the output data frame
     K <- data.frame(r=r, theo= pi * r^2)
@@ -84,8 +125,18 @@
             fname=c("K", "scaled"))
         
     # identify all close pairs
-    rmax <- max(r)
-    close <- closepairs(X, rmax)
+  ################ CHANGE (U, 01.08.2013)   ####################
+  # this may lead to problems since rmax refers to the locally-scaled distances
+  #  
+  #  rmax <- max(r)
+  #  close <- closepairs(X, rmax)
+  #
+  #  use worst case for lambda to get limits of r. somewhat optimistically
+  #  
+    abs.rmax <- min(diameter(W)/2, max(r)/minrescale)
+    close <- closepairs(X, abs.rmax)
+  ################ END CHANGE ##################################
+     
     I <- close$i
     J <- close$j
     # locally-scaled distances
@@ -112,12 +163,16 @@
     bI <- b[I]
   # apply reduced sample algorithm
     RS <- Kount(DIJ, bI, b, breaks)
-    if(any(correction == "border")) {
-      Kb <- RS$numerator/RS$denom.count
-      K <- bind.fv(K, data.frame(border=Kb), "{hat(%s)[%s]^{bord}}(r)",
+  # ################ CHANGE (U, 01.08.2013)   ####################
+  #  if(any(correction == "border")) {
+  
+    Kb <- RS$numerator/RS$denom.count
+    Kb[r > rlim] <- NA
+    
+    K <- bind.fv(K, data.frame(border=Kb), "{hat(%s)[%s]^{bord}}(r)",
                    "border-corrected estimate of %s",
                    "border")
-    }
+  #  }
   }
 
   if(any(correction == "translate")) {
@@ -125,9 +180,11 @@
     XJ <- ppp(close$xj, close$yj, window=W, check=FALSE)
     edgewt <- edge.Trans(XI, XJ, paired=TRUE)
     wh <- whist(DIJ, breaks$val, edgewt)
-    Ktrans <- cumsum(wh)/npts
-    h <- diameter(W)/2
-    Ktrans[r >= h] <- NA
+    Ktrans <- cumsum(wh)/npts 
+  # ################ CHANGE (U, 01.08.2013)   ####################
+  #  h <- diameter(W)/2
+  #  Ktrans[r >= h] <- NA
+    Ktrans[r > rlim] <- NA
     K <- bind.fv(K, data.frame(trans=Ktrans), "{hat(%s)[%s]^{trans}}(r)",
                  "translation-corrected estimate of %s",
                  "trans")
@@ -136,13 +193,18 @@
     # Ripley isotropic correction (using UN-SCALED distances)
     edgewt <- edge.Ripley(XI, matrix(absDIJ, ncol=1))
     wh <- whist(DIJ, breaks$val, edgewt)
-    Kiso <- cumsum(wh)/npts
-    h <- diameter(W)/2
-    Kiso[r >= h] <- NA
+    Kiso <- cumsum(wh)/npts 
+  ################ CHANGE (U, 01.08.2013)   ####################
+  #  h <- diameter(W)/2
+  #  Kiso[r >= h] <- NA
+    Kiso[r > rlim] <- NA
     K <- bind.fv(K, data.frame(iso=Kiso), "{hat(%s)[%s]^{iso}}(r)",
                  "Ripley isotropic correction estimate of %s",
                  "iso")
   }
+  # ################ CHANGE (U, 01.08.2013)   ####################
+  K$theo[r > rlim] <- NA
+  
   # default plot will display all edge corrections
   formula(K) <- . ~ r
   nama <- rev(colnames(K))
