@@ -6,7 +6,7 @@ Estimates the reduced second moment measure \eqn{\kappa}{Kappa}
 from a point pattern in a window of arbitrary shape.
 }
 \usage{
-  Kmeasure(X, sigma, edge=TRUE, ..., varcov=NULL)
+  Kmeasure(X, sigma, edge=TRUE, \dots, varcov=NULL)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -19,10 +19,13 @@ from a point pattern in a window of arbitrary shape.
       smoothing kernel. Incompatible with \code{varcov}.
     }
     \item{edge}{
-      logical value indicating whether an edge correction
+      Logical value indicating whether an edge correction
       should be applied.
     }
-    \item{\dots}{Ignored.}
+    \item{\dots}{
+      Arguments passed to \code{\link{as.mask}} controlling
+      the pixel resolution.
+    }
     \item{varcov}{
       Variance-covariance matrix of the Gaussian smoothing kernel.
       Incompatible with \code{sigma}.

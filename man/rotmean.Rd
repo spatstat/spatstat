@@ -8,7 +8,7 @@
   about the origin, as a function of distance from the origin.
 }
 \usage{
-rotmean(X, ..., origin, Xname)
+rotmean(X, ..., origin, Xname, result=c("fv", "im"))
 }
 \arguments{
   \item{X}{
@@ -26,16 +26,27 @@ rotmean(X, ..., origin, Xname)
     Optional name for \code{X} to be used in the
     function labels.
   }
+  \item{result}{
+    Character string specifying the kind of result required.
+  }
 }
 \details{
   This command computes, for each possible distance \eqn{r},
   the average pixel value of the pixels lying at
   distance \eqn{r} from the origin. Kernel smoothing is used
   to obtain a smooth function of \eqn{r}.
+
+  If \code{result="fv"} (the default) the result is a function
+  object of class \code{"fv"} giving the mean pixel value of \code{X}
+  as a function of distance from the origin.
+
+  If \code{result="im"} the result is a pixel image, with the same
+  dimensions as \code{X}, giving the mean value of \code{X}
+  over all pixels lying at the same distance from the origin
+  as the current pixel.
 }
 \value{
-  An object of class \code{"fv"} giving the mean pixel value of \code{X}
-  as a function of distance from the origin.
+  An object of class \code{"fv"} or \code{"im"}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
@@ -49,6 +60,7 @@ rotmean(X, ..., origin, Xname)
   if(interactive()) {
     Z <- setcov(square(1))
     plot(rotmean(Z))
+    plot(rotmean(Z, result="im"))
   } else {
     Z <- setcov(square(1), dimyx=32)
     f <- rotmean(Z)

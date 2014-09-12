@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.46 $    $Date: 2014/02/17 02:17:49 $
+#           $Revision: 1.47 $    $Date: 2014/09/12 03:43:29 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -35,7 +35,8 @@ Kmeasure <- function(X, sigma, edge=TRUE, ..., varcov=NULL) {
     }
   }  
 
-  second.moment.calc(X, sigma=sigma, edge, "Kmeasure", varcov=varcov)
+  second.moment.calc(x=X, sigma=sigma, edge=edge,
+                     what="Kmeasure", varcov=varcov, ...)
 }
 
 second.moment.calc <- function(x, sigma=NULL, edge=TRUE,

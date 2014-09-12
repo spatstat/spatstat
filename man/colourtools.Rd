@@ -6,6 +6,7 @@
 \alias{paletteindex}
 \alias{samecolour}
 \alias{complementarycolour}
+\alias{is.grey}
 \alias{to.grey}
 \title{
   Convert and Compare Colours in Different Formats
@@ -22,6 +23,7 @@ paletteindex(x)
 samecolour(x,y)
 complementarycolour(x)
 to.grey(x, weights=c(1,1,1))
+is.grey(x)
 }
 
 \arguments{
@@ -55,6 +57,9 @@ to.grey(x, weights=c(1,1,1))
   \code{samecolour} decides whether two colours \code{x} and \code{y}
   are equivalent.
 
+  \code{is.grey} determines whether each entry of \code{x} is a
+  greyscale colour, and returns a logical vector.
+  
   \code{to.grey} converts the colour data in \code{x} to greyscale colours.
   Alternatively \code{x} can be an object of class \code{"colourmap"}
   and \code{to.grey(x)} is the modified colour map.
@@ -77,7 +82,8 @@ to.grey(x, weights=c(1,1,1))
   For \code{paletteindex}, an integer vector, possibly containing
   \code{NA} values.
 
-  For \code{samecolour}, a logical value or logical vector.
+  For \code{samecolour} and \code{is.grey},
+  a logical value or logical vector.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
@@ -100,5 +106,7 @@ to.grey(x, weights=c(1,1,1))
   col2hex("orange")
   to.grey("orange")
   complementarycolour("orange")
+  is.grey("lightgrey")
+  is.grey(8)
 }
 \keyword{color}

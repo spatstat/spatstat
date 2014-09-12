@@ -39,12 +39,21 @@ complementarycolour <- function(x) {
   return(y)
 }
 
+is.grey <- function(x) {
+  if(inherits(x, "colourmap")) x <- colouroutputs(x)
+  sat <- rgb2hsv(col2rgb(x))["s", ]
+  return(sat == 0)
+}
+  
 to.grey <- function(x, weights=c(1,1,1)) {
   if(is.null(x)) return(NULL)
   if(inherits(x, "colourmap")) {
-    colouroutputs(x) <- to.grey(colouroutputs(x))
+    colouroutputs(x) <- to.grey(colouroutputs(x), weights=weights)
     return(x)
   }
+  ## preserve palette indices, if only using black/grey
+  if(all(!is.na(paletteindex(x))) && all(is.grey(x)))
+    return(x)
   y <- col2rgb(x)
   z <- (weights %*% y)/(255 * sum(weights))
   return(grey(z))

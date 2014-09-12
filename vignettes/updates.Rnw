@@ -439,6 +439,7 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{is.grey}: determines whether a colour value is a shade of grey.
 \item \texttt{increment.fv}: increments of a summary function:
   $g(x) = f(x+h)-f(x-h)$.
 \item \texttt{rotmean}: rotational average of pixel values in an image.

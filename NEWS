@@ -32,6 +32,9 @@ NEW FUNCTIONS
    translation edge correction and isotropic edge correction   
    are valid.
 
+   o is.grey
+   Determines whether a colour value is a shade of grey.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o Kest
@@ -64,6 +67,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.fv
    Improved handling of 'shade' argument.
 
+   o Kmeasure
+   Now passes '...' arguments to as.mask()
 
 BUG FIXES
 

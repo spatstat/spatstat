@@ -1,7 +1,7 @@
 #
 #	Ksector.R	Estimation of 'sector K function'
 #
-#	$Revision: 1.1 $	$Date: 2014/07/29 12:04:50 $
+#	$Revision: 1.2 $	$Date: 2014/09/12 05:53:28 $
 #
 
 Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL, 
@@ -22,9 +22,10 @@ Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL,
 
   check.1.real(begin)
   check.1.real(end)
-  check.in.range(begin, c(0, 2*pi))
+  check.in.range(begin, c(-pi, 2*pi))
   check.in.range(end, c(0, 2*pi))
   stopifnot(begin < end)
+  stopifnot((end - begin) <= 2 * pi)
 
   # choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
@@ -70,7 +71,13 @@ Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL,
 
   ## select pairs in angular range
   ang <- with(close, atan2(dy, dx)) %% (2*pi)
-  ok <- (begin <= ang) & (ang <= end)
+  if(begin >= 0) {
+    ## 0 <= begin < end
+    ok <- (begin <= ang) & (ang <= end)
+  } else {
+    ## begin < 0 <= end
+    ok <- (ang >= 2 * pi + begin) | (ang <= end)
+  }
   close <- close[ok, , drop=FALSE]
 
   ## pairwise distances
