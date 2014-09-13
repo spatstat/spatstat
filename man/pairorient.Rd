@@ -8,7 +8,8 @@
   pairs of points at a particular range of distances.
 }
 \usage{
-pairorient(X, r1, r2, ..., correction, ratio = FALSE)
+pairorient(X, r1, r2, ..., correction, ratio = FALSE,
+           units=c("degrees", "radians"))
 }
 \arguments{
   \item{X}{
@@ -32,6 +33,10 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE)
     each edge-corrected estimate will also be saved,
     for use in analysing replicated point patterns.
   }
+  \item{units}{
+    Units in which the angles should be expressed.
+    Either \code{"degrees"} or \code{"radians"}.
+  }
 }
 \details{
   This function calculates the point pair orientation distribution
@@ -41,7 +46,8 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE)
   The function considers all pairs of points in the pattern
   \code{X} that lie more than \code{r1} and less than \code{r2}
   units apart. The \emph{direction} of the arrow joining the points
-  is measured, as an angle in degrees, anticlockwise from the \eqn{x} axis.
+  is measured, as an angle in degrees or radians,
+  anticlockwise from the \eqn{x} axis.
   The result is the cumulative distribution function of these
   directions. 
 
@@ -58,7 +64,8 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE)
 \value{
   A function value table (object of class \code{"fv"})
   containing the estimates of the cumulative distribution
-  function of angles, in degrees.
+  function of angles, in degrees (if \code{units="degrees"})
+  or radians (if \code{units="radians"}).
 }
 \references{
   Stoyan, D. and Stoyan, H. (1994)

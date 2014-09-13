@@ -1,12 +1,14 @@
 #
 #	Ksector.R	Estimation of 'sector K function'
 #
-#	$Revision: 1.2 $	$Date: 2014/09/12 05:53:28 $
+#	$Revision: 1.3 $	$Date: 2014/09/13 03:22:35 $
 #
 
-Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL, 
+Ksector <- function(X, begin=0, end=360, ...,
+                    units=c("degrees", "radians"),
+                    r=NULL, breaks=NULL, 
                     correction=c("border", "isotropic", "Ripley", "translate"),
-                    ratio=FALSE)
+                    ratio=FALSE, verbose=TRUE)
 {
   verifyclass(X, "ppp")
   rfixed <- !is.null(r) || !is.null(breaks)
@@ -20,14 +22,36 @@ Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL,
   r <- breaks$r
   rmax <- breaks$max
 
-  check.1.real(begin)
-  check.1.real(end)
-  check.in.range(begin, c(-pi, 2*pi))
-  check.in.range(end, c(0, 2*pi))
-  stopifnot(begin < end)
-  stopifnot((end - begin) <= 2 * pi)
-
-  # choose correction(s)
+  units <- match.arg(units)
+  switch(units,
+         radians = {
+           if(missing(end)) end <- 2 * pi
+           check.1.real(begin)
+           check.1.real(end)
+           check.in.range(begin, c(-pi, 2*pi))
+           check.in.range(end, c(0, 2*pi))
+           stopifnot(begin < end)
+           stopifnot((end - begin) <= 2 * pi)
+           BEGIN <- begin
+           END   <- end
+           Bname <- simplenumber(begin/pi, "pi") %orifnull% signif(begin, 3)
+           Ename <- simplenumber(end/pi, "pi") %orifnull% signif(end, 3)
+         },
+         degrees = {
+           check.1.real(begin)
+           check.1.real(end)
+           check.in.range(begin, c(-90, 360))
+           check.in.range(end, c(0, 360))
+           stopifnot(begin < end)
+           stopifnot((end - begin) <= 360)
+           if(verbose && (end - begin) <= 2 * pi)
+             warning("Very small interval in degrees: did you mean radians?")
+           BEGIN <- pi* (begin/180)
+           END   <- pi * (end/180)
+           Bname <- signif(begin, 3)
+           Ename <- signif(end, 3)
+         })
+  ## choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction))
     correction <- c("border", "isotropic", "Ripley", "translate")
@@ -44,39 +68,52 @@ Ksector <- function(X, begin=0, end=2*pi, ..., r=NULL, breaks=NULL,
                              best="best"),
                            multi=TRUE)
   best.wanted <- ("best" %in% correction)
-  # replace 'good' by the optimal choice for this size of dataset
+  ## replace 'good' by the optimal choice for this size of dataset
   if("good" %in% correction)
     correction[correction == "good"] <- good.correction.K(X)
-  # retain only corrections that are implemented for the window
+  ## retain only corrections that are implemented for the window
   correction <- implemented.for.K(correction, W$type, correction.given)
   
-  # recommended range of r values
+  ## recommended range of r values
   alim <- c(0, min(rmax, rmaxdefault))
 
-  # this will be the output data frame
-  Kdf <- data.frame(r=r, theo = ((end-begin)/2) * r^2)
+  ## labels
+  subscripts <- paste("sector", Bname, Ename, sep=",")
+  ylabel <- paste("K[", subscripts, "]")
+  ylab <-  eval(parse(text=paste("quote(", ylabel, ")")))
+#  ylab <-  parse(text=paste("K[sector,", Bname, ",", Ename, "]"))
+#  yexp <- substitute(K[list(sector,B,E)](r),
+#                     list(B=Bname, E=Ename))
+  yexp <-  parse(text=paste("K[list(", subscripts, ")]"))
+  fname <- c("K", paste("list", paren(subscripts)))
+  
+  ## this will be the output data frame
+  Kdf <- data.frame(r=r, theo = ((END-BEGIN)/2) * r^2)
   desc <- c("distance argument r", "theoretical Poisson %s")
   denom <- lambda2 * area
   K <- ratfv(Kdf, NULL, denom,
-             "r", quote(K(r)),
-             "theo", NULL, alim,
-             c("r","{%s[%s]^{pois}}(r)"),
-             desc,
-             fname=c("K", "sector"),
+             "r",
+             ylab = ylab,
+             valu = "theo",
+             fmla = NULL,
+             alim =alim,
+             labl = c("r","{%s[%s]^{pois}}(r)"),
+             desc = desc,
+             fname=fname, yexp=yexp, 
              ratio=ratio)
-
+  
   # identify all close pairs
   rmax <- max(r)
   close <- as.data.frame(closepairs(X, rmax))
 
   ## select pairs in angular range
   ang <- with(close, atan2(dy, dx)) %% (2*pi)
-  if(begin >= 0) {
+  if(BEGIN >= 0) {
     ## 0 <= begin < end
-    ok <- (begin <= ang) & (ang <= end)
+    ok <- (BEGIN <= ang) & (ang <= END)
   } else {
     ## begin < 0 <= end
-    ok <- (ang >= 2 * pi + begin) | (ang <= end)
+    ok <- (ang >= 2 * pi + BEGIN) | (ang <= END)
   }
   close <- close[ok, , drop=FALSE]
 

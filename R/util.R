@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.159 $    $Date: 2014/08/08 07:10:09 $
+#    $Revision: 1.160 $    $Date: 2014/09/13 03:21:31 $
 #
 #
 matrowsum <- function(x) {
@@ -1306,5 +1306,25 @@ prepareTitle <- function(main) {
   return(list(main=main,
               nlines=nlines,
               blank=rep('  ', nlines)))
+}
+
+simplenumber <- function(x, unit = "", multiply="*") {
+  ## Try to express x as a simple multiple or fraction
+  stopifnot(length(x) == 1)
+  s <- if(x < 0) "-" else ""
+  x <- abs(x)
+  if(unit == "") {
+    if(x %% 1 == 0) return(paste0(s, round(x)))
+    for(i in 2:12) 
+      if((i/x) %% 1 == 0) return(paste0(s, i, "/", round(i/x)))
+  } else {
+    if(x == 0) return("0")
+    if(x == 1) return(paste0(s,unit))
+    if(x %% 1 == 0) return(paste0(s, round(x), multiply, unit))
+    if((1/x) %% 1 == 0) return(paste0(s, unit, "/", round(i/x)))
+    for(i in 2:12) 
+      if((i/x) %% 1 == 0) return(paste0(s, i, multiply, unit, "/", round(i/x)))
+  }
+  return(NULL)
 }
 

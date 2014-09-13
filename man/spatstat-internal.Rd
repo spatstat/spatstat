@@ -571,6 +571,7 @@
 \alias{shiftxypolygon}              
 \alias{short.deparse}
 \alias{signalStatus}
+\alias{simplenumber}              
 \alias{simplify.xypolygon}              
 \alias{simulrecipe}              
 \alias{singlestring}              
@@ -1309,6 +1310,7 @@ sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 short.deparse(x, maxlen)
+simplenumber(x, unit, multiply)
 simplify.xypolygon(p, dmin)
 simulrecipe(type, expr, envir, csr, pois, constraints)
 singlestring(s, coll)

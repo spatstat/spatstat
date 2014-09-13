@@ -8,12 +8,24 @@
 ##
 
 pairorient <- function(X, r1, r2, ...,
-                       correction, ratio=FALSE) {
+                       correction, ratio=FALSE,
+                       units=c("degrees", "radians")) {
   stopifnot(is.ppp(X))
   check.1.real(r1)
   check.1.real(r2)
   stopifnot(r1 < r2)
   W <- Window(X)
+
+  units <- match.arg(units)
+  switch(units,
+         degrees = {
+           FullCircle <- 360
+           Convert <- 180/pi
+         },
+         radians = {
+           FullCircle <- 2 * pi
+           Convert <- 1
+         })
 
   ## choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
@@ -38,6 +50,7 @@ pairorient <- function(X, r1, r2, ...,
   ## retain only corrections that are implemented for the window
   correction <- implemented.for.K(correction, W$type, correction.given)
 
+  
   ## border corrections not implemented
   ## Find close pairs in range [r1, r2]
   close <- as.data.frame(closepairs(X, r2))
@@ -48,13 +61,13 @@ pairorient <- function(X, r1, r2, ...,
     return(NULL)
   }
   close <- close[ok, , drop=FALSE]
-  ANGLE <- with(close, atan2(dy, dx) * 180/pi) %% 360
+  ANGLE <- with(close, atan2(dy, dx) * Convert) %% FullCircle
 
   ## initialise output object
-  breaks <- make.even.breaks(bmax=360, npos=511)
+  breaks <- make.even.breaks(bmax=FullCircle, npos=511)
   phi <- breaks$r
   Odf <- data.frame(phi  = phi,
-                    theo = phi/(360))
+                    theo = phi/FullCircle)
   desc <- c("distance argument r",
             "theoretical isotropic %s")
   OO <- ratfv(Odf, NULL, denom=nrow(close),
@@ -62,7 +75,7 @@ pairorient <- function(X, r1, r2, ...,
               ylab=substitute(O[R1,R2](r), list(R1=r1, R2=r2)), 
               valu="theo",
               fmla = . ~ phi,
-              alim = c(0, 360),
+              alim = c(0, FullCircle),
               c("phi",
                 "{%s[%s]^{pois}}(phi)"),
               desc,
@@ -116,7 +129,9 @@ pairorient <- function(X, r1, r2, ...,
                      "iso",
                      ratio=ratio)
   }
-  unitname(OO) <- c("degree", "degrees")
+  unitname(OO) <- switch(units,
+                         degrees = c("degree", "degrees"),
+                         radians = c("radian", "radians"))
   return(OO)
 }
 
