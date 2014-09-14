@@ -12,7 +12,7 @@ Ksector(X, begin = 0, end = 360, \dots,
         units = c("degrees", "radians"), 
         r = NULL, breaks = NULL,
         correction = c("border", "isotropic", "Ripley", "translate"),
-        ratio = FALSE, verbose=TRUE)
+        domain=NULL, ratio = FALSE, verbose=TRUE)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -44,6 +44,10 @@ Ksector(X, begin = 0, end = 360, \dots,
     \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
     \code{"translation"}, \code{"none"}, \code{"good"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+  }
+  \item{domain}{
+    Optional window. The first point \eqn{x_i}{x[i]} of each pair of points
+    will be constrained to lie in \code{domain}.
   }
   \item{ratio}{
     Logical. 

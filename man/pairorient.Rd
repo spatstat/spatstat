@@ -9,7 +9,7 @@
 }
 \usage{
 pairorient(X, r1, r2, ..., correction, ratio = FALSE,
-           units=c("degrees", "radians"))
+           units=c("degrees", "radians"), domain=NULL)
 }
 \arguments{
   \item{X}{
@@ -36,6 +36,10 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE,
   \item{units}{
     Units in which the angles should be expressed.
     Either \code{"degrees"} or \code{"radians"}.
+  }
+  \item{domain}{
+    Optional window. The first point \eqn{x_i}{x[i]} of each pair of points
+    will be constrained to lie in \code{domain}.
   }
 }
 \details{

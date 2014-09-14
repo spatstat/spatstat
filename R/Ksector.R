@@ -8,12 +8,13 @@ Ksector <- function(X, begin=0, end=360, ...,
                     units=c("degrees", "radians"),
                     r=NULL, breaks=NULL, 
                     correction=c("border", "isotropic", "Ripley", "translate"),
+                    domain = NULL,
                     ratio=FALSE, verbose=TRUE)
 {
   verifyclass(X, "ppp")
   rfixed <- !is.null(r) || !is.null(breaks)
   npts <- npoints(X)
-  W <- X$window
+  W <- Window(X)
   area <- area.owin(W)
   lambda <- npts/area
   lambda2 <- (npts * (npts - 1))/(area^2)
@@ -21,6 +22,12 @@ Ksector <- function(X, begin=0, end=360, ...,
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max
+  
+  if(!is.null(domain)) {
+    domain <- as.owin(domain)
+    stopifnot(is.subset.owin(domain, Window(X)))
+    area <- area.owin(domain)
+  }
 
   units <- match.arg(units)
   switch(units,
@@ -102,9 +109,15 @@ Ksector <- function(X, begin=0, end=360, ...,
              fname=fname, yexp=yexp, 
              ratio=ratio)
   
-  # identify all close pairs
+  ## identify all close pairs
   rmax <- max(r)
   close <- as.data.frame(closepairs(X, rmax))
+
+  if(!is.null(domain)) {
+    ## restrict to pairs with first point in 'domain'
+    indom <- with(close, inside.owin(xi, yi, domain))
+    close <- close[indom, , drop=FALSE]
+  }
 
   ## select pairs in angular range
   ang <- with(close, atan2(dy, dx)) %% (2*pi)
@@ -140,11 +153,13 @@ Ksector <- function(X, begin=0, end=360, ...,
     b <- bdist.points(X)
     I <- close$i
     bI <- b[I]
+    if(!is.null(domain))
+      b <- b[inside.owin(X, , w=domain)]
   # apply reduced sample algorithm
     RS <- Kount(DIJ, bI, b, breaks)
     if(any(correction == "bord.modif")) {
       # modified border correction
-      denom.area <- eroded.areas(W, r)
+      denom.area <- eroded.areas(W, r, subset=domain)
       numKbm <- RS$numerator
       denKbm <- lambda2 * denom.area
       K <- bind.ratfv(K,

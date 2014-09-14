@@ -59,8 +59,10 @@ sidelengths.owin <- function(x) {
 
 shortside.owin <- function(x) { min(sidelengths(x)) }
 
-eroded.areas <- function(w, r) {
+eroded.areas <- function(w, r, subset=NULL) {
   w <- as.owin(w)
+  if(!is.null(subset) && !is.mask(w))
+    w <- as.mask(w)
   switch(w$type,
          rectangle = {
            width <- abs(diff(w$xrange))
@@ -68,23 +70,24 @@ eroded.areas <- function(w, r) {
            areas <- pmax(width - 2 * r, 0) * pmax(height - 2 * r, 0)
          },
          polygonal = {
-           # warning("Approximating polygonal window by digital image")
+           ## warning("Approximating polygonal window by digital image")
            w <- as.mask(w)
            areas <- eroded.areas(w, r)
          },
          mask = {
-           # distances from each pixel to window boundary
-           b <- bdist.pixels(w, style="matrix")
-           # histogram breaks to satisfy hist()
+           ## distances from each pixel to window boundary
+           b <- if(is.null(subset)) bdist.pixels(w, style="matrix") else 
+                bdist.pixels(w)[subset, drop=TRUE, rescue=FALSE]
+           ## histogram breaks to satisfy hist()
            Bmax <- max(b, r)
            breaks <- c(-1,r,Bmax+1)
-           # histogram of boundary distances
+           ## histogram of boundary distances
            h <- hist(b, breaks=breaks, plot=FALSE)$counts
-           # reverse cumulative histogram
+           ## reverse cumulative histogram
            H <- revcumsum(h)
-           # drop first entry corresponding to r=-1
+           ## drop first entry corresponding to r=-1
            H <- H[-1]
-           # convert count to area
+           ## convert count to area
            pixarea <- w$xstep * w$ystep
            areas <- pixarea * H
          },

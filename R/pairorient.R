@@ -9,13 +9,16 @@
 
 pairorient <- function(X, r1, r2, ...,
                        correction, ratio=FALSE,
-                       units=c("degrees", "radians")) {
+                       units=c("degrees", "radians"),
+                       domain=NULL) {
   stopifnot(is.ppp(X))
   check.1.real(r1)
   check.1.real(r2)
   stopifnot(r1 < r2)
   W <- Window(X)
-
+  if(!is.null(domain))
+    stopifnot(is.subset.owin(domain, Window(X)))
+  
   units <- match.arg(units)
   switch(units,
          degrees = {
@@ -55,6 +58,8 @@ pairorient <- function(X, r1, r2, ...,
   ## Find close pairs in range [r1, r2]
   close <- as.data.frame(closepairs(X, r2))
   ok <- with(close, r1 <= d & d <= r2)
+  if(!is.null(domain))
+      ok <- ok & with(close, inside.owin(xi, yi, domain))
   if(!any(ok)) {
     warning(paste("There are no pairs of points in the distance range",
                   prange(c(r1,r2))))

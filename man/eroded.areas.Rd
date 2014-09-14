@@ -5,11 +5,14 @@
   Computes the areas of successive morphological erosions of a window.
 }
 \usage{
- eroded.areas(w, r)
+ eroded.areas(w, r, subset=NULL)
 }
 \arguments{
   \item{w}{A window.}
   \item{r}{Numeric vector of radii at which erosions will be performed.}
+  \item{subset}{
+    Optional window inside which the areas should be computed.
+  }
 }
 \value{
   Numeric vector, of the same length as \code{r},

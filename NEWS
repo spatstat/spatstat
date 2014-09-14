@@ -70,6 +70,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o Kmeasure
    Now passes '...' arguments to as.mask()
 
+   o Ksector
+   Now allows start < 0.  
+   New arguments 'units' and 'domain'.
+
+   o pairorient
+   New arguments 'units' and 'domain'.
+
+   o eroded.areas
+   New argument 'subset'
+
 BUG FIXES
 
    o varblock
