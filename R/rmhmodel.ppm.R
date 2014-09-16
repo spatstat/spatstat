@@ -234,7 +234,7 @@ rmhmodel.ppm <- function(model, win, ...,
     ## hack the coefficients
     co <- coef(model)
     check.nvector(new.coef, length(co), things="coefficients")
-    model$orig.coef <- co
+    model$coef.orig <- co
     model$coef <- new.coef
   }
 
