@@ -3,7 +3,7 @@
 
 OVERVIEW
 
-   o We thank Shane Frank and Ute Hahn for contributions.
+   o We thank Shane Frank, Ute Hahn and Sebastian Schutte for contributions.
 
    o Geometry with windows and images.
 
@@ -130,13 +130,18 @@ BUG FIXES
    Ignored argument 'var.approx' if the window was a rectangle.
    Fixed.
 
+   o rmh.ppm, rmhmodel.ppm
+   Ignored the argument 'new.coef'.
+   [Spotted by Sebastian Schutte]
+   Fixed.
+
    o as.function.fv
    The meanings of 'extrapolate=TRUE' and 'extrapolate=FALSE' were swapped.
    Fixed.
 
    o varblock
    Handled the case 'fun=Lest' incorrectly.
-
+   Fixed.
 
 	CHANGES IN spatstat VERSION 1.38-1
 

@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.57 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 2.58 $   $Date: 2014/09/16 09:13:55 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()

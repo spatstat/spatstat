@@ -1711,6 +1711,7 @@
   Farzaneh Safavimanesh,
   Aila \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka},
   Katja Schladitz,
+  Sebastian Schutte,
   Bryan Scott,
   Vadim Shcherbakov,
   Shen Guochun,
