@@ -3,7 +3,7 @@
 
 OVERVIEW
 
-   o We thank Shane Frank for contributions.
+   o We thank Shane Frank and Ute Hahn for contributions.
 
    o Geometry with windows and images.
 
@@ -35,7 +35,16 @@ NEW FUNCTIONS
    o is.grey
    Determines whether a colour value is a shade of grey.
 
+   o harmonise
+   Convert several objects of the same class to a common format.
+   (New generic function with existing methods harmonise.im and harmonise.fv)
+
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o Kscaled
+   Improved algorithm [thanks to Ute Hahn.]
+   New arguments 'renormalise' and 'normpower' allow renormalisation
+   of intensity, similar to Kinhom.
 
    o Kest
    New option: correction="rigid" computes the rigid motion correction.
@@ -79,6 +88,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o eroded.areas
    New argument 'subset'
+
+   o harmonise.fv, harmonise.im
+   These are now methods for the new generic 'harmonise'
 
 BUG FIXES
 

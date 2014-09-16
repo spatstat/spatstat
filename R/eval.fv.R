@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.25 $     $Date: 2014/09/03 08:15:29 $
+#     $Revision: 1.26 $     $Date: 2014/09/16 01:07:19 $
 #
 
 eval.fv <- local({
@@ -187,6 +187,10 @@ compatible.fv <- function(A, B, ...) {
 }
 
 # force a list of images to be compatible with regard to 'x' values
+
+harmonize <- harmonise <- function(...) {
+  UseMethod("harmonise")
+}
 
 harmonize.fv <- harmonise.fv <- function(...) {
   argh <- list(...)

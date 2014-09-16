@@ -7,8 +7,9 @@
   to the same values of the function argument.
 }
 \usage{
-harmonise.fv(\dots)
-harmonize.fv(\dots)
+\method{harmonise}{fv}(\dots)
+
+\method{harmonize}{fv}(\dots)
 }
 \arguments{
   \item{\dots}{
@@ -21,6 +22,9 @@ harmonize.fv(\dots)
   (or several alternative estimates of this value)
   at equally-spaced values of the function argument \eqn{x}.
 
+  The command \code{\link{harmonise}} is generic. This is the
+  method for objects of class \code{"fv"}.
+  
   This command makes any number of \code{"fv"} objects compatible,
   in the loose sense that they have the same sequence of values of
   \eqn{x}. They can then be combined by \code{\link{cbind.fv}},
@@ -61,7 +65,7 @@ harmonize.fv(\dots)
   and Ege Rubak.
 }
 \examples{
-   H <- harmonise.fv(K=Kest(cells), G=Gest(cells))
+   H <- harmonise(K=Kest(cells), G=Gest(cells))
    H
    \dontrun{
       ## generates a warning about duplicated columns

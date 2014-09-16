@@ -6,8 +6,9 @@
   Convert several pixel images to a common pixel raster.
 }
 \usage{
-harmonise.im(\dots)
-harmonize.im(\dots)
+\method{harmonise}{im}(\dots)
+
+\method{harmonize}{im}(\dots)
 }
 \arguments{
   \item{\dots}{
@@ -19,6 +20,9 @@ harmonize.im(\dots)
   This function makes any number of pixel images compatible,
   by converting them all to a common pixel grid.
 
+  The command \code{\link{harmonise}} is generic. This is the
+  method for objects of class \code{"im"}.
+  
   At least one of the arguments \code{\dots} must be a pixel image.
   Some arguments may be windows (objects of class \code{"owin"}),
   functions (\code{function(x,y)}) or numerical constants. These will be
@@ -52,7 +56,7 @@ harmonize.im(\dots)
    A <- setcov(square(1))
    B <- function(x,y) { x }
    G <- density(runifpoint(42))
-   harmonise.im(X=A, Y=B, Z=G)
+   harmonise(X=A, Y=B, Z=G)
 }
 \seealso{
   \code{\link{commonGrid}},

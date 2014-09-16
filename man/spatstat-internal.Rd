@@ -551,6 +551,7 @@
 \alias{safedeldir}
 \alias{safelookup}
 \alias{samefunction}
+\alias{scalardilate.breakpts}
 \alias{scalardilate.msr}
 \alias{scanmeasure}
 \alias{scanmeasure.ppp}
@@ -1289,6 +1290,7 @@ runifrect(n, win = owin(c(0, 1), c(0, 1)))
 safedeldir(X)
 safelookup(Z, X, factor, warn)
 samefunction(f, g)
+\method{scalardilate}{breakpts}(X, f, \dots)
 \method{scalardilate}{msr}(X, f, \dots)
 scanmeasure(X, \dots)
 \method{scanmeasure}{ppp}(X, r, \dots, method) %DontDeclare

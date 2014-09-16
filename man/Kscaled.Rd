@@ -3,13 +3,16 @@
 \alias{Lscaled}
 \title{Locally Scaled K-function}
 \description{
-  Estimates the template \eqn{K} function of
-  a locally-scaled point process.
+  Estimates the locally-rescaled \eqn{K}-function of
+  a point process.
 }
 \usage{
   Kscaled(X, lambda=NULL, \dots, r = NULL, breaks = NULL,
+    rmax = 2.5, 
     correction=c("border", "isotropic", "translate"),
+    renormalise=FALSE, normpower=1,
     sigma=NULL, varcov=NULL)
+
   Lscaled(\dots)
 }
 \arguments{
@@ -38,19 +41,30 @@
   \item{r}{
     vector of values for the argument \eqn{r} at which
     the locally scaled \eqn{K} function
-    should be evaluated. Not normally given by the user;
-    there is a sensible default.
+    should be evaluated. (These are rescaled distances.)
+    Not normally given by the user; there is a sensible default.
   }
   \item{breaks}{
-	This argument is for internal use only.
+    This argument is for internal use only.
+  }
+  \item{rmax}{
+    maximum value of the argument \eqn{r} that should be used.
+    (This is the rescaled distance).
   }
   \item{correction}{
-      A character vector containing any selection of the
-      options \code{"border"}, 
-      \code{"isotropic"}, \code{"Ripley"},
-      \code{"translate"}, \code{"translation"},
-      \code{"none"} or \code{"best"}.
-      It specifies the edge correction(s) to be applied.
+    A character vector containing any selection of the
+    options \code{"border"}, 
+    \code{"isotropic"}, \code{"Ripley"},
+    \code{"translate"}, \code{"translation"},
+    \code{"none"} or \code{"best"}.
+    It specifies the edge correction(s) to be applied.
+  }
+  \item{renormalise}{
+    Logical. Whether to renormalise the estimate. See Details.
+  }
+  \item{normpower}{
+    Integer (usually either 1 or 2).
+    Normalisation power. See Details.
   }
   \item{sigma,varcov}{
     Optional arguments passed to  \code{\link{density.ppp}}
@@ -165,6 +179,13 @@
   by the arguments \code{sigma} and \code{varcov}, which are passed to
   \code{\link{density.ppp}} along with any extra arguments.
   
+  If \code{renormalise=TRUE}, the estimated intensity \code{lambda}
+  is multiplied by \eqn{c^(normpower/2)} before performing other calculations,
+  where \eqn{c = area(W)/sum[i] (1/lambda(x[i]))}. This 
+  renormalisation has about the same effect as in \code{\link{Kinhom}},
+  reducing the variability and bias of the estimate
+  in small samples and in cases of very strong inhomogeneity.
+
   Edge corrections are used to correct bias in the estimation
   of \eqn{K_{\rm scaled}}{Kscaled}. First the interpoint distances are 
   rescaled, and then edge corrections are applied as in \code{\link{Kest}}.
@@ -186,11 +207,12 @@
     Statistics of Spatial Point Processes}. Habilitationsschrift,
   Universitaet Augsburg.
   
-  Hahn, U., Jensen, E.BV., van Lieshout, M.N.M. and Nielsen, L.S. (2003)
+  Hahn, U., Jensen, E.B.V., van Lieshout, M.N.M. and Nielsen, L.S. (2003)
   Inhomogeneous spatial point processes by location-dependent scaling.
   \emph{Advances in Applied Probability} \bold{35}, 319--336.
 
-  Prokesova, M., Hahn, U. and Vedel Jensen, E.B. (2006)
+  \ifelse{latex}{\out{Proke\u{s}ov{\'{a}}}}{Prokesova}, M.,
+  Hahn, U. and Vedel Jensen, E.B. (2006)
   Statistics for locally scaled point patterns.
   In A. Baddeley, P. Gregori, J. Mateu, R. Stoica and D. Stoyan (eds.)
   \emph{Case Studies in Spatial Point Pattern Modelling}.

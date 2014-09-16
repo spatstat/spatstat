@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.12 $	$Date: 2011/05/18 01:27:46 $
+#	$Revision: 1.13 $	$Date: 2014/09/16 02:19:37 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -62,6 +62,19 @@ breakpts <- function(val, maxi, even=FALSE, npos=NULL, step=NULL) {
   out
 }
 
+scalardilate.breakpts <- function(X, f, ...) {
+  out <- with(X,
+              list(val    = f*val,
+                   max    = f*max,
+                   ncells = ncells,
+                   r      = f*r,
+                   even   = even,
+                   npos   = npos,
+                   step   = f*step))
+  class(out) <- "breakpts"
+  out
+}  
+                            
 "make.even.breaks" <- 
 function(bmax, npos, bstep) {
   if(bmax <= 0)
