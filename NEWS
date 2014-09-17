@@ -9,6 +9,10 @@ OVERVIEW
 
    o More edge corrections for K-function.
 
+   o Improved algorithm for locally-scaled K-function.
+
+   o Improved handling of 'fv' objects.
+
    o Bug fixes.
 
    o Nickname: Smoke and Mirrors
@@ -52,6 +56,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o eval.fv
    Functions no longer need to have exactly the same sequence of 'r' values.
    They will now be made compatible using 'harmonise.fv'.
+
+   o scanpp 
+   Upgraded to handle multiple columns of mark data.
 
    o circumradius
    The function 'circumradius' is now generic, with methods

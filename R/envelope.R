@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.65 $  $Date: 2014/08/26 04:28:00 $
+#   $Revision: 2.66 $  $Date: 2014/09/17 02:01:50 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -930,7 +930,7 @@ print.envelope <- function(x, ...) {
           "Monte Carlo test:",
           paste0(if(g) nr else 2 * nr,
                  "/", nsim+1),
-          "=", alpha)
+          "=", signif(alpha, 3))
   }
   if(waxlyrical('gory') && !is.null(pwrong <- attr(x, "pwrong"))) {
     splat("\t[Estimated significance level of pointwise excursions:",

@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.98 $	$Date: 2014/07/29 02:59:13 $
+#	$Revision: 4.99 $	$Date: 2014/09/17 01:20:20 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -341,10 +341,10 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
 # ------------------------------------------------------------------
 #
 #
-scanpp <- function(filename, window, header=TRUE, dir="", multitype=FALSE) {
+scanpp <- function(filename, window, header=TRUE, dir="", factor.marks = NULL, ...) {
   filename <- if(dir=="") filename else
               paste(dir, filename, sep=.Platform$file.sep)
-  df <- read.table(filename, header=header)
+  df <- read.table(filename, header=header, stringsAsFactors = is.null(factor.marks))
   if(header) {
     # check whether there are columns named 'x' and 'y'
     colnames <- dimnames(df)[[2]]
@@ -365,9 +365,30 @@ scanpp <- function(filename, window, header=TRUE, dir="", multitype=FALSE) {
   if(ncol(df) == 2) 
       X <- ppp(x, y, window=window)
   else {
+      # Catch old argument "multitype":
+      dots <- list(...)
+      multi <- charmatch(names(dots), "multitype")
+      argindex <- which(!is.na(multi))
+      if(length(argindex)>0){
+          if(missing(factor.marks)){
+              factor.marks <- dots[[argindex]]
+              ignored <- ""
+          } else{
+              ignored <- paste(" and it is ignored since",
+                               sQuote("factor.marks"),
+                               "is also supplied.")
+          }
+          warning("It appears you have called scanpp with (something partially matching)",
+                  " the deprecated argument ", sQuote("multitype"), ignored,
+                  " Please change to the new syntax.")
+      }
     marks <- df[ , -xycolumns]
-    if(multitype) 
-      marks <- factor(marks)
+    if(any(factor.marks)){
+        # Find indices to convert to factors (recycling to obtain correct length)
+        factorid <- (1:ncol(marks))[factor.marks]
+        # Convert relevant columns to factors
+        marks[,factorid] <- lapply(marks[,factorid,drop=FALSE], factor)
+    }
     X <- ppp(x, y, window=window, marks = marks)
   }
   X

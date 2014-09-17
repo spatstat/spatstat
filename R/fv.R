@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.115 $   $Date: 2014/09/03 05:30:09 $
+#    $Revision: 1.116 $   $Date: 2014/09/17 04:15:09 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -220,8 +220,10 @@ print.fv <- local({
   ##
     if(showextras) {
       cat(fullline, fill=TRUE)
-      splat("Default plot formula:\t",
+      splat("Default plot formula: ",
             flat.deparse(as.formula(a$fmla)))
+      splat("where", dQuote("."), "stands for",
+            commasep(sQuote(fvnames(x, ".")), ", "))
       if(!is.null(a$shade)) 
         splat("Columns", commasep(sQuote(a$shade)), 
               "will be plotted as shading (by default)")
