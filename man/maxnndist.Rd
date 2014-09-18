@@ -9,12 +9,18 @@
   nearest-neighbour distance in a point pattern.
 }
 \usage{
-minnndist(X)
-maxnndist(X)
+minnndist(X, positive=FALSE)
+maxnndist(X, positive=FALSE)
 }
 \arguments{
   \item{X}{
     A point pattern (object of class \code{"ppp"}).
+  }
+  \item{positive}{
+    Logical. If \code{FALSE} (the default), compute the usual
+    nearest-neighbour distance.
+    If \code{TRUE}, ignore coincident points, so that the
+    nearest neighbour distance for each point is greater than zero.
   }
 }
 \details{
@@ -38,6 +44,8 @@ maxnndist(X)
 
   max(nndist(swedishpines))
   maxnndist(swedishpines)
+
+  minnndist(lansing, positive=TRUE)
 
   if(interactive()) {
      X <- rpoispp(1e6)

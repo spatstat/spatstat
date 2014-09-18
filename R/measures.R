@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.47 $  $Date: 2014/07/28 08:26:13 $
+#  $Revision: 1.48 $  $Date: 2014/09/18 01:18:35 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -150,7 +150,7 @@ augment.msr <- function(x, ..., sigma) {
   d <- ncol(as.matrix(x$val))
   xloc <- x$loc
   W <- as.owin(xloc)
-  if(missing(sigma)) sigma <- maxnndist(xloc)
+  if(missing(sigma)) sigma <- maxnndist(xloc, positive=TRUE)
   ## smooth density unless constant
   xdensity <- as.matrix(x$density)
   ra <- apply(xdensity, 2, range)

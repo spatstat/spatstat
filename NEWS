@@ -80,6 +80,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    This can now be used to add an extra column to an 'fv' object
    (previously it refused).
 
+   o minnndist, maxnndist
+   New argument 'positive'. If TRUE, coincident points are ignored:
+   the nearest-neighbour distance of a point is the distance to the
+   nearest point that does not coincide with the current point.
+
    o plot.fv
    Improved handling of 'shade' argument.
 
@@ -118,6 +123,10 @@ BUG FIXES
    o nnmark
    Crashed when at="points" if there was only a single column of marks.
    [Spotted by Shane Frank.]
+   Fixed.
+
+   o plot.msr, augment.msr
+   Crashed if every data point was duplicated.
    Fixed.
 
    o as.im.owin
