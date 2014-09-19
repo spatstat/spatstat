@@ -108,6 +108,7 @@ with modifications by
 }
 \seealso{
   \code{\link{clarkevans.test}},
+  \code{\link{hopskel}},
   \code{\link{nndist}},
   \code{\link{Gest}}
 }

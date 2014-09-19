@@ -19,6 +19,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+   o hopskel.test
+   Hopkins-Skellam test of CSR
+
    o increment.fv
    Increments of a summary function: g(x) = f(x+h)-f(x-h).
 

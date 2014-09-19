@@ -95,7 +95,8 @@ clarkevans.test(X, ...,
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
-  \code{\link{clarkevans}}
+  \code{\link{clarkevans}},
+  \code{\link{hopskel.test}}
 }
 \examples{
   # Redwood data - clustered
@@ -104,3 +105,4 @@ clarkevans.test(X, ...,
 }
 \keyword{spatial}
 \keyword{nonparametric}
+\keyword{htest}
