@@ -2,13 +2,14 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 #include "chunkloop.h"
+#include "looptest.h"
 #include "constants.h"
 
 /*
 
   Ediggatsti.c
 
-  $Revision: 1.2 $     $Date: 2012/03/28 05:55:38 $
+  $Revision: 1.3 $     $Date: 2014/09/19 00:53:30 $
 
   C implementation of 'eval' for DiggleGatesStibbard interaction 
 
@@ -29,17 +30,18 @@ void Ediggatsti(nnsource, xsource, ysource, idsource,
 {
   int nsource, ntarget, maxchunk, j, i, ileft, idsourcej;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
-  double rho, rho2, coef, product;
+  double rho, rho2, rho2pluseps, coef, product;
 
   nsource = *nnsource;
   ntarget = *nntarget;
   rho   = *rrho;
 
-  rho2   = rho * rho;
-  coef   = M_PI_2/rho;
-
   if(nsource == 0 || ntarget == 0) 
     return;
+
+  rho2   = rho * rho;
+  coef   = M_PI_2/rho;
+  rho2pluseps = rho2 + EPSILON(rho2);
 
   ileft = 0;
 
@@ -63,7 +65,7 @@ void Ediggatsti(nnsource, xsource, ysource, idsource,
       for(i=ileft; i < ntarget; i++) {
 	dx = xtarget[i] - xsourcej;
 	dx2 = dx * dx;
-	if(dx2 > rho2)
+	if(dx2 > rho2pluseps)
 	  break;
 	if(idtarget[i] != idsourcej) {
 	  dy = ytarget[i] - ysourcej;

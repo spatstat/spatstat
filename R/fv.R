@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.116 $   $Date: 2014/09/17 04:15:09 $
+#    $Revision: 1.117 $   $Date: 2014/09/18 09:22:24 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -175,7 +175,7 @@ print.fv <- local({
       splat("Function value object",
             paren(paste("class", sQuote("fv"))))
       if(!is.null(ylab)) {
-        xlab <- fvlabels(x)[[a$argu]]
+        xlab <- fvlabels(x, expand=TRUE)[[a$argu]]
         splat("for the function", xlab, "->", ylab)
       }
     }
@@ -365,7 +365,6 @@ fvnames <- function(X, a=".") {
 
 fvlabels <- function(x, expand=FALSE) {
   lab <- attr(x, "labl")
-  names(lab) <- names(x)
   if(expand && !is.null(fname <- attr(x, "fname"))) {
     ## expand plot labels using function name
     nstrings <- max(substringcount("%s", lab))
@@ -378,6 +377,7 @@ fvlabels <- function(x, expand=FALSE) {
   }
   ## remove empty space
   lab <- gsub(" ", "", lab)
+  names(lab) <- names(x)
   return(lab)
 }
 

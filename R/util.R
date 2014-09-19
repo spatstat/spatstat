@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.160 $    $Date: 2014/09/13 03:21:31 $
+#    $Revision: 1.161 $    $Date: 2014/09/18 10:41:41 $
 #
 #
 matrowsum <- function(x) {
@@ -863,7 +863,12 @@ short.deparse <- function(x, maxlen=60) {
 }
 
 ## deparse() can produce multiple lines of text
-flat.deparse <- function(x) { paste(deparse(x), collapse=" ") }
+flat.deparse <- function(x) {
+  y <- paste(deparse(x), collapse=" ")
+  y <- gsub("\n", " ", y)
+  y <- gsub(" ", "", y)
+  return(y)
+}
 
 good.names <- function(nama, defaults, suffices) {
   # ensure sensible, unique names 

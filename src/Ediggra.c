@@ -1,12 +1,13 @@
 #include <R.h>
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
+#include "looptest.h"
 
 /*
 
   Ediggra.c
 
-  $Revision: 1.4 $     $Date: 2012/03/28 05:55:50 $
+  $Revision: 1.5 $     $Date: 2014/09/19 00:53:38 $
 
   C implementation of 'eval' for DiggleGratton interaction (exponentiated)
 
@@ -29,7 +30,7 @@ void Ediggra(nnsource, xsource, ysource, idsource,
 {
   int nsource, ntarget, maxchunk, j, i, ileft, idsourcej;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
-  double delta, rho, delta2, rho2, rhominusdelta;
+  double delta, rho, delta2, rho2, rho2pluseps, rhominusdelta;
   double product;
 
   nsource = *nnsource;
@@ -37,12 +38,13 @@ void Ediggra(nnsource, xsource, ysource, idsource,
   delta = *ddelta;
   rho   = *rrho;
 
+  if(nsource == 0 || ntarget == 0) 
+    return;
+
   rho2   = rho * rho;
   delta2 = delta * delta;
   rhominusdelta = rho - delta;
-
-  if(nsource == 0 || ntarget == 0) 
-    return;
+  rho2pluseps = rho2 + EPSILON(rho2);
 
   ileft = 0;
 
@@ -69,7 +71,7 @@ void Ediggra(nnsource, xsource, ysource, idsource,
       for(i=ileft; i < ntarget; i++) {
 	dx = xtarget[i] - xsourcej;
 	dx2 = dx * dx;
-	if(dx2 > rho2) 
+	if(dx2 > rho2pluseps) 
 	  break;
 	if(idtarget[i] != idsourcej) {
 	  dy = ytarget[i] - ysourcej;

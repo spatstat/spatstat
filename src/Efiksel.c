@@ -1,6 +1,7 @@
 #include <R.h>
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
+#include "looptest.h"
 
 /*
 
@@ -27,17 +28,18 @@ void Efiksel(nnsource, xsource, ysource,
 {
   int nsource, ntarget, maxchunk, j, i, ileft;
   double xsourcej, ysourcej, xleft, dx, dy, dx2, d2;
-  double rmax, r2max, kappa, total;
+  double rmax, r2max, r2maxpluseps, kappa, total;
 
   nsource = *nnsource;
   ntarget = *nntarget;
   rmax = *rrmax;
   kappa = *kkappa;
 
-  r2max = rmax * rmax;
-
   if(nsource == 0 || ntarget == 0) 
     return;
+
+  r2max = rmax * rmax;
+  r2maxpluseps = r2max + EPSILON(r2max);
 
   ileft = 0;
 
@@ -61,7 +63,7 @@ void Efiksel(nnsource, xsource, ysource,
 	/* squared interpoint distance */
 	dx = xtarget[i] - xsourcej;
 	dx2 = dx * dx;
-	if(dx2 > r2max)
+	if(dx2 > r2maxpluseps)
 	  break;
 	dy = ytarget[i] - ysourcej;
 	d2 = dx2 + dy * dy;

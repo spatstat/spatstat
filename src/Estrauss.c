@@ -1,12 +1,12 @@
 #include <R.h>
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
-
+#include "looptest.h"
 /*
 
   Estrauss.c
 
-  $Revision: 1.3 $     $Date: 2012/03/28 05:56:24 $
+  $Revision: 1.4 $     $Date: 2014/09/19 00:54:07 $
 
   C implementation of 'eval' for Strauss interaction
 
@@ -29,12 +29,13 @@ void Ccrosspaircounts(nnsource, xsource, ysource,
      int *counts;
 {
   int nsource, ntarget, maxchunk, j, i, ileft, counted;
-  double xsourcej, ysourcej, rmax, r2max, xleft, dx, dy, dx2, d2;
+  double xsourcej, ysourcej, rmax, r2max, r2maxpluseps, xleft, dx, dy, dx2, d2;
 
   nsource = *nnsource;
   ntarget = *nntarget;
   rmax = *rrmax;
   r2max = rmax * rmax;
+  r2maxpluseps = r2max + EPSILON(r2max);
 
   if(nsource == 0 || ntarget == 0) 
     return;
@@ -60,7 +61,7 @@ void Ccrosspaircounts(nnsource, xsource, ysource,
       for(i=ileft; i < ntarget; i++) {
 	dx = xtarget[i] - xsourcej;
 	dx2 = dx * dx;
-	if(dx2 > r2max)
+	if(dx2 > r2maxpluseps)
 	  break;
 	dy = ytarget[i] - ysourcej;
 	d2 = dx2 + dy * dy;

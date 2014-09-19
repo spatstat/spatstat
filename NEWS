@@ -45,6 +45,11 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+   o pairwise interactions 
+   Fitted parameters and other calculations for pairwise interaction models
+   DiggleGatesStibbard, DiggleGratton, Fiksel, Geyer, Strauss 
+   may change slightly due to a change in handling numerical rounding effects.
+
    o Kscaled
    Improved algorithm [thanks to Ute Hahn.]
    New arguments 'renormalise' and 'normpower' allow renormalisation
@@ -56,6 +61,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o eval.fv
    Functions no longer need to have exactly the same sequence of 'r' values.
    They will now be made compatible using 'harmonise.fv'.
+
+   o crosspaircounts
+   Results may change slightly due to a change in handling numerical 
+   rounding effects.
 
    o scanpp 
    Upgraded to handle multiple columns of mark data.

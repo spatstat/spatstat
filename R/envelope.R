@@ -885,7 +885,7 @@ print.envelope <- function(x, ...) {
   nr <- e$nrank
   nsim <- e$nsim
   V <- e$VARIANCE
-  fname <- deparse(attr(x, "ylab"))
+  fname <- flat.deparse(attr(x, "ylab"))
   type <- if(V) paste("Pointwise", e$nSD, "sigma") else
           if(g) "Simultaneous" else "Pointwise"
   splat(type, "critical envelopes for", fname,

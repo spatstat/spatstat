@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.105 $    $Date: 2014/09/09 03:44:47 $
+#  $Revision: 1.108 $    $Date: 2014/09/18 10:41:27 $
 #
 #
 
@@ -310,15 +310,15 @@ plot.fv <- local({
       argname <- fvnames(x, ".x")
       if(as.character(fmla)[3] == argname) {
         ## The x axis variable is the default function argument.
-        argName <- as.name(argname)
-        xlab <- as.expression(argName)
+        ArgString <- fvlabels(x, expand=TRUE)[[argname]]
+        xexpr <- parse(text=ArgString)
         ## Add name of unit of length?
         ax <- summary(unitname(x))$axis
         if(is.null(ax)) {
-          xlab <- as.expression(argName)
+          xlab <- xexpr
         } else {
           xlab <- expression(VAR ~ COMMENT)
-          xlab[[1]][[2]] <- argName
+          xlab[[1]][[2]] <- xexpr[[1]]
           xlab[[1]][[3]] <- ax
         }
       } else {
@@ -485,8 +485,8 @@ plot.fv <- local({
     leglabl[keyok] <- labl[matok]
     ylab <- attr(x, "ylab")
     if(!is.null(ylab)) {
-      if(is.language(ylab))
-        ylab <- deparse(ylab)
+      if(is.language(ylab)) 
+        ylab <- flat.deparse(ylab)
       legdesc <- sprintf(legdesc, ylab)
     }
     ## compute legend info

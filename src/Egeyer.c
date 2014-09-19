@@ -1,12 +1,13 @@
 #include <R.h>
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
+#include "looptest.h"
 
 /*
 
   Egeyer.c
 
-  $Revision: 1.5 $     $Date: 2013/04/18 06:10:06 $
+  $Revision: 1.6 $     $Date: 2014/09/19 00:53:20 $
 
   Part of C implementation of 'eval' for Geyer interaction
 
@@ -33,7 +34,7 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
      double *result;
 {
   int nquad, ndata, maxchunk, j, i, ileft, dataindex, isdata;
-  double xquadj, yquadj, rmax, sat, r2max, xleft, dx, dy, dx2, d2;
+  double xquadj, yquadj, rmax, sat, r2max, r2maxpluseps, xleft, dx, dy, dx2, d2;
   double tbefore, tafter, satbefore, satafter, delta, totalchange;
 
   nquad = *nnquad;
@@ -41,10 +42,11 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
   rmax  = *rrmax;
   sat   = *ssat;
 
-  r2max = rmax * rmax;
-
   if(nquad == 0 || ndata == 0) 
     return;
+
+  r2max = rmax * rmax;
+  r2maxpluseps = r2max + EPSILON(r2max);
 
   ileft = 0;
 
@@ -70,7 +72,7 @@ void Egeyer(nnquad, xquad, yquad, quadtodata,
       for(i=ileft; i < ndata; i++) {
 	dx = xdata[i] - xquadj;
 	dx2 = dx * dx;
-	if(dx2 > r2max)
+	if(dx2 > r2maxpluseps)
 	  break;
 	if(i != dataindex) {
 	  dy = ydata[i] - yquadj;
