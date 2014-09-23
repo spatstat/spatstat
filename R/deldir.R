@@ -250,3 +250,14 @@ safedeldir <- function(X) {
   warning("deldir failed even after perturbation of coordinates.", call.=FALSE)
   return(NULL)
 }
+
+dirichlet.vertices <- function(X) {
+  DT <- tiles(dirichlet(X))
+  xy <- do.call(concatxy, lapply(DT, vertices))
+  Y <- unique(ppp(xy$x, xy$y, window=Window(X), check=FALSE))
+  b <- bdist.points(Y)
+  thresh <- diameter(Frame(X))/1000
+  Y <- Y[b > thresh]
+  return(Y)
+}
+    

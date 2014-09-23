@@ -12,8 +12,7 @@ hopskel <- function(X) {
   U <- runifpoint(n, Window(X))
   dU <- nncross(U, X, what="dist")
   A <- mean(dX^2)/mean(dU^2)
-  H <- A/(1+A)
-  return(H)
+  return(A)
 }
 
 hopskel.test <- function(X, ..., 
@@ -37,22 +36,23 @@ hopskel.test <- function(X, ...,
   altblurb <-
     switch(alternative,
            two.sided="two-sided",
-           less="clustered (H < 0.5)",
-           greater="regular (H > 0.5)")
+           less="clustered (A < 1)",
+           greater="regular (A > 1)")
 
   ## compute observed value
   statistic <- hopskel(X)
   ## p-value
   switch(method,
          asymptotic = {
-           ## Beta distribution
+           ## F-distribution
+           nn <- 2 * n
            p.value <-
              switch(alternative,
-                    less = pbeta(statistic, n, n, lower.tail=TRUE),
-                    greater = pbeta(statistic, n, n, lower.tail=FALSE),
+                    less = pf(statistic, nn, nn, lower.tail=TRUE),
+                    greater = pf(statistic, nn, nn, lower.tail=FALSE),
                     two.sided = 2 *
-                    pbeta(statistic, n, n, lower.tail=(statistic < 0.5)))
-           pvblurb <- "using Beta distribution"
+                    pf(statistic, nn, nn, lower.tail=(statistic < 1)))
+           pvblurb <- "using F distribution"
          },
          MonteCarlo = {
            ## Monte Carlo p-value
@@ -72,7 +72,7 @@ hopskel.test <- function(X, ...,
          })
 
   statistic <- as.numeric(statistic)
-  names(statistic) <- "H"
+  names(statistic) <- "A"
   
   out <- list(statistic=statistic,
               p.value=p.value,

@@ -5,7 +5,7 @@
 Creates a circular window
 }
 \usage{
- disc(radius=1, centre=c(0,0), \dots, mask=FALSE, npoly=128)
+ disc(radius=1, centre=c(0,0), \dots, mask=FALSE, npoly=128, delta=NULL)
 }
 \arguments{
   \item{radius}{Radius of the circle.}
@@ -14,7 +14,12 @@ Creates a circular window
     to a perfect circle. See Details.
   }
   \item{npoly}{Number of edges of the polygonal approximation,
-    if \code{mask=FALSE}.
+    if \code{mask=FALSE}. Incompatible with \code{delta}.
+  }
+  \item{delta}{
+    Tolerance of polygonal approximation: the length of arc
+    that will be replaced by one edge of the polygon.
+    Incompatible with \code{npoly}.
   }
   \item{\dots}{Arguments passed to \code{as.mask} determining the
     pixel resolution, if \code{mask=TRUE}.

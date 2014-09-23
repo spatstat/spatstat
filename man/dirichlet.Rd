@@ -40,7 +40,8 @@ dirichlet(X)
 \seealso{
   \code{\link{tess}},
   \code{\link{delaunay}},
-  \code{\link{ppp}}
+  \code{\link{ppp}},
+  \code{\link{dirichlet.vertices}}
 }
 \examples{
   X <- runifpoint(42)

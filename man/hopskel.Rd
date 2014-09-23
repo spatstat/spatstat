@@ -46,25 +46,28 @@ hopskel.test(X, \dots,
   the same number \code{n} of points, and compute for each point of \code{U}
   the distance to the nearest point of \code{X}, giving
   distances \eqn{I_1, \ldots, I_n}{I[1], ..., I[n]}.
-  The test statistic is \eqn{H = A/(1+A)} where
+  The test statistic is 
   \deqn{
     A = \frac{\sum_i P_i^2}{\sum_i I_i^2}
   }{
     A = (sum[i] P[i]^2) / (sum[i] I[i]^2)
   }
-  The null distribution of \eqn{H} is roughly
-  a Beta distribution with shape parameters \eqn{(n,n)}.
+  The null distribution of \eqn{A} is roughly
+  an \eqn{F} distribution with shape parameters \eqn{(2n,2n)}.
+  (This is equivalent to using the test statistic \eqn{H=A/(1+A)}
+  and referring \eqn{H} to the Beta distribution with parameters
+  \eqn{(n,n)}).
 
   The function \code{hopskel} calculates the Hopkins-Skellam test statistic
-  \eqn{H}, and returns its numeric value. This can be used as a simple
-  summary of spatial pattern: the value \eqn{H=0.5} is consistent
-  with Complete Spatial Randomness, while values \eqn{H < 0.5} are
-  consistent with spatial clustering, and values \eqn{H > 0.5} are consistent
+  \eqn{A}, and returns its numeric value. This can be used as a simple
+  summary of spatial pattern: the value \eqn{H=1} is consistent
+  with Complete Spatial Randomness, while values \eqn{H < 1} are
+  consistent with spatial clustering, and values \eqn{H > 1} are consistent
   with spatial regularity.
 
   The function \code{hopskel.test} performs the test.
   If \code{method="asymptotic"} (the default), the test statistic \eqn{H}
-  is referred to the Beta distribution. If \code{method="MonteCarlo"},
+  is referred to the \eqn{F} distribution. If \code{method="MonteCarlo"},
   a Monte Carlo test is performed using \code{nsim} simulated point
   patterns.
 }

@@ -3,19 +3,28 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.11 $ $Date: 2014/03/31 05:57:35 $
+## $Revision: 1.15 $ $Date: 2014/09/22 11:01:39 $
 ##
 
 disc <- local({
 
   indic <- function(x,y,x0,y0,r) { as.integer((x-x0)^2 + (y-y0)^2 < r^2) }
   
-  disc <- function(radius=1, centre=c(0,0), ..., mask=FALSE, npoly=128) {
+  disc <- function(radius=1, centre=c(0,0), ...,
+                   mask=FALSE, npoly=128, delta=NULL) {
     stopifnot(length(radius) == 1)
     stopifnot(radius > 0)
     centre <- as2vector(centre)
-    stopifnot(length(npoly) == 1)
-    stopifnot(npoly > 2)
+    if(!missing(npoly) && !is.null(delta))
+      stop("Specify either npoly or delta")
+    if(!missing(npoly)) {
+      stopifnot(length(npoly) == 1)
+      stopifnot(npoly >= 3)
+    } else if(!is.null(delta)) {
+      check.1.real(delta)
+      stopifnot(delta > 0)
+      npoly <- pmax(16, ceiling(2 * pi * radius/delta))
+    }
     if(!mask) {
       theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1)]
       x <- centre[1] + radius * cos(theta)
