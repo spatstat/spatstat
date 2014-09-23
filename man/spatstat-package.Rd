@@ -188,9 +188,7 @@
 	\code{\link{rNeymanScott}} \tab
 	simulate a general Neyman-Scott process\cr
 	\code{\link{rPoissonCluster}} \tab
-	simulate a general Neyman-Scott process\cr
-	\code{\link{rNeymanScott}} \tab
-	simulate a general Neyman-Scott process\cr
+	simulate a general Poisson cluster process\cr
 	\code{\link{rMatClust}} \tab
 	simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster process\cr
 	\code{\link{rThomas}} \tab
