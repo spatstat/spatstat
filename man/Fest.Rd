@@ -7,7 +7,7 @@
   window of arbitrary shape.
 }
 \usage{
-Fest(X, ..., eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
+Fest(X, \dots, eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
 }
 \arguments{
   \item{X}{The observed point pattern, 

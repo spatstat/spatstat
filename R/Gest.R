@@ -94,24 +94,27 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
   if(any(correction %in% c("rs", "km"))) {
     # calculate Kaplan-Meier and border correction (Reduced Sample) estimators
     if(npts == 0)
-      result <- data.frame(rs=zeroes, km=zeroes, hazard=zeroes)
+      result <- data.frame(rs=zeroes, km=zeroes, hazard=zeroes, theohaz=zeroes)
     else {
       result <- km.rs(o, bdry, d, breaks)
-      result <- as.data.frame(result[c("rs", "km", "hazard")])
+      result$theohaz <- 2 * pi * lambda * rvals
+      result <- as.data.frame(result[c("rs", "km", "hazard", "theohaz")])
     }
     # add to fv object
     Z <- bind.fv(Z, result,
-                 c("hat(%s)[bord](r)", "hat(%s)[km](r)", "hat(lambda)[km](r)"),
+                 c("hat(%s)[bord](r)", "hat(%s)[km](r)",
+                   "hat(h)[km](r)", "h[pois](r)"),
                  c("border corrected estimate of %s",
                    "Kaplan-Meier estimate of %s",
-                   "Kaplan-Meier estimate of hazard function lambda(r)"),
+                   "Kaplan-Meier estimate of hazard function h(r)",
+                   "theoretical Poisson hazard function h(r)"),
                  "km")
     
     # modify recommended plot range
     attr(Z, "alim") <- range(rvals[result$km <= 0.9])
   }
   nama <- names(Z)
-  fvnames(Z, ".") <- rev(nama[!(nama %in% c("r", "hazard"))])
+  fvnames(Z, ".") <- rev(setdiff(nama, c("r", "hazard", "theohaz")))
   unitname(Z) <- unitname(X)
   return(Z)
 }	

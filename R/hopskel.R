@@ -2,7 +2,7 @@
 ## hopskel.R
 ##     Hopkins-Skellam test
 ##
-##  $Revision: 1.1 $  $Date: 2014/09/19 02:48:57 $
+##  $Revision: 1.2 $  $Date: 2014/09/23 08:24:36 $
 
 hopskel <- function(X) {
   stopifnot(is.ppp(X))

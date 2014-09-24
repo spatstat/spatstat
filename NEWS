@@ -125,6 +125,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o harmonise.fv, harmonise.im
    These are now methods for the new generic 'harmonise'
 
+   o Fest, Gest
+   These functions now also compute the theoretical value of hazard
+   for a Poisson process, if correction = "km".
+
 BUG FIXES
 
    o varblock
@@ -178,6 +182,10 @@ BUG FIXES
 
    o varblock
    Handled the case 'fun=Lest' incorrectly.
+   Fixed.
+
+   o Fest
+   Argument 'eps' was not interpreted correctly.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.38-1

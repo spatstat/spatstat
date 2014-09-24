@@ -4,7 +4,7 @@
 #	S function empty.space()
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.32 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.33 $	$Date: 2014/09/24 04:47:38 $
 #
 "Fest" <- 	
 "empty.space" <-
@@ -18,13 +18,13 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   lambda <- npts/area.owin(W)
   
 # First discretise
-  dwin <- as.mask(W, eps)
+  dwin <- as.mask(W, eps=eps)
   dX <- ppp(X$x, X$y, window=dwin, check=FALSE)
 #        
 # histogram breakpoints 
 #
   rmaxdefault <- rmax.rule("F", dwin, lambda)
-  breaks <- handle.r.b.args(r, breaks, dwin, eps,
+  breaks <- handle.r.b.args(r, breaks, dwin, eps, 
                                   rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
@@ -119,17 +119,20 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
     # calculate Kaplan-Meier and/or border corrected (Reduced Sample) estimators
     want.rs <- "rs" %in% correction
     want.km <- "km" %in% correction
-    selection <- c(want.rs, want.km, want.km)
-    tags <- c("rs", "km", "hazard")[selection]
-    labels <- c("hat(%s)[bord](r)", "hat(%s)[km](r)", "hazard(r)")[selection]
+    selection <- c(want.rs, want.km, want.km, want.km)
+    tags <- c("rs", "km", "hazard", "theohaz")[selection]
+    labels <- c("hat(%s)[bord](r)", "hat(%s)[km](r)",
+                "hat(h)[km](r)", "h[pois](r)")[selection]
     descr <- c("border corrected estimate of %s",
                "Kaplan-Meier estimate of %s",
-               "Kaplan-Meier estimate of hazard function lambda(r)")[selection]
+               "Kaplan-Meier estimate of hazard function h(r)",
+               "theoretical Poisson hazard h(r)")[selection]
     if(npts == 0) {
       result <- as.data.frame(matrix(0, nr, length(tags)))
       names(result) <- tags
     } else {
       result <- km.rs.opt(o, bdry, d, breaks, KM=want.km, RS=want.rs)
+      result$theohaz <- 2 * pi * lambda * rvals
       result <- as.data.frame(result[tags])
     }
     # add to fv object
@@ -142,7 +145,7 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   
   # remove 'hazard' from the dotnames
   nama <- names(Z)
-  fvnames(Z, ".") <- rev(nama[!(nama %in% c("r", "hazard"))])
+  fvnames(Z, ".") <- rev(setdiff(nama, c("r", "hazard", "theohaz")))
   
   # determine recommended plot range
   attr(Z, "alim") <- with(Z, range(.x[is.finite(.y) & .y <= 0.9]))

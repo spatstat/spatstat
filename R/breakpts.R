@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.13 $	$Date: 2014/09/16 02:19:37 $
+#	$Revision: 1.14 $	$Date: 2014/09/24 05:23:36 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -164,8 +164,8 @@ breakpts.from.r <- function(r) {
   return(as.breakpts(b))
 }
 
-handle.r.b.args <- function(r=NULL, breaks=NULL, window, eps=NULL,
-                            rmaxdefault) {
+handle.r.b.args <- function(r=NULL, breaks=NULL, window, pixeps=NULL,
+                            rmaxdefault=NULL) {
 
         if(!is.null(r) && !is.null(breaks))
           stop(paste("Do not specify both",
@@ -176,16 +176,13 @@ handle.r.b.args <- function(r=NULL, breaks=NULL, window, eps=NULL,
         } else if(!is.null(r)) {
           breaks <- breakpts.from.r(r)
 	} else {
-          # both 'r' and 'breaks' are missing
-          rmax <- if(missing(rmaxdefault)) diameter(as.rectangle(window)) else rmaxdefault
-          if(is.null(eps)) {
-            if(!is.null(window$xstep))
-              eps <- window$xstep/4
-            else 
-              eps <- rmax/512
+          rmax <- rmaxdefault %orifnull% diameter(Frame(window))
+          if(is.null(pixeps)) {
+            pixeps <- if(is.mask(window))
+                      min(window$xstep, window$ystep) else rmax/128
           }
-          # warning(paste("step size for argument \'r\' defaults to", eps/4))
-          breaks <- make.even.breaks( rmax, bstep=eps)
+          rstep <- pixeps/4
+          breaks <- make.even.breaks(rmax, bstep=rstep)
         }
 
         return(breaks)
