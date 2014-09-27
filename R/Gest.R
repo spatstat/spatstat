@@ -3,27 +3,31 @@
 #
 #	Compute estimates of nearest neighbour distance distribution function G
 #
-#	$Revision: 4.28 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 4.29 $	$Date: 2014/09/26 06:30:13 $
 #
 ################################################################################
 #
 "Gest" <-
 "nearest.neighbour" <-
-function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
+function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"),
+         domain=NULL) {
   verifyclass(X, "ppp")
-#
+  if(!is.null(domain))
+      stopifnot(is.subset.owin(domain, Window(X)))
+  
+  ##
   W <- X$window
   npts <- npoints(X)
   lambda <- npts/area.owin(W)
   
-# determine r values 
+  ## determine r values 
   rmaxdefault <- rmax.rule("G", W, lambda)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
   zeroes <- numeric(length(rvals))
 
-# choose correction(s)
+  ## choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction)) {
     correction <- c("rs", "km", "han")
@@ -41,16 +45,22 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
                              best="km"),
                            multi=TRUE)
 
-#  compute nearest neighbour distances
-	nnd <- nndist(X$x, X$y)
-#  distance to boundary
-        bdry <- bdist.points(X)
-#  observations
-	o <- pmin.int(nnd,bdry)
-#  censoring indicators
-	d <- (nnd <= bdry)
+  ##  compute nearest neighbour distances
+  nnd <- nndist(X$x, X$y)
+  ##  distance to boundary
+  bdry <- bdist.points(X)
+  ## restrict to subset ?
+  if(!is.null(domain)) {
+    ok <- inside.owin(X, w=domain)
+    nnd <- nnd[ok]
+    bdry <- bdry[ok]
+  }
+  ##  observations
+  o <- pmin.int(nnd,bdry)
+  ##  censoring indicators
+  d <- (nnd <= bdry)
 
-# initialise fv object
+  ## initialise fv object
   df <- data.frame(r=rvals, theo=1-exp(-lambda * pi * rvals^2))
   Z <- fv(df, "r", substitute(G(r), NULL), "theo", . ~ r,
           c(0,rmax),
@@ -59,7 +69,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
           fname="G")
 
   if("none" %in% correction) {
-    #  UNCORRECTED e.d.f. of nearest neighbour distances: use with care
+    ##  UNCORRECTED e.d.f. of nearest neighbour distances: use with care
     if(npts <= 1)
       edf <- zeroes
     else {
@@ -73,26 +83,26 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
     if(npts <= 1)
       G <- zeroes
     else {
-      #  uncensored distances
+      ##  uncensored distances
       x <- nnd[d]
-      #  weights
-      a <- eroded.areas(W, rvals)
-      # calculate Hanisch estimator
+      ##  weights
+      a <- eroded.areas(W, rvals, subset=domain)
+      ## calculate Hanisch estimator
       h <- hist(x[x <= rmax], breaks=breaks$val, plot=FALSE)$counts
       G <- cumsum(h/a)
       G <- G/max(G[is.finite(G)])
     }
-    # add to fv object
+    ## add to fv object
     Z <- bind.fv(Z, data.frame(han=G),
                  "hat(%s)[han](r)", 
                  "Hanisch estimate of %s",
                  "han")
-    # modify recommended plot range
+    ## modify recommended plot range
     attr(Z, "alim") <- range(rvals[G <= 0.9])
   }
 
   if(any(correction %in% c("rs", "km"))) {
-    # calculate Kaplan-Meier and border correction (Reduced Sample) estimators
+    ## calculate Kaplan-Meier and border correction (Reduced Sample) estimators
     if(npts == 0)
       result <- data.frame(rs=zeroes, km=zeroes, hazard=zeroes, theohaz=zeroes)
     else {
@@ -100,7 +110,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
       result$theohaz <- 2 * pi * lambda * rvals
       result <- as.data.frame(result[c("rs", "km", "hazard", "theohaz")])
     }
-    # add to fv object
+    ## add to fv object
     Z <- bind.fv(Z, result,
                  c("hat(%s)[bord](r)", "hat(%s)[km](r)",
                    "hat(h)[km](r)", "h[pois](r)"),
@@ -110,7 +120,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han")) {
                    "theoretical Poisson hazard function h(r)"),
                  "km")
     
-    # modify recommended plot range
+    ## modify recommended plot range
     attr(Z, "alim") <- range(rvals[result$km <= 0.9])
   }
   nama <- names(Z)

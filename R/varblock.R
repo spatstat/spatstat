@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.12 $  $Date: 2014/09/08 05:21:22 $
+#   $Revision: 1.14 $  $Date: 2014/09/26 10:04:41 $
 #
 
 varblock <- local({
@@ -82,19 +82,21 @@ varblock <- local({
     ## sample mean
     m <- meanlistfv(z)
     ## sample variance
-    sqdev <- lapply(z, function(x,m){ eval.fv((x-m)^2) }, m=m)
+    sqdev <- lapply(z, function(x,m){ eval.fv((x-m)^2, dotonly=FALSE) }, m=m)
     v <- meanlistfv(sqdev)
-    v <- eval.fv(v * n/(n-1))
+    v <- eval.fv(v * n/(n-1), dotonly=FALSE)
     ## sample standard deviation
-    sd <- eval.fv(sqrt(v))
+    sd <- eval.fv(sqrt(v), dotonly=FALSE)
     ## upper and lower limits
-    sem <- eval.fv(sd/sqrt(n))
+    sem <- eval.fv(sd/sqrt(n), dotonly=FALSE)
     zcrit <- qnorm(probs)
-    lower <- eval.fv(fX + zcrit[1] * sem)
-    upper <- eval.fv(fX + zcrit[2] * sem)
+    lower <- eval.fv(m + zcrit[1] * sem, dotonly=FALSE)
+    upper <- eval.fv(m + zcrit[2] * sem, dotonly=FALSE)
     ## rebadge
-    attributes(m) <- attributes(v) <- attributes(sd) <- attributes(fX)
-    attributes(upper) <- attributes(lower) <- attributes(fX)
+    fva <- .Spatstat.FvAttrib
+    fva <- fva[fva %in% names(attributes(fX))]
+    attributes(m)[fva] <- attributes(v)[fva] <- attributes(sd)[fva] <- 
+        attributes(upper)[fva] <- attributes(lower)[fva] <- attributes(fX)[fva]
     m <- prefixfv(m, "mean", "sample mean of", "bold(mean)~")
     v <- prefixfv(v, "var", "estimated variance of", "bold(var)~")
     sd <- prefixfv(sd, "sd", "estimated standard deviation of", "bold(sd)~")
@@ -111,6 +113,14 @@ varblock <- local({
     alim <- c(0, rmax)
     if(!canrestrict) alim <- intersect.ranges(attr(out, "alim"), alim)
     attr(out, "alim") <- alim
+    ## sensible default plot formula
+    ybase <- fvnames(fX, ".y")
+    xname <- fvnames(fX, ".x")
+    tname <- intersect("theo", fvnames(fX, "."))
+    fvnames(out, ".y") <- yname <- paste0("mean", ybase)
+    fvnames(out, ".s") <- snames <- paste0(c("lo", "hi"), ybase)
+    fvnames(out, ".") <- c(yname, snames, tname)
+    attr(out, "fmla") <- paste(". ~ ", xname)
     return(out)
   }
 

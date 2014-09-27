@@ -10,7 +10,9 @@ function \eqn{G(r)} from a point pattern in a
 window of arbitrary shape.
 }
 \usage{
-Gest(X, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
+Gest(X, r=NULL, breaks=NULL, \dots,
+     correction=c("rs", "km", "han"),
+     domain=NULL)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -34,7 +36,11 @@ Gest(X, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"Hanisch"}
     and \code{"best"}.
   }
-}
+  \item{domain}{
+    Optional. Calculations will be restricted to this subset
+    of the window. See Details.
+  }
+ }
 \value{
   An object of class \code{"fv"}, see \code{\link{fv.object}},
   which can be plotted directly using \code{\link{plot.fv}}.
@@ -131,6 +137,15 @@ Gest(X, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
     lambda(r) = - (d/dr) log(1 - G(r))}
   This estimate should be used with caution as \eqn{G} is not necessarily
   differentiable.
+
+  If the argument \code{domain} is given, the estimate of \eqn{G(r)}
+  will be based only on the nearest neighbour distances
+  measured from points falling inside \code{domain} (although their
+  nearest neighbours may lie outside \code{domain}).
+  This is useful in bootstrap techniques. The argument \code{domain}
+  should be a window (object of class \code{"owin"}) or something acceptable to
+  \code{\link{as.owin}}. It must be a subset of the
+  window of the point pattern \code{X}.
 
   The naive empirical distribution of distances from each point of
   the pattern \code{X} to the nearest other point of the pattern, 

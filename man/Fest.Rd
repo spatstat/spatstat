@@ -7,7 +7,8 @@
   window of arbitrary shape.
 }
 \usage{
-Fest(X, \dots, eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
+Fest(X, \dots, eps, r=NULL, breaks=NULL,
+     correction=c("rs", "km", "cs"), domain=NULL)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -34,6 +35,10 @@ Fest(X, \dots, eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
     A vector of character strings selected from
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"cs"}
     and \code{"best"}.
+  }
+  \item{domain}{
+    Optional. Calculations will be restricted to this subset
+    of the window. See Details.
   }
 }
 \value{
@@ -162,6 +167,15 @@ Fest(X, \dots, eps, r=NULL, breaks=NULL, correction=c("rs", "km", "cs"))
   Kaplan-Meier estimator of \eqn{F}. Note that \eqn{F} is 
   absolutely continuous (for any stationary point process \eqn{X}), 
   so the hazard function always exists (Baddeley and Gill, 1997). 
+
+  If the argument \code{domain} is given, the estimate of \eqn{F(r)}
+  will be based only on the empty space distances
+  measured from locations inside \code{domain} (although their
+  nearest data points may lie outside \code{domain}).
+  This is useful in bootstrap techniques. The argument \code{domain}
+  should be a window (object of class \code{"owin"}) or something acceptable to
+  \code{\link{as.owin}}. It must be a subset of the
+  window of the point pattern \code{X}.
 
   The naive empirical distribution of distances from each location
   in the window to the nearest point of the data pattern, is a biased

@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.108 $    $Date: 2014/09/18 10:41:27 $
+#  $Revision: 1.110 $    $Date: 2014/09/26 07:16:22 $
 #
 #
 
@@ -74,7 +74,7 @@ plot.fv <- local({
 
     ## validate the variable names
     vars <- variablesinformula(fmla)
-    reserved <- c(".", ".x", ".y")
+    reserved <- c(".", ".x", ".y", ".a", ".s")
     external <- !(vars %in% c(colnames(x), reserved))
     if(any(external)) {
       sought <- vars[external]
@@ -108,13 +108,8 @@ plot.fv <- local({
     ## expand "."
     dotnames <- fvnames(x, ".")
     starnames <- fvnames(x, "*")
-    u <- if(length(dotnames) == 1) as.name(dotnames) else {
-      as.call(lapply(c("cbind", dotnames), as.name))
-    }
-    ux <- as.name(fvnames(x, ".x"))
-    uy <- as.name(fvnames(x, ".y"))
-    fmla <- eval(substitute(substitute(fom, list(.=u, .x=ux, .y=uy)),
-                            list(fom=fmla)))
+    umap <- fvexprmap(x)
+    fmla <- eval(substitute(substitute(fom, um), list(fom=fmla, um=umap)))
 
     ## ------------------- extract data for plot ---------------------
   

@@ -177,6 +177,7 @@
 \alias{forbidNA}
 \alias{forbid.logi}
 \alias{FormatFaspFormulae}
+\alias{fvexprmap}
 \alias{fvlabels}
 \alias{fvlabels<-}
 \alias{fvlabelmap}
@@ -865,6 +866,7 @@ flipxypolygon(p)
 forbidNA(x, context, xname, fatal, usergiven)
 forbid.logi(object)
 FormatFaspFormulae(f, argname)
+fvexprmap(x)
 fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
 fvlabelmap(x, dot=TRUE)

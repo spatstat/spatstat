@@ -75,6 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Results may change slightly due to a change in handling numerical 
    rounding effects.
 
+   o Fest, Gest
+   New argument 'domain' supports boostrap methods.
+
    o scanpp 
    Upgraded to handle multiple columns of mark data.
 
@@ -128,6 +131,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o Fest, Gest
    These functions now also compute the theoretical value of hazard
    for a Poisson process, if correction = "km".
+
+   o with.fv
+   Improved mathematical labels.
 
 BUG FIXES
 

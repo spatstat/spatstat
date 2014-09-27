@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.117 $   $Date: 2014/09/18 09:22:24 $
+#    $Revision: 1.119 $   $Date: 2014/09/26 09:17:05 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -454,6 +454,23 @@ fvlabelmap <- local({
   fvlabelmap
 })
 
+## map from abbreviations to expressions involving the column names,
+## for use in eval(substitute(...))
+fvexprmap <- function(x) {
+  dotnames <- fvnames(x, ".")
+  u <- if(length(dotnames) == 1) as.name(dotnames) else 
+       as.call(lapply(c("cbind", dotnames), as.name))
+  ux <- as.name(fvnames(x, ".x"))
+  uy <- as.name(fvnames(x, ".y"))
+  umap <- list(.=u, .a=u, .x=ux, .y=uy)
+  if(!is.null(fvnames(x, ".s"))) {
+    shnm <- fvnames(x, ".s")
+    shadexpr <- substitute(cbind(A,B), list(A=as.name(shnm[1]),
+                                            B=as.name(shnm[2])))
+    umap <- append(umap, list(.s = shadexpr))
+  }
+  return(umap)
+}
 
 fvlegend <- function(object, elang) {
   # Compute mathematical legend(s) for column(s) in fv object 
@@ -947,7 +964,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   } else {
     # map 'cbind(....)' to "." for name of function only
     cb <- paste("cbind(",
-                paste(used.dotnames, collapse=", "),
+                paste(used.dotnames, collapse=","),
                 ")", sep="")
     compresselang <- gsub(cb, ".", flat.deparse(expandelang), fixed=TRUE)
     compresselang <- as.formula(paste(compresselang, "~1"))[[2]]
