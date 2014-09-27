@@ -1,12 +1,19 @@
 \name{area.owin}
+\alias{area}
 \alias{area.owin}
+\alias{area.default}
 \alias{volume.owin}
 \title{Area of a Window}
 \description{
   Computes the area of a window 
 }
 \usage{
- area.owin(w)
+ area(w)
+
+ \method{area}{owin}(w)
+
+ \method{area}{default}(w)
+
  \method{volume}{owin}(x)
 }
 \arguments{
@@ -39,7 +46,7 @@
 }
 \examples{
   w <- unit.square()
-  area.owin(w)
+  area(w)
        # returns 1.00000
 
   k <- 6
@@ -47,14 +54,14 @@
   co <- cos(theta)
   si <- sin(theta)
   mas <- owin(c(-1,1), c(-1,1), poly=list(x=co, y=si))
-  area.owin(mas)
+  area(mas)
       # returns approx area of k-gon
   
   mas <- as.mask(square(2), eps=0.01)
   X <- raster.x(mas)
   Y <- raster.y(mas)
   mas$m <- ((X - 1)^2 + (Y - 1)^2 <= 1)
-  area.owin(mas)
+  area(mas)
        # returns 3.14 approx     
 
 }

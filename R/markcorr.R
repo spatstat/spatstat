@@ -145,7 +145,7 @@ markcorrint <-
       warning(whinge)
   }
   # estimated intensity
-  lambda <- X$n/area.owin(as.owin(X))
+  lambda <- X$n/area(Window(X))
   mX <- marks(X)
   switch(ftype,
          mul={
@@ -236,7 +236,7 @@ markcorr <-
 
   
   # determine r values 
-  rmaxdefault <- rmax.rule("K", W, npts/area.owin(W))
+  rmaxdefault <- rmax.rule("K", W, npts/area(W))
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max

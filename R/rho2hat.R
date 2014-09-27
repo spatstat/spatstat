@@ -69,7 +69,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
                                   append(list(w=as.owin(X)), list(...)))
              gstarX <- switch(reference,
                               area = {
-                                rep.int(area.owin(W), npoints(X))
+                                rep.int(area(W), npoints(X))
                               },
                               model = {
                                 lam <- predict(model, locations=W)
@@ -116,8 +116,8 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     # normalising constants
     nX   <- length(Z1X)
     npixel <- length(lambda)
-    area <- area.owin(as.owin(model))
-    pixelarea <- area/npixel
+    areaW <- area(Window(model))
+    pixelarea <- areaW/npixel
     baseline <- if(reference == "area") rep.int(1, npixel) else lambda
     wts <- baseline * pixelarea
     switch(method,

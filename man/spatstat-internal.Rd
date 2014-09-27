@@ -13,7 +13,7 @@
 \alias{anycrossing.psp}
 \alias{apply23sum}
 \alias{applytolayers}
-\alias{area.xypolygon}       
+\alias{Area.xypolygon}       
 \alias{areadelta2}       
 \alias{areaGain.diri}       
 \alias{areaGain.grid}       
@@ -674,7 +674,7 @@ affinexypolygon(p, mat, vec, detmat)
 anycrossing.psp(A,B)
 apply23sum(x)
 applytolayers(L, FUN, \dots)
-area.xypolygon(polly)
+Area.xypolygon(polly)
 areadelta2(X, r, \dots)
 areaGain.diri(u, X, r, \dots, W)
 areaGain.grid(u, X, r, \dots, W, ngrid)

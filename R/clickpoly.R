@@ -2,7 +2,7 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.4 $  $Date: 2014/03/26 01:19:33 $
+# $Revision: 1.5 $  $Date: 2014/09/27 09:45:44 $
 #
 #
 clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
@@ -26,7 +26,7 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
                   resolve.defaults(if(!is.null(nv)) list(n=nv) else list(),
                                    list(...),
                                    list(type="o")))
-    if(area.xypolygon(xy) < 0)
+    if(Area.xypolygon(xy) < 0)
       xy <- lapply(xy, rev)
     gon[[i]] <- xy
     plot(owin(poly=xy), add=TRUE)

@@ -70,8 +70,8 @@ Creates a circular window
  # how to control the resolution of the mask
  plot(disc(mask=TRUE, dimyx=256))
  # check accuracy of approximation
- area.owin(disc())/pi
- area.owin(disc(mask=TRUE))/pi
+ area(disc())/pi
+ area(disc(mask=TRUE))/pi
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

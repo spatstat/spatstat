@@ -101,7 +101,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   r.override <- !is.null(r)
 
   win <- X$window
-  area <- area.owin(win)
+  areaW <- area(win)
   npts <- npoints(X)
   
   correction.given <- !missing(correction) && !is.null(correction)
@@ -121,7 +121,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   # bandwidth  
   if(is.null(bw) && kernel=="epanechnikov") {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
-    h <- stoyan /sqrt(npts/area)
+    h <- stoyan /sqrt(npts/areaW)
     hmax <- h
     # conversion to standard deviation
     bw <- h/sqrt(5)
@@ -131,7 +131,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
     hmax <- 3 * bw
   } else {
     # data-dependent bandwidth selection: guess upper bound on half-width
-    hmax <- 2 * stoyan /sqrt(npts/area)
+    hmax <- 2 * stoyan /sqrt(npts/areaW)
   }
 
   ##########  indices I and J  ########################
@@ -194,7 +194,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   ########## r values ############################
   # handle arguments r and breaks 
 
-  rmaxdefault <- rmax.rule("K", win, npts/area)        
+  rmaxdefault <- rmax.rule("K", win, npts/areaW)        
   breaks <- handle.r.b.args(r, breaks, win, rmaxdefault=rmaxdefault)
   if(!(breaks$even))
     stop("r values must be evenly spaced")
@@ -263,7 +263,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   if(any(correction=="translate")) {
     # translation correction
     edgewt <- edge.Trans(XI[icloseI], XJ[jcloseJ], paired=TRUE)
-    gT <- sewpcf(dclose, edgewt * weight, denargs, area)$g
+    gT <- sewpcf(dclose, edgewt * weight, denargs, areaW)$g
     out <- bind.fv(out,
                    data.frame(trans=gT),
                    makefvlabel(NULL, "hat", fname, "Trans"),
@@ -273,7 +273,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
     edgewt <- edge.Ripley(XI[icloseI], matrix(dclose, ncol=1))
-    gR <- sewpcf(dclose, edgewt * weight, denargs, area)$g
+    gR <- sewpcf(dclose, edgewt * weight, denargs, areaW)$g
     out <- bind.fv(out,
                    data.frame(iso=gR),
                    makefvlabel(NULL, "hat", fname, "Ripley"),

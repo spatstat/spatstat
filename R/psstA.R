@@ -61,10 +61,10 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
   }
   
   # basic statistics
-  Win <- X$window
-  npoints <- X$n
-  area <- area.owin(Win)
-  lambda <- npoints/area
+  Win <- Window(X)
+  npts <- npoints(X)
+  areaW <- area(Win)
+  lambda <- npts/areaW
 
   #  determine breakpoints for r values
   rmaxdefault <- rmax.rule("F", Win, lambda)
@@ -97,7 +97,7 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
   #
   # for efficiency, compute the largest value of distance transform
   Dmax <- 0
-  for(i in 1:npoints) {
+  for(i in 1:npts) {
     Di <- distmap(X[-i])
     Dimax <- summary(Di)$max
     Dmax <- max(Dmax, Dimax)

@@ -89,19 +89,19 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
     return(h * pixelarea)
   }
   X <- unique(X)
-  npoints <- X$n
+  npts <- npoints(X)
   nr <- length(r)
-  if(npoints == 0)
+  if(npts == 0)
     return(numeric(nr))
-  else if(npoints == 1) 
+  else if(npts == 1) 
     return(discpartarea(X, r, W))
   samebox <- (W$type == "rectangle") &&
               identical(all.equal(W, as.owin(X)), "TRUE")
   needclip <- constrained && !samebox
   dd <- dirichlet(X)
   til <- tiles(dd)
-  out <- matrix(0, npoints, nr)
-  for(i in 1:npoints) {
+  out <- matrix(0, npts, nr)
+  for(i in 1:npts) {
     Ti <- til[[i]]
     if(needclip)
       Ti <- intersect.owin(Ti, W)

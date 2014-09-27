@@ -132,8 +132,8 @@ bw.stoyan <- function(X, co=0.15) {
   # Stoyan's rule of thumb
   stopifnot(is.ppp(X))
   n <- npoints(X)
-  W <- as.owin(X)
-  a <- area.owin(W)
+  W <- Window(X)
+  a <- area(W)
   stoyan <- co/sqrt(5 * n/a)
   return(stoyan)
 }
@@ -179,8 +179,8 @@ bw.relrisk <- function(X, method="likelihood",
   # determine a range of bandwidth values
   n <- npoints(X)
   if(is.null(hmin) || is.null(hmax)) {
-    W <- as.owin(X)
-    a <- area.owin(W)
+    W <- Window(X)
+    a <- area(W)
     d <- diameter(as.rectangle(W))
     # Stoyan's rule of thumb applied to the least and most common types
     mcount <- table(marx)

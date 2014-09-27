@@ -20,7 +20,7 @@ bw.diggle <- function(X, ..., correction="good", hmax=NULL) {
   mf <- function(..., method=c("C", "interpreted")) match.arg(method)
   method <- mf(...)
   #
-  lambda <- npoints(X)/area.owin(X)
+  lambda <- npoints(X)/area(Window(X))
   r <- if(is.null(hmax)) NULL else seq(0, 4*hmax, length=512)
   K <- Kest(X, r=r, correction=correction)
   yname <- fvnames(K, ".y")

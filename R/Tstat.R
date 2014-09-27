@@ -54,11 +54,11 @@ Tstat <- local({
       verifyclass(X, "ppp")
       rfixed <- !is.null(r) 
       npts <- npoints(X)
-      W <- X$window
-      area <- area.owin(W)
-      lambda <- npts/area
-      lambda2 <- (npts * (npts - 1))/(area^2)
-      lambda3 <- (npts * (npts - 1) * (npts - 2))/(area^3)
+      W <- Window(X)
+      areaW <- area(W)
+      lambda <- npts/areaW
+      lambda2 <- (npts * (npts - 1))/(areaW^2)
+      lambda3 <- (npts * (npts - 1) * (npts - 2))/(areaW^3)
 
       rmaxdefault <- if(!is.null(rmax)) rmax else rmax.rule("K", W, lambda)
       breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
@@ -91,7 +91,7 @@ Tstat <- local({
 
       # save numerator and denominator?
       if(ratio) {
-        denom <- lambda2 * area
+        denom <- lambda2 * areaW
         numT <- eval.fv(denom * TT)
         denT <- eval.fv(denom + TT * 0)
         attributes(numT) <- attributes(denT) <- attributes(T)
@@ -127,7 +127,7 @@ Tstat <- local({
         # uncorrected! For demonstration purposes only!
         wh <- whist(DD, breaks$val)  # no weights
         numTun <- cumsum(wh)
-        denTun <- lambda3 * area
+        denTun <- lambda3 * areaW
         # uncorrected estimate of T
         Tun <- numTun/denTun
         TT <- bind.fv(TT, data.frame(un=Tun), "hat(%s)[un](r)",
@@ -196,7 +196,7 @@ Tstat <- local({
         edgewt <- edgetri.Trans(X, tri[, 1:3])
         wh <- whist(tri$diam, breaks$val, edgewt)
         numTtrans <- 3 * cumsum(wh)
-        denTtrans <- lambda3 * area
+        denTtrans <- lambda3 * areaW
         Ttrans <- numTtrans/denTtrans
         h <- diameter(W)/2
         Ttrans[r >= h] <- NA

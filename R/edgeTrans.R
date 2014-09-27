@@ -88,7 +88,7 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
                Wshift <- shift(W, c(dx[i], dy[i]))
                weight[i] <- overlap.owin(W, Wshift)
              }
-             weight <- area.owin(W)/weight
+             weight <- area(W)/weight
            }
            g <- NULL
          },
@@ -97,7 +97,7 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
            g <- setcov(W)
            ## evaluate set covariance at these vectors
            gvalues <- lookup.im(g, dx, dy, naok=TRUE, strict=FALSE)
-           weight <- area.owin(W)/gvalues
+           weight <- area(W)/gvalues
          }
          )
   

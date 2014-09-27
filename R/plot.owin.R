@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.51 $	$Date: 2014/08/18 02:20:17 $
+#	$Revision: 1.52 $	$Date: 2014/09/27 09:45:44 $
 #
 #
 #
@@ -221,7 +221,7 @@ break.holes <- local({
     if(length(ab)==0)
       return(emptywindow(Box))
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(Box$xrange, Box$yrange,

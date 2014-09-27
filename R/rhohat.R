@@ -54,9 +54,9 @@ rhohat.ppp <- rhohat.quad <-
     covunits <- NULL
   }
 
-  area <- area.owin(as.owin(data.ppm(model)))
+  areaW <- area(Window(data.ppm(model)))
   
-  rhohatEngine(model, covariate, reference, area, ...,
+  rhohatEngine(model, covariate, reference, areaW, ...,
                weights=weights,
                method=method,
                horvitz=horvitz,
@@ -108,9 +108,9 @@ rhohat.ppm <- function(object, covariate, ...,
     covunits <- NULL
   }
 
-  area <- area.owin(as.owin(data.ppm(model)))
+  areaW <- area(Window(data.ppm(model)))
   
-  rhohatEngine(model, covariate, reference, area, ...,
+  rhohatEngine(model, covariate, reference, areaW, ...,
                weights=weights,
                method=method,
                horvitz=horvitz,

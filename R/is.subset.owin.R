@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.11 $   $Date: 2014/08/04 09:58:56 $
+#  $Revision: 1.12 $   $Date: 2014/09/27 09:45:44 $
 #
 #  Determine whether a window is a subset of another window
 #
@@ -62,7 +62,7 @@ is.subset.owin <- local({
         return(npoints(bx) == 0)
       } else {
         # compare area of intersection with area of A
-        return(overlap.owin(A,B) >= area.owin(A))
+        return(overlap.owin(A,B) >= area(A))
       }
     }
   
@@ -78,7 +78,7 @@ is.subset.owin <- local({
   }
 
   okpolygon <- function(a, B) {
-    if(area.xypolygon(a) < 0) return(TRUE)
+    if(Area.xypolygon(a) < 0) return(TRUE)
     ok <- inside.owin(a$x, a$y, B)
     return(all(ok))
   }

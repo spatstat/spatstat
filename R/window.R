@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.152 $	$Date: 2014/08/04 09:35:50 $
+#	$Revision: 4.153 $	$Date: 2014/09/27 09:45:44 $
 #
 #
 #	A window may be either
@@ -151,7 +151,7 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       # single boundary polygon
       bdry <- list(poly)
       if(check || calculate) {
-        w.area <- area.xypolygon(poly)
+        w.area <- Area.xypolygon(poly)
         if(w.area < 0)
           stop(paste("Area of polygon is negative -",
                      "maybe traversed in wrong direction?"))
@@ -160,7 +160,7 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       # multiple boundary polygons
       bdry <- poly
       if(check || calculate) {
-        w.area <- unlist(lapply(poly, area.xypolygon))
+        w.area <- unlist(lapply(poly, Area.xypolygon))
         if(sum(w.area) < 0)
           stop(paste("Area of window is negative;\n",
                      "check that all polygons were traversed",
@@ -216,7 +216,7 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       bb <- polyclip::polyclip(ww, rr, "intersection",
                                fillA="nonzero", fillB="nonzero")
       ## ensure correct polarity
-      totarea <- sum(unlist(lapply(bb, area.xypolygon)))
+      totarea <- sum(unlist(lapply(bb, Area.xypolygon)))
       if(totarea < 0)
         bb <- lapply(bb, reverse.xypolygon)
       w$bdry <- bb
@@ -763,7 +763,7 @@ complement.owin <- function(w, frame=as.rectangle(w)) {
            # bounding box, in anticlockwise order
            box <- list(x=w$xrange[c(1,2,2,1)],
                        y=w$yrange[c(1,1,2,2)])
-           boxarea <- area.xypolygon(box)
+           boxarea <- Area.xypolygon(box)
                  
            # first check whether one of the current boundary polygons
            # is the bounding box itself (with + sign)
@@ -771,9 +771,9 @@ complement.owin <- function(w, frame=as.rectangle(w)) {
              is.box <- rep.int(FALSE, length(bdry))
            else {
              nvert <- unlist(lapply(bdry, function(a) { length(a$x) }))
-             area <- unlist(lapply(bdry, area.xypolygon))
+             areas <- unlist(lapply(bdry, Area.xypolygon))
              boxarea.mineps <- boxarea * (0.99999)
-             is.box <- (nvert == 4 & area >= boxarea.mineps)
+             is.box <- (nvert == 4 & areas >= boxarea.mineps)
              if(sum(is.box) > 1)
                stop("Internal error: multiple copies of bounding box")
              if(all(is.box)) {
@@ -907,7 +907,7 @@ summary.owin <- function(object, ...) {
   result <- list(xrange=object$xrange,
                  yrange=object$yrange,
                  type=object$type,
-                 area=area.owin(object),
+                 area=area(object),
                  units=unitname(object))
   switch(object$type,
          rectangle={
@@ -918,10 +918,10 @@ summary.owin <- function(object, ...) {
            if(npoly == 0) {
              result$areas <- result$nvertices <- numeric(0)
            } else if(npoly == 1) {
-             result$areas <- area.xypolygon(poly[[1]])
+             result$areas <- Area.xypolygon(poly[[1]])
              result$nvertices <- length(poly[[1]]$x)
            } else {
-             result$areas <- unlist(lapply(poly, area.xypolygon))
+             result$areas <- unlist(lapply(poly, Area.xypolygon))
              result$nvertices <- unlist(lapply(poly,
                                                function(a) {length(a$x)}))
            }

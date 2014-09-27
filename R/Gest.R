@@ -18,7 +18,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"),
   ##
   W <- X$window
   npts <- npoints(X)
-  lambda <- npts/area.owin(W)
+  lambda <- npts/area(W)
   
   ## determine r values 
   rmaxdefault <- rmax.rule("G", W, lambda)

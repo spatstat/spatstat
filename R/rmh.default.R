@@ -256,7 +256,7 @@ rmh.default <- function(model,start=NULL,
       stop("No starting state given")
     # Determine integral of beta * trend over data window.
     # This is the expected number of points in the reference Poisson process.
-    area.w.clip <- area.owin(w.clip)
+    area.w.clip <- area(w.clip)
     if(trendy) {
       tsummaries <- summarise.trend(trend, w=w.clip, a=area.w.clip)
       En <- beta * unlist(lapply(tsummaries, function(x) { x$integral }))
@@ -303,7 +303,7 @@ rmh.default <- function(model,start=NULL,
            # with the expansion that has occurred.  
            if(expanded) {
 	     holnum <- if(spatstat.options("scalable")) round else ceiling
-             n.start <- holnum(n.start * area.owin(w.sim)/area.owin(w.clip))
+             n.start <- holnum(n.start * area(w.sim)/area(w.clip))
            }
            #
            npts.free <- sum(n.start) # The ``sum()'' is redundant if n.start
@@ -364,7 +364,7 @@ rmh.default <- function(model,start=NULL,
 # Integral of trend over the expanded window (or area of window):
 # Iota == Integral Of Trend (or) Area.
 
-  area.w.sim <- area.owin(w.sim)
+  area.w.sim <- area(w.sim)
   if(trendy) {
     if(verbose)
       cat("Evaluating trend integral...")
@@ -973,7 +973,7 @@ rmhEngine <- function(InfoList, ...,
 
 summarise.trend <- local({
   # main function
-  summarise.trend <- function(trend, w, a=area.owin(w)) {
+  summarise.trend <- function(trend, w, a=area(w)) {
     tlist <- if(is.function(trend) || is.im(trend)) list(trend) else trend
     return(lapply(tlist, summarise1, w=w, a=a))
   }

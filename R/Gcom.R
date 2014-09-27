@@ -76,21 +76,21 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   WQ <- w.quad(Q)  # quadrature weights
 
   # basic statistics
-  npoints <- X$n
-  area <- area.owin(Win)
-  lambda <- npoints/area
+  npts <- npoints(X)
+  areaW <- area(Win)
+  lambda <- npts/areaW
   
   # quadrature points used
   USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
   
   # adjustments to account for restricted domain 
   if(conditional) {
-    npoints.used <- sum(Z & USED)
+    npts.used <- sum(Z & USED)
     area.used <- sum(WQ[USED])
-    lambda.used <- npoints.used/area.used
+    lambda.used <- npts.used/area.used
   } else {
-    npoints.used <- npoints
-    area.used <- area
+    npts.used <- npts
+    area.used <- areaW
     lambda.used <- lambda
   }
   
@@ -146,7 +146,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI], b[Z & USED],
-                  rep.int(1, npoints.used), breaks)
+                  rep.int(1, npts.used), breaks)
     Gbcom <- RSD$numerator/(1 + RSD$denominator)
     
     G <- bind.fv(G, data.frame(bcom=Gbcom), "bold(C)~hat(%s)[bord](r)",
@@ -181,7 +181,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
     x <- nnd[nnd <= bdry]
     wt <- wt[nnd <= bdry]
     h <- whist(x[x <= rmax], breaks=breaks$val, weights=wt[x <= rmax])
-    lambdaplus <- (npoints + 1)/area
+    lambdaplus <- (npts + 1)/areaW
     Hint <- (1/lambdaplus) * cumsum(h/ea)
     # glue on 
     G <- bind.fv(G, data.frame(hcom=Hint), "bold(C)~hat(%s)[han](r)",

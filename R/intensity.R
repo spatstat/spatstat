@@ -12,7 +12,7 @@ intensity <- function(X, ...) {
 
 intensity.ppp <- function(X, ..., weights=NULL) {
   n <- npoints(X)
-  a <- area.owin(as.owin(X))
+  a <- area(Window(X))
   if(is.null(weights)) {
     ## unweighted case - for efficiency
     if(is.multitype(X)) {

@@ -250,7 +250,7 @@ areaLoss.grid <- function(X, r, ...,
            # Many values of r: use distance transform
            D <- distmap(X, ...)
            DW <- D[W, drop=FALSE]
-           a <- area.owin(as.owin(DW))
+           a <- area(Window(DW))
            # empirical cdf of distance values
            FW <- ecdf(DW[drop=TRUE])
            # radii below which there are no overlaps

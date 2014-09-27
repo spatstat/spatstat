@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.110 $    $Date: 2014/09/26 07:16:22 $
+#  $Revision: 1.111 $    $Date: 2014/09/27 09:45:44 $
 #
 #
 
@@ -603,7 +603,7 @@ assemble.plot.objects <- function(xlim, ylim, ..., lines=NULL, polygon=NULL) {
     ok <- with(pol, is.finite(x) & is.finite(y))
     if(!all(ok))
       pol <- with(pol, list(x=x[ok], y=y[ok]))
-    if(area.xypolygon(pol) < 0) pol <- lapply(pol, rev)
+    if(Area.xypolygon(pol) < 0) pol <- lapply(pol, rev)
     P <- try(owin(poly=pol, xrange=xlim, yrange=ylim, check=FALSE))
     if(!inherits(P, "try-error"))
       objects <- append(objects, list(P))

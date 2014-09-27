@@ -85,7 +85,7 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
   nX <- npoints(X)
   nY <- if(missi) nX else length(seq_len(nX)[i])
   W <- as.owin(X)
-  lambda.ave <- nX/area.owin(W)
+  lambda.ave <- nX/area(W)
   if(is.null(delta)) 
     delta <- stoyan/sqrt(lambda.ave)
   if(is.null(rmax)) 

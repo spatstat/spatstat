@@ -98,7 +98,7 @@ pcfmulti <- function(X, I, J, ...,
   divisor <- match.arg(divisor)
 
   win <- X$window
-  area <- area.owin(win)
+  areaW <- area(win)
   npts <- npoints(X)
   
   correction.given <- !missing(correction) && !is.null(correction)
@@ -130,10 +130,10 @@ pcfmulti <- function(X, I, J, ...,
   XI <- X[I]
   XJ <- X[J]
 
-  lambdaI <- nI/area
-  lambdaJ <- nJ/area
+  lambdaI <- nI/areaW
+  lambdaJ <- nJ/areaW
   nIJ <- sum(I & J)
-  lambdaIJarea <- (nI * nJ - nIJ)/area
+  lambdaIJarea <- (nI * nJ - nIJ)/areaW
   
   ## ...........  kernel bandwidth and support .........................
   

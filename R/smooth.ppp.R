@@ -454,8 +454,8 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   # determine a range of bandwidth values
   n <- npoints(X)
   if(is.null(hmin) || is.null(hmax)) {
-    W <- as.owin(X)
-    a <- area.owin(W)
+    W <- Window(X)
+    a <- area(W)
     d <- diameter(as.rectangle(W))
     # Stoyan's rule of thumb 
     stoyan <- bw.stoyan(X)

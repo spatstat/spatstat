@@ -184,8 +184,8 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   
   if(opt$sum) 
     result$sum <- list(marksum=sum(Yclip$marks, na.rm=TRUE),
-                       area.Wclip=area.owin(Wclip),
-                       area.quad=if(clip) sum(Qweightsclip) else sum(Qweights),
+                       areaWclip=area(Wclip),
+                       areaquad=if(clip) sum(Qweightsclip) else sum(Qweights),
                        range=if(!is.null(Z)) range(Z) else NULL)
 
   return(invisible(result))
@@ -382,9 +382,9 @@ print.diagppm <- function(x, ...) {
     cat(paste("sum of", typename, "in", windowname, "=",
               signif(sum(xs$marksum),4), "\n"))
     cat(paste("area of", windowname, "=",
-              signif(xs$area.Wclip, 4), "\n"))
+              signif(xs$areaWclip, 4), "\n"))
     cat(paste("quadrature area =",
-              signif(xs$area.quad, 4), "\n"))
+              signif(xs$areaquad, 4), "\n"))
   }
   if(opt$smooth) 
     cat(paste("range of smoothed field = [",

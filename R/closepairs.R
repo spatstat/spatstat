@@ -42,7 +42,7 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
   oo <- fave.order(X$x)
   Xsort <- X[oo]
   # First make an OVERESTIMATE of the number of pairs
-  nsize <- ceiling(4 * pi * (npts^2) * (rmax^2)/area.owin(X$window))
+  nsize <- ceiling(4 * pi * (npts^2) * (rmax^2)/area(Window(X)))
   nsize <- max(1024, nsize)
   # Now extract pairs
   if(spatstat.options("closepairs.newcode")) {
@@ -236,7 +236,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
   if(spatstat.options("crosspairs.newcode")) {
     # ------------------- use new faster code ---------------------
     # First (over)estimate the number of pairs
-    nsize <- ceiling(2 * pi * (rmax^2) * nX * nY/area.owin(Y$window))
+    nsize <- ceiling(2 * pi * (rmax^2) * nX * nY/area(Window(Y)))
     nsize <- max(1024, nsize)
     # .Call
     Xx <- Xsort$x
@@ -377,7 +377,7 @@ closethresh <- function(X, R, S, ordered=TRUE) {
   oo <- fave.order(X$x)
   Xsort <- X[oo]
   # First make an OVERESTIMATE of the number of pairs
-  nsize <- ceiling(4 * pi * (npts^2) * (R^2)/area.owin(X$window))
+  nsize <- ceiling(4 * pi * (npts^2) * (R^2)/area(Window(X)))
   nsize <- max(1024, nsize)
   # Now extract pairs
   x <- Xsort$x

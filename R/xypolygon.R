@@ -250,11 +250,11 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
 is.hole.xypolygon <- function(polly) {
   h <- polly$hole
   if(is.null(h))
-    h <- (area.xypolygon(polly) < 0)
+    h <- (Area.xypolygon(polly) < 0)
   return(h)
 }
   
-area.xypolygon <- function(polly) {
+Area.xypolygon <- function(polly) {
   #
   # polly: list(x,y) vertices of a single polygon (n joins to 1)
   #
@@ -553,7 +553,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
       message(paste("Polygon", i, "is self-intersecting"))
     # check whether one of the current boundary polygons
     # is the bounding box itself (with + sign)
-    is.box[i] <- (length(Bi$x) == 4) && (area.xypolygon(Bi) >= boxarea.mineps)
+    is.box[i] <- (length(Bi$x) == 4) && (Area.xypolygon(Bi) >= boxarea.mineps)
   }
   if(blowbyblow)
     cat("done.\n")
@@ -668,7 +668,7 @@ simplify.xypolygon <- function(p, dmin) {
   #
   p$x <- x
   p$y <- y
-  p$area <- area.xypolygon(p[c("x","y")])
+  p$area <- Area.xypolygon(p[c("x","y")])
   return(p)
 }
 

@@ -108,7 +108,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
   verifyclass(X, "ppp")
   W <- X$window
   npts <- npoints(X)
-  area <- area.owin(W)
+  areaW <- area(W)
 # check I and J
   I <- ppsubset(X, I)
   J <- ppsubset(X, J)
@@ -137,7 +137,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
                              best="km"),
                            multi=TRUE)
 #  determine breakpoints for r values
-  lamJ <- nJ/area
+  lamJ <- nJ/areaW
   rmaxdefault <- rmax.rule("G", W, lamJ)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   brks <- breaks$val

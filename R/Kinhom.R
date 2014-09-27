@@ -75,10 +75,10 @@
     # determine basic parameters
     W <- X$window
     npts <- npoints(X)
-    area <- area.owin(W)
+    areaW <- area(W)
     diamW <- diameter(W)
     
-    rmaxdefault <- rmax.rule("K", W, npts/area)
+    rmaxdefault <- rmax.rule("K", W, npts/areaW)
     breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
     r <- breaks$r
     rmax <- breaks$max
@@ -129,7 +129,7 @@
       if(renormalise) {
         check.1.real(normpower)
         stopifnot(normpower %in% 1:2)
-        renorm.factor <- (area^2/sum(reciplambda2))^(normpower/2)
+        renorm.factor <- (areaW^2/sum(reciplambda2))^(normpower/2)
       } 
     } else {
       # Vector lambda or reciplambda is required
@@ -185,7 +185,7 @@
       if(renormalise) {
         check.1.real(normpower)
         stopifnot(normpower %in% 1:2)
-        renorm.factor <- (area/sum(reciplambda))^normpower
+        renorm.factor <- (areaW/sum(reciplambda))^normpower
       } 
     }
 
@@ -335,7 +335,7 @@
       edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
-      Ktrans <- cumsum(wh)/area
+      Ktrans <- cumsum(wh)/areaW
       if(renormalise) Ktrans <- Ktrans * renorm.factor
       rmax <- diamW/2
       Ktrans[r >= rmax] <- NA
@@ -348,7 +348,7 @@
       edgewt <- edge.Ripley(X[I], matrix(dIJ, ncol=1))
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
-      Kiso <- cumsum(wh)/area
+      Kiso <- cumsum(wh)/areaW
       if(renormalise) Kiso <- Kiso * renorm.factor
       rmax <- diamW/2
       Kiso[r >= rmax] <- NA

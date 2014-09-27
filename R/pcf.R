@@ -24,9 +24,9 @@ pcf.ppp <- function(X, ..., r=NULL,
   r.override <- !is.null(r)
 
   win <- X$window
-  area <- area.owin(win)
-  lambda <- X$n/area
-  lambda2area <- area * lambda^2
+  areaW <- area(win)
+  lambda <- X$n/areaW
+  lambda2area <- areaW * lambda^2
 
   if(!is.null(domain)) {
     # estimate based on contributions from a subdomain
@@ -153,7 +153,7 @@ pcf.ppp <- function(X, ..., r=NULL,
 # d = vector of relevant distances
 # w = vector of edge correction weights (in normal use)
 # denargs = arguments to density.default
-# lambda2area = constant lambda^2 * area (in normal use)
+# lambda2area = constant lambda^2 * areaW (in normal use)
 
 sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
   divisor <- match.arg(divisor)

@@ -52,6 +52,9 @@ NEW FUNCTIONS
    Convert several objects of the same class to a common format.
    (New generic function with existing methods harmonise.im and harmonise.fv)
 
+   o area
+   New generic function, with methods for 'owin' and 'default'.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o pairwise interactions 
@@ -134,6 +137,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o with.fv
    Improved mathematical labels.
+
+   o area.owin
+   This function is now a method for the new generic 'area'
 
 BUG FIXES
 

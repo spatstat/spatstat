@@ -128,7 +128,7 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
   	  # compute tile areas
           if(win$type == "rectangle") {
 
-            tilearea <- area.owin(win)/(nx * ny)
+            tilearea <- area(win)/(nx * ny)
             areas <- rep.int(tilearea, nx * ny)
 
           } else {

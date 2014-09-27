@@ -273,7 +273,7 @@ ppmInfluence <- function(fit,
     levval <- loc %mark% h
     levsmo <- Smooth(levval, sigma=maxnndist(loc))
     # nominal mean level
-    a <- area.owin(loc$window)
+    a <- area(loc$window)
     levmean <- p/a
     lev <- list(val=levval, smo=levsmo, ave=levmean)
     result$lev <- lev

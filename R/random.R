@@ -137,7 +137,7 @@ function(lambda, win = owin(c(0,1),c(0,1))) {
 
     # generate Poisson process in enclosing rectangle 
     box <- boundingbox(win)
-    mean <- lambda * area.owin(box)
+    mean <- lambda * area(box)
     n <- rpois(1, mean)
     X <- runifpoint(n, box)
 
@@ -397,7 +397,7 @@ rpoint <- function(n, f, fmax=NULL,
   }
   X <- x.init
   r2 <- r^2
-  if(!is.infinite(n) && (n * pi * r2/4  > area.owin(win)))
+  if(!is.infinite(n) && (n * pi * r2/4  > area(win)))
     warning(paste("Window is too small to fit", n, "points",
                "at minimum separation", r))
   ntries <- 0

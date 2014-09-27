@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.25 $   $Date: 2013/12/15 11:32:12 $
+#  $Revision: 1.26 $   $Date: 2014/09/27 09:45:44 $
 #
 
 # ............ generic  ............................
@@ -75,7 +75,7 @@ erosion.owin <-
     # compute polygonal region using polyclip package
     pnew <- polyclip::polyoffset(w$bdry, -r, jointype="round")
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
     if(totarea < 0)
       pnew <- lapply(pnew, reverse.xypolygon)
     if(shrink.frame) {
@@ -154,7 +154,7 @@ dilation.owin <-
     # compute polygonal region using polyclip package
     pnew <- polyclip::polyoffset(w$bdry, r, jointype="round")
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
     if(totarea < 0)
       pnew <- lapply(pnew, reverse.xypolygon)
     # determine bounding frame, convert to owin
@@ -267,7 +267,7 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     pnew <- polyclip::polylineoffset(plines, r,
                                      jointype="round", endtype="openround")
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(pnew, area.xypolygon)))
+    totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
     if(totarea < 0)
       pnew <- lapply(pnew, reverse.xypolygon)
     # convert to owin object

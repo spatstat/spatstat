@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.4 $	$Date: 2014/08/04 09:47:43 $
+#	$Revision: 1.5 $	$Date: 2014/09/27 09:42:37 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	
@@ -71,7 +71,7 @@ meanX.owin <- function(w) {
 		answer <- mean(w$xrange)
                },
                polygonal = {
-	         area <- sum(unlist(lapply(w$bdry, area.xypolygon)))
+	         area <- sum(unlist(lapply(w$bdry, Area.xypolygon)))
                  integrated <- sum(unlist(lapply(w$bdry, intX.xypolygon)))
 		 answer <- integrated/area
                },
@@ -110,7 +110,7 @@ intY.xypolygon <- function(polly) {
 
   # integrate
   integrals <- (1/2) * (dx * y^2 + slope * y * dx^2 + slope^2 * dx^3/3)
-  total <- sum(integrals) - yadjust * area.xypolygon(polly)
+  total <- sum(integrals) - yadjust * Area.xypolygon(polly)
 
   # change sign to adhere to anticlockwise convention
   -total
@@ -144,7 +144,7 @@ meanY.owin <- function(w) {
 		answer <- mean(w$yrange)
                },
                polygonal = {
-	         area <- sum(unlist(lapply(w$bdry, area.xypolygon)))
+	         area <- sum(unlist(lapply(w$bdry, Area.xypolygon)))
                  integrated <- sum(unlist(lapply(w$bdry, intY.xypolygon)))
 		 answer <- integrated/area
                },

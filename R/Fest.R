@@ -19,7 +19,7 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   ## Intensity estimate
   W <- X$window
   npts <- npoints(X)
-  lambda <- npts/area.owin(W)
+  lambda <- npts/area(W)
   
   ## First discretise
   dwin <- as.mask(W, eps=eps)

@@ -64,7 +64,7 @@ logi.engine <- function(Q,
     D <- Q$dummy
     Dinfo <- Q$param
     if(is.null(Dinfo)){
-      Dinfo <- list(how="given", rho=npoints(D)/(area.owin(D)*markspace.integral(D)))
+      Dinfo <- list(how="given", rho=npoints(D)/(area(D)*markspace.integral(D)))
     }
     Q <- quadscheme.logi(Xplus, D)
   } else stop("Format of object Q is not understood")
@@ -250,7 +250,7 @@ logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALS
   W <- as.owin(X)
   type <- match.arg(dummytype, c("stratrand", "binomial", "poisson", "grid", "transgrid"))
   B <- boundingbox(W)
-  rho <- nd[1]*nd[2]/area.owin(B)
+  rho <- nd[1]*nd[2]/area(B)
   Dinfo <- list(nd=nd, rho=rho, how=type)
   ## Repeating dummy process for each mark type 1:N (only once if unmarked or mark.repeat = FALSE)
   for(i in 1:N){
@@ -312,10 +312,10 @@ quadscheme.logi <- function(data, dummy, dummytype = "stratrand", nd = NULL, mar
   Dinfo <- attr(dummy, "dummy.parameters")
   D <- as.ppp(dummy)
   if(is.null(Dinfo))
-    Dinfo <- list(how="given", rho=npoints(D)/(area.owin(D)*markspace.integral(D)))
+    Dinfo <- list(how="given", rho=npoints(D)/(area(D)*markspace.integral(D)))
   ## Weights:
   n <- npoints(data)+npoints(D)
-  w <- area.owin(as.owin(data))/n
+  w <- area(Window(data))/n
   Q <- quad(data, D, rep(w,n), param=Dinfo)
   class(Q) <- c("logiquad", class(Q))
   return(Q)

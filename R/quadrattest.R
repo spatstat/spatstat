@@ -117,7 +117,7 @@ quadrat.testEngine <- function(X, nx, ny,
     if(tess$type == "rect") 
       areas <- outer(diff(tess$xgrid), diff(tess$ygrid), "*")
     else 
-      areas <- unlist(lapply(tiles(tess), area.owin))
+      areas <- unlist(lapply(tiles(tess), area))
     fitmeans <- sum(Xcount) * areas/sum(areas)
     df <- switch(method,
                  Chisq      = length(fitmeans) - 1,
@@ -301,7 +301,7 @@ plot.quadrattest <- local({
                              list(main=xname)))
     # compute locations for text
     til <- tiles(tess)
-    ok <- unlist(lapply(til, function(x) { !is.null(x) && area.owin(x) > 0 }))
+    ok <- unlist(lapply(til, function(x) { !is.null(x) && area(x) > 0 }))
     incircles <- lapply(til[ok], incircle)
     x0 <- unlist(lapply(incircles, function(z) { z$x }))
     y0 <- unlist(lapply(incircles, function(z) { z$y }))

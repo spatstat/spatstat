@@ -86,7 +86,7 @@ istat <- function(x, xname) {
                     title="sigma",
                     initval=winwid/8, showvalue=TRUE, pos=pozzie(nextrow, ''))
   nextrow <- nextrow + 1
-  pcfbw <- pcfbwinit <- 0.15/sqrt(5 * x$n/area.owin(x$window))
+  pcfbw <- pcfbwinit <- 0.15/sqrt(5 * x$n/area(x$window))
   rpanel::rp.slider(p, pcfbw, pcfbwinit/10, 4 * pcfbwinit, action=redraw, 
                     title="bw", initval=pcfbwinit,
                     showvalue=TRUE, pos=pozzie(nextrow, ''))

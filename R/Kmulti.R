@@ -163,7 +163,7 @@ function(X, I, J, r=NULL, breaks=NULL,
   x <- X$x
   y <- X$y
   W <- X$window
-  area <- area.owin(W)
+  areaW <- area(W)
 
   correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction))
@@ -193,8 +193,8 @@ function(X, I, J, r=NULL, breaks=NULL,
 		
   nI <- sum(I)
   nJ <- sum(J)
-  lambdaI <- nI/area
-  lambdaJ <- nJ/area
+  lambdaI <- nI/areaW
+  lambdaJ <- nJ/areaW
 
   # r values 
   rmaxdefault <- rmax.rule("K", W, lambdaJ)
@@ -216,7 +216,7 @@ function(X, I, J, r=NULL, breaks=NULL,
   
   # save numerator and denominator?
   if(ratio) {
-    denom <- lambdaI * lambdaJ * area
+    denom <- lambdaI * lambdaJ * areaW
     numK <- eval.fv(denom * K)
     denK <- eval.fv(denom + K * 0)
     attributes(numK) <- attributes(denK) <- attributes(K)
@@ -261,7 +261,7 @@ function(X, I, J, r=NULL, breaks=NULL,
     # uncorrected! 
     wh <- whist(dcloseIJ, breaks$val)  # no weights
     numKun <- cumsum(wh)
-    denKun <- lambdaI * lambdaJ * area
+    denKun <- lambdaI * lambdaJ * areaW
     Kun <- numKun/denKun
     K <- bind.fv(K, data.frame(un=Kun), "{hat(%s)[%s]^{un}}(r)",
                  "uncorrected estimate of %s",
@@ -329,7 +329,7 @@ function(X, I, J, r=NULL, breaks=NULL,
     edgewt <- edge.Trans(XI[icloseI], XJ[jcloseJ], paired=TRUE)
     wh <- whist(dcloseIJ, breaks$val, edgewt)
     numKtrans <- cumsum(wh)
-    denKtrans <- lambdaI * lambdaJ * area
+    denKtrans <- lambdaI * lambdaJ * areaW
     Ktrans <- numKtrans/denKtrans
     rmax <- diameter(W)/2
     Ktrans[r >= rmax] <- NA
@@ -352,7 +352,7 @@ function(X, I, J, r=NULL, breaks=NULL,
     edgewt <- edge.Ripley(XI[icloseI], matrix(dcloseIJ, ncol=1))
     wh <- whist(dcloseIJ, breaks$val, edgewt)
     numKiso <- cumsum(wh)
-    denKiso <- lambdaI * lambdaJ * area
+    denKiso <- lambdaI * lambdaJ * areaW
     Kiso <- numKiso/denKiso
     rmax <- diameter(W)/2
     Kiso[r >= rmax] <- NA

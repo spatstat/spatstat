@@ -97,7 +97,7 @@ resid4plot <- local({
            if(any(c("maxsize","meansize","markscale") %in% names(list(...)))) {
              plot(Ys[neg], add=TRUE, legend=FALSE, ...)
            } else {
-             hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
+             hackmax <- 0.5 * sqrt(area(Wclip)/Yclip$n)
              plot(Ys[neg], add=TRUE, legend=FALSE, maxsize=hackmax, ...)
            }
            ## plot positive masses at atoms
@@ -355,7 +355,7 @@ resid1plot <-
                  z <- plot(Y[neg], add=TRUE,
                           show.all=show.all, do.plot=do.plot, ...)
                } else {
-                 hackmax <- 0.5 * sqrt(area.owin(Wclip)/Yclip$n)
+                 hackmax <- 0.5 * sqrt(area(Wclip)/Yclip$n)
                  z <- plot(Y[neg], add=TRUE, maxsize=hackmax,
                            show.all=show.all, do.plot=do.plot, ...)
                }

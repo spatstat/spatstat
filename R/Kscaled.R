@@ -26,7 +26,7 @@
   ## determine basic parameters
   W <- X$window
   npts <- X$n
-  area <- area.owin(W)
+  areaW <- area(W)
   halfdiameter <- diameter(W)/2
   
   ## match corrections
@@ -73,7 +73,7 @@
     ## renormalise. Here we only need half the power ;-)
     check.1.real(normpower)
     stopifnot(normpower %in% 1:2) 
-    renorm.factor <- (area/sum(1/lambda))^(normpower/2)
+    renorm.factor <- (areaW/sum(1/lambda))^(normpower/2)
     lambda <- lambda/renorm.factor
   }     
   ## Calculate range of r values using max lambda

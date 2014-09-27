@@ -20,7 +20,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   r.override <- !is.null(r)
 
   win <- X$window
-  area <- area.owin(win)
+  areaW <- area(win)
   npts <- npoints(X)
   
   correction.given <- !missing(correction)
@@ -39,7 +39,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   
   if(is.null(bw) && kernel=="epanechnikov") {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
-    h <- stoyan /sqrt(npts/area)
+    h <- stoyan /sqrt(npts/areaW)
     hmax <- h
     # conversion to standard deviation
     bw <- h/sqrt(5)
@@ -49,7 +49,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
     hmax <- 3 * bw
   } else {
     # data-dependent bandwidth selection: guess upper bound on half-width
-    hmax <- 2 * stoyan /sqrt(npts/area)
+    hmax <- 2 * stoyan /sqrt(npts/areaW)
   }
 
 
@@ -96,7 +96,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   if(renormalise) {
     check.1.real(normpower)
     stopifnot(normpower %in% 1:2)
-    renorm.factor <- (area/sum(reciplambda))^normpower
+    renorm.factor <- (areaW/sum(reciplambda))^normpower
   } 
   
   ########## r values ############################
@@ -146,7 +146,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
     # translation correction
     XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
     edgewt <- edge.Trans(XI, XJ, paired=TRUE)
-    gT <- sewpcf(dIJ, edgewt * wIJ, denargs, area, divisor)$g
+    gT <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
     if(renormalise) gT <- gT * renorm.factor
     out <- bind.fv(out,
                    data.frame(trans=gT),
@@ -157,7 +157,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
     edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
-    gR <- sewpcf(dIJ, edgewt * wIJ, denargs, area, divisor)$g
+    gR <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
     if(renormalise) gR <- gR * renorm.factor
     out <- bind.fv(out,
                    data.frame(iso=gR),

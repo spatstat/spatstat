@@ -14,11 +14,11 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
 
   npts <- npoints(X)
   W <- as.owin(X)
-  area <- area.owin(W)
+  areaW <- area(W)
   miss.update <- missing(update)
 
   # determine 'r' values
-  rmaxdefault <- rmax.rule("G", W, npts/area)
+  rmaxdefault <- rmax.rule("G", W, npts/areaW)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   if(!breaks$even)
     stop("r values must be evenly spaced")
@@ -182,11 +182,11 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
 
   npts <- npoints(X)
   W <- as.owin(X)
-  area <- area.owin(W)
+  areaW <- area(W)
   miss.update <- missing(update)
 
   # determine 'r' values
-  rmaxdefault <- rmax.rule("F", W, npts/area)
+  rmaxdefault <- rmax.rule("F", W, npts/areaW)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   if(!breaks$even)
     stop("r values must be evenly spaced")

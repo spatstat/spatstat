@@ -43,7 +43,7 @@
     L[,varcols] <- as.data.frame(K)[,varcols]/(2 * pi * r)^2
     # fix 0/0
     n <- npoints(X)
-    A <- area.owin(as.owin(X))
+    A <- area(Window(X))
     if(any(colnames(K) == "rip"))
       L[r == 0, "rip"] <- (2 * A/(n-1)^2)/(4 * pi)
     if(any(colnames(K) == "ls"))
@@ -66,9 +66,9 @@ function(X, ..., r=NULL, breaks=NULL,
   rfixed <- !is.null(r) || !is.null(breaks)
   npts <- npoints(X)
   W <- X$window
-  area <- area.owin(W)
-  lambda <- npts/area
-  lambda2 <- (npts * (npts - 1))/(area^2)
+  areaW <- area(W)
+  lambda <- npts/areaW
+  lambda2 <- (npts * (npts - 1))/(areaW^2)
 
   if(!is.null(domain)) {
     # estimate based on contributions from a subdomain
@@ -179,7 +179,7 @@ function(X, ..., r=NULL, breaks=NULL,
     ## this will be the output data frame
     Kdf <- data.frame(r=r, theo = pi * r^2)
     desc <- c("distance argument r", "theoretical Poisson %s")
-    denom <- lambda2 * area
+    denom <- lambda2 * areaW
     K <- ratfv(Kdf, NULL, denom,
                "r", quote(K(r)),
                "theo", NULL, alim, c("r","%s[pois](r)"), desc, fname="K",
@@ -194,7 +194,7 @@ function(X, ..., r=NULL, breaks=NULL,
       ## uncorrected! For demonstration purposes only!
       wh <- whist(DIJ, breaks$val)  # no weights
       numKun <- cumsum(wh)
-      denKun <- lambda2 * area
+      denKun <- lambda2 * areaW
       ## uncorrected estimate of K
       K <- bind.ratfv(K,
                       data.frame(un=numKun), denKun,
@@ -243,7 +243,7 @@ function(X, ..., r=NULL, breaks=NULL,
       edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
       wh <- whist(DIJ, breaks$val, edgewt)
       numKtrans <- cumsum(wh)
-      denKtrans <- lambda2 * area
+      denKtrans <- lambda2 * areaW
       h <- diameter(as.rectangle(W))/2
       numKtrans[r >= h] <- NA
       K <- bind.ratfv(K,
@@ -257,10 +257,10 @@ function(X, ..., r=NULL, breaks=NULL,
     if(any(correction == "rigid")) {
       ## Ohser-Stoyan rigid motion correction
       CW <- rotmean(setcov(W))
-      edgewt <- area/as.function(CW)(DIJ)
+      edgewt <- areaW/as.function(CW)(DIJ)
       wh <- whist(DIJ, breaks$val, edgewt)
       numKrigid <- cumsum(wh)
-      denKrigid <- lambda2 * area
+      denKrigid <- lambda2 * areaW
       h <- diameter(as.rectangle(W))
       numKrigid[r >= h] <- NA
       K <- bind.ratfv(K,
@@ -277,7 +277,7 @@ function(X, ..., r=NULL, breaks=NULL,
       edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
       wh <- whist(DIJ, breaks$val, edgewt)
       numKiso <- cumsum(wh)
-      denKiso <- lambda2 * area
+      denKiso <- lambda2 * areaW
       h <- diameter(W)/2
       numKiso[r >= h] <- NA
       K <- bind.ratfv(K,
@@ -296,7 +296,7 @@ function(X, ..., r=NULL, breaks=NULL,
 
   if(var.approx) {
     ## Compute variance approximations
-    A <- area
+    A <- areaW
     P <- perimeter(W)
     n <- npts
     ## Ripley asymptotic approximation
@@ -411,9 +411,9 @@ Kborder.engine <- function(X, rmax, nr=100,
   npts <- npoints(X)
   W <- as.owin(X)
 
-  area <- area.owin(W)
-  lambda <- npts/area
-  lambda2 <- (npts * (npts - 1))/(area^2)
+  areaW <- area(W)
+  lambda <- npts/areaW
+  lambda2 <- (npts * (npts - 1))/(areaW^2)
 
   if(missing(rmax))
     rmax <- diameter(W)/4
@@ -427,7 +427,7 @@ Kborder.engine <- function(X, rmax, nr=100,
 
   if(ratio) {
     # save numerator and denominator
-    denom <- lambda2 * area
+    denom <- lambda2 * areaW
     numK <- eval.fv(denom * Kfv)
     denK <- eval.fv(denom + Kfv * 0)
     attributes(numK) <- attributes(denK) <- attributes(Kfv)
@@ -599,10 +599,10 @@ Knone.engine <- function(X, rmax, nr=100,
   npts <- npoints(X)
   W <- as.owin(X)
 
-  area <- area.owin(W)
-  lambda <- npts/area
-  lambda2 <- (npts * (npts - 1))/(area^2)
-  denom <- lambda2 * area
+  areaW <- area(W)
+  lambda <- npts/areaW
+  lambda2 <- (npts * (npts - 1))/(areaW^2)
+  denom <- lambda2 * areaW
 
   if(missing(rmax))
     rmax <- diameter(W)/4
@@ -663,7 +663,7 @@ Knone.engine <- function(X, rmax, nr=100,
     }
 
     numKun <- res$numer
-    denKun <- denom # = lambda2 * area
+    denKun <- denom # = lambda2 * areaW
     Kun <- numKun/denKun
   } else {
     # weighted version
@@ -787,11 +787,11 @@ Krect.engine <- function(X, rmax, nr=100,
   npts <- npoints(X)
   W <- as.owin(X)
 
-  area <- area.owin(W)
+  areaW <- area(W)
   width <- sidelengths(W)[1]
   height <- sidelengths(W)[2]
-  lambda <- npts/area
-  lambda2 <- (npts * (npts - 1))/(area^2)
+  lambda <- npts/areaW
+  lambda2 <- (npts * (npts - 1))/(areaW^2)
 
   if(missing(rmax))
     rmax <- diameter(W)/4
@@ -812,7 +812,7 @@ Krect.engine <- function(X, rmax, nr=100,
   # this will be the output data frame
   Kdf <- data.frame(r=r, theo= pi * r^2)
   desc <- c("distance argument r", "theoretical Poisson %s")
-  denom <- if(weighted) area else (lambda2 * area)
+  denom <- if(weighted) areaW else (lambda2 * areaW)
   Kfv <- ratfv(Kdf, NULL, denom,
                "r", quote(K(r)),
                "theo", NULL, c(0,rmax),
@@ -934,7 +934,7 @@ Krect.engine <- function(X, rmax, nr=100,
   ## Uncorrected estimate
   if("none" %in% correction) {
     numKun <- res$unco
-    denKun <- if(weighted) area else (lambda2 * area)
+    denKun <- if(weighted) areaW else (lambda2 * areaW)
     Kfv <- bind.ratfv(Kfv,
                       data.frame(un=numKun),
                       denKun,
@@ -973,7 +973,7 @@ Krect.engine <- function(X, rmax, nr=100,
   ## translation correction
   if("translate" %in% correction) {
     numKtrans <- res$trans
-    denKtrans <- if(weighted) area else (lambda2 * area)
+    denKtrans <- if(weighted) areaW else (lambda2 * areaW)
     h <- diameter(as.rectangle(W))/2
     numKtrans[r >= h] <- NA
     Kfv <- bind.ratfv(Kfv,
@@ -987,7 +987,7 @@ Krect.engine <- function(X, rmax, nr=100,
   ## isotropic correction
   if("isotropic" %in% correction) {
     numKiso <- res$iso
-    denKiso <- if(weighted) area else (lambda2 * area)
+    denKiso <- if(weighted) areaW else (lambda2 * areaW)
     h <- diameter(as.rectangle(W))/2
     numKiso[r >= h] <- NA
     Kfv <- bind.ratfv(Kfv,

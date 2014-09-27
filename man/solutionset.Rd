@@ -68,7 +68,7 @@
   W <- solutionset(X > Y)
   W <- solutionset(X + Y >= 1)
 
-  area.owin(solutionset(X < Y))
+  area(solutionset(X < Y))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

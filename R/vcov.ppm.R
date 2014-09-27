@@ -374,11 +374,11 @@ vcalcGibbsGeneral <- function(model,
   rho <- model$internal$logistic$rho
   #### If dummy intensity rho is unknown we estimate it
   if(is.null(rho))
-     rho <- npoints(D)/(area.owin(D)*markspace.integral(D))
+     rho <- npoints(D)/(area(D)*markspace.integral(D))
   X <- data.ppm(model)
   Z <- is.data(Q)
   W <- as.owin(model)
-  areaW <- if(correction == "border") eroded.areas(W, rbord) else area.owin(W)
+  areaW <- if(correction == "border") eroded.areas(W, rbord) else area(W)
   ##
   ## determine which quadrature points contributed to the
   ## sum/integral in the pseudolikelihood
@@ -1105,7 +1105,7 @@ vcalcGibbsSpecial <- function(fit, ...,
 
   ## The reduced window, area and point pattern:
   W<-erosion.owin(Wplus,R)
-  areaW <- area.owin(W)
+  areaW <- area(W)
 
   ## Interior points determined by bdist.points:
   IntPoints <- bdist.points(Xplus)>=R  
@@ -1178,7 +1178,7 @@ vcalcGibbsSpecial <- function(fit, ...,
   rho <- fit$internal$logistic$rho
   ## If dummy intensity rho is unknown we estimate it
   if(is.null(rho))
-     rho <- npoints(D)/(area.owin(D)*markspace.integral(D))
+     rho <- npoints(D)/(area(D)*markspace.integral(D))
   X <- data.ppm(fit)
   Z <- is.data(Q)
 
@@ -1349,7 +1349,7 @@ vcovPairPiece <- function(Xplus, R, Gam, matrix.action,
   ## Extracting the window and calculating area:
   Wplus<-as.owin(Xplus)
   W<-erosion.owin(Wplus,Rmax)
-  areaW <- area.owin(W)
+  areaW <- area(W)
 
   ## Interior points determined by bdist.points:
   IntPoints <- bdist.points(Xplus)>=Rmax
@@ -1449,7 +1449,7 @@ vcovMultiStrauss <- function(Xplus, vecR, vecg, matrix.action,
   ## Extracting the window and calculating area:
   Wplus<-as.owin(Xplus)
   W<-erosion.owin(Wplus,R)
-  areaW <- area.owin(W)
+  areaW <- area(W)
   X1plus<-Xplus[Xplus$marks==levels(Xplus$marks)[1]]
   X2plus<-Xplus[Xplus$marks==levels(Xplus$marks)[2]]
 

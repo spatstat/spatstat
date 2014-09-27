@@ -89,26 +89,26 @@ Kcom <- local({
   USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
 
   # basic statistics
-  npoints <- X$n
-  area <- area.owin(Win)
-  lambda <- npoints/area
-  lambda2 <- npoints * (npoints - 1)/(area^2)
+  npts <- npoints(X)
+  areaW <- area(Win)
+  lambda <- npts/areaW
+  lambda2 <- npts * (npts - 1)/(areaW^2)
 
   # adjustments to account for restricted domain of pseudolikelihood
   if(algo == "reweighted") {
-    npoints.used <- sum(Z & USED)
+    npts.used <- sum(Z & USED)
     area.used <- sum(WQ[USED])
-    lambda.used <- npoints.used/area.used
-    lambda2.used <- npoints.used * (npoints.used - 1)/(area.used^2)
+    lambda.used <- npts.used/area.used
+    lambda2.used <- npts.used * (npts.used - 1)/(area.used^2)
   } else {
-    npoints.used <- npoints
-    area.used <- area
+    npts.used <- npts
+    area.used <- areaW
     lambda.used <- lambda
     lambda2.used <- lambda2
   }
   
   # 'r' values
-  rmaxdefault <- rmax.rule("K", if(restrict) Wfree else Win, npoints/area)
+  rmaxdefault <- rmax.rule("K", if(restrict) Wfree else Win, npts/areaW)
   breaks <- handle.r.b.args(r, breaks, Wfree, rmaxdefault=rmaxdefault)
   r <- breaks$r
   nr <- length(r)
@@ -180,9 +180,9 @@ Kcom <- local({
                  "border")
     # reduced sample for adjustment integral
     RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI],
-                  b[Z & USED], rep.int(1, npoints.used), breaks)
-#    lambdaU <- (npoints.used + 1)/area.used
-    lambdaU <- (npoints + 1)/area
+                  b[Z & USED], rep.int(1, npts.used), breaks)
+#    lambdaU <- (npts.used + 1)/area.used
+    lambdaU <- (npts + 1)/areaW
     Kb <- RSD$numerator/((RSD$denominator + 1) * lambdaU)
 
     K <- bind.fv(K, data.frame(bcom=Kb), "bold(C)~hat(%s)[bord](r)",
@@ -205,8 +205,8 @@ Kcom <- local({
                  nzpaste(algo,
                          "translation-corrected nonparametric estimate of %s"),
                  "trans")
-#    lambda2U <- (npoints.used + 1) * npoints.used/(area.used^2)
-    lambda2U <- (npoints + 1) * npoints/(area^2)
+#    lambda2U <- (npts.used + 1) * npts.used/(area.used^2)
+    lambda2U <- (npts + 1) * npts/(areaW^2)
     Ktrans <- cumsum(wh)/(lambda2U * area.used)
     Ktrans[r >= rmax] <- NA
     K <- bind.fv(K, data.frame(tcom=Ktrans), "bold(C)~hat(%s)[trans](r)",
@@ -227,8 +227,8 @@ Kcom <- local({
                  nzpaste(algo,
                          "isotropic-corrected nonparametric estimate of %s"),
                  "iso")
-#    lambda2U <- (npoints.used + 1) * npoints.used/(area.used^2)
-    lambda2U <- (npoints + 1) * npoints/(area^2)    
+#    lambda2U <- (npts.used + 1) * npts.used/(area.used^2)
+    lambda2U <- (npts + 1) * npts/(areaW^2)    
     Kiso <- cumsum(wh)/(lambda2U * area.used)
     Kiso[r >= rmax] <- NA
     K <- bind.fv(K, data.frame(icom=Kiso), "bold(C)~hat(%s)[iso](r)",
@@ -342,7 +342,7 @@ edge.Trans.modif <- function(X, Y=X, WX=X$window, WY=Y$window,
     # This code is SLOW
     WX <- as.polygonal(WX)
     WY <- as.polygonal(WY)
-    a <- area.owin(W)
+    a <- area(W)
     if(!paired) {
       weight <- matrix(, nrow=nX, ncol=nY)
       if(nX > 0 && nY > 0) {
@@ -384,7 +384,7 @@ edge.Trans.modif <- function(X, Y=X, WX=X$window, WY=Y$window,
     # evaluate set cross-covariance at these vectors
     gvalues <- lookup.im(g, as.vector(DX), as.vector(DY),
                          naok=TRUE, strict=FALSE)
-    weight <- area.owin(WY)/gvalues
+    weight <- area(WY)/gvalues
   }
 
   # clip high values

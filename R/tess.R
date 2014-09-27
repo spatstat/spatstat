@@ -323,7 +323,7 @@ tile.areas <- function(x) {
            names(a) <- as.vector(t(tilenames(x)))
          },
          tiled={
-           a <- unlist(lapply(x$tiles, area.owin))
+           a <- unlist(lapply(x$tiles, area))
          },
          image={
            z <- x$image

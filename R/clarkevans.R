@@ -104,7 +104,7 @@ clarkevans.test <- function(X, ...,
   #
   if(correction == "none" && miss.nsim) {
     # standard Normal p-value
-    SE <- with(working, sqrt(((4-pi)*area)/(4 * pi))/npts)
+    SE <- with(working, sqrt(((4-pi)*areaW)/(4 * pi))/npts)
     Z <- with(working, (Dobs - Dpois)/SE)
     p.value <- switch(alternative,
                       less=pnorm(Z),
@@ -146,10 +146,10 @@ clarkevans.test <- function(X, ...,
 clarkevansCalc <- function(X, correction="none", clipregion=NULL,
                            working=FALSE) {
   # calculations for Clark-Evans index or test
-  W <- X$window
-  area <- area.owin(W)
+  W <- Window(X)
+  areaW <- area(W)
   npts <- npoints(X)
-  intensity <- npts/area
+  intensity <- npts/areaW
   # R undefined for empty point pattern
   if(npts == 0)
     return(NA)
@@ -161,7 +161,7 @@ clarkevansCalc <- function(X, correction="none", clipregion=NULL,
 
   statistic <- NULL
   if(working) 
-    work <- list(area=area, npts=npts, intensity=intensity,
+    work <- list(areaW=areaW, npts=npts, intensity=intensity,
                  Dobs=Dobs, Dpois=Dpois)
   
   # Naive uncorrected value

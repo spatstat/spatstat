@@ -195,7 +195,7 @@ areadelta2 <- local({
       # divide into rectangular tiles
       B <- as.rectangle(W)
       ntile0 <- ceiling(npix/(2^20))
-      tile0area <- area.owin(B)/ntile0
+      tile0area <- area(B)/ntile0
       tile0side <- sqrt(tile0area)
       nx <- ceiling(sidelengths(B)[1]/tile0side)
       ny <- ceiling(sidelengths(B)[2]/tile0side)

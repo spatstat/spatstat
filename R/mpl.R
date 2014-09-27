@@ -122,7 +122,7 @@ mpl.engine <-
         areaW <- eroded.areas(W, rbord)
       } else {
         npts <- npoints(X)
-        areaW <- area.owin(W)
+        areaW <- area(W)
       }
       volume <- areaW * markspace.integral(X)
       lambda <- npts/volume

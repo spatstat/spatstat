@@ -63,9 +63,9 @@
 {
   npts <- npoints(X)
   W <- X$window
-  area <- area.owin(W)
-  lambda.ave <- npts/area
-  lambda1.ave <- (npts - 1)/area
+  areaW <- area(W)
+  lambda.ave <- npts/areaW
+  lambda1.ave <- (npts - 1)/areaW
 
   weighted <- !is.null(lambda)
 

@@ -48,21 +48,21 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   } else USED <- rep.int(TRUE, U$n)
   
   # basic statistics
-  Win <- X$window
-  npoints <- X$n
-  area <- area.owin(Win)
-  lambda <- npoints/area
+  Win <- Window(X)
+  npts <- npoints(X)
+  areaW <- area(Win)
+  lambda <- npts/areaW
 
   # adjustments to account for restricted domain of pseudolikelihood
   if(any(!USED)) {
     XUSED <- USED[Z]
-    npoints.used <- sum(Z & USED)
+    npts.used <- sum(Z & USED)
     area.used <- sum(WQ[USED])
-    lambda.used <- npoints.used/area.used
+    lambda.used <- npts.used/area.used
   } else {
-    XUSED <- rep.int(TRUE, npoints)
-    npoints.used <- npoints
-    area.used <- area
+    XUSED <- rep.int(TRUE, npts)
+    npts.used <- npts
+    area.used <- areaW
     lambda.used <- lambda
   }
   

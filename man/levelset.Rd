@@ -57,7 +57,7 @@
   W <- levelset(X, -0.3, ">")
 
   # compute area of level set
-  area.owin(levelset(X, 0.1))
+  area(levelset(X, 0.1))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

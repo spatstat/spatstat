@@ -425,7 +425,7 @@ second.moment.engine <-
   # Divide by number of points * lambda and convert mass to density
   pixarea <- with(X, xstep * ystep)
   if(nimages == 1) {
-    mom <- mom * area.owin(obswin) / (pixarea * npts^2)
+    mom <- mom * area(obswin) / (pixarea * npts^2)
     # this is the second moment measure
     mm <- im(mom, xcol.G[ctwist], yrow.G[rtwist], unitname=unitsX)
     if(what == "Kmeasure")
@@ -433,7 +433,7 @@ second.moment.engine <-
     else 
       result$Kmeasure <- mm
   } else {
-    ccc <- area.owin(obswin) / (pixarea * npts^2)
+    ccc <- area(obswin) / (pixarea * npts^2)
     mmlist <- blanklist
     for(i in 1:nimages) {
       mom.i <- momlist[[i]]
@@ -455,7 +455,7 @@ second.moment.engine <-
 Kest.fft <- function(X, sigma, r=NULL, breaks=NULL) {
   verifyclass(X, "ppp")
   W <- X$window
-  lambda <- X$n/area.owin(W)
+  lambda <- X$n/area(W)
   rmaxdefault <- rmax.rule("K", W, lambda)        
   bk <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   breaks <- bk$val

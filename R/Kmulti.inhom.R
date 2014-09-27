@@ -149,7 +149,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   x <- X$x
   y <- X$y
   W <- as.owin(X)
-  area <- area.owin(W)
+  areaW <- area(W)
 
   # validate edge correction
   correction.given <- !missing(correction) && !is.null(correction)
@@ -182,7 +182,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   if(nJ == 0) stop(paste("There are no", Jname))
 
   # r values 
-  rmaxdefault <- rmax.rule("K", W, nJ/area)
+  rmaxdefault <- rmax.rule("K", W, nJ/areaW)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max
@@ -324,7 +324,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
     edgewt <- edge.Trans(XI[icloseI], XJ[jcloseJ], paired=TRUE)
     allweight <- edgewt * weight
     wh <- whist(dclose, breaks$val, allweight)
-    Ktrans <- cumsum(wh)/area
+    Ktrans <- cumsum(wh)/areaW
     rmax <- diameter(W)/2
     Ktrans[r >= rmax] <- NA
     K <- bind.fv(K, data.frame(trans=Ktrans),
@@ -337,7 +337,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
     edgewt <- edge.Ripley(XI[icloseI], matrix(dclose, ncol=1))
     allweight <- edgewt * weight
     wh <- whist(dclose, breaks$val, allweight)
-    Kiso <- cumsum(wh)/area
+    Kiso <- cumsum(wh)/areaW
     rmax <- diameter(W)/2
     Kiso[r >= rmax] <- NA
     K <- bind.fv(K, data.frame(iso=Kiso), 

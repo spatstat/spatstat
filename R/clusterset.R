@@ -37,8 +37,8 @@ clusterset <- function(X, what=c("marks", "domain"),
     suppressWarnings(id <- as.integer(names(D)))
     if(any(is.na(id)) && ("marks" %in% what))
       stop("Unable to map Dirichlet tiles to data points")
-    A <- area.owin(W)
-    a <- unlist(lapply(D, area.owin))
+    A <- area(W)
+    a <- unlist(lapply(D, area))
   }
   # determine optimal selection of tiles
   ntile <- length(a)

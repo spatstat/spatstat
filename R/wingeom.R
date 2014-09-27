@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.86 $	$Date: 2014/08/04 10:40:04 $
+#	$Revision: 4.88 $	$Date: 2014/09/27 09:45:44 $
 #
 #
 #
@@ -11,8 +11,12 @@
 
 volume.owin <- function(x) { area.owin(x) }
 
+area <- function(w) UseMethod("area")
+
+area.default <- function(w) area.owin(as.owin(w))
+
 area.owin <- function(w) {
-	w <- as.owin(w)
+    stopifnot(is.owin(w))
         switch(w$type,
                rectangle = {
 		width <- abs(diff(w$xrange))
@@ -20,7 +24,7 @@ area.owin <- function(w) {
 		area <- width * height
                },
                polygonal = {
-                 area <- sum(unlist(lapply(w$bdry, area.xypolygon)))
+                 area <- sum(unlist(lapply(w$bdry, Area.xypolygon)))
                },
                mask = {
                  pixelarea <- abs(w$xstep * w$ystep)
@@ -251,7 +255,7 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     if(length(ab)==0)
       return(emptywindow(C))
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
@@ -370,7 +374,7 @@ union.owin <- function(A, B, ...) {
     if(length(ab) == 0)
       return(emptywindow(C))
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
@@ -450,7 +454,7 @@ setminus.owin <- function(A, B, ...) {
     if(length(ab) == 0)
       return(emptywindow(C))
     # ensure correct polarity
-    totarea <- sum(unlist(lapply(ab, area.xypolygon)))
+    totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))

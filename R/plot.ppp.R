@@ -411,7 +411,7 @@ mark.scale.default <- function(marx, w, markscale=NULL,
     ## compute default value of 'maxsize'
     ## guess appropriate max physical size of symbols
     bb <- as.rectangle(w)
-    maxsize <- 1.4/sqrt(pi * length(marx)/area.owin(bb))
+    maxsize <- 1.4/sqrt(pi * length(marx)/area(bb))
     maxsize <- min(maxsize, diameter(bb) * 0.07)
     ## updated: maxsize now represents *diameter*
     maxsize <- 2 * maxsize

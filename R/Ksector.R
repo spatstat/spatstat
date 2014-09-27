@@ -15,9 +15,9 @@ Ksector <- function(X, begin=0, end=360, ...,
   rfixed <- !is.null(r) || !is.null(breaks)
   npts <- npoints(X)
   W <- Window(X)
-  area <- area.owin(W)
-  lambda <- npts/area
-  lambda2 <- (npts * (npts - 1))/(area^2)
+  areaW <- area(W)
+  lambda <- npts/areaW
+  lambda2 <- (npts * (npts - 1))/(areaW^2)
   rmaxdefault <- rmax.rule("K", W, lambda)        
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
@@ -26,7 +26,7 @@ Ksector <- function(X, begin=0, end=360, ...,
   if(!is.null(domain)) {
     domain <- as.owin(domain)
     stopifnot(is.subset.owin(domain, Window(X)))
-    area <- area.owin(domain)
+    areaW <- area(domain)
   }
 
   units <- match.arg(units)
@@ -97,7 +97,7 @@ Ksector <- function(X, begin=0, end=360, ...,
   ## this will be the output data frame
   Kdf <- data.frame(r=r, theo = ((END-BEGIN)/2) * r^2)
   desc <- c("distance argument r", "theoretical Poisson %s")
-  denom <- lambda2 * area
+  denom <- lambda2 * areaW
   K <- ratfv(Kdf, NULL, denom,
              "r",
              ylab = ylab,
@@ -137,7 +137,7 @@ Ksector <- function(X, begin=0, end=360, ...,
     # uncorrected! For demonstration purposes only!
     wh <- whist(DIJ, breaks$val)  # no weights
     numKun <- cumsum(wh)
-    denKun <- lambda2 * area
+    denKun <- lambda2 * areaW
     # uncorrected estimate of K
     K <- bind.ratfv(K,
                     data.frame(un=numKun), denKun,
@@ -188,7 +188,7 @@ Ksector <- function(X, begin=0, end=360, ...,
     edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
     wh <- whist(DIJ, breaks$val, edgewt)
     numKtrans <- cumsum(wh)
-    denKtrans <- lambda2 * area
+    denKtrans <- lambda2 * areaW
     h <- diameter(as.rectangle(W))/2
     numKtrans[r >= h] <- NA
     K <- bind.ratfv(K,
@@ -205,7 +205,7 @@ Ksector <- function(X, begin=0, end=360, ...,
     edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
     wh <- whist(DIJ, breaks$val, edgewt)
     numKiso <- cumsum(wh)
-    denKiso <- lambda2 * area
+    denKiso <- lambda2 * areaW
     h <- diameter(W)/2
     numKiso[r >= h] <- NA
     K <- bind.ratfv(K,

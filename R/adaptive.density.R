@@ -14,7 +14,7 @@ adaptive.density <- function(X, f=0.1, ..., nrep=1, verbose=TRUE) {
     # naive estimate of intensity
     if(verbose) cat("Tiny threshold: returning uniform intensity estimate")
     W <- X$window
-    lam <- npts/area.owin(W)
+    lam <- npts/area(W)
     return(as.im(lam, W, ...))
   }
   if(nrep > 1) {
@@ -36,7 +36,7 @@ adaptive.density <- function(X, f=0.1, ..., nrep=1, verbose=TRUE) {
   Xtess <- X[itess]
   Xcount <- X[-itess]
   tes <- dirichlet(Xtess)
-  meanintensity <- function(x) { x$n/area.owin(x$window) }
+  meanintensity <- function(x) { x$n/area(x$window) }
   lam <- unlist(lapply(split(Xcount, tes), meanintensity))
   tesim <- as.im(tes, ...)
   out <- eval.im(lam[as.integer(tesim)]/fcount)
