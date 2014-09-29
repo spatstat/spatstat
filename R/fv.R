@@ -285,7 +285,10 @@ fvnames <- function(X, a=".") {
            nam <- rev(nam) # convention
            return(nam)
          },
-         stop(paste("Unrecognised abbreviation", dQuote(a)))
+         {
+           if(a %in% names(X)) return(a)
+           stop(paste("Unrecognised abbreviation", dQuote(a)))
+         }
        )
 }
 

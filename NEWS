@@ -55,6 +55,9 @@ NEW FUNCTIONS
    o area
    New generic function, with methods for 'owin' and 'default'.
 
+   o Fhazard
+   Hazard rate of empty space function
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o pairwise interactions 

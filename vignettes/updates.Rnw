@@ -439,6 +439,7 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{Fhazard}: hazard rate of the empty space function.
 \item \texttt{dirichlet.vertices}: Vertices of the Dirichlet tessellation.
 \item \texttt{stienen, stienenSet}: Stienen diagrams.
 \item \texttt{hopskel.test}: Hopkins-Skellam test.

@@ -1,18 +1,38 @@
 #
-#	Fest.S
+#	Fest.R
 #
-#	S function empty.space()
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.34 $	$Date: 2014/09/26 06:30:23 $
+#	$Revision: 4.38 $	$Date: 2014/09/28 09:17:16 $
 #
-"Fest" <- 	
-"empty.space" <-
-function(X, ..., eps = NULL, r=NULL, breaks=NULL,
-         correction=c("rs", "km", "cs"),
-         domain=NULL) {
-  verifyclass(X, "ppp")
 
+Fhazard <- function(X, ...) {
+  Z <- Fest(X, ...)
+  if(!any(names(Z) == "km"))
+    stop("Kaplan-Meier estimator 'km' is required for hazard rate")
+  ## strip off Poisson F
+  Z <- Z[, (colnames(Z) != "theo")]
+  ## relabel the fv object
+  Z <- rebadge.fv(Z,
+                  new.ylab=quote(h(r)),
+                  new.fname="h",
+                  tags=c("hazard", "theohaz"),
+                  new.tags=c("hazard", "theo"),
+                  new.labl=c("hat(%s)[km](r)", "%s[pois](r)"),
+                  new.desc=c(
+                      "Kaplan-Meier estimate of %s",
+                      "theoretical Poisson %s"),
+                  new.dotnames=c("hazard", "theo"),
+                  new.preferred="hazard")
+  ## strip off unwanted bits
+  Z <- Z[, c("r", "hazard", "theo")]
+  return(Z)
+}
+
+Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
+                 correction=c("rs", "km", "cs"),
+                 domain=NULL) {
+  verifyclass(X, "ppp")
   if(!is.null(domain))
       stopifnot(is.subset.owin(domain, Window(X)))
   
@@ -161,7 +181,6 @@ function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   
   ## determine recommended plot range
   attr(Z, "alim") <- with(Z, range(.x[is.finite(.y) & .y <= 0.9]))
-
   return(Z)
 }
 
