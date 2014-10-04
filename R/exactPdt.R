@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of pixel image
 #
-#	$Revision: 4.13 $	$Date: 2012/04/06 09:49:56 $
+#	$Revision: 4.15 $	$Date: 2014/10/04 09:09:36 $
 #
 
 "exactPdt"<-
@@ -15,7 +15,7 @@
   nr <- w$dim[1]
   nc <- w$dim[2]
 # input image will be padded out with a margin of width 2 on all sides
-  mr <- mc <- 2
+  mr <- mc <- 2L
   # full dimensions of padded image
   Nnr <- nr + 2 * mr
   Nnc <- nc + 2 * mc
@@ -55,7 +55,22 @@
   bdist<- matrix(res$boundary,
                  ncol=Nnc, nrow=Nnr, byrow = TRUE)[rmin:rmax, cmin:cmax]
   # convert from C to R indexing
-  rows <- rows + 1L
-  cols <- cols + 1L
+  rows <- rows + 1L - as.integer(mr)
+  cols <- cols + 1L - as.integer(mc)
   return(list(d=dist,row=rows,col=cols,b=bdist, w=w))
+}
+
+project2set <- function(X, W, ...) {
+  stopifnot(is.ppp(X))
+  W <- as.mask(W, ...)
+  eW <- exactPdt(W)
+  ## grid location of X
+  XX <- nearest.raster.point(X$x, X$y, W)
+  ijX <- cbind(XX$row, XX$col)
+  ## look up values of 'eW' at this location 
+  iY <- eW$row[ijX]
+  jY <- eW$col[ijX]
+  ## convert to spatial coordinates
+  Y <- ppp(W$xcol[jY], W$yrow[iY], window=W)
+  return(Y)
 }

@@ -3,7 +3,7 @@
 #
 # flip x and y coordinates
 #
-# $Revision: 1.1 $ $Date: 2011/08/02 03:10:23 $ 
+# $Revision: 1.2 $ $Date: 2014/09/29 04:20:32 $ 
 #
 
 flipxy <- function(X) {
@@ -30,14 +30,16 @@ flipxy.owin <- function(X) {
   verifyclass(X, "owin")
   switch(X$type,
          rectangle={
-           W <- owin(X$yrange, X$xrange)
+           W <- owin(X$yrange, X$xrange, unitname=unitname(X))
          },
          polygonal={
            bdry <- lapply(X$bdry, flipxypolygon)
            W <- owin(poly=bdry, check=FALSE, unitname=unitname(X))
          },
          mask={
-           W <- owin(mask=t(X$m), xy=list(x=X$yrow, y=X$xcol))
+           W <- owin(mask=t(X$m),
+                     xy=list(x=X$yrow, y=X$xcol),
+                     unitname=unitname(X))
          },
          stop("Unrecognised window type")
          )

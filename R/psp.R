@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.76 $ $Date: 2014/08/08 10:13:47 $
+#  $Revision: 1.77 $ $Date: 2014/10/04 01:51:56 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -191,7 +191,7 @@ as.psp.owin <- function(x, ..., window=NULL,
 }
 
 edges <- function(x, ...,
-                  window=NULL, check=spatstat.options("checksegments")) {
+                  window=NULL, check=FALSE) {
   x <- as.owin(x)
   if(is.null(window)) window <- as.rectangle(x)
   x <- as.polygonal(x)

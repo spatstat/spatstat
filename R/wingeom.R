@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.88 $	$Date: 2014/09/27 09:45:44 $
+#	$Revision: 4.90 $	$Date: 2014/10/04 10:58:47 $
 #
 #
 #
@@ -817,3 +817,48 @@ emptywindow <- function(w) {
   return(out)
 }
 
+discs <- function(centres, radii=marks(centres)/2, ..., 
+                  separate=FALSE, mask=FALSE, trim=TRUE, delta=NULL) {
+  stopifnot(is.ppp(centres))
+  n <- npoints(centres)
+  if(n == 0) return(emptywindow(Frame(centres)))
+  check.nvector(radii, npoints(centres))
+  stopifnot(all(radii > 0))
+  if(is.null(delta)) delta <- 2 * pi * min(radii)/16
+  if(separate) {
+    D <- list()
+    W <- disc(centre=centres[1], radius=radii[1], delta=delta)
+    D[[1]] <- W
+    if(n == 1) return(D)
+    for(i in 2:n) 
+      D[[i]] <- disc(centre=centres[i], radius=radii[i], delta=delta)
+    return(D)
+  } else if(mask) {
+    M <- as.mask(Window(centres), ...)
+    DUP <- spatstat.options('dupC')
+    z <- .C("discs2grid",
+            nx    = as.integer(M$dim[2]),
+            x0    = as.double(M$xcol[1]),
+            xstep = as.double(M$xstep),  
+            ny    = as.integer(M$dim[1]),
+            y0    = as.double(M$yrow[1]),
+            ystep = as.double(M$ystep), 
+            nd    = as.integer(n),
+            xd    = as.double(centres$x),
+            yd    = as.double(centres$y),
+            rd    = as.double(radii), 
+            out   = as.integer(integer(prod(M$dim))),
+            DUP   = DUP)
+    M$m[] <- as.logical(z$out)
+    return(M)
+  } else {
+    W <- disc(centre=centres[1], radius=radii[1], delta=delta)
+    if(n == 1) return(W)
+    for(i in 2:n) {
+      Di <- disc(centre=centres[i], radius=radii[i], delta=delta)
+      W <- union.owin(W, Di)
+    }
+    if(trim) W <- intersect.owin(W, Window(centres))
+    return(W)
+  }
+}

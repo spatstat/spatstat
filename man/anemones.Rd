@@ -26,7 +26,8 @@
   data. According to Upton and Fingleton (1985), one unit in the dataset 
   is approximately 0.475 cm. According to Kooijman (1979a, 1979b)
   and also quoted by Upton and Fingleton (1985), the
-  physical size of the sample plot was 14.5 by 9.75 cm. 
+  physical size of the sample plot was 14.5 by 9.75 decimetres
+  (145 by 97.5 centimetres). 
   However if the data are plotted at this scale, they are too small for
   a rectangle of this size, and the appearance of the plot
   does not match the original hand-drawn plot in Kooijman (1979b).

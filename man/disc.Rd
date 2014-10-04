@@ -48,6 +48,7 @@ Creates a circular window
 }
 \seealso{
   \code{\link{ellipse}},
+  \code{\link{discs}},
   \code{\link{owin.object}},
   \code{\link{owin}},
   \code{\link{as.mask}}
@@ -56,7 +57,6 @@ Creates a circular window
   by setting \code{npoly} to a small integer value. For example
   \code{npoly=5} generates a pentagon and \code{npoly=13} a triskaidecagon.
 }
-
 \examples{
  # unit disc
  W <- disc()

@@ -8,7 +8,7 @@
   and returns them as a line segment pattern.
 }
 \usage{
-  edges(x, \dots, window = NULL, check = spatstat.options("checksegments"))
+  edges(x, \dots, window = NULL, check = FALSE) 
 }
 \arguments{
   \item{x}{
@@ -20,7 +20,7 @@
     Ignored.
   }
   \item{window}{
-    Optional window to contain the resulting line segments.
+    Window to contain the resulting line segments.
     Defaults to \code{as.rectangle(x)}.
   }
   \item{check}{

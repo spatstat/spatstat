@@ -3,7 +3,8 @@
 
 OVERVIEW
 
-   o We thank Shane Frank, Ute Hahn and Sebastian Schutte for contributions.
+   o We thank Shane Frank, Ute Hahn, Sebastian Schutte and
+   Carl Witthoft for contributions.
 
    o Geometry with windows and images.
 
@@ -22,11 +23,20 @@ NEW FUNCTIONS
    o hopskel.test
    Hopkins-Skellam test of CSR
 
+   o project2set
+   For each data point in a point pattern X, find the nearest
+   spatial location in a given window W.
+
    o stienen, stienenset
    Stienen diagrams
 
    o dirichlet.vertices
    Vertices of the Dirichlet tessellation
+
+   o discs 
+   Union of discs.
+   Given a point pattern dataset recording the locations and diameters
+   of objects, find the region covered by the objects.
 
    o increment.fv
    Increments of a summary function: g(x) = f(x+h)-f(x-h).
@@ -144,6 +154,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o area.owin
    This function is now a method for the new generic 'area'
 
+   o edges
+   Default for argument 'check' changed to FALSE.
+
 BUG FIXES
 
    o varblock
@@ -173,6 +186,11 @@ BUG FIXES
    Crashed if X was a 1 x 1 pixel array.
    Fixed.
 
+   o owin
+   Coordinates of polygon data were altered slightly when fix=TRUE. 
+   [Spotted by Carl Witthoft.]
+   Fixed.
+   
    o objects of class 'fv'
    Assigning a new value to names(x) or colnames(x) or dimnames(x)
    would cause the internal data format to become corrupted.
@@ -201,6 +219,10 @@ BUG FIXES
 
    o Fest
    Argument 'eps' was not interpreted correctly.
+   Fixed.
+
+   o flipxy.owin
+   Sometimes deleted the name of the unit of length.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.38-1

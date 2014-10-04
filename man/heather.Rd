@@ -23,7 +23,7 @@
 \section{Notes on data}{
   These data record the spatial mosaic of vegetation
   of the heather plant (\emph{Calluna vulgaris}) in a 10 by 20 metre
-  sampling plot near Jadraas, Sweden. 
+  sampling plot near \ifelse{latex}{\out{J{\"a}dra{\aa}s}}{Jadraas}, Sweden. 
   They were recorded and first analysed by Diggle(1981).
 
   The dataset \code{heather} contains three different versions of the data

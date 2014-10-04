@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.153 $	$Date: 2014/09/27 09:45:44 $
+#	$Revision: 4.155 $	$Date: 2014/10/03 15:12:44 $
 #
 #
 #	A window may be either
@@ -208,21 +208,33 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       }
     }
     if(check && fix) {
-      ## repair polygon data by invoking polyclip
-      ##        to intersect polygon with bounding rectangle
-      ##        (Streamlined version of intersect.owin)
-      ww <- lapply(bdry, reverse.xypolygon)
-      rr <- list(list(x=xrange[c(1,2,2,1)], y=yrange[c(2,2,1,1)]))
-      bb <- polyclip::polyclip(ww, rr, "intersection",
-                               fillA="nonzero", fillB="nonzero")
-      ## ensure correct polarity
-      totarea <- sum(unlist(lapply(bb, Area.xypolygon)))
-      if(totarea < 0)
-        bb <- lapply(bb, reverse.xypolygon)
-      w$bdry <- bb
+      if(length(bdry) == 1 &&
+         length(bx <- bdry[[1]]$x) == 4 &&
+         length(unique(bx)) == 2 &&
+         length(unique(bdry[[1]]$y)) == 2) {
+        ## it's really a rectangle
+        if(Area.xypolygon(bdry[[1]]) < 0)
+          w$bdry <- lapply(bdry, reverse.xypolygon)
+      } else {
+        ## repair polygon data by invoking polyclip
+        ##        to intersect polygon with larger-than-bounding rectangle
+        ##        (Streamlined version of intersect.owin)
+        ww <- lapply(bdry, reverse.xypolygon)
+        xrplus <- mean(xrange) + c(-1,1) * diff(xrange)
+        yrplus <- mean(yrange) + c(-1,1) * diff(yrange)
+        bignum <- (.Machine$integer.max^2)/2
+        epsclip <- max(diff(xrange), diff(yrange))/bignum
+        rr <- list(list(x=xrplus[c(1,2,2,1)], y=yrplus[c(2,2,1,1)]))
+        bb <- polyclip::polyclip(ww, rr, "intersection",
+                                 fillA="nonzero", fillB="nonzero", eps=epsclip)
+        ## ensure correct polarity
+        totarea <- sum(unlist(lapply(bb, Area.xypolygon)))
+        if(totarea < 0)
+          bb <- lapply(bb, reverse.xypolygon)
+        w$bdry <- bb
+      }
     }
     return(w)
-    
   } else if(mask.given) {
     ######### digital mask #####################
     

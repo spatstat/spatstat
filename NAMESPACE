@@ -69,6 +69,7 @@ useDynLib(spatstat,
 "digberJ",
 "dinfty_R",
 "discareapoly",
+"discs2grid",
 "distmapbin",
 "dppll",
 "drevcumsum",
@@ -593,6 +594,7 @@ export("dirichlet.weights")
 export("disc")
 export("discpartarea")
 export("discretise")
+export("discs")
 export("dist2dpath")
 export("distcdf")
 export("distfun")
@@ -1565,6 +1567,7 @@ export("print.units")
 export("profilepl")
 export("progressreport")
 export("project2segment")
+export("project2set")
 export("project.ppm")
 export("prolongseq")
 export("[.psp")
