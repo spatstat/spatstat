@@ -6,7 +6,7 @@
 
   Fill binary mask with discs with given centres and radii
 
-  $Revision: 1.3 $  $Date: 2014/10/03 10:04:36 $
+  $Revision: 1.4 $  $Date: 2014/10/05 03:04:08 $
 
 */
 
@@ -22,11 +22,11 @@ void discs2grid(nx, x0, xstep,
      int *out;
 { 
   int Nxcol, Nyrow, Ndiscs;
-  int i, j, k;
   double  X0, Y0, Xstep, Ystep;
-  double xk, yk, rk, rk2;
-  double xj, dx, dymax; 
-  int imin, imax, jmin, jmax, iminj, imaxj;
+
+  int i, j, k;
+  double xk, yk, rk, rk2, dx, dymax; 
+  int imin, imax, jmin, jmax, iminj, imaxj, Nxcol1, Nyrow1;
 
   Nxcol   = *nx;
   Nyrow   = *ny;
@@ -39,6 +39,9 @@ void discs2grid(nx, x0, xstep,
   if(Ndiscs == 0)
     return;
 
+  Nxcol1 = Nxcol - 1;
+  Nyrow1 = Nyrow - 1;
+
   /* loop over discs */
   for(k = 0; k < Ndiscs; k++) {
     
@@ -50,33 +53,34 @@ void discs2grid(nx, x0, xstep,
 
     /* find valid range of i and j */
 
-    imax = ceil( (yk + rk - Y0)/Ystep);
-    imin = floor((yk - rk - Y0)/Ystep);
-    jmax = ceil( (xk + rk - X0)/Xstep);
-    jmin = floor((xk - rk - X0)/Xstep);
+    imax = floor( (yk + rk - Y0)/Ystep);
+    imin = ceil((yk - rk - Y0)/Ystep);
+    jmax = floor( (xk + rk - X0)/Xstep);
+    jmin = ceil((xk - rk - X0)/Xstep);
 
-    if(imax >= 0 && imin < Nyrow && jmax >= 0 && jmin < Nxcol) {
+    if(imax >= 0 && imin < Nyrow && jmax >= 0 && jmin < Nxcol &&
+       imax >= imin && jmax >= jmin) {
       
       if(imin < 0) imin = 0; 
-      if(imax > Nyrow) imax = Nyrow;
+      if(imax > Nyrow1) imax = Nyrow1;
       if(jmin < 0) jmin = 0; 
-      if(jmax > Nxcol) jmax = Nxcol;
+      if(jmax > Nxcol1) jmax = Nxcol1;
 
       rk2 = rk * rk;
       
       /* loop over relevant pixels */
-      for(j = jmin; j <= jmax; j++) {
+      for(j = jmin, dx=X0 + jmin * Xstep - xk;
+	  j <= jmax; 
+	  j++, dx += Xstep) {
 
-	xj = X0 + j * Xstep;
-	dx = xj - xk;
 	dymax = sqrt(rk2 - dx * dx);
 	
-	imaxj = ceil( (yk + dymax - Y0)/Ystep);
-	iminj = floor((yk - dymax - Y0)/Ystep);
+	imaxj = floor( (yk + dymax - Y0)/Ystep);
+	iminj = ceil((yk - dymax - Y0)/Ystep);
 
 	if(imaxj >= 0 && iminj < Nyrow) {
 	  if(iminj < 0) iminj = 0; 
-	  if(imaxj > Nyrow) imaxj = Nyrow;
+	  if(imaxj > Nyrow1) imaxj = Nyrow1;
 	  
 	  for(i = iminj; i <= imaxj; i++) 
 	    out[i + j * Nyrow] = 1;
