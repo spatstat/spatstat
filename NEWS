@@ -93,6 +93,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'leaveoneout' allows leave-one-out calculation
    of fitted intensity at original data points.
 
+   o Kinhom, Linhom
+   New argument 'leaveoneout' specifies whether the leave-one-out rule
+   should be applied when calculating the fitted intensities. 
+   
    o crosspaircounts
    Results may change slightly due to a change in handling numerical 
    rounding effects.

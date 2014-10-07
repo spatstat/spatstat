@@ -62,6 +62,7 @@
             renormalise=TRUE,
             normpower=1,
             update = TRUE,
+            leaveoneout = TRUE,
             nlarge = 1000, 
             lambda2=NULL,
             reciplambda=NULL, reciplambda2=NULL,
@@ -138,7 +139,7 @@
         danger <- FALSE
         # Estimate density by leave-one-out kernel smoothing
         lambda <- density(X, ..., sigma=sigma, varcov=varcov,
-                            at="points", leaveoneout=TRUE)
+                            at="points", leaveoneout=leaveoneout)
         lambda <- as.numeric(lambda)
         reciplambda <- 1/lambda
       } else if(!is.null(reciplambda)) {
@@ -162,9 +163,16 @@
             lambda <- predict(lambda, locations=X, type="trend")
           } else {
             ## re-fit model to data X
-            model <-
-              if(is.ppm(model)) update(model, Q=X) else update(model, X=X)
-            lambda <- fitted(model, dataonly=TRUE)
+            if(is.ppm(model)) {
+              model <- update(model, Q=X)
+              lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+            } else if(is.kppm(model)) {
+              model <- update(model, X=X)
+              lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+            } else {
+              model <- update(model, X=X)
+              lambda <- fitted(model, dataonly=TRUE)
+            }
             danger <- FALSE
             if(miss.update) 
               warn.once(key="Kinhom.update",

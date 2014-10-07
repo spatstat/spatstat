@@ -11,6 +11,7 @@
     renormalise=TRUE,
     normpower=1,
     update=TRUE,
+    leaveoneout=TRUE,
     nlarge = 1000,
     lambda2=NULL, reciplambda=NULL, reciplambda2=NULL,
     sigma=NULL, varcov=NULL)
@@ -71,6 +72,11 @@
     before the fitted intensity is computed.
     If \code{update=FALSE}, the fitted intensity of the
     model will be computed without fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
   }
   \item{nlarge}{
     Optional. Efficiency threshold.
