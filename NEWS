@@ -6,13 +6,15 @@ OVERVIEW
    o We thank Shane Frank, Ute Hahn, Sebastian Schutte and
    Carl Witthoft for contributions.
 
-   o Geometry with windows and images.
+   o Geometrical operations with windows and images.
 
    o More edge corrections for K-function.
 
    o Improved algorithm for locally-scaled K-function.
 
    o Improved handling of 'fv' objects.
+
+   o Leave-one-out calculation of fitted values in ppm objects
 
    o Bug fixes.
 
@@ -86,6 +88,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o eval.fv
    Functions no longer need to have exactly the same sequence of 'r' values.
    They will now be made compatible using 'harmonise.fv'.
+
+   o fitted.ppm
+   New argument 'leaveoneout' allows leave-one-out calculation
+   of fitted intensity at original data points.
 
    o crosspaircounts
    Results may change slightly due to a change in handling numerical 
@@ -215,6 +221,10 @@ BUG FIXES
 
    o varblock
    Handled the case 'fun=Lest' incorrectly.
+   Fixed.
+
+   o range.fv
+   Sometimes returned NA even when na.rm=TRUE.
    Fixed.
 
    o Fest

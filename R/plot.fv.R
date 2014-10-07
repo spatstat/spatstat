@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.111 $    $Date: 2014/09/27 09:45:44 $
+#  $Revision: 1.112 $    $Date: 2014/10/06 15:17:02 $
 #
 #
 
@@ -210,7 +210,7 @@ plot.fv <- local({
                         paren(paste(explicit.lhs.names, collapse=", ")),
                         "~ 1")
             lhs <- lhs.of.formula(as.formula(ff))
-          }
+          } else success <- FALSE
         } else success <- FALSE
         if(success) {
           ## add these columns to the plotting data

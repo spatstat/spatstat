@@ -11,7 +11,7 @@
 }
 \usage{
   \method{fitted}{ppm}(object, \dots, type="lambda", dataonly=FALSE,
-  new.coef=NULL, drop=FALSE, check=TRUE, repair=TRUE)
+  new.coef=NULL, leaveoneout=FALSE, drop=FALSE, check=TRUE, repair=TRUE)
 }
 \arguments{
   \item{object}{
@@ -34,6 +34,10 @@
   \item{new.coef}{
     Numeric vector of parameter values to replace the 
     fitted model parameters \code{coef(object)}.
+  }
+  \item{leaveoneout}{
+    Logical. If \code{TRUE} the fitted value at each data
+    point will be computed using a leave-one-out method. See Details.
   }
   \item{drop}{
     Logical value determining whether to delete quadrature points
@@ -78,6 +82,15 @@
   dataset \code{x}) and other ``dummy'' points 
   in the window of observation.
 
+  If \code{leaveoneout=TRUE}, fitted values will be computed
+  for the data points only, using a \sQuote{leave-one-out} rule: 
+  the fitted value at \code{X[i]} is effectively computed by
+  deleting this point from the data and re-fitting the model to the
+  reduced pattern \code{X[-i]}, then predicting the value at
+  \code{X[i]}. (Instead of literally performing this calculation,
+  we apply a Taylor approximation using the leverage
+  computed in \code{\link{dfbetas.ppm}}. 
+  
   The argument \code{drop} is explained in \code{\link{quad.ppm}}.
   
   Use \code{\link{predict.ppm}} to compute the fitted conditional
@@ -96,8 +109,7 @@
  \code{\link{predict.ppm}}
 }
 \examples{
-    data(cells)
-    str <- ppm(cells, ~x, Strauss(r=0.15))
+    str <- ppm(cells ~x, Strauss(r=0.1))
     lambda <- fitted(str)
 
     # extract quadrature points in corresponding order
@@ -107,6 +119,10 @@
     # as circles centred on the quadrature points 
     quadmarked <- setmarks(quadpoints, lambda)
     plot(quadmarked)
+
+    if(!interactive()) str <- ppm(cells ~ x)
+
+    lambdaX <- fitted(str, leaveoneout=TRUE)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

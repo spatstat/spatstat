@@ -4,7 +4,7 @@
 #
 #    class "fv" of function value objects
 #
-#    $Revision: 1.119 $   $Date: 2014/09/26 09:17:05 $
+#    $Revision: 1.120 $   $Date: 2014/10/06 03:10:08 $
 #
 #
 #    An "fv" object represents one or more related functions
@@ -1002,7 +1002,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
 
 range.fv <- local({
 
-  range1fv <- function(x, na.rm=TRUE, finite=na.rm) {
+  range1fv <- function(x, ..., na.rm=TRUE, finite=na.rm) {
     xdat <- as.matrix(as.data.frame(x))
     yall <- fvnames(x, ".")
     ydat <- xdat[, yall]

@@ -3,11 +3,11 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.11 $   $Date: 2013/11/08 15:56:58 $
+#   $Revision: 1.12 $   $Date: 2014/10/07 05:13:22 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
-                       new.coef=NULL,
+                       new.coef=NULL, leaveoneout=FALSE,
                        drop=FALSE, check=TRUE, repair=TRUE) {
   verifyclass(object, "ppm")
   
@@ -16,6 +16,15 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
       stop("object format corrupted; try update(object, use.internal=TRUE)")
     message("object format corrupted; repairing it.")
     object <- update(object, use.internal=TRUE)
+  }
+
+  if(leaveoneout) {
+    ## Leave-one-out calculation for data points only
+    if(missing(dataonly)) dataonly <- TRUE
+    if(!dataonly)
+      stop("Leave-one-out calculation requires dataonly=FALSE")
+    if(!is.null(new.coef))
+      stop("Leave-one-out calculation requires new.coef=NULL")
   }
   
   fitcoef <- coef(object)
@@ -82,7 +91,17 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
   }
   if(dataonly)
     lambda <- lambda[is.data(quad.ppm(object))]
-  
+
+  if(leaveoneout) {
+    ## Perform leverage calculation
+    dfb <- dfbetas(object)
+    delta <- with(dfb, 'discrete')[with(dfb, 'is.atom'),,drop=FALSE]
+    ## adjust fitted value
+    mom <- model.matrix(object)[is.data(quad.ppm(object)),,drop=FALSE]
+    if(type == "trend" && !uniform && interacting)
+      mom[, Vnames] <- 0
+    lambda <- lambda * exp(- rowSums(delta * mom))
+  }
   return(lambda)
 }
 
