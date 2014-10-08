@@ -2,7 +2,7 @@
 #
 #     markcorr.R
 #
-#     $Revision: 1.64 $ $Date: 2014/08/27 09:55:28 $
+#     $Revision: 1.65 $ $Date: 2014/10/08 10:47:28 $
 #
 #    Estimate the mark correlation function
 #    and related functions 
@@ -150,26 +150,26 @@ markcorrint <-
   switch(ftype,
          mul={
            wt <- mX/lambda
-           K <- Kinhom(X, reciplambda=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction, ...)
            Ef2 <- mean(mX)^2
          },
          equ={
            fXX <- outer(mX, mX, "==")
            wt <- fXX/lambda^2
-           K <- Kinhom(X, reciplambda2=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction, ...)
            mtable <- table(mX)
            Ef2 <- sum(mtable^2)/length(mX)^2
          },
          product={
            f1X <- do.call(f1, append(list(mX), fargs))
            wt <- f1X/lambda
-           K <- Kinhom(X, reciplambda=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction, ...)
            Ef2 <- mean(f1X)^2
          },
          general={
            fXX <- do.call("outer", append(list(mX, mX, f), fargs))
            wt <- fXX/lambda^2
-           K <- Kinhom(X, reciplambda2=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction, ...)
            Ef2 <- mean(fXX)
          })
   K$theo <- K$theo * Ef2

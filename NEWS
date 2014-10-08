@@ -3,8 +3,8 @@
 
 OVERVIEW
 
-   o We thank Shane Frank, Ute Hahn, Sebastian Schutte and
-   Carl Witthoft for contributions.
+   o We thank Shane Frank, Shaaban Ghalandarayeshi, Ute Hahn, 
+     Sebastian Schutte and Carl Witthoft for contributions.
 
    o Geometrical operations with windows and images.
 
@@ -18,7 +18,7 @@ OVERVIEW
 
    o Bug fixes.
 
-   o Nickname: Smoke and Mirrors
+   o Version nickname: Smoke and Mirrors
 
 NEW FUNCTIONS
 
@@ -225,6 +225,10 @@ BUG FIXES
 
    o varblock
    Handled the case 'fun=Lest' incorrectly.
+   Fixed.
+
+   o [.fv
+   Sometimes garbled the internal data format, causing plot.fv to crash.
    Fixed.
 
    o range.fv

@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.161 $    $Date: 2014/09/18 10:41:41 $
+#    $Revision: 1.162 $    $Date: 2014/10/08 09:57:45 $
 #
 #
 matrowsum <- function(x) {
@@ -326,13 +326,14 @@ prolongseq <- function(x, newrange, step=NULL) {
 }
 
 intersect.ranges <- function(a, b, fatal=TRUE) {
-  lo <- max(a[1],b[1])
-  hi <- min(a[2],b[2])
-  if(lo > hi) {
-    if(fatal) stop("Intersection is empty")
-    else return(NULL)
+  if(!is.null(a) && !is.null(b)) {
+    lo <- max(a[1],b[1])
+    hi <- min(a[2],b[2])
+    if(lo <= hi)
+      return(c(lo, hi))
   }
-  return(c(lo, hi))
+  if(fatal) stop("Intersection is empty")
+  return(NULL)
 }
 
 inside.range <- function(x, r) {

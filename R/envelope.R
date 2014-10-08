@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.66 $  $Date: 2014/09/17 02:01:50 $
+#   $Revision: 2.67 $  $Date: 2014/10/08 10:07:59 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -544,7 +544,7 @@ envelopeEngine <-
   # default domain over which to maximise
   alim <- attr(funX, "alim")
   if(global && is.null(ginterval))
-    ginterval <- if(rgiven) range(rvals) else alim
+    ginterval <- if(rgiven || is.null(alim)) range(rvals) else alim
   
   #--------------------------------------------------------------------
   # Determine number of simulations

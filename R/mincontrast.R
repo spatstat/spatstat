@@ -8,7 +8,7 @@
 
 mincontrast <- local({
 
-  # objective function (in a format that is re-usable by other code)
+  ## objective function (in a format that is re-usable by other code)
   contrast.objective <- function(par, objargs, ...) {
     with(objargs, {
       theo <- theoretical(par=par, rvals, ...)
@@ -33,30 +33,31 @@ mincontrast <- local({
       stop(paste("Theoretical function does not include an argument called",
                  sQuote("par")))
 
-    # enforce defaults
+    ## enforce defaults
     ctrl <- resolve.defaults(ctrl, list(q = 1/4, p = 2, rmin=NULL, rmax=NULL))
     fvlab <- resolve.defaults(fvlab,
                               list(label=NULL, desc="minimum contrast fit"))
     explain <- resolve.defaults(explain,
                                 list(dataname=NULL, modelname=NULL, fname=NULL))
   
-    # determine range of r values
+    ## extract vector of r values
+    argu <- fvnames(observed, ".x")
+    rvals <- observed[[argu]]
+    
+    ## determine range of r values
     rmin <- ctrl$rmin
     rmax <- ctrl$rmax
     if(!is.null(rmin) && !is.null(rmax)) 
       stopifnot(rmin < rmax && rmin >= 0)
     else {
-      alim <- attr(observed, "alim")
+      alim <- attr(observed, "alim") %orifnull% range(rvals)
       if(is.null(rmin)) rmin <- alim[1]
       if(is.null(rmax)) rmax <- alim[2]
     }
-    # extract vector of r values
-    argu <- fvnames(observed, ".x")
-    rvals <- observed[[argu]]
-    # extract vector of observed values of statistic
+    ## extract vector of observed values of statistic
     valu <- fvnames(observed, ".y")
     obs <- observed[[valu]]
-    # restrict to [rmin, rmax]
+    ## restrict to [rmin, rmax]
     if(max(rvals) < rmax)
       stop(paste("rmax=", signif(rmax,4),
                  "exceeds the range of available data",
@@ -64,7 +65,7 @@ mincontrast <- local({
     sub <- (rvals >= rmin) & (rvals <= rmax)
     rvals <- rvals[sub]
     obs <- obs[sub]
-    # sanity clause
+    ## sanity clause
     if(!all(ok <- is.finite(obs))) {
       whinge <- paste("Some values of the empirical function",
                       sQuote(explain$fname),
@@ -84,22 +85,22 @@ mincontrast <- local({
       } else stop(paste(whinge, "Please choose a narrower range [rmin, rmax]"),
                   call.=FALSE)
     }
-    # pack data into a list
+    ## pack data into a list
     objargs <- list(theoretical = theoretical,
                     rvals       = rvals,
                     nrvals      = length(rvals),
-                    obsq        = obs^(ctrl$q),   # for efficiency
+                    obsq        = obs^(ctrl$q),   ## for efficiency
                     qq          = ctrl$q,
                     pp          = ctrl$p,
                     rmin        = rmin,
                     rmax        = rmax)
-    # go
+    ## go
     minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
-    # if convergence failed, issue a warning 
+    ## if convergence failed, issue a warning 
     signalStatus(optimStatus(minimum), errors.only=TRUE)
-    # evaluate the fitted theoretical curve
+    ## evaluate the fitted theoretical curve
     fittheo <- theoretical(minimum$par, rvals, ...)
-    # pack it up as an `fv' object
+    ## pack it up as an `fv' object
     label <- fvlab$label
     desc  <- fvlab$desc
     if(is.null(label))
@@ -124,7 +125,7 @@ mincontrast <- local({
 })
 
 print.minconfit <- function(x, ...) {
-  # explanatory
+  ## explanatory
   cat(paste("Minimum contrast fit ",
             "(",
             "object of class ",
@@ -138,7 +139,7 @@ print.minconfit <- function(x, ...) {
   if(!is.null(mo))
     cat("Model:", mo, fill=TRUE)
   if(!is.null(cm)) {
-    # Covariance/kernel model and nuisance parameters 
+    ## Covariance/kernel model and nuisance parameters 
     cat("\t", cm$type, "model:", cm$model, fill=TRUE)
     margs <- cm$margs
     if(!is.null(margs)) {
@@ -157,7 +158,7 @@ print.minconfit <- function(x, ...) {
     if(!is.null(da))
       splat(" fitted to", da)
   }
-  # Values
+  ## Values
   splat("Parameters fitted by minimum contrast ($par):")
   print(x$par, ...)
   mp <- x$modelpar
@@ -167,12 +168,12 @@ print.minconfit <- function(x, ...) {
           "($modelpar):")
     print(mp)
   }
-  # Diagnostics
+  ## Diagnostics
   printStatus(optimStatus(x$opt))
-  # Starting values
+  ## Starting values
   splat("Starting values of parameters:")
   print(x$startpar)
-  # Algorithm parameters
+  ## Algorithm parameters
   ct <- x$ctrl
   splat("Domain of integration:",
         "[",
@@ -289,34 +290,34 @@ printStatusList <- function(stats) {
 ############### applications (specific models) ##################
 
 
-# lookup table of explicitly-known K functions and pcf
-# and algorithms for computing sensible starting parameters
+## lookup table of explicitly-known K functions and pcf
+## and algorithms for computing sensible starting parameters
 
 .Spatstat.ClusterModelInfoTable <- 
   list(
        Thomas=list(
-         # Thomas process: par = (kappa, sigma2)
+         ## Thomas process: par = (kappa, sigma2)
          modelname = "Thomas process",
          isPCP=TRUE,
-         # K-function
+         ## K-function
          K = function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            pi*rvals^2+(1-exp(-rvals^2/(4*par[2])))/par[1]
          },
-         # pair correlation function
+         ## pair correlation function
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            1 + exp(-rvals^2/(4 * par[2]))/(4 * pi * par[1] * par[2])
          },
-         # sensible starting parameters
+         ## sensible starting parameters
          selfstart = function(X) {
            kappa <- intensity(X)
            sigma2 <- 4 * mean(nndist(X))^2
            c(kappa=kappa, sigma2=sigma2)
          },
-         # meaningful model parameters
+         ## meaningful model parameters
          interpret = function(par, lambda) {
            kappa <- par[["kappa"]]
            sigma <- sqrt(par[["sigma2"]])
@@ -325,9 +326,9 @@ printStatusList <- function(stats) {
            c(kappa=kappa, sigma=sigma, mu=mu)
          }
          ),
-       # ...............................................
+       ## ...............................................
        MatClust=list(
-         # Matern Cluster process: par = (kappa, R)
+         ## Matern Cluster process: par = (kappa, R)
          modelname = "Matern cluster process",
          isPCP=TRUE,
          K = function(par,rvals, ..., funaux){
@@ -370,7 +371,7 @@ printStatusList <- function(stats) {
              h[ok] <- (16/pi) * (z * acos(z) - (z^2) * sqrt(1 - z^2))
              return(h)
            },
-           # g(z) = DOH(z)/z has a limit at z=0.
+           ## g(z) = DOH(z)/z has a limit at z=0.
            g=function(zz) {
              ok <- (zz < 1)
              h <- numeric(length(zz))
@@ -379,13 +380,13 @@ printStatusList <- function(stats) {
              h[ok] <- (2/pi) * (acos(z) - z * sqrt(1 - z^2))
              return(h)
            }),
-         # sensible starting paramters
+         ## sensible starting paramters
          selfstart = function(X) {
            kappa <- intensity(X)
            R <- 2 * mean(nndist(X)) 
            c(kappa=kappa, R=R)
          },
-         # meaningful model parameters
+         ## meaningful model parameters
          interpret = function(par, lambda) {
            kappa <- par[["kappa"]]
            R     <- par[["R"]]
@@ -394,9 +395,9 @@ printStatusList <- function(stats) {
            c(kappa=kappa, R=R, mu=mu)
          }
          ),
-       # ...............................................
+       ## ...............................................
        Cauchy=list(
-         # Neyman-Scott with Cauchy clusters: par = (kappa, eta2)
+         ## Neyman-Scott with Cauchy clusters: par = (kappa, eta2)
          modelname = "Neyman-Scott process with Cauchy kernel",
          isPCP=TRUE,
          K = function(par,rvals, ...){
@@ -414,7 +415,7 @@ printStatusList <- function(stats) {
            eta2 <- 4 * mean(nndist(X))^2
            c(kappa = kappa, eta2 = eta2)
          },
-         # meaningful model parameters
+         ## meaningful model parameters
          interpret = function(par, lambda) {
            kappa <- par[["kappa"]]
            omega <- sqrt(par[["eta2"]])/2
@@ -423,21 +424,21 @@ printStatusList <- function(stats) {
            c(kappa=kappa, omega=omega, mu=mu)
          }
          ),
-       # ...............................................
+       ## ...............................................
        VarGamma=list(
-         # Neyman-Scott with VarianceGamma/Bessel clusters: par = (kappa, eta)
+         ## Neyman-Scott with VarianceGamma/Bessel clusters: par = (kappa, eta)
          modelname = "Neyman-Scott process with Variance Gamma kernel",
          isPCP=TRUE,
          K = local({
-           # K function requires integration of pair correlation
+           ## K function requires integration of pair correlation
            xgx <- function(x, par, nu.pcf) {
-             # x * pcf(x) without check on par values
+             ## x * pcf(x) without check on par values
              numer <- (x/par[2])^nu.pcf * besselK(x/par[2], nu.pcf)
              denom <- 2^(nu.pcf+1) * pi * par[2]^2 * par[1] * gamma(nu.pcf + 1)
              return(x * (1 + numer/denom))
            }
            vargammaK <- function(par,rvals, ..., margs){
-             # margs = list(.. nu.pcf.. ) 
+             ## margs = list(.. nu.pcf.. ) 
              if(any(par <= 0))
                return(rep.int(Inf, length(rvals)))
              nu.pcf <- margs$nu.pcf
@@ -453,16 +454,16 @@ printStatusList <- function(stats) {
              return(out)
            }
            vargammaK
-           }), # end of 'local'
+           }), ## end of 'local'
          pcf= function(par,rvals, ..., margs){
-           # margs = list(..nu.pcf..)
+           ## margs = list(..nu.pcf..)
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            nu.pcf <- margs$nu.pcf
            sig2 <- 1 / (4 * pi * (par[2]^2) * nu.pcf * par[1])
            denom <- 2^(nu.pcf - 1) * gamma(nu.pcf)
            rr <- rvals / par[2]
-           # Matern correlation function
+           ## Matern correlation function
            fr <- ifelseXB(rr > 0,
                         (rr^nu.pcf) * besselK(rr, nu.pcf) / denom,
                         1)
@@ -477,13 +478,13 @@ printStatusList <- function(stats) {
                        margs=list(nu.ker=nu.ker,
                                   nu.pcf=nu.pcf)))
          },
-         # sensible starting values
+         ## sensible starting values
          selfstart = function(X) {
            kappa <- intensity(X)
            eta <- 2 * mean(nndist(X))
            c(kappa=kappa, eta=eta)
          },
-         # meaningful model parameters
+         ## meaningful model parameters
          interpret = function(par, lambda) {
            kappa <- par[["kappa"]]
            omega <- par[["eta"]]
@@ -492,20 +493,20 @@ printStatusList <- function(stats) {
            c(kappa=kappa, omega=omega, mu=mu)
          }
          ),
-       # ...............................................
+       ## ...............................................
        LGCP=list(
-         # Log Gaussian Cox process: par = (sigma2, alpha)
+         ## Log Gaussian Cox process: par = (sigma2, alpha)
          modelname = "Log-Gaussian Cox process",
          isPCP=FALSE,
-         # calls relevant covariance function from RandomFields package
+         ## calls relevant covariance function from RandomFields package
          K = function(par, rvals, ..., model, margs) {
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
-             # For efficiency and to avoid need for RandomFields package
+             ## For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
-             # use RandomFields 
+             ## use RandomFields 
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
@@ -521,7 +522,7 @@ printStatusList <- function(stats) {
            nr <- length(rvals)
            th <- numeric(nr)
            if(spatstat.options("fastK.lgcp")) {
-             # integrate using Simpson's rule
+             ## integrate using Simpson's rule
              fvals <- integrand(r=rvals, par=par, model=model, margs=margs)
              th[1] <- rvals[1] * fvals[1]/2
              if(nr > 1)
@@ -529,7 +530,7 @@ printStatusList <- function(stats) {
                  th[i] <- th[i-1] +
                    (rvals[i] - rvals[i-1]) * (fvals[i] + fvals[i-1])/2
            } else {
-             # integrate using 'integrate'
+             ## integrate using 'integrate'
              th[1] <- if(rvals[1] == 0) 0 else 
              integrate(integrand,lower=0,upper=rvals[1],
                        par=par,model=model,margs=margs)$value
@@ -546,7 +547,7 @@ printStatusList <- function(stats) {
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
-             # For efficiency and to avoid need for RandomFields package
+             ## For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
              modgen <- attr(model, "modgen")
@@ -577,12 +578,12 @@ printStatusList <- function(stats) {
            }
            return(list(type="Covariance", model=model, margs=margs))
          },
-         # sensible starting values
+         ## sensible starting values
          selfstart = function(X) {
            alpha <- 2 * mean(nndist(X))
            c(sigma2=1, alpha=alpha)
          },
-         # meaningful model parameters
+         ## meaningful model parameters
          interpret = function(par, lambda) {
            sigma2 <- par[["sigma2"]]
            alpha  <- par[["alpha"]]
@@ -639,11 +640,11 @@ thomas.estK <- function(X, startpar=c(kappa=1,sigma2=1),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
                           modelname="Thomas process"), ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "sigma2")
   result$par <- par
-  # infer meaningful model parameters
+  ## infer meaningful model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="Thomas")
   return(result)
@@ -672,7 +673,7 @@ lgcp.estK <- function(X, startpar=c(sigma2=1,alpha=1),
 
   info <- spatstatClusterModelInfo("LGCP")
   
-  # digest parameters of Covariance model and test validity
+  ## digest parameters of Covariance model and test validity
   ph <- info$parhandler
   cmodel <- do.call(ph, covmodel)
   
@@ -688,12 +689,12 @@ lgcp.estK <- function(X, startpar=c(sigma2=1,alpha=1),
                         ...,
                         model=cmodel$model,
                         margs=cmodel$margs)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("sigma2", "alpha")
   result$par <- par
   result$covmodel <- cmodel
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="lgcp")
   return(result)
@@ -734,11 +735,11 @@ matclust.estK <- function(X, startpar=c(kappa=1,R=1),
                           modelname="Matern Cluster process"),
                         ...,
                         funaux=funaux)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "R")
   result$par <- par
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="MatClust")
   return(result)
@@ -771,7 +772,7 @@ thomas.estpcf <- function(X, startpar=c(kappa=1,sigma2=1),
   info <- spatstatClusterModelInfo("Thomas")
   theoret <- info$pcf
   
-  # avoid using g(0) as it may be infinite
+  ## avoid using g(0) as it may be infinite
   argu <- fvnames(g, ".x")
   rvals <- g[[argu]]
   if(rvals[1] == 0 && (is.null(rmin) || rmin == 0)) {
@@ -786,11 +787,11 @@ thomas.estpcf <- function(X, startpar=c(kappa=1,sigma2=1),
                           dataname=dataname,
                           fname=attr(g, "fname"),
                           modelname="Thomas process"), ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "sigma2")
   result$par <- par
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="Thomas")
   return(result)
@@ -821,7 +822,7 @@ matclust.estpcf <- function(X, startpar=c(kappa=1,R=1),
   theoret <- info$pcf
   funaux <-  info$funaux
   
-  # avoid using g(0) as it may be infinite
+  ## avoid using g(0) as it may be infinite
   argu <- fvnames(g, ".x")
   rvals <- g[[argu]]
   if(rvals[1] == 0 && (is.null(rmin) || rmin == 0)) {
@@ -836,11 +837,11 @@ matclust.estpcf <- function(X, startpar=c(kappa=1,R=1),
                           modelname="Matern Cluster process"),
                         ...,
                         funaux=funaux)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "R")
   result$par <- par
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="MatClust")
   return(result)
@@ -870,7 +871,7 @@ lgcp.estpcf <- function(X, startpar=c(sigma2=1,alpha=1),
 
   info <- spatstatClusterModelInfo("LGCP")
   
-  # digest parameters of Covariance model and test validity
+  ## digest parameters of Covariance model and test validity
   ph <- info$parhandler
   cmodel <- do.call(ph, covmodel)
   
@@ -886,12 +887,12 @@ lgcp.estpcf <- function(X, startpar=c(sigma2=1,alpha=1),
                         ...,
                         model=cmodel$model,
                         margs=cmodel$margs)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("sigma2", "alpha")
   result$par <- par
   result$covmodel <- cmodel
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="lgcp")
   return(result)
@@ -901,9 +902,9 @@ lgcp.estpcf <- function(X, startpar=c(sigma2=1,alpha=1),
 cauchy.estK <- function(X, startpar=c(kappa=1,eta2=1),
                         lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, ...) {
 
-# omega: scale parameter of Cauchy kernel function
-# eta: scale parameter of Cauchy pair correlation function
-# eta = 2 * omega
+## omega: scale parameter of Cauchy kernel function
+## eta: scale parameter of Cauchy pair correlation function
+## eta = 2 * omega
 
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
@@ -932,11 +933,11 @@ cauchy.estK <- function(X, startpar=c(kappa=1,eta2=1),
                         explain=list(dataname=dataname,
                           fname=attr(K, "fname"),
                           modelname="Cauchy process"), ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "eta2")
   result$par <- par
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="Cauchy")
   return(result)
@@ -947,9 +948,9 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,eta2=1),
                           lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, ...,
                           pcfargs=list()) {
 
-# omega: scale parameter of Cauchy kernel function
-# eta: scale parameter of Cauchy pair correlation function
-# eta = 2 * omega
+## omega: scale parameter of Cauchy kernel function
+## eta: scale parameter of Cauchy pair correlation function
+## eta = 2 * omega
 
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
@@ -971,7 +972,7 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,eta2=1),
   info <- spatstatClusterModelInfo("Cauchy")
   theoret <- info$pcf
 
-  # avoid using g(0) as it may be infinite
+  ## avoid using g(0) as it may be infinite
   argu <- fvnames(g, ".x")
   rvals <- g[[argu]]
   if(rvals[1] == 0 && (is.null(rmin) || rmin == 0)) {
@@ -985,17 +986,17 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,eta2=1),
                         explain=list(dataname=dataname,
                           fname=attr(g, "fname"),
                           modelname="Cauchy process"), ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "eta2")
   result$par <- par
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="Cauchy")
   return(result)
 }
 
-# user-callable
+## user-callable
 resolve.vargamma.shape <- function(..., nu.ker=NULL, nu.pcf=NULL) {
   if(is.null(nu.ker) && is.null(nu.pcf))
     stop("Must specify either nu.ker or nu.pcf", call.=FALSE)
@@ -1018,11 +1019,11 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
                         lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL,
                           nu.pcf=NULL, ...) {
 
-# nu.ker: smoothness parameter of Variance Gamma kernel function
-# omega: scale parameter of kernel function
-# nu.pcf: smoothness parameter of Variance Gamma pair correlation function
-# eta: scale parameter of Variance Gamma pair correlation function
-# nu.pcf = 2 * nu.ker + 1    and    eta = omega
+## nu.ker: smoothness parameter of Variance Gamma kernel function
+## omega: scale parameter of kernel function
+## nu.pcf: smoothness parameter of Variance Gamma pair correlation function
+## eta: scale parameter of Variance Gamma pair correlation function
+## nu.pcf = 2 * nu.ker + 1    and    eta = omega
 
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
@@ -1046,7 +1047,7 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
   info <- spatstatClusterModelInfo("VarGamma")
   theoret <- info$K
   
-  # test validity of parameter nu and digest
+  ## test validity of parameter nu and digest
   ph <- info$parhandler
   cmodel <- ph(nu.ker=nu.ker, nu.pcf=nu.pcf)
   margs <- cmodel$margs
@@ -1059,12 +1060,12 @@ vargamma.estK <- function(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4,
                           fname=attr(K, "fname"),
                           modelname="Variance Gamma process"),
                         margs=margs, ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "eta")
   result$par <- par
   result$covmodel <- cmodel
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="VarGamma")
   return(result)
@@ -1075,11 +1076,11 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
                           lambda=NULL, q=1/4, p=2, rmin=NULL, rmax=NULL, 
                           nu.pcf=NULL, ..., pcfargs=list()) {
 
-# nu.ker: smoothness parameter of Variance Gamma kernel function
-# omega: scale parameter of kernel function
-# nu.pcf: smoothness parameter of Variance Gamma pair correlation function
-# eta: scale parameter of Variance Gamma pair correlation function
-# nu.pcf = 2 * nu.ker + 1    and    eta = omega
+## nu.ker: smoothness parameter of Variance Gamma kernel function
+## omega: scale parameter of kernel function
+## nu.pcf: smoothness parameter of Variance Gamma pair correlation function
+## eta: scale parameter of Variance Gamma pair correlation function
+## nu.pcf = 2 * nu.ker + 1    and    eta = omega
 
   dataname <-
     getdataname(short.deparse(substitute(X), 20), ...)
@@ -1103,12 +1104,12 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
   info <- spatstatClusterModelInfo("VarGamma")
   theoret <- info$pcf
 
-  # test validity of parameter nu and digest 
+  ## test validity of parameter nu and digest 
   ph <- info$parhandler
   cmodel <- ph(nu.ker=nu.ker, nu.pcf=nu.pcf)
   margs <- cmodel$margs
   
-  # avoid using g(0) as it may be infinite
+  ## avoid using g(0) as it may be infinite
   argu <- fvnames(g, ".x")
   rvals <- g[[argu]]
   if(rvals[1] == 0 && (is.null(rmin) || rmin == 0)) {
@@ -1124,12 +1125,12 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,eta=1), nu.ker=-1/4,
                           modelname="Variance Gamma process"),
                         margs=margs,
                         ...)
-  # imbue with meaning
+  ## imbue with meaning
   par <- result$par
   names(par) <- c("kappa", "eta")
   result$par <- par
   result$covmodel <- cmodel
-  # infer model parameters
+  ## infer model parameters
   result$modelpar <- info$interpret(par, lambda)
   result$internal <- list(model="VarGamma")
   return(result)

@@ -18,6 +18,8 @@
     Name of the summary function for which confidence intervals are
     desired: one of the strings \code{"pcf"}, \code{"Kest"}, \code{"Lest"},
     \code{"pcfinhom"}, \code{"Kinhom"} or \code{"Linhom"}.
+    Alternatively, the function itself; it must be
+    one of the functions listed here.
   }
   \item{\dots}{
     Arguments passed to the corresponding local version of the summary

@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.11 $   $Date: 2014/09/08 08:38:28 $
+#  $Revision: 1.13 $   $Date: 2014/10/08 10:25:26 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -11,7 +11,18 @@ lohboot <-
            fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
            ..., nsim=200, confidence=0.95, global=FALSE, type=7) {
   stopifnot(is.ppp(X))
-  fun <- match.arg(fun)
+  fun.name <- short.deparse(substitute(fun))
+  if(is.character(fun)) {
+    fun <- match.arg(fun)
+  } else if(is.function(fun)) {
+    flist <- list(pcf=pcf, Kest=Kest, Lest=Lest,
+                  pcfinhom=pcfinhom, Kinhom=Kinhom, Linhom=Linhom)
+    id <- match(list(fun), flist)
+    if(is.na(id))
+      stop(paste("Loh's bootstrap is not supported for the function",
+                 sQuote(fun.name)))
+    fun <- names(flist)[id]
+  } else stop("Unrecognised format for argument fun")
   # validate confidence level
   stopifnot(confidence > 0.5 && confidence < 1)
   alpha <- 1 - confidence

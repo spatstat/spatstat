@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.112 $    $Date: 2014/10/06 15:17:02 $
+#  $Revision: 1.113 $    $Date: 2014/10/08 09:52:08 $
 #
 #
 
@@ -263,7 +263,7 @@ plot.fv <- local({
     } else {
       ## if we're using the default argument, use its recommended range
       if(rhs == fvnames(x, ".x")) {
-        xlim <- attr(x, "alim")
+        xlim <- attr(x, "alim") %orifnull% range(rhsdata, finite=TRUE)
         if(xlogscale && xlim[1] <= 0) 
           xlim[1] <- min(rhsdata[is.finite(rhsdata) & rhsdata > 0], na.rm=TRUE)
         ok <- !is.finite(rhsdata) | (rhsdata >= xlim[1] & rhsdata <= xlim[2])
