@@ -5,7 +5,8 @@
   Displays a perspective plot of a pixel image.
 }
 \usage{
-  \method{persp}{im}(x, \dots, colmap=NULL, colin=x, apron=FALSE)
+  \method{persp}{im}(x, \dots,
+                     colmap=NULL, colin=x, apron=FALSE, visible=FALSE)
 }
 \arguments{
   \item{x}{
@@ -27,12 +28,22 @@
     Logical. If \code{TRUE}, a grey apron is placed
     around the sides of the perspective plot.
   }
+  \item{visible}{
+    Logical value indicating whether to compute which pixels of \code{x}
+    are visible in the perspective view. See Details.
+  }
 }
 \value{
   (invisibly) the 3D transformation matrix
   returned by \code{\link{persp.default}},
   together with an attribute \code{"expand"} which gives the
   relative scale of the \eqn{z} coordinate.
+
+  If argument \code{visible=TRUE} was given, the return value
+  also has an attribute \code{"visible"} which is a pixel image,
+  compatible with \code{x}, with logical values which are \emph{TRUE}
+  when the corresponding pixel is visible in the perspective view,
+  and \code{FALSE} when it is obscured.
 }
 \details{
   This is the \code{persp} method for the class \code{"im"}.
@@ -80,7 +91,17 @@
   The vertical scale is controlled by the argument \code{expand}:
   setting \code{expand=1} will interpret the pixel values as being in
   the same units as the spatial coordinates \eqn{x} and \eqn{y} and
-  represent them at the same scale.  
+  represent them at the same scale.
+
+  If \code{visible=TRUE}, the algorithm also computes whether each pixel
+  in \code{x} is visible in the perspective view. In order to be
+  visible, a pixel must not be obscured by another pixel which lies
+  in front of it (as seen from the viewing direction), and the
+  three-dimensional vector normal to the surface must be pointing toward the
+  viewer. The return value of \code{persp.im} then has an attribute
+  \code{"visible"} which is a pixel image, compatible with \code{x},
+  with pixel value equal to \code{TRUE} if the corresponding pixel in
+  \code{x} is visible, and \code{FALSE} if it is not visible.
 }
 \seealso{
   \code{\link{im.object}},
@@ -95,10 +116,19 @@
    persp(Z, colmap=co, axes=FALSE, shade=0.3)
 
    ## Terrain elevation
-   persp(bei.extra$elev, colmap=terrain.colors(128),
-       apron=TRUE, theta=-30, phi=20,
-       zlab="Elevation", main="", ticktype="detailed",
-       expand=6)
+   M <- persp(bei.extra$elev, colmap=terrain.colors(128),
+             apron=TRUE, theta=-30, phi=20,
+             zlab="Elevation", main="", ticktype="detailed",
+             expand=6, visible=TRUE)
+
+   ## select those points of 'bei' which are visible
+   S <- attr(M, "visible")
+   seen <- S[bei]
+   bs <- bei[seen]
+
+   ## use 'trans3d' to plot them 
+   points(trans3d(bs$x, bs$y, bei.extra$elev[bs], M),
+          pch=16, cex=0.3)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

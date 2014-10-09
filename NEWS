@@ -72,10 +72,10 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-   o pairwise interactions 
-   Fitted parameters and other calculations for pairwise interaction models
-   DiggleGatesStibbard, DiggleGratton, Fiksel, Geyer, Strauss 
-   may change slightly due to a change in handling numerical rounding effects.
+   o persp.im
+   If visible=TRUE, the algorithm will also calculate which pixels of x
+   are visible in the perspective view. This is useful for drawing
+   points or lines on a perspective surface.
 
    o Kscaled
    Improved algorithm [thanks to Ute Hahn.]
@@ -84,6 +84,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o Kest
    New option: correction="rigid" computes the rigid motion correction.
+
+   o pairwise interactions 
+   Fitted parameters and other calculations for pairwise interaction models
+   DiggleGatesStibbard, DiggleGratton, Fiksel, Geyer, Strauss 
+   may change slightly due to a change in handling numerical rounding effects.
 
    o eval.fv
    Functions no longer need to have exactly the same sequence of 'r' values.

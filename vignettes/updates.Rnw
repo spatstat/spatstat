@@ -2009,6 +2009,9 @@ listed alphabetically.
       \item 
         The surface heights and colours can be controlled by
         two different pixel images.
+      \item 
+        Option to compute which pixels are visible in the perspective view
+        and which are obscured.
       \end{itemize}
 
   \item  pixel images and grids:
