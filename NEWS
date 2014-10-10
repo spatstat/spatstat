@@ -16,11 +16,16 @@ OVERVIEW
 
    o Leave-one-out calculation of fitted values in ppm objects
 
+   o Utilities for perspective views of surfaces.
+
    o Bug fixes.
 
    o Version nickname: Smoke and Mirrors
 
 NEW FUNCTIONS
+
+   o perspPoints, perspLines, perspSegments, perspContour
+   Draw points and lines on a surface, as seen in perspective view.
 
    o hopskel.test
    Hopkins-Skellam test of CSR

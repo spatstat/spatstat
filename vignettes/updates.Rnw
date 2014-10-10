@@ -439,6 +439,9 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{perspPoints}, \texttt{perspLines}, \texttt{perspSegments},
+  \texttt{perspContour}: draw points and lines on a surface,
+  as seen in perspective view.
 \item \texttt{project2set}: 
   For each data point in a point pattern \texttt{X}, find the nearest
   spatial location in a given window \texttt{W}.

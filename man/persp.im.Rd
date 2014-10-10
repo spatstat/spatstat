@@ -104,6 +104,10 @@
   \code{x} is visible, and \code{FALSE} if it is not visible.
 }
 \seealso{
+  \code{\link{perspPoints}},
+  \code{\link{perspLines}}
+  for drawing additional points or lines on the surface.
+
   \code{\link{im.object}},
   \code{\link{plot.im}},
   \code{\link{contour.im}}
@@ -116,19 +120,10 @@
    persp(Z, colmap=co, axes=FALSE, shade=0.3)
 
    ## Terrain elevation
-   M <- persp(bei.extra$elev, colmap=terrain.colors(128),
-             apron=TRUE, theta=-30, phi=20,
-             zlab="Elevation", main="", ticktype="detailed",
-             expand=6, visible=TRUE)
-
-   ## select those points of 'bei' which are visible
-   S <- attr(M, "visible")
-   seen <- S[bei]
-   bs <- bei[seen]
-
-   ## use 'trans3d' to plot them 
-   points(trans3d(bs$x, bs$y, bei.extra$elev[bs], M),
-          pch=16, cex=0.3)
+   persp(bei.extra$elev, colmap=terrain.colors(128),
+         apron=TRUE, theta=-30, phi=20,
+         zlab="Elevation", main="", ticktype="detailed",
+         expand=6)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
