@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.113 $    $Date: 2014/10/08 09:52:08 $
+#  $Revision: 1.116 $    $Date: 2014/10/12 08:17:57 $
 #
 #
 
@@ -46,6 +46,7 @@ plot.fv <- local({
                       legendmath=TRUE, legendargs=list(),
                       shade=fvnames(x, ".s"), shadecol="grey", add=FALSE,
                       log="",
+                      mathfont=c("italic", "plain", "bold", "bolditalic"), 
                       limitsonly=FALSE) {
 
     xname <-
@@ -54,6 +55,8 @@ plot.fv <- local({
     force(legendavoid)
     if(is.null(legend))
       legend <- !add
+
+    mathfont <- match.arg(mathfont)
 
     verifyclass(x, "fv")
     env.user <- parent.frame()
@@ -307,6 +310,8 @@ plot.fv <- local({
         ## The x axis variable is the default function argument.
         ArgString <- fvlabels(x, expand=TRUE)[[argname]]
         xexpr <- parse(text=ArgString)
+        ## use specified font
+        xexpr <- fontify(xexpr, mathfont)
         ## Add name of unit of length?
         ax <- summary(unitname(x))$axis
         if(is.null(ax)) {
@@ -319,11 +324,13 @@ plot.fv <- local({
       } else {
         ## map ident to label
         xlab <- eval(substitute(substitute(rh, mp), list(rh=rhs, mp=map)))
+        ## use specified font
+        xlab <- fontify(xlab, mathfont)
       }
     }
     if(is.language(xlab) && !is.expression(xlab))
       xlab <- as.expression(xlab)
-  
+
     ## ......... label for y axis ...................
 
     leftside <- lhs
@@ -369,8 +376,13 @@ plot.fv <- local({
                                 list(le=compactleftside, mp=map)))
       }
     }
-    if(is.language(ylab) && !is.expression(ylab))
-      ylab <- as.expression(ylab)
+    if(is.language(ylab)) {
+      ## use specified font
+      ylab <- fontify(ylab, mathfont)
+      ## ensure it's an expression
+      if(!is.expression(ylab))
+        ylab <- as.expression(ylab)
+    }
 
     ## ------------------ start plotting ---------------------------
 
@@ -501,17 +513,25 @@ plot.fv <- local({
       }
     }
 
+    if(is.expression(legtxt) ||
+       is.language(legtxt) ||
+       all(sapply(legtxt, is.language)))
+      legtxt <- fontify(legtxt, mathfont)
+
     ## --------------- handle legend plotting  -----------------------------
     
     if(identical(legend, TRUE)) {
       ## legend will be plotted
       ## Basic parameters of legend
       legendxpref <- if(identical(legendpos, "float")) NULL else legendpos
+      optparfv <- spatstat.options("par.fv")$legendargs %orifnull% list()
       legendspec <- resolve.defaults(legendargs,
+                                     list(lty=lty,
+                                          col=col,
+                                          lwd=lwd),
+                                     optparfv,
                                      list(x=legendxpref,
                                           legend=legtxt,
-                                          lty=lty,
-                                          col=col,
                                           inset=0.05,
                                           y.intersp=if(legendmath) 1.3 else 1),
                                      .StripNull=TRUE)

@@ -10,7 +10,9 @@
            legend=!add, legendpos="topleft", legendavoid=missing(legendpos),
            legendmath=TRUE, legendargs=list(),
            shade=fvnames(x, ".s"), shadecol="grey",
-           add=FALSE, log="", limitsonly=FALSE)
+           add=FALSE, log="",
+           mathfont=c("italic", "plain", "bold", "bolditalic"), 
+           limitsonly=FALSE)
 }
 \arguments{
   \item{x}{
@@ -109,6 +111,10 @@
     A character string which contains \code{"x"} if the x axis is to
     be logarithmic, \code{"y"} if the y axis is to be logarithmic and
     \code{"xy"} or \code{"yx"} if both axes are to be logarithmic.
+  }
+  \item{mathfont}{
+    Character string. The font to be used for mathematical
+    expressions in the axis labels and the legend.
   }
   \item{limitsonly}{
     Logical. If \code{FALSE}, plotting is performed normally.

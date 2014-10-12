@@ -12,7 +12,7 @@ OVERVIEW
 
    o Improved algorithm for locally-scaled K-function.
 
-   o Improved handling of 'fv' objects.
+   of Improved handling and plotting of 'fv' objects.
 
    o Leave-one-out calculation of fitted values in ppm objects
 
@@ -112,7 +112,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    rounding effects.
 
    o Fest, Gest
-   New argument 'domain' supports boostrap methods.
+   New argument 'domain' supports bootstrap methods.
+ 
+   o plot.fv
+   New argument 'mathfont' determines the font (e.g. plain, italic, bold)
+   for mathematical expressions on the axes and in the legend.
+   Defaults to italic.
 
    o scanpp 
    Upgraded to handle multiple columns of mark data.
@@ -248,6 +253,9 @@ BUG FIXES
    o Fest
    Argument 'eps' was not interpreted correctly.
    Fixed.
+
+   o plot.fv
+   Argument 'lwd' was not passed to legend()
 
    o flipxy.owin
    Sometimes deleted the name of the unit of length.

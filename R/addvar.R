@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.2 $  $Date: 2013/05/01 05:39:46 $
+#   $Revision: 1.5 $  $Date: 2014/10/12 00:17:05 $
 #
 
 
@@ -262,11 +262,19 @@ addvar <- function(model, covariate, ...,
   twosd <- 2 * safesqrt(vvv)
   # pack into fv object
   rslt <- data.frame(rcov=xxx, rpts=yyy, theo=0, var=vvv, hi=twosd, lo=-twosd)
-  given.covars <- used.covars
-  if(length(given.covars) == 0) given.covars <- "1"
-  given <- paste("|", paste(given.covars, collapse=", "))
-  xlab <- paste("r", paren(paste(covname, given)))
-  ylab <- paste("r", paren(paste("points", given)))
+  nuc <- length(used.covars)
+  if(nuc == 0) {
+    given <- givenlab <- 1
+  } else if(nuc == 1) {
+    given <- givenlab <- used.covars
+  } else {
+    given <- commasep(used.covars, ", ")
+    givenlab <- paste("list", paren(given))
+  }
+  given <- paste("|", given)
+  xlab <- sprintf("r(paste(%s, '|', %s))", covname, givenlab)
+  ylab <- sprintf("r(paste(points, '|', %s))", givenlab)
+  yexpr <- parse(text=ylab)[[1]]
   desc <- c(paste("Pearson residual of covariate", covname, given),
             paste("Smoothed Pearson residual of point process", given),
             "Null expected value of point process residual",
@@ -275,16 +283,16 @@ addvar <- function(model, covariate, ...,
             "Lower limit of pointwise 5%% significance band")
   rslt <- fv(rslt,
              argu="rcov",
-             ylab=as.name(ylab),
+             ylab=yexpr,
              valu="rpts",
              fmla= (. ~ rcov),
              alim=alim,
              labl=c(xlab,
                     "%s",
                     "0",
-                    "var[%s]",
-                    "hi",
-                    "lo"),
+                    "bold(var) ~ %s",
+                    "%s[hi]",
+                    "%s[lo]"),
              desc=desc,
              fname=ylab)
   attr(rslt, "dotnames") <- c("rpts", "theo", "hi", "lo")
@@ -339,19 +347,12 @@ plot.addvar <- function(x, ..., do.points=FALSE) {
   covname <- s$covname
   xresid <- s$xresid
   yresid <- s$yresid
-  # check whether it's the default plot
-  argh <- list(...)
-  isfo <- unlist(lapply(argh, inherits, what="formula"))
-  defaultplot <- !any(isfo)
-  # set x label if it's the default plot
-  xlab0 <- if(defaultplot) s$xlab else NULL
   # adjust y limits if intending to plot points as well
   ylimcover <- if(do.points) range(yresid, finite=TRUE) else NULL
   #
   do.call("plot.fv", resolve.defaults(list(x), list(...),
                                       list(main=xname,
                                            shade=c("hi", "lo"),
-                                           xlab=xlab0,
                                            legend=FALSE,
                                            ylim.covers=ylimcover)))
   # plot points

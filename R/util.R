@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.162 $    $Date: 2014/10/08 09:57:45 $
+#    $Revision: 1.164 $    $Date: 2014/10/12 00:17:15 $
 #
 #
 matrowsum <- function(x) {
@@ -1333,4 +1333,24 @@ simplenumber <- function(x, unit = "", multiply="*") {
   }
   return(NULL)
 }
+
+fontify <- function(x, font="italic") {
+  if(!nzchar(font) || font == "plain")
+    return(x)
+  if(is.character(x) || is.numeric(x))
+    return(paste0(font, "(", x, ")"))
+  if(is.expression(x)) {
+    if((n <- length(x)) > 0) {
+      for(i in 1:n) 
+        x[[i]] <- fontify(x[[i]], font)
+    }
+    return(x)
+  }
+  if(is.language(x)) 
+    return(substitute(f(X), list(f=as.name(font), X=x)))
+  if(all(sapply(x, is.language)))
+    return(lapply(x, fontify))
+  return(NULL)
+}
+
 

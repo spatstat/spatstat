@@ -174,6 +174,7 @@
 \alias{flat.deparse}
 \alias{flatfname}
 \alias{flipxypolygon}
+\alias{fontify}
 \alias{forbidNA}
 \alias{forbid.logi}
 \alias{FormatFaspFormulae}
@@ -863,6 +864,7 @@ fillNA(x, value)
 flat.deparse(x)
 flatfname(x)
 flipxypolygon(p)
+fontify(x, font)
 forbidNA(x, context, xname, fatal, usergiven)
 forbid.logi(object)
 FormatFaspFormulae(f, argname)
