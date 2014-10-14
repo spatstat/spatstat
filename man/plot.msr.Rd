@@ -7,6 +7,7 @@
 \usage{
   \method{plot}{msr}(x, \dots, add=FALSE,
                      how=c("image", "contour", "imagecontour"),
+                     main=NULL,
                      do.plot=TRUE)
 }
 \arguments{
@@ -27,6 +28,9 @@
   }
   \item{how}{
     String indicating how to display the continuous density component.
+  }
+  \item{main}{
+    String. Main title for the plot.
   }
   \item{do.plot}{
     Logical value determining whether to actually perform the plotting.

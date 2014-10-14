@@ -166,6 +166,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o disc
    New argument 'delta' 
 
+   o plot.plotppm
+   New argument 'pppargs'
+
    o harmonise.fv, harmonise.im
    These are now methods for the new generic 'harmonise'
 
@@ -204,6 +207,14 @@ BUG FIXES
    o nnmark
    Crashed when at="points" if there was only a single column of marks.
    [Spotted by Shane Frank.]
+   Fixed.
+
+   o plot.msr
+   Some elements of the plot were omitted or cut off.
+   Fixed.
+
+   o plot.msr
+   Did not work with 'equal.scales=TRUE'.
    Fixed.
 
    o plot.msr, augment.msr

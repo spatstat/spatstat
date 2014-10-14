@@ -3,13 +3,14 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.14 $  $Date: 2011/05/18 08:39:26 $
+# $Revision: 1.15 $  $Date: 2014/10/14 07:46:06 $
 #
 #
 
 plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                          pause=interactive(),
-                         how=c("persp","image","contour"), ...)
+                         how=c("persp","image","contour"), ...,
+                         pppargs=list())
 {
   verifyclass(x,"plotppm")
   
@@ -72,9 +73,8 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                                           list(...),
                                           list(main=main)))
                  if(superimposed) {
-                   if(marked) plot(data[data.marks == level],
-                                   add = TRUE)
-                   else plot(data,add=TRUE)
+                   X <- if(marked) data[data.marks == level] else data
+                   do.call(plot.ppp, append(list(x=X, add=TRUE), pppargs))
                  }
                },
                contour = {
@@ -82,10 +82,9 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                          resolve.defaults(list(xs[[i]]),
                                           list(...),
                                           list(main=main)))
-                 if (superimposed) {
-                   if(marked) plot(data[data.marks == level],
-                                   add = TRUE)
-                   else plot(data,add=TRUE)
+                 if(superimposed) {
+                   X <- if(marked) data[data.marks == level] else data
+                   do.call(plot.ppp, append(list(x=X, add=TRUE), pppargs))
                  }
                },
                {

@@ -2270,3 +2270,14 @@ local({
     fut0 <- step(fut, trace=0)
     cat("OK\n")
 })
+## tests/colour.R
+##
+## $Revision$ $Date$
+##
+
+require(spatstat)
+
+local({
+   f <- function(n) grey(seq(0,1,length=n))
+   z <- to.grey(f)
+})

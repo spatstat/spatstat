@@ -55,8 +55,11 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   if(!add) {
     # new plot
     # allow space for main title
-    guesslinespace <- 0.08 * diff(yr) * cex.main.absol
-    ylim[2] <- ylim[2] + nlines * guesslinespace
+    if(nlines > 0) {
+      guesslinespace <- 0.1 * diff(yr) * cex.main.absol
+      added <- (nlines + 1) * guesslinespace
+      ylim[2] <- ylim[2] + added
+    }
     # set up plot with equal scales
     do.call.plotfun("plot.default",
                     resolve.defaults(list(x=numeric(0), y=numeric(0),

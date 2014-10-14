@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.8 $   $Date: 2014/09/03 12:03:05 $
+#   $Revision: 1.9 $   $Date: 2014/10/14 12:35:54 $
 #
 
 
@@ -41,6 +41,7 @@ complementarycolour <- function(x) {
 
 is.grey <- function(x) {
   if(inherits(x, "colourmap")) x <- colouroutputs(x)
+  if(is.function(x)) return(NA)
   sat <- rgb2hsv(col2rgb(x))["s", ]
   return(sat == 0)
 }
@@ -50,6 +51,11 @@ to.grey <- function(x, weights=c(1,1,1)) {
   if(inherits(x, "colourmap")) {
     colouroutputs(x) <- to.grey(colouroutputs(x), weights=weights)
     return(x)
+  }
+  if(is.function(x)) {
+    f <- x
+    g <- function(...) to.grey(f(...))
+    return(g)
   }
   ## preserve palette indices, if only using black/grey
   if(all(!is.na(paletteindex(x))) && all(is.grey(x)))

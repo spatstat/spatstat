@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.48 $  $Date: 2014/09/18 01:18:35 $
+#  $Revision: 1.49 $  $Date: 2014/10/14 08:57:50 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -182,8 +182,10 @@ augment.msr <- function(x, ..., sigma) {
 
 plot.msr <- function(x, ..., add=FALSE,
                      how=c("image", "contour", "imagecontour"),
+                     main=NULL, 
                      do.plot=TRUE) {
-  xname <- short.deparse(substitute(x))
+  if(is.null(main)) 
+    main <- short.deparse(substitute(x))
   how <- match.arg(how)
   d <- ncol(as.matrix(x$val))
   xloc <- x$loc
@@ -205,33 +207,33 @@ plot.msr <- function(x, ..., add=FALSE,
     result <- do.call("plot.listof", resolve.defaults(list(lis),
                                                       list(...),
                                                       list(how=how,
-                                                           main=xname)))
+                                                           main=main,
+                                                           equal.scales=TRUE)))
     return(invisible(result))
   }
-  ## 
+  ## scalar measure
   xatomic <- (x$loc %mark% x$discrete)[x$atoms]
-  xtra.im <- unique(c(names(formals(plot.default)),
-                      names(formals(image.default)),
-                      "box"))
-  xtra.pp <- unique(c(names(formals(plot.owin)),
-                      "pch", "cex", "lty", "lwd",
-                      names(formals(symbols)),
-                      "etch"))
-  xtra.pp <- setdiff(xtra.pp, "box")
+  xtra.im <- graphicsPars("image")
+  xtra.pp <- setdiff(graphicsPars("ppp"), c("box", "col"))
+  xtra.ow <- graphicsPars("owin")
   ##
   do.image <-  how %in% c("image", "imagecontour")
   do.contour <-  how %in% c("contour", "imagecontour")
   ## allocate space for plot and legend using do.plot=FALSE mechanism
   pdata <- do.call.matched("plot.ppp",
                            resolve.defaults(list(x=xatomic,
-                                                 do.plot=FALSE),
-                                            list(...)),
+                                                 do.plot=FALSE,
+                                                 main=main),
+                                            list(...),
+                                            list(show.all=TRUE)),
                            extrargs=xtra.pp)
   result <- pdata
   bb <- attr(pdata, "bbox")
   if(do.image) {
     idata <- do.call.matched("plot.im",
-                             resolve.defaults(list(x=smo, do.plot=FALSE),
+                             resolve.defaults(list(x=smo,
+                                                   main=main,
+                                                   do.plot=FALSE),
                                               list(...)),
                              extrargs=xtra.im)
     result <- idata
@@ -241,23 +243,26 @@ plot.msr <- function(x, ..., add=FALSE,
   attr(result, "bbox") <- bb
   ##
   if(do.plot) {
-    if(!add) 
+    if(!add) {
+      blankmain <- prepareTitle(main)$blank
       ## initialise plot
       do.call.matched(plot.owin,
-                      resolve.defaults(list(x=bb, type="n", main="   "),
-                                       list(...)))
+                      resolve.defaults(list(x=bb, type="n", main=blankmain),
+                                       list(...)),
+                      extrargs=xtra.ow)
+    }
     ## display density
     if(do.image) 
       do.call.matched("plot.im",
                       resolve.defaults(list(x=smo, add=TRUE),
                                        list(...),
-                                       list(main=xname, show.all=TRUE)),
+                                       list(main=main, show.all=TRUE)),
                       extrargs=xtra.im)
     if(do.contour) 
       do.call.matched("contour.im",
                       resolve.defaults(list(x=smo, add=TRUE),
                                        list(...),
-                                       list(main=xname,
+                                       list(main=main,
                                             axes=FALSE, show.all=!do.image)),
                       extrargs=c("zlim", "labels", "labcex",
                         ## DO NOT ALLOW 'col' 
@@ -265,7 +270,8 @@ plot.msr <- function(x, ..., add=FALSE,
     ## display atoms
     do.call.matched("plot.ppp",
                     resolve.defaults(list(x=xatomic, add=TRUE, main=""),
-                                     list(...)),
+                                     list(...),
+                                     list(show.all=TRUE)),
                     extrargs=xtra.pp)
   }
   return(invisible(result))
@@ -335,6 +341,8 @@ domain.msr <- Window.msr <- function(X, ...) { as.owin(X) }
 
 shift.msr <- function(X,  ...) {
   X$loc <- Xloc <- shift(X$loc, ...)
+  if(!is.null(smo <- attr(X, "smoothdensity")))
+    attr(X, "smoothdensity") <- shift(smo, getlastshift(Xloc))
   putlastshift(X, getlastshift(Xloc))
 }
 

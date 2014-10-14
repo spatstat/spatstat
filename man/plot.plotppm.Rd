@@ -8,8 +8,9 @@
 }
 \usage{
   \method{plot}{plotppm}(x, data = NULL, trend = TRUE, cif = TRUE,
-     se = TRUE, pause = interactive(),
-             how = c("persp", "image", "contour"), ...)
+             se = TRUE, pause = interactive(),
+             how = c("persp", "image", "contour"),
+             \dots, pppargs)
 }
 \arguments{
   \item{x}{
@@ -43,6 +44,10 @@
   \item{\dots}{
     Extra arguments to the plotting functions
     \code{\link{persp}}, \code{\link{image}} and \code{\link{contour}}.
+  }
+  \item{pppargs}{
+    List of extra arguments passed to \code{\link{plot.ppp}}
+    when displaying the original point pattern data.
   }
 }
 \details{
@@ -83,9 +88,7 @@
 \seealso{ \code{\link{plot.ppm}()} }
 \examples{
  \dontrun{
- data(cells)
- Q <- quadscheme(cells)
- m <- ppm(Q, ~1, Strauss(0.05))
+ m <- ppm(cells ~ 1, Strauss(0.05))
  mpic <- plot(m)
  # Perspective plot only, with altered parameters:
   plot(mpic,how="persp", theta=-30,phi=40,d=4)
