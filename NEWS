@@ -176,6 +176,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o with.fv
    Improved mathematical labels.
 
+   o Gfox, Jfox
+   Improved mathematical labels.
+
    o area.owin
    This function is now a method for the new generic 'area'
 
