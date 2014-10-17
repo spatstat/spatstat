@@ -6,21 +6,23 @@ OVERVIEW
    o We thank Shane Frank, Shaaban Ghalandarayeshi, Ute Hahn, 
      Sebastian Schutte and Carl Witthoft for contributions.
 
+   o ANOVA extended to Gibbs models.
+
+   o Improved algorithm for locally-scaled K-function.
+
+   o Leave-one-out calculation of fitted values in ppm objects
+
    o Geometrical operations with windows and images.
 
    o More edge corrections for K-function.
 
-   o Improved algorithm for locally-scaled K-function.
-
-   of Improved handling and plotting of 'fv' objects.
-
-   o Leave-one-out calculation of fitted values in ppm objects
+   o Improved handling and plotting of 'fv' objects.
 
    o Utilities for perspective views of surfaces.
 
    o Bug fixes.
 
-   o Version nickname: Smoke and Mirrors
+   o Version nickname: 'Smoke and Mirrors'
 
 NEW FUNCTIONS
 
@@ -76,6 +78,10 @@ NEW FUNCTIONS
    Hazard rate of empty space function
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o anova.ppm
+   Now applies to Gibbs models as well as Poisson models,
+   using adjusted composite likelihood ratio test statistic.
 
    o persp.im
    If visible=TRUE, the algorithm will also calculate which pixels of x

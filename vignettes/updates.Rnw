@@ -1541,6 +1541,50 @@ the News and Release Notes for each update.
 
    \item One-sided tests and envelopes of summary functions
 
+   \item Palm likelihood method for fitting cluster processes and Cox processes.
+
+   \item Quasi-likelihood and weighted composite likelihood methods
+     for estimating trend in cluster processes and Cox processes.
+
+   \item Further extensions to model formulas in ppm and kppm.
+
+   \item Faster variance calculations for ppm objects.
+
+   \item One-sided tests and one-sided envelopes of summary functions.
+
+   \item Cramer-Von Mises and Anderson-Darling tests of spatial distribution.
+
+   \item Cressie-Read test statistic in quadrat counting tests.
+
+   \item Spatial cumulative distribution functions.
+
+   \item Faster algorithm for point pattern matching.
+
+   \item Increased support for envelopes.
+
+   \item New generic functions \texttt{Window}, 
+     \texttt{Frame} and \texttt{domain}.
+
+   \item Directional $K$-function and directional distribution.
+
+   \item Raster calculations accelerated.
+
+   \item Summary functions accelerated.
+     
+   \item \texttt{anova} extended to Gibbs models.
+
+   \item Improved algorithm for locally-scaled K-function.
+
+   \item Leave-one-out calculation of fitted values in ppm objects
+
+   \item Geometrical operations with windows and images.
+
+   \item More edge corrections for K-function.
+
+   \item Improved handling and plotting of 'fv' objects.
+
+   \item Utilities for perspective views of surfaces.
+
   \end{itemize}
   
 \section{Alphabetical list of changes}

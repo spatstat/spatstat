@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.99 $   $Date: 2014/10/10 06:54:09 $
+#  $Revision: 1.103 $   $Date: 2014/10/17 10:21:42 $
 #
 #  Plotting code for pixel images
 #
@@ -173,50 +173,30 @@ plot.im <- local({
     imagebreaks <- NULL
     ribbonvalues <- ribbonbreaks <- NULL
 
-    ## predetermined colour map?
-    ## (i.e. mapping from values to colours)
-    colmap <- if(valuesAreColours) colourmap(col=col, inputs=col) else
-              if(inherits(col, "colourmap")) col else NULL
-
-    ## colour map determined by a function?
-    colfun <- NULL
-    if(is.null(colmap) && (!col.given || is.function(col))) {
-      colfun <- if(is.function(col)) col else spatstat.options("image.colfun")
-      colargnames <- names(formals(colfun))
-      ## colfun could be a function(n) that generates n colours,
-      ## or a function(...) that generates a colour map.
-      ## If the latter, convert it to a 'colmap'
-      if("range" %in% colargnames && xtype %in% c("real", "integer")) {
-        # continuous 
-        vrange <- range(range(x, finite=TRUE), zlim)
-        cvals <- try(do.call.matched(colfun,
-                                     append(list(range=vrange), colargs)),
-                     silent=TRUE)
-        if(!inherits(cvals, "try-error")) {
-          colmap <- if(inherits(cvals, "colourmap")) cvals else
-            if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
-        }
-        if(!is.null(colmap)) colfun <- NULL
-      } else if("inputs" %in% colargnames && xtype != "real") {
-        # discrete
-        vpossible <- switch(xtype,
-                            logical = c(FALSE, TRUE),
-                            factor = levels(x),
-                            unique(as.matrix(x)))
-        if(!is.null(vpossible) && length(vpossible) < 256) {
-          cvals <- try(do.call.matched(colfun,
-                                       append(list(inputs=vpossible), colargs)),
-                       silent=TRUE)
-          if(!inherits(cvals, "try-error")) {
-            colmap <- if(inherits(cvals, "colourmap")) cvals else
-            if(is.character(cvals)) colourmap(cvals, inputs=vpossible) else NULL
-          }
-        if(!is.null(colmap)) colfun <- NULL
-        }
-      } else if(colargnames[1] != "n")
-        stop("Unrecognised syntax for colour function")
+    ## NOW DETERMINE THE COLOUR MAP
+    colfun <- colmap <- NULL
+    if(valuesAreColours) {
+      ## pixel values are colours; set of colours was determined earlier
+      colmap <- colourmap(col=col, inputs=col)
+    } else if(!col.given) {
+      ## no colour information given: use default
+      colfun <- spatstat.options("image.colfun")
+    } else if(inherits(col, "colourmap")) {
+      ## Bob's your uncle
+      colmap <- col
+    } else if(is.function(col)) {
+      ## Some kind of function determining a colour map
+      if(names(formals(col))[1] == "n") {
+        ## function(n) -> colour values
+        colfun <- col
+      } else {
+        ## colour map determined by a rule (e.g. 'beachcolours')
+        colmap <- invokeColourmapRule(col, x, zlim=zlim, colargs=colargs)
+        if(is.null(colmap))
+          stop("Unrecognised syntax for colour function")
+      }
     }
-       
+
     switch(xtype,
            real    = {
              vrange <- range(x, finite=TRUE)
@@ -623,7 +603,47 @@ plot.im <- local({
   PlotIm
 })
 
-
+invokeColourmapRule <- function(colfun, x, ..., zlim=NULL, colargs=list()) {
+  ## utility for handling special functions that generate colour maps
+  ## either 
+  ##        function(... range) -> colourmap
+  ##        function(... inputs) -> colourmap
+  stopifnot(is.im(x))
+  stopifnot(is.function(colfun))
+  colargnames <- names(formals(colfun))
+  ## Convert it to a 'colourmap'
+  colmap <- NULL
+  xtype <- x$type
+  if(xtype %in% c("real", "integer") && "range" %in% colargnames) {
+    ## function(range) -> colourmap
+    vrange <- range(range(x, finite=TRUE), zlim)
+    cvals <- try(do.call.matched(colfun,
+                                 append(list(range=vrange), colargs)),
+                 silent=TRUE)
+    if(!inherits(cvals, "try-error")) {
+      colmap <- if(inherits(cvals, "colourmap")) cvals else
+      if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
+    }
+  } else if(xtype != "real" && "inputs" %in% colargnames) {
+    ## function(inputs) -> colourmap
+    vpossible <- switch(xtype,
+                        logical = c(FALSE, TRUE),
+                        factor = levels(x),
+                        unique(as.matrix(x)))
+    if(!is.null(vpossible) && length(vpossible) < 256) {
+      cvals <- try(do.call.matched(colfun,
+                                   append(list(inputs=vpossible),
+                                          colargs)),
+                   silent=TRUE)
+      if(!inherits(cvals, "try-error")) {
+        colmap <- if(inherits(cvals, "colourmap")) cvals else
+        if(is.character(cvals))
+          colourmap(cvals, inputs=vpossible) else NULL
+      }
+    }
+  }
+  return(colmap)
+}
 
 ########################################################################
 

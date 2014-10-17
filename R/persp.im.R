@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.1 $ $Date: 2014/10/10 08:47:05 $
+##  $Revision: 1.4 $ $Date: 2014/10/17 11:24:08 $
 ##
 
 persp.im <- local({
@@ -30,6 +30,21 @@ persp.im <- local({
         colmap <- spatstat.options("image.colfun")(128)
     }
     pop <- spatstat.options("par.persp")
+    ##
+    if(is.function(colmap) && !inherits(colmap, "colourmap")) {
+      ## coerce to a 'colourmap' if possible
+      zlim <- resolve.1.default(list(zlim=range(colin, finite=TRUE)), list(...))
+      if(names(formals(colmap))[1] == "n") {
+        colval <- colmap(128)
+        colmap <- colourmap(colval, range=zlim)
+      } else {
+        ## colour map determined by a rule (e.g. 'beachcolours')
+        colmap <- invokeColourmapRule(colmap, colin,
+                                      zlim=zlim, colargs=list(...))
+        if(is.null(colmap))
+          stop("Unrecognised syntax for colour function")
+      }
+    }
     ## colour map?
     if(is.null(colmap)) {
       colinfo <- list(col=NULL)
@@ -181,16 +196,14 @@ persp.im <- local({
         deltaz <- pplus[,3] - pz
         isvis <- infront & (deltaz > 0)
       } else {
-        theta <- atan2(M[2,1],M[1,1])
-        phi <- atan2(M[3,3], M[3,2])
+        theta <- atan2(M[2,1],M[1,1]) + pi/2
+        phi <-  - atan2(M[3,3], M[3,2])
         ## check agreement
         ## cat(paste("Guess: theta=", theta * 180/pi, "\n"))
         ## cat(paste("Guess: phi=", phi * 180/pi, "\n"))
         ## view vector
-        Theta <- (theta + 90) * pi/180
-        Phi <- -phi * pi/180
-        viewer <- cos(Phi) * c(cos(Theta), sin(Theta), 0)
-                       + c(0, 0, sin(Phi))
+        viewer <- cos(phi) * c(cos(theta), sin(theta), 0)
+                       + c(0, 0, sin(phi))
         ## inner product
         dotprod <- -dzdx * viewer[1] - dzdy * viewer[2] + viewer[3]
         isvis <- infront & (dotprod < 0)

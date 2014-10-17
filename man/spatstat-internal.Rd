@@ -238,6 +238,7 @@
 \alias{intX.xypolygon}     
 \alias{intY.owin}     
 \alias{intY.xypolygon}
+\alias{invokeColourmapRule}
 \alias{is.atomicQtest}
 \alias{is.cadlag}
 \alias{is.data}
@@ -928,6 +929,7 @@ intX.owin(w)
 intX.xypolygon(polly)
 intY.owin(w)
 intY.xypolygon(polly)
+invokeColourmapRule(colfun, x, \dots, zlim, colargs)
 is.atomicQtest(x)
 is.cadlag(s)
 is.data(Q)
