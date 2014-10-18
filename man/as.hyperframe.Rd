@@ -5,6 +5,7 @@
 \alias{as.hyperframe.data.frame}
 \alias{as.hyperframe.hyperframe}
 \alias{as.hyperframe.listof}
+\alias{as.hyperframe.anylist}
 \title{
   Convert Data to Hyperframe
 }
@@ -13,10 +14,16 @@
 }
 \usage{
 as.hyperframe(x, \dots)
+
 \method{as.hyperframe}{default}(x, \dots)
+
 \method{as.hyperframe}{data.frame}(x, \dots, stringsAsFactors=FALSE)
+
 \method{as.hyperframe}{hyperframe}(x, \dots)
+
 \method{as.hyperframe}{listof}(x, \dots)
+
+\method{as.hyperframe}{anylist}(x, \dots)
 }
 \arguments{
   \item{x}{
@@ -39,10 +46,10 @@ as.hyperframe(x, \dots)
   of data into a hyperframe.
 
   There are methods for the classes
-  \code{data.frame} and \code{listof}, and a default method,
+  \code{data.frame}, \code{listof}, \code{anylist} and a default method,
   all of which convert data that is like a hyperframe into
   a hyperframe object. (The method for the class \code{listof}
-  converts a list of objects, of
+  and \code{anylist} converts a list of objects, of
   arbitrary type, into a hyperframe with one column.)
   These methods do not discard any information.
 
@@ -82,6 +89,7 @@ as.hyperframe(x, \dots)
    sims <- list()
    for(i in 1:3) sims[[i]] <- rpoispp(42)
    as.hyperframe(as.listof(sims))
+   as.hyperframe(as.solist(sims))
 }
 \keyword{spatial}
 \keyword{manip}

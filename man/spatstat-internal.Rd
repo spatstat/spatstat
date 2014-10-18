@@ -422,6 +422,7 @@
 \alias{primesbelow}
 \alias{printStatus}
 \alias{print.addvar}    
+\alias{print.anylist}    
 \alias{print.autoexec}    
 \alias{print.bt.frame}
 \alias{print.bw.frac}
@@ -465,6 +466,7 @@
 \alias{print.rmhInfoList}
 \alias{print.splitppp}
 \alias{print.simplepanel}
+\alias{print.solist}
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
@@ -475,6 +477,7 @@
 \alias{print.summary.ppp}
 \alias{print.summary.psp}
 \alias{print.summary.rmhexpand}
+\alias{print.summary.solist}
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
 \alias{print.summary.units}
@@ -1148,6 +1151,7 @@ prepareTitle(main)
 primefactors(n, prmax)
 primesbelow(nmax)
 \method{print}{addvar}(x, \dots)
+\method{print}{anylist}(x, \dots)
 \method{print}{autoexec}(x, \dots)
 \method{print}{bt.frame}(x, \dots)
 \method{print}{bw.frac}(x, \dots)
@@ -1189,6 +1193,7 @@ primesbelow(nmax)
 \method{print}{rmhstart}(x, \dots)
 \method{print}{rmhInfoList}(x, \dots)
 \method{print}{simplepanel}(x, \dots)
+\method{print}{solist}(x, \dots)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
@@ -1201,6 +1206,7 @@ primesbelow(nmax)
 \method{print}{summary.psp}(x, \dots)
 \method{print}{summary.rmhexpand}(x, \dots)
 \method{print}{summary.splitppp}(x, \dots)
+\method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.units}(x, \dots)
 \method{print}{texturemap}(x, \dots)

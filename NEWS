@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.38-2
+	CHANGES IN spatstat VERSION 1.39-0
 
 OVERVIEW
 
@@ -20,9 +20,21 @@ OVERVIEW
 
    o Utilities for perspective views of surfaces.
 
+   o New classes 'anylist', 'solist' will ultimately replace 'listof'.
+
    o Bug fixes.
 
    o Version nickname: 'Smoke and Mirrors'
+
+NEW CLASSES
+
+   o anylist
+   List of objects. 
+   (A replacement for 'listof')
+
+   o solist
+   List of two-dimensional spatial objects.
+   (A replacement for some uses of 'listof')
 
 NEW FUNCTIONS
 
@@ -76,6 +88,16 @@ NEW FUNCTIONS
 
    o Fhazard
    Hazard rate of empty space function
+
+   o anylist, as.anylist, [.anylist, [<-.anylist, print.anylist, summary.anylist
+   Support for new class 'anylist'
+
+   o solist, as.solist, [.solist, [<-.solist, print.solist, summary.solist
+   Support for new class 'solist'
+
+   o plot.anylist, plot.solist
+   Plot methods for the classes 'anylist' and 'solist'
+   (Currently identical to 'plot.listof')
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

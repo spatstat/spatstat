@@ -66,6 +66,21 @@
     \code{length(colmap)} intervals, and those parts of the surface
     which lie in a particular altitude range will be assigned
     the corresponding colour from \code{colmap}.
+    \item If \code{colmap} is a function in the \R language
+    of the form \code{function(n, ...)}, this function will be called
+    with an appropriate value of \code{n} to generate a character
+    vector of \code{n} colours. 
+      Examples of such functions are
+      \code{\link[grDevices]{heat.colors}},
+      \code{\link[grDevices]{terrain.colors}},
+      \code{\link[grDevices]{topo.colors}} and
+      \code{\link[grDevices]{cm.colors}}. 
+    \item If \code{colmap} is a function in the \R language of the
+    form \code{function(range, ...)} then it will be called
+    with \code{range} equal to the range of altitudes,
+    to determine the colour values or colour map.
+    Examples of such functions are \code{\link{beachcolours}}
+    and \code{\link{beachcolourmap}}.
     \item If \code{colmap} is a list with entries \code{breaks} and \code{col},
     then \code{colmap$breaks} determines the breakpoints of the altitude
     intervals, and \code{colmap$col} provides the corresponding colours.

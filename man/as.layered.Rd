@@ -3,6 +3,7 @@
 \alias{as.layered.default}
 \alias{as.layered.ppp}
 \alias{as.layered.splitppp}
+\alias{as.layered.solist}
 \alias{as.layered.listof}
 \alias{as.layered.msr}
 \title{Convert Data To Layered Object}
@@ -17,6 +18,8 @@
  \method{as.layered}{ppp}(X)
 
  \method{as.layered}{splitppp}(X)
+
+ \method{as.layered}{solist}(X)
 
  \method{as.layered}{listof}(X)
 
@@ -45,7 +48,7 @@
   multiple layers of data, then the result will be a \code{layered}
   object consisting of these separate layers of data.
   \itemize{
-    \item if \code{X} is an object of class \code{"listof"},
+    \item if \code{X} is a list of class \code{"listof"} or \code{"solist"},
     then \code{as.layered(X)} consists of several layers,
     one for each entry in the list \code{X};
     \item if \code{X} is a multitype point pattern,

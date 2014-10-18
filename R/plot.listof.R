@@ -1,4 +1,5 @@
 #
+plot.solist <- plot.anylist <- 
 plot.listof <- 
   local({
 

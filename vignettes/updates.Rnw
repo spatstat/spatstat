@@ -373,6 +373,13 @@ Important new classes of objects are listed here.
 \item \texttt{texturemap}:
   An object of class '\texttt{texturemap}' 
   represents a mapping from data values to graphical textures.
+  
+\item \texttt{anylist}, \texttt{solist}:
+  these are replacements for the class '\texttt{listof}'.
+  An object of class '\texttt{anylist}' represents a list of
+  objects, of any kind, that the user intends to treat in the same way.
+  An object of class '\texttt{solist}' (spatial object list)
+  represents a list of two-dimensional spatial objects.
 \end{itemize}
   
 \section{New datasets}  
@@ -439,6 +446,15 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  \item \texttt{anylist}, \texttt{as.anylist}, \texttt{[.anylist}, \texttt{[<-.anylist}, \texttt{print.anylist}, \texttt{summary.anylist}\\ 
+   Support for new class '\texttt{anylist}'
+ \item \texttt{solist}, \texttt{as.solist}, 
+   \texttt{[.solist}, \texttt{[<-.solist}, \texttt{print.solist}, 
+   \texttt{summary.solist}\\
+   Support for new class '\texttt{solist}'
+ \item \texttt{plot.anylist}, \texttt{plot.solist}: \\
+   Plot methods for the classes '\texttt{anylist}' and '\texttt{solist}'
+   (Currently identical to '\texttt{plot.listof}')
 \item \texttt{perspPoints}, \texttt{perspLines}, \texttt{perspSegments},
   \texttt{perspContour}: draw points and lines on a surface,
   as seen in perspective view.
@@ -2828,7 +2844,7 @@ of potential impact.
  \item \texttt{varblock}:
    Calculations were incorrect if more than one column of 
    edge corrections was computed. 
-   \bugger{1.21-1}{november 2010}{1.38-2}{october 2014}
+   \bugger{1.21-1}{november 2010}{1.39-0}{october 2014}
    
  \item \texttt{scan.test}
    Results were sometimes incorrect due to numerical instability

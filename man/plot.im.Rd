@@ -184,23 +184,41 @@
 	see \code{\link{image.default}}.
       }
     }
-    \item a \code{function} in the \R language
-    with an argument named \code{range}
-    or \code{inputs}.
+    \item {
+      a \code{function} in the \R language
+      with an argument named \code{range}
+      or \code{inputs}.
     
-    If \code{col} is a function with an argument named \code{range},
-    and if the pixel values of \code{x} are numeric values, 
-    then the colour values will be determined by evaluating
-    \code{col(range=range(x))}. The result should be a character vector 
-    containing colour values.
+      If \code{col} is a function with an argument named \code{range},
+      and if the pixel values of \code{x} are numeric values, 
+      then the colour values will be determined by evaluating
+      \code{col(range=range(x))}. The result of this evaluation
+      should be a character vector containing colour values, or
+      a \code{"colourmap"} object. Examples of such functions
+      are \code{\link{beachcolours}} and \code{\link{beachcolourmap}}.
   
-    If \code{col} is a function with an argument named \code{inputs},
-    and if the pixel values of \code{x} are discrete values (integer,
-    logical, factor or character), 
-    then the colour values will be determined by evaluating
-    \code{col(inputs=p)} where \code{p} is the set of possible pixel
-    values. The result should be a character vector 
-    containing colour values.
+      If \code{col} is a function with an argument named \code{inputs},
+      and if the pixel values of \code{x} are discrete values (integer,
+      logical, factor or character), 
+      then the colour values will be determined by evaluating
+      \code{col(inputs=p)} where \code{p} is the set of possible pixel
+      values. The result should be a character vector 
+      containing colour values, or a \code{"colourmap"} object.
+    }
+    \item{
+      a \code{function} in the \R language with first argument
+      named \code{n}.
+      The colour values will be determined by evaluating
+      \code{col(n)} where \code{n} is the
+      number of distinct pixel values, up to a maximum of 128.
+      The result of this evaluation
+      should be a character vector containing color values.
+      Examples of such functions are
+      \code{\link[grDevices]{heat.colors}},
+      \code{\link[grDevices]{terrain.colors}},
+      \code{\link[grDevices]{topo.colors}} and
+      \code{\link[grDevices]{cm.colors}}. 
+   }
   }
 
   If \code{spatstat.options("monochrome")} has been set to \code{TRUE}

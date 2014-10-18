@@ -245,6 +245,7 @@ as.hyperframe.data.frame <- function(x, ..., stringsAsFactors=FALSE) {
                            .StripNull=TRUE))
 }
 
+as.hyperframe.anylist <- 
 as.hyperframe.listof <- function(x, ...) {
   if(!missing(x)) {
     xname <- sensiblevarname(short.deparse(substitute(x)), "x")
