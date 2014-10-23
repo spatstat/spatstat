@@ -387,6 +387,9 @@ Important new classes of objects are listed here.
 The following datasets have been added to the package.
 
 \begin{itemize}
+\item \texttt{vesicles}:
+  Spatial pattern of synaptic vesicles in rat brain tissue.
+   
 \item \texttt{sporophores}:
   Spatial pattern of three species of mycorrhizal fungi around a tree.
   Multitype point pattern in circular window.

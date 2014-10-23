@@ -4,13 +4,17 @@
 OVERVIEW
 
    o We thank Shane Frank, Shaaban Ghalandarayeshi, Ute Hahn, 
-     Sebastian Schutte and Carl Witthoft for contributions.
+     Mahdieh Khanmohammadi, Nicoletta Nava, Jens Randel Nyengaard,
+     Sebastian Schutte, Rasmus Waagepetersen and Carl G. Witthoft 
+     for contributions.
 
    o ANOVA extended to Gibbs models.
 
    o Improved algorithm for locally-scaled K-function.
 
-   o Leave-one-out calculation of fitted values in ppm objects
+   o Leave-one-out calculation of fitted values in ppm objects.
+
+   o New dataset: presynaptic vesicles.
 
    o Geometrical operations with windows and images.
 
@@ -25,6 +29,12 @@ OVERVIEW
    o Bug fixes.
 
    o Version nickname: 'Smoke and Mirrors'
+
+NEW DATASETS
+
+   o vesicles
+   Synaptic vesicles 
+   (includes raw data files for training purposes)
 
 NEW CLASSES
 

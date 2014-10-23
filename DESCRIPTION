@@ -1,7 +1,7 @@
 Package: spatstat
 Version: 1.39-0
 Nickname: Smoke and Mirrors
-Date: 2014-10-18
+Date: 2014-10-23
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -69,6 +69,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	A. Jammalamadaka;
 	R. John-Chandran; 
 	D. Johnson; 
+	M. Khanmohammadi;
 	M. Kuhn; 
 	J. Laake; 
 	F. Lavancier;
@@ -92,8 +93,10 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	J. Moller; 
 	E. Mudrak;
         G.M. Nair;
+	N. Nava;
 	L.S. Nielsen; 
 	F. Nunes; 
+	J.R. Nyengaard;
 	J. Oehlschlaegel;
 	T. Onkelinx;
 	S. O'Riordan;
