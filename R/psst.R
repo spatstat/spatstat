@@ -3,7 +3,7 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.6 $	$Date: 2014/06/17 04:43:13 $
+#	$Revision: 1.7 $	$Date: 2014/10/24 00:22:30 $
 #
 ################################################################################
 #

@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.9 $ $Date: 2012/10/13 02:25:43 $
+#  $Revision: 1.10 $ $Date: 2014/10/24 00:22:30 $
 #
 #
 #  pairdist.lpp
@@ -71,7 +71,6 @@ pairdist.lpp <- function(X, ..., method="C") {
     from0 <- from - 1L
     to0   <- to - 1L
     segmap <- pro - 1L
-    DUP <- spatstat.options("dupC")
     zz <- .C("linpairdist",
              np = as.integer(n),
              xp = as.double(Y$x),
@@ -84,9 +83,7 @@ pairdist.lpp <- function(X, ..., method="C") {
              to = as.integer(to0),
              dpath = as.double(dpath),
              segmap = as.integer(segmap),
-             answer = as.double(pairdistmat),
-             DUP=DUP)
-#             PACKAGE="spatstat")
+             answer = as.double(pairdistmat))
     pairdistmat <- matrix(zz$answer, n, n)
   }
   return(pairdistmat)

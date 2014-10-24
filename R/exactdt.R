@@ -2,7 +2,7 @@
 #	exactdt.S
 #	S function exactdt() for exact distance transform
 #
-#	$Revision: 4.15 $	$Date: 2014/09/26 06:51:59 $
+#	$Revision: 4.16 $	$Date: 2014/10/24 00:22:30 $
 #
 
 exactdt <- local({
@@ -42,7 +42,6 @@ exactdt <- local({
     cmin <- mc + 1
     cmax <- Nnc - mc
     ## go
-    DUP <- spatstat.options("dupC")
     res <- .C("exact_dt_R",
               as.double(X$x),
               as.double(X$y),
@@ -57,8 +56,7 @@ exactdt <- local({
               mc = as.integer(mc),
               distances = as.double(double(N)),
               indices = as.integer(integer(N)),
-              boundary = as.double(double(N)),
-              DUP=DUP)
+              boundary = as.double(double(N)))
     ## extract 
     dist <- matrix(res$distances,
                    ncol=Nnc, nrow=Nnr, byrow = TRUE)[rmin:rmax, cmin:cmax]

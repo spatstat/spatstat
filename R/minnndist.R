@@ -3,7 +3,7 @@
 ##
 ## Fast versions of min(nndist(X)), max(nndist(X))
 ##
-##  $Revision: 1.3 $  $Date: 2014/09/18 01:17:42 $
+##  $Revision: 1.4 $  $Date: 2014/10/24 00:22:30 $
 
 minnndist <- function(X, positive=FALSE) {
   stopifnot(is.ppp(X))
@@ -12,7 +12,6 @@ minnndist <- function(X, positive=FALSE) {
   x <- X$x
   y <- X$y
   o <- fave.order(y)
-  DUP <- spatstat.options("dupC")
   big <- sqrt(.Machine$double.xmax)
   if(positive) {
       z <- .C("minPnnd2",
@@ -20,16 +19,14 @@ minnndist <- function(X, positive=FALSE) {
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)),
-              DUP=DUP)
+              result = as.double(numeric(1)))
   } else {
       z <- .C("minnnd2",
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)),
-              DUP=DUP)
+              result = as.double(numeric(1)))
   }
   return(sqrt(z$result))
 }
@@ -41,7 +38,6 @@ maxnndist <- function(X, positive=FALSE) {
   x <- X$x
   y <- X$y
   o <- fave.order(y)
-  DUP <- spatstat.options("dupC")
   big <- sqrt(.Machine$double.xmax)
   if(positive) {
       z <- .C("maxPnnd2",
@@ -49,16 +45,14 @@ maxnndist <- function(X, positive=FALSE) {
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)),
-              DUP=DUP)
+              result = as.double(numeric(1)))
   } else {
       z <- .C("maxnnd2",
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)),
-              DUP=DUP)
+              result = as.double(numeric(1)))
   }
   return(sqrt(z$result))
 }

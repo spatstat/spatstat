@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.45 $  $Date: 2014/06/10 04:27:41 $
+#   $Revision: 1.46 $  $Date: 2014/10/24 00:22:30 $
 #
 
 quadrat.test <- function(X, ...) {

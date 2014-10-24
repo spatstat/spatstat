@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.16 $  $Date: 2013/10/06 04:36:07 $
+#  $Revision: 1.17 $  $Date: 2014/10/24 00:22:30 $
 #
 #
 #  Compute area of intersection between a disc and a window,
@@ -32,7 +32,6 @@ discpartarea <- function(X, r, W=as.owin(X)) {
   vert <- (Y$ends$x1 == Y$ends$x0)
   Y <- Y[!vert]
   # go
-  DUP <- spatstat.options("dupC")
   z <- .C("discareapoly",
           nc=as.integer(n),
           xc=as.double(X$x),
@@ -45,9 +44,7 @@ discpartarea <- function(X, r, W=as.owin(X)) {
           x1=as.double(Y$ends$x1),
           y1=as.double(Y$ends$y1),
           eps=as.double(.Machine$double.eps),
-          out=as.double(numeric(length(r))),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          out=as.double(numeric(length(r))))
   areas <- matrix(z$out, n, nr)
   return(areas)
 }

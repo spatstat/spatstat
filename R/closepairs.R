@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.29 $   $Date: 2014/06/20 07:53:39 $
+#   $Revision: 1.30 $   $Date: 2014/10/24 00:22:30 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -82,7 +82,6 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
 
   } else {
     # ------------------- use older code --------------------------
-    DUP <- spatstat.options("dupC")
     z <-
       .C("Fclosepairs",
          nxy=as.integer(npts),
@@ -100,8 +99,7 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1)),
-         DUP=DUP)
+         status=as.integer(integer(1)))
 
     if(z$status != 0) {
       # Guess was insufficient
@@ -113,8 +111,7 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
                   x=as.double(Xsort$x),
                   y=as.double(Xsort$y),
                   rmaxi=as.double(rmaxplus),
-                  count=as.integer(integer(1)),
-                  DUP=DUP)$count
+                  count=as.integer(integer(1)))$count
       if(nsize <= 0)
         return(null.answer)
       # add a bit more for safety
@@ -137,8 +134,7 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
            dxout=as.double(numeric(nsize)),
            dyout=as.double(numeric(nsize)),
            dout=as.double(numeric(nsize)),
-           status=as.integer(integer(1)),
-           DUP=DUP)
+           status=as.integer(integer(1)))
       if(z$status != 0)
         stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     }
@@ -282,7 +278,6 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
     # Older code 
     # obtain upper estimate of number of pairs
     # (to work around gcc bug 323)
-    DUP <- spatstat.options("dupC")
     rmaxplus <- 1.25 * rmax
     nsize <- .C("crosscount",
                 nn1=as.integer(X$n),
@@ -292,8 +287,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
                 x2=as.double(Ysort$x),
                 y2=as.double(Ysort$y),
                 rmaxi=as.double(rmaxplus),
-                count=as.integer(integer(1)),
-                DUP=DUP)$count
+                count=as.integer(integer(1)))$count
     if(nsize <= 0)
       return(null.answer)
 
@@ -321,8 +315,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1)),
-         DUP=DUP)
+         status=as.integer(integer(1)))
     if(z$status != 0)
       stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     # trim vectors to the length indicated

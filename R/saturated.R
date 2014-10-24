@@ -2,7 +2,7 @@
 #
 #    saturated.S
 #
-#    $Revision: 1.6 $	$Date: 2007/01/11 03:36:02 $
+#    $Revision: 1.7 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Saturated pairwise process with user-supplied potential
 #

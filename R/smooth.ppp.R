@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.21 $  $Date: 2014/07/05 02:30:17 $
+#  $Revision: 1.22 $  $Date: 2014/10/24 00:22:30 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -303,7 +303,6 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       yy <- x$y[oo]
       vv <- values[oo]
     }
-    DUP <- spatstat.options("dupC")
     if(is.null(varcov)) {
       # isotropic kernel
       if(is.null(weights)) {
@@ -315,8 +314,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -329,8 +327,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     } else {
@@ -345,8 +342,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -359,8 +355,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     }
@@ -598,7 +593,6 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
     yd <- yd[ood]
     vd <- vd[ood] 
   }
-  DUP <- spatstat.options("dupC")
   if(is.null(varcov)) {
     ## isotropic kernel
     if(is.null(weights)) {
@@ -612,8 +606,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                vd      = as.double(vd),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)),
-               DUP     = DUP)
+               result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result
     } else {
       wtsort <- weights[ood]
@@ -628,8 +621,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                wd      = as.double(wtsort),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)),
-               DUP     = DUP)
+               result  = as.double(double(nquery)))
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       }
     } else {
@@ -646,8 +638,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                  vd      = as.double(vd),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)),
-                 DUP     = DUP)
+                 result  = as.double(double(nquery)))
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       } else {
         wtsort <- weights[ood]
@@ -662,8 +653,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                  wd      = as.double(wtsort),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)),
-                 DUP     = DUP)
+                 result  = as.double(double(nquery)))
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       }
     }

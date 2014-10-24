@@ -1,7 +1,7 @@
 #
 # crossdistlpp.R
 #
-#  $Revision: 1.3 $ $Date: 2013/08/23 07:35:36 $
+#  $Revision: 1.4 $ $Date: 2014/10/24 00:22:30 $
 #
 #  crossdist.lpp
 #        Calculates the shortest-path distance from each point of X
@@ -83,7 +83,6 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
     to0   <- to - 1L
     Xsegmap <- Xpro - 1L
     Ysegmap <- Ypro - 1L
-    DUP <- spatstat.options("dupC")
     zz <- .C("lincrossdist",
              np = as.integer(nX),
              xp = as.double(P$x),
@@ -100,9 +99,7 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
              dpath = as.double(dpath),
              psegmap = as.integer(Xsegmap),
              qsegmap = as.integer(Ysegmap),
-             answer = as.double(crossdistmat),
-             DUP=DUP)
-#             PACKAGE="spatstat")
+             answer = as.double(crossdistmat))
     crossdistmat <- matrix(zz$answer, nX, nY)
   }
   return(crossdistmat)

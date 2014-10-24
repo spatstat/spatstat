@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.15 $  $Date: 2014/07/25 07:38:12 $
+#   $Revision: 1.16 $  $Date: 2014/10/24 00:22:30 $
 #
 #  Logistic likelihood method - under development
 #
@@ -195,7 +195,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/07/25 07:38:12 $")
+                      date="$Date: 2014/10/24 00:22:30 $")
 
   ## Compile results
   fit <- list(method      = "logi",

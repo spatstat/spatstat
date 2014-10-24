@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.10 $  $Date: 2013/07/04 00:43:27 $
+#   $Revision: 1.11 $  $Date: 2014/10/24 00:22:30 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),

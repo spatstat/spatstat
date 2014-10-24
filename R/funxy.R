@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.2 $   $Date: 2012/10/13 09:35:28 $
+#   $Revision: 1.3 $   $Date: 2014/10/24 00:22:30 $
 #
 
 funxy <- function(f, W=NULL) {

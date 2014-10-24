@@ -3,7 +3,7 @@
 #
 #  Inverse-distance weighted smoothing
 #
-#  $Revision: 1.4 $ $Date: 2011/07/25 06:25:10 $
+#  $Revision: 1.5 $ $Date: 2014/10/24 00:22:30 $
 
 idw <- function(X, power=2, at="pixels", ...) {
   stopifnot(is.ppp(X) && is.marked(X))
@@ -32,7 +32,6 @@ idw <- function(X, power=2, at="pixels", ...) {
            dim <- W$dim
            npixels <- prod(dim)
            # call C
-           DUP <- spatstat.options("dupC")
            z <- .C("Cidw",
                    x = as.double(X$x),
                    y = as.double(X$y),
@@ -47,13 +46,10 @@ idw <- function(X, power=2, at="pixels", ...) {
                    power  = as.double(power),
                    num    = as.double(numeric(npixels)),
                    den    = as.double(numeric(npixels)),
-                   rat    = as.double(numeric(npixels)),
-                   DUP    = DUP)
-#                   PACKAGE = "spatstat")
+                   rat    = as.double(numeric(npixels)))
            out <- as.im(matrix(z$rat, dim[1], dim[2]), W=W)
          },
          points={
-           DUP <- spatstat.options("dupC")
            npts <- npoints(X)
            z <- .C("idwloo",
                    x = as.double(X$x),
@@ -63,9 +59,7 @@ idw <- function(X, power=2, at="pixels", ...) {
                    power  = as.double(power),
                    num    = as.double(numeric(npts)),
                    den    = as.double(numeric(npts)),
-                   rat    = as.double(numeric(npts)),
-                   DUP    = DUP)
-#                   PACKAGE = "spatstat")
+                   rat    = as.double(numeric(npts)))
            out <- z$rat
          })
   return(out)

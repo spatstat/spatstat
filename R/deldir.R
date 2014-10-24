@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.19 $ $Date: 2014/08/01 09:00:16 $
+#  $Revision: 1.20 $ $Date: 2014/10/24 00:22:30 $
 #
 
 .spst.triEnv <- new.env()

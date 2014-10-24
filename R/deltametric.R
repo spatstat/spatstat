@@ -3,7 +3,7 @@
 #
 #   Delta metric
 #
-#   $Revision: 1.3 $  $Date: 2010/07/10 11:42:08 $
+#   $Revision: 1.4 $  $Date: 2014/10/24 00:22:30 $
 #
 
 deltametric <- function(A, B, p=2, c=Inf, ...) {

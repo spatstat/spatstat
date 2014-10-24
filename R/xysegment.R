@@ -1,7 +1,7 @@
 #
 #      xysegment.S
 #
-#     $Revision: 1.15 $    $Date: 2013/08/22 08:27:19 $
+#     $Revision: 1.16 $    $Date: 2014/10/24 00:22:30 $
 #
 # Low level utilities for analytic geometry for line segments
 #
@@ -161,7 +161,6 @@ distppll <- function(p, l, mintype=0,
          },
          C = {
            eps <- .Machine$double.eps
-           DUP <- spatstat.options("dupC")
            temp <- .C("prdist2segs",
                       x=as.double(xp),
                       y=as.double(yp),
@@ -172,9 +171,7 @@ distppll <- function(p, l, mintype=0,
                       y1=as.double(l[,4]),
                       nsegments=as.integer(nl),
                       epsilon=as.double(eps),
-                      dist2=as.double(numeric(np * nl)),
-                      DUP=DUP)
-#                      PACKAGE="spatstat")
+                      dist2=as.double(numeric(np * nl)))
            d <- sqrt(matrix(temp$dist2, nrow=np, ncol=nl))
            if(mintype == 2) {
              min.which <- apply(d, 1, which.min)
@@ -205,7 +202,6 @@ distppllmin <- function(p, l, big=NULL) {
   }
   dist2 <- rep.int(big, np)
   #
-  DUP <- spatstat.options("dupC")
   z <- .C("nndist2segs",
           xp=as.double(p[,1]),
           yp=as.double(p[,2]),
@@ -217,9 +213,7 @@ distppllmin <- function(p, l, big=NULL) {
           nsegments=as.integer(nl),
           epsilon=as.double(.Machine$double.eps),
           dist2=as.double(dist2),
-          index=as.integer(integer(np)),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          index=as.integer(integer(np)))
   min.d <- sqrt(z$dist2)
   min.which <- z$index+1L
   return(list(min.d=min.d, min.which=min.which))

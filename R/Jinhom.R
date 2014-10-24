@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.8 $ $Date: 2014/06/21 05:33:58 $
+#  $Revision: 1.9 $ $Date: 2014/10/24 00:22:30 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
@@ -120,7 +120,6 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
   yord <- yy[oX]
   vord <- vv[oX]
   # compute local cumulative products
-  DUP <- spatstat.options("dupC")
   z <- .C("locprod",
           n = as.integer(npts),
           x = as.double(xord),
@@ -128,9 +127,7 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
           v = as.double(vord),
           nr = as.integer(nr),
           rmax = as.double(rmax),
-          ans = as.double(numeric(npts * nr)),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          ans = as.double(numeric(npts * nr)))
   ans <- matrix(z$ans, nrow=nr, ncol=npts)
   # revert to original ordering
   loccumprod <- matrix(,  nrow=nr, ncol=npts)
@@ -296,7 +293,6 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   yM <- as.vector(rastery.mask(M))
   nM <- length(xM)
   # compute local cumulative products
-  DUP <- spatstat.options("dupC")
   z <- .C("locxprod",
          ntest = as.integer(nM),
          xtest = as.double(xM),
@@ -307,9 +303,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
          vdata = as.double(vord),
          nr = as.integer(nr),
          rmax = as.double(rmax),
-         ans = as.double(numeric(nM * nr)),
-          DUP=DUP)
-#         PACKAGE="spatstat")
+         ans = as.double(numeric(nM * nr)))
   loccumprod <- matrix(z$ans, nrow=nr, ncol=nM)
   # border correction
   ok <- outer(r, bM, "<=")

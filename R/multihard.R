@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.10 $	$Date: 2014/04/30 07:57:38 $
+#    $Revision: 1.11 $	$Date: 2014/10/24 00:22:30 $
 #
 #    The Hard core process
 #

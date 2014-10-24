@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.10 $     $Date: 2013/11/03 02:18:14 $
+#      $Revision: 1.11 $     $Date: 2014/10/24 00:22:30 $
 #
 #      Interpoint distances for 3D points
 #
@@ -23,7 +23,6 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
   else if(n == 1)
     return(matrix(0,nrow=1,ncol=1))
   #
-  DUP <- spatstat.options("dupC")
   if(!periodic) {
     Cout <- .C("D3pairdist",
                n = as.integer(n),
@@ -31,8 +30,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                y = as.double(y),
                z = as.double(z),
                squared = as.integer(squared),
-               d = as.double(numeric(n*n)),
-               DUP=DUP)
+               d = as.double(numeric(n*n)))
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
@@ -47,8 +45,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                yheight=as.double(high),
                zdepth=as.double(deep),
                squared = as.integer(squared),
-               d= as.double(numeric(n*n)),
-               DUP=DUP)
+               d= as.double(numeric(n*n)))
   }
   dout <- matrix(Cout$d, nrow=n, ncol=n)
 }
@@ -101,7 +98,6 @@ nndist.pp3 <- function(X, ..., k=1) {
     nnd<-numeric(n)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("nnd3D",
                n= as.integer(n),
                x= as.double(x[o]),
@@ -109,15 +105,13 @@ nndist.pp3 <- function(X, ..., k=1) {
                z= as.double(z[o]),
                nnd= as.double(nnd),
                nnwhich = as.integer(integer(1)),
-               huge=as.double(big),
-               DUP=DUP)
+               huge=as.double(big))
     nnd[o] <- Cout$nnd
   } else {
     # case kmaxcalc > 1
     nnd<-numeric(n * kmaxcalc)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("knnd3D",
                n    = as.integer(n),
                kmax = as.integer(kmaxcalc),
@@ -126,8 +120,7 @@ nndist.pp3 <- function(X, ..., k=1) {
                z    = as.double(z[o]),
                nnd  = as.double(nnd),
                nnwhich = as.integer(integer(1)),
-               huge = as.double(big),
-               DUP=DUP)
+               huge = as.double(big))
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
   }
@@ -194,7 +187,6 @@ nnwhich.pp3 <- function(X, ..., k=1) {
     nnw <- integer(n)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("nnw3D",
                n = as.integer(n),
                x = as.double(x[o]),
@@ -202,8 +194,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                z = as.double(z[o]),
                nnd = as.double(numeric(1)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big),
-               DUP=DUP)
+               huge = as.double(big))
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich
     if(any(witch <= 0))
@@ -216,7 +207,6 @@ nnwhich.pp3 <- function(X, ..., k=1) {
     nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("knnw3D",
                n = as.integer(n),
                kmax = as.integer(kmaxcalc),
@@ -225,8 +215,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                z = as.double(z[o]),
                nnd = as.double(numeric(1)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big),
-               DUP=DUP)
+               huge = as.double(big))
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich 
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
@@ -264,7 +253,6 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
   if(nX == 0 || nY == 0)
     return(matrix(numeric(0), nrow=nX, ncol=nY))
 
-  DUP <- spatstat.options("dupC")
   if(!periodic) {
     Cout <- .C("D3crossdist",
                nfrom = as.integer(nX),
@@ -276,8 +264,7 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
                yto = as.double(cY$y),
                zto = as.double(cY$z),
                squared = as.integer(squared),
-               d = as.double(matrix(0, nrow=nX, ncol=nY)),
-               DUP=DUP)
+               d = as.double(matrix(0, nrow=nX, ncol=nY)))
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
@@ -296,8 +283,7 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
                yheight = as.double(high),
                zheight = as.double(deep),
                squared = as.integer(squared),
-               d = as.double(matrix(0, nrow=nX, ncol=nY)),
-               DUP=DUP)
+               d = as.double(matrix(0, nrow=nX, ncol=nY)))
   }
   return(matrix(Cout$d, nrow=nX, ncol=nY))
 }

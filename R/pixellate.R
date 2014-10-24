@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.12 $    $Date: 2014/06/27 06:32:02 $
+#           $Revision: 1.13 $    $Date: 2014/10/24 00:22:30 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -137,7 +137,6 @@ pixellate.owin <- function(x, W=NULL, ...) {
   Z <- eval.im(Z * 0)
   # process each component polygon  
   B <- P$bdry
-  DUP <- spatstat.options("dupC")
   for(i in seq_along(B)) {
     PP <- B[[i]]
     # transform so that pixels become unit squares
@@ -159,9 +158,7 @@ pixellate.owin <- function(x, W=NULL, ...) {
              ypoly=as.double(yy),
              npoly=as.integer(nn),
              out=as.double(numeric(nx * ny)),
-             status=as.integer(integer(1)),
-             DUP=DUP)
-#             PACKAGE="spatstat")
+             status=as.integer(integer(1)))
     if(zz$status != 0)
       stop("Internal error")
     # increment output image

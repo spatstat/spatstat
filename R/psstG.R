@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.5 $	$Date: 2014/06/17 05:16:39 $
+#	$Revision: 1.6 $	$Date: 2014/10/24 00:22:30 $
 #
 ################################################################################
 #

@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.30 $	$Date: 2014/01/31 09:25:55 $
+#    $Revision: 2.31 $	$Date: 2014/10/24 00:22:30 $
 #
 #    The Strauss process
 #
@@ -140,7 +140,6 @@ crosspaircounts <- function(X, Y, r) {
   nX <- npoints(X)
   nY <- npoints(Y)
   # call C routine
-  DUP <- spatstat.options("dupC")
   out <- .C("Ccrosspaircounts",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -149,9 +148,7 @@ crosspaircounts <- function(X, Y, r) {
             xtarget  = as.double(Ysort$x),
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
-            counts   = as.integer(integer(nX)),
-            DUP      = DUP)
-#            PACKAGE  = "spatstat")
+            counts   = as.integer(integer(nX)))
   answer <- integer(nX)
   answer[oX] <- out$counts
   return(answer)
@@ -167,14 +164,12 @@ closepaircounts <- function(X, r) {
   Xsort <- X[oX]
   nX <- npoints(X)
   # call C routine
-  DUP <- spatstat.options("dupC")
   out <- .C("Cclosepaircounts",
             nxy    = as.integer(nX),
             x      = as.double(Xsort$x),
             y      = as.double(Xsort$y),
             rmaxi  = as.double(r),
-            counts = as.integer(integer(nX)),
-            DUP    = DUP)
+            counts = as.integer(integer(nX)))
   answer <- integer(nX)
   answer[oX] <- out$counts
   return(answer)

@@ -1,7 +1,7 @@
 #
 #	localK.R		Getis-Franklin neighbourhood density function
 #
-#	$Revision: 1.19 $	$Date: 2013/02/07 09:58:14 $
+#	$Revision: 1.20 $	$Date: 2014/10/24 00:22:30 $
 #
 #
 

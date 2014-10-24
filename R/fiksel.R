@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.8 $	$Date: 2012/07/14 06:36:26 $
+#    $Revision: 1.9 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Fiksel interaction 
 #    
@@ -36,7 +36,6 @@ Fiksel <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
-    DUP <- spatstat.options("dupC")
     out <- .C("Efiksel",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -46,9 +45,7 @@ Fiksel <- local({
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
             kkappa   = as.double(kappa),
-            values   = as.double(double(nX)),
-              DUP=DUP)
-#            PACKAGE  = "spatstat")
+            values   = as.double(double(nX)))
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.46 $	$Date: 2014/03/26 03:06:34 $
+#	$Revision: 1.47 $	$Date: 2014/10/24 00:22:30 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {

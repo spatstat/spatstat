@@ -2,7 +2,7 @@
 #
 #    pairwise.S
 #
-#    $Revision: 1.8 $	$Date: 2009/11/02 19:07:46 $
+#    $Revision: 1.9 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Pairwise()    create a user-defined pairwise interaction process
 #                 [an object of class 'interact']

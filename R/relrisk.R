@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.21 $  $Date: 2014/01/08 00:51:39 $
+#  $Revision: 1.22 $  $Date: 2014/10/24 00:22:30 $
 #
 
 relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",

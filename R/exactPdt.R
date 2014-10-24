@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of pixel image
 #
-#	$Revision: 4.15 $	$Date: 2014/10/04 09:09:36 $
+#	$Revision: 4.16 $	$Date: 2014/10/24 00:22:30 $
 #
 
 "exactPdt"<-
@@ -29,7 +29,6 @@
   x <- matrix(FALSE, nrow=Nnr, ncol=Nnc)
   x[rmin:rmax, cmin:cmax] <- w$m
   #
-  DUP <- spatstat.options("dupC")
   res <- .C("ps_exact_dt_R",
             as.double(w$xrange[1]),
             as.double(w$yrange[1]),
@@ -43,9 +42,7 @@
             distances = as.double (double(N)),
             rows      = as.integer(integer(N)),
             cols      = as.integer(integer(N)),
-            boundary  = as.double (double(N)),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            boundary  = as.double (double(N)))
   dist <- matrix(res$distances,
                  ncol=Nnc, nrow=Nnr, byrow = TRUE)[rmin:rmax, cmin:cmax]
   rows <- matrix(res$rows,

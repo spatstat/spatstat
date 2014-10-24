@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.54 $   $Date: 2014/05/18 01:47:48 $
+#    $Revision: 1.55 $   $Date: 2014/10/24 00:22:30 $
 #
 #
 
@@ -78,12 +78,6 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
-       dupC = list(
-         ## value of 'DUP' for .C calls
-         default=FALSE,
-         check=function(x) { is.logical(x) && length(x) == 1},
-         valid="a single logical value"
-         ),
        exactdt.checks.data=list(
          ## whether 'exactdt' checks validity of return value
          default=FALSE,

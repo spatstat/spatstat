@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.69 $    $Date: 2014/05/20 09:30:40 $
+#  $Revision: 1.70 $    $Date: 2014/10/24 00:22:30 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -199,7 +199,6 @@ densitypointsEngine <- function(x, sigma, ...,
       xx <- x$x[oo]
       yy <- x$y[oo]
     }
-    DUP <- spatstat.options("dupC")
     if(is.null(varcov)) {
       # isotropic kernel
       if(is.null(weights)) {
@@ -209,8 +208,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  y       = as.double(yy),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1) {
         wtsort <- if(sorted) weights else weights[oo]
@@ -221,8 +219,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
        } else {
         # matrix of weights
@@ -235,8 +232,7 @@ densitypointsEngine <- function(x, sigma, ...,
                    rmaxi   = as.double(cutoff),
                    sig     = as.double(sd),
                    weight  = as.double(wtsort[,j]),
-                   result  = as.double(double(npts)),
-                   DUP     = DUP)
+                   result  = as.double(double(npts)))
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
         }
       }
@@ -251,8 +247,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(npts)),
-                 DUP     = DUP)
+                 result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1) {
         # vector of weights
@@ -265,8 +260,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
                  weight  = as.double(wtsort),
-                 result   = as.double(double(npts)),
-                 DUP     = DUP)
+                 result   = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else {
         # matrix of weights
@@ -280,8 +274,7 @@ densitypointsEngine <- function(x, sigma, ...,
                    detsigma = as.double(detSigma),
                    sinv    = as.double(flatSinv),
                    weight  = as.double(wtsort[,j]),
-                   result  = as.double(double(npts)),
-                   DUP     = DUP)
+                   result  = as.double(double(npts)))
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result 
         }
       }
@@ -514,7 +507,6 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
     xd <- xd[ood]
     yd <- yd[ood]
   }
-  DUP <- spatstat.options("dupC")
   if(is.null(varcov)) {
     ## isotropic kernel
     if(is.null(weights)) {
@@ -527,8 +519,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                yd      = as.double(yd),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)),
-               DUP     = DUP)
+               result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else if(k == 1) {
       wtsort <- if(sorted) weights else weights[ood]
@@ -542,8 +533,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                wd      = as.double(wtsort),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)),
-               DUP     = DUP)
+               result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else {
       ## matrix of weights
@@ -559,8 +549,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  wd      = as.double(wtsort[,j]),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(nquery)),
-                 DUP     = DUP)
+                 result  = as.double(double(nquery)))
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result
       }
     }
@@ -578,8 +567,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                rmaxi   = as.double(cutoff),
                detsigma = as.double(detSigma),
                sinv    = as.double(flatSinv),
-               result  = as.double(double(nquery)),
-               DUP     = DUP)
+               result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else if(k == 1) {
       ## vector of weights
@@ -595,8 +583,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                rmaxi   = as.double(cutoff),
                detsigma = as.double(detSigma),
                sinv    = as.double(flatSinv),
-               result   = as.double(double(nquery)),
-               DUP     = DUP)
+               result   = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else {
       ## matrix of weights
@@ -613,8 +600,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)),
-                 DUP     = DUP)
+                 result  = as.double(double(nquery)))
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result 
       }
     }

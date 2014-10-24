@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.19 $  $Date: 2014/05/28 08:24:16 $
+##   $Revision: 1.20 $  $Date: 2014/10/24 00:22:30 $
 ##
 
 symbolmap <- local({

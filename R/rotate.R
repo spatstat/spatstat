@@ -1,7 +1,7 @@
 #
 #	rotate.S
 #
-#	$Revision: 1.20 $	$Date: 2014/02/23 13:40:09 $
+#	$Revision: 1.21 $	$Date: 2014/10/24 00:22:30 $
 #
 
 rotxy <- function(X, angle=pi/2) {

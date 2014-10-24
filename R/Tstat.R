@@ -1,7 +1,7 @@
 #
 #	tstat.R		Estimation of T function
 #
-#	$Revision: 1.7 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.8 $	$Date: 2014/10/24 00:22:30 $
 #
 
 Tstat <- local({

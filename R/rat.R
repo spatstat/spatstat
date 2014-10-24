@@ -5,7 +5,7 @@
 #
 #   Numerator and denominator are stored as attributes
 #
-#   $Revision: 1.4 $   $Date: 2011/10/18 06:09:02 $
+#   $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
 #
 
 rat <- function(ratio, numerator, denominator, check=TRUE) {

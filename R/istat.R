@@ -1,7 +1,7 @@
 #
 # interactive analysis of point patterns
 #
-#   $Revision: 1.17 $   $Date: 2014/08/27 09:48:23 $
+#   $Revision: 1.18 $   $Date: 2014/10/24 00:22:30 $
 #
 #
 

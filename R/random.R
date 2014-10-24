@@ -3,7 +3,7 @@
 #
 #    Functions for generating random point patterns
 #
-#    $Revision: 4.62 $   $Date: 2014/08/04 11:26:15 $
+#    $Revision: 4.63 $   $Date: 2014/10/24 00:22:30 $
 #
 #
 #    runifpoint()      n i.i.d. uniform random points ("binomial process")

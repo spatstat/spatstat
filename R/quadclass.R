@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.23 $	$Date: 2013/12/17 04:13:06 $
+#	$Revision: 4.24 $	$Date: 2014/10/24 00:22:30 $
 #
 # An object of class 'quad' contains the following entries:
 #

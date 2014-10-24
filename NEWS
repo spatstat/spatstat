@@ -1,4 +1,26 @@
 
+	CHANGES IN spatstat VERSION 1.39-1
+
+OVERVIEW
+
+   o Urgent bug fix.
+
+   o We thank Suman Rakshit and Brian Ripley for contributions.
+
+BUG FIXES
+
+   o bdry.mask, convexhull
+   In R-devel only, these functions could return an empty window,
+   causing errors in other packages.
+   [Spotted by Brian Ripley.]
+   Fixed.
+
+   o project2segment
+   An error occurred if any line segments had length zero.
+   [Spotted by Suman Rakshit.]
+   Fixed.
+
+
 	CHANGES IN spatstat VERSION 1.39-0
 
 OVERVIEW

@@ -2,7 +2,7 @@
 #
 #    lennard.R
 #
-#    $Revision: 1.17 $	$Date: 2012/01/18 10:56:30 $
+#    $Revision: 1.18 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Lennard-Jones potential
 #

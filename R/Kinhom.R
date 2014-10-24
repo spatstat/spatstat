@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.81 $	$Date: 2014/06/21 05:34:07 $
+#	$Revision: 1.82 $	$Date: 2014/10/24 00:22:30 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #

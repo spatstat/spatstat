@@ -3,7 +3,7 @@
 #
 # differentiation for fv objects
 #
-#  $Revision: 1.5 $ $Date: 2014/05/07 01:09:32 $
+#  $Revision: 1.6 $ $Date: 2014/10/24 00:22:30 $
 #
 
 deriv.fv <- local({

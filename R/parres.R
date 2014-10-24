@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.2 $  $Date: 2014/03/20 08:56:36 $
+#   $Revision: 1.3 $  $Date: 2014/10/24 00:22:30 $
 #
 
 parres <- function(model, covariate, ...,

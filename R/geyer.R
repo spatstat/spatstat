@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.24 $	$Date: 2014/02/06 05:55:47 $
+#    $Revision: 2.25 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Geyer's saturation process
 #
@@ -171,7 +171,6 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
   Cmap <- rep.int(-1, nU)
   Cmap[Usortindex] <- Xsortindex - 1
   # call C routine
-  DUP <- spatstat.options("dupC")
   zz <- .C("Egeyer",
            nnquad = as.integer(nU),
            xquad  = as.double(Usort$x),
@@ -183,9 +182,7 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
            tdata  = as.integer(Xcountsort),
            rrmax  = as.double(r),
            ssat   = as.double(sat),
-           result = as.double(numeric(nU)),
-           DUP=DUP)
-#           PACKAGE="spatstat")
+           result = as.double(numeric(nU)))
   result <- zz$result[rankU]
   return(result)
 }

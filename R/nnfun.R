@@ -3,7 +3,7 @@
 #
 #   nearest neighbour function (returns a function of x,y)
 #
-#   $Revision: 1.4 $   $Date: 2013/12/11 09:22:56 $
+#   $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
 #
 
 nnfun <- function(X, ...) {

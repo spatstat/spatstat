@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.50 $   $Date: 2014/02/15 03:39:26 $
+#   $Revision: 1.51 $   $Date: 2014/10/24 00:22:30 $
 #
 #
 #   calculate pair correlation function

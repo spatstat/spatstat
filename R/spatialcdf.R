@@ -1,7 +1,7 @@
 ##
 ## spatialcdf.R
 ##
-##  $Revision: 1.1 $ $Date: 2014/06/26 03:11:49 $
+##  $Revision: 1.2 $ $Date: 2014/10/24 00:22:30 $
 ##
 
 spatialcdf <- function(Z, weights=NULL, normalise=FALSE, ...,

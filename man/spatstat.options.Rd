@@ -300,13 +300,6 @@
       to evaluate \code{density.ppp(X, at="points")}.
       Initialised to \code{TRUE}.
     }
-    \item{dupC}{
-      Logical. 
-      Value of the argument \code{DUP} 
-      passed to \code{\link[base:Foreign]{.C}}
-      when calling the \pkg{spatstat} internal C code.
-      Initialised to \code{FALSE}. 
-    }
     \item{exactdt.checks.data}{
       Logical.
       Do not change this value, unless you are

@@ -1,7 +1,7 @@
 #
 #  nearestsegment.R
 #
-#  $Revision: 1.8 $  $Date: 2013/05/01 07:27:08 $
+#  $Revision: 1.10 $  $Date: 2014/10/24 06:47:27 $
 #
 # Given a point pattern X and a line segment pattern Y,
 # for each point x of X, determine which segment of Y is closest to x
@@ -51,7 +51,7 @@ ppllengine <- function(X, Y, action="project", check=FALSE) {
   dx <- with(alldata, x1-x0)
   dy <- with(alldata, y1-y0)
   leng <- sqrt(dx^2 + dy^2)
-  # rotation sines & cosines
+  # rotation sines & cosines (may include 0/0)
   co <- dx/leng
   si <- dy/leng
   # vector to point from first endpoint of segment
@@ -61,13 +61,14 @@ ppllengine <- function(X, Y, action="project", check=FALSE) {
   xpr <- xv * co + yv * si
   ypr <- - xv * si + yv * co
   # determine whether projection is an endpoint or interior point of segment
-  left <- (xpr <= 0)
-  right <- (xpr >= leng)
+  ok <- is.finite(xpr)
+  left <- !ok | (xpr <= 0)
+  right <- ok &  (xpr >= leng)
   # location of projected point in rotated coordinates
   xr <- with(alldata, ifelseAX(left, 0, ifelseXY(right, leng, xpr)))
   # back to standard coordinates
-  xproj <- with(alldata, x0 + xr * co)
-  yproj <- with(alldata, y0 + xr * si)
+  xproj <- with(alldata, x0 + ifelseXB(ok, xr * co, 0))
+  yproj <- with(alldata, y0 + ifelseXB(ok, xr * si, 0))
   Xproj <- ppp(xproj, yproj, window=X$window, marks=X$marks, check=check)
   # parametric coordinates
   tp <- xr/leng

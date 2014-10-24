@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.31 $ $Date: 2014/02/16 08:30:25 $
+# $Revision: 1.32 $ $Date: 2014/10/24 00:22:30 $
 #
 # K function for point pattern on linear network
 #

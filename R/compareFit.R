@@ -1,7 +1,7 @@
 #
 # compareFit.R
 #
-# $Revision: 1.1 $  $Date: 2011/06/19 06:08:20 $
+# $Revision: 1.2 $  $Date: 2014/10/24 00:22:30 $
 
 compareFit <- function(object, Fun, r=NULL, breaks=NULL,
                      ..., trend=~1, interaction=Poisson(),

@@ -1,7 +1,7 @@
 #
 #     dg.S
 #
-#    $Revision: 1.16 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.17 $	$Date: 2014/10/24 00:22:30 $
 #
 #     Diggle-Gratton pair potential
 #
@@ -24,7 +24,6 @@ DiggleGratton <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
-    DUP <- spatstat.options("dupC")
     out <- .C("Ediggra",
               nnsource = as.integer(nX),
               xsource  = as.double(Xsort$x),
@@ -36,9 +35,7 @@ DiggleGratton <- local({
               idtarget = as.integer(idYsort),
               ddelta   = as.double(delta),
               rrho     = as.double(rho),
-              values   = as.double(double(nX)),
-              DUP = DUP)
-#              PACKAGE  = "spatstat")
+              values   = as.double(double(nX)))
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

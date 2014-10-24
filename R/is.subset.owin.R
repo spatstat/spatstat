@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.12 $   $Date: 2014/09/27 09:45:44 $
+#  $Revision: 1.13 $   $Date: 2014/10/24 00:22:30 $
 #
 #  Determine whether a window is a subset of another window
 #

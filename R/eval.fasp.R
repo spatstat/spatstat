@@ -6,7 +6,7 @@
 #
 #        compatible.fasp()       Check whether two fasp objects are compatible
 #
-#     $Revision: 1.6 $     $Date: 2012/06/11 05:22:53 $
+#     $Revision: 1.7 $     $Date: 2014/10/24 00:22:30 $
 #
 
 eval.fasp <- function(expr, envir, dotonly=TRUE) {

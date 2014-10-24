@@ -1,7 +1,7 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.18 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.19 $  $Date: 2014/10/24 00:22:30 $
 #
 #
 
@@ -118,7 +118,6 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
     nY <- npoints(Y)
     force(nr)
     # call C
-    DUP <- spatstat.options("dupC")
     if(!weighted) {
       zz <- .C("locpcfx",
                nn1 = as.integer(nY),
@@ -132,9 +131,7 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
                nnr = as.integer(nr),
                rmaxi=as.double(rmax),
                del=as.double(delta),
-               pcf=as.double(double(nr * nY)),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               pcf=as.double(double(nr * nY)))
     } else {
       zz <- .C("locWpcfx",
                nn1 = as.integer(nY),
@@ -149,9 +146,7 @@ localpcfmatrix <- function(X, i=seq_len(npoints(X)), ...,
                nnr = as.integer(nr),
                rmaxi=as.double(rmax),
                del=as.double(delta),
-               pcf=as.double(double(nr * nY)),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               pcf=as.double(double(nr * nY)))
     }
     out <- matrix(zz$pcf, nr, nY)
     # reorder columns to match original

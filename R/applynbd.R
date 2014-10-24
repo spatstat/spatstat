@@ -1,6 +1,6 @@
 # 	applynbd.R
 #
-#     $Revision: 1.15 $     $Date: 2013/04/25 06:37:43 $
+#     $Revision: 1.16 $     $Date: 2014/10/24 00:22:30 $
 #
 #  applynbd()
 # For each point, identify either

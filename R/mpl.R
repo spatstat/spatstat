@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.180 $	$Date: 2014/05/17 03:56:29 $
+#	$Revision: 5.181 $	$Date: 2014/10/24 00:22:30 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/05/17 03:56:29 $")
+                        date="$Date: 2014/10/24 00:22:30 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object

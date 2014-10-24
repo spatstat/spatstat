@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.13 $   $Date: 2014/02/09 07:43:24 $
+#    $Revision: 1.14 $   $Date: 2014/10/24 00:22:30 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))

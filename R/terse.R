@@ -2,7 +2,7 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.4 $  $Date: 2014/08/14 07:48:40 $
+##  $Revision: 1.5 $  $Date: 2014/10/24 00:22:30 $
 ##
 
 ## 'split cat'

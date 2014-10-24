@@ -3,7 +3,7 @@
 #
 #    summary() method for class "im"
 #
-#    $Revision: 1.16 $   $Date: 2014/02/20 02:35:29 $
+#    $Revision: 1.17 $   $Date: 2014/10/24 00:22:30 $
 #
 #    summary.im()
 #    print.summary.im()

@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.5 $ $Date: 2013/12/12 10:55:33 $
+#   $Revision: 1.6 $ $Date: 2014/10/24 00:22:30 $
 #
 
 nndist <- function(X, ...) {
@@ -104,12 +104,10 @@ nndist.default <-
            nnd<-numeric(n)
            o <- fave.order(y)
            big <- sqrt(.Machine$double.xmax)
-           DUP <- spatstat.options("dupC")
            z<- .C("nndistsort",
                   n= as.integer(n),
                   x= as.double(x[o]), y= as.double(y[o]), nnd= as.double(nnd),
-                  as.double(big),
-                  DUP=DUP)
+                  as.double(big))
            nnd[o] <- z$nnd
          },
          stop(paste("Unrecognised method", sQuote(method)))
@@ -141,15 +139,13 @@ nndist.default <-
              nnd<-numeric(n * kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             DUP <- spatstat.options("dupC")
              z<- .C("knndsort",
                     n    = as.integer(n),
                     kmax = as.integer(kmaxcalc),
                     x    = as.double(x[o]),
                     y    = as.double(y[o]),
                     nnd  = as.double(nnd),
-                    huge = as.double(big),
-                    DUP=DUP)
+                    huge = as.double(big))
              nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
              nnd[o, ] <- matrix(z$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
            },
@@ -286,14 +282,12 @@ nnwhich.default <-
              nnw <- integer(n)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             DUP <- spatstat.options("dupC")
              z<- .C("nnwhichsort",
                     n = as.integer(n),
                     x = as.double(x[o]),
                     y = as.double(y[o]),
                     nnwhich = as.integer(nnw),
-                    huge = as.double(big),
-                    DUP=DUP)
+                    huge = as.double(big))
              witch <- z$nnwhich # sic 
              if(any(witch <= 0))
                stop("Internal error: non-positive index returned from C code")
@@ -328,7 +322,6 @@ nnwhich.default <-
              nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             DUP <- spatstat.options("dupC")
              z<- .C("knnsort",
                     n = as.integer(n),
                     kmax = as.integer(kmaxcalc),
@@ -336,8 +329,7 @@ nnwhich.default <-
                     y = as.double(y[o]),
                     nnd = as.double(numeric(n * kmaxcalc)),
                     nnwhich = as.integer(nnw),
-                    huge = as.double(big),
-                    DUP=DUP)
+                    huge = as.double(big))
              witch <- z$nnwhich # sic
              witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
              if(any(witch <= 0))

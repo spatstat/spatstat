@@ -3,7 +3,7 @@
 #
 #   Rules/data for expanding the simulation window in rmh
 #
-#   $Revision: 1.6 $  $Date: 2012/05/11 12:38:42 $
+#   $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
 #
 
 # Establish names and rules for each type of expansion

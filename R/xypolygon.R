@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.60 $    $Date: 2013/09/21 08:24:55 $
+#    $Revision: 1.61 $    $Date: 2014/10/24 00:22:30 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -40,7 +40,6 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
 
   # Check for points (x,y) that coincide with vertices (xp, yp)
   # Handle them separately
-  DUP <- spatstat.options("dupC")
   z <- .C("Cmatchxy",
           na=as.integer(npts),
           xa=as.double(x),
@@ -48,9 +47,7 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
           nb=as.integer(nedges),
           xb=as.double(xp),
           yb=as.double(yp),
-          match=as.integer(integer(npts)),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          match=as.integer(integer(npts)))
   is.vertex <- (z$match != 0)
   retain <- !is.vertex
   # Remove vertices from subsequent consideration; replace them later
@@ -454,7 +451,6 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
   y0 <- p$y
   dx <- diff(x0[c(1:n,1)])
   dy <- diff(y0[c(1:n,1)])
-  DUP <- spatstat.options("dupC")
   if(yesorno) {
     # get a yes-or-no answer
     answer <- .C("xypsi",
@@ -467,9 +463,7 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
                  ysep=as.double(2 * max(abs(dy))),
                  eps=as.double(eps),
                  proper=as.integer(proper),
-                 answer=as.integer(integer(1)),
-                 DUP=DUP)$answer
-#                 PACKAGE="spatstat")
+                 answer=as.integer(integer(1)))$answer
     if(verbose)
       cat("]\n")
     return(answer != 0)
@@ -485,9 +479,7 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
             yy=as.double(numeric(n^2)),
             ti=as.double(numeric(n^2)),
             tj=as.double(numeric(n^2)),
-            ok=as.integer(integer(n^2)),
-     DUP=DUP)
-#     PACKAGE="spatstat")
+            ok=as.integer(integer(n^2)))
 
   uhoh <- (matrix(out$ok, n, n) != 0)
   if(proper) {

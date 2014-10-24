@@ -2,7 +2,7 @@
 #
 #    dgs.R
 #
-#    $Revision: 1.6 $	$Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.7 $	$Date: 2014/10/24 00:22:30 $
 #
 #    Diggle-Gates-Stibbard process
 #
@@ -25,7 +25,6 @@ DiggleGatesStibbard <- local({
     nX <- npoints(X)
     nY <- npoints(Y)
     # call C routine
-    DUP <- spatstat.options("dupC")
     out <- .C("Ediggatsti",
             nnsource = as.integer(nX),
             xsource  = as.double(Xsort$x),
@@ -36,9 +35,7 @@ DiggleGatesStibbard <- local({
             ytarget  = as.double(Ysort$y),
             idtarget = as.integer(idYsort),
             rrho     = as.double(rho),
-            values   = as.double(double(nX)),
-            DUP = DUP)
-#            PACKAGE  = "spatstat")
+            values   = as.double(double(nX)))
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

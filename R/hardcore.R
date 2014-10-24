@@ -2,7 +2,7 @@
 #
 #    hardcore.S
 #
-#    $Revision: 1.9 $	$Date: 2014/01/31 08:04:21 $
+#    $Revision: 1.10 $	$Date: 2014/10/24 00:22:30 $
 #
 #    The Hard core process
 #

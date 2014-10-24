@@ -1,7 +1,7 @@
 #
 # linalg.R
 #
-# $Revision: 1.7 $ $Date: 2013/09/25 05:55:41 $
+# $Revision: 1.8 $ $Date: 2014/10/24 00:22:30 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -22,24 +22,19 @@ sumouter <- function(x, w=NULL) {
     tx <- tx[ , ok, drop=FALSE]
     if(!is.null(w)) w <- w[ok]
   }
-  DUP <- spatstat.options("dupC")
   if(is.null(w)) {
     z <- .C("Csumouter",
             x=as.double(tx),
             n=as.integer(n),
             p=as.integer(p),
-            y=as.double(numeric(p * p)),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            y=as.double(numeric(p * p)))
   } else {
     z <- .C("Cwsumouter",
             x=as.double(tx),
             n=as.integer(n),
             p=as.integer(p),
             w=as.double(w),
-            y=as.double(numeric(p * p)),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            y=as.double(numeric(p * p)))
   }
   out <- matrix(z$y, p, p)
   if(!is.null(nama))
@@ -67,15 +62,12 @@ quadform <- function(x, v) {
     if(nrow(v) != ncol(v)) stop("v should be a square matrix")
     stopifnot(ncol(x) == nrow(v))
   }
-  DUP <- spatstat.options("dupC")  
   z <- .C("Cquadform",
           x=as.double(tx),
           n=as.integer(n),
           p=as.integer(p),
           v=as.double(v),
-          y=as.double(numeric(n)),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          y=as.double(numeric(n)))
   result <- z$y
   names(result) <- nama[ok]
   if(allok)
@@ -110,15 +102,13 @@ bilinearform <- function(x, v, y) {
     if(nrow(v) != ncol(v)) stop("v should be a square matrix")
     stopifnot(ncol(x) == nrow(v))
   }
-  DUP <- spatstat.options("dupC")  
   z <- .C("Cbiform",
           x=as.double(tx),
           y=as.double(ty),
           n=as.integer(n),
           p=as.integer(p),
           v=as.double(v),
-          z=as.double(numeric(n)),
-          DUP=DUP)
+          z=as.double(numeric(n)))
   result <- z$z
   names(result) <- nama[ok]
   if(allok)
@@ -141,24 +131,19 @@ sumsymouter <- function(x, w=NULL) {
   }
   p <- dim(x)[1]
   n <- dim(x)[2]
-  DUP <- spatstat.options("dupC")
   if(is.null(w)) {
     zz <- .C("Csumsymouter",
              x = as.double(x),
              p = as.integer(p),
              n = as.integer(n),
-             y = as.double(numeric(p * p)),
-             DUP = DUP)
-#             PACKAGE = "spatstat")
+             y = as.double(numeric(p * p)))
   } else {
     zz <- .C("Cwsumsymouter",
              x = as.double(x),
              w = as.double(w),
              p = as.integer(p),
              n = as.integer(n),
-             y = as.double(numeric(p * p)),
-             DUP = DUP)
-#             PACKAGE = "spatstat")
+             y = as.double(numeric(p * p)))
   }
   matrix(zz$y, p, p)
 }

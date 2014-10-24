@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.49 $  $Date: 2014/10/14 08:57:50 $
+#  $Revision: 1.50 $  $Date: 2014/10/24 00:22:30 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))

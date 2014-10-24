@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.24 $  $Date: 2012/08/14 10:23:55 $
+#   $Revision: 1.25 $  $Date: 2014/10/24 00:22:30 $
 #
 #
 

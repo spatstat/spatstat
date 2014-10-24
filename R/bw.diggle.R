@@ -3,7 +3,7 @@
 ##
 ## bandwidth selection rules bw.diggle and bw.scott (for density.ppp)
 ##
-## $Revision: 1.1 $ $Date: 2014/05/20 09:30:49 $
+## $Revision: 1.2 $ $Date: 2014/10/24 00:22:30 $
 ##
 
 bw.scott <- function(X) {
@@ -56,15 +56,13 @@ bw.diggle <- function(X, ..., correction="good", hmax=NULL) {
            nrmax <- sum(ok)
            dK <- diff(K[[yname]])
            ndK <- length(dK)
-           DUP <- spatstat.options("dupC")
            z <- .C("digberJ",
                    r=as.double(rvals),
                    dK=as.double(dK),
                    nr=as.integer(nr),
                    nrmax=as.integer(nrmax),
                    ndK=as.integer(ndK),
-                   J=as.double(numeric(nrmax)),
-                   DUP=DUP)
+                   J=as.double(numeric(nrmax)))
            J <- z$J
            rvals <- rvals[ok]
          })

@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.2 $ $Date: 2014/02/16 08:50:46 $
+# $Revision: 1.3 $ $Date: 2014/10/24 00:22:30 $
 #
 # K functions for multitype point pattern on linear network
 #

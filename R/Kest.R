@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.103 $	$Date: 2014/02/15 03:39:44 $
+#	$Revision: 5.104 $	$Date: 2014/10/24 00:22:30 $
 #
 #
 # -------- functions ----------------------------------------
@@ -448,8 +448,6 @@ Kborder.engine <- function(X, rmax, nr=100,
   b <- bdist.points(Xsort)
 
   # call the C code
-  DUP <- spatstat.options("dupC")
-  
   if(is.null(weights)) {
     # determine whether the numerator can be stored as an integer
     bigint <- .Machine$integer.max
@@ -463,9 +461,7 @@ Kborder.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.integer(integer(nr)),
-                denom=as.integer(integer(nr)),
-                DUP=DUP)
-#                PACKAGE="spatstat")
+                denom=as.integer(integer(nr)))
     } else {
       # no - need double precision storage
       res <- .C("KborderD",
@@ -476,9 +472,7 @@ Kborder.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.double(numeric(nr)),
-                denom=as.double(numeric(nr)),
-                DUP=DUP)
-#                PACKAGE="spatstat")
+                denom=as.double(numeric(nr)))
     }
     if("bord.modif" %in% correction) {
       denom.area <- eroded.areas(W, r)
@@ -539,9 +533,7 @@ Kborder.engine <- function(X, rmax, nr=100,
               nr=as.integer(nr),
               rmax=as.double(rmax),
               numer=as.double(numeric(nr)),
-              denom=as.double(numeric(nr)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              denom=as.double(numeric(nr)))
     if("border" %in% correction) {
       bord <- res$numer/res$denom
       Kfv <- bind.fv(Kfv, data.frame(border=bord), "hat(%s)[bord](r)",
@@ -633,8 +625,6 @@ Knone.engine <- function(X, rmax, nr=100,
   y <- Xsort$y
   
   # call the C code
-  DUP <- spatstat.options("dupC")
-  
   if(is.null(weights)) {
     # determine whether the numerator can be stored as an integer
     bigint <- .Machine$integer.max
@@ -646,9 +636,7 @@ Knone.engine <- function(X, rmax, nr=100,
                 y=as.double(y),
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
-                numer=as.integer(integer(nr)),
-                DUP=DUP)
-#                PACKAGE="spatstat")
+                numer=as.integer(integer(nr)))
     } else {
       # no - need double precision storage
       res <- .C("KnoneD",
@@ -657,9 +645,7 @@ Knone.engine <- function(X, rmax, nr=100,
                 y=as.double(y),
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
-                numer=as.double(numeric(nr)),
-                DUP=DUP)
-#                PACKAGE="spatstat")
+                numer=as.double(numeric(nr)))
     }
 
     numKun <- res$numer
@@ -684,9 +670,7 @@ Knone.engine <- function(X, rmax, nr=100,
               w=as.double(weights.Xsort),
               nr=as.integer(nr),
               rmax=as.double(rmax),
-              numer=as.double(numeric(nr)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              numer=as.double(numeric(nr)))
     numKun <- res$numer
     denKun <- sum(weights)
     Kun <- numKun/denKun
@@ -849,8 +833,6 @@ Krect.engine <- function(X, rmax, nr=100,
   ztrans <- numeric(if(doTrans) nr else 1L)
   
   ## call the C code
-  DUP <- spatstat.options("dupC")
-
   if(weighted) {
     ## weighted version
     zbnumer <- numeric(if(doBord) nr else 1L)
@@ -874,8 +856,7 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.double(zbnumer),
               bdenom=as.double(zbdenom),
-              unco=as.double(zunco),
-              DUP=DUP)
+              unco=as.double(zunco))
   } else if(npts < sqrt(.Machine$integer.max)) {
     ## unweighted
     ## numerator of border correction can be stored as an integer
@@ -900,8 +881,7 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.integer(zbnumer),
               bdenom=as.integer(zbdenom),
-              unco=as.integer(zunco),
-              DUP=DUP)
+              unco=as.integer(zunco))
   } else {
     ## unweighted
     ## need double precision storage
@@ -925,8 +905,7 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.double(zbnumer),
               bdenom=as.double(zbdenom),
-              unco=as.double(zunco),
-              DUP=DUP)
+              unco=as.double(zunco))
   }
 
   ## Process corrections in reverse order of priority

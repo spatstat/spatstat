@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.6 $  $Date: 2013/12/03 10:15:30 $
+#  $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -99,8 +99,6 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
     nndv <- if(want.dist) numeric(npixel * kmaxcalc) else numeric(1)
     nnwh <- if(want.which) integer(npixel * kmaxcalc) else integer(1)
 
-    DUP <- spatstat.options("dupC")
-
     # ............. call C code ............................
     
     if(kmaxcalc == 1) {
@@ -118,8 +116,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
-               huge = as.double(huge),
-               DUP = DUP)
+               huge = as.double(huge))
     } else {
       zz <- .C("knnGinterface",
                nx = as.integer(nxcol),
@@ -136,8 +133,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
-               huge = as.double(huge),
-               DUP = DUP)
+               huge = as.double(huge))
     }
     
     # extract results

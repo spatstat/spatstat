@@ -3,7 +3,7 @@
 #
 # Helpful information for beginners
 #
-#  $Revision: 1.1 $  $Date: 2013/08/02 05:40:16 $
+#  $Revision: 1.2 $  $Date: 2014/10/24 00:22:30 $
 #
 
 print.autoexec <- function(x, ...) { x() }

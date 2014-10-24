@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.110 $  $Date: 2014/07/15 09:06:47 $
+##  $Revision: 1.111 $  $Date: 2014/10/24 00:22:30 $
 ##
 
 vcov.ppm <- local({

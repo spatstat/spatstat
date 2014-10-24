@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.44 $     $Date: 2013/11/03 05:20:13 $
+#      $Revision: 1.45 $     $Date: 2014/10/24 00:22:30 $
 #
 #
 #      Interpoint distances between pairs 
@@ -74,15 +74,13 @@ pairdist.default <-
          },
          C={
            d <- numeric( n * n)
-           DUP <- spatstat.options("dupC")
            if(!periodic) {
                z<- .C("Cpairdist",
                       n = as.integer(n),
                       x= as.double(x),
                       y= as.double(y),
                       squared=as.integer(squared),
-                      d= as.double(d),
-                      DUP=DUP)
+                      d= as.double(d))
            } else {
              z <- .C("CpairPdist",
                      n = as.integer(n),
@@ -91,8 +89,7 @@ pairdist.default <-
                      xwidth=as.double(wide),
                      yheight=as.double(high),
                      squared = as.integer(squared),
-                     d= as.double(d),
-                     DUP=DUP)
+                     d= as.double(d))
            }
            dout <- matrix(z$d, nrow=n, ncol=n)
          },
@@ -171,7 +168,6 @@ crossdist.default <-
                  return(if(squared) d2 else sqrt(d2))
                },
                C = {
-                 DUP <- spatstat.options("dupC")
                  if(!periodic) {
                    z<- .C("Ccrossdist",
                           nfrom = as.integer(n1),
@@ -181,8 +177,7 @@ crossdist.default <-
                           xto = as.double(x2),
                           yto = as.double(y2),
                           squared = as.integer(squared),
-                          d = as.double(matrix(0, nrow=n1, ncol=n2)),
-                          DUP=DUP)
+                          d = as.double(matrix(0, nrow=n1, ncol=n2)))
                  } else {
                    z<- .C("CcrossPdist",
                           nfrom = as.integer(n1),
@@ -194,8 +189,7 @@ crossdist.default <-
                           xwidth = as.double(wide),
                           yheight = as.double(high),
                           squared = as.integer(squared),
-                          d = as.double(matrix(0, nrow=n1, ncol=n2)),
-                          DUP=DUP)
+                          d = as.double(matrix(0, nrow=n1, ncol=n2)))
                  }
                  return(matrix(z$d, nrow=n1, ncol=n2))
                },

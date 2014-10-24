@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.17 $ $Date: 2013/05/01 07:22:48 $
+#   $Revision: 1.18 $ $Date: 2014/10/24 00:22:30 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -173,7 +173,6 @@ countends <- function(L, x=locator(1), r) {
   from0 <- L$from - 1L
   to0   <- L$to - 1L
   toler <- 0.001 * min(lengths)
-  DUP <- spatstat.options("dupC")
   zz <- .C("Ccountends",
            np = as.integer(np),
            f = as.double(startfraction),
@@ -188,8 +187,6 @@ countends <- function(L, x=locator(1), r) {
            dpath = as.double(dpath),
            lengths = as.double(lengths),
            toler=as.double(toler),
-           nendpoints = as.integer(integer(np)),
-           DUP=DUP)
-#           PACKAGE="spatstat")
+           nendpoints = as.integer(integer(np)))
   zz$nendpoints
 }

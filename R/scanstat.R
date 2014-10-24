@@ -3,7 +3,7 @@
 ##
 ##  Spatial scan statistics
 ##
-##  $Revision: 1.12 $  $Date: 2014/09/01 03:34:08 $
+##  $Revision: 1.13 $  $Date: 2014/10/24 00:22:30 $
 ##
 
 scanmeasure <- function(X, ...){
@@ -32,7 +32,6 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
            nc <- dimyx[2]
            ##
            n <- npoints(X)
-           DUP <- spatstat.options("dupC")
            zz <- .C("scantrans",
                     x=as.double(X$x),
                     y=as.double(X$y),
@@ -44,8 +43,7 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
                     nr=as.integer(nr),
                     nc=as.integer(nc),
                     R=as.double(r),
-                    counts=as.integer(numeric(prod(dimyx))),
-                    DUP=DUP)
+                    counts=as.integer(numeric(prod(dimyx))))
            zzz <- matrix(zz$counts, nrow=dimyx[1], ncol=dimyx[2], byrow=TRUE)
            Z <- im(zzz, xrange=xr, yrange=yr, unitname=unitname(X))
          },

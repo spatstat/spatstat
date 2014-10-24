@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.26 $  $Date: 2013/12/11 08:42:46 $
+#    $Revision: 1.27 $  $Date: 2014/10/24 00:22:30 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -131,7 +131,6 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     nnwh <- if(want.which) integer(nX) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
 
-    DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
 
     z <- .C("nnXinterface",
@@ -148,8 +147,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge),
-            DUP=DUP)
+            huge=as.double(huge))
 
     if(want.which) {
       nnwcode <- z$nnwhich #sic. C code now increments by 1
@@ -178,7 +176,6 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     nnwh <- if(want.which) integer(nX * kmaxcalc) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
 
-    DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
   
     z <- .C("knnXinterface",
@@ -196,8 +193,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge),
-            DUP=DUP)
+            huge=as.double(huge))
 
     # extract results
     nnD <- z$nnd

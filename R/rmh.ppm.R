@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.28 $ $Date: 2013/07/26 05:39:36 $
+#  $Revision: 1.29 $ $Date: 2014/10/24 00:22:30 $
 #
 #
 rmh.ppm <- function(model, start = NULL,

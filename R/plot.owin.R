@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.52 $	$Date: 2014/09/27 09:45:44 $
+#	$Revision: 1.53 $	$Date: 2014/10/24 00:22:30 $
 #
 #
 #

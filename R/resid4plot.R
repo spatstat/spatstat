@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.26 $    $Date: 2014/05/09 01:12:42 $
+#   $Revision: 1.27 $    $Date: 2014/10/24 00:22:30 $
 #
 #
 

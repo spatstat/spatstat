@@ -1,7 +1,7 @@
 #
 #  primefactors.R
 #
-#  $Revision: 1.4 $   $Date: 2012/04/18 09:16:32 $
+#  $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
 #
 
 primesbelow <- local({

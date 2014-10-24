@@ -3,7 +3,7 @@
 #
 #   simulating from Neyman-Scott processes
 #
-#   $Revision: 1.11 $  $Date: 2013/12/10 06:11:43 $
+#   $Revision: 1.12 $  $Date: 2014/10/24 00:22:30 $
 #
 #    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 #    Other code and modifications by Adrian Baddeley

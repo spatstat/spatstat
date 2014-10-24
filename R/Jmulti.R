@@ -3,7 +3,7 @@
 #	Usual invocations to compute multitype J function(s)
 #	if F and G are not required 
 #
-#	$Revision: 4.38 $	$Date: 2014/02/16 05:51:17 $
+#	$Revision: 4.39 $	$Date: 2014/10/24 00:22:30 $
 #
 #
 #

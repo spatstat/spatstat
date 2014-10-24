@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.6 $  $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
 #
 #
 
@@ -28,7 +28,6 @@ as.mask.psp <- function(x, W=NULL, ...) {
   y1 <- (ends$y1 - W$yrange[1])/W$ystep
   nr <- W$dim[1]
   nc <- W$dim[2]
-  DUP <- spatstat.options("dupC")
   zz <- .C("seg2pixI",
            ns=as.integer(nseg),
            x0=as.double(x0),
@@ -37,9 +36,7 @@ as.mask.psp <- function(x, W=NULL, ...) {
            y1=as.double(y1),
            nx=as.integer(nc),
            ny=as.integer(nr),
-           out=as.integer(integer(nr * nc)),
-           DUP=DUP)
-#           PACKAGE="spatstat")
+           out=as.integer(integer(nr * nc)))
   mm <- matrix(zz$out, nr, nc)
   # intersect with existing window
   W$m <- W$m & mm
@@ -85,7 +82,6 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
   y1 <- (ends$y1 - Z$yrange[1])/Z$ystep
   nr <- Z$dim[1]
   nc <- Z$dim[2]
-  DUP <- spatstat.options("dupC")
   zz <- .C("seg2pixL",
            ns=as.integer(nseg),
            x0=as.double(x0),
@@ -97,9 +93,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
            pixheight=as.double(Z$ystep),
            nx=as.integer(nc),
            ny=as.integer(nr),
-           out=as.double(numeric(nr * nc)),
-           DUP=DUP)
-#           PACKAGE="spatstat")
+           out=as.double(numeric(nr * nc)))
   mm <- matrix(zz$out, nr, nc)
   mm[is.na(Z$v)] <- NA
   # intersect with existing window

@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.16 $   $Date: 2014/02/22 02:43:19 $
+#    $Revision: 1.17 $   $Date: 2014/10/24 00:22:30 $
 #
 #
  
@@ -162,7 +162,6 @@ clippoly.psp <- function(s, window) {
   dxw <- ew$x1 - ew$x0
   dyw <- ew$y1 - ew$y0
 
-  DUP <- spatstat.options("dupC")
   out <- .C("xysegint",
             na=as.integer(ns),
             x0a=as.double(x0s),
@@ -179,9 +178,7 @@ clippoly.psp <- function(s, window) {
             yy=as.double(numeric(ns * nw)),
             ta=as.double(numeric(ns * nw)),
             tb=as.double(numeric(ns * nw)),
-            ok=as.integer(integer(ns * nw)),
-     DUP=DUP)
-#     PACKAGE="spatstat")
+            ok=as.integer(integer(ns * nw)))
 
   ok <- (matrix(out$ok, ns, nw) != 0)
   ts <- matrix(out$ta, ns, nw)

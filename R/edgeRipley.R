@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.11 $    $Date: 2014/08/31 10:39:18 $
+#    $Revision: 1.12 $    $Date: 2014/10/24 00:22:30 $
 #
 #    Ripley isotropic edge correction weights
 #
@@ -125,8 +125,6 @@ edge.Ripley <- local({
            },
            C = {
              ############ C code #############################
-             DUP <- spatstat.options("dupC")
-  
              switch(W$type,
                     rectangle={
                       z <- .C("ripleybox",
@@ -140,8 +138,7 @@ edge.Ripley <- local({
                               xmax=as.double(W$xrange[2]),
                               ymax=as.double(W$yrange[2]),
                               epsilon=as.double(.Machine$double.eps),
-                              out=as.double(numeric(Nr * Nc)),
-                              DUP=DUP)
+                              out=as.double(numeric(Nr * Nc)))
                       weight <- matrix(z$out, nrow=Nr, ncol=Nc)
                     },
                     polygonal={
@@ -157,8 +154,7 @@ edge.Ripley <- local({
                               y0=as.double(Y$ends$y0),
                               x1=as.double(Y$ends$x1),
                               y1=as.double(Y$ends$y1),
-                              out=as.double(numeric(Nr * Nc)),
-                              DUP=DUP)
+                              out=as.double(numeric(Nr * Nc)))
                       angles <- matrix(z$out, nrow = Nr, ncol = Nc)
                       weight <- 2 * pi/angles
                     }

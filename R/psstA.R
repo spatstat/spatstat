@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised F (area-interaction)
 #
-#	$Revision: 1.5 $	$Date: 2013/04/25 06:37:43 $
+#	$Revision: 1.6 $	$Date: 2014/10/24 00:22:30 $
 #
 ################################################################################
 #

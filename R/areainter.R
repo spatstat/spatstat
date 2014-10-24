@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.29 $	$Date: 2013/09/23 01:19:58 $
+#    $Revision: 1.30 $	$Date: 2014/10/24 00:22:30 $
 #
 #    The area interaction
 #
@@ -141,7 +141,6 @@ areadelta2 <- local({
         # relevant neighbours
         K <- setdiff(union(Ki, Kj), c(i,j))
         # call C code
-        DUP <- spatstat.options("dupC")
         z <- .C("delta2area",
                 xa = as.double(xx[i]),
                 ya = as.double(yy[i]),
@@ -152,8 +151,7 @@ areadelta2 <- local({
                 yother = as.double(yy[K]),
                 radius = as.double(r),
                 epsilon = as.double(eps),
-                pixcount = as.integer(integer(1)),
-                DUP = DUP)
+                pixcount = as.integer(integer(1)))
         result[i,j] <- result[j,i] <- z$pixcount
       }
       # normalise
@@ -274,7 +272,6 @@ areadelta2 <- local({
     # 
     result <- matrix(0, nU, nU)
     eps <- r/spatstat.options("ngrid.disc")
-    DUP <- spatstat.options("dupC")
     #
     for(k in seq_along(I)) {
       i <- I[k]
@@ -296,8 +293,7 @@ areadelta2 <- local({
             yother = as.double(yy[K]),
             radius = as.double(r),
             epsilon = as.double(eps),
-            pixcount = as.integer(integer(1)),
-            DUP = DUP)
+            pixcount = as.integer(integer(1)))
       result[i,j] <- z$pixcount
     }
     # normalise

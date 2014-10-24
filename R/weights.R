@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.31 $	$Date: 2014/08/04 10:32:45 $
+#	$Revision: 4.32 $	$Date: 2014/10/24 00:22:30 $
 #
 #
 # Main functions:

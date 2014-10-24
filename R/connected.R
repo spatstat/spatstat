@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.16 $  $Date: 2013/08/23 07:34:24 $
+#    $Revision: 1.17 $  $Date: 2014/10/24 00:22:30 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -44,12 +44,10 @@ connected.owin <- function(X, ..., method="C") {
     L[M] <- seq_len(sum(M))
     L[!M] <- 0
     # resolve labels
-    #        (warning: 'mat' is overwritten, so DUP=TRUE)
     z <- .C("cocoImage",
             mat=as.integer(t(L)),
             nr=as.integer(nr),
             nc=as.integer(nc))
-#            PACKAGE="spatstat")
     # unpack
     Z <- matrix(z$mat, nr+2, nc+2, byrow=TRUE)
   } else {
@@ -161,16 +159,13 @@ connected.ppp <- function(X, R, ...) {
   ie <- cl$i - 1L
   je <- cl$j - 1L
   ne <- length(ie)
-  DUP <- spatstat.options("dupC")
   zz <- .C("cocoGraph",
            nv=as.integer(nv),
            ne=as.integer(ne),
            ie=as.integer(ie),
            je=as.integer(je),
            label=as.integer(integer(nv)),
-           status=as.integer(integer(1)),
-           DUP=DUP)
-#           PACKAGE="spatstat")
+           status=as.integer(integer(1)))
   if(zz$status != 0)
     stop("Internal error: connected.ppp did not converge")
   if(internal)

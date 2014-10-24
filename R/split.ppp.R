@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.23 $ $Date: 2014/07/11 07:38:15 $
+# $Revision: 1.24 $ $Date: 2014/10/24 00:22:30 $
 #
 # split.ppp and "split<-.ppp"
 #

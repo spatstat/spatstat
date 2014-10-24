@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.28 $  $Date: 2013/11/02 01:53:09 $
+#  $Revision: 1.29 $  $Date: 2014/10/24 00:22:30 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -179,7 +179,6 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
   xx <- X$x
   yy <- X$y
   result <- matrix(, nrow=nu, ncol=nr)
-  DUP <- spatstat.options("dupC")
   #
   for(i in 1:nu) {
     # shift u[i] to origin
@@ -199,9 +198,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               y   = as.double(yshift[close]),
               nn  = as.integer(nclose),
               ngrid = as.integer(ngrid),
-              answer = as.double(numeric(nr)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              answer = as.double(numeric(nr)))
       result[i,] <- z$answer
     } else {
       z <- .C("areaBdif",
@@ -215,9 +212,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               y0 = as.double(W$yrange[1] - yu),
               x1 = as.double(W$xrange[2] - xu),
               y1 = as.double(W$yrange[2] - yu),
-              answer = as.double(numeric(nr)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              answer = as.double(numeric(nr)))
       result[i,] <- z$answer
     }
   }

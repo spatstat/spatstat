@@ -1,7 +1,7 @@
 #
 #	Ksector.R	Estimation of 'sector K function'
 #
-#	$Revision: 1.3 $	$Date: 2014/09/13 03:22:35 $
+#	$Revision: 1.4 $	$Date: 2014/10/24 00:22:30 $
 #
 
 Ksector <- function(X, begin=0, end=360, ...,

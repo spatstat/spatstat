@@ -3,7 +3,7 @@
 ##
 ## Farthest distance to boundary, and circumradius
 ##
-##  $Revision: 1.6 $ $Date: 2014/08/31 06:48:53 $
+##  $Revision: 1.7 $ $Date: 2014/10/24 00:22:30 $
 
 fardist <- function(X, ...) {
   UseMethod("fardist")
@@ -19,7 +19,6 @@ fardist.owin <- function(X, ..., squared=FALSE) {
   y0 <- M$yrow[1]
   xstep <- M$xstep
   ystep <- M$ystep
-  DUP <- spatstat.options("dupC")
   if(squared) {
     z <- .C("fardist2grid",
             nx = as.integer(nx),
@@ -31,8 +30,7 @@ fardist.owin <- function(X, ..., squared=FALSE) {
             np = as.integer(length(V$x)),
             xp = as.double(V$x),
             yp = as.double(V$y),
-            dfar = as.double(numeric(nx * ny)),
-            DUP = DUP)
+            dfar = as.double(numeric(nx * ny)))
   } else {
     z <- .C("fardistgrid",
             nx = as.integer(nx),
@@ -44,8 +42,7 @@ fardist.owin <- function(X, ..., squared=FALSE) {
             np = as.integer(length(V$x)),
             xp = as.double(V$x),
             yp = as.double(V$y),
-            dfar = as.double(numeric(nx * ny)),
-            DUP = DUP)
+            dfar = as.double(numeric(nx * ny)))
   }
   out <- im(z$dfar, xcol=M$xcol, yrow=M$yrow,
             xrange=M$xrange, yrange=M$yrange, unitname=unitname(M))

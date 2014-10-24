@@ -3,17 +3,15 @@
 ##
 ##  Quasi-random sequence generators
 ##
-##  $Revision: 1.4 $   $Date: 2014/05/02 01:26:54 $
+##  $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
 ##
 
 vdCorput <- function(n, base) {
   stopifnot(is.prime(base))
-  DUP <- spatstat.options("dupC")
   z <- .C("Corput",
           base=as.integer(base),
           n=as.integer(n),
-          result=as.double(numeric(n)),
-          DUP=DUP)
+          result=as.double(numeric(n)))
   return(z$result)
 }
 

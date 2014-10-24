@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.18 $	$Date: 2013/05/01 05:48:28 $
+#	$Revision: 1.19 $	$Date: 2014/10/24 00:22:30 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -273,7 +273,6 @@ k3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
                      rmax=1, nrval=100, correction="translation") 
 {
   code <- switch(correction, translation=0, isotropic=1)
-  DUP <- spatstat.options("dupC")
   res <- .C("RcallK3",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
@@ -285,9 +284,7 @@ k3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
             f = as.double(numeric(nrval)),
             num = as.double(numeric(nrval)),
             denom = as.double(numeric(nrval)),
-            as.integer(code),
-            DUP=DUP)
-#           PACKAGE="spatstat")
+            as.integer(code))
   return(list(range = c(0,rmax),
               f = res$f, num=res$num, denom=res$denom, 
               correction=correction))
@@ -299,7 +296,6 @@ g3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
                      rmax=1, nrval=10, correction="Hanisch G3") 
 {
 	code <- switch(correction, "minus sampling"=1, "Hanisch G3"=3)
-        DUP <- spatstat.options("dupC")
 	res <- .C("RcallG3",
 		as.double(x), as.double(y), as.double(z), 
 		as.integer(length(x)),
@@ -311,9 +307,7 @@ g3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 		f = as.double(numeric(nrval)),
 		num = as.double(numeric(nrval)),
 		denom = as.double(numeric(nrval)),
-		as.integer(code),
-                  DUP=DUP)
-#                  PACKAGE="spatstat")
+		as.integer(code))
 	return(list(range = range, f = res$f, num=res$num, denom=res$denom, 
 		correction=correction))
 }
@@ -326,7 +320,6 @@ f3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 {
 #
 	code <- switch(correction, "minus sampling"=1, no=0)
-        DUP <- spatstat.options("dupC")
 	res <- .C("RcallF3",
 		as.double(x), as.double(y), as.double(z), 
 		as.integer(length(x)),
@@ -338,9 +331,7 @@ f3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 		m=as.integer(nval),
 		num = as.integer(integer(nval)),
 		denom = as.integer(integer(nval)),
-		as.integer(code),
-                  DUP=DUP)
-#                  PACKAGE="spatstat")
+		as.integer(code))
 	r <- seq(from=range[1], to=range[2], length.out=nval)
 	f <- with(res, ifelseXB(denom > 0, num/denom, 1))
 
@@ -352,7 +343,6 @@ f3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
 	vside=0.05, rmax=1, nrval=25)
 {
 #
-  DUP <- spatstat.options("dupC")
   res <- .C("RcallF3cen",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
@@ -367,9 +357,7 @@ f3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
             upperobs = as.integer(integer(1)),
-            uppercen = as.integer(integer(1)),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            uppercen = as.integer(integer(1)))
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -394,7 +382,6 @@ g3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
 	rmax=1, nrval=25)
 {
 #
-  DUP <- spatstat.options("dupC")
   res <- .C("RcallG3cen",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
@@ -408,9 +395,7 @@ g3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
             upperobs = as.integer(integer(1)),
-            uppercen = as.integer(integer(1)),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            uppercen = as.integer(integer(1)))
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -435,7 +420,6 @@ pcf3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
                        delta=rmax/10) 
 {
   code <- switch(correction, translation=0, isotropic=1)
-  DUP <- spatstat.options("dupC")
   res <- .C("Rcallpcf3",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
@@ -448,9 +432,7 @@ pcf3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
             num = as.double(numeric(nrval)),
             denom = as.double(numeric(nrval)),
             method=as.integer(code),
-            delta=as.double(delta),
-            DUP=DUP)
-#                  PACKAGE="spatstat")
+            delta=as.double(delta))
 	return(list(range = c(0,rmax),
                     f = res$f, num=res$num, denom=res$denom, 
                     correction=correction))
@@ -476,7 +458,6 @@ digital.volume <- function(range=c(0, 1.414),  nval=25, vside= 0.05)
 #
 	w <- 2 * range[2] + 2 * vside
 #
-        DUP <- spatstat.options("dupC")
 	dvol <- .C("RcallF3",
                    as.double(w/2), as.double(w/2), as.double(w/2),
                    as.integer(1),
@@ -488,10 +469,7 @@ digital.volume <- function(range=c(0, 1.414),  nval=25, vside= 0.05)
                    as.integer(nval),
                    num = as.integer(integer(nval)),
                    denom = as.integer(integer(nval)),
-                   as.integer(0),
-                   DUP=DUP
-#                  PACKAGE="spatstat"
-                 )$num
+                   as.integer(0))$num
 #	
         (vside^3) * dvol 
       }

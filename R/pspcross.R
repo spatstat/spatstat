@@ -3,7 +3,7 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.12 $   $Date: 2013/04/25 06:37:43 $
+#    $Revision: 1.13 $   $Date: 2014/10/24 00:22:30 $
 #
 #
 crossing.psp <- function(A,B,fatal=TRUE) {
@@ -34,7 +34,6 @@ crossing.psp <- function(A,B,fatal=TRUE) {
   useCall <- spatstat.options("crossing.psp.useCall")
   if(!useCall) {
     # old C routine
-    DUP <- spatstat.options("dupC")
     out <- .C("xysegint",
               na=as.integer(na),
               x0a=as.double(x0a),
@@ -51,9 +50,7 @@ crossing.psp <- function(A,B,fatal=TRUE) {
               yy=as.double(numeric(na * nb)),
               ta=as.double(numeric(na * nb)),
               tb=as.double(numeric(na * nb)),
-              ok=as.integer(integer(na * nb)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              ok=as.integer(integer(na * nb)))
     
     ok <- (matrix(out$ok, na, nb) != 0)
     xx <- matrix(out$xx, na, nb)
@@ -105,7 +102,6 @@ test.crossing.psp <- function(A,B) {
   dxb <- eB$x1 - eB$x0
   dyb <- eB$y1 - eB$y0
 
-  DUP <- spatstat.options("dupC")
   out <- .C("xysi",
             na=as.integer(na),
             x0a=as.double(x0a),
@@ -118,9 +114,7 @@ test.crossing.psp <- function(A,B) {
             dxb=as.double(dxb),
             dyb=as.double(dyb), 
             eps=as.double(eps),
-            ok=as.integer(integer(na * nb)),
-     DUP=DUP)
-#     PACKAGE="spatstat")
+            ok=as.integer(integer(na * nb)))
 
   hit <- (matrix(out$ok, na, nb) != 0)
   return(hit)
@@ -147,7 +141,6 @@ anycrossing.psp <- function(A,B) {
   dxb <- eB$x1 - eB$x0
   dyb <- eB$y1 - eB$y0
 
-  DUP <- spatstat.options("dupC")
   out <- .C("xysiANY",
             na=as.integer(na),
             x0a=as.double(x0a),
@@ -160,9 +153,7 @@ anycrossing.psp <- function(A,B) {
             dxb=as.double(dxb),
             dyb=as.double(dyb), 
             eps=as.double(eps),
-            ok=as.integer(integer(1)),
-     DUP=DUP)
-#     PACKAGE="spatstat")
+            ok=as.integer(integer(1)))
   hit <- (out$ok != 0)
   return(hit)
 }
@@ -181,7 +172,6 @@ selfcrossing.psp <- function(A) {
   useCall <- spatstat.options("selfcrossing.psp.useCall")
   if(!useCall) {
     # old C routine
-    DUP <- spatstat.options("dupC")
     out <- .C("xysegXint",
               n=as.integer(n),
               x0=as.double(x0),
@@ -193,9 +183,7 @@ selfcrossing.psp <- function(A) {
               yy=as.double(numeric(n^2)),
               ti=as.double(numeric(n^2)),
               tj=as.double(numeric(n^2)),
-              ok=as.integer(integer(n^2)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              ok=as.integer(integer(n^2)))
 
     ok <- (matrix(out$ok, n, n) != 0)
     xx <- matrix(out$xx, n, n)
@@ -233,7 +221,6 @@ test.selfcrossing.psp <- function(A) {
   dx <- eA$x1 - eA$x0
   dy <- eA$y1 - eA$y0
 
-  DUP <- spatstat.options("dupC")
   out <- .C("xysxi",
             na=as.integer(n),
             x0=as.double(x0),
@@ -241,9 +228,7 @@ test.selfcrossing.psp <- function(A) {
             dx=as.double(dx),
             dy=as.double(dy), 
             eps=as.double(eps),
-            ok=as.integer(integer(n*n)),
-     DUP=DUP)
-#     PACKAGE="spatstat")
+            ok=as.integer(integer(n*n)))
   hit <- (matrix(out$ok, n, n) != 0)
   return(hit)
 }

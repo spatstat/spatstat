@@ -1866,6 +1866,14 @@ local({
   D <- shift(square(2), origin="midpoint")
   if(is.subset.owin(D,AB))
     stop("is.subset.owin fails for polygons with holes")
+
+  ## thanks to Brian Ripley / SpatialVx
+  M <- as.mask(letterR)
+  stopifnot(area(bdry.mask(M)) > 0)
+  stopifnot(area(convexhull(M)) > 0)
+  R <- as.mask(square(1))
+  stopifnot(area(bdry.mask(R)) > 0)
+  stopifnot(area(convexhull(R)) > 0)
 })
 
 #
@@ -2280,4 +2288,16 @@ require(spatstat)
 local({
    f <- function(n) grey(seq(0,1,length=n))
    z <- to.grey(f)
+})
+##
+## tests/xysegment.R
+##    Test weird problems and boundary cases for line segment code
+##    $Version$ $Date: 2014/10/24 06:12:05 $ 
+require(spatstat)
+local({
+  # segment of length zero
+  B <- psp(1/2, 1/2, 1/2, 1/2, window=square(1))
+  BB <- angles.psp(B)
+  A <- runifpoint(3)
+  AB <- project2segment(A,B)
 })

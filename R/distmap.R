@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.19 $     $Date: 2014/08/04 09:55:52 $
+#      $Revision: 1.20 $     $Date: 2014/10/24 00:22:30 $
 #
 #
 #     Distance transforms
@@ -75,7 +75,6 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
     mat <- cbind(pad, mat, pad)
     mat <- rbind(pad, mat, pad)
 # call C routine
-    DUP <- spatstat.options("dupC")
     res <- .C("distmapbin",
               as.double(X$xrange[1]),
               as.double(X$yrange[1]),
@@ -85,9 +84,7 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
               nc = as.integer(nc),
               as.logical(t(mat)),
               distances = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
-              boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
-              DUP=DUP)
-#              PACKAGE="spatstat")
+              boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)))
   # strip off margins again
     dist <- matrix(res$distances,
                    ncol = nc + 2, byrow = TRUE)[2:(nr + 1), 2:(nc +1)]
@@ -112,7 +109,6 @@ distmap.psp <- function(X, ...) {
   E <- X$ends
   big <- 2 * diameter(as.rectangle(W))^2
   dist2 <- rep.int(big, np)
-  DUP <- spatstat.options("dupC")
   z <- .C("nndist2segs",
           xp=as.double(xp),
           yp=as.double(yp),
@@ -124,9 +120,7 @@ distmap.psp <- function(X, ...) {
           nsegments=as.integer(nrow(E)),
           epsilon=as.double(.Machine$double.eps),
           dist2=as.double(dist2),
-          index=as.integer(integer(np)),
-          DUP=DUP)
-#          PACKAGE="spatstat")
+          index=as.integer(integer(np)))
   xc <- W$xcol
   yr <- W$yrow
   Dist <- im(array(sqrt(z$dist2), dim=W$dim), xc, yr, unitname=uni)

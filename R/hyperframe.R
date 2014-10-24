@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.51 $  $Date: 2014/08/25 04:03:45 $
+# $Revision: 1.52 $  $Date: 2014/10/24 00:22:30 $
 #
 
 hyperframe <- function(...,

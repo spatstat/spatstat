@@ -3,7 +3,7 @@
 #
 #   method for 'nnfun' for class 'lpp'
 #
-#   $Revision: 1.2 $ $Date: 2012/10/18 10:55:16 $
+#   $Revision: 1.1 $ $Date: 2014/10/24 00:22:30 $
 #
 
 nnfun.lpp <- local({

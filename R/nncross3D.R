@@ -1,7 +1,7 @@
 #
 #   nncross3D.R
 #
-#    $Revision: 1.6 $  $Date: 2013/11/03 03:17:02 $
+#    $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
 #  Licence: GNU Public Licence >= 2
@@ -117,7 +117,6 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     nnwh <- if(want.which) integer(nX) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
 
-    DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
     z <- .C("nnX3Dinterface",
@@ -136,8 +135,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge),
-            DUP=DUP)
+            huge=as.double(huge))
 
     if(want.which) {
       # conversion to R indexing is done in C code
@@ -166,7 +164,6 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
     nndv <- if(want.dist) numeric(nX * kmaxcalc) else numeric(1)
     nnwh <- if(want.which) integer(nX * kmaxcalc) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
-    DUP <- spatstat.options("dupC")
     huge <- 1.1 * diameter(bounding.box3(as.box3(X),as.box3(Y)))
   
     z <- .C("knnX3Dinterface",
@@ -186,9 +183,7 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge),
-            DUP=DUP)
-#            PACKAGE="spatstat")
+            huge=as.double(huge))
 
     # extract results
     nnD <- z$nnd

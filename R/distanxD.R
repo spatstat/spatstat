@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.5 $     $Date: 2013/04/25 06:37:43 $
+#      $Revision: 1.6 $     $Date: 2014/10/24 00:22:30 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -85,31 +85,25 @@ nndist.ppx <- function(X, ..., k=1) {
     nnd<-numeric(n)
     o <- fave.order(coo[,1])
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("nndMD",
                n= as.integer(n),
                m=as.integer(m),
                x= as.double(t(coo[o,])),
                nnd= as.double(nnd),
-               as.double(big),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               as.double(big))
     nnd[o] <- Cout$nnd
   } else {
     # case kmaxcalc > 1
     nnd<-numeric(n * kmaxcalc)
     o <- fave.order(coo[,1])
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("knndMD",
                n    = as.integer(n),
                m    = as.integer(m),
                kmax = as.integer(kmaxcalc),
                x    = as.double(t(coo[o,])),
                nnd  = as.double(nnd),
-               huge = as.double(big),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               huge = as.double(big))
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
   }
@@ -177,16 +171,13 @@ nnwhich.ppx <- function(X, ..., k=1) {
     nnw <- integer(n)
     o <- fave.order(coo[,1])
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("nnwMD",
                n = as.integer(n),
                m = as.integer(m),
                x = as.double(t(coo[o,])),
                nnd = as.double(numeric(n)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               huge = as.double(big))
     witch <- Cout$nnwhich
     if(any(witch <= 0))
       stop("Internal error: non-positive index returned from C code")
@@ -198,7 +189,6 @@ nnwhich.ppx <- function(X, ..., k=1) {
     nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
     o <- fave.order(coo[,1])
     big <- sqrt(.Machine$double.xmax)
-    DUP <- spatstat.options("dupC")
     Cout <- .C("knnwMD",
                n = as.integer(n),
                m = as.integer(m),
@@ -206,9 +196,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
                x = as.double(t(coo[o,])),
                nnd = as.double(numeric(n * kmaxcalc)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big),
-               DUP=DUP)
-#               PACKAGE="spatstat")
+               huge = as.double(big))
     witch <- Cout$nnwhich
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
     if(any(witch <= 0))

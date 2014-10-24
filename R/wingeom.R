@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.90 $	$Date: 2014/10/04 10:58:47 $
+#	$Revision: 4.93 $	$Date: 2014/10/24 01:58:26 $
 #
 #
 #
@@ -629,14 +629,12 @@ bdry.mask <- function(W) {
     b <- b | (m != cbind(m[, -1], FALSE))
   } else {
     b <- integer(nr * nc)
-    DUP <- spatstat.options("dupC")
     z <- .C("bdrymask",
             nx = as.integer(nc),
             ny = as.integer(nr),
             m = as.integer(m),
-            b = as.integer(b),
-            DUP=DUP)
-    b <- matrix(as.logical(b), nr, nc)
+            b = as.integer(b))
+    b <- matrix(as.logical(z$b), nr, nc)
   }
   W$m <- b
   return(W)
@@ -835,7 +833,6 @@ discs <- function(centres, radii=marks(centres)/2, ...,
     return(D)
   } else if(mask) {
     M <- as.mask(Window(centres), ...)
-    DUP <- spatstat.options('dupC')
     z <- .C("discs2grid",
             nx    = as.integer(M$dim[2]),
             x0    = as.double(M$xcol[1]),
@@ -847,8 +844,7 @@ discs <- function(centres, radii=marks(centres)/2, ...,
             xd    = as.double(centres$x),
             yd    = as.double(centres$y),
             rd    = as.double(radii), 
-            out   = as.integer(integer(prod(M$dim))),
-            DUP   = DUP)
+            out   = as.integer(integer(prod(M$dim))))
     M$m[] <- as.logical(z$out)
     return(M)
   } else {
