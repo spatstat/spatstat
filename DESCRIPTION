@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.39-1
-Nickname: Wrath of Grapes
-Date: 2014-10-24
+Version: 1.39-2
+Nickname: Who Let the Bugs Out
+Date: 2014-11-09
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

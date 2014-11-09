@@ -2301,3 +2301,29 @@ local({
   A <- runifpoint(3)
   AB <- project2segment(A,B)
 })
+## tests/markcor.R
+##   Tests of mark correlation code (etc)
+## $Revision: 1.3 $ $Date: 2014/11/09 03:59:41 $
+
+require(spatstat)
+
+local({
+  ## check.testfun checks equality of functions
+  ##  and is liable to break if the behaviour of all.equal is changed
+  fe <- function(m1, m2) {m1 == m2}
+  fm <- function(m1, m2) {m1 * m2}
+  fs <- function(m1, m2) {sqrt(m1)}
+  if(check.testfun(fe, X=amacrine)$ftype != "equ")
+    warning("check.testfun fails to recognise mark equality function")
+  if(check.testfun(fm, X=longleaf)$ftype != "mul")
+    warning("check.testfun fails to recognise mark product function")
+  check.testfun(fs, X=longleaf)
+  
+  ## test all is well in markcorrint -> Kinhom 
+  MA <- markcorrint(amacrine,function(m1,m2){m1==m2})
+  set.seed(42)
+  AR <- rlabel(amacrine)
+  MR <- markcorrint(AR,function(m1,m2){m1==m2})
+  if(isTRUE(all.equal(MA,MR)))
+    stop("markcorrint unexpectedly ignores marks")
+})

@@ -1,4 +1,25 @@
 
+	CHANGES IN spatstat VERSION 1.39-2
+
+OVERVIEW
+
+   o Bug fixes
+
+   o Version nickname: 'Who Let the Bugs Out'
+
+BUG FIXES
+
+   o markcorrint
+   Results were completely incorrect due to a bug in Kinhom.
+   Bug introduced in spatstat 1.39-0, october 2014.
+   Fixed.
+
+   o Kinhom
+   Ignored argument 'reciplambda2' in some cases.
+   Bug introduced in spatstat 1.39-0, october 2014.
+   Fixed.
+
+
 	CHANGES IN spatstat VERSION 1.39-1
 
 OVERVIEW

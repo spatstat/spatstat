@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.82 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.83 $	$Date: 2014/11/09 03:17:12 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -206,7 +206,7 @@
   # Usable only if r values are evenly spaced from 0 to rmax
   # Invoked automatically if number of points is large
 
-    can.do.fast <- breaks$even && missing(lambda2)
+    can.do.fast <- breaks$even && !lambda2.given
     large.n    <- (npts >= nlarge)
     demand.best <- correction.given && best.wanted
     large.n.trigger <- large.n && !correction.given
@@ -308,7 +308,7 @@
     J <- close$j
     wI <- reciplambda[I]
     wIJ <- 
-      if(is.null(lambda2))
+      if(!lambda2.given)
         reciplambda[I] * reciplambda[J]
       else 
         reciplambda2[cbind(I,J)]
