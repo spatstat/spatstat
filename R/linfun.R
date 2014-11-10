@@ -49,8 +49,8 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
 }
   
 plot.linfun <- function(x, ..., L=NULL, eps = NULL, dimyx = NULL, xy = NULL,
-                        main="") {
-  xname <- short.deparse(substitute(x))
+                        main) {
+  if(missing(main)) main <- short.deparse(substitute(x))
   if(is.null(L)) L <- as.linnet(x)
   Z <- as.linim(x, eps=eps, dimyx=dimyx, xy=xy, L=L)
   plot(Z, ..., main=main)

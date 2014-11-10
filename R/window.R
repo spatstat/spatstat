@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.155 $	$Date: 2014/10/03 15:12:44 $
+#	$Revision: 4.156 $	$Date: 2014/11/10 05:38:43 $
 #
 #
 #	A window may be either
@@ -749,7 +749,6 @@ mask2df <- function(w) {
 #------------------------------------------------------------------
 		
 complement.owin <- function(w, frame=as.rectangle(w)) {
-  wname <- short.deparse(substitute(w))
   w <- as.owin(w)
 
   if(reframe <- !missing(frame)) {

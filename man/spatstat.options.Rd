@@ -51,6 +51,19 @@
       the endpoints of the line segments are inside the specified
       window). It is advisable to leave this flag set to \code{TRUE}. 
     }
+    \item{eroded.intensity}{
+      Logical flag affecting the behaviour of the
+      score and pseudo-score residual functions
+      \code{\link{Gcom}}, \code{\link{Gres}}
+      \code{\link{Kcom}}, \code{\link{Kres}}, 
+      \code{\link{psstA}}, 
+      \code{\link{psstG}}, 
+      \code{\link{psst}}.
+      The flag indicates whether to compute intensity estimates
+      on an eroded window (\code{eroded.intensity=TRUE})
+      or on the original data window
+      (\code{eroded.intensity=FALSE}, the default). 
+    }
     \item{expand}{
       The default expansion factor (area inflation factor)
       for expansion of the simulation window in

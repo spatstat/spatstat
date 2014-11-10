@@ -171,7 +171,8 @@ plot.im <- local({
     }
     
     imagebreaks <- NULL
-    ribbonvalues <- ribbonbreaks <- NULL
+#    ribbonvalues <- ribbonbreaks <- NULL
+    ribbonvalues <- NULL
 
     ## NOW DETERMINE THE COLOUR MAP
     colfun <- colmap <- NULL
@@ -280,7 +281,7 @@ plot.im <- local({
              imagebreaks <- c(-0.5, 0.5, 1.5)
              ribbonvalues <- c(0,1)
              ribbonrange <- range(imagebreaks)
-             ribbonbreaks <- imagebreaks
+#             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- c("FALSE", "TRUE")
              if(!is.null(colmap)) 
@@ -296,7 +297,7 @@ plot.im <- local({
              imagebreaks <- c(intlev - 0.5, max(intlev) + 0.5)
              ribbonvalues <- intlev
              ribbonrange <- range(imagebreaks)
-             ribbonbreaks <- imagebreaks
+#             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- paste(lev)
              vrange <- range(intlev)
@@ -314,7 +315,7 @@ plot.im <- local({
              imagebreaks <- c(intlev - 0.5, max(intlev) + 0.5)
              ribbonvalues <- intlev
              ribbonrange <- range(imagebreaks)
-             ribbonbreaks <- imagebreaks
+#             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- paste(lev)
              vrange <- range(intlev)

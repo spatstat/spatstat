@@ -224,8 +224,8 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
       stop(paste(sQuote("rbord"), "is infinite"))
   }
   
-  # whether window should be clipped
-  clip <- (rbord > 0)
+#  # whether window should be clipped
+#  clip <- (rbord > 0)
 
   # match type argument
   type <- pickoption("type", type,

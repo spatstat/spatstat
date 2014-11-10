@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.83 $	$Date: 2014/08/04 09:59:56 $
+#	$Revision: 1.84 $	$Date: 2014/11/10 11:29:01 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -93,7 +93,7 @@ predict.ppm <- local({
     ##       find out what kind of model it is
     if(is.null(sumobj))
       sumobj <- summary(model, quick="entries")  # undocumented hack!
-    stationary  <- sumobj$stationary
+#    stationary  <- sumobj$stationary
     poisson     <- sumobj$poisson
     marked      <- sumobj$marked
     multitype   <- sumobj$multitype
@@ -431,7 +431,7 @@ predict.ppm <- local({
                fmla <- formula(model)
                mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
                mm <- model.matrix(fmla, mf, ..., na.action=na.pass)
-               if((nr <- nrow(mm)) != nrow(newdata))
+               if(nrow(mm) != nrow(newdata))
                  stop("Internal error: row mismatch in SE calculation")
                ## compute relative variance = diagonal of quadratic form
                vv <- quadform(mm, vc)
@@ -456,7 +456,7 @@ predict.ppm <- local({
       W <- as.owin(data.ppm(model))
       U <- ppp(newdata$x, y=newdata$y, window=W, check=FALSE)
       if(marked) 
-        marks(U) <- Umarks <- newdata$marks
+        marks(U) <- newdata$marks
       ## determine which prediction points are data points
       if(is.null(E))
         E <- equalpairs(U, X, marked)

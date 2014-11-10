@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.48 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.49 $	$Date: 2014/11/10 11:27:55 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -25,8 +25,8 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL, subset) {
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
-  Yexpr <- lhs <- formula[[2]]
-  trend <- rhs <- formula[c(1,3)]
+  Yexpr <- formula[[2]]
+  trend <- formula[c(1,3)]
   
   ## FIT #######################################
   thecall <- if(missing(subset)) {

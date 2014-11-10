@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.15 $    $Date: 2014/05/10 04:31:48 $
+##  $Revision: 1.16 $    $Date: 2014/11/10 08:13:19 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -113,9 +113,9 @@ function (x, i, j, value)
   jgiven <- !missing(j)
   if(!igiven) i <- seq_len(dimx[1])
   if(!jgiven) j <- seq_len(dimx[2])
-  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
-                   || (is.character(i) && length(i) == 1)
-                   || (is.logical(i) && sum(i) == 1))
+#  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
+#                   || (is.character(i) && length(i) == 1)
+#                   || (is.logical(i) && sum(i) == 1))
   singlecolumn <- ((is.integer(j) && length(j) == 1 && j > 0)
                    || (is.character(j) && length(j) == 1)
                    || (is.logical(j) && sum(j) == 1))

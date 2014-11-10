@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.10 $   $Date: 2013/10/20 01:05:35 $
+#  $Revision: 1.11 $   $Date: 2014/11/10 11:14:30 $
 #
 #  Image/function on a linear network
 #
@@ -84,7 +84,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
   # sort each segment's data by position along segment
   dfmap <- lapply(dfmap, function(z) { z[fave.order(z$tp), ] })
   # plot each segment's data
-  Lends <- Llines$ends
+#  Lends <- Llines$ends
   Lperp <- angles.psp(Llines) + pi/2
   Lfrom <- L$from
   Lto   <- L$to

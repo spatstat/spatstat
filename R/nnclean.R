@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.13 $   $Date: 2014/01/09 10:59:13 $
+#  $Revision: 1.14 $   $Date: 2014/11/10 10:55:29 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -60,7 +60,6 @@ nnclean.ppp <-
 
   Xname <- short.deparse(substitute(X))
   
-  n <- X$n
   validposint(k, "nnclean.ppp")
 
   if(!edge.correct) {
@@ -163,7 +162,7 @@ nncleanEngine <-
     # E - step
     f1 <- dknn(kthNND[!Z], lambda=lambda1, k = k, d = d[1])
     f2 <- dknn(kthNND[!Z], lambda=lambda2, k = k, d = d[2])
-    delta[!Z] <- deltaNZ <- (p * f1)/(p * f1 + (1 - p) * f2)
+    delta[!Z] <- (p * f1)/(p * f1 + (1 - p) * f2)
     delta[Z] <- 0
     # M - step
     sumdelta <- sum(delta)

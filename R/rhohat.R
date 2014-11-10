@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.60 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.61 $  $Date: 2014/11/10 11:18:05 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -565,7 +565,7 @@ plot.rhohat <- function(x, ..., do.rug=TRUE) {
         names(dat) <- vars[1]
         rugx <- as.numeric(eval(parse(text=rhstr), dat))
       } else {
-        warning("Unable to add rug plot")
+        if(asked.rug) warning("Unable to add rug plot")
         rugx <- NULL
       }
     } 

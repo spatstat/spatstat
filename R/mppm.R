@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.62 $   $Date: 2014/03/22 01:22:27 $
+#  $Revision: 1.63 $   $Date: 2014/11/10 10:53:54 $
 #
 
 mppm <- function(formula, data, interaction=Poisson(), ...,
@@ -60,8 +60,8 @@ mppm <- function(formula, data, interaction=Poisson(), ...,
   if(length(formula) < 3)
     stop(paste("Argument", sQuote("formula"),
                "must have a left hand side"))
-  Yname <- lhs <- formula[[2]]
-  trend <- rhs <- formula[c(1,3)]
+  Yname <- formula[[2]]
+  trend <- formula[c(1,3)]
   if(!is.name(Yname))
     stop("Left hand side of formula should be a single name")
   Yname <- paste(Yname)

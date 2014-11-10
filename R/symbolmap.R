@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.20 $  $Date: 2014/10/24 00:22:30 $
+##   $Revision: 1.21 $  $Date: 2014/11/10 11:18:52 $
 ##
 
 symbolmap <- local({
@@ -396,7 +396,7 @@ plot.symbolmap <- local({
              if(vertical) vv <- rev(vv)
            })
     nn <- length(vv)
-    gg <- map(vv)
+##    gg <- map(vv)
     ll <- paste(labelmap(vv))
     
     ## determine position of plot and symbols

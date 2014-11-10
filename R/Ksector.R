@@ -1,7 +1,7 @@
 #
 #	Ksector.R	Estimation of 'sector K function'
 #
-#	$Revision: 1.4 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.5 $	$Date: 2014/11/10 10:41:14 $
 #
 
 Ksector <- function(X, begin=0, end=360, ...,
@@ -12,7 +12,7 @@ Ksector <- function(X, begin=0, end=360, ...,
                     ratio=FALSE, verbose=TRUE)
 {
   verifyclass(X, "ppp")
-  rfixed <- !is.null(r) || !is.null(breaks)
+#  rfixed <- !is.null(r) || !is.null(breaks)
   npts <- npoints(X)
   W <- Window(X)
   areaW <- area(W)
@@ -74,7 +74,7 @@ Ksector <- function(X, begin=0, end=360, ...,
                              good="good",
                              best="best"),
                            multi=TRUE)
-  best.wanted <- ("best" %in% correction)
+#  best.wanted <- ("best" %in% correction)
   ## replace 'good' by the optimal choice for this size of dataset
   if("good" %in% correction)
     correction[correction == "good"] <- good.correction.K(X)

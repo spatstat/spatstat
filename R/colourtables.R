@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.32 $ $Date: 2014/09/03 12:04:17 $
+# $Revision: 1.33 $ $Date: 2014/11/10 05:38:05 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -12,7 +12,7 @@ colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
     f <- lut()
   } else {
     ## validate colour data 
-    h <- col2hex(col)
+    col2hex(col)
     ## store without conversion
     f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs)
   }
@@ -495,7 +495,7 @@ colouroutputs <- function(x) {
 "colouroutputs<-" <- function(x, value) {
   stopifnot(inherits(x, "colourmap"))
   st <- attr(x, "stuff")
-  h <- col2hex(value) # validates colours
+  col2hex(value) # validates colours
   st$outputs[] <- value
   attr(x, "stuff") <- st
   assign("stuff", st, envir=environment(x))

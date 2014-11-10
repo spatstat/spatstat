@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.3 $ $Date: 2013/10/21 02:35:05 $
+#  $Revision: 1.4 $ $Date: 2014/11/10 12:08:48 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -90,7 +90,7 @@ nnwhich.lpp <- function(X, ..., method="C") {
   # find nearest segment for each point
   # This is given by local coordinates, if available (spatstat >= 1.28-0)
   loco <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)
-  pro <- if(!is.null(seg <- loco$seg)) seg else nearestsegment(X, Lseg)
+  pro <- loco$seg %orifnull% nearestsegment(X, L$lines)
 
   if(method == "interpreted") {
     D <- pairdist(X, method="interpreted")

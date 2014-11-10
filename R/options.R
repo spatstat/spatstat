@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.55 $   $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.56 $   $Date: 2014/11/10 11:44:41 $
 #
 #
 
@@ -289,6 +289,13 @@ warn.once <- function(key, ...) {
        psstG.remove.zeroes=list(
          ## whether to remove zero distances in psstG
          default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+      eroded.intensity=list(
+         ## whether to compute intensity estimate in eroded window
+         ## e.g. for Kcom, Gcom
+         default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),

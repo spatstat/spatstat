@@ -6,14 +6,14 @@
 #
 #        compatible.fasp()       Check whether two fasp objects are compatible
 #
-#     $Revision: 1.7 $     $Date: 2014/10/24 00:22:30 $
+#     $Revision: 1.9 $     $Date: 2014/11/10 07:36:27 $
 #
 
 eval.fasp <- function(expr, envir, dotonly=TRUE) {
   # convert syntactic expression to 'expression' object
   e <- as.expression(substitute(expr))
   # convert syntactic expression to call
-  elang <- substitute(expr)
+#  elang <- substitute(expr)
   # find names of all variables in the expression
   varnames <- all.vars(e)
   if(length(varnames) == 0)
@@ -33,7 +33,7 @@ eval.fasp <- function(expr, envir, dotonly=TRUE) {
   fasps <- vars[isfasp]
   nfasps <- length(fasps)
   # test whether the fasp objects are compatible
-  if(nfasps > 1 && !(ok <- do.call("compatible", unname(fasps))))
+  if(nfasps > 1 && !(do.call("compatible", unname(fasps))))
     stop(paste(if(nfasps > 2) "some of" else NULL,
                "the objects",
                commasep(sQuote(names(fasps))),

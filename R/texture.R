@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.4 $ $Date: 2014/07/21 09:17:58 $
+##  $Revision: 1.5 $ $Date: 2014/11/10 11:20:15 $
 
 ### .................. basic graphics .............................
 
@@ -132,7 +132,7 @@ plot.texturemap <- local({
     if(missing(main))
       main <- short.deparse(substitute(x))
     df <- attr(x, "df")
-    textures <- df$textures
+#    textures <- df$textures
     n   <- nrow(df)
     check.1.real(gap, "In plot.texturemap")
     explain.ifnot(gap >= 0, "In plot.texturemap")

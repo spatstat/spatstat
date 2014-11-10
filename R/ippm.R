@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.15 $   $Date: 2014/06/24 02:44:07 $
+#   $Revision: 2.16 $   $Date: 2014/11/10 08:22:41 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -46,8 +46,8 @@ ippm <- local({
     ## fit the initial model and extract information
     ppmcall$covfunargs <- covfunargs
     fit0 <- eval(ppmcall, callframe)
-    lpl0 <- fit0$maxlogpl
-    p <- length(coef(fit0))
+#    lpl0 <- fit0$maxlogpl
+#    p <- length(coef(fit0))
     ## examine covariates and trend
     covariates <- fit0$covariates
     isfun <- unlist(lapply(covariates, is.function))

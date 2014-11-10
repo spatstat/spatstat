@@ -1,7 +1,7 @@
 #
 #   pcfmulti.R
 #
-#   $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.6 $   $Date: 2014/11/10 11:05:55 $
 #
 #   multitype pair correlation functions
 #
@@ -94,7 +94,7 @@ pcfmulti <- function(X, I, J, ...,
                      Jname="points satisfying condition J")
 {
   verifyclass(X, "ppp")
-  r.override <- !is.null(r)
+#  r.override <- !is.null(r)
   divisor <- match.arg(divisor)
 
   win <- X$window
@@ -130,7 +130,7 @@ pcfmulti <- function(X, I, J, ...,
   XI <- X[I]
   XJ <- X[J]
 
-  lambdaI <- nI/areaW
+#  lambdaI <- nI/areaW
   lambdaJ <- nJ/areaW
   nIJ <- sum(I & J)
   lambdaIJarea <- (nI * nJ - nIJ)/areaW
@@ -216,7 +216,7 @@ pcfmulti <- function(X, I, J, ...,
   ## extract information for these pairs (relative to orderings of XI, XJ)
   dclose <- close$d
   icloseI  <- close$i
-  jcloseJ  <- close$j
+#  jcloseJ  <- close$j
 
   ###### compute #######
 

@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.83 $	$Date: 2014/11/09 03:17:12 $
+#	$Revision: 1.84 $	$Date: 2014/11/10 08:29:05 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -208,7 +208,7 @@
 
     can.do.fast <- breaks$even && !lambda2.given
     large.n    <- (npts >= nlarge)
-    demand.best <- correction.given && best.wanted
+#    demand.best <- correction.given && best.wanted
     large.n.trigger <- large.n && !correction.given
     fastcorrections <- c("border", "bord.modif", "none")
     fastdefault <- "border"

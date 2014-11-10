@@ -231,7 +231,7 @@ dilation.psp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     # old code for polygonal case
     ends   <- x$ends
     angles <- angles.psp(x, directed=TRUE)
-    lengths <- lengths.psp(x)
+#    lengths <- lengths.psp(x)
     out <- NULL
     # dilate individual segments
     halfcircle <- seq(from=0, to=pi, length.out=128)[-c(1,128)]

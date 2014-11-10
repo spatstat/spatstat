@@ -3,14 +3,14 @@
 #
 # 'exact' MPLE for stationary Strauss process
 #
-#  $Revision: 1.5 $  $Date: 2012/07/13 09:12:41 $
+#  $Revision: 1.6 $  $Date: 2014/11/10 07:39:41 $
 #
 
 exactMPLEstrauss <- local({
 
   # main function
   exactMPLEstrauss <- function(X, R, ngrid=2048, plotit=FALSE, project=TRUE) {
-    n <- npoints(X)
+#    n <- npoints(X)
     W <- as.owin(X)
     # border correction
     WminR <- erosion(W, R)

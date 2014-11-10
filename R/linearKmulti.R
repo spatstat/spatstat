@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.3 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.5 $ $Date: 2014/11/10 10:45:42 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -73,8 +73,8 @@ linearKmulti <- function(X, I, J, r=NULL, ..., correction="Ang") {
   nI <- sum(I)
   nJ <- sum(J)
   nIandJ <- sum(I & J)
-  lambdaI <- nI/lengthL
-  lambdaJ <- nJ/lengthL
+#  lambdaI <- nI/lengthL
+#  lambdaJ <- nJ/lengthL
   # compute K
   denom <- (nI * nJ - nIandJ)/lengthL
   K <- linearKmultiEngine(X, I, J, r=r, denom=denom,
@@ -186,9 +186,10 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
 linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
                           correction="Ang", showworking=FALSE) {
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+#  sX <- summary(X)
+#  np <- sX$npoints
+#  lengthL <- sX$totlength
+  np <- npoints(X)
   # extract linear network
   L <- X$domain
   # extract points

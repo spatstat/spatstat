@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.182 $	$Date: 2014/11/10 02:21:10 $
+#	$Revision: 5.184 $	$Date: 2014/11/10 10:52:45 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/11/10 02:21:10 $")
+                        date="$Date: 2014/11/10 10:52:45 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -404,7 +404,7 @@ mpl.prepare <- local({
     ## count data and dummy points in specified subset
     izdat <- .mpl$Z[.mpl$SUBSET]
     ndata <- sum(izdat)
-    ndummy <- sum(!izdat)
+#    ndummy <- sum(!izdat)
     
     ## Determine the domain of integration for the pseudolikelihood.
     if(correction == "border") {
@@ -1008,7 +1008,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     Pdummy <- if(length(Pdata) > 0) Pall[-Pdata] else Pall
     nD <- length(Pdummy)
     ## size of full matrix
-    nmat <- (nD + nX) * nX
+#    nmat <- (nD + nX) * nX
     nMAX <- spatstat.options("maxmatrix")
     ## Calculate number of dummy points in largest permissible X * (X+D) matrix 
     nperblock <- max(1, floor(nMAX/nX - nX))

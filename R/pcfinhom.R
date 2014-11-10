@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.15 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.16 $   $Date: 2014/11/10 11:03:53 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -17,7 +17,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
                      sigma=NULL, varcov=NULL)
 {
   verifyclass(X, "ppp")
-  r.override <- !is.null(r)
+#  r.override <- !is.null(r)
 
   win <- X$window
   areaW <- area(win)

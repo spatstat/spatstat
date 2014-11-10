@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.51 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.52 $   $Date: 2014/11/10 11:06:53 $
 #
 #
 #   calculate pair correlation function
@@ -21,7 +21,7 @@ pcf.ppp <- function(X, ..., r=NULL,
                     domain=NULL)
 {
   verifyclass(X, "ppp")
-  r.override <- !is.null(r)
+#  r.override <- !is.null(r)
 
   win <- X$window
   areaW <- area(win)

@@ -28,7 +28,7 @@ function(X, r=NULL, breaks=NULL, ..., correction=c("rs", "km", "han"),
   zeroes <- numeric(length(rvals))
 
   ## choose correction(s)
-  correction.given <- !missing(correction) && !is.null(correction)
+#  correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction)) {
     correction <- c("rs", "km", "han")
   } else correction <- pickoption("correction", correction,

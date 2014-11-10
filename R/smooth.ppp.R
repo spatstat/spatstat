@@ -447,10 +447,10 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   #
   marx <- marks(X)
   # determine a range of bandwidth values
-  n <- npoints(X)
+#  n <- npoints(X)
   if(is.null(hmin) || is.null(hmax)) {
     W <- Window(X)
-    a <- area(W)
+#    a <- area(W)
     d <- diameter(as.rectangle(W))
     # Stoyan's rule of thumb 
     stoyan <- bw.stoyan(X)
@@ -479,7 +479,7 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
 
   # optimize
   iopt <- which.min(cv)
-  hopt <- h[iopt]
+#  hopt <- h[iopt]
   #
   if(warn && (iopt == nh || iopt == 1)) 
     warning(paste("Cross-validation criterion was minimised at",

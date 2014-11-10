@@ -46,7 +46,7 @@ pairorient <- function(X, r1, r2, ...,
                              good="good",
                              best="best"),
                            multi=TRUE)
-  best.wanted <- ("best" %in% correction)
+#  best.wanted <- ("best" %in% correction)
   ## replace 'good' by the optimal choice for this size of dataset
   if("good" %in% correction)
     correction[correction == "good"] <- good.correction.K(X)

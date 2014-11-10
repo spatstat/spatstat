@@ -46,7 +46,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
     linearK(X, r=r, ..., correction=correction)
   # extract info about pattern
   sX <- summary(X)
-  np <- sX$npoints
+#  np <- sX$npoints
   lengthL <- sX$totlength
   #
   lambdaX <- getlambda.lpp(lambda, X, ...)
@@ -101,7 +101,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   # extract info about pattern
   sX <- summary(X)
   np <- sX$npoints
-  lengthL <- sX$totlength
+#  lengthL <- sX$totlength
   # extract linear network
   L <- X$domain
   # extract points

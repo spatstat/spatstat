@@ -1,7 +1,7 @@
 #
 #  nearestsegment.R
 #
-#  $Revision: 1.10 $  $Date: 2014/10/24 06:47:27 $
+#  $Revision: 1.11 $  $Date: 2014/11/10 11:27:12 $
 #
 # Given a point pattern X and a line segment pattern Y,
 # for each point x of X, determine which segment of Y is closest to x
@@ -59,7 +59,7 @@ ppllengine <- function(X, Y, action="project", check=FALSE) {
   yv <- with(alldata, y - y0)
   # rotate coordinate system so that x axis is parallel to line segment
   xpr <- xv * co + yv * si
-  ypr <- - xv * si + yv * co
+#  ypr <- - xv * si + yv * co
   # determine whether projection is an endpoint or interior point of segment
   ok <- is.finite(xpr)
   left <- !ok | (xpr <= 0)

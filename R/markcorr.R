@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.68 $ $Date: 2014/11/09 03:16:18 $
+##     $Revision: 1.69 $ $Date: 2014/11/10 10:58:11 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -136,6 +136,7 @@ markcorrint <-
   ##
   stopifnot(is.ppp(X) && is.marked(X))
   is.marked(X, dfok=FALSE)
+  W <- Window(X)
   ## validate test function
   h <- check.testfun(f, f1, X)
   f     <- h$f
@@ -158,6 +159,9 @@ markcorrint <-
                              translation="translate",
                              best="best"),
                            multi=TRUE)
+
+  correction <- implemented.for.K(correction, W$type, correction.given)
+
   isborder  <- correction %in% c("border", "bord.modif")
   if(any(isborder) && !multiplicative) {
     whinge <- paste("Border correction is not valid unless",
@@ -169,7 +173,7 @@ markcorrint <-
       warning(whinge)
   }
   ## estimated intensity
-  lambda <- X$n/area(Window(X))
+  lambda <- intensity(X)
   mX <- marks(X)
   switch(ftype,
          mul={

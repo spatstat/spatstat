@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.104 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 5.106 $	$Date: 2014/11/10 10:35:35 $
 #
 #
 # -------- functions ----------------------------------------
@@ -125,7 +125,7 @@ function(X, ..., r=NULL, breaks=NULL,
 
   can.do.fast <- breaks$even
   large.n    <- (npts >= nlarge)
-  demand.best <- correction.given && best.wanted
+#  demand.best <- correction.given && best.wanted
   large.n.trigger <- large.n && !correction.given
   fastcorrections <- c("border", "bord.modif", "none")
   fastdefault     <- "border"
@@ -592,7 +592,7 @@ Knone.engine <- function(X, rmax, nr=100,
   W <- as.owin(X)
 
   areaW <- area(W)
-  lambda <- npts/areaW
+#  lambda <- npts/areaW
   lambda2 <- (npts * (npts - 1))/(areaW^2)
   denom <- lambda2 * areaW
 

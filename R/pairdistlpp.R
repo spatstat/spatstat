@@ -17,7 +17,7 @@ pairdist.lpp <- function(X, ..., method="C") {
   Y <- as.ppp(X)
   n <- npoints(Y)
   #
-  Lseg  <- L$lines
+#  Lseg  <- L$lines
   Lvert <- L$vertices
   from  <- L$from
   to    <- L$to

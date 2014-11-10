@@ -98,7 +98,7 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
                            Jname="points satisfying condition J")
 {
   verifyclass(X, "ppp")
-  r.override <- !is.null(r)
+#  r.override <- !is.null(r)
 
   win <- X$window
   areaW <- area(win)

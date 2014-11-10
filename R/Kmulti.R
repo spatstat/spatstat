@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.45 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 5.46 $	$Date: 2014/11/10 10:34:24 $
 #
 #
 # -------- functions ----------------------------------------
@@ -160,8 +160,6 @@ function(X, I, J, r=NULL, breaks=NULL,
   verifyclass(X, "ppp")
 
   npts <- npoints(X)
-  x <- X$x
-  y <- X$y
   W <- X$window
   areaW <- area(W)
 

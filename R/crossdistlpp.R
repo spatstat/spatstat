@@ -27,7 +27,7 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
   P <- as.ppp(X)
   Q <- as.ppp(Y)
   #
-  Lseg  <- L$lines
+#  Lseg  <- L$lines
   Lvert <- L$vertices
   from  <- L$from
   to    <- L$to

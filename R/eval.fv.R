@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.26 $     $Date: 2014/09/16 01:07:19 $
+#     $Revision: 1.27 $     $Date: 2014/11/10 07:37:10 $
 #
 
 eval.fv <- local({
@@ -40,7 +40,7 @@ eval.fv <- local({
     if(dotonly) 
       funs <- lapply(funs, restrict.to.dot)
     # test whether the fv objects are compatible
-    if(nfuns > 1 && !(ok <- do.call("compatible", unname(funs)))) {
+    if(nfuns > 1 && !(do.call("compatible", unname(funs)))) {
       warning(paste(if(nfuns > 2) "some of" else NULL,
                     "the functions",
                     commasep(sQuote(names(funs))),
@@ -81,7 +81,6 @@ eval.fv <- local({
     }
     # Remove duplicated names
     # Typically occurs when combining several K functions, etc.
-    oldfnames <- fnames
     # Tweak fv objects so their function names are their object names
     # as used in the expression
     if(any(duplicated(fnames))) {

@@ -3,7 +3,7 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.38 $	$Date: 2014/09/28 09:17:16 $
+#	$Revision: 4.39 $	$Date: 2014/11/10 07:40:28 $
 #
 
 Fhazard <- function(X, ...) {
@@ -53,7 +53,7 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   rmax  <- breaks$max
   
   ## choose correction(s)
-  correction.given <- !missing(correction) && !is.null(correction)
+#  correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction)) {
     correction <- c("rs", "km", "cs")
   } else correction <- pickoption("correction", correction,

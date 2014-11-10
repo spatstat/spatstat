@@ -2903,7 +2903,6 @@ of potential impact.
 \item polygon geometry:
     The point-in-polygon test gave the wrong answer in some boundary cases.
     {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
-    
 \end{itemize}
 
 

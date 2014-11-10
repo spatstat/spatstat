@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.88 $ $Date: 2014/08/27 09:39:08 $
+# $Revision: 1.91 $ $Date: 2014/11/10 10:38:43 $
 #
 
 kppm <- function(X, ...) {
@@ -30,8 +30,8 @@ kppm.formula <-
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
-  Yexpr <- lhs <- formula[[2]]
-  trend <- rhs <- formula[c(1,3)]
+  Yexpr <- formula[[2]]
+  trend <- formula[c(1,3)]
   
   ## FIT #######################################
   thecall <- call("kppm", X=Yexpr, trend=trend,
@@ -259,7 +259,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   if(stationary <- is.stationary(po)) {
     # stationary unmarked Poisson process
     lambda <- intensity(X)
-    lambdaIJ <- lambda^2
+#    lambdaIJ <- lambda^2
     # compute cdf of distance between two uniform random points in W
     g <- distcdf(W)
     # scaling constant is (area * intensity)^2
@@ -269,7 +269,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
     lambdaX <- fitted(po, dataonly=TRUE)
     lambda <- lambdaM <- predict(po, locations=M)
     # lambda(x_i) * lambda(x_j)
-    lambdaIJ <- lambdaX[I] * lambdaX[J]
+#    lambdaIJ <- lambdaX[I] * lambdaX[J]
     # compute cdf of distance between two random points in W
     # with density proportional to intensity function
     g <- distcdf(M, dW=lambdaM)
@@ -307,7 +307,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   # define objective function 
   if(!is.function(weightfun)) {
     # pack up necessary information
-    objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g,
+    objargs <- list(dIJ=dIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(paco))
     # define objective function (with 'paco' in its environment)
     # Note that this is 1/2 of the log composite likelihood,
@@ -329,7 +329,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
       return(y * w)
     }
     # pack up necessary information
-    objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g,
+    objargs <- list(dIJ=dIJ, wIJ=wIJ, sumweight=sumweight, g=g, gscale=gscale, 
                     envir=environment(wpaco))
     # define objective function (with 'paco', 'wpaco' in its environment)
     # Note that this is 1/2 of the log composite likelihood,
@@ -393,17 +393,17 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
     rmax <- rmax.rule("K", W, intensity(X))
   # identify pairs of points that contribute
   cl <- closepairs(X, rmax)
-  I <- cl$i
+#  I <- cl$i
   J <- cl$j
   dIJ <- cl$d
   # compute weights for pairs of points
   if(is.function(weightfun)) {
     wIJ <- weightfun(dIJ)
-    sumweight <- sum(wIJ)
+#    sumweight <- sum(wIJ)
   } else {
     npairs <- length(dIJ)
     wIJ <- rep.int(1, npairs)
-    sumweight <- npairs
+#    sumweight <- npairs
   }
   # convert window to mask, saving other arguments for later
   dcm <- do.call.matched("as.mask",
@@ -567,7 +567,7 @@ improve.kppm <- local({
     wt <- wt[mask]
     Uxy <- rasterxy.mask(mask)
     U <- ppp(Uxy$x, Uxy$y, window = win, check=FALSE)
-    nU <- npoints(U)
+#    nU <- npoints(U)
     Yu <- pixellate(X, W = mask)
     Yu <- Yu[mask]
     

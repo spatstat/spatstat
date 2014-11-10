@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.36 $     $Date: 2014/09/12 04:11:42 $
+#     $Revision: 1.37 $     $Date: 2014/11/10 07:37:31 $
 #
 
 eval.im <- local({
@@ -38,7 +38,7 @@ eval.im <- local({
     images <- vars[ims]
     nimages <- length(images)
     ## test that the images are compatible
-    if(!(ok <- do.call("compatible", unname(images)))) {
+    if(!(do.call("compatible", unname(images)))) {
       whinge <- paste(if(nimages > 2) "some of" else NULL,
                       "the images",
                       commasep(sQuote(names(images))),

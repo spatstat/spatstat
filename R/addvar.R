@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.5 $  $Date: 2014/10/12 00:17:05 $
+#   $Revision: 1.6 $  $Date: 2014/11/10 05:26:39 $
 #
 
 
@@ -33,7 +33,7 @@ addvar <- function(model, covariate, ...,
   
   # extract spatial locations
   Q <- quad.ppm(model)
-  datapoints <- Q$data
+#  datapoints <- Q$data
   quadpoints <- union.quad(Q)
   Z <- is.data(Q)
   wts <- w.quad(Q)
@@ -344,7 +344,7 @@ print.addvar <- function(x, ...) {
 plot.addvar <- function(x, ..., do.points=FALSE) {
   xname <- deparse(substitute(x))
   s <- attr(x, "stuff")
-  covname <- s$covname
+#  covname <- s$covname
   xresid <- s$xresid
   yresid <- s$yresid
   # adjust y limits if intending to plot points as well

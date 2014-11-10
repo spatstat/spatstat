@@ -28,8 +28,8 @@ lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
-  Yexpr <- lhs <- formula[[2]]
-  trend <- rhs <- formula[c(1,3)]
+  Yexpr <- formula[[2]]
+  trend <- formula[c(1,3)]
   
   ## FIT #######################################
   thecall <- call("lppm", X=Yexpr, trend=trend,

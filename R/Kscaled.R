@@ -1,7 +1,7 @@
 #
 #	Kscaled.R	Estimation of K function for locally-scaled process
 #
-#	$Revision: 1.14 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.15 $	$Date: 2014/11/10 10:41:18 $
 #
 
 "Lscaled" <- function(...) {
@@ -21,7 +21,7 @@
             sigma=NULL, varcov=NULL)
 {
   verifyclass(X, "ppp")
-  rfixed <- !missing(r) || !missing(breaks)
+#  rfixed <- !missing(r) || !missing(breaks)
 
   ## determine basic parameters
   W <- X$window
@@ -42,7 +42,7 @@
                              best="best"),
                            multi=TRUE)
 
-  best.wanted <- ("best" %in% correction)
+#  best.wanted <- ("best" %in% correction)
   correction <- implemented.for.K(correction, W$type, correction.given)
 
   ###########################################################

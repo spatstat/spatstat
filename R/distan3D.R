@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.11 $     $Date: 2014/10/24 00:22:30 $
+#      $Revision: 1.12 $     $Date: 2014/11/10 11:01:39 $
 #
 #      Interpoint distances for 3D points
 #
@@ -48,6 +48,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                d= as.double(numeric(n*n)))
   }
   dout <- matrix(Cout$d, nrow=n, ncol=n)
+  return(dout)
 }
 
 nndist.pp3 <- function(X, ..., k=1) {

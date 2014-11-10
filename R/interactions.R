@@ -4,7 +4,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.8 $  $Date: 2007/03/30 08:19:16 $
+#  $Revision: 1.11 $  $Date: 2014/11/10 08:17:39 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {
@@ -14,7 +14,7 @@ impliedpresence <- function(tags, formula, df, extranames=character(0)) {
   stopifnot(inherits(formula, "formula"))
   stopifnot(is.character(tags))
   stopifnot(is.character(extranames))
-  allvars <- variablesinformula(formula)
+#  allvars <- variablesinformula(formula)
   if(any(tags %in% names(df)))
     stop(paste(sQuote("tags"),
                "conflicts with the name of a column of",
@@ -57,11 +57,14 @@ active.interactions <- function(object) {
   stopifnot(inherits(object, "mppm"))
   interaction <- object$Inter$interaction
   iformula <- object$iformula
-  environment(iformula) <- nenv <- new.env()
-  ninter   <- object$Inter$ninter
+  nenv <- new.env()
+  environment(iformula) <- nenv 
+
   itags    <- object$Inter$itags
-  iused    <- object$Inter$iused
-  trivial  <- object$Inter$trivial
+# The following are currently unused  
+#  ninter   <- object$Inter$ninter
+#  iused    <- object$Inter$iused
+#  trivial  <- object$Inter$trivial
 
   # names of variables
   dat <- object$data
@@ -83,11 +86,12 @@ impliedcoefficients <- function(object, tag) {
   stopifnot(is.character(tag) && length(tag) == 1)
   fitobj      <- object$Fit$FIT
   Vnamelist   <- object$Fit$Vnamelist
-  fitter      <- object$Fit$fitter
-  interaction <- object$Inter$interaction
-  ninteract   <- object$Inter$ninteract
-  trivial     <- object$Inter$trivial
-  iused       <- object$Inter$iused
+# Not currently used:  
+#  fitter      <- object$Fit$fitter
+#  interaction <- object$Inter$interaction
+#  ninteract   <- object$Inter$ninteract
+#  trivial     <- object$Inter$trivial
+#  iused       <- object$Inter$iused
   itags       <- object$Inter$itags
   if(!(tag %in% itags))
     stop(paste("Argument", dQuote("tag"),
@@ -160,7 +164,7 @@ illegal.iformula <- function(ifmla, itags, dfvarnames) {
   tt <- attributes(terms(ifmla))
   # extract all variables appearing in the formula
   vars <- as.list(tt$variables)[-1]
-  nvars <- length(vars)
+#  nvars <- length(vars)
   varstrings <- sapply(vars, function(x) paste(as.expression(x)))
   # Each variable may be a name or an expression
   v.is.name <- sapply(vars, is.name)

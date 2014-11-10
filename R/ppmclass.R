@@ -73,12 +73,12 @@ function(x, ...,
   s <- summary.ppm(x, quick=if(do.SE) FALSE else "no variances")
         
   notrend <-    s$no.trend
-  stationary <- s$stationary
+#  stationary <- s$stationary
   poisson <-    s$poisson
   markeddata <- s$marked
   multitype  <- s$multitype
         
-  markedpoisson <- poisson && markeddata
+#  markedpoisson <- poisson && markeddata
   csr <- poisson && notrend && !markeddata
 
   special <- csr && all(c("model", "trend") %in% what)

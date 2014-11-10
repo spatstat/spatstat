@@ -1,13 +1,12 @@
 #
 #  fryplot.R
 #
-#  $Revision: 1.12 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.13 $ $Date: 2014/11/10 07:42:41 $
 #
 
 fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
   Xname <- short.deparse(substitute(X))
   X <- as.ppp(X)
-  n <- npoints(X)
   b <- as.rectangle(X)
   halfspan <- with(b, c(diff(xrange), diff(yrange)))
   if(!is.null(width)) {

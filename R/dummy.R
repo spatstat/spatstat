@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.28 $     $Date: 2014/08/04 09:56:52 $
+#       $Revision: 5.29 $     $Date: 2014/11/10 05:33:43 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -93,7 +93,6 @@ cellmiddles <- local({
     # and ensures that dummy points are generated only inside those tiles
     # that have nonzero digital area
     M   <- as.mask(W, dimyx=rev(npix))
-    Mm <- M$m
     xx <- as.vector(rasterx.mask(M, drop=TRUE))
     yy <- as.vector(rastery.mask(M, drop=TRUE))
     pid <- gridindex(xx,yy,W$xrange,W$yrange,nx,ny)$index
@@ -311,7 +310,7 @@ default.n.tiling <- local({
   ndminX <- pmax(ndummy.min, 10 * ceiling(2 * sqrt(X$n)/10))
   ndminX <- ensure2vector(ndminX)
 
-  if(eps.given <- !is.null(eps)) {
+  if(!is.null(eps)) {
     eps <- ensure2print(eps, verbose)
     Xbox <- as.rectangle(as.owin(X))
     sides <- with(Xbox, c(diff(xrange), diff(yrange)))

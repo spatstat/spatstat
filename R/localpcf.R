@@ -1,7 +1,7 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.19 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.20 $  $Date: 2014/11/10 11:29:47 $
 #
 #
 
@@ -167,7 +167,7 @@ print.localpcfmatrix <- function(x, ...) {
   nr <- nrow(x)
   cat(paste("pcf estimates for", nc, ngettext(nc, "point", "points"), "\n"))
   rval <- attr(x, "r")
-  cat(paste("r values from 0 to", max(rval), "in", nrow(x), "steps\n"))
+  cat(paste("r values from 0 to", max(rval), "in", nr, "steps\n"))
   return(invisible(NULL))
 }
 

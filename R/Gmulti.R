@@ -122,7 +122,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
   if(is.null(disjoint))
     disjoint <- !any(I & J)
 # choose correction(s)
-  correction.given <- !missing(correction) && !is.null(correction)
+#  correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction))
     correction <- c("rs", "km", "han")
   correction <- pickoption("correction", correction,
@@ -140,7 +140,7 @@ function(X, I, J, r=NULL, breaks=NULL, ..., disjoint=NULL,
   lamJ <- nJ/areaW
   rmaxdefault <- rmax.rule("G", W, lamJ)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
-  brks <- breaks$val
+#  brks <- breaks$val
   rmax <- breaks$max
   rvals <- breaks$r
   zeroes <- numeric(length(rvals))

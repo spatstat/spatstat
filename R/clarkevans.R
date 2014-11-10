@@ -1,6 +1,6 @@
 ## clarkevans.R
 ## Clark-Evans statistic and test
-## $Revision: 1.15 $ $Date: 2014/10/24 00:22:30 $
+## $Revision: 1.16 $ $Date: 2014/11/10 05:34:18 $
 
 clarkevans <- function(X, correction=c("none", "Donnelly", "cdf"),
                        clipregion=NULL)
@@ -114,7 +114,6 @@ clarkevans.test <- function(X, ...,
   } else {
     # Monte Carlo p-value
     sims <- numeric(nsim)
-    intensity <- working$intensity
     for(i in 1:nsim) {
       Xsim <- runifpoint(nX, win=W)
       sims[i] <- clarkevansCalc(Xsim, correction=correction,

@@ -3,7 +3,7 @@
 #	Usual invocation to compute J function
 #	if F and G are not required 
 #
-#	$Revision: 4.18 $	$Date: 2011/04/19 02:14:27 $
+#	$Revision: 4.19 $	$Date: 2014/11/10 08:23:33 $
 #
 #
 #
@@ -19,7 +19,7 @@ function(X, ..., eps=NULL, r=NULL, breaks=NULL, correction=NULL) {
   # initialise fv object
   rvals <- FF$r
   rmax  <- max(rvals)
-  Fvals <- FF[[attr(FF, "valu")]]
+#  Fvals <- FF[[attr(FF, "valu")]]
   Z <- fv(data.frame(r=rvals, theo=1),
           "r", substitute(J(r), NULL),
           "theo",

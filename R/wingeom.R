@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.93 $	$Date: 2014/10/24 01:58:26 $
+#	$Revision: 4.94 $	$Date: 2014/11/10 08:19:10 $
 #
 #
 #
@@ -237,8 +237,8 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
   
   Arect <- is.rectangle(A)
   Brect <- is.rectangle(B)
-  Apoly <- is.polygonal(A)
-  Bpoly <- is.polygonal(B)
+#  Apoly <- is.polygonal(A)
+#  Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
   
@@ -354,8 +354,8 @@ union.owin <- function(A, B, ...) {
   
   Arect <- is.rectangle(A)
   Brect <- is.rectangle(B)
-  Apoly <- is.polygonal(A)
-  Bpoly <- is.polygonal(B)
+#  Apoly <- is.polygonal(A)
+#  Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
 
@@ -432,8 +432,8 @@ setminus.owin <- function(A, B, ...) {
   
   Arect <- is.rectangle(A)
   Brect <- is.rectangle(B)
-  Apoly <- is.polygonal(A)
-  Bpoly <- is.polygonal(B)
+#  Apoly <- is.polygonal(A)
+#  Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
 

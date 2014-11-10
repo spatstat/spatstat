@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.116 $    $Date: 2014/10/12 08:17:57 $
+#  $Revision: 1.117 $    $Date: 2014/11/10 11:10:49 $
 #
 #
 
@@ -105,7 +105,7 @@ plot.fv <- local({
     }
   
     ## Extract left hand side as given
-    lhs.original <- fmla[[2]]
+#    lhs.original <- fmla[[2]]
     fmla.original <- fmla
   
     ## expand "."

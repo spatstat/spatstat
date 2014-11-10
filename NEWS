@@ -3,13 +3,13 @@
 
 OVERVIEW
 
-   o We thank Andrew Lister for contributions.
+   o We thank Andrew Lister and Brian Ripley for contributions.
 
    o Mathematical operations for images.
 
    o Bug fixes.
 
-   o Version nickname: 'Who Let the Bugs Out'
+   o Version nickname: 'Do The Maths'
 
 NEW FUNCTIONS
 
@@ -33,6 +33,13 @@ BUG FIXES
    Ignored argument 'reciplambda2' in some cases.
    Bug introduced in spatstat 1.39-0, october 2014.
    Fixed.
+
+   o Gcom, Gres
+   When conditional=TRUE and restrict=TRUE, the Hanisch estimate
+   was not calculated exactly as described in Appendix E.1 of 
+   Baddeley, Rubak and Moller (2011). The intensity was estimated 
+   on the full window rather than the eroded window.
+   Fixed.   
 
    o profilepl
    Crashed in some cases when the interaction was multitype.

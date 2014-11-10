@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.17 $   $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.18 $   $Date: 2014/11/10 05:36:38 $
 #
 #
  
@@ -185,7 +185,7 @@ clippoly.psp <- function(s, window) {
 
   # form all the chopped segments (whether in or out)
 
-  chopped <- empty <- s[numeric(0)]
+  chopped <- s[numeric(0)]
   chopped$window <- boundingbox(s$window, window)
     
   for(seg in seq_len(ns)) {

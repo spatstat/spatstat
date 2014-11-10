@@ -7,7 +7,7 @@
 nnmean <- function(X) {
   stopifnot(is.ppp(X) && is.marked(X))
   m <- numeric.columns(marks(X), logical=TRUE, others="na")
-  nv <- ncol(m)
+#  nv <- ncol(m)
   nnid <- nnwhich(X)
   ok <- (nndist(X) <= bdist.points(X))
   if(!any(ok))

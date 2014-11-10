@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.5 $	$Date: 2014/09/27 09:42:37 $
+#	$Revision: 1.6 $	$Date: 2014/11/10 08:20:59 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	
@@ -23,7 +23,7 @@ intX.xypolygon <- function(polly) {
   x <- polly$x
   y <- polly$y
   
-  nedges <- length(x)   # sic
+#  nedges <- length(x)   # sic
   
   # place x axis below polygon
   y <- y - min(y) 
@@ -93,7 +93,7 @@ intY.xypolygon <- function(polly) {
   x <- polly$x
   y <- polly$y
   
-  nedges <- length(x)   # sic
+#  nedges <- length(x)   # sic
   
   # place x axis below polygon
   yadjust <- min(y)

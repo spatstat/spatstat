@@ -1,7 +1,7 @@
 #
 #    plot.ppm.S
 #
-#    $Revision: 2.8 $    $Date: 2008/08/12 08:26:45 $
+#    $Revision: 2.9 $    $Date: 2014/11/10 11:16:14 $
 #
 #    plot.ppm()
 #         Plot a point process model fitted by ppm().
@@ -36,7 +36,7 @@ plot.ppm <- function(x, ngrid = c(40,40),
     else
       mrkvals <- levels(marks(data))
   } else mrkvals <- 1
-  ntypes <- length(mrkvals)
+#  ntypes <- length(mrkvals)
         
 #
 #        Interpret options

@@ -3,7 +3,7 @@
 #
 # place points at regular intervals along line segments
 #
-#   $Revision: 1.6 $  $Date: 2011/09/23 01:55:58 $
+#   $Revision: 1.7 $  $Date: 2014/11/10 11:21:02 $
 #
 
 pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
@@ -23,7 +23,7 @@ pointsOnLines <- function(X, eps=NULL, np=1000, shortok=TRUE) {
   xmid <- with(Xdf, (x0+x1)/2)
   ymid <- with(Xdf, (y0+y1)/2)
   # handle very short segments
-  allsegs <- 1:nseg
+#  allsegs <- 1:nseg
   if(any(short <- (len <= eps)) && shortok) {
     # very short segments: use midpoints
     Z <- data.frame(x = xmid[short], y = ymid[short])

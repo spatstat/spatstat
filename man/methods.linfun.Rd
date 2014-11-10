@@ -18,7 +18,7 @@
 
   \method{plot}{linfun}(x, \dots, L=NULL,
                      eps = NULL, dimyx = NULL, xy = NULL,
-                     main="")
+                     main)
 
   \method{as.linim}{linfun}(X, L, \dots, eps = NULL, dimyx = NULL, xy = NULL)
 

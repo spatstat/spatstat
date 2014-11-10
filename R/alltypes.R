@@ -1,7 +1,7 @@
 #
 #      alltypes.R
 #
-#   $Revision: 1.29 $   $Date: 2013/01/24 07:47:50 $
+#   $Revision: 1.30 $   $Date: 2014/11/10 05:27:18 $
 #
 #
                                   
@@ -80,7 +80,7 @@ alltypes <- function(X, fun="K", ...,
              dimnames=list(marklabels, ""))
     else 
       matrix(1:(nmarks^2),ncol=nmarks,nrow=nmarks, byrow=TRUE,
-             dimnames <- list(marklabels, marklabels))
+             dimnames=list(marklabels, marklabels))
 
   # ------------ start computing -------------------------------  
   # if computing envelopes, first generate simulated patterns

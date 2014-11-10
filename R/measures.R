@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.50 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.51 $  $Date: 2014/11/10 11:15:31 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -188,7 +188,6 @@ plot.msr <- function(x, ..., add=FALSE,
     main <- short.deparse(substitute(x))
   how <- match.arg(how)
   d <- ncol(as.matrix(x$val))
-  xloc <- x$loc
   if(is.null(smo <- attr(x, "smoothdensity"))) {
     x <- augment.msr(x, ...)
     smo <- attr(x, "smoothdensity")

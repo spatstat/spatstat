@@ -576,7 +576,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
     answer <- FALSE
   }
   
-  if((nbox <- sum(is.box)) > 1) {
+  if(sum(is.box) > 1) {
     answer <- FALSE
     whinge <- paste("Polygons",
                     commasep(which(is.box)),

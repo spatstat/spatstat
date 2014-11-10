@@ -161,7 +161,6 @@ cdf.test.slrm <- function(model, covariate,
   FZ <- ewcdf(covvalu, probvalu/sum(probvalu))
   X <- model$Data$response
   ZX <- safelookup(covim, X)
-  FZX <- ewcdf(ZX)
   # Ensure support of cdf includes the range of the data
   xxx <- knots(FZ)
   yyy <- FZ(xxx)

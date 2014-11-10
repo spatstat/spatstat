@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.70 $   $Date: 2014/08/14 08:27:54 $
+#    $Revision: 1.71 $   $Date: 2014/11/10 11:33:30 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -384,12 +384,12 @@ print.summary.ppm <- function(x, ...) {
   # and the inclusion of the 'gory details' bit
   
   notrend <-    x$no.trend
-  stationary <- x$stationary
+#  stationary <- x$stationary
   poisson <-    x$poisson
   markeddata <- x$marked
   multitype  <- x$multitype
         
-  markedpoisson <- poisson && markeddata
+#  markedpoisson <- poisson && markeddata
 
   # ----------- Print model type -------------------
         

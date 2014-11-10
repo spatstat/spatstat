@@ -3,7 +3,7 @@
 #
 #	Model compensator of G 
 #
-#	$Revision: 1.4 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.8 $	$Date: 2014/11/10 13:20:25 $
 #
 ################################################################################
 #
@@ -34,10 +34,10 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   if(missing(conditional) || is.null(conditional))
     conditional <- !is.poisson(fit)
   
-  rfixed <- !is.null(r) || !is.null(breaks)
+#  rfixed <- !is.null(r) || !is.null(breaks)
   
   # selection of edge corrections
-  correction.given <- !missing(correction) && !is.null(correction)
+#  correction.given <- !missing(correction) && !is.null(correction)
   correction <- pickoption("correction", correction,
                            c(none="none",
                              border="border",
@@ -72,7 +72,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   # Extract quadrature info
   U <- union.quad(Q)
   Z <- is.data(Q) # indicator data/dummy
-  E <- equalsfun.quad(Q)
+#  E <- equalsfun.quad(Q)
   WQ <- w.quad(Q)  # quadrature weights
 
   # basic statistics
@@ -84,7 +84,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   USED <- if(algo == "reweighted") (bdist.points(U) > rbord) else rep.int(TRUE, U$n)
   
   # adjustments to account for restricted domain 
-  if(conditional) {
+  if(conditional && spatstat.options("eroded.intensity")) {
     npts.used <- sum(Z & USED)
     area.used <- sum(WQ[USED])
     lambda.used <- npts.used/area.used
@@ -109,13 +109,13 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
     rescts  <- rescts[retain]
   }
   # absolute weight for continuous integrals
-  wc   <- -rescts
+#  wc   <- -rescts
 
   # nearest neighbours (quadrature point to data point)
   nn <- nncross(U, X, seq(U$n), seq(X$n))
   dIJ <- nn$dist
   I <- seq(U$n)
-  J <- nn$which
+#  J <- nn$which
   DD <- Z <- (I <= X$n)  # TRUE for data points
   wcIJ <- -rescts
 
@@ -124,7 +124,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
 
    # initialise fv object
   r <- breaks$r
-  df <- data.frame(r=r, pois=1 - exp(-pi * lambda * r^2))
+  df <- data.frame(r=r, pois=1 - exp(-pi * lambda.used * r^2))
   G <- fv(df, "r", substitute(G(r), NULL), "pois", . ~ r,
           alim=c(0, rmax),
           labl=c("r","%s[pois](r)"),
@@ -139,14 +139,15 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
   # Border method
   if("border" %in% correction) {
     # reduced sample for G(r) of data only
-    RSX <- Kount(dIJ[DD & okI], bI[DD & okI], b[Z & USED], breaks)
+    ZUSED <- Z & USED
+    RSX <- Kount(dIJ[DD & okI], bI[DD & okI], b[ZUSED], breaks)
     Gb <- RSX$numerator/RSX$denom.count
     G <- bind.fv(G, data.frame(border=Gb), "hat(%s)[bord](r)",
                  "border-corrected nonparametric estimate of %s",
                  "border")
     # reduced sample for adjustment integral
-    RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI], b[Z & USED],
-                  rep.int(1, npts.used), breaks)
+    RSD <- Kwtsum(dIJ[okI], bI[okI], wcIJ[okI], b[ZUSED],
+                  rep.int(1, sum(ZUSED)), breaks)
     Gbcom <- RSD$numerator/(1 + RSD$denominator)
     
     G <- bind.fv(G, data.frame(bcom=Gbcom), "bold(C)~hat(%s)[bord](r)",
@@ -169,7 +170,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
     # compute
     x <- nnd[nnd <= bdry]
     h <- whist(x[x <= rmax], breaks=breaks$val)
-    H <- (1/lambda) * cumsum(h/ea)
+    H <- (1/lambda.used) * cumsum(h/ea)
     # glue on 
     G <- bind.fv(G, data.frame(han=H), "hat(%s)[han](r)",
                  "Hanisch correction estimate of %s",
@@ -181,7 +182,7 @@ Gcom <- function(object, r=NULL, breaks=NULL, ...,
     x <- nnd[nnd <= bdry]
     wt <- wt[nnd <= bdry]
     h <- whist(x[x <= rmax], breaks=breaks$val, weights=wt[x <= rmax])
-    lambdaplus <- (npts + 1)/areaW
+    lambdaplus <- (npts.used + 1)/area.used
     Hint <- (1/lambdaplus) * cumsum(h/ea)
     # glue on 
     G <- bind.fv(G, data.frame(hcom=Hint), "bold(C)~hat(%s)[han](r)",

@@ -3,12 +3,12 @@
 #
 # method for 'fitted' for mppm objects
 #
-#   $Revision: 1.5 $   $Date: 2006/10/09 02:25:33 $
+#   $Revision: 1.2 $   $Date: 2014/11/10 07:42:09 $
 # 
 
 fitted.mppm <- function(object, ...,
                         type="lambda", dataonly=FALSE) {
-  sumry <- summary(object)
+#  sumry <- summary(object)
 
   type <- pickoption("type", type, c(lambda="lambda",
                                      cif   ="lambda",
@@ -55,8 +55,8 @@ fitted.mppm <- function(object, ...,
   if(dataonly) {
     # extract only data values
     isdata <- (glmdata$.mpl.Y != 0)
-    values <- values[is.data]
-    id     <- id[is.data]
+    values <- values[isdata]
+    id     <- id[isdata]
   }
 
   return(split(values, id))

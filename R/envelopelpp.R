@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.16 $   $Date: 2014/06/11 09:41:10 $
+#  $Revision: 1.17 $   $Date: 2014/11/10 05:58:17 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -91,7 +91,6 @@ envelope.lppm <-
     X <- Y$X
     MODEL <- Y
     NETWORK <- X$domain
-    type <- "lppm"
     lambdaFit <- predict(MODEL)
     LMAX <-
       if(is.im(lambdaFit)) max(lambdaFit) else unlist(lapply(lambdaFit, max))

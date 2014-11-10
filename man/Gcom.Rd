@@ -198,7 +198,9 @@ Gcom(object, r = NULL, breaks = NULL, ...,
   If \code{conditional=TRUE}, then the algorithm calculates
   the \emph{restriction estimator} if \code{restrict=TRUE},
   and calculates the \emph{reweighting estimator} if \code{restrict=FALSE}.
-  See Appendix E of Baddeley, Rubak and \ifelse{latex}{\out{M\o ller}}{Moller} (2011).
+  See Appendix E of Baddeley, Rubak
+  and \ifelse{latex}{\out{M\o ller}}{Moller} (2011).
+  See also \code{\link{spatstat.options}('eroded.intensity')}.
   Thus, by default, the reweighting estimator is computed
   for non-Poisson models.
 

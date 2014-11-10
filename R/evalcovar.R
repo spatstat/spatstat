@@ -3,7 +3,7 @@
 #
 #   evaluate covariate values at data points and at pixels
 #
-# $Revision: 1.12 $ $Date: 2014/03/14 09:18:35 $
+# $Revision: 1.13 $ $Date: 2014/11/10 06:02:01 $
 #
 
 evalCovar <- function(model, covariate, ...) {
@@ -280,7 +280,6 @@ evalCovar.lppm <- function(model, covariate, ...,
       stop("Only implemented for multitype models (factor marks)")
     marx <- marks(U, dfok=FALSE)
     possmarks <- levels(marx)
-    npts <- npoints(X)
     # single image: replicate 
     if(is.im(covariate))
       covariate <- lapply(possmarks, function(x,v){v}, v=covariate)

@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.10 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.11 $ $Date: 2014/11/10 10:46:54 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -95,9 +95,10 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
 linearpcfengine <- function(X, ..., r=NULL,
                             reweight=NULL, denom=1, correction="Ang") {
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+#  sX <- summary(X)
+#  np <- sX$npoints
+#  lengthL <- sX$totlength
+  np <- npoints(X)
   # extract linear network
   L <- X$domain
   # extract points

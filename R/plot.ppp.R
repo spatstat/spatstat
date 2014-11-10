@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.77 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.78 $	$Date: 2014/11/10 11:16:58 $
 #
 #
 #--------------------------------------------------------------------------
@@ -255,7 +255,7 @@ plot.ppp <- local({
                                     markscale=markscale,
                                     ...)
   }
-  gtype <- symbolmaptype(symap)
+#  gtype <- symbolmaptype(symap)
 
   ## Determine bounding box for main plot
   BB <- as.rectangle(x)

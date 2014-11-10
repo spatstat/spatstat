@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.43 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.44 $	$Date: 2014/11/10 10:34:57 $
 #
 #
 # ------------------------------------------------------------------------
@@ -146,8 +146,6 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   
         
   npts <- npoints(X)
-  x <- X$x
-  y <- X$y
   W <- as.owin(X)
   areaW <- area(W)
 

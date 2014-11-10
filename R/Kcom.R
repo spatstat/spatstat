@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.10 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.12 $ $Date: 2014/11/10 08:27:27 $
 #
 
 Kcom <- local({
@@ -32,7 +32,7 @@ Kcom <- local({
   if(missing(conditional) || is.null(conditional))
     conditional <- !is.poisson(fit)
 
-  rfixed <- !is.null(r) || !is.null(breaks)
+#  rfixed <- !is.null(r) || !is.null(breaks)
   
   # Extract data and window
   Q <- quad.ppm(fit, drop=FALSE)
@@ -111,7 +111,7 @@ Kcom <- local({
   rmaxdefault <- rmax.rule("K", if(restrict) Wfree else Win, npts/areaW)
   breaks <- handle.r.b.args(r, breaks, Wfree, rmaxdefault=rmaxdefault)
   r <- breaks$r
-  nr <- length(r)
+#  nr <- length(r)
   rmax <- breaks$max
 
   
@@ -148,7 +148,7 @@ Kcom <- local({
   EIJ <- E(I, J) # TRUE if points are identical, U[I[k]] == X[J[k]] 
   ZI <- Z[I]     # TRUE if U[I[k]] is a data point
   DD <- ZI & !EIJ  # TRUE for pairs of distinct data points only
-  nDD <- sum(DD)
+#  nDD <- sum(DD)
 
   # determine whether a quadrature point will be used in integral
   okI <- USED[I]
@@ -157,7 +157,7 @@ Kcom <- local({
     okI <- okI & !EIJ
   
   # residual weights
-  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
+#  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
   # absolute weight for continuous integrals
   wc   <- -rescts
   wcIJ <- -rescts[I]

@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.4 $ $Date: 2014/10/17 11:24:08 $
+##  $Revision: 1.6 $ $Date: 2014/11/10 11:08:30 $
 ##
 
 persp.im <- local({
@@ -82,8 +82,8 @@ persp.im <- local({
       colid <- cut.im(colin, breaks=breaks, include.lowest=TRUE)
       colval <- eval.im(colvalues[unclass(colid)])
       colval <- t(as.matrix(colval))
-      nr <- nrow(colval)
-      nc <- ncol(colval)
+#      nr <- nrow(colval)
+#      nc <- ncol(colval)
       ## strip one row and column for input to persp.default
       colval <- colval[-1, -1]
       colval[is.na(colval)] <- colvalues[1]
@@ -257,9 +257,9 @@ perspSegments <- local({
     
     if(is.psp(X <- x0) && is.null(y0) && is.null(x1) && is.null(y1)) {
       eX <- X$ends
-      nX <- nrow(eX)
+#      nX <- nrow(eX)
     } else {
-      nX <- length(x0)
+#      nX <- length(x0)
       check.nvector(x0, naok=TRUE)
       check.nvector(y0, naok=TRUE)
       check.nvector(x1, naok=TRUE)

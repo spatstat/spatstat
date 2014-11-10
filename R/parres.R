@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.3 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.4 $  $Date: 2014/11/10 11:02:35 $
 #
 
 parres <- function(model, covariate, ...,
@@ -35,7 +35,7 @@ parres <- function(model, covariate, ...,
   
   # extract spatial locations
   Q <- quad.ppm(model)
-  datapoints <- Q$data
+#  datapoints <- Q$data
   quadpoints <- union.quad(Q)
   Z <- is.data(Q)
   wts <- w.quad(Q)
