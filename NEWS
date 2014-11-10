@@ -3,14 +3,29 @@
 
 OVERVIEW
 
-   o Bug fixes
+   o We thank Andrew Lister for contributions.
+
+   o Mathematical operations for images.
+
+   o Bug fixes.
 
    o Version nickname: 'Who Let the Bugs Out'
+
+NEW FUNCTIONS
+
+   o Mathematical operations are now supported for images.
+   For example:   inc <- atan(bei.extra$grad) * 180/pi
+   See help(Math.im)
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o pairorient
+   Labels and descriptions of columns have been corrected.
 
 BUG FIXES
 
    o markcorrint
-   Results were completely incorrect due to a bug in Kinhom.
+   Results were completely incorrect.
    Bug introduced in spatstat 1.39-0, october 2014.
    Fixed.
 
@@ -19,6 +34,15 @@ BUG FIXES
    Bug introduced in spatstat 1.39-0, october 2014.
    Fixed.
 
+   o profilepl
+   Crashed in some cases when the interaction was multitype.
+   [Spotted by Andrew Lister.]
+   Fixed.
+
+   o profilepl
+   Crashed if the model involved covariates that were not
+   given in a 'data' argument.
+   Fixed.
 
 	CHANGES IN spatstat VERSION 1.39-1
 

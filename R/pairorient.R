@@ -1,5 +1,5 @@
 ##
-## ppod.R
+## pairorient.R
 ##
 ## point pair orientation distribution
 ##
@@ -17,7 +17,7 @@ pairorient <- function(X, r1, r2, ...,
   stopifnot(r1 < r2)
   W <- Window(X)
   if(!is.null(domain))
-    stopifnot(is.subset.owin(domain, Window(X)))
+    stopifnot(is.subset.owin(domain, W))
   
   units <- match.arg(units)
   switch(units,
@@ -73,11 +73,11 @@ pairorient <- function(X, r1, r2, ...,
   phi <- breaks$r
   Odf <- data.frame(phi  = phi,
                     theo = phi/FullCircle)
-  desc <- c("distance argument r",
+  desc <- c("angle argument phi",
             "theoretical isotropic %s")
   OO <- ratfv(Odf, NULL, denom=nrow(close),
               argu="phi",
-              ylab=substitute(O[R1,R2](r), list(R1=r1, R2=r2)), 
+              ylab=substitute(O[R1,R2](phi), list(R1=r1, R2=r2)), 
               valu="theo",
               fmla = . ~ phi,
               alim = c(0, FullCircle),
@@ -139,5 +139,3 @@ pairorient <- function(X, r1, r2, ...,
                          radians = c("radian", "radians"))
   return(OO)
 }
-
-

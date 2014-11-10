@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.181 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 5.182 $	$Date: 2014/11/10 02:21:10 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/10/24 00:22:30 $")
+                        date="$Date: 2014/11/10 02:21:10 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -193,7 +193,7 @@ mpl.engine <-
     problems <- prep$problems
     likelihood.is.zero <- prep$likelihood.is.zero
     is.identifiable <- prep$is.identifiable
-    computed <- append(computed, prep$computed)
+    computed <- resolve.defaults(prep$computed, computed)
     IsOffset <- prep$IsOffset
 
     ## update covariates (if they were resolved from the environment)  
@@ -346,6 +346,7 @@ mpl.prepare <- local({
 
     ## Extract covariate values
     updatecovariates <- FALSE
+    covariates.df <- NULL
     if(allcovar || want.trend || want.subset) {
       if("covariates.df" %in% names.precomputed) {
         covariates.df <- precomputed$covariates.df
@@ -451,7 +452,7 @@ mpl.prepare <- local({
       }
       ##
       ## Check covariates
-      if(!is.null(covariates)) {
+      if(!is.null(covariates.df)) {
         ## Check for duplication of reserved names
         cc <- check.clashes(reserved.names, names(covariates),
                             sQuote("covariates"))
@@ -512,7 +513,8 @@ mpl.prepare <- local({
       ## Form the matrix of "regression variables" V.
       ## The rows of V correspond to the rows of P (quadrature points)
       ## while the column(s) of V are the regression variables (log-potentials)
-      E <- equalpairs.quad(Q)
+
+      E <- precomputed$E %orifnull% equalpairs.quad(Q)
 
       if(!skip.border) {
         ## usual case
@@ -522,21 +524,37 @@ mpl.prepare <- local({
                              savecomputed=savecomputed)
       } else {
         ## evaluate only in eroded domain
-        Retain <- .mpl$DOMAIN
-        Psub <- P[Retain]
-        ## map serial numbers in 'P[Retain]' to serial numbers in 'Psub'
-        Pmap <- cumsum(Retain)
-        keepE <- Retain[ E[,2] ]
-        ## adjust equal pairs matrix
-        Esub <- E[ keepE, , drop=FALSE]
-        Esub[,2] <- Pmap[Esub[,2]]
+        if(all(c("Esub", "Usub", "Retain") %in% names.precomputed)) {
+          ## use precomputed data
+          Psub <- precomputed$Usub
+          Esub <- precomputed$Esub
+          Retain <- precomputed$Retain
+        } else {
+          Retain <- .mpl$DOMAIN
+          Psub <- P[Retain]
+          ## map serial numbers in 'P[Retain]' to serial numbers in 'Psub'
+          Pmap <- cumsum(Retain)
+          keepE <- Retain[ E[,2] ]
+          ## adjust equal pairs matrix
+          Esub <- E[ keepE, , drop=FALSE]
+          Esub[,2] <- Pmap[Esub[,2]]
+        }
         ## call evaluator on reduced data
         ## with 'W=NULL' (currently detected only by AreaInter)
+        if(all(c("X", "Q", "U") %in% names.precomputed)) {
+          subcomputed <- resolve.defaults(list(E=Esub, U=Psub, Q=Q[Retain]),
+                                          precomputed)
+        } else subcomputed <- NULL
         V <- evalInteraction(X, Psub, Esub, interaction, correction,
                              ...,
                              W=NULL,
-                             precomputed=precomputed,
+                             precomputed=subcomputed,
                              savecomputed=savecomputed)
+        if(savecomputed) {
+          computed$Usub <- Psub
+          computed$Esub <- Esub
+          computed$Retain <- Retain
+        }
       }
       
       if(!is.matrix(V))
@@ -560,8 +578,8 @@ mpl.prepare <- local({
     
       ## extract intermediate computation results 
       if(savecomputed)
-        computed <- append(computed, attr(V, "computed"))
-  
+        computed <- resolve.defaults(attr(V, "computed"), computed)
+
       ## Augment data frame by appending the regression variables
       ## for interactions.
       ##

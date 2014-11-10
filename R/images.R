@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#         $Revision: 1.119 $     $Date: 2014/10/24 00:22:30 $
+#      $Revision: 1.122 $     $Date: 2014/11/10 03:45:06 $
 #
 #      The class "im" of raster images
 #
@@ -397,8 +397,25 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
   Extract.im
 })
 
+update.im <- function(object, ...) {
+  ## update internal structure of image after manipulation
+  X <- object
+  mat <- X$v
+  typ <- typeof(mat)
+  if(typ == "double")
+    typ <- "real"
+  ## deal with factor case
+  if(is.factor(mat)) {
+    typ <- "factor"
+  } else if(!is.null(lev <- levels(mat))) {
+    typ <- "factor"
+    X$v <- factor(mat, levels=lev)
+  }
+  X$type <- typ
+  return(X)
+}
+
 "[<-.im" <- function(x, i, j, value) {
-  
   # detect 'blank' arguments like second argument of x[i, ] 
   ngiven <- length(sys.call())
   nmatched <- length(match.call())
@@ -425,7 +442,7 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
     v <- X$v
     v[!is.na(v)] <- value
     X$v <- v
-    return(X)
+    return(update(X))
   }
   if(itype == "given") {
     # ..................... Try a spatial index ....................
@@ -439,7 +456,8 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
       yy <- rxy$y
       ok <- inside.owin(xx, yy, i)
       X$v[ok] <- value
-      return(X)
+      X$type <- ifelse(is.factor(X$v), "factor", typeof(X$v))
+      return(update(X))
     }
     if(verifyclass(i, "im", fatal=FALSE) && i$type == "logical") {
       if(jtype == "given") warning("Index j ignored")
@@ -451,7 +469,8 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
       yy <- rxy$y
       ok <- inside.owin(xx, yy, i)
       X$v[ok] <- value
-      return(X)
+      X$type <- ifelse(is.factor(X$v), "factor", typeof(X$v))
+      return(update(X))
     }
     if(is.ppp(i)) {
       # 'i' is a point pattern
@@ -474,7 +493,8 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         # set values
         X$v[cbind(loc$row, loc$col)] <- value
       }
-      return(X)
+      X$type <- ifelse(is.factor(X$v), "factor", typeof(X$v))
+      return(update(X))
     }
   }
   # .................. 'i' is not a spatial index ....................
@@ -501,9 +521,10 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
                   })
   # try it
   litmus <- try(eval(as.call(ycall)), silent=TRUE)
-  if(!inherits(litmus, "try-error")) 
-    return(X)
-
+  if(!inherits(litmus, "try-error")){
+    X$type <- ifelse(is.factor(X$v), "factor", typeof(X$v))
+    return(update(X))
+  }
   #  Last chance!
   if(itype == "given" &&
      !is.matrix(i) &&
@@ -528,7 +549,8 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
       # set values
       X$v[cbind(loc$row, loc$col)] <- value
     }
-    return(X)
+    X$type <- ifelse(is.factor(X$v), "factor", typeof(X$v))
+    return(update(X))
   }
 
   stop("The subset operation is undefined for this type of index")

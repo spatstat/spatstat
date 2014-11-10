@@ -635,6 +635,7 @@
 \alias{unitname<-.default}
 \alias{unparen}
 \alias{update.interact}
+\alias{update.im}
 \alias{update.ippm}
 \alias{update.rmhstart}
 \alias{uptrimat}
@@ -1384,6 +1385,7 @@ tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
 \method{unitname}{default}(x) <- value  %DontDeclare
 unparen(x)
 \method{update}{interact}(object, \dots) 
+\method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{rmhstart}(object, \dots)
 uptrimat(x)

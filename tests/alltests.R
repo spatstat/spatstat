@@ -424,22 +424,32 @@ local({
 #
 #   Test backdoor exits and hidden options in ppm
 #
-#   $Revision: 1.1 $  $Date: 2013/06/17 06:54:51 $
+#   $Revision: 1.4 $  $Date: 2014/11/10 03:05:01 $
 #
 require(spatstat)
 local({
 
-  # (1) skip.border
+  ## (1) skip.border
   
   fit <- ppm(cells, ~1, Strauss(0.1), skip.border=TRUE)
 
-  # (2) subset arguments of different kinds
+  ## (2) subset arguments of different kinds
   fut <- ppm(cells ~ x, subset=(x > 0.5))
   fot <- ppm(cells ~ x, subset=(x > 0.5), method="logi")
   W <- owin(c(0.4, 0.8), c(0.2, 0.7))
   fut <- ppm(cells ~ x, subset=W)
   fot <- ppm(cells ~ x, subset=W, method="logi")
-  
+
+  ## (3) profilepl -> ppm
+  ##     uses 'skip.border' and 'precomputed'
+  ##     also tests scoping for covariates
+  splants <- split(ants)
+  mess    <- splants[["Messor"]]
+  cats    <- splants[["Cataglyphis"]]
+  ss      <- data.frame(r=seq(60,120,by=20),hc=29/6)
+  dM      <- distmap(mess,dimyx=256)
+  mungf    <- profilepl(ss, StraussHard, cats ~ dM)
+  mungp   <- profilepl(ss, StraussHard, trend=~dM, Q=cats)
 })
 
 #

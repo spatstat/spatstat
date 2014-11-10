@@ -7,6 +7,7 @@
 #
 
 profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
+  callenv <- parent.frame()
   s <- as.data.frame(s)
   n <- nrow(s)
   fname <- paste(short.deparse(substitute(f)), collapse="")
@@ -75,10 +76,11 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
   if(pass.cfa || got.cfa) {
     savecomp <- FALSE
   } else {
-    Q <- ppm(..., rbord=rbord, justQ=TRUE)
+    Q <- do.call("ppm",
+                 append(list(...), list(rbord=rbord, justQ=TRUE)),
+                 envir=callenv)
     savecomp <- !oversize.quad(Q)
   }
-  
   # fit one model and extract quadscheme
   if(verbose) message(paste("Comparing", n, "models..."))
   for(i in 1:n) {
@@ -98,7 +100,7 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
                    callstring="",
                    skip.border=TRUE)
       if(pass.cfa) arg1 <- append(arg1, cfai)
-      fiti <- do.call("ppm", arg1)
+      fiti <- do.call("ppm", arg1, envir=callenv)
       # save intermediate computations (pairwise distances, etc)
       precomp <- fiti$internal$computed
       savedargs <- list(...,
@@ -110,7 +112,7 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
       # use precomputed data
       argi <- append(savedargs, list(interaction=fi))
       if(pass.cfa) argi <- append(argi, cfai)
-      fiti <- do.call("ppm", argi)
+      fiti <- do.call("ppm", argi, envir=callenv)
     }
     # save log PL for each fit
     logmpl[i] <- as.numeric(logLik(fiti, warn=FALSE))
@@ -131,7 +133,7 @@ profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
     attr(optcfa, "fitter") <- "profilepl"
     optarg <- append(optarg, list(covfunargs=optcfa))
   }
-  optfit <- do.call("ppm", optarg)
+  optfit <- do.call("ppm", optarg, envir=callenv)
   if(verbose) message("done.")
   result <- list(param=s,
                  prof=logmpl,
