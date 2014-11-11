@@ -214,7 +214,7 @@ reincarnate.interact <- function(object) {
   }
   
   par <- object$par
-  pot <- object$pot
+#  pot <- object$pot
   name <- object$name
   
   # get creator function

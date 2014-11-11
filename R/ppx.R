@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.43 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.44 $  $Date: 2014/11/11 01:25:08 $
 #
 
 ppx <- local({
@@ -378,6 +378,11 @@ duplicated.ppx <- function(x, ...) {
   dup <- duplicated(as.data.frame(x), ...)
   return(dup)
 }
+
+anyDuplicated.ppx <- function(x, ...) {
+  anyDuplicated(as.data.frame(x), ...)
+}
+
 
 multiplicity.ppx <- function(x) {
   mul <- multiplicity(as.data.frame(x))

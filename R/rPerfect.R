@@ -27,7 +27,7 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE) {
   stopifnot(gamma <= 1)
   stopifnot(R >= 0)
 
-  nothing <- runif(1)
+  runif(1)
 
   Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
   xrange <- Wsim$xrange
@@ -74,7 +74,7 @@ rHardcore <- function(beta, R=0, W=owin(), expand=TRUE) {
   stopifnot(beta > 0)
   stopifnot(R    >= 0)
 
-  nothing <- runif(1)
+  runif(1)
 
   Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
   xrange <- Wsim$xrange
@@ -130,7 +130,7 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE) {
   stopifnot(H >= 0)
   stopifnot(H <= R)
 
-  nothing <- runif(1)
+  runif(1)
 
   Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
   xrange <- Wsim$xrange
@@ -187,7 +187,7 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(), expand=TRUE) {
   stopifnot(delta <= rho)
   stopifnot(kappa >= 0)
 
-  nothing <- runif(1)
+  runif(1)
 
   Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*rho))
   xrange <- Wsim$xrange
@@ -237,7 +237,7 @@ rDGS <- function(beta, rho, W=owin(), expand=TRUE) {
   stopifnot(beta > 0)
   stopifnot(rho  >= 0)
 
-  nothing <- runif(1)
+  runif(1)
 
   Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*rho))
   xrange <- Wsim$xrange

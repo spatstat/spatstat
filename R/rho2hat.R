@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.18 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.19 $   $Date: 2014/11/11 02:43:31 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -114,7 +114,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     Z12points <- ppp(scal(Z1X, r1), scal(Z2X, r2), c(0,1), c(0,1))
     Z12pixels <- ppp(scal(Z1values, r1), scal(Z2values, r2), c(0,1), c(0,1))
     # normalising constants
-    nX   <- length(Z1X)
+#    nX   <- length(Z1X)
     npixel <- length(lambda)
     areaW <- area(Window(model))
     pixelarea <- areaW/npixel

@@ -3,7 +3,7 @@
 #
 #    Functions for generating random point patterns
 #
-#    $Revision: 4.63 $   $Date: 2014/10/24 00:22:30 $
+#    $Revision: 4.64 $   $Date: 2014/11/11 02:49:01 $
 #
 #
 #    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -575,7 +575,7 @@ rcellnumber <- function(n, N=10) {
   u <- runif(n, min=0, max=1)
   p0 <- 1/N
   pN <- 1/(N * (N-1))
-  k <- ifelse(u < 1/N, 0, ifelse(u < (1 - pN), 1, N))
+  k <- ifelse(u < p0, 0, ifelse(u < (1 - pN), 1, N))
   return(k)
 }
 
@@ -634,7 +634,6 @@ rthin <- function(X, P, ...) {
       stop("Function P returned non-numeric values")
     if(any(is.na(pX)))
       stop("Function P returned some NA values")
-    prange <- range(pX)
   } else if(is.im(P)) {
     # image - look it up
     if(!(P$type %in% c("integer", "real")))

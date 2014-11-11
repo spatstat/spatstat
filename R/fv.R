@@ -890,7 +890,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   if(is.null(enclos)) 
     enclos <- parent.frame()
    ## convert syntactic expression to 'expression' object
-  e <- as.expression(substitute(expr))
+#  e <- as.expression(substitute(expr))
   ## convert syntactic expression to call
   elang <- substitute(expr)
   ## map "." etc to names of columns of data

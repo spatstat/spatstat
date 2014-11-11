@@ -38,7 +38,7 @@ reduceformula <- function(fmla, deletevar, verbose=FALSE) {
     v.is.offset <- v.is.offset[-repo]
   }
   # a term may be a variable name
-  v.is.name <- sapply(vars, is.name)
+#  v.is.name <- sapply(vars, is.name)
   # a term may be an expression like sin(x), poly(x,y,degree=2)
   v.args <- lapply(vars, function(x) all.vars(as.expression(x)))
   v.has.delete <- sapply(v.args,

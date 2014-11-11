@@ -1,6 +1,8 @@
 \name{duplicated.ppp}
 \alias{duplicated.ppp}
 \alias{duplicated.ppx}
+\alias{anyDuplicated.ppp}
+\alias{anyDuplicated.ppx}
 \title{Determine Duplicated Points in a Spatial Point Pattern}
 \description{
   Determines which points in a spatial point pattern
@@ -10,6 +12,10 @@
  \method{duplicated}{ppp}(x, \dots, rule=c("spatstat", "deldir", "unmark"))
 
  \method{duplicated}{ppx}(x, \dots)
+
+ \method{anyDuplicated}{ppp}(x, \dots)
+
+ \method{anyDuplicated}{ppx}(x, \dots)
 }
 \arguments{
   \item{x}{
@@ -28,9 +34,13 @@
   A logical vector of length equal to the number of points in \code{x}.
 }
 \details{
-  These are methods for the generic function \code{duplicated} for 
+  These are methods for the generic functions \code{\link{duplicated}}
+  and \code{\link{anyDuplicated}} for 
   point pattern datasets (of class \code{"ppp"}, see
   \code{\link{ppp.object}}, or class \code{"ppx"}).
+
+  \code{anyDuplicated(x)} is a faster version of
+  \code{any(duplicated(x))}.
 
   Two points in a point pattern are deemed to be identical
   if their \eqn{x,y} coordinates are the same,

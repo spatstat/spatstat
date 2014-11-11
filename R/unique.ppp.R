@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.29 $  $Date: 2014/06/30 03:53:09 $
+# $Revision: 1.30 $  $Date: 2014/11/11 01:25:17 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -66,6 +66,10 @@ duplicated.ppp <- function(x, ...,
          stop(paste("Unknown mark type", sQuote(markformat(x))))
          )
   return(result)
+}
+
+anyDuplicated.ppp <- function(x, ...) {
+  anyDuplicated(as.data.frame(x), ...)
 }
 
 ## utility to check whether two rows are identical

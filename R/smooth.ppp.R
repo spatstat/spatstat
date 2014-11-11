@@ -143,7 +143,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     isconst <- (apply(ra, 2, diff) == 0)
     if(anyisconst <- any(isconst)) {
       oldmarx <- marx
-      oldX <- X
+#      oldX <- X
       marx <- marx[, !isconst]
       X <- X %mark% marx
     }
@@ -245,13 +245,13 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                leaveoneout=TRUE,
                                sorted=FALSE) {
   stopifnot(is.logical(leaveoneout))
-  if(is.null(varcov)) {
-    const <- 1/(2 * pi * sigma^2)
-  } else {
-    detSigma <- det(varcov)
-    Sinv <- solve(varcov)
-    const <- 1/(2 * pi * sqrt(detSigma))
-  }
+#  if(is.null(varcov)) {
+#    const <- 1/(2 * pi * sigma^2)
+#  } else {
+#    detSigma <- det(varcov)
+#    Sinv <- solve(varcov)
+#    const <- 1/(2 * pi * sqrt(detSigma))
+#  }
   # detect constant values
   if(diff(range(values, na.rm=TRUE)) == 0) { 
     result <- values
@@ -332,6 +332,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       }
     } else {
       # anisotropic kernel
+      Sinv <- solve(varcov)
       flatSinv <- as.vector(t(Sinv))
       if(is.null(weights)) {
         zz <- .C("asmoopt",
@@ -499,13 +500,13 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
 smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                               weights=NULL, varcov=NULL,
                               sorted=FALSE) {
-  if(is.null(varcov)) {
-    const <- 1/(2 * pi * sigma^2)
-  } else {
-    detSigma <- det(varcov)
-    Sinv <- solve(varcov)
-    const <- 1/(2 * pi * sqrt(detSigma))
-  }
+#  if(is.null(varcov)) {
+#    const <- 1/(2 * pi * sigma^2)
+#  } else {
+#    detSigma <- det(varcov)
+#    Sinv <- solve(varcov)
+#    const <- 1/(2 * pi * sqrt(detSigma))
+#  }
   if(!is.null(dim(weights)))
     stop("weights must be a vector")
 
@@ -626,6 +627,7 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
       }
     } else {
       # anisotropic kernel
+      Sinv <- solve(varcov)
       flatSinv <- as.vector(t(Sinv))
       if(is.null(weights)) {
         zz <- .C("acrsmoopt",

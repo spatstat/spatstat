@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.12 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.13 $  $Date: 2014/11/11 02:37:44 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {
@@ -107,7 +107,7 @@ redraw.simplepanel <- function(P, verbose=FALSE) {
   if(verbose)
     cat("Redrawing entire panel\n")
   with(P, {
-    ntitle <- sum(nzchar(title))
+#    ntitle <- sum(nzchar(title))
     plot(B, type="n", main=title)
     for(j in seq_along(nama)) 
       (redraws[[j]])(boxes[[j]], nama[j], env)

@@ -83,6 +83,7 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
 superimpose.psp <- function(..., W=NULL, check=TRUE) {
   # superimpose any number of line segment patterns
   arglist <- list(...)
+  misscheck <- missing(check)
 
   if(!all(sapply(arglist, is.psp)))
     stop("Patterns to be superimposed must all be psp objects")
@@ -99,7 +100,7 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
   if(!is.owin(W)) {
     # we have to compute the final window
     WXY <- NULL
-    Wpsp <- NULL
+#    Wpsp <- NULL
     if(any(ispsp <- unlist(lapply(arglist, is.psp)))) {
       # extract windows from psp objects
       wins <- unname(lapply(arglist[ispsp], as.owin))
@@ -138,6 +139,7 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
   nobj <- sapply(arglist, nsegments)
   marx <- superimposeMarks(arglist, nobj)
 
+  if(misscheck && !needcheck) check <- FALSE
   return(as.psp(mat, window=W, marks=marx, check=check))
 }
 

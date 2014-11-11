@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.9 $  $Date: 2014/08/18 09:59:51 $
+#  $Revision: 2.10 $  $Date: 2014/11/11 03:01:53 $
 #
 #
 
@@ -254,7 +254,7 @@ spatialCDFframe <- function(model, covariate, ...) {
   stuff <- evalCovar(model, covariate, ...)
   # extract 
   values <- stuff$values
-  info   <- stuff$info
+#  info   <- stuff$info
   Zvalues <- values$Zvalues
   lambda  <- values$lambda
   weights <- values$weights

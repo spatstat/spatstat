@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.30 $   $Date: 2014/03/22 01:21:07 $
+#  $Revision: 1.31 $   $Date: 2014/11/11 03:06:52 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
@@ -20,8 +20,8 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   FIT      <- object$Fit$FIT
   coef.FIT <- coef(FIT)
   trend    <- object$trend
-  iformula <- object$iformula
-  use.gam  <- object$Fit$use.gam
+#  iformula <- object$iformula
+#  use.gam  <- object$Fit$use.gam
   info     <- object$Info
   npat     <- object$npat
   Inter    <- object$Inter
@@ -124,8 +124,8 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/03/22 01:21:07 $")
-  fake.call <- call("cannot.update", Q=NULL, trend=object$trend,
+                      date="$Date: 2014/11/11 03:06:52 $")
+  fake.call <- call("cannot.update", Q=NULL, trend=trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
                            rbord     = object$Info$rbord)
@@ -212,7 +212,7 @@ subfits.old <-
   FIT      <- object$Fit$FIT
   coef.FIT <- coef(FIT)
   trend    <- object$trend
-  iformula <- object$iformula
+#  iformula <- object$iformula
   use.gam  <- object$Fit$use.gam
   info     <- object$Info
   npat     <- object$npat

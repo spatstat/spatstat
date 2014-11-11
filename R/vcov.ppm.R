@@ -42,7 +42,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   ## nonstandard calculations (hack) 
   generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
   nonstandard <- any(generic.triggers %in% names(argh))
-  saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
+#  saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
   
   ## Fisher information *may* be contained in object
   fisher <- object$fisher

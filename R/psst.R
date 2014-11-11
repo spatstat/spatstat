@@ -3,7 +3,7 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.7 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.8 $	$Date: 2014/11/11 02:30:45 $
 #
 ################################################################################
 #
@@ -28,14 +28,14 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   } else 
     stop("object should be a fitted point process model or a point pattern")
 
-  rfixed <- !is.null(r) || !is.null(breaks)
+#  rfixed <- !is.null(r) || !is.null(breaks)
   
   # Extract data and quadrature points
   Q <- quad.ppm(fit, drop=FALSE)
   X <- data.ppm(fit)
   U <- union.quad(Q)
   Z <- is.data(Q) # indicator data/dummy
-  E <- equalsfun.quad(Q)
+#  E <- equalsfun.quad(Q)
   WQ <- w.quad(Q)  # quadrature weights
 
   # integrals will be restricted to quadrature points
@@ -54,17 +54,17 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   lambda <- npts/areaW
 
   # adjustments to account for restricted domain of pseudolikelihood
-  if(any(!USED)) {
-    XUSED <- USED[Z]
-    npts.used <- sum(Z & USED)
-    area.used <- sum(WQ[USED])
-    lambda.used <- npts.used/area.used
-  } else {
-    XUSED <- rep.int(TRUE, npts)
-    npts.used <- npts
-    area.used <- areaW
-    lambda.used <- lambda
-  }
+#  if(any(!USED) && spatstat.options("eroded.intensity")) {
+#    XUSED <- USED[Z]
+#    npts.used <- sum(Z & USED)
+#    area.used <- sum(WQ[USED])
+#    lambda.used <- npts.used/area.used
+#  } else {
+#    XUSED <- rep.int(TRUE, npts)
+#    npts.used <- npts
+#    area.used <- areaW
+#    lambda.used <- lambda
+#  }
   
   #  determine breakpoints for r values
   rmaxdefault <- rmax.rule("G", Win, lambda)

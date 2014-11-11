@@ -66,7 +66,7 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
 
   # Extract quadrature points and weights
   Q <- quad.ppm(object, drop=drop, clip=drop)
-  U <- union.quad(Q) # quadrature points
+#  U <- union.quad(Q) # quadrature points
   Z <- is.data(Q) # indicator data/dummy
 #  W <- w.quad(Q) # quadrature weights
 

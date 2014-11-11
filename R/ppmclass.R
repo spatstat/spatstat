@@ -282,6 +282,7 @@ getppmdatasubset <- function(object) {
   return(sub)
 }
 
+
 getppmOriginalCovariates <- function(object) {
   df <- as.data.frame(as.ppp(quad.ppm(object)))
   cova <- object$covariates

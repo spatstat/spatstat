@@ -52,7 +52,7 @@ Tstat <- local({
                     verbose=TRUE)
     {
       verifyclass(X, "ppp")
-      rfixed <- !is.null(r) 
+#      rfixed <- !is.null(r) 
       npts <- npoints(X)
       W <- Window(X)
       areaW <- area(W)

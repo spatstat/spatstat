@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised F (area-interaction)
 #
-#	$Revision: 1.6 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.7 $	$Date: 2014/11/11 02:31:44 $
 #
 ################################################################################
 #
@@ -43,8 +43,8 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
   X <- data.ppm(fit)
   U <- union.quad(Q)
   Z <- is.data(Q) # indicator data/dummy
-  E <- equalsfun.quad(Q)
-  WQ <- w.quad(Q)  # quadrature weights
+#  E <- equalsfun.quad(Q)
+#  WQ <- w.quad(Q)  # quadrature weights
 
   # integrals will be restricted to quadrature points
   # that were actually used in the fit

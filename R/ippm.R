@@ -185,7 +185,7 @@ update.ippm <- local({
   }
 
   update.ippm <- function(object, ..., envir=environment(terms(object))) {
-    call <- match.call()
+#    call <- match.call()
     new.call <- old.call <- object$call
     old.callframe <- object$callframe
     Qold <- eval(old.call$Q, as.list(envir), enclos=old.callframe)

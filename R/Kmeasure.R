@@ -183,8 +183,8 @@ second.moment.engine <-
   Ypad <- Ypadlist[[1]]
   lengthYpad <- 4 * nc * nr
   # corresponding coordinates
-  xw.pad <- xw[1] + 2 * c(0, diff(xw))
-  yw.pad <- yw[1] + 2 * c(0, diff(yw))
+#  xw.pad <- xw[1] + 2 * c(0, diff(xw))
+#  yw.pad <- yw[1] + 2 * c(0, diff(yw))
   xcol.pad <- X$xcol[1] + X$xstep * (0:(2*nc-1))
   yrow.pad <- X$yrow[1] + X$ystep * (0:(2*nr-1))
   # set up Gauss kernel

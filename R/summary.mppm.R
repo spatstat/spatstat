@@ -34,7 +34,7 @@ summary.mppm <- function(object, ..., brief=FALSE) {
   allVnames <- unlist(Vnamelist)
   poistags  <- itags[trivial]
 
-  rownames  <- y$Info$rownames
+#  rownames  <- y$Info$rownames
   
   switch(y$Fit$fitter,
          gam=,
@@ -141,7 +141,7 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
   allVnames <- unlist(Vnamelist)
   poistags <- itags[trivial]
 
-  rownames <- x$Info$rownames
+#  rownames <- x$Info$rownames
 
   cat(paste("Point process model fitted to", x$npat, "point patterns\n"))
   cat(paste("Call:\n", x$Call$callstring, "\n"))

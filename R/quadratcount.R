@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.47 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.48 $  $Date: 2014/11/11 02:34:24 $
 #
 
 quadratcount <- function(X, ...) {
@@ -38,7 +38,7 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
       if(!any(nonempty))
         stop("All tiles are empty")
       if(!all(nonempty)) {
-        ntiles <- sum(nonempty)
+#        ntiles <- sum(nonempty)
         tess   <- tess[nonempty]
         Xcount <- t(Xcount)[nonempty]
         # matrices and tables are in row-major order,

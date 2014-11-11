@@ -1,7 +1,7 @@
 #
 # pppmatch.R
 #
-# $Revision: 1.21 $  $Date: 2014/07/23 07:36:03 $
+# $Revision: 1.22 $  $Date: 2014/11/11 01:06:44 $
 #
 # Code by Dominic Schuhmacher
 #
@@ -533,11 +533,13 @@ acedist.noshow <- function(X, Y, n, d) {
       feasible <- FALSE
       while (!feasible) {
          rpsol <- maxflow(d)  # rpsol = restricted primal, solution
-         am <- matrix(0, n, n)
-         for (i in 1:n) {
-            if (rpsol$assignment[i] > -1) am[i, rpsol$assignment[i]] <- TRUE
-         }
-         channelmat <- (d == 0 & !am)
+# ~~~~~~~~~ deleted by AJB ~~~~~~~~~~~~~~~~~
+#         am <- matrix(0, n, n)
+#         for (i in 1:n) {
+#            if (rpsol$assignment[i] > -1) am[i, rpsol$assignment[i]] <- TRUE
+#         }
+#         channelmat <- (d == 0 & !am)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~         
          # if the solution of the restricted primal is not feasible for  
          # the original primal, update dual variables
          if (min(rpsol$assignment) == -1) {

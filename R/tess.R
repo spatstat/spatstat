@@ -316,8 +316,8 @@ tile.areas <- function(x) {
          rect={
            xg <- x$xgrid
            yg <- x$ygrid
-           nx <- length(xg) - 1 
-           ny <- length(yg) - 1
+#           nx <- length(xg) - 1 
+#           ny <- length(yg) - 1
            a <- outer(rev(diff(yg)), diff(xg), "*")
            a <- as.vector(t(a))
            names(a) <- as.vector(t(tilenames(x)))

@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.26 $   $Date: 2014/09/27 09:45:44 $
+#  $Revision: 1.27 $   $Date: 2014/11/11 03:17:18 $
 #
 
 # ............ generic  ............................
@@ -362,17 +362,23 @@ opening.ppp <- function(w, r, ...) {
 
 # ............ utilities ............................
 
-validradius <- function(r, caller="morphological operator") {
-  rname <- short.deparse(substitute(r))
+validradius <- local({
+
+  validradius <- function(r, caller="morphological operator") {
+  #  rname <- short.deparse(substitute(r))
+    if(!is.numeric(r) || length(r) != 1)
+      groan("radius r must be a single number", caller)
+    if(r < 0)
+      groan("radius r must be nonnegative", caller)
+    return(TRUE)
+  }
+
   groan <- function(whinge, caller) {
     stop(paste("for", paste(caller, ",", sep=""), whinge), call.=FALSE)
   }
-  if(!is.numeric(r) || length(r) != 1)
-    groan("radius r must be a single number", caller)
-  if(r < 0)
-    groan("radius r must be nonnegative", caller)
-  return(TRUE)
-}
+
+  validradius
+})
   
 idorempty <- function(w, r, caller="morphological operator") {
   validradius(r, caller)

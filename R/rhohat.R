@@ -65,7 +65,7 @@ rhohat.ppp <- rhohat.quad <-
                n=n, bw=bw, adjust=adjust, from=from, to=to,
                bwref=bwref, covname=covname, covunits=covunits,
                confidence=confidence,
-               modelcall=NULL, callstring=callstring)
+               modelcall=modelcall, callstring=callstring)
 }
 
 rhohat.ppm <- function(object, covariate, ...,
@@ -202,7 +202,7 @@ rhohatEngine <- function(model, covariate,
   stuff <- do.call("evalCovar",
                    append(list(model, covariate), resolution))
   # unpack
-  info   <- stuff$info
+#  info   <- stuff$info
   values <- stuff$values
   # values at each data point
   ZX      <- values$ZX

@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.47 $  $Date: 2014/11/10 11:24:39 $
+#   $Revision: 1.48 $  $Date: 2014/11/11 03:19:32 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -261,6 +261,7 @@ X2testEngine <- function(OBS, EXP, ...,
                              CR = CR,
                              method.key = method),
                         class = "htest")
+  return(result)
 }
                          
 print.quadrattest <- function(x, ...) {

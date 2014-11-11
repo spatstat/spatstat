@@ -29,7 +29,7 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
   if(length(formula) < 3)
     stop(paste("Argument", sQuote("formula"),
                "must have a left hand side"))
-  Yname <- lhs <- formula[[2]]
+  Yname <- formula[[2]]
   trend <- rhs <- formula[c(1,3)]
   if(!is.name(Yname))
     stop("Left hand side of formula should be a single name")
@@ -59,7 +59,7 @@ slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
 
   Data <- slr.prepare(CallInfo, parenv, data, dataAtPoints, splitby)
 
-  W  <- Data$W
+#  W  <- Data$W
   df <- Data$df
   
   ########  FIT MODEL ###############################
@@ -96,7 +96,7 @@ slr.prepare <- function(CallInfo, envir, data,
   # data  is 'data' argument that takes precedence over 'envir'
   # 'clip' is TRUE if the data should be clipped to the domain of Y
   Yname    <- CallInfo$responsename
-  varnames <- CallInfo$varnames
+#  varnames <- CallInfo$varnames
   covnames <- CallInfo$covnames
   dotargs  <- CallInfo$dotargs
   #
@@ -152,8 +152,8 @@ slr.prepare <- function(CallInfo, envir, data,
     israster[issplit] <- FALSE
   }
   # 
-  nnum <- sum(isnum)
-  nspatial <- sum(isspatial)
+#  nnum <- sum(isnum)
+#  nspatial <- sum(isspatial)
   nraster <- sum(israster)
   #
   numlist <- covlist[isnum]
@@ -162,7 +162,7 @@ slr.prepare <- function(CallInfo, envir, data,
   #
   numnames <- names(numlist)
   spatialnames <- names(spatiallist)
-  rasternames <- names(rasterlist)
+#  rasternames <- names(rasterlist)
   #
   
   ########  CONVERT TO RASTER DATA  ###############################
@@ -316,18 +316,18 @@ print.slrm <- function(x, ...) {
   lk <- x$CallInfo$link
   switch(lk,
          logit= {
-           cat("Fitted spatial logistic regression model\n")
+           splat("Fitted spatial logistic regression model")
          },
          cloglog= {
-           cat("Fitted spatial regression model (complementary log-log) \n")
+           splat("Fitted spatial regression model (complementary log-log)")
          },
          {
-           cat("Fitted spatial regression model\n")
-           cat(paste("Link =", dQuote(lk), "\n"))
+           splat("Fitted spatial regression model")
+           splat("Link =", dQuote(lk))
          })
   cat("Formula:\t")
   print(x$CallInfo$formula)
-  cat("Fitted coefficients:\n")
+  splat("Fitted coefficients:")
   print(coef(x))
   return(invisible(NULL))
 }

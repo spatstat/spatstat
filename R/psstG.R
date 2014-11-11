@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.6 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.7 $	$Date: 2014/11/11 02:33:16 $
 #
 ################################################################################
 #
@@ -29,7 +29,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   } else 
     stop("object should be a fitted point process model or a point pattern")
 
-  rfixed <- !is.null(r) || !is.null(breaks)
+#  rfixed <- !is.null(r) || !is.null(breaks)
   
   # Extract data and quadrature points
   Q <- quad.ppm(fit, drop=FALSE)
@@ -55,15 +55,15 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   lambda <- npts/areaW
 
   # adjustments to account for restricted domain of pseudolikelihood
-  if(any(!USED)) {
-    npts.used <- sum(Z & USED)
-    area.used <- sum(WQ[USED])
-    lambda.used <- npts.used/area.used
-  } else {
-    npts.used <- npts
-    area.used <- areaW
-    lambda.used <- lambda
-  }
+#  if(any(!USED)) {
+#    npts.used <- sum(Z & USED)
+#    area.used <- sum(WQ[USED])
+#    lambda.used <- npts.used/area.used
+#  } else {
+#    npts.used <- npts
+#    area.used <- areaW
+#    lambda.used <- lambda
+#  }
   
   #  determine breakpoints for r values
   rmaxdefault <- rmax.rule("G", Win, lambda)
@@ -122,16 +122,16 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   dIJ <- close$d
   I   <- close$i
   J   <- close$j
-  UI <- U[I]
-  XJ <- X[J]
+#  UI <- U[I]
+#  XJ <- X[J]
   EIJ <- E(I, J) # TRUE if points are identical, U[I[k]] == X[J[k]] 
   ZI <- Z[I]     # TRUE if U[I[k]] is a data point
   DD <- ZI & !EIJ  # TRUE for pairs of distinct data points only
-  nDD <- sum(DD)
+#  nDD <- sum(DD)
   okI <- USED[I]
   
   # residual weights
-  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
+#  wIJ <- ifelseXY(EIJ, rescts[I], resval[I])
   # absolute weight for continuous integrals
   wc   <- -rescts
   wcIJ <- -rescts[I]

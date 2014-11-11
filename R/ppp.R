@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.99 $	$Date: 2014/09/17 01:20:20 $
+#	$Revision: 4.100 $	$Date: 2014/11/11 01:26:40 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -128,7 +128,7 @@ ppp <- function(x, y, ..., window, marks, check=TRUE, drop=TRUE) {
     pp$marks <- marks
   }
   class(pp) <- "ppp"
-  if(check && any(duplicated(pp)))
+  if(check && anyDuplicated(pp))
     warning("data contain duplicated points")
   if(nout > 0) 
     attr(pp, "rejects") <- rejects

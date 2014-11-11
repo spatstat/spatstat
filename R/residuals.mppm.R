@@ -24,7 +24,7 @@ residuals.mppm <- function(object, type="raw", ...,
   
   # Extract quadrature points and weights
   Q <- quad.mppm(object)
-  U <- lapply(Q, union.quad) # quadrature point patterns
+#  U <- lapply(Q, union.quad) # quadrature point patterns
   Z <- unlist(lapply(Q, is.data)) # indicator data/dummy
   W <- unlist(lapply(Q, w.quad)) # quadrature weights
   # total number of quadrature points

@@ -109,8 +109,8 @@ rmh.default <- function(model,start=NULL,
 ##  Clipping window (for final result)
   
   w.clip <-
-    if(!is.null(model$w))
-      model$w
+    if(!is.null(w.model))
+      w.model
     else if(!will.expand(control$expand)) {
       if(start$given == "x" && is.ppp(x.start))
         x.start$window
@@ -198,7 +198,7 @@ rmh.default <- function(model,start=NULL,
   
   condtype <- control$condtype
   x.cond   <- control$x.cond
-  n.cond   <- control$n.cond
+#  n.cond   <- control$n.cond
 
   switch(condtype,
          none={
@@ -554,7 +554,7 @@ rmhEngine <- function(InfoList, ...,
 
   trend <- model$trend
   trendy <- model$internal$trendy
-  betalist <- model$internal$betalist
+#  betalist <- model$internal$betalist
   beta <- model$internal$beta
   iota <- model$internal$iota
   tmax <- model$internal$tmax
@@ -655,7 +655,7 @@ rmhEngine <- function(InfoList, ...,
 #### Build starting state
 
   npts.cond  <- if(condtype != "none") x.condpp$n else 0
-  npts.total <- npts.free + npts.cond
+#  npts.total <- npts.free + npts.cond
 
 #### FIRST generate the 'free' points
   
@@ -746,8 +746,8 @@ rmhEngine <- function(InfoList, ...,
   p       <- control$p
   q       <- control$q
   nrep    <- control$nrep
-  fixcode <- control$fixcode
-  fixing  <- control$fixing
+#  fixcode <- control$fixcode
+#  fixing  <- control$fixing
   fixall  <- control$fixall
   nverb   <- control$nverb
   saving  <- control$saving

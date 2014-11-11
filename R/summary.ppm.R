@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.71 $   $Date: 2014/11/10 11:33:30 $
+#    $Revision: 1.72 $   $Date: 2014/11/11 03:09:00 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -50,7 +50,7 @@ summary.ppm <- local({
     virgin <- min(package_version(c(mpl.ver, int.ver)))
     
     y$antiquated <- antiquated <- (virgin <= package_version("1.5"))
-    y$old        <- old        <- (virgin < majorminorversion(current))
+    y$old        <- (virgin < majorminorversion(current))
 
     y$version    <- as.character(virgin)
     
@@ -217,7 +217,7 @@ summary.ppm <- local({
 
     if(y$poisson && y$no.trend) {
       # uniform Poisson process
-      y$trend$value <- lambda <- exp(COEFS[[1]])
+      y$trend$value <- exp(COEFS[[1]])
       y$trend$label <- switch(y$marktype,
                               unmarked="Uniform intensity",
                               multitype="Uniform intensity for each mark level",
