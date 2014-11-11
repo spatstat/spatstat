@@ -53,6 +53,10 @@ BUG FIXES
    Bug introduced in spatstat 1.39-0, october 2014.
    Fixed.
 
+   o $<-.hyperframe
+   Columns containing character values were converted to factors.
+   Fixed.
+
    o profilepl
    Crashed in some cases when the interaction was multitype.
    [Spotted by Andrew Lister.]

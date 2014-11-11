@@ -31,7 +31,12 @@
   }
 }
 \value{
-  A logical vector of length equal to the number of points in \code{x}.
+  \code{duplicated(x)} returns
+  a logical vector of length equal to the number of points in \code{x}.
+
+  \code{anyDuplicated(x)} is a number equal to 0 if there are no
+  duplicated points, and otherwise is equal to the index of the first
+  duplicated point.
 }
 \details{
   These are methods for the generic functions \code{\link{duplicated}}

@@ -119,7 +119,7 @@ rmhmodel.default <- function(...,
     stabi.ex <- unlist(lapply(models, function(x){ x$explainvalid$stabilising}))
     stabi.oper <- !(stabi.ex %in% c("TRUE", "FALSE"))
     integ.oper <- !(integ.ex %in% c("TRUE", "FALSE"))
-    compnames <- if(!any(duplicated(C.id))) paste("cif", sQuote(C.id)) else 
+    compnames <- if(!anyDuplicated(C.id)) paste("cif", sQuote(C.id)) else 
          paste("component", 1:Ncif, paren(sQuote(C.id)))
     if(!integrable && stopinvalid) {
       # model is not integrable: explain why

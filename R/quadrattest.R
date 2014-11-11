@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.48 $  $Date: 2014/11/11 03:19:32 $
+#   $Revision: 1.49 $  $Date: 2014/11/11 10:34:41 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -240,7 +240,7 @@ X2testEngine <- function(OBS, EXP, ...,
              SIM  <- matrix(rpois(nsim*ne,EXP),nrow=ne)
            }
            simstats <- apply(SIM, 2, CressieReadStatistic, EXP=EXP)
-           if(any(duplicated(simstats)))
+           if(anyDuplicated(simstats))
              simstats <- jitter(simstats)
            phi <- (1 + sum(simstats >= X2))/(1+nsim)
            plo <- (1 + sum(simstats <= X2))/(1+nsim)

@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.61 $    $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.63 $    $Date: 2014/11/11 12:24:55 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -536,7 +536,8 @@ owinpolycheck <- function(W, verbose=TRUE) {
       progressreport(i, npoly)
     Bi <- B[[i]]
     # check for duplicated vertices
-    dup[i] <- any(duplicated(ppp(Bi$x, Bi$y, window=outerframe, check=FALSE)))
+    dup[i] <- as.logical(anyDuplicated(ppp(Bi$x, Bi$y,
+                                           window=outerframe, check=FALSE)))
     if(dup[i] && blowbyblow)
       message(paste("Polygon", i, "contains duplicated vertices"))
     # check for self-intersection

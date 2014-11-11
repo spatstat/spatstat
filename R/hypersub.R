@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.16 $    $Date: 2014/11/10 08:13:19 $
+##  $Revision: 1.17 $    $Date: 2014/11/11 10:21:17 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -99,7 +99,8 @@
   if(!dfcol && !is.null(value))
     value <- as.list(value)
   x[[name]] <- value
-  y <- do.call("hyperframe", append(x, list(row.names=rown)))
+  y <- do.call("hyperframe", append(x, list(row.names=rown,
+                                            stringsAsFactors=FALSE)))
   return(y)
 }
 

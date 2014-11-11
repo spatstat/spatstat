@@ -881,7 +881,7 @@ good.names <- function(nama, defaults, suffices) {
     result <- defaults
   else if(any(blank <- !nzchar(result)))
     result[blank] <- defaults[blank]
-  if(any(duplicated(result)))
+  if(anyDuplicated(result))
     result <- make.names(result, unique=TRUE)
   return(result)
 }

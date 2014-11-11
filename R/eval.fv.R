@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.27 $     $Date: 2014/11/10 07:37:10 $
+#     $Revision: 1.28 $     $Date: 2014/11/11 10:33:33 $
 #
 
 eval.fv <- local({
@@ -83,13 +83,13 @@ eval.fv <- local({
     # Typically occurs when combining several K functions, etc.
     # Tweak fv objects so their function names are their object names
     # as used in the expression
-    if(any(duplicated(fnames))) {
+    if(anyDuplicated(fnames)) {
       newfnames <- names(funs)
       for(i in 1:nfuns)
         funs[[i]] <- rebadge.fv(funs[[i]], new.fname=newfnames[i])
       fnames <- newfnames
     }
-    if(any(duplicated(ylabs))) {
+    if(anyDuplicated(ylabs)) {
       flatnames <- lapply(funs, flatfname)
       for(i in 1:nfuns) {
         new.ylab <- substitute(f(r), list(f=flatnames[[i]]))
@@ -97,7 +97,7 @@ eval.fv <- local({
       }
       ylabs <- lapply(funs, attr, which="ylab")
     }
-    if(any(duplicated(yexps))) {
+    if(anyDuplicated(yexps)) {
       newfnames <- names(funs)
       for(i in 1:nfuns) {
         new.yexp <- substitute(f(r), list(f=as.name(newfnames[i])))

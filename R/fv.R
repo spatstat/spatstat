@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.122 $   $Date: 2014/10/08 10:53:14 $
+##    $Revision: 1.123 $   $Date: 2014/11/11 10:34:13 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -604,7 +604,7 @@ collapse.fv <- function(..., same=NULL, different=NULL) {
     stop("arguments should be objects of class fv")
   if(is.null(same)) same <- character(0)
   if(is.null(different)) different <- character(0)
-  if(any(duplicated(c(same, different))))
+  if(anyDuplicated(c(same, different)))
     stop(paste("The arguments", sQuote("same"), "and", sQuote("different"),
                "should not have entries in common"))
   either <- c(same, different)
