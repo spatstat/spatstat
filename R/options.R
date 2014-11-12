@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.56 $   $Date: 2014/11/10 11:44:41 $
+#    $Revision: 1.59 $   $Date: 2014/11/12 10:24:25 $
 #
 #
 
@@ -20,6 +20,52 @@ putSpatstatVariable("Spatstat.Options", list())
 putSpatstatVariable("Spatstat.ProgressBar", NULL)
 putSpatstatVariable("Spatstat.ProgressData", NULL)
 putSpatstatVariable("warnedkeys", character(0))
+
+## Kovesi's uniform colour map, row 29, linear 'bmy'
+putSpatstatVariable("DefaultImageColours", 
+c("#000C7D", "#000D7E", "#000D80", "#000E81", "#000E83", "#000E85", 
+"#000F86", "#000F88", "#00108A", "#00108B", "#00118D", "#00118F", 
+"#001190", "#001292", "#001293", "#001295", "#001396", "#001398", 
+"#001399", "#00149A", "#00149C", "#00149D", "#00149E", "#00159F", 
+"#0015A0", "#0015A1", "#0015A2", "#0015A3", "#0015A4", "#0016A5", 
+"#0016A6", "#0016A6", "#0016A7", "#0016A8", "#0016A8", "#0016A8", 
+"#0A16A9", "#1516A9", "#1D15A9", "#2315A9", "#2915A9", "#2F15A8", 
+"#3414A8", "#3914A7", "#3E13A6", "#4313A5", "#4712A4", "#4C12A3", 
+"#5011A2", "#5311A1", "#5710A0", "#5A0F9F", "#5E0F9E", "#610E9E", 
+"#640E9D", "#670D9C", "#6A0D9B", "#6C0C9A", "#6F0B99", "#720B98", 
+"#740A98", "#770A97", "#790996", "#7C0896", "#7E0895", "#800794", 
+"#810794", "#840693", "#860692", "#880692", "#8A0591", "#8C0591", 
+"#8E0490", "#900490", "#92048F", "#94038F", "#96038E", "#98038E", 
+"#9A028D", "#9C028D", "#9E028D", "#A0018C", "#A2018C", "#A4018B", 
+"#A6018B", "#A8008A", "#AA008A", "#AB0089", "#AD0089", "#AF0088", 
+"#B10088", "#B30087", "#B50087", "#B70086", "#B80086", "#BA0086", 
+"#BC0085", "#BE0085", "#C00084", "#C20084", "#C30083", "#C50083", 
+"#C70082", "#C90082", "#CB0081", "#CD0081", "#CE0080", "#D00080", 
+"#D20080", "#D40080", "#D5007F", "#D7007F", "#D9007E", "#DA007E", 
+"#DC007D", "#DD007C", "#DF017C", "#E1027B", "#E2047B", "#E4067A", 
+"#E5087A", "#E70B79", "#E80D78", "#E91078", "#EB1277", "#EC1477", 
+"#ED1676", "#EF1875", "#F01A75", "#F11C74", "#F31E73", "#F42073", 
+"#F52272", "#F62471", "#F72671", "#F82870", "#FA2A6F", "#FB2C6F", 
+"#FC2E6E", "#FD306D", "#FE326C", "#FE346C", "#FE366B", "#FE386A", 
+"#FE3A6A", "#FE3D69", "#FE3F68", "#FE4167", "#FE4366", "#FE4566", 
+"#FE4765", "#FE4964", "#FE4B63", "#FE4D62", "#FE5062", "#FE5261", 
+"#FE5460", "#FE565F", "#FE585E", "#FE5A5D", "#FE5D5C", "#FE5F5B", 
+"#FE615B", "#FE635A", "#FE6559", "#FE6758", "#FE6A57", "#FE6C56", 
+"#FE6E55", "#FE7054", "#FE7253", "#FE7452", "#FE7651", "#FE7850", 
+"#FE7A4E", "#FE7C4D", "#FE7E4C", "#FE7F4B", "#FE804A", "#FE8249", 
+"#FE8448", "#FE8647", "#FE8745", "#FE8944", "#FE8B43", "#FE8D42", 
+"#FE8E40", "#FE903F", "#FE923E", "#FE943C", "#FE953B", "#FE9739", 
+"#FE9938", "#FE9A36", "#FE9C35", "#FE9E33", "#FE9F32", "#FEA130", 
+"#FEA22F", "#FEA42E", "#FEA52C", "#FEA72B", "#FEA82A", "#FEAA29", 
+"#FEAB28", "#FEAD27", "#FEAE26", "#FEB026", "#FEB125", "#FEB324", 
+"#FEB423", "#FEB523", "#FEB722", "#FEB822", "#FEBA21", "#FEBB20", 
+"#FEBC20", "#FEBE1F", "#FEBF1F", "#FEC11F", "#FEC21E", "#FEC31E", 
+"#FEC51E", "#FEC61D", "#FEC71D", "#FEC91D", "#FECA1D", "#FECB1D", 
+"#FECD1D", "#FECE1C", "#FECF1C", "#FED11C", "#FED21C", "#FED31C", 
+"#FED51C", "#FED61D", "#FED71D", "#FED91D", "#FEDA1D", "#FEDB1D", 
+"#FEDD1D", "#FEDE1E", "#FEDF1E", "#FEE11E", "#FEE21E", "#FEE31F", 
+"#FEE51F", "#FEE61F", "#FEE720", "#FEE820", "#FEEA21", "#FEEB21", 
+"#FEEC22", "#FEEE22", "#FEEF23", "#FEF023"))
 
 warn.once <- function(key, ...) {
   warned <- getSpatstatVariable("warnedkeys")
@@ -135,7 +181,11 @@ warn.once <- function(key, ...) {
        ),
        image.colfun=list(
          ## default colour scheme for plot.im
-         default=function(n){topo.colors(n)},
+#         default=function(n){topo.colors(n)},
+         default=function(n) {
+           z <- getSpatstatVariable("DefaultImageColours")
+           interp.colours(z, n)
+         },
          check=function(x) {
            if(!is.function(x) || length(formals(x)) == 0) return(FALSE)
            y <- x(42)

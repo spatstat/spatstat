@@ -6,6 +6,7 @@
 \alias{paletteindex}
 \alias{samecolour}
 \alias{complementarycolour}
+\alias{interp.colours}
 \alias{is.grey}
 \alias{to.grey}
 \title{
@@ -22,6 +23,7 @@ rgb2hex(v)
 paletteindex(x)
 samecolour(x,y)
 complementarycolour(x)
+interp.colours(x, length.out=512)
 to.grey(x, weights=c(1,1,1))
 is.grey(x)
 }
@@ -40,6 +42,9 @@ is.grey(x)
     Numeric vector of length 3 giving 
     relative weights for the red, green, and blue
     channels respectively.
+  }
+  \item{length.out}{
+    Integer. Length of desired sequence.
   }
 }
 \details{
@@ -69,6 +74,11 @@ is.grey(x)
   RGB values \code{(r, g, b)} by \code{(255-r, 255-g, 255-b)}).
   Alternatively \code{x} can be an object of class \code{"colourmap"}
   and \code{complementarycolour(x)} is the modified colour map.
+
+  \code{interp.colours} interpolates between each successive pair of
+  colours in a sequence of colours, to generate a more finely-spaced
+  sequence. It uses linear interpolation in HSV space (with hue
+  represented as a two-dimensional unit vector).
 }
 \section{Warning}{
   \code{paletteindex("green")} returns \code{NA} because
@@ -108,5 +118,6 @@ is.grey(x)
   complementarycolour("orange")
   is.grey("lightgrey")
   is.grey(8)
+  interp.colours(c("orange", "red", "violet"), 5)
 }
 \keyword{color}

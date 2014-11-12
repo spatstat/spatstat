@@ -3,16 +3,24 @@
 
 OVERVIEW
 
-   o We thank Andrew Lister, Brian Ripley, Dominic Schuhmacher
+   o We thank Peter Kovesi, Andrew Lister, Brian Ripley, Dominic Schuhmacher
    and Maxime Woringer for contributions.
 
    o Mathematical operations for images.
 
-   o Faster checking of large datasets
+   o Improved colour maps.
+
+   o Faster checking of large datasets.
 
    o Bug fixes.
 
    o Version nickname: 'Do The Maths'
+
+NEW DATASETS
+
+   o Kovesi
+   Colour maps with perceptually uniform contrast.
+   Generously contributed by Peter Kovesi.
 
 NEW FUNCTIONS
 
@@ -20,10 +28,18 @@ NEW FUNCTIONS
    For example:   inc <- atan(bei.extra$grad) * 180/pi
    See help(Math.im)
 
+   o interp.colours
+   Interpolate a sequence of colour values.
+
    o anyDuplicated.ppp, anyDuplicated.ppx
    Fast replacements for any(duplicated(x)) for point patterns.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o plot.im
+   The default colour map for plotting images,
+   specified by spatstat.options('image.colfun'), 
+   has been changed to a perceptually uniform map.
 
    o pairorient
    Labels and descriptions of columns have been corrected.
