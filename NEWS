@@ -3,7 +3,7 @@
 
 OVERVIEW
 
-   o We thank Andrew Lister, Brian Ripley, Dominic Schuhmacher
+   o We thank Peter Kovesi, Andrew Lister, Brian Ripley, Dominic Schuhmacher
    and Maxime Woringer for contributions.
 
    o Mathematical operations for images.
@@ -14,11 +14,20 @@ OVERVIEW
 
    o Version nickname: 'Do The Maths'
 
+NEW DATASETS
+
+   o Kovesi
+   Sequences of colours with perceptually uniform contrast.
+   Generously contributed by Peter Kovesi.
+
 NEW FUNCTIONS
 
    o Mathematical operations are now supported for images.
    For example:   inc <- atan(bei.extra$grad) * 180/pi
    See help(Math.im)
+
+   o interp.colours
+   Interpolate a sequence of colour values.
 
    o anyDuplicated.ppp, anyDuplicated.ppx
    Fast replacements for any(duplicated(x)) for point patterns.

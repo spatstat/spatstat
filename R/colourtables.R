@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.33 $ $Date: 2014/11/10 05:38:05 $
+# $Revision: 1.34 $ $Date: 2014/11/12 01:21:02 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -428,6 +428,13 @@ interp.colourmap <- function(m, n=512) {
   # done
   f <- colourmap(yy, breaks=xbreaks)
   return(f)
+}
+
+interp.colours <- function(x, length.out=512) {
+  y <- colourmap(x, range=c(0,1))
+  z <- interp.colourmap(y, length.out)
+  oo <- attr(z, "stuff")$outputs
+  return(oo)
 }
 
 tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {

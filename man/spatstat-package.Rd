@@ -1662,6 +1662,7 @@
   Robert John-Chandran,
   Devin Johnson,
   Mahdieh Khanmohammadi,
+  Peter Kovesi,
   Mike Kuhn,
   Jeff Laake,
   Frederic Lavancier,
