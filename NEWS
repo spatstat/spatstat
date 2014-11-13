@@ -3,12 +3,14 @@
 
 OVERVIEW
 
-   o We thank Peter Kovesi, Andrew Lister, Brian Ripley, Dominic Schuhmacher
-   and Maxime Woringer for contributions.
+   o We thank Peter Kovesi, Andrew Lister, Enrique Miranda,
+   Brian Ripley, Dominic Schuhmacher and Maxime Woringer for contributions.
 
    o Mathematical operations for images.
 
    o Improved colour maps.
+
+   o New datasets.
 
    o Faster checking of large datasets.
 
@@ -17,6 +19,10 @@ OVERVIEW
    o Version nickname: 'Do The Maths'
 
 NEW DATASETS
+
+   o bdspots
+   Breakdown spots on microelectronic capacitor electrodes.
+   Generously contributed by Prof Enrique Miranda.
 
    o Kovesi
    Colour maps with perceptually uniform contrast.
@@ -73,6 +79,12 @@ BUG FIXES
    Columns containing character values were converted to factors.
    Fixed.
 
+   o relrisk
+   A small fraction of pixel values were sometimes wildly inaccurate
+   due to numerical errors. This affected the range of values
+   in the result, and therefore the appearance of plots.
+   Fixed.
+
    o profilepl
    Crashed in some cases when the interaction was multitype.
    [Spotted by Andrew Lister.]
@@ -81,6 +93,15 @@ BUG FIXES
    o profilepl
    Crashed if the model involved covariates that were not
    given in a 'data' argument.
+   Fixed.
+
+   o relrisk
+   Did not accept a character string value for the argument 'case'.
+   Fixed.
+
+   o plot.ppp
+   Warned about NA values amongst the marks, even if there were no NA's
+   in the column(s) of marks selected by the argument 'which.marks'.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.39-1

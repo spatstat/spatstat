@@ -223,7 +223,7 @@ plot.ppp <- local({
 
   ## Determine symbol map and mark values to be used
   y <- x
-  if(!is.marked(x) || !use.marks) {
+  if(!is.marked(x, na.action="ignore") || !use.marks) {
     ## Marks are not mapped.
     marx <- NULL
     if(is.null(symap)) symap <- symbolmap(..., chars=chars, cols=cols)
@@ -236,7 +236,7 @@ plot.ppp <- local({
       y <- setmarks(y, marx)
     }
     if(npoints(y) > 0) {
-      ok <- complete.cases(as.data.frame(x))
+      ok <- complete.cases(as.data.frame(y))
       if(!any(ok)) {
         warning("All mark values are NA; plotting locations only.")
         if(is.null(symap)) symap <- symbolmap()

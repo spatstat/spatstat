@@ -1685,6 +1685,7 @@
   Mi Xiangcheng,
   Lore De Middeleer,
   Robin Milne,
+  Enrique Miranda,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
   Erika Mudrak,
   Gopalan Nair,

@@ -1,7 +1,7 @@
 Package: spatstat
 Version: 1.39-2
 Nickname: Do The Maths
-Date: 2014-11-12
+Date: 2014-11-13
 Title: Spatial Point Pattern analysis, model-fitting, simulation, tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -92,6 +92,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	X.C. Mi;
 	L. De Middeleer;
 	R.K. Milne; 
+        E. Miranda;
 	J. Moller; 
 	E. Mudrak;
         G.M. Nair;
