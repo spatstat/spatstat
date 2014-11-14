@@ -18,13 +18,16 @@
   given in microns.  
 }
 \details{
-  The application of successive voltage sweeps to the gate electrode
+  The application of successive voltage sweeps to the metal gate electrode
   of a microelectronic capacitor generates multiple breakdown spots
-  on the metal gate.
-  Miranda et al (2010, 2013) and Saura et al (2013a, 2013b, 2014)
-  analysed the spatial distribution of these breakdown spots
+  on the electrode.
+  The spatial distribution of these breakdown spots
   in MIM (metal-insulator-metal) and MIS (metal-insulator-semiconductor)
-  structures.
+  structures was observed and analysed by 
+  Miranda et al (2010, 2013) and Saura et al (2013a, 2013b, 2014).
+
+  The data given here are the breakdown spot patterns for three circular
+  electrodes of different radii, 169, 282 and 423 microns respectively.
 }
 \source{
   Professor Enrique Miranda, Departament d'Enginyeria
@@ -76,7 +79,7 @@
 }
 \examples{
 data(bdspots)
-plot(bdspots)
+plot(bdspots, equal.scales=TRUE)
 }
 \keyword{datasets}
 \keyword{spatial}

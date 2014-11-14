@@ -5,13 +5,15 @@
 }
 \description{
   Given a multitype point pattern, this function estimates the
-  spatially-varying probability of each type of point, using
-  kernel smoothing. The default smoothing bandwidth is selected by
+  spatially-varying probability of each type of point, or the ratios of
+  such probabilities, using kernel smoothing.
+  The default smoothing bandwidth is selected by
   cross-validation.
 }
 \usage{
 relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
-           casecontrol=TRUE, case=2)
+           relative=FALSE,
+           casecontrol=TRUE, control=1, case)
 }
 \arguments{
   \item{X}{
@@ -39,9 +41,21 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
     at a grid of pixel locations (\code{at="pixels"}) or
     only at the points of \code{X} (\code{at="points"}).
   }
+  \item{relative}{
+    Logical.
+    If \code{FALSE} (the default) the algorithm
+    computes the probabilities of each type of point.
+    If \code{TRUE}, it computes the    
+    \emph{relative risk}, the ratio of probabilities
+    of each type relative to the probability of a control.
+  }
   \item{casecontrol}{
     Logical. Whether to treat a bivariate point pattern
     as consisting of cases and controls. See Details.
+  }
+  \item{control}{
+    Integer, or character string, identifying which mark value
+    corresponds to a control. 
   }
   \item{case}{
     Integer, or character string, identifying which mark value
@@ -109,7 +123,11 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
 \value{
   If \code{X} consists of only two types of points,
   the result is a pixel image (if \code{at="pixels"})
-  or a vector of probabilities (if \code{at="points"}).
+  or a vector (if \code{at="points"}).
+  The pixel values or vector values
+  are the probabilities of a case if \code{relative=FALSE},
+  or the relative risk of a case (probability of a case divided by the
+  probability of a control) if \code{relative=TRUE}.
 
   If \code{X} consists of more than two types of points,
   the result is:
@@ -124,6 +142,10 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
     data points \eqn{x_i}{x[i]}, and columns corresponding
     to types \eqn{j}.
   }
+  The pixel values or matrix entries
+  are the probabilities of each type of point if \code{relative=FALSE},
+  or the relative risk of each type (probability of each type divided by the
+  probability of a control) if \code{relative=TRUE}.
 }
 \seealso{
  \code{\link{bw.relrisk}},

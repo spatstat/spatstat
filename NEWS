@@ -42,6 +42,10 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+   o relrisk
+   New argument 'relative' specifies whether to calculate the relative risk
+   or the absolute probability of each type of point.
+
    o plot.im
    The default colour map for plotting images,
    specified by spatstat.options('image.colfun'), 

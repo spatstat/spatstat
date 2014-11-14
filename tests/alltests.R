@@ -1943,7 +1943,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.1 $  $Date: 2013/02/26 09:13:52 $
+#  $Revision: 1.2 $  $Date: 2014/11/14 05:58:15 $
 #
 
 require(spatstat)
@@ -1955,7 +1955,9 @@ local({
   
   lamX <- density(redwood, at="points")
   KX <- Kinhom(redwood, lamX)
-  
+
+  a <- relrisk(ants, sigma=100, relative=TRUE)
+  b <- relrisk(ants, sigma=100, relative=TRUE, casecontrol=FALSE)
 })
 #
 # tests/slrm.R

@@ -3,15 +3,18 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.24 $  $Date: 2014/11/13 01:39:04 $
+#  $Revision: 1.25 $  $Date: 2014/11/14 05:48:57 $
 #
 
 relrisk <- local({
 
   relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
-                      casecontrol=TRUE, case=2) {
+                      relative=FALSE,
+                      casecontrol=TRUE, control=1, case) {
     stopifnot(is.ppp(X))
     stopifnot(is.multitype(X))
+    control.given <- !missing(control)
+    case.given <- !missing(case)
     Y <- split(X)
     ntypes <- length(Y)
     if(ntypes == 1)
@@ -29,14 +32,29 @@ relrisk <- local({
       sigma <- do.call(bw.relrisk, append(list(X), bwargs))
     ## compute probabilities
     if(ntypes == 2 && casecontrol) {
-      if(is.numeric(case)) {
-        icase <- case <- as.integer(case)
-        stopifnot(case %in% 1:2)
-      } else if(is.character(case)) {
-        icase <- match(case, levels(marks(X)))
-        if(is.na(icase)) stop(paste("No points have mark =", case))
-      } else stop(paste("Unrecognised format for argument", sQuote("case")))
-      icontrol <- 3 - icase
+      if(control.given || !case.given) {
+        if(is.numeric(control)) {
+          icontrol <- control <- as.integer(control)
+          stopifnot(control %in% 1:2)
+        } else if(is.character(control)) {
+          icontrol <- match(control, levels(marks(X)))
+          if(is.na(icontrol)) stop(paste("No points have mark =", control))
+        } else
+          stop(paste("Unrecognised format for argument", sQuote("control")))
+        if(!case.given)
+          icase <- 3 - icontrol
+      }
+      if(case.given) {
+        if(is.numeric(case)) {
+          icase <- case <- as.integer(case)
+          stopifnot(case %in% 1:2)
+        } else if(is.character(case)) {
+          icase <- match(case, levels(marks(X)))
+          if(is.na(icase)) stop(paste("No points have mark =", case))
+        } else stop(paste("Unrecognised format for argument", sQuote("case")))
+        if(!control.given) 
+          icontrol <- 3 - icase
+      }
       ## compute densities
       Deach <- do.call(density.splitppp,
                        append(list(Y, sigma=sigma, varcov=varcov, at=at),
@@ -59,6 +77,8 @@ relrisk <- local({
                  closecase <- eval.im(as.integer(distcase < distcontrol))
                  result[nbg] <- closecase[nbg]
                }
+               if(relative)
+                 result <- eval.im(ifelse(result < 1, result/(1-result), NA))
              },
              points={
                result <- numeric(npoints(X))
@@ -73,9 +93,22 @@ relrisk <- local({
                  nntype <- imarks[nnwhich(X)]
                  result[nbg] <- as.integer(nntype[nbg] == icase)
                }
+               if(relative)
+                 result <- result/(1-result)
              })
     } else {
       ## several types
+      if(relative) {
+        ## need 'control' type
+        if(is.numeric(control)) {
+          icontrol <- control <- as.integer(control)
+          stopifnot(control %in% 1:2)
+        } else if(is.character(control)) {
+          icontrol <- match(control, levels(marks(X)))
+          if(is.na(icontrol)) stop(paste("No points have mark =", control))
+        } else
+          stop(paste("Unrecognised format for argument", sQuote("control")))
+      }
       switch(at,
              pixels={
                Deach <- do.call(density.splitppp,
@@ -100,6 +133,14 @@ relrisk <- local({
                  for(k in seq_along(result)) 
                    result[[k]][nbg] <- (typennsub == k)
                }
+               if(relative) {
+                 result <-
+                   as.listof(lapply(result,
+                                    function(z, d) {
+                                      eval.im(ifelse(d > 0, z/d, NA))
+                                    },
+                                    d = result[[icontrol]]))
+               }
              },
              points = {
                npts <- npoints(X)
@@ -123,7 +164,9 @@ relrisk <- local({
                  typenn <- imarks[nnwhich(X)]
                  result[badrow, ] <- (typenn == col(result))[badrow, ]
                }
-             })
+               if(relative) 
+                 result <- result/result[,icontrol]
+            })
     }
     attr(result, "sigma") <- sigma
     attr(result, "varcov") <- varcov
@@ -137,7 +180,7 @@ relrisk <- local({
 
   badvalues <- function(x) {
     if(is.im(x)) x <- as.matrix(x)
-    return(badprobability(x, FALSE))
+    return(!(is.finite(x) | is.na(x)))
   }
   
   relrisk
