@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.25 $  $Date: 2014/11/14 05:48:57 $
+#  $Revision: 1.26 $  $Date: 2014/11/15 01:02:37 $
 #
 
 relrisk <- local({
@@ -15,6 +15,14 @@ relrisk <- local({
     stopifnot(is.multitype(X))
     control.given <- !missing(control)
     case.given <- !missing(case)
+    if(!relative && (control.given || case.given)) {
+      aa <- c("control", "case")[c(control.given, case.given)]
+      nn <- length(aa)
+      warning(paste(ngettext(nn, "Argument", "Arguments"),
+                    paste(sQuote(aa), collapse=" and "),
+                    ngettext(nn, "was", "were"),
+                    "ignored, because relative=FALSE"))
+    }
     Y <- split(X)
     ntypes <- length(Y)
     if(ntypes == 1)
@@ -33,6 +41,7 @@ relrisk <- local({
     ## compute probabilities
     if(ntypes == 2 && casecontrol) {
       if(control.given || !case.given) {
+        stopifnot(length(control) == 1)
         if(is.numeric(control)) {
           icontrol <- control <- as.integer(control)
           stopifnot(control %in% 1:2)
@@ -45,6 +54,7 @@ relrisk <- local({
           icase <- 3 - icontrol
       }
       if(case.given) {
+        stopifnot(length(case) == 1)
         if(is.numeric(case)) {
           icase <- case <- as.integer(case)
           stopifnot(case %in% 1:2)
@@ -100,9 +110,10 @@ relrisk <- local({
       ## several types
       if(relative) {
         ## need 'control' type
+        stopifnot(length(control) == 1)
         if(is.numeric(control)) {
           icontrol <- control <- as.integer(control)
-          stopifnot(control %in% 1:2)
+          stopifnot(control %in% 1:ntypes)
         } else if(is.character(control)) {
           icontrol <- match(control, levels(marks(X)))
           if(is.na(icontrol)) stop(paste("No points have mark =", control))

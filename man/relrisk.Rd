@@ -51,7 +51,10 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
   }
   \item{casecontrol}{
     Logical. Whether to treat a bivariate point pattern
-    as consisting of cases and controls. See Details.
+    as consisting of cases and controls, and return only the
+    probability or relative risk of a case.
+    Ignored if there are more than 2 types of points.
+    See Details.
   }
   \item{control}{
     Integer, or character string, identifying which mark value
@@ -59,7 +62,11 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
   }
   \item{case}{
     Integer, or character string, identifying which mark value
-    corresponds to a case (rather than a control).
+    corresponds to a case (rather than a control)
+    in a bivariate point pattern.
+    This is an alternative to the argument \code{control}
+    in a bivariate point pattern. 
+    Ignored if there are more than 2 types of points.
   }
 }
 \details{
@@ -68,34 +75,52 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
   then by default,
   the points of the first type (the first level of \code{marks(X)})
   are treated as controls or non-events, and points of the second type
-  are treated as cases or events. Then this command computes
-  the spatially-varying risk of an event,
+  are treated as cases or events. Then by default this command computes
+  the spatially-varying \emph{probability} of a case,
   i.e. the probability \eqn{p(u)}
   that a point at spatial location \eqn{u}
-  will be a case.
+  will be a case. If \code{relative=TRUE}, it computes the
+  spatially-varying \emph{relative risk} of a case relative to a
+  control, \eqn{r(u) = p(u)/(1- p(u))}.
 
   If \code{X} is a multitype point pattern with \eqn{m > 2} types,
   or if \code{X} is a bivariate point pattern
   and \code{casecontrol=FALSE},
-  then this command computes, for each type \eqn{j},
+  then by default this command computes, for each type \eqn{j},
   a nonparametric estimate of
-  the spatially-varying risk of an event of type \eqn{j}.
+  the spatially-varying \emph{probability} of an event of type \eqn{j}.
   This is the probability \eqn{p_j(u)}{p[j](u)}
   that a point at spatial location \eqn{u}
   will belong to type \eqn{j}.
+  If \code{relative=TRUE}, the command computes the
+  \emph{relative risk} of an event of type \eqn{j}
+  relative to a control,
+  \eqn{r_j(u) = p_j(u)/p_k(u)}{r[j](u) = p[j](u)/p[k](u)},
+  where events of type \eqn{k} are treated as controls.
+  The argument \code{control} determines which type \eqn{k}
+  is treated as a control.
 
   If \code{at = "pixels"} the calculation is performed for
   every spatial location \eqn{u} on a fine pixel grid, and the result
   is a pixel image representing the function \eqn{p(u)}
   or a list of pixel images representing the functions 
-  \eqn{p_j(u)}{p[j](u)} for \eqn{j = 1,\ldots,m}{j = 1,...,m}.
+  \eqn{p_j(u)}{p[j](u)} or \eqn{r_j(u)}{r[j](u)}
+  for \eqn{j = 1,\ldots,m}{j = 1,...,m}.
+  An infinite value of relative risk (arising because the
+  probability of a control is zero) will be returned as \code{NA}.
 
   If \code{at = "points"} the calculation is performed
-  only at the data points \eqn{x_i}{x[i]}. The result is a vector of values
+  only at the data points \eqn{x_i}{x[i]}. By default
+  the result is a vector of values
   \eqn{p(x_i)}{p(x[i])} giving the estimated probability of a case
   at each data point, or a matrix of values 
   \eqn{p_j(x_i)}{p[j](x[i])} giving the estimated probability of
   each possible type \eqn{j} at each data point.
+  If \code{relative=TRUE} then the relative risks
+  \eqn{r(x_i)}{r(x[i])} or \eqn{r_j(x_i)}{r[j](x[i])} are
+  returned.
+  An infinite value of relative risk (arising because the
+  probability of a control is zero) will be returned as \code{Inf}.
 
   Estimation is performed by a simple Nadaraja-Watson type kernel
   smoother (Diggle, 2003).
@@ -122,6 +147,7 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
 }
 \value{
   If \code{X} consists of only two types of points,
+  and if \code{casecontrol=TRUE},
   the result is a pixel image (if \code{at="pixels"})
   or a vector (if \code{at="points"}).
   The pixel values or vector values
@@ -130,7 +156,7 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
   probability of a control) if \code{relative=TRUE}.
 
   If \code{X} consists of more than two types of points,
-  the result is:
+  or if \code{casecontrol=FALSE}, the result is:
   \itemize{
     \item (if \code{at="pixels"})
     a list of pixel images, with one image for each possible type of point.
@@ -146,6 +172,10 @@ relrisk(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
   are the probabilities of each type of point if \code{relative=FALSE},
   or the relative risk of each type (probability of each type divided by the
   probability of a control) if \code{relative=TRUE}.
+
+  If \code{relative=FALSE}, the resulting values always lie between 0
+  and 1. If \code{relative=TRUE}, the results are either non-negative
+  numbers, or the values \code{Inf} or \code{NA}. 
 }
 \seealso{
  \code{\link{bw.relrisk}},

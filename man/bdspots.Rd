@@ -27,7 +27,8 @@
   Miranda et al (2010, 2013) and Saura et al (2013a, 2013b, 2014).
 
   The data given here are the breakdown spot patterns for three circular
-  electrodes of different radii, 169, 282 and 423 microns respectively.
+  electrodes of different radii, 169, 282 and 423 microns respectively,
+  in MIM structures analysed in Saura et al (2013a).
 }
 \source{
   Professor Enrique Miranda, Departament d'Enginyeria
