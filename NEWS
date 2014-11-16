@@ -64,6 +64,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    on the full window rather than the eroded window.
    Fixed.   
 
+   o predict.ppm
+   For multitype models, when the result is a list of images,
+   the names of list entries are now identical to the mark levels
+   (e.g. "hickory" instead of "markhickory")
+
    o print.slrm
    Output now respects options('width')
 
@@ -99,8 +104,16 @@ BUG FIXES
    given in a 'data' argument.
    Fixed.
 
+   o pixelquad
+   If X was a multitype point pattern, the result was mangled.
+   Fixed.
+
    o relrisk
    Did not accept a character string value for the argument 'case'.
+   Fixed.
+
+   o intensity.ppm
+   Format of result was incorrect for ppm(Y ~ 1) where Y is multitype.
    Fixed.
 
    o plot.ppp

@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.11 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.12 $ $Date: 2014/11/16 10:23:19 $
 #
 
 intensity <- function(X, ...) {
@@ -73,7 +73,14 @@ intensity.ppm <- function(X, ...) {
     if(is.stationary(X)) {
       # stationary univariate/multivariate Poisson
       sX <- summary(X, quick="no variances")
-      return(sX$trend$value)
+      lam <- sX$trend$value
+      if(sX$multitype && sX$no.trend) {
+        ## trend is ~1; lam should be replicated for each mark
+        lev <- levels(marks(data.ppm(X)))
+        lam <- rep(lam, length(lev))
+        names(lam) <- lev
+      }
+      return(lam)
     }
     # Nonstationary Poisson
     return(predict(X, ...))

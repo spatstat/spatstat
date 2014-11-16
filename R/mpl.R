@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.184 $	$Date: 2014/11/10 10:52:45 $
+#	$Revision: 5.185 $	$Date: 2014/11/16 10:28:09 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -65,7 +65,7 @@ mpl.engine <-
       } else if(verifyclass(Q, "ppp", fatal = FALSE)) {
         ## point pattern - create default quadrature scheme
         X <- Q
-        Q <- quadscheme(X, nd=nd, eps=eps)
+        Q <- quadscheme(X, nd=nd, eps=eps, check=FALSE)
       } else 
       stop("First argument Q should be a point pattern or a quadrature scheme")
       ## Data and dummy points together
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/11/10 10:52:45 $")
+                        date="$Date: 2014/11/16 10:28:09 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object

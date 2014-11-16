@@ -535,7 +535,7 @@ predict.ppm <- local({
           out[[i]] <- outi
         }
         out <- as.listof(out)
-        names(out) <- paste("mark", types, sep="")
+        names(out) <- as.character(types)
       }
     }
     ##  
