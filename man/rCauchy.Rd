@@ -6,7 +6,7 @@
   Neyman-Scott process with Cauchy cluster kernel.
 }
 \usage{
- rCauchy(kappa, omega, mu, win = owin(), eps = 0.001)
+ rCauchy(kappa, omega, mu, win = owin(), eps = 0.001, nsim=1)
 }
 \arguments{
   \item{kappa}{
@@ -31,9 +31,11 @@
     Threshold below which the values of the cluster kernel
     will be treated as zero for simulation purposes. 
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
+  or a list of point patterns if \code{nsim > 1}.
 
   Additionally,  some intermediate results of the simulation are
   returned as attributes of this point pattern.

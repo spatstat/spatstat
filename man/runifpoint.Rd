@@ -6,7 +6,7 @@
   containing \eqn{n} independent uniform random points.
 }
 \usage{
- runifpoint(n, win=owin(c(0,1),c(0,1)), giveup=1000, warn=TRUE)
+ runifpoint(n, win=owin(c(0,1),c(0,1)), giveup=1000, warn=TRUE, \dots, nsim=1)
 }
 \arguments{
   \item{n}{
@@ -25,9 +25,12 @@
     Logical. Whether to issue a warning if \code{n} is very large.
     See Details.
   }
+  \item{\dots}{Ignored.}
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   This function generates \code{n} independent random points,

@@ -1,19 +1,26 @@
 #
 # randomOnLines.R
 #
-# $Revision: 1.7 $  $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.8 $  $Date: 2014/11/17 04:40:14 $
 #
 # Generate random points on specified lines
 #
 
-runifpointOnLines <- function(n, L) {
+runifpointOnLines <- function(n, L, nsim=1) {
   if(!is.numeric(n) || any(n < 0) || any(n %% 1 != 0))
     stop("n should be a nonnegative integer or integers")
   if(!is.psp(L))
     L <- as.psp(L)
-  X <- datagen.runifpointOnLines(n, L)
-  out <- ppp(X$x, X$y, marks=X$marks, window=as.owin(L), check=FALSE)
-  return(out)
+  W <- as.owin(L)
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) {
+    X <- datagen.runifpointOnLines(n, L)
+    Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
+    result[[i]] <- Y
+  }
+  if(nsim == 1) return(result[[1]])
+  names(result) <- paste("Simulation", 1:nsim)
+  return(as.solist(result))
 }
 
 datagen.runifpointOnLines <- function(n, L) {
@@ -71,14 +78,21 @@ datagen.runifpointOnLines <- function(n, L) {
   return(out)
 }
 
-runifpoisppOnLines <- function(lambda, L) {
+runifpoisppOnLines <- function(lambda, L, nsim=1) {
   if(!is.numeric(lambda) || !all(is.finite(lambda) && (lambda >= 0)))
     stop("lambda should be a finite, nonnegative number or numbers")
   if(!is.psp(L))
     L <- as.psp(L)
-  X <- datagen.runifpoisppOnLines(lambda, L)
-  out <- ppp(X$x, X$y, marks=X$marks, window=as.owin(L), check=FALSE)
-  return(out)
+  W <- as.owin(L)
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) {
+    X <- datagen.runifpoisppOnLines(lambda, L)
+    Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
+    result[[i]] <- Y
+  }
+  if(nsim == 1) return(result[[1]])
+  names(result) <- paste("Simulation", 1:nsim)
+  return(as.solist(result))
 }
 
 datagen.runifpoisppOnLines <- function(lambda, L) {
@@ -91,12 +105,19 @@ datagen.runifpoisppOnLines <- function(lambda, L) {
   return(df)
 }
 
-rpoisppOnLines <- function(lambda, L, lmax=NULL, ...) {
+rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., nsim=1) {
   if(!is.psp(L))
     L <- as.psp(L)
-  X <- datagen.rpoisppOnLines(lambda, L, lmax=lmax, ...)
-  out <- ppp(X$x, X$y, marks=X$marks, window=as.owin(L))
-  return(out)
+  W <- as.owin(L)
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) {
+    X <- datagen.rpoisppOnLines(lambda, L, lmax=lmax, ...)
+    Y <- ppp(X$x, X$y, marks=X$marks, window=W, check=FALSE)
+    result[[i]] <- Y
+  }
+  if(nsim == 1) return(result[[1]])
+  names(result) <- paste("Simulation", 1:nsim)
+  return(as.solist(result))
 }
 
 datagen.rpoisppOnLines <- function(lambda, L, lmax=NULL, ..., check=TRUE)  {

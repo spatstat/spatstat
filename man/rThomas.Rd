@@ -6,7 +6,7 @@
   Thomas cluster process.
 }
 \usage{
- rThomas(kappa, sigma, mu, win = owin(c(0,1),c(0,1)))
+ rThomas(kappa, sigma, mu, win = owin(c(0,1),c(0,1)), nsim=1)
 }
 \arguments{
   \item{kappa}{
@@ -27,9 +27,11 @@
     An object of class \code{"owin"}
     or something acceptable to \code{\link{as.owin}}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
+  or a list of point patterns if \code{nsim > 1}.
 
   Additionally,  some intermediate results of the simulation are
   returned as attributes of this point pattern.

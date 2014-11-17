@@ -6,7 +6,7 @@
   (homogeneous or inhomogeneous) multitype Poisson process.
 }
 \usage{
- rmpoispp(lambda, lmax=NULL, win, types, \dots)
+ rmpoispp(lambda, lmax=NULL, win, types, \dots, nsim=1)
 }
 \arguments{
   \item{lambda}{
@@ -31,10 +31,13 @@
   \item{\dots}{
     Arguments passed to \code{lambda} if it is a function.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated multitype point pattern (an object of class \code{"ppp"}
-  with a component \code{marks} which is a factor).
+  A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
+  or a list of point patterns if \code{nsim > 1}.
+  Each point pattern is multitype (it carries a vector of marks
+  which is a factor).
 }
 \details{
   This function generates a realisation of the marked Poisson

@@ -8,7 +8,7 @@
   using the homogeneous Poisson process.
 }
 \usage{
-rpoisppx(lambda, domain)
+rpoisppx(lambda, domain, nsim=1)
 }
 \arguments{
   \item{lambda}{
@@ -19,6 +19,11 @@ rpoisppx(lambda, domain)
     Multi-dimensional box in which the process should be generated.
     An object of class \code{"boxx"}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+}
+\value{
+  If \code{nsim = 1}, a point pattern (an object of class \code{"ppx"}).
+  If \code{nsim > 1}, a list of such point patterns.
 }
 \details{
   This function generates a realisation
@@ -28,10 +33,6 @@ rpoisppx(lambda, domain)
   The realisation is generated inside the multi-dimensional region
   \code{domain} which currently must be a rectangular box (object of
   class \code{"boxx"}).
-}
-\value{
-  The simulated multi-dimensional point pattern
-  (an object of class \code{"ppx"}).
 }
 \note{
   The intensity \code{lambda} is the expected number of points

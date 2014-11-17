@@ -8,7 +8,8 @@
 \usage{
  rmpoint(n, f=1, fmax=NULL, win=unit.square(),
          types, ptypes,
-         \dots, giveup=1000, verbose=FALSE)
+         \dots, giveup=1000, verbose=FALSE,
+         nsim=1)
 }
 \arguments{
   \item{n}{
@@ -49,9 +50,11 @@
     Flag indicating whether to report details of performance
     of the simulation algorithm.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
+  or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   This function generates random multitype point patterns

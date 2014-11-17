@@ -6,7 +6,8 @@
   general Poisson cluster process.
 }
 \usage{
- rPoissonCluster(kappa, rmax, rcluster, win = owin(c(0,1),c(0,1)), \dots, lmax=NULL)
+ rPoissonCluster(kappa, rmax, rcluster, win = owin(c(0,1),c(0,1)),
+                 \dots, lmax=NULL, nsim=1)
 }
 \arguments{
   \item{kappa}{
@@ -31,12 +32,14 @@
     Optional. Upper bound on the values of \code{kappa}
     when \code{kappa} is a function or pixel image.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
   
   Additionally,  some intermediate results of the simulation are
-  returned as attributes of this point pattern: see Details.
+  returned as attributes of the point pattern: see Details.
 }
 \details{
   This algorithm generates a realisation of the

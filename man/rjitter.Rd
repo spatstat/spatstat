@@ -5,7 +5,7 @@
   Applies independent random displacements to each point in a point pattern.
 }
 \usage{
-rjitter(X, radius, retry=TRUE, giveup = 10000)
+rjitter(X, radius, retry=TRUE, giveup = 10000, \dots, nsim=1)
 }
 \arguments{
   \item{X}{
@@ -26,6 +26,13 @@ rjitter(X, radius, retry=TRUE, giveup = 10000)
   \item{giveup}{
     Maximum number of unsuccessful attempts.
   }
+  \item{\dots}{Ignored.}
+  \item{nsim}{Number of simulated realisations to be generated.}
+}
+\value{
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1},
+  in the same window as \code{X}.
 }
 \details{
   Each of the points in the point pattern \code{X} is subjected to
@@ -42,10 +49,6 @@ rjitter(X, radius, retry=TRUE, giveup = 10000)
   attempts have been made. In the latter case, any unresolved points
   will be included without any perturbation. The return value will
   always be a point pattern with the same number of points as \code{X}.
-}
-\value{
-  A point pattern (object of class \code{"ppp"}) in the same window
-  as \code{X}. 
 }
 \examples{
    X <- rsyst(owin(), 10, 10)

@@ -8,7 +8,7 @@
   using the homogeneous Poisson process.
 }
 \usage{
-rpoispp3(lambda, domain = box3())
+rpoispp3(lambda, domain = box3(), nsim=1)
 }
 \arguments{
   \item{lambda}{
@@ -19,6 +19,12 @@ rpoispp3(lambda, domain = box3())
     Three-dimensional box in which the process should be generated.
     An object of class \code{"box3"}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+}
+\value{
+  If \code{nsim = 1}, a point pattern in
+  three dimensions (an object of class \code{"pp3"}).
+  If \code{nsim > 1}, a list of such point patterns.
 }
 \details{
   This function generates a realisation
@@ -28,10 +34,6 @@ rpoispp3(lambda, domain = box3())
   The realisation is generated inside the three-dimensional region
   \code{domain} which currently must be a rectangular box (object of
   class \code{"box3"}).
-}
-\value{
-  The simulated three-dimensional point pattern
-  (an object of class \code{"pp3"}).
 }
 \note{
   The intensity \code{lambda} is the expected number of points

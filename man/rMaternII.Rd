@@ -6,7 +6,7 @@
   \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process.
 }
 \usage{
- rMaternII(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE)
+ rMaternII(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE, ..., nsim=1)
 }
 \arguments{
   \item{kappa}{
@@ -26,14 +26,17 @@
     (\code{stationary=TRUE}) or to generate the
     proposal points only inside the window (\code{stationary=FALSE}).
   }
+  \item{\dots}{Ignored.}
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
-  This algorithm generates a realisation of \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model II
-  inhibition process 
-  inside the window \code{win}.
+  This algorithm generates one or more realisations
+  of \ifelse{latex}{\out{Mat\'ern}}{Matern}'s Model II
+  inhibition process inside the window \code{win}.
 
   The process is constructed by first
   generating a uniform Poisson point process of ``proposal'' points 

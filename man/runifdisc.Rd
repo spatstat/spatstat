@@ -7,7 +7,7 @@
   in a circular disc.
 }
 \usage{
- runifdisc(n, radius=1, centre=c(0,0), ...)
+ runifdisc(n, radius=1, centre=c(0,0), ..., nsim=1)
 }
 \arguments{
   \item{n}{
@@ -19,9 +19,11 @@
     Arguments passed to \code{\link{disc}} controlling the
     accuracy of approximation to the circle.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   This function generates \code{n} independent random points,

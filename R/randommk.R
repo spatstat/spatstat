@@ -4,7 +4,7 @@
 #
 #   Random generators for MULTITYPE point processes
 #
-#   $Revision: 1.32 $   $Date: 2014/08/04 10:30:05 $
+#   $Revision: 1.33 $   $Date: 2014/11/17 04:11:18 $
 #
 #   rmpoispp()   random marked Poisson pp
 #   rmpoint()    n independent random marked points
@@ -33,7 +33,7 @@ rmpoispp <- local({
   ## Main function
   rmpoispp <- 
     function(lambda, lmax=NULL, win = owin(c(0,1),c(0,1)),
-             types, ...) {
+             types, ..., nsim=1) {
       ## arguments:
       ##     lambda  intensity:
       ##                constant, function(x,y,m,...), image,
@@ -48,6 +48,16 @@ rmpoispp <- local({
       ##    
       ##     ...     extra arguments passed to lambda()
       ##
+
+      if(missing(types)) types <- NULL
+
+      if(nsim > 1) {
+        result <- vector(mode="list", length=nsim)
+        for(i in 1:nsim)
+          result[[i]] <- rmpoispp(lambda, lmax, win, types, ...)
+        names(result) <- paste("Simulation", 1:nsim)
+        return(as.solist(result))
+      }
       
       ## Validate arguments
       single.arg <- checkone(lambda)
@@ -65,7 +75,7 @@ rmpoispp <- local({
                    sQuote("lambda"), "are negative"))
 
       ## Determine & validate the set of possible types
-      if(missing(types)) {
+      if(is.null(types)) {
         if(single.arg)
           stop(paste(sQuote("types"), "must be given explicitly when",
                      sQuote("lambda"), "is a constant, a function or an image"))
@@ -156,25 +166,38 @@ rmpoint <- local({
   rmpoint <- function(n, f=1, fmax=NULL, 
                       win = unit.square(), 
                       types, ptypes, ...,
-                      giveup = 1000, verbose = FALSE) {
+                      giveup = 1000, verbose = FALSE,
+                      nsim = 1) {
     if(!is.numeric(n))
       stop("n must be a scalar or vector")
     if(any(ceiling(n) != floor(n)))
       stop("n must be an integer or integers")
     if(any(n < 0))
       stop("n must be non-negative")
-            
+    if(missing(types)) types <- NULL
+    if(missing(ptypes)) ptypes <- NULL
+
+    if(nsim > 1) {
+      result <- vector(mode="list", length=nsim)
+      for(i in 1:nsim)
+        result[[i]] <- rmpoint(n, f, fmax, win, types, ptypes, ...,
+                               giveup=giveup, verbose=verbose)
+      names(result) <- paste("Simulation", 1:nsim)
+      return(as.solist(result))
+    }
+      
     if(sum(n) == 0) {
       nopoints <- ppp(x=numeric(0), y=numeric(0), window=win, check=FALSE)
-      nomarks <- factor(types[numeric(0)], levels=types)
-      empty <- nopoints %mark% nomarks
-      return(empty)
+      if(!is.null(types)) {
+        nomarks <- factor(types[numeric(0)], levels=types)
+        npoints <- nopoints %mark% nomarks
+      }
+      return(nopoints)
     }         
-
     #############
   
     Model <- if(length(n) == 1) {
-      if(missing(ptypes)) "I" else "II"
+      if(is.null(ptypes)) "I" else "II"
     } else "III"
   
     ##############  Validate f argument
@@ -198,7 +221,7 @@ rmpoint <- local({
     same.density <- const.density || (single.arg && !is.function(f))
 
     ################   Determine & validate the set of possible types
-    if(missing(types)) {
+    if(is.null(types)) {
       if(single.arg && length(n) == 1)
         stop(paste(sQuote("types"), "must be given explicitly when",
                    sQuote("f"),
@@ -379,7 +402,15 @@ rmpoint.I.allim <- local({
 rpoint.multi <- function (n, f, fmax=NULL, marks = NULL,
                           win = unit.square(),
                           giveup = 1000, verbose = FALSE,
-                          warn=TRUE) {
+                          warn=TRUE, nsim=1) {
+  if(nsim > 1) {
+    result <- vector(mode="list", length=nsim)
+    for(i in 1:nsim)
+      result[[i]] <- rpoint.multi(n, f, fmax, marks, win, giveup, verbose)
+    names(result) <- paste("Simulation", 1:nsim)
+    return(as.solist(result))
+  }
+  
   no.marks <- is.null(marks) ||
                (is.factor(marks) && length(levels(marks)) == 1)
   if(warn) {

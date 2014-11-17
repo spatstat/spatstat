@@ -79,6 +79,8 @@ solist <- local({
 })
 
 as.solist <- function(x, ...) {
+  if(inherits(x, "solist") && length(list(...)) == 0)
+    return(x)
   if(!is.list(x))
     x <- list(x)
   return(do.call(solist, append(x, list(...))))

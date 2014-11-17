@@ -5,7 +5,7 @@
   Applies independent random thinning to a point pattern.
 }
 \usage{
-rthin(X, P, \dots)
+rthin(X, P, \dots, nsim=1)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,11 @@ rthin(X, P, \dots)
   \item{\dots}{
     Additional arguments passed to \code{P}, if it is a function.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+}
+\value{
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   In a random thinning operation, each point of the pattern \code{X}
@@ -52,9 +57,6 @@ rthin(X, P, \dots)
   it should accept vector arguments \code{x,y} and should yield a
   numeric vector of the same length. The function may have extra
   arguments which are passed through the \code{\dots} argument.
-}
-\value{
-  A point pattern (object of class \code{"ppp"}).
 }
 \examples{
   data(redwood)

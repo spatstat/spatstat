@@ -6,7 +6,7 @@
   of the Diggle-Gates-Stibbard process, using a perfect simulation algorithm.
 }
 \usage{
-  rDGS(beta, rho, W = owin(), expand=TRUE)
+  rDGS(beta, rho, W = owin(), expand=TRUE, nsim=1)
 }
 \arguments{
   \item{beta}{
@@ -29,6 +29,7 @@
     \code{"rmhexpand"} (see \code{\link{rmhexpand}})
     determining the expansion method.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}  
 }
 \details{
   This function generates a realisation of the 
@@ -61,7 +62,8 @@
   message will be generated.
 }
 \value{
-  A point pattern (object of class \code{"ppp"}).
+  If \code{nsim = 1}, a point pattern (object of class \code{"ppp"}).
+  If \code{nsim > 1}, a list of point patterns.
 }
 \references{
   Berthelsen, K.K. and \ifelse{latex}{\out{M\o ller}}{Moller}, J. (2002)

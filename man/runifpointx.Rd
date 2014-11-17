@@ -8,7 +8,7 @@
   independent, uniform random points in any number of spatial dimensions.
 }
 \usage{
-runifpointx(n, domain)
+runifpointx(n, domain, nsim=1)
 }
 \arguments{
   \item{n}{
@@ -18,12 +18,14 @@ runifpointx(n, domain)
     Multi-dimensional box in which the process should be generated.
     An object of class \code{"boxx"}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppx"}).
+  If \code{nsim = 1}, a point pattern (an object of class \code{"ppx"}).
+  If \code{nsim > 1}, a list of such point patterns.
 }
 \details{
-  This function generates \code{n} independent random points,
+  This function generates a pattern of \code{n} independent random points,
   uniformly distributed in the multi-dimensional box \code{domain}.
 }
 \seealso{

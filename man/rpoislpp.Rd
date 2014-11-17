@@ -8,7 +8,7 @@
   with specified intensity on the given linear network.
 }
 \usage{
-rpoislpp(lambda, L, ...)
+rpoislpp(lambda, L, ..., nsim=1)
 }
 \arguments{
   \item{lambda}{
@@ -24,14 +24,16 @@ rpoislpp(lambda, L, ...)
   \item{\dots}{
     Arguments passed to \code{\link{rpoisppOnLines}}.
   }
+  \item{nsim}{Number of simulated realisations to generate.}
 }
 \details{
   This function uses \code{\link{rpoisppOnLines}}
   to generate the random points.
 }
 \value{
-  A point pattern on the linear network,
+  If \code{nsim = 1}, a point pattern on the linear network,
   i.e.\ an object of class \code{"lpp"}.
+  If \code{nsim > 1}, a list of such point patterns.
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and

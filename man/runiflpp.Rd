@@ -8,7 +8,7 @@
   uniformly distributed, on a linear network.
 }
 \usage{
-runiflpp(n, L)
+runiflpp(n, L, nsim=1)
 }
 \arguments{
   \item{n}{
@@ -20,14 +20,16 @@ runiflpp(n, L)
     A linear network (object of class \code{"linnet"},
     see \code{\link{linnet}}).
   }
+  \item{nsim}{Number of simulated realisations to generate.}
 }
 \details{
   This function uses \code{\link{runifpointOnLines}}
   to generate the random points.
 }
 \value{
-  A point pattern on the linear network,
+  If \code{nsim = 1}, a point pattern on the linear network,
   i.e.\ an object of class \code{"lpp"}.
+  If \code{nsim > 1}, a list of such point patterns.
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and

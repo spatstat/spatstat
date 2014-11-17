@@ -7,7 +7,7 @@
   displacement.
 }
 \usage{
- rsyst(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx)
+ rsyst(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx, nsim=1)
 }
 \arguments{
   \item{win}{
@@ -28,9 +28,11 @@
   \item{dy}{Spacing of grid points in \eqn{y} direction.
     Incompatible with \code{ny}.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  A point pattern (object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   This function generates a \dQuote{systematic random} pattern

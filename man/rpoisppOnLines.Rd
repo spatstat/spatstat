@@ -6,7 +6,7 @@
   on the line segments.
 }
 \usage{
-rpoisppOnLines(lambda, L, lmax = NULL, ...)
+rpoisppOnLines(lambda, L, lmax = NULL, ..., nsim=1)
 }
 \arguments{
   \item{lambda}{Intensity of the Poisson process.
@@ -23,6 +23,7 @@ rpoisppOnLines(lambda, L, lmax = NULL, ...)
   \item{\dots}{Additional arguments passed to \code{lambda} if it is a
     function.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \details{
   This command generates a Poisson point process on the one-dimensional
@@ -56,8 +57,9 @@ rpoisppOnLines(lambda, L, lmax = NULL, ...)
   \code{lambda}. 
 }
 \value{
-  A point pattern (object of class \code{"ppp"}) in the same window
-  as \code{L}.
+  If \code{nsim = 1}, a point pattern
+  (object of class \code{"ppp"}) in the same window
+  as \code{L}. If \code{nsim > 1}, a list of such point patterns.
 }
 \seealso{
   \code{\link{psp}},

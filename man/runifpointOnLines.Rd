@@ -7,13 +7,14 @@
   line segments.
 }
 \usage{
-runifpointOnLines(n, L)
+runifpointOnLines(n, L, nsim=1)
 }
 \arguments{
   \item{n}{Number of points to generate.}
   \item{L}{Line segment pattern (object of class \code{"psp"})
     on which the points should lie.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \details{
   This command generates a point pattern consisting of \code{n}
@@ -34,8 +35,10 @@ runifpointOnLines(n, L)
   in which there are \code{n[j]} points of type \code{j}.
 }
 \value{
-  A point pattern (object of class \code{"ppp"}) with the same
+  If \code{nsim = 1}, 
+  a point pattern (object of class \code{"ppp"}) with the same
   window as \code{L}.
+  If \code{nsim > 1}, a list of point patterns.
 }
 \seealso{
   \code{\link{psp}},

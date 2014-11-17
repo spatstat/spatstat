@@ -6,7 +6,7 @@
   Simple Sequential Inhibition (SSI) process.
 }
 \usage{
- rSSI(r, n=Inf, win = square(1), giveup = 1000, x.init=NULL)
+ rSSI(r, n=Inf, win = square(1), giveup = 1000, x.init=NULL, ..., nsim=1)
 }
 \arguments{
   \item{r}{
@@ -37,12 +37,15 @@
     \code{rSSI} consists of this pattern together with the points
     added via simple sequential inhibition.  See \bold{Details}.
   }
+  \item{\dots}{Ignored.}
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
-  This algorithm generates a realisation of the Simple Sequential
+  This algorithm generates one or more realisations of the Simple Sequential
   Inhibition point process inside the window \code{win}.
 
   Starting with an empty window (or with the point pattern

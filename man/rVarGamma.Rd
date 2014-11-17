@@ -7,7 +7,7 @@
 }
 \usage{
  rVarGamma(kappa, nu.ker, omega, mu, win = owin(), 
-           eps = 0.001, nu.pcf=NULL)
+           eps = 0.001, nu.pcf=NULL, nsim=1)
 }
 \arguments{
   \item{kappa}{
@@ -38,9 +38,11 @@
   \item{nu.pcf}{
     Alternative specifier of the shape parameter. See Details.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
+  or a list of point patterns if \code{nsim > 1}.
 
   Additionally,  some intermediate results of the simulation are
   returned as attributes of this point pattern.

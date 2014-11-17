@@ -193,7 +193,14 @@ volume.box3 <- function(x) {
   with(x, prod(diff(xrange), diff(yrange), diff(zrange)))
 }
 
-runifpoint3 <- function(n, domain=box3()) {
+runifpoint3 <- function(n, domain=box3(), nsim=1) {
+  if(nsim > 1) {
+    result <- vector(mode="list", length=nsim)
+    for(i in 1:n) result[[i]] <- runifpoint3(n, domain)
+    result <- as.solist(result)
+    names(result) <- paste("Simulation", 1:n)
+    return(result)
+  }
   domain <- as.box3(domain)
   x <- with(domain, runif(n, min=xrange[1], max=xrange[2]))
   y <- with(domain, runif(n, min=yrange[1], max=yrange[2]))
@@ -201,7 +208,14 @@ runifpoint3 <- function(n, domain=box3()) {
   pp3(x,y,z,domain)
 }
 
-rpoispp3 <- function(lambda, domain=box3()) {
+rpoispp3 <- function(lambda, domain=box3(), nsim=1) {
+  if(nsim > 1) {
+    result <- vector(mode="list", length=nsim)
+    for(i in 1:n) result[[i]] <- rpoispp3(n, domain)
+    result <- as.solist(result)
+    names(result) <- paste("Simulation", 1:n)
+    return(result)
+  }
   domain <- as.box3(domain)
   v <- volume.box3(domain)
   if(!(is.numeric(lambda) && length(lambda) == 1))

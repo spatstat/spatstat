@@ -51,6 +51,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
    specified by spatstat.options('image.colfun'), 
    has been changed to a perceptually uniform map.
 
+   o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
+   rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,
+   rPoissonCluster, rGaussPoisson, rstrat, rsyst, rcell, rthin, rjitter,
+   rNeymanScott, rMatClust, rThomas, rCauchy, rVarGamma, rmpoint, rmpoispp, 
+   runifpointOnLines, rpoisppOnLines, runiflpp, rpoislpp, runifpointx, 
+   rpoisppx, runifpoint3, rpoispp3
+      These random point pattern generators now have an argument 'nsim'
+      specifying the number of simulated realisations to be generated.
+
    o pairorient
    Labels and descriptions of columns have been corrected.
 

@@ -7,7 +7,7 @@
   Includes CSR (complete spatial randomness).
 }
 \usage{
- rpoispp(lambda, lmax, win, \dots)
+ rpoispp(lambda, lmax=NULL, win=owin(), \dots, nsim=1)
 }
 \arguments{
   \item{lambda}{
@@ -28,9 +28,11 @@
   \item{\dots}{
     Arguments passed to \code{lambda} if it is a function.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (an object of class \code{"ppp"})
+  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
 }
 \details{
   If \code{lambda} is a single number,

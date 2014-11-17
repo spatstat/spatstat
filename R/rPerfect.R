@@ -1,7 +1,7 @@
 #
 #  Perfect Simulation 
 #
-#  $Revision: 1.16 $ $Date: 2014/04/29 09:29:56 $
+#  $Revision: 1.17 $ $Date: 2014/11/17 05:04:59 $
 #
 #  rStrauss
 #  rHardcore
@@ -9,7 +9,7 @@
 #  rDiggleGratton
 #  rDGS
 
-rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE) {
+rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE, nsim=1) {
 
   if(!missing(W)) 
     verifyclass(W, "owin")
@@ -33,35 +33,45 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE) {
   xrange <- Wsim$xrange
   yrange <- Wsim$yrange
 
-  storage.mode(beta) <- storage.mode(gamma) <- storage.mode(R) <- "double"
-  storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- storage.mode(gamma) <- storage.mode(R) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
-  z <- .Call("PerfectStrauss",
-             beta,
-             gamma,
-             R,
-             xrange,
-             yrange)
+    z <- .Call("PerfectStrauss",
+               beta,
+               gamma,
+               R,
+               xrange,
+               yrange)
 
-  X <- z[[1]]
-  Y <- z[[2]]
-  nout <- z[[3]]
-  times <- c(start=z[[4]], end=z[[5]])
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
+    times <- c(start=z[[4]], end=z[[5]])
+    
+    if(nout<0)
+      stop("internal error: copying failed in PerfectStrauss")
 
-  if(nout<0)
-    stop("internal error: copying failed in PerfectStrauss")
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
+    attr(P, "times") <- times
 
-  seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
-  if(attr(Wsim, "changed"))
-    P <- P[W]
-  attr(P, "times") <- times
-  return(P)
+    if(nsim == 1) return(P)
+    
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 #  Perfect Simulation of Hardcore process
 
-rHardcore <- function(beta, R=0, W=owin(), expand=TRUE) {
+rHardcore <- function(beta, R=0, W=owin(), expand=TRUE, nsim=1) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -80,27 +90,36 @@ rHardcore <- function(beta, R=0, W=owin(), expand=TRUE) {
   xrange <- Wsim$xrange
   yrange <- Wsim$yrange
 
-  storage.mode(beta) <- storage.mode(R) <- "double"
-  storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- storage.mode(R) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
-  z <- .Call("PerfectHardcore",
-             beta,
-             R,
-             xrange,
-             yrange)
+    z <- .Call("PerfectHardcore",
+               beta,
+               R,
+               xrange,
+               yrange)
 
-  X <- z[[1]]
-  Y <- z[[2]]
-  nout <- z[[3]]
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
+    
+    if(nout<0)
+      stop("internal error: copying failed in PerfectHardcore")
 
-  if(nout<0)
-    stop("internal error: copying failed in PerfectHardcore")
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
 
-  seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
-  if(attr(Wsim, "changed"))
-    P <- P[W]
-  return(P)
+    if(nsim == 1) return(P)
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 #
@@ -108,7 +127,7 @@ rHardcore <- function(beta, R=0, W=owin(), expand=TRUE) {
 #        provided gamma <= 1
 #
 
-rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE) {
+rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE, nsim=1) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -136,38 +155,47 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE) {
   xrange <- Wsim$xrange
   yrange <- Wsim$yrange
 
-  storage.mode(beta) <- storage.mode(gamma) <-
-    storage.mode(R) <- storage.mode(H) <- "double"
-  storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- storage.mode(gamma) <-
+      storage.mode(R) <- storage.mode(H) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
-  z <- .Call("PerfectStraussHard",
-             beta,
-             gamma,
-             R,
-             H,
-             xrange,
-             yrange)
+    z <- .Call("PerfectStraussHard",
+               beta,
+               gamma,
+               R,
+               H,
+               xrange,
+               yrange)
 
-  X <- z[[1]]
-  Y <- z[[2]]
-  nout <- z[[3]]
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
 
-  if(nout<0)
-    stop("internal error: copying failed in PerfectStraussHard")
+    if(nout<0)
+      stop("internal error: copying failed in PerfectStraussHard")
 
-  seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
-  if(attr(Wsim, "changed"))
-    P <- P[W]
-  return(P)
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
+
+    if(nsim == 1) return(P)
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
-
 
 #
 #  Perfect Simulation of Diggle-Gratton process
 #
 
-rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(), expand=TRUE) {
+rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(),
+                           expand=TRUE, nsim=1) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -193,30 +221,39 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(), expand=TRUE) {
   xrange <- Wsim$xrange
   yrange <- Wsim$yrange
 
-  storage.mode(beta) <- "double"
-  storage.mode(delta) <- storage.mode(rho) <- storage.mode(kappa) <- "double"
-  storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- "double"
+    storage.mode(delta) <- storage.mode(rho) <- storage.mode(kappa) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
-  z <- .Call("PerfectDiggleGratton",
-             beta,
-             delta,
-             rho,
-             kappa,
-             xrange,
-             yrange)
+    z <- .Call("PerfectDiggleGratton",
+               beta,
+               delta,
+               rho,
+               kappa,
+               xrange,
+               yrange)
 
-  X <- z[[1]]
-  Y <- z[[2]]
-  nout <- z[[3]]
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
 
-  if(nout<0)
-    stop("internal error: copying failed in PerfectDiggleGratton")
+    if(nout<0)
+      stop("internal error: copying failed in PerfectDiggleGratton")
 
-  seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
-  if(attr(Wsim, "changed"))
-    P <- P[W]
-  return(P)
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
+
+    if(nsim == 1) return(P)
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 
@@ -224,7 +261,7 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(), expand=TRUE) {
 #  Perfect Simulation of Diggle-Gates-Stibbard process
 #
 
-rDGS <- function(beta, rho, W=owin(), expand=TRUE) {
+rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -243,33 +280,41 @@ rDGS <- function(beta, rho, W=owin(), expand=TRUE) {
   xrange <- Wsim$xrange
   yrange <- Wsim$yrange
 
-  storage.mode(beta) <- "double"
-  storage.mode(rho) <- "double"
-  storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- "double"
+    storage.mode(rho) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
   
-  z <- .Call("PerfectDGS",
-             beta,
-             rho,
-             xrange,
-             yrange)
+    z <- .Call("PerfectDGS",
+               beta,
+               rho,
+               xrange,
+               yrange)
 
-  X <- z[[1]]
-  Y <- z[[2]]
-  nout <- z[[3]]
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
+    
+    if(nout<0)
+      stop("internal error: copying failed in PerfectDGS")
+    
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
 
-  if(nout<0)
-    stop("internal error: copying failed in PerfectDGS")
-
-  seqn <- seq_len(nout)
-  P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
-  if(attr(Wsim, "changed"))
-    P <- P[W]
-  return(P)
+    if(nsim == 1) return(P)
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 
 ## .......  utilities .................................
-
 
 expandwinPerfect <- function(W, expand, amount) {
   ## expand 'W' if expand=TRUE according to default 'amount'
