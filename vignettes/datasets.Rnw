@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+
+% \VignetteIndexEntry{Datasets Provided in Spatstat}
+
+<<echo=FALSE,results=hide,fig=FALSE>>=
+options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
+@ 
+
+\usepackage{graphicx}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+\newcommand{\pkg}[1]{\texttt{#1}}
+\newcommand{\bold}[1]{{\textbf {#1}}}
+\newcommand{\R}{{\sf R}}
+\newcommand{\spst}{\pkg{spatstat}}
+\newcommand{\Spst}{\pkg{Spatstat}}
+
+\begin{document}
+\bibliographystyle{plain}
+\thispagestyle{empty}
+\SweaveOpts{eps=TRUE}
+\setkeys{Gin}{width=0.6\textwidth}
+
+<<echo=FALSE,results=hide>>=
+library(spatstat)
+spatstat.options(image.colfun=function(n) { grey(seq(0,1,length=n)) })
+sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Date")
+sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
+         fields = "Version")
+options(useFancyQuotes=FALSE)
+@ 
+
+\title{Datasets provided in \spst}
+\author{Adrian Baddeley, Rolf Turner and Ege Rubak}
+\date{For \spst\ version \texttt{\Sexpr{sversion}}}
+\maketitle
+
+This document is an overview of the spatial datasets
+that are provided in the \spst\ package. 
+
+To flick through a nice display of all the data sets that come with
+\spst\ type \texttt{demo(data)}.  To see information about a given
+data set, type \texttt{help({\em name})} where \emph{name} is the
+name of the data set  To plot a given data set, 
+type \texttt{plot({\em name})}.
+
+Datasets in \spst\ are ``lazy-loaded'', which means that they can
+be accessed simply by typing their name. Not all packages do this;
+in some packages you have to type \texttt{data({\em name})} in
+order to access a data set.
+
+\section{List of datasets}
+
+\subsection{Point patterns in 2D}
+
+Here is a list of the standard point pattern data sets 
+that are supplied with the current installation of \spst:
+
+\newcommand{\recto}{\framebox{\hphantom{re}\vphantom{re}}}
+\newcommand{\irregpoly}{\includegraphics*[width=6mm]{irregpoly}}
+\newcommand{\convpoly}{\includegraphics*[width=4mm]{hexagon}}
+\newcommand{\disc}{$\bigcirc$}
+\newcommand{\nomarks}{$\cdot$}
+\newcommand{\nocov}{$\cdot$}
+
+\begin{tabular}{l|l|ccc}
+{\sf name} & {\sf description} &
+            {\sf marks} & {\sf covariates} & {\sf window} \\ \hline
+{\tt amacrine} & rabbit amacrine cells &
+            cell type & \nocov & \recto \\  
+{\tt anemones} & sea anemones  & 
+            diameter & \nocov & \recto \\
+{\tt ants} & ant nests& 
+            species & zones  & \convpoly \\
+{\tt bdspots} & breakdown spots & 
+           \nomarks           & \nocov & \disc \\
+{\tt bei} & rainforest trees & 
+           \nomarks           & topography & \recto \\
+{\tt betacells} & cat retinal ganglia & 
+            cell type, area & \nocov & \recto \\
+{\tt bramblecanes} & bramble canes & 
+            age & \nocov & \recto \\
+{\tt bronzefilter} & bronze particles & 
+            diameter & \nocov & \recto \\
+{\tt cells} & biological cells &
+             \nomarks &\nocov & \recto \\
+{\tt chorley} & cancers & 
+            case/control &\nocov  & \irregpoly \\
+{\tt clmfires} & forest fires & 
+            cause, size, date & 
+            \shortstack[c]{elevation, orientation,\\ slope, land use}  
+            & \irregpoly \\
+{\tt copper} & copper deposits & 
+             \nomarks & fault lines & \recto  \\
+{\tt demopat} & artificial data & 
+             type & \nocov & \irregpoly \\
+{\tt finpines} & trees & 
+             diam, height & \nocov & \recto  \\
+{\tt gordon} & people in a park & 
+             \nomarks & \nocov & \irregpoly  \\
+{\tt gorillas} & gorilla nest sites & 
+             group, season & 
+            \shortstack[c]{terrain, vegetation,\\ heat, water} & 
+             \irregpoly  \\
+{\tt hamster} & hamster tumour cells & 
+              cell type &\nocov  & \recto \\
+{\tt hyytiala} & mixed forest & 
+              species &\nocov  & \recto \\
+{\tt humberside} & child leukaemia & 
+              case/control & \nocov & \irregpoly\\
+{\tt japanesepines} & Japanese pines & \nomarks &\nocov & \recto \\
+{\tt lansing} & mixed forest &
+               species & \nocov & \recto \\
+{\tt longleaf} & trees & 
+              diameter & \nocov &  \recto \\
+{\tt mucosa}   & gastric mucosa cells & 
+              cell type & \nocov &  \recto \\
+{\tt murchison} & gold deposits & \nomarks & faults, rock type & \irregpoly \\
+{\tt nbfires} & wildfires & several & \nocov & \irregpoly \\
+{\tt nztrees} & trees & \nomarks & \nocov & \recto \\
+{\tt paracou} & trees & adult/juvenile & \nocov & \recto \\
+{\tt ponderosa} & trees & \nomarks & \nocov & \recto \\
+{\tt redwood} & saplings & \nomarks & \nocov & \recto \\
+{\tt redwoodfull} & saplings & 
+              \nomarks & zones & \recto \\
+{\tt shapley} & galaxies & magnitude, recession, SE & \nocov & \convpoly \\
+{\tt simdat} & simulated pattern & \nomarks & \nocov & \recto \\
+{\tt sporophores} & fungi & species & \nocov &  \disc \\
+{\tt spruces} & trees & diameter & \nocov &  \recto \\
+{\tt swedishpines} & trees & \nomarks & \nocov & \recto \\
+{\tt urkiola} & mixed forest & species & \nocov & \irregpoly \\
+{\tt vesicles} & synaptic vesicles & \nomarks & zones & \irregpoly \\
+{\tt waka} & trees & diameter & \nocov & \recto \\
+\hline
+\end{tabular}
+
+\bigskip
+\noindent
+The shape of the window containing the point pattern
+is indicated by the symbols \recto\ (rectangle), 
+\disc\ (disc), \convpoly\ (convex polygon) and \irregpoly\ (irregular polygon).
+
+Additional information about the data set \texttt{\em name}
+may be stored in a separate list \texttt{{\em name}.extra}.
+Currently these are the available options:
+
+\begin{tabular}[!h]{ll}
+  {\sc Name} & {\sc Contents} \\ 
+  \hline
+  {\tt ants.extra} & field and scrub subregions; \\
+                   & additional map elements; plotting function \\
+  {\tt bei.extra} & covariate images \\
+  {\tt chorley.extra} & incinerator location; plotting function \\
+  {\tt gorillas.extra} & covariate images\\
+  {\tt nbfires.extra} & inscribed rectangle \\
+  {\tt ponderosa.extra} & data points of interest; plotting function\\
+  {\tt redwoodfull.extra} & subregions; plotting function \\
+  {\tt shapley.extra} & individual survey fields; plotting function \\
+  {\tt vesicles.extra} & anatomical regions \\
+  \hline
+\end{tabular}
+
+\subsection{Other Data Types}
+
+There are also the following spatial data sets which are not 2D point patterns:
+
+\begin{tabular}[c]{l|l|l}
+{\sf name} & {\sf description} & {\sf format} \\ \hline
+{\tt heather} & heather mosaic & binary image (three versions) \\
+{\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
+{\tt osteo} & osteocyte lacunae & replicated 3D point patterns with covariates\\
+{\tt pyramidal} & pyramidal neurons & replicated 2D point patterns in 3 groups\\
+{\tt residualspaper} 
+                & data \& code from \cite{baddetal05} &  
+                       2D point patterns, \R\ function \\
+{\tt simba} & simulated data & replicated 2D point patterns in 2 groups\\
+{\tt waterstriders} & insects on water & replicated 2D point patterns\\
+\hline
+\end{tabular}
+
+Additionally there is a dataset \texttt{Kovesi} containing
+several colour maps with perceptually uniform contrast. 
+
+\end{document}
+

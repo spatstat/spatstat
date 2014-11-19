@@ -12,6 +12,8 @@ OVERVIEW
 
    o New datasets.
 
+   o New vignette, summarising all datasets installed with spatstat.
+
    o Faster checking of large datasets.
 
    o Bug fixes.
@@ -41,6 +43,10 @@ NEW FUNCTIONS
    Fast replacements for any(duplicated(x)) for point patterns.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o vignettes
+   New vignette 'datasets' summarises all the datasets installed
+   with the spatstat package.
 
    o relrisk
    New argument 'relative' specifies whether to calculate the relative risk
@@ -123,6 +129,10 @@ BUG FIXES
 
    o intensity.ppm
    Format of result was incorrect for ppm(Y ~ 1) where Y is multitype.
+   Fixed.
+
+   o plot.psp
+   Ignored 'show.all' in some cases.
    Fixed.
 
    o plot.ppp

@@ -1321,7 +1321,7 @@ simplenumber <- function(x, unit = "", multiply="*") {
   x <- abs(x)
   if(unit == "") {
     if(x %% 1 == 0) return(paste0(s, round(x)))
-    for(i in 2:12) 
+    for(i in 1:12) 
       if((i/x) %% 1 == 0) return(paste0(s, i, "/", round(i/x)))
   } else {
     if(x == 0) return("0")

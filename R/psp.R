@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.77 $ $Date: 2014/10/04 01:51:56 $
+#  $Revision: 1.78 $ $Date: 2014/11/19 07:19:42 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -337,7 +337,8 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
     bb.all <- as.rectangle(as.owin(x))
     if(do.plot && show.all)
       do.call.plotfun("plot.owin", 
-                      resolve.defaults(list(x=x$window, main=main, add=add),
+                      resolve.defaults(list(x=x$window, main=main,
+                                            add=add, show.all=show.all),
                                        list(...)),
                       extrargs=owinpars)
   } else {
