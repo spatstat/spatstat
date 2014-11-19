@@ -592,8 +592,8 @@ plot.im <- local({
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
       do.call.plotfun("axis",
-                      resolve.defaults(axisargs,
-                                       ribargs, dotargs,
+                      resolve.defaults(ribargs,
+                                       axisargs, dotargs,
                                        posargs),
                       extrargs=graphicsPars("axis"))
     }

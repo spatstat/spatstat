@@ -87,6 +87,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.slrm
    Output now respects options('width')
 
+   o plot.im
+   The list 'ribargs' can now include the parameter 'labels'.
+   
 BUG FIXES
 
    o markcorrint
