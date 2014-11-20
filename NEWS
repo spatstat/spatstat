@@ -42,6 +42,9 @@ NEW FUNCTIONS
    o anyDuplicated.ppp, anyDuplicated.ppx
    Fast replacements for any(duplicated(x)) for point patterns.
 
+   o yardstick, plot.yardstick
+   Plot a scale bar on a spatial plot.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o vignettes

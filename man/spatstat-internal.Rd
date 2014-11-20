@@ -3,6 +3,7 @@
 \alias{[.pp3}
 \alias{[.localpcfmatrix}
 \alias{[.splitppx}
+\alias{[.yardstick}
 \alias{[<-.splitppx}
 \alias{acedist.show}
 \alias{acedist.noshow}
@@ -484,6 +485,7 @@
 \alias{print.texturemap}
 \alias{print.tess}
 \alias{print.timed}
+\alias{print.yardstick}
 \alias{prolongseq}
 \alias{putlastshift}
 \alias{quad}
@@ -574,6 +576,7 @@
 \alias{shift.msr}              
 \alias{shift.quadratcount}              
 \alias{shift.quadrattest}              
+\alias{shift.yardstick}              
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{short.deparse}
@@ -671,6 +674,7 @@
 \usage{
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
+\method{[}{yardstick}(x, \dots)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
@@ -1213,6 +1217,7 @@ primesbelow(nmax)
 \method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
 \method{print}{timed}(x, \dots)
+\method{print}{yardstick}(x, \dots)
 prolongseq(x, newrange, step)
 putlastshift(X, vec)
 quad(data, dummy, w, param)
@@ -1322,6 +1327,7 @@ sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
 \method{shift}{msr}(X, \dots)
 \method{shift}{quadratcount}(X, \dots)
 \method{shift}{quadrattest}(X, \dots)
+\method{shift}{yardstick}(X, \dots)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 short.deparse(x, maxlen)
