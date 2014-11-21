@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.105 $	$Date: 2014/08/14 08:28:03 $
+#	$Revision: 2.106 $	$Date: 2014/11/20 10:54:04 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -681,28 +681,37 @@ model.images <- function(object, ...) {
 
 model.images.ppm <- function(object, W=as.owin(object), ...) {
   X <- data.ppm(object)
-  # make a quadscheme with a dummy point at every pixel
+  ## make a quadscheme with a dummy point at every pixel
   Q <- pixelquad(X, W)
-  # construct Berman-Turner frame
+  ## construct Berman-Turner frame
   needed <- c("trend", "interaction", "covariates", "correction", "rbord")
   bt <- do.call("bt.frame", append(list(Q), object[needed]))
-  # compute model matrix
+  ## compute model matrix
   mf <- model.frame(bt$fmla, bt$glmdata, ...)
   mm <- model.matrix(bt$fmla, mf, ...)
-  # retain only the entries for dummy points (pixels)
+  ## retain only the entries for dummy points (pixels)
   mm <- mm[!is.data(Q), , drop=FALSE]
-  # create template image
+  mm <- as.data.frame(mm)
+  ## create template image
   Z <- as.im(attr(Q, "M"))
-  # make images
+  ok <- !is.na(Z$v)
+  ## make images
   imagenames <- colnames(mm)
-  result <- lapply(imagenames,
-                   function(nama, Z, mm) {
-                     Z$v[!is.na(Z$v)] <- mm[, nama]
-                     return(Z)
-                   },
-                   Z=Z, mm=mm)
-  result <- as.listof(result)
-  names(result) <- imagenames
+  if(!is.multitype(object)) {
+    result <- lapply(as.list(mm), replace, list=ok, x=Z)
+    result <- as.listof(result)
+    names(result) <- imagenames
+  } else {
+    marx <- marks(Q$dummy)
+    mmsplit <- split(mm, marx)
+    result <- vector(mode="list", length=length(mmsplit))
+    for(i in seq_along(mmsplit))
+      result[[i]] <- as.listof(lapply(as.list(mmsplit[[i]]),
+                                      replace, list=ok, x=Z))
+    names(result) <- names(mmsplit)
+    result <- do.call(hyperframe, result)
+    row.names(result) <- imagenames
+  }
   return(result)
 }
 
@@ -733,7 +742,7 @@ as.ppm.ppm <- function(object) {
   object
 }
 
-# method for as.owin
+## method for as.owin
 
 as.owin.ppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
   if(!verifyclass(W, "ppm", fatal=fatal))

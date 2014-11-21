@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.22 $   $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.23 $   $Date: 2014/11/20 11:04:37 $
 #
 
 lppm <- function(X, ...) {
@@ -215,15 +215,28 @@ model.images.lppm <- function(object, L=as.linnet(object), ...) {
   stopifnot(inherits(L, "linnet"))
   m <- model.images(object$fit, W=as.rectangle(L), ...)
   if(length(m) > 0) {
-    # restrict images to L
+    ## restrict images to L
     rasta <- as.mask(m[[1]])
     DL <- as.mask.psp(as.psp(L), xy=rasta)
     ZL <- as.im(DL)
-    m <- lapply(m, function(x, Z) eval.im(x * Z), Z=ZL)
-    # convert to linim
-    m <- lapply(m, function(x, L) linim(L,x), L=L)
+    if(!is.hyperframe) {
+      ## list of images
+      m <- lapply(m, function(x, Z) eval.im(x * Z), Z=ZL)
+      ## convert to linim
+      m <- lapply(m, function(x, L) linim(L,x), L=L)
+      return(as.listof(m))
+    } else {
+      ## hyperframe, each column being a list of images
+      mm <- lapply(as.list(m),
+                   function(a) {
+                     b <- lapply(a, function(x, Z) eval.im(x * Z), Z=ZL)
+                     b <- lapply(b, function(x, L) linim(L,x), L=L)
+                     return(as.listof(b))
+                   })
+      m <- do.call(hyperframe, mm)
+    }
   }
-  return(as.listof(m))
+  return(m)
 }
   
 model.matrix.lppm <- function(object, data=model.frame(object),

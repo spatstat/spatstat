@@ -105,14 +105,14 @@ BUG FIXES
    Bug introduced in spatstat 1.39-0, october 2014.
    Fixed.
 
-   o $<-.hyperframe
-   Columns containing character values were converted to factors.
-   Fixed.
-
    o relrisk
    A small fraction of pixel values were sometimes wildly inaccurate
    due to numerical errors. This affected the range of values
    in the result, and therefore the appearance of plots.
+   Fixed.
+
+   o model.images
+   Crashed if the model was multitype.
    Fixed.
 
    o profilepl
@@ -135,6 +135,10 @@ BUG FIXES
 
    o intensity.ppm
    Format of result was incorrect for ppm(Y ~ 1) where Y is multitype.
+   Fixed.
+
+   o $<-.hyperframe
+   Columns containing character values were converted to factors.
    Fixed.
 
    o plot.psp

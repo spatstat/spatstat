@@ -73,19 +73,31 @@
   Otherwise, the pixel resolution is determined by
   \code{\link{spatstat.options}}.
 
-  The result is a named list of pixel images (objects of class
-  \code{"im"}) containing the values of the spatial covariates.
-  The names of the list elements are the names of the covariates
-  determined by \code{\link{model.matrix.lm}}.
-  
-  The result is also of class \code{"listof"} so that it can
-  be plotted immediately.
+  The format of the result depends on whether the original point pattern
+  data were marked or unmarked.
+  \itemize{
+    \item
+    If the original dataset was unmarked,
+    the result is a named list of pixel images (objects of class
+    \code{"im"}) containing the values of the spatial covariates.
+    The names of the list elements are the names of the covariates
+    determined by \code{\link{model.matrix.lm}}.
+    The result is also of class \code{"listof"} so that it can
+    be plotted immediately.
+    \item 
+    If the original dataset was a multitype point pattern,
+    the result is a \code{\link{hyperframe}}
+    with one column for each possible type of points.
+    Each column is a named list of pixel images (objects of class
+    \code{"im"}) containing the values of the spatial covariates.
+    The row names of the hyperframe are the names of the covariates
+    determined by \code{\link{model.matrix.lm}}.
+  }
 }
 \value{
-  An object of class \code{"listof"} consisting of 
-  a named list of pixel images (objects of class \code{"im"}).
-  This list can be plotted immediately using \code{\link{plot.listof}}.
-  
+  A list (of class \code{"listof"}) or
+  array (of class \code{"hyperframe"}) containing
+  pixel images (objects of class \code{"im"}).
   For \code{model.images.lppm}, the images are also of class \code{"linim"}.
 }
 \author{Adrian Baddeley
@@ -109,14 +121,16 @@
 }
 
 \examples{
-   fit <- ppm(cells, ~x)
+   fit <- ppm(cells ~x)
    model.images(fit)
    B <- owin(c(0.2, 0.4), c(0.3, 0.8))
    model.images(fit, B)
-   fit2 <- ppm(cells, ~cut(x,3))
+   fit2 <- ppm(cells ~cut(x,3))
    model.images(fit2)
    fit3 <- slrm(japanesepines ~ x)
    model.images(fit3)
+   fit4 <- ppm(amacrine ~ marks + x)
+   model.images(fit4)
 }
 \keyword{spatial}
 \keyword{models}
