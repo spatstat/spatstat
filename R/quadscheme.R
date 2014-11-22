@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.32 $    $Date: 2014/11/16 10:26:12 $
+#      $Revision: 4.33 $    $Date: 2014/11/22 02:19:30 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.
@@ -120,92 +120,92 @@ quadscheme.spatial <-
 
 "quadscheme.replicated" <-
   function(data, dummy, method="grid", ...) {
-        #
-	# generate a quadrature scheme from data and dummy patterns.
-	#
-	# The 'method' may be "grid" or "dirichlet"
-	#
-	# '...' are passed to gridweights() or dirichlet.weights()
-        #
-        # quadscheme.replicated:
-        #       for multitype point patterns.
-        #
-        # No two points in 'data'+'dummy' should have the same spatial location
+    ##
+    ## generate a quadrature scheme from data and dummy patterns.
+    ##
+    ## The 'method' may be "grid" or "dirichlet"
+    ##
+    ## '...' are passed to gridweights() or dirichlet.weights()
+    ##
+    ## quadscheme.replicated:
+    ##       for multitype point patterns.
+    ##
+    ## No two points in 'data'+'dummy' should have the same spatial location
 
     check <- resolve.defaults(list(...), list(check=TRUE))$check
 
     data <- as.ppp(data, check=check)
     dummy <- as.ppp(dummy, data$window, check=check)
-		# note data$window is the DEFAULT quadrature window
-		# unless otherwise specified in 'dummy'
+		## note data$window is the DEFAULT quadrature window
+		## unless otherwise specified in 'dummy'
     ndata <- data$n
     ndummy <- dummy$n
 
-        if(!is.marked(data))
-          stop("data pattern does not have marks")
-        if(is.marked(dummy, dfok=TRUE))
-          warning("dummy points have marks --- ignored")
+    if(!is.marked(data))
+      stop("data pattern does not have marks")
+    if(is.marked(dummy, dfok=TRUE) && npoints(dummy) > 0)
+      warning("dummy points have marks --- ignored")
 
-        # first, ignore marks and compute spatial weights
-        P <- quadscheme.spatial(unmark(data), dummy, method, ...)
-        W <- w.quad(P)
-        iz <- is.data(P)
-        Wdat <- W[iz]
-        Wdum <- W[!iz]
+    ## first, ignore marks and compute spatial weights
+    P <- quadscheme.spatial(unmark(data), dummy, method, ...)
+    W <- w.quad(P)
+    iz <- is.data(P)
+    Wdat <- W[iz]
+    Wdum <- W[!iz]
 
-        # find the set of all possible marks
+    ## find the set of all possible marks
 
-        if(!is.multitype(data))
-          stop("data pattern is not multitype")
-        data.marks <- marks(data)
-        markset <- levels(data.marks)
-        nmarks <- length(markset)
-
-        # replicate dummy points, one copy for each possible mark
-        # -> dummy x {1,..,K}
-        
-        dumdum <- cartesian(dummy, markset)
-        Wdumdum <- rep.int(Wdum, nmarks)
-        Idumdum <- rep.int((ndata + 1):(ndata + ndummy), nmarks)
-        
-        # also make dummy marked points at same locations as data points
-        # but with different marks
-
-        dumdat <- cartesian(unmark(data), markset)
-        Wdumdat <- rep.int(Wdat, nmarks)
-        Mdumdat <- marks(dumdat)
-        Idumdat <- rep.int(1:ndata, nmarks)
-        
-        Mrepdat <- rep.int(data.marks, nmarks)
-
-        ok <- (Mdumdat != Mrepdat)
-        dumdat <- dumdat[ok,]
-        Wdumdat <- Wdumdat[ok]
-        Idumdat <- Idumdat[ok]
-
-        # combine the two dummy patterns
-        dumb <- superimpose(dumdum, dumdat, W=dummy$window, check=FALSE)
-        Wdumb <- c(Wdumdum, Wdumdat)
-        Idumb <- c(Idumdum, Idumdat)
+    if(!is.multitype(data))
+      stop("data pattern is not multitype")
+    data.marks <- marks(data)
+    markset <- levels(data.marks)
+    nmarks <- length(markset)
     
-        # record the quadrature parameters
-        param <- list(weight = P$param$weight,
-                      dummy = NULL,
-                      sourceid=c(1:ndata, Idumb))
+    ## replicate dummy points, one copy for each possible mark
+    ## -> dummy x {1,..,K}
+        
+    dumdum <- cartesian(dummy, markset)
+    Wdumdum <- rep.int(Wdum, nmarks)
+    Idumdum <- rep.int(ndata + seq_len(ndummy), nmarks)
+        
+    ## also make dummy marked points at same locations as data points
+    ## but with different marks
 
-        # wrap up
-	Q <- quad(data, dumb, c(Wdat, Wdumb), param)
-        return(Q)
+    dumdat <- cartesian(unmark(data), markset)
+    Wdumdat <- rep.int(Wdat, nmarks)
+    Mdumdat <- marks(dumdat)
+    Idumdat <- rep.int(1:ndata, nmarks)
+        
+    Mrepdat <- rep.int(data.marks, nmarks)
+
+    ok <- (Mdumdat != Mrepdat)
+    dumdat <- dumdat[ok,]
+    Wdumdat <- Wdumdat[ok]
+    Idumdat <- Idumdat[ok]
+
+    ## combine the two dummy patterns
+    dumb <- superimpose(dumdum, dumdat, W=dummy$window, check=FALSE)
+    Wdumb <- c(Wdumdum, Wdumdat)
+    Idumb <- c(Idumdum, Idumdat)
+    
+    ## record the quadrature parameters
+    param <- list(weight = P$param$weight,
+                  dummy = NULL,
+                  sourceid=c(1:ndata, Idumb))
+
+    ## wrap up
+    Q <- quad(data, dumb, c(Wdat, Wdumb), param)
+    return(Q)
 }
 
 
 "cartesian" <-
 function(pp, markset, fac=TRUE) {
-  # given an unmarked point pattern 'pp'
-  # and a finite set of marks,
-  # create the marked point pattern which is
-  # the Cartesian product, consisting of all pairs (u,k)
-  # where u is a point of 'pp' and k is a mark in 'markset'
+  ## given an unmarked point pattern 'pp'
+  ## and a finite set of marks,
+  ## create the marked point pattern which is
+  ## the Cartesian product, consisting of all pairs (u,k)
+  ## where u is a point of 'pp' and k is a mark in 'markset'
   nmarks <- length(markset)
   result <- ppp(rep.int(pp$x, nmarks),
                 rep.int(pp$y, nmarks),

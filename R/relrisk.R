@@ -3,12 +3,14 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.26 $  $Date: 2014/11/15 01:02:37 $
+#  $Revision: 1.27 $  $Date: 2014/11/22 04:50:24 $
 #
 
-relrisk <- local({
+relrisk <- function(X, ...) UseMethod("relrisk")
+                                      
+relrisk.ppp <- local({
 
-  relrisk <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
+  relrisk.ppp <- function(X, sigma=NULL, ..., varcov=NULL, at="pixels",
                       relative=FALSE,
                       casecontrol=TRUE, control=1, case) {
     stopifnot(is.ppp(X))
@@ -194,7 +196,7 @@ relrisk <- local({
     return(!(is.finite(x) | is.na(x)))
   }
   
-  relrisk
+  relrisk.ppp
 })
 
 

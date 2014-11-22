@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.106 $	$Date: 2014/11/20 10:54:04 $
+#	$Revision: 2.107 $	$Date: 2014/11/22 01:35:58 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -627,8 +627,24 @@ model.frame.ppm <- function(formula, ...) {
 # method for model.matrix
 
 model.matrix.ppm <- function(object, data=model.frame(object),
-                             ..., keepNA=TRUE) {
-  data.given <- !missing(data)
+                             ..., Q=NULL, keepNA=TRUE) {
+  data.given <- !missing(data) && !is.null(data)
+  if(!is.null(Q)) {
+    if(data.given) stop("Arguments Q and data are incompatible")
+    if(!inherits(Q, c("ppp", "quad")))
+      stop("Q should be a point pattern or quadrature scheme")
+    if(is.ppp(Q)) Q <- quad(Q, Q[FALSE])
+    ## construct Berman-Turner frame
+    needed <- c("trend", "interaction", "covariates", "correction", "rbord")
+    bt <- do.call("bt.frame", append(list(Q), object[needed]))
+    ## compute model matrix
+    mf <- model.frame(bt$fmla, bt$glmdata, ...)
+    mm <- model.matrix(bt$fmla, mf, ...)
+    ## remove NA's ?
+    if(!keepNA)
+      mm <- mm[complete.cases(mm), ..., drop=FALSE]
+    return(mm)
+  }
   gf <- getglmfit(object)
   if(is.null(gf)) {
     warning("Model re-fitted with forcefit=TRUE")
@@ -683,12 +699,8 @@ model.images.ppm <- function(object, W=as.owin(object), ...) {
   X <- data.ppm(object)
   ## make a quadscheme with a dummy point at every pixel
   Q <- pixelquad(X, W)
-  ## construct Berman-Turner frame
-  needed <- c("trend", "interaction", "covariates", "correction", "rbord")
-  bt <- do.call("bt.frame", append(list(Q), object[needed]))
   ## compute model matrix
-  mf <- model.frame(bt$fmla, bt$glmdata, ...)
-  mm <- model.matrix(bt$fmla, mf, ...)
+  mm <- model.matrix(object, Q=Q)
   ## retain only the entries for dummy points (pixels)
   mm <- mm[!is.data(Q), , drop=FALSE]
   mm <- as.data.frame(mm)

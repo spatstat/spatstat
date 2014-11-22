@@ -2438,12 +2438,23 @@ listed alphabetically.
     \texttt{plotit} 
     for conformity with other datasets, and improved.
 
-  \item \texttt{relrisk}: 	
+  \item \texttt{relrisk}:
+    \begin{itemize}
+    \item 
+       This function is now generic, with methods for 
+       point patterns and point process models.
+     \item 
        New argument \texttt{casecontrol} determines whether a bivariate
        point pattern should be treated as case-control data.
-       New argument \texttt{case} allows the user to specify which mark value
-       corresponds to the cases in a case-control dataset.
-
+     \item 
+       New arguments \texttt{case} and \texttt{control} allow
+       the user to specify which mark values
+       corresponds to the cases or the controls, in a case-control dataset.
+     \item 
+       New argument \code{relative} determines whether to compute
+       probabilities or relative risks.
+    \end{itemize}
+       
  \item \texttt{rescale}:
    \begin{itemize}
    \item 

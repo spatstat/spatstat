@@ -1122,8 +1122,10 @@ model.images.kppm <- function(object, W=as.owin(object), ...) {
 }
 
 model.matrix.kppm <- function(object, data=model.frame(object), ...,
+                              Q=NULL, 
                               keepNA=TRUE) {
-  model.matrix(as.ppm(object), data=data, ..., keepNA=keepNA)
+  if(missing(data)) data <- NULL
+  model.matrix(as.ppm(object), data=data, ..., Q=Q, keepNA=keepNA)
 }
 
 model.frame.kppm <- function(formula, ...) {

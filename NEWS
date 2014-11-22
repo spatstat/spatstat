@@ -10,6 +10,8 @@ OVERVIEW
 
    o Improved colour maps.
 
+   o Relative risk estimates from fitted point process models.
+
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
@@ -36,6 +38,10 @@ NEW FUNCTIONS
    For example:   inc <- atan(bei.extra$grad) * 180/pi
    See help(Math.im)
 
+   o relrisk.ppm
+   Spatially-varying probabilities of different types of points
+   predicted by a fitted point process model.
+
    o interp.colours
    Interpolate a sequence of colour values.
 
@@ -52,6 +58,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    with the spatstat package.
 
    o relrisk
+   The function relrisk is now generic, with methods for ppp and ppm.
    New argument 'relative' specifies whether to calculate the relative risk
    or the absolute probability of each type of point.
 
@@ -81,6 +88,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Baddeley, Rubak and Moller (2011). The intensity was estimated 
    on the full window rather than the eroded window.
    Fixed.   
+
+   o model.matrix.ppm, model.matrix.kppm
+   New argument 'Q' allows prediction at any desired locations.
 
    o predict.ppm
    For multitype models, when the result is a list of images,

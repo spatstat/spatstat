@@ -9,12 +9,14 @@
   this function extracts the design matrix of the model.
 }
 \usage{
-   \method{model.matrix}{ppm}(object, data=model.frame(object), ..., keepNA=TRUE)
+   \method{model.matrix}{ppm}(object, data=model.frame(object), \dots, 
+                              Q=NULL, keepNA=TRUE)
 
-   \method{model.matrix}{kppm}(object, data=model.frame(object), ...,
-   keepNA=TRUE)
+   \method{model.matrix}{kppm}(object, data=model.frame(object), \dots,
+                              Q=NULL, keepNA=TRUE)
 
-   \method{model.matrix}{lppm}(object, data=model.frame(object), ..., keepNA=TRUE)
+   \method{model.matrix}{lppm}(object, data=model.frame(object), \dots,
+                              keepNA=TRUE)
 }
 \arguments{
   \item{object}{
@@ -23,6 +25,11 @@
   }
   \item{data}{
     A model frame, containing the data required for the Berman-Turner device.
+  }
+  \item{Q}{
+    A point pattern (class \code{"ppp"}) or quadrature scheme
+    (class \code{"quad"}) specifying new locations where the
+    covariates should be computed.
   }
   \item{keepNA}{
     Logical. Determines whether rows containing NA values will be
@@ -90,10 +97,10 @@
 }
 
 \examples{
-   fit <- ppm(cells, ~x)
+   fit <- ppm(cells ~ x)
    head(model.matrix(fit))
-   # matrix with two columns: '(Intercept)' and 'x'
-   kfit <- kppm(redwood, ~x, "Thomas")
+   model.matrix(fit, Q=runifpoint(5))
+   kfit <- kppm(redwood ~ x, "Thomas")
    m <- model.matrix(kfit)
 }
 \keyword{spatial}
