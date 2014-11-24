@@ -12,6 +12,8 @@ OVERVIEW
 
    o Relative risk estimates from fitted point process models.
 
+   o Standard errors for relative risk.
+
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
@@ -35,7 +37,7 @@ NEW DATASETS
 NEW FUNCTIONS
 
    o Mathematical operations are now supported for images.
-   For example:   inc <- atan(bei.extra$grad) * 180/pi
+   For example:   alpha <- atan(bei.extra$grad) * 180/pi
    See help(Math.im)
 
    o relrisk.ppm
@@ -61,6 +63,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    The function relrisk is now generic, with methods for ppp and ppm.
    New argument 'relative' specifies whether to calculate the relative risk
    or the absolute probability of each type of point.
+   New argument 'se' specifies whether to calculate standard errors.
 
    o plot.im
    The default colour map for plotting images,
@@ -100,6 +103,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.slrm
    Output now respects options('width')
 
+   o image.listof
+   New argument 'ribmar' controls margin space around the ribbon
+   when equal.ribbon=TRUE.
+
    o plot.im
    The list 'ribargs' can now include the parameter 'labels'.
    
@@ -116,9 +123,9 @@ BUG FIXES
    Fixed.
 
    o relrisk
-   A small fraction of pixel values were sometimes wildly inaccurate
-   due to numerical errors. This affected the range of values
-   in the result, and therefore the appearance of plots.
+   When at="pixels", a small fraction of pixel values were sometimes
+   wildly inaccurate, due to numerical errors. This affected the 
+   range of values in the result, and therefore the appearance of plots.
    Fixed.
 
    o model.images

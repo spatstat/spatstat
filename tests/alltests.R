@@ -1956,8 +1956,19 @@ local({
   lamX <- density(redwood, at="points")
   KX <- Kinhom(redwood, lamX)
 
-  a <- relrisk(ants, sigma=100, relative=TRUE)
-  b <- relrisk(ants, sigma=100, relative=TRUE, casecontrol=FALSE)
+  ## test all code cases of new 'relrisk' algorithm
+  pants <- function(...) {
+    a <- relrisk(ants, sigma=100, se=TRUE, ...)
+    return(TRUE)
+  }
+  pants()
+  pants(casecontrol=FALSE)
+  pants(relative=TRUE)
+  pants(casecontrol=FALSE, relative=TRUE)
+  pants(at="points")
+  pants(casecontrol=FALSE,at="points")
+  pants(relative=TRUE,at="points")
+  pants(casecontrol=FALSE, relative=TRUE,at="points")
 })
 #
 # tests/slrm.R

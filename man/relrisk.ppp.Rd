@@ -13,6 +13,7 @@
 \usage{
 \method{relrisk}{ppp}(X, sigma = NULL, ..., varcov = NULL, at = "pixels",
            relative=FALSE,
+           se=FALSE,
            casecontrol=TRUE, control=1, case)
 }
 \arguments{
@@ -48,6 +49,10 @@
     If \code{TRUE}, it computes the    
     \emph{relative risk}, the ratio of probabilities
     of each type relative to the probability of a control.
+  }
+  \item{se}{
+    Logical value indicating whether to compute standard errors
+    as well.
   }
   \item{casecontrol}{
     Logical. Whether to treat a bivariate point pattern
@@ -151,8 +156,15 @@
     smoothing bandwidth \code{sigma}
     will be selected by cross-validation using \code{\link{bw.relrisk}}.
   }
+
+  If \code{se=TRUE} then standard errors will also be computed,
+  based on asymptotic theory, \emph{assuming a Poisson process}.
 }
 \value{
+  If \code{se=FALSE} (the default), the format is described below.
+  If \code{se=TRUE}, the result is a list of two entries,
+  \code{estimate} and \code{SE}, each having the format described below.
+  
   If \code{X} consists of only two types of points,
   and if \code{casecontrol=TRUE},
   the result is a pixel image (if \code{at="pixels"})
@@ -201,9 +213,10 @@
       plot(p.oak, main="proportion of oak")
       plot(eval.im(p.oak > 0.3), main="More than 30 percent oak")
       plot(split(lansing), main="Lansing Woods")
-      p.lan <- relrisk(lansing, 0.05)
-      plot(p.lan, main="Lansing Woods species probability")
-      wh <- im.apply(p.lan, which.max)
+      p.lan <- relrisk(lansing, 0.05, se=TRUE)
+      plot(p.lan$estimate, main="Lansing Woods species probability")
+      plot(p.lan$SE, main="Lansing Woods standard error")
+      wh <- im.apply(p.lan$estimate, which.max)
       types <- levels(marks(lansing))
       wh <- eval.im(types[wh])
       plot(wh, main="Most common species")

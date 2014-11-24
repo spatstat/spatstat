@@ -87,9 +87,9 @@ density.ppp <- function(x, sigma=NULL, ...,
             else as.listof(lapply(smo, "[", i=x$window, drop=FALSE))
 
   # internal use only
-  spill <- list(...)$spill
-  if(!is.null(spill)) 
-    return(list(sigma=sigma, varcov=varcov, raw = raw, edg=edg))
+  spill <- resolve.1.default(list(spill=FALSE), list(...))
+  if(spill)
+    return(list(result=result, sigma=sigma, varcov=varcov, raw = raw, edg=edg))
 
   # normal return
   attr(result, "sigma") <- sigma
@@ -114,7 +114,7 @@ density.ppp
 densitypointsEngine <- function(x, sigma, ...,
                                 weights=NULL, edge=TRUE, varcov=NULL,
                                 leaveoneout=TRUE, diggle=FALSE,
-                                sorted=FALSE) {
+                                sorted=FALSE, spill=FALSE) {
   if(is.null(varcov)) {
     const <- 1/(2 * pi * sigma^2)
   } else {
@@ -347,6 +347,9 @@ densitypointsEngine <- function(x, sigma, ...,
                  "of NA values generated in leave-one-out method"))
     }
   }
+  if(spill)
+      return(list(result=result, sigma=sigma, varcov=varcov,
+                  edg=edgeweight))
   # tack on bandwidth
   attr(result, "sigma") <- sigma
   attr(result, "varcov") <- varcov

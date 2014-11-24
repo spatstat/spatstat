@@ -782,7 +782,7 @@ densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     diggle, sorted)
 densitypointsEngine(x, sigma, \dots,
                     weights, edge, varcov,
-                    leaveoneout, diggle, sorted)
+                    leaveoneout, diggle, sorted, spill)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd,
                          compute.cts, rv, oldstyle, splineargs)

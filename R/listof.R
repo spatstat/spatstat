@@ -59,13 +59,13 @@ contour.listof <- function(x, ...) {
 
 image.listof <- local({
 
-  image.listof <- function(x, ..., equal.ribbon = FALSE) {
+  image.listof <- function(x, ..., equal.ribbon = FALSE, ribmar=NULL) {
     xname <- short.deparse(substitute(x))
     if(equal.ribbon && !all(unlist(lapply(x, is.im)))) {
       warning("equal.ribbon is only implemented for objects of class 'im'")
       equal.ribbon <- FALSE
     }
-    if(equal.ribbon) imagecommon(x, ..., xname=xname) else 
+    if(equal.ribbon) imagecommon(x, ..., xname=xname, ribmar=ribmar) else 
       do.call("plot.listof",
               resolve.defaults(list(x=x, plotcommand="image"),
                                list(...),
@@ -78,7 +78,9 @@ image.listof <- local({
                           ribbon=TRUE,
                           ribside=c("right", "left", "bottom", "top"),
                           ribsep=NULL, ribwid=0.5, ribn=1024,
-                          ribscale=NULL, ribargs=list()) {
+                          ribscale=NULL, ribargs=list(),
+                          ribmar=NULL,
+                          mar.panel=c(2,1,1,2)) {
     if(missing(xname))
       xname <- short.deparse(substitute(x))
     ribside <- match.arg(ribside)
@@ -102,11 +104,15 @@ image.listof <- local({
                     ribargs,
                     scaleinfo,
                     list(side=sidecode))
-      ribmar <- switch(ribside,
-                       left   = c(1, 2, 1, 0),
-                       right  = c(1, 0, 1, 2),
-                       bottom = c(2, 1, 0, 1),
-                       top    = c(0, 1, 2, 1))
+      if(is.null(ribmar)) {
+          ribmar <- mar.panel/2
+          newmar <- c(2, 0) ## 2 for title, 0 for opposite side
+          switch(ribside,
+                 left   = { ribmar[c(2,4)] <- newmar },
+                 right  = { ribmar[c(4,2)] <- newmar },
+                 bottom = { ribmar[c(1,3)] <- newmar },
+                 top    = { ribmar[c(3,1)] <- newmar })
+      }
       # function executed to plot colour ribbon
       do.ribbon <- function() {
         opa <- par(mar=ribmar)

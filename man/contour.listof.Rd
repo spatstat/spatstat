@@ -8,7 +8,7 @@
 }
 \usage{
   \method{contour}{listof}(x, \dots)
-  \method{image}{listof}(x, \dots, equal.ribbon=FALSE)
+  \method{image}{listof}(x, \dots, equal.ribbon=FALSE, ribmar=NULL)
 }
 \arguments{
   \item{x}{
@@ -25,6 +25,12 @@
     image is adjusted to the range of values of that image.
     Applies only when all the elements of \code{x} are
     pixel images (objects of class \code{"im"}).
+  }
+  \item{ribmar}{
+    Numeric vector of length 4 specifying the margins around the
+    colour ribbon, if \code{equal.ribbon=TRUE}. Entries in the vector
+    give the margin at the bottom, left, top, and right respectively,
+    as a multiple of the height of a line of text.
   }
 }
 \value{
