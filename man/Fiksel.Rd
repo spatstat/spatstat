@@ -7,7 +7,7 @@
   which can then be fitted to point pattern data.
 }
 \usage{
-  Fiksel(r, hc, kappa)
+  Fiksel(r, hc=NA, kappa)
 }
 \arguments{
   \item{r}{The interaction radius of the Fiksel model}
@@ -66,6 +66,12 @@
   it is possible to use \code{\link{profilepl}}. The maximum likelihood
   estimator of\eqn{h} is the minimum interpoint distance.
 
+  If the hard core distance argument \code{hc} is missing or \code{NA},
+  it will be estimated from the data when \code{\link{ppm}} is called.
+  The estimated value of \code{hc} is the minimum nearest neighbour distance
+  multiplied by \eqn{n/(n+1)}, where \eqn{n} is the
+  number of data points.
+  
   See also Stoyan, Kendall and Mecke (1987) page 161.
 }
 \seealso{
@@ -96,7 +102,7 @@ of marked and non-marked Gibbsian point processes.
    data(spruces)
    X <- unmark(spruces)
 
-   fit <- ppm(X, ~1, Fiksel(r=3.5, hc=1, kappa=1))
+   fit <- ppm(X ~ 1, Fiksel(r=3.5, kappa=1))
    plot(fitin(fit))
 }
 \author{Adrian Baddeley

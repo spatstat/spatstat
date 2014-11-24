@@ -14,6 +14,9 @@ OVERVIEW
 
    o Standard errors for relative risk.
 
+   o Hard core parameters in all interactions no longer need to be specified
+     and will be estimated from data.
+
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
@@ -69,6 +72,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    The default colour map for plotting images,
    specified by spatstat.options('image.colfun'), 
    has been changed to a perceptually uniform map.
+
+   o DiggleGratton, Fiksel
+   The hard core distance parameter in these models
+   can now be omitted by the user, and will be estimated automatically
+   from data (by the 'self-starting' feature of interactions).
+   This was already true of Hardcore, StraussHard, MultiHard 
+   and MultiStraussHard.
 
    o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
    rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,

@@ -104,6 +104,8 @@ image.listof <- local({
                     ribargs,
                     scaleinfo,
                     list(side=sidecode))
+      if(is.null(mar.panel)) mar.panel <- c(2,1,1,2)
+      if(length(mar.panel) != 4) mar.panel <- rep(mar.panel,4)[1:4]
       if(is.null(ribmar)) {
           ribmar <- mar.panel/2
           newmar <- c(2, 0) ## 2 for title, 0 for opposite side

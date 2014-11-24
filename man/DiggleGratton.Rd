@@ -6,7 +6,7 @@
   point process model, which can then be fitted to point pattern data.
 }
 \usage{
-  DiggleGratton(delta, rho)
+  DiggleGratton(delta=NA, rho)
 }
 \arguments{
   \item{delta}{lower threshold \eqn{\delta}{delta}}
@@ -51,6 +51,12 @@
   \eqn{\delta, \rho}{delta, rho} must be given in the call to
   \code{DiggleGratton}, while the
   regular parameter \eqn{\kappa}{kappa} will be estimated.
+
+  If the lower threshold \code{delta} is missing or \code{NA},
+  it will be estimated from the data when \code{\link{ppm}} is called.
+  The estimated value of \code{delta} is the minimum nearest neighbour distance
+  multiplied by \eqn{n/(n+1)}, where \eqn{n} is the
+  number of data points.
 }
 \seealso{
   \code{\link{ppm}},
@@ -58,8 +64,7 @@
   \code{\link{Pairwise}}
 }
 \examples{
-   data(cells)
-   ppm(cells, ~1, DiggleGratton(0.05, 0.1))
+   ppm(cells ~1, DiggleGratton(0.05, 0.1))
 }
 \references{
   Diggle, P.J., Gates, D.J. and Stibbard, A. (1987)

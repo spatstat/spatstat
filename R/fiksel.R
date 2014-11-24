@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.9 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.10 $	$Date: 2014/11/24 04:30:03 $
 #
 #    Fiksel interaction 
 #    
@@ -68,16 +68,40 @@ Fiksel <- local({
          parnames = c("interaction distance",
                       "hard core distance",
                       "rate parameter"), 
+         selfstart = function(X, self) {
+           # self starter for Fiksel
+           nX <- npoints(X)
+           if(nX < 2) {
+             # not enough points to make any decisions
+             return(self)
+           }
+           md <- minnndist(X)
+           if(!is.na(hc <- self$par$hc)) {
+             # value fixed by user or previous invocation
+             # check it
+             if(md < hc)
+               warning(paste("Hard core distance is too large;",
+                             "some data points will have zero probability"))
+             return(self)
+           }
+           if(md == 0) 
+             warning(paste("Pattern contains duplicated points:",
+                           "hard core must be zero"))
+           # take hc = minimum interpoint distance * n/(n+1)
+           hcX <- md * nX/(nX+1)
+           Fiksel(r=self$par$r, hc = hcX, kappa=self$par$kappa)
+         },
          init   = function(self) {
            r <- self$par$r
            hc <- self$par$hc
            kappa <- self$par$kappa
-           if(!is.numeric(hc) || length(hc) != 1 || hc <= 0)
-             stop("hard core distance hc must be a positive number")
-           if(!is.numeric(r) || length(r) != 1 || r <= hc)
-             stop("interaction distance r must be a number greater than hardcore dstance hc")
-           if(!is.numeric(kappa) || length(kappa) != 1)
-             stop("rate parameter kappa must be a single number")
+           check.1.real(r)
+           check.1.real(kappa)
+           if(!is.na(hc)) {
+             check.1.real(hc)
+             stopifnot(hc > 0)
+             stopifnot(r > hc)
+           } else stopifnot(r > 0)
          },
          update = NULL,       # default OK
          print = NULL,         # default OK
@@ -147,7 +171,7 @@ Fiksel <- local({
   )
   class(BlankFiksel) <- "interact"
 
-  Fiksel <- function(r, hc, kappa) {
+  Fiksel <- function(r, hc=NA, kappa) {
     instantiate.interact(BlankFiksel, list(r = r, hc = hc, kappa=kappa))
   }
 

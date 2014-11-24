@@ -58,17 +58,42 @@ DiggleGratton <- local({
                     },
          par      = list(delta=NULL, rho=NULL),  # to be filled in later
          parnames = list("lower limit delta", "upper limit rho"),
-         init     = function(self) {
-                      delta <- self$par$delta
-                      rho   <- self$par$rho
-                      if(!is.numeric(delta) || length(delta) != 1)
-                       stop("lower limit delta must be a single number")
-                      if(!is.numeric(rho) || length(rho) != 1)
-                       stop("upper limit rho must be a single number")
-                      stopifnot(delta >= 0)
-                      stopifnot(rho > delta)
-                      stopifnot(is.finite(rho))
-                    },
+         selfstart = function(X, self) {
+           # self starter for DiggleGratton
+           nX <- npoints(X)
+           if(nX < 2) {
+             # not enough points to make any decisions
+             return(self)
+           }
+           md <- minnndist(X)
+           if(!is.na(delta <- self$par$delta)) {
+             # value fixed by user or previous invocation
+             # check it
+             if(md < delta)
+               warning(paste("Hard core distance delta is too large;",
+                             "some data points will have zero probability"))
+             return(self)
+           }
+           if(md == 0) 
+             warning(paste("Pattern contains duplicated points:",
+                           "hard core distance delta must be zero"))
+           # take hard core = minimum interpoint distance * n/(n+1)
+           deltaX <- md * nX/(nX+1)
+           DiggleGratton(delta=deltaX, rho=self$par$rho)
+         },
+         init = function(self) {
+           delta <- self$par$delta
+           rho   <- self$par$rho
+           if(!is.numeric(rho) || length(rho) != 1)
+             stop("upper limit rho must be a single number")
+           stopifnot(is.finite(rho))
+           if(!is.na(delta)) {
+             if(!is.numeric(delta) || length(delta) != 1)
+               stop("lower limit delta must be a single number")
+             stopifnot(delta >= 0)
+             stopifnot(rho > delta)
+           } else stopifnot(rho >= 0)
+         },
          update = NULL, # default OK
          print = NULL,    # default OK
          interpret =  function(coeffs, self) {
@@ -131,7 +156,7 @@ DiggleGratton <- local({
   )
   class(BlankDG) <- "interact"
 
-  DiggleGratton <- function(delta, rho) {
+  DiggleGratton <- function(delta=NA, rho) {
     instantiate.interact(BlankDG, list(delta=delta, rho=rho))
   }
 
