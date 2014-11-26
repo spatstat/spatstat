@@ -104,13 +104,13 @@ vblogit <- function(y, X, offset, eps=1e-2, m0, S0, S0i, xi0, verb=FALSE, maxite
     #' update post mean
     m <- S%*%( t(X)%*%( (y-0.5) + 2*L%*%offset ) + Sm0  )
     #' compute the log evidence
-    le <-  as.numeric( 0.5*determinant(S)$mod + sum( gamma(xi) ) + sum(oo2*la) + 0.5*t(m)%*%Si%*%m + LE_CONST    
+    le <-  as.numeric( 0.5*determinant(S)$mod + sum( gamma(xi) ) + sum(oo2*la) + 0.5*t(m)%*%Si%*%m + LE_CONST
     #' check convergence
-    dev <- le - old
-    if(dev < 0) warning("Log-evidence decreasing, try different starting values for xi.")
-    loop <- abs(dev) > eps & (iter<-iter+1) <= maxiter
+    devi <- le - old
+    if(devi < 0) warning("Log-evidence decreasing, try different starting values for xi.")
+    loop <- abs(devi) > eps & (iter<-iter+1) <= maxiter
     le_hist <- c(le_hist, le)
-    cat2("diff:", dev, "             \r")
+    cat2("diff:", devi, "             \r")
   }
   if(iter == maxiter) warning("Maximum iteration limit reached.")
   cat2("\n")
