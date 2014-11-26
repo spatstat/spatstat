@@ -20,7 +20,8 @@ logi.engine <- function(Q,
                         vnameprefix=NULL,
                         justQ = FALSE,
                         savecomputed = FALSE,
-                        precomputed = NULL
+                        precomputed = NULL,
+                        VB=FALSE
                         ){
   if(is.null(trend)) trend <- ~1 
   if(is.null(interaction)) interaction <- Poisson()
@@ -180,8 +181,14 @@ logi.engine <- function(Q,
   .logi.ok  <- ok
   .logi.Y   <- resp
   # go
-  fit <- glm(fmla, data=glmdata,
-             family=binomial(), subset = .logi.ok, weights = .logi.w)
+  ##fit <- glm(fmla, data=glmdata,
+  ##           family=binomial(), subset = .logi.ok, weights = .logi.w)
+  fit <- if(VB) 
+           vblogit.fmla(fmla, data = glmdata, 
+                        subset = .logi.ok, w = .logi.w, ...)
+         else 
+           glm(fmla, data = glmdata, 
+               family = binomial(), subset = .logi.ok, weights = .logi.w)
   environment(fit$terms) <- sys.frame(sys.nframe())
   ## Fitted coeffs
   co <- coef(fit)
