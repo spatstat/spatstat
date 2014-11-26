@@ -6,3 +6,10 @@
 
 # R data files from past sessions
 .Rdata
+.Rproj.user
+
+# R-studio files
+spatstat.Rproj
+
+# .o files
+src/*o

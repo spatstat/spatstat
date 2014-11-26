@@ -2982,6 +2982,10 @@ S3method("with", "fv")
 S3method("with", "hyperframe")
 S3method("with", "msr")
 S3method("xtfrm", "im")
+# vb-logistic 
+S3method("print", "vblogit")
+S3method("summary", "vblogit")
+S3method("predict", "vblogit")
 # ......................................... 
 #      Assignment methods                   
 # ......................................... 
