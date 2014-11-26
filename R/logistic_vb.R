@@ -104,8 +104,8 @@ vblogit <- function(y, X, offset, eps=1e-2, m0, S0, S0i, xi0, verb=FALSE, maxite
     #' update post mean
     m <- S%*%( t(X)%*%( (y-0.5) + 2*L%*%offset ) + Sm0  )
     #' compute the log evidence
-    le <-  as.numeric( 0.5*determinant(S)$mod + sum( gamma(xi) ) + sum(oo2*la) + 0.5*t(m)%*%Si%*%m + LE_CONST
-    #' check convergence
+    le <-  as.numeric( 0.5*determinant(S)$mod + sum( gamma(xi) ) + sum(oo2*la) + 0.5*t(m)%*%Si%*%m + LE_CONST)
+    #' check convergence 
     devi <- le - old
     if(devi < 0) warning("Log-evidence decreasing, try different starting values for xi.")
     loop <- abs(devi) > eps & (iter<-iter+1) <= maxiter
