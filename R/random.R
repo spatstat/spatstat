@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.69 $   $Date: 2014/11/17 08:54:40 $
+##    $Revision: 4.71 $   $Date: 2014/11/27 03:25:32 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -138,7 +138,7 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
                ## retain those which are inside 'win'
                qq <- qq[win]
                ## add them to result
-               X <- superimpose(X, qq, W=win)
+               X <- superimpose(X, qq, W=win, check=FALSE)
                ## if we have enough points, exit
                if(X$n > n) {
                  result[[isim]] <- X[1:n]
@@ -289,16 +289,21 @@ rpoint <- function(n, f, fmax=NULL,
     ## initialise empty pattern
     X <- ppp(numeric(0), numeric(0), window=win)
   
-    ntries <- 0
-
+    pbar <- 1
+    nremaining <- n
+    totngen <- 0
+    
     ## generate uniform random points in batches
     ## and apply the rejection method.
     ## Collect any points that are retained in X
 
+    ntries <- 0
     repeat{
       ntries <- ntries + 1
       ## proposal points
-      prop <- runifrect(n, box)
+      ngen <- nremaining/pbar + 10
+      totngen <- totngen + ngen
+      prop <- runifrect(ngen, box)
       if(irregular)
         prop <- prop[win]
       if(prop$n > 0) {
@@ -309,13 +314,15 @@ rpoint <- function(n, f, fmax=NULL,
         Y <- prop[u < paccept]
         if(Y$n > 0) {
           ## add to X
-          X <- superimpose(X, Y, W=win)
-          if(X$n >= n) {
+          X <- superimpose(X, Y, W=win, check=FALSE)
+          nX <- X$n
+          pbar <- nX/totngen
+          nremaining <- n - nX
+          if(nremaining <= 0) {
             ## we have enough!
             if(verbose)
-              cat(paste("acceptance rate = ",
-                        round(100 * X$n/(ntries * n), 2), "%\n"))
-            result[[isim]] <- X[1:n]
+              splat("acceptance rate = ", round(100 * pbar, 2), "%")
+            result[[isim]] <- if(nX == n) X else X[1:n]
             break
           }
         }
@@ -548,7 +555,7 @@ rSSI <- function(r, n=Inf, win = square(1),
     x <- qq$x[1]
     y <- qq$y[1]
     if(X$n == 0 || all(((x - X$x)^2 + (y - X$y)^2) > r2))
-      X <- superimpose(X, qq, W=win)
+      X <- superimpose(X, qq, W=win, check=FALSE)
     if(X$n >= n)
       return(X)
   }
@@ -610,7 +617,7 @@ rPoissonCluster <-
             parentid <- rep.int(1, cluster$n)
           } else {
             ## add to pattern
-            result <- superimpose(result, cluster, W=win)
+            result <- superimpose(result, cluster, W=win, check=FALSE)
             ## update offspring-to-parent map
             parentid <- c(parentid, rep.int(i, cluster$n))
           }

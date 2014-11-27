@@ -23,6 +23,8 @@ OVERVIEW
 
    o Faster checking of large datasets.
 
+   o Faster simulations.
+
    o Bug fixes.
 
    o Version nickname: 'Do The Maths'
@@ -119,7 +121,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o plot.im
    The list 'ribargs' can now include the parameter 'labels'.
-   
+
+   o rmh, rpoint, rpoispp, rmpoint, rmpoispp
+   Accelerated, for inhomogeneous processes.
+
 BUG FIXES
 
    o markcorrint
