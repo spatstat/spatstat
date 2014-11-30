@@ -83,7 +83,7 @@
   \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{plot.yardstick}}
+  \code{\link{yardstick}}
 }
 \keyword{spatial}
 \keyword{hplot}

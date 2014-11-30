@@ -1,17 +1,27 @@
 \name{yardstick}
+\alias{textstring}
+\alias{onearrow}
 \alias{yardstick}
 \title{
-  Yardstick or Scale Bar 
+  Text, Arrow or Scale Bar in a Diagram
 }
 \description{
-  Create a spatial object that represents a scale bar.
+  Create spatial objects that represent a text string,
+  an arrow, or a yardstick (scale bar).
 }
 \usage{
-yardstick(x0, y0, x1, y1, txt)
+textstring(x, y, txt = NULL, \dots)
+
+onearrow(x0, y0, x1, y1, txt = NULL, \dots)
+
+yardstick(x0, y0, x1, y1, txt = NULL, \dots)
 }
 \arguments{
+  \item{x,y}{
+    Coordinates where the text should be placed.
+  }
   \item{x0,y0,x1,y1}{
-    Spatial coordinates of both ends of the line segment.
+    Spatial coordinates of both ends of the arrow or yardstick.
     Alternatively \code{x0} can be a point pattern (class \code{"ppp"})
     containing exactly two points, or a line segment pattern
     (class \code{"psp"}) consisting of exactly one line segment.
@@ -20,23 +30,37 @@ yardstick(x0, y0, x1, y1, txt)
     The text to be displayed beside the line segment.
     Either a character string or an expression.
   }
+  \item{\dots}{
+    Additional named arguments for plotting the object.
+  }
 }
 \details{
-  A yardstick or scale bar is a line segment, drawn on any spatial
-  graphics display, indicating the scale of the plot. 
+  These commands create objects that represent components of a
+  diagram:
+  \itemize{
+    \item \code{textstring} creates an object that represents a string
+    of text at a particular spatial location.
+    \item \code{onearrow} creates an object that represents an arrow
+    between two locations.
+    \item \code{yardstick} creates an object that represents
+    a scale bar: a line segment indicating the scale of the plot.
+  }
+  To display the relevant object, it should be plotted, using
+  \code{plot}. See the help files for the plot methods
+  \code{\link{plot.textstring}}, \code{\link{plot.onearrow}}
+  and \code{\link{plot.yardstick}}.
 
-  This command creates an object of class \code{"yardstick"}
-  which is essentially a line segment joining the
-  endpoints \code{(x0,y0)} and \code{(x1,y1)} and annotated by
-  the text \code{txt}. Plotting this object will display the
-  yardstick on the current plot, with the annotation next to the line.
-
-  A yardstick can be one of the components in a
-  list of spatial objects (see \code{\link{solist}})
-  or in a layered object (see \code{\link{layered}}).
+  These objects are designed to be included as components in a
+  \code{\link{layered}} object or a \code{\link{solist}}. This makes it
+  possible to build up a diagram consisting of many spatial objects,
+  and to annotate the diagram with arrows, text and so on, so that
+  ultimately the entire diagram is plotted using \code{plot}.
 }
 \value{
-  Object of class \code{"yardstick"} which can be plotted.
+  An object of class \code{"diagramobj"} which also
+  belongs to one of the special classes \code{"textstring"}, \code{"onearrow"}
+  or \code{"yardstick"}. There are methods for \code{plot},
+  \code{print}, \code{"["} and \code{\link{shift}}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
@@ -47,7 +71,9 @@ yardstick(x0, y0, x1, y1, txt)
   \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{plot.yardstick}}
+  \code{\link{plot.textstring}},
+  \code{\link{plot.onearrow}},
+  \code{\link{plot.yardstick}}.
 }
 \examples{
   X <- rescale(swedishpines)
@@ -55,7 +81,7 @@ yardstick(x0, y0, x1, y1, txt)
   ys <- yardstick(as.psp(list(xmid=4, ymid=0.5, length=1, angle=0),
                          window=Window(X)),
                   txt="1 m")
-  plot(ys)
+  plot(ys, angle=90)
 }
 \keyword{spatial}
 \keyword{hplot}

@@ -3,7 +3,7 @@
 \alias{[.pp3}
 \alias{[.localpcfmatrix}
 \alias{[.splitppx}
-\alias{[.yardstick}
+\alias{[.diagramobj}
 \alias{[<-.splitppx}
 \alias{acedist.show}
 \alias{acedist.noshow}
@@ -105,6 +105,7 @@
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
 \alias{diagnose.ppm.engine}
+\alias{diagramobj}
 \alias{digital.volume}
 \alias{dilate.owin}
 \alias{dim.fasp}               
@@ -452,6 +453,7 @@
 \alias{print.mppm}
 \alias{print.msr}
 \alias{print.nnfun}
+\alias{print.onearrow}
 \alias{print.parres}
 \alias{print.plotpairsim}
 \alias{print.plotppm}
@@ -482,6 +484,7 @@
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
 \alias{print.summary.units}
+\alias{print.textstring}
 \alias{print.texturemap}
 \alias{print.tess}
 \alias{print.timed}
@@ -571,12 +574,12 @@
 \alias{sensiblevarname}
 \alias{sewpcf}
 \alias{sewsmod}
+\alias{shift.diagramobj}              
 \alias{shift.influence.ppm}              
 \alias{shift.leverage.ppm}              
 \alias{shift.msr}              
 \alias{shift.quadratcount}              
 \alias{shift.quadrattest}              
-\alias{shift.yardstick}              
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{short.deparse}
@@ -674,7 +677,7 @@
 \usage{
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
-\method{[}{yardstick}(x, \dots)
+\method{[}{diagramobj}(x, \dots)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
@@ -786,6 +789,7 @@ densitypointsEngine(x, sigma, \dots,
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd,
                          compute.cts, rv, oldstyle, splineargs)
+diagramobj(X, \dots)
 digital.volume(range, nval, vside)
 dilate.owin(\dots)
 \method{dim}{fasp}(x)
@@ -1184,6 +1188,7 @@ primesbelow(nmax)
 \method{print}{mppm}(x, \dots)
 \method{print}{msr}(x, \dots)
 \method{print}{nnfun}(x, \dots)
+\method{print}{onearrow}(x, \dots)
 \method{print}{parres}(x, \dots)
 \method{print}{plotppm}(x, \dots)
 \method{print}{plotpairsim}(x, \dots)
@@ -1214,6 +1219,7 @@ primesbelow(nmax)
 \method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.units}(x, \dots)
+\method{print}{textstring}(x, \dots)
 \method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
 \method{print}{timed}(x, \dots)
@@ -1322,12 +1328,12 @@ second.moment.engine(x, sigma, edge, what, \dots,
 sensiblevarname(guess, fallback, maxlen)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)
+\method{shift}{diagramobj}(X, \dots)
 \method{shift}{influence.ppm}(X, \dots)
 \method{shift}{leverage.ppm}(X, \dots)
 \method{shift}{msr}(X, \dots)
 \method{shift}{quadratcount}(X, \dots)
 \method{shift}{quadrattest}(X, \dots)
-\method{shift}{yardstick}(X, \dots)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 short.deparse(x, maxlen)

@@ -10,9 +10,9 @@ OVERVIEW
 
    o Improved colour maps.
 
-   o Relative risk estimates from fitted point process models.
+   o Parametric estimates of relative risk from fitted point process models.
 
-   o Standard errors for relative risk.
+   o Standard errors for relative risk (parametric and non-parametric).
 
    o Hard core parameters in all interactions no longer need to be specified
      and will be estimated from data.
@@ -24,6 +24,8 @@ OVERVIEW
    o Faster checking of large datasets.
 
    o Faster simulations.
+
+   o Code for drawing diagrams (arrows, scale bars).
 
    o Bug fixes.
 
@@ -55,8 +57,9 @@ NEW FUNCTIONS
    o anyDuplicated.ppp, anyDuplicated.ppx
    Fast replacements for any(duplicated(x)) for point patterns.
 
-   o yardstick, plot.yardstick
-   Plot a scale bar on a spatial plot.
+   o textstring, onearrow, yardstick
+   Objects representing a text string, an arrow, or a scale bar,
+   for use in drawing spatial diagrams.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
