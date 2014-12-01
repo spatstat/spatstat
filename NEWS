@@ -8,7 +8,7 @@ OVERVIEW
 
    o Mathematical operations for images.
 
-   o Improved colour maps.
+   o Improved colour maps. 
 
    o Parametric estimates of relative risk from fitted point process models.
 
@@ -27,7 +27,7 @@ OVERVIEW
 
    o Code for drawing diagrams (arrows, scale bars).
 
-   o Bug fixes.
+   o Bug fixes. 
 
    o Version nickname: 'Do The Maths'
 
@@ -60,6 +60,9 @@ NEW FUNCTIONS
    o textstring, onearrow, yardstick
    Objects representing a text string, an arrow, or a scale bar,
    for use in drawing spatial diagrams.
+
+   o plot.imlist, image.imlist, contour.imlist
+   Methods for the new class 'imlist'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

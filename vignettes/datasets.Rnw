@@ -24,7 +24,6 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 
 <<echo=FALSE,results=hide>>=
 library(spatstat)
-spatstat.options(image.colfun=function(n) { grey(seq(0,1,length=n)) })
 sdate <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
          fields = "Date")
 sversion <- read.dcf(file = system.file("DESCRIPTION", package = "spatstat"),
@@ -173,7 +172,7 @@ There are also the following spatial data sets which are not 2D point patterns:
 {\tt osteo} & osteocyte lacunae & replicated 3D point patterns with covariates\\
 {\tt pyramidal} & pyramidal neurons & replicated 2D point patterns in 3 groups\\
 {\tt residualspaper} 
-                & data \& code from \cite{baddetal05} &  
+                & data \& code from Baddeley et al (2005) &  
                        2D point patterns, \R\ function \\
 {\tt simba} & simulated data & replicated 2D point patterns in 2 groups\\
 {\tt waterstriders} & insects on water & replicated 2D point patterns\\
@@ -182,6 +181,533 @@ There are also the following spatial data sets which are not 2D point patterns:
 
 Additionally there is a dataset \texttt{Kovesi} containing
 several colour maps with perceptually uniform contrast. 
+
+\section{Information on each dataset}
+
+Here we give basic information about each dataset.
+For further information, consult the help file for the 
+particular dataset.
+
+\subsubsection*{\texttt{amacrine}: Amacrine cells}
+
+Locations of displaced amacrine cells in the retina of a rabbit.
+There are two types of points, ``on'' and ``off''.
+
+<<fig=TRUE>>=
+plot(amacrine)
+@ 
+
+\subsubsection*{\texttt{anemones}: Sea Anemones}
+
+These data give the spatial locations and diameters
+of sea anemones on a boulder near sea level.
+
+<<fig=TRUE>>=
+plot(anemones, markscale=1)
+@ 
+
+\subsubsection*{\texttt{ants}: Ants' nests}
+
+Spatial locations of nests of two species of
+ants at a site in Greece.
+The full dataset (supplied here) has an irregular polygonal boundary,
+while most analyses have been confined to two rectangular
+subsets of the pattern (also supplied here).
+
+<<fig=TRUE>>=
+ants.extra$plotit()
+@ 
+
+\subsubsection*{\texttt{bei}: Beilschmiedia data}
+
+Locations of 3605 trees in a tropical rain forest.
+Accompanied by covariate data giving the elevation (altitude)
+and slope of elevation in the study region.
+  
+<<fig=TRUE>>=
+plot(bei.extra$elev, main="Beilschmiedia")
+plot(bei, add=TRUE, pch=16, cex=0.3)
+@ 
+
+<<fig=TRUE>>=
+M <- persp(bei.extra$elev, 
+           theta=-45, phi=18, expand=7,
+           border=NA, apron=TRUE, shade=0.3, 
+           box=FALSE, visible=TRUE,
+           main="")
+perspPoints(bei, Z=bei.extra$elev, M=M, pch=16, cex=0.3)
+@ 
+
+\subsubsection*{\texttt{betacells}: Beta ganglion cells}
+
+Locations of beta ganglion cells in cat retina,
+each cell classified as `on' or `off'
+and also labelled with the cell profile area.
+  
+<<fig=TRUE>>=
+plot(betacells)
+@ 
+
+\subsubsection*{\texttt{bramblecanes}: Bramble canes}
+
+<<fig=TRUE>>=
+plot(bramblecanes, cols=1:3)
+@ 
+
+<<fig=TRUE>>=
+plot(split(bramblecanes))
+@ 
+
+\subsubsection*{\texttt{bronzefilter}: Bronze filter section profiles}
+
+Spatially inhomogeneous pattern of
+circular section profiles of particles, observed in a
+longitudinal plane section through a gradient sinter
+filter made from bronze powder.
+
+<<fig=TRUE>>=
+plot(bronzefilter,markscale=2)
+@ 
+
+\subsubsection*{\texttt{cells}: Biological cells}
+
+Locations of the centres of 42 biological cells
+observed under optical microscopy in a histological section.
+Often used as a demonstration example.
+
+<<fig=TRUE>>=
+plot(cells)
+@ 
+
+\subsubsection*{\texttt{chicago}: Chicago street crimes}
+
+Street crimes reported in a two-week period
+in an area close to the University of Chicago.
+A multitype point pattern on a linear network.
+
+<<fig=TRUE>>=
+plot(chicago, main="Chicago Street Crimes", col="grey",
+     cols=c("red", "blue", "black", "blue", "red", "blue", "blue"),
+     chars=c(16,2,22,17,24,15,6), leg.side="left", show.window=FALSE)
+@ 
+
+\subsubsection*{\texttt{chorley}: Chorley-Ribble cancer data}
+
+Spatial locations of cases of cancer of the larynx
+and cancer of the lung, and the location of a disused industrial
+incinerator. A marked point pattern, with an irregular window
+and a simple covariate.
+
+<<fig=TRUE>>=
+chorley.extra$plotit()
+@ %$
+
+\subsubsection*{\texttt{clmfires}: Castilla-La Mancha Fires}
+
+Forest fires in the Castilla-La Mancha
+region of Spain between 1998 and 2007.
+A point pattern with 4 columns of marks:
+
+\begin{tabular}{ll}
+  \texttt{cause} & cause of fire\\ 
+  \texttt{burnt.area} & total area burned, in hectares \\
+  \texttt{date} & date of fire \\
+  \texttt{julian.date} & date of fire in days since 1.1.1998
+\end{tabular}
+  
+<<fig=TRUE>>=
+plot(clmfires, which.marks="cause", cols=2:5, cex=0.25,
+     main="Castilla-La Mancha forest fires")
+@ 
+
+The accompanying dataset \texttt{clmfires.extra} is a list
+of two items \texttt{clmcov100} and \texttt{clmcov200} containing covariate
+information for the entire Castilla-La Mancha region. Each
+of these two elements is a list of four pixel images 
+named \texttt{elevation}, \texttt{orientation},
+\texttt{slope} and \texttt{landuse}. 
+
+<<fig=TRUE>>=
+plot(clmfires.extra$clmcov200, main="Covariates for forest fires")
+@ %$ 
+
+\subsubsection*{\texttt{copper}: Queensland copper data}
+
+These data come from an intensive geological survey 
+in central Queensland, Australia.
+They consist of 67 points representing copper ore deposits,
+and 146 line segments representing geological `lineaments',
+mostly faults. 
+
+<<fig=TRUE>>=
+plot(copper$Points, main="Copper")
+plot(copper$Lines, add=TRUE)
+@ 
+
+\subsubsection*{\texttt{demohyper}}
+
+A synthetic example of a \texttt{hyperframe} for demonstration purposes.
+
+<<fig=TRUE>>=
+plot(demohyper, quote({ plot(Image, main=""); plot(Points, add=TRUE) }),
+      parargs=list(mar=rep(1,4)))
+@ 
+
+\subsubsection*{\texttt{demopat}}
+
+A synthetic example of a point pattern for demonstration purposes.
+
+<<fig=TRUE>>=
+plot(demopat)
+@ 
+
+\subsubsection*{\texttt{finpines}: Finnish pine saplings}
+
+Locations of 126 pine saplings
+in a Finnish forest, their heights and their diameters.
+
+<<fig=TRUE>>=
+plot(finpines, main="Finnish pines")
+@ 
+
+\subsubsection*{\texttt{flu}: Influenza virus proteins}
+
+  The \texttt{flu} dataset contains
+  replicated spatial point patterns giving the locations of two
+  different virus proteins on the membranes of cells infected with
+  influenza virus.
+  
+  It is a \texttt{hyperframe} containing
+  point patterns and explanatory variables.
+  
+<<fig=TRUE>>=
+wildM1 <- with(flu, virustype == "wt" & stain == "M2-M1")
+plot(flu[wildM1, 1, drop=TRUE],
+     main=c("flu data", "wild type virus, M2-M1 stain"),
+     chars=c(16,3), cex=0.4, cols=2:3)
+@ 
+
+\subsubsection*{\texttt{gordon}: People in Gordon Square}
+
+Locations of people sitting on a grass patch on a sunny afternoon.
+
+  
+<<fig=TRUE>>=
+plot(gordon, main="People in Gordon Square", pch=16)
+@ 
+
+\subsubsection*{\texttt{gorillas}: Gorilla nesting sites}
+
+ Locations of nesting sites of gorillas, and associated covariates,
+  in a National Park in Cameroon.  
+  
+  \texttt{gorillas} is a marked point pattern (object
+  of class \texttt{"ppp"}) representing nest site locations.
+
+  \texttt{gorillas.extra} is a named list of 7 pixel images (objects of
+  class \texttt{"im"}) containing spatial covariates.
+  It also belongs to the class \texttt{"listof"}.
+  
+<<fig=TRUE>>=
+plot(gorillas, which.marks=1, chars=c(1,3), cols=2:3, main="Gorilla nest sites")
+@ 
+
+\subsubsection*{\texttt{hamster}: Hamster kidney cells}
+
+ Cell nuclei in hamster kidney, each nucleus classified as
+ either `dividing' or `pyknotic'.
+ A multitype point pattern.
+ 
+<<fig=TRUE>>=
+plot(hamster, cols=c(2,4))
+@ 
+
+\subsubsection*{\texttt{heather}: Heather mosaic}
+
+The spatial mosaic of vegetation of the heather plant,
+recorded in a 10 by 20 metre sampling plot in Sweden.
+A list with three entries, representing the same data at
+different spatial resolutions.
+  
+<<fig=TRUE>>=
+plot(heather)
+@ 
+
+\subsubsection*{\texttt{humberside}: Childhood Leukemia and Lymphoma}
+
+Spatial locations of cases of childhood leukaemia
+and lymphoma, and randomly-selected controls,
+in North Humberside.
+A marked point pattern.
+
+<<fig=TRUE>>=
+plot(humberside)
+@ 
+
+The dataset \texttt{humberside.convex} is an object of the
+same format, representing the same point pattern data,
+but contained in a larger, 5-sided convex polygon.
+
+\subsubsection*{\texttt{hyytiala}: Mixed forest}
+
+Spatial locations and species classification for
+trees in a Finnish forest.
+
+<<fig=TRUE>>=
+plot(hyytiala, cols=2:5)
+@ 
+
+\subsubsection*{\texttt{japanesepines}: Japanese black pine saplings}
+
+Locations of Japanese black pine saplings
+in a square sampling region in a natural forest.
+Often used as a standard example.
+
+<<fig=TRUE>>=
+plot(japanesepines)
+@ 
+
+\subsubsection*{\texttt{lansing}: Lansing Woods}
+
+Locations and botanical classification of trees in a forest.
+A multitype point pattern with 6 different types of points.
+Includes duplicated points.
+
+<<fig=TRUE>>=
+plot(lansing)
+@ 
+
+<<fig=TRUE>>=
+plot(split(lansing))
+@ 
+
+\subsubsection*{\texttt{longleaf}: Longleaf Pines}
+
+Locations and diameters of Longleaf pine trees.
+  
+<<fig=TRUE>>=
+plot(longleaf)
+@ 
+
+\subsubsection*{\texttt{mucosa}: Gastric Mucosa Cells}
+
+A bivariate inhomogeneous point pattern, giving the locations of
+the centres of two types of cells in a cross-section of the
+gastric mucosa of a rat.
+  
+<<fig=TRUE>>=
+plot(mucosa, chars=c(1,3), cols=c("red", "green"))
+plot(mucosa.subwin, add=TRUE, lty=3)
+@ 
+
+\subsubsection*{\texttt{murchison}: Murchison Gold Deposits}
+
+Spatial locations of gold deposits and associated
+geological features in the Murchison area of Western Australia.
+A list of three elements:
+\begin{itemize}
+\item \texttt{gold}, the point pattern of gold deposits;
+\item \texttt{faults}, the line segment pattern of geological faults;
+\item \texttt{greenstone}, the subregion of greenstone outcrop.
+\end{itemize}
+
+<<fig=TRUE>>=
+plot(murchison$greenstone, main="Murchison data", col="lightgreen")
+plot(murchison$gold, add=TRUE, pch=3, col="blue")
+plot(murchison$faults, add=TRUE, col="red")
+@ 
+
+\subsubsection*{\texttt{nbfires}: New Brunswick Fires}
+
+Fires in New Brunswick (Canada) 
+with marks giving information about each fire.
+
+<<fig=TRUE>>=
+plot(nbfires, use.marks=FALSE, pch=".")
+@ 
+
+<<fig=TRUE>>=
+plot(split(nbfires), use.marks=FALSE, chars=".")
+@ 
+
+<<fig=TRUE>>=
+plot(split(nbfires)$"2000", which.marks="fire.type",
+     main=c("New Brunswick fires 2000", "by fire type"),
+     cols=c("blue", "green", "red", "cyan"),
+     leg.side="left")
+@ 
+
+\subsubsection*{\texttt{nztrees}: New Zealand Trees}
+
+Locations of trees in a forest plot in New Zealand.
+Often used as a demonstration example.
+
+<<fig=TRUE>>=
+plot(nztrees)
+plot(trim.rectangle(as.owin(nztrees), c(0,5), 0), add=TRUE, lty=3)
+@ 
+
+\subsubsection*{\texttt{osteo}: Osteocyte Lacunae}
+
+Replicated three-dimensional point patterns:
+the three-dimensional locations of 
+  osteocyte lacunae observed in rectangular volumes of
+  solid bone using a confocal microscope.
+A \texttt{hyperframe} containing 3D point patterns
+and explanatory variables.
+  
+  
+<<fig=TRUE>>=
+enable3d <- ("scatterplot3d" %in% row.names(installed.packages()))
+if(enable3d) {
+  plot(osteo[1:10,], tick.marks=FALSE, xlab="", ylab="", zlab="")
+}
+@ 
+
+\subsubsection*{\texttt{paracou}: Kimboto trees}
+
+Point pattern of adult and juvenile Kimboto trees
+recorded at Paracou in French Guiana.
+A bivariate point pattern.
+
+<<fig=TRUE>>=
+plot(paracou, cols=2:3, chars=c(16,3))
+@ 
+
+\subsubsection*{\texttt{ponderosa}: Ponderosa Pines}
+
+Locations of Ponderosa Pine trees in a forest.
+Several special points are identified.
+
+<<fig=TRUE>>=
+ponderosa.extra$plotit()
+@  %$
+
+\subsubsection*{\texttt{pyramidal}: Pyramidal Neurons in Brain}
+
+Locations of pyramidal neurons in sections of human brain.
+There is one point pattern from each of 31 human subjects.
+The subjects are divided into three groups:
+controls (12 subjects), schizoaffective (9  subjects)
+and schizophrenic (10 subjects).
+
+<<fig=TRUE>>=
+pyr <- pyramidal
+pyr$grp <- abbreviate(pyramidal$group, minlength=7)
+plot(pyr, quote(plot(Neurons, pch=16, main=grp)), main="Pyramidal Neurons")
+@ 
+
+\subsubsection*{\texttt{redwood}, \texttt{redwoodfull}: Redwood seedlings and saplings}
+
+California Redwood seedlings and saplings in a forest.
+There are two versions of this dataset:
+\texttt{redwood} and \texttt{redwoodfull}.
+
+The \texttt{redwoodfull} dataset is the full data.
+It is spatially inhomogeneous in density and spacing of points.
+
+The \texttt{redwood} dataset is a subset of the full data,
+selected because it is apparently homogeneous, and has often 
+been used as a demonstration example.
+
+
+<<fig=TRUE>>=
+plot(redwood)
+@ 
+
+<<fig=TRUE>>=
+redwoodfull.extra$plotit()
+@ %$
+
+\subsubsection*{\texttt{residualspaper}: Data from residuals paper}
+
+Contains the point patterns used as examples in 
+\begin{quote}
+  A. Baddeley, R. Turner, J. M{\o}ller and M. Hazelton (2005)
+  Residual analysis for spatial point processes.
+  \emph{Journal of the Royal Statistical Society, Series B}
+  \textbf{67}, 617--666
+\end{quote}
+along with {\sf R} code.
+
+<<fig=TRUE>>=
+plot(as.listof(residualspaper[c("Fig1", "Fig4a", "Fig4b", "Fig4c")]), 
+     main="")
+@ 
+
+\subsubsection*{\texttt{shapley}: Shapley Galaxy Concentration}
+
+Sky positions of 4215 galaxies in the Shapley Supercluster
+(mapped by radioastronomy).
+
+<<fig=TRUE>>=
+shapley.extra$plotit(main="Shapley")
+@  %$
+
+\subsubsection*{\texttt{simdat}: Simulated data}
+
+Another simulated dataset used for demonstration purposes.
+
+<<fig=TRUE>>=
+plot(simdat)
+@ 
+
+\subsubsection*{\texttt{sporophores}: Sporophores}
+
+Sporophores of three species of fungi around a tree.
+
+<<fig=TRUE>>=
+plot(sporophores, chars=c(16,1,2), cex=0.6)
+points(0,0,pch=16, cex=2)
+text(15,8,"Tree", cex=0.75)
+@ 
+
+\subsubsection*{\texttt{spruces}: Spruces in Saxony}
+
+Locations of Norwegian spruce trees 
+in a natural forest stand in Saxonia, Germany.
+Each tree is marked with its diameter at breast height.
+ 
+<<fig=TRUE>>=
+plot(spruces, maxsize=min(nndist(spruces)))
+@ 
+
+\subsubsection*{\texttt{swedishpines}: Swedish Pines}
+
+Locations of pine saplings
+in a Swedish forest.
+Often used as a demonstration example.
+
+<<fig=TRUE>>=
+plot(swedishpines)
+@ 
+
+\subsubsection*{\texttt{urkiola}: trees in a wood}
+
+Locations of birch and oak trees  in a secondary wood in
+Urkiola Natural Park (Basque country, northern Spain). 
+Irregular window, bivariate point pattern.
+
+<<fig=TRUE>>=
+plot(urkiola, cex=0.5, cols=2:3)
+@ 
+
+\subsubsection*{\texttt{waka}: trees in Waka National Park}
+
+Spatial coordinates of each tree, marked by the tree diameter at breast height.
+    
+<<fig=TRUE>>=
+plot(waka, markscale=0.04, main=c("Waka national park", "tree diameters"))
+@ 
+
+\subsubsection*{\texttt{waterstriders}: Insects on a pond}
+
+Three independent replications of a point pattern
+formed by insects on the surface of a pond.
+  
+<<fig=TRUE>>=
+plot(waterstriders)
+@ 
 
 \end{document}
 

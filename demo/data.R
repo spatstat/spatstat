@@ -60,7 +60,7 @@ plot(heather)
 
 plot(humberside)
 
-plot(hyytiala, add=TRUE, cols=2:5)
+plot(hyytiala, cols=2:5)
 
 plot(japanesepines)
 
