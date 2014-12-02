@@ -188,12 +188,39 @@ Here we give basic information about each dataset.
 For further information, consult the help file for the 
 particular dataset.
 
+<<echo=FALSE>>=
+opa <- par()
+## How to set all margins to zero and eliminate all outer spaces
+zeromargins <- function() {
+  par(
+      mar=rep(0,4),
+      omd=c(0,1,0,1),
+      xaxs="i",
+      yaxs="i"
+  )
+  invisible(NULL)
+}
+## Set 'mar'
+setmargins <- function(...) {
+  par(opa)
+  x <- c(...)
+  x <- rep(x, 4)[1:4]
+  par(mar=x)
+  invisible(NULL)
+}
+@ 
+
 \subsubsection*{\texttt{amacrine}: Amacrine cells}
 
 Locations of displaced amacrine cells in the retina of a rabbit.
 There are two types of points, ``on'' and ``off''.
 
-<<fig=TRUE>>=
+\SweaveOpts{width=5.5,height=3}\setkeys{Gin}{width=0.8\textwidth}
+<<eval=FALSE>>=
+plot(amacrine)
+@ 
+<<fig=TRUE,echo=FALSE,results=hide>>=
+setmargins(0,1,0,0)
 plot(amacrine)
 @ 
 
@@ -202,7 +229,12 @@ plot(amacrine)
 These data give the spatial locations and diameters
 of sea anemones on a boulder near sea level.
 
-<<fig=TRUE>>=
+\SweaveOpts{width=7,height=4.5}\setkeys{Gin}{width=0.8\textwidth}
+<<eval=FALSE>>=
+plot(anemones, markscale=1)
+@ 
+<<fig=TRUE,echo=FALSE,results=hide>>=
+setmargins(0)
 plot(anemones, markscale=1)
 @ 
 
@@ -214,9 +246,15 @@ The full dataset (supplied here) has an irregular polygonal boundary,
 while most analyses have been confined to two rectangular
 subsets of the pattern (also supplied here).
 
-<<fig=TRUE>>=
+% Parameters for Ants data with key at right
+\SweaveOpts{width=6.3,height=4}\setkeys{Gin}{width=0.7\textwidth}
+<<eval=FALSE>>=
 ants.extra$plotit()
-@ 
+@ %$
+<<fig=TRUE,echo=FALSE,results=hide>>=
+zeromargins()
+ants.extra$plotit()
+@ %$
 
 \subsubsection*{\texttt{bei}: Beilschmiedia data}
 
@@ -224,7 +262,13 @@ Locations of 3605 trees in a tropical rain forest.
 Accompanied by covariate data giving the elevation (altitude)
 and slope of elevation in the study region.
   
-<<fig=TRUE>>=
+\SweaveOpts{width=12,height=6}\setkeys{Gin}{width=0.8\textwidth}
+<<eval=FALSE>>=
+plot(bei.extra$elev, main="Beilschmiedia")
+plot(bei, add=TRUE, pch=16, cex=0.3)
+@ 
+<<fig=TRUE,echo=FALSE,results=hide>>=
+setmargins(0)
 plot(bei.extra$elev, main="Beilschmiedia")
 plot(bei, add=TRUE, pch=16, cex=0.3)
 @ 

@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.listof
 ##
-##   $Revision: 1.6 $ $Date: 2014/12/02 03:28:16 $
+##   $Revision: 1.8 $ $Date: 2014/12/02 09:31:45 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -41,6 +41,7 @@ textstring <- function(x, y, txt=NULL, ...) {
   if(is.ppp(x) && missing(y)) {
     stopifnot(npoints(x) == 1)
     X <- x
+    Window(x) <- boundingbox(x)
   } else {
     if(missing(y) && checkfields(x, c("x", "y"))) {
       y <- x$y
@@ -87,8 +88,9 @@ yardstick <- function(x0, y0, x1, y1, txt=NULL, ...) {
     xx <- c(x0, x1)
     yy <- c(y0, y1)
     B <- boundingbox(list(x=xx, y=yy))
-    X <- ppp(xx, yy, window=grow.rectangle(B, diameter(B)))
+    X <- ppp(xx, yy, window=B, check=FALSE)
   }
+  Window(X) <- boundingbox(X)
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
   class(Y) <- c("yardstick", class(Y))
   return(Y)
@@ -208,8 +210,9 @@ onearrow <- function(x0, y0, x1, y1, txt=NULL, ...) {
     xx <- c(x0, x1)
     yy <- c(y0, y1)
     B <- boundingbox(list(x=xx, y=yy))
-    X <- ppp(xx, yy, window=grow.rectangle(B, diameter(B)))
+    X <- ppp(xx, yy, window=B, check=FALSE)
   }
+  Window(X) <- boundingbox(X)
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
   class(Y) <- c("onearrow", class(Y))
   return(Y)
