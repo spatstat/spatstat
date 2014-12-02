@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.30 $  $Date: 2014/08/09 10:41:11 $
+#  $Revision: 1.31 $  $Date: 2014/12/02 07:28:50 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -200,6 +200,32 @@ plotEachLayer <- function(x, ..., main,
   if(drop && nx == 1)
     return(x[[1]])
   y <- layered(LayerList=x, plotargs=p)
+  return(y)
+}
+
+"[[<-.layered" <- function(x, i, value) {
+  x[i] <- if(!is.null(value)) list(value) else NULL
+  return(x)
+}
+
+"[<-.layered" <- function(x, i, value) {
+  p <- layerplotargs(x)
+  ## invoke list method
+  y <- x
+  class(y) <- "list"
+  y[i] <- value
+  # make it a 'layered' object too
+  class(y) <- c("layered", class(y))
+  # update names and plotargs
+  if(any(blank <- !nzchar(names(y)))) {
+    names(y)[blank] <- paste("Layer", which(blank))
+    pnew <- rep(list(list()), length(y))
+    names(pnew) <- names(y)
+    m <- match(names(y), names(x))
+    mok <- !is.na(m)
+    pnew[mok] <- p[m[mok]]
+    layerplotargs(y) <- pnew
+  } else layerplotargs(y) <- layerplotargs(x)[names(y)]
   return(y)
 }
 

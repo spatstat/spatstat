@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.listof
 ##
-##   $Revision: 1.5 $ $Date: 2014/11/30 11:28:23 $
+##   $Revision: 1.6 $ $Date: 2014/12/02 03:28:16 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -51,7 +51,7 @@ textstring <- function(x, y, txt=NULL, ...) {
     X <- ppp(x, y, window=owin(c(x,x),c(y,y)))
   }
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
-  class(Y) <- c("textstring", class(X))
+  class(Y) <- c("textstring", class(Y))
   return(Y)
 }
 
@@ -90,7 +90,7 @@ yardstick <- function(x0, y0, x1, y1, txt=NULL, ...) {
     X <- ppp(xx, yy, window=grow.rectangle(B, diameter(B)))
   }
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
-  class(Y) <- c("yardstick", class(X))
+  class(Y) <- c("yardstick", class(Y))
   return(Y)
 }
 
@@ -210,9 +210,9 @@ onearrow <- function(x0, y0, x1, y1, txt=NULL, ...) {
     B <- boundingbox(list(x=xx, y=yy))
     X <- ppp(xx, yy, window=grow.rectangle(B, diameter(B)))
   }
-  X <- diagramobj(X, txt=txt, otherargs=list(...))
-  class(X) <- c("onearrow", class(X))
-  return(X)
+  Y <- diagramobj(X, txt=txt, otherargs=list(...))
+  class(Y) <- c("onearrow", class(Y))
+  return(Y)
 }
 
 print.onearrow <- function(x, ...) {

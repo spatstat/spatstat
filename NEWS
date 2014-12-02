@@ -4,7 +4,8 @@
 OVERVIEW
 
    o We thank Peter Kovesi, Andrew Lister, Enrique Miranda,
-   Brian Ripley, Dominic Schuhmacher and Maxime Woringer for contributions.
+   Tuomas Rajala, Brian Ripley, Dominic Schuhmacher and
+   Maxime Woringer for contributions.
 
    o Mathematical operations for images.
 
@@ -63,6 +64,9 @@ NEW FUNCTIONS
 
    o plot.imlist, image.imlist, contour.imlist
    Methods for the new class 'imlist'
+
+   o [<-.layered,  [[<-.layered
+   More support for class 'layered'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

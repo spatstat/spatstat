@@ -74,6 +74,7 @@
 \alias{clippoly.psp}
 \alias{closethresh}
 \alias{coef.summary.ppm}
+\alias{coef.vblogit} 
 \alias{coerce.marks.numeric}
 \alias{compatible.rat}
 \alias{complaining}
@@ -163,6 +164,7 @@
 \alias{extractAtomicQtests}
 \alias{fakecallstring}
 \alias{fakemaintitle}
+\alias{family.vblogit} 
 \alias{fave.order}
 \alias{f3engine}
 \alias{f3Cengine}
@@ -298,6 +300,7 @@
 \alias{local2lpp}
 \alias{logi.dummy}
 \alias{logi.engine}
+\alias{logLik.vblogit}
 \alias{lty2char}
 \alias{parbreak}
 \alias{passthrough}
@@ -418,6 +421,7 @@
 \alias{pppdist.prohorov}
 \alias{ppsubset}
 \alias{prange}
+\alias{predict.vblogit}
 \alias{prefixfv}
 \alias{prepareTitle}
 \alias{primefactors}       
@@ -488,6 +492,7 @@
 \alias{print.texturemap}
 \alias{print.tess}
 \alias{print.timed}
+\alias{print.vblogit}
 \alias{print.yardstick}
 \alias{prolongseq}
 \alias{putlastshift}
@@ -623,6 +628,7 @@
 \alias{summary.ppx}
 \alias{summary.splitppx}
 \alias{summary.rmhexpand}
+\alias{summary.vblogit}
 \alias{sumsymouter}
 \alias{superimposeMarks}
 \alias{symbolmaptype}
@@ -651,6 +657,8 @@
 \alias{validposint}        
 \alias{vanilla.fv}        
 \alias{variablesinformula}
+%\alias{vblogit} %DoNotExport
+%\alias{vblogit.fmla} %DoNotExport
 \alias{verbalogic}
 \alias{versionstring.interact}
 \alias{versionstring.ppm}
@@ -752,6 +760,7 @@ cliprect.psp(x, window)
 clippoly.psp(s, window)
 closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
+\method{coef}{vblogit}(object, \dots) 
 coerce.marks.numeric(X, warn)
 \method{compatible}{rat}(A, B, \dots) %DontDeclare
 complaining(whinge, fatal, value)
@@ -864,6 +873,7 @@ explain.ifnot(expr, context)
 extractAtomicQtests(x)
 fakecallstring(fname, parlist)
 fakemaintitle(bb, main, \dots)
+\method{family}{vblogit}(object, \dots)
 fave.order(x)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
@@ -1003,7 +1013,9 @@ local2lpp(L, seg, tp, X)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, correction, rbord, covfunargs, allcovar, 
-            vnamebase, vnameprefix, justQ, savecomputed, precomputed)
+            vnamebase, vnameprefix, justQ, savecomputed, precomputed,
+            VB)
+\method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
@@ -1155,6 +1167,8 @@ pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
             ccode, auction, precision, approximation) 
 ppsubset(X, I)
 prange(x)
+\method{predict}{vblogit}(object, newdata, type, se.fit, dispersion,
+                          terms, na.action, \dots)
 prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
 prepareTitle(main)
 primefactors(n, prmax)
@@ -1223,6 +1237,7 @@ primesbelow(nmax)
 \method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)
 \method{print}{timed}(x, \dots)
+\method{print}{vblogit}(x, \dots)
 \method{print}{yardstick}(x, \dots)
 prolongseq(x, newrange, step)
 putlastshift(X, vec)
@@ -1379,6 +1394,7 @@ summarise.trend(trend, w, a)
 \method{summary}{ppx}(object, \dots)
 \method{summary}{rmhexpand}(object, \dots)
 \method{summary}{splitppx}(object, \dots)
+\method{summary}{vblogit}(object, \dots)
 sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
 symbolmaptype(x)
@@ -1407,6 +1423,8 @@ validate.quad(Q, fatal, repair, announce)
 validposint(n, caller, fatal)
 vanilla.fv(x)
 variablesinformula(x)
+%vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)
+%vblogit.fmla(formula, offset, data, subset, weights, verbose, epsilon, \dots)
 verbalogic(x, op)
 versionstring.interact(object)
 versionstring.ppm(object)

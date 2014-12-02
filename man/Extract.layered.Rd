@@ -1,12 +1,18 @@
 \name{Extract.layered}
 \alias{[.layered}
-\title{Extract Subset of a Layered Object}
+\alias{[<-.layered}
+\alias{[[<-.layered}
+\title{Extract or Replace Subset of a Layered Object}
 \description{
-  Extract some or all of the layers of a layered object,
+  Extract or replace some or all of the layers of a layered object,
   or extract a spatial subset of each layer.
 }
 \usage{
   \method{[}{layered}(x, i, j, drop=FALSE, ...)
+
+  \method{[}{layered}(x, i) <- value
+
+  \method{[[}{layered}(x, i) <- value
 }
 \arguments{
   \item{x}{
@@ -15,7 +21,7 @@
   \item{i}{
     Subset index for the list of layers.
     A logical vector, integer vector or character vector
-    specifying which layers are to be retained.
+    specifying which layers are to be extracted or replaced.
   }
   \item{j}{
     Subset index to be applied to the data in each layer.
@@ -29,6 +35,9 @@
   \item{\dots}{
     Ignored. 
   }
+  \item{value}{List of objects which shall replace the designated
+    subset, or an object which shall replace the designated element.
+  }
 }
 \value{
   Usually an object of class \code{"layered"}.
@@ -38,9 +47,15 @@
   successive layers, for example, a background and a foreground.
   See \code{\link{layered}}.
 
-  This function extracts a designated subset of a layered object.
+  The function \code{[.layered}
+  extracts a designated subset of a layered object.
   It is a method for \code{\link{[}} for the
   class \code{"layered"}.
+
+  The functions \code{[<-.layered} and \code{[[<-.layered}
+  replace a designated subset or designated entry of the object by new
+  values. They are methods for \code{\link{[<-}} and \code{\link{[[<-}}
+  for the \code{"layered"} class.
 
   The index \code{i} specifies which layers will be retained.
   It should be a valid subset index for the list of layers.
@@ -58,6 +73,9 @@
  example(layered)
  L[-2]
  L[, square(0.5)]
+
+ L[[3]] <- japanesepines
+ L
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

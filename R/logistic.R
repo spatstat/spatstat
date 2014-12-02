@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.16 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.17 $  $Date: 2014/12/02 01:11:36 $
 #
 #  Logistic likelihood method - under development
 #
@@ -185,7 +185,7 @@ logi.engine <- function(Q,
   ##           family=binomial(), subset = .logi.ok, weights = .logi.w)
   fit <- if(VB) 
            vblogit.fmla(fmla, data = glmdata, 
-                        subset = .logi.ok, w = .logi.w, ...)
+                        subset = .logi.ok, weights = .logi.w, ...)
          else 
            glm(fmla, data = glmdata, 
                family = binomial(), subset = .logi.ok, weights = .logi.w)
@@ -202,7 +202,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/10/24 00:22:30 $")
+                      date="$Date: 2014/12/02 01:11:36 $")
 
   ## Compile results
   fit <- list(method      = "logi",

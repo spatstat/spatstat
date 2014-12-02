@@ -1601,6 +1601,7 @@
   Kasper Klitgaard Berthelsen,
   Abdollah Jalilian,
   Marie-Colette van Lieshout,
+  Tuomas Rajala,
   Dominic Schuhmacher and
   Rasmus Waagepetersen
   made substantial contributions of code.
