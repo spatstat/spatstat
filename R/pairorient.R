@@ -8,8 +8,9 @@
 ##
 
 pairorient <- function(X, r1, r2, ...,
+                       cumulative=FALSE,
                        correction, ratio=FALSE,
-                       units=c("degrees", "radians"),
+                       unit=c("degree", "radian"),
                        domain=NULL) {
   stopifnot(is.ppp(X))
   check.1.real(r1)
@@ -19,13 +20,13 @@ pairorient <- function(X, r1, r2, ...,
   if(!is.null(domain))
     stopifnot(is.subset.owin(domain, W))
   
-  units <- match.arg(units)
-  switch(units,
-         degrees = {
+  unit <- match.arg(unit)
+  switch(unit,
+         degree = {
            FullCircle <- 360
            Convert <- 180/pi
          },
-         radians = {
+         radian = {
            FullCircle <- 2 * pi
            Convert <- 1
          })
@@ -69,32 +70,42 @@ pairorient <- function(X, r1, r2, ...,
   ANGLE <- with(close, atan2(dy, dx) * Convert) %% FullCircle
 
   ## initialise output object
-  breaks <- make.even.breaks(bmax=FullCircle, npos=511)
+  Nphi <- 512
+  breaks <- make.even.breaks(bmax=FullCircle, npos=Nphi-1)
   phi <- breaks$r
   Odf <- data.frame(phi  = phi,
-                    theo = phi/FullCircle)
+                    theo = (if(cumulative) phi else 1)/FullCircle)
   desc <- c("angle argument phi",
             "theoretical isotropic %s")
+  Oletter <- if(cumulative) "O" else "o"
+  Osymbol <- as.name(Oletter)
   OO <- ratfv(Odf, NULL, denom=nrow(close),
               argu="phi",
-              ylab=substitute(O[R1,R2](phi), list(R1=r1, R2=r2)), 
+              ylab=substitute(fn[R1,R2](phi), list(R1=r1, R2=r2, fn=Osymbol)),
               valu="theo",
               fmla = . ~ phi,
               alim = c(0, FullCircle),
               c("phi",
                 "{%s[%s]^{pois}}(phi)"),
               desc,
-              fname=c("O", paste0("list(", r1, ",", r2, ")")),
-              yexp=substitute(O[list(R1,R2)](phi),
-                list(R1=r1,R2=r2)))
+              fname=c(Oletter, paste0("list(", r1, ",", r2, ")")),
+              yexp=substitute(fn[list(R1,R2)](phi),
+                list(R1=r1,R2=r2,fn=Osymbol)))
 
   ## ^^^^^^^^^^^^^^^  Compute edge corrected estimates ^^^^^^^^^^^^^^^^
+
+  nangles <- length(ANGLE)
   
   if(any(correction == "none")) {
     ## uncorrected! For demonstration purposes only!
-    wh <- whist(ANGLE, breaks$val)  # no weights
-    num.un <- cumsum(wh)
-    den.un <- length(ANGLE)
+    if(cumulative) {
+      wh <- whist(ANGLE, breaks$val)  # no weights
+      num.un <- cumsum(wh)
+    } else {
+      kd <- circdensity(ANGLE, ..., n=Nphi, unit=unit)
+      num.un <- kd$y * nangles
+    }
+    den.un <- nangles
     ## uncorrected estimate 
     OO <- bind.ratfv(OO,
                      data.frame(un=num.un), den.un,
@@ -107,9 +118,15 @@ pairorient <- function(X, r1, r2, ...,
   if(any(correction == "translate")) {
     ## Ohser-Stoyan translation correction
     edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)
-    wh <- whist(ANGLE, breaks$val, edgewt)
-    num.trans <- cumsum(wh)/mean(edgewt)
-    den.trans <- length(ANGLE)
+    if(cumulative) {
+      wh <- whist(ANGLE, breaks$val, edgewt)
+      num.trans <- cumsum(wh)/mean(edgewt)
+    } else {
+      w <- edgewt/sum(edgewt)
+      kd <- circdensity(ANGLE, ..., weights=w, n=Nphi, unit=unit)
+      num.trans <- kd$y * nangles
+    }
+    den.trans <- nangles
     OO <- bind.ratfv(OO,
                      data.frame(trans=num.trans),
                      den.trans,
@@ -123,9 +140,15 @@ pairorient <- function(X, r1, r2, ...,
     XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
     DIJ <- close$d
     edgewt <- edge.Ripley(XI, matrix(DIJ, ncol=1))
-    wh <- whist(ANGLE, breaks$val, edgewt)
-    num.iso <- cumsum(wh)/mean(edgewt)
-    den.iso <- length(ANGLE)
+    if(cumulative) {
+      wh <- whist(ANGLE, breaks$val, edgewt)
+      num.iso <- cumsum(wh)/mean(edgewt)
+    } else {
+      w <- edgewt/sum(edgewt)
+      kd <- circdensity(ANGLE, ..., weights=w, n=Nphi, unit=unit)
+      num.iso <- kd$y * nangles
+    }
+    den.iso <- nangles
     OO <- bind.ratfv(OO,
                      data.frame(iso=num.iso),
                      den.iso,
@@ -134,8 +157,8 @@ pairorient <- function(X, r1, r2, ...,
                      "iso",
                      ratio=ratio)
   }
-  unitname(OO) <- switch(units,
-                         degrees = c("degree", "degrees"),
-                         radians = c("radian", "radians"))
+  unitname(OO) <- switch(unit,
+                         degree = c("degree", "degrees"),
+                         radian = c("radian", "radians"))
   return(OO)
 }

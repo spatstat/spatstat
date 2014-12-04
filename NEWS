@@ -18,6 +18,8 @@ OVERVIEW
    o Hard core parameters in all interactions no longer need to be specified
      and will be estimated from data.
 
+   o Smoothing and plotting for angular data
+
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
@@ -51,6 +53,12 @@ NEW FUNCTIONS
    o relrisk.ppm
    Spatially-varying probabilities of different types of points
    predicted by a fitted point process model.
+
+   o circdensity
+   Kernel density estimate for angular data
+
+   o rose
+   Rose diagram (rose of directions) for angular data
 
    o interp.colours
    Interpolate a sequence of colour values.
@@ -102,6 +110,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
       specifying the number of simulated realisations to be generated.
 
    o pairorient
+   New argument 'cumulative'.
+   New algorithm to compute kernel estimate of probability density.
+   Default behaviour changed.
+   Argument 'units' has been renamed 'unit' for consistency.
    Labels and descriptions of columns have been corrected.
 
    o ppp
@@ -134,6 +146,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o rmh, rpoint, rpoispp, rmpoint, rmpoispp
    Accelerated, for inhomogeneous processes.
+
+   o suffstat
+   Accelerated (also affects ppm with method='ho').
 
 BUG FIXES
 

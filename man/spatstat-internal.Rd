@@ -68,6 +68,7 @@
 \alias{check.1.real}
 \alias{check.range}
 \alias{check.testfun}
+\alias{circticks}
 \alias{clarkevansCalc}
 \alias{clip.psp}
 \alias{cliprect.psp}
@@ -513,6 +514,7 @@
 \alias{rhohatCalc}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
+\alias{roseContinuous}
 \alias{quadrat.testEngine}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
@@ -652,6 +654,7 @@
 \alias{update.rmhstart}
 \alias{uptrimat}
 \alias{validradius}        
+\alias{validate.angles}        
 \alias{validate.mask}        
 \alias{validate.quad}        
 \alias{validposint}        
@@ -754,6 +757,7 @@ check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
+circticks(R, at)
 clarkevansCalc(X, correction, clipregion, working)
 clip.psp(x, window, check=TRUE)
 cliprect.psp(x, window)
@@ -1267,6 +1271,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
 RmhExpandRule(nama)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
+roseContinuous(ang, rad, unit, \dots, main, do.plot)
 quadrat.testEngine(X, nx, ny, alternative, method, conditional, CR, 
      \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)
 quadscheme.replicated(data, dummy, method = "grid", \dots)
@@ -1418,6 +1423,7 @@ unparen(x)
 \method{update}{rmhstart}(object, \dots)
 uptrimat(x)
 validradius(r, caller)
+validate.angles(angles, unit, guess)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
 validposint(n, caller, fatal)

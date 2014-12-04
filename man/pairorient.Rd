@@ -8,8 +8,9 @@
   pairs of points at a particular range of distances.
 }
 \usage{
-pairorient(X, r1, r2, ..., correction, ratio = FALSE,
-           units=c("degrees", "radians"), domain=NULL)
+pairorient(X, r1, r2, ..., cumulative=FALSE,
+           correction, ratio = FALSE,
+           unit=c("degree", "radian"), domain=NULL)
 }
 \arguments{
   \item{X}{
@@ -20,7 +21,13 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE,
     to be considered.
   }
   \item{\dots}{
-    Ignored.
+    Arguments passed to \code{\link{circdensity}} to control
+    the kernel smoothing, if \code{cumulative=FALSE}.
+  }
+  \item{cumulative}{
+    Logical value specifying whether to estimate the probability density
+    (\code{cumulative=FALSE}, the default) or the cumulative
+    distribution function (\code{cumulative=TRUE}).
   }
   \item{correction}{
     Character vector specifying edge correction or corrections.
@@ -33,9 +40,9 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE,
     each edge-corrected estimate will also be saved,
     for use in analysing replicated point patterns.
   }
-  \item{units}{
-    Units in which the angles should be expressed.
-    Either \code{"degrees"} or \code{"radians"}.
+  \item{unit}{
+    Unit in which the angles should be expressed.
+    Either \code{"degree"} or \code{"radian"}.
   }
   \item{domain}{
     Optional window. The first point \eqn{x_i}{x[i]} of each pair of points
@@ -43,33 +50,40 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE,
   }
 }
 \details{
-  This function calculates the point pair orientation distribution
-  function \eqn{O_{r1,r2}(\phi)}{O[r1,r2](phi)} defined 
-  in Stoyan and Stoyan (1994), equation (14.53), page 271.
-
-  The function considers all pairs of points in the pattern
+  This algorithm considers all pairs of points in the pattern
   \code{X} that lie more than \code{r1} and less than \code{r2}
   units apart. The \emph{direction} of the arrow joining the points
   is measured, as an angle in degrees or radians,
   anticlockwise from the \eqn{x} axis.
-  The result is the cumulative distribution function of these
-  directions. 
 
-  In calculating the cumulative distribution function,
-  the algorithm gives each observed direction a weight,
+  If \code{cumulative=FALSE} (the default),
+  a kernel estimate of the probability density of the orientations
+  is calculated using \code{\link{circdensity}}.
+
+  If \code{cumulative=TRUE}, then the cumulative distribution
+  function of these directions is calculated.
+  This is the function \eqn{O_{r1,r2}(\phi)}{O[r1,r2](phi)} defined 
+  in Stoyan and Stoyan (1994), equation (14.53), page 271.
+
+  In either case the result can be plotted as a rose diagram by 
+  \code{\link{rose}}, or as a function plot by \code{\link{plot.fv}}.
+  
+  The algorithm gives each observed direction a weight,
   determined by an edge correction, to adjust for the fact that some
   interpoint distances are more likely to be observed than others.
   The choice of edge correction or corrections is determined by the argument
   \code{correction}.
 
-  To calculate the probability density of directions,
-  use \code{\link{deriv.fv}} with the argument \code{Dperiodic=TRUE}.
+  It is also possible to calculate an estimate of the probability
+  density from the cumulative distribution function,
+  by numerical differentiation. 
+  Use \code{\link{deriv.fv}} with the argument \code{Dperiodic=TRUE}.
 }
 \value{
   A function value table (object of class \code{"fv"})
   containing the estimates of the cumulative distribution
-  function of angles, in degrees (if \code{units="degrees"})
-  or radians (if \code{units="radians"}).
+  function of angles, in degrees (if \code{unit="degree"})
+  or radians (if \code{unit="radian"}).
 }
 \references{
   Stoyan, D. and Stoyan, H. (1994)
@@ -81,8 +95,9 @@ pairorient(X, r1, r2, ..., correction, ratio = FALSE,
   \code{\link{Kest}}, \code{\link{Ksector}}
 }
 \examples{
-  plot(f <- pairorient(redwood, 0.05, 0.15))
-  plot(Df <- deriv(f, spar=0.6, Dperiodic=TRUE))
+  rose(pairorient(redwood, 0.05, 0.15, sigma=8))
+  plot(CDF <- pairorient(redwood, 0.05, 0.15, cumulative=TRUE))
+  plot(f <- deriv(CDF, spar=0.6, Dperiodic=TRUE))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

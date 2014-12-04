@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.59 $	$Date: 2013/10/24 04:21:59 $
+#    $Revision: 1.60 $	$Date: 2014/12/03 02:44:08 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -342,7 +342,7 @@ return(V)
   # partial model matrix arising from ordered pairs of data points
   # the second of which does not contribute to the pseudolikelihood
   mom <- partialModelMatrix(Xout, Xin, model, "suffstat")
-  indx <- Xout$n + (1:(Xin$n))
+  indx <- Xout$n + seq_len(Xin$n)
   momINxOUT <- mom[indx, , drop=FALSE]
 
   # parameters
@@ -354,14 +354,14 @@ return(V)
   if(any(order1)) {
     # first order contributions can be determined from INxIN
     o1terms  <- momINxIN[ , order1, drop=FALSE]
-    o1sum   <- apply(o1terms, 2, sum)
+    o1sum   <- colSums(o1terms)
     result[order1] <- o1sum
   }
   if(any(order2)) {
     # adjust for double counting of ordered pairs in INxIN but not INxOUT
     o2termsINxIN  <- momINxIN[, order2, drop=FALSE]
     o2termsINxOUT <- momINxOUT[, order2, drop=FALSE]
-    o2sum   <- apply(o2termsINxIN, 2, sum)/2 + apply(o2termsINxOUT, 2, sum)
+    o2sum   <- colSums(o2termsINxIN)/2 + colSums(o2termsINxOUT)
     result[order2] <- o2sum
   }
 
@@ -373,8 +373,8 @@ return(V)
   # for pairwise interaction processes
   # Equivalent to evaluating pair potential.
     X <- as.ppp(X)
-    nX <- npoints(X)
-    E <- cbind(1:nX, 1:nX)
+    seqX <- seq_len(npoints(X))
+    E <- cbind(seqX, seqX)
     R <- reach(inte)
     result <- pairwise.family$eval(X,X,E,
                                  inte$pot,inte$par,
