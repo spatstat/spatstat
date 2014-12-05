@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.122 $     $Date: 2014/11/10 03:45:06 $
+#      $Revision: 1.123 $     $Date: 2014/12/04 10:03:57 $
 #
 #      The class "im" of raster images
 #
@@ -890,11 +890,13 @@ quantile.im <- function(x, ...) {
   return(q)
 }
 
-integral.im <- function(x, ...) {
+integral.im <- function(x, domain=NULL, ...) {
   verifyclass(x, "im")
   typ <- x$type
   if(!any(typ == c("integer", "real", "complex", "logical")))
     stop(paste("Don't know how to integrate an image of type", sQuote(typ)))
+  if(!is.null(domain))
+    x <- x[domain, drop=FALSE, tight=TRUE]
   a <- with(x, sum(v, na.rm=TRUE) * xstep * ystep)
   return(a)
 }

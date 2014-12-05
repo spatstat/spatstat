@@ -1,24 +1,20 @@
-\name{pairorient}
-\alias{pairorient}
+\name{nnorient}
+\alias{nnorient}
 \title{
-  Point Pair Orientation Distribution
+  Nearest Neighbour Orientation Distribution
 }
 \description{
-  Computes the distribution of the orientation of vectors joining
-  pairs of points at a particular range of distances.
+  Computes the distribution of the orientation of the vectors
+  from each point to its nearest neighbour.
 }
 \usage{
-pairorient(X, r1, r2, ..., cumulative=FALSE,
-           correction, ratio = FALSE,
-           unit=c("degree", "radian"), domain=NULL)
+  nnorient(X, \dots, cumulative = FALSE, correction, k = 1,
+                     unit = c("degree", "radian"),
+                     domain = NULL, ratio = FALSE)
 }
 \arguments{
   \item{X}{
     Point pattern (object of class \code{"ppp"}).
-  }
-  \item{r1,r2}{
-    Minimum and maximum values of distance
-    to be considered.
   }
   \item{\dots}{
     Arguments passed to \code{\link{circdensity}} to control
@@ -31,8 +27,11 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   }
   \item{correction}{
     Character vector specifying edge correction or corrections.
-    Options are \code{"none"}, \code{"isotropic"}, \code{"translate"},
+    Options are \code{"none"}, \code{"bord.modif"}, 
     \code{"good"} and \code{"best"}.
+  }
+  \item{k}{
+    Integer. The \eqn{k}th nearest neighbour will be used.
   }
   \item{ratio}{
     Logical. 
@@ -50,20 +49,20 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   }
 }
 \details{
-  This algorithm considers all pairs of points in the pattern
-  \code{X} that lie more than \code{r1} and less than \code{r2}
-  units apart. The \emph{direction} of the arrow joining the points
+  This algorithm considers each point in the pattern \code{X}
+  and finds its nearest neighbour (or \eqn{k}th nearest neighour).
+  The \emph{direction} of the arrow joining the data point to its neighbour
   is measured, as an angle in degrees or radians,
   anticlockwise from the \eqn{x} axis.
 
   If \code{cumulative=FALSE} (the default),
-  a kernel estimate of the probability density of the orientations
+  a kernel estimate of the probability density of the angles
   is calculated using \code{\link{circdensity}}.
+  This is the function \eqn{\vartheta(\phi)}{theta(phi)} defined 
+  in Illian et al (2008), equation (4.5.3), page 253.
 
   If \code{cumulative=TRUE}, then the cumulative distribution
-  function of these directions is calculated.
-  This is the function \eqn{O_{r1,r2}(\phi)}{O[r1,r2](phi)} defined 
-  in Stoyan and Stoyan (1994), equation (14.53), page 271.
+  function of these angles is calculated.
 
   In either case the result can be plotted as a rose diagram by 
   \code{\link{rose}}, or as a function plot by \code{\link{plot.fv}}.
@@ -87,18 +86,16 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   or radians (if \code{unit="radian"}).
 }
 \references{
-  Stoyan, D. and Stoyan, H. (1994)
-  Fractals, random shapes and point fields:
-  methods of geometrical statistics.
-  John Wiley and Sons.
+  Illian, J., Penttinen, A., Stoyan, H. and Stoyan, D. (2008)
+  \emph{Statistical Analysis and Modelling of Spatial Point Patterns.}
+  Wiley.
 }
 \seealso{
-  \code{\link{Kest}}, \code{\link{Ksector}}, \code{\link{nnorient}}
+  \code{\link{pairorient}}
 }
 \examples{
-  rose(pairorient(redwood, 0.05, 0.15, sigma=8), col="grey")
-  plot(CDF <- pairorient(redwood, 0.05, 0.15, cumulative=TRUE))
-  plot(f <- deriv(CDF, spar=0.6, Dperiodic=TRUE))
+  rose(nnorient(redwood, adjust=0.6), col="grey")
+  plot(CDF <- nnorient(redwood, cumulative=TRUE))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

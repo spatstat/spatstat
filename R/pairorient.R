@@ -6,6 +6,9 @@
 ## Function O_{r1,r2}(phi) defined in
 ## Stoyan & Stoyan (1994) equ (14.53) page 271
 ##
+##     and its derivative estimated by kernel smoothing
+##
+##  $Revision: 1.9 $ $Date: 2014/12/05 06:59:53 $
 
 pairorient <- function(X, r1, r2, ...,
                        cumulative=FALSE,
@@ -34,11 +37,11 @@ pairorient <- function(X, r1, r2, ...,
   ## choose correction(s)
   correction.given <- !missing(correction) && !is.null(correction)
   if(!correction.given)
-    correction <- c("isotropic", "translate")
+    correction <- c("border", "isotropic", "translate")
   correction <- pickoption("correction", correction,
                            c(none="none",
-##                             border="border",
-##                             "bord.modif"="bord.modif",
+                             border="border",
+                             bord.modif="bord.modif",
                              isotropic="isotropic",
                              Ripley="isotropic",
                              trans="translate",
@@ -55,7 +58,6 @@ pairorient <- function(X, r1, r2, ...,
   correction <- implemented.for.K(correction, W$type, correction.given)
 
   
-  ## border corrections not implemented
   ## Find close pairs in range [r1, r2]
   close <- as.data.frame(closepairs(X, r2))
   ok <- with(close, r1 <= d & d <= r2)
@@ -115,6 +117,58 @@ pairorient <- function(X, r1, r2, ...,
                     ratio=ratio)
   }
 
+  if(any(c("border", "bord.modif") %in% correction)) {
+    ## border type corrections
+    bX <- bdist.points(X)
+    bI <- bX[close$i]
+    if("border" %in% correction) {
+      bok <- (bI > r2)
+      ANGLEok <- ANGLE[bok]
+      nok <- length(ANGLEok)
+      if(cumulative) {
+        wh <- whist(ANGLEok, breaks$val)
+        num.bord <- cumsum(wh)
+      } else {
+        kd <- circdensity(ANGLEok, ..., n=Nphi, unit=unit)
+        num.bord <- kd$y * nok
+      }
+      den.bord <- nok
+      OO <- bind.ratfv(OO,
+                       data.frame(border=num.bord),
+                       den.bord,
+                       "{hat(%s)[%s]^{bord}}(phi)",
+                       "border-corrected estimate of %s",
+                       "border",
+                       ratio=ratio)
+    }
+    if("bord.modif" %in% correction) {
+      ok <- (close$d < bI)
+      nok <- sum(ok)
+      inradius <- max(distmap(W, invert=TRUE))
+      rrr <- range(r2, inradius)
+      rr <- seq(rrr[1], rrr[2], length=256)
+      Ar <- eroded.areas(W, rr)
+      Arf <- approxfun(rr, Ar, rule=2)
+      AI <- (Arf(bX))[close$i]
+      edgewt <- ifelse(ok, pmin(area(W)/AI, 100), 0)
+      if(cumulative) {
+        wh <- whist(ANGLE, breaks$val, edgewt)
+        num.bm <- cumsum(wh)/mean(edgewt)
+      } else {
+        w <- edgewt/sum(edgewt)
+        kd <- circdensity(ANGLE, ..., weights=w, n=Nphi, unit=unit)
+        num.bm <- kd$y * nok
+      }
+      den.bm <- nok
+      OO <- bind.ratfv(OO,
+                       data.frame(bordm=num.bm),
+                       den.bm,
+                       "{hat(%s)[%s]^{bordm}}(phi)",
+                       "modified border-corrected estimate of %s",
+                       "bordm",
+                       ratio=ratio)
+    }
+  }
   if(any(correction == "translate")) {
     ## Ohser-Stoyan translation correction
     edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=W, paired=TRUE)

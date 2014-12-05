@@ -7,12 +7,15 @@
   Computes the integral of a pixel image.
 }
 \usage{
-integral.im(x, ...)
+integral.im(x, domain=NULL, ...)
 }
 \arguments{
   \item{x}{
     A pixel image (object of class \code{"im"}) with pixel values
     that can be treated as numeric or complex values.
+  }
+  \item{domain}{
+    Optional. Window specifying the domain of integration.
   }
   \item{\dots}{
     Ignored.
@@ -58,8 +61,7 @@ integral.im(x, ...)
 
    # integrate over the subset [0.1,0.9] x [0.2,0.8]
    W <- owin(c(0.1,0.9), c(0.2,0.8))
-   DW <- D[W, drop=FALSE]
-   integral.im(DW)
+   integral.im(D, W)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

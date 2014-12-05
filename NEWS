@@ -60,6 +60,9 @@ NEW FUNCTIONS
    o rose
    Rose diagram (rose of directions) for angular data
 
+   o nnorient
+   Nearest neighbour orientation distribution.
+
    o interp.colours
    Interpolate a sequence of colour values.
 
@@ -140,6 +143,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o image.listof
    New argument 'ribmar' controls margin space around the ribbon
    when equal.ribbon=TRUE.
+
+   o integral.im
+   New argument 'domain' specifies the domain of integration.
 
    o plot.im
    The list 'ribargs' can now include the parameter 'labels'.
