@@ -175,5 +175,7 @@ Fiksel <- local({
     instantiate.interact(BlankFiksel, list(r = r, hc = hc, kappa=kappa))
   }
 
+  Fiksel <- intermaker(Fiksel, BlankFiksel)
+  
   Fiksel
 })

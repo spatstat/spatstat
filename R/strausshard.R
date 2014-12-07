@@ -129,5 +129,7 @@ StraussHard <- local({
     instantiate.interact(BlankStraussHard, list(r=r, hc=hc))
   }
 
+  StraussHard <- intermaker(StraussHard, BlankStraussHard)
+  
   StraussHard
 })

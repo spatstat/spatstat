@@ -137,6 +137,8 @@ Geyer <- local({
     instantiate.interact(BlankGeyer, list(r = r, sat=sat))
   }
 
+  Geyer <- intermaker(Geyer, BlankGeyer)
+  
   Geyer
 })
 

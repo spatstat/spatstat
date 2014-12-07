@@ -105,6 +105,8 @@ LennardJones <- local({
     instantiate.interact(BlankLJ, list(sigma0=sigma0))
   }
 
+  LennardJones <- intermaker(LennardJones, BlankLJ)
+  
   LennardJones
 })
 

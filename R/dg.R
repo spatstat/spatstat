@@ -160,5 +160,7 @@ DiggleGratton <- local({
     instantiate.interact(BlankDG, list(delta=delta, rho=rho))
   }
 
+  DiggleGratton <- intermaker(DiggleGratton, BlankDG)
+
   DiggleGratton
 })

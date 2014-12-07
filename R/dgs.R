@@ -108,5 +108,7 @@ DiggleGatesStibbard <- local({
     instantiate.interact(BlankDGS, list(rho = rho))
   }
 
+  DiggleGatesStibbard <- intermaker(DiggleGatesStibbard, BlankDGS)
+
   DiggleGatesStibbard
 })

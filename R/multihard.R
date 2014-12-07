@@ -166,5 +166,7 @@ MultiHard <- local({
     return(out)
   }
 
+  MultiHard <- intermaker(MultiHard, BlankMH)
+  
   MultiHard
 })

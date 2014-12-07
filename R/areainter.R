@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.30 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.31 $	$Date: 2014/12/07 09:01:54 $
 #
 #    The area interaction
 #
@@ -99,6 +99,8 @@ AreaInter <- local({
     instantiate.interact(BlankAI, list(r=r))
   }
 
+  AreaInter <- intermaker(AreaInter, BlankAI)
+  
   AreaInter
 })
 

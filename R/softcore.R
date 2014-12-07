@@ -107,6 +107,8 @@ Softcore <- local({
     instantiate.interact(BlankSoftcore, list(kappa=kappa, sigma0=sigma0))
   }
 
+  Softcore <- intermaker(Softcore, BlankSoftcore)
+  
   Softcore
 })
 

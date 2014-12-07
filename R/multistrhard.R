@@ -286,19 +286,33 @@ doMultiStraussHard <- local({
 })
 
 
-MultiStraussHard <- function(iradii, hradii, types=NULL) {
-  ## try new syntax
-  newcall <- match.call()
-  newcall[[1]] <- as.name('doMultiStraussHard')
-  out <- try(eval(newcall, parent.frame()), silent=TRUE)
-  if(is.interact(out))
-    return(out)
-  ## try old syntax
-  oldcall <- match.call(function(types=NULL, iradii, hradii) {})
-  oldcall[[1]] <- as.name('doMultiStraussHard')
-  out <- try(eval(oldcall, parent.frame()), silent=TRUE)
-  if(is.interact(out))
-    return(out)
-  ## Syntax is wrong: generate error using new syntax rules
-  doMultiStraussHard(iradii=iradii, hradii=hradii, types=types)
-}
+MultiStraussHard <- local({
+
+  MultiStraussHard <- function(iradii, hradii, types=NULL) {
+    ## try new syntax
+    newcall <- match.call()
+    newcall[[1]] <- as.name('doMultiStraussHard')
+    out <- try(eval(newcall, parent.frame()), silent=TRUE)
+    if(is.interact(out))
+      return(out)
+    ## try old syntax
+    oldcall <- match.call(function(types=NULL, iradii, hradii) {})
+    oldcall[[1]] <- as.name('doMultiStraussHard')
+    out <- try(eval(oldcall, parent.frame()), silent=TRUE)
+    if(is.interact(out))
+      return(out)
+    ## Syntax is wrong: generate error using new syntax rules
+    doMultiStraussHard(iradii=iradii, hradii=hradii, types=types)
+  }
+
+
+  BlankMSHobject <- get("BlankMSHobject",
+                        envir=environment(doMultiStraussHard))
+  
+  MultiStraussHard <- intermaker(MultiStraussHard, BlankMSHobject)
+
+  MultiStraussHard
+})
+
+
+  

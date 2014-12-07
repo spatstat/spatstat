@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-2
+	CHANGES IN spatstat VERSION 1.39-2001
 
 OVERVIEW
 
@@ -7,18 +7,20 @@ OVERVIEW
    Tuomas Rajala, Brian Ripley, Dominic Schuhmacher and
    Maxime Woringer for contributions.
 
-   o Mathematical operations for images.
-
-   o Improved colour maps. 
+   o Mathematical operators now apply to images.
 
    o Parametric estimates of relative risk from fitted point process models.
 
    o Standard errors for relative risk (parametric and non-parametric).
 
+   o Kernel smoothing and rose diagrams for angular data.
+
+   o Perceptually uniform colour maps. 
+
+   o Hierarchical interactions for multitype patterns.
+
    o Hard core parameters in all interactions no longer need to be specified
      and will be estimated from data.
-
-   o Smoothing and plotting for angular data
 
    o New datasets.
 
@@ -153,8 +155,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o rmh, rpoint, rpoispp, rmpoint, rmpoispp
    Accelerated, for inhomogeneous processes.
 
+   o stienen
+   Now recognises the parameter 'lwd'. 
+
    o suffstat
    Accelerated (also affects ppm with method='ho').
+
+   o Poisson, AreaInter, BadGey, Concom, DiggleGatesStibbard, DiggleGratton,
+   Fiksel, Geyer, Hardcore, Hybrid, LennardJones, MultiHard, MultiStrauss,
+   MultiStraussHard, OrdThresh, Ord, PairPiece, Pairwise, SatPiece, 
+   Saturated, Softcore, Strauss, StraussHard, Triplets
+      These functions can now be printed (by typing the function name)
+      to give a sensible description of the required syntax.
 
 BUG FIXES
 
@@ -211,6 +223,10 @@ BUG FIXES
    o plot.ppp
    Warned about NA values amongst the marks, even if there were no NA's
    in the column(s) of marks selected by the argument 'which.marks'.
+   Fixed.
+
+   o stienen
+   Did not suppress the border circles when border=FALSE.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.39-1

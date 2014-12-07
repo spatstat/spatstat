@@ -148,6 +148,8 @@ Triplets <- local({
   Triplets <- function(r) {
     instantiate.interact(BlankTripletsObject, list(r=r))
   }
+  Triplets <- intermaker(Triplets, BlankTripletsObject)
+  
   Triplets
 })
 

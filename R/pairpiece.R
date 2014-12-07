@@ -122,6 +122,8 @@ PairPiece <- local({
     instantiate.interact(BlankPairPiece, list(r=r))
   }
 
+  PairPiece <- intermaker(PairPiece, BlankPairPiece)
+  
   PairPiece
 })
 

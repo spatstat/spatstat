@@ -216,6 +216,8 @@
 \alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
+\alias{hierarchicalordering}
+\alias{hiermat}
 \alias{ho.engine}
 \alias{hsvNA}
 \alias{IdenticalRows}
@@ -238,6 +240,7 @@
 \alias{inside.triangle}     
 \alias{inside.xypolygon}     
 \alias{instantiate.interact}
+\alias{intermaker}
 \alias{intersect.ranges}     
 \alias{intX.owin}     
 \alias{intX.xypolygon}     
@@ -443,11 +446,11 @@
 \alias{print.fv}       
 \alias{print.fvfun}       
 \alias{print.funxy}       
-\alias{print.symbolmap}       
-\alias{print.Smoothfun}       
+\alias{print.hierarchicalordering}
 \alias{print.hyperframe}
 \alias{print.influence.ppm}       
 \alias{print.interact}       
+\alias{print.intermaker}       
 \alias{print.isf}
 \alias{print.layered}
 \alias{print.leverage.ppm}
@@ -474,6 +477,7 @@
 \alias{print.rmhInfoList}
 \alias{print.splitppp}
 \alias{print.simplepanel}
+\alias{print.Smoothfun}       
 \alias{print.solist}
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
@@ -489,6 +493,7 @@
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
 \alias{print.summary.units}
+\alias{print.symbolmap}       
 \alias{print.textstring}
 \alias{print.texturemap}
 \alias{print.tess}
@@ -928,6 +933,8 @@ gsubdot(replacement, x)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip, edgedefault)
+hierarchicalordering(i, s)
+hiermat(x, h)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
 hsvNA(h, s, v, \dots)
 IdenticalRows(i,j,a,b)
@@ -950,6 +957,7 @@ inside.range(x, r)
 inside.triangle(x, y, xx, yy)
 inside.xypolygon(pts, polly, test01, method)
 instantiate.interact(x, par)
+intermaker(f, blank)
 intersect.ranges(a,b,fatal)
 intX.owin(w)
 intX.xypolygon(polly)
@@ -1192,11 +1200,11 @@ primesbelow(nmax)
 \method{print}{funxy}(x, \dots)
 \method{print}{fv}(x, \dots, tight)
 \method{print}{fvfun}(x, \dots)
-\method{print}{symbolmap}(x, \dots)
-\method{print}{Smoothfun}(x, \dots)
+\method{print}{hierarchicalordering}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)
 \method{print}{interact}(x, \dots, family=TRUE, brief=FALSE)       
+\method{print}{intermaker}(x, \dots)
 \method{print}{isf}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
@@ -1221,6 +1229,7 @@ primesbelow(nmax)
 \method{print}{rmhstart}(x, \dots)
 \method{print}{rmhInfoList}(x, \dots)
 \method{print}{simplepanel}(x, \dots)
+\method{print}{Smoothfun}(x, \dots)
 \method{print}{solist}(x, \dots)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
@@ -1237,6 +1246,7 @@ primesbelow(nmax)
 \method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.units}(x, \dots)
+\method{print}{symbolmap}(x, \dots)
 \method{print}{textstring}(x, \dots)
 \method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)

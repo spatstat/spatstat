@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.31 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 2.32 $	$Date: 2014/12/07 09:01:47 $
 #
 #    The Strauss process
 #
@@ -111,6 +111,8 @@ Strauss <- local({
     instantiate.interact(BlankStrauss, list(r=r))
   }
 
+  Strauss <- intermaker(Strauss, BlankStrauss)
+  
   Strauss
 })
 

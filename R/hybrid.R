@@ -285,3 +285,8 @@ splitHybridInteraction <- function(coeffs, inte) {
   names(coeflist) <- names(interlist)
   return(list(coeflist=coeflist, interlist=interlist))
 }
+
+Hybrid <- intermaker(Hybrid, list(creator="Hybrid",
+                                  name="general hybrid Gibbs process",
+                                  par=list("..."=42),
+                                  parnames=list("any list of interactions")))

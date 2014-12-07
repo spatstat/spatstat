@@ -49,3 +49,11 @@ Saturated <- function(pot, name) {
   class(out) <- "interact"
   return(out)
 }
+
+Saturated <-
+    intermaker(Saturated,
+               list(creator="Saturated",
+                    name="saturated process with user-defined potential",
+                    par=formals(Saturated),
+                    parnames=list("the potential",
+                        "the name of the interaction")))

@@ -65,5 +65,14 @@ Pairwise <- function(pot, name = "user-defined pairwise interaction process",
   return(out)
 }
 
+Pairwise <- intermaker(Pairwise,
+                       list(creator="Pairwise",
+                            name="user-defined pairwise interaction process",
+                            par=formals(Pairwise),
+                            parnames=list("the potential",
+                                "the name of the interaction",
+                                "the list of parameters",
+                                "a description of each parameter",
+                                "an optional print function")))
 
 

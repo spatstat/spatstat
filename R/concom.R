@@ -122,6 +122,8 @@ Concom <- local({
     instantiate.interact(BlankCoco, list(r=r))
   }
 
+  Concom <- intermaker(Concom, BlankCoco)
+  
   Concom
 })
 

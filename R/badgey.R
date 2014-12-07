@@ -196,6 +196,8 @@ BadGey <- local({
     instantiate.interact(BlankBG, list(r=r, sat=sat))
   }
 
+  BadGey <- intermaker(BadGey, BlankBG)
+  
   BadGey
 
 })

@@ -114,5 +114,7 @@ Hardcore <- local({
     instantiate.interact(BlankHardcore, list(hc=hc))
   }
 
+  Hardcore <- intermaker(Hardcore, BlankHardcore)
+  
   Hardcore
 })

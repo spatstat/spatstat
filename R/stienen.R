@@ -2,7 +2,7 @@
 ##
 ##  Stienen diagram with border correction
 ##
-##  $Revision: 1.5 $ $Date: 2014/09/22 11:15:42 $
+##  $Revision: 1.7 $ $Date: 2014/12/06 02:29:14 $
 
 stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   Xname <- short.deparse(substitute(X))
@@ -17,7 +17,7 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   d <- nndist(X)
   b <- bdist.points(X)
   Y <- X %mark% d
-  gp <- graphicsPars("symbols")
+  gp <- union(graphicsPars("symbols"), "lwd")
   do.call.plotfun(plot.ppp,
                   resolve.defaults(list(x=Y[b >= d],
                                         markscale=1),
@@ -25,15 +25,18 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
                                    list(bg=bg),
                                    list(main=Xname)),
                   extrargs=gp)
-  do.call.plotfun(plot.ppp,
-                  resolve.defaults(list(x=Y[b < d],
-                                        markscale=1,
-                                        add=TRUE),
-                                   border,
-                                   list(...),
-                                   list(bg=bg),
-                                   list(cols="grey", lwd=2)),
+  if(!identical(border, FALSE)) {
+    if(!is.list(border)) border <- list()
+    do.call.plotfun(plot.ppp,
+                    resolve.defaults(list(x=Y[b < d],
+                                          markscale=1,
+                                          add=TRUE),
+                                     border,
+                                     list(...),
+                                     list(bg=bg),
+                                     list(cols=grey(0.75), lwd=2)),
                   extrargs=gp)
+  }
   return(invisible(NULL))
 }
 

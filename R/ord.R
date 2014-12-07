@@ -2,7 +2,7 @@
 #
 #    ord.S
 #
-#    $Revision: 1.5 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.6 $	$Date: 2014/12/07 10:43:43 $
 #
 #    Ord process with user-supplied potential
 #
@@ -14,16 +14,14 @@
 # -------------------------------------------------------------------
 #	
 
-Ord <- function(pot, name) {
-  if(missing(name))
-    name <- "Ord process with user-defined potential"
-  
-  out <- 
+Ord <- local({
+
+  BlankOrd <- 
   list(
-         name     = name,
+         name     = "Ord process with user-defined potential",
          creator  = "Ord",
-         family    = ord.family,
-         pot      = pot,
+         family    = "ord.family",
+         pot      = NULL,
          par      = NULL,
          parnames = NULL,
          init     = NULL,
@@ -37,8 +35,18 @@ Ord <- function(pot, name) {
            print(self$pot)
            invisible()
          },
-       version=versionstring.spatstat()
+       version=NULL
   )
-  class(out) <- "interact"
-  return(out)
-}
+  class(BlankOrd) <- "interact"
+
+  Ord <- function(pot, name) {
+    out <- instantiate.interact(BlankOrd)
+    out$pot <- pot
+    if(!missing(name)) out$name <- name
+  }
+
+  Ord <- intermaker(Ord, BlankOrd)
+})
+
+
+  

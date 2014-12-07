@@ -127,6 +127,8 @@ SatPiece <- local({
     instantiate.interact(BlankSatPiece, list(r=r, sat=sat))
   }
 
+  SatPiece <- intermaker(SatPiece, BlankSatPiece)
+  
   SatPiece
 })
 
