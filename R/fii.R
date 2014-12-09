@@ -211,6 +211,7 @@ fitin.ppm <- function(object) {
     # Internal names of regressor variables 
     f <- fii(inte, coefs, Vnames, IsOffset)
   }
+  unitname(f) <- unitname(data.ppm(object))
   return(f)
 }
 

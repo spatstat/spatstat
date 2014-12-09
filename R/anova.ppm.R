@@ -1,11 +1,15 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.15 $   $Date: 2014/10/17 05:31:31 $
+#  $Revision: 1.17 $   $Date: 2014/12/09 02:39:39 $
 #
 
-anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
+anova.ppm <- function(object, ..., test=NULL, adjust=TRUE, warn=TRUE) {
 
+  gripe <-
+    if(warn) function(...) warning(paste(...), call.=FALSE) else
+    function(...) NULL
+  
   if(!is.null(test)) {
     test <- match.arg(test, c("Chisq", "LRT", "Rao", "F", "Cp"))
     if(!(test %in% c("Chisq", "LRT")))
@@ -15,7 +19,7 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
   ## trap outmoded usage
   argh <- list(...)
   if("override" %in% names(argh)) {
-    warning("Argument 'override' is superseded and was ignored")
+    gripe("Argument 'override' is superseded and was ignored")
     argh <- argh[-which(names(argh) == "override")]
   }
   
@@ -48,41 +52,74 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
     }
   }
 
-  ## all models fitted by MPL or logi?
-  fitmethod <- unlist(lapply(objex, getElement, name="method"))
-  logi <- all(fitmethod=="logi")
-  if(!(all(fitmethod=="mpl")||logi)) 
-    stop(paste("Not all models fitted by maximum pseudolikelihood",
-               "or logistic regression method;",
-               "comparison not possible"))
+  ## all models fitted by same method?
+  fitmethod <- unique(unlist(lapply(objex, getElement, name="method")))
+  if(length(fitmethod) > 1)
+    stop(paste("Models were fitted by different methods",
+               commasep(sQuote(fitmethod)), 
+               "- comparison is not possible"))
+  ## fitted by MPL or logistic?
+  if(!(fitmethod %in% c("mpl", "logi")))
+    stop(paste("Not implemented for models fitted by method=",
+               sQuote(fitmethod)))
+  logi <- (fitmethod == "logi")
 
-  ## Extract glmfit objects 
-  fitz <- lapply(objex, getglmfit)
+  refitargs <- list()
+  ## fitted to same quadscheme using same edge correction?
+  if(length(objex) > 1) {
+    ## same data? 
+    datas <- lapply(objex, data.ppm)
+    samedata <- all(sapply(datas[-1], identical, y=datas[[1]]))
+    if(!samedata) stop("Models were fitted to different datasets")
+    ## same dummy points?
+    quads <- lapply(objex, quad.ppm)
+    samequad <- all(sapply(quads[-1], identical, y=quads[[1]]))
+    if(!samequad) {
+      gripe("Models were re-fitted using a common quadrature scheme")
+      sizes <- sapply(quads,
+                      function(x) if(inherits(x, "quad")) n.quad(x) else 0)
+      imax <- which.max(sizes)
+      bigQ <- quads[[imax]]
+      refitargs$Q <- bigQ
+    }
+    ## same edge correction?
+    corrxn <- unique(sapply(objex, getElement, name="correction"))
+    if(length(corrxn) > 1)
+      stop(paste("Models were fitting using different edge corrections",
+                 commasep(sQuote(corrxn))))
+    if(corrxn == "border") {
+      rbord <- unique(sapply(objex, getElement, name="rbord"))
+      if(length(rbord) > 1) {
+        gripe("Models were re-fitted using a common value of 'rbord'")
+        refitargs$rbord <- max(rbord)
+      }
+    } 
+    
+    ## Extract glmfit objects 
+    fitz <- lapply(objex, getglmfit)
 
-  ## Any trivial models? (uniform Poisson)
-  trivial <- unlist(lapply(fitz, is.null))
-  
-  ## force all non-trivial models to be fitted using same method
-  ## (all using GLM or all using GAM)
-  isgam <- unlist(lapply(fitz, inherits, what="gam"))
-  isglm <- unlist(lapply(fitz, inherits, what="glm"))
-  usegam <- any(isgam)
-  if(usegam && any(isglm)) {
-    warning("Some, but not all, models were fitted with use.gam=TRUE;",
-            "refitting all models with use.gam=TRUE.")
-    objex[isglm] <- lapply(objex[isglm], update.ppm,
-                           forcefit=TRUE, use.gam=TRUE)
-    fitz[isglm] <- lapply(objex[isglm], getglmfit)   
+    ## Any trivial models? (uniform Poisson)
+    trivial <- unlist(lapply(fitz, is.null))
+    if(any(trivial))
+      refitargs$forcefit <- TRUE
+    
+    ## force all non-trivial models to be fitted using same method
+    ## (all using GLM or all using GAM)
+    isgam <- unlist(lapply(fitz, inherits, what="gam"))
+    isglm <- unlist(lapply(fitz, inherits, what="glm"))
+    usegam <- any(isgam)
+    if(usegam && any(isglm)) {
+      gripe("Models were re-fitted with use.gam=TRUE")
+      refitargs$use.gam <- TRUE
+      refitargs$forcefit <- TRUE
+    }
+
+    ## finally refit models
+    if(length(refitargs) > 0)
+      objex <- do.call(lapply, append(list(X=objex, FUN=update),
+                                      refitargs))
   }
   
-  ## Force any trivial models to be refitted using GLM or GAM
-  if(any(trivial)) {
-    ## force them to be fitted using glm
-    objex[trivial] <- lapply(objex[trivial], update.ppm,
-                             forcefit=TRUE, use.gam=usegam)
-    fitz[trivial] <- lapply(objex[trivial], getglmfit)
-  }
-
   ## If any models were fitted by ippm we need to correct the df
   if(any(unlist(lapply(objex, inherits, what="ippm")))) {
     nfree <- unlist(lapply(lapply(objex, logLik), attr, which="df"))
@@ -94,6 +131,7 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
   }
   
   ## Finally do the appropriate ANOVA
+  fitz <- lapply(objex, getglmfit)
   result <- do.call("anova", append(fitz, list(test=test, dispersion=1)))
 
   ## Remove approximation-dependent columns 
@@ -137,9 +175,9 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
   
   if(adjust && !pois) {
     ## issue warning, if not already given
-    warn.once("anovaAdjust",
-              "anova.ppm now computes the *adjusted* deviances",
-              "when the models are not Poisson processes.")
+    if(warn) warn.once("anovaAdjust",
+                          "anova.ppm now computes the *adjusted* deviances",
+                          "when the models are not Poisson processes.")
     ## Corrected pseudolikelihood ratio 
     nmodels <- length(objex)
     if(nmodels > 1) {
@@ -159,17 +197,17 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
         bigger <- objex[[ibig]]
         smaller <- objex[[ismal]]
         if(df == 0) {
-          warning(paste("Models", i-1, "and", i, "have the same dimension"))
+          gripe("Models", i-1, "and", i, "have the same dimension")
         } else {
           bignames <- names(coef(bigger))
           smallnames <- names(coef(smaller))
           injection <- match(smallnames, bignames)
           if(any(uhoh <- is.na(injection))) {
-            warning(paste("Unable to match",
-                          ngettext(sum(uhoh), "coefficient", "coefficients"),
-                          commasep(sQuote(smallnames[uhoh])),
-                          "of model", ismal, 
-                          "to coefficients in model", ibig))
+            gripe("Unable to match",
+                  ngettext(sum(uhoh), "coefficient", "coefficients"),
+                  commasep(sQuote(smallnames[uhoh])),
+                  "of model", ismal, 
+                  "to coefficients in model", ibig)
           } else {
             thetaDot <- 0 * coef(bigger)
             thetaDot[injection] <- coef(smaller)
@@ -212,10 +250,9 @@ anova.ppm <- function(object, ..., test=NULL, adjust=TRUE) {
       ## calculation does not include 'covfunargs'
       cfa <- lapply(lapply(objects, getElement, name="confunargs"), names)
       cfa <- unique(unlist(cfa))
-      warning(paste("Adjustment to composite likelihood does not account for",
-                    "irregular trend parameters (covfunargs)",
-                    commasep(sQuote(cfa))),
-              call.=FALSE)
+      gripe("Adjustment to composite likelihood does not account for",
+            "irregular trend parameters (covfunargs)",
+            commasep(sQuote(cfa)))
     }
   }
   return(result)

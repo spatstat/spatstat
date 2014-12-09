@@ -22,6 +22,8 @@ OVERVIEW
    o Hard core parameters in all interactions no longer need to be specified
      and will be estimated from data.
 
+   o Improvements to analysis of deviance.
+
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
@@ -83,7 +85,7 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-   o vignettes
+   o (vignettes)
    New vignette 'datasets' summarises all the datasets installed
    with the spatstat package.
 
@@ -104,6 +106,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    from data (by the 'self-starting' feature of interactions).
    This was already true of Hardcore, StraussHard, MultiHard 
    and MultiStraussHard.
+
+   o anova.ppm
+   Can now reconcile models fitted using different dummy points,
+   different values of 'rbord', different values of 'use.gam', etc. 
 
    o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
    rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,
@@ -167,6 +173,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Saturated, Softcore, Strauss, StraussHard, Triplets
       These functions can now be printed (by typing the function name)
       to give a sensible description of the required syntax.
+
+   o fitin
+   A plot of the fitted interpoint interaction of a point process model
+   e.g. plot(fitin(ppm(swedishpines ~ 1, Strauss(9))))
+   now shows the unit of length on the x-axis.
+   
+   o anova.ppm
+   New argument 'warn' to suppress warnings.
 
 BUG FIXES
 

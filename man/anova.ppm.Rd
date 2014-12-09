@@ -5,7 +5,7 @@
 Performs analysis of deviance for two or more fitted point process models.
 }
 \usage{
-  \method{anova}{ppm}(object, \dots, test=NULL, adjust=TRUE)
+  \method{anova}{ppm}(object, \dots, test=NULL, adjust=TRUE, warn=TRUE)
 }
 \arguments{
   \item{object}{A fitted point process model
@@ -23,6 +23,10 @@ Performs analysis of deviance for two or more fitted point process models.
       Logical value indicating whether to correct the
       pseudolikelihood ratio when some of the models are not Poisson
       processes.
+    }
+    \item{warn}{
+      Logical value indicating whether to issue warnings
+      if problems arise.
     }
 }
 \value{

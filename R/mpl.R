@@ -262,6 +262,7 @@ mpl.engine <-
 
     ## fitted interaction object
     fitin <- if(want.inter) fii(interaction, co, Vnames, IsOffset) else fii()
+    unitname(fitin) <- unitname(X)
     ######################################################################
     ## Clean up & return 
 

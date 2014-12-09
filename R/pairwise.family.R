@@ -21,6 +21,7 @@ pairwise.family <-
        plot = function(fint, ..., d=NULL, plotit=TRUE) {
          verifyclass(fint, "fii")
          inter <- fint$interaction
+         unitz <- unitname(fint)
          if(is.null(inter) || is.null(inter$family)
             || inter$family$name != "pairwise")
            stop("Tried to plot the wrong kind of interaction")
@@ -73,14 +74,13 @@ pairwise.family <-
                      xlim, c("r", "h(r)", "1"),
                      c("distance argument r",
                        "pairwise interaction term h(r)",
-                       "reference value 1"))
+                       "reference value 1"),
+                     unitname=unitz)
            if(plotit)
              do.call("plot.fv",
                      resolve.defaults(list(fun),
                                       list(...),
-                                      list(ylab="Pairwise interaction",
-                                           xlab="Distance",
-                                           ylim=ylim)))
+                                      list(ylim=ylim)))
            return(invisible(fun))
          } else{
            # compute each potential and store in `fasp' object
@@ -110,12 +110,14 @@ pairwise.family <-
                # extract values of potential
                yy <- y[tx == types[i], j]
                # make fv object
-               fns[[ijpos]] <- fv(data.frame(r=d, h=yy, one=1),
-                     "r", substitute(h(r), NULL), "h", cbind(h,one) ~ r,
-                     xlim, c("r", "h(r)", "1"),
-                     c("distance argument r",
-                       "pairwise interaction term h(r)",
-                       "reference value 1"))
+               fns[[ijpos]] <-
+                   fv(data.frame(r=d, h=yy, one=1),
+                      "r", substitute(h(r), NULL), "h", cbind(h,one) ~ r,
+                      xlim, c("r", "h(r)", "1"),
+                      c("distance argument r",
+                        "pairwise interaction term h(r)",
+                        "reference value 1"),
+                      unitname=unitz)
                #
              }
            }
@@ -127,9 +129,7 @@ pairwise.family <-
              do.call("plot.fasp",
                      resolve.defaults(list(funz),
                                       list(...),
-                                      list(ylim=ylim,
-                                           ylab="Pairwise interaction",
-                                           xlab="Distance")))
+                                      list(ylim=ylim)))
            return(invisible(funz))
          }
        },
