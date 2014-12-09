@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-2001
+	CHANGES IN spatstat VERSION 1.39-2004
 
 OVERVIEW
 
@@ -127,6 +127,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Argument 'units' has been renamed 'unit' for consistency.
    Labels and descriptions of columns have been corrected.
 
+   o rmh.ppm
+   New argument 'w' determines the window in which the simulated pattern
+   is generated.
+
    o ppp
    Accelerated.
 
@@ -181,6 +185,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    
    o anova.ppm
    New argument 'warn' to suppress warnings.
+
+   o rmhmodel.ppm
+   Argument 'win' renamed 'w' for consistency with other functions.
+
+   o print.ppm
+   Printed output for the fitted regular parameters
+   now respects options('digits').
 
 BUG FIXES
 

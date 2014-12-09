@@ -100,7 +100,7 @@ DiggleGratton <- local({
            kappa <- as.numeric(coeffs[1])
            return(list(param=list(kappa=kappa),
                        inames="exponent kappa",
-                       printable=round(kappa,4)))
+                       printable=dround(kappa)))
          },
          valid = function(coeffs, self) {
            kappa <- as.numeric(coeffs[1])

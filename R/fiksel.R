@@ -109,7 +109,7 @@ Fiksel <- local({
            a <- as.numeric(coeffs[1])
            return(list(param=list(a=a),
                        inames="interaction strength a",
-                       printable=round(a,2)))
+                       printable=signif(a)))
          },
          valid = function(coeffs, self) {
            a <- (self$interpret)(coeffs, self)$param$a

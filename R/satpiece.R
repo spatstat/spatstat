@@ -73,7 +73,7 @@ SatPiece <- local({
            #
            return(list(param=list(gammas=gammas),
                        inames="interaction parameters gamma_i",
-                       printable=round(gn,4)))
+                       printable=dround(gn)))
          },
         valid = function(coeffs, self) {
            # interaction parameters gamma must be

@@ -133,6 +133,7 @@
 \alias{doMultiStraussHard}
 \alias{dotexpr.to.call}
 \alias{dropifsingle}
+\alias{dround}
 \alias{emptywindow}
 \alias{ensure2vector}
 \alias{ensure3Darray}
@@ -833,6 +834,7 @@ do.istat(panel)
 doMultiStraussHard(iradii, hradii, types)
 dotexpr.to.call(expr, dot, evaluator)
 dropifsingle(x)
+dround(x)
 emptywindow(w)
 ensure2vector(x)
 ensure3Darray(x)

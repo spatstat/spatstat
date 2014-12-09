@@ -156,7 +156,7 @@ MultiStrauss <- local({
          #
          return(list(param=list(gammas=gammas),
                      inames="interaction parameters gamma_ij",
-                     printable=round(gammas,4)))
+                     printable=dround(gammas)))
        },
        valid = function(coeffs, self) {
          # interaction parameters gamma[i,j]

@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.58 $   $Date: 2014/09/16 09:13:55 $
+#  $Revision: 2.59 $   $Date: 2014/12/09 08:49:17 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -222,13 +222,14 @@ list(
 #
 
 
-rmhmodel.ppm <- function(model, win, ...,
+rmhmodel.ppm <- function(model, w, ...,
                          verbose=TRUE, project=TRUE,
                          control=rmhcontrol(),
                          new.coef=NULL) {
   ## converts ppm object `model' into format palatable to rmh.default
   
   verifyclass(model, "ppm")
+  argh <- list(...)
 
   if(!is.null(new.coef)) {
     ## hack the coefficients
@@ -315,16 +316,22 @@ rmhmodel.ppm <- function(model, win, ...,
        
   ######## Window for result 
     
-  if(missing(win))
-    win <- Y$entries$data$window
+  if(missing(w) || is.null(w)) {
+    ## check for outdated argument name 'win'
+    if(!is.na(m <- match("win", names(argh)))) {
+      warning("Argument 'win' to rmhmodel.ppm is deprecated; use 'w'")
+      w <- argh[[m]]
+      argh <- argh[-m]
+    } else w <- Y$entries$data$window
+  }
 
-  Z$w <- win
+  Z$w <- w
 
   ######## Expanded window for simulation?
 
   covims <- if(Y$uses.covars) model$covariates[Y$covars.used] else NULL
     
-  wsim <- rmhResolveExpansion(win, control, covims, "covariate")$wsim
+  wsim <- rmhResolveExpansion(w, control, covims, "covariate")$wsim
       
   ###### Trend or Intensity ############
 
@@ -365,10 +372,9 @@ rmhmodel.ppm <- function(model, win, ...,
     for(i in (1:Ncif)[-absorb])
       Z$par[[i]]$beta <- rep.int(1, Z$ntypes[i])
   }
-    
   if(verbose)
     cat("done.\n")
-  Z <- rmhmodel(Z, ...)
+  Z <- do.call(rmhmodel, append(list(Z), argh))
   return(Z)
 }
 

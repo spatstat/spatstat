@@ -77,7 +77,7 @@ LennardJones <- local({
            }
            return(list(param=list(sigma=sigma, epsilon=epsilon),
                        inames="interaction parameters",
-                       printable=round(c(sigma=sigma,epsilon=epsilon),4)))
+                       printable=signif(c(sigma=sigma,epsilon=epsilon))))
          },
          valid = function(coeffs, self) {
            p <- self$interpret(coeffs, self)$param

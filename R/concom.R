@@ -94,7 +94,7 @@ Concom <- local({
            eta <- exp(logeta)
            return(list(param=list(eta=eta),
                        inames="interaction parameter eta",
-                       printable=round(eta,4)))
+                       printable=signif(eta)))
          },
          valid = function(coeffs, self) {
            eta <- ((self$interpret)(coeffs, self))$param$eta

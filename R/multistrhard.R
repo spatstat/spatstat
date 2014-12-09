@@ -195,7 +195,7 @@ doMultiStraussHard <- local({
           #
           return(list(param=list(gammas=gammas),
                       inames="interaction parameters gamma_ij",
-                      printable=round(gammas,4)))
+                      printable=dround(gammas)))
         },
         valid = function(coeffs, self) {
            # interaction radii r[i,j]

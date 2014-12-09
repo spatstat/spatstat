@@ -7,7 +7,7 @@
   by the Metropolis-Hastings algorithm. 
 }
 \usage{
-  \method{rmhmodel}{ppm}(model, win, ..., verbose=TRUE, project=TRUE,
+  \method{rmhmodel}{ppm}(model, w, ..., verbose=TRUE, project=TRUE,
                          control=rmhcontrol(),
                          new.coef=NULL)
 }
@@ -15,7 +15,7 @@
   \item{model}{
     Fitted point process model (object of class \code{"ppm"}).
   }
-  \item{win}{
+  \item{w}{
     Optional. Window in which the simulations should be generated.
   }
   \item{\dots}{Ignored.}
@@ -56,7 +56,7 @@
   model-fitting function \code{\link{ppm}}.
   This will be converted into an object of class \code{"rmhmodel"}.
 
-  The optional argument \code{win} specifies the window
+  The optional argument \code{w} specifies the window
   in which the pattern is to be generated.  If specified, it must be in
   a form which can be coerced to an object of class \code{owin}
   by \code{\link{as.owin}}.

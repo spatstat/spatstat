@@ -74,7 +74,7 @@ Softcore <- local({
            sigma <- sigma * sig0
          return(list(param=list(sigma=sigma),
                      inames="interaction parameter sigma",
-                     printable=signif(sigma,4)))
+                     printable=signif(sigma)))
        },
        valid = function(coeffs, self) {
          theta <- coeffs[1]

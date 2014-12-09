@@ -38,7 +38,7 @@ OrdThresh <- local({
         gamma <- exp(loggamma)
         return(list(param=list(gamma=gamma),
                     inames="interaction parameter gamma",
-                    printable=round(gamma,4)))
+                    printable=dround(gamma)))
       },
       valid = function(coeffs, self) {
         loggamma <- as.numeric(coeffs[1])

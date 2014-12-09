@@ -1,12 +1,13 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.29 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.30 $ $Date: 2014/12/09 09:14:35 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
                     control = default.rmhcontrol(model),
-                    ..., project=TRUE, verbose=TRUE,
+                    ...,
+                    w = NULL, project=TRUE, verbose=TRUE,
                     new.coef=NULL) {
   verifyclass(model, "ppm")
   argh <- list(...)
@@ -22,7 +23,7 @@ rmh.ppm <- function(model, start = NULL,
     control <- update(control, ...)
   
   # convert fitted model object to list of parameters for rmh.default
-  X <- rmhmodel(model, verbose=verbose, project=project, control=control,
+  X <- rmhmodel(model, w=w, verbose=verbose, project=project, control=control,
                 new.coef=new.coef)
 
   # set initial state

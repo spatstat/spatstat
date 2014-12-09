@@ -1353,4 +1353,8 @@ fontify <- function(x, font="italic") {
   return(NULL)
 }
 
+dround <- function(x) {
+  round(x, getOption('digits'))
+}
+
 

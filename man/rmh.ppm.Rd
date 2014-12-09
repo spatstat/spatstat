@@ -11,6 +11,7 @@
   \method{rmh}{ppm}(model, start=NULL,
                     control=default.rmhcontrol(model),
                     \dots,
+                    w = NULL, 
                     project=TRUE, verbose=TRUE, new.coef=NULL)
 }
 
@@ -32,6 +33,10 @@
   \item{\dots}{
     Further arguments passed to \code{\link{rmhcontrol}},
     or to \code{\link{rmh.default}}, or to covariate functions in the model.
+  }
+  \item{w}{
+    Optional. Window in which the simulations should be generated.
+    Default is the window of the original data.
   }
   \item{project}{
     Logical flag indicating what to do if the fitted model is
