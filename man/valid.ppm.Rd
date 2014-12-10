@@ -8,11 +8,16 @@
   satisfies the integrability conditions for existence of the point process.
 }
 \usage{
-valid.ppm(object)
+valid.ppm(object, warn=TRUE)
 }
 \arguments{
   \item{object}{
     Fitted point process model (object of class \code{"ppm"}).
+  }
+  \item{warn}{
+    Logical value indicating whether to issue a warning if the
+    validity of the model cannot be checked (due to unavailability of
+    the required code).
   }
 }
 \details{
@@ -54,7 +59,7 @@ valid.ppm(object)
   to be valid.
 }
 \value{
-  Logical.
+  A logical value, or \code{NA}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

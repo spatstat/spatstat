@@ -2,7 +2,7 @@
 #
 #    lennard.R
 #
-#    $Revision: 1.18 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.19 $	$Date: 2014/12/10 07:23:14 $
 #
 #    Lennard-Jones potential
 #
@@ -80,7 +80,7 @@ LennardJones <- local({
                        printable=signif(c(sigma=sigma,epsilon=epsilon))))
          },
          valid = function(coeffs, self) {
-           p <- self$interpret(coeffs, self)$param
+           p <- unlist(self$interpret(coeffs, self)$param)
            return(all(is.finite(p) & (p > 0)))
          },
          project = function(coeffs, self) {

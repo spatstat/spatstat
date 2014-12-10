@@ -2,7 +2,7 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.5 $  $Date: 2014/10/24 00:22:30 $
+##  $Revision: 1.6 $  $Date: 2014/12/10 06:43:37 $
 ##
 
 ## 'split cat'
@@ -59,4 +59,13 @@ waxlyrical <- local({
   
 })
 
+ruletextline <- function(ch="-", n=getOption('width'),
+                         terse=spatstat.options('terse')) {
+  if(waxlyrical('space', terse)) {
+    chn <- paste(rep(ch, n), collapse="")
+    chn <- substr(chn, 1, n)
+    cat(chn, fill=TRUE)
+  }
+  return(invisible(NULL))
+}
   

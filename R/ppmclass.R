@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.107 $	$Date: 2014/11/22 01:35:58 $
+#	$Revision: 2.108 $	$Date: 2014/12/10 06:53:18 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -194,12 +194,26 @@ function(x, ...,
     fitter <- s$fitter
     converged <- s$converged
     if(!is.null(fitter) && fitter %in% c("glm", "gam") && !converged)
-      splat(paste("*** Fitting algorithm for", sQuote(fitter),
-                "did not converge ***"))
+      splat("*** Fitting algorithm for", sQuote(fitter),
+            "did not converge ***")
   }
 
-  if(waxlyrical("extras", terselevel) && s$projected)
+  if(waxlyrical("extras", terselevel) && s$projected) {
+    parbreak()
     splat("Fit was projected to obtain a valid point process model")
+  }
+
+  if(identical(s$valid, FALSE) && waxlyrical("errors", terselevel)) {
+    parbreak()
+    splat("***",
+          "Model is not valid",
+          "***\n***",
+          "Interaction parameters are outside valid range",
+          "***")
+  } else if(is.na(s$valid) && waxlyrical("extras", terselevel)) {
+    parbreak()
+    splat("[Validity of model could not be checked]")
+  }
   
   return(invisible(NULL))
 }
@@ -298,7 +312,7 @@ getppmOriginalCovariates <- function(object) {
   
 # ??? method for 'effects' ???
 
-valid.ppm <- function(object) {
+valid.ppm <- function(object, warn=TRUE) {
   verifyclass(object, "ppm")
   coeffs <- coef(object)
   # ensure all coefficients are fitted, and finite
@@ -315,7 +329,7 @@ valid.ppm <- function(object) {
   # check interaction
   checker <- inte$valid
   if(is.null(checker) || !newstyle.coeff.handling(inte)) {
-    warning("Internal error: unable to check validity of model")
+    if(warn) warning("Internal error: unable to check validity of model")
     return(NA)
   }
   answer <- checker(Icoeffs, inte)

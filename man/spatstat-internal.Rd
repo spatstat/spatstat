@@ -521,6 +521,7 @@
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
 \alias{roseContinuous}
+\alias{ruletextline}
 \alias{quadrat.testEngine}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
@@ -1284,6 +1285,7 @@ RmhExpandRule(nama)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
 roseContinuous(ang, rad, unit, \dots, main, do.plot)
+ruletextline(ch, n, terse)
 quadrat.testEngine(X, nx, ny, alternative, method, conditional, CR, 
      \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)
 quadscheme.replicated(data, dummy, method = "grid", \dots)

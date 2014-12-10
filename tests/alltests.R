@@ -2141,6 +2141,11 @@ b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
 A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
 B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
 
+#' check savefuns/savepatterns with global 
+fit <- ppm(cells~x)
+Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
+Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
+
 # check conditional simulation
 e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
 e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)

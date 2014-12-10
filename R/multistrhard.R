@@ -119,7 +119,12 @@ doMultiStraussHard <- local({
          family   = "pairwise.family", # evaluated later
          pot      = MSHpotential,
          par      = list(types=NULL, iradii=NULL, hradii=NULL),  # to be added
-         parnames = c("possible types", "interaction distances", "hardcore distances"),
+         parnames = c("possible types",
+                      "interaction distances",
+                      "hardcore distances"),
+         pardesc  = c("vector of possible types",
+                      "matrix of interaction distances",
+                      "matrix of hardcore distances"),
          selfstart = function(X, self) {
            if(!is.null(self$par$types)) return(self)
            types <- levels(marks(X))

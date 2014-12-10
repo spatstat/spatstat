@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-2004
+	CHANGES IN spatstat VERSION 1.39-1.005
 
 OVERVIEW
 
@@ -193,6 +193,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Printed output for the fitted regular parameters
    now respects options('digits').
 
+   o print.ppm, print.summary.ppm
+   Output now respects options('width') and spatstat.options('terse')
+
 BUG FIXES
 
    o markcorrint
@@ -223,6 +226,10 @@ BUG FIXES
    o profilepl
    Crashed if the model involved covariates that were not
    given in a 'data' argument.
+   Fixed.
+
+   o envelope.ppm
+   Crashed if global=TRUE and savefuns=TRUE.
    Fixed.
 
    o pixelquad

@@ -100,6 +100,8 @@ MultiStrauss <- local({
        pot      = MSpotential,
        par      = list(types=NULL, radii = NULL), # to be filled in later
        parnames = c("possible types", "interaction distances"),
+       pardesc  = c("vector of possible types",
+                    "matrix of hardcore distances"),
        selfstart = function(X, self) {
          if(!is.null(self$par$types)) return(self)
          types <- levels(marks(X))

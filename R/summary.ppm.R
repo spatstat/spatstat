@@ -92,9 +92,11 @@ summary.ppm <- local({
 
     ######  Coefficients were changed after fit? #####################
   
-    y$projected <- identical(x$projected, TRUE)
+    y$projected <- yproj <- identical(x$projected, TRUE)
     y$changedcoef <- y$projected || !is.null(x$coef.orig)
 
+    y$valid <- valid.ppm(x, warn=FALSE)
+      
     ######  Extract fitted model coefficients #########################
 
     y$entries$coef <- COEFS <- x$coef
@@ -316,12 +318,12 @@ print.summary.ppm <- function(x, ...) {
   
   if(is.null(x$args)) {
     # this is the quick version
-    cat(paste(x$name, "\n"))
+    splat(x$name)
     return(invisible(NULL))
   }
 
   # otherwise - full details
-  cat("Point process model\n")
+  splat("Point process model")
   fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
   methodchosen <-
     if(is.null(x$method))
@@ -346,38 +348,39 @@ print.summary.ppm <- function(x, ...) {
              },
              ho="Huang-Ogata method (approximate maximum likelihood)",
              paste("unrecognised method", sQuote(x$method)))
-  cat(paste("Fitting method:", methodchosen, "\n"))
+  splat("Fitting method:", methodchosen)
   howfitted <- switch(fitter,
                       exact= "analytically",
                       gam  = "using gam()",
                       glm  = "using glm()",
                       ho   = NULL,
                       paste("using unrecognised fitter", sQuote(fitter)))
-  if(!is.null(howfitted)) cat(paste("Model was fitted", howfitted, "\n"))
+  if(!is.null(howfitted)) splat("Model was fitted", howfitted)
   if(fitter %in% c("glm", "gam")) {
-    if(x$converged) cat("Algorithm converged\n")
-    else cat("*** Algorithm did not converge ***\n")
+    if(x$converged) splat("Algorithm converged")
+    else splat("*** Algorithm did not converge ***")
   }
   if(x$projected)
-    cat("Fit was projected to obtain a valid point process model\n")
+    splat("Fit was projected to obtain a valid point process model")
 
   cat("Call:\n")
   print(x$args$call)
 
   if(x$old) 
-    cat(paste("** Executed by old spatstat version", x$version, " **\n"))
+    splat("** Executed by old spatstat version", x$version, " **")
   
-  cat(paste("Edge correction:", dQuote(x$args$correction), "\n"))
+  splat("Edge correction:", dQuote(x$args$correction))
   if(x$args$correction == "border")
-    cat(paste("\t[border correction distance r =", x$args$rbord,"]\n"))
+    splat("\t[border correction distance r =", x$args$rbord,"]")
 
-  cat("\n----------------------------------------------------\n")
+  ruletextline()
 
   # print summary of quadrature scheme
   print(x$quad)
   
-  cat("\n----------------------------------------------------\n")
-  cat("FITTED MODEL:\n\n")
+  ruletextline()
+  splat("FITTED MODEL:")
+  parbreak()
 
   # This bit is currently identical to print.ppm()
   # except for a bit more fanfare
@@ -398,37 +401,39 @@ print.summary.ppm <- function(x, ...) {
 
   if(markeddata) mrk <- x$entries$marks
   if(multitype) {
-    cat("Possible marks: \n")
+    splat("Possible marks:")
     cat(paste(levels(mrk)))
   }
 
   # ----- trend --------------------------
 
-  cat(paste("\n\n ---- ", x$trend$name, ": ----\n\n", sep=""))
+  parbreak()
+  splat(paste0("---- ", x$trend$name, ": ----"))
+  parbreak()
 
   if(!notrend) {
     splat("Trend formula: ",
           pasteFormula(x$trend$formula))
     if(x$uses.covars) 
-      cat(paste("Model depends on external",
-                ngettext(length(x$covars.used), "covariate", "covariates"),
-                commasep(sQuote(x$covars.used)), "\n"))
+      splat("Model depends on external",
+            ngettext(length(x$covars.used), "covariate", "covariates"),
+            commasep(sQuote(x$covars.used)))
   }
   if(x$has.covars) {
     if(notrend || !x$uses.covars)
-      cat("Model object contains external covariates\n")
+      splat("Model object contains external covariates")
     isdf <- identical(x$covars.are.df, TRUE)
     if(!is.null(cd <- x$covar.descrip)) {
       # print description of each covariate
-      cat(paste("\nCovariates provided",
-                if(isdf) " (in data frame)" else NULL,
-                ":\n", sep=""))
+      splat(paste0("Covariates provided",
+                   if(isdf) " (in data frame)" else NULL,
+                   ":"))
       namescd <- names(cd)
       for(i in seq_along(cd))
-        cat(paste("\t", namescd[i], ": ", cd[i], "\n", sep=""))
+        splat(paste0("\t", namescd[i], ": ", cd[i]))
     }
     if(!is.null(cfa <- x$covfunargs) && length(cfa) > 0) {
-      cat("Covariate function arguments (covfunargs) provided:\n")
+      splat("Covariate function arguments (covfunargs) provided:")
       namescfa <- names(cfa)
       for(i in seq_along(cfa)) {
         cat(paste(namescfa[i], "= "))
@@ -440,7 +445,8 @@ print.summary.ppm <- function(x, ...) {
     }
   }
 
-  cat(paste("\n", x$trend$label, ":\n", sep=""))
+  parbreak()
+  splat(paste0(x$trend$label, ":"))
   
   tv <- x$trend$value
   if(!is.list(tv))
@@ -457,19 +463,25 @@ print.summary.ppm <- function(x, ...) {
   
   # ---- Interaction ----------------------------
 
+  
   if(!poisson) {
-    cat("\n\n ---- Interaction: -----\n\n")
+    parbreak()
+    splat(" ---- Interaction: -----")
+    parbreak()
     print(x$interaction)
   }
 
   ####### Gory details ###################################
-  cat("\n\n----------- gory details -----\n")
+  parbreak()
+  splat("----------- gory details -----")
+  parbreak()
   COEFS <- x$entries$coef
   
-  cat("\nFitted regular parameters (theta): \n")
+  splat("Fitted regular parameters (theta):")
   print(COEFS)
 
-  cat("\nFitted exp(theta): \n")
+  parbreak()
+  splat("Fitted exp(theta):")
   print(exp(unlist(COEFS)))
 
   ##### Warnings issued #######
@@ -481,7 +493,20 @@ print.summary.ppm <- function(x, ...) {
              if(is.list(a) && !is.null(p <- a$print))
                cat(paste("Problem:\n", p, "\n\n"))
            })
-          
+
+  vali <- x$valid
+  if(identical(vali, FALSE) && waxlyrical("errors")) {
+    parbreak()
+    splat("***",
+          "Model is not valid",
+          "***\n***",
+          "Interaction parameters are outside valid range",
+          "***")
+  } else if(is.na(vali) && waxlyrical("extras")) {
+    parbreak()
+    splat("[Validity of model could not be checked]")
+  }
+  
   return(invisible(NULL))
 }
 

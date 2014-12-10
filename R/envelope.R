@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.68 $  $Date: 2014/11/10 11:23:36 $
+#   $Revision: 2.69 $  $Date: 2014/12/10 01:18:19 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -801,7 +801,7 @@ envelopeEngine <-
 
   if(savefuns) {
     alldata <- cbind(rvals, simvals)
-    simnames <- paste("sim", 1:nsim, sep="")
+    simnames <- paste("sim", 1:Nsim, sep="")
     colnames(alldata) <- c("r", simnames)
     alldata <- as.data.frame(alldata)
     SimFuns <- fv(alldata,
@@ -812,7 +812,7 @@ envelopeEngine <-
                   alim=attr(funX, "alim"),
                   labl=names(alldata),
                   desc=c("distance argument r",
-                    paste("Simulation ", 1:nsim, sep="")),
+                    paste("Simulation ", 1:Nsim, sep="")),
                   fname=attr(funX, "fname"),
                   yexp=attr(funX, "yexp"))
     fvnames(SimFuns, ".") <- simnames
@@ -832,7 +832,8 @@ envelopeEngine <-
 
   result <- envelope.matrix(simvals, funX=funX,
                             jsim=jsim, jsim.mean=jsim.mean,
-                            type=etype, alternative=alternative, csr=csr, use.theory=csr.theo,
+                            type=etype, alternative=alternative,
+                            csr=csr, use.theory=csr.theo,
                             nrank=nrank, ginterval=ginterval, nSD=nSD,
                             Yname=Yname, do.pwrong=do.pwrong,
                             weights=weights)
