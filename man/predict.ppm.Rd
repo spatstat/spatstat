@@ -8,9 +8,11 @@ at new locations.
 }
 \usage{
    \method{predict}{ppm}(object, window=NULL, ngrid=NULL, locations=NULL,
-   covariates=NULL, type="trend",
+   covariates=NULL,
+   type=c("trend", "cif", "intensity", "count"),
+   se=FALSE,
    interval=c("none", "confidence", "prediction"),
-   level = 0.95, total=NULL, 
+   level = 0.95, 
    X=data.ppm(object), correction, 
    \dots, new.coef=NULL, check=TRUE, repair=TRUE)
 }
@@ -51,7 +53,12 @@ at new locations.
     Indicates which property of the fitted model should be predicted.
     Options are \code{"trend"} for the spatial trend, 
     \code{"cif"} or \code{"lambda"} for the conditional intensity,
-    and \code{"se"} for the standard error of the fitted spatial trend.
+    \code{"intensity"} for the intensity, and
+    \code{"count"} for the total number of points in \code{window}.
+  }
+  \item{se}{
+    Logical value indicating whether to calculate
+    standard errors as well.
   }
   \item{interval}{
     String (partially matched) indicating whether to produce
@@ -61,14 +68,6 @@ at new locations.
   }
   \item{level}{
     Coverage probability for the confidence or prediction interval.
-  }
-  \item{total}{
-    Optional. If present, then it should specify a spatial region,
-    and the code will compute an estimate, standard error, confidence interval
-    or prediction interval for the total number of points in this region.
-    The argument \code{total} can be a window (object of class \code{"owin"}),
-    a tessellation (object of class \code{"tess"}) or 
-    \code{TRUE} indicating the original data window.
   }
   \item{X}{
     Optional. A point pattern (object of class \code{"ppp"})
@@ -122,15 +121,23 @@ at new locations.
 
   The ``predicted values'' are either values of the spatial trend
   (if \code{type="trend"}), values of the conditional intensity
-  (if \code{type="cif"} or \code{type="lambda"}), or
-  estimates of standard error for the fitted spatial trend
-  (if \code{type="se"}).
+  (if \code{type="cif"} or \code{type="lambda"}), 
+  values of the intensity (if \code{type="intensity"})
+  or numbers of points (if \code{type="count"}).
+
+  If \code{se=TRUE}, then the result is a list with two entries,
+  the first being the predicted values in the format described above,
+  and the second being the standard errors in the same format.
 }
 \details{
-  This function computes the spatial trend 
-  and the conditional intensity of a fitted spatial point process model,
-  and the standard error of the estimate of spatial trend.
-  See Baddeley and Turner (2000) for explanation and examples.
+  This function computes properties of a fitted spatial point process
+  model (object of class \code{"ppm"}). For a Poisson point process
+  it can compute the fitted intensity function, or the expected number of
+  points in a region. For a Gibbs point process it can compute the
+  spatial trend (first order potential), conditional intensity,
+  and approximate intensity of the process. 
+  Point estimates, standard errors,
+  confidence intervals and prediction intervals are available.
  
   Given a point pattern dataset, we may fit
   a point process model to the data using the 
@@ -139,40 +146,53 @@ at new locations.
   the fitted point process model (see \code{\link{ppm.object}}).
   The parameter estimates in this fitted model can be read off 
   simply by printing the \code{ppm} object.
-  The spatial trend and conditional intensity of the 
+  The spatial trend, conditional intensity and intensity of the 
   fitted model are evaluated using this function \code{predict.ppm}.
 
   The default action is to create a rectangular grid of points
   in the observation window of the data point pattern, and evaluate
   the spatial trend at these locations.
 
-  The argument \code{type} specifies the values that are computed:
+  The argument \code{type} specifies the values that are desired:
   \describe{
     \item{If \code{type="trend"}:}{
       the ``spatial trend'' of the fitted model is evaluated at each
-      required spatial location \eqn{u}.
+      required spatial location \eqn{u}. See below.
     }
     \item{If \code{type="cif"}:}{
       the conditional intensity \eqn{\lambda(u, X)}{lambda(u,X)} of the
       fitted model is evaluated at each required spatial location \eqn{u},
       with respect to the data point pattern \eqn{X}.
     }
-    \item{If \code{type="se"}:}{
-      the estimated (asymptotic) standard error of the
-      fitted spatial trend is evaluated at each required spatial location
-      \eqn{u}. This is available only for Poisson point process models.
+    \item{If \code{type="intensity"}:}{
+      the intensity \eqn{\lambda(u)}{lambda(u)} of the
+      fitted model is evaluated at each required spatial location \eqn{u}.
+    }
+    \item{If \code{type="count"}:}{
+      the expected total number of points (or the expected number
+      of points falling in \code{window}) is evaluated. 
+      If \code{window} is a tessellation,
+      the expected number of points in each tile of the tessellation
+      is evaluated.
     }
   }
-  Note that the ``spatial trend'' is the same as the intensity function
-  if the fitted model \code{object} is a Poisson point process.
-  However, if the model is not a Poisson process, then the
-  ``spatial trend'' is the (exponentiated) first order potential
-  and not the intensity of the process. [For example if we fit the
+  The spatial trend, conditional intensity, and intensity
+  are all equivalent if the fitted model is a Poisson point process.
+  However, if the model is not a Poisson process, then they are
+  all different. The ``spatial trend'' is the (exponentiated)
+  first order potential, and not the intensity of the process.
+  [For example if we fit the
   stationary Strauss process with parameters
   \eqn{\beta}{beta} and \eqn{\gamma}{gamma},
   then the spatial trend is constant and equal to \eqn{\beta}{beta},
-  while the intensity is a smaller value that is not easy to
-  compute. ]
+  while the intensity is a smaller value.]
+
+  The default is to compute an estimate of the desired quantity.
+  If \code{interval="confidence"} or \code{interval="prediction"},
+  the estimate is replaced by a confidence interval or prediction interval.
+
+  If \code{se=TRUE}, then a standard error is also calculated,
+  and is returned together with the (point or interval) estimate.
 
   The spatial locations where predictions are required,
   are determined by the (incompatible)
@@ -269,6 +289,7 @@ at new locations.
     \code{x[i],y[i]} where \code{x = as.vector(raster.x(locations))}
     and \code{y = as.vector(raster.y(locations))}.
   }
+
   Note that if you only want to use prediction in order to
   generate a plot of the predicted values,
   it may be easier to use \code{\link{plot.ppm}} which calls
@@ -309,7 +330,7 @@ at new locations.
 }
 \examples{
   \testonly{op <- spatstat.options(npixel=32)}
-  m <- ppm(cells, ~ polynom(x,y,2), Strauss(0.05))
+  m <- ppm(cells ~ polynom(x,y,2), Strauss(0.05))
   trend <- predict(m, type="trend")
   \dontrun{
   image(trend)
@@ -320,18 +341,17 @@ at new locations.
   persp(cif)
   }
   data(japanesepines)
-  mj <- ppm(japanesepines, ~harmonic(x,y,2))
-  se <- predict(mj, type="se")
+  mj <- ppm(japanesepines ~ harmonic(x,y,2))
+  se <- predict(mj, se=TRUE)
 
   # prediction interval for total number of points
-  predict(mj, total=TRUE, interval="p")
+  predict(mj, type="count", interval="p")
 
   # prediction at arbitrary locations
   predict(mj, locations=data.frame(x=0.3, y=0.4))
 
   X <- runifpoint(5, Window(japanesepines))
-  predict(mj, locations=X)
-  predict(mj, locations=X, type="se")
+  predict(mj, locations=X, se=TRUE)
 
   # multitype
   rr <- matrix(0.06, 2, 2)

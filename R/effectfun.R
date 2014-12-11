@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.13 $ $Date: 2014/04/04 08:00:56 $
+#   $Revision: 1.15 $ $Date: 2014/12/11 07:05:21 $
 #
 
 effectfun <- function(model, covname, ..., se.fit=FALSE) {
@@ -114,9 +114,10 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
   fakecov <- if(length(fakecov) > 0) do.call("data.frame", fakecov) else NULL
   #
   # Now predict
-  lambda <- predict(model, locations=fakeloc, covariates=fakecov)
-  if(se.fit) {
-    se <- predict(model, locations=fakeloc, covariates=fakecov, type="se")
+  pred <- predict(model, locations=fakeloc, covariates=fakecov, se=se.fit)
+  if(!se.fit) lambda <- pred else {
+    lambda <- pred$estimate
+    se     <- pred$se
     sedf <- data.frame(se =se,
                        hi = lambda + 2 * se,
                        lo = lambda - 2 * se)

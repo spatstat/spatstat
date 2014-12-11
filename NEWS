@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.005
+	CHANGES IN spatstat VERSION 1.39-1.006
 
 OVERVIEW
 
@@ -126,6 +126,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Default behaviour changed.
    Argument 'units' has been renamed 'unit' for consistency.
    Labels and descriptions of columns have been corrected.
+
+   o predict.ppm
+   New syntax (backward-compatible).
 
    o rmh.ppm
    New argument 'w' determines the window in which the simulated pattern

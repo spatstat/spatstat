@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.84 $	$Date: 2014/11/10 11:29:01 $
+#	$Revision: 1.86 $	$Date: 2014/12/11 07:05:13 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -13,14 +13,17 @@
 
 predict.ppm <- local({
   ##
-  ##  extract undocumented arguments and trap others
+  ##  extract undocumented/outdated arguments, and trap others
   ##
-  xtract <- function(..., newdata=NULL, sumobj=NULL, E=NULL) {
+  xtract <- function(..., newdata=NULL, sumobj=NULL, E=NULL, total=NULL) {
     if(!is.null(newdata))
       warning(paste("The use of the argument", sQuote("newdata"),
                     "is out-of-date. See help(predict.ppm)"))
+    if(!is.null(total)) 
+      message(paste("The use of the argument", sQuote("total"),
+                    "is out-of-date. See help(predict.ppm)"))
     trap.extra.arguments(..., .Context="In predict.ppm")
-    return(list(sumobj=sumobj, E=E))
+    return(list(sumobj=sumobj, E=E, total=total))
   }
   ##
   ## confidence/prediction intervals for number of points
@@ -49,22 +52,48 @@ predict.ppm <- local({
     out
   }
 
+  typeaccept <- c("trend", "cif", "lambda", "intensity", "count", "se", "SE")
+  typeuse    <- c("trend", "cif", "cif",    "intensity", "count", "se", "se")
+  typepublic <- c("trend", "cif", "intensity", "count")
+  
   predict.ppm <- function(object, window=NULL, ngrid=NULL, locations=NULL,
-                          covariates=NULL, type="trend",
+                          covariates=NULL,
+                          type=c("trend", "cif", "intensity", "count"),
+                          se=FALSE,
                           interval=c("none", "confidence", "prediction"),
                           level = 0.95,
-                          total=NULL, 
                           X=data.ppm(object),
                           correction,
                           ..., new.coef=NULL, check=TRUE, repair=TRUE) {
-    type <- pickoption("type", type,
-                       c(trend="trend", cif="cif", lambda="cif",
-                         se="se", SE="se"))
     interval <- match.arg(interval)
+    ## match 'type' argument including 'legacy' options
+    seonly <- FALSE
+    if(misstype <- missing(type)) type <- type[1] else {
+      if(length(type) > 1) stop("Argument 'type' should be a single value")
+      mt <- pmatch(type, typeaccept)
+      if(is.na(mt)) stop("Argument 'type' should be one of",
+                         commasep(sQuote(typepublic), " or "))
+      type <- typeuse[mt]
+      if(type == "se") {
+        message(paste("Outdated syntax:",
+                      "type='se' should be replaced by se=TRUE;",
+                      "then the standard error is predict(...)$se"))
+        type <- "trend"
+        se <- TRUE
+        seonly <- TRUE
+      }
+    } 
     ## extract undocumented arguments 
     xarg <- xtract(...)
     sumobj <- xarg$sumobj
     E      <- xarg$E
+    total  <- xarg$total
+    if(!is.null(total)) {
+      message("Outdated argument 'total': use 'window' and set type='count'")
+      type <- "count" 
+      if(!is.logical(total))
+        window <- if(is.tess(total)) total else as.owin(total)
+    }
     ##
     model <- object
     verifyclass(model, "ppm")
@@ -115,72 +144,74 @@ predict.ppm <- local({
         types <- levels(marks(sumobj$entries$data))
     }
 
-    ##    Standard error only available for Poisson models
-    if(type == "se" && !poisson)
-      stop(paste("Standard error calculation",
-                 "is only available for Poisson models"), call.=FALSE)
+    ## For Poisson models cif=intensity=trend
+    if(poisson && type %in% c("cif", "intensity"))
+      type <- "trend"
 
-    ## Point estimates for total count in a region
-    if(!is.null(total) && interval == "none") {
-      what <- switch(type,
-                     trend="estimate",
-                     se="se",
-                     cif=stop(
-                       paste("Prediction for total count",
-                             "is not implemented for type='cif'"),
-                       call.=FALSE))
-      if(identical(total, TRUE)) {
+    ## ............. trap un-implemented cases ...................
+    
+    ## Standard errors not yet available for cif, intensity
+    if(se && type %in% c("cif", "intensity"))
+      stop(paste("Standard error for", type, "is not yet implemented"),
+           call.=FALSE)
+
+    ## Intervals are only available for unmarked Poisson models
+    if(type == "count" && interval != "none" && (marked || !poisson)) {
+      stop(paste0(interval, " intervals for counts are only implemented for",
+                  if(marked) " unmarked" else "",
+                  if(!poisson) " Poisson",
+                  " models"),
+           call.=FALSE)
+    }
+
+    if(interval == "prediction" && type != "count")
+      stop("Prediction intervals are only available for type='count'",
+           call.=FALSE)
+    
+    if(interval == "confidence" && type %in% c("intensity", "cif")) 
+      stop(paste("Confidence intervals are not yet available for", type),
+           call.=FALSE)
+
+    estimatename <- if(interval == "none") "estimate" else interval
+    
+    ## ............. start computing .............................
+    
+    ## Total count in a region
+    
+    if(type == "count") {
+      ## point or interval estimate, optionally with SE
+      if(is.null(window)) {
         ## domain of the original data
-        result <- predconfPois(NULL, model, level, what)
-      } else if(is.tess(total)) {
+        if(!seonly) est <- predconfPois(NULL, model, level, estimatename)
+        if(se) sem <- predconfPois(NULL, model, level, "se")
+      } else if(is.tess(window)) {
         ## quadrats
-        result <- unlist(lapply(tiles(total), predconfPois,
-                                object=model, level=level, what=what))
+        tilz <- tiles(window)
+        if(!seonly) {
+          est <- unlist(lapply(tilz, predconfPois,
+                               object=model, level=level, what=estimatename))
+          if(interval != "none") # reshape
+            est <- matrix(unlist(est), byrow=TRUE, ncol=2,
+                          dimnames=list(names(est), names(est[[1]])))
+        }
+        if(se) sem <- unlist(lapply(tilz, predconfPois,
+                                    object=model, level=level, what="se"))
       } else {
         ## window
-        total <- as.owin(total)
-        result <- predconfPois(total, model, level, what)
+        if(!seonly) est <- predconfPois(window, model, level, estimatename)
+        if(se) sem <- predconfPois(window, model, level, "se")
       }
+      if(!se) return(est)
+      if(seonly) return(sem)
+      result <- list(est, sem)
+      names(result) <- c(estimatename, "se")
       return(result)
     }
+
+    ## .....   Predict a spatial function .......
     
-    ##  Confidence/prediction intervals 
     if(interval != "none") {
-      ## Only available for unmarked Poisson models
-      if(marked || !poisson)
-        stop(paste0(interval, " intervals are only implemented for",
-                    if(marked) " unmarked" else "",
-                    if(!poisson) " Poisson",
-                    " models"),
-             call.=FALSE)
-      ## Confidence/prediction interval for total count in a region
-      if(!is.null(total)) {
-        if(identical(total, TRUE)) {
-          ## domain of the original data
-          result <- predconfPois(NULL, model, level, interval)
-        } else if(is.tess(total)) {
-          ## quadrats
-          zz <- lapply(tiles(total), predconfPois,
-                       object=model, level=level, what=interval)
-          result <- matrix(unlist(zz), byrow=TRUE, ncol=2,
-                           dimnames=list(names(zz), names(zz[[1]])))
-        } else {
-          ## window
-          total <- as.owin(total)
-          result <- predconfPois(total, model, level, interval)
-        }
-        return(result)
-      }
-      ## Interval for trend etc
-      if(interval == "prediction")
-        stop("Prediction intervals are meaningless for intensity function",
-             call.=FALSE)
-      if(type != "trend")
-        warning(paste("Ignored argument: type =", sQuote(type),
-                      "because confidence intervals are specified"),
-                call.=FALSE)
-      ## Confidence interval for trend
-      type <- "confint"
+      ## Prepare for confidence interval 
       alpha2 <- (1-level)/2
       pp <- sort(c(alpha2, 1-alpha2))
       ci.names <- paste0(signif(100 * pp, 3), "%")
@@ -376,34 +407,36 @@ predict.ppm <- local({
     ##   Compute the predicted value z[i] for each row of 'newdata'
     ##   Store in a vector z and reshape it later
     ##
+    ##
     ## #############################################################
-  
+
+    needSE <- se || (interval != "none")
+    
     if(trivial) {
       ## ###########  UNIFORM POISSON PROCESS #####################
 
       lambda <- exp(coeffs[[1]])
-      switch(type,
-             cif=,
-             trend={
+      if(needSE) {
+        npts <- nobs(model)
+        se.lambda <- lambda/sqrt(npts)
+      }
+      switch(interval,
+             none = {
                z <- rep.int(lambda, nrow(newdata))
              },
-             se={
-               npts <- nobs(model)
-               se.lambda <- lambda/sqrt(npts)
-               z <- rep.int(se.lambda, nrow(newdata))
-             },
-             confint={
-               npts <- npoints(data.ppm(model))
-               se.lambda <- lambda/sqrt(npts)
+             confidence = {
                z <- matrix(lambda + se.lambda * ci.q, 
                            byrow=TRUE,
                            nrow=nrow(newdata), ncol=2,
                            dimnames=list(NULL, ci.names))
              },
-             stop("Internal error: unrecognised type"))
+             stop("Internal error: unreached"))
+
+      if(se) 
+        zse <- rep.int(se.lambda, nrow(newdata))
     
       ## ##############################################################
-    } else if((type %in% c("trend","se")) || poisson) {
+    } else if(type == "trend" || poisson) {
       ##
       ## ##########  COMPUTE TREND ###################################
       ##	
@@ -415,37 +448,30 @@ predict.ppm <- local({
       ##
       ##   predict
       ##
-      lambda <- GLMpredict(glmfit, newdata, coeffs, 
-                           changecoef=changedcoef)
+      z <- lambda <- GLMpredict(glmfit, newdata, coeffs, 
+                                changecoef=changedcoef)
       ##
-      switch(type,
-             cif=,
-             trend={
-               z <- lambda
-             },
-             confint=,
-             se={
-               ## extract variance-covariance matrix of parameters
-               vc <- vcov(model)
-               ## compute model matrix
-               fmla <- formula(model)
-               mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
-               mm <- model.matrix(fmla, mf, ..., na.action=na.pass)
-               if(nrow(mm) != nrow(newdata))
-                 stop("Internal error: row mismatch in SE calculation")
-               ## compute relative variance = diagonal of quadratic form
-               vv <- quadform(mm, vc)
-               ## standard error
-               SE <- lambda * sqrt(vv)
-               if(type == "se") {
-                 z <- SE
-               } else if(type == "confint") {
-                 z <- lambda + outer(SE, ci.q, "*")
-                 colnames(z) <- ci.names
-               }
-             },
-             stop("Internal error: unrecognised type"))
-
+      if(needSE) {
+        ## extract variance-covariance matrix of parameters
+        vc <- vcov(model)
+        ## compute model matrix
+        fmla <- formula(model)
+        mf <- model.frame(fmla, newdata, ..., na.action=na.pass)
+        mm <- model.matrix(fmla, mf, ..., na.action=na.pass)
+        if(nrow(mm) != nrow(newdata))
+          stop("Internal error: row mismatch in SE calculation")
+        ## compute relative variance = diagonal of quadratic form
+        vv <- quadform(mm, vc)
+        ## standard error
+        SE <- lambda * sqrt(vv)
+        if(se) 
+          zse <- SE
+        if(interval == "confidence") {
+          z <- lambda + outer(SE, ci.q, "*")
+          colnames(z) <- ci.names
+        } 
+      } 
+      
       ## ############################################################  
     } else if(type == "cif" || type =="lambda") {
       ## ####### COMPUTE FITTED CONDITIONAL INTENSITY ################
@@ -506,32 +532,63 @@ predict.ppm <- local({
     ##
     ## reshape the result
     ##
-    if(!want.image) 
-      out <- as.vector(z)
+    if(!want.image) {
+      if(!se) {
+        out <- as.vector(z)
+      } else if(seonly) {
+        out <- as.vector(zse)
+      } else {
+        out <- list(as.vector(z), as.vector(zse))
+        names(out) <- c(estimatename, "se")
+      }
+    }
     else {
-      ## make an image of the right shape
-      imago <- as.im(masque)
-      imago <- eval.im(as.double(imago))
-      M <- masque$m
+      ## make an image of the right shape and value
+      imago <- as.im(masque, value=1.0)
       if(!marked && interval=="none") {
         ## single image
-        out <- imago
-        ## set entries
-        out$v[M] <- z
+        if(!se) {
+          out <- imago
+          ## set entries
+          out[] <- z
+        } else if(seonly) {
+          out <- imago
+          out[] <- zse
+        } else {
+          est <- std <- imago
+          est[] <- z
+          std[] <- zse
+          out <- list(est, std)
+          names(out) <- c(estimatename, "se")
+        }
       } else if(interval != "none") {
         ## list of 2 images for CI
-        hi <- lo <- imago
-        hi$v[M] <- z[,1]
-        lo$v[M] <- z[,2]
-        out <- listof(hi, lo)
-        names(out) <- ci.names
+        if(!seonly) {
+          hi <- lo <- imago
+          hi[] <- z[,1]
+          lo[] <- z[,2]
+          est <- listof(hi, lo)
+          names(est) <- ci.names
+        }
+        if(se) {
+          std <- imago
+          std[] <- zse
+        }
+        if(!se) {
+          out <- est
+        } else if(seonly) {
+          out <- std
+        } else {
+          out <- list(est, std)
+          names(out) <- c(estimatename, "se")
+        }
       } else {
         ## list of images, one for each level of marks
         out <- list()
         for(i in seq_along(types)) {
           outi <- imago
           ## set entries
-          outi$v[masque$m] <- z[newdata$marks == types[i]]
+          outi[] <- z[newdata$marks == types[i]]
           out[[i]] <- outi
         }
         out <- as.listof(out)
