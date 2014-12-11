@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.006
+	CHANGES IN spatstat VERSION 1.39-1.007
 
 OVERVIEW
 
@@ -129,7 +129,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o predict.ppm
    New syntax (backward-compatible).
-
+   New argument 'se' replaces option 'type="se"'.
+   Old argument 'total' is deprecated: use 'window' and set 'type="count"'.
+   
    o rmh.ppm
    New argument 'w' determines the window in which the simulated pattern
    is generated.

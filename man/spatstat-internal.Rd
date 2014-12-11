@@ -311,6 +311,7 @@
 \alias{passthrough}
 \alias{paste.expr}
 \alias{plan.legend.layout}
+\alias{PoisSaddleApp}
 \alias{prettyinside}
 \alias{prettydiscrete}
 \alias{putSpatstatVariable}
@@ -1037,6 +1038,7 @@ passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
+PoisSaddleApp(beta, fi)
 prettyinside(x, \dots)
 prettydiscrete(x, n)
 \method{print}{localpcfmatrix}(x, \dots)

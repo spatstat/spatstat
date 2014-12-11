@@ -436,7 +436,7 @@ predict.ppm <- local({
         zse <- rep.int(se.lambda, nrow(newdata))
     
       ## ##############################################################
-    } else if(type == "trend" || poisson) {
+    } else if((type %in% c("trend", "intensity")) || poisson) {
       ##
       ## ##########  COMPUTE TREND ###################################
       ##	
@@ -446,10 +446,14 @@ predict.ppm <- local({
       for(vn in Vnames)    
         newdata[[vn]] <- zeroes
       ##
-      ##   predict
+      ##   predict trend
       ##
       z <- lambda <- GLMpredict(glmfit, newdata, coeffs, 
                                 changecoef=changedcoef)
+      ##
+      if(type == "intensity") 
+        z <- PoisSaddleApp(z, fitin(model))
+      
       ##
       if(needSE) {
         ## extract variance-covariance matrix of parameters
