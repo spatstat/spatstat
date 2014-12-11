@@ -100,7 +100,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## `boomerang despatch'
     cl <- match.call()
     if(missing(plotcommand) && isIm) {
-      cl[[1]] <- as.name("image.anylist")
+      cl[[1]] <- as.name("image.imlist")
       parenv <- sys.parent()
       return(eval(cl, envir=parenv))
     }
@@ -311,7 +311,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     }
     ## ................. multiple logical plots using 'layout' ..............
     ## adjust panel margins to accommodate desired extra separation
-    mar.panel <- mar.panel + c(vsep, hsep, vsep, hsep)/2
+    mar.panel <- pmax(0, mar.panel + c(vsep, hsep, vsep, hsep)/2)
     ## check for adornment
     if(!is.null(adorn.left)) {
       ## add margin at left, of width adorn.size * meanwidth
@@ -475,8 +475,10 @@ image.imlist <- plot.imlist <- image.listof <- local({
     do.call("plot.solist",
             resolve.defaults(list(x=x, plotcommand="image"),
                              list(...),
-                             list(main=xname),
-                             list(col=imcolmap, zlim=zlim, ribbon=FALSE),
+                             list(mar.panel=mar.panel,
+                                  main=xname,
+                                  col=imcolmap, zlim=zlim,
+                                  ribbon=FALSE),
                              ribadorn))
   }
 
