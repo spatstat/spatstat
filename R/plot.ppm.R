@@ -1,7 +1,7 @@
 #
 #    plot.ppm.S
 #
-#    $Revision: 2.9 $    $Date: 2014/11/10 11:16:14 $
+#    $Revision: 2.10 $    $Date: 2014/12/12 11:45:52 $
 #
 #    plot.ppm()
 #         Plot a point process model fitted by ppm().
@@ -82,8 +82,9 @@ plot.ppm <- function(x, ngrid = c(40,40),
 
   for (ttt in surftypes) {
     p <- predict(model,
-                   ngrid=ng, locations=locations, covariates=covariates,
-                   type = ttt)
+                 ngrid=ng, locations=locations, covariates=covariates,
+                 type = ttt,
+                 getoutofjail=TRUE)  # permit outdated usage type="se"
     if(is.im(p))
       p <- list(p)
     out[[ttt]] <- p

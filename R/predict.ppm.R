@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.86 $	$Date: 2014/12/11 07:05:13 $
+#	$Revision: 1.87 $	$Date: 2014/12/12 11:44:58 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -15,7 +15,8 @@ predict.ppm <- local({
   ##
   ##  extract undocumented/outdated arguments, and trap others
   ##
-  xtract <- function(..., newdata=NULL, sumobj=NULL, E=NULL, total=NULL) {
+  xtract <- function(..., newdata=NULL, sumobj=NULL, E=NULL, total=NULL,
+                     getoutofjail=FALSE) {
     if(!is.null(newdata))
       warning(paste("The use of the argument", sQuote("newdata"),
                     "is out-of-date. See help(predict.ppm)"))
@@ -23,7 +24,7 @@ predict.ppm <- local({
       message(paste("The use of the argument", sQuote("total"),
                     "is out-of-date. See help(predict.ppm)"))
     trap.extra.arguments(..., .Context="In predict.ppm")
-    return(list(sumobj=sumobj, E=E, total=total))
+    return(list(sumobj=sumobj, E=E, total=total, getoutofjail=getoutofjail))
   }
   ##
   ## confidence/prediction intervals for number of points
@@ -66,6 +67,12 @@ predict.ppm <- local({
                           correction,
                           ..., new.coef=NULL, check=TRUE, repair=TRUE) {
     interval <- match.arg(interval)
+    ## extract undocumented arguments 
+    xarg <- xtract(...)
+    sumobj <- xarg$sumobj
+    E      <- xarg$E
+    total  <- xarg$total
+    getoutofjail <- xarg$getoutofjail
     ## match 'type' argument including 'legacy' options
     seonly <- FALSE
     if(misstype <- missing(type)) type <- type[1] else {
@@ -75,19 +82,15 @@ predict.ppm <- local({
                          commasep(sQuote(typepublic), " or "))
       type <- typeuse[mt]
       if(type == "se") {
-        message(paste("Outdated syntax:",
-                      "type='se' should be replaced by se=TRUE;",
-                      "then the standard error is predict(...)$se"))
+        if(!getoutofjail)
+          message(paste("Outdated syntax:",
+                        "type='se' should be replaced by se=TRUE;",
+                        "then the standard error is predict(...)$se"))
         type <- "trend"
         se <- TRUE
         seonly <- TRUE
       }
     } 
-    ## extract undocumented arguments 
-    xarg <- xtract(...)
-    sumobj <- xarg$sumobj
-    E      <- xarg$E
-    total  <- xarg$total
     if(!is.null(total)) {
       message("Outdated argument 'total': use 'window' and set type='count'")
       type <- "count" 

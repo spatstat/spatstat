@@ -26,6 +26,7 @@
     \code{activezone} \tab line segment pattern representing \cr
                       \tab the active zone.
   }
+  All coordinates are in nanometres (nm).		    
 }
 \details{
   As part of a study on the effects of stress on brain function,

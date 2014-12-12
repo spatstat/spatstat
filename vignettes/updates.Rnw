@@ -37,7 +37,7 @@ last set of workshop notes \cite{badd10wshop}
 was published. Those notes covered \spst\ version \texttt{1.21-2}. 
 
 The current version of \spst\ is \texttt{\Sexpr{sversion}}. 
-\Spst\ has almost tripled in size since 2010,
+\Spst\ has tripled in size since 2010,
 and now contains over 100,000 lines of code.
 
 <<echo=FALSE,results=hide>>=
