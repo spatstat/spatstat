@@ -1,5 +1,6 @@
 \name{logLik.ppm}
 \alias{logLik.ppm}
+\alias{AIC.ppm}
 \alias{extractAIC.ppm}
 \alias{nobs.ppm}
 \title{Log Likelihood and AIC for Point Process Model}
@@ -11,7 +12,8 @@
 }
 \usage{
 \method{logLik}{ppm}(object, ..., new.coef=NULL, warn=TRUE)
-\method{extractAIC}{ppm}(fit, scale=0, k=2, \dots)
+\method{AIC}{ppm}(object, \dots, k=2, takeuchi=TRUE)
+\method{extractAIC}{ppm}(fit, scale=0, k=2, \dots, takeuchi=TRUE)
 \method{nobs}{ppm}(object, ...)
 }
 \arguments{
@@ -21,7 +23,8 @@
   \item{\dots}{Ignored.}
   \item{warn}{
     If \code{TRUE}, a warning is given when the
-    pseudolikelihood is returned instead of the likelihood.
+    pseudolikelihood or logistic likelihood
+    is returned instead of the likelihood.
   }
   \item{scale}{Ignored.}
   \item{k}{Numeric value specifying the weight of the
@@ -30,6 +33,12 @@
   \item{new.coef}{
     New values for the canonical parameters of the model.
     A numeric vector of the same length as \code{coef(object)}.
+  }
+  \item{takeuchi}{
+    Logical value specifying whether to use the Takeuchi penalty
+    (\code{takeuchi=TRUE}) or the
+    number of fitted parameters (\code{takeuchi=FALSE})
+    in calculating AIC.
   }
 }
 \details{
@@ -51,9 +60,9 @@
 
   The Akaike Information Criterion AIC for a fitted model is defined as
   \deqn{
-    AIC = -2 \log(L) + k \times \mbox{edf}
+    AIC = -2 \log(L) + k \times \mbox{penalty}
   }{
-    AIC = -2 * log(L) + k * edf
+    AIC = -2 * log(L) + k * penalty
   }
   where \eqn{L} is the maximised likelihood of the fitted model,
   and \eqn{\mbox{edf}}{edf} is the effective degrees of freedom
@@ -62,16 +71,38 @@
   \eqn{AIC*} in which \eqn{L} is replaced by \eqn{L*},
   the quadrature approximation
   to the likelihood (if \code{fit} is a Poisson model)
-  or the pseudolikelihood (if \code{fit} is a Gibbs model).
+  or the pseudolikelihood or logistic likelihood
+  (if \code{fit} is a Gibbs model).
 
+  The \eqn{\mbox{penalty}}{penalty} term is calculated
+  as follows. If \code{takeuchi=FALSE} then \eqn{\mbox{penalty}}{penalty} is
+  the number of fitted parameters. If \code{takeuchi=TRUE} then
+  \eqn{\mbox{penalty} = \mbox{trace}(J H^{-1})}{edf = trace(J H^(-1))}
+  where \eqn{J} and \eqn{H} are the estimated variance and hessian,
+  respectively, of the composite score.
+  These two choices are equivalent for a Poisson process.
+  
   The method \code{nobs.ppm} returns the number of points
   in the original data point pattern to which the model was fitted.
   
-  The \R functions \code{\link{AIC}} and \code{\link{step}} use
-  these methods.
+  The \R function \code{\link{step}} uses these methods.
 }
 \value{
-  A numerical value.
+  \code{logLik} returns a numerical value, belonging to the class
+  \code{"logLik"}, with an attribute \code{"df"} giving the degrees of
+  freedom.
+  
+  \code{AIC} returns a numerical value.
+
+  \code{extractAIC} returns a numeric vector of length 2
+  containing the degrees of freedom and the AIC value.
+
+  \code{nobs} returns an integer value.
+}
+\references{
+  Varin, C. and Vidoni, P. (2005)
+  A note on composite likelihood inference and model selection.
+  \emph{Biometrika} \bold{92}, 519--528.
 }
 \seealso{
   \code{\link{ppm}},  
@@ -93,8 +124,10 @@
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \examples{
   data(cells)

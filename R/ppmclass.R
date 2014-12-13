@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.108 $	$Date: 2014/12/10 06:53:18 $
+#	$Revision: 2.113 $	$Date: 2014/12/13 05:40:40 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -117,9 +117,11 @@ function(x, ...,
           splat(thead)
           for(i in seq_along(tv))
             print(tv[[i]])
-        } else if(is.numeric(tv) && length(tv) == 1 && is.null(names(tv))) {
+        } else if(is.numeric(tv) && length(tv) == 1) {
           ## single number: append to end of current line
-          splat(paste0(thead, "\t", signif(tv, digits)))
+          tvn <- names(tv)
+          tveq <- if(is.null(tvn)) "\t" else paste(" ", tvn, "= ")
+          splat(paste0(thead, tveq, signif(tv, digits)))
         } else {
           ## some other format 
           splat(thead)
@@ -156,8 +158,8 @@ function(x, ...,
 
   if("interaction" %in% what) {
     if(!poisson) {
-      print(s$interaction, family=FALSE,
-            brief=!waxlyrical("extras", terselevel))
+      print(s$interaction, family=FALSE, banner=FALSE, 
+            brief=!waxlyrical("extras"))
       parbreak(terselevel)
     }
   }
@@ -171,7 +173,8 @@ function(x, ...,
       splat("Standard errors unavailable; variance-covariance matrix is singular")
     } else if(!force.no.SE) {
       # standard error was voluntarily omitted
-      splat("For standard errors, type coef(summary(x))\n")
+      if(waxlyrical('space', terselevel))
+        splat("For standard errors, type coef(summary(x))\n")
     }
   }
   
@@ -614,11 +617,26 @@ labels.ppm <- function(object, ...) {
   return(lab[okterms])
 }
 
-extractAIC.ppm <- function (fit, scale = 0, k = 2, ...)
+AIC.ppm <- function(object, ..., k=2, takeuchi=TRUE) {
+  ll <- logLik(object, warn=FALSE)
+  if(takeuchi && !is.poisson(object)) {
+    vv <- vcov(object, what="internals")
+    logi <- (object$method == "logi")
+    J  <- with(vv, if(!logi) Sigma else (Sigma1log+Sigma2log))
+    H  <- with(vv, if(!logi) A1 else Slog)
+    ## Takeuchi penalty = trace of J H^{-1}
+    pen <- sum(diag(J %*% solve(H)))
+  } else {
+    pen <- attr(ll, "df")
+  }
+  return(- 2 * as.numeric(ll) + k * pen)
+}
+
+extractAIC.ppm <- function (fit, scale = 0, k = 2, ..., takeuchi=TRUE)
 {
-    edf <- length(coef(fit))
-    aic <- AIC(fit)
-    c(edf, aic + (k - 2) * edf)
+  edf <- length(coef(fit))
+  aic <- AIC(fit, k=k, takeuchi=takeuchi)
+  c(edf, aic)
 }
 
 #

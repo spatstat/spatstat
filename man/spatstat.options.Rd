@@ -261,7 +261,7 @@
         1 \tab Avoid wasteful output \cr
         2 \tab Remove space between paragraphs\cr
         3 \tab Suppress extras such as standard errors \cr
-        4 \tab Suppress internal warnings
+        4 \tab Compress text, suppress internal warnings
       }
       The value of \code{terse} is initialised to 0.
     }

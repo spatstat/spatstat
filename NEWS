@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.009
+	CHANGES IN spatstat VERSION 1.39-1.011
 
 OVERVIEW
 
@@ -22,7 +22,7 @@ OVERVIEW
    o Hard core parameters in all interactions no longer need to be specified
      and will be estimated from data.
 
-   o Improvements to analysis of deviance.
+   o Improvements to analysis of deviance and model selection.
 
    o New datasets.
 
@@ -66,6 +66,9 @@ NEW FUNCTIONS
 
    o nnorient
    Nearest neighbour orientation distribution.
+
+   o AIC.ppm
+   Calculate AIC of a Gibbs model using Takeuchi's rule.
 
    o interp.colours
    Interpolate a sequence of colour values.
@@ -145,6 +148,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Baddeley, Rubak and Moller (2011). The intensity was estimated 
    on the full window rather than the eroded window.
    Fixed.   
+
+   o step, drop1, add1, extractAIC
+   The AIC of a Gibbs model is now calculated using Takeuchi's rule
+   for the degrees of freedom.
 
    o model.matrix.ppm, model.matrix.kppm
    New argument 'Q' allows prediction at any desired locations.

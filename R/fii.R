@@ -89,66 +89,76 @@ summary.fii <- function(object, ...) {
 }
 
 print.fii <- function(x, ...) {
-  tiny <- resolve.1.default("tiny", list(...), list(tiny=FALSE))
-  print(summary(x), brief=TRUE, tiny=tiny)
+  sx <- summary(x)
+  do.call(print.summary.fii,
+          resolve.defaults(list(x=sx, brief=TRUE), list(...)))
   return(invisible(NULL))
 }
 
-print.summary.fii <- function(x, ...) {
-  secret <- resolve.defaults(list(...),
-                             list(prefix="Interaction: ",
-                                  family=TRUE,
-                                  brief=FALSE,
-                                  tiny=FALSE))
-  if(secret$tiny) {
-    # use thumbnail if available
-    thumbnail <- x$thumbnail
-    if(!is.null(thumbnail)) {
-      splat(thumbnail)
-      return(invisible(NULL))
-    }
+print.summary.fii <- local({
+
+  #'  hide internal arguments
+  print.summary.fii <- function(x, ...) {
+    PrintIt(x, ...)
   }
-  terselevel <- spatstat.options("terse")
-  brief <- secret$brief
-  if(!brief)
-    cat(secret$prefix)
-  if(x$poisson) {
-    splat("Poisson process")
-    parbreak(terselevel)
-  } else {
-    print(x$interaction, family=secret$family, brief=TRUE)
-    if(!is.null(x$printable)) {
-      nvalues <- length(x$printable)
-      nheader <- length(x$header)
-      if(nvalues == 1) {
-        splat(paste(paste0(x$header, ":\t"), x$printable))
-      } else if(nvalues == nheader) {
-        for(i in 1:nheader) {
-          hdi <- x$header[i]
-          xpi <- x$printable[[i]]
-          if(!is.list(xpi) && length(xpi) == 1) {
-            splat(paste0(hdi, ":\t", xpi))
-          } else {
-            splat(paste0(hdi, ":"))
-            print(xpi)
-          }
-        } 
-      } else {
-        splat(x$header)
-        print(x$printable)
-      } 
+  
+  PrintIt <- function(x, ..., prefix="Interaction: ",
+                      banner=TRUE,
+                      family = waxlyrical('extras'),
+                      brief = !family,
+                      tiny = !waxlyrical('errors')) {
+    if(tiny) {
+      #' use thumbnail if available
+      thumbnail <- x$thumbnail
+      if(!is.null(thumbnail)) {
+        splat(thumbnail)
+        return(invisible(NULL))
+      }
     }
-  }
-  if(!brief) {
-    co <- x$coefs[x$Vnames[!x$IsOffset]]
-    if(length(co) > 0) {
+    terselevel <- spatstat.options('terse')
+    if(banner && !brief)
+      cat(prefix)
+    if(x$poisson) {
+      splat("Poisson process")
       parbreak(terselevel)
-      splat("Relevant coefficients:")
-      print(co)
+    } else {
+      print(x$interaction, family=family, brief=TRUE, banner=banner)
+      if(!is.null(x$printable)) {
+        nvalues <- length(x$printable)
+        nheader <- length(x$header)
+        if(nvalues == 1) {
+          splat(paste(paste0(x$header, ":\t"), x$printable))
+        } else if(nvalues == nheader) {
+          for(i in 1:nheader) {
+            hdi <- x$header[i]
+            xpi <- x$printable[[i]]
+            if(!is.list(xpi) && length(xpi) == 1) {
+              splat(paste0(hdi, ":\t", xpi))
+            } else {
+              splat(paste0(hdi, ":"))
+              print(xpi)
+            }
+          } 
+        } else {
+          splat(x$header)
+          print(x$printable)
+        } 
+      }
     }
+    if(!brief) {
+      co <- x$coefs[x$Vnames[!x$IsOffset]]
+      if(length(co) > 0) {
+        parbreak(terselevel)
+        splat("Relevant coefficients:")
+        print(co)
+      }
+    }
+    return(invisible(NULL))
   }
-  return(invisible(NULL))
-}
+
+  print.summary.fii
+})
+
 
 coef.summary.fii <- function(object, ...) {
   object$printable
