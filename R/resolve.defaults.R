@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.21 $ $Date: 2014/10/14 10:02:44 $
+#  $Revision: 1.22 $ $Date: 2014/12/14 01:50:04 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -157,7 +157,9 @@ graphicsPars <- local({
            "col.main", "col.sub",
            "font.main", "font.sub",
            "xaxs", "yaxs"),
-         symbols = c(PlotArgs, "fg", "bg"))
+         lines = c("lwd", "lty", "col", "lend", "ljoin", "lmitre"),
+         symbols = c(PlotArgs, "fg", "bg")
+         )
 
     TheTable$ppp <- unique(c(TheTable$owin,
                              TheTable$symbols,

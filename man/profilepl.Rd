@@ -1,16 +1,17 @@
 \name{profilepl}
 \alias{profilepl}
-\title{Profile Maximum Pseudolikelihood}
+\title{Profile Maximum Pseudolikelihood or AIC}
 \description{
-  Fits point process models by profile maximum pseudolikelihood
+  Fits point process models by maximising the profile likelihood,
+  profile pseudolikelihood, profile composite likelihood or AIC.
 }
 \usage{
-profilepl(s, f, \dots, rbord = NULL, verbose = TRUE)
+profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
 }
 \arguments{
   \item{s}{
     Data frame containing values of the irregular parameters
-    over which the profile pseudolikelihood will be computed.
+    over which the criterion will be computed.
   }
   \item{f}{
     Function (such as \code{\link{Strauss}})
@@ -19,6 +20,11 @@ profilepl(s, f, \dots, rbord = NULL, verbose = TRUE)
   }
   \item{\dots}{
     Data passed to \code{\link{ppm}} to fit the model.
+  }
+  \item{aic}{
+    Logical value indicating whether to find the parameter values
+    which minimise the AIC (\code{aic=TRUE}) or maximise the
+    profile likelihood (\code{aic=FALSE}, the default).
   }
   \item{rbord}{
     Radius for border correction (same for all models).
@@ -36,8 +42,13 @@ profilepl(s, f, \dots, rbord = NULL, verbose = TRUE)
   parameters that must be fixed in any call to \code{\link{ppm}}.
 
   This function \code{profilepl} is a wrapper which finds the values of the
-  irregular parameters that give the best fit. It uses the method of
-  maximum profile pseudolikelihood. 
+  irregular parameters that give the best fit.
+  If \code{aic=FALSE} (the default),
+  the best fit is the model which maximises the
+  likelihood (if the models are Poisson processes) or maximises
+  the pseudolikelihood or logistic likelihood. 
+  If \code{aic=TRUE} then the best fit is the model which
+  minimises the Akaike Information Criterion \code{\link{AIC.ppm}}.
   
   The argument \code{s} must be a data frame whose columns contain
   values of the irregular parameters over which the maximisation is
@@ -86,21 +97,22 @@ profilepl(s, f, \dots, rbord = NULL, verbose = TRUE)
   will be interpreted as interaction parameters. Other columns will be
   interpreted as trend parameters.
 
-  To apply the method of profile maximum pseudolikelihood,
+  To find the best fit,
   each row of \code{s} will be taken in turn. Interaction parameters in this
   row will be passed to \code{f}, resulting in an interaction object. 
   Then \code{\link{ppm}} will be applied to the data \code{...}
   using this interaction. Any trend parameters will be passed to
   \code{\link{ppm}} through the argument \code{covfunargs}.
   This results in a fitted point process model.
-  The value of the log pseudolikelihood from this model is stored.
+  The value of the log pseudolikelihood or AIC from this model is stored.
   After all rows of \code{s} have been processed in this way, the
   row giving the maximum value of log pseudolikelihood will be found.
 
   The object returned by \code{profilepl} contains the profile
-  pseudolikelihood function, the best fitting model, and other data.
+  pseudolikelihood (or profile AIC) function,
+  the best fitting model, and other data.
   It can be plotted (yielding a
-  plot of the log pseudolikelihood values against the irregular
+  plot of the log pseudolikelihood or AIC values against the irregular
   parameters) or printed (yielding information about the best fitting
   values of the irregular parameters). 
  

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.011
+	CHANGES IN spatstat VERSION 1.39-1.013
 
 OVERVIEW
 
@@ -114,6 +114,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Can now reconcile models fitted using different dummy points,
    different values of 'rbord', different values of 'use.gam', etc. 
 
+   o profilepl
+   New argument 'aic' makes it possible to optimise the parameters 
+   by minimising AIC.
+
    o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
    rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,
    rPoissonCluster, rGaussPoisson, rstrat, rsyst, rcell, rthin, rjitter,
@@ -208,6 +212,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.ppm, print.summary.ppm
    Output now respects options('width') and spatstat.options('terse')
 
+   o plot.profilepl
+   Now recognises 'lty', 'lwd', 'col' etc
+
 BUG FIXES
 
    o markcorrint
@@ -242,6 +249,14 @@ BUG FIXES
 
    o envelope.ppm
    Crashed if global=TRUE and savefuns=TRUE.
+   Fixed.
+
+   o setminus.owin
+   Crashed if the result was empty and the input was polygonal.
+   Fixed.
+
+   o predict.ppm
+   Crashed sometimes when type="cif" and ngrid was very large.
    Fixed.
 
    o pixelquad

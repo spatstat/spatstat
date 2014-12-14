@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.113 $	$Date: 2014/12/13 05:40:40 $
+#	$Revision: 2.114 $	$Date: 2014/12/14 02:35:18 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -619,16 +619,17 @@ labels.ppm <- function(object, ...) {
 
 AIC.ppm <- function(object, ..., k=2, takeuchi=TRUE) {
   ll <- logLik(object, warn=FALSE)
+  pen <- attr(ll, "df")
   if(takeuchi && !is.poisson(object)) {
     vv <- vcov(object, what="internals")
     logi <- (object$method == "logi")
     J  <- with(vv, if(!logi) Sigma else (Sigma1log+Sigma2log))
     H  <- with(vv, if(!logi) A1 else Slog)
-    ## Takeuchi penalty = trace of J H^{-1}
-    pen <- sum(diag(J %*% solve(H)))
-  } else {
-    pen <- attr(ll, "df")
-  }
+    ## Takeuchi penalty = trace of J H^{-1} = trace of H^{-1} J
+    JiH <- try(solve(H, J), silent=TRUE)
+    if(!inherits(JiH, "try-error")) 
+      pen <- sum(diag(JiH))
+  } 
   return(- 2 * as.numeric(ll) + k * pen)
 }
 

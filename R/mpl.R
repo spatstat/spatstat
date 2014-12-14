@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.185 $	$Date: 2014/11/16 10:28:09 $
+#	$Revision: 5.186 $	$Date: 2014/12/14 09:06:32 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/11/16 10:28:09 $")
+                        date="$Date: 2014/12/14 09:06:32 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1030,7 +1030,8 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
                     nD - nperblock * nfull, "dummy points"))
     ##
     ##
-    Ei <- cbind(1:nX, 1:nX)
+    seqX <- seq_len(nX)
+    EX <- cbind(seqX, seqX)
     ##
     for(iblock in 1:nblocks) {
       first <- min(nD, (iblock - 1) * nperblock + 1)
@@ -1039,7 +1040,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       Di <- P[Pdummy[first:last]]
       Pi <- superimpose(X, Di, check=FALSE, W=X$window)
       ## evaluate potential
-      Vi <- evalInterEngine(X=X, P=Pi, E=Ei, 
+      Vi <- evalInterEngine(X=X, P=Pi, E=EX, 
                             interaction=interaction,
                             correction=correction,
                             ...,
@@ -1048,8 +1049,20 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
         V <- Vi
       } else {
         ## tack on the glm variables for the extra DUMMY points only
-        V <- rbind(V, Vi[-(1:nX), , drop=FALSE])
+        V <- rbind(V, Vi[-seqX, , drop=FALSE])
       }
+    }
+    ## The first 'nX' rows of V contain values for X.
+    ## The remaining rows of V contain values for dummy points.
+    if(length(Pdata) == 0) {
+      ## simply discard rows corresponding to data
+      V <- V[-seqX, , drop=FALSE]
+    } else {
+      ## replace data in correct position
+      ii <- integer(nP)
+      ii[Pdata] <- seqX
+      ii[Pdummy] <- (nX+1):nrow(V)
+      V <- V[ii, ]
     }
   } 
   return(V)

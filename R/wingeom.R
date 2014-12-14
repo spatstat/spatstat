@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.94 $	$Date: 2014/11/10 08:19:10 $
+#	$Revision: 4.95 $	$Date: 2014/12/14 08:16:37 $
 #
 #
 #
@@ -451,7 +451,7 @@ setminus.owin <- function(A, B, ...) {
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
     ab <- polyclip::polyclip(a, b, "minus", fillA="nonzero", fillB="nonzero")
     if(length(ab) == 0)
-      return(emptywindow(C))
+      return(emptywindow(A))
     # ensure correct polarity
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)

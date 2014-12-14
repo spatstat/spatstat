@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.23 $  $Date: 2014/11/10 11:41:52 $
+#  $Revision: 1.26 $  $Date: 2014/12/14 02:45:36 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -16,7 +16,7 @@ profilepl <- local({
     return(correction)
   }
   
-  profilepl <- function(s, f, ..., rbord=NULL, verbose=TRUE) {
+  profilepl <- function(s, f, ..., aic=FALSE, rbord=NULL, verbose=TRUE) {
     callenv <- parent.frame()
     s <- as.data.frame(s)
     n <- nrow(s)
@@ -34,7 +34,7 @@ profilepl <- local({
     if(pass.cfa && got.cfa)
       stop("Some columns in s are superfluous")
     ##
-    logmpl <- numeric(n)
+    criterion <- numeric(n)
     ## make a fake call
     pseudocall <- match.call()
     pseudocall[[1]] <- as.symbol("ppm")
@@ -90,7 +90,7 @@ profilepl <- local({
     for(i in 1:n) {
       if(verbose)
         progressreport(i, n)
-      fi <- do.call("f", as.list(s[i, is.farg, drop=FALSE]))
+      fi <- do.call(f, as.list(s[i, is.farg, drop=FALSE]))
       if(!inherits(fi, "interact"))
         stop(paste("f did not yield an object of class", sQuote("interact")))
       if(pass.cfa)
@@ -119,7 +119,8 @@ profilepl <- local({
         fiti <- do.call("ppm", argi, envir=callenv)
       }
       ## save log PL for each fit
-      logmpl[i] <- as.numeric(logLik(fiti, warn=FALSE))
+      criterion[i] <-
+          if(aic) -AIC(fiti) else as.numeric(logLik(fiti, warn=FALSE))
       ## save fitted coefficients for each fit
       co <- coef(fiti)
       if(i == 1) {
@@ -129,8 +130,8 @@ profilepl <- local({
         allcoef <- rbind(allcoef, co)
     }
     if(verbose) message("Fitting optimal model...")
-    opti <- which.max(logmpl)
-    optint <- do.call("f", as.list(s[opti, is.farg, drop=FALSE]))
+    opti <- which.max(criterion)
+    optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
     optarg <- list(interaction=optint, ..., rbord=rbord)
     if(pass.cfa) {
       optcfa <- as.list(s[opti, !is.farg, drop=FALSE])
@@ -139,8 +140,12 @@ profilepl <- local({
     }
     optfit <- do.call("ppm", optarg, envir=callenv)
     if(verbose) message("done.")
+    critname <- if(aic) "-AIC" else
+                if(is.poisson(optfit)) "log L" else
+                if(optfit$method == "logi") "log CL" else "log PL"
     result <- list(param=s,
-                   prof=logmpl,
+                   prof=criterion,
+                   critname=critname,
                    iopt=opti,
                    fit=optfit,
                    rbord=rbord,
@@ -231,7 +236,7 @@ plot.profilepl <- function(x, ..., add=FALSE, main=NULL,
   ## y variable for plot                  
   if(is.null(coeff)) {
     yvalues <- x$prof
-    ylab <- "log PL"
+    ylab <- x$critname %orifnull% "log PL"
   } else {
     stopifnot(is.character(coeff))
     allcoef <- x$allcoef
@@ -243,13 +248,18 @@ plot.profilepl <- function(x, ..., add=FALSE, main=NULL,
   ## start plot
   if(!add)
     do.call.matched("plot.default",
-                  resolve.defaults(list(x=range(xvalues), y=range(yvalues)),
-                                   list(type="n", main=main),
-                                   list(...),
-                                   list(ylab=ylab, xlab=xname)))
+                    resolve.defaults(list(x=range(xvalues), y=range(yvalues)),
+                                     list(type="n", main=main),
+                                     list(...),
+                                     list(ylab=ylab, xlab=xname)),
+                    extrargs=graphicsPars("plot"))
+                    
   ## single curve
   if(npara == 1) {
-    do.call.matched("lines.default", list(x=xvalues, y=yvalues, ...))
+    do.call.matched("lines.default",
+                    resolve.defaults(list(x=xvalues, y=yvalues, ...),
+                                     spatstat.options("par.fv")),
+                    extrargs=graphicsPars("lines"))
     abline(v = xvalues[x$iopt], lty=2, col="green")
     return(invisible(NULL))
   }
