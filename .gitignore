@@ -13,3 +13,6 @@ spatstat.Rproj
 
 # .o files
 src/*o
+
+# Profiling logs
+Rprof.out
