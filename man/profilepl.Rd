@@ -97,6 +97,10 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
   will be interpreted as interaction parameters. Other columns will be
   interpreted as trend parameters.
 
+  The data frame \code{s} must provide values for each argument of
+  \code{f}, except for the optional arguments, which are those arguments of
+  \code{f} that have the default value \code{NA}.  
+
   To find the best fit,
   each row of \code{s} will be taken in turn. Interaction parameters in this
   row will be passed to \code{f}, resulting in an interaction object. 

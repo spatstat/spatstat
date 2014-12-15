@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.26 $  $Date: 2014/12/14 02:45:36 $
+#  $Revision: 1.27 $  $Date: 2014/12/15 00:57:31 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -15,6 +15,7 @@ profilepl <- local({
            covariates = NULL, covfunargs = NULL, control = NULL) {
     return(correction)
   }
+  isSingleNA <- function(x) { length(x) == 1 && is.na(x) }
   
   profilepl <- function(s, f, ..., aic=FALSE, rbord=NULL, verbose=TRUE) {
     callenv <- parent.frame()
@@ -25,8 +26,18 @@ profilepl <- local({
     ## validate 's'
     parms <- names(s)
     fargs <- names(formals(f))
-    if(!all(fargs %in% parms))
-      stop("Some arguments of f are not provided in s")
+    if(!all(fargs %in% parms)) {
+      bad <- !(fargs %in% parms)
+      forgiven <- sapply(formals(f)[bad], isSingleNA)
+      if(!all(forgiven)) {
+        slecht <- fargs[bad[!forgiven]]
+        nsl <- length(slecht)
+        stop(paste(ngettext(nsl, "Argument", "Arguments"),
+                   commasep(sQuote(slecht)),
+                   ngettext(nsl, "is", "are"),
+                   "not provided in the data frame s"))
+      }
+    }
     ## extra columns in 's' are assumed to be parameters of covariate functions
     is.farg <- parms %in% fargs
     pass.cfa <- any(!is.farg)

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.013
+	CHANGES IN spatstat VERSION 1.39-1.014
 
 OVERVIEW
 
@@ -117,6 +117,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o profilepl
    New argument 'aic' makes it possible to optimise the parameters 
    by minimising AIC.
+
+   o profilepl
+   No longer requires values for parameters which are 'optional' 
+   (such as the hard core distance).
 
    o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
    rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,
