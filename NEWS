@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.017
+	CHANGES IN spatstat VERSION 1.39-1.019
 
 OVERVIEW
 
@@ -109,6 +109,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    from data (by the 'self-starting' feature of interactions).
    This was already true of Hardcore, StraussHard, MultiHard 
    and MultiStraussHard.
+
+   o Hybrid
+   Hybrid models now apply the 'self-starting' feature
+   to each component model. 
 
    o anova.ppm
    Can now reconcile models fitted using different dummy points,

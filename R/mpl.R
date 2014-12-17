@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.186 $	$Date: 2014/12/14 09:06:32 $
+#	$Revision: 5.187 $	$Date: 2014/12/17 09:28:02 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/12/14 09:06:32 $")
+                        date="$Date: 2014/12/17 09:28:02 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1073,6 +1073,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
 evalInterEngine <- function(X, P, E, 
                             interaction, correction,
                             ...,
+                            Reach = NULL,
                             precomputed=NULL,
                             savecomputed=FALSE) {
 
@@ -1095,7 +1096,7 @@ evalInterEngine <- function(X, P, E,
   if(is.null(V)) {
     ## use generic evaluator for family
     evaluate <- interaction$family$eval
-    Reach <- reach(interaction)
+    if(is.null(Reach)) Reach <- reach(interaction)
     if("precomputed" %in% names(formals(evaluate))) {
       ## Use precomputed data
       ## version 1.9-3 onward (pairwise and pairsat families)
