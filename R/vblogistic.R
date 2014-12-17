@@ -7,7 +7,7 @@
 #' 
 #' Special version for 'spatstat'
 #'
-#'    $Revision: 1.2 $ $Date: 2014/12/02 01:29:32 $
+#'    $Revision: 1.4 $ $Date: 2014/12/17 00:53:11 $
 #' 
 ####################################################
 #' Used inside ppm

@@ -85,12 +85,11 @@ which can then be fitted to point pattern data.
    # prints a sensible description of itself
 
    \dontrun{
-   ppm(cells, ~1, Triplets(r=0.1))
+   ppm(cells, ~1, Triplets(r=0.2))
    # fit the stationary Triplets process to `cells'
    }
 
-
-   ppm(cells, ~polynom(x,y,3), Triplets(r=0.1))
+   ppm(cells, ~polynom(x,y,3), Triplets(r=0.2))
    # fit a nonstationary Triplets process with log-cubic polynomial trend
 }
 \author{Adrian Baddeley

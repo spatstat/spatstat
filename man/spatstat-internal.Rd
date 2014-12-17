@@ -1163,7 +1163,8 @@ ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
 \method{plot}{parres}(x, \dots)
 \method{plot}{pppmatching}(x, addmatch = NULL, main = NULL, \dots)
 \method{plot}{plotpairsim}(x, \dots)
-\method{plot}{profilepl}(x, \dots, add=FALSE, main=NULL, tag=TRUE, coeff=NULL, xvariable=NULL)
+\method{plot}{profilepl}(x, \dots, add, main, tag, coeff, xvariable,
+                         col, lty, lwd, col.opt, lty.opt, lwd.opt)
 \method{plot}{qqppm}(x, \dots, limits=TRUE, monochrome=FALSE,
            limcol=if(monochrome) "black" else "red")
 \method{plot}{spatialcdf}(x, \dots, xlab, ylab)

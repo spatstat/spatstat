@@ -51,10 +51,10 @@
   \code{\link{tess}}
 }
 \examples{
-   Y <- connected(redwood, 0.13)
+   Y <- connected(redwoodfull, 0.1)
    if(interactive()) {
-     plot(Y, cols=1:length(levels(f)))
-     plot(split(Y))
+    plot(Y, cols=1:length(levels(marks(Y))),
+         main="connected(redwoodfull, 0.1)")
    }
 }
 \author{

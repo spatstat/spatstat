@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.27 $  $Date: 2014/12/15 00:57:31 $
+#  $Revision: 1.31 $  $Date: 2014/12/17 05:01:35 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -226,75 +226,122 @@ as.ppm.profilepl <- function(object) {
 ##  plot method 
 ##
 
-plot.profilepl <- function(x, ..., add=FALSE, main=NULL,
-                           tag=TRUE, coeff=NULL, xvariable=NULL) {
-  para <- x$param
-  npara <- ncol(para)
-  ## main header
-  if(is.null(main))
-    main <- short.deparse(x$pseudocall)
-  ## x variable for plot
-  if(is.null(xvariable)) {
-    xvalues <- para[,1]
-    xname <- names(para)[1]
-  } else {
-    stopifnot(is.character(xvariable))
-    if(!(xvariable %in% names(para)))
-      stop("There is no irregular parameter named", sQuote(xvariable))
-    xvalues <- para[[xvariable]]
-    xname <- xvariable
-  }
-  ## y variable for plot                  
-  if(is.null(coeff)) {
-    yvalues <- x$prof
-    ylab <- x$critname %orifnull% "log PL"
-  } else {
-    stopifnot(is.character(coeff))
-    allcoef <- x$allcoef
-    if(!(coeff %in% names(allcoef)))
-      stop(paste("There is no coefficient named", sQuote(coeff), "in the fitted model"))
-    yvalues <- allcoef[[coeff]]
-    ylab <- paste("coefficient:", coeff)
-  }
-  ## start plot
-  if(!add)
-    do.call.matched("plot.default",
-                    resolve.defaults(list(x=range(xvalues), y=range(yvalues)),
-                                     list(type="n", main=main),
+plot.profilepl <- local({
+
+  plot.profilepl <- function(x, ..., add=FALSE, main=NULL,
+                             tag=TRUE, coeff=NULL, xvariable=NULL,
+                             col=1, lty=1, lwd=1,
+                             col.opt="green", lty.opt=3, lwd.opt=1) {
+    para <- x$param
+    ## graphics arguments may be expressions involving parameters
+    if(ncol(para) > 1) {
+      col <- eval(substitute(col), para)
+      lwd <- eval(substitute(lwd), para)
+      lty <- eval(substitute(lty), para)
+      px <- cbind(para, col, lwd, lty, stringsAsFactors=FALSE)
+      col <- px$col
+      lwd <- px$lwd
+      lty <- px$lty
+    }
+    ## strip any column that is entirely NA
+    nacol <- sapply(para, function(z) all(!is.finite(z)))
+    para <- para[, !nacol, drop=FALSE]
+    ## 
+    npara <- ncol(para)
+    ## main header
+    if(is.null(main))
+      main <- short.deparse(x$pseudocall)
+    ## x variable for plot
+    if(is.null(xvariable)) {
+      xvalues <- para[,1]
+      xname <- names(para)[1]
+    } else {
+      stopifnot(is.character(xvariable))
+      if(!(xvariable %in% names(para)))
+        stop("There is no irregular parameter named", sQuote(xvariable))
+      xvalues <- para[[xvariable]]
+      xname <- xvariable
+    }
+    ## y variable for plot                  
+    if(is.null(coeff)) {
+      yvalues <- x$prof
+      ylab <- x$critname %orifnull% "log PL"
+    } else {
+      stopifnot(is.character(coeff))
+      allcoef <- x$allcoef
+      if(!(coeff %in% names(allcoef)))
+        stop(paste("There is no coefficient named", sQuote(coeff),
+                   "in the fitted model"))
+      yvalues <- allcoef[[coeff]]
+      ylab <- paste("coefficient:", coeff)
+    }
+    ## start plot
+    if(!add)
+      do.call.matched("plot.default",
+                      resolve.defaults(list(x=range(xvalues), y=range(yvalues)),
+                                       list(type="n", main=main),
+                                       list(...),
+                                       list(ylab=ylab, xlab=xname)),
+                      extrargs=graphicsPars("plot"))
+
+    linepars <- graphicsPars("lines")
+  
+    if(npara == 1) {
+      ## single curve
+      do.call.matched(lines.default,
+                      resolve.defaults(list(x=xvalues, y=yvalues, ...),
+                                       spatstat.options("par.fv")),
+                      extrargs=linepars)
+    } else {
+      ## multiple curves
+      other <- para[, -1, drop=FALSE]
+      tapply(1:nrow(para),
+             as.list(other),
+             plotslice, 
+             xvalues=xvalues, yvalues=yvalues, other=other,
+             tag=tag, ...,
+             col=col, lwd=lwd, lty=lty,
+             lineargs=linepars)
+    }
+
+    
+    ## show optimal value
+    do.call.matched(abline,
+                    resolve.defaults(list(v = xvalues[x$iopt]),
                                      list(...),
-                                     list(ylab=ylab, xlab=xname)),
-                    extrargs=graphicsPars("plot"))
-                    
-  ## single curve
-  if(npara == 1) {
-    do.call.matched("lines.default",
-                    resolve.defaults(list(x=xvalues, y=yvalues, ...),
-                                     spatstat.options("par.fv")),
-                    extrargs=graphicsPars("lines"))
-    abline(v = xvalues[x$iopt], lty=2, col="green")
+                                     list(lty=lty.opt, lwd=lwd.opt,
+                                          col=col.opt)),
+                    extrargs=linepars)
     return(invisible(NULL))
   }
 
-  ## multiple curves
-  other <- para[, -1, drop=FALSE]
-  tapply(1:nrow(para),
-         as.list(other),
-         function(z, xvalues, yvalues, other, tag) {
-           fz <- xvalues[z]
-           pz<- yvalues[z]
-           lines(fz, pz)
-           if(tag) {
-             oz <- other[z, , drop=FALSE]
-             uniques <- apply(oz, 2, unique)
-             labels <- paste(names(uniques), "=", uniques, sep="")
-             label <- paste(labels, sep=",")
-             ii <- which.max(pz)
-             text(fz[ii], pz[ii], label)
-           }
-         },
-         xvalues=xvalues, yvalues=yvalues, other=other, tag=tag)
+  plotslice <- function(z, xvalues, yvalues, other, tag=TRUE, ...,
+                        lty=1, col=1, lwd=1, lineargs) {
+    fz <- xvalues[z]
+    pz <- yvalues[z]
+    n <- length(xvalues)
+    if(length(lty) == n) lty <- unique(lty[z])[1]
+    if(length(col) == n) col <- unique(col[z])[1]
+    if(length(lwd) == n) lwd <- unique(lwd[z])[1]
+    do.call.matched(lines.default,
+                    resolve.defaults(list(x=fz, y=pz,
+                                          col=col, lwd=lwd, lty=lty),
+                                     list(...)),
+                    extrargs=lineargs)
+    if(tag) {
+      oz <- other[z, , drop=FALSE]
+      uniques <- apply(oz, 2, unique)
+      labels <- paste(names(uniques), "=", uniques, sep="")
+      label <- paste(labels, sep=",")
+      ii <- which.max(pz)
+      do.call.matched(text.default,
+                      list(x=fz[ii], y=pz[ii], labels=label,
+                           col=col, ...))
+    }
+    return(NULL)
+  }
 
-  abline(v = xvalues[x$iopt], lty=2, col="green")
-  return(invisible(NULL))
-}
+  plot.profilepl
+})
+
 
