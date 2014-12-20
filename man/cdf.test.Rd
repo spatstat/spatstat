@@ -7,25 +7,29 @@
 \alias{cdf.test.slrm}
 \title{Spatial Distribution Test for Point Pattern or Point Process Model} 
 \description{
-  Performs a test of goodness-of-fit of a Poisson point process model.
+  Performs a test of goodness-of-fit of a point process model.
   The observed and predicted distributions
   of the values of a spatial covariate are compared using either the
   Kolmogorov-Smirnov test,
   \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
   or Anderson-Darling test.
+  For non-Poisson models, a Monte Carlo test is used.
 }
 \usage{
 cdf.test(...)
 
-\method{cdf.test}{ppp}(X, covariate, test=c("ks", "cvm", "ad"), ..., jitter=TRUE)
+\method{cdf.test}{ppp}(X, covariate, test=c("ks", "cvm", "ad"), \dots, jitter=TRUE)
 
-\method{cdf.test}{ppm}(model, covariate,  test=c("ks", "cvm", "ad"), ..., jitter=TRUE)
+\method{cdf.test}{ppm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots,
+          jitter=TRUE, nsim=99, verbose=TRUE)
 
-\method{cdf.test}{lpp}(X, covariate,  test=c("ks", "cvm", "ad"), ..., jitter=TRUE)
+\method{cdf.test}{lpp}(X, covariate,  test=c("ks", "cvm", "ad"), \dots, jitter=TRUE)
 
-\method{cdf.test}{lppm}(model, covariate,  test=c("ks", "cvm", "ad"), ..., jitter=TRUE)
+\method{cdf.test}{lppm}(model, covariate,  test=c("ks", "cvm", "ad"),
+\dots,
+          jitter=TRUE, nsim=99, verbose=TRUE)
 
-\method{cdf.test}{slrm}(model, covariate,  test=c("ks", "cvm", "ad"), ..., modelname=NULL, covname=NULL)
+\method{cdf.test}{slrm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots, modelname=NULL, covname=NULL)
 }
 \arguments{
   \item{X}{
@@ -62,13 +66,24 @@ cdf.test(...)
     Character strings giving alternative names for \code{model}
     and \code{covariate} to be used in labelling plot axes.
   }
+  \item{nsim}{
+    Number of simulated realisations from the \code{model} to be used
+    for the Monte Carlo test, when \code{model} is not a Poisson process.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports when
+    performing a Monte Carlo test.
+  }
 }
 \details{
-  These functions perform a goodness-of-fit test of a Poisson point
+  These functions perform a goodness-of-fit test of a Poisson or Gibbs point
   process model fitted to point pattern data. The observed distribution
   of the values of a spatial covariate at the data points,
   and the predicted distribution of the same values under the model,
-  are compared using the Kolmogorov-Smirnov test. 
+  are compared using the Kolmogorov-Smirnov test,
+  the \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises test
+  or the Anderson-Darling test. For Gibbs models, a Monte Carlo test is
+  performed using these test statistics.
 
   The function \code{cdf.test} is generic, with methods for
   point patterns (\code{"ppp"} or \code{"lpp"}),
@@ -77,7 +92,7 @@ cdf.test(...)
   \itemize{
     \item 
     If \code{X} is a point pattern dataset (object of class
-    \code{"ppp"}), then \code{cdf.test(X, ...)}
+    \code{"ppp"}), then \code{cdf.test(X, \dots)}
     performs a goodness-of-fit test of the
     uniform Poisson point process (Complete Spatial Randomness, CSR)
     for this dataset.
@@ -87,12 +102,11 @@ cdf.test(...)
     \item
     If \code{model} is a fitted point process model
     (object of class \code{"ppm"} or \code{"lppm"})
-    then \code{cdf.test(model, ...)} performs
-    a test of goodness-of-fit for this fitted model. In this case,
-    \code{model} should be a Poisson point process.
+    then \code{cdf.test(model, \dots)} performs
+    a test of goodness-of-fit for this fitted model. 
     \item
     If \code{model} is a fitted spatial logistic regression
-    (object of class \code{"slrm"}) then \code{cdf.test(model, ...)} performs
+    (object of class \code{"slrm"}) then \code{cdf.test(model, \dots)} performs
     a test of goodness-of-fit for this fitted model. 
   }
   The test is performed by comparing the observed distribution
@@ -146,6 +160,15 @@ cdf.test(...)
   spatial data, and using Kolmogorov-Smirnov) by Berman (1986).
   See also Baddeley et al (2005).
 
+  If \code{model} is not a Poisson process, then
+  a Monte Carlo test is performed, by generating \code{nsim}
+  point patterns which are simulated realisations of the \code{model},
+  re-fitting the model to each simulated point pattern, 
+  and calculating the test statistic for each fitted model.
+  The Monte Carlo \eqn{p} value is determined by comparing
+  the simulated values of the test statistic 
+  with the value for the original data.
+  
   The return value is an object of class \code{"htest"} containing the
   results of the hypothesis test. The print method for this class
   gives an informative summary of the test outcome.
@@ -227,7 +250,7 @@ cdf.test(...)
    cdf.test(nztrees, funimage)
 
    # fit inhomogeneous Poisson model and test
-   model <- ppm(nztrees, ~x)
+   model <- ppm(nztrees ~x)
    cdf.test(model, "x")
 
    if(interactive()) {
@@ -235,9 +258,9 @@ cdf.test(...)
      X <- rpoispp(function(x,y) { 100 * exp(x) }, win=square(1))
 
      # fit uniform Poisson process
-     fit0 <- ppm(X, ~1)
+     fit0 <- ppm(X ~1)
      # fit correct nonuniform Poisson process
-     fit1 <- ppm(X, ~x)
+     fit1 <- ppm(X ~x)
 
      # test wrong model
      cdf.test(fit0, "x")
@@ -248,7 +271,7 @@ cdf.test(...)
    # multitype point pattern
    cdf.test(amacrine, "x")
    yimage <- as.im(function(x,y){y}, W=Window(amacrine))
-   cdf.test(ppm(amacrine, ~marks+y), yimage)
+   cdf.test(ppm(amacrine ~marks+y), yimage)
 }
 \keyword{htest}
 \keyword{spatial}

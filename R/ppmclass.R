@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.114 $	$Date: 2014/12/14 02:35:18 $
+#	$Revision: 2.115 $	$Date: 2014/12/19 00:28:18 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -64,9 +64,11 @@ function(x, ...,
                 always = { force.SE <- TRUE }, 
                 never  = { force.no.SE <- TRUE },
                 poisson = {
-                  do.SE <- is.poisson(x) &&
-                           !is.null(x$fitter) && (x$fitter != "gam") &&
-                           waxlyrical("extras", terselevel)
+                  do.SE <-
+                    is.poisson(x) &&
+                      !identical(x$fitter, "gam") &&
+                        (!is.null(x$varcov) || x$method != "logi") &&
+                          waxlyrical("extras", terselevel)
                 })
   do.SE <- (do.SE || force.SE) && !force.no.SE
 

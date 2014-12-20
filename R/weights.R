@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.32 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 4.33 $	$Date: 2014/12/19 14:08:19 $
 #
 #
 # Main functions:
@@ -124,6 +124,9 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
         if(verbose) 
           cat(paste("grid weights for a", nx, "x", ny, "grid of tiles\n"))
         
+        if(is.null(npix)) npix <- rev(spatstat.options("npixel"))
+        npix <- ensure2vector(npix)
+        
         if(is.null(areas)) {
   	  # compute tile areas
           if(win$type == "rectangle") {
@@ -133,15 +136,11 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
 
           } else {
             # convert window to mask
-
             win <- as.mask(win, dimyx=rev(npix))
 
-            if(verbose) {
-              np <- npix %orifnull% rev(spatstat.options("npixel"))
-              np <- ensure2vector(npix)
-              cat(paste("Approximating window by mask (",
-                        np[1], " x ", np[2], " pixels)\n", sep=""))
-            }
+            if(verbose) 
+              splat(paste0("Approximating window by mask (",
+                           npix[1], " x ", npix[2], " pixels)"))
                 
             # extract pixel coordinates inside window
             rxy <- rasterxy.mask(win, drop=TRUE)
@@ -157,16 +156,17 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
             tilepixels <- as.vector(table(pixelid))
             pixelarea <- win$xstep * win$ystep
             areas <- tilepixels * pixelarea
-            
             zeroareas <- (tilepixels == 0)
           } 
-        }
+        } else zeroareas <- (areas == 0)
         
         id <- gridindex(x, y, win$xrange, win$yrange, nx, ny)$index
 
         if(win$type != "rectangle" && any(uhoh <- zeroareas[id])) {
           # this can happen: the tile has digital area zero
           # but contains a data/dummy point 
+          if(win$type != "mask") 
+            pixelarea <- area(Frame(win))/prod(npix)
           slivers <- unique(id[uhoh])
           areas[slivers] <- pixelarea/2
         }

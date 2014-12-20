@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.019
+	CHANGES IN spatstat VERSION 1.39-1.020
 
 OVERVIEW
 
@@ -27,6 +27,8 @@ OVERVIEW
    o New datasets.
 
    o New vignette, summarising all datasets installed with spatstat.
+
+   o Tests and diagnostics now include a Monte Carlo option.
 
    o Faster checking of large datasets.
 
@@ -147,6 +149,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'se' replaces option 'type="se"'.
    Old argument 'total' is deprecated: use 'window' and set 'type="count"'.
    
+   o cdf.test
+   The methods for class 'ppm' and 'lppm' now handle Gibbs models
+   and perform a Monte Carlo test in this case.
+
+   o lurking, diagnose.ppm
+   Lurking variable plot can now include simulation envelopes.
+
    o rmh.ppm
    New argument 'w' determines the window in which the simulated pattern
    is generated.
@@ -219,6 +228,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o print.ppm, print.summary.ppm
    Output now respects options('width') and spatstat.options('terse')
+
+   o print.ppm
+   By default, standard errors are not printed 
+   for a model fitted with method="logi" (due to computational load)
 
    o plot.profilepl
    Now recognises 'lty', 'lwd', 'col' etc

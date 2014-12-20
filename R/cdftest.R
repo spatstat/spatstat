@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.10 $  $Date: 2014/11/11 03:01:53 $
+#  $Revision: 2.11 $  $Date: 2014/12/19 11:25:15 $
 #
 #
 
@@ -40,7 +40,7 @@ cdf.test.ppp <-
       # multitype
       mf <- summary(X)$marks$frequency
       if(all(mf > 0)) {
-        model <- ppm(X, ~marks)
+        model <- ppm(X ~marks)
         modelname <- "CSRI"
       } else {
         warning("Ignoring marks, because some mark values have zero frequency")
@@ -64,7 +64,8 @@ cdf.test.ppp <-
 }
 
 cdf.test.ppm <- 
-  function(model, covariate, test=c("ks", "cvm", "ad"), ..., jitter=TRUE) {
+  function(model, covariate, test=c("ks", "cvm", "ad"), ...,
+           jitter=TRUE, nsim=99, verbose=TRUE) {
   modelname <- short.deparse(substitute(model))
   covname <- singlestring(short.deparse(substitute(covariate)))
   test <- match.arg(test)
@@ -74,7 +75,7 @@ cdf.test.ppm <-
     modelname <- "CSR"
   do.call("spatialCDFtest",
           resolve.defaults(list(model, covariate, test=test),
-                           list(jitter=jitter),
+                           list(jitter=jitter, nsim=nsim, verbose=verbose),
                            list(...),
                            list(modelname=modelname,
                                 covname=covname)))
@@ -94,7 +95,7 @@ cdf.test.lpp <-
       # multitype
       mf <- table(marks(X))
       if(all(mf > 0)) {
-        model <- lppm(X, ~marks)
+        model <- lppm(X ~ marks)
         modelname <- "CSRI"
       } else {
         warning("Ignoring marks, because some mark values have zero frequency")
@@ -119,7 +120,8 @@ cdf.test.lpp <-
 
 cdf.test.lppm <- function(model, covariate,
                           test=c("ks", "cvm", "ad"),
-                          ..., jitter=TRUE) {
+                          ..., jitter=TRUE,
+                          nsim=99, verbose=TRUE) {
   modelname <- short.deparse(substitute(model))
   covname <- singlestring(short.deparse(substitute(covariate)))
   test <- match.arg(test)
@@ -129,7 +131,7 @@ cdf.test.lppm <- function(model, covariate,
     modelname <- "CSR"
   do.call("spatialCDFtest",
           resolve.defaults(list(model, covariate, test=test),
-                           list(jitter=jitter),
+                           list(jitter=jitter, nsim=nsim, verbose=verbose),
                            list(...),
                            list(modelname=modelname,
                                 covname=covname)))
@@ -209,12 +211,11 @@ cdf.test.slrm <- function(model, covariate,
 spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                            ...,
                            dimyx=NULL, eps=NULL,
-                           jitter=TRUE, 
+                           jitter=TRUE, nsim=99, verbose=TRUE,
                            modelname=NULL, covname=NULL, dataname=NULL) {
-  if(!is.poisson(model))
-    stop("Only implemented for Poisson point process models")
   # conduct test based on comparison of CDF's of covariate values
   test <- match.arg(test)
+  ispois <- is.poisson(model)
   # compute the essential data
   fra <- spatialCDFframe(model, covariate,
                          dimyx=dimyx, eps=eps,
@@ -222,7 +223,7 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                          covname=covname, dataname=dataname)
   values <- fra$values
   info   <- fra$info
-  # Test uniformity of transformed values
+  ## Test uniformity of transformed values
   U <- values$U
   result <- switch(test,
                    ks  = ks.test(U, "punif", ...),
@@ -232,11 +233,40 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                      ks="Kolmogorov-Smirnov",
                      cvm="Cramer-Von Mises",
                      ad="Anderson-Darling")
+  ## 
+  if(!ispois) {
+    ## Gibbs model: perform Monte Carlo test
+    result$poisson.p.value <- result$p.value
+    pobs <- result$p.value
+    Xsim <- simulate(model, nsim=nsim, progress=verbose)
+    pvals <- numeric(nsim)
+    if(verbose) cat("Processing.. ")
+    for(i in seq_len(nsim)) {
+      model.i <- update(model, Xsim[[i]])
+      fra.i <- spatialCDFframe(model.i, covariate,
+                               dimyx=dimyx, eps=eps,
+                               jitter=jitter, modelname=modelname,
+                               covname=covname, dataname=dataname)
+      U.i <- fra.i$values$U
+      res.i <- switch(test,
+                      ks  = ks.test(U.i, "punif", ...),
+                      cvm = cvm.test(U.i, "punif", ...),
+                      ad = ad.test(U.i, "punif", ...))     
+      pvals[i] <- res.i$p.value
+      if(verbose) progressreport(i, nsim)
+    }
+    if(verbose) cat("Done.\n")
+    ## insert Monte Carlo p-value
+    result$p.value <- mean(pobs <= c(pobs, pvals))
+  }
+  ## 
   # modify the 'htest' entries
   csr <- info$csr
-  result$method <- paste("Spatial", testname, "test of",
-                         if(csr) "CSR" else "inhomogeneous Poisson process",
-                         "in", info$spacename)
+  modelname <- if(csr) "CSR" else
+               if(ispois) "inhomogeneous Poisson process" else "Gibbs process"
+  result$method <-
+    paste(if(ispois) "Spatial" else "Monte Carlo spatial",
+          testname, "test of", modelname, "in", info$spacename)
   result$data.name <-
     paste("covariate", sQuote(singlestring(info$covname)),
           "evaluated at points of", sQuote(info$dataname), 

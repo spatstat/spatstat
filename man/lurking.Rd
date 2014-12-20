@@ -9,12 +9,15 @@ lurking(object, covariate, type="eem",
                     cumulative=TRUE,
                     clipwindow=default.clipwindow(object),
                     rv,
-                    plot.sd, plot.it=TRUE,
+                    plot.sd,
+                    envelope=FALSE, nsim=39, nrank=1,
+                    plot.it=TRUE,
                     typename,
                     covname,
                     oldstyle=FALSE, check=TRUE,
                     \dots,
-                    splineargs=list(spar=0.5))
+                    splineargs=list(spar=0.5),
+                    verbose=TRUE)
 }
 \arguments{
   \item{object}{
@@ -59,6 +62,22 @@ lurking(object, covariate, type="eem",
     The default is \code{TRUE} for Poisson models and
     \code{FALSE} for non-Poisson models. See Details.
   }
+  \item{envelope}{
+    Logical value indicating whether to compute simulation envelopes
+    for the plot. Alternatively \code{envelope} may be a list of
+    point patterns to use for computing the simulation envelopes,
+    or an object of class \code{"envelope"} containing simulated point
+    patterns.
+  }
+  \item{nsim}{
+    Number of simulated point patterns to be generated
+    to produce the simulation envelope, if \code{envelope=TRUE}.
+  }
+  \item{nrank}{
+    Integer. Rank of the envelope value amongst the \code{nsim} simulated
+    values. A rank of 1 means that the minimum and maximum
+    simulated values will be used.
+  }
   \item{plot.it}{
     Logical value indicating whether 
     plots should be shown. If \code{plot.it=FALSE}, only
@@ -90,6 +109,10 @@ lurking(object, covariate, type="eem",
   \item{splineargs}{
     A list of arguments passed to \code{smooth.spline}
     for the estimation of the derivatives in the case \code{cumulative=FALSE}.
+  }
+  \item{verbose}{
+    Logical value indicating
+    whether to print progress reports during Monte Carlo simulation.
   }
 }
 \value{

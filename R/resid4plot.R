@@ -182,20 +182,29 @@ resid4plot <- local({
     theoreticalX <- a$theoretical$covariate
     theoreticalV <- a$theoretical$mean
     theoreticalSD <- a$theoretical$sd
+    theoreticalHI <- a$theoretical$upper
+    theoreticalLO <- a$theoretical$lower
     ylabel <- paste("cumulative sum of", typename)
   }
   # pretty axis marks
   pX <- pretty(theoreticalX)
-  if(is.null(theoreticalSD))
-    pV <- pretty(c(0,observedV,theoreticalV))
-  else
-    pV <- pretty(c(0,observedV,theoreticalV,
-                   theoreticalV+2*theoreticalSD,
-                   theoreticalV-2*theoreticalSD))
+  rV <- range(0, observedV, theoreticalV, theoreticalHI, theoreticalLO)
+  if(!is.null(theoreticalSD))
+    rV <- range(rV,
+                theoreticalV+2*theoreticalSD,
+                theoreticalV-2*theoreticalSD)
+  pV <- pretty(rV)
   # rescale smoothed values
   rr <- range(c(0, observedV, theoreticalV, pV))
   yscale <- function(y) { high * (y - rr[1])/diff(rr) }
   xscale <- function(x) { x - W$xrange[1] }
+  if(!is.null(theoreticalHI)) 
+    do.call.matched(polygon,
+                    resolve.defaults(
+                      list(x=xscale(c(theoreticalX, rev(theoreticalX))),
+                           y=yscale(c(theoreticalHI, rev(theoreticalLO)))),
+                      list(...),
+                      list(col="grey", border=NA)))
   do.clean(do.lines, xscale(observedX), yscale(observedV), 1, ...)
   do.clean(do.lines, xscale(theoreticalX), yscale(theoreticalV), 2, ...)
   if(!is.null(theoreticalSD)) {
@@ -231,20 +240,29 @@ resid4plot <- local({
     theoreticalY <- a$theoretical$covariate
     theoreticalV <- a$theoretical$mean
     theoreticalSD <- a$theoretical$sd
+    theoreticalHI <- a$theoretical$upper
+    theoreticalLO <- a$theoretical$lower
     ylabel <- paste("cumulative sum of", typename)
   }
   # pretty axis marks
   pY <- pretty(theoreticalY)
-  if(is.null(theoreticalSD))
-    pV <- pretty(c(0,observedV,theoreticalV))
-  else
-    pV <- pretty(c(0,observedV,theoreticalV,
-                   theoreticalV+2*theoreticalSD,
-                   theoreticalV-2*theoreticalSD))
+  rV <- range(0, observedV, theoreticalV, theoreticalHI, theoreticalLO)
+  if(!is.null(theoreticalSD))
+    rV <- range(rV,
+                theoreticalV+2*theoreticalSD,
+                theoreticalV-2*theoreticalSD)
+  pV <- pretty(rV)
   # rescale smoothed values
   rr <- range(c(0, observedV, theoreticalV, pV))
   yscale <- function(y) { y - W$yrange[1] + high + space}
   xscale <- function(x) { wide + space + wide * (rr[2] - x)/diff(rr) }
+  if(!is.null(theoreticalHI)) 
+    do.call.matched(polygon,
+                    resolve.defaults(
+                      list(x=xscale(c(theoreticalHI, rev(theoreticalLO))),
+                           y=yscale(c(theoreticalY,  rev(theoreticalY)))),
+                      list(...),
+                      list(col="grey", border=NA)))
   do.clean(do.lines, xscale(observedV), yscale(observedY), 1, ...)
   do.clean(do.lines, xscale(theoreticalV), yscale(theoreticalY), 2, ...)
   if(!is.null(theoreticalSD)) {

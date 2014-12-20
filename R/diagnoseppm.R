@@ -9,8 +9,11 @@
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
                                 sigma=NULL,
                                 rbord = reach(object), compute.sd=TRUE,
-                                compute.cts=TRUE, rv=NULL, oldstyle=FALSE,
-                                splineargs = list(spar=0.5))
+                                compute.cts=TRUE,
+                                envelope=FALSE, nsim=39, nrank=1,
+                                rv=NULL, oldstyle=FALSE,
+                                splineargs = list(spar=0.5),
+                                verbose=TRUE)
 {
   if(is.marked.ppm(object))
     stop("Sorry, this is not yet implemented for marked models")
@@ -150,13 +153,18 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   
   # -------------- cumulative (lurking variable) plots --------------
 
+  ## precompute simulated patterns for envelopes
+  if(identical(envelope, TRUE))
+    envelope <- simulate(object, nsim=nsim, progress=verbose)
+
   if(opt$xcumul)
     result$xcumul <- 
-    lurking(object, covariate=x.quad(Q),
+    lurking(object, covariate=expression(x),
             type=type,
             clipwindow= if(clip) Wclip else NULL,
             rv=residval,
             plot.sd=compute.sd,
+            envelope=envelope, nsim=nsim, nrank=nrank,
             plot.it=FALSE,
             typename=typename,
             covname="x coordinate",
@@ -167,11 +175,12 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
 
   if(opt$ycumul)
     result$ycumul <- 
-    lurking(object, covariate=y.quad(Q),
+    lurking(object, covariate=expression(y),
             type=type,
             clipwindow= if(clip) Wclip else NULL,
             rv=residval,
             plot.sd=compute.sd,
+            envelope=envelope, nsim=nsim, nrank=nrank,
             plot.it=FALSE,
             typename=typename,
             covname="y coordinate",
@@ -200,6 +209,7 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                          rbord = reach(object), cumulative=TRUE,
                          plot.it = TRUE, rv = NULL, 
                          compute.sd=TRUE, compute.cts=TRUE,
+                         envelope=FALSE, nsim=39, nrank=1,
                          typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
                          splineargs=list(spar=0.5))
 {
@@ -211,7 +221,9 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
       stop("object format corrupted; try update(object, use.internal=TRUE)")
     message("object format corrupted; repairing it.")
     object <- update(object, use.internal=TRUE)
-  }
+  } else if(compute.sd && is.null(getglmfit(object)))
+    object <- update(object, forcefit=TRUE, use.internal=TRUE)
+
     
   # -------------  Interpret arguments --------------------------
 
@@ -283,6 +295,7 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                               opt=opt, sigma=sigma, rbord=rbord,
                               compute.sd=compute.sd,
                               compute.cts=compute.cts,
+                              envelope=envelope, nsim=nsim, nrank=nrank,
                               rv=rv, oldstyle=oldstyle,
                               splineargs=splineargs,
                               ...)

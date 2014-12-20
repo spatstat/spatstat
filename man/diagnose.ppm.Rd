@@ -11,8 +11,10 @@
 \usage{
   diagnose.ppm(object, \dots, type="raw", which="all", sigma=NULL, 
                rbord=reach(object), cumulative=TRUE,
-               plot.it=TRUE, rv = NULL, compute.sd=TRUE,
-               compute.cts=TRUE, typename, check=TRUE, repair=TRUE,
+               plot.it=TRUE, rv = NULL,
+               compute.sd=TRUE, compute.cts=TRUE,
+               envelope=FALSE, nsim=39, nrank=1,
+               typename, check=TRUE, repair=TRUE,
                oldstyle=FALSE, splineargs=list(spar=0.5))
 
   \method{plot}{diagppm}(x, \dots, which, 
@@ -77,6 +79,10 @@
     error bounds should be computed and added to the \code{"x"} and \code{"y"}
     plots. The default is \code{TRUE} for Poisson models and
     \code{FALSE} for non-Poisson models. See Details.
+  }
+  \item{envelope,nsim,nrank}{
+    Arguments passed to \code{\link{lurking}}
+    in order to plot simulation envelopes for the lurking variable plots.
   }
   \item{rv}{
     Usually absent. Advanced use only.

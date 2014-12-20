@@ -1,30 +1,61 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.37 $ $Date: 2014/05/17 09:15:12 $
+# $Revision: 1.40 $ $Date: 2014/12/19 16:26:13 $
 #
 
 lurking <- function(object, covariate, type="eem",
                     cumulative=TRUE,
                     clipwindow=default.clipwindow(object),
                     rv = NULL,
-                    plot.sd=is.poisson.ppm(object), plot.it=TRUE,
+                    plot.sd=is.poisson(object), 
+                    envelope=FALSE, nsim=39, nrank=1,
+                    plot.it=TRUE,
                     typename,
                     covname, oldstyle=FALSE,
-                    check=TRUE, ..., splineargs=list(spar=0.5)) {
+                    check=TRUE, ..., splineargs=list(spar=0.5),
+                    verbose=TRUE) {
+  cl <- match.call()
   # default name for covariate
   if(missing(covname)) {
-    cl <- match.call()
     covname <- if(is.name(cl$covariate)) as.character(cl$covariate) else
                if(is.language(cl$covariate)) format(cl$covariate) else NULL
-  } 
+  }
+
+  if(!identical(envelope, FALSE)) {
+    ## compute simulation envelope
+    Xsim <- NULL
+    if(!identical(envelope, TRUE)) {
+      ## some kind of object
+      Y <- envelope
+      if(is.list(Y) && all(sapply(Y, is.ppp))) {
+        Xsim <- Y
+        envelope <- TRUE
+      } else if(inherits(Y, "envelope")) {
+        Xsim <- attr(Y, "simpatterns")
+        if(is.null(Xsim))
+          stop("envelope does not contain simulated point patterns")
+        envelope <- TRUE
+      } else stop("Unrecognised format of argument: envelope")
+      nXsim <- length(Xsim)
+      if(missing(nsim) && (nXsim < nsim)) {
+        warning(paste("Only", nXsim, "simulated patterns available"))
+        nsim <- nXsim
+      }
+    }
+  }
     
   # validate object
   if(is.ppp(object)) {
     X <- object
-    object <- ppm(X, ~1, forcefit=TRUE)
+    object <- ppm(X ~1, forcefit=TRUE)
   } else verifyclass(object, "ppm")
 
+  # may need to refit the model
+  if(plot.sd && is.null(getglmfit(object)))
+    object <- update(object, forcefit=TRUE, use.internal=TRUE)
+
+  
   # match type argument
   type <- pickoption("type", type,
                      c(eem="eem",
@@ -39,10 +70,6 @@ lurking <- function(object, covariate, type="eem",
                        inverse="inverse-lambda residuals",
                        pearson="Pearson residuals")
 
-  # may need to refit the model
-  if(plot.sd && is.null(getglmfit(object)))
-    object <- update(object, forcefit=TRUE, use.internal=TRUE)
-  
   # extract spatial locations
   Q <- quad.ppm(object)
   datapoints <- Q$data
@@ -65,21 +92,6 @@ lurking <- function(object, covariate, type="eem",
            quadpoints$n, ", number of quadrature points")
   } else if(is.expression(covariate)) {
     # Expression involving covariates in the model
-    # Set up environment for evaluating expression
-    if(!is.null(object$covariates)) {
-      # Expression may involve an external covariate
-      # Recompute model, extracting all covariates 
-      object <- update(object, allcovar=TRUE)
-      # harmonise, just in case
-      Q <- quad.ppm(object)
-      datapoints <- Q$data
-      quadpoints <- union.quad(Q)
-      Z <- is.data(Q)
-      wts <- w.quad(Q)
-      subQset <- getglmsubset(object)
-      if(is.null(subQset)) subQset <- rep.int(TRUE, n.quad(Q))
-      # 
-    }
     glmdata <- getglmdata(object)
     # Fix special cases
     if(is.null(glmdata)) {
@@ -93,6 +105,16 @@ lurking <- function(object, covariate, type="eem",
       glmdata$x <- quadpoints$x
       glmdata$y <- quadpoints$y
     } 
+    if(!is.null(object$covariates)) {
+      # Expression may involve an external covariate that's not used in model
+      neednames <- all.vars(covariate)
+      if(!all(neednames %in% colnames(glmdata))) {
+        moredata <- mpl.get.covariates(object$covariates, quadpoints,
+                                       covfunargs=object$covfunargs)
+        use <- !(names(moredata) %in% colnames(glmdata))
+        glmdata <- cbind(glmdata, moredata[,use,drop=FALSE])
+      }
+    }
     # Evaluate expression
     sp <- parent.frame()
     covvalues <- eval(covariate, envir= glmdata, enclos=sp)
@@ -341,14 +363,44 @@ lurking <- function(object, covariate, type="eem",
       theoretical$sd <- sqrt(varR)
     }
 
+  ## 
+  if(envelope) {
+    ## compute envelopes by simulation
+    cl$plot.it <- FALSE
+    cl$envelope <- FALSE
+    cl$rv <- NULL
+    if(is.null(Xsim))
+      Xsim <- simulate(object, nsim=nsim, progress=verbose)
+    values <- NULL
+    if(verbose) cat("Processing.. ")
+    for(i in seq_len(nsim)) {
+      cl$object <- update(object, Xsim[[i]])
+      result.i <- eval(cl, parent.frame())
+      ## interpolate empirical values onto common sequence
+      f.i <- with(result.i$empirical,
+                  approxfun(covariate, value, rule=2))
+      val.i <- f.i(theoretical$covariate)
+      values <- cbind(values, val.i)
+      if(verbose) progressreport(i, nsim)
+    }
+    if(verbose) cat("Done.\n")
+    hilo <- if(nrank == 1) apply(values, 1, range) else
+            apply(values, 1, function(x, n) { sort(x)[n] },
+                  n=c(nrank, nsim-nrank+1))
+    theoretical$upper <- hilo[1,]
+    theoretical$lower <- hilo[2,]
+  }
     # ---------------  PLOT THEM  ----------------------------------
     if(plot.it) {
       # work out plot range
-      mr <- range(c(0, empirical$value, theoretical$mean), na.rm=TRUE)
+      mr <- range(0, empirical$value, theoretical$mean, na.rm=TRUE)
       if(!is.null(theoretical$sd))
-        mr <- range(c(mr, theoretical$mean + 2 * theoretical$sd,
-                          theoretical$mean - 2 * theoretical$sd),
+        mr <- range(mr,
+                    theoretical$mean + 2 * theoretical$sd,
+                    theoretical$mean - 2 * theoretical$sd,
                     na.rm=TRUE)
+      if(!is.null(theoretical$upper))
+        mr <- range(mr, theoretical$upper, theoretical$lower, na.rm=TRUE)
 
       # start plot
       vname <- paste(if(cumulative)"cumulative" else "marginal", typename)
@@ -358,6 +410,15 @@ lurking <- function(object, covariate, type="eem",
                                list(type="n"),
                                list(...),
                                list(xlab=covname, ylab=vname)))
+      # envelopes
+      if(!is.null(theoretical$upper)) {
+        xx <- with(theoretical, c(covariate, rev(covariate)))
+        yy <- with(theoretical, c(upper, rev(lower)))
+        do.call.matched(polygon,
+                        resolve.defaults(list(x=xx, y=yy),
+                                         list(...),
+                                         list(border=NA, col="grey")))
+      }
       # (A)/(A') Empirical
       lines(value ~ covariate, empirical, ...)
       # (B)/(B') Theoretical mean

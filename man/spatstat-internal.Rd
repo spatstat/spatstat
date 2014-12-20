@@ -808,8 +808,9 @@ densitypointsEngine(x, sigma, \dots,
                     weights, edge, varcov,
                     leaveoneout, diggle, sorted, spill)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
-                         sigma, rbord, compute.sd,
-                         compute.cts, rv, oldstyle, splineargs)
+                         sigma, rbord, compute.sd, compute.cts,
+                         envelope, nsim, nrank,
+                         rv, oldstyle, splineargs, verbose)
 diagramobj(X, \dots)
 digital.volume(range, nval, vside)
 dilate.owin(\dots)
@@ -867,9 +868,9 @@ eratosthenes(nmax, startset)
 erodemask(w,r,strict)
 erode.owin(\dots)
 evalCovar(model, covariate, \dots)
-\method{evalCovar}{ppm}(model, covariate, \dots,
+\method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
           dimyx, eps, jitter, modelname, covname, dataname) 
-\method{evalCovar}{lppm}(model, covariate, \dots,
+\method{evalCovar}{lppm}(model, covariate, \dots, lambdatype, 
           eps, nd, jitter, modelname, covname, dataname)
 evalCovariate(covariate, locations)
 evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
@@ -1391,7 +1392,7 @@ spatstatClusterModelInfo(name)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
-         dimyx, eps, jitter, modelname, covname, dataname)
+         dimyx, eps, jitter, nsim, verbose, modelname, covname, dataname)
 sphere.volume(range, nval = 10)
 %splat(\dots)
 splitHybridInteraction(coeffs, inte)
