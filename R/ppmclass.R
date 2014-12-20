@@ -104,7 +104,8 @@ function(x, ...,
     ## ----- trend --------------------------
     if("trend" %in% what) {
       if(!notrend) {
-        splat("Trend formula: ",
+        splat("Log",
+              if(poisson) "intensity: " else "trend: ",
               pasteFormula(s$trend$formula))
         parbreak(terselevel)
       }

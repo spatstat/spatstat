@@ -32,6 +32,13 @@ fitin(object)
   Users may find this a convenient way to plot the
   fitted interpoint interaction term, as shown in the Examples.
 
+  For a pairwise interaction, the plot of the fitted interaction
+  shows the pair interaction function (the contribution to the
+  probability density from a pair of points as a function of the
+  distance between them). For a higher-order interaction, the plot shows
+  the strongest interaction (the value most different from 1)
+  that could ever arise at the given distance. 
+
   The fitted interaction coefficients can also be extracted
   from this object using \code{\link{coef}}.
 }

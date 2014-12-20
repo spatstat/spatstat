@@ -412,7 +412,8 @@ print.summary.ppm <- function(x, ...) {
   parbreak()
 
   if(!notrend) {
-    splat("Trend formula: ",
+    splat("Log",
+          if(poisson) "intensity:" else "trend:",
           pasteFormula(x$trend$formula))
     if(x$uses.covars) 
       splat("Model depends on external",

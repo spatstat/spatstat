@@ -191,11 +191,12 @@ reach.fii <- function(x, ..., epsilon=0) {
 }
 
 plot.fii <- function(x, ...) {
-  if(is.poisson.interact(x$interaction)) {
+  inte <- x$interaction
+  if(is.poisson.interact(inte)) {
     message("Poisson interaction; nothing plotted")
     return(invisible(NULL))
   }
-  plfun <- x$interaction$family$plot
+  plfun <- inte$plot %orifnull% inte$family$plot
   if(is.null(plfun)) 
     stop("Plotting not implemented for this type of interaction")
   plfun(x, ...)

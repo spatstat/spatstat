@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.25 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 2.28 $	$Date: 2014/12/20 14:21:08 $
 #
 #    Geyer's saturation process
 #
@@ -35,6 +35,44 @@ Geyer <- local({
                     },
          update = NULL, # default OK
          print = NULL,    # default OK
+         plot = function(fint, ..., d=NULL, plotit=TRUE) {
+           verifyclass(fint, "fii")
+           inter <- fint$interaction
+           unitz <- unitname(fint)
+           if(!identical(inter$name, "Geyer saturation process"))
+             stop("Tried to plot the wrong kind of interaction")
+           #' fitted interaction coefficient
+           theta <- fint$coefs[fint$Vnames]
+           #' interaction radius
+           r <- inter$par$r
+           sat <- inter$par$sat
+           xlim <- resolve.1.default(list(xlim=c(0, 1.25 * r)), list(...)) 
+           rmax <- max(xlim, d)
+           if(is.null(d)) {
+             d <- seq(from=0, to=rmax, length.out=1024)
+           } else {
+             stopifnot(is.numeric(d) &&
+                       all(is.finite(d)) &&
+                       all(diff(d) > 0))
+           }
+           #' compute interaction between two points at distance d
+           y <- exp(theta * sat * (d <= r))
+           #' compute `fv' object
+           fun <- fv(data.frame(r=d, h=y, one=1),
+                     "r", substitute(h(r), NULL), "h", cbind(h,one) ~ r,
+                     xlim, c("r", "h(r)", "1"),
+                     c("distance argument r",
+                       "maximal interaction h(r)",
+                       "reference value 1"),
+                     unitname=unitz)
+           if(plotit)
+             do.call("plot.fv",
+                     resolve.defaults(list(fun),
+                                      list(...),
+                                      list(ylim=range(0,1,y))))
+           return(invisible(fun))
+         },
+         #' end of function 'plot'
          interpret =  function(coeffs, self) {
            loggamma <- as.numeric(coeffs[1])
            gamma <- exp(loggamma)

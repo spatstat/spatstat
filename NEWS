@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.020
+	CHANGES IN spatstat VERSION 1.39-1.021
 
 OVERVIEW
 
@@ -216,6 +216,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    e.g. plot(fitin(ppm(swedishpines ~ 1, Strauss(9))))
    now shows the unit of length on the x-axis.
    
+   o fitin
+   Plots of the fitted interpoint interaction are now possible
+   for some higher-order interactions such as Geyer and AreaInter.
+
    o anova.ppm
    New argument 'warn' to suppress warnings.
 
