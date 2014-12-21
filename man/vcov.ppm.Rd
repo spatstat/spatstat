@@ -7,6 +7,7 @@
 }
 \usage{
   \method{vcov}{ppm}(object, \dots, what = "vcov", verbose = TRUE,
+                    fine=FALSE,
                     gam.action=c("warn", "fatal", "silent"),
                     matrix.action=c("warn", "fatal", "silent"),
                     logi.action=c("warn", "fatal", "silent"),
@@ -21,6 +22,11 @@
     \code{"corr"} for the correlation matrix, and
     \code{"fisher"} or \code{"Fisher"}
     for the Fisher information matrix.
+  }
+  \item{fine}{
+    Logical value indicating whether to use a quick estimate
+    (\code{fine=FALSE}, the default) or a slower, more accurate
+    estimate (\code{fine=TRUE}).
   }
   \item{verbose}{Logical. If \code{TRUE}, a message will be printed
     if various minor problems are encountered.

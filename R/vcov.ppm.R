@@ -3,12 +3,13 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.111 $  $Date: 2014/10/24 00:22:30 $
+##  $Revision: 1.112 $  $Date: 2014/12/21 11:31:45 $
 ##
 
 vcov.ppm <- local({
 
 vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
+                     fine=FALSE,
                      gam.action=c("warn", "fatal", "silent"),
                      matrix.action=c("warn", "fatal", "silent"),
                      logi.action=c("warn", "fatal", "silent"),
@@ -20,6 +21,11 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
 
+  if(missing(fine) && ("A1dummy" %in% names(argh))) {
+    message("Argument 'A1dummy' has been replaced by 'fine'")
+    fine <- as.logical(argh$A1dummy)
+  } else fine <- as.logical(fine)
+  
   stopifnot(length(what) == 1 && is.character(what))
   what.options <- c("vcov", "corr", "fisher", "Fisher", "internals", "all")
   what.map     <- c("vcov", "corr", "fisher", "fisher", "internals", "all")
@@ -40,8 +46,8 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   }
   
   ## nonstandard calculations (hack) 
-  generic.triggers <- c("A1", "A1dummy", "new.coef", "matwt", "saveterms")
-  nonstandard <- any(generic.triggers %in% names(argh))
+  generic.triggers <- c("A1", "new.coef", "matwt", "saveterms")
+  nonstandard <- any(generic.triggers %in% names(argh)) || fine
 #  saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
   
   ## Fisher information *may* be contained in object
@@ -83,6 +89,7 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
     } else {
       ## Gibbs model 
       results <- vcalcGibbs(object, ..., what=what,
+                            fine=fine,
                             matrix.action=matrix.action)
     }
     varcov <- results$varcov
@@ -253,6 +260,7 @@ vcalcPois <- function(object, ...,
 ## ...................... vcov calculation for Gibbs models ....................
 
 vcalcGibbs <- function(fit, ...,
+                       fine=FALSE,
                        what = c("vcov", "corr", "fisher", "internals", "all"),
                        generic=FALSE) {
   what <- match.arg(what)
@@ -269,11 +277,11 @@ vcalcGibbs <- function(fit, ...,
   }
   
   ## decide whether to use the generic algorithm
-  generic.triggers <- c("A1", "A1dummy", "hessian",
+  generic.triggers <- c("A1", "hessian",
                         "new.coef", "matwt", "saveterms")
   
   use.generic <-
-    generic ||
+    generic || fine ||
   !is.stationary(fit) ||
   (fit$method == "logi" && ("marks" %in% variablesinformula(fit$trend))) ||
   (fit$method != "logi" && has.offset(fit)) ||
@@ -288,7 +296,7 @@ vcalcGibbs <- function(fit, ...,
   spill <- (what %in% c("all", "internals", "fisher"))
   spill.vc <- (what == "all")
   out <- if(use.generic)
-    vcalcGibbsGeneral(fit, ..., spill=spill, spill.vc=spill.vc) else
+    vcalcGibbsGeneral(fit, ..., fine=fine, spill=spill, spill.vc=spill.vc) else
     vcalcGibbsSpecial(fit, ..., spill=spill, spill.vc=spill.vc)
 
   switch(what,
@@ -337,7 +345,7 @@ vcalcGibbsGeneral <- function(model,
                          logi.action=c("warn", "fatal", "silent"),
                          algorithm=c("vectorclip", "vector", "basic"),
                          A1 = NULL,
-                         A1dummy = FALSE,
+                         fine = FALSE,
                          hessian = FALSE,
                          matwt = NULL, new.coef = NULL,
                          saveterms = FALSE,
@@ -434,7 +442,7 @@ vcalcGibbsGeneral <- function(model,
   }
   ## Sensitivity matrix for MPLE case (= A1)
   if(is.null(A1) || reweighting) {
-    if(A1dummy){
+    if(fine){
       A1 <- sumouter(mokall, w = (lamall * w.quad(Q))[okall])
       if(reweighting)
         gradient <- sumouter(mokall.orig, w=(matwt * lamall * w.quad(Q))[okall])

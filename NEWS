@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.021
+	CHANGES IN spatstat VERSION 1.39-1.022
 
 OVERVIEW
 
@@ -176,6 +176,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o model.matrix.ppm, model.matrix.kppm
    New argument 'Q' allows prediction at any desired locations.
+
+   o vcov.ppm
+   New argument 'fine' gives more control over computation.
 
    o predict.ppm
    For multitype models, when the result is a list of images,
