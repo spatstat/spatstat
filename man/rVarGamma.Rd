@@ -83,7 +83,7 @@
   Poisson process on the infinite plane.
 
   This model can be fitted to data by the method of minimum contrast,
-  using \code{\link{cauchy.estK}}, \code{\link{cauchy.estpcf}}
+  using \code{\link{vargamma.estK}}, \code{\link{vargamma.estpcf}}
   or \code{\link{kppm}}. It can also be fitted by maximum composite
   likelihood using \code{\link{kppm}}.
   
@@ -104,15 +104,15 @@
   When the parents are homogeneous (\code{kappa} is a single number)
   and the offspring are inhomogeneous (\code{mu} is a
   function or pixel image), the model can be fitted to data
-  using \code{\link{kppm}}, or using \code{\link{cauchy.estK}}
-  or \code{\link{cauchy.estpcf}}
+  using \code{\link{kppm}}, or using \code{\link{vargamma.estK}}
+  or \code{\link{vargamma.estpcf}}
   applied to the inhomogeneous \eqn{K} function. 
 }
 \seealso{
   \code{\link{rpoispp}},
   \code{\link{rNeymanScott}},
-  \code{\link{cauchy.estK}},
-  \code{\link{cauchy.estpcf}},
+  \code{\link{vargamma.estK}},
+  \code{\link{vargamma.estpcf}},
   \code{\link{kppm}}.
 }
 \examples{

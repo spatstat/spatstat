@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.16 $   $Date: 2014/11/10 08:22:41 $
+#   $Revision: 2.17 $   $Date: 2014/12/22 07:22:51 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -161,7 +161,7 @@ ippm <- local({
                      "lower than current estimate. ",
                      "Either current estimate is an approximate ",
                      "local minimum of the function ",
-                     "or 'steptol' is too small"),
+                     "or 'steptol' is too large"),
                    "Iteration limit exceeded",
                    c("Maximum step size 'stepmax' ",
                      "exceeded five consecutive times. ",

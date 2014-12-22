@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.33 $	$Date: 2014/12/20 13:20:03 $
+#    $Revision: 1.35 $	$Date: 2014/12/22 04:37:56 $
 #
 #    The area interaction
 #
@@ -41,20 +41,11 @@ AreaInter <- local({
       return(1 - areas/(pi * r^2))
     }
 
-   #' fractional area of overlap of two unit discs at distance 2 * zz
-   discOverlap <- function(zz) {
-     ok <- (zz < 1)
-     h <- numeric(length(zz))
-     h[!ok] <- 1
-     z <- zz[ok]
-     h[ok] <- 2 + (1/pi) * (
-       (8 * z^2 - 4) * acos(z)
-       - 2 * asin(z)
-       + 4 * z * sqrt((1 - z^2)^3)
-       - 6 * z * sqrt(1 - z^2)
-       )
-     return(h)
-   }
+  #' fractional area of overlap of two unit discs at distance 2 * z
+  discOverlap <- function(z) {
+    z <- pmax(pmin(z, 1), -1)
+    (2/pi) * (acos(z) - z * sqrt(1 - z^2))
+  }
   
   # template object without family, par, version
   BlankAI <- 
@@ -92,7 +83,7 @@ AreaInter <- local({
                        all(diff(d) > 0))
            }
            #' compute interaction between two points at distance d
-           y <- exp(-theta * discOverlap(d/(2 * r)))
+           y <- exp(theta * discOverlap(d/(2 * r)))
            #' compute `fv' object
            fun <- fv(data.frame(r=d, h=y, one=1),
                      "r", substitute(h(r), NULL), "h", cbind(h,one) ~ r,
