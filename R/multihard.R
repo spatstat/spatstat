@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.11 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.12 $	$Date: 2014/12/23 05:42:19 $
 #
 #    The Hard core process
 #
@@ -102,9 +102,21 @@ MultiHard <- local({
        pardesc  = c("vector of possible types",
                     "matrix of hardcore distances"),
        selfstart = function(X, self) {
-         if(!is.null(self$par$types)) return(self)
-         types <- levels(marks(X))
-         MultiHard(types=types,hradii=self$par$hradii)
+         types <- self$par$types
+         hradii <- self$par$hradii
+         if(!is.null(types) && !is.null(hradii)) return(self)
+         if(is.null(types)) types <- levels(marks(X))
+         if(is.null(hradii)) {
+           marx <- marks(X)
+           d <- nndist(X, by=marx)
+           h <- aggregate(d, by=list(from=marx), min)
+           h <- as.matrix(h[, -1, drop=FALSE])
+           m <- table(marx)
+           mm <- outer(m, m, pmin)
+           hradii <- h * mm/(mm+1)
+           dimnames(hradii) <- list(types, types)
+         }
+         MultiHard(types=types,hradii=hradii)
        },
        init     = function(self) {
          types <- self$par$types
@@ -156,7 +168,7 @@ MultiHard <- local({
   )
   class(BlankMH) <- "interact"
 
-  MultiHard <- function(hradii, types=NULL) {
+  MultiHard <- function(hradii=NULL, types=NULL) {
     if((missing(hradii) || !is.matrix(hradii)) && is.matrix(types)) {
       ## old syntax: (types=NULL, hradii)
       hradii <- types

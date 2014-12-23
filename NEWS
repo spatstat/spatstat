@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.023
+	CHANGES IN spatstat VERSION 1.39-1.024
 
 OVERVIEW
 
@@ -105,12 +105,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    specified by spatstat.options('image.colfun'), 
    has been changed to a perceptually uniform map.
 
-   o DiggleGratton, Fiksel
-   The hard core distance parameter in these models
+   o DiggleGratton, Fiksel, MultiHard, MultiStraussHard
+   The hard core distance parameters in these models
    can now be omitted by the user, and will be estimated automatically
    from data (by the 'self-starting' feature of interactions).
-   This was already true of Hardcore, StraussHard, MultiHard 
-   and MultiStraussHard.
+   This was already true of Hardcore and StraussHard.
 
    o Hybrid
    Hybrid models now apply the 'self-starting' feature
