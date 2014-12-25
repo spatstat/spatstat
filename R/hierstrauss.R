@@ -1,7 +1,7 @@
 ##
 ##    hierstrauss.R
 ##
-##    $Revision: 1.1 $	$Date: 2014/12/03 02:46:03 $
+##    $Revision: 1.2 $	$Date: 2014/12/24 03:15:34 $
 ##
 ##    The hierarchical Strauss process
 ##
@@ -158,8 +158,11 @@ HierStrauss <- local({
          radii <- self$par$radii
          # parameters to estimate
          required <- !is.na(radii) & self$par$archy$relation
-         gr <- gamma[required]
-         return(all(is.finite(gr) & gr <= 1))
+         # all required parameters must be finite
+         if(!all(is.finite(gamma[required]))) return(FALSE)
+         # DIAGONAL interaction parameters must be non-explosive
+         d <- diag(rep(TRUE, nrow(radii)))
+         return(all(gamma[required & d] <= 1))
        },
        project  = function(coeffs, self) {
          # interaction parameters gamma[i,j]
@@ -212,7 +215,7 @@ HierStrauss <- local({
     if(!is.null(types)) {
       if(is.null(archy)) archy <- seq_len(length(types))
       archy <- hierarchicalordering(archy, types)
-    }
+    } 
     out <- instantiate.interact(BlankHSobject,
                                 list(types=types,
                                      radii=radii,
