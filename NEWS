@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.025
+	CHANGES IN spatstat VERSION 1.39-1.026
 
 OVERVIEW
 
@@ -300,6 +300,10 @@ BUG FIXES
 
    o $<-.hyperframe
    Columns containing character values were converted to factors.
+   Fixed.
+
+   o clickppp
+   Sometimes filled the window in solid black colour..
    Fixed.
 
    o plot.psp

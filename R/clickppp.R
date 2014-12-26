@@ -1,6 +1,7 @@
-# Dominic Schuhmacher's idea
+#' Dominic Schuhmacher's idea
 
-clickppp <- function(n=NULL, win=square(1), types=NULL, ..., add=FALSE, main=NULL, hook=NULL) {
+clickppp <- function(n=NULL, win=square(1), types=NULL, ...,
+                     add=FALSE, main=NULL, hook=NULL) {
 
   win <- as.owin(win)
 
@@ -13,7 +14,7 @@ clickppp <- function(n=NULL, win=square(1), types=NULL, ..., add=FALSE, main=NUL
   
   ####  single type #########################
   if(is.null(types)) {
-    plot(win, add=add, main=main)
+    plot(win, add=add, main=main, invert=TRUE)
     if(!is.null(hook))
       plot(hook, add=TRUE)
     if(!is.null(n))
@@ -65,13 +66,14 @@ clickppp <- function(n=NULL, win=square(1), types=NULL, ..., add=FALSE, main=NUL
     if(!naughty)
       plot(X, main="Final pattern")
     else {
-      plot(X$window, main="Final pattern (in expanded window)")
-      plot(win, add=TRUE)
+      plot(X$window, main="Final pattern (in expanded window)", invert=TRUE)
+      plot(win, add=TRUE, invert=TRUE)
       plot(X, add=TRUE)
     }
   }
   return(X)
 
 }
+
 
   
