@@ -19,7 +19,7 @@ The easiest way to install the github version of `spatstat` is through the `devt
 
 ```R
 require(devtools)
-install_github('spatstat', username = 'spatstat')
+install_github('spatstat/spatstat')
 ```
 
 If you don't have `devtools` installed you should first run
