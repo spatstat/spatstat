@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.026
+	CHANGES IN spatstat VERSION 1.39-1.027
 
 OVERVIEW
 
@@ -126,6 +126,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o profilepl
    No longer requires values for parameters which are 'optional' 
    (such as the hard core distance).
+
+   o rmh, simulate.ppm, rmh.ppm, rmh.default
+   The Metropolis-Hastings algorithm now starts by deleting any points
+   in the initial state that are 'illegal' (i.e. whose conditional intensity
+   is equal to zero). This ensures that the result of rmh 
+   never contains illegal points.
 
    o runifpoint, rpoispp, rStrauss, rHardcore, rStraussHard,
    rDiggleGratton, rDGS, runifdisc, rpoint, rMaternI, rMaternII, rSSI,

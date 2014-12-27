@@ -51,7 +51,7 @@ SEXP xmethas(
   double cvd, cvn, qnodds, anumer, adenom, betavalue;
   double *iparvector;
   int verb, marked, mustupdate, itype;
-  int nfree;
+  int nfree, nsuspect;
   int irep, ix, j, maxchunk, iverb;
   int Ncif; 
   int *plength;

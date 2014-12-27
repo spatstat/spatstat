@@ -20,13 +20,90 @@
    
    MH_SNOOP     whether to run visual debugger
 
-   $Revision: 1.18 $  $Date: 2013/05/27 02:09:10 $ 
+   $Revision: 1.20 $  $Date: 2014/12/27 07:47:58 $ 
 
 */
 
 #ifndef MH_DEBUG
 #define MH_DEBUG NO
 #endif
+
+/* ......... Pre-processing: recursively delete any illegal points ....... */
+
+nfree = state.npts - algo.ncond;  /* number of 'free' points */
+
+if(nfree > 0) {
+  nsuspect = nfree;
+  while(nsuspect > 0) {
+    /* scan for illegal points */
+    ix = state.npts - nsuspect;
+    deathprop.ix = ix;
+    deathprop.u  = state.x[ix];
+    deathprop.v  = state.y[ix];
+#if MH_MARKED
+    deathprop.mrk = state.marks[ix];
+#endif
+#if MH_DEBUG
+#if MH_MARKED
+    Rprintf("check legality of point %d = (%lf, %lf) with mark %d\n", 
+	    ix, deathprop.u, deathprop.v, deathprop.mrk);
+#else
+    Rprintf("check legality of point %d = (%lf, %lf)\n", 
+	    ix, deathprop.u, deathprop.v);
+#endif
+#endif
+    /* evaluate conditional intensity without trend terms */
+
+#if MH_SINGLE
+    adenom = (*(thecif.eval))(deathprop, state, thecdata);
+#else
+    adenom = 1.0;
+    for(k = 0; k < Ncif; k++)
+      adenom *= (*(cif[k].eval))(deathprop, state, cdata[k]);
+#endif
+#if MH_DEBUG
+    Rprintf("cif = %lf\n", adenom);
+#endif
+    /* accept/reject */
+    if(adenom == 0.0) {
+#if MH_DEBUG
+      Rprintf("deleting illegal point\n");
+#endif
+      /* delete point x[ix], y[ix] */
+      if(mustupdate) {
+	/* Update auxiliary variables first */
+#if MH_SINGLE
+	(*(thecif.update))(state, deathprop, thecdata);
+#else
+	for(k = 0; k < Ncif; k++) {
+	  if(needupd[k])
+	    (*(cif[k].update))(state, deathprop, cdata[k]);
+	}
+#endif
+      }
+      state.npts--;
+      nfree--;
+#if MH_DEBUG
+      Rprintf("deleting point %d\n", ix);
+      Rprintf("\tnpts=%d\n", state.npts);
+#endif
+      if(ix < state.npts) {
+	for(j = ix; j < state.npts; j++) {
+	  state.x[j] = state.x[j+1];
+	  state.y[j] = state.y[j+1];
+#if MH_MARKED
+	  state.marks[j] = state.marks[j+1];
+#endif
+	}
+      }
+    }
+    nsuspect--;
+  }
+ }
+
+
+/* ............... MAIN ITERATION LOOP  ............................. */
+
 
 OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
   R_CheckUserInterrupt();

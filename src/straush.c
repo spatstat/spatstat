@@ -41,7 +41,7 @@ Cdata *straushinit(state, model, algo)
   strausshard->period = model.period;
   /* is the interaction numerically equivalent to hard core ? */
   strausshard->hard   = (strausshard->gamma < DOUBLE_EPS);
-  strausshard->loggamma = (strausshard->hard) ? 0 : log(strausshard->gamma);
+  strausshard->loggamma = (strausshard->hard) ? 0.0 : log(strausshard->gamma);
   /* periodic boundary conditions? */
   strausshard->per    = (model.period[0] > 0.0);
   return((Cdata *) strausshard);
@@ -87,7 +87,7 @@ double straushcif(prop, state, cdata)
       for(j=0; j < ix; j++) {
 	if(CLOSE_PERIODIC(u,v,x[j],y[j],period,r2)) {
 	  /* RESIDUE = r2 - distance^2 */
-	  if(RESIDUE > r2h2) return(0.0);
+	  if(RESIDUE > r2h2) return((double) 0.0);
 	  ++kount;
 	}
       }
@@ -95,7 +95,7 @@ double straushcif(prop, state, cdata)
     if(ixp1 < npts) {
       for(j=ixp1; j<npts; j++) {
 	if(CLOSE_PERIODIC(u,v,x[j],y[j],period,r2)) {
-	  if(RESIDUE > r2h2) return(0.0);
+	  if(RESIDUE > r2h2) return((double) 0.0);
 	  ++kount;
 	}
       }
@@ -105,7 +105,7 @@ double straushcif(prop, state, cdata)
     if(ix > 0) {
       for(j=0; j < ix; j++) {
 	if(CLOSE(u,v,x[j],y[j],r2)) {
-	  if(RESIDUE > r2h2) return(0.0);
+	  if(RESIDUE > r2h2) return((double) 0.0);
 	  ++kount;
 	}
       }
@@ -113,7 +113,7 @@ double straushcif(prop, state, cdata)
     if(ixp1 < npts) {
       for(j=ixp1; j<npts; j++) {
 	if(CLOSE(u,v,x[j],y[j],r2)) {
-	  if(RESIDUE > r2h2) return(0.0);
+	  if(RESIDUE > r2h2) return((double) 0.0);
 	  ++kount;
 	}
       }
@@ -121,8 +121,8 @@ double straushcif(prop, state, cdata)
   }
 
   if(strausshard->hard) {
-    if(kount > 0) cifval = 0.0;
-    else cifval = 1.0;
+    if(kount > 0) cifval = (double) 0.0;
+    else cifval = (double) 1.0;
   }
   else cifval = exp(strausshard->loggamma*kount);
   

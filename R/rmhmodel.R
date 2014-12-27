@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.60 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.63 $  $Date: 2014/12/27 06:21:03 $
 #
 #
 
@@ -379,7 +379,8 @@ spatstatRmhInfo <- function(cifname) {
                      stabilising=FALSE)
             },
             explainvalid=list(integrable="TRUE",stabilising="FALSE"),
-            reach = function(par, ...) { return(0) }
+            reach = function(par, ...) { return(0) },
+            hardcore = function(par, ...) { return(0) }
             ),
 #       
 # 1. Strauss.
@@ -417,6 +418,11 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g == 1) 0 else r)
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par[["r"]]
+              g <- par[["gamma"]]
+              return(if(g <= epsilon) r else 0)
             }
             ),
 #       
@@ -463,6 +469,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g == 1) h else r)
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              h <- par[["hc"]]
+              r <- par[["r"]]
+              g <- par[["gamma"]]
+              return(if(g <= epsilon) r else h)
             }
             ),
 #       
@@ -497,6 +509,13 @@ spatstatRmhInfo <- function(cifname) {
               kappa <- par[["kappa"]]
               sigma <- par[["sigma"]]
               return(sigma/(epsilon^(kappa/2)))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              if(epsilon==0)
+                return(0)
+              kappa <- par[["kappa"]]
+              sigma <- par[["sigma"]]
+              return(sigma/((-log(epsilon))^(kappa/2)))
             }
             ),
 #       
@@ -557,6 +576,11 @@ spatstatRmhInfo <- function(cifname) {
               g <- par$gamma
               operative <- ! (is.na(r) | (g == 1))
               return(max(0, r[operative]))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par$radii
+              g <- par$gamma
+              return(max(0, r[!is.na(r) & g <= epsilon]))
             }
             ),
 #       
@@ -634,6 +658,13 @@ spatstatRmhInfo <- function(cifname) {
               roperative <- ! (is.na(r) | (g == 1))
               hoperative <- ! is.na(h)
               return(max(0, r[roperative], h[hoperative]))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par$radii
+              h <- par$hradii
+              g <- par$gamma
+              return(max(h[!is.na(h)],
+                         r[!is.na(r) & g <= epsilon]))
             }
             ),
 #       
@@ -662,6 +693,10 @@ spatstatRmhInfo <- function(cifname) {
             explainvalid=list(integrable="TRUE", stabilising="FALSE"),
             reach=function(par, ...) {
               return(par[["rho"]])
+            },
+            hardcore=function(par, ..., epsilon=0) {
+              if(epsilon == 0) return(0)
+              return(par[["rho"]] * (2/pi) * asin(sqrt(epsilon)))
             }
             ),
 #
@@ -698,6 +733,9 @@ spatstatRmhInfo <- function(cifname) {
             explainvalid=list(integrable="TRUE",stabilising="FALSE"),
             reach=function(par, ...) {
               return(par[["rho"]])
+            },
+            hardcore=function(par, ..., epsilon=0) {
+              return(par[["delta"]])
             }
             ),
 #       
@@ -732,6 +770,11 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g == 1) 0 else 2 * r)
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par[["r"]]
+              g <- par[["gamma"]]
+              return(if(g <= epsilon) r else 0)
             }
             ),
 #       
@@ -833,6 +876,13 @@ spatstatRmhInfo <- function(cifname) {
               if(is.null(r)) 
                 r <- knots(h)
               return(max(r))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par[["r"]]
+              h <- par[["h"]]
+              if(is.null(r)) 
+                r <- knots(h)
+              return(max(0, r[h <= epsilon]))
             }
             ),
 #       
@@ -866,6 +916,14 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               eta <- par[["eta"]]
               return(if(eta == 1) 0 else (2 * r))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par[["r"]]
+              eta <- par[["eta"]]
+              if(eta > epsilon) return(0)
+              if(eta == 0) return(2 * r)
+              # linear approximation
+              return(2 * r * eta/epsilon)
             }
             ),
 #
@@ -912,6 +970,11 @@ spatstatRmhInfo <- function(cifname) {
               gamma <- par[["gamma"]]
               operative <- (gamma != 1)
               return(if(!any(operative)) 0 else (2 * max(r[operative])))
+            },
+            hardcore = function(par, ..., epsilon=0) {
+              r <- par[["r"]]
+              gamma <- par[["gamma"]]
+              return(max(0, r[gamma <= epsilon]))
             }
             ),
 #
@@ -938,6 +1001,10 @@ spatstatRmhInfo <- function(cifname) {
             },
             explainvalid=list(integrable="TRUE", stabilising="hc > 0"),
             reach = function(par, ...) {
+              hc <- par[["hc"]]
+              return(hc)
+            },
+            hardcore = function(par, ...) {
               hc <- par[["hc"]]
               return(hc)
             }
@@ -982,6 +1049,9 @@ spatstatRmhInfo <- function(cifname) {
               hc <- par[["hc"]]              
               a <- par[["a"]]
               return(if(a != 0) r else hc)
+            },
+            hardcore = function(par, ...) {
+              return(par[["hc"]])
             }
             ),
 #
@@ -1016,6 +1086,10 @@ spatstatRmhInfo <- function(cifname) {
             reach = function(par, ...) {
               sigma <- par[["sigma"]]
               return(2.5 * sigma)
+            },
+            hardcore = function(par, ...) {
+              sigma <- par[["sigma"]]
+              return(sigma/2.5)
             }
             ),
 #       
@@ -1062,6 +1136,9 @@ spatstatRmhInfo <- function(cifname) {
               stabilising="hradii[i,i] > 0 for all i"),
             reach=function(par, ...) {
               return(max(0, par$hradii, na.rm=TRUE))
+            },
+            hardcore=function(par, ..., epsilon=0) {
+              return(max(0, par$hradii, na.rm=TRUE))
             }
             ),
 #       
@@ -1100,6 +1177,9 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g == 1) 0 else r)
+            },
+            hardcore = function(par, ...) {
+              return(0)
             }
             )
        # end of list '.Spatstat.RmhTable'
