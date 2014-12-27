@@ -1,11 +1,13 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.027
+	CHANGES IN spatstat VERSION 1.39-1.028
 
 OVERVIEW
 
-   o We thank Peter Kovesi, Andrew Lister, Enrique Miranda,
-   Tuomas Rajala, Brian Ripley, Dominic Schuhmacher and
-   Maxime Woringer for contributions.
+   o We thank Markus Herrmann, Peter Kovesi, Andrew Lister, 
+   Enrique Miranda, Tuomas Rajala, Brian Ripley, Dominic Schuhmacher 
+   and Maxime Woringer for contributions.
+
+   o Important bug fixes.
 
    o Mathematical operators now apply to images.
 
@@ -35,8 +37,6 @@ OVERVIEW
    o Faster simulations.
 
    o Code for drawing diagrams (arrows, scale bars).
-
-   o Bug fixes. 
 
    o Version nickname: 'Do The Maths'
 
@@ -250,6 +250,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+   o rmh, rmh.ppm, rmh.default, simulate.ppm
+   The result of simulating a model with a hard core
+   did not necessarily respect the hard core constraint,
+   and simulation of a model with strong inhibition
+   did not necessarily converge. 
+   This only happened if the first order trend was large,
+   the starting state (n.start or x.start) was not given,
+   and the number of iterations (nrep) was not very large.
+   It occurred because of a poor choice for the default starting state.
+   Bug was present since about 2010.
+   Fixed.
+   
    o markcorrint
    Results were completely incorrect.
    Bug introduced in spatstat 1.39-0, october 2014.

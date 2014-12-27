@@ -45,6 +45,7 @@ SEXP xmethas(
 	     SEXP ncond,
 	     SEXP fixall,
              SEXP track,
+	     SEXP thin,
              SEXP snoopenv)
 {
   char *cifstring;
@@ -59,7 +60,7 @@ SEXP xmethas(
   double *xx, *yy, *xpropose, *ypropose;
   int    *mm,      *mpropose, *pp, *aa;
   SEXP out, xout, yout, mout, pout, aout;
-  int tracking;
+  int tracking, thinstart;
 #ifdef HISTORY_INCLUDES_RATIO
   SEXP numout, denout;
   double *nn, *dd;
@@ -105,8 +106,9 @@ SEXP xmethas(
   PROTECT(fixall    = AS_INTEGER(fixall)); 
   PROTECT(ncond     = AS_INTEGER(ncond)); 
   PROTECT(track     = AS_INTEGER(track)); 
+  PROTECT(thin      = AS_INTEGER(thin)); 
 
-                    /* that's 21 protected objects */
+                    /* that's 22 protected objects */
 
   /* =================== Translate arguments from R to C ================ */
 
@@ -236,6 +238,10 @@ SEXP xmethas(
   Rprintf("Initialised\n");
   if(snooper.active) Rprintf("Debugger is active.\n");
 #endif
+
+  /* ================= Thinning of initial state ==================== */
+
+  thinstart = (*(INTEGER_POINTER(thin)) != 0);
 
   /* ================= Initialise algorithm ==================== */
  
@@ -398,10 +404,10 @@ SEXP xmethas(
     }
   }
 #ifdef HISTORY_INCLUDES_RATIO
-  UNPROTECT(29);  /* 21 arguments plus xout, yout, mout, pout, aout, out,
+  UNPROTECT(30);  /* 22 arguments plus xout, yout, mout, pout, aout, out,
                             numout, denout */
 #else
-  UNPROTECT(27);  /* 21 arguments plus xout, yout, mout, pout, aout, out */
+  UNPROTECT(28);  /* 22 arguments plus xout, yout, mout, pout, aout, out */
 #endif
   return(out);
 }

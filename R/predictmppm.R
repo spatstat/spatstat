@@ -1,7 +1,7 @@
 #
 #    predictmppm.R
 #
-#	$Revision: 1.6 $	$Date: 2007/05/18 16:39:51 $
+#	$Revision: 1.8 $	$Date: 2014/12/27 11:46:56 $
 #
 #
 # -------------------------------------------------------------------
@@ -168,9 +168,9 @@ function(object, ..., newdata=NULL, type=c("trend", "cif"),
   if(verbose)
     cat("(responses)...")
   Y <- if(Yname %in% sumry$col.names) 
-    newdata[, Yname, drop=TRUE]
+    newdata[, Yname, drop=TRUE, strip=FALSE]
   else if(npat.new == model$npat)
-    data[, Yname, drop=TRUE]
+    data[, Yname, drop=TRUE, strip=FALSE]
   else NULL
   #
   if(want.cif && is.null(Y))
@@ -248,12 +248,27 @@ function(object, ..., newdata=NULL, type=c("trend", "cif"),
     Quads[[i]] <- quad(data=Y[[i]], dummy=Dummies[[i]])
   # Insert quadschemes into newdata
   newdata[, Yname] <- Quads
+  
+  # Determine interactions to be used
+  if(verbose)
+    cat("(interactions)...")
+  interactions <- model$Inter$interaction
+  ninter <- if(is.hyperframe(interactions)) nrow(interactions) else 1
+  nnew <- nrow(newdata)
+  if(ninter != nnew && ninter != 1) {
+    if(!all(model$Inter$constant))
+      stop(paste("Number of rows of newdata", paren(nnew),
+                 "does not match number of interactions in model",
+                 paren(ninter)))
+    interactions <- interactions[1, ]
+  }
+
   # compute the Berman-Turner frame
   if(verbose)
     cat("done.\nStarting prediction...(Berman-Turner frame)...")
   moadf <- mppm(formula     = model$formula,
                 data        = newdata,
-                interaction = model$Inter$interaction,
+                interaction = interactions,
                 iformula    = model$iformula,
                 use.gam     = model$Fit$use.gam,
                 correction  = model$Info$correction,

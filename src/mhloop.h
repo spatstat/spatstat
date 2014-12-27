@@ -20,7 +20,7 @@
    
    MH_SNOOP     whether to run visual debugger
 
-   $Revision: 1.20 $  $Date: 2014/12/27 07:47:58 $ 
+   $Revision: 1.21 $  $Date: 2014/12/27 14:56:30 $ 
 
 */
 
@@ -28,11 +28,11 @@
 #define MH_DEBUG NO
 #endif
 
-/* ......... Pre-processing: recursively delete any illegal points ....... */
+/* ..... Pre-processing: recursively delete illegal/improbable points ..... */
 
 nfree = state.npts - algo.ncond;  /* number of 'free' points */
 
-if(nfree > 0) {
+if(thinstart && nfree > 0) {
   nsuspect = nfree;
   while(nsuspect > 0) {
     /* scan for illegal points */
@@ -65,9 +65,9 @@ if(nfree > 0) {
     Rprintf("cif = %lf\n", adenom);
 #endif
     /* accept/reject */
-    if(adenom == 0.0) {
+    if(unif_rand() >= adenom) {
 #if MH_DEBUG
-      Rprintf("deleting illegal point\n");
+      Rprintf("deleting illegal/improbable point\n");
 #endif
       /* delete point x[ix], y[ix] */
       if(mustupdate) {
