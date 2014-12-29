@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.028
+	CHANGES IN spatstat VERSION 1.39-1.029
 
 OVERVIEW
 
@@ -199,6 +199,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o integral.im
    New argument 'domain' specifies the domain of integration.
+
+   o plot.fasp
+   New argument 'transpose' allows rows and columns to be exchanged.
 
    o plot.im
    The list 'ribargs' can now include the parameter 'labels'.

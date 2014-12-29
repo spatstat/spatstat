@@ -10,6 +10,7 @@
 \usage{
    \method{plot}{fasp}(x,formule=NULL, \dots,
                         subset=NULL, title=NULL, banner=TRUE,
+                        transpose=FALSE,
                         samex=FALSE, samey=FALSE,
                         mar.panel=NULL,
                         outerlabels=TRUE, cex.outerlabels=1.25,
@@ -50,6 +51,9 @@
     Logical. If \code{TRUE}, the overall title is plotted.
     If \code{FALSE}, the overall title is not plotted
     and no space is allocated for it.
+  }
+  \item{transpose}{
+    Logical. If \code{TRUE}, rows and columns will be exchanged.
   }
   \item{samex,samey}{
     Logical values indicating whether all individual plot panels should have the
