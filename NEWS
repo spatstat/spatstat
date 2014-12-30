@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.39-1.029
+	CHANGES IN spatstat VERSION 1.39-1.030
 
 OVERVIEW
 
@@ -250,6 +250,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o plot.profilepl
    Now recognises 'lty', 'lwd', 'col' etc
+
+   o vesicles, gorillas
+   Some of the raw data files for these datasets are also installed in spatstat
+   for demonstration and training purposes. 
 
 BUG FIXES
 

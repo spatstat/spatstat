@@ -106,6 +106,18 @@
 
   For further information see Funwi-Gabga and Mateu (2012).
 }
+\section{Raw Data}{
+  For demonstration and training purposes,
+  the raw data file for the \code{vegetation} covariate is
+  also provided in the \pkg{spatstat} package installation,
+  as the file \code{vegetation.asc} in the folder \code{rawdata/gorillas}.
+  Use \code{\link[base]{system.file}} to obtain the file path:
+  \code{system.file("rawdata/gorillas/vegetation.asc", package="spatstat")}.
+  This is a text file in the simple ASCII file format of the geospatial
+  library \code{GDAL}. The file can be read by the function
+  \code{readGDAL} in the \pkg{rgdal} package, or alternatively
+  read directly using \code{\link[base]{scan}}.
+}
 \source{
   Field data collector: Wildlife Conservation Society Takamanda-Mone
   Landscape Project (WCS-TMLP).
