@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.28 $  $Date: 2014/11/23 08:50:23 $
+#  $Revision: 1.29 $  $Date: 2014/12/30 11:01:15 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -280,11 +280,11 @@ relrisk.ppp <- local({
                    result <- list(estimate=probs, SE=SE)
                  }
                } else {
-                 risks <- as.listof(lapply(Deach,
+                 risks <- as.listof(lapply(probs,
                                            function(z, d) {
                                              eval.im(ifelse(d > 0, z/d, NA))
                                            },
-                                           d = Deach[[icontrol]]))
+                                           d = probs[[icontrol]]))
                  if(!se) {
                    result <- risks
                  } else {

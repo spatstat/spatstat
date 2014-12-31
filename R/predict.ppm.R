@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.87 $	$Date: 2014/12/12 11:44:58 $
+#	$Revision: 1.89 $	$Date: 2014/12/31 04:06:17 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -666,7 +666,8 @@ model.se.image <- function(fit, W=as.owin(fit), ..., what="sd") {
 }
 
 GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
-  if(!changecoef) {
+  ok <- is.finite(coefs)
+  if(!changecoef && all(ok)) {
     answer <- predict(fit, newdata=data, type="response")
   } else {
     # do it by hand
@@ -675,7 +676,18 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
     fram <- model.frame(fmla, data=data)
     # linear predictor
     mm <- model.matrix(fmla, data=fram)
-    eta <- as.vector(mm %*% coefs)
+    if(all(ok)) {
+      eta <- as.vector(mm %*% coefs)
+    } else {
+      #' ensure 0 * anything = 0
+      eta <- as.vector(mm[ , ok, drop=FALSE] %*% coefs[ok])
+      for(j in which(!ok)) {
+        mmj <- mm[, j]
+        nonzero <- is.na(mmj) | (mmj != 0)
+        if(any(nonzero))
+          eta[nonzero] <- eta[nonzero] + mmj[nonzero] * coefs[j]
+      }
+    }
     # offset
     mo <- model.offset(fram)
     if(!is.null(mo)) {
@@ -691,7 +703,6 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
   if(family(fit)$family=="binomial")
     answer <- fit$data$.logi.B[1] * answer/(1-answer)
   return(answer)
-
 }
 
 # An 'equalpairs' matrix E is needed in the ppm class

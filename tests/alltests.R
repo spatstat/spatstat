@@ -457,7 +457,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.1 $ $Date: 2013/11/12 16:06:11 $
+#  $Revision: 1.2 $ $Date: 2014/12/31 04:24:30 $
 #
 
 require(spatstat)
@@ -465,8 +465,17 @@ require(spatstat)
 local({
   # test of 'covfunargs'
   f <- function(x,y,a){ y - a }
-  fit <- ppm(cells, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
+  fit <- ppm(cells ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
   p <- predict(fit)
+
+  # prediction involving 0 * NA
+  qc <- quadscheme(cells, nd=10)
+  r <- minnndist(as.ppp(qc))/10
+  fit <- ppm(qc ~ 1, Strauss(r)) # model has NA for interaction coefficient
+  p1 <- predict(fit)
+  p2 <- predict(fit, type="cif", ngrid=10)
+  stopifnot(all(is.finite(as.matrix(p1))))
+  stopifnot(all(is.finite(as.matrix(p2))))
 })
 
 #
