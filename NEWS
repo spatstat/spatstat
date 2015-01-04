@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.003
+	CHANGES IN spatstat VERSION 1.40-0.004
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o anova.lppm
    Removed outdated argument 'override'.
+
+   o split<-.ppp
+   Preserves the original ordering of the data, if possible.
 
 BUG FIXES
 

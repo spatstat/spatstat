@@ -209,7 +209,16 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
   }
 
   # put Humpty together again
-  out <- do.call(superimpose,c(value,list(W=W)))
+  if(npoints(x) == length(f) &&
+     length(levels(f)) == length(value) &&
+     all(table(f) == sapply(value, npoints))) {
+    ## exact correspondence
+    out <- x
+    for(i in seq_along(levels(f)))
+      out[ f == lev[i] ] <- value[[i]]
+  } else {
+    out <- do.call(superimpose,c(value,list(W=W)))
+  }
   return(out)
 }
 

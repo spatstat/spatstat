@@ -115,7 +115,9 @@
   \code{f}. These point patterns are expected to be compatible with the
   type of data in the original pattern \code{x}.
 
-  Splitting can also be undone by the function \code{\link{superimpose}}.
+  Splitting can also be undone by the function
+  \code{\link{superimpose}},
+  but this typically changes the ordering of the data.
 }
 \seealso{
   \code{\link{cut.ppp}},
@@ -172,6 +174,15 @@
 # (3) Splitting over a tessellation
    tes <- tess(xgrid=seq(0,96,length=5),ygrid=seq(0,100,length=5))
    v <- split(swedishpines, tes)
+
+
+# (4) how to apply an operation to selected points:
+#  split into components, transform desired component, then un-split
+#  e.g. apply random jitter to 'on' points only
+  X <- amacrine
+  Y <- split(X)
+  Y$on <- rjitter(Y$on, 0.1)
+  split(X) <- Y
 }
 
 \author{Adrian Baddeley

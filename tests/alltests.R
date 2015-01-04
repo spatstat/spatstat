@@ -1678,6 +1678,12 @@ A <- runifpoint(10)
 B <- runifpoint(10)
 AB <- split(superimpose(A=A, B=B))
 
+#' check that split<- respects ordering where possible
+X <- amacrine
+Y <- split(X)
+split(X) <- Y
+stopifnot(identical(X, amacrine))
+
 })
 #
 #  tests/imageops.R
