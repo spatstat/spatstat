@@ -8,7 +8,7 @@
   \method{density}{ppp}(x, sigma, \dots,
         weights=NULL, edge=TRUE, varcov=NULL,
         at="pixels", leaveoneout=TRUE,
-        adjust=1, diggle=FALSE)
+        adjust=1, diggle=FALSE, se=FALSE) 
 }
 \arguments{
   \item{x}{
@@ -29,7 +29,7 @@
     the pixel resolution, or passed to \code{sigma} if it is a function.
   }
   \item{edge}{
-    Logical flag: if \code{TRUE}, apply edge correction.
+    Logical value indicating whether to apply edge correction.
   }
   \item{varcov}{
     Variance-covariance matrix of anisotropic Gaussian kernel.
@@ -52,6 +52,9 @@
     which is more accurate but slower to compute than the
     correction described under Details.
   }
+  \item{se}{
+    Logical value indicating whether to compute standard errors as well.
+  }
 }
 \value{
   By default, the result is
@@ -71,6 +74,8 @@
   result is a list of images (if \code{at="pixels"}) or a matrix of
   numerical values (if \code{at="points"}).
   
+  If \code{se=TRUE}, the result is a list with two elements named
+  \code{estimate} and \code{SE}, each of the format described above.
 }
 \details{
   This is a method for the generic function \code{density}.

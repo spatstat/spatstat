@@ -1,4 +1,41 @@
 
+	CHANGES IN spatstat VERSION 1.40-0.003
+
+OVERVIEW
+
+   o We thank Brian Ripley for contributions.
+
+   o Fixed bug causing a segmentation fault.
+
+   o Standard errors for kernel estimates of intensity.
+
+   o Test for segregation.
+
+   o Temporary nickname: 'Team Australia'
+
+NEW FUNCTIONS
+
+   o segregation.test
+   Test of spatial segregation of types in a multitype point pattern.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o density.ppp
+   New argument 'se' allows calculation of standard errors as well.
+
+   o anova.lppm
+   Removed outdated argument 'override'.
+
+BUG FIXES
+
+   o density.ppp
+   Crashed when at="points" if the dataset had exactly 1 point.
+   Fixed.
+
+   o sumouter
+   A segmentation fault could occur, if any data were NA.
+   Fixed.
+
 	CHANGES IN spatstat VERSION 1.40-0
 
 OVERVIEW

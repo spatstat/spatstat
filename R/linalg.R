@@ -1,7 +1,7 @@
 #
 # linalg.R
 #
-# $Revision: 1.8 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.10 $ $Date: 2015/01/03 09:50:35 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -21,7 +21,8 @@ sumouter <- function(x, w=NULL) {
   if(!all(ok)) {
     tx <- tx[ , ok, drop=FALSE]
     if(!is.null(w)) w <- w[ok]
-  }
+    n <- ncol(tx)
+  } 
   if(is.null(w)) {
     z <- .C("Csumouter",
             x=as.double(tx),

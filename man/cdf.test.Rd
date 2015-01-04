@@ -236,6 +236,8 @@ cdf.test(...)
   \emph{Applied Statistics} \bold{35}, 54--62.
 }
 \examples{
+   op <- options(useFancyQuotes=FALSE)
+
    # test of CSR using x coordinate
    cdf.test(nztrees, "x")
    cdf.test(nztrees, "x", "cvm")
@@ -272,6 +274,8 @@ cdf.test(...)
    cdf.test(amacrine, "x")
    yimage <- as.im(function(x,y){y}, W=Window(amacrine))
    cdf.test(ppm(amacrine ~marks+y), yimage)
+
+   options(op)
 }
 \keyword{htest}
 \keyword{spatial}

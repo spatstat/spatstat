@@ -6,7 +6,7 @@ Performs analysis of deviance for two or more fitted point process
 models on a linear network.
 }
 \usage{
-  \method{anova}{lppm}(object, \dots, test=NULL, override=FALSE)
+  \method{anova}{lppm}(object, \dots, test=NULL)
 }
 \arguments{
   \item{object}{A fitted point process model on a linear network
@@ -19,10 +19,6 @@ models on a linear network.
     \item{test}{
       Character string, partially matching one of
       \code{"Chisq"}, \code{"F"} or \code{"Cp"}.
-    }
-    \item{override}{
-      Logical flag indicating whether to proceed even when there is
-      no statistical theory to support the calculation.
     }
 }
 \value{
@@ -43,18 +39,9 @@ models on a linear network.
   is very similar to that in \code{\link{anova.glm}}.
 
   If some of the fitted models are \emph{not} Poisson point processes,
-  then there is no statistical theory available to support
-  a similar analysis. The function issues a warning,
-  and (by default) returns a \code{NULL} value.
-
-  However if \code{override=TRUE},
-  then a kind of analysis of deviance table will be printed.
-  The `deviance' differences in this table are equal to 2 times the differences
-  in the maximised values of the log pseudolikelihood (see
-  \code{\link{ppm}}). At the time of writing, there is no statistical
-  theory to support inferential interpretation of log pseudolikelihood
-  ratios. The \code{override} option is provided for research purposes
-  only!
+  then the deviance difference is replaced by the
+  adjusted composite likelihood ratio (Pace et al, 2011;
+  Baddeley et al, 2014). 
 }
 \section{Errors and warnings}{
   \describe{
@@ -105,9 +92,17 @@ models on a linear network.
   ecology and criminology.
   \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 
+  Baddeley, A., Turner, R. and Rubak, E. (2014)
+  Adjusted composite likelihood ratio test for Gibbs point processes.
+  Submitted for publication.
+
   McSwiggan, G., Nair, M.G. and Baddeley, A. (2012)
   Fitting Poisson point process models to events 
   on a linear network. Manuscript in preparation.
+
+  Pace, L., Salvan, A. and Sartori, N. (2011)
+  Adjusting composite likelihood ratio statistics.
+  \emph{Statistica Sinica} \bold{21}, 129--148.
 }
 \keyword{spatial}
 \keyword{models}

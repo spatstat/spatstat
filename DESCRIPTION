@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.40-0
-Nickname: Do The Maths
-Date: 2014-12-31
+Version: 1.40-0.003
+Nickname: Team Australia
+Date: 2015-01-04
 Title: Spatial Point Pattern Analysis, Model-fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

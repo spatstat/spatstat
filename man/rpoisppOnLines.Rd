@@ -92,7 +92,7 @@ rpoisppOnLines(lambda, L, lmax = NULL, ..., nsim=1)
 
   # intensity is an image
   Z <- as.im(function(x,y){10 * sqrt(x+y)}, unit.square())
-  Y <- rpoisppOnLines(Z, L, 10)
+  Y <- rpoisppOnLines(Z, L, 15)
   if(live) {
    plot(L, main="")
    plot(Y, add=TRUE, pch="+")

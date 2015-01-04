@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.23 $   $Date: 2014/11/20 11:04:37 $
+#  $Revision: 1.24 $   $Date: 2015/01/04 03:18:39 $
 #
 
 lppm <- function(X, ...) {
@@ -151,12 +151,16 @@ plot.lppm <- function(x, ..., type="trend") {
                                    list(main=xname)))
 }
   
-anova.lppm <- function(object, ..., test=NULL, override=FALSE) {
+anova.lppm <- function(object, ..., test=NULL) {
   stuff <- list(object=object, ...)
-  # extract ppm objects where appropriate
+  if(!is.na(hit <- match("override", names(stuff)))) {
+    warning("Argument 'override' is outdated and was ignored")
+    stuff <- stuff[-hit]
+  }
+  #' extract ppm objects where appropriate
   stuff <- lapply(stuff, function(z) { if(inherits(z, "lppm")) z$fit else z })
-  # analysis of deviance for 
-  do.call("anova.ppm", append(stuff, list(test=test, override=override)))
+  #' analysis of deviance or adjusted composite deviance
+  do.call("anova.ppm", append(stuff, list(test=test)))
 }
 
 update.lppm <- function(object, ...) {

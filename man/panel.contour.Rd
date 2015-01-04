@@ -74,7 +74,7 @@ panel.histogram(x, ...)
   with(bei.extra,
          pairs(grad, elev,
                panel      = panel.contour,
-               panel.diag = panel.histogram))
+               diag.panel = panel.histogram))
 }
 \keyword{spatial}
 \keyword{hplot}
