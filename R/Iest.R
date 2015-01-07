@@ -2,7 +2,7 @@
 #
 #	I function
 #
-#	$Revision: 1.12 $	$Date: 2011/04/19 02:31:39 $
+#	$Revision: 1.13 $	$Date: 2015/01/06 02:44:17 $
 #
 #
 #
@@ -21,7 +21,7 @@ Iest <- function(X, ..., eps=NULL, r = NULL, breaks = NULL, correction=NULL) {
   fi <- ni/sum(ni)
 
   # J function of pattern regardless of type
-  Jdotdot <- Jest(unmark(X), correction=correction)
+  Jdotdot <- Jest(unmark(X), correction=correction, r=r, eps=eps, breaks=breaks)
   rvals <- Jdotdot$r
   
   # J function of subpattern of each type i

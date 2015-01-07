@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.31 $	$Date: 2014/12/23 05:42:03 $
+#    $Revision: 2.33 $	$Date: 2015/01/07 06:24:47 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -146,6 +146,7 @@ doMultiStraussHard <- local({
            types <- self$par$types
            iradii <- self$par$iradii
            hradii <- self$par$hradii
+           # hradii could be NULL
            if(!is.null(types)) {
              if(!is.null(dim(types)))
                stop(paste("The", sQuote("types"),
@@ -162,16 +163,19 @@ doMultiStraussHard <- local({
              }
              nt <- length(types)
              MultiPair.checkmatrix(iradii, nt, sQuote("iradii"))
-             MultiPair.checkmatrix(hradii, nt, sQuote("hradii"))
+             if(!is.null(hradii))
+               MultiPair.checkmatrix(hradii, nt, sQuote("hradii"))
            }
            ina <- is.na(iradii)
-           hna <- is.na(hradii)
            if(all(ina))
              stop(paste("All entries of", sQuote("iradii"),
                         "are NA"))
-           both <- !ina & !hna
-           if(any(iradii[both] <= hradii[both]))
-             stop("iradii must be larger than hradii")
+           if(!is.null(hradii)) {
+             hna <- is.na(hradii)
+             both <- !ina & !hna
+             if(any(iradii[both] <= hradii[both]))
+               stop("iradii must be larger than hradii")
+           }
          },
          update = NULL,  # default OK
          print = function(self) {
@@ -179,15 +183,17 @@ doMultiStraussHard <- local({
            iradii <- self$par$iradii
            hradii <- self$par$hradii
            nt <- nrow(iradii)
-           cat(paste(nt, "types of points\n"))
+           splat(nt, "types of points")
            if(!is.null(types)) {
-             cat("Possible types: \n")
+             splat("Possible types:")
              print(noquote(types))
-           } else cat("Possible types:\t not yet determined\n")
-           cat("Interaction radii:\n")
+           } else splat("Possible types:\t not yet determined")
+           splat("Interaction radii:")
            print(iradii)
-           cat("Hardcore radii:\n")
-           print(hradii)
+           if(!is.null(hradii)) {
+             splat("Hardcore radii:")
+             print(hradii)
+           } else splat("Hardcore radii: not yet determined")
            invisible()
          },
         interpret = function(coeffs, self) {
@@ -288,13 +294,17 @@ doMultiStraussHard <- local({
   class(BlankMSHobject) <- "interact"
 
   # Finally define MultiStraussHard function
-  doMultiStraussHard <- function(iradii, hradii, types=NULL) {
+  doMultiStraussHard <- function(iradii, hradii=NULL, types=NULL) {
+    iradii[iradii == 0] <- NA
+    if(!is.null(hradii)) hradii[hradii == 0] <- NA
     out <- instantiate.interact(BlankMSHobject,
                                 list(types=types,
                                      iradii = iradii, hradii = hradii))
-    if(!is.null(types)) 
-      dimnames(out$par$iradii) <- 
-        dimnames(out$par$hradii) <- list(types, types)
+    if(!is.null(types)) {
+      dn <- list(types, types)
+      dimnames(out$par$iradii) <- dn
+      if(!is.null(out$par$hradii)) dimnames(out$par$hradii) <- dn
+    }
     return(out)
   }
 
@@ -318,6 +328,7 @@ MultiStraussHard <- local({
     if(is.interact(out))
       return(out)
     ## Syntax is wrong: generate error using new syntax rules
+    if(missing(hradii)) hradii <- NULL
     doMultiStraussHard(iradii=iradii, hradii=hradii, types=types)
   }
 

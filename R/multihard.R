@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.12 $	$Date: 2014/12/23 05:42:19 $
+#    $Revision: 1.14 $	$Date: 2015/01/07 06:24:36 $
 #
 #    The Hard core process
 #
@@ -123,7 +123,7 @@ MultiHard <- local({
          if(!is.null(types)) {
            h <- self$par$hradii
            nt <- length(types)
-           MultiPair.checkmatrix(h, nt, sQuote("hradii"))
+           if(!is.null(h)) MultiPair.checkmatrix(h, nt, sQuote("hradii"))
            if(length(types) == 0)
              stop(paste("The", sQuote("types"),
                         "argument should be",
@@ -140,14 +140,16 @@ MultiHard <- local({
        update = NULL,  # default OK
        print = function(self) {
          h <- self$par$hradii
-         cat(paste(nrow(h), "types of points\n"))
+         if(!is.null(h)) splat(nrow(h), "types of points")
          types <- self$par$types
          if(!is.null(types)) {
-           cat("Possible types: \n")
+           splat("Possible types:")
            print(noquote(types))
-         } else cat("Possible types: \t not yet determined\n")
-         cat("Hardcore radii:\n")
-         print(h)
+         } else splat("Possible types:\t not yet determined")
+         if(!is.null(h)) {
+           splat("Hardcore radii:")
+           print(h)
+         } else splat("Hardcore radii:\t not yet determined") 
          invisible()
        },
        interpret = function(coeffs, self) {
@@ -174,6 +176,7 @@ MultiHard <- local({
       hradii <- types
       types <- NULL
     }
+    if(!is.null(hradii)) hradii[hradii == 0] <- NA
     out <- instantiate.interact(BlankMH, list(types=types, hradii = hradii))
     if(!is.null(types))
       dimnames(out$par$hradii) <- list(types, types)

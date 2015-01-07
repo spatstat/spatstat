@@ -2,7 +2,7 @@
 #
 #    multistrauss.S
 #
-#    $Revision: 2.21 $	$Date: 2014/04/30 07:57:47 $
+#    $Revision: 2.22 $	$Date: 2015/01/07 04:21:53 $
 #
 #    The multitype Strauss process
 #
@@ -222,6 +222,7 @@ MultiStrauss <- local({
       radii <- types
       types <- NULL
     }
+    radii[radii == 0] <- NA
     out <- instantiate.interact(BlankMSobject, list(types=types, radii = radii))
     if(!is.null(types))
       dimnames(out$par$radii) <- list(types, types)

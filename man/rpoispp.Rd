@@ -47,9 +47,19 @@
   inside the window \code{win}.
   The function \code{lambda} must work correctly with vectors \code{x}
   and \code{y}.
-  The value \code{lmax} must be given and must be an upper bound on the 
-  values of \code{lambda(x,y,\dots)} for all locations \code{(x, y)}
-  inside the window \code{win}. 
+  
+  If \code{lmax} is given,
+  it must be an upper bound on the values of \code{lambda(x,y,\dots)}
+  for all locations \code{(x, y)}
+  inside the window \code{win}.
+
+  If \code{lmax} is missing or \code{NULL},
+  an approximate upper bound is computed by finding the maximum value
+  of \code{lambda(x,y,\dots)}
+  on a grid of locations \code{(x,y)} inside the window \code{win},
+  and adding a safety margin equal to 5 percent of the range of
+  \code{lambda} values. This can be computationally intensive,
+  so it is advisable to specify \code{lmax} if possible.
 
   If \code{lambda} is a pixel image object of class \code{"im"}
   (see \code{\link{im.object}}), this algorithm generates a realisation

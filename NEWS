@@ -1,11 +1,11 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.004
+	CHANGES IN spatstat VERSION 1.40-0.005
 
 OVERVIEW
 
    o We thank Brian Ripley for contributions.
 
-   o Fixed bug causing a segmentation fault.
+   o Fixed a bug causing a segmentation fault.
 
    o Standard errors for kernel estimates of intensity.
 
@@ -29,14 +29,24 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o split<-.ppp
    Preserves the original ordering of the data, if possible.
 
+   o MultiHard, MultiStraussHard
+   Improved handling of missing arguments.
+
+   o MultiHard, MultiStrauss, MultiStraussHard
+   Printed output now respects options('width')
+
 BUG FIXES
+
+   o sumouter
+   A segmentation fault could occur, if any data were NA.
+   Fixed.
 
    o density.ppp
    Crashed when at="points" if the dataset had exactly 1 point.
    Fixed.
 
-   o sumouter
-   A segmentation fault could occur, if any data were NA.
+   o Iest
+   Ignored the arguments 'r' and 'eps'.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0
