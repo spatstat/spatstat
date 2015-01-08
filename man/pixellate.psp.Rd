@@ -5,10 +5,11 @@
 }
 \description{
   Converts a line segment pattern to a pixel image
-  by measuring the length of lines intersecting each pixel.
+  by measuring the length or number of lines intersecting each pixel.
 }
 \usage{
-\method{pixellate}{psp}(x, W=NULL, ..., weights = NULL)
+\method{pixellate}{psp}(x, W=NULL, ..., weights = NULL,
+                        what=c("length", "number"))
 }
 \arguments{
   \item{x}{
@@ -25,11 +26,19 @@
   \item{weights}{
     Optional vector of weights associated with each line segment.
   }
+  \item{what}{
+    String (partially matched) indicating whether to compute the
+    total length of intersection (\code{what="length"}, the default)
+    or the total number of segments intersecting each pixel
+    (\code{what="number"}).
+  }
 }
 \details{
   This function converts a line segment pattern to a pixel image by computing,
   for each pixel, the total length of
   intersection between the pixel and the line segments.
+  Alternatively it can count the number of line segments intersecting
+  each pixel. 
   
   This is a method for the generic function
   \code{\link{pixellate}} for the class of line segment patterns.
@@ -64,12 +73,15 @@
   plot(X, add=TRUE)
   sum(lengths.psp(X))
   sum(pixellate(X))
+  plot(pixellate(X, what="n"))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

@@ -1,7 +1,7 @@
 ##
 ##    hierstrauss.R
 ##
-##    $Revision: 1.2 $	$Date: 2014/12/24 03:15:34 $
+##    $Revision: 1.4 $	$Date: 2015/01/08 07:34:30 $
 ##
 ##    The hierarchical Strauss process
 ##
@@ -119,15 +119,15 @@ HierStrauss <- local({
          radii <- self$par$radii
          types <- self$par$types
          archy <- self$par$archy
-         cat(paste(nrow(radii), "types of points\n"))
+         splat(nrow(radii), "types of points")
          if(!is.null(types) && !is.null(archy)) {
-           cat("Possible types and ordering: \n")
+           splat("Possible types and ordering:")
            print(archy)
          } else if(!is.null(types)) {
-           cat("Possible types: \n")
+           splat("Possible types:")
            print(types)
-         } else cat("Possible types:\t not yet determined\n")
-         cat("Interaction radii:\n")
+         } else splat("Possible types:\t not yet determined")
+         splat("Interaction radii:")
          print(hiermat(radii, self$par$archy))
          invisible(NULL)
        },
@@ -215,7 +215,8 @@ HierStrauss <- local({
     if(!is.null(types)) {
       if(is.null(archy)) archy <- seq_len(length(types))
       archy <- hierarchicalordering(archy, types)
-    } 
+    }
+    radii[radii == 0] <- NA
     out <- instantiate.interact(BlankHSobject,
                                 list(types=types,
                                      radii=radii,
@@ -254,14 +255,16 @@ hierarchicalordering <- function(i, s) {
 }
 
 print.hierarchicalordering <- function(x, ...) {
-  cat(paste(x$labels[x$indices], collapse=" > "))
-  cat("\n")
+  splat(x$labels[x$indices], collapse=" ~> ")
+  invisible(NULL)
 }
                      
 hiermat <- function (x, h) 
 {
   stopifnot(is.matrix(x))
+  isna <- is.na(x)
   x[] <- as.character(x)
+  x[isna] <- ""
   if(inherits(h, "hierarchicalordering")) ## allows h to be NULL, etc
     x[!(h$relation)] <- ""
   return(noquote(x))

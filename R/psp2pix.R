@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.8 $  $Date: 2015/01/08 11:52:28 $
 #
 #
 
@@ -44,8 +44,11 @@ as.mask.psp <- function(x, W=NULL, ...) {
 }
 
 
-pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
+pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
+                          what=c("length", "number")) {
   L <- as.psp(x)
+  what <- match.arg(what)
+  
   if(is.null(W))
     W <- as.owin(L)
   else
@@ -62,6 +65,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
     Z$v[] <- 0
     return(Z)
   }
+
   
   if(is.null(weights))
     weights <- rep.int(1, nseg)
@@ -82,21 +86,36 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL) {
   y1 <- (ends$y1 - Z$yrange[1])/Z$ystep
   nr <- Z$dim[1]
   nc <- Z$dim[2]
-  zz <- .C("seg2pixL",
-           ns=as.integer(nseg),
-           x0=as.double(x0),
-           y0=as.double(y0),
-           x1=as.double(x1),
-           y1=as.double(y1),
-           weights=as.double(weights),
-           pixwidth=as.double(Z$xstep),
-           pixheight=as.double(Z$ystep),
-           nx=as.integer(nc),
-           ny=as.integer(nr),
-           out=as.double(numeric(nr * nc)))
+  switch(what,
+         length = {
+           zz <- .C("seg2pixL",
+                    ns=as.integer(nseg),
+                    x0=as.double(x0),
+                    y0=as.double(y0),
+                    x1=as.double(x1),
+                    y1=as.double(y1),
+                    weights=as.double(weights),
+                    pixwidth=as.double(Z$xstep),
+                    pixheight=as.double(Z$ystep),
+                    nx=as.integer(nc),
+                    ny=as.integer(nr),
+                    out=as.double(numeric(nr * nc)))
+         },
+         number = {
+           zz <- .C("seg2pixN",
+                    ns=as.integer(nseg),
+                    x0=as.double(x0),
+                    y0=as.double(y0),
+                    x1=as.double(x1),
+                    y1=as.double(y1),
+                    w=as.double(weights),
+                    nx=as.integer(nc),
+                    ny=as.integer(nr),
+                    out=as.double(numeric(nr * nc)))
+         })
   mm <- matrix(zz$out, nr, nc)
   mm[is.na(Z$v)] <- NA
-  # intersect with existing window
+  ## intersect with existing window
   Z$v <- mm
   Z
 }

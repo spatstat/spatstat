@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.005
+	CHANGES IN spatstat VERSION 1.40-0.006
 
 OVERVIEW
 
@@ -23,16 +23,19 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o density.ppp
    New argument 'se' allows calculation of standard errors as well.
 
+   o pixellate.psp
+   Can now count the number of segments that intersect each pixel, 
+   instead of the total length of intersection.
+
    o anova.lppm
-   Removed outdated argument 'override'.
+   Outdated argument 'override' has been removed.
 
    o split<-.ppp
    Preserves the original ordering of the data, if possible.
 
-   o MultiHard, MultiStraussHard
+   o MultiHard, MultiStrauss, MultiStraussHard, HierStrauss
+   Zero values in the interaction radii are now treated as NA.
    Improved handling of missing arguments.
-
-   o MultiHard, MultiStrauss, MultiStraussHard
    Printed output now respects options('width')
 
 BUG FIXES
