@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.006
+	CHANGES IN spatstat VERSION 1.40-0.007
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
    o Standard errors for kernel estimates of intensity.
 
    o Test for segregation.
+
+   o Improvements and bug fixes.
 
    o Temporary nickname: 'Team Australia'
 
@@ -42,6 +44,11 @@ BUG FIXES
 
    o sumouter
    A segmentation fault could occur, if any data were NA.
+   Fixed.
+
+   o simulate.kppm
+   Simulation failed for log-Gaussian Cox processes (in simulate.kppm only) 
+   with an error message from the RandomFields package.
    Fixed.
 
    o density.ppp

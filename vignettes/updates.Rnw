@@ -145,6 +145,11 @@ Following is an overview of the most important changes.
      for intensity, and for total number of points in a region.
    \item 
      covariates can be tessellations.
+   \item 
+     improvements to model selection.
+   \item 
+     hierarchical interactions between types
+     in a multitype point process.
     \end{itemize}
 \item 
     Diagnostics for Gibbs models:
@@ -232,6 +237,8 @@ Following is an overview of the most important changes.
       bootstrap confidence intervals for summary functions (\texttt{lohboot})
     \item 
       pooling operations (\texttt{pool.*})
+    \item 
+      tools for directional data (rose diagram, kernel smoothing)
     \end{itemize}
 \item
   Changes to \texttt{ppx} format:
@@ -260,6 +267,8 @@ Following is an overview of the most important changes.
     \item 
       Switch all plots from colour to greyscale by setting
       \texttt{spatstat.options(monochrome=TRUE)}
+    \item 
+      perceptually uniform colour maps
     \end{itemize}
 \item
     simulation:
@@ -276,10 +285,13 @@ Following is an overview of the most important changes.
       quasirandom point patterns and sequences
     \end{itemize}
 
+\item mathematical operations are now supported for images.
+
 \item envelopes: 
        Extended functionality;
        Envelopes can be pooled and transformed.
        One-sided envelopes are available.
+
 
 \item Many, many, many bug fixes.
 
@@ -295,7 +307,8 @@ Following is an overview of the most important changes.
 
 \item vignettes:
    New vignettes 'Getting Started with the Spatstat Package',
-   'Analysing Replicated Point Patterns in Spatstat'
+   'Analysing Replicated Point Patterns in Spatstat',
+   'Datasets in the Spatstat Package'
    and `Summary of Recent Changes to Spatstat'
    
 \item demonstrations:   
@@ -448,7 +461,30 @@ The following datasets have been added to the package.
 
 Following is a list of all the functions that have been added.
 
-\begin{itemize}
+\begin{itemize}  
+  \item \texttt{segregation.test}
+   Test of spatial segregation of types in a multitype point pattern.
+  \item mathematical operations are now supported for images. For example\\ 
+    \verb!alpha <- atan(bei.extra$grad) * 180/pi!   %$
+  \item \texttt{relrisk.ppm}: spatially-varying probabilities
+    of different types of points
+    predicted by a fitted point process model.
+  \item \texttt{circdensity}: Kernel density estimate for angular data
+  \item \texttt{rose}: Rose diagram (rose of directions) for angular data
+  \item \texttt{nnorient}: Nearest neighbour orientation distribution.
+  \item \texttt{AIC.ppm}: Calculate \textit{AIC}
+    of a Gibbs model using Takeuchi's rule.
+  \item \texttt{interp.colours}:
+   Interpolate a sequence of colour values.
+  \item \texttt{anyDuplicated.ppp}, \texttt{anyDuplicated.ppx}:
+   Fast replacements for \texttt{any(duplicated(x))} for point patterns.
+  \item \texttt{textstring}, \texttt{onearrow}, \texttt{yardstick}:
+   Objects representing a text string, an arrow, or a scale bar,
+   for use in drawing spatial diagrams.
+  \item \texttt{plot.imlist}, \texttt{image.imlist}, \texttt{contour.imlist}:
+   Methods for the new class \texttt{"imlist"}
+  \item \verb![<-.layered!,  \verb![[<-.layered!:
+   More support for class \texttt{"layered"}
   \item \texttt{anylist}, \texttt{as.anylist}, \texttt{[.anylist}, \texttt{[<-.anylist}, \texttt{print.anylist}, \texttt{summary.anylist}\\ 
    Support for new class '\texttt{anylist}'
  \item \texttt{solist}, \texttt{as.solist}, 
@@ -1326,7 +1362,41 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-  \item Likelihood cross-validation for smoothing bandwidth.
+   \item Standard errors for kernel estimates of intensity.
+
+   \item  Test for segregation.
+
+   \item  Mathematical operators now apply to images.
+
+   \item  Parametric estimates of relative risk 
+     from fitted point process models.
+
+   \item  Standard errors for relative risk (parametric and non-parametric).
+
+   \item  Kernel smoothing and rose diagrams for angular data.
+
+   \item  Perceptually uniform colour maps. 
+
+   \item  Hierarchical interactions for multitype patterns.
+
+   \item  Hard core parameters in all interactions no longer need
+     to be specified and will be estimated from data.
+
+   \item  Improvements to analysis of deviance and model selection.
+
+   \item  New datasets.
+
+   \item  New vignette, summarising all datasets installed with spatstat.
+
+   \item  Tests and diagnostics now include a Monte Carlo option.
+
+   \item  Faster checking of large datasets.
+
+   \item  Faster simulations.
+
+   \item  Code for drawing diagrams (arrows, scale bars).
+
+ \item Likelihood cross-validation for smoothing bandwidth.
 
   \item Faster computations for pairwise interaction models.
 
@@ -2765,7 +2835,18 @@ of potential impact.
      Simulation of the Strauss-Hard Core process was partially incorrect,
      giving point patterns with a slightly lower intensity.
      \bugger{1.31-0}{january 2013}{1.37-0}{may 2014}
-   \item 
+   \item
+   The result of simulating a model with a hard core
+   did not necessarily respect the hard core constraint,
+   and simulation of a model with strong inhibition
+   did not necessarily converge. 
+   This only happened if the first order trend was large,
+   the starting state (\texttt{n.start} or \texttt{x.start}) was not given,
+   and the number of iterations \texttt{nrep} was not very large.
+   It occurred because of a poor choice for the default starting state.
+   {\small (Bug was present since about 2010.  
+     Fixed in \texttt{spatstat 1.40-0}, december 2014)}
+  \item 
      Simulation of the Geyer saturation process was 
      incorrectly initialised, so that the results of a short run 
      (i.e. small value of \texttt{nrep}) were incorrect, 
@@ -2846,6 +2927,14 @@ of potential impact.
    \bugger{1.21-0}{december 2010}{1.37-0}{may 2014}
      
  \item \texttt{Kinhom}, \texttt{Linhom}:
+   Ignored argument \texttt{reciplambda2} in some cases.
+   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
+
+  \item \texttt{markcorrint}:
+   Results were completely incorrect.
+   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
+
+ \item \texttt{Kinhom}, \texttt{Linhom}:
    Calculations were incorrect if \texttt{lambda} was a fitted point
    process model.
    \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
@@ -2864,6 +2953,12 @@ of potential impact.
    Results were sometimes incorrect due to numerical instability
    (a 'Gibbs phenomenon').    
    \bugger{1.24-1}{october 2011}{1.26-1}{april 2012}
+
+ \item \texttt{relrisk}:
+   When \verb!at="pixels"!, a small fraction of pixel values were sometimes
+   wildly inaccurate, due to numerical errors. This affected the 
+   range of values in the result, and therefore the appearance of plots.
+   {\small (Bug fixed in \texttt{spatstat 1.40-0}, december 2014)}
 
  \item \texttt{selfcrossing.psp}:
    $y$ coordinate values were incorrect.   

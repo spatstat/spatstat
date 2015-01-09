@@ -79,6 +79,8 @@
   \code{\link{cdf.test}}
 }
 \examples{
+   op <- options(useFancyQuotes=FALSE)
+
    # synthetic data: nonuniform Poisson process
    X <- rpoispp(function(x,y) { 100 * exp(x) }, win=square(1))
 
@@ -97,6 +99,8 @@
    plot(k, style="PP")
 
    plot(k, style="QQ")
+
+   options(op)
 }
 
 \author{Adrian Baddeley

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.91 $ $Date: 2014/11/10 10:38:43 $
+# $Revision: 1.92 $ $Date: 2015/01/09 05:13:59 $
 #
 
 kppm <- function(X, ...) {
@@ -938,7 +938,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            cm <- object$covmodel
            model <- cm$model
            margs <- cm$margs
-           param <- c(0, sigma2, 0, alpha, unlist(margs))
+           param <- append(list(var=sigma2, scale=alpha), margs)
            if(!is.im(mu)) {
              # simulate in 'win'
              cmd <- expression(rLGCP(model=model, mu=mu, param=param,

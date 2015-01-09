@@ -184,6 +184,7 @@ local({
 })
 # tests/NAinCov.R
 # Testing the response to the presence of NA's in covariates
+# $Revision: 1.4 $ $Date: 2015/01/09 04:52:43 $
 
 require(spatstat)
 local({
@@ -193,8 +194,7 @@ local({
   # fit model: should produce a warning but no failure
   misfit <- ppm(X, ~Y, covariates=list(Y=Y))
   # prediction 
-  Z <- predict(misfit, type="trend")
-  Z <- predict(misfit, type="se")
+  Z <- predict(misfit, type="trend", se=TRUE)
   # covariance matrix: all should be silent
   v <- vcov(misfit)
   ss <- vcov(misfit, what="internals")
@@ -1560,7 +1560,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.6 $ $Date: 2012/04/08 03:22:20 $
+# $Revision: 1.7 $ $Date: 2015/01/09 05:21:22 $
 #
 # Test functionality of kppm that depends on RandomFields
 #
@@ -1571,17 +1571,20 @@ local({
   if(require(RandomFields) && RandomFieldsSafe()) {
 
     fit0 <- kppm(redwood, ~1, "LGCP")
-    simulate(fit0)
-
-    fit <- kppm(redwood, ~x, "LGCP",
+    Y0 <- simulate(fit0)[[1]]
+    stopifnot(is.ppp(Y0))
+    
+    fit1 <- kppm(redwood, ~x, "LGCP",
                 covmodel=list(model="matern", nu=0.3),
                 control=list(maxit=5))
-    simulate(fit)
+    Y1 <- simulate(fit1)[[1]]
+    stopifnot(is.ppp(Y1))
 
 # ... and Abdollah's code
 
-    fit <- kppm(redwood, ~x, cluster="Cauchy", statistic="K")
-    simulate(fit)
+    fit2 <- kppm(redwood, ~x, cluster="Cauchy", statistic="K")
+    Y2 <- simulate(fit2)[[1]]
+    stopifnot(is.ppp(Y2))
   }
   
 })
