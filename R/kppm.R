@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.92 $ $Date: 2015/01/09 05:13:59 $
+# $Revision: 1.94 $ $Date: 2015/01/10 12:24:00 $
 #
 
 kppm <- function(X, ...) {
@@ -939,17 +939,29 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            model <- cm$model
            margs <- cm$margs
            param <- append(list(var=sigma2, scale=alpha), margs)
+           #' 
            if(!is.im(mu)) {
-             # simulate in 'win'
+             # model will be simulated in 'win'
              cmd <- expression(rLGCP(model=model, mu=mu, param=param,
                                ..., win=win))
+             #' check that RandomFields package recognises parameter format
+             rfmod <- try(rLGCP(model, mu=mu, param=param, win=win,
+                              ..., modelonly=TRUE))
            } else {
-             # simulate in as.owin(mu), then change window
+             # model will be simulated in as.owin(mu), then change window
              cmd <- expression(rLGCP(model=model, mu=mu, param=param,
                                ...)[win])
+             #' check that RandomFields package recognises parameter format
+             rfmod <- try(rLGCP(model, mu=mu, param=param, 
+                              ..., modelonly=TRUE))
            }
+           #' check that model is recognised
+           if(inherits(rfmod, "try-error"))
+             stop(paste("Internal error in simulate.kppm:",
+                        "unable to build Random Fields model",
+                        "for log-Gaussian Cox process"))
          })
-
+  
   # run
   if(verbose)
     cat(paste("Generating", nsim, "simulations... "))
@@ -963,7 +975,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
     gripe <- paste(nbad,
                    ngettext(nbad, "simulation was", "simulations were"),
                    "unsuccessful")
-    if(verbose) cat(paste(gripe, "\n"))
+    if(verbose) splat(gripe)
     if(retry <= 0) {
       fate <- "returned as NULL"
       out[bad] <- list(NULL)

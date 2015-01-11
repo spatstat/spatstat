@@ -72,7 +72,7 @@
   If \code{returnL=FALSE} then the function \eqn{K_f(r)}{K[f](r)} is returned;
   otherwise the function
   \deqn{
-    L_f(r) = \sqrt{K_f(r)/pi}
+    L_f(r) = \sqrt{K_f(r)/\pi}
   }{
     L[f](r) = sqrt(K[f](r)/pi)
   }

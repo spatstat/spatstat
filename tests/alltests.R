@@ -1560,7 +1560,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.7 $ $Date: 2015/01/09 05:21:22 $
+# $Revision: 1.8 $ $Date: 2015/01/11 01:25:25 $
 #
 # Test functionality of kppm that depends on RandomFields
 #
@@ -1570,11 +1570,11 @@ local({
 
   if(require(RandomFields) && RandomFieldsSafe()) {
 
-    fit0 <- kppm(redwood, ~1, "LGCP")
+    fit0 <- kppm(redwood ~1, "LGCP")
     Y0 <- simulate(fit0)[[1]]
     stopifnot(is.ppp(Y0))
     
-    fit1 <- kppm(redwood, ~x, "LGCP",
+    fit1 <- kppm(redwood ~x, "LGCP",
                 covmodel=list(model="matern", nu=0.3),
                 control=list(maxit=5))
     Y1 <- simulate(fit1)[[1]]
@@ -1582,7 +1582,7 @@ local({
 
 # ... and Abdollah's code
 
-    fit2 <- kppm(redwood, ~x, cluster="Cauchy", statistic="K")
+    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
     Y2 <- simulate(fit2)[[1]]
     stopifnot(is.ppp(Y2))
   }
