@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.71 $   $Date: 2014/11/27 03:25:32 $
+##    $Revision: 4.72 $   $Date: 2015/01/11 14:29:36 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -499,7 +499,7 @@ rSSI <- function(r, n=Inf, win = square(1),
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
     for(isim in 1:nsim)
-      result[[isim]] <- rSSI(r=r, n=n, win=if(win.given) win else NULL,
+      result[[isim]] <- rSSI(r=r, n=n, win=if(win.given) win else square(1),
                              giveup=giveup, x.init=x.init)
     names(result) <- paste("Simulation", 1:nsim)
     return(as.solist(result))

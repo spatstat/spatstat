@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.008
+	CHANGES IN spatstat VERSION 1.40-0.009
 
 OVERVIEW
 
@@ -55,8 +55,16 @@ BUG FIXES
    Crashed when at="points" if the dataset had exactly 1 point.
    Fixed.
 
+   o rSSI
+   Crashed if nsim > 1.
+   Fixed.
+
    o Iest
    Ignored the arguments 'r' and 'eps'.
+   Fixed.
+
+   o rMatClust, rVarGamma, rCauchy, rNeymanScott
+   Result was a list, but not a 'solist', when nsim > 1.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0

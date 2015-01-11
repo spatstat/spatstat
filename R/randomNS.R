@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.13 $  $Date: 2014/11/17 08:44:46 $
+##   $Revision: 1.14 $  $Date: 2015/01/11 14:29:31 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -114,7 +114,7 @@ rNeymanScott <-
 
   if(nsim == 1) return(resultlist[[1]])
   names(resultlist) <- paste("Simulation", 1:nsim)
-  return(resultlist)
+  return(as.solist(resultlist))
 }  
 
 rMatClust <- local({
