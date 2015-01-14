@@ -50,9 +50,13 @@ Vmark(X, r=NULL,
   }
 }
 \value{
-  An object of class \code{"fv"} (see \code{\link{fv.object}}).
-  
-  Essentially a data frame containing numeric columns 
+  If \code{marks(X)} is a numeric vector, the result is 
+  an object of class \code{"fv"} (see \code{\link{fv.object}}).
+  If \code{marks(X)} is a data frame, the result is
+  a list of objects of class \code{"fv"}, one for each column of marks.
+
+  An object of class \code{"fv"} is essentially
+  a data frame containing numeric columns 
   \item{r}{the values of the argument \eqn{r} 
     at which the function \eqn{E(r)} or \eqn{V(r)}
     has been estimated

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.009
+	CHANGES IN spatstat VERSION 1.40-0.011
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o density.ppp
    New argument 'se' allows calculation of standard errors as well.
 
+   o Emark, Vmark
+   These functions can now work with multiple columns of marks.
+
    o pixellate.psp
    Can now count the number of segments that intersect each pixel, 
    instead of the total length of intersection.
@@ -39,6 +42,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Zero values in the interaction radii are now treated as NA.
    Improved handling of missing arguments.
    Printed output now respects options('width')
+
+   o rVarGamma
+   Accelerated.
+
+   o summary.mppm, print.mppm
+   These functions now respect options('width') and spatstat.options('terse').
 
 BUG FIXES
 
@@ -61,6 +70,10 @@ BUG FIXES
 
    o Iest
    Ignored the arguments 'r' and 'eps'.
+   Fixed.
+
+   o markvario
+   Result was garbled, when X had more than one column of marks.
    Fixed.
 
    o rMatClust, rVarGamma, rCauchy, rNeymanScott

@@ -1,7 +1,7 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.8 $  $Date: 2013/11/13 18:02:37 $
+# $Revision: 1.9 $  $Date: 2015/01/14 09:01:35 $
 #
 
 
@@ -141,11 +141,13 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
   allVnames <- unlist(Vnamelist)
   poistags <- itags[trivial]
 
+  terselevel <- spatstat.options("terse")
 #  rownames <- x$Info$rownames
 
-  cat(paste("Point process model fitted to", x$npat, "point patterns\n"))
-  cat(paste("Call:\n", x$Call$callstring, "\n"))
-  cat(paste("Trend formula:", paste(x$trend, collapse=""), "\n"))
+  splat("Point process model fitted to", x$npat, "point patterns")
+  if(waxlyrical('gory', terselevel))
+    splat("Call:", x$Call$callstring)
+  splat("Log trend formula:", pasteFormula(x$trend))
   switch(x$Fit$fitter,
          gam=,
          glm={
@@ -154,36 +156,41 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
            co <- coef(FIT)
          })
 
-  if(!brief) {
+  if(!brief && waxlyrical('extras', terselevel)) {
     cat("All fitted coefficients:\n")
     print(co)
   }
     
-  cat("\n")
+  parbreak(terselevel)
 
-  
+
   ### Print interaction information ###
-  iprint <- x$iprint
-  nama <- names(iprint)
-  for(i in seq(length(iprint))) {
-    nami <- nama[i]
-    vali <- iprint[[i]]
-    newlin <- !(inherits(vali, "formula") || is.character(vali))
-    if(nami != "")
-      cat(paste(nami, ":", if(newlin) "\n" else "\t", sep=""))
-    if(!is.null(vali)) {
-      if(inherits(vali, "fii")) {
-        print(vali, tiny=brief)
-      } else if(is.character(vali)) {
-        cat(vali)
-      } else print(vali)
+  if(waxlyrical('extras', terselevel)) {
+    iprint <- x$iprint 
+    nama <- names(iprint)
+    for(i in seq_along(iprint)) {
+      nami <- nama[i]
+      vali <- iprint[[i]]
+      if(nami != "") {
+        inline <- inherits(vali, "formula") ||
+                  is.character(vali) ||
+                  (brief && inherits(vali, "fii"))
+        if(inline) cat(paste0(nami, ":\t")) else splat(paste0(nami, ":"))
+      }
+      if(!is.null(vali)) {
+        if(inherits(vali, "fii")) {
+          print(vali, tiny=brief)
+        } else if(is.character(vali)) {
+          splat(vali)
+        } else print(vali)
+      }
+      parbreak(terselevel)
     }
-    cat("\n")
   }
 
-  if(!brief) {
-    cat("--- Gory details: ---\n")
-    cat(paste("Combined data frame has", x$Fit$moadf$nrow, "rows\n"))
+  if(!brief && waxlyrical('gory', terselevel)) {
+    splat("--- Gory details: ---")
+    splat("Combined data frame has", x$Fit$moadf$nrow, "rows")
     print(FIT)
   }
   invisible(NULL)

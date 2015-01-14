@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.14 $  $Date: 2015/01/11 14:29:31 $
+##   $Revision: 1.15 $  $Date: 2015/01/13 02:06:35 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -233,7 +233,7 @@ rVarGamma <- local({
     numer/denom - eps
   }
   kernfun <- function(r, nu.ker, omega, eps) {
-    numer <- ((r/omega)^(nu.ker + 1)) * besselK(r/omega, nu.ker)
+    numer <- ((r/omega)^nu.ker) * besselK(r/omega, nu.ker)
     denom <- pi * (2^(nu.ker+1)) * omega^2 * gamma(nu.ker + 1)
     numer/denom - eps
   }

@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.69 $ $Date: 2014/11/10 10:58:11 $
+##     $Revision: 1.70 $ $Date: 2015/01/13 02:01:09 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -13,6 +13,8 @@ markvario <- local({
 
   halfsquarediff <- function(m1, m2) { ((m1-m2)^2)/2 }
 
+  assigntheo <- function(x, value) { x$theo <- value; return(x) }
+  
   markvario <- 
     function(X, correction=c("isotropic", "Ripley", "translate"),
              r=NULL, method="density", ..., normalise=FALSE) {
@@ -25,12 +27,16 @@ markvario <- local({
       v <- markcorr(X, f=halfsquarediff, 
                     r=r, correction=correction, method=method,
                     normalise=normalise, ...)
-      ## adjust theoretical value
-      v$theo <- if(normalise) 1 else var(m)    
-      ## fix labels
-      v <- rebadge.fv(v,
-                      quote(gamma(r)),
-                      "gamma")
+      if(is.fv(v)) v <- anylist(v)
+      ## adjust theoretical value and fix labels
+      theoval <- if(normalise) 1 else var(m)
+      for(i in seq_len(length(v))) {
+        v[[i]]$theo <- theoval
+        v[[i]] <- rebadge.fv(v[[i]],
+                             quote(gamma(r)),
+                             "gamma")
+      }
+      if(length(v) == 1) v <- v[[1]]
       return(v)
     }
 
@@ -82,13 +88,22 @@ Emark <- local({
   Emark <- function(X, r=NULL, 
                     correction=c("isotropic", "Ripley", "translate"),
                     method="density", ..., normalise=FALSE) {
-    stopifnot(is.ppp(X) && is.marked(X) && is.numeric(marks(X)))
+    stopifnot(is.ppp(X) && is.marked(X))
+    marx <- marks(X)
+    isvec <- is.vector(marx) && is.numeric(marx)
+    isdf <- is.data.frame(marx) && all(sapply(as.list(marx), is.numeric))
+    if(!(isvec || isdf))
+      stop("All marks of X should be numeric")
     if(missing(correction))
       correction <- NULL
     E <- markcorr(X, f1, r=r,
                   correction=correction, method=method,
                   ..., normalise=normalise)
-    E <- rebadge.fv(E, quote(E(r)), "E")
+    if(isvec) {
+      E <- rebadge.fv(E, quote(E(r)), "E")
+    } else {
+      E[] <- lapply(E, rebadge.fv, new.ylab=quote(E(r)), new.fname="E")
+    }
     return(E)
   }
 
@@ -109,13 +124,26 @@ Vmark <- local({
     E2 <- markcorr(X, f2, r=E$r,
                    correction=correction, method=method,
                    ..., normalise=FALSE)
-    V <- eval.fv(E2 - E^2)
-    if(normalise) {
+    if(normalise) 
       sig2 <- var(marks(X))
-      V <- eval.fv(V/sig2)
+    if(is.fv(E)) {
+      E <- list(E)
+      E2 <- list(E2)
     }
-    V <- rebadge.fv(V, quote(V(r)), "V")
-    attr(V, "labl") <- attr(E, "labl")
+    V <- list()
+    for(i in seq_along(E)) {
+      Ei <- E[[i]]
+      E2i <- E2[[i]]
+      Vi <- eval.fv(E2i - Ei^2)
+      if(normalise) 
+        Vi <- eval.fv(Vi/sig2[i,i])
+      Vi <- rebadge.fv(Vi, quote(V(r)), "V")
+      attr(Vi, "labl") <- attr(Ei, "labl")
+      V[[i]] <- Vi
+    }
+    if(length(V) == 1) return(V[[1]])
+    V <- as.anylist(V)
+    names(V) <- colnames(marks(X))
     return(V)
   }
 
