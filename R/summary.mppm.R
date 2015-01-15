@@ -1,7 +1,7 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.9 $  $Date: 2015/01/14 09:01:35 $
+# $Revision: 1.10 $  $Date: 2015/01/15 04:42:54 $
 #
 
 
@@ -171,6 +171,8 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
     for(i in seq_along(iprint)) {
       nami <- nama[i]
       vali <- iprint[[i]]
+      if(brief && is.matrix(vali))
+        vali <- paren(paste(nrow(vali), "x", ncol(vali), "matrix"))
       if(nami != "") {
         inline <- inherits(vali, "formula") ||
                   is.character(vali) ||
@@ -182,7 +184,9 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
           print(vali, tiny=brief)
         } else if(is.character(vali)) {
           splat(vali)
-        } else print(vali)
+        } else {
+          print(vali)
+        } 
       }
       parbreak(terselevel)
     }

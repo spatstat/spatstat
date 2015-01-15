@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.31 $   $Date: 2014/11/11 03:06:52 $
+#  $Revision: 1.32 $   $Date: 2015/01/15 06:02:18 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
@@ -79,7 +79,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
       # Find relevant interaction
     acti <- active[i,]
     nactive <- sum(acti)
-    interi <- if(nactive == 0) Poisson else interaction[i, acti, drop=TRUE]
+    interi <- if(nactive == 0) Poisson() else interaction[i, acti, drop=TRUE]
     tagi <- names(interaction)[acti]
       # Find relevant coefficients
     coef.avail  <- coef.FIT
@@ -87,11 +87,12 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
       ic <- implcoef[[tagi]]
       coef.implied <- ic[i, ,drop=TRUE]
       names(coef.implied) <- colnames(ic)
+      # overwrite any existing values of coefficients; add new ones.
+      coef.avail[names(coef.implied)] <- coef.implied
     }
-    # overwrite any existing values of coefficients; add new ones.
-    coef.avail[names(coef.implied)] <- coef.implied
-      # create fitted interaction with these coefficients
-    interactions[[i]] <- fii(interi, coef.avail, Vnamelist[[tagi]])
+    # create fitted interaction with these coefficients
+    vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
+    interactions[[i]] <- fii(interi, coef.avail, vni)
     }
   announce("Done!\n")
   names(interactions) <- rownames
@@ -124,7 +125,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/11/11 03:06:52 $")
+                      date="$Date: 2015/01/15 06:02:18 $")
   fake.call <- call("cannot.update", Q=NULL, trend=trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
@@ -270,7 +271,7 @@ subfits.old <-
       # Find relevant interaction
       acti <- active[i,]
       nactive <- sum(acti)
-      interi <- if(nactive == 0) Poisson else interaction[i, acti, drop=TRUE]
+      interi <- if(nactive == 0) Poisson() else interaction[i, acti, drop=TRUE]
       tagi <- names(interaction)[acti]
       # Find relevant coefficients
       coef.avail  <- coef.FIT
@@ -278,11 +279,12 @@ subfits.old <-
         ic <- implcoef[[tagi]]
         coef.implied <- ic[i, ,drop=TRUE]
         names(coef.implied) <- colnames(ic)
+        # overwrite any existing values of coefficients; add new ones.
+        coef.avail[names(coef.implied)] <- coef.implied
       }
-      # overwrite any existing values of coefficients; add new ones.
-      coef.avail[names(coef.implied)] <- coef.implied
       # create fitted interaction with these coefficients
-      results[[i]] <- fii(interi, coef.avail, Vnamelist[[tagi]])
+      vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
+      results[[i]] <- fii(interi, coef.avail, vni)
     }
     announce("Done!\n")
     names(results) <- rownames

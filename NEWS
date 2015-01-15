@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.011
+	CHANGES IN spatstat VERSION 1.40-0.012
 
 OVERVIEW
 
@@ -78,6 +78,10 @@ BUG FIXES
 
    o rMatClust, rVarGamma, rCauchy, rNeymanScott
    Result was a list, but not a 'solist', when nsim > 1.
+   Fixed.
+
+   o print.mppm, summary.mppm, subfits
+   Crashed if a Poisson interaction was implied but not given explicitly.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0
