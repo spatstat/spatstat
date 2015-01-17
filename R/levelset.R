@@ -1,6 +1,6 @@
 # levelset.R
 #
-#  $Revision: 1.4 $  $Date: 2013/05/01 07:22:05 $
+#  $Revision: 1.5 $  $Date: 2015/01/15 07:10:37 $
 #
 # level set of an image
 
@@ -25,7 +25,13 @@ levelset <- function(X, thresh, compare="<=") {
 solutionset <- function(..., envir) {
   if(missing(envir))
     envir <- parent.frame()
-  A <- eval.im(..., envir=envir)
+  A <- try(eval.im(..., envir=envir), silent=TRUE)
+  if(inherits(A, "try-error"))
+    A <- try(eval(..., envir=envir), silent=TRUE)
+  if(inherits(A, "try-error"))
+    stop("Unable to evaluate expression")
+  if(!is.im(A))
+    stop("Evaluating the expression did not yield a pixel image")
   if(A$type != "logical")
     stop("Evaluating the expression did not yield a logical-valued image")
   W <- as.owin(eval.im(ifelse1NA(A)))

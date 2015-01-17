@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.012
+	CHANGES IN spatstat VERSION 1.40-0.013
 
 OVERVIEW
 
@@ -19,6 +19,10 @@ NEW FUNCTIONS
 
    o segregation.test
    Test of spatial segregation of types in a multitype point pattern.
+
+   o Kmark
+   Weighted K-function. 
+   Identical to 'markcorrint' and will eventually replace it.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -43,6 +47,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Improved handling of missing arguments.
    Printed output now respects options('width')
 
+   o solutionset
+   The expression will be evaluated using pixel arithmetic (Math.im)
+   if it cannot be evaluated using eval.im.
+   
    o rVarGamma
    Accelerated.
 

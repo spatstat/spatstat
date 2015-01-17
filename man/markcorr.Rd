@@ -254,14 +254,13 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
   multitype K-functions \code{\link{Kcross}}, \code{\link{Kdot}}
   for factor-valued marks.
 
-  \code{\link{markcorrint}} to estimate the
-  indefinite integral of the mark correlation function.
+  \code{\link{Kmark}} to estimate a cumulative function
+  related to the mark correlation function.
 }
 \examples{
     # CONTINUOUS-VALUED MARKS:
     # (1) Spruces
     # marks represent tree diameter
-    data(spruces)
     # mark correlation function
     ms <- markcorr(spruces)
     plot(ms)
@@ -277,7 +276,6 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
     # MULTITYPE DATA:
     # Hughes' amacrine data
     # Cells marked as 'on'/'off'
-    data(amacrine)
     # (3) Kernel density estimate with Epanecnikov kernel
     # (as proposed by Stoyan & Stoyan)
     M <- markcorr(amacrine, function(m1,m2) {m1==m2},

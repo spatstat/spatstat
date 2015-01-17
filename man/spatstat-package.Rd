@@ -879,7 +879,7 @@
     \code{\link{markvar}} \tab smoothed local variance of marks \cr
     \code{\link{markcorr}} \tab mark correlation function \cr
     \code{\link{markvario}} \tab mark variogram \cr
-    \code{\link{markcorrint}} \tab mark correlation integral \cr
+    \code{\link{Kmark}} \tab mark-weighted \eqn{K} function \cr
     \code{\link{Emark}} \tab mark independence diagnostic \eqn{E(r)} \cr
     \code{\link{Vmark}} \tab mark independence diagnostic \eqn{V(r)} \cr
     \code{\link{nnmean}} \tab nearest neighbour mean index \cr

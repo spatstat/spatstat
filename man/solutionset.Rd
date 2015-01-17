@@ -27,27 +27,32 @@
   pixel values, with extra attributes recording the pixel dimensions,
   etc.
 
-  Suppose \code{X} is a pixel image. Then \code{eval.im(abs(X) > 3)}
+  Suppose \code{X} is a pixel image. Then \code{solutionset(abs(X) > 3)}
   will find all the pixels in \code{X} for which the pixel value
   is greater than 3 in absolute value, and return a window containing
   all these pixels.
 
-  Suppose \code{X} and \code{Y} are two pixel images with compatible
-  dimensions: they have the same number of pixels, the same physical
-  size of pixels, and the same bounding box. Then
-  \code{eval.im(X > Y)} will find all pixels for which the
+  If \code{X} and \code{Y} are two pixel images,
+  \code{solutionset(X > Y)} will find all pixels for which the
   pixel value of \code{X} is greater than the corresponding pixel value
   of \code{Y}, and return a window containing these pixels.
   
-  In general, \code{expr} can be any logical expression involving
+  In general, \code{\dots} can be any logical expression involving
+  pixel images.
+
+  The code first tries to evaluate the expression using
+  \code{\link{eval.im}}.
+  This is successful if the expression involves only
   (a) the \emph{names} of pixel images, (b) scalar
   constants, and (c) functions which are vectorised.
+  There must be at least one pixel image in the expression.
+  The expression \code{expr} must be vectorised.
   See the Examples.
 
-  The expression \code{expr} is evaluated by \code{\link{eval.im}}.
-  The expression \code{expr} must be vectorised.
-  There must be at least one pixel image in the expression.
-  All images must have compatible dimensions.
+  If this is unsuccessful, the code then tries to evaluate the
+  expression using pixel arithmetic. This is successful if all the
+  arithmetic operations in the expression are listed
+  in \code{\link{Math.im}}. 
 }
 \value{
   A spatial window
@@ -69,6 +74,8 @@
   W <- solutionset(X + Y >= 1)
 
   area(solutionset(X < Y))
+
+  solutionset(density(cells) > 20)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

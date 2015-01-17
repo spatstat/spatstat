@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.70 $ $Date: 2015/01/13 02:01:09 $
+##     $Revision: 1.71 $ $Date: 2015/01/17 03:06:56 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -153,6 +153,7 @@ Vmark <- local({
 ############## workhorses 'markcorr' and 'markcorrint' ####################
 
 markcorrint <-
+Kmark <-
   function(X, f=NULL, r=NULL, 
            correction=c("isotropic", "Ripley", "translate"), ...,
            f1=NULL, normalise=TRUE, returnL=FALSE, fargs=NULL) {
@@ -165,6 +166,11 @@ markcorrint <-
   stopifnot(is.ppp(X) && is.marked(X))
   is.marked(X, dfok=FALSE)
   W <- Window(X)
+  ## 
+  if(identical(sys.call()[[1]], as.name('markcorrint')))
+    warn.once('markcorrint',
+              "markcorrint will be deprecated in future versions of spatstat;",
+              "use the equivalent function Kmark")
   ## validate test function
   h <- check.testfun(f, f1, X)
   f     <- h$f
