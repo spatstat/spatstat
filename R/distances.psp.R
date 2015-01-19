@@ -7,7 +7,7 @@
 #
 #
 
-pairdist.psp <- function(X, ..., method="Fortran", type="Hausdorff") {
+pairdist.psp <- function(X, ..., method="C", type="Hausdorff") {
   verifyclass(X, "psp")
   if(X$n == 0)
     return(matrix(, 0, 0))
@@ -34,7 +34,7 @@ pairdist.psp <- function(X, ..., method="Fortran", type="Hausdorff") {
   return(D)
 }
 
-crossdist.psp <- function(X, Y, ..., method="Fortran", type="Hausdorff") {
+crossdist.psp <- function(X, Y, ..., method="C", type="Hausdorff") {
   verifyclass(X, "psp")
   Y <- as.psp(Y)
   if(X$n * Y$n == 0)
@@ -64,7 +64,7 @@ crossdist.psp <- function(X, Y, ..., method="Fortran", type="Hausdorff") {
   return(D)
 }
 
-nndist.psp <- function(X, ..., k=1, method="Fortran") {
+nndist.psp <- function(X, ..., k=1, method="C") {
   verifyclass(X, "psp")
   if(!(is.vector(k) && all(k %% 1 == 0) && all(k >= 1)))
     stop("k should be a positive integer or integers")
@@ -119,7 +119,7 @@ nndist.psp <- function(X, ..., k=1, method="Fortran") {
 
 
 AsymmDistance.psp <- function(X, Y, metric="Hausdorff",
-                              method=c("Fortran", "C", "interpreted")) {
+                              method=c("C", "Fortran", "interpreted")) {
   method <- match.arg(method)
   # Extract endpoints of X
   EX <- endpoints.psp(X, "both")

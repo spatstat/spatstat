@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.4 $  $Date: 2014/08/27 09:51:02 $
+#   $Revision: 1.5 $  $Date: 2015/01/19 09:19:36 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -89,6 +89,9 @@ vcov.kppm <- function(object, ...,
       }
       vc <- object$vcov
   }
+
+  ## Convert from Matrix to ordinary matrix:
+  vc <- as.matrix(vc)
   
   switch(what,
          vcov={ return(vc) },

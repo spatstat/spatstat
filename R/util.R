@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.165 $    $Date: 2014/10/14 05:44:08 $
+#    $Revision: 1.166 $    $Date: 2015/01/18 02:33:03 $
 #
 #
 matrowsum <- function(x) {
@@ -1321,15 +1321,19 @@ simplenumber <- function(x, unit = "", multiply="*") {
   x <- abs(x)
   if(unit == "") {
     if(x %% 1 == 0) return(paste0(s, round(x)))
-    for(i in 1:12) 
+    for(i in 1:12) {
       if((i/x) %% 1 == 0) return(paste0(s, i, "/", round(i/x)))
+      if((i*x) %% 1 == 0) return(paste0(s, round(i*x), "/", i))
+    }
   } else {
     if(x == 0) return("0")
     if(x == 1) return(paste0(s,unit))
     if(x %% 1 == 0) return(paste0(s, round(x), multiply, unit))
     if((1/x) %% 1 == 0) return(paste0(s, unit, "/", round(i/x)))
-    for(i in 2:12) 
+    for(i in 2:12) {
       if((i/x) %% 1 == 0) return(paste0(s, i, multiply, unit, "/", round(i/x)))
+      if((i*x) %% 1 == 0) return(paste0(s, round(i*x), multiply, unit, "/", i))
+    }
   }
   return(NULL)
 }

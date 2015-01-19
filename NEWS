@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.013
+	CHANGES IN spatstat VERSION 1.40-0.015
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
    o Standard errors for kernel estimates of intensity.
 
    o Test for segregation.
+
+   o spatstat no longer requires a Fortran compiler.
 
    o Improvements and bug fixes.
 
@@ -56,6 +58,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o summary.mppm, print.mppm
    These functions now respect options('width') and spatstat.options('terse').
+
+   o nnmean
+   Now yields a vector, instead of a 1-column matrix,
+   when there is only a single column of marks.
+
+   o pairdist.psp, crossdist.psp, nndist.psp
+   The option 'method="Fortran"' is no longer supported.
+   The default is 'method="C"'.
+
+   o [installation of spatstat]
+   A Fortran compiler is no longer needed to compile spatstat from source.
 
 BUG FIXES
 

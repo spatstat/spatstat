@@ -232,11 +232,15 @@
 
       Type \code{demo(data)} to see a display of all the datasets
       installed with the package.
+
+      Type \code{vignette(datasets)} for a document giving an overview
+      of all datasets, including background information, and plots.
       
       \tabular{ll}{
 	\code{\link{amacrine}} \tab Austin Hughes' rabbit amacrine cells \cr
 	\code{\link{anemones}} \tab Upton-Fingleton sea anemones data\cr
 	\code{\link{ants}} \tab Harkness-Isham ant nests data\cr
+	\code{\link{bdspots}} \tab Breakdown spots in microelectrodes \cr
 	\code{\link{bei}} \tab Tropical rainforest trees \cr
 	\code{\link{betacells}} \tab Waessle et al. cat retinal ganglia data \cr
 	\code{\link{bramblecanes}} \tab Bramble Canes data \cr

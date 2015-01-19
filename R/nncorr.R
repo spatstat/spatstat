@@ -1,13 +1,12 @@
 #
 # nncorr.R
 #
-# $Revision: 1.8 $  $Date: 2013/04/25 06:37:43 $
+# $Revision: 1.9 $  $Date: 2015/01/17 06:58:12 $
 #
 
 nnmean <- function(X) {
   stopifnot(is.ppp(X) && is.marked(X))
   m <- numeric.columns(marks(X), logical=TRUE, others="na")
-#  nv <- ncol(m)
   nnid <- nnwhich(X)
   ok <- (nndist(X) <= bdist.points(X))
   if(!any(ok))
@@ -16,6 +15,7 @@ nnmean <- function(X) {
   denom <- unlist(lapply(as.data.frame(m),             mean, na.rm=TRUE))
   ans <- rbind(unnormalised=numer,
                normalised  =numer/denom)
+  if(ncol(ans) == 1) ans <- ans[,1,drop=TRUE]
   return(ans)
 }
 

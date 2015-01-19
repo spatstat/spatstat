@@ -8,7 +8,7 @@
   third nearest etc.
 }
 \usage{
-  \method{nndist}{psp}(X, \dots, k=1, method="Fortran")
+  \method{nndist}{psp}(X, \dots, k=1, method="C")
 }
 \arguments{
   \item{X}{
@@ -23,7 +23,7 @@
   }
   \item{method}{
     String specifying which method of calculation to use.
-    Values are \code{"Fortran"}, \code{"C"} and \code{"interpreted"}.
+    Values are \code{"C"} and \code{"interpreted"}.
     Usually not specified.
   }
 }
@@ -67,8 +67,9 @@
   The argument \code{method} is not normally used. It is
   retained only for checking the validity of the software.
   If \code{method = "interpreted"} then the distances are
-  computed using interpreted R code only. If \code{method="Fortran"}
-  (the default) then Fortran code is used. The Fortran code is somewhat faster.
+  computed using interpreted \R code only. If \code{method="C"}
+  (the default) then compiled \code{C} code is used.
+  The \code{C} code is somewhat faster.
 }
 \seealso{
   \code{\link{nndist}},

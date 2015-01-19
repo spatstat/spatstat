@@ -105,10 +105,10 @@ that are supplied with the current installation of \spst:
              \irregpoly  \\
 {\tt hamster} & hamster tumour cells & 
               cell type &\nocov  & \recto \\
-{\tt hyytiala} & mixed forest & 
-              species &\nocov  & \recto \\
 {\tt humberside} & child leukaemia & 
               case/control & \nocov & \irregpoly\\
+{\tt hyytiala} & mixed forest & 
+              species &\nocov  & \recto \\
 {\tt japanesepines} & Japanese pines & \nomarks &\nocov & \recto \\
 {\tt lansing} & mixed forest &
                species & \nocov & \recto \\
@@ -161,12 +161,17 @@ Currently these are the available options:
   \hline
 \end{tabular}
 
+For demonstration and instruction purposes, 
+raw data files are available for the datasets 
+\texttt{vesicles}, \texttt{gorillas} and \texttt{osteo}.
+
 \subsection{Other Data Types}
 
 There are also the following spatial data sets which are not 2D point patterns:
 
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
+{\tt flu} & virus proteins & replicated 2D point patterns \\
 {\tt heather} & heather mosaic & binary image (three versions) \\
 {\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
 {\tt osteo} & osteocyte lacunae & replicated 3D point patterns with covariates\\
@@ -255,6 +260,17 @@ ants.extra$plotit()
 zeromargins()
 ants.extra$plotit()
 @ %$
+
+\subsubsection*{\texttt{bdspots}: Breakdown spots}
+
+A list of three point patterns, each giving the locations of
+electrical breakdown spots on a circular electrode in
+a microelectronic capacitor.
+
+\SweaveOpts{width=12,height=4}\setkeys{Gin}{width=\textwidth}
+<<fig=TRUE>>=
+plot(bdspots, equal.scales=TRUE)
+@   
 
 \subsubsection*{\texttt{bei}: Beilschmiedia data}
 
@@ -456,6 +472,11 @@ plot(gordon, main="People in Gordon Square", pch=16)
 plot(gorillas, which.marks=1, chars=c(1,3), cols=2:3, main="Gorilla nest sites")
 @ 
 
+The \texttt{vegetation} covariate is also available as a raw ASCII format file,
+<<eval=FALSE>>=
+system.file("rawdata/gorillas/vegetation.asc", package="spatstat")
+@ 
+
 \subsubsection*{\texttt{hamster}: Hamster kidney cells}
 
  Cell nuclei in hamster kidney, each nucleus classified as
@@ -608,6 +629,13 @@ if(enable3d) {
 }
 @ 
 
+For demonstration and instruction purposes, the 
+raw data from the 36th point pattern are available in a plain ascii file in the
+\texttt{spatstat} installation,
+<<eval=FALSE>>=
+system.file("rawdata/osteo/osteo36.txt", package="spatstat")
+@ 
+
 \subsubsection*{\texttt{paracou}: Kimboto trees}
 
 Point pattern of adult and juvenile Kimboto trees
@@ -742,6 +770,43 @@ Spatial coordinates of each tree, marked by the tree diameter at breast height.
     
 <<fig=TRUE>>=
 plot(waka, markscale=0.04, main=c("Waka national park", "tree diameters"))
+@ 
+
+\subsubsection*{\texttt{vesicles}: synaptic vesicles}
+
+Point pattern of synaptic vesicles observed in rat brain tissue.
+
+<<fig=TRUE>>=
+v <- rotate(vesicles, pi/2)
+ve <- lapply(vesicles.extra, rotate, pi/2)
+plot(v, main="Vesicles")
+plot(ve$activezone, add=TRUE, lwd=3)
+@ 
+
+The auxiliary dataset \texttt{vesicles.extra} is a list with entries
+\begin{tabular}{ll}
+  \texttt{presynapse} & outer polygonal boundary of presynapse \\
+  \texttt{mitochondria} & polygonal boundary of mitochondria \\
+  \texttt{mask} & binary mask representation of vesicles window \\
+  \texttt{activezone} & line segment pattern representing the active zone.
+\end{tabular}
+
+For demonstration and training purposes,
+the raw data files for this dataset are also
+provided in the \pkg{spatstat} package installation:
+\begin{tabular}{ll}
+  \texttt{vesicles.txt} &  spatial locations of vesicles \\
+  \texttt{presynapse.txt} &  vertices of \texttt{presynapse} \\
+  \texttt{mitochondria.txt}  &  vertices of \texttt{mitochondria} \\
+  \texttt{vesiclesimage.tif}  &  greyscale microscope image \\
+  \texttt{vesiclesmask.tif}  &  binary image of \texttt{mask} \\
+  \texttt{activezone.txt}  &  coordinates of \texttt{activezone} 
+\end{tabular}
+The files are in the folder \texttt{rawdata/vesicles} in the
+\texttt{spatstat} installation directory. The precise location of the
+files can be obtained using \texttt{system.file}, for example
+<<eval=FALSE>>=
+system.file("rawdata/vesicles/mitochondria.txt", package="spatstat")
 @ 
 
 \subsubsection*{\texttt{waterstriders}: Insects on a pond}

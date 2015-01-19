@@ -74,25 +74,24 @@ inside.xypolygon <- function(pts, polly, test01=TRUE, method="C") {
                         nedges=as.integer(nedges),
                         score=as.integer(score),
                         onbndry=as.integer(on.boundary))
-#                        PACKAGE="spatstat")
              score <- temp$score/2
              on.boundary <- as.logical(temp$onbndry)
            },
-           Fortran={
-             #------------------ call Fortran routine ------------------
-             temp <- .Fortran("inxyp",
-                              x=as.double(x),
-                              y=as.double(y),
-                              xp=as.double(xp),
-                              yp=as.double(yp),
-                              npts=as.integer(npts),
-                              nedges=as.integer(nedges),
-                              score=as.double(score),
-                              onbndry=as.logical(on.boundary))
-#                              PACKAGE="spatstat")
-             score <- temp$score
-             on.boundary <- temp$onbndry
-           },
+# Fortran code removed!           
+#           Fortran={
+#             #------------------ call Fortran routine ------------------
+#             temp <- DOTFortran("inxyp",
+#                              x=as.double(x),
+#                              y=as.double(y),
+#                              xp=as.double(xp),
+#                              yp=as.double(yp),
+#                              npts=as.integer(npts),
+#                              nedges=as.integer(nedges),
+#                              score=as.double(score),
+#                              onbndry=as.logical(on.boundary))
+#             score <- temp$score
+#             on.boundary <- temp$onbndry
+#           },
            interpreted={
              #----------------- original interpreted code --------------
              for(i in 1:nedges) {

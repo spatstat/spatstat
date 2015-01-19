@@ -83,7 +83,7 @@ distppl <- function(p, l) {
 }
 
 distppll <- function(p, l, mintype=0,
-                     method=c("Fortran", "C", "interpreted"), listit=FALSE) {
+                     method=c("C", "Fortran", "interpreted"), listit=FALSE) {
   np <- nrow(p)
   nl <- nrow(l)
   xp <- p[,1]
@@ -91,6 +91,10 @@ distppll <- function(p, l, mintype=0,
   if(is.na(match(mintype,0:2)))
     stop(paste("Argument", sQuote("mintype"), "must be 0, 1 or 2.\n"))
   method <- match.arg(method)
+  if(method == "Fortran") {
+    warning("method='Fortran' is no longer supported; method='C' was used")
+    method <- "C"
+  }
   switch(method,
          interpreted={
            dx <- l[,3]-l[,1]
@@ -129,36 +133,36 @@ distppll <- function(p, l, mintype=0,
            if(mintype == 2)
              min.which <- apply(d, 1, which.min)
          },
-         Fortran={
-           eps <- .Machine$double.eps
-           if(mintype > 0) {
-             big <- sqrt(2)*diff(range(c(p,l)))
-             xmin <- rep.int(big,np)
-           } else {
-             xmin <- 1
-           } 
-           n2 <- if(mintype > 1) np else 1
-           temp <- .Fortran("dppll",
-                            x=as.double(xp),
-                            y=as.double(yp),
-                            l1=as.double(l[,1]),
-                            l2=as.double(l[,2]),
-                            l3=as.double(l[,3]),
-                            l4=as.double(l[,4]),
-                            np=as.integer(np),
-                            nl=as.integer(nl),
-                            eps=as.double(eps),
-                            mint=as.integer(mintype),
-                            rslt=double(np*nl),
-                            xmin=as.double(xmin),
-                            jmin=integer(n2))
-#                            PACKAGE="spatstat")
-           d <- matrix(temp$rslt, nrow=np, ncol=nl)
-           if(mintype >= 1)
-             min.d <- temp$xmin
-           if(mintype == 2)
-             min.which <- temp$jmin
-         },
+# Fortran code removed!         
+#         Fortran={
+#           eps <- .Machine$double.eps
+#           if(mintype > 0) {
+#             big <- sqrt(2)*diff(range(c(p,l)))
+#             xmin <- rep.int(big,np)
+#           } else {
+#             xmin <- 1
+#           } 
+#           n2 <- if(mintype > 1) np else 1
+#           temp <- DOTFortran("dppll",
+#                            x=as.double(xp),
+#                            y=as.double(yp),
+#                            l1=as.double(l[,1]),
+#                            l2=as.double(l[,2]),
+#                            l3=as.double(l[,3]),
+#                            l4=as.double(l[,4]),
+#                            np=as.integer(np),
+#                            nl=as.integer(nl),
+#                            eps=as.double(eps),
+#                            mint=as.integer(mintype),
+#                            rslt=double(np*nl),
+#                            xmin=as.double(xmin),
+#                            jmin=integer(n2))
+#           d <- matrix(temp$rslt, nrow=np, ncol=nl)
+#           if(mintype >= 1)
+#             min.d <- temp$xmin
+#           if(mintype == 2)
+#             min.which <- temp$jmin
+#         },
          C = {
            eps <- .Machine$double.eps
            temp <- .C("prdist2segs",
@@ -172,7 +176,7 @@ distppll <- function(p, l, mintype=0,
                       nsegments=as.integer(nl),
                       epsilon=as.double(eps),
                       dist2=as.double(numeric(np * nl)))
-           d <- sqrt(matrix(temp$dist2, nrow=np, ncol=nl))
+           d <- matrix(sqrt(temp$dist2), nrow=np, ncol=nl)
            if(mintype == 2) {
              min.which <- apply(d, 1, which.min)
              min.d <- d[cbind(1:np, min.which)]

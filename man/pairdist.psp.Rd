@@ -6,7 +6,7 @@
   in a line segment pattern.
 }
 \usage{
-  \method{pairdist}{psp}(X, \dots, method="Fortran", type="Hausdorff")
+  \method{pairdist}{psp}(X, \dots, method="C", type="Hausdorff")
 }
 \arguments{
   \item{X}{
@@ -17,7 +17,7 @@
   }
   \item{method}{
     String specifying which method of calculation to use.
-    Values are \code{"Fortran"}, \code{"C"} and \code{"interpreted"}.
+    Values are \code{"C"} and \code{"interpreted"}.
     Usually not specified.
   }
   \item{type}{
@@ -52,8 +52,9 @@
   The argument \code{method} is not normally used. It is
   retained only for checking the validity of the software.
   If \code{method = "interpreted"} then the distances are
-  computed using interpreted R code only. If \code{method="Fortran"}
-  (the default) then Fortran code is used. The Fortran code is somewhat faster.
+  computed using interpreted \R code only. If \code{method="C"}
+  (the default) then compiled \code{C} code is used,
+  which is somewhat faster.
 }
 \seealso{
   \code{\link{crossdist}},
