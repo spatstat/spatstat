@@ -610,6 +610,7 @@
 \alias{sort.im}
 \alias{spatstat.rawdata.location}
 \alias{spatstatClusterModelInfo}
+\alias{spatstatLocator}
 \alias{spatstatRmhInfo}
 \alias{spatialCDFframe}
 \alias{spatialCDFtest}
@@ -1389,6 +1390,7 @@ smoothpointsEngine(x, values, sigma, \dots,
 \method{sort}{im}(x, \dots)
 spatstat.rawdata.location(\dots)
 spatstatClusterModelInfo(name)
+spatstatLocator(n, ...)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,

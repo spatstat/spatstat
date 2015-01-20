@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.015
+	CHANGES IN spatstat VERSION 1.40-0.016
 
 OVERVIEW
 
@@ -21,6 +21,9 @@ NEW FUNCTIONS
 
    o segregation.test
    Test of spatial segregation of types in a multitype point pattern.
+
+   o clickdist
+   Measures the distance between two spatial locations clicked by the user.
 
    o Kmark
    Weighted K-function. 
@@ -52,7 +55,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o solutionset
    The expression will be evaluated using pixel arithmetic (Math.im)
    if it cannot be evaluated using eval.im.
-   
+
+   o to.grey
+   Now uses better weights for the R, G, B channels.
+
    o rVarGamma
    Accelerated.
 
@@ -87,6 +93,10 @@ BUG FIXES
 
    o rSSI
    Crashed if nsim > 1.
+   Fixed.
+
+   o clickppp, clickpoly
+   Did not work correctly in the RStudio display device.
    Fixed.
 
    o Iest

@@ -29,14 +29,15 @@
   The return value is a window (object of class \code{"owin"})
   representing the rectangle.
 
-  This function uses the \R command \code{\link{locator}} to
+  This function uses the \R command \code{\link[graphics]{locator}} to
   input the mouse clicks. It only works on screen devices such as
   \sQuote{X11}, \sQuote{windows} and \sQuote{quartz}. 
 }
 \seealso{
   \code{\link{clickpoly}},
   \code{\link{clickppp}},
-  \code{\link{locator}}
+  \code{\link{clickdist}},
+  \code{\link[graphics]{locator}}
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

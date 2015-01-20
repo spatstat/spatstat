@@ -15,7 +15,7 @@
     A point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{identify.default}}.
+    Arguments passed to \code{\link[graphics]{identify.default}}.
   }
 }
 \value{
@@ -27,7 +27,7 @@
   and the second containing the marks for these points.
 }
 \details{
-  This is a method for the generic function \code{\link{identify}}
+  This is a method for the generic function \code{\link[graphics]{identify}}
   for point pattern objects.
 
   The point pattern \code{x} should first be plotted
@@ -45,7 +45,7 @@
   or its mark value (if \code{x} is marked).
 }
 \seealso{
-  \code{\link{identify}},
+  \code{\link[graphics]{identify}},
   \code{\link{clickppp}}
 }
 \author{Adrian Baddeley

@@ -33,7 +33,7 @@
   \code{x} that were identified.
 }
 \details{
-  This is a method for the generic function \code{\link{identify}}
+  This is a method for the generic function \code{\link[graphics]{identify}}
   for line segment pattern objects.
 
   The line segment pattern \code{x} should first be plotted
@@ -48,7 +48,7 @@
   showing its serial number (or the relevant entry of \code{labels}).
 }
 \seealso{
-  \code{\link{identify}},
+  \code{\link[graphics]{identify}},
   \code{\link{identify.ppp}}.
 }
 \author{Adrian Baddeley

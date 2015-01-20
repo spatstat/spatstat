@@ -2,15 +2,17 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.5 $  $Date: 2014/09/27 09:45:44 $
+# $Revision: 1.6 $  $Date: 2015/01/19 11:22:48 $
 #
 #
+
 clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
   if((!add) | dev.cur() == 1) {
     plot(0,0,type="n", xlab="", ylab="", xlim=c(0,1), ylim=c(0,1), asp=1.0,
          axes=FALSE)
     rect(0,0,1,1)
   }
+  spatstatLocator(0) ## check locator is enable
   gon <- list()
   stopifnot(np >= 1)
   for(i in 1:np) {
@@ -22,7 +24,7 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
       cat(paste("to add points: click left mouse button in window\n",
                 "      to exit: click middle mouse button\n",
                 "[The last point should NOT repeat the first point]\n"))
-    xy <- do.call("locator",
+    xy <- do.call(spatstatLocator,
                   resolve.defaults(if(!is.null(nv)) list(n=nv) else list(),
                                    list(...),
                                    list(type="o")))
@@ -37,17 +39,18 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
 }
   
 clickbox <- function(add=TRUE) {
+  spatstatLocator(0) # check locator enabled
   cat("Click two corners of a box\n")
   if(!add) plot(owin(), main="Click two corners of a box") 
-  a <- try(locator(1), silent=TRUE)
+  a <- try(spatstatLocator(1), silent=TRUE)
   if(inherits(a, "try-error")) {
     ## add=TRUE but there is no current plot
     plot.new()
-    a <- locator(1)
+    a <- spatstatLocator(1)
   }
   abline(v=a$x)
   abline(h=a$y)
-  b <- locator(1)
+  b <- spatstatLocator(1)
   abline(v=b$x)
   abline(h=b$y)
   ab <- concatxy(a, b)

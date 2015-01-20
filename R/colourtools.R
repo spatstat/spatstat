@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.9 $   $Date: 2014/10/14 12:35:54 $
+#   $Revision: 1.10 $   $Date: 2015/01/19 12:00:33 $
 #
 
 
@@ -46,7 +46,7 @@ is.grey <- function(x) {
   return(sat == 0)
 }
   
-to.grey <- function(x, weights=c(1,1,1)) {
+to.grey <- function(x, weights=c(0.299, 0.587, 0.114)) {
   if(is.null(x)) return(NULL)
   if(inherits(x, "colourmap")) {
     colouroutputs(x) <- to.grey(colouroutputs(x), weights=weights)

@@ -7,7 +7,7 @@
 }
 \usage{
   clickppp(n=NULL, win=square(1), types=NULL, \dots, add=FALSE,
-main=NULL, hook=NULL)
+    main=NULL, hook=NULL)
 }
 \arguments{
   \item{n}{
@@ -21,7 +21,7 @@ main=NULL, hook=NULL)
     Vector of types, when creating a multitype point pattern.
   }
   \item{\dots}{
-    Optional extra arguments to be passed to \code{\link{locator}}
+    Optional extra arguments to be passed to \code{\link[graphics]{locator}}
     to control the display.
   }
   \item{add}{
@@ -61,19 +61,20 @@ main=NULL, hook=NULL)
   given, there will be \code{n} points of \emph{each} type.)
   The return value is a multitype point pattern.
   
-  This function uses the \R{} command \code{\link{locator}} to
+  This function uses the \R{} command \code{\link[graphics]{locator}} to
   input the mouse clicks. It only works on screen devices such as
   \sQuote{X11}, \sQuote{windows} and \sQuote{quartz}. Arguments that can be
-  passed to \code{\link{locator}} through \code{\dots} include
+  passed to \code{\link[graphics]{locator}} through \code{\dots} include
   \code{pch} (plotting character), \code{cex} (character expansion
-  factor) and \code{col} (colour). See \code{\link{locator}}
+  factor) and \code{col} (colour). See \code{\link[graphics]{locator}}
   and \code{\link{par}}.
 }
 \seealso{
   \code{\link{identify.ppp}},
-  \code{\link{locator}},
+  \code{\link[graphics]{locator}},
   \code{\link{clickpoly}},
-  \code{\link{clickbox}}
+  \code{\link{clickbox}},
+  \code{\link{clickdist}}
 }
 \author{Original by Dominic Schuhmacher.
   Adapted by Adrian Baddeley

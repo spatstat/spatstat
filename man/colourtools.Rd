@@ -24,7 +24,7 @@ paletteindex(x)
 samecolour(x,y)
 complementarycolour(x)
 interp.colours(x, length.out=512)
-to.grey(x, weights=c(1,1,1))
+to.grey(x, weights=c(0.299, 0.587, 0.114))
 is.grey(x)
 }
 

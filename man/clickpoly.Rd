@@ -20,7 +20,7 @@
     Number of polygons to create.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{locator}} to control the
+    Arguments passed to \code{\link[graphics]{locator}} to control the
     interactive plot.
   }
 }
@@ -40,12 +40,12 @@
   The return value is a window (object of class \code{"owin"})
   representing the polygon.
 
-  This function uses the \R command \code{\link{locator}} to
+  This function uses the \R command \code{\link[graphics]{locator}} to
   input the mouse clicks. It only works on screen devices such as
   \sQuote{X11}, \sQuote{windows} and \sQuote{quartz}. Arguments that can be
-  passed to \code{\link{locator}} through \code{\dots} include
+  passed to \code{\link[graphics]{locator}} through \code{\dots} include
   \code{pch} (plotting character), \code{cex} (character expansion
-  factor) and \code{col} (colour). See \code{\link{locator}}
+  factor) and \code{col} (colour). See \code{\link[graphics]{locator}}
   and \code{\link{par}}.
 
   Multiple polygons can also be drawn, by specifying
@@ -56,7 +56,8 @@
   \code{\link{identify.ppp}},
   \code{\link{clickbox}},
   \code{\link{clickppp}},
-  \code{\link{locator}}
+  \code{\link{clickdist}},
+  \code{\link[graphics]{locator}}
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
