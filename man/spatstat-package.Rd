@@ -5,7 +5,7 @@
 \title{The Spatstat Package}
 \description{
   This is a summary of the features of 
-  \pkg{spatstat}, a package in \code{R}
+  \pkg{spatstat}, a package in \R 
   for the statistical analysis of spatial point patterns.
 }
 \details{
@@ -48,7 +48,7 @@
   The models may include spatial trend,
   dependence on covariates, and complicated interpoint interactions.
   Models are specified by 
-  a \code{formula} in the \code{R} language, and are fitted using
+  a \code{formula} in the \R  language, and are fitted using
   a function analogous to \code{\link{lm}} and \code{\link{glm}}.
   Fitted models can be printed, plotted, predicted, simulated and so on.
 }
@@ -478,6 +478,7 @@
 	\code{\link{pixellate}} \tab convert other data to a pixel image\cr
 	\code{\link{as.matrix.im}} \tab convert pixel image to matrix\cr
 	\code{\link{as.data.frame.im}} \tab convert pixel image to data frame\cr
+	\code{\link{as.function.im}} \tab convert pixel image to function\cr
 	\code{\link{plot.im}}	\tab	plot a pixel image on screen as a digital image\cr
 	\code{\link{contour.im}}	\tab draw contours of a pixel image \cr
 	\code{\link{persp.im}}	\tab draw perspective plot of a pixel image \cr
@@ -1144,7 +1145,7 @@
   
   \bold{To specify a point process model:}
   
-  The first order ``trend'' of the model is determined by an \code{R}
+  The first order ``trend'' of the model is determined by an \R 
   language formula. The formula specifies the form of the
   \emph{logarithm} of the trend.
   
@@ -1640,6 +1641,7 @@
   Patrick Donnelly,
   Ian Dryden,
   Stephen Eglen,
+  Ahmed El-Gabbas,
   Olivier Flores,
   David Ford,
   Peter Forbes,
@@ -1736,6 +1738,7 @@
   Ben Taylor,
   Thordis Linda Thorarinsdottir,
   Berwin Turlach,
+  Torben Tvedebrink,
   Kevin Ummer,
   Medha Uppala,
   Andrew van Burgel,

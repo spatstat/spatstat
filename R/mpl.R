@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.187 $	$Date: 2014/12/17 09:28:02 $
+#	$Revision: 5.189 $	$Date: 2015/01/21 01:29:32 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2014/12/17 09:28:02 $")
+                        date="$Date: 2015/01/21 01:29:32 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1015,19 +1015,33 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     nperblock <- max(1, floor(nMAX/nX - nX))
     ## determine number of such blocks 
     nblocks <- ceiling(nD/nperblock)
-    nfull <- nblocks - 1
+    ## make blocks roughly equal (except for the last one)
+    nperblock <- min(nperblock, ceiling(nD/nblocks))
     ## announce
-    if(nblocks > 1) 
-      message(paste("Large quadrature scheme",
-                    "split into blocks to avoid memory size limits;",
-                    nD, "dummy points",
-                    "split into", nblocks, "blocks,",
-                    "the first",
-                    if(nfull > 1) paste(nfull, "blocks") else "block",
-                    "containing",
-                    nperblock, "dummy", ngettext(nperblock, "point", "points"),
-                    "and the last block containing",
-                    nD - nperblock * nfull, "dummy points"))
+    if(nblocks > 1) {
+      msg <- paste("Large quadrature scheme",
+                   "split into blocks to avoid memory size limits;",
+                   nD, "dummy points split into",
+                   nblocks, "blocks,")
+      nfull <- nblocks - 1
+      nlastblock <- nD - nperblock * nfull
+      if(nlastblock == nperblock) {
+        msg <- paste(msg,
+                     "each containing",
+                     nperblock, "dummy points")
+      } else {
+        msg <- paste(msg,
+                     "the first",
+                     ngettext(nfull, "block", paste(nfull, "blocks")),
+                     "containing",
+                     nperblock,
+                     ngettext(nperblock, "dummy point", "dummy points"),
+                     "and the last block containing",
+                     nlastblock, 
+                     ngettext(nlastblock, "dummy point", "dummy points"))
+      }
+      message(msg)
+    }
     ##
     ##
     seqX <- seq_len(nX)
@@ -1062,7 +1076,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       ii <- integer(nP)
       ii[Pdata] <- seqX
       ii[Pdummy] <- (nX+1):nrow(V)
-      V <- V[ii, ]
+      V <- V[ii, , drop=FALSE]
     }
   } 
   return(V)

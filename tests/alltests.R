@@ -450,6 +450,11 @@ local({
   dM      <- distmap(mess,dimyx=256)
   mungf    <- profilepl(ss, StraussHard, cats ~ dM)
   mungp   <- profilepl(ss, StraussHard, trend=~dM, Q=cats)
+
+  ## splitting large quadschemes into blocks
+  op <- spatstat.options(maxmatrix=5000)
+  pr <- predict(ppm(cells ~ x, AreaInter(0.05)))
+  spatstat.options(op)
 })
 
 #

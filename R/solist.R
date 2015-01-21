@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.5 $ $Date: 2014/10/18 01:43:45 $
+## $Revision: 1.6 $ $Date: 2015/01/21 02:34:58 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -16,16 +16,21 @@ anylist <- function(...) {
 }
 
 print.anylist <- function (x, ...) {
-  nn <- names(x)
   ll <- length(x)
+  if(ll == 0) {
+    splat("(Zero length list)")
+    return(invisible(NULL))
+  }
+  nn <- names(x)
   if (length(nn) != ll) 
     nn <- paste("Component", seq.int(ll))
+  spaceok <- waxlyrical('space')
   for (i in seq_len(ll)) {
     splat(paste0(nn[i], ":"))
     print(x[[i]], ...)
-    cat("\n")
+    if(spaceok && i < ll) cat("\n")
   }
-  return(invisible(x))
+  return(invisible(NULL))
 }
 
 as.anylist <- function(x) {
@@ -57,13 +62,16 @@ summary.anylist <- function(object, ...) {
 
 solist <- local({
 
-  checkspatial <-
+  check2Dspatial <-
     function(z) !inherits(try(Frame(z), silent=TRUE), "try-error")
 
-  solist <- function(..., check=TRUE, promote=TRUE) {
+  solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE) {
     stuff <- list(...)
-    if(check && !all(unlist(lapply(stuff, checkspatial))))
+    if((check || demote) && !all(unlist(lapply(stuff, check2Dspatial)))) {
+      if(demote)
+        return(as.anylist(stuff))
       stop("Some arguments of solist() are not 2D spatial objects")
+    }
     class(stuff) <- c("solist", "anylist", "listof", class(stuff))
     if(promote) {
       if(all(unlist(lapply(stuff, is.ppp)))) {
@@ -132,5 +140,18 @@ print.summary.solist <- function(x, ...) {
 
 as.layered.solist <- function(X) {
   layered(LayerList=X)
+}
+
+# --------------- counterparts of 'lapply' --------------------
+
+anylapply <- function(X, FUN, ...) {
+  v <- lapply(X, FUN, ...)
+  u <- as.anylist(v)
+}
+
+solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {
+  v <- lapply(X, FUN, ...)
+  u <- as.solist(v, check=check, promote=promote, demote=demote)
+  return(u)
 }
 

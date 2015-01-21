@@ -462,6 +462,19 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}  
+   \item \texttt{head.hyperframe}, \texttt{tail.hyperframe}:
+     Methods for \texttt{head} and \texttt{tail} for hyperframes.
+   \item \texttt{subset.hyperframe}:
+     Method for \texttt{subset} for hyperframes.
+   \item \texttt{as.function.im}:
+     Converts a pixel image to a function of spatial coordinates.
+   \item \texttt{clickdist}:
+   Measures the distance between two spatial locations clicked by the user.
+   \item \texttt{solapply}, \texttt{anylapply}:
+   wrappers for \texttt{lapply} which return a list of class 
+   \texttt{"solist"} or \texttt{"anylist"}.
+   \item \texttt{Kmark}: Weighted $K$-function. 
+   Identical to \texttt{markcorrint} and will eventually replace it.
   \item \texttt{segregation.test}
    Test of spatial segregation of types in a multitype point pattern.
   \item mathematical operations are now supported for images. For example\\ 
@@ -1366,6 +1379,8 @@ the News and Release Notes for each update.
 
    \item  Test for segregation.
 
+   \item \texttt{spatstat} no longer uses Fortran.
+ 
    \item  Mathematical operators now apply to images.
 
    \item  Parametric estimates of relative risk 
@@ -1674,7 +1689,7 @@ the News and Release Notes for each update.
 
    \item Utilities for perspective views of surfaces.
 
-  \end{itemize}
+ \end{itemize}
   
 \section{Alphabetical list of changes}
 
@@ -1693,6 +1708,9 @@ listed alphabetically.
   \item \texttt{alltypes}
    Now works for lpp objects 
 
+   \item \texttt{anova.lppm}: outdated argument \texttt{override}
+     has been removed.
+     
  \item \texttt{ants}:
   The function \verb!ants.extra$plot()! has been renamed plotit() 
   for conformity with other datasets.
@@ -1754,7 +1772,11 @@ listed alphabetically.
    New argument \texttt{squared} allows the squared distances to be computed
    (saving computation time in some applications)
 
-  \item \texttt{crossing.psp}:
+ \item \texttt{crossdist.psp}: 
+   The option \texttt{method="Fortran"} is no longer supported.
+   The default is now \texttt{method="C"}.
+
+ \item \texttt{crossing.psp}:
    New argument \texttt{fatal} allows the user to handle empty intersections
 
   \item \texttt{dclf.test}, \texttt{mad.test}:
@@ -1773,6 +1795,7 @@ listed alphabetically.
 
   \item \texttt{density.ppp}:
     \begin{itemize}
+    \item    New argument \texttt{se} allows calculation of standard errors.
     \item    The argument \texttt{weights} can now be a matrix
       or an \code{expression}.
     \item    Numerical underflow no longer occurs when \texttt{sigma} 
@@ -1802,6 +1825,9 @@ listed alphabetically.
    Now has argument \texttt{se.fit} allowing calculation of standard errors
    and confidence intervals.
 
+   \item \texttt{Emark}: 
+     Now works with multiple columns.
+     
    \item \texttt{envelope}: 
      One-sided envelopes can be selected by new argument \texttt{alternative}.
      
@@ -2086,6 +2112,9 @@ listed alphabetically.
     \item 
       The ordering of the arguments has changed. 
       (The old syntax will still work.)
+    \item Zero values in the interaction radii are now treated as \texttt{NA}.
+    \item Improved handling of missing arguments.
+    \item Printed output now respects options('width').
      \end{itemize}
 
  \item \texttt{nbfires}:
@@ -2108,17 +2137,26 @@ listed alphabetically.
    belonging to specified subsets in a point pattern, for example,
    the nearest neighbour of each type in a multitype point pattern.
 
-  \item \texttt{nncorr}, \texttt{nnmean}, \texttt{nnvario}
+ \item \texttt{nndist.psp}: 
+   The option \texttt{method="Fortran"} is no longer supported.
+   The default is now \texttt{method="C"}.
+
+  \item \texttt{nncorr}, \texttt{nnmean}, \texttt{nnvario}:
    These functions now handle data frames of marks.
 
-  \item pairwise interaction Gibbs models:
-   Many calculations for these models have been accelerated.
 
  \item \texttt{owin}: 
    Polygon data are no longer subjected to strict checks on their
    geometrical validity (self-intersections, overlaps, etc).
    Instead, geometrical inconsistencies in polygon data are automatically 
    repaired. 
+
+  \item pairwise interaction Gibbs models:
+   Many calculations for these models have been accelerated.
+
+ \item \texttt{pairdist.psp}: 
+   The option \texttt{method="Fortran"} is no longer supported.
+   The default is now \texttt{method="C"}.
    
 \item \texttt{pcf.ppp}:
    New argument \texttt{domain} allows the computation to be 
@@ -2156,6 +2194,10 @@ listed alphabetically.
       has been changed from 100 to 128. A power of 2 gives faster
       and more accurate results in many cases.
 
+  \item \texttt{pixellate.psp}:
+    Can now count the number of segments that intersect each pixel,
+    instead of the total length of intersection.
+    
   \item 
     \texttt{plot.fasp}, 
     \texttt{plot.fv}, 
@@ -2420,6 +2462,10 @@ listed alphabetically.
   \item \texttt{predict.slrm}:
    New argument \texttt{window} 
 
+  \item \texttt{print.mppm}:
+    Now respects \verb!options('width')! and 
+    \verb!spatstat.options('terse')!.
+    
    \item \texttt{print.ppp}, \texttt{print.summary.ppp}, 
      \texttt{print.owin}, \texttt{print.summary.owin},
      \texttt{print.im}, \texttt{print.summary.im}, \texttt{print.fv},
@@ -2639,6 +2685,8 @@ listed alphabetically.
    argument \texttt{nu.ker}. Function calls that use the ambiguous argument
    name \texttt{nu} will no longer be accepted.
 
+  \item \texttt{rVarGamma}: Accelerated.
+    
   \item second order summary functions
    (\texttt{Kest}, \texttt{Lest}, \texttt{Kinhom}, \texttt{pcf.ppp}, 
    \texttt{Kdot}, \texttt{Kcross}, \texttt{Ldot} etc etc)
@@ -2692,6 +2740,10 @@ listed alphabetically.
   Improved numerical stability.
   New argument \texttt{sigma0} for manual control over rescaling.
 
+  \item \texttt{solutionset}:
+    The expression will be evaluated using pixel arithmetic (Math.im)
+   if it cannot be evaluated using \texttt{eval.im}. 
+   
   \item \texttt{spatstat.options}:
     \begin{itemize}
     \item New option \texttt{nvoxel}.
@@ -2712,6 +2764,9 @@ listed alphabetically.
      from colour to greyscale.
     \end{itemize}
 
+ \item \verb!split<-.ppp!: 
+   Preserves the original ordering of the data, if possible.
+   
  \item \texttt{square}
   Now accepts vectors of length 2.
 
@@ -2724,6 +2779,10 @@ listed alphabetically.
      \texttt{update.slrm}, \texttt{edge.Trans}, \texttt{edge.Ripley}:
     These already-existing functions are now documented.
 
+  \item \texttt{summary.mppm}:
+    Now respects \verb!options('width')! and 
+    \verb!spatstat.options('terse')!.
+    
   \item \texttt{summary.ppm}:
    Now reports whether the spatial coordinates have been rounded.
    Improved behaviour when the model covariates are a data frame.
@@ -2734,6 +2793,9 @@ listed alphabetically.
    \item \texttt{superimpose}:
       Now handles data frames of marks.
 
+   \item \texttt{to.grey}:
+        Now uses better weights for the R, G, B channels.
+        
   \item \texttt{union.owin}:
    It is now guaranteed that if \texttt{A} is a subset of \texttt{B}, 
    then \texttt{union.owin(A,B)=B}.
@@ -2751,6 +2813,9 @@ listed alphabetically.
    Can now calculate correlation matrix or Fisher information matrix
    as well as variance-covariance matrix.
 
+   \item \texttt{Vmark}: 
+     Now works with multiple columns.
+     
   \item \texttt{with.fv}:
    Argument \texttt{drop} replaced by new argument \texttt{fun}
    (with different interpretation).
@@ -2759,6 +2824,10 @@ listed alphabetically.
  \item \verb![.fv!
    Now handles the argument 'drop'.
    Improved behaviour when plotted.
+
+  \item \verb![.hyperframe!: 
+    When a row of data is extracted with \texttt{drop=TRUE}, the result
+   belongs to class \texttt{"anylist"}.
 
   \item \verb![.im! and \verb![<-.im!
    New argument 'j' allows any type of matrix indexing to be used.
@@ -2809,7 +2878,7 @@ of potential impact.
   
 \begin{itemize}
 \item \texttt{nncross.ppp}:
-  
+
   Results were completely incorrect if $k > 1$.
   \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
 

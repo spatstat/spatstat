@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.31 $  $Date: 2014/12/17 05:01:35 $
+#  $Revision: 1.32 $  $Date: 2015/01/20 13:57:52 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -109,7 +109,8 @@ profilepl <- local({
       ## fit model
       if(i == 1) {
         ## fit from scratch
-        arg1 <- list(interaction=fi, ...,
+        arg1 <- list(...,
+                     interaction=fi, 
                      rbord=rbord, savecomputed=savecomp,
                      warn.illegal=FALSE,
                      callstring="",
@@ -143,7 +144,7 @@ profilepl <- local({
     if(verbose) message("Fitting optimal model...")
     opti <- which.max(criterion)
     optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
-    optarg <- list(interaction=optint, ..., rbord=rbord)
+    optarg <- list(..., interaction=optint, rbord=rbord)
     if(pass.cfa) {
       optcfa <- as.list(s[opti, !is.farg, drop=FALSE])
       attr(optcfa, "fitter") <- "profilepl"

@@ -1085,3 +1085,9 @@ padimage <- function(X, value, n=1) {
   return(Y)
 }
 
+as.function.im <- function(x, ...) {
+  Z <- x
+  f <- function(x,y) { Z[list(x=x, y=y)] }
+  g <- funxy(f, Window(x))
+  return(g)
+}

@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.52 $  $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.55 $  $Date: 2015/01/21 11:00:27 $
 #
 
 hyperframe <- function(...,
@@ -135,13 +135,12 @@ print.hyperframe <- function(x, ...) {
   nvars <- ux$nvars
   ncases <- ux$ncases
   if(nvars * ncases == 0) {
-    cat(paste("NULL hyperframe with", ncases,
-              ngettext(ncases, "row (=case)", "rows (=cases)"),
-              "and", nvars,
-              ngettext(nvars, "column (=variable)", "columns (=variables)"),
-              "\n"))
+    splat("NULL hyperframe with", ncases,
+          ngettext(ncases, "row (=case)", "rows (=cases)"),
+          "and", nvars,
+          ngettext(nvars, "column (=variable)", "columns (=variables)"))
   } else {
-    cat("Hyperframe:\n")
+    if(waxlyrical('gory')) cat("Hyperframe:\n")
     print(as.data.frame(x, discard=FALSE), ...)
   }
   return(invisible(NULL))
@@ -175,19 +174,18 @@ summary.hyperframe <- function(object, ..., brief=FALSE) {
 print.summary.hyperframe <- function(x, ...) {
   nvars <- x$nvars
   ncases <- x$ncases
-  cat(paste(if(nvars * ncases == 0) "NULL" else NULL,
-            "hyperframe with", ncases,
-            ngettext(ncases, "row (=case)", "rows (=cases)"),
-            "and", nvars,
-            ngettext(nvars, "column (=variable)", "columns (=variables)"),
-            "\n"))
+  splat(if(nvars * ncases == 0) "NULL hyperframe" else "hyperframe",
+        "with", ncases,
+        ngettext(ncases, "row (=case)", "rows (=cases)"),
+        "and", nvars,
+        ngettext(nvars, "column (=variable)", "columns (=variables)"))
   if(nvars == 0)
     return(invisible(NULL))
   # Variable names and types
   print(x$typeframe)
   # Ordinary data frame columns
   if(!is.null(x$df)) {
-    cat("Summary of data frame columns:\n")
+    splat("Summary of data frame columns:")
     print(x$df, ...)
   }
   return(invisible(NULL))
@@ -548,3 +546,44 @@ str.hyperframe <- function(object, ...) {
   }
   return(invisible(NULL))
 }
+
+subset.hyperframe <- function(x, subset, select, ...) {
+  stopifnot(is.hyperframe(x))
+  r <- if(missing(subset)) {
+    rep_len(TRUE, nrow(x))
+  } else {
+      r <- eval(substitute(
+        with(x, e, enclos=parent.frame()),
+        list(e=substitute(subset))))
+    if (!is.logical(r)) 
+      stop("'subset' must be logical")
+    r & !is.na(r)
+  }
+  vars <- if(missing(select)) { 
+    TRUE
+  } else {
+    nl <- as.list(seq_len(ncol(x)))
+    names(nl) <- names(x)
+    eval(substitute(select), nl, parent.frame())
+  }
+  nama <- names(x)
+  names(nama) <- nama
+  vars <- nama[vars]
+  z <- x[i=r, j=vars, ...]
+  return(z)
+}
+
+head.hyperframe <- function (x, n = 6L, ...) {
+  stopifnot(length(n) == 1L)
+  n <- if(n < 0L) max(nrow(x) + n, 0L) else min(n, nrow(x))
+  x[seq_len(n), , drop = FALSE]
+}
+
+tail.hyperframe <- function(x, n = 6L, ...) {
+  stopifnot(length(n) == 1L)
+  nrx <- nrow(x)
+  n <- if(n < 0L) max(nrx + n, 0L) else min(n, nrx)
+  sel <- seq.int(to = nrx, length.out = n)
+  x[sel, , drop = FALSE]
+}
+

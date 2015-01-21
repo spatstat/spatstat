@@ -1,9 +1,10 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.016
+	CHANGES IN spatstat VERSION 1.40-0.020
 
 OVERVIEW
 
-   o We thank Brian Ripley for contributions.
+   o We thank Ahmed El-Gabbas, Brian Ripley and Torben Tvedebrink
+     for contributions.
 
    o Fixed a bug causing a segmentation fault.
 
@@ -11,23 +12,35 @@ OVERVIEW
 
    o Test for segregation.
 
-   o spatstat no longer requires a Fortran compiler.
-
    o Improvements and bug fixes.
 
-   o Temporary nickname: 'Team Australia'
+   o spatstat no longer uses Fortran.
+
+   o Nickname: 'Team Australia'
 
 NEW FUNCTIONS
 
    o segregation.test
    Test of spatial segregation of types in a multitype point pattern.
 
+   o subset.hyperframe
+   'subset' method for class 'hyperframe'.
+
+   o head.hyperframe, tail.hyperframe
+   'head' and 'tail' methods for hyperframes.
+
    o clickdist
    Measures the distance between two spatial locations clicked by the user.
+
+   o solapply, anylapply
+   wrappers for 'lapply' which return a list of class 'solist' or 'anylist'.
 
    o Kmark
    Weighted K-function. 
    Identical to 'markcorrint' and will eventually replace it.
+
+   o as.function.im
+   Convert a pixel image to a function(x,y).
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -72,6 +85,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o pairdist.psp, crossdist.psp, nndist.psp
    The option 'method="Fortran"' is no longer supported.
    The default is 'method="C"'.
+ 
+   o [.hyperframe:
+   When a row of data is extracted with drop=TRUE, the result
+   belongs to class 'anylist'.
 
    o [installation of spatstat]
    A Fortran compiler is no longer needed to compile spatstat from source.
@@ -85,6 +102,11 @@ BUG FIXES
    o simulate.kppm
    Simulation failed for log-Gaussian Cox processes (in simulate.kppm only) 
    with an error message from the RandomFields package.
+   Fixed.
+
+   o ppm,  predict.ppm, profilepl
+   Crashed sometimes with message 
+   "interaction evaluator did not return a matrix".
    Fixed.
 
    o density.ppp

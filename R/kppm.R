@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.94 $ $Date: 2015/01/10 12:24:00 $
+# $Revision: 1.95 $ $Date: 2015/01/21 06:53:41 $
 #
 
 kppm <- function(X, ...) {
@@ -727,38 +727,42 @@ print.kppm <- function(x, ...) {
   isPCP <- x$isPCP
   # handle outdated objects - which were all cluster processes
   if(is.null(isPCP)) isPCP <- TRUE
+
+  terselevel <- spatstat.options('terse')
   
-  cat(paste(if(x$stationary) "Stationary" else "Inhomogeneous",
-            if(isPCP) "cluster" else "Cox",
-            "point process model\n"))
+  splat(if(x$stationary) "Stationary" else "Inhomogeneous",
+        if(isPCP) "cluster" else "Cox",
+        "point process model")
 
-  if(nchar(x$Xname) < 20)
-    cat(paste("Fitted to point pattern dataset", sQuote(x$Xname), "\n"))
+  if(waxlyrical('extras', terselevel) && nchar(x$Xname) < 20)
+    splat("Fitted to point pattern dataset", sQuote(x$Xname))
 
-  switch(x$Fit$method,
-         mincon = {
-           cat("Fitted by minimum contrast\n")
-           cat(paste("\tSummary statistic:", x$Fit$StatName, "\n"))
-         },
-         clik  =,
-         clik2 = {
-           cat("Fitted by maximum second order composite likelihood\n")
-           cat(paste("\trmax =", x$Fit$rmax, "\n"))
-           if(!is.null(wtf <- x$Fit$weightfun)) {
-             cat("\tweight function: ")
-             print(wtf)
-           }
-         },
-         palm = {
-           cat("Fitted by maximum Palm likelihood\n")
-           cat(paste("\trmax =", x$Fit$rmax, "\n"))
-           if(!is.null(wtf <- x$Fit$weightfun)) {
-             cat("\tweight function: ")
-             print(wtf)
-           }
-         },
-         warning(paste("Unrecognised fitting method", sQuote(x$Fit$method)))
-         )
+  if(waxlyrical('gory', terselevel)) {
+    switch(x$Fit$method,
+           mincon = {
+             splat("Fitted by minimum contrast")
+             splat("\tSummary statistic:", x$Fit$StatName)
+           },
+           clik  =,
+           clik2 = {
+             splat("Fitted by maximum second order composite likelihood")
+             splat("\trmax =", x$Fit$rmax)
+             if(!is.null(wtf <- x$Fit$weightfun)) {
+               cat("\tweight function: ")
+               print(wtf)
+             }
+           },
+           palm = {
+             splat("Fitted by maximum Palm likelihood")
+             splat("\trmax =", x$Fit$rmax)
+             if(!is.null(wtf <- x$Fit$weightfun)) {
+               cat("\tweight function: ")
+               print(wtf)
+             }
+           },
+           warning(paste("Unrecognised fitting method", sQuote(x$Fit$method)))
+           )
+  }
 
   # ............... trend .........................
 
@@ -766,37 +770,36 @@ print.kppm <- function(x, ...) {
 
   # ..................... clusters ................
   
-  cat(paste(if(isPCP) "Cluster" else "Cox",
-            "model:", x$modelname, "\n"))
+  splat(if(isPCP) "Cluster" else "Cox",
+        "model:", x$modelname)
   cm <- x$covmodel
   if(!is.null(cm)) {
     # Covariance model - LGCP only
-    cat(paste("\tCovariance model:", cm$model, "\n"))
+    splat("\tCovariance model:", cm$model)
     margs <- cm$margs
     if(!is.null(margs)) {
       nama <- names(margs)
       tags <- ifelse(nzchar(nama), paste(nama, "="), "")
       tagvalue <- paste(tags, margs)
-      cat(paste("\tCovariance parameters:",
-                paste(tagvalue, collapse=", "),
-                "\n"))
+      splat("\tCovariance parameters:",
+            paste(tagvalue, collapse=", "))
     }
   }
   pa <- x$par
   if (!is.null(pa)) {
-    cat(paste("Fitted",
-              if(isPCP) "cluster" else "correlation",
-              "parameters:\n"))
+    splat("Fitted",
+          if(isPCP) "cluster" else "correlation",
+          "parameters:")
     print(pa)
   }
 
   if(!is.null(mu <- x$mu)) {
     if(isPCP) {
-      cat("Mean cluster size: ")
-      if(!is.im(mu)) cat(mu, "points\n") else cat("[pixel image]\n")
+      splat("Mean cluster size: ",
+            if(!is.im(mu)) paste(mu, "points") else "[pixel image]")
     } else {
-      cat("Fitted mean of log of random intensity: ")
-      if(!is.im(mu)) cat(mu, "\n") else cat("[pixel image]\n")
+      splat("Fitted mean of log of random intensity:",
+            if(!is.im(mu)) mu else "[pixel image]")
     }
   }
   invisible(NULL)

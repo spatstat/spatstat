@@ -32,7 +32,9 @@ as.solist(x, \dots)
   A list, usually of class \code{"solist"}.
 }
 \seealso{
-  \code{\link{solist}}
+  \code{\link{solist}},
+  \code{\link{as.anylist}},
+  \code{\link{solapply}}.
 }
 \examples{
   x <- list(cells, density(cells))

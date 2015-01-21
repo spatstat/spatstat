@@ -217,6 +217,7 @@
 \alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
+\alias{head.hyperframe}
 \alias{hierarchicalordering}
 \alias{hiermat}
 \alias{ho.engine}
@@ -644,6 +645,7 @@
 \alias{superimposeMarks}
 \alias{symbolmaptype}
 \alias{sympoly}
+\alias{tail.hyperframe}
 \alias{termsinformula}
 \alias{test.crossing.psp}
 \alias{test.selfcrossing.psp}
@@ -939,7 +941,9 @@ grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
-handle.rshift.args(W, \dots, radius, width, height, edge, clip, edgedefault)
+handle.rshift.args(W, \dots, radius, width, height, edge, clip,
+edgedefault)
+\method{head}{hyperframe}(x,n,\dots)
 hierarchicalordering(i, s)
 hiermat(x, h)
 ho.engine(model, \dots, nsim, nrmh, start, control, verb)
@@ -1425,6 +1429,7 @@ sumsymouter(x, w)
 superimposeMarks(arglist, nobj)
 symbolmaptype(x)
 sympoly(x, y, n)
+\method{tail}{hyperframe}(x,n,\dots)
 termsinformula(x)
 test.crossing.psp(A,B)
 test.selfcrossing.psp(A)

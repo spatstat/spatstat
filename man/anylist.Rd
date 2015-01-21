@@ -46,7 +46,9 @@ as.anylist(x)
   \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{solist}}
+  \code{\link{solist}},
+  \code{\link{as.solist}},
+  \code{\link{anylapply}}.
 }
 \examples{
   anylist(cells, intensity(cells), Kest(cells))
