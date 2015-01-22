@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.020
+	CHANGES IN spatstat VERSION 1.40-0.021
 
 OVERVIEW
 
@@ -78,6 +78,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o summary.mppm, print.mppm
    These functions now respect options('width') and spatstat.options('terse').
 
+   o print.quadrattest
+   Now respects options('width') and spatstat.options('terse').
+
    o nnmean
    Now yields a vector, instead of a 1-column matrix,
    when there is only a single column of marks.
@@ -92,6 +95,22 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o [installation of spatstat]
    A Fortran compiler is no longer needed to compile spatstat from source.
+
+   o hyperframe class
+   The internal structure of hyperframes has changed slightly:
+   columns of objects are now stored and returned as
+   lists of class 'anylist' or 'solist'.
+   There should be no change in behaviour.
+
+   o datasets
+   Internal format of the datasets 
+   	    bdspots, bei, clmfires, demohyper, flu, gorillas, heather, 
+	    Kovesi, murchison, osteo, pyramidal, waterstriders
+   has changed slightly to use the classes 'anylist' and 'solist'.
+   There should be no change in behaviour.
+
+   o diagnose.ppm
+   New arguments xlab, ylab, rlab control labels in the 4-panel plot.
 
 BUG FIXES
 

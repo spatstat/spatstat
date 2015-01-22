@@ -68,6 +68,7 @@
 \alias{check.1.real}
 \alias{check.range}
 \alias{check.testfun}
+\alias{choptext}
 \alias{circticks}
 \alias{clarkevansCalc}
 \alias{clip.psp}
@@ -768,6 +769,7 @@ check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
+choptext(\dots, prefix)
 circticks(R, at)
 clarkevansCalc(X, correction, clipregion, working)
 clip.psp(x, window, check=TRUE)
@@ -1321,7 +1323,8 @@ reconcile.fv(\dots)
 repair.old.factor.image(x)
 reincarnate.interact(object)
 resid4plot(RES, plot.neg, plot.smooth,
-           spacing=0.1, srange=NULL,monochrome=FALSE, main=NULL, \dots)
+           spacing, srange, monochrome, main,
+           xlab, ylab, rlab, \dots)
 resid1plot(RES, opt, plot.neg, plot.smooth,
               srange, monochrome, main,
               add, show.all, do.plot, \dots)

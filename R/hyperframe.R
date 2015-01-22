@@ -299,7 +299,7 @@ as.list.hyperframe <- function(x, ...) {
   names(nama) <- nama
   out <- lapply(nama, function(nam, x) { x[, nam, drop=TRUE] }, x=x)
   if(ux$ncases == 1)
-    out <- lapply(out, listof)
+    out <- lapply(out, solist, demote=TRUE)
   out <- lapply(out, "names<-", value=row.names(x))
   return(out)
 }
@@ -435,7 +435,7 @@ plot.hyperframe <-
     if(any(ok)) {
       j <- min(which(ok))
       x <- x[,j, drop=TRUE]
-      x <- as.listof(x)
+      x <- as.solist(x, demote=TRUE)
       plot(x, ..., main=main, arrange=arrange, nrows=nrows, ncols=ncols)
       return(invisible(NULL))
     } else {

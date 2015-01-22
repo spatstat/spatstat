@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.189 $	$Date: 2015/01/21 01:29:32 $
+#	$Revision: 5.190 $	$Date: 2015/01/22 06:14:14 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2015/01/21 01:29:32 $")
+                        date="$Date: 2015/01/22 06:14:14 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -809,7 +809,7 @@ mpl.get.covariates <- local({
         stop(paste("Some entries in the list",
                    covargname, "are un-named"))
       ## look up values of each covariate at the quadrature points
-      values <- covariates
+      values <- unclass(covariates)
       values[isim] <- lapply(covariates[isim], lookup.im, x=x, y=y,
                              naok=TRUE, strict=FALSE)
       values[isfun] <- vf <- lapply(covariates[isfun], evalfxy, x=x, y=y,

@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.49 $  $Date: 2014/11/11 10:34:41 $
+#   $Revision: 1.50 $  $Date: 2015/01/22 08:40:19 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -266,15 +266,20 @@ X2testEngine <- function(OBS, EXP, ...,
                          
 print.quadrattest <- function(x, ...) {
    NextMethod("print")
-   if(is.atomicQtest(x)) {
-     cat("Quadrats: ")
-   } else {
-     cat("Pooled test\nQuadrats of component tests:\n")
+   single <- is.atomicQtest(x)
+   if(!single)
+     splat("Pooled test")
+   if(waxlyrical('gory')) {
+     if(single) {
+       cat("Quadrats: ")
+     } else {
+       splat("Quadrats of component tests:")
+     }
+     do.call("print",
+             resolve.defaults(list(x=as.tess(x)),
+                              list(...),
+                              list(brief=TRUE)))
    }
-   do.call("print",
-           resolve.defaults(list(x=as.tess(x)),
-                            list(...),
-                            list(brief=TRUE)))
    return(invisible(NULL))
 }
 

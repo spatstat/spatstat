@@ -148,7 +148,7 @@
   and printed using \code{print.diagppm}.
 }
 \details{
-  This function generates several diagnostic plots for a
+  The function \code{diagnose.ppm} generates several diagnostic plots for a
   fitted point process model.
   The plots display the residuals from the fitted model
   (Baddeley et al, 2005)
@@ -332,8 +332,14 @@
 
   The return value of \code{diagnose.ppm}
   is an object of class \code{"diagppm"}.
-  There are methods for \code{plot} and \code{print} for such objects.
-  See the Examples.
+  The \code{plot} method for this class is documented here.
+  There is also a \code{print} method. See the Examples.
+
+  In \code{plot.diagppm},
+  if a four-panel diagnostic plot is produced (the default), then
+  the extra arguments \code{xlab}, \code{ylab}, \code{rlab} determine the
+  text labels for the \eqn{x} and \eqn{y} coordinates
+  and the residuals, respectively.
   
   See also the companion functions \code{\link{qqplot.ppm}}, which produces a
   Q-Q plot of the residuals, and \code{\link{lurking}}, which produces
@@ -364,8 +370,7 @@
  \code{\link{ppm}}
 }
 \examples{
-    data(cells)
-    fit <- ppm(cells, ~x, Strauss(r=0.15))
+    fit <- ppm(cells ~x, Strauss(r=0.15))
     diagnose.ppm(fit)
     \dontrun{
     diagnose.ppm(fit, type="pearson")

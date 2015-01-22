@@ -2,7 +2,7 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.6 $  $Date: 2014/12/10 06:43:37 $
+##  $Revision: 1.7 $  $Date: 2015/01/22 04:37:58 $
 ##
 
 ## 'split cat'
@@ -17,6 +17,41 @@ splat <- function(...) {
     cat(unlist(strsplit(ssi, " ")), fill=TRUE)
   return(invisible(NULL))
 }
+
+choptext <- local({
+
+  choptext <- function(..., prefix="") {
+    s <- paste(...)
+    ## split at newline characters, if present
+    lines <- unlist(strsplit(s, "\n"))
+    ## cut into pieces that don't overreach width
+    w <- getOption('width')
+    lines <- sapply(lines, chopline, w=w, prefix=prefix)
+    return(lines)
+  }
+
+  chopline <- function(s, w=getOption('width'), prefix="") {
+    words <- unlist(strsplit(s, " "))
+    nwords <- length(words)
+    wordlengths <- nchar(words)
+    lines <- character(0)
+    prefixlength <- nchar(prefix)
+    while(nwords > 0) {
+      wordends <- cumsum(wordlengths + c(prefixlength, rep(1, nwords-1)))
+      n <- which.max(wordends * (wordends <= w))
+      if(n == 0) n <- 1
+      lines <- c(lines, paste(words[1:n], collapse=" "))
+      words <- words[-(1:n)]
+      wordlengths <- wordlengths[-(1:n)]
+      nwords <- nwords - n
+      prefixlength <- 0
+    }
+    return(lines)
+  }
+                         
+  choptext
+})
+
 
 pasteFormula <- function(f) {
   ## convert formula to a single string

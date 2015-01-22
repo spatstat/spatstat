@@ -31,9 +31,11 @@ resid4plot <- local({
              plot.neg=c("image", "discrete", "contour", "imagecontour"),
              plot.smooth=c("imagecontour", "image", "contour", "persp"),
              spacing=0.1, srange=NULL, monochrome=FALSE, main=NULL,
+             xlab="x coordinate", ylab="y coordinate", rlab, 
              ...)
 {
   plot.neg <- match.arg(plot.neg)
+  if(missing(rlab)) rlab <- NULL
   clip     <- RES$clip
   Yclip    <- RES$Yclip
   Z        <- RES$smooth$Z
@@ -174,7 +176,7 @@ resid4plot <- local({
     theoreticalV <- a$ExZ
     theoreticalX <- a$x
     theoreticalSD <- NULL
-    ylabel <- paste("marginal of", typename)
+    if(is.null(rlab)) rlab <- paste("marginal of", typename)
   } else if(!is.null(RES$xcumul)) {
     a <- RES$xcumul
     observedX <- a$empirical$covariate
@@ -184,7 +186,7 @@ resid4plot <- local({
     theoreticalSD <- a$theoretical$sd
     theoreticalHI <- a$theoretical$upper
     theoreticalLO <- a$theoretical$lower
-    ylabel <- paste("cumulative sum of", typename)
+    if(is.null(rlab)) rlab <- paste("cumulative sum of", typename)
   }
   # pretty axis marks
   pX <- pretty(theoreticalX)
@@ -218,9 +220,9 @@ resid4plot <- local({
              3, ...)
   }
   axis(side=1, pos=0, at=xscale(pX), labels=pX)
-  text(xscale(mean(theoreticalX)), - outerspace, "x coordinate")
+  text(xscale(mean(theoreticalX)), - outerspace, xlab)
   axis(side=2, pos=0, at=yscale(pV), labels=pV)
-  text(-outerspace, yscale(mean(pV)), ylabel, srt=90)
+  text(-outerspace, yscale(mean(pV)), rlab, srt=90)
   
   # --------- lurking variable plot for y coordinate ------------------
   #           (cumulative or marginal)
@@ -232,7 +234,7 @@ resid4plot <- local({
     theoreticalV <- a$EyZ
     theoreticalY <- a$y
     theoreticalSD <- NULL
-    ylabel <- paste("marginal of", typename)
+    if(is.null(rlab)) rlab <- paste("marginal of", typename)
   } else if(!is.null(RES$ycumul)) {
     a <- RES$ycumul
     observedV <- a$empirical$value
@@ -242,7 +244,7 @@ resid4plot <- local({
     theoreticalSD <- a$theoretical$sd
     theoreticalHI <- a$theoretical$upper
     theoreticalLO <- a$theoretical$lower
-    ylabel <- paste("cumulative sum of", typename)
+    if(is.null(rlab)) rlab <- paste("cumulative sum of", typename)
   }
   # pretty axis marks
   pY <- pretty(theoreticalY)
@@ -276,9 +278,9 @@ resid4plot <- local({
              3, ...)
   }
   axis(side=4, pos=width, at=yscale(pY), labels=pY)
-  text(width + outerspace, yscale(mean(theoreticalY)), "y coordinate", srt=90)
+  text(width + outerspace, yscale(mean(theoreticalY)), ylab, srt=90)
   axis(side=3, pos=height, at=xscale(pV), labels=pV)
-  text(xscale(mean(pV)), height + outerspace, ylabel)
+  text(xscale(mean(pV)), height + outerspace, rlab)
   #
   if(!is.null(main))
     title(main=main)
