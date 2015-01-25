@@ -58,6 +58,10 @@ summary.anylist <- function(object, ...) {
   as.anylist(lapply(object, summary, ...))
 }
 
+pool.anylist <- function(x, ...) {
+  do.call(pool, append(x, list(...)))
+}
+
 ## .................... solist .............................
 
 solist <- local({

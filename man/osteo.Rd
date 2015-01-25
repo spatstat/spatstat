@@ -113,7 +113,7 @@
     the \eqn{90 \times 110}{90 * 110} mm counting frame.
 }
 \source{
-  Adrian Baddeley.
+  Data were collected by Adrian Baddeley.
 }
 \references{
   Baddeley, A.J., Howard, C.V, Boyde, A. and Reid, S.A. (1987)

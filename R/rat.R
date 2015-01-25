@@ -5,7 +5,7 @@
 #
 #   Numerator and denominator are stored as attributes
 #
-#   $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.6 $   $Date: 2015/01/25 04:25:13 $
 #
 
 rat <- function(ratio, numerator, denominator, check=TRUE) {
@@ -50,6 +50,8 @@ pool.rat <- function(...) {
   template <- vanilla.fv(argh[[1]])
   Y <- lapply(argh, attr, which="numerator")
   X <- lapply(argh, attr, which="denominator")
+  X <- do.call(harmonise, X)
+  Y <- do.call(harmonise, Y)
   templateX <- vanilla.fv(X[[1]])
   templateY <- vanilla.fv(Y[[1]])
   # sum

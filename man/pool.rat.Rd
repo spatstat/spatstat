@@ -60,6 +60,7 @@
 \seealso{
   \code{\link{rat}},
   \code{\link{pool}},
+  \code{\link{pool.fv}},
   \code{\link{Kest}}
 }
 \examples{

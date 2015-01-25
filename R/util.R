@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.166 $    $Date: 2015/01/18 02:33:03 $
+#    $Revision: 1.168 $    $Date: 2015/01/24 03:03:03 $
 #
 #
 matrowsum <- function(x) {
@@ -171,6 +171,7 @@ commasep <- function(x, join=" and ", flatten=TRUE) {
 }
 
 paren <- function(x, type="(") {
+  if(length(x) == 0) return(x)
   switch(type,
          "(" = {
            out <- paste("(", x, ")", sep="")
@@ -233,6 +234,33 @@ truncline <- function(x, nc) {
   z <- paste0(z, pad)
   return(z)
 }
+
+padtowidth <- local({
+
+  blankstring <- function(n) paste(rep(" ", n), collapse="")
+
+  padtowidth <- function(a, b, justify=c("left", "right", "centre")) {
+    justify <- match.arg(justify)
+    if(is.character(b)) b <- nchar(b) else stopifnot(is.numeric(b))
+    extra <- pmax(0, b - nchar(a))
+    rpad <- lpad <- ""
+    switch(justify,
+           left = {
+             rpad <- sapply(extra, blankstring)
+           },
+           right = {
+             lpad <- sapply(extra, blankstring)
+           },
+           centre = {
+             lpad <- sapply(floor(extra/2), blankstring)
+             rpad <- sapply(ceiling(extra/2), blankstring)
+           })
+    result <- paste0(lpad, a, rpad)
+    return(result)
+  }
+
+  padtowidth
+})
 
 fakecallstring <- function(fname, parlist) {
   cl <- do.call("call", append(list(name = fname), parlist))

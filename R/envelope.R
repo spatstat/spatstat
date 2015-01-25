@@ -1673,10 +1673,6 @@ envelope.envelope <- function(Y, fun=NULL, ...,
   return(result)
 }
 
-pool <- function(...) {
-  UseMethod("pool")
-}
-
 pool.envelope <- function(..., savefuns=FALSE, savepatterns=FALSE) {
   Yname <- short.deparse(sys.call())
   if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1, 40), "[..]")

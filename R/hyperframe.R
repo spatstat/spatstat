@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.55 $  $Date: 2015/01/21 11:00:27 $
+# $Revision: 1.57 $  $Date: 2015/01/24 03:23:26 $
 #
 
 hyperframe <- function(...,
@@ -164,9 +164,27 @@ summary.hyperframe <- function(object, ..., brief=FALSE) {
   y$classes <- classes
   # Ordinary data frame columns
   df <- x$df
-  y$dfnames <- names(df)
+  y$dfnames <- colnames(df)
   y$df <- if(length(df) > 0 && !brief) summary(df) else NULL
   y$row.names <- row.names(df)
+  # insert into full array
+  if(!brief && x$nvars > 0) {
+    isobject <- (x$vtype != "dfcolumn")
+    nobj <- sum(isobject)
+    if(nobj == 0) {
+      allcols <- y$df
+    } else {
+      nas <- rep(list(NA_character_), nobj)
+      names(nas) <- x$vname[isobject]
+      allcols <- do.call(cbind, append(list(y$df), nas))
+      acnames <- c(colnames(df), names(nas))
+      allcols <- allcols[ , match(x$vname, acnames), drop=FALSE]
+    }
+    pclass <- padtowidth(paren(classes), colnames(allcols), justify="right")
+    allcols <- as.table(rbind(class=pclass, as.table(allcols)))
+    row.names(allcols) <- rep("", nrow(allcols))
+    y$allcols <- allcols
+  }
   class(y) <- c("summary.hyperframe", class(y))
   return(y)
 }
@@ -176,18 +194,12 @@ print.summary.hyperframe <- function(x, ...) {
   ncases <- x$ncases
   splat(if(nvars * ncases == 0) "NULL hyperframe" else "hyperframe",
         "with", ncases,
-        ngettext(ncases, "row (=case)", "rows (=cases)"),
+        ngettext(ncases, "row", "rows"),
         "and", nvars,
-        ngettext(nvars, "column (=variable)", "columns (=variables)"))
+        ngettext(nvars, "column", "columns"))
   if(nvars == 0)
     return(invisible(NULL))
-  # Variable names and types
-  print(x$typeframe)
-  # Ordinary data frame columns
-  if(!is.null(x$df)) {
-    splat("Summary of data frame columns:")
-    print(x$df, ...)
-  }
+  print(if(any(x$storage == "dfcolumn")) x$allcols else noquote(x$classes))
   return(invisible(NULL))
 }
 
@@ -424,11 +436,12 @@ rbind.hyperframe <- function(...) {
 plot.hyperframe <-
   function(x, e, ..., main, arrange=TRUE,
            nrows=NULL, ncols=NULL,
-           parargs=list(mar=c(1,1,3,1) * marsize),
-           marsize=0.1) {
+           parargs=list(mar=mar * marsize),
+           marsize=0.1, mar=c(1,1,3,1)) {
   xname <- short.deparse(substitute(x))
   main <- if(!missing(main)) main else xname
-
+  mar <- rep(mar, 4)[1:4]
+  
   if(missing(e)) {
     # default: plot first column that contains objects
     ok <- (summary(x)$storage %in% c("hypercolumn", "hyperatom"))

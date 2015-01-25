@@ -8,8 +8,8 @@
 \usage{
    \method{plot}{hyperframe}(x, e, \dots, main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
-                            parargs=list(mar=c(1,1,3,1) * marsize),
-                            marsize=0.1)
+                            parargs=list(mar=mar * marsize),
+                            marsize=0.1, mar=c(1,1,3,1))
 }
 \arguments{
   \item{x}{
@@ -42,7 +42,12 @@
   }
   \item{marsize}{
     Optional scale parameter controlling the sizes of margins between
-    the panels.
+    the panels. Incompatible with \code{parargs}.
+  }
+  \item{mar}{
+    Optional numeric vector of length 1, 2 or 4
+    controlling the relative sizes of margins between
+    the panels. Incompatible with \code{parargs}.
   }
 }
 \details{

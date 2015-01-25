@@ -31,7 +31,8 @@ pool(...)
 \seealso{
   \code{\link{pool.envelope}},
   \code{\link{pool.fasp}},
-  \code{\link{pool.rat}}
+  \code{\link{pool.rat}},
+  \code{\link{pool.fv}}
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.021
+	CHANGES IN spatstat VERSION 1.40-0.024
 
 OVERVIEW
 
@@ -41,6 +41,9 @@ NEW FUNCTIONS
 
    o as.function.im
    Convert a pixel image to a function(x,y).
+
+   o pool.fv, pool.anylist
+   New methods for 'pool' 
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -112,6 +115,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o diagnose.ppm
    New arguments xlab, ylab, rlab control labels in the 4-panel plot.
 
+   o plot.hyperframe
+   New argument 'mar' 
+
+   o summary.hyperframe
+   Improved output.
+
 BUG FIXES
 
    o sumouter
@@ -154,6 +163,10 @@ BUG FIXES
 
    o print.mppm, summary.mppm, subfits
    Crashed if a Poisson interaction was implied but not given explicitly.
+   Fixed.
+
+   o Kest
+   Crashed if ratio=TRUE and the window was a rectangle.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0

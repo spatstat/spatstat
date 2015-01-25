@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.123 $   $Date: 2014/11/11 10:34:13 $
+##    $Revision: 1.124 $   $Date: 2015/01/24 02:41:06 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1308,7 +1308,11 @@ bind.ratfv <- function(x, numerator, denominator,
   den <- attr(x, "denominator")
   ## convert scalar denominator to data frame
   if(!is.data.frame(denominator)) {
-    check.1.real(denominator, "Unless it is a data frame,")
+    if(!is.numeric(denominator) || !is.vector(denominator))
+      stop("Denominator should be a data frame or a numeric vector")
+    nd <- length(denominator)
+    if(nd != 1 && nd != nrow(x))
+      stop("Denominator has wrong length")
     dvalue <- denominator
     denominator <- numerator
     denominator[] <- dvalue

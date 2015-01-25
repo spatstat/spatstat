@@ -309,6 +309,7 @@
 \alias{logi.engine}
 \alias{logLik.vblogit}
 \alias{lty2char}
+\alias{padtowidth}
 \alias{parbreak}
 \alias{passthrough}
 \alias{paste.expr}
@@ -1042,6 +1043,7 @@ logi.engine(Q, trend, interaction, \dots,
             VB)
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
+padtowidth(a, b, justify)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
