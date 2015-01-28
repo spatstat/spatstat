@@ -192,6 +192,10 @@
       List of arguments controlling the plotting of point patterns
       by \code{\link{plot.ppp}}.
     }
+    \item{par.pp3}{
+      List of arguments controlling the plotting of three-dimensional
+      point patterns by \code{\link{plot.pp3}}.
+    }
     \item{print.ppm.SE}{
       Default rule used by \code{\link{print.ppm}}
       to decide whether to calculate and print standard errors

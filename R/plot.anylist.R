@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.5 $ $Date: 2014/12/01 06:20:21 $
+##  $Revision: 1.6 $ $Date: 2015/01/28 07:02:36 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -129,7 +129,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     if(is.null(main.panel))
       main.panel <- names(x)
     else {
-      stopifnot(is.character(main.panel) || is.expression(main.panel))
+      if(!is.expression(main.panel))
+        main.panel <- as.character(main.panel)
       nmp <- length(main.panel)
       if(nmp == 1)
         main.panel <- rep.int(main.panel, n)

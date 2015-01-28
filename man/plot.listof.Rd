@@ -208,14 +208,10 @@
       panel.end=function(i,y,...){contour(y, ...)})
 
 # list of 3D point patterns
- if(require(scatterplot3d)) {
-   ape1 <- osteo[osteo$shortid==4, "pts", drop=TRUE]
-   class(ape1)
-   plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
-        tick.marks=FALSE, xlab="", ylab="", zlab="",
-        mar=rep(0.7,4), cex.symbols=1.5, pch=16, type="h")
-   # Last two lines are arguments of scatterplot3d
- }
+ ape1 <- osteo[osteo$shortid==4, "pts", drop=TRUE]
+ class(ape1)
+ plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
+      cex=1.5, pch=21, bg='white')
 }
 
 \author{Adrian Baddeley

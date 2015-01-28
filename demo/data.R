@@ -88,10 +88,7 @@ plot(split(nbfires)$"2000", which.marks="fire.type",
 plot(nztrees)
 plot(trim.rectangle(as.owin(nztrees), c(0,5), 0), add=TRUE, lty=3)
 
-enable3d <- ("scatterplot3d" %in% row.names(installed.packages()))
-if(enable3d) {
-  plot(osteo[1:10,], tick.marks=FALSE, xlab="", ylab="", zlab="")
-}
+plot(osteo[1:10,], tick.marks=FALSE, xlab="", ylab="", zlab="")
 
 plot(paracou, cols=2:3, chars=c(16,3))
 

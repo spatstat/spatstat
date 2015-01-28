@@ -42,9 +42,7 @@ plot(Z, main="Pixel image")
 X <- runifpoint(42)
 plot(dirichlet(X), main="Tessellation")
 
-enable3d <- ("scatterplot3d" %in% row.names(installed.packages()))
-if(enable3d)
-  plot(rpoispp3(100), main="Three-dimensional point pattern")
+plot(rpoispp3(100), main="Three-dimensional point pattern")
 
 plot(simplenet, main="Linear network (linnet)")
 

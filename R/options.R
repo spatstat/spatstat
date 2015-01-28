@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.59 $   $Date: 2014/11/12 10:24:25 $
+#    $Revision: 1.60 $   $Date: 2015/01/28 06:23:21 $
 #
 #
 
@@ -296,6 +296,12 @@ warn.once <- function(key, ...) {
          ),
        par.points=list(
          ## default graphics parameters for 'points'
+         default=list(),
+         check=is.list,
+         valid="a list"
+         ),
+       par.pp3=list(
+         ## default graphics parameters for 'plot.pp3'
          default=list(),
          check=is.list,
          valid="a list"

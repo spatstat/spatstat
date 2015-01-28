@@ -408,6 +408,7 @@
 \alias{plotEachLayer}
 \alias{ploterodewin}
 \alias{ploterodeimage}
+\alias{plot3Dpoints}
 \alias{plot.addvar}
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
@@ -505,6 +506,7 @@
 \alias{print.timed}
 \alias{print.vblogit}
 \alias{print.yardstick}
+\alias{project3Dhom}
 \alias{prolongseq}
 \alias{putlastshift}
 \alias{quad}
@@ -1166,6 +1168,10 @@ pickoption(what="option", key, keymap, \dots,
 plotEachLayer(x, \dots, main, plotargs, add, show.all, do.plot)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
 ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
+plot3Dpoints(xyz, eye, org,
+             \dots,
+             xlim, ylim, zlim,
+             add, box, main, cex, box.back, box.front)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
@@ -1270,6 +1276,7 @@ primesbelow(nmax)
 \method{print}{timed}(x, \dots)
 \method{print}{vblogit}(x, \dots)
 \method{print}{yardstick}(x, \dots)
+project3Dhom(xyz, eye, org, vert)
 prolongseq(x, newrange, step)
 putlastshift(X, vec)
 quad(data, dummy, w, param)

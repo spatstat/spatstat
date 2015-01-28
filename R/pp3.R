@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.15 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.19 $  $Date: 2015/01/28 06:31:28 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -51,7 +51,7 @@ print.box3 <- function(x, ...) {
                                "]", sep="")
   v <- paste(unlist(lapply(x[1:3], bracket)), collapse=" x ")
   s <- summary(unitname(x))
-  cat(paste("Box:", v, s$plural, s$explain, "\n"))
+  splat("Box:", v, s$plural, s$explain)
   invisible(NULL)
 }
 
@@ -110,10 +110,10 @@ is.pp3 <- function(x) { inherits(x, "pp3") }
 npoints.pp3 <- function(x) { nrow(x$data) }
 
 print.pp3 <- function(x, ...) {
-  cat("Three-dimensional point pattern\n")
+  splat("Three-dimensional point pattern")
   sd <- summary(x$data)
   np <- sd$ncases
-  cat(paste(np, ngettext(np, "point", "points"), "\n"))
+  splat(np, ngettext(np, "point", "points"))
   print(x$domain)
   invisible(NULL)
 }
@@ -131,36 +131,40 @@ summary.pp3 <- function(object, ...) {
 }
 
 print.summary.pp3 <- function(x, ...) {
-  cat("Three-dimensional point pattern\n")
-  cat(paste(x$np, ngettext(x$np, "point", "points"), "\n"))
+  splat("Three-dimensional point pattern")
+  splat(x$np, ngettext(x$np, "point", "points"))
   print(x$dom)
   u <- x$u
   v <- x$v
-  cat(paste("Volume", v, "cubic",
-            if(v == 1) u$singular else u$plural,
-            u$explain, "\n"))
-  cat(paste("Average intensity", x$intensity,
-            "points per cubic", u$singular, u$explain,
-            "\n"))
+  splat("Volume", v, "cubic",
+        if(v == 1) u$singular else u$plural,
+        u$explain)
+  splat("Average intensity", x$intensity,
+        "points per cubic", u$singular, u$explain)
   invisible(NULL)
 }
 
-plot.pp3 <- function(x, ...) {
+plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15) {
   xname <- short.deparse(substitute(x))
-  if(!require("scatterplot3d"))
-    stop("Package scatterplot3d is needed to plot 3D point patterns\n")
-  coo <- coords(x)
-  cnam <- names(coo)
-  do.call("scatterplot3d",
-          resolve.defaults(list(x=coo[,1],
-                                y=coo[,2],
-                                z=coo[,3]),
+  coo <- as.matrix(coords(x))
+  xlim <- x$domain$xrange
+  ylim <- x$domain$yrange
+  zlim <- x$domain$zrange
+  if(is.null(org)) org <- c(mean(xlim), mean(ylim), mean(zlim))
+  if(is.null(eye)) {
+    theta <- theta * pi/180
+    phi   <- phi * pi/180
+    d <- 2 * diameter(x$domain)
+    eye <- org + d * c(cos(phi) * c(sin(theta), -cos(theta)), sin(phi))
+  }
+  deefolts <- spatstat.options('par.pp3')
+  ## determine default eye position and centre of view
+  do.call(plot3Dpoints,
+          resolve.defaults(list(xyz=coo, eye=eye, org=org),
                            list(...),
-                           list(main=xname),
-                           list(xlab=cnam[1],
-                                ylab=cnam[2],
-                                zlab=cnam[3]),
-                           list(xlim=x$domain$xrange,
+                           deefolts,
+                           list(main=xname,
+                                xlim=x$domain$xrange,
                                 ylim=x$domain$yrange,
                                 zlim=x$domain$zrange)))
 }

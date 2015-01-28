@@ -2,48 +2,64 @@
 \Rdversion{1.1}
 \alias{plot.pp3}
 \title{
-  Plot a three-dimensional point pattern
+  Plot a Three-Dimensional Point Pattern
 }
 \description{
   Plots a three-dimensional point pattern.
 }
 \usage{
- \method{plot}{pp3}(x, ...)
+ \method{plot}{pp3}(x, ..., eye=NULL, org=NULL, theta=25, phi=15)
 }
 \arguments{
   \item{x}{
     Three-dimensional point pattern (object of class \code{"pp3"}).
   }
   \item{\dots}{
-    Arguments passed to \code{scatterplot3d} controlling the plot.
+    Arguments passed to \code{\link[graphics]{points}}
+    controlling the appearance of the points.
+  }
+  \item{eye}{
+    Optional. Eye position. A numeric vector of length 3 giving the
+    location from which the scene is viewed.
+  }
+  \item{org}{
+    Optional. Origin (centre) of the view. A numeric vector of length
+    3 which will be at the centre of the view.
+  }
+  \item{theta,phi}{
+    Optional angular coordinates (in degrees) specifying the direction
+    from which the scene is viewed: \code{theta} is the azimuth
+    and \code{phi} is the colatitude. Ignored if \code{eye} is given.
   }
 }
 \details{
   This is the plot method for objects of class \code{"pp3"}.
-  
-  This function requires the \pkg{scatterplot3d} package. The
-  coordinates of the point pattern are passed to the function
-  \code{scatterplot3d} along with any extra arguments \code{\dots}.
+  It generates a two-dimensional plot of the point pattern \code{x}
+  and its containing box as if they had been viewed from the
+  location specified by \code{eye} (or from the direction
+  specified by \code{theta} and \code{phi}). 
+
+  Note that default values of arguments to \code{plot.pp3}
+  can be set by \code{\link{spatstat.options}("par.pp3")}.
 }
-\value{
-  Null.
-}
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\value{Null.}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{pp3}}
+  \code{\link{pp3}},
+  \code{\link{spatstat.options}}.
 }
 \examples{
-  if(require(scatterplot3d)) {
-    X <- osteo$pts[[1]]
-    plot(X, tick.marks=FALSE, xlab="", ylab="", zlab="",
-         main="Osteocyte lacunae, animal 1, brick 1",
-         mar=rep(0.5,4), cex.symbols=1.5, pch=16, type="h")
-  }
+  X <- osteo$pts[[1]]
+  plot(X, main="Osteocyte lacunae, animal 1, brick 1",
+       cex=1.5, pch=16)
 }
 \keyword{spatial}
 \keyword{hplot}

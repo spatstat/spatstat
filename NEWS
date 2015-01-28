@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.024
+	CHANGES IN spatstat VERSION 1.40-0.025
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
    o Improvements and bug fixes.
 
    o spatstat no longer uses Fortran.
+
+   o spatstat no longer depends on the package 'scatterplot3d'.
 
    o Nickname: 'Team Australia'
 
@@ -84,6 +86,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.quadrattest
    Now respects options('width') and spatstat.options('terse').
 
+   o print.pp3
+   Now respects options('width')
+
    o nnmean
    Now yields a vector, instead of a 1-column matrix,
    when there is only a single column of marks.
@@ -111,6 +116,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 	    Kovesi, murchison, osteo, pyramidal, waterstriders
    has changed slightly to use the classes 'anylist' and 'solist'.
    There should be no change in behaviour.
+
+   o plot.pp3
+   Now produces a genuine perspective view.
+   New arguments control the eye position for the perspective view.
+
+   o spatstat.options
+   New option 'par.points3d' sets default arguments for plot.pp3. 
 
    o diagnose.ppm
    New arguments xlab, ylab, rlab control labels in the 4-panel plot.

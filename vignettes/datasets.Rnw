@@ -623,10 +623,7 @@ and explanatory variables.
   
   
 <<fig=TRUE>>=
-enable3d <- ("scatterplot3d" %in% row.names(installed.packages()))
-if(enable3d) {
-  plot(osteo[1:10,], tick.marks=FALSE, xlab="", ylab="", zlab="")
-}
+plot(osteo[1:10,], main.panel="", pch=21, bg='white')
 @ 
 
 For demonstration and instruction purposes, the 
