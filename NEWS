@@ -1,9 +1,9 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.025
+	CHANGES IN spatstat VERSION 1.40-0.026
 
 OVERVIEW
 
-   o We thank Ahmed El-Gabbas, Brian Ripley and Torben Tvedebrink
+   o We thank Ahmed El-Gabbas, Ute Hahn, Brian Ripley and Torben Tvedebrink
      for contributions.
 
    o Fixed a bug causing a segmentation fault.
@@ -40,6 +40,10 @@ NEW FUNCTIONS
    o Kmark
    Weighted K-function. 
    Identical to 'markcorrint' and will eventually replace it.
+
+   o quantess
+   Quantile tessellation: divide space into pieces which contain
+   equal amounts of 'stuff'.
 
    o as.function.im
    Convert a pixel image to a function(x,y).

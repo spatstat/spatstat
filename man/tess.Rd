@@ -110,6 +110,9 @@
   \code{\link{quadrats}}, \code{\link{hextess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}
   and \code{\link{rpoislinetess}}.
+
+  To divide space into pieces containing equal
+  amounts of stuff, use \code{\link{quantess}}.
 }
 \examples{
   A <- tess(xgrid=0:4,ygrid=0:4)

@@ -1381,6 +1381,9 @@ the News and Release Notes for each update.
 
    \item \texttt{spatstat} no longer uses Fortran.
  
+   \item \texttt{spatstat} no longer depends on 
+     the package \texttt{scatterplot3d}.
+ 
    \item  Mathematical operators now apply to images.
 
    \item  Parametric estimates of relative risk 
