@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.8 $  $Date: 2015/01/08 11:52:28 $
+#  $Revision: 1.9 $  $Date: 2015/01/30 03:12:34 $
 #
 #
 
@@ -11,7 +11,10 @@ as.mask.psp <- function(x, W=NULL, ...) {
     W <- as.owin(L)
   else
     W <- as.owin(W)
-  W <- as.mask(W, ...)
+
+  W <- do.call.matched(as.mask,
+                       resolve.defaults(list(...),
+                                        list(w=W)))
 
   ends <- L$ends
   nseg <- nrow(ends)
@@ -53,7 +56,10 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
     W <- as.owin(L)
   else
     W <- as.owin(W)
-  W <- as.mask(W, ...)
+
+  W <- do.call.matched(as.mask,
+                         resolve.defaults(list(...),
+                                          list(w=W)))
 
   Z <- as.im(W)
 

@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.48 $    $Date: 2014/10/24 00:22:30 $
+#           $Revision: 1.50 $    $Date: 2015/01/30 05:35:53 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -143,6 +143,7 @@ second.moment.engine <-
            what=c("Kmeasure", "kernel", "smooth", 
              "Bartlett", "edge", "smoothedge", "all"),
            ...,
+           kernel="gaussian",
            obswin = as.owin(x), varcov=NULL,
            npts=NULL, debug=FALSE)
 {
@@ -187,33 +188,49 @@ second.moment.engine <-
 #  yw.pad <- yw[1] + 2 * c(0, diff(yw))
   xcol.pad <- X$xcol[1] + X$xstep * (0:(2*nc-1))
   yrow.pad <- X$yrow[1] + X$ystep * (0:(2*nr-1))
-  # set up Gauss kernel
-  xcol.G <- X$xstep * c(0:(nc-1),-(nc:1))
-  yrow.G <- X$ystep * c(0:(nr-1),-(nr:1))
-  Gpixarea <- X$xstep * X$ystep
-  if(!is.null(sigma)) {
-    densX.G <- dnorm(xcol.G, sd=sigma)
-    densY.G <- dnorm(yrow.G, sd=sigma)
-    Kern <- outer(densY.G, densX.G, "*") * Gpixarea
-  } else if(!is.null(varcov)) {
-    # anisotropic kernel
-    detSigma <- det(varcov)
-    Sinv <- solve(varcov)
-    halfSinv <- Sinv/2
-    constG <- Gpixarea/(2 * pi * sqrt(detSigma))
-    xsq <- matrix((xcol.G^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
-    ysq <- matrix((yrow.G^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
-    xy <- outer(yrow.G, xcol.G, "*")
-    Kern <- constG * exp(-(xsq * halfSinv[1,1]
-                           + xy * (halfSinv[1,2]+halfSinv[2,1])
-                           + ysq * halfSinv[2,2]))
-#    xx <- matrix(xcol.G[col(Ypad)], ncol=2*nc, nrow=2*nr)
-#    yy <- matrix(yrow.G[row(Ypad)], ncol=2*nc, nrow=2*nr)
-#    Kern <- const * exp(-(xx * (xx * Sinv[1,1] + yy * Sinv[1,2])
-#                          + yy * (xx * Sinv[2,1] + yy * Sinv[2,2]))/2)
-  } else 
-    stop("Must specify either sigma or varcov")
-
+  # set up kernel
+  xcol.ker <- X$xstep * c(0:(nc-1),-(nc:1))
+  yrow.ker <- X$ystep * c(0:(nr-1),-(nr:1))
+  kerpixarea <- X$xstep * X$ystep
+  if(identical(kernel, "gaussian")) {
+    if(!is.null(sigma)) {
+      densX.ker <- dnorm(xcol.ker, sd=sigma)
+      densY.ker <- dnorm(yrow.ker, sd=sigma)
+      Kern <- outer(densY.ker, densX.ker, "*") * kerpixarea
+    } else if(!is.null(varcov)) {
+      ## anisotropic kernel
+      detSigma <- det(varcov)
+      Sinv <- solve(varcov)
+      halfSinv <- Sinv/2
+      constker <- kerpixarea/(2 * pi * sqrt(detSigma))
+      xsq <- matrix((xcol.ker^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
+      ysq <- matrix((yrow.ker^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
+      xy <- outer(yrow.ker, xcol.ker, "*")
+      Kern <- constker * exp(-(xsq * halfSinv[1,1]
+                               + xy * (halfSinv[1,2]+halfSinv[2,1])
+                               + ysq * halfSinv[2,2]))
+    } else 
+      stop("Must specify either sigma or varcov")
+  } else {
+    ## evaluate kernel at array of points
+    xker <- as.vector(xcol.ker[col(Ypad)])
+    yker <- as.vector(yrow.ker[row(Ypad)])
+    if(is.function(kernel)) {
+      argh <- list(...)
+      if(length(argh) > 0)
+        argh <- argh[names(argh) %in% names(formals(kernel))]
+      Kern <- do.call(kernel, append(list(xker, yker), argh))
+      if(anyNA(Kern))
+        stop("NA values returned from kernel function")
+      if(length(Kern) != length(xker))
+        stop("Kernel function returned the wrong number of values")
+    } else if(is.im(kernel)) {
+      Kern <- kernel[list(x=xker, y=yker)]
+      if(anyNA(Kern))
+        stop("Domain of kernel image is not large enough")
+    } else stop("kernel must be a function(x,y) or a pixel image")
+    Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
+  }
   # these options call for several image outputs
   if(what %in% c("all", "smoothedge"))
     result <- list()
@@ -224,11 +241,11 @@ second.moment.engine <-
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
     if(debug) {
-      if(any(fave.order(xcol.G) != rtwist))
+      if(any(fave.order(xcol.ker) != rtwist))
         cat("something round the twist\n")
     }
     Kermit <- Kern[ rtwist, ctwist]
-    ker <- im(Kermit, xcol.G[ctwist], yrow.G[ rtwist], unitname=unitsX)
+    ker <- im(Kermit, xcol.ker[ctwist], yrow.ker[ rtwist], unitname=unitsX)
     if(what == "kernel")
       return(ker)
     else 
@@ -404,7 +421,7 @@ second.moment.engine <-
       momlist <- lapply(momlist, "[", i=rtwist, j=ctwist)
     }
     if(debug) {
-      if(any(fave.order(xcol.G) != rtwist))
+      if(any(fave.order(xcol.ker) != rtwist))
         cat("internal error: something round the twist\n")
     }
   }
@@ -427,7 +444,7 @@ second.moment.engine <-
   if(nimages == 1) {
     mom <- mom * area(obswin) / (pixarea * npts^2)
     # this is the second moment measure
-    mm <- im(mom, xcol.G[ctwist], yrow.G[rtwist], unitname=unitsX)
+    mm <- im(mom, xcol.ker[ctwist], yrow.ker[rtwist], unitname=unitsX)
     if(what == "Kmeasure")
       return(mm)
     else 
@@ -440,7 +457,7 @@ second.moment.engine <-
       mom.i <- mom.i * ccc
       # this is the second moment measure
       mmlist[[i]] <-
-        im(mom.i, xcol.G[ctwist], yrow.G[rtwist], unitname=unitsX)
+        im(mom.i, xcol.ker[ctwist], yrow.ker[rtwist], unitname=unitsX)
     }
     mmlist <- as.listof(mmlist)
     if(what == "Kmeasure")

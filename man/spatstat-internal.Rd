@@ -1380,7 +1380,7 @@ scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
 \dots, varcov=NULL, expand=FALSE)
 second.moment.engine(x, sigma, edge, what, \dots,
-      obswin, varcov, npts, debug)
+      kernel, obswin, varcov, npts, debug)
 sensiblevarname(guess, fallback, maxlen)
 sewpcf(d, w, denargs, lambda2area, divisor)
 sewsmod(d, ff, wt, Ef, rvals, method="smrep", \dots, nwtsteps=500)

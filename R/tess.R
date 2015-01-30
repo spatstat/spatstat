@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.58 $ $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.62 $ $Date: 2015/01/30 00:55:39 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, keepempty=FALSE) {
@@ -44,8 +44,7 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
           win <- union.owin(win, tiles[[i]])
       }
     }
-    ismask <- function(x) {x$type == "mask"}
-    if(ismask(win) || any(unlist(lapply(tiles, ismask)))) {
+    if(is.mask(win) || any(unlist(lapply(tiles, is.mask)))) {
       # convert to pixel image tessellation
       win <- as.mask(win)
       ima <- as.im(win)
@@ -137,6 +136,8 @@ print.tess <- function(x, ..., brief=FALSE) {
   if(full) print(win)
   invisible(NULL)
 }
+
+
 
 plot.tess <- local({
 
@@ -270,43 +271,56 @@ tilenames <- function(x) {
   stopifnot(is.tess(x))
   switch(x$type,
          rect={
-           nx <- length(x$xgrid) - 1
-           ny <- length(x$ygrid) - 1
-           nam <- outer(rev(seq_len(ny)),
-                        seq_len(nx),
-                        function(j,i,ny) {
-                          paste("Tile row ", ny-j+1, ", col ", i,
-                                sep="")},
-                        ny=ny)
-           return(nam)
+           if(!is.null(x$tilenames)) {
+             out <- x$tilenames
+           } else {
+             nx <- length(x$xgrid) - 1
+             ny <- length(x$ygrid) - 1
+             ij <- expand.grid(1:nx, 1:ny)
+             out <- paste0("Tile row ", ij[,2], ", col ", ij[,1])
+           }
          },
          tiled={
-           til <- x$tiles
-           if(!is.null(names(til)))
-             nam <- names(til)
-           else 
-             nam <- paste("Tile", seq_along(til))
+           out <- names(x$tiles)
+           if(sum(nzchar(out)) != x$n)
+             out <- paste("Tile", seq_len(x$n))
          },
          image={
-           ima <- x$image
-           lev <- levels(ima)
-           nam <- paste(lev)
-         })
-  return(nam)
+           out <- levels(x$image)
+         }
+         )
+  return(as.character(out))
 }
 
 "tilenames<-" <- function(x, value) {
   stopifnot(is.tess(x))
+  if(!is.null(value)) {
+    ## validate length
+    value <- as.character(value)
+    nv <- length(value)
+    switch(x$type,
+           rect = {
+             nx <- length(x$xgrid) - 1
+             ny <- length(x$ygrid) - 1
+             n <- nx * ny
+           },
+           tiled = { n <- length(x$tiles) },
+           image = { n <- length(levels(x$image)) })
+    if(nv != n)
+      stop("Replacement value has wrong length",
+           paren(paste(nv, "instead of", n)))
+  }
   switch(x$type,
-         rect = {
-           warning("Cannot change names of the tiles in a rectangular grid")
+         rect={
+           x$tilenames <- value
          },
-         tiled = {
+         tiled={
            names(x$tiles) <- value
          },
-         image = {
-           levels(x$image) <- value
-         })
+         image={
+           levels(x$image) <- value %orifnull% (1:n)
+         }
+         )
   return(x)
 }
 

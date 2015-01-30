@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.13 $    $Date: 2014/10/24 00:22:30 $
+#           $Revision: 1.15 $    $Date: 2015/01/30 04:59:57 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -19,14 +19,13 @@ pixellate <- function(x, ...) {
 pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
   verifyclass(x, "ppp")
 
-  if(!is.null(W))
-    W <- as.mask(W)
-  else {
-    # determine W using as.mask
-    W <- do.call.matched("as.mask",
-                         resolve.defaults(list(...),
-                                          list(w=x$window)))
-  }
+  if(is.null(W))
+    W <- Window(x)
+
+  W <- do.call.matched("as.mask",
+                       resolve.defaults(list(...),
+                                        list(w=W)))
+  
   insideW <- W$m
   dimW   <- W$dim
   xcolW <- W$xcol
@@ -124,7 +123,10 @@ pixellate.owin <- function(x, W=NULL, ...) {
     W <- R
   else if(!is.subset.owin(R, as.rectangle(W)))
     stop("W does not cover the domain of x")
-  W <- as.mask(W, ...)
+  
+  W <- do.call.matched("as.mask",
+                       resolve.defaults(list(...),
+                                        list(w=W)))
   #
   x0 <- W$xrange[1]
   y0 <- W$yrange[1]

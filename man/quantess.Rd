@@ -47,7 +47,7 @@ quantess(M, Z, n, \dots)
   and pixel images (\code{"im"}).
 
   The first argument \code{M} (for mass) specifies the spatial
-  distribution of mass that is to be divided. If \code{M} is a window,
+  distribution of stuff that is to be divided. If \code{M} is a window,
   the \emph{area} of the window is to be divided into \code{n} equal pieces.
   If \code{M} is a point pattern, the \emph{number of points} in the
   pattern is to be divided into \code{n} equal parts, as far as
@@ -81,7 +81,8 @@ and Ege Rubak
 Based on work by Ute Hahn.
 }
 \seealso{
-\code{\link{tess}}, \code{\link{quadrats}}, \code{\link{quantile}}.
+  \code{\link{tess}}, \code{\link{quadrats}}, \code{\link{quantile}},
+  \code{\link{tilenames}}
 }
 \examples{
   plot(quantess(letterR, "x", 5))
@@ -91,10 +92,15 @@ Based on work by Ute Hahn.
   plot(quantess(bronzefilter, "x", 6, ny=2))
   points(unmark(bronzefilter))
 
-  plot(quantess(Window(bei), bei.extra$elev, 4))
-
-  plot(quantess(bei, bei.extra$elev, 4))
-  points(bei, pch=".", cex=2)
+  opa <- par(mar=c(0,0,2,5))
+  A <- quantess(Window(bei), bei.extra$elev, 4)
+  plot(A, ribargs=list(las=1))
+  
+  B <- quantess(bei, bei.extra$elev, 4)
+  tilenames(B) <- paste(ordinal(1:4), "quartile")
+  plot(B, ribargs=list(las=1))
+  points(bei, pch=".", cex=2, col="white")
+  par(opa)
 }
 \keyword{spatial}
 \keyword{manip}

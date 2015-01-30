@@ -1,7 +1,7 @@
 #
 # cdf.test.mppm.R
 #
-# $Revision: 1.12 $  $Date: 2014/06/10 02:47:08 $
+# $Revision: 1.13 $  $Date: 2015/01/29 06:46:02 $
 #
 cdf.test.mppm <- function(model, covariate,
                           test=c("ks", "cvm", "ad"), ..., verbose=TRUE,
@@ -46,8 +46,7 @@ cdf.test.mppm <- function(model, covariate,
                  "number of point patterns in data of original model"))
   } else if(is.function(covariate) || is.im(covariate)) {
     # replicate to make a list
-    covariate <- rep(list(covariate), npat)
-    class(covariate) <- c("listof", class(covariate))
+    covariate <- as.anylist(rep(list(covariate), npat))
   } else     
   stop(paste("Format of argument", sQuote("covariates"), "not understood"))
   if(verbose)

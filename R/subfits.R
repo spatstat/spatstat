@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.32 $   $Date: 2015/01/15 06:02:18 $
+#  $Revision: 1.33 $   $Date: 2015/01/29 06:44:03 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
@@ -125,7 +125,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2015/01/15 06:02:18 $")
+                      date="$Date: 2015/01/29 06:44:03 $")
   fake.call <- call("cannot.update", Q=NULL, trend=trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
@@ -194,7 +194,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   }
   announce("done.\n")
   names(models) <- rownames
-  class(models) <- c("listof", class(models))
+  models <- as.anylist(models)
   return(models)
 }
 
@@ -401,7 +401,7 @@ subfits.old <-
   }
   announce("done.\n")
   names(results) <- rownames
-  class(results) <- c("listof", class(results))
+  results <- as.anylist(results)
   return(results)
 }
 

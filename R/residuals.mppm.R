@@ -4,7 +4,7 @@
 # computes residuals for fitted multiple point process model
 #
 #
-#  $Revision: 1.4 $ $Date: 2013/11/11 14:47:19 $
+#  $Revision: 1.5 $ $Date: 2015/01/29 06:44:26 $
 #
 
 residuals.mppm <- function(object, type="raw", ..., 
@@ -85,6 +85,6 @@ residuals.mppm <- function(object, type="raw", ...,
   # tag
   answer <- lapply(answer, "attr<-", which="type", value=type)
   answer <- lapply(answer, "attr<-", which="typename", value=typename)
-  return(as.listof(answer))
+  return(as.solist(answer))
 }
 

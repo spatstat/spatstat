@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.73 $    $Date: 2015/01/03 09:33:13 $
+#  $Revision: 1.76 $    $Date: 2015/01/30 03:47:16 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -24,6 +24,16 @@ density.ppp <- function(x, sigma=NULL, ...,
                        c(pixels="pixels",
                          points="points"))
 
+  if("kernel" %in% names(list(...))) {
+    ## kernel is only partly implemented!
+    if(output == "points")
+      stop("Non-Gaussian kernel is not implemented for at='points'")
+    if(se)
+      stop("Standard errors are not implemented for non-Gaussian kernel")
+    if(is.function(sigma))
+      warning("Bandwidth selection will be based on Gaussian kernel")
+  }
+  
   ker <- resolve.2D.kernel(..., sigma=sigma, varcov=varcov, x=x, adjust=adjust)
   sigma <- ker$sigma
   varcov <- ker$varcov

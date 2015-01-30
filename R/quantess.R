@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.2 $  $Date: 2015/01/28 12:04:44 $
+#'   $Revision: 1.4 $  $Date: 2015/01/30 02:05:22 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -11,8 +11,11 @@ quantess <- function(M, Z, n, ...) {
 quantess.owin <- function(M, Z, n, ...) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
-  if(is.character(Z)) {
-    if(!any(c("x", "y") == Z))
+  if(!is.character(Z)) {
+    Zim <- as.im(Z, W)
+    Zrange <- range(Zim)
+  } else {
+    if(!(Z %in% c("x", "y")))
       stop(paste("Unrecognised covariate", dQuote(Z)))
     if(is.rectangle(W)) {
       out <- switch(Z,
@@ -21,15 +24,32 @@ quantess.owin <- function(M, Z, n, ...) {
       if(!is.null(tcross)) out <- intersect.tess(out, tcross)
       return(out)
     }
-    Z <- switch(Z,
-                x=function(x,y){x},
-                y=function(x,y){y})
+    switch(Z,
+           x={
+             Zfun <- function(x,y){x}
+             Zrange <- boundingbox(W)$xrange
+           },
+           y={
+             Zfun <- function(x,y){y}
+             Zrange <- boundingbox(W)$yrange
+           })
+    Zim <- as.im(Zfun, W)
   }
-  Z <- as.im(Z, W)
-  qZ <- quantile(Z, probs=(1:(n-1))/n)
-  qZ <- c(min(Z), qZ, max(Z))
-  ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
-  out <- tess(image=ZC)
+  qZ <- quantile(Zim, probs=(1:(n-1))/n)
+  qZ <- c(Zrange[1], qZ, Zrange[2])
+  if(is.polygonal(W) && is.character(Z)) {
+    R <- Frame(W)
+    strips <- switch(Z,
+                     x = tess(xgrid=qZ, ygrid=R$yrange),
+                     y = tess(xgrid=R$xrange, ygrid=qZ))
+    out <- intersect.tess(strips, tess(tiles=list(W)))
+  } else {
+    ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
+    out <- tess(image=ZC)
+  }
+  qzz <- signif(qZ, 3)
+  tilenames(out) <- paste0("[", qzz[1:(n-1)], ",",
+                           qzz[-1], c(rep(")", n-1), "]"))
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)
   return(out)
 }
@@ -37,8 +57,12 @@ quantess.owin <- function(M, Z, n, ...) {
 quantess.ppp <- function(M, Z, n, ...) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
-  if(is.character(Z)) {
-    if(!any(c("x", "y") == Z))
+  if(!is.character(Z)) {
+    Zim <- as.im(Z, W)
+    ZM <- if(is.function(Z)) Z(M$x, M$y) else Zim[M]
+    Zrange <- range(range(Zim), ZM)
+  } else {
+    if(!(Z %in% c("x", "y")))
       stop(paste("Unrecognised covariate", dQuote(Z)))
     if(is.rectangle(W)) {
       switch(Z,
@@ -55,16 +79,34 @@ quantess.ppp <- function(M, Z, n, ...) {
       if(!is.null(tcross)) out <- intersect.tess(out, tcross)
       return(out)
     }
-    Z <- switch(Z,
-                x=function(x,y){x},
-                y=function(x,y){y})
-  }
-  Z <- as.im(Z, W)
-  ZM <- Z[M]
+    switch(Z,
+           x={
+             Zfun <- function(x,y){x}
+             ZM <- M$x
+             Zrange <- boundingbox(W)$xrange
+           },
+           y={
+             Zfun <- function(x,y){y}
+             ZM <- M$y
+             Zrange <- boundingbox(W)$yrange
+           })
+    Zim <- as.im(Zfun, W)
+  } 
   qZ <- quantile(ZM, probs=(1:(n-1))/n)
-  qZ <- c(min(ZM), qZ, max(ZM))
-  ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
-  out <- tess(image=ZC)
+  qZ <- c(Zrange[1], qZ, Zrange[2])
+  if(is.polygonal(W) && is.character(Z)) {
+    R <- Frame(W)
+    strips <- switch(Z,
+                     x = tess(xgrid=qZ, ygrid=R$yrange),
+                     y = tess(xgrid=R$xrange, ygrid=qZ))
+    out <- intersect.tess(strips, tess(tiles=list(W)))
+  } else {
+    ZC <- cut(Zim, breaks=qZ, include.lowest=TRUE)
+    out <- tess(image=ZC)
+  }
+  qzz <- signif(qZ, 3)
+  tilenames(out) <- paste0("[", qzz[1:(n-1)], ",",
+                           qzz[-1], c(rep(")", n-1), "]"))
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)
   return(out)
 }
@@ -80,11 +122,15 @@ quantess.im <- function(M, Z, n, ...) {
   MZ <- harmonise(M=M, Z=Z)
   M <- MZ$M[W, drop=FALSE]
   Z <- MZ$Z[W, drop=FALSE]
+  Zrange <- range(Z)
   Fun <- ewcdf(Z[], weights=M[]/sum(M[]))
   qZ <- quantile(Fun, probs=(1:(n-1))/n)
-  qZ <- c(min(Z), qZ, max(Z))
+  qZ <- c(Zrange[1], qZ, Zrange[2])
   ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
   out <- tess(image=ZC)
+  qzz <- signif(qZ, 3)
+  tilenames(out) <- paste0("[", qzz[1:(n-1)], ",",
+                           qzz[-1], c(rep(")", n-1), "]"))
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)
   return(out)
 }
