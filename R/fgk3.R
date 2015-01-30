@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.19 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.23 $	$Date: 2015/01/30 10:24:13 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -9,7 +9,8 @@
 
 K3est <- function(X, ...,
                   rmax=NULL, nrval=128,
-                  correction=c("translation", "isotropic"))
+                  correction=c("translation", "isotropic"),
+                  ratio=FALSE)
 {
   stopifnot(inherits(X, "pp3"))
   correction <- pickoption("correction", correction,
@@ -24,12 +25,17 @@ K3est <- function(X, ...,
   if(is.null(rmax))
     rmax <- diameter(B)/2
   r <- seq(from=0, to=rmax, length.out=nrval)
-
+  np <- npoints(X)
+  denom <- np * (np-1)/volume(B)
+  
   # this will be the output data frame
   K <- data.frame(r=r, theo= (4/3) * pi * r^3)
   desc <- c("distance argument r", "theoretical Poisson %s")
-  K <- fv(K, "r", substitute(K3(r), NULL),
-          "theo", , c(0,rmax/2), c("r","%s[pois](r)"), desc, fname="K3")
+  K <- ratfv(K, NULL, denom,
+             "r", quote(K[3](r)), 
+             "theo", NULL, c(0,rmax/2), c("r","{%s[%s]^{pois}}(r)"), desc,
+             fname=c("K", "3"),
+             ratio=ratio)
 
   # extract the x,y,z ranges as a vector of length 6
   flatbox <- unlist(B[1:3])
@@ -40,18 +46,22 @@ K3est <- function(X, ...,
   if(any(correction %in% "translation")) {
     u <- k3engine(coo$x, coo$y, coo$z, flatbox,
                   rmax=rmax, nrval=nrval, correction="translation")
-    Kt <- u$f
-    K <- bind.fv(K, data.frame(trans=Kt), "%s[trans](r)",
-                 "translation-corrected estimate of %s",
-                 "trans")
+    K <- bind.ratfv(K,
+                    data.frame(trans=u$num), u$denom,
+                    "{hat(%s)[%s]^{trans}}(r)",
+                    "translation-corrected estimate of %s",
+                    "trans",
+                    ratio=ratio)
   }
   if(any(correction %in% "isotropic")) {
     u <- k3engine(coo$x, coo$y, coo$z, flatbox,
                   rmax=rmax, nrval=nrval, correction="isotropic")
-    Ki <- u$f
-    K <- bind.fv(K, data.frame(iso=Ki), "%s[iso](r)",
-                 "isotropic-corrected estimate of %s",
-                 "iso")
+    K <- bind.ratfv(K,
+                    data.frame(iso=u$num), u$denom,
+                    "{hat(%s)[%s]^{iso}}(r)",
+                    "isotropic-corrected estimate of %s",
+                    "iso",
+                    ratio=ratio)
   }
   # default is to display them all
   formula(K) <- . ~ r

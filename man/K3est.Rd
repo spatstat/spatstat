@@ -8,7 +8,10 @@
   Estimates the \eqn{K}-function from a three-dimensional point pattern.
 }
 \usage{
-K3est(X, ..., rmax = NULL, nrval = 128, correction = c("translation", "isotropic"))
+  K3est(X, \dots,
+        rmax = NULL, nrval = 128,
+        correction = c("translation", "isotropic"),
+        ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -29,6 +32,12 @@ K3est(X, ..., rmax = NULL, nrval = 128, correction = c("translation", "isotropic
   \item{correction}{
     Optional. Character vector specifying the edge correction(s)
     to be applied. See Details.
+  }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    each edge-corrected estimate will also be saved,
+    for use in analysing replicated point patterns.
   }
 }
 \details{

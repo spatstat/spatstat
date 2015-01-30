@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.028
+	CHANGES IN spatstat VERSION 1.40-0.029
 
 OVERVIEW
 
@@ -55,6 +55,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o density.ppp
    New argument 'se' allows calculation of standard errors as well.
+
+   o plot.pp3
+   Now produces a genuine perspective view.
+   New arguments control the eye position for the perspective view.
 
    o Emark, Vmark
    These functions can now work with multiple columns of marks.
@@ -121,9 +125,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
    has changed slightly to use the classes 'anylist' and 'solist'.
    There should be no change in behaviour.
 
-   o plot.pp3
-   Now produces a genuine perspective view.
-   New arguments control the eye position for the perspective view.
+   o K3est
+   New argument 'ratio'.
 
    o spatstat.options
    New option 'par.points3d' sets default arguments for plot.pp3. 
