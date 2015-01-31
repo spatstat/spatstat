@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.29 $     $Date: 2014/11/10 05:33:43 $
+#       $Revision: 5.30 $     $Date: 2015/01/31 05:05:17 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid

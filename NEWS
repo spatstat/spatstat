@@ -1,16 +1,18 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.029
+	CHANGES IN spatstat VERSION 1.40-0.030
 
 OVERVIEW
 
-   o We thank Ahmed El-Gabbas, Ute Hahn, Brian Ripley and Torben Tvedebrink
-     for contributions.
+   o We thank Ahmed El-Gabbas, Ute Hahn, Ian Renner, 
+     Brian Ripley and Torben Tvedebrink for contributions.
 
    o Fixed a bug causing a segmentation fault.
 
    o Standard errors for kernel estimates of intensity.
 
    o Test for segregation.
+
+   o Tessellations may now have marks.
 
    o Improvements and bug fixes.
 
@@ -41,7 +43,10 @@ NEW FUNCTIONS
    Weighted K-function. 
    Identical to 'markcorrint' and will eventually replace it.
 
-   o quantess
+   o marks.tess, marks<-.tess, unmark.tess:
+   Extract or change the marks associated with the tiles of a tessellation.
+
+   o quantess, quantsplit
    Quantile tessellation: divide space into pieces which contain
    equal amounts of 'stuff'.
 
@@ -140,10 +145,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o summary.hyperframe
    Improved output.
 
+   o pixellate.owin
+   Accelerated.
+
 BUG FIXES
 
    o sumouter
-   A segmentation fault could occur, if any data were NA.
+   A segmentation fault could occur if any data were NA.
    Fixed.
 
    o simulate.kppm
@@ -156,6 +164,13 @@ BUG FIXES
    "interaction evaluator did not return a matrix".
    Fixed.
 
+   o quadscheme
+   If quadscheme() was called explicitly, with the stipulated number of tiles
+   exceeding the number of dummy points given, then the quadrature weights 
+   were sometimes vastly inflated - total quadrature weight was
+   much larger than window area. Spotted by Ian Renner. 
+   Fixed.   
+   
    o density.ppp
    Crashed when at="points" if the dataset had exactly 1 point.
    Fixed.

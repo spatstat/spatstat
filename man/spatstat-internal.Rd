@@ -315,6 +315,7 @@
 \alias{paste.expr}
 \alias{plan.legend.layout}
 \alias{PoisSaddleApp}
+\alias{polytileareaEngine}
 \alias{prettyinside}
 \alias{prettydiscrete}
 \alias{putSpatstatVariable}
@@ -1052,6 +1053,7 @@ paste.expr(x)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
+polytileareaEngine(P, xrange, yrange, nx, ny)
 prettyinside(x, \dots)
 prettydiscrete(x, n)
 \method{print}{localpcfmatrix}(x, \dots)

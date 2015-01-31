@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.15 $    $Date: 2015/01/30 04:59:57 $
+#           $Revision: 1.16 $    $Date: 2015/01/31 02:38:58 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -127,17 +127,21 @@ pixellate.owin <- function(x, W=NULL, ...) {
   W <- do.call.matched("as.mask",
                        resolve.defaults(list(...),
                                         list(w=W)))
-  #
-  x0 <- W$xrange[1]
-  y0 <- W$yrange[1]
-  dx <- W$xstep
-  dy <- W$ystep
-  nx <- W$dim[2]
-  ny <- W$dim[1]
-  # set up output image (real-valued) and initialise to zero
-  Z <- as.im(W, value=pi, na.replace=pi)
-  Z <- eval.im(Z * 0)
-  # process each component polygon  
+  ## compute
+  Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2], ny=W$dim[1])
+  ## convert to image
+  Z <- im(Zmat, xcol=W$xcol, yrow=W$yrow, xrange=W$xrange, yrange=W$yrange,
+          unitname=unitname(W))
+  return(Z)
+}
+
+polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
+  x0 <- xrange[1]
+  y0 <- yrange[1]
+  dx <- diff(xrange)/nx
+  dy <- diff(yrange)/ny
+  # process each component polygon
+  Z <- matrix(0.0, ny, nx)
   B <- P$bdry
   for(i in seq_along(B)) {
     PP <- B[[i]]
@@ -163,14 +167,13 @@ pixellate.owin <- function(x, W=NULL, ...) {
              status=as.integer(integer(1)))
     if(zz$status != 0)
       stop("Internal error")
-    # increment output image
-    Z$v <- Z$v + matrix(zz$out, ny, nx)
+    # increment output 
+    Z[] <- Z[] + zz$out
   }
   # revert to original scale
   pixelarea <- dx * dy
-  Z <- eval.im(Z * pixelarea)
-  return(Z)
+  return(Z * pixelarea)
 }
 
-    
+
   

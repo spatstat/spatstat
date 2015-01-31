@@ -699,7 +699,7 @@ xy.grid <- function(xr, yr, nx, ny, dx, dy) {
   } else if(dx.given) {
     stopifnot(dx > 0)
     x0 <- seq(from=xr[1], to=xr[2], by=dx)
-    nx <- length(x0)
+    nx <- length(x0) - 1
   } else stop("Need either nx or dx")
   ## determine y grid
   if(ny.given && dy.given)
@@ -712,7 +712,7 @@ xy.grid <- function(xr, yr, nx, ny, dx, dy) {
     if(is.null(dy)) dy <- dx
     stopifnot(dy > 0)
     y0 <- seq(from=yr[1], to=yr[2], by=dy)
-    ny <- length(y0)
+    ny <- length(y0) - 1
   }
   return(list(x0=x0, y0=y0, nx=nx, ny=ny, dx=dx, dy=dy))
 }

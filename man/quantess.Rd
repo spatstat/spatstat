@@ -1,4 +1,5 @@
 \name{quantess}
+\alias{quantsplit}
 \alias{quantess}
 \alias{quantess.owin}
 \alias{quantess.ppp}
@@ -9,6 +10,8 @@
 }
 \usage{
 quantess(M, Z, n, \dots)
+
+quantsplit(M, Z, n, \dots)
 
 \method{quantess}{owin}(M, Z, n, \dots)
 
@@ -33,6 +36,7 @@ quantess(M, Z, n, \dots)
     Number of bands. A positive integer.
   }
   \item{\dots}{
+    Ignored.
     Additional arguments passed to \code{\link{quadrats}} or
     \code{\link{tess}} defining another tessellation
     which should be intersected with the quantile tessellation.
@@ -42,9 +46,14 @@ quantess(M, Z, n, \dots)
   A \emph{quantile tessellation} is a division of space into
   pieces which contain equal amounts of stuff.
 
+  The functions \code{quantess} and \code{quantsplit}
+  both compute a quantile tessellation;
+  \code{quantess} returns the tessellation itself, while
+  \code{quantsplit} splits the data \code{M} according to this tessellation.
+  
   The function \code{quantess} is generic, with methods for
   windows (class \code{"owin"}), point patterns (\code{"ppp"})
-  and pixel images (\code{"im"}).
+  and pixel images (\code{"im"}). 
 
   The first argument \code{M} (for mass) specifies the spatial
   distribution of stuff that is to be divided. If \code{M} is a window,
@@ -61,14 +70,20 @@ quantess(M, Z, n, \dots)
   the same total weight. That is, we determine the quantiles of \code{Z}
   with weights given by \code{M}.
 
-  The result is a tessellation of \code{as.owin(M)}
-  determined by the quantiles of \code{Z}.
-
   For convenience, additional arguments \code{\dots} can be given,
   to further subdivide the tiles of the tessellation.
+
+  The result of \code{quantess} is a tessellation of \code{as.owin(M)}
+  determined by the quantiles of \code{Z}.
+  The result of \code{quantsplit} is a list of spatial objects
+  obtained by splitting \code{M} according to the quantile tessellation.
 }
 \value{
-  A tessellation (object of class \code{"tess"}).
+  The result of \code{quantess} is a
+  tessellation (object of class \code{"tess"}).
+
+  The result of \code{quantsplit} is a list (of class \code{"solist"})
+  of objects of the same type as \code{M}.
 }
 \author{
 Adrian Baddeley
@@ -87,9 +102,7 @@ Based on work by Ute Hahn.
 \examples{
   plot(quantess(letterR, "x", 5))
 
-  plot(quantess(letterR, "x", 5, ny=3))
-
-  plot(quantess(bronzefilter, "x", 6, ny=2))
+  plot(quantess(bronzefilter, "x", 6))
   points(unmark(bronzefilter))
 
   opa <- par(mar=c(0,0,2,5))

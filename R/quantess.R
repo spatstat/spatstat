@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.4 $  $Date: 2015/01/30 02:05:22 $
+#'   $Revision: 1.7 $  $Date: 2015/01/31 14:21:13 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -152,4 +152,10 @@ MinimalTess <- function(W, ...) {
   }
   v <- do.call(fun, resolve.defaults(list(W), argh, dflt))
   return(v)
+}
+
+quantsplit <- function(M, Z, n, ...) {
+  f <- quantess(M, Z, n, ...)
+  out <- if(is.owin(M)) f else split(M, f)
+  return(out)
 }

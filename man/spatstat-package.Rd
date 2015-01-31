@@ -1715,6 +1715,7 @@
   Pablo Ramon,
   Xavier Raynaud,
   Matt Reiter,
+  Ian Renner,
   Tom Richardson,
   Brian Ripley,
   Ted Rosenbaum,

@@ -7,7 +7,7 @@
 }
 \usage{
   tess(..., xgrid = NULL, ygrid = NULL, tiles = NULL, image = NULL,
-            window=NULL, keepempty=FALSE)
+            window=NULL, marks=NULL, keepempty=FALSE)
 }
 \arguments{
   \item{\dots}{Ignored.}
@@ -27,6 +27,9 @@
     Optional.
     The spatial region which is tessellated (i.e. the union of all the tiles).
     An object of class \code{"owin"}.
+  }
+  \item{marks}{
+    Optional vector or data frame of marks associated with the tiles.
   }
   \item{keepempty}{
     Logical flag indicating whether empty tiles should be retained
@@ -79,8 +82,12 @@
 
   There are methods for \code{print}, \code{plot}, \code{[} and \code{[<-}
   for tessellations. Use \code{\link{tiles}} to extract the list of
-  tiles in a tessellation, or \code{\link{tile.areas}} to compute their
+  tiles in a tessellation, \code{\link{tilenames}} to extract the names
+  of the tiles, and \code{\link{tile.areas}} to compute their
   areas.
+
+  The tiles may have marks, which can be extracted by
+  \code{\link{marks.tess}} and changed by \code{\link{marks<-.tess}}.
 
   Tessellations can be used to classify the points of
   a point pattern, in \code{\link{split.ppp}}, \code{\link{cut.ppp}} and
@@ -95,6 +102,7 @@
   An object of class \code{"tess"} representing the tessellation.
 }
 \seealso{
+  \code{\link{marks.tess}},
   \code{\link{plot.tess}},
   \code{\link{[.tess}},
   \code{\link{as.tess}},
@@ -124,11 +132,14 @@
   E <- tess(image=v)
   E
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{datagen}

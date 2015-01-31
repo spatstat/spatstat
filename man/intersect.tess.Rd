@@ -6,7 +6,7 @@
   or the intersection of a tessellation with a window.
 }
 \usage{
-   intersect.tess(X, Y, \dots)
+   intersect.tess(X, Y, \dots, keepmarks=FALSE)
 }
 \arguments{
   \item{X,Y}{Two tessellations (objects of class \code{"tess"}),
@@ -17,6 +17,11 @@
   \item{\dots}{
     Optional arguments passed to \code{\link{as.mask}}
     to control the discretisation, if required.
+  }
+  \item{keepmarks}{
+    Logical value. If \code{TRUE}, the marks attached to the
+    tiles of \code{X} and \code{Y} will be retained as marks of
+    the intersection tiles. 
   }
 }
 \value{
@@ -64,8 +69,14 @@
   plot(DA <- dirichlet(A))
   plot(DB <- dirichlet(B))
   plot(intersect.tess(DA, DB))
-
   par(opa)
+
+  marks(DA) <- 1:10
+  marks(DB) <- 1:10
+  plot(Z <- intersect.tess(DA,DB, keepmarks=TRUE))
+  mZ <- marks(Z)
+  tZ <- tiles(Z)
+  for(i in which(mZ[,1] == 3)) plot(tZ[[i]], add=TRUE, col="pink")
 }
 \keyword{spatial}
 \keyword{math}

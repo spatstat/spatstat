@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.33 $	$Date: 2014/12/19 14:08:19 $
+#	$Revision: 4.35 $	$Date: 2015/01/31 04:10:22 $
 #
 #
 # Main functions:
@@ -56,12 +56,16 @@ countingweights <- function(id, areas, check=TRUE) {
     zerocount <- (counts == 0)
     zeroarea <- (areas == 0)
     if(any(uhoh <- !zeroarea & zerocount)) {
-      lostfrac <- sum(areas[uhoh])/sum(areas)
-      warning(paste("some tiles with positive area do not contain any points:",
-                    "relative error =", signif(lostfrac, 4)))
+      lostfrac <- 1 - sum(w)/sum(areas)
+      lostpc <- round(100 * lostfrac, 1)
+      if(lostpc >= 1)
+        warning(paste("some tiles with positive area",
+                      "do not contain any quadrature points:",
+                      "relative error =",
+                      paste0(lostpc, "%")))
     }
     if(any(!zerocount & zeroarea)) {
-	warning("Some tiles with zero area contain points")
+	warning("Some tiles with zero area contain quadrature points")
 	warning("Some weights are zero")
 	attr(w, "zeroes") <- zeroarea[id]
     }
@@ -123,54 +127,98 @@ gridweights <- function(X, ntile=NULL, ..., window=NULL, verbose=FALSE,
 
         if(verbose) 
           cat(paste("grid weights for a", nx, "x", ny, "grid of tiles\n"))
-        
-        if(is.null(npix)) npix <- rev(spatstat.options("npixel"))
-        npix <- ensure2vector(npix)
+
+        ## determine pixel resolution in case it is required
+        if(!is.null(npix)) {
+          npix <- ensure2vector(npix)
+        } else {
+          npix <- pmax(rev(spatstat.options("npixel")),
+                       c(nx, ny))
+          if(is.mask(win))
+            npix <- pmax(npix, rev(dim(win)))
+        }
         
         if(is.null(areas)) {
   	  # compute tile areas
-          if(win$type == "rectangle") {
-
-            tilearea <- area(win)/(nx * ny)
-            areas <- rep.int(tilearea, nx * ny)
-
-          } else {
-            # convert window to mask
-            win <- as.mask(win, dimyx=rev(npix))
-
-            if(verbose) 
-              splat(paste0("Approximating window by mask (",
-                           npix[1], " x ", npix[2], " pixels)"))
-                
-            # extract pixel coordinates inside window
-            rxy <- rasterxy.mask(win, drop=TRUE)
-            xx <- rxy$x
-            yy <- rxy$y
+          switch(win$type,
+                 rectangle = {
+                   nxy <- nx * ny
+                   tilearea <- area(win)/nxy
+                   areas <- rep.int(tilearea, nxy)
+                   zeroareas <- rep(FALSE, nxy)
+                 },
+                 polygonal = {
+                   areamat <- polytileareaEngine(win,
+                                                 win$xrange, win$yrange,
+                                                 nx, ny)
+                   ## convert from 'im' to 'gridindex' ordering
+                   areas <- as.vector(t(areamat))
+                   zeroareas <- (areas == 0)
+                   if(verbose)
+                     splat("Split polygonal window of area", area(win),
+                           "into", nx, "x", ny, "grid of tiles",
+                           "of total area", sum(areas))
+                 },
+                 mask = {
+                   win <- as.mask(win, dimyx=rev(npix))
+                   if(verbose) 
+                     splat("Converting mask dimensions to",
+                           npix[1], "x", npix[2], "pixels")
+                   ## extract pixel coordinates inside window
+                   rxy <- rasterxy.mask(win, drop=TRUE)
+                   xx <- rxy$x
+                   yy <- rxy$y
+                   
+                   ## classify all pixels into tiles
+                   pixelid <- gridindex(xx, yy, 
+                                        win$xrange, win$yrange, nx, ny)$index
+                   pixelid <- factor(pixelid, levels=seq_len(nx * ny))
                                 
-	    # classify all pixels into tiles
-            pixelid <- gridindex(xx, yy, 
-                                 win$xrange, win$yrange, nx, ny)$index
-            pixelid <- factor(pixelid, levels=seq_len(nx * ny))
-                                
-	    # compute digital areas of tiles
-            tilepixels <- as.vector(table(pixelid))
-            pixelarea <- win$xstep * win$ystep
-            areas <- tilepixels * pixelarea
-            zeroareas <- (tilepixels == 0)
-          } 
+                   ## compute digital areas of tiles
+                   tilepixels <- as.vector(table(pixelid))
+                   pixelarea <- win$xstep * win$ystep
+                   areas <- tilepixels * pixelarea
+                   zeroareas <- (tilepixels == 0)
+                 }
+               )
         } else zeroareas <- (areas == 0)
         
         id <- gridindex(x, y, win$xrange, win$yrange, nx, ny)$index
 
         if(win$type != "rectangle" && any(uhoh <- zeroareas[id])) {
           # this can happen: the tile has digital area zero
-          # but contains a data/dummy point 
-          if(win$type != "mask") 
-            pixelarea <- area(Frame(win))/prod(npix)
+          # but contains a data/dummy point
           slivers <- unique(id[uhoh])
-          areas[slivers] <- pixelarea/2
+          switch(win$type,
+                 mask = {
+                   offence <- "digital area zero"
+                   epsa <- pixelarea/2
+                 },
+                 polygonal = {
+                   offence <- "very small area"
+                   epsa <- min(areas[!zeroareas])/10
+                 })
+          areas[slivers] <- epsa
+          nsliver <- length(slivers)
+          extraarea <- nsliver * epsa
+          extrafrac <- extraarea/area(win)
+          if(verbose || extrafrac > 0.01) {
+            splat(nsliver, ngettext(nsliver, "tile", "tiles"),
+                  "of", offence,
+                  ngettext(nsliver, "was", "were"),
+                  "given nominal area", signif(epsa, 3),
+                  "increasing the total area by",
+                  signif(extraarea, 5), "square units or",
+                  paste0(round(100 * extrafrac, 1), "% of total area"))
+            if(extrafrac > 0.01)
+              warning(paste("Repairing tiles with", offence,
+                            "caused a",
+                            paste0(round(100 * extrafrac), "%"),
+                            "change in total area"),
+                      call.=FALSE)
+          }
         }
-        
+ 
 	# compute counting weights 
 	w <- countingweights(id, areas)
 

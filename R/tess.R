@@ -3,10 +3,10 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.62 $ $Date: 2015/01/30 00:55:39 $
+#   $Revision: 1.63 $ $Date: 2015/01/31 14:21:17 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
-                 window=NULL, keepempty=FALSE) {
+                 window=NULL, marks=NULL, keepempty=FALSE) {
   if(!is.null(window))
     win <- as.owin(window)
   else win <- NULL
@@ -85,6 +85,15 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     if(is.null(win)) win <- as.owin(image)
     out <- list(type="image", window=win, image=image, n=length(levels(image)))
   } else stop("Internal error: unrecognised format")
+  ## add marks!
+  if(!is.null(marks)) {
+    marks <- as.data.frame(marks)
+    if(nrow(marks) != out$n)
+      stop(paste("wrong number of marks:",
+                 nrow(marks), "should be", out$n),
+           call.=FALSE)
+    out$marks <- marks
+  }
   class(out) <- c("tess", class(out))
   return(out)
 }
@@ -104,40 +113,41 @@ print.tess <- function(x, ..., brief=FALSE) {
                diff(range(dz))/mean(dz) < 0.01
              }
              if(equispaced(x$xgrid) && equispaced(x$ygrid)) 
-               cat(paste("Tiles are equal rectangles, of dimension",
-                         signif(mean(diff(x$xgrid)), 5),
-                         "x",
-                         signif(mean(diff(x$ygrid)), 5),
-                         unitinfo$plural, " ", unitinfo$explain,
-                         "\n"))
+               splat("Tiles are equal rectangles, of dimension",
+                     signif(mean(diff(x$xgrid)), 5),
+                     "x",
+                     signif(mean(diff(x$ygrid)), 5),
+                     unitinfo$plural, " ", unitinfo$explain)
              else
-               cat(paste("Tiles are unequal rectangles\n"))
+               splat("Tiles are unequal rectangles")
            }
-           cat(paste(length(x$xgrid)-1, "by", length(x$ygrid)-1,
-                     "grid of tiles", "\n"))
+           splat(length(x$xgrid)-1, "by", length(x$ygrid)-1, "grid of tiles")
          },
          tiled={
            if(full) {
              if(win$type == "polygonal")
-               cat("Tiles are irregular polygons\n")
+               splat("Tiles are irregular polygons")
              else
-               cat("Tiles are windows of general type\n")
+               splat("Tiles are windows of general type")
            }
-           cat(paste(length(x$tiles), "tiles (irregular windows)\n"))
+           splat(length(x$tiles), "tiles (irregular windows)")
          },
          image={
            nlev <- length(levels(x$image))
            if(full) {
-             cat(paste("Tessellation is determined by",
-                       "a factor-valued image",
-                       "with", nlev, "levels\n"))
-           } else cat(paste(nlev, "tiles (levels of a pixel image)\n"))
+             splat("Tessellation is determined by a factor-valued image with",
+                   nlev, "levels")
+           } else splat(nlev, "tiles (levels of a pixel image)")
          })
+  if(!is.null(marx <- x$marks)) {
+    m <- dim(marx)[2] %orifnull% 1
+    if(m == 1) splat("Tessellation is marked") else
+    splat("Tessellation has", m, "columns of marks:",
+          commasep(sQuote(colnames(marx))))
+  }
   if(full) print(win)
   invisible(NULL)
 }
-
-
 
 plot.tess <- local({
 
@@ -324,6 +334,28 @@ tilenames <- function(x) {
   return(x)
 }
 
+marks.tess <- function(x, ...) {
+  stopifnot(is.tess(x))
+  return(x$marks)
+}
+
+"marks<-.tess" <- function(x, ..., value) {
+  stopifnot(is.tess(x))
+  if(!is.null(value)) {
+    value <- as.data.frame(value)
+    if(nrow(value) != x$n)
+      stop(paste("replacement value for marks has wrong length:",
+                 nrow(value), "should be", x$n),
+           call.=FALSE)
+    rownames(value) <- NULL
+    if(ncol(value) == 1) colnames(value) <- "marks"
+  }
+  x$marks <- value
+  return(x)
+}
+
+unmark.tess <- function(X) { marks(X) <- NULL; return(X) }
+
 tile.areas <- function(x) {
   stopifnot(is.tess(x))
   switch(x$type,
@@ -465,7 +497,7 @@ as.tess.tess <- function(X) {
            tiled={ "tiles" },
            image={ "image" },
            stop(paste("Unrecognised tessellation type", sQuote(X$type))))
-  fields <- c(c("type", "window"), fields)
+  fields <- c(c("type", "window", "n", "marks"), fields)
   X <- unclass(X)[fields]
   class(X) <- c("tess", class(X))
   return(X)
@@ -486,7 +518,7 @@ as.tess.owin <- function(X) {
 
 domain.tess <- Window.tess <- function(X, ...) { as.owin(X) } 
 
-intersect.tess <- function(X, Y, ...) {
+intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
   X <- as.tess(X)
   if(is.owin(Y) && Y$type == "mask") {
     # special case
@@ -498,7 +530,9 @@ intersect.tess <- function(X, Y, ...) {
       result[tilei] <- i
     }
     result <- result[Y, drop=FALSE]
-    return(tess(image=result, window=Y))
+    out <- tess(image=result, window=Y)
+    if(keepmarks) marks(out) <- marks(X)
+    return(out)
   }
   if(is.owin(Y)) {
     # efficient code when Y is a window, retaining names of tiles of X
@@ -507,26 +541,62 @@ intersect.tess <- function(X, Y, ...) {
     Ztiles <- Ztiles[!isempty]
     Xwin <- as.owin(X)
     Ywin <- Y
+    if(keepmarks) {
+      marksX <- marks(X)
+      if(!is.null(marksX))
+        marx <- as.data.frame(marksX)[!isempty, ]
+    }
   } else {
     # general case
     Y <- as.tess(Y)
     Xtiles <- tiles(X)
     Ytiles <- tiles(Y)
     Ztiles <- list()
-    namesX <- names(Xtiles)
+    namesX <- tilenames(X)
+    namesY <- tilenames(Y)
+    if(keepmarks) {
+      Xmarks <- as.data.frame(marks(X))
+      Ymarks <- as.data.frame(marks(Y))
+      gotXmarks <- (ncol(Xmarks) > 0)
+      gotYmarks <- (ncol(Ymarks) > 0)
+      if(gotXmarks && gotYmarks) {
+        colnames(Xmarks) <- paste0("X", colnames(Xmarks))
+        colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
+      }
+      if(gotXmarks || gotYmarks) {
+        XYmarks <- if(gotXmarks && gotYmarks) cbind(Xmarks, Ymarks) else
+                   if(gotXmarks) Xmarks else Ymarks
+        marx <- XYmarks[integer(0), , drop=FALSE]
+      } else keepmarks <- FALSE
+    }
     for(i in seq_along(Xtiles)) {
       Xi <- Xtiles[[i]]
       Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
       isempty <- unlist(lapply(Ti, function(x) { is.null(x) || is.empty(x)}))
       Ti <- Ti[!isempty]
-      names(Ti) <- paste(namesX[i], names(Ti), sep="x")
+      names(Ti) <- paste(namesX[i], namesY[!isempty], sep="x")
       Ztiles <- append(Ztiles, Ti)
+      if(keepmarks) {
+        extra <- if(gotXmarks && gotYmarks) {
+          data.frame(X=Xmarks[i, ,drop=FALSE],
+                     Y=Ymarks[!isempty, ,drop=FALSE],
+                     row.names=NULL)
+        } else if(gotYmarks) {
+          Ymarks[!isempty, ,drop=FALSE]
+        } else {
+          Xmarks[rep(i, sum(!isempty)), ,drop=FALSE]
+        }
+        marx <- rbind(marx, extra)
+      }
     }
     Xwin <- as.owin(X)
     Ywin <- as.owin(Y)
   }
   Zwin <- intersect.owin(Xwin, Ywin)
-  return(tess(tiles=Ztiles, window=Zwin))
+  out <- tess(tiles=Ztiles, window=Zwin)
+  if(keepmarks) 
+    marks(out) <- marx
+  return(out)
 }
 
 

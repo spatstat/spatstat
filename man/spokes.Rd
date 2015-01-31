@@ -81,14 +81,10 @@
 }
 \examples{
   dat <- runifrect(10)
-  \dontrun{
-  plot(dat)
-  }
-  dum <- spokes(dat$x, dat$y)
-  \dontrun{
-  points(dum$x, dum$y, pch=".")
-  }
-  Q <- quadscheme(dat, dum)
+  dum <- spokes(dat$x, dat$y, 5, 3, 0.7)
+  plot(dum)
+  Q <- quadscheme(dat, dum, method="dirichlet")
+  plot(Q, tiles=TRUE)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
