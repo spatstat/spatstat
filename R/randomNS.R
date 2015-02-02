@@ -127,10 +127,13 @@ rMatClust <- local({
   }
 
   rMatClust <- 
-  function(kappa, r, mu, win = owin(c(0,1),c(0,1)), nsim=1) {
+  function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1, saveLambda=FALSE, ...) {
     ## Matern Cluster Process with Poisson (mu) offspring distribution
-    stopifnot(is.numeric(r) && length(r) == 1 && r > 0)
-    result <- rNeymanScott(kappa, r, list(mu, rundisk), win, radius=r,
+      ## Catch old scale syntax (r)
+      if(missing(scale)) scale <- list(...)$r
+      check.1.real(scale)
+      stopifnot(scale > 0)
+    result <- rNeymanScott(kappa, scale, list(mu, rundisk), win, radius=scale,
                            nsim=nsim)  
     return(result)
   }
@@ -148,14 +151,17 @@ rThomas <- local({
 
   ## main function
   rThomas <-
-    function(kappa, sigma, mu, win = owin(c(0,1),c(0,1)), nsim=1) {
+    function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1, saveLambda=FALSE, ...) {
       ## Thomas process with Poisson(mu) number of offspring
       ## at isotropic Normal(0,sigma^2) displacements from parent
       ##
-      stopifnot(is.numeric(sigma) && length(sigma) == 1 && sigma > 0)
+      ## Catch old scale syntax (omega)
+      if(missing(scale)) scale <- list(...)$sigma
+      check.1.real(scale)
+      stopifnot(scale > 0)
 
-      result <- rNeymanScott(kappa, 4 * sigma, list(mu, gaus),
-                             win, sigma=sigma,
+      result <- rNeymanScott(kappa, 4 * scale, list(mu, gaus),
+                             win, sigma=scale,
                              nsim=nsim)  
       return(result)
     }
@@ -167,7 +173,7 @@ rThomas <- local({
 ## Neyman-Scott process with Cauchy kernel function
 ## ================================================
 
-## omega: scale parameter of Cauchy kernel function
+## scale / omega: scale parameter of Cauchy kernel function
 ## eta: scale parameter of Cauchy pair correlation function
 ## eta = 2 * omega
 
@@ -180,26 +186,30 @@ rCauchy <- local({
     return(sqrt(s) * V)
   }
 
-  ## threshold the kernel function in polar coordinate
-  kernthresh <- function(r, eta, eps) {
-    4 * (r/eta^2)/((1 + (2 * r/eta)^2)^(3/2)) - eps
+  ## Polar integrand of kernel, i.e. 2*pi*r*kernel (minus threshhold
+  ## eps relative to max of kernfun). Used to determine range of
+  ## cluster below
+  integrand <- function(r, scale, eps) {
+    kernel0 <- 1/(2*pi*scale^2)
+    r/(scale^2) *  (1 + (r / scale)^2)^(-3/2) - eps*kernel0
   }
   
   ## main function
-  rCauchy <- function (kappa, omega, mu, win = owin(), eps = 0.001, nsim=1) {
-
-    ## omega: scale parameter of Cauchy kernel function
+  rCauchy <- function (kappa, scale, mu, win = owin(), eps = 0.001, nsim=1, saveLambda=FALSE, ...) {
+    ## scale / omega: scale parameter of Cauchy kernel function
     ## eta: scale parameter of Cauchy pair correlation function
-    eta     <- 2 * omega
+
+    ## Catch old scale syntax (omega)
+    if(missing(scale)) scale <- list(...)$omega
     
     ## determine the maximum radius of clusters
-    rmax <- uniroot(kernthresh,
-                    lower = eta/2, upper = 5 * diameter(as.rectangle(win)),
-                    eta = eta, eps = eps)$root
+    rmax <- uniroot(integrand,
+                    lower = scale, upper = 5 * diameter(as.rectangle(win)),
+                    scale = scale, eps = eps)$root
     ## simulate
     result <- rNeymanScott(kappa, rmax,
                            list(mu, rnmix.invgam),
-                           win, rate = eta^2/8, nsim=nsim)
+                           win, rate = scale^2/2, nsim=nsim)
     ## correction from Abdollah: the rate is beta = omega^2 / 2 = eta^2 / 8.
     return(result)
   }
@@ -226,38 +236,48 @@ rVarGamma <- local({
     return(sqrt(s) * V)
   }
 
-  ## kernel function in polar coordinates
-  kernfun.old <- function(r, nu.ker, omega, eps) {
-    numer <- ((r/omega)^(nu.ker+1)) * besselK(r/omega, nu.ker)
-    denom <- (2^nu.ker) * omega * gamma(nu.ker + 1)
-    numer/denom - eps
-  }
-  kernfun <- function(r, nu.ker, omega, eps) {
-    numer <- ((r/omega)^nu.ker) * besselK(r/omega, nu.ker)
-    denom <- pi * (2^(nu.ker+1)) * omega^2 * gamma(nu.ker + 1)
-    numer/denom - eps
+  ## Polar integrand of kernel, i.e. 2*pi*r*kernel (minus threshhold
+  ## eps relative to max of kernfun). Used to determine range of
+  ## cluster below
+  integrand <- function(r, nu, scale, eps) {
+    kernel0 <- 1 / (pi * (2^(nu+1)) * scale^2 * gamma(nu + 1))
+    numer <- ((r/scale)^(nu+1)) * besselK(r/scale, nu)
+    numer[r==0] <- 0
+    denom <- (2^nu) * scale * gamma(nu + 1)
+    numer/denom - eps*kernel0
   }
   
   ## main function
-  rVarGamma <- function (kappa, nu.ker=NULL, omega, mu, win = owin(),
-                         eps = 0.001, nu.pcf=NULL, nsim=1) {
-    ## nu.ker: smoothness parameter of Variance Gamma kernel function
-    ## omega: scale parameter of kernel function
+  rVarGamma <- function (kappa, nu, scale, mu, win = owin(),
+                         eps = 0.001, nsim=1, saveLambda=FALSE, ...) {
+    ## nu / nu.ker: smoothness parameter of Variance Gamma kernel function
+    ## scale / omega: scale parameter of kernel function
 
-    nu.ker <- resolve.vargamma.shape(nu.ker=nu.ker, nu.pcf=nu.pcf)$nu.ker
+    ## Catch old nu.ker/nu.pcf syntax and resolve nu-value.
+    dots <- list(...)
+    if(missing(nu)){
+        nu <- resolve.vargamma.shape(nu.ker=dots$nu.ker, nu.pcf=dots$nu.pcf)$nu.ker
+    } else{
+        check.1.real(nu)
+        stopifnot(nu > -1/2)
+    }
+    ## Catch old scale syntax (omega)
+    if(missing(scale)) scale <- dots$omega
     
     ## determine the maximum radius of clusters
-    rmax <- uniroot(kernfun,
-                    lower = omega, upper = 5 * diameter(as.rectangle(win)),
-                    nu.ker = nu.ker, omega=omega, eps=eps)$root
+    rmax <- uniroot(integrand,
+                    lower = scale, upper = 5 * diameter(as.rectangle(win)),
+                    nu = nu, scale=scale, eps=eps)$root
     ## simulate
     result <- rNeymanScott(kappa, rmax,
                            list(mu, rnmix.gamma), win,
 ##                          WAS:  shape = 2 * (nu.ker + 1)
-                           shape = nu.ker + 1,
-                           rate = 1/(2 * omega^2),
+                           shape = nu + 1,
+                           rate = 1/(2 * scale^2),
                            nsim=nsim)
     return(result)
+    parents <- attr(result, "parents")
+    attr(result, "Lambda") <- clusterfield("VarGamma", parents, scale=scale, nu=nu, ...)
   }
 
   rVarGamma })

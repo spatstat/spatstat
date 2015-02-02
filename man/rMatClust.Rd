@@ -6,14 +6,15 @@
   \ifelse{latex}{\out{Mat\'ern}}{Matern} Cluster Process.
 }
 \usage{
- rMatClust(kappa, r, mu, win = owin(c(0,1),c(0,1)), nsim=1)
+ rMatClust(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1,
+saveLambda=FALSE, ...)
 }
 \arguments{
   \item{kappa}{
     Intensity of the Poisson process of cluster centres.
     A single positive number, a function, or a pixel image.
   }
-  \item{r}{
+  \item{scale}{
     Radius parameter of the clusters.
   }
   \item{mu}{
@@ -27,14 +28,22 @@
     or something acceptable to \code{\link{as.owin}}.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{saveLambda}{
+    Logical. If \code{TRUE} then the random intensity corresponding to
+    the simulated parent points will also be calculated and saved,
+    and returns as an attribute of the point pattern.
+  }
+  \item{\dots}{ignored.}
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
   or a list of point patterns if \code{nsim > 1}.
 
-  Additionally,  some intermediate results of the simulation are
-  returned as attributes of this point pattern.
-  See \code{\link{rNeymanScott}}.
+  Additionally, some intermediate results of the simulation are returned
+  as attributes of this point pattern (see
+  \code{\link{rNeymanScott}}). Furthermore, the simulated intensity
+  function is returned as an attribute \code{"Lambda"}, if
+  \code{saveLambda=TRUE}.
 }
 \details{
   This algorithm generates a realisation of
@@ -49,7 +58,7 @@
   the number of points per cluster being Poisson (\code{mu})
   distributed, and their
   positions being placed and uniformly inside
-  a disc of radius \code{r} centred on the parent point.
+  a disc of radius \code{scale} centred on the parent point.
   The resulting point pattern
   is a realisation of the classical
   \dQuote{stationary Matern cluster process}
@@ -71,13 +80,13 @@
     in the sense of Waagepetersen (2007).
     For a given parent point, the offspring constitute a Poisson process
     with intensity function equal to 
-    \code{mu/(pi * r^2)}
-    inside the disc of radius \code{r} centred on the parent
+    \code{mu/(pi * scale^2)}
+    inside the disc of radius \code{scale} centred on the parent
     point, and zero intensity outside this disc.
     Equivalently we first generate,
     for each parent point, a Poisson (\eqn{M}) random number of
     offspring (where \eqn{M} is the maximum value of \code{mu})
-    placed independently and uniformly in the disc of radius \code{r}
+    placed independently and uniformly in the disc of radius \code{scale}
     centred on the parent location, and then randomly thin the
     offspring points, with retention probability \code{mu/M}.
     \item
@@ -90,7 +99,7 @@
   \code{win} could have its parent point lying outside \code{win}.
   In order to allow this, the simulation algorithm
   first expands the original window \code{win}
-  by a distance \code{r} and generates the Poisson process of
+  by a distance \code{scale} and generates the Poisson process of
   parent points on this larger window. If \code{kappa} is a pixel image,
   its domain must contain this larger window.
 
@@ -98,11 +107,11 @@
   process is \code{kappa * mu}
   if either \code{kappa} or \code{mu} is a single number. In the general
   case the intensity is an integral involving \code{kappa}, \code{mu}
-  and \code{r}.
+  and \code{scale}.
 
   The \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process model
   with homogeneous parents (i.e. where \code{kappa} is a single number)
-  can be fitted to data using \code{\link{kppm}} or related functions.
+  can be fitted to data using \code{\link{kppm}}.
   Currently it is not possible to fit the
   \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process model
   with inhomogeneous parents.
@@ -112,9 +121,10 @@
   \code{\link{rThomas}},
   \code{\link{rGaussPoisson}},
   \code{\link{rNeymanScott}},
+  \code{\link{kppm}}.
+
   \code{\link{matclust.estK}},
   \code{\link{matclust.estpcf}},
-  \code{\link{kppm}}.
 }
 \examples{
  # homogeneous

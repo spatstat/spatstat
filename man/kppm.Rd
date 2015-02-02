@@ -54,9 +54,9 @@
 }
 \arguments{
   \item{X}{
-    A point pattern dataset (object of class \code{"ppp"}) to which the model
-    should be fitted, or a \code{formula} in the \R language
-    defining the model. See Details.
+    A point pattern dataset (object of class \code{"ppp"} or
+    \code{"quad"}) to which the model should be fitted, or a
+    \code{formula} in the \R language defining the model. See Details.
   }
   \item{trend}{
     An \R formula, with no left hand side,
@@ -140,8 +140,11 @@
   \code{clusters="Cauchy"} for the Neyman-Scott cluster process
   with Cauchy kernel,
   \code{clusters="VarGamma"} for the Neyman-Scott cluster process
-  with Variance Gamma kernel,
-  and \code{clusters="LGCP"} for the log-Gaussian Cox process.
+  with Variance Gamma kernel (requires an additional argument \code{nu}
+  to be passed through the dots; see \code{\link{rVarGamma}} for details),
+  and \code{clusters="LGCP"} for the log-Gaussian Cox process (may
+  require additional arguments passed through \code{\dots}; see
+  \code{\link{rLGCP}} for details on argument names).
   The first four models are Neyman-Scott cluster processes.
 
   The algorithm first estimates the intensity function
@@ -206,18 +209,8 @@
       as shown in the Examples.
 
       Additional arguments \code{\dots} will be passed to
-      the appropriate fitting function 
-      \code{\link{thomas.estK}} or
-      \code{\link{thomas.estpcf}} or
-      \code{\link{matclust.estK}} or
-      \code{\link{matclust.estpcf}} or
-      \code{\link{lgcp.estK}} or
-      \code{\link{lgcp.estpcf}} or
-      \code{\link{cauchy.estK}} or
-      \code{\link{cauchy.estpcf}} or
-      \code{\link{vargamma.estK}} or
-      \code{\link{vargamma.estpcf}}
-      to control the minimum contrast fitting algorithm.
+      \code{\link{mincontrast}} to control the minimum contrast fitting
+      algorithm.
     }
     \item{Composite likelihood:}{
       If \code{method = "clik2"} the clustering parameters of the
@@ -290,7 +283,10 @@
   \code{\link{Kmodel.kppm}},
   \code{\link{pcfmodel.kppm}}.
 
-  Minimum contrast fitting algorithms:
+  Minimum contrast fitting algorithm:
+  \code{\link{mincontrast}}.
+
+  Alternative fitting algorithms:
   \code{\link{thomas.estK}},
   \code{\link{matclust.estK}},
   \code{\link{lgcp.estK}},
@@ -301,7 +297,6 @@
   \code{\link{lgcp.estpcf}},
   \code{\link{cauchy.estpcf}},
   \code{\link{vargamma.estpcf}},
-  \code{\link{mincontrast}}.
 
   Summary statistics:
   \code{\link{Kest}},
@@ -345,10 +340,10 @@
   kppm(redwood ~ x, "MatClust", statistic="pcf", statargs=list(stoyan=0.2)) 
   kppm(redwood ~ 1, "LGCP", statistic="pcf")
   kppm(redwood ~ x, cluster="Cauchy", statistic="K")
-  kppm(redwood, cluster="VarGamma", nu.ker = 0.5, statistic="pcf")
+  kppm(redwood, cluster="VarGamma", nu = 0.5, statistic="pcf")
   if(require(RandomFields)) {
      kppm(redwood ~ x, "LGCP", statistic="pcf",
-           covmodel=list(model="matern", nu=0.3),
+           model="matern", nu=0.3,
            control=list(maxit=10))
   }
 

@@ -69,6 +69,7 @@ plot3Dpoints <- local({
 
   plot3Dpoints <- function(xyz, eye=c(2,-3,2), org=c(0,0,0),
                            ...,
+                           type=c("p", "n", "h"),
                            xlim=c(0,1), ylim=c(0,1), zlim=c(0,1),
                            add=FALSE, box=TRUE, 
                            main, cex=par('cex'), 
@@ -76,6 +77,7 @@ plot3Dpoints <- local({
                            box.front=list(col="blue", lwd=2)
                            ) {
     if(missing(main)) main <- short.deparse(substitute(xyz))
+    type <- match.arg(type)
     stopifnot(is.matrix(xyz) && ncol(xyz) == 3)
     if(nrow(xyz) > 0) {
       if(missing(xlim)) xlim <- range(pretty(xyz[,1]))
@@ -96,10 +98,24 @@ plot3Dpoints <- local({
                                   part="back"),
                              box.back,
                              list(...)))
-    uv <- project3Dhom(xyz, eye=eye, org=org)
-    uv <- as.data.frame(uv)
-    dord <- order(uv$d, decreasing=TRUE)
-    with(uv[dord, ,drop=FALSE], points(x/d, y/d, cex=cex * min(d)/d, ...))
+    if(type != "n") {
+      uv <- project3Dhom(xyz, eye=eye, org=org)
+      uv <- as.data.frame(uv)
+      dord <- order(uv$d, decreasing=TRUE)
+      uv <- uv[dord, , drop=FALSE]
+      if(type == "h") {
+        xy0 <- cbind(xyz[,1:2,drop=FALSE], zlim[1])
+        uv0 <- as.data.frame(project3Dhom(xy0, eye=eye, org=org))
+        uv0 <- uv0[dord, , drop=FALSE]
+        do.call.matched(segments,
+                        list(x0=with(uv0, x/d),
+                             y0=with(uv0, y/d),
+                             x1=with(uv,  x/d),
+                             y1=with(uv,  y/d),
+                             ...))
+      }
+      with(uv, points(x/d, y/d, cex=cex * min(d)/d, ...))
+    }
     do.call(plot3DboxPart,
             resolve.defaults(list(xlim=xlim,
                                   ylim=ylim,

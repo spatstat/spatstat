@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.9 $  $Date: 2015/02/01 07:44:48 $
+#'   $Revision: 1.10 $  $Date: 2015/02/01 11:36:57 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -184,8 +184,8 @@ nestsplit <- function(X, ...) {
   lev2 <- if(fax2) levels(sp2) else seq_len(sp2$n)
   if(!fax1 && !fax2) {
     ## two tessellations
-    marks(sp1) <- lev1
-    marks(sp2) <- lev2
+    marks(sp1) <- factor(lev1, levels=lev1)
+    marks(sp2) <- factor(lev2, levels=lev2)
     sp12 <- intersect.tess(sp1, sp2, keepmarks=TRUE)
     pats <- split(X, sp12)
     f1 <- marks(sp12)[,1]

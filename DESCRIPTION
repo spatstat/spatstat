@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.40-0.032
+Version: 1.40-0.034
 Nickname: Team Australia
-Date: 2015-02-01
+Date: 2015-02-02
 Title: Spatial Point Pattern Analysis, Model-fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

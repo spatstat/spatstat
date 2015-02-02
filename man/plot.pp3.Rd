@@ -8,7 +8,8 @@
   Plots a three-dimensional point pattern.
 }
 \usage{
- \method{plot}{pp3}(x, ..., eye=NULL, org=NULL, theta=25, phi=15)
+ \method{plot}{pp3}(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
+                    type=c("p", "n", "h"))
 }
 \arguments{
   \item{x}{
@@ -30,6 +31,11 @@
     Optional angular coordinates (in degrees) specifying the direction
     from which the scene is viewed: \code{theta} is the azimuth
     and \code{phi} is the colatitude. Ignored if \code{eye} is given.
+  }
+  \item{type}{
+    Type of plot: \code{type="p"} for points,
+    \code{type="h"} for points on vertical lines,
+    \code{type="n"} for box only.
   }
 }
 \details{

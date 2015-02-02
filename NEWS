@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.032
+	CHANGES IN spatstat VERSION 1.40-0.034
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
    o Tessellations may now have marks.
 
    o Nested splitting.
+
+   o Reorganised parametrisation of cluster models.
 
    o Improvements and bug fixes.
 
@@ -62,6 +64,14 @@ NEW FUNCTIONS
    New methods for 'pool' 
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o kppm
+   The parametrisation of cluster models has been reorganised.
+   The scale parameter is now always called 'scale'.
+   Results should be backward-compatible.
+   
+   o plot.kppm 
+   Also plots the cluster kernel.
 
    o density.ppp
    New argument 'se' allows calculation of standard errors as well.

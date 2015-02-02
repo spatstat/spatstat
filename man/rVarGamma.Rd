@@ -6,18 +6,18 @@
   Neyman-Scott process with Variance Gamma (Bessel) cluster kernel.
 }
 \usage{
- rVarGamma(kappa, nu.ker, omega, mu, win = owin(), 
-           eps = 0.001, nu.pcf=NULL, nsim=1)
+ rVarGamma(kappa, nu, scale, mu, win = owin(), 
+           eps = 0.001, nsim=1, saveLambda=FALSE, ...)
 }
 \arguments{
   \item{kappa}{
     Intensity of the Poisson process of cluster centres.
     A single positive number, a function, or a pixel image.
   }
-  \item{nu.ker}{
+  \item{nu}{
     Shape parameter for the cluster kernel. A number greater than -1.
   }
-  \item{omega}{
+  \item{scale}{
     Scale parameter for cluster kernel. Determines the size of clusters.
     A positive number in the same units as the spatial coordinates.
   }
@@ -35,18 +35,23 @@
     Threshold below which the values of the cluster kernel
     will be treated as zero for simulation purposes. 
   }
-  \item{nu.pcf}{
-    Alternative specifier of the shape parameter. See Details.
-  }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{saveLambda}{
+    Logical. If \code{TRUE} then the random intensity corresponding to
+    the simulated parent points will also be calculated and saved,
+    and returns as an attribute of the point pattern.
+  }
+  \item{\dots}{ignored.}
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
   or a list of point patterns if \code{nsim > 1}.
 
-  Additionally,  some intermediate results of the simulation are
-  returned as attributes of this point pattern.
-  See \code{\link{rNeymanScott}}.
+  Additionally, some intermediate results of the simulation are returned
+  as attributes of this point pattern (see
+  \code{\link{rNeymanScott}}). Furthermore, the simulated intensity
+  function is returned as an attribute \code{"Lambda"}, if
+  \code{saveLambda=TRUE}.
 }
 \details{
   This algorithm generates a realisation of the Neyman-Scott process
@@ -61,17 +66,11 @@
   according to a Variance Gamma kernel.
 
   The shape of the kernel is determined by the dimensionless
-  index \code{nu.ker}. This is the parameter
+  index \code{nu}. This is the parameter
   \eqn{\nu^\prime = \alpha/2-1}{nu' = alpha/2 - 1} appearing in
   equation (12) on page 126 of Jalilian et al (2013).
-  Instead of specifying \code{nu.ker} the user can specify
-  \code{nu.pcf} which is the parameter \eqn{\nu=\alpha-1}{nu = alpha-1}
-  appearing in equation (13), page 127 of Jalilian et al (2013).
-  These are related by \code{nu.pcf = 2 * nu.ker + 1}
-  and \code{nu.ker = (nu.pcf - 1)/2}.
-  Exactly one of \code{nu.ker} or \code{nu.pcf} must be specified.
 
-  The scale of the kernel is determined by the argument \code{omega},
+  The scale of the kernel is determined by the argument \code{scale},
   which is the parameter
   \eqn{\eta}{eta} appearing in equations (12) and (13) of
   Jalilian et al (2013). 
@@ -83,9 +82,8 @@
   Poisson process on the infinite plane.
 
   This model can be fitted to data by the method of minimum contrast,
-  using \code{\link{vargamma.estK}}, \code{\link{vargamma.estpcf}}
-  or \code{\link{kppm}}. It can also be fitted by maximum composite
-  likelihood using \code{\link{kppm}}.
+  maximum composite likelihood or Palm likelihood using
+  \code{\link{kppm}}.
   
   The algorithm can also generate spatially inhomogeneous versions of
   the cluster process:
@@ -111,9 +109,10 @@
 \seealso{
   \code{\link{rpoispp}},
   \code{\link{rNeymanScott}},
-  \code{\link{vargamma.estK}},
-  \code{\link{vargamma.estpcf}},
   \code{\link{kppm}}.
+
+  \code{\link{vargamma.estK}},
+  \code{\link{vargamma.estpcf}}.
 }
 \examples{
  # homogeneous

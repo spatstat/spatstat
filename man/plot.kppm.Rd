@@ -6,7 +6,7 @@
   displaying the fitted intensity and the fitted \eqn{K}-function.
 }
 \usage{
-  \method{plot}{kppm}(x, ..., what=c("intensity", "statistic"))
+  \method{plot}{kppm}(x, ..., what=c("intensity", "statistic", "cluster"))
 }
 \arguments{
   \item{x}{
@@ -36,23 +36,24 @@
 
   The choice of plots (and the order in which they are
   displayed) is controlled by the argument \code{what}.
-  The options (partially matched) are \code{"intensity"} and \code{"statistic"}.
+  The options (partially matched) are \code{"intensity"},
+  \code{"statistic"} and \code{"cluster"}.
 
   The option \code{what="intensity"} will be ignored if the
-  model is stationary.
+  model is stationary and the option \code{"statistic"} will be ignored
+  if the model hasn't been fitted by the minimum contrast method.
 }
 \value{
   Null.
 }
 \examples{
   data(redwood)
-  fit <- kppm(redwood, ~1, "Thomas")
+  fit <- kppm(redwood~1, "Thomas")
   plot(fit)
 }
 \seealso{
   \code{\link{kppm}},
   \code{\link{plot.ppm}},
-  \code{\link{plot.minconfit}}
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

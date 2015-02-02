@@ -1015,7 +1015,7 @@ Kpcf.kppm(model, what)
 killinteraction(model)
 km.rs.opt(o, cc, d, breaks, KM, RS)
 kppmComLik(X, Xname, po, clusters, control, weightfun, rmax, \dots)
-kppmMinCon(X, Xname, po, clusters, statistic, statargs, \dots)
+kppmMinCon(X, Xname, po, clusters, control, statistic, statargs, \dots)
 kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, \dots)
 \method{labels}{ppm}(object, \dots)
 least.common.multiple(n,m)
@@ -1172,7 +1172,7 @@ ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
 ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)
 plot3Dpoints(xyz, eye, org,
              \dots,
-             xlim, ylim, zlim,
+             type, xlim, ylim, zlim,
              add, box, main, cex, box.back, box.front)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)

@@ -296,8 +296,44 @@ printStatusList <- function(stats) {
 .Spatstat.ClusterModelInfoTable <- 
   list(
        Thomas=list(
-         ## Thomas process: par = (kappa, sigma2)
-         modelname = "Thomas process",
+         ## Thomas process: old par = (kappa, sigma2) (internally used everywhere)
+         ## Thomas process: new par = (kappa, scale) (officially recommended for input/output)
+         modelname = "Thomas process", # In modelname field of mincon fv obj.
+         descname = "Thomas process", # In desc field of mincon fv obj.
+         modelabbrev = "Thomas process", # In fitted obj.
+         printmodelname = function(...) "Thomas process", # Used by print.kppm
+         parnames = c("kappa", "sigma2"),
+         clustargsnames = NULL,
+         checkpar = function(par, old = TRUE){
+             if(any(par<=0))
+                 stop("par values must be positive.")
+             nam <- try(check.named.vector(par, c("kappa","sigma2")), silent = TRUE)
+             if(inherits(nam, "try-error")){
+                 check.named.vector(par, c("kappa","scale"))
+                 names(par)[2] <- "sigma2"
+                 par[2] <- par[2]^2
+             }
+             if(!old){
+                 names(par)[2] <- "scale"
+                 par[2] <- sqrt(par[2])
+             }
+             return(par)
+         },
+         checkclustargs = function(margs, old = TRUE) list(),
+         resolvedots = function(...){
+             ## resolve dots for kppm and friends allowing for old/new par syntax
+             dots <- list(...)
+             nam <- names(dots)
+             out <- list()
+             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             chk <- .Spatstat.ClusterModelInfoTable$Thomas$checkpar
+             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
+             return(out)
+         },
+         kernel = function(par, rvals, ...) {
+             scale <- sqrt(par[2])
+             dnorm(rvals, 0, scale)/sqrt(2*pi*scale^2)
+         },
          isPCP=TRUE,
          ## K-function
          K = function(par,rvals, ...){
@@ -328,8 +364,42 @@ printStatusList <- function(stats) {
          ),
        ## ...............................................
        MatClust=list(
-         ## Matern Cluster process: par = (kappa, R)
-         modelname = "Matern cluster process",
+         ## Matern Cluster process: old par = (kappa, R) (internally used everywhere)
+         ## Matern Cluster process: new par = (kappa, scale) (officially recommended for input/output)
+         modelname = "Matern cluster process", # In modelname field of mincon fv obj.
+         descname = "Matern cluster process", # In desc field of mincon fv obj.
+         modelabbrev = "Matern cluster process", # In fitted obj.
+         printmodelname = function(...) "Matern cluster process", # Used by print.kppm
+         parnames = c("kappa", "R"),
+         clustargsnames = NULL,
+         checkpar = function(par, old = TRUE){
+             if(any(par<=0))
+                 stop("par values must be positive.")
+             nam <- try(check.named.vector(par, c("kappa","R")), silent = TRUE)
+             if(inherits(nam, "try-error")){
+                 check.named.vector(par, c("kappa","scale"))
+                 names(par)[2] <- "R"
+             }
+             if(!old){
+                 names(par)[2] <- "scale"
+             }
+             return(par)
+         },
+         checkclustargs = function(margs, old = TRUE) list(),
+         resolvedots = function(...){
+             ## resolve dots for kppm and friends allowing for old/new par syntax
+             dots <- list(...)
+             nam <- names(dots)
+             out <- list()
+             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             chk <- .Spatstat.ClusterModelInfoTable$MatClust$checkpar
+             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
+             return(out)
+         },
+         kernel = function(par, rvals, ...) {
+             scale <- par[2]
+             ifelse(rvals>scale, 0, 1/(pi*scale^2))
+         },
          isPCP=TRUE,
          K = function(par,rvals, ..., funaux){
            if(any(par <= 0))
@@ -397,8 +467,44 @@ printStatusList <- function(stats) {
          ),
        ## ...............................................
        Cauchy=list(
-         ## Neyman-Scott with Cauchy clusters: par = (kappa, eta2)
-         modelname = "Neyman-Scott process with Cauchy kernel",
+         ## Neyman-Scott with Cauchy clusters: old par = (kappa, eta2) (internally used everywhere)
+         ## Neyman-Scott with Cauchy clusters: new par = (kappa, scale) (officially recommended for input/output)
+         modelname = "Neyman-Scott process with Cauchy kernel", # In modelname field of mincon fv obj.
+         descname = "Neyman-Scott process with Cauchy kernel", # In desc field of mincon fv obj.
+         modelabbrev = "Cauchy process", # In fitted obj.
+         printmodelname = function(...) "Cauchy process", # Used by print.kppm
+         parnames = c("kappa", "eta2"),
+         clustargsnames = NULL,
+         checkpar = function(par, old = TRUE){
+             if(any(par<=0))
+                 stop("par values must be positive.")
+             nam <- try(check.named.vector(par, c("kappa","eta2")), silent = TRUE)
+             if(inherits(nam, "try-error")){
+                 check.named.vector(par, c("kappa","scale"))
+                 names(par)[2] <- "eta2"
+                 par[2] <- (2*par[2])^2
+             }
+             if(!old){
+                 names(par)[2] <- "scale"
+                 par[2] <- sqrt(par[2])/2
+             }
+             return(par)
+         },
+         checkclustargs = function(margs, old = TRUE) list(),
+         resolvedots = function(...){
+             ## resolve dots for kppm and friends allowing for old/new par syntax
+             dots <- list(...)
+             nam <- names(dots)
+             out <- list()
+             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             chk <- .Spatstat.ClusterModelInfoTable$Cauchy$checkpar
+             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
+             return(out)
+         },
+         kernel = function(par, rvals, ...) {
+             scale <- sqrt(par[2])/2
+             1/(2*pi*scale^2)*((1 + (rvals/scale)^2)^(-3/2))
+         },
          isPCP=TRUE,
          K = function(par,rvals, ...){
            if(any(par <= 0))
@@ -426,8 +532,63 @@ printStatusList <- function(stats) {
          ),
        ## ...............................................
        VarGamma=list(
-         ## Neyman-Scott with VarianceGamma/Bessel clusters: par = (kappa, eta)
-         modelname = "Neyman-Scott process with Variance Gamma kernel",
+         ## Neyman-Scott with VarianceGamma/Bessel clusters: old par = (kappa, eta) (internally used everywhere)
+         ## Neyman-Scott with VarianceGamma/Bessel clusters: new par = (kappa, scale) (officially recommended for input/output)
+         modelname = "Neyman-Scott process with Variance Gamma kernel", # In modelname field of mincon fv obj.
+         descname = "Neyman-Scott process with Variance Gamma kernel", # In desc field of mincon fv obj.
+         modelabbrev = "Variance Gamma process", # In fitted obj.
+         printmodelname = function(obj){ # Used by print.kppm
+             paste0("Variance Gamma process (nu=",
+                    signif(obj$clustargs[["nu"]], 2), ")")
+         },
+         parnames = c("kappa", "eta"),
+         clustargsnames = "nu",
+         checkpar = function(par, old = TRUE){
+             if(any(par<=0))
+                 stop("par values must be positive.")
+             nam <- try(check.named.vector(par, c("kappa","eta")), silent = TRUE)
+             if(inherits(nam, "try-error")){
+                 check.named.vector(par, c("kappa","scale"))
+                 names(par)[2] <- "eta"
+             }
+             if(!old) names(par)[2] <- "scale"
+             return(par)
+         },
+         checkclustargs = function(margs, old = TRUE){
+             if(!old)
+                 margs <- list(nu=margs$nu.ker)
+             return(margs)
+         },
+         resolvedots = function(...){
+             ## resolve dots for kppm and friends allowing for old/new par syntax
+             dots <- list(...)
+             nam <- names(dots)
+             out <- list()
+             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             chk <- .Spatstat.ClusterModelInfoTable$VarGamma$checkpar
+             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
+             nu <- dots$nu
+             if(is.null(nu)){
+                 nu <- try(resolve.vargamma.shape(nu.ker=dots$nu.ker, nu.pcf=dots$nu.pcf)$nu.ker)
+                 if(inherits(nu, "try-error"))
+                     nu <- -1/4
+             } else{
+                 check.1.real(nu)
+                 stopifnot(nu > -1/2)
+             }
+             out$margs <- list(nu.ker=nu, nu.pcf=2*nu+1)
+             out$covmodel <- list(type="Kernel", model="VarGamma", margs=out$margs)
+             return(out)
+         },
+         ## kernel function in polar coordinates (no angular argument).
+         kernel = function(par, rvals, ..., margs) {
+             scale <- par[2]
+             nu <- margs$nu.ker
+             numer <- ((rvals/scale)^nu) * besselK(rvals/scale, nu)
+             numer[rvals==0] <- 1
+             denom <- pi * (2^(nu+1)) * scale^2 * gamma(nu + 1)
+             numer/denom
+         },
          isPCP=TRUE,
          K = local({
            ## K function requires integration of pair correlation
@@ -495,8 +656,60 @@ printStatusList <- function(stats) {
          ),
        ## ...............................................
        LGCP=list(
-         ## Log Gaussian Cox process: par = (sigma2, alpha)
-         modelname = "Log-Gaussian Cox process",
+         ## Log Gaussian Cox process: old par = (sigma2, alpha) (internally used everywhere)
+         ## Log Gaussian Cox process: new par = (var, scale) (officially recommended for input/output)
+         modelname = "Log-Gaussian Cox process", # In modelname field of mincon fv obj.
+         descname = "LGCP", # In desc field of mincon fv obj.
+         modelabbrev = "log-Gaussian Cox process", # In fitted obj.
+         printmodelname = function(...) "log-Gaussian Cox process", # Used by print.kppm
+         parnames = c("sigma2", "alpha"),
+         checkpar = function(par, old = TRUE){
+             if(any(par<=0))
+                 stop("par values must be positive.")
+             nam <- try(check.named.vector(par, c("sigma2","alpha")), silent = TRUE)
+             if(inherits(nam, "try-error")){
+                 check.named.vector(par, c("var","scale"))
+                 names(par) <- c("sigma2", "alpha")
+             }
+             if(!old) names(par) <- c("var", "scale")
+             return(par)
+         },
+         checkclustargs = function(margs, old = TRUE) return(margs),
+         resolvedots = function(...){
+             ## resolve dots for kppm and friends allowing for old/new par syntax
+             dots <- list(...)
+             nam <- names(dots)
+             out <- list()
+             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             chk <- .Spatstat.ClusterModelInfoTable$LGCP$checkpar
+             if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
+             cmod <- dots$covmodel
+             model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
+             margs <- NULL
+             if(model != "exponential") {
+                 if(!require(RandomFields))
+                     stop("The package RandomFields is required")
+                 ## get the 'model generator' 
+                 modgen <- mget(paste0("RM", model), inherits=TRUE,
+                                ifnotfound=list(NULL))[[1]]
+                 if(is.null(modgen) || !inherits(modgen, "RMmodelgenerator"))
+                     stop(paste("Model", sQuote(model), "is not recognised"))
+                 attr(model, "modgen") <- modgen
+                 if(is.null(cmod)){
+                     margsnam <- names(formals(modgen))
+                     margsnam <- margsnam[!(margsnam %in% c("var", "scale"))]
+                     margs <- dots[nam %in% margsnam]
+                 } else{
+                     margs <- cmod[names(cmod)!="model"]
+                 }
+             }
+             if(length(margs)==0)
+                 margs <- NULL
+             out$margs <- margs
+             out$model <- model
+             out$covmodel <- list(type="Covariance", model=model, margs=margs)
+             return(out)
+         },
          isPCP=FALSE,
          ## calls relevant covariance function from RandomFields package
          K = function(par, rvals, ..., model, margs) {

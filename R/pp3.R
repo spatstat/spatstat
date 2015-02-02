@@ -144,8 +144,10 @@ print.summary.pp3 <- function(x, ...) {
   invisible(NULL)
 }
 
-plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15) {
+plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
+                     type=c("p", "n", "h")) {
   xname <- short.deparse(substitute(x))
+  type <- match.arg(type)
   coo <- as.matrix(coords(x))
   xlim <- x$domain$xrange
   ylim <- x$domain$yrange
@@ -160,7 +162,7 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15) {
   deefolts <- spatstat.options('par.pp3')
   ## determine default eye position and centre of view
   do.call(plot3Dpoints,
-          resolve.defaults(list(xyz=coo, eye=eye, org=org),
+          resolve.defaults(list(xyz=coo, eye=eye, org=org, type=type),
                            list(...),
                            deefolts,
                            list(main=xname,
