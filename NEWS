@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.030
+	CHANGES IN spatstat VERSION 1.40-0.032
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
    o Test for segregation.
 
    o Tessellations may now have marks.
+
+   o Nested splitting.
 
    o Improvements and bug fixes.
 
@@ -46,9 +48,12 @@ NEW FUNCTIONS
    o marks.tess, marks<-.tess, unmark.tess:
    Extract or change the marks associated with the tiles of a tessellation.
 
-   o quantess, quantsplit
+   o quantess
    Quantile tessellation: divide space into pieces which contain
    equal amounts of 'stuff'.
+
+   o nestsplit
+   Nested split
 
    o as.function.im
    Convert a pixel image to a function(x,y).
@@ -102,6 +107,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.pp3
    Now respects options('width')
 
+   o print.owin, print.im, print.summary.owin, print.summary.im
+   Now respect options('width').
+
    o nnmean
    Now yields a vector, instead of a 1-column matrix,
    when there is only a single column of marks.
@@ -138,6 +146,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o diagnose.ppm
    New arguments xlab, ylab, rlab control labels in the 4-panel plot.
+   The confusing default value for 'compute.sd' has been changed.
 
    o plot.hyperframe
    New argument 'mar' 

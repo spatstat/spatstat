@@ -3,12 +3,13 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.35 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.37 $ $Date: 2015/02/01 08:27:07 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
                                 sigma=NULL,
-                                rbord = reach(object), compute.sd=TRUE,
+                                rbord = reach(object),
+                                compute.sd=is.poisson(object),
                                 compute.cts=TRUE,
                                 envelope=FALSE, nsim=39, nrank=1,
                                 rv=NULL, oldstyle=FALSE,
@@ -208,7 +209,7 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                          sigma=NULL, 
                          rbord = reach(object), cumulative=TRUE,
                          plot.it = TRUE, rv = NULL, 
-                         compute.sd=TRUE, compute.cts=TRUE,
+                         compute.sd=is.poisson(object), compute.cts=TRUE,
                          envelope=FALSE, nsim=39, nrank=1,
                          typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
                          splineargs=list(spar=0.5))
@@ -318,7 +319,7 @@ plot.diagppm <-
   function(x, ..., which,
            plot.neg=c("image", "discrete", "contour", "imagecontour"),
            plot.smooth=c("imagecontour", "image", "contour", "persp"),
-           plot.sd=TRUE, spacing=0.1,
+           plot.sd, spacing=0.1,
            srange=NULL, monochrome=FALSE, main=NULL)
 {
   opt <- x$opt
@@ -349,9 +350,10 @@ plot.diagppm <-
     opt <- newopt
   }
 
-  if(!(x$compute.sd) && plot.sd) {
-    if(!missing(plot.sd))
-      warning("can't plot standard deviations; they were not computed")
+  if(missing(plot.sd)) {
+    plot.sd <- x$compute.sd
+  } else if(plot.sd && !(x$compute.sd)) {
+    warning("can't plot standard deviations; they were not computed")
     plot.sd <- FALSE
   }
 

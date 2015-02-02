@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.24 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.25 $ $Date: 2015/02/01 01:24:58 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -62,7 +62,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
       splittype <- "factor"
     } else 
       stop(paste("f must be",
-                 "a factor, a tessellation, an image,",
+                 "a factor, a tessellation, a window, an image,",
                  "or the name of a column of marks"))
     if(length(f) != npoints(x))
       stop("length(f) must equal the number of points in x")
@@ -104,6 +104,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
   }
   class(out) <- c("splitppp", class(out))
   attr(out, "fsplit") <- fsplit
+  attr(out, "fgroup") <- f
   return(out)
 }
 

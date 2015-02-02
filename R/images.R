@@ -89,11 +89,6 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
 
   unitname <- as.units(unitname)
 
-  # get rid of those annoying 8.67e-19 printouts
-  swat <- function(x) {ifelseAX(abs(x) < .Machine$double.eps, 0, x)}
-  xrange <- swat(xrange)
-  yrange <- swat(yrange)
-  
   out <- list(v   = mat,
               dim = c(nr, nc),
               xrange   = xrange,

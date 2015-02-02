@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.63 $ $Date: 2015/01/31 14:21:17 $
+#   $Revision: 1.65 $ $Date: 2015/02/01 07:44:56 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE) {
@@ -564,29 +564,37 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
         colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
       }
       if(gotXmarks || gotYmarks) {
-        XYmarks <- if(gotXmarks && gotYmarks) cbind(Xmarks, Ymarks) else
-                   if(gotXmarks) Xmarks else Ymarks
-        marx <- XYmarks[integer(0), , drop=FALSE]
+        marx <- if(gotXmarks && gotYmarks) {
+          cbind(Xmarks[integer(0), , drop=FALSE],
+                Ymarks[integer(0), , drop=FALSE])
+        } else if(gotXmarks) {
+          Xmarks[integer(0), , drop=FALSE]
+        } else {
+          Ymarks[integer(0), , drop=FALSE]
+        }
       } else keepmarks <- FALSE
     }
     for(i in seq_along(Xtiles)) {
       Xi <- Xtiles[[i]]
       Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
       isempty <- unlist(lapply(Ti, function(x) { is.null(x) || is.empty(x)}))
-      Ti <- Ti[!isempty]
-      names(Ti) <- paste(namesX[i], namesY[!isempty], sep="x")
-      Ztiles <- append(Ztiles, Ti)
-      if(keepmarks) {
-        extra <- if(gotXmarks && gotYmarks) {
-          data.frame(X=Xmarks[i, ,drop=FALSE],
-                     Y=Ymarks[!isempty, ,drop=FALSE],
-                     row.names=NULL)
-        } else if(gotYmarks) {
-          Ymarks[!isempty, ,drop=FALSE]
-        } else {
-          Xmarks[rep(i, sum(!isempty)), ,drop=FALSE]
+      nonempty <- !isempty
+      if(any(nonempty)) {
+        Ti <- Ti[nonempty]
+        names(Ti) <- paste(namesX[i], namesY[nonempty], sep="x")
+        Ztiles <- append(Ztiles, Ti)
+        if(keepmarks) {
+          extra <- if(gotXmarks && gotYmarks) {
+            data.frame(X=Xmarks[i, ,drop=FALSE],
+                       Y=Ymarks[nonempty, ,drop=FALSE],
+                       row.names=NULL)
+          } else if(gotYmarks) {
+            Ymarks[nonempty, ,drop=FALSE]
+          } else {
+            Xmarks[rep(i, sum(nonempty)), ,drop=FALSE]
+          }
+          marx <- rbind(marx, extra)
         }
-        marx <- rbind(marx, extra)
       }
     }
     Xwin <- as.owin(X)

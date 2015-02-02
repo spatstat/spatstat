@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.156 $	$Date: 2014/11/10 05:38:43 $
+#	$Revision: 4.157 $	$Date: 2015/02/01 04:12:14 $
 #
 #
 #	A window may be either
@@ -891,25 +891,24 @@ print.owin <- function(x, ...) {
            rectname <- "window: rectangle ="
          },
          polygonal={
-           cat("window:", "polygonal", "boundary", fill=TRUE)
+           splat("window: polygonal boundary")
            if(length(x$bdry) == 0)
-             cat("window is empty\n")
+             splat("window is empty")
            rectname <- "enclosing rectangle:"
          },
          mask={
-           cat("window: binary", "image mask", fill=TRUE)
+           splat("window: binary image mask")
            di <- x$dim
-           cat(di[1], "x", di[2], "pixel array (ny, nx)", fill=TRUE)
+           splat(di[1], "x", di[2], "pixel array (ny, nx)")
            rectname <- "enclosing rectangle:"
          }
          )
-  cat(rectname,
-      prange(zapsmall(x$xrange)),
-      "x",
-      prange(zapsmall(x$yrange)),
-      unitinfo$plural,
-      unitinfo$explain,
-      fill=TRUE)
+  splat(rectname,
+        prange(zapsmall(x$xrange)),
+        "x",
+        prange(zapsmall(x$yrange)),
+        unitinfo$plural,
+        unitinfo$explain)
   invisible(NULL)
 }
 
@@ -959,20 +958,18 @@ print.summary.owin <- function(x, ...) {
          },
          polygonal={
            np <- x$npoly
-           cat("Window:", "polygonal", "boundary", fill=TRUE)
+           splat("Window: polygonal boundary")
            if(np == 0) {
-             cat("window is empty\n")
+             splat("window is empty")
            } else if(np == 1) {
-             cat("single connected", "closed polygon",
-                 "with",
-                 x$nvertices, 
-                 "vertices", fill=TRUE)
+             splat("single connected closed polygon with",
+                   x$nvertices, "vertices")
            } else {
              nh <- x$nhole
              holy <- if(nh == 0) "(no holes)" else
                      if(nh == 1) "(1 hole)" else
                      paren(paste(nh, "holes"))
-             cat(np, "separate polygons", holy, fill=TRUE)
+             splat(np, "separate polygons", holy)
              if(np > 0)
                print(data.frame(vertices=x$nvertices,
                                 area=signif(x$areas, 6),
@@ -985,27 +982,25 @@ print.summary.owin <- function(x, ...) {
            rectname <- "enclosing rectangle:"
          },
          mask={
-           cat("binary image mask\n")
+           splat("binary image mask")
            di <- x$npixels
-           cat(paste(di[1], "x", di[2], "pixel array (ny, nx)\n"))
-           cat(paste("pixel size:",
-                     signif(x$xstep,3), "by", signif(x$ystep,3),
-                     pluralunits, "\n"))
+           splat(di[1], "x", di[2], "pixel array (ny, nx)")
+           splat("pixel size:",
+                 signif(x$xstep,3), "by", signif(x$ystep,3),
+                 pluralunits)
            rectname <- "enclosing rectangle:"
          }
          )
-  cat(rectname,
-      prange(zapsmall(x$xrange)),
-      "x",
-      prange(zapsmall(x$yrange)),
-      pluralunits, 
-      fill=TRUE)
+  splat(rectname,
+        prange(zapsmall(x$xrange)),
+        "x",
+        prange(zapsmall(x$yrange)),
+        pluralunits)
   Area <- signif(x$area, 6)
-  cat("Window area =", Area, "square",
-      if(Area == 1) singularunits else pluralunits,
-      fill=TRUE)
+  splat("Window area =", Area, "square",
+        if(Area == 1) singularunits else pluralunits)
   if(!is.null(ledge <- unitinfo$legend))
-    cat(ledge, "\n")
+    splat(ledge)
   return(invisible(x))
 }
 

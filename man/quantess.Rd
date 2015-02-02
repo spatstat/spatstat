@@ -1,5 +1,4 @@
 \name{quantess}
-\alias{quantsplit}
 \alias{quantess}
 \alias{quantess.owin}
 \alias{quantess.ppp}
@@ -10,8 +9,6 @@
 }
 \usage{
 quantess(M, Z, n, \dots)
-
-quantsplit(M, Z, n, \dots)
 
 \method{quantess}{owin}(M, Z, n, \dots)
 
@@ -46,11 +43,9 @@ quantsplit(M, Z, n, \dots)
   A \emph{quantile tessellation} is a division of space into
   pieces which contain equal amounts of stuff.
 
-  The functions \code{quantess} and \code{quantsplit}
-  both compute a quantile tessellation;
-  \code{quantess} returns the tessellation itself, while
-  \code{quantsplit} splits the data \code{M} according to this tessellation.
-  
+  The function \code{quantess} 
+  computes a quantile tessellation and 
+  returns the tessellation itself.  
   The function \code{quantess} is generic, with methods for
   windows (class \code{"owin"}), point patterns (\code{"ppp"})
   and pixel images (\code{"im"}). 
@@ -75,17 +70,13 @@ quantsplit(M, Z, n, \dots)
 
   The result of \code{quantess} is a tessellation of \code{as.owin(M)}
   determined by the quantiles of \code{Z}.
-  The result of \code{quantsplit} is a list of spatial objects
-  obtained by splitting \code{M} according to the quantile tessellation.
 }
 \value{
-  The result of \code{quantess} is a
-  tessellation (object of class \code{"tess"}).
-
-  The result of \code{quantsplit} is a list (of class \code{"solist"})
-  of objects of the same type as \code{M}.
+  A tessellation (object of class \code{"tess"}).
 }
 \author{
+  Original idea by Ute Hahn.
+  Implemented in \code{spatstat} by
 Adrian Baddeley
 \email{Adrian.Baddeley@uwa.edu.au}
 \url{http://www.maths.uwa.edu.au/~adrian/}
@@ -93,7 +84,6 @@ Rolf Turner
 \email{r.turner@auckland.ac.nz}
 and Ege Rubak
 \email{rubak@math.aau.dk}.
-Based on work by Ute Hahn.
 }
 \seealso{
   \code{\link{tess}}, \code{\link{quadrats}}, \code{\link{quantile}},

@@ -12,7 +12,7 @@
   diagnose.ppm(object, \dots, type="raw", which="all", sigma=NULL, 
                rbord=reach(object), cumulative=TRUE,
                plot.it=TRUE, rv = NULL,
-               compute.sd=TRUE, compute.cts=TRUE,
+               compute.sd=is.poisson(object), compute.cts=TRUE,
                envelope=FALSE, nsim=39, nrank=1,
                typename, check=TRUE, repair=TRUE,
                oldstyle=FALSE, splineargs=list(spar=0.5))
@@ -20,7 +20,7 @@
   \method{plot}{diagppm}(x, \dots, which, 
                plot.neg=c("image", "discrete", "contour", "imagecontour"),
                plot.smooth=c("imagecontour", "image", "contour", "persp"),
-               plot.sd=TRUE, spacing=0.1,
+               plot.sd, spacing=0.1,
                srange=NULL, monochrome=FALSE, main=NULL)
 }
 \arguments{
