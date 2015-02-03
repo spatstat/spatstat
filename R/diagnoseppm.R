@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.37 $ $Date: 2015/02/01 08:27:07 $
+# $Revision: 1.38 $ $Date: 2015/02/03 00:32:59 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -319,7 +319,7 @@ plot.diagppm <-
   function(x, ..., which,
            plot.neg=c("image", "discrete", "contour", "imagecontour"),
            plot.smooth=c("imagecontour", "image", "contour", "persp"),
-           plot.sd, spacing=0.1,
+           plot.sd, spacing=0.1, outer=3, 
            srange=NULL, monochrome=FALSE, main=NULL)
 {
   opt <- x$opt
@@ -364,9 +364,14 @@ plot.diagppm <-
   }
   
   if(opt$all) 
-    resid4plot(x, plot.neg, plot.smooth, spacing, srange,monochrome, main, ...)
+    resid4plot(RES=x,
+               plot.neg=plot.neg, plot.smooth=plot.smooth,
+               spacing=spacing, outer=outer,
+               srange=srange, monochrome=monochrome, main=main, ...)
   else
-    resid1plot(x, opt, plot.neg, plot.smooth, srange, monochrome, main, ...)
+    resid1plot(RES=x, opt=opt,
+               plot.neg=plot.neg, plot.smooth=plot.smooth,
+               srange=srange, monochrome=monochrome, main=main, ...)
 }
 
 

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.034
+	CHANGES IN spatstat VERSION 1.40-0.036
 
 OVERVIEW
 
@@ -155,7 +155,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New option 'par.points3d' sets default arguments for plot.pp3. 
 
    o diagnose.ppm
-   New arguments xlab, ylab, rlab control labels in the 4-panel plot.
+   New arguments 'xlab', 'ylab', 'rlab' determine the labels
+   in the 4-panel plot, and new argument 'outer' controls their position.
    The confusing default value for 'compute.sd' has been changed.
 
    o plot.hyperframe
@@ -220,6 +221,10 @@ BUG FIXES
 
    o Kest
    Crashed if ratio=TRUE and the window was a rectangle.
+   Fixed.
+
+   o plot.diagppm
+   Ignored add=TRUE in some cases.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0

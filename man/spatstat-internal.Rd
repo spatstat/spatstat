@@ -1334,7 +1334,7 @@ reconcile.fv(\dots)
 repair.old.factor.image(x)
 reincarnate.interact(object)
 resid4plot(RES, plot.neg, plot.smooth,
-           spacing, srange, monochrome, main,
+           spacing, outer, srange, monochrome, main,
            xlab, ylab, rlab, \dots)
 resid1plot(RES, opt, plot.neg, plot.smooth,
               srange, monochrome, main,

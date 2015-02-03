@@ -20,7 +20,7 @@
   \method{plot}{diagppm}(x, \dots, which, 
                plot.neg=c("image", "discrete", "contour", "imagecontour"),
                plot.smooth=c("imagecontour", "image", "contour", "persp"),
-               plot.sd, spacing=0.1,
+               plot.sd, spacing=0.1, outer=3,
                srange=NULL, monochrome=FALSE, main=NULL)
 }
 \arguments{
@@ -94,6 +94,10 @@
     The spacing between plot panels (when a four-panel plot
     is generated) expressed as a fraction of the width of the
     window of the point pattern.
+  }
+  \item{outer}{
+    The distance from the outermost line of text to the nearest plot
+    panel, expressed as a multiple of the spacing between plot panels.
   }
   \item{srange}{
     Vector of length 2 that will be taken as giving the range of values

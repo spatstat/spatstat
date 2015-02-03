@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.53 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.54 $	$Date: 2015/02/03 05:52:34 $
 #
 #
 #
@@ -56,7 +56,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
     # new plot
     # allow space for main title
     if(nlines > 0) {
-      guesslinespace <- 0.1 * diff(yr) * cex.main.absol
+      guesslinespace <- 0.07 * sqrt(diff(xr)^2 + diff(yr)^2) * cex.main.absol
       added <- (nlines + 1) * guesslinespace
       ylim[2] <- ylim[2] + added
     }
