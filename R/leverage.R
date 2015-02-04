@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.45 $  $Date: 2014/10/07 05:01:05 $
+#  $Revision: 1.46 $  $Date: 2015/02/04 08:49:01 $
 #
 
 leverage <- function(model, ...) {
@@ -223,6 +223,14 @@ ppmInfluence <- function(fit,
     # effect of addition/deletion of U[j] on score contribution from data points
     ddSX <- ddS[isdata, , , drop=FALSE]
     eff.data <- apply(ddSX, c(2,3), sum)
+    # check whether any quadrature points have zero conditional intensity
+    zerocif <- rep(TRUE, nrow(eff.data))
+    if(any(theta > 0)) 
+      zerocif <- apply(eff.data[, theta > 0, drop=FALSE] != -Inf, 1, any)
+    if(any(theta < 0)) 
+      zerocif <- zerocif &
+        apply(eff.data[, theta < 0, drop=FALSE] != Inf, 1, any)
+    eff.data[zerocif, ] <- 0
     # model matrix after addition/deletion of each U[j]
     # mombefore[i,j,] <- mom[i,]
     di <- dim(ddS)
@@ -236,6 +244,8 @@ ppmInfluence <- function(fit,
     lamratio <- array(lamratio, dim=dim(momafter))
     # integrate 
     ddSintegrand <- lam * (momafter * lamratio - mombefore)
+    ddSintegrand[zerocif,,] <- 0
+    ddSintegrand[,zerocif,] <- 0
     eff.back <- changesign * tensor::tensor(ddSintegrand, w, 1, 1)
     # total
     eff <- eff + eff.data - eff.back
@@ -274,6 +284,7 @@ ppmInfluence <- function(fit,
     # values of leverage (diagonal) at points of 'loc'
     h <- b * lam
     levval <- loc %mark% h
+    levval <- levval[is.finite(h)]
     levsmo <- Smooth(levval, sigma=maxnndist(loc))
     # nominal mean level
     a <- area(loc$window)
@@ -297,14 +308,16 @@ ppmInfluence <- function(fit,
              dis <- con <- matrix(0, nloc, ncol(mom))
              for(i in seq(nloc)) {
                vexi <- vex[,i, drop=FALSE]
-               dis[i, ] <- isdata[i] * vexi
+               dis[i, ] <- if(isdata[i]) vexi else 0
                con[i, ] <- - lam[i] * vexi
              }
            },
            C = {
              tvex <- t(vex)
-             dis <- isdata * tvex
+             dis <- tvex
+             dis[!isdata,] <- 0
              con <- - lam  * tvex
+             con[lam == 0,] <- 0
            })
     colnames(dis) <- colnames(con) <- colnames(mom)
     result$dfbetas <- msr(Q, dis[isdata, ], con)

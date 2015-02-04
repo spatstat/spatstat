@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.037
+	CHANGES IN spatstat VERSION 1.40-0.038
 
 OVERVIEW
 
@@ -96,6 +96,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o pixellate.psp
    Can now count the number of segments that intersect each pixel, 
    instead of the total length of intersection.
+
+   o tess
+   New argument 'marks' allows marks to be associated with tiles.
 
    o anova.lppm
    Outdated argument 'override' has been removed.
@@ -207,6 +210,12 @@ BUG FIXES
 
    o rSSI
    Crashed if nsim > 1.
+   Fixed.
+
+   o influence.ppm, leverage.ppm, dfbetas.ppm
+   Crashed or issued a warning if any quadrature points had 
+   conditional intensity zero under the model (negative infinite values
+   of the sufficient statistic).
    Fixed.
 
    o clickppp, clickpoly
