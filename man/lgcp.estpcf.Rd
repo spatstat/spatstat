@@ -9,7 +9,7 @@
 }
 \usage{
 lgcp.estpcf(X,
-            startpar=c(sigma2=1,alpha=1),
+            startpar=c(var=1,scale=1),
             covmodel=list(model="exponential"),
             lambda=NULL,
             q = 1/4, p = 2, rmin = NULL, rmax = NULL, ..., pcfargs=list())
@@ -175,7 +175,8 @@ lgcp.estpcf(X,
   }
 }
 \references{
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J, Syversveen, A. and Waagepetersen, R. (1998)
+  \ifelse{latex}{\out{M\o ller}}{Moller}, J.,
+  Syversveen, A. and Waagepetersen, R. (1998)
   Log Gaussian Cox Processes.
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
   
@@ -191,10 +192,11 @@ lgcp.estpcf(X,
 \author{
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
+  \url{http://www.maths.uwa.edu.au/~adrian/}
   with modifications by Shen Guochun and 
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}
+  and Ege Rubak.
 }
 \seealso{
   \code{\link{lgcp.estK}} for alternative method of fitting LGCP.
@@ -213,7 +215,7 @@ lgcp.estpcf(X,
 }
 \examples{
     data(redwood)
-    u <- lgcp.estpcf(redwood, c(sigma2=0.1, alpha=1))
+    u <- lgcp.estpcf(redwood, c(var=1, scale=0.1))
     u
     plot(u)
     if(require(RandomFields)) {

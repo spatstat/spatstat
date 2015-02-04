@@ -7,8 +7,8 @@
   using the pair correlation function.
 }
 \usage{
-vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
-            q = 1/4, p = 2, rmin = NULL, rmax = NULL, nu.pcf=NULL,
+vargamma.estpcf(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
+            q = 1/4, p = 2, rmin = NULL, rmax = NULL,
             ..., pcfargs = list())
 }
 \arguments{
@@ -20,7 +20,7 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   \item{startpar}{
     Vector of starting values for the parameters of the model.
   }
-  \item{nu.ker}{
+  \item{nu}{
     Numerical value controlling the shape of the tail of the clusters.
     A number greater than \code{-1/2}.
   }
@@ -32,9 +32,6 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   }
   \item{rmin, rmax}{
     Optional. The interval of \eqn{r} values for the contrast criterion.
-  }
-  \item{nu.pcf}{
-    Alternative specification of the shape parameter. See Details.
   }
   \item{\dots}{
     Optional arguments passed to \code{\link[stats]{optim}}
@@ -88,15 +85,17 @@ vargamma.estpcf(X, startpar=c(kappa=1,eta=1), nu.ker = -1/4, lambda=NULL,
   have a common distribution described in Jalilian et al (2013).
 
   The shape of the kernel is determined by the dimensionless
-  index \code{nu.ker}. This is the parameter
+  index \code{nu}. This is the parameter
   \eqn{\nu^\prime = \alpha/2-1}{nu' = alpha/2 - 1} appearing in
   equation (12) on page 126 of Jalilian et al (2013).
-  Instead of specifying \code{nu.ker} the user can specify
+  In previous versions of spatstat instead of specifying \code{nu}
+  (called \code{nu.ker} at that time) the user could specify
   \code{nu.pcf} which is the parameter \eqn{\nu=\alpha-1}{nu = alpha-1}
   appearing in equation (13), page 127 of Jalilian et al (2013).
   These are related by \code{nu.pcf = 2 * nu.ker + 1}
-  and \code{nu.ker = (nu.pcf - 1)/2}.
-  Exactly one of \code{nu.ker} or \code{nu.pcf} must be specified.
+  and \code{nu.ker = (nu.pcf - 1)/2}. This syntax is still supported but
+  not recommended for consistency across the package. In that case
+  exactly one of \code{nu.ker} or \code{nu.pcf} must be specified.
   
   If the argument \code{lambda} is provided, then this is used
   as the value of the point process intensity \eqn{\lambda}{lambda}.

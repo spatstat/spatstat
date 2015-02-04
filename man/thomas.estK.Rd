@@ -6,7 +6,7 @@
   Minimum Contrast using the K function.
 }
 \usage{
-thomas.estK(X, startpar=c(kappa=1,sigma2=1), lambda=NULL,
+thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
             q = 1/4, p = 2, rmin = NULL, rmax = NULL, ...)
 }
 \arguments{
@@ -61,15 +61,20 @@ thomas.estK(X, startpar=c(kappa=1,sigma2=1), lambda=NULL,
   For a more detailed explanation of the Method of Minimum Contrast,
   see \code{\link{mincontrast}}.
   
-  The Thomas point process is described in \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen
-  (2003, pp. 61--62). It is a cluster process formed by taking a 
-  pattern of parent points, generated according to a Poisson process
-  with intensity \eqn{\kappa}{kappa}, and around each parent point,
-  generating a random number of offspring points, such that the
-  number of offspring of each parent is a Poisson random variable with mean
-  \eqn{\mu}{mu}, and the locations of the offspring points of one parent
-  are independent and isotropically Normally distributed around the parent
-  point with standard deviation \eqn{\sigma}{sigma}.
+  The Thomas point process is described in \ifelse{latex}{\out{M\o
+  ller}}{Moller} and Waagepetersen (2003, pp. 61--62). It is a cluster
+  process formed by taking a pattern of parent points, generated
+  according to a Poisson process with intensity \eqn{\kappa}{kappa}, and
+  around each parent point, generating a random number of offspring
+  points, such that the number of offspring of each parent is a Poisson
+  random variable with mean \eqn{\mu}{mu}, and the locations of the
+  offspring points of one parent are independent and isotropically
+  Normally distributed around the parent point with standard deviation
+  \eqn{\sigma}{sigma} which is equal to the parameter \code{scale}. The
+  named vector of stating values can use either \code{sigma2}
+  (\eqn{\sigma^2}{sigma^2}) or \code{scale} as the name of the second
+  component, but the latter is recommended for consistency with other
+  cluster models.
 
   The theoretical \eqn{K}-function of the Thomas process is
   \deqn{
@@ -154,7 +159,7 @@ thomas.estK(X, startpar=c(kappa=1,sigma2=1), lambda=NULL,
 }
 \examples{
     data(redwood)
-    u <- thomas.estK(redwood, c(kappa=10, sigma2=0.1))
+    u <- thomas.estK(redwood, c(kappa=10, scale=0.1))
     u
     plot(u)
 }

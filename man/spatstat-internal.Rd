@@ -1291,7 +1291,7 @@ rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn)
-resolve.vargamma.shape(\dots, nu.ker, nu.pcf)
+resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
 rgbNA(red, green, blue, \dots)
 rhs.of.formula(x, tilde)
 rhohatEngine(model, covariate, reference, volume, \dots,

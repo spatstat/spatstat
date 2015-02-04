@@ -6,7 +6,7 @@
   by the Method of Minimum Contrast using the pair correlation function.
 }
 \usage{
-matclust.estpcf(X, startpar=c(kappa=1,R=1), lambda=NULL,
+matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
             q = 1/4, p = 2, rmin = NULL, rmax = NULL, ...,
             pcfargs=list())
 }
@@ -76,7 +76,10 @@ matclust.estpcf(X, startpar=c(kappa=1,R=1), lambda=NULL,
   number of offspring of each parent is a Poisson random variable with mean
   \eqn{\mu}{mu}, and the locations of the offspring points of one parent
   are independent and uniformly distributed inside a circle of radius
-  \eqn{R} centred on the parent point.
+  \eqn{R} centred on the parent point, where \eqn{R}{R} is equal to
+  the parameter \code{scale}. The named vector of stating values can use
+  either \code{R} or \code{scale} as the name of the second component,
+  but the latter is recommended for consistency with other cluster models.
 
   The theoretical pair correlation function of the Matern Cluster process is
   \deqn{
@@ -84,7 +87,7 @@ matclust.estpcf(X, startpar=c(kappa=1,R=1), lambda=NULL,
   }{
     g(r) = 1 + h(r/(2*R))/(4 * pi * R * kappa * r)
   }
-  where
+  where the radius R is the parameter \code{scale} and
   \deqn{
     h(z) = \frac {16} \pi [ z \mbox{arccos}(z) - z^2 \sqrt{1 - z^2} ]
   }{

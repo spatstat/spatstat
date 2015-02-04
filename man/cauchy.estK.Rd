@@ -6,7 +6,7 @@
   to a point pattern dataset by the Method of Minimum Contrast.
 }
 \usage{
-cauchy.estK(X, startpar=c(kappa=1,eta2=1), lambda=NULL,
+cauchy.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
             q = 1/4, p = 2, rmin = NULL, rmax = NULL, ...)
 }
 \arguments{
@@ -86,8 +86,8 @@ cauchy.estK(X, startpar=c(kappa=1,eta2=1), lambda=NULL,
   The corresponding model can be simulated using \code{\link{rCauchy}}.
 
   For computational reasons, the optimisation procedure uses the parameter 
-  \code{eta2}, which is equivalent to \code{4 * omega^2}
-  where \code{omega} is the scale parameter for the model
+  \code{eta2}, which is equivalent to \code{4 * scale^2}
+  where \code{scale} is the scale parameter for the model
   as used in \code{\link{rCauchy}}.
   
   Homogeneous or inhomogeneous Neyman-Scott/Cauchy models can also be

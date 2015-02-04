@@ -6,7 +6,7 @@
   by the Method of Minimum Contrast.
 }
 \usage{
-matclust.estK(X, startpar=c(kappa=1,R=1), lambda=NULL,
+matclust.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
             q = 1/4, p = 2, rmin = NULL, rmax = NULL, ...)
 }
 \arguments{
@@ -70,7 +70,10 @@ matclust.estK(X, startpar=c(kappa=1,R=1), lambda=NULL,
   number of offspring of each parent is a Poisson random variable with mean
   \eqn{\mu}{mu}, and the locations of the offspring points of one parent
   are independent and uniformly distributed inside a circle of radius
-  \eqn{R} centred on the parent point.
+  \eqn{R}{R} centred on the parent point, where \eqn{R}{R} is equal to
+  the parameter \code{scale}. The named vector of stating values can use
+  either \code{R} or \code{scale} as the name of the second component,
+  but the latter is recommended for consistency with other cluster models.
 
   The theoretical \eqn{K}-function of the Matern Cluster process is
   \deqn{
@@ -78,7 +81,7 @@ matclust.estK(X, startpar=c(kappa=1,R=1), lambda=NULL,
   }{
     K(r) = pi r^2 + h(r/(2*R))/kappa
   }
-  where
+  where the radius R is the parameter \code{scale} and
   \deqn{
     h(z) = 2 + \frac 1 \pi [ ( 8 z^2 - 4 ) \mbox{arccos}(z)
     - 2 \mbox{arcsin}(z)
@@ -162,7 +165,7 @@ matclust.estK(X, startpar=c(kappa=1,R=1), lambda=NULL,
 }
 \examples{
     data(redwood)
-    u <- matclust.estK(redwood, c(kappa=10, R=0.1))
+    u <- matclust.estK(redwood, c(kappa=10, scale=0.1))
     u
     plot(u)
 }

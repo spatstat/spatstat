@@ -6,7 +6,7 @@
   to a point pattern dataset by the Method of Minimum Contrast.
 }
 \usage{
-lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
+lgcp.estK(X, startpar=c(var=1,scale=1),
              covmodel=list(model="exponential"),
              lambda=NULL,
              q = 1/4, p = 2, rmin = NULL, rmax = NULL, ...)
@@ -101,7 +101,8 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   determining the shape of the covariance. 
   The strength and scale parameters
   \eqn{\sigma^2}{sigma^2} and \eqn{\alpha}{alpha}
-  will be estimated by the algorithm.
+  will be estimated by the algorithm as the values
+  \code{var} and \code{scale} respectively.
   The template covariance function \eqn{c(r)} must be specified
   as explained below.
   
@@ -195,7 +196,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
   Further modifications by Rasmus Waagepetersen
-  and Shen Guochun.
+  and Shen Guochun, and by Ege Rubak.
 }
 \seealso{
   \code{\link{lgcp.estpcf}} for alternative method of fitting LGCP.
@@ -216,7 +217,7 @@ lgcp.estK(X, startpar=c(sigma2=1,alpha=1),
     \donttest{
       u <- lgcp.estK(redwood)
     }
-    u <- lgcp.estK(redwood, c(sigma2=1, alpha=0.1))
+    u <- lgcp.estK(redwood, c(var=1, scale=0.1))
     u
     if(interactive()) plot(u)
 
