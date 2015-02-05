@@ -1,10 +1,10 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.038
+	CHANGES IN spatstat VERSION 1.40-0.039
 
 OVERVIEW
 
    o We thank Ahmed El-Gabbas, Ute Hahn, Ian Renner, 
-     Brian Ripley and Torben Tvedebrink for contributions.
+     Brian Ripley, Sasha Voss and Torben Tvedebrink for contributions.
 
    o Fixed a bug causing a segmentation fault.
 
@@ -25,6 +25,13 @@ OVERVIEW
    o spatstat no longer depends on the package 'scatterplot3d'.
 
    o Nickname: 'Team Australia'
+
+NEW DATASETS
+
+   o spiders
+   Spider webs on the mortar lines of a brick wall.
+   A point pattern on a linear network.
+   Generously contributed by Sasha Voss.
 
 NEW FUNCTIONS
 

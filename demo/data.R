@@ -112,6 +112,8 @@ shapley.extra$plotit(main="Shapley")
 
 plot(simdat)
 
+plot(spiders, pch=16, show.window=FALSE)
+
 plot(sporophores, chars=c(16,1,2), cex=0.6)
 points(0,0,pch=16, cex=2)
 text(15,8,"Tree", cex=0.75)

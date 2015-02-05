@@ -276,6 +276,7 @@
 	\code{\link{residualspaper}} \tab Data from Baddeley et al (2005) \cr
 	\code{\link{shapley}} \tab Galaxies in an astronomical survey \cr
 	\code{\link{simdat}} \tab Simulated point pattern (inhomogeneous, with interaction) \cr
+	\code{\link{spiders}} \tab Spider webs on mortar lines of brick wall \cr
 	\code{\link{sporophores}} \tab Mycorrhizal fungi around a tree \cr
 	\code{\link{spruces}} \tab Spruce trees in Saxonia \cr
 	\code{\link{swedishpines}} \tab Strand-Ripley Swedish pines data \cr
@@ -671,6 +672,7 @@
       \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
       \code{\link{chicago}} \tab Chicago street crime data \cr
+      \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall \cr
     }
     
     \bold{Hyperframes}
@@ -1748,6 +1750,7 @@
   Mikko Vihtakari,
   Alexendre Villers,
   Fabrice Vinatier,
+  Sasha Voss,
   Hao Wang,
   H. Wendrock,
   Jan Wild,

@@ -171,6 +171,8 @@ There are also the following spatial data sets which are not 2D point patterns:
 
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
+{\tt chicago} & street crimes & point pattern on linear network \\
+{\tt spiders} & spider webs & point pattern on linear network \\
 {\tt flu} & virus proteins & replicated 2D point patterns \\
 {\tt heather} & heather mosaic & binary image (three versions) \\
 {\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
@@ -719,6 +721,15 @@ Another simulated dataset used for demonstration purposes.
 
 <<fig=TRUE>>=
 plot(simdat)
+@ 
+
+\subsubsection*{\texttt{spiders}: Spider webs}
+
+Spider webs across the mortar lines of a brick wall. 
+A point pattern on a linear network.
+
+<<fig=TRUE>>=
+plot(spiders, pch=16, show.window=FALSE)
 @ 
 
 \subsubsection*{\texttt{sporophores}: Sporophores}
