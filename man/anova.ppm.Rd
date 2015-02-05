@@ -110,15 +110,15 @@ Performs analysis of deviance for two or more fitted point process models.
   \code{\link[spatstat]{ppm}}
 }
 \examples{
- mod0 <- ppm(swedishpines, ~1)
- modx <- ppm(swedishpines, ~x)
+ mod0 <- ppm(swedishpines ~1)
+ modx <- ppm(swedishpines ~x)
  anova(mod0, modx, test="Chi")
 
- modxy <- ppm(swedishpines, ~x + y)
+ modxy <- ppm(swedishpines ~x + y)
  anova(modxy, test="Chi")
 
- modP <- ppm(swedishpines, ~1, rbord=9)
- modS <- ppm(swedishpines, ~1, Strauss(9))
+ modP <- ppm(swedishpines ~1, rbord=9)
+ modS <- ppm(swedishpines ~1, Strauss(9))
  anova(modP, modS, test="Chi")
 }
 \references{

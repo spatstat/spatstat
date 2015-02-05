@@ -1,10 +1,10 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.039
+	CHANGES IN spatstat VERSION 1.40-0.040
 
 OVERVIEW
 
-   o We thank Ahmed El-Gabbas, Ute Hahn, Ian Renner, 
-     Brian Ripley, Sasha Voss and Torben Tvedebrink for contributions.
+   o We thank Ahmed El-Gabbas, Ute Hahn, Ian Renner, Brian Ripley, 
+   Torben Tvedebrink and Sasha Voss for contributions.
 
    o Fixed a bug causing a segmentation fault.
 
@@ -247,6 +247,13 @@ BUG FIXES
 
    o Kest
    Crashed if ratio=TRUE and the window was a rectangle.
+   Fixed.
+
+   o anova.ppm
+   Crashed sometimes with message 'models were not all fitted
+   to the same size of dataset'. 
+   (This occurred if there were quadrature points with
+   conditional intensity equal to zero in some models but not in all models.)
    Fixed.
 
    o plot.diagppm
