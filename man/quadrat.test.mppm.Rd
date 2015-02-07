@@ -92,7 +92,6 @@
   \code{\link[spatstat]{quadrat.test}}
 }
 \examples{
-  data(waterstriders)
   H <- hyperframe(X=waterstriders)
   # Poisson with constant intensity for all patterns
   fit1 <- mppm(X~1, H)

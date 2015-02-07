@@ -72,7 +72,6 @@
   \code{\link{mppm}}
 }
 \examples{
- data(waterstriders)
  H <- hyperframe(X=waterstriders)
  mod0 <- mppm(X~1, H, Poisson())
  modx <- mppm(X~x, H, Poisson())

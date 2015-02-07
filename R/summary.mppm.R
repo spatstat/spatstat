@@ -1,7 +1,7 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.10 $  $Date: 2015/01/15 04:42:54 $
+# $Revision: 1.11 $  $Date: 2015/02/06 10:26:46 $
 #
 
 
@@ -167,7 +167,7 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
   ### Print interaction information ###
   if(waxlyrical('extras', terselevel)) {
     iprint <- x$iprint 
-    nama <- names(iprint)
+    nama <- names(iprint) %orifnull% rep("", length(iprint))
     for(i in seq_along(iprint)) {
       nami <- nama[i]
       vali <- iprint[[i]]

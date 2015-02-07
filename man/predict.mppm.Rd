@@ -108,7 +108,6 @@
   \code{\link[spatstat]{hyperframe}}
 }
 \examples{
-  data(waterstriders)
   h <- hyperframe(Bugs=waterstriders)
   fit <- mppm(Bugs ~ x, data=h, interaction=Strauss(7))
   # prediction on a grid

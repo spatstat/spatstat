@@ -36,7 +36,6 @@
   \url{http://www.math.unb.ca/~rolf}
 }
 \examples{
-  data(waterstriders)
   fit <- mppm(Bugs ~ x, hyperframe(Bugs=waterstriders))
   logLik(fit)
   AIC(fit)

@@ -191,7 +191,6 @@
 }
 \examples{
 # Waterstriders data
- data(waterstriders)
  H <- hyperframe(Y = waterstriders)
  mppm(Y ~ 1,  data=H)
  mppm(Y ~ 1,  data=H, Strauss(7))

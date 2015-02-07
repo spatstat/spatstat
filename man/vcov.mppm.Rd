@@ -62,7 +62,6 @@
   \code{\link{mppm}}
 }
 \examples{
-   data(waterstriders)
    fit <- mppm(Wat ~x, data=hyperframe(Wat=waterstriders))
    vcov(fit)
 }

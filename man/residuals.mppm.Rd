@@ -44,7 +44,6 @@
   See Details.
 }
 \examples{
-    data(waterstriders)
     fit <- mppm(Bugs ~ x, hyperframe(Bugs=waterstriders))
     r <- residuals(fit)
     # compute total residual for each point pattern

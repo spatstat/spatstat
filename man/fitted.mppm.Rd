@@ -62,7 +62,6 @@
   \url{http://www.math.unb.ca/~rolf}
 }
 \examples{
-   data(waterstriders)
    model <- mppm(Bugs ~ x, data=hyperframe(Bugs=waterstriders),
                            interaction=Strauss(7))
    cifs <- fitted(model)

@@ -57,7 +57,6 @@
   objects of class \code{"fii"}).
 }
 \examples{
-data(waterstriders)
 fit <- mppm(Wat~x, data=hyperframe(Wat=waterstriders))
 subfits(fit)
 }

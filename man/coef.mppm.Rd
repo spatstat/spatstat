@@ -56,7 +56,6 @@
  \code{\link{mppm}}
 }
 \examples{
-    data(waterstriders)
     H <- hyperframe(X=waterstriders)
     fit.Poisson <- mppm(X ~ 1, H)
     coef(fit.Poisson)
