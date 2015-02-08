@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.20 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.22 $ $Date: 2015/02/08 10:07:46 $
 #
 
 .spst.triEnv <- new.env()
@@ -261,3 +261,31 @@ dirichlet.vertices <- function(X) {
   return(Y)
 }
     
+delaunay.network <- function(X) {
+  stopifnot(is.ppp(X))
+  X <- unique(X, rule="deldir")
+  nX <- npoints(X)
+  if(nX == 0) return(NULL)
+  if(nX == 1) return(linnet(X, !diag(TRUE)))
+  if(nX == 2) return(linnet(X, !diag(c(TRUE,TRUE))))
+  dd <- safedeldir(X)
+  if(is.null(dd)) 
+    return(NULL)
+  joins <- as.matrix(dd$delsgs[, 5:6])
+  return(linnet(X, edges=joins))
+}
+
+dirichlet.edges <- function(X) {
+  stopifnot(is.ppp(X))
+  X <- unique(X, rule="deldir")
+  nX <- npoints(X)
+  W <- Window(X)
+  if(nX < 2)
+    return(edges(W))
+  dd <- safedeldir(X)
+  if(is.null(dd))
+    return(edges(W))
+  return(as.psp(dd$dirsgs[,1:4], window=W))
+}
+
+dirichlet.network <- function(X, ...) as.linnet(dirichlet.edges(X), ...)

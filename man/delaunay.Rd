@@ -29,7 +29,9 @@ delaunay(X)
   \code{\link{tess}},
   \code{\link{dirichlet}},
   \code{\link{convexhull.xy}},
-  \code{\link{ppp}}
+  \code{\link{ppp}},
+  \code{\link{delaunay.distance}},
+  \code{\link{delaunay.network}}
 }
 \examples{
   X <- runifpoint(42)

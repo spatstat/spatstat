@@ -3,7 +3,7 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.13 $   $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.19 $   $Date: 2015/02/08 09:57:11 $
 #
 #
 crossing.psp <- function(A,B,fatal=TRUE) {
@@ -233,4 +233,74 @@ test.selfcrossing.psp <- function(A) {
   return(hit)
 }
 
-
+selfcut.psp <- function(A, ..., eps) {
+  stopifnot(is.psp(A))
+  n <- A$n
+  eA <- A$ends
+  x0 <- eA$x0
+  y0 <- eA$y0
+  dx <- eA$x1 - eA$x0
+  dy <- eA$y1 - eA$y0
+  if(missing(eps) || is.null(eps)) {
+    eps <- sqrt(.Machine$double.eps) * diameter(Frame(A))
+  } else {
+    check.1.real(eps)
+    stopifnot(eps >= 0)
+  }
+  ## identify self-crossings
+  eps <- .Machine$double.eps
+  storage.mode(x0) <- storage.mode(y0) <- "double"
+  storage.mode(dx) <- storage.mode(dy) <- "double"
+  storage.mode(eps) <- "double"
+  zz <- .Call("CxysegXint",
+              x0, 
+              y0, 
+              dx, 
+              dy, 
+              eps)
+  if(length(zz[[1]]) == 0)
+    return(A)
+  ##
+  names(zz) <- c("i", "j", "ti", "tj", "x", "y")
+  df <- as.data.frame(zz)
+  df$i <- df$i + 1L
+  df$j <- df$j + 1L
+  ##
+  gone <- with(df, unique(c(i,j)))
+  newends <- as.matrix(eA)
+  newends <- newends[-gone, , drop=FALSE]
+  newmarx <- marx <- marks(A)
+  if(mama <- !is.null(marx)) 
+    newmarx <- as.data.frame(marx)[-gone, ,drop=FALSE]
+  ## cut each segment using the *provided* values of x,y
+  for(ii in gone) {
+    ## assemble cuts through segment ii
+    imatch <- with(df, which(i == ii))
+    jmatch <- with(df, which(j == ii))
+    df.i <- with(df,
+                 data.frame(t=c(ti[imatch], tj[jmatch]),
+                            x=x[c(imatch, jmatch)],
+                            y=y[c(imatch, jmatch)]))
+    # discard T-junctions
+    ok <- with(df.i, t > 0 & t < 1)
+    df.i <- df.i[ok, ,drop=FALSE]
+    # order the pieces
+    ord <- with(df.i, order(t))
+    df.i <- df.i[ord, , drop=FALSE]
+    ## add endpoints
+    xnew <- c(eA[ii,"x0"], df.i$x, eA[ii,"x1"])
+    ynew <- c(eA[ii,"y0"], df.i$y, eA[ii,"y1"])
+    m <- length(xnew)
+    newsegs <- cbind(xnew[-m], ynew[-m], xnew[-1], ynew[-1])
+    newends <- rbind(newends, newsegs)
+    if(mama)
+      newmarx <- rbind(newmarx, marx[rep(ii, m-1), , drop=FALSE])
+  }
+  Y <- as.psp(newends, window=Window(A), marks=newmarx)
+  if(eps > 0) {
+    ok <- (lengths.psp(Y) > eps)
+    if(any(!ok)) Y <- Y[ok]
+  }
+  return(Y)
+}
+  

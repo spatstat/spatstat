@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.25 $    $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.29 $    $Date: 2015/02/08 09:56:26 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -44,11 +44,19 @@ linnet <- function(vertices, m, edges) {
     stopifnot(is.matrix(m) && is.logical(m) && isSymmetric(m))
     if(nrow(m) != vertices$n)
       stop("dimensions of matrix m do not match number of vertices")
+    if(any(diag(m))) {
+      warning("diagonal entries of the matrix m should not be TRUE; ignored")
+      diag(m) <- FALSE
+    }
   } else {
     # check (from, to) pairs
     stopifnot(is.matrix(edges) && ncol(edges) == 2)
     if(any((edges %% 1) != 0))
       stop("Entries of edges list should be integers")
+    if(any(self <- (edges[,1] == edges[,2]))) {
+      warning("edge list should not join a vertex to itself; ignored")
+      edges <- edges[!self, , drop=FALSE]
+    }
     np <- npoints(vertices)
     if(any(edges > np))
       stop("index out-of-bounds in edges list")
@@ -133,6 +141,11 @@ as.psp.linnet <- function(x, ..., fatal=TRUE) {
   return(x$lines)
 }
 
+vertices.linnet <- function(w) {
+  verifyclass(w, "linnet")
+  return(w$vertices)
+}
+
 as.owin.linnet <- function(W, ...) {
   return(as.owin(as.psp(W)))
 }
@@ -142,6 +155,38 @@ as.linnet <- function(X, ...) {
 }
 
 as.linnet.linnet <- function(X, ...) { X }
+
+as.linnet.psp <- local({
+  
+  as.linnet.psp <- function(X, ..., eps) {
+    X <- selfcut.psp(X)
+    V <- unique(endpoints.psp(X))
+    nV <- npoints(V)
+    if(missing(eps) || is.null(eps)) {
+      eps <- sqrt(.Machine$double.eps) * diameter(Frame(X))
+    } else {
+      check.1.real(eps)
+      stopifnot(eps >= 0)
+    }
+    if(eps > 0 && minnndist(V) <= eps) {
+      gV <- marks(connected(V, eps))
+      xy <- split(coords(V), gV)
+      mxy <- lapply(xy, centro)
+      V <- do.call(superimpose, append(unname(mxy), list(W=Window(X))))
+    }
+    first  <- endpoints.psp(X, "first")
+    second <- endpoints.psp(X, "second")
+    from <- nncross(first, V, what="which")
+    to   <- nncross(second, V, what="which")
+    join <- cbind(from, to)[from != to, , drop=FALSE]
+    linnet(V, edges=join)
+  }
+
+  centro <- function(X) as.list(apply(X, 2, mean))
+  
+  as.linnet.psp
+})
+
 
 unitname.linnet <- function(x) {
   unitname(x$window)
@@ -165,6 +210,11 @@ diameter.linnet <- function(x) {
 
 volume.linnet <- function(x) {
   sum(lengths.psp(x$lines))
+}
+
+vertexdegree <- function(x) {
+  verifyclass(x, "linnet")
+  return(rowSums(x$m))
 }
 
 circumradius.linnet <- function(x, ...) {
@@ -302,3 +352,4 @@ rescale.linnet <- function(X, s, unitname) {
   xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto))
   return(xnew)
 }
+

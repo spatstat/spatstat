@@ -32,7 +32,8 @@ delaunay.distance(X)
   A symmetric square matrix with integer entries.
 }
 \seealso{
-  \code{\link{delaunay}}
+  \code{\link{delaunay}},
+  \code{\link{delaunay.network}}
 }
 \examples{
   X <- runifpoint(20)

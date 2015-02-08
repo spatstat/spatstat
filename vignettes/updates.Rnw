@@ -467,6 +467,18 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  \item \texttt{as.linnet.psp}:
+    Convert line segment pattern to linear network
+    by guessing the connectivity using a distance threshold.
+  \item \texttt{selfcut.psp}:
+   Cut line segments where they cross each other.
+  \item \texttt{vertices.linnet}, \texttt{vertexdegree}:
+    Extract the vertices (nodes) of the linear network
+    and compute the degree of each vertex.
+  \item \texttt{dirichlet.network}, \texttt{delaunay.network}:
+   The linear networks formed by the Dirichlet tessellation
+   and Delaunay triangulation.
+  \item \texttt{dirichlet.edges}: the edges of the Dirichlet tessellation.
 \item \texttt{quantess}:
    Quantile tessellation: divide space into pieces which contain
    equal amounts of 'stuff'.

@@ -640,6 +640,10 @@ bdry.mask <- function(W) {
 }
 
 vertices <- function(w) {
+  UseMethod("vertices")
+}
+
+vertices.owin <- function(w) {
   verifyclass(w, "owin")
   if(is.empty(w))
     return(NULL)

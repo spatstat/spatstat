@@ -1,23 +1,28 @@
 \name{vertices}
 \alias{vertices}
+\alias{vertices.owin}
 \title{Vertices of a Window}
 \description{
-  Finds the vertices of a window 
+  Finds the vertices of a window, or similar object.
 }
 \usage{
  vertices(w)
+
+ \method{vertices}{owin}(w)
 }
 \arguments{
-  \item{w}{A window.}
+  \item{w}{A window (object of class \code{"owin"}) or similar object.}
 }
 \value{
   A list with components \code{x} and \code{y} giving the coordinates
   of the vertices.
 }
 \details{
-  This function computes the vertices (`corners') of a spatial window.
+  This function computes the vertices (`corners') of a spatial window
+  or other object.
 
-  The argument \code{w} should be a window (an object of class
+  For \code{vertices.owin},
+  the argument \code{w} should be a window (an object of class
   \code{"owin"}, see \code{\link{owin.object}} for details).
 
   If \code{w} is a rectangle, the coordinates of the
