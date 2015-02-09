@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.29 $    $Date: 2015/02/08 09:56:26 $
+#    $Revision: 1.30 $    $Date: 2015/02/09 07:37:46 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -351,5 +351,24 @@ rescale.linnet <- function(X, s, unitname) {
   # make new linear network
   xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto))
   return(xnew)
+}
+
+#
+# interactive plot for linnet objects
+#
+
+iplot.linnet <- function(x, ..., xname) {
+  if(missing(xname))
+    xname <- short.deparse(substitute(x))
+  if(!inherits(x, "linnet"))
+    stop("x should be a linnet object")
+  ## predigest
+  v <- vertices(x)
+  deg <- vertexdegree(x)
+  dv <- textstring(v, txt=paste(deg))
+  y <- layered(lines=as.psp(x),
+               vertices=v,
+               degree=dv)
+  iplot(y, ..., xname=xname, visible=c(TRUE, FALSE, FALSE))
 }
 

@@ -2,6 +2,8 @@
 \alias{iplot}
 \alias{iplot.ppp}
 \alias{iplot.layered}
+\alias{iplot.linnet}
+\alias{iplot.lpp}
 \alias{iplot.default}
 \title{Point and Click Interface for Displaying Spatial Data}
 \description{
@@ -13,7 +15,11 @@
 
  \method{iplot}{ppp}(x, ..., xname)
 
- \method{iplot}{layered}(x, ..., xname)
+ \method{iplot}{linnet}(x, ..., xname)
+
+ \method{iplot}{lpp}(x, ..., xname)
+
+ \method{iplot}{layered}(x, ..., xname, visible)
 
  \method{iplot}{default}(x, ..., xname)
 }
@@ -21,11 +27,15 @@
   \item{x}{
     The spatial object to be plotted.
     An object of class \code{"ppp"}, \code{"psp"}, \code{"im"},
-    \code{"owin"}, or \code{"layered"}.
+    \code{"owin"}, \code{"linnet"}, \code{"lpp"} or \code{"layered"}.
   }
   \item{\dots}{Ignored.}
   \item{xname}{
     Optional. Character string to use as the title of the dataset.
+  }
+  \item{visible}{
+    Optional. Logical vector indicating which layers of
+    \code{x} should initially be turned on (visible).
   }
 }
 \value{

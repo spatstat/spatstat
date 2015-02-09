@@ -584,6 +584,7 @@
 \alias{safelookup}
 \alias{samefunction}
 \alias{scalardilate.breakpts}
+\alias{scalardilate.diagramobj}
 \alias{scalardilate.msr}
 \alias{scanmeasure}
 \alias{scanmeasure.ppp}
@@ -1373,6 +1374,7 @@ safedeldir(X)
 safelookup(Z, X, factor, warn)
 samefunction(f, g)
 \method{scalardilate}{breakpts}(X, f, \dots)
+\method{scalardilate}{diagramobj}(X, f, \dots)
 \method{scalardilate}{msr}(X, f, \dots)
 scanmeasure(X, \dots)
 \method{scanmeasure}{ppp}(X, r, \dots, method) %DontDeclare

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.042
+	CHANGES IN spatstat VERSION 1.40-0.043
 
 OVERVIEW
 
@@ -50,10 +50,13 @@ NEW FUNCTIONS
    o as.linnet.psp
    Convert a line segment pattern to a linear network
    by guessing the connectivity using a distance threshold.
-  
+
+   o iplot.linnet, iplot.lpp
+   Methods for interactive plotting 'iplot' for objects of class lpp and linnet.
+
    o dirichlet.network, delaunay.network
    The linear networks formed by the Dirichlet tessellation 
-   and Delaunay triangulation
+   and Delaunay triangulation.
 
    o dirichlet.edges
    The edges of the Dirichlet tessellation.
@@ -206,6 +209,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    in the 4-panel plot, and new argument 'outer' controls their position.
    The confusing default value for 'compute.sd' has been changed.
 
+   o iplot.layered
+   New argument 'visible' controls which layers are initially visible.
+
+   o textstring
+   Any number of spatial locations (x,y) can be specified,
+   with a corresponding vector of text strings.
+
    o plot.hyperframe
    New argument 'mar' 
 
@@ -285,6 +295,10 @@ BUG FIXES
 
    o plot.diagppm
    Ignored add=TRUE in some cases.
+   Fixed.
+
+   o iplot.layered
+   Did not handle 'diagramobj' objects correctly.
    Fixed.
 
 	CHANGES IN spatstat VERSION 1.40-0

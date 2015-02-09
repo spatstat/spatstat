@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.25 $   $Date: 2014/08/09 01:56:29 $
+#  $Revision: 1.26 $   $Date: 2015/02/09 07:36:35 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -412,5 +412,25 @@ superimpose.lpp <- function(..., L=NULL) {
   Y <- lpp(locns, L)
   marks(Y) <- marx
   return(Y)
+}
+
+#
+# interactive plot for lpp objects
+#
+
+iplot.lpp <- function(x, ..., xname) {
+  if(missing(xname))
+    xname <- short.deparse(substitute(x))
+  stopifnot(is.lpp(x))
+  ## predigest
+  L <- domain(x)
+  v <- vertices(L)
+  deg <- vertexdegree(L)
+  dv <- textstring(v, txt=paste(deg))
+  y <- layered(lines=as.psp(L),
+               vertices=v,
+               degree=dv,
+               points=as.ppp(x))
+  iplot(y, ..., xname=xname, visible=c(TRUE, FALSE, FALSE, TRUE))
 }
 

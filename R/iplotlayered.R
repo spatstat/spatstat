@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.7 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.8 $   $Date: 2015/02/09 07:26:34 $
 #
 #
 
@@ -23,7 +23,7 @@ iplot.layered <- local({
     redraw.iplot.layered(panel)
   }
   
-  faster.layers <- function(x) {
+  faster.layers <- function(x, visible) {
     if(any(islinnet <- unlist(lapply(x, inherits, what="linnet")))) {
       # convert linnet layers to psp, for efficiency
       x[islinnet] <- lapply(x[islinnet], as.psp)
@@ -44,21 +44,35 @@ iplot.layered <- local({
       b <- as.ppp(x[[ii]])
       x <- layered(LayerList=c(xpre, list(a, b), xpost),
                    plotargs=unname(c(ppre, pl[ii], pl[ii], ppost)))
+      visible <- visible[if(ii == 1) c(1, seq_len(n)) else
+                         if(ii == n) c(seq_len(n), n) else
+                         c(1:(ii-1), ii, ii, (ii+1):n)]
     }
+    attr(x, "visible") <- visible
     return(x)
   }
   
-iplot.layered <- function(x, ..., xname) {
+iplot.layered <- function(x, ..., xname, visible) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "layered")
+
+  if(missing(visible) || is.null(visible)) {
+    visible <- rep(TRUE, length(x))
+  } else if(length(visible) == 1) {
+    visible <- rep(visible, length(x))
+  } else stopifnot(length(visible) == length(x))
+  
   require(rpanel)
 
-  x <- faster.layers(x)
+  x <- faster.layers(x, visible)
+  visible <- attr(x, "visible")
+
   x <- freeze.colourmaps(x)
   bb <- as.rectangle(as.owin(x))
   bbmid <- unlist(centroid.owin(bb))
-  
+
+
   lnames <- names(x)
   if(sum(nzchar(lnames)) != length(x))
     lnames <- paste("Layer", seq_len(length(x)))
@@ -72,7 +86,7 @@ iplot.layered <- function(x, ..., xname) {
                           bbmid=bbmid,
                           zoomfactor=1,
                           zoomcentre=bbmid,
-                          which = rep.int(TRUE, length(x)),
+                          which = visible,
                           size=c(700, 400))
 
 # Split panel into three
