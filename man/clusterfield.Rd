@@ -11,13 +11,15 @@
 \usage{
   clusterfield(clusters, locations = NULL, \dots)
 
-  \method{clusterfield}{function}(clusters, locations = NULL, \dots)
+  \method{clusterfield}{character}(clusters, locations = NULL, \dots)
+
+  \method{clusterfield}{function}(clusters, locations = NULL, \dots, mu = NULL)
 
   \method{clusterfield}{kppm}(clusters, locations = NULL, \dots)
 }
 \arguments{
   \item{clusters}{
-    A function of defining the cluster kernel or a fitted cluster model
+    A function defining the cluster kernel or a fitted cluster model
     (object of class \code{"kppm"}) from which it can be extracted or a
     string specifying a model. See Details.
   }
@@ -30,37 +32,59 @@
     Additional arguments passed to \code{\link{density.ppp}} or the
     cluster kernel. See Details.
   }
+  \item{mu}{
+    Expected cluster size. A numerical value or a pixel image.
+  }
 }
 \details{
-  The actual calculations are preformed by \code{\link{density.ppp}} and
+  The actual calculations are performed by \code{\link{density.ppp}} and
   \code{\dots} arguments are passed thereto for control over the pixel
-  resolution etc. (These arguments are then passed on to \code{\link{pixellate.ppp}}
+  resolution etc.
+  (These arguments are then passed on to \code{\link{pixellate.ppp}}
   and \code{\link{as.mask}}.)
 
   For the function method the given kernel function should accept
   vectors of x and y coordinates as its first two arguments. Any
   additional arguments may be passed through the \code{\dots}.
 
+  The function method also accepts the optional parameter \code{mu}
+  (defaulting to 1) specifying the mean number of points per cluster (as
+  a numeric) or the inhomogeneous reference cluster intensity (as an
+  \code{"im"} object or a \code{function(x,y)}). The interpretation of
+  \code{mu} is as explained in the simulation functions referenced in
+  the See Also section below.
+
   For the character method \code{clusters} must be one of:
   \code{clusters="Thomas"} for the Thomas process,
   \code{clusters="MatClust"} for the Matern cluster process,
-  \code{clusters="Cauchy"} for the Neyman-Scott cluster process
-  with Cauchy kernel, or
-  \code{clusters="VarGamma"} for the Neyman-Scott cluster process
-  with Variance Gamma kernel.
-  For all these models the parameter \code{scale} is required and passed
-  through the dots as well as the parameter \code{nu} when
-  \code{clusters="VarGamma"}.
+  \code{clusters="Cauchy"} for the Neyman-Scott cluster process with
+  Cauchy kernel, or \code{clusters="VarGamma"} for the Neyman-Scott
+  cluster process with Variance Gamma kernel. For all these models the
+  parameter \code{scale} is required and passed through \code{\dots} as
+  well as the parameter \code{nu} when \code{clusters="VarGamma"}. This
+  method calls \code{clusterfield.function} so the parameter \code{mu}
+  may also be passed through \code{\dots} and will be interpreted as
+  explained above.
+
+  The kppm method extracts the relevant information from the fitted
+  model (including \code{mu}) and calls \code{clusterfield.function}.
+  
 }
 \value{
   A pixel image (object of class \code{"im"}).
 }
 \seealso{
   \code{\link{density.ppp}} and \code{\link{kppm}}
+
+  Simulation algorithms for cluster models:
+  \code{\link{rCauchy}}
+  \code{\link{rMatClust}}
+  \code{\link{rThomas}}
+  \code{\link{rVarGamma}}
 }
 \examples{
   # method for fitted model
-  fit <- kppm(redwood, ~1, "Thomas")
+  fit <- kppm(redwood~1, "Thomas")
   clusterfield(fit, eps = 0.01)
 
   # method for functions

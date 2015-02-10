@@ -109,32 +109,104 @@ kppm.ppp <- kppm.quad <-
 kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...) {
   # Minimum contrast fit
   stationary <- is.stationary(po)
-  # compute summary function
+  # compute intensity
   if(stationary) {
-    StatFun <- if(statistic == "K") "Kest" else "pcf"
-    StatName <-
-      if(statistic == "K") "K-function" else "pair correlation function"
-    Stat <- do.call(StatFun,
-                    resolve.defaults(list(X=X),
-                                     statargs,
-                                     list(correction="best")))
     lambda <- summary(po)$trend$value
   } else {
-    StatFun <- if(statistic == "K") "Kinhom" else "pcfinhom"
-    StatName <- if(statistic == "K") "inhomogeneous K-function" else
-    "inhomogeneous pair correlation function"
     # compute intensity at high resolution if available
     w <- as.owin(po, from="covariates")
     if(!is.mask(w)) w <- NULL
     lambda <- predict(po, locations=w)
-    Stat <- do.call(StatFun,
-                    resolve.defaults(list(X=X, lambda=lambda),
-                                     statargs,
-                                     list(correction="best")))
+  }
+  mcfit <- clusterfit(X, clusters, lambda = lambda,
+                      dataname = Xname, control = control,
+                      statistic = statistic, statargs = statargs, ...)
+  fitinfo <- attr(mcfit, "info")
+  attr(mcfit, "info") <- NULL
+  # all info that depends on the fitting method:
+  Fit <- list(method    = "mincon",
+              statistic = statistic,
+              Stat      = fitinfo$Stat,
+              StatFun   = fitinfo$StatFun,
+              StatName  = fitinfo$StatName,
+              FitFun    = fitinfo$FitFun,
+              statargs  = statargs,
+              mcfit     = mcfit)
+  # results
+  out <- list(Xname      = Xname,
+              X          = X,
+              stationary = stationary,
+              clusters   = clusters,
+              modelname  = fitinfo$modelname,
+              isPCP      = fitinfo$isPCP,
+              po         = po,
+              lambda     = lambda,
+              mu         = fitinfo$mu,
+              par        = mcfit$par,
+              clustpar   = fitinfo$clustpar,
+              clustargs  = fitinfo$clustargs,
+              modelpar   = mcfit$modelpar,
+              covmodel   = mcfit$covmodel,
+              Fit        = Fit)
+}
+
+clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
+                       q=1/4, p=2, rmin=NULL, rmax=NULL, ..., statistic = NULL, statargs = NULL){
+  ## If possible get dataname from dots
+  dataname <- list(...)$dataname
+  ## Cluster info:
+  info <- spatstatClusterModelInfo(clusters)
+  
+  if(inherits(X, "ppp")){
+      if(is.null(dataname))
+         dataname <- getdataname(short.deparse(substitute(X), 20), ...)
+      if(is.null(statistic))
+          statistic <- "K"
+      # Startpar:
+      if(is.null(startpar))
+          startpar <- info$selfstart(X)
+      stationary <- is.null(lambda) || (is.numeric(lambda) && length(lambda)==1)
+      # compute summary function
+      if(stationary) {
+          if(is.null(lambda)) lambda <- intensity(X)
+          StatFun <- if(statistic == "K") "Kest" else "pcf"
+          StatName <-
+              if(statistic == "K") "K-function" else "pair correlation function"
+          Stat <- do.call(StatFun,
+                          resolve.defaults(list(X=X),
+                                           statargs,
+                                           list(correction="best")))
+      } else {
+          StatFun <- if(statistic == "K") "Kinhom" else "pcfinhom"
+          StatName <- if(statistic == "K") "inhomogeneous K-function" else
+          "inhomogeneous pair correlation function"
+          Stat <- do.call(StatFun,
+                          resolve.defaults(list(X=X, lambda=lambda),
+                                           statargs,
+                                           list(correction="best")))
+      }
+  } else if(inherits(X, "fv")){
+      Stat <- X
+      ## Get statistic type
+      stattype <- attr(Stat, "fname")
+      StatFun <- paste0(stattype)
+      StatName <- NULL
+      if(is.null(statistic)){
+          if(is.null(stattype) || !is.element(stattype[1], c("K", "pcf")))
+              stop("Cannot infer the type of summary statistic from argument ",
+                   sQuote("X"), " please specify this via argument ",
+                   sQuote("statistic"))
+          statistic <- stattype[1]
+      }
+      if(stattype[1]!=statistic)
+          stop("Statistic inferred from ", sQuote("X"),
+               " not equal to supplied argument ",
+               sQuote("statistic"))
+  } else{
+      stop("Unrecognised format for argument X")
   }
   
   ## avoid using g(0) as it may be infinite
-  rmin <- list(...)$rmin
   if(statistic=="pcf"){
       argu <- fvnames(Stat, ".x")
       rvals <- Stat[[argu]]
@@ -143,14 +215,12 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
       }
   }
 
-  # determine initial values of parameters
-  info <- spatstatClusterModelInfo(clusters)
   isPCP <- info$isPCP
-  dots <- info$resolvedots(..., rmin = rmin)
+  dots <- info$resolvedots(..., q = q, p = p, rmin = rmin, rmax = rmax)
+  # determine initial values of parameters
+  startpar <- info$checkpar(startpar)
   # fit
   theoret <- info[[statistic]]
-  startpar <- dots$startpar %orifnull% info$selfstart(X)
-  dataname <- resolve.defaults(list(...), dataname=Xname)$dataname
   desc <- paste("minimum contrast fit of", info$descname)
 
   mcargs <- resolve.defaults(list(observed=Stat,
@@ -160,12 +230,11 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
                                   fvlab=list(label="%s[fit](r)",
                                       desc=desc),
                                   explain=list(dataname=dataname,
-                                      fname=attr(Stat, "fname"),
+                                      fname=StatFun,
                                       modelname=info$modelname),
                                   margs=dots$margs,
                                   model=dots$model,
-                                  funaux=info$funaux,
-                                  control=control),
+                                  funaux=info$funaux),
                              list(...))
   
   mcfit <- do.call("mincontrast", mcargs)
@@ -182,44 +251,29 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
     # Poisson cluster process: extract parent intensity kappa
     kappa <- mcfit$par[["kappa"]]
     # mu = mean cluster size
-    mu <- if(stationary) lambda/kappa else eval.im(lambda/kappa)
+    mu <- lambda/kappa
   } else {
     # LGCP: extract variance parameter sigma2
     sigma2 <- mcfit$par[["sigma2"]]
     # mu = mean of log intensity 
-    mu <- if(stationary) log(lambda) - sigma2/2 else
-          eval.im(log(lambda) - sigma2/2)  
+    mu <- log(lambda) - sigma2/2
   }
 
   ## The old fit fun that would have been used (DO WE NEED THIS?)
   FitFun <- paste0(tolower(clusters), ".est", statistic)
-  
-  # all info that depends on the fitting method:
-  Fit <- list(method    = "mincon",
-              statistic = statistic,
-              Stat      = Stat,
-              StatFun   = StatFun,
-              StatName  = StatName,
-              FitFun    = FitFun,
-              statargs  = statargs,
-              mcfit     = mcfit)
-  # results
-  out <- list(Xname      = Xname,
-              X          = X,
-              stationary = stationary,
-              clusters   = clusters,
-              modelname  = info$modelabbrev,
-              isPCP      = isPCP,
-              po         = po,
-              lambda     = lambda,
-              mu         = mu,
-              par        = mcfit$par,
-              clustpar   = info$checkpar(par=mcfit$par, old=FALSE),
-              clustargs  = info$checkclustargs(dots$margs, old=FALSE),
-              modelpar   = mcfit$modelpar,
-              covmodel   = mcfit$covmodel,
-              Fit        = Fit)
-  return(out)
+
+  extra <- list(FitFun    = FitFun,
+                Stat      = Stat,
+                StatFun   = StatFun,
+                StatName  = StatName,
+                modelname  = info$modelabbrev,
+                isPCP      = isPCP,
+                lambda     = lambda,
+                mu         = mu,
+                clustpar   = info$checkpar(mcfit$par, old=FALSE),
+                clustargs  = info$checkclustargs(dots$margs, old=FALSE))
+  attr(mcfit, "info") <- extra
+  mcfit
 }
 
 kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
@@ -813,9 +867,13 @@ clusterfield.kppm <- function(clusters, locations = NULL, ...) {
         kernel <- Kpcf.kppm(clusters, what = "kernel")
         kernel(sqrt(x^2+y^2))
     }
-    if(is.null(locations))
+    if(is.null(locations)){
+        if(!is.stationary(clusters))
+            stop("The model is non-stationary. The argument ",
+                 sQuote("locations"), " must be given.")
         locations <- centroid.owin(Window(clusters), as.ppp = TRUE)
-    clusterfield.function(f, locations, ...)
+    }
+    clusterfield.function(f, locations, ..., mu = clusters$mu)
 }
 
 clusterfield.character <- function(clusters, locations = NULL, ...){
@@ -834,11 +892,19 @@ clusterfield.character <- function(clusters, locations = NULL, ...){
     clusterfield.function(f, locations, ...)
 }
 
-clusterfield.function <- function(clusters, locations = NULL, ...) {
+clusterfield.function <- function(clusters, locations = NULL, ..., mu = NULL) {
     if(is.null(locations)){
         locations <- ppp(.5, .5, window=square(1))
     }
-    density(locations, kernel=clusters, ...)
+    if(!inherits(locations, "ppp"))
+        stop("Argument ", sQuote("locations"), " must be a point pattern (ppp).")
+    rslt <- density(locations, kernel=clusters, ...)
+    if(is.null(mu))
+        return(rslt)
+    mu <- as.im(mu, W=rslt)
+    if(min(mu)<0)
+        stop("Cluster reference intensity ", sQuote("mu"), " is negative.")
+    return(rslt*mu)
 }
 
 plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {

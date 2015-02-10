@@ -305,6 +305,8 @@ printStatusList <- function(stats) {
          parnames = c("kappa", "sigma2"),
          clustargsnames = NULL,
          checkpar = function(par, old = TRUE){
+             if(is.null(par))
+                 par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
              nam <- try(check.named.vector(par, c("kappa","sigma2")), silent = TRUE)
@@ -325,7 +327,11 @@ printStatusList <- function(stats) {
              dots <- list(...)
              nam <- names(dots)
              out <- list()
-             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             if("ctrl" %in% nam){
+                 out$ctrl <- dots$ctrl
+             } else{
+                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             }
              chk <- .Spatstat.ClusterModelInfoTable$Thomas$checkpar
              if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
              return(out)
@@ -373,6 +379,8 @@ printStatusList <- function(stats) {
          parnames = c("kappa", "R"),
          clustargsnames = NULL,
          checkpar = function(par, old = TRUE){
+             if(is.null(par))
+                 par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
              nam <- try(check.named.vector(par, c("kappa","R")), silent = TRUE)
@@ -391,7 +399,11 @@ printStatusList <- function(stats) {
              dots <- list(...)
              nam <- names(dots)
              out <- list()
-             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             if("ctrl" %in% nam){
+                 out$ctrl <- dots$ctrl
+             } else{
+                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             }
              chk <- .Spatstat.ClusterModelInfoTable$MatClust$checkpar
              if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
              return(out)
@@ -476,6 +488,8 @@ printStatusList <- function(stats) {
          parnames = c("kappa", "eta2"),
          clustargsnames = NULL,
          checkpar = function(par, old = TRUE){
+             if(is.null(par))
+                 par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
              nam <- try(check.named.vector(par, c("kappa","eta2")), silent = TRUE)
@@ -496,7 +510,11 @@ printStatusList <- function(stats) {
              dots <- list(...)
              nam <- names(dots)
              out <- list()
-             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             if("ctrl" %in% nam){
+                 out$ctrl <- dots$ctrl
+             } else{
+                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             }
              chk <- .Spatstat.ClusterModelInfoTable$Cauchy$checkpar
              if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
              return(out)
@@ -544,6 +562,8 @@ printStatusList <- function(stats) {
          parnames = c("kappa", "eta"),
          clustargsnames = "nu",
          checkpar = function(par, old = TRUE){
+             if(is.null(par))
+                 par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
              nam <- try(check.named.vector(par, c("kappa","eta")), silent = TRUE)
@@ -564,12 +584,17 @@ printStatusList <- function(stats) {
              dots <- list(...)
              nam <- names(dots)
              out <- list()
-             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             if("ctrl" %in% nam){
+                 out$ctrl <- dots$ctrl
+             } else{
+                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             }
              chk <- .Spatstat.ClusterModelInfoTable$VarGamma$checkpar
              if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
              nu <- dots$nu
              if(is.null(nu)){
-                 nu <- try(resolve.vargamma.shape(nu.ker=dots$nu.ker, nu.pcf=dots$nu.pcf)$nu.ker)
+                 nu <- try(resolve.vargamma.shape(nu.ker=dots$nu.ker, nu.pcf=dots$nu.pcf)$nu.ker,
+                           silent = TRUE)
                  if(inherits(nu, "try-error"))
                      nu <- -1/4
              } else{
@@ -664,6 +689,8 @@ printStatusList <- function(stats) {
          printmodelname = function(...) "log-Gaussian Cox process", # Used by print.kppm
          parnames = c("sigma2", "alpha"),
          checkpar = function(par, old = TRUE){
+             if(is.null(par))
+                 par <- c(var=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
              nam <- try(check.named.vector(par, c("sigma2","alpha")), silent = TRUE)
@@ -680,7 +707,11 @@ printStatusList <- function(stats) {
              dots <- list(...)
              nam <- names(dots)
              out <- list()
-             out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             if("ctrl" %in% nam){
+                 out$ctrl <- dots$ctrl
+             } else{
+                 out$ctrl <- dots[nam %in% c("p", "q", "rmin", "rmax")]
+             }
              chk <- .Spatstat.ClusterModelInfoTable$LGCP$checkpar
              if(!is.null(dots$startpar)) out$startpar <- chk(dots$startpar)
              cmod <- dots$covmodel

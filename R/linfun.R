@@ -3,18 +3,29 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.1 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.3 $   $Date: 2015/02/10 10:23:33 $
 #
 
 linfun <- function(f, L) {
   stopifnot(is.function(f))
   stopifnot(inherits(L, "linnet"))
   needargs <- c("x", "y", "seg", "tp")
-  if(!all(needargs %in% names(formals(f))))
-    stop(paste("f must have arguments named", commasep(sQuote(needargs))))
-  class(f) <- c("linfun", class(f))
-  attr(f, "L") <- L
-  return(f)
+  if(!all(needargs %in% names(formals(f)))) 
+    stop(paste("Function must have formal arguments",
+               commasep(sQuote(needargs))),
+         call.=FALSE)
+  g <- function(...) {
+    dcm <- do.call.matched(as.lpp,
+                           append(list(...), list(L=L)),
+                           sieve=TRUE, matchfirst=TRUE)
+    X <- dcm$result
+    value <- do.call(f, append(as.list(coords(X)), X$otherargs))
+    return(value)
+  }
+  class(g) <- c("linfun", class(g))
+  attr(g, "L") <- L
+  attr(g, "f") <- f
+  return(g)
 }
 
 print.linfun <- function(x, ...) {
@@ -22,9 +33,9 @@ print.linfun <- function(x, ...) {
   if(!is.null(explain <- attr(x, "explain"))) {
     explain(x)
   } else {
-    cat("Function on linear network\n")
-    print(as.function(x), ...)
-    cat("Function domain:\n")
+    splat("Function on linear network:")
+    print(attr(x, "f"), ...)
+    splat("Function domain:")
     print(L)
   }
   invisible(NULL)
@@ -43,6 +54,9 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
   vals <- do.call(X, append(as.list(coo), list(...)))
   # replace values
   df$values <- vals
+  typ <- typeof(vals)
+  if(typ == "double") typ <- "real"
+  Y$type <- typ
   attr(Y, "df") <- df
   Y[!is.na(Y$v)] <- vals
   return(Y)

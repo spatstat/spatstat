@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.043
+	CHANGES IN spatstat VERSION 1.40-0.044
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
    o More support for linear networks.
 
-   o New dataset
+   o New dataset: spiders.
 
    o Improvements and bug fixes.
 
@@ -134,6 +134,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Can now count the number of segments that intersect each pixel, 
    instead of the total length of intersection.
 
+   o linfun
+   If  g = linfun(f, L),
+   the function f will always be called as f(x,y,seg,tp, ...)
+   It is no longer expected to handle the case where 'seg' and 'tp' are absent.
+   The resulting function g can now be called as g(X) where X is an lpp object,
+   or as g(x,y) or g(x,y,seg,tp) where x,y,seg,tp are coordinates.
+
    o tess
    New argument 'marks' allows marks to be associated with tiles.
 
@@ -225,6 +232,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o pixellate.owin
    Accelerated.
 
+   o summary.linnet
+   Now prints more information.
+
 BUG FIXES
 
    o sumouter
@@ -291,6 +301,14 @@ BUG FIXES
    to the same size of dataset'. 
    (This occurred if there were quadrature points with
    conditional intensity equal to zero in some models but not in all models.)
+   Fixed.
+
+   o as.linim.linfun
+   Erroneously converted the pixel values to numeric values.
+   Fixed.
+
+   o plot.lpp
+   Ignored symbolmap arguments like 'cex'.
    Fixed.
 
    o plot.diagppm

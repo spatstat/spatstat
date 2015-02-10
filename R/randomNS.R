@@ -100,14 +100,14 @@ rNeymanScott <-
       result <- ppp(xoff, yoff, window=win, check=FALSE, marks=mm)
     }
 
-    attr(result, "parents") <- parents
-    attr(result, "parentid") <- parentid
-
     if(is.im(mu)) {
       ## inhomogeneously modulated clusters a la Waagepetersen
       P <- eval.im(mu/mumax)
       result <- rthin(result, P)
     }
+
+    attr(result, "parents") <- parents
+    attr(result, "parentid") <- parentid
 
     resultlist[[i]] <- result
   }
@@ -129,12 +129,17 @@ rMatClust <- local({
   rMatClust <- 
   function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1, saveLambda=FALSE, ...) {
     ## Matern Cluster Process with Poisson (mu) offspring distribution
-      ## Catch old scale syntax (r)
-      if(missing(scale)) scale <- list(...)$r
-      check.1.real(scale)
-      stopifnot(scale > 0)
+    ## Catch old scale syntax (r)
+    if(missing(scale)) scale <- list(...)$r
+    check.1.real(scale)
+    stopifnot(scale > 0)
     result <- rNeymanScott(kappa, scale, list(mu, rundisk), win, radius=scale,
-                           nsim=nsim)  
+                           nsim=nsim)
+    if(saveLambda){
+        parents <- attr(result, "parents")
+        Lambda <- clusterfield("Cauchy", parents, scale=scale, mu=mu, ...)
+        attr(result, "Lambda") <- Lambda[win]
+    }
     return(result)
   }
 
@@ -163,6 +168,11 @@ rThomas <- local({
       result <- rNeymanScott(kappa, 4 * scale, list(mu, gaus),
                              win, sigma=scale,
                              nsim=nsim)  
+      if(saveLambda){
+          parents <- attr(result, "parents")
+          Lambda <- clusterfield("Thomas", parents, scale=scale, mu=mu, ...)
+          attr(result, "Lambda") <- Lambda[win]
+      }
       return(result)
     }
   rThomas
@@ -211,6 +221,11 @@ rCauchy <- local({
                            list(mu, rnmix.invgam),
                            win, rate = scale^2/2, nsim=nsim)
     ## correction from Abdollah: the rate is beta = omega^2 / 2 = eta^2 / 8.
+    if(saveLambda){
+        parents <- attr(result, "parents")
+        Lambda <- clusterfield("Cauchy", parents, scale=scale, mu=mu, ...)
+        attr(result, "Lambda") <- Lambda[win]
+    }
     return(result)
   }
 
@@ -275,9 +290,12 @@ rVarGamma <- local({
                            shape = nu + 1,
                            rate = 1/(2 * scale^2),
                            nsim=nsim)
+    if(saveLambda){
+        parents <- attr(result, "parents")
+        Lambda <- clusterfield("VarGamma", parents, scale=scale, nu=nu, mu=mu, ...)
+        attr(result, "Lambda") <- Lambda[win]
+    }
     return(result)
-    parents <- attr(result, "parents")
-    attr(result, "Lambda") <- clusterfield("VarGamma", parents, scale=scale, nu=nu, ...)
   }
 
   rVarGamma })

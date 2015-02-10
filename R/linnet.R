@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.30 $    $Date: 2015/02/09 07:37:46 $
+#    $Revision: 1.31 $    $Date: 2015/02/10 11:01:31 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -108,9 +108,15 @@ print.linnet <- function(x, ...) {
 summary.linnet <- function(object, ...) {
   print(object, ...)
   unitinfo <- summary(unitname(object))
-  cat(paste("Total length",
-            sum(lengths.psp(object$lines)),
-            unitinfo$plural, unitinfo$explain, "\n"))
+  dig <- getOption('digits')
+  len <- sum(lengths.psp(object$lines))
+  splat("Total length",
+        signif(len, dig), 
+        unitinfo$plural, unitinfo$explain)
+  splat("Diameter:", signif(diameter(object), dig), unitinfo$plural)
+  if(!is.null(cr <- object$circumradius))
+    splat("Circumradius:", signif(cr, dig), unitinfo$plural)
+  splat("Maximum vertex degree:", max(vertexdegree(object)))
   print(as.owin(object))
   return(invisible(NULL))
 }
