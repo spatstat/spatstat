@@ -2,7 +2,7 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.7 $  $Date: 2015/01/22 04:37:58 $
+##  $Revision: 1.8 $  $Date: 2015/02/11 10:44:08 $
 ##
 
 ## 'split cat'
@@ -52,6 +52,16 @@ choptext <- local({
   choptext
 })
 
+exhibitStringList <- function(prefix, strings) {
+  shortblurb <- paste(prefix, paste(strings, collapse=", "), "\n")
+  if(nchar(shortblurb) < options("width")[[1]]) {
+    cat(shortblurb)
+  } else {
+    cat(paste(prefix,"\n"))
+    splat("  ", paste(strings, collapse=" "))
+  }
+  return(invisible(NULL))
+}
 
 pasteFormula <- function(f) {
   ## convert formula to a single string

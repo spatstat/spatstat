@@ -883,21 +883,21 @@ inside.owin <- function(x, y, w) {
 
 #-------------------------------------------------------------------------
   
-print.owin <- function(x, ...) {
+print.owin <- function(x, ..., prefix="window: ") {
   verifyclass(x, "owin")
   unitinfo <- summary(unitname(x))
   switch(x$type,
          rectangle={
-           rectname <- "window: rectangle ="
+           rectname <- paste0(prefix, "rectangle =")
          },
          polygonal={
-           splat("window: polygonal boundary")
+           splat(paste0(prefix, "polygonal boundary"))
            if(length(x$bdry) == 0)
              splat("window is empty")
            rectname <- "enclosing rectangle:"
          },
          mask={
-           splat("window: binary image mask")
+           splat(paste0(prefix, "binary image mask"))
            di <- x$dim
            splat(di[1], "x", di[2], "pixel array (ny, nx)")
            rectname <- "enclosing rectangle:"

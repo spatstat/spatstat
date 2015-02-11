@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.27 $   $Date: 2015/02/10 10:29:07 $
+#  $Revision: 1.28 $   $Date: 2015/02/11 06:00:05 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -50,27 +50,35 @@ lpp <- function(X, L) {
 
 print.lpp <- function(x, ...) {
   stopifnot(inherits(x, "lpp"))
-  cat("Point pattern on linear network\n")
+  splat("Point pattern on linear network")
   sd <- summary(x$data)
   np <- sd$ncases
   nama <- sd$col.names
-  cat(paste(np, ngettext(np, "point", "points"), "\n"))
-  if(any(iscoord <- (x$ctype == "spatial")))
-    cat(paste(sum(iscoord), "-dimensional space coordinates ",
-              paren(paste(nama[iscoord], collapse=",")), "\n", sep=""))
-  if(any(istime <- (x$ctype == "temporal")))
-    cat(paste(sum(istime), "-dimensional time coordinates ",
-              paren(paste(nama[istime], collapse=",")), "\n", sep=""))
-  if(any(islocal <- (x$ctype == "local"))) 
-    cat(paste(sum(islocal), ngettext(sum(islocal), "column", "columns"),
-              "of local coordinates:",
-              commasep(sQuote(nama[islocal])), "\n"))
-  if(any(ismark <- (x$ctype == "mark"))) 
-    cat(paste(sum(ismark), ngettext(sum(ismark), "column", "columns"),
-              "of marks:",
-              commasep(sQuote(nama[ismark])), "\n"))
+  splat(np, ngettext(np, "point", "points"))
+  ## check for unusual coordinates
+  ctype <- x$ctype
+  nam.m <- nama[ctype == "mark"]
+  nam.t <- nama[ctype == "temporal"]
+  nam.c <- setdiff(nama[ctype == "spatial"], c("x","y"))
+  nam.l <- setdiff(nama[ctype == "local"], c("seg", "tp"))
+  if(length(nam.c) > 0)
+    splat("Additional spatial coordinates", commasep(sQuote(nam.c)))
+  if(length(nam.l) > 0)
+    splat("Additional local coordinates", commasep(sQuote(nam.l)))
+  if(length(nam.t) > 0)
+    splat("Additional temporal coordinates", commasep(sQuote(nam.t)))
+  if((nmarks <- length(nam.m)) > 0) {
+    if(nmarks > 1) {
+      splat(nmarks, "columns of marks:", commasep(sQuote(nam.m)))
+    } else {
+      marx <- marks(x)
+      if(is.factor(marx)) {
+        exhibitStringList("Multitype, with possible types:", levels(marx))
+      } else splat("Marks of type", sQuote(typeof(marx)))
+    }
+  }
   print(x$domain, ...)
-  invisible(NULL)
+  return(invisible(NULL))
 }
 
 plot.lpp <- function(x, ..., main, add=FALSE,
@@ -128,35 +136,35 @@ plot.lpp <- function(x, ..., main, add=FALSE,
 summary.lpp <- function(object, ...) {
   stopifnot(inherits(object, "lpp"))
   L <- object$domain
-  npoints <- nrow(object$data)
-  totlen <-  sum(lengths.psp(L$lines))
+  out <- summary(L)
+  np <- npoints(object)
+  lambda <- np/out$totlength
   marx <- marks(object)
   summarx <- if(is.null(marx)) NULL else summary(marx)
-  out <- list(npoints=npoints,
-              totlength=totlen,
-              intensity=npoints/totlen,
-              nvert=L$vertices$n,
-              nedge=L$lines$n,
-              unitinfo=summary(unitname(L)),
-              marks=summarx)
+  out <- append(out,
+                list(npoints=np,
+                     intensity=lambda,
+                     marks=summarx))
   class(out) <- "summary.lpp"
   return(out)
 }
 
 print.summary.lpp <- function(x, ...) {
-  cat("Point pattern on linear network\n")
-  cat(paste(x$npoints, "points\n"))
-  cat(paste("Linear network with",
-            x$nvert, "vertices and",
-            x$nedge, "edges\n"))
+  splat("Point pattern on linear network")
+  splat(x$npoints, "points")
+  splat("Linear network with",
+        x$nvert, "vertices and",
+        x$nline, "lines")
   u <- x$unitinfo
-  cat(paste("Total edge length", x$totlength, u$plural, u$explain, "\n"))
-  cat(paste("Average intensity", x$intensity,
-            "points per", if(u$vanilla) "unit length" else u$singular, "\n"))
+  dig <- getOption('digits')
+  splat("Total length", signif(x$totlength, dig), u$plural, u$explain)
+  splat("Average intensity", signif(x$intensity, dig),
+        "points per", if(u$vanilla) "unit length" else u$singular)
   if(!is.null(x$marks)) {
     cat("Marks:\n")
     print(x$marks)
   }
+  print(x$win, prefix="Enclosing window: ")
   invisible(NULL)
 }
 

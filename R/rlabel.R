@@ -3,7 +3,7 @@
 #
 #   random (re)labelling
 #
-#   $Revision: 1.7 $   $Date: 2013/02/27 01:01:20 $
+#   $Revision: 1.8 $   $Date: 2015/02/11 09:19:10 $
 #
 #
 rlabel <- function(X, labels=marks(X), permute=TRUE) {
@@ -20,7 +20,7 @@ rlabel <- function(X, labels=marks(X), permute=TRUE) {
     nlabels <- nrow(labels)
     if(permute && (nlabels != npts))
       stop("number of rows of data frame does not match number of points")      
-    Y <- X %mark% labels[sample(1:nlabels, npts, replace=!permute), ]
+    Y <- X %mark% labels[sample(1:nlabels, npts, replace=!permute), ,drop=FALSE]
   } else stop("Format of labels argument is not understood")
   return(Y)
 }

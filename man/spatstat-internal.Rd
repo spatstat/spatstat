@@ -160,6 +160,7 @@
 \alias{evenly.spaced}
 \alias{exactdt}              
 \alias{exactPdt}
+\alias{exhibitStringList}
 \alias{expand.polynom}
 \alias{expandwinPerfect}
 \alias{explain.ifnot}
@@ -489,6 +490,7 @@
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
+\alias{print.summary.linnet}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
 \alias{print.summary.mppm}
@@ -891,6 +893,7 @@ even.breaks.owin(w)
 evenly.spaced(x, tol)
 exactdt(X, \dots)              
 exactPdt(w)
+exhibitStringList(prefix, strings)
 expand.polynom(f)
 expandwinPerfect(W, expand, amount)
 explain.ifnot(expr, context)
@@ -1260,6 +1263,7 @@ primesbelow(nmax)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
+\method{print}{summary.linnet}(x, \dots)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)

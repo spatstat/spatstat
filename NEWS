@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.044
+	CHANGES IN spatstat VERSION 1.40-0.045
 
 OVERVIEW
 
@@ -174,6 +174,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.pp3
    Now respects options('width')
 
+   o print.lpp
+   Now respects options('width') and options('digits').
+
    o print.owin, print.im, print.summary.owin, print.summary.im
    Now respect options('width').
 
@@ -233,7 +236,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Accelerated.
 
    o summary.linnet
-   Now prints more information.
+   Now prints more information, and respects options('digits').
 
 BUG FIXES
 

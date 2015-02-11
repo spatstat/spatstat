@@ -96,28 +96,43 @@ linnet <- function(vertices, m, edges) {
 print.linnet <- function(x, ...) {
   nv <- x$vertices$n
   nl <- x$lines$n
-  ne <- sum(x$m)/2
   splat("Linear network with",
-        nv, ngettext(nv, "vertex,", "vertices,"), 
-        nl, ngettext(nl, "line", "lines"),
+        nv, ngettext(nv, "vertex", "vertices"), 
         "and",
-        ne, ngettext(ne, "edge", "edges"))
+        nl, ngettext(nl, "line", "lines"))
+  print(as.owin(x), prefix="Enclosing window: ")
   return(invisible(NULL))
 }
 
 summary.linnet <- function(object, ...) {
-  print(object, ...)
-  unitinfo <- summary(unitname(object))
+  deg <- vertexdegree(object)
+  result <- list(nvert = object$vertices$n,
+                 nline = object$lines$n,
+                 nedge = sum(deg)/2,
+                 unitinfo = summary(unitname(object)),
+                 totlength = sum(lengths.psp(object$lines)),
+                 diam = diameter(object),
+                 circrad = circumradius(object),
+                 maxdegree = max(deg),
+                 win = as.owin(object))
+  class(result) <- c("summary.linnet", class(result))
+  result
+}
+
+print.summary.linnet <- function(x, ...) {
   dig <- getOption('digits')
-  len <- sum(lengths.psp(object$lines))
-  splat("Total length",
-        signif(len, dig), 
-        unitinfo$plural, unitinfo$explain)
-  splat("Diameter:", signif(diameter(object), dig), unitinfo$plural)
-  if(!is.null(cr <- object$circumradius))
-    splat("Circumradius:", signif(cr, dig), unitinfo$plural)
-  splat("Maximum vertex degree:", max(vertexdegree(object)))
-  print(as.owin(object))
+  with(x, {
+    splat("Linear network with",
+          nvert, ngettext(nvert, "vertex", "vertices"), 
+          "and",
+          nline, ngettext(nline, "line", "lines"))
+    splat("Total length", signif(totlength, dig), 
+          unitinfo$plural, unitinfo$explain)
+    splat("Diameter:", signif(diam, dig), unitinfo$plural)
+    splat("Circumradius:", signif(circrad, dig), unitinfo$plural)
+    splat("Maximum vertex degree:", maxdegree)
+    print(win, prefix="Enclosing window: ")
+  })
   return(invisible(NULL))
 }
 
