@@ -172,6 +172,7 @@ There are also the following spatial data sets which are not 2D point patterns:
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
 {\tt chicago} & street crimes & point pattern on linear network \\
+{\tt dendrite} & dendritic spines & point pattern on linear network \\
 {\tt spiders} & spider webs & point pattern on linear network \\
 {\tt flu} & virus proteins & replicated 2D point patterns \\
 {\tt heather} & heather mosaic & binary image (three versions) \\
@@ -421,6 +422,21 @@ A synthetic example of a point pattern for demonstration purposes.
 
 <<fig=TRUE>>=
 plot(demopat)
+@ 
+
+\subsubsection*{\texttt{dendrite}}
+
+  Dendrites are branching filaments which extend from the
+  main body of a neuron (nerve cell) to propagate electrochemical
+  signals. Spines are small protrusions on the dendrites.
+
+  This dataset gives the locations of 566 spines
+  observed on one branch of the dendritic tree of a rat neuron.
+  The spines are classified according to their shape into three types:
+  mushroom, stubby or thin.
+
+<<fig=TRUE>>=
+plot(dendrite, leg.side="bottom", main="", cex=0.75, cols=2:4)
 @ 
 
 \subsubsection*{\texttt{finpines}: Finnish pine saplings}

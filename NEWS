@@ -1,10 +1,11 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.045
+	CHANGES IN spatstat VERSION 1.40-0.046
 
 OVERVIEW
 
-   o We thank Ahmed El-Gabbas, Ute Hahn, Ian Renner, Brian Ripley, 
-   Torben Tvedebrink and Sasha Voss for contributions.
+   o We thank Ahmed El-Gabbas, Ute Hahn, Aruna Jammalamadaka,
+   Ian Renner, Brian Ripley, Torben Tvedebrink and Sasha Voss 
+   for contributions.
 
    o Fixed a bug causing a segmentation fault.
 
@@ -20,7 +21,7 @@ OVERVIEW
 
    o More support for linear networks.
 
-   o New dataset: spiders.
+   o New datasets: 'spiders' and 'dendrite'.
 
    o Improvements and bug fixes.
 
@@ -31,6 +32,11 @@ OVERVIEW
    o Nickname: 'Team Australia'
 
 NEW DATASETS
+
+   o dendrite
+   Dendritic spines on the dendrite network of a neuron.
+   A point pattern on a linear network.
+   Generously contributed by Aruna Jammalamadaka.
 
    o spiders
    Spider webs on the mortar lines of a brick wall.
@@ -192,7 +198,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    When a row of data is extracted with drop=TRUE, the result
    belongs to class 'anylist'.
 
-   o [installation of spatstat]
+   o installation of spatstat
    A Fortran compiler is no longer needed to compile spatstat from source.
 
    o hyperframe class
@@ -222,6 +228,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o iplot.layered
    New argument 'visible' controls which layers are initially visible.
 
+   o plot.lpp
+   New argument 'show.window' controls whether to plot the containing window.
+   
    o textstring
    Any number of spatial locations (x,y) can be specified,
    with a corresponding vector of text strings.

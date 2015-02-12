@@ -62,7 +62,10 @@ lpp(X, L)
   \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \seealso{
-  \code{\link{as.lpp}} for converting data to an \code{lpp} object.
+  Installed datasets which are \code{"lpp"} objects:
+  \code{\link{chicago}}, \code{\link{dendrite}}, \code{\link{spiders}}.
+  
+  See \code{\link{as.lpp}} for converting data to an \code{lpp} object.
 
   See \code{\link{methods.lpp}} and
   \code{\link{methods.ppx}} for other methods applicable

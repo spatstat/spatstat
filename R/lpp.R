@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.28 $   $Date: 2015/02/11 06:00:05 $
+#  $Revision: 1.29 $   $Date: 2015/02/12 01:28:32 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -83,7 +83,8 @@ print.lpp <- function(x, ...) {
 
 plot.lpp <- function(x, ..., main, add=FALSE,
                      use.marks=TRUE, which.marks=NULL,
-                     show.all=!add, do.plot=TRUE, multiplot=TRUE) {
+                     show.all=!add, show.window=FALSE,
+                     do.plot=TRUE, multiplot=TRUE) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   ## Handle multiple columns of marks as separate plots
@@ -97,7 +98,8 @@ plot.lpp <- function(x, ..., main, add=FALSE,
       ## generate one plot for each column of marks
       y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
       out <- do.call("plot",
-                     c(list(x=y, main=main, do.plot=do.plot),
+                     c(list(x=y, main=main, do.plot=do.plot,
+                            show.window=show.window),
                        list(...)))
       return(invisible(out))
     } 
@@ -112,8 +114,12 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   if(!do.plot) return(a)
   ## initialise graphics space
   if(!add) {
-    b <- attr(a, "bbox")
-    plot(b, type="n", main=main, ..., show.all=FALSE)
+    if(show.window) {
+      plot(Window(P), main=main, invert=TRUE, ...)
+    } else {
+      b <- attr(a, "bbox")
+      plot(b, type="n", main=main, ..., show.all=FALSE)
+    }
   }
   ## plot linear network
   L <- as.linnet(x)
@@ -124,7 +130,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   ## plot points, legend, title
   ans <- do.call.matched("plot.ppp",
                          c(list(x=P, add=TRUE, main=main,
-                                show.all=show.all),
+                                show.all=show.all, show.window=FALSE),
                            list(...)),
                          extrargs=c("shape", "size", "pch", "cex",
                            "fg", "bg", "col", "lty", "lwd", "etch",

@@ -41,6 +41,8 @@ plot(copper$Lines, add=TRUE)
 plot(demohyper, quote({ plot(Image, main=""); plot(Points, add=TRUE) }),
       parargs=list(mar=rep(1,4)))
 
+plot(dendrite, leg.side="bottom", main="", cex=0.75, cols=2:4)
+
 plot(demopat)
 
 plot(finpines, main="Finnish pines")

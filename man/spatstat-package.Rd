@@ -250,6 +250,7 @@
 	\code{\link{chorley}} \tab Chorley-Ribble cancer data \cr
 	\code{\link{clmfires}} \tab Castilla-La Mancha forest fires \cr
 	\code{\link{copper}} \tab Berman-Huntington copper deposits data \cr
+	\code{\link{dendrite}} \tab Dendritic spines \cr
 	\code{\link{demohyper}} \tab Synthetic point patterns\cr
 	\code{\link{demopat}} \tab Synthetic point pattern \cr
 	\code{\link{finpines}} \tab Finnish Pines data \cr
@@ -672,6 +673,7 @@
       \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
       \code{\link{chicago}} \tab Chicago street crime data \cr
+      \code{\link{dendrite}} \tab Dendritic spines data \cr
       \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall \cr
     }
     

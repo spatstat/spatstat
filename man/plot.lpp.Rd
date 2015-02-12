@@ -10,7 +10,8 @@
 \usage{
 \method{plot}{lpp}(x, \dots, main, add = FALSE,
                    use.marks=TRUE, which.marks=NULL,
-                   show.all = !add, do.plot = TRUE, multiplot=TRUE) 
+                   show.all = !add, show.window=FALSE,
+                   do.plot = TRUE, multiplot=TRUE) 
 }
 \arguments{
   \item{x}{
@@ -48,7 +49,11 @@
   }
   \item{show.all}{
     Logical value indicating whether to plot everything
-    including the main title and the observation window of \code{x}.
+    including the main title and the window containing the network.
+  }
+  \item{show.window}{
+    Logical value indicating whether to plot the
+    window containing the network. Overrides \code{show.all}.
   }
   \item{do.plot}{
     Logical value determining whether to actually perform the plotting.
@@ -70,8 +75,6 @@
     types of points
     \item \code{legend} and \code{leg.side} to control the graphics
     legend
-    \item \code{show.window=FALSE} to suppress the box drawn around
-    the linear network.
   }
 }
 \value{
