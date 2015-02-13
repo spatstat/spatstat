@@ -82,6 +82,11 @@ linearKcross.inhom(X, i, j, lambdaI, lambdaJ,
   The values of \eqn{r} must be increasing nonnegative numbers
   and the maximum \eqn{r} value must not exceed the radius of the
   largest disc contained in the window.
+
+  If \code{lambdaI} or \code{lambdaJ} is a fitted point process model,
+  the default behaviour is to update the model by re-fitting it to
+  the data, before computing the fitted intensity.
+  This can be disabled by setting \code{update=FALSE}.
 }
 \references{
   Baddeley, A, Jammalamadaka, A. and Nair, G. (to appear)

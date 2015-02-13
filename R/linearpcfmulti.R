@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.4 $ $Date: 2014/11/10 10:49:57 $
+# $Revision: 1.5 $ $Date: 2015/02/12 11:21:16 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -98,8 +98,6 @@ linearpcfdot.inhom <- function(X, i, lambdaI, lambdadot,
     if(!(i %in% lev)) stop(paste("i = ", i , "is not a valid mark"))  
   I <- (marx == i)
   J <- rep(TRUE, npoints(X))  # i.e. all points
-  # for better error messages
-  lambdadot <- getlambda.lpp(lambdadot, X, ...)
   # compute
   result <- linearpcfmulti.inhom(X, I, J, lambdaI, lambdadot, 
                                r=r, correction=correction, normalise=normalise,
@@ -178,6 +176,8 @@ linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
   type <- if(correction == "Ang") "L, inhom" else "net, inhom"
   g <- rebadge.as.crossfun(g, "g", type, "I", "J")
   attr(g, "correction") <- correction
+  attr(g, "dangerous") <- union(attr(lambdaI, "dangerous"),
+                                attr(lambdaJ, "dangerous"))
   return(g)
 }
 

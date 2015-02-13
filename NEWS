@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.046
+	CHANGES IN spatstat VERSION 1.40-0.047
 
 OVERVIEW
 
@@ -160,6 +160,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Zero values in the interaction radii are now treated as NA.
    Improved handling of missing arguments.
    Printed output now respects options('width')
+
+   o linearKinhom, linearKcross.inhom, linearKdot.inhom,
+     linearpcfinhom, linearpcfcross.inhom, linearpcfdot.inhom
+   If the intensity argument lambda, lambdaI, lambdaJ, lambdadot
+   is a fitted point process model, the model is first updated
+   by re-fitting it to the data, before computing the fitted intensity.
 
    o solutionset
    The expression will be evaluated using pixel arithmetic (Math.im)

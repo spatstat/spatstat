@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.32 $ $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.34 $ $Date: 2015/02/12 12:00:59 $
 #
 # K function for point pattern on linear network
 #
@@ -67,12 +67,24 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
            fname <- c("K", "list(net, inhom)")
          })
   K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab)
+  attr(K, "dangerous") <- attr(lambdaX, "dangerous")
   return(K)
 }
 
-getlambda.lpp <- function(lambda, X, ...) {
+getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
   lambdaname <- deparse(substitute(lambda))
   XX <- as.ppp(X)
+  missup <- missing(update)
+  if(update && (is.lppm(lambda) || is.ppm(lambda))) {
+    danger <- FALSE
+    model <- if(is.lppm(lambda)) update(lambda, X) else update(lambda, XX)
+    if(missup)
+      warn.once("lin.inhom.update",
+                "The behaviour of linearKinhom and similar functions",
+                "when lambda is an lppm object",
+                "has changed (in spatstat 1.41-0 and later)",
+                "See help(linearKinhom)")
+  } else danger <- TRUE
   lambdaX <-
     if(is.vector(lambda)) lambda  else
     if(is.function(lambda)) lambda(XX$x, XX$y, ...) else
@@ -82,7 +94,6 @@ getlambda.lpp <- function(lambda, X, ...) {
       predict(lambda, locations=as.data.frame(XX)) else
     stop(paste(lambdaname, "should be",
                "a numeric vector, function, pixel image, or fitted model"))
-
   if(!is.numeric(lambdaX))
     stop(paste("Values of", lambdaname, "are not numeric"))
   if((nv <- length(lambdaX)) != (np <- npoints(X)))
@@ -92,7 +103,8 @@ getlambda.lpp <- function(lambda, X, ...) {
     stop(paste("Negative values of", lambdaname, "obtained"))
   if(any(lambdaX == 0))
     stop(paste("Zero values of", lambdaname, "obtained"))
-
+  if(danger)
+    attr(lambdaX, "dangerous") <- lambdaname
   return(lambdaX)
 }
 

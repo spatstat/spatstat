@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.29 $   $Date: 2015/02/12 01:28:32 $
+#  $Revision: 1.30 $   $Date: 2015/02/12 10:34:51 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -142,17 +142,37 @@ plot.lpp <- function(x, ..., main, add=FALSE,
 summary.lpp <- function(object, ...) {
   stopifnot(inherits(object, "lpp"))
   L <- object$domain
-  out <- summary(L)
+  result <- summary(L)
   np <- npoints(object)
-  lambda <- np/out$totlength
-  marx <- marks(object)
-  summarx <- if(is.null(marx)) NULL else summary(marx)
-  out <- append(out,
-                list(npoints=np,
-                     intensity=lambda,
-                     marks=summarx))
-  class(out) <- "summary.lpp"
-  return(out)
+  result$npoints <- np <- npoints(object)
+  result$intensity <- np/result$totlength
+  result$is.marked <- is.marked(object)
+  result$is.multitype <- is.marked(object)
+  if(result$is.marked) {
+    mks <- marks(object)
+    if(result$multiple.marks <- is.data.frame(mks)) {
+      result$marknames <- names(mks)
+      result$is.numeric <- FALSE
+      result$marktype <- "dataframe"
+      result$is.multitype <- FALSE
+    } else {
+      result$is.numeric <- is.numeric(mks)
+      result$marknames <- "marks"
+      result$marktype <- typeof(mks)
+      result$is.multitype <- is.multitype(object)
+    }
+    if(result$is.multitype) {
+      tm <- as.vector(table(mks))
+      tfp <- data.frame(frequency=tm,
+                        proportion=tm/sum(tm),
+                        intensity=tm/result$totlength,
+                        row.names=levels(mks))
+      result$marks <- tfp
+    } else 
+      result$marks <- summary(mks)
+  }
+  class(result) <- "summary.lpp"
+  return(result)
 }
 
 print.summary.lpp <- function(x, ...) {
@@ -166,9 +186,22 @@ print.summary.lpp <- function(x, ...) {
   splat("Total length", signif(x$totlength, dig), u$plural, u$explain)
   splat("Average intensity", signif(x$intensity, dig),
         "points per", if(u$vanilla) "unit length" else u$singular)
-  if(!is.null(x$marks)) {
-    cat("Marks:\n")
-    print(x$marks)
+  if(x$is.marked) {
+    if(x$multiple.marks) {
+      splat("Mark variables:", commasep(x$marknames, ", "))
+      cat("Summary:\n")
+      print(x$marks)
+    } else if(x$is.multitype) {
+      cat("Multitype:\n")
+      print(signif(x$marks,dig))
+    } else {
+      splat("marks are ",
+            if(x$is.numeric) "numeric, ",
+            "of type ", sQuote(x$marktype),
+            sep="")
+      cat("Summary:\n")
+      print(x$marks)
+    }
   }
   print(x$win, prefix="Enclosing window: ")
   invisible(NULL)

@@ -53,6 +53,11 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
   or a pixel image (object of class \code{"im"}) or a fitted point 
   process model (object of class \code{"ppm"} or \code{"lppm"}).
 
+  If \code{lambda} is a fitted point process model,
+  the default behaviour is to update the model by re-fitting it to
+  the data, before computing the fitted intensity.
+  This can be disabled by setting \code{update=FALSE}.
+  
   If \code{correction="none"}, the calculations do not include
   any correction for the geometry of the linear network.
   If \code{correction="Ang"}, the pair counts are weighted using
