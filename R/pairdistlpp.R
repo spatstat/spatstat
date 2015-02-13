@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.10 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.11 $ $Date: 2015/02/13 06:42:44 $
 #
 #
 #  pairdist.lpp
@@ -13,7 +13,7 @@ pairdist.lpp <- function(X, ..., method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
   #
-  L <- as.linnet(X)
+  L <- as.linnet(X, sparse=FALSE)
   Y <- as.ppp(X)
   n <- npoints(Y)
   #

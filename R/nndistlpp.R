@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.4 $ $Date: 2014/11/10 12:08:48 $
+#  $Revision: 1.5 $ $Date: 2015/02/13 06:42:51 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -13,7 +13,7 @@ nndist.lpp <- function(X, ..., method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
   #
-  L <- X$domain
+  L <- as.linnet(X$domain, sparse=FALSE)
   Y <- as.ppp(X)
   n <- npoints(Y)
   #

@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.31 $    $Date: 2015/02/10 11:01:31 $
+#    $Revision: 1.32 $    $Date: 2015/02/13 07:50:48 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -30,24 +30,28 @@
 
 # Make an object of class "linnet" from the minimal data
 
-linnet <- function(vertices, m, edges) {
+linnet <- function(vertices, m, edges, sparse=FALSE) {
   if(missing(m) && missing(edges))
     stop("specify either m or edges")
   if(!missing(m) && !missing(edges))
     stop("do not specify both m and edges")
   # validate inputs
   stopifnot(is.ppp(vertices))
-  if((nv <- npoints(vertices)) <= 1) {
+  nv <- npoints(vertices)
+  if(nv <= 1) {
     m <- matrix(FALSE, nv, nv)
   } else if(!missing(m)) {
-    # check logical matrix
-    stopifnot(is.matrix(m) && is.logical(m) && isSymmetric(m))
+    # check logical matrix or logical sparse matrix
+    if(!is.matrix(m) && !inherits(m, c("lgCMatrix", "lgTMatrix")))
+      stop("m should be a matrix or sparse matrix")
+    stopifnot(is.logical(m) && isSymmetric(m))
     if(nrow(m) != vertices$n)
       stop("dimensions of matrix m do not match number of vertices")
     if(any(diag(m))) {
       warning("diagonal entries of the matrix m should not be TRUE; ignored")
       diag(m) <- FALSE
     }
+    sparse <- !is.matrix(m)
   } else {
     # check (from, to) pairs
     stopifnot(is.matrix(edges) && ncol(edges) == 2)
@@ -61,33 +65,38 @@ linnet <- function(vertices, m, edges) {
     if(any(edges > np))
       stop("index out-of-bounds in edges list")
     # convert to adjacency matrix
-    m <- matrix(FALSE, np, np)
-    m[edges] <- TRUE
+    if(!sparse) {
+      m <- matrix(FALSE, np, np)
+      m[edges] <- TRUE
+    } else 
+      m <- sparseMatrix(i=edges[,1], j=edges[,2], x=TRUE, dims=c(np, np))
     m <- m | t(m)
   }
   # create line segments
-  rowm <- row(m)
-  colm <- col(m)
-  uptri <- m & (rowm < colm)
-  from <- as.vector(rowm[uptri])
-  to   <- as.vector(colm[uptri])
+  ij <- which(m, arr.ind=TRUE)
+  ij <- ij[ ij[,1] < ij[,2], , drop=FALSE]
+  from <- ij[,1]
+  to   <- ij[,2]
   xx   <- vertices$x
   yy   <- vertices$y
   lines <- psp(xx[from], yy[from], xx[to], yy[to], window=vertices$window,
                check=FALSE)
+  ## pack up
+  out <- list(vertices=vertices, m=m, lines=lines, from=from, to=to,
+              sparse=sparse, window=vertices$window)
+  class(out) <- c("linnet", class(out))
+  ## finish ?
+  if(sparse)
+    return(out)
   # compute matrix of distances between adjacent vertices
   n <- nrow(m)
   d <- matrix(Inf, n, n)
   diag(d) <- 0
   d[m] <- pairdist(vertices)[m]
-  # now compute shortest-path distances between each pair of vertices
-  dpath <- dist2dpath(d)
+  ## now compute shortest-path distances between each pair of vertices
+  out$dpath <- dpath <- dist2dpath(d)
   if(any(is.infinite(dpath)))
     warning("Network is not connected")
-  # pack up
-  out <- list(vertices=vertices, m=m, lines=lines, from=from, to=to,
-              dpath=dpath, window=vertices$window)
-  class(out) <- c("linnet", class(out))
   # pre-compute circumradius
   out$circumradius <- circumradius(out)
   return(out)  
@@ -106,15 +115,19 @@ print.linnet <- function(x, ...) {
 
 summary.linnet <- function(object, ...) {
   deg <- vertexdegree(object)
+  sparse <- object$sparse %orifnull% is.null(object$dpath)
   result <- list(nvert = object$vertices$n,
                  nline = object$lines$n,
                  nedge = sum(deg)/2,
                  unitinfo = summary(unitname(object)),
                  totlength = sum(lengths.psp(object$lines)),
-                 diam = diameter(object),
-                 circrad = circumradius(object),
                  maxdegree = max(deg),
-                 win = as.owin(object))
+                 win = as.owin(object),
+                 sparse = sparse)
+  if(!sparse) {
+    result$diam <- diameter(object)
+    result$circrad <- circumradius(object)
+  }
   class(result) <- c("summary.linnet", class(result))
   result
 }
@@ -128,9 +141,11 @@ print.summary.linnet <- function(x, ...) {
           nline, ngettext(nline, "line", "lines"))
     splat("Total length", signif(totlength, dig), 
           unitinfo$plural, unitinfo$explain)
-    splat("Diameter:", signif(diam, dig), unitinfo$plural)
-    splat("Circumradius:", signif(circrad, dig), unitinfo$plural)
     splat("Maximum vertex degree:", maxdegree)
+    if(sparse) splat("[Sparse matrix representation]") else {
+      splat("Diameter:", signif(diam, dig), unitinfo$plural)
+      splat("Circumradius:", signif(circrad, dig), unitinfo$plural)
+    }
     print(win, prefix="Enclosing window: ")
   })
   return(invisible(NULL))
@@ -175,11 +190,29 @@ as.linnet <- function(X, ...) {
   UseMethod("as.linnet")
 }
 
-as.linnet.linnet <- function(X, ...) { X }
+as.linnet.linnet <- function(X, ..., sparse) {
+  if(missing(sparse)) return(X)
+  if(is.null(X$sparse)) X$sparse <- is.null(X$dpath)
+  if(sparse && !(X$sparse)) {
+    # delete distance matrix
+    X$dpath <- NULL
+    X$sparse <- TRUE
+  } else if(!sparse && X$sparse) {
+    # compute distance matrix
+    m <- X$m
+    n <- nrow(m)
+    d <- matrix(Inf, n, n)
+    diag(d) <- 0
+    d[m] <- pairdist(vertices)[m]
+    X$dpath <- dist2dpath(d)
+    X$circumradius <- circumradius(X)
+  }
+  return(X)
+}
 
 as.linnet.psp <- local({
   
-  as.linnet.psp <- function(X, ..., eps) {
+  as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
     X <- selfcut.psp(X)
     V <- unique(endpoints.psp(X))
     nV <- npoints(V)
@@ -200,7 +233,7 @@ as.linnet.psp <- local({
     from <- nncross(first, V, what="which")
     to   <- nncross(second, V, what="which")
     join <- cbind(from, to)[from != to, , drop=FALSE]
-    linnet(V, edges=join)
+    linnet(V, edges=join, sparse=sparse)
   }
 
   centro <- function(X) as.list(apply(X, 2, mean))
@@ -226,7 +259,8 @@ unitname.linnet <- function(x) {
 
 diameter.linnet <- function(x) {
   stopifnot(inherits(x, "linnet"))
-  max(0, x$dpath)
+  dpath <- x$dpath
+  if(is.null(dpath)) return(NULL) else return(max(0, dpath))
 }
 
 volume.linnet <- function(x) {
@@ -244,6 +278,7 @@ circumradius.linnet <- function(x, ...) {
   if(!is.null(cr))
     return(cr)
   dpath <- x$dpath
+  if(is.null(dpath)) return(NULL)
   if(nrow(dpath) <= 1)
     return(max(0,dpath))
   from  <- x$from
@@ -299,8 +334,10 @@ scalardilate.linnet <- function(X, f, ...) {
   Y$vertices     <- scalardilate(X$vertices, f=f)
   Y$lines        <- scalardilate(X$lines, f=f)
   Y$window       <- scalardilate(X$window, f=f)
-  Y$dpath        <- f * X$dpath
-  Y$circumradius <- f * X$circumradius
+  if(!is.null(X$dpath)) {
+    Y$dpath        <- f * X$dpath
+    Y$circumradius <- f * X$circumradius
+  }
   return(Y)
 }
 
@@ -313,8 +350,10 @@ affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
     Y$vertices     <- affine(X$vertices, mat=mat, vec=vec, ...)
     Y$lines        <- affine(X$lines,    mat=mat, vec=vec, ...)
     Y$window       <- affine(X$window,   mat=mat, vec=vec, ...)
-    Y$dpath        <- scal * X$dpath
-    Y$circumradius <- scal * X$circumradius
+    if(!is.null(X$dpath)) {
+      Y$dpath        <- scal * X$dpath
+      Y$circumradius <- scal * X$circumradius
+    }
   } else {
     # general case
     vertices <- affine(X$vertices, mat=mat, vec=vec, ...)
@@ -370,7 +409,8 @@ rescale.linnet <- function(X, s, unitname) {
   newfrom <- newserial[x$from[okedge]]
   newto   <- newserial[x$to[okedge]]
   # make new linear network
-  xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto))
+  xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto),
+                 sparse=x$sparse %orifnull% is.null(x$dpath))
   return(xnew)
 }
 

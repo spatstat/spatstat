@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.5 $  $Date: 2015/01/19 09:19:36 $
+#   $Revision: 1.6 $  $Date: 2015/02/13 07:04:15 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -41,10 +41,6 @@ vcov.kppm <- function(object, ...,
       stop("Argument fast must be NULL or logical.")
   # compute pair correlation function minus 1
   if(fast){
-    if(!require(Matrix))
-      stop(paste("Package Matrix must be installed in order for",
-                 "the fast option to work."),
-           call.=FALSE)
     if(is.null(rmax)){
         diamwin <- diameter(as.owin(U))
         fnc <- get("fnc", envir = environment(improve.kppm))

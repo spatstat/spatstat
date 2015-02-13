@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.101 $	$Date: 2015/02/11 10:43:57 $
+#	$Revision: 4.102 $	$Date: 2015/02/13 08:18:19 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -341,10 +341,12 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
 # ------------------------------------------------------------------
 #
 #
-scanpp <- function(filename, window, header=TRUE, dir="", factor.marks = NULL, ...) {
+scanpp <- function(filename, window, header=TRUE, dir="",
+                   factor.marks = NULL, ...) {
   filename <- if(dir=="") filename else
               paste(dir, filename, sep=.Platform$file.sep)
-  df <- read.table(filename, header=header, stringsAsFactors = is.null(factor.marks))
+  df <- read.table(filename, header=header,
+                   stringsAsFactors = is.null(factor.marks))
   if(header) {
     # check whether there are columns named 'x' and 'y'
     colnames <- dimnames(df)[[2]]
@@ -376,13 +378,15 @@ scanpp <- function(filename, window, header=TRUE, dir="", factor.marks = NULL, .
           } else{
               ignored <- paste(" and it is ignored since",
                                sQuote("factor.marks"),
-                               "is also supplied.")
+                               "is also supplied")
           }
-          warning("It appears you have called scanpp with (something partially matching)",
-                  " the deprecated argument ", sQuote("multitype"), ignored,
+          warning("It appears you have called scanpp ",
+                  " with (something partially matching) ",
+                  " the deprecated argument ",
+                  paste0(sQuote("multitype"), ignored, "."),
                   " Please change to the new syntax.")
       }
-    marks <- df[ , -xycolumns]
+    marks <- df[ , -xycolumns, drop=FALSE]
     if(any(factor.marks)){
         # Find indices to convert to factors (recycling to obtain correct length)
         factorid <- (1:ncol(marks))[factor.marks]

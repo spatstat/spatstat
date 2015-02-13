@@ -8,7 +8,7 @@
   a network of line segments.
 }
 \usage{
-linnet(vertices, m, edges)
+linnet(vertices, m, edges, sparse=FALSE)
 }
 \arguments{
   \item{vertices}{
@@ -16,7 +16,8 @@ linnet(vertices, m, edges)
     specifying the vertices of the network.
   }
   \item{m}{
-    Adjacency matrix. A matrix of logical values equal to \code{TRUE}
+    Adjacency matrix. A matrix or sparse matrix
+    of logical values equal to \code{TRUE}
     when the corresponding vertices are joined by a line.
     (Specify either \code{m} or \code{edges}.)
   }
@@ -26,6 +27,10 @@ linnet(vertices, m, edges)
     that should be joined by an edge. 
     (Specify either \code{m} or \code{edges}.)
   }
+  \item{sparse}{
+    Optional. Logical value indicating whether to use a
+    sparse matrix representation of the network. See Details.
+  }
 }
 \details{
   An object of class \code{"linnet"} represents a network of
@@ -34,9 +39,17 @@ linnet(vertices, m, edges)
   of each vertex (endpoint, crossing point or meeting point of lines)
   and information about which vertices are joined by an edge.
 
-  This function can take some time to execute, because the algorithm
-  computes various properties of the network that are stored in the
-  resulting object.
+  If \code{sparse=FALSE} (the default), the algorithm will compute
+  and store various properties of the network, including
+  the adjacency matrix \code{m} and a matrix giving the
+  shortest-path distances between each pair of vertices in the network.
+  This is more efficient for small datasets. However it can require
+  large amounts of memory and can take a long time to execute.
+
+  If \code{sparse=TRUE}, then the shortest-path distances will not be computed,
+  and the network adjacency matrix \code{m} will be stored as a
+  sparse matrix. This saves a lot of time and memory when creating the
+  linear network.
 }
 \value{
   Object of class \code{"linnet"} representing the linear network.

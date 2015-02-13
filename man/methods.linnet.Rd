@@ -22,9 +22,9 @@
 \usage{
 as.linnet(X, ...)
 
-\method{as.linnet}{linnet}(X, ...)
+\method{as.linnet}{linnet}(X, ..., sparse)
 
-\method{as.linnet}{lpp}(X, ..., fatal=TRUE)
+\method{as.linnet}{lpp}(X, ..., fatal=TRUE, sparse)
 
 \method{as.owin}{linnet}(W, ...)
 
@@ -60,6 +60,11 @@ vertexdegree(x)
     Logical value indicating whether data in the wrong format
     should lead to an error (\code{fatal=TRUE}) or a warning
     (\code{fatal=FALSE}).
+  }
+  \item{sparse}{
+    Logical value indicating whether to use a sparse matrix
+    representation, as explained in \code{\link{linnet}}.
+    Default is to keep the same representation as in \code{X}.
   }
 }
 \details{

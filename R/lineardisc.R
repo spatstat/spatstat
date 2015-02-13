@@ -15,6 +15,10 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   #
   stopifnot(inherits(L, "linnet"))
   check.1.real(r)
+  if(L$sparse) {
+    message("Converting linear network to non-sparse representation..")
+    L <- as.linnet(L, sparse=FALSE)
+  }
   lines <- L$lines
   vertices <- L$vertices
   lengths <- lengths.psp(lines)

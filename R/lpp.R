@@ -260,9 +260,12 @@ as.owin.lpp <- function(W,  ..., fatal=TRUE) {
 
 domain.lpp <- function(X, ...) { as.linnet(X) }
 
-as.linnet.lpp <- function(X, ..., fatal=TRUE) {
+as.linnet.lpp <- function(X, ..., fatal=TRUE, sparse) {
   verifyclass(X, "lpp", fatal=fatal)
-  X$domain
+  L <- X$domain
+  if(!missing(sparse))
+    L <- as.linnet(L, sparse=sparse)
+  return(L)
 }
   
 "[.lpp" <- function (x, i, ...) {

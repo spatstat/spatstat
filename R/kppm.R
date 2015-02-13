@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.95 $ $Date: 2015/01/21 06:53:41 $
+# $Revision: 1.96 $ $Date: 2015/02/13 07:03:07 $
 #
 
 kppm <- function(X, ...) {
@@ -602,11 +602,6 @@ improve.kppm <- local({
                            save.internals = FALSE) {
     verifyclass(object, "kppm")
     type <- match.arg(type)
-    if(((type == "quasi" && fast) || (vcov && fast.vcov)) && !require(Matrix))
-      stop(paste("Package Matrix must be installed in order for",
-                 "the fast option of quasi-likelihood estimation",
-                 "for cluster models to work."),
-           call.=FALSE)
     gfun <- pcfmodel(object)
     X <- object$X
     win <- as.owin(X)

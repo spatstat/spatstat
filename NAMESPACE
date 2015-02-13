@@ -2,6 +2,7 @@
 
 import(stats,graphics,grDevices,utils)
 import(polyclip,goftest)
+import(Matrix)
 importFrom(deldir,deldir,duplicatedxy,tile.list)
 importFrom(abind,abind)
 importFrom(tensor,tensor)

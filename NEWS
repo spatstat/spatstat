@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.047
+	CHANGES IN spatstat VERSION 1.40-0.048
 
 OVERVIEW
 
@@ -28,6 +28,8 @@ OVERVIEW
    o spatstat no longer uses Fortran.
 
    o spatstat no longer depends on the package 'scatterplot3d'.
+
+   o spatstat now imports (rather than 'suggests') the Matrix package.
 
    o Nickname: 'Team Australia'
 
@@ -112,6 +114,10 @@ NEW FUNCTIONS
    New methods for 'pool' 
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o linnet, lpp
+   A linear network can now be built in 'sparse matrix' form
+   which requires much less memory. 
 
    o kppm
    The parametrisation of cluster models has been reorganised.

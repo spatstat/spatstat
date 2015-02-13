@@ -7,7 +7,7 @@
   Converts a line segment pattern to a linear network.
 }
 \usage{
- \method{as.linnet}{psp}(X, \dots, eps)
+ \method{as.linnet}{psp}(X, \dots, eps, sparse=FALSE)
 }
 \arguments{
   \item{X}{
@@ -21,6 +21,10 @@
     are closer than \code{eps} units apart, they will be treated
     as the same point, and will become a single vertex in the
     linear network.
+  }
+  \item{sparse}{
+    Logical value indicating whether to use a sparse matrix
+    representation, as explained in \code{\link{linnet}}.
   }
 }
 \details{
@@ -51,7 +55,8 @@ and Ege Rubak
 \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{linnet}}, \code{\link{selfcut.psp}}
+  \code{\link{linnet}}, \code{\link{selfcut.psp}},
+  \code{\link{methods.linnet}}.
 }
 \examples{
   # make some data

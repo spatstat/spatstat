@@ -400,6 +400,10 @@ Important new classes of objects are listed here.
 The following datasets have been added to the package.
 
 \begin{itemize}
+\item \texttt{dendrite}:
+  Dendritic spines on a branch of the dendritic tree of a neuron.
+  A point pattern on a linear network.
+   
 \item \texttt{spiders}:
   Spider webs on the mortar lines of a brick wall.
   A point pattern on a linear network.
@@ -467,6 +471,8 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  \item \texttt{iplot.linnet}, \texttt{iplot.lpp}: interactive plotting 
+    for linear networks.
   \item \texttt{as.linnet.psp}:
     Convert line segment pattern to linear network
     by guessing the connectivity using a distance threshold.
@@ -1404,7 +1410,11 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-   \item Tessellations may now have marks.
+  \item Reorganised parametrisation of cluster models.
+
+  \item More support for linear networks.
+  
+  \item Tessellations may now have marks.
 
   \item Nested splitting.
 
@@ -1412,6 +1422,9 @@ the News and Release Notes for each update.
 
    \item  Test for segregation.
 
+   \item \texttt{spatstat} now imports (rather than Suggests)
+     the package \texttt{Matrix}.
+ 
    \item \texttt{spatstat} no longer uses Fortran.
  
    \item \texttt{spatstat} no longer depends on 
@@ -2093,6 +2106,9 @@ listed alphabetically.
    Computation can be greatly accelerated 
    by setting \texttt{spatstat.options(fastK.lgcp=TRUE)}.
 
+ \item \texttt{linnet}: linear networks can be built using a
+   sparse matrix representation to save memory.
+   
   \item \texttt{logLik.ppm}:
     New argument \texttt{new.coef} allows the user to evaluate
     the likelihood for a different value of the parameter.

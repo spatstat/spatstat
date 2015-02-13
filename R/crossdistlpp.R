@@ -1,7 +1,7 @@
 #
 # crossdistlpp.R
 #
-#  $Revision: 1.4 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.5 $ $Date: 2015/02/13 06:43:00 $
 #
 #  crossdist.lpp
 #        Calculates the shortest-path distance from each point of X
@@ -17,9 +17,9 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
   nX <- npoints(X)
   nY <- npoints(Y)
   #
-  L <- as.linnet(X)
+  L <- as.linnet(X, sparse=FALSE)
   if(check) {
-    LY <- as.linnet(Y)
+    LY <- as.linnet(Y, sparse=FALSE)
     if(!identical(L, LY))
       stop("X and Y are on different linear networks")
   }
