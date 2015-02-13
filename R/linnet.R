@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.32 $    $Date: 2015/02/13 07:50:48 $
+#    $Revision: 1.35 $    $Date: 2015/02/13 09:41:23 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -196,16 +196,27 @@ as.linnet.linnet <- function(X, ..., sparse) {
   if(sparse && !(X$sparse)) {
     # delete distance matrix
     X$dpath <- NULL
+    # convert adjacency matrix to sparse matrix
+    X$m <- as(X$m, "sparseMatrix")
     X$sparse <- TRUE
   } else if(!sparse && X$sparse) {
-    # compute distance matrix
-    m <- X$m
+    # convert adjacency to matrix
+    m <- as.matrix(X$m)
+    edges <- which(m, arr.ind=TRUE)
+    from <- edges[,1]
+    to   <- edges[,2]
+    # compute distances to one-step neighbours
     n <- nrow(m)
     d <- matrix(Inf, n, n)
     diag(d) <- 0
-    d[m] <- pairdist(vertices)[m]
+    coo <- coords(vertices(X))
+    d[edges] <- sqrt(rowSums((coo[from, 1:2] - coo[to, 1:2])^2))
+    # compute shortest path distance matrix
     X$dpath <- dist2dpath(d)
+    # compute circumradius
     X$circumradius <- circumradius(X)
+    X$m <- m
+    X$sparse <- FALSE
   }
   return(X)
 }
