@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.30 $   $Date: 2015/02/12 10:34:51 $
+#  $Revision: 1.31 $   $Date: 2015/02/14 09:32:35 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -217,13 +217,17 @@ is.lpp <- function(x) {
 }
 
 as.lpp <- function(x, y=NULL, seg=NULL, tp=NULL, ...,
-                   marks=NULL, L=NULL, check=FALSE) {
-  nomore <- is.null(y) && is.null(seg) && is.null(tp)
+                   marks=NULL, L=NULL, check=FALSE, sparse) {
+  nomore <- is.null(y) && is.null(seg) && is.null(tp) 
   if(inherits(x, "lpp") && nomore) {
     X <- x
+    if(!missing(sparse) && !is.null(sparse))
+      X$domain <- as.linnet(domain(X), sparse=sparse)
   } else {
     if(!inherits(L, "linnet"))
       stop("L should be a linear network")
+    if(!missing(sparse) && !is.null(sparse))
+      L <- as.linnet(L, sparse=sparse)
     if(is.ppp(x) && nomore) {
       X <- lpp(x, L)
     } else {

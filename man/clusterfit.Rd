@@ -17,17 +17,24 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
     See Details.
   }
   \item{clusters}{
-    Character string determining the cluster model.
+    Character string determining the cluster or Cox model.
     Partially matched.
     Options are \code{"Thomas"}, \code{"MatClust"},
     \code{"Cauchy"}, \code{"VarGamma"} and \code{"LGCP"}.
   }
   \item{lambda}{
     Optional. An estimate of the intensity of the point process.
+    Either a single numeric specifying a constant intensity,
+    a pixel image (object of class \code{"im"}) giving the
+    intensity values at all locations, a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"})
+    or a \code{function(x,y)} which
+    can be evaluated to give the intensity value at any location.
   }
   \item{startpar}{
     Vector of initial values of the parameters of the
-    point process mode.
+    point process mode. If \code{X} is a point pattern sensible defaults
+    are used. Otherwise rather arbitrary values are used.
   }
   \item{q,p}{
     Optional. Exponents for the contrast criterion.
@@ -39,7 +46,7 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
     Additional arguments passed to \code{\link{mincontrast}.}
   }
   \item{statistic}{
-    Name of the summary statistic to be used
+    Optional. Name of the summary statistic to be used
     for minimum contrast estimation: either \code{"K"} or \code{"pcf"}.
   }
   \item{statargs}{
@@ -52,20 +59,47 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   process model by the Method of Minimum Contrast, that is, by
   matching the theoretical \eqn{K}-function of the model to the
   empirical \eqn{K}-function of the data, as explained in
-  \code{\link{mincontrast}}....
+  \code{\link{mincontrast}}.
+  
+  If \code{statistic="pcf"} (or \code{X} appears to be an
+  estimated pair correlation function) then instead of using the
+  \eqn{K}-function, the algorithm will use the pair correlation
+  function.
+
+  If \code{X} is a point pattern of class \code{"ppp"} an estimate of
+  the summary statistic specfied by \code{statistic} (defaults to
+  \code{"K"}) is first computed before minimum contrast estimation is
+  carried out as described above. In this case the argument
+  \code{statargs} can be used for controlling the summary statistic
+  estimation. The precise algorithm for computing the summary statistic
+  depends on whether the intensity specification (\code{lambda}) is:
+
+  \describe{
+    \item{homogeneous:}{
+      If \code{lambda} is \code{NUll} or a single numeric the pattern is
+      considered homogeneous and either \code{\link{Kest}} or
+      \code{\link{pcf}} is invoked. In this case \code{lambda} is
+      \bold{not} used for anything when estimating the summary statistic.
+    }
+    \item{inhomogeneous:}{
+
+      If \code{lambda} is a pixel image (object of class \code{"im"}),
+      a fitted point process model (object of class \code{"ppm"} or
+      \code{"kppm"}) or a \code{function(x,y)} the pattern is considered
+      inhomogeneous. In this case either \code{\link{Kinhom}} or
+      \code{\link{pcfinhom}} is invoked with \code{lambda} as an
+      argument.
+      
+    }
+  }
+
+  After the clustering parameters of the model have been estimated by
+  minimum contrast \code{lambda} (if non-null) is used to compute the
+  additional model parameter \eqn{\mu}{mu}.
 }
 \value{
   An object of class \code{"minconfit"}. There are methods for printing
-  and plotting this object. It contains the following components:
-  \item{par }{Vector of fitted parameter values.}
-  \item{fit }{Function value table (object of class \code{"fv"})
-    containing the observed values of the summary statistic
-    (\code{observed}) and the theoretical values of the summary
-    statistic computed from the fitted model parameters.
-  }
-  \item{opt }{The return value from the optimizer \code{\link{optim}}.}
-  \item{crtl }{The control parameters of the algorithm.}
-  \item{info }{List of explanatory strings.}
+  and plotting this object. See \code{\link{mincontrast}}.
 }
 \references{
   Diggle, P.J. and Gratton, R.J. (1984)
@@ -92,6 +126,13 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
 }
 \seealso{
   \code{\link{kppm}}
+}
+\examples{
+  fit <- clusterfit(redwood, "Thomas")
+  fit
+  if(interactive()){
+    plot(fit)
+  }
 }
 \keyword{spatial}
 \keyword{models}

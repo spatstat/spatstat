@@ -125,6 +125,8 @@ mincontrast <- local({
 })
 
 print.minconfit <- function(x, ...) {
+  terselevel <- spatstat.options('terse')
+  digits <- getOption('digits')
   ## explanatory
   cat(paste("Minimum contrast fit ",
             "(",
@@ -158,32 +160,63 @@ print.minconfit <- function(x, ...) {
     if(!is.null(da))
       splat(" fitted to", da)
   }
+
+  if(waxlyrical('space', terselevel))
+      cat("\n")
   ## Values
-  splat("Parameters fitted by minimum contrast ($par):")
+  splat("Internal parameters fitted by minimum contrast ($par):")
   print(x$par, ...)
-  mp <- x$modelpar
-  if(!is.null(mp)) {
-    splat("Derived parameters of",
-          if(!is.null(mo)) mo else "model",
-          "($modelpar):")
-    print(mp)
+  if(waxlyrical('space', terselevel))
+      cat("\n")
+  
+  ## Handling new parameters
+  isPCP <- x$isPCP %orifnull% x$internal$model!="lgcp"
+  cpar <- x$clustpar
+  if (!is.null(cpar)) {
+    splat("Fitted",
+          if(isPCP) "cluster" else "covariance",
+          "parameters:")
+    print(cpar, digits=digits)
+  } else{
+    ## Old modelpar field if necessary
+    mp <- x$modelpar
+    if(!is.null(mp)) {
+      splat("Derived parameters of",
+            if(!is.null(mo)) mo else "model",
+            "($modelpar):")
+      print(mp)
+    }
   }
+  if(!is.null(mu <- x$mu)) {
+    if(isPCP) {
+      splat("Mean cluster size: ",
+            if(!is.im(mu)) paste(signif(mu, digits), "points") else "[pixel image]")
+    } else {
+      splat("Fitted mean of log of random intensity:",
+            if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
+    }
+  }
+  if(waxlyrical('space', terselevel))
+      cat("\n")
   ## Diagnostics
   printStatus(optimStatus(x$opt))
   ## Starting values
-  splat("Starting values of parameters:")
-  print(x$startpar)
-  ## Algorithm parameters
-  ct <- x$ctrl
-  splat("Domain of integration:",
-        "[",
-        signif(ct$rmin,4),
-        ",",
-        signif(ct$rmax,4),
-        "]")
-  splat("Exponents:",
-        "p=", paste(signif(ct$p, 3), ",",  sep=""),
-        "q=", signif(ct$q,3))
+  if(waxlyrical('gory', terselevel)){
+      cat("\n")
+      splat("Starting values of parameters:")
+      print(x$startpar)
+      ## Algorithm parameters
+      ct <- x$ctrl
+      splat("Domain of integration:",
+            "[",
+            signif(ct$rmin,4),
+            ",",
+            signif(ct$rmax,4),
+            "]")
+      splat("Exponents:",
+            "p=", paste(signif(ct$p, 3), ",",  sep=""),
+            "q=", signif(ct$q,3))
+  }
   invisible(NULL)
 }
               
@@ -639,6 +672,24 @@ printStatusList <- function(stats) {
              out[ok] <- outok
              return(out)
            }
+           ## Initiated integration in sub-subintervals, but it is unfinished!
+           ## vargammaK <- function(par,rvals, ..., margs){
+           ##   ## margs = list(.. nu.pcf.. ) 
+           ##   if(any(par <= 0))
+           ##     return(rep.int(Inf, length(rvals)))
+           ##   nu.pcf <- margs$nu.pcf
+           ##   out <- numeric(length(rvals))
+           ##   out[1] <- if(rvals[1] == 0) 0 else 
+           ##   integrate(xgx, lower=0, upper=rvals[1],
+           ##             par = par, nu.pcf=nu.pcf)$value
+           ##   for (i in 2:length(rvals)) {
+           ##     delta <- integrate(xgx,
+           ##                        lower=rvals[i-1], upper=rvals[i],
+           ##                        par=par, nu.pcf=nu.pcf)
+           ##     out[i]=out[i-1]+delta$value
+           ##   }
+           ##   return(out)
+           ## }
            vargammaK
            }), ## end of 'local'
          pcf= function(par,rvals, ..., margs){

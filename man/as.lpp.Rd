@@ -9,7 +9,7 @@
 }
 \usage{
   as.lpp(x, y=NULL, seg=NULL, tp=NULL, \dots,
-         marks=NULL, L=NULL, check=FALSE)
+         marks=NULL, L=NULL, check=FALSE, sparse)
 }
 \arguments{
   \item{x,y}{
@@ -35,6 +35,11 @@
   }
   \item{check}{
     Logical. Whether to check the validity of the spatial coordinates.
+  }
+  \item{sparse}{
+    Optional logical value indicating whether to store the
+    linear network data in a sparse matrix representation or not.
+    See \code{\link{linnet}}.
   }
 }
 \details{

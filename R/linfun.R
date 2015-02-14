@@ -3,23 +3,31 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.3 $   $Date: 2015/02/10 10:23:33 $
+#   $Revision: 1.4 $   $Date: 2015/02/14 11:34:23 $
 #
 
 linfun <- function(f, L) {
   stopifnot(is.function(f))
   stopifnot(inherits(L, "linnet"))
+  fargs <- names(formals(f))
   needargs <- c("x", "y", "seg", "tp")
-  if(!all(needargs %in% names(formals(f)))) 
+  if(!all(needargs %in% fargs))
     stop(paste("Function must have formal arguments",
                commasep(sQuote(needargs))),
          call.=FALSE)
+  otherfargs <- setdiff(fargs, needargs)
   g <- function(...) {
-    dcm <- do.call.matched(as.lpp,
-                           append(list(...), list(L=L)),
-                           sieve=TRUE, matchfirst=TRUE)
-    X <- dcm$result
-    value <- do.call(f, append(as.list(coords(X)), X$otherargs))
+    argh <- list(...)
+    extra <- names(argh) %in% otherfargs
+    if(!any(extra)) {
+      X <- as.lpp(..., L=L)
+      value <- do.call(f, as.list(coords(X)))
+    } else {
+      extrargs <- argh[extra]
+      mainargs <- argh[!extra]
+      X <- do.call(as.lpp, mainargs)
+      value <- do.call(f, append(as.list(coords(X)), extrargs))
+    }
     return(value)
   }
   class(g) <- c("linfun", class(g))

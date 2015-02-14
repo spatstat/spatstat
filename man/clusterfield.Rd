@@ -33,14 +33,14 @@
     cluster kernel. See Details.
   }
   \item{mu}{
-    Expected cluster size. A numerical value or a pixel image.
+     Mean number of offspring per cluster. 
+     A single number or a pixel image.
   }
 }
 \details{
-  The actual calculations are performed by \code{\link{density.ppp}} and
+  The actual calculations are preformed by \code{\link{density.ppp}} and
   \code{\dots} arguments are passed thereto for control over the pixel
-  resolution etc.
-  (These arguments are then passed on to \code{\link{pixellate.ppp}}
+  resolution etc. (These arguments are then passed on to \code{\link{pixellate.ppp}}
   and \code{\link{as.mask}}.)
 
   For the function method the given kernel function should accept

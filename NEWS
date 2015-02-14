@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.049
+	CHANGES IN spatstat VERSION 1.40-0.051
 
 OVERVIEW
 
@@ -19,7 +19,9 @@ OVERVIEW
 
    o Reorganised parametrisation of cluster models.
 
-   o More support for linear networks.
+   o Sparse data representation of linear networks.
+
+   o More support for data on a linear network.
 
    o New datasets: 'spiders' and 'dendrite'.
 
@@ -118,6 +120,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o linnet, lpp
    A linear network can now be built in 'sparse matrix' form
    which requires much less memory. 
+
+   o chicago
+   The Chicago street crimes data are now stored in 'sparse matrix' form.
+   To convert them to non-sparse form, use as.lpp(chicago, sparse=FALSE)
 
    o kppm
    The parametrisation of cluster models has been reorganised.

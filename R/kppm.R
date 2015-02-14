@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.96 $ $Date: 2015/02/13 07:03:07 $
+# $Revision: 1.97 $ $Date: 2015/02/14 09:14:36 $
 #
 
 kppm <- function(X, ...) {
@@ -141,10 +141,10 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
               isPCP      = fitinfo$isPCP,
               po         = po,
               lambda     = lambda,
-              mu         = fitinfo$mu,
+              mu         = mcfit$mu,
               par        = mcfit$par,
-              clustpar   = fitinfo$clustpar,
-              clustargs  = fitinfo$clustargs,
+              clustpar   = mcfit$clustpar,
+              clustargs  = mcfit$clustargs,
               modelpar   = mcfit$modelpar,
               covmodel   = mcfit$covmodel,
               Fit        = Fit)
@@ -202,6 +202,11 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
           stop("Statistic inferred from ", sQuote("X"),
                " not equal to supplied argument ",
                sQuote("statistic"))
+      # Startpar:
+      if(is.null(startpar)){
+          startpar <- info$checkpar(startpar, old=FALSE)
+          startpar[["scale"]] <- mean(range(Stat[[fvnames(Stat, ".x")]]))
+      }
   } else{
       stop("Unrecognised format for argument X")
   }
@@ -230,7 +235,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   fvlab=list(label="%s[fit](r)",
                                       desc=desc),
                                   explain=list(dataname=dataname,
-                                      fname=StatFun,
+                                      fname=statistic,
                                       modelname=info$modelname),
                                   margs=dots$margs,
                                   model=dots$model,
@@ -246,7 +251,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   mcfit$modelpar <- info$interpret(par, lambda)
   mcfit$internal <- list(model=ifelse(isPCP, clusters, "lgcp"))
   mcfit$covmodel <- dots$covmodel
-
+  
   if(isPCP) {
     # Poisson cluster process: extract parent intensity kappa
     kappa <- mcfit$par[["kappa"]]
@@ -258,6 +263,10 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     # mu = mean of log intensity 
     mu <- log(lambda) - sigma2/2
   }
+  ## Parameter values (new format)
+  mcfit$mu <- mu
+  mcfit$clustpar <- info$checkpar(mcfit$par, old=FALSE)
+  mcfit$clustargs <- info$checkclustargs(dots$margs, old=FALSE)
 
   ## The old fit fun that would have been used (DO WE NEED THIS?)
   FitFun <- paste0(tolower(clusters), ".est", statistic)
@@ -268,12 +277,9 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                 StatName  = StatName,
                 modelname  = info$modelabbrev,
                 isPCP      = isPCP,
-                lambda     = lambda,
-                mu         = mu,
-                clustpar   = info$checkpar(mcfit$par, old=FALSE),
-                clustargs  = info$checkclustargs(dots$margs, old=FALSE))
+                lambda     = lambda)
   attr(mcfit, "info") <- extra
-  mcfit
+  return(mcfit)
 }
 
 kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
@@ -893,6 +899,12 @@ clusterfield.function <- function(clusters, locations = NULL, ..., mu = NULL) {
     }
     if(!inherits(locations, "ppp"))
         stop("Argument ", sQuote("locations"), " must be a point pattern (ppp).")
+
+    if("sigma" %in% names(list(...)) && "sigma" %in% names(formals(clusters)))
+        warning("Currently ", sQuote("sigma"),
+                "cannot be passed as an extra argument to the kernel function. ",
+                "Please redefine the kernel function to use another argument name.")
+
     rslt <- density(locations, kernel=clusters, ...)
     if(is.null(mu))
         return(rslt)
@@ -905,6 +917,7 @@ clusterfield.function <- function(clusters, locations = NULL, ..., mu = NULL) {
 plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
   objectname <- short.deparse(substitute(x))
   plotem <- function(x, ..., main=dmain, dmain) { plot(x, ..., main=main) }
+  nochoice <- missing(what)
   what <- pickoption("plot type", what,
                     c(statistic="statistic",
                       intensity="intensity",
@@ -917,12 +930,22 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
     Fit <- x
     Fit$method <- "mincon"
   } 
-  inappropriate <- ((what == "intensity") & (x$stationary)) |
-                   ((what == "statistic") & (Fit$method != "mincon"))
+  inappropriate <- (nochoice && ((what == "intensity") & (x$stationary))) |
+                   ((what == "statistic") & (Fit$method != "mincon")) |
+                   ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp"))
   if(any(inappropriate)) {
     what <- what[!inappropriate]
-    if(length(what) == 0) return(invisible(NULL))
+    if(length(what) == 0){
+        message("Nothing meaningful to plot. Exiting...")
+        return(invisible(NULL))
+    }
   }
+
+  ## Check for missing locations for non-stationary cluster field plot:
+  locations <- list(...)$locations
+  if(!x$stationary && "cluster" %in% what && is.null(locations))
+      stop("Please specify additional argument ", sQuote("locations"),
+           "which will be passed to the function ", sQuote("clusterfield"))
   pauseit <- interactive() && (length(what) > 1)
   if(pauseit) opa <- par(ask=TRUE)
   for(style in what)
@@ -937,7 +960,7 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
                     dmain=c(objectname, Fit$StatName))
            },
            cluster={
-             plotem(clusterfield(x), ...,
+             plotem(clusterfield(x, locations = locations), ...,
                     dmain=c(objectname, "Fitted cluster"))
            })
   if(pauseit) par(opa)

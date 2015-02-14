@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.24 $   $Date: 2015/01/04 03:18:39 $
+#  $Revision: 1.25 $   $Date: 2015/02/14 11:36:21 $
 #
 
 lppm <- function(X, ...) {
@@ -135,11 +135,10 @@ coef.lppm <- function(object, ...) {
 }
 
 print.lppm <- function(x, ...) {
-  cat("Point process model on linear network\n")
+  splat("Point process model on linear network")
   print(x$fit)
-  cat("Linear network:\n")
   print(as.linnet(x))
-  cat(paste("Original data:", x$Xname, "\n"))
+  splat("Original data:", x$Xname)
   return(invisible(NULL))
 }
 
