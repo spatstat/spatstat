@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.051
+	CHANGES IN spatstat VERSION 1.40-0.053
 
 OVERVIEW
 
@@ -287,6 +287,10 @@ BUG FIXES
    were sometimes vastly inflated - total quadrature weight was
    much larger than window area. Spotted by Ian Renner. 
    Fixed.   
+
+   o Math.im
+   Unary operators did not work (e.g."-x")
+   Fixed.
    
    o density.ppp
    Crashed when at="points" if the dataset had exactly 1 point.
@@ -335,6 +339,10 @@ BUG FIXES
 
    o as.linim.linfun
    Erroneously converted the pixel values to numeric values.
+   Fixed.
+
+   o plot.ppm
+   Paused the plot between frames even when there was only one frame.
    Fixed.
 
    o plot.lpp

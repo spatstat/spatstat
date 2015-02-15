@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.11 $   $Date: 2014/11/10 11:14:30 $
+#  $Revision: 1.13 $   $Date: 2015/02/15 03:27:12 $
 #
 #  Image/function on a linear network
 #
@@ -89,6 +89,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
   Lfrom <- L$from
   Lto   <- L$to
   Lvert <- L$vertices
+  Ljoined  <- (vertexdegree(L) > 1)
   for(i in seq(length(dfmap))) {
     z <- dfmap[[i]]
     segid <- unique(z$mapXY)[1]
@@ -96,12 +97,14 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
     yy <- z$y
     vv <- z$values
     # add endpoints of segment
-    leftend <- Lvert[Lfrom[segid]]
-    rightend <- Lvert[Lto[segid]]
+    ileft <- Lfrom[segid]
+    iright <- Lto[segid]
+    leftend <- Lvert[ileft]
+    rightend <- Lvert[iright]
     xx <- c(leftend$x, xx, rightend$x)
     yy <- c(leftend$y, yy, rightend$y)
     vv <- c(vv[1],     vv, vv[length(vv)])
-    # create polygon
+    # draw polygon around segment
     xx <- c(xx, rev(xx))
     yy <- c(yy, rev(yy))
     vv <- c(vv, -rev(vv))/2
@@ -112,6 +115,27 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
                     resolve.defaults(list(x=xx, y=yy),
                                      list(...),
                                      list(border=NA, col=1)))
+    ## add hexagonal 'joints'
+    if(Ljoined[ileft]) {
+      rleft <- abs(vv[1])
+      if(rleft > 0) {
+        hexx <- disc(radius=rleft, centre=leftend, npoly=6)
+        do.call(plot,
+                resolve.defaults(list(x=hexx, add=TRUE),
+                                 list(...),
+                                 list(border=NA, col=1)))
+      }
+    }
+    if(Ljoined[iright]) {
+      rright <- abs(vv[length(vv)])
+      if(rright > 0) {
+        hexx <- disc(radius=rright, centre=rightend, npoly=6)
+        do.call(plot,
+                resolve.defaults(list(x=hexx, add=TRUE),
+                                 list(...),
+                                 list(border=NA, col=1)))
+      }
+    }
   }
   return(invisible(NULL))
 }

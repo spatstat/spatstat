@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.4 $   $Date: 2015/02/14 11:34:23 $
+#   $Revision: 1.5 $   $Date: 2015/02/15 02:50:43 $
 #
 
 linfun <- function(f, L) {
@@ -63,10 +63,10 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
   # replace values
   df$values <- vals
   typ <- typeof(vals)
-  if(typ == "double") typ <- "real"
-  Y$type <- typ
+  storage.mode(Y$v) <- typ
+  Y[] <- vals
+  Y$type <- if(typ == "double") "real" else typ
   attr(Y, "df") <- df
-  Y[!is.na(Y$v)] <- vals
   return(Y)
 }
   

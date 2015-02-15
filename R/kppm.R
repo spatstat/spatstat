@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.97 $ $Date: 2015/02/14 09:14:36 $
+# $Revision: 1.98 $ $Date: 2015/02/15 01:18:27 $
 #
 
 kppm <- function(X, ...) {
@@ -929,10 +929,18 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
     warning("kppm object is in outdated format")
     Fit <- x
     Fit$method <- "mincon"
-  } 
-  inappropriate <- (nochoice && ((what == "intensity") & (x$stationary))) |
+  }
+  # Catch locations for clusters if given
+  loc <- list(...)$locations
+  inappropriate <- (nochoice & ((what == "intensity") & (x$stationary))) |
                    ((what == "statistic") & (Fit$method != "mincon")) |
-                   ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp"))
+                   ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp")) |
+                   ((what == "cluster") & ((!x$stationary)) & is.null(loc))
+
+  if(!nochoice && !x$stationary && "cluster" %in% what && is.null(loc))
+      stop("Please specify additional argument ", sQuote("locations"),
+           " which will be passed to the function ", sQuote("clusterfield"), ".")
+
   if(any(inappropriate)) {
     what <- what[!inappropriate]
     if(length(what) == 0){
@@ -940,12 +948,6 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
         return(invisible(NULL))
     }
   }
-
-  ## Check for missing locations for non-stationary cluster field plot:
-  locations <- list(...)$locations
-  if(!x$stationary && "cluster" %in% what && is.null(locations))
-      stop("Please specify additional argument ", sQuote("locations"),
-           "which will be passed to the function ", sQuote("clusterfield"))
   pauseit <- interactive() && (length(what) > 1)
   if(pauseit) opa <- par(ask=TRUE)
   for(style in what)
@@ -960,7 +962,7 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
                     dmain=c(objectname, Fit$StatName))
            },
            cluster={
-             plotem(clusterfield(x, locations = locations), ...,
+             plotem(clusterfield(x, locations = loc), ...,
                     dmain=c(objectname, "Fitted cluster"))
            })
   if(pauseit) par(opa)

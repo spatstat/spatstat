@@ -1,7 +1,7 @@
 ##
 ##   Math.im.R
 ##
-##   $Revision: 1.2 $ $Date: 2014/11/10 03:46:52 $
+##   $Revision: 1.3 $ $Date: 2015/02/15 04:43:35 $
 ##
 
 Ops.im <- function(e1,e2=NULL){
@@ -10,10 +10,10 @@ Ops.im <- function(e1,e2=NULL){
         if(!is.element(.Generic, c("!", "-", "+")))
             stop("Unary usage is undefined for this operation for images.")
         callstring <- paste(.Generic, "e1")
-    } else{
+    } else {
         callstring <- paste("e1", .Generic, "e2")
-        expr <- parse(text = callstring)
     }
+    expr <- parse(text = callstring)
     return(do.call(eval.im, list(expr = expr)))
 }
 
