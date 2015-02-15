@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.053
+	CHANGES IN spatstat VERSION 1.40-0.054
 
 OVERVIEW
 
@@ -63,6 +63,9 @@ NEW FUNCTIONS
 
    o iplot.linnet, iplot.lpp
    Methods for interactive plotting 'iplot' for objects of class lpp and linnet.
+
+   o Mathematical operations are now supported for pixel images
+   on a linear network. See help(Math.linim)
 
    o dirichlet.network, delaunay.network
    The linear networks formed by the Dirichlet tessellation 
@@ -258,6 +261,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o summary.hyperframe
    Improved output.
+
+   o eval.linim
+   Improved scoping rules.
 
    o pixellate.owin
    Accelerated.

@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.13 $   $Date: 2015/02/15 03:27:12 $
+#  $Revision: 1.14 $   $Date: 2015/02/15 10:02:32 $
 #
 #  Image/function on a linear network
 #
@@ -174,8 +174,11 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
   if(length(varnames) == 0)
     stop("No variables in this expression")
   # get the values of the variables
-  if(missing(envir))
+  if(missing(envir)) {
     envir <- sys.parent()
+  } else if(is.list(envir)) {
+    envir <- list2env(envir, parent=parent.frame())
+  }
   vars <- lapply(as.list(varnames), function(x, e) get(x, envir=e), e=envir)
   names(vars) <- varnames
   funs <- lapply(as.list(funnames), function(x, e) get(x, envir=e), e=envir)
@@ -188,6 +191,7 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
   # Evaluate the pixel values using eval.im
   # ....................................
   sc[[1]] <- as.name('eval.im')
+  sc$envir <- envir
   Y <- eval(sc)
   # .........................................
   # Then evaluate data frame entries if feasible

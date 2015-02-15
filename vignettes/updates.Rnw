@@ -471,6 +471,7 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{Math.linim}: arithmetic for pixel images on a linear network.
   \item \texttt{iplot.linnet}, \texttt{iplot.lpp}: interactive plotting 
     for linear networks.
   \item \texttt{as.linnet.psp}:
@@ -1412,7 +1413,9 @@ the News and Release Notes for each update.
 \begin{itemize}
   \item Reorganised parametrisation of cluster models.
 
-  \item More support for linear networks.
+  \item Sparse matrix representation of linear networks.
+    
+  \item More support for data on linear networks.
   
   \item Tessellations may now have marks.
 
