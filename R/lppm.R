@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.25 $   $Date: 2015/02/14 11:36:21 $
+#  $Revision: 1.26 $   $Date: 2015/02/16 03:07:40 $
 #
 
 lppm <- function(X, ...) {
@@ -13,8 +13,8 @@ lppm <- function(X, ...) {
 
 lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
   ## remember call
-  callstring <- short.deparse(sys.call())
-  ## cl <- match.call()
+  callstring <- paste(short.deparse(sys.call()), collapse = "")
+  cl <- match.call()
 
   ########### INTERPRET FORMULA ##############################
   
@@ -43,14 +43,16 @@ lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
   }
   result <- eval(thecall, parent.frame())
 
-  if(!("callstring" %in% names(list(...))))
-    result$callstring <- callstring
-  
+  result$call <- cl
+  result$callstring <- callstring
+
   return(result)
 }
 
 lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
   Xname <- short.deparse(substitute(X))
+  callstring <- paste(short.deparse(sys.call()), collapse = "")
+  cl <- match.call()
   nama <- names(list(...))
   resv <- c("method", "forcefit")
   if(any(clash <- resv %in% nama))
@@ -62,7 +64,7 @@ lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
   fit <- ppm(Q, ..., method="mpl", forcefit=TRUE)
   if(!is.poisson.ppm(fit))
     warning("Non-Poisson models currently use Euclidean distance")
-  out <- list(X=X, fit=fit, Xname=Xname)
+  out <- list(X=X, fit=fit, Xname=Xname, call=cl, callstring=callstring)
   class(out) <- "lppm"
   return(out)
 }

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.054
+	CHANGES IN spatstat VERSION 1.40-0.055
 
 OVERVIEW
 
@@ -285,6 +285,10 @@ BUG FIXES
    o ppm,  predict.ppm, profilepl
    Crashed sometimes with message 
    "interaction evaluator did not return a matrix".
+   Fixed.
+
+   o lppm
+   step() did not work correctly on 'lppm' objects.
    Fixed.
 
    o quadscheme

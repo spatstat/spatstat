@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.14 $   $Date: 2015/02/15 10:02:32 $
+#  $Revision: 1.15 $   $Date: 2015/02/16 04:12:02 $
 #
 #  Image/function on a linear network
 #
@@ -70,6 +70,9 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
                   resolve.defaults(list(x=W, type="n"),
                                    list(...), list(main=xname)),
                   extrargs="type")
+  # resolve graphics parameters for polygons
+  grafpar <- resolve.defaults(list(...), list(border=1, col=1))
+  grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
   # rescale values to a plottable range
   vr <- range(df$values)
   vr[1] <- min(0, vr[1])
@@ -111,31 +114,23 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
     ang <- Lperp[segid]
     xx <- xx + cos(ang) * vv
     yy <- yy + sin(ang) * vv
-    do.call.matched("polygon",
-                    resolve.defaults(list(x=xx, y=yy),
-                                     list(...),
-                                     list(border=NA, col=1)))
-    ## add hexagonal 'joints'
+    ## first add hexagonal 'joints'
     if(Ljoined[ileft]) {
       rleft <- abs(vv[1])
       if(rleft > 0) {
-        hexx <- disc(radius=rleft, centre=leftend, npoly=6)
-        do.call(plot,
-                resolve.defaults(list(x=hexx, add=TRUE),
-                                 list(...),
-                                 list(border=NA, col=1)))
+        hex <- disc(radius=rleft, centre=leftend, npoly=6)
+        do.call(polygon, append(list(x=hex$x, y=hex$y), grafpar))
       }
     }
     if(Ljoined[iright]) {
       rright <- abs(vv[length(vv)])
       if(rright > 0) {
-        hexx <- disc(radius=rright, centre=rightend, npoly=6)
-        do.call(plot,
-                resolve.defaults(list(x=hexx, add=TRUE),
-                                 list(...),
-                                 list(border=NA, col=1)))
+        hex <- disc(radius=rright, centre=rightend, npoly=6)
+        do.call(polygon, append(list(x=hex$x, y=hex$y), grafpar))
       }
     }
+    # now draw main
+    do.call(polygon, append(list(x=xx, y=yy), grafpar))
   }
   return(invisible(NULL))
 }
