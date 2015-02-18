@@ -61,7 +61,8 @@
 \seealso{
   \code{\link{plot.linim}},
   \code{\link{linnet}},
-%  \code{\link{eval.linim}},
+  \code{\link{eval.linim}},
+  \code{\link{Math.linim}},
   \code{\link{im}}.
 }
 \examples{

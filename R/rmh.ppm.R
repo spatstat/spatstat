@@ -52,7 +52,8 @@ simulate.ppm <- function(object, nsim=1, ...,
                          project=TRUE,
                          new.coef=NULL,
                          verbose=FALSE,
-                         progress=(nsim > 1)) {
+                         progress=(nsim > 1),
+                         drop=FALSE) {
   verifyclass(object, "ppm")
   argh <- list(...)
   if(nsim == 0) return(list())
@@ -148,9 +149,13 @@ simulate.ppm <- function(object, nsim=1, ...,
       }
     }
   }
-  out <- as.listof(out)
-  if(nsim > 0)
-    names(out) <- paste("Simulation", 1:nsim)
+  if(nsim == 1 && drop) {
+    out <- out[[1]]
+  } else {
+    out <- as.solist(out)
+    if(nsim > 0)
+      names(out) <- paste("Simulation", 1:nsim)
+  }
   out <- timed(out, starttime=starttime)
   return(out)
 }  

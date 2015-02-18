@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.51 $  $Date: 2014/11/10 11:15:31 $
+#  $Revision: 1.52 $  $Date: 2015/02/17 10:47:48 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -138,9 +138,11 @@ print.msr <- function(x, ...) {
   return(invisible(NULL))
 }
 
-integral.msr <- function(x, ...) {
-  stopifnot(inherits(x, "msr"))
-  y <- with(x, "increment")
+integral.msr <- function(f, domain=NULL, ...) {
+  stopifnot(inherits(f, "msr"))
+  if(!is.null(domain))
+    f <- f[domain]
+  y <- with(f, "increment")
   if(is.matrix(y)) apply(y, 2, sum) else sum(y)
 }
 

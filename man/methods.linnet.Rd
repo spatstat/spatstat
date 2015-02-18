@@ -3,7 +3,6 @@
 \Rdversion{1.1}
 \alias{as.linnet}
 \alias{as.linnet.linnet}
-\alias{as.linnet.lpp}
 \alias{as.owin.linnet}
 \alias{as.psp.linnet}
 \alias{print.linnet}
@@ -23,8 +22,6 @@
 as.linnet(X, ...)
 
 \method{as.linnet}{linnet}(X, ..., sparse)
-
-\method{as.linnet}{lpp}(X, ..., fatal=TRUE, sparse)
 
 \method{as.owin}{linnet}(W, ...)
 

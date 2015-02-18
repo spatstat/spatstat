@@ -9,8 +9,10 @@
 \usage{
  \method{plot}{yardstick}(x, \dots,
         angle = 20, frac = 1/8, 
-        cex = 1, pos = NULL,
         split = FALSE, shrink = 1/4,
+        pos = NULL,
+        txt.args=list(),
+        txt.shift=c(0,0),
         do.plot = TRUE)
 }
 \arguments{
@@ -28,17 +30,6 @@
   \item{frac}{
     Length of arrow as a fraction of total length of the line segment.
   }
-  \item{cex}{
-    Character expansion factor for the annotation text
-    that is displayed next to the yardstick.
-  }
-  \item{pos}{
-    Integer (passed to \code{\link[graphics]{text}}) determining the
-    position of the annotation text relative to the line segment,
-    if \code{split=FALSE}. Values of 1, 2, 3 and 4
-    indicate positions below, to the left of,
-    above and to the right of the line, respectively.
-  }
   \item{split}{
     Logical. If \code{TRUE}, then the line will be broken in the
     middle, and the text will be placed in this gap. If \code{FALSE},
@@ -48,6 +39,23 @@
   \item{shrink}{
     Fraction of total length to be removed from the middle of the
     line segment, if \code{split=TRUE}.
+  }
+  \item{pos}{
+    Integer (passed to \code{\link[graphics]{text}}) determining the
+    position of the annotation text relative to the line segment,
+    if \code{split=FALSE}. Values of 1, 2, 3 and 4
+    indicate positions below, to the left of,
+    above and to the right of the line, respectively.
+  }
+  \item{txt.args}{
+    Optional list of additional arguments passed to
+    \code{\link[graphics]{text}} controlling the appearance of the text.
+    Examples include \code{adj}, \code{srt}, \code{col}, \code{cex},
+    \code{font}.
+  }
+  \item{txt.shift}{
+    Optional numeric vector of length 2 specifying displacement
+    of the text position relative to the centre of the yardstick.
   }
   \item{do.plot}{
     Logical. Whether to actually perform the plot (\code{do.plot=TRUE}).

@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.15 $   $Date: 2015/02/16 04:12:02 $
+#  $Revision: 1.16 $   $Date: 2015/02/17 11:24:23 $
 #
 #  Image/function on a linear network
 #
@@ -219,4 +219,20 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
   result <- linim(nets[[1]], Y, df=dfY)
   return(result)
 }
-    
+
+as.linnet.linim <- function(X, ...) {
+  attr(X, "L")
+}
+
+integral.linim <- function(f, domain=NULL, ...){
+  verifyclass(f, "linim")
+  L <- as.linnet(f)
+  if(is.null(domain)) {
+    mu <- mean(f)
+    len <- volume(L)
+  } else {
+    mu <- mean(f[domain])
+    len <- sum(lengths.psp(as.psp(L)[domain]))
+  }
+  return(mu * len)
+}

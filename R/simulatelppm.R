@@ -8,7 +8,8 @@
 
 simulate.lppm <- function(object, nsim=1, ...,
                           new.coef=NULL,
-                          progress=(nsim > 1)) {
+                          progress=(nsim > 1),
+                          drop=FALSE) {
   starttime <- proc.time()
   if(!is.poisson(object$fit))
     stop("Simulation of non-Poisson models is not yet implemented")
@@ -20,7 +21,13 @@ simulate.lppm <- function(object, nsim=1, ...,
     if(progress) progressreport(i, nsim)
     result[[i]] <- rpoislpp(lambda, L, lmax=lmax)
   }
-  result <- as.listof(result)
+  if(nsim == 1 && drop) {
+    result <- result[[1]]
+  } else {
+    result <- as.solist(result)
+    if(nsim > 0)
+      names(result) <- paste("Simulation", 1:nsim)
+  }
   result <- timed(result, starttime=starttime)
   return(result)
 }

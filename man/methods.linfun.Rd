@@ -5,7 +5,6 @@
 \alias{plot.linfun}
 \alias{as.linim.linfun}
 \alias{as.owin.linfun}
-\alias{as.linnet.linfun}
 \alias{as.function.linfun}
 \title{
    Methods for Functions on Linear Network
@@ -23,8 +22,6 @@
   \method{as.linim}{linfun}(X, L, \dots, eps = NULL, dimyx = NULL, xy = NULL)
 
   \method{as.owin}{linfun}(W, \dots)
-
-  \method{as.linnet}{linfun}(X, \dots)
 
   \method{as.function}{linfun}(x, \dots)
 }
@@ -49,7 +46,6 @@
   \code{\link{plot}}, \code{\link{print}}
   and the \pkg{spatstat} generic functions
   \code{\link{as.owin}},
-  \code{\link{as.linnet}},
   \code{\link{as.linim}}.
 
   An object of class \code{"linfun"} represents a
@@ -82,7 +78,6 @@
    plot(f)
    as.function(f)
    as.owin(f)
-   as.linnet(f)
    as.linim(f)
 }
 \author{Adrian Baddeley

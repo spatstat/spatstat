@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.31 $  $Date: 2014/12/02 07:28:50 $
+#  $Revision: 1.33 $  $Date: 2015/02/17 07:17:47 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -143,7 +143,9 @@ plotEachLayer <- function(x, ..., main,
       defaultplot <- !(".plot" %in% names(pla.i))
       ## plot layer i, or just determine bounding box
       if(defaultplot &&
-         inherits(xi, c("ppp", "psp", "owin", "im", "msr", "layered"))) {
+         inherits(xi, c("ppp", "psp", "owin",
+                        "lpp", "linnet", 
+                        "im", "msr", "layered"))) {
         ## plot method for 'xi' has argument 'do.plot'.
         out[[i]] <- outi <- do.call("plot",
                                     resolve.defaults(list(x=xi,
@@ -312,28 +314,44 @@ rescale.layered <- function(X, s, unitname) {
 }
 
 
-as.owin.layered <- function(W, ..., fatal=TRUE) {
-  if(length(W) == 0) {
-    if(fatal) stop("Layered object is empty: no window data")
-    return(NULL)
+as.owin.layered <- local({
+
+  as.owin.layered <- function(W, ..., fatal=TRUE) {
+    if(length(W) == 0) {
+      if(fatal) stop("Layered object is empty: no window data")
+      return(NULL)
+    }
+    ## remove null layers
+    isnul <- unlist(lapply(W, is.null))
+    W <- W[!isnul]
+    if(length(W) == 0) {
+      if(fatal) stop("Layered object has no window data")
+      return(NULL)
+    }
+    Wlist <- lapply(unname(W), as.owin, ..., fatal=fatal)
+    Wlist <- lapply(Wlist, rescue.rectangle)
+    Wlist <- lapply(Wlist, puffbox)
+    Z <- Wlist[[1]]
+    if(length(Wlist) > 1) {
+      same <- unlist(lapply(Wlist[-1], identical, y=Z))
+      if(!all(same))
+        Z <- do.call("union.owin", Wlist)
+    }
+    return(Z)
   }
-  # remove null layers
-  isnul <- unlist(lapply(W, is.null))
-  W <- W[!isnul]
-  if(length(W) == 0) {
-    if(fatal) stop("Layered object has no window data")
-    return(NULL)
+
+  puffbox <- function(W) {
+    ## union.owin will delete boxes that have width zero or height zero
+    ## so 'puff' them out slightly
+    ss <- sidelengths(Frame(W))
+    if(ss[1] == 0) W$xrange <- W$xrange + 1e-6 * c(-1,1) * ss[2]
+    if(ss[2] == 0) W$yrange <- W$yrange + 1e-6 * c(-1,1) * ss[1]
+    return(W)
   }
-  Wlist <- lapply(unname(W), as.owin, ..., fatal=fatal)
-  Wlist <- lapply(Wlist, rescue.rectangle)
-  Z <- Wlist[[1]]
-  if(length(Wlist) > 1) {
-    same <- unlist(lapply(Wlist[-1], identical, y=Z))
-    if(!all(same))
-      Z <- do.call("union.owin", Wlist)
-  }
-  return(Z)
-}
+  
+  as.owin.layered
+})
+
 
 domain.layered <- Window.layered <- function(X, ...) { as.owin(X) }
 

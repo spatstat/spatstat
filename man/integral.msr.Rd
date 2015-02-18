@@ -7,12 +7,15 @@
   Computes the integral (total value) of a measure over its domain.
 }
 \usage{
-integral.msr(x, ...)
+\method{integral}{msr}(f, domain=NULL, \dots)
 }
 \arguments{
-  \item{x}{
+  \item{f}{
     A signed measure or vector-valued measure (object of class
     \code{"msr"}).
+  }
+  \item{domain}{
+    Optional window specifying the domain of integration.
   }
   \item{\dots}{
     Ignored.
@@ -27,12 +30,12 @@ integral.msr(x, ...)
 }
 \seealso{
   \code{\link{msr}},
-  \code{\link{integral.im}}
+  \code{\link{integral}}
 }
 \examples{
    fit <- ppm(cells, ~x)
    rp <- residuals(fit)
-   integral.msr(rp)
+   integral(rp)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

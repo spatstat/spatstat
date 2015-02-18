@@ -8,7 +8,8 @@
 \usage{
   \method{simulate}{lppm}(object, nsim=1, ...,
                          new.coef=NULL,
-                         progress=(nsim > 1))
+                         progress=(nsim > 1),
+                         drop=FALSE)
 }
 \arguments{
   \item{object}{
@@ -31,6 +32,11 @@
     to determine the spatial resolution of the image of the fitted intensity
     used in the simulation.
   }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE}, the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \details{
   This function is a method for the generic function
@@ -45,7 +51,7 @@
   A list of length \code{nsim} containing simulated point patterns
   (objects of class \code{"lpp"}) on the same linear network as the
   original data used to fit the model.
-  The result also belongs to the class \code{"listof"}, so that it can be
+  The result also belongs to the class \code{"solist"}, so that it can be
   plotted, and the class \code{"timed"}, so that the total computation
   time is recorded.
 }

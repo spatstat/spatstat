@@ -11,7 +11,8 @@
                          start = NULL,
                          control = default.rmhcontrol(object),
                          project=TRUE, new.coef=NULL,
-                         verbose=FALSE, progress=(nsim > 1))
+                         verbose=FALSE, progress=(nsim > 1),
+                         drop=FALSE)
 }
 \arguments{
   \item{object}{
@@ -62,6 +63,11 @@
     New values for the canonical parameters of the model.
     A numeric vector of the same length as \code{coef(object)}.
   }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE}, the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \details{
   This function is a method for the generic function
@@ -86,7 +92,7 @@
 \value{
   A list of length \code{nsim} containing simulated point patterns
   (objects of class \code{"ppp"}).
-  It also belongs to the class \code{"listof"}, so that it can be
+  It also belongs to the class \code{"solist"}, so that it can be
   plotted, and the class \code{"timed"}, so that the total computation
   time is recorded.
 }

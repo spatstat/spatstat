@@ -582,7 +582,7 @@ is.poisson.slrm <- function(x) { TRUE }
 
 simulate.slrm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL, 
-                          verbose=TRUE) {
+                          verbose=TRUE, drop=FALSE) {
   # .... copied from simulate.lm ....
   if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE))
     runif(1)
@@ -594,6 +594,7 @@ simulate.slrm <- function(object, nsim=1, seed=NULL, ...,
     RNGstate <- structure(seed, kind = as.list(RNGkind()))
     on.exit(assign(".Random.seed", R.seed, envir = .GlobalEnv))
   }
+  starttime <- proc.time()
   
   # determine simulation window and compute intensity
   if(!is.null(window))
@@ -613,8 +614,14 @@ simulate.slrm <- function(object, nsim=1, seed=NULL, ...,
     if(verbose) progressreport(i, nsim)
   }
   # pack up
-  out <- as.listof(out)
-  names(out) <- paste("Simulation", 1:nsim)
+  if(nsim == 1 && drop) {
+    out <- out[[1]]
+  } else {
+    out <- as.solist(out)
+    if(nsim > 0)
+      names(out) <- paste("Simulation", 1:nsim)
+  }
+  out <- timed(out, starttime=starttime)
   attr(out, "seed") <- RNGstate
   return(out)
 }

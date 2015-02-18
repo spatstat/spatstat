@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.35 $    $Date: 2015/02/13 09:41:23 $
+#    $Revision: 1.36 $    $Date: 2015/02/17 05:13:13 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -152,10 +152,13 @@ print.summary.linnet <- function(x, ...) {
 }
 
 plot.linnet <- function(x, ..., main=NULL, add=FALSE,
-                        vertices=FALSE, window=FALSE) {
+                        vertices=FALSE, window=FALSE,
+                        do.plot=TRUE) {
   if(is.null(main))
     main <- short.deparse(substitute(x))
   stopifnot(inherits(x, "linnet"))
+  bb <- Frame(x)
+  if(!do.plot) return(invisible(bb))
   lines <- as.psp(x)
   if(!add) {
     # initialise new plot
@@ -169,7 +172,7 @@ plot.linnet <- function(x, ..., main=NULL, add=FALSE,
   plot(lines, ..., add=TRUE, main=main)
   if(vertices)
     plot(x$vertices, add=TRUE)
-  return(invisible(NULL))
+  return(invisible(bb))
 }
 
 as.psp.linnet <- function(x, ..., fatal=TRUE) {

@@ -1,4 +1,5 @@
 \name{integral.im}
+\alias{integral}
 \alias{integral.im}
 \title{
   Integral of a Pixel Image
@@ -7,10 +8,12 @@
   Computes the integral of a pixel image.
 }
 \usage{
-integral.im(x, domain=NULL, ...)
+integral(f, domain=NULL, \dots)
+
+\method{integral}{im}(f, domain=NULL, \dots)
 }
 \arguments{
-  \item{x}{
+  \item{f}{
     A pixel image (object of class \code{"im"}) with pixel values
     that can be treated as numeric or complex values.
   }
@@ -22,23 +25,21 @@ integral.im(x, domain=NULL, ...)
   }
 }
 \details{
-  This function treats the pixel image \code{x} as a function of
+  The function \code{integral} is generic, with methods
+  for \code{"im"}, \code{"msr"}, \code{"linim"} and \code{"linfun"}.
+  
+  The method \code{integral.im} treats the pixel image \code{f} as a function of
   the spatial coordinates, and computes its integral.
   The integral is calculated
   by summing the pixel values and multiplying by the area of one pixel.
 
-  The pixel values of \code{x} may be numeric, integer, logical or
+  The pixel values of \code{f} may be numeric, integer, logical or
   complex. They cannot be factor or character values.
 
   The logical values \code{TRUE} and \code{FALSE} are converted to
   \code{1} and \code{0} respectively, so that the integral of a logical
   image is the total area of the \code{TRUE} pixels, in the same units
   as \code{unitname(x)}.
-
-  For more complicated integration tasks such as computing the integral
-  of an image over a specified subset, use \code{\link{eval.im}} to
-  construct an integrand or \code{\link{[.im}} to extract a subset of
-  the image.
 }
 \value{
   A single numeric or complex value.
@@ -54,7 +55,6 @@ integral.im(x, domain=NULL, ...)
    integral.im(Z)
    # correct answer is 2
 
-   data(cells)
    D <- density(cells)
    integral.im(D)
    # should be approximately equal to number of points = 42
@@ -63,11 +63,14 @@ integral.im(x, domain=NULL, ...)
    W <- owin(c(0.1,0.9), c(0.2,0.8))
    integral.im(D, W)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{math}

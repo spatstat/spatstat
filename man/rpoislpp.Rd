@@ -20,6 +20,7 @@ rpoislpp(lambda, L, ..., nsim=1)
   \item{L}{
     A linear network (object of class \code{"linnet"},
     see \code{\link{linnet}}).
+    Can be omitted in some cases: see Details.
   }
   \item{\dots}{
     Arguments passed to \code{\link{rpoisppOnLines}}.
@@ -29,6 +30,10 @@ rpoislpp(lambda, L, ..., nsim=1)
 \details{
   This function uses \code{\link{rpoisppOnLines}}
   to generate the random points.
+
+  Argument \code{L} can be omitted, and defaults to \code{as.linnet(lambda)},
+  when \code{lambda} is a function on a linear network (class
+  \code{"linfun"}) or a pixel image on a linear network (\code{"linim"}).
 }
 \value{
   If \code{nsim = 1}, a point pattern on the linear network,

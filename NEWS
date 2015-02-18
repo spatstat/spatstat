@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.055
+	CHANGES IN spatstat VERSION 1.40-0.056
 
 OVERVIEW
 
@@ -109,11 +109,18 @@ NEW FUNCTIONS
    o nestsplit
    Nested split
 
+   o integral
+   New generic function for integrating functions,
+   with methods for 'im', 'msr', 'linim' and 'linfun'.
+
    o selfcut.psp
    Cut line segments where they cross each other
 
    o as.function.im
    Convert a pixel image to a function(x,y).
+
+   o as.linnet.linim
+   Extract the linear network from a 'linim' object.
 
    o pool.fv, pool.anylist
    New methods for 'pool' 
@@ -259,6 +266,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.hyperframe
    New argument 'mar' 
 
+   o plot.linnet
+   New argument 'do.plot'
+
    o summary.hyperframe
    Improved output.
 
@@ -270,6 +280,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o summary.linnet
    Now prints more information, and respects options('digits').
+
+   o rpoislpp
+   Argument 'L' can be omitted when lambda is a 'linim' or 'linfun'
+
+   o simulate.ppm, simulate.kppm, simulate.lppm, simulate.slrm
+   New argument 'drop': if nsim = 1 and drop=TRUE, the result is a point pattern
+   rather than a list containing one point pattern.
 
 BUG FIXES
 
@@ -351,8 +368,16 @@ BUG FIXES
    Erroneously converted the pixel values to numeric values.
    Fixed.
 
+   o as.owin.layered
+   Ignored layers with zero area.
+   Fixed.
+
    o plot.ppm
    Paused the plot between frames even when there was only one frame.
+   Fixed.
+
+   o plot.layered
+   Did not allocate space for legends of 'lpp' objects.
    Fixed.
 
    o plot.lpp
@@ -366,6 +391,9 @@ BUG FIXES
    o iplot.layered
    Did not handle 'diagramobj' objects correctly.
    Fixed.
+
+   o plot.yardstick
+   Changed arguments.
 
 	CHANGES IN spatstat VERSION 1.40-0
 

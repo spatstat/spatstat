@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.listof
 ##
-##   $Revision: 1.9 $ $Date: 2015/02/09 06:41:59 $
+##   $Revision: 1.10 $ $Date: 2015/02/17 03:45:04 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -151,10 +151,11 @@ plot.yardstick <- local({
   plot.yardstick <- function(x, ...,
                              angle=20,
                              frac=1/8,
-                             cex=1,
-                             pos=NULL,
                              split=FALSE,
                              shrink=1/4,
+                             pos=NULL,
+                             txt.args=list(),
+                             txt.shift=c(0,0),
                              do.plot=TRUE) {
     if(do.plot) {
       txt <- attr(x, "txt")
@@ -166,7 +167,7 @@ plot.yardstick <- local({
         ## double-headed arrow
         myarrows(A[1], A[2], B[1], y1=B[2],
                  angle=angle, frac=frac, moreargs=argh)
-        if(missing(pos))
+        if(is.null(pos) && !("adj" %in% names(txt.args)))
           pos <- if(abs(A[1] - B[1]) < abs(A[2] - B[2])) 4 else 3
       } else {
         ## two single-headed arrows with text 
@@ -179,7 +180,16 @@ plot.yardstick <- local({
         myarrows(BM[1], BM[2], B[1], B[2], 
                  angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
       }
-      text(M[1], M[2], txt, cex=cex, pos=pos)
+      if(is.null(txt.shift)) txt.shift <- rep(0, 2) else 
+                             txt.shift <- ensure2vector(unlist(txt.shift))
+      do.call.matched(text.default,
+                      resolve.defaults(list(x=M[1] + txt.shift[1],
+                                            y=M[2] + txt.shift[2]),
+                                       txt.args,
+                                       list(labels=txt, pos=pos),
+                                       argh,
+                                       .MatchNull=FALSE),
+                      extrargs=c("srt", "family", "xpd"))
     }
     return(invisible(Window(x)))
   }

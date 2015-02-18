@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.5 $   $Date: 2015/02/15 02:50:43 $
+#   $Revision: 1.6 $   $Date: 2015/02/17 11:27:35 $
 #
 
 linfun <- function(f, L) {
@@ -95,3 +95,6 @@ as.function.linfun <- function(x, ...) {
   return(x)
 }
 
+integral.linfun <- function(f, domain=NULL, ...) {
+  integral(as.linim(f), domain=domain, ...)
+}

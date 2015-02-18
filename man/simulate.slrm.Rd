@@ -7,7 +7,7 @@
 }
 \usage{
   \method{simulate}{slrm}(object, nsim = 1, seed=NULL, ...,
-         window=NULL, covariates=NULL, verbose=TRUE)
+         window=NULL, covariates=NULL, verbose=TRUE, drop=FALSE)
 }
 \arguments{
   \item{object}{
@@ -33,6 +33,11 @@
   }
   \item{verbose}{
     Logical. Whether to print progress reports (when \code{nsim > 1}).
+  }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE}, the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
   }
 }
 \details{
