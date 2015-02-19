@@ -124,6 +124,8 @@
       proportional to the vector \code{f}. In Model II, the marginal
       distribution of types is \code{ptypes}, that is, the values in
       \code{f} are ignored.
+      The argument \code{types} defaults to \code{names(f)},
+      or if that is null, \code{1:length(f)}.
     }
     \item{function:}{
       If \code{f} is a function, it will be called in the form
@@ -157,7 +159,8 @@
       The value \code{fmax} must be given and must be an upper bound on the 
       values of \code{f[[i]](x,y,\dots)} for all locations \code{(x, y)}
       inside the window \code{win}. 
-      The argument \code{types} defaults to \code{seq(f)}.
+      The argument \code{types} defaults to \code{names(f)},
+      or if that is null, \code{1:length(f)}.
     }
     \item{pixel image:}{
       If \code{f} is a pixel image object of class \code{"im"}
@@ -175,7 +178,8 @@
       of points of type \code{types[i]}. 
       The argument \code{win} is ignored;
       the window of the pixel image is used instead.
-      The argument \code{types} defaults to \code{factor(seq(f))}.
+      The argument \code{types} defaults to \code{names(f)},
+      or if that is null, \code{1:length(f)}.
     }
   }
   The implementation uses the rejection method.
@@ -271,16 +275,13 @@ rmpoint(c(12, 8, 4), list(function(x,y) { rep(1, length(x)) },
 #########
 
 ## Randomising an existing point pattern:
-data(demopat)
-X <- demopat
-
 # same numbers of points of each type, uniform random locations (Model III)
-rmpoint(table(X$marks), 1, types=levels(X$marks), win=X$window)
+rmpoint(table(marks(demopat)), 1, win=Window(demopat))
 
 # same total number of points, distribution of types estimated from X,
 # uniform random locations (Model II)
-rmpoint(X$n, 1, types=levels(X$marks), win=X$window,
-       ptypes=table(X$marks))
+rmpoint(npoints(demopat), 1, types=levels(marks(demopat)), win=Window(demopat),
+       ptypes=table(marks(demopat)))
 
 }
 \author{Adrian Baddeley

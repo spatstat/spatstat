@@ -5,6 +5,7 @@
 \alias{as.linnet.linnet}
 \alias{as.owin.linnet}
 \alias{as.psp.linnet}
+\alias{pixellate.linnet}
 \alias{print.linnet}
 \alias{summary.linnet}
 \alias{unitname.linnet}
@@ -28,6 +29,8 @@ as.linnet(X, ...)
 \method{as.psp}{linnet}(x, ..., fatal=TRUE)
 
 \method{print}{linnet}(x, ...)
+
+\method{pixellate}{linnet}(x, ...)
 
 \method{summary}{linnet}(object, ...)
 
@@ -74,6 +77,7 @@ vertexdegree(x)
   The other functions are methods for the generic commands
   \code{\link{as.owin}},
   \code{\link{as.psp}},
+  \code{\link{pixellate}},
   \code{\link{print}},
   \code{\link{summary}},
   \code{\link{unitname}},
@@ -92,7 +96,12 @@ vertexdegree(x)
   The method \code{vertices.linnet} extracts the vertices (nodes)
   of the linear network. The function \code{vertexdegree} calculates
   the topological degree of each vertex (the number of lines
-  emanating from that vertex) and returns these values as an integer vector.
+  emanating from that vertex) and returns these values as an integer
+  vector.
+
+  The method \code{pixellate.linnet} applies \code{\link{as.psp.linnet}}
+  to convert the network to a collection of line segments,
+  then invokes \code{\link{pixellate.psp}}.
 }
 \value{
   For \code{as.linnet} the value is an object of class \code{"linnet"}.

@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.056
+	CHANGES IN spatstat VERSION 1.40-0.057
 
 OVERVIEW
 
@@ -82,6 +82,9 @@ NEW FUNCTIONS
 
    o vertexdegree
    Compute the degree of each vertex in a linear network.
+
+   o pixellate.linnet
+   Pixellate a linear network.
 
    o subset.hyperframe
    'subset' method for class 'hyperframe'.
@@ -281,12 +284,21 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o summary.linnet
    Now prints more information, and respects options('digits').
 
+   o rmpoispp, rmpoint
+   The vector of possible types of points will default to the 'names' vector
+   of the argument 'lambda', 'n', or 'f' where appropriate.
+
    o rpoislpp
    Argument 'L' can be omitted when lambda is a 'linim' or 'linfun'
 
    o simulate.ppm, simulate.kppm, simulate.lppm, simulate.slrm
    New argument 'drop': if nsim = 1 and drop=TRUE, the result is a point pattern
    rather than a list containing one point pattern.
+
+   o spatstat.options
+   New option 'units.paren' controls the type of parenthesis
+   enclosing the explanatory text about the unit of length,
+   in print.ppm, plot.fv, etc.
 
 BUG FIXES
 

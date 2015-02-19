@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.60 $   $Date: 2015/01/28 06:23:21 $
+#    $Revision: 1.61 $   $Date: 2015/02/18 00:49:30 $
 #
 #
 
@@ -394,6 +394,14 @@ warn.once <- function(key, ...) {
          default=0,
          check=function(x) { length(x) == 1 && (x %in% 0:4) },
          valid="an integer between 0 and 4"
+       ),
+       units.paren=list(
+         default="(",
+         check=function(x) {
+           is.character(x) && (length(x) == 1) &&
+             (x %in% c("(", "[", "{", ""))
+         },
+         valid="one of the strings '(', '[', '{' or '' "
        ),
        use.Krect=list(
          ## whether to use function Krect in Kest(X) when window is rectangle

@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.26 $   $Date: 2015/02/16 03:07:40 $
+#  $Revision: 1.28 $   $Date: 2015/02/18 02:36:11 $
 #
 
 lppm <- function(X, ...) {
@@ -139,8 +139,22 @@ coef.lppm <- function(object, ...) {
 print.lppm <- function(x, ...) {
   splat("Point process model on linear network")
   print(x$fit)
-  print(as.linnet(x))
-  splat("Original data:", x$Xname)
+  terselevel <- spatstat.options('terse')
+  if(waxlyrical('extras', terselevel))
+    splat("Original data:", x$Xname)
+  if(waxlyrical('gory', terselevel))
+    print(as.linnet(x))
+  return(invisible(NULL))
+}
+
+summary.lppm <- function(object, ...) {
+  splat("Point process model on linear network")
+  print(summary(object$fit))
+  terselevel <- spatstat.options('terse')
+  if(waxlyrical('extras', terselevel))
+    splat("Original data:", object$Xname)
+  if(waxlyrical('gory', terselevel))
+    print(summary(as.linnet(object)))
   return(invisible(NULL))
 }
 

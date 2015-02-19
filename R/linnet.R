@@ -169,7 +169,11 @@ plot.linnet <- function(x, ..., main=NULL, add=FALSE,
       plot(w, ..., main=main, type="n")
   }
   # plot segments and (optionally) vertices
-  plot(lines, ..., add=TRUE, main=main)
+  do.call(plot,
+          resolve.defaults(list(x=lines,
+                                show.all=FALSE, add=TRUE,
+                                main=main),
+                           list(...)))
   if(vertices)
     plot(x$vertices, add=TRUE)
   return(invisible(bb))
@@ -447,3 +451,6 @@ iplot.linnet <- function(x, ..., xname) {
   iplot(y, ..., xname=xname, visible=c(TRUE, FALSE, FALSE))
 }
 
+pixellate.linnet <- function(x, ...) {
+  pixellate(as.psp(x), ...)
+}

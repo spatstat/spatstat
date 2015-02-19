@@ -68,8 +68,9 @@
       of the stationary marked Poisson process inside the window
       \code{win} with intensity \code{lambda[i]} for points of type
       \code{types[i]}. The total intensity of points of all types
-      is \code{sum(lambda)}.  The argument \code{types} defaults to
-      \code{seq(lambda)}.
+      is \code{sum(lambda)}.
+      The argument \code{types} defaults to
+      \code{names(lambda)}, or if that is null, \code{1:length(lambda)}.
     }
     \item{function:}{
       If \code{lambda} is a function, the process has intensity
@@ -93,7 +94,8 @@
       The value \code{lmax}, if given, must be an upper bound on the 
       values of \code{lambda(x,y,\dots)} for all locations \code{(x, y)}
       inside the window \code{win}. 
-      The argument \code{types} defaults to \code{seq(lambda)}.
+      The argument \code{types} defaults to
+      \code{names(lambda)}, or if that is null, \code{1:length(lambda)}.
     }
     \item{pixel image:}{
       If \code{lambda} is a pixel image object of class \code{"im"}
@@ -110,7 +112,8 @@
       of points of type \code{types[i]}. 
       The argument \code{win} is ignored;
       the window of the pixel image is used instead.
-      The argument \code{types} defaults to \code{seq(lambda)}.
+      The argument \code{types} defaults to
+      \code{names(lambda)}, or if that is null, \code{1:length(lambda)}.
     }
   }
   If \code{lmax} is missing, an approximate upper bound will be calculated.
@@ -181,7 +184,9 @@
           as.im(function(x,y){40 * (x^3 + y^2)}, letterR))
  pp <- rmpoispp(ZZ, types=c("A","B"))
  pp <- rmpoispp(ZZ)
- 
+
+ # randomising an existing point pattern
+ rmpoispp(intensity(amacrine), win=Window(amacrine))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -127,12 +127,18 @@
  # pixel image
  Z <- as.im(function(x,y){100 * sqrt(x+y)}, unit.square())
  pp <- rpoispp(Z)
+
+ # randomising an existing point pattern
+ rpoispp(intensity(cells), win=Window(cells))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{datagen}

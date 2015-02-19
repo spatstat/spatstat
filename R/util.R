@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.168 $    $Date: 2015/01/24 03:03:03 $
+#    $Revision: 1.169 $    $Date: 2015/02/18 00:37:09 $
 #
 #
 matrowsum <- function(x) {
@@ -172,6 +172,7 @@ commasep <- function(x, join=" and ", flatten=TRUE) {
 
 paren <- function(x, type="(") {
   if(length(x) == 0) return(x)
+  if(identical(type, "")) type <- "blank"
   switch(type,
          "(" = {
            out <- paste("(", x, ")", sep="")
@@ -181,6 +182,9 @@ paren <- function(x, type="(") {
          },
          "{" = {
            out <- paste("{", x, "}", sep="")
+         },
+         blank = {
+           out <- paste(x)
          },
          stop(paste("Unrecognised parenthesis type:", sQuote(type)))
          )

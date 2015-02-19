@@ -6,6 +6,7 @@
 \alias{logLik.lppm}
 \alias{nobs.lppm}
 \alias{print.lppm}
+\alias{summary.lppm}
 \alias{terms.lppm}
 \alias{update.lppm}
 \alias{vcov.lppm}
@@ -29,6 +30,8 @@
   \method{nobs}{lppm}(object, ...)
 
   \method{print}{lppm}(x, ...)
+
+  \method{summary}{lppm}(object, ...)
 
   \method{terms}{lppm}(x, ...)
 
@@ -56,6 +59,7 @@
   \code{\link{logLik}},
   \code{\link{nobs}},
   \code{\link{print}}, 
+  \code{\link{summary}}, 
   \code{\link{terms}},
   \code{\link{update}} and
   \code{\link{vcov}}

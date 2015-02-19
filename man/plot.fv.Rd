@@ -184,6 +184,10 @@
   Use \code{limitsonly=TRUE} to suppress all plotting
   and just compute the \eqn{x} and \eqn{y} limits. This can be used
   to calculate common \eqn{x} and \eqn{y} scales for several plots.
+
+  To change the kind of parenthesis enclosing the
+  explanatory text about the unit of length, use
+  \code{\link{spatstat.options}('units.paren')}
 }
 \examples{
    K <- Kest(cells)

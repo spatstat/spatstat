@@ -121,15 +121,17 @@ summary.units <- function(object, ...) {
            plural   = "units")
     } else if(named & !scaled) {
       list(legend = paste("Unit of length: 1", x$singular),
-           axis   = paste("(", x$plural, ")", sep=""),
+           axis   = paren(x$plural, type=spatstat.options('units.paren')),
            explain = NULL,
            singular = x$singular,
            plural   = x$plural)
     } else {
       expanded <- paste(x$multiplier, x$plural)
+      expla <- paren(paste("one unit =", expanded),
+                     type=spatstat.options('units.paren'))
       list(legend = paste("Unit of length:", expanded),
-           axis   = paste("(one unit = ", expanded, ")", sep=""),
-           explain  = paste("(one unit = ", expanded, ")", sep=""),
+           axis   = expla, 
+           explain  = expla,
            singular = "unit",
            plural   = "units")
     }

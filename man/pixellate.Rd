@@ -53,6 +53,7 @@ pixellate(x, ...)
   \code{\link{pixellate.ppp}},
   \code{\link{pixellate.owin}},
   \code{\link{pixellate.psp}},
+  \code{\link{pixellate.linnet}},
   \code{\link{as.im}}
 }
 \author{Adrian Baddeley
