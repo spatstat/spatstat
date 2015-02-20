@@ -7,7 +7,7 @@
 }
 \usage{
   rThomas(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1,
-saveLambda=FALSE, ...)
+saveLambda=FALSE, rmax = 4*scale, savermax = FALSE, ...)
 }
 \arguments{
   \item{kappa}{
@@ -34,7 +34,13 @@ saveLambda=FALSE, ...)
     the simulated parent points will also be calculated and saved,
     and returns as an attribute of the point pattern.
   }
-  \item{\dots}{ignored.}
+  \item{rmax}{Cut-off value for the range of a cluster.}
+  \item{savermax}{Logical. If \code{TRUE} then the value of \code{rmax}
+    is returned as an attribute of the point pattern.}
+  \item{\dots}{Passed to \code{\link{clusterfield}} to control the image
+    resolution when \code{saveLambda=TRUE} and to
+    \code{\link{clusterrange}} when \code{rmax} is missing, which may be
+    useful when \code{savermax=TRUE}.}
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},

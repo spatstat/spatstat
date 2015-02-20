@@ -7,7 +7,7 @@
 }
 \usage{
  rVarGamma(kappa, nu, scale, mu, win = owin(), 
-           eps = 0.001, nsim=1, saveLambda=FALSE, ...)
+           thresh = 0.001, nsim=1, saveLambda=FALSE, rmax = NULL, savermax = FALSE, ...)
 }
 \arguments{
   \item{kappa}{
@@ -31,9 +31,11 @@
     An object of class \code{"owin"}
     or something acceptable to \code{\link{as.owin}}.
   }
-  \item{eps}{
-    Threshold below which the values of the cluster kernel
-    will be treated as zero for simulation purposes. 
+  \item{thresh}{
+    Threshold relative to the cluster kernel value at the origin (parent
+    location) determining when the cluster kernel will be treated as
+    zero for simulation purposes. Will be overridden by argument
+    \code{rmax} if that is given.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
   \item{saveLambda}{
@@ -41,7 +43,14 @@
     the simulated parent points will also be calculated and saved,
     and returns as an attribute of the point pattern.
   }
-  \item{\dots}{ignored.}
+  \item{rmax}{Cut-off value for the range of a cluster. Calculated from
+    the value of argument \code{thresh} if missing.}
+  \item{savermax}{Logical. If \code{TRUE} then the value of \code{rmax}
+    is returned as an attribute of the point pattern.}
+  \item{\dots}{Passed to \code{\link{clusterfield}} to control the image
+    resolution when \code{saveLambda=TRUE} and to
+    \code{\link{clusterrange}} when \code{rmax} is missing, which may be
+    useful when \code{savermax=TRUE}.}
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},

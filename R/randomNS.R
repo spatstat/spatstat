@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.15 $  $Date: 2015/01/13 02:06:35 $
+##   $Revision: 1.16 $  $Date: 2015/02/20 06:24:50 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -156,7 +156,8 @@ rThomas <- local({
 
   ## main function
   rThomas <-
-    function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1, saveLambda=FALSE, ...) {
+      function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1,
+               saveLambda=FALSE, rmax = 4*scale, savermax = FALSE, ...) {
       ## Thomas process with Poisson(mu) number of offspring
       ## at isotropic Normal(0,sigma^2) displacements from parent
       ##
@@ -164,8 +165,12 @@ rThomas <- local({
       if(missing(scale)) scale <- list(...)$sigma
       check.1.real(scale)
       stopifnot(scale > 0)
+      
+      ## determine the maximum radius of clusters
+      if(missing(rmax))
+          rmax <- clusterrange("Thomas", scale = scale, ...)
 
-      result <- rNeymanScott(kappa, 4 * scale, list(mu, gaus),
+      result <- rNeymanScott(kappa, rmax, list(mu, gaus),
                              win, sigma=scale,
                              nsim=nsim)  
       if(saveLambda){
@@ -173,6 +178,8 @@ rThomas <- local({
           Lambda <- clusterfield("Thomas", parents, scale=scale, mu=mu, ...)
           attr(result, "Lambda") <- Lambda[win]
       }
+      if(savermax)
+          attr(result, "rmax") <- rmax
       return(result)
     }
   rThomas
@@ -196,26 +203,26 @@ rCauchy <- local({
     return(sqrt(s) * V)
   }
 
-  ## Polar integrand of kernel, i.e. 2*pi*r*kernel (minus threshhold
-  ## eps relative to max of kernfun). Used to determine range of
-  ## cluster below
-  integrand <- function(r, scale, eps) {
-    kernel0 <- 1/(2*pi*scale^2)
-    r/(scale^2) *  (1 + (r / scale)^2)^(-3/2) - eps*kernel0
-  }
-  
   ## main function
-  rCauchy <- function (kappa, scale, mu, win = owin(), eps = 0.001, nsim=1, saveLambda=FALSE, ...) {
+  rCauchy <- function (kappa, scale, mu, win = owin(), thresh = 0.001, nsim=1, saveLambda=FALSE, rmax = NULL, savermax = FALSE, ...) {
     ## scale / omega: scale parameter of Cauchy kernel function
     ## eta: scale parameter of Cauchy pair correlation function
 
     ## Catch old scale syntax (omega)
-    if(missing(scale)) scale <- list(...)$omega
+    dots <- list(...)
+    if(missing(scale)) scale <- dots$omega
     
+    ## Catch old name 'eps' for 'thresh':
+    if(missing(thresh))
+        thresh <- dots$eps %orifnull% 0.001
+
     ## determine the maximum radius of clusters
-    rmax <- uniroot(integrand,
-                    lower = scale, upper = 5 * diameter(as.rectangle(win)),
-                    scale = scale, eps = eps)$root
+    if(missing(rmax)){
+        rmax <- clusterrange("Cauchy", scale = scale, thresh = thresh, ...)
+    } else if(!missing(thresh)){
+        warning("Argument ", sQuote("thresh"), " is ignored when ", sQuote("rmax"), " is given")
+    }
+
     ## simulate
     result <- rNeymanScott(kappa, rmax,
                            list(mu, rnmix.invgam),
@@ -226,6 +233,8 @@ rCauchy <- local({
         Lambda <- clusterfield("Cauchy", parents, scale=scale, mu=mu, ...)
         attr(result, "Lambda") <- Lambda[win]
     }
+    if(savermax)
+        attr(result, "rmax") <- rmax
     return(result)
   }
 
@@ -251,23 +260,12 @@ rVarGamma <- local({
     return(sqrt(s) * V)
   }
 
-  ## Polar integrand of kernel, i.e. 2*pi*r*kernel (minus threshhold
-  ## eps relative to max of kernfun). Used to determine range of
-  ## cluster below
-  integrand <- function(r, nu, scale, eps) {
-    kernel0 <- 1 / (pi * (2^(nu+1)) * scale^2 * gamma(nu + 1))
-    numer <- ((r/scale)^(nu+1)) * besselK(r/scale, nu)
-    numer[r==0] <- 0
-    denom <- (2^nu) * scale * gamma(nu + 1)
-    numer/denom - eps*kernel0
-  }
-  
   ## main function
   rVarGamma <- function (kappa, nu, scale, mu, win = owin(),
-                         eps = 0.001, nsim=1, saveLambda=FALSE, ...) {
+                         thresh = 0.001, nsim=1, saveLambda=FALSE,
+                         rmax = NULL, savermax = FALSE, ...) {
     ## nu / nu.ker: smoothness parameter of Variance Gamma kernel function
     ## scale / omega: scale parameter of kernel function
-
     ## Catch old nu.ker/nu.pcf syntax and resolve nu-value.
     dots <- list(...)
     if(missing(nu)){
@@ -279,10 +277,18 @@ rVarGamma <- local({
     ## Catch old scale syntax (omega)
     if(missing(scale)) scale <- dots$omega
     
-    ## determine the maximum radius of clusters
-    rmax <- uniroot(integrand,
-                    lower = scale, upper = 5 * diameter(as.rectangle(win)),
-                    nu = nu, scale=scale, eps=eps)$root
+    ## Catch old name 'eps' for 'thresh':
+    if(missing(thresh))
+        thresh <- dots$eps %orifnull% 0.001
+
+     ## determine the maximum radius of clusters
+    if(missing(rmax)){
+        rmax <- clusterrange("VarGamma", scale = scale, nu = nu,
+                             thresh = thresh, ...)
+    } else if(!missing(thresh)){
+        warning("Argument ", sQuote("thresh"), " is ignored when ", sQuote("rmax"), " is given")
+    }
+
     ## simulate
     result <- rNeymanScott(kappa, rmax,
                            list(mu, rnmix.gamma), win,
@@ -295,8 +301,9 @@ rVarGamma <- local({
         Lambda <- clusterfield("VarGamma", parents, scale=scale, nu=nu, mu=mu, ...)
         attr(result, "Lambda") <- Lambda[win]
     }
+    if(savermax)
+        attr(result, "rmax") <- rmax
     return(result)
   }
 
   rVarGamma })
-

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.98 $ $Date: 2015/02/15 01:18:27 $
+# $Revision: 1.99 $ $Date: 2015/02/20 06:24:50 $
 #
 
 kppm <- function(X, ...) {
@@ -857,61 +857,6 @@ print.kppm <- function(x, ...) {
     }
   }
   invisible(NULL)
-}
-
-clusterfield <- function(clusters, locations = NULL, ...) {
-    UseMethod("clusterfield")
-}
-
-clusterfield.kppm <- function(clusters, locations = NULL, ...) {
-    f <- function(x, y, ...){
-        kernel <- Kpcf.kppm(clusters, what = "kernel")
-        kernel(sqrt(x^2+y^2))
-    }
-    if(is.null(locations)){
-        if(!is.stationary(clusters))
-            stop("The model is non-stationary. The argument ",
-                 sQuote("locations"), " must be given.")
-        locations <- centroid.owin(Window(clusters), as.ppp = TRUE)
-    }
-    clusterfield.function(f, locations, ..., mu = clusters$mu)
-}
-
-clusterfield.character <- function(clusters, locations = NULL, ...){
-    info <- spatstatClusterModelInfo(clusters)
-    dots <- list(...)
-    par <- c(kappa = 1, scale = dots$scale)
-    par <- info$checkpar(par, old = TRUE)
-    nam <- info$clustargsnames
-    margs <- NULL
-    if(!is.null(nam))
-        margs <- dots[[nam]]
-    f <- function(x, y, ...){
-        kernel <- info$kernel
-        kernel(par = par, rvals = sqrt(x^2+y^2), margs = margs)
-    }
-    clusterfield.function(f, locations, ...)
-}
-
-clusterfield.function <- function(clusters, locations = NULL, ..., mu = NULL) {
-    if(is.null(locations)){
-        locations <- ppp(.5, .5, window=square(1))
-    }
-    if(!inherits(locations, "ppp"))
-        stop("Argument ", sQuote("locations"), " must be a point pattern (ppp).")
-
-    if("sigma" %in% names(list(...)) && "sigma" %in% names(formals(clusters)))
-        warning("Currently ", sQuote("sigma"),
-                "cannot be passed as an extra argument to the kernel function. ",
-                "Please redefine the kernel function to use another argument name.")
-
-    rslt <- density(locations, kernel=clusters, ...)
-    if(is.null(mu))
-        return(rslt)
-    mu <- as.im(mu, W=rslt)
-    if(min(mu)<0)
-        stop("Cluster reference intensity ", sQuote("mu"), " is negative.")
-    return(rslt*mu)
 }
 
 plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {

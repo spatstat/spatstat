@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.16 $   $Date: 2015/02/17 11:24:23 $
+#  $Revision: 1.17 $   $Date: 2015/02/19 12:33:35 $
 #
 #  Image/function on a linear network
 #
@@ -80,7 +80,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
     maxsize <- mean(distmap(Llines))/2
     scale <- maxsize/diff(vr)
   } 
-  df$values <- adjust * scale * (df$values - vr[1])
+  df$values <- adjust * scale * (df$values - vr[1])/2
   # split data by segment
   mapXY <- factor(df$mapXY, levels=seq_len(Llines$n))
   dfmap <- split(df, mapXY, drop=TRUE)
@@ -93,6 +93,9 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
   Lto   <- L$to
   Lvert <- L$vertices
   Ljoined  <- (vertexdegree(L) > 1)
+  # precompute coordinates of dodecagon
+  dodo <- disc(npoly=12)$bdry[[1]]
+  #
   for(i in seq(length(dfmap))) {
     z <- dfmap[[i]]
     segid <- unique(z$mapXY)[1]
@@ -107,28 +110,26 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
     xx <- c(leftend$x, xx, rightend$x)
     yy <- c(leftend$y, yy, rightend$y)
     vv <- c(vv[1],     vv, vv[length(vv)])
+    rleft <- vv[1]
+    rright <- vv[length(vv)]
     # draw polygon around segment
     xx <- c(xx, rev(xx))
     yy <- c(yy, rev(yy))
-    vv <- c(vv, -rev(vv))/2
+    vv <- c(vv, -rev(vv))
     ang <- Lperp[segid]
     xx <- xx + cos(ang) * vv
     yy <- yy + sin(ang) * vv
-    ## first add hexagonal 'joints'
-    if(Ljoined[ileft]) {
-      rleft <- abs(vv[1])
-      if(rleft > 0) {
-        hex <- disc(radius=rleft, centre=leftend, npoly=6)
-        do.call(polygon, append(list(x=hex$x, y=hex$y), grafpar))
-      }
-    }
-    if(Ljoined[iright]) {
-      rright <- abs(vv[length(vv)])
-      if(rright > 0) {
-        hex <- disc(radius=rright, centre=rightend, npoly=6)
-        do.call(polygon, append(list(x=hex$x, y=hex$y), grafpar))
-      }
-    }
+    ## first add dodecagonal 'joints'
+    if(Ljoined[ileft] && rleft > 0) 
+      do.call(polygon,
+              append(list(x=rleft * dodo$x + leftend$x,
+                          y=rleft * dodo$y + leftend$y),
+                     grafpar))
+    if(Ljoined[iright] && rright > 0)
+      do.call(polygon,
+              append(list(x=rright * dodo$x + rightend$x,
+                          y=rright * dodo$y + rightend$y),
+                     grafpar))
     # now draw main
     do.call(polygon, append(list(x=xx, y=yy), grafpar))
   }
