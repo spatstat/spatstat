@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.059
+	CHANGES IN spatstat VERSION 1.40-0.060
 
 OVERVIEW
 
@@ -378,6 +378,10 @@ BUG FIXES
    to the same size of dataset'. 
    (This occurred if there were quadrature points with
    conditional intensity equal to zero in some models but not in all models.)
+   Fixed.
+
+   o vcov.kppm
+   Occasionally ran out of memory.
    Fixed.
 
    o as.linim.linfun

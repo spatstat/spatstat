@@ -8,7 +8,8 @@
 \usage{
    \method{vcov}{kppm}(object, ...,
           what=c("vcov", "corr", "fisher", "internals"),
-          fast = NULL, rmax = NULL, eps.rmax = 0.01)
+          fast = NULL, rmax = NULL, eps.rmax = 0.01,
+          verbose = TRUE)
 }
 \arguments{
   \item{object}{
@@ -44,6 +45,10 @@
     falls below \code{eps.rmax}.
     Only used when \code{fast=TRUE}.
     Ignored if \code{rmax} is provided.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports
+    during very long calculations.
   }
 }
 \details{
