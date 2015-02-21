@@ -2375,6 +2375,28 @@ local({
   if(isTRUE(all.equal(MA,MR)))
     stop("markcorrint unexpectedly ignores marks")
 })
+##  tests/closeshave.R
+## check 'closepairs/crosspairs' code
+## validity and memory allocation
+## $Revision: 1.1 $ $Date: 2015/02/21 02:56:07 $
+
+local({
+  r <- 0.12
+  close.all <- closepairs(redwood, r)
+  close.ij <- closepairs(redwood, r, what="indices")
+  close.ijd <- closepairs(redwood, r, what="ijd")
+  stopifnot(identical(close.ij, close.all[c("i","j")]))
+  stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
+
+  Y <- split(amacrine)
+  on <- Y$on
+  off <- Y$off
+  cross.all <- crosspairs(on, off, r)
+  cross.ij <- crosspairs(on, off, r, what="indices")
+  cross.ijd <- crosspairs(on, off, r, what="ijd")
+  stopifnot(identical(cross.ij, cross.all[c("i","j")]))
+  stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
+})
 # ...............................................................
 #          multippm/tests/tests.R
 #

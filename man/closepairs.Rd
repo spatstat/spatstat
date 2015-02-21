@@ -19,11 +19,11 @@ crosspaircounts(X, Y, r)
 closepairs(X, rmax, \dots)
 
 \method{closepairs}{ppp}(X, rmax, ordered=TRUE,
-                         what=c("all","indices"), \dots)
+                         what=c("all","indices","ijd"), \dots)
 
 crosspairs(X, Y, rmax, \dots)
 
-\method{crosspairs}{ppp}(X, Y, rmax, what=c("all", "indices"), \dots)
+\method{crosspairs}{ppp}(X, Y, rmax, what=c("all", "indices", "ijd"), \dots)
 }
 \arguments{
   \item{X,Y}{
@@ -44,7 +44,10 @@ crosspairs(X, Y, rmax, \dots)
     If \code{what="all"} (the default) then the
     returned information includes the indices \code{i,j} of each pair,
     their \code{x,y} coordinates, and the distance between them.
-    If \code{what="indices"} then only the indices \code{i,j} are returned.
+    If \code{what="indices"} then only the indices \code{i,j} are
+    returned.
+    If \code{what="ijd"} then the indices \code{i,j} and the
+    distance \code{d} are returned.
   }
   \item{\dots}{Extra arguments, ignored by methods.}
 }
@@ -82,7 +85,8 @@ crosspairs(X, Y, rmax, \dots)
     \item{d}{Euclidean distance between each pair of points.}
   }
   If \code{what="indices"} then only the components \code{i} and
-  \code{j} are returned. This is slightly faster.
+  \code{j} are returned. This is slightly faster and more efficient
+  with use of memory.
 
   \code{crosspairs(X,rmax)} identifies all pairs of neighbours
   \code{(X[i], Y[j])} between the patterns \code{X} and \code{Y},

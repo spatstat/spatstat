@@ -2,7 +2,7 @@
 
   closepair.c
 
-  $Revision: 1.31 $     $Date: 2013/11/22 01:01:12 $
+  $Revision: 1.32 $     $Date: 2015/02/21 02:39:35 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
@@ -489,22 +489,39 @@ void Fcrosspairs(nn1, x1, y1, nn2, x2, y2, rmaxi, noutmax,
 #define CROSSFUN VcrossIJpairs
 #undef THRESH
 #undef COORDS
+#undef DIST
 #include "closefuns.h"
 #undef CLOSEFUN
 #undef CROSSFUN
 #undef THRESH
 #undef COORDS
+#undef DIST
+
+/* return i, j, d */
+#define CLOSEFUN VcloseIJDpairs
+#define CROSSFUN VcrossIJDpairs
+#undef THRESH
+#undef COORDS
+#define DIST
+#include "closefuns.h"
+#undef CLOSEFUN
+#undef CROSSFUN
+#undef THRESH
+#undef COORDS
+#undef DIST
 
 /* return i, j, xi, yi, xj, yj, dx, dy, d */
 #define CLOSEFUN Vclosepairs
 #define CROSSFUN Vcrosspairs
 #undef THRESH
 #define COORDS
+#define DIST
 #include "closefuns.h"
 #undef CLOSEFUN
 #undef CROSSFUN
 #undef THRESH
 #undef COORDS
+#undef DIST
 
 /* return i, j, t where t = 1{d < s} */
 

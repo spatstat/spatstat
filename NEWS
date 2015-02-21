@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.060
+	CHANGES IN spatstat VERSION 1.40-0.061
 
 OVERVIEW
 
@@ -303,6 +303,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New option 'units.paren' controls the type of parenthesis
    enclosing the explanatory text about the unit of length,
    in print.ppm, plot.fv, etc.
+
+   o closepairs, crosspairs
+   New option: what="ijd" returns only the indices i, j and the distance d
 
 BUG FIXES
 

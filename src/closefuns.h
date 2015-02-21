@@ -10,13 +10,15 @@
 
   CROSSFUN   name of function for 'crosspairs'
 
-  COORDS     if defined, also return xi, yi, xj, yj, dx, dy, d
+  DIST       if defined, also return d
+
+  COORDS     if defined, also return xi, yi, xj, yj, dx, dy
 
   THRESH     if defined, also return 1(d < s)
 
   ZCOORD     if defined, coordinates are 3-dimensional
 
-  $Revision: 1.3 $ $Date: 2013/05/22 10:21:28 $
+  $Revision: 1.5 $ $Date: 2015/02/21 02:59:59 $
 
 */
 
@@ -53,14 +55,19 @@ SEXP CLOSEFUN(SEXP xx,
   int *iOutP, *jOutP;
 
 #ifdef COORDS
-  double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout, *dout;
-  SEXP xiOut, yiOut, xjOut, yjOut, dxOut, dyOut, dOut;
-  double *xiOutP, *yiOutP, *xjOutP, *yjOutP, *dxOutP, *dyOutP, *dOutP;
+  double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout;
+  SEXP xiOut, yiOut, xjOut, yjOut, dxOut, dyOut;
+  double *xiOutP, *yiOutP, *xjOutP, *yjOutP, *dxOutP, *dyOutP;
 #ifdef ZCOORD
   double *ziout, *zjout, *dzout;
   SEXP ziOut, zjOut, dzOut;
   double *ziOutP, *zjOutP, *dzOutP;
 #endif
+#endif
+#ifdef DIST
+  double *dout;
+  SEXP dOut;
+  double *dOutP;
 #endif
 
 #ifdef THRESH
@@ -123,6 +130,8 @@ SEXP CLOSEFUN(SEXP xx,
     zjout =  (double *) R_alloc(kmax, sizeof(double));
     dzout =  (double *) R_alloc(kmax, sizeof(double));
 #endif
+#endif
+#ifdef DIST
     dout  =  (double *) R_alloc(kmax, sizeof(double));
 #endif
 
@@ -180,6 +189,8 @@ SEXP CLOSEFUN(SEXP xx,
 		  zjout = dblRealloc(zjout, kmaxold, kmax); 
 		  dzout = dblRealloc(dzout, kmaxold, kmax); 
 #endif
+#endif
+#ifdef DIST
 		  dout  = dblRealloc(dout,  kmaxold, kmax); 
 #endif
 #ifdef THRESH
@@ -200,6 +211,8 @@ SEXP CLOSEFUN(SEXP xx,
 	      zjout[k] = z[j];
 	      dzout[k] = dz;
 #endif
+#endif
+#ifdef DIST
 	      dout[k] = sqrt(d2);
 #endif
 
@@ -248,6 +261,8 @@ SEXP CLOSEFUN(SEXP xx,
 		  zjout = dblRealloc(zjout, kmaxold, kmax); 
 		  dzout = dblRealloc(dzout, kmaxold, kmax); 
 #endif
+#endif
+#ifdef DIST
 		  dout  = dblRealloc(dout,  kmaxold, kmax); 
 #endif
 #ifdef THRESH
@@ -268,6 +283,8 @@ SEXP CLOSEFUN(SEXP xx,
 		zjout[k] = z[j];
 		dzout[k] = dz;
 #endif
+#endif
+#ifdef DIST
 		dout[k] = sqrt(d2);
 #endif
 #ifdef THRESH
@@ -300,6 +317,8 @@ SEXP CLOSEFUN(SEXP xx,
   PROTECT(zjOut = NEW_NUMERIC(k));
   PROTECT(dzOut = NEW_NUMERIC(k));
 #endif
+#endif
+#ifdef DIST
   PROTECT(dOut  = NEW_NUMERIC(k));
 #endif
 #ifdef THRESH
@@ -320,6 +339,8 @@ SEXP CLOSEFUN(SEXP xx,
     zjOutP = NUMERIC_POINTER(zjOut);
     dzOutP = NUMERIC_POINTER(dzOut);
 #endif
+#endif
+#ifdef DIST
     dOutP  = NUMERIC_POINTER(dOut);
 #endif
 #ifdef THRESH
@@ -340,6 +361,8 @@ SEXP CLOSEFUN(SEXP xx,
       zjOutP[m] = zjout[m];
       dzOutP[m] = dzout[m];
 #endif
+#endif
+#ifdef DIST
       dOutP[m]  = dout[m];
 #endif
 #ifdef THRESH
@@ -350,17 +373,22 @@ SEXP CLOSEFUN(SEXP xx,
 
 #define HEAD 2
 #ifdef THRESH
-#define MIDDLE 1
+#define NECK 1
 #else
-#define MIDDLE 0
+#define NECK 0
 #endif
 #ifdef COORDS
-#define TAIL (3*SPACEDIM + 1)
+#define MIDDLE (3*SPACEDIM)
 #else 
+#define MIDDLE 0
+#endif
+#ifdef DIST
+#define TAIL 1
+#else
 #define TAIL 0
 #endif
 
-  PROTECT(Out   = NEW_LIST(HEAD+MIDDLE+TAIL));
+  PROTECT(Out   = NEW_LIST(HEAD+NECK+MIDDLE+TAIL));
 
   SET_VECTOR_ELT(Out, 0,  iOut);
   SET_VECTOR_ELT(Out, 1,  jOut);
@@ -371,36 +399,41 @@ SEXP CLOSEFUN(SEXP xx,
 
 #ifdef COORDS
 #ifdef ZCOORD
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE,   xiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+1, yiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+2, ziOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+3, xjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+4, yjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+5, zjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+6, dxOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+7, dyOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+8, dzOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+9, dOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, ziOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, zjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+6, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+7, dyOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+8, dzOut);
 #else
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE,   xiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+1, yiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+2, xjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+3, yjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+4, dxOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+5, dyOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+6, dOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, dyOut);
 #endif
 #endif
 
-  UNPROTECT(NINPUTS+1+HEAD+MIDDLE+TAIL);    /* 1 is for 'Out' itself */
+#ifdef DIST
+  SET_VECTOR_ELT(Out, HEAD+NECK+MIDDLE, dOut);
+#endif
+
+  UNPROTECT(NINPUTS+1+HEAD+NECK+MIDDLE+TAIL);   /* 1 is for 'Out' itself */
 
   return(Out);
 }
 
 #undef NINPUTS
 #undef HEAD
+#undef NECK
 #undef MIDDLE
 #undef TAIL
+
+/* ........................................................ */
 
 SEXP CROSSFUN(SEXP xx1,
 	      SEXP yy1,
@@ -441,15 +474,21 @@ SEXP CROSSFUN(SEXP xx1,
   /* external storage pointers */
   int *iOutP, *jOutP;
 #ifdef COORDS
-  SEXP xiOut, yiOut, xjOut, yjOut, dxOut, dyOut, dOut;
-  double *xiOutP, *yiOutP, *xjOutP, *yjOutP, *dxOutP, *dyOutP, *dOutP;
-  double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout, *dout;
+  SEXP xiOut, yiOut, xjOut, yjOut, dxOut, dyOut;
+  double *xiOutP, *yiOutP, *xjOutP, *yjOutP, *dxOutP, *dyOutP;
+  double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout;
 #ifdef ZCOORD
   SEXP ziOut, zjOut, dzOut;
   double *ziOutP, *zjOutP, *dzOutP;
   double *ziout, *zjout, *dzout;
 #endif
 #endif  
+#ifdef DIST
+  SEXP dOut;
+  double *dOutP;
+  double *dout;
+#endif
+
 #ifdef THRESH
   double s, s2;
   int *tout;
@@ -517,6 +556,8 @@ SEXP CROSSFUN(SEXP xx1,
     zjout =  (double *) R_alloc(noutmax, sizeof(double));
     dzout =  (double *) R_alloc(noutmax, sizeof(double));
 #endif
+#endif
+#ifdef DIST
     dout  =  (double *) R_alloc(noutmax, sizeof(double));
 #endif
 #ifdef THRESH
@@ -586,6 +627,8 @@ SEXP CROSSFUN(SEXP xx1,
 		  zjout = dblRealloc(zjout, noutmaxold, noutmax); 
 		  dzout = dblRealloc(dzout, noutmaxold, noutmax); 
 #endif
+#endif
+#ifdef DIST
 		  dout  = dblRealloc(dout,  noutmaxold, noutmax); 
 #endif
 #ifdef THRESH
@@ -606,6 +649,8 @@ SEXP CROSSFUN(SEXP xx1,
 		zjout[nout] = z2[j];
 		dzout[nout] = dz;
 #endif
+#endif
+#ifdef DIST
 		dout[nout] = sqrt(d2);
 #endif
 #ifdef THRESH
@@ -636,6 +681,8 @@ SEXP CROSSFUN(SEXP xx1,
   PROTECT(zjOut = NEW_NUMERIC(nout));
   PROTECT(dzOut = NEW_NUMERIC(nout));
 #endif
+#endif
+#ifdef DIST
   PROTECT(dOut  = NEW_NUMERIC(nout));
 #endif
 #ifdef THRESH
@@ -656,6 +703,8 @@ SEXP CROSSFUN(SEXP xx1,
     zjOutP = NUMERIC_POINTER(zjOut);
     dzOutP = NUMERIC_POINTER(dzOut);
 #endif
+#endif
+#ifdef DIST
     dOutP  = NUMERIC_POINTER(dOut);
 #endif
 #ifdef THRESH
@@ -676,6 +725,8 @@ SEXP CROSSFUN(SEXP xx1,
       zjOutP[m] = zjout[m];
       dzOutP[m] = dzout[m];
 #endif
+#endif
+#ifdef DIST
       dOutP[m]  = dout[m];
 #endif
 #ifdef THRESH
@@ -685,17 +736,22 @@ SEXP CROSSFUN(SEXP xx1,
   }
 #define HEAD 2
 #ifdef THRESH
-#define MIDDLE 1
+#define NECK 1
 #else
-#define MIDDLE 0
+#define NECK 0
 #endif
 #ifdef COORDS
-#define TAIL (3*SPACEDIM + 1)
+#define MIDDLE (3*SPACEDIM)
 #else 
+#define MIDDLE 0
+#endif
+#ifdef DIST
+#define TAIL 1
+#else
 #define TAIL 0
 #endif
 
-  PROTECT(Out   = NEW_LIST(HEAD+MIDDLE+TAIL));
+  PROTECT(Out   = NEW_LIST(HEAD+NECK+MIDDLE+TAIL));
 
   SET_VECTOR_ELT(Out, 0,  iOut);
   SET_VECTOR_ELT(Out, 1,  jOut);
@@ -706,34 +762,36 @@ SEXP CROSSFUN(SEXP xx1,
 
 #ifdef COORDS
 #ifdef ZCOORD
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE,   xiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+1, yiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+2, ziOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+3, xjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+4, yjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+5, zjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+6, dxOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+7, dyOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+8, dzOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+9, dOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, ziOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, zjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+6, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+7, dyOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+8, dzOut);
 #else
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE,   xiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+1, yiOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+2, xjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+3, yjOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+4, dxOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+5, dyOut);
-  SET_VECTOR_ELT(Out, HEAD+MIDDLE+6, dOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, dyOut);
 #endif
+#endif
+#ifdef DIST
+  SET_VECTOR_ELT(Out, HEAD+NECK+MIDDLE, dOut);
 #endif
 
-  UNPROTECT(NINPUTS+1+HEAD+MIDDLE+TAIL);   /* 1 is for 'Out' itself */
+  UNPROTECT(NINPUTS+1+HEAD+NECK+MIDDLE+TAIL);   /* 1 is for 'Out' itself */
 
   return(Out);
 }
 
 #undef NINPUTS
 #undef HEAD
+#undef NECK
 #undef MIDDLE
 #undef TAIL
 

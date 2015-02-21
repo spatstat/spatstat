@@ -1393,4 +1393,8 @@ dround <- function(x) {
   round(x, getOption('digits'))
 }
 
-
+there.is.no.try <- function(...) {
+  y <- try(..., silent=TRUE)
+  if(inherits(y, "try-error")) return(NULL)
+  return(y)
+}

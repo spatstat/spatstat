@@ -13,7 +13,7 @@ closepairs <- function(X, rmax, ...) {
 }
   
 closepairs.ppp <- function(X, rmax, ordered=TRUE,
-                           what=c("all", "indices"), ...) {
+                           what=c("all", "indices", "ijd"), ...) {
   verifyclass(X, "ppp")
   what <- match.arg(what)
   stopifnot(is.numeric(rmax) && length(rmax) == 1)
@@ -35,6 +35,11 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
                         indices = {
                           list(i=integer(0),
                                j=integer(0))
+                        },
+                        ijd = {
+                          list(i=integer(0),
+                               j=integer(0),
+                               d=numeric(0))
                         })
    if(npts == 0)
      return(null.answer)
@@ -78,6 +83,15 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
                stop("Internal error: incorrect format returned from VcloseIJpairs")
              i  <- z[[1]]  # NB no increment required
              j  <- z[[2]]
+           },
+           ijd = {
+             z <- .Call("VcloseIJDpairs",
+                        xx=x, yy=y, rr=r, nguess=ng)
+             if(length(z) != 3)
+               stop("Internal error: incorrect format returned from VcloseIJDpairs")
+             i  <- z[[1]]  # NB no increment required
+             j  <- z[[2]]
+             d  <- z[[3]]
            })
 
   } else {
@@ -145,15 +159,20 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
     actual <- seq_len(npairs)
     i  <- z$iout[actual]  # sic
     j  <- z$jout[actual]
-    if(what == "all") {
-      xi <- z$xiout[actual]
-      yi <- z$yiout[actual]
-      xj <- z$xjout[actual]
-      yj <- z$yjout[actual]
-      dx <- z$dxout[actual]
-      dy <- z$dyout[actual]
-      d <-  z$dout[actual]
-    }
+    switch(what,
+           indices={},
+           all={
+             xi <- z$xiout[actual]
+             yi <- z$yiout[actual]
+             xj <- z$xjout[actual]
+             yj <- z$yjout[actual]
+             dx <- z$dxout[actual]
+             dy <- z$dyout[actual]
+             d <-  z$dout[actual]
+           },
+           ijd = {
+             d <- z$dout[actual]
+           })
     # ------------------- end code switch ------------------------
   }
   
@@ -165,15 +184,20 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
     ok <- (i < j)
     i  <-  i[ok]
     j  <-  j[ok]
-    if(what == "all") {
-      xi <- xi[ok]
-      yi <- yi[ok]
-      xj <- xj[ok]
-      yj <- yj[ok]
-      dx <- dx[ok]
-      dy <- dy[ok]
-      d  <-  d[ok]
-    }
+    switch(what,
+           indices = { },
+           all = {
+             xi <- xi[ok]
+             yi <- yi[ok]
+             xj <- xj[ok]
+             yj <- yj[ok]
+             dx <- dx[ok]
+             dy <- dy[ok]
+             d  <-  d[ok]
+           },
+           ijd = {
+             d  <-  d[ok]
+           })
   }
   # done
   switch(what,
@@ -190,6 +214,9 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
          },
          indices = {
            answer <- list(i = i, j = j)
+         },
+         ijd = {
+           answer <- list(i=i, j=j, d=d)
          })
   return(answer)
 }
@@ -200,7 +227,7 @@ crosspairs <- function(X, Y, rmax, ...) {
   UseMethod("crosspairs")
 }
 
-crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
+crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
   verifyclass(X, "ppp")
   verifyclass(Y, "ppp")
   what <- match.arg(what)
@@ -220,6 +247,11 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
                         indices = {
                           list(i=integer(0),
                                j=integer(0))
+                        },
+                        ijd = {
+                          list(i=integer(0),
+                               j=integer(0),
+                               d=numeric(0))
                         })
   nX <- npoints(X)
   nY <- npoints(Y)
@@ -272,6 +304,17 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
                stop("Internal error: incorrect format returned from VcrossIJpairs")
              i  <- z[[1]]  # NB no increment required
              j  <- z[[2]]
+           }, 
+           ijd = {
+             z <- .Call("VcrossIJDpairs",
+                        xx1=Xx, yy1=Xy,
+                        xx2=Yx, yy2=Yy,
+                        rr=r, nguess=ng)
+             if(length(z) != 3)
+               stop("Internal error: incorrect format returned from VcrossIJDpairs")
+             i  <- z[[1]]  # NB no increment required
+             j  <- z[[2]]
+             d  <- z[[3]]
            })
            
   } else {
@@ -351,6 +394,9 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices"), ...) {
          },
          indices = {
            answer <- list(i=i, j=j)
+         },
+         ijd = {
+           answer <- list(i=i, j=j, d=d)
          })
   return(answer)
 }

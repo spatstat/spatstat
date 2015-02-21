@@ -159,9 +159,11 @@ useDynLib(spatstat,
 "trigrafS",
 "triograph",
 "trioxgraph",
+"VcloseIJDpairs",
 "VcloseIJpairs",
 "Vclosepairs",
 "Vclosethresh",
+"VcrossIJDpairs",
 "VcrossIJpairs",
 "Vcrosspairs",
 "wtcrdenspt",
@@ -2113,6 +2115,7 @@ export("test.selfcrossing.psp")
 export("textstring")
 export("texturemap")
 export("textureplot")
+export("there.is.no.try")
 export("thomas.estK")
 export("thomas.estpcf")
 export("tile.areas")

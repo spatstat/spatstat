@@ -2,7 +2,7 @@
 
   close3pair.c
 
-  $Revision: 1.31 $     $Date: 2013/11/22 01:01:12 $
+  $Revision: 1.1 $     $Date: 2015/02/21 03:28:53 $
 
   closepairs and crosspairs for 3D
 
@@ -36,22 +36,26 @@ double sqrt();
 #define CROSSFUN cross3IJpairs
 #undef THRESH
 #undef COORDS
+#undef DIST
 #include "closefuns.h"
 #undef CLOSEFUN
 #undef CROSSFUN
 #undef THRESH
 #undef COORDS
+#undef DIST
 
 /* return i, j, xi, yi, zi, xj, yj, zj, dx, dy, dz, d */
 #define CLOSEFUN close3pairs
 #define CROSSFUN cross3pairs
 #undef THRESH
 #define COORDS
+#define DIST
 #include "closefuns.h"
 #undef CLOSEFUN
 #undef CROSSFUN
 #undef THRESH
 #undef COORDS
+#undef DIST
 
 /* return i, j, t where t = 1{d < s} */
 
@@ -59,9 +63,11 @@ double sqrt();
 #define CROSSFUN cross3thresh
 #define THRESH
 #undef COORDS
+#undef DIST
 #include "closefuns.h"
 #undef CLOSEFUN
 #undef CROSSFUN
 #undef THRESH
 #undef COORDS
+#undef DIST
 

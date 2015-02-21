@@ -657,6 +657,7 @@
 \alias{termsinformula}
 \alias{test.crossing.psp}
 \alias{test.selfcrossing.psp}
+\alias{there.is.no.try}
 \alias{tilecentroids}        
 \alias{tileindex}        
 \alias{trap.extra.arguments}
@@ -1453,6 +1454,7 @@ sympoly(x, y, n)
 termsinformula(x)
 test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
+there.is.no.try(\dots)
 tilecentroids(W, nx, ny)
 tileindex(x, y, Z)
 trap.extra.arguments(\dots, .Context, .Fatal)
