@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.061
+	CHANGES IN spatstat VERSION 1.40-0.063
 
 OVERVIEW
 
@@ -333,6 +333,11 @@ BUG FIXES
    were sometimes vastly inflated - total quadrature weight was
    much larger than window area. Spotted by Ian Renner. 
    Fixed.   
+
+   o predict.rhohat
+   Result was incorrect for data on a non-rectangular window 
+   (and a warning was issued about incorrect vector length).
+   Fixed.
 
    o Math.im
    Unary operators did not work (e.g."-x")

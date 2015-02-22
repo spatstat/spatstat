@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.84 $	$Date: 2014/11/10 08:29:05 $
+#	$Revision: 1.85 $	$Date: 2015/02/22 03:00:48 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -301,7 +301,8 @@
 
     # identify all close pairs
     rmax <- max(r)
-    close <- closepairs(X, rmax)
+    what <- if(any(correction == "translate")) "all" else "ijd"
+    close <- closepairs(X, rmax, what=what)
     dIJ <- close$d
     # compute weights for these pairs
     I <- close$i
@@ -319,7 +320,6 @@
       # border method
       # Compute distances to boundary
       b <- bdist.points(X)
-      I <- close$i
       bI <- b[I]
       # apply reduced sample algorithm
       RS <- Kwtsum(dIJ, bI, wIJ, b, w=reciplambda, breaks)

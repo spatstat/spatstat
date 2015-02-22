@@ -1,7 +1,7 @@
 #
 #   pcfmulti.R
 #
-#   $Revision: 1.6 $   $Date: 2014/11/10 11:05:55 $
+#   $Revision: 1.7 $   $Date: 2015/02/22 03:00:48 $
 #
 #   multitype pair correlation functions
 #
@@ -191,7 +191,8 @@ pcfmulti <- function(X, I, J, ...,
   ## compute pairwise distances
   
   ## identify close pairs of points
-  close <- crosspairs(XI, XJ, rmax+hmax)
+  what <- if(any(correction == "translate")) "all" else "ijd"
+  close <- crosspairs(XI, XJ, rmax+hmax, what=what)
   ## map (i,j) to original serial numbers in X
   orig <- seq_len(npts)
   imap <- orig[I]
@@ -201,17 +202,8 @@ pcfmulti <- function(X, I, J, ...,
   ## eliminate any identical pairs
   if(nIJ > 0) {
     ok <- (iX != jX)
-    if(!all(ok)) {
-      close$i  <- close$i[ok]
-      close$j  <- close$j[ok]
-      close$xi <- close$xi[ok]
-      close$yi <- close$yi[ok]
-      close$xj <- close$xj[ok]
-      close$yj <- close$yj[ok]
-      close$dx <- close$dx[ok]
-      close$dy <- close$dy[ok]
-      close$d  <- close$d[ok]
-    }
+    if(!all(ok))
+      close <- as.list(as.data.frame(close)[ok, , drop=FALSE])
   }
   ## extract information for these pairs (relative to orderings of XI, XJ)
   dclose <- close$d

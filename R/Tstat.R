@@ -1,7 +1,7 @@
 #
 #	tstat.R		Estimation of T function
 #
-#	$Revision: 1.8 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.9 $	$Date: 2015/02/22 03:00:48 $
 #
 
 Tstat <- local({
@@ -101,7 +101,7 @@ Tstat <- local({
   
       # identify all close pairs
       rmax <- max(r)
-      close <- closepairs(X, rmax, ordered=FALSE)
+      close <- closepairs(X, rmax, what="ijd", ordered=FALSE)
       I <- close$i
       J <- close$j
       DIJ <- close$d

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.99 $ $Date: 2015/02/20 06:24:50 $
+# $Revision: 1.100 $ $Date: 2015/02/22 03:00:48 $
 #
 
 kppm <- function(X, ...) {
@@ -287,7 +287,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
   # identify pairs of points that contribute
-  cl <- closepairs(X, rmax)
+  cl <- closepairs(X, rmax, what="ijd")
   I <- cl$i
   J <- cl$j
   dIJ <- cl$d
@@ -659,7 +659,7 @@ improve.kppm <- local({
       if (verbose)
         cat("computing the sparse G-1 matrix ...\n")
       ## Non-zero gminus1 entries (when using tapering)
-      cp <- crosspairs(U,U,rmax)
+      cp <- crosspairs(U,U,rmax,what="ijd")
       if (verbose)
         cat("crosspairs done\n")
       Gtap <- (gfun(cp$d) - 1)

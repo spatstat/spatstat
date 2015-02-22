@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.5 $ $Date: 2015/02/13 06:42:51 $
+#  $Revision: 1.6 $ $Date: 2015/02/22 11:17:25 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -144,9 +144,14 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
   stopifnot(method %in% c("C", "interpreted"))
   check <- resolve.defaults(list(...), list(check=TRUE))$check
   #
-  L <- as.linnet(X)
-  if(check && !identical(L, as.linnet(Y))) 
+  if(check && !identical(as.linnet(X, sparse=TRUE),
+                         as.linnet(Y, sparse=TRUE)))
     stop("X and Y are on different linear networks")
+  Xsparse <- identical(domain(X)$sparse, TRUE)
+  Ysparse <- identical(domain(Y)$sparse, TRUE)
+  L <- if(!Xsparse && Ysparse) as.linnet(X) else
+       if(Xsparse && !Ysparse) as.linnet(Y) else
+       as.linnet(X, sparse=FALSE)
   #
   nX <- npoints(X)
   nY <- npoints(Y)

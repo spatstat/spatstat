@@ -3,7 +3,7 @@
 #
 #   model compensated K-function
 #
-# $Revision: 1.12 $ $Date: 2014/11/10 08:27:27 $
+# $Revision: 1.13 $ $Date: 2015/02/22 03:00:48 $
 #
 
 Kcom <- local({
@@ -139,7 +139,7 @@ Kcom <- local({
   
   # close pairs of points
   # (quadrature point to data point)
-  clos <- crosspairs(U, X, rmax)
+  clos <- crosspairs(U, X, rmax, what="ijd")
   dIJ <- clos$d
   I   <- clos$i
   J   <- clos$j

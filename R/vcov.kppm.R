@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.8 $  $Date: 2015/02/21 04:21:05 $
+#   $Revision: 1.9 $  $Date: 2015/02/22 03:00:48 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -60,7 +60,9 @@ vcov.kppm <- function(object, ...,
         crosspairs(U,U,rmax,what="ijd")
         )
       gminus1 <- if(is.null(cp)) NULL else
-                 sparseMatrix(i=cp$i, j=cp$j, x=g(cp$d) - 1, dims=c(nU, nU))
+                 sparseMatrix(i=cp$i, j=cp$j,
+                              x=g(cp$d) - 1,
+                              dims=c(nU, nU))
     }
     ## compute quadratic form
     if(!is.null(gminus1)) {
@@ -88,8 +90,9 @@ vcov.kppm <- function(object, ...,
           iend   <- min(nrowperblock * k, nU)
           ii <- istart:iend
           cp <- crosspairs(U[ii], U, rmax, what="ijd")
-          gm1 <- Matrix::sparseMatrix(i=cp$i, j=cp$j,
-                                      x=g(cp$d) - 1, dims=c(iend-istart+1, nU))
+          gm1 <- sparseMatrix(i=cp$i, j=cp$j,
+                              x=g(cp$d) - 1,
+                              dims=c(iend-istart+1, nU))
           g1ff <- rbind(g1ff, as.matrix(gm1 %*% ff))
         }
       }

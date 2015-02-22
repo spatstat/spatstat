@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.107 $	$Date: 2015/01/08 09:29:28 $
+#	$Revision: 5.108 $	$Date: 2015/02/22 03:00:48 $
 #
 #
 # -------- functions ----------------------------------------
@@ -187,7 +187,9 @@ function(X, ..., r=NULL, breaks=NULL,
   
     ## identify all close pairs
     rmax <- max(r)
-    close <- closepairs(X, rmax)
+    what <- 
+	if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd"
+    close <- closepairs(X, rmax, what=what)
     DIJ <- close$d
 
     if(any(correction == "none")) {

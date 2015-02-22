@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.61 $  $Date: 2014/11/10 11:18:05 $
+#  $Revision: 1.62 $  $Date: 2015/02/22 13:07:27 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -598,7 +598,7 @@ predict.rhohat <- function(object, ..., relative=FALSE) {
   # adjust to reference baseline
   if(reference != "Lebesgue" && !relative) {
     lambda <- s$lambda
-    Y <- eval.im(Y * lambda)
+    Y[] <- Y[] * lambda
   }
   return(Y)
 }

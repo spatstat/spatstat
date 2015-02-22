@@ -3,7 +3,7 @@
 #
 #	Pseudoscore residual for unnormalised G (saturation process)
 #
-#	$Revision: 1.7 $	$Date: 2014/11/11 02:33:16 $
+#	$Revision: 1.8 $	$Date: 2015/02/22 03:00:48 $
 #
 ################################################################################
 #
@@ -118,7 +118,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   
   # Second phase: ................................................
   # close pairs (quadrature point to data point)
-  close <- crosspairs(U, X, rmax)
+  close <- crosspairs(U, X, rmax, what="ijd")
   dIJ <- close$d
   I   <- close$i
   J   <- close$j

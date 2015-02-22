@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.52 $   $Date: 2014/11/10 11:06:53 $
+#   $Revision: 1.53 $   $Date: 2015/02/22 03:00:48 $
 #
 #
 #   calculate pair correlation function
@@ -98,7 +98,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   #################################################
   
   # compute pairwise distances
-  
+  what <- if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd" 
   close <- closepairs(X, rmax + hmax)
   dIJ <- close$d
 

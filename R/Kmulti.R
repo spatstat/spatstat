@@ -4,7 +4,7 @@
 #	Compute estimates of cross-type K functions
 #	for multitype point patterns
 #
-#	$Revision: 5.46 $	$Date: 2014/11/10 10:34:24 $
+#	$Revision: 5.47 $	$Date: 2015/02/22 03:00:48 $
 #
 #
 # -------- functions ----------------------------------------
@@ -225,7 +225,7 @@ function(X, I, J, r=NULL, breaks=NULL,
   # find close pairs of points
   XI <- X[I]
   XJ <- X[J]
-  close <- crosspairs(XI, XJ, max(r))
+  close <- crosspairs(XI, XJ, max(r), what="ijd")
 # close$i and close$j are serial numbers in XI and XJ respectively;        
 # map them to original serial numbers in X
   orig <- seq_len(npts)
@@ -239,12 +239,6 @@ function(X, I, J, r=NULL, breaks=NULL,
     if(!all(ok)) {
       close$i  <- close$i[ok]
       close$j  <- close$j[ok]
-      close$xi <- close$xi[ok]
-      close$yi <- close$yi[ok]
-      close$xj <- close$xj[ok]
-      close$yj <- close$yj[ok]
-      close$dx <- close$dx[ok]
-      close$dy <- close$dy[ok]
       close$d  <- close$d[ok]
     }
   }

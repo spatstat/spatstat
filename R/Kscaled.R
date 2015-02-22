@@ -1,7 +1,7 @@
 #
 #	Kscaled.R	Estimation of K function for locally-scaled process
 #
-#	$Revision: 1.15 $	$Date: 2014/11/10 10:41:18 $
+#	$Revision: 1.16 $	$Date: 2015/02/22 03:00:48 $
 #
 
 "Lscaled" <- function(...) {
@@ -109,7 +109,8 @@
           fname=c("K", "scaled"))
         
   ## identify all relevant close pairs
-  close <- closepairs(X, maxabsdist)
+  what <- if(any(correction == "translate")) "all" else "ijd"
+  close <- closepairs(X, maxabsdist, what=what)
   I <- close$i
   J <- close$j
   ## locally-scaled distances

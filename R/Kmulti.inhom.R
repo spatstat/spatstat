@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.44 $	$Date: 2014/11/10 10:34:57 $
+#	$Revision: 1.45 $	$Date: 2015/02/22 03:00:48 $
 #
 #
 # ------------------------------------------------------------------------
@@ -260,7 +260,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
 # identify close pairs of points
   XI <- X[I]
   XJ <- X[J]
-  close <- crosspairs(XI, XJ, max(r))
+  close <- crosspairs(XI, XJ, max(r), what="ijd")
 # map (i,j) to original serial numbers in X
   orig <- seq_len(npts)
   imap <- orig[I]
@@ -273,12 +273,6 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
     if(!all(ok)) {
       close$i  <- close$i[ok]
       close$j  <- close$j[ok]
-      close$xi <- close$xi[ok]
-      close$yi <- close$yi[ok]
-      close$xj <- close$xj[ok]
-      close$yj <- close$yj[ok]
-      close$dx <- close$dx[ok]
-      close$dy <- close$dy[ok]
       close$d  <- close$d[ok]
     }
   }

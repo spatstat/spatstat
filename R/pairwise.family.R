@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.60 $	$Date: 2014/12/03 02:44:08 $
+#    $Revision: 1.61 $	$Date: 2015/02/22 03:00:48 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -414,7 +414,7 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
   Vnames <- dimnames(fakePOT)[[3]]
   p <- dim(fakePOT)[3]
   # Identify close pairs X[i], P[j]
-  cl <- crosspairs(X, P, R)
+  cl <- crosspairs(X, P, R, what="ijd")
   I <- cl$i
   J <- cl$j
   D <- matrix(cl$d, ncol=1)

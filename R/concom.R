@@ -2,7 +2,7 @@
 #
 #    concom.R
 #
-#    $Revision: 1.1 $	$Date: 2013/02/25 05:19:36 $
+#    $Revision: 1.2 $	$Date: 2015/02/22 03:00:48 $
 #
 #    The connected component interaction
 #
@@ -39,7 +39,7 @@ Concom <- local({
   cocoAdd <- function(U, X, R) {
     U <- as.ppp(U, W=as.owin(X))
     nU <- npoints(U)
-    cr <- crosspairs(U, X, R)
+    cr <- crosspairs(U, X, R, what="indices")
     lab <- connectedlabels(X, R)
     hitcomp <- tapply(X=lab[cr$j],
                       INDEX=factor(cr$i, levels=1:nU),
