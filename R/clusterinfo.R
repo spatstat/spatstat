@@ -407,7 +407,7 @@
              if(is.null(nu))
                  stop("Argument ", sQuote("nu"), " is missing.")
              numer <- ((rvals/scale)^nu) * besselK(rvals/scale, nu)
-             numer[rvals==0] <- 2^(nu-1)*gamma(nu)
+             numer[rvals==0] <- ifelse(nu>0, 2^(nu-1)*gamma(nu), Inf)
              denom <- pi * (2^(nu+1)) * scale^2 * gamma(nu + 1)
              numer/denom
          },
@@ -653,10 +653,17 @@
          )
   )
 
-spatstatClusterModelInfo <- function(name) {
+spatstatClusterModelInfo <- function(name, onlyPCP = FALSE) {
   if(!is.character(name) || length(name) != 1)
     stop("Argument must be a single character string", call.=FALSE)
   nama2 <- names(.Spatstat.ClusterModelInfoTable)
+  if(onlyPCP){
+      ok <- sapply(nama2,
+                    function(x) .Spatstat.ClusterModelInfoTable[[x]]$isPCP)
+  } else{
+      ok <- rep(TRUE, length(nama2))
+  }
+  nama2 <- nama2[ok]
   if(!(name %in% nama2))
     stop(paste(sQuote(name), "is not recognised;",
                "valid names are", commasep(sQuote(nama2))),

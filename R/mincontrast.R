@@ -244,15 +244,18 @@ as.fv.minconfit <- function(x) x$fit
 
 optimStatus <- function(x, call=NULL) {
   cgce <- x$convergence
+  neval <- x$counts[["function"]]
   switch(paste(cgce),
          "0" = {
            simpleMessage(
-                         paste("Converged successfully after",
-                               x$counts[["function"]],
-                               "iterations"),
+                         paste("Converged successfully after", 
+                               neval, "function evaluations"),
                          call)
          },
-         "1" = simpleWarning("Iteration limit maxit was reached", call),
+         "1" = simpleWarning(
+           paste("Iteration limit maxit was reached after",
+                 neval, "function evaluations"),
+           call),
          "10" = simpleWarning("Nelder-Mead simplex was degenerate", call),
          "51"= {
            simpleWarning(

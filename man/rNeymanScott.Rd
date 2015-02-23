@@ -6,7 +6,7 @@
   Neyman-Scott cluster process.
 }
 \usage{
- rNeymanScott(kappa, rmax, rcluster, win = owin(c(0,1),c(0,1)),
+ rNeymanScott(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
               \dots, lmax=NULL, nsim=1)
 }
 \arguments{
@@ -14,8 +14,9 @@
     Intensity of the Poisson process of cluster centres.
     A single positive number, a function, or a pixel image.
   }
-  \item{rmax}{
-    Maximum radius of a random cluster.
+  \item{expand}{
+    Size of the expansion of the simulation window for generating parent
+    points. A single non-negative number.
   }
   \item{rcluster}{
     A function which generates random clusters,
@@ -47,19 +48,26 @@
   This algorithm generates a realisation of the
   general Neyman-Scott process, with the cluster mechanism
   given by the function \code{rcluster}. 
-  The clusters must have a finite maximum possible radius \code{rmax}.
 
   First, the algorithm generates a Poisson point process of
-  \dQuote{parent} points with intensity \code{kappa}. Here \code{kappa}
+  \dQuote{parent} points with intensity \code{kappa} in an expanded
+  window as explained below. Here \code{kappa}
   may be a single positive number,
   a function \code{kappa(x,y)},
   or a pixel image object of class \code{"im"} (see
   \code{\link{im.object}}).  See \code{\link{rpoispp}} for details.
 
   Second, each parent point is replaced by a random cluster
-  of points.  These clusters are combined together to yield a
-  single point pattern which is then returned as the result of
+  of points. These clusters are combined together to yield a
+  single point pattern, and the restriction of this pattern to the
+  window \code{win} is then returned as the result of
   \code{rNeymanScott}.
+
+  The expanded window consists of \code{\link{as.rectangle}(win)}
+  extended by the amount \code{expand} in each direction. The size of
+  the expansion is saved in the attribute \code{"expand"} and may be
+  extracted by \code{attr(X, "expand")} where \code{X} is the generated
+  point pattern.  
 
   The argument \code{rcluster} specifies the cluster mechanism.
   It may be either:
@@ -152,9 +160,7 @@
   Note that if \code{kappa} is an
   image, the spatial domain covered by this image must be large
   enough to include the \emph{expanded} window in which the parent
-  points are to be generated.  This expanded window consists of
-  \code{\link{as.rectangle}(win)} extended by the amount \code{rmax}
-  in each direction.  This requirement means that \code{win} must
+  points are to be generated. This requirement means that \code{win} must
   be small enough so that the expansion of \code{as.rectangle(win)}
   is contained in the spatial domain of \code{kappa}.  As a result,
   one may wind up having to simulate the process in a window smaller

@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.72 $   $Date: 2015/01/11 14:29:36 $
+##    $Revision: 4.73 $   $Date: 2015/02/23 00:21:39 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -566,7 +566,7 @@ rSSI <- function(r, n=Inf, win = square(1),
 }
 
 rPoissonCluster <-
-  function(kappa, rmax, rcluster, win = owin(c(0,1),c(0,1)), ...,
+  function(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)), ...,
            lmax=NULL, nsim=1)
 {
   ## Generic Poisson cluster process
@@ -578,12 +578,19 @@ rPoissonCluster <-
   ## "..." are arguments to be passed to 'rcluster()'
   ##
 
+  ## Catch old argument name rmax for expand, and allow rmax to be
+  ## passed to rcluster (and then be ignored)
+  if(missing(expand) && !is.null(rmax <- list(...)$rmax)){
+      expand <- rmax
+      f <- rcluster
+      rcluster <- function(..., rmax) f(...)
+  }
   win <- as.owin(win)
   
   ## Generate parents in dilated window
   frame <- boundingbox(win)
-  dilated <- owin(frame$xrange + c(-rmax, rmax),
-                  frame$yrange + c(-rmax, rmax))
+  dilated <- owin(frame$xrange + c(-expand, expand),
+                  frame$yrange + c(-expand, expand))
   if(is.im(kappa) && !is.subset.owin(dilated, as.owin(kappa)))
     stop(paste("The window in which the image",
                sQuote("kappa"),
@@ -631,6 +638,7 @@ rPoissonCluster <-
 
     attr(result, "parents") <- parents
     attr(result, "parentid") <- parentid
+    attr(result, "expand") <- expand
 
     resultlist[[isim]] <- result
   }

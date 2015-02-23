@@ -7,7 +7,7 @@
 }
 \usage{
  rVarGamma(kappa, nu, scale, mu, win = owin(), 
-           thresh = 0.001, nsim=1, saveLambda=FALSE, rmax = NULL, savermax = FALSE, ...)
+           thresh = 0.001, nsim=1, saveLambda=FALSE, expand = NULL, ...)
 }
 \arguments{
   \item{kappa}{
@@ -35,7 +35,7 @@
     Threshold relative to the cluster kernel value at the origin (parent
     location) determining when the cluster kernel will be treated as
     zero for simulation purposes. Will be overridden by argument
-    \code{rmax} if that is given.
+    \code{expand} if that is given.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
   \item{saveLambda}{
@@ -43,14 +43,17 @@
     the simulated parent points will also be calculated and saved,
     and returns as an attribute of the point pattern.
   }
-  \item{rmax}{Cut-off value for the range of a cluster. Calculated from
-    the value of argument \code{thresh} if missing.}
-  \item{savermax}{Logical. If \code{TRUE} then the value of \code{rmax}
-    is returned as an attribute of the point pattern.}
-  \item{\dots}{Passed to \code{\link{clusterfield}} to control the image
-    resolution when \code{saveLambda=TRUE} and to
-    \code{\link{clusterrange}} when \code{rmax} is missing, which may be
-    useful when \code{savermax=TRUE}.}
+  \item{expand}{
+    Numeric. Size of window expansion for generation of parent
+    points. By default determined by calling
+    \code{\link{clusterradius}} with the numeric threshold value given
+    in \code{thresh}.
+  }
+  \item{\dots}{
+    Passed to \code{\link{clusterfield}} to control the image resolution
+    when \code{saveLambda=TRUE} and to \code{\link{clusterradius}} when
+    \code{expand} is missing or \code{NULL}.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},

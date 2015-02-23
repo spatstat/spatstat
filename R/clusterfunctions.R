@@ -3,9 +3,9 @@
 ## Contains the generic functions:
 ##  - clusterkernel
 ##  - clusterfield
-##  - clusterrange.
+##  - clusterradius.
 ##
-##   $Revision: 1.2 $  $Date: 2015/02/20 07:32:03 $
+##   $Revision: 1.3 $  $Date: 2015/02/23 00:21:39 $
 ##
 
 clusterkernel <- function(model, ...) {
@@ -21,7 +21,7 @@ clusterkernel.kppm <- function(model, ...) {
 }
 
 clusterkernel.character <- function(model, ...){
-  info <- spatstatClusterModelInfo(model)
+  info <- spatstatClusterModelInfo(model, onlyPCP = TRUE)
   internalkernel <- info$kernel
   dots <- list(...)
   par <- c(kappa = 1, scale = dots$scale)
@@ -77,12 +77,12 @@ clusterfield.function <- function(model, locations = NULL, ..., mu = NULL) {
     return(rslt*mu)
 }
 
-clusterrange <- function(model, ...){
-    UseMethod("clusterrange")
+clusterradius <- function(model, ...){
+    UseMethod("clusterradius")
 }
 
-clusterrange.character <- function(model, ..., thresh = NULL, precision = FALSE){
-    info <- spatstatClusterModelInfo(model)
+clusterradius.character <- function(model, ..., thresh = NULL, precision = FALSE){
+    info <- spatstatClusterModelInfo(model, onlyPCP = TRUE)
     rmax <- info$range(..., thresh = thresh)
     if(precision){
         ddist <- function(r) info$ddist(r, ...)
@@ -92,10 +92,10 @@ clusterrange.character <- function(model, ..., thresh = NULL, precision = FALSE)
     return(rmax)
 }
 
-clusterrange.kppm <- function(model, ..., thresh = NULL, precision = FALSE){
+clusterradius.kppm <- function(model, ..., thresh = NULL, precision = FALSE){
     a <- list(model = model$clusters,
               thresh = thresh,
               precision = precision)
     a <- append(a, as.list(c(model$clustpar, model$clustargs)))
-    do.call(clusterrange.character, a)
+    do.call(clusterradius.character, a)
 }

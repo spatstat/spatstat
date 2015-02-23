@@ -1414,7 +1414,7 @@ smoothpointsEngine(x, values, sigma, \dots,
                     weights, varcov, leaveoneout, sorted)
 \method{sort}{im}(x, \dots)
 spatstat.rawdata.location(\dots)
-spatstatClusterModelInfo(name)
+spatstatClusterModelInfo(name, onlyPCP)
 spatstatLocator(n, ...)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)

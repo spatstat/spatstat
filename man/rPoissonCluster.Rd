@@ -6,7 +6,7 @@
   general Poisson cluster process.
 }
 \usage{
- rPoissonCluster(kappa, rmax, rcluster, win = owin(c(0,1),c(0,1)),
+ rPoissonCluster(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
                  \dots, lmax=NULL, nsim=1)
 }
 \arguments{
@@ -14,8 +14,9 @@
     Intensity of the Poisson process of cluster centres.
     A single positive number, a function, or a pixel image.
   }
-  \item{rmax}{
-    Maximum radius of a random cluster.
+  \item{expand}{
+    Size of the expansion of the simulation window for generating parent
+    points. A single non-negative number.
   }
   \item{rcluster}{
     A function which generates random clusters.
@@ -45,20 +46,26 @@
   This algorithm generates a realisation of the
   general Poisson cluster process, with the cluster mechanism
   given by the function \code{rcluster}. 
-  The clusters must have a finite maximum possible radius \code{rmax}.
 
   First, the algorithm
   generates a Poisson point process of ``parent'' points 
-  with intensity \code{kappa}. Here \code{kappa} may be a single
+  with intensity \code{kappa} in an expanded
+  window as explained below.. Here \code{kappa} may be a single
   positive number, a function \code{kappa(x, y)}, or a pixel image
   object of class \code{"im"} (see \code{\link{im.object}}).
   See \code{\link{rpoispp}} for details.
   
-  Second, each parent point is
-  replaced by a random cluster of points, created by calling the
-  function \code{rcluster}.
-  These clusters are combined together to yield a single point pattern
-  which is then returned as the result of \code{rPoissonCluster}.
+  Second, each parent point is replaced by a random cluster of points,
+  created by calling the function \code{rcluster}.  These clusters are
+  combined together to yield a single point pattern, and the restriction
+  of this pattern to the window \code{win} is then returned as the
+  result of \code{rPoissonCluster}.
+
+  The expanded window consists of \code{\link{as.rectangle}(win)}
+  extended by the amount \code{expand} in each direction. The size of
+  the expansion is saved in the attribute \code{"expand"} and may be
+  extracted by \code{attr(X, "expand")} where \code{X} is the generated
+  point pattern.
 
   The function \code{rcluster} should expect to be called as
   \code{rcluster(xp[i],yp[i],\dots)} for each parent point at a location
@@ -81,9 +88,12 @@
 }
 \seealso{
   \code{\link{rpoispp}},
+  \code{\link{rMatClust}},
   \code{\link{rThomas}},
-  \code{\link{rGaussPoisson}},
-  \code{\link{rMatClust}}
+  \code{\link{rCauchy}},
+  \code{\link{rVarGamma}},
+  \code{\link{rNeymanScott}},
+  \code{\link{rGaussPoisson}}.
 }
 \examples{
   # each cluster consist of 10 points in a disc of radius 0.2
