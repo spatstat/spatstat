@@ -189,6 +189,10 @@ vertices.linnet <- function(w) {
   return(w$vertices)
 }
 
+Window.linnet <- function(X, ...) {
+  return(as.owin(as.psp(X)))
+}
+
 as.owin.linnet <- function(W, ...) {
   return(as.owin(as.psp(W)))
 }

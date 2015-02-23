@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.31 $   $Date: 2015/02/14 09:32:35 $
+#  $Revision: 1.32 $   $Date: 2015/02/23 04:20:57 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -126,14 +126,14 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   do.call.matched("plot.linnet",
                   resolve.defaults(list(x=L, add=TRUE),
                                    list(...)),
-                  extrargs=c("lty", "lwd"))
+                  extrargs=c("lty", "lwd", "col"))
   ## plot points, legend, title
   ans <- do.call.matched("plot.ppp",
                          c(list(x=P, add=TRUE, main=main,
                                 show.all=show.all, show.window=FALSE),
                            list(...)),
                          extrargs=c("shape", "size", "pch", "cex",
-                           "fg", "bg", "col", "lty", "lwd", "etch",
+                           "fg", "bg", "cols", "lty", "lwd", "etch",
                            "cex.main", "col.main", "line", "outer", "sub"))
   return(invisible(ans))
 }

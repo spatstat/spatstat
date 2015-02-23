@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.064
+	CHANGES IN spatstat VERSION 1.40-0.065
 
 OVERVIEW
 
@@ -131,6 +131,9 @@ NEW FUNCTIONS
 
    o pool.fv, pool.anylist
    New methods for 'pool' 
+
+   o Window.linnet
+   Extract the two-dimensional window containing a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -412,7 +415,8 @@ BUG FIXES
    Fixed.
 
    o plot.lpp
-   Ignored symbolmap arguments like 'cex'.
+   Ignored symbolmap arguments like 'cex'
+   and confused the arguments 'col' and 'cols'.
    Fixed.
 
    o plot.diagppm

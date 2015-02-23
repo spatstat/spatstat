@@ -13,6 +13,7 @@
 \alias{vertexdegree}
 \alias{vertices.linnet}
 \alias{volume.linnet}
+\alias{Window.linnet}
 \title{
   Methods for Linear Networks
 }
@@ -43,6 +44,8 @@ vertexdegree(x)
 \method{vertices}{linnet}(w)
 
 \method{volume}{linnet}(x)
+
+\method{Window}{linnet}(X, ...)
 }
 \arguments{
   \item{x,X,object,w,W}{
@@ -82,12 +85,14 @@ vertexdegree(x)
   \code{\link{summary}},
   \code{\link{unitname}},
   \code{\link{unitname<-}},
-  \code{\link{vertices}}
-  and \code{\link{volume}}
+  \code{\link{vertices}},
+  \code{\link{volume}}
+  and \code{\link{Window}}
   for the class \code{"linnet"}.
 
-  The method \code{as.owin.linnet} extracts the window containing
-  the linear network, and returns it as an object of class \code{"owin"}.
+  The methods \code{as.owin.linnet} and \code{Window.linnet}
+  extract the window containing
+  the linear network, and return it as an object of class \code{"owin"}.
   
   The method \code{as.psp.linnet} extracts the
   lines of the linear network as a line segment pattern (object of class
@@ -117,11 +122,11 @@ vertexdegree(x)
   \code{\link{linnet}}
 }
 \examples{
-  data(simplenet)
   simplenet
   summary(simplenet)
   volume(simplenet)
   unitname(simplenet) <- c("cubit", "cubits")
+  Window(simplenet)
 }
 \keyword{spatial}
 \keyword{methods}
