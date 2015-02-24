@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.12 $    $Date: 2015/01/10 14:31:39 $
+#  $Revision: 1.13 $    $Date: 2015/02/24 01:46:37 $
 #
 
 rLGCP <- local({
@@ -21,7 +21,7 @@ rLGCP <- local({
     if(!all(nzchar(names(param))))
       stop("Outdated syntax of argument 'param' to rLGCP", call.=FALSE)
     ## 
-    if(!require(RandomFields))
+    if(!requireNamespace("RandomFields"))
       stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
     ## 
     do.rLGCP(model=model, mu=mu, param=param, ...,
@@ -35,10 +35,12 @@ rLGCP <- local({
     ## make RF model object from RandomFields package
     ## get the 'model generator'
     modelname <- if(model == "exponential") "exp" else model
-    modgen <- mget(paste0("RM", modelname), inherits=TRUE,
-                   ifnotfound=list(NULL))[[1]]
-    if(is.null(modgen) || !inherits(modgen, "RMmodelgenerator"))
-      stop(paste("Model", sQuote(modelname), "is not recognised"))
+    modgen <- try(getExportedValue("RandomFields", 
+                                   paste0("RM", modelname)),
+                  silent=TRUE)
+    if(inherits(modgen, "try-error") ||
+       !inherits(modgen, "RMmodelgenerator"))
+      stop(paste("Model", sQuote(model), "is not recognised"))
     ## now create a RandomFields 'model' object
     rfmodel <- do.call(modgen, append(as.list(param), list(...)))
 

@@ -16,6 +16,10 @@
 \special{Ops(e1, e2)}
 \special{Complex(z)}
 \special{Summary(\dots, na.rm = FALSE)}
+%NAMESPACE S3method("Math", "linim")
+%NAMESPACE S3method("Ops", "linim")
+%NAMESPACE S3method("Complex", "linim")
+%NAMESPACE S3method("Summary", "linim")
 }
 \arguments{
   \item{x, z, e1, e2}{objects of class \code{"linim"}.}

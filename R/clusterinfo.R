@@ -533,13 +533,15 @@
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
              if(model != "exponential") {
-                 if(!require(RandomFields))
+                 if(!requireNamespace("RandomFields"))
                      stop("The package RandomFields is required")
                  ## get the 'model generator' 
-                 modgen <- mget(paste0("RM", model), inherits=TRUE,
-                                ifnotfound=list(NULL))[[1]]
-                 if(is.null(modgen) || !inherits(modgen, "RMmodelgenerator"))
-                     stop(paste("Model", sQuote(model), "is not recognised"))
+                 modgen <- try(getExportedValue("RandomFields", 
+                                                paste0("RM", model)),
+                               silent=TRUE)
+                 if(inherits(modgen, "try-error") ||
+                    !inherits(modgen, "RMmodelgenerator"))
+                   stop(paste("Model", sQuote(model), "is not recognised"))
                  attr(model, "modgen") <- modgen
                  if(is.null(cmod)){
                      margsnam <- names(formals(modgen))
@@ -626,12 +628,14 @@
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             if(!require(RandomFields))
+             if(!requireNamespace("RandomFields"))
                stop("The package RandomFields is required")
              ## get the 'model generator' 
-             modgen <- mget(paste0("RM", model), inherits=TRUE,
-                           ifnotfound=list(NULL))[[1]]
-             if(is.null(modgen) || !inherits(modgen, "RMmodelgenerator"))
+             modgen <- try(getExportedValue("RandomFields", 
+                                            paste0("RM", model)),
+                           silent=TRUE)
+             if(inherits(modgen, "try-error") ||
+                !inherits(modgen, "RMmodelgenerator"))
                stop(paste("Model", sQuote(model), "is not recognised"))
              attr(model, "modgen") <- modgen
            }

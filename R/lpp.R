@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.32 $   $Date: 2015/02/23 04:20:57 $
+#  $Revision: 1.33 $   $Date: 2015/02/24 01:58:05 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -214,6 +214,28 @@ intensity.lpp <- function(X, ...) {
 
 is.lpp <- function(x) {
   inherits(x, "lpp")
+}
+
+is.multitype.lpp <- function(X, na.action="warn", ...) {
+  marx <- marks(X)
+  if(is.null(marx))
+    return(FALSE)
+  if((is.data.frame(marx) || is.hyperframe(marx)) && ncol(marx) > 1)
+    return(FALSE)
+  if(!is.factor(marx))
+    return(FALSE)
+  if((length(marx) > 0) && any(is.na(marx)))
+    switch(na.action,
+           warn = {
+             warning(paste("some mark values are NA in the point pattern",
+                           short.deparse(substitute(X))))
+           },
+           fatal = {
+             return(FALSE)
+           },
+           ignore = {}
+           )
+  return(TRUE)
 }
 
 as.lpp <- function(x, y=NULL, seg=NULL, tp=NULL, ...,

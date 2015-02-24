@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.18 $   $Date: 2014/08/27 09:46:17 $
+#   $Revision: 1.19 $   $Date: 2015/02/24 01:41:14 $
 #
 #
 
@@ -38,7 +38,7 @@ iplot.ppp <- function(x, ..., xname) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "ppp")
-  require(rpanel)
+  requireNamespace("rpanel")
   
   if(markformat(x) %in% c("hyperframe", "listof")) 
     marks(x) <- as.data.frame(as.hyperframe(marks(x)))
@@ -334,7 +334,7 @@ do.iplot.ppp <- function(panel) {
 
 CommitAndRedraw <- function(panel) {
   # hack to ensure that panel is immediately updated in rpanel
-  require(rpanel)
+  requireNamespace("rpanel", quietly=TRUE)
   ## This is really a triple-colon!
   rpanel:::rp.control.put(panel$panelname, panel)
   # now redraw it

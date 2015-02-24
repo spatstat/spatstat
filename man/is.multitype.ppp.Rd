@@ -1,5 +1,6 @@
 \name{is.multitype.ppp}
 \alias{is.multitype.ppp}
+\alias{is.multitype.lpp}
 \title{Test Whether A Point Pattern is Multitype}
 \description{
   Tests whether a point pattern has ``marks''
@@ -7,10 +8,12 @@
 }
 \usage{
   \method{is.multitype}{ppp}(X, na.action="warn", \dots) 
+
+  \method{is.multitype}{lpp}(X, na.action="warn", \dots) 
 }
 \arguments{
   \item{X}{
-    Point pattern (object of class \code{"ppp"})
+    Point pattern (object of class \code{"ppp"} or \code{"lpp"})
   }
   \item{na.action}{
     String indicating what to do if \code{NA} values are
@@ -53,11 +56,8 @@
   \code{\link{is.multitype.ppm}}
 }
 \examples{
-   data(cells)
    is.multitype(cells)  #FALSE - no marks
-   data(longleaf)
    is.multitype(longleaf) #FALSE - real valued marks
-   data(amacrine)
    is.multitype(amacrine) #TRUE
 }
 \author{Adrian Baddeley

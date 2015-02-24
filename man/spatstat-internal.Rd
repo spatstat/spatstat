@@ -787,7 +787,7 @@ closethresh(X,R,S,ordered)
 \method{coef}{summary.ppm}(object, \dots)
 \method{coef}{vblogit}(object, \dots) 
 coerce.marks.numeric(X, warn)
-\method{compatible}{rat}(A, B, \dots) %DontDeclare
+\method{compatible}{rat}(A, B, \dots) 
 complaining(whinge, fatal, value)
 compileCDF(D, B, r, \dots, han.denom, check)
 compileK(D, r, weights, denom, check, ratio, fname)
@@ -990,8 +990,8 @@ is.atomicQtest(x)
 is.cadlag(s)
 is.data(Q)
 is.expandable(x)
-\method{is.expandable}{ppm}(x)  %DontDeclare
-\method{is.expandable}{rmhmodel}(x) %DontDeclare
+\method{is.expandable}{ppm}(x)  
+\method{is.expandable}{rmhmodel}(x) 
 is.fv(x)
 is.hole.xypolygon(polly)
 is.hyperframe(x)
@@ -1075,10 +1075,10 @@ makeunits(sing, plur, mul)
 markappend(\dots)
 markcbind(\dots)
 markformat(x)
-\method{markformat}{ppp}(x) %DontDeclare
-\method{markformat}{ppx}(x) %DontDeclare
-\method{markformat}{psp}(x) %DontDeclare
-\method{markformat}{default}(x) %DontDeclare
+\method{markformat}{ppp}(x) 
+\method{markformat}{ppx}(x) 
+\method{markformat}{psp}(x) 
+\method{markformat}{default}(x) 
 mark.scale.default(marx, w, markscale, maxsize, meansize, characters)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)
@@ -1134,9 +1134,9 @@ nncleanEngine(kthNND, k, d, \dots, tol, maxit,
 nndcumfun(X, \dots, r)
 no.trend.ppm(x)
 nobjects(x)
-\method{nobjects}{ppp}(x) %DontDeclare
-\method{nobjects}{ppx}(x) %DontDeclare
-\method{nobjects}{psp}(x) %DontDeclare
+\method{nobjects}{ppp}(x)
+\method{nobjects}{ppx}(x)
+\method{nobjects}{psp}(x)
 n.quad(Q)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)
@@ -1332,10 +1332,10 @@ rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
 rebadge.as.crossfun(x, main, sub, i, j)
 rebadge.as.dotfun(x, main, sub, i)
 rebound(x, rect)
-\method{rebound}{im}(x, rect)  %DontDeclare
-\method{rebound}{ppp}(x, rect) %DontDeclare
-\method{rebound}{psp}(x, rect) %DontDeclare
-\method{rebound}{owin}(x, rect) %DontDeclare
+\method{rebound}{im}(x, rect)  
+\method{rebound}{ppp}(x, rect) 
+\method{rebound}{psp}(x, rect) 
+\method{rebound}{owin}(x, rect)
 reconcile.fv(\dots)
 repair.old.factor.image(x)
 reincarnate.interact(object)
@@ -1362,12 +1362,12 @@ rmhResolveControl(control, model)
 rmhResolveExpansion(win, control, imagelist, itype)
 rmhResolveTypes(model, start, control)
 rmhSnoopEnv(Xinit, Wclip, R)
-\method{rmhcontrol}{rmhcontrol}(\dots)  %DontDeclare
-\method{rmhcontrol}{list}(\dots) %DontDeclare
+\method{rmhcontrol}{rmhcontrol}(\dots) 
+\method{rmhcontrol}{list}(\dots) 
 rmhEngine(InfoList, \dots, verbose, kitchensink, preponly, snoop) 
-\method{rmhmodel}{rmhmodel}(model, \dots) %DontDeclare
-\method{rmhstart}{rmhstart}(start, \dots) %DontDeclare
-\method{rmhstart}{list}(start, \dots) %DontDeclare
+\method{rmhmodel}{rmhmodel}(model, \dots) 
+\method{rmhstart}{rmhstart}(start, \dots) 
+\method{rmhstart}{list}(start, \dots) 
 rmpoint.I.allim(n, f, types)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
@@ -1382,8 +1382,8 @@ samefunction(f, g)
 \method{scalardilate}{diagramobj}(X, f, \dots)
 \method{scalardilate}{msr}(X, f, \dots)
 scanmeasure(X, \dots)
-\method{scanmeasure}{ppp}(X, r, \dots, method) %DontDeclare
-\method{scanmeasure}{im}(X, r, \dots) %DontDeclare
+\method{scanmeasure}{ppp}(X, r, \dots, method) 
+\method{scanmeasure}{im}(X, r, \dots)
 scanPoisLRTS(nZ, nG, muZ, muG, alternative)
 scanBinomLRTS(nZ, nG, muZ, muG, alternative)
 second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
@@ -1462,8 +1462,8 @@ trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
 truncline(x, nc)
 tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
-\method{unitname}{default}(x)  %DontDeclare
-\method{unitname}{default}(x) <- value  %DontDeclare
+\method{unitname}{default}(x) 
+\method{unitname}{default}(x) <- value 
 unparen(x)
 \method{update}{interact}(object, \dots) 
 \method{update}{im}(object, \dots) 

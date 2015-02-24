@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.71 $ $Date: 2015/01/17 03:06:56 $
+##     $Revision: 1.72 $ $Date: 2015/02/24 01:42:41 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -513,7 +513,7 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
          sm={
            ## This is slow!
            oldopt <- options(warn=-1)
-           smok <- require(sm)
+           smok <- requireNamespace("sm")
            options(oldopt)
            if(!smok)
              stop(paste("Option method=sm requires package sm,",
@@ -534,7 +534,7 @@ sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {
          },
          smrep={
            oldopt <- options(warn=-1)
-           smok <- require(sm)
+           smok <- requireNamespace("sm")
            options(oldopt)
            if(!smok)
              stop(paste("Option method=smrep requires package sm,",

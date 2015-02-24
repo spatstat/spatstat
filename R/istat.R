@@ -1,7 +1,7 @@
 #
 # interactive analysis of point patterns
 #
-#   $Revision: 1.18 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.19 $   $Date: 2015/02/24 01:41:47 $
 #
 #
 
@@ -15,7 +15,7 @@ istat <- function(x, xname) {
   # initial value of smoothing parameter
   sigma0 <- with(x$window, min(diff(xrange),diff(yrange)))/8
   # create panel
-  require(rpanel)
+  requireNamespace("rpanel")
   p <- rpanel::rp.control(paste("istat(", xname, ")", sep=""),
                           x=x,           # point pattern
                           xname=xname,   # name of point pattern

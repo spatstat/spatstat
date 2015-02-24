@@ -8,6 +8,8 @@
 }
 \usage{
   \method{is.multitype}{ppm}(X, \dots) 
+
+  \method{is.multitype}{lppm}(X, \dots) 
 }
 \arguments{
   \item{X}{

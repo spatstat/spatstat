@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.13 $ $Date: 2014/12/11 08:25:02 $
+#  $Revision: 1.14 $ $Date: 2015/02/24 01:39:48 $
 #
 
 intensity <- function(X, ...) {
@@ -142,7 +142,7 @@ LambertW <- local({
   W <- function(x) {
     result <- rep.int(NA_real_, length(x))
     ok <- is.finite(x) & (x >= 0)
-    if(require(gsl, quietly=TRUE)) {
+    if(requireNamespace("gsl", quietly=TRUE)) {
       result[ok] <- gsl::lambert_W0(x[ok])
     } else {
       for(i in which(ok))
