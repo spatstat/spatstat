@@ -7,7 +7,7 @@
   \code{k} random points independently in each tile.
 }
 \usage{
- rstrat(win=square(1), nx, ny=nx, k = 1, nsim=1)
+ rstrat(win=square(1), nx, ny=nx, k = 1, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{win}{
@@ -22,6 +22,11 @@
   \item{k}{Number of random points to generate in each tile.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})

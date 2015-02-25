@@ -7,7 +7,8 @@
   displacement.
 }
 \usage{
- rsyst(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx, nsim=1)
+ rsyst(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx,
+       nsim=1, drop=TRUE)
 }
 \arguments{
   \item{win}{
@@ -29,6 +30,11 @@
     Incompatible with \code{ny}.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})

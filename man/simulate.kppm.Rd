@@ -6,7 +6,8 @@
 }
 \usage{
   \method{simulate}{kppm}(object, nsim = 1, seed=NULL, ...,
-         window=NULL, covariates=NULL, verbose=TRUE, retry=10)
+         window=NULL, covariates=NULL, verbose=TRUE, retry=10,
+         drop=FALSE)
 }
 \arguments{
   \item{object}{
@@ -36,6 +37,11 @@
   \item{retry}{
     Number of times to repeat the simulation if it fails
     (e.g. because of insufficient memory).
+  }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE}, the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
   }
 }
 \details{

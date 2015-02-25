@@ -1,5 +1,5 @@
 
-	CHANGES IN spatstat VERSION 1.40-0.066
+	CHANGES IN spatstat VERSION 1.40-0.067
 
 OVERVIEW
 
@@ -301,6 +301,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o simulate.ppm, simulate.kppm, simulate.lppm, simulate.slrm
    New argument 'drop': if nsim = 1 and drop=TRUE, the result is a point pattern
    rather than a list containing one point pattern.
+
+   o runifdisc, runifpoint, rpoint, rpoispp, rmpoint, rmpoispp, 
+   rMaternI, rMaternII, rSSI, rPoissonCluster, rGaussPoisson,
+   rstrat, rsyst, rcell, rthin, rNeymanScott, rMatClust, rThomas,
+   rCauchy, rVarGamma
+   New argument 'drop'
 
    o spatstat.options
    New option 'units.paren' controls the type of parenthesis

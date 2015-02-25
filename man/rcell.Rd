@@ -6,7 +6,8 @@
   Baddeley-Silverman cell process model. 
 }
 \usage{
- rcell(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx, N=10, nsim=1)
+ rcell(win=square(1), nx=NULL, ny=nx, \dots, dx=NULL, dy=dx,
+       N=10, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{win}{
@@ -36,6 +37,11 @@
     Passed to \code{\link{rcellnumber}}.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})

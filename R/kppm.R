@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.100 $ $Date: 2015/02/22 03:00:48 $
+# $Revision: 1.101 $ $Date: 2015/02/24 09:21:31 $
 #
 
 kppm <- function(X, ...) {
@@ -925,7 +925,8 @@ fitted.kppm <- function(object, ...) {
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,
-                          verbose=TRUE, retry=10) {
+                          verbose=TRUE, retry=10,
+                          drop=FALSE) {
   starttime <- proc.time()
   verbose <- verbose && (nsim > 1)
   check.1.real(retry)
@@ -1076,10 +1077,15 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   if(verbose)
     cat("Done.\n")
   # pack up
-  out <- as.listof(out)
-  names(out) <- paste("Simulation", 1:nsim)
-  attr(out, "seed") <- RNGstate
+  if(nsim == 1 && drop) {
+    out <- out[[1]]
+  } else {
+    out <- as.solist(out)
+    if(nsim > 0)
+      names(out) <- paste("Simulation", 1:nsim)
+  }
   out <- timed(out, starttime=starttime)
+  attr(out, "seed") <- RNGstate
   return(out)
 }
 

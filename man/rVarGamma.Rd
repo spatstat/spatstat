@@ -7,7 +7,8 @@
 }
 \usage{
  rVarGamma(kappa, nu, scale, mu, win = owin(), 
-           thresh = 0.001, nsim=1, saveLambda=FALSE, expand = NULL, ...)
+           thresh = 0.001, nsim=1, drop=TRUE,
+           saveLambda=FALSE, expand = NULL, ...)
 }
 \arguments{
   \item{kappa}{
@@ -38,6 +39,11 @@
     \code{expand} if that is given.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
   \item{saveLambda}{
     Logical. If \code{TRUE} then the random intensity corresponding to
     the simulated parent points will also be calculated and saved,

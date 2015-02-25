@@ -5,7 +5,7 @@
   Applies independent random thinning to a point pattern.
 }
 \usage{
-rthin(X, P, \dots, nsim=1)
+rthin(X, P, \dots, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,11 @@ rthin(X, P, \dots, nsim=1)
     Additional arguments passed to \code{P}, if it is a function.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})

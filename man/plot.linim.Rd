@@ -9,7 +9,9 @@
   either as colours or as line widths.
 }
 \usage{
-\method{plot}{linim}(x, ..., style = c("colour", "width"), scale, adjust = 1)
+\method{plot}{linim}(x, ..., style = c("colour", "width"),
+             scale, adjust = 1,
+             do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -30,6 +32,9 @@
   \item{adjust}{
     Adjustment factor for the default scale.
   }
+  \item{do.plot}{
+    Logical value indicating whether to actually perform the plot.
+  }
 }
 \details{
   This is the \code{plot} method for objects 
@@ -45,7 +50,8 @@
   thick lines centred on the line segments of the linear network.
 }
 \value{
-  Null.
+  An (invisible) window (class \code{"owin"}) containing the
+  area that will be plotted, including the colour ribbon.
 }
 \author{
   Adrian Baddeley

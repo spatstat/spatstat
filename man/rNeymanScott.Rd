@@ -7,7 +7,7 @@
 }
 \usage{
  rNeymanScott(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
-              \dots, lmax=NULL, nsim=1)
+              \dots, lmax=NULL, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{kappa}{
@@ -36,6 +36,11 @@
     when \code{kappa} is a function or pixel image.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},

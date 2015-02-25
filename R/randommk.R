@@ -33,7 +33,7 @@ rmpoispp <- local({
   ## Main function
   rmpoispp <- 
     function(lambda, lmax=NULL, win = owin(c(0,1),c(0,1)),
-             types, ..., nsim=1) {
+             types, ..., nsim=1, drop=TRUE) {
       ## arguments:
       ##     lambda  intensity:
       ##                constant, function(x,y,m,...), image,
@@ -132,7 +132,8 @@ rmpoispp <- local({
 
       ## Randomly permute, just in case the order is important
       permu <- sample(X$n)
-      return(X[permu])
+      X <- X[permu]
+      return(if(drop) X else solist(X))
     }
 
   rmpoispp
@@ -171,7 +172,7 @@ rmpoint <- local({
                       win = unit.square(), 
                       types, ptypes, ...,
                       giveup = 1000, verbose = FALSE,
-                      nsim = 1) {
+                      nsim = 1, drop=TRUE) {
     if(!is.numeric(n))
       stop("n must be a scalar or vector")
     if(any(ceiling(n) != floor(n)))
@@ -196,7 +197,7 @@ rmpoint <- local({
         nomarks <- factor(types[numeric(0)], levels=types)
         npoints <- nopoints %mark% nomarks
       }
-      return(nopoints)
+      return(if(drop) nopoints else solist(nopoints))
     }         
     #############
   
@@ -279,8 +280,10 @@ rmpoint <- local({
 
     ## special algorithm for Model I when all f[[i]] are images
 
-    if(Model == "I" && !same.density && all(unlist(lapply(flist, is.im))))
-      return(rmpoint.I.allim(n, flist, types))
+    if(Model == "I" && !same.density && all(unlist(lapply(flist, is.im)))) {
+      X <- rmpoint.I.allim(n, flist, types)
+      return(if(drop) X else solist(X))
+    }
 
     ## otherwise, first select types, then locations given types
   
@@ -329,7 +332,7 @@ rmpoint <- local({
       X <- rpoint(ntot, flist[[1]], maxes[[1]], win=win, ...,
                   giveup=giveup, verbose=verbose)
       X <- X %mark% marques
-      return(X)
+      return(if(drop) X else solist(X))
     }
     ## Otherwise invoke rpoint() for each type separately
     X <- ppp(numeric(ntot), numeric(ntot), window=win, marks=marques,
@@ -349,7 +352,7 @@ rmpoint <- local({
       Y <- Y %mark% factortype[i]
       X[marques == factortype[i]] <- Y
     }
-      return(X)
+    return(if(drop) X else solist(X))
   }
 
   rmpoint
@@ -410,7 +413,7 @@ rmpoint.I.allim <- local({
 rpoint.multi <- function (n, f, fmax=NULL, marks = NULL,
                           win = unit.square(),
                           giveup = 1000, verbose = FALSE,
-                          warn=TRUE, nsim=1) {
+                          warn=TRUE, nsim=1, drop=TRUE) {
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
     for(i in 1:nsim)
@@ -428,10 +431,12 @@ rpoint.multi <- function (n, f, fmax=NULL, marks = NULL,
   }
   ## unmarked case
   if (no.marks) {
-    if(is.function(f))
-      return(rpoint(n, f, fmax, win, giveup=giveup, verbose=verbose))
-    else
-      return(rpoint(n, f, fmax, giveup=giveup, verbose=verbose))
+    X <- if(is.function(f)) {
+      rpoint(n, f, fmax, win, giveup=giveup, verbose=verbose)
+    } else {
+      rpoint(n, f, fmax, giveup=giveup, verbose=verbose)
+    }
+    return(if(drop) X else solist(X))
   }
   ## multitype case
   if(length(marks) != n)
@@ -460,7 +465,7 @@ rpoint.multi <- function (n, f, fmax=NULL, marks = NULL,
       Y$marks[to] <- ty
     }
   }
-  return(Y)
+  return(if(drop) Y else solist(Y))
 }
 
 

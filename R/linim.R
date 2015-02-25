@@ -51,11 +51,12 @@ print.linim <- function(x, ...) {
   NextMethod("print")
 }
 
-plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
+plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
+                       do.plot=TRUE) {
   xname <- short.deparse(substitute(x))
   style <- match.arg(style)
   # colour style: plot as pixel image
-  if(style == "colour")
+  if(style == "colour" || !do.plot)
     return(do.call("plot.im",
                    resolve.defaults(list(x),
                                     list(...),
@@ -66,10 +67,10 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
   Llines <- as.psp(L)
   # initialise plot
   W <- as.owin(L)
-  do.call.matched("plot.owin",
-                  resolve.defaults(list(x=W, type="n"),
-                                   list(...), list(main=xname)),
-                  extrargs="type")
+  bb <- do.call.matched("plot.owin",
+                        resolve.defaults(list(x=W, type="n"),
+                                         list(...), list(main=xname)),
+                        extrargs="type")
   # resolve graphics parameters for polygons
   grafpar <- resolve.defaults(list(...), list(border=1, col=1))
   grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
@@ -133,7 +134,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1) {
     # now draw main
     do.call(polygon, append(list(x=xx, y=yy), grafpar))
   }
-  return(invisible(NULL))
+  return(invisible(bb))
 }
 
 as.im.linim <- function(X, ...) { as.im(X$Z, ...) }

@@ -7,7 +7,7 @@
   in a circular disc.
 }
 \usage{
- runifdisc(n, radius=1, centre=c(0,0), ..., nsim=1)
+ runifdisc(n, radius=1, centre=c(0,0), ..., nsim=1, drop=TRUE)
 }
 \arguments{
   \item{n}{
@@ -20,6 +20,11 @@
     accuracy of approximation to the circle.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})

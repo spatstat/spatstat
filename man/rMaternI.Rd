@@ -6,7 +6,8 @@
   \ifelse{latex}{\out{Mat\'ern}}{Matern} Model I inhibition process model.
 }
 \usage{
- rMaternI(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE, \dots, nsim=1)
+ rMaternI(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE, \dots,
+          nsim=1, drop=TRUE)
 }
 \arguments{
   \item{kappa}{
@@ -28,6 +29,11 @@
   }
   \item{\dots}{Ignored.}
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
   A point pattern (an object of class \code{"ppp"})
