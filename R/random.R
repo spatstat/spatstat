@@ -93,8 +93,11 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
 
   if(warn) {
     nhuge <- spatstat.options("huge.npoints")
-    if(n > nhuge)
-      warning(paste("Attempting to generate", n, "random points"))
+    if(n > nhuge) {
+      whinge <- paste("Attempting to generate", n, "random points")
+      message(whinge)
+      warning(whinge, call.=FALSE)
+    }
   }
 
   switch(win$type,

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.157 $	$Date: 2015/02/01 04:12:14 $
+#	$Revision: 4.159 $	$Date: 2015/02/25 10:08:05 $
 #
 #
 #	A window may be either
@@ -510,6 +510,14 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
         }
       }
     }
+    if((mpix <- (nr * nc)/1048576) >= 10) {
+      whinge <- paste("Creating",
+                      articlebeforenumber(mpix),
+                      paste0(round(mpix, 1), "-megapixel"),
+                      "window mask")
+      message(whinge)
+      warning(whinge, call.=FALSE)
+    }
     # Initialise mask with all entries TRUE
     rasta <- owin(w$xrange, w$yrange, mask=matrix(TRUE, nr, nc))
   } else {
@@ -534,6 +542,15 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
       # derive other parameters
       nr <- length(y)
       nc <- length(x)
+      # check size
+      if((mpix <- (nr * nc)/1048576) >= 10) {
+        whinge <- paste("Creating",
+                        articlebeforenumber(mpix),
+                        paste0(round(mpix, 1), "-megapixel"),
+                        "window mask")
+        message(whinge)
+        warning(whinge, call.=FALSE)
+      }
       # x and y pixel sizes
       dx <- diff(x)
       if(diff(range(dx)) > 0.01 * mean(dx))

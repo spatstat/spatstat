@@ -3,7 +3,7 @@
 #
 # mark connection function & mark equality function for linear networks
 #
-# $Revision: 1.1 $ $Date: 2014/02/17 01:44:38 $
+# $Revision: 1.2 $ $Date: 2015/02/25 06:22:30 $
 #
 
 linearmarkconnect <- function(X, i, j, r=NULL, ...) {
@@ -16,6 +16,10 @@ linearmarkconnect <- function(X, i, j, r=NULL, ...) {
   if(missing(j) || is.null(j)) j <- lev[2] else
     if(!(j %in% lev)) stop(paste("j = ", j , "is not a valid mark"))
 
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
+
+  #
   pcfij <- linearpcfcross(X, i, j, r=r, ...)
   pcfall <- linearpcf(X, r=r, ...)
 
@@ -33,12 +37,15 @@ linearmarkconnect <- function(X, i, j, r=NULL, ...) {
 linearmarkequal <- function(X, r=NULL, ...) {
   if(!is.multitype(X, dfok=FALSE)) 
 	stop("Point pattern must be multitype")
-  lev <- levels(marks(X))
+  
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
 
+  lev <- levels(marks(X))
   v <- list()
   for(l in lev) v[[l]] <- linearmarkconnect(X, l, l, r=r, ...)
 
-  result <- Reduce(function(A,B){eval.fv(A+B)}, v)
+  result <- Reduce("+", v)
   result <-rebadge.fv(result, 
                       quote(p[L](r)),
                       new.fname=c("p", "L"))

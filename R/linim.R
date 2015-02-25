@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.17 $   $Date: 2015/02/19 12:33:35 $
+#  $Revision: 1.18 $   $Date: 2015/02/25 07:04:17 $
 #
 #  Image/function on a linear network
 #
@@ -60,7 +60,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
     return(do.call("plot.im",
                    resolve.defaults(list(x),
                                     list(...),
-                                    list(main=xname))))
+                                    list(main=xname, do.plot=do.plot))))
   # width style
   L <- attr(x, "L")
   df <- attr(x, "df")

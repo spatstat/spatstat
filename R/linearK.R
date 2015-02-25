@@ -110,12 +110,14 @@ getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
 
 linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
                           correction="Ang", showworking=FALSE) {
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
   sX <- summary(X)
   np <- sX$npoints
 #  lengthL <- sX$totlength
   # extract linear network
-  L <- X$domain
+  L <- domain(X)
   # extract points
   Y <- as.ppp(X)
   W <- Y$window

@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.6 $ $Date: 2015/02/12 11:21:58 $
+# $Revision: 1.7 $ $Date: 2015/02/25 06:23:05 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -186,13 +186,15 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
 
 linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
                           correction="Ang", showworking=FALSE) {
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
 #  sX <- summary(X)
 #  np <- sX$npoints
 #  lengthL <- sX$totlength
   np <- npoints(X)
   # extract linear network
-  L <- X$domain
+  L <- domain(X)
   # extract points
   XP <- as.ppp(X)
   W <- as.owin(XP)

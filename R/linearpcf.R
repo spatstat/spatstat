@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.12 $ $Date: 2015/02/12 11:21:47 $
+# $Revision: 1.13 $ $Date: 2015/02/25 06:22:54 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -78,6 +78,8 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
 
 linearpcfengine <- function(X, ..., r=NULL,
                             reweight=NULL, denom=1, correction="Ang") {
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
 #  sX <- summary(X)
 #  np <- sX$npoints

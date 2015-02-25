@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.5 $ $Date: 2015/02/12 11:21:16 $
+# $Revision: 1.6 $ $Date: 2015/02/25 06:22:40 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -185,6 +185,8 @@ linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
 
 linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
                           correction="Ang", showworking=FALSE) {
+  # ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
 #  sX <- summary(X)
 #  np <- sX$npoints

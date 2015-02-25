@@ -289,6 +289,14 @@ ordinal <- function(k) {
   return(paste(k, ending, sep=""))
 }
 
+articlebeforenumber <- function(k) {
+  k <- abs(k)
+  if(k == 11) return("an")
+  leading <- floor(k/10^floor(log10(k)))
+  if(leading == 8) return("an")
+  return("a")
+}
+
 # equivalent to rev(cumsum(rev(x)))
 
 revcumsum <- function(x) {
