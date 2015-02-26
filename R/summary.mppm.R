@@ -127,24 +127,25 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
   # NB: x is an object of class "summary.mppm"
   npat <- x$npat
   Inter <- x$Inter
-  ninteract   <- Inter$ninteract
-  interaction   <- Inter$interaction
-  iused     <- Inter$iused
+#  ninteract   <- Inter$ninteract
+#  interaction   <- Inter$interaction
+#  iused     <- Inter$iused
+#  constant <- Inter$constant
+#  iformula <- x$iformula
+#  processnames   <- Inter$processes
   itags   <- Inter$itags
-  processnames   <- Inter$processes
-  constant <- Inter$constant
   trivial  <- Inter$trivial
-  iformula <- x$iformula
 
   FIT <- x$Fit$FIT
   Vnamelist <- x$Fit$Vnamelist
-  allVnames <- unlist(Vnamelist)
-  poistags <- itags[trivial]
+  
+#  allVnames <- unlist(Vnamelist)
+#  poistags <- itags[trivial]
 
   terselevel <- spatstat.options("terse")
 #  rownames <- x$Info$rownames
 
-  splat("Point process model fitted to", x$npat, "point patterns")
+  splat("Point process model fitted to", npat, "point patterns")
   if(waxlyrical('gory', terselevel))
     splat("Call:", x$Call$callstring)
   splat("Log trend formula:", pasteFormula(x$trend))

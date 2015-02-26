@@ -55,11 +55,11 @@ countingweights <- function(id, areas, check=TRUE) {
   if(check) {
     zerocount <- (counts == 0)
     zeroarea <- (areas == 0)
-    if(any(uhoh <- !zeroarea & zerocount)) {
+    if(any(!zeroarea & zerocount)) {
       lostfrac <- 1 - sum(w)/sum(areas)
       lostpc <- round(100 * lostfrac, 1)
-      if(lostpc >= 1)
-        warning(paste("some tiles with positive area",
+      if(lostpc >= 1) 
+        warning(paste("some times with positive area",
                       "do not contain any quadrature points:",
                       "relative error =",
                       paste0(lostpc, "%")))

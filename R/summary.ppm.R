@@ -93,7 +93,7 @@ summary.ppm <- local({
     ######  Coefficients were changed after fit? #####################
   
     y$projected <- yproj <- identical(x$projected, TRUE)
-    y$changedcoef <- y$projected || !is.null(x$coef.orig)
+    y$changedcoef <- yproj || !is.null(x$coef.orig)
 
     y$valid <- valid.ppm(x, warn=FALSE)
       

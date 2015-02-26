@@ -99,7 +99,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   
   # compute pairwise distances
   what <- if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd" 
-  close <- closepairs(X, rmax + hmax)
+  close <- closepairs(X, rmax + hmax, what=what)
   dIJ <- close$d
 
   # initialise fv object

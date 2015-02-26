@@ -46,7 +46,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
     linearpcf(X, r=r, ..., correction=correction)
   # extract info about pattern
   sX <- summary(X)
-  np <- sX$npoints
+#  np <- sX$npoints
   lengthL <- sX$totlength
   #
   lambdaX <- getlambda.lpp(lambda, X, ...)

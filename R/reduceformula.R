@@ -22,7 +22,7 @@ reduceformula <- function(fmla, deletevar, verbose=FALSE) {
   lhs <- if(length(fmla) < 3) NULL else fmla[[2]]
   # create terms object
   tt <- attributes(terms(fmla))
-  formula.has.intercept <- (tt$intercept == 1)
+#  formula.has.intercept <- (tt$intercept == 1)
   # extract all variables appearing in the model
   vars <- as.list(tt$variables)[-1]
   nvars <- length(vars)

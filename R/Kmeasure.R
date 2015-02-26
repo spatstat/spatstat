@@ -84,7 +84,7 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
            np <- NULL
          },
          imlist = {
-           Xlist <- x
+           X <- x
            np <- NULL
          })
 
@@ -172,8 +172,8 @@ second.moment.engine <-
   Y <- X$v
   Ylist <- lapply(Xlist, getElement, name="v")
   #
-  xw <- X$xrange
-  yw <- X$yrange
+#  xw <- X$xrange
+#  yw <- X$yrange
   # pad with zeroes
   nr <- nrow(Y)
   nc <- ncol(Y)

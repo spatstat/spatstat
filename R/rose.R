@@ -95,7 +95,7 @@ rose.histogram <- function(x, ...,
   #' validate
   bks <- x$breaks
   unit <- validate.angles(bks, unit, missu)
-  FullCircle <- switch(unit, degree = 360, radian = 2*pi)
+#  FullCircle <- switch(unit, degree = 360, radian = 2*pi)
   #' get sector sizes
   y <- x$density
   ymax <- max(y)

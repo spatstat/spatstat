@@ -195,7 +195,7 @@ rmpoint <- local({
       nopoints <- ppp(x=numeric(0), y=numeric(0), window=win, check=FALSE)
       if(!is.null(types)) {
         nomarks <- factor(types[numeric(0)], levels=types)
-        npoints <- nopoints %mark% nomarks
+        nopoints <- nopoints %mark% nomarks
       }
       return(if(drop) nopoints else solist(nopoints))
     }         

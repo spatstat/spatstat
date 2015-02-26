@@ -235,7 +235,7 @@ test.selfcrossing.psp <- function(A) {
 
 selfcut.psp <- function(A, ..., eps) {
   stopifnot(is.psp(A))
-  n <- A$n
+#  n <- A$n
   eA <- A$ends
   x0 <- eA$x0
   y0 <- eA$y0

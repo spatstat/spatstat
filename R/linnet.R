@@ -237,7 +237,6 @@ as.linnet.psp <- local({
   as.linnet.psp <- function(X, ..., eps, sparse=FALSE) {
     X <- selfcut.psp(X)
     V <- unique(endpoints.psp(X))
-    nV <- npoints(V)
     if(missing(eps) || is.null(eps)) {
       eps <- sqrt(.Machine$double.eps) * diameter(Frame(X))
     } else {

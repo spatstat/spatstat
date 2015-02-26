@@ -148,6 +148,7 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
               modelpar   = mcfit$modelpar,
               covmodel   = mcfit$covmodel,
               Fit        = Fit)
+  return(out)
 }
 
 clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
@@ -288,8 +289,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
     rmax <- rmax.rule("K", W, intensity(X))
   # identify pairs of points that contribute
   cl <- closepairs(X, rmax, what="ijd")
-  I <- cl$i
-  J <- cl$j
+#  I <- cl$i
+#  J <- cl$j
   dIJ <- cl$d
   # compute weights for pairs of points
   if(is.function(weightfun)) {
@@ -318,7 +319,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
     gscale <- npoints(X)^2  
   } else {
     # compute fitted intensity at data points and in window
-    lambdaX <- fitted(po, dataonly=TRUE)
+#    lambdaX <- fitted(po, dataonly=TRUE)
     lambda <- lambdaM <- predict(po, locations=M)
     # lambda(x_i) * lambda(x_j)
 #    lambdaIJ <- lambdaX[I] * lambdaX[J]

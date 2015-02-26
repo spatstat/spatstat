@@ -158,7 +158,7 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
   P <- as.ppp(X)
   Q <- as.ppp(Y)
   #
-  Lseg  <- L$lines
+#  Lseg  <- L$lines
   Lvert <- L$vertices
   from  <- L$from
   to    <- L$to

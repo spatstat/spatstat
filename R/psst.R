@@ -36,7 +36,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   U <- union.quad(Q)
   Z <- is.data(Q) # indicator data/dummy
 #  E <- equalsfun.quad(Q)
-  WQ <- w.quad(Q)  # quadrature weights
+#  WQ <- w.quad(Q)  # quadrature weights
 
   # integrals will be restricted to quadrature points
   # that were actually used in the fit

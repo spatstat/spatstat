@@ -26,8 +26,8 @@ relrisk.ppm <- local({
     model <- X
     Y <- data.ppm(model)
     types <- levels(marks(Y))
-    nm <- ntypes <- length(types)
-    np <- length(coef(model))
+    ntypes <- length(types)
+#    np <- length(coef(model))
     ## compute probabilities or risks
     if(ntypes == 2 && casecontrol) {
       if(control.given || !case.given) {

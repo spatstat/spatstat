@@ -75,7 +75,7 @@ predict.ppm <- local({
     getoutofjail <- xarg$getoutofjail
     ## match 'type' argument including 'legacy' options
     seonly <- FALSE
-    if(misstype <- missing(type)) type <- type[1] else {
+    if(missing(type)) type <- type[1] else {
       if(length(type) > 1) stop("Argument 'type' should be a single value")
       mt <- pmatch(type, typeaccept)
       if(is.na(mt)) stop("Argument 'type' should be one of",

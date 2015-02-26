@@ -150,7 +150,7 @@ as.layered.solist <- function(X) {
 
 anylapply <- function(X, FUN, ...) {
   v <- lapply(X, FUN, ...)
-  u <- as.anylist(v)
+  return(as.anylist(v))
 }
 
 solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {

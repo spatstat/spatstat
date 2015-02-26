@@ -99,7 +99,7 @@
                                best="best"),
                              multi=TRUE)
 
-    best.wanted <- ("best" %in% correction)
+#    best.wanted <- ("best" %in% correction)
     ## replace 'good' by the optimal choice for this size of dataset
     if("good" %in% correction)
       correction[correction == "good"] <- good.correction.K(X)
@@ -307,7 +307,7 @@
     # compute weights for these pairs
     I <- close$i
     J <- close$j
-    wI <- reciplambda[I]
+#    wI <- reciplambda[I]
     wIJ <- 
       if(!lambda2.given)
         reciplambda[I] * reciplambda[J]

@@ -37,7 +37,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   U <- union.quad(Q)
   Z <- is.data(Q) # indicator data/dummy
   E <- equalsfun.quad(Q)
-  WQ <- w.quad(Q)  # quadrature weights
+#  WQ <- w.quad(Q)  # quadrature weights
 
   # integrals will be restricted to quadrature points
   # that were actually used in the fit
@@ -74,7 +74,7 @@ psstG <- function(object, r=NULL, breaks=NULL, ...,
   # residuals
   res <- residuals(fit, type="raw",drop=FALSE,
                     new.coef=truecoef, quad=hi.res)
-  resval <- with(res, "increment")
+#  resval <- with(res, "increment")
   rescts <- with(res, "continuous")
   # absolute weight for continuous integrals
   wc   <- -rescts

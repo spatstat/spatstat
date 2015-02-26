@@ -98,13 +98,13 @@ Kcom <- local({
   if(algo == "reweighted") {
     npts.used <- sum(Z & USED)
     area.used <- sum(WQ[USED])
-    lambda.used <- npts.used/area.used
-    lambda2.used <- npts.used * (npts.used - 1)/(area.used^2)
+#    lambda.used <- npts.used/area.used
+#    lambda2.used <- npts.used * (npts.used - 1)/(area.used^2)
   } else {
     npts.used <- npts
     area.used <- areaW
-    lambda.used <- lambda
-    lambda2.used <- lambda2
+#    lambda.used <- lambda
+#    lambda2.used <- lambda2
   }
   
   # 'r' values

@@ -77,7 +77,7 @@ getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
   missup <- missing(update)
   if(update && (is.lppm(lambda) || is.ppm(lambda))) {
     danger <- FALSE
-    model <- if(is.lppm(lambda)) update(lambda, X) else update(lambda, XX)
+    lambda <- if(is.lppm(lambda)) update(lambda, X) else update(lambda, XX)
     if(missup)
       warn.once("lin.inhom.update",
                 "The behaviour of linearKinhom and similar functions",

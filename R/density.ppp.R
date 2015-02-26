@@ -491,12 +491,9 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                                weights=NULL, edge=TRUE, varcov=NULL,
                                diggle=FALSE,
                                sorted=FALSE) {
-  if(is.null(varcov)) {
-    const <- 1/(2 * pi * sigma^2)
-  } else {
+  if(!is.null(varcov)) {
     detSigma <- det(varcov)
     Sinv <- solve(varcov)
-    const <- 1/(2 * pi * sqrt(detSigma))
   }
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
     weights <- NULL
@@ -621,6 +618,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  result  = as.double(double(nquery)))
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result
       }
+      colnames(result) <- weightnames
     }
   } else {
     ## anisotropic kernel
@@ -672,6 +670,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  result  = as.double(double(nquery)))
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result 
       }
+      colnames(result) <- weightnames
     }
   }
   # ........  Edge correction ........................................

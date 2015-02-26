@@ -229,7 +229,6 @@ envelope.ppm <-
     rmhinfolist <- rmh(rmodel, rstart, rcontr, preponly=TRUE, verbose=FALSE)
     # expression that will be evaluated
     simexpr <- expression(rmhEngine(rmhinfolist, verbose=FALSE))
-    envir <- envir.here
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type  = type,
                              expr  = simexpr,
@@ -539,7 +538,7 @@ envelopeEngine <-
   }
     
   rvals <- funX[[argname]]
-  fX    <- funX[[valname]]
+#  fX    <- funX[[valname]]
 
   # default domain over which to maximise
   alim <- attr(funX, "alim")
