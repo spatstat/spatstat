@@ -121,7 +121,7 @@ improve.kppm(object, type=c("quasi", "wclik1", "clik1"), rmax = NULL,
 }
 \author{Abdollah Jalilian
   \email{jalilian@razi.ac.ir}
-  \url{http://www.razi.ac.ir/ajalilian/}
+%  \url{http://www.razi.ac.ir/ajalilian/}
   and Rasmus Waagepetersen
   \email{rw@math.aau.dk}
   adapted for \pkg{spatstat} by Adrian Baddeley

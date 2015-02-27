@@ -16,6 +16,17 @@
                    ribscale=1, ribargs=list(), colargs=list(),
                    useRaster=NULL,
                    do.plot=TRUE) 
+
+  \method{image}{im}(x, \dots,
+                   main,
+                   add=FALSE, clipwin=NULL,
+                   col=NULL, valuesAreColours=NULL, log=FALSE,
+                   ribbon=show.all, show.all=!add,
+                   ribside=c("right", "left", "bottom", "top"),
+                   ribsep=0.15, ribwid=0.05, ribn=1024,
+                   ribscale=1, ribargs=list(), colargs=list(),
+                   useRaster=NULL,
+                   do.plot=TRUE) 
 }
 \arguments{
   \item{x}{

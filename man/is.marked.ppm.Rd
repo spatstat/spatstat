@@ -8,6 +8,8 @@
 }
 \usage{
   \method{is.marked}{ppm}(X, \dots) 
+
+  \method{is.marked}{lppm}(X, \dots) 
 }
 \arguments{
   \item{X}{

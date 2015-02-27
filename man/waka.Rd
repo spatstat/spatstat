@@ -33,7 +33,7 @@ title(sub="Tree diameters 4x scale")
   \emph{A vegetation assessment of the Waka national park, Gabon.}
   Herbier National du Gabon, LBG, MBG, WCS, FRP and
   Simthsonian Institution, Libreville, Gabon. CARPE Report, 154 pp.
-  \url{http://carpe.umd.edu/resources/Documents/}
+  \url{http://carpe.umd.edu/}
 
   Picard, N., Bar-Hen, A., Mortier, F. and Chadoeuf, J. (2009)
   The multi-scale marked area-interaction point process: a model for
