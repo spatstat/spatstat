@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.169 $    $Date: 2015/02/18 00:37:09 $
+#    $Revision: 1.173 $    $Date: 2015/02/27 09:22:47 $
 #
 #
 matrowsum <- function(x) {
@@ -1354,29 +1354,44 @@ prepareTitle <- function(main) {
               blank=rep('  ', nlines)))
 }
 
-simplenumber <- function(x, unit = "", multiply="*") {
-  ## Try to express x as a simple multiple or fraction
-  stopifnot(length(x) == 1)
-  s <- if(x < 0) "-" else ""
-  x <- abs(x)
-  if(unit == "") {
-    if(x %% 1 == 0) return(paste0(s, round(x)))
-    for(i in 1:12) {
-      if((i/x) %% 1 == 0) return(paste0(s, i, "/", round(i/x)))
-      if((i*x) %% 1 == 0) return(paste0(s, round(i*x), "/", i))
+simplenumber <- local({
+
+  iswhole <- function(x, tol=0) { abs(x %% 1) <= tol }
+
+  iszero <- function(x, tol=0) { abs(x) <= tol }
+  
+  simplenumber <- function(x, unit = "", multiply="*",
+                           tol=.Machine$double.eps) {
+    ## Try to express x as a simple multiple or fraction
+    if(length(x) > 1)
+      return(sapply(as.list(x), simplenumber,
+                    unit=unit, multiply=multiply, tol=tol))
+    s <- if(x < 0) "-" else ""
+    x <- abs(x)
+    if(unit == "") {
+      if(iswhole(x, tol)) return(paste0(s, round(x)))
+      for(i in 1:12) {
+        if(iswhole(i/x, tol)) return(paste0(s, i, "/", round(i/x)))
+        if(iswhole(i*x, tol)) return(paste0(s, round(i*x), "/", i))
+      }
+    } else {
+      if(iszero(x, tol)) return("0")
+      if(iszero(x-1, tol)) return(paste0(s,unit))
+      if(iswhole(x, tol)) return(paste0(s, round(x), multiply, unit))
+      if(iswhole(1/x, tol)) return(paste0(s, unit, "/", round(1/x)))
+      for(i in 2:12) {
+        if(iswhole(i/x, tol))
+          return(paste0(s, i, multiply, unit, "/", round(i/x)))
+        if(iswhole(i*x, tol))
+          return(paste0(s, round(i*x), multiply, unit, "/", i))
+      }
     }
-  } else {
-    if(x == 0) return("0")
-    if(x == 1) return(paste0(s,unit))
-    if(x %% 1 == 0) return(paste0(s, round(x), multiply, unit))
-    if((1/x) %% 1 == 0) return(paste0(s, unit, "/", round(i/x)))
-    for(i in 2:12) {
-      if((i/x) %% 1 == 0) return(paste0(s, i, multiply, unit, "/", round(i/x)))
-      if((i*x) %% 1 == 0) return(paste0(s, round(i*x), multiply, unit, "/", i))
-    }
+    return(NULL)
   }
-  return(NULL)
-}
+
+  simplenumber
+})
+
 
 fontify <- function(x, font="italic") {
   if(!nzchar(font) || font == "plain")

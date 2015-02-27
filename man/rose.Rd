@@ -7,7 +7,7 @@
 \title{Rose Diagram}
 \description{
   Plots a rose diagram (rose of directions),
-  the analogue of a histogram for angular data.
+  the analogue of a histogram or density plot for angular data.
 }
 \usage{
 rose(x, \dots)
@@ -17,15 +17,15 @@ rose(x, \dots)
 
 \method{rose}{histogram}(x, \dots,
                        unit = c("degree", "radian"), main,
-                       do.plot = TRUE)
+                       labels=TRUE, at=NULL, do.plot = TRUE)
 
 \method{rose}{density}(x, \dots, 
                   unit = c("degree", "radian"), main,
-                  do.plot = TRUE)
+                  labels=TRUE, at=NULL, do.plot = TRUE)
 
 \method{rose}{fv}(x, \dots, 
                   unit = c("degree", "radian"), main,
-                  do.plot = TRUE)
+                  labels=TRUE, at=NULL, do.plot = TRUE)
 }
 \arguments{
   \item{x}{
@@ -52,6 +52,14 @@ rose(x, \dots)
   }
   \item{main}{
     Optional main title for the plot.
+  }
+  \item{labels}{
+    Either a logical value indicating whether to plot labels
+    next to the tick marks, or a vector of labels for the tick marks.
+  }
+  \item{at}{
+    Optional vector of angles at which tick marks should be plotted.
+    Set \code{at=numeric(0)} to suppress tick marks.
   }
   \item{do.plot}{
     Logical value indicating whether to really perform the plot.
@@ -100,7 +108,6 @@ rose(x, \dots)
   \code{\link{fv}}, \code{\link[graphics]{hist}},
   \code{\link{circdensity}},
   \code{\link[stats]{density.default}}.
-
 }
 \examples{
   ang <- runif(1000, max=360)

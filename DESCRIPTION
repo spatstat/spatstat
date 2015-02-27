@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.41-1
-Nickname: Ides of March
+Version: 1.41-1.001
+Nickname: Stitch in Time
 Date: 2015-02-27
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,

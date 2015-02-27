@@ -3,7 +3,7 @@
 #'
 #'   Rose diagrams
 #'
-#'   $Revision: 1.3 $  $Date: 2014/12/04 05:12:44 $
+#'   $Revision: 1.4 $  $Date: 2015/02/27 09:22:32 $
 #'
 
 rose <- function(x, ...) UseMethod("rose")
@@ -12,7 +12,8 @@ rose.default <- local({
 
   rose.default <- function(x, breaks = NULL, ...,
                            nclass=NULL,
-                           unit=c("degree", "radian"), main) {
+                           unit=c("degree", "radian"),
+                           main) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
     stopifnot(is.numeric(x))
@@ -86,7 +87,7 @@ rose.default <- local({
 
 rose.histogram <- function(x, ...,
                            unit=c("degree", "radian"),
-                           main, do.plot=TRUE) {
+                           main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   #' determine units
@@ -100,10 +101,14 @@ rose.histogram <- function(x, ...,
   y <- x$density
   ymax <- max(y)
   #' draw disc
-  R <- 1.1 * ymax
+  insideclearance <- 0.1
+  outsidespace <- if(!is.null(at) && length(at) == 0) 0 else
+                  if(identical(labels, FALSE)) 0.1 else 0.25
+  R <- (1+insideclearance) * ymax
   DD <- disc(R)
+  Rout <- (1 + outsidespace) * R
   result <- do.call.matched(plot.owin,
-                            resolve.defaults(list(x=disc(R * 1.1),
+                            resolve.defaults(list(x=disc(Rout),
                                                   main=main,
                                                   type="n"), 
                                              list(...)))
@@ -127,14 +132,14 @@ rose.histogram <- function(x, ...,
       do.call.matched(polygon, list(x=xx, y=yy, ...))
     }
     #' add tick marks
-    circticks(R)
+    circticks(R, at=at, labels=labels)
   }
   #'
   return(invisible(result))
 }
 
 rose.density <- function(x, ..., unit=c("degree", "radian"),
-                         main, do.plot=TRUE) {
+                         main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   ang <- x$x
@@ -143,12 +148,14 @@ rose.density <- function(x, ..., unit=c("degree", "radian"),
   unit <- match.arg(unit)
   unit <- validate.angles(ang, unit, missu)
   #'
-  result <- roseContinuous(ang, rad, unit, ..., main=main, do.plot=do.plot)
+  result <- roseContinuous(ang, rad, unit, ...,
+                           main=main, labels=labels, at=at,
+                           do.plot=do.plot)
   return(invisible(result))
 }
 
 rose.fv <- function(x, ..., unit=c("degree", "radian"),
-                            main, do.plot=TRUE) {
+                    main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   ang <- with(x, .x)
@@ -157,17 +164,25 @@ rose.fv <- function(x, ..., unit=c("degree", "radian"),
   unit <- match.arg(unit)
   unit <- validate.angles(ang, unit, missu)
   #'
-  result <- roseContinuous(ang, rad, unit, ..., main=main, do.plot=do.plot)
+  result <- roseContinuous(ang, rad, unit, ...,
+                           main=main, labels=labels, at=at,
+                           do.plot=do.plot)
   return(invisible(result))
 }
 
-roseContinuous <- function(ang, rad, unit, ..., main, do.plot=TRUE) {
+roseContinuous <- function(ang, rad, unit, ..., main,
+                           labels=TRUE, at=NULL,
+                           do.plot=TRUE) {
   rmax <- max(rad)
   #' draw disc
-  R <- 1.1 * rmax
+  insideclearance <- 0.1
+  outsidespace <- if(!is.null(at) && length(at) == 0) 0 else
+                  if(identical(labels, FALSE)) 0.1 else 0.25
+  R <- (1+insideclearance) * rmax
   DD <- disc(R)
+  Rout <- (1 + outsidespace) * R
   result <- do.call.matched(plot.owin,
-                            resolve.defaults(list(x=disc(R * 1.1),
+                            resolve.defaults(list(x=disc(Rout),
                                                   main=main,
                                                   type="n"), 
                                              list(...)))
@@ -184,33 +199,46 @@ roseContinuous <- function(ang, rad, unit, ..., main, do.plot=TRUE) {
     xx <- rad * cos(ang)
     yy <- rad * sin(ang)
     do.call.matched(polygon, list(x=xx, y=yy, ...), extrargs="lwd")
-    circticks(R)
+    circticks(R, at=at, labels=labels)
   }
   return(result)
 }
 
-circticks <- function(R, at) {
-  if(missing(at)) {
-    at <- 2 * pi * (0:23)/24
+circticks <- function(R, at=NULL, unit=c("degree", "radian"), labels=TRUE) {
+  unit <- match.arg(unit)
+  FullCircle <- switch(unit, degree = 360, radian = 2*pi)
+  if(is.null(at)) {
+    at <- FullCircle * (0:23)/24
     major <- ((0:23) %% 6 == 0)
   } else {
-    nat <- at * 2/pi
+    if(length(at) == 0) return(invisible(NULL))
+    nat <- (at/FullCircle) * 4
     major <- abs(nat - round(nat)) < 0.01
   }
-  tx <- R * cos(at)
-  ty <- R * sin(at)
+  atradians <- switch(unit, degree = pi * at/180, radian = at)
+  tx <- R * cos(atradians)
+  ty <- R * sin(atradians)
   expan <- ifelse(major, 1.1, 1.05)
   segments(tx, ty, expan * tx, expan * ty, lwd=major+1)
+  if(!identical(labels, FALSE)) {
+    if(identical(labels, TRUE)) {
+      labels <- switch(unit,
+                       degree=paste(round(at)),
+                       radian=parse(text= simplenumber(at/pi, "pi", "*", 1e-3)))
+    } else stopifnot(is.vector(labels) && length(labels) == length(at))
+    big <- expan + 0.1
+    text(big * tx, big * ty, labels=labels)
+  }
   invisible(NULL)
 }
 
-validate.angles <- function(angles, unit, guess=TRUE) {
+validate.angles <- function(angles, unit=c("degree", "radian"), guess=TRUE) {
   #' validate
   width <- diff(range(angles))
-  if(guess && width <= 6.2832) {
+  if(missing(unit) && guess && width <= 6.2832) {
     warning("Very small range of angles: treating them as radian")
     unit <- "radian"
-  }
+  } else unit <- match.arg(unit)
   FullCircle <- switch(unit, degree = 360, radian = 2*pi)
   if(width > 1.002 * FullCircle)
     stop("Range of angles exceeds a full circle")
