@@ -1,11 +1,23 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.001
+        CHANGES IN spatstat VERSION 1.41-1.002
 
 OVERVIEW
 
-   o Nothing yet.
-
    o Version nickname: 'Stitch in Time'
+
+   o Improved behaviour of polygon geometry operations.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o intersect.owin, union.owin, setminus.owin
+   New argument 'p' controls resolution of polygon clipping algorithm.
+
+BUG FIXES
+
+   o union.owin
+   Strange results were sometimes obtained when taking the union 
+   of more than two windows.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1
 

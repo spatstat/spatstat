@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.95 $	$Date: 2014/12/14 08:16:37 $
+#	$Revision: 4.97 $	$Date: 2015/03/01 03:33:57 $
 #
 #
 #
@@ -194,7 +194,11 @@ function(x, i, ...) {
 #
 #
 
-intersect.owin <- function(A, B, ..., fatal=TRUE) {
+intersect.owin <- function(A, B, ..., fatal=TRUE, p) {
+  if(missing(A)) A <- NULL
+  if(missing(B)) B <- NULL
+  ## p is a list of arguments to polyclip::polyclip
+  if(missing(p) || is.null(p)) p <- list()
   liszt <- list(...)
   rasterinfo <- list()
   if(length(liszt) > 0) {
@@ -206,9 +210,19 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     nextra <- sum(isowin)
     if(nextra > 0) {
       windows <- liszt[isowin]
-      for(i in 1:nextra)
-        B <- do.call("intersect.owin",
-                     append(list(B, windows[[i]]), rasterinfo))
+      ## handle case where B is not matched
+      if(is.null(B)) {
+        B <- windows[[1]]
+        windows <- windows[-1]
+        nextra <- nextra - 1
+      }
+      ## determine a common set of parameters for polyclip
+      p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
+      ## absorb all windows into B
+      for(i in seq_len(nextra))
+        B <- do.call(intersect.owin,
+                     append(list(B, windows[[i]], p=p),
+                            rasterinfo))
     }
   }
   if(missing(A) || is.null(A)) return(B)
@@ -250,8 +264,10 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
     ####### Result is polygonal ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip::polyclip(a, b, "intersection",
-                             fillA="nonzero", fillB="nonzero")
+    ab <- do.call(polyclip::polyclip,
+                  append(list(a, b, "intersection",
+                              fillA="nonzero", fillB="nonzero"),
+                         p))
     if(length(ab)==0)
       return(emptywindow(C))
     # ensure correct polarity
@@ -320,46 +336,62 @@ intersect.owin <- function(A, B, ..., fatal=TRUE) {
 }
 
 
-union.owin <- function(A, B, ...) {
+union.owin <- function(A, B, ..., p) {
+  if(missing(A)) A <- NULL
+  if(missing(B)) B <- NULL
+  ## p is a list of arguments to polyclip::polyclip
+  if(missing(p) || is.null(p)) p <- list()
   liszt <- list(...)
   rasterinfo <- list()
   if(length(liszt) > 0) {
-    # explicit arguments controlling raster info
+    ## arguments controlling raster info
     israster <- names(liszt) %in% names(formals(as.mask))
     rasterinfo <- liszt[israster]
-    # handle union of more than two windows
+    ## handle union of more than two windows
     isowin <- unlist(lapply(liszt, is.owin))
     nextra <- sum(isowin)
     if(nextra > 0) {
       windows <- liszt[isowin]
-      for(i in 1:nextra)
-        B <- do.call("union.owin",
-                     append(list(B, windows[[i]]), rasterinfo))
+      ## handle case where B is not matched
+      if(is.null(B)) {
+        B <- windows[[1]]
+        windows <- windows[-1]
+        nextra <- nextra - 1
+      }
+      ## determine a common set of parameters for polyclip
+      p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
+      ## absorb all windows into B
+      for(i in seq_len(nextra))
+        B <- do.call(union.owin,
+                     append(list(B, windows[[i]], p=p),
+                            rasterinfo))
     }
-  }
-  #
-  if(missing(A) || is.null(A) || is.empty(A)) return(B)
-  if(missing(B) || is.null(B) || is.empty(B)) return(A)
+  } 
+
+  ## There are now only two arguments
+  if(is.null(A) || is.empty(A)) return(B)
+  if(is.null(B) || is.empty(B)) return(A)
+
   verifyclass(A, "owin")
   verifyclass(B, "owin")
 
   if(identical(A, B))
     return(A)
 
-  # check units
+  ## check units
   if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
   
-  # Determine type of intersection
+  ## Determine type of intersection
   
-#  Arect <- is.rectangle(A)
-#  Brect <- is.rectangle(B)
-#  Apoly <- is.polygonal(A)
-#  Bpoly <- is.polygonal(B)
+##  Arect <- is.rectangle(A)
+##  Brect <- is.rectangle(B)
+##  Apoly <- is.polygonal(A)
+##  Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
 
-  # Create a rectangle to contain the result
+  ## Create a rectangle to contain the result
   
   C <- owin(range(A$xrange, B$xrange),
             range(A$yrange, B$yrange),
@@ -369,10 +401,13 @@ union.owin <- function(A, B, ...) {
     ####### Result is polygonal (or rectangular) ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip::polyclip(a, b, "union", fillA="nonzero", fillB="nonzero")
+    ab <- do.call(polyclip::polyclip,
+                  append(list(a, b, "union",
+                              fillA="nonzero", fillB="nonzero"),
+                         p))
     if(length(ab) == 0)
       return(emptywindow(C))
-    # ensure correct polarity
+    ## ensure correct polarity
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
@@ -383,7 +418,7 @@ union.owin <- function(A, B, ...) {
 
   ####### Result is a mask ############
 
-  # Determine pixel raster parameters
+  ## Determine pixel raster parameters
   if(length(rasterinfo) == 0) {
     rasterinfo <-
       if(Amask)
@@ -396,7 +431,7 @@ union.owin <- function(A, B, ...) {
         list()
   }
 
-  # Convert C to mask
+  ## Convert C to mask
   C <- do.call("as.mask", append(list(w=C), rasterinfo))
 
   rxy <- rasterxy.mask(C)
@@ -405,54 +440,59 @@ union.owin <- function(A, B, ...) {
   ok <- inside.owin(x, y, A) | inside.owin(x, y, B)
 
   if(all(ok)) {
-    # result is a rectangle
+    ## result is a rectangle
     C <- as.rectangle(C)
   } else {
-    # result is a mask
+    ## result is a mask
     C$m[] <- ok
   }
   return(C)
 }
 
-setminus.owin <- function(A, B, ...) {
+setminus.owin <- function(A, B, ..., p) {
   if(is.null(A) || is.empty(A)) return(B)
   if(is.null(B) || is.empty(B)) return(A)
   verifyclass(A, "owin")
   verifyclass(B, "owin")
-
   if(identical(A, B))
     return(emptywindow(as.rectangle(A)))
 
-  # check units
+  ## p is a list of arguments to polyclip::polyclip
+  if(missing(p) || is.null(p)) p <- list()
+
+  ## check units
   if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
   
-  # Determine type of arguments
+  ## Determine type of arguments
   
   Arect <- is.rectangle(A)
   Brect <- is.rectangle(B)
-#  Apoly <- is.polygonal(A)
-#  Bpoly <- is.polygonal(B)
+##  Apoly <- is.polygonal(A)
+##  Bpoly <- is.polygonal(B)
   Amask <- is.mask(A)
   Bmask <- is.mask(B)
 
-  # Case where A and B are both rectangular
+  ## Case where A and B are both rectangular
   if(Arect && Brect) {
     C <- intersect.owin(A, B, fatal=FALSE)
     if(is.null(C)) return(A)
     return(complement.owin(C, A))
   }
     
-  # Polygonal case
+  ## Polygonal case
 
   if(!Amask && !Bmask) {
     ####### Result is polygonal ############
     a <- lapply(as.polygonal(A)$bdry, reverse.xypolygon)
     b <- lapply(as.polygonal(B)$bdry, reverse.xypolygon)
-    ab <- polyclip::polyclip(a, b, "minus", fillA="nonzero", fillB="nonzero")
+    ab <- do.call(polyclip::polyclip,
+                  append(list(a, b, "minus",
+                              fillA="nonzero", fillB="nonzero"),
+                         p))
     if(length(ab) == 0)
       return(emptywindow(A))
-    # ensure correct polarity
+    ## ensure correct polarity
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
@@ -463,7 +503,7 @@ setminus.owin <- function(A, B, ...) {
 
   ####### Result is a mask ############
 
-  # Determine pixel raster parameters
+  ## Determine pixel raster parameters
   rasterinfo <- 
     if((length(list(...)) > 0))
       list(...)
@@ -476,7 +516,7 @@ setminus.owin <- function(A, B, ...) {
     else
       list()
 
-  # Convert A to mask
+  ## Convert A to mask
   AB <- do.call("as.mask", append(list(w=A), rasterinfo))
 
   rxy <- rasterxy.mask(AB)
@@ -492,23 +532,38 @@ setminus.owin <- function(A, B, ...) {
   return(AB)
 }
 
-# auxiliary functions
-  
-trim.mask <- function(M, R, tolerant=TRUE) {
-    # M is a mask,
-    # R is a rectangle
+## auxiliary functions
 
-    # Ensure R is a subset of bounding rectangle of M
+commonPolyclipArgs <- function(..., p=NULL) {
+  # compute a common resolution for polyclip operations
+  # on several windows
+  if(!is.null(p) && !is.null(p$eps) && !is.null(p$x0) && !is.null(p$y0))
+    return(p)
+  bb <- boundingbox(...)
+  xr <- bb$xrange
+  yr <- bb$yrange
+  eps <- p$eps %orifnull% max(diff(xr), diff(yr))/(2^31)
+  x0  <- p$x0  %orifnull% mean(xr)
+  y0  <- p$y0  %orifnull% mean(yr)
+  return(list(eps=eps, x0=x0, y0=y0))
+}
+
+
+trim.mask <- function(M, R, tolerant=TRUE) {
+    ## M is a mask,
+    ## R is a rectangle
+
+    ## Ensure R is a subset of bounding rectangle of M
     R <- owin(intersect.ranges(M$xrange, R$xrange),
               intersect.ranges(M$yrange, R$yrange))
     
-    # Deal with very thin rectangles
+    ## Deal with very thin rectangles
     if(tolerant) {
       R$xrange <- adjustthinrange(R$xrange, M$xstep, M$xrange)
       R$yrange <- adjustthinrange(R$yrange, M$ystep, M$yrange)
     }
 
-    # Extract subset of image grid
+    ## Extract subset of image grid
     within.range <- function(u, v) { (u >= v[1]) & (u <= v[2]) }
     yrowok <- within.range(M$yrow, R$yrange)
     xcolok <- within.range(M$xcol, R$xrange)

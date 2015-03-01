@@ -91,6 +91,7 @@
 \alias{colouroutputs}
 \alias{colouroutputs<-}
 \alias{commasep}
+\alias{commonPolyclipArgs}
 \alias{conform.imagelist}
 \alias{countingweights}
 \alias{CressieReadStatistic}
@@ -801,6 +802,7 @@ codetime(x, hms, what)
 colouroutputs(x)
 colouroutputs(x) <- value
 commasep(x, join, flatten)
+commonPolyclipArgs(\dots, p)
 conform.imagelist(X, Zlist)
 countingweights(id, areas, check = TRUE)
 CressieReadStatistic(OBS,EXP,lambda)

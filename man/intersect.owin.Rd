@@ -2,24 +2,30 @@
 \alias{intersect.owin}
 \alias{union.owin}
 \alias{setminus.owin}
-\title{Intersection, Union or Set Subtraction of Two Windows}
+\title{Intersection, Union or Set Subtraction of Windows}
 \description{
-  Yields the intersection, union or set subtraction of two windows.
+  Yields the intersection, union or set subtraction of windows.
 }
 \usage{
-   intersect.owin(A, B, \dots, fatal=TRUE)
-   union.owin(A,B, \dots)
-   setminus.owin(A,B, \dots)
+   intersect.owin(A, B, \dots, fatal=TRUE, p)
+   union.owin(A, B, \dots, p)
+   setminus.owin(A, B, \dots, p)
 }
 \arguments{
   \item{A}{A window object (see Details).}
   \item{B}{A window object.}
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}}
-    to control the discretisation, if required.
+    Additional windows,
+    or arguments passed to \code{\link{as.mask}}
+    to control the discretisation.
   }
   \item{fatal}{Logical.
     Determines what happens if the intersection is empty.
+  }
+  \item{p}{
+    Optional list of parameters passed to
+    \code{\link[polyclip]{polyclip}} to control the
+    accuracy of polygon geometry.
   }
 }
 \value{
