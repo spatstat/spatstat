@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.002
+        CHANGES IN spatstat VERSION 1.41-1.003
 
 OVERVIEW
 
@@ -7,10 +7,21 @@ OVERVIEW
 
    o Improved behaviour of polygon geometry operations.
 
+   o Improvements and bug fixes.
+
+NEW FUNCTIONS
+
+   o as.data.frame.owin
+   Convert a window to a data frame.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o intersect.owin, union.owin, setminus.owin
    New argument 'p' controls resolution of polygon clipping algorithm.
+
+   o clickpoly, clickbox
+   These functions now handle graphical arguments to polygon()
+   when drawing the resulting polygon or rectangle.
 
 BUG FIXES
 

@@ -21,7 +21,8 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link[graphics]{locator}} to control the
-    interactive plot.
+    interactive plot, and to \code{\link[graphics]{polygon}} to plot the
+    polygons.
   }
 }
 \value{

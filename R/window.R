@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.159 $	$Date: 2015/02/25 10:08:05 $
+#	$Revision: 4.161 $	$Date: 2015/03/02 03:43:01 $
 #
 #
 #	A window may be either
@@ -1019,6 +1019,27 @@ print.summary.owin <- function(x, ...) {
   if(!is.null(ledge <- unitinfo$legend))
     splat(ledge)
   return(invisible(x))
+}
+
+as.data.frame.owin <- function(x, ...) {
+  stopifnot(is.owin(x))
+  switch(x$type,
+         rectangle = { x <- as.polygonal(x) },
+         polygonal = { },
+         mask = {
+           return(as.data.frame(rasterxy.mask(x, drop=TRUE), ...))
+         })
+  b <- x$bdry
+  ishole <- sapply(b, is.hole.xypolygon)
+  sign <- (-1)^ishole
+  b <- lapply(b, as.data.frame, ...)
+  nb <- length(b)
+  if(nb == 1)
+    return(b[[1]])
+  dfs <- mapply(cbind, b, id=as.list(seq_len(nb)), sign=as.list(sign),
+                SIMPLIFY=FALSE)
+  df <- do.call(rbind, dfs)
+  return(df)
 }
 
 discretise <- function(X,eps=NULL,dimyx=NULL,xy=NULL) {

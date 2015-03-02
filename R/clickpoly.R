@@ -2,7 +2,7 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.6 $  $Date: 2015/01/19 11:22:48 $
+# $Revision: 1.9 $  $Date: 2015/03/02 08:13:34 $
 #
 #
 
@@ -12,9 +12,10 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
          axes=FALSE)
     rect(0,0,1,1)
   }
-  spatstatLocator(0) ## check locator is enable
+  spatstatLocator(0) ## check locator is enabled
   gon <- list()
   stopifnot(np >= 1)
+  #
   for(i in 1:np) {
     if(np > 1)
       cat(paste(".... Polygon number", i, ".....\n"))
@@ -31,14 +32,14 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
     if(Area.xypolygon(xy) < 0)
       xy <- lapply(xy, rev)
     gon[[i]] <- xy
-    plot(owin(poly=xy), add=TRUE)
+    plotPolygonBdry(owin(poly=xy), ...)
   }
   result <- owin(poly=gon)
-  plot(result, add=TRUE)
+  plotPolygonBdry(result, ...)
   return(result)
 }
-  
-clickbox <- function(add=TRUE) {
+
+clickbox <- function(add=TRUE, ...) {
   spatstatLocator(0) # check locator enabled
   cat("Click two corners of a box\n")
   if(!add) plot(owin(), main="Click two corners of a box") 
@@ -46,13 +47,29 @@ clickbox <- function(add=TRUE) {
   if(inherits(a, "try-error")) {
     ## add=TRUE but there is no current plot
     plot.new()
-    a <- spatstatLocator(1)
+    a <- spatstatLocator(1, ...)
   }
   abline(v=a$x)
   abline(h=a$y)
-  b <- spatstatLocator(1)
+  b <- spatstatLocator(1, ...)
   abline(v=b$x)
   abline(h=b$y)
   ab <- concatxy(a, b)
-  return(owin(range(ab$x), range(ab$y)))
+  result <- owin(range(ab$x), range(ab$y))
+  plotPolygonBdry(result, ...)
+  return(result)
+}
+
+plotPolygonBdry <- function(x, ...) {
+  # filter appropriate arguments
+  argh <- list(...)
+  polyPars <- union(graphicsPars("lines"), graphicsPars("owin"))
+  polyargs <- argh[names(argh) %in% polyPars]
+  # change 'col' to 'border'
+  nama <- names(polyargs)
+  if(any(nama == "col") && !any(nama == "border"))
+    names(polyargs)[nama == "col"] <- "border"
+  # plot
+  do.call(plot.owin,
+          append(list(x=x, add=TRUE), polyargs))
 }

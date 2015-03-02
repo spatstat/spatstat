@@ -413,6 +413,7 @@
 \alias{ploterodewin}
 \alias{ploterodeimage}
 \alias{plot3Dpoints}
+\alias{plotPolygonBdry}
 \alias{plot.addvar}
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
@@ -1183,6 +1184,7 @@ plot3Dpoints(xyz, eye, org,
              \dots,
              type, xlim, ylim, zlim,
              add, box, main, cex, box.back, box.front)
+plotPolygonBdry(x, \dots)
 \method{plot}{addvar}(x, \dots, do.points=FALSE)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)

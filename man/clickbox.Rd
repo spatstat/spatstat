@@ -6,12 +6,16 @@
   point-and-click in the display.
 }
 \usage{
-  clickbox(add=TRUE)
+  clickbox(add=TRUE, \dots)
 }
 \arguments{
   \item{add}{
     Logical value indicating whether to create a new plot
     (\code{add=FALSE}) or draw over the existing plot (\code{add=TRUE}).
+  }
+  \item{\dots}{
+    Graphics arguments passed to \code{\link[graphics]{polygon}} to plot the
+    box.
   }
 }
 \value{
