@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.003
+        CHANGES IN spatstat VERSION 1.41-1.004
 
 OVERVIEW
 
@@ -13,6 +13,13 @@ NEW FUNCTIONS
 
    o as.data.frame.owin
    Convert a window to a data frame.
+
+   o harmonise.owin
+   Convert several binary mask windows to a common pixel grid.
+
+   o vesiclesCopy
+   Copy the data files for the vesicles dataset to a chosen folder.
+   Part of an exercise for beginners.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

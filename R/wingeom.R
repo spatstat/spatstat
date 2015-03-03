@@ -916,3 +916,14 @@ discs <- function(centres, radii=marks(centres)/2, ...,
     return(W)
   }
 }
+
+harmonise.owin <- harmonize.owin <- function(...) {
+  argz <- list(...)
+  wins <- solapply(argz, as.owin)
+  if(length(wins) < 2L) return(wins)
+  ismask <- sapply(wins, is.mask)
+  if(!any(ismask)) return(wins)
+  comgrid <- do.call(commonGrid, lapply(argz, as.owin))
+  result <- solapply(argz, "[", i=comgrid, drop=FALSE)
+  return(result)
+}
