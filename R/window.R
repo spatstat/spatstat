@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.161 $	$Date: 2015/03/02 03:43:01 $
+#	$Revision: 4.162 $	$Date: 2015/03/04 08:34:18 $
 #
 #
 #	A window may be either
@@ -68,7 +68,12 @@
     "Transpose matrices to get the standard presentation in R",
     "Example: image(result$xcol,result$yrow,t(result$d))")
 
-owin <- function(xrange=c(0,1), yrange=c(0,1),
+owin <- local({
+
+  isxy <- function(x) { (is.matrix(x) || is.data.frame(x)) && ncol(x) == 2 }
+  asxy <- function(xy) { list(x=xy[,1], y=xy[,2]) }
+
+  owin <- function(xrange=c(0,1), yrange=c(0,1),
                  ..., poly=NULL, mask=NULL, unitname=NULL, xy=NULL) {
 
   unitname <- as.units(unitname)
@@ -129,8 +134,6 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
       return(w)
     }
     # convert matrix or data frame to list(x,y)
-    isxy <- function(x) { (is.matrix(x) || is.data.frame(x)) && ncol(x) == 2 }
-    asxy <- function(xy) { list(x=xy[,1], y=xy[,2]) }
     if(isxy(poly)) {
       poly <- asxy(poly)
     } else if(is.list(poly) && all(unlist(lapply(poly, isxy)))) {
@@ -237,7 +240,14 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
     return(w)
   } else if(mask.given) {
     ######### digital mask #####################
-    
+
+    if(is.data.frame(mask) &&
+       ncol(mask) %in% c(2,3) &&
+       sum(sapply(mask, is.numeric)) == 2) {
+      # data frame with 2 columns of coordinates
+      return(as.owin(W=mask, xy=xy))
+    }
+      
     if(!is.matrix(mask))
       stop(paste(sQuote("mask"), "must be a matrix"))
     if(!is.logical(mask))
@@ -307,6 +317,9 @@ owin <- function(xrange=c(0,1), yrange=c(0,1),
   NULL
 }
 
+  owin
+})
+
 #
 #-----------------------------------------------------------------------------
 #
@@ -375,11 +388,15 @@ as.owin.tess <- function(W, ..., fatal=TRUE) {
 as.owin.data.frame <- function(W, ..., fatal=TRUE) {
   if(!verifyclass(W, "data.frame", fatal=fatal))
     return(NULL)
-  if(ncol(W) != 3) {
-    whinge <- "need exactly 3 columns of data"
+  if(!(ncol(W) %in% c(2,3))) {
+    whinge <- "need exactly 2 or 3 columns of data"
     if(fatal) stop(whinge)
     warning(whinge)
     return(NULL)
+  }
+  if(ncol(W) == 2) {
+    # assume data is a list of TRUE pixels
+    W <- cbind(W, TRUE)
   }
   mch <- match(c("x", "y"), names(W))
   if(!any(is.na(mch))) {
@@ -462,21 +479,21 @@ as.rectangle <- function(w, ...) {
 as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
 #	eps:		   grid mesh (pixel) size
 #	dimyx:		   dimensions of pixel raster
-#       xy:                coordinates of pixel raster  
+#       xy:                coordinates of pixel raster
+  nonamedargs <- is.null(eps) && is.null(dimyx) && is.null(xy)
+  uname <- as.units(NULL)
   if(!missing(w) && !is.null(w)) {
-    if(is.matrix(w))
-      return(owin(mask=w, xy=xy))
+    if(is.matrix(w) || is.data.frame(w))
+      return(owin(mask=as.data.frame(w), xy=xy))
     w <- as.owin(w)
     uname <- unitname(w)
   } else {
-    uname <- as.units(NULL)
     if(is.null(xy)) 
       stop("If w is missing, xy is required")
   }
   # If it's already a mask, and no other arguments specified,
   # just return it.
-  if(!missing(w) && w$type == "mask" &&
-     is.null(eps) && is.null(dimyx) && is.null(xy))
+  if(!missing(w) && w$type == "mask" && nonamedargs)
     return(w)
   
 ##########################
@@ -578,9 +595,17 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
                     units   = uname)
       class(rasta) <- "owin"
     }
-    # window may be implicit in this case.
-    if(missing(w))
-      w <- owin(xrange, yrange)
+    if(missing(w)) {
+      # No more window information
+      out <- rasta
+      if(!(identical(x, xy$x) && identical(y, xy$y))) {
+        ## xy is an enumeration of the TRUE pixels
+        out$m[] <- FALSE
+        ij <- cbind(i=match(xy$y, y), j=match(xy$x, x))
+        out$m[ij] <- TRUE
+        return(out)
+      }
+    }
   }
 
 ################################  

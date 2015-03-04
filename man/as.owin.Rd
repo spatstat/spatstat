@@ -167,6 +167,10 @@ in any of several formats, into an object of class \code{"owin"}.
     \eqn{x} and \eqn{y} coordinates of a pixel, and a logical value
     indicating whether the pixel lies inside the window.   
     \item
+    A \code{data.frame} with exactly two columns. Each row of the
+    data frame contains the \eqn{x} and \eqn{y} coordinates of a pixel
+    that lies inside the window.
+    \item
     an object of class \code{"distfun"}, \code{"nnfun"}
     or \code{"funxy"} representing a function of spatial location,
     defined on a spatial domain. The spatial domain of the function will be

@@ -270,9 +270,16 @@ A list of three point patterns, each giving the locations of
 electrical breakdown spots on a circular electrode in
 a microelectronic capacitor.
 
-\SweaveOpts{width=12,height=4}\setkeys{Gin}{width=\textwidth}
-<<fig=TRUE>>=
-plot(bdspots, equal.scales=TRUE)
+\SweaveOpts{width=12,height=6}\setkeys{Gin}{width=\textwidth}
+<<eval=FALSE>>=
+plot(bdspots, equal.scales=TRUE, pch="+", 
+     panel.args=function(i)list(cex=c(0.15, 0.2, 0.7)[i]))
+@   
+<<fig=TRUE,echo=FALSE>>=
+zeromargins()
+plot(bdspots, equal.scales=TRUE, pch="+", main="",
+     mar.panel=0, hsep=1,
+     panel.args=function(i)list(cex=c(0.15, 0.2, 0.7)[i]))
 @   
 
 \subsubsection*{\texttt{bei}: Beilschmiedia data}
@@ -817,7 +824,7 @@ The auxiliary dataset \texttt{vesicles.extra} is a list with entries
 
 For demonstration and training purposes,
 the raw data files for this dataset are also
-provided in the \pkg{spatstat} package installation:
+provided in the \pkg{spatstat} package installation:\\ 
 \begin{tabular}{ll}
   \texttt{vesicles.txt} &  spatial locations of vesicles \\
   \texttt{presynapse.txt} &  vertices of \texttt{presynapse} \\

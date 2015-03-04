@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.5 $ $Date: 2014/08/06 01:12:38 $
+## $Revision: 1.6 $ $Date: 2015/03/04 09:34:07 $
 
 bounding.box <- function(...) {
   .Deprecated("boundingbox", "spatstat")
@@ -34,12 +34,12 @@ recognise.spatstat.type <- local({
   function(x) {
     for(kt in knowntypes)
       if(inherits(x, kt)) return(kt)
-    aso <- try(as.owin(x), silent=TRUE)
-    if(!inherits(aso, "try-error")) return("as.owin")
     if(is.list(x) && checkfields(x, c("x", "y"))
        && is.numeric(x$x) && is.numeric(x$y) &&
        is.vector(x$x) && is.vector(x$y) && length(x$x) == length(x$y))
         return("listxy")
+    aso <- try(as.owin(x), silent=TRUE)
+    if(!inherits(aso, "try-error")) return("as.owin")
     return("unknown")
   }
 })

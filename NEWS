@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.004
+        CHANGES IN spatstat VERSION 1.41-1.005
 
 OVERVIEW
 
    o Version nickname: 'Stitch in Time'
 
    o Improved behaviour of polygon geometry operations.
+
+   o Improved basic support for owin objects.
 
    o Improvements and bug fixes.
 
@@ -16,6 +18,9 @@ NEW FUNCTIONS
 
    o harmonise.owin
    Convert several binary mask windows to a common pixel grid.
+
+   o transmat
+   Convert pixel arrays between different display conventions.
 
    o vesiclesCopy
    Copy the data files for the vesicles dataset to a chosen folder.
@@ -29,6 +34,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o clickpoly, clickbox
    These functions now handle graphical arguments to polygon()
    when drawing the resulting polygon or rectangle.
+
+   o owin, as.owin, as.mask
+   owin(mask=D) or as.owin(D) or as.mask(D) will produce a binary mask window
+   if D is a data frame with two columns of (x,y) coordinates
+   or a data frame with three columns containing (x,y,logical).
 
 BUG FIXES
 

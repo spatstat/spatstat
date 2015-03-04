@@ -87,17 +87,31 @@ describing a window in the two-dimensional plane.
     \item
     \bold{binary masks:}
     If \code{mask} is given, then the window will be a binary image.
-    The argument \code{mask} should be a logical matrix
-    such that \code{mask[i,j]} is \code{TRUE} if the point
-    \code{(x[j],y[i])} belongs to the window, and \code{FALSE} if it
-    does not. Note carefully that rows of \code{mask} correspond to the
-    \eqn{y} coordinate, and columns to the \eqn{x} coordinate.
-    Here \code{x} and \code{y} are vectors of \eqn{x} and \eqn{y}
-    coordinates equally spaced over \code{xrange} and \code{yrange}
-    respectively. The pixel coordinate vectors \code{x} and \code{y}
-    may be specified explicitly using the argument \code{xy}, which
-    should be a list containing components \code{x} and \code{y}.
-    Alternatively there is a sensible default.
+    \itemize{
+      \item
+      \emph{Specified by logical matrix:}
+      Normally the argument \code{mask} should be a logical matrix
+      such that \code{mask[i,j]} is \code{TRUE} if the point
+      \code{(x[j],y[i])} belongs to the window, and \code{FALSE} if it
+      does not. Note carefully that rows of \code{mask} correspond to the
+      \eqn{y} coordinate, and columns to the \eqn{x} coordinate.
+      Here \code{x} and \code{y} are vectors of \eqn{x} and \eqn{y}
+      coordinates equally spaced over \code{xrange} and \code{yrange}
+      respectively. The pixel coordinate vectors \code{x} and \code{y}
+      may be specified explicitly using the argument \code{xy}, which
+      should be a list containing components \code{x} and \code{y}.
+      Alternatively there is a sensible default.
+      \item
+      \emph{Specified by list of pixel coordinates:}
+      Alternatively the argument \code{mask} can be a data frame
+      with 2 or 3 columns. If it has 2 columns, it is expected to
+      contain the spatial coordinates of all the
+      pixels which are inside the window.
+      If it has 3 columns,
+      it should contain the spatial coordinates \eqn{(x,y)}
+      of every pixel in the grid, and the logical value associated
+      with each pixel. The pixels may be listed in any order.
+    }
   }
   To create a window which is mathematically
   defined by inequalities in the Cartesian coordinates, 
