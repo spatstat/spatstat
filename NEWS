@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.007
+        CHANGES IN spatstat VERSION 1.41-1.008
 
 OVERVIEW
 
@@ -22,9 +22,9 @@ NEW FUNCTIONS
    o transmat
    Convert pixel arrays between different display conventions.
 
-   o vesiclesCopy
-   Copy the raw data files for the synaptic vesicles dataset
-   to a chosen folder, for use in a training exercise.
+   o copyExampleFiles
+   Copy the raw data files from an installed dataset
+   to a chosen folder, for use in a practice exercise.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
