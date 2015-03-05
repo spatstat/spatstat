@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.005
+        CHANGES IN spatstat VERSION 1.41-1.007
 
 OVERVIEW
 
@@ -23,8 +23,8 @@ NEW FUNCTIONS
    Convert pixel arrays between different display conventions.
 
    o vesiclesCopy
-   Copy the data files for the vesicles dataset to a chosen folder.
-   Part of an exercise for beginners.
+   Copy the raw data files for the synaptic vesicles dataset
+   to a chosen folder, for use in a training exercise.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -40,11 +40,22 @@ SIGNIFICANT USER-VISIBLE CHANGES
    if D is a data frame with two columns of (x,y) coordinates
    or a data frame with three columns containing (x,y,logical).
 
+   o as.owin.data.frame
+   W can now be a data frame with only two columns,
+   giving the spatial coordinates of the pixels that are inside the window.
+
+   o rose
+   Tick marks now have labels showing the angle (in degrees or radians).
+
 BUG FIXES
 
    o union.owin
    Strange results were sometimes obtained when taking the union 
    of more than two windows.
+   Fixed.
+
+   o as.owin.data.frame
+   Crashed if the window was not connected.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

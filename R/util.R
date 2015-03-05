@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.173 $    $Date: 2015/02/27 09:22:47 $
+#    $Revision: 1.174 $    $Date: 2015/03/05 00:44:38 $
 #
 #
 matrowsum <- function(x) {
@@ -363,6 +363,27 @@ prolongseq <- function(x, newrange, step=NULL) {
   attr(x, "nleft") <- nleft
   attr(x, "nright") <- nright
   return(x)
+}
+
+## fill gaps in a sequence
+fillseq <- function(x) {
+  xname <- short.deparse(substitute(x))
+  n <- length(x)
+  if(n <= 1) return(x)
+  rx <- range(x)
+  dx <- diff(x)
+  if(any(dx < 0)) stop(paste(xname, "should be an increasing sequence"),
+                       call.=FALSE)
+  ## guess step length
+  eps <- diff(rx)/1e7
+  step <- min(dx[dx > eps])
+  ## make new sequence
+  y <- seq(rx[1], rx[2], by=step)
+  ny <- length(y)
+  ## mapping from x to y
+  i <- round((x - rx[1])/step) + 1L
+  i <- pmin(ny, pmax(1, i))
+  return(list(xnew=y, i=i))
 }
 
 intersect.ranges <- function(a, b, fatal=TRUE) {

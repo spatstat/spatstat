@@ -175,6 +175,7 @@
 \alias{f3engine}
 \alias{f3Cengine}
 \alias{fasp}
+\alias{fillseq}
 \alias{findbestlegendpos}
 \alias{findCovariate}
 \alias{findcbind}
@@ -912,6 +913,7 @@ fave.order(x)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
+fillseq(x)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)
 findcbind(root, depth, maxdepth)

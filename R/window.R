@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.162 $	$Date: 2015/03/04 08:34:18 $
+#	$Revision: 4.164 $	$Date: 2015/03/05 02:33:42 $
 #
 #
 #	A window may be either
@@ -409,13 +409,28 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     iz <- 3
   }
   df <- data.frame(x=W[,ix], y=W[,iy], z=as.logical(W[,iz]))
-  # convert data frame (x,y,z) to logical matrix
-  m <- with(df, tapply(z, list(y, x), any))
-  # extract pixel coordinates
-  xy <- with(df, list(x=sort(unique(x)), y=sort(unique(y))))
-  # make binary mask
-  out <- owin(mask=m, xy=xy)
-  return(out)
+  with(df, {
+    xx <- with(df, sort(unique(x)))
+    yy <- with(df, sort(unique(y)))
+    jj <- with(df, match(x, xx))
+    ii <- with(df, match(y, yy))
+    ## make logical matrix (for incomplete x, y sequence)
+    mm <- tapply(z, list(ii,jj), any)
+    ## ensure xx and yy are complete equally-spaced sequences
+    fx <- fillseq(xx)
+    fy <- fillseq(yy)
+    xcol <- fx[[1]]
+    yrow <- fy[[1]]
+    ## mapping from xx to xcol, yy to yrow
+    jjj <- fx[[2]]
+    iii <- fy[[2]]
+    ## make logical matrix for full sequence
+    m <- matrix(FALSE, length(yrow), length(xcol))
+    m[iii,jjj] <- mm
+    ## make binary mask
+    out <- owin(mask=m, xy=list(x=xcol, y=yrow))
+    return(out)
+  })
 }
 
 as.owin.default <- function(W, ..., fatal=TRUE) {
@@ -483,8 +498,12 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
   nonamedargs <- is.null(eps) && is.null(dimyx) && is.null(xy)
   uname <- as.units(NULL)
   if(!missing(w) && !is.null(w)) {
-    if(is.matrix(w) || is.data.frame(w))
-      return(owin(mask=as.data.frame(w), xy=xy))
+    if(is.data.frame(w)) return(owin(mask=w, xy=xy))
+    if(is.matrix(w)) {
+      w <- as.data.frame(w)
+      colnames(w) <- c("x", "y")
+      return(owin(mask=w, xy=xy))
+    }
     w <- as.owin(w)
     uname <- unitname(w)
   } else {
@@ -759,7 +778,8 @@ rasterxy.mask <- function(w, drop=FALSE) {
   return(list(x=as.numeric(x),
               y=as.numeric(y)))
 }
-  
+
+
 nearest.raster.point <- function(x,y,w, indices=TRUE) {
   stopifnot(is.mask(w) || is.im(w))
   nr <- w$dim[1]
@@ -1046,13 +1066,15 @@ print.summary.owin <- function(x, ...) {
   return(invisible(x))
 }
 
-as.data.frame.owin <- function(x, ...) {
+as.data.frame.owin <- function(x, ..., drop=TRUE) {
   stopifnot(is.owin(x))
   switch(x$type,
          rectangle = { x <- as.polygonal(x) },
          polygonal = { },
          mask = {
-           return(as.data.frame(rasterxy.mask(x, drop=TRUE), ...))
+           xy <- rasterxy.mask(x, drop=drop)
+           if(!drop) xy <- append(xy, list(inside=as.vector(x$m)))
+           return(as.data.frame(xy, ...))
          })
   b <- x$bdry
   ishole <- sapply(b, is.hole.xypolygon)
