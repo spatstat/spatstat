@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.164 $	$Date: 2015/03/05 02:33:42 $
+#	$Revision: 4.165 $	$Date: 2015/03/06 05:57:32 $
 #
 #
 #	A window may be either
@@ -415,7 +415,8 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     jj <- with(df, match(x, xx))
     ii <- with(df, match(y, yy))
     ## make logical matrix (for incomplete x, y sequence)
-    mm <- tapply(z, list(ii,jj), any)
+    mm <- matrix(FALSE, length(yy), length(xx))
+    mm[cbind(ii,jj)] <- z
     ## ensure xx and yy are complete equally-spaced sequences
     fx <- fillseq(xx)
     fy <- fillseq(yy)
