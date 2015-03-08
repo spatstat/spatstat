@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.6 $ $Date: 2015/01/28 07:02:36 $
+##  $Revision: 1.7 $ $Date: 2015/03/08 04:25:06 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -61,13 +61,26 @@ plot.anylist <- plot.solist <- plot.listof <-
 
   ## bounding box, including ribbon for images, legend for point patterns
   getplotbox <- function(x, ..., do.plot) {
-    if(inherits(x, c("im", "ppp", "psp", "msr", "layered"))) {
+    if(inherits(x, c("im", "ppp", "psp", "msr", "layered", "tess"))) {
       y <- plot(x, ..., do.plot=FALSE)      
       return(as.owin(y))
     }
-    return(as.rectangle(x))
+    return(try(as.rectangle(x), silent=TRUE))
   }
 
+  # calculate bounding boxes for each panel using intended arguments!
+  getPlotBoxes <- function(xlist, ..., panel.args=NULL, extrargs=list()) {
+    userargs <- list(...)
+    n <- length(xlist)
+    result <- vector(length=n, mode="list")
+    for(i in seq_len(n)) {
+      pai <- if(is.function(panel.args)) panel.args(i) else list()
+      argh <- resolve.defaults(pai, userargs, extrargs)
+      result[[i]] <- do.call(getplotbox, append(list(x=xlist[[i]]), argh))
+    }
+    return(result)
+  }
+    
   is.shiftable <- function(x) {
     if(is.null(x)) return(TRUE)
     if(is.function(x)) return(FALSE)
@@ -202,8 +215,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     } else {
       ## Determine dimensions of objects
       ##     (including space for colour ribbons, if they are images)
-      boxes <- try(lapply(x, getplotbox, ...), silent=TRUE)
-      sizes.known <- !inherits(boxes, "try-error")
+      boxes <- getPlotBoxes(x, ..., panel.args=panel.args, extrargs=extrargs)
+      sizes.known <- !any(sapply(boxes, inherits, what="try-error"))
       if(equal.scales && !sizes.known) {
         warning("Ignored equal.scales=TRUE; scales could not be determined")
         equal.scales <- FALSE

@@ -163,49 +163,62 @@ plot.tess <- local({
                 "cex.main", "col.main", "font.main",
                 "cex.sub", "col.sub", "font.sub", "border")
 
-  plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL) {
+  plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL,
+                        do.plot=TRUE) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
     switch(x$type,
            rect={
              win <- x$window
-             do.call.matched("plot.owin",
-                             resolve.defaults(list(x=win, main=main,
-                                                   add=add, show.all=show.all),
-                                              list(...)),
-                             extrargs=plotpars)
-             xg <- x$xgrid
-             yg <- x$ygrid
-             do.call.matched("segments",
-                             resolve.defaults(list(x0=xg, y0=win$yrange[1],
-                                                   x1=xg, y1=win$yrange[2]),
-                                              list(col=col),
-                                              list(...),
-                                              .StripNull=TRUE))
-             do.call.matched("segments",
-                             resolve.defaults(list(x0=win$xrange[1], y0=yg,
-                                                   x1=win$xrange[2], y1=yg),
-                                              list(col=col),
-                                              list(...),
-                                              .StripNull=TRUE))
+             result <-
+               do.call.matched("plot.owin",
+                               resolve.defaults(list(x=win, main=main,
+                                                     add=add,
+                                                     show.all=show.all,
+                                                     do.plot=do.plot),
+                                                list(...)),
+                               extrargs=plotpars)
+             if(do.plot) {
+               xg <- x$xgrid
+               yg <- x$ygrid
+               do.call.matched("segments",
+                               resolve.defaults(list(x0=xg, y0=win$yrange[1],
+                                                     x1=xg, y1=win$yrange[2]),
+                                                list(col=col),
+                                                list(...),
+                                                .StripNull=TRUE))
+               do.call.matched("segments",
+                               resolve.defaults(list(x0=win$xrange[1], y0=yg,
+                                                     x1=win$xrange[2], y1=yg),
+                                                list(col=col),
+                                                list(...),
+                                                .StripNull=TRUE))
+             }
            },
            tiled={
-             do.call.matched("plot.owin",
-                             resolve.defaults(list(x=x$window, main=main,
-                                                   add=add, show.all=show.all),
-                                              list(...)),
-                             extrargs=plotpars)
-             til <- tiles(x)
-             lapply(til, plotem, ..., col=col)
+             result <-
+               do.call.matched("plot.owin",
+                               resolve.defaults(list(x=x$window, main=main,
+                                                     add=add,
+                                                     show.all=show.all,
+                                                     do.plot=do.plot),
+                                                list(...)),
+                               extrargs=plotpars)
+             if(do.plot) {
+               til <- tiles(x)
+               lapply(til, plotem, ..., col=col)
+             }
            },
            image={
-             do.call("plot",
-                     resolve.defaults(list(x$image, add=add, main=main,
-                                           show.all=show.all),
-                                      list(...),
-                                      list(valuesAreColours=FALSE)))
+             result <-
+               do.call("plot",
+                       resolve.defaults(list(x$image, add=add, main=main,
+                                             show.all=show.all,
+                                             do.plot=do.plot),
+                                        list(...),
+                                        list(valuesAreColours=FALSE)))
            })
-    return(invisible(NULL))
+    return(invisible(result))
   }
 
   plot.tess

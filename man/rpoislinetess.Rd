@@ -34,6 +34,9 @@ rpoislinetess(lambda, win = owin())
 }
 \value{
   A tessellation (object of class \code{"tess"}).
+
+  Also has an attribute \code{"lines"} containing the realisation of the
+  Poisson line process, as an object of class \code{"infline"}.
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

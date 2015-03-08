@@ -32,6 +32,7 @@ rpoislinetess <- function(lambda, win=owin()) {
   Z <- chop.tess(boundbox, Y)
   # clip to window
   Z <- intersect.tess(Z, win)
+  attr(Z, "lines") <- Y
   return(Z)
 }
 

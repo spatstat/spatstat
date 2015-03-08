@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.41-1.009
+Version: 1.41-1.010
 Nickname: Stitch in Time
-Date: 2015-03-06
+Date: 2015-03-07
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

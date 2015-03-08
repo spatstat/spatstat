@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.009
+        CHANGES IN spatstat VERSION 1.41-1.010
 
 OVERVIEW
 
@@ -47,6 +47,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o rose
    Tick marks now have labels showing the angle (in degrees or radians).
 
+   o rpoislinetess
+   Return value now has an attribute 'lines' giving the 
+   realisation of the Poisson line process.
+
+   o plot.tess
+   New argument 'do.plot'.
+
 BUG FIXES
 
    o union.owin
@@ -56,6 +63,11 @@ BUG FIXES
 
    o as.owin.data.frame
    Crashed if the window was not connected.
+   Fixed.
+
+   o plot.solist
+   Figures were sometimes aligned incorrectly 
+   when the argument 'panel.args' was given.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1
