@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.101 $ $Date: 2015/02/24 09:21:31 $
+# $Revision: 1.102 $ $Date: 2015/03/11 06:07:26 $
 #
 
 kppm <- function(X, ...) {
@@ -84,6 +84,11 @@ kppm.ppp <- kppm.quad <-
             forcefit=TRUE, rename.intercept=FALSE,
             covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps)
   XX <- if(isquad) X$data else X
+  # set default weight function
+  if(is.null(weightfun) && method != "mincon") {
+    RmaxW <- (rmax %orifnull% rmax.rule("K", Window(XX), intensity(XX))) / 2
+    weightfun <- function(d, rr=RmaxW) { as.integer(d <= rr) }
+  }
   # fit
   out <- switch(method,
          mincon = kppmMinCon(X=XX, Xname=Xname, po=po, clusters=clusters,

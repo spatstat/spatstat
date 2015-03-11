@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.010
+        CHANGES IN spatstat VERSION 1.41-1.011
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
    o Improved behaviour of polygon geometry operations.
 
    o Improved basic support for owin objects.
+
+   o Improved support for tessellations.
 
    o Improvements and bug fixes.
 
@@ -28,6 +30,10 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+   o kppm
+   The default for the weight function 'weightfun' has been changed, 
+   for better performance.
+
    o intersect.owin, union.owin, setminus.owin
    New argument 'p' controls resolution of polygon clipping algorithm.
 
@@ -46,6 +52,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o rose
    Tick marks now have labels showing the angle (in degrees or radians).
+
+   o distcdf
+   New argument 'regularise' determines whether values at short distances
+   will be smoothed to avoid discretisation artefacts.
 
    o rpoislinetess
    Return value now has an attribute 'lines' giving the 

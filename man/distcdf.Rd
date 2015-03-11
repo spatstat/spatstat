@@ -7,7 +7,7 @@
   or windows.
 }
 \usage{
-  distcdf(W, V=W, \dots, dW=1, dV=dW, nr=1024)
+  distcdf(W, V=W, \dots, dW=1, dV=dW, nr=1024, regularise=TRUE)
 }
 \arguments{
   \item{W}{
@@ -34,6 +34,10 @@
     Integer. The number of values of interpoint distance \eqn{r}
     for which the CDF will be computed.
     Should be a large value!
+  }
+  \item{regularise}{
+    Logical value indicating whether to smooth the results
+    for very small distances, to avoid discretisation artefacts.
   }
 }
 \value{
@@ -76,6 +80,11 @@
   The result is the cumulative distribution function
   of the distance from a randomly selected point in the point pattern,
   to a randomly selected point in the other point pattern or window.
+
+  If \code{regularise=TRUE} (the default), values of the cumulative
+  distribution function for very short distances are smoothed to avoid
+  discretisation artefacts. Smoothing is applied to all distances
+  shorter than the width of 7 pixels. 
 }
 \seealso{
   \code{\link{setcov}},

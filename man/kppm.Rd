@@ -238,8 +238,9 @@
       The function \eqn{w} in the composite likelihood
       is a weighting function and may be chosen arbitrarily.
       It is specified by the argument \code{weightfun}.
-      If this is missing or \code{NULL} then \eqn{w} is taken to
-      equal 1.
+      If this is missing or \code{NULL} then the default is
+      a threshold weight function,
+      \eqn{w(d) = 1(d \le R)}{w(d) = 1(d <= R)}, where \eqn{R} is \code{rmax/2}.
     }
     \item{Palm likelihood:}{
       If \code{method = "palm"} the clustering parameters of the

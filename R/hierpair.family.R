@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.1 $	$Date: 2014/12/03 02:46:13 $
+#    $Revision: 1.2 $	$Date: 2015/03/09 09:24:30 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -14,7 +14,7 @@ hierpair.family <-
   list(
        name  = "hierpair",
        print = function(self) {
-         spatstat:::splat("Hierarchical pairwise interaction family")
+         splat("Hierarchical pairwise interaction family")
        },
        plot = function(fint, ..., d=NULL, plotit=TRUE) {
          verifyclass(fint, "fii")

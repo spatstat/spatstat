@@ -3,10 +3,10 @@
 #
 # cdf of |X1-X2| when X1,X2 are iid uniform in W, etc
 #
-#  $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.8 $  $Date: 2015/03/11 06:40:04 $
 #
 
-distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
+distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
   reflexive <- missing(V) && missing(dV)
   diffuse <- is.owin(W) && is.owin(V)
   uniformW <- identical(dW, 1)
@@ -60,8 +60,16 @@ distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024) {
   rvals <- as.vector(as.matrix(r))
   gvals <- as.vector(as.matrix(g))
   rgrid <- seq(0, max(rvals), length=nr)
+  dr <- max(rvals)/(nr-1)
   h <- whist(rvals, breaks=rgrid, weights=gvals/sum(gvals))
   ch <- c(0,cumsum(h))
+  # regularise at very short distances
+  if(regularise) {
+    sevenpix <- 7 * with(r, max(xstep, ystep))
+    ii <- round(sevenpix/dr)
+    ch[1:ii] <- ch[ii] * (rgrid[1:ii]/rgrid[ii])^2
+  }
+  # ok
   result <- fv(data.frame(r=rgrid, f=ch),
                 "r", quote(CDF(r)),
                "f", , range(rvals), c("r","%s(r)"),
