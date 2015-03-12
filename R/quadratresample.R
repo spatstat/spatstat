@@ -39,6 +39,6 @@ quadratresample <- function(X, nx, ny=nx, ...,
   }
   if(nsamples == 1)
     return(out[[1]])
-  return(as.listof(out))
+  return(as.solist(out))
 }
 

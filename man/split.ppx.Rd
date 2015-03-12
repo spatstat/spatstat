@@ -33,7 +33,7 @@
 \value{
   A list of point patterns.
   The components of the list are named by the levels of \code{f}.
-  The list also has the class \code{"splitppx"} and \code{"listof"}.
+  The list also has the class \code{"splitppx"} and \code{"anylist"}.
 }
 \details{
   The generic command \code{\link[base]{split}} allows a dataset to be separated
@@ -90,13 +90,12 @@
   marks.
   
   The result of \code{split.ppx} has class \code{"splitppx"}
-  and \code{"listof"}. There are methods for \code{print},
+  and \code{"anylist"}. There are methods for \code{print},
   \code{summary} and \code{plot}.
-
 }
 \seealso{
   \code{\link{ppx}},
-  \code{\link{plot.listof}}
+  \code{\link{plot.anylist}}
 }
 \examples{
    df <- data.frame(x=runif(4),y=runif(4),t=runif(4),

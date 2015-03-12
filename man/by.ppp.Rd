@@ -47,7 +47,8 @@
   are separated into different point patterns.
 }
 \value{
-  A list (also of class \code{"listof"}) containing the results returned
+  A list (also of class \code{"anylist"} or \code{"solist"} as
+  appropriate) containing the results returned
   from \code{FUN} for each of the subpatterns.
 }
 \seealso{

@@ -4,7 +4,7 @@
 #   $Revision: 1.7 $   $Date: 2014/08/04 05:55:43 $
 #
 
-pairs.listof <-
+pairs.listof <- pairs.solist <- 
   pairs.im <- function(..., plot=TRUE) {
   argh <- list(...)
   cl <- match.call()

@@ -42,7 +42,7 @@
 }
 \value{
   If \code{drop=FALSE}, a list of pixel images (objects of class
-  \code{"im"}). It is also of class \code{"listof"} so that it can be
+  \code{"im"}). It is also of class \code{"solist"} so that it can be
   plotted immediately.
 
   If \code{drop=TRUE}, a list of numeric vectors.

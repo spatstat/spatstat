@@ -436,7 +436,7 @@ pool.quadrattest <- function(...,
                          testname=testname, dataname=Xname)
   # add info
   class(result) <- c("quadrattest", class(result))
-  attr(result, "tests") <- as.listof(tests)
+  attr(result, "tests") <- as.solist(tests)
   # there is no quadratcount attribute 
   return(result)
 }
@@ -452,7 +452,7 @@ extractAtomicQtests <- function(x) {
   tests <- attr(x, "tests")
   y <- lapply(tests, extractAtomicQtests)
   z <- do.call("c", y)
-  return(as.listof(z))
+  return(as.solist(z))
 }
 
 as.tess.quadrattest <- function(X) {
@@ -461,7 +461,7 @@ as.tess.quadrattest <- function(X) {
     return(as.tess(Y))
   }
   tests <- extractAtomicQtests(X)
-  return(as.listof(lapply(tests, as.tess.quadrattest)))
+  return(as.solist(lapply(tests, as.tess.quadrattest)))
 }
 
 as.owin.quadrattest <- function(W, ..., fatal=TRUE) {
@@ -476,7 +476,7 @@ as.owin.quadrattest <- function(W, ..., fatal=TRUE) {
 domain.quadrattest <- Window.quadrattest <- function(X, ...) { as.owin(X) }
 
 ## The shift method is undocumented.
-## It is only needed in plot.listof
+## It is only needed in plot.listof etc
 
 shift.quadrattest <- function(X, ...) {
   if(is.atomicQtest(X)) {

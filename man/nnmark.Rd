@@ -81,7 +81,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     If \code{at="pixels"} (the default), the result is a named list of 
     pixel images (object of class \code{"im"}). There is one
     image for each column of marks. This list also belongs to
-    the class \code{listof}, for which there is a plot method.
+    the class \code{"solist"}, for which there is a plot method.
     \item
     If \code{at="points"}, the result is a data frame
     with one row for each point of \code{X},

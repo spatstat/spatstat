@@ -30,7 +30,7 @@ ppmCovariates <- function(model) {
   co <- as.list(model$covariates)
   xy <- list(x=function(x,y){x}, y=function(x,y){y})
   coplus <- append(co, xy)
-  return(as.listof(coplus))
+  return(as.anylist(coplus))
 }
 
 findCovariate <- function(covname, scope, scopename=NULL) {

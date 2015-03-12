@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.012
+        CHANGES IN spatstat VERSION 1.41-1.013
 
 OVERVIEW
+
+   o We thank Ben Taylor for contributions.
 
    o Version nickname: 'Stitch in Time'
 
@@ -10,6 +12,8 @@ OVERVIEW
    o Improved basic support for owin objects.
 
    o Improved support for tessellations.
+
+   o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
    o Improvements and bug fixes.
 
@@ -72,10 +76,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Now handles lists of point patterns 
    (objects of class 'ppplist' or 'splitppp')
 
+   o density.ppp
+   New argument 'positive' allows the user to stipulate that
+   density values must be positive (avoiding numerical errors
+   which occasionally produce small negative values).
+
    o plot.tess
    New argument 'do.plot'.
 
-   o relrisk, density.splitppp
+   o allstats, compareFit, markcorr, split.ppx, by.ppp
+   Result is now of class 'anylist'.
+
+   o by.im, density.splitppp, idw, model.images, nnmark, pixellate.ppp,
+   predict.lppm, predict.ppm, quadratcount.splitppp, quadratresample, relrisk, 
+   Smooth.msr, split.im, tiles
    Result is now of class 'solist'.
 
    o split.ppp

@@ -82,7 +82,7 @@
     \code{"im"}) containing the values of the spatial covariates.
     The names of the list elements are the names of the covariates
     determined by \code{\link{model.matrix.lm}}.
-    The result is also of class \code{"listof"} so that it can
+    The result is also of class \code{"solist"} so that it can
     be plotted immediately.
     \item 
     If the original dataset was a multitype point pattern,
@@ -95,7 +95,7 @@
   }
 }
 \value{
-  A list (of class \code{"listof"}) or
+  A list (of class \code{"solist"}) or
   array (of class \code{"hyperframe"}) containing
   pixel images (objects of class \code{"im"}).
   For \code{model.images.lppm}, the images are also of class \code{"linim"}.
@@ -116,7 +116,7 @@
   \code{\link{slrm}},
   \code{\link{im}},
   \code{\link{im.object}},
-  \code{\link{plot.listof}},
+  \code{\link{plot.solist}},
   \code{\link{spatstat.options}}
 }
 

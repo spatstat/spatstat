@@ -404,6 +404,7 @@
 \alias{owinpolycheck}
 \alias{owinpoly2mask}
 \alias{pairs.listof}
+\alias{pairs.solist}
 \alias{param.quad}
 \alias{paren}
 \alias{partialModelMatrix}
@@ -1167,6 +1168,7 @@ oversize.quad(Q, \dots, nU, nX)
 owinpolycheck(W, verbose=TRUE)
 owinpoly2mask(w, rasta, check=TRUE)
 \method{pairs}{listof}(\dots, plot=TRUE)
+\method{pairs}{solist}(\dots, plot=TRUE)
 param.quad(Q)
 paren(x, type)
 partialModelMatrix(X,D,model,callstring,\dots)

@@ -96,7 +96,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
     do.several <- want.several && !add && multiplot
     if(do.several) {
       ## generate one plot for each column of marks
-      y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      y <- as.solist(lapply(mx, function(z, P) setmarks(P,z), P=x))
       out <- do.call("plot",
                      c(list(x=y, main=main, do.plot=do.plot,
                             show.window=show.window),

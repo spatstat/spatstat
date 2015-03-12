@@ -43,13 +43,13 @@ quantess.owin <- function(M, Z, n, ...) {
                      x = tess(xgrid=qZ, ygrid=R$yrange),
                      y = tess(xgrid=R$xrange, ygrid=qZ))
     out <- intersect.tess(strips, tess(tiles=list(W)))
+    qzz <- signif(qZ, 3)
+    tilenames(out) <- paste0("[", qzz[1:n], ",",
+                             qzz[-1], c(rep(")", n-1), "]"))
   } else {
-    ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
+    ZC <- cut(Z, breaks=qZ, include.lowest=TRUE, right=FALSE)
     out <- tess(image=ZC)
   }
-  qzz <- signif(qZ, 3)
-  tilenames(out) <- paste0("[", qzz[1:(n-1)], ",",
-                           qzz[-1], c(rep(")", n-1), "]"))
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)
   return(out)
 }
@@ -100,13 +100,13 @@ quantess.ppp <- function(M, Z, n, ...) {
                      x = tess(xgrid=qZ, ygrid=R$yrange),
                      y = tess(xgrid=R$xrange, ygrid=qZ))
     out <- intersect.tess(strips, tess(tiles=list(W)))
+    qzz <- signif(qZ, 3)
+    tilenames(out) <- paste0("[", qzz[1:n], ",",
+                             qzz[-1], c(rep(")", n-1), "]"))
   } else {
     ZC <- cut(Zim, breaks=qZ, include.lowest=TRUE)
     out <- tess(image=ZC)
   }
-  qzz <- signif(qZ, 3)
-  tilenames(out) <- paste0("[", qzz[1:(n-1)], ",",
-                           qzz[-1], c(rep(")", n-1), "]"))
   if(!is.null(tcross)) out <- intersect.tess(out, tcross)
   return(out)
 }

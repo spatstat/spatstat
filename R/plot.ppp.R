@@ -195,8 +195,8 @@ plot.ppp <- local({
     do.several <- want.several && !add && multiplot
     if(do.several) {
       ## generate one plot for each column of marks
-      y <- as.listof(lapply(mx, function(z, P) setmarks(P,z), P=x))
-      out <- do.call("plot",
+      y <- as.solist(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      out <- do.call(plot,
                      resolve.defaults(list(x=y, main=main,
                                            show.window=show.window,
                                            do.plot=do.plot,

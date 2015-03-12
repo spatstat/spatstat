@@ -527,7 +527,7 @@ model.images.slrm <- function(object, ...) {
     names(resultOUT) <- paste(names(resultOUT), splitby, "FALSE", sep="")
     result <- c(resultIN, resultOUT)
   }
-  return(as.listof(result))
+  return(as.solist(result))
 }
 
 update.slrm <- function(object, ..., evaluate=TRUE, env=parent.frame()) {

@@ -2,7 +2,7 @@
 ##   diagram.R
 ##
 ##   Simple objects for the elements of a diagram (text, arrows etc)
-##    that are compatible with plot.layered and plot.listof
+##    that are compatible with plot.layered and plot.solist
 ##
 ##   $Revision: 1.10 $ $Date: 2015/02/17 03:45:04 $
 

@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.16 $    $Date: 2015/01/31 02:38:58 $
+#           $Revision: 1.17 $    $Date: 2015/03/12 11:23:56 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -54,7 +54,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
       zeroimage <- na.handle.im(zeroimage, 0)
     result <- zeroimage
     if(k > 1) {
-      result <- as.listof(rep(list(zeroimage), k))
+      result <- as.solist(rep(list(zeroimage), k))
       names(result) <- colnames(weights)
     }
     return(result)
@@ -109,7 +109,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
       # store
       out[[j]] <- outj
     }
-    out <- as.listof(out)
+    out <- as.solist(out)
     names(out) <- names(weights)
   }
   return(out)

@@ -16,7 +16,7 @@ idw <- function(X, power=2, at="pixels", ...) {
         out[[j]] <- idw(X %mark% marx[,j], power=power, at=at, ...)
       names(out) <- names(marx)
       switch(at,
-             pixels = { out <- as.listof(out) },
+             pixels = { out <- as.solist(out) },
              points = { out <- as.data.frame(out) })
       return(out)
     } else 

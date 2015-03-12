@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.76 $    $Date: 2015/01/30 03:47:16 $
+#  $Revision: 1.77 $    $Date: 2015/03/12 09:05:23 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -17,7 +17,7 @@ density.ppp <- function(x, sigma=NULL, ...,
                         weights=NULL, edge=TRUE, varcov=NULL,
                         at="pixels", leaveoneout=TRUE,
                         adjust=1, diggle=FALSE,
-                        se=FALSE) {
+                        se=FALSE, positive=FALSE) {
   verifyclass(x, "ppp")
 
   output <- pickoption("output location type", at,
@@ -50,6 +50,7 @@ density.ppp <- function(x, sigma=NULL, ...,
                         weights=weights, edge=edge, at=output,
                         leaveoneout=leaveoneout, adjust=adjust,
                         diggle=diggle)
+    if(positive) SE <- posify(SE)
   }
                          
   if(output == "points") {
@@ -63,6 +64,9 @@ density.ppp <- function(x, sigma=NULL, ...,
              underflow=warning("underflow due to very small bandwidth"),
              warning(uhoh))
     }
+    ## constrain values to be positive
+    if(positive) 
+      result <- posify(result)
     if(se) 
       result <- list(estimate=result, SE=SE)
     return(result)
@@ -106,12 +110,16 @@ density.ppp <- function(x, sigma=NULL, ...,
   }
 
   result <- if(is.im(smo)) smo[x$window, drop=FALSE]
-            else as.listof(lapply(smo, "[", i=x$window, drop=FALSE))
+            else solapply(smo, "[", i=x$window, drop=FALSE)
 
   # internal use only
   spill <- resolve.1.default(list(spill=FALSE), list(...))
   if(spill)
     return(list(result=result, sigma=sigma, varcov=varcov, raw = raw, edg=edg))
+
+  # constrain values to be positive
+  if(positive) 
+    result <- posify(result)
 
   # normal return
   attr(result, "sigma") <- sigma
@@ -119,6 +127,18 @@ density.ppp <- function(x, sigma=NULL, ...,
   if(se)
     result <- list(estimate=result, SE=SE)
   return(result)
+}
+
+posify <- function(x, eps=.Machine$double.xmin) {
+  force(eps) # scalpel
+  if(is.im(x)) return(eval.im(pmax(eps, x)))
+  if(inherits(x, "solist")) return(solapply(x, posify, eps=eps))
+  if(is.numeric(x)) return(pmax(eps, x))
+  # data frame or list
+  if(is.list(x) && all(sapply(x, is.numeric)))
+    return(lapply(x, posify, eps=eps))
+  warning("Internal error: posify did not recognise data format")
+  return(x)
 }
 
 divide.by.pixelarea <- function(x) {

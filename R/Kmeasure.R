@@ -296,7 +296,7 @@ second.moment.engine <-
         smolist[[i]] <- im(Re(smlist[[i]])[1:nr, 1:nc],
                            xcol.pad[1:nc], yrow.pad[1:nr],
                            unitname=unitsX)
-      smolist <- as.listof(smolist)
+      smolist <- as.solist(smolist)
       if(what == "smooth") {
         return(smolist)
       } else {
@@ -332,7 +332,7 @@ second.moment.engine <-
         Bart <- (bartlist[[i]])[ rtwist, ctwist]
         Bartlist[[i]] <- im(Mod(Bart),(-nc):(nc-1), (-nr):(nr-1))
       }
-      Bartlist <- as.listof(Bartlist)
+      Bartlist <- as.solist(Bartlist)
       if(what == "Bartlett")
         return(Bartlist)
       else
@@ -459,7 +459,7 @@ second.moment.engine <-
       mmlist[[i]] <-
         im(mom.i, xcol.ker[ctwist], yrow.ker[rtwist], unitname=unitsX)
     }
-    mmlist <- as.listof(mmlist)
+    mmlist <- as.solist(mmlist)
     if(what == "Kmeasure")
       return(mmlist)
     else 

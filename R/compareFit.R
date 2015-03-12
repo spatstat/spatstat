@@ -19,13 +19,15 @@ compareFit <- function(object, Fun, r=NULL, breaks=NULL,
   # try to get nice model names
   if(is.null(modelnames)) {
     if(inherits(trend, "formula") && is.interact(interaction) &&
-       inherits(object, "listof") && all(nzchar(names(object))) &&
+       inherits(object, c("anylist", "listof")) &&
+       all(nzchar(names(object))) &&
        length(names(object)) == nrow(h))
       modelnames <- names(object)
-    else if(inherits(trend, "listof") && all(nzchar(names(trend))) &&
+    else if(inherits(trend, c("anylist", "listof")) &&
+            all(nzchar(names(trend))) &&
             length(names(trend)) == nrow(h))
       modelnames <- names(trend) 
-    else if(inherits(interaction, "listof") &&
+    else if(inherits(interaction, c("anylist", "listof")) &&
             all(nzchar(names(interaction))) &&
             length(names(interaction)) == nrow(h))
       modelnames <- names(interaction)
@@ -62,7 +64,7 @@ compareFit <- function(object, Fun, r=NULL, breaks=NULL,
   if(N == 2)
     funs2toN <- list(funs2toN)
   # collect all functions in a list
-  funs <- as.listof(append(list(fun1), funs2toN))
+  funs <- as.anylist(append(list(fun1), funs2toN))
   names(funs) <- row.names(h)
   # collapse together
   out <- collapse.fv(funs, same=same, different=different)

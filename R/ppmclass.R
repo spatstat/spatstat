@@ -747,14 +747,14 @@ model.images.ppm <- function(object, W=as.owin(object), ...) {
   imagenames <- colnames(mm)
   if(!is.multitype(object)) {
     result <- lapply(as.list(mm), replace, list=ok, x=Z)
-    result <- as.listof(result)
+    result <- as.solist(result)
     names(result) <- imagenames
   } else {
     marx <- marks(Q$dummy)
     mmsplit <- split(mm, marx)
     result <- vector(mode="list", length=length(mmsplit))
     for(i in seq_along(mmsplit))
-      result[[i]] <- as.listof(lapply(as.list(mmsplit[[i]]),
+      result[[i]] <- as.solist(lapply(as.list(mmsplit[[i]]),
                                       replace, list=ok, x=Z))
     names(result) <- names(mmsplit)
     result <- do.call(hyperframe, result)

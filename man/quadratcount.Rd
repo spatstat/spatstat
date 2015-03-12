@@ -49,7 +49,7 @@
   The value of \code{quadratcount.splitppp} is a list of such
   contingency tables, each containing the quadrat counts for one of the
   component point patterns in \code{X}.
-  This list also has the class \code{"listof"} which has
+  This list also has the class \code{"solist"} which has
   print and plot methods.
 }
 \details{

@@ -38,7 +38,7 @@
   \code{"im"}) provided \code{drop=TRUE}.
   For vector-valued measures (or if \code{drop=FALSE}),
   a list of pixel images; the list also
-  belongs to the class \code{"listof"} so that it can be printed and plotted.
+  belongs to the class \code{"solist"} so that it can be printed and plotted.
 }
 \references{
   Baddeley, A., Turner, R.,

@@ -8,7 +8,8 @@
   \method{density}{ppp}(x, sigma, \dots,
         weights=NULL, edge=TRUE, varcov=NULL,
         at="pixels", leaveoneout=TRUE,
-        adjust=1, diggle=FALSE, se=FALSE) 
+        adjust=1, diggle=FALSE, se=FALSE,
+        positive=FALSE) 
 }
 \arguments{
   \item{x}{
@@ -54,6 +55,10 @@
   }
   \item{se}{
     Logical value indicating whether to compute standard errors as well.
+  }
+  \item{positive}{
+    Logical value indicating whether to force all density values to
+    be positive numbers. Default is \code{FALSE}.
   }
 }
 \value{
@@ -260,8 +265,19 @@
   probability map or relative risk surface (the spatially-varying
   probability of a given type), use \code{\link{relrisk}}.
 }
+\section{Negative Values}{
+  Negative and zero values of the density estimate are possible
+  when \code{at="pixels"} because of numerical errors in finite-precision
+  arithmetic.
+
+  By default, \code{density.ppp} does not try to repair such errors.
+  This would take more computation time and is not always needed.
+  (Also it would not be appropriate if \code{weights} include negative values.)
+
+  To ensure that the resulting density values are always positive,
+  set \code{positive=TRUE}.
+}
 \examples{
-  data(cells)
   if(interactive()) {
     opa <- par(mfrow=c(1,2))
     plot(density(cells, 0.05))

@@ -54,7 +54,7 @@
   \eqn{K} functions respectively. 
 
   The list can be plotted directly using \code{plot} (which dispatches to
-  \code{\link{plot.listof}}). 
+  \code{\link{plot.solist}}). 
 
   Each list entry retains the format
   of the output of the relevant estimating routine
@@ -74,7 +74,7 @@
   \email{r.turner@auckland.ac.nz}
 }
 \seealso{
-         \code{\link{plot.listof}},
+         \code{\link{plot.solist}},
          \code{\link{plot.fv}},
          \code{\link{fv.object}},
          \code{\link{Fest}},

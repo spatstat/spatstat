@@ -930,14 +930,14 @@ split.im <- function(x, f, ..., drop=FALSE) {
   if(drop)
     return(out)
   else 
-    return(as.listof(out))
+    return(as.solist(out))
 }
 
 by.im <- function(data, INDICES, FUN, ...) {
   stopifnot(is.im(data))
   V <- split(data, INDICES)
   U <- lapply(V, FUN, ...)
-  return(as.listof(U))
+  return(as.solist(U, demote=TRUE))
 }
 
 rebound.im <- function(x, rect) {

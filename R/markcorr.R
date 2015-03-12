@@ -281,7 +281,7 @@ markcorr <-
                               method=method, ...,
                               f1=f1, normalise=normalise, fargs=fargs)
     }
-    result <- as.listof(result)
+    result <- as.anylist(result)
     names(result) <- colnames(marx)
     return(result)
   }

@@ -80,7 +80,7 @@ hybrid.family <-
            separate <- TRUE
          }
          # return separate 'fv' or 'fasp' objects if required
-         results <- as.listof(results)
+         results <- as.anylist(results)
          if(separate) {
            if(plotit) {
              main0 <- "Pairwise interaction components"

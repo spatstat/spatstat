@@ -40,7 +40,7 @@ iplot.ppp <- function(x, ..., xname) {
   verifyclass(x, "ppp")
   requireNamespace("rpanel")
   
-  if(markformat(x) %in% c("hyperframe", "listof")) 
+  if(markformat(x) %in% c("hyperframe", "list"))
     marks(x) <- as.data.frame(as.hyperframe(marks(x)))
   if(markformat(x) == "dataframe" && ncol(marks(x)) > 1) {
     warning("Using only the first column of marks")

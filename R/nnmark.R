@@ -16,7 +16,7 @@ nnmark <- function(X, ..., k=1, at=c("pixels", "points")) {
                     result <- eval.im(mX[Y])
                   },
                   dataframe = {
-                    result <- as.listof(lapply(mX, function(z) eval.im(z[Y])))
+                    result <- as.solist(lapply(mX, function(z) eval.im(z[Y])))
                   },
                   stop("Marks must be a vector or dataframe"))
          },

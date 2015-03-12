@@ -286,7 +286,7 @@ tiles <- function(x) {
              out[[i]] <- solutionset(ima == lev[i])
            names(out) <- paste(lev)
          })
-  out <- as.listof(out)
+  out <- as.solist(out)
   return(out)
 }
 

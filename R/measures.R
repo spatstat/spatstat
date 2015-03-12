@@ -202,14 +202,14 @@ plot.msr <- function(x, ..., add=FALSE,
       attr(xj, "smoothdensity") <- smo[[j]]
       lis[[j]] <- xj
     }
-    lis <- as.listof(lis)
+    lis <- as.solist(lis)
     if(!is.null(cn <- colnames(x$val)))
       names(lis) <- cn
-    result <- do.call("plot.listof", resolve.defaults(list(lis),
-                                                      list(...),
-                                                      list(how=how,
-                                                           main=main,
-                                                           equal.scales=TRUE)))
+    result <- do.call(plot.solist, resolve.defaults(list(lis),
+                                                    list(...),
+                                                    list(how=how,
+                                                         main=main,
+                                                         equal.scales=TRUE)))
     return(invisible(result))
   }
   ## scalar measure
@@ -330,7 +330,7 @@ Smooth.msr <- function(X, ..., drop=TRUE) {
   val <- X$val
   result <- density(loc, weights=val, ...)
   if(!drop && is.im(result))
-    result <- listof(result)
+    result <- solist(result)
   return(result)
 }
 

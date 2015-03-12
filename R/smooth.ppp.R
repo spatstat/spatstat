@@ -202,7 +202,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                  }
                  attr(ratio, "warnings") <- uhoh
                }
-               result <- as.listof(ratio)
+               result <- as.solist(ratio)
                names(result) <- colnames(marx)
              })
     } else result <- NULL 
@@ -226,7 +226,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                  M <- do.call.matched(as.mask, list(w=as.owin(X), ...))
                }
                result[isconst] <- lapply(ra[1, isconst], as.im, W=M)
-               result <- as.listof(result)
+               result <- as.solist(result)
                names(result) <- colnames(oldmarx)
              })
     }

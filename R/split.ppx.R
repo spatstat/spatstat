@@ -78,7 +78,7 @@ split.ppx <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
   
   if(un)
      out <- lapply(out, unmark)
-  class(out) <- c("splitppx", "listof", class(out))
+  class(out) <- c("splitppx", "anylist", class(out))
   attr(out, "fsplit") <- fsplit
   return(out)
 }
@@ -102,7 +102,7 @@ summary.splitppx <- function(object, ...) {
 }
 
 print.summary.splitppx <- function(x, ...) {
-  class(x) <- "listof"
+  class(x) <- "anylist"
   print(x)
   invisible(NULL)
 }

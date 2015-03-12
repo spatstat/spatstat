@@ -42,6 +42,6 @@ allstats <- function(pp, ..., dataname=NULL,verb=FALSE) {
   attr(fns, "title") <- title
 
 #
-  fns <- as.listof(fns)
+  fns <- as.anylist(fns)
   return(fns)
 }

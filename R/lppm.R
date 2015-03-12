@@ -127,7 +127,7 @@ predict.lppm <- function(object, ...,
       out[[k]] <- linim(L, Z, df=df)
     }
     names(out) <- as.character(lev)
-    class(out) <- c("listof", class(out))
+    class(out) <- as.solist(out)
   }
   return(out)
 }
@@ -243,14 +243,14 @@ model.images.lppm <- function(object, L=as.linnet(object), ...) {
       m <- lapply(m, function(x, Z) eval.im(x * Z), Z=ZL)
       ## convert to linim
       m <- lapply(m, function(x, L) linim(L,x), L=L)
-      return(as.listof(m))
+      return(as.solist(m))
     } else {
       ## hyperframe, each column being a list of images
       mm <- lapply(as.list(m),
                    function(a) {
                      b <- lapply(a, function(x, Z) eval.im(x * Z), Z=ZL)
                      b <- lapply(b, function(x, L) linim(L,x), L=L)
-                     return(as.listof(b))
+                     return(as.solist(b))
                    })
       m <- do.call(hyperframe, mm)
     }

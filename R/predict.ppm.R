@@ -574,7 +574,7 @@ predict.ppm <- local({
           hi <- lo <- imago
           hi[] <- z[,1]
           lo[] <- z[,2]
-          est <- listof(hi, lo)
+          est <- solist(hi, lo)
           names(est) <- ci.names
         }
         if(se) {
@@ -598,7 +598,7 @@ predict.ppm <- local({
           outi[] <- z[newdata$marks == types[i]]
           out[[i]] <- outi
         }
-        out <- as.listof(out)
+        out <- as.solist(out)
         names(out) <- as.character(types)
       }
     }

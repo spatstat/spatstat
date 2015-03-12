@@ -496,7 +496,7 @@ rmh.default <- function(model,start=NULL,
 
 print.rmhInfoList <- function(x, ...) {
   cat("\nPre-digested Metropolis-Hastings algorithm parameters (rmhInfoList)\n")
-  print(as.listof(x))
+  print(as.anylist(x))
 }
 
 #---------------  rmhEngine -------------------------------------------
@@ -967,7 +967,7 @@ rmhEngine <- function(InfoList, ...,
     # Result of simulation is final state 'X'
     # Tack on the list of intermediate states
     names(Xlist) <- paste("Iteration", as.integer(blockend), sep="_")
-    attr(X, "saved") <- as.listof(Xlist)
+    attr(X, "saved") <- as.solist(Xlist)
   }
 
 # Append to the result information about how it was generated.

@@ -9,7 +9,7 @@ quadratcount <- function(X, ...) {
 }
 
 quadratcount.splitppp <- function(X, ...) {
-  as.listof(lapply(X, quadratcount, ...))
+  as.solist(lapply(X, quadratcount, ...))
 }
 
 quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
@@ -193,7 +193,7 @@ intensity.quadratcount <- function(X, ..., image=FALSE) {
 }
 
 ## The shift method is undocumented.
-## It is only needed in plot.listof
+## It is only needed in plot.listof / plot.solist / plot.layered
 
 shift.quadratcount <- function(X, ...) {
   attr(X, "tess") <- te <- shift(attr(X, "tess"), ...)

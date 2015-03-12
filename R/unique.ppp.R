@@ -60,7 +60,7 @@ duplicated.ppp <- function(x, ...,
          hyperframe = {
            result <- duplicated(as.data.frame(x))
          }, 
-         listof = {
+         list = {
            result <- duplicated(as.data.frame(as.hyperframe(x)))
          },
          stop(paste("Unknown mark type", sQuote(markformat(x))))
@@ -118,7 +118,7 @@ multiplicity.ppp <- function(x) {
            I <- I[agree]
            J <- J[agree]
          }, 
-         listof = stop("Not implemented for lists of marks")
+         list = stop("Not implemented for lists of marks")
          )
   if(length(I) == 0)
     return(rep.int(1L, np))
