@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.25 $ $Date: 2015/02/01 01:24:58 $
+# $Revision: 1.28 $ $Date: 2015/03/11 10:28:59 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -102,7 +102,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
     for(i in seq_along(out))
       out[[i]]$window <- til[[i]]
   }
-  class(out) <- c("splitppp", class(out))
+  class(out) <- c("splitppp", "ppplist", "solist", class(out))
   attr(out, "fsplit") <- fsplit
   attr(out, "fgroup") <- f
   return(out)
@@ -244,7 +244,7 @@ summary.splitppp <- function(object, ...) {
 }
 
 print.summary.splitppp <- function(x, ...) {
-  class(x) <- "listof"
+  class(x) <- "anylist"
   print(x)
   invisible(NULL)
 }
@@ -288,16 +288,16 @@ print.summary.splitppp <- function(x, ...) {
 }
   
 density.splitppp <- function(x, ...) {
-  as.listof(lapply(x, density, ...))
+  as.solist(lapply(x, density, ...), demote=TRUE)
 }
 
 plot.splitppp <- function(x, ..., main) {
   if(missing(main)) main <- short.deparse(substitute(x))
-  do.call("plot.listof",
+  do.call(plot.solist,
           resolve.defaults(list(x=x, main=main),
                            list(...),
                            list(equal.scales=TRUE)))
 }
 
-as.layered.splitppp <- function(X) { do.call("layered", X) }
+as.layered.splitppp <- function(X) { do.call(layered, X) }
 

@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.97 $	$Date: 2015/03/01 03:33:57 $
+#	$Revision: 4.98 $	$Date: 2015/03/12 02:13:45 $
 #
 #
 #
@@ -194,42 +194,56 @@ function(x, i, ...) {
 #
 #
 
-intersect.owin <- function(A, B, ..., fatal=TRUE, p) {
-  if(missing(A)) A <- NULL
-  if(missing(B)) B <- NULL
+intersect.owin <- function(..., fatal=TRUE, p) {
+  argh <- list(...)
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
-  liszt <- list(...)
+  ## handle 'solist' objects
+  argh <- expandSpecialLists(argh, "solist")
   rasterinfo <- list()
-  if(length(liszt) > 0) {
+  if(length(argh) > 0) {
     # explicit arguments controlling raster info
-    israster <- names(liszt) %in% names(formals(as.mask))
-    rasterinfo <- liszt[israster]
-    # handle intersection of more than two windows
-    isowin <- unlist(lapply(liszt, is.owin))
-    nextra <- sum(isowin)
-    if(nextra > 0) {
-      windows <- liszt[isowin]
-      ## handle case where B is not matched
-      if(is.null(B)) {
-        B <- windows[[1]]
-        windows <- windows[-1]
-        nextra <- nextra - 1
-      }
-      ## determine a common set of parameters for polyclip
-      p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
-      ## absorb all windows into B
-      for(i in seq_len(nextra))
-        B <- do.call(intersect.owin,
-                     append(list(B, windows[[i]], p=p),
-                            rasterinfo))
+    israster <- names(argh) %in% names(formals(as.mask))
+    if(any(israster)) {
+      rasterinfo <- argh[israster]
+      ## remaining arguments
+      argh <- argh[!israster]
     }
   }
-  if(missing(A) || is.null(A)) return(B)
-  if(missing(B) || is.null(B)) return(A)
-  verifyclass(A, "owin")
-  verifyclass(B, "owin")
-  #
+  ## look for window arguments
+  isowin <- sapply(argh, is.owin)
+  if(any(!isowin))
+    warning("Some arguments were not windows")
+  argh <- argh[isowin]
+  nwin <- length(argh)
+
+  if(nwin == 0) {
+    warning("No windows were given")
+    return(NULL)
+  }
+
+  ## at least one window
+  A <- argh[[1]]
+  if(nwin == 1) return(A)
+  ## at least two windows
+  B <- argh[[2]]
+  
+  if(nwin > 2) {
+    ## handle union of more than two windows
+    windows <- argh[-c(1,2)]
+    ## determine a common set of parameters for polyclip
+    p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
+    ## absorb all windows into B
+    for(i in seq_along(windows))
+      B <- do.call(intersect.owin,
+                   append(list(B, windows[[i]], p=p),
+                            rasterinfo))
+  }
+
+  ## There are now only two windows
+  if(is.empty(A)) return(A)
+  if(is.empty(B)) return(B)
+
   if(identical(A, B))
     return(A)
 
@@ -336,44 +350,54 @@ intersect.owin <- function(A, B, ..., fatal=TRUE, p) {
 }
 
 
-union.owin <- function(A, B, ..., p) {
-  if(missing(A)) A <- NULL
-  if(missing(B)) B <- NULL
+union.owin <- function(..., p) {
+  argh <- list(...)
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
-  liszt <- list(...)
+  ## handle 'solist' objects
+  argh <- expandSpecialLists(argh, "solist")
   rasterinfo <- list()
-  if(length(liszt) > 0) {
+  if(length(argh) > 0) {
     ## arguments controlling raster info
-    israster <- names(liszt) %in% names(formals(as.mask))
-    rasterinfo <- liszt[israster]
-    ## handle union of more than two windows
-    isowin <- unlist(lapply(liszt, is.owin))
-    nextra <- sum(isowin)
-    if(nextra > 0) {
-      windows <- liszt[isowin]
-      ## handle case where B is not matched
-      if(is.null(B)) {
-        B <- windows[[1]]
-        windows <- windows[-1]
-        nextra <- nextra - 1
-      }
-      ## determine a common set of parameters for polyclip
-      p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
-      ## absorb all windows into B
-      for(i in seq_len(nextra))
-        B <- do.call(union.owin,
-                     append(list(B, windows[[i]], p=p),
-                            rasterinfo))
+    israster <- names(argh) %in% names(formals(as.mask))
+    if(any(israster)) {
+      rasterinfo <- argh[israster]
+      ## remaining arguments
+      argh <- argh[!israster]
     }
-  } 
+  }
+  ## look for window arguments
+  isowin <- sapply(argh, is.owin)
+  if(any(!isowin))
+    warning("Some arguments were not windows")
+  argh <- argh[isowin]
+  #
+  nwin <- length(argh)
+  if(nwin == 0) {
+    warning("No windows were given")
+    return(NULL)
+  }
+  ## at least one window
+  A <- argh[[1]]
+  if(nwin == 1) return(A)
+  ## at least two windows
+  B <- argh[[2]]
+  
+  if(nwin > 2) {
+    ## handle union of more than two windows
+    windows <- argh[-c(1,2)]
+    ## determine a common set of parameters for polyclip
+    p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
+    ## absorb all windows into B
+    for(i in seq_along(windows))
+      B <- do.call(union.owin,
+                   append(list(B, windows[[i]], p=p),
+                          rasterinfo))
+  }
 
   ## There are now only two arguments
-  if(is.null(A) || is.empty(A)) return(B)
-  if(is.null(B) || is.empty(B)) return(A)
-
-  verifyclass(A, "owin")
-  verifyclass(B, "owin")
+  if(is.empty(A)) return(B)
+  if(is.empty(B)) return(A)
 
   if(identical(A, B))
     return(A)

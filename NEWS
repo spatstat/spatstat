@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.011
+        CHANGES IN spatstat VERSION 1.41-1.012
 
 OVERVIEW
 
@@ -28,14 +28,14 @@ NEW FUNCTIONS
    Copy the raw data files from an installed dataset
    to a chosen folder, for use in a practice exercise.
 
+   o density.ppplist
+   Method for 'density' for lists of point patterns.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o kppm
    The default for the weight function 'weightfun' has been changed, 
    for better performance.
-
-   o intersect.owin, union.owin, setminus.owin
-   New argument 'p' controls resolution of polygon clipping algorithm.
 
    o clickpoly, clickbox
    These functions now handle graphical arguments to polygon()
@@ -61,8 +61,25 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Return value now has an attribute 'lines' giving the 
    realisation of the Poisson line process.
 
+   o intersect.owin, union.owin, setminus.owin
+   New argument 'p' controls resolution of polygon clipping algorithm.
+
+   o intersect.owin, union.owin
+   Arguments may be lists of windows, of class 'solist'.
+   Formal arguments A and B have been removed.
+
+   o superimpose
+   Now handles lists of point patterns 
+   (objects of class 'ppplist' or 'splitppp')
+
    o plot.tess
    New argument 'do.plot'.
+
+   o relrisk, density.splitppp
+   Result is now of class 'solist'.
+
+   o split.ppp
+   Result now inherits class 'ppplist' and 'solist', as well as 'splitppp'
 
 BUG FIXES
 

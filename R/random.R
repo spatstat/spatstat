@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.73 $   $Date: 2015/02/23 00:21:39 $
+##    $Revision: 4.75 $   $Date: 2015/03/11 09:32:29 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -187,10 +187,13 @@ runifpoispp <- function(lambda, win = owin(c(0,1),c(0,1)), ...,
 
   ## will generate Poisson process in enclosing rectangle and trim it
   box <- boundingbox(win)
-  mean <- lambda * area(box)
-
+  meanN <- lambda * area(box)
+  
   if(nsim == 1) {
-    n <- rpois(1, mean)
+    n <- rpois(1, meanN)
+    if(!is.finite(n))
+      stop(paste("Unable to generate Poisson process with a mean of",
+                 meanN, "points"))
     X <- runifpoint(n, box)
     ## trim to window
     if(win$type != "rectangle")
@@ -199,7 +202,10 @@ runifpoispp <- function(lambda, win = owin(c(0,1),c(0,1)), ...,
   }
   result <- vector(mode="list", length=nsim)
   for(isim in 1:nsim) {
-    n <- rpois(1, mean)
+    n <- rpois(1, meanN)
+    if(!is.finite(n))
+      stop(paste("Unable to generate Poisson process with a mean of",
+                 meanN, "points"))
     X <- runifpoint(n, box)
     ## trim to window
     if(win$type != "rectangle")

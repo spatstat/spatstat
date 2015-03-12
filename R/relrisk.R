@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.29 $  $Date: 2014/12/30 11:01:15 $
+#  $Revision: 1.30 $  $Date: 2015/03/11 10:05:47 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -250,9 +250,9 @@ relrisk.ppp <- local({
       }
       switch(at,
              pixels={
-               probs <- as.listof(lapply(Deach, "/", e2=Dall))
+               probs <- as.solist(lapply(Deach, "/", e2=Dall))
                ## correct small numerical errors
-               probs <- as.listof(lapply(probs, clamp01))
+               probs <- as.solist(lapply(probs, clamp01))
                ## trap NaN values
                nbg <- lapply(probs, badvalues)
                nbg <- Reduce("|", nbg)
@@ -275,12 +275,12 @@ relrisk.ppp <- local({
                              + Vall * probs[[i]]^2)
                      SE[[i]] <- eval.im(sqrt(pmax(NUM, 0))/Dall)
                    }
-                   SE <- as.listof(SE)
+                   SE <- as.solist(SE)
                    names(SE) <- types
                    result <- list(estimate=probs, SE=SE)
                  }
                } else {
-                 risks <- as.listof(lapply(probs,
+                 risks <- as.solist(lapply(probs,
                                            function(z, d) {
                                              eval.im(ifelse(d > 0, z/d, NA))
                                            },
@@ -295,7 +295,7 @@ relrisk.ppp <- local({
                      NUM <- Veach[[i]] + Vctrl * risks[[i]]^2
                      SE[[i]] <- eval.im(sqrt(pmax(NUM, 0))/Dctrl)
                    }
-                   SE <- as.listof(SE)
+                   SE <- as.solist(SE)
                    names(SE) <- types
                    result <- list(estimate=risks, SE=SE)
                    

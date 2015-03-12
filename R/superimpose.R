@@ -17,7 +17,12 @@ superimpose.default <- function(...) {
   argh <- list(...)
   if(any(sapply(argh, is.lpp)) || any(sapply(argh, inherits, what="linnet")))
     return(superimpose.lpp(...))
-  return(superimpose.ppp(...))
+  ispl <- sapply(argh, inherits, what="ppplist")
+  if(!any(ispl))
+    return(superimpose.ppp(...))
+  yargh <- argh[!ispl]
+  for(i in which(ispl)) yargh <- append(yargh, argh[[i]])
+  return(do.call(superimpose.ppp, yargh))
 }
 
 superimpose.ppp <- function(..., W=NULL, check=TRUE) {

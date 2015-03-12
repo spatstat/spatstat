@@ -164,6 +164,7 @@
 \alias{exactPdt}
 \alias{exhibitStringList}
 \alias{expand.polynom}
+\alias{expandSpecialLists}
 \alias{expandwinPerfect}
 \alias{explain.ifnot}
 \alias{extractAIC.slrm}
@@ -902,6 +903,7 @@ exactdt(X, \dots)
 exactPdt(w)
 exhibitStringList(prefix, strings)
 expand.polynom(f)
+expandSpecialLists(x, special)
 expandwinPerfect(W, expand, amount)
 explain.ifnot(expr, context)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)

@@ -160,7 +160,7 @@
   \itemize{
     \item (if \code{at="pixels"})
     a list of pixel images, with one image for each possible type of point.
-    The result also belongs to the class \code{"listof"} so that it can
+    The result also belongs to the class \code{"solist"} so that it can
     be printed and plotted.
     \item
     (if \code{at="points"})

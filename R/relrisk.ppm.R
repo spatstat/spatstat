@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.3 $ $Date: 2014/11/22 03:51:17 $
+##  $Revision: 1.4 $ $Date: 2015/03/11 10:05:39 $
 ##
 
 relrisk.ppm <- local({
@@ -69,7 +69,7 @@ relrisk.ppm <- local({
                    result <- killglitches(result)
                  } else {
                    probs <- lapply(lambda.each, "/", e2=lambda.all)
-                   probs <- as.listof(lapply(probs, killglitches))
+                   probs <- as.solist(lapply(probs, killglitches))
                    estimate <- probs[[icase]]
                    SE <- SEprobPixels(model, probs)[[icase]]
                    SE <- killglitches(SE)
@@ -83,7 +83,7 @@ relrisk.ppm <- local({
                    result <- killglitches(result)
                  } else {
                    risks <- lapply(lambda.each, "/", e2=lambda.ctrl)
-                   risks <- as.listof(lapply(risks, killglitches))
+                   risks <- as.solist(lapply(risks, killglitches))
                    estimate <- risks[[icase]]
                    SE <- SErelriskPixels(model, risks, icontrol)[[icase]]
                    SE <- killglitches(SE)
@@ -149,24 +149,24 @@ relrisk.ppm <- local({
                  ## image of total intensity
                  lambda.all <- Reduce("+", lambda.each)
                  probs <- lapply(lambda.each, "/", e2=lambda.all)
-                 probs <- as.listof(lapply(probs, killglitches))
+                 probs <- as.solist(lapply(probs, killglitches))
                  if(!se) {
                    result <- probs
                  } else {
                    SE <- SEprobPixels(model, probs)
-                   SE <- as.listof(lapply(SE, killglitches))
+                   SE <- as.solist(lapply(SE, killglitches))
                    result <- list(estimate=probs, SE=SE)
                  }
                } else {
                  ## compute relative risks
                  risks <- lapply(lambda.each, "/",
                                  e2=lambda.each[[icontrol]])
-                 risks <- as.listof(lapply(risks, killglitches))
+                 risks <- as.solist(lapply(risks, killglitches))
                  if(!se) {
                    result <- risks
                  } else {
                    SE <- SErelriskPixels(model, risks, icontrol)
-                   SE <- as.listof(lapply(SE, killglitches))
+                   SE <- as.solist(lapply(SE, killglitches))
                    result <- list(estimate=risks, SE=SE)
                  }
                }
@@ -262,7 +262,7 @@ relrisk.ppm <- local({
     dS.um <- lapply(S.um, 
                     function(z, z0) mapply("-", e1=z, e2=z0, SIMPLIFY=FALSE),
                     z0=S.um[,icontrol,drop=TRUE])
-    R.um <- mapply(function(a, b) as.listof(lapply(a, "*", e2=b)),
+    R.um <- mapply(function(a, b) as.solist(lapply(a, "*", e2=b)),
                    a=dS.um,
                    b=riskvalues,
                    SIMPLIFY=FALSE)
@@ -281,8 +281,8 @@ relrisk.ppm <- local({
       VAR[[type]] <- v
     }
     names(VAR) <- types
-    VAR <- as.listof(VAR)
-    SE <- as.listof(lapply(VAR, sqrt))
+    VAR <- as.solist(VAR)
+    SE <- as.solist(lapply(VAR, sqrt))
     return(SE)
   }
 
@@ -307,7 +307,7 @@ relrisk.ppm <- local({
     ## Sdif.um is a list of lists of images.
     ##   List of length ntypes,
     ##   each entry being an imlist of length ncoef
-    P.um <- mapply(function(a, b) as.listof(lapply(a, "*", e2=b)),
+    P.um <- mapply(function(a, b) as.solist(lapply(a, "*", e2=b)),
                    Sdif.um, 
                    probvalues, 
                    SIMPLIFY=FALSE)
@@ -326,8 +326,8 @@ relrisk.ppm <- local({
       VAR[[m]] <- v
     }
     names(VAR) <- types
-    VAR <- as.listof(VAR)
-    SE <- as.listof(lapply(VAR, sqrt))
+    VAR <- as.solist(VAR)
+    SE <- as.solist(lapply(VAR, sqrt))
   }
   
   SEprobPoints <- function(model, probvalues) {

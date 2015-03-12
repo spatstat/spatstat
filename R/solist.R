@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.6 $ $Date: 2015/01/21 02:34:58 $
+## $Revision: 1.9 $ $Date: 2015/03/12 01:46:17 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -159,3 +159,17 @@ solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {
   return(u)
 }
 
+density.ppplist <- function(x, ...) {
+  as.solist(lapply(x, density, ...), demote=TRUE)
+}
+
+expandSpecialLists <- function(x, special="solist") {
+  ## x is a list which may include entries which are lists, of class 'lclass'
+  ## unlist these entries only
+  hit <- sapply(x, inherits, what=special) 
+  if(!any(hit)) return(x)
+  # wrap each *non*-special entry in list()
+  x[!hit] <- lapply(x[!hit], list)
+  # now strip one layer of list() from all entries
+  return(unlist(x, recursive=FALSE))
+}

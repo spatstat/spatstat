@@ -19,7 +19,7 @@
 \arguments{
   \item{\dots}{
     Any number of arguments, each of which represents either a point
-    pattern or a line segment pattern. 
+    pattern or a line segment pattern or a list of point patterns.
   }
   \item{W}{
     Optional. Data determining the window for the resulting pattern.
@@ -50,19 +50,15 @@
   of line segment patterns, and a default method. There is also
   a method for \code{lpp}, described separately in
   \code{\link{superimpose.lpp}}.
-  The dispatch to a method is determined by the class of the first
-  argument in \code{\dots}. 
+
+  The dispatch to a method is initially determined
+  by the class of the \emph{first} argument in \code{\dots}.
   \itemize{
     \item \code{default}:  If the first argument is 
     \emph{not} an object of class \code{ppp} or \code{psp}, then the
     default method \code{superimpose.default} is executed.
-    All arguments in \code{\dots}
-    must have components \code{x} and \code{y}
-    representing spatial coordinates. They may include
-    objects of class \code{ppp}.
-    The result will be either a \code{list(x,y)}
-    or a point pattern (objects of class \code{ppp})
-    as explained below.
+    This checks the class of all arguments, and dispatches to the
+    appropriate method. Arguments of class \code{ppplist} can be handled.
     \item \code{ppp}:
     If the first \code{\dots} argument is an object of
     class \code{ppp} then the method \code{superimpose.ppp}

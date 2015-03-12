@@ -7,15 +7,15 @@
   Yields the intersection, union or set subtraction of windows.
 }
 \usage{
-   intersect.owin(A, B, \dots, fatal=TRUE, p)
-   union.owin(A, B, \dots, p)
+   intersect.owin(\dots, fatal=TRUE, p)
+   union.owin(\dots, p)
    setminus.owin(A, B, \dots, p)
 }
 \arguments{
-  \item{A}{A window object (see Details).}
-  \item{B}{A window object.}
+  \item{A,B}{Windows (objects of class \code{"owin"})
+    or data acceptable to \code{\link{as.owin}}.}
   \item{\dots}{
-    Additional windows,
+    Windows,
     or arguments passed to \code{\link{as.mask}}
     to control the discretisation.
   }
@@ -29,32 +29,41 @@
   }
 }
 \value{
-  A window (object of class \code{"owin"}).
+  A window (object of class \code{"owin"})
+  or possibly \code{NULL}.
 }
 \details{
-  The function \code{intersect.owin} computes the intersection between the
-  two windows \code{A} and \code{B}, while
+  The function \code{intersect.owin} computes the intersection between
+  the windows given in \code{\dots}, while 
   \code{union.owin} computes their union.
   The function \code{setminus.owin} computes the intersection of
   \code{A} with the complement of \code{B}.
 
-  The arguments \code{A} and \code{B} must be window objects
-  (either objects of class \code{"owin"}, or data that can be
-  coerced to this class by \code{\link{as.owin}}).
+  For \code{intersect.owin} and \code{union.owin}, 
+  the arguments \code{\dots} must be either
+  \itemize{
+    \item window objects of class \code{"owin"},
+    \item data that can be coerced to this class by
+    \code{\link{as.owin}}),
+    \item lists of windows, of class \code{"solist"},
+    \item named arguments of \code{\link{as.mask}} to control
+    the discretisation if required.
+  }
+  For \code{setminus.owin}, the arguments \code{\dots}
+  must be named arguments of \code{\link{as.mask}}.
 
   If the intersection is empty, then if \code{fatal=FALSE}
   the result is NULL, while if \code{fatal=TRUE} an error occurs.
-
-  The intersection or union of more than two windows can also be
-  computed. For \code{intersect.owin} and \code{union.owin} the
-  arguments \code{\dots} can include additional window objects.
 }
 
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{is.subset.owin}},
