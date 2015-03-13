@@ -5,13 +5,13 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.13 $    $Date: 2015/02/24 01:46:37 $
+#  $Revision: 1.14 $    $Date: 2015/03/13 07:31:46 $
 #
 
 rLGCP <- local({
 
   rLGCP <- function(model="exp", mu = 0, param = NULL, ...,
-                    win=NULL, saveLambda=TRUE) {
+                    win=NULL, saveLambda=TRUE, nsim=1, drop=TRUE) {
     ## validate
     if (!(is.numeric(mu) || is.function(mu) || is.im(mu))) 
       stop(paste(sQuote("mu"), "must be a constant, a function or an image"))
@@ -25,13 +25,13 @@ rLGCP <- local({
       stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
     ## 
     do.rLGCP(model=model, mu=mu, param=param, ...,
-             win=win, saveLambda=saveLambda)
+             win=win, saveLambda=saveLambda, nsim=nsim, drop=drop)
   }
 
   do.rLGCP <- function(model="exp", mu = 0, param = NULL, ...,
                        win=NULL, saveLambda=TRUE,
                        eps = NULL, dimyx = NULL, xy = NULL,
-                       modelonly=FALSE) {
+                       modelonly=FALSE, nsim=1, drop=TRUE) {
     ## make RF model object from RandomFields package
     ## get the 'model generator'
     modelname <- if(model == "exponential") "exp" else model
@@ -71,23 +71,30 @@ rLGCP <- local({
             lookup.im(mu, xx, yy, naok=TRUE, strict=TRUE)
     muxy[is.na(muxy)] <- -Inf
 
-    ## generate zero-mean Gaussian random field
-    spc <- RandomFields::RFoptions()$general$spConform
-    if(spc) RandomFields::RFoptions(spConform=FALSE)
-    z <- RandomFields::RFsimulate(rfmodel, xcol, yrow, grid = TRUE)
-    if(spc) RandomFields::RFoptions(spConform=TRUE)
+    stopifnot(nsim >= 1)
+    result <- vector(mode="list", length=nsim)
+    for(i in 1:nsim) {
+      ## generate zero-mean Gaussian random field
+      spc <- RandomFields::RFoptions()$general$spConform
+      if(spc) RandomFields::RFoptions(spConform=FALSE)
+      z <- RandomFields::RFsimulate(rfmodel, xcol, yrow, grid = TRUE)
+      if(spc) RandomFields::RFoptions(spConform=TRUE)
 
-    ## convert to log-Gaussian image
-    logLambda <- muxy + z
-    Lambda <- matrix(exp(logLambda), nrow=dim[1], ncol=dim[2], byrow=TRUE)
-    Lambda <- as.im(Lambda, W=w)
-    ## generate Poisson points
-    X <- rpoispp(Lambda)[win]
-    ## 
-    if(saveLambda)
-      attr(X, "Lambda") <- Lambda
-  
-    return(X)
+      ## convert to log-Gaussian image
+      logLambda <- muxy + z
+      Lambda <- matrix(exp(logLambda), nrow=dim[1], ncol=dim[2], byrow=TRUE)
+      Lambda <- as.im(Lambda, W=w)
+      ## generate Poisson points
+      X <- rpoispp(Lambda)[win]
+      ## 
+      if(saveLambda)
+        attr(X, "Lambda") <- Lambda
+      result[[i]] <- X
+    }
+    if(drop && nsim == 1)
+      return(result[[1]])
+    names(result) <- paste("Simulation", 1:nsim)
+    return(as.solist(result))
   }
 
   rLGCP

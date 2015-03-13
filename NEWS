@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.014
+        CHANGES IN spatstat VERSION 1.41-1.015
 
 OVERVIEW
 
@@ -94,6 +94,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o split.ppp
    Result now inherits class 'ppplist' and 'solist', as well as 'splitppp'
+
+   o rLGCP
+   New argument 'nsim' allows multiple patterns to be generated.
 
 BUG FIXES
 

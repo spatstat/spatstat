@@ -6,7 +6,9 @@
   log-Gaussian Cox process.
 }
 \usage{
- rLGCP(model="exp", mu = 0, param = NULL, ..., win=NULL, saveLambda=TRUE)
+ rLGCP(model="exp", mu = 0, param = NULL,
+       \dots,
+       win=NULL, saveLambda=TRUE, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{model}{
@@ -38,12 +40,19 @@
     simulated random intensity will also be saved,
     and returns as an attribute of the point pattern.
   }
+  \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
-  The simulated point pattern (an object of class \code{"ppp"}).
+  A point pattern (object of class \code{"ppp"})
+  or a list of point patterns.
 
-  Additionally, the simulated intensity function is
-  returned as an attribute \code{"Lambda"},
+  Additionally, the simulated intensity function for each point pattern is
+  returned as an attribute \code{"Lambda"} of the point pattern,
   if \code{saveLambda=TRUE}.
 }
 \details{
