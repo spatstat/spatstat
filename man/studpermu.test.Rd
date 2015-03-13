@@ -4,7 +4,8 @@
   Studentised Permutation Test
 }
 \description{
-  Ute Hahn's studentised permutation test
+  Perform a studentised permutation test for a difference between
+  groups of point patterns.
 }
 \usage{
    studpermu.test(X, formula, summaryfunction = Kest,
@@ -68,29 +69,59 @@
   }
 }
 \details{
-  Studentized permutation test for grouped point patterns.
+  This function performs the studentized permutation test
+  of Hahn (2012) for a difference between groups of point patterns.
 
-  Interpreted version, random permutations only.
-  
+  The first argument \code{X} should be either
+  \describe{
+    \item{a list of lists of point patterns.}{
+      Each element of \code{X} will be interpreted as a group of
+      point patterns, assumed to be replicates of the same point process.
+    }
+    \item{a hyperframe:}{
+      One column of the hyperframe should contain point patterns,
+      and another column should contain a factor indicating the
+      grouping. The argument \code{formula} should be a formula in the
+      \R language specifying the grouping: it should be of the form
+      \code{P ~ G} where \code{P} is the name of the column of point
+      patterns, and \code{G} is the name of the factor.
+    }
+  }
   A group needs to contain at least two point patterns with at least
   \code{minpoints} points in each pattern.
 
-  Returns an object of class \code{"htest"} and \code{"studpermutest"},
-  that can be plotted. The plot shows the summary functions for the
+  The function returns an object of class \code{"htest"}
+  and \code{"studpermutest"} that can be printed and plotted.
+  The printout shows the test result and \eqn{p}-value.
+  The plot shows the summary functions for the
   groups (and the group means if requested).
 }
 \value{
   Object of class \code{"studpermutest"}.
 }
+\references{
+  Hahn, U. (2012) 
+  A studentized permutation test for the comparison of
+  spatial point patterns.
+  \emph{Journal of the American Statistical Association}
+  \bold{107} (498), 754--764.
+}
 \author{
   Ute Hahn.
 
-  Modified by Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Modified for \code{spatstat} by
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \examples{
-  42
+\donttest{
+  testpyramidal <- studpermu.test(pyramidal, Neurons ~ group)
+}
 }
 \keyword{spatial}
 \keyword{htest}

@@ -7,7 +7,7 @@
 }
 \usage{
  runifpoint(n, win=owin(c(0,1),c(0,1)), giveup=1000, warn=TRUE, \dots,
-            nsim=1, drop=TRUE)
+            nsim=1, drop=TRUE, ex=NULL)
 }
 \arguments{
   \item{n}{
@@ -32,6 +32,12 @@
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
     result will be a point pattern, rather than a list 
     containing a point pattern.
+  }
+  \item{ex}{
+    Optional. A point pattern to use as the example.
+    If \code{ex} is given and \code{n} and \code{win} are missing,
+    then \code{n} and \code{win} will be calculated from
+    the point pattern \code{ex}.
   }
 }
 \value{
@@ -85,6 +91,10 @@
  pp <- runifpoint(100, letterR)
  # binary image mask
  pp <- runifpoint(100, as.mask(letterR))
+ ##
+ # randomising an existing point pattern
+ runifpoint(npoints(cells), win=Window(cells))
+ runifpoint(ex=cells)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

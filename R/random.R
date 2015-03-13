@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.75 $   $Date: 2015/03/11 09:32:29 $
+##    $Revision: 4.76 $   $Date: 2015/03/13 11:15:51 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -76,12 +76,18 @@ runifdisc <- function(n, radius=1, centre=c(0,0), ..., nsim=1, drop=TRUE)
 
 
 runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
-                       giveup=1000, warn=TRUE, ..., nsim=1, drop=TRUE)
+                       giveup=1000, warn=TRUE, ...,
+                       nsim=1, drop=TRUE, ex=NULL)
 {
-  win <- as.owin(win)
-    
-  check.1.integer(n)
-  stopifnot(n >= 0)
+  if(missing(n) && missing(win) && !is.null(ex)) {
+    stopifnot(is.ppp(ex))
+    n <- npoints(ex)
+    win <- Window(ex)
+  } else {
+    win <- as.owin(win)
+    check.1.integer(n)
+    stopifnot(n >= 0)
+  }
 
   if(n == 0) {
     emp <- ppp(numeric(0), numeric(0), window=win)
@@ -351,32 +357,36 @@ rpoint <- function(n, f, fmax=NULL,
 }
 
 rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
-                    nsim=1, drop=TRUE) {
+                    nsim=1, drop=TRUE, ex=NULL) {
   ## arguments:
   ##     lambda  intensity: constant, function(x,y,...) or image
   ##     lmax     maximum possible value of lambda(x,y,...)
   ##     win     default observation window (of class 'owin')
   ##   ...       arguments passed to lambda(x, y, ...)
   ##     nsim    number of replicate simulations
-  
-  if(!(is.numeric(lambda) || is.function(lambda) || is.im(lambda)))
-    stop(paste(sQuote("lambda"),
-               "must be a constant, a function or an image"))
-  if(is.numeric(lambda) && !(length(lambda) == 1 && lambda >= 0))
-    stop(paste(sQuote("lambda"),
-               "must be a single, nonnegative number"))
-  if(!is.null(lmax)) {
-    if(!is.numeric(lmax))
-      stop("lmax should be a number")
-    if(length(lmax) > 1)
-      stop("lmax should be a single number")
+
+  if(missing(lambda) && is.null(lmax) && missing(win) && !is.null(ex)) {
+    lambda <- intensity(unmark(ex))
+    win <- Window(ex)
+  } else {
+    if(!(is.numeric(lambda) || is.function(lambda) || is.im(lambda)))
+      stop(paste(sQuote("lambda"),
+                 "must be a constant, a function or an image"))
+    if(is.numeric(lambda) && !(length(lambda) == 1 && lambda >= 0))
+      stop(paste(sQuote("lambda"),
+                 "must be a single, nonnegative number"))
+    if(!is.null(lmax)) {
+      if(!is.numeric(lmax))
+        stop("lmax should be a number")
+      if(length(lmax) > 1)
+        stop("lmax should be a single number")
+    }
+    win <- if(is.im(lambda))
+      rescue.rectangle(as.owin(lambda))
+    else
+      as.owin(win)
   }
   
-  win <- if(is.im(lambda))
-    rescue.rectangle(as.owin(lambda))
-  else
-    as.owin(win)
-    
   if(is.numeric(lambda)) 
     ## uniform Poisson
     return(runifpoispp(lambda, win, nsim=nsim, drop=drop))

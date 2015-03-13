@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.015
+        CHANGES IN spatstat VERSION 1.41-1.016
 
 OVERVIEW
 
-   o We thank Ben Taylor for contributions.
+   o We thank Ben Taylor and Ute Hahn for contributions.
 
    o Version nickname: 'Lifestyle Choice'
 
@@ -18,6 +18,10 @@ OVERVIEW
    o Improvements and bug fixes.
 
 NEW FUNCTIONS
+
+   o studpermu.test
+   Studentised permutation test for difference between groups of point patterns.
+   Generously contributed by Ute Hahn.
 
    o as.data.frame.owin
    Convert a window to a data frame.
@@ -97,6 +101,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o rLGCP
    New argument 'nsim' allows multiple patterns to be generated.
+
+   o rpoispp, runifpoint
+   New argument 'ex' makes it possible to generate a random pattern
+   similar to an example point pattern.
 
 BUG FIXES
 

@@ -7,7 +7,7 @@
   Includes CSR (complete spatial randomness).
 }
 \usage{
- rpoispp(lambda, lmax=NULL, win=owin(), \dots, nsim=1, drop=TRUE)
+ rpoispp(lambda, lmax=NULL, win=owin(), \dots, nsim=1, drop=TRUE, ex=NULL)
 }
 \arguments{
   \item{lambda}{
@@ -33,6 +33,12 @@
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
     result will be a point pattern, rather than a list 
     containing a point pattern.
+  }
+  \item{ex}{
+    Optional. A point pattern to use as the example.
+    If \code{ex} is given and \code{lambda,lmax,win} are missing,
+    then \code{lambda} and \code{win} will be calculated from
+    the point pattern \code{ex}.
   }
 }
 \value{
@@ -135,6 +141,7 @@
 
  # randomising an existing point pattern
  rpoispp(intensity(cells), win=Window(cells))
+ rpoispp(ex=cells)
 }
 \author{
 Adrian Baddeley
