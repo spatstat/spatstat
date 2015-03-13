@@ -34,7 +34,7 @@ cdf.test.mppm <- function(model, covariate,
                  dQuote(covariate)))
     covname <- covariate
     covariate <- data[, covname, drop=TRUE]
-  } else if(inherits(covariate, "listof")) {
+  } else if(inherits(covariate, c("listof", "anylist"))) {
     if(length(covariate) != npat)
       stop(paste("Length of list of covariate values does not match",
                  "number of point patterns in data of original model"))

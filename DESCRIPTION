@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.41-1.013
-Nickname: Stitch in Time
-Date: 2015-03-12
+Version: 1.41-1.014
+Nickname: Lifestyle Choice
+Date: 2015-03-13
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

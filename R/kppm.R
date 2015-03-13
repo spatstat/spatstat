@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.102 $ $Date: 2015/03/11 06:07:26 $
+# $Revision: 1.103 $ $Date: 2015/03/13 06:13:18 $
 #
 
 kppm <- function(X, ...) {
@@ -921,13 +921,16 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
 }
 
 predict.kppm <- function(object, ...) {
-  predict(object$po, ...)
+  predict(as.ppm(object), ...)
 }
 
 fitted.kppm <- function(object, ...) {
-  fitted(object$po, ...)
+  fitted(as.ppm(object), ...)
 }
 
+residuals.kppm <- function(object, ...) {
+  residuals(as.ppm(object), ...)
+}
 
 simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
                           window=NULL, covariates=NULL,

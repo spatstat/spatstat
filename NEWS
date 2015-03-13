@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.013
+        CHANGES IN spatstat VERSION 1.41-1.014
 
 OVERVIEW
 
    o We thank Ben Taylor for contributions.
 
-   o Version nickname: 'Stitch in Time'
+   o Version nickname: 'Lifestyle Choice'
 
    o Improved behaviour of polygon geometry operations.
 
