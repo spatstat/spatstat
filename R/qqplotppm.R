@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.24 $   $Date: 2013/04/25 06:37:43 $
+#  $Revision: 1.25 $   $Date: 2015/03/16 11:02:36 $
 #
 
 qqplot.ppm <-
@@ -223,8 +223,9 @@ qqplot.ppm <-
   return(invisible(result))
 }
 
-plot.qqppm <- function(x, ..., limits=TRUE, monochrome=FALSE,
-                               limcol=if(monochrome) "black" else "red") {
+plot.qqppm <- function(x, ..., limits=TRUE,
+                       monochrome=spatstat.options('monochrome'),
+                       limcol=if(monochrome) "black" else "red") {
   stopifnot(inherits(x, "qqppm"))
   default.type <- if(length(x$x) > 150) "l" else "p"
   myplot <- function(object,

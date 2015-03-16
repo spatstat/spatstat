@@ -4,7 +4,7 @@
 #  Class of optimised bandwidths
 #  Plotting the object displays the optimisation criterion
 #
-#  $Revision: 1.21 $  $Date: 2013/07/08 04:54:41 $
+#  $Revision: 1.22 $  $Date: 2015/03/16 10:39:38 $
 #
 
 bw.optim <- function(cv, h, iopt=which.min(cv), ...,
@@ -96,8 +96,10 @@ plot.bw.optim <- function(x, ...,
   }
   # show optimal value?
   if(showopt) {
-    hopt <- as.numeric(x)
-    do.call("abline", append(list(v=hopt), optargs))
+    hoptim <- as.numeric(x)
+    if(spatstat.options('monochrome'))
+      optargs <- col.args.to.grey(optargs)
+    do.call("abline", append(list(v=hoptim), optargs))
   }
   if(is.null(out)) return(invisible(NULL))
   return(out)

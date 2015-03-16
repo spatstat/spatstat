@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.33 $	$Date: 2015/01/07 06:24:47 $
+#    $Revision: 2.34 $	$Date: 2015/03/16 10:27:39 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -44,9 +44,9 @@ doMultiStraussHard <- local({
      # ensure factor levels are acceptable for column names (etc)
      lxname <- make.names(lx, unique=TRUE)
 
-     # list all UNORDERED pairs of types to be checked
+     # list all UNORDERED pairs of types to be counted
      # (the interaction must be symmetric in type, and scored as such)
-     uptri <- (row(r) <= col(r)) & (!is.na(r) | !is.na(h))
+     uptri <- (row(r) <= col(r)) & !is.na(r)
      mark1 <- (lx[row(r)])[uptri]
      mark2 <- (lx[col(r)])[uptri]
      # corresponding names
@@ -55,7 +55,7 @@ doMultiStraussHard <- local({
      vname <- apply(cbind(mark1name,mark2name), 1, paste, collapse="x")
      vname <- paste("mark", vname, sep="")
      npairs <- length(vname)
-     # list all ORDERED pairs of types to be checked
+     # list all ORDERED pairs of types to be counted
      # (to save writing the same code twice)
      different <- mark1 != mark2
      mark1o <- c(mark1, mark2[different])
@@ -204,7 +204,7 @@ doMultiStraussHard <- local({
           r <- self$par$iradii
           h <- self$par$hradii
           # list all relevant unordered pairs of types
-          uptri <- (row(r) <= col(r)) & (!is.na(r) | !is.na(h))
+          uptri <- (row(r) <= col(r)) & !is.na(r)
           index1 <- (row(r))[uptri]
           index2 <- (col(r))[uptri]
           npairs <- length(index1)

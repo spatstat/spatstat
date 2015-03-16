@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.016
+        CHANGES IN spatstat VERSION 1.41-1.017
 
 OVERVIEW
 
    o We thank Ben Taylor and Ute Hahn for contributions.
 
    o Version nickname: 'Lifestyle Choice'
+
+   o Permutation test for difference between groups of point patterns.
 
    o Improved behaviour of polygon geometry operations.
 
@@ -106,6 +108,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'ex' makes it possible to generate a random pattern
    similar to an example point pattern.
 
+   o persp.im, nnclean, plot.qqppm, plot.bw.optim
+   These plotting functions now obey spatstat.options('monochrome')
+
 BUG FIXES
 
    o union.owin
@@ -115,6 +120,11 @@ BUG FIXES
 
    o as.owin.data.frame
    Crashed if the window was not connected.
+   Fixed.
+
+   o MultiStraussHard
+   Generated misleading error messages (e.g. 'model is invalid') 
+   when arguments 'iradii' and 'hradii' did not have the same pattern of NA's.
    Fixed.
 
    o plot.solist

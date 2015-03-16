@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.10 $   $Date: 2015/01/19 12:00:33 $
+#   $Revision: 1.11 $   $Date: 2015/03/16 10:52:23 $
 #
 
 
@@ -63,6 +63,16 @@ to.grey <- function(x, weights=c(0.299, 0.587, 0.114)) {
   y <- col2rgb(x)
   z <- (weights %*% y)/(255 * sum(weights))
   return(grey(z))
+}
+
+is.col.argname <- function(x) {
+  return(nzchar(x) & ((x == "col") | (substr(x, 1, 4) == "col.")))
+}
+
+col.args.to.grey <- function(x) {
+  if(any(hit <- is.col.argname(names(x))))
+    x[hit] <- lapply(x[hit], to.grey)
+  return(x)
 }
 
 # versions of rgb() and hsv() that work with NA values

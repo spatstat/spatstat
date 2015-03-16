@@ -181,11 +181,14 @@ nncleanEngine <-
                 "\tp =", signif(p,4), "\n"))
   }
   if(plothist) {
+    dotargs <- list(...)
+    if(spatstat.options('monochrome'))
+      dotargs <- col.args.to.grey(dotargs)
     ## compute plot limits to include both histogram and density
     xlim <- c(0, max(kthNND))
     H <- do.call("hist",
                  resolve.defaults(list(kthNND, plot=FALSE, warn.unused=FALSE),
-                                  list(...), 
+                                  dotargs,
                                   list(nclass=40)))
     barheights <- H$density
     support <- seq(from=xlim[1], to=xlim[2], length.out = 200)
@@ -197,7 +200,7 @@ nncleanEngine <-
     reallyplot <- resolve.1.default("plot", list(...), list(plot=TRUE))
     H <- do.call("hist",
                  resolve.defaults(list(kthNND, probability=TRUE),
-                                  list(...),
+                                  dotargs,
                                   list(plot=TRUE,
                                        warn.unused=reallyplot,
                                        nclass=40,
@@ -208,9 +211,10 @@ nncleanEngine <-
     H$xname <- xlab
     if(reallyplot) {
       box()
-      do.call("lines", resolve.defaults(list(x=support, y=fittedy),
-                                        lineargs,
-                                        list(col="green", lwd=2)))
+      lineargs <- resolve.defaults(lineargs, list(col="green", lwd=2))
+      if(spatstat.options("monochrome"))
+        lineargs <- col.args.to.grey(lineargs)
+      do.call("lines", append(list(x=support, y=fittedy), lineargs))
     }
   }
   #

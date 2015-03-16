@@ -122,8 +122,12 @@ persp.im <- local({
     } else 
       zscale <- zlim <- NULL
 
+    dotargs <- list(...)
+    if(spatstat.options("monochrome"))
+      dotargs <- col.args.to.grey(dotargs)
+    
     yargh <- resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
-                              list(...),
+                              dotargs,
                               pop,
                               colinfo,
                               list(xlab="x", ylab="y", zlab=xname),

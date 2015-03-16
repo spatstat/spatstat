@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.63 $  $Date: 2014/12/27 06:21:03 $
+#   $Revision: 1.64 $  $Date: 2015/03/16 12:00:51 $
 #
 #
 
@@ -617,14 +617,17 @@ spatstatRmhInfo <- function(cifname) {
               check.finite(iradii, ctxt)
 
               MultiPair.checkmatrix(hradii, ntypes, "par$hradii")
-              hradii[is.na(hradii)] <- 0
+              nah <- is.na(hradii)
+              hradii[nah] <- 0
               check.finite(hradii, ctxt)
 
               explain.ifnot(all(beta >= 0), ctxt)
               explain.ifnot(all(gamma >= 0), ctxt)
               explain.ifnot(all(iradii >= 0), ctxt)
               explain.ifnot(all(hradii >= 0), ctxt)
-              explain.ifnot(all(iradii >= hradii), ctxt)
+
+              comparable <- !nar & !nah
+              explain.ifnot(all((iradii >= hradii)[comparable]), ctxt)
 
               par <- list(beta=beta,gamma=gamma,iradii=iradii,hradii=hradii)
               return(par)

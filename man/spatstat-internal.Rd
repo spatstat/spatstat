@@ -88,6 +88,7 @@
 \alias{crosspairquad}
 \alias{cobble.xy}
 \alias{codetime}
+\alias{col.args.to.grey}
 \alias{colouroutputs}
 \alias{colouroutputs<-}
 \alias{commasep}
@@ -257,6 +258,7 @@
 \alias{invokeColourmapRule}
 \alias{is.atomicQtest}
 \alias{is.cadlag}
+\alias{is.col.argname}
 \alias{is.data}
 \alias{is.expandable}
 \alias{is.expandable.ppm}
@@ -804,6 +806,7 @@ conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
+col.args.to.grey(x)
 colouroutputs(x)
 colouroutputs(x) <- value
 commasep(x, join, flatten)
@@ -999,6 +1002,7 @@ intY.xypolygon(polly)
 invokeColourmapRule(colfun, x, \dots, zlim, colargs)
 is.atomicQtest(x)
 is.cadlag(s)
+is.col.argname(x)
 is.data(Q)
 is.expandable(x)
 \method{is.expandable}{ppm}(x)  
@@ -1202,7 +1206,8 @@ plotPolygonBdry(x, \dots)
 \method{plot}{plotpairsim}(x, \dots)
 \method{plot}{profilepl}(x, \dots, add, main, tag, coeff, xvariable,
                          col, lty, lwd, col.opt, lty.opt, lwd.opt)
-\method{plot}{qqppm}(x, \dots, limits=TRUE, monochrome=FALSE,
+\method{plot}{qqppm}(x, \dots, limits=TRUE,
+           monochrome=spatstat.options('monochrome'),
            limcol=if(monochrome) "black" else "red")
 \method{plot}{spatialcdf}(x, \dots, xlab, ylab)
 \method{plot}{studpermutest}(x, fmla, \dots,
