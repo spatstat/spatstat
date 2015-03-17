@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.7 $ $Date: 2015/03/08 04:25:06 $
+##  $Revision: 1.8 $ $Date: 2015/03/17 06:49:08 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -209,7 +209,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       nrows <- as.integer(ceiling(n/ncols))
     else stopifnot(nrows * ncols >= length(x))
     nblank <- ncols * nrows - n
-    if(allfv) {
+    if(allfv || plotcommand == "persp") {
       ## Function plots do not have physical 'size'
       sizes.known <- FALSE
     } else {
@@ -413,21 +413,20 @@ contour.imlist <- contour.listof <- function(x, ...) {
                            list(main=xname)))
 }
 
-image.imlist <- plot.imlist <- image.listof <- local({
+plot.imlist <- local({
 
-  image.imlist <- function(x, ..., equal.ribbon = FALSE, ribmar=NULL) {
+  plot.imlist <- function(x, ..., plotcommand="image",
+                          equal.ribbon = FALSE, ribmar=NULL) {
     xname <- short.deparse(substitute(x))
-    if(equal.ribbon &&
-       !inherits(x, "imlist") &&
-       !all(unlist(lapply(x, is.im)))) {
-      warning("equal.ribbon is only implemented for objects of class 'im'")
-      equal.ribbon <- FALSE
+    if(plotcommand == "image" && equal.ribbon) {
+      out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)
+    } else {
+      out <- do.call("plot.solist",
+                     resolve.defaults(list(x=x, plotcommand=plotcommand), 
+                                      list(...),
+                                      list(main=xname)))
     }
-    if(equal.ribbon) imagecommon(x, ..., xname=xname, ribmar=ribmar) else 
-      do.call("plot.solist",
-              resolve.defaults(list(x=x, plotcommand="image"),
-                               list(...),
-                               list(main=xname)))
+    return(out)
   }
 
   imagecommon <- function(x, ...,
@@ -496,6 +495,18 @@ image.imlist <- plot.imlist <- image.listof <- local({
                              ribadorn))
   }
 
-  image.imlist
+  plot.imlist
 })
+
+image.imlist <- image.listof <-
+  function(x, ..., equal.ribbon = FALSE, ribmar=NULL) {
+    plc <- resolve.1.default(list(plotcommand="image"), list(...))
+    if(plc != "image") {
+      out <- plot.solist(x, ..., ribmar=ribmar)
+    } else {
+      out <- plot.imlist(x, ..., plotcommand="image",
+                         equal.ribbon=equal.ribbon, ribmar=ribmar)
+    }
+    return(out)
+  }
 

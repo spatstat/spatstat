@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.017
+        CHANGES IN spatstat VERSION 1.41-1.018
 
 OVERVIEW
 
@@ -111,6 +111,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o persp.im, nnclean, plot.qqppm, plot.bw.optim
    These plotting functions now obey spatstat.options('monochrome')
 
+   o plot.imlist
+   New argument 'plotcommand'.
+
 BUG FIXES
 
    o union.owin
@@ -130,6 +133,10 @@ BUG FIXES
    o plot.solist
    Figures were sometimes aligned incorrectly 
    when the argument 'panel.args' was given.
+   Fixed.
+
+   o plot.solist
+   Behaved incorrectly when plotcommand='persp'.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

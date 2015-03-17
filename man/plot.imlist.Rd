@@ -7,7 +7,8 @@
   Plots an array of pixel images.
 }
 \usage{
-  \method{plot}{imlist}(x, \dots, equal.ribbon=FALSE, ribmar=NULL)
+  \method{plot}{imlist}(x, \dots, plotcommand="image",
+                          equal.ribbon=FALSE, ribmar=NULL)
 
   \method{image}{imlist}(x, \dots, equal.ribbon=FALSE, ribmar=NULL)
 
@@ -34,6 +35,11 @@
     colour ribbon, if \code{equal.ribbon=TRUE}. Entries in the vector
     give the margin at the bottom, left, top, and right respectively,
     as a multiple of the height of a line of text.
+  }
+  \item{plotcommand}{
+    Character string giving the name of a function
+    to be used to display each image.
+    Recognised by \code{plot.imlist} only.
   }
 }
 \value{
