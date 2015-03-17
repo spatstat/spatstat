@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.11 $ $Date: 2015/03/17 07:41:48 $
+##  $Revision: 1.12 $ $Date: 2015/03/17 08:24:07 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -209,7 +209,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       nrows <- as.integer(ceiling(n/ncols))
     else stopifnot(nrows * ncols >= length(x))
     nblank <- ncols * nrows - n
-    if(allfv || plotcommand %in% list("persp", persp)) {
+    if(allfv || list(plotcommand) %in% list("persp", persp)) {
       ## Function plots do not have physical 'size'
       sizes.known <- FALSE
     } else {
@@ -418,7 +418,8 @@ plot.imlist <- local({
   plot.imlist <- function(x, ..., plotcommand="image",
                           equal.ribbon = FALSE, ribmar=NULL) {
     xname <- short.deparse(substitute(x))
-    if(equal.ribbon && (plotcommand %in% list("image", "plot", image, plot))) {
+    if(equal.ribbon &&
+       (list(plotcommand) %in% list("image", "plot", image, plot))) {
       out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)
     } else {
       out <- do.call("plot.solist",
@@ -501,7 +502,7 @@ plot.imlist <- local({
 image.imlist <- image.listof <-
   function(x, ..., equal.ribbon = FALSE, ribmar=NULL) {
     plc <- resolve.1.default(list(plotcommand="image"), list(...))
-    if(plc %in% list("image", "plot", image, plot)) {
+    if(list(plc) %in% list("image", "plot", image, plot)) {
       out <- plot.imlist(x, ..., plotcommand="image",
                          equal.ribbon=equal.ribbon, ribmar=ribmar)
     } else {
