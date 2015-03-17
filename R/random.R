@@ -521,9 +521,11 @@ rSSI <- function(r, n=Inf, win = square(1),
   ##
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
-    for(isim in 1:nsim)
-      result[[isim]] <- rSSI(r=r, n=n, win=if(win.given) win else square(1),
-                             giveup=giveup, x.init=x.init)
+    if(!win.given) win <- square(1)
+    for(isim in 1:nsim) {
+      progressreport(isim, nsim)
+      result[[isim]] <- rSSI(r=r, n=n, win=win, giveup=giveup, x.init=x.init)
+    }
     names(result) <- paste("Simulation", 1:nsim)
     return(as.solist(result))
   }

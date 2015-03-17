@@ -424,6 +424,7 @@
 \alias{plot.bw.frac}
 \alias{plot.bw.optim}
 \alias{plot.localpcfmatrix}
+\alias{plot.lurk}
 \alias{plot.minconfit}
 \alias{plot.parres}
 \alias{plot.plotpairsim}
@@ -869,7 +870,7 @@ ensure3Darray(x)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, 
            verbose, clipdata, 
-           transform, global, ginterval,
+           transform, global, ginterval, use.theory,
            alternative,
            savefuns, savepatterns, saveresultof,
            weights,
@@ -1200,6 +1201,7 @@ plotPolygonBdry(x, \dots)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
 \method{plot}{bw.optim}(x, \dots, showopt, optargs)
+\method{plot}{lurk}(x, \dots)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
 \method{plot}{pppmatching}(x, addmatch = NULL, main = NULL, \dots)

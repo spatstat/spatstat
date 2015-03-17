@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.40 $ $Date: 2014/12/19 16:26:13 $
+# $Revision: 1.42 $ $Date: 2015/03/17 11:27:47 $
 #
 
 lurking <- function(object, covariate, type="eem",
@@ -17,9 +17,9 @@ lurking <- function(object, covariate, type="eem",
                     verbose=TRUE) {
   cl <- match.call()
   # default name for covariate
-  if(missing(covname)) {
+  if(missing(covname) || is.null(covname)) {
     covname <- if(is.name(cl$covariate)) as.character(cl$covariate) else
-               if(is.language(cl$covariate)) format(cl$covariate) else NULL
+               if(is.expression(cl$covariate)) cl$covariate else NULL
   }
 
   if(!identical(envelope, FALSE)) {
@@ -390,61 +390,75 @@ lurking <- function(object, covariate, type="eem",
     theoretical$upper <- hilo[1,]
     theoretical$lower <- hilo[2,]
   }
-    # ---------------  PLOT THEM  ----------------------------------
-    if(plot.it) {
-      # work out plot range
-      mr <- range(0, empirical$value, theoretical$mean, na.rm=TRUE)
-      if(!is.null(theoretical$sd))
-        mr <- range(mr,
-                    theoretical$mean + 2 * theoretical$sd,
-                    theoretical$mean - 2 * theoretical$sd,
-                    na.rm=TRUE)
-      if(!is.null(theoretical$upper))
-        mr <- range(mr, theoretical$upper, theoretical$lower, na.rm=TRUE)
-
-      # start plot
-      vname <- paste(if(cumulative)"cumulative" else "marginal", typename)
-      do.call("plot",
-              resolve.defaults(
-                               list(covrange, mr),
-                               list(type="n"),
-                               list(...),
-                               list(xlab=covname, ylab=vname)))
-      # envelopes
-      if(!is.null(theoretical$upper)) {
-        xx <- with(theoretical, c(covariate, rev(covariate)))
-        yy <- with(theoretical, c(upper, rev(lower)))
-        do.call.matched(polygon,
-                        resolve.defaults(list(x=xx, y=yy),
-                                         list(...),
-                                         list(border=NA, col="grey")))
-      }
-      # (A)/(A') Empirical
-      lines(value ~ covariate, empirical, ...)
-      # (B)/(B') Theoretical mean
-      do.call("lines",
-              resolve.defaults(
-                               list(mean ~ covariate, theoretical),
-                               list(...),
-                               list(lty=2)))
-      # (C) Standard deviation 
-      if(!is.null(theoretical$sd)) {
-        do.call("lines",
-                resolve.defaults(
-                                 list(mean + 2 * sd ~ covariate, theoretical),
-                                 list(...),
-                                 list(lty=3)))
-        do.call("lines",
-                resolve.defaults(
-                                 list(mean - 2 * sd ~ covariate, theoretical),
-                                 list(...),
-                                 list(lty=3)))
-      }
-    }
-  
-    # ----------------  RETURN COORDINATES ----------------------------
-  stuff <- list(empirical=empirical, theoretical=theoretical)
-
+  ## ----------------  RETURN COORDINATES ----------------------------
+  stuff <- list(empirical=empirical,
+                theoretical=theoretical)
+  attr(stuff, "info") <- list(typename=typename,
+                              cumulative=cumulative,
+                              covrange=covrange,
+                              covname=covname)
+  class(stuff) <- "lurk"
+  ## ---------------  PLOT THEM  ----------------------------------
+  if(plot.it) 
+    plot(stuff, ...)
   return(invisible(stuff))
 }
+
+plot.lurk <- function(x, ...) {
+  xplus <- append(x, attr(x, "info"))
+  with(xplus, {
+    ## work out plot range
+    mr <- range(0, empirical$value, theoretical$mean, na.rm=TRUE)
+    if(!is.null(theoretical$sd))
+      mr <- range(mr,
+                  theoretical$mean + 2 * theoretical$sd,
+                  theoretical$mean - 2 * theoretical$sd,
+                  na.rm=TRUE)
+    if(!is.null(theoretical$upper))
+      mr <- range(mr, theoretical$upper, theoretical$lower, na.rm=TRUE)
+
+    ## start plot
+    vname <- paste(if(cumulative)"cumulative" else "marginal", typename)
+    do.call("plot",
+            resolve.defaults(
+              list(covrange, mr),
+              list(type="n"),
+              list(...),
+              list(xlab=covname, ylab=vname)))
+    ## envelopes
+    if(!is.null(theoretical$upper)) {
+      xx <- with(theoretical, c(covariate, rev(covariate)))
+      yy <- with(theoretical, c(upper, rev(lower)))
+      do.call.matched(polygon,
+                      resolve.defaults(list(x=xx, y=yy),
+                                       list(...),
+                                       list(border=NA, col="grey")))
+    }
+    ## (A)/(A') Empirical
+    lines(value ~ covariate, empirical, ...)
+    ## (B)/(B') Theoretical mean
+    do.call("lines",
+            resolve.defaults(
+              list(mean ~ covariate, theoretical),
+              list(...),
+              list(lty=2)))
+    ## (C) Standard deviation 
+    if(!is.null(theoretical$sd)) {
+      do.call("lines",
+              resolve.defaults(
+                list(mean + 2 * sd ~ covariate, theoretical),
+                list(...),
+                list(lty=3)))
+      do.call("lines",
+              resolve.defaults(
+                list(mean - 2 * sd ~ covariate, theoretical),
+                list(...),
+                list(lty=3)))
+    }
+  })
+  return(invisible(NULL))
+}
+
+  
+
 

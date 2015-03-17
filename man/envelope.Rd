@@ -13,7 +13,7 @@
   \method{envelope}{ppp}(Y, fun=Kest, nsim=99, nrank=1, \dots,
   simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
-  transform=NULL, global=FALSE, ginterval=NULL,
+  transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
@@ -23,7 +23,7 @@
   simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   start=NULL, control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5,
-  transform=NULL, global=FALSE, ginterval=NULL,
+  transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
@@ -32,7 +32,7 @@
   \method{envelope}{kppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
   simulate=NULL,
   verbose=TRUE, clipdata=TRUE,
-  transform=NULL, global=FALSE, ginterval=NULL,
+  transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
@@ -122,6 +122,11 @@
     A vector of length 2 specifying
     the interval of \eqn{r} values for the simultaneous critical
     envelopes. Only relevant if \code{global=TRUE}.
+  }
+  \item{use.theory}{
+    Logical value indicating whether to use the theoretical value,
+    computed by \code{fun}, as the reference value for simultaneous
+    envelopes. Applicable only when \code{global=TRUE}.
   }
   \item{alternative}{
     Character string determining whether the envelope corresponds

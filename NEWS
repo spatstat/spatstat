@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.020
+        CHANGES IN spatstat VERSION 1.41-1.021
 
 OVERVIEW
 
@@ -67,6 +67,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'regularise' determines whether values at short distances
    will be smoothed to avoid discretisation artefacts.
 
+   o envelope
+   envelope methods now have argument 'use.theory' specifying whether
+   to use the 'theoretical' value of the summary function when constructing
+   simultaneous envelopes.
+   
    o rpoislinetess
    Return value now has an attribute 'lines' giving the 
    realisation of the Poisson line process.
@@ -111,6 +116,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o persp.im, nnclean, plot.qqppm, plot.bw.optim
    These plotting functions now obey spatstat.options('monochrome')
 
+   o lurking
+   Now returns an object of class 'lurk' which has a plot method.
+   
    o plot.imlist
    New argument 'plotcommand'.
 

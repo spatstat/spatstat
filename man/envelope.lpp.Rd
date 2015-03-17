@@ -10,7 +10,7 @@
 \usage{
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
-  transform=NULL,global=FALSE,ginterval=NULL,
+  transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
@@ -19,7 +19,7 @@
 
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
-  transform=NULL,global=FALSE,ginterval=NULL,
+  transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"),
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
@@ -76,6 +76,11 @@
     A vector of length 2 specifying
     the interval of \eqn{r} values for the simultaneous critical
     envelopes. Only relevant if \code{global=TRUE}.
+  }
+  \item{use.theory}{
+    Logical value indicating whether to use the theoretical value,
+    computed by \code{fun}, as the reference value for simultaneous
+    envelopes. Applicable only when \code{global=TRUE}.
   }
   \item{alternative}{
     Character string determining whether the envelope corresponds

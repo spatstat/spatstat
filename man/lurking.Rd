@@ -123,7 +123,10 @@ lurking(object, covariate, type="eem",
   lurking variable plot. The second dataframe \code{theoretical}
   contains columns \code{covariate}, \code{mean} and \code{sd}
   giving the coordinates of the plot of the theoretical mean
-  and standard deviation. 
+  and standard deviation.
+
+  The return value belongs to the class \code{"lurk"} for which there is
+  a plot method. 
 }
 \details{
   This function generates a `lurking variable' plot for a
