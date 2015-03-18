@@ -4,13 +4,14 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.6 $ $Date: 2014/11/10 11:08:30 $
+##  $Revision: 1.9 $ $Date: 2015/03/18 08:57:32 $
 ##
 
 persp.im <- local({
 
   persp.im <- function(x, ...,
-                       colmap=NULL, colin=x, apron=FALSE, visible=FALSE) {
+                       colmap=NULL, colin=x, apron=FALSE,
+                       visible=FALSE) {
     xname <- deparse(substitute(x))
     xinfo <- summary(x)
     if(xinfo$type == "factor")
@@ -33,14 +34,14 @@ persp.im <- local({
     ##
     if(is.function(colmap) && !inherits(colmap, "colourmap")) {
       ## coerce to a 'colourmap' if possible
-      zlim <- resolve.1.default(list(zlim=range(colin, finite=TRUE)), list(...))
+      clim <- range(colin, finite=TRUE)
       if(names(formals(colmap))[1] == "n") {
         colval <- colmap(128)
-        colmap <- colourmap(colval, range=zlim)
+        colmap <- colourmap(colval, range=clim)
       } else {
         ## colour map determined by a rule (e.g. 'beachcolours')
         colmap <- invokeColourmapRule(colmap, colin,
-                                      zlim=zlim, colargs=list(...))
+                                      zlim=clim, colargs=list(...))
         if(is.null(colmap))
           stop("Unrecognised syntax for colour function")
       }
@@ -93,9 +94,10 @@ persp.im <- local({
 
     if(apron) {
       ## add an 'apron'
-      minx <- min(x)
-      x <- na.handle.im(x, na.replace=minx)
-      x <- padimage(x, minx)
+      zlim <- list(...)$zlim
+      bottom <- if(!is.null(zlim)) zlim[1] else min(x)
+      x <- na.handle.im(x, na.replace=bottom)
+      x <- padimage(x, bottom)
       xinfo <- summary(x)
       if(is.matrix(colval <- colinfo$col)) {
         colval <- matrix(col2hex(colval), nrow(colval), ncol(colval))

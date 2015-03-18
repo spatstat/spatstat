@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.021
+        CHANGES IN spatstat VERSION 1.41-1.022
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ OVERVIEW
    o Improved basic support for owin objects.
 
    o Improved support for tessellations.
+
+   o Modifications to Kest
 
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
@@ -41,11 +43,17 @@ NEW FUNCTIONS
    o density.ppplist
    Method for 'density' for lists of point patterns.
 
+   o inradius
+   Radius of largest circle inside a window.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o kppm
    The default for the weight function 'weightfun' has been changed, 
    for better performance.
+
+   o Kest
+   New argument 'rmax' controls maximum value of argument 'r'
 
    o clickpoly, clickbox
    These functions now handle graphical arguments to polygon()
@@ -120,7 +128,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Now returns an object of class 'lurk' which has a plot method.
    
    o plot.imlist
-   New argument 'plotcommand'.
+   New argument 'plotcommand' specifies how to plot each image.
+
+   o persp.im
+   The lower extent of the apron can now be controlled by 'zlim'.
 
 BUG FIXES
 

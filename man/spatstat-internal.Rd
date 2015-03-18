@@ -537,6 +537,7 @@
 \alias{rhs.of.formula}
 \alias{rhohatEngine}
 \alias{rhohatCalc}
+\alias{rigidradius}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
 \alias{roseContinuous}
@@ -670,6 +671,7 @@
 \alias{there.is.no.try}
 \alias{tilecentroids}        
 \alias{tileindex}        
+\alias{transradius}
 \alias{trap.extra.arguments}
 \alias{trianglediameters}
 \alias{trim.mask}        
@@ -1338,6 +1340,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            n, bw, adjust, from, to, 
            bwref, covname, confidence,
            covunits, modelcall, callstring, savestuff)
+rigidradius(X)
 RmhExpandRule(nama)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
@@ -1485,6 +1488,7 @@ test.selfcrossing.psp(A)
 there.is.no.try(\dots)
 tilecentroids(W, nx, ny)
 tileindex(x, y, Z)
+transradius(W)
 trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)

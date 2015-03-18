@@ -66,3 +66,4 @@ circumradius <- function(x, ...) {
 circumradius.owin <- function(x, ...) {
   sqrt(min(fardist(x, ..., squared=TRUE)))
 }
+

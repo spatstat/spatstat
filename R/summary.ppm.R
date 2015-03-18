@@ -498,11 +498,12 @@ print.summary.ppm <- function(x, ...) {
   vali <- x$valid
   if(identical(vali, FALSE) && waxlyrical("errors")) {
     parbreak()
-    splat("***",
-          "Model is not valid",
-          "***\n***",
-          "Interaction parameters are outside valid range",
-          "***")
+    splat("*** Model is not valid ***")
+    if(!all(is.finite(x$entries$coef))) {
+      splat("*** Some coefficients are NA or Inf ***")
+    } else {
+      splat("*** Interaction parameters are outside valid range ***")
+    }
   } else if(is.na(vali) && waxlyrical("extras")) {
     parbreak()
     splat("[Validity of model could not be checked]")

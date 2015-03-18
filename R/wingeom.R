@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.98 $	$Date: 2015/03/12 02:13:45 $
+#	$Revision: 4.100 $	$Date: 2015/03/18 03:07:20 $
 #
 #
 #
@@ -762,6 +762,14 @@ diameter.owin <- function(x) {
   return(sqrt(max(d)))
 }
 
+##    radius of inscribed circle
+
+inradius <- function(W) {
+  stopifnot(is.owin(W))
+  if(W$type == "rectangle") diameter(W)/2 else max(distmap(W, invert=TRUE))
+}
+
+  
 incircle <- function(W) {
   # computes the largest circle contained in W
   verifyclass(W, "owin")
@@ -951,3 +959,4 @@ harmonise.owin <- harmonize.owin <- function(...) {
   result <- solapply(argz, "[", i=comgrid, drop=FALSE)
   return(result)
 }
+

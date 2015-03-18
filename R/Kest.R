@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.108 $	$Date: 2015/02/22 03:00:48 $
+#	$Revision: 5.113 $	$Date: 2015/03/18 03:16:03 $
 #
 #
 # -------- functions ----------------------------------------
@@ -56,7 +56,7 @@
 }
 
 "Kest"<-
-function(X, ..., r=NULL, breaks=NULL, 
+function(X, ..., r=NULL, rmax=NULL, breaks=NULL, 
          correction=c("border", "isotropic", "Ripley", "translate"),
          nlarge=3000, domain=NULL, var.approx=FALSE,
          ratio=FALSE)
@@ -86,7 +86,8 @@ function(X, ..., r=NULL, breaks=NULL,
     return(Kd)
   }
 
-  rmaxdefault <- rmax.rule("K", W, lambda)        
+  rmaxdefault <- rmax %orifnull% rmax.rule("K", W, lambda)
+  if(is.infinite(rmaxdefault)) rmaxdefault <- diameter(W)
   breaks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max
@@ -246,7 +247,7 @@ function(X, ..., r=NULL, breaks=NULL,
       wh <- whist(DIJ, breaks$val, edgewt)
       numKtrans <- cumsum(wh)
       denKtrans <- lambda2 * areaW
-      h <- diameter(as.rectangle(W))/2
+      h <- transradius(W)
       numKtrans[r >= h] <- NA
       K <- bind.ratfv(K,
                       data.frame(trans=numKtrans),
@@ -263,7 +264,7 @@ function(X, ..., r=NULL, breaks=NULL,
       wh <- whist(DIJ, breaks$val, edgewt)
       numKrigid <- cumsum(wh)
       denKrigid <- lambda2 * areaW
-      h <- diameter(as.rectangle(W))
+      h <- rigidradius(X) #sic
       numKrigid[r >= h] <- NA
       K <- bind.ratfv(K,
                       data.frame(rigid=numKrigid),
@@ -280,7 +281,7 @@ function(X, ..., r=NULL, breaks=NULL,
       wh <- whist(DIJ, breaks$val, edgewt)
       numKiso <- cumsum(wh)
       denKiso <- lambda2 * areaW
-      h <- diameter(W)/2
+      h <- circumradius(W)
       numKiso[r >= h] <- NA
       K <- bind.ratfv(K,
                       data.frame(iso=numKiso),
@@ -994,4 +995,30 @@ Krect.engine <- function(X, rmax, nr=100,
 }
 
 
+## maximum radius for translation correction
+## = inradius of W + ^W
 
+transradius <- function(W) {
+  stopifnot(is.owin(W))
+  if(W$type == "rectangle") return(shortside(W))
+  Z <- setcov(W)
+  a <- with(Z, xstep * ystep)
+  D <- solutionset(Z > a)
+  return(inradius(D))
+}
+
+## maximum radius for rigid motion correction
+## = circumradius of W + ^W
+
+rigidradius <- function(X) {
+  stopifnot(is.ppp(X) || is.owin(X))
+  if(is.ppp(X))
+    return(max(pairdist(X[chull(X)])))
+  W <- X
+  if(W$type == "rectangle") return(diameter(W))
+  Z <- setcov(W)
+  a <- with(Z, xstep * ystep)
+  D <- solutionset(Z > a)
+  return(circumradius(D))
+}
+  

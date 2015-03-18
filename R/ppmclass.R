@@ -211,11 +211,12 @@ function(x, ...,
 
   if(identical(s$valid, FALSE) && waxlyrical("errors", terselevel)) {
     parbreak()
-    splat("***",
-          "Model is not valid",
-          "***\n***",
-          "Interaction parameters are outside valid range",
-          "***")
+    splat("*** Model is not valid ***")
+    if(!all(is.finite(s$entries$coef))) {
+      splat("*** Some coefficients are NA or Inf ***")
+    } else {
+      splat("*** Interaction parameters are outside valid range ***")
+    }
   } else if(is.na(s$valid) && waxlyrical("extras", terselevel)) {
     parbreak()
     splat("[Validity of model could not be checked]")

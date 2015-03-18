@@ -6,7 +6,7 @@ Estimates Ripley's reduced second moment function \eqn{K(r)}
 from a point pattern in a window of arbitrary shape.
 }
 \usage{
-  Kest(X, \dots, r=NULL, breaks=NULL, 
+  Kest(X, \dots, r=NULL, rmax=NULL, breaks=NULL, 
      correction=c("border", "isotropic", "Ripley", "translate"),
     nlarge=3000, domain=NULL, var.approx=FALSE, ratio=FALSE)
 }
@@ -20,7 +20,10 @@ from a point pattern in a window of arbitrary shape.
   \item{r}{
     Optional. Vector of values for the argument \eqn{r} at which \eqn{K(r)} 
     should be evaluated. Users are advised \emph{not} to specify this
-    argument; there is a sensible default.
+    argument; there is a sensible default. If necessary, specify \code{rmax}.
+  }
+  \item{rmax}{
+    Optional. Maximum desired value of the argument \eqn{r}.
   }
   \item{breaks}{
     This argument is for internal use only.
