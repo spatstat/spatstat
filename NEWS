@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.022
+        CHANGES IN spatstat VERSION 1.41-1.023
 
 OVERVIEW
 
@@ -132,6 +132,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o persp.im
    The lower extent of the apron can now be controlled by 'zlim'.
+
+   o quadscheme
+   Argument 'method' is partially matched.
 
 BUG FIXES
 

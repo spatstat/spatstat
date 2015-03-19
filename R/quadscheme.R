@@ -69,7 +69,7 @@ quadscheme <- function(data, dummy, method="grid", ...) {
 }
 
 quadscheme.spatial <-
-  function(data, dummy, method="grid", ...) {
+  function(data, dummy, method=c("grid", "dirichlet"), ...) {
         #
 	# generate a quadrature scheme from data and dummy patterns.
 	#
@@ -87,6 +87,7 @@ quadscheme.spatial <-
         # 
 
     check <- resolve.defaults(list(...), list(check=TRUE))$check
+    method <- match.arg(method)
     
     data <- as.ppp(data, check=check)
     dummy <- as.ppp(dummy, data$window, check=check)
@@ -119,7 +120,7 @@ quadscheme.spatial <-
   }
 
 "quadscheme.replicated" <-
-  function(data, dummy, method="grid", ...) {
+  function(data, dummy, method=c("grid", "dirichlet"), ...) {
     ##
     ## generate a quadrature scheme from data and dummy patterns.
     ##
@@ -133,7 +134,8 @@ quadscheme.spatial <-
     ## No two points in 'data'+'dummy' should have the same spatial location
 
     check <- resolve.defaults(list(...), list(check=TRUE))$check
-
+    method <- match.arg(method)
+    
     data <- as.ppp(data, check=check)
     dummy <- as.ppp(dummy, data$window, check=check)
 		## note data$window is the DEFAULT quadrature window
