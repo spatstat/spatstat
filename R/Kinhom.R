@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.85 $	$Date: 2015/02/22 03:00:48 $
+#	$Revision: 1.86 $	$Date: 2015/03/20 07:56:43 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -245,7 +245,7 @@
         Kb <- Kborder.engine(X, max(r), length(r), correction,
                              weights=reciplambda)
         if(renormalise) {
-          ynames <- fvnames(Kb, "*")
+          ynames <- setdiff(fvnames(Kb, "*"), "theo")
           Kb[,ynames] <- renorm.factor * as.data.frame(Kb)[,ynames]
         }
         Kb <- tweak.fv.entry(Kb, "border", new.labl="{hat(%s)[%s]^{bord}} (r)")
@@ -277,7 +277,7 @@
     K <-  Krect.engine(X, rmax, length(r), correction,
                         weights=reciplambda, fname=c("K", "inhom"))
     if(renormalise) {
-      allfun <- fvnames(K, "*")
+      allfun <- setdiff(fvnames(K, "*"), "theo")
       K[, allfun] <- renorm.factor * as.data.frame(K)[, allfun]
     }
     K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))

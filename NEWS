@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.023
+        CHANGES IN spatstat VERSION 1.41-1.024
 
 OVERVIEW
 
@@ -137,6 +137,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Argument 'method' is partially matched.
 
 BUG FIXES
+
+   o Kinhom, Linhom
+   The value of 'theo' was erroneously rescaled 
+   by a small amount, when renormalise=TRUE (the default).
+   Fixed.
 
    o union.owin
    Strange results were sometimes obtained when taking the union 
