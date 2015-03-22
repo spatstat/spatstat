@@ -60,10 +60,22 @@ plot.anylist <- plot.solist <- plot.listof <-
   }
 
   ## bounding box, including ribbon for images, legend for point patterns
-  getplotbox <- function(x, ..., do.plot) {
+  getplotbox <- function(x, ..., do.plot, plotcommand="plot") {
     if(inherits(x, c("im", "ppp", "psp", "msr", "layered", "tess"))) {
-      y <- plot(x, ..., do.plot=FALSE)      
-      return(as.owin(y))
+      if(identical(plotcommand, "plot")) {
+        y <- plot(x, ..., do.plot=FALSE)      
+        return(as.owin(y))
+      } else if(identical(plotcommand, "contour")) {
+        y <- contour(x, ..., do.plot=FALSE)      
+        return(as.owin(y))
+      } else {
+        plc <- plotcommand
+        if(is.character(plc)) plc <- get(plc)
+        if(!is.function(plc)) stop("Unrecognised plot function")
+        if("do.plot" %in% names(args(plc)))
+          return(as.owin(do.call(plc, list(x=x, ..., do.plot=FALSE))))
+        return(as.rectangle(x))
+      }
     }
     return(try(as.rectangle(x), silent=TRUE))
   }
@@ -215,7 +227,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     } else {
       ## Determine dimensions of objects
       ##     (including space for colour ribbons, if they are images)
-      boxes <- getPlotBoxes(x, ..., panel.args=panel.args, extrargs=extrargs)
+      boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
+                            panel.args=panel.args, extrargs=extrargs)
       sizes.known <- !any(sapply(boxes, inherits, what="try-error"))
       if(equal.scales && !sizes.known) {
         warning("Ignored equal.scales=TRUE; scales could not be determined")
