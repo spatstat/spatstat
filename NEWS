@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.025
+        CHANGES IN spatstat VERSION 1.41-1.026
 
 OVERVIEW
 
@@ -17,6 +17,8 @@ OVERVIEW
 
    o Modifications to Kest
 
+   o White noise.
+
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
    o Improvements and bug fixes.
@@ -27,14 +29,17 @@ NEW FUNCTIONS
    Studentised permutation test for difference between groups of point patterns.
    Generously contributed by Ute Hahn.
 
+   o transmat
+   Convert pixel arrays between different display conventions.
+
+   o rnoise
+   Random pixel noise.
+
    o as.data.frame.owin
    Convert a window to a data frame.
 
    o harmonise.owin
    Convert several binary mask windows to a common pixel grid.
-
-   o transmat
-   Convert pixel arrays between different display conventions.
 
    o copyExampleFiles
    Copy the raw data files from an installed dataset
