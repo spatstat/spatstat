@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.103 $   $Date: 2014/10/17 10:21:42 $
+#  $Revision: 1.104 $   $Date: 2015/03/24 02:58:28 $
 #
 #  Plotting code for pixel images
 #
@@ -32,6 +32,34 @@ plot.im <- local({
                     extrargs=extrargs)
   }
 
+  do.box.etc <- function(bb, add, argh)
+    do.call(box.etc, append(list(bb=bb, add=add), argh))
+  
+  box.etc <- function(bb, ..., add=FALSE, axes=FALSE, box=!add) {
+    # axes for image
+    xr <- bb$xrange
+    yr <- bb$yrange
+    if(box)
+      rect(xr[1], yr[1], xr[2], yr[2])
+    if(axes) {
+      px <- pretty(xr)
+      py <- pretty(yr)
+      do.call.plotfun("axis",
+                      resolve.defaults(
+                                       list(side=1, at=px), 
+                                       list(...),
+                                       list(pos=yr[1])),
+                      extrargs=graphicsPars("axis"))
+      do.call.plotfun("axis",
+                      resolve.defaults(
+                                       list(side=2, at=py), 
+                                       list(...),
+                                       list(pos=xr[1])),
+                      extrargs=graphicsPars("axis"))
+    }
+  }
+  
+  
   clamp <- function(x, v, tol=0.02 * diff(v)) {
     ok <- (x >= v[1] - tol) & (x <= v[2] + tol)
     x[ok]
@@ -421,6 +449,9 @@ plot.im <- local({
                  list(asp = 1, main = main, axes=FALSE))
 ##      if(add && show.all)
 ##        fakemaintitle(x, main, dotargs)
+
+      do.box.etc(Frame(x), add, dotargs)
+      
       return(invisible(output.colmap))
     }
     
@@ -498,27 +529,9 @@ plot.im <- local({
 ##    if(add && show.all)
 ##      fakemaintitle(bb.all, main, ...)
     
-    # axes for image
-    imax <- identical(dotargs$axes, TRUE)
-    imbox <- !identical(dotargs$box, FALSE)
-    if(imbox)
-      rect(x$xrange[1], x$yrange[1], x$xrange[2], x$yrange[2])
-    if(imax) {
-      px <- pretty(bb$xrange)
-      py <- pretty(bb$yrange)
-      do.call.plotfun("axis",
-                      resolve.defaults(
-                                       list(side=1, at=px), 
-                                       dotargs,
-                                       list(pos=bb$yrange[1])),
-                      extrargs=graphicsPars("axis"))
-      do.call.plotfun("axis",
-                      resolve.defaults(
-                                       list(side=2, at=py), 
-                                       dotargs,
-                                       list(pos=bb$xrange[1])),
-                      extrargs=graphicsPars("axis"))
-    }
+    # box or axes for image
+    do.box.etc(bb, add, dotargs)
+
     # plot ribbon image containing the range of image values
     rib.npixel <- length(ribbonvalues) + 1
     switch(ribside,

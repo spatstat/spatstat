@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.026
+        CHANGES IN spatstat VERSION 1.41-1.027
 
 OVERVIEW
 
@@ -169,6 +169,10 @@ BUG FIXES
 
    o plot.solist
    Behaved incorrectly when plotcommand='persp'.
+   Fixed.
+
+   o plot.im
+   Did not plot surrounding frame box when ribbon=FALSE.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1
