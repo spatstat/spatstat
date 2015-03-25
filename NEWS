@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.027
+        CHANGES IN spatstat VERSION 1.41-1.028
 
 OVERVIEW
 
@@ -131,7 +131,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o lurking
    Now returns an object of class 'lurk' which has a plot method.
-   
+
+   o marktable
+   New argument 'N' for studying the N nearest neighbours.   
+   New argument 'collapse' for manipulating the contingency table.
+
    o plot.imlist
    New argument 'plotcommand' specifies how to plot each image.
 
