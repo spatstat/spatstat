@@ -1522,6 +1522,7 @@ local({
 require(spatstat)
 
 local({
+  set.seed(42)
   fit  <- ppm(cells, ~1,         Strauss(0.1), method="ho", nsim=10)
   fitx <- ppm(cells, ~offset(x), Strauss(0.1), method="ho", nsim=10)
 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.028
+        CHANGES IN spatstat VERSION 1.41-1.029
 
 OVERVIEW
 
@@ -159,6 +159,18 @@ BUG FIXES
 
    o as.owin.data.frame
    Crashed if the window was not connected.
+   Fixed.
+
+   o Frame<-
+   Crashed when applied to a binary mask.
+   Fixed.
+
+   o as.mask
+   Crashed sometimes when only the argument 'xy' was given.
+   Fixed.
+
+   o ppm
+   Crashed (rarely) when method='ho' if the simulated pattern was empty.
    Fixed.
 
    o MultiStraussHard

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.165 $	$Date: 2015/03/06 05:57:32 $
+#	$Revision: 4.166 $	$Date: 2015/03/25 09:56:24 $
 #
 #
 #	A window may be either
@@ -623,8 +623,8 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
         out$m[] <- FALSE
         ij <- cbind(i=match(xy$y, y), j=match(xy$x, x))
         out$m[ij] <- TRUE
-        return(out)
       }
+      return(out)
     }
   }
 

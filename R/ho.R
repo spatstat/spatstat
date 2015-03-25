@@ -3,7 +3,7 @@
 #
 #  Huang-Ogata method 
 #
-#  $Revision: 1.14 $ $Date: 2014/02/11 11:01:08 $
+#  $Revision: 1.15 $ $Date: 2015/03/25 11:42:47 $
 #
 
 ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
@@ -28,13 +28,17 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   # and compute the sufficient statistics of the model
   rmhinfolist <- rmh(model, start, control, preponly=TRUE, verbose=FALSE)
   if(verb) cat("Simulating... ")
-  for(i in 1:nsim) {
-    if(verb) progressreport(i, nsim)
+  ndone <- 0
+  while(ndone < nsim) {
     Xi <- rmhEngine(rmhinfolist, verbose=FALSE)
-    v <- suffstat(model,Xi)
-    if(i == 1) 
-      svalues <- matrix(, nrow=nsim, ncol=length(v))
-    svalues[i, ] <- v
+    v <- try(suffstat(model,Xi))
+    if(!inherits(v, "try-error")) {
+      if(ndone == 0) 
+        svalues <- matrix(, nrow=nsim, ncol=length(v))
+      ndone <- ndone + 1
+      svalues[ndone, ] <- v
+    }
+    if(verb) progressreport(ndone, nsim)
   }
   if(verb) cat("Done.\n\n")
   # calculate the sample mean and variance of the

@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.124 $     $Date: 2015/02/17 10:46:04 $
+#      $Revision: 1.127 $     $Date: 2015/03/25 13:30:33 $
 #
 #      The class "im" of raster images
 #
@@ -435,7 +435,13 @@ update.im <- function(object, ...) {
     # no index provided
     # set all pixels to 'value'
     v <- X$v
-    v[!is.na(v)] <- value
+    if(!is.factor(value)) {
+      v[!is.na(v)] <- value
+    } else {
+      vnew <- matrix(NA_integer_, ncol(v), nrow(v))
+      vnew[!is.na(v)] <- as.integer(value)
+      v <- factor(vnew, labels=levels(value))
+    }
     X$v <- v
     return(update(X))
   }
