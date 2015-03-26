@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.029
+        CHANGES IN spatstat VERSION 1.41-1.030
 
 OVERVIEW
 
@@ -50,6 +50,12 @@ NEW FUNCTIONS
 
    o inradius
    Radius of largest circle inside a window.
+
+   o mergeLevels
+   Merge different levels of a factor.
+   
+   o relevel.im, relevel.ppp, relevel.ppx
+   Change the reference level of a factor.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
