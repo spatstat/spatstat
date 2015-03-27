@@ -7,7 +7,7 @@
   for a multitype point pattern.
 }
 \usage{
-  Ldot(X, i, ...)
+  Ldot(X, i, ..., from)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -25,6 +25,7 @@
   \item{\dots}{
     Arguments passed to \code{\link{Kdot}}.
   }
+  \item{from}{An alternative way to specify \code{i}.}
 }
 \details{
   This command computes 

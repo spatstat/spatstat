@@ -73,7 +73,7 @@
 
   The results of each call to \code{fun} are collected and returned
   according to the usual rules for \code{\link{apply}} and its
-  relatives. See \bold{Value} above.
+  relatives. See the section on \bold{Value}.
 
   This function is just a convenient wrapper for a common use of the
   function \code{\link{applynbd}}. For more complex tasks,

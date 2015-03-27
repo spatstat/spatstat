@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.030
+        CHANGES IN spatstat VERSION 1.41-1.031
 
 OVERVIEW
 
@@ -150,6 +150,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o quadscheme
    Argument 'method' is partially matched.
+
+   o Kdot, Ldot
+   New argument 'from' is an alternative to 'i'.
+
+   o Kcross, Lcross
+   New arguments 'from' and 'to' are alternatives to 'i' and 'j' respectively.
+
 
 BUG FIXES
 

@@ -10,7 +10,8 @@
   within a given distance of a point of type \eqn{i}.
 }
 \usage{
-Kcross(X, i, j, r=NULL, breaks=NULL, correction, \dots, ratio=FALSE)
+Kcross(X, i, j, r=NULL, breaks=NULL, correction,
+       \dots, ratio=FALSE, from, to )
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -55,6 +56,9 @@ Kcross(X, i, j, r=NULL, breaks=NULL, correction, \dots, ratio=FALSE)
     If \code{TRUE}, the numerator and denominator of
     each edge-corrected estimate will also be saved,
     for use in analysing replicated point patterns.
+  }
+  \item{from,to}{
+    An alternative way to specify \code{i} and \code{j} respectively.
   }
 }
 \value{

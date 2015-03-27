@@ -10,7 +10,7 @@
   within a given distance of a point of type \eqn{i}.
 }
 \usage{
-Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE)
+Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -50,6 +50,7 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE)
     each edge-corrected estimate will also be saved,
     for use in analysing replicated point patterns.
   }
+  \item{from}{An alternative way to specify \code{i}.}
 }
 \value{
   An object of class \code{"fv"} (see \code{\link{fv.object}}).

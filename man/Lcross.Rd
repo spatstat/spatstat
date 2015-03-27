@@ -6,7 +6,7 @@
   for a multitype point pattern.
 }
 \usage{
-  Lcross(X, i, j, ...)
+  Lcross(X, i, j, ..., from, to)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -29,6 +29,9 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link{Kcross}}.
+  }
+  \item{from,to}{
+    An alternative way to specify \code{i} and \code{j} respectively.
   }
 }
 \details{

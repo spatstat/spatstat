@@ -42,11 +42,11 @@
 #
 # ------------------------------------------------------------------------
 
-"Lcross" <- function(X, i, j, ...) {
+"Lcross" <- function(X, i, j, ..., from, to) {
   if(!is.multitype(X, dfok=FALSE)) 
 	stop("Point pattern must be multitype")
-  if(missing(i)) i <- levels(marks(X))[1]
-  if(missing(j)) j <- levels(marks(X))[2]
+  if(missing(i)) i <- if(!missing(from)) from else levels(marks(X))[1]
+  if(missing(j)) j <- if(!missing(to)) to else levels(marks(X))[2]
   K <- Kcross(X, i, j, ...)
   L <- eval.fv(sqrt(K/pi))
   # relabel the fv object
@@ -62,10 +62,10 @@
   return(L)  
 }
 
-"Ldot" <- function(X, i, ...) {
+"Ldot" <- function(X, i, ..., from) {
   if(!is.multitype(X, dfok=FALSE)) 
 	stop("Point pattern must be multitype")
-  if(missing(i)) i <- levels(marks(X))[1]
+  if(missing(i)) i <- if(!missing(from)) from else levels(marks(X))[1]
   K <- Kdot(X, i, ...)
   L <- eval.fv(sqrt(K/pi))
   # relabel the fv object
@@ -81,7 +81,7 @@
 "Kcross" <- 
 function(X, i, j, r=NULL, breaks=NULL,
          correction =c("border", "isotropic", "Ripley", "translate") , ...,
-         ratio=FALSE)
+         ratio=FALSE, from, to)
 {
   verifyclass(X, "ppp")
   if(!is.multitype(X, dfok=FALSE)) 
@@ -90,9 +90,9 @@ function(X, i, j, r=NULL, breaks=NULL,
     correction <- NULL
   marx <- marks(X)
   if(missing(i))
-    i <- levels(marx)[1]
+    i <- if(!missing(from)) from else levels(marx)[1]
   if(missing(j))
-    j <- levels(marx)[2]
+    j <- if(!missing(to)) to else levels(marx)[2]
   I <- (marx == i)
   if(!any(I))
     stop(paste("No points have mark i =", i))
@@ -123,7 +123,7 @@ function(X, i, j, r=NULL, breaks=NULL,
 "Kdot" <- 
 function(X, i, r=NULL, breaks=NULL,
          correction = c("border", "isotropic", "Ripley", "translate") , ...,
-         ratio=FALSE)
+         ratio=FALSE, from)
 {
   verifyclass(X, "ppp")
   if(!is.multitype(X, dfok=FALSE)) 
@@ -133,7 +133,7 @@ function(X, i, r=NULL, breaks=NULL,
 
   marx <- marks(X)
   if(missing(i))
-    i <- levels(marx)[1]
+    i <- if(!missing(from)) from else levels(marx)[1]
         
   I <- (marx == i)
   J <- rep.int(TRUE, X$n)  # i.e. all points
