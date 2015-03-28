@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.031
+        CHANGES IN spatstat VERSION 1.41-1.032
 
 OVERVIEW
 
@@ -111,8 +111,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
    density values must be positive (avoiding numerical errors
    which occasionally produce small negative values).
 
-   o plot.tess
-   New argument 'do.plot'.
+   o effectfun
+   Now works for 'kppm' and 'lppm' objects as well.
 
    o allstats, compareFit, markcorr, split.ppx, by.ppp
    Result is now of class 'anylist'.
@@ -156,6 +156,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o Kcross, Lcross
    New arguments 'from' and 'to' are alternatives to 'i' and 'j' respectively.
+
+   o plot.tess
+   New argument 'do.plot'.
 
 
 BUG FIXES

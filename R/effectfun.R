@@ -1,11 +1,15 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.15 $ $Date: 2014/12/11 07:05:21 $
+#   $Revision: 1.16 $ $Date: 2015/03/28 08:46:27 $
 #
 
 effectfun <- function(model, covname, ..., se.fit=FALSE) {
-  stopifnot(is.ppm(model))
+  if(!is.ppm(model)) {
+    if(is.kppm(model)) model <- as.ppm(model) else
+    if(is.lppm(model)) model <- model$fit else
+    stop("First argument 'model' should be a ppm, kppm or lppm object")
+  }
   dotargs <- list(...)
   # determine names of covariates involved
   intern.names <-
