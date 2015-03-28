@@ -11,7 +11,8 @@ mergeLevels(.f, \dots)
 }
 \arguments{
   \item{.f}{
-    A factor (or a factor-valued pixel image).
+    A factor (or a factor-valued pixel image
+    or a point pattern with factor-valued marks).
   }
   \item{\dots}{
     List of \code{name=value} pairs, where \code{name} is the
@@ -29,8 +30,13 @@ mergeLevels(.f, \dots)
   and \code{old} is a character vector containing the old levels
   that are to be merged.
 
-  The result is a new factor, in which the levels listed in \code{old}
+  The result is a new factor (or factor-valued object),
+  in which the levels listed in \code{old}
   have been replaced by a single level \code{new}.
+
+  An argument of the form \code{name=character(0)} or \code{name=NULL}
+  is interpreted to mean that all other levels of the old factor
+  should be mapped to \code{name}.
 }
 \value{
   Another factor of the same length as \code{.f}
