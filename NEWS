@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.033
+        CHANGES IN spatstat VERSION 1.41-1.034
 
 OVERVIEW
 
@@ -201,6 +201,10 @@ BUG FIXES
 
    o plot.solist
    Behaved incorrectly when plotcommand='persp'.
+   Fixed.
+
+   o "[.hyperframe"
+   Sometimes returned an 'anylist' when it should have returned a 'solist'.
    Fixed.
 
    o plot.im

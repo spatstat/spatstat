@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.18 $    $Date: 2015/01/10 11:41:08 $
+##  $Revision: 1.19 $    $Date: 2015/03/29 07:37:55 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -57,7 +57,7 @@
                          hypercolumn = (x$hypercolumns[[nami]])[[1]]
                          )
       }
-      return(as.anylist(y))
+      return(as.solist(y, demote=TRUE))
     } else if(ncols == 1) {
       ## return a column as an 'anylist'/'solist' or a vector
       switch(as.character(x$vtype),
