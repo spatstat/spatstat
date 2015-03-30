@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.034
+        CHANGES IN spatstat VERSION 1.41-1.035
 
 OVERVIEW
 
@@ -156,6 +156,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o Kcross, Lcross
    New arguments 'from' and 'to' are alternatives to 'i' and 'j' respectively.
+
+   o varblock
+   Changed the ordering (and therefore default colours/styles) 
+   of curves in the plot, to match other functions like lohboot.
 
    o plot.tess
    New argument 'do.plot'.

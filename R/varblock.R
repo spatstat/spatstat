@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.14 $  $Date: 2014/09/26 10:04:41 $
+#   $Revision: 1.15 $  $Date: 2015/03/30 03:31:17 $
 #
 
 varblock <- local({
@@ -119,7 +119,7 @@ varblock <- local({
     tname <- intersect("theo", fvnames(fX, "."))
     fvnames(out, ".y") <- yname <- paste0("mean", ybase)
     fvnames(out, ".s") <- snames <- paste0(c("lo", "hi"), ybase)
-    fvnames(out, ".") <- c(yname, snames, tname)
+    fvnames(out, ".") <- c(yname, tname, snames)
     attr(out, "fmla") <- paste(". ~ ", xname)
     return(out)
   }
