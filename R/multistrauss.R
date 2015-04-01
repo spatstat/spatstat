@@ -2,7 +2,7 @@
 #
 #    multistrauss.S
 #
-#    $Revision: 2.22 $	$Date: 2015/01/07 04:21:53 $
+#    $Revision: 2.23 $	$Date: 2015/03/31 03:57:11 $
 #
 #    The multitype Strauss process
 #
@@ -129,11 +129,13 @@ MultiStrauss <- local({
        print = function(self) {
          radii <- self$par$radii
          types <- self$par$types
-         cat(paste(nrow(radii), "types of points\n"))
-         if(!is.null(types)) {
-           cat("Possible types: \n")
-           print(noquote(types))
-         } else cat("Possible types:\t not yet determined\n")
+         if(waxlyrical('gory')) {
+           splat(nrow(radii), "types of points")
+           if(!is.null(types)) {
+             splat("Possible types: ")
+             print(noquote(types))
+           } else splat("Possible types:\t not yet determined")
+         }
          cat("Interaction radii:\n")
          print(self$par$radii)
          invisible()

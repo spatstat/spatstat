@@ -513,18 +513,27 @@ rMaternII <- function(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE,
 }
   
 rSSI <- function(r, n=Inf, win = square(1), 
-                 giveup = 1000, x.init=NULL, ..., nsim=1, drop=TRUE)
+                 giveup = 1000, x.init=NULL, ...,
+                 f=NULL, fmax=NULL,
+                 nsim=1, drop=TRUE)
 {
   win.given <- !missing(win) && !is.null(win)
   stopifnot(is.numeric(r) && length(r) == 1 && r >= 0)
   stopifnot(is.numeric(n) && length(n) == 1 && n >= 0)
+  ##
+  if(!is.null(f)) {
+    stopifnot(is.numeric(f) || is.im(f) || is.function(f))
+    if(is.null(fmax) && !is.numeric(f))
+      fmax <- if(is.im(f)) max(f) else max(as.im(f, win))
+  }
   ##
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
     if(!win.given) win <- square(1)
     for(isim in 1:nsim) {
       progressreport(isim, nsim)
-      result[[isim]] <- rSSI(r=r, n=n, win=win, giveup=giveup, x.init=x.init)
+      result[[isim]] <- rSSI(r=r, n=n, win=win, giveup=giveup, x.init=x.init,
+                             f=f, fmax=fmax)
     }
     names(result) <- paste("Simulation", 1:nsim)
     return(as.solist(result))
@@ -576,10 +585,10 @@ rSSI <- function(r, n=Inf, win = square(1),
   ntries <- 0
   while(ntries < giveup) {
     ntries <- ntries + 1
-    qq <- runifpoint(1, win)
-    x <- qq$x[1]
-    y <- qq$y[1]
-    if(X$n == 0 || all(((x - X$x)^2 + (y - X$y)^2) > r2))
+    qq <- if(is.null(f)) runifpoint(1, win) else rpoint(1, f, fmax, win)
+    dx <- qq$x[1] - X$x
+    dy <- qq$y[1] - X$y
+    if(all(dx^2 + dy^2 > r2))
       X <- superimpose(X, qq, W=win, check=FALSE)
     if(X$n >= n)
       return(if(drop) X else solist(X))

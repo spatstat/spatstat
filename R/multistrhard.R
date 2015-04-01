@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.34 $	$Date: 2015/03/16 10:27:39 $
+#    $Revision: 2.35 $	$Date: 2015/03/31 03:57:00 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -183,11 +183,13 @@ doMultiStraussHard <- local({
            iradii <- self$par$iradii
            hradii <- self$par$hradii
            nt <- nrow(iradii)
-           splat(nt, "types of points")
-           if(!is.null(types)) {
-             splat("Possible types:")
-             print(noquote(types))
-           } else splat("Possible types:\t not yet determined")
+           if(waxlyrical('gory')) {
+             splat(nt, "types of points")
+             if(!is.null(types)) {
+               splat("Possible types:")
+               print(noquote(types))
+             } else splat("Possible types:\t not yet determined")
+           }
            splat("Interaction radii:")
            print(iradii)
            if(!is.null(hradii)) {

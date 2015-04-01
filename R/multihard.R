@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.14 $	$Date: 2015/01/07 06:24:36 $
+#    $Revision: 1.15 $	$Date: 2015/03/31 03:57:19 $
 #
 #    The Hard core process
 #
@@ -140,12 +140,14 @@ MultiHard <- local({
        update = NULL,  # default OK
        print = function(self) {
          h <- self$par$hradii
-         if(!is.null(h)) splat(nrow(h), "types of points")
-         types <- self$par$types
-         if(!is.null(types)) {
-           splat("Possible types:")
-           print(noquote(types))
-         } else splat("Possible types:\t not yet determined")
+         if(waxlyrical('gory')) {
+           if(!is.null(h)) splat(nrow(h), "types of points")
+           types <- self$par$types
+           if(!is.null(types)) {
+             splat("Possible types:")
+             print(noquote(types))
+           } else splat("Possible types:\t not yet determined")
+         }
          if(!is.null(h)) {
            splat("Hardcore radii:")
            print(h)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.035
+        CHANGES IN spatstat VERSION 1.41-1.036
 
 OVERVIEW
 
@@ -111,6 +111,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    density values must be positive (avoiding numerical errors
    which occasionally produce small negative values).
 
+   o rSSI
+   Can now generate inhomogeneous patterns.
+
    o effectfun
    Now works for 'kppm' and 'lppm' objects as well.
 
@@ -164,6 +167,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.tess
    New argument 'do.plot'.
 
+   o MultiHard, MultiStrauss, MultiStraussHard
+   Printed output of fitted model now respects spatstat.options('terse').
 
 BUG FIXES
 

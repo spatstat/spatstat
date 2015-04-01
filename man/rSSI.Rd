@@ -7,7 +7,7 @@
 }
 \usage{
  rSSI(r, n=Inf, win = square(1), giveup = 1000, x.init=NULL, ...,
-      nsim=1, drop=TRUE)
+      f=NULL, fmax=NULL, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{r}{
@@ -39,6 +39,10 @@
     added via simple sequential inhibition.  See \bold{Details}.
   }
   \item{\dots}{Ignored.}
+  \item{f,fmax}{
+    Optional arguments passed to \code{\link{rpoint}}
+    to specify a non-uniform probability density for the random points.
+  }
   \item{nsim}{Number of simulated realisations to be generated.}
   \item{drop}{
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
@@ -117,16 +121,20 @@
  X <- runifpoint(100)
  Y <- rSSI(0.03,142,x.init=X) # Y consists of X together with
                               # 42 added points.
- \dontrun{
-  plot(Y)
+ if(interactive()) {
+  plot(Y, main="rSSI")
   plot(X,add=TRUE,chars=20,cols="red")
  }
+ Z <- rSSI(0.05, 100, f=function(x,y){x})
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{datagen}
