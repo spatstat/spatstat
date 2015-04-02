@@ -20,6 +20,8 @@
        method="mpl",
        forcefit=FALSE,
        project=FALSE,
+       prior.mean = NULL,
+       prior.var = NULL,
        nd = NULL,
        eps = NULL,
        gcontrol=list(),
@@ -39,6 +41,8 @@
        method="mpl",
        forcefit=FALSE,
        project=FALSE,
+       prior.mean = NULL,
+       prior.var = NULL,
        nd = NULL,
        eps = NULL,
        gcontrol=list(),
@@ -101,6 +105,7 @@
     The method used to fit the model. Options are 
     \code{"mpl"} for the method of Maximum PseudoLikelihood,
     \code{"logi"} for the Logistic Likelihood method,
+    \code{"VBlogi"} for the Variational Bayes Logistic Likelihood method,
     and \code{"ho"} for the Huang-Ogata approximate maximum likelihood
     method.
   }
@@ -114,6 +119,13 @@
     Logical. Setting \code{project=TRUE} will ensure that the
     fitted model is always a valid point process by
     applying \code{\link{project.ppm}}.
+  }
+  \item{prior.mean}{
+    Optional vector of prior means for canonical parameters (for
+       \code{method="VBlogi"}). See Details.
+  }
+  \item{prior.var}{
+    Optional prior variance covariance matrix for canonical parameters (for \code{method="VBlogi"}). See Details.
   }
   \item{nd}{
     Optional. Integer or pair of integers.
@@ -420,6 +432,15 @@
 	  specify a relatively small number of dummy points,
 	  so that this method is the fastest, in practice.
 	}
+	\item{method="VBlogi":}{	  
+	  the model will be fitted in a Bayesian setup by maximising the
+	  posterior probability density for the canonical model
+	  parameters. This uses the variational Bayes approximation to
+	  the posterior derived from the logistic likelihood as described
+	  in Rajala (2014). The prior is assumed to be multivariate
+	  Gaussian with mean vector \code{prior.mean} and variance-covariance
+	  matrix \code{prior.var}.	  
+	}
 	\item{method="ho":}{
 	  the model will be fitted
 	  by applying the approximate maximum likelihood
@@ -428,9 +449,9 @@
 	  but has better statistical properties.
 	}
       }
-      Note that \code{method='logi'} and \code{method='ho'}
-      involve randomisation, so that the results are subject to
-      random variation. 
+      Note that \code{method='logi'}, \code{method='VBlogi'} and
+      \code{method='ho'} involve randomisation, so that the results are
+      subject to random variation.
     }
     \item{Huang-Ogata method:}{
       If \code{method="ho"} then the model will be fitted using
@@ -557,6 +578,12 @@
   estimates for pairwise interaction processes,
   \emph{Annals of the Institute of Statistical Mathematics}
   \bold{46} (1994) 475-486.
+
+  Rajala T. (2014)
+  \emph{A note on Bayesian logistic regression for spatial exponential family
+  Gibbs point processes},
+  Preprint on ArXiv.org. \url{http://arxiv.org/abs/1411.0539}
+
 }
 
 \seealso{

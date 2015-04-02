@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.112 $  $Date: 2014/12/21 11:31:45 $
+##  $Revision: 1.113 $  $Date: 2015/04/02 02:17:19 $
 ##
 
 vcov.ppm <- local({
@@ -33,6 +33,9 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
     stop(paste("Unrecognised option: what=", sQuote(what)))
   what <- what.map[m]
 
+  ## No vcov for Variational Bayes
+  if(!is.null(object$internal$VB))
+      stop("Variance calculations currently not possible for variational Bayes fit.")
   ## no parameters, no variance
   if(length(coef(object)) == 0) {
     result <- switch(what,

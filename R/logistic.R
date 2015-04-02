@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.18 $  $Date: 2014/12/17 00:52:48 $
+#   $Revision: 1.19 $  $Date: 2015/04/02 02:17:19 $
 #
 #  Logistic likelihood method - under development
 #
@@ -202,7 +202,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2014/12/17 00:52:48 $")
+                      date="$Date: 2015/04/02 02:17:19 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -219,13 +219,16 @@ logi.engine <- function(Q,
               fitin       = fitin,
               maxlogpl    = maxlogpl,
               covariates  = mpl.usable(covariates),
-              varcov      = if(VB) fit$S else NULL,
+#              varcov      = if(VB) fit$S else NULL,
               internal    = list(Vnames  = Vnames,
                                  IsOffset=IsOffset,
                                  glmdata = glmdata,
                                  glmfit = fit,
                                  logistic = Dinfo,
-                                 computed = computed)
+                                 computed = computed,
+                                 VB = if(VB) TRUE else NULL,
+                                 priors = if(VB) fit$priors else NULL
+                                 )
               )
   class(fit) <- "ppm"
   return(fit)

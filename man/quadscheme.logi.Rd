@@ -118,11 +118,9 @@ weights are never used and only appear to be compatible with the class
 \code{"quad"} from which the \code{"logiquad"} object inherits.
 }
 \references{
-  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2013)
-  \emph{A logistic regression estimating function
-    for spatial Gibbs point processes.}
-  Research Report, Centre for Stochastic Geometry and Bioimaging,
-  Denmark. \url{www.csgb.dk}
+  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)
+  Logistic regression for spatial Gibbs point processes.
+  \emph{Biometrika} \bold{101} (2) 377--392.
 }
 \seealso{
   \code{\link{ppm}},

@@ -8,7 +8,7 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.diggle(X, ..., correction="good", hmax=NULL)
+   bw.diggle(X, ..., correction="good", hmax=NULL, nr=512)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,10 @@
   \item{hmax}{
     Numeric. Maximum value of bandwidth that should be considered.
   }
+  \item{nr}{
+    Integer. Number of steps in the distance value \eqn{r} to use in computing
+    numerical integrals. 
+  }
 }
 \details{
   This function selects an appropriate bandwidth \code{sigma}
@@ -31,8 +35,18 @@
 
   The bandwidth \eqn{\sigma}{sigma} is chosen to 
   minimise the mean-square error criterion defined by Diggle (1985).
-  The algorithm computes the mean-square error by 
-  the method of Berman and Diggle (1989).
+  The algorithm uses the method of Berman and Diggle (1989) to
+  compute the quantity
+  \deqn{
+    M(\sigma) = \frac{\mbox{MSE}(\sigma)}{\lambda^2} - g(0)
+  }{
+    M(sigma) = MSE(sigma)/lambda^2 - g(0)
+  }
+  as a function of bandwidth \eqn{\sigma}{sigma},
+  where \eqn{\mbox{MSE}(\sigma)}{MSE(sigma)} is the
+  mean squared error at bandwidth \eqn{\sigma}{sigma},
+  while \eqn{\lambda}{lambda} is the mean intensity,
+  and \eqn{g} is the pair correlation function. 
   See Diggle (2003, pages 115-118) for a summary of this method.
 
   The result is a numerical value giving the selected bandwidth.

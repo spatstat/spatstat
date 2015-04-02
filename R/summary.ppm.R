@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.72 $   $Date: 2014/11/11 03:09:00 $
+#    $Revision: 1.73 $   $Date: 2015/04/02 02:17:19 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -83,7 +83,9 @@ summary.ppm <- local({
     ######  Fitting algorithm ########################################
 
     y$method <- x$method
-  
+
+    y$VB <- x$internal$VB
+    
     y$problems <- x$problems
 
     y$fitter <- if(!is.null(x$fitter)) x$fitter else "unknown"
@@ -272,6 +274,12 @@ summary.ppm <- local({
     if(is.character(quick) && (quick == "no variances"))
       return(y)
 
+    # Exit before SE for variational Bayes
+    if(!is.null(x$internal$VB)){
+        class(y) <- "summary.ppm"
+        return(y)
+    }
+    
     if(length(COEFS) > 0) {
       # compute standard errors
       se <- x$internal$se
@@ -332,19 +340,23 @@ print.summary.ppm <- function(x, ...) {
       switch(x$method,
              mpl={
                if(x$poisson) {
-                 # Poisson process
-                 "maximum likelihood (Berman-Turner approximation)"
+                 # Poisson process 
+                "maximum likelihood (Berman-Turner approximation)"
                } else {
                  "maximum pseudolikelihood (Berman-Turner approximation)"
                } 
              },
              logi={
-               if(!x$poisson) {
-                 "maximum pseudolikelihood (logistic regression approximation)"
+               if(is.null(x$VB)){
+                 if(x$poisson) {
+                   # Poisson process
+                   "maximum likelihood (logistic regression approximation)"
+                 } else {
+                   "maximum pseudolikelihood (logistic regression approximation)"
+                 }
                } else {
-                 # Poisson process
-                 "maximum likelihood (logistic regression approximation)"
-               } 
+                 "maximum posterior density (variational Bayes approximation)"
+               }
              },
              ho="Huang-Ogata method (approximate maximum likelihood)",
              paste("unrecognised method", sQuote(x$method)))

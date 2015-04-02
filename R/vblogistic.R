@@ -7,7 +7,7 @@
 #' 
 #' Special version for 'spatstat'
 #'
-#'    $Revision: 1.4 $ $Date: 2014/12/17 00:53:11 $
+#'    $Revision: 1.5 $ $Date: 2015/04/02 02:17:19 $
 #' 
 ####################################################
 #' Used inside ppm
@@ -73,9 +73,16 @@ vblogit <- local({
     #'
     #'
     #' Priors and initial estimates.
-    if(missing(S0))  S0  <- diag(1e5, K, K)
-    if(missing(S0i)) S0i <- solve(S0)
     if(missing(m0))  m0  <- rep(0, K)
+    if(missing(S0))  S0  <- diag(1e5, K, K)
+    #' Overwrite with priors from ppm if given.
+    if(!is.null(prior.mean <- list(...)$prior.mean))
+        m0 <- prior.mean
+    if(!is.null(prior.var <- list(...)$prior.var))
+        S0 <- prior.var
+    check.nvector(m0, K, things="parameters")
+    stopifnot(is.matrix(S0))
+    if(missing(S0i)) S0i <- solve(S0)
     #' Constants:
     oo2 <- offset^2
     LE_CONST <- as.numeric( -0.5*t(m0)%*%S0i%*%m0

@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.49 $	$Date: 2014/11/10 11:27:55 $
+#	$Revision: 1.50 $	$Date: 2015/04/02 02:17:19 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -69,6 +69,8 @@ function(Q,
          method = "mpl",
          forcefit=FALSE,
          project=FALSE,
+         prior.mean = NULL,
+         prior.var = NULL,
          nd = NULL,
          eps = NULL,
          gcontrol=list(),
@@ -83,8 +85,23 @@ function(Q,
 
   subsetexpr <- if(!missing(subset)) substitute(subset) else NULL
 
-  if(!(method %in% c("mpl", "ho", "logi")))
-    stop(paste("Unrecognised fitting method", sQuote(method)))
+  if(!(method %in% c("mpl", "ho", "logi", "VBlogi")))
+      stop(paste("Unrecognised fitting method", sQuote(method)))
+
+  if(!is.null(prior.mean) | !is.null(prior.var)){
+      if(missing(method))
+          method <- "VBlogi"
+      if(method!="VBlogi")
+          stop("Prior specification only works with method ",
+               sQuote("VBlogi"))
+  }
+  if(method=="VBlogi"){
+      VB <- TRUE
+      method <- "logi"
+  } else{
+      VB <- FALSE
+  }
+  
   if(inherits(Q, "logiquad")){
     if(missing(method))
       method <- "logi"
@@ -177,6 +194,9 @@ function(Q,
                            nd = nd,
                            gcontrol=gcontrol,
                            callstring=callstring,
+                           prior.mean=prior.mean,
+                           prior.var=prior.var,
+                           VB=VB,
                            ...)
     fitLOGI$Qname <- Qname
     fitLOGI$call <- cl

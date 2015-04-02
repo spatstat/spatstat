@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.116 $	$Date: 2014/12/31 01:54:00 $
+#	$Revision: 2.117 $	$Date: 2015/04/02 02:17:19 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -57,6 +57,8 @@ function(x, ...,
   # Otherwise, do it only if the model is Poisson (by default)
   do.SE <- force.no.SE <- force.SE <- FALSE
   if(np == 0) {
+    force.no.SE <- TRUE
+  } else if(!is.null(x$internal$VB)) {
     force.no.SE <- TRUE
   } else if(!misswhat && ("se" %in% what)) {
     force.SE <- TRUE
@@ -327,7 +329,7 @@ valid.ppm <- function(object, warn=TRUE) {
     return(FALSE)
   # inspect interaction
   inte <- object$interaction
-  if(is.null(inte))
+  if(is.poisson(object))
     return(TRUE) # Poisson process
   # extract fitted interaction coefficients
   Vnames <- object$internal$Vnames

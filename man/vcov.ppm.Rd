@@ -206,17 +206,14 @@
   \code{\link[stats]{confint}} for confidence intervals.
 }
 \references{
-  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2013)
-  \emph{A logistic regression estimating function
-    for spatial Gibbs point processes.}
-  Research Report, Centre for Stochastic Geometry and Bioimaging,
-  Denmark. \url{www.csgb.dk}
+  Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)
+  Logistic regression for spatial Gibbs point processes.
+  \emph{Biometrika} \bold{101} (2) 377--392.
 
-  Coeurjolly, J.-F. and Rubak, E. (2012)
-  \emph{Fast covariance estimation for innovations
-    computed from a spatial Gibbs point process}.
-  Research Report, Centre for Stochastic Geometry and Bioimaging,
-  Denmark. \url{www.csgb.dk}
+  Coeurjolly, J.-F. and Rubak, E. (2013)
+  Fast covariance estimation for innovations
+  computed from a spatial Gibbs point process.
+  Scandinavian Journal of Statistics \bold{40} 669--684.
 
   Kutoyants, Y.A. (1998) 
   \bold{Statistical Inference for Spatial Poisson Processes},
