@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.100 $	$Date: 2015/03/18 03:07:20 $
+#	$Revision: 4.101 $	$Date: 2015/04/02 05:05:30 $
 #
 #
 #
@@ -871,7 +871,7 @@ convexhull <- function(x) {
   if(inherits(x, "owin")) 
     v <- vertices(x)
   else if(inherits(x, "psp"))
-    v <- endpoints.psp
+    v <- endpoints.psp(x)
   else if(inherits(x, "ppp"))
     v <- x
   else {

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.037
+        CHANGES IN spatstat VERSION 1.41-1.038
 
 OVERVIEW
 
@@ -202,6 +202,10 @@ BUG FIXES
 
    o ppm
    Crashed (rarely) when method='ho' if the simulated pattern was empty.
+   Fixed.
+
+   o convexhull
+   Crashed if applied to a 'psp' object.
    Fixed.
 
    o MultiStraussHard
