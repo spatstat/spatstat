@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.3 $ $Date: 2007/02/28 10:16:07 $
+# $Revision: 1.4 $ $Date: 2015/04/04 09:05:55 $
 #
 
 anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
@@ -34,8 +34,10 @@ anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
   # Extract fit objects 
   fitz <- lapply(objex, function(x) { x$Fit$FIT })
 
+  opt <- list(test=test, dispersion=1)
+
   # Finally do the appropriate ANOVA
-  result <- do.call("anova", append(fitz, list(test=test, dispersion=1)))
+  result <- do.call(anova, append(fitz, opt))
   
   return(result)
 }

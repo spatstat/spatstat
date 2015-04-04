@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.038
+        CHANGES IN spatstat VERSION 1.41-1.039
 
 OVERVIEW
 
-   o We thank Ben Taylor and Ute Hahn for contributions.
+   o We thank Cody Schank, Ben Taylor and Ute Hahn for contributions.
 
    o Version nickname: 'Lifestyle Choice'
 
@@ -133,6 +133,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o rLGCP
    New argument 'nsim' allows multiple patterns to be generated.
+
+   o alltypes
+   New argument 'reuse' determines whether all simulation envelopes
+   are based on the same set of simulated patterns, or on independent sets.
 
    o rpoispp, runifpoint
    New argument 'ex' makes it possible to generate a random pattern

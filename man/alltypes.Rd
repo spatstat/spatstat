@@ -9,7 +9,8 @@
 }
 
 \usage{
-  alltypes(X, fun="K", \dots, dataname=NULL,verb=FALSE,envelope=FALSE)
+  alltypes(X, fun="K", \dots,
+           dataname=NULL,verb=FALSE,envelope=FALSE,reuse=TRUE)
 }
 
 \arguments{
@@ -46,6 +47,12 @@
   \item{envelope}{
     Logical value. If \code{envelope} is true, then simulation envelopes
     of the summary function will also be computed. See Details.
+  }
+  \item{reuse}{
+    Logical value indicating whether the envelopes in each panel
+    should be based on the same set of simulated patterns
+    (\code{reuse=TRUE}) or on different, independent sets of simulated
+    patterns (\code{reuse=FALSE}).
   }
 }
 
@@ -127,7 +134,6 @@
   simulations, the random process generating the simulations,
   the construction of envelopes, and so on. 
 }
-
 \value{
   A function array (an object of class \code{"fasp"},
   see \code{\link{fasp.object}}). This can be plotted

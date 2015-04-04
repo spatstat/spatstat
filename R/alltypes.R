@@ -6,7 +6,7 @@
 #
                                   
 alltypes <- function(X, fun="K", ...,
-                     dataname=NULL,verb=FALSE,envelope=FALSE) {
+                     dataname=NULL,verb=FALSE,envelope=FALSE,reuse=TRUE) {
 #
 # Function 'alltypes' --- calculates a summary function for
 # each type, or each pair of types, in a multitype point pattern
@@ -85,7 +85,7 @@ alltypes <- function(X, fun="K", ...,
   # ------------ start computing -------------------------------  
   # if computing envelopes, first generate simulated patterns
   # using undocumented feature of envelope()
-  if(envelope) {
+  if(envelope && reuse) {
     L <- do.call("envelope",
                  resolve.defaults(
                                   list(X, fun=estimator),
@@ -93,7 +93,7 @@ alltypes <- function(X, fun="K", ...,
                                   list(...),
                                   list(verbose=verb)))
     intern <- attr(L, "internal")
-  }
+  } else intern <- NULL
 
   # compute function array and build up 'fasp' object
   fns  <- list()

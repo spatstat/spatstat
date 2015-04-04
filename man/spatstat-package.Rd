@@ -1736,6 +1736,7 @@
   Christopher Ryan,
   Farzaneh Safavimanesh,
   Aila \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka},
+  Cody Schank,
   Katja Schladitz,
   Sebastian Schutte,
   Bryan Scott,

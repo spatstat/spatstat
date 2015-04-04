@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.32 $  $Date: 2015/01/20 13:57:52 $
+#  $Revision: 1.33 $  $Date: 2015/04/03 13:03:22 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -97,6 +97,7 @@ profilepl <- local({
       savecomp <- !oversize.quad(Q)
     }
     ## go
+    gc()
     if(verbose) message(paste("Comparing", n, "models..."))
     for(i in 1:n) {
       if(verbose)
@@ -143,6 +144,7 @@ profilepl <- local({
     }
     if(verbose) message("Fitting optimal model...")
     opti <- which.max(criterion)
+    gc()
     optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
     optarg <- list(..., interaction=optint, rbord=rbord)
     if(pass.cfa) {
