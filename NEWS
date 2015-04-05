@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.039
+        CHANGES IN spatstat VERSION 1.41-1.040
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
    o Permutation test for difference between groups of point patterns.
 
    o Improved behaviour of polygon geometry operations.
+
+   o Improved support for cluster and Cox models.
 
    o Improved basic support for owin objects.
 
@@ -28,6 +30,9 @@ NEW FUNCTIONS
    o studpermu.test
    Studentised permutation test for difference between groups of point patterns.
    Generously contributed by Ute Hahn.
+
+   o AIC.kppm, extractAIC.kppm, logLik.kppm, nobs.kppm
+   Methods for computing AIC for fitted Cox and cluster models.
 
    o transmat
    Convert pixel arrays between different display conventions.
@@ -61,6 +66,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o ppm
    Now supports Variational Bayes fitting method.
+
+   o kppm
+   'AIC' and 'step' now work for kppm objects
+   fitted using maximum Palm likelihood.
 
    o kppm
    The default for the weight function 'weightfun' has been changed, 

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.103 $ $Date: 2015/03/13 06:13:18 $
+# $Revision: 1.104 $ $Date: 2015/04/05 06:30:02 $
 #
 
 kppm <- function(X, ...) {
@@ -16,7 +16,7 @@ kppm.formula <-
            ..., data=NULL) {
   ## remember call
   callstring <- short.deparse(sys.call())
-  ## cl <- match.call()
+  cl <- match.call()
 
   ########### INTERPRET FORMULA ##############################
   
@@ -45,6 +45,8 @@ kppm.formula <-
   }
   result <- eval(thecall, parent.frame())
 
+  result$call <- cl
+  result$callframe <- parent.frame()
   if(!("callstring" %in% names(list(...))))
     result$callstring <- callstring
   
@@ -68,6 +70,8 @@ kppm.ppp <- kppm.quad <-
            covfunargs=NULL,
            use.gam=FALSE,
            nd=NULL, eps=NULL) {
+  cl <- match.call()
+  callstring <- paste(short.deparse(sys.call()), collapse="")
   Xname <- short.deparse(substitute(X))
   clusters <- match.arg(clusters)
   improve.type <- match.arg(improve.type)
@@ -75,6 +79,14 @@ kppm.ppp <- kppm.quad <-
   if(method == "mincon")
     statistic <- pickoption("summary statistic", statistic,
                             c(K="K", g="pcf", pcf="pcf"))
+  ClusterArgs <- list(method = method,
+                      improve.type = improve.type,
+                      improve.args = improve.args,
+                      weightfun=weightfun,
+                      control=control,
+                      statistic=statistic,
+                      statargs=statargs,
+                      rmax = rmax)
   isquad <- inherits(X, "quad")
   if(!is.ppp(X) && !isquad)
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
@@ -101,6 +113,10 @@ kppm.ppp <- kppm.quad <-
                              control=control, weightfun=weightfun, 
                              rmax=rmax, ...))
   #
+  out <- append(out, list(ClusterArgs=ClusterArgs,
+                          call=cl,
+                          callframe=parent.frame(),
+                          callstring=callstring))
   class(out) <- c("kppm", class(out))
 
   # Update intensity estimate with improve.kppm if necessary:
@@ -1118,7 +1134,8 @@ update.kppm <- function(object, trend=~1, ..., clusters=NULL) {
   out <- do.call(kppm,
                  resolve.defaults(list(trend=trend, clusters=clusters),
                                   list(...),
-                                  list(X=object$X)))
+                                  list(X=object$X),
+                                  object$ClusterArgs))
   out$Xname <- object$Xname
   return(out)
 }
@@ -1234,3 +1251,31 @@ model.frame.kppm <- function(formula, ...) {
   model.frame(as.ppm(formula), ...)
 }
 
+logLik.kppm <- function(object, ...) {
+  pl <- object$Fit$clfit$value
+  if(is.null(pl))
+    stop("logLik is only available for kppm objects fitted with method='palm'",
+         call.=FALSE)
+  ll <- logLik(as.ppm(object)) # to inherit class and d.f.
+  ll[] <- pl
+  return(ll)
+}
+ 
+AIC.kppm <- function(object, ..., k=2) {
+  # extract Palm loglikelihood
+  pl <- object$Fit$clfit$value
+  if(is.null(pl))
+    stop("AIC is only available for kppm objects fitted with method='palm'",
+         call.=FALSE)
+  df <- length(coef(object))
+  return(- 2 * as.numeric(pl) + k * df)
+}
+
+extractAIC.kppm <- function (fit, scale = 0, k = 2, ...)
+{
+  edf <- length(coef(fit))
+  aic <- AIC(fit, k=k)
+  c(edf, aic)
+}
+
+nobs.kppm <- function(object, ...) { nobs(as.ppm(object)) }
