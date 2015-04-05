@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.101 $	$Date: 2015/04/02 05:05:30 $
+#	$Revision: 4.102 $	$Date: 2015/04/05 08:34:43 $
 #
 #
 #
@@ -352,6 +352,8 @@ intersect.owin <- function(..., fatal=TRUE, p) {
 
 union.owin <- function(..., p) {
   argh <- list(...)
+  ## weed out NULL arguments
+  argh <- argh[!sapply(argh, is.null)]
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
   ## handle 'solist' objects

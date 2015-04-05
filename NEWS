@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.040
+        CHANGES IN spatstat VERSION 1.41-1.041
 
 OVERVIEW
 
@@ -186,7 +186,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.tess
    New argument 'do.plot'.
 
-   o MultiHard, MultiStrauss, MultiStraussHard
+   o MultiHard, MultiStrauss, MultiStraussHard, HierStrauss
    Printed output of fitted model now respects spatstat.options('terse').
 
 BUG FIXES

@@ -1,7 +1,7 @@
 ##
 ##    hierstrauss.R
 ##
-##    $Revision: 1.4 $	$Date: 2015/01/08 07:34:30 $
+##    $Revision: 1.5 $	$Date: 2015/04/05 09:15:59 $
 ##
 ##    The hierarchical Strauss process
 ##
@@ -119,14 +119,18 @@ HierStrauss <- local({
          radii <- self$par$radii
          types <- self$par$types
          archy <- self$par$archy
-         splat(nrow(radii), "types of points")
+         if(waxlyrical('gory'))
+           splat(nrow(radii), "types of points")
          if(!is.null(types) && !is.null(archy)) {
-           splat("Possible types and ordering:")
+           if(waxlyrical('space')) {
+             splat("Possible types and ordering:")
+           } else cat("Hierarchy: ")
            print(archy)
          } else if(!is.null(types)) {
-           splat("Possible types:")
+           (if(waxlyrical('space')) splat else cat)("Possible types: ")
            print(types)
-         } else splat("Possible types:\t not yet determined")
+         } else if(waxlyrical('gory'))
+           splat("Possible types:\t not yet determined")
          splat("Interaction radii:")
          print(hiermat(radii, self$par$archy))
          invisible(NULL)
