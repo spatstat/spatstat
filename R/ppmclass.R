@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.117 $	$Date: 2015/04/02 02:17:19 $
+#	$Revision: 2.118 $	$Date: 2015/04/06 11:39:31 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -112,30 +112,32 @@ function(x, ...,
         parbreak(terselevel)
       }
 
-      tv <- s$trend$value
+      if(waxlyrical('space', terselevel) || !do.SE) {
+        ## print trend coefficients, unless redundant and space is tight
+        tv <- s$trend$value
       
-      if(length(tv) == 0) 
-        splat("[No trend coefficients]")
-      else {
-        thead <- paste0(s$trend$label, ":")
-        if(is.list(tv)) {
-          splat(thead)
-          for(i in seq_along(tv))
-            print(tv[[i]])
-        } else if(is.numeric(tv) && length(tv) == 1) {
-          ## single number: append to end of current line
-          tvn <- names(tv)
-          tveq <- if(is.null(tvn)) "\t" else paste(" ", tvn, "= ")
-          splat(paste0(thead, tveq, signif(tv, digits)))
-        } else {
-          ## some other format 
-          splat(thead)
-          print(tv)
+        if(length(tv) == 0) 
+          splat("[No trend coefficients]")
+        else {
+          thead <- paste0(s$trend$label, ":")
+          if(is.list(tv)) {
+            splat(thead)
+            for(i in seq_along(tv))
+              print(tv[[i]])
+          } else if(is.numeric(tv) && length(tv) == 1) {
+            ## single number: append to end of current line
+            tvn <- names(tv)
+            tveq <- if(is.null(tvn)) "\t" else paste(" ", tvn, "= ")
+            splat(paste0(thead, tveq, signif(tv, digits)))
+          } else {
+            ## some other format 
+            splat(thead)
+            print(tv)
+          }
         }
+        parbreak(terselevel)
       }
     }
-
-    parbreak(terselevel)
 
     if(waxlyrical("extras", terselevel) &&
        !is.null(cfa <- s$covfunargs) && length(cfa) > 0) {

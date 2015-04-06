@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.042
+        CHANGES IN spatstat VERSION 1.41-1.043
 
 OVERVIEW
 
@@ -191,6 +191,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o MultiHard, MultiStrauss, MultiStraussHard, HierStrauss
    Printed output of fitted model now respects spatstat.options('terse').
+
+   o print.ppm
+   Reduced redundancy in output in some cases.
 
 BUG FIXES
 
