@@ -1,15 +1,19 @@
 #
 # nncorr.R
 #
-# $Revision: 1.9 $  $Date: 2015/01/17 06:58:12 $
+# $Revision: 1.10 $  $Date: 2015/04/06 08:53:59 $
 #
 
-nnmean <- function(X) {
+nnmean <- function(X, k=1) {
   stopifnot(is.ppp(X) && is.marked(X))
+  if(k %% 1 != 0 || length(k) != 1 || k <= 0)
+    stop("k should be a single integer greater than 0", call.=FALSE)
+  if(k >= npoints(X))
+    stop("Not enough points to compute k-th nearest neighbours")
   m <- numeric.columns(marks(X), logical=TRUE, others="na")
-  nnid <- nnwhich(X)
-  ok <- (nndist(X) <= bdist.points(X))
-  if(!any(ok))
+  nnid <- nnwhich(X, k=k)
+  ok <- (nndist(X, k=k) <= bdist.points(X))
+  if(!any(ok, na.rm=TRUE))
     stop("Insufficient data")
   numer <- unlist(lapply(as.data.frame(m[nnid[ok], ]), mean, na.rm=TRUE))
   denom <- unlist(lapply(as.data.frame(m),             mean, na.rm=TRUE))
@@ -19,19 +23,26 @@ nnmean <- function(X) {
   return(ans)
 }
 
-nnvario <- function(X) {
+nnvario <- function(X, k=1) {
   stopifnot(is.ppp(X) && is.marked(X))
   m <- numeric.columns(marks(X), logical=TRUE, others="na")
   f <- function(m1,m2) { ((m1-m2)^2)/2 }
-  ans <- nncorr(X %mark% m, f, denominator=diag(var(m)))
+  ans <- nncorr(X %mark% m, f, k=k, denominator=diag(var(m)))
   return(ans)
 }
 
-nncorr <- function(X, f = function(m1,m2) { m1 * m2}, ...,
+nncorr <- function(X, f = function(m1,m2) { m1 * m2},
+                   k=1,
+                   ...,
                    use = "all.obs",
                    method = c("pearson", "kendall", "spearman"),
                    denominator=NULL) {
   stopifnot(is.ppp(X) && is.marked(X))
+  if(k %% 1 != 0 || length(k) != 1 || k <= 0)
+    stop("k should be a single integer greater than 0", call.=FALSE)
+  if(k >= npoints(X))
+    stop("Not enough points to compute k-th nearest neighbours")
+  
   m <- as.data.frame(marks(X))
   nv <- ncol(m)
   if(nv == 1) colnames(m) <- ""
@@ -63,7 +74,7 @@ nncorr <- function(X, f = function(m1,m2) { m1 * m2}, ...,
     for(j in 1:nv) {
       mj <- m[,j, drop=FALSE]
       denj <- denominator[[j]]
-      nncj <- nncorr(X %mark% mj, f=f[[j]], use=use, method=method,
+      nncj <- nncorr(X %mark% mj, f=f[[j]], k=k, use=use, method=method,
                      denominator=denj)
       kj <- length(nncj)
       result[1:kj,j] <- nncj
@@ -91,8 +102,8 @@ nncorr <- function(X, f = function(m1,m2) { m1 * m2}, ...,
              mean(outer(m, m, f, ...))
            })
   # border method
-  nn <- nnwhich(X)
-  ok <- (nndist(X) <= bdist.points(X))
+  nn <- nnwhich(X, k=k)
+  ok <- (nndist(X, k=k) <= bdist.points(X))
   if(!any(ok))
     stop("Insufficient data")
   mY <- m[nn[ok]]

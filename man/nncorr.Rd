@@ -13,11 +13,12 @@
 \usage{
      nncorr(X,
             f = function(m1, m2) { m1 * m2 },
+            k = 1,       
             \dots,
             use = "all.obs", method = c("pearson", "kendall", "spearman"),
             denominator=NULL)
-     nnmean(X)
-     nnvario(X)
+     nnmean(X, k=1)
+     nnvario(X, k=1)
 }
 \arguments{
   \item{X}{
@@ -28,6 +29,9 @@
     Function \eqn{f} used in the definition of the
     nearest neighbour correlation. There is a sensible default
     that depends on the type of marks of \code{X}.
+  }
+  \item{k}{
+    Integer. The \code{k}-th nearest neighbour of each point will be used.
   }
   \item{\dots}{
     Extra arguments passed to \code{f}.

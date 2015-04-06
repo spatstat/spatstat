@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.041
+        CHANGES IN spatstat VERSION 1.41-1.042
 
 OVERVIEW
 
@@ -79,9 +79,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    envelope methods now have argument 'use.theory' specifying whether
    to use the 'theoretical' value of the summary function when constructing
    simultaneous envelopes.
-   
+
    o Kest
    New argument 'rmax' controls maximum value of argument 'r'
+
+   o nncorr, nnmean, nnvario
+   New argument 'k' specifies k-th nearest neighbour.
 
    o clickpoly, clickbox
    These functions now handle graphical arguments to polygon()
