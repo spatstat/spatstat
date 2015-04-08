@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.043
+        CHANGES IN spatstat VERSION 1.41-1.044
 
 OVERVIEW
 
@@ -200,6 +200,10 @@ BUG FIXES
    o Kinhom, Linhom
    The value of 'theo' was erroneously rescaled 
    by a small amount, when renormalise=TRUE (the default).
+   Fixed.
+
+   o Kmark
+   Values were erroneously rescaled.
    Fixed.
 
    o union.owin

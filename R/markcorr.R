@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.72 $ $Date: 2015/02/24 01:42:41 $
+##     $Revision: 1.73 $ $Date: 2015/04/08 01:45:25 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -212,26 +212,30 @@ Kmark <-
   switch(ftype,
          mul={
            wt <- mX/lambda
-           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction,
+                       ..., renormalise=FALSE)
            Ef2 <- mean(mX)^2
          },
          equ={
            fXX <- outer(mX, mX, "==")
            wt <- fXX/lambda^2
-           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction,
+                       ..., renormalise=FALSE)
            mtable <- table(mX)
            Ef2 <- sum(mtable^2)/length(mX)^2
          },
          product={
            f1X <- do.call(f1, append(list(mX), fargs))
            wt <- f1X/lambda
-           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda=wt, correction=correction,
+                       ..., renormalise=FALSE)
            Ef2 <- mean(f1X)^2
          },
          general={
            fXX <- do.call("outer", append(list(mX, mX, f), fargs))
            wt <- fXX/lambda^2
-           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction, ...)
+           K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction,
+                       ..., renormalise=FALSE)
            Ef2 <- mean(fXX)
          })
   K$theo <- K$theo * Ef2
