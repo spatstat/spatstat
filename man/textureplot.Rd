@@ -1,11 +1,12 @@
 \name{textureplot}
 \alias{textureplot}
 \title{
-  Plot Image Using Texture Fill
+  Plot Image or Tessellation Using Texture Fill
 }
 \description{
   For a factor-valued pixel image, this command plots each level
-  of the factor using a different texture. 
+  of the factor using a different texture.
+  For a tessellation, each tile is plotted using a different texture.
 }
 \usage{
 textureplot(x, \dots,
@@ -18,7 +19,8 @@ textureplot(x, \dots,
 }
 \arguments{
   \item{x}{
-    Pixel image (object of class \code{"im"}) whose pixel values
+    A tessellation (object of class \code{"tess"}) with at most 8 tiles,
+    or a pixel image (object of class \code{"im"}) whose pixel values
     are a \code{factor} with at most 8 levels.
   }
   \item{\dots}{
@@ -77,7 +79,11 @@ textureplot(x, \dots,
   }
 }
 \details{
-  For each level of the factor, the algorithm finds the region where the image
+  If \code{x} is a tessellation, then each tile of the tessellation is
+  plotted and filled with a texture using \link{add.texture}.
+
+  If \code{x} is a factor-valued pixel image, then
+  for each level of the factor, the algorithm finds the region where the image
   takes this value, and fills the region with a texture using
   \code{\link{add.texture}}.
 }
@@ -85,11 +91,14 @@ textureplot(x, \dots,
   (Invisible) A texture map (object of class \code{"texturemap"})
   associating a texture with each level of the factor.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{im}}, 
@@ -99,6 +108,7 @@ textureplot(x, \dots,
 \examples{
   Z <- cut(setcov(owin()), 3, labels=c("Lo", "Med", "Hi"))
   textureplot(Z)
+  textureplot(dirichlet(runifpoint(6)))
 }
 \keyword{spatial}
 \keyword{hplot}

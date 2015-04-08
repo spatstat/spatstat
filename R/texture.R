@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.5 $ $Date: 2014/11/10 11:20:15 $
+##  $Revision: 1.6 $ $Date: 2015/04/08 08:55:40 $
 
 ### .................. basic graphics .............................
 
@@ -254,16 +254,22 @@ textureplot <- local({
                           legsep=0.1, legwid=0.2) {
     if(missing(main))
       main <- short.deparse(substitute(x))
-    stopifnot(is.im(x))
+    if(!(is.im(x) || is.tess(x)))
+      stop("x must be a pixel image or a tessellation", call.=FALSE)
     leg.side <- match.arg(leg.side)
     if(!is.null(clipwin))
       x <- x[clipwin, drop=FALSE]
-    if(x$type != "factor")
-      x <- eval.im(factor(x))
-    levX <- levels(x)
+    if(is.im(x)) {
+      if(x$type != "factor")
+        x <- eval.im(factor(x))
+      levX <- levels(x)
+    } else {
+      tilX <- tiles(x)
+      levX <- names(tilX)
+    }
     n <- length(levX)
     if(n > 8)
-      stop("Too many factor levels for texture plot: maximum is 8")
+      stop("Too many factor levels or tiles: maximum is 8")
     ## determine texture map
     if(inherits(textures, "texturemap")) {
       tmap <- textures
@@ -319,9 +325,10 @@ textureplot <- local({
         fakemaintitle(bb, main, ...)
       }
       if(is.null(spacing)) spacing <- diameter(as.rectangle(x))/50
-      ok <- (table(x$v) > 0)
-      for(i in which(ok)) {
-        Zi <- as.polygonal(levelset(x, levX[i], "=="))
+      areas <- if(is.im(x)) table(x$v) else tile.areas(x)
+      for(i in which(areas > 0)) {
+        Zi <- if(is.tess(x)) tilX[[i]] else 
+              as.polygonal(levelset(x, levX[i], "==")) 
         if(is.null(border) || !is.na(border))
           plot(Zi, add=TRUE, border=border)
         add.texture(Zi, texture=tmap(levX[i]), spacing=spacing, ...)

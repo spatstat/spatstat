@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.044
+        CHANGES IN spatstat VERSION 1.41-1.045
 
 OVERVIEW
 
@@ -182,6 +182,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o varblock
    Changed the ordering (and therefore default colours/styles) 
    of curves in the plot, to match other functions like lohboot.
+
+   o textureplot
+   Now accepts a tessellation or a pixel image.
 
    o bw.diggle
    New argument 'nr' controls accuracy.
