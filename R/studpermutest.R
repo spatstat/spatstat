@@ -48,7 +48,7 @@ studpermu.test <- local({
 studpermu.test <-
   function (X, formula, summaryfunction = Kest,
             ...,
-            rinterval = NULL, nperm = 1000,
+            rinterval = NULL, nperm = 999,
             use.Tbar = FALSE, # the alternative statistic, use with K/r or L  
             minpoints = 20, 
             rsteps = 128, r = NULL,
@@ -250,7 +250,7 @@ studpermu.test <-
     }  
     names(Tobs) <- if(use.Tbar) "Tbar" else "T"
 
-    pval <- mean(Tobs < Tsim)
+    pval <- (1 + sum(Tobs < Tsim))/(1 + nperm)
   
     #' ----- making a test object -----
     method <- c("Studentized permutation test for grouped point patterns",

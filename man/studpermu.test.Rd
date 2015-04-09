@@ -9,7 +9,7 @@
 }
 \usage{
    studpermu.test(X, formula, summaryfunction = Kest,
-       \dots, rinterval = NULL, nperm = 1000,
+       \dots, rinterval = NULL, nperm = 999,
         use.Tbar = FALSE, minpoints = 20, rsteps = 128,
         r = NULL, arguments.in.data = FALSE)
 }
