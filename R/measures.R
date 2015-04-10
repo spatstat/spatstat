@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.52 $  $Date: 2015/02/17 10:47:48 $
+#  $Revision: 1.53 $  $Date: 2015/04/10 03:41:42 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -114,12 +114,14 @@ print.msr <- function(x, ...) {
   d <- ncol(as.matrix(x$val))
   splat(paste0(if(d == 1) "Scalar" else paste0(d, "-dimensional vector"),
                "-valued measure"))
-  if(d > 1 && !is.null(cn <- colnames(x$val)))
+  if(d > 1 && !is.null(cn <- colnames(x$val)) && waxlyrical("space"))
     splat("vector components:", commasep(sQuote(cn)))
-  if(waxlyrical("extras")) {
+  if(waxlyrical("gory")) {
     splat("Approximated by", n, "quadrature points")
     print(as.owin(x$loc))
     splat(sum(x$atoms), "atoms")
+  }
+  if(waxlyrical("extras")) {
     splat("Total mass:")
     if(d == 1) {
       splat("discrete =", signif(sum(with(x, "discrete")), 5),

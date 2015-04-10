@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.046
+        CHANGES IN spatstat VERSION 1.41-1.047
 
 OVERVIEW
 
@@ -198,6 +198,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o print.ppm
    Reduced redundancy in output in some cases.
+
+   o print.msr
+   Responds better to spatstat.options('terse').
 
 BUG FIXES
 

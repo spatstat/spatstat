@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.118 $	$Date: 2015/04/06 11:39:31 $
+#	$Revision: 2.119 $	$Date: 2015/04/10 04:02:56 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -139,7 +139,7 @@ function(x, ...,
       }
     }
 
-    if(waxlyrical("extras", terselevel) &&
+    if(waxlyrical("space", terselevel) &&
        !is.null(cfa <- s$covfunargs) && length(cfa) > 0) {
       cfafitter <- s$cfafitter
       if(is.null(cfafitter)) {
