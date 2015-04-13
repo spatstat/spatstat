@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.6 $ $Date: 2015/04/08 08:55:40 $
+##  $Revision: 1.7 $ $Date: 2015/04/13 12:23:15 $
 
 ### .................. basic graphics .............................
 
@@ -327,8 +327,8 @@ textureplot <- local({
       if(is.null(spacing)) spacing <- diameter(as.rectangle(x))/50
       areas <- if(is.im(x)) table(x$v) else tile.areas(x)
       for(i in which(areas > 0)) {
-        Zi <- if(is.tess(x)) tilX[[i]] else 
-              as.polygonal(levelset(x, levX[i], "==")) 
+        Zi <- if(is.tess(x)) tilX[[i]] else levelset(x, levX[i], "==")
+        Zi <- as.polygonal(Zi)
         if(is.null(border) || !is.na(border))
           plot(Zi, add=TRUE, border=border)
         add.texture(Zi, texture=tmap(levX[i]), spacing=spacing, ...)

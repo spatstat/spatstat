@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.048
+        CHANGES IN spatstat VERSION 1.41-1.049
 
 OVERVIEW
 
@@ -22,6 +22,8 @@ OVERVIEW
 
    o White noise.
 
+   o Discrimination index AUC for fitted models.
+   
    o score test in anova.ppm
 
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
@@ -39,6 +41,10 @@ NEW FUNCTIONS
 
    o transmat
    Convert pixel arrays between different display conventions.
+
+   o auc
+   Discrimination index AUC (area under the Receiver Operating Characteristic
+   curve) for fitted models.
 
    o rnoise
    Random pixel noise.
