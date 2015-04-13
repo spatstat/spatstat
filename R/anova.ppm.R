@@ -1,7 +1,7 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.19 $   $Date: 2015/02/05 13:08:20 $
+#  $Revision: 1.20 $   $Date: 2015/04/13 08:13:47 $
 #
 
 anova.ppm <- local({
@@ -15,8 +15,9 @@ anova.ppm <- local({
   anova.ppm <- function(object, ..., test=NULL, adjust=TRUE, warn=TRUE) {
     gripe <- if(warn) do.gripe else dont.gripe
     if(!is.null(test)) {
-      test <- match.arg(test, c("Chisq", "LRT", "Rao", "F", "Cp"))
-      if(!(test %in% c("Chisq", "LRT")))
+      test <- match.arg(test, c("Chisq", "LRT", "Rao", "score", "F", "Cp"))
+      if(test == "score") test <- "Rao"
+      if(!(test %in% c("Chisq", "LRT", "Rao")))
         stop("test=", dQuote(test), "is not yet implemented")
     }
     ## trap outmoded usage
@@ -34,6 +35,10 @@ anova.ppm <- local({
     ## non-Poisson models?
     pois <- all(unlist(lapply(objex, is.poisson.ppm)))
 
+    if(!pois && !is.null(test) && test == "Rao")
+      stop("Score test is only implemented for Poisson models",
+           call.=FALSE)
+    
     ## handle anova for a single 'ippm' object  
     expandedfrom1 <- FALSE
     if(length(objex) == 1 && inherits(object, "ippm")) {
@@ -151,10 +156,15 @@ anova.ppm <- local({
     if(is.null(fitz)) fitz <- lapply(objex, getglmfit)
     result <- do.call("anova", append(fitz, list(test=test, dispersion=1)))
 
-    ## Remove approximation-dependent columns 
-    result[, "Resid. Df"] <- NULL
+    ## Remove approximation-dependent columns if present
     result[, "Resid. Dev"] <- NULL
-
+    ## replace 'residual df' by number of parameters in model
+    if("Resid. Df" %in% names(result)) {
+      nq <- n.quad(quad.ppm(objex[[1]]))
+      result[, "Resid. Df"] <- nq - result[, "Resid. Df"]
+      names(result)[match("Resid. Df", names(result))] <- "Npar"
+    }
+    
     ## edit header 
     if(!is.null(h <- attr(result, "heading"))) {
       ## remove .mpl.Y and .logi.Y from formulae if present
@@ -262,14 +272,18 @@ anova.ppm <- local({
         class(result) <- class(oldresult)
         attr(result, "heading") <- attr(oldresult, "heading")
       }
-      if(any(unlist(lapply(objex, inherits, what="ippm")))) {
-        ## calculation does not include 'covfunargs'
-        cfa <- lapply(lapply(objects, getElement, name="confunargs"), names)
-        cfa <- unique(unlist(cfa))
-        gripe("Adjustment to composite likelihood does not account for",
+    }
+
+    if(any(unlist(lapply(objex, inherits, what="ippm")))) {
+      ## calculation does not include 'covfunargs'
+      cfa <- lapply(lapply(objex, getElement, name="covfunargs"), names)
+      cfa <- unique(unlist(cfa))
+      action <- if(adjust && !pois) "Adjustment to composite likelihood" else
+                if(test == "Rao") "Score test calculation" else NULL
+      if(!is.null(action)) 
+        gripe(action, "does not account for",
               "irregular trend parameters (covfunargs)",
               commasep(sQuote(cfa)))
-      }
     }
     return(result)
   }
