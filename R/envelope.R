@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.69 $  $Date: 2014/12/10 01:18:19 $
+#   $Revision: 2.70 $  $Date: 2015/04/14 11:36:21 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -818,7 +818,8 @@ envelopeEngine <-
                   desc=c("distance argument r",
                     paste("Simulation ", 1:Nsim, sep="")),
                   fname=attr(funX, "fname"),
-                  yexp=attr(funX, "yexp"))
+                  yexp=attr(funX, "yexp"),
+                  unitname=unitname(funX))
     fvnames(SimFuns, ".") <- simnames
   } 
   if(savepatterns)
@@ -1056,6 +1057,8 @@ summary.envelope <- function(object, ...) {
 # theory = funX[["theo"]]
 # observed = fX
 
+envelope.matrix <- local({
+
 envelope.matrix <- function(Y, ...,
                             rvals=NULL, observed=NULL, theory=NULL, 
                             funX=NULL,
@@ -1088,7 +1091,8 @@ envelope.matrix <- function(Y, ...,
     # assume funX is summary function for observed data
     rvals <- with(funX, .x)
     observed <- with(funX, .y)
-    theory <- if(use.theory && "theo" %in% names(funX)) with(funX, theo) else NULL
+    theory <-
+      if(use.theory && "theo" %in% names(funX)) with(funX, theo) else NULL
   } else if(check) {
     # validate vectors of data
     if(is.null(rvals)) stop("rvals must be supplied")
@@ -1175,7 +1179,8 @@ envelope.matrix <- function(Y, ...,
                lohi <- apply(simvals, 1, range)
              } else {
                lohi <- apply(simvals, 1,
-                             function(x, n) { sort(x)[n] },
+#                             function(x, n) { sort(x)[n] },
+                             orderstats,
                              n=c(nrank, nsim-nrank+1))
              }
              lo <- lohi[1,]
@@ -1535,14 +1540,15 @@ envelope.matrix <- function(Y, ...,
     colnames(alldata) <- c("r", simnames)
     alldata <- as.data.frame(alldata)
     SimFuns <- fv(alldata,
-                   argu="r",
-                   ylab=atr$ylab,
-                   valu="sim1",
-                   fmla= deparse(. ~ r),
-                   alim=atr$alim,
-                   labl=names(alldata),
-                   desc=c("distance argument r",
-                     paste("Simulation ", 1:nsim, sep="")))
+                  argu="r",
+                  ylab=atr$ylab,
+                  valu="sim1",
+                  fmla= deparse(. ~ r),
+                  alim=atr$alim,
+                  labl=names(alldata),
+                  desc=c("distance argument r",
+                          paste("Simulation ", 1:nsim, sep="")),
+                  unitname=unitname(funX))
     fvnames(SimFuns, ".") <- simnames
     attr(result, "simfuns") <- SimFuns
   }
@@ -1553,6 +1559,11 @@ envelope.matrix <- function(Y, ...,
   return(result)
 }
 
+  orderstats <- function(x, n) { sort(x)[n] }
+
+  envelope.matrix
+  
+})
 
 envelope.envelope <- function(Y, fun=NULL, ...,
                               transform=NULL, global=FALSE, VARIANCE=FALSE) {

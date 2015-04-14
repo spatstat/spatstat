@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.049
+        CHANGES IN spatstat VERSION 1.41-1.050
 
 OVERVIEW
 
@@ -270,6 +270,11 @@ BUG FIXES
 
    o plot.im
    Did not plot surrounding frame box when ribbon=FALSE.
+   Fixed.
+
+   o envelope
+   The functions stored when savefuns=TRUE did not inherit 
+   the correct name for the unit of length.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1
