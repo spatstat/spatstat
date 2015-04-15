@@ -1,20 +1,20 @@
-\name{auc}
-\alias{auc}
-\alias{auc.ppp}
-\alias{auc.ppm}
+\name{roc}
+\alias{roc}
+\alias{roc.ppp}
+\alias{roc.ppm}
 \title{
-  Area Under ROC Curve
+  Receiver Operating Characteristic
 }
 \description{
-  Compute the AUC (area under the Receiver Operating Characteristic
-  curve) for a fitted point process model.
+  Computes the Receiver Operating Characteristic curve
+  for a point pattern or a fitted point process model.
 }
 \usage{
-auc(X, \dots)
+ roc(X, \dots)
 
-\method{auc}{ppp}(X, covariate, \dots, high = TRUE)
+\method{roc}{ppp}(X, covariate, \dots, high = TRUE)
 
-\method{auc}{ppm}(X, \dots)
+\method{roc}{ppm}(X, \dots)
 }
 \arguments{
   \item{X}{
@@ -37,39 +37,30 @@ auc(X, \dots)
   }
 }
 \details{
-  This command computes the AUC, the area under the Receiver Operating
-  Characteristic curve. The ROC itself is computed by \code{\link{roc}}.
+  This command computes Receiver Operating
+  Characteristic curve. The area under the ROC is computed by \code{\link{auc}}.
 
   For a point pattern \code{X} and a covariate \code{Z}, the
-  AUC is a numerical index that measures the ability of the 
+  ROC is a plot showing the ability of the 
   covariate to separate the spatial domain
   into areas of high and low density of points.
-  Let \eqn{x_i}{x[i]} be a randomly-chosen data point from \code{X}
-  and \eqn{U} a randomly-selected location in the study region.
-  The AUC is the probability that
-  \eqn{Z(x_i) > Z(U)}{Z(x[i]) > Z(U)}
-  assuming \code{high=TRUE}.
-  That is, AUC is the probability that a randomly-selected data point
-  has a higher value of the covariate \code{Z} than does a
-  randomly-selected spatial location. The AUC is a number between 0 and 1. 
-  A value of 0.5 indicates a complete lack of discriminatory power.
+  For each possible threshold \eqn{z}, the algorithm calculates
+  the fraction \eqn{a(z)} of area in the study region where the
+  covariate takes a value greater than \eqn{z}, and the
+  fraction \eqn{b(z)} of data points for which the covariate value
+  is greater than \eqn{z}. The ROC is a plot of \eqn{b(z)} against
+  \eqn{a(z)} for all thresholds \eqn{z}. 
   
-  For a fitted point process model \code{X},
-  the AUC measures the ability of the
+  For a fitted point process model, 
+  the ROC shows the ability of the
   fitted model intensity to separate the spatial domain
   into areas of high and low density of points.
-  Suppose \eqn{\lambda(u)}{\lambda(u)} is the intensity function of the model.
-  The AUC is the probability that
-  \eqn{\lambda(x_i) > \lambda(U)}{lambda(x[i]) > lambda(U)}.
-  That is, AUC is the probability that a randomly-selected data point
-  has higher predicted intensity than does a randomly-selected spatial
-  location.
-  The AUC is \bold{not} a measure of the goodness-of-fit of the model
+  The ROC is \bold{not} a diagnostic for the goodness-of-fit of the model
   (Lobo et al, 2007).
 }
 \value{
-  A numeric vector of length 2 giving the AUC value 
-  and the theoretically expected AUC value for this model.
+  Function value table (object of class \code{"fv"})
+  which can be plotted to show the ROC curve.
 }
 \references{
   Lobo, J.M.,
@@ -96,11 +87,11 @@ and Ege Rubak
 \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{roc}}
+\code{\link{auc}}
 }
 \examples{
+  plot(roc(swedishpines, "x"))
   fit <- ppm(swedishpines ~ x+y)
-  auc(fit)
-  auc(swedishpines, "x")
+  plot(roc(fit))
 }
 \keyword{spatial}

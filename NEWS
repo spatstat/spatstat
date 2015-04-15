@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.050
+        CHANGES IN spatstat VERSION 1.41-1.051
 
 OVERVIEW
 
@@ -22,7 +22,7 @@ OVERVIEW
 
    o White noise.
 
-   o Discrimination index AUC for fitted models.
+   o ROC curve, and discrimination index AUC, for fitted models.
    
    o score test in anova.ppm
 
@@ -42,9 +42,12 @@ NEW FUNCTIONS
    o transmat
    Convert pixel arrays between different display conventions.
 
+   o roc
+   Receiver Operating Characteristic curve.
+
    o auc
    Discrimination index AUC (area under the Receiver Operating Characteristic
-   curve) for fitted models.
+   curve)
 
    o rnoise
    Random pixel noise.
