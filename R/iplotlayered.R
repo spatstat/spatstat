@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.9 $   $Date: 2015/02/24 01:40:29 $
+#   $Revision: 1.10 $   $Date: 2015/04/15 11:04:58 $
 #
 #
 
@@ -63,7 +63,8 @@ iplot.layered <- function(x, ..., xname, visible) {
     visible <- rep(visible, length(x))
   } else stopifnot(length(visible) == length(x))
   
-  requireNamespace("rpanel")
+#  requireNamespace("rpanel")
+  require(rpanel)
 
   x <- faster.layers(x, visible)
   visible <- attr(x, "visible")

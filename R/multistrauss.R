@@ -137,7 +137,7 @@ MultiStrauss <- local({
            } else splat("Possible types:\t not yet determined")
          }
          cat("Interaction radii:\n")
-         print(self$par$radii)
+         print(signif(radii, getOption("digits")))
          invisible()
        },
        interpret = function(coeffs, self) {

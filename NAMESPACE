@@ -1,7 +1,6 @@
 # spatstat NAMESPACE file
 
 import(stats,graphics,grDevices,utils)
-import(rpanel)
 import(polyclip,goftest)
 import(Matrix)
 importFrom(deldir,deldir,duplicatedxy,tile.list)

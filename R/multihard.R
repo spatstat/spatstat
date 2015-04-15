@@ -150,7 +150,7 @@ MultiHard <- local({
          }
          if(!is.null(h)) {
            splat("Hardcore radii:")
-           print(h)
+           print(signif(h, getOption("digits")))
          } else splat("Hardcore radii:\t not yet determined") 
          invisible()
        },

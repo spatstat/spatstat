@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.052
+        CHANGES IN spatstat VERSION 1.41-1.053
 
 OVERVIEW
 
@@ -7,8 +7,6 @@ OVERVIEW
    for contributions.
 
    o Version nickname: 'Lifestyle Choice'
-
-   o spatstat now formally depends on the package 'rpanel'.
 
    o Permutation test for difference between groups of point patterns.
 
@@ -219,6 +217,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o print.msr
    Responds better to spatstat.options('terse').
 
+   o print.ppm, print.fii, print.interact
+   Irregular parameters are now printed to the number of significant figures
+   specified by options("digits").
+
 BUG FIXES
 
    o Kinhom, Linhom
@@ -284,6 +286,10 @@ BUG FIXES
    o envelope
    The functions stored when savefuns=TRUE did not inherit 
    the correct name for the unit of length.
+   Fixed.
+
+   o print.ppm, print.fii, print.interact
+   Layout was misaligned.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

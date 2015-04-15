@@ -3,7 +3,7 @@
 ##
 ##  Calculate ROC curve or area under it
 ##
-## $Revision: 1.2 $ $Date: 2015/04/14 15:58:13 $
+## $Revision: 1.4 $ $Date: 2015/04/15 09:23:22 $
 
 roc <- function(X, ...) { UseMethod("roc") }
 
@@ -12,14 +12,16 @@ roc.ppp <- function(X, covariate, ..., high=TRUE) {
   U <- d$values$U
   ec <- if(high) ecdf(1-U) else ecdf(U)
   p <- seq(0,1,length=1024)
-  df <- data.frame(p=p, fobs=ec(p))
+  df <- data.frame(p=p, fobs=ec(p), fnull=p)
   result <- fv(df,
                argu="p",
                ylab=quote(roc(p)),
                valu="fobs",
                desc=c("fraction of area",
-                      "observed fraction of points"),
+                      "observed fraction of points",
+                      "expected fraction if no effect"),
                fname="roc")
+  fvnames(result, ".") <- c("fobs", "fnull")
   return(result)
 }
 
@@ -39,7 +41,7 @@ roc.ppm <- function(X, ...) {
   qZ <- get("x", environment(FZ))
   FZinverse <- approxfun(pZ, qZ, rule=2)
   ftheo <- 1 - F1Z(FZinverse(1-p))
-  df <- data.frame(p=p, fobs=fobs, ftheo=ftheo)
+  df <- data.frame(p=p, fobs=fobs, ftheo=ftheo, fnull=p)
   result <- fv(df,
                argu="p",
                ylab=quote(roc(p)),
@@ -47,9 +49,10 @@ roc.ppm <- function(X, ...) {
                fmla = . ~ p,
                desc=c("fraction of area",
                  "observed fraction of points",
-                 "expected fraction of points"),
+                 "expected fraction of points",
+                 "expected fraction if no effect"),
                fname="roc")
-  fvnames(result, ".") <- c("fobs", "ftheo")
+  fvnames(result, ".") <- c("fobs", "ftheo", "fnull")
   return(result)
 }
 

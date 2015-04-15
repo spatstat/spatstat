@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.20 $   $Date: 2015/04/15 08:07:54 $
+#   $Revision: 1.21 $   $Date: 2015/04/15 11:04:49 $
 #
 #
 
@@ -50,6 +50,7 @@ iplot.ppp <- function(x, ..., xname) {
   bb <- as.rectangle(as.owin(x))
   bbmid <- unlist(centroid.owin(bb))
   ##
+  require(rpanel)
   p <- rpanel::rp.control(paste("iplot(", xname, ")", sep=""), 
                           x=x,
                           w=as.owin(x),

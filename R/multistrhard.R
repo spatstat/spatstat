@@ -191,10 +191,11 @@ doMultiStraussHard <- local({
              } else splat("Possible types:\t not yet determined")
            }
            splat("Interaction radii:")
-           print(iradii)
+           dig <- getOption("digits")
+           print(signif(iradii, dig))
            if(!is.null(hradii)) {
              splat("Hardcore radii:")
-             print(hradii)
+             print(signif(hradii, dig))
            } else splat("Hardcore radii: not yet determined")
            invisible()
          },

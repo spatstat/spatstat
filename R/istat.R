@@ -1,7 +1,7 @@
 #
 # interactive analysis of point patterns
 #
-#   $Revision: 1.20 $   $Date: 2015/04/15 08:08:00 $
+#   $Revision: 1.21 $   $Date: 2015/04/15 11:05:09 $
 #
 #
 
@@ -9,6 +9,7 @@ istat <- function(x, xname) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "ppp")
+  require(rpanel)
   # generate simulations of CSR for use in envelopes
   simx <- envelope(x, fun=NULL, nsim=39, verbose=FALSE,
                    internal=list(csr=TRUE, eject="patterns"))
