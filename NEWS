@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.051
+        CHANGES IN spatstat VERSION 1.41-1.052
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
    for contributions.
 
    o Version nickname: 'Lifestyle Choice'
+
+   o spatstat now formally depends on the package 'rpanel'.
 
    o Permutation test for difference between groups of point patterns.
 
@@ -247,6 +249,10 @@ BUG FIXES
 
    o ppm
    Crashed (rarely) when method='ho' if the simulated pattern was empty.
+   Fixed.
+
+   o istat, iplot
+   Crashed in recent versions of rpanel.
    Fixed.
 
    o convexhull

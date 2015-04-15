@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.19 $   $Date: 2015/02/24 01:41:14 $
+#   $Revision: 1.20 $   $Date: 2015/04/15 08:07:54 $
 #
 #
 
@@ -38,7 +38,6 @@ iplot.ppp <- function(x, ..., xname) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "ppp")
-  requireNamespace("rpanel")
   
   if(markformat(x) %in% c("hyperframe", "list"))
     marks(x) <- as.data.frame(as.hyperframe(marks(x)))
