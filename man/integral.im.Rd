@@ -19,6 +19,7 @@ integral(f, domain=NULL, \dots)
   }
   \item{domain}{
     Optional. Window specifying the domain of integration.
+    Alternatively a tessellation.
   }
   \item{\dots}{
     Ignored.
@@ -40,9 +41,15 @@ integral(f, domain=NULL, \dots)
   \code{1} and \code{0} respectively, so that the integral of a logical
   image is the total area of the \code{TRUE} pixels, in the same units
   as \code{unitname(x)}.
+
+  If \code{domain} is a window (class \code{"owin"}) then the integration
+  will be restricted to this window. If \code{domain} is a tessellation
+  (class \code{"tess"}) then the integral of \code{f} in each
+  tile of \code{domain} will be computed.
 }
 \value{
-  A single numeric or complex value.
+  A single numeric or complex value (or a vector of such values
+  if \code{domain} is a tessellation).
 }
 \seealso{
   \code{\link{eval.im}},

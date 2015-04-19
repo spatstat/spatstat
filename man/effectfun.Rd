@@ -15,6 +15,7 @@
   }
   \item{covname}{
     The name of the covariate. A character string.
+    (Needed only if the model has more than one covariate.)
   }
   \item{\dots}{
     The fixed values of other covariates (in the form

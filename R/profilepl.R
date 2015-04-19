@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.33 $  $Date: 2015/04/03 13:03:22 $
+#  $Revision: 1.34 $  $Date: 2015/04/19 18:21:59 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -347,4 +347,8 @@ plot.profilepl <- local({
   plot.profilepl
 })
 
+
+simulate.profilepl <- function(object, ...) {
+  simulate(as.ppm(object), ...)
+}
 

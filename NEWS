@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.053
+        CHANGES IN spatstat VERSION 1.41-1.054
 
 OVERVIEW
 
@@ -10,6 +10,14 @@ OVERVIEW
 
    o Permutation test for difference between groups of point patterns.
 
+   o Score test in anova.ppm
+
+   o ROC curve, and discrimination index AUC, for fitted models.
+   
+   o Text editor for spatial datasets.
+
+   o White noise.
+
    o Improved behaviour of polygon geometry operations.
 
    o Improved support for cluster and Cox models.
@@ -19,12 +27,6 @@ OVERVIEW
    o Improved support for tessellations.
 
    o Modifications to Kest
-
-   o White noise.
-
-   o ROC curve, and discrimination index AUC, for fitted models.
-   
-   o score test in anova.ppm
 
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
@@ -48,6 +50,9 @@ NEW FUNCTIONS
    o auc
    Discrimination index AUC (area under the Receiver Operating Characteristic
    curve)
+
+   o edit.ppp, edit.im
+   Interactive text editor for spatial datasets.
 
    o rnoise
    Random pixel noise.
@@ -73,6 +78,9 @@ NEW FUNCTIONS
    
    o relevel.im, relevel.ppp, relevel.ppx
    Change the reference level of a factor.
+
+   o simulate.profilepl
+   simulation method for models fitted by profile maximum pseudolikelihood.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -101,6 +109,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o nncorr, nnmean, nnvario
    New argument 'k' specifies k-th nearest neighbour.
+
+   o quadrat.test.ppp, quadrat.test.quadratcount
+   New argument 'lambda' supports a test of the Poisson process 
+   with given intensity 'lambda'.
 
    o clickpoly, clickbox
    These functions now handle graphical arguments to polygon()
@@ -148,6 +160,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o effectfun
    Now works for 'kppm' and 'lppm' objects as well.
 
+   o integral.im
+   Argument 'domain' can now be a tessellation;
+   the integral of the function over each tile of the tessellation is returned.
+
    o allstats, compareFit, markcorr, split.ppx, by.ppp
    Result is now of class 'anylist'.
 
@@ -169,6 +185,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o rpoispp, runifpoint
    New argument 'ex' makes it possible to generate a random pattern
    similar to an example point pattern.
+
+   o effectfun
+   Argument 'covname' is not needed if the model has only one covariate.
+
+   o quadratcount
+   Argument 'tess' can now be anything acceptable to as.tess.
 
    o persp.im, nnclean, plot.qqppm, plot.bw.optim
    These plotting functions now obey spatstat.options('monochrome')
@@ -200,7 +222,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    of curves in the plot, to match other functions like lohboot.
 
    o textureplot
-   Now accepts a tessellation or a pixel image.
+   Now accepts a pixel image, a tessellation, or anything acceptable to as.tess.
 
    o bw.diggle
    New argument 'nr' controls accuracy.

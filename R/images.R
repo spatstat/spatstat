@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.127 $     $Date: 2015/03/25 13:30:33 $
+#      $Revision: 1.128 $     $Date: 2015/04/19 18:27:54 $
 #
 #      The class "im" of raster images
 #
@@ -900,8 +900,10 @@ integral.im <- function(f, domain=NULL, ...) {
   typ <- f$type
   if(!any(typ == c("integer", "real", "complex", "logical")))
     stop(paste("Don't know how to integrate an image of type", sQuote(typ)))
-  if(!is.null(domain))
+  if(!is.null(domain)) {
+    if(is.tess(domain)) return(sapply(tiles(domain), integral.im, f=f))
     f <- f[domain, drop=FALSE, tight=TRUE]
+  }
   a <- with(f, sum(v, na.rm=TRUE) * xstep * ystep)
   return(a)
 }

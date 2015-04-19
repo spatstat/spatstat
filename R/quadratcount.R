@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.48 $  $Date: 2014/11/11 02:34:24 $
+#  $Revision: 1.49 $  $Date: 2015/04/18 18:05:26 $
 #
 
 quadratcount <- function(X, ...) {
@@ -50,8 +50,11 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     }
   } else {
     # user-supplied tessellation
-    if(!inherits(tess, "tess"))
-      stop("The argument tess should be a tessellation", call.=FALSE)
+    if(!inherits(tess, "tess")) {
+      tess <- try(as.tess(tess), silent=TRUE)
+      if(inherits(tess, "try-error"))
+        stop("The argument tess should be a tessellation", call.=FALSE)
+    }
     if(tess$type == "rect") {
       # fast code for counting points in rectangular grid
       Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)

@@ -395,15 +395,13 @@ plot(listof("Emark(spruces)"=Emark(spruces),
      main="Independence diagnostics", ylim.covers=0,
      legendpos="bottom")
 
-if(enable3d) {
-  par3 <- par(mfrow=c(1,2))
-  X <- rpoispp3(100)
-  plot(X, main="3D point pattern X")
-  plot(K3est(X), main="K-function in 3D")
-  plot(X, main="3D point pattern X")
-  plot(G3est(X), main="G-function in 3D", legendpos="bottomright")
-  par(par3)
-}
+par3 <- par(mfrow=c(1,2))
+X <- rpoispp3(100)
+plot(X, main="3D point pattern X")
+plot(K3est(X), main="K-function in 3D")
+plot(X, main="3D point pattern X")
+plot(G3est(X), main="G-function in 3D", legendpos="bottomright")
+par(par3)
 
 par(mfrow=c(1,3))
 X <- unmark(chicago)

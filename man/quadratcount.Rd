@@ -34,8 +34,8 @@
     boundaries of the rectangular quadrats. Incompatible with \code{ny}.
   }
   \item{tess}{
-    Tessellation (object of class \code{"tess"})
-    determining the quadrats. Incompatible
+    Tessellation (object of class \code{"tess"} or something acceptable
+    to \code{\link{as.tess}}) determining the quadrats. Incompatible
     with \code{nx,ny,xbreaks,ybreaks}.
   }
 }

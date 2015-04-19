@@ -19,8 +19,9 @@ quadrat.test(X, ...)
 \method{quadrat.test}{ppp}(X, nx=5, ny=nx,
                           alternative=c("two.sided", "regular", "clustered"),
                            method=c("Chisq", "MonteCarlo"),
-                           conditional=TRUE, CR=1, 
-                           ..., 
+                           conditional=TRUE, CR=1,
+                           lambda=NULL, 
+                           ...,
                            xbreaks=NULL, ybreaks=NULL, tess=NULL,
                            nsim=1999)
 
@@ -35,7 +36,8 @@ quadrat.test(X, ...)
 \method{quadrat.test}{quadratcount}(X,
                           alternative=c("two.sided", "regular", "clustered"),
                           method=c("Chisq", "MonteCarlo"),
-                          conditional=TRUE, CR=1, 
+                          conditional=TRUE, CR=1,
+                          lambda=NULL, 
                           ...,
                           nsim=1999)
 }
@@ -70,6 +72,11 @@ quadrat.test(X, ...)
     Optional. Numerical value of the index \eqn{\lambda}{lambda}
     for the Cressie-Read test statistic. 
   }
+  \item{lambda}{
+    Optional. Pixel image (object of class \code{"im"})
+    or function (class \code{"funxy"}) giving the predicted
+    intensity of the point process.
+  }
   \item{\dots}{Ignored.}
   \item{xbreaks}{
     Optional. Numeric vector giving the \eqn{x} coordinates of the
@@ -80,7 +87,8 @@ quadrat.test(X, ...)
     boundaries of the quadrats. Incompatible with \code{ny}.
   }
   \item{tess}{
-    Tessellation (object of class \code{"tess"}) determining the
+    Tessellation (object of class \code{"tess"} or something acceptable
+    to \code{\link{as.tess}}) determining the
     quadrats. Incompatible with \code{nx, ny, xbreaks, ybreaks}.
   }
   \item{nsim}{
@@ -102,7 +110,8 @@ quadrat.test(X, ...)
     if \code{X} is a point pattern, we test the null hypothesis
     that the data pattern is a realisation of Complete Spatial
     Randomness (the uniform Poisson point process). Marks in the point
-    pattern are ignored.
+    pattern are ignored. (If \code{lambda} is given then the null
+    hypothesis is the Poisson process with intensity \code{lambda}.)
     \item 
     if \code{X} is a split point pattern, then for each of the
     component point patterns (taken separately) we test 

@@ -620,7 +620,8 @@
 \alias{short.deparse}
 \alias{signalStatus}
 \alias{simplenumber}              
-\alias{simplify.xypolygon}              
+\alias{simplify.xypolygon}
+\alias{simulate.profilepl}
 \alias{simulrecipe}              
 \alias{singlestring}              
 \alias{slr.prepare}
@@ -1436,6 +1437,7 @@ shiftxypolygon(p, vec = c(0, 0))
 short.deparse(x, maxlen)
 simplenumber(x, unit, multiply, tol)
 simplify.xypolygon(p, dmin)
+\method{simulate}{profilepl}(object, \dots)
 simulrecipe(type, expr, envir, csr, pois, constraints)
 singlestring(s, coll)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)

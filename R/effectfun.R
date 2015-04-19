@@ -16,8 +16,10 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
   needed.names <- variablesinformula(rhs.of.formula(formula(model)))
   ## validate the relevant covariate 
-  if(missing(covname))
-    stop("covname must be provided")
+  if(missing(covname) | is.null(covname)) {
+    mc <- model.covariates(model)
+    if(length(mc) == 1) covname <- mc else stop("covname must be provided")
+  }
   if(!(covname %in% c(intern.names, needed.names)))
     stop(paste("model does not have a covariate called", sQuote(covname)),
          call.=FALSE)

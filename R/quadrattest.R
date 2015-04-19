@@ -13,6 +13,7 @@ quadrat.test.ppp <-
            alternative = c("two.sided", "regular", "clustered"),
            method = c("Chisq", "MonteCarlo"),
            conditional=TRUE, CR=1,
+           lambda=NULL, 
            ...,
            xbreaks=NULL, ybreaks=NULL,
            tess=NULL, nsim=1999)
@@ -26,6 +27,7 @@ quadrat.test.ppp <-
                                 method=method,
                                 conditional=conditional,
                                 CR=CR,
+                                fit=lambda,
                                 xbreaks=xbreaks, ybreaks=ybreaks,
                                 tess=tess,
                                 nsim=nsim),
@@ -75,6 +77,7 @@ quadrat.test.quadratcount <-
            alternative = c("two.sided", "regular", "clustered"),
            method=c("Chisq", "MonteCarlo"),
            conditional=TRUE, CR=1,
+           lambda=NULL, 
            ...,
            nsim=1999) {
    trap.extra.arguments(...)
@@ -82,6 +85,7 @@ quadrat.test.quadratcount <-
    alternative <- match.arg(alternative)
    quadrat.testEngine(Xcount=X,
                       alternative=alternative,
+                      fit=lambda,
                       method=method, conditional=conditional, CR=CR, nsim=nsim)
 }
 
@@ -122,6 +126,14 @@ quadrat.testEngine <- function(X, nx, ny,
     df <- switch(method,
                  Chisq      = length(fitmeans) - 1,
                  MonteCarlo = NULL)
+  } else if(is.im(fit) || inherits(fit, "funxy")) {
+    nullname <- "Poisson process with given intensity"
+    fit <- as.im(fit, W=Window(tess))
+    areas <- integral(fit, tess)
+    fitmeans <- sum(Xcount) * areas/sum(areas)
+    df <- switch(method,
+                 Chisq      = length(fitmeans) - 1,
+                 MonteCarlo = NULL)    
   } else {
     if(!is.ppm(fit))
       stop("fit should be a ppm object")

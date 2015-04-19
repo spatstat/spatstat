@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.18 $  $Date: 2015/02/25 03:42:41 $
+##   $Revision: 1.19 $  $Date: 2015/04/19 19:20:57 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -289,14 +289,14 @@ rVarGamma <- local({
     if(missing(scale)) scale <- dots$omega
     
     ## Catch old name 'eps' for 'thresh':
-    if(missing(thresh))
+    if(missthresh <- missing(thresh))
         thresh <- dots$eps %orifnull% 0.001
 
      ## determine the maximum radius of clusters
     if(missing(expand)){
         expand <- clusterradius("VarGamma", scale = scale, nu = nu,
                              thresh = thresh, ...)
-    } else if(!missing(thresh)){
+    } else if(!missthresh){
         warning("Argument ", sQuote("thresh"), " is ignored when ", sQuote("expand"), " is given")
     }
 

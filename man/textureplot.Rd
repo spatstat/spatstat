@@ -19,7 +19,8 @@ textureplot(x, \dots,
 }
 \arguments{
   \item{x}{
-    A tessellation (object of class \code{"tess"}) with at most 8 tiles,
+    A tessellation (object of class \code{"tess"} or something
+    acceptable to \code{\link{as.tess}}) with at most 8 tiles,
     or a pixel image (object of class \code{"im"}) whose pixel values
     are a \code{factor} with at most 8 levels.
   }
