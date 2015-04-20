@@ -1031,6 +1031,7 @@ scaletointerval.default <- function(x, from=0, to=1, xrange=range(x)) {
   } else {
     y <- (from+to)/2 + 0 * x
   }
+  y[] <- pmin(pmax(y[], from), to)
   return(y)
 }
 

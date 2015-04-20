@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.054
+        CHANGES IN spatstat VERSION 1.41-1.055
 
 OVERVIEW
 
@@ -81,6 +81,9 @@ NEW FUNCTIONS
 
    o simulate.profilepl
    simulation method for models fitted by profile maximum pseudolikelihood.
+
+   o predict.rho2hat
+   Prediction method for class rho2hat
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -291,6 +294,11 @@ BUG FIXES
    o plot.solist
    Figures were sometimes aligned incorrectly 
    when the argument 'panel.args' was given.
+   Fixed.
+
+   o scaletointerval
+   Results sometimes fell slightly outside the desired interval
+   due to numerical error.
    Fixed.
 
    o plot.solist

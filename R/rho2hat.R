@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.19 $   $Date: 2014/11/11 02:43:31 $
+#   $Revision: 1.20 $   $Date: 2015/04/20 05:32:04 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -144,11 +144,14 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
   }
   # add scale and label info
   attr(rslt, "stuff") <- list(isxy=isxy,
+                              cov1=cov1,
+                              cov2=cov2,
                               cov1name=cov1name,
                               cov2name=cov2name,
                               r1=r1,
                               r2=r2,
                               reference=reference,
+                              lambda=lambda,
                               modelcall=modelcall,
                               callstring=callstring,
                               Z12points=Z12points,
@@ -227,4 +230,28 @@ print.rho2hat <- function(x, ...) {
   if(!is.null(s$varcov)) { cat("\tvarcov =\n") ; print(s$varcov) }
   cat("Intensity values:\n")
   NextMethod("print")
+}
+
+predict.rho2hat <- function(object, ..., relative=FALSE) {
+  if(length(list(...)) > 0)
+    warning("Additional arguments ignored in predict.rho2hat")
+  # extract info
+  s <- attr(object, "stuff")
+  reference <- s$reference
+  # extract images of covariate, scaled to [0,1]
+  Z1 <- scaletointerval(s$cov1, xrange=s$r1)
+  Z2 <- scaletointerval(s$cov2, xrange=s$r2)
+  # extract pairs of covariate values
+  ZZ <- pairs(Z1, Z2, plot=FALSE)
+  # apply rho to Z
+  YY <- safelookup(object, ppp(ZZ[,1], ZZ[,2], c(0,1), c(0,1)), warn=FALSE)
+  # reform as image
+  Y <- Z1
+  Y[] <- YY
+  # adjust to reference baseline
+  if(reference != "Lebesgue" && !relative) {
+    lambda <- s$lambda
+    Y <- Y * lambda
+  }
+  return(Y)
 }
