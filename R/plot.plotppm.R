@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.17 $  $Date: 2015/02/15 01:55:11 $
+# $Revision: 1.18 $  $Date: 2015/04/21 13:14:20 $
 #
 #
 
@@ -48,7 +48,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
   # no pause required for single display
   if(missing(pause) || is.null(pause)) {
     nplots <- length(surftypes) * length(mrkvals)
-    pause <- interactive() && (nplots == 1)
+    pause <- interactive() && (nplots != 1)
   }
   
   # start plotting

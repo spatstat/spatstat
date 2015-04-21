@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.055
+        CHANGES IN spatstat VERSION 1.41-1.056
 
 OVERVIEW
 
@@ -246,6 +246,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Irregular parameters are now printed to the number of significant figures
    specified by options("digits").
 
+   o square
+   New argument 'unitname'.
+
 BUG FIXES
 
    o Kinhom, Linhom
@@ -286,6 +289,10 @@ BUG FIXES
    Crashed if applied to a 'psp' object.
    Fixed.
 
+   o plot.ppm
+   Crashed with message about 'variable lengths differ'.
+   Fixed.
+
    o MultiStraussHard
    Generated misleading error messages (e.g. 'model is invalid') 
    when arguments 'iradii' and 'hradii' did not have the same pattern of NA's.
@@ -320,6 +327,10 @@ BUG FIXES
 
    o print.ppm, print.fii, print.interact
    Layout was misaligned.
+   Fixed.
+
+   o plot.plotppm
+   Paused for input when it was not appropriate.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

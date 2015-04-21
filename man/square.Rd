@@ -6,12 +6,17 @@
 Creates a square window
 }
 \usage{
- square(r=1)
+ square(r=1, unitname=NULL)
  unit.square()
 }
 \arguments{
   \item{r}{Numeric. The side length of the square,
     or a vector giving the minimum and maximum coordinate values.
+  }
+  \item{unitname}{
+    Optional. Name of unit of length. Either a single character string,
+    or a vector of two character strings giving the
+    singular and plural forms, respectively.
   }
 }
 \value{
@@ -35,8 +40,8 @@ Creates a square window
   It is equivalent to
   \code{square(1)} or \code{square()} or \code{owin(c(0,1),c(0,1))}.
 
-  These commands are 
-  included mainly to improve the readability of some code.
+  These commands are included for convenience,
+  and to improve the readability of some code.
 }
 \seealso{
   \code{\link{owin.object}},

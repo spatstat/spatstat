@@ -108,7 +108,7 @@ even.breaks.owin <- function(w) {
 
 unit.square <- function() { owin(c(0,1),c(0,1)) }
 
-square <- function(r=1) {
+square <- function(r=1, unitname=NULL) {
   stopifnot(is.numeric(r))
   if(any(is.na(r) | !is.finite(r)))
     stop("argument r is NA or infinite")
@@ -118,7 +118,7 @@ square <- function(r=1) {
   } else if(length(r) == 2) {
     stopifnot(r[1] < r[2])
   } else stop("argument r must be a single number, or a vector of length 2")
-  owin(r,r)
+  owin(r,r, unitname=unitname)
 }
 
 overlap.owin <- function(A, B) {

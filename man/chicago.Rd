@@ -15,13 +15,13 @@
   The data give the spatial location of each crime,
   and the type of crime. The type labels are interpreted as follows:
   \tabular{ll}{
-    \code{assault} & battery/assault \cr
-    \code{burglary} & burglary \cr
-    \code{cartheft} & motor vehicle theft \cr
-    \code{damage} & criminal damage \cr
-    \code{robbery} & robbery \cr
-    \code{theft} & theft \cr
-    \code{trespass} & criminal trespass
+    \code{assault} \tab battery/assault \cr
+    \code{burglary} \tab burglary \cr
+    \code{cartheft} \tab motor vehicle theft \cr
+    \code{damage} \tab criminal damage \cr
+    \code{robbery} \tab robbery \cr
+    \code{theft} \tab theft \cr
+    \code{trespass} \tab criminal trespass
   }
   All crimes occurred on or near a street. The data give the
   coordinates of all streets in the survey area, and their connectivity.
