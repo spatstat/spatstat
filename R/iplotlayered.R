@@ -16,7 +16,7 @@ iplot.layered <- local({
 
   CommitAndRedraw <- function(panel) {
     ## hack to ensure that panel is immediately updated in rpanel
-    requireNamespace("rpanel", quietly=TRUE)
+    bibliotheque("rpanel", "rp.control")
     ## This is really a triple-colon!
     rpanel:::rp.control.put(panel$panelname, panel)
     ## now redraw it
@@ -63,8 +63,7 @@ iplot.layered <- function(x, ..., xname, visible) {
     visible <- rep(visible, length(x))
   } else stopifnot(length(visible) == length(x))
   
-#  requireNamespace("rpanel")
-  require(rpanel)
+  bibliotheque("rpanel", "rp.control")
 
   x <- faster.layers(x, visible)
   visible <- attr(x, "visible")

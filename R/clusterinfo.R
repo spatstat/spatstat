@@ -533,7 +533,7 @@
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
              if(model != "exponential") {
-                 if(!requireNamespace("RandomFields"))
+                 if(!bibliotheque("RandomFields", "RFcov"))
                      stop("The package RandomFields is required")
                  ## get the 'model generator' 
                  modgen <- try(getExportedValue("RandomFields", 
@@ -628,7 +628,7 @@
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             if(!requireNamespace("RandomFields"))
+             if(!bibliotheque("RandomFields", "RFcov"))
                stop("The package RandomFields is required")
              ## get the 'model generator' 
              modgen <- try(getExportedValue("RandomFields", 
@@ -675,3 +675,4 @@ spatstatClusterModelInfo <- function(name, onlyPCP = FALSE) {
   out <- .Spatstat.ClusterModelInfoTable[[name]]
   return(out)
 }
+

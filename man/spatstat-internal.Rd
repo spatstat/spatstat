@@ -40,6 +40,7 @@
 \alias{bermantestEngine}
 \alias{bdrylength.xypolygon} 
 \alias{bdry.mask}
+\alias{bibliotheque}
 \alias{bind.ratfv}
 \alias{blankcoefnames}
 \alias{blockdiagmatrix}
@@ -760,6 +761,7 @@ bbEngine(\dots)
 bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
 bdrylength.xypolygon(polly)
 bdry.mask(W)
+bibliotheque(nom, dont)
 bind.ratfv(x, numerator, denominator, labl, desc, preferred, ratio)
 blankcoefnames(x)
 blockdiagmatrix(\dots)

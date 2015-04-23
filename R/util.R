@@ -1444,3 +1444,11 @@ there.is.no.try <- function(...) {
   return(y)
 }
 
+## attach a library's namespace
+bibliotheque <- function(nom, dont) {
+  ok <- requireNamespace(nom)
+  if(!ok) return(FALSE)
+  if(exists(dont)) return(TRUE)
+  attachNamespace(nom)
+  return(exists(dont))
+}
