@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.056
+        CHANGES IN spatstat VERSION 1.41-1.057
 
 OVERVIEW
 
@@ -229,6 +229,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o bw.diggle
    New argument 'nr' controls accuracy.
+
+   o plot.tess
+   Can now plot a text label in each tile.
 
    o plot.tess
    New argument 'do.plot'.

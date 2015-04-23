@@ -39,7 +39,7 @@
   For a completely random (uniform Poisson) point pattern,
   the theoretical value of the \eqn{L}-function is \eqn{L(r) = r}.
   The square root also has the effect of stabilising
-  the variance of the estimator, so that \eqn{K} is more appropriate
+  the variance of the estimator, so that \eqn{L(r)} is more appropriate
   for use in simulation envelopes and hypothesis tests.
 
   See \code{\link{Kest}} for the list of arguments.

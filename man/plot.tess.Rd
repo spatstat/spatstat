@@ -6,7 +6,9 @@
 }
 \usage{
   \method{plot}{tess}(x, ..., main, add=FALSE,
-                      show.all=!add, col=NULL, do.plot=TRUE)
+                      show.all=!add, col=NULL, do.plot=TRUE,
+                      do.labels=FALSE,
+                      labels=tilenames(x), labelargs=list())
 }
 \arguments{
   \item{x}{Tessellation (object of class \code{"tess"}) to be plotted.}
@@ -25,6 +27,15 @@
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.
+  }
+  \item{do.labels}{
+    Logical value indicating whether to show a text label for each tile
+    of the tessellation.
+  }
+  \item{labels}{Character vector of labels for the tiles.}
+  \item{labelargs}{
+    List of arguments passed to
+    \code{\link{text.default}} to control display of the text labels.
   }
 }
 \details{

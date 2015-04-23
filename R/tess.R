@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.65 $ $Date: 2015/02/01 07:44:56 $
+#   $Revision: 1.66 $ $Date: 2015/04/23 07:29:52 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE) {
@@ -164,7 +164,9 @@ plot.tess <- local({
                 "cex.sub", "col.sub", "font.sub", "border")
 
   plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL,
-                        do.plot=TRUE) {
+                        do.plot=TRUE,
+                        do.labels=FALSE, labels=tilenames(x),
+                        labelargs=list()) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
     switch(x$type,
@@ -218,6 +220,17 @@ plot.tess <- local({
                                         list(...),
                                         list(valuesAreColours=FALSE)))
            })
+    if(do.plot && do.labels) {
+      labels <- paste(as.vector(labels))
+      til <- tiles(x)
+      incircles <- lapply(til, incircle)
+      x0 <- unlist(lapply(incircles, function(z) { z$x }))
+      y0 <- unlist(lapply(incircles, function(z) { z$y }))
+      do.call.matched("text.default",
+                      resolve.defaults(list(x=x0, y = y0),
+                                       list(labels=labels),
+                                       labelargs))
+    }
     return(invisible(result))
   }
 
