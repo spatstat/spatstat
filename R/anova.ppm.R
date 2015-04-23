@@ -1,7 +1,7 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.20 $   $Date: 2015/04/13 08:13:47 $
+#  $Revision: 1.21 $   $Date: 2015/04/23 14:29:50 $
 #
 
 anova.ppm <- local({
@@ -160,7 +160,10 @@ anova.ppm <- local({
     result[, "Resid. Dev"] <- NULL
     ## replace 'residual df' by number of parameters in model
     if("Resid. Df" %in% names(result)) {
-      nq <- n.quad(quad.ppm(objex[[1]]))
+      ## count number of quadrature points used in each model
+      obj1 <- objex[[1]]
+      ss <- getglmsubset(obj1)
+      nq <- if(!is.null(ss)) sum(ss) else n.quad(quad.ppm(obj1))
       result[, "Resid. Df"] <- nq - result[, "Resid. Df"]
       names(result)[match("Resid. Df", names(result))] <- "Npar"
     }
