@@ -9,7 +9,8 @@
                       type=c("w","n"), show.all=!add, 
                       hatch=FALSE,
                       hatchargs=list(), 
-                      invert=FALSE, do.plot=TRUE)
+                      invert=FALSE, do.plot=TRUE,
+                      claim.title.space=FALSE)
 }
 \arguments{
   \item{x}{
@@ -61,6 +62,11 @@
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.
+  }
+  \item{claim.title.space}{
+    Logical value indicating whether extra space for the main title
+    should be allocated when declaring the plot dimensions.
+    Should be set to \code{FALSE} under normal conditions.
   }
 }
 \value{

@@ -227,6 +227,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     } else {
       ## Determine dimensions of objects
       ##     (including space for colour ribbons, if they are images)
+      extrargs <- resolve.defaults(extrargs, list(claim.title.space=TRUE))
       boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
                             panel.args=panel.args, extrargs=extrargs)
       sizes.known <- !any(sapply(boxes, inherits, what="try-error"))

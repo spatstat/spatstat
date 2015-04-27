@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.060
+        CHANGES IN spatstat VERSION 1.41-1.061
 
 OVERVIEW
 
@@ -260,6 +260,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o square
    New argument 'unitname'.
 
+   o plot.fv
+   Return value is now invisible.
+
 BUG FIXES
 
    o Kinhom, Linhom
@@ -342,6 +345,15 @@ BUG FIXES
 
    o plot.plotppm
    Paused for input when it was not appropriate.
+   Fixed.
+
+   o plot.fv
+   On png devices, the legend box was drawn with a white background,
+   obscuring the main plot. 
+   Fixed.
+
+   o plot.owin, plot.ppp, plot.im
+   There was unnecessary extra space above the main title.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

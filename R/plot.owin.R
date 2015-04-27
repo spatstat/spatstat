@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.54 $	$Date: 2015/02/03 05:52:34 $
+#	$Revision: 1.55 $	$Date: 2015/04/27 07:24:25 $
 #
 #
 #
@@ -12,7 +12,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       type = c("w", "n"), show.all=!add,
                       hatch=FALSE,
                       hatchargs=list(), 
-                      invert=FALSE, do.plot=TRUE)
+                      invert=FALSE, do.plot=TRUE,
+                      claim.title.space=FALSE) 
 {
 #
 # Function plot.owin.  A method for plot.
@@ -53,14 +54,14 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   cex.main.absol <- cex.main.rela * par('cex')
     
   if(!add) {
-    # new plot
-    # allow space for main title
-    if(nlines > 0) {
+    ## new plot
+    if(claim.title.space && nlines > 0) {
+      ## allow space for main title (only in multi-panel plots)
       guesslinespace <- 0.07 * sqrt(diff(xr)^2 + diff(yr)^2) * cex.main.absol
       added <- (nlines + 1) * guesslinespace
       ylim[2] <- ylim[2] + added
     }
-    # set up plot with equal scales
+    ## set up plot with equal scales
     do.call.plotfun("plot.default",
                     resolve.defaults(list(x=numeric(0), y=numeric(0),
                                           type="n"),
@@ -70,9 +71,9 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                           asp=1.0,
                                           xaxs="i", yaxs="i")))
   }
-  if(show.all) {
-    ## add title in a reasonable place!
-    if(nlines > 0) {
+  if(show.all && nlines > 0) {
+    ## add title 
+    if(claim.title.space) {
       mainheight <- sum(strheight(main, units="user", cex=cex.main.rela))
       gapheight <- (strheight("b\nb", units="user", cex=cex.main.rela)
                     - 2 * strheight("b", units="user", cex=cex.main.rela))
@@ -82,6 +83,11 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
            cex=cex.main.rela,
            col=gparam$col.main,
            font=gparam$font.main)
+    } else {
+      title(main=main,
+            cex=cex.main.rela,
+            col=gparam$col.main,
+            font=gparam$font.main)
     }
   }
   

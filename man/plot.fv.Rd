@@ -124,7 +124,7 @@
   }
 }
 \value{
-  Either \code{NULL}, or a data frame giving the meaning of the
+  Invisible: either \code{NULL}, or a data frame giving the meaning of the
   different line types and colours.
 }
 \details{

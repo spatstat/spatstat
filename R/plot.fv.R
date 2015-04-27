@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.117 $    $Date: 2014/11/10 11:10:49 $
+#  $Revision: 1.118 $    $Date: 2015/04/27 06:14:53 $
 #
 #
 
@@ -535,6 +535,9 @@ plot.fv <- local({
                                           inset=0.05,
                                           y.intersp=if(legendmath) 1.3 else 1),
                                      .StripNull=TRUE)
+      if(!any(names(legendspec) == "bg") &&
+         dev.capabilities()$transparentBackground != "no")
+        legendspec$bg <- "transparent"
       
       if(legendavoid || identical(legendpos, "float")) {
         ## Automatic determination of legend position
@@ -578,7 +581,7 @@ plot.fv <- local({
     ## return legend info
     df <- data.frame(lty=lty, col=col, key=key, label=labl,
                      meaning=legdesc, row.names=key)
-    return(df)
+    return(invisible(df))
   }
   plot.fv
 
