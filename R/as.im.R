@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.41 $   $Date: 2014/08/30 10:30:05 $
+#    $Revision: 1.42 $   $Date: 2015/04/27 08:51:04 $
 #
 #    as.im()
 #
@@ -93,6 +93,10 @@ as.im.owin <- function(X, W=NULL, ...,
   v[!m] <- if(is.null(na.replace)) NA else na.replace
   out <- im(v, M$xcol, M$yrow, unitname=unitname(X))
   return(out)
+}
+
+as.im.funxy <- function(X, W=Window(X), ...) {
+  as.im.function(X, W=W, ...)
 }
 
 as.im.function <- function(X, W=NULL, ...,

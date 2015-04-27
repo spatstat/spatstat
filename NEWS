@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.061
+        CHANGES IN spatstat VERSION 1.41-1.062
 
 OVERVIEW
 
@@ -16,7 +16,7 @@ OVERVIEW
    
    o Text editor for spatial datasets.
 
-   o White noise.
+   o Random pixel noise.
 
    o Improved behaviour of polygon geometry operations.
 
@@ -26,7 +26,7 @@ OVERVIEW
 
    o Improved support for tessellations.
 
-   o Modifications to Kest
+   o Modifications to Kest.
 
    o summary method for Cox and cluster models.
 
@@ -92,6 +92,9 @@ NEW FUNCTIONS
 
    o summary.kppm, print.summary.kppm, coef.summary.kppm
    Methods for 'summary' and 'coef(summary(..))' for Cox and cluster models.
+
+   o as.im.funxy
+   Method for as.im for class funxy.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

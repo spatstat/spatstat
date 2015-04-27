@@ -6,6 +6,7 @@
 \alias{as.im.matrix}
 \alias{as.im.tess}
 \alias{as.im.function}
+\alias{as.im.funxy}
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
 \alias{as.im.Smoothfun}
@@ -34,6 +35,8 @@
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL)
+
+  \method{as.im}{funxy}(X, W=Window(X), \dots)
 
   \method{as.im}{distfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
@@ -112,6 +115,8 @@
     arguments given. This function must return a
     vector or factor of the same length as the input vectors,
     giving the pixel values.
+    \item
+    an object of class \code{"funxy"} representing a \code{function(x,y,...)}
     \item
     an object of class \code{"distfun"} representing a distance function
     (created by the command \code{\link{distfun}}).
