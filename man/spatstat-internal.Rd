@@ -77,6 +77,7 @@
 \alias{cliprect.psp}
 \alias{clippoly.psp}
 \alias{closethresh}
+\alias{coef.summary.kppm}
 \alias{coef.summary.ppm}
 \alias{coef.vblogit} 
 \alias{coerce.marks.numeric}
@@ -800,6 +801,7 @@ clip.psp(x, window, check=TRUE)
 cliprect.psp(x, window)
 clippoly.psp(s, window)
 closethresh(X,R,S,ordered)
+\method{coef}{summary.kppm}(object, \dots)
 \method{coef}{summary.ppm}(object, \dots)
 \method{coef}{vblogit}(object, \dots) 
 coerce.marks.numeric(X, warn)

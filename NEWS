@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.059
+        CHANGES IN spatstat VERSION 1.41-1.060
 
 OVERVIEW
 
@@ -28,6 +28,8 @@ OVERVIEW
 
    o Modifications to Kest
 
+   o summary method for Cox and cluster models.
+
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
    o Improvements and bug fixes.
@@ -53,6 +55,9 @@ NEW FUNCTIONS
 
    o edit.ppp, edit.im
    Interactive text editor for spatial datasets.
+
+   o parameters
+   Extract all parameters from a fitted model.
 
    o rnoise
    Random pixel noise.
@@ -84,6 +89,9 @@ NEW FUNCTIONS
 
    o predict.rho2hat
    Prediction method for class rho2hat
+
+   o summary.kppm, print.summary.kppm, coef.summary.kppm
+   Methods for 'summary' and 'coef(summary(..))' for Cox and cluster models.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

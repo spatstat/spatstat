@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.104 $ $Date: 2015/04/05 06:30:02 $
+# $Revision: 1.105 $ $Date: 2015/04/25 07:23:14 $
 #
 
 kppm <- function(X, ...) {
@@ -1279,3 +1279,4 @@ extractAIC.kppm <- function (fit, scale = 0, k = 2, ...)
 }
 
 nobs.kppm <- function(object, ...) { nobs(as.ppm(object)) }
+
