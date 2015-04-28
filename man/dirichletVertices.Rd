@@ -1,6 +1,6 @@
-\name{dirichlet.vertices}
-\alias{dirichlet.vertices}
-\alias{dirichlet.edges}
+\name{dirichletVertices}
+\alias{dirichletVertices}
+\alias{dirichletEdges}
 \title{
    Vertices and Edges of Dirichlet Tessellation
 }
@@ -9,9 +9,9 @@
   and extracts the vertices or edges of the tiles.
 }
 \usage{
-dirichlet.vertices(X)
+dirichletVertices(X)
 
-dirichlet.edges(X)
+dirichletEdges(X)
 }
 \arguments{
   \item{X}{
@@ -34,17 +34,17 @@ dirichlet.edges(X)
   using \code{\link{dirichlet}}. The vertices or edges of all
   tiles of the tessellation are extracted.
 
-  For \code{dirichlet.vertices}, any vertex which
+  For \code{dirichletVertices}, any vertex which
   lies on the boundary of the window of \code{X} is deleted.
   The remaining vertices are returned, as a point pattern,
   without duplicated entries.
 }
 \value{
-  \code{dirichlet.vertices}
+  \code{dirichletVertices}
   returns a point pattern (object of class \code{"ppp"}) in the same window
   as \code{X}.
 
-  \code{dirichlet.edges} returns a line segment pattern (object of
+  \code{dirichletEdges} returns a line segment pattern (object of
   class \code{"psp"}).
 }
 \seealso{
@@ -53,9 +53,9 @@ dirichlet.edges(X)
 \examples{
   plot(dirichlet(cells))
 
-  plot(dirichlet.vertices(cells), add=TRUE)
+  plot(dirichletVertices(cells), add=TRUE)
 
-  ed <- dirichlet.edges(cells)
+  ed <- dirichletEdges(cells)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

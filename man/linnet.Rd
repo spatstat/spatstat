@@ -65,7 +65,7 @@ linnet(vertices, m, edges, sparse=FALSE)
   \code{\link[spatstat:methods.linnet]{methods.linnet}} for
   methods applicable to \code{linnet} objects.
 
-  \code{\link{delaunay.network}}.
+  \code{\link{delaunayNetwork}}.
   
   \code{\link{ppp}},
   \code{\link{psp}}.

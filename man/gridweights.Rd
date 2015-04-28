@@ -51,7 +51,7 @@
 }
 \seealso{
   \code{\link{quad.object}},
-  \code{\link{dirichlet.weights}}
+  \code{\link{dirichletWeights}}
 }
 \examples{
   Q <- quadscheme(runifpoispp(10))

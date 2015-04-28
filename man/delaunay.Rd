@@ -30,19 +30,22 @@ delaunay(X)
   \code{\link{dirichlet}},
   \code{\link{convexhull.xy}},
   \code{\link{ppp}},
-  \code{\link{delaunay.distance}},
-  \code{\link{delaunay.network}}
+  \code{\link{delaunayDistance}},
+  \code{\link{delaunayNetwork}}
 }
 \examples{
   X <- runifpoint(42)
   plot(delaunay(X))
   plot(X, add=TRUE)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

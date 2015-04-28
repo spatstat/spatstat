@@ -75,7 +75,7 @@ quadscheme.spatial <-
 	#
 	# The 'method' may be "grid" or "dirichlet"
 	#
-	# '...' are passed to gridweights() or dirichlet.weights()
+	# '...' are passed to gridweights() or dirichletWeights()
         #
         # quadscheme.spatial:
         #       for unmarked point patterns.
@@ -105,7 +105,7 @@ quadscheme.spatial <-
              w <- gridweights(both, window= dummy$window, ...)
            },
            dirichlet = {
-             w <- dirichlet.weights(both, window=dummy$window, ...)
+             w <- dirichletWeights(both, window=dummy$window, ...)
            },
            { 
              stop(paste("unrecognised method", sQuote(method)))
@@ -126,7 +126,7 @@ quadscheme.spatial <-
     ##
     ## The 'method' may be "grid" or "dirichlet"
     ##
-    ## '...' are passed to gridweights() or dirichlet.weights()
+    ## '...' are passed to gridweights() or dirichletWeights()
     ##
     ## quadscheme.replicated:
     ##       for multitype point patterns.

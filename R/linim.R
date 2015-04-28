@@ -137,7 +137,11 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   return(invisible(bb))
 }
 
-as.im.linim <- function(X, ...) { as.im(X$Z, ...) }
+as.im.linim <- function(X, ...) {
+  attr(X, "L") <- attr(X, "df") <- NULL
+  class(X) <- "im"
+  return(X)
+}
 
 as.linim <- function(X, ...) {
   UseMethod("as.linim")
@@ -238,3 +242,39 @@ integral.linim <- function(f, domain=NULL, ...){
   }
   return(mu * len)
 }
+
+shift.linim <- function (X, ...) {
+  verifyclass(X, "linim")
+  Z <- shift(as.im(X), ...)
+  L <- shift(as.linnet(X), ...)
+  v <- getlastshift(L)
+  df <- attr(X, "df")
+  df[,c("xc","yc")] <- shiftxy(df[,c("xc", "yc")], v)
+  df[,c("x","y")]   <- shiftxy(df[,c("x", "y")],   v)
+  Y <- linim(L, Z, df=df)
+  return(putlastshift(Y, v))
+}
+
+affine.linim <- function(X, mat = diag(c(1, 1)), vec = c(0, 0), ...) {
+  Z <- affine(as.im(X), mat=mat, vec=vec, ...)
+  L <- affine(as.linnet(X), mat=mat, vec=vec, ...)
+  df <- attr(X, "df")
+  df[,c("xc","yc")] <- affinexy(df[,c("xc", "yc")], mat=mat, vec=vec)
+  df[,c("x","y")]   <- affinexy(df[,c("x", "y")],   mat=mat, vec=vec)
+  Y <- linim(L, Z, df=df)
+  return(Y)
+}
+
+scalardilate.linim <- function(X, f, ..., origin=NULL) {
+  trap.extra.arguments(..., .Context = "In scalardilate(X,f)")
+  check.1.real(f, "In scalardilate(X,f)")
+  stopifnot(is.finite(f) && f > 0)
+  if (!is.null(origin)) {
+    X <- shift(X, origin = origin)
+    negorig <- getlastshift(X)
+  }
+  else negorig <- c(0, 0)
+  Y <- affine(X, mat = diag(c(f, f)), vec = -negorig)
+  return(Y)
+}
+

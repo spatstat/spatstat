@@ -119,7 +119,7 @@
   \code{\link{as.ppp}},
   \code{\link{quad.object}},
   \code{\link{gridweights}},
-  \code{\link{dirichlet.weights}},
+  \code{\link{dirichletWeights}},
   \code{\link{corners}},
   \code{\link{gridcentres}},
   \code{\link{stratrand}},

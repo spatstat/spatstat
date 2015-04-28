@@ -1,12 +1,12 @@
-\name{delaunay.distance}
-\alias{delaunay.distance}
+\name{delaunayDistance}
+\alias{delaunayDistance}
 \title{Distance on Delaunay Triangulation}
 \description{
   Computes the graph distance in the Delaunay triangulation
   of a point pattern.
 }
 \usage{
-delaunay.distance(X)
+delaunayDistance(X)
 }
 \arguments{
   \item{X}{Spatial point pattern (object of class \code{"ppp"}).}
@@ -33,19 +33,22 @@ delaunay.distance(X)
 }
 \seealso{
   \code{\link{delaunay}},
-  \code{\link{delaunay.network}}
+  \code{\link{delaunayNetwork}}
 }
 \examples{
   X <- runifpoint(20)
-  M <- delaunay.distance(X)
+  M <- delaunayDistance(X)
   plot(delaunay(X), lty=3)
   text(X, labels=M[1, ], cex=2)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+Adrian Baddeley
+\email{Adrian.Baddeley@uwa.edu.au}
+\url{http://www.maths.uwa.edu.au/~adrian/}
+Rolf Turner
+\email{r.turner@auckland.ac.nz}
+and Ege Rubak
+\email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

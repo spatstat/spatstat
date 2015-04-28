@@ -354,7 +354,7 @@
 	compute Dirichlet-Voronoi tessellation \cr
 	\code{\link{delaunay}} \tab
 	compute Delaunay triangulation \cr 
-	\code{\link{delaunay.distance}} \tab
+	\code{\link{delaunayDistance}} \tab
 	graph distance in Delaunay triangulation \cr 
 	\code{\link{convexhull}} \tab compute convex hull \cr
 	\code{\link{discretise}} \tab discretise coordinates \cr
@@ -666,6 +666,8 @@
       \code{\link{clickjoin}} \tab interactively join vertices in network \cr
       \code{\link{simplenet}} \tab simple example of network \cr
       \code{\link{lineardisc}} \tab disc in a linear network \cr
+      \code{\link{delaunayNetwork}} \tab network of Delaunay triangulation \cr
+      \code{\link{dirichletNetwork}} \tab network of Dirichlet edges \cr
       \code{\link{methods.linnet}} \tab methods for \code{linnet} objects
     }
     
@@ -1236,7 +1238,7 @@
   To compute weights:
   \tabular{ll}{
     \code{\link{gridweights}} \tab quadrature weights by the grid-counting rule  \cr
-    \code{\link{dirichlet.weights}} \tab quadrature weights are
+    \code{\link{dirichletWeights}} \tab quadrature weights are
     Dirichlet tile areas
   }
 
@@ -1633,6 +1635,7 @@
   Ricardo Bernhardt,
   Andrew Bevan,
   Brad Biggerstaff,
+  Anders Bilgrau,
   Leanne Bischof,
   Roger Bivand,
   Jose M. Blanco Moreno,

@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.062
+        CHANGES IN spatstat VERSION 1.41-1.063
 
 OVERVIEW
 
-   o We thank Ute Hahn, Cody Schank, Olivia Semboli and Ben Taylor
-   for contributions.
+   o We thank Anders Bilgrau, Ute Hahn, Cody Schank, Olivia Semboli
+   and Ben Taylor for contributions.
 
    o Version nickname: 'Lifestyle Choice'
 
@@ -95,6 +95,15 @@ NEW FUNCTIONS
 
    o as.im.funxy
    Method for as.im for class funxy.
+
+   o shift.linim, scalardilate.linim, affine.linim
+   Geometrical transformations for 'linim' objects.
+
+   o delaunayDistance, delaunayNetwork, dirichletEdges, 
+   dirichletNetwork, dirichletVertices
+      These functions will replace delaunay.distance, delaunay.network, 
+   dirichlet.edges, dirichlet.network and dirichlet.vertices respectively.
+   The latter are now 'deprecated'.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -265,6 +274,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o plot.fv
    Return value is now invisible.
+
+   o delaunay.distance, delaunay.network, dirichlet.edges, 
+   dirichlet.network, dirichlet.vertices
+      These functions are now 'deprecated', and will be replaced by
+      delaunayDistance, delaunayNetwork, dirichletEdges, 
+      dirichletNetwork and dirichletVertices respectively.
 
 BUG FIXES
 

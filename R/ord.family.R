@@ -64,7 +64,7 @@ else
 #############################################################################
 
 marks(X) <- NULL
-Wdata <- dirichlet.weights(X)   # sic - these are the tile areas.
+Wdata <- dirichletWeights(X)   # sic - these are the tile areas.
 Pdata <- pot(Wdata, pars)
 summa <- function(P) {
   if(is.matrix(P))
@@ -98,7 +98,7 @@ rowV <- array(seqU, dim=dimV)
 
 for(j in seq_len(nX)) {
         #  Dirichlet tessellation of data without point j
-  Wminus <- dirichlet.weights(X[-j])
+  Wminus <- dirichletWeights(X[-j])
         #  regressor is the difference in total potential
   V[rowV == j] <- total.data.potential - summa(pot(Wminus, pars))
 }
@@ -113,7 +113,7 @@ for(j in seq_len(nX)) {
 for(j in seqU[!is.data]) {
   Xplus <- superimpose(X, list(x=U$x[j], y=U$y[j]), W=X$window)
   #  compute Dirichlet tessellation (of these points only!)
-  Wplus <- dirichlet.weights(Xplus)
+  Wplus <- dirichletWeights(Xplus)
   #  regressor is difference in total potential
   V[rowV == j] <- summa(pot(Wplus, pars)) - total.data.potential
 }

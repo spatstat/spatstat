@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.22 $ $Date: 2015/02/08 10:07:46 $
+#  $Revision: 1.24 $ $Date: 2015/04/28 01:53:24 $
 #
 
 .spst.triEnv <- new.env()
@@ -195,7 +195,7 @@ delaunay <- function(X) {
   return(del)
 }
 
-delaunay.distance <- function(X) {
+delaunayDistance <- function(X) {
   stopifnot(is.ppp(X))
   nX <- npoints(X)
   w <- as.owin(X)
@@ -251,7 +251,7 @@ safedeldir <- function(X) {
   return(NULL)
 }
 
-dirichlet.vertices <- function(X) {
+dirichletVertices <- function(X) {
   DT <- tiles(dirichlet(X))
   xy <- do.call(concatxy, lapply(DT, vertices))
   Y <- unique(ppp(xy$x, xy$y, window=Window(X), check=FALSE))
@@ -261,7 +261,7 @@ dirichlet.vertices <- function(X) {
   return(Y)
 }
     
-delaunay.network <- function(X) {
+delaunayNetwork <- function(X) {
   stopifnot(is.ppp(X))
   X <- unique(X, rule="deldir")
   nX <- npoints(X)
@@ -275,7 +275,7 @@ delaunay.network <- function(X) {
   return(linnet(X, edges=joins))
 }
 
-dirichlet.edges <- function(X) {
+dirichletEdges <- function(X) {
   stopifnot(is.ppp(X))
   X <- unique(X, rule="deldir")
   nX <- npoints(X)
@@ -288,4 +288,31 @@ dirichlet.edges <- function(X) {
   return(as.psp(dd$dirsgs[,1:4], window=W))
 }
 
-dirichlet.network <- function(X, ...) as.linnet(dirichlet.edges(X), ...)
+dirichletNetwork <- function(X, ...) as.linnet(dirichletEdges(X), ...)
+
+## deprecated older names
+
+delaunay.distance <- function(...) {
+  .Deprecated("delaunayDistance", package="spatstat")
+  delaunayDistance(...)
+}
+
+delaunay.network <- function(...) {
+  .Deprecated("delaunayNetwork", package="spatstat")
+  delaunayNetwork(...)
+}
+
+dirichlet.edges <- function(...) {
+  .Deprecated("dirichletEdges", package="spatstat")
+  dirichletEdges(...)
+}
+
+dirichlet.network <- function(...) {
+  .Deprecated("dirichletNetwork", package="spatstat")
+  dirichletNetwork(...)
+}
+
+dirichlet.vertices <- function(...) {
+  .Deprecated("dirichletVertices", package="spatstat")
+  dirichletVertices(...)
+}

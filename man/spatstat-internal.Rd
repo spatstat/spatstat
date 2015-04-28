@@ -28,7 +28,6 @@
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
-\alias{as.im.linim}
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.units}
@@ -474,7 +473,6 @@
 \alias{print.isf}
 \alias{print.layered}
 \alias{print.leverage.ppm}
-\alias{print.linim}
 \alias{print.localpcfmatrix}
 \alias{print.lut}
 \alias{print.minconfit}
@@ -751,7 +749,6 @@ as.breakpts(\dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.double}{im}(x, \dots)
 \method{as.list}{hyperframe}(x, \dots)
-\method{as.im}{linim}(X, \dots)
 as.listof(x)
 as.units(s)
 as2vector(x)
@@ -1274,7 +1271,6 @@ primesbelow(nmax)
 \method{print}{isf}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
-\method{print}{linim}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
 \method{print}{mppm}(x, \dots)

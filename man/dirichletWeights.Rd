@@ -1,12 +1,12 @@
-\name{dirichlet.weights}
-\alias{dirichlet.weights}
+\name{dirichletWeights}
+\alias{dirichletWeights}
 \title{Compute Quadrature Weights Based on Dirichlet Tessellation}
 \description{
   Computes quadrature weights for a given set of points,
   using the areas of tiles in the Dirichlet tessellation.
 }
 \usage{
- dirichlet.weights(X, window=NULL, exact=TRUE, \dots)
+ dirichletWeights(X, window=NULL, exact=TRUE, \dots)
 }
 \arguments{
   \item{X}{Data defining a point pattern.}
@@ -49,7 +49,7 @@
 \examples{
   Q <- quadscheme(runifpoispp(10))
   X <- as.ppp(Q) # data and dummy points together
-  w <- dirichlet.weights(X, exact=FALSE)
+  w <- dirichletWeights(X, exact=FALSE)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

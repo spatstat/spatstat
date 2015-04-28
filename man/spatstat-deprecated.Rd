@@ -13,6 +13,12 @@
 \alias{rtoro}
 \alias{superimposePSP}
 \alias{which.max.im}
+\alias{delaunay.distance}
+\alias{delaunay.network}
+\alias{dirichlet.edges}
+\alias{dirichlet.network}
+\alias{dirichlet.vertices}
+\alias{dirichlet.weights}
 \title{Deprecated spatstat functions}
 \description{
   Deprecated spatstat functions.
@@ -35,6 +41,12 @@ rtoro(X, which=NULL, radius=NULL, width=NULL, height=NULL)
 eval.hyper(e, h, simplify=TRUE, ee=NULL)
 superimposePSP(\dots, W=NULL, check=TRUE)
 which.max.im(x)
+delaunay.distance(\dots)
+delaunay.network(\dots)
+dirichlet.edges(\dots)
+dirichlet.network(\dots)
+dirichlet.vertices(\dots)
+dirichlet.weights(\dots)
 }
 
 \details{
@@ -69,6 +81,19 @@ which.max.im(x)
   \code{superimposePSP} has been replaced by \code{\link{superimpose.psp}}
   which is a method for the generic function \code{\link{superimpose}}.
 
-  \code{which.max.im(x)} is replaced by \code{\link{im.apply}(x, which.max)}.
+  \code{which.max.im(x)} is replaced by
+  \code{\link{im.apply}(x, which.max)}.
+
+  \code{delaunay.distance}   is replaced by \code{delaunayDistance}.
+  
+  \code{delaunay.network} is replaced by \code{delaunayNetwork}.
+  
+  \code{dirichlet.edges} is replaced by \code{dirichletEdges}.
+  
+  \code{dirichlet.network} is replaced by \code{dirichletNetwork}.
+  
+  \code{dirichlet.vertices} is replaced by \code{dirichletVertices}.
+  
+  \code{dirichlet.weights} is replaced by \code{dirichletWeights}.
 }
 \keyword{internal}

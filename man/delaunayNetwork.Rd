@@ -1,6 +1,6 @@
-\name{delaunay.network}
-\alias{delaunay.network}
-\alias{dirichlet.network}
+\name{delaunayNetwork}
+\alias{delaunayNetwork}
+\alias{dirichletNetwork}
 \title{
   Linear Network of Delaunay Triangulation or Dirichlet Tessellation
 }
@@ -10,22 +10,22 @@
   and returns the result as a linear network object.
 }
 \usage{
-delaunay.network(X)
+delaunayNetwork(X)
 
-dirichlet.network(X, \dots)
+dirichletNetwork(X, \dots)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).}
   \item{\dots}{Arguments passed to \code{\link{as.linnet.psp}}}
 }
 \details{
-  For \code{delaunay.network}, points of \code{X} which are neighbours
+  For \code{delaunayNetwork}, points of \code{X} which are neighbours
   in the Delaunay triangulation
   (see \code{\link{delaunay}}) will be joined by a straight line.
   The result will be returned as a linear network (object of class
   \code{"linnet"}).
 
-  For \code{dirichlet.network}, the Dirichlet tessellation is computed
+  For \code{dirichletNetwork}, the Dirichlet tessellation is computed
   (see \code{\link{dirichlet}}) and the edges of the
   tiles of the tessellation are extracted. This is converted to a linear
   network using \code{\link{as.linnet.psp}}.
@@ -46,11 +46,11 @@ and Ege Rubak
 \seealso{
   \code{\link{delaunay}},
   \code{\link{dirichlet}},
-  \code{\link{delaunay.distance}}
+  \code{\link{delaunayDistance}}
 }
 \examples{
-  LE <- delaunay.network(cells)
-  LI <- dirichlet.network(cells)
+  LE <- delaunayNetwork(cells)
+  LI <- dirichletNetwork(cells)
 }
 \keyword{spatial}
 \keyword{manip}
