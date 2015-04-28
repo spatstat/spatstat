@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.20 $   $Date: 2015/04/20 05:32:04 $
+#   $Revision: 1.21 $   $Date: 2015/04/28 08:21:12 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -46,6 +46,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     needflip <- (cov1name == "y" && cov2name == "x")
     X <- data.ppm(model)
     if(needflip) X <- flipxy(X)
+    
     switch(method,
            ratio = {
              # ratio of smoothed intensity estimates
@@ -53,12 +54,15 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
              sigma <- attr(den, "sigma")
              varcov <- attr(den, "varcov")
              W <- as.owin(den)
+             if(!needflip) {
+               lambda <- predict(model, locations=W)
+             } else {
+               lambda <- flipxy(predict(model, locations=flipxy(W)))
+             }
              rslt <- switch(reference,
                             area = { den },
                             model = {
-                              lam <- predict(model, locations=W)
-                              if(needflip) lam <- flipxy(lam)
-                              lam <- blur(lam, sigma=sigma, varcov=varcov,
+                              lam <- blur(lambda, sigma=sigma, varcov=varcov,
                                           normalise=TRUE)
                               eval.im(den/lam)
                             })
@@ -67,14 +71,17 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
              # smoothed point pattern with weights = 1/reference
              W <- do.call.matched("as.mask",
                                   append(list(w=as.owin(X)), list(...)))
+             if(!needflip) {
+               lambda <- predict(model, locations=W)
+             } else {
+               lambda <- flipxy(predict(model, locations=flipxy(W)))
+             }
              gstarX <- switch(reference,
                               area = {
                                 rep.int(area(W), npoints(X))
                               },
                               model = {
-                                lam <- predict(model, locations=W)
-                                if(needflip) lam <- flipxy(lam)
-                                lam[X]
+                                lambda[X]
                               })
              rslt <- density(X, ..., weights=1/gstarX)
              sigma <- attr(rslt, "sigma")
@@ -83,6 +90,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
     Z12points <- X
     r1 <- W$xrange
     r2 <- W$yrange
+    lambda <- lambda[]
   } else {
     # general case
     isxy <- FALSE
@@ -172,7 +180,8 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
   plotparams <- graphicsPars("plot")
   do.call.matched("plot.im",
                   resolve.defaults(list(x=x, axes=FALSE),
-                                   list(...), list(main=xname)),
+                                   list(...),
+                                   list(main=xname, ribargs=list(axes=TRUE))),
                   extrargs=c(plotparams, "add", "zlim", "breaks"))
   # add axes 
   if(rd$axes) {
