@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.22 $ $Date: 2014/12/14 01:50:04 $
+#  $Revision: 1.25 $ $Date: 2015/04/28 12:26:37 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -142,7 +142,8 @@ graphicsPars <- local({
            "cex", "font", 
            "cex.axis", "cex.lab", "cex.main", "cex.sub",
            "col.axis", "col.lab", "col.main", "col.sub",
-           "font.axis", "font.lab", "font.main", "font.sub"),
+           "font.axis", "font.lab", "font.main", "font.sub",
+           "claim.title.space"),
          axis = c(
            "cex", 
            "cex.axis", "cex.lab",
@@ -156,7 +157,8 @@ graphicsPars <- local({
            "cex.main", "cex.sub",
            "col.main", "col.sub",
            "font.main", "font.sub",
-           "xaxs", "yaxs"),
+           "xaxs", "yaxs",
+           "claim.title.space"),
          lines = c("lwd", "lty", "col", "lend", "ljoin", "lmitre"),
          symbols = c(PlotArgs, "fg", "bg")
          )
@@ -164,7 +166,8 @@ graphicsPars <- local({
     TheTable$ppp <- unique(c(TheTable$owin,
                              TheTable$symbols,
                              "pch", "cex", "lty", "lwd",
-                             "etch"))
+                             "etch",
+                             "annotate", "labelmap"))
 
   graphicsPars <- function(key) {
     n <- pmatch(key, names(TheTable))

@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.21 $  $Date: 2014/11/10 11:18:52 $
+##   $Revision: 1.22 $  $Date: 2015/04/28 12:20:31 $
 ##
 
 symbolmap <- local({
@@ -342,164 +342,150 @@ invoke.symbolmap <- local({
 
 ## Display the symbol map itself (`legend' style)
 
-plot.symbolmap <- local({
-
-  # recognised additional arguments to axis()
+plot.symbolmap <- function(x, ..., main,
+                           xlim=NULL, ylim=NULL,
+                           vertical=FALSE,
+                           side=c("bottom", "left", "top", "right"),
+                           annotate=TRUE, labelmap=NULL, add=FALSE) {
+  if(missing(main))
+    main <- short.deparse(substitute(x))
+  miss.side <- missing(side)
+  side <- match.arg(side)
   
-  axisparams <- c("cex", 
-                  "cex.axis", "cex.lab",
-                  "col.axis", "col.lab",
-                  "font.axis", "font.lab",
-                  "las", "mgp", "xaxp", "yaxp",
-                  "tck", "tcl", "xpd")
+  type <- symbolmaptype(x)
+  map <- x
+  stuff <- attr(map, "stuff")
 
-  plot.symbolmap <- function(x, ..., main,
-                               xlim=NULL, ylim=NULL,
-                               vertical=FALSE,
-                               side=c("bottom", "left", "top", "right"),
-                               annotate=TRUE, labelmap=NULL, add=FALSE) {
-    if(missing(main))
-      main <- short.deparse(substitute(x))
-    miss.side <- missing(side)
-    side <- match.arg(side)
-
-    type <- symbolmaptype(x)
-    map <- x
-    stuff <- attr(map, "stuff")
-
-    if(type == "constant" && length(stuff$parlist) == 0)
-      return(invisible(NULL))
-
-    if(is.null(labelmap)) {
-      labelmap <- function(x) x
-    } else if(type == "continuous" &&
-              is.numeric(labelmap) && length(labelmap) == 1) {
-      labscal <- labelmap
-      labelmap <- function(x) { x * labscal }
-    } else stopifnot(is.function(labelmap))
-
-    ## determine the 'example' input values and their graphical representations
-    switch(type,
-           constant = {
-             vv <- NULL
-           },
-           continuous = {
-             ra <- stuff$range
-             if(is.null(ra))
-               stop("Cannot plot symbolmap with an infinite range")
-             vv <- prettyinside(ra)
-             if(is.numeric(vv))
-               vv <- signif(vv, 4)
-           },
-           discrete = {
-             vv <- prettydiscrete(stuff$inputs)
-             if(vertical) vv <- rev(vv)
-           })
-    nn <- length(vv)
-##    gg <- map(vv)
-    ll <- paste(labelmap(vv))
-    
-    ## determine position of plot and symbols
-    if(add) {
-      ## x and y limits must respect existing plot space
-      usr <- par('usr')
-      if(is.null(xlim)) xlim <- usr[1:2]
-      if(is.null(ylim)) ylim <- usr[3:4]
-    } else {
-      ## create new plot
-      zz <- c(0, 1)
-      if(is.null(xlim) && is.null(ylim)) {
-        if(vertical) {
-          xlim <- zz
-          ylim <- length(vv) * zz
-        } else {
-          xlim <- length(vv) * zz
-          ylim <- zz
-        }
-      } else if(is.null(ylim)) {
-        ylim <- zz
-      } else if(is.null(xlim)) {
-        xlim <- zz
-      }
-    }
-
-    ## .......... initialise plot ...............................
-    if(!add)
-      do.call.matched("plot.default",
-                      resolve.defaults(list(x=xlim, y=ylim,
-                                            type="n", main=main,
-                                            axes=FALSE, xlab="", ylab="",
-                                            asp=1.0),
-                                       list(...)))
-    ## maximum symbol diameter
-    maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=TRUE)
-
-    ## .......... plot symbols ....................
-    if(type == "constant") {
-      xp <- mean(xlim)
-      yp <- mean(ylim)
-    } else if(vertical) {
-      ## vertical arrangement
-      xp <- rep(mean(xlim), nn)
-      vskip <- 1.1 * max(maxdiam, 3 * max(strheight(labelmap(vv))))
-      if(diff(ylim) > nn * vskip) {
-        yp <- (1:nn) * vskip
-        yp <- yp - mean(yp) + mean(ylim)
-      } else {
-        z <- seq(ylim[1], ylim[2], length=nn+1)
-        yp <- z[-1] - diff(z)/2
-      }
-    } else {
-      ## horizontal arrangement
-      yp <- rep(mean(ylim), nn)
-      hskip <- 1.1 * max(maxdiam, max(strwidth(labelmap(vv))))
-      if(diff(xlim) > nn * hskip) {
-        xp <- (1:nn) * hskip
-        xp <- xp - mean(xp) + mean(xlim)
-      } else {
-        z <- seq(xlim[1], xlim[2], length=nn+1)
-        xp <- z[-1] - diff(z)/2
-      }
-    }
-    invoke.symbolmap(map, vv, xp, yp, ..., add=TRUE)
-
-    ## ................. draw annotation ..................
-    if(annotate && length(ll) > 0) {
-      if(vertical) {
-        ## default axis position is to the right 
-        if(miss.side) side <- "right"
-        sidecode <- match(side, c("bottom", "left", "top", "right"))
-        if(!(sidecode %in% c(2,4)))
-          warning(paste("side =", sQuote(side),
-                        "is not consistent with vertical orientation"))
-        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
-        ## draw axis
-        do.call.matched("axis",
-                        resolve.defaults(list(...),
-                                         list(side=sidecode, pos=pos, at=yp,
-                                              labels=ll, tick=FALSE, las=1)),
-                        extrargs=axisparams)
-      } else {
-        ## default axis position is below 
-        if(miss.side) side <- "bottom"
-        sidecode <- match(side, c("bottom", "left", "top", "right"))
-        if(!(sidecode %in% c(1,3)))
-          warning(paste("side =", sQuote(side),
-                        "is not consistent with horizontal orientation"))
-        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
-        ## draw axis
-        do.call.matched("axis",
-                        resolve.defaults(list(...),
-                                         list(side = sidecode, pos = pos,
-                                              at = xp, labels=ll, tick=FALSE)),
-                        extrargs=axisparams)
-      } 
-    }
+  if(type == "constant" && length(stuff$parlist) == 0)
     return(invisible(NULL))
+
+  if(is.null(labelmap)) {
+    labelmap <- function(x) x
+  } else if(type == "continuous" &&
+            is.numeric(labelmap) && length(labelmap) == 1) {
+    labscal <- labelmap
+    labelmap <- function(x) { x * labscal }
+  } else stopifnot(is.function(labelmap))
+
+  ## determine the 'example' input values and their graphical representations
+  switch(type,
+         constant = {
+           vv <- NULL
+         },
+         continuous = {
+           ra <- stuff$range
+           if(is.null(ra))
+             stop("Cannot plot symbolmap with an infinite range")
+           vv <- prettyinside(ra)
+           if(is.numeric(vv))
+             vv <- signif(vv, 4)
+         },
+         discrete = {
+           vv <- prettydiscrete(stuff$inputs)
+           if(vertical) vv <- rev(vv)
+         })
+  nn <- length(vv)
+  ##    gg <- map(vv)
+  ll <- paste(labelmap(vv))
+    
+  ## determine position of plot and symbols
+  if(add) {
+    ## x and y limits must respect existing plot space
+    usr <- par('usr')
+    if(is.null(xlim)) xlim <- usr[1:2]
+    if(is.null(ylim)) ylim <- usr[3:4]
+  } else {
+    ## create new plot
+    zz <- c(0, 1)
+    if(is.null(xlim) && is.null(ylim)) {
+      if(vertical) {
+        xlim <- zz
+        ylim <- length(vv) * zz
+      } else {
+        xlim <- length(vv) * zz
+        ylim <- zz
+      }
+    } else if(is.null(ylim)) {
+      ylim <- zz
+    } else if(is.null(xlim)) {
+      xlim <- zz
+    }
   }
 
-  plot.symbolmap
-})
+  ## .......... initialise plot ...............................
+  if(!add)
+    do.call.matched("plot.default",
+                    resolve.defaults(list(x=xlim, y=ylim,
+                                          type="n", main=main,
+                                          axes=FALSE, xlab="", ylab="",
+                                          asp=1.0),
+                                     list(...)))
+  ## maximum symbol diameter
+  maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=TRUE)
+
+  ## .......... plot symbols ....................
+  if(type == "constant") {
+    xp <- mean(xlim)
+    yp <- mean(ylim)
+  } else if(vertical) {
+    ## vertical arrangement
+    xp <- rep(mean(xlim), nn)
+    vskip <- 1.1 * max(maxdiam, 3 * max(strheight(labelmap(vv))))
+    if(diff(ylim) > nn * vskip) {
+      yp <- (1:nn) * vskip
+      yp <- yp - mean(yp) + mean(ylim)
+    } else {
+      z <- seq(ylim[1], ylim[2], length=nn+1)
+      yp <- z[-1] - diff(z)/2
+    }
+  } else {
+    ## horizontal arrangement
+    yp <- rep(mean(ylim), nn)
+    hskip <- 1.1 * max(maxdiam, max(strwidth(labelmap(vv))))
+    if(diff(xlim) > nn * hskip) {
+      xp <- (1:nn) * hskip
+      xp <- xp - mean(xp) + mean(xlim)
+    } else {
+      z <- seq(xlim[1], xlim[2], length=nn+1)
+      xp <- z[-1] - diff(z)/2
+    }
+  }
+  invoke.symbolmap(map, vv, xp, yp, ..., add=TRUE)
+
+  ## ................. draw annotation ..................
+  if(annotate && length(ll) > 0) {
+    if(vertical) {
+      ## default axis position is to the right 
+      if(miss.side) side <- "right"
+      sidecode <- match(side, c("bottom", "left", "top", "right"))
+      if(!(sidecode %in% c(2,4)))
+        warning(paste("side =", sQuote(side),
+                      "is not consistent with vertical orientation"))
+      pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+      ## draw axis
+      do.call.matched("axis",
+                      resolve.defaults(list(...),
+                                       list(side=sidecode, pos=pos, at=yp,
+                                            labels=ll, tick=FALSE, las=1)),
+                      extrargs=graphicsPars("axis"))
+    } else {
+      ## default axis position is below 
+      if(miss.side) side <- "bottom"
+      sidecode <- match(side, c("bottom", "left", "top", "right"))
+      if(!(sidecode %in% c(1,3)))
+        warning(paste("side =", sQuote(side),
+                      "is not consistent with horizontal orientation"))
+      pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+      ## draw axis
+      do.call.matched("axis",
+                      resolve.defaults(list(...),
+                                       list(side = sidecode, pos = pos,
+                                            at = xp, labels=ll, tick=FALSE)),
+                      extrargs=graphicsPars("axis"))
+    } 
+  }
+  return(invisible(NULL))
+}
 
 plan.legend.layout <- function(B, 
                                ..., 
