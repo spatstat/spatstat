@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.66 $ $Date: 2015/04/23 07:29:52 $
+#   $Revision: 1.67 $ $Date: 2015/04/29 07:31:57 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE) {
@@ -238,12 +238,12 @@ plot.tess <- local({
 })
 
 
-"[<-.tess" <- function(x, ..., value) {
+"[<-.tess" <- function(x, i, ..., value) {
   switch(x$type,
          rect=,
          tiled={
            til <- tiles(x)
-           til[...] <- value
+           til[i] <- value
            ok <- !unlist(lapply(til, is.null))
            x <- tess(tiles=til[ok])
          },
@@ -253,17 +253,21 @@ plot.tess <- local({
   return(x)
 }
   
-"[.tess" <- function(x, ...) {
+"[.tess" <- function(x, i, ...) {
+  trap.extra.arguments(..., .Context="in [.tess")
+  if(missing(i)) return(x)
+  if(is.owin(i))
+    return(intersect.tess(x, i))
   switch(x$type,
          rect=,
          tiled={
-           til <- tiles(x)[...]
+           til <- tiles(x)[i]
            return(tess(tiles=til))
          },
          image={
            img <- x$image
            oldlev <- levels(img)
-           newlev <- unique(oldlev[...])
+           newlev <- unique(oldlev[i])
            img <- eval.im(factor(img, levels=newlev))
            return(tess(image=img))
          })

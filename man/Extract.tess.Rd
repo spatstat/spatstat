@@ -7,11 +7,15 @@
   to make a new tessellation.
 }
 \usage{
-  \method{[}{tess}(x, ...)
-  \method{[}{tess}(x, ...) <- value
+  \method{[}{tess}(x, i, \dots)
+  \method{[}{tess}(x, i, \dots) <- value
 }
 \arguments{
   \item{x}{A tessellation (object of class \code{"tess"}).}
+  \item{i}{
+     Subset index for the tiles of the tessellation.
+     Alternatively a window (object of class \code{"owin"}).
+  }
   \item{\dots}{
      One argument that specifies the subset to be extracted or changed.
      Any valid format for the subset index in a list.
@@ -27,7 +31,11 @@
   The subset operator \code{[.tess} extracts some
   of these tiles and forms a new tessellation, which of course covers a
   smaller region than the original. 
-  
+
+  For \code{[.tess} only, the subset index can also be a window
+  (object of class \code{"owin"}). The tessellation \code{x}
+  is then intersected with the window.
+
   The replacement operator changes the selected tiles. The replacement
   \code{value} may be either \code{NULL} (which causes the selected tiles
   to be removed from \code{x}) or a list of the same length as
@@ -44,7 +52,7 @@
   A tessellation (object of class \code{"tess"}).
 }
 \seealso{
-  \code{\link{tess}},
+  \code{\link{tess}}, \code{\link{tiles}}, \code{\link{intersect.tess}}.
 }
 \examples{
    \testonly{op <- spatstat.options(npixel=10)}
@@ -54,11 +62,14 @@
    A[c(2, 5, 11)] <- NULL
    \testonly{spatstat.options(op)}
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

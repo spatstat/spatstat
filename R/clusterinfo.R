@@ -58,10 +58,14 @@
                  stop("Argument ", sQuote("scale"), " must be given.")
              thresh <- dots$thresh
              if(!is.null(thresh)){
-                 ddist <- .Spatstat.ClusterModelInfoTable$Thomas$ddist
-                 kernel0 <- clusterkernel("Thomas", scale = scale)(0,0)
-                 f <- function(r) ddist(r, scale = scale)-thresh*kernel0
-                 rmax <- uniroot(f, lower = scale, upper = 1000 * scale)$root
+               ## The squared length of isotropic Gaussian (sigma)
+               ## is exponential with mean 2 sigma^2
+               rmax <- scale * sqrt(2 * qexp(thresh, lower.tail=FALSE))
+               ## old code
+               ##  ddist <- .Spatstat.ClusterModelInfoTable$Thomas$ddist
+               ##  kernel0 <- clusterkernel("Thomas", scale = scale)(0,0)
+               ##  f <- function(r) ddist(r, scale = scale)-thresh*kernel0
+               ##  rmax <- uniroot(f, lower = scale, upper = 1000 * scale)$root
              } else{
                  rmax <- 4*scale
              }
@@ -277,13 +281,15 @@
              scale <- c(dots$scale, dots$par[["scale"]])[1]
              if(is.null(scale))
                  stop("Argument ", sQuote("scale"), " must be given.")
-             thresh <- dots$thresh
-             if(is.null(thresh))
-                 thresh <- .001
-             ddist <- .Spatstat.ClusterModelInfoTable$Cauchy$ddist
-             kernel0 <- clusterkernel("Cauchy", scale = scale)(0,0)
-             f <- function(r) ddist(r, scale = scale)-thresh*kernel0
-             rmax <- uniroot(f, lower = scale, upper = 1000 * scale)$root
+             thresh <- dots$thresh %orifnull% 0.01
+             ## integral of ddist(r) dr is 1 - (1+(r/scale)^2)^(-1/2)
+             ## solve for integral = 1-thresh:
+             rmax <- scale * sqrt(1/thresh^2 - 1)
+             ## old code
+             ## ddist <- .Spatstat.ClusterModelInfoTable$Cauchy$ddist
+             ## kernel0 <- clusterkernel("Cauchy", scale = scale)(0,0)
+             ## f <- function(r) ddist(r, scale = scale)-thresh*kernel0
+             ## rmax <- uniroot(f, lower = scale, upper = 1000 * scale)$root
              return(rmax)
          },
          kernel = function(par, rvals, ...) {
@@ -395,8 +401,13 @@
              if(is.null(thresh))
                  thresh <- .001
              ddist <- .Spatstat.ClusterModelInfoTable$VarGamma$ddist
-             kernel0 <- clusterkernel("VarGamma", scale = scale, nu = nu)(0,0)
-             f <- function(r) ddist(r, scale = scale, nu = nu) - thresh*kernel0
+             f1 <- function(rmx) {
+               integrate(ddist, 0, rmx, scale=scale, nu=nu)$value - (1 - thresh)
+             }
+             f <- Vectorize(f1)
+             ## old code
+             ## kernel0 <- clusterkernel("VarGamma", scale = scale, nu = nu)(0,0)
+             ## f <- function(r) ddist(r, scale = scale, nu = nu) - thresh*kernel0
              rmax <- uniroot(f, lower = scale, upper = 1000 * scale)$root
              return(rmax)
          },

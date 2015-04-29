@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.066
+        CHANGES IN spatstat VERSION 1.41-1.067
 
 OVERVIEW
 
@@ -247,11 +247,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Changed the ordering (and therefore default colours/styles) 
    of curves in the plot, to match other functions like lohboot.
 
+   o bw.diggle
+   New argument 'nr' controls accuracy.
+
    o textureplot
    Now accepts a pixel image, a tessellation, or anything acceptable to as.tess.
 
-   o bw.diggle
-   New argument 'nr' controls accuracy.
+   o [.tess
+   Subset index can now be a window.
 
    o plot.tess
    Can now plot a text label in each tile.
