@@ -96,16 +96,18 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
 
 with.msr <- function(data, expr, ...) {
   stopifnot(inherits(data, "msr"))
-  stopifnot(is.character(expr)) 
-  y <- switch(expr,
-              increment  = { data$val },
-              is.atom    = { data$atoms },
-              discrete   = { data$discrete },
-              density    = { data$density },
-              continuous = { data$density * data$wt },
-              qweights   = { data$wt },
-              qlocations = { data$loc },
-              stop("Unrecognised option in entry.msr", call.=FALSE))
+  stuff <- list(increment  = data$val,
+                is.atom    = data$atoms,
+                discrete   = data$discrete,
+                density    = data$density,
+                continuous = data$density * data$wt,
+                qweights   = data$wt,
+                qlocations = data$loc,
+                atoms      = data$loc[data$atoms],
+                atommass   = data$wt[data$atoms])
+  y <- eval(substitute(expr), envir=stuff, enclos=parent.frame())
+  if(is.character(y) && length(y) == 1 && y %in% names(stuff))
+    y <- stuff[[y]]
   return(y)
 }
 

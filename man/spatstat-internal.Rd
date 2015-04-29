@@ -706,7 +706,6 @@
 \alias{waxlyrical}
 \alias{weighted.var}
 \alias{windows.mppm}
-\alias{with.msr}
 \alias{w.quad}               
 \alias{x.quad}
 \alias{y.quad}
@@ -1525,7 +1524,6 @@ warn.once(key, \dots)
 waxlyrical(type, terse)
 weighted.var(x, w, na.rm)
 windows.mppm(x)
-\method{with}{msr}(data, expr, \dots)
 w.quad(Q)               
 x.quad(Q)
 y.quad(Q)

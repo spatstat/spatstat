@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.065
+        CHANGES IN spatstat VERSION 1.41-1.066
 
 OVERVIEW
 
@@ -89,6 +89,9 @@ NEW FUNCTIONS
 
    o predict.rho2hat
    Prediction method for class rho2hat
+
+   o with.msr
+   Evaluate (expression involving) components of a measure. 
 
    o summary.kppm, print.summary.kppm, coef.summary.kppm
    Methods for 'summary' and 'coef(summary(..))' for Cox and cluster models.
