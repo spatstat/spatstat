@@ -33,3 +33,4 @@ foo <- local({
   foo
 })
 
+plot.foo <- function(x, ...) foo()

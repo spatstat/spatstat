@@ -1,13 +1,24 @@
 \name{foo}
 \alias{foo}
+\alias{plot.foo}
 \title{
-  Foo is Not a Variable
+  Foo is Not a Real Name
 }
 \description{
-  Prints an explanation of the placeholder name \code{foo}.
+  The name \code{foo} is not a real name: it is a place holder,
+  used to represent the name of any desired thing.
+
+  The functions defined here simply print an explanation of the
+  placeholder name \code{foo}.
 }
 \usage{
 foo()
+
+\method{plot}{foo}(x, \dots)
+}
+\arguments{
+  \item{x}{Ignored.}
+  \item{\dots}{Ignored.}
 }
 \details{
   The name \code{foo} is used by computer scientists as a
