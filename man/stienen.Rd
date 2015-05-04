@@ -68,6 +68,7 @@ stienenSet(X, edge=TRUE)
 \examples{
   Y <- stienenSet(cells)
   stienen(redwood)
+  stienen(redwood, border=list(bg=NULL, lwd=2, cols="red"))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

@@ -34,7 +34,7 @@ stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
                                      border,
                                      list(...),
                                      list(bg=bg),
-                                     list(cols=grey(0.75), lwd=2)),
+                                     list(cols=grey(0.5), lwd=2)),
                   extrargs=gp)
   }
   return(invisible(NULL))

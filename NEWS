@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.069
+        CHANGES IN spatstat VERSION 1.41-1.070
 
 OVERVIEW
 
@@ -286,6 +286,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
       These functions are now 'deprecated', and will be replaced by
       delaunayDistance, delaunayNetwork, dirichletEdges, 
       dirichletNetwork and dirichletVertices respectively.
+
+   o data(residualspaper)
+   In the real datasets (Fig1 and Fig11), the name of the unit of length
+   has now been recorded.
 
 BUG FIXES
 
