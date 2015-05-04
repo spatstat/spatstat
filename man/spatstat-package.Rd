@@ -1680,6 +1680,7 @@
   Markus Herrmann,
   Kurt Hornik,
   Philipp Hunziker,
+  Jack Hywood,
   Ross Ihaka,
   Aruna Jammalamadaka,
   Robert John-Chandran,

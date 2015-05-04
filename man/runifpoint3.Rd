@@ -8,7 +8,7 @@
   independent, uniform random points in three dimensions.
 }
 \usage{
-runifpoint3(n, domain = box3(), nsim=1)
+runifpoint3(n, domain = box3(), nsim=1, drop=TRUE)
 }
 \arguments{
   \item{n}{
@@ -19,9 +19,14 @@ runifpoint3(n, domain = box3(), nsim=1)
     An object of class \code{"box3"}.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \value{
-  If \code{nsim = 1}, a point pattern in
+  If \code{nsim = 1} and \code{drop=TRUE}, a point pattern in
   three dimensions (an object of class \code{"pp3"}).
   If \code{nsim > 1}, a list of such point patterns.
 }

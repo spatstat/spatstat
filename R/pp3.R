@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.19 $  $Date: 2015/01/28 06:31:28 $
+#  $Revision: 1.22 $  $Date: 2015/05/04 05:02:31 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -199,35 +199,41 @@ volume.box3 <- function(x) {
   with(x, prod(diff(xrange), diff(yrange), diff(zrange)))
 }
 
-runifpoint3 <- function(n, domain=box3(), nsim=1) {
-  if(nsim > 1) {
-    result <- vector(mode="list", length=nsim)
-    for(i in 1:n) result[[i]] <- runifpoint3(n, domain)
-    result <- as.solist(result)
-    names(result) <- paste("Simulation", 1:n)
-    return(result)
-  }
+runifpoint3 <- function(n, domain=box3(), nsim=1, drop=TRUE) {
   domain <- as.box3(domain)
-  x <- with(domain, runif(n, min=xrange[1], max=xrange[2]))
-  y <- with(domain, runif(n, min=yrange[1], max=yrange[2]))
-  z <- with(domain, runif(n, min=zrange[1], max=zrange[2]))
-  pp3(x,y,z,domain)
+  result <- vector(mode="list", length=nsim)
+  dd <- as.list(domain)[c("xrange", "yrange", "zrange")]
+  for(i in 1:nsim) {
+    x <- with(dd, runif(n, min=xrange[1], max=xrange[2]))
+    y <- with(dd, runif(n, min=yrange[1], max=yrange[2]))
+    z <- with(dd, runif(n, min=zrange[1], max=zrange[2]))
+    result[[i]] <- pp3(x,y,z,domain)
+  }
+  if(drop && nsim == 1) return(result[[1]])
+  result <- as.anylist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
-rpoispp3 <- function(lambda, domain=box3(), nsim=1) {
-  if(nsim > 1) {
-    result <- vector(mode="list", length=nsim)
-    for(i in 1:n) result[[i]] <- rpoispp3(n, domain)
-    result <- as.solist(result)
-    names(result) <- paste("Simulation", 1:n)
-    return(result)
-  }
+rpoispp3 <- function(lambda, domain=box3(), nsim=1, drop=TRUE) {
   domain <- as.box3(domain)
-  v <- volume.box3(domain)
+  v <- volume(domain)
   if(!(is.numeric(lambda) && length(lambda) == 1))
     stop("lambda must be a single numeric value")
-  n <- rpois(1, lambda * v)
-  runifpoint3(n, domain=domain)
+  np <- rpois(nsim, lambda * v)
+  dd <- as.list(domain)[c("xrange", "yrange", "zrange")]
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) {
+    ni <- np[i]
+    x <- with(dd, runif(ni, min=xrange[1], max=xrange[2]))
+    y <- with(dd, runif(ni, min=yrange[1], max=yrange[2]))
+    z <- with(dd, runif(ni, min=zrange[1], max=zrange[2]))
+    result[[i]] <- pp3(x,y,z,domain)
+  }
+  if(drop && nsim == 1) return(result[[1]])
+  result <- as.anylist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 

@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.068
+        CHANGES IN spatstat VERSION 1.41-1.069
 
 OVERVIEW
 
-   o We thank Anders Bilgrau, Ute Hahn, Cody Schank, Olivia Semboli
-   and Ben Taylor for contributions.
+   o We thank Anders Bilgrau, Ute Hahn, Jack Hywood, Cody Schank, 
+   Olivia Semboli and Ben Taylor for contributions.
 
    o Version nickname: 'Lifestyle Choice'
 
@@ -303,6 +303,12 @@ BUG FIXES
    of more than two windows.
    Fixed.
 
+   o rpoispp3 
+   Implementation was incorrect for nsim > 1.
+   (Results may have been incorrect.)
+   Spotted by Jack Hywood.
+   Fixed.
+   
    o as.owin.data.frame
    Crashed if the window was not connected.
    Fixed.
@@ -333,6 +339,11 @@ BUG FIXES
 
    o plot.ppm
    Crashed with message about 'variable lengths differ'.
+   Fixed.
+
+   o runifpoint3, rpoispp3
+   Crashed if nsim > 1.
+   Spotted by Jack Hywood.
    Fixed.
 
    o MultiStraussHard
@@ -698,8 +709,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o runifdisc, runifpoint, rpoint, rpoispp, rmpoint, rmpoispp, 
    rMaternI, rMaternII, rSSI, rPoissonCluster, rGaussPoisson,
    rstrat, rsyst, rcell, rthin, rNeymanScott, rMatClust, rThomas,
-   rCauchy, rVarGamma
-   New argument 'drop'
+   rCauchy, rVarGamma, rpoispp3, runifpoint3
+   New argument 'drop': if nsim = 1 and drop=TRUE, the result is a point pattern
+   rather than a list containing one point pattern.
 
    o spatstat.options
    New option 'units.paren' controls the type of parenthesis
