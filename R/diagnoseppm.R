@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.38 $ $Date: 2015/02/03 00:32:59 $
+# $Revision: 1.39 $ $Date: 2015/05/05 09:54:08 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -129,8 +129,11 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
       sigma <- 0.1 * diameter(Wclip)  
     Z <- density.ppp(Yclip, sigma, weights=Yclip$marks, edge=TRUE, ...)
   }
-  if(opt$smooth)
+  if(opt$smooth) {
     result$smooth <- list(Z = Z, sigma=sigma)
+    if(type == "pearson")
+      result$smooth$sdp <- 1/(2 * sigma * sqrt(pi))
+  }
 
   # -------------- marginals of smoothed field ------------------------
   
@@ -380,9 +383,8 @@ print.diagppm <- function(x, ...) {
   opt <- x$opt
   typename <- x$typename
   
-  cat(paste("Model diagnostics (", typename, ")\n", sep=""))
-
-  cat("Diagnostics available:\n")
+  splat("Model diagnostics", paren(typename))
+  splat("Diagnostics available:")
   optkey <- list(all="four-panel plot",
                  marks=paste("mark plot", if(!x$compute.cts)
                    "(discrete representation only)" else NULL),
@@ -399,17 +401,15 @@ print.diagppm <- function(x, ...) {
   if(opt$sum) {
     xs <- x$sum
     windowname <- if(x$clip) "clipped window" else "entire window"
-    cat(paste("sum of", typename, "in", windowname, "=",
-              signif(sum(xs$marksum),4), "\n"))
-    cat(paste("area of", windowname, "=",
-              signif(xs$areaWclip, 4), "\n"))
-    cat(paste("quadrature area =",
-              signif(xs$areaquad, 4), "\n"))
+    splat("sum of", typename, "in", windowname, "=", signif(sum(xs$marksum),4))
+    splat("area of", windowname, "=", signif(xs$areaWclip, 4))
+    splat("quadrature area =", signif(xs$areaquad, 4))
   }
-  if(opt$smooth) 
-    cat(paste("range of smoothed field = [",
-              paste(signif(range(x$smooth$Z$v, na.rm=TRUE),4), collapse=","),
-              "]\n"))
-
+  if(opt$smooth) {
+    splat("range of smoothed field = ", prange(signif(range(x$smooth$Z),4)))
+    if(!is.null(sdp <- x$smooth$sdp))
+      splat("Null standard deviation of smoothed Pearson residual field:",
+            signif(sdp, 4))
+  }
   return(invisible(NULL))
 }

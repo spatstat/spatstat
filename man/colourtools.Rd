@@ -7,6 +7,7 @@
 \alias{samecolour}
 \alias{complementarycolour}
 \alias{interp.colours}
+\alias{is.colour}
 \alias{is.grey}
 \alias{to.grey}
 \title{
@@ -24,6 +25,7 @@ paletteindex(x)
 samecolour(x,y)
 complementarycolour(x)
 interp.colours(x, length.out=512)
+is.colour(x)
 to.grey(x, weights=c(0.299, 0.587, 0.114))
 is.grey(x)
 }
@@ -48,6 +50,11 @@ is.grey(x)
   }
 }
 \details{
+  \code{is.colour(x)} can be applied to any kind of data \code{x}
+  and returns \code{TRUE} if \code{x} can be interpreted as a colour or
+  colours. The remaining functions expect data that can be interpreted
+  as colours.
+  
   \code{col2hex} converts colours specified in any format
   into their hexadecimal character codes.
 

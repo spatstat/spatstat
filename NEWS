@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.071
+        CHANGES IN spatstat VERSION 1.41-1.072
 
 OVERVIEW
 
@@ -133,6 +133,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o Kest
    New argument 'rmax' controls maximum value of argument 'r'
 
+   o diagnose.ppm
+   Now computes and prints the null standard deviation of the
+   smoothed Pearson residual field, when appropriate.
+
    o nncorr, nnmean, nnvario
    New argument 'k' specifies k-th nearest neighbour.
 
@@ -223,6 +227,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o lurking
    Now returns an object of class 'lurk' which has a plot method.
+   Two-standard-deviation limits are now plotted using grey shading.
 
    o marktable
    New argument 'N' for studying the N nearest neighbours.   

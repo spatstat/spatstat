@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.11 $   $Date: 2015/03/16 10:52:23 $
+#   $Revision: 1.13 $   $Date: 2015/05/05 08:43:55 $
 #
 
 
@@ -25,6 +25,13 @@ paletteindex <- function(x) {
   p <- col2hex(palette())
   m <- match(x, p)
   return(m)
+}
+
+is.colour <- function(x) {
+  if(length(x) == 0) return(FALSE)
+  cx <- try(col2rgb(x), silent=TRUE)
+  bad <- inherits(cx, "try-error")
+  return(!bad)
 }
 
 samecolour <- function(x, y) { col2hex(x) == col2hex(y) }

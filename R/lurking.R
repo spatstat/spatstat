@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.42 $ $Date: 2015/03/17 11:27:47 $
+# $Revision: 1.45 $ $Date: 2015/05/05 08:43:00 $
 #
 
 lurking <- function(object, covariate, type="eem",
@@ -404,7 +404,7 @@ lurking <- function(object, covariate, type="eem",
   return(invisible(stuff))
 }
 
-plot.lurk <- function(x, ...) {
+plot.lurk <- function(x, ..., shade="grey") {
   xplus <- append(x, attr(x, "info"))
   with(xplus, {
     ## work out plot range
@@ -425,36 +425,46 @@ plot.lurk <- function(x, ...) {
               list(type="n"),
               list(...),
               list(xlab=covname, ylab=vname)))
-    ## envelopes
+    ## Envelopes
     if(!is.null(theoretical$upper)) {
-      xx <- with(theoretical, c(covariate, rev(covariate)))
-      yy <- with(theoretical, c(upper, rev(lower)))
-      do.call.matched(polygon,
-                      resolve.defaults(list(x=xx, y=yy),
-                                       list(...),
-                                       list(border=NA, col="grey")))
+      Upper <- theoretical$upper
+      Lower <- theoretical$lower
+    } else if(!is.null(theoretical$sd)) {
+      Upper <- with(theoretical, mean+2*sd)
+      Lower <- with(theoretical, mean-2*sd)
+    } else Upper <- Lower <- NULL
+    if(!is.null(Upper) && !is.null(Lower)) {
+      xx <- theoretical$covariate
+      if(!is.null(shade)) {
+        ## shaded envelope region
+        shadecol <- if(is.colour(shade)) shade else "grey"
+        xx <- c(xx,    rev(xx))
+        yy <- c(Upper, rev(Lower))
+        do.call.matched(polygon,
+                        resolve.defaults(list(x=xx, y=yy),
+                                         list(...),
+                                         list(border=shadecol, col=shadecol)))
+      } else {
+        do.call(lines,
+                resolve.defaults(
+                  list(x = xx, y=Upper),
+                  list(...),
+                  list(lty=3)))
+        do.call(lines,
+                resolve.defaults(
+                  list(x = xx, y = Lower),
+                  list(...),
+                  list(lty=3)))
+      }
     }
-    ## (A)/(A') Empirical
+    ## Empirical
     lines(value ~ covariate, empirical, ...)
-    ## (B)/(B') Theoretical mean
+    ## Theoretical mean
     do.call("lines",
             resolve.defaults(
               list(mean ~ covariate, theoretical),
               list(...),
               list(lty=2)))
-    ## (C) Standard deviation 
-    if(!is.null(theoretical$sd)) {
-      do.call("lines",
-              resolve.defaults(
-                list(mean + 2 * sd ~ covariate, theoretical),
-                list(...),
-                list(lty=3)))
-      do.call("lines",
-              resolve.defaults(
-                list(mean - 2 * sd ~ covariate, theoretical),
-                list(...),
-                list(lty=3)))
-    }
   })
   return(invisible(NULL))
 }

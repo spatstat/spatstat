@@ -151,7 +151,7 @@ lurking(object, covariate, type="eem",
   the covariate. The empirical plot (solid lines) is shown
   together with its expected value assuming the model is true
   (dashed lines) and optionally also the pointwise
-  two-standard-deviation limits (dotted lines).
+  two-standard-deviation limits (grey shading).
   
   To be more precise, let \eqn{Z(u)} denote the value of the covariate
   at a spatial location \eqn{u}. 
