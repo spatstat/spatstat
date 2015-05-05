@@ -7,10 +7,10 @@
 #
 
 dclf.progress <- function(X, ..., nrank=1)
-  mctest.progress(X, ..., expo=2, nrank=nrank)
+  mctest.progress(X, ..., exponent=2, nrank=nrank)
 
 mad.progress <- function(X, ..., nrank=1)
-  mctest.progress(X, ..., expo=Inf, nrank=nrank)
+  mctest.progress(X, ..., exponent=Inf, nrank=nrank)
 
 mctest.progress <- local({
 
@@ -20,14 +20,14 @@ mctest.progress <- local({
     if(all(is.nan(z))) NaN else max(z[is.finite(z)])
   }
 
-  mctest.progress <- function(X, fun=Lest, ..., expo=1, nrank=1) {
-    check.1.real(expo)
-    explain.ifnot(expo >= 0)
+  mctest.progress <- function(X, fun=Lest, ..., exponent=1, nrank=1) {
+    check.1.real(exponent)
+    explain.ifnot(exponent >= 0)
     if((nrank %% 1) != 0)
       stop("nrank must be an integer")
     if(missing(fun) && inherits(X, "envelope"))
       fun <- NULL
-    Z <- envelopeProgressData(X, fun=fun, ..., expo=expo)
+    Z <- envelopeProgressData(X, fun=fun, ..., exponent=exponent)
     R       <- Z$R
     devdata <- Z$devdata
     devsim  <- Z$devsim
@@ -37,11 +37,11 @@ mctest.progress <- local({
     alpha   <- nrank/(nsim + 1)
     alphastring <- paste(100 * alpha, "%%", sep="")
     # create fv object
-    fname  <- if(is.infinite(expo)) "mad" else
-              if(expo == 2) "T" else paste("D[",expo,"]", sep="")
-    ylab <- if(is.infinite(expo)) quote(mad(R)) else
-            if(expo == 2) quote(T(R)) else
-            eval(substitute(quote(D[p](R)), list(p=expo)))
+    fname  <- if(is.infinite(exponent)) "mad" else
+              if(exponent == 2) "T" else paste("D[",exponent,"]", sep="")
+    ylab <- if(is.infinite(exponent)) quote(mad(R)) else
+            if(exponent == 2) quote(T(R)) else
+            eval(substitute(quote(D[p](R)), list(p=exponent)))
     df <- data.frame(R=R, obs=devdata, crit=critval, zero=0)
     p <- fv(df,
             argu="R", ylab=ylab, valu="obs", fmla = . ~ R, 
@@ -63,7 +63,7 @@ mctest.progress <- local({
 # Do not call this function.
 # Performs underlying computations
 
-envelopeProgressData <- function(X, fun=Lest, ..., expo=1,
+envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
                                 normalize=FALSE, deflate=FALSE) {
   # compute or extract simulated functions
   X <- envelope(X, fun=fun, ..., savefuns=TRUE)
@@ -75,27 +75,27 @@ envelopeProgressData <- function(X, fun=Lest, ..., expo=1,
   sim <- as.matrix(as.data.frame(Y))[, -1]
   nsim <- ncol(sim)
 
-  if(is.infinite(expo)) {
+  if(is.infinite(exponent)) {
     # MAD
     devdata <- cummax(abs(obs-reference))
     devsim <- apply(abs(sim-reference), 2, cummax)
     testname <- "Maximum absolute deviation test"
   } else {
     dR <- c(0, diff(R))
-    a <- (nsim/(nsim - 1))^expo
-    devdata <- a * cumsum(dR * abs(obs - reference)^expo)
-    devsim <- a * apply(dR * abs(sim - reference)^expo, 2, cumsum)
+    a <- (nsim/(nsim - 1))^exponent
+    devdata <- a * cumsum(dR * abs(obs - reference)^exponent)
+    devsim <- a * apply(dR * abs(sim - reference)^exponent, 2, cumsum)
     if(normalize) {
       devdata <- devdata/R
       devsim <- sweep(devsim, 1, R, "/")
     }
     if(deflate) {
-      devdata <- devdata^(1/expo)
-      devsim <- devsim^(1/expo)
+      devdata <- devdata^(1/exponent)
+      devsim <- devsim^(1/exponent)
     }
-    testname <- if(expo == 2) "Diggle-Cressie-Loosmore-Ford test" else
-                if(expo == 1) "Integral absolute deviation test" else
-                paste("Integrated", ordinal(expo), "Power Deviation test")
+    testname <- if(exponent == 2) "Diggle-Cressie-Loosmore-Ford test" else
+                if(exponent == 1) "Integral absolute deviation test" else
+                paste("Integrated", ordinal(exponent), "Power Deviation test")
   }
   result <- list(R=R, devdata=devdata, devsim=devsim, testname=testname)
   return(result)
