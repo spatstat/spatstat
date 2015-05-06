@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.072
+        CHANGES IN spatstat VERSION 1.41-1.073
 
 OVERVIEW
 
@@ -190,9 +190,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o effectfun
    Now works for 'kppm' and 'lppm' objects as well.
 
-   o integral.im
+   o integral.im, integral.msr
    Argument 'domain' can now be a tessellation;
-   the integral of the function over each tile of the tessellation is returned.
+   the integral over each tile of the tessellation is returned.
 
    o allstats, compareFit, markcorr, split.ppx, by.ppp
    Result is now of class 'anylist'.
