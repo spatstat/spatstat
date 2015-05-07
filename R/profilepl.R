@@ -352,3 +352,6 @@ simulate.profilepl <- function(object, ...) {
   simulate(as.ppm(object), ...)
 }
 
+parameters.profilepl <- function(model, ...) {
+  parameters(as.ppm(model))
+}

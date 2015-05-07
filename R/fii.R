@@ -159,6 +159,11 @@ print.summary.fii <- local({
   print.summary.fii
 })
 
+parameters.fii <- function(model, ...) {
+  ss <- summary(model)
+  out <- append(ss$interaction$par, ss$sensible$param)
+  return(out)
+}
 
 coef.summary.fii <- function(object, ...) {
   object$printable

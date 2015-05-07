@@ -2,6 +2,7 @@
 \alias{parameters}
 \alias{parameters.kppm}
 \alias{parameters.ppm}
+\alias{parameters.profilepl}
 \title{
   Extract Model Parameters in Understandable Form
 }
@@ -16,6 +17,8 @@ parameters(model, \dots)
 \method{parameters}{kppm}(model, \dots)
 
 \method{parameters}{ppm}(model, \dots)
+
+\method{parameters}{profilepl}(model, \dots)
 }
 \arguments{
   \item{model}{
@@ -31,10 +34,11 @@ parameters(model, \dots)
   specify the model, and returns them as a list.
 
   The function \code{parameters} is generic, with methods
-  for \code{"ppm"} and \code{"kppm"}.
+  for class \code{"ppm"}, \code{"kppm"} and \code{"profilepl"}
+  and possibly for other classes.
 }
 \value{
-  A list, whose format depends on the fitted model.
+  A named list, whose format depends on the fitted model.
 }
 \author{
 Adrian Baddeley

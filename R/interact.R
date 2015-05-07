@@ -184,6 +184,9 @@ is.poisson.interact <- function(x) {
   is.null(x$family)
 }
 
+parameters.interact <- function(model, ...) {
+  model$par
+}
 
 # Test whether interact object was made by an older version of spatstat
 
@@ -305,7 +308,6 @@ as.interact.interact <- function(object) {
   verifyclass(object, "interact")
   return(object)
 }
-
 
 #### internal code for streamlining initialisation of interactions
 #
