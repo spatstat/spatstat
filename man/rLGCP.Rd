@@ -101,6 +101,9 @@
   
   The LGCP model can be fitted to data using \code{\link{kppm}}.
 }
+\section{Package Dependence}{
+  This function requires the package \pkg{RandomFields} to be loaded.
+}
 \seealso{
 \code{\link{rpoispp}},
 \code{\link{rMatClust}},

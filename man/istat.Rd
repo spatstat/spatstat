@@ -42,12 +42,14 @@
    it is advisable to select \emph{No simulation envelopes}
    to save a lot of computation time.
 }
+\section{Package Dependence}{
+  This function requires the package \pkg{rpanel} to be loaded.
+}
 \seealso{
   \code{\link{iplot}}
 }
 \examples{
-   if(interactive()) {
-      data(swedishpines)
+   if(interactive() && require(rpanel)) {
       istat(swedishpines)
    }
 }

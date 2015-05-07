@@ -70,8 +70,11 @@
 \seealso{
   \code{\link{istat}}
 }
+\section{Package Dependence}{
+  This function requires the package \pkg{rpanel} to be loaded.
+}
 \examples{
-   if(interactive()) {
+   if(interactive() && require(rpanel)) {
       iplot(cells)
       iplot(amacrine)
       iplot(lansing)

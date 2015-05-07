@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.073
+        CHANGES IN spatstat VERSION 1.41-1.074
 
 OVERVIEW
 
@@ -296,6 +296,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
    In the real datasets (Fig1 and Fig11), the name of the unit of length
    has now been recorded.
 
+   o rLGCP
+   This function now requires the package 'RandomFields'
+   to be loaded explicitly by library(RandomFields) or require(RandomFields), 
+   unless model="exp".
+
+   o iplot, istat
+   These functions now require the package 'rpanel' 
+   to be loaded explicitly by library(rpanel) or require(rpanel).
+   
 BUG FIXES
 
    o Kinhom, Linhom

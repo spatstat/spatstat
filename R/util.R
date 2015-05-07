@@ -1449,6 +1449,8 @@ bibliotheque <- function(nom, dont) {
   ok <- requireNamespace(nom)
   if(!ok) return(FALSE)
   if(exists(dont)) return(TRUE)
+  if(isNamespaceLoaded(nom)) return(TRUE)
+  cat("Attaching namespace", sQuote(nom), fill=TRUE)
   attachNamespace(nom)
   return(exists(dont))
 }

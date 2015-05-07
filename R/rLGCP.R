@@ -21,7 +21,7 @@ rLGCP <- local({
     if(!all(nzchar(names(param))))
       stop("Outdated syntax of argument 'param' to rLGCP", call.=FALSE)
     ## 
-    if(!requireNamespace("RandomFields"))
+    if(!isNamespaceLoaded("RandomFields"))
       stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
     ## 
     do.rLGCP(model=model, mu=mu, param=param, ...,

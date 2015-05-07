@@ -544,8 +544,8 @@
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
              if(model != "exponential") {
-                 if(!bibliotheque("RandomFields", "RFcov"))
-                     stop("The package RandomFields is required")
+                 if(!isNamespaceLoaded("RandomFields"))
+                     stop("The package RandomFields is required", call.=FALSE)
                  ## get the 'model generator' 
                  modgen <- try(getExportedValue("RandomFields", 
                                                 paste0("RM", model)),
@@ -639,8 +639,8 @@
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             if(!bibliotheque("RandomFields", "RFcov"))
-               stop("The package RandomFields is required")
+             if(!isNamespaceLoaded("RandomFields"))
+               stop("The package RandomFields is required", call.=FALSE)
              ## get the 'model generator' 
              modgen <- try(getExportedValue("RandomFields", 
                                             paste0("RM", model)),

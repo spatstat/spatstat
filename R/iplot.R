@@ -50,7 +50,8 @@ iplot.ppp <- function(x, ..., xname) {
   bb <- as.rectangle(as.owin(x))
   bbmid <- unlist(centroid.owin(bb))
   ##
-  bibliotheque("rpanel", "rp.control")
+  check.rpanel()
+  ##
   p <- rpanel::rp.control(paste("iplot(", xname, ")", sep=""), 
                           x=x,
                           w=as.owin(x),
@@ -334,7 +335,7 @@ do.iplot.ppp <- function(panel) {
 
 CommitAndRedraw <- function(panel) {
   # hack to ensure that panel is immediately updated in rpanel
-  bibliotheque("rpanel", "rp.control")
+  check.rpanel()
   ## This is really a triple-colon!
   rpanel:::rp.control.put(panel$panelname, panel)
   # now redraw it
@@ -343,3 +344,9 @@ CommitAndRedraw <- function(panel) {
 
 iplot.ppp
 })
+
+check.rpanel <- function() {
+  if(!isNamespaceLoaded("rpanel"))
+    stop("The library 'rpanel' is required")
+}
+  

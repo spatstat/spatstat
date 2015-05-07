@@ -68,6 +68,7 @@
 \alias{check.1.integer}
 \alias{check.1.real}
 \alias{check.range}
+\alias{check.rpanel}
 \alias{check.testfun}
 \alias{choptext}
 \alias{circticks}
@@ -789,6 +790,7 @@ check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
+check.rpanel()
 check.testfun(f, f1, X)
 choptext(\dots, prefix)
 circticks(R, at, unit, labels)

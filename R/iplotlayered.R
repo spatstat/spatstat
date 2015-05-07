@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.10 $   $Date: 2015/04/15 11:04:58 $
+#   $Revision: 1.11 $   $Date: 2015/05/07 01:56:47 $
 #
 #
 
@@ -16,7 +16,7 @@ iplot.layered <- local({
 
   CommitAndRedraw <- function(panel) {
     ## hack to ensure that panel is immediately updated in rpanel
-    bibliotheque("rpanel", "rp.control")
+    check.rpanel()
     ## This is really a triple-colon!
     rpanel:::rp.control.put(panel$panelname, panel)
     ## now redraw it
@@ -62,8 +62,8 @@ iplot.layered <- function(x, ..., xname, visible) {
   } else if(length(visible) == 1) {
     visible <- rep(visible, length(x))
   } else stopifnot(length(visible) == length(x))
-  
-  bibliotheque("rpanel", "rp.control")
+
+  check.rpanel()
 
   x <- faster.layers(x, visible)
   visible <- attr(x, "visible")
