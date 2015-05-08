@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.102 $	$Date: 2015/02/13 08:18:19 $
+#	$Revision: 4.103 $	$Date: 2015/05/08 09:10:07 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -416,10 +416,10 @@ scanpp <- function(filename, window, header=TRUE, dir="",
 print.ppp <- function(x, ...) {
   verifyclass(x, "ppp")
   ism <- is.marked(x, dfok=TRUE)
-  splat(paste0(if(ism) "marked " else NULL,
-               "planar point pattern:"),
-        x$n,
-        ngettext(x$n, "point", "points"))
+  nx <- x$n
+  splat(if(ism) "Marked planar" else "Planar",
+        "point pattern:",
+        nx, ngettext(nx, "point", "points"))
   if(ism) {
     mks <- marks(x, dfok=TRUE)
     if(is.data.frame(mks)) {
@@ -503,7 +503,7 @@ summary.ppp <- function(object, ..., checkdup=TRUE) {
   return(result)
 }
 
-print.summary.ppp <- function(x, ..., dp=3) {
+print.summary.ppp <- function(x, ..., dp=getOption("digits")) {
   verifyclass(x, "summary.ppp")
   terselevel <- spatstat.options("terse")
   splat(if(x$is.marked) "Marked planar" else "Planar",
