@@ -423,6 +423,7 @@ local({
 #   tests/ppmtricks.R
 #
 #   Test backdoor exits and hidden options in ppm
+#        and summary.ppm, print.summary.ppm
 #
 #   $Revision: 1.4 $  $Date: 2014/11/10 03:05:01 $
 #
@@ -451,9 +452,17 @@ local({
   mungf    <- profilepl(ss, StraussHard, cats ~ dM)
   mungp   <- profilepl(ss, StraussHard, trend=~dM, Q=cats)
 
-  ## splitting large quadschemes into blocks
+  ## (4) splitting large quadschemes into blocks
   op <- spatstat.options(maxmatrix=5000)
   pr <- predict(ppm(cells ~ x, AreaInter(0.05)))
+
+  ## (5) shortcuts in summary.ppm
+  ## and corresponding behaviour of print.summary.ppm
+  print(summary(fit, quick=TRUE))
+  print(summary(fit, quick="entries"))
+  print(summary(fit, quick="no prediction"))
+  print(summary(fit, quick="no variances"))
+  
   spatstat.options(op)
 })
 

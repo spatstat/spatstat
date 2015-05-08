@@ -2,7 +2,7 @@
 #	interact.S
 #
 #
-#	$Revision: 1.26 $	$Date: 2015/04/15 14:09:34 $
+#	$Revision: 1.27 $	$Date: 2015/05/08 04:46:04 $
 #
 #	Class 'interact' representing the interpoint interaction
 #               of a point process model
@@ -140,8 +140,9 @@ print.interact <- function(x, ..., family, brief=FALSE, banner=TRUE) {
     parval <- x$par
     pwords <- paste(toupper(substring(pwords, 1, 1)),
                     substring(pwords, 2), sep="")
-    if(is.numeric(parval))
-      parval <- signif(parval, getOption("digits"))
+    isnum <- sapply(parval, is.numeric)
+    parval[isnum] <- lapply(parval[isnum], signif,
+                            digits=getOption("digits"))
     splat(paste(paste0(pwords, ":\t", parval), collapse="\n"))
   }
   invisible(NULL)

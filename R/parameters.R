@@ -1,7 +1,7 @@
 ##
 ##    parameters.R
 ##
-##   $Revision: 1.1 $ $Date: 2015/04/25 21:52:59 $
+##   $Revision: 1.2 $ $Date: 2015/05/08 04:27:15 $
 ##
 
 parameters <- function(model, ...) {
@@ -9,7 +9,7 @@ parameters <- function(model, ...) {
 }
 
 parameters.ppm <- function(model, ...) {
-  ss <- summary(model)
+  ss <- summary(model, quick="no variances")
   out <- c(list(trend=ss$trend$value),
            ss$covfunargs,
            ss$interaction$interaction$par,
@@ -18,7 +18,7 @@ parameters.ppm <- function(model, ...) {
 }
 
 parameters.kppm <- function(model, ...) {
-  ss <- summary(model)
+  ss <- summary(model, quick="no variances")
   out <- c(list(trend=ss$trend$trend$value),
            ss$covfunargs,
            ss$clustpar,

@@ -6,7 +6,7 @@
   \code{summary} method for class \code{"kppm"}.
 }
 \usage{
-  \method{summary}{kppm}(object, \dots)
+  \method{summary}{kppm}(object, \dots, quick=FALSE)
 
   \method{print}{summary.kppm}(x, \dots)
 }
@@ -15,6 +15,7 @@
     A fitted Cox or cluster point process model (object of
     class \code{"kppm"}).
   }
+  \item{quick}{Logical value controlling the scope of the summary.}
   \item{\dots}{Arguments passed to \code{\link{summary.ppm}} or
     \code{\link{print.summary.ppm}} controlling the treatment of
     the trend component of the model.}

@@ -1,37 +1,39 @@
 #'
 #'       summary.kppm.R
 #'
-#'   $Revision: 1.4 $  $Date: 2015/04/25 21:43:11 $
+#'   $Revision: 1.5 $  $Date: 2015/05/08 04:25:23 $
 #' 
 
-summary.kppm <- function(object, ...) {
+summary.kppm <- function(object, ..., quick=FALSE) {
   nama <- names(object)
   result <- unclass(object)[!(nama %in% c("X", "po", "call", "callframe"))]
   ## handle old format
   if(is.null(result$isPCP)) result$isPCP <- TRUE
   ## summarise trend component
-  result$trend <- summary(as.ppm(object), ...)
-  theta <- coef(object)
-  if(length(theta) > 0) {
-    vc <- vcov(object, matrix.action="warn")
-    if(!is.null(vc)) {
-      se <- if(is.matrix(vc)) sqrt(diag(vc)) else
-      if(length(vc) == 1) sqrt(vc) else NULL
-    }
-    if(!is.null(se)) {
-      two <- qnorm(0.975)
-      lo <- theta - two * se
-      hi <- theta + two * se
-      zval <- theta/se
-      pval <- 2 * pnorm(abs(zval), lower.tail=FALSE)
-      psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1),
-                  labels=c("***", "**", "*", "  "),
-                  include.lowest=TRUE)
-      ## table of coefficient estimates with SE and 95% CI
-      result$coefs.SE.CI <- data.frame(Estimate=theta, S.E.=se,
-                                       CI95.lo=lo, CI95.hi=hi,
-                                       Ztest=psig,
-                                       Zval=zval)
+  result$trend <- summary(as.ppm(object), ..., quick=quick)
+  if(identical(quick, FALSE)) {
+    theta <- coef(object)
+    if(length(theta) > 0) {
+      vc <- vcov(object, matrix.action="warn")
+      if(!is.null(vc)) {
+        se <- if(is.matrix(vc)) sqrt(diag(vc)) else
+        if(length(vc) == 1) sqrt(vc) else NULL
+      }
+      if(!is.null(se)) {
+        two <- qnorm(0.975)
+        lo <- theta - two * se
+        hi <- theta + two * se
+        zval <- theta/se
+        pval <- 2 * pnorm(abs(zval), lower.tail=FALSE)
+        psig <- cut(pval, c(0,0.001, 0.01, 0.05, 1),
+                    labels=c("***", "**", "*", "  "),
+                    include.lowest=TRUE)
+        ## table of coefficient estimates with SE and 95% CI
+        result$coefs.SE.CI <- data.frame(Estimate=theta, S.E.=se,
+                                         CI95.lo=lo, CI95.hi=hi,
+                                         Ztest=psig,
+                                         Zval=zval)
+      }
     }
   }
   class(result) <- "summary.kppm"
@@ -127,6 +129,15 @@ print.summary.kppm <- function(x, ...) {
       splat("Fitted mean of log of random intensity:",
             if(!is.im(mu)) signif(mu, digits) else "[pixel image]")
     }
+  }
+  # table of coefficient estimates with SE and 95% CI
+  if(!is.null(cose <- x$coefs.SE.CI)) {
+    parbreak()
+    splat("Final standard error and CI")
+    splat("(allowing for correlation of",
+          if(isPCP) "cluster" else "Cox",
+          "process):")
+    print(cose)
   }
   invisible(NULL)
 }

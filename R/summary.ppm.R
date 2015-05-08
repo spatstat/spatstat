@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.73 $   $Date: 2015/04/02 02:17:19 $
+#    $Revision: 1.74 $   $Date: 2015/05/08 04:25:37 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -31,7 +31,8 @@ summary.ppm <- local({
 
     x <- object
     y <- list()
-  
+    class(y) <- "summary.ppm"
+
     #######  Extract main data components #########################
 
     QUAD <- object$Q
@@ -114,10 +115,8 @@ summary.ppm <- local({
 
     # Exit here if quick=TRUE
     
-    if(identical(quick, TRUE)) {
-      class(y) <- "summary.ppm"
+    if(identical(quick, TRUE)) 
       return(y)
-    }
 
     ######  Does it have external covariates?  ####################
 
@@ -135,6 +134,7 @@ summary.ppm <- local({
                      covfunargs    = NULL,
                      has.xargs     = FALSE,
                      xargmap       = NULL))
+    class(y) <- "summary.ppm"
 
     if(!antiquated) {
       covars <- x$covariates
@@ -275,10 +275,8 @@ summary.ppm <- local({
       return(y)
 
     # Exit before SE for variational Bayes
-    if(!is.null(x$internal$VB)){
-        class(y) <- "summary.ppm"
-        return(y)
-    }
+    if(!is.null(x$internal$VB))
+      return(y)
     
     if(length(COEFS) > 0) {
       # compute standard errors
@@ -307,7 +305,6 @@ summary.ppm <- local({
       }
     }
   
-    class(y) <- "summary.ppm"
     return(y)
   }
   
@@ -385,11 +382,17 @@ print.summary.ppm <- function(x, ...) {
   if(x$args$correction == "border")
     splat("\t[border correction distance r =", x$args$rbord,"]")
 
-  ruletextline()
-
   # print summary of quadrature scheme
+  if(is.null(x$quad))
+    return(invisible(NULL))
+  ruletextline()
   print(x$quad)
-  
+
+
+  ## start printing trend information
+  if(is.null(x$no.trend))
+    return(invisible(NULL))
+
   ruletextline()
   splat("FITTED MODEL:")
   parbreak()
@@ -419,6 +422,9 @@ print.summary.ppm <- function(x, ...) {
 
   # ----- trend --------------------------
 
+  if(length(x$trend) == 0)
+    return(invisible(NULL))
+  
   parbreak()
   splat(paste0("---- ", x$trend$name, ": ----"))
   parbreak()
