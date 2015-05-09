@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.077
+        CHANGES IN spatstat VERSION 1.41-1.078
 
 OVERVIEW
 
@@ -102,6 +102,9 @@ NEW FUNCTIONS
    o shift.linim, scalardilate.linim, affine.linim
    Geometrical transformations for 'linim' objects.
 
+   o Smooth.solist
+   Smooth method for a list of spatial objects.
+
    o delaunayDistance, delaunayNetwork, dirichletEdges, 
    dirichletNetwork, dirichletVertices
       These functions will replace delaunay.distance, delaunay.network, 
@@ -203,6 +206,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Result is now of class 'solist'.
 
    o split.ppp
+   New argument 'reduce'.
    Result now inherits class 'ppplist' and 'solist', as well as 'splitppp'
 
    o rLGCP
@@ -357,6 +361,16 @@ BUG FIXES
 
    o plot.ppm
    Crashed with message about 'variable lengths differ'.
+   Fixed.
+
+   o plot.solist
+   Crashed when applied to a list of point patterns
+   if some patterns had more than one column of marks.
+   Fixed.
+
+   o Smooth.ppp
+   Crashed if applied to a point pattern with several columns of marks
+   if some of the columns were factors.
    Fixed.
 
    o runifpoint3, rpoispp3

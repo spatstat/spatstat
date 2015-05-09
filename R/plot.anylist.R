@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.12 $ $Date: 2015/03/17 08:24:07 $
+##  $Revision: 1.14 $ $Date: 2015/05/09 11:23:27 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -37,11 +37,13 @@ plot.anylist <- plot.solist <- plot.listof <-
     argh <- resolve.defaults(list(...),
                              extrargs,
                              ## some plot commands don't recognise 'add' 
-                             if(add) list(add=TRUE) else NULL)
-    if(is.function(cmd)) 
+                             if(add) list(add=TRUE) else NULL,
+                             if(is.ppp(cmd)) list(multiplot=FALSE) else NULL)
+    if(is.function(cmd)) {
       do.call(cmd, resolve.defaults(list(i, xi), argh))
-    else
+    } else {
       do.call(plot, resolve.defaults(list(cmd), argh))
+    }
   }
 
   exec.or.plotshift <- function(cmd, i, xi, ..., vec=vec,
@@ -50,7 +52,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     argh <- resolve.defaults(list(...),
                              extrargs,
                              ## some plot commands don't recognise 'add' 
-                             if(add) list(add=TRUE) else NULL)
+                             if(add) list(add=TRUE) else NULL,
+                             if(is.ppp(cmd)) list(multiplot=FALSE) else NULL)
     if(is.function(cmd)) {
       do.call(cmd, resolve.defaults(list(i, xi), argh))
     } else {
@@ -63,7 +66,8 @@ plot.anylist <- plot.solist <- plot.listof <-
   getplotbox <- function(x, ..., do.plot, plotcommand="plot") {
     if(inherits(x, c("im", "ppp", "psp", "msr", "layered", "tess"))) {
       if(identical(plotcommand, "plot")) {
-        y <- plot(x, ..., do.plot=FALSE)      
+        y <- if(is.ppp(x)) plot(x, ..., multiplot=FALSE, do.plot=FALSE) else 
+                           plot(x, ..., do.plot=FALSE)      
         return(as.owin(y))
       } else if(identical(plotcommand, "contour")) {
         y <- contour(x, ..., do.plot=FALSE)      
@@ -127,7 +131,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     if(missing(plotcommand) && isIm) {
       cl[[1]] <- as.name("image.imlist")
       parenv <- sys.parent()
-      return(eval(cl, envir=parenv))
+      return(invisible(eval(cl, envir=parenv)))
     }
 
     if(isSo) {
@@ -441,7 +445,7 @@ plot.imlist <- local({
                                       list(...),
                                       list(main=xname)))
     }
-    return(out)
+    return(invisible(out))
   }
 
   imagecommon <- function(x, ...,
@@ -522,6 +526,6 @@ image.imlist <- image.listof <-
     } else {
       out <- plot.solist(x, ..., ribmar=ribmar)
     }
-    return(out)
+    return(invisible(out))
   }
 

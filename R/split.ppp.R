@@ -1,20 +1,22 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.28 $ $Date: 2015/03/11 10:28:59 $
+# $Revision: 1.31 $ $Date: 2015/05/09 10:23:48 $
 #
 # split.ppp and "split<-.ppp"
 #
 #########################################
 
-split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
+split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
   verifyclass(x, "ppp")
   mf <- markformat(x)
+  fgiven <- !missing(f)
   
-  if(is.null(un))
-    un <- missing(f) && (mf != "dataframe")
+  if(is.null(un)) {
+    un <- !fgiven && (mf != "dataframe")
+  } else un <- as.logical(un)
 
-  if(missing(f)) {
+  if(!fgiven) {
     # f defaults to marks of x
     switch(mf,
            none={
@@ -31,7 +33,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
                stop("Data frame of marks contains no factors")
            })
     splittype <- "factor"
-  } else{
+  } else {
     # f was given
     fsplit <- f
     if(is.factor(f)) {
@@ -90,13 +92,25 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, ...) {
            stop("Internal error: wrong format for fsplit"))
   }
 
-  # split the data
-  out <- list()
-  for(l in lev) 
-    out[[paste(l)]] <- x[!is.na(f) & (f == l)]
+  ## remove marks that will not be retained
+  if(un && reduce && mf == "dataframe")
+    warning("Incompatible arguments un=TRUE and reduce=TRUE: assumed un=TRUE")
+  if(un) {
+    x <- unmark(x)
+  } else if(reduce && !fgiven && mf == "dataframe") {
+    # remove the column of marks that determined the split
+    j <- findfirstfactor(marks(x))
+    if(!is.null(j))
+      marks(x) <- marks(x)[, -j]
+  }
   
-  if(un)
-     out <- lapply(out, unmark)
+  ## split the data
+  out <- list()
+  fok <- !is.na(f)
+  for(l in lev) 
+    out[[paste(l)]] <- x[fok & (f == l)]
+
+  ## 
   if(splittype == "tess") {
     til <- tiles(fsplit)
     for(i in seq_along(out))

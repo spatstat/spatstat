@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.177 $    $Date: 2015/03/26 04:53:55 $
+#    $Revision: 1.178 $    $Date: 2015/05/09 09:31:16 $
 #
 #
 matrowsum <- function(x) {
@@ -802,12 +802,18 @@ validposint <- function(n, caller, fatal=TRUE) {
 
 # wrangle data.frames
 
-firstfactor <- function(x) {
+findfirstfactor <- function(x) {
   stopifnot(is.data.frame(x) || is.hyperframe(x))
   isfac <- unlist(lapply(as.list(x), is.factor))
   if(!any(isfac)) 
     return(NULL)
-  return(x[, min(which(isfac)), drop=TRUE])
+  min(which(isfac))
+}
+
+firstfactor <- function(x) {
+  j <- findfirstfactor(x)
+  if(is.null(j)) return(NULL)
+  return(x[, j, drop=TRUE])
 }
 
 onecolumn <- function(m) {

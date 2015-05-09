@@ -7,7 +7,7 @@
   according to their marks, or according to any user-specified grouping.
 }
 \usage{
-  \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=NULL, \dots)
+  \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, \dots)
   \method{split}{ppp}(x, f = marks(x), drop=FALSE, un=missing(f), \dots) <- value
 }
 \arguments{
@@ -28,6 +28,10 @@
     Logical. Determines whether the resulting subpatterns will be unmarked
     (i.e. whether marks will be removed	from the points in each
     subpattern). 
+  }
+  \item{reduce}{
+    Logical. Determines whether to delete the column of marks used to split the
+    pattern, when the marks are a data frame.
   }
   \item{\dots}{
     Other arguments are ignored.
@@ -104,7 +108,12 @@
   then the default is \code{un=TRUE} for multitype point patterns
   and \code{un=FALSE} for marked point patterns with a data frame of
   marks.
-  
+
+  If the marks of \code{x} are a data frame, then 
+  \code{split(x, reduce=TRUE)} will discard only the column of marks
+  that was used to split the pattern. This applies only when
+  the argument \code{f} is missing.
+
   The result of \code{split.ppp} has class \code{"splitppp"}
   and can be plotted using \code{\link{plot.splitppp}}.
 

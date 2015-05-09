@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.41-1.077
+Version: 1.41-1.078
 Nickname: Lifestyle Choice
-Date: 2015-05-08
+Date: 2015-05-09
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

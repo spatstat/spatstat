@@ -23,7 +23,7 @@ rLGCP <- local({
     ## 
     if(!isNamespaceLoaded("RandomFields"))
       stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
-    ## 
+    ##
     do.rLGCP(model=model, mu=mu, param=param, ...,
              win=win, saveLambda=saveLambda, nsim=nsim, drop=drop)
   }

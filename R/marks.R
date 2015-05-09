@@ -370,12 +370,16 @@ coerce.marks.numeric <- function(X, warn=TRUE) {
   } else {
     marx <- as.data.frame(marx)
     if(any(fax <- unlist(lapply(marx, is.factor)))) {
-      if(warn) warning("Factor-valued mark",
-                       ngettext(sum(fax), "variable was", "variables were"),
-                       "converted to integer codes:",
-                       commasep(sQuote(colnames(marx)[fax])),
-                       call.=FALSE)
-      marx[,fax] <- as.data.frame(lapply(marx[,fax], as.integer))
+      if(warn) {
+        nf <- sum(fax)
+        whinge <- paste("Factor-valued mark",
+                        ngettext(nf, "variable", "variables"),
+                        commasep(sQuote(colnames(marx)[fax])),
+                        ngettext(nf, "was", "were"),
+                        "converted to integer codes")
+        warning(whinge, call.=FALSE)
+      }
+      marx[fax] <- as.data.frame(lapply(marx[fax], as.integer))
       return(X %mark% marx)
     }
   }

@@ -183,6 +183,7 @@
 \alias{findbestlegendpos}
 \alias{findCovariate}
 \alias{findcbind}
+\alias{findfirstfactor}
 \alias{firstfactor}
 \alias{fii}
 \alias{fillNA}
@@ -629,6 +630,7 @@
 \alias{singlestring}              
 \alias{slr.prepare}
 \alias{slrAssemblePixelData}
+\alias{Smooth.solist}
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}              
 \alias{sort.im}
@@ -932,6 +934,7 @@ fillseq(x)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)
 findcbind(root, depth, maxdepth)
+findfirstfactor(x)
 firstfactor(x)
 fii(interaction, coefs, Vnames, IsOffset)
 fillNA(x, value)
@@ -1447,6 +1450,7 @@ simulrecipe(type, expr, envir, csr, pois, constraints)
 singlestring(s, coll)
 slr.prepare(CallInfo, envir, data, dataAtPoints, splitby, clip)
 slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
+\method{Smooth}{solist}(X, \dots)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,

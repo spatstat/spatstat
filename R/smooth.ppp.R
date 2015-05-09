@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.22 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.24 $  $Date: 2015/05/09 11:52:15 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -14,6 +14,10 @@ smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
 
 Smooth <- function(X, ...) {
   UseMethod("Smooth")
+}
+
+Smooth.solist <- function(X, ...) {
+  solapply(X, Smooth, ...)
 }
 
 Smooth.ppp <- function(X, sigma=NULL, ...,
