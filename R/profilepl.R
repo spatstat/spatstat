@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.34 $  $Date: 2015/04/19 18:21:59 $
+#  $Revision: 1.35 $  $Date: 2015/05/10 10:43:49 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -21,7 +21,6 @@ profilepl <- local({
     callenv <- parent.frame()
     s <- as.data.frame(s)
     n <- nrow(s)
-    fname <- paste(short.deparse(substitute(f)), collapse="")
     stopifnot(is.function(f))
     ## validate 's'
     parms <- names(s)
@@ -163,7 +162,7 @@ profilepl <- local({
                    iopt=opti,
                    fit=optfit,
                    rbord=rbord,
-                   fname=fname,
+                   fname=as.interact(optfit)$name,
                    allcoef=allcoef,
                    otherstuff=list(...),
                    pseudocall=pseudocall)
@@ -192,7 +191,9 @@ print.profilepl <- function(x, ...) {
   }
   nparm <- ncol(x$param)
   if(waxlyrical('extras')) {
-    splat("fitted with rbord =", x$rbord)
+    corx <- x$fit$correction
+    if(identical(corx, "border") && !is.null(x$rbord))
+      splat("fitted with rbord =", x$rbord)
     splat("Interaction:", x$fname)
     splat("Irregular",
           ngettext(nparm, "parameter:", "parameters:\n"),

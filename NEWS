@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.079
+        CHANGES IN spatstat VERSION 1.41-1.080
 
 OVERVIEW
 
@@ -33,6 +33,8 @@ OVERVIEW
    o class 'listof' is almost completely replaced by 'anylist' and 'solist'.
 
    o Improvements and bug fixes.
+
+   o spatstat now depends on R version 3.2.0 or later.
 
 NEW FUNCTIONS
 
