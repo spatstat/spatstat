@@ -179,7 +179,7 @@ chop.tess <- function(X, L) {
                               y=c(yleft,ylo,ylo,yright)))
       upper <- owin(poly=list(x=xr[c(1,2,2,1)],
                               y=c(yleft,yright,yhi,yhi)))
-      Bplus <- owin(xr, c(ylo, yhi))
+      Bplus <- owin(xr, c(ylo, yhi), unitname=unitname(B))
       Z <- tess(tiles=list(lower,upper), window=Bplus)
     }
     # intersect this simple tessellation with X

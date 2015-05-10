@@ -7,7 +7,7 @@
 }
 \usage{
   tess(..., xgrid = NULL, ygrid = NULL, tiles = NULL, image = NULL,
-            window=NULL, marks=NULL, keepempty=FALSE)
+            window=NULL, marks=NULL, keepempty=FALSE, unitname=NULL)
 }
 \arguments{
   \item{\dots}{Ignored.}
@@ -34,6 +34,16 @@
   \item{keepempty}{
     Logical flag indicating whether empty tiles should be retained
     or deleted.
+  }
+  \item{unitname}{
+    Optional. Name of unit of length. Either a single character string,
+    or a vector of two character strings giving the
+    singular and plural forms, respectively.
+    If this argument is missing or \code{NULL},
+    information about the unitname will be
+    extracted from the other arguments.
+    If this argument is given, it overrides any other information
+    about the unitname.
   }
 }
 \details{

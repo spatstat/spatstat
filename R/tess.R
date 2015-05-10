@@ -6,10 +6,13 @@
 #   $Revision: 1.67 $ $Date: 2015/04/29 07:31:57 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
-                 window=NULL, marks=NULL, keepempty=FALSE) {
-  if(!is.null(window))
-    win <- as.owin(window)
-  else win <- NULL
+                 window=NULL, marks=NULL, keepempty=FALSE,
+                 unitname=NULL) {
+  uname <- unitname
+  if(!is.null(window)) {
+    window <- as.owin(window)
+    if(is.null(uname)) uname <- unitname(window) 
+  }
   isrect <- !is.null(xgrid) && !is.null(ygrid)
   istiled <- !is.null(tiles)
   isimage <- !is.null(image)
@@ -18,16 +21,34 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
   if(isrect) {
     stopifnot(is.numeric(xgrid) && all(diff(xgrid) > 0))
     stopifnot(is.numeric(ygrid) && all(diff(ygrid) > 0))
-    if(is.null(win)) win <- owin(range(xgrid), range(ygrid))
+    if(is.null(window))
+      window <- owin(range(xgrid), range(ygrid), unitname=uname)
     ntiles <- (length(xgrid)-1) * (length(ygrid)-1)
-    out <- list(type="rect", window=win, xgrid=xgrid, ygrid=ygrid, n=ntiles)
+    out <- list(type="rect", window=window, xgrid=xgrid, ygrid=ygrid, n=ntiles)
   } else if(istiled) {
     stopifnot(is.list(tiles))
-    if(!all(unlist(lapply(tiles, is.owin))))
-      stop("tiles must be a list of owin objects")
+    if(!all(sapply(tiles, is.owin)))
+      stop("Tiles must be a list of owin objects")
+    if(!is.null(uname)) {
+      ## attach new unit name to each tile
+      tiles <- lapply(tiles, "unitname<-", value=uname)
+    } else {
+      ## extract unit names from tiles, check agreement, use as unitname
+      uu <- unique(lapply(tiles, unitname))
+      uu <- uu[!sapply(uu, is.null)]
+      nun <- length(uu)
+      if(nun > 1)
+        stop("Tiles have inconsistent names for the unit of length")
+      if(nun == 1) {
+        ## use this unit name
+        uname <- uu[[1]]
+        if(!is.null(window))
+          unitname(window) <- uname
+      }
+    }
     if(!keepempty) {
       # remove empty tiles
-      isempty <- unlist(lapply(tiles, is.empty))
+      isempty <- sapply(tiles, is.empty)
       if(all(isempty))
         stop("All tiles are empty")
       if(any(isempty))
@@ -36,34 +57,35 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     ntiles <- length(tiles)
     nam <- names(tiles)
     lev <- if(!is.null(nam) && all(nzchar(nam))) nam else 1:ntiles
-    if(is.null(win)) {
+    if(is.null(window)) {
       for(i in 1:ntiles) {
         if(i == 1)
-          win <- tiles[[1]]
+          window <- tiles[[1]]
         else
-          win <- union.owin(win, tiles[[i]])
+          window <- union.owin(window, tiles[[i]])
       }
     }
-    if(is.mask(win) || any(unlist(lapply(tiles, is.mask)))) {
+    if(is.mask(window) || any(unlist(lapply(tiles, is.mask)))) {
       # convert to pixel image tessellation
-      win <- as.mask(win)
-      ima <- as.im(win)
+      window <- as.mask(window)
+      ima <- as.im(window)
       ima$v[] <- NA
       for(i in 1:ntiles)
         ima[tiles[[i]]] <- i
-      ima <- ima[win, drop=FALSE]
+      ima <- ima[window, drop=FALSE]
       ima <- eval.im(factor(ima, levels=1:ntiles))
       levels(ima) <- lev
       out <- list(type="image",
-                  window=win, image=ima, n=length(lev))
+                  window=window, image=ima, n=length(lev))
     } else {
       # tile list
-      win <- rescue.rectangle(win)
-      out <- list(type="tiled", window=win, tiles=tiles, n=length(tiles))
+      window <- rescue.rectangle(window)
+      out <- list(type="tiled", window=window, tiles=tiles, n=length(tiles))
     }
   } else if(isimage) {
     # convert to factor valued image
     image <- as.im(image)
+    if(!is.null(uname)) unitname(image) <- uname
     switch(image$type,
            logical={
              # convert to factor
@@ -82,8 +104,8 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
              image <- eval.im(factor(image))
            })
                
-    if(is.null(win)) win <- as.owin(image)
-    out <- list(type="image", window=win, image=image, n=length(levels(image)))
+    if(is.null(window)) window <- as.owin(image)
+    out <- list(type="image", window=window, image=image, n=length(levels(image)))
   } else stop("Internal error: unrecognised format")
   ## add marks!
   if(!is.null(marks)) {
@@ -147,6 +169,21 @@ print.tess <- function(x, ..., brief=FALSE) {
   }
   if(full) print(win)
   invisible(NULL)
+}
+
+unitname.tess <- function(x) unitname(x$window)
+
+"unitname<-.tess" <- function(x, value) {
+  unitname(x$window) <- value
+  switch(x$type,
+         rect={},
+         tiled={
+           x$tiles <- lapply(x$tiles, "unitname<-", value)
+         },
+         image={
+           unitname(x$image) <- value
+         })
+  return(x)
 }
 
 plot.tess <- local({
@@ -567,7 +604,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
   if(is.owin(Y)) {
     # efficient code when Y is a window, retaining names of tiles of X
     Ztiles <- lapply(tiles(X), intersect.owin, B=Y, ..., fatal=FALSE)
-    isempty <- unlist(lapply(Ztiles, function(x) { is.null(x) || is.empty(x)}))
+    isempty <- sapply(Ztiles, is.empty)
     Ztiles <- Ztiles[!isempty]
     Xwin <- as.owin(X)
     Ywin <- Y

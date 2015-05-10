@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.104 $   $Date: 2015/03/24 02:58:28 $
+#  $Revision: 1.105 $   $Date: 2015/05/10 02:49:06 $
 #
 #  Plotting code for pixel images
 #
@@ -27,6 +27,7 @@ plot.im <- local({
                       resolve.defaults(list(x=W, type="n"), aarg), 
                       extrargs=graphicsPars("owin"))
     }
+    extrargs <- setdiff(extrargs, "claim.title.space")
     do.call.matched("image.default",
                     append(imagedata, aarg),
                     extrargs=extrargs)

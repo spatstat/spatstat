@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.19 $   $Date: 2014/03/04 10:25:19 $
+#   $Revision: 1.20 $   $Date: 2015/05/10 01:44:48 $
 #
 #
 
@@ -50,6 +50,7 @@ unitname.default <- function(x) {
 }
 
 "unitname<-.default" <- function(x, value) {
+  if(is.null(x)) return(x)
   attr(x, "units") <- as.units(value)
   return(x)
 }

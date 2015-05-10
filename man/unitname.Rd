@@ -9,6 +9,7 @@
 \alias{unitname.psp}
 \alias{unitname.quad}
 \alias{unitname.slrm}
+\alias{unitname.tess}
 \alias{unitname<-}
 \alias{unitname<-.im}
 \alias{unitname<-.kppm}
@@ -19,6 +20,7 @@
 \alias{unitname<-.psp}
 \alias{unitname<-.quad}
 \alias{unitname<-.slrm}
+\alias{unitname<-.tess}
 \title{Name for Unit of Length}
 \description{
   Inspect or change the name of the unit of length
@@ -35,6 +37,7 @@ unitname(x)
 \method{unitname}{psp}(x)
 \method{unitname}{quad}(x)
 \method{unitname}{slrm}(x)
+\method{unitname}{tess}(x)
 unitname(x) <- value
 \method{unitname}{im}(x) <- value
 \method{unitname}{kppm}(x) <- value
@@ -45,6 +48,7 @@ unitname(x) <- value
 \method{unitname}{psp}(x) <- value
 \method{unitname}{quad}(x) <- value
 \method{unitname}{slrm}(x) <- value
+\method{unitname}{tess}(x) <- value
 }
 \arguments{
   \item{x}{A spatial dataset.
@@ -52,6 +56,7 @@ unitname(x) <- value
     a line segment pattern (object of class \code{"psp"}),
     a window (object of class \code{"owin"}),
     a pixel image (object of class \code{"im"}),
+    a tessellation (object of class \code{"tess"}),
     a quadrature scheme (object of class \code{"quad"}),
     or a fitted point process model
     (object of class \code{"ppm"} or \code{"kppm"} or \code{"slrm"}

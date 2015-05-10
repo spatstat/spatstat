@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.49 $  $Date: 2015/04/18 18:05:26 $
+#  $Revision: 1.50 $  $Date: 2015/05/10 02:22:36 $
 #
 
 quadratcount <- function(X, ...) {
@@ -150,7 +150,7 @@ quadrats <- function(X, nx=5, ny=nx, xbreaks = NULL, ybreaks = NULL,
   yr <- W$yrange
   b <- rectquadrat.breaks(xr, yr, nx, ny, xbreaks, ybreaks)
   # rectangular tiles
-  Z <- tess(xgrid=b$xbreaks, ygrid=b$ybreaks)
+  Z <- tess(xgrid=b$xbreaks, ygrid=b$ybreaks, unitname=unitname(W))
   if(W$type != "rectangle") {
     # intersect rectangular tiles with window W
     if(!keepempty) {

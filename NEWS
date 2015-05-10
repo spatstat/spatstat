@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.078
+        CHANGES IN spatstat VERSION 1.41-1.079
 
 OVERVIEW
 
@@ -104,6 +104,9 @@ NEW FUNCTIONS
 
    o Smooth.solist
    Smooth method for a list of spatial objects.
+
+   o unitname.tess, unitname<-.tess
+   Tessellations now keep track of the name of the unit of length.
 
    o delaunayDistance, delaunayNetwork, dirichletEdges, 
    dirichletNetwork, dirichletVertices
@@ -225,6 +228,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o quadratcount
    Argument 'tess' can now be anything acceptable to as.tess.
+
+   o tess
+   New argument 'unitname' specifies the name of the unit of length.
+   If it is missing, unitname information will be extracted from the
+   other data.
+
+   o intersect.tess, chop.tess, quadrats
+   Results of these functions now have the same 'unitname' as their input.
 
    o persp.im, nnclean, plot.qqppm, plot.bw.optim
    These plotting functions now obey spatstat.options('monochrome')
