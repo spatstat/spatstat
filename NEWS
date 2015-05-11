@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.080
+        CHANGES IN spatstat VERSION 1.41-1.081
 
 OVERVIEW
 
@@ -191,6 +191,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'positive' allows the user to stipulate that
    density values must be positive (avoiding numerical errors
    which occasionally produce small negative values).
+
+   o adaptive.density
+   Now accepts f = 0 (uniform intensity estimate) and
+   f = 1 (Voronoi intensity estimate) as well as 0 < f < 1.
+   Algorithm accelerated.
 
    o rSSI
    Can now generate inhomogeneous patterns.

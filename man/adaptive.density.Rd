@@ -10,7 +10,7 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
 }
 \arguments{
   \item{X}{Point pattern dataset (object of class \code{"ppp"}).}
-  \item{f}{Fraction (between 0 and 1) of the data points that will be
+  \item{f}{Fraction (between 0 and 1 inclusive) of the data points that will be
     removed from the data and used to determine a tessellation for the
     intensity estimate.
   }
@@ -25,12 +25,22 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
 \details{
   This function is an alternative to \code{\link{density.ppp}}. It
   computes an estimate of the intensity function of a point pattern
-  dataset.
+  dataset. The result is a pixel image giving the estimated intensity,
 
-  The dataset \code{X} is randomly split into two patterns \code{A} and
+  If \code{f=1}, the Voronoi estimate (Barr and Schoenberg, 2010)
+  is computed: the point pattern \code{X} is used to construct
+  a Voronoi/Dirichlet tessellation (see \code{\link{dirichlet}});
+  the areas of the Dirichlet tiles are computed; the estimated intensity
+  in each tile is the reciprocal of the tile area.
+
+  If \code{f=0}, the intensity estimate at every location is
+  equal to the average intensity (number of points divided by window area).
+  
+  If \code{f} is strictly between 0 and 1, 
+  the dataset \code{X} is randomly split into two patterns \code{A} and
   \code{B} containing a fraction \code{f} and \code{1-f}, respectively,
   of the original data. The subpattern \code{A} is used to construct a
-  Dirichlet tessellation (see \code{\link{dirichlet}}). The subpattern
+  Dirichlet tessellation, while the subpattern
   \code{B} is retained for counting. For each tile of the Dirichlet
   tessellation, we count the number of points of \code{B} falling in the
   tile, and divide by the area of the same tile, to obtain an estimate
@@ -61,6 +71,10 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
   \emph{SCMA IV: Statistical Challenges in Modern Astronomy IV},
   volume 317 of Astronomical Society of the Pacific Conference Series,
   San Francisco, California USA, 2007. Pages 22--38.
+
+  Barr, C., and Schoenberg, F.P. (2010).
+  On the Voronoi estimator for the intensity of an inhomogeneous
+  planar Poisson process. \emph{Biometrika} \bold{97} (4), 977--984.
 
   Ogata, Y. (2004)
   Space-time model for regional seismicity and detection of crustal
