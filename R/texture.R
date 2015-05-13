@@ -128,7 +128,8 @@ plot.texturemap <- local({
 
   plot.texturemap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
-                             labelmap=NULL, gap=0.25, add=FALSE) {
+                             labelmap=NULL, gap=0.25,
+                             spacing=NULL, add=FALSE) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     df <- attr(x, "df")
@@ -179,6 +180,9 @@ plot.texturemap <- local({
         owin(xlim[1] + c(i-1, i) * boxwidth + (i-1) * hgap, ylim)
     }
     boxsize <- shortside(boxes[[1]])
+    if(is.null(spacing))
+      spacing <- 0.1 * boxsize
+    
     # .......... initialise plot ...............................
     if(!add)
       do.call.matched("plot.default",
@@ -191,7 +195,7 @@ plot.texturemap <- local({
     ## ................ plot texture blocks .................
     for(i in 1:n) {
       dfi <- df[i,,drop=FALSE]
-      add.texture(W=boxes[[i]], texture=dfi, ..., spacing=0.1 * boxsize)
+      add.texture(W=boxes[[i]], texture=dfi, ..., spacing=spacing)
       plot(boxes[[i]], add=TRUE)
     }
 
@@ -343,7 +347,8 @@ textureplot <- local({
                                       vertical=vertical,
                                       side=iside,
                                       xlim=bb.leg$xrange,
-                                      ylim=bb.leg$yrange),
+                                      ylim=bb.leg$yrange,
+                                      spacing=spacing),
                                  list(...)))
     }
     return(invisible(result))

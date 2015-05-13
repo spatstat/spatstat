@@ -10,7 +10,8 @@
 \usage{
  \method{plot}{texturemap}(x, \dots, main, xlim = NULL, ylim = NULL,
                            vertical = FALSE, axis = TRUE,
-                           labelmap = NULL, gap = 0.25, add = FALSE)
+                           labelmap = NULL, gap = 0.25,
+                           spacing = NULL, add = FALSE)
 }
 \arguments{
   \item{x}{
@@ -44,6 +45,10 @@
   \item{gap}{
     Separation between texture boxes, as a fraction of the
     width or height of a box.
+  }
+  \item{spacing}{
+    Argument passed to \code{\link{add.texture}} controlling the density
+    of lines in a texture. Expressed in spatial coordinate units.
   }
   \item{add}{
     Logical value indicating whether to add the graphics to an existing

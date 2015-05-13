@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.081
+        CHANGES IN spatstat VERSION 1.41-1.082
 
 OVERVIEW
 
@@ -280,6 +280,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o textureplot
    Now accepts a pixel image, a tessellation, or anything acceptable to as.tess.
 
+   o textureplot
+   Line spacing in legend now matches line spacing in main display.
+   
    o [.tess
    Subset index can now be a window.
 
