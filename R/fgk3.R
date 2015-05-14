@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.23 $	$Date: 2015/01/30 10:24:13 $
+#	$Revision: 1.24 $	$Date: 2015/05/14 10:57:14 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -241,8 +241,10 @@ pcf3est <- function(X, ...,
   # this will be the output data frame
   g <- data.frame(r=r, theo=rep.int(1, length(r)))
   desc <- c("distance argument r", "theoretical Poisson %s")
-  g <- fv(g, "r", substitute(pcf3(r), NULL),
-          "theo", , c(0,rmax/2), c("r","%s[pois](r)"), desc, fname="pcf3")
+  g <- fv(g, "r", quote(g[3](r)),
+          "theo", , c(0,rmax/2),
+          c("r", "{%s[%s]^{pois}}(r)"),
+          desc, fname=c("g", "3"))
 
   # extract the x,y,z ranges as a vector of length 6
   flatbox <- unlist(B[1:3])
@@ -256,7 +258,8 @@ pcf3est <- function(X, ...,
     gt <- u$f
     if(biascorrect)
       gt <- gt/biasbit
-    g <- bind.fv(g, data.frame(trans=gt), "%s[trans](r)",
+    g <- bind.fv(g, data.frame(trans=gt),
+                 "{hat(%s)[%s]^{trans}}(r)",
                  "translation-corrected estimate of %s",
                  "trans")
   }
@@ -266,7 +269,8 @@ pcf3est <- function(X, ...,
     gi <- u$f
     if(biascorrect)
       gi <- gi/biasbit
-    g <- bind.fv(g, data.frame(iso=gi), "%s[iso](r)",
+    g <- bind.fv(g, data.frame(iso=gi), 
+                 "{hat(%s)[%s]^{iso}}(r)",
                  "isotropic-corrected estimate of %s",
                  "iso")
   }

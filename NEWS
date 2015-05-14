@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.083
+        CHANGES IN spatstat VERSION 1.41-1.084
 
 OVERVIEW
 
@@ -329,6 +329,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o iplot, istat
    These functions now require the package 'rpanel' 
    to be loaded explicitly by library(rpanel) or require(rpanel).
+
+   o pcf3est
+   Mathematical labels changed.
    
 BUG FIXES
 
