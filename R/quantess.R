@@ -8,7 +8,7 @@ quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
 }
 
-quantess.owin <- function(M, Z, n, ...) {
+quantess.owin <- function(M, Z, n, ..., type=2) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
   if(!is.character(Z)) {
@@ -35,7 +35,7 @@ quantess.owin <- function(M, Z, n, ...) {
            })
     Zim <- as.im(Zfun, W)
   }
-  qZ <- quantile(Zim, probs=(1:(n-1))/n)
+  qZ <- quantile(Zim, probs=(1:(n-1))/n, type=type)
   qZ <- c(Zrange[1], qZ, Zrange[2])
   if(is.polygonal(W) && is.character(Z)) {
     R <- Frame(W)
@@ -54,7 +54,7 @@ quantess.owin <- function(M, Z, n, ...) {
   return(out)
 }
 
-quantess.ppp <- function(M, Z, n, ...) {
+quantess.ppp <- function(M, Z, n, ..., type=2) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
   if(!is.character(Z)) {
@@ -67,12 +67,12 @@ quantess.ppp <- function(M, Z, n, ...) {
     if(is.rectangle(W)) {
       switch(Z,
              x={
-               qx <- quantile(M$x, probs=(1:(n-1))/n)
+               qx <- quantile(M$x, probs=(1:(n-1))/n, type=type)
                qx <- c(W$xrange[1], qx, W$xrange[2])
                out <- tess(xgrid=qx, ygrid=W$yrange)
              },
              y={
-               qy <- quantile(M$y, probs=(1:(n-1))/n)
+               qy <- quantile(M$y, probs=(1:(n-1))/n, type=type)
                qy <- c(W$yrange[1], qy, W$yrange[2])
                out <- tess(xgrid=W$xrange, ygrid=qy)
              })
@@ -92,7 +92,7 @@ quantess.ppp <- function(M, Z, n, ...) {
            })
     Zim <- as.im(Zfun, W)
   } 
-  qZ <- quantile(ZM, probs=(1:(n-1))/n)
+  qZ <- quantile(ZM, probs=(1:(n-1))/n, type=type)
   qZ <- c(Zrange[1], qZ, Zrange[2])
   if(is.polygonal(W) && is.character(Z)) {
     R <- Frame(W)
@@ -111,7 +111,7 @@ quantess.ppp <- function(M, Z, n, ...) {
   return(out)
 }
 
-quantess.im <- function(M, Z, n, ...) {
+quantess.im <- function(M, Z, n, ..., type=2) {
   W <- Window(M)
   tcross <- MinimalTess(W, ...)
   if(is.character(Z)) 
@@ -124,7 +124,7 @@ quantess.im <- function(M, Z, n, ...) {
   Z <- MZ$Z[W, drop=FALSE]
   Zrange <- range(Z)
   Fun <- ewcdf(Z[], weights=M[]/sum(M[]))
-  qZ <- quantile(Fun, probs=(1:(n-1))/n)
+  qZ <- quantile(Fun, probs=(1:(n-1))/n, type=type)
   qZ <- c(Zrange[1], qZ, Zrange[2])
   ZC <- cut(Z, breaks=qZ, include.lowest=TRUE)
   out <- tess(image=ZC)

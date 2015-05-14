@@ -545,7 +545,9 @@
              margs <- NULL
              if(model != "exponential") {
                  if(!isNamespaceLoaded("RandomFields"))
-                     stop("The package RandomFields is required", call.=FALSE)
+                     stop(paste("The package RandomFields is required:",
+                                "please type library(RandomFields)"),
+                          call.=FALSE)
                  ## get the 'model generator' 
                  modgen <- try(getExportedValue("RandomFields", 
                                                 paste0("RM", model)),
@@ -640,7 +642,9 @@
            margs <- c(...)
            if(model != "exponential") {
              if(!isNamespaceLoaded("RandomFields"))
-               stop("The package RandomFields is required", call.=FALSE)
+               stop(paste("The package RandomFields is required:",
+                          "please type library(RandomFields)"),
+                    call.=FALSE)
              ## get the 'model generator' 
              modgen <- try(getExportedValue("RandomFields", 
                                             paste0("RM", model)),

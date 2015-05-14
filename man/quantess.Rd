@@ -10,11 +10,11 @@
 \usage{
 quantess(M, Z, n, \dots)
 
-\method{quantess}{owin}(M, Z, n, \dots)
+\method{quantess}{owin}(M, Z, n, \dots, type=2)
 
-\method{quantess}{ppp}(M, Z, n, \dots)
+\method{quantess}{ppp}(M, Z, n, \dots, type=2)
 
-\method{quantess}{im}(M, Z, n, \dots)
+\method{quantess}{im}(M, Z, n, \dots, type=2)
 }
 \arguments{
   \item{M}{
@@ -32,8 +32,11 @@ quantess(M, Z, n, \dots)
   \item{n}{
     Number of bands. A positive integer.
   }
+  \item{type}{
+    Integer specifying the rule for calculating quantiles.
+    Passed to \code{\link[stats]{quantile.default}}.
+  }
   \item{\dots}{
-    Ignored.
     Additional arguments passed to \code{\link{quadrats}} or
     \code{\link{tess}} defining another tessellation
     which should be intersected with the quantile tessellation.

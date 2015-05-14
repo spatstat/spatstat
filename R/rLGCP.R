@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.14 $    $Date: 2015/03/13 07:31:46 $
+#  $Revision: 1.15 $    $Date: 2015/05/13 08:59:30 $
 #
 
 rLGCP <- local({
@@ -22,7 +22,9 @@ rLGCP <- local({
       stop("Outdated syntax of argument 'param' to rLGCP", call.=FALSE)
     ## 
     if(!isNamespaceLoaded("RandomFields"))
-      stop("Simulation of log-Gaussian Cox process requires the package RandomFields")
+      stop(paste("The package RandomFields is required:",
+                 "please type library(RandomFields)"),
+           call.=FALSE)
     ##
     do.rLGCP(model=model, mu=mu, param=param, ...,
              win=win, saveLambda=saveLambda, nsim=nsim, drop=drop)
