@@ -23,7 +23,7 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
       cat(paste("click", nv, "times in window\n"))
     else
       cat(paste("to add points: click left mouse button in window\n",
-                "      to exit: click middle mouse button\n",
+                "      to exit: press ESC or click middle mouse button\n",
                 "[The last point should NOT repeat the first point]\n"))
     xy <- do.call(spatstatLocator,
                   resolve.defaults(if(!is.null(nv)) list(n=nv) else list(),

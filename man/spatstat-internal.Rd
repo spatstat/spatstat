@@ -337,6 +337,7 @@
 \alias{makefvlabel}
 \alias{make.parseable}
 \alias{makeunits}
+\alias{mapstrings}
 \alias{markappend}
 \alias{markcbind}
 \alias{markformat}
@@ -1100,6 +1101,7 @@ make.even.breaks(bmax, npos, bstep)
 makefvlabel(op, accent, fname, sub, argname)
 make.parseable(x)
 makeunits(sing, plur, mul)
+mapstrings(x, map)
 markappend(\dots)
 markcbind(\dots)
 markformat(x)

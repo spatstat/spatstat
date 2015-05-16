@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.37 $	$Date: 2015/04/28 01:54:18 $
+#	$Revision: 4.38 $	$Date: 2015/05/16 05:16:46 $
 #
 #
 # Main functions:
@@ -236,75 +236,59 @@ dirichlet.weights <- function(...) {
 }
 
 dirichletWeights <- function(X, window = NULL, exact=TRUE, ...) {
-	#
-	# Compute weights based on Dirichlet tessellation of the window 
-	# induced by the point pattern X. 
-	# The weights are just the tile areas.
-	#
-	# NOTE:	X should contain both data and dummy points,
-	# if you need these weights for the B-T-B method.
-	#
-	# Arguments X and (optionally) 'window' are interpreted as a
-	# point pattern.
-	#
-	# If the window is a rectangle, we invoke Rolf Turner's "deldir"
-	# package to compute the areas of the tiles of the Dirichlet
-	# tessellation of the window frame induced by the points.
-	# [NOTE: the functionality of deldir to create dummy points
-	# is NOT used. ]
-	#	if exact=TRUE	compute the exact areas, using "deldir"
-	#	if exact=FALSE      compute the digital areas using exactdt()
-	# 
-	# If the window is a mask, we compute the digital area of
-	# each tile of the Dirichlet tessellation by counting pixels.
-	#
-	#
-	# 
-	#
-	
-	X <- as.ppp(X, window)
-	x <- X$x
-	y <- X$y
-	win <- X$window
+  #'
+  #' Compute weights based on Dirichlet tessellation of the window 
+  #' induced by the point pattern X. 
+  #' The weights are just the tile areas.
+  #'
+  #' NOTE:	X should contain both data and dummy points,
+  #' if you need these weights for the B-T-B method.
+  #'
+  #' Arguments X and (optionally) 'window' are interpreted as a
+  #' point pattern.
+  #'
+  #' If the window is a rectangle, we invoke Rolf Turner's "deldir"
+  #' package to compute the areas of the tiles of the Dirichlet
+  #' tessellation of the window frame induced by the points.
+  #' [NOTE: the functionality of deldir to create dummy points
+  #' is NOT used. ]
+  #'	if exact=TRUE	compute the exact areas, using "deldir"
+  #'	if exact=FALSE      compute the digital areas using exactdt()
+  #' 
+  #' If the window is a mask, we compute the digital area of
+  #' each tile of the Dirichlet tessellation by counting pixels.
+  #'
+  #'
+  #' 
+  X <- as.ppp(X, window)
 
-	if(exact && (win$type == "rectangle")) {
-		rw <- c(win$xrange, win$yrange)
-	        # invoke deldir() with NO DUMMY POINTS
-		tessellation <- deldir(x, y, dpl=NULL, rw=rw)
-	        # extract tile areas
-	        w <- tessellation$summary[, 'dir.area']
-	} else {
-		# Compute digital areas of Dirichlet tiles.
-                win <- as.mask(win)
-                X$window <- win
-		#
-                # Nearest data point to each pixel:
-                tileid <- exactdt(X)$i
-                # 
-		if(win$type == "mask") 
-			# Restrict to window (result is a vector - OK)
-			tileid <- tileid[win$m]
-		# Count pixels in each tile
-		id <- factor(tileid, levels=seq_len(X$n))
-		counts <- table(id)
-                # turn off the christmas lights
-                class(counts) <- NULL
-                names(counts) <- NULL
-                dimnames(counts) <- NULL
-		# Convert to digital area
-		pixelarea <- win$xstep * win$ystep
-		w <- pixelarea * counts
-		# Check for zero pixel counts
-		zeroes <- (counts == 0)
-		if(any(zeroes)) {
-			warning("some Dirichlet tiles have zero digital area")
-			attr(w, "zeroes") <- zeroes
-		}
-	} 
-        # attach information about weight construction parameters
-        attr(w, "weight.parameters") <- list(method="dirichlet", exact=exact)
+  if(!exact && is.polygonal(Window(X)))
+    Window(X) <- as.mask(Window(X))
+  
+  #' compute tile areas
+  w <- dirichletAreas(X)
 
-        return(w)
+  #' zero areas can occur due to discretisation or weird geometry
+  zeroes <- (w == 0)
+  if(any(zeroes)) {
+    #' compute weights for subset
+    nX <- npoints(X)
+    Xnew <- X[!zeroes]
+    wnew <- dirichletAreas(Xnew)
+    w    <- numeric(nX)
+    w[!zeroes] <- wnew
+    #' map deleted points to nearest retained point
+    jj <- nncross(X[zeroes], Xnew, what="which")
+    #' map retained points to themselves
+    ii <- Xseq <- seq_len(nX)
+    ii[zeroes] <- (ii[!zeroes])[jj]
+    #' redistribute weights
+    nshare <- table(factor(ii, levels=Xseq))
+    w <- w[ii]/nshare[ii]
+  }
+  #' attach information about weight construction parameters
+  attr(w, "weight.parameters") <- list(method="dirichlet", exact=exact)
+  return(w)
 }
 
 default.ntile <- function(X) { 

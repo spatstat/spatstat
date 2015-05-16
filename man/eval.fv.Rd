@@ -6,7 +6,7 @@
   and returns another object of the same kind.
 }
 \usage{
-  eval.fv(expr, envir, dotonly=TRUE)
+  eval.fv(expr, envir, dotonly=TRUE, equiv=NULL)
 }
 \arguments{
   \item{expr}{An expression.}
@@ -16,6 +16,8 @@
     used in the expression.
   }
   \item{dotonly}{Logical. See Details.}
+  \item{equiv}{Mapping between column names of different objects
+    that are deemed to be equivalent. See Details.}
 }
 \details{
   This is a wrapper to make it easier to perform
@@ -74,6 +76,14 @@
   They are the columns normally plotted by \code{\link{plot.fv}}
   and identified by the symbol \code{"."} in plot formulas
   in \code{\link{plot.fv}}.
+
+  The argument \code{equiv} can be used to specify that 
+  two different column names in different function objects
+  are mathematically equivalent or cognate.
+  It should be a list of \code{name=value} pairs, or a named vector of
+  character strings, indicating the pairing of equivalent names.
+  (Without this argument, these columns would be discarded.)
+  See the Examples.
 }
 \value{
   Another object of class \code{"fv"}.
@@ -99,6 +109,12 @@
 
   ## Use of 'envir'
   U <- eval.fv(sqrt(K), list(K=Kest(cells)))
+
+  ## Use of 'equiv'
+  Fc <- Fest(cells)
+  Gc <- Gest(cells)
+  # Hanisch and Chiu-Stoyan estimators are cognate
+  Dc <- eval.fv(Fc - Gc, equiv=list(cs="han"))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

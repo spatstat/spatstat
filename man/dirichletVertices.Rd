@@ -48,7 +48,8 @@ dirichletEdges(X)
   class \code{"psp"}).
 }
 \seealso{
- \code{\link{dirichlet}}
+ \code{\link{dirichlet}},
+ \code{\link{dirichletAreas}}
 }
 \examples{
   plot(dirichlet(cells))

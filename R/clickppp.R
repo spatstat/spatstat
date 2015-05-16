@@ -11,7 +11,7 @@ clickppp <- local({
     instructions <-
       if(!is.null(n)) paste("click", n, "times in window") else
       paste("add points: click left mouse button in window\n",
-            "exit: click middle mouse button")
+            "exit: press ESC or another mouse button")
     if(is.null(main))
       main <- instructions
   

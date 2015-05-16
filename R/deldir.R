@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.24 $ $Date: 2015/04/28 01:53:24 $
+#  $Revision: 1.26 $ $Date: 2015/05/16 05:41:57 $
 #
 
 .spst.triEnv <- new.env()
@@ -260,7 +260,44 @@ dirichletVertices <- function(X) {
   Y <- Y[b > thresh]
   return(Y)
 }
-    
+
+dirichletAreas <- function(X) {
+  stopifnot(is.ppp(X))
+  X <- unmark(X)
+  win <- Window(X)
+  dup <- duplicated(X, rule="deldir")
+  if((anydup <- any(dup))) {
+    oldX <- X
+    X <- X[!dup]
+  }
+  switch(win$type,
+         rectangle = {
+           rw <- c(win$xrange, win$yrange)
+           dd <- deldir(X$x, X$y, dpl=NULL, rw=rw)
+           w <- dd$summary[, 'dir.area']
+         },
+         polygonal = {
+           w <- tile.areas(dirichlet(X))
+         },
+         mask = {
+           #' Nearest data point to each pixel:
+           tileid <- exactdt(X)$i
+           #' Restrict to window (result is a vector - OK)
+           tileid <- tileid[win$m]
+           #' Count pixels in each tile
+           id <- factor(tileid, levels=seq_len(X$n))
+           counts <- table(id)
+           #' Convert to digital area
+           pixelarea <- win$xstep * win$ystep
+           w <- pixelarea * as.numeric(counts)
+         })
+  if(!anydup)
+    return(w)
+  oldw <- numeric(npoints(oldX))
+  oldw[!dup] <- w
+  return(oldw)
+}
+
 delaunayNetwork <- function(X) {
   stopifnot(is.ppp(X))
   X <- unique(X, rule="deldir")

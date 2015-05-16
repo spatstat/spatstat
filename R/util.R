@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.178 $    $Date: 2015/05/09 09:31:16 $
+#    $Revision: 1.179 $    $Date: 2015/05/16 02:52:50 $
 #
 #
 matrowsum <- function(x) {
@@ -1459,4 +1459,20 @@ bibliotheque <- function(nom, dont) {
   cat("Attaching namespace", sQuote(nom), fill=TRUE)
   attachNamespace(nom)
   return(exists(dont))
+}
+
+## replace recognise keywords by other keywords
+mapstrings <- function(x, map=NULL) {
+  if(is.null(map)) return(x)
+  x <- as.character(x)
+  from <- names(map)
+  map <- as.character(map)
+  if(sum(nzchar(from)) != length(map))
+    stop("input names are missing in map", call.=FALSE)
+  if(any(duplicated(from)))
+    stop("input names are duplicated in map", call.=FALSE)
+  i <- match(x, from)
+  hit <- !is.na(i)
+  x[hit] <- map[i[hit]]
+  return(x)
 }

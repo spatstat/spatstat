@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.084
+        CHANGES IN spatstat VERSION 1.41-1.086
 
 OVERVIEW
 
@@ -110,10 +110,14 @@ NEW FUNCTIONS
    o unitname.tess, unitname<-.tess
    Tessellations now keep track of the name of the unit of length.
 
+   o dirichletAreas
+   Faster algorithm for tile.areas(dirichlet(X)).
+
    o delaunayDistance, delaunayNetwork, dirichletEdges, 
-   dirichletNetwork, dirichletVertices
+   dirichletNetwork, dirichletVertices, dirichletWeights
       These functions will replace delaunay.distance, delaunay.network, 
-   dirichlet.edges, dirichlet.network and dirichlet.vertices respectively.
+   dirichlet.edges, dirichlet.network, dirichlet.vertices and
+   dirichlet.weights respectively.
    The latter are now 'deprecated'.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -255,6 +259,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'N' for studying the N nearest neighbours.   
    New argument 'collapse' for manipulating the contingency table.
 
+   o harmonise.fv
+   Now discards columns with names which do not match.
+
+   o eval.fv
+   New argument 'equiv' can be used to declare that two columns
+   with different names in different objects are equivalent.
+
    o plot.imlist
    New argument 'plotcommand' specifies how to plot each image.
 
@@ -330,9 +341,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    These functions now require the package 'rpanel' 
    to be loaded explicitly by library(rpanel) or require(rpanel).
 
+   o ppm, quadscheme
+   Improved calculation of Dirichlet weights.
+   
    o pcf3est
    Mathematical labels changed.
-   
+
 BUG FIXES
 
    o Kinhom, Linhom
@@ -400,6 +414,10 @@ BUG FIXES
    o runifpoint3, rpoispp3
    Crashed if nsim > 1.
    Spotted by Jack Hywood.
+   Fixed.
+
+   o hist.im
+   Crashed if argument 'freq' was given.
    Fixed.
 
    o MultiStraussHard

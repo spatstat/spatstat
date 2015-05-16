@@ -7,14 +7,18 @@
   to the same values of the function argument.
 }
 \usage{
-\method{harmonise}{fv}(\dots)
+\method{harmonise}{fv}(\dots, strict=FALSE)
 
-\method{harmonize}{fv}(\dots)
+\method{harmonize}{fv}(\dots, strict=FALSE)
 }
 \arguments{
   \item{\dots}{
     Any number of function tables (objects of class \code{"fv"}).
-  } 
+  }
+  \item{strict}{
+    Logical. If \code{TRUE}, a column of data will be deleted
+    if columns of the same name do not appear in every object.
+  }
 }
 \details{
   A function value table (object of class \code{"fv"}) is
@@ -46,10 +50,16 @@
   \eqn{x} values in the original functions.
   Function values are interpolated using \code{\link[stats]{approxfun}}.
 
-  The resulting objects are \bold{not} guaranteed to be compatible
-  in the strict sense of \code{\link{compatible.fv}},
-  so they cannot necessarily be combined using \code{\link{eval.fv}}
+  If \code{strict=TRUE}, each column of data will be retained only if
+  a column of the same name appears in all of the arguments \code{\dots}.
+  This ensures that the resulting objects are strictly compatible
+  in the sense of \code{\link{compatible.fv}},
+  and can be combined using \code{\link{eval.fv}}
   or \code{\link{collapse.fv}}.
+  
+  If \code{strict=FALSE} (the default), this does not occur,
+  and then the resulting objects are \bold{not} guaranteed to be compatible
+  in the sense of \code{\link{compatible.fv}}.
 }
 \value{
   A list, of length equal to the number of arguments \code{\dots},

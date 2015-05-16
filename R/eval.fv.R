@@ -6,13 +6,13 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.28 $     $Date: 2014/11/11 10:33:33 $
+#     $Revision: 1.31 $     $Date: 2015/05/16 07:37:40 $
 #
 
 eval.fv <- local({
 
   # main function
-  eval.fv <- function(expr, envir, dotonly=TRUE) {
+  eval.fv <- function(expr, envir, dotonly=TRUE, equiv=NULL) {
     # convert syntactic expression to 'expression' object
     e <- as.expression(substitute(expr))
     # convert syntactic expression to call
@@ -39,13 +39,16 @@ eval.fv <- local({
     # restrict to columns identified by 'dotnames'
     if(dotonly) 
       funs <- lapply(funs, restrict.to.dot)
+    # map names if instructed
+    if(!is.null(equiv))
+      funs <- lapply(funs, mapnames, map=equiv)
     # test whether the fv objects are compatible
     if(nfuns > 1 && !(do.call("compatible", unname(funs)))) {
       warning(paste(if(nfuns > 2) "some of" else NULL,
                     "the functions",
                     commasep(sQuote(names(funs))),
                     "were not compatible: enforcing compatibility"))
-      funs <- do.call(harmonise.fv, funs)
+      funs <- do.call(harmonise, append(funs, list(strict=TRUE)))
     }
     # copy first object as template
     result <- funs[[1]]
@@ -150,6 +153,12 @@ eval.fv <- local({
   }
   getfname <- function(x) { if(!is.null(y <- attr(x, "fname"))) y else "" }
   flatten <- function(x) { paste(x, collapse=" ") }
+  mapnames <- function(x, map=NULL) {
+    colnames(x) <- mapstrings(colnames(x), map=map)
+    fvnames(x, ".y") <- mapstrings(fvnames(x, ".y"), map=map)
+    return(x)
+  }
+
   eval.fv
 })
     
@@ -157,33 +166,40 @@ compatible <- function(A, B, ...) {
   UseMethod("compatible")
 }
 
-compatible.fv <- function(A, B, ...) {
-  verifyclass(A, "fv")
-  if(missing(B)) {
-    answer <- if(length(...) == 0) TRUE else compatible(A, ...)
-    return(answer)
-  }
-  verifyclass(B, "fv")
-  # are columns the same?
-  namesmatch <-
-    identical(all.equal(names(A),names(B)), TRUE) &&
-    (fvnames(A, ".x") == fvnames(B, ".x")) &&
-    (fvnames(A, ".y") == fvnames(B, ".y"))
-  if(!namesmatch)
-    return(FALSE)
-  # are 'r' values the same ?
-  rA <- with(A, .x)
-  rB <- with(B, .x)
+compatible.fv <- local({
+
   approx.equal <- function(x, y) { max(abs(x-y)) <= .Machine$double.eps }
-  rmatch <- (length(rA) == length(rB)) && approx.equal(rA, rB)
-  if(!rmatch)
-    return(FALSE)
-  # A and B are compatible
-  if(length(list(...)) == 0)
-    return(TRUE)
-  # recursion
-  return(compatible.fv(B, ...))
-}
+
+  compatible.fv <- function(A, B, ...) {
+    verifyclass(A, "fv")
+    if(missing(B)) {
+      answer <- if(length(...) == 0) TRUE else compatible(A, ...)
+      return(answer)
+    }
+    verifyclass(B, "fv")
+    ## are columns the same?
+    namesmatch <-
+      identical(all.equal(names(A),names(B)), TRUE) &&
+        (fvnames(A, ".x") == fvnames(B, ".x")) &&
+          (fvnames(A, ".y") == fvnames(B, ".y"))
+    if(!namesmatch)
+      return(FALSE)
+    ## are 'r' values the same ?
+    rA <- with(A, .x)
+    rB <- with(B, .x)
+    rmatch <- (length(rA) == length(rB)) && approx.equal(rA, rB)
+    if(!rmatch)
+      return(FALSE)
+    ## A and B are compatible
+    if(length(list(...)) == 0)
+      return(TRUE)
+    ## recursion
+    return(compatible.fv(B, ...))
+  }
+
+  compatible.fv
+})
+
 
 # force a list of images to be compatible with regard to 'x' values
 
@@ -191,11 +207,16 @@ harmonize <- harmonise <- function(...) {
   UseMethod("harmonise")
 }
 
-harmonize.fv <- harmonise.fv <- function(...) {
+harmonize.fv <- harmonise.fv <- function(..., strict=FALSE) {
   argh <- list(...)
   n <- length(argh)
-  if(n < 2) return(argh)
-  isfv <- unlist(lapply(argh, is.fv))
+  if(n == 0) return(argh)
+  if(n == 1) {
+    a1 <- argh[[1]]
+    if(is.fv(a1)) return(argh)
+    if(is.list(a1) && all(sapply(a1, is.fv))) argh <- a1
+  }
+  isfv <- sapply(argh, is.fv)
   if(!all(isfv))
     stop("All arguments must be fv objects")
   ## determine range of argument
@@ -204,6 +225,11 @@ harmonize.fv <- harmonise.fv <- function(...) {
               min(unlist(lapply(ranges, max))))
   if(diff(xrange) < 0)
     stop("No overlap in ranges of argument")
+  if(strict) {
+    ## find common column names and keep these
+    keepnames <- Reduce(intersect, lapply(argh, colnames))
+    argh <- lapply(argh, "[", j=keepnames)
+  }
   ## determine finest resolution
   xsteps <- unlist(lapply(argh, function(f) { mean(diff(with(f, .x))) }))
   finest <- which.min(xsteps)

@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.128 $     $Date: 2015/04/19 18:27:54 $
+#      $Revision: 1.129 $     $Date: 2015/05/16 03:38:48 $
 #
 #      The class "im" of raster images
 #
@@ -843,12 +843,12 @@ hist.im <- function(x, ..., probability=FALSE) {
     if(plotit) {
       ylab <- if(probability) "Probability density" else "Number of pixels"
       out <- do.call("hist.default",
-                   resolve.defaults(list(values),
-                                    list(...),
-                                    list(probability=probability),
-                                    list(xlab=paste("Pixel value"),
-                                         ylab=ylab,
-                                         main=main)))
+                     resolve.defaults(list(values),
+                                      list(...),
+                                      list(freq=!probability,
+                                           xlab="Pixel value",
+                                           ylab=ylab,
+                                           main=main)))
       out$xname <- xname
     } else {
       # plot.default whinges if `probability' given when plot=FALSE
