@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.10 $  $Date: 2015/02/01 11:36:57 $
+#'   $Revision: 1.11 $  $Date: 2015/05/17 10:31:04 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -11,6 +11,7 @@ quantess <- function(M, Z, n, ...) {
 quantess.owin <- function(M, Z, n, ..., type=2) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
+  force(n)
   if(!is.character(Z)) {
     Zim <- as.im(Z, W)
     Zrange <- range(Zim)
@@ -57,6 +58,7 @@ quantess.owin <- function(M, Z, n, ..., type=2) {
 quantess.ppp <- function(M, Z, n, ..., type=2) {
   W <- as.owin(M)
   tcross <- MinimalTess(W, ...)
+  force(n)
   if(!is.character(Z)) {
     Zim <- as.im(Z, W)
     ZM <- if(is.function(Z)) Z(M$x, M$y) else Zim[M]
@@ -114,6 +116,9 @@ quantess.ppp <- function(M, Z, n, ..., type=2) {
 quantess.im <- function(M, Z, n, ..., type=2) {
   W <- Window(M)
   tcross <- MinimalTess(W, ...)
+  force(n)
+  if(!(type %in% c(1,2)))
+    stop("Only quantiles of type 1 and 2 are implemented for quantess.im")
   if(is.character(Z)) 
     Z <- switch(Z,
                 x=function(x,y){x},

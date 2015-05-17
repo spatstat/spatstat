@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.086
+        CHANGES IN spatstat VERSION 1.41-1.087
 
 OVERVIEW
 
@@ -52,8 +52,7 @@ NEW FUNCTIONS
    Receiver Operating Characteristic curve.
 
    o auc
-   Discrimination index AUC (area under the Receiver Operating Characteristic
-   curve)
+   Discrimination index AUC (area under the ROC curve) 
 
    o edit.ppp, edit.im
    Interactive text editor for spatial datasets.
@@ -93,7 +92,7 @@ NEW FUNCTIONS
    Prediction method for class rho2hat
 
    o with.msr
-   Evaluate (expression involving) components of a measure. 
+   Evaluate (an expression involving) components of a measure. 
 
    o summary.kppm, print.summary.kppm, coef.summary.kppm
    Methods for 'summary' and 'coef(summary(..))' for Cox and cluster models.
@@ -266,6 +265,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'equiv' can be used to declare that two columns
    with different names in different objects are equivalent.
 
+   o quantile.ewcdf
+   New argument 'type' controls the type of quantile.
+   
    o plot.imlist
    New argument 'plotcommand' specifies how to plot each image.
 
@@ -343,7 +345,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o ppm, quadscheme
    Improved calculation of Dirichlet weights.
-   
+
    o pcf3est
    Mathematical labels changed.
 

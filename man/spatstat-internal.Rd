@@ -888,7 +888,7 @@ envelopeEngine(X, fun, simul,
            Yname, maxnerr, internal, cl,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent, normalize, deflate)
-envelopeTest(X, \dots, power, alternative,
+envelopeTest(X, \dots, exponent, alternative,
             rinterval, use.theo, tie.rule,
             save.envelope, savefuns, savepatterns,
             Xname, verbose, internal)

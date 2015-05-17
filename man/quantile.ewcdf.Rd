@@ -7,7 +7,8 @@
   Compute quantiles of a weighted empirical cumulative distribution function.  
 }
 \usage{
-  \method{quantile}{ewcdf}(x, probs = seq(0, 1, 0.25), names = TRUE, ...)
+  \method{quantile}{ewcdf}(x, probs = seq(0, 1, 0.25),
+                 names = TRUE, \dots, type=1)
 }
 \arguments{
   \item{x}{
@@ -26,6 +27,11 @@
   \item{\dots}{
     Ignored.
   }
+  \item{type}{
+    Integer specifying the type of quantile to be calculated,
+    as explained in \code{\link[stats]{quantile.default}}.
+    Only types 1 and 2 are currently implemented.
+  }
 }
 \details{
   This is a method for the generic \code{\link[stats]{quantile}}
@@ -34,7 +40,7 @@
 
   The quantile for a probability \code{p} is computed
   as the right-continuous inverse of the cumulative
-  distribution function.   
+  distribution function (assuming \code{type=1}, the default).
 }
 \value{
   Numeric vector of quantiles, of the same length as \code{probs}.

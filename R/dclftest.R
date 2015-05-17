@@ -15,7 +15,7 @@ dclf.test <- function(X, ...,
                       alternative=c("two.sided", "less", "greater"),
                       rinterval=NULL, use.theo=FALSE) {
   Xname <- short.deparse(substitute(X))
-  envelopeTest(X, ..., power=2, alternative=alternative,
+  envelopeTest(X, ..., exponent=2, alternative=alternative,
                        use.theo=use.theo, rinterval=rinterval, Xname=Xname)
 }
 
@@ -23,7 +23,7 @@ mad.test <- function(X, ...,
                      alternative=c("two.sided", "less", "greater"),
                      rinterval=NULL, use.theo=FALSE) {
   Xname <- short.deparse(substitute(X))
-  envelopeTest(X, ..., power=Inf, alternative=alternative,
+  envelopeTest(X, ..., exponent=Inf, alternative=alternative,
                use.theo=use.theo, rinterval=rinterval, Xname=Xname)
 }
 
@@ -38,7 +38,7 @@ envelopeTest <- local({
 
   envelopeTest <-
     function(X, ...,
-             power=1,
+             exponent=1,
              alternative=c("two.sided", "less", "greater"),
              rinterval=NULL,
              use.theo=FALSE,
@@ -53,8 +53,8 @@ envelopeTest <- local({
       tie.rule <- match.arg(tie.rule)
       alternative <- match.arg(alternative)
       force(save.envelope)
-      check.1.real(power)
-      explain.ifnot(power >= 0)
+      check.1.real(exponent)
+      explain.ifnot(exponent >= 0)
       if(use.theo) {
         ## using theoretical function as reference.
         ## ensure resulting envelope object includes theoretical function.
@@ -152,7 +152,7 @@ envelopeTest <- local({
                         greater = plusvalue)
 
       ## compute test statistic
-      if(is.infinite(power)) {
+      if(is.infinite(exponent)) {
         ## MAD
         devdata <- max(deviant(obs-reference))
         names(devdata) <- "mad"
@@ -160,14 +160,14 @@ envelopeTest <- local({
         testname <- "Maximum absolute deviation test"
       } else {
         L <- if(nr > 1) diff(rinterval) else 1
-        a <- L * (if(used.theo) 1 else ((nsim+1)/nsim)^power)
-        if(power == 2) {
+        a <- L * (if(used.theo) 1 else ((nsim+1)/nsim)^exponent)
+        if(exponent == 2) {
           ## Cramer-von Mises
           devdata <- a * mean((deviant(obs - reference))^2)
           names(devdata) <- "u"
           devsim <- a * .colMeans((deviant(sim - reference))^2, nr, nsim)
           testname <- "Diggle-Cressie-Loosmore-Ford test"
-        } else if(power == 1) {
+        } else if(exponent == 1) {
           ## integral absolute deviation
           devdata <- a * mean(deviant(obs - reference))
           names(devdata) <- "L1"
@@ -175,11 +175,11 @@ envelopeTest <- local({
           testname <- "Integral absolute deviation test"
         } else {
           ## general p
-          devdata <- a * mean(((deviant(obs - reference))^power))
+          devdata <- a * mean(((deviant(obs - reference))^exponent))
           names(devdata) <- "Lp"
-          devsim <- a * .colMeans(((deviant(sim - reference))^power), nr, nsim)
+          devsim <- a * .colMeans(((deviant(sim - reference))^exponent), nr, nsim)
           testname <- paste("Integrated",
-                            ordinal(power), "Power Deviation test")
+                            ordinal(exponent), "Power Deviation test")
         }
       }
       ## compute rank and p-value
@@ -232,7 +232,7 @@ envelopeTest <- local({
       if(save.envelope) {
         attr(result, "envelope") <- X
         attr(result, "statistics") <- list(data=devdata, sim=devsim)
-        attr(result, "info") <- list(power=power,
+        attr(result, "info") <- list(exponent=exponent,
                                      alternative=alternative,
                                      nties=nties,
                                      tie.rule=tie.rule,
