@@ -5,18 +5,27 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.29 $    $Date: 2015/02/03 05:52:52 $
+#   $Revision: 1.31 $    $Date: 2015/05/18 02:11:17 $
 #
 #
 
 resid4plot <- local({
-  
+
+  Contour <- function(...,
+                      pch, chars, cols, etch, size,
+                      maxsize, meansize, markscale, symap, zap,
+                      legend, leg.side, leg.args) {
+    ## avoid passing arguments of plot.ppp to contour.default
+    contour(...)
+  }
+
   do.clean <- function(fun, ..., 
                        pch, chars, cols, etch, size,
                        maxsize, meansize, markscale, symap, zap,
-                       legend, leg.side, leg.args) {
-    ## avoid passing arguments of plot.ppp to image()
-    do.call(fun, list(...))
+                       legend, leg.side, leg.args,
+                       nlevels, levels, labels, drawlabels, labcex) {
+    ## avoid passing arguments of plot.ppp, contour.default to other functions
+    do.call(fun, list(...)) 
   }
 
   do.lines <- function(x, y, defaulty=1, ...) {
@@ -113,7 +122,7 @@ resid4plot <- local({
          contour = {
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
-           do.clean(contour, Yds, add=TRUE, ...)
+           Contour(Yds, add=TRUE, ...)
            do.call("plot",
                    resolve.defaults(list(x=Yms, add=TRUE),
                                     list(...), 
@@ -135,7 +144,7 @@ resid4plot <- local({
                       col=backcols, zlim=srange,
                       ...)
            if(plot.neg == "imagecontour")
-             do.clean(contour, Yds, add=TRUE, ...)
+             Contour(Yds, add=TRUE, ...)
            ## plot positive masses at atoms
            do.call("plot",
                    resolve.defaults(list(x=Yms, add=TRUE),
@@ -156,14 +165,14 @@ resid4plot <- local({
                     ...)
          },
          contour={
-           do.clean(contour, Zs, add=TRUE, ...)
+           Contour(Zs, add=TRUE, ...)
          },
          persp={ warning("persp not available in 4-panel plot") },
          imagecontour={
              do.clean(image,
                       Zs, add=TRUE, col=backcols, zlim=srange, ribbon=FALSE,
                       ...)
-             do.clean(contour, Zs, add=TRUE, ...)
+             Contour(Zs, add=TRUE, ...)
            }
          )
   lines(Zs$xrange[c(1,2,2,1,1)], Zs$yrange[c(1,1,2,2,1)])
@@ -298,7 +307,26 @@ resid4plot <- local({
 #
 #
 
-resid1plot <-
+resid1plot <- local({
+
+  Contour <- function(...,
+                      pch, chars, cols, etch, size,
+                      maxsize, meansize, markscale, symap, zap,
+                      legend, leg.side, leg.args) {
+    ## avoid passing arguments of plot.ppp to contour.default
+    contour(...)
+  }
+
+  do.clean <- function(fun, ..., 
+                       pch, chars, cols, etch, size,
+                       maxsize, meansize, markscale, symap, zap,
+                       legend, leg.side, leg.args,
+                       nlevels, levels, labels, drawlabels, labcex) {
+    ## avoid passing arguments of plot.ppp, contour.default to other functions
+    do.call(fun, list(...)) 
+  }
+
+  resid1plot <- 
   function(RES, opt,
            plot.neg=c("image", "discrete", "contour", "imagecontour"),
            plot.smooth=c("imagecontour", "image", "contour", "persp"),
@@ -357,15 +385,18 @@ resid1plot <-
                    (type != "eem") && (Yclip$window$type == "mask")
       ## pre-plot the window(s)
       if(redundant && !add) {
-        z <- plot(as.rectangle(W), box=FALSE, main="",
-                  do.plot=do.plot, ...)
+        z <- do.clean(plot,
+                      as.rectangle(W), box=FALSE, main="",
+                      do.plot=do.plot, ...)
       } else {
         if(!clip) 
-          z <- plot(W, main="",
-               add=add, show.all=show.all, do.plot=do.plot, ...)
+          z <- do.clean(plot,
+                        W, main="",
+                        add=add, show.all=show.all, do.plot=do.plot, ...)
         else
-          z <- ploterodewin(W, Wclip, main="",
-                       add=add, show.all=show.all, do.plot=do.plot, ...)
+          z <- do.clean(ploterodewin,
+                        W, Wclip, main="",
+                        add=add, show.all=show.all, do.plot=do.plot, ...)
       }
       bb <- as.owin(z)
 
@@ -387,30 +418,32 @@ resid1plot <-
                bb <- boundingbox(bb, z, zp)
            },
            contour = {
-             z <- contour(Ydens, add=TRUE, do.plot=do.plot, ...)
+             z <- Contour(Ydens, add=TRUE, do.plot=do.plot, ...)
              bb <- boundingbox(bb, z)
            },
            imagecontour=,
            image={
              if(redundant) {
-               z <- ploterodeimage(W, Ydens, rangeZ=srange, colsZ=backcols,
-                                   add=add, show.all=show.all, main="", 
-                                   do.plot=do.plot, ...)
+               z <- do.clean(ploterodeimage,
+                             W, Ydens, rangeZ=srange, colsZ=backcols,
+                             add=add, show.all=show.all, main="", 
+                             do.plot=do.plot, ...)
              } else if(type != "eem") {
-               z <- image(Ydens, col=backcols, zlim=srange, ribbon=FALSE,
-                          add=TRUE, show.all=show.all, do.plot=do.plot,
-                          main="", ...)
+               z <- do.clean(image,
+                             Ydens, col=backcols, zlim=srange, ribbon=FALSE,
+                             add=TRUE, show.all=show.all, do.plot=do.plot,
+                             main="", ...)
              }
              bb <- boundingbox(bb, z)
              if(plot.neg == "imagecontour") {
-               z <- contour(Ydens, add=TRUE,
+               z <- Contour(Ydens, add=TRUE,
                             show.all=show.all, do.plot=do.plot, ...)
                bb <- boundingbox(bb, z)
              }
              ## decide whether mark scale should be shown
              showscale <- (type != "raw")
              ## plot positive masses at atoms
-             z <- do.call("plot",
+             z <- do.call(plot,
                           resolve.defaults(list(x=Ymass, add=TRUE),
                                            list(...),
                                            list(use.marks=showscale,
@@ -425,26 +458,29 @@ resid1plot <-
     if(!clip) {
       switch(plot.smooth,
            image={
-             z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
-                        col=backcols, zlim=srange, ribbon=FALSE,
-                        do.plot=do.plot, add=add, show.all=show.all, ...)
+             z <- do.clean(image,
+                           Z, main="", axes=FALSE, xlab="", ylab="",
+                           col=backcols, zlim=srange, ribbon=FALSE,
+                           do.plot=do.plot, add=add, show.all=show.all, ...)
              bb <- as.owin(z)
            },
            contour={
-             z <- contour(Z, main="", axes=FALSE, xlab="", ylab="",
-                        do.plot=do.plot, add=add, show.all=show.all, ...)
+             z <- Contour(Z, main="", axes=FALSE, xlab="", ylab="",
+                          do.plot=do.plot, add=add, show.all=show.all, ...)
              bb <- as.owin(z)
            },
            persp={
              if(do.plot)
-               persp(Z, main="", axes=FALSE, xlab="", ylab="", ...)
+               do.clean(persp,
+                        Z, main="", axes=FALSE, xlab="", ylab="", ...)
              bb <- NULL
            },
            imagecontour={
-             z <- image(Z, main="", axes=FALSE, xlab="", ylab="",
-                        col=backcols, zlim=srange, ribbon=FALSE,
-                        do.plot=do.plot, add=add, show.all=show.all, ...)
-             contour(Z, add=TRUE, do.plot=do.plot, ...)
+             z <- do.clean(image,
+                           Z, main="", axes=FALSE, xlab="", ylab="",
+                           col=backcols, zlim=srange, ribbon=FALSE,
+                           do.plot=do.plot, add=add, show.all=show.all, ...)
+             Contour(Z, add=TRUE, do.plot=do.plot, ...)
              bb <- as.owin(z)
            }
              )
@@ -452,30 +488,36 @@ resid1plot <-
     } else {
       switch(plot.smooth,
              image={
-               plot(as.rectangle(W), box=FALSE, main=main,
-                    do.plot=do.plot, add=add, ...)
-               z <- ploterodeimage(W, Z, colsZ=backcols, rangeZ=srange,
-                                   do.plot=do.plot, ...)
+               do.clean(plot,
+                        as.rectangle(W), box=FALSE, main=main,
+                        do.plot=do.plot, add=add, ...)
+               z <- do.clean(ploterodeimage,
+                             W, Z, colsZ=backcols, rangeZ=srange,
+                             do.plot=do.plot, ...)
                bb <- boundingbox(as.rectangle(W), z)
              },
              contour={
-               plot(W, main=main,
-                    do.plot=do.plot, add=add, show.all=show.all, ...)
-               z <- contour(Z, add=TRUE,
+               do.clean(plot,
+                        W, main=main,
+                        do.plot=do.plot, add=add, show.all=show.all, ...)
+               z <- Contour(Z, add=TRUE,
                             show.all=show.all, do.plot=do.plot, ...)
                bb <- as.owin(z)
              },
              persp={
                if(do.plot) 
-                 persp(Z, main=main, axes=FALSE, xlab="", ylab="", ...)
+                 do.clean(persp,
+                          Z, main=main, axes=FALSE, xlab="", ylab="", ...)
                bb <- NULL
              },
              imagecontour={
-               plot(as.rectangle(W), box=FALSE, main=main,
-                    do.plot=do.plot, add=add, ...)
-               z <- ploterodeimage(W, Z, colsZ=backcols, rangeZ=srange,
-                                   do.plot=do.plot, ...)
-               contour(Z, add=TRUE, do.plot=do.plot, ...)
+               do.clean(plot,
+                        as.rectangle(W), box=FALSE, main=main,
+                        do.plot=do.plot, add=add, ...)
+               z <- do.clean(ploterodeimage,
+                             W, Z, colsZ=backcols, rangeZ=srange,
+                             do.plot=do.plot, ...)
+               Contour(Z, add=TRUE, do.plot=do.plot, ...)
                bb <- as.owin(z)
              }
              )
@@ -487,11 +529,12 @@ resid1plot <-
     a <- RES$xcumul
     obs <- a$empirical
     theo <- a$theoretical
-    resid1panel(obs$covariate, obs$value,
-               theo$covariate, theo$mean, theo$sd,
-               "x coordinate", "cumulative mark", main=main,
-                ...,
-                do.plot=do.plot)
+    do.clean(resid1panel,
+             obs$covariate, obs$value,
+             theo$covariate, theo$mean, theo$sd,
+             "x coordinate", "cumulative mark", main=main,
+             ...,
+             do.plot=do.plot)
     bb <- NULL
   }
   
@@ -500,29 +543,32 @@ resid1plot <-
     a <- RES$ycumul
     obs <- a$empirical
     theo <- a$theoretical
-    resid1panel(obs$covariate, obs$value,
-               theo$covariate, theo$mean, theo$sd,
-               "y coordinate", "cumulative mark", main=main,
-                ...,
-                do.plot=do.plot)
+    do.clean(resid1panel,
+             obs$covariate, obs$value,
+             theo$covariate, theo$mean, theo$sd,
+             "y coordinate", "cumulative mark", main=main,
+             ...,
+             do.plot=do.plot)
     bb <- NULL
   }
   ## ------------  x margin -----------------------------------------
   if(opt$xmargin) {
     a <- RES$xmargin
-    resid1panel(a$x, a$xZ, a$x, a$ExZ, NULL,
-               "x coordinate", "marginal of residuals", main=main,
-                ...,
-                do.plot=do.plot)
+    do.clean(resid1panel,
+             a$x, a$xZ, a$x, a$ExZ, NULL,
+             "x coordinate", "marginal of residuals", main=main,
+             ...,
+             do.plot=do.plot)
     bb <- NULL
   }
   # ------------  y margin -----------------------------------------
   if(opt$ymargin) {
     a <- RES$ymargin
-    resid1panel(a$y, a$yZ, a$y, a$EyZ, NULL,
-               "y coordinate", "marginal of residuals", main=main,
-                ...,
-                do.plot=do.plot)
+    do.clean(resid1panel,
+             a$y, a$yZ, a$y, a$EyZ, NULL,
+             "y coordinate", "marginal of residuals", main=main,
+             ...,
+             do.plot=do.plot)
     bb <- NULL
   }
 
@@ -530,6 +576,18 @@ resid1plot <-
   return(invisible(bb))
 }
 
+resid1plot
+})
+
+
+resid1panel <- local({
+
+  do.lines <- function(x, y, defaulty=1, ...) {
+      do.call("lines",
+              resolve.defaults(list(x, y),
+                               list(...),
+                               list(lty=defaulty)))
+  }
 
 resid1panel <- function(observedX, observedV,
                         theoreticalX, theoreticalV, theoreticalSD, xlab, ylab,
@@ -543,13 +601,6 @@ resid1panel <- function(observedX, observedV,
     rV <- range(c(rV, theoreticalV + 2*theoreticalSD,
                   theoreticalV - 2*theoreticalSD))
   ## argument handling
-  do.lines <-
-    function(x, y, defaulty=1, ...) {
-      do.call("lines",
-              resolve.defaults(list(x, y),
-                               list(...),
-                               list(lty=defaulty)))
-    }
   ## start plot
   plot(rX, rV, type="n", xlab=xlab, ylab=ylab, ...)
   do.lines(observedX, observedV, 1, ...)
@@ -559,6 +610,9 @@ resid1panel <- function(observedX, observedV,
     do.lines(theoreticalX, theoreticalV - 2 * theoreticalSD, 3, ...)
   }
 }
+
+resid1panel
+})
 
 #
 #

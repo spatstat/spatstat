@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.087
+        CHANGES IN spatstat VERSION 1.41-1.088
 
 OVERVIEW
 
@@ -345,6 +345,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o ppm, quadscheme
    Improved calculation of Dirichlet weights.
+
+   o diagnose.ppm
+   Improved handling of additional graphics arguments.
 
    o pcf3est
    Mathematical labels changed.
