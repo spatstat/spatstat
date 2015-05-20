@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.088
+        CHANGES IN spatstat VERSION 1.41-1.089
 
 OVERVIEW
 
@@ -14,7 +14,7 @@ OVERVIEW
 
    o ROC curve, and discrimination index AUC, for fitted models.
    
-   o Text editor for spatial datasets.
+   o Interactive text editor for spatial datasets.
 
    o Random pixel noise.
 
@@ -54,8 +54,11 @@ NEW FUNCTIONS
    o auc
    Discrimination index AUC (area under the ROC curve) 
 
-   o edit.ppp, edit.im
-   Interactive text editor for spatial datasets.
+   o edit.ppp, edit.psp, edit.im
+   Interactive text editor works for spatial datasets.
+
+   o edit.hyperframe
+   Interactive text editor works for hyperframes.
 
    o parameters
    Extract all parameters from a fitted model.

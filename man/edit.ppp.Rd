@@ -1,5 +1,6 @@
 \name{edit.ppp}
 \alias{edit.ppp}
+\alias{edit.psp}
 \alias{edit.im}
 \title{
   Invoke Text Editor on Spatial Data
@@ -11,11 +12,14 @@
 \usage{
 \method{edit}{ppp}(name, \dots)
 
+\method{edit}{psp}(name, \dots)
+
 \method{edit}{im}(name, \dots)
 }
 \arguments{
   \item{name}{
-    Spatial dataset. An object of class \code{"ppp"} or \code{"im"}.
+    A spatial dataset
+    (object of class \code{"ppp"}, \code{"psp"} or \code{"im"}).
   }
   \item{\dots}{
     Other arguments passed to \code{\link[utils]{edit.data.frame}}.
@@ -23,12 +27,15 @@
 }
 \details{
   The function \code{\link[utils]{edit}} is generic. These functions
-  are methods for objects of class \code{"ppp"} and \code{"im"}.
-  
+  are methods for spatial
+  objects of class \code{"ppp"}, \code{"psp"} and \code{"im"}.
+
   The spatial dataset \code{name} is converted to a data frame or array,
   and the text editor is invoked. The user can change the values of spatial
   coordinates or marks of the points in a point pattern,
-  or the pixel values in an image.
+  or the coordinates or marks of the segments in a segment pattern,
+  or the pixel values in an image. 
+  The names of the columns of marks can also be edited.
 
   If \code{name} is a pixel image, it is converted to a matrix 
   and displayed in the same spatial orientation as if
@@ -50,7 +57,8 @@ and Ege Rubak
 \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link[utils]{edit.data.frame}}
+  \code{\link[utils]{edit.data.frame}},
+  \code{\link{edit.hyperframe}}
 }
 \examples{
   if(interactive()) Z <- edit(cells)

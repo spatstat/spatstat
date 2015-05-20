@@ -612,3 +612,18 @@ tail.hyperframe <- function(x, n = 6L, ...) {
   x[sel, , drop = FALSE]
 }
 
+edit.hyperframe <- function(name, ...) {
+  x <- name
+  isdf <- unclass(x)$vtype == "dfcolumn"
+  if(!any(isdf)) {
+    warning("No columns of editable data", call.=FALSE)
+    return(x)
+  }
+  y <- x[,isdf]
+  ynew <- edit(as.data.frame(y), ...)
+  xnew <- x
+  for(na in names(ynew)) xnew[,na] <- ynew[,na]
+  losenames <- setdiff(names(y), names(ynew))
+  for(na in losenames) xnew[,na] <- NULL
+  return(xnew)
+}

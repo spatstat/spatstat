@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.78 $ $Date: 2014/11/19 07:19:42 $
+#  $Revision: 1.79 $ $Date: 2015/05/20 03:07:30 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -729,3 +729,11 @@ domain.psp <- Window.psp <- function(X, ...) { as.owin(X) }
   verifyclass(value, "owin")
   X[value]
 }
+
+edit.psp <- function(name, ...) {
+  x <- name
+  y <- edit(as.data.frame(x), ...)
+  xnew <- as.psp(y, window=Window(x))
+  return(xnew)
+}
+
