@@ -545,6 +545,7 @@
 \alias{rigidradius}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
+\alias{romansort}
 \alias{roseContinuous}
 \alias{ruletextline}
 \alias{quadrat.testEngine}
@@ -1354,6 +1355,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            covunits, modelcall, callstring, savestuff)
 rigidradius(X)
 RmhExpandRule(nama)
+romansort(x)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
 roseContinuous(ang, rad, unit, \dots, main, labels, at, do.plot)

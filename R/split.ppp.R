@@ -301,8 +301,8 @@ print.summary.splitppp <- function(x, ...) {
   x
 }
   
-density.splitppp <- function(x, ...) {
-  as.solist(lapply(x, density, ...), demote=TRUE)
+density.splitppp <- function(x, ..., se=FALSE) {
+  density.ppplist(x, ..., se=se)
 }
 
 plot.splitppp <- function(x, ..., main) {

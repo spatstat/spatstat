@@ -159,8 +159,14 @@ solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {
   return(u)
 }
 
-density.ppplist <- function(x, ...) {
-  as.solist(lapply(x, density, ...), demote=TRUE)
+density.ppplist <- function(x, ..., se=FALSE) {
+  y <- lapply(x, density, ..., se=se)
+  if(!se) return(as.solist(y, demote=TRUE))
+  y.est <- lapply(y, getElement, name="estimate")
+  y.se  <- lapply(y, getElement, name="SE")
+  z <- list(estimate = as.solist(y.est, demote=TRUE),
+            SE       = as.solist(y.se,  demote=TRUE))
+  return(z)
 }
 
 expandSpecialLists <- function(x, special="solist") {

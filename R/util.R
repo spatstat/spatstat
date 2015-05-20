@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.179 $    $Date: 2015/05/16 02:52:50 $
+#    $Revision: 1.180 $    $Date: 2015/05/20 09:10:09 $
 #
 #
 matrowsum <- function(x) {
@@ -1476,3 +1476,27 @@ mapstrings <- function(x, map=NULL) {
   x[hit] <- map[i[hit]]
   return(x)
 }
+
+romansort <- local({
+
+  # sort character strings in order of Roman alphabet
+  
+  romansort <- function(x) {
+    if(!is.character(x)) return(sort(x))
+    x <- as.vector(x)
+    ## convert each 'word' to a vector of single characters
+    cc <- strsplit(x, "")
+    ## find position of each character in Roman alphabet
+    mm <- lapply(cc, match, table=c(letters, LETTERS))
+    mmax <- max(unlist(mm), na.rm=TRUE)
+    ## encode
+    nn <- sapply(mm, powercode, base=mmax)
+    ## find ordering
+    oo <- order(nn, na.last=TRUE)
+    return(x[oo])
+  }
+
+  powercode <- function(x, base) sum(x * base^rev((seq_len(length(x))-1)))
+
+  romansort
+})

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.089
+        CHANGES IN spatstat VERSION 1.41-1.090
 
 OVERVIEW
 
@@ -479,6 +479,10 @@ BUG FIXES
 
    o plot.rho2hat
    Colour map ribbon was drawn but not annotated.
+   Fixed.
+
+   o density.splitppp, density.ppplist
+   Format was out of order if se=TRUE.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

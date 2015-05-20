@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.14 $ $Date: 2015/05/09 11:23:27 $
+##  $Revision: 1.15 $ $Date: 2015/05/20 14:41:37 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -231,10 +231,14 @@ plot.anylist <- plot.solist <- plot.listof <-
     } else {
       ## Determine dimensions of objects
       ##     (including space for colour ribbons, if they are images)
-      extrargs <- resolve.defaults(extrargs, list(claim.title.space=TRUE))
       boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
                             panel.args=panel.args, extrargs=extrargs)
       sizes.known <- !any(sapply(boxes, inherits, what="try-error"))
+      if(sizes.known) {
+        extrargs <- resolve.defaults(extrargs, list(claim.title.space=TRUE))
+        boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
+                              panel.args=panel.args, extrargs=extrargs)
+      }
       if(equal.scales && !sizes.known) {
         warning("Ignored equal.scales=TRUE; scales could not be determined")
         equal.scales <- FALSE

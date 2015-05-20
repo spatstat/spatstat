@@ -8,9 +8,9 @@
   or each of the point patterns in a list.
 }
 \usage{
-  \method{density}{splitppp}(x, \dots)
+  \method{density}{splitppp}(x, \dots, se=FALSE)
 
-  \method{density}{ppplist}(x, \dots)
+  \method{density}{ppplist}(x, \dots, se=FALSE)
 }
 \arguments{
   \item{x}{
@@ -23,11 +23,17 @@
     Arguments passed to \code{\link{density.ppp}} to control
     the smoothing, pixel resolution, edge correction etc.
   }
+  \item{se}{
+    Logical value indicating whether to compute standard errors as well.
+  }
 }
 \value{
   A list of pixel images (objects of class \code{"im"})
   which can be plotted or printed;
   or a list of numeric vectors giving the values at specified points.
+
+  If \code{se=TRUE}, the result is a list with two elements named
+  \code{estimate} and \code{SE}, each of the format described above.
 }
 \details{
   This is a method for the generic function \code{density}.
@@ -51,6 +57,9 @@
 
   If the argument \code{at="points"} is given, the result is a list
   of numeric vectors giving the intensity values at the data points.
+
+  If \code{se=TRUE}, the result is a list with two elements named
+  \code{estimate} and \code{SE}, each of the format described above.
 }
 \seealso{
   \code{\link{ppp.object}},
