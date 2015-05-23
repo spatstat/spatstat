@@ -1,5 +1,6 @@
 \name{identify.ppp}
 \alias{identify.ppp}
+\alias{identify.lpp}
 \title{Identify Points in a Point Pattern}
 \description{
   If a point pattern is plotted in the graphics window,
@@ -9,10 +10,12 @@
 }
 \usage{
   \method{identify}{ppp}(x, \dots)
+
+  \method{identify}{lpp}(x, \dots)
 }
 \arguments{
   \item{x}{
-    A point pattern (object of class \code{"ppp"}).
+    A point pattern (object of class \code{"ppp"} or \code{"lpp"}).
   }
   \item{\dots}{
     Arguments passed to \code{\link[graphics]{identify.default}}.
@@ -31,7 +34,8 @@
   for point pattern objects.
 
   The point pattern \code{x} should first be plotted
-  using \code{\link{plot.ppp}}. Then \code{identify(x)}
+  using \code{\link{plot.ppp}} or \code{\link{plot.lpp}}
+  as appropriate. Then \code{identify(x)}
   reads the position of the graphics pointer each time the
   left mouse button is pressed.  It then finds 
   the point of the pattern \code{x} closest to the mouse position.

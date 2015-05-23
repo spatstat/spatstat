@@ -1,14 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.090
+        CHANGES IN spatstat VERSION 1.41-1.091
 
 OVERVIEW
 
-   o We thank Anders Bilgrau, Ute Hahn, Jack Hywood, Cody Schank, 
-   Olivia Semboli and Ben Taylor for contributions.
+   o We thank Anders Bilgrau, Ute Hahn, Jack Hywood, Tuomas Rajala,
+   Cody Schank, Olivia Semboli and Ben Taylor for contributions.
 
    o Version nickname: 'Lifestyle Choice'
 
    o Permutation test for difference between groups of point patterns.
+
+   o Variational Bayes estimation for point process models.
 
    o Score test in anova.ppm
 
@@ -114,6 +116,9 @@ NEW FUNCTIONS
 
    o dirichletAreas
    Faster algorithm for tile.areas(dirichlet(X)).
+
+   o identify.lpp
+   Method for 'identify' for point patterns on a linear network.
 
    o delaunayDistance, delaunayNetwork, dirichletEdges, 
    dirichletNetwork, dirichletVertices, dirichletWeights
@@ -354,6 +359,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o pcf3est
    Mathematical labels changed.
+
+   o plot.hyperframe
+   Default margin spacing has been increased.
 
 BUG FIXES
 

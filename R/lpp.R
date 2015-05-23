@@ -511,3 +511,13 @@ iplot.lpp <- function(x, ..., xname) {
   iplot(y, ..., xname=xname, visible=c(TRUE, FALSE, FALSE, TRUE))
 }
 
+identify.lpp <- function(x, ...) {
+  verifyclass(x, "lpp")
+  P <- as.ppp(x)
+  id <- identify(P$x, P$y, ...)
+  if(!is.marked(x)) return(id)
+  marks <- as.data.frame(P)[id, -(1:2)]
+  out <- cbind(data.frame(id=id), marks)
+  row.names(out) <- NULL
+  return(out)
+}

@@ -449,7 +449,7 @@ plot.hyperframe <-
   function(x, e, ..., main, arrange=TRUE,
            nrows=NULL, ncols=NULL,
            parargs=list(mar=mar * marsize),
-           marsize=0.1, mar=c(1,1,3,1)) {
+           marsize=1, mar=c(1,1,3,1)) {
   xname <- short.deparse(substitute(x))
   main <- if(!missing(main)) main else xname
   mar <- rep(mar, 4)[1:4]

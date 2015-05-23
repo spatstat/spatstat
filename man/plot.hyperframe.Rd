@@ -9,7 +9,7 @@
    \method{plot}{hyperframe}(x, e, \dots, main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
                             parargs=list(mar=mar * marsize),
-                            marsize=0.1, mar=c(1,1,3,1))
+                            marsize=1, mar=c(1,1,3,1))
 }
 \arguments{
   \item{x}{
@@ -41,7 +41,7 @@
     plotting each panel. Can be used to control margin sizes, etc.
   }
   \item{marsize}{
-    Optional scale parameter controlling the sizes of margins between
+    Optional scale parameter controlling the sizes of margins around
     the panels. Incompatible with \code{parargs}.
   }
   \item{mar}{
