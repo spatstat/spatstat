@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.091
+        CHANGES IN spatstat VERSION 1.41-1.092
 
 OVERVIEW
 
@@ -17,6 +17,10 @@ OVERVIEW
    o ROC curve, and discrimination index AUC, for fitted models.
    
    o Interactive text editor for spatial datasets.
+
+   o Tools for analysing data on a tree. 
+
+   o Kernel density/intensity estimation on a linear network.
 
    o Random pixel noise.
 
@@ -64,6 +68,12 @@ NEW FUNCTIONS
 
    o parameters
    Extract all parameters from a fitted model.
+
+   o density.lpp
+   Kernel estimation of point process intensity on a linear network.
+
+   o extractbranch, deletebranch, treeprune, treebranchlabels, begins
+   Tools for analysing data on a tree.
 
    o rnoise
    Random pixel noise.

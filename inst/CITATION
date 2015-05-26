@@ -1,5 +1,21 @@
 citHeader("To cite spatstat in publications use:")
 
+citEntry(entry = "Book",
+  title        = "Spatial Point Patterns: Methodology and Applications with {R}",
+  author       = personList(as.person("Adrian Baddeley"),
+                            as.person("Ege Rubak"),
+                            as.person("Rolf Turner")),
+  year         = "2015",
+  publisher    = "Chapman and Hall/CRC Press",
+  address      = "London",
+  note = "In press",
+  textVersion  =
+  paste("Adrian Baddeley, Ege Rubak, Rolf Turner (2015).",
+        "Spatial Point Patterns: Methodology and Applications with R.",
+        "London: Chapman and Hall/CRC Press, 2015.",
+        "In press.")
+)
+
 citEntry(entry = "Article",
   title        = "{spatstat}: An {R} Package for Analyzing Spatial Point Patterns",
   author       = personList(as.person("Adrian Baddeley"),
