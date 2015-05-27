@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.36 $	$Date: 2015/05/26 10:05:09 $
+#    $Revision: 2.37 $	$Date: 2015/05/27 06:42:34 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -250,11 +250,12 @@ doMultiStraussHard <- local({
            gamma <- (self$interpret)(coeffs, self)$param$gammas
            # required gamma parameters
            required <- !is.na(iradii)
-           # inactive hard cores
-           ihc <- is.na(hradii) | (hradii == 0)
+           # active hard cores
+           activehard <- !is.na(hradii) & (hradii > 0)
+           ihc <- !activehard
            # problems
-           okgamma <- is.finite(gamma) & (gamma <= 1)
-           naughty <- ihc & required & !okgamma
+           gammavalid <- is.finite(gamma) & (activehard | gamma <= 1)
+           naughty    <- required & !gammavalid
            if(!any(naughty))
              return(NULL)
            #

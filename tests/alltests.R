@@ -1747,32 +1747,57 @@ local({
 #
 #     tests/project.ppm.R
 #
-#      $Revision: 1.3 $  $Date: 2012/10/22 03:12:08 $
+#      $Revision: 1.5 $  $Date: 2015/05/27 07:33:33 $
 #
 #     Tests of projection mechanism
 #
 
 require(spatstat)
 local({
+  chk <- function(m) {
+    if(!valid.ppm(m)) stop("Projected model was still not valid")
+    return(invisible(NULL))
+  }
   # a very unidentifiable model
-  fit <- ppm(cells, ~Z, Strauss(1e-06), covariates=list(Z=0))
-  project.ppm(fit)
+  fit <- ppm(cells ~Z, Strauss(1e-06), covariates=list(Z=0))
+  chk(project.ppm(fit))
   # multitype
-  fit2 <- ppm(amacrine, ~1, MultiStrauss(types=c("off", "on"),
-                                         radii=matrix(1e-06, 2, 2)))
-  project.ppm(fit2)
+  r <- matrix(1e-06, 2, 2)
+  fit2 <- ppm(amacrine ~1, MultiStrauss(types=c("off", "on"), radii=r))
+  chk(project.ppm(fit2))
+  # complicated multitype 
+  fit3 <- ppm(amacrine ~1, MultiStraussHard(types=c("off", "on"),
+                                            iradii=r, hradii=r/5))
+  chk(project.ppm(fit3))
+  
+  # hierarchical
+  ra <- r
+  r[2,1] <- NA
+  fit4 <- ppm(amacrine ~1, HierStrauss(types=c("off", "on"), radii=r))
+  chk(project.ppm(fit4))
+  # complicated hierarchical
+  fit5 <- ppm(amacrine ~1, HierStraussHard(types=c("off", "on"),
+                                            iradii=r, hradii=r/5))
+  chk(project.ppm(fit5))
   
   # hybrids
   r0 <- min(nndist(redwood))
   ra <- 1.25 * r0
   rb <- 0.8 * r0
-  f <- ppm(redwood, ~1, Hybrid(A=Strauss(ra), B=Geyer(0.1, 2)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Strauss(rb), B=Geyer(0.1, 2)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Strauss(ra), B=Strauss(0.1)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Strauss(rb), B=Strauss(0.1)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Hardcore(rb), B=Strauss(0.1)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Hardcore(rb), B=Geyer(0.1, 2)), project=TRUE)
-  f <- ppm(redwood, ~1, Hybrid(A=Geyer(rb, 1), B=Strauss(0.1)), project=TRUE)
+  f1 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f1)
+  f2 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f2)
+  f3 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Strauss(0.1)), project=TRUE)
+  chk(f3)
+  f4 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Strauss(0.1)), project=TRUE)
+  chk(f4)
+  f5 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Strauss(0.1)), project=TRUE)
+  chk(f5)
+  f6 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f6)
+  f7 <- ppm(redwood ~1, Hybrid(A=Geyer(rb, 1), B=Strauss(0.1)), project=TRUE)
+  chk(f7)
 
 })
 #

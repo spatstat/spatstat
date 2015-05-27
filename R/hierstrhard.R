@@ -1,7 +1,7 @@
 ##
 ##    hierstrhard.R
 ##
-##    $Revision: 1.1 $	$Date: 2015/05/26 08:38:08 $
+##    $Revision: 1.2 $	$Date: 2015/05/27 06:42:43 $
 ##
 ##    The hierarchical Strauss-hard core process
 ##
@@ -87,6 +87,7 @@ HierStraussHard <- local({
       return(HierStraussHard(types=types, iradii=iradii, hradii=hradii,
                              archy=archy))
     } else if(any(!ihc)) {
+      # ihc = inactive hard cores
       # no gamma interactions left, but some active hard cores
       return(HierHard(types=types, hradii=hradii, archy=archy))
     } else return(Poisson())
@@ -227,8 +228,8 @@ HierStraussHard <- local({
          if(!all(is.finite(gamma[required]))) return(FALSE)
          # DIAGONAL interactions must be non-explosive
          d <- diag(rep(TRUE, nrow(iradii)))
-         excused <- is.na(hradii) | (hradii > 0)
-         return(all(gamma[required & d & !excused] <= 1))
+         activehard <- !is.na(hradii) & (hradii > 0)
+         return(all(gamma[required & d & !activehard] <= 1))
        },
        project  = function(coeffs, self) {
          # interaction parameters gamma[i,j]
@@ -238,13 +239,16 @@ HierStraussHard <- local({
          # hard core radii r[i,j]
          hradii <- self$par$hradii
          types <- self$par$types
-         # inactive hard cores
-         ihc <- is.na(hradii) | (hradii == 0)
+         archy <- self$par$archy
+         # active hard cores
+         activehard <- !is.na(hradii) & (hradii > 0)
+         ihc <- !activehard
          # problems?
-         uptri <- self$par$archy$relation
+         uptri <- archy$relation
          required <- !is.na(iradii) & uptri
-         okgamma  <- !uptri | (is.finite(gamma) & (gamma <= 1))
-         naughty  <- ihc & required & !okgamma
+         offdiag <- !diag(nrow(iradii))
+         gammavalid <- is.finite(gamma) & (activehard | offdiag | (gamma <= 1))
+         naughty <- required & !gammavalid
          # 
          if(!any(naughty))  
            return(NULL)

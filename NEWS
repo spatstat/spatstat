@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.093
+        CHANGES IN spatstat VERSION 1.41-1.094
 
 OVERVIEW
 
@@ -509,6 +509,10 @@ BUG FIXES
 
    o density.splitppp, density.ppplist
    Format was out of order if se=TRUE.
+   Fixed.
+
+   o MultiStraussHard
+   project.ppm sometimes yielded a model that was still invalid.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.41-1

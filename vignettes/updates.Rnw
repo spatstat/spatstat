@@ -3434,6 +3434,11 @@ of potential impact.
 \item polygon geometry:
     The point-in-polygon test gave the wrong answer in some boundary cases.
     {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
+
+\item \texttt{MultiStraussHard}:
+    If a fitted model with \texttt{MultiStraussHard} interaction was invalid,
+    \texttt{project.ppm} sometimes yielded a model that was still invalid.
+    {\small (Bug fixed in \texttt{spatstat 1.42-0}, may 2015)}
 \end{itemize}
 
 

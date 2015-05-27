@@ -1,7 +1,7 @@
 ##
 ##    hierstrauss.R
 ##
-##    $Revision: 1.7 $	$Date: 2015/05/26 08:41:12 $
+##    $Revision: 1.8 $	$Date: 2015/05/27 08:04:38 $
 ##
 ##    The hierarchical Strauss process
 ##
@@ -92,9 +92,11 @@ HierStrauss <- local({
                     "interaction distances",
                     "hierarchical order"),
        selfstart = function(X, self) {
-         if(is.null(self$par$types)) types <- levels(marks(X))
-         if(is.null(self$par$archy)) archy <- types
-         HierStrauss(types=types,radii=self$par$radii,archy=self$par$archy)
+         if(!is.null(self$par$types) && !is.null(self$par$archy))
+           return(self)
+         types <- self$par$types %orifnull% levels(marks(X))
+         archy <- self$par$archy %orifnull% types
+         HierStrauss(types=types,radii=self$par$radii,archy=archy)
        },
        init = function(self) {
          types <- self$par$types
@@ -174,8 +176,9 @@ HierStrauss <- local({
          # interaction radii and types
          radii <- self$par$radii
          types <- self$par$types
+         archy <- self$par$archy
          # problems?
-         uptri <- self$par$archy$relation
+         uptri <- archy$relation
          required <- !is.na(radii) & uptri
          okgamma  <- !uptri | (is.finite(gamma) & (gamma <= 1))
          naughty  <- required & !okgamma
