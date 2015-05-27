@@ -476,6 +476,9 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  \item \texttt{HierStrauss}, \texttt{HierStraussHard}, \texttt{HierHard}:
+    hierarchical interactions for Gibbs models.
+    
   \item \texttt{density.lpp}:
     Kernel estimation of intensity on a linear network.
     
@@ -1546,6 +1549,8 @@ the News and Release Notes for each update.
 
    \item Improved support for tessellations.
 
+   \item More hierarchical interactions for Gibbs models.
+     
    \item Modifications to \texttt{Kest}.
 
    \item summary method for Cox and cluster models.
@@ -1999,6 +2004,9 @@ listed alphabetically.
   \item \texttt{connected}:
    \texttt{connected} is now generic, with methods for 
    \texttt{im}, \texttt{owin} and \texttt{ppp}.
+
+  \item \texttt{countends}:
+    New argument \texttt{toler}.
 
   \item \texttt{crossdist.ppp}, \texttt{crossdist.pp3}, 
     \texttt{crossdist.default}:

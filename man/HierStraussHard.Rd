@@ -1,15 +1,16 @@
-\name{HierStrauss}
-\alias{HierStrauss}
-\title{The Hierarchical Strauss Point Process Model}
+\name{HierStraussHard}
+\alias{HierStraussHard}
+\title{The Hierarchical Strauss Hard Core Point Process Model}
 \description{
-Creates an instance of the hierarchical Strauss point process model
+Creates an instance of the hierarchical Strauss-hard core point process model
 which can then be fitted to point pattern data.
 }
 \usage{
-  HierStrauss(radii, types=NULL, archy=NULL)
+  HierStraussHard(iradii, hradii=NULL, types=NULL, archy=NULL)
 }
 \arguments{
-  \item{radii}{Matrix of interaction radii}
+  \item{iradii}{Matrix of interaction radii}
+  \item{hradii}{Optional matrix of hard core distances}
   \item{types}{Optional; vector of all possible types (i.e. the possible levels
     of the \code{marks} variable in the data)}
   \item{archy}{Optional: the hierarchical order. See Details.}
@@ -17,8 +18,9 @@ which can then be fitted to point pattern data.
 \value{
   An object of class \code{"interact"}
   describing the interpoint interaction
-  structure of the hierarchical Strauss process with
-  interaction radii \eqn{radii[i,j]}.
+  structure of the hierarchical Strauss-hard core process with
+  interaction radii \eqn{iradii[i,j]} and hard core distances
+  \eqn{hradii[i,j]}.
 }
 \details{
   This is a hierarchical point process model
@@ -32,8 +34,8 @@ which can then be fitted to point pattern data.
   \eqn{1,2,\ldots,j-1}{1,2,...,j-1}.
   
   The hierarchical version of the (stationary) 
-  Strauss process with \eqn{m} types, with interaction radii
-  \eqn{r_{ij}}{r[i,j]} and 
+  Strauss hard core process with \eqn{m} types, with interaction radii
+  \eqn{r_{ij}}{r[i,j]}, hard core distances \eqn{h_{ij}}{h[i,j]} and 
   parameters \eqn{\beta_j}{beta[j]} and \eqn{\gamma_{ij}}{gamma[i,j]}
   is a point process
   in which each point of type \eqn{j}
@@ -42,9 +44,13 @@ which can then be fitted to point pattern data.
   of types \eqn{i} and \eqn{j} closer than \eqn{r_{ij}}{r[i,j]}
   units apart contributes a factor
   \eqn{\gamma_{ij}}{gamma[i,j]} to the density
-  \bold{provided} \eqn{i \le j}{i <= j}. 
+  \bold{provided} \eqn{i \le j}{i <= j}. If any pair of points
+  of types \eqn{i} and \eqn{j} lies closer than \eqn{h_{ij}}{h[i,j]}
+  units apart, the configuration of points is impossible (probability
+  density zero).
   
-  The nonstationary hierarchical Strauss process is similar except that 
+  The nonstationary hierarchical Strauss hard core
+  process is similar except that 
   the contribution of each individual point \eqn{x_i}{x[i]}
   is a function \eqn{\beta(x_i)}{beta(x[i])}
   of location and type, rather than a constant beta. 
@@ -55,12 +61,12 @@ which can then be fitted to point pattern data.
   of class \code{"interact"} describing the interpoint interaction
   structure of the model to be fitted. 
   The appropriate description of the hierarchical
-  Strauss process pairwise interaction is
-  yielded by the function \code{HierStrauss()}. See the examples below.
+  Strauss hard core process pairwise interaction is
+  yielded by the function \code{HierStraussHard()}. See the examples below.
 
   The argument \code{types} need not be specified in normal use.
   It will be determined automatically from the point pattern data set
-  to which the HierStrauss interaction is applied,
+  to which the HierStraussHard interaction is applied,
   when the user calls \code{\link{ppm}}. 
   However, the user should be confident that
   the ordering of types in the dataset corresponds to the ordering of
@@ -73,30 +79,31 @@ which can then be fitted to point pattern data.
   \eqn{1,2, \ldots, m}{1,2, ..., m} meaning that type \eqn{j}
   depends on types \eqn{1,2, \ldots, j-1}{1,2, ..., j-1}.
   
-  The matrix \code{radii} must be symmetric, with entries
-  which are either positive numbers or \code{NA}. 
-  A value of \code{NA} indicates that no interaction term should be included
-  for this combination of types.
+  The matrices \code{iradii} and \code{hradii} must be square, with entries
+  which are either positive numbers or zero or \code{NA}. 
+  A value of zero or \code{NA} indicates that no interaction term
+  should be included for this combination of types.
   
-  Note that only the interaction radii are
-  specified in \code{HierStrauss}.  The canonical
+  Note that only the interaction radii and hard core distances are
+  specified in \code{HierStraussHard}.  The canonical
   parameters \eqn{\log(\beta_j)}{log(beta[j])} and
   \eqn{\log(\gamma_{ij})}{log(gamma[i,j])} are estimated by
-  \code{\link{ppm}()}, not fixed in \code{HierStrauss()}.
+  \code{\link{ppm}()}, not fixed in \code{HierStraussHard()}.
 }
 \seealso{
-  \code{\link{MultiStrauss}} for the corresponding
+  \code{\link{MultiStraussHard}} for the corresponding
   symmetrical interaction.
 
   \code{\link{HierHard}},
-  \code{\link{HierStraussHard}}.
+  \code{\link{HierStrauss}}.
 }
 \examples{
-   r <- matrix(10 * c(3,4,4,3), nrow=2,ncol=2)
-   HierStrauss(r)
+   r <- matrix(c(30, NA, 40, 30), nrow=2,ncol=2)
+   h <- matrix(c(4, NA, 10, 15), 2, 2)
+   HierStraussHard(r, h)
    # prints a sensible description of itself
-   ppm(ants ~1, HierStrauss(r, , c("Messor", "Cataglyphis")))
-   # fit the stationary hierarchical Strauss process to ants data
+   ppm(ants ~1, HierStraussHard(r, h))
+   # fit the stationary hierarchical Strauss-hard core process to ants data
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

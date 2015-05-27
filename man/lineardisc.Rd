@@ -10,8 +10,9 @@
 }
 \usage{
   lineardisc(L, x = locator(1), r, plotit = TRUE,
-   cols=c("blue", "red","green"))
-  countends(L, x = locator(1), r)
+             cols=c("blue", "red","green"))
+
+  countends(L, x = locator(1), r, toler=NULL)
 }
 \arguments{
   \item{L}{
@@ -33,6 +34,10 @@
     length 3 specifying the colours of the disc centre, disc lines and
     disc endpoints respectively.
   }
+  \item{toler}{
+    Optional. Distance threshold for \code{countends}. See Details.
+    There is a sensible default.
+  }
 }
 \details{
   The \sQuote{disc} \eqn{B(u,r)} of centre \eqn{x} and radius \eqn{r}
@@ -50,6 +55,12 @@
   optionally plots them, and returns them.
   The faster function \code{countends} simply counts the number of
   points in the relative boundary.
+
+  The optional threshold \code{toler} is used to suppress numerical
+  errors in \code{countends}.
+  If the distance from \eqn{u} to a network vertex \eqn{v}
+  is between \code{r-toler} and \code{r+toler}, the vertex
+  will be treated as lying on the relative boundary.    
 }
 \value{
   The value of \code{lineardisc} is a list with two entries:

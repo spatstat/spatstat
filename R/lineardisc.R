@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.19 $ $Date: 2014/11/10 05:39:57 $
+#   $Revision: 1.20 $ $Date: 2015/05/27 01:02:33 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -143,7 +143,7 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
   return(list(lines=disclines, endpoints=discends))
 }
 
-countends <- function(L, x=locator(1), r) {
+countends <- function(L, x=locator(1), r, toler=NULL) {
   # L is the linear network (object of class "linnet")
   # x is the centre point of the disc
   # r is the radius of the disc
@@ -176,7 +176,12 @@ countends <- function(L, x=locator(1), r) {
   seg0 <- startsegment - 1L
   from0 <- L$from - 1L
   to0   <- L$to - 1L
-  toler <- 0.001 * min(lengths)
+  if(is.null(toler)) {
+    toler <- 0.001 * min(lengths[lengths > 0])
+  } else {
+    check.1.real(toler)
+    stopifnot(toler > 0)
+  }
   zz <- .C("Ccountends",
            np = as.integer(np),
            f = as.double(startfraction),

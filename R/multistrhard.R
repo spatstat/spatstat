@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.35 $	$Date: 2015/03/31 03:57:00 $
+#    $Revision: 2.36 $	$Date: 2015/05/26 10:05:09 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -269,8 +269,8 @@ doMultiStraussHard <- local({
              upn <- uptri & naughty
              rowidx <- as.vector(rn[upn])
              colidx <- as.vector(cn[upn])
-             matindex <- function(v) { matrix(c(v, rev(v)),
-                                              ncol=2, byrow=TRUE) }
+#             matindex <- function(v) { matrix(c(v, rev(v)),
+#                                              ncol=2, byrow=TRUE) }
              mats <- lapply(as.data.frame(rbind(rowidx, colidx)), matindex)
              inters <- lapply(mats, delMSH,
                               types=types, iradii=iradii,
@@ -296,6 +296,8 @@ doMultiStraussHard <- local({
          )
   class(BlankMSHobject) <- "interact"
 
+  matindex <- function(v) { matrix(c(v, rev(v)), ncol=2, byrow=TRUE) }
+  
   # Finally define MultiStraussHard function
   doMultiStraussHard <- function(iradii, hradii=NULL, types=NULL) {
     iradii[iradii == 0] <- NA
