@@ -178,6 +178,7 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   to0   <- L$to - 1L
   if(is.null(toler)) {
     toler <- 0.001 * min(lengths[lengths > 0])
+    toler <- max(.Machine$double.xmin, toler, finite=TRUE)
   } else {
     check.1.real(toler)
     stopifnot(toler > 0)

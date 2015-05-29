@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.41-1.094
+        CHANGES IN spatstat VERSION 1.42-0
 
 OVERVIEW
 
    o We thank Anders Bilgrau, Ute Hahn, Jack Hywood, Tuomas Rajala,
    Cody Schank, Olivia Semboli and Ben Taylor for contributions.
 
-   o Version nickname: 'Lifestyle Choice'
+   o Version nickname: 'Life, The Universe and Everything'
 
    o Permutation test for difference between groups of point patterns.
 
