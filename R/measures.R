@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.55 $  $Date: 2015/05/06 07:11:39 $
+#  $Revision: 1.56 $  $Date: 2015/06/03 06:23:58 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -14,6 +14,8 @@ msr <- function(qscheme, discrete, density, check=TRUE) {
   Z <- is.data(qscheme)
   ndata <- sum(Z)
   # ensure conformable vectors/matrices
+  stopifnot(is.numeric(discrete) || is.logical(discrete))
+  stopifnot(is.numeric(density))
   if(is.vector(discrete) && is.vector(density)) {
     # handle constants
     if(length(discrete) == 1)

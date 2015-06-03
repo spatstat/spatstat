@@ -1,4 +1,31 @@
 
+        CHANGES IN spatstat VERSION 1.42-0.001
+
+OVERVIEW
+
+   o Minor improvements
+
+   o Memory leak is under investigation
+
+NEW FUNCTIONS
+
+   o boundingbox.solist
+   Method for boundingbox for lists of spatial objects.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o solist, as.solist
+   Accelerated. 
+
+   o as.list.hyperframe
+   Accelerated. Possibly removed a memory leak.
+
+BUG FIXES
+
+   o vignette("replicated")
+   Fails to execute on some systems due to a memory leak.
+   We are still investigating this bug.
+
         CHANGES IN spatstat VERSION 1.42-0
 
 OVERVIEW

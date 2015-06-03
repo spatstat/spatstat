@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.58 $  $Date: 2015/03/12 10:52:58 $
+# $Revision: 1.60 $  $Date: 2015/06/03 11:20:08 $
 #
 
 hyperframe <- local({
@@ -69,7 +69,7 @@ hyperframe <- local({
       }
       if(any(stubs <- hypercolumns & (heights != ncases))) {
         ## hypercolumns of height 1 should be hyperatoms
-        aarg[stubs] <- lapply(aarg[stubs], "[[", 1)
+        aarg[stubs] <- lapply(aarg[stubs], "[[", i=1)
         hypercolumns[stubs] <- FALSE
         hyperatoms[stubs] <- TRUE
       }
@@ -319,12 +319,25 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
 
 as.list.hyperframe <- function(x, ...) {
   ux <- unclass(x)
-  nama <- ux$vname
-  names(nama) <- nama
-  out <- lapply(nama, function(nam, x) { x[, nam, drop=TRUE] }, x=x)
-  if(ux$ncases == 1)
-    out <- lapply(out, solist, demote=TRUE)
-  out <- lapply(out, "names<-", value=row.names(x))
+  out <- vector(mode="list", length=ux$nvars)
+  vtype <- ux$vtype
+  df <- ux$df
+  if(any(dfcol <- (vtype == "dfcolumn")))
+    out[dfcol] <- as.list(df)
+  if(any(hypcol <- (vtype == "hypercolumn"))) {
+    hc <- lapply(ux$hypercolumns, as.solist, demote=TRUE)
+    out[hypcol] <- hc
+  }
+  if(any(hatom <- (vtype == "hyperatom"))) {
+    ha <- ux$hyperatoms
+    names(ha) <- NULL
+    hacol <- lapply(ha, list)
+    hacol <- lapply(hacol, rep.int, times=ux$ncases)
+    hacol <- lapply(hacol, as.solist, demote=TRUE)
+    out[hatom] <- hacol
+  }
+  out <- lapply(out, "names<-", value=row.names(df))
+  names(out) <- names(x)
   return(out)
 }
 
@@ -349,7 +362,7 @@ with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
   out <- vector(mode="list", length=n)
   datalist <- as.list(data)
   for(i in 1:n) {
-    rowi <- lapply(datalist, "[[", i)  # ensures the result is always a list
+    rowi <- lapply(datalist, "[[", i=i)  # ensures the result is always a list
     outi <- eval(ee, rowi, enclos)
     if(!is.null(outi))
       out[[i]] <- outi

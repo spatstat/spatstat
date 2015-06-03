@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.63 $   $Date: 2014/11/10 10:53:54 $
+#  $Revision: 1.65 $   $Date: 2015/06/03 09:53:28 $
 #
 
 mppm <- function(formula, data, interaction=Poisson(), ...,
@@ -117,16 +117,19 @@ mppm <- function(formula, data, interaction=Poisson(), ...,
 
   # Extract the list of responses (point pattern/quadscheme)
   Y <- data[, Yname, drop=TRUE]
-  if(npat == 1) Y <- list(Y)
+  if(npat == 1) Y <- solist(Y)
   Yclass <- data.sumry$classes[Yname]
   if(Yclass == "ppp") {
     # convert to quadrature schemes, for efficiency's sake
-    Y <- lapply(Y, quadscheme)
-  } else if(Yclass != "quad")
-    stop(paste("Column", dQuote(Yname), "of data",
-               "does not consist of point patterns (class ppp)",
-               "nor of quadrature schemes (class quad)"))
-
+    Y <- solapply(Y, quadscheme)
+  } else {
+    if(Yclass != "quad")
+      stop(paste("Column", dQuote(Yname), "of data",
+                 "does not consist of point patterns (class ppp)",
+                 "nor of quadrature schemes (class quad)"))
+    Y <- as.solist(Y)
+  }
+  
   # Extract sub-hyperframe of data named in formulae
   datanames <- names(data)
   used.cov.names <- allvars[allvars %in% datanames]
@@ -466,15 +469,15 @@ is.poisson.mppm <- function(x) {
 }
 
 quad.mppm <- function(x) {
-  x$Y
+  as.solist(x$Y)
 }
 
 data.mppm <- function(x) {
-  lapply(x$Y, function(z) { z$data })
+  solapply(x$Y, getElement, name="data")
 }
 
 windows.mppm <- function(x) {
-  lapply(x$Y, function(z) {z$data$window})
+  solapply(data.mppm(x), Window)
 }
 
 logLik.mppm <- function(object, ...) {

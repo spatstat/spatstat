@@ -4,6 +4,7 @@
 \alias{boundingbox.im}
 \alias{boundingbox.owin}
 \alias{boundingbox.ppp}
+\alias{boundingbox.solist}
 \title{
   Bounding Box of a Window, Image, or Point Pattern
 }
@@ -21,11 +22,15 @@ boundingbox(\dots)
 \method{boundingbox}{owin}(\dots)
 
 \method{boundingbox}{ppp}(\dots)
+
+\method{boundingbox}{solist}(\dots)
 }
 \arguments{
   \item{\dots}{One or more windows (objects of class \code{"owin"}),
     pixel images (objects of class \code{"im"}) or
     point patterns (objects of class \code{"ppp"}).
+    Alternatively, the argument may be a list of such objects,
+    of class \code{"solist"}.
   }
 }
 \details{

@@ -19,6 +19,13 @@ boundingbox <- function(...) {
   UseMethod("boundingbox")
 }
 
+boundingbox.solist <- function(...) {
+  argh <- list(...)
+  issl <- sapply(argh, inherits, what="solist")
+  yarg <- c(do.call(c, argh[issl]), argh[!issl])
+  do.call(bbEngine, yarg)
+}
+
 boundingbox.ppp  <-
 boundingbox.psp  <-
 boundingbox.owin <-

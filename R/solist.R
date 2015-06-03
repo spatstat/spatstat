@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.9 $ $Date: 2015/03/12 01:46:17 $
+## $Revision: 1.11 $ $Date: 2015/06/03 11:13:30 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -66,8 +66,18 @@ pool.anylist <- function(x, ...) {
 
 solist <- local({
 
-  check2Dspatial <-
-    function(z) !inherits(try(Frame(z), silent=TRUE), "try-error")
+  known2D <- c("ppp", "im", "owin", "psp",
+               "quad", "tess", "msr",
+               "quadratcount", "quadrattest", 
+               "layered", "funxy",  
+               "lpp", "linnet")
+  knownNot2D <- c("fv", "pp3", "ppx", "hyperframe", "solist", "anylist")
+  
+  check2Dspatial <- function(z) {
+    if(inherits(z, known2D)) return(TRUE)
+    if(inherits(z, knownNot2D)) return(FALSE)
+    !inherits(try(Frame(z), silent=TRUE), "try-error")
+  }
 
   solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE) {
     stuff <- list(...)

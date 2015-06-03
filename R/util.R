@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.180 $    $Date: 2015/05/20 09:10:09 $
+#    $Revision: 1.181 $    $Date: 2015/06/03 11:19:56 $
 #
 #
 matrowsum <- function(x) {
@@ -1334,8 +1334,8 @@ blockdiagarray <- function(...) {
   dims3 <- unlist(lapply(dims, "[", i=3))
   result <- array(0, dim=c(dim1, sum(dims2), sum(dims3)))
   dn <- lapply(x, dimnames)
-  dimnames(result)[[2]] <- unlist(lapply(dn, "[[", 2))
-  dimnames(result)[[3]] <- unlist(lapply(dn, "[[", 3))
+  dimnames(result)[[2]] <- unlist(lapply(dn, "[[", i=2))
+  dimnames(result)[[3]] <- unlist(lapply(dn, "[[", i=3))
   rowend <- cumsum(dims2)
   rowstart <- c(0, rowend) + 1
   colend <- cumsum(dims3)
