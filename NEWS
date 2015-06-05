@@ -1,18 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.42-0.004
+        CHANGES IN spatstat VERSION 1.42-1
 
 OVERVIEW
 
    o We thank Andrew Hardegen, Tom Lawrence, Robin Milne, Suman Rakshit,
    and Brian Ripley for contributions.
 
-   o Urgent fix for a memory leak.
+   o Urgent bug fix.
 
    o More robust simulation of cluster processes.
 
    o Slightly accelerated.
 
-   o Nickname: 'None of the Above'
+   o Version nickname: 'Vogon Poetry'
 
 NEW FUNCTIONS
 
@@ -36,8 +36,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-   o vignette("replicated")
-   Brought some computers to a grinding halt, due to a memory leak.
+   o residuals.mppm
+   Brought some computers to a grinding halt, due to the bug in solist().
+   Fixed.
+
+   o solist, as.solist
+   In rare cases, the format was corrupted, or the algorithm never terminated.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-0
