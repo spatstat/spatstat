@@ -283,6 +283,7 @@
 \alias{is.ppx}
 \alias{is.prime}
 \alias{is.psp}
+\alias{is.sob}
 \alias{is.tess}
 \alias{k3engine}
 \alias{Kborder.engine}
@@ -1037,6 +1038,7 @@ is.pp3(x)
 is.ppx(x)
 is.prime(n)
 is.psp(x)
+is.sob(x)
 is.tess(x)
 k3engine(x, y, z, box, rmax, nrval, correction)
 Kborder.engine(X, rmax, nr, correction, weights, ratio)

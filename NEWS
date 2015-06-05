@@ -1,11 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.42-0.002
+        CHANGES IN spatstat VERSION 1.42-0.003
 
 OVERVIEW
 
+   o We thank Andrew Hardegen, Tom Lawrence, Robin Milne, Suman Rakshit,
+   and Brian Ripley for contributions.
+
+   o Urgent fix for a memory leak.
+
    o More robust simulation of cluster processes.
 
-   o Memory leak is under investigation
+   o Slightly accelerated.
 
    o Nickname: 'None of the Above'
 
@@ -27,13 +32,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Accelerated. 
 
    o as.list.hyperframe
-   Accelerated. Possibly removed a memory leak.
+   Accelerated. 
 
 BUG FIXES
 
    o vignette("replicated")
-   Fails to execute on some systems due to a memory leak.
-   We are still investigating this bug.
+   Brought some computers to a grinding halt, due to a memory leak.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.42-0
 
