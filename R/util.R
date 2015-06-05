@@ -1500,3 +1500,15 @@ romansort <- local({
 
   romansort
 })
+
+checkbigmatrix <- function(n, m, fatal=FALSE, silent=FALSE) {
+  if(n * m <= spatstat.options("maxmatrix"))
+    return(TRUE)
+  whinge <- paste("Attempted to create binary mask with",
+                  n, "*", m, "=", n * m, "entries")
+  if(fatal) stop(whinge, call.=FALSE)
+  if(!silent) warning(whinge, call.=FALSE)
+  return(FALSE)
+}
+
+  

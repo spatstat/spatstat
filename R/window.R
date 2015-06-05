@@ -415,6 +415,8 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     jj <- with(df, match(x, xx))
     ii <- with(df, match(y, yy))
     ## make logical matrix (for incomplete x, y sequence)
+    ok <- checkbigmatrix(length(xx), length(yy), fatal=fatal)
+    if(!ok) return(NULL)
     mm <- matrix(FALSE, length(yy), length(xx))
     mm[cbind(ii,jj)] <- z
     ## ensure xx and yy are complete equally-spaced sequences
@@ -422,6 +424,9 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     fy <- fillseq(yy)
     xcol <- fx[[1]]
     yrow <- fy[[1]]
+    ## trap very large matrices
+    ok <- checkbigmatrix(length(xcol), length(yrow), fatal=fatal)
+    if(!ok) return(NULL)
     ## mapping from xx to xcol, yy to yrow
     jjj <- fx[[2]]
     iii <- fy[[2]]

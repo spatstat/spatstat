@@ -56,6 +56,7 @@
 \alias{cellmiddles}
 \alias{censtimeCDFest}
 \alias{change.default.expand}          
+\alias{checkbigmatrix}          
 \alias{checkfields}          
 \alias{check.finite}
 \alias{check.hist.lengths}
@@ -785,6 +786,7 @@ cellmiddles(W, nx, ny, npix, distances)
 censtimeCDFest(o, cc, d, breaks, \dots,
      KM, RS, HAN, RAW, han.denom, tt, pmax)
 change.default.expand(x, newdefault)
+checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)          
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
