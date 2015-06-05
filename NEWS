@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.42-0.001
+        CHANGES IN spatstat VERSION 1.42-0.002
 
 OVERVIEW
 
-   o Minor improvements
+   o More robust simulation of cluster processes.
 
    o Memory leak is under investigation
+
+   o Nickname: 'None of the Above'
 
 NEW FUNCTIONS
 
@@ -13,6 +15,13 @@ NEW FUNCTIONS
    Method for boundingbox for lists of spatial objects.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o rThomas, rMatClust, rCauchy, rVarGamma, rNeymanScott
+   New faster algorithm which is more robust against extreme values of
+   the parameters.
+
+   o rNeymanScott
+   New argument 'nonempty' controls choice of algorithm.
 
    o solist, as.solist
    Accelerated. 

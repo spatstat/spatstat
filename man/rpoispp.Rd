@@ -78,7 +78,8 @@
   pixel values of the image. (The value of the intensity function at an
   arbitrary location is the pixel value of the nearest pixel.)
   The argument \code{win} is ignored;
-  the window of the pixel image is used instead.
+  the window of the pixel image is used instead. It will be converted
+  to a rectangle if possible, using \code{\link{rescue.rectangle}}.
   
   To generate an inhomogeneous Poisson process
   the algorithm uses ``thinning'': it first generates a uniform

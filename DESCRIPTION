@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.42-0.001
+Version: 1.42-0.002
 Nickname: None Of The Above
-Date: 2015-06-03
+Date: 2015-06-05
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

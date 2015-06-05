@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.19 $  $Date: 2015/04/19 19:20:57 $
+##   $Revision: 1.20 $  $Date: 2015/06/05 02:06:31 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -11,7 +11,7 @@
 
 rNeymanScott <- 
   function(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)), ...,
-           lmax=NULL, nsim=1, drop=TRUE)
+           lmax=NULL, nsim=1, drop=TRUE, nonempty=TRUE)
 {
   ## Generic Neyman-Scott process
   ## Implementation for bounded cluster radius
@@ -61,6 +61,11 @@ rNeymanScott <-
                "is defined\n",
                "is not large enough to contain the dilation of the window",
                sQuote("win")))
+  if(nonempty) {
+    ## intensity of parents with at least one offspring point
+    kappa <- kappa * (1 - exp(-mumax))
+  }
+  ## generate
   parentlist <- rpoispp(kappa, lmax=lmax, win=dilated, nsim=nsim, drop=FALSE)
 
   resultlist <- vector(mode="list", length=nsim)
@@ -74,7 +79,13 @@ rNeymanScott <-
       result <- ppp(numeric(0), numeric(0), window=win)
       parentid <- integer(0)
     } else {
-      csize <- rpois(np, mumax)
+      if(!nonempty) {
+        ## cluster sizes are Poisson
+        csize <- rpois(np, mumax)
+      } else {
+        ## cluster sizes are Poisson conditional on > 0
+        csize <- qpois(runif(np, min=dpois(0, mumax)), mumax)
+      }
       noff <- sum(csize)
       xparent <- parents$x
       yparent <- parents$y

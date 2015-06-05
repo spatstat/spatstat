@@ -7,7 +7,7 @@
 }
 \usage{
  rNeymanScott(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
-              \dots, lmax=NULL, nsim=1, drop=TRUE)
+              \dots, lmax=NULL, nsim=1, drop=TRUE, nonempty=TRUE)
 }
 \arguments{
   \item{kappa}{
@@ -40,6 +40,14 @@
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
     result will be a point pattern, rather than a list 
     containing a point pattern.
+  }
+  \item{nonempty}{
+    Logical. If \code{TRUE} (the default), a more efficient algorithm is
+    used, in which parents are generated conditionally on having at
+    least one offspring point. If \code{FALSE}, parents are generated
+    even if they have no offspring. Both choices are valid; the default
+    is recommended unless you need to simulate all the parent points
+    for some other purpose.
   }
 }
 \value{
