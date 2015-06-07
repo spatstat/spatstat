@@ -814,7 +814,7 @@ plot(v, main="Vesicles")
 plot(ve$activezone, add=TRUE, lwd=3)
 @ 
 
-The auxiliary dataset \texttt{vesicles.extra} is a list with entries
+The auxiliary dataset \texttt{vesicles.extra} is a list with entries\\ 
 \begin{tabular}{ll}
   \texttt{presynapse} & outer polygonal boundary of presynapse \\
   \texttt{mitochondria} & polygonal boundary of mitochondria \\

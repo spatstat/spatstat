@@ -9,11 +9,13 @@ citEntry(entry = "Book",
   publisher    = "Chapman and Hall/CRC Press",
   address      = "London",
   note = "In press",
+  url="http://www.taylorandfrancis.com/books/details/9781482210200/",
   textVersion  =
   paste("Adrian Baddeley, Ege Rubak, Rolf Turner (2015).",
         "Spatial Point Patterns: Methodology and Applications with R.",
         "London: Chapman and Hall/CRC Press, 2015.",
-        "In press.")
+        "In press.",
+        "URL http://www.taylorandfrancis.com/books/details/9781482210200/")
 )
 
 citEntry(entry = "Article",

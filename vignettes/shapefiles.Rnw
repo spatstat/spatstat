@@ -11,6 +11,8 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 \usepackage{graphicx}
 \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
 \usepackage{color}
+\usepackage{anysize}
+\marginsize{2cm}{2cm}{2cm}{2cm}
 
 \newcommand{\pkg}[1]{\texttt{#1}}
 \newcommand{\bold}[1]{{\textbf {#1}}}
