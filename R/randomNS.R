@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.20 $  $Date: 2015/06/05 02:06:31 $
+##   $Revision: 1.21 $  $Date: 2015/06/08 09:34:14 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -144,12 +144,20 @@ rMatClust <- local({
 
   rMatClust <- 
   function(kappa, scale, mu, win = owin(c(0,1),c(0,1)),
-           nsim=1, drop=TRUE, saveLambda=FALSE, expand = scale, ...) {
+           nsim=1, drop=TRUE, saveLambda=FALSE, expand = scale, ...,
+           poisthresh=1e-6) {
     ## Matern Cluster Process with Poisson (mu) offspring distribution
     ## Catch old scale syntax (r)
     if(missing(scale)) scale <- list(...)$r
     check.1.real(scale)
     stopifnot(scale > 0)
+
+    ## trap case of large clusters, close to Poisson
+    if(1/(pi * kappa * scale^2) < poisthresh) {
+      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+      return(result)
+    }
+
     result <- rNeymanScott(kappa, scale, list(mu, rundisk), win, radius=scale,
                            nsim=nsim, drop=FALSE)
     if(saveLambda){
@@ -176,14 +184,20 @@ rThomas <- local({
   ## main function
   rThomas <-
       function(kappa, scale, mu, win = owin(c(0,1),c(0,1)), nsim=1, drop=TRUE, 
-               saveLambda=FALSE, expand = 4*scale, ...) {
+               saveLambda=FALSE, expand = 4*scale, ..., poisthresh=1e-6) {
       ## Thomas process with Poisson(mu) number of offspring
       ## at isotropic Normal(0,sigma^2) displacements from parent
       ##
-      ## Catch old scale syntax (omega)
+      ## Catch old scale syntax (sigma)
       if(missing(scale)) scale <- list(...)$sigma
       check.1.real(scale)
       stopifnot(scale > 0)
+
+      ## trap case of large clusters, close to Poisson
+      if(1/(4*pi * kappa * scale^2) < poisthresh) {
+        result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+        return(result)
+      }
       
       ## determine the maximum radius of clusters
       if(missing(expand))
@@ -226,7 +240,7 @@ rCauchy <- local({
   ## main function
   rCauchy <- function (kappa, scale, mu, win = owin(), thresh = 0.001,
                        nsim=1, drop=TRUE, saveLambda=FALSE, expand = NULL,
-                       ...) {
+                       ..., poisthresh=1e-6) {
     ## scale / omega: scale parameter of Cauchy kernel function
     ## eta: scale parameter of Cauchy pair correlation function
 
@@ -238,6 +252,12 @@ rCauchy <- local({
     if(missing(thresh))
         thresh <- dots$eps %orifnull% 0.001
 
+    ## trap case of large clusters, close to Poisson
+    if(1/(pi * kappa * scale^2) < poisthresh) {
+      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+      return(result)
+    }
+    
     ## determine the maximum radius of clusters
     if(missing(expand)){
         expand <- clusterradius("Cauchy", scale = scale, thresh = thresh, ...)
@@ -285,7 +305,7 @@ rVarGamma <- local({
   ## main function
   rVarGamma <- function (kappa, nu, scale, mu, win = owin(),
                          thresh = 0.001, nsim=1, drop=TRUE, saveLambda=FALSE,
-                         expand = NULL, ...) {
+                         expand = NULL, ..., poisthresh=1e-6) {
     ## nu / nu.ker: smoothness parameter of Variance Gamma kernel function
     ## scale / omega: scale parameter of kernel function
     ## Catch old nu.ker/nu.pcf syntax and resolve nu-value.
@@ -303,6 +323,12 @@ rVarGamma <- local({
     if(missthresh <- missing(thresh))
         thresh <- dots$eps %orifnull% 0.001
 
+    ## trap case of large clusters, close to Poisson
+    if(1/(4 * pi * kappa * scale^2) < poisthresh) {
+      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+      return(result)
+    }
+    
      ## determine the maximum radius of clusters
     if(missing(expand)){
         expand <- clusterradius("VarGamma", scale = scale, nu = nu,

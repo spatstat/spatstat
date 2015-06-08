@@ -8,7 +8,8 @@
 \usage{
  rVarGamma(kappa, nu, scale, mu, win = owin(), 
            thresh = 0.001, nsim=1, drop=TRUE,
-           saveLambda=FALSE, expand = NULL, ...)
+           saveLambda=FALSE, expand = NULL, ...,
+           poisthresh=1e-6)
 }
 \arguments{
   \item{kappa}{
@@ -59,6 +60,10 @@
     Passed to \code{\link{clusterfield}} to control the image resolution
     when \code{saveLambda=TRUE} and to \code{\link{clusterradius}} when
     \code{expand} is missing or \code{NULL}.
+  }
+  \item{poisthresh}{
+    Numerical threshold below which the model will be treated
+    as a Poisson process. See Details.
   }
 }
 \value{
@@ -123,6 +128,14 @@
   using \code{\link{kppm}}, or using \code{\link{vargamma.estK}}
   or \code{\link{vargamma.estpcf}}
   applied to the inhomogeneous \eqn{K} function. 
+
+  If the pair correlation function of the model is very close
+  to that of a Poisson process, deviating by less than
+  \code{poisthresh}, then the model is approximately a Poisson process,
+  and will be simulated as a Poisson process with intensity
+  \code{kappa * mu}, using \code{\link{rpoispp}}.
+  This avoids computations that would otherwise require huge amounts
+  of memory.
 }
 \seealso{
   \code{\link{rpoispp}},

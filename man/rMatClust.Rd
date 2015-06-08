@@ -8,7 +8,8 @@
 \usage{
  rMatClust(kappa, scale, mu, win = owin(c(0,1),c(0,1)),
            nsim=1, drop=TRUE, 
-           saveLambda=FALSE, expand = scale, ...)
+           saveLambda=FALSE, expand = scale, ...,
+           poisthresh=1e-6)
 }
 \arguments{
   \item{kappa}{
@@ -46,8 +47,11 @@
   \item{\dots}{Passed to \code{\link{clusterfield}} to control the image
     resolution when \code{saveLambda=TRUE}.
   }
+  \item{poisthresh}{
+    Numerical threshold below which the model will be treated
+    as a Poisson process. See Details.
+  }
 }
-
 \value{
   A point pattern (an object of class \code{"ppp"}) if \code{nsim=1},
   or a list of point patterns if \code{nsim > 1}.
@@ -128,6 +132,14 @@
   Currently it is not possible to fit the
   \ifelse{latex}{\out{Mat\'ern}}{Matern} cluster process model
   with inhomogeneous parents.
+
+  If the pair correlation function of the model is very close
+  to that of a Poisson process, deviating by less than
+  \code{poisthresh}, then the model is approximately a Poisson process,
+  and will be simulated as a Poisson process with intensity
+  \code{kappa * mu}, using \code{\link{rpoispp}}.
+  This avoids computations that would otherwise require huge amounts
+  of memory.
 }
 \seealso{
   \code{\link{rpoispp}},

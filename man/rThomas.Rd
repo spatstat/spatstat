@@ -8,7 +8,8 @@
 \usage{
   rThomas(kappa, scale, mu, win = owin(c(0,1),c(0,1)),
           nsim=1, drop=TRUE, 
-          saveLambda=FALSE, expand = 4*scale, ...)
+          saveLambda=FALSE, expand = 4*scale, ...,
+          poisthresh=1e-6)
 }
 \arguments{
   \item{kappa}{
@@ -48,6 +49,10 @@
     Passed to \code{\link{clusterfield}} to control the image
     resolution when \code{saveLambda=TRUE} and to
     \code{\link{clusterradius}} when \code{expand} is missing.
+  }
+  \item{poisthresh}{
+    Numerical threshold below which the model will be treated
+    as a Poisson process. See Details.
   }
 }
 \value{
@@ -123,6 +128,14 @@
   can be fitted to data using \code{\link{kppm}}.
   Currently it is not possible to fit the Thomas model
   with inhomogeneous parents.
+
+  If the pair correlation function of the model is very close
+  to that of a Poisson process, deviating by less than
+  \code{poisthresh}, then the model is approximately a Poisson process,
+  and will be simulated as a Poisson process with intensity
+  \code{kappa * mu}, using \code{\link{rpoispp}}.
+  This avoids computations that would otherwise require huge amounts
+  of memory.
 }
 \seealso{
 \code{\link{rpoispp}},

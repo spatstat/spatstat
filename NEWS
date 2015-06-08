@@ -1,11 +1,29 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.002
+        CHANGES IN spatstat VERSION 1.42-1.003
 
 OVERVIEW
 
    o Nothing yet.
 
    o Nickname: 'Barking at Balloons'
+
+NEW FUNCTIONS
+
+   o None yet.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o rThomas, rMatClust, rCauchy, rVarGamma
+   When the model is approximately Poisson, it is simulated using rpoispp. 
+   This avoids computations which would require huge amounts of memory. 
+   New argument 'poisthresh' controls this behaviour.
+
+BUG FIXES
+
+   o rThomas, rMatClust, rCauchy, rVarGamma
+   Large values of the scale parameter could cause the algorithm to freeze
+   or require huge amounts of memory.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.42-1
 
