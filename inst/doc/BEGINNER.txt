@@ -17,8 +17,9 @@ To handle spatial data in the 'shapefile' format, see the document
 "Handling shapefiles in the spatstat package", by typing
      vignette('shapefiles')
 
-For a complete two-day workshop on spatstat, please download the
-workshop notes at <www.csiro.au/resources/pf16h.html>
+For a complete course on spatstat, see the forthcoming book
+"Spatial Point Patterns: Methodology and Applications with R"
+by Baddeley, Rubak and Turner, Chapman and Hall/CRC Press, December 2015
 
 For news about new features in the latest version of spatstat, type
      latest.news

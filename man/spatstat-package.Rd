@@ -65,9 +65,8 @@
     start \R, type \code{help.start()} to open the help
     browser, and navigate to \code{Packages > spatstat > Vignettes}.
   }
-  For a complete 2-day course on using \pkg{spatstat}, see the workshop notes
-  by Baddeley (2010), available on the internet. (This is now \emph{very}
-  out-of-date but it will get you started.)
+  For a complete course on using \pkg{spatstat}, see the
+  forthcoming book Baddeley, Rubak and Turner (2015).
 
   Type \code{demo(spatstat)} for a demonstration 
   of the package's capabilities.
@@ -1545,8 +1544,14 @@
   the package. 
   Baddeley and Turner (2005b) is a more detailed explanation of
   how to fit point process models to data.
+  
   Baddeley (2010) is a complete set of notes from a 2-day workshop
-  on the use of \pkg{spatstat}.
+  on the use of \pkg{spatstat}. It is now very out-of-date.
+
+  The forthcoming book
+  Baddeley, Rubak and Turner (2015) is a complete course
+  on analysing spatial point patterns, with full details about
+  \pkg{spatstat}.
 
   Type \code{citation("spatstat")} to get these references.
 }
@@ -1554,7 +1559,11 @@
   Baddeley, A. (2010)
   \emph{Analysing spatial point patterns in R}.
   Workshop notes. Version 4.1. CSIRO online technical publication.
-  URL: \code{www.uwa.edu.au/resources/pf16h.html}
+  \emph{No longer available}.
+
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  Chapman and Hall/CRC Press.
   
   Baddeley, A. and Turner, R. (2005a)
   Spatstat: an R package for analyzing spatial point patterns.

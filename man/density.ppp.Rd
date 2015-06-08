@@ -258,7 +258,7 @@
 
   Inspecting an estimate of the intensity function is usually the
   first step in exploring a spatial point pattern dataset.
-  For more explanation, see the workshop notes (Baddeley, 2008)
+  For more explanation, see Baddeley, Rubak and Turner (2015)
   or Diggle (2003).
 
   If you have two (or more) types of points, and you want a
@@ -301,10 +301,10 @@
   density(cells, 0.05, at="points")
 }
 \references{
-  Baddeley, A. (2010) Analysing spatial point patterns in R.
-  Workshop notes. CSIRO online technical publication.
-  URL: \code{www.uwa.edu.au/resources/pf16h.html}
-
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  Chapman and Hall/CRC Press.
+  
   Diggle, P.J. (1985)
   A kernel method for smoothing point process data.
   \emph{Applied Statistics} (Journal of the Royal Statistical Society,

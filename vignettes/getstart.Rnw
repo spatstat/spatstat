@@ -261,7 +261,7 @@ plot(Smooth(mypattern, sigma=1.2), main="Smooth(mypattern)")
 \setkeys{Gin}{width=0.4\textwidth}
 \item
   You are airborne!
-  Now look at the workshop notes \cite{badd10wshop} for more hints.
+  Now look at the book \cite{baddrubaturn15} for more hints.
 \end{enumerate}
 
 \section*{How do I find out which command to use?}
@@ -288,11 +288,10 @@ Information sources for \spst\ include:
     Alternatively you can download a pdf of the entire manual (1000 pages!)
     from the website \texttt{www.spatstat.org}. 
   \end{quote}
-\item workshop notes:
+\item book:
   \begin{quote}
-    A complete set of notes from an Introductory Workshop is available
-    from \texttt{www.csiro.au/resources/pf16h.html}
-    or by visiting \texttt{www.spatstat.org}
+    The forthcoming book \cite{baddrubaturn15} 
+    contains a complete course on \texttt{spatstat}.
   \end{quote}
 \item vignettes:
   \begin{quote}
@@ -321,7 +320,13 @@ Information sources for \spst\ include:
 A. Baddeley.
 \newblock Analysing spatial point patterns in {{R}}.
 \newblock Technical report, CSIRO, 2010.
-\newblock Version 4. Available at {\texttt{www.csiro.au/resources/pf16h.html}}.
+\newblock Version 4.
+\newblock (No longer available).
+
+\bibitem{baddrubaturn15}
+A. Baddeley, E. Rubak, and R. Turner.
+\newblock {\em Spatial Point Patterns: Methodology and Applications with {{R}}}.
+\newblock Chapman \& Hall/CRC Press, 2015.
 
 \bibitem{bivapebegome08}
 R. Bivand, E.J. Pebesma, and V. G{\'{o}}mez-Rubio.

@@ -3447,7 +3447,14 @@ of potential impact.
 A.~Baddeley.
 \newblock Analysing spatial point patterns in {{R}}.
 \newblock Technical report, CSIRO, 2010.
-\newblock Version 4. Available at {\texttt{www.csiro.au/resources/pf16h.html}}.
+\newblock Version 4.
+\newblock (No longer available).
+
+\bibitem{baddrubaturn15}
+A. Baddeley, E. Rubak, and R. Turner.
+\newblock {\em Spatial Point Patterns: Methodology and Applications with {{R}}}.
+\newblock Chapman \& Hall/CRC Press, 2015.
+
 \end{thebibliography}
  
 \end{document}
