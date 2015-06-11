@@ -5,7 +5,7 @@
   \code{update} method for class \code{"kppm"}.
 }
 \usage{
- \method{update}{kppm}(object, trend = ~1, ..., clusters = NULL)
+ \method{update}{kppm}(object, \dots)
 }
 \arguments{
   \item{object}{
@@ -13,16 +13,8 @@
     An object of class \code{"kppm"},
     obtained from \code{\link{kppm}}.
   }
-  \item{trend}{
-    A formula without a left hand side,
-    determining the form of the intensity of the model.
-  }
   \item{\dots}{
-    Other arguments passed to \code{\link{kppm}}.
-  }
-  \item{clusters}{
-    The type of cluster mechanism. A character string.
-    See \code{\link{kppm}}.
+    Arguments passed to \code{\link{kppm}}.
   }
 }
 \details{
@@ -30,11 +22,24 @@
   obtained from the model-fitting function \code{\link{kppm}}.
   The model will be updated according to the new arguments provided.
 
-  The argument \code{trend} determines the formula for the intensity
-  in the model. It should be an \R formula without a left hand side.
-  It may include the symbols \code{.} and \code{+} or \code{-} to
-  specify addition or deletion of terms in the current model formula,
-  as shown in the Examples below.
+  If the argument \code{trend} is provided, it determines the
+  intensity in the updated model. It should be an \R formula
+  (with or without a left hand side). It may include the symbols
+  \code{+} or \code{-} to specify addition or deletion of terms
+  in the current model formula, as shown in the Examples below.
+  The symbol \code{.} refers to the current contents of the
+  formula.
+
+  The intensity in the updated model is determined by the
+  argument \code{trend} if it is provided, or otherwise by any unnamed
+  argument that is a formula, or otherwise by the formula of the
+  original model, \code{formula(object)}.
+
+  The spatial point pattern data to which the new model is fitted
+  is determined by the left hand side of the updated model formula,
+  if this is present. Otherwise it is determined by the argument
+  \code{X} if it is provided, or otherwise by any unnamed argument
+  that is a point pattern or a quadrature scheme.
 
   The model is refitted using \code{\link{kppm}}.
 }
@@ -45,20 +50,24 @@
 \seealso{
   \code{\link{kppm}},  \code{\link{plot.kppm}},
   \code{\link{predict.kppm}}, \code{\link{simulate.kppm}},
-  \code{\link[spatstat:methods.kppm]{methods.kppm}},
+  \code{\link{methods.kppm}},
   \code{\link{vcov.kppm}}
 }
 \examples{
- data(redwood)
- fit <- kppm(redwood, ~1, "Thomas")
+ fit <- kppm(redwood ~1, "Thomas")
  fitx <- update(fit, ~ . + x)
  fitM <- update(fit, clusters="MatClust")
+ fitC <- update(fit, cells)
+ fitCx <- update(fit, cells ~ x)
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

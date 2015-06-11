@@ -4,7 +4,7 @@
 #
 #   Functions for manipulating model formulae
 #
-#	$Revision: 1.20 $	$Date: 2014/04/14 08:05:01 $
+#	$Revision: 1.22 $	$Date: 2015/06/10 08:27:22 $
 #
 #   identical.formulae()
 #          Test whether two formulae are identical
@@ -278,3 +278,27 @@ expand.polynom <- local({
 
   expand.polynom
 })
+
+can.be.formula <- function(x) {
+  #' test whether x is a formula object
+  if(inherits(x, "formula")) return(TRUE)
+  #' or a character representation of a formula.
+  if(!is.character(x)) return(FALSE)
+  x <- paste(x, collapse=" ")
+  if(length(grep("~", x)) == 0) return(FALSE)
+  ok <- !inherits(try(as.formula(x), silent=TRUE), "try-error")
+  return(ok)
+}
+
+## update formula and expand polynomial
+newformula <- function(old, change, eold, enew) {
+  old <- if(is.null(old)) ~1 else eval(old, eold)
+  change <- if(is.null(change)) ~1 else eval(change, enew)
+  old <- as.formula(old, env=eold)
+  change <- as.formula(change, env=enew)
+  answer <- update.formula(old, change)
+  if(spatstat.options("expand.polynom")) 
+    answer <- expand.polynom(answer)
+  return(answer)
+}
+

@@ -1575,12 +1575,18 @@ local({
 # $Revision: 1.8 $ $Date: 2015/01/11 01:25:25 $
 #
 # Test functionality of kppm that depends on RandomFields
-#
+# Test update.kppm for old style kppm objects
 
 require(spatstat)
 local({
 
-  if(require(RandomFields) && RandomFieldsSafe()) {
+ fit <- kppm(redwood, ~1, "Thomas")
+ fitx <- update(fit, ~ . + x)
+ fitM <- update(fit, clusters="MatClust")
+ fitC <- update(fit, cells)
+ fitCx <- update(fit, cells ~ x)
+
+ if(require(RandomFields) && RandomFieldsSafe()) {
 
     fit0 <- kppm(redwood ~1, "LGCP")
     Y0 <- simulate(fit0)[[1]]

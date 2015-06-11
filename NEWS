@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.003
+        CHANGES IN spatstat VERSION 1.42-1.004
 
 OVERVIEW
 
@@ -17,6 +17,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    When the model is approximately Poisson, it is simulated using rpoispp. 
    This avoids computations which would require huge amounts of memory. 
    New argument 'poisthresh' controls this behaviour.
+
+   o update.kppm
+   Now handles additional arguments in any order, with or without names.
+   Changed arguments. Improved behaviour.
 
 BUG FIXES
 

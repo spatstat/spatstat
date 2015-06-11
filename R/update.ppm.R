@@ -2,24 +2,12 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.55 $    $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.57 $    $Date: 2015/06/10 08:33:34 $
 #
 #
 #
 
 update.ppm <- local({
-
-  ## update formula and expand polynomial
-  newformula <- function(old, change, eold, enew) {
-    old <- if(is.null(old)) ~1 else eval(old, eold)
-    change <- if(is.null(change)) ~1 else eval(change, enew)
-    old <- as.formula(old, env=eold)
-    change <- as.formula(change, env=enew)
-    answer <- update.formula(old, change)
-    if(spatstat.options("expand.polynom")) 
-      answer <- expand.polynom(answer)
-    return(answer)
-  }
 
   ## update point pattern dataset using either data or formula
   newpattern <- function(oldpattern, lhs, callframe, envir) {

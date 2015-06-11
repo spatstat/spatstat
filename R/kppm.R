@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.105 $ $Date: 2015/04/25 07:23:14 $
+# $Revision: 1.106 $ $Date: 2015/06/10 07:28:05 $
 #
 
 kppm <- function(X, ...) {
@@ -250,6 +250,23 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   theoret <- info[[statistic]]
   desc <- paste("minimum contrast fit of", info$descname)
 
+  #' ............ experimental .........................
+  usecanonical <- spatstat.options("kppm.canonical")
+  if(usecanonical) {
+     tocanonical <- info$tocanonical
+     tohuman <- info$tohuman
+     if(is.null(tocanonical) || is.null(tohuman)) {
+       warning("Canonical parameters are not yet supported for this model")
+       usecanonical <- FALSE
+     }
+  }
+  if(usecanonical) {
+    htheo <- theoret
+    startpar <- tocanonical(startpar)
+    theoret <- function(par, ...) { htheo(tohuman(par), ...) }
+  }
+  #' ...................................................
+  
   mcargs <- resolve.defaults(list(observed=Stat,
                                   theoretical=theoret,
                                   startpar=startpar,
@@ -266,7 +283,12 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   
   mcfit <- do.call("mincontrast", mcargs)
   ## imbue with meaning
-  par <- mcfit$par
+  if(!usecanonical) {
+    par <- mcfit$par
+  } else {
+    mcfit$can <- can <- mcfit$par
+    par <- tohuman(can)
+  }
   names(par) <- info$parnames
   mcfit$par <- par
   ## infer model parameters
@@ -1126,17 +1148,75 @@ labels.kppm <- function(object, ...) {
   labels(object$po, ...)
 }
 
-update.kppm <- function(object, trend=~1, ..., clusters=NULL) {
-  if(!missing(trend))
-    trend <- update(formula(object), trend)
-  if(is.null(clusters))
-    clusters <- object$clusters
-  out <- do.call(kppm,
-                 resolve.defaults(list(trend=trend, clusters=clusters),
-                                  list(...),
-                                  list(X=object$X),
-                                  object$ClusterArgs))
-  out$Xname <- object$Xname
+update.kppm <- function(object, ...) {
+  argh <- list(...)
+  nama <- names(argh)
+  callframe <- object$callframe
+  envir <- environment(terms(object))
+  #' look for a formula argument
+  fmla <- formula(object)
+  if(!is.null(trend <- argh$trend)) {
+    if(!can.be.formula(trend))
+      stop("Argument \"trend\" should be a formula")
+    fmla <- newformula(formula(object), trend, callframe, envir)
+    jf <- which(nama == "trend")
+  } else if(any(isfo <- sapply(argh, can.be.formula))) {
+    if(sum(isfo) > 1) {
+      if(!is.null(nama)) isfo <- isfo & nzchar(nama)
+      if(sum(isfo) > 1)
+        stop(paste("Arguments not understood:",
+                   "there are two unnamed formula arguments"))
+    }
+    jf <- which(isfo)
+    fmla <- argh[[jf]]
+    fmla <- newformula(formula(object), fmla, callframe, envir)
+  }
+  jf <- integer(0)
+
+  #' look for a point pattern or quadscheme
+  if(!is.null(X <- argh$X)) {
+    if(!inherits(X, c("ppp", "quad")))
+      stop(paste("Argument X should be a formula,",
+                 "a point pattern or a quadrature scheme"))
+    jX <- which(nama == "X")
+  } else if(any(ispp <- sapply(argh, inherits, what=c("ppp", "quad")))) {
+    if(sum(ispp) > 1) {
+      if(!is.null(nama)) ispp <- ispp & nzchar(nama)
+      if(sum(ispp) > 1)
+        stop(paste("Arguments not understood:",
+                   "there are two unnamed point pattern/quadscheme arguments"))
+    }
+    jX <- which(ispp)
+    X <- argh[[jX]]
+  } else {
+    X <- object$X
+    jX <- integer(0)
+  }
+  #' remove used arguments
+  argh <- argh[-c(jf, jX)]
+  #' update
+  if(is.null(lhs.of.formula(fmla))) {
+    #' kppm(X, ~trend, ...) 
+    out <- do.call(kppm,
+                   resolve.defaults(list(X=X, trend=fmla),
+                                    argh,
+                                    object$ClusterArgs,
+                                    list(clusters=object$clusters)))
+  } else {
+    #' kppm(X ~trend, ...) 
+    out <- do.call(kppm,
+                   resolve.defaults(list(X=fmla), 
+                                    argh,
+                                    object$ClusterArgs,
+                                    list(clusters=object$clusters)))
+  }
+  #' update name of data
+  if(length(jX) == 1) {
+    mc <- match.call()
+    Xlang <- mc[[2+jX]]
+    out$Xname <- short.deparse(Xlang)
+  }
+  #'
   return(out)
 }
 

@@ -420,6 +420,12 @@ warn.once <- function(key, ...) {
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       kppm.canonical=list(
+         ## whether to use 'canonical' parameters in kppm
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
        )
 # end of options list

@@ -50,6 +50,7 @@
 \alias{breakpts.from.r}
 \alias{bt.frame}
 \alias{bw.optim}
+\alias{can.be.formula}
 \alias{cannot.update}
 \alias{cartesian}
 \alias{cat.factor}
@@ -387,6 +388,7 @@
 \alias{names<-.hyperframe}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
+\alias{newformula}
 \alias{newstyle.coeff.handling}
 \alias{niceround}
 \alias{nncleanEngine}
@@ -779,6 +781,7 @@ breakpts.from.r(r)
 bt.frame(Q, trend, interaction, \dots, covariates,
          correction, rbord, use.gam, allcovar)
 bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
+can.be.formula(x)
 cannot.update(\dots)
 cartesian(pp, markset, fac = TRUE)
 cat.factor(\dots, recursive=FALSE)
@@ -1162,6 +1165,7 @@ na.handle.im(X, na.replace)
 \method{names}{hyperframe}(x) <- value
 nearest.pixel(x, y, im)
 nearest.valid.pixel(x, y, im)
+newformula(old, change, eold, enew)
 newstyle.coeff.handling(object)
 niceround(x, m)
 nncleanEngine(kthNND, k, d, \dots, tol, maxit,

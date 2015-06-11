@@ -101,6 +101,17 @@
            mu <- if(is.numeric(lambda) && length(lambda) == 1)
              lambda/kappa else NA
            c(kappa=kappa, sigma=sigma, mu=mu)
+         },
+         ## Experimental: convert to/from canonical cluster parameters
+         tocanonical = function(par) {
+           kappa <- par[[1]]
+           sigma2 <- par[[2]]
+           c(strength=1/kappa, decay=1/sqrt(sigma2))
+         },
+         tohuman = function(can) {
+           strength <- can[[1]]
+           decay <- can[[2]]
+           c(kappa=1/strength, sigma2=1/decay^2)
          }
          ),
        ## ...............................................
