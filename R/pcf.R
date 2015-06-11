@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.53 $   $Date: 2015/02/22 03:00:48 $
+#   $Revision: 1.54 $   $Date: 2015/06/11 08:37:46 $
 #
 #
 #   calculate pair correlation function
@@ -23,9 +23,10 @@ pcf.ppp <- function(X, ..., r=NULL,
   verifyclass(X, "ppp")
 #  r.override <- !is.null(r)
 
-  win <- X$window
+  win <- Window(X)
   areaW <- area(win)
-  lambda <- X$n/areaW
+  npts <- npoints(X)
+  lambda <- npts/areaW
   lambda2area <- areaW * lambda^2
 
   if(!is.null(domain)) {
@@ -98,9 +99,13 @@ pcf.ppp <- function(X, ..., r=NULL,
   #################################################
   
   # compute pairwise distances
-  what <- if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd" 
-  close <- closepairs(X, rmax + hmax, what=what)
-  dIJ <- close$d
+  if(npts > 1) {
+    what <- if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd" 
+    close <- closepairs(X, rmax + hmax, what=what)
+    dIJ <- close$d
+  } else {
+    undefined <- rep(NaN, length(r))
+  }
 
   # initialise fv object
   
@@ -116,8 +121,10 @@ pcf.ppp <- function(X, ..., r=NULL,
 
   if(any(correction=="translate")) {
     # translation correction
-    edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=win, paired=TRUE)
-    gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+    if(npts > 1) {
+      edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=win, paired=TRUE)
+      gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+    } else gT <- undefined
     out <- bind.fv(out,
                    data.frame(trans=gT),
                    "hat(%s)[Trans](r)",
@@ -126,9 +133,11 @@ pcf.ppp <- function(X, ..., r=NULL,
   }
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
-    XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
-    edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
-    gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+    if(npts > 1) {
+      XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
+      edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
+      gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+    } else gR <- undefined
     out <- bind.fv(out,
                    data.frame(iso=gR),
                    "hat(%s)[Ripley](r)",

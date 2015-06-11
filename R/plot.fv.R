@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.118 $    $Date: 2015/04/27 06:14:53 $
+#  $Revision: 1.119 $    $Date: 2015/06/11 09:24:42 $
 #
 #
 
@@ -551,7 +551,11 @@ plot.fv <- local({
           linedata[[i]] <- list(x=xmap(rhsdata), y=ymap(lhsdata[,i]))
         polydata <-
           if(length(xpoly) > 0) list(x=xmap(xpoly), y=ymap(ypoly)) else NULL
-        objects <- assemble.plot.objects(xmap(xlim), ymap(ylim),
+        #' ensure xlim, ylim define a box
+        boxXlim <- if(diff(xlim) > 0) xlim else par('usr')[1:2]
+        boxYlim <- if(diff(ylim) > 0) ylim else par('usr')[3:4]
+        #' 
+        objects <- assemble.plot.objects(xmap(boxXlim), ymap(boxYlim),
                                          lines=linedata, polygon=polydata)
         ## find best position to avoid them
         legendbest <- findbestlegendpos(objects, preference=legendpos,

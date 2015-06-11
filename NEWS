@@ -1,9 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.004
+        CHANGES IN spatstat VERSION 1.42-1.005
 
 OVERVIEW
 
-   o Nothing yet.
+   o Improvements to simulation of Neyman-Scott processes.
+
+   o Improvements to update.kppm.
+
+   o Bug fixes and performance improvements.
 
    o Nickname: 'Barking at Balloons'
 
@@ -27,6 +31,14 @@ BUG FIXES
    o rThomas, rMatClust, rCauchy, rVarGamma
    Large values of the scale parameter could cause the algorithm to freeze
    or require huge amounts of memory.
+   Fixed.
+
+   o pcf.ppp
+   Crashed if the pattern was empty.
+   Fixed.
+
+   o plot.fv
+   Gave an error message if all 'y' values were equal, when legend=TRUE.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-1
