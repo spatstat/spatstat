@@ -28,7 +28,7 @@ objsurf.kppm <- function(x, ..., ngrid=32, ratio=1.5, verbose=TRUE) {
 }
 
 objsurf.minconfit <- function(x, ..., ngrid=32, ratio=1.5, verbose=TRUE) {
-  optpar  <- x$par
+  optpar  <- x$par.canon %orifnull% x$par
   objfun  <- x$objfun
   objargs <- x$objargs
   dotargs <- x$dotargs

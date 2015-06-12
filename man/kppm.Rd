@@ -27,6 +27,7 @@
        improve.args = list(),
        weightfun=NULL,
        control=list(),
+       algorithm="Nelder-Mead",
        statistic="K",
        statargs=list(),
        rmax = NULL,
@@ -45,6 +46,7 @@
        improve.args = list(),
        weightfun=NULL,
        control=list(),
+       algorithm="Nelder-Mead",
        statistic="K",
        statargs=list(),
        rmax = NULL,
@@ -108,8 +110,13 @@
     See Details.
   }
   \item{control}{
-    List of control parameters passed to the optimization algorithm
+    List of control parameters passed to the optimization function
     \code{\link[stats]{optim}}.
+  }
+  \item{algorithm}{
+    Character string determining the mathematical optimisation algorithm
+    to be used by \code{\link[stats]{optim}}. See
+    the argument \code{method} of \code{\link[stats]{optim}}.
   }
   \item{statistic}{
     Name of the summary statistic to be used

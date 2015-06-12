@@ -8,7 +8,7 @@
 \usage{
 clusterfit(X, clusters, lambda = NULL, startpar = NULL,
            q = 1/4, p = 2, rmin = NULL, rmax = NULL, \dots,
-           statistic = NULL, statargs = NULL)
+           statistic = NULL, statargs = NULL, algorithm="Nelder-Mead")
 }
 \arguments{
   \item{X}{
@@ -52,6 +52,11 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   \item{statargs}{
     Optional list of arguments to be used when calculating
     the \code{statistic}. See Details.
+  }
+  \item{algorithm}{
+    Character string determining the mathematical optimisation algorithm
+    to be used by \code{\link[stats]{optim}}. See
+    the argument \code{method} of \code{\link[stats]{optim}}.
   }
 }
 \details{

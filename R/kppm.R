@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.106 $ $Date: 2015/06/10 07:28:05 $
+# $Revision: 1.107 $ $Date: 2015/06/12 08:54:54 $
 #
 
 kppm <- function(X, ...) {
@@ -64,6 +64,7 @@ kppm.ppp <- kppm.quad <-
            improve.args = list(),
            weightfun=NULL,
            control=list(),
+           algorithm="Nelder-Mead",
            statistic="K",
            statargs=list(),
            rmax = NULL,
@@ -84,6 +85,7 @@ kppm.ppp <- kppm.quad <-
                       improve.args = improve.args,
                       weightfun=weightfun,
                       control=control,
+                      algorithm=algorithm,
                       statistic=statistic,
                       statargs=statargs,
                       rmax = rmax)
@@ -105,13 +107,14 @@ kppm.ppp <- kppm.quad <-
   out <- switch(method,
          mincon = kppmMinCon(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, statistic=statistic,
-                             statargs=statargs, rmax=rmax, ...),
+                             statargs=statargs, rmax=rmax,
+                             algorithm=algorithm, ...),
          clik2   = kppmComLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, weightfun=weightfun, 
-                             rmax=rmax, ...),
+                             rmax=rmax, algorithm=algorithm, ...),
          palm   = kppmPalmLik(X=XX, Xname=Xname, po=po, clusters=clusters,
                              control=control, weightfun=weightfun, 
-                             rmax=rmax, ...))
+                             rmax=rmax, algorithm=algorithm, ...))
   #
   out <- append(out, list(ClusterArgs=ClusterArgs,
                           call=cl,
@@ -127,7 +130,8 @@ kppm.ppp <- kppm.quad <-
   return(out)
 }
 
-kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...) {
+kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
+                       algorithm="Nelder-Mead", ...) {
   # Minimum contrast fit
   stationary <- is.stationary(po)
   # compute intensity
@@ -141,7 +145,8 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
   }
   mcfit <- clusterfit(X, clusters, lambda = lambda,
                       dataname = Xname, control = control,
-                      statistic = statistic, statargs = statargs, ...)
+                      statistic = statistic, statargs = statargs,
+                      algorithm=algorithm, ...)
   fitinfo <- attr(mcfit, "info")
   attr(mcfit, "info") <- NULL
   # all info that depends on the fitting method:
@@ -164,6 +169,7 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
               lambda     = lambda,
               mu         = mcfit$mu,
               par        = mcfit$par,
+              par.canon  = mcfit$par.canon,
               clustpar   = mcfit$clustpar,
               clustargs  = mcfit$clustargs,
               modelpar   = mcfit$modelpar,
@@ -173,7 +179,9 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs, ...
 }
 
 clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
-                       q=1/4, p=2, rmin=NULL, rmax=NULL, ..., statistic = NULL, statargs = NULL){
+                       q=1/4, p=2, rmin=NULL, rmax=NULL, ...,
+                       statistic = NULL, statargs = NULL,
+                       algorithm="Nelder-Mead"){
   ## If possible get dataname from dots
   dataname <- list(...)$dataname
   ## Cluster info:
@@ -271,6 +279,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   theoretical=theoret,
                                   startpar=startpar,
                                   ctrl=dots$ctrl,
+                                  method=algorithm,
                                   fvlab=list(label="%s[fit](r)",
                                       desc=desc),
                                   explain=list(dataname=dataname,
@@ -286,7 +295,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   if(!usecanonical) {
     par <- mcfit$par
   } else {
-    mcfit$can <- can <- mcfit$par
+    mcfit$par.canon <- can <- mcfit$par
     par <- tohuman(can)
   }
   names(par) <- info$parnames
@@ -326,7 +335,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   return(mcfit)
 }
 
-kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
+kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
+                       algorithm="Nelder-Mead", ...) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -440,7 +450,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   }    
   # optimize it
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
-  opt <- optim(startpar, obj, objargs=objargs, control=ctrl)
+  opt <- optim(startpar, obj, objargs=objargs, control=ctrl, method=algorithm)
   # raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
   # meaningful model parameters
@@ -485,7 +495,8 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   return(result)
 }
 
-kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
+kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
+                        algorithm="Nelder-Mead", ...) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -597,7 +608,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax, ...) {
   }    
   # optimize it
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
-  opt <- optim(startpar, obj, objargs=objargs, control=ctrl)
+  opt <- optim(startpar, obj, objargs=objargs, control=ctrl, method=algorithm)
   # raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
   # meaningful model parameters
@@ -882,6 +893,11 @@ print.kppm <- function(x, ...) {
       splat("\tCovariance parameters:",
             paste(tagvalue, collapse=", "))
     }
+  }
+  pc <- x$par.canon
+  if(!is.null(pc)) {
+    splat("Fitted canonical parameters:")
+    print(pc, digits=digits)
   }
   pa <- x$clustpar
   if (!is.null(pa)) {

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.005
+        CHANGES IN spatstat VERSION 1.42-1.006
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o update.kppm
    Now handles additional arguments in any order, with or without names.
    Changed arguments. Improved behaviour.
+
+   o kppm, clusterfit
+   New argument 'algorithm' specifies the choice of optimisation algorithm.
 
 BUG FIXES
 

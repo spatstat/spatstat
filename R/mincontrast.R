@@ -17,7 +17,9 @@ mincontrast <- local({
       if(length(theo) != nrvals)
         stop("theoretical function did not return the correct number of values")
       discrep <- (abs(theo^qq - obsq))^pp
-      return(sum(discrep))
+      value <- mean(discrep)
+      value <- min(value, .Machine$double.xmax)
+      return(value)
     })
   }
 

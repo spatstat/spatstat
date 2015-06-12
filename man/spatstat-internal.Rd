@@ -1054,9 +1054,12 @@ Kwtsum(dIJ, bI, wIJ, b, w, breaks)
 Kpcf.kppm(model, what)
 killinteraction(model)
 km.rs.opt(o, cc, d, breaks, KM, RS)
-kppmComLik(X, Xname, po, clusters, control, weightfun, rmax, \dots)
-kppmMinCon(X, Xname, po, clusters, control, statistic, statargs, \dots)
-kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, \dots)
+kppmComLik(X, Xname, po, clusters, control, weightfun, rmax,
+           algorithm, \dots)
+kppmMinCon(X, Xname, po, clusters, control, statistic, statargs,
+           algorithm, \dots)
+kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, 
+           algorithm, \dots)
 \method{labels}{ppm}(object, \dots)
 least.common.multiple(n,m)
 \method{levels}{im}(x)
