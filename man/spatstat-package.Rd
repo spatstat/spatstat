@@ -1559,7 +1559,7 @@
   Baddeley, A. (2010)
   \emph{Analysing spatial point patterns in R}.
   Workshop notes. Version 4.1. CSIRO online technical publication.
-  \emph{No longer available}.
+  \url{https://research.csiro.au/software/r-workshop-notes/}
 
   Baddeley, A., Rubak, E. and Turner, R. (2015)
   \emph{Spatial Point Patterns: Methodology and Applications with R}.

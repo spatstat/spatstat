@@ -32,7 +32,7 @@ options(useFancyQuotes=FALSE)
 \thispagestyle{empty}
 
 This is a summary of changes that have been made 
-to the \spst\  package since 2010, when the 
+to the \spst\ package since 2010, when the 
 last set of workshop notes \cite{badd10wshop} 
 was published. Those notes covered \spst\ version \texttt{1.21-2}. 
 
@@ -3448,7 +3448,7 @@ A.~Baddeley.
 \newblock Analysing spatial point patterns in {{R}}.
 \newblock Technical report, CSIRO, 2010.
 \newblock Version 4.
-\newblock (No longer available).
+\newblock URL \texttt{https://research.csiro.au/software/r-workshop-notes/}
 
 \bibitem{baddrubaturn15}
 A. Baddeley, E. Rubak, and R. Turner.

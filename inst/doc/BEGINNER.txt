@@ -19,14 +19,18 @@ To handle spatial data in the 'shapefile' format, see the document
 
 For a complete course on spatstat, see the forthcoming book
 "Spatial Point Patterns: Methodology and Applications with R"
-by Baddeley, Rubak and Turner, Chapman and Hall/CRC Press, December 2015
+by Baddeley, Rubak and Turner, Chapman and Hall/CRC Press, December 2015.
 
-For news about new features in the latest version of spatstat, type
-     latest.news
-or
+Old notes from a two-day workshop on spatstat are also available online:
+<https://research.csiro.au/software/r-workshop-notes/>
+For a summary of changes to spatstat since the workshop notes
+were published in 2010, type 
      vignette('updates')
 
-(Press 'Q' to exit, on some computers)
+For news about new features in the very latest version of spatstat, type
+     latest.news
+
+[[[Press 'Q' to exit, on some computers]]]
 
 
 
