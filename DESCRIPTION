@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.42-1.007
+Version: 1.42-1.008
 Nickname: Barking at Balloons
-Date: 2015-06-13
+Date: 2015-06-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

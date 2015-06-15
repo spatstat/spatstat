@@ -12,7 +12,9 @@
 \usage{
 rose(x, \dots)
 
-\method{rose}{default}(x, breaks = NULL, \dots, nclass = NULL,
+\method{rose}{default}(x, breaks = NULL, \dots,
+                       weights=NULL,
+                       nclass = NULL,
                        unit = c("degree", "radian"), main)
 
 \method{rose}{histogram}(x, \dots,
@@ -49,6 +51,9 @@ rose(x, \dots)
   }
   \item{unit}{
     The unit in which the angles are expressed.
+  }
+  \item{weights}{
+    Optional vector of numeric weights associated with \code{x}.
   }
   \item{main}{
     Optional main title for the plot.

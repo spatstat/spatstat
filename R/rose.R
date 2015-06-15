@@ -3,7 +3,7 @@
 #'
 #'   Rose diagrams
 #'
-#'   $Revision: 1.4 $  $Date: 2015/02/27 09:22:32 $
+#'   $Revision: 1.6 $  $Date: 2015/06/15 08:25:07 $
 #'
 
 rose <- function(x, ...) UseMethod("rose")
@@ -11,12 +11,15 @@ rose <- function(x, ...) UseMethod("rose")
 rose.default <- local({
 
   rose.default <- function(x, breaks = NULL, ...,
+                           weights=NULL,
                            nclass=NULL,
                            unit=c("degree", "radian"),
                            main) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
     stopifnot(is.numeric(x))
+    if(!is.null(weights))
+      check.nvector(weights, length(x), things="observations")
     #' determine units
     missu <- missing(unit)
     unit <- match.arg(unit)
@@ -26,12 +29,22 @@ rose.default <- local({
     x <- x %% FullCircle
     #' determine breakpoints strictly inside full circle
     breaks <- makebreaks(x, c(0, FullCircle), breaks, nclass)
-    #'
+    #' histogram without weights
     h <- do.call.matched(hist.default,
                          list(x=x, breaks=breaks, ..., plot=FALSE),
                          skipargs=graphicsAargh,
                          sieve=TRUE)
-    do.call(rose.histogram, c(list(x=h$result, main=main), h$otherargs))
+    result <- h$result
+    otherargs <- h$otherargs
+    #' redo weights, if given
+    if(!is.null(weights)) {
+      wh <- whist(x=x, breaks=breaks, weights=weights)
+      result$count <- wh
+      result$density <- wh/diff(breaks)
+    }
+    #
+    do.call(rose.histogram,
+            c(list(x=result, main=main, unit=unit), otherargs))
   }
 
   graphicsAargh <- c("density", "angle", "col", "border",

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.007
+        CHANGES IN spatstat VERSION 1.42-1.008
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o kppm, clusterfit
    New argument 'algorithm' specifies the choice of optimisation algorithm.
 
+   o rose.default
+   New argument 'weights'.
+
 BUG FIXES
 
    o rThomas, rMatClust, rCauchy, rVarGamma
@@ -43,6 +46,9 @@ BUG FIXES
    o plot.fv
    Gave an error message if all 'y' values were equal, when legend=TRUE.
    Fixed.
+
+   o rose.default
+   Display was incorrect when unit="radian".
 
         CHANGES IN spatstat VERSION 1.42-1
 
