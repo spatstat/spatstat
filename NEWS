@@ -1,11 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.008
+        CHANGES IN spatstat VERSION 1.42-1.009
 
 OVERVIEW
 
    o Improvements to simulation of Neyman-Scott processes.
 
-   o Improvements to update.kppm.
+   o Improvements to fitting of Neyman-Scott models.
+
+   o Extended functionality for pixel images.
+
+   o Corrected an edge correction.
 
    o Bug fixes and performance improvements.
 
@@ -29,8 +33,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o kppm, clusterfit
    New argument 'algorithm' specifies the choice of optimisation algorithm.
 
+   o rotmean
+   New argument 'padzero'. 
+   Default behaviour has changed.
+
    o rose.default
    New argument 'weights'.
+
+   o padimage 
+   New argument 'W' allows an image to be padded out to fill any window.
 
 BUG FIXES
 
@@ -49,6 +60,12 @@ BUG FIXES
 
    o rose.default
    Display was incorrect when unit="radian".
+   Fixed.
+
+   o Kest
+   Ohser-Stoyan rigid motion correction (correction='rigid')
+   was calculated incorrectly at large distances.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.42-1
 

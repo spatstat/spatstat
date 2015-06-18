@@ -8,7 +8,7 @@
   about the origin, as a function of distance from the origin.
 }
 \usage{
-rotmean(X, ..., origin, Xname, result=c("fv", "im"))
+rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"))
 }
 \arguments{
   \item{X}{
@@ -22,12 +22,19 @@ rotmean(X, ..., origin, Xname, result=c("fv", "im"))
     Either a numeric vector or a character string as described
     in the help for \code{\link{shift.owin}}.
   }
+  \item{padzero}{
+    Logical. If \code{TRUE} (the default), the value of \code{X}
+    is assumed to be zero outside the window of \code{X}.
+    If \code{FALSE}, the value of \code{X} is taken to be undefined
+    outside the window of \code{X}.
+  }
   \item{Xname}{
     Optional name for \code{X} to be used in the
     function labels.
   }
   \item{result}{
-    Character string specifying the kind of result required.
+    Character string specifying the kind of result required:
+    either a function object or a pixel image.
   }
 }
 \details{
@@ -44,6 +51,18 @@ rotmean(X, ..., origin, Xname, result=c("fv", "im"))
   dimensions as \code{X}, giving the mean value of \code{X}
   over all pixels lying at the same distance from the origin
   as the current pixel.
+
+  If \code{padzero=TRUE} (the default), the value of \code{X}
+  is assumed to be zero outside the window of \code{X}. The rotational
+  mean at a given distance \eqn{r} is the average value of the image
+  \code{X} over the \emph{entire} circle of radius \eqn{r},
+  including zero values outside the window if the circle
+  lies partly outside the window.
+  
+  If \code{padzero=FALSE}, the value of \code{X} is taken to be
+  undefined outside the window of \code{X}. The rotational mean
+  is the average of the \code{X} values over the \emph{subset} of the circle
+  of radius \eqn{r} that lies entirely inside the window.
 }
 \value{
   An object of class \code{"fv"} or \code{"im"}.

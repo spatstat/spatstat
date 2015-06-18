@@ -3,9 +3,9 @@
 ##
 ## rotational average of pixel values
 ##
-##  $Revision: 1.6 $ $Date: 2014/09/11 07:23:43 $
+##  $Revision: 1.9 $ $Date: 2015/06/18 02:45:42 $
 
-rotmean <- function(X, ..., origin, Xname, result=c("fv", "im")) {
+rotmean <- function(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im")) {
   if(missing(Xname))
     Xname <- sensiblevarname(short.deparse(substitute(X)), "X")
   trap.extra.arguments(..., .Context="rotmean")
@@ -13,9 +13,12 @@ rotmean <- function(X, ..., origin, Xname, result=c("fv", "im")) {
   if(!missing(origin))
     X <- shift(X, origin=origin)
   result <- match.arg(result)
+  rmax <- with(vertices(Frame(X)), sqrt(max(x^2+y^2)))
+  if(padzero) 
+    X <- padimage(na.handle.im(X, 0), 0, W=square(c(-1,1)*rmax))
   values <- X[drop=TRUE]
   radii <- with(as.data.frame(rasterxy.im(X, drop=TRUE)), sqrt(x^2+y^2))
-  ra <- range(radii)
+  ra <- pmin(range(radii), rmax)
   eps <- sqrt(X$xstep^2 + X$ystep^2)
   a <- unnormdensity(radii,                 from=ra[1], to=ra[2], bw=eps)
   b <- unnormdensity(radii, weights=values, from=ra[1], to=ra[2], bw=eps)
