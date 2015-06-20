@@ -9,6 +9,8 @@ OVERVIEW
 
    o Extended functionality for pixel images.
 
+   o Triangulation of windows.
+
    o Corrected an edge correction.
 
    o Bug fixes and performance improvements.
@@ -17,7 +19,8 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-   o None yet.
+   o triangulate
+   Decompose a spatial window into triangles.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

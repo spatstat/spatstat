@@ -3,11 +3,11 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.67 $ $Date: 2015/04/29 07:31:57 $
+#   $Revision: 1.69 $ $Date: 2015/06/20 10:56:11 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
-                 unitname=NULL) {
+                 unitname=NULL, check=TRUE) {
   uname <- unitname
   if(!is.null(window)) {
     window <- as.owin(window)
@@ -27,26 +27,28 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     out <- list(type="rect", window=window, xgrid=xgrid, ygrid=ygrid, n=ntiles)
   } else if(istiled) {
     stopifnot(is.list(tiles))
-    if(!all(sapply(tiles, is.owin)))
-      stop("Tiles must be a list of owin objects")
-    if(!is.null(uname)) {
-      ## attach new unit name to each tile
-      tiles <- lapply(tiles, "unitname<-", value=uname)
-    } else {
-      ## extract unit names from tiles, check agreement, use as unitname
-      uu <- unique(lapply(tiles, unitname))
-      uu <- uu[!sapply(uu, is.null)]
-      nun <- length(uu)
-      if(nun > 1)
-        stop("Tiles have inconsistent names for the unit of length")
-      if(nun == 1) {
-        ## use this unit name
-        uname <- uu[[1]]
-        if(!is.null(window))
-          unitname(window) <- uname
+    if(check) {
+      if(!all(sapply(tiles, is.owin)))
+        stop("Tiles must be a list of owin objects")
+      if(!is.null(uname)) {
+        ## attach new unit name to each tile
+        tiles <- lapply(tiles, "unitname<-", value=uname)
+      } else {
+        ## extract unit names from tiles, check agreement, use as unitname
+        uu <- unique(lapply(tiles, unitname))
+        uu <- uu[!sapply(uu, is.null)]
+        nun <- length(uu)
+        if(nun > 1)
+          stop("Tiles have inconsistent names for the unit of length")
+        if(nun == 1) {
+          ## use this unit name
+          uname <- uu[[1]]
+          if(!is.null(window))
+            unitname(window) <- uname
+        }
       }
     }
-    if(!keepempty) {
+    if(!keepempty && check) {
       # remove empty tiles
       isempty <- sapply(tiles, is.empty)
       if(all(isempty))
@@ -57,14 +59,8 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     ntiles <- length(tiles)
     nam <- names(tiles)
     lev <- if(!is.null(nam) && all(nzchar(nam))) nam else 1:ntiles
-    if(is.null(window)) {
-      for(i in 1:ntiles) {
-        if(i == 1)
-          window <- tiles[[1]]
-        else
-          window <- union.owin(window, tiles[[i]])
-      }
-    }
+    if(is.null(window)) 
+      window <- do.call(union.owin, unname(tiles))
     if(is.mask(window) || any(unlist(lapply(tiles, is.mask)))) {
       # convert to pixel image tessellation
       window <- as.mask(window)

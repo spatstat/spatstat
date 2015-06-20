@@ -7,7 +7,7 @@
 }
 \usage{
   tess(..., xgrid = NULL, ygrid = NULL, tiles = NULL, image = NULL,
-            window=NULL, marks=NULL, keepempty=FALSE, unitname=NULL)
+            window=NULL, marks=NULL, keepempty=FALSE, unitname=NULL, check=TRUE)
 }
 \arguments{
   \item{\dots}{Ignored.}
@@ -44,6 +44,11 @@
     extracted from the other arguments.
     If this argument is given, it overrides any other information
     about the unitname.
+  }
+  \item{check}{
+    Logical value indicating whether to check the validity of the
+    input data. It is strongly recommended to use the default
+    value \code{check=TRUE}.
   }
 }
 \details{
