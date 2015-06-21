@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.009
+        CHANGES IN spatstat VERSION 1.42-1.011
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
    o Improvements to fitting of Neyman-Scott models.
 
    o Extended functionality for pixel images.
+
+   o Fitted intensity on linear network
 
    o Triangulation of windows.
 
@@ -21,6 +23,9 @@ NEW FUNCTIONS
 
    o triangulate
    Decompose a spatial window into triangles.
+
+   o fitted.lppm
+   Fitted intensity values for a point process on a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

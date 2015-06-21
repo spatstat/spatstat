@@ -12,7 +12,7 @@
 \arguments{
   \item{object}{
     fitted point process model (an object of class \code{"ppm"}
-    or \code{"kppm"}).
+    or \code{"kppm"} or \code{"lppm"}).
   }
   \item{drop}{
     Logical value determining whether to delete quadrature points
@@ -69,7 +69,8 @@
   See \code{\link{quad.object}} for a list of all operations that can be
   performed on objects of class \code{"quad"}.
 
-  This function can also be applied to objects of class \code{"kppm"}.
+  This function can also be applied to objects of class \code{"kppm"}
+  and \code{"lppm"}.
 }
 \seealso{
   \code{\link{ppm.object}},

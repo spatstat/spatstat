@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.28 $   $Date: 2015/02/18 02:36:11 $
+#  $Revision: 1.29 $   $Date: 2015/06/21 02:17:36 $
 #
 
 lppm <- function(X, ...) {
@@ -71,6 +71,12 @@ lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
 
 is.lppm <- function(x) { inherits(x, "lppm") }
 
+fitted.lppm <- function(object, ..., dataonly=FALSE, new.coef=NULL) {
+  pfit <- object$fit
+  v <- fitted(pfit, dataonly=dataonly, new.coef=new.coef)
+  return(v)
+}
+  
 predict.lppm <- function(object, ..., 
                          type="trend", locations=NULL,
                          new.coef=NULL) {

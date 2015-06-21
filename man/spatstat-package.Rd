@@ -299,6 +299,7 @@
 	plot a point pattern (e.g. \code{plot(X)}) \cr
 	\code{\link{iplot}} \tab
 	plot a point pattern interactively \cr
+	\code{\link{edit.ppp}} \tab interactive text editor \cr
 	\code{\link{[.ppp}} \tab
 	extract or replace a subset of a point pattern \cr
         \tab \code{pp[subset]} or \code{pp[subwindow]} \cr
@@ -390,7 +391,7 @@
 	\code{\link{clickpoly}}    \tab
 	interactively draw a polygonal window  \cr
 	\code{\link{clickbox}}    \tab
-	interactively draw a rectangle 
+	interactively draw a rectangle  
       }
 
     \bold{To manipulate a window:}
@@ -418,7 +419,9 @@
 	\code{\link{flipxy}} \tab swap \eqn{x} and \eqn{y} coordinates  \cr
 	\code{\link{shift} } \tab translate window  \cr
 	\code{\link{periodify} } \tab make several translated copies  \cr
-	\code{\link{affine}} \tab apply affine transformation 
+	\code{\link{affine}} \tab apply affine transformation \cr
+	\code{\link{as.data.frame.owin}} \tab
+	convert window to data frame 
       }
 
     \bold{Digital approximations:}
@@ -436,7 +439,7 @@
 	\code{\link{raster.y}} \tab
 	raster y coordinates \cr
 	\code{\link{as.polygonal}} \tab
-	convert pixel mask to polygonal window
+	convert pixel mask to polygonal window 
       }
       See \code{\link{spatstat.options}} to control the approximation
 
@@ -452,6 +455,7 @@
 	\code{\link{perimeter}}	\tab	compute perimeter length \cr
 	\code{\link{diameter.owin}}	\tab	compute diameter\cr
 	\code{\link{incircle}}	\tab	find largest circle inside a window \cr
+	\code{\link{inradius}}	\tab	radius of incircle \cr
 	\code{\link{connected.owin}}    \tab find connected components of window \cr
 	\code{\link{eroded.areas}}	\tab	compute areas of eroded windows\cr
 	\code{\link{dilated.areas}}	\tab	compute areas of dilated windows\cr
@@ -466,13 +470,16 @@
 	window contains another \cr
 	\code{\link{is.convex}} \tab determine whether a window is convex \cr 
 	\code{\link{convexhull}} \tab compute convex hull \cr
+	\code{\link{triangulate}} \tab decompose into triangles \cr
 	\code{\link{as.mask}} \tab pixel approximation of window \cr
 	\code{\link{as.polygonal}} \tab polygonal approximation of window \cr
 	\code{\link{is.rectangle}} \tab test whether window is a rectangle \cr 
 	\code{\link{is.polygonal}} \tab test whether window is polygonal \cr 
 	\code{\link{is.mask}} \tab test whether window is a mask \cr 
 	\code{\link{setcov}} \tab spatial covariance function of window \cr
-	\code{\link{pixelcentres}} \tab extract centres of pixels in mask 
+	\code{\link{pixelcentres}} \tab extract centres of pixels in mask \cr
+	\code{\link{clickdist}}    \tab
+	measure distance between two points clicked by user
       }
 
     \bold{Pixel images:}
@@ -521,7 +528,10 @@
 	\code{\link{imcov}} \tab spatial covariance function of image \cr
 	\code{\link{convolve.im}} \tab spatial convolution of images \cr
 	\code{\link{transect.im}} \tab line transect of image \cr
-	\code{\link{pixelcentres}} \tab extract centres of pixels 
+	\code{\link{pixelcentres}} \tab extract centres of pixels \cr
+	\code{\link{transmat}} \tab convert matrix of pixel values \cr
+	                       \tab to a different indexing convention \cr
+	\code{\link{rnoise}} \tab random pixel noise
      }
 
     \bold{Line segment patterns}
@@ -564,6 +574,7 @@
       \code{\link{density.psp}} \tab kernel smoothing of line segments\cr
       \code{\link{selfcrossing.psp}} \tab find crossing points between
       line segments \cr
+      \code{\link{selfcut.psp}} \tab cut segments where they cross \cr
       \code{\link{crossing.psp}} \tab find crossing points between
       two line segment patterns \cr
       \code{\link{nncross}} \tab find distance to nearest line segment
@@ -663,11 +674,14 @@
     \tabular{ll}{
       \code{\link{linnet}} \tab create a linear network \cr
       \code{\link{clickjoin}} \tab interactively join vertices in network \cr
+      \code{\link{iplot.linnet}} \tab interactively plot network \cr
       \code{\link{simplenet}} \tab simple example of network \cr
       \code{\link{lineardisc}} \tab disc in a linear network \cr
       \code{\link{delaunayNetwork}} \tab network of Delaunay triangulation \cr
       \code{\link{dirichletNetwork}} \tab network of Dirichlet edges \cr
-      \code{\link{methods.linnet}} \tab methods for \code{linnet} objects
+      \code{\link{methods.linnet}} \tab methods for \code{linnet} objects\cr
+      \code{\link{vertices.linnet}} \tab nodes of network \cr 
+      \code{\link{pixellate.linnet}} \tab approximate by pixel image
     }
     
     An object of class \code{"lpp"} represents a 
@@ -682,7 +696,7 @@
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
       \code{\link{chicago}} \tab Chicago street crime data \cr
       \code{\link{dendrite}} \tab Dendritic spines data \cr
-      \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall \cr
+      \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall 
     }
     
     \bold{Hyperframes}
@@ -699,7 +713,10 @@
       \code{\link{cbind.hyperframe}} \tab combine hyperframes by columns\cr
       \code{\link{rbind.hyperframe}} \tab combine hyperframes by rows\cr
       \code{\link{as.data.frame.hyperframe}} \tab convert hyperframe to
-      data frame 
+      data frame \cr
+      \code{\link{subset.hyperframe}} \tab method for \code{subset} \cr
+      \code{\link{head.hyperframe}} \tab first few rows of hyperframe \cr
+      \code{\link{tail.hyperframe}} \tab last few rows of hyperframe
     }
     
     \bold{Layered objects}
@@ -778,7 +795,8 @@
     \code{\link{sharpen.ppp}} \tab Choi-Hall data sharpening \cr
     \code{\link{rhohat}} \tab Kernel estimate of covariate effect\cr
     \code{\link{rho2hat}} \tab Kernel estimate of covariate effect\cr
-    \code{\link{spatialcdf}} \tab Spatial cumulative distribution function
+    \code{\link{spatialcdf}} \tab Spatial cumulative distribution function\cr
+    \code{\link{roc}} \tab Receiver operating characteristic curve
   }
 
   \bold{Summary statistics for a point pattern:}
@@ -831,6 +849,7 @@
     summary function\cr
     \code{\link{Smooth.fv}} \tab apply smoothing to a summary function\cr
     \code{\link{deriv.fv}} \tab calculate derivative of a summary function\cr
+    \code{\link{pool.fv}} \tab pool several estimates of a summary function\cr
     \code{\link{nndist}} \tab nearest neighbour distances \cr
     \code{\link{nnwhich}} \tab find nearest neighbours \cr
     \code{\link{pairdist}} \tab distances between all pairs of points\cr
@@ -973,6 +992,7 @@
     \code{\link{nncross.lpp}} \tab nearest neighbour distances  \cr
     \code{\link{nnwhich.lpp}} \tab find nearest neighbours  \cr
     \code{\link{nnfun.lpp}} \tab find nearest data point  \cr
+    \code{\link{density.lpp}} \tab kernel smoothing estimator of intensity  \cr
     \code{\link{distfun.lpp}} \tab distance transform  \cr
     \code{\link{envelope.lpp}} \tab simulation envelopes  \cr
     \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
@@ -1044,16 +1064,28 @@
   \tabular{ll}{
     \code{\link{kppm}} \tab  Fit model\cr
     \code{\link{plot.kppm}} \tab  Plot the fitted model\cr
+    \code{\link{summary.kppm}} \tab  Summarise the fitted model\cr
     \code{\link{fitted.kppm}} \tab Compute fitted intensity \cr
     \code{\link{predict.kppm}} \tab Compute fitted intensity \cr
     \code{\link{update.kppm}} \tab Update the model \cr
     \code{\link{improve.kppm}} \tab Refine the estimate of trend \cr
     \code{\link{simulate.kppm}} \tab Generate simulated realisations \cr
     \code{\link{vcov.kppm}} \tab Variance-covariance matrix of coefficients \cr
+    \code{\link[spatstat:methods.kppm]{coef.kppm}}
+    \tab Extract trend coefficients \cr
+    \code{\link[spatstat:methods.kppm]{formula.kppm}}
+    \tab Extract trend formula \cr
+    \code{\link{parameters}} \tab Extract all model parameters \cr
+    \code{\link{clusterfield}} \tab Compute offspring density \cr
+    \code{\link{clusterradius}} \tab Radius of support of offspring density \cr
     \code{\link{Kmodel.kppm}} \tab \eqn{K} function of fitted model \cr
     \code{\link{pcfmodel.kppm}} \tab Pair correlation of fitted model 
   }
   
+  For model selection, you can also use 
+  the generic functions \code{\link{step}}, \code{\link{drop1}} 
+  and \code{\link{AIC}} on fitted point process models.
+
   The theoretical models can also be simulated,
   for any choice of parameter values,
   using \code{\link{rThomas}}, \code{\link{rMatClust}},
@@ -1126,6 +1158,7 @@
     \tab   Compute the spatial trend and conditional intensity\cr
     \tab   of the fitted point process model \cr
     \code{\link{coef.ppm}} \tab Extract the fitted model coefficients\cr
+    \code{\link{parameters}} \tab Extract all model parameters\cr
     \code{\link{formula.ppm}} \tab Extract the trend formula\cr
     \code{\link{intensity.ppm}} \tab Compute fitted intensity \cr
     \code{\link{Kmodel.ppm}} \tab \eqn{K} function of fitted model \cr
@@ -1185,6 +1218,10 @@
     \code{\link{Fiksel}()}	 \tab Fiksel pairwise interaction process\cr
     \code{\link{Geyer}()}	 \tab Geyer's saturation process\cr
     \code{\link{Hardcore}()}	 \tab Hard core process\cr
+    \code{\link{HierHard}()}	 \tab Hierarchical multiype hard core process\cr
+    \code{\link{HierStrauss}()}	 \tab Hierarchical multiype Strauss process\cr
+    \code{\link{HierStraussHard}()}	 \tab
+    Hierarchical multiype Strauss-hard core process\cr
     \code{\link{Hybrid}()}	 \tab Hybrid of several interactions\cr
     \code{\link{LennardJones}() } \tab Lennard-Jones potential \cr
     \code{\link{MultiHard}()} \tab 		multitype hard core process \cr
@@ -1262,6 +1299,7 @@
     \tab point process model on linear network \cr
     \code{\link{envelope.lppm}} \tab simulation envelopes for \cr
     \tab point process model on linear network \cr
+    \code{\link{fitted.lppm}} \tab fitted intensity values \cr
     \code{\link{predict.lppm}} \tab model prediction on linear network \cr
     \code{\link{linim}} \tab pixel image on linear network \cr
     \code{\link{plot.linim}} \tab plot a pixel image on linear network \cr
@@ -1446,7 +1484,9 @@
     test of goodness-of-fit \cr
     \code{\link{qqplot.ppm}} \tab diagnostic plot for interpoint
     interaction \cr
-    \code{\link{scan.test}} \tab spatial scan statistic/test
+    \code{\link{scan.test}} \tab spatial scan statistic/test \cr
+    \code{\link{studpermu.test}} \tab studentised permutation test\cr
+    \code{\link{segregation.test}} \tab test of segregation of types 
   }
 }
 

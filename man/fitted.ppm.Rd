@@ -5,7 +5,7 @@
 }
 \description{
   Given a point process model fitted to a point pattern,
-  compute the fitted conditional intensity of the model
+  compute the fitted conditional intensity or fitted trend of the model
   at the points of the pattern,
   or at the points of the quadrature scheme used to fit the model.
 }

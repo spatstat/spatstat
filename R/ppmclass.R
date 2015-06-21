@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.119 $	$Date: 2015/04/10 04:02:56 $
+#	$Revision: 2.120 $	$Date: 2015/06/21 02:17:47 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -231,8 +231,9 @@ function(x, ...,
 
 quad.ppm <- function(object, drop=FALSE, clip=FALSE) {
   if(!is.ppm(object)) {
-    if(inherits(object, "kppm")) object <- object$po else
-    stop("object is not of class ppm or kppm")
+    if(is.kppm(object)) object <- object$po else
+    if(is.lppm(object)) object <- object$fit else
+    stop("object is not of class ppm, kppm or lppm")
   }
   Q <- object$Q
   if(is.null(Q))
