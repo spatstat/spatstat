@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.102 $	$Date: 2015/04/05 08:34:43 $
+#	$Revision: 4.103 $	$Date: 2015/06/22 05:03:45 $
 #
 #
 #
@@ -373,34 +373,50 @@ union.owin <- function(..., p) {
   if(any(!isowin))
     warning("Some arguments were not windows")
   argh <- argh[isowin]
-  #
+  ## 
   nwin <- length(argh)
   if(nwin == 0) {
     warning("No windows were given")
     return(NULL)
   }
+  ## find non-empty ones
+  if(any(isemp <- sapply(argh, is.empty)))
+    argh <- argh[!isemp]
+  nwin <- length(argh)
+  if(nwin == 0) {
+    warning("All windows were empty")
+    return(NULL)
+  }
   ## at least one window
   A <- argh[[1]]
   if(nwin == 1) return(A)
-  ## at least two windows
-  B <- argh[[2]]
-  
+
+  ## more than two windows
   if(nwin > 2) {
-    ## handle union of more than two windows
-    windows <- argh[-c(1,2)]
-    ## determine a common set of parameters for polyclip
-    p <- commonPolyclipArgs(A, B, do.call(boundingbox, windows), p=p)
-    ## absorb all windows into B
-    for(i in seq_along(windows))
-      B <- do.call(union.owin,
-                   append(list(B, windows[[i]], p=p),
+    ## check if we need polyclip
+    somepoly <- !all(sapply(argh, is.mask))
+    if(somepoly) {
+      ## determine a common set of parameters for polyclip
+      p <- commonPolyclipArgs(do.call(boundingbox, argh), p=p)
+      ## apply these parameters now to avoid numerical errors
+      argh <- applyPolyclipArgs(argh, p=p)
+      A <- argh[[1]]
+    } 
+    ## absorb all windows into A without rescaling
+    nullp <- list(eps=1, x0=0, y0=0)
+    for(i in 2:nwin) 
+      A <- do.call(union.owin,
+                   append(list(A, argh[[i]], p=nullp),
                           rasterinfo))
+    if(somepoly) {
+      ## undo rescaling
+      A <- reversePolyclipArgs(A, p=p)
+    }
+    return(A)
   }
 
-  ## There are now only two arguments
-  if(is.empty(A)) return(B)
-  if(is.empty(B)) return(A)
-
+  ## Exactly two windows
+  B <- argh[[2]]
   if(identical(A, B))
     return(A)
 
@@ -574,6 +590,19 @@ commonPolyclipArgs <- function(..., p=NULL) {
   return(list(eps=eps, x0=x0, y0=y0))
 }
 
+applyPolyclipArgs <- function(x, p=NULL) {
+  if(is.null(p)) return(x)
+  y <- lapply(x, shift, vec=-c(p$x0, p$y0))
+  z <- lapply(y, scalardilate, f=1/p$eps)
+  return(z)
+}
+
+reversePolyclipArgs <- function(x, p=NULL) {
+  if(is.null(p)) return(x)
+  y <- scalardilate(x, f=p$eps)
+  z <- shift(y, vec=c(p$x0, p$y0))
+  return(z)
+}
 
 trim.mask <- function(M, R, tolerant=TRUE) {
     ## M is a mask,

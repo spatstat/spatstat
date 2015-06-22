@@ -15,6 +15,7 @@
 \alias{anycrossing.psp}
 \alias{apply23sum}
 \alias{applytolayers}
+\alias{applyPolyclipArgs}
 \alias{Area.xypolygon}       
 \alias{areadelta2}       
 \alias{areaGain.diri}       
@@ -583,6 +584,7 @@
 \alias{resolve.2D.kernel}
 \alias{restrict.mask}
 \alias{reverse.xypolygon}    
+\alias{reversePolyclipArgs}
 \alias{revcumsum}
 \alias{rmax.rule}
 \alias{rotxy}
@@ -743,6 +745,7 @@ ang2rad(ang, unit, start, clockwise)
 anycrossing.psp(A,B)
 apply23sum(x)
 applytolayers(L, FUN, \dots)
+applyPolyclipArgs(x, p)
 Area.xypolygon(polly)
 areadelta2(X, r, \dots)
 areaGain.diri(u, X, r, \dots, W)
@@ -1413,6 +1416,7 @@ resolve.2D.kernel(\dots,
             sigma, varcov, x, mindist, adjust, bwfun, allow.zero)
 restrict.mask(M, W)
 reverse.xypolygon(p, adjust=FALSE)
+reversePolyclipArgs(x, p)
 revcumsum(x)
 rmax.rule(fun, W, lambda)
 rotxy(X, angle = pi/2)
@@ -1523,7 +1527,8 @@ trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
 truncline(x, nc)
-tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL)
+tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL,
+new.tag=NULL)
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unparen(x)

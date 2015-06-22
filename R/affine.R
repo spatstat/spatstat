@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.47 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.48 $	$Date: 2015/06/22 05:09:59 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -40,11 +40,6 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
   vec <- as2vector(vec)
   if(!is.matrix(mat) || any(dim(mat) != c(2,2)))
     stop(paste(sQuote("mat"), "should be a 2 x 2 matrix"))
-  # Inspect the determinant
-  detmat <- det(mat)
-  if(abs(detmat) < .Machine$double.eps)
-    stop("Matrix of linear transformation is singular")
-  #
   diagonalmatrix <- all(mat == diag(diag(mat)))
   scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1)
   newunits <- if(scaletransform) unitname(X) else as.units(NULL)
@@ -67,7 +62,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
          polygonal={
            # Transform the polygonal boundaries
            bdry <- lapply(X$bdry, affinexypolygon, mat=mat, vec=vec,
-                          detmat=detmat)
+                          detmat=det(mat))
            # Compile result
            W <- owin(poly=bdry, check=FALSE, unitname=newunits)
            # Result might be a rectangle: if so, convert to rectangle type
@@ -77,6 +72,8 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
          },
          mask={
            # binary mask
+           if(sqrt(abs(det(mat))) < .Machine$double.eps)
+             stop("Matrix of linear transformation is singular")
            newframe <- boundingbox(affinexy(corners(X), mat, vec))
            W <- if(length(list(...)) > 0) as.mask(newframe, ...) else 
                    as.mask(newframe, eps=with(X, min(xstep, ystep)))
@@ -107,7 +104,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
     stop(paste(sQuote("mat"), "should be a 2 x 2 matrix"))
   # Inspect the determinant
   detmat <- det(mat)
-  if(abs(detmat) < .Machine$double.eps)
+  if(sqrt(abs(detmat)) < .Machine$double.eps)
     stop("Matrix of linear transformation is singular")
   #
   diagonalmatrix <- all(mat == diag(diag(mat)))

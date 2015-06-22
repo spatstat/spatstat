@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.012
+        CHANGES IN spatstat VERSION 1.42-1.013
 
 OVERVIEW
 
@@ -54,6 +54,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o padimage 
    New argument 'W' allows an image to be padded out to fill any window.
+
+   o union.owin
+   Improved behaviour when there are more than 2 windows.
+
+   o clusterset
+   Improved behaviour.
+
+   o affine.owin
+   Allows transformation matrix to be singular, if the window is polygonal.
 
 BUG FIXES
 
