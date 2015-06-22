@@ -15,19 +15,24 @@ rose(x, \dots)
 \method{rose}{default}(x, breaks = NULL, \dots,
                        weights=NULL,
                        nclass = NULL,
-                       unit = c("degree", "radian"), main)
+                       unit = c("degree", "radian"),
+                       start=0, clockwise=FALSE,
+                       main)
 
 \method{rose}{histogram}(x, \dots,
-                       unit = c("degree", "radian"), main,
-                       labels=TRUE, at=NULL, do.plot = TRUE)
+                       unit = c("degree", "radian"),
+                       start=0, clockwise=FALSE,
+                       main, labels=TRUE, at=NULL, do.plot = TRUE)
 
 \method{rose}{density}(x, \dots, 
-                  unit = c("degree", "radian"), main,
-                  labels=TRUE, at=NULL, do.plot = TRUE)
+                  unit = c("degree", "radian"), 
+                  start=0, clockwise=FALSE,
+                  main, labels=TRUE, at=NULL, do.plot = TRUE)
 
 \method{rose}{fv}(x, \dots, 
-                  unit = c("degree", "radian"), main,
-                  labels=TRUE, at=NULL, do.plot = TRUE)
+                  unit = c("degree", "radian"),
+                  start=0, clockwise=FALSE,
+                  main, labels=TRUE, at=NULL, do.plot = TRUE)
 }
 \arguments{
   \item{x}{
@@ -51,6 +56,23 @@ rose(x, \dots)
   }
   \item{unit}{
     The unit in which the angles are expressed.
+  }
+  \item{start}{
+    The starting direction for measurement of angles,
+    that is, the spatial direction which corresponds to a measured angle
+    of zero. Either a character string giving a compass direction
+    (\code{"N"} for north, \code{"S"} for south, \code{"E"} for east,
+    or \code{"W"} for west) or a number giving the angle from the
+    the horizontal (East) axis to the starting direction. For example,
+    if \code{unit="degree"} and \code{clockwise=FALSE},
+    then \code{start=90} and \code{start="N"} are equivalent.
+    The default is to measure angles anti-clockwise from the
+    horizontal axis (East direction).
+  }
+  \item{clockwise}{
+    Logical value indicating whether angles increase in the clockwise
+    direction (\code{clockwise=TRUE}) or anti-clockwise,
+    counter-clockwise direction (\code{clockwise=FALSE}, the default).
   }
   \item{weights}{
     Optional vector of numeric weights associated with \code{x}.
@@ -99,6 +121,13 @@ rose(x, \dots)
   If \code{x} is a function value table (object of class \code{"fv"})
   then the argument of the function will be interpreted as an angle,
   and the value of the function will be interpreted as the radius.
+
+  By default, angles are interpreted using the mathematical convention
+  where the zero angle is the horizontal \eqn{x} axis, and angles
+  increase anti-clockwise. Other conventions can be specified
+  using the arguments \code{start} and \code{clockwise}.
+  Standard compass directions are obtained by setting \code{unit="degree"},
+  \code{start="N"} and \code{clockwise=TRUE}.  
 }
 \value{A window (class \code{"owin"}) containing the plotted region.}
 \author{Adrian Baddeley
@@ -117,6 +146,7 @@ rose(x, \dots)
 \examples{
   ang <- runif(1000, max=360)
   rose(ang, col="grey")
+  rose(ang, col="grey", start="N", clockwise=TRUE)
 }
 \keyword{spatial}
 \keyword{hplot}

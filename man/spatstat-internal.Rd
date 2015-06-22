@@ -11,6 +11,7 @@
 \alias{adjustthinrange}
 \alias{affinexy}
 \alias{affinexypolygon}
+\alias{ang2rad}
 \alias{anycrossing.psp}
 \alias{apply23sum}
 \alias{applytolayers}
@@ -738,6 +739,7 @@ active.interactions(object)
 adjustthinrange(ur,vstep,vr)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
+ang2rad(ang, unit, start, clockwise)
 anycrossing.psp(A,B)
 apply23sum(x)
 applytolayers(L, FUN, \dots)
@@ -805,7 +807,7 @@ check.range(x, fatal)
 check.rpanel()
 check.testfun(f, f1, X)
 choptext(\dots, prefix)
-circticks(R, at, unit, labels)
+circticks(R, at, unit, start, clockwise, labels)
 clarkevansCalc(X, correction, clipregion, working)
 clip.psp(x, window, check=TRUE)
 cliprect.psp(x, window)
@@ -1369,7 +1371,8 @@ RmhExpandRule(nama)
 romansort(x)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)
-roseContinuous(ang, rad, unit, \dots, main, labels, at, do.plot)
+roseContinuous(ang, rad, unit, \dots,
+               start, clockwise, main, labels, at, do.plot)
 ruletextline(ch, n, terse)
 quadrat.testEngine(X, nx, ny, alternative, method, conditional, CR, 
      \dots, nsim, Xcount, xbreaks, ybreaks, tess, fit, Xname, fitname)

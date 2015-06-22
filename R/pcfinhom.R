@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.16 $   $Date: 2014/11/10 11:03:53 $
+#   $Revision: 1.17 $   $Date: 2015/06/22 01:30:38 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -57,8 +57,11 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
 
   dangerous <- c("lambda", "reciplambda")
   danger <- TRUE
-  
-  if(missing(lambda) && is.null(reciplambda)) {
+
+  if(npts == 0) {
+    lambda <- reciplambda <- numeric(0)
+    danger <- FALSE
+  } else if(missing(lambda) && is.null(reciplambda)) {
     # No intensity data provided
     danger <- FALSE
     # Estimate density by leave-one-out kernel smoothing
@@ -93,7 +96,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   }
   
   # renormalise
-  if(renormalise) {
+  if(renormalise && npts > 0) {
     check.1.real(normpower)
     stopifnot(normpower %in% 1:2)
     renorm.factor <- (areaW/sum(reciplambda))^normpower
@@ -122,13 +125,17 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   #################################################
   
   # compute pairwise distances
-  
-  close <- closepairs(X, rmax+hmax)
-  dIJ <- close$d
-  I <- close$i
-  J <- close$j
-  XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
-  wIJ <- reciplambda[I] * reciplambda[J]
+
+  if(npts > 1) {
+    close <- closepairs(X, rmax+hmax)
+    dIJ <- close$d
+    I <- close$i
+    J <- close$j
+    XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
+    wIJ <- reciplambda[I] * reciplambda[J]
+  } else {
+    undefined <- rep(NaN, length(r))
+  }
 
   # initialise fv object
   
@@ -144,10 +151,12 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
 
   if(any(correction=="translate")) {
     # translation correction
-    XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
-    edgewt <- edge.Trans(XI, XJ, paired=TRUE)
-    gT <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
-    if(renormalise) gT <- gT * renorm.factor
+    if(npts > 1) {
+      XJ <- ppp(close$xj, close$yj, window=win, check=FALSE)
+      edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+      gT <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
+      if(renormalise) gT <- gT * renorm.factor
+    } else gT <- undefined
     out <- bind.fv(out,
                    data.frame(trans=gT),
                    "{hat(%s)[%s]^{Trans}}(r)",
@@ -156,9 +165,11 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   }
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
-    edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
-    gR <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
-    if(renormalise) gR <- gR * renorm.factor
+    if(npts > 1) {
+      edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
+      gR <- sewpcf(dIJ, edgewt * wIJ, denargs, areaW, divisor)$g
+      if(renormalise) gR <- gR * renorm.factor
+    } else gR <- undefined
     out <- bind.fv(out,
                    data.frame(iso=gR),
                    "{hat(%s)[%s]^{Ripley}}(r)",

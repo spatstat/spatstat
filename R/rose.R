@@ -3,7 +3,7 @@
 #'
 #'   Rose diagrams
 #'
-#'   $Revision: 1.6 $  $Date: 2015/06/15 08:25:07 $
+#'   $Revision: 1.8 $  $Date: 2015/06/22 02:15:32 $
 #'
 
 rose <- function(x, ...) UseMethod("rose")
@@ -14,6 +14,7 @@ rose.default <- local({
                            weights=NULL,
                            nclass=NULL,
                            unit=c("degree", "radian"),
+                           start=0, clockwise=FALSE,
                            main) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
@@ -44,7 +45,9 @@ rose.default <- local({
     }
     #
     do.call(rose.histogram,
-            c(list(x=result, main=main, unit=unit), otherargs))
+            c(list(x=result, main=main,
+                   unit=unit, start=start, clockwise=clockwise),
+              otherargs))
   }
 
   graphicsAargh <- c("density", "angle", "col", "border",
@@ -100,6 +103,7 @@ rose.default <- local({
 
 rose.histogram <- function(x, ...,
                            unit=c("degree", "radian"),
+                           start=0, clockwise=FALSE,
                            main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
@@ -134,7 +138,7 @@ rose.histogram <- function(x, ...,
                   skipargs="col")
   if(do.plot) {
     #' draw sectors
-    ang <- switch(unit, degree = pi * (bks/180), radian=bks)
+    ang <- ang2rad(bks, unit=unit, start=start, clockwise=clockwise)
     eps <- min(diff(ang), pi/128)/2
     for(i in seq_along(y)) {
       aa <- seq(ang[i], ang[i+1], by=eps)
@@ -145,13 +149,15 @@ rose.histogram <- function(x, ...,
       do.call.matched(polygon, list(x=xx, y=yy, ...))
     }
     #' add tick marks
-    circticks(R, at=at, labels=labels)
+    circticks(R, at=at, unit=unit, start=start, clockwise=clockwise,
+              labels=labels)
   }
   #'
   return(invisible(result))
 }
 
 rose.density <- function(x, ..., unit=c("degree", "radian"),
+                         start=0, clockwise=FALSE,
                          main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
@@ -162,12 +168,14 @@ rose.density <- function(x, ..., unit=c("degree", "radian"),
   unit <- validate.angles(ang, unit, missu)
   #'
   result <- roseContinuous(ang, rad, unit, ...,
+                           start=start, clockwise=clockwise,
                            main=main, labels=labels, at=at,
                            do.plot=do.plot)
   return(invisible(result))
 }
 
 rose.fv <- function(x, ..., unit=c("degree", "radian"),
+                    start=0, clockwise=FALSE,
                     main, labels=TRUE, at=NULL, do.plot=TRUE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
@@ -178,12 +186,15 @@ rose.fv <- function(x, ..., unit=c("degree", "radian"),
   unit <- validate.angles(ang, unit, missu)
   #'
   result <- roseContinuous(ang, rad, unit, ...,
+                           start=start, clockwise=clockwise,
                            main=main, labels=labels, at=at,
                            do.plot=do.plot)
   return(invisible(result))
 }
 
-roseContinuous <- function(ang, rad, unit, ..., main,
+roseContinuous <- function(ang, rad, unit, ...,
+                           start=0, clockwise=FALSE,
+                           main,
                            labels=TRUE, at=NULL,
                            do.plot=TRUE) {
   rmax <- max(rad)
@@ -208,16 +219,51 @@ roseContinuous <- function(ang, rad, unit, ..., main,
                   skipargs="col")
   #' draw plot
   if(do.plot) {
-    if(unit == "degree") ang <- pi * (ang/180)
+    ang <- ang2rad(ang, unit=unit, start=start, clockwise=clockwise)
     xx <- rad * cos(ang)
     yy <- rad * sin(ang)
     do.call.matched(polygon, list(x=xx, y=yy, ...), extrargs="lwd")
-    circticks(R, at=at, labels=labels)
+    circticks(R, at=at, unit=unit, start=start, clockwise=clockwise,
+              labels=labels)
   }
   return(result)
 }
 
-circticks <- function(R, at=NULL, unit=c("degree", "radian"), labels=TRUE) {
+ang2rad <- local({
+
+  compasspoints <- c(E=0,N=90,W=180,S=270)
+  
+  ang2rad <- function(ang, unit=c("degree", "radian"),
+                         start=0, clockwise=FALSE) {
+    unit <- match.arg(unit)
+    clocksign <- if(clockwise) -1 else 1
+    stopifnot(length(start) == 1)
+    if(is.character(start)) {
+      if(is.na(m <- match(toupper(start), names(compasspoints))))
+        stop(paste("Unrecognised compass point", sQuote(start)), call.=FALSE)
+      startdegrees <- compasspoints[[start]]
+      start <- switch(unit,
+                      degree = startdegrees,
+                      radian = pi * (startdegrees/180))
+      # start is measured anticlockwise
+      ang <- start + clocksign * ang
+    } else {
+      stopifnot(is.numeric(start))
+      # start is measured according to value of 'clockwise'
+      ang <- clocksign * (start + ang)
+    }
+    rad <- switch(unit,
+                  degree = pi * (ang/180),
+                  radian = ang)
+    return(rad)
+  }
+
+  ang2rad
+})
+
+
+circticks <- function(R, at=NULL, unit=c("degree", "radian"),
+                      start=0, clockwise=FALSE, labels=TRUE) {
   unit <- match.arg(unit)
   FullCircle <- switch(unit, degree = 360, radian = 2*pi)
   if(is.null(at)) {
@@ -228,7 +274,7 @@ circticks <- function(R, at=NULL, unit=c("degree", "radian"), labels=TRUE) {
     nat <- (at/FullCircle) * 4
     major <- abs(nat - round(nat)) < 0.01
   }
-  atradians <- switch(unit, degree = pi * at/180, radian = at)
+  atradians <- ang2rad(ang=at, unit=unit, start=start, clockwise=clockwise)
   tx <- R * cos(atradians)
   ty <- R * sin(atradians)
   expan <- ifelse(major, 1.1, 1.05)

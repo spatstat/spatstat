@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.011
+        CHANGES IN spatstat VERSION 1.42-1.012
 
 OVERVIEW
 
@@ -48,6 +48,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o rose.default
    New argument 'weights'.
 
+   o rose
+   New arguments 'start' and 'clockwise' specify the convention
+   for measuring and plotting angles.
+
    o padimage 
    New argument 'W' allows an image to be padded out to fill any window.
 
@@ -58,8 +62,8 @@ BUG FIXES
    or require huge amounts of memory.
    Fixed.
 
-   o pcf.ppp
-   Crashed if the pattern was empty.
+   o pcf, pcfinhom
+   Crashed if the point pattern was empty.
    Fixed.
 
    o plot.fv
