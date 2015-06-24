@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.105 $   $Date: 2015/05/10 02:49:06 $
+#  $Revision: 1.106 $   $Date: 2015/06/24 09:50:40 $
 #
 #  Plotting code for pixel images
 #
@@ -23,12 +23,12 @@ plot.im <- local({
     if(add && show.all) {
       ## set up the window space *with* the main title
       ## using the same code as plot.owin, for consistency
-      do.call.matched("plot.owin",
+      do.call.matched(plot.owin,
                       resolve.defaults(list(x=W, type="n"), aarg), 
                       extrargs=graphicsPars("owin"))
     }
-    extrargs <- setdiff(extrargs, "claim.title.space")
-    do.call.matched("image.default",
+    extrargs <- setdiff(extrargs, c("claim.title.space", "box"))
+    do.call.matched(image.default,
                     append(imagedata, aarg),
                     extrargs=extrargs)
   }
@@ -45,13 +45,13 @@ plot.im <- local({
     if(axes) {
       px <- pretty(xr)
       py <- pretty(yr)
-      do.call.plotfun("axis",
+      do.call.plotfun(axis,
                       resolve.defaults(
                                        list(side=1, at=px), 
                                        list(...),
                                        list(pos=yr[1])),
                       extrargs=graphicsPars("axis"))
-      do.call.plotfun("axis",
+      do.call.plotfun(axis,
                       resolve.defaults(
                                        list(side=2, at=py), 
                                        list(...),
@@ -496,7 +496,7 @@ plot.im <- local({
     
     if(!add) {
       ## establish coordinate system
-      do.call.plotfun("plot.owin",
+      do.call.plotfun(plot.owin,
                       resolve.defaults(list(x=bb.all,
                                             type="n",
                                             main=pt$blank),
@@ -505,7 +505,7 @@ plot.im <- local({
     }
     if(show.all) {
       ## plot title centred over main image area 'bb'
-      do.call.plotfun("plot.owin",
+      do.call.plotfun(plot.owin,
                       resolve.defaults(list(x=bb,
                                             type="n",
                                             main=main,
@@ -605,7 +605,7 @@ plot.im <- local({
                posargs <- list(pos=bb.rib$yrange[1],
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
-      do.call.plotfun("axis",
+      do.call.plotfun(axis,
                       resolve.defaults(ribargs,
                                        axisargs, dotargs,
                                        posargs),
@@ -690,7 +690,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
     x <- x[clipwin, drop=FALSE]
   if(show.all) {
     if(axes) # with axes
-      do.call.plotfun("plot.default",
+      do.call.plotfun(plot.default,
                       resolve.defaults(
                                        list(x = range(x$xcol),
                                             y = range(x$yrow),
@@ -700,13 +700,13 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                                             ylab = "y", main = main)))
     else { # box without axes
       rec <- owin(x$xrange, x$yrange)
-      do.call.matched("plot.owin",
+      do.call.matched(plot.owin,
                       resolve.defaults(list(x=rec, add=add, show.all=TRUE),
                                        list(...),
                                        list(main=main)))
     }
   }
-  do.call.plotfun("contour.default",
+  do.call.plotfun(contour.default,
                   resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
                                    list(add=TRUE),
                                    list(...)))

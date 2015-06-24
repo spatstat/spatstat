@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.013
+        CHANGES IN spatstat VERSION 1.42-1.014
 
 OVERVIEW
+
+   o We thank Bob Klaver for contributions.
 
    o Improvements to simulation of Neyman-Scott processes.
 
@@ -86,6 +88,15 @@ BUG FIXES
    o Kest
    Ohser-Stoyan rigid motion correction (correction='rigid')
    was calculated incorrectly at large distances.
+   Fixed.
+
+   o summary.im
+   Issued a warning about numerical overflow in some cases.
+   [Spotted by Bob Klaver.]
+   Fixed.
+
+   o plot.im
+   Sometimes warned that 'box' is not a graphical parameter.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-1

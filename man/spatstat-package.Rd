@@ -1735,6 +1735,7 @@
   Robert John-Chandran,
   Devin Johnson,
   Mahdieh Khanmohammadi,
+  Bob Klaver,
   Peter Kovesi,
   Mike Kuhn,
   Jeff Laake,

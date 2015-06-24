@@ -3,7 +3,7 @@
 #
 #    summary() method for class "im"
 #
-#    $Revision: 1.19 $   $Date: 2015/02/01 03:59:04 $
+#    $Revision: 1.20 $   $Date: 2015/06/23 02:26:24 $
 #
 #    summary.im()
 #    print.summary.im()
@@ -33,19 +33,19 @@ summary.im <- function(object, ...) {
   switch(x$type,
          integer=,
          real={
-           y$integral <- sum(v) * pixelarea
-           y$mean <- mean(v)
-           y$range <- range(v)
-           y$min <- y$range[1]  
-           y$max <- y$range[2]
+           y$mean <- mv <- mean(v)
+           y$integral <- mv * length(v) * pixelarea
+           y$range <- ra <- range(v)
+           y$min <- ra[1]  
+           y$max <- ra[2]
          },
          factor={
            y$levels <- lev
            y$table <- table(v, dnn="")
          },
          complex={
-           y$integral <- sum(v) * pixelarea
-           y$mean <- mean(v)
+           y$mean <- mv <- mean(v)
+           y$integral <- mv * length(v) * pixelarea
            rr <- range(Re(v))
            y$Re <- list(range=rr, min=rr[1], max=rr[2])
            ri <- range(Im(v))

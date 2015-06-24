@@ -138,7 +138,7 @@ graphicsPars <- local({
     list(plot = PlotArgs,
          image = c(
            "main", "asp", "sub", "axes", "ann",
-           "box", 
+           "box",  # note 'box' is not an argument of image.default
            "cex", "font", 
            "cex.axis", "cex.lab", "cex.main", "cex.sub",
            "col.axis", "col.lab", "col.main", "col.sub",
