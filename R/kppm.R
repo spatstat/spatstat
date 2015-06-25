@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.107 $ $Date: 2015/06/12 08:54:54 $
+# $Revision: 1.108 $ $Date: 2015/06/25 03:58:51 $
 #
 
 kppm <- function(X, ...) {
@@ -43,7 +43,9 @@ kppm.formula <-
     thecall[ncall + 1:nargh] <- argh
     names(thecall)[ncall + 1:nargh] <- names(argh)
   }
-  result <- eval(thecall, parent.frame())
+  result <- eval(thecall, 
+                 envir=if(!is.null(data)) data else parent.frame(),
+                 enclos=if(!is.null(data)) parent.frame() else baseenv())
 
   result$call <- cl
   result$callframe <- parent.frame()
@@ -89,6 +91,9 @@ kppm.ppp <- kppm.quad <-
                       statistic=statistic,
                       statargs=statargs,
                       rmax = rmax)
+  X <- eval(substitute(X),
+            envir=if(!is.null(data)) data else parent.frame(),
+            enclos=if(!is.null(data)) parent.frame() else baseenv())
   isquad <- inherits(X, "quad")
   if(!is.ppp(X) && !isquad)
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")

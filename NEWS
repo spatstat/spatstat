@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.014
+        CHANGES IN spatstat VERSION 1.42-1.015
 
 OVERVIEW
 
@@ -42,6 +42,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o kppm, clusterfit
    New argument 'algorithm' specifies the choice of optimisation algorithm.
+
+   o kppm
+   Left hand side of formula can now involve entries in the list 'data'.
 
    o rotmean
    New argument 'padzero'. 
