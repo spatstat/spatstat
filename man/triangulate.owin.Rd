@@ -1,5 +1,5 @@
-\name{triangulate}
-\alias{triangulate}
+\name{triangulate.owin}
+\alias{triangulate.owin}
 \title{
   Decompose Window into Triangles
 }
@@ -10,7 +10,7 @@
   in which each tile is a triangle.
 }
 \usage{
-triangulate(W)
+triangulate.owin(W)
 }
 \arguments{
   \item{W}{Window (object of class \code{"owin"}).}
@@ -47,7 +47,7 @@ triangulate(W)
   \code{\link{as.polygonal}}
 }
 \examples{
-  plot(triangulate(letterR))
+  plot(triangulate.owin(letterR))
 }
 \keyword{spatial}
 \keyword{manip}

@@ -1,6 +1,6 @@
 #  First.R
 #
-#  $Revision: 1.41 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.42 $ $Date: 2015/06/28 06:14:35 $
 #
 
 .onLoad <- function(...) reset.spatstat.options()
@@ -16,38 +16,41 @@
                "\nFor an introduction to spatstat, type",
                sQuote("beginner"))
   packageStartupMessage(msg)
-  ## check versions
-  rv <- R.Version()
-  rdate <- with(rv, ISOdate(year, month, day))
-  if(Sys.Date() - as.Date(rdate) > 270) {
-    ## R version is really old; just warn about this
-    packageStartupMessage(paste("\nNote:",
-                                rv$version.string,
-                                "is more than 9 months old;",
+  if(FALSE) {
+    ## currently disabled due to bug in R
+    ## check versions
+    rv <- R.Version()
+    rdate <- with(rv, ISOdate(year, month, day))
+    if(Sys.Date() - as.Date(rdate) > 270) {
+      ## R version is really old; just warn about this
+      packageStartupMessage(paste("\nNote:",
+                                  rv$version.string,
+                                  "is more than 9 months old;",
             "we strongly recommend upgrading to the latest version"))
-  } else {
-    ## warn if spatstat version is old
-    packdate <- as.Date(read.dcf(file=descfile, fields="Date"))
-    elapsed <- Sys.Date() - packdate
-    if(elapsed > 70) {
-      if(elapsed > 365) {
-        n <- floor(elapsed/365)
-        unit <- "year"
-        sowhat <- "we strongly recommend upgrading to the latest version."
-      } else if(elapsed > 84) {
-        n <- floor(elapsed/30)
-        unit <- "month"
-        sowhat <- "we recommend upgrading to the latest version."
-      } else {
-        n <- floor(elapsed/7)
-        unit <- "week"
-        sowhat <- "a newer version should be available."
+    } else {
+      ## warn if spatstat version is old
+      packdate <- as.Date(read.dcf(file=descfile, fields="Date"))
+      elapsed <- Sys.Date() - packdate
+      if(elapsed > 70) {
+        if(elapsed > 365) {
+          n <- floor(elapsed/365)
+          unit <- "year"
+          sowhat <- "we strongly recommend upgrading to the latest version."
+        } else if(elapsed > 84) {
+          n <- floor(elapsed/30)
+          unit <- "month"
+          sowhat <- "we recommend upgrading to the latest version."
+        } else {
+          n <- floor(elapsed/7)
+          unit <- "week"
+          sowhat <- "a newer version should be available."
       }
-      expired <- if(n == 1) paste("a", unit) else paste(n, paste0(unit, "s"))
-      packageStartupMessage(paste("\nNote: spatstat version", ver,
-                                  "is out of date by more than",
-                                  paste0(expired, ";"), 
-                                  sowhat))
+        expired <- if(n == 1) paste("a", unit) else paste(n, paste0(unit, "s"))
+        packageStartupMessage(paste("\nNote: spatstat version", ver,
+                                    "is out of date by more than",
+                                    paste0(expired, ";"), 
+                                    sowhat))
+      }
     }
   }
   invisible(NULL)

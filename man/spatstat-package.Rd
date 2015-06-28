@@ -470,7 +470,7 @@
 	window contains another \cr
 	\code{\link{is.convex}} \tab determine whether a window is convex \cr 
 	\code{\link{convexhull}} \tab compute convex hull \cr
-	\code{\link{triangulate}} \tab decompose into triangles \cr
+	\code{\link{triangulate.owin}} \tab decompose into triangles \cr
 	\code{\link{as.mask}} \tab pixel approximation of window \cr
 	\code{\link{as.polygonal}} \tab polygonal approximation of window \cr
 	\code{\link{is.rectangle}} \tab test whether window is a rectangle \cr 
@@ -1797,6 +1797,7 @@
   Olivia Semboli,
   Vadim Shcherbakov,
   Shen Guochun,
+  Harold-Jeffrey Ship,
   Ida-Maria Sintorn,
   Yong Song, 
   Malte Spiess,

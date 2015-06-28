@@ -3,16 +3,16 @@
 #'
 #'   Decompose a polygon into triangles
 #'
-#'    $Revision: 1.2 $  $Date: 2015/06/20 10:28:51 $
+#'    $Revision: 1.3 $  $Date: 2015/06/28 11:00:09 $
 #'
 
-triangulate <- local({
+triangulate.owin <- local({
 
   tricentre <- function(triangle) {
     as.numeric(lapply(vertices(triangle), mean))
   }
   
-  triangulate <- function(W) {
+  triangulate.owin <- function(W) {
     stopifnot(is.owin(W))
     W <- as.polygonal(W)
     P <- as.ppp(vertices(W), W=Frame(W), check=FALSE)
@@ -24,5 +24,5 @@ triangulate <- local({
     return(result)
   }
 
-  triangulate
+  triangulate.owin
 })

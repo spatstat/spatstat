@@ -190,7 +190,10 @@ Following is an overview of the most important changes.
    \item 
      extract K function (\texttt{Kmodel}, \texttt{pcfmodel});
    \item 
-     more control over trend (more arguments passed to \texttt{ppm});
+     more control over trend (more arguments passed to \texttt{ppm}).
+   \item
+     Left hand side of formula can now involve entries in the 
+     list \texttt{data}.
    \item 
      confidence intervals using \texttt{confint}
    \item
@@ -198,6 +201,8 @@ Following is an overview of the most important changes.
      fitted using Palm likelihood.
    \item 
      covariates can be tessellations.
+   \item 
+     more control over the optimisation algorithm.
     \end{itemize}
 \item
     Support for point patterns on a linear network,
@@ -476,6 +481,10 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{triangulate.owin}: decompose a spatial window into triangles.
+\item \texttt{fitted.lppm}: fitted intensity values for a point process
+  on a linear network.
+  
   \item \texttt{HierStrauss}, \texttt{HierStraussHard}, \texttt{HierHard}:
     hierarchical interactions for Gibbs models.
     
@@ -1525,6 +1534,18 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+   \item Improvements to simulation of Neyman-Scott processes.
+
+   \item Improvements to fitting of Neyman-Scott models.
+
+   \item Extended functionality for pixel images.
+
+   \item Fitted intensity on linear network
+
+   \item Triangulation of windows.
+
+   \item  Corrected an edge correction.
+  
    \item Permutation test for difference between groups of point patterns.
 
    \item Variational Bayes estimation for point process models.
@@ -3007,6 +3028,13 @@ listed alphabetically.
    Performs 'Random Sequential Packing' if \texttt{n=Inf}.
    Can now generate inhomogeneous patterns.
 
+   \item \texttt{rThomas}, \texttt{rMatClust}, 
+     \texttt{rCauchy}, \texttt{rVarGamma}:
+   When the model is approximately Poisson, it is simulated using 
+   \texttt{rpoispp}. 
+   This avoids computations which would require huge amounts of memory. 
+   New argument \texttt{poisthresh} controls this behaviour.
+
    \item \texttt{runifpoint}:
     New argument \texttt{ex} makes it possible to generate a random pattern
     similar to an example point pattern.
@@ -3148,11 +3176,13 @@ listed alphabetically.
     
    \item \texttt{to.grey}:
         Now uses better weights for the R, G, B channels.
-        
   \item \texttt{union.owin}:
    It is now guaranteed that if \texttt{A} is a subset of \texttt{B}, 
    then \texttt{union.owin(A,B)=B}.
    Now handles a single argument: \texttt{union.owin(A)} returns \texttt{A}.
+
+ \item \texttt{update.kppm}: Now handles additional arguments in any order, 
+   with or without names. Changed arguments. Improved behaviour. 
 
    \item \code{varblock}:
       Ugly legends have been repaired.

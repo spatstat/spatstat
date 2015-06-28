@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.42-1.015
+        CHANGES IN spatstat VERSION 1.42-2
 
 OVERVIEW
 
-   o We thank Bob Klaver for contributions.
+   o We thank Bob Klaver and Harold-Jeffrey Ship for contributions.
 
    o Improvements to simulation of Neyman-Scott processes.
 
@@ -23,7 +23,7 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-   o triangulate
+   o triangulate.owin
    Decompose a spatial window into triangles.
 
    o fitted.lppm
@@ -70,6 +70,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Allows transformation matrix to be singular, if the window is polygonal.
 
 BUG FIXES
+
+   o spatstat
+   spatstat could not be installed on some 64-bit VM systems
+   because of an apparent bug in R.
+   Fixed.
 
    o rThomas, rMatClust, rCauchy, rVarGamma
    Large values of the scale parameter could cause the algorithm to freeze
