@@ -2,6 +2,10 @@ language: r
 sudo: required
 warnings_are_errors: true
 
+apt_packages:
+  - libgsl0-dev
+  - bwidget
+
 r_binary_packages:
   - mgcv
   - deldir
