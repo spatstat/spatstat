@@ -1,26 +1,31 @@
-language: r
+language: c
 sudo: required
-warnings_are_errors: false
 
-env: 
-  - _R_CHECK_FORCE_SUGGESTS_=false
-  
-apt_packages:
-  - libgsl0-dev
-  - bwidget
+before_install:
+  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
+  - chmod 755 pkg-build.sh
+  - cp pkg-build.sh rbuildertest
+  - cd rbuildertest
+  - ./pkg-build.sh bootstrap
 
-r_binary_packages:
-  - mgcv
-  - deldir
-  - abind
-  - tensor
-  - Matrix
-  - maptools
-  - tkrplot
-  - spatial
+install:
+  - ./pkg-build.sh install_deps
 
-r_github_packages:
-  - jimhester/covr
+script:
+  - ./pkg-build.sh run_build
+  - ./pkg-build.sh run_check
 
-after_success:
-  - Rscript -e 'covr::codecov()'
+after_failure:
+  - ./pkg-build.sh dump_logs
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
+env:
+  matrix:
+    - RVERSION=oldrel
+    - RVERSION=release
+    - RVERSION=devel
+ 
