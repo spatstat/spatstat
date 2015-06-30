@@ -1,7 +1,10 @@
 language: r
 sudo: required
-warnings_are_errors: true
+warnings_are_errors: false
 
+env: 
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  
 apt_packages:
   - libgsl0-dev
   - bwidget
