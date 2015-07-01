@@ -1129,7 +1129,7 @@
   Gibbs point process models to point pattern data using \pkg{spatstat},
   see Baddeley and Turner (2005b) or Baddeley (2008).
   
-  \bold{To fit a Poison or Gibbs point process model:}
+  \bold{To fit a Poisson or Gibbs point process model:}
 
   Model fitting in \pkg{spatstat} is performed mainly by the function
   \code{\link{ppm}}. Its result is an object of class \code{"ppm"}.

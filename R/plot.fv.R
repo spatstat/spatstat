@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.119 $    $Date: 2015/06/11 09:24:42 $
+#  $Revision: 1.120 $    $Date: 2015/06/30 12:44:04 $
 #
 #
 
@@ -535,8 +535,9 @@ plot.fv <- local({
                                           inset=0.05,
                                           y.intersp=if(legendmath) 1.3 else 1),
                                      .StripNull=TRUE)
+      tB <- dev.capabilities()$transparentBackground
       if(!any(names(legendspec) == "bg") &&
-         dev.capabilities()$transparentBackground != "no")
+         !is.na(tB) && !identical(tB, "no"))
         legendspec$bg <- "transparent"
       
       if(legendavoid || identical(legendpos, "float")) {

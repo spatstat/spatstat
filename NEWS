@@ -1,4 +1,24 @@
 
+        CHANGES IN spatstat VERSION 1.42-2.001
+
+OVERVIEW
+
+   o Nothing yet.
+
+NEW FUNCTIONS
+  
+   o None yet.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o None yet.
+
+BUG FIXES
+
+   o plot.fv
+   Crashed with some graphics devices, if legend=TRUE.
+   Fixed.
+
         CHANGES IN spatstat VERSION 1.42-2
 
 OVERVIEW
