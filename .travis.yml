@@ -6,7 +6,7 @@ before_install:
   - chmod 755 pkg-build.sh
   - ./pkg-build.sh bootstrap
   - sudo apt-get update -qq
-	- sudo apt-get install -qq libgsl0-dev bwidget
+  - sudo apt-get install -qq libgsl0-dev bwidget
 
 install:
   - ./pkg-build.sh install_deps
