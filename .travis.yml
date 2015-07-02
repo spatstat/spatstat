@@ -23,7 +23,8 @@ notifications:
     on_failure: change
 
 env:
-  - _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
     - RVERSION=release
+      _R_CHECK_FORCE_SUGGESTS_=false
     - RVERSION=devel
+      _R_CHECK_FORCE_SUGGESTS_=false
