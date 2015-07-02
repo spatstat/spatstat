@@ -5,13 +5,8 @@ before_install:
   - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
   - chmod 755 pkg-build.sh
   - ./pkg-build.sh bootstrap
-
-env: 
-  - _R_CHECK_FORCE_SUGGESTS_=false
-  
-apt_packages:
-  - libgsl0-dev
-  - bwidget
+  - sudo apt-get update -qq
+	- sudo apt-get install -qq libgsl0-dev bwidget
 
 install:
   - ./pkg-build.sh install_deps
@@ -29,6 +24,6 @@ notifications:
 
 env:
   matrix:
-    - RVERSION=oldrel
-    - RVERSION=release
-    - RVERSION=devel
+    - RVERSION=oldrel;_R_CHECK_FORCE_SUGGESTS_=false
+    - RVERSION=release;_R_CHECK_FORCE_SUGGESTS_=false
+    - RVERSION=devel;_R_CHECK_FORCE_SUGGESTS_=false
