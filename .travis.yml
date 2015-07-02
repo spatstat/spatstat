@@ -6,6 +6,13 @@ before_install:
   - chmod 755 pkg-build.sh
   - ./pkg-build.sh bootstrap
 
+env: 
+  - _R_CHECK_FORCE_SUGGESTS_=false
+  
+apt_packages:
+  - libgsl0-dev
+  - bwidget
+
 install:
   - ./pkg-build.sh install_deps
 
