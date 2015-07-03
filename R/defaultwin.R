@@ -5,7 +5,7 @@
 #   $Revision: 1.9 $   $Date: 2012/05/11 11:20:09 $
 #
 
-default.expand <- function(object, m=2, epsilon=1e-6) {
+default.expand <- function(object, m=2, epsilon=1e-6, w=Window(object)) {
   stopifnot(is.ppm(object) || inherits(object, "rmhmodel"))
   # no expansion necessary if model is Poisson
   if(is.poisson(object))
@@ -27,8 +27,7 @@ default.expand <- function(object, m=2, epsilon=1e-6) {
   mr <- m * rr
   rule <- rmhexpand(distance = mr)
   # 
-  w <- as.owin(object)
-  if(!is.null(w)) {
+  if(is.owin(w)) {
     # apply rule to window
     wplus <- expand.owin(w, rule)
     # save as new expansion rule

@@ -1189,6 +1189,10 @@ local({
    # then clipped to original window
    Xsim <- rmh(fit, control=list(nrep=Nrep, expand=1.1, periodic=TRUE))
 
+   # Extension of model to another window (thanks to Tuomas Rajala)
+   Xsim <- rmh(fit, w=square(2))
+   Xsim <- simulate(fit, w=square(2))
+   
    # Strauss - hard core process
 #   fit <- ppm(X, ~1, StraussHard(r=7,hc=2))
 #   Xsim <- rmh(fit, start=list(n.start=X$n))

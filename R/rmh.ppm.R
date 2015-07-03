@@ -1,11 +1,11 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.30 $ $Date: 2014/12/09 09:14:35 $
+#  $Revision: 1.31 $ $Date: 2015/07/03 06:37:03 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
-                    control = default.rmhcontrol(model),
+                    control = default.rmhcontrol(model, w=w),
                     ...,
                     w = NULL, project=TRUE, verbose=TRUE,
                     new.coef=NULL) {
@@ -13,7 +13,7 @@ rmh.ppm <- function(model, start = NULL,
   argh <- list(...)
 
   if(is.null(control)) {
-    control <- default.rmhcontrol(model)
+    control <- default.rmhcontrol(model, w=w)
   } else {
     control <- rmhcontrol(control)
   }
@@ -48,7 +48,8 @@ rmh.ppm <- function(model, start = NULL,
 simulate.ppm <- function(object, nsim=1, ...,
                          singlerun=FALSE,
                          start = NULL,
-                         control = default.rmhcontrol(object),
+                         control = default.rmhcontrol(object, w=w),
+                         w = NULL,
                          project=TRUE,
                          new.coef=NULL,
                          verbose=FALSE,
@@ -62,7 +63,7 @@ simulate.ppm <- function(object, nsim=1, ...,
   
   # set up control parameters
   if(missing(control) || is.null(control)) {
-    rcontr <- default.rmhcontrol(object)
+    rcontr <- default.rmhcontrol(object, w=w)
   } else {
     rcontr <- rmhcontrol(control)
   }
@@ -83,7 +84,7 @@ simulate.ppm <- function(object, nsim=1, ...,
     rcontr <- update(rcontr, ...)
 
   # Set up model parameters for rmh
-  rmodel <- rmhmodel(object, verbose=FALSE, project=TRUE, control=rcontr,
+  rmodel <- rmhmodel(object, w=w, verbose=FALSE, project=TRUE, control=rcontr,
                      new.coef=new.coef)
   if(is.null(start)) {
     datapattern <- data.ppm(object)

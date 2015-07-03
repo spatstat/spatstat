@@ -6,7 +6,7 @@
   for simulation of a fitted point process model.
 }
 \usage{
-  default.expand(object, m=2, epsilon=1e-6)
+  default.expand(object, m=2, epsilon=1e-6, w=Window(object))
 }
 \arguments{
   \item{object}{
@@ -21,6 +21,10 @@
   \item{epsilon}{
     Threshold argument passed to \code{\link{reach}} to determine
     \code{reach(object)}.
+  }
+  \item{w}{
+    Optional. The un-expanded window in which the model is defined.
+    The resulting simulated point patterns will lie in this window. 
   }
 } 
 \value{

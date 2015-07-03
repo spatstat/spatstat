@@ -8,11 +8,14 @@
   of the Metropolis-Hastings algorithm.
 }
 \usage{
-   default.rmhcontrol(model)
+   default.rmhcontrol(model, w=NULL)
 }
 \arguments{
   \item{model}{
     A fitted point process model (object of class \code{"ppm"})
+  }
+  \item{w}{
+    Optional. Window for the resulting simulated patterns.
   }
 }
 \value{
@@ -27,7 +30,7 @@
   process model \code{model}.
 
   The expansion parameter \code{expand} is set to
-  \code{\link{default.expand}(model)}.
+  \code{\link{default.expand}(model, w)}.
 
   All other parameters revert to their defaults given in
   \code{\link{rmhcontrol.default}}.
@@ -44,6 +47,7 @@
 \examples{
   fit <- ppm(cells, ~1, Strauss(0.1))
   default.rmhcontrol(fit)
+  default.rmhcontrol(fit, w=square(2))
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

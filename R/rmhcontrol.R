@@ -201,9 +201,9 @@ print.rmhcontrol <- function(x, ...) {
   return(invisible(NULL))
 }
 
-default.rmhcontrol <- function(model) {
+default.rmhcontrol <- function(model, w=NULL) {
   # set default for 'expand'
-  return(rmhcontrol(expand=default.expand(model)))
+  return(rmhcontrol(expand=default.expand(model, w=w)))
 }
 
 update.rmhcontrol <- function(object, ...) {

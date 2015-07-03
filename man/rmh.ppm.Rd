@@ -9,7 +9,7 @@
 
 \usage{
   \method{rmh}{ppm}(model, start=NULL,
-                    control=default.rmhcontrol(model),
+                    control=default.rmhcontrol(model, w=w),
                     \dots,
                     w = NULL, 
                     project=TRUE, verbose=TRUE, new.coef=NULL)

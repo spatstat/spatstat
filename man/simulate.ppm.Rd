@@ -9,7 +9,8 @@
   \method{simulate}{ppm}(object, nsim=1, ...,
                          singlerun = FALSE,
                          start = NULL,
-                         control = default.rmhcontrol(object),
+                         control = default.rmhcontrol(object, w=w),
+                         w = NULL, 
                          project=TRUE, new.coef=NULL,
                          verbose=FALSE, progress=(nsim > 1),
                          drop=FALSE)
@@ -38,6 +39,10 @@
   \item{control}{Data controlling the running of
     the Metropolis-Hastings algorithm.  See \code{\link{rmhcontrol}}
     for description of these arguments.
+  }
+  \item{w}{
+    Optional. The window in which the model is defined.
+    An object of class \code{"owin"}.
   }
   \item{\dots}{
     Further arguments passed to \code{\link{rmhcontrol}},
