@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.16 $ $Date: 2015/03/28 08:46:27 $
+#   $Revision: 1.17 $ $Date: 2015/07/07 03:38:19 $
 #
 
 effectfun <- function(model, covname, ..., se.fit=FALSE) {
@@ -16,7 +16,7 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
     if(is.marked.ppm(model)) c("x", "y", "marks") else c("x", "y")
   needed.names <- variablesinformula(rhs.of.formula(formula(model)))
   ## validate the relevant covariate 
-  if(missing(covname) | is.null(covname)) {
+  if(missing(covname) || is.null(covname)) {
     mc <- model.covariates(model)
     if(length(mc) == 1) covname <- mc else stop("covname must be provided")
   }

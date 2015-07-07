@@ -43,7 +43,7 @@
     Huang-Ogata approximate maximum likelihood)
     \item Cox/cluster process models
     (by Waagepetersen's two-step fitting procedure
-    and minimum contrast, or by composite likelihood)
+    and minimum contrast, composite likelihood, or Palm likelihood)
   }
   The models may include spatial trend,
   dependence on covariates, and complicated interpoint interactions.
@@ -103,7 +103,8 @@
   datasets is available by typing \code{library(help=spatstat)}.
 
   For further information on any of these,
-  type \code{help(name)} where \code{name} is the name of the function
+  type \code{help(name)} or \code{?name}
+  where \code{name} is the name of the function
   or dataset.
 }
 \section{CONTENTS:}{
@@ -383,6 +384,7 @@
 	Convert other data to a window object \cr
 	\code{\link{square}}    \tab	make a square window \cr
 	\code{\link{disc}}    \tab	make a circular window \cr
+	\code{\link{ellipse}}    \tab	make an elliptical window \cr
 	\code{\link{ripras}}    \tab
 	Ripley-Rasson estimator of window, given only the points \cr
 	\code{\link{convexhull}} \tab compute convex hull of something \cr 
@@ -438,6 +440,8 @@
 	raster x coordinates \cr
 	\code{\link{raster.y}} \tab
 	raster y coordinates \cr
+	\code{\link{raster.xy}} \tab
+	raster x and y coordinates \cr
 	\code{\link{as.polygonal}} \tab
 	convert pixel mask to polygonal window 
       }
@@ -758,7 +762,8 @@
     print basic description of point pattern \code{X}  \cr
     \code{any(duplicated(X))} \tab
     check for duplicated points in pattern \code{X} \cr
-    \code{\link{istat}(X)} \tab Interactive exploratory analysis 
+    \code{\link{istat}(X)} \tab Interactive exploratory analysis \cr
+    \code{\link{View}(X)} \tab spreadsheet-style viewer
   }
 
   \bold{Classical exploratory tools:}
@@ -794,7 +799,7 @@
     \code{\link{nnclean}} \tab Byers-Raftery feature detection  \cr
     \code{\link{sharpen.ppp}} \tab Choi-Hall data sharpening \cr
     \code{\link{rhohat}} \tab Kernel estimate of covariate effect\cr
-    \code{\link{rho2hat}} \tab Kernel estimate of covariate effect\cr
+    \code{\link{rho2hat}} \tab Kernel estimate of effect of two covariates\cr
     \code{\link{spatialcdf}} \tab Spatial cumulative distribution function\cr
     \code{\link{roc}} \tab Receiver operating characteristic curve
   }
@@ -1580,20 +1585,20 @@
   The online manual entries are quite detailed and should be consulted
   first for information about a particular function.
   
-  The paper by Baddeley and Turner (2005a) is a brief overview of
-  the package. 
-  Baddeley and Turner (2005b) is a more detailed explanation of
-  how to fit point process models to data.
-  
-  Baddeley (2010) is a complete set of notes from a 2-day workshop
-  on the use of \pkg{spatstat}. It is now very out-of-date.
-
   The forthcoming book
   Baddeley, Rubak and Turner (2015) is a complete course
   on analysing spatial point patterns, with full details about
   \pkg{spatstat}.
 
-  Type \code{citation("spatstat")} to get these references.
+  Older material (which is now out-of-date but is freely available)
+  includes Baddeley and Turner (2005a), a brief overview of
+  the package in its early development;
+  Baddeley and Turner (2005b), a more detailed explanation of
+  how to fit point process models to data; and 
+  Baddeley (2010), a complete set of notes from a 2-day workshop
+  on the use of \pkg{spatstat}. 
+
+  Type \code{citation("spatstat")} to get a list of these references.
 }
 \references{
   Baddeley, A. (2010)
