@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.003
+        CHANGES IN spatstat VERSION 1.42-2.004
 
 OVERVIEW
 
@@ -29,6 +29,10 @@ BUG FIXES
 
    o effectfun
    Crashed if 'covname' was missing.
+   Fixed.
+
+   o as.function.fv
+   Generated an error when executed in the 'covr' package.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

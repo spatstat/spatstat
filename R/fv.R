@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.124 $   $Date: 2015/01/24 02:41:06 $
+##    $Revision: 1.127 $   $Date: 2015/07/07 10:28:37 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1151,15 +1151,19 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
                    u=xx,
                    endrule=endrule)
     ## return a function which selects the appropriate 'approxfun' and executes
-    f <- function(x, what=value) {
+    f <- function(xxxx, what=value) {
       what <- match.arg(what)
-      funs[[what]](x)
+      funs[[what]](xxxx)
     }
     ## recast function definition
-    ## ('any sufficiently advanced technology...')
+    ## ('any sufficiently advanced technology is
+    ##   indistinguishable from magic' -- Arthur C. Clarke)
     formals(f)[[2]] <- value
     names(formals(f))[1] <- argname
-    body(f)[[3]][[2]] <- as.name(argname)
+#    body(f)[[3]][[2]] <- as.name(argname)
+    body(f) <- eval(substitute(substitute(z,
+                                          list(xxxx=as.name(argname))),
+                               list(z=body(f))))
   }
   class(f) <- c("fvfun", class(f))
   attr(f, "fname") <- attr(x, "fname")
