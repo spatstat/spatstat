@@ -8,16 +8,20 @@
   whose pixel values are colours.
 }
 \usage{
-  rgbim(R, G, B, maxColorValue=255, autoscale=FALSE)
-  hsvim(H, S, V, autoscale=FALSE)
+  rgbim(R, G, B, A, maxColorValue=255, autoscale=FALSE)
+  hsvim(H, S, V, A, autoscale=FALSE)
 }
 \arguments{
   \item{R,G,B}{
     Pixel images (objects of class \code{"im"}) or constants
     giving the red, green, and blue components of a colour, respectively.
   }
+  \item{A}{
+    Optional. Pixel image or constant value
+    giving the alpha (transparency) component of a colour.
+  }
   \item{maxColorValue}{
-    Maximum colour channel value for \code{R,G,B}.
+    Maximum colour channel value for \code{R,G,B,A}.
   }
   \item{H,S,V}{
     Pixel images (objects of class \code{"im"}) or constants
@@ -64,7 +68,7 @@
   M <- Window(X)
   Y <- as.im(function(x,y){(x+1)/2}, W=M)
   Z <- as.im(function(x,y){(y+1)/2}, W=M)
-  RGB <- rgbim(X, Y, Z, 1)
+  RGB <- rgbim(X, Y, Z, maxColorValue=1)
   HSV <- hsvim(X, Y, Z)
   plot(RGB, valuesAreColours=TRUE)
   plot(HSV, valuesAreColours=TRUE)

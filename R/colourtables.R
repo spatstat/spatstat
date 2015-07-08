@@ -409,7 +409,7 @@ interp.colourmap <- function(m, n=512) {
     xknots <- (bks[-1] + bks[-nb])/2
   }
   # corresponding colours in hsv coordinates
-  yknots.hsv <- rgb2hsv(col2rgb(st$outputs))
+  yknots.hsv <- rgb2hsva(col2rgb(st$outputs, alpha=TRUE))
   # transform 'hue' from polar to cartesian coordinate
   # divide domain into n equal intervals
   xrange <- range(xknots)
@@ -423,8 +423,17 @@ interp.colourmap <- function(m, n=512) {
   yy.huex <- approx(x=xknots, y=cos(yknots.hue), xout=xx)$y
   yy.huey <- approx(x=xknots, y=sin(yknots.hue), xout=xx)$y
   yy.hue <- (atan2(yy.huey, yy.huex)/(2 * pi)) %% 1
-  # form colours using hue, sat, val
-  yy <- hsv(yy.hue, yy.sat, yy.val)
+  # handle transparency
+  yknots.alpha <- yknots.hsv["alpha", ]
+  if(all(yknots.alpha == 1)) {
+    ## opaque colours: form using hue, sat, val
+    yy <- hsv(yy.hue, yy.sat, yy.val)
+  } else {
+    ## transparent colours: interpolate alpha
+    yy.alpha <- approx(x=xknots, y=yknots.alpha, xout=xx)$y
+    ## form colours using hue, sat, val, alpha
+    yy <- hsv(yy.hue, yy.sat, yy.val, yy.alpha)    
+  }
   # done
   f <- colourmap(yy, breaks=xbreaks)
   return(f)
@@ -437,62 +446,72 @@ interp.colours <- function(x, length.out=512) {
   return(oo)
 }
 
-tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
-  if(!inherits(m, "colourmap"))
-    stop("m should be a colourmap")
-  if(is.null(inputs) && is.null(range)) 
-    stop("Specify either inputs or range")
-  if(!is.null(inputs) && !is.null(range))
-    stop("Do not specify both inputs and range")
-  # determine indices of colours to be changed
-  if(!is.null(inputs)) {
-    ix <- m(inputs, what="index")
-  } else {
-    if(!(is.numeric(range) && length(range) == 2 && diff(range) > 0))
-      stop("range should be a numeric vector of length 2 giving (min, max)")
-    if(length(col2hex(col)) != 1)
-      stop("When range is given, col should be a single colour value")
-    ixr <- m(range, what="index")
-    ix <- (ixr[1]):(ixr[2])
+tweak.colourmap <- local({
+
+  is.hex <- function(z) {
+    is.character(z) &&
+    all(nchar(z, keepNA=TRUE) %in% c(7,9)) &&
+    identical(substr(z, 1, 7), substr(col2hex(z), 1, 7))
   }
-  # reassign colours
-  st <- attr(m, "stuff")
-  outputs <- st$outputs
-  is.hex <- function(z) identical(substr(z, 1, 7), substr(col2hex(z), 1, 7))
-  result.hex <- FALSE
-  if(is.hex(outputs)) {
-    # convert replacement data to hex
-    col <- col2hex(col)
-    result.hex <- TRUE
-  } else if(is.hex(col)) {
-    # convert existing data to hex
-    outputs <- col2hex(outputs)
-    result.hex <- TRUE
-  } else if(!(is.character(outputs) && is.character(col))) {
-    # unrecognised format - convert both to hex
-    outputs <- col2hex(outputs)
-    col <- col2hex(col)
-    result.hex <- TRUE
-  }
-  if(result.hex) {
-    # hex codes may be 7 or 9 characters
-    outlen <- nchar(outputs)
-    collen <- nchar(col)
-    if(length(unique(c(outlen, collen))) > 1) {
-      # convert all to 9 characters
-      if(any(bad <- (outlen == 7))) 
-        outputs[bad] <- paste0(outputs[bad], "FF")
-      if(any(bad <- (collen == 7))) 
-        col[bad] <- paste0(col[bad], "FF")
+
+  tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
+    if(!inherits(m, "colourmap"))
+      stop("m should be a colourmap")
+    if(is.null(inputs) && is.null(range)) 
+      stop("Specify either inputs or range")
+    if(!is.null(inputs) && !is.null(range))
+      stop("Do not specify both inputs and range")
+    ## determine indices of colours to be changed
+    if(!is.null(inputs)) {
+      ix <- m(inputs, what="index")
+    } else {
+      if(!(is.numeric(range) && length(range) == 2 && diff(range) > 0))
+        stop("range should be a numeric vector of length 2 giving (min, max)")
+      if(length(col2hex(col)) != 1)
+        stop("When range is given, col should be a single colour value")
+      ixr <- m(range, what="index")
+      ix <- (ixr[1]):(ixr[2])
     }
+    ## reassign colours
+    st <- attr(m, "stuff")
+    outputs <- st$outputs
+    result.hex <- FALSE
+    if(is.hex(outputs)) {
+      ## convert replacement data to hex
+      col <- col2hex(col)
+      result.hex <- TRUE
+    } else if(is.hex(col)) {
+      ## convert existing data to hex
+      outputs <- col2hex(outputs)
+      result.hex <- TRUE
+    } else if(!(is.character(outputs) && is.character(col))) {
+      ## unrecognised format - convert both to hex
+      outputs <- col2hex(outputs)
+      col <- col2hex(col)
+      result.hex <- TRUE
+    }
+    if(result.hex) {
+      ## hex codes may be 7 or 9 characters
+      outlen <- nchar(outputs)
+      collen <- nchar(col)
+      if(length(unique(c(outlen, collen))) > 1) {
+        ## convert all to 9 characters
+        if(any(bad <- (outlen == 7))) 
+          outputs[bad] <- paste0(outputs[bad], "FF")
+        if(any(bad <- (collen == 7))) 
+          col[bad] <- paste0(col[bad], "FF")
+      }
+    }
+    ## Finally, replace
+    outputs[ix] <- col
+    st$outputs <- outputs
+    attr(m, "stuff") <- st
+    assign("stuff", st, envir=environment(m))
+    return(m)
   }
-  # Finally, replace
-  outputs[ix] <- col
-  st$outputs <- outputs
-  attr(m, "stuff") <- st
-  assign("stuff", st, envir=environment(m))
-  return(m)
-}
+
+  tweak.colourmap
+})
 
 colouroutputs <- function(x) {
   stopifnot(inherits(x, "colourmap"))

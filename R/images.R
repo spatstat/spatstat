@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.130 $     $Date: 2015/06/18 01:56:30 $
+#      $Revision: 1.132 $     $Date: 2015/07/08 06:04:40 $
 #
 #      The class "im" of raster images
 #
@@ -999,23 +999,31 @@ sort.im <- function(x, ...) {
 dim.im <- function(x) { x$dim }
 
 # colour images
-rgbim <- function(R, G, B, maxColorValue=255, autoscale=FALSE) {
+rgbim <- function(R, G, B, A=NULL, maxColorValue=255, autoscale=FALSE) {
   if(autoscale) {
     R <- scaletointerval(R, 0, maxColorValue)
     G <- scaletointerval(G, 0, maxColorValue)
     B <- scaletointerval(B, 0, maxColorValue)
+    if(!is.null(A))
+      A <- scaletointerval(A, 0, maxColorValue)
   }
-  eval.im(factor(rgbNA(as.vector(R), as.vector(G), as.vector(B),
-                     maxColorValue=maxColorValue)))
+  Z <- eval.im(factor(rgbNA(as.vector(R), as.vector(G), as.vector(B),
+                            as.vector(A),
+                            maxColorValue=maxColorValue)))
+  return(Z)
 }
 
-hsvim <- function(H, S, V, autoscale=FALSE) {
+hsvim <- function(H, S, V, A=NULL, autoscale=FALSE) {
   if(autoscale) {
     H <- scaletointerval(H, 0, 1)
     S <- scaletointerval(S, 0, 1)
     V <- scaletointerval(V, 0, 1)
+    if(!is.null(A))
+      A <- scaletointerval(A, 0, 1)
   }
-  eval.im(factor(hsvNA(as.vector(H), as.vector(S), as.vector(V))))
+  Z <- eval.im(factor(hsvNA(as.vector(H), as.vector(S), as.vector(V),
+                            as.vector(A))))
+  return(Z)
 }
 
 scaletointerval <- function(x, from=0, to=1, xrange=range(x)) {

@@ -1,13 +1,19 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.004
+        CHANGES IN spatstat VERSION 1.42-2.005
 
 OVERVIEW
 
    o We thank Tuomas Rajala for contributions.
 
+   o spatstat colour tools now handle transparent colours.
+
 NEW FUNCTIONS
   
-   o None yet.
+   o to.opaque, to.transparent
+   Change transparency value in colours
+
+   o rgb2hsva
+   Convert RGB to HSV data, like rgb2hsv, but preserving transparency.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -16,6 +22,19 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o default.rmhcontrol, default.rmhexpand
    New argument 'w'.
+
+   o rgbim, hsvim
+   New argument 'A' controls the alpha (transparency) channel.
+
+   o rgb2hex, col2hex, paletteindex, is.colour, samecolour,
+   complementarycolour, is.grey, to.grey
+   These colour tools now handle transparent colours.
+
+   o rgb2hex
+   New argument 'maxColorValue'
+
+   o to.grey
+   New argument 'transparent'.
 
 BUG FIXES
 
