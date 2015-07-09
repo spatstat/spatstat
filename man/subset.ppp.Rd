@@ -11,13 +11,13 @@
   a specified condition.
 }
 \usage{
-\method{subset}{ppp}(x, subset, select, \dots)
+\method{subset}{ppp}(x, subset, select, drop=FALSE, \dots)
 
-\method{subset}{pp3}(x, subset, select, \dots)
+\method{subset}{pp3}(x, subset, select, drop=FALSE, \dots)
 
-\method{subset}{lpp}(x, subset, select, \dots)
+\method{subset}{lpp}(x, subset, select, drop=FALSE, \dots)
 
-\method{subset}{ppx}(x, subset, select, \dots)
+\method{subset}{ppx}(x, subset, select, drop=FALSE, \dots)
 }
 \arguments{
   \item{x}{
@@ -34,6 +34,10 @@
   }
   \item{select}{
     Expression indicating which columns of marks should be kept.
+  }
+  \item{drop}{
+    Logical value indicating whether to remove unused levels
+    of the marks, if the marks are a factor.
   }
   \item{\dots}{
     Ignored.
@@ -72,7 +76,12 @@
   (i.e. containing zero points) in the same window as \code{x}.
   Setting \code{select=FALSE} or \code{select= -marks} will
   remove all the marks from \code{x}.
-  
+
+  The argument \code{drop} determines whether to remove
+  unused levels of a factor, if the resulting point pattern is multitype
+  (i.e. the marks are a factor) or if the marks are a data frame
+  in which some of the columns are factors.
+
   The result is always a point pattern, of the same class as \code{x}.
   Spatial coordinates (and local
   coordinates) are always retained. To extract only some
@@ -94,12 +103,18 @@
 }
 \seealso{
   \code{\link[base]{subset}},
-  \code{\link{[.ppp}}
+  
+  \code{\link{[.ppp}},
+  \code{\link{[.pp3}},
+  \code{\link{[.lpp}},
+  \code{\link{[.ppx}}
 }
 \examples{
  plot(subset(cells, x > 0.5))
 
  subset(amacrine, marks == "on")
+
+ subset(amacrine, marks == "on", drop=TRUE)
 
  subset(redwood, nndist(redwood) > 0.04)
 
@@ -111,6 +126,8 @@
                  select=cause:fnl.size)
 
  v <- subset(chicago, x + y > 1100 & marks == "assault")
+
+ vv <- subset(chicago, x + y > 1100 & marks == "assault", drop=TRUE)
 
  a <- subset(rpoispp3(40), z > 0.5)
 }

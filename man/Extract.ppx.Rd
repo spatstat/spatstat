@@ -5,15 +5,19 @@
   Extract a subset of a multidimensional point pattern.
 }
 \usage{
-  \method{[}{ppx}(x, i, ...)
+  \method{[}{ppx}(x, i, drop=FALSE, ...)
 }
 \arguments{
   \item{x}{
     A multidimensional point pattern (object of class \code{"ppx"}).
   }
   \item{i}{
-    Subset index. A valid subset index in the usual \R sense,
+   Subset index. A valid subset index in the usual \R sense,
    indicating which points should be retained.
+  }
+  \item{drop}{
+    Logical value indicating whether to remove unused levels
+    of the marks, if the marks are a factor.
   }
   \item{\dots}{
     Ignored. 
@@ -39,6 +43,11 @@
   \code{subset[i]=TRUE} will be retained, and the others
   will be deleted.
  
+  The argument \code{drop} determines whether to remove
+  unused levels of a factor, if the point pattern is multitype
+  (i.e. the marks are a factor) or if the marks are a data frame or hyperframe
+  in which some of the columns are factors.
+
   Use the function \code{\link{unmark}} to remove marks from a
   marked point pattern.
 }

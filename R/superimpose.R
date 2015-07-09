@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.28 $ $Date: 2014/07/21 06:40:11 $
+# $Revision: 1.29 $ $Date: 2015/07/09 04:02:55 $
 #
 #
 ############################# 
@@ -84,6 +84,16 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
   #
   ppp(XY$x, XY$y, window=W, marks=marx, check=check & needcheck)
 }
+
+superimpose.splitppp <- superimpose.ppplist <-
+  function(..., W=NULL, check=TRUE) {
+    arglist <- list(...)
+    while(any(h <- sapply(arglist, inherits, what=c("splitppp", "ppplist")))) {
+      i <- min(which(h))
+      arglist <- insertinlist(arglist, i, arglist[[i]])
+    }
+    do.call(superimpose, append(arglist, list(W=W, check=check)))
+  }
 
 superimpose.psp <- function(..., W=NULL, check=TRUE) {
   # superimpose any number of line segment patterns

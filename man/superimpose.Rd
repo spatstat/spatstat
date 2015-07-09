@@ -1,6 +1,8 @@
 \name{superimpose}  %DontDeclareMethods
 \alias{superimpose}
 \alias{superimpose.ppp}
+\alias{superimpose.splitppp}
+\alias{superimpose.ppplist}
 \alias{superimpose.psp}
 \alias{superimpose.default}
 \title{Superimpose Several Geometric Patterns}
@@ -13,6 +15,10 @@
   \method{superimpose}{ppp}(\dots, W=NULL, check=TRUE)
 
   \method{superimpose}{psp}(\dots, W=NULL, check=TRUE)
+
+  \method{superimpose}{splitppp}(\dots, W=NULL, check=TRUE)
+
+  \method{superimpose}{ppplist}(\dots, W=NULL, check=TRUE)
 
   \method{superimpose}{default}(\dots)
 }

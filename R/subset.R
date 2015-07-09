@@ -3,9 +3,9 @@
 ##
 ## Methods for 'subset'
 ##
-##   $Revision: 1.1 $  $Date: 2014/07/19 02:58:23 $
+##   $Revision: 1.3 $  $Date: 2015/07/09 03:15:37 $
 
-subset.ppp <- function(x, subset, select, ...) {
+subset.ppp <- function(x, subset, select, drop=FALSE, ...) {
   stopifnot(is.ppp(x))
   w <- as.owin(x)
   y <- as.data.frame(x)
@@ -38,10 +38,12 @@ subset.ppp <- function(x, subset, select, ...) {
   z <- y[r, vars, drop = FALSE]
   ## reinstate as point pattern
   out <- as.ppp(z, W=w, check=FALSE)
+  if(drop)
+    out <- out[drop=TRUE]
   return(out)
 }
 
-subset.pp3 <- subset.lpp <- subset.ppx <- function(x, subset, select, ...) {
+subset.pp3 <- subset.lpp <- subset.ppx <- function(x, subset, select, drop=FALSE, ...) {
   y <- as.data.frame(x)
   r <- if (missing(subset)) 
     rep_len(TRUE, nrow(y))
@@ -73,6 +75,9 @@ subset.pp3 <- subset.lpp <- subset.ppx <- function(x, subset, select, ...) {
   ## reinstate as point pattern
   ctype <- as.character(x$ctype)[match(vars, nama)]
   out <- ppx(z, domain=x$domain, coord.type=ctype)
+  ## drop unused factor levels
+  if(drop)
+    out <- out[drop=TRUE]
   ## reinstate class
   class(out) <- class(x)
   return(out)

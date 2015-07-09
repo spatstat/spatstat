@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.44 $  $Date: 2014/11/11 01:25:08 $
+#  $Revision: 1.45 $  $Date: 2015/07/09 03:13:15 $
 #
 
 ppx <- local({
@@ -160,11 +160,36 @@ plot.ppx <- function(x, ...) {
   return(invisible(NULL))
 }
 
-"[.ppx" <- function (x, i, ...) {
+"[.ppx" <- function (x, i, drop=FALSE, ...) {
   da <- x$data
-  daij <- da[i, , drop=FALSE]
-  out <- list(data=daij, ctype=x$ctype, domain=x$domain)
+  ct <- x$ctype
+  if(!missing(i))
+    da <- da[i, , drop=FALSE]
+  out <- list(data=da, ctype=x$ctype, domain=x$domain)
   class(out) <- "ppx"
+  if(drop) {
+    # remove unused factor levels
+    mo <- marks(out)
+    switch(markformat(mo),
+           none = { },
+           vector = {
+             if(is.factor(mo))
+               marks(out) <- factor(mo)
+           },
+           dataframe = {
+             isfac <- sapply(mo, is.factor)
+             if(any(isfac))
+               mo[, isfac] <- lapply(mo[, isfac], factor)
+             marks(out) <- mo
+           },
+           hyperframe = {
+             lmo <- as.list(mo)
+             isfac <- sapply(lmo, is.factor)
+             if(any(isfac))
+               mo[, isfac] <- as.hyperframe(lapply(lmo[isfac], factor))
+             marks(out) <- mo
+           })
+  }
   return(out)
 }
 

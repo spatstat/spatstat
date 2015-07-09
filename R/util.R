@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.181 $    $Date: 2015/06/03 11:19:56 $
+#    $Revision: 1.182 $    $Date: 2015/07/09 02:55:27 $
 #
 #
 matrowsum <- function(x) {
@@ -1509,6 +1509,22 @@ checkbigmatrix <- function(n, m, fatal=FALSE, silent=FALSE) {
   if(fatal) stop(whinge, call.=FALSE)
   if(!silent) warning(whinge, call.=FALSE)
   return(FALSE)
+}
+
+insertinlist <- function(x, i, y) {
+  ## insert a possibly longer or shorter list 'y'
+  ## into serial position 'i' in list 'x'
+  n <- length(x)
+  if(n == 0) return(y)
+  m <- seq_len(n)
+  names(m) <- names(x)
+  i <- m[[i]] # convert 'i' to integer index
+  stopifnot(length(i) == 1)
+  if(n == 1) return(y)
+  xleft <- x[seq_len(i-1)]
+  xright <- x[i + seq_len(n-i)]
+  z <- c(xleft, y, xright)
+  return(z)
 }
 
   

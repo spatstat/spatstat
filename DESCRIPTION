@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.42-2.005
+Version: 1.42-2.006
 Nickname: Reds Under The Beds
-Date: 2015-07-08
+Date: 2015-07-09
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -88,6 +88,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	G. Limitsios;
 	A. Lister;
 	B. Madin;
+	M. Maechler;
 	J. Marcus;
 	K. Marchikanti; 
 	R. Mark; 

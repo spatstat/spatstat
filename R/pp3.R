@@ -171,7 +171,7 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
                                 zlim=x$domain$zrange)))
 }
 
-"[.pp3" <- function(x, i, ...) {
+"[.pp3" <- function(x, i, drop=FALSE, ...) {
   answer <- NextMethod("[")
   if(is.ppx(answer))
     class(answer) <- c("pp3", class(answer))

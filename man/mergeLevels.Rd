@@ -42,6 +42,18 @@ mergeLevels(.f, \dots)
   Another factor of the same length as \code{.f}
   (or object of the same kind as \code{.f}).
 }
+\section{Tips for manipulating factor levels}{
+  To remove unused levels from a factor \code{f},
+  just type \code{f <- factor(f)}.
+
+  To change the ordering of levels in a factor,
+  use \code{\link[base]{factor}(f, levels=l)} or
+  \code{\link[stats]{relevel}(f, ref)}.
+}
+\seealso{
+  \code{\link[base]{factor}},
+  \code{\link[stats]{relevel}}
+}
 \author{
 Adrian Baddeley
 \email{Adrian.Baddeley@uwa.edu.au}

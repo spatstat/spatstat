@@ -26,10 +26,14 @@
     Replacement value for the subset. A point pattern.
   }
   \item{j}{
-   Redundant. Included for backward compatibility.
+    Redundant. Included for backward compatibility.
   }
-  \item{drop, \dots}{
-    Ignored. These arguments are required for compatibility
+  \item{drop}{
+    Logical value indicating whether to remove unused levels
+    of the marks, if the marks are a factor.
+  }
+  \item{\dots}{
+    Ignored. This argument is required for compatibility
     with the generic function.
   }
 }
@@ -66,7 +70,12 @@
   \code{window} will be retained. Alternatively \code{i} may be a
   pixel image (object of class \code{"im"}) with logical values;
   the pixels with the value \code{TRUE} will be interpreted as a window.
- 
+
+  The argument \code{drop} determines whether to remove
+  unused levels of a factor, if the point pattern is multitype
+  (i.e. the marks are a factor) or if the marks are a data frame
+  in which some of the columns are factors.
+
   The function \code{[<-.ppp} is a method for \code{\link{[<-}} for the
   class \code{"ppp"}. It replaces the designated
   subset with the point pattern \code{value}.
@@ -104,7 +113,6 @@
   inside \code{x$window}.
 }
 \examples{
- data(longleaf)
  # Longleaf pines data
  \dontrun{
  plot(longleaf)
@@ -122,7 +130,6 @@
  # Use unmark(longadult) to remove the marks
  
  # New Zealand trees data
- data(nztrees)
  \dontrun{
  plot(nztrees)          # plot shows a line of trees at the far right
  abline(v=148, lty=2)   # cut along this line
@@ -135,7 +142,6 @@
  }
 
  # Redwood data
- data(redwood) 
  \dontrun{
  plot(redwood)
  }
@@ -151,7 +157,6 @@
  redwood[modif] <- scramble(redwood[modif])
 
  # Lansing woods data - multitype points
- data(lansing)
  \testonly{
     lansing <- lansing[seq(1, lansing$n, length=100)]
  }
@@ -165,7 +170,11 @@
 
  # Scramble the locations of trees in subwindow, retaining their marks
   lansing[win] <- scramble(lsub) \%mark\% (lsub$marks)
-  
+
+ # Extract oaks only
+ oaknames <- c("redoak", "whiteoak", "blackoak")
+ oak <- lansing[marks(lansing) \%in\% oaknames, drop=TRUE]
+ oak <- subset(lansing, marks \%in\% oaknames, drop=TRUE)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

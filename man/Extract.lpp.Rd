@@ -5,20 +5,24 @@
   Extract a subset of a point pattern on a linear network.
 }
 \usage{
-  \method{[}{lpp}(x, i, j, ...)
+  \method{[}{lpp}(x, i, j, drop=FALSE, ...)
 }
 \arguments{
   \item{x}{
     A point pattern on a linear network (object of class \code{"lpp"}).
   }
   \item{i}{
-    Subset index. A valid subset index in the usual \R sense,
-   indicating which points should be retained
+   Subset index. A valid subset index in the usual \R sense,
+   indicating which points should be retained.
   }
   \item{j}{
     Spatial window
    (object of class \code{"owin"}) delineating the region that should
    be retained.
+  }
+  \item{drop}{
+    Logical value indicating whether to remove unused levels
+    of the marks, if the marks are a factor.
   }
   \item{\dots}{
     Ignored. 
@@ -48,11 +52,17 @@
   \emph{Line segments that cross the boundary of the window
   are deleted} in the current implementation.
 
+  The argument \code{drop} determines whether to remove
+  unused levels of a factor, if the point pattern is multitype
+  (i.e. the marks are a factor) or if the marks are a data frame or hyperframe
+  in which some of the columns are factors.
+
   Use the function \code{\link{unmark}} to remove marks from a
   marked point pattern.
 }
 \seealso{
-  \code{\link{lpp}}
+  \code{\link{lpp}},
+  \code{\link{subset.lpp}}
 }
 \examples{
   # Chicago crimes data - remove cases of assault

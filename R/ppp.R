@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.103 $	$Date: 2015/05/08 09:10:07 $
+#	$Revision: 4.104 $	$Date: 2015/07/09 02:13:37 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -289,13 +289,10 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
 # --------------------------------------------------------------
 
 "[.ppp" <-
-  function(x, i, j, drop, ...) {
+  function(x, i, j, drop=FALSE, ...) {
 
         verifyclass(x, "ppp")
         
-        if(missing(i) && missing(j))
-          return(x)
-
         if(!missing(i)) {
           if(inherits(i, "owin")) {
             # i is a window
@@ -334,6 +331,22 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
         if(!missing(j))
           x <- x[j]   # invokes code above
 
+        if(drop) {
+          mx <- x$marks
+          switch(markformat(mx),
+                 none = { },
+                 vector = {
+                   if(is.factor(mx))
+                     marks(x) <- factor(mx)
+                 },
+                 dataframe = {
+                   isfac <- sapply(mx, is.factor)
+                   if(any(isfac))
+                     mx[, isfac] <- lapply(mx[, isfac], factor)
+                 },
+                 hyperframe = { })
+        }
+               
         return(x)
 }
 

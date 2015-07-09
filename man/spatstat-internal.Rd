@@ -252,6 +252,7 @@
 \alias{impliedcoefficients}
 \alias{inject.expr}
 \alias{inpoint}
+\alias{insertinlist}     
 \alias{inside.range}     
 \alias{inside.triangle}     
 \alias{inside.xypolygon}     
@@ -1013,6 +1014,7 @@ impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)
 inject.expr(base, expr)
 inpoint(W)
+insertinlist(x, i, y)
 inside.range(x, r)
 inside.triangle(x, y, xx, yy)
 inside.xypolygon(pts, polly, test01, method)
@@ -1110,7 +1112,7 @@ prettydiscrete(x, n)
 \method{plot}{localpcfmatrix}(x, \dots)
 putSpatstatVariable(name, value)
 \method{[}{localpcfmatrix}(x, i, \dots)
-\method{[}{pp3}(x, i, \dots)
+\method{[}{pp3}(x, i, drop, \dots)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)

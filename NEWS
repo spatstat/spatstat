@@ -1,11 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.005
+        CHANGES IN spatstat VERSION 1.42-2.006
 
 OVERVIEW
 
-   o We thank Tuomas Rajala for contributions.
+   o We thank Tuomas Rajala and Martin Maechler for contributions.
 
    o spatstat colour tools now handle transparent colours.
+
+   O Improvements to "[" and subset() methods
+
+   o Minor improvements and bug fixes.
+
+   o Version nickname: 'Reds under the Beds'
 
 NEW FUNCTIONS
   
@@ -15,7 +21,18 @@ NEW FUNCTIONS
    o rgb2hsva
    Convert RGB to HSV data, like rgb2hsv, but preserving transparency.
 
+   o superimpose.ppplist, superimpose.splitppp
+   New methods for 'superimpose' for lists of point patterns.
+
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o [.ppp
+   The previously-unused argument 'drop' now determines whether 
+   to remove unused levels of a factor.
+
+   o [.pp3, [.lpp, [.ppx, subset.ppp, subset.pp3, subset.lpp, subset.ppx
+   These methods now have an argument 'drop' which determines
+   whether to remove unused levels of a factor.
 
    o simulate.ppm
    New argument 'w' controls the window of the simulated patterns.
@@ -38,10 +55,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-   o rmh.ppm
-   Argument 'w' was ignored in some cases.
-   Fixed.
-
    o plot.fv
    Crashed with some graphics devices, if legend=TRUE.
    Fixed.
@@ -52,6 +65,13 @@ BUG FIXES
 
    o as.function.fv
    Generated an error when executed in the 'covr' package.
+   Fixed.
+
+   o $<-.hyperframe, [<-.hyperframe
+   Result was garbled if 'value' was a hyperframe with one column.
+
+   o rmh.ppm
+   Argument 'w' was ignored in some cases.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

@@ -294,13 +294,6 @@ as.linnet.lpp <- function(X, ..., fatal=TRUE, sparse) {
   return(L)
 }
   
-"[.lpp" <- function (x, i, ...) {
-  # invoke [.ppx
-  y <- NextMethod("[")
-  class(y) <- c("lpp", class(y))
-  return(y)
-}
-
 unitname.lpp <- function(x) {
   u <- unitname(x$domain)
   return(u)
@@ -355,7 +348,7 @@ local2lpp <- function(L, seg, tp, X=NULL) {
 # subset extractor
 ####################################################
 
-"[.lpp" <- function (x, i, j, ...) {
+"[.lpp" <- function (x, i, j, drop=FALSE, ...) {
   if(!missing(i) && !is.null(i)) {
     if(is.owin(i)) {
       # spatial domain: call code for 'j'
@@ -365,6 +358,8 @@ local2lpp <- function(L, seg, tp, X=NULL) {
       da <- x$data
       daij <- da[i, , drop=FALSE]
       xi <- ppx(data=daij, domain=x$domain, coord.type=as.character(x$ctype))
+      if(drop)
+        xi <- xi[drop=TRUE] # call [.ppx to remove unused factor levels
       class(xi) <- c("lpp", class(xi))
     }
     x <- xi
