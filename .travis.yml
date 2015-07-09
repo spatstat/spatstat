@@ -16,6 +16,9 @@ script:
 
 after_failure:
   - ./pkg-build.sh dump_logs
+  
+after_success:
+  - Rscript -e 'library(covr);codecov(path="spatstat/spatstat", type="all")'
 
 notifications:
   email:
@@ -23,8 +26,8 @@ notifications:
     on_failure: change
 
 env:
+  global:
+    - _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
     - RVERSION=release
-      _R_CHECK_FORCE_SUGGESTS_=false
     - RVERSION=devel
-      _R_CHECK_FORCE_SUGGESTS_=false
