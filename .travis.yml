@@ -19,9 +19,7 @@ after_failure:
   - ./pkg-build.sh dump_logs
   
 after_success:
-  - pwd
-  - ls
-  - Rscript -e 'library(covr);codecov(path="spatstat/spatstat", type="all")'
+  - Rscript -e 'library(covr);codecov(path=".", type="all")'
 
 notifications:
   email:
