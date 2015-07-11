@@ -3,7 +3,7 @@
 #'
 #'   Monte Carlo test of segregation for multitype patterns
 #'
-#'    $Revision: 1.2 $ $Date: 2015/01/03 01:58:06 $
+#'    $Revision: 1.3 $ $Date: 2015/07/11 08:19:26 $
 #'
 
 segregation.test <- function(X, ...) {
@@ -30,7 +30,10 @@ segregation.test.ppp <- function(X, ..., nsim=19, permute=TRUE,
   if(verbose) cat("Computing observed value... ")
   phat <- relrisk(X, at="points", ...)
   obs <- mean((phat-pbar)^2)
-  if(verbose) cat("Done.\nComputing simulated values... ")
+  if(verbose) {
+    cat("Done.\nComputing simulated values... ")
+    pstate <- list()
+  }
   sim <- numeric(nsim)
   for(i in 1:nsim) {
     Xsim <- rlabel(X, permute=permute)
@@ -41,7 +44,7 @@ segregation.test.ppp <- function(X, ..., nsim=19, permute=TRUE,
       pbarsim <- matrix(pbarsim, byrow=TRUE, nrow=np, ncol=nt)
     }
     sim[i] <- mean((phatsim - pbarsim)^2)
-    if(verbose) progressreport(i, nsim)
+    if(verbose) pstate <- progressreport(i, nsim, state=pstate)
   }
   p.value <- (1+sum(sim >= obs))/(1+nsim)
   names(obs) <- "T"

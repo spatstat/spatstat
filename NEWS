@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.007
+        CHANGES IN spatstat VERSION 1.42-2.008
 
 OVERVIEW
 
@@ -52,6 +52,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o to.grey
    New argument 'transparent'.
+
+   o progressreport
+   New argument 'state'
+   New option: style="tk"
 
 BUG FIXES
 

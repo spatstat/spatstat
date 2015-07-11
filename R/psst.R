@@ -3,7 +3,7 @@
 #
 #	Computes the GNZ contrast of delta-f for any function f
 #
-#	$Revision: 1.8 $	$Date: 2014/11/11 02:30:45 $
+#	$Revision: 1.9 $	$Date: 2015/07/11 08:19:26 $
 #
 ################################################################################
 #
@@ -104,7 +104,9 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
   uX <- superimpose(U[1], X, W=Win, check=FALSE)
   Ux <- U$x
   Uy <- U$y
-  # 
+  #
+  if(verbose) pstate <- list()
+  #
   for(j in seq(nused)) {
     i <- iused[j]
     wi <- wc[i]
@@ -130,7 +132,7 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
       gc()
       cat("collected]")
     }
-    if(verbose) progressreport(j, nused)
+    if(verbose) pstate <- progressreport(j, nused, state=pstate)
   }
 
   sdv <- sqrt(integ2)

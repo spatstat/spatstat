@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.35 $  $Date: 2015/05/10 10:43:49 $
+#  $Revision: 1.36 $  $Date: 2015/07/11 08:19:26 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -97,10 +97,13 @@ profilepl <- local({
     }
     ## go
     gc()
-    if(verbose) message(paste("Comparing", n, "models..."))
+    if(verbose) {
+      message(paste("Comparing", n, "models..."))
+      pstate <- list()
+    }
     for(i in 1:n) {
       if(verbose)
-        progressreport(i, n)
+        pstate <- progressreport(i, n, state=pstate)
       fi <- do.call(f, as.list(s[i, is.farg, drop=FALSE]))
       if(!inherits(fi, "interact"))
         stop(paste("f did not yield an object of class", sQuote("interact")))

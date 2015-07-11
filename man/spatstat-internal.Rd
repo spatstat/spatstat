@@ -145,6 +145,7 @@
 \alias{dropifsingle}
 \alias{dround}
 \alias{emptywindow}
+\alias{ensureRandomFields}
 \alias{ensure2vector}
 \alias{ensure3Darray}
 \alias{envelopeEngine}
@@ -888,6 +889,7 @@ dotexpr.to.call(expr, dot, evaluator)
 dropifsingle(x)
 dround(x)
 emptywindow(w)
+ensureRandomFields(fatal)
 ensure2vector(x)
 ensure3Darray(x)
 envelopeEngine(X, fun, simul,

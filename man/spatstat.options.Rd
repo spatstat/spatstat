@@ -209,7 +209,8 @@
     \item{progress}{
       Character string determining the style of progress reports
       printed by \code{\link{progressreport}}. Either
-      \code{"tty"} or \code{"txtbar"}.
+      \code{"tty"}, \code{"tk"} or \code{"txtbar"}.
+      For explanation of these options, see \code{\link{progressreport}}.
     }
     \item{project.fast}{
       Logical. If \code{TRUE}, the algorithm of

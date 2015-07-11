@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.29 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.30 $  $Date: 2015/07/11 08:19:26 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -102,8 +102,9 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X)) {
   pir2 <- pi * r^2
   wbox <- as.rectangle(as.owin(X))
   #
+  state <- list()
   for(i in 1:nY) {
-    progressreport(i, nY)
+    state <- progressreport(i, nY, state=state)
     V <- superimpose(Y[i], X, W=wbox, check=FALSE)
     # Dirichlet neighbour relation for V
     dd <- deldir(V$x, V$y, rw=c(wbox$xrange, wbox$yrange))

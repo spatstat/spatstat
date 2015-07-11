@@ -3,7 +3,7 @@
 #
 # resample a point pattern by resampling quadrats
 #
-# $Revision: 1.5 $  $Date: 2010/11/25 02:58:49 $
+# $Revision: 1.6 $  $Date: 2015/07/11 08:19:26 $
 #
 
 quadratresample <- function(X, nx, ny=nx, ...,
@@ -21,8 +21,10 @@ quadratresample <- function(X, nx, ny=nx, ...,
   V <- lapply(B, function(z) { w <- z$window;
                                c(w$xrange[1], w$yrange[1]) })
   out <- list()
-  if(verbose)
+  if(verbose) {
     cat("Generating resampled patterns...")
+    pstate <- list()
+  }
   for(i in 1:nsamples) {
     # resample tiles
     ind <- sample(1:nq, nq, replace=replace)
@@ -35,7 +37,7 @@ quadratresample <- function(X, nx, ny=nx, ...,
     split(Xresampled, A) <- Bresampled
     out[[i]] <- Xresampled
     if(verbose)
-      progressreport(i, nsamples)
+      pstate <- progressreport(i, nsamples, state=pstate)
   }
   if(nsamples == 1)
     return(out[[1]])

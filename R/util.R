@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.182 $    $Date: 2015/07/09 02:55:27 $
+#    $Revision: 1.184 $    $Date: 2015/07/11 07:27:28 $
 #
 #
 matrowsum <- function(x) {
@@ -455,107 +455,156 @@ niceround <- function(x, m=c(1,2,5,10)) {
   return(z)
 }
 
-progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
-                           nperline=min(charsperline,
-                             every * ceiling(charsperline /(every+3))),
-                           charsperline=60,
-                           style=spatstat.options("progress")) {
-  missevery <- missing(every)
-  if(i > n) {
-    warning(paste("progressreport called with i =", i, "> n =", n))
-    return(invisible(NULL))
+progressreport <- local({
+
+  Put <- function(name, value, state) {
+    if(is.null(state)) {
+      putSpatstatVariable(paste0("Spatstat.", name), value)
+    } else {
+      state[[name]] <- value
+    }
+    return(state)
   }
-  switch(style,
-         txtbar={
-           if(i == 1) {
-             # initialise text bar
-             putSpatstatVariable("Spatstat.ProgressBar",
-                                 txtProgressBar(1, n, 1, style=3))
-           } else {
-             # get text bar
-             pbar <- getSpatstatVariable("Spatstat.ProgressBar")
-             # update 
-             setTxtProgressBar(pbar, i)
-             if(i == n) {
-               close(pbar)
-               putSpatstatVariable("Spatstat.ProgressBar", NULL)
-             } 
-           }
-         },
-         tty={
-           now <- proc.time()
-           if(i == 1) {
-             # Initialise stuff
-             if(missevery && every > 1 && n > 10) {
-               every <- niceround(every)
-               nperline <- min(charsperline,
-                               every * ceiling(charsperline /(every+3)))
+  Get <- function(name, state) {
+    if(is.null(state)) {
+      value <- getSpatstatVariable(paste0("Spatstat.", name))
+    } else {
+      value <- state[[name]] 
+    }
+    return(value)
+  }
+  
+  progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
+                             nperline=min(charsperline,
+                               every * ceiling(charsperline /(every+3))),
+                             charsperline=60,
+                             style=spatstat.options("progress"),
+                             state=NULL) {
+    missevery <- missing(every)
+    if(i > n) {
+      warning(paste("progressreport called with i =", i, "> n =", n))
+      return(invisible(NULL))
+    }
+    if(style == "tk" && !requireNamespace("tcltk"))
+      style <- "txtbar"
+    switch(style,
+           txtbar={
+             if(i == 1) {
+               ## initialise text bar
+               state <- Put("ProgressBar",
+                            txtProgressBar(1, n, 1, style=3),
+                            state)
+             } else {
+               ## get text bar
+               pbar <- Get("ProgressBar", state)
+               ## update 
+               setTxtProgressBar(pbar, i)
+               if(i == n) {
+                 close(pbar)
+                 state <- Put("ProgressBar", NULL, state)
+               } 
              }
-             showtime <- FALSE
-             showevery <- n
-             putSpatstatVariable("Spatstat.ProgressData",
-                                 list(every=every, nperline=nperline,
-                                      starttime=now,
-                                      showtime=FALSE, showevery=n))
-           } else {
-             pd <- getSpatstatVariable("Spatstat.ProgressData")
-             if(is.null(pd))
-               stop(paste("progressreport called with i =", i, "before i = 1"))
-             every     <- pd$every
-             nperline  <- pd$nperline
-             showtime  <- pd$showtime
-             showevery <- pd$showevery
-             if(i < n) {
-               # estimate time remaining
-               starttime <- pd$starttime
-               elapsed <- now - starttime
-               elapsed <- unname(elapsed[3])
-               rate <- elapsed/(i-1)
-               remaining <- rate * (n-i)
-               if(!showtime) {
-                 # show time remaining if..
-                 if(rate > 20) {
-                   # .. rate is very slow
-                   showtime <- TRUE
-                   showevery <- 1
-                 } else if(remaining > 180) {
-                   # ... more than 3 minutes remaining
-                   showtime <- TRUE
-                   showevery <- every
-                   aminute <- ceiling(60/rate)
-                   if(aminute < showevery) 
-                     showevery <- min(niceround(aminute), showevery)
-                 }
+           },
+           tk={
+             requireNamespace("tcltk")
+             if(i == 1) {
+               ## initialise text bar
+               state <- Put("ProgressBar",
+                            tcltk::tkProgressBar(title="progress",
+                                                 min=0, max=n, width=300),
+                            state)
+             } else {
+               ## get text bar
+               pbar <- Get("ProgressBar", state)
+               ## update 
+               tcltk::setTkProgressBar(pbar, i,
+                                       label=paste0(round(100 * i/n), "%"))
+               if(i == n) {
+                 close(pbar)
+                 state <- Put("ProgressBar", NULL, state)
+               } 
+             }
+           },
+           tty={
+             now <- proc.time()
+             if(i == 1) {
+               ## Initialise stuff
+               if(missevery && every > 1 && n > 10) {
+                 every <- niceround(every)
+                 nperline <- min(charsperline,
+                                 every * ceiling(charsperline /(every+3)))
                }
-               putSpatstatVariable("Spatstat.ProgressData",
-                                   list(every=every, nperline=nperline,
-                                        starttime=starttime,
-                                        showtime=showtime, showevery=showevery))
+               showtime <- FALSE
+               showevery <- n
+               state <- Put("ProgressData",
+                            list(every=every, nperline=nperline,
+                                 starttime=now,
+                                 showtime=FALSE, showevery=n),
+                            state)
+             } else {
+               pd <- Get("ProgressData", state)
+               if(is.null(pd))
+                 stop(paste("progressreport called with i =", i,
+                            "before i = 1"))
+               every     <- pd$every
+               nperline  <- pd$nperline
+               showtime  <- pd$showtime
+               showevery <- pd$showevery
+               if(i < n) {
+                 ## estimate time remaining
+                 starttime <- pd$starttime
+                 elapsed <- now - starttime
+                 elapsed <- unname(elapsed[3])
+                 rate <- elapsed/(i-1)
+                 remaining <- rate * (n-i)
+                 if(!showtime) {
+                   ## show time remaining if..
+                   if(rate > 20) {
+                     ## .. rate is very slow
+                     showtime <- TRUE
+                     showevery <- 1
+                   } else if(remaining > 180) {
+                     ## ... more than 3 minutes remaining
+                     showtime <- TRUE
+                     showevery <- every
+                     aminute <- ceiling(60/rate)
+                     if(aminute < showevery) 
+                       showevery <- min(niceround(aminute), showevery)
+                   }
+                 }
+                 state <- Put("ProgressData",
+                              list(every=every, nperline=nperline,
+                                   starttime=starttime,
+                                   showtime=showtime, showevery=showevery),
+                              state)
+               }
              }
-           }
-           if(i == n) 
-             cat(paste(" ", n, ".\n", sep=""))
-           else if(every == 1 || i <= 3)
-             cat(paste(i, ",", if(i %% nperline == 0) "\n" else " ", sep=""))
-           else {
-             if(i %% every == 0) 
-               cat(i)
-             else
-               cat(".")
-             if(i %% nperline == 0)
-               cat("\n")
-           }
-           if(i < n && showtime && (i %% showevery == 0)) {
-             st <- paste("etd", codetime(round(remaining)))
-             st <- paren(st, "[")
-             cat(paste("", st, ""))
-           }
-           flush.console()
-         },
-         stop(paste("Unrecognised option for style:", dQuote(style)))
-         )
-  return(invisible(NULL))
-}
+             if(i == n) 
+               cat(paste(" ", n, ".\n", sep=""))
+             else if(every == 1 || i <= 3)
+               cat(paste(i, ",", if(i %% nperline == 0) "\n" else " ", sep=""))
+             else {
+               if(i %% every == 0) 
+                 cat(i)
+               else
+                 cat(".")
+               if(i %% nperline == 0)
+                 cat("\n")
+             }
+             if(i < n && showtime && (i %% showevery == 0)) {
+               st <- paste("etd", codetime(round(remaining)))
+               st <- paren(st, "[")
+               cat(paste("", st, ""))
+             }
+             flush.console()
+           },
+           stop(paste("Unrecognised option for style:", dQuote(style)))
+           )
+    return(invisible(state))
+  }
+
+  progressreport
+})
   
 numalign <- function(i, nmax, zero="0") {
   stopifnot(i <= nmax)

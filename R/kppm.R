@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.108 $ $Date: 2015/06/25 03:58:51 $
+# $Revision: 1.109 $ $Date: 2015/07/11 08:19:26 $
 #
 
 kppm <- function(X, ...) {
@@ -1107,11 +1107,13 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
          })
   
   # run
-  if(verbose)
+  if(verbose) {
     cat(paste("Generating", nsim, "simulations... "))
+    state <- list()
+  }
   for(i in 1:nsim) {
     out[[i]] <- try(eval(cmd))
-    if(verbose) progressreport(i, nsim)
+    if(verbose) state <- progressreport(i, nsim, state=state)
   }
   # detect failures
   if(any(bad <- unlist(lapply(out, inherits, what="try-error")))) {

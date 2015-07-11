@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.11 $  $Date: 2014/12/19 11:25:15 $
+#  $Revision: 2.12 $  $Date: 2015/07/11 08:19:26 $
 #
 #
 
@@ -240,7 +240,10 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
     pobs <- result$p.value
     Xsim <- simulate(model, nsim=nsim, progress=verbose)
     pvals <- numeric(nsim)
-    if(verbose) cat("Processing.. ")
+    if(verbose) {
+      cat("Processing.. ")
+      state <- list()
+    }
     for(i in seq_len(nsim)) {
       model.i <- update(model, Xsim[[i]])
       fra.i <- spatialCDFframe(model.i, covariate,
@@ -253,7 +256,7 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                       cvm = cvm.test(U.i, "punif", ...),
                       ad = ad.test(U.i, "punif", ...))     
       pvals[i] <- res.i$p.value
-      if(verbose) progressreport(i, nsim)
+      if(verbose) state <- progressreport(i, nsim, state=state)
     }
     if(verbose) cat("Done.\n")
     ## insert Monte Carlo p-value

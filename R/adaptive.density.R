@@ -1,7 +1,7 @@
 #
 #  adaptive.density.R
 #
-#  $Revision: 1.7 $   $Date: 2015/05/11 10:40:44 $
+#  $Revision: 1.8 $   $Date: 2015/07/11 08:19:26 $
 #
 #
 
@@ -34,10 +34,11 @@ adaptive.density <- function(X, f=0.1, ..., nrep=1, verbose=TRUE) {
     total <- 0
     if(verbose)
       cat(paste("Computing", nrep, "intensity estimates..."))
+    state <- list()
     for(i in seq_len(nrep)) {
       estimate <- adaptive.density(X, f, ..., nrep=1)
       total <- eval.im(total + estimate)
-      if(verbose) progressreport(i, nrep)
+      if(verbose) state <- progressreport(i, nrep, state=state)
     }
     if(verbose) cat("Done.\n")
     average <- eval.im(total/nrep)

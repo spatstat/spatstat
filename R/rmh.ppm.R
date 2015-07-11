@@ -1,7 +1,7 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.31 $ $Date: 2015/07/03 06:37:03 $
+#  $Revision: 1.32 $ $Date: 2015/07/11 08:19:26 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
@@ -144,9 +144,11 @@ simulate.ppm <- function(object, nsim=1, ...,
       known <- names(argh) %in% names(formals(rmhcontrol.default))
       fargs <- argh[!known]
       rmhargs <- append(list(InfoList=rmhinfolist, verbose=verbose), fargs)
+      if(progress)
+        pstate <- list()
       for(i in 1:nsim) {
         out[[i]] <- do.call("rmhEngine", rmhargs)
-        if(progress) progressreport(i, nsim)
+        if(progress) pstate <- progressreport(i, nsim, state=pstate)
       }
     }
   }

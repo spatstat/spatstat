@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.45 $ $Date: 2015/05/05 08:43:00 $
+# $Revision: 1.46 $ $Date: 2015/07/11 08:19:26 $
 #
 
 lurking <- function(object, covariate, type="eem",
@@ -372,7 +372,10 @@ lurking <- function(object, covariate, type="eem",
     if(is.null(Xsim))
       Xsim <- simulate(object, nsim=nsim, progress=verbose)
     values <- NULL
-    if(verbose) cat("Processing.. ")
+    if(verbose) {
+      cat("Processing.. ")
+      state <- list()
+    }
     for(i in seq_len(nsim)) {
       cl$object <- update(object, Xsim[[i]])
       result.i <- eval(cl, parent.frame())
@@ -381,7 +384,7 @@ lurking <- function(object, covariate, type="eem",
                   approxfun(covariate, value, rule=2))
       val.i <- f.i(theoretical$covariate)
       values <- cbind(values, val.i)
-      if(verbose) progressreport(i, nsim)
+      if(verbose) state <- progressreport(i, nsim, state=state)
     }
     if(verbose) cat("Done.\n")
     hilo <- if(nrank == 1) apply(values, 1, range) else

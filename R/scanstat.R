@@ -3,7 +3,7 @@
 ##
 ##  Spatial scan statistics
 ##
-##  $Revision: 1.13 $  $Date: 2014/10/24 00:22:30 $
+##  $Revision: 1.14 $  $Date: 2015/07/11 08:19:26 $
 ##
 
 scanmeasure <- function(X, ...){
@@ -254,9 +254,12 @@ scan.test <- function(X, r, ...,
                            paste("Monte Carlo p-value based on",
                                  nsim, "simulations"))
          })
-  if(verbose) cat("Simulating...")
+  if(verbose) {
+    cat("Simulating...")
+    pstate <- list()
+  }
   for(i in 1:nsim) {
-    if(verbose) progressreport(i, nsim)
+    if(verbose) pstate <- progressreport(i, nsim, state=pstate)
     Xsim <- eval(simexpr)
     simLRTS <- scanLRTS(X=Xsim, r=r,
                          method=method, alternative=alternative,

@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.70 $  $Date: 2015/04/14 11:36:21 $
+#   $Revision: 2.71 $  $Date: 2015/07/11 08:19:26 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -591,9 +591,10 @@ envelopeEngine <-
       splat(action, Nsim, descrip, explan, "...")
     }
     XsimList <- list()
-  # start simulation loop 
+  # start simulation loop
+    sstate <- list() 
     for(i in 1:Nsim) {
-      if(verbose) progressreport(i, Nsim)
+      if(verbose) sstate <- progressreport(i, Nsim, state=sstate)
       Xsim <- eval(simexpr, envir=envir)
       if(!inherits(Xsim, Xclass))
         switch(simtype,
@@ -699,6 +700,7 @@ envelopeEngine <-
   
   # start simulation loop
   nerr <- 0
+  if(verbose) pstate <- list()
   for(i in 1:Nsim) {
     ok <- FALSE
     # safely generate a random pattern and apply function
@@ -791,7 +793,7 @@ envelopeEngine <-
       
     simvals[ , i] <- funXsim[[valname]]
     if(verbose)
-      progressreport(i, Nsim)
+      pstate <- progressreport(i, Nsim, state=pstate)
   }
   ##  end simulation loop
   

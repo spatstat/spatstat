@@ -3,7 +3,7 @@
 #
 #  Huang-Ogata method 
 #
-#  $Revision: 1.15 $ $Date: 2015/03/25 11:42:47 $
+#  $Revision: 1.16 $ $Date: 2015/07/11 08:19:26 $
 #
 
 ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
@@ -27,7 +27,10 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   # generate 'nsim' realisations of the fitted model
   # and compute the sufficient statistics of the model
   rmhinfolist <- rmh(model, start, control, preponly=TRUE, verbose=FALSE)
-  if(verb) cat("Simulating... ")
+  if(verb) {
+    cat("Simulating... ")
+    state <- list()
+  }
   ndone <- 0
   while(ndone < nsim) {
     Xi <- rmhEngine(rmhinfolist, verbose=FALSE)
@@ -38,7 +41,7 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
       ndone <- ndone + 1
       svalues[ndone, ] <- v
     }
-    if(verb) progressreport(ndone, nsim)
+    if(verb) state <- progressreport(ndone, nsim, state=state)
   }
   if(verb) cat("Done.\n\n")
   # calculate the sample mean and variance of the

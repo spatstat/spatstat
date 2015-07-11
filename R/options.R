@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.61 $   $Date: 2015/02/18 00:49:30 $
+#    $Revision: 1.62 $   $Date: 2015/07/11 07:52:12 $
 #
 #
 
@@ -316,9 +316,8 @@ warn.once <- function(key, ...) {
        progress = list(
          ## how to display progress reports
          default="tty",
-         check=function(x){ x %in% c("tty", "txtbar") },
-         valid=paste("one of the strings", dQuote("tty"),
-           "or", dQuote("txtbar"))
+         check=function(x){ x %in% c("tty", "tk", "txtbar") },
+         valid="one of the strings 'tty', 'tk' or 'txtbar'"
          ),
        project.fast=list(
          ## whether to cut corners when projecting an invalid ppm object
@@ -423,6 +422,12 @@ warn.once <- function(key, ...) {
        ),
        kppm.canonical=list(
          ## whether to use 'canonical' parameters in kppm
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       debugRF=list(
+         ## TEMPORARY - for debugging
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"

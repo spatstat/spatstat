@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.33 $   $Date: 2015/01/29 06:44:03 $
+#  $Revision: 1.34 $   $Date: 2015/07/11 09:06:17 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
@@ -74,8 +74,9 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
 
   # interactions
   announce("Determining interactions...")
+  pstate <- list()
   for(i in 1:npat) {
-    if(verbose) progressreport(i, npat)
+    if(verbose) pstate <- progressreport(i, npat, state=pstate)
       # Find relevant interaction
     acti <- active[i,]
     nactive <- sum(acti)
@@ -125,7 +126,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2015/01/29 06:44:03 $")
+                      date="$Date: 2015/07/11 09:06:17 $")
   fake.call <- call("cannot.update", Q=NULL, trend=trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
@@ -158,8 +159,9 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
 
   ## Loop through point patterns
   announce("Generating models for each row...")
+  pstate <- list()
   for(i in 1:npat) {
-    if(verbose) progressreport(i, npat)
+    if(verbose) pstate <- progressreport(i, npat, state=pstate)
     Yi <- Y[[i]]
     Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
     # assemble relevant covariate images
@@ -266,8 +268,9 @@ subfits.old <-
   
   if(what == "interactions") {
     announce("Determining interactions...")
+    pstate <- list()
     for(i in 1:npat) {
-      if(verbose) progressreport(i, npat)
+      if(verbose) pstate <- progressreport(i, npat, state=pstate)
       # Find relevant interaction
       acti <- active[i,]
       nactive <- sum(acti)
@@ -310,8 +313,9 @@ subfits.old <-
   
   ## Loop through point patterns
   announce("Looping through rows...")
+  pstate <- list()
   for(i in 1:npat) {
-    if(verbose) progressreport(i, npat)
+    if(verbose) pstate <- progressreport(i, npat, state=pstate)
     Yi <- Y[[i]]
     Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
     # assemble relevant covariate images

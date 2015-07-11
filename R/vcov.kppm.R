@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.9 $  $Date: 2015/02/22 03:00:48 $
+#   $Revision: 1.10 $  $Date: 2015/07/11 08:19:26 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -72,11 +72,13 @@ vcov.kppm <- function(object, ...,
       nrowperblock <- max(1, floor(maxmat/nU))
       nblocks <- ceiling(nU/nrowperblock)
       g1ff <- NULL
-      if(verbose)
+      if(verbose) {
         splat("Splitting large matrix calculation into", nblocks, "blocks")
+        pstate <- list()
+      }
       if(!fast) {
         for(k in seq_len(nblocks)) {
-          if(verbose) progressreport(k, nblocks)
+          if(verbose) pstate <- progressreport(k, nblocks, state=pstate)
           istart <- nrowperblock * (k-1) + 1
           iend   <- min(nrowperblock * k, nU)
           ii <- istart:iend
@@ -85,7 +87,7 @@ vcov.kppm <- function(object, ...,
         }
       } else {
         for(k in seq_len(nblocks)) {
-          if(verbose) progressreport(k, nblocks)
+          if(verbose) pstate <- progressreport(k, nblocks, state=pstate)
           istart <- nrowperblock * (k-1) + 1
           iend   <- min(nrowperblock * k, nU)
           ii <- istart:iend

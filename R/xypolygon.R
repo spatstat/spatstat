@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.63 $    $Date: 2014/11/11 12:24:55 $
+#    $Revision: 1.64 $    $Date: 2015/07/11 08:19:26 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -525,14 +525,16 @@ owinpolycheck <- function(W, verbose=TRUE) {
   err <- character(0)
   
   # check for duplicated points, self-intersection, outer frame
-  if(blowbyblow)
+  if(blowbyblow) {
     cat(paste("Checking", npoly, ngettext(npoly, "polygon...", "polygons...")))
+    pstate <- list()
+  }
 
   dup <- self <- is.box <- logical(npoly)
-
+  
   for(i in 1:npoly) {
     if(blowbyblow && npoly > 1)
-      progressreport(i, npoly)
+      pstate <- progressreport(i, npoly, state=pstate)
     Bi <- B[[i]]
     # check for duplicated vertices
     dup[i] <- as.logical(anyDuplicated(ppp(Bi$x, Bi$y,
@@ -588,13 +590,15 @@ owinpolycheck <- function(W, verbose=TRUE) {
   # check for crossings between different polygons
   cross <- matrix(FALSE, npoly, npoly)
   if(npoly > 1) {
-    if(blowbyblow)
+    if(blowbyblow) {
       cat(paste("Checking for cross-intersection between",
                 npoly, "polygons..."))
+      pstate <- list()
+    }
     P <- lapply(B, xypolygon2psp, w=outerframe, check=FALSE)
     for(i in seq_len(npoly-1)) {
       if(blowbyblow)
-        progressreport(i, npoly-1)
+        pstate <- progressreport(i, npoly-1, state=pstate)
       Pi <- P[[i]]
       for(j in (i+1):npoly) {
         crosses <- if(is.box[i] || is.box[j]) FALSE else {

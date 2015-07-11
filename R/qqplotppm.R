@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.25 $   $Date: 2015/03/16 11:02:36 $
+#  $Revision: 1.27 $   $Date: 2015/07/11 09:06:59 $
 #
 
 qqplot.ppm <-
@@ -80,7 +80,10 @@ qqplot.ppm <-
   }
 
   ######  Perform simulations
-  if(verbose) cat(paste("Simulating", nsim, "realisations... "))
+  if(verbose) {
+    cat(paste("Simulating", nsim, "realisations... "))
+    pstate <- list()
+  }
   simul.sizes <- numeric(nsim)
   i <- 0
   ierr <- 0
@@ -115,7 +118,7 @@ qqplot.ppm <-
         sim <- array(, dim=c(dim(resi), nsim))
       sim[,,i] <- resi
       if(verbose) 
-        progressreport(i, nsim)
+        pstate <- progressreport(i, nsim, state=pstate)
       if(i >= nsim)
         break
     }

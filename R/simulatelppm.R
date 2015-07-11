@@ -3,7 +3,7 @@
 ##
 ##  Simulation of lppm objects
 ##
-##  $Revision: 1.5 $  $Date: 2014/06/06 03:10:41 $
+##  $Revision: 1.6 $  $Date: 2015/07/11 08:19:26 $
 ##
 
 simulate.lppm <- function(object, nsim=1, ...,
@@ -17,8 +17,9 @@ simulate.lppm <- function(object, nsim=1, ...,
   lmax <- if(is.im(lambda)) max(lambda) else unlist(lapply(lambda, max))
   L <- as.linnet(object)
   result <- vector(mode="list", length=nsim)
+  pstate <- list()
   for(i in seq_len(nsim)) {
-    if(progress) progressreport(i, nsim)
+    if(progress) pstate <- progressreport(i, nsim, state=pstate)
     result[[i]] <- rpoislpp(lambda, L, lmax=lmax)
   }
   if(nsim == 1 && drop) {

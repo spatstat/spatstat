@@ -1,7 +1,7 @@
 #
 #	localK.R		Getis-Franklin neighbourhood density function
 #
-#	$Revision: 1.20 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.21 $	$Date: 2015/07/11 08:19:26 $
 #
 #
 
@@ -114,6 +114,8 @@
   labl <- desc <- character(npts)
 
   bkt <- function(x) { paste("[", x, "]", sep="") }
+
+  if(verbose) state <- list()
   
   switch(correction,
          none={
@@ -128,7 +130,7 @@
              labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
              desc[i] <- paste("uncorrected estimate of %s",
                               "for point", icode)
-             if(verbose) progressreport(i, npts)
+             if(verbose) state <- progressreport(i, npts, state=state)
            }
            if(!weighted) df <- df/lambda1.ave
          },
@@ -148,7 +150,7 @@
              labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
              desc[i] <- paste("translation-corrected estimate of %s",
                               "for point", icode)
-             if(verbose) progressreport(i, npts)
+             if(verbose) state <- progressreport(i, npts, state=state)
            }
            if(!weighted) df <- df/lambda1.ave
            h <- diameter(W)/2
@@ -169,7 +171,7 @@
              labl[i] <- paste("%s", bkt(icode), "(r)", sep="")
              desc[i] <- paste("Ripley isotropic correction estimate of %s", 
                               "for point", icode)
-             if(verbose) progressreport(i, npts)
+             if(verbose) state <- progressreport(i, npts, state=state)
            }
            if(!weighted) df <- df/lambda1.ave
            h <- diameter(W)/2
