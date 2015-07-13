@@ -588,7 +588,7 @@
              ## For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
-             ## use RandomFields 
+             requireNamespace("RandomFields")
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
@@ -598,7 +598,7 @@
                                 append(list(var=par[1], scale=par[2]),
                                        margs))
                }
-               2*pi *r *exp(RFcov(model=mod, x=r))
+               2*pi *r *exp(RandomFields::RFcov(model=mod, x=r))
              }
            }
            nr <- length(rvals)
@@ -632,6 +632,7 @@
              ## For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
+             requireNamespace("RandomFields")
              modgen <- attr(model, "modgen")
              if(length(margs) == 0) {
                mod <- modgen(var=par[1], scale=par[2])
@@ -640,7 +641,7 @@
                               append(list(var=par[1], scale=par[2]),
                                      margs))
              }
-             gtheo <- exp(RFcov(model=mod, x=rvals))
+             gtheo <- exp(RandomFields::RFcov(model=mod, x=rvals))
            }
            return(gtheo)
          },
