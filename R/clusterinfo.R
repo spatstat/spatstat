@@ -682,8 +682,6 @@ ensureRandomFields <- function(fatal=TRUE) {
   ## The first line 'should' be sufficient according to Martin Maechler
   ok <- requireNamespace("RandomFields")
   if(ok && !spatstat.options("debugRF")) {
-    #' This line seems to be required in practice - i.e. the package
-    #' must have been actually loaded
     ok <- isNamespaceLoaded("RandomFields")
   }
   if(!ok && fatal)

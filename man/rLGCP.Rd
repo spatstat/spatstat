@@ -101,9 +101,6 @@
   
   The LGCP model can be fitted to data using \code{\link{kppm}}.
 }
-\section{Package Dependence}{
-  This function requires the package \pkg{RandomFields} to be loaded.
-}
 \seealso{
 \code{\link{rpoispp}},
 \code{\link{rMatClust}},
@@ -118,7 +115,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
 }
 \examples{
-  if(require(RandomFields)) {
+  if(requireNamespace("RandomFields")) {
     # homogeneous LGCP with exponential covariance function
     X <- rLGCP("exp", 3, var=0.2, scale=.1)
 

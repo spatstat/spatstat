@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.009
+        CHANGES IN spatstat VERSION 1.42-2.010
 
 OVERVIEW
 
@@ -56,6 +56,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o progressreport
    New argument 'state'
    New option: style="tk"
+
+   o rLGCP
+   This function no longer requires the package 'RandomFields'
+   to be loaded explicitly. 
+
+   o kppm
+   Fitting a model with clusters="LGCP" no longer requires the
+   package 'RandomFields' to be loaded explicitly.
 
 BUG FIXES
 

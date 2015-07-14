@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.62 $   $Date: 2015/07/11 07:52:12 $
+#    $Revision: 1.63 $   $Date: 2015/07/14 12:18:05 $
 #
 #
 
@@ -428,7 +428,7 @@ warn.once <- function(key, ...) {
        ),
        debugRF=list(
          ## TEMPORARY - for debugging
-         default=FALSE,
+         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        )

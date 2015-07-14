@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.65 $   $Date: 2015/06/03 09:53:28 $
+#  $Revision: 1.66 $   $Date: 2015/07/14 12:17:14 $
 #
 
 mppm <- function(formula, data, interaction=Poisson(), ...,
@@ -393,7 +393,7 @@ mppm <- function(formula, data, interaction=Poisson(), ...,
     deviants <- deviance(FIT)
   } else {
     fitter <- "glm"
-    FIT  <- glm(fmla, family=quasi(link=log, variance=mu), weights=.mpl.W,
+    FIT  <- glm(fmla, family=quasi(link="log", variance="mu"), weights=.mpl.W,
                 data=moadf, subset=(.mpl.SUBSET=="TRUE"),
                 control=glm.control(maxit=50))
     deviants <- deviance(FIT)

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.190 $	$Date: 2015/01/22 06:14:14 $
+#	$Revision: 5.191 $	$Date: 2015/07/14 12:15:45 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2015/01/22 06:14:14 $")
+                        date="$Date: 2015/07/14 12:15:45 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -220,11 +220,13 @@ mpl.engine <-
     if(is.null(famille)) {
       ## the sanctioned technique, using `quasi' family
       if(want.trend && use.gam)
-        FIT  <- gam(fmla, family=quasi(link=log, variance=mu), weights=.mpl.W,
+        FIT  <- gam(fmla, family=quasi(link="log", variance="mu"),
+                    weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol)
       else
-        FIT  <- glm(fmla, family=quasi(link=log, variance=mu), weights=.mpl.W,
+        FIT  <- glm(fmla, family=quasi(link="log", variance="mu"),
+                    weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol, model=FALSE)
     } else {
