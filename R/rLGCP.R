@@ -21,8 +21,6 @@ rLGCP <- local({
     if(!all(nzchar(names(param))))
       stop("Outdated syntax of argument 'param' to rLGCP", call.=FALSE)
     ## 
-    ensureRandomFields()
-    ##
     do.rLGCP(model=model, mu=mu, param=param, ...,
              win=win, saveLambda=saveLambda, nsim=nsim, drop=drop)
   }
@@ -32,6 +30,7 @@ rLGCP <- local({
                        eps = NULL, dimyx = NULL, xy = NULL,
                        modelonly=FALSE, nsim=1, drop=TRUE) {
     ## make RF model object from RandomFields package
+    requireNamespace("RandomFields")
     ## get the 'model generator'
     modelname <- if(model == "exponential") "exp" else model
     modgen <- try(getExportedValue("RandomFields", 

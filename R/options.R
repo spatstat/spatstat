@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.63 $   $Date: 2015/07/14 12:18:05 $
+#    $Revision: 1.64 $   $Date: 2015/07/16 09:41:14 $
 #
 #
 
@@ -423,12 +423,6 @@ warn.once <- function(key, ...) {
        kppm.canonical=list(
          ## whether to use 'canonical' parameters in kppm
          default=FALSE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
-       debugRF=list(
-         ## TEMPORARY - for debugging
-         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        )

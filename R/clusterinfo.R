@@ -555,7 +555,7 @@
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
              if(model != "exponential") {
-               ensureRandomFields()
+               requireNamespace("RandomFields")
                ## get the 'model generator' 
                modgen <- try(getExportedValue("RandomFields", 
                                               paste0("RM", model)),
@@ -650,7 +650,7 @@
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             ensureRandomFields()
+             requireNamespace("RandomFields")
              ## get the 'model generator' 
              modgen <- try(getExportedValue("RandomFields", 
                                             paste0("RM", model)),
@@ -677,19 +677,6 @@
          }
          )
   )
-
-ensureRandomFields <- function(fatal=TRUE) {
-  ## The first line 'should' be sufficient according to Martin Maechler
-  ok <- requireNamespace("RandomFields")
-  if(ok && !spatstat.options("debugRF")) {
-    ok <- isNamespaceLoaded("RandomFields")
-  }
-  if(!ok && fatal)
-    stop(paste("The package RandomFields is required:",
-               "please type library(RandomFields)"),
-         call.=FALSE)
-  return(ok)
-}
 
 spatstatClusterModelInfo <- function(name, onlyPCP = FALSE) {
   if(!is.character(name) || length(name) != 1)
