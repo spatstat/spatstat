@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.011
+        CHANGES IN spatstat VERSION 1.42-2.012
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
    o spatstat colour tools now handle transparent colours.
 
-   O Improvements to "[" and subset() methods
+   o Improvements to "[" and subset() methods
 
    o Minor improvements and bug fixes.
 

@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.16 $    $Date: 2015/07/11 07:51:35 $
+#  $Revision: 1.17 $    $Date: 2015/07/18 03:12:53 $
 #
 
 rLGCP <- local({
@@ -30,7 +30,7 @@ rLGCP <- local({
                        eps = NULL, dimyx = NULL, xy = NULL,
                        modelonly=FALSE, nsim=1, drop=TRUE) {
     ## make RF model object from RandomFields package
-    requireNamespace("RandomFields")
+    kraever("RandomFields")
     ## get the 'model generator'
     modelname <- if(model == "exponential") "exp" else model
     modgen <- try(getExportedValue("RandomFields", 

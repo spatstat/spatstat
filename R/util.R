@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.184 $    $Date: 2015/07/11 07:27:28 $
+#    $Revision: 1.186 $    $Date: 2015/07/18 03:27:06 $
 #
 #
 matrowsum <- function(x) {
@@ -1499,15 +1499,24 @@ there.is.no.try <- function(...) {
   return(y)
 }
 
-## attach a library's namespace
-bibliotheque <- function(nom, dont) {
-  ok <- requireNamespace(nom)
-  if(!ok) return(FALSE)
-  if(exists(dont)) return(TRUE)
-  if(isNamespaceLoaded(nom)) return(TRUE)
-  cat("Attaching namespace", sQuote(nom), fill=TRUE)
-  attachNamespace(nom)
-  return(exists(dont))
+# require a namespace and optionally check whether it is attached
+kraever <- function(package, fatal=TRUE) {
+  if(!requireNamespace(package, quietly=TRUE)) {
+    if(fatal)
+      stop(paste("The package", sQuote(package), "is required"),
+           call.=FALSE)
+    return(FALSE)
+  }
+  if(spatstat.options(paste("check", package, "loaded", sep=".")) &&
+    !isNamespaceLoaded(package)){
+    if(fatal)
+      stop(paste("The package", sQuote(package),
+                 "must be loaded: please type",
+                 sQuote(paste0("library", paren(package)))),
+           call.=FALSE)
+    return(FALSE)
+  }
+  return(TRUE)
 }
 
 ## replace recognise keywords by other keywords

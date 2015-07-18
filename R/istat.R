@@ -9,7 +9,7 @@ istat <- function(x, xname) {
   if(missing(xname))
     xname <- short.deparse(substitute(x))
   verifyclass(x, "ppp")
-  check.rpanel()
+  kraever("rpanel")
   # generate simulations of CSR for use in envelopes
   simx <- envelope(x, fun=NULL, nsim=39, verbose=FALSE,
                    internal=list(csr=TRUE, eject="patterns"))

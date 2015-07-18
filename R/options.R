@@ -425,6 +425,18 @@ warn.once <- function(key, ...) {
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       check.rpanel.loaded=list(
+         # internal debugging
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       check.RandomFields.loaded=list(
+         # this is working OK so no need to check
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
        )
 # end of options list

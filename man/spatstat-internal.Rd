@@ -41,7 +41,6 @@
 \alias{bermantestEngine}
 \alias{bdrylength.xypolygon} 
 \alias{bdry.mask}
-\alias{bibliotheque}
 \alias{bind.ratfv}
 \alias{blankcoefnames}
 \alias{blockdiagmatrix}
@@ -72,7 +71,6 @@
 \alias{check.1.integer}
 \alias{check.1.real}
 \alias{check.range}
-\alias{check.rpanel}
 \alias{check.testfun}
 \alias{choptext}
 \alias{circticks}
@@ -302,6 +300,7 @@
 \alias{kppmComLik}
 \alias{kppmMinCon}
 \alias{kppmPalmLik}
+\alias{kraever}
 \alias{labels.ppm}
 \alias{least.common.multiple}
 \alias{levels.im}
@@ -775,7 +774,6 @@ bbEngine(\dots)
 bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
 bdrylength.xypolygon(polly)
 bdry.mask(W)
-bibliotheque(nom, dont)
 bind.ratfv(x, numerator, denominator, labl, desc, preferred, ratio)
 blankcoefnames(x)
 blockdiagmatrix(\dots)
@@ -808,7 +806,6 @@ check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
 check.range(x, fatal)
-check.rpanel()
 check.testfun(f, f1, X)
 choptext(\dots, prefix)
 circticks(R, at, unit, start, clockwise, labels)
@@ -1067,6 +1064,7 @@ kppmMinCon(X, Xname, po, clusters, control, statistic, statargs,
            algorithm, \dots)
 kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, 
            algorithm, \dots)
+kraever(package, fatal)
 \method{labels}{ppm}(object, \dots)
 least.common.multiple(n,m)
 \method{levels}{im}(x)

@@ -555,7 +555,7 @@
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
              if(model != "exponential") {
-               requireNamespace("RandomFields")
+               kraever("RandomFields")
                ## get the 'model generator' 
                modgen <- try(getExportedValue("RandomFields", 
                                               paste0("RM", model)),
@@ -588,7 +588,7 @@
              ## For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
-             requireNamespace("RandomFields")
+             kraever("RandomFields")
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
@@ -632,7 +632,7 @@
              ## For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
-             requireNamespace("RandomFields")
+             kraever("RandomFields")
              modgen <- attr(model, "modgen")
              if(length(margs) == 0) {
                mod <- modgen(var=par[1], scale=par[2])
@@ -650,7 +650,7 @@
              stop("Covariance function model should be specified by name")
            margs <- c(...)
            if(model != "exponential") {
-             requireNamespace("RandomFields")
+             kraever("RandomFields")
              ## get the 'model generator' 
              modgen <- try(getExportedValue("RandomFields", 
                                             paste0("RM", model)),
