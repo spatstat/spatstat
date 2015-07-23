@@ -11,6 +11,7 @@
 }
 \usage{
 \method{density}{lpp}(x, sigma, \dots,
+        kernel="gaussian",
         epsilon = 1e-06, verbose = TRUE, debug = FALSE, savehistory = TRUE)
 
 \method{density}{splitppx}(x, sigma, \dots)
@@ -21,15 +22,19 @@
     to be smoothed.
   }
   \item{sigma}{
-    Smoothing bandwidth (standard deviation of the Gaussian kernel)
+    Smoothing bandwidth (standard deviation of the kernel)
     in the same units as the spatial coordinates of \code{x}.
   }
   \item{\dots}{
     Arguments passed to \code{\link[spatstat]{as.mask}} determining the
     resolution of the result.
   }
+  \item{kernel}{
+    Character string specifying the smoothing kernel.
+    See \code{\link{dkernel}} for possible options.
+  }
   \item{epsilon}{
-    Tolerance value. A tail of the Gaussian kernel with total mass
+    Tolerance value. A tail of the kernel with total mass
     less than \code{epsilon} may be deleted.
   }
   \item{verbose}{
@@ -44,7 +49,7 @@
   }
 }
 \details{
-  Kernel smoothing using the Gaussian kernel with the
+  Kernel smoothing using the
   equal-split continuous rule is applied to the points of \code{x}.
   The result is a pixel image on the linear network (class
   \code{"linim"}) which can be plotted.
@@ -80,6 +85,7 @@
   X <- runiflpp(3, simplenet)
   D <- density(X, 0.2, verbose=FALSE)
   plot(D, style="w", main="", adjust=2)
+  De <- density(X, 0.2, kernel="epanechnikov", verbose=FALSE)
 }
 \keyword{spatial}
 \keyword{methods}

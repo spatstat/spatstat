@@ -1,13 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.013
+        CHANGES IN spatstat VERSION 1.42-2.014
 
 OVERVIEW
 
-   o We thank Tuomas Rajala and Martin Maechler for contributions.
+   o We thank Tuomas Rajala, Martin Maechler and Greg McSwiggan
+   for contributions.
 
    o spatstat colour tools now handle transparent colours.
 
    o Improvements to "[" and subset() methods
+
+   o Extension to kernel smoothing on a linear network.
 
    o Support for one-dimensional smoothing kernels.
 
@@ -49,6 +52,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o default.rmhcontrol, default.rmhexpand
    New argument 'w'.
+
+   o density.lpp
+   New argument 'kernel' specifies the smoothing kernel.
+   Any of the standard one-dimensional smoothing kernels can be used.
 
    o rgbim, hsvim
    New argument 'A' controls the alpha (transparency) channel.

@@ -3,7 +3,7 @@
 #
 #  rXXX, dXXX, pXXX and qXXX for kernels
 #
-#  $Revision: 1.11 $  $Date: 2008/01/15 20:24:11 $
+#  $Revision: 1.12 $  $Date: 2015/07/23 08:46:10 $
 #
 
 match.kernel <- function(kernel) {
@@ -198,23 +198,30 @@ qkernel <- function(p, kernel="gaussian", mean=0, sd=1, lower.tail=TRUE) {
 
 nukernel <- function(r, m, kernel="gaussian") {
   ker <- match.kernel(kernel)
-  r <- pmin(r, 1)
-  r <- pmax(r, -1)
+  if(ker != "gaussian") {
+    r <- pmin(r, 1)
+    r <- pmax(r, -1)
+  }
   stopifnot(length(m) == 1)
   if(!(m %in% c(0,1,2)))
     stop("Only implemented for m = 0, 1 or 2")
   switch(ker,
-         gaussian={stop("Sorry, not yet implemented for Gaussian kernel")},
+         gaussian={
+           if(m == 0) return(pnorm(r)) else
+           if(m == 1) return(-dnorm(r)) else
+           return(pnorm(r) - r * dnorm(r))
+         },
          rectangular = {
-           if(m == 0)
-             return((r + 1)/2)
-           else if(m == 1)
-             return((r^2 - 1)/4)
-           else
-             return((r^3 + 1)/6)
+           if(m == 0) return((r + 1)/2) else
+           if(m == 1) return((r^2 - 1)/4) else
+           return((r^3 + 1)/6)
          },
          triangular={
-           stop("Sorry, not yet implemented for triangular kernel")
+           m1 <- m+1
+           m2 <- m+2
+           const <- ((-1)^m1)/m1 + ((-1)^m2)/m2
+           answer <- (r^m1)/m1 + ifelse(r < 0, 1, -1) * (r^m2)/m2 - const
+           return(answer)
          },
          epanechnikov = {
            if(m == 0)
