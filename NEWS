@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.012
+        CHANGES IN spatstat VERSION 1.42-2.013
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
    o spatstat colour tools now handle transparent colours.
 
    o Improvements to "[" and subset() methods
+
+   o Support for one-dimensional smoothing kernels.
 
    o Minor improvements and bug fixes.
 
@@ -23,6 +25,14 @@ NEW FUNCTIONS
 
    o superimpose.ppplist, superimpose.splitppp
    New methods for 'superimpose' for lists of point patterns.
+
+   o dkernel, pkernel, qkernel, rkernel
+   Probability density, cumulative probability, quantiles
+   and random generation from distributions used in basic one-dimensional
+   kernel smoothing.
+
+   o kernel.factor
+   Auxiliary calculations for one-dimensional kernel smoothing.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

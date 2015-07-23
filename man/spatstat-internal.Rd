@@ -365,6 +365,7 @@
 \alias{\%msub\%} %DoNotExport
 %NAMESPACE export("%msub%")
 \alias{mask2df}
+\alias{match.kernel}
 \alias{matcolall}
 \alias{matcolany}
 \alias{matcolsum}
@@ -401,6 +402,7 @@
 \alias{nobjects.ppx}
 \alias{nobjects.psp}
 \alias{n.quad}
+\alias{nukernel}
 \alias{numalign}
 \alias{numeric.columns}
 \alias{nzpaste}
@@ -1137,6 +1139,7 @@ x \%msub\% i
 markreplicateop(x, n)
 x \%mrep\% n
 mask2df(w)
+match.kernel(kernel)
 matcolall(x)
 matcolany(x)
 matcolsum(x)            
@@ -1185,6 +1188,7 @@ nobjects(x)
 \method{nobjects}{ppx}(x)
 \method{nobjects}{psp}(x)
 n.quad(Q)
+nukernel(r, m, kernel)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)
 nzpaste(\dots, sep, collapse)
