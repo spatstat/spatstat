@@ -686,6 +686,7 @@
 \alias{test.crossing.psp}
 \alias{test.selfcrossing.psp}
 \alias{there.is.no.try}
+\alias{thinjump}
 \alias{tilecentroids}        
 \alias{tileindex}        
 \alias{transradius}
@@ -1524,6 +1525,7 @@ termsinformula(x)
 test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
 there.is.no.try(\dots)
+thinjump(n, p)
 tilecentroids(W, nx, ny)
 tileindex(x, y, Z)
 transradius(W)

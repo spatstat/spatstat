@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.77 $   $Date: 2015/07/11 08:19:26 $
+##    $Revision: 4.80 $   $Date: 2015/07/25 03:41:53 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -843,6 +843,18 @@ rcell <- function(win=square(1), nx=NULL, ny=nx, ...,
 }
 
 
+thinjump <- function(n, p) {
+  # equivalent to which(runif(n) < p) for constant p
+  stopifnot(length(p) == 1)
+  if(p <= 0) return(integer(0))
+  if(p >= 1) return(seq_len(n))
+  if(p > 0.5) return(-thinjump(n, 1-p))
+  guessmaxlength <- ceiling(n * p + 2 * sqrt(n * p * (1-p)))
+  i <- .Call("thinjumpequal",
+             n, p, guessmaxlength)
+  return(i)
+}
+  
 rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
   verifyclass(X, "ppp")
 
@@ -852,6 +864,22 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
     result <- rep(list(X), nsim)
     names(result) <- paste("Simulation", 1:nsim)
     return(as.solist(result))
+  }
+
+  if(is.numeric(P) && length(P) == 1 && spatstat.options("thin.fast")) {
+    # special algorithm for constant probability
+    result <- vector(mode="list", length=nsim)
+    for(isim in 1:nsim) {
+      retain <- thinjump(nX, P)
+      Y <- X[retain]
+      ## also handle offspring-to-parent map if present
+      if(!is.null(parentid <- attr(X, "parentid")))
+        attr(Y, "parentid") <- parentid[retain]
+      result[[isim]] <- Y
+    }
+    if(nsim == 1 && drop)
+      result <- result[[1]]
+    return(result)
   }
 
   if(is.numeric(P)) {

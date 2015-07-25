@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.014
+        CHANGES IN spatstat VERSION 1.42-2.015
 
 OVERVIEW
 
@@ -81,6 +81,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o kppm
    Fitting a model with clusters="LGCP" no longer requires the
    package 'RandomFields' to be loaded explicitly.
+
+   o rthin
+   Accelerated in some cases.
 
 BUG FIXES
 

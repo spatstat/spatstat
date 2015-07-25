@@ -154,6 +154,7 @@ useDynLib(spatstat,
 "seg2pixL",
 "seg2pixN",
 "smoopt",
+"thinjumpequal",
 "triDgraph",
 "trigraf",
 "trigrafS",
@@ -2217,6 +2218,7 @@ export("textstring")
 export("texturemap")
 export("textureplot")
 export("there.is.no.try")
+export("thinjump")
 export("thomas.estK")
 export("thomas.estpcf")
 export("tile.areas")

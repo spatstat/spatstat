@@ -437,6 +437,12 @@ warn.once <- function(key, ...) {
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       thin.fast=list(
+         # whether to use fast C algorithm for rthin() when P is constant
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
        )
 # end of options list
