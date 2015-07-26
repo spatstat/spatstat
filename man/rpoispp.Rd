@@ -97,6 +97,13 @@
   pattern will be random with expected value \code{mu = lambda * a}
   where \code{a} is the area of the window \code{win}. 
 }
+\section{Reproducibility}{
+  The simulation algorithm, for the case where
+  \code{lambda} is a pixel image, was changed in \pkg{spatstat}
+  version \code{1.42-3}. Set \code{spatstat.options(fastpois=FALSE)}
+  to use the previous, slower algorithm, if it is desired to reproduce
+  results obtained with earlier versions.
+}
 \seealso{
   \code{\link{rmpoispp}} for Poisson \emph{marked} point patterns,
   \code{\link{runifpoint}} for a fixed number of independent

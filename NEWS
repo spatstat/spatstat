@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.015
+        CHANGES IN spatstat VERSION 1.42-2.016
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ OVERVIEW
 
    o Support for one-dimensional smoothing kernels.
 
+   o Some basic simulation code has been accelerated.
+ 
    o Minor improvements and bug fixes.
 
    o Version nickname: 'Reds under the Beds'
@@ -82,8 +84,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Fitting a model with clusters="LGCP" no longer requires the
    package 'RandomFields' to be loaded explicitly.
 
+   o rpoispp
+   Accelerated, when 'lambda' is a pixel image.
+
    o rthin
-   Accelerated in some cases.
+   Accelerated, when 'P' is a single number.
+
+   o spatstat.options
+   New options 'fastthin' and 'fastpois' enable fast simulation algorithms.
+   Set these options to FALSE to reproduce results obtained with
+   previous versions of spatstat.
 
 BUG FIXES
 

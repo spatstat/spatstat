@@ -63,6 +63,12 @@ rthin(X, P, \dots, nsim=1, drop=TRUE)
   numeric vector of the same length. The function may have extra
   arguments which are passed through the \code{\dots} argument.
 }
+\section{Reproducibility}{
+  The algorithm for random thinning was changed in \pkg{spatstat}
+  version \code{1.42-3}. Set \code{spatstat.options(fastthin=FALSE)}
+  to use the previous, slower algorithm, if it is desired to reproduce
+  results obtained with earlier versions.
+}
 \examples{
   data(redwood)
   plot(redwood, main="thinning")

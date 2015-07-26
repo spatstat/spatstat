@@ -76,6 +76,24 @@
       \code{polynom(x,2)} is replaced by \code{x + I(x^2)} and so on.
       Initialised to \code{TRUE}.
     }
+    \item{fastpois}{
+      Logical. Whether to use a fast algorithm
+      (introduced in \pkg{spatstat 1.42-3}) for
+      simulating the Poisson point process in \code{\link{rpoispp}}
+      when the argument \code{lambda} is a pixel image.
+      Initialised to \code{TRUE}.
+      Should be set to \code{FALSE} if needed to guarantee repeatability
+      of results computed using earlier versions of \pkg{spatstat}.
+    }
+    \item{fastthin}{
+      Logical. Whether to use a fast C language algorithm
+      (introduced in \pkg{spatstat 1.42-3}) for
+      random thinning in \code{\link{rthin}} when the argument
+      \code{P} is a single number.
+      Initialised to \code{TRUE}.
+      Should be set to \code{FALSE} if needed to guarantee repeatability
+      of results computed using earlier versions of \pkg{spatstat}.
+    }
     \item{fastK.lgcp}{
       Logical. Whether to use fast or slow algorithm to compute the
       (theoretical) \eqn{K}-function of a log-Gaussian Cox process

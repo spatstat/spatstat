@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.64 $   $Date: 2015/07/16 09:41:14 $
+#    $Revision: 1.65 $   $Date: 2015/07/26 10:03:24 $
 #
 #
 
@@ -149,6 +149,18 @@ warn.once <- function(key, ...) {
          default="on",
          check=function(x) { x %in% c("off", "on", "test") },
          valid="one of the strings \'off\', \'on\' or \'test\'"
+       ),
+       fastpois=list(
+         # whether to use fast algorithm for rpoispp() when lambda is an image
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       fastthin=list(
+         # whether to use fast C algorithm for rthin() when P is constant
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        ),
        fastK.lgcp=list(
          ## whether to cut a few corners in 'lgcp.estK'
@@ -435,12 +447,6 @@ warn.once <- function(key, ...) {
        check.RandomFields.loaded=list(
          # this is working OK so no need to check
          default=FALSE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
-       thin.fast=list(
-         # whether to use fast C algorithm for rthin() when P is constant
-         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        )
