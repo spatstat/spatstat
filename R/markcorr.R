@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.73 $ $Date: 2015/04/08 01:45:25 $
+##     $Revision: 1.74 $ $Date: 2015/08/01 08:43:18 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -265,15 +265,17 @@ Kmark <-
 markcorr <-
   function(X, f = function(m1, m2) { m1 * m2}, r=NULL, 
            correction=c("isotropic", "Ripley", "translate"),
-           method="density", ..., f1=NULL, normalise=TRUE, fargs=NULL)
+           method="density", ...,
+           weights=NULL, f1=NULL, normalise=TRUE, fargs=NULL)
 {
   ## mark correlation function with test function f
   stopifnot(is.ppp(X) && is.marked(X))
+  nX <- npoints(X)
   
   ## set defaults to NULL
   if(missing(f)) f <- NULL
   if(missing(correction)) correction <- NULL
-  
+
   ## handle data frame of marks
   marx <- marks(X, dfok=TRUE)
   if(is.data.frame(marx)) {
@@ -283,11 +285,23 @@ markcorr <-
       Xj <- X %mark% marx[,j]
       result[[j]] <- markcorr(Xj, f=f, r=r, correction=correction,
                               method=method, ...,
+                              weights=weights,
                               f1=f1, normalise=normalise, fargs=fargs)
     }
     result <- as.anylist(result)
     names(result) <- colnames(marx)
     return(result)
+  }
+  
+  ## weights
+  if(unweighted <- is.null(weights)) {
+    weights <- rep(1, nX)
+  } else {
+    stopifnot(is.numeric(weights))
+    if(length(weights) == 1) {
+      weights <- rep(weights, nX)
+    } else check.nvector(weights, nX)
+    stopifnot(all(weights > 0))
   }
   
   ## validate test function
@@ -299,7 +313,6 @@ markcorr <-
   ## 
   npts <- npoints(X)
   W <- X$window
-
   
   ## determine r values 
   rmaxdefault <- rmax.rule("K", W, npts/area(W))
@@ -335,21 +348,33 @@ markcorr <-
   ## Apply f to every possible pair of marks, and average
   Ef <- switch(ftype,
                mul = {
-                 mean(marx)^2
+                 mean(marx * weights)^2
                },
                equ = {
-                 mtable <- table(marx)
-                 sum(mtable^2)/sum(mtable)^2
-               },
+                 if(unweighted) {
+                   mtable <- table(marx)
+                 } else {
+                   mtable <- tapply(weights, marx, sum)
+                   mtable[is.na(mtable)] <- 0
+                 }
+                 sum(mtable^2)/nX^2
+             },
                product={
                  f1m <- do.call(f1, append(list(marx), fargs))
-                 mean(f1m)^2
+                 mean(f1m * weights)^2
                },
                general = {
-                 if(is.null(fargs))
-                   mean(outer(marx, marx, f))
-                 else
-                   mean(do.call("outer", append(list(marx,marx,f),fargs)))
+                 mcross <- if(is.null(fargs)) {
+                   outer(marx, marx, f)
+                 } else {
+                   do.call("outer", append(list(marx,marx,f),fargs))
+                 }
+                 if(unweighted) {
+                   mean(mcross)
+                 } else {
+                   wcross <- outer(weights, weights, "*")
+                   mean(mcross * wcross)
+                 }
                },
                stop("Internal error: invalid ftype"))
 
@@ -447,7 +472,11 @@ markcorr <-
            equ=stop("negative marks are not permitted"),
            product=,
            general=stop("negative values of function f are not permitted"))
-    
+
+  ## weights
+  if(!unweighted)
+    ff <- ff * weights[I] * weights[J]
+  
   #### Compute estimates ##############
         
   if(any(correction == "translate")) {
@@ -481,6 +510,175 @@ markcorr <-
   ##
   unitname(result) <- unitname(X)
   return(result)
+}
+
+## mark cross-correlation function 
+
+markcrosscorr <-
+  function(X, r=NULL, 
+           correction=c("isotropic", "Ripley", "translate"),
+           method="density", ..., normalise=TRUE, Xname=NULL)
+{
+  if(missing(Xname))
+    Xname <- short.deparse(substitute(X))
+
+  stopifnot(is.ppp(X) && is.marked(X))
+  npts <- npoints(X)
+  W <- Window(X)
+
+  ## available selection of edge corrections depends on window
+  correction.given <- !missing(correction) && !is.null(correction)
+  if(is.null(correction))
+    correction <- c("isotropic", "Ripley", "translate")
+  correction <- pickoption("correction", correction,
+                           c(none="none",
+                             border="border",
+                             "bord.modif"="bord.modif",
+                             isotropic="isotropic",
+                             Ripley="isotropic",
+                             translate="translate",
+                             translation="translate",
+                             best="best"),
+                           multi=TRUE)
+  correction <- implemented.for.K(correction, W$type, correction.given)
+  
+  ## determine r values 
+  rmaxdefault <- rmax.rule("K", W, npts/area(W))
+  breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
+  r <- breaks$r
+  rmax <- breaks$max
+        
+  ## find close pairs of points
+  close <- closepairs(X, rmax)
+  dIJ <- close$d
+  I   <- close$i
+  J   <- close$j
+  XI <- ppp(close$xi, close$yi, window=W, check=FALSE)
+
+  ## determine estimation method
+  if(length(method) > 1)
+    stop("Select only one method, please")
+  if(method=="density" && !breaks$even)
+    stop(paste("Evenly spaced r values are required if method=",
+               sQuote("density"), sep=""))
+
+  ## ensure marks are a data frame
+  marx <- marks(X, dfok=TRUE)
+  if(!is.data.frame(marx))
+    marx <- data.frame(marks=marx)
+
+  ## convert factor marks to dummy variables
+  while(any(isfac <- sapply(marx, is.factor))) {
+    i <- min(which(isfac))
+    mari <- marx[,i]
+    levi <- levels(mari)
+    nami <- colnames(marx)[i]
+    dumi <- 1 * outer(mari, levi, "==")
+    colnames(dumi) <- paste0(nami, levi)
+    marx <- as.data.frame(append(marx[,-i,drop=FALSE], list(dumi), after=i-1))
+  }
+  nc <- ncol(marx)
+  nama <- colnames(marx)
+  ## loop over all pairs of columns
+  funs <- list()
+  for(i in 1:nc) {
+    marxi <- marx[,i]
+    namei <- nama[i]
+    for(j in 1:nc) {
+      marxj <- marx[,j]
+      namej <- nama[j]
+      ## Denominator
+      ## Ef = E M M' = EM EM'
+      ## when M, M' are independent from the respective columns
+      Ef <- mean(marxi) * mean(marxj)
+      if(normalise) {
+        theory <- 1
+        Efdenom <- Ef
+        ## check validity of denominator
+        if(Efdenom == 0)
+          stop(paste("Cannot normalise the mark correlation for",
+                     namei, "x", namej, "because the denominator is zero"),
+               call.=FALSE)
+        else if(Efdenom < 0)
+          warning(paste("Problem when normalising the mark correlation for",
+                        namei, "x", namej,
+                        "- the denominator is negative"),
+                  call.=FALSE)
+      } else {
+        theory <- Ef
+        Efdenom <- 1
+      }
+      ## this will be the output data frame
+      df.ij <- data.frame(r=r, theo= rep.int(theory,length(r)))
+      desc <- c("distance argument r",
+                "theoretical value (independent marks) for %s")
+      alim <- c(0, min(rmax, rmaxdefault))
+      ## determine conventional name of function
+      mimj <- as.name(paste0(namei,".",namej))
+      if(normalise) {
+        ylab <- substitute(k[mm](r), list(mm=mimj))
+        fnam <- c("k", as.character(mimj))
+      } else {
+        ylab <- substitute(c[mm](r), list(mm=mimj))
+        fnam <- c("c", as.character(mimj))
+      }
+      fun.ij <- fv(df.ij, "r", ylab, "theo", , alim,
+                   c("r","{%s[%s]^{ind}}(r)"), desc, fname=fnam)
+
+      mI <- marxi[I]
+      mJ <- marxj[J]
+      ff <- mI * mJ
+      ## check values of f(M1, M2)
+
+      if(any(is.na(ff))) 
+        stop("some marks were NA", call.=FALSE)
+
+      if(any(ff < 0))
+        stop("negative marks are not permitted")
+    
+      ## Compute estimates ##############
+        
+      if(any(correction == "translate")) {
+        ## translation correction
+        XJ <- ppp(close$xj, close$yj, window=W, check=FALSE)
+        edgewt <- edge.Trans(XI, XJ, paired=TRUE)
+        ## get smoothed estimate of mark covariance
+        Mtrans <- sewsmod(dIJ, ff, edgewt, Efdenom, r, method, ...)
+        fun.ij <- bind.fv(fun.ij,
+                          data.frame(trans=Mtrans),
+                          "{hat(%s)[%s]^{trans}}(r)",
+                          "translation-corrected estimate of %s",
+                          "trans")
+      }
+      if(any(correction == "isotropic")) {
+        ## Ripley isotropic correction
+        edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
+        ## get smoothed estimate of mark covariance
+        Miso <- sewsmod(dIJ, ff, edgewt, Efdenom, r, method, ...)
+        fun.ij <- bind.fv(fun.ij,
+                          data.frame(iso=Miso), "{hat(%s)[%s]^{iso}}(r)",
+                          "Ripley isotropic correction estimate of %s",
+                          "iso")
+      }
+      ## which corrections have been computed?
+      nama2 <- names(fun.ij)
+      corrxns <- rev(nama2[nama2 != "r"])
+
+      ## default is to display them all
+      formula(fun.ij) <- (. ~ r)
+      fvnames(fun.ij, ".") <- corrxns
+      ##
+      unitname(fun.ij) <- unitname(X)
+      funs <- append(funs, list(fun.ij))
+    }
+  }
+  # matrix mapping array entries to list positions in 'funs'
+  witch <- matrix(1:(nc^2), nc, nc, byrow=TRUE)
+  header <- paste("Mark cross-correlation functions for", Xname)
+  answer <- fasp(funs, witch, 
+                 rowNames=nama, colNames=nama,
+                 title=header, dataname=Xname)
+  return(answer)
 }
 
 sewsmod <- function(d, ff, wt, Ef, rvals, method="smrep", ..., nwtsteps=500) {

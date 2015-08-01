@@ -10,7 +10,7 @@
 \usage{
 markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
          correction=c("isotropic", "Ripley", "translate"),
-         method="density", \dots,
+         method="density", \dots, weights=NULL,
          f1=NULL, normalise=TRUE, fargs=NULL)
 }
 \arguments{
@@ -45,6 +45,9 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
     Arguments passed to the density estimation routine
     (\code{\link{density}}, \code{\link{loess}} or \code{sm.density})
     selected by \code{method}.
+  }
+  \item{weights}{
+    Optional numeric vector of weights for each data point in \code{X}.
   }
   \item{f1}{
     An alternative to \code{f}. If this argument is given,
@@ -254,6 +257,9 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
   multitype K-functions \code{\link{Kcross}}, \code{\link{Kdot}}
   for factor-valued marks.
 
+  Mark cross-correlation function \code{\link{markcrosscorr}}
+  for point patterns with several columns of marks.
+  
   \code{\link{Kmark}} to estimate a cumulative function
   related to the mark correlation function.
 }
@@ -296,6 +302,11 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
     niets <- markcorr(amacrine, function(m1,m2){m1 == m2}, method="loess")
     niets <- markcorr(X, correction="isotropic", method="smrep", hmult=2)
     }
+
+   # weighted mark correlation
+   Y <- subset(betacells, select=type)
+   a <- marks(betacells)$area
+   v <- markcorr(Y, weights=a)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

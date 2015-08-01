@@ -920,6 +920,7 @@
     \code{\link{markmean}} \tab smoothed local average of marks \cr
     \code{\link{markvar}} \tab smoothed local variance of marks \cr
     \code{\link{markcorr}} \tab mark correlation function \cr
+    \code{\link{markcrosscorr}} \tab mark cross-correlation function \cr
     \code{\link{markvario}} \tab mark variogram \cr
     \code{\link{Kmark}} \tab mark-weighted \eqn{K} function \cr
     \code{\link{Emark}} \tab mark independence diagnostic \eqn{E(r)} \cr

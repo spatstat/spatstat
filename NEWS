@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.016
+        CHANGES IN spatstat VERSION 1.42-2.017
 
 OVERVIEW
 
@@ -14,6 +14,10 @@ OVERVIEW
 
    o Support for one-dimensional smoothing kernels.
 
+   o Mark correlation function may include weights.
+
+   o Cross-correlation version of the mark correlation function.
+
    o Some basic simulation code has been accelerated.
  
    o Minor improvements and bug fixes.
@@ -21,7 +25,11 @@ OVERVIEW
    o Version nickname: 'Reds under the Beds'
 
 NEW FUNCTIONS
-  
+
+   o markcrosscorr
+   Mark cross-correlation function for point patterns with
+   several columns of marks
+
    o to.opaque, to.transparent
    Change transparency value in colours
 
@@ -55,9 +63,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o default.rmhcontrol, default.rmhexpand
    New argument 'w'.
 
+   o markcorr
+   New argument 'weights' allows computation of the weighted version
+   of the mark correlation function.
+
    o density.lpp
    New argument 'kernel' specifies the smoothing kernel.
    Any of the standard one-dimensional smoothing kernels can be used.
+
+   o plot.ppp
+   The default colour for the points is now a transparent grey,
+   if this is supported by the plot device.
 
    o rgbim, hsvim
    New argument 'A' controls the alpha (transparency) channel.
