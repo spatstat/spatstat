@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.31 $ $Date: 2015/05/09 10:23:48 $
+# $Revision: 1.32 $ $Date: 2015/08/05 02:50:25 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -38,6 +38,9 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
     fsplit <- f
     if(is.factor(f)) {
       splittype <- "factor"
+    } else if(is.logical(f)) {
+      splittype <- "factor"
+      f <- factor(f)
     } else if(is.tess(f)) {
       # f is a tessellation: determine the grouping
       f <- marks(cut(x, fsplit))
@@ -64,7 +67,8 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
       splittype <- "factor"
     } else 
       stop(paste("f must be",
-                 "a factor, a tessellation, a window, an image,",
+                 "a factor, a logical vector,", 
+                 "a tessellation, a window, an image,",
                  "or the name of a column of marks"))
     if(length(f) != npoints(x))
       stop("length(f) must equal the number of points in x")
@@ -177,9 +181,11 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
         fsplit <- f <- marx[[f]]
       else
         stop(paste("The name", sQuote(f), "does not match any column of marks"))
+    } else if(is.logical(f)) {
+      f <- factor(f)
     } else if(!is.factor(f))
       stop(paste("f must be",
-                 "a factor, a tessellation, an image,",
+                 "a factor, a logical vector, a tessellation, an image,",
                  "or the name of a column of marks"))
     if(length(f) != x$n)
       stop("length(f) must equal the number of points in x")

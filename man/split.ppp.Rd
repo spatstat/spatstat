@@ -16,7 +16,8 @@
     An object of class \code{"ppp"}.
   }
   \item{f}{
-    Data determining the grouping. Either a factor, 
+    Data determining the grouping. Either a factor,
+    a logical vector,
     a pixel image with factor values, a tessellation, a window,
     or the name of one of the columns of marks.
   }

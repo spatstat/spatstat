@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.017
+        CHANGES IN spatstat VERSION 1.42-2.018
 
 OVERVIEW
 
@@ -110,6 +110,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New options 'fastthin' and 'fastpois' enable fast simulation algorithms.
    Set these options to FALSE to reproduce results obtained with
    previous versions of spatstat.
+
+   o split.ppp
+   The splitting variable 'f' can now be a logical vector.
 
 BUG FIXES
 
