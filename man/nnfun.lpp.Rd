@@ -43,8 +43,9 @@
   nearest neighbour function of \code{X}. Evaluating the function \code{f}
   in the form \code{v <- f(x,y)}, where \code{x} and \code{y}
   are any numeric vectors of equal length containing coordinates of
-  spatial locations, yields the values of the distance function at these
-  locations. More efficiently \code{f} can take the arguments
+  spatial locations, yields a vector of identifiers or serial numbers of
+  the data points closest to these spatial locations.
+  More efficiently \code{f} can take the arguments
   \code{x, y, seg, tp} where \code{seg} and \code{tp} are the local
   coordinates on the network.
 

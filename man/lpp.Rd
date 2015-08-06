@@ -8,7 +8,7 @@
   a point pattern on a linear network.
 }
 \usage{
-lpp(X, L)
+lpp(X, L, \dots)
 }
 \arguments{
   \item{X}{
@@ -18,7 +18,10 @@ lpp(X, L)
   }
   \item{L}{
     Linear network (object of class \code{"linnet"}).
-}
+  }
+  \item{\dots}{
+    Ignored.
+  }
 }
 \details{
   This command creates an object of class \code{"lpp"} that represents

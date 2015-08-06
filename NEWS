@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.018
+        CHANGES IN spatstat VERSION 1.42-2.019
 
 OVERVIEW
 
@@ -115,6 +115,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    The splitting variable 'f' can now be a logical vector.
 
 BUG FIXES
+
+   o lpp
+   Crashed if X was a 4-column matrix.
+   Fixed.
 
    o plot.fv
    Crashed with some graphics devices, if legend=TRUE.
