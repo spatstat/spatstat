@@ -11,7 +11,7 @@
 }
 \usage{
 \method{density}{lpp}(x, sigma, \dots,
-        kernel="gaussian",
+        kernel="gaussian", continuous=TRUE,
         epsilon = 1e-06, verbose = TRUE, debug = FALSE, savehistory = TRUE)
 
 \method{density}{splitppx}(x, sigma, \dots)
@@ -33,6 +33,12 @@
     Character string specifying the smoothing kernel.
     See \code{\link{dkernel}} for possible options.
   }
+  \item{continuous}{
+    Logical value indicating whether to compute the
+    \dQuote{equal-split continuous} smoother (\code{continuous=TRUE}, the
+    default) or the \dQuote{equal-split discontinuous} smoother
+    (\code{continuous=FALSE}).
+  }
   \item{epsilon}{
     Tolerance value. A tail of the kernel with total mass
     less than \code{epsilon} may be deleted.
@@ -49,10 +55,20 @@
   }
 }
 \details{
-  Kernel smoothing using the
-  equal-split continuous rule is applied to the points of \code{x}.
+  Kernel smoothing is applied to the points of \code{x}
+  using one of the algorithms described in Okabe and Sugihara (2012).
   The result is a pixel image on the linear network (class
   \code{"linim"}) which can be plotted.
+
+  If \code{continuous=TRUE} (the default), smoothing is performed
+  using the \dQuote{equal-split continuous} rule described in
+  Section 9.2.3 of Okabe and Sugihara (2012). The resulting function
+  is continuous on the linear network.
+
+  If \code{continuous=FALSE}, smoothing is performed
+  using the \dQuote{equal-split discontinuous} rule described in
+  Section 9.2.2 of Okabe and Sugihara (2012). This algorithm is
+  faster, but the resulting function is not continuous.  
 
   There is also a method for split point patterns on a linear network
   (class \code{"splitppx"}) which will return a list of pixel images.
@@ -86,6 +102,7 @@
   D <- density(X, 0.2, verbose=FALSE)
   plot(D, style="w", main="", adjust=2)
   De <- density(X, 0.2, kernel="epanechnikov", verbose=FALSE)
+  Ded <- density(X, 0.2, kernel="epanechnikov", continuous=FALSE, verbose=FALSE)
 }
 \keyword{spatial}
 \keyword{methods}

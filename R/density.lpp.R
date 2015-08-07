@@ -1,14 +1,15 @@
 #
 # kernel smoothing on linear network
-# (Okabe algorithm)
+# (Okabe algorithms)
 #  Computationally expensive unless sigma is very small
 #  You Have Been Warned
 #
-#   $Revision: 1.2 $  $Date: 2015/07/23 12:29:02 $
+#   $Revision: 1.5 $  $Date: 2015/08/07 06:59:51 $
 #
 
 density.lpp <- function(x, sigma, ...,
                         kernel="gaussian",
+                        continuous=TRUE,
                         epsilon=1e-6,
                         verbose=TRUE, debug=FALSE, savehistory=TRUE) {
   stopifnot(inherits(x, "lpp"))
@@ -107,14 +108,21 @@ density.lpp <- function(x, sigma, ...,
     Hvert <- if(H$from) Lfrom[Hseg] else Lto[Hseg]
     Hdist <- H$distance
     # find all segments incident to this vertex
-    incident <- (Lfrom == Hvert) | (Lto == Hvert)
-    degree <- sum(incident)
-    for(J in which(incident)) {
+    incident <- which((Lfrom == Hvert) | (Lto == Hvert))
+    degree <- length(incident)
+    # exclude reflecting paths?
+    if(!continuous)
+      incident <- setdiff(incident, Hseg)
+    for(J in incident) {
       lenJ <- Llengths[J]
       # determine whether Hvert is the 'to' or 'from' endpoint of segment J
       H.is.from <- (Lfrom[J] == Hvert)
       # update weight
-      Jweight <- H$weight * (2/degree - (J == Hseg))
+      if(continuous) {
+        Jweight <- H$weight * (2/degree - (J == Hseg))
+      } else {
+        Jweight <- H$weight/(degree-1)
+      }
       # increment density on segment
       relevant <- (projmap$mapXY == J)
       tp.rel <- projmap$tp[relevant]

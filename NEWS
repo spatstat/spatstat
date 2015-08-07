@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.019
+        CHANGES IN spatstat VERSION 1.42-2.020
 
 OVERVIEW
 
@@ -10,7 +10,7 @@ OVERVIEW
 
    o Improvements to "[" and subset() methods
 
-   o Extension to kernel smoothing on a linear network.
+   o Extensions to kernel smoothing on a linear network.
 
    o Support for one-dimensional smoothing kernels.
 
@@ -56,6 +56,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o [.pp3, [.lpp, [.ppx, subset.ppp, subset.pp3, subset.lpp, subset.ppx
    These methods now have an argument 'drop' which determines
    whether to remove unused levels of a factor.
+
+   o density.lpp
+   Now supports both the 'equal-split continuous' and 
+   'equal-split discontinuous' smoothers. New argument 'continuous' 
+   determines the choice of smoother.
 
    o simulate.ppm
    New argument 'w' controls the window of the simulated patterns.
