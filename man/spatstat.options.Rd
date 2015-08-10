@@ -288,6 +288,12 @@
       }
       The value of \code{terse} is initialised to 0.
     }
+    \item{transparent}{
+      Logical value indicating whether default colour maps
+      are allowed to include semi-transparent colours, where possible.
+      Default is \code{TRUE}.
+      Currently this only affects \code{\link{plot.ppp}}. 
+    }
     \item{units.paren}{
       The kind of parenthesis which encloses the text that
       explains a \code{unitname}. This text is seen in

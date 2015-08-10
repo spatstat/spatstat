@@ -406,6 +406,12 @@ warn.once <- function(key, ...) {
          check=function(x) { length(x) == 1 && (x %in% 0:4) },
          valid="an integer between 0 and 4"
        ),
+       transparent=list(
+         ## whether to allow transparent colours in default colour maps
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
        units.paren=list(
          default="(",
          check=function(x) {

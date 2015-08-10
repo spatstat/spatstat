@@ -19,7 +19,8 @@ plot.ppp <- local({
       if(is.null(cols) &&
          !any(c("col", "fg", "bg") %in% names(list(...))) &&
          npoints(x) > 100 &&
-         identical(dev.capabilities()$semiTransparency, TRUE)) 
+         identical(dev.capabilities()$semiTransparency, TRUE) &&
+         spatstat.options("transparent"))
         cols <- rgb(0,0,0,0.2)
       return(symbolmap(..., chars=chars, cols=cols))
     }

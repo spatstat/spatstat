@@ -238,7 +238,9 @@
   colour of the window.
 
   The default colour for the points is a semi-transparent grey,
-  if this is supported by the plot device.   
+  if this is supported by the plot device. This behaviour can be
+  suppressed (so that the default colour is non-transparent)
+  by setting \code{spatstat.options(transparent=FALSE)}.
 
   The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
   incompatible. They control the physical size of the circles and
