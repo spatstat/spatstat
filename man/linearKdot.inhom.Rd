@@ -65,7 +65,7 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{Kdot.inhom}} 
+  This is a counterpart of the function \code{\link{Kdot.inhom}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The argument \code{i} will be interpreted as
@@ -99,7 +99,7 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
 }
 \seealso{
  \code{\link{linearKdot}},
- \code{\link[spatstat]{linearK}}.
+ \code{\link{linearK}}.
 }
 \examples{
    lam <- table(marks(chicago))/(summary(chicago)$totlength)

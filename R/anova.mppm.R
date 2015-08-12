@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.4 $ $Date: 2015/04/04 09:05:55 $
+# $Revision: 1.5 $ $Date: 2015/08/12 07:24:07 $
 #
 
 anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
@@ -30,11 +30,28 @@ anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
                "they were fitted by different methods (",
                paste(fitter, collapse=", "), ")" ))
 
+  if(fitter == "glmmPQL") {
+    # anova.lme requires different format of `test' argument
+    # and does not recognise 'dispersion'
+    if(is.null(test))
+      test <- FALSE
+    else {
+      stopifnot(is.character(test) && length(test) == 1)
+      m<- pmatch(test, c("Chisq", "F", "Cp"))
+      if(is.na(m))
+        stop(paste("Unrecognised test:", test))
+      if(m != 1)
+        stop(paste("Test", dQuote(test),
+                   "is not implemented for random effects models"))
+      test <- TRUE
+    }
+  }
   
   # Extract fit objects 
   fitz <- lapply(objex, function(x) { x$Fit$FIT })
 
   opt <- list(test=test, dispersion=1)
+  if(fitter == "glmmPQL") opt <- list(test=test)
 
   # Finally do the appropriate ANOVA
   result <- do.call(anova, append(fitz, opt))

@@ -23,7 +23,7 @@
     If \code{newdata=NULL}, predictions are computed for the original
     values of the covariates, to which the model was fitted.
     Otherwise \code{newdata} should be a hyperframe
-    (see \code{\link[spatstat]{hyperframe}}) containing columns of covariates
+    (see \code{\link{hyperframe}}) containing columns of covariates
     as required by the model. If \code{type} includes \code{"cif"},
     then \code{newdata} must also include a column of spatial point
     pattern responses, in order to compute the conditional intensity.
@@ -94,18 +94,26 @@
   Bell, M. and Turner, R. 
   Analysis of a designed experiment where the response is a spatial
   point pattern. In preparation.
+
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  London: Chapman and Hall/CRC Press. 
 }
-\author{Adrian Baddeley
-  \email{adrian.baddeley@uwa.edu.au}
+\author{
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented by 
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{rolf@math.unb.ca}
-  \url{http://www.math.unb.ca/~rolf}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{mppm}},
   \code{\link{fitted.mppm}},
-  \code{\link[spatstat]{hyperframe}}
+  \code{\link{hyperframe}}
 }
 \examples{
   h <- hyperframe(Bugs=waterstriders)

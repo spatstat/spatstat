@@ -2091,7 +2091,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.1 $ $Date: 2013/11/10 08:59:08 $
+# $Revision: 1.2 $ $Date: 2015/08/12 11:09:07 $
 # 
 
 require(spatstat)
@@ -2112,10 +2112,21 @@ subfits(fit3)
 
 # test handling of offsets and zero cif values in mppm
 
- data(waterstriders)
- H <- hyperframe(Y = waterstriders)
- mppm(Y ~ 1,  data=H, Hardcore(1.5))
- mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+H <- hyperframe(Y = waterstriders)
+mppm(Y ~ 1,  data=H, Hardcore(1.5))
+mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+
+# prediction, in training/testing context
+#    (example from Markus Herrmann and Ege Rubak)
+
+X <- waterstriders
+dist <- as.listof(lapply(waterstriders,
+                         function(z) distfun(runifpoint(1, Window(z)))))
+i <- 3
+train <- hyperframe(pattern = X[-i], dist = dist[-i])
+test <- hyperframe(pattern = X[i], dist = dist[i])
+fit <- mppm(pattern ~ dist, data = train)
+pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
 })
 # tests/ppx.R
 #

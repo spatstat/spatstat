@@ -43,7 +43,7 @@ linearpcfdot(X, i, r=NULL, \dots, correction="Ang")
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{pcfdot}} 
+  This is a counterpart of the function \code{\link{pcfdot}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The argument \code{i} will be interpreted as
@@ -73,8 +73,8 @@ linearpcfdot(X, i, r=NULL, \dots, correction="Ang")
 }
 \seealso{
  \code{\link{linearpcfcross}},
- \code{\link[spatstat]{linearpcf}}.
- \code{\link[spatstat]{pcfcross}}.
+ \code{\link{linearpcf}}.
+ \code{\link{pcfcross}}.
 }
 \examples{
    data(chicago)

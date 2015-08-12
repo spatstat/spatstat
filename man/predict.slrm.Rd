@@ -20,7 +20,7 @@
     An object of class \code{"slrm"}.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link[spatstat]{pixellate}}
+    Optional arguments passed to \code{\link{pixellate}}
     determining the pixel resolution for the discretisation
     of the point pattern.
   }

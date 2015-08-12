@@ -1,13 +1,16 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.11 $  $Date: 2015/02/06 10:26:46 $
+# $Revision: 1.13 $  $Date: 2015/08/12 07:40:25 $
 #
 
 
 summary.mppm <- function(object, ..., brief=FALSE) {
   # y will be the summary 
   y <- object[c("Call", "Info", "Inter", "trend", "iformula",
+#%^!ifdef RANDOMEFFECTS                
+                "random",
+#%^!endif                
                 "npat", "maxlogpl")]
   y$brief <- brief
 
@@ -30,6 +33,9 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 
   npat      <- y$npat
   iformula  <- y$iformula
+#%^!ifdef RANDOMEFFECTS  
+  random    <- y$random
+#%^!endif  
   Vnamelist <- y$Fit$Vnamelist
   allVnames <- unlist(Vnamelist)
   poistags  <- itags[trivial]
@@ -37,6 +43,14 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 #  rownames  <- y$Info$rownames
   
   switch(y$Fit$fitter,
+#%^!ifdef RANDOMEFFECTS         
+         glmmPQL={
+           y$coef <- co <- fixed.effects(FIT)
+           systematic <- !(names(co) %in% c(allVnames, poistags))
+           y$coef.syst <- co[systematic]
+           y$coef.rand <- random.effects(FIT)
+         },
+#%^!endif         
          gam=,
          glm={
            y$coef <- co <- coef(FIT)
@@ -47,21 +61,40 @@ summary.mppm <- function(object, ..., brief=FALSE) {
   # model depends on covariates
   y$depends.covar <- Info$has.covar && (length(Info$used.cov.names) > 0)
 
+#%^!ifdef RANDOMEFFECTS  
+  # random effects
+  y$ranef <- if(Info$has.random) summary(FIT$modelStruct) else NULL
+#%^!endif  
 
   ### Interactions 
   # model is Poisson 
   y$poisson <- all(trivial[iused])
   # Determine how complicated the interactions are:
+#%^!ifdef RANDOMEFFECTS  
+  # (0) are there random effects involving the interactions
+  randominteractions <-
+    !is.null(random) && any(variablesinformula(random) %in% itags)
+#%^!endif  
   # (1) is the interaction formula of the form ~ tag + tag + ... + tag
   isimple  <- identical(sort(variablesinformula(iformula)),
                         sort(termsinformula(iformula)))
   # (2) is it of the form ~tag 
   trivialformula <- (isimple && ninteract == 1)
   # (3) is it of the form ~tag where the interaction is the same in each row
-  fixedinteraction <- trivialformula && constant
+#%^!ifdef RANDOMEFFECTS
+  fixedinteraction <- (trivialformula && constant && !randominteractions)
+#%^!else
+#  fixedinteraction <- trivialformula && constant
+#%^!endif  
   
   ### Determine printing of interactions, accordingly ###
   iprint <- list()
+#%^!ifdef RANDOMEFFECTS  
+  if(randominteractions) {
+    toohard <- TRUE
+    printeachrow <- FALSE
+  } else 
+#%^!endif  
   if(fixedinteraction) {    
     # exactly the same interaction for all patterns
     interaction <- interaction[1,1,drop=TRUE]
@@ -101,6 +134,9 @@ summary.mppm <- function(object, ..., brief=FALSE) {
   }
 
   y$ikind <- list(
+#%^!ifdef RANDOMEFFECTS                  
+                  randominteractions=randominteractions,
+#%^!endif                  
                   isimple           =isimple,
                   trivialformula    =trivialformula,
                   fixedinteraction  =fixedinteraction,
@@ -135,6 +171,9 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
 #  processnames   <- Inter$processes
   itags   <- Inter$itags
   trivial  <- Inter$trivial
+#%^!ifdef RANDOMEFFECTS  
+  random   <- x$random
+#%^!endif  
 
   FIT <- x$Fit$FIT
   Vnamelist <- x$Fit$Vnamelist
@@ -150,6 +189,15 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
     splat("Call:", x$Call$callstring)
   splat("Log trend formula:", pasteFormula(x$trend))
   switch(x$Fit$fitter,
+#%^!ifdef RANDOMEFFECTS         
+         glmmPQL={
+           cat("Fixed effects:\n")
+           print(x$coef.syst)
+           cat("Random effects:\n")
+           print(x$coef.rand)
+           co <- fixed.effects(FIT)
+         },
+#%^!endif         
          gam=,
          glm={
            cat("Fitted trend coefficients:\n")
@@ -164,6 +212,13 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
     
   parbreak(terselevel)
 
+#%^!ifdef RANDOMEFFECTS  
+  if(!is.null(x$ranef)) {
+    splat("Random effects summary:")
+    print(x$ranef)
+    parbreak(terselevel)
+  }
+#%^!endif
 
   ### Print interaction information ###
   if(waxlyrical('extras', terselevel)) {

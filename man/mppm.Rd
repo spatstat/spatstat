@@ -8,6 +8,9 @@
 \usage{
    mppm(formula, data, interaction=Poisson(), ...,
             iformula=NULL,
+%#%^!ifdef RANDOMEFFECTS
+            random=NULL,
+%#%^!endif
         use.gam = FALSE)
 }
 \arguments{
@@ -17,7 +20,7 @@
   }
   \item{data}{
     A hyperframe (object of class \code{"hyperframe"},
-    see \code{\link[spatstat]{hyperframe}}) containing the
+    see \code{\link{hyperframe}}) containing the
     point pattern responses and the explanatory variables. 
   }
   \item{interaction}{
@@ -28,7 +31,7 @@
     rows as \code{data}) whose entries are objects of class
     \code{"interact"}.     
   }
-  \item{\dots}{Arguments passed to \code{\link[spatstat]{ppm}} controlling
+  \item{\dots}{Arguments passed to \code{\link{ppm}} controlling
     the fitting procedure.
   }
   \item{iformula}{
@@ -38,6 +41,14 @@
     in the hyperframe \code{interaction}, or the name of a column
     in the hyperframe \code{data} that is a vector or factor.
   }
+%#%^!ifdef RANDOMEFFECTS  
+  \item{random}{
+    Optional. A formula (with no left hand side)
+    describing a random effect. Variable names in the formula
+    may be any of the column names of \code{data} and \code{interaction}.
+    The formula must be recognisable to \code{\link{lme}}. 
+  }
+%#%^!endif  
   \item{use.gam}{Logical flag indicating whether to fit the model
     using \code{\link{gam}} or \code{\link{glm}}.
   }
@@ -46,7 +57,7 @@
   This function fits a common point process model to a dataset
   containing several different point patterns.
   
-  It extends the capabilities of the function \code{\link[spatstat]{ppm}}
+  It extends the capabilities of the function \code{\link{ppm}}
   to deal with data such as
   \itemize{
     \item replicated observations of spatial point patterns
@@ -79,7 +90,7 @@
   of the covariate at a fine grid of locations.
 
   The argument \code{data} is a hyperframe (a generalisation of
-  a data frame, see \code{\link[spatstat]{hyperframe}}). This is like a data frame
+  a data frame, see \code{\link{hyperframe}}). This is like a data frame
   except that the entries can be objects of any class.
   The hyperframe has one row for each experimental unit,
   and one column for each variable (response or explanatory variable).
@@ -112,10 +123,14 @@
   marked, and must have the same type of marks.
 
   The scope of models that can be fitted to each pattern is the same as the
-  scope of \code{\link[spatstat]{ppm}}, that is, Gibbs point processes with
+  scope of \code{\link{ppm}}, that is, Gibbs point processes with
   interaction terms that belong to a specified list, including
   for example the Poisson process, Strauss process, Geyer's saturation
   model, and piecewise constant pairwise interaction models.
+%#%^!ifdef RANDOMEFFECTS  
+  Additionally, it is possible to include random effects
+  as explained in the section on Random Effects below.
+%#%^!endif
   
   The stochastic part of the model is determined by
   the arguments \code{interaction} and (optionally) \code{iformula}.
@@ -158,19 +173,29 @@
   model with interpoint interaction \code{B} to be fitted
   with different interaction parameters for each level of \code{group}.
 }
+%#%^!ifdef RANDOMEFFECTS
+\section{Random Effects}{
+  It is also possible to include random effects in the
+  trend term. The argument \code{random} is a formula,
+  with no left-hand side, that specifies the structure of the
+  random effects. The formula should be recognisable to
+  \code{\link{lme}} (see the description of the argument \code{random}
+  for \code{\link{lme}}).
+
+  The names in the formula \code{random} may be any of the covariates
+  supplied by \code{data}.
+  Additionally the formula may involve the name
+  \code{id}, which is a factor representing the
+  serial number (\eqn{1} to \eqn{n}) of the point pattern in the
+  list \code{X}.
+}
+%#%^!endif
 \value{
   An object of class \code{"mppm"} representing the
   fitted model.
 
   There are methods for
   \code{print}, \code{summary} and \code{coef} for this class.
-}
-\author{Adrian Baddeley
-  \email{adrian.baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{rolf@math.unb.ca}
-  \url{http://www.math.unb.ca/~rolf}
 }
 \references{
   Baddeley, A. and Turner, R.
@@ -182,9 +207,24 @@
   Bell, M. and Turner, R. 
   Analysis of a designed experiment where the response is a spatial
   point pattern. In preparation.
+
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  London: Chapman and Hall/CRC Press. 
+}
+\author{
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented by 
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link[spatstat]{ppm}},
+  \code{\link{ppm}},
   \code{\link{print.mppm}},
   \code{\link{summary.mppm}},
   \code{\link{coef.mppm}},

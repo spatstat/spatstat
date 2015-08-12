@@ -226,6 +226,7 @@
 \alias{grid1index}
 \alias{grow.mask}
 \alias{gsubdot}
+\alias{hackglmmPQL}
 \alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
@@ -989,6 +990,8 @@ gridindex(x, y, xrange, yrange, nx, ny)
 grid1index(x, xrange, nx)
 grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
+hackglmmPQL(fixed, random, family, data, correlation, weights,
+            control, niter, verbose, subset, \dots)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip,

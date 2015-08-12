@@ -20,6 +20,9 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   FIT      <- object$Fit$FIT
   coef.FIT <- coef(FIT)
   trend    <- object$trend
+#%^!ifdef RANDOMEFFECTS  
+  random   <- object$random
+#%^!endif  
 #  iformula <- object$iformula
 #  use.gam  <- object$Fit$use.gam
   info     <- object$Info
@@ -40,6 +43,11 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
     stop(paste("subfits() is not implemented for models",
                "in which several interpoint interactions",
                "are active on the same point pattern"))
+#%^!ifdef RANDOMEFFECTS  
+  if(!is.null(random) && any(variablesinformula(random) %in% itags))
+    stop(paste("subfits() is not yet implemented for models",
+               "with random effects that involve the interpoint interactions"))
+#%^!endif
   
   # implied coefficients for each active interaction
   announce("Computing implied coefficients...")
@@ -215,6 +223,9 @@ subfits.old <-
   FIT      <- object$Fit$FIT
   coef.FIT <- coef(FIT)
   trend    <- object$trend
+#%^!ifdef RANDOMEFFECTS  
+  random   <- object$random
+#%^!endif  
 #  iformula <- object$iformula
   use.gam  <- object$Fit$use.gam
   info     <- object$Info
@@ -235,6 +246,11 @@ subfits.old <-
     stop(paste("subfits() is not implemented for models",
                "in which several interpoint interactions",
                "are active on the same point pattern"))
+#%^!ifdef RANDOMEFFECTS  
+  if(!is.null(random) && any(variablesinformula(random) %in% itags))
+    stop(paste("subfits() is not yet implemented for models",
+               "with random effects that involve the interpoint interactions"))
+#%^!endif
   
   # implied coefficients for each active interaction
   announce("Computing implied coefficients...")
@@ -362,10 +378,16 @@ subfits.old <-
       interi <- interaction[i, acti, drop=TRUE] 
       tagi <- names(interaction)[acti]
       fit <- ppm(Yi, trend, interi, covariates=covariates,
+#%^!ifdef RANDOMEFFECTS                 
+                 allcovar=info$has.random,
+#%^!endif                 
                  use.gam=use.gam,
                  forcefit=TRUE, vnamebase=tagi, vnameprefix=tagi)
     } else {
       fit <- ppm(Yi, trend, Poisson(), covariates=covariates,
+#%^!ifdef RANDOMEFFECTS                 
+                 allcovar=info$has.random,
+#%^!endif                 
                  use.gam=use.gam,
                  forcefit=TRUE)
     }

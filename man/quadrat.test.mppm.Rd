@@ -16,7 +16,7 @@
     It should be a Poisson model.
   }
   \item{\dots}{
-    Arguments passed to \code{\link[spatstat]{quadrat.test.ppm}}
+    Arguments passed to \code{\link{quadrat.test.ppm}}
     which determine the size of the quadrats.
   }
 }
@@ -42,7 +42,7 @@
   \itemize{
     \item the window of observation is divided
     into rectangular tiles, and the number of data points in each tile is
-    counted, as described in \code{\link[spatstat]{quadratcount}}.
+    counted, as described in \code{\link{quadratcount}}.
     \item 
     The expected number of points in each quadrat is calculated,
     as determined by the fitted model.
@@ -89,7 +89,7 @@
 }
 \seealso{
   \code{\link{mppm}},
-  \code{\link[spatstat]{quadrat.test}}
+  \code{\link{quadrat.test}}
 }
 \examples{
   H <- hyperframe(X=waterstriders)
@@ -101,12 +101,21 @@
   fit2 <- mppm(X ~ id, H)
   quadrat.test(fit2, nx=2)
 }
-\author{Adrian Baddeley
-  \email{adrian.baddeley@uwa.edu.au}
+\references{
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  London: Chapman and Hall/CRC Press. 
+}
+\author{
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented by 
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{rolf@math.unb.ca}
-  \url{http://www.math.unb.ca/~rolf}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{htest}

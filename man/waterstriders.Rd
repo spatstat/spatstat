@@ -32,7 +32,7 @@
   it is a source of inhomogeneity to interactions.
 
   Penttinen (1984, chapter 5) fitted a pairwise interaction model with
-  a Strauss/hardcore interaction (see \code{\link[spatstat]{StraussHard}})
+  a Strauss/hardcore interaction (see \code{\link{StraussHard}})
   with hard core radius 1.5 cm and interaction radius 4.5 cm.
 } 
 \format{

@@ -1,10 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.021
+        CHANGES IN spatstat VERSION 1.42-2.022
 
 OVERVIEW
 
    o We thank Tuomas Rajala, Martin Maechler and Greg McSwiggan
    for contributions.
+
+   o spatstat now depends on the package 'nlme'.
+
+   o random-effects and mixed-effects models for replicated patterns.
 
    o spatstat colour tools now handle transparent colours.
 
@@ -20,15 +24,27 @@ OVERVIEW
 
    o Some basic simulation code has been accelerated.
  
+   o New dataset: Australian states and territories.
+
    o Minor improvements and bug fixes.
 
    o Version nickname: 'Reds under the Beds'
+
+NEW DATASET
+
+   o austates
+   The states and large mainland territories of Australia
+   represented as polygonal regions forming a tessellation.
 
 NEW FUNCTIONS
 
    o markcrosscorr
    Mark cross-correlation function for point patterns with
    several columns of marks
+
+   o fixef.mppm, ranef.mppm
+   Extract fixed effects and random effects from a point process model
+   fitted to replicated point patterns.
 
    o to.opaque, to.transparent
    Change transparency value in colours
@@ -48,6 +64,10 @@ NEW FUNCTIONS
    Auxiliary calculations for one-dimensional kernel smoothing.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o mppm
+   Now handles models with a random effect component.
+   New argument 'random' is a formula specifying the random effect.
 
    o [.ppp
    The previously-unused argument 'drop' now determines whether 
@@ -118,6 +138,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o split.ppp
    The splitting variable 'f' can now be a logical vector.
+
+   o collapse.fv
+   This is now treated as a method for the 'nlme' generic 'collapse'.
+   Its syntax has been adjusted slightly.
 
 BUG FIXES
 

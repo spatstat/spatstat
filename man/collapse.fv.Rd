@@ -1,5 +1,6 @@
 \name{collapse.fv}
 \alias{collapse.fv}
+\alias{collapse.anylist}
 \title{
   Collapse Several Function Tables into One
 }
@@ -9,12 +10,16 @@
   and relabelling columns that are different.
 }
 \usage{
-collapse.fv(..., same = NULL, different = NULL)
+\method{collapse}{fv}(object, \dots, same = NULL, different = NULL)
+
+\method{collapse}{anylist}(object, \dots, same = NULL, different = NULL)
 }
 \arguments{
+  \item{object}{
+    An object of class \code{"fv"}, or a list of such objects.
+  }
   \item{\dots}{
-    Arguments which are objects of class \code{"fv"},
-    or a list of objects of class \code{"fv"}.
+    Additional objects of class \code{"fv"}.
   }
   \item{same}{
     Character string or character vector specifying a column or columns,
@@ -29,7 +34,10 @@ collapse.fv(..., same = NULL, different = NULL)
   }
 }
 \details{
-  This command combines the data in several function tables 
+  This is a method for the generic function
+  \code{\link[nlme]{collapse}}.
+  
+  It combines the data in several function tables 
   (objects of class \code{"fv"}, see \code{\link{fv.object}})
   to make a single function table.
   It is essentially a smart wrapper for
@@ -40,7 +48,7 @@ collapse.fv(..., same = NULL, different = NULL)
   and then to use \code{collapse.fv} to combine the results into a
   single object that can easily be plotted. See the Examples.
   
-  The arguments \code{\dots} should be function tables
+  The arguments \code{object} and \code{\dots} should be function tables
   (objects of class \code{"fv"}, see \code{\link{fv.object}})
   that are compatible in the sense that they
   have the same values of the function argument. 
@@ -70,9 +78,9 @@ collapse.fv(..., same = NULL, different = NULL)
   X <- replicate(3, rpoispp(100), simplify=FALSE)
   names(X) <- paste("Simulation", 1:3)
   # compute K function estimates
-  Klist <- lapply(X, Kest)
+  Klist <- anylapply(X, Kest)
   # collapse
-  K <- collapse.fv(Klist, same="theo", different="iso")
+  K <- collapse(Klist, same="theo", different="iso")
   K
 }
 \author{Adrian Baddeley

@@ -43,7 +43,7 @@ linearmarkconnect(X, i, j, r=NULL, \dots)
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{markconnect}} 
+  This is a counterpart of the function \code{\link{markconnect}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The argument \code{i} will be interpreted as
@@ -75,7 +75,7 @@ linearmarkconnect(X, i, j, r=NULL, \dots)
  \code{\link{linearpcfcross}},
  \code{\link{linearpcf}},
  \code{\link{linearmarkequal}},
- \code{\link[spatstat]{markconnect}}.
+ \code{\link{markconnect}}.
 }
 \examples{
    pab <- linearmarkconnect(chicago, "assault", "burglary")

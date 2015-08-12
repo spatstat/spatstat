@@ -270,6 +270,9 @@ function(object, ..., newdata=NULL, type=c("trend", "cif"),
                 data        = newdata,
                 interaction = interactions,
                 iformula    = model$iformula,
+#%^!ifdef RANDOMEFFECTS                
+                random      = model$random,
+#%^!endif                
                 use.gam     = model$Fit$use.gam,
                 correction  = model$Info$correction,
                 rbord       = model$Info$rbord,

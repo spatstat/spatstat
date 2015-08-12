@@ -1,7 +1,7 @@
 #
 #   method for 'quadrat.test' for class mppm
 #
-#   $Revision: 1.7 $   $Date: 2012/09/06 03:50:17 $
+#   $Revision: 1.8 $   $Date: 2015/08/12 07:29:17 $
 #
 quadrat.test.mppm <- function(X, ...) {
   Xname <- short.deparse(substitute(X))

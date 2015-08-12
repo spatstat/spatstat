@@ -69,7 +69,7 @@ linearKcross.inhom(X, i, j, lambdaI, lambdaJ,
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{Kcross.inhom}} 
+  This is a counterpart of the function \code{\link{Kcross.inhom}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The arguments \code{i} and \code{j} will be interpreted as
@@ -103,7 +103,7 @@ linearKcross.inhom(X, i, j, lambdaI, lambdaJ,
 }
 \seealso{
  \code{\link{linearKdot}},
- \code{\link[spatstat]{linearK}}.
+ \code{\link{linearK}}.
 }
 \examples{
    lam <- table(marks(chicago))/(summary(chicago)$totlength)

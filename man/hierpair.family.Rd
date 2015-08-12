@@ -19,10 +19,10 @@
 } 
 \seealso{
   Other families: 
-  \code{\link[spatstat]{pairwise.family}},
-  \code{\link[spatstat]{pairsat.family}},
-  \code{\link[spatstat]{ord.family}},
-  \code{\link[spatstat]{inforder.family}}.
+  \code{\link{pairwise.family}},
+  \code{\link{pairsat.family}},
+  \code{\link{ord.family}},
+  \code{\link{inforder.family}}.
 
   Hierarchical Strauss interaction:
   \code{\link{HierStrauss}}.

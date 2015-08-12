@@ -56,7 +56,7 @@ linearmarkequal(X, r=NULL, \dots)
  \code{\link{linearpcfcross}},
  \code{\link{linearpcf}},
  \code{\link{linearmarkconnect}},
- \code{\link[spatstat]{markconnect}}.
+ \code{\link{markconnect}}.
 }
 \examples{
    

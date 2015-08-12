@@ -18,7 +18,7 @@
     The pixel image to be plotted. An object of class \code{"linim"}.
   }
   \item{\dots}{
-    Extra graphical parameters, passed to \code{\link[spatstat]{plot.im}}
+    Extra graphical parameters, passed to \code{\link{plot.im}}
     if \code{style="colour"}, or to \code{\link{polygon}}
     if \code{style="width"}.
   }
@@ -43,7 +43,7 @@
 
   If \code{style="colour"} (the default) then
   the pixel values of \code{x} are plotted as colours,
-  using \code{\link[spatstat]{plot.im}}. 
+  using \code{\link{plot.im}}. 
 
   If \code{style="width"} then
   the pixel values of \code{x} are used to determine the widths of
@@ -60,7 +60,7 @@
 }
 \seealso{
   \code{\link{linim}},
-  \code{\link[spatstat]{plot.im}},
+  \code{\link{plot.im}},
   \code{\link{polygon}}
 }
 \references{

@@ -1,7 +1,7 @@
 #
 # cdf.test.mppm.R
 #
-# $Revision: 1.13 $  $Date: 2015/01/29 06:46:02 $
+# $Revision: 1.14 $  $Date: 2015/08/12 07:24:31 $
 #
 cdf.test.mppm <- function(model, covariate,
                           test=c("ks", "cvm", "ad"), ..., verbose=TRUE,

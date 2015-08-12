@@ -28,7 +28,7 @@
   is the shortest-path distance from \eqn{s} to \eqn{A}.
 
   The command \code{distfun.lpp} is a method for the generic command
-  \code{\link[spatstat]{distfun}}
+  \code{\link{distfun}}
   for the class \code{"lpp"} of point patterns on a linear network.
 
   If \code{X} is a point pattern on a linear network,

@@ -171,6 +171,7 @@ There are also the following spatial data sets which are not 2D point patterns:
 
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
+{\tt austates} & Australian states & tessellation \\
 {\tt chicago} & street crimes & point pattern on linear network \\
 {\tt dendrite} & dendritic spines & point pattern on linear network \\
 {\tt spiders} & spider webs & point pattern on linear network \\
@@ -263,6 +264,15 @@ ants.extra$plotit()
 zeromargins()
 ants.extra$plotit()
 @ %$
+
+\subsubsection*{\texttt{austates}: Australian states}
+
+  The states and large mainland territories of Australia are
+  represented as polygonal regions forming a tessellation.
+
+<<fig=TRUE>>=
+plot(austates)
+@   
 
 \subsubsection*{\texttt{bdspots}: Breakdown spots}
 

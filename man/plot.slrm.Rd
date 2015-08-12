@@ -17,7 +17,7 @@
     An object of class \code{"slrm"}.
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link[spatstat]{plot.im}} to
+    Extra arguments passed to \code{\link{plot.im}} to
     control the appearance of the plot.
   }
   \item{type}{
@@ -38,7 +38,7 @@
 \seealso{
   \code{\link{slrm}}, 
   \code{\link{predict.slrm}}, 
-  \code{\link[spatstat]{plot.im}}
+  \code{\link{plot.im}}
 }
 \examples{
    data(copper)

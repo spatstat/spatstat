@@ -69,7 +69,7 @@ linearpcfcross.inhom(X, i, j, lambdaI, lambdaJ, r=NULL, \dots,
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{pcfcross.inhom}} 
+  This is a counterpart of the function \code{\link{pcfcross.inhom}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The argument \code{i} will be interpreted as
@@ -104,8 +104,8 @@ linearpcfcross.inhom(X, i, j, lambdaI, lambdaJ, r=NULL, \dots,
 }
 \seealso{
  \code{\link{linearpcfdot}},
- \code{\link[spatstat]{linearpcf}},
- \code{\link[spatstat]{pcfcross.inhom}}.
+ \code{\link{linearpcf}},
+ \code{\link{pcfcross.inhom}}.
 }
 \examples{
    lam <- table(marks(chicago))/(summary(chicago)$totlength)

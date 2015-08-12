@@ -26,7 +26,7 @@
     in the same units as the spatial coordinates of \code{x}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link[spatstat]{as.mask}} determining the
+    Arguments passed to \code{\link{as.mask}} determining the
     resolution of the result.
   }
   \item{kernel}{

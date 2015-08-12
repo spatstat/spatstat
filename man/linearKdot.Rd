@@ -41,7 +41,7 @@ linearKdot(X, i, r=NULL, \dots, correction="Ang")
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
 }
 \details{
-  This is a counterpart of the function \code{\link[spatstat]{Kdot}} 
+  This is a counterpart of the function \code{\link{Kdot}} 
   for a point pattern on a linear network (object of class \code{"lpp"}).
 
   The argument \code{i} will be interpreted as
@@ -69,9 +69,9 @@ linearKdot(X, i, r=NULL, \dots, correction="Ang")
   interpreted in the same way as character values. 
 }
 \seealso{
- \code{\link[spatstat]{Kdot}},
+ \code{\link{Kdot}},
  \code{\link{linearKcross}},
- \code{\link[spatstat]{linearK}}.
+ \code{\link{linearK}}.
 }
 \examples{
    data(chicago)

@@ -32,11 +32,11 @@
   }
   \item{L}{A linear network}
   \item{eps,dimyx,xy}{
-    Arguments passed to \code{\link[spatstat]{as.mask}} to control
+    Arguments passed to \code{\link{as.mask}} to control
     the pixel resolution.
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link[spatstat]{plot.im}} or
+    Extra arguments passed to \code{\link{plot.im}} or
     \code{\link{print.default}}.
   }
   \item{main}{Main title for plot.}
@@ -64,7 +64,7 @@
   For \code{print.linfun} the result is \code{NULL}.
 
   For \code{plot.linfun} the result is the same as
-  for \code{\link[spatstat]{plot.im}}.
+  for \code{\link{plot.im}}.
   
   For the conversion methods, the result is an object of the
   required type: \code{as.linim.linfun} returns an object of

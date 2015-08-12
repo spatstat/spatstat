@@ -34,7 +34,7 @@
   
   The result \code{f} also belongs to the class \code{"linfun"}.
   It can be called using several different kinds of data,
-  as explained in the help for \code{\link[spatstat]{linfun}}.
+  as explained in the help for \code{\link{linfun}}.
   The values of the function are character strings.
 }
 \value{
@@ -51,7 +51,7 @@ and Ege Rubak
 }
 \seealso{
   \code{\link{treebranchlabels}},
-  \code{\link[spatstat]{linfun}}
+  \code{\link{linfun}}
 }
 \examples{
   # make a simple tree

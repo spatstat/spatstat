@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.127 $   $Date: 2015/07/07 10:28:37 $
+##    $Revision: 1.131 $   $Date: 2015/08/12 10:23:31 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -589,17 +589,15 @@ cbind.fv <- function(...) {
   return(z)
 }
 
-collapse.fv <- function(..., same=NULL, different=NULL) {
-  x <- list(...)
-  n <- length(x)
-  if(n == 0)
-    return(NULL)
-  if(n == 1)  {
-    ## single argument - could be a list - extract it
-    x1 <- x[[1]]
-    if(!is.fv(x1))
-      x <- x1
-  } 
+collapse.anylist <-
+collapse.fv <- function(object, ..., same=NULL, different=NULL) {
+  if(is.fv(object)) {
+    x <- list(object, ...)
+  } else if(inherits(object, "anylist")) {
+    x <- append(object, list(...))
+  } else if(is.list(object) && all(sapply(object, is.fv))) {
+    x <- append(object, list(...))
+  } else stop("Format not understood")
   if(!all(unlist(lapply(x, is.fv))))
     stop("arguments should be objects of class fv")
   if(is.null(same)) same <- character(0)

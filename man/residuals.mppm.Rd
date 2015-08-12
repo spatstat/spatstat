@@ -22,7 +22,7 @@
   Baddeley et al (2005) defined residuals for the fit of
   a point process model to spatial point pattern data.
   For an explanation of these residuals, see the help file for
-  \code{\link[spatstat]{residuals.ppm}}.
+  \code{\link{residuals.ppm}}.
 
   This function computes the residuals
   for a point process model fitted to \emph{multiple} point patterns.
@@ -33,7 +33,7 @@
   The number of entries in the list equals the
   number of point patterns in the original data. Each entry in the list
   has the same format as the output of
-  \code{\link[spatstat]{residuals.ppm}}.
+  \code{\link{residuals.ppm}}.
   That is, each entry in the list is a signed measure (object of
   class \code{"msr"}) giving the residual measure for the corresponding
   point pattern. 
@@ -57,18 +57,25 @@
   Residual analysis for spatial point processes.
   \emph{Journal of the Royal Statistical Society, Series B}
   \bold{67}, 617--666.
+
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  London: Chapman and Hall/CRC Press. 
 }
-\author{Adrian Baddeley
-  \email{adrian.baddeley@uwa.edu.au}
+\author{
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented by 
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{rolf@math.unb.ca}
-  \url{http://www.math.unb.ca/~rolf}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{mppm}},
-  \code{\link{residuals.mppm}},
-  \code{\link{mppm}}
+  \code{\link{residuals.mppm}}
 }
 \keyword{spatial}
 \keyword{models}

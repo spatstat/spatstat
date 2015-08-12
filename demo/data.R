@@ -13,6 +13,8 @@ plot(anemones, markscale=1)
 
 ants.extra$plotit()
 
+plot(austates)
+
 plot(bei.extra$elev, main="Beilschmiedia")
 plot(bei, add=TRUE, pch=16, cex=0.3)
 

@@ -60,15 +60,24 @@
 fit <- mppm(Wat~x, data=hyperframe(Wat=waterstriders))
 subfits(fit)
 }
-\author{Adrian Baddeley
-  \email{adrian.baddeley@uwa.edu.au}
+\references{
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  London: Chapman and Hall/CRC Press. 
+}
+\author{
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented by 
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{rolf@math.unb.ca}
-  \url{http://www.math.unb.ca/~rolf}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link[spatstat]{ppm}}
+  \code{\link{ppm}}
 }
 \keyword{spatial}
 \keyword{models}

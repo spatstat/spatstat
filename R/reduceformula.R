@@ -1,7 +1,7 @@
 #
 #  reduceformula.R
 #
-#  $Revision: 1.3 $   $Date: 2007/04/02 06:28:17 $
+#  $Revision: 1.4 $   $Date: 2015/08/12 07:29:30 $
 #
 # delete variable from formula 
 #
