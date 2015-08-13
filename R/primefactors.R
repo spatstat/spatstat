@@ -1,7 +1,7 @@
 #
 #  primefactors.R
 #
-#  $Revision: 1.5 $   $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.6 $   $Date: 2015/08/13 02:33:34 $
 #
 
 primesbelow <- local({
@@ -70,6 +70,11 @@ primefactors <- function(n, prmax) {
 }
 
 is.prime <- function(n) { length(primefactors(n)) == 1 }
+
+relatively.prime <- function(n, m) {
+  cf <- intersect(primefactors(n), primefactors(m))
+  return(length(cf) == 0)
+}
 
 least.common.multiple <- function(n, m) {
   nf <- primefactors(n)

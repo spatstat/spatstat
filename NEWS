@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.022
+        CHANGES IN spatstat VERSION 1.42-2.023
 
 OVERVIEW
 
@@ -9,6 +9,8 @@ OVERVIEW
    o spatstat now depends on the package 'nlme'.
 
    o random-effects and mixed-effects models for replicated patterns.
+
+   o Dao-Genton test.
 
    o spatstat colour tools now handle transparent colours.
 
@@ -28,7 +30,7 @@ OVERVIEW
 
    o Minor improvements and bug fixes.
 
-   o Version nickname: 'Reds under the Beds'
+   o Version nickname: "It's So Random"
 
 NEW DATASET
 
@@ -37,6 +39,15 @@ NEW DATASET
    represented as polygonal regions forming a tessellation.
 
 NEW FUNCTIONS
+
+   o dg.test
+   Dao-Genton adjusted Monte Carlo goodness-of-fit test.
+
+   o dg.envelope
+   Simulation envelopes corresponding to Dao-Genton test.
+
+   o dclf.sigtrace, mad.sigtrace, mctest.sigtrace
+   Significance trace of Monte Carlo test
 
    o markcrosscorr
    Mark cross-correlation function for point patterns with
@@ -62,6 +73,9 @@ NEW FUNCTIONS
 
    o kernel.factor
    Auxiliary calculations for one-dimensional kernel smoothing.
+
+   o PPversion, QQversion
+   Transformation of a summary function to its P-P or Q-Q counterpart.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

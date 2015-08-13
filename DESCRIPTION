@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.42-2.022
-Nickname: Reds Under The Beds
-Date: 2015-08-12
+Version: 1.42-2.023
+Nickname: It's So Random
+Date: 2015-08-13
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

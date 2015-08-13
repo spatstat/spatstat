@@ -1,0 +1,101 @@
+\name{dg.test}
+\alias{dg.test}
+\title{
+  Dao-Genton Adjusted Goodness-Of-Fit Test
+}
+\description{
+  Performs the Dao and Genton (2013) adjusted
+  goodness-of-fit test of spatial pattern.
+}
+\usage{
+dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
+        alternative=c("two.sided", "less", "greater"),
+        verbose = TRUE)
+}
+\arguments{
+  \item{X}{
+    Either a point pattern dataset (object of class \code{"ppp"},
+    \code{"lpp"} or \code{"pp3"}) or a fitted point process model
+    (object of class \code{"ppm"}, \code{"kppm"} or \code{"slrm"}).
+  }
+  \item{\dots}{
+    Arguments passed to \code{\link{dclf.test}} or
+    \code{\link{mad.test}} or \code{\link{envelope}} to
+    control the conduct of the test.
+    Useful arguments include \code{fun} to determine the summary
+    function, \code{rinterval} to determine the range of
+    \eqn{r} values used in the test, and
+    \code{verbose=FALSE} to turn off the messages.
+  }
+  \item{exponent}{
+    Exponent used in the test statistic. Use \code{exponent=2}
+    for the Diggle-Cressie-Loosmore-Ford test, and \code{exponent=1}
+    for the Maximum Absolute Deviation test.
+  }
+  \item{nsim}{
+    Number of repetitions of the basic test.
+  }
+  \item{nsimsub}{
+    Number of simulations in each basic test. There will be \code{nsim}
+    repetitions of the basic test, each involving \code{nsimsub} simulated
+    realisations, so there will be a total
+    of \code{nsim * (nsimsub + 1)} simulations.
+  }
+  \item{alternative}{
+    Character string specifying the alternative hypothesis.
+    The default (\code{alternative="two.sided"}) is that the
+    true value of the summary function is not equal to the theoretical
+    value postulated under the null hypothesis.
+    If \code{alternative="less"} the alternative hypothesis is that the
+    true value of the summary function is lower than the theoretical value.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports.
+  }
+}
+\details{
+  Performs the Dao-Genton (2013) adjusted Monte Carlo goodness-of-fit
+  test, in the modified form described by Baddeley et al (2015).
+  
+  If \code{X} is a point pattern, the null hypothesis is CSR.
+
+  If \code{X} is a fitted model, the null hypothesis is that model.
+}
+\value{
+  A hypothesis test (object of class \code{"htest"}
+  which can be printed to show the outcome of the test.
+}
+\references{
+  Dao, N.A. and Genton, M. (2013)
+  A Monte Carlo adjusted goodness-of-fit test for
+  parametric models describing spatial point patterns.
+  \emph{Journal of Graphical and Computational Statistics}
+  \bold{23}, 497--517.
+
+  Baddeley, A., Hardegen, A., Lawrence, L., 
+  Milne, R.K., Nair, G.M. and Rakshit, S. (2015)
+  Pushing the envelope: extensions of graphical
+  Monte Carlo tests. Submitted for publication.
+}
+\author{
+  Adrian Baddeley, Andrew Hardegen, Tom Lawrence,
+  Robin Milne, Gopalan Nair and Suman Rakshit.
+  Implemented by
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
+}
+\seealso{
+  \code{\link{dclf.test}},
+  \code{\link{mad.test}}
+}
+\examples{
+ dg.test(cells)
+ dg.test(cells, alternative="less")
+}
+\keyword{spatial}
+\keyword{htest}

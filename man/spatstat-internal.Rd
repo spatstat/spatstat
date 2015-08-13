@@ -544,6 +544,7 @@
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
 \alias{reduceformula}
+\alias{relatively.prime}
 \alias{repair.image.xycoords}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
@@ -1362,6 +1363,7 @@ recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
+relatively.prime(n, m)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)

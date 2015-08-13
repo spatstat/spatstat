@@ -76,7 +76,8 @@
   and Miranda, E. (2014)
   Failure analysis of MIM and MIS structures using point-to-event
   distance and angular probability distributions. 
-  \emph{IEEE Transactions on Devices and Materials Reliability} (in press)
+  \emph{IEEE Transactions on Devices and Materials Reliability} 
+  \bold{14} (4) 1080--1090.
 }
 \examples{
 data(bdspots)
