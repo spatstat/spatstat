@@ -1673,6 +1673,7 @@
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,
+  Ute Hahn,
   Abdollah Jalilian,
   Marie-Colette van Lieshout,
   Tuomas Rajala,

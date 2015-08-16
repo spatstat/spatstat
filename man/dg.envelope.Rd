@@ -95,10 +95,11 @@ dg.envelope(X, ..., nsim = 19, nsimsub=nsim-1, nrank = 1,
   \code{\link{envelope}}
 }
 \examples{
-  E <- dg.envelope(swedishpines, Lest)
+  ns <- if(interactive()) 19 else 4
+  E <- dg.envelope(swedishpines, Lest, nsim=ns)
   E
   plot(E)
-  Eo <- dg.envelope(swedishpines, Lest, alternative="less")
+  Eo <- dg.envelope(swedishpines, Lest, alternative="less", nsim=ns)
 }
 \keyword{spatial}
 \keyword{htest}

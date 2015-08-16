@@ -94,8 +94,9 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
   \code{\link{mad.test}}
 }
 \examples{
- dg.test(cells)
- dg.test(cells, alternative="less")
+ ns <- if(interactive()) 19 else 4
+ dg.test(cells, nsim=ns)
+ dg.test(cells, alternative="less", nsim=ns)
 }
 \keyword{spatial}
 \keyword{htest}

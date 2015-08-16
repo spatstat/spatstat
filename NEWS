@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.023
+        CHANGES IN spatstat VERSION 1.42-2.025
 
 OVERVIEW
 
-   o We thank Tuomas Rajala, Martin Maechler and Greg McSwiggan
-   for contributions.
+   o We thank Leanne Bischof, Martin Maechler, Greg McSwiggan, Tuomas Rajala
+   and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
@@ -171,6 +171,10 @@ BUG FIXES
    Crashed if 'covname' was missing.
    Fixed.
 
+   o opening.owin, closing.owin
+   Crashed sometimes, with a message about a rectangle not containing a window.
+   Fixed.
+
    o as.function.fv
    Generated an error when executed in the 'covr' package.
    Fixed.
@@ -180,6 +184,10 @@ BUG FIXES
 
    o rmh.ppm
    Argument 'w' was ignored in some cases.
+   Fixed.
+
+   o Hest
+   There was an artefact at r=0 when conditional=TRUE.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

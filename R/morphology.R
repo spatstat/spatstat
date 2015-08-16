@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.27 $   $Date: 2014/11/11 03:17:18 $
+#  $Revision: 1.28 $   $Date: 2015/08/15 05:23:15 $
 #
 
 # ............ generic  ............................
@@ -175,7 +175,8 @@ closing.owin <- function(w, r, ..., polygonal=NULL) {
   if(is.empty(wplus))
     return(wplus)
   wclose <- erosion.owin(wplus, r, strict=TRUE)
-  wclose <- rebound.owin(wclose, as.rectangle(w))
+  b <- as.rectangle(w)
+  wclose <- rebound.owin(wclose[b], b)
   return(wclose)
 }
 
@@ -187,7 +188,8 @@ opening.owin <- function(w, r, ..., polygonal=NULL) {
   if(is.empty(wminus))
     return(wminus)
   wopen <- dilation.owin(wminus, r, tight=FALSE)
-  wopen <- rebound.owin(wopen, as.rectangle(w))
+  b <- as.rectangle(w)
+  wopen <- rebound.owin(wopen[b], b)
   return(wopen)
 }
 
