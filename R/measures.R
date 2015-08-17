@@ -303,7 +303,7 @@ plot.msr <- function(x, ..., add=FALSE,
   if(!missing(i)) {
     # use [.ppp to identify which points are retained
     locn  <- loc %mark% seq_len(npoints(loc))
-    loci  <- locn[i]
+    loci  <- locn[i, clip=TRUE]
     loc   <- unmark(loci)
     id    <- marks(loci)
     # extract

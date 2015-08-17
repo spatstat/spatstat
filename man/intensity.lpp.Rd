@@ -5,7 +5,7 @@
 }
 \description{
   Computes the average number of points per unit length
-  in a point pattern on a linear network
+  in a point pattern on a linear network.
 }
 \usage{
 \method{intensity}{lpp}(X, ...)

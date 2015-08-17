@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.025
+        CHANGES IN spatstat VERSION 1.42-2.026
 
 OVERVIEW
 
@@ -7,6 +7,10 @@ OVERVIEW
    and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
+
+   o Some basic simulation algorithms have been accelerated.
+   Simulation outcomes are no longer identical to those obtained
+   from previous versions of spatstat, even if the same random seed is used.
 
    o random-effects and mixed-effects models for replicated patterns.
 
@@ -24,9 +28,9 @@ OVERVIEW
 
    o Cross-correlation version of the mark correlation function.
 
-   o Some basic simulation code has been accelerated.
- 
    o New dataset: Australian states and territories.
+
+   o More support for multi-dimensional point patterns.
 
    o Minor improvements and bug fixes.
 
@@ -77,11 +81,23 @@ NEW FUNCTIONS
    o PPversion, QQversion
    Transformation of a summary function to its P-P or Q-Q counterpart.
 
+   o spatdim
+   Spatial dimension of any object in the spatstat package.
+
+   o as.boxx
+   Convert data to a multi-dimensional box.
+
+   o intensity.ppx
+   Method for 'intensity' for multi-dimensional space-time point patterns.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o mppm
    Now handles models with a random effect component.
    New argument 'random' is a formula specifying the random effect.
+
+   o [.ppp
+   New argument 'clip' determines whether the window is clipped.
 
    o [.ppp
    The previously-unused argument 'drop' now determines whether 
@@ -188,6 +204,11 @@ BUG FIXES
 
    o Hest
    There was an artefact at r=0 when conditional=TRUE.
+   Fixed.
+
+   o [.msr
+   The result of M[W] where W is a window
+   was a measure with window W, instead of intersect.owin(W, Window(M)).
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

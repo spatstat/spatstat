@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.104 $	$Date: 2015/07/09 02:13:37 $
+#	$Revision: 4.106 $	$Date: 2015/08/17 07:07:37 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -289,7 +289,7 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
 # --------------------------------------------------------------
 
 "[.ppp" <-
-  function(x, i, j, drop=FALSE, ...) {
+  function(x, i, j, drop=FALSE, ..., clip=FALSE) {
 
         verifyclass(x, "ppp")
         
@@ -297,6 +297,7 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
           if(inherits(i, "owin")) {
             # i is a window
             window <- i
+            if(clip) window <- intersect.owin(window, x$window)
             ok <- inside.owin(x$x, x$y, window)
             x <- ppp(x$x[ok], x$y[ok], window=window, #SIC
                      marks=marksubset(x$marks, ok),
@@ -310,6 +311,7 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
             # convert logical image to window
             e <- sys.frame(sys.nframe())
             window <- solutionset(i, e)
+            if(clip) window <- intersect.owin(window, x$window)
             ok <- inside.owin(x$x, x$y, window)
             x <- ppp(x$x[ok], x$y[ok], window=window, #SIC
                      marks=marksubset(x$marks, ok),

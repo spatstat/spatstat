@@ -8,7 +8,7 @@
   points and/or trimming the window.
 }
 \usage{
-  \method{[}{ppp}(x, i, j, drop, ...)
+  \method{[}{ppp}(x, i, j, drop=FALSE, \dots, clip=FALSE)
   \method{[}{ppp}(x, i, j) <- value
 }
 \arguments{
@@ -17,10 +17,12 @@
     An object of class \code{"ppp"}.
   }
   \item{i}{
-    Subset index. Either a valid subset index in the usual \R sense,
+   Subset index. Either a valid subset index in the usual \R sense,
    indicating which points should be retained, or a window
-   (an object of class \code{"owin"})
-    delineating a subset of the original observation window. 
+   (an object of class \code{"owin"}) 
+   delineating a subset of the original observation window,
+   or a pixel image with logical values defining a subset of the
+   original observation window.
   }
   \item{value}{
     Replacement value for the subset. A point pattern.
@@ -31,6 +33,14 @@
   \item{drop}{
     Logical value indicating whether to remove unused levels
     of the marks, if the marks are a factor.
+  }
+  \item{clip}{
+    Logical value indicating how to form the window of the resulting
+    point pattern, when \code{i} is a window. 
+    If \code{clip=FALSE} (the default), the result has window
+    equal to \code{i}. If \code{clip=TRUE}, the resulting window
+    is the intersection between the window of \code{x} and the
+    window \code{i}.
   }
   \item{\dots}{
     Ignored. This argument is required for compatibility
@@ -67,7 +77,7 @@
   if \code{i} is an object of class 
   \code{"owin"} specifying a window of observation.
   The points of \code{x} lying inside the new
-  \code{window} will be retained. Alternatively \code{i} may be a
+  window \code{i} will be retained. Alternatively \code{i} may be a
   pixel image (object of class \code{"im"}) with logical values;
   the pixels with the value \code{TRUE} will be interpreted as a window.
 
@@ -108,7 +118,7 @@
   \code{\link{cut.ppp}}
 }
 \section{Warnings}{
-  The function does not check whether \code{window} is a subset of
+  The function does not check whether \code{i} is a subset of
   \code{x$window}. Nor does it check whether \code{value} lies
   inside \code{x$window}.
 }
@@ -175,6 +185,18 @@
  oaknames <- c("redoak", "whiteoak", "blackoak")
  oak <- lansing[marks(lansing) \%in\% oaknames, drop=TRUE]
  oak <- subset(lansing, marks \%in\% oaknames, drop=TRUE)
+
+ # To clip or not to clip
+ X <- runifpoint(25, letterR)
+ B <- owin(c(2.2, 3.9), c(2, 3.5))
+ opa <- par(mfrow=c(1,2))
+ plot(X, main="X[B]")
+ plot(X[B], border="red", cols="red", add=TRUE, show.all=TRUE, main="")
+ plot(X, main="X[B, clip=TRUE]")
+ plot(B, add=TRUE, lty=2)
+ plot(X[B, clip=TRUE], border="blue", cols="blue", add=TRUE,
+      show.all=TRUE, main="")
+ par(opa)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
