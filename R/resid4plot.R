@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.31 $    $Date: 2015/05/18 02:11:17 $
+#   $Revision: 1.32 $    $Date: 2015/08/18 08:00:19 $
 #
 #
 
@@ -40,7 +40,8 @@ resid4plot <- local({
              plot.neg=c("image", "discrete", "contour", "imagecontour"),
              plot.smooth=c("imagecontour", "image", "contour", "persp"),
              spacing=0.1, outer=3, srange=NULL, monochrome=FALSE, main=NULL,
-             xlab="x coordinate", ylab="y coordinate", rlab, 
+             xlab="x coordinate", ylab="y coordinate", rlab,
+             col.neg=NULL, col.smooth=NULL,
              ...)
 {
   plot.neg <- match.arg(plot.neg)
@@ -76,7 +77,9 @@ resid4plot <- local({
     stopifnot(all(is.finite(srange)))
   }
   backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
-                      
+  if(is.null(col.neg)) col.neg <- backcols
+  if(is.null(col.smooth)) col.smooth <- backcols
+  
   # ------ plot residuals/marks (in top left panel) ------------
   Xlowleft <- c(W$xrange[1],W$yrange[1])
   vec <- c(0, high) + c(0, space) - Xlowleft
@@ -136,12 +139,12 @@ resid4plot <- local({
            Yms <- shift(Ymass, vec)
            if(redundant)
              do.clean(ploterodeimage,
-                      Ws, Yds, rangeZ=srange, colsZ=backcols,
+                      Ws, Yds, rangeZ=srange, colsZ=col.neg,
                       ...)
            else if(type != "eem")
              do.clean(image,
                       Yds, add=TRUE, ribbon=FALSE,
-                      col=backcols, zlim=srange,
+                      col=col.neg, zlim=srange,
                       ...)
            if(plot.neg == "imagecontour")
              Contour(Yds, add=TRUE, ...)
@@ -160,7 +163,7 @@ resid4plot <- local({
   switch(plot.smooth,
          image={
            do.clean(image,
-                    Zs, add=TRUE, col=backcols,
+                    Zs, add=TRUE, col=col.smooth,
                     zlim=srange, ribbon=FALSE,
                     ...)
          },
@@ -170,7 +173,7 @@ resid4plot <- local({
          persp={ warning("persp not available in 4-panel plot") },
          imagecontour={
              do.clean(image,
-                      Zs, add=TRUE, col=backcols, zlim=srange, ribbon=FALSE,
+                      Zs, add=TRUE, col=col.smooth, zlim=srange, ribbon=FALSE,
                       ...)
              Contour(Zs, add=TRUE, ...)
            }
@@ -331,7 +334,8 @@ resid1plot <- local({
            plot.neg=c("image", "discrete", "contour", "imagecontour"),
            plot.smooth=c("imagecontour", "image", "contour", "persp"),
            srange=NULL, monochrome=FALSE, main=NULL,
-           add=FALSE, show.all=!add, do.plot=TRUE, 
+           add=FALSE, show.all=!add, do.plot=TRUE,
+           col.neg=NULL, col.smooth=NULL, 
            ...) {
     if(!any(unlist(opt[c("all", "marks", "smooth",
                          "xmargin", "ymargin", "xcumul", "ycumul")])))
@@ -367,6 +371,8 @@ resid1plot <- local({
         srange <- range(c(0, Yrange, Zrange), na.rm=TRUE)
       }
       backcols <- beachcolours(srange, if(type=="eem") 1 else 0, monochrome)
+      if(is.null(col.neg)) col.neg <- backcols
+      if(is.null(col.smooth)) col.smooth <- backcols
     }
     ## determine main heading
     if(is.null(main)) {
@@ -425,12 +431,12 @@ resid1plot <- local({
            image={
              if(redundant) {
                z <- do.clean(ploterodeimage,
-                             W, Ydens, rangeZ=srange, colsZ=backcols,
+                             W, Ydens, rangeZ=srange, colsZ=col.neg,
                              add=add, show.all=show.all, main="", 
                              do.plot=do.plot, ...)
              } else if(type != "eem") {
                z <- do.clean(image,
-                             Ydens, col=backcols, zlim=srange, ribbon=FALSE,
+                             Ydens, col=col.neg, zlim=srange, ribbon=FALSE,
                              add=TRUE, show.all=show.all, do.plot=do.plot,
                              main="", ...)
              }
@@ -460,7 +466,7 @@ resid1plot <- local({
            image={
              z <- do.clean(image,
                            Z, main="", axes=FALSE, xlab="", ylab="",
-                           col=backcols, zlim=srange, ribbon=FALSE,
+                           col=col.smooth, zlim=srange, ribbon=FALSE,
                            do.plot=do.plot, add=add, show.all=show.all, ...)
              bb <- as.owin(z)
            },
@@ -478,7 +484,7 @@ resid1plot <- local({
            imagecontour={
              z <- do.clean(image,
                            Z, main="", axes=FALSE, xlab="", ylab="",
-                           col=backcols, zlim=srange, ribbon=FALSE,
+                           col=col.smooth, zlim=srange, ribbon=FALSE,
                            do.plot=do.plot, add=add, show.all=show.all, ...)
              Contour(Z, add=TRUE, do.plot=do.plot, ...)
              bb <- as.owin(z)
@@ -492,7 +498,7 @@ resid1plot <- local({
                         as.rectangle(W), box=FALSE, main=main,
                         do.plot=do.plot, add=add, ...)
                z <- do.clean(ploterodeimage,
-                             W, Z, colsZ=backcols, rangeZ=srange,
+                             W, Z, colsZ=col.smooth, rangeZ=srange,
                              do.plot=do.plot, ...)
                bb <- boundingbox(as.rectangle(W), z)
              },
@@ -515,7 +521,7 @@ resid1plot <- local({
                         as.rectangle(W), box=FALSE, main=main,
                         do.plot=do.plot, add=add, ...)
                z <- do.clean(ploterodeimage,
-                             W, Z, colsZ=backcols, rangeZ=srange,
+                             W, Z, colsZ=col.smooth, rangeZ=srange,
                              do.plot=do.plot, ...)
                Contour(Z, add=TRUE, do.plot=do.plot, ...)
                bb <- as.owin(z)

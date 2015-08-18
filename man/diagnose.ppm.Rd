@@ -344,6 +344,9 @@
   the extra arguments \code{xlab}, \code{ylab}, \code{rlab} determine the
   text labels for the \eqn{x} and \eqn{y} coordinates
   and the residuals, respectively.
+  The undocumented arguments \code{col.neg} and \code{col.smooth}
+  control the colour maps used in the top left and bottom right
+  panels respectively.
   
   See also the companion functions \code{\link{qqplot.ppm}}, which produces a
   Q-Q plot of the residuals, and \code{\link{lurking}}, which produces
