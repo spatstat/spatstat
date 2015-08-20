@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.9 $ $Date: 2015/03/18 08:57:32 $
+##  $Revision: 1.11 $ $Date: 2015/08/20 02:44:09 $
 ##
 
 persp.im <- local({
@@ -119,7 +119,8 @@ persp.im <- local({
         zlim <- zrange
       } else {
         zscale <- NULL
-        zlim <- c(0,2) * xinfo$mean
+        mx <- xinfo$mean
+        zlim <- mx + c(-1,1) * if(mx == 0) 0.1 else min(abs(mx), 1)
       }
     } else 
       zscale <- zlim <- NULL
@@ -225,14 +226,14 @@ persp.im <- local({
 })
 
 
-.Spatstat.persp.args <- list("x", "y", "z",
-                             "xlim", "ylim", "zlim",
-                             "xlab", "ylab", "zlab",
-                             "main", "sub",
-                             "theta", "phi", "r", "d", "scale",
-                             "expand", "col", "border",
-                             "ltheta", "lphi", "shade", "box",
-                             "axes", "nticks", "ticktype")
+.Spatstat.persp.args <- c("x", "y", "z",
+                          "xlim", "ylim", "zlim",
+                          "xlab", "ylab", "zlab",
+                          "main", "sub",
+                          "theta", "phi", "r", "d", "scale",
+                          "expand", "col", "border",
+                          "ltheta", "lphi", "shade", "box",
+                          "axes", "nticks", "ticktype")
 
 perspPoints <- function(x, y=NULL, ..., Z, M) {
   xy <- xy.coords(x, y)

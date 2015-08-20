@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.027
+        CHANGES IN spatstat VERSION 1.42-2.028
 
 OVERVIEW
 
@@ -192,6 +192,10 @@ BUG FIXES
 
    o opening.owin, closing.owin
    Crashed sometimes, with a message about a rectangle not containing a window.
+   Fixed.
+
+   o persp.im
+   Crashed if all pixel values were equal to zero (unless zlim was given).
    Fixed.
 
    o as.function.fv
