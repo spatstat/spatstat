@@ -3,11 +3,12 @@
 #
 #  Dao-Genton adjusted p-values
 #
-#  $Revision: 1.5 $  $Date: 2015/08/13 00:52:16 $
+#  $Revision: 1.6 $  $Date: 2015/08/22 10:08:30 $
 #
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
                     alternative=c("two.sided", "less", "greater"),
+                    interpolate=FALSE,
                     verbose=TRUE) {
   Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -19,6 +20,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   if(verbose) cat("Applying test to original data... ")
   tX <- envelopeTest(X, ...,
                      nsim=nsim, alternative=alternative,
+                     interpolate=interpolate,
                      exponent=exponent, savepatterns=TRUE, verbose=FALSE,
                      envir.simul=env.here)
   if(verbose) cat("Done.\n")
@@ -35,6 +37,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
     if(Xismodel) Yi <- update(X, Yi)
     tYi <- envelopeTest(Yi, ...,
                         nsim=nsimsub, alternative=alternative,
+                        interpolate=interpolate,
                         exponent=exponent, savepatterns=TRUE, verbose=FALSE,
                         envir.simul=env.here)
     pY[i] <- tYi$p.value

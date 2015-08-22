@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.24 $  $Date: 2014/08/20 10:39:43 $
+#  $Revision: 1.26 $  $Date: 2015/08/22 09:56:39 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -36,6 +36,8 @@ envelopeTest <- local({
     return(y)
   }
 
+  minusvalue <- function(x) plusvalue(-x)
+  
   envelopeTest <-
     function(X, ...,
              exponent=1,
@@ -43,6 +45,7 @@ envelopeTest <- local({
              rinterval=NULL,
              use.theo=FALSE,
              tie.rule=c("randomise","mean"),
+             interpolate=FALSE,
              save.envelope = savefuns || savepatterns,
              savefuns = FALSE, 
              savepatterns = FALSE, 
@@ -147,8 +150,8 @@ envelopeTest <- local({
       }
 
       deviant <- switch(alternative,
-                        two.sided = function(x) abs(x),
-                        less = function(x) plusvalue(-x),
+                        two.sided = abs,
+                        less = minusvalue,
                         greater = plusvalue)
 
       ## compute test statistic
@@ -182,20 +185,32 @@ envelopeTest <- local({
                             ordinal(exponent), "Power Deviation test")
         }
       }
-      ## compute rank and p-value
-      datarank <- sum(devdata < devsim) + 1
-      nties <- sum(devdata == devsim)
-      if(nties > 0) {
-        tierank <- switch(tie.rule,
-                          mean = nties/2,
-                          randomise = sample(1:nties, 1))
-        datarank <- datarank + tierank
-        if(verbose) message("Ties were encountered")
+      if(!interpolate) {
+        ## standard Monte Carlo test 
+        ## compute rank and p-value
+        datarank <- sum(devdata < devsim) + 1
+        nties <- sum(devdata == devsim)
+        if(nties > 0) {
+          tierank <- switch(tie.rule,
+                            mean = nties/2,
+                            randomise = sample(1:nties, 1))
+          datarank <- datarank + tierank
+          if(verbose) message("Ties were encountered")
+        }
+        pvalue <- datarank/(nsim+1)
+        ## bookkeeping
+        statistic <- data.frame(devdata, rank=datarank)
+        colnames(statistic)[1] <- names(devdata)
+      } else {
+        ## Dao-Genton style interpolation
+        fhat <- density(devsim)
+        pvalue <- with(fhat, {
+          if(max(x) <= devdata) 0 else
+          mean(y[x >= devdata]) * (max(x) - devdata)
+        })
+        statistic <- data.frame(devdata)
+        colnames(statistic)[1] <- names(devdata)
       }
-      pvalue <- datarank/(nsim+1)
-      ## bookkeeping
-      statistic <- data.frame(devdata, rank=datarank)
-      colnames(statistic)[1] <- names(devdata)
       e <- attr(X, "einfo")
       nullmodel <-
         if(identical(e$csr, TRUE)) "CSR" else 
@@ -213,8 +228,10 @@ envelopeTest <- local({
       fname <- deparse(attr(X, "ylab"))
       uname <- with(summary(unitname(X)),
                     if(!vanilla) paste(plural, explain) else NULL)
+      testtype <- paste0(if(interpolate) "Interpolated " else NULL,
+                         "Monte Carlo")
       testname <- c(paste(testname, "of", nullmodel),
-                    paste("Monte Carlo test based on", nsim,
+                    paste(testtype, "based on", nsim,
                           "simulations", e$constraints), 
                     paste("Summary function:", fname),
                     paste("Reference function:",

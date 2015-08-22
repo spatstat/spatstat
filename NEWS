@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.028
+        CHANGES IN spatstat VERSION 1.42-2.029
 
 OVERVIEW
 
-   o We thank Leanne Bischof, Martin Maechler, Greg McSwiggan, Tuomas Rajala
-   and Ida-Maria Sintorn for contributions.
+   o We thank Leanne Bischof, Andrew Hardegen, Tom Lawrence,
+   Martin Maechler, Greg McSwiggan, Robin Milne, Gopalan Nair,
+   Tuomas Rajala, Suman Rakshit and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 

@@ -10,6 +10,7 @@
 \usage{
 dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
+        interpolate = FALSE, 
         verbose = TRUE)
 }
 \arguments{
@@ -48,6 +49,11 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
     value postulated under the null hypothesis.
     If \code{alternative="less"} the alternative hypothesis is that the
     true value of the summary function is lower than the theoretical value.
+  }
+  \item{interpolate}{
+    Logical value indicating whether to interpolate the distribution of
+    the test statistic by kernel smoothing, as described in
+    Dao and Genton (2013, Section 5).
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.
