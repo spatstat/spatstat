@@ -210,6 +210,7 @@ envelopeTest <- local({
         })
         statistic <- data.frame(devdata)
         colnames(statistic)[1] <- names(devdata)
+        nties <- 0
       }
       e <- attr(X, "einfo")
       nullmodel <-
@@ -252,6 +253,7 @@ envelopeTest <- local({
         attr(result, "info") <- list(exponent=exponent,
                                      alternative=alternative,
                                      nties=nties,
+                                     interpolate=interpolate,
                                      tie.rule=tie.rule,
                                      use.theo=use.theo)
       }

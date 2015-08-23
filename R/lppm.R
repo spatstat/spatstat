@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.29 $   $Date: 2015/06/21 02:17:36 $
+#  $Revision: 1.31 $   $Date: 2015/08/23 09:33:07 $
 #
 
 lppm <- function(X, ...) {
@@ -293,6 +293,17 @@ is.marked.lppm <- function(X, ...) { is.marked(X$fit) }
 
 vcov.lppm <- function(object, ...) {
   if(!is.poisson(object))
-    stop("vov.lppm is only implemented for Poisson models")
+    stop("vcov.lppm is only implemented for Poisson models")
   vcov(object$fit, ...)
 }
+
+valid.lppm <- function(object, ...) {
+  valid(object$fit, ...)
+}
+
+project.lppm <- function(object, ...) {
+  object$fit <- project.ppm(object$fit, ...)
+  return(object)
+}
+
+  

@@ -6,9 +6,11 @@
 \alias{logLik.lppm}
 \alias{nobs.lppm}
 \alias{print.lppm}
+\alias{project.lppm}
 \alias{summary.lppm}
 \alias{terms.lppm}
 \alias{update.lppm}
+\alias{valid.lppm}
 \alias{vcov.lppm}
 \alias{as.linnet.lppm}
 \title{
@@ -31,11 +33,15 @@
 
   \method{print}{lppm}(x, ...)
 
+  project.lppm(object, \dots)
+
   \method{summary}{lppm}(object, ...)
 
   \method{terms}{lppm}(x, ...)
 
   \method{update}{lppm}(object, ...)
+
+  \method{valid}{lppm}(object, ...)
 
   \method{vcov}{lppm}(object, ...)
 
@@ -61,7 +67,9 @@
   \code{\link{print}}, 
   \code{\link{summary}}, 
   \code{\link{terms}},
-  \code{\link{update}} and
+  \code{\link{update}},
+  \code{\link{valid}}
+  and
   \code{\link{vcov}}
   for the class \code{"lppm"}. 
 }
@@ -72,6 +80,10 @@
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
+  Rolf Turner
+  \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{lppm}},
@@ -79,7 +91,7 @@
 }
 \examples{
   example(lpp)
-  fit <- lppm(X, ~x)
+  fit <- lppm(X ~ x)
   print(fit)
   coef(fit)
   formula(fit)
@@ -88,6 +100,7 @@
   nobs(fit)
   extractAIC(fit)
   update(fit, ~1)
+  valid(fit)
   vcov(fit)
 }
 \keyword{spatial}

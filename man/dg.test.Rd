@@ -103,6 +103,7 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
  ns <- if(interactive()) 19 else 4
  dg.test(cells, nsim=ns)
  dg.test(cells, alternative="less", nsim=ns)
+ dg.test(cells, nsim=ns, interpolate=TRUE)
 }
 \keyword{spatial}
 \keyword{htest}
