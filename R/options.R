@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.65 $   $Date: 2015/07/26 10:03:24 $
+#    $Revision: 1.66 $   $Date: 2015/08/23 08:18:10 $
 #
 #
 
@@ -123,6 +123,14 @@ warn.once <- function(key, ...) {
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       dpp.maxmatrix=list(
+         ## maximum size of matrix in dppeigen
+         default=2^24, # 16,777,216
+         check=function(x) {
+           is.numeric(x) && length(x) == 1 && (x == ceiling(x)) && x > 1024
+         },
+         valid="a single integer, greater than 1024"
        ),
        exactdt.checks.data=list(
          ## whether 'exactdt' checks validity of return value

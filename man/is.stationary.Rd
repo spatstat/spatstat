@@ -5,6 +5,7 @@
 \alias{is.stationary.lppm}
 \alias{is.stationary.slrm}
 \alias{is.stationary.rmhmodel}
+\alias{is.stationary.dppmodel}
 \alias{is.poisson}
 \alias{is.poisson.ppm}
 \alias{is.poisson.kppm}
@@ -27,6 +28,7 @@ is.stationary(x)
 \method{is.stationary}{lppm}(x)
 \method{is.stationary}{slrm}(x)
 \method{is.stationary}{rmhmodel}(x)
+\method{is.stationary}{dppmodel}(x)
 
 is.poisson(x)
 \method{is.poisson}{ppm}(x)
@@ -59,7 +61,9 @@ is.poisson(x)
   \code{"slrm"} (spatial logistic regression models) and
   \code{"rmhmodel"} (model specifications for the
   Metropolis-Hastings algorithm).
-  Additionally \code{is.poisson} has a method for 
+  Additionally \code{is.stationary} has a method for
+  class \code{"dppmodel"} (determinantal point processes) and 
+  \code{is.poisson} has a method for 
   class \code{"interact"} (interaction structures for Gibbs models). 
 
   \code{is.poisson.kppm} will return \code{FALSE}, unless
@@ -74,11 +78,14 @@ is.poisson(x)
 \value{
   A logical value.
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{is.marked}} to determine whether a model is a marked

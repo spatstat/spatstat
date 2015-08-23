@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.120 $	$Date: 2015/06/21 02:17:47 $
+#	$Revision: 2.121 $	$Date: 2015/08/23 07:30:27 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -324,7 +324,11 @@ getppmOriginalCovariates <- function(object) {
   
 # ??? method for 'effects' ???
 
-valid.ppm <- function(object, warn=TRUE) {
+valid <- function(object, ...) {
+  UseMethod("valid")
+}
+
+valid.ppm <- function(object, warn=TRUE, ...) {
   verifyclass(object, "ppm")
   coeffs <- coef(object)
   # ensure all coefficients are fitted, and finite

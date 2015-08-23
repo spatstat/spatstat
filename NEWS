@@ -1,19 +1,23 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.029
+        CHANGES IN spatstat VERSION 1.42-2.030
 
 OVERVIEW
 
-   o We thank Leanne Bischof, Andrew Hardegen, Tom Lawrence,
-   Martin Maechler, Greg McSwiggan, Robin Milne, Gopalan Nair,
-   Tuomas Rajala, Suman Rakshit and Ida-Maria Sintorn for contributions.
+   o We thank Leanne Bischof, Christophe Biscio, Andrew Hardegen, 
+   Frederic Lavancier, Tom Lawrence, Martin Maechler, Greg McSwiggan, 
+   Robin Milne, Gopalan Nair, Tuomas Rajala, Suman Rakshit and
+   Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
-   o Some basic simulation algorithms have been accelerated.
-   Simulation outcomes are no longer identical to those obtained
-   from previous versions of spatstat, even if the same random seed is used.
+   o Simulation algorithms have been accelerated.
+   
+   o Simulation outcomes are different from those obtained
+   from previous versions of spatstat.
 
-   o random-effects and mixed-effects models for replicated patterns.
+   o Determinantal point process models.
+
+   o Random-effects and mixed-effects models for replicated patterns.
 
    o Dao-Genton test.
 
@@ -44,6 +48,25 @@ NEW DATASET
    represented as polygonal regions forming a tessellation.
 
 NEW FUNCTIONS
+
+   o dppBessel, dppCauchy, dppGauss, dppMatern,	dppPowerExp
+   Determinantal Point Process models.
+
+   o update.dppmodel            
+   Set parameter values in a dpp model.
+
+   o is.stationary.dppmodel, print.dppmodel, reach.dppmodel, valid.dppmodel    
+   Basic information about a dpp model
+
+   o rdpp, simulate.dppmodel		 
+   Simulation of a dpp model.
+
+   o intensity.dppmodel, Kmodel.dppmodel, pcfmodel.dppmodel
+   Moments of a dpp model
+
+   o dim.dppmodel, dppapproxkernel, dppapproxpcf, dppeigen, dppfamily,
+   dppkernel, dppparbounds, dppspecdenrange, dppspecden
+   Helper functions for dpp models.
 
    o dg.test
    Dao-Genton adjusted Monte Carlo goodness-of-fit test.
@@ -91,6 +114,12 @@ NEW FUNCTIONS
    o intensity.ppx
    Method for 'intensity' for multi-dimensional space-time point patterns.
 
+   o fourierbasis
+   Evaluate Fourier basis functions in any number of dimensions.
+
+   o valid
+   New generic function, with methods valid.ppm, valid.dppmodel
+   
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o mppm
@@ -176,6 +205,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o diagnose.ppm, plot.diagppm
    New arguments col.neg, col.smooth control the colour maps.
+
+   o valid.ppm
+   This is now a method for the generic function 'valid'.
 
 BUG FIXES
 

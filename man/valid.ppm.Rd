@@ -8,7 +8,7 @@
   satisfies the integrability conditions for existence of the point process.
 }
 \usage{
-valid.ppm(object, warn=TRUE)
+  \method{valid}{ppm}(object, warn=TRUE, \dots)
 }
 \arguments{
   \item{object}{
@@ -19,8 +19,12 @@ valid.ppm(object, warn=TRUE)
     validity of the model cannot be checked (due to unavailability of
     the required code).
   }
+  \item{\dots}{Ignored.}
 }
 \details{
+  This is a method for the generic function \code{\link{valid}}
+  for Poisson and Gibbs point process models (class \code{"ppm"}).
+  
   The model-fitting function \code{\link{ppm}}
   fits Gibbs point process models to point pattern data.
   By default, \code{\link{ppm}} does not check whether the
@@ -73,9 +77,9 @@ valid.ppm(object, warn=TRUE)
 }
 \examples{
    fit1 <- ppm(cells, ~1, Strauss(0.1))
-   valid.ppm(fit1)
+   valid(fit1)
    fit2 <- ppm(redwood, ~1, Strauss(0.1))
-   valid.ppm(fit2)
+   valid(fit2)
 }
 \keyword{spatial}
 \keyword{models}

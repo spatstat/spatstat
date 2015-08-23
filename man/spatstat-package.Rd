@@ -1693,6 +1693,7 @@
   Brad Biggerstaff,
   Anders Bilgrau,
   Leanne Bischof,
+  Christophe Biscio,
   Roger Bivand,
   Jose M. Blanco Moreno,
   Florent Bonneu,
