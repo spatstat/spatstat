@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.121 $	$Date: 2015/08/23 07:30:27 $
+#	$Revision: 2.122 $	$Date: 2015/08/25 06:57:37 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -350,6 +350,10 @@ valid.ppm <- function(object, warn=TRUE, ...) {
   }
   answer <- checker(Icoeffs, inte)
   return(answer)
+}
+
+project <- function(object, ...) {
+  UseMethod("project")
 }
 
 project.ppm <- local({

@@ -8,7 +8,7 @@
   satisfies the integrability conditions for existence of the point process.
 }
 \usage{
-project.ppm(object, ..., fatal=FALSE, trace=FALSE)
+\method{project}{ppm}(object, \dots, fatal=FALSE, trace=FALSE)
 }
 \arguments{
   \item{object}{
@@ -55,7 +55,8 @@ project.ppm(object, ..., fatal=FALSE, trace=FALSE)
   fitted.
 
   The function \code{project.ppm} modifies the model \code{object}
-  so that the model is valid.
+  so that the model is valid. It is a method for the generic
+  function \code{\link{project}}.
 
   \code{project.ppm} identifies the terms in the model \code{object}
   that are associated with illegal parameter values (i.e. parameter
@@ -97,7 +98,7 @@ project.ppm(object, ..., fatal=FALSE, trace=FALSE)
 \examples{
    fit <- ppm(redwood, ~1, Strauss(0.1))
    coef(fit)
-   fit2 <- project.ppm(fit)
+   fit2 <- project(fit)
    coef(fit2)
 }
 \keyword{spatial}

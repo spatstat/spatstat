@@ -33,7 +33,7 @@
 
   \method{print}{lppm}(x, ...)
 
-  project.lppm(object, \dots)
+  \method{project}{lppm}(object, \dots)
 
   \method{summary}{lppm}(object, ...)
 
@@ -65,6 +65,7 @@
   \code{\link{logLik}},
   \code{\link{nobs}},
   \code{\link{print}}, 
+  \code{\link{project}}, 
   \code{\link{summary}}, 
   \code{\link{terms}},
   \code{\link{update}},

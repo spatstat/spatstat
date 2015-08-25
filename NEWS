@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.031
+        CHANGES IN spatstat VERSION 1.42-2.032
 
 OVERVIEW
 
@@ -118,7 +118,10 @@ NEW FUNCTIONS
    Evaluate Fourier basis functions in any number of dimensions.
 
    o valid
-   New generic function, with methods valid.ppm, valid.dppmodel
+   New generic function, with methods valid.ppm, valid.lppm, valid.dppmodel
+   
+   o project
+   New generic function, with methods project.ppm, project.lppm
    
 SIGNIFICANT USER-VISIBLE CHANGES
 
