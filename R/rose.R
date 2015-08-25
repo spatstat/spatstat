@@ -3,7 +3,7 @@
 #'
 #'   Rose diagrams
 #'
-#'   $Revision: 1.8 $  $Date: 2015/06/22 02:15:32 $
+#'   $Revision: 1.9 $  $Date: 2015/08/25 08:19:19 $
 #'
 
 rose <- function(x, ...) UseMethod("rose")
@@ -239,7 +239,7 @@ ang2rad <- local({
     clocksign <- if(clockwise) -1 else 1
     stopifnot(length(start) == 1)
     if(is.character(start)) {
-      if(is.na(m <- match(toupper(start), names(compasspoints))))
+      if(is.na(match(toupper(start), names(compasspoints))))
         stop(paste("Unrecognised compass point", sQuote(start)), call.=FALSE)
       startdegrees <- compasspoints[[start]]
       start <- switch(unit,

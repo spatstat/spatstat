@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.48 $  $Date: 2015/08/17 08:29:04 $
+#  $Revision: 1.49 $  $Date: 2015/08/25 08:16:36 $
 #
 
 ppx <- local({
@@ -162,7 +162,6 @@ plot.ppx <- function(x, ...) {
 
 "[.ppx" <- function (x, i, drop=FALSE, ...) {
   da <- x$data
-  ct <- x$ctype
   if(!missing(i))
     da <- da[i, , drop=FALSE]
   out <- list(data=da, ctype=x$ctype, domain=x$domain)

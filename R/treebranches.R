@@ -13,7 +13,7 @@ treebranchlabels <- local({
     stopifnot(inherits(L, "linnet"))
     stopifnot(length(root) == 1)
     V <- L$vertices
-    M <- L$m
+    #'    M <- L$m
     #' assign label to each vertex
     e <- rep(NA_character_, npoints(V))
     #' do root
@@ -187,7 +187,7 @@ deletebranch.lpp <- function(X, code, labels, ...) {
   #' which data points are retained
   xin <- ekeep[coords(X)$seg]
   #' new serial numbers for vertices
-  vId <- cumsum(vkeep)
+  #        vId <- cumsum(vkeep)
   #' new serial numbers for edges
   eId <- cumsum(ekeep)
   #' construct subset

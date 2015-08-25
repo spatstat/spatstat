@@ -3,7 +3,7 @@
 #
 #  Dao-Genton adjusted p-values
 #
-#  $Revision: 1.6 $  $Date: 2015/08/22 10:08:30 $
+#  $Revision: 1.7 $  $Date: 2015/08/25 08:24:13 $
 #
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
@@ -66,7 +66,7 @@ dg.envelope <- function(X, ..., nsim=19,
                         nrank=1,
                         alternative=c("two.sided", "less", "greater"),
                         verbose=TRUE) {
-  Xname <- short.deparse(substitute(X))
+  #  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
   Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
@@ -81,9 +81,9 @@ dg.envelope <- function(X, ..., nsim=19,
   if(verbose) cat("Done.\n")
   ## extract info
   envX <- attr(tX, "envelope")
-  ## extract simulated patterns and functions
-  SimFuns <- attr(envX, "simfuns")
+  ## extract simulated patterns 
   Ylist <- attr(envX, "simpatterns")
+  ##     SimFuns <- attr(envX, "simfuns")
   # apply same test to each simulated pattern
   if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... "))
   rankY <- numeric(nsim)

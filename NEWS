@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.032
+        CHANGES IN spatstat VERSION 1.42-2.033
 
 OVERVIEW
 
@@ -252,6 +252,10 @@ BUG FIXES
    o [.msr
    The result of M[W] where W is a window
    was a measure with window W, instead of intersect.owin(W, Window(M)).
+   Fixed.
+
+   o pool.envelope
+   Did not always respect the value of 'use.theory'.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

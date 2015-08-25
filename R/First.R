@@ -1,6 +1,6 @@
 #  First.R
 #
-#  $Revision: 1.42 $ $Date: 2015/06/28 06:14:35 $
+#  $Revision: 1.44 $ $Date: 2015/08/25 08:14:27 $
 #
 
 .onLoad <- function(...) reset.spatstat.options()
@@ -16,8 +16,7 @@
                "\nFor an introduction to spatstat, type",
                sQuote("beginner"))
   packageStartupMessage(msg)
-  if(FALSE) {
-    ## currently disabled due to bug in R
+  if(exists("getRversion") && getRversion() >= "3.2.2") {
     ## check versions
     rv <- R.Version()
     rdate <- with(rv, ISOdate(year, month, day))
@@ -31,12 +30,12 @@
       ## warn if spatstat version is old
       packdate <- as.Date(read.dcf(file=descfile, fields="Date"))
       elapsed <- Sys.Date() - packdate
-      if(elapsed > 70) {
+      if(elapsed > 75) {
         if(elapsed > 365) {
           n <- floor(elapsed/365)
           unit <- "year"
           sowhat <- "we strongly recommend upgrading to the latest version."
-        } else if(elapsed > 84) {
+        } else if(elapsed > 100) {
           n <- floor(elapsed/30)
           unit <- "month"
           sowhat <- "we recommend upgrading to the latest version."
@@ -44,7 +43,7 @@
           n <- floor(elapsed/7)
           unit <- "week"
           sowhat <- "a newer version should be available."
-      }
+        }
         expired <- if(n == 1) paste("a", unit) else paste(n, paste0(unit, "s"))
         packageStartupMessage(paste("\nNote: spatstat version", ver,
                                     "is out of date by more than",

@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.71 $  $Date: 2015/07/11 08:19:26 $
+#   $Revision: 2.73 $  $Date: 2015/08/25 08:31:46 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1271,7 +1271,8 @@ envelope.matrix <- function(Y, ...,
                # Estimate the mean from one set of columns
                # Form envelopes from another set of columns
                simvals.mean <- simvals[, jsim.mean]
-               reference <- mmean <-
+               # mmean <-
+               reference <- 
                  if(!use.weights) apply(simvals.mean, 1, mean, na.rm=TRUE) else
                  apply(simvals.mean, 1, weighted.mean, w=weights[jsim.mean],
                        na.rm=TRUE)
@@ -1284,7 +1285,8 @@ envelope.matrix <- function(Y, ...,
                  simvals <- simvals[, jsim]
                  if(use.weights) weights <- weights[jsim]
                }
-               reference <- mmean <-
+               # mmean <-
+               reference <- 
                  if(!use.weights) apply(simvals.mean, 1, mean, na.rm=TRUE) else
                  apply(simvals.mean, 1, weighted.mean, w=weights, na.rm=TRUE)
                nsim.mean <- NULL
@@ -1782,8 +1784,9 @@ pool.envelope <- function(..., savefuns=FALSE, savepatterns=FALSE) {
            bigmat <- do.call(cbind, matlist)
            # ..... ready to compute
            result <- envelope(bigmat, funX=Elist[[1]],
-                              type=type, alternative=alternative, csr=csr, Yname=Yname,
-                              weights=weights,
+                              type=type, alternative=alternative,
+                              csr=csr, use.theory=use.theory,
+                              Yname=Yname, weights=weights,
                               savefuns=savefuns)
          },
          variance = {

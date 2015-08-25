@@ -1,7 +1,7 @@
 #
 # summary.mppm.R
 #
-# $Revision: 1.13 $  $Date: 2015/08/12 07:40:25 $
+# $Revision: 1.14 $  $Date: 2015/08/25 08:38:13 $
 #
 
 
@@ -169,14 +169,14 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
 #  constant <- Inter$constant
 #  iformula <- x$iformula
 #  processnames   <- Inter$processes
-  itags   <- Inter$itags
-  trivial  <- Inter$trivial
+#  itags   <- Inter$itags
+#  trivial  <- Inter$trivial
 #%^!ifdef RANDOMEFFECTS  
   random   <- x$random
 #%^!endif  
 
   FIT <- x$Fit$FIT
-  Vnamelist <- x$Fit$Vnamelist
+#  Vnamelist <- x$Fit$Vnamelist
   
 #  allVnames <- unlist(Vnamelist)
 #  poistags <- itags[trivial]

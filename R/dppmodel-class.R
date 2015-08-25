@@ -1,6 +1,8 @@
 print.dppmodel <- function(x, ...){
-  cat(paste(x$name, "determinantal point process model",ifelse(is.numeric(x$dim), paste("in dimension", x$dim), ""),"\n"))
-  parnames <- names(x$par)
+  splat(x$name, "determinantal point process model",
+        ifelse(is.numeric(x$dim), paste("in dimension", x$dim), ""))
+  #' Not used:
+  #'  parnames <- names(x$par)
   anyfixed <- length(x$fixedpar)>0
   if(anyfixed){
       fixedlambda <- NULL
@@ -18,15 +20,15 @@ print.dppmodel <- function(x, ...){
   }
   ## Partially specified model:
   if(length(x$freepar)>0){
-    cat("The model is only partially specified.\n")
-    cat("The following parameters are free (e.g. to be estimated by dppm):\n")
+    splat("The model is only partially specified.")
+    splat("The following parameters are free (e.g. to be estimated by dppm):")
     cat(x$freepar, sep = ", ")
     cat("\n")
     if(anyfixed){
         cat("The fixed parameters are: ")
         cat(fixedparstring, sep = ", ")
     } else{
-        cat("There are no fixed parameters.")
+        splat("There are no fixed parameters.")
     }        
   } else{
     cat("The parameters are: ")
@@ -34,10 +36,12 @@ print.dppmodel <- function(x, ...){
   }
   cat("\n")
   if(!is.null(x$intensity)){
-    cat(paste("The parameter", x$intensity, "specifies the intensity of the process.\n"))
+    splat("The parameter", x$intensity,
+          "specifies the intensity of the process.")
   }
   if(is.character(x$dim)){
-    cat(paste("The parameter", x$dim, "specifies the dimension of the state space.\n"))
+    splat("The parameter", x$dim,
+          "specifies the dimension of the state space.")
   }
   invisible(NULL)
 }
