@@ -1757,7 +1757,7 @@ local({
 #
 #     tests/project.ppm.R
 #
-#      $Revision: 1.5 $  $Date: 2015/05/27 07:33:33 $
+#      $Revision: 1.6 $  $Date: 2015/08/27 08:19:03 $
 #
 #     Tests of projection mechanism
 #
@@ -1770,25 +1770,25 @@ local({
   }
   # a very unidentifiable model
   fit <- ppm(cells ~Z, Strauss(1e-06), covariates=list(Z=0))
-  chk(project.ppm(fit))
+  chk(emend(fit))
   # multitype
   r <- matrix(1e-06, 2, 2)
   fit2 <- ppm(amacrine ~1, MultiStrauss(types=c("off", "on"), radii=r))
-  chk(project.ppm(fit2))
+  chk(emend(fit2))
   # complicated multitype 
   fit3 <- ppm(amacrine ~1, MultiStraussHard(types=c("off", "on"),
                                             iradii=r, hradii=r/5))
-  chk(project.ppm(fit3))
+  chk(emend(fit3))
   
   # hierarchical
   ra <- r
   r[2,1] <- NA
   fit4 <- ppm(amacrine ~1, HierStrauss(types=c("off", "on"), radii=r))
-  chk(project.ppm(fit4))
+  chk(emend(fit4))
   # complicated hierarchical
   fit5 <- ppm(amacrine ~1, HierStraussHard(types=c("off", "on"),
                                             iradii=r, hradii=r/5))
-  chk(project.ppm(fit5))
+  chk(emend(fit5))
   
   # hybrids
   r0 <- min(nndist(redwood))

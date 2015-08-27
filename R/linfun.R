@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.6 $   $Date: 2015/02/17 11:27:35 $
+#   $Revision: 1.7 $   $Date: 2015/08/26 08:41:58 $
 #
 
 linfun <- function(f, L) {
@@ -25,7 +25,7 @@ linfun <- function(f, L) {
     } else {
       extrargs <- argh[extra]
       mainargs <- argh[!extra]
-      X <- do.call(as.lpp, mainargs)
+      X <- do.call(as.lpp, append(mainargs, list(L=L)))
       value <- do.call(f, append(as.list(coords(X)), extrargs))
     }
     return(value)

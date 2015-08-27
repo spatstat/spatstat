@@ -1265,7 +1265,7 @@ polynom(x, \dots)
 ppllengine(X, Y, action="project", check=FALSE)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, 
-       correction, rbord, use.gam, method, forcefit, project,
+       correction, rbord, use.gam, method, forcefit, emend, project,
        prior.mean, prior.var,
        nd, eps, gcontrol, nsim, nrmh, start, control,
        verb, callstring)

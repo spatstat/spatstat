@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.033
+        CHANGES IN spatstat VERSION 1.42-2.034
 
 OVERVIEW
 
@@ -10,10 +10,10 @@ OVERVIEW
 
    o spatstat now depends on the package 'nlme'.
 
-   o Simulation algorithms have been accelerated.
-   
-   o Simulation outcomes are different from those obtained
-   from previous versions of spatstat.
+   o spatstat now depends on R 3.2.2 or later.
+
+   o Simulation algorithms have been accelerated; simulation outcomes 
+   are *not* identical to those obtained from previous versions of spatstat. 
 
    o Determinantal point process models.
 
@@ -120,10 +120,19 @@ NEW FUNCTIONS
    o valid
    New generic function, with methods valid.ppm, valid.lppm, valid.dppmodel
    
-   o project
-   New generic function, with methods project.ppm, project.lppm
+   o emend, emend.ppm, emend.lppm
+   New generic function with methods for ppm and lppm.
+   emend.ppm is equivalent to project.ppm
    
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o simulation
+   Several basic simulation algorithms have been accelerated.
+   Consequently, simulation outcomes are not identical to 
+   those obtained with previous versions of spatstat, even when the
+   same random seed is used. To ensure compatibility with previous
+   versions of spatstat, revert to the slower code by setting
+   spatstat.options(fastthin=FALSE, fastpois=FALSE).
 
    o mppm
    Now handles models with a random effect component.
@@ -212,6 +221,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o valid.ppm
    This is now a method for the generic function 'valid'.
 
+   o ppm.ppp, ppm.quad
+   New argument 'emend', equivalent to 'project'.
+
 BUG FIXES
 
    o lpp
@@ -233,6 +245,10 @@ BUG FIXES
    o persp.im
    Crashed if all pixel values were equal to zero (unless zlim was given).
    Fixed.
+
+   o as.linim.linfun
+   Generated an error ('L must be a linear network')
+   if extra arguments were given.
 
    o as.function.fv
    Generated an error when executed in the 'covr' package.

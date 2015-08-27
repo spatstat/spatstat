@@ -1,5 +1,5 @@
-\name{project}
-\alias{project}
+\name{emend}
+\alias{emend}
 \title{
   Force Model to be Valid
 }
@@ -8,7 +8,7 @@
   find the nearest model which is valid.
 }
 \usage{
-project(object, \dots)
+emend(object, \dots)
 }
 \arguments{
   \item{object}{
@@ -17,7 +17,7 @@ project(object, \dots)
   \item{\dots}{Arguments passed to methods.}
 }
 \details{
-  The function \code{project} is generic,
+  The function \code{emend} is generic,
   and has methods for several classes of statistical models
   in the \pkg{spatstat} package (mostly point process models).
   Its purpose is to check whether a given model is valid
@@ -39,8 +39,8 @@ project(object, \dots)
   \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{project.ppm}},
-  \code{\link{project.lppm}},
+  \code{\link{emend.ppm}},
+  \code{\link{emend.lppm}},
   \code{\link{valid}}.
 }
 \keyword{spatial}

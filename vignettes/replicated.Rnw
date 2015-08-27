@@ -1064,6 +1064,139 @@ fit2
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%#%^!ifdef RANDOMEFFECTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Random effects}
+
+\subsection{Mixed effects models}
+
+It is also possible to fit models that include `random effects'.
+Effectively, some of the coefficients
+in the model are assumed to be Normally-distributed random variables
+instead of constants.
+
+\subsubsection{Mixed Poisson model}
+
+Consider the simplest model of a uniform Poisson process which we fitted to
+the 3 point patterns of waterstriders. It might be sensible to assume that
+each pattern is a realisation of a Poisson process, but with 
+{\em random intensity\/}. In each realisation the intensity $\lambda$
+is constant across different locations, but it
+is a different, random value in different realisations.
+This example is called a `mixed Poisson process' and belongs to the
+class of `Cox processes' (Poisson processes with random intensity 
+functions).
+Let's assume further that the log-intensity 
+is a Normal random variable.
+Then the model is a (very degenerate) special case of
+a `log-Gaussian Cox process'. 
+
+To fit such a model we use the standard techniques of mixed effects
+models \cite{lairware82,davigilt95,pinhbate00}.
+The mixed Poisson process which we discussed above would
+be written in standard form
+\begin{equation}
+\label{mixPois}
+   \lambda_i(u) = \exp(\mu + Z_i)
+\end{equation}
+for the $i$th point pattern, where $\mu$ is a parameter to be estimated 
+(the `fixed effect')
+and $Z_i \sim N(0, \sigma^2)$ is a zero-mean Normal random variable
+(the `random effect' for point pattern $i$). In the simplest case we
+would assume that $Z_1, \ldots, Z_n$ are independent.
+The variance $\sigma^2$ of the random effects
+would be estimated. One can also estimate the individual realised values
+$z_i$ of the random effects for each point pattern, although these are
+usually not of such great interest. Since the model includes both
+fixed and random effects, it is called a ``mixed-effects'' model.
+
+\subsubsection{Dependence structure}
+
+When we formulate a random-effects or mixed-effects model, we must 
+specify the dependence structure of the random effects. In the model above
+we assumed that the $Z_i$ are independent for all point patterns $i$. 
+If the experiment consists of two groups, we could alternatively assume
+that $Z_i = Z_j$ whenever $i$ and $j$ belong to the same group. In other words
+all the patterns in one group have the same value of the random effect.
+So the random effect is associated with the group rather than with
+individual patterns. This could be appropriate if, for example, 
+the groups represent different
+batches of a chemical. Each batch is prepared under slightly different 
+conditions so we believe that there are random variations between batches,
+but within a batch we believe that the chemical is well-mixed.
+
+\subsubsection{Random effects are coefficients}
+
+In the mixed Poisson model (\ref{mixPois}), 
+the random effect is an additive constant
+(with a random value) in the log-intensity. In general, a
+random effect is a \emph{coefficient} of one of the covariates.
+For example if $v$ is a real-valued design covariate (e.g. `temperature'), 
+with value $v_i$ for the $i$th point pattern, then we could assume
+\begin{equation}
+\label{ranef2}
+   \lambda_i(u) = \exp(\mu + Z_i v_i)
+\end{equation}
+where $Z_i \sim N(0, \sigma^2)$ are independent for different $i$.
+This model has a random effect in the dependence on $v$.
+
+We could also have a random effect for a spatial covariate $V$.
+Suppose $V_i$ is a real-valued image for the $i$th pattern 
+(so that $V_i(u)$ is the value of some covariate at the location $u$
+for the $i$th case). Then we could assume
+\begin{equation}
+\label{ranef3}
+   \lambda_i(u) = \exp(\mu + Z_i V_i(u))
+\end{equation}
+where $Z_i \sim N(0, \sigma^2)$ are independent for different $i$.
+This kind of random effect would be appropriate if, for example, the 
+images $V_i$ are not `normalised' or `standardised' relative to each 
+other (e.g.\ they are images taken under different illumination). Then the
+coefficients $Z_i$ effectively include the rescaling necessary to standardise
+the images.
+
+\subsection{Fitting a mixed-effects model}
+
+The call to \texttt{mppm} can also include the argument
+\texttt{random}. This should be a formula (with no left-hand side) 
+describing the structure of random effects. 
+
+The formula for random effects
+must be recognisable to \texttt{lme}. It is typically of the form
+\begin{verbatim}
+      ~x1 + ... + xn | g
+\end{verbatim}
+or
+\begin{verbatim}
+      ~x1 + ... + xn | g1/.../gm
+\end{verbatim}
+where \verb!x1 + ... + xn! specifies the covariates for the random effects
+and \texttt{g} or \verb!g1/.../gm! determines the grouping (dependence) 
+structure. Here \code{g} or \code{g1, \ldots, gm} should be factors.
+
+To fit the mixed Poisson model (\ref{mixPois}) to the waterstriders,
+we want to have a random intercept coefficient
+(so \texttt{x} is \texttt{1}) that varies for different point patterns
+(so \texttt{g} is \texttt{id}). 
+The reserved name \code{id} is a factor referring to the individual
+point pattern. Thus
+
+<<>>=
+H <- hyperframe(P=waterstriders)
+mppm(P ~ 1, H, random=~1|id)
+@ 
+
+To fit the mixed effects model (\ref{ranef2}) to the coculture data
+with the \code{AstroIm} covariate, with a random effect associated
+with each well,
+
+<<eval=FALSE>>=
+mppm(Neurons ~ AstroIm, random=~AstroIm|WellNumber)
+@ 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%#%^!endif
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Studying the fitted model}
@@ -1352,6 +1485,12 @@ B.J. Chen, G.P. Leser, D. Jackson, and R.A. Lamb.
   {M1} protein and influences virus assembly at the site of virus budding.
 \newblock {\em Journal of Virology}, 82:10059--10070, 2008.
 
+%#%^!ifdef RANDOMEFFECTS  
+\bibitem{davigilt95}
+M. Davidian and D.M. Giltinan.
+\newblock {\em Nonlinear Mixed Effects Models for Repeated Measurement Data}.
+\newblock Chapman and Hall, 1995.
+%#%^!endif
 
 \bibitem{digglangbene91}
 P.J. Diggle, N. Lange, and F. M. Benes.
@@ -1360,6 +1499,12 @@ P.J. Diggle, N. Lange, and F. M. Benes.
 \newblock {\em Journal of the {A}merican {S}tatistical {A}ssociation},
   86:618--625, 1991.
 
+%#%^!ifdef RANDOMEFFECTS  
+\bibitem{lairware82}
+N.M. Laird and J.H. Ware.
+\newblock Random-effects models for longitudinal data.
+\newblock {\em Biometrics}, 38:963--974, 1982.
+%#%^!endif
 
 \bibitem{pent84}
 A. Penttinen.
@@ -1368,6 +1513,12 @@ A. Penttinen.
 \newblock Number 7 in {Jyv\"askyl\"a} Studies in Computer Science, Economics
   and Statistics. University of {Jyv\"askyl\"a}, 1984.
 
+%#%^!ifdef RANDOMEFFECTS  
+\bibitem{pinhbate00}
+J.C. Pinheiro and D.M. Bates.
+\newblock {\em Mixed-Effects Models in {S} and {S-PLUS}}.
+\newblock Springer, 2000.
+%#%^!endif
 
 \end{thebibliography}
 

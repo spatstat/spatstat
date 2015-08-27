@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.31 $   $Date: 2015/08/23 09:33:07 $
+#  $Revision: 1.32 $   $Date: 2015/08/27 08:12:09 $
 #
 
 lppm <- function(X, ...) {
@@ -301,8 +301,8 @@ valid.lppm <- function(object, ...) {
   valid(object$fit, ...)
 }
 
-project.lppm <- function(object, ...) {
-  object$fit <- project.ppm(object$fit, ...)
+emend.lppm <- function(object, ...) {
+  object$fit <- emend(object$fit, ...)
   return(object)
 }
 

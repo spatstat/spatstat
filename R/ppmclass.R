@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.122 $	$Date: 2015/08/25 06:57:37 $
+#	$Revision: 2.123 $	$Date: 2015/08/27 08:10:31 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -210,7 +210,7 @@ function(x, ...,
 
   if(waxlyrical("extras", terselevel) && s$projected) {
     parbreak()
-    splat("Fit was projected to obtain a valid point process model")
+    splat("Fit was emended to obtain a valid point process model")
   }
 
   if(identical(s$valid, FALSE) && waxlyrical("errors", terselevel)) {
@@ -352,11 +352,11 @@ valid.ppm <- function(object, warn=TRUE, ...) {
   return(answer)
 }
 
-project <- function(object, ...) {
-  UseMethod("project")
+emend <- function(object, ...) {
+  UseMethod("emend")
 }
 
-project.ppm <- local({
+emend.ppm <- project.ppm <- local({
   tracemessage <- function(depth, ...) {
     if(depth == 0) return(NULL)
     spacer <- paste(rep.int("  ", depth), collapse="")
@@ -367,7 +367,7 @@ project.ppm <- local({
   leaving <- function(depth) {
     tracemessage(depth, ngettext(depth, "Returning.", "Exiting level."))
   }
-  project.ppm <- function(object, ..., fatal=FALSE, trace=FALSE) {
+  emend.ppm <- function(object, ..., fatal=FALSE, trace=FALSE) {
     verifyclass(object, "ppm")
     fast <- spatstat.options("project.fast")
     # user specifies 'trace' as logical
@@ -416,7 +416,7 @@ project.ppm <- local({
           print(newobject)
         }
         # recurse
-        newobject <- project.ppm(newobject, fatal=fatal, trace=tdnext)
+        newobject <- emend.ppm(newobject, fatal=fatal, trace=tdnext)
         # return
         leaving(td)
         return(newobject)
@@ -435,7 +435,7 @@ project.ppm <- local({
             print(object.i)
           }
           # recurse
-          object.i <- project.ppm(object.i, fatal=fatal, trace=tdnext)
+          object.i <- emend.ppm(object.i, fatal=fatal, trace=tdnext)
           # evaluate logPL
           logPL.i   <- logLik(object.i, warn=FALSE)
           tracemessage(td, "max log pseudolikelihood = ", logPL.i)
@@ -509,7 +509,7 @@ project.ppm <- local({
         print(newobject)
       }
       # recurse
-      newobject <- project.ppm(newobject, fatal=fatal, trace=tdnext)
+      newobject <- emend.ppm(newobject, fatal=fatal, trace=tdnext)
       object <- newobject
     } else if(is.list(change) && all(unlist(lapply(change, is.interact)))) {
       # new style: 'project' returns a list of candidate interactions
@@ -536,7 +536,7 @@ project.ppm <- local({
           print(object.i)
         }
         # recurse
-        object.i <- project.ppm(object.i, fatal=fatal, trace=tdnext)
+        object.i <- emend.ppm(object.i, fatal=fatal, trace=tdnext)
         # evaluate logPL
         logPL.i   <- logLik(object.i, warn=FALSE)
         tracemessage(td, "max log pseudolikelihood = ", logPL.i)
@@ -556,7 +556,7 @@ project.ppm <- local({
     leaving(td)
     return(object)
   }
-  project.ppm
+  emend.ppm
 })
 
 # more methods

@@ -19,6 +19,7 @@
        use.gam=FALSE,
        method="mpl",
        forcefit=FALSE,
+       emend=project,
        project=FALSE,
        prior.mean = NULL,
        prior.var = NULL,
@@ -40,6 +41,7 @@
        use.gam=FALSE,
        method="mpl",
        forcefit=FALSE,
+       emend=project,
        project=FALSE,
        prior.mean = NULL,
        prior.var = NULL,
@@ -115,10 +117,12 @@
     fitted by a shortcut. If \code{forcefit=TRUE},
     the generic fitting method will always be used. 
   }
-  \item{project}{
-    Logical. Setting \code{project=TRUE} will ensure that the
+  \item{emend,project}{
+    (These are equivalent: \code{project} is an older name for
+    \code{emend}.)
+    Logical value. Setting \code{emend=TRUE} will ensure that the
     fitted model is always a valid point process by
-    applying \code{\link{project.ppm}}.
+    applying \code{\link{emend.ppm}}.
   }
   \item{prior.mean}{
     Optional vector of prior means for canonical parameters (for
@@ -620,7 +624,7 @@
       fitting nuisance parameters in the interaction,
       and \code{\link{ippm}} for irregular parameters in the trend.
 
-      See \code{\link{valid.ppm}} and \code{\link{project.ppm}} for
+      See \code{\link{valid.ppm}} and \code{\link{emend.ppm}} for
       ensuring the fitted model is a valid point process.
 }
 \section{Warnings}{
@@ -644,15 +648,15 @@
   corresponding to a value of \code{ppm()$theta[2]}
   less than or equal to \code{0}.
 
-  By default (if \code{project=FALSE}) the algorithm
+  By default (if \code{emend=FALSE}) the algorithm
   maximises the pseudolikelihood
   without constraining the parameters, and does not apply any checks for
   sanity after fitting the model.
   This is because the fitted parameter value
   could be useful information for data analysis.
   To constrain the parameters to ensure that the model is a valid
-  point process, set \code{project=TRUE}. See also the functions
-  \code{\link{valid.ppm}} and \code{\link{project.ppm}}.
+  point process, set \code{emend=TRUE}. See also the functions
+  \code{\link{valid.ppm}} and \code{\link{emend.ppm}}.
   
   The \code{trend} formula should not use any variable names
   beginning with the prefixes \code{.mpl} or \code{Interaction}

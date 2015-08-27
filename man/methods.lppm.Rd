@@ -1,12 +1,12 @@
 \name{methods.lppm}
 \alias{methods.lppm} %DoNotExport
 \alias{coef.lppm}
+\alias{emend.lppm}
 \alias{extractAIC.lppm}
 \alias{formula.lppm}
 \alias{logLik.lppm}
 \alias{nobs.lppm}
 \alias{print.lppm}
-\alias{project.lppm}
 \alias{summary.lppm}
 \alias{terms.lppm}
 \alias{update.lppm}
@@ -23,6 +23,8 @@
 \usage{
   \method{coef}{lppm}(object, ...)
 
+  \method{emend}{lppm}(object, \dots)
+
   \method{extractAIC}{lppm}(fit, ...)
 
   \method{formula}{lppm}(x, ...)
@@ -32,8 +34,6 @@
   \method{nobs}{lppm}(object, ...)
 
   \method{print}{lppm}(x, ...)
-
-  \method{project}{lppm}(object, \dots)
 
   \method{summary}{lppm}(object, ...)
 
@@ -60,12 +60,12 @@
 \details{
   These are methods for the generic commands
   \code{\link{coef}},
+  \code{\link{emend}}, 
   \code{\link{extractAIC}},
   \code{\link{formula}},
   \code{\link{logLik}},
   \code{\link{nobs}},
   \code{\link{print}}, 
-  \code{\link{project}}, 
   \code{\link{summary}}, 
   \code{\link{terms}},
   \code{\link{update}},

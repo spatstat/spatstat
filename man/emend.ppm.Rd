@@ -1,4 +1,5 @@
-\name{project.ppm}
+\name{emend.ppm}
+\alias{emend.ppm}
 \alias{project.ppm}
 \title{
   Force Point Process Model to be Valid
@@ -8,7 +9,9 @@
   satisfies the integrability conditions for existence of the point process.
 }
 \usage{
-\method{project}{ppm}(object, \dots, fatal=FALSE, trace=FALSE)
+project.ppm(object, \dots, fatal=FALSE, trace=FALSE)
+
+\method{emend}{ppm}(object, \dots, fatal=FALSE, trace=FALSE)
 }
 \arguments{
   \item{object}{
@@ -25,6 +28,13 @@
   }
 }
 \details{
+  The functions \code{emend.ppm} and \code{project.ppm} are identical:
+  \code{emend.ppm} is a method for the generic \code{\link{emend}},
+  while \code{project.ppm} is an older name for the same function.
+
+  The purpose of the function is to ensure that a fitted model
+  is valid.
+  
   The model-fitting function \code{\link{ppm}}
   fits Gibbs point process models to point pattern data.
   By default, the fitted model returned by \code{\link{ppm}} may not
@@ -54,21 +64,21 @@
   the Strauss model is not appropriate, and suggests a clustered model should be
   fitted.
 
-  The function \code{project.ppm} modifies the model \code{object}
-  so that the model is valid. It is a method for the generic
-  function \code{\link{project}}.
-
-  \code{project.ppm} identifies the terms in the model \code{object}
+  The function \code{emend.ppm} or \code{project.ppm}
+  modifies the model \code{object}
+  so that the model is valid. It 
+  identifies the terms in the model \code{object}
   that are associated with illegal parameter values (i.e. parameter
   values which are either \code{NA}, infinite, or outside their permitted
   range). It considers all possible sub-models of \code{object}
   obtained by deleting one or more
   of these terms. It identifies which of these submodels are valid,
   and chooses the valid submodel with the largest pseudolikelihood. The result
-  of \code{project.ppm} is the true maximum pseudolikelihood fit to the
-  data.
+  of \code{emend.ppm} or \code{project.ppm} is the
+  true maximum pseudolikelihood fit to the data.
 
   For large datasets or complex models, the algorithm used in
+  \code{emend.ppm} or 
   \code{project.ppm} may be time-consuming, because it takes time to
   compute all the sub-models. A faster, approximate
   algorithm can be applied by setting
@@ -93,12 +103,13 @@
 \seealso{
   \code{\link{ppm}},
   \code{\link{valid.ppm}},
+  \code{\link{emend}},
   \code{\link{spatstat.options}}
 }
 \examples{
    fit <- ppm(redwood, ~1, Strauss(0.1))
    coef(fit)
-   fit2 <- project(fit)
+   fit2 <- emend(fit)
    coef(fit2)
 }
 \keyword{spatial}

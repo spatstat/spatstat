@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.50 $	$Date: 2015/04/02 02:17:19 $
+#	$Revision: 1.51 $	$Date: 2015/08/27 08:28:22 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -68,6 +68,7 @@ function(Q,
          use.gam=FALSE,
          method = "mpl",
          forcefit=FALSE,
+         emend=project,
          project=FALSE,
          prior.mean = NULL,
          prior.var = NULL,
@@ -88,6 +89,9 @@ function(Q,
   if(!(method %in% c("mpl", "ho", "logi", "VBlogi")))
       stop(paste("Unrecognised fitting method", sQuote(method)))
 
+  if(!missing(emend) && !missing(project) && emend != project)
+    stop("Conflicting options: emend != project")
+          
   if(!is.null(prior.mean) | !is.null(prior.var)){
       if(missing(method))
           method <- "VBlogi"
