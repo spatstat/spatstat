@@ -46,17 +46,20 @@ SEXP xmethas(
 	     SEXP fixall,
              SEXP track,
 	     SEXP thin,
-             SEXP snoopenv)
+             SEXP snoopenv,
+	     SEXP temper,
+	     SEXP invertemp)
 {
   char *cifstring;
   double cvd, cvn, qnodds, anumer, adenom, betavalue;
   double *iparvector;
-  int verb, marked, mustupdate, itype;
+  int verb, marked, tempered, mustupdate, itype;
   int nfree, nsuspect;
   int irep, ix, j, maxchunk, iverb;
   int Ncif; 
   int *plength;
   long Nmore;
+  double invtemp;
   double *xx, *yy, *xpropose, *ypropose;
   int    *mm,      *mpropose, *pp, *aa;
   SEXP out, xout, yout, mout, pout, aout;
@@ -107,8 +110,10 @@ SEXP xmethas(
   PROTECT(ncond     = AS_INTEGER(ncond)); 
   PROTECT(track     = AS_INTEGER(track)); 
   PROTECT(thin      = AS_INTEGER(thin)); 
+  PROTECT(temper    = AS_INTEGER(temper)); 
+  PROTECT(invertemp = AS_NUMERIC(invertemp)); 
 
-                    /* that's 22 protected objects */
+                    /* that's 24 protected objects */
 
   /* =================== Translate arguments from R to C ================ */
 
@@ -127,6 +132,8 @@ SEXP xmethas(
   algo.q = *(NUMERIC_POINTER(q));
   algo.fixall = ((*(INTEGER_POINTER(fixall))) == 1);
   algo.ncond =  *(INTEGER_POINTER(ncond));
+  algo.tempered = tempered = (*(INTEGER_POINTER(temper)) != 0);
+  algo.invtemp  = invtemp  = *(NUMERIC_POINTER(invertemp));
 
   /* copy model parameters without interpreting them */
   model.beta = NUMERIC_POINTER(beta);
@@ -404,10 +411,10 @@ SEXP xmethas(
     }
   }
 #ifdef HISTORY_INCLUDES_RATIO
-  UNPROTECT(30);  /* 22 arguments plus xout, yout, mout, pout, aout, out,
+  UNPROTECT(32);  /* 24 arguments plus xout, yout, mout, pout, aout, out,
                             numout, denout */
 #else
-  UNPROTECT(28);  /* 22 arguments plus xout, yout, mout, pout, aout, out */
+  UNPROTECT(30);  /* 24 arguments plus xout, yout, mout, pout, aout, out */
 #endif
   return(out);
 }

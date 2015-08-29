@@ -545,6 +545,7 @@
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
 \alias{reduceformula}
+\alias{reheat}
 \alias{relatively.prime}
 \alias{repair.image.xycoords}
 \alias{resolveEinfo}
@@ -1365,6 +1366,7 @@ recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
+reheat(model, invtemp)
 relatively.prime(n, m)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn)
@@ -1439,7 +1441,8 @@ rmhResolveTypes(model, start, control)
 rmhSnoopEnv(Xinit, Wclip, R)
 \method{rmhcontrol}{rmhcontrol}(\dots) 
 \method{rmhcontrol}{list}(\dots) 
-rmhEngine(InfoList, \dots, verbose, kitchensink, preponly, snoop) 
+rmhEngine(InfoList, \dots, verbose, kitchensink, preponly, snoop,
+                           overrideXstart, overrideclip) 
 \method{rmhmodel}{rmhmodel}(model, \dots) 
 \method{rmhstart}{rmhstart}(start, \dots) 
 \method{rmhstart}{list}(start, \dots) 

@@ -527,7 +527,8 @@ print.rmhInfoList <- function(x, ...) {
 
 rmhEngine <- function(InfoList, ...,
                        verbose=FALSE, kitchensink=FALSE,
-                       preponly=FALSE, snoop=FALSE) {
+                       preponly=FALSE, snoop=FALSE,
+                       overrideXstart=NULL, overrideclip=FALSE) {
 # Internal Use Only!
 # This is the interface to the C code.
 
@@ -643,7 +644,7 @@ rmhEngine <- function(InfoList, ...,
     if(condtype != "none")
       Xsim <- superimpose(Xsim, x.condpp, W=w.state)
     # clip result to output window
-    Xclip <- Xsim[w.clip]
+    Xclip <- if(!overrideclip) Xsim[w.clip] else Xsim
     attr(Xclip, "info") <- InfoList
     return(Xclip)
   }
@@ -715,6 +716,13 @@ rmhEngine <- function(InfoList, ...,
       Cmarks <- c(as.integer(marks(x.condpp))-1, Cmarks)
   }
 
+  if(!is.null(overrideXstart)) {
+    #' override the previous data
+    x <- overrideXstart$x
+    y <- overrideXstart$y
+    if(mtype) Cmarks <- as.integer(marks(overrideXstart))-1
+  }
+
 # decide whether to activate visual debugger
   if(snoop) {
     Xinit <- ppp(x, y, window=w.sim)
@@ -760,6 +768,8 @@ rmhEngine <- function(InfoList, ...,
   nburn   <- control$nburn
   track   <- control$track
   thin    <- control$internal$thin
+  temper  <- FALSE
+  invertemp <- 1.0
   
   if(verbose)
     cat("Proposal points...")
@@ -799,6 +809,8 @@ rmhEngine <- function(InfoList, ...,
   storage.mode(npts.cond) <- "integer"
   storage.mode(track) <- "integer"
   storage.mode(thin) <- "integer"
+  storage.mode(temper) <- "integer"
+  storage.mode(invertemp) <- "double"
 
   if(!saving) {
     # ////////// Single block /////////////////////////////////
@@ -823,7 +835,9 @@ rmhEngine <- function(InfoList, ...,
                  fixall,
                  track,
                  thin,
-                 snoopenv)
+                 snoopenv,
+                 temper,
+                 invertemp)
 #                 PACKAGE="spatstat")
   
     # Extract the point pattern returned from C
@@ -838,7 +852,7 @@ rmhEngine <- function(InfoList, ...,
     }
 
     # Now clip the pattern to the ``clipping'' window:
-    if(!control$expand$force.noexp)
+    if(!overrideclip && !control$expand$force.noexp)
       X <- X[w.clip]
 
     # Extract transition history:
@@ -911,7 +925,9 @@ rmhEngine <- function(InfoList, ...,
                    fixall,
                    track,
                    thin,
-                   snoopenv)
+                   snoopenv,
+                   temper,
+                   invertemp)
 #                   PACKAGE="spatstat")
       # Extract the point pattern returned from C
       X <- ppp(x=out[[1]], y=out[[2]], window=w.state, check=FALSE)
@@ -925,7 +941,7 @@ rmhEngine <- function(InfoList, ...,
       }
       
       # Now clip the pattern to the ``clipping'' window:
-      if(!control$expand$force.noexp)
+      if(!overrideclip && !control$expand$force.noexp)
         X <- X[w.clip]
 
       # commit to list

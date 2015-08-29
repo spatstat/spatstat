@@ -59,6 +59,8 @@ typedef struct Algor {
   int nverb;       /* print report every 'nverb' iterations */
   int nrep0;       /* number of iterations already performed 
 		      in previous blocks - for reporting purposes */
+  int tempered;    /* TRUE if tempering is applied */
+  double invtemp;  /* inverse temperature if tempering is applied */
 } Algor;
 
 /* Metropolis-Hastings proposal */

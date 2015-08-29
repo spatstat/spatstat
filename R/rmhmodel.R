@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.64 $  $Date: 2015/03/16 12:00:51 $
+#   $Revision: 1.68 $  $Date: 2015/08/29 04:36:43 $
 #
 #
 
@@ -28,138 +28,225 @@ rmhmodel.list <- function(model, ...) {
           resolve.defaults(list(...), model[argnames[ok]]))
 }
 
-rmhmodel.default <- function(...,
-                             cif=NULL, par=NULL, w=NULL, trend=NULL, types=NULL)
-{
-  extractsecret <- function(..., stopinvalid=TRUE) {
+rmhmodel.default <- local({
+  
+  rmhmodel.default <- function(...,
+    cif=NULL, par=NULL, w=NULL, trend=NULL, types=NULL) {
+    rmhmodelDefault(..., cif=cif, par=par, w=w, trend=trend, types=types)
+  }
+
+  rmhmodelDefault <- function(...,
+    cif=NULL, par=NULL, w=NULL, trend=NULL, types=NULL,
+    stopinvalid=TRUE) {
+
     if(length(list(...)) > 0)
-      stop(paste("rmhmodel.default: syntax should be",
+      stop(paste("rmhmodel.default: syntax should be", 
                  "rmhmodel(cif, par, w, trend, types)",
-                 "with arguments given by name if they are present"),
-           call.=FALSE)
-    return(list(stopinvalid=stopinvalid))
-  }
-  stopinvalid <- extractsecret(...)$stopinvalid
+                 "with arguments given by name if they are present"), 
+           call. = FALSE)
+
+    ## Validate parameters
+    if(is.null(cif)) stop("cif is missing or NULL")
+    if(is.null(par)) stop("par is missing or NULL")
+
+    if(!is.null(w))
+      w <- as.owin(w)
   
-  # Validate parameters
-  if(is.null(cif)) stop("cif is missing or NULL")
-  if(is.null(par)) stop("par is missing or NULL")
+    if(!is.character(cif))
+      stop("cif should be a character string")
 
-  if(!is.null(w))
-    w <- as.owin(w)
-  
-  if(!is.character(cif))
-    stop("cif should be a character string")
-
-  betamultiplier <- 1
-
-  Ncif <- length(cif)
-  if(Ncif > 1) {
-    # hybrid
-    # check for Poisson components
-    ispois <- (cif == 'poisson')
-    if(any(ispois)) {
-      # validate Poisson components
-      Npois <- sum(ispois)
-      poismodels <- vector(mode="list", length=Npois)
-      parpois <- par[ispois]
-      for(i in 1:Npois)
-        poismodels[[i]] <- rmhmodel(cif='poisson', par=parpois[[i]],
-                                    w=w, trend=NULL, types=types,
-                                    stopinvalid=FALSE)
-      # consolidate Poisson intensity parameters
-      poisbetalist <- lapply(poismodels, function(x){x$C.beta})
-      poisbeta <- Reduce("*", poisbetalist)
-      if(all(ispois)) {
-        # model collapses to a Poisson process
-        cif <- 'poisson'
-        Ncif <- 1
-        par <- list(beta=poisbeta)
-        betamultiplier <- 1
-      } else {
-        # remove Poisson components
-        cif <- cif[!ispois]
-        Ncif <- sum(!ispois)
-        par <- par[!ispois]
-        if(Ncif == 1) # revert to single-cif format
-          par <- par[[1]]
-        # absorb beta parameters 
-        betamultiplier <- poisbeta
+    betamultiplier <- 1
+    
+    Ncif <- length(cif)
+    if(Ncif > 1) {
+      ## hybrid
+      ## check for Poisson components
+      ispois <- (cif == 'poisson')
+      if(any(ispois)) {
+        ## validate Poisson components
+        Npois <- sum(ispois)
+        poismodels <- vector(mode="list", length=Npois)
+        parpois <- par[ispois]
+        for(i in 1:Npois)
+          poismodels[[i]] <- rmhmodel(cif='poisson', par=parpois[[i]],
+                                      w=w, trend=NULL, types=types,
+                                      stopinvalid=FALSE)
+        ## consolidate Poisson intensity parameters
+        poisbetalist <- lapply(poismodels, function(x){x$C.beta})
+        poisbeta <- Reduce("*", poisbetalist)
+        if(all(ispois)) {
+          ## model collapses to a Poisson process
+          cif <- 'poisson'
+          Ncif <- 1
+          par <- list(beta=poisbeta)
+          betamultiplier <- 1
+        } else {
+          ## remove Poisson components
+          cif <- cif[!ispois]
+          Ncif <- sum(!ispois)
+          par <- par[!ispois]
+          if(Ncif == 1) # revert to single-cif format
+            par <- par[[1]]
+          ## absorb beta parameters 
+          betamultiplier <- poisbeta
+        }
       }
     }
-  }
   
-  if(Ncif > 1) {
-    # genuine hybrid 
-    models <- vector(mode="list", length=Ncif)
-    check <- vector(mode="list", length=Ncif)
-    for(i in 1:Ncif) 
-      models[[i]] <- rmhmodel(cif=cif[i], par=par[[i]],
-                              w=w, trend=NULL, types=types,
-                              stopinvalid=FALSE)
-    C.id  <- unlist(lapply(models, function(x){x$C.id}))
-    C.betalist <- lapply(models, function(x){x$C.beta})
-    C.iparlist <- lapply(models, function(x){x$C.ipar})
-    # absorb beta multiplier into beta parameter of first component
-    C.betalist[[1]] <- C.betalist[[1]] * betamultiplier
-    # concatenate for use in C
-    C.beta     <- unlist(C.betalist)
-    C.ipar     <- unlist(C.iparlist)
-    check <- lapply(models, function(x){x$check})
-    maxr <- max(unlist(lapply(models, function(x){x$reach})))
-    ismulti <- unlist(lapply(models, function(x){x$multitype.interact}))
-    multi <- any(ismulti)
-    # determine whether model exists
-    integ <- unlist(lapply(models, function(x) { x$integrable }))
-    stabi <- unlist(lapply(models, function(x) { x$stabilising }))
-    integrable <- all(integ) || any(stabi)
-    stabilising <- any(stabi)
-    # string explanations of conditions for validity
-    integ.ex <- unlist(lapply(models, function(x){ x$explainvalid$integrable }))
-    stabi.ex <- unlist(lapply(models, function(x){ x$explainvalid$stabilising}))
-    stabi.oper <- !(stabi.ex %in% c("TRUE", "FALSE"))
-    integ.oper <- !(integ.ex %in% c("TRUE", "FALSE"))
-    compnames <- if(!anyDuplicated(C.id)) paste("cif", sQuote(C.id)) else 
-         paste("component", 1:Ncif, paren(sQuote(C.id)))
-    if(!integrable && stopinvalid) {
-      # model is not integrable: explain why
-      ifail <- !integ & integ.oper
-      ireason <- paste(compnames[ifail], "should satisfy",
-                       paren(integ.ex[ifail], "{"))
-      ireason <- verbalogic(ireason, "and")
-      if(sum(ifail) <= 1) {
-        # There's only one offending cif, so stability is redundant
-        sreason <- "FALSE"
-      } else {
-        sfail <- !stabi & stabi.oper
-        sreason <- paste(compnames[sfail], "should satisfy",
-                         paren(stabi.ex[sfail], "{"))
-        sreason <- verbalogic(sreason, "or")
-      }
-      reason <- verbalogic(c(ireason, sreason), "or")
-      stop(paste("rmhmodel: hybrid model is not integrable; ", reason),
-           call.=FALSE)
-    } else {
-      # construct strings summarising conditions for validity
-      if(!any(integ.oper))
-        ireason <- as.character(integrable)
-      else {
-        ireason <- paste(compnames[integ.oper], "should satisfy",
-                         paren(integ.ex[integ.oper], "{"))
+    if(Ncif > 1) {
+      ## genuine hybrid 
+      models <- vector(mode="list", length=Ncif)
+      check <- vector(mode="list", length=Ncif)
+      for(i in 1:Ncif) 
+        models[[i]] <- rmhmodel(cif=cif[i], par=par[[i]],
+                                w=w, trend=NULL, types=types,
+                                stopinvalid=FALSE)
+      C.id  <- unlist(lapply(models, getElement, name="C.id"))
+      C.betalist <- lapply(models, getElement, name="C.beta")
+      C.iparlist <- lapply(models, getElement, name="C.ipar")
+      ## absorb beta multiplier into beta parameter of first component
+      C.betalist[[1]] <- C.betalist[[1]] * betamultiplier
+      ## concatenate for use in C
+      C.beta     <- unlist(C.betalist)
+      C.ipar     <- unlist(C.iparlist)
+      check <- lapply(models, function(x){x$check})
+      maxr <- max(unlist(lapply(models, getElement, name="reach")))
+      ismulti <- unlist(lapply(models, getElement, name="multitype.interact"))
+      multi <- any(ismulti)
+      ## determine whether model exists
+      integ <- unlist(lapply(models, getElement, name="integrable"))
+      stabi <- unlist(lapply(models, getElement, name="stabilising"))
+      integrable <- all(integ) || any(stabi)
+      stabilising <- any(stabi)
+      ## string explanations of conditions for validity
+      expl <- lapply(models, getElement, name="explainvalid")
+      integ.ex <- unlist(lapply(expl, getElement, name="integrable"))
+      stabi.ex <- unlist(lapply(expl, getElement, name="stabilising"))
+      stabi.oper <- !(stabi.ex %in% c("TRUE", "FALSE"))
+      integ.oper <- !(integ.ex %in% c("TRUE", "FALSE"))
+      compnames <- if(!anyDuplicated(C.id)) paste("cif", sQuote(C.id)) else 
+      paste("component", 1:Ncif, paren(sQuote(C.id)))
+      if(!integrable && stopinvalid) {
+        ## model is not integrable: explain why
+        ifail <- !integ & integ.oper
+        ireason <- paste(compnames[ifail], "should satisfy",
+                         paren(integ.ex[ifail], "{"))
         ireason <- verbalogic(ireason, "and")
+        if(sum(ifail) <= 1) {
+          ## There's only one offending cif, so stability is redundant
+          sreason <- "FALSE"
+        } else {
+          sfail <- !stabi & stabi.oper
+          sreason <- paste(compnames[sfail], "should satisfy",
+                           paren(stabi.ex[sfail], "{"))
+          sreason <- verbalogic(sreason, "or")
+        }
+        reason <- verbalogic(c(ireason, sreason), "or")
+        stop(paste("rmhmodel: hybrid model is not integrable; ", reason),
+             call.=FALSE)
+      } else {
+        ## construct strings summarising conditions for validity
+        if(!any(integ.oper))
+          ireason <- as.character(integrable)
+        else {
+          ireason <- paste(compnames[integ.oper], "should satisfy",
+                           paren(integ.ex[integ.oper], "{"))
+          ireason <- verbalogic(ireason, "and")
+        }
+        if(!any(stabi.oper))
+          sreason <- as.character(stabilising)
+        else {
+          sreason <- paste(compnames[stabi.oper], "should satisfy",
+                           paren(stabi.ex[stabi.oper], "{"))
+          sreason <- verbalogic(sreason, "or")
+        }
+        ireason <- verbalogic(c(ireason, sreason), "or")
+        explainvalid <- list(integrable=ireason,
+                             stabilising=sreason)
       }
-      if(!any(stabi.oper))
-        sreason <- as.character(stabilising)
-      else {
-        sreason <- paste(compnames[stabi.oper], "should satisfy",
-                         paren(stabi.ex[stabi.oper], "{"))
-        sreason <- verbalogic(sreason, "or")
-      }
-      ireason <- verbalogic(c(ireason, sreason), "or")
-      explainvalid <- list(integrable=ireason,
-                           stabilising=sreason)
+      
+      out <- list(cif=cif,
+                  par=par,
+                  w=w,
+                  trend=trend,
+                  types=types,
+                  C.id=C.id,
+                  C.beta=C.beta,
+                  C.ipar=C.ipar,
+                  C.betalist=C.betalist,
+                  C.iparlist=C.iparlist,
+                  check=check,
+                  multitype.interact=multi,
+                  integrable=integrable,
+                  stabilising=stabilising,
+                  explainvalid=explainvalid,
+                  reach=maxr)
+      class(out) <- c("rmhmodel", class(out))
+      return(out)
     }
 
+    ## non-hybrid
+  
+    ## Check that this is a recognised model
+    ## and look up the rules for this model
+    rules <- spatstatRmhInfo(cif)
+  
+    ## Map the name of the cif from R to C
+    ##      (the names are normally identical in R and C,
+    ##      except "poisson" -> NA)
+    C.id <- rules$C.id
+  
+    ## Check that the C name is recognised in C 
+    if(!is.na(C.id)) {
+      z <- .C("knownCif",
+              cifname=as.character(C.id),
+              answer=as.integer(0))
+      ok <- as.logical(z$answer)
+      if(!ok)
+        stop(paste("Internal error: the cif", sQuote(C.id),
+                   "is not recognised in the C code"))
+    }
+
+    ## Validate the model parameters and reformat them 
+    check <- rules$parhandler
+    checkedpar <-
+      if(!rules$multitype)
+        check(par)
+      else if(!is.null(types))
+        check(par, types)
+      else 
+      ## types vector not given - defer checking
+      NULL
+
+    if(!is.null(checkedpar)) {
+      stopifnot(is.list(checkedpar))
+      stopifnot(!is.null(names(checkedpar)) && all(nzchar(names(checkedpar))))
+      stopifnot(names(checkedpar)[[1]] == "beta")
+      C.beta  <- unlist(checkedpar[[1]])
+      C.beta <- C.beta * betamultiplier
+      C.ipar <- as.numeric(unlist(checkedpar[-1]))
+    } else {
+      C.beta <- C.ipar <- NULL
+    }
+  
+    ## Determine whether model is integrable
+    integrable <- rules$validity(par, "integrable")
+    explainvalid  <- rules$explainvalid
+    
+    if(!integrable && stopinvalid) 
+      stop(paste("rmhmodel: the model is not integrable; it should satisfy",
+                 explainvalid$integrable),
+           call.=FALSE)
+  
+    ## Determine whether cif is stabilising
+    ## (i.e. any hybrid including this cif will be integrable)
+    stabilising <- rules$validity(par, "stabilising")
+
+    ## Calculate reach of model
+    mreach <- rules$reach(par)
+
+    ###################################################################
+    ## return augmented list  
     out <- list(cif=cif,
                 par=par,
                 w=w,
@@ -168,100 +255,19 @@ rmhmodel.default <- function(...,
                 C.id=C.id,
                 C.beta=C.beta,
                 C.ipar=C.ipar,
-                C.betalist=C.betalist,
-                C.iparlist=C.iparlist,
-                check=check,
-                multitype.interact=multi,
+                check= if(is.null(C.ipar)) check else NULL,
+                multitype.interact=rules$multitype,
                 integrable=integrable,
                 stabilising=stabilising,
                 explainvalid=explainvalid,
-                reach=maxr)
+                reach=mreach
+                )
     class(out) <- c("rmhmodel", class(out))
     return(out)
   }
 
-  # non-hybrid
-  
-  # Check that this is a recognised model
-  # and look up the rules for this model
-  rules <- spatstatRmhInfo(cif)
-  
-  # Map the name of the cif from R to C
-  #      (the names are normally identical in R and C,
-  #      except "poisson" -> NA)
-  C.id <- rules$C.id
-  
-  # Check that the C name is recognised in C 
-  if(!is.na(C.id)) {
-    z <- .C("knownCif",
-            cifname=as.character(C.id),
-            answer=as.integer(0))
-#            PACKAGE="spatstat")
-    ok <- as.logical(z$answer)
-    if(!ok)
-      stop(paste("Internal error: the cif", sQuote(C.id),
-                 "is not recognised in the C code"))
-  }
-
-  # Validate the model parameters and reformat them 
-  check <- rules$parhandler
-  checkedpar <-
-    if(!rules$multitype)
-      check(par)
-    else if(!is.null(types))
-      check(par, types)
-    else 
-      # types vector not given - defer checking
-      NULL
-
-  if(!is.null(checkedpar)) {
-    stopifnot(is.list(checkedpar))
-    stopifnot(!is.null(names(checkedpar)) && all(nzchar(names(checkedpar))))
-    stopifnot(names(checkedpar)[[1]] == "beta")
-    C.beta  <- unlist(checkedpar[[1]])
-    C.beta <- C.beta * betamultiplier
-    C.ipar <- as.numeric(unlist(checkedpar[-1]))
-  } else {
-    C.beta <- C.ipar <- NULL
-  }
-  
-  # Determine whether model is integrable
-  integrable <- rules$validity(par, "integrable")
-  explainvalid  <- rules$explainvalid
-
-  if(!integrable && stopinvalid) 
-    stop(paste("rmhmodel: the model is not integrable; it should satisfy",
-               explainvalid$integrable),
-         call.=FALSE)
-  
-  # Determine whether cif is stabilising
-  # (i.e. any hybrid including this cif will be integrable)
-  stabilising <- rules$validity(par, "stabilising")
-
-  # Calculate reach of model
-  mreach <- rules$reach(par)
-
-  
-###################################################################
-# return augmented list  
-  out <- list(cif=cif,
-              par=par,
-              w=w,
-              trend=trend,
-              types=types,
-              C.id=C.id,
-              C.beta=C.beta,
-              C.ipar=C.ipar,
-              check= if(is.null(C.ipar)) check else NULL,
-              multitype.interact=rules$multitype,
-              integrable=integrable,
-              stabilising=stabilising,
-              explainvalid=explainvalid,
-              reach=mreach
-              )
-  class(out) <- c("rmhmodel", class(out))
-  return(out)
-}
+  rmhmodel.default
+})
 
 print.rmhmodel <- function(x, ...) {
   verifyclass(x, "rmhmodel")
@@ -380,7 +386,8 @@ spatstatRmhInfo <- function(cifname) {
             },
             explainvalid=list(integrable="TRUE",stabilising="FALSE"),
             reach = function(par, ...) { return(0) },
-            hardcore = function(par, ...) { return(0) }
+            hardcore = function(par, ...) { return(0) },
+            temper = function(par, invtemp) { return(par^invtemp) }
             ),
 #       
 # 1. Strauss.
@@ -423,6 +430,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g <= epsilon) r else 0)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #       
@@ -475,6 +488,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g <= epsilon) r else h)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #       
@@ -516,6 +535,12 @@ spatstatRmhInfo <- function(cifname) {
               kappa <- par[["kappa"]]
               sigma <- par[["sigma"]]
               return(sigma/((-log(epsilon))^(kappa/2)))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                sigma <- sigma * (invtemp^(kappa/2))
+              })
             }
             ),
 #       
@@ -581,6 +606,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par$radii
               g <- par$gamma
               return(max(0, r[!is.na(r) & g <= epsilon]))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #       
@@ -668,6 +699,12 @@ spatstatRmhInfo <- function(cifname) {
               g <- par$gamma
               return(max(h[!is.na(h)],
                          r[!is.na(r) & g <= epsilon]))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #       
@@ -700,7 +737,8 @@ spatstatRmhInfo <- function(cifname) {
             hardcore=function(par, ..., epsilon=0) {
               if(epsilon == 0) return(0)
               return(par[["rho"]] * (2/pi) * asin(sqrt(epsilon)))
-            }
+            },
+            temper = NULL  # not a loglinear model
             ),
 #
 # 7. Diggle-Gratton interaction 
@@ -739,8 +777,12 @@ spatstatRmhInfo <- function(cifname) {
             },
             hardcore=function(par, ..., epsilon=0) {
               return(par[["delta"]])
-            }
-            ),
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                kappa <- kappa * invtemp
+              })
+            }),
 #       
 # 8. Geyer saturation model
 #       
@@ -778,6 +820,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               g <- par[["gamma"]]
               return(if(g <= epsilon) r else 0)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #       
@@ -886,6 +934,12 @@ spatstatRmhInfo <- function(cifname) {
               if(is.null(r)) 
                 r <- knots(h)
               return(max(0, r[h <= epsilon]))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                h <- h^invtemp
+              })
             }
             ),
 #       
@@ -927,6 +981,12 @@ spatstatRmhInfo <- function(cifname) {
               if(eta == 0) return(2 * r)
               # linear approximation
               return(2 * r * eta/epsilon)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta <- beta^invtemp
+                eta  <- eta^invtemp
+              })
             }
             ),
 #
@@ -978,6 +1038,12 @@ spatstatRmhInfo <- function(cifname) {
               r <- par[["r"]]
               gamma <- par[["gamma"]]
               return(max(0, r[gamma <= epsilon]))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             ),
 #
@@ -1010,6 +1076,11 @@ spatstatRmhInfo <- function(cifname) {
             hardcore = function(par, ...) {
               hc <- par[["hc"]]
               return(hc)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+              })
             }
             ),
 #
@@ -1055,6 +1126,12 @@ spatstatRmhInfo <- function(cifname) {
             },
             hardcore = function(par, ...) {
               return(par[["hc"]])
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+                a <- a * invtemp
+              })
             }
             ),
 #
@@ -1093,6 +1170,12 @@ spatstatRmhInfo <- function(cifname) {
             hardcore = function(par, ...) {
               sigma <- par[["sigma"]]
               return(sigma/2.5)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+                epsilon <- epsilon * invtemp
+              })
             }
             ),
 #       
@@ -1142,6 +1225,11 @@ spatstatRmhInfo <- function(cifname) {
             },
             hardcore=function(par, ..., epsilon=0) {
               return(max(0, par$hradii, na.rm=TRUE))
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+              })
             }
             ),
 #       
@@ -1183,6 +1271,12 @@ spatstatRmhInfo <- function(cifname) {
             },
             hardcore = function(par, ...) {
               return(0)
+            },
+            temper = function(par, invtemp) {
+              within(par, {
+                beta  <- beta^invtemp
+                gamma <- gamma^invtemp
+              })
             }
             )
        # end of list '.Spatstat.RmhTable'

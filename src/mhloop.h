@@ -14,6 +14,8 @@
    MH_SINGLE    whether there is a single interaction 
               (as opposed to a hybrid of several interactions)
 
+   MH_TEMPER    whether tempering is applied
+
    MH_TRACKING  whether to save transition history
 
    MH_DEBUG     whether to print debug information
@@ -60,6 +62,9 @@ if(thinstart && nfree > 0) {
     adenom = 1.0;
     for(k = 0; k < Ncif; k++)
       adenom *= (*(cif[k].eval))(deathprop, state, cdata[k]);
+#endif
+#if MH_TEMPER
+    adenom = pow(adenom, invtemp);
 #endif
 #if MH_DEBUG
     Rprintf("cif = %lf\n", adenom);
@@ -159,6 +164,9 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	for(k = 0; k < Ncif; k++)
 	  anumer *= (*(cif[k].eval))(birthprop, state, cdata[k]);
 #endif
+#if MH_TEMPER
+        anumer = pow(anumer, invtemp);
+#endif
 
 	adenom = qnodds*(nfree+1);
 
@@ -224,6 +232,10 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	for(k = 0; k < Ncif; k++)
 	  adenom *= (*(cif[k].eval))(deathprop, state, cdata[k]);
 #endif
+#if MH_TEMPER
+        adenom = pow(adenom, invtemp);
+#endif
+
 	anumer = qnodds * nfree;
 #if MH_DEBUG
 	Rprintf("cif = %lf, Hastings ratio = %lf\n", adenom, anumer/adenom);
@@ -300,6 +312,11 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	cvn *= model.beta[shiftprop.mrk];
 	cvd *= model.beta[deathprop.mrk];
       }
+#endif
+
+#if MH_TEMPER
+      cvn = pow(cvn, invtemp);
+      cvd = pow(cvd, invtemp);
 #endif
 
 #if MH_DEBUG
