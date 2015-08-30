@@ -3,7 +3,7 @@
 #
 #  Dao-Genton adjusted p-values
 #
-#  $Revision: 1.7 $  $Date: 2015/08/25 08:24:13 $
+#  $Revision: 1.8 $  $Date: 2015/08/30 07:46:14 $
 #
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
@@ -65,6 +65,7 @@ dg.envelope <- function(X, ..., nsim=19,
                         nsimsub=nsim-1,
                         nrank=1,
                         alternative=c("two.sided", "less", "greater"),
+                        interpolate = FALSE,
                         verbose=TRUE) {
   #  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -74,6 +75,7 @@ dg.envelope <- function(X, ..., nsim=19,
   if(verbose) cat("Applying test to original data... ")
   tX <- envelopeTest(X, ...,
                      alternative=alternative,
+                     interpolate = interpolate,
                      nsim=nsim, nrank=nrank,
                      exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
                      verbose=FALSE,
@@ -86,7 +88,7 @@ dg.envelope <- function(X, ..., nsim=19,
   ##     SimFuns <- attr(envX, "simfuns")
   # apply same test to each simulated pattern
   if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... "))
-  rankY <- numeric(nsim)
+  pvalY <- numeric(nsim)
   for(i in 1:nsim) {
     if(verbose) progressreport(i, nsim)
     Yi <- Ylist[[i]]
@@ -94,21 +96,32 @@ dg.envelope <- function(X, ..., nsim=19,
     if(Xismodel) Yi <- update(X, Yi)
     tYi <- envelopeTest(Yi, ...,
                         alternative=alternative,
+                        interpolate = interpolate, save.interpolant = FALSE,
                         nsim=nsimsub, nrank=nrank,
                         exponent=Inf, savepatterns=TRUE, verbose=FALSE,
                         envir.simul=env.here)
-    rankY[i] <- tYi$p.value * (nsimsub + 1)
+    pvalY[i] <- tYi$p.value 
   }
-  ## find critical rank 'l' 
-  dg.rank <- sort(rankY, na.last=TRUE)[nrank]
-  if(verbose) cat("dg.rank=", dg.rank, fill=TRUE)
-  ## extract deviation values from top-level simulation
-  simdev <- attr(tX, "statistics")[["sim"]]
-  ## find critical deviation
-  dg.crit <- sort(simdev, decreasing=TRUE, na.last=TRUE)[dg.rank]
-  if(verbose) cat("dg.crit=", dg.crit, fill=TRUE)
-  alpha <- nrank/nsim
-  alphatext <- paste0(100*alpha, "%%")
+  ## Find critical deviation
+  if(!interpolate) {
+    ## find critical rank 'l'
+    rankY <- pvalY * (nsimsub + 1)
+    dg.rank <- sort(rankY, na.last=TRUE)[nrank]
+    if(verbose) cat("dg.rank=", dg.rank, fill=TRUE)
+    ## extract deviation values from top-level simulation
+    simdev <- attr(tX, "statistics")[["sim"]]
+    ## find critical deviation
+    dg.crit <- sort(simdev, decreasing=TRUE, na.last=TRUE)[dg.rank]
+    if(verbose) cat("dg.crit=", dg.crit, fill=TRUE)
+  } else {
+    ## compute estimated cdf of t
+    fhat <- attr(tX, "density")[c("x", "y")]
+    fhat$z <- with(fhat, cumsum(y)/sum(y))  # 'within' upsets package checker
+    ## find critical (second stage) p-value
+    pcrit <- sort(pvalY, na.last=TRUE)[nrank]
+    ## compute corresponding upper quantile of estimated density of t
+    dg.crit <- with(fhat, { min(x[z >= 1 - pcrit]) })
+  }
   ## make fv object, for now
   refname <- if("theo" %in% names(envX)) "theo" else "mmean"
   fname <- attr(envX, "fname")
@@ -121,6 +134,8 @@ dg.envelope <- function(X, ..., nsim=19,
                         lo=refval - dg.crit)
   newlabl <- c(makefvlabel(NULL, NULL, fname, "hi"),
                makefvlabel(NULL, NULL, fname, "lo"))
+  alpha <- nrank/(nsim+1)
+  alphatext <- paste0(100*alpha, "%%")
   newdesc <- c(paste("upper", alphatext, "critical boundary for %s"),
                paste("lower", alphatext, "critical boundary for %s"))
   switch(alternative,

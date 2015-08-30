@@ -906,7 +906,8 @@ envelopeEngine(X, fun, simul,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent, normalize, deflate)
 envelopeTest(X, \dots, exponent, alternative,
-            rinterval, use.theo, tie.rule, interpolate,
+            rinterval, use.theo, tie.rule,
+            interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
             Xname, verbose, internal)
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,

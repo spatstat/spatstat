@@ -8,8 +8,10 @@
   corresponding to the Dao-Genton test of goodness-of-fit.
 }
 \usage{
-dg.envelope(X, ..., nsim = 19, nsimsub=nsim-1, nrank = 1,
+dg.envelope(X, \dots,
+            nsim = 19, nsimsub=nsim-1, nrank = 1,
             alternative=c("two.sided", "less", "greater"),
+            interpolate = FALSE,
             verbose = TRUE)
 }
 \arguments{
@@ -49,13 +51,18 @@ dg.envelope(X, ..., nsim = 19, nsimsub=nsim-1, nrank = 1,
     (\code{alternative="less"}) or a one-sided test
     with an upper critical boundary (\code{alternative="greater"}).
   }
+  \item{interpolate}{
+    Logical value indicating whether to interpolate the distribution of
+    the test statistic by kernel smoothing, as described in
+    Dao and Genton (2014, Section 5).
+  }
   \item{verbose}{
     Logical value determining whether to print progress reports.
   }
 }
 \details{
   Computes global simulation envelopes corresponding to the
-  Dao-Genton (2013) adjusted Monte Carlo goodness-of-fit test.
+  Dao-Genton (2014) adjusted Monte Carlo goodness-of-fit test.
   The envelopes are described in Baddeley et al (2015).
   
   If \code{X} is a point pattern, the null hypothesis is CSR.
@@ -66,7 +73,7 @@ dg.envelope(X, ..., nsim = 19, nsimsub=nsim-1, nrank = 1,
   An object of class \code{"fv"}.
 }
 \references{
-  Dao, N.A. and Genton, M. (2013)
+  Dao, N.A. and Genton, M. (2014)
   A Monte Carlo adjusted goodness-of-fit test for
   parametric models describing spatial point patterns.
   \emph{Journal of Graphical and Computational Statistics}
@@ -100,6 +107,7 @@ dg.envelope(X, ..., nsim = 19, nsimsub=nsim-1, nrank = 1,
   E
   plot(E)
   Eo <- dg.envelope(swedishpines, Lest, alternative="less", nsim=ns)
+  Ei <- dg.envelope(swedishpines, Lest, interpolate=TRUE, nsim=ns)
 }
 \keyword{spatial}
 \keyword{htest}

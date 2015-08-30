@@ -1237,6 +1237,7 @@
     \code{\link{Ord}()} \tab 		        Ord model, user-supplied potential \cr
     \code{\link{PairPiece}()} \tab		pairwise interaction, piecewise constant \cr
     \code{\link{Pairwise}()} \tab	pairwise interaction, user-supplied potential\cr
+    \code{\link{Penttinen}()} \tab	Penttinen pairwise interaction\cr
     \code{\link{SatPiece}()} \tab	Saturated pair model, piecewise  constant potential\cr
     \code{\link{Saturated}()} \tab	Saturated pair model, user-supplied potential\cr
     \code{\link{Softcore}()} \tab pairwise interaction, soft core potential\cr

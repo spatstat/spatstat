@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.035
+        CHANGES IN spatstat VERSION 1.42-2.036
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
    o Random-effects and mixed-effects models for replicated patterns.
 
-   o Dao-Genton test.
+   o Dao-Genton test, and corresponding simulation envelopes.
 
    o Simulated annealing and simulated tempering.
 
@@ -34,6 +34,8 @@ OVERVIEW
    o Mark correlation function may include weights.
 
    o Cross-correlation version of the mark correlation function.
+
+   o Penttinen pairwise interaction model.
 
    o New dataset: Australian states and territories.
 
@@ -128,6 +130,9 @@ NEW FUNCTIONS
    o emend, emend.ppm, emend.lppm
    New generic function with methods for ppm and lppm.
    emend.ppm is equivalent to project.ppm
+
+   o Penttinen
+   New pairwise interaction model.
    
 SIGNIFICANT USER-VISIBLE CHANGES
 

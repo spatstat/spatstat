@@ -4,11 +4,12 @@
   Dao-Genton Adjusted Goodness-Of-Fit Test
 }
 \description{
-  Performs the Dao and Genton (2013) adjusted
+  Performs the Dao and Genton (2014) adjusted
   goodness-of-fit test of spatial pattern.
 }
 \usage{
-dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
+dg.test(X, \dots,
+        exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
         interpolate = FALSE, 
         verbose = TRUE)
@@ -30,7 +31,7 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
   }
   \item{exponent}{
     Exponent used in the test statistic. Use \code{exponent=2}
-    for the Diggle-Cressie-Loosmore-Ford test, and \code{exponent=1}
+    for the Diggle-Cressie-Loosmore-Ford test, and \code{exponent=Inf}
     for the Maximum Absolute Deviation test.
   }
   \item{nsim}{
@@ -53,14 +54,14 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of
     the test statistic by kernel smoothing, as described in
-    Dao and Genton (2013, Section 5).
+    Dao and Genton (2014, Section 5).
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.
   }
 }
 \details{
-  Performs the Dao-Genton (2013) adjusted Monte Carlo goodness-of-fit
+  Performs the Dao-Genton (2014) adjusted Monte Carlo goodness-of-fit
   test, in the modified form described by Baddeley et al (2015).
   
   If \code{X} is a point pattern, the null hypothesis is CSR.
@@ -72,7 +73,7 @@ dg.test(X, ..., exponent = 2, nsim=19, nsimsub=nsim-1,
   which can be printed to show the outcome of the test.
 }
 \references{
-  Dao, N.A. and Genton, M. (2013)
+  Dao, N.A. and Genton, M. (2014)
   A Monte Carlo adjusted goodness-of-fit test for
   parametric models describing spatial point patterns.
   \emph{Journal of Graphical and Computational Statistics}

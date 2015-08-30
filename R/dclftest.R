@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.26 $  $Date: 2015/08/22 09:56:39 $
+#  $Revision: 1.27 $  $Date: 2015/08/30 07:25:46 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -46,9 +46,10 @@ envelopeTest <- local({
              use.theo=FALSE,
              tie.rule=c("randomise","mean"),
              interpolate=FALSE,
+             save.interpolant = TRUE,
              save.envelope = savefuns || savepatterns,
              savefuns = FALSE, 
-             savepatterns = FALSE, 
+             savepatterns = FALSE,
              Xname=NULL,
              verbose=TRUE,
              internal=NULL) {
@@ -247,6 +248,8 @@ envelopeTest <- local({
                                data.name = e$Yname),
                           class="htest")
       attr(result, "rinterval") <- rinterval
+      if(save.interpolant && interpolate)
+        attr(result, "density") <- fhat
       if(save.envelope) {
         attr(result, "envelope") <- X
         attr(result, "statistics") <- list(data=devdata, sim=devsim)
