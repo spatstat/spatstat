@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.037
+        CHANGES IN spatstat VERSION 1.42-2.038
 
 OVERVIEW
 
@@ -133,7 +133,13 @@ NEW FUNCTIONS
 
    o Penttinen
    New pairwise interaction model.
-   
+
+   o quantile.density
+   Calculates quantiles from kernel density estimates.
+
+   o CDF.density
+   Calculates cumulative distribution function from kernel density estimates.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o simulation
