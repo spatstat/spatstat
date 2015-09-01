@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.132 $     $Date: 2015/07/08 06:04:40 $
+#      $Revision: 1.133 $     $Date: 2015/09/01 01:56:46 $
 #
 #      The class "im" of raster images
 #
@@ -426,10 +426,11 @@ update.im <- function(object, ...) {
 
   X <- x
   W <- as.owin(X)
-  if(is.im(value)) {
+
+  stopifnot(is.im(value) || is.vector(value) ||
+            is.matrix(value) || is.array(value) || is.factor(value))
+  if(is.im(value)) 
     value <- value$v
-  }
-  stopifnot(is.vector(value) || is.matrix(value) || is.factor(value))
 
   if(itype == "missing" && jtype == "missing") {
     # no index provided

@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.036
+        CHANGES IN spatstat VERSION 1.42-2.037
 
 OVERVIEW
 
-   o We thank Leanne Bischof, Christophe Biscio, Andrew Hardegen, 
-   Frederic Lavancier, Tom Lawrence, Martin Maechler, Greg McSwiggan, 
-   Robin Milne, Gopalan Nair, Tuomas Rajala, Suman Rakshit and
-   Ida-Maria Sintorn for contributions.
+   o We thank Leanne Bischof, Christophe Biscio, Belarmain Fandohan,
+   Andrew Hardegen, Frederic Lavancier, Tom Lawrence, Martin Maechler, 
+   Greg McSwiggan, Robin Milne, Gopalan Nair, Tuomas Rajala, 
+   Suman Rakshit and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
@@ -234,6 +234,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o ppm.ppp, ppm.quad
    New argument 'emend', equivalent to 'project'.
 
+   o "[<-.im"
+   Accepts an array for 'value'.
+   
 BUG FIXES
 
    o lpp
@@ -255,6 +258,9 @@ BUG FIXES
    o persp.im
    Crashed if all pixel values were equal to zero (unless zlim was given).
    Fixed.
+
+   o predict.ppm
+   Crashed sometimes if the model was fitted with use.gam=TRUE.
 
    o as.linim.linfun
    Generated an error ('L must be a linear network')

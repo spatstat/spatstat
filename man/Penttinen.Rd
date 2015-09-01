@@ -17,8 +17,8 @@
   structure of a point process. 
 }
 \details{
-  Penttinen (1984) introduced the pairwise interaction point
-  process with interaction factor
+  Penttinen (1984, Example 2.1, page 18), citing Cormack (1979),
+  described the pairwise interaction point process with interaction factor
   \deqn{
     h(d) = e^{\theta A(d)} = \gamma^{A(d)}
   }{
@@ -58,9 +58,17 @@
   \code{\link{AreaInter}}.
 }
 \examples{
-   ppm(cells ~ 1, Penttinen(0.07))
+   fit <- ppm(cells ~ 1, Penttinen(0.07))
+   fit
+   reach(fit) # interaction range is circle DIAMETER
 }
 \references{
+  Cormack, R.M. (1979)
+  Spatial aspects of competition between individuals.
+  Pages 151--212 in \emph{Spatial and Temporal Analysis in Ecology},
+  eds. R.M. Cormack and J.K. Ord, International Co-operative
+  Publishing House, Fairland, MD, USA. 
+
   Penttinen, A. (1984) 
   \emph{Modelling Interaction in Spatial Point Patterns:
   Parameter Estimation by the Maximum Likelihood Method.}

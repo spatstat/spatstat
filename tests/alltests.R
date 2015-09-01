@@ -337,15 +337,16 @@ local({
 #
 #   Test ppm with use.gam=TRUE
 #
-#   $Revision: 1.2 $  $Date: 2013/03/01 08:46:34 $
+#   $Revision: 1.3 $  $Date: 2015/09/01 02:01:33 $
 #
 
 require(spatstat)
 local({
-  fit <- ppm(nztrees, ~s(x,y), use.gam=TRUE)
+  fit <- ppm(nztrees ~s(x,y), use.gam=TRUE)
   mm <- model.matrix(fit)
   mf <- model.frame(fit)
   v <- vcov(fit)
+  prd <- predict(fit)
 })
 
 #
@@ -2453,45 +2454,3 @@ local({
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
   stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
 })
-# ...............................................................
-#          multippm/tests/tests.R
-#
-#      Tests of 'mppm' and methods
-#
-#  $Revision: 1.4 $ $Date: 2014/12/28 01:32:31 $
-
-require(spatstat)
-
-# test interaction formulae and subfits
-data(simba)
-fit1 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~ifelse(group=="control", po, str))
-fit2 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~id * str)
-fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))), iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
-fit1
-fit2
-fit3
-subfits(fit1)
-subfits(fit2)
-subfits(fit3)
-
-# test handling of offsets and zero cif values in mppm
-
- data(waterstriders)
- H <- hyperframe(Y = waterstriders)
- mppm(Y ~ 1,  data=H, Hardcore(1.5))
- mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
-
-# prediction, in training/testing context
-#    (example from Markus Herrmann and Ege Rubak)
-
-X <- waterstriders
-dist <- as.listof(lapply(waterstriders,
-                         function(z) distfun(runifpoint(1, Window(z)))))
-i <- 3
-train <- hyperframe(pattern = X[-i], dist = dist[-i])
-test <- hyperframe(pattern = X[i], dist = dist[i])
-fit <- mppm(pattern ~ dist, data = train)
-pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
-
