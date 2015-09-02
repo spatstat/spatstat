@@ -31,4 +31,4 @@ env:
     - _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
     - RVERSION=release
-    - RVERSION=devel COVERAGE=true R_CHECK_ARGS="--no-tests"
+    - RVERSION=devel COVERAGE=true R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
