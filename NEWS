@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.038
+        CHANGES IN spatstat VERSION 1.42-2.039
 
 OVERVIEW
 
@@ -294,6 +294,14 @@ BUG FIXES
 
    o pool.envelope
    Did not always respect the value of 'use.theory'.
+   Fixed.
+
+   o envelope, pool.envelope
+   If 'ginterval' was given, the results were in a slightly incorrect format.
+   Fixed.
+
+   o pool.envelope
+   Did not check for compatible values of 'ginterval'.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.42-2

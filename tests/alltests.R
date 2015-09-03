@@ -2180,7 +2180,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.3 $  $Date: 2013/10/21 01:51:07 $
+#  $Revision: 1.4 $  $Date: 2015/09/03 10:44:34 $
 #
 
 require(spatstat)
@@ -2231,6 +2231,16 @@ fit <- ppm(japanesepines ~ 1, Strauss(0.04))
 e4 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
 fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
 e5 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+
+# check pooling of envelopes in global case
+E1 <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE)
+E2 <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE)
+p12 <- pool(E1, E2)
+E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
+                ginterval=c(0.05, 0.15))
+E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
+                ginterval=c(0.05, 0.15))
+p12r <- pool(E1r, E2r)
 })
 ## tests/rhohat.R
 ## Test all combinations of options for rhohatCalc

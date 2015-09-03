@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.42-2.038
+Version: 1.42-2.039
 Nickname: It's So Random
-Date: 2015-09-01
+Date: 2015-09-03
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

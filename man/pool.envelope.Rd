@@ -75,7 +75,6 @@
   \code{\link{pool.fasp}}
 }
 \examples{
-   data(cells)
    E1 <- envelope(cells, Kest, nsim=10, savefuns=TRUE)
    E2 <- envelope(cells, Kest, nsim=20, savefuns=TRUE)
    pool(E1, E2)
