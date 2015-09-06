@@ -7,7 +7,8 @@
   Includes CSR (complete spatial randomness).
 }
 \usage{
- rpoispp(lambda, lmax=NULL, win=owin(), \dots, nsim=1, drop=TRUE, ex=NULL)
+ rpoispp(lambda, lmax=NULL, win=owin(), \dots,
+         nsim=1, drop=TRUE, ex=NULL, warnwin=TRUE)
 }
 \arguments{
   \item{lambda}{
@@ -39,6 +40,11 @@
     If \code{ex} is given and \code{lambda,lmax,win} are missing,
     then \code{lambda} and \code{win} will be calculated from
     the point pattern \code{ex}.
+  }
+  \item{warnwin}{
+    Logical value specifying whether to issue a warning
+    when \code{win} is ignored (which occurs when \code{lambda}
+    is an image and \code{win} is present).
   }
 }
 \value{

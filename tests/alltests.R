@@ -123,12 +123,14 @@ local({
     stop("For sorted data, nncross()$which does not agree with apply(crossdist(), 1, which.min)")
 
   # sanity check for nncross with k > 1
-  ndw <- nncross(X, Y, k=1:4)$which
-  if(any(is.na(ndw)))
-    stop("NA's returned by nncross.ppp(k > 1)$which")
   ndw <- nncross(X, Y, k=1:4, what="which")
   if(any(is.na(ndw)))
     stop("NA's returned by nncross.ppp(k > 1, what='which')")
+  nnc4 <- nncross(X, Y, k=1:4)
+  iswhich <- (substr(colnames(nnc4), 1, nchar("which")) == "which")
+  ndw <- nnc4[,iswhich]
+  if(any(is.na(ndw)))
+    stop("NA's returned by nncross.ppp(k > 1)$which")
   
   # test of correctness for nncross with k > 1
   flipcells <- flipxy(cells)
@@ -734,6 +736,7 @@ if(!identical(wsim, as.owin(cells)))
 })
 
 
+#  tests/rmhMulti.R
 #
 #  tests of rmh, running multitype point processes
 #
@@ -899,8 +902,8 @@ checkp(ks.test(X1$y, "punif")$p.value,
        the.context,
        "Kolmogorov-Smirnov test of uniformity of y coordinates of type 1 points")
 if(any(X1$x < 0.5)) {
-  warning(paste(the.context, ",", 
-                "x-coordinates of type 1 points are IMPOSSIBLE"), call.=FALSE)
+  stop(paste(the.context, ",", 
+             "x-coordinates of type 1 points are IMPOSSIBLE"), call.=FALSE)
 } else {
   checkp(ks.test(Fx1(X1$x), "punif")$p.value,
        the.context,

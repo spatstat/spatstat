@@ -244,7 +244,7 @@ H <- hyperframe(V=1:n,
                 M=factor(letters[1 + (1:n) \%\% 3]))
 H$Z <- setcov(square(1))
 H$U <- with(H, as.im(U, as.rectangle(Z)))
-H$Y <- with(H, rpoispp(eval.im(exp(2+3*Z)), win=as.rectangle(Z)))
+H$Y <- with(H, rpoispp(eval.im(exp(2+3*Z))))
 
 fit <- mppm(Y ~Z + U + V, data=H)
 }

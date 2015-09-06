@@ -59,6 +59,7 @@ SEXP xmethas(
   int Ncif; 
   int *plength;
   long Nmore;
+  int permitted;
   double invtemp;
   double *xx, *yy, *xpropose, *ypropose;
   int    *mm,      *mpropose, *pp, *aa;

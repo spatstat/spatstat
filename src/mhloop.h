@@ -22,7 +22,7 @@
    
    MH_SNOOP     whether to run visual debugger
 
-   $Revision: 1.21 $  $Date: 2014/12/27 14:56:30 $ 
+   $Revision: 1.22 $  $Date: 2015/09/06 05:21:55 $ 
 
 */
 
@@ -279,12 +279,15 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
       deathprop.mrk = state.marks[ix];
 #endif
       /* where to shift */
+      permitted = YES;
+      shiftprop.ix = ix;
       shiftprop.u = xpropose[irep]; 
       shiftprop.v = ypropose[irep];
 #if MH_MARKED
-      shiftprop.mrk = (algo.fixall) ? deathprop.mrk : mpropose[irep];
+      shiftprop.mrk = mpropose[irep]; 
+      if(algo.fixall) permitted = (shiftprop.mrk == deathprop.mrk);
 #endif
-      shiftprop.ix = ix;
+
 #if MH_DEBUG
 #if MH_MARKED
       Rprintf("propose shift of point %d = (%lf, %lf)[mark %d] to (%lf, %lf)[mark %d]\n", 
@@ -295,41 +298,59 @@ OUTERCHUNKLOOP(irep, algo.nrep, maxchunk, 1024) {
 	      ix, deathprop.u, deathprop.v, shiftprop.u, shiftprop.v);
 #endif
 #endif
-      /* evaluate cif in two stages */
-#if MH_SINGLE
-      cvd = (*(thecif.eval))(deathprop, state, thecdata);
-      cvn = (*(thecif.eval))(shiftprop, state, thecdata);
-#else
-      cvd = cvn = 1.0;
-      for(k = 0; k < Ncif; k++) {
-	cvd *= (*(cif[k].eval))(deathprop, state, cdata[k]);
-	cvn *= (*(cif[k].eval))(shiftprop, state, cdata[k]);
-      }
-#endif
 
+      /* evaluate cif in two stages */
+      cvn = cvd = 1.0;
+      if(permitted) {
+#if MH_SINGLE
+	cvn = (*(thecif.eval))(shiftprop, state, thecdata);
+	if(cvn > 0.0) {
+	  cvd = (*(thecif.eval))(deathprop, state, thecdata);
+	} else {
+	  permitted = NO;
+	}
+#else
+	for(k = 0; k < Ncif; k++) {
+	  cvn *= (*(cif[k].eval))(shiftprop, state, cdata[k]);
+	  if(cvn > 0.0) {
+	    cvd *= (*(cif[k].eval))(deathprop, state, cdata[k]);
+	  } else {
+	    permitted = NO;
+	    break; 
+	  }
+	}
+#endif
+      } 
+
+      if(permitted) {
 #if MH_MARKED
-      if(!algo.fixall) {
 	cvn *= model.beta[shiftprop.mrk];
 	cvd *= model.beta[deathprop.mrk];
-      }
 #endif
-
 #if MH_TEMPER
-      cvn = pow(cvn, invtemp);
-      cvd = pow(cvd, invtemp);
+	cvn = pow(cvn, invtemp);
+	cvd = pow(cvd, invtemp);
 #endif
 
 #if MH_DEBUG
-      Rprintf("cif[old] = %lf, cif[new] = %lf, Hastings ratio = %lf\n", 
-	      cvd, cvn, cvn/cvd);
+	Rprintf("cif[old] = %lf, cif[new] = %lf, Hastings ratio = %lf\n", 
+		cvd, cvn, cvn/cvd);
 #endif
-      /* accept/reject */
-      if(unif_rand() * cvd < cvn) {
+	/* accept/reject */
+	if(unif_rand() * cvd < cvn) {
 #if MH_DEBUG
-	Rprintf("accepted shift\n");
+	  Rprintf("accepted shift\n");
 #endif
-	itype = SHIFT;          /* Shift proposal accepted . */
+	  itype = SHIFT;          /* Shift proposal accepted . */
+	}
+      } else {
+	cvn = 0.0;
+	cvd = 1.0;
+#if MH_DEBUG
+	Rprintf("Forbidden shift");
+#endif
       }
+
 #if MH_SNOOP
 	/* visual debug */
 	mhsnoop(&snooper, irep, &algo, &state, &shiftprop, 

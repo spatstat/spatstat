@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.039
+        CHANGES IN spatstat VERSION 1.42-2.040
 
 OVERVIEW
 
@@ -30,6 +30,8 @@ OVERVIEW
    o Extensions to kernel smoothing on a linear network.
 
    o Support for one-dimensional smoothing kernels.
+
+   o Bug fix in Metropolis-Hastings simulation.
 
    o Mark correlation function may include weights.
 
@@ -276,6 +278,11 @@ BUG FIXES
    Generated an error when executed in the 'covr' package.
    Fixed.
 
+   o rmh, simulate.ppm
+   Results were incorrect for inhomogeneous multitype models
+   simulated with fixall=TRUE.
+   Fixed.
+   
    o $<-.hyperframe, [<-.hyperframe
    Result was garbled if 'value' was a hyperframe with one column.
 

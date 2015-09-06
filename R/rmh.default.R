@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.99 2014/12/27 15:30:57 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.100 2015/09/06 03:12:17 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -616,9 +616,9 @@ rmhEngine <- function(InfoList, ...,
              none= {
                # Poisson process 
                if(!mtype)
-                 rpoispp(intensity, win=w.sim, ...)
+                 rpoispp(intensity, win=w.sim, ..., warnwin=FALSE)
                else
-                 rmpoispp(intensity, win=w.sim, types=types)
+                 rmpoispp(intensity, win=w.sim, types=types, warnwin=FALSE)
              },
              n.total = {
                # Binomial/multinomial process with fixed total number of points

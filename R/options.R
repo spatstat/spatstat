@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.66 $   $Date: 2015/08/23 08:18:10 $
+#    $Revision: 1.67 $   $Date: 2015/09/06 03:23:27 $
 #
 #
 
@@ -87,6 +87,7 @@ warn.once <- function(key, ...) {
        ),
        checkpolygons = list(
          ## superseded
+         superseded=TRUE,
          default=FALSE,
          check=function(x) {
            warning("spatstat.options('checkpolygons') will be ignored in future versions of spatstat", call.=FALSE)
@@ -184,6 +185,7 @@ warn.once <- function(key, ...) {
          ),
        gpclib=list(
          ## defunct!
+         superseded=TRUE, 
          default=FALSE,
          check=function(x) {
            message("gpclib is no longer needed")
@@ -468,8 +470,7 @@ warn.once <- function(key, ...) {
 # end of options list
 
 reset.spatstat.options <- function() {
-  Spatstat.Options <- lapply(.Spat.Stat.Opt.Table,
-                               function(z) { z$default })
+  Spatstat.Options <- lapply(.Spat.Stat.Opt.Table, getElement, name="default")
   putSpatstatVariable("Spatstat.Options", Spatstat.Options)
   invisible(Spatstat.Options)  
 }
@@ -482,9 +483,13 @@ function (...)
     Spatstat.Options <- getSpatstatVariable("Spatstat.Options")
     called <- list(...)    
 
-    if(length(called) == 0)
-    	return(Spatstat.Options)
-
+    if(length(called) == 0) {
+      # return all options, except superseded ones
+      allofem <- .Spat.Stat.Opt.Table[names(Spatstat.Options)]
+      retain <- sapply(lapply(allofem, getElement, name="superseded"), is.null)
+      return(Spatstat.Options[retain])
+    }
+    
     if(is.null(names(called)) && length(called)==1) {
       # spatstat.options(x) 
       x <- called[[1]]

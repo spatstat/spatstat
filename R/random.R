@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.83 $   $Date: 2015/07/26 10:03:13 $
+##    $Revision: 4.84 $   $Date: 2015/09/06 03:11:34 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -357,7 +357,7 @@ rpoint <- function(n, f, fmax=NULL,
 }
 
 rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
-                    nsim=1, drop=TRUE, ex=NULL) {
+                    nsim=1, drop=TRUE, ex=NULL, warnwin=TRUE) {
   ## arguments:
   ##     lambda  intensity: constant, function(x,y,...) or image
   ##     lmax     maximum possible value of lambda(x,y,...)
@@ -382,7 +382,7 @@ rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
         stop("lmax should be a single number")
     }
     if(is.im(lambda)) {
-      if(!missing(win))
+      if(warnwin && !missing(win))
         warning("Argument win ignored", call.=FALSE)
       win <- rescue.rectangle(as.owin(lambda))
     } else {

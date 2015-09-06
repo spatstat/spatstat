@@ -6,7 +6,8 @@
   (homogeneous or inhomogeneous) multitype Poisson process.
 }
 \usage{
- rmpoispp(lambda, lmax=NULL, win, types, \dots, nsim=1, drop=TRUE)
+ rmpoispp(lambda, lmax=NULL, win, types, \dots,
+          nsim=1, drop=TRUE, warnwin=!missing(win))
 }
 \arguments{
   \item{lambda}{
@@ -36,6 +37,10 @@
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
     result will be a point pattern, rather than a list 
     containing a point pattern.
+  }
+  \item{warnwin}{
+    Logical value specifying whether to issue a warning
+    when \code{win} is ignored.
   }
 }
 \value{

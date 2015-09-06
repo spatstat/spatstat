@@ -4,7 +4,7 @@
 #
 #   Random generators for MULTITYPE point processes
 #
-#   $Revision: 1.34 $   $Date: 2015/02/18 01:24:04 $
+#   $Revision: 1.35 $   $Date: 2015/09/06 03:11:26 $
 #
 #   rmpoispp()   random marked Poisson pp
 #   rmpoint()    n independent random marked points
@@ -33,7 +33,7 @@ rmpoispp <- local({
   ## Main function
   rmpoispp <- 
     function(lambda, lmax=NULL, win = owin(c(0,1),c(0,1)),
-             types, ..., nsim=1, drop=TRUE) {
+             types, ..., nsim=1, drop=TRUE, warnwin=!missing(win)) {
       ## arguments:
       ##     lambda  intensity:
       ##                constant, function(x,y,m,...), image,
@@ -50,11 +50,13 @@ rmpoispp <- local({
       ##
 
       if(missing(types)) types <- NULL
-
+      force(warnwin)
+      
       if(nsim > 1) {
         result <- vector(mode="list", length=nsim)
         for(i in 1:nsim)
-          result[[i]] <- rmpoispp(lambda, lmax, win, types, ...)
+          result[[i]] <- rmpoispp(lambda, lmax, win, types, ...,
+                                  warnwin=warnwin)
         names(result) <- paste("Simulation", 1:nsim)
         return(as.solist(result))
       }
@@ -121,10 +123,10 @@ rmpoispp <- local({
         if(single.arg && is.function(lambda)) {
           ## call f(x,y,m, ...)
           Y <- rpoispp(slice.fun, lmax=maxes[i], win=win,
-                       fun=lambda, mvalue=types[i], ...)
+                       fun=lambda, mvalue=types[i], ..., warnwin=warnwin)
         } else {
           ## call f(x,y, ...) or use other formats
-          Y <- rpoispp(lam[[i]], lmax=maxes[i], win=win, ...)
+          Y <- rpoispp(lam[[i]], lmax=maxes[i], win=win, ..., warnwin=warnwin)
         }
         Y <- Y %mark% factortype[i]
         X <- if(i == 1) Y else superimpose(X, Y, W=X$window, check=FALSE)
