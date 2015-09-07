@@ -79,6 +79,9 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
       stop("When dim is a numeric it must be a positive integer")
   }
 
+  ## Catch extra unknown args (will be appended to output object below).
+  dots <- list(...)
+
   ## Create output object.
   out <- function(...){
     caller <- as.character(match.call()[[1]])
@@ -133,9 +136,9 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
                 startpar = startpar,
                 isotropic = isotropic,
                 caller = caller,
-                basis = basis,
-                ...
+                basis = basis
                 )
+    obj <- append(obj, dots)
     class(obj) <- "dppmodel"
     return(obj)
   }

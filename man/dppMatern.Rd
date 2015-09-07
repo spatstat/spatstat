@@ -12,6 +12,7 @@
   } 
 }
 \details{
+  The Whittle-\ifelse{latex}{\out{Mat\' ern}}{Matern} DPP is defined in (Lavancier, \ifelse{latex}{\out{M\o ller}}{Moller} and Rubak, 2015)
   The possible parameters are:
   \itemize{
     \item the intensity \code{lambda} as a positive numeric
@@ -31,6 +32,12 @@
   \email{r.turner@auckland.ac.nz}
   and Ege Rubak
   \email{rubak@math.aau.dk}
+}
+\references{
+  Lavancier, F. \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Rubak, E. (2015)
+  Determinantal point process models and statistical inference
+  \emph{Journal of the Royal Statistical Society, Series B}
+  \bold{77}, 853--977.
 }
 \examples{
 m <- dppMatern(lambda=100, alpha=.02, nu=1, d=2)

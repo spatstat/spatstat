@@ -127,6 +127,13 @@ dppapproxkernel <- function(model, trunc = .99, W = NULL){
         W <- model$window
         model <- model$fitted
     }
+    ####### BACKDOOR TO SPHERICAL CASE ########
+    if(!is.null(spherefun <- model$approxkernelfun)){
+        spherefun <- get(spherefun)
+        rslt <- spherefun(model, trunc)
+        return(rslt)
+    }
+    ###########################################
     d <- dim(model)
     if(is.null(W))
       W <- boxx(replicate(d, c(-.5,.5), simplify=FALSE))

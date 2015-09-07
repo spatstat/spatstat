@@ -66,7 +66,7 @@
 
   If border correction is used then the simulation is done
   in an extended window. Edge effects are theoretically completely
-  removed by doubling the size of the window in both directions,
+  removed by doubling the size of the window in each spatial dimension,
   but for practical purposes much less extension may be
   sufficient. The numeric \code{rbord} determines the extend of the
   extra space added to the window.
@@ -80,9 +80,10 @@
   See Details.
 }
 \references{
-  Lavancier, F., Moller, J. and Rubak, E. (2012)
-  Statistical aspects of determinantal point processes.
-  \emph{Submitted}
+  Lavancier, F. \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Rubak, E. (2015)
+  Determinantal point process models and statistical inference
+  \emph{Journal of the Royal Statistical Society, Series B}
+  \bold{77}, 853--977.
 }
 \author{
   Adrian Baddeley
