@@ -80,6 +80,8 @@ Following is an overview of the most important changes.
    This means that these libraries are not accessible to the user
    unless the user explicitly loads them by typing \code{library(mgcv)}
    and so on.
+   
+ \item \spst\ now `Depends' on the library \pkg{nlme}.
 
  \item polygon clipping is now performed
    by the Free Open Source library \pkg{polyclip}.
@@ -116,6 +118,8 @@ Following is an overview of the most important changes.
      new interactions (\texttt{Triplets}, \texttt{Concom});
    \item 
      hybrids of interactions;
+   \item 
+     Penttinen pairwise interaction;
    \item 
      self-starting feature of interactions;
    \item 
@@ -212,12 +216,15 @@ Following is an overview of the most important changes.
 \item Support for replicated point patterns:
       An object of class \texttt{mppm} 
       represents a point process model fitted to
-      several point patterns. The patterns may be treated as independent replicate observations
-     of the same model, or as the responses from different units in a 
-     designed experiment.
-     Methods for this class include \texttt{plot}, \texttt{print}, 
-     \texttt{summary}, \texttt{fitted}, \texttt{predict}, \texttt{simulate}, ...
-
+      several point patterns. 
+      The patterns may be treated as independent replicate observations
+      of the same model, or as the responses from different units in a 
+      designed experiment.
+      Methods for this class include \texttt{plot}, \texttt{print}, 
+      \texttt{summary}, \texttt{fitted}, \texttt{predict}, \texttt{simulate}, 
+      $\ldots$
+\item
+  Determinantal point process models.
 \item 
     Nonparametric/summary statistics e.g.
     \begin{itemize}
@@ -237,6 +244,7 @@ Following is an overview of the most important changes.
   \item Cram\'er-von Mises and Anderson-Darling tests
     of goodness-of-fit for Poisson process models
   \item Cressie-Read statistic for quadrat counting tests
+  \item Dao-Genton test, and corresponding simulation envelopes.
   \end{itemize}
 \item
     Statistical tools e.g.
@@ -279,10 +287,13 @@ Following is an overview of the most important changes.
       \texttt{spatstat.options(monochrome=TRUE)}
     \item 
       perceptually uniform colour maps
+    \item 
+      transparent colours
     \end{itemize}
 \item
     simulation:
     \begin{itemize}
+    \item Basic simulation algorithms accelerated.
     \item 
       \texttt{rmh} interface restructured
     \item
@@ -293,6 +304,8 @@ Following is an overview of the most important changes.
       exact simulation for many models
     \item 
       quasirandom point patterns and sequences
+    \item 
+      simulated annealing and simulated tempering.
     \end{itemize}
 
 \item mathematical operations are now supported for images.
@@ -410,6 +423,9 @@ Important new classes of objects are listed here.
 The following datasets have been added to the package.
 
 \begin{itemize}
+\item \texttt{austates}: The states and large mainland territories of Australia
+   represented as polygonal regions forming a tessellation.
+   
 \item \texttt{dendrite}:
   Dendritic spines on a branch of the dendritic tree of a neuron.
   A point pattern on a linear network.
@@ -481,6 +497,97 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{dppBessel}, \texttt{dppCauchy}, 
+  \texttt{dppGauss}, \texttt{dppMatern}, \texttt{dppPowerExp}: 
+   Determinantal Point Process models.
+ \item    
+   \texttt{update.dppmodel}: Set parameter values in a \texttt{dpp} model.
+ \item \texttt{is.stationary.dppmodel}, 
+   \texttt{print.dppmodel}, \texttt{reach.dppmodel}, \texttt{valid.dppmodel}: 
+   Basic information about a \texttt{dpp} model.
+ \item
+   \texttt{rdpp}, \texttt{simulate.dppmodel}:
+   Simulation of a \texttt{dpp} model.
+ \item 
+   \texttt{intensity.dppmodel}, \texttt{Kmodel.dppmodel}, 
+   \texttt{pcfmodel.dppmodel}: Moments of a \texttt{dpp} model.
+
+ \item \texttt{dim.dppmodel}, \texttt{dppapproxkernel}, 
+   \texttt{dppapproxpcf}, \texttt{dppeigen}, \texttt{dppfamily},
+   \texttt{dppkernel}, \texttt{dppparbounds}, \texttt{dppspecdenrange}, 
+   \texttt{dppspecden}:
+   Helper functions for \texttt{dpp} models.
+
+ \item \texttt{dg.test}:
+   Dao-Genton adjusted Monte Carlo goodness-of-fit test.
+ 
+ \item \texttt{dg.envelope}:
+   Simulation envelopes corresponding to Dao-Genton test.
+
+ \item \texttt{dclf.sigtrace}, \texttt{mad.sigtrace}, \texttt{mctest.sigtrace}:
+   Significance trace of Monte Carlo test.
+
+ \item \texttt{markcrosscorr}:
+   Mark cross-correlation function for point patterns with
+   several columns of marks.
+
+ \item \texttt{fixef.mppm}, \texttt{ranef.mppm}:
+   Extract fixed effects and random effects from a point process model
+   fitted to replicated point patterns.
+
+ \item \texttt{rtemper}:
+   Simulated annealing or simulated tempering.
+
+ \item \texttt{to.opaque}, \texttt{to.transparent}:
+   Change transparency value in colours.
+
+ \item \texttt{rgb2hsva}:
+   Convert RGB to HSV data, like \texttt{rgb2hsv}, but preserving transparency.
+
+ \item \texttt{superimpose.ppplist}, \texttt{superimpose.splitppp}:
+   New methods for 'superimpose' for lists of point patterns.
+
+ \item \texttt{dkernel}, \texttt{pkernel}, \texttt{qkernel}, \texttt{rkernel}:
+   Probability density, cumulative probability, quantiles
+   and random generation from distributions used in basic one-dimensional
+   kernel smoothing.
+
+ \item \texttt{kernel.factor}:
+   Auxiliary calculations for one-dimensional kernel smoothing.
+
+ \item \texttt{PPversion}, \texttt{QQversion}:
+   Transformation of a summary function to its P--P or Q--Q counterpart.
+
+ \item \texttt{spatdim}:
+   Spatial dimension of any object in the \spst\ package.
+
+ \item \texttt{as.boxx}:
+   Convert data to a multi-dimensional box.
+
+ \item \texttt{intensity.ppx}:
+   Method for \texttt{intensity} for multi-dimensional
+   space-time point patterns.
+
+ \item \texttt{fourierbasis}:
+   Evaluate Fourier basis functions in any number of dimensions.
+
+ \item \texttt{valid}:
+   New generic function, with methods 
+   \texttt{valid.ppm}, \texttt{valid.lppm}, \texttt{valid.dppmodel}.
+   
+ \item \texttt{emend}, \texttt{emend.ppm}, \texttt{emend.lppm}:
+   New generic function with methods for \texttt{ppm} and \texttt{lppm}.
+   \texttt{emend.ppm} is equivalent to \texttt{project.ppm}.
+
+ \item \texttt{Penttinen}:
+   New pairwise interaction model.
+
+  \item \texttt{quantile.density}:
+   Calculates quantiles from kernel density estimates.
+
+  \item \texttt{CDF.density}:
+   Calculates cumulative distribution function from kernel density estimates.
+
 \item \texttt{triangulate.owin}: decompose a spatial window into triangles.
 \item \texttt{fitted.lppm}: fitted intensity values for a point process
   on a linear network.
@@ -1534,7 +1641,42 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-   \item Improvements to simulation of Neyman-Scott processes.
+   \item \spst\ now depends on the package \pkg{nlme}.
+
+   \item \spst\ now depends on \texttt{R 3.2.2} or later.
+
+   \item Simulation algorithms have been accelerated; simulation outcomes 
+   are \emph{not} identical to those obtained from previous versions of \spst. 
+
+   \item Determinantal point process models.
+
+   \item Random-effects and mixed-effects models for replicated patterns.
+
+   \item Dao-Genton test, and corresponding simulation envelopes.
+
+   \item Simulated annealing and simulated tempering.
+
+   \item spatstat colour tools now handle transparent colours.
+
+   \item Improvements to \verb![! and \texttt{subset} methods
+
+   \item Extensions to kernel smoothing on a linear network.
+
+   \item Support for one-dimensional smoothing kernels.
+
+   \item Bug fix in Metropolis-Hastings simulation.
+
+   \item Mark correlation function may include weights.
+
+   \item Cross-correlation version of the mark correlation function.
+
+   \item Penttinen pairwise interaction model.
+
+   \item New dataset: Australian states and territories.
+
+   \item More support for multi-dimensional point patterns.
+
+ \item Improvements to simulation of Neyman-Scott processes.
 
    \item Improvements to fitting of Neyman-Scott models.
 
@@ -2017,6 +2159,10 @@ listed alphabetically.
    It is now possible to give multiple values to \code{what}
    so that both types of result can be computed together.
 
+ \item \texttt{collapse.fv}:
+   Is now a method for the \pkg{nlme} generic \texttt{collapse}.
+   Syntax adjusted slightly.
+   
  \item \texttt{colourmap}:
 	The argument \texttt{col} can now be any kind of colour data
   \item \texttt{compareFit}:
@@ -2052,9 +2198,23 @@ listed alphabetically.
     Can now generate dummy points as a quasirandom sequence.
 
   \item \texttt{default.rmhcontrol}, \texttt{default.expand}:
-   These functions now work with models of class \texttt{rmhmodel} 
-   as well as \texttt{ppm}.
-
+    \begin{itemize}
+    \item 
+      These functions now work with models of class \texttt{rmhmodel} 
+      as well as \texttt{ppm}.
+    \item New argument \texttt{w}.
+    \end{itemize}
+   
+   \item \texttt{density.lpp}:
+     \begin{itemize}
+     \item 
+     Now supports both the 'equal-split continuous' and 
+     'equal-split discontinuous' smoothers. New argument \texttt{continuous}
+     determines the choice of smoother.
+   \item 
+     New argument \texttt{kernel} specifies the smoothing kernel.
+     Any of the standard one-dimensional smoothing kernels can be used.
+     \end{itemize}
   \item \texttt{density.ppp}:
     \begin{itemize}
     \item    New argument \texttt{se} allows calculation of standard errors.
@@ -2074,8 +2234,14 @@ listed alphabetically.
     \end{itemize}
 
    \item \texttt{diagnose.ppm}:
-   Now computes and prints the null standard deviation of the
-   smoothed Pearson residual field, when appropriate.
+     \begin{itemize}
+     \item 
+       Now computes and prints the null standard deviation of the
+       smoothed Pearson residual field, when appropriate.
+     \item 
+       New arguments \texttt{col.neg}, \texttt{col.smooth} control the
+       colour maps.
+     \end{itemize}
 
    \item \texttt{disc}:
      Argument \texttt{centre} can be in various formats.
@@ -2399,8 +2565,13 @@ listed alphabetically.
     Two-standard-deviation limits are now plotted using grey shading.
 
   \item \texttt{markcorr}:
-  Result is now of class \texttt{"anylist"}.
-    
+    \begin{itemize}
+    \item   Result is now of class \texttt{"anylist"}.
+    \item New argument \texttt{weights}
+      allows computation of the weighted version
+      of the mark correlation function.
+    \end{itemize}
+
   \item \texttt{markstat}:
    The arguments \texttt{N} and \texttt{R} may now be specified together.
 
@@ -2416,7 +2587,13 @@ listed alphabetically.
   \item \texttt{model.depends}:
    Now also recognises 'offset' terms.
 
-   \item \texttt{MultiStrauss}, \texttt{MultiHard}, \texttt{MultiStraussHard}:
+  \item \texttt{mppm}:
+    \begin{itemize}
+    \item Now handles models with a random effect component.
+      New argument \texttt{random} is a formula specifying the random effect.
+       \end{itemize}
+   
+     \item \texttt{MultiStrauss}, \texttt{MultiHard}, \texttt{MultiStraussHard}:
      \begin{itemize}
      \item 
       The argument \texttt{types} can now be omitted or NULL;
@@ -2654,6 +2831,9 @@ listed alphabetically.
       Automatically plots a legend
     \item 
       Return value is now a graphics map object
+    \item   
+      The default colour for the points is now a transparent grey,
+      if this is supported by the plot device.
     \item 
       Now behaves differently if there are multiple columns of marks.
       Each column of marks is plotted, in a series of separate plots
@@ -2756,6 +2936,8 @@ listed alphabetically.
      now show standard errors for parameter estimates
      if the model is Poisson.
    \item Covariates can now be tessellations.
+    \item
+      New argument \texttt{emend} equivalent to \texttt{project}.
  \end{itemize}
 
 
@@ -2826,7 +3008,14 @@ listed alphabetically.
    Can now maximise over trend parameters as well as interaction parameters
 
   \item \texttt{progressreport}:
-   Improved output (also affects many functions which print progress reports)
+    \begin{itemize}
+    \item 
+      Improved output (also affects many functions which print progress reports)
+    \item 
+      New argument \texttt{state}
+    \item 
+      New option: \texttt{style="tk"}
+    \end{itemize}
 
   \item \texttt{project.ppm}:
      Improved algorithm.
@@ -2930,7 +3119,18 @@ listed alphabetically.
         modified version of the fitted model.)
     	The value returned by \texttt{residuals.ppm} is now an object 
 	of class \texttt{msr}. It can be plotted directly.
-
+        
+       \item \texttt{rgb2hex}:
+         New argument \texttt{maxColorValue}.
+         
+      \item \texttt{rgb2hex}, \texttt{col2hex}, \texttt{paletteindex},
+        \texttt{is.colour}, \texttt{samecolour}, \texttt{complementarycolour},
+        \texttt{is.grey}, \texttt{to.grey}:
+        Now handle transparent colours.
+        
+      \item \texttt{rgbim}, \texttt{hsvim}:
+        new argument \texttt{A} controls the alpha (transparency) channel.
+        
    \item \texttt{rhohat}:
       Now has arguments \texttt{eps}, \texttt{dimyx} 
       to control pixel resolution.
@@ -3005,8 +3205,15 @@ listed alphabetically.
   \item \texttt{rNeymanScott}:
    Argument \texttt{rcluster} may now take a different format.
 
-   \item \texttt{rLGCP}:  
+   \item \texttt{rLGCP}:
+     \begin{itemize}
+     \item 
+       No longer requires \pkg{RandomFields} to be loaded explicitly.
+     \item 
      New argument \texttt{nsim} allows multiple patterns to be generated.
+   \end{itemize}
+
+
 
    \item \texttt{rotate}: 
      The user can specify the centre of rotation.
@@ -3021,13 +3228,20 @@ listed alphabetically.
      realisation of the Poisson line process.
 
    \item \texttt{rpoispp}:
+     \begin{itemize}
+     \item 
     New argument \texttt{ex} makes it possible to generate a random pattern
     similar to an example point pattern.
+  \item Accelerated when \texttt{lambda} is an image.
+     \end{itemize}
 
   \item \texttt{rSSI}:
    Performs 'Random Sequential Packing' if \texttt{n=Inf}.
    Can now generate inhomogeneous patterns.
 
+   \item \texttt{rthin}:
+     Accelerated when \texttt{P} is a single number.
+     
    \item \texttt{rThomas}, \texttt{rMatClust}, 
      \texttt{rCauchy}, \texttt{rVarGamma}:
    When the model is approximately Poisson, it is simulated using 
@@ -3068,10 +3282,15 @@ listed alphabetically.
    Argument \texttt{vec} can be in various formats.
    
  \item \texttt{simulate.ppm}:
-  New argument \texttt{singlerun} determines whether the simulated patterns
-  are generated using independent runs of the Metropolis-Hastings algorithm
-  or are obtained by performing one long run of the algorithm and saving
-  every k-th iteration.
+   \begin{itemize}
+   \item 
+     New argument \texttt{singlerun} determines whether the simulated patterns
+     are generated using independent runs of the Metropolis-Hastings algorithm
+     or are obtained by performing one long run of the algorithm and saving
+     every k-th iteration.
+   \item 
+     New argument \texttt{w} controls the window of the simulated patterns.
+   \end{itemize}
 
   \item \texttt{simulate.ppm}, \texttt{simulate.kppm}:
    The total computation time is also returned.
@@ -3111,6 +3330,7 @@ listed alphabetically.
    
   \item \texttt{spatstat.options}:
     \begin{itemize}
+    \item New options \texttt{fastthin} and \texttt{fastpois}.
     \item New option \texttt{nvoxel}.
     \item New option \texttt{print.ppm.SE} controls whether standard errors 
    and confidence intervals are printed for all Gibbs models,
@@ -3133,9 +3353,14 @@ listed alphabetically.
    Preserves the original ordering of the data, if possible.
    
  \item \texttt{split.ppp}: 
+   \begin{itemize}
+   \item The splitting variable \texttt{f} can now be a logical vector.
+   \item 
    New argument \texttt{reduce}.
+   \item
    Result now inherits class \texttt{"ppplist"} and \texttt{"solist"}, 
    as well as \texttt{"splitppp"}.
+   \end{itemize}
    
  \item \texttt{split.ppx}:   Result is now of class 'anylist'.
    
@@ -3175,7 +3400,13 @@ listed alphabetically.
     other data.
     
    \item \texttt{to.grey}:
-        Now uses better weights for the R, G, B channels.
+     \begin{itemize}
+     \item 
+        Now uses better weights for the \texttt{R, G, B} channels. 
+     \item 
+        New argument \texttt{transparent}.
+     \end{itemize}
+     
   \item \texttt{union.owin}:
    It is now guaranteed that if \texttt{A} is a subset of \texttt{B}, 
    then \texttt{union.owin(A,B)=B}.
@@ -3212,12 +3443,15 @@ listed alphabetically.
     When a row of data is extracted with \texttt{drop=TRUE}, the result
    belongs to class \texttt{"anylist"}.
 
-  \item \verb![.im! and \verb![<-.im!
-   New argument 'j' allows any type of matrix indexing to be used.
-
   \item \verb![.im!
    Default behaviour changed in the case of a rectangular subset.
    New argument 'rescue' can be set to TRUE to reinstate previous behaviour.
+
+  \item \verb![.im! and \verb![<-.im!
+   New argument 'j' allows any type of matrix indexing to be used.
+
+  \item \verb![<-.im!
+    Accepts an array for \texttt{value}.
 
   \item \verb![.lpp!
    Subset index may now be a window (class 'owin')
@@ -3225,7 +3459,18 @@ listed alphabetically.
   \item \verb![.msr!
    Now handles character-valued indices. 
 
-  \item \verb![.psp!
+  \item \verb![.ppp!
+    New argument \texttt{clip} determines whether the window is clipped.
+    The previously-unused argument \texttt{drop} now determines whether 
+   to remove unused levels of a factor.
+   
+  \item \verb![.pp3!, \verb![.lpp!, \verb![.ppx!, 
+    \texttt{subset.ppp}, \texttt{subset.pp3}, \texttt{subset.lpp}, 
+    \texttt{subset.ppx}:
+   These methods now have an argument \texttt{drop} which determines
+   whether to remove unused levels of a factor.
+
+ \item \verb![.psp!
    Now handles binary mask windows.
 
   \item \verb![.tess!
@@ -3301,6 +3546,15 @@ of potential impact.
    It occurred because of a poor choice for the default starting state.
    {\small (Bug was present since about 2010.  
      Fixed in \texttt{spatstat 1.40-0}, december 2014)}
+   \item 
+     Simulation was incorrect in the case of an inhomogeneous multitype model
+     with \texttt{fixall=TRUE} (i.e.\ with a fixed number of points 
+     of each type) if the model was segregated (i.e.\ if different types
+     of points had different first order trend). 
+     The effect of the error was that all types of points
+     had the same first order trend.
+     {\small (Bug was present since about 2010.
+       Fixed in \texttt{spatstat 1.43-0}, september 2015)}
   \item 
      Simulation of the Geyer saturation process was 
      incorrectly initialised, so that the results of a short run 
@@ -3469,6 +3723,10 @@ of potential impact.
     If a fitted model with \texttt{MultiStraussHard} interaction was invalid,
     \texttt{project.ppm} sometimes yielded a model that was still invalid.
     {\small (Bug fixed in \texttt{spatstat 1.42-0}, may 2015)}
+    
+\item \texttt{pool.envelope}:  
+  Did not always respect the value of \texttt{use.theory}.
+    \bugger{1.23-5}{september 2011}{1.43-0}{september 2015}
 \end{itemize}
 
 

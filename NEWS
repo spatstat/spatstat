@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.041
+        CHANGES IN spatstat VERSION 1.42-2.042
 
 OVERVIEW
 
@@ -280,7 +280,9 @@ BUG FIXES
 
    o rmh, simulate.ppm
    Results were incorrect for inhomogeneous multitype models
-   simulated with fixall=TRUE.
+   simulated with fixall=TRUE (i.e. prescribing a fixed number of
+   points of each type) if the model was segregated 
+   (i.e. if different types of points had different first order trend).
    Fixed.
    
    o $<-.hyperframe, [<-.hyperframe
