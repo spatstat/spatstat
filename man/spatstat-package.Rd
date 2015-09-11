@@ -1788,6 +1788,7 @@
   Sergiy Protsiv,
   Adrian Raftery,
   Suman Rakshit,
+  Ben Ramage,
   Pablo Ramon,
   Xavier Raynaud,
   Matt Reiter,

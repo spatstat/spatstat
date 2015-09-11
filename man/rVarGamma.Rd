@@ -149,8 +149,10 @@
  # homogeneous
  X <- rVarGamma(30, 2, 0.02, 5)
  # inhomogeneous
- Z <- as.im(function(x,y){ exp(2 - 3 * x) }, W= owin())
+ ff <- function(x,y){ exp(2 - 3 * abs(x)) }
+ Z <- as.im(ff, W= owin())
  Y <- rVarGamma(30, 2, 0.02, Z)
+ YY <- rVarGamma(ff, 2, 0.02, 3)
 }
 \references{
   Jalilian, A., Guan, Y. and Waagepetersen, R. (2013)

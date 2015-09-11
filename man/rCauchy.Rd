@@ -134,8 +134,10 @@
  # homogeneous
  X <- rCauchy(30, 0.01, 5)
  # inhomogeneous
- Z <- as.im(function(x,y){ exp(2 - 3 * x) }, W= owin())
+ ff <- function(x,y){ exp(2 - 3 * abs(x)) }
+ Z <- as.im(ff, W= owin())
  Y <- rCauchy(50, 0.01, Z)
+ YY <- rCauchy(ff, 0.01, 5)
 }
 \references{
   Ghorbani, M. (2013) Cauchy cluster process.

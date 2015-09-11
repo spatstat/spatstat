@@ -3,7 +3,7 @@
 ##
 ##   simulating from Neyman-Scott processes
 ##
-##   $Revision: 1.21 $  $Date: 2015/06/08 09:34:14 $
+##   $Revision: 1.22 $  $Date: 2015/09/11 09:57:11 $
 ##
 ##    Original code for rCauchy and rVarGamma by Abdollah Jalilian
 ##    Other code and modifications by Adrian Baddeley
@@ -46,7 +46,7 @@ rNeymanScott <-
     mumax <- mu
   } else if (is.im(mu) || is.function(mu)) {
       ## inhomogeneous
-    if(is.function(mu)) mu <- as.im(mu, W=win)
+    if(is.function(mu)) mu <- as.im(mu, W=win, ..., strict=TRUE)
     mumax <- max(mu)
   } else stop("rcluster[[1]] should be a number, a function or a pixel image")  
   if(!is.function(rdisplace))
@@ -62,11 +62,16 @@ rNeymanScott <-
                "is not large enough to contain the dilation of the window",
                sQuote("win")))
   if(nonempty) {
+    if(is.function(kappa)) {
+      kappa <- as.im(kappa, W=dilated, ..., strict=TRUE)
+      lmax <- NULL
+    }
     ## intensity of parents with at least one offspring point
     kappa <- kappa * (1 - exp(-mumax))
   }
   ## generate
-  parentlist <- rpoispp(kappa, lmax=lmax, win=dilated, nsim=nsim, drop=FALSE)
+  parentlist <- rpoispp(kappa, lmax=lmax, win=dilated, nsim=nsim,
+                        drop=FALSE, warnwin=FALSE)
 
   resultlist <- vector(mode="list", length=nsim)
   for(i in 1:nsim) {
@@ -153,8 +158,17 @@ rMatClust <- local({
     stopifnot(scale > 0)
 
     ## trap case of large clusters, close to Poisson
-    if(1/(pi * kappa * scale^2) < poisthresh) {
-      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+    kok <- is.numeric(kappa) || is.im(kappa)
+    if(kok) {
+      kappamax <- max(kappa)
+    } else {
+      kim <- as.im(kappa, W=win, ..., strict=TRUE)
+      kra <- range(kim)
+      kappamax <- kra[2] + 0.05 * diff(kra)
+    }
+    if(1/(pi * kappamax * scale^2) < poisthresh) {
+      kapmu <- mu * (if(kok) kappa else kim)
+      result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
       return(result)
     }
 
@@ -194,8 +208,17 @@ rThomas <- local({
       stopifnot(scale > 0)
 
       ## trap case of large clusters, close to Poisson
-      if(1/(4*pi * kappa * scale^2) < poisthresh) {
-        result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+      kok <- is.numeric(kappa) || is.im(kappa)
+      if(kok) {
+        kappamax <- max(kappa)
+      } else {
+        kim <- as.im(kappa, W=win, ..., strict=TRUE)
+        kra <- range(kim)
+        kappamax <- kra[2] + 0.05 * diff(kra)
+      }
+      if(1/(4*pi * kappamax * scale^2) < poisthresh) {
+        kapmu <- mu * (if(kok) kappa else kim)
+        result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
         return(result)
       }
       
@@ -253,8 +276,17 @@ rCauchy <- local({
         thresh <- dots$eps %orifnull% 0.001
 
     ## trap case of large clusters, close to Poisson
-    if(1/(pi * kappa * scale^2) < poisthresh) {
-      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+    kok <- is.numeric(kappa) || is.im(kappa)
+    if(kok) {
+      kappamax <- max(kappa)
+    } else {
+      kim <- as.im(kappa, W=win, ..., strict=TRUE)
+      kra <- range(kim)
+      kappamax <- kra[2] + 0.05 * diff(kra)
+    }
+    if(1/(pi * kappamax * scale^2) < poisthresh) {
+      kapmu <- mu * (if(kok) kappa else kim)
+      result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
       return(result)
     }
     
@@ -324,8 +356,17 @@ rVarGamma <- local({
         thresh <- dots$eps %orifnull% 0.001
 
     ## trap case of large clusters, close to Poisson
-    if(1/(4 * pi * kappa * scale^2) < poisthresh) {
-      result <- rpoispp(kappa * mu, win=win, nsim=nsim, drop=drop)
+    kok <- is.numeric(kappa) || is.im(kappa)
+    if(kok) {
+      kappamax <- max(kappa)
+    } else {
+      kim <- as.im(kappa, W=win, ..., strict=TRUE)
+      kra <- range(kim)
+      kappamax <- kra[2] + 0.05 * diff(kra)
+    }
+    if(1/(4 * pi * kappamax * scale^2) < poisthresh) {
+      kapmu <- mu * (if(kok) kappa else kim)
+      result <- rpoispp(kapmu, win=win, nsim=nsim, drop=drop, warnwin=FALSE)
       return(result)
     }
     

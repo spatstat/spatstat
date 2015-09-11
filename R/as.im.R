@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.42 $   $Date: 2015/04/27 08:51:04 $
+#    $Revision: 1.44 $   $Date: 2015/09/11 11:50:58 $
 #
 #    as.im()
 #
@@ -101,7 +101,7 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
-                           na.replace=NULL) {
+                           na.replace=NULL, strict=FALSE) {
   f <- X
   if(is.null(W))
     stop("A window W is required")
@@ -113,13 +113,16 @@ as.im.function <- function(X, W=NULL, ...,
   xx <- as.vector(rasterx.mask(W))
   yy <- as.vector(rastery.mask(W))
 
+  argh <- list(...)
+  if(strict) argh <- argh[names(argh) %in% names(formals(f))]
+
   # evaluate function value at each pixel 
   if(!funnywindow) 
-    values <- f(xx, yy, ...)
+    values <- do.call(f, append(list(xx, yy), argh))
   else {
     # evaluate only inside window
     inside <- as.vector(m)
-    val <- f(xx[inside], yy[inside], ...)
+    val <- do.call(f, append(list(xx[inside], yy[inside]), argh))
     # create space for full matrix
     msize <- length(m)
     values <-

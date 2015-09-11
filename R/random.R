@@ -439,6 +439,9 @@ rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
       lpix <- df$value
       result <- vector(mode="list", length=nsim)
       nn <- rpois(nsim, mu)
+      if(!all(is.finite(nn)))
+        stop(paste("Unable to generate Poisson process with a mean of",
+                   mu, "points"))
       for(isim in seq_len(nsim)) {
         ni <- nn[isim]
         ii <- sample.int(npix, size=ni, replace=TRUE, prob=lpix)

@@ -1,12 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.042
+        CHANGES IN spatstat VERSION 1.42-2.043
 
 OVERVIEW
 
    o We thank Leanne Bischof, Christophe Biscio, Belarmain Fandohan,
    Andrew Hardegen, Frederic Lavancier, Tom Lawrence, Martin Maechler, 
    Greg McSwiggan, Robin Milne, Gopalan Nair, Tuomas Rajala, 
-   Suman Rakshit and Ida-Maria Sintorn for contributions.
+   Suman Rakshit, Ben Ramage and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
@@ -244,6 +244,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o "[<-.im"
    Accepts an array for 'value'.
+
+   o as.im.function
+   New argument 'strict'.
    
 BUG FIXES
 
@@ -257,6 +260,11 @@ BUG FIXES
 
    o effectfun
    Crashed if 'covname' was missing.
+   Fixed.
+
+   o rVarGamma, rMatClust, rCauchy, rNeymanScott
+   Crashed if 'kappa' was a function or image instead of a single number.
+   [Spotted by Ben Ramage.]
    Fixed.
 
    o opening.owin, closing.owin

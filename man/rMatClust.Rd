@@ -155,8 +155,10 @@
  # homogeneous
  X <- rMatClust(10, 0.05, 4)
  # inhomogeneous
- Z <- as.im(function(x,y){ 4 * exp(2 * x - 1) }, owin())
+ ff <- function(x,y){ 4 * exp(2 * abs(x) - 1) }
+ Z <- as.im(ff, owin())
  Y <- rMatClust(10, 0.05, Z)
+ YY <- rMatClust(ff, 0.05, 3)
 }
 \references{
   \ifelse{latex}{\out{Mat\'ern}}{Matern}, B. (1960)

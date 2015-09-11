@@ -34,7 +34,7 @@
 
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
-        na.replace=NULL)
+        na.replace=NULL, strict=FALSE)
 
   \method{as.im}{funxy}(X, W=Window(X), \dots)
 
@@ -72,6 +72,14 @@
   \item{value}{Optional.
     The value to be assigned to pixels inside the window,
     if \code{X} is a window.
+  }
+  \item{strict}{
+    Logical value indicating whether to match formal arguments
+    of \code{X} when \code{X} is a function. If \code{strict=FALSE}
+    (the default), all the \code{\dots} arguments are passed to
+    \code{X}. If \code{strict=TRUE}, only named arguments
+    are passed, and only if they match the names of formal arguments of
+    \code{X}. 
   }
 }
 \details{
