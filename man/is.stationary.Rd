@@ -5,6 +5,7 @@
 \alias{is.stationary.lppm}
 \alias{is.stationary.slrm}
 \alias{is.stationary.rmhmodel}
+\alias{is.stationary.dppm}
 \alias{is.stationary.dppmodel}
 \alias{is.poisson}
 \alias{is.poisson.ppm}
@@ -28,6 +29,7 @@ is.stationary(x)
 \method{is.stationary}{lppm}(x)
 \method{is.stationary}{slrm}(x)
 \method{is.stationary}{rmhmodel}(x)
+\method{is.stationary}{dppm}(x)
 \method{is.stationary}{dppmodel}(x)
 
 is.poisson(x)
@@ -41,7 +43,7 @@ is.poisson(x)
 \arguments{
   \item{x}{
     A fitted spatial point process model
-    (object of class \code{"ppm"}, \code{"kppm"}, \code{"lppm"}
+    (object of class \code{"ppm"}, \code{"kppm"}, \code{"lppm"}, \code{"dppm"}
     or \code{"slrm"}) or similar object.
   }
 }
@@ -62,7 +64,7 @@ is.poisson(x)
   \code{"rmhmodel"} (model specifications for the
   Metropolis-Hastings algorithm).
   Additionally \code{is.stationary} has a method for
-  class \code{"dppmodel"} (determinantal point processes) and 
+  class \code{"dppmodel"} and \code{"dppm"} (both determinantal point processes) and
   \code{is.poisson} has a method for 
   class \code{"interact"} (interaction structures for Gibbs models). 
 
@@ -95,6 +97,7 @@ is.poisson(x)
 
   Model-fitting functions 
   \code{\link{ppm}},
+  \code{\link{dppm}},
   \code{\link{kppm}},
   \code{\link{lppm}},
   \code{\link{slrm}}.
@@ -103,11 +106,11 @@ is.poisson(x)
   data(cells)
   data(redwood)
 
-  fit <- ppm(cells, ~x)
+  fit <- ppm(cells ~ x)
   is.stationary(fit)
   is.poisson(fit)
 
-  fut <- kppm(redwood, ~1, "MatClust")
+  fut <- kppm(redwood ~ 1, "MatClust")
   is.stationary(fut)
   is.poisson(fut)
 

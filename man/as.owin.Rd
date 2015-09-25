@@ -4,6 +4,7 @@
 \alias{as.owin.ppp}
 \alias{as.owin.ppm}
 \alias{as.owin.kppm}
+\alias{as.owin.dppm}
 \alias{as.owin.lpp}
 \alias{as.owin.lppm}
 \alias{as.owin.msr}
@@ -38,6 +39,8 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{ppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
 
  \method{as.owin}{kppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
+
+ \method{as.owin}{dppm}(W, \dots, from=c("points", "covariates"), fatal=TRUE)
 
  \method{as.owin}{lpp}(W, \dots, fatal=TRUE)
 
@@ -142,7 +145,7 @@ in any of several formats, into an object of class \code{"owin"}.
     lies outside the window, is transformed into the logical value
     \code{FALSE}, which is the corresponding convention for window masks.
     \item
-    an object of class \code{"ppm"} or \code{"kppm"}  
+    an object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}
     representing a fitted point process
     model. In this case, if \code{from="data"} (the default),
     \code{as.owin} extracts the  original point
@@ -219,8 +222,10 @@ in any of several formats, into an object of class \code{"owin"}.
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

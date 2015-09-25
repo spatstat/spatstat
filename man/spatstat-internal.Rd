@@ -140,6 +140,8 @@
 \alias{do.istat}
 \alias{doMultiStraussHard}
 \alias{dotexpr.to.call}
+\alias{dppmFixAlgorithm}
+\alias{dppmFixIntensity}
 \alias{dropifsingle}
 \alias{dround}
 \alias{emptywindow}
@@ -651,6 +653,7 @@
 \alias{sort.im}
 \alias{spatstat.rawdata.location}
 \alias{spatstatClusterModelInfo}
+\alias{spatstatDPPModelInfo}
 \alias{spatstatLocator}
 \alias{spatstatRmhInfo}
 \alias{spatialCDFframe}
@@ -889,6 +892,8 @@ do.call.without(fun, \dots, avoid)
 do.istat(panel)
 doMultiStraussHard(iradii, hradii, types)
 dotexpr.to.call(expr, dot, evaluator)
+dppmFixIntensity(DPP, lambda, po)
+dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
 dropifsingle(x)
 dround(x)
 emptywindow(w)
@@ -1069,11 +1074,11 @@ Kpcf.kppm(model, what)
 killinteraction(model)
 km.rs.opt(o, cc, d, breaks, KM, RS)
 kppmComLik(X, Xname, po, clusters, control, weightfun, rmax,
-           algorithm, \dots)
+           algorithm, DPP, \dots)
 kppmMinCon(X, Xname, po, clusters, control, statistic, statargs,
-           algorithm, \dots)
+           algorithm, DPP, \dots)
 kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, 
-           algorithm, \dots)
+           algorithm, DPP, \dots)
 kraever(package, fatal)
 \method{labels}{ppm}(object, \dots)
 least.common.multiple(n,m)
@@ -1496,6 +1501,7 @@ smoothpointsEngine(x, values, sigma, \dots,
 \method{sort}{im}(x, \dots)
 spatstat.rawdata.location(\dots)
 spatstatClusterModelInfo(name, onlyPCP)
+spatstatDPPModelInfo(model)
 spatstatLocator(n, ...)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)

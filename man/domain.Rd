@@ -8,6 +8,7 @@
 \alias{domain.lpp}
 \alias{domain.ppm}
 \alias{domain.kppm}
+\alias{domain.dppm}
 \alias{domain.lpp}
 \alias{domain.lppm}
 \alias{domain.msr}
@@ -48,6 +49,8 @@
  \method{domain}{ppm}(X, \dots, from=c("points", "covariates"))
 
  \method{domain}{kppm}(X, \dots, from=c("points", "covariates"))
+
+ \method{domain}{dppm}(X, \dots, from=c("points", "covariates"))
 
  \method{domain}{lpp}(X, \dots)
 
@@ -107,7 +110,7 @@
 
   The argument \code{from} applies when \code{X} is a fitted 
   point process model
-  (object of class \code{"ppm"} or \code{"kppm"}).
+  (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
   If \code{from="data"} (the default),
   \code{domain} extracts the window of the original point
   pattern data to which the model was fitted.

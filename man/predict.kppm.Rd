@@ -49,7 +49,7 @@
 }
 \examples{
   data(redwood)
-  fit <- kppm(redwood, ~x, "Thomas")
+  fit <- kppm(redwood ~ x, "Thomas")
   predict(fit)
 }
 \author{Adrian Baddeley

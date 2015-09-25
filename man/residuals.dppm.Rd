@@ -1,18 +1,18 @@
-\name{residuals.kppm}
-\alias{residuals.kppm}
+\name{residuals.dppm}
+\alias{residuals.dppm}
 \title{
-  Residuals for Fitted Cox or Cluster Point Process Model
+  Residuals for Fitted Determinantal Point Process Model
 }
 \description{
-  Given a Cox or cluster point process model fitted to a point pattern,
+  Given a determinantal point process model fitted to a point pattern,
   compute residuals.
 }
 \usage{
-  \method{residuals}{kppm}(object, \dots)
+  \method{residuals}{dppm}(object, \dots)
 }
 \arguments{
   \item{object}{
-    The fitted point process model (an object of class \code{"kppm"})
+    The fitted determinatal point process model (an object of class \code{"dppm"})
     for which residuals should be calculated.
   }
   \item{\dots}{
@@ -20,7 +20,7 @@
   }
 }
 \value{
-  An object of class \code{"msr"} 
+  An object of class \code{"msr"}
   representing a signed measure or vector-valued measure
   (see \code{\link{msr}}). This object can be plotted.
 }
@@ -28,15 +28,15 @@
   This function extracts the intensity component of the model using
   \code{\link{as.ppm}} and then applies \code{\link{residuals.ppm}}
   to compute the residuals.
-  
+
   Use \code{\link{plot.msr}} to plot the residuals directly.
 }
 \seealso{
  \code{\link{msr}},
- \code{\link{kppm}}
+ \code{\link{dppm}}
 }
 \examples{
-   fit <- kppm(redwood ~ x, "Thomas")
+   fit <- dppm(swedishpines ~ x, dppGauss())
    rr <- residuals(fit)
 }
 \author{

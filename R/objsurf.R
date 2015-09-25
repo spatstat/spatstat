@@ -10,7 +10,7 @@ objsurf <- function(x, ...) {
   UseMethod("objsurf")
 }
 
-objsurf.kppm <- function(x, ..., ngrid=32, ratio=1.5, verbose=TRUE) {
+objsurf.kppm <- objsurf.dppm <- function(x, ..., ngrid=32, ratio=1.5, verbose=TRUE) {
   Fit <- x$Fit
   switch(Fit$method,
          mincon = {

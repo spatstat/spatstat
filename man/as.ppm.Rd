@@ -3,6 +3,7 @@
 \alias{as.ppm.ppm}
 \alias{as.ppm.profilepl}
 \alias{as.ppm.kppm}
+\alias{as.ppm.dppm}
 \title{Extract Fitted Point Process Model}
 \description{
   Extracts the fitted point process model from
@@ -16,11 +17,13 @@ as.ppm(object)
 \method{as.ppm}{profilepl}(object)
 
 \method{as.ppm}{kppm}(object)
+
+\method{as.ppm}{dppm}(object)
 }
 \arguments{
   \item{object}{An object that includes a
     fitted Poisson or Gibbs point process model.
-    An object of class \code{"ppm"}, \code{"profilepl"} or \code{"kppm"}
+    An object of class \code{"ppm"}, \code{"profilepl"}, \code{"kppm"} or \code{"dppm"}
     or possibly other classes.
   }
 }
@@ -30,7 +33,7 @@ as.ppm(object)
   from a suitable object.
   
   The function \code{as.ppm} is generic, with methods for the classes
-  \code{"ppm"}, \code{"profilepl"} and \code{"kppm"},
+  \code{"ppm"}, \code{"profilepl"}, \code{"kppm"} and \code{"dppm"},
   and possibly for other classes.
 
   For the class \code{"profilepl"} of models fitted by maximum profile
@@ -38,11 +41,13 @@ as.ppm(object)
   fitted point process model (with the optimal values of the
   irregular parameters).
 
-  For the class \code{"kppm"} of models fitted by minimum contrast
+  For the class \code{"kppm"} of models fitted by minimum contrast (or Palm or composite likelihood)
   using Waagepetersen's two-step estimation procedure
   (see \code{\link{kppm}}), the method \code{as.ppm.kppm}
   extracts the Poisson point process model that is fitted in the
   first stage of the procedure.
+
+  The behaviour for the class \code{"dppm"} is analogous to the \code{"kppm"} case above.
 }
 \value{
   An object of class \code{"ppm"}.
@@ -50,8 +55,10 @@ as.ppm(object)
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{ppm}},

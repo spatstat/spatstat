@@ -1,5 +1,6 @@
 \name{intensity.dppmodel}
 \alias{intensity.dppmodel}
+\alias{intensity.dppm}
 \title{Intensity of Determinantal Point Process Model}
 \description{Extracts the intensity of a determinantal point process model.}
 \usage{
@@ -8,7 +9,7 @@
 \arguments{
   \item{X}{
     A determinantal point process model (object of class
-    \code{dppmodel}).
+    \code{"dppmodel"} or \code{"dppm"}).
   }
   \item{\dots}{Ignored.}
 }

@@ -1,5 +1,6 @@
 \name{objsurf}
 \alias{objsurf}
+\alias{objsurf.dppm}
 \alias{objsurf.kppm}
 \alias{objsurf.minconfit}
 \title{
@@ -13,6 +14,8 @@
 \usage{
 objsurf(x, \dots)
 
+\method{objsurf}{dppm}(x, ..., ngrid = 32, ratio = 1.5, verbose = TRUE)
+
 \method{objsurf}{kppm}(x, ..., ngrid = 32, ratio = 1.5, verbose = TRUE)
 
 \method{objsurf}{minconfit}(x, ..., ngrid = 32, ratio = 1.5, verbose = TRUE)
@@ -21,7 +24,7 @@ objsurf(x, \dots)
   \item{x}{
     Some kind of model that was fitted
     by finding the optimal value of an objective function. 
-    An object of class \code{"kppm"} or \code{"minconfit"}.
+    An object of class \code{"dppm"}, \code{"kppm"} or \code{"minconfit"}.
   }
   \item{\dots}{
     Extra arguments are usually ignored.
@@ -50,6 +53,10 @@ objsurf(x, \dots)
   Currently the following types of objects are accepted:
   \itemize{
     \item
+    an object of class \code{"dppm"} representing a
+    determinantal point process.
+    See \code{\link{dppm}}.
+    \item
     an object of class \code{"kppm"} representing a
     cluster point process or Cox point process. 
     See \code{\link{kppm}}.
@@ -77,7 +84,7 @@ objsurf(x, \dots)
   \code{\link{mincontrast}}
 }
 \examples{
-   fit <- kppm(redwood, ~1, "Thomas")
+   fit <- kppm(redwood ~ 1, "Thomas")
    os <- objsurf(fit)
 
    if(interactive()) {

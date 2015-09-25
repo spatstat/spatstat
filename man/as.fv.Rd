@@ -5,6 +5,7 @@
 \alias{as.fv.data.frame}
 \alias{as.fv.matrix}
 \alias{as.fv.minconfit}
+\alias{as.fv.dppm}
 \alias{as.fv.kppm}
 \alias{as.fv.bw.optim}
 \title{Convert Data To Class fv}
@@ -23,6 +24,8 @@
   \method{as.fv}{fasp}(x)
 
   \method{as.fv}{minconfit}(x)
+
+  \method{as.fv}{dppm}(x)
 
   \method{as.fv}{kppm}(x)
 
@@ -59,6 +62,10 @@
     Cox or cluster point process model, obtained from the
     model-fitting command \code{\link{kppm}};
     \item
+    an object of class \code{"dppm"}, representing a fitted
+    determinantal point process model, obtained from the
+    model-fitting command \code{\link{dppm}};
+    \item
     an object of class \code{"bw.optim"}, representing an optimal
     choice of smoothing bandwidth by a cross-validation method, obtained
     from commands like \code{\link{bw.diggle}}.
@@ -80,7 +87,7 @@
     these are combined into a single \code{"fv"} object.
     \item
     If \code{x} is an object of class \code{"minconfit"},
-    or an object of class \code{"kppm"} that was fitted by minimum contrast,
+    or an object of class \code{"kppm"} or \code{"dppm"} that was fitted by minimum contrast,
     the result is a function table containing the
     observed summary function and the best fit summary function.
     \item
@@ -97,8 +104,10 @@
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

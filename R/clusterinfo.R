@@ -679,21 +679,21 @@
   )
 
 spatstatClusterModelInfo <- function(name, onlyPCP = FALSE) {
+  if(inherits(name, "dppmodel"))
+    return(spatstatDPPModelInfo(name))
   if(!is.character(name) || length(name) != 1)
     stop("Argument must be a single character string", call.=FALSE)
-  nama2 <- names(.Spatstat.ClusterModelInfoTable)
+  TheTable <- .Spatstat.ClusterModelInfoTable
+  nama2 <- names(TheTable)
   if(onlyPCP){
-      ok <- sapply(nama2,
-                    function(x) .Spatstat.ClusterModelInfoTable[[x]]$isPCP)
-  } else{
-      ok <- rep(TRUE, length(nama2))
-  }
-  nama2 <- nama2[ok]
+    ok <- sapply(TheTable, getElement, name="isPCP")
+    nama2 <- nama2[ok]
+  } 
   if(!(name %in% nama2))
     stop(paste(sQuote(name), "is not recognised;",
                "valid names are", commasep(sQuote(nama2))),
          call.=FALSE)
-  out <- .Spatstat.ClusterModelInfoTable[[name]]
+  out <- TheTable[[name]]
   return(out)
 }
 

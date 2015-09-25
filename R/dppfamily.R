@@ -7,6 +7,14 @@
 ## - dppMatern
 ## - dppPowerExp
 
+dppfamily <- local({
+
+names_formals <- function(f, dots = FALSE){
+    nam <- names(formals(f))
+    if(!dots) nam <- nam[nam!="..."]
+    return(nam)
+}
+
 dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
                       convkernel=NULL, Kfun=NULL, valid=NULL,
                       intensity=NULL, dim=2, name="User-defined",
@@ -20,7 +28,7 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
     if(!is.function(kernel))
       stop("If kernel is given it must be a function.")
     given <- "kernel"
-    kernelnames <- names(formals(kernel))
+    kernelnames <- names_formals(kernel)
     if(length(kernelnames)<1)
       stop("kernel function must have at least one argument")
     kernelnames <- kernelnames[-1]
@@ -29,7 +37,7 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
     if(!is.function(specden))
       stop("If specden is given it must be a function.")
     given <- c(given, "specden")
-    specdennames <- names(formals(specden))
+    specdennames <- names_formals(specden)
     if(length(specdennames)<1)
       stop("specden function must have at least one argument")
     specdennames <- specdennames[-1]
@@ -49,18 +57,18 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
     given <- c(given,"convkernel")
     if(!is.function(convkernel)||length(formals(convkernel))<2)
       stop("If convkernel is given it must be a function with at least two arguments.")
-    if(!setequal(parnames,names(formals(convkernel))[-(1:2)]))
+    if(!setequal(parnames,names_formals(convkernel)[-(1:2)]))
       stop("argument names of convkernel must match argument names of kernel and/or specden.")
   }
   if(!is.null(Kfun)){
     given <- c(given,"Kfun")
     if(!is.function(Kfun)||length(formals(Kfun))<1)
       stop("If Kfun is given it must be a function with at least one arguments.")
-    if(!setequal(parnames,names(formals(Kfun))[-1]))
+    if(!setequal(parnames,names_formals(Kfun)[-1]))
       stop("argument names of Kfun must match argument names of kernel and/or specden.")
   }
   if(!is.null(valid)){
-    if(!(is.function(valid)&&setequal(parnames,names(formals(valid)))))
+    if(!(is.function(valid)&&setequal(parnames,names_formals(valid))))
       stop("argument names of valid must match argument names of kernel and/or specden.")
   } else{
     warning("No function for checking parameter validity provided. ANY numerical value for the parameters will be accepted.")
@@ -99,15 +107,10 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
     fixedpar <- fixedpar[match]
     
     ## Code to always fix the dimension to a numeric when calling the function #######
-    if(is.character(dim)){
-      if(!is.element(dim,names(fixedpar))){
-    ##     warning(paste("Setting the dimension to", dim, "= 2", "since nothing else is specified. To change this add the argument",dim,"with the desired value to your call."))
+    if(is.character(dim) && !is.element(dim,names(fixedpar))){
          dimpar <- structure(list(2), .Names=dim)
          fixedpar <- c(fixedpar, dimpar)
-      }
-      dim <- getElement(fixedpar, dim)
     }
-    #####################################################################################
     
     ## Detect inhomogeneous intensity (an image), and replace by max and an image for thinning
     thin <- NULL
@@ -147,6 +150,10 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
   attr(out, "name") <- name
   return(out)
 }
+
+dppfamily
+}
+)
 
 print.dppfamily <- function(x, ...){
   cat(paste(attr(x, "name"), "determinantal point process model family\n"))

@@ -1,5 +1,6 @@
 \name{parameters}
 \alias{parameters}
+\alias{parameters.dppm}
 \alias{parameters.kppm}
 \alias{parameters.ppm}
 \alias{parameters.profilepl}
@@ -13,6 +14,8 @@
 }
 \usage{
 parameters(model, \dots)
+
+\method{parameters}{dppm}(model, \dots)
 
 \method{parameters}{kppm}(model, \dots)
 
@@ -34,7 +37,7 @@ parameters(model, \dots)
   specify the model, and returns them as a list.
 
   The function \code{parameters} is generic, with methods
-  for class \code{"ppm"}, \code{"kppm"} and \code{"profilepl"}
+  for class \code{"ppm"}, \code{"kppm"}, \code{"dppm"} and \code{"profilepl"}
   and possibly for other classes.
 }
 \value{

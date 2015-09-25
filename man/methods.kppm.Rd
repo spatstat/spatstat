@@ -59,7 +59,7 @@
 }
 \examples{
   data(redwood)
-  fit <- kppm(redwood, ~x, "MatClust")
+  fit <- kppm(redwood ~ x, "MatClust")
   coef(fit)
   formula(fit)
   tf <- terms(fit)

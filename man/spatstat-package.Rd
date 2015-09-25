@@ -111,12 +111,13 @@
   \tabular{ll}{
     I. \tab Creating and manipulating data \cr
     II. \tab Exploratory Data Analysis \cr
-    III. \tab Model fitting (cluster models) \cr
+    III. \tab Model fitting (Cox and cluster models) \cr
     IV. \tab Model fitting (Poisson and Gibbs models) \cr
-    V. \tab Model fitting (spatial logistic regression)\cr
-    VI. \tab Simulation \cr
-    VII. \tab Tests and diagnostics\cr
-    VIII. \tab Documentation
+    V. \tab Model fitting (determinantal point processes)\cr
+    VI. \tab Model fitting (spatial logistic regression)\cr
+    VII. \tab Simulation \cr
+    VIII. \tab Tests and diagnostics\cr
+    IX. \tab Documentation
   }
 }
 
@@ -1059,7 +1060,7 @@
   
 }
 
-\section{III. MODEL FITTING (CLUSTER MODELS)}{
+\section{III. MODEL FITTING (COX AND CLUSTER MODELS)}{
   
   Cluster process models (with homogeneous or inhomogeneous intensity)
   and Cox processes can be fitted by the function \code{\link{kppm}}.
@@ -1317,7 +1318,15 @@
 }
 
 
-\section{V. MODEL FITTING (SPATIAL LOGISTIC REGRESSION)}{
+\section{V. MODEL FITTING (DETERMINANTAL POINT PROCESS MODELS)}{
+
+  Code for fitting \emph{determinantal point process models} has 
+  recently been added to \pkg{spatstat}.
+
+  For information, see the help file for \code{\link{dppm}}.
+}
+
+\section{VI. MODEL FITTING (SPATIAL LOGISTIC REGRESSION)}{
   
   \bold{Logistic regression}
   
@@ -1381,7 +1390,7 @@
 }
 
 
-\section{VI. SIMULATION}{
+\section{VII. SIMULATION}{
 
   There are many ways to generate a random point pattern,
   line segment pattern, pixel image or tessellation
@@ -1498,7 +1507,7 @@
 }
 
 
-\section{VII. TESTS AND DIAGNOSTICS}{
+\section{VIII. TESTS AND DIAGNOSTICS}{
 
   \bold{Classical hypothesis tests:}
   
@@ -1583,7 +1592,7 @@
 }
 
 
-\section{VIII. DOCUMENTATION}{
+\section{IX. DOCUMENTATION}{
   The online manual entries are quite detailed and should be consulted
   first for information about a particular function.
   

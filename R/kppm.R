@@ -125,7 +125,9 @@ kppm.ppp <- kppm.quad <-
                           call=cl,
                           callframe=parent.frame(),
                           callstring=callstring))
-  class(out) <- c("kppm", class(out))
+  # Detect DPPs
+  DPP <- list(...)$DPP
+  class(out) <- c(ifelse(is.null(DPP), "kppm", "dppm"), class(out))
 
   # Update intensity estimate with improve.kppm if necessary:
   if(improve.type != "none")
@@ -136,7 +138,7 @@ kppm.ppp <- kppm.quad <-
 }
 
 kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
-                       algorithm="Nelder-Mead", ...) {
+                       algorithm="Nelder-Mead", DPP=NULL, ...) {
   # Minimum contrast fit
   stationary <- is.stationary(po)
   # compute intensity
@@ -147,6 +149,13 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
     w <- as.owin(po, from="covariates")
     if(!is.mask(w)) w <- NULL
     lambda <- predict(po, locations=w)
+  }
+  # Detect DPP model and change clusters and intensity correspondingly
+  if(!is.null(DPP)){
+    tmp <- dppmFixIntensity(DPP, lambda, po)
+    clusters <- tmp$clusters
+    lambda <- tmp$lambda
+    po <- tmp$po
   }
   mcfit <- clusterfit(X, clusters, lambda = lambda,
                       dataname = Xname, control = control,
@@ -164,22 +173,32 @@ kppmMinCon <- function(X, Xname, po, clusters, control, statistic, statargs,
               statargs  = statargs,
               mcfit     = mcfit)
   # results
-  out <- list(Xname      = Xname,
-              X          = X,
-              stationary = stationary,
-              clusters   = clusters,
-              modelname  = fitinfo$modelname,
-              isPCP      = fitinfo$isPCP,
-              po         = po,
-              lambda     = lambda,
-              mu         = mcfit$mu,
-              par        = mcfit$par,
-              par.canon  = mcfit$par.canon,
-              clustpar   = mcfit$clustpar,
-              clustargs  = mcfit$clustargs,
-              modelpar   = mcfit$modelpar,
-              covmodel   = mcfit$covmodel,
-              Fit        = Fit)
+  if(!is.null(DPP)){
+    clusters <- update(clusters, as.list(mcfit$par))
+    out <- list(Xname      = Xname,
+                X          = X,
+                stationary = stationary,
+                fitted     = clusters,
+                po         = po,
+                Fit        = Fit)
+  } else{
+    out <- list(Xname      = Xname,
+                X          = X,
+                stationary = stationary,
+                clusters   = clusters,
+                modelname  = fitinfo$modelname,
+                isPCP      = fitinfo$isPCP,
+                po         = po,
+                lambda     = lambda,
+                mu         = mcfit$mu,
+                par        = mcfit$par,
+                par.canon  = mcfit$par.canon,
+                clustpar   = mcfit$clustpar,
+                clustargs  = mcfit$clustargs,
+                modelpar   = mcfit$modelpar,
+                covmodel   = mcfit$covmodel,
+                Fit        = Fit)
+  }
   return(out)
 }
 
@@ -191,6 +210,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   dataname <- list(...)$dataname
   ## Cluster info:
   info <- spatstatClusterModelInfo(clusters)
+  ## Detect DPP usage
+  isDPP <- inherits(clusters, "dppmodel")
   
   if(inherits(X, "ppp")){
       if(is.null(dataname))
@@ -239,6 +260,9 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                sQuote("statistic"))
       # Startpar:
       if(is.null(startpar)){
+          if(isDPP)
+              stop("No rule for starting parameters in this case. Please set ",
+                   sQuote("startpar"), " explicitly.")
           startpar <- info$checkpar(startpar, old=FALSE)
           startpar[["scale"]] <- mean(range(Stat[[fvnames(Stat, ".x")]]))
       }
@@ -255,7 +279,15 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
       }
   }
 
+  ## DPP resolving algorithm and checking startpar
+  changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
+  if(isDPP){
+    alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
+    algorithm <- alg$algorithm
+  }
+
   isPCP <- info$isPCP
+  if(isDPP && missing(q)) q <- 1/2
   dots <- info$resolvedots(..., q = q, p = p, rmin = rmin, rmax = rmax)
   # determine initial values of parameters
   startpar <- info$checkpar(startpar)
@@ -294,8 +326,23 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                   model=dots$model,
                                   funaux=info$funaux),
                              list(...))
+  if(isDPP && algorithm=="Brent" && changealgorithm){
+    mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
+  }
   
   mcfit <- do.call("mincontrast", mcargs)
+  # Return results for DPPs
+  if(isDPP){
+    names(mcfit$par) <- names(startpar)
+    extra <- list(Stat      = Stat,
+                  StatFun   = StatFun,
+                  StatName  = StatName,
+                  modelname  = info$modelabbrev,
+                  lambda     = lambda)
+    attr(mcfit, "info") <- extra
+    return(mcfit)
+  }
+  ## Extra stuff for ordinary cluster/lgcp models
   ## imbue with meaning
   if(!usecanonical) {
     par <- mcfit$par
@@ -341,7 +388,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
 }
 
 kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
-                       algorithm="Nelder-Mead", ...) {
+                       algorithm="Nelder-Mead", DPP=NULL, ...) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -365,6 +412,10 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                          sieve=TRUE)
   M         <- dcm$result
   otherargs <- dcm$otherargs
+
+  ## Detect DPP usage
+  isDPP <- inherits(clusters, "dppmodel")
+
   # compute intensity at pairs of data points
   # and c.d.f. of interpoint distance in window
   if(stationary <- is.stationary(po)) {
@@ -387,6 +438,16 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # scaling constant is (integral of intensity)^2
     gscale <- integral.im(lambdaM)^2
   }
+
+  # Detect DPP model and change clusters and intensity correspondingly
+  isDPP <- !is.null(DPP)
+  if(isDPP){
+    tmp <- dppmFixIntensity(DPP, lambda, po)
+    clusters <- tmp$clusters
+    lambda <- tmp$lambda
+    po <- tmp$po
+  }
+
   # trim 'g' to [0, rmax] 
   g <- g[with(g, .x) <= rmax,]
   # get pair correlation function (etc) for model
@@ -452,12 +513,46 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
            - sumweight * log(unlist(stieltjes(wpaco, g, par=par))),
            enclos=objargs$envir)
     }
-  }    
-  # optimize it
+  }
+  # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
-  opt <- optim(startpar, obj, objargs=objargs, control=ctrl, method=algorithm)
+  optargs <- list(par=startpar, fn=obj, objargs=objargs, control=ctrl, method=algorithm)
+  ## DPP resolving algorithm and checking startpar
+  changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
+  if(isDPP){
+    alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
+    algorithm <- optargs$method <- alg$algorithm
+    if(algorithm=="Brent" && changealgorithm){
+      optargs$lower <- alg$lower
+      optargs$upper <- alg$upper
+    }
+  }
+  # optimize it
+  opt <- do.call(optim, optargs)
   # raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
+  # Finish in DPP case
+  if(!is.null(DPP)){
+    names(opt$par) <- names(startpar)
+    # all info that depends on the fitting method:
+    Fit <- list(method    = "clik2",
+                clfit     = opt,
+                weightfun = weightfun,
+                rmax      = rmax,
+                objfun    = obj,
+                objargs   = objargs)
+    # pack up
+    clusters <- update(clusters, as.list(opt$par))
+    result <- list(Xname      = Xname,
+                   X          = X,
+                   stationary = stationary,
+                   fitted     = clusters,
+                   modelname  = modelname,
+                   po         = po,
+                   lambda     = lambda,
+                   Fit        = Fit)
+    return(result)
+  }
   # meaningful model parameters
   optpar <- opt$par
   modelpar <- info$interpret(optpar, lambda)
@@ -501,7 +596,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
 }
 
 kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
-                        algorithm="Nelder-Mead", ...) {
+                        algorithm="Nelder-Mead", DPP=NULL, ...) {
   W <- as.owin(X)
   if(is.null(rmax))
     rmax <- rmax.rule("K", W, intensity(X))
@@ -525,6 +620,10 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
                          sieve=TRUE)
   M         <- dcm$result
   otherargs <- dcm$otherargs
+
+  ## Detect DPP usage
+  isDPP <- inherits(clusters, "dppmodel")
+
   # compute intensity at data points
   # and c.d.f. of interpoint distance in window
   if(stationary <- is.stationary(po)) {
@@ -547,6 +646,16 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     # scaling constant is (integral of intensity) * (number of points)
     gscale <- integral.im(lambdaM) * npoints(X)
   }
+
+  # Detect DPP model and change clusters and intensity correspondingly
+  isDPP <- !is.null(DPP)
+  if(isDPP){
+    tmp <- dppmFixIntensity(DPP, lambda, po)
+    clusters <- tmp$clusters
+    lambda <- tmp$lambda
+    po <- tmp$po
+  }
+
   # trim 'g' to [0, rmax] 
   g <- g[with(g, .x) <= rmax,]
   # get pair correlation function (etc) for model
@@ -611,11 +720,45 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
            enclos=objargs$envir)
     }
   }    
-  # optimize it
+  # arguments for optimization
   ctrl <- resolve.defaults(list(fnscale=-1), control, list(trace=0))
-  opt <- optim(startpar, obj, objargs=objargs, control=ctrl, method=algorithm)
+  optargs <- list(par=startpar, fn=obj, objargs=objargs, control=ctrl, method=algorithm)
+  ## DPP resolving algorithm and checking startpar
+  changealgorithm <- length(startpar)==1 && algorithm=="Nelder-Mead"
+  if(isDPP){
+    alg <- dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
+    algorithm <- optargs$method <- alg$algorithm
+    if(algorithm=="Brent" && changealgorithm){
+      optargs$lower <- alg$lower
+      optargs$upper <- alg$upper
+    }
+  }
+  # optimize it
+  opt <- do.call(optim, optargs)
   # raise warning/error if something went wrong
   signalStatus(optimStatus(opt), errors.only=TRUE)
+  # Finish in DPP case
+  if(!is.null(DPP)){
+    names(opt$par) <- names(startpar)
+    # all info that depends on the fitting method:
+    Fit <- list(method    = "palm",
+                clfit     = opt,
+                weightfun = weightfun,
+                rmax      = rmax,
+                objfun    = obj,
+                objargs   = objargs)
+    # pack up
+    clusters <- update(clusters, as.list(opt$par))
+    result <- list(Xname      = Xname,
+                   X          = X,
+                   stationary = stationary,
+                   fitted     = clusters,
+                   modelname  = modelname,
+                   po         = po,
+                   lambda     = lambda,
+                   Fit        = Fit)
+    return(result)
+  }
   # meaningful model parameters
   optpar <- opt$par
   modelpar <- info$interpret(optpar, lambda)
@@ -833,17 +976,19 @@ improve.kppm <- local({
 
 is.kppm <- function(x) { inherits(x, "kppm")}
 
-print.kppm <- function(x, ...) {
+print.kppm <- print.dppm <- function(x, ...) {
 
   isPCP <- x$isPCP
+  # detect DPP
+  isDPP <- inherits(x, "dppm")
   # handle outdated objects - which were all cluster processes
-  if(is.null(isPCP)) isPCP <- TRUE
+  if(!isDPP && is.null(isPCP)) isPCP <- TRUE
 
   terselevel <- spatstat.options('terse')
   digits <- getOption('digits')
   
   splat(if(x$stationary) "Stationary" else "Inhomogeneous",
-        if(isPCP) "cluster" else "Cox",
+        if(isDPP) "determinantal" else if(isPCP) "cluster" else "Cox",
         "point process model")
 
   if(waxlyrical('extras', terselevel) && nchar(x$Xname) < 20)
@@ -878,9 +1023,17 @@ print.kppm <- function(x, ...) {
 
   # ............... trend .........................
 
-  print(x$po, what="trend")
+  if(!(isDPP && is.null(x$fitted$intensity)))
+    print(x$po, what="trend")
 
   # ..................... clusters ................
+
+  # DPP case
+  if(isDPP){
+      splat("Fitted DPP model:")
+      print(x$fitted)
+      return(invisible(NULL))
+  }
 
   tableentry <- spatstatClusterModelInfo(x$clusters)
   
@@ -925,7 +1078,8 @@ print.kppm <- function(x, ...) {
 }
 
 plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
-  objectname <- short.deparse(substitute(x))
+  # catch objectname from dots if present otherwise deparse x:
+  objectname <- list(...)$objectname %orifnull% short.deparse(substitute(x))
   plotem <- function(x, ..., main=dmain, dmain) { plot(x, ..., main=main) }
   nochoice <- missing(what)
   what <- pickoption("plot type", what,
@@ -979,15 +1133,15 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
   return(invisible(NULL))
 }
 
-predict.kppm <- function(object, ...) {
+predict.kppm <- predict.dppm <- function(object, ...) {
   predict(as.ppm(object), ...)
 }
 
-fitted.kppm <- function(object, ...) {
+fitted.kppm <- fitted.dppm <- function(object, ...) {
   fitted(as.ppm(object), ...)
 }
 
-residuals.kppm <- function(object, ...) {
+residuals.kppm <- residuals.dppm <- function(object, ...) {
   residuals(as.ppm(object), ...)
 }
 
@@ -1159,15 +1313,15 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
   return(out)
 }
 
-formula.kppm <- function(x, ...) {
+formula.kppm <- formula.dppm <- function(x, ...) {
   formula(x$po, ...)
 }
 
-terms.kppm <- function(x, ...) {
+terms.kppm <- terms.dppm <- function(x, ...) {
   terms(x$po, ...)
 }
 
-labels.kppm <- function(object, ...) {
+labels.kppm <- labels.dppm <- function(object, ...) {
   labels(object$po, ...)
 }
 
@@ -1243,11 +1397,11 @@ update.kppm <- function(object, ...) {
   return(out)
 }
 
-unitname.kppm <- function(x) {
+unitname.kppm <- unitname.dppm <- function(x) {
   return(unitname(x$X))
 }
 
-"unitname<-.kppm" <- function(x, value) {
+"unitname<-.kppm" <- "unitname<-.dppm" <- function(x, value) {
   unitname(x$X) <- value
   if(!is.null(x$Fit$mcfit)) {
     unitname(x$Fit$mcfit) <- value
@@ -1259,9 +1413,9 @@ unitname.kppm <- function(x) {
   return(x)
 }
 
-as.fv.kppm <- function(x) as.fv(x$Fit$mcfit)
+as.fv.kppm <- as.fv.dppm <- function(x) as.fv(x$Fit$mcfit)
 
-coef.kppm <- function(object, ...) {
+coef.kppm <- coef.dppm <- function(object, ...) {
   return(coef(object$po))
 }
 
@@ -1299,7 +1453,7 @@ Kpcf.kppm <- function(model, what=c("K", "pcf", "kernel")) {
   return(f)
 }
 
-is.stationary.kppm <- function(x) {
+is.stationary.kppm <- is.stationary.dppm <- function(x) {
   return(x$stationary)
 }
 
@@ -1323,38 +1477,38 @@ is.poisson.kppm <- function(x) {
 
 # extract ppm component
 
-as.ppm.kppm <- function(object) {
+as.ppm.kppm <- as.ppm.dppm <- function(object) {
   object$po
 }
 
 # other methods that pass through to 'ppm'
 
-as.owin.kppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
+as.owin.kppm <- as.owin.dppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
   from <- match.arg(from)
   as.owin(as.ppm(W), ..., from=from, fatal=fatal)
 }
 
-domain.kppm <- Window.kppm <- function(X, ..., from=c("points", "covariates")) {
+domain.kppm <- Window.kppm <- domain.dppm <- Window.dppm <- function(X, ..., from=c("points", "covariates")) {
   from <- match.arg(from)
   as.owin(X, from=from)
 }
 
-model.images.kppm <- function(object, W=as.owin(object), ...) {
+model.images.kppm <- model.images.dppm <- function(object, W=as.owin(object), ...) {
   model.images(as.ppm(object), W=W, ...)
 }
 
-model.matrix.kppm <- function(object, data=model.frame(object), ...,
+model.matrix.kppm <- model.matrix.dppm <- function(object, data=model.frame(object), ...,
                               Q=NULL, 
                               keepNA=TRUE) {
   if(missing(data)) data <- NULL
   model.matrix(as.ppm(object), data=data, ..., Q=Q, keepNA=keepNA)
 }
 
-model.frame.kppm <- function(formula, ...) {
+model.frame.kppm <- model.frame.dppm <- function(formula, ...) {
   model.frame(as.ppm(formula), ...)
 }
 
-logLik.kppm <- function(object, ...) {
+logLik.kppm <- logLik.dppm <- function(object, ...) {
   pl <- object$Fit$clfit$value
   if(is.null(pl))
     stop("logLik is only available for kppm objects fitted with method='palm'",
@@ -1364,7 +1518,7 @@ logLik.kppm <- function(object, ...) {
   return(ll)
 }
  
-AIC.kppm <- function(object, ..., k=2) {
+AIC.kppm <- AIC.dppm <- function(object, ..., k=2) {
   # extract Palm loglikelihood
   pl <- object$Fit$clfit$value
   if(is.null(pl))
@@ -1374,12 +1528,12 @@ AIC.kppm <- function(object, ..., k=2) {
   return(- 2 * as.numeric(pl) + k * df)
 }
 
-extractAIC.kppm <- function (fit, scale = 0, k = 2, ...)
+extractAIC.kppm <- extractAIC.dppm <- function (fit, scale = 0, k = 2, ...)
 {
   edf <- length(coef(fit))
   aic <- AIC(fit, k=k)
   c(edf, aic)
 }
 
-nobs.kppm <- function(object, ...) { nobs(as.ppm(object)) }
+nobs.kppm <- nobs.dppm <- function(object, ...) { nobs(as.ppm(object)) }
 

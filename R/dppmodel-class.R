@@ -7,13 +7,13 @@ print.dppmodel <- function(x, ...){
   if(anyfixed){
       fixedlambda <- NULL
       if(!is.null(x$intensity) && is.element(x$intensity, names(x$fixedpar))){
-          lambda <- x$fixedpar[[x$intensity]]
+          lambda <- signif(x$fixedpar[[x$intensity]], 4)
           x$fixedpar <- x$fixedpar[names(x$fixedpar)!=x$intensity]
-          fixedlambda <- paste(x$intensity, ifelse(is.numeric(lambda), paste("=", lambda), "= an image"))
+          fixedlambda <- paste(x$intensity, ifelse(is.null(x$thin), paste("=", lambda), "= an image"))
       }
       if(length(x$fixedpar)>0){
           fixedparstring <- paste(names(x$fixedpar), signif(unlist(x$fixed),4), sep = " = ", collapse = ", ")
-          fixedparstring <- paste(fixedparstring, fixedlambda, sep=", ")
+          fixedparstring <- paste(fixedlambda, fixedparstring, sep=", ")
       } else{
           fixedparstring <- fixedlambda
       }
@@ -98,9 +98,8 @@ dppspecden <- function(model){
     stop("Spectral density unknown for this model!")
   if(length(model$freepar)>0)
     stop("Cannot extract the spectral density of a partially specified model. Please supply all parameters.")
-  firstarg <- names(formals(fun))[1]
-  specden <- function(x){
-    allargs <- c(structure(list(x), .Names=firstarg), model$fixedpar)
+  specden <- function(x, ...){
+    allargs <- c(list(x), model$fixedpar, list(...))
     do.call(fun, allargs)
   }
   return(specden)
@@ -239,7 +238,7 @@ intensity.dppmodel <- function(X, ...){
     return(NA)
 }
 
-parameters.dppmodel <- function(model, ...){
+parameters.dppm <- parameters.dppmodel <- function(model, ...){
     if(inherits(object, "dppm"))
         object <- object$fitted
     c(object$fixed, structure(rep(NA,length(object$freepar)), .Names = object$freepar))

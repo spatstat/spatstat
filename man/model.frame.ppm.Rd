@@ -1,6 +1,7 @@
 \name{model.frame.ppm}
 \alias{model.frame.ppm}
 \alias{model.frame.kppm}
+\alias{model.frame.dppm}
 \alias{model.frame.lppm}
 \title{
 Extract the Variables in a Point Process Model
@@ -15,12 +16,14 @@ Extract the Variables in a Point Process Model
 
  \method{model.frame}{kppm}(formula, ...)
 
+ \method{model.frame}{dppm}(formula, ...)
+
  \method{model.frame}{lppm}(formula, ...)
 }
 \arguments{
   \item{formula}{
     A fitted point process model.
-    An object of class \code{"ppm"} or \code{"kppm"} or \code{"lppm"}.
+    An object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{model.frame.glm}}.
@@ -30,7 +33,7 @@ Extract the Variables in a Point Process Model
   The function \code{\link{model.frame}} is generic.
   These functions are method for \code{\link{model.frame}}
   for fitted point process models (objects of class \code{"ppm"}
-  or \code{"kppm"} or \code{"lppm"}).
+  or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}).
 
   The first argument should be a fitted point process model;
   it has to be named \code{formula} for consistency with the generic
@@ -56,21 +59,24 @@ Extract the Variables in a Point Process Model
 \seealso{
   \code{\link{ppm}},
   \code{\link{kppm}},
+  \code{\link{dppm}},
   \code{\link{lppm}},
   \code{\link{model.frame}},
   \code{\link{model.matrix.ppm}}
 }
 \examples{
-  fit <- ppm(cells, ~x)
+  fit <- ppm(cells ~ x)
   mf <- model.frame(fit)
-  kfit <- kppm(redwood, ~x, "Thomas")
+  kfit <- kppm(redwood ~ x, "Thomas")
   kmf <- model.frame(kfit)
 }
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

@@ -1,6 +1,7 @@
 \name{model.images}  %DontDeclareMethods
 \alias{model.images}
 \alias{model.images.ppm}
+\alias{model.images.dppm}
 \alias{model.images.kppm}
 \alias{model.images.lppm}
 \alias{model.images.slrm}
@@ -17,6 +18,8 @@
 
   \method{model.images}{kppm}(object, W = as.owin(object), ...)
 
+  \method{model.images}{dppm}(object, W = as.owin(object), ...)
+
   \method{model.images}{lppm}(object, L = as.linnet(object), ...)
 
   \method{model.images}{slrm}(object, ...)
@@ -24,7 +27,7 @@
 \arguments{
   \item{object}{
     The fitted point process model. An object of class \code{"ppm"}
-    or \code{"kppm"} or \code{"lppm"} or \code{"slrm"}.
+    or \code{"kppm"} or \code{"lppm"} or \code{"slrm"} or \code{"dppm"}.
   }
   \item{W}{
     A window (object of class \code{"owin"}) in which the
@@ -49,7 +52,9 @@
   The \code{object} must be a fitted spatial point process model
   object of class \code{"ppm"} (produced by the model-fitting
   function \code{\link{ppm}}) or class \code{"kppm"} (produced by the
-  fitting function \code{\link{kppm}}) or class \code{"lppm"} (produced
+  fitting function \code{\link{kppm}})
+  or class \code{"dppm"} (produced by the
+  fitting function \code{\link{dppm}}) or class \code{"lppm"} (produced
   by \code{\link{lppm}}) or class \code{"slrm"} (produced by
   \code{\link{slrm}}). 
 
@@ -103,8 +108,10 @@
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{model.matrix.ppm}},
@@ -112,6 +119,7 @@
   \code{\link{ppm}},
   \code{\link{ppm.object}},
   \code{\link{lppm}},
+  \code{\link{dppm}},
   \code{\link{kppm}},
   \code{\link{slrm}},
   \code{\link{im}},
@@ -121,11 +129,11 @@
 }
 
 \examples{
-   fit <- ppm(cells ~x)
+   fit <- ppm(cells ~ x)
    model.images(fit)
    B <- owin(c(0.2, 0.4), c(0.3, 0.8))
    model.images(fit, B)
-   fit2 <- ppm(cells ~cut(x,3))
+   fit2 <- ppm(cells ~ cut(x,3))
    model.images(fit2)
    fit3 <- slrm(japanesepines ~ x)
    model.images(fit3)

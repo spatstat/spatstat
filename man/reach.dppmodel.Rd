@@ -1,15 +1,15 @@
 \name{reach.dppmodel}
 \alias{reach.dppmodel}
+\alias{reach.dppm}
 \title{Range of Interaction for a Determinantal Point Process Model}
 \description{
-  Returns the range of interaction for a determinantal point process
-  model.
+  Returns the range of interaction for a determinantal point process model.
 }
 \usage{
   \method{reach}{dppmodel}(x, \dots)
 }
 \arguments{
-  \item{x}{Model of class \code{"dppmodel"}.}
+  \item{x}{Model of class \code{"dppmodel"} or \code{"dppm"}.}
   \item{\dots}{Additional arguments passed to the range function
     of the given model.
   }
@@ -22,7 +22,7 @@
   may instead use a value where the pair correlation function is
   sufficiently close to 1. For example in the Matern model this defaults
   to finding \eqn{R} such that \eqn{g(R)=0.99}.
-} 
+}
 \value{Numeric}
 \author{
   Adrian Baddeley

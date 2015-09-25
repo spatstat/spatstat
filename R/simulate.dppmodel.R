@@ -173,6 +173,7 @@ rdpp
 }
 )
 
+simulate.dppm <-
 simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
                               trunc = .99, correction = "periodic", rbord = reach(object)
                               #  parallel = FALSE
@@ -191,6 +192,11 @@ simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
   }
   # ..................................
 
+  if(inherits(object, "dppm")){
+      if(is.null(W))
+          W <- Window(object$X)
+      object <- object$fitted
+  }
   if(!inherits(object, "dppmodel"))
     stop("The model to simulate must be of class dppmodel")
   if(length(tmp <- object$freepar)>0)
@@ -213,7 +219,7 @@ simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
 
   # Check stationarity and window compatibility (if 'W' and 'thin' both are present)
   statmodel <- is.null(thin <- object$thin)
-  if(missing(W)){
+  if(is.null(W)){
     if(!statmodel) W <- domain(thin)
   }
   Wowin <- if(is.owin(W)) W else NULL

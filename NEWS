@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.043
+        CHANGES IN spatstat VERSION 1.42-2.044
 
 OVERVIEW
 
@@ -54,6 +54,30 @@ NEW DATASET
    represented as polygonal regions forming a tessellation.
 
 NEW FUNCTIONS
+
+   o dppm
+   Fit a determinantal point process model to point pattern data.
+
+   o fitted.dppm, predict.dppm, intensity.dppm
+   Predict a fitted dppm object.
+
+   o logLik.dppm, AIC.dppm, extractAIC.dppm, nobs.dppm
+   Likelihood and AIC for determinantal point process models
+   (enabling the use of 'step')
+
+   o coef.dppm, formula.dppm, print.dppm, terms.dppm, labels.dppm,
+   model.frame.dppm, model.matrix.dppm, model.images.dppm,
+   is.stationary.dppm, reach.dppm, unitname.dppm, unitname<-.dppm, Window.dppm
+    Various methods for dppm objects.
+
+   o parameters.dppm
+   Extract meaningful list of model parameters
+
+   o objsurf.dppm
+   Objective function surface of a dppm object
+
+   o residuals.dppm
+   Residual measure for a dppm object.
 
    o dppBessel, dppCauchy, dppGauss, dppMatern,	dppPowerExp
    Determinantal Point Process models.

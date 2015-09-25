@@ -1,0 +1,135 @@
+#'
+#'     dppm.R
+#'
+#'     $Revision: 1.1 $   $Date: 2015/09/25 05:54:59 $
+
+dppm <-
+  function(formula, model, data=NULL,
+           ...,
+           startpar = NULL,
+           method = c("mincon", "clik2", "palm"),
+           weightfun=NULL,
+           control=list(),
+           algorithm="Nelder-Mead",
+           statistic="K",
+           statargs=list(),
+           rmax = NULL,
+           covfunargs=NULL,
+           use.gam=FALSE,
+           nd=NULL, eps=NULL) {
+
+  # Instatiate model if not already done.
+  if(inherits(model, "dppfamily")){
+    model <- short.deparse(substitute(model))
+    model <- do.call(model, args = list())
+  }
+  verifyclass(model, "dppmodel")
+
+  # Check for intensity as only unknown and exit (should be changed for likelihood method)
+  if(length(model$freepar)==1 && (model$freepar %in% model$intensity))
+      stop("Only the intensity needs to be estimated. Please do this with ppm yourself.")
+  # Detect missing rhs of 'formula' and fix
+  if(inherits(formula, c("ppp", "quad"))){
+    Xname <- short.deparse(substitute(formula))
+    formula <- as.formula(paste(Xname, "~ 1"))
+  }
+  if(!inherits(formula, "formula"))
+    stop(paste("Argument 'formula' should be a formula"))
+
+  kppm(formula, DPP = model, data = data, covariates = data,
+       startpar = startpar, method = method, weightfun = weightfun,
+       control = control, algorithm = algorithm, statistic = statistic,
+       statargs = statargs, rmax = rmax, covfunargs = covfunargs,
+       use.gam = use.gam, nd = nd, eps = eps, ...)
+}
+
+## Auxiliary function to mimic cluster models for DPPs in kppm code
+spatstatDPPModelInfo <- function(model){
+  out <- list(
+    modelname = paste(model$name, "DPP"), # In modelname field of mincon fv obj.
+    descname = paste(model$name, "DPP"), # In desc field of mincon fv obj.
+    modelabbrev = paste(model$name, "DPP"), # In fitted obj.
+    printmodelname = function(...) paste(model$name, "DPP"), # Used by print.kppm
+    parnames = model$freepar,
+    checkpar = function(par){
+      return(par)
+    },
+    checkclustargs = function(margs, old = TRUE) list(),
+    resolvedots = function(...){
+      ## returning the input arguments p, q, rmin, rmax in list with one element 'ctrl'
+      dots <- list(...)
+      return(list(ctrl = dots[c("p", "q", "rmin", "rmax")]))
+    },
+    ## K-function
+    K = function(par, rvals, ...){
+      if(length(par)==1 && is.null(names(par)))
+        names(par) <- model$freepar
+      mod <- update(model, as.list(par))
+      if(!valid.dppmodel(mod)){
+        return(rep(Inf, length(rvals)))
+      } else{
+        return(Kmodel(mod)(rvals))
+      }
+    },
+    ## pair correlation function
+    pcf = function(par, rvals, ...){
+      if(length(par)==1 && is.null(names(par)))
+        names(par) <- model$freepar
+      mod <- update(model, as.list(par))
+      if(!valid.dppmodel(mod)){
+        return(rep(Inf, length(rvals)))
+      } else{
+        return(pcfmodel(mod)(rvals))
+      }
+    },
+    ## sensible starting parameters
+    selfstart = function(X) {
+      return(model$startpar(model, X))
+    }
+)
+}
+
+## Auxilliary function used for DPP stuff in kppm.R
+dppmFixIntensity <- function(DPP, lambda, po){
+  lambdaname <- DPP$intensity
+  if(is.null(lambdaname))
+    warning("The model has no intensity parameter.\n",
+            "Prediction from the fitted model is invalid ",
+            "(but no warning or error will be given by predict.dppm).")
+  ## Update model object with estimated intensity if it is a free model parameter
+  if(lambdaname %in% DPP$freepar){
+    clusters <- update(DPP, structure(list(lambda), .Names=lambdaname))
+  } else{
+    clusters <- DPP
+    lambda <- intensity(clusters)
+    ## Overwrite po object with fake version
+    X <- po$Q$data
+    po <- ppm(X~log(lambda)-1)
+    po$coef.orig <- po$coef
+    po$coef <- 1
+    po$fitter <- "dppm"
+    ## update pseudolikelihood value using code in logLik.ppm
+    po$maxlogpl.orig <- po$maxlogpl
+    po$maxlogpl <- logLik(po, new.coef=1, warn=FALSE)
+    #########################################
+  }
+  return(list(clusters=clusters, lambda=lambda, po=po))
+}
+
+## Auxilliary function used for DPP stuff in kppm.R
+dppmFixAlgorithm <- function(algorithm, changealgorithm, clusters, startpar){
+  if(!setequal(clusters$freepar, names(startpar)))
+    stop("Names of startpar vector does not match the free parameters of the model.")
+  lower <- upper <- NULL
+  if(changealgorithm){
+    bb <- dppparbounds(clusters, names(startpar))
+    if(all(is.finite(bb))){
+      algorithm <- "Brent"
+      lower <- bb[1]
+      upper <- bb[2]
+    } else{
+      algorithm <- "BFGS"
+    }
+  }
+  return(list(algorithm = algorithm, lower = lower, upper = upper))
+}

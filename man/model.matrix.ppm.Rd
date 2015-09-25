@@ -1,6 +1,7 @@
 \name{model.matrix.ppm}
 \alias{model.matrix.ppm}
 \alias{model.matrix.kppm}
+\alias{model.matrix.dppm}
 \alias{model.matrix.lppm}
 \title{Extract Design Matrix from Point Process Model}
 \description{
@@ -15,13 +16,16 @@
    \method{model.matrix}{kppm}(object, data=model.frame(object), \dots,
                               Q=NULL, keepNA=TRUE)
 
+   \method{model.matrix}{dppm}(object, data=model.frame(object), \dots,
+                              Q=NULL, keepNA=TRUE)
+
    \method{model.matrix}{lppm}(object, data=model.frame(object), \dots,
                               keepNA=TRUE)
 }
 \arguments{
   \item{object}{
     The fitted point process model. An object of class \code{"ppm"}
-    or \code{"kppm"} or \code{"lppm"}.
+    or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}.
   }
   \item{data}{
     A model frame, containing the data required for the Berman-Turner device.
@@ -43,7 +47,7 @@
 \details{
   These commands are methods for the generic function
   \code{\link{model.matrix}}. They extracts the design matrix of a
-  spatial point process model (class \code{"ppm"} or \code{"kppm"}
+  spatial point process model (class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}
   or \code{"lppm"}).
 
   More precisely, this command extracts
@@ -51,12 +55,12 @@
   a spatial point process model. 
   
   The \code{object} must be a fitted point process model
-  (object of class \code{"ppm"} or \code{"kppm"} or \code{"lppm"})
+  (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"} or \code{"lppm"})
   fitted to spatial point pattern data.
   Such objects are produced by the model-fitting
-  functions \code{\link{ppm}}, \code{\link{kppm}} and \code{\link{lppm}}.
+  functions \code{\link{ppm}}, \code{\link{kppm}}, \code{\link{dppm}} and \code{\link{lppm}}.
 
-  The methods \code{model.matrix.ppm}, \code{model.matrix.kppm}
+  The methods \code{model.matrix.ppm}, \code{model.matrix.kppm}, \code{model.matrix.dppm}
   and \code{model.matrix.lppm} 
   extract the model matrix for the GLM.
 
@@ -82,14 +86,17 @@
 \author{Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{model.matrix}},
   \code{\link{model.images}},
   \code{\link{ppm}},
   \code{\link{kppm}},
+  \code{\link{dppm}},
   \code{\link{lppm}},
   \code{\link{ppm.object}},
   \code{\link{quad.ppm}},

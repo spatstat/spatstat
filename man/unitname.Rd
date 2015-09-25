@@ -1,5 +1,6 @@
 \name{unitname}  %DontDeclareMethods
 \alias{unitname}
+\alias{unitname.dppm}
 \alias{unitname.im}
 \alias{unitname.kppm}
 \alias{unitname.minconfit}
@@ -11,6 +12,7 @@
 \alias{unitname.slrm}
 \alias{unitname.tess}
 \alias{unitname<-}
+\alias{unitname<-.dppm}
 \alias{unitname<-.im}
 \alias{unitname<-.kppm}
 \alias{unitname<-.minconfit}
@@ -28,6 +30,7 @@
 }
 \usage{
 unitname(x)
+\method{unitname}{dppm}(x)
 \method{unitname}{im}(x)
 \method{unitname}{kppm}(x)
 \method{unitname}{minconfit}(x)
@@ -39,6 +42,7 @@ unitname(x)
 \method{unitname}{slrm}(x)
 \method{unitname}{tess}(x)
 unitname(x) <- value
+\method{unitname}{dppm}(x) <- value
 \method{unitname}{im}(x) <- value
 \method{unitname}{kppm}(x) <- value
 \method{unitname}{minconfit}(x) <- value
@@ -60,7 +64,7 @@ unitname(x) <- value
     a quadrature scheme (object of class \code{"quad"}),
     or a fitted point process model
     (object of class \code{"ppm"} or \code{"kppm"} or \code{"slrm"}
-    or \code{"minconfit"}). 
+    or \code{"dppm"} or \code{"minconfit"}).
   }
   \item{value}{
     Name of the unit of length. See Details.

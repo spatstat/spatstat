@@ -1,6 +1,7 @@
 \name{WindowOnly}
 \alias{Window.ppm}
 \alias{Window.kppm}
+\alias{Window.dppm}
 \alias{Window.lpp}
 \alias{Window.lppm}
 \alias{Window.msr}
@@ -25,6 +26,8 @@
  \method{Window}{ppm}(X, \dots, from=c("points", "covariates"))
 
  \method{Window}{kppm}(X, \dots, from=c("points", "covariates"))
+
+ \method{Window}{dppm}(X, \dots, from=c("points", "covariates"))
 
  \method{Window}{lpp}(X, \dots)
 
@@ -70,7 +73,7 @@
 
   The argument \code{from} applies when \code{X} is a fitted 
   point process model
-  (object of class \code{"ppm"} or \code{"kppm"}).
+  (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
   If \code{from="data"} (the default),
   \code{Window} extracts the window of the original point
   pattern data to which the model was fitted.

@@ -1,10 +1,12 @@
 \name{Kmodel.dppmodel}
 \alias{Kmodel.dppmodel}
 \alias{pcfmodel.dppmodel}
+\alias{Kmodel.dppm}
+\alias{pcfmodel.dppm}
 \title{
   K-function or Pair Correlation Function of a
   Determinantal Point Process Model
-} 
+}
 \description{Returns the theoretical \eqn{K}-function
   or theoretical pair correlation function of a determinantal point
   process model as a function of one argument \eqn{r}.
@@ -13,10 +15,14 @@
    \method{Kmodel}{dppmodel}(model, \dots)
 
    \method{pcfmodel}{dppmodel}(model, \dots)
+
+   \method{Kmodel}{dppm}(model, \dots)
+
+   \method{pcfmodel}{dppm}(model, \dots)
 }
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"}.}
-  \item{\dots}{Ignored (not true -- there is some undocumented internal use)}
+  \item{model}{Model of class \code{"dppmodel"} or \code{"dppm"}.}
+  \item{\dots}{Ignored (not quite true -- there is some undocumented internal use)}
 }
 \author{
   Adrian Baddeley
