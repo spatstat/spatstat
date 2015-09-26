@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.166 $	$Date: 2015/03/25 09:56:24 $
+#	$Revision: 4.167 $	$Date: 2015/09/26 03:06:10 $
 #
 #
 #	A window may be either
@@ -394,10 +394,10 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     warning(whinge)
     return(NULL)
   }
-  if(ncol(W) == 2) {
+  if(twocol <- (ncol(W) == 2)) {
     # assume data is a list of TRUE pixels
     W <- cbind(W, TRUE)
-  }
+  } 
   mch <- match(c("x", "y"), names(W))
   if(!any(is.na(mch))) {
     ix <- mch[1]
@@ -435,6 +435,15 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     m[iii,jjj] <- mm
     ## make binary mask
     out <- owin(mask=m, xy=list(x=xcol, y=yrow))
+    ## warn if area fraction is small: may be a misuse of as.owin
+    if(twocol) {
+      pcarea <- 100 * nrow(df)/prod(dim(m))
+      if(pcarea < 1) 
+       warning(paste("Window occupies only",
+                     paste0(signif(pcarea, 2), "%"),
+                     "of frame area. Did you mean owin(poly=df) ?"),
+               call.=FALSE)
+    }
     return(out)
   })
 }

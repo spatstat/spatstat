@@ -1,12 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.044
+        CHANGES IN spatstat VERSION 1.42-2.045
 
 OVERVIEW
 
    o We thank Leanne Bischof, Christophe Biscio, Belarmain Fandohan,
    Andrew Hardegen, Frederic Lavancier, Tom Lawrence, Martin Maechler, 
    Greg McSwiggan, Robin Milne, Gopalan Nair, Tuomas Rajala, 
-   Suman Rakshit, Ben Ramage and Ida-Maria Sintorn for contributions.
+   Suman Rakshit, Ben Ramage, Francois Semecurbe 
+   and Ida-Maria Sintorn for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
@@ -271,6 +272,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o as.im.function
    New argument 'strict'.
+
+   o bw.ppl
+   New argument 'weights'.
    
 BUG FIXES
 

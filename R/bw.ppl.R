@@ -6,7 +6,7 @@
 #   $Revision: 1.3 $ $Date: 2014/01/09 03:51:59 $
 #
 
-bw.ppl <- function(X, ..., srange=NULL, ns=16) {
+bw.ppl <- function(X, ..., srange=NULL, ns=16, weights=NULL) {
   stopifnot(is.ppp(X))
   if(!is.null(srange)) check.range(srange) else {
     nnd <- nndist(X)
@@ -16,8 +16,8 @@ bw.ppl <- function(X, ..., srange=NULL, ns=16) {
   cv <- numeric(ns)
   for(i in 1:ns) {
     si <- sigma[i]
-    lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE)
-    lam <- density(X, sigma=si)
+    lamx <- density(X, sigma=si, at="points", leaveoneout=TRUE, weights=weights)
+    lam <- density(X, sigma=si, weights=weights)
     cv[i] <- sum(log(lamx)) - integral.im(lam)
   }
   result <- bw.optim(cv, sigma, iopt=which.max(cv), 

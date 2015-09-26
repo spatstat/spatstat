@@ -1816,6 +1816,7 @@
   Sebastian Schutte,
   Bryan Scott,
   Olivia Semboli,
+  \ifelse{latex}{\out{Fran\c{c}ois S\'{e}m\'{e}curbe}}{Francois Semecurbe},
   Vadim Shcherbakov,
   Shen Guochun,
   Harold-Jeffrey Ship,

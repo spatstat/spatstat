@@ -8,7 +8,7 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.ppl(X, ..., srange=NULL, ns=16)
+   bw.ppl(X, \dots, srange=NULL, ns=16, weights=NULL)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,10 @@
   \item{ns}{
     Optional integer giving the number of values of
     bandwidth to search.
+  }
+  \item{weights}{
+    Optional. Numeric vector of weights for the points of \code{X}.
+    Argument passed to \code{\link{density.ppp}}.
   }
 }
 \details{
