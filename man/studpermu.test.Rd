@@ -119,9 +119,9 @@ and Ege Rubak
 \email{rubak@math.aau.dk}
 }
 \examples{
-\donttest{
-  testpyramidal <- studpermu.test(pyramidal, Neurons ~ group)
-}
+  np <- if(interactive()) 99 else 19
+  testpyramidal <- studpermu.test(pyramidal, Neurons ~ group, nperm=np)
+  testpyramidal
 }
 \keyword{spatial}
 \keyword{htest}

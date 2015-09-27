@@ -1,26 +1,24 @@
 #
 # plot.mppm.R
 #
-#   $Revision: 1.1 $  $Date: 2007/03/26 01:31:40 $
+#   $Revision: 1.3 $  $Date: 2015/09/27 02:28:17 $
 #
 #
 
-plot.mppm <- function(x, ..., trend=TRUE, cif=FALSE, how="image") {
+plot.mppm <- function(x, ..., trend=TRUE, cif=FALSE, se=FALSE,
+                      how=c("image", "contour", "persp")) {
   xname <- deparse(substitute(x))
-  if(length(how) > 1)
-    stop(paste("Multiple plotting styles cannot be selected;",
-               "argument", dQuote("how"), "must have length 1"))
-  if(!missing(trend) && missing(cif))
-    cif <- !trend
-  else if(missing(trend) && !missing(cif))
-    trend <- !cif
-  else if(trend + cif != 1)
-    stop(paste("Exactly one of", dQuote("trend"), "and", dQuote("cif"),
-               "should be TRUE"))
+  how <- match.arg(how)
   subs <- subfits(x)
-  arglist <- resolve.defaults(list(x=subs,how=how, trend=trend, cif=cif),
+  arglist <- resolve.defaults(list(x=subs, how=how),
                               list(...),
                               list(main=xname))
-  do.call("plot", arglist)
+  if(trend) 
+    do.call("plot", c(arglist, list(trend=TRUE, cif=FALSE, se=FALSE)))
+  if(cif) 
+    do.call("plot", c(arglist, list(trend=FALSE, cif=TRUE, se=FALSE)))
+  if(se) 
+    do.call("plot", c(arglist, list(trend=FALSE, cif=FALSE, se=TRUE)))
+  invisible(NULL)
 }
 

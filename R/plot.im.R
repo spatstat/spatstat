@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.106 $   $Date: 2015/06/24 09:50:40 $
+#  $Revision: 1.107 $   $Date: 2015/09/27 02:51:17 $
 #
 #  Plotting code for pixel images
 #
@@ -667,6 +667,7 @@ image.im <- plot.im
 ######################################################################
 
 contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
+                        col=par("fg"), 
                         clipwin=NULL, show.all=!add, do.plot=TRUE)
 {
   defaultmain <- deparse(substitute(x))
@@ -689,6 +690,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   if(!is.null(clipwin))
     x <- x[clipwin, drop=FALSE]
   if(show.all) {
+    col0 <- if(inherits(col, "colourmap")) par("fg") else col
     if(axes) # with axes
       do.call.plotfun(plot.default,
                       resolve.defaults(
@@ -696,20 +698,39 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                                             y = range(x$yrow),
                                             type = "n", add=add),
                                        list(...),
-                                       list(asp = 1, xlab = "x",
-                                            ylab = "y", main = main)))
+                                       list(asp = 1,
+                                            xlab = "x",
+                                            ylab = "y",
+                                            col = col0,
+                                            main = main)))
     else { # box without axes
       rec <- owin(x$xrange, x$yrange)
       do.call.matched(plot.owin,
                       resolve.defaults(list(x=rec, add=add, show.all=TRUE),
                                        list(...),
-                                       list(main=main)))
+                                       list(col=col0, main=main)))
     }
   }
-  do.call.plotfun(contour.default,
-                  resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
-                                   list(add=TRUE),
+  if(!inherits(col, "colourmap")) {
+    do.call.plotfun(contour.default,
+                    resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
+                                     list(add=TRUE, col=col),
+                                     list(...)))
+  } else {
+    clin <- do.call.matched(contourLines,
+                            append(list(x=x$xcol, y=x$yrow, z=t(x$v)),
                                    list(...)))
+    linpar <- graphicsPars("lines")
+    for(i in seq_along(clin)) {
+      lini <- clin[[i]]
+      levi <- lini$level
+      coli <- col(levi)
+      argi <- resolve.defaults(lini[c("x", "y")],
+                               list(...),
+                               list(col=coli))
+      do.call.matched(lines.default, argi, extrargs=linpar)
+    }
+  }
   return(invisible(z))
 }
 

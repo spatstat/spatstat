@@ -88,9 +88,9 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
 }
 
 \examples{
-  \dontrun{
-  data(nztrees)
-  plot(adaptive.density(nztrees))
+  plot(adaptive.density(nztrees, 1), main="Voronoi estimate")
+  if(interactive()) {
+    plot(adaptive.density(nztrees), main="Adaptive estimate")
   }
 }
 \author{Adrian Baddeley

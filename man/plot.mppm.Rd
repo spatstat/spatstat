@@ -9,8 +9,9 @@
   surface.
 }
 \usage{
-  \method{plot}{mppm}(x, ..., trend = TRUE, cif = FALSE,
-                  how="image")
+  \method{plot}{mppm}(x, \dots,
+                trend=TRUE, cif=FALSE, se=FALSE,
+                how=c("image", "contour", "persp"))
 }
 \arguments{
   \item{x}{
@@ -21,18 +22,20 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link{plot.ppm}} or
-    \code{\link{plot.listof}} controlling the plot.
+    \code{\link{plot.anylist}} controlling the plot.
   }
   \item{trend}{
-    logical flag; if \code{TRUE}, the spatial trend surface will be produced.
+    Logical value indicating whether to plot the fitted trend.
   }
   \item{cif}{
-    logical flag; if \code{TRUE}, the conditional intensity surface will be
-    produced.
+    Logical value indicating whether to plot the fitted conditional intensity.
+  }
+  \item{se}{
+    Logical value indicating whether to plot the standard error of the
+    fitted trend.
   }
   \item{how}{
-    character string vector indicating the style of
-    plot to be performed. 
+    Single character string indicating the style of plot to be performed. 
   }
 }
 \value{
@@ -46,7 +49,7 @@
   It invokes \code{\link{subfits}} to compute the fitted model for
   each individual point pattern dataset, then calls
   \code{\link{plot.ppm}} to plot these individual models. These
-  individual plots are displayed using \code{\link{plot.listof}},
+  individual plots are displayed using \code{\link{plot.anylist}},
   which generates either a series of separate plot frames or an
   array of plot panels on a single page. 
 }
@@ -59,6 +62,19 @@
   Baddeley, A., Rubak, E. and Turner, R. (2015)
   \emph{Spatial Point Patterns: Methodology and Applications with R}.
   London: Chapman and Hall/CRC Press. 
+}
+\examples{
+  # Synthetic data from known model
+  n <- 9
+  H <- hyperframe(V=1:n,
+                  U=runif(n, min=-1, max=1))
+  H$Z <- setcov(square(1))
+  H$U <- with(H, as.im(U, as.rectangle(Z)))
+  H$Y <- with(H, rpoispp(eval.im(exp(2+3*Z))))
+
+  fit <- mppm(Y ~Z + U + V, data=H)
+
+  plot(fit)
 }
 \author{
   Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.

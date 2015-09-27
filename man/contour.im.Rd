@@ -6,7 +6,8 @@
 }
 \usage{
    \method{contour}{im}(x, \dots, main,
-            axes=FALSE, add=FALSE, clipwin=NULL, show.all=!add, do.plot=TRUE)
+            axes=FALSE, add=FALSE, col=par("fg"), 
+            clipwin=NULL, show.all=!add, do.plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -26,6 +27,11 @@
   \item{add}{
     Logical. If \code{FALSE}, a new plot is created. If \code{TRUE},
     the contours are drawn over the existing plot.
+  }
+  \item{col}{
+    Colour in which to draw the contour lines.
+    Either a single value that can be interpreted as a colour value,
+    or a \code{colourmap} object.
   }
   \item{clipwin}{
     Optional. A window (object of class \code{"owin"}).
@@ -74,7 +80,13 @@
   See \code{\link{contour.default}} for a full list of these arguments.
 
   The defaults for any of the abovementioned arguments
-  can be reset using \code{\link{spatstat.options}("par.contour")}. 
+  can be reset using \code{\link{spatstat.options}("par.contour")}.
+
+  If \code{col} is a colour map (object of class \code{"colourmap"},
+  see \code{\link{colourmap}}) then the contours will be plotted in
+  different colours as determined by the colour map.
+  The contour at level \code{z} will be plotted
+  in the colour \code{col(z)} associated with this level in the colour map.
 }
 \value{
   none.
@@ -84,17 +96,23 @@
    Z <- setcov(owin())
    contour(Z, axes=TRUE)
    contour(Z)
+
+   co <- colourmap(rainbow(100), range=c(0,1))
+   contour(Z, col=co, lwd=2)
 }
 \seealso{
   \code{\link{im.object}},
   \code{\link{plot.im}},
   \code{\link{persp.im}}
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{hplot}

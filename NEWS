@@ -1,13 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.045
+        CHANGES IN spatstat VERSION 1.42-2.046
 
 OVERVIEW
 
    o We thank Leanne Bischof, Christophe Biscio, Belarmain Fandohan,
    Andrew Hardegen, Frederic Lavancier, Tom Lawrence, Martin Maechler, 
    Greg McSwiggan, Robin Milne, Gopalan Nair, Tuomas Rajala, 
-   Suman Rakshit, Ben Ramage, Francois Semecurbe 
-   and Ida-Maria Sintorn for contributions.
+   Suman Rakshit, Ben Ramage, Francois Semecurbe and Ida-Maria Sintorn 
+   for contributions.
 
    o spatstat now depends on the package 'nlme'.
 
@@ -39,6 +39,8 @@ OVERVIEW
    o Cross-correlation version of the mark correlation function.
 
    o Penttinen pairwise interaction model.
+
+   o Contour plots with colours determined by a colour map.
 
    o New dataset: Australian states and territories.
 
@@ -211,6 +213,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    New argument 'kernel' specifies the smoothing kernel.
    Any of the standard one-dimensional smoothing kernels can be used.
 
+   o contour.im
+   New argument 'col' specifies the colour of the contour lines.
+   If 'col' is a colour map, then the contours are drawn in different colours.
+
    o plot.ppp
    The default colour for the points is now a transparent grey,
    if this is supported by the plot device.
@@ -275,6 +281,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o bw.ppl
    New argument 'weights'.
+
+   o plot.mppm
+   New argument 'se'.
    
 BUG FIXES
 
@@ -293,6 +302,11 @@ BUG FIXES
    o rVarGamma, rMatClust, rCauchy, rNeymanScott
    Crashed if 'kappa' was a function or image instead of a single number.
    [Spotted by Ben Ramage.]
+   Fixed.
+
+   o plot.mppm
+   Crashed with a message about "figure margins too large"
+   unless the argument se=FALSE was given explicitly.
    Fixed.
 
    o opening.owin, closing.owin
