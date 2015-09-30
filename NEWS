@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.046
+        CHANGES IN spatstat VERSION 1.42-2.047
 
 OVERVIEW
 
@@ -37,6 +37,8 @@ OVERVIEW
    o Mark correlation function may include weights.
 
    o Cross-correlation version of the mark correlation function.
+
+   o Variance calculations for replicated patterns.
 
    o Penttinen pairwise interaction model.
 
@@ -183,6 +185,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Now handles models with a random effect component.
    New argument 'random' is a formula specifying the random effect.
 
+   o vcov.mppm
+   Now handles models with Gibbs interactions.
+
    o [.ppp
    New argument 'clip' determines whether the window is clipped.
 
@@ -299,7 +304,7 @@ BUG FIXES
    Crashed if 'covname' was missing.
    Fixed.
 
-   o rVarGamma, rMatClust, rCauchy, rNeymanScott
+   o rVarGamma, rMatClust, rThomas, rCauchy, rNeymanScott
    Crashed if 'kappa' was a function or image instead of a single number.
    [Spotted by Ben Ramage.]
    Fixed.

@@ -2095,7 +2095,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.2 $ $Date: 2015/08/12 11:09:07 $
+# $Revision: 1.3 $ $Date: 2015/09/30 04:52:47 $
 # 
 
 require(spatstat)
@@ -2110,9 +2110,15 @@ fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.0
 fit1
 fit2
 fit3
+
 subfits(fit1)
 subfits(fit2)
 subfits(fit3)
+
+# test vcov algorithm
+vcov(fit1)
+vcov(fit2)
+vcov(fit3)
 
 # test handling of offsets and zero cif values in mppm
 

@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.113 $  $Date: 2015/04/02 02:17:19 $
+##  $Revision: 1.114 $  $Date: 2015/09/30 04:36:48 $
 ##
 
 vcov.ppm <- local({
@@ -1591,22 +1591,6 @@ contrastmatrix <- function(x,p){
     }
   }
   mat
-}
-
-
-checksolve <- function(M, action, descrip, target="") {
-  Mname <- short.deparse(substitute(M))
-  Minv <- try(solve(M), silent=(action=="silent"))
-  if(!inherits(Minv, "try-error"))
-    return(Minv)
-  if(missing(descrip))
-    descrip <- paste("the matrix", sQuote(Mname))
-  whinge <- paste0("Cannot compute ", target, ": ", descrip, " is singular")
-  switch(action,
-         fatal=stop(whinge, call.=FALSE),
-         warn= warning(whinge, call.=FALSE),
-         silent={})
-  return(NULL)
 }
 
 vcov.ppm

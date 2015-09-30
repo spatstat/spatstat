@@ -1,13 +1,12 @@
 #
 #
-#  $Revision: 1.34 $   $Date: 2015/07/11 09:06:17 $
+#  $Revision: 1.37 $   $Date: 2015/09/30 07:57:58 $
 #
 #
 subfits.new <- function(object, what="models", verbose=FALSE) {
   stopifnot(inherits(object, "mppm"))
 
-  if(!(what %in% c("models","interactions")))
-    stop(paste("Unrecognised option: what=", dQuote(what)))
+  what <- match.arg(what, c("models", "interactions", "basicmodels"))
 
   if(what == "interactions")
     return(subfits.old(object, what, verbose))
@@ -59,7 +58,8 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   }
   announce("done.\n")
 
-  # Fisher information, if possible
+  # Fisher information and vcov
+  fisher <- varcov <- NULL
   if(what == "models") {
     announce("Fisher information...")
     fisher   <- vcov(object, what="fisher", err="null")
@@ -67,7 +67,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
     if(inherits(varcov, "try-error"))
       varcov <- NULL
     announce("done.\n")
-  }
+  } 
   
   # Extract data frame 
   announce("Extracting data...")
@@ -102,7 +102,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
     # create fitted interaction with these coefficients
     vni <- if(nactive > 0) Vnamelist[[tagi]] else character(0)
     interactions[[i]] <- fii(interi, coef.avail, vni)
-    }
+  }
   announce("Done!\n")
   names(interactions) <- rownames
 
@@ -134,7 +134,7 @@ subfits.new <- function(object, what="models", verbose=FALSE) {
   fake.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2015/07/11 09:06:17 $")
+                      date="$Date: 2015/09/30 07:57:58 $")
   fake.call <- call("cannot.update", Q=NULL, trend=trend,
                            interaction=NULL, covariates=NULL,
                            correction=object$Info$correction,
@@ -213,8 +213,7 @@ subfits.old <-
   function(object, what="models", verbose=FALSE) {
   stopifnot(inherits(object, "mppm"))
 
-  if(!(what %in% c("models","interactions")))
-    stop(paste("Unrecognised option: what=", dQuote(what)))
+  what <- match.arg(what, c("models","interactions", "basicmodels"))
   
   # extract stuff
   announce <- if(verbose) function(x) { cat(x) } else function(x) {} 
@@ -262,7 +261,8 @@ subfits.old <-
   }
   announce("done.\n")
 
-  # Fisher information, if possible
+  # Fisher information and vcov
+  fisher <- varcov <- NULL
   if(what == "models") {
     announce("Fisher information...")
     fisher   <- vcov(object, what="fisher", err="null")

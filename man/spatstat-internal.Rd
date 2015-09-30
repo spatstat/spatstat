@@ -60,6 +60,7 @@
 \alias{change.default.expand}          
 \alias{checkbigmatrix}          
 \alias{checkfields}          
+\alias{checksolve}          
 \alias{check.finite}
 \alias{check.hist.lengths}
 \alias{check.in.range}
@@ -804,7 +805,8 @@ censtimeCDFest(o, cc, d, breaks, \dots,
      KM, RS, HAN, RAW, han.denom, tt, pmax)
 change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
-checkfields(X,L)          
+checkfields(X,L)
+checksolve(M, action, descrip, target)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)

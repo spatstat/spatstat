@@ -1,7 +1,9 @@
 #
 # linalg.R
 #
-# $Revision: 1.10 $ $Date: 2015/01/03 09:50:35 $
+#  Linear Algebra
+#
+# $Revision: 1.11 $ $Date: 2015/09/30 04:36:17 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -149,3 +151,17 @@ sumsymouter <- function(x, w=NULL) {
   matrix(zz$y, p, p)
 }
 
+checksolve <- function(M, action, descrip, target="") {
+  Mname <- short.deparse(substitute(M))
+  Minv <- try(solve(M), silent=(action=="silent"))
+  if(!inherits(Minv, "try-error"))
+    return(Minv)
+  if(missing(descrip))
+    descrip <- paste("the matrix", sQuote(Mname))
+  whinge <- paste0("Cannot compute ", target, ": ", descrip, " is singular")
+  switch(action,
+         fatal=stop(whinge, call.=FALSE),
+         warn= warning(whinge, call.=FALSE),
+         silent={})
+  return(NULL)
+}
