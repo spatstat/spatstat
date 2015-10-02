@@ -221,6 +221,7 @@ Following is an overview of the most important changes.
       of the same model, or as the responses from different units in a 
       designed experiment.
       Methods for this class include \texttt{plot}, \texttt{print}, 
+      \texttt{vcov},
       \texttt{summary}, \texttt{fitted}, \texttt{predict}, \texttt{simulate}, 
       $\ldots$
 \item
@@ -497,11 +498,28 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+\item \texttt{dppm}:
+  Fit a determinantal point process model.
+\item \texttt{fitted.dppm}, \texttt{predict.dppm}, \texttt{intensity.dppm}:
+  prediction for a fitted determinantal point process model.
+\item \texttt{logLik.dppm}, \texttt{AIC.dppm}, \texttt{extractAIC.dppm}, 
+  \texttt{nobs.dppm}: Likelihood and AIC for 
+  a fitted determinantal point process model.
+\item \texttt{coef.dppm}, \texttt{formula.dppm}, \texttt{print.dppm}, 
+  \texttt{terms.dppm}, \texttt{labels.dppm},
+   \texttt{model.frame.dppm}, \texttt{model.matrix.dppm}, 
+   \texttt{model.images.dppm},  \texttt{is.stationary.dppm}, 
+   \texttt{reach.dppm}, \texttt{unitname.dppm}, \verb!unitname<-.dppm!, 
+   \texttt{Window.dppm}: Various methods for \texttt{dppm} objects.
+ \item \texttt{parameters.dppm}: Extract meaningful list of model parameters.
+ \item \texttt{objsurf.dppm}: Objective function surface of 
+   a \texttt{dppm} object. 
+ \item \texttt{residuals.dppm}: Residual measure for a \texttt{dppm} object.
 \item \texttt{dppBessel}, \texttt{dppCauchy}, 
   \texttt{dppGauss}, \texttt{dppMatern}, \texttt{dppPowerExp}: 
-   Determinantal Point Process models.
+   Determinantal Point Processes.
  \item    
-   \texttt{update.dppmodel}: Set parameter values in a \texttt{dpp} model.
+   \texttt{update.dppmodel}: Set parameter values in a \texttt{dpp}.
  \item \texttt{is.stationary.dppmodel}, 
    \texttt{print.dppmodel}, \texttt{reach.dppmodel}, \texttt{valid.dppmodel}: 
    Basic information about a \texttt{dpp} model.
@@ -2116,6 +2134,9 @@ listed alphabetically.
   \item \texttt{as.fv}:
       Now handles objects of class \texttt{kppm} or \texttt{minconfit}.
 
+  \item \texttt{as.im.function}:
+      New argument \texttt{strict}.
+
   \item \texttt{as.mask}:
    Argument \texttt{eps} can now be a 2-vector, specifying x and y resolutions.
 
@@ -2171,6 +2192,9 @@ listed alphabetically.
   \item \texttt{connected}:
    \texttt{connected} is now generic, with methods for 
    \texttt{im}, \texttt{owin} and \texttt{ppp}.
+
+ \item \texttt{contour.im}: new argument \texttt{col} can be a colour map
+   (to specify different colours for each contour level).
 
   \item \texttt{countends}:
     New argument \texttt{toler}.
@@ -2288,6 +2312,11 @@ listed alphabetically.
        envelope methods now have argument \texttt{use.theory} specifying whether
        to use the ``theoretical'' value of the summary function
        when constructing simultaneous envelopes.
+     \item 
+       envelope methods have new argument \texttt{scale} specifying a 
+       scaling function for global envelopes. The resulting global envelopes
+       will have non-constant width, proportional to \code{scale(r)},
+       instead of constant width.
      \item \texttt{envelope.envelope}:
        New argument \texttt{transform} allows the user to apply a transformation
        to previously-computed summary functions.

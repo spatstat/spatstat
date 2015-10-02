@@ -11,7 +11,7 @@
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
-  alternative=c("two.sided", "less", "greater"),
+  alternative=c("two.sided", "less", "greater"), scale=NULL, 
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -20,7 +20,7 @@
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
-  alternative=c("two.sided", "less", "greater"),
+  alternative=c("two.sided", "less", "greater"), scale=NULL,
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -88,6 +88,17 @@
     or a one-sided test with a lower critical boundary
     (\code{side="less"}) or a one-sided test
     with an upper critical boundary (\code{side="greater"}).
+  }
+  \item{scale}{
+    Optional. Scaling function for global envelopes.
+    A function in the \R language which determines the
+    relative scale of deviations, as a function of
+    distance \eqn{r}, when computing the global envelopes.
+    Applicable only when \code{global=TRUE}.
+    Summary function values for distance \code{r}
+    will be \emph{divided} by \code{scale(r)} before the
+    maximum deviation is computed. The resulting global envelopes
+    will have width proportional to \code{scale(r)}. 
   }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated

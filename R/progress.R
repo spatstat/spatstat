@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.7 $  $Date: 2014/10/12 00:16:58 $
+#   $Revision: 1.8 $  $Date: 2015/10/02 05:09:42 $
 #
 #   progress plots (envelope representations)
 #
@@ -64,9 +64,12 @@ mctest.progress <- local({
 # Performs underlying computations
 
 envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
-                                normalize=FALSE, deflate=FALSE) {
+                                 alternative=c("two.sided", "less", "greater"),
+                                 scale=NULL, 
+                                 normalize=FALSE, deflate=FALSE) {
+  alt <- alternative <- match.arg(alternative)
   # compute or extract simulated functions
-  X <- envelope(X, fun=fun, ..., savefuns=TRUE)
+  X <- envelope(X, fun=fun, ..., alternative=alternative, savefuns=TRUE)
   Y <- attr(X, "simfuns")
   # extract values
   R   <- with(X, .x)
@@ -75,23 +78,44 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   sim <- as.matrix(as.data.frame(Y))[, -1]
   nsim <- ncol(sim)
 
+  ## determine rescaling if any
+  if(is.null(scale)) {
+    sc <- NULL
+  } else if(is.function(scale)) {
+    sc <- scale(R)
+    sname <- "scale(r)"
+    ans <- check.nvector(sc, length(R), things="values of r",
+                         fatal=FALSE, vname=sname)
+    if(!ans)
+      stop(attr(ans, "whinge"), call.=FALSE)
+    if(any(bad <- (sc <= 0))) {
+      ## issue a warning unless this only happens at r=0
+      if(any(bad[R > 0]))
+        warning(paste("Some values of", sname, "were negative or zero:",
+                      "scale was reset to 1 for these values"),
+                call.=FALSE)
+      sc[bad] <- 1
+    }
+  } else stop("Argument scale should be a function")
+
   if(is.infinite(exponent)) {
     # MAD
-    devdata <- cummax(abs(obs-reference))
-    devsim <- apply(abs(sim-reference), 2, cummax)
+    devdata <- cummax(Deviant(obs-reference, alt, sc))
+    devsim <- apply(Deviant(sim-reference, alt, sc), 2, cummax)
     testname <- "Maximum absolute deviation test"
   } else {
     dR <- c(0, diff(R))
     a <- (nsim/(nsim - 1))^exponent
-    devdata <- a * cumsum(dR * abs(obs - reference)^exponent)
-    devsim <- a * apply(dR * abs(sim - reference)^exponent, 2, cumsum)
+    devdata <- a * cumsum(dR * Deviant(obs - reference, alt, sc)^exponent)
+    devsim <- a * apply(dR * Deviant(sim - reference, alt, sc)^exponent, 2, cumsum)
     if(normalize) {
       devdata <- devdata/R
       devsim <- sweep(devsim, 1, R, "/")
     }
     if(deflate) {
-      devdata <- devdata^(1/exponent)
-      devsim <- devsim^(1/exponent)
+      scr <- sc %orifnull% 1
+      devdata <- scr * devdata^(1/exponent)
+      devsim <-  scr * devsim^(1/exponent)
     }
     testname <- if(exponent == 2) "Diggle-Cressie-Loosmore-Ford test" else
                 if(exponent == 1) "Integral absolute deviation test" else

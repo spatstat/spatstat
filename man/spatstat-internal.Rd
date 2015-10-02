@@ -112,6 +112,7 @@
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
+\alias{Deviant}
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
@@ -858,6 +859,7 @@ default.clipwindow(object, epsilon)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force)
+Deviant(x, alternative, scaling)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     weights, edge, varcov,
@@ -905,22 +907,24 @@ envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, 
            verbose, clipdata, 
            transform, global, ginterval, use.theory,
-           alternative,
+           alternative, scale,
            savefuns, savepatterns, saveresultof,
            weights,
            nsim2, VARIANCE, nSD,
            Yname, maxnerr, internal, cl,
            envir.user, expected.arg, do.pwrong)
-envelopeProgressData(X, fun, \dots, exponent, normalize, deflate)
+envelopeProgressData(X, fun, \dots, exponent,
+                     alternative, scale,
+                     normalize, deflate)
 envelopeTest(X, \dots, exponent, alternative,
             rinterval, scale, use.theo, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
             Xname, verbose, internal)
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,
-      nsim, nsim2, jsim, jsim.mean,
-      type, alternative, csr, use.theory, nrank, ginterval, nSD,
-      savefuns, check, Yname, do.pwrong, weights, precomputed)
+  nsim, nsim2, jsim, jsim.mean,
+  type, alternative, scale, csr, use.theory, nrank, ginterval, nSD,
+  savefuns, check, Yname, do.pwrong, weights, precomputed)
 equalpairs(U, X, marked=FALSE)
 equalpairs.quad(Q)
 equals.quad(Q)          

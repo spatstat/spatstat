@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.76 $  $Date: 2015/09/03 11:32:45 $
+#   $Revision: 2.77 $  $Date: 2015/10/02 03:50:07 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -50,7 +50,7 @@ envelope.ppp <-
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
@@ -175,7 +175,7 @@ envelope.ppp <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
-                 alternative=alternative,
+                 alternative=alternative, scale=scale,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, maxnerr=maxnerr, cl=cl,
@@ -189,7 +189,7 @@ envelope.ppm <-
            start=NULL,
            control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL,
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, maxnerr=nsim, do.pwrong=FALSE,
@@ -248,7 +248,7 @@ envelope.ppm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
-                 alternative=alternative,
+                 alternative=alternative, scale=scale,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, maxnerr=maxnerr, cl=cl,
@@ -259,7 +259,7 @@ envelope.kppm <-
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
            do.pwrong=FALSE, envir.simul=NULL)
@@ -296,7 +296,7 @@ envelope.kppm <-
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
-                 alternative=alternative,
+                 alternative=alternative, scale=scale,
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, maxnerr=maxnerr, cl=cl,
@@ -317,7 +317,7 @@ envelopeEngine <-
            nsim=99, nrank=1, ..., 
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL,
            savefuns=FALSE, savepatterns=FALSE,
            saveresultof=NULL,
            weights=NULL,
@@ -841,6 +841,7 @@ envelopeEngine <-
   result <- envelope.matrix(simvals, funX=funX,
                             jsim=jsim, jsim.mean=jsim.mean,
                             type=etype, alternative=alternative,
+                            scale=scale,
                             csr=csr, use.theory=use.theory,
                             nrank=nrank, ginterval=ginterval, nSD=nSD,
                             Yname=Yname, do.pwrong=do.pwrong,
@@ -1069,6 +1070,7 @@ envelope.matrix <- function(Y, ...,
                             jsim=NULL, jsim.mean=NULL,
                             type=c("pointwise", "global", "variance"),
                             alternative=c("two.sided", "less", "greater"),
+                            scale = NULL,
                             csr=FALSE, use.theory = csr, 
                             nrank=1, ginterval=NULL, nSD=2,
                             savefuns=FALSE,
@@ -1293,7 +1295,7 @@ envelope.matrix <- function(Y, ...,
                nsim.mean <- NULL
              }
              nsim <- ncol(simvals)
-             # compute max deviations
+             # compute deviations
              deviations <- sweep(simvals, 1, reference)
              deviations <- switch(alternative,
                                   two.sided = abs(deviations),
@@ -1301,12 +1303,34 @@ envelope.matrix <- function(Y, ...,
                                   greater = pmax(0, deviations))
              deviations <- matrix(deviations,
                                   nrow=nrow(simvals), ncol=ncol(simvals))
+             ## rescale ?
+             sc <- 1
+             if(!is.null(scale)) {
+               stopifnot(is.function(scale))
+               sc <- scale(rvals)
+               sname <- "scale(r)"
+               ans <- check.nvector(sc, length(rvals), things="values of r",
+                                    fatal=FALSE, vname=sname)
+               if(!ans)
+                 stop(attr(ans, "whinge"), call.=FALSE)
+               if(any(bad <- (sc <= 0))) {
+                 ## issue a warning unless this only happens at r=0
+                 if(any(bad[rvals > 0]))
+                   warning(paste("Some values of", sname,
+                                 "were negative or zero:",
+                                 "scale was reset to 1 for these values"),
+                           call.=FALSE)
+                 sc[bad] <- 1
+               }
+               deviations <- sweep(deviations, 1, sc, "/")
+             }
+             ## compute max (scaled) deviations
              suprema <- apply(deviations, 2, max, na.rm=TRUE)
              # ranked deviations
              dmax <- sort(suprema)[nsim-nrank+1]
              # simultaneous bands
-             lo <- reference - dmax
-             hi <- reference + dmax
+             lo <- reference - sc * dmax
+             hi <- reference + sc * dmax
            }
 
            lo.name <- "lower critical boundary for %s"
@@ -1523,6 +1547,7 @@ envelope.matrix <- function(Y, ...,
   attr(result, "einfo") <- list(global = (type =="global"),
                                 ginterval = ginterval,
                                 alternative=alternative,
+                                scale = scale, 
                                 csr = csr,
                                 use.theory = use.theory,
                                 csr.theo = csr && use.theory,
@@ -1730,6 +1755,7 @@ pool.envelope <- local({
     ginterval    <- resolveEinfo(eilist, "ginterval", NULL, atomic=FALSE)
     VARIANCE  <- resolveEinfo(eilist, "VARIANCE", FALSE)
     alternative      <- resolveEinfo(eilist, "alternative", FALSE)
+    scale <- resolveEinfo(eilist, "scale", NULL, atomic=FALSE)
     resolveEinfo(eilist, "simtype",  "funs",
                  "Envelopes were generated using different types of simulation")
     resolveEinfo(eilist, "constraints",  "",
@@ -1798,6 +1824,7 @@ pool.envelope <- local({
              }
              result <- envelope(simfunmatrix, funX=Elist[[1]],
                                 type=type, alternative=alternative,
+                                scale=scale,
                                 csr=csr, use.theory=use.theory,
                                 ginterval=ginterval,
                                 Yname=Yname, weights=weights,

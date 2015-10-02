@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.17 $   $Date: 2014/11/10 05:58:17 $
+#  $Revision: 1.18 $   $Date: 2015/10/02 03:43:53 $
 #
 #  Envelopes for 'lpp' objects
 #
@@ -11,7 +11,7 @@ envelope.lpp <-
   function(Y, fun=linearK, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
@@ -57,7 +57,7 @@ envelope.lpp <-
                  verbose=verbose, clipdata=FALSE,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
-                 alternative=alternative,
+                 alternative=alternative, scale=scale, 
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, cl=cl,
@@ -68,7 +68,7 @@ envelope.lppm <-
   function(Y, fun=linearK, nsim=99, nrank=1, ..., 
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
-           alternative=c("two.sided", "less", "greater"),
+           alternative=c("two.sided", "less", "greater"), scale=NULL, 
            savefuns=FALSE, savepatterns=FALSE, nsim2=nsim,
            VARIANCE=FALSE, nSD=2,
            Yname=NULL, do.pwrong=FALSE, envir.simul=NULL) {
@@ -114,7 +114,7 @@ envelope.lppm <-
                  verbose=verbose, clipdata=FALSE,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
-                 alternative=alternative,
+                 alternative=alternative, scale=scale, 
                  savefuns=savefuns, savepatterns=savepatterns, nsim2=nsim2,
                  VARIANCE=VARIANCE, nSD=nSD,
                  Yname=Yname, cl=cl,

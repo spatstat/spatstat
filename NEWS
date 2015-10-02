@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.048
+        CHANGES IN spatstat VERSION 1.42-2.049
 
 OVERVIEW
 
@@ -204,7 +204,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    'equal-split discontinuous' smoothers. New argument 'continuous' 
    determines the choice of smoother.
 
-   o dclf.test, mad.test
+   o envelope
+   New argument 'scale' allows global envelopes to have 
+   width proportional to a specified function of r,
+   rather than constant width.
+
+   o dclf.test, mad.test, dclf.progress, mad.progress
    New argument 'scale' allows summary function values to be rescaled
    before the comparison is performed.
 
@@ -342,6 +347,10 @@ BUG FIXES
    simulated with fixall=TRUE (i.e. prescribing a fixed number of
    points of each type) if the model was segregated 
    (i.e. if different types of points had different first order trend).
+   Fixed.
+
+   o dclf.progress, mad.progress
+   Ignored the argument 'alternative'. 
    Fixed.
    
    o $<-.hyperframe, [<-.hyperframe

@@ -11,8 +11,8 @@
   Maximum Absolute Deviation test for a spatial point pattern.
 }
 \usage{
-dclf.progress(X, ..., nrank = 1)
-mad.progress(X, ..., nrank = 1)
+dclf.progress(X, \dots, nrank = 1)
+mad.progress(X, \dots, nrank = 1)
 mctest.progress(X, fun = Lest, \dots, exponent = 1, nrank = 1)
 }
 \arguments{
@@ -26,7 +26,8 @@ mctest.progress(X, fun = Lest, \dots, exponent = 1, nrank = 1)
     Arguments passed to \code{\link{envelope}}.
     Useful arguments include \code{fun} to determine the summary
     function, \code{nsim} to specify the number of Monte Carlo
-    simulations, and \code{verbose=FALSE} to turn off the messages.
+    simulations, \code{alternative} to specify one-sided or two-sided
+    envelopes, and \code{verbose=FALSE} to turn off the messages.
   }
   \item{nrank}{
     Integer. The rank of the critical value of the Monte Carlo test,

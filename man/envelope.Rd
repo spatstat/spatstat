@@ -14,7 +14,7 @@
   simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
-  alternative=c("two.sided", "less", "greater"),
+  alternative=c("two.sided", "less", "greater"), scale=NULL, 
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -24,7 +24,7 @@
   verbose=TRUE, clipdata=TRUE,
   start=NULL, control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
-  alternative=c("two.sided", "less", "greater"),
+  alternative=c("two.sided", "less", "greater"), scale=NULL, 
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -33,7 +33,7 @@
   simulate=NULL,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
-  alternative=c("two.sided", "less", "greater"),
+  alternative=c("two.sided", "less", "greater"), scale=NULL, 
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL, maxnerr=nsim,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -134,6 +134,17 @@
     or a one-sided test with a lower critical boundary
     (\code{side="less"}) or a one-sided test
     with an upper critical boundary (\code{side="greater"}).
+  }
+  \item{scale}{
+    Optional. Scaling function for global envelopes.
+    A function in the \R language which determines the
+    relative scale of deviations, as a function of
+    distance \eqn{r}, when computing the global envelopes.
+    Applicable only when \code{global=TRUE}.
+    Summary function values for distance \code{r}
+    will be \emph{divided} by \code{scale(r)} before the
+    maximum deviation is computed. The resulting global envelopes
+    will have width proportional to \code{scale(r)}. 
   }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated
@@ -579,20 +590,30 @@
   E <- envelope(X, nsim=3, correction="translate")
  }
 
+# Global envelopes
+ \dontrun{
+ plot(envelope(X, Lest, global=TRUE))
+ plot(envelope(X, Kest,  global=TRUE, scale=function(r) { r }))
+ }
+ \testonly{
+  E <- envelope(X, Lest, nsim=3, global=TRUE)
+  E <- envelope(X, Kest, nsim=3, global=TRUE, scale=function(r) { r })
+ }
+
  # Envelope of K function for simulations from Gibbs model 
  \dontrun{
- fit <- ppm(cells, ~1, Strauss(0.05))
+ fit <- ppm(cells ~1, Strauss(0.05))
  plot(envelope(fit))
  plot(envelope(fit), global=TRUE)
  }
  \testonly{
-  fit <- ppm(cells, ~1, Strauss(0.05), nd=20)
+  fit <- ppm(cells ~1, Strauss(0.05), nd=20)
   E <- envelope(fit, nsim=3, correction="border", nrep=100)
   E <- envelope(fit, nsim=3, correction="border", global=TRUE, nrep=100)
  }
 
  # Envelope of K function for simulations from cluster model 
- fit <- kppm(redwood, ~1, "Thomas")
+ fit <- kppm(redwood ~1, "Thomas")
  \dontrun{
  plot(envelope(fit, Gest))
  plot(envelope(fit, Gest, global=TRUE))
@@ -681,7 +702,7 @@ nsim=3, global=TRUE))
  # each simulated pattern to obtain the intensity estimates for Kinhom.
  # (lambda=NULL would also be valid)
 
- fit <- kppm(redwood, ~1, clusters="MatClust")
+ fit <- kppm(redwood ~1, clusters="MatClust")
  \dontrun{
     plot(envelope(fit, Kinhom, lambda=fit, nsim=19))
  }
