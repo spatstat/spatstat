@@ -13,20 +13,24 @@ clf.test <- function(...) {
 
 dclf.test <- function(X, ...,
                       alternative=c("two.sided", "less", "greater"),
-                      rinterval=NULL, use.theo=FALSE, scale=NULL) {
+                      rinterval=NULL, use.theo=FALSE, scale=NULL,
+                      interpolate=FALSE) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=2, alternative=alternative,
                        use.theo=use.theo, rinterval=rinterval,
-                       scale=scale, Xname=Xname)
+                       scale=scale, interpolate=interpolate,
+                       Xname=Xname)
 }
 
 mad.test <- function(X, ...,
                      alternative=c("two.sided", "less", "greater"),
-                     rinterval=NULL, use.theo=FALSE, scale=NULL) {
+                     rinterval=NULL, use.theo=FALSE, scale=NULL,
+                     interpolate=FALSE) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=Inf, alternative=alternative,
                use.theo=use.theo, rinterval=rinterval,
-               scale=scale, Xname=Xname)
+               scale=scale, interpolate=interpolate,
+               Xname=Xname)
 }
 
 ## measure deviation of summary function

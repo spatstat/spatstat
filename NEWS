@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.049
+        CHANGES IN spatstat VERSION 1.42-2.050
 
 OVERVIEW
 
@@ -209,9 +209,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
    width proportional to a specified function of r,
    rather than constant width.
 
-   o dclf.test, mad.test, dclf.progress, mad.progress
+   o dclf.test, mad.test, dclf.progress, mad.progress, mctest.progress
    New argument 'scale' allows summary function values to be rescaled
    before the comparison is performed.
+
+   o dclf.test, mad.test
+   New argument 'interpolate' supports interpolation of p-value
+
+   o dclf.progress, mad.progress, mctest.progress
+   New argument 'interpolate' supports interpolation of critical value of test.
 
    o simulate.ppm
    New argument 'w' controls the window of the simulated patterns.

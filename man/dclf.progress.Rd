@@ -11,9 +11,11 @@
   Maximum Absolute Deviation test for a spatial point pattern.
 }
 \usage{
-dclf.progress(X, \dots, nrank = 1)
-mad.progress(X, \dots, nrank = 1)
-mctest.progress(X, fun = Lest, \dots, exponent = 1, nrank = 1)
+dclf.progress(X, \dots)
+mad.progress(X, \dots)
+mctest.progress(X, fun = Lest, \dots,
+                exponent = 1, nrank = 1,
+                interpolate = FALSE, alpha)
 }
 \arguments{
   \item{X}{
@@ -23,17 +25,11 @@ mctest.progress(X, fun = Lest, \dots, exponent = 1, nrank = 1)
     \code{"envelope"}). 
   }
   \item{\dots}{
-    Arguments passed to \code{\link{envelope}}.
+    Arguments passed to \code{mctest.progress} or to \code{\link{envelope}}.
     Useful arguments include \code{fun} to determine the summary
     function, \code{nsim} to specify the number of Monte Carlo
     simulations, \code{alternative} to specify one-sided or two-sided
     envelopes, and \code{verbose=FALSE} to turn off the messages.
-  }
-  \item{nrank}{
-    Integer. The rank of the critical value of the Monte Carlo test,
-    amongst the \code{nsim} simulated values.
-    A rank of 1 means that the minimum and maximum
-    simulated values will become the critical values for the test.
   }
   \item{fun}{
     Function that computes the desired summary statistic
@@ -42,6 +38,27 @@ mctest.progress(X, fun = Lest, \dots, exponent = 1, nrank = 1)
   \item{exponent}{
     Positive number. The exponent of the \eqn{L^p} distance.
     See Details.
+  }
+  \item{nrank}{
+    Integer. The rank of the critical value of the Monte Carlo test,
+    amongst the \code{nsim} simulated values.
+    A rank of 1 means that the minimum and maximum
+    simulated values will become the critical values for the test.
+  }
+  \item{interpolate}{
+    Logical value indicating how to compute the critical value.
+    If \code{interpolate=FALSE} (the default), a standard Monte Carlo test
+    is performed, and the critical value is the largest
+    simulated value of the test statistic (if \code{nrank=1})
+    or the \code{nrank}-th largest (if \code{nrank} is another number).
+    If \code{interpolate=TRUE}, kernel density estimation
+    is applied to the simulated values, and the critical value is
+    the upper \code{alpha} quantile of this estimated distribution.
+  }
+  \item{alpha}{
+    Optional. The significance level of the test.
+    Equivalent to \code{nrank/(nsim+1)} where \code{nsim} is the
+    number of simulations.
   }
 }
 \details{

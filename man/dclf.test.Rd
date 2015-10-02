@@ -10,10 +10,12 @@
 }
 \usage{
 dclf.test(X, ..., alternative=c("two.sided", "less", "greater"),
-                      rinterval = NULL, use.theo=FALSE, scale=NULL)
+                  rinterval = NULL, use.theo=FALSE,
+                  scale=NULL, interpolate=FALSE)
 
 mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
-                      rinterval = NULL, use.theo=FALSE, scale=NULL)
+                  rinterval = NULL, use.theo=FALSE, 
+                  scale=NULL, interpolate=FALSE)
 }
 \arguments{
   \item{X}{
@@ -41,6 +43,11 @@ mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
     over which the maximum absolute deviation, or the integral,
     will be computed for the test. A numeric vector of length 2.
   }
+  \item{use.theo}{
+    Logical value determining whether to compare the summary function
+    for the data to its theoretical value for CSR (\code{use.theo=TRUE})
+    or to the sample mean of simulations from CSR (\code{use.theo=FALSE}).
+  }
   \item{scale}{
     Optional. A function in the \R language which determines the
     relative scale of deviations, as a function of
@@ -48,10 +55,16 @@ mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
     will be \emph{divided} by \code{scale(r)} before the
     test statistic is computed.
   }
-  \item{use.theo}{
-    Logical value determining whether to compare the summary function
-    for the data to its theoretical value for CSR (\code{use.theo=TRUE})
-    or to the sample mean of simulations from CSR (\code{use.theo=FALSE}).
+  \item{interpolate}{
+    Logical value specifying whether to calculate the \eqn{p}-value
+    by interpolation.
+    If \code{interpolate=FALSE} (the default), a standard Monte Carlo test
+    is performed, yielding a \eqn{p}-value of the form \eqn{(k+1)/(n+1)}
+    where \eqn{n} is the number of simulations and \eqn{k} is the number
+    of simulated values which are more extreme than the observed value.
+    If \code{interpolate=TRUE}, the \eqn{p}-value is calculated by
+    applying kernel density estimation to the simulated values, and
+    computing the tail probability for this estimated distribution.
   }
 }
 \details{
