@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.047
+        CHANGES IN spatstat VERSION 1.42-2.048
 
 OVERVIEW
 
@@ -203,6 +203,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Now supports both the 'equal-split continuous' and 
    'equal-split discontinuous' smoothers. New argument 'continuous' 
    determines the choice of smoother.
+
+   o dclf.test, mad.test
+   New argument 'scale' allows summary function values to be rescaled
+   before the comparison is performed.
 
    o simulate.ppm
    New argument 'w' controls the window of the simulated patterns.

@@ -813,7 +813,7 @@ check.in.range(x, r, fatal)
 check.named.list(x, nam, context, namopt)
 check.named.vector(x, nam, context, namopt)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
-check.nvector(v, npoints, fatal, things, naok, warn)
+check.nvector(v, npoints, fatal, things, naok, warn, vname)
 check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
@@ -913,7 +913,7 @@ envelopeEngine(X, fun, simul,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent, normalize, deflate)
 envelopeTest(X, \dots, exponent, alternative,
-            rinterval, use.theo, tie.rule,
+            rinterval, scale, use.theo, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
             Xname, verbose, internal)

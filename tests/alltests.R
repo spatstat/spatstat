@@ -2095,7 +2095,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.3 $ $Date: 2015/09/30 04:52:47 $
+# $Revision: 1.4 $ $Date: 2015/09/30 10:30:01 $
 # 
 
 require(spatstat)
@@ -2119,6 +2119,12 @@ subfits(fit3)
 vcov(fit1)
 vcov(fit2)
 vcov(fit3)
+
+# test summary.mppm which currently sits in spatstat-internal.Rd
+
+summary(fit1)
+summary(fit2)
+summary(fit3)
 
 # test handling of offsets and zero cif values in mppm
 

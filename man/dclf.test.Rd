@@ -10,10 +10,10 @@
 }
 \usage{
 dclf.test(X, ..., alternative=c("two.sided", "less", "greater"),
-                      rinterval = NULL, use.theo=FALSE)
+                      rinterval = NULL, use.theo=FALSE, scale=NULL)
 
 mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
-                      rinterval = NULL, use.theo=FALSE)
+                      rinterval = NULL, use.theo=FALSE, scale=NULL)
 }
 \arguments{
   \item{X}{
@@ -40,6 +40,13 @@ mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
     Interval of values of the summary function argument \code{r}
     over which the maximum absolute deviation, or the integral,
     will be computed for the test. A numeric vector of length 2.
+  }
+  \item{scale}{
+    Optional. A function in the \R language which determines the
+    relative scale of deviations, as a function of
+    distance \eqn{r}. Summary function values for distance \code{r}
+    will be \emph{divided} by \code{scale(r)} before the
+    test statistic is computed.
   }
   \item{use.theo}{
     Logical value determining whether to compare the summary function
@@ -186,8 +193,8 @@ mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
 \author{
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Andrew Hardegen.
+  \url{http://www.maths.uwa.edu.au/~adrian/},
+  Andrew Hardegen and Suman Rakshit.
 }
 \seealso{
   \code{\link{envelope}},
@@ -205,6 +212,11 @@ mad.test(X, ...,  alternative=c("two.sided", "less", "greater"),
 
   ## one-sided test
   ml <- mad.test(cells, Lest, verbose=FALSE, nsim=19, alternative="less")
+
+  ## scaled
+  mad.test(cells, Kest, verbose=FALSE, nsim=19,
+           rinterval=c(0.05, 0.2),
+           scale=function(r) { r })
 }
 \keyword{spatial}
 \keyword{htest}

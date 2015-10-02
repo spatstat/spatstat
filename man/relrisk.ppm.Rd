@@ -200,6 +200,7 @@
   rr <- relrisk(fit, relative=TRUE, control="lung", se=TRUE)
   plot(rr$estimate)
   plot(rr$SE)
+  rrX <- relrisk(fit, at="points", relative=TRUE, control="lung")
 }
 \keyword{spatial}
 \keyword{models}

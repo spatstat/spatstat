@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.27 $  $Date: 2015/08/30 07:25:46 $
+#  $Revision: 1.28 $  $Date: 2015/10/01 10:16:29 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -13,18 +13,20 @@ clf.test <- function(...) {
 
 dclf.test <- function(X, ...,
                       alternative=c("two.sided", "less", "greater"),
-                      rinterval=NULL, use.theo=FALSE) {
+                      rinterval=NULL, use.theo=FALSE, scale=NULL) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=2, alternative=alternative,
-                       use.theo=use.theo, rinterval=rinterval, Xname=Xname)
+                       use.theo=use.theo, rinterval=rinterval,
+                       scale=scale, Xname=Xname)
 }
 
 mad.test <- function(X, ...,
                      alternative=c("two.sided", "less", "greater"),
-                     rinterval=NULL, use.theo=FALSE) {
+                     rinterval=NULL, use.theo=FALSE, scale=NULL) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=Inf, alternative=alternative,
-               use.theo=use.theo, rinterval=rinterval, Xname=Xname)
+               use.theo=use.theo, rinterval=rinterval,
+               scale=scale, Xname=Xname)
 }
 
 envelopeTest <- local({
@@ -37,12 +39,21 @@ envelopeTest <- local({
   }
 
   minusvalue <- function(x) plusvalue(-x)
-  
+
+  deviant <- function(x, alternative, fscale) {
+    if(!is.null(fscale)) x <- x/fscale
+    switch(alternative,
+           two.sided = abs(x),
+           less = minusvalue(x),
+           greater = plusvalue(x))
+  }
+
   envelopeTest <-
     function(X, ...,
              exponent=1,
              alternative=c("two.sided", "less", "greater"),
              rinterval=NULL,
+             scale=NULL, 
              use.theo=FALSE,
              tie.rule=c("randomise","mean"),
              interpolate=FALSE,
@@ -55,7 +66,7 @@ envelopeTest <- local({
              internal=NULL) {
       if(is.null(Xname)) Xname <- short.deparse(substitute(X))
       tie.rule <- match.arg(tie.rule)
-      alternative <- match.arg(alternative)
+      alt <- alternative <- match.arg(alternative)
       force(save.envelope)
       check.1.real(exponent)
       explain.ifnot(exponent >= 0)
@@ -94,6 +105,7 @@ envelopeTest <- local({
         used.theo <- FALSE
       }
       ## determine interval of r values for computation
+      rok <- r
       if(!is.null(rinterval)) {
         check.range(rinterval)
         if(max(r) < rinterval[2]) {
@@ -119,6 +131,7 @@ envelopeTest <- local({
           ok <- which.min(abs(r - mean(rinterval)))
           nr <- 1
         }
+        rok <- r[ok]
         obs <- obs[ok]
         sim <- sim[ok, , drop=FALSE]
         reference <- reference[ok]
@@ -135,6 +148,7 @@ envelopeTest <- local({
                             "interval of r values was reset to",
                             prange(rinterval)))
             ok <- (rinterval[1] <= r & r <= rinterval[2])
+            rok <- r[ok]
             obs <- obs[ok]
             sim <- sim[ok, ]
             reference <- reference[ok]
@@ -148,40 +162,63 @@ envelopeTest <- local({
                        "Please specify a shorter", sQuote("rinterval")))
           }
         } 
-      }
+      } 
 
-      deviant <- switch(alternative,
-                        two.sided = abs,
-                        less = minusvalue,
-                        greater = plusvalue)
+      ## determine rescaling if any
+      if(is.null(scale)) {
+        sc <- NULL
+      } else if(is.function(scale)) {
+        sc <- scale(rok)
+        sname <- "scale(r)"
+        ans <- check.nvector(sc, nr, things="values of r",
+                             fatal=FALSE, vname=sname)
+        if(!ans)
+          stop(attr(ans, "whinge"), call.=FALSE)
+        if(any(sc <= 0)) {
+          warning(paste("Some values of", sname, "were negative or zero:",
+                        "corresponding data were ignored"))
+          ok <- (sc > 0)
+          nr <- sum(ok)
+          if(nr == 0) {
+            ## rinterval is very short: pick nearest r value
+            ok <- which.min(abs(r - mean(rinterval)))
+            nr <- 1
+          }
+          sc  <- sc[ok]
+          rok <- rok[ok]
+          obs <- obs[ok]
+          sim <- sim[ok, , drop=FALSE]
+          reference <- reference[ok]
+        }
+      } else stop("Argument scale should be a function")
 
       ## compute test statistic
       if(is.infinite(exponent)) {
         ## MAD
-        devdata <- max(deviant(obs-reference))
+        devdata <- max(deviant(obs-reference, alt, sc))
         names(devdata) <- "mad"
-        devsim <- apply(deviant(sim-reference), 2, max)
+        devsim <- apply(deviant(sim-reference, alt, sc), 2, max)
         testname <- "Maximum absolute deviation test"
       } else {
         L <- if(nr > 1) diff(rinterval) else 1
         a <- L * (if(used.theo) 1 else ((nsim+1)/nsim)^exponent)
         if(exponent == 2) {
           ## Cramer-von Mises
-          devdata <- a * mean((deviant(obs - reference))^2)
+          devdata <- a * mean((deviant(obs - reference, alt, sc))^2)
           names(devdata) <- "u"
-          devsim <- a * .colMeans((deviant(sim - reference))^2, nr, nsim)
+          devsim <- a * .colMeans((deviant(sim - reference, alt, sc))^2, nr, nsim)
           testname <- "Diggle-Cressie-Loosmore-Ford test"
         } else if(exponent == 1) {
           ## integral absolute deviation
-          devdata <- a * mean(deviant(obs - reference))
+          devdata <- a * mean(deviant(obs - reference, alt, sc))
           names(devdata) <- "L1"
-          devsim <- a * .colMeans(deviant(sim - reference), nr, nsim)
+          devsim <- a * .colMeans(deviant(sim - reference, alt, sc), nr, nsim)
           testname <- "Integral absolute deviation test"
         } else {
           ## general p
-          devdata <- a * mean(((deviant(obs - reference))^exponent))
+          devdata <- a * mean(((deviant(obs - reference, alt, sc))^exponent))
           names(devdata) <- "Lp"
-          devsim <- a * .colMeans(((deviant(sim - reference))^exponent), nr, nsim)
+          devsim <- a * .colMeans(((deviant(sim - reference, alt, sc))^exponent), nr, nsim)
           testname <- paste("Integrated",
                             ordinal(exponent), "Power Deviation test")
         }
@@ -232,6 +269,8 @@ envelopeTest <- local({
                     if(!vanilla) paste(plural, explain) else NULL)
       testtype <- paste0(if(interpolate) "Interpolated " else NULL,
                          "Monte Carlo")
+      scaleblurb <- if(is.null(scale)) NULL else
+                paste("Scale function:", paste(deparse(scale), collapse=" "))
       testname <- c(paste(testname, "of", nullmodel),
                     paste(testtype, "based on", nsim,
                           "simulations", e$constraints), 
@@ -240,7 +279,8 @@ envelopeTest <- local({
                           if(used.theo) "theoretical" else "sample mean"),
                     paste("Alternative:", alternative),
                     paste("Interval of distance values:",
-                          prange(rinterval), uname)
+                          prange(rinterval), uname),
+                    scaleblurb
                     )
       result <- structure(list(statistic = statistic,
                                p.value = pvalue,
@@ -257,6 +297,7 @@ envelopeTest <- local({
                                      alternative=alternative,
                                      nties=nties,
                                      interpolate=interpolate,
+                                     scale=scale,
                                      tie.rule=tie.rule,
                                      use.theo=use.theo)
       }

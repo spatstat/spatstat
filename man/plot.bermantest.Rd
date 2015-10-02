@@ -73,9 +73,13 @@
 
    # test wrong model
    k <- berman.test(fit0, xcoord, "Z1")
-
+   
    # plot result of test
    plot(k, col="red", col0="green")
+
+   # Z2 test
+   k2 <- berman.test(fit0, xcoord, "Z2")
+   plot(k2, col="red", col0="green")
 }
 
 \author{Adrian Baddeley

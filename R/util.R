@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.186 $    $Date: 2015/07/18 03:27:06 $
+#    $Revision: 1.187 $    $Date: 2015/10/01 10:23:50 $
 #
 #
 matrowsum <- function(x) {
@@ -666,9 +666,10 @@ ensure3Darray <- function(x) {
 }
 
 check.nvector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
-                          naok=FALSE, warn=FALSE) {
+                          naok=FALSE, warn=FALSE, vname) {
   # vector of numeric values for each point/thing
-  vname <- sQuote(deparse(substitute(v)))
+  if(missing(vname))
+    vname <- sQuote(deparse(substitute(v)))
   whinge <- NULL
   if(!is.numeric(v))
     whinge <- paste(vname, "is not numeric")
@@ -685,7 +686,9 @@ check.nvector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
   if(!is.null(whinge)) {
     if(fatal) stop(whinge)
     if(warn) warning(whinge)
-    return(FALSE)
+    ans <- FALSE
+    attr(ans, "whinge") <- whinge
+    return(ans)
   }
   return(TRUE)
 }
