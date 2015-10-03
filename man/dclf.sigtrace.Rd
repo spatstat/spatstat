@@ -14,7 +14,8 @@
 \usage{
 dclf.sigtrace(X, ...)
 mad.sigtrace(X, ...)
-mctest.sigtrace(X, fun=Lest, ..., exponent=1, alpha=0.05)
+mctest.sigtrace(X, fun=Lest, ...,
+                exponent=1, interpolate=FALSE, alpha=0.05, confint=TRUE)
 }
 \arguments{
   \item{X}{
@@ -37,9 +38,24 @@ mctest.sigtrace(X, fun=Lest, ..., exponent=1, alpha=0.05)
     Positive number. The exponent of the \eqn{L^p} distance.
     See Details.
   }
+  \item{interpolate}{
+    Logical value specifying whether to calculate the \eqn{p}-value
+    by interpolation.
+    If \code{interpolate=FALSE} (the default), a standard Monte Carlo test
+    is performed, yielding a \eqn{p}-value of the form \eqn{(k+1)/(n+1)}
+    where \eqn{n} is the number of simulations and \eqn{k} is the number
+    of simulated values which are more extreme than the observed value.
+    If \code{interpolate=TRUE}, the \eqn{p}-value is calculated by
+    applying kernel density estimation to the simulated values, and
+    computing the tail probability for this estimated distribution.
+  }
   \item{alpha}{
     Significance level to be plotted (this has no effect on the calculation
     but is simply plotted as a reference value).
+  }
+  \item{confint}{
+    Logical value indicating whether to compute a confidence interval
+    for the \sQuote{true} \eqn{p}-value.
   }
 }
 \details{
@@ -80,10 +96,12 @@ mctest.sigtrace(X, fun=Lest, ..., exponent=1, alpha=0.05)
   and a pointwise 95\% confidence band (grey shading)
   for the \sQuote{true} (Neyman-Pearson) \eqn{p}-value.
   The confidence band is based on the Agresti-Coull (1998)
-  confidence interval for a binomial proportion.
+  confidence interval for a binomial proportion (when
+  \code{interpolate=FALSE}) or the delta method
+  and normal approximation (when \code{interpolate=TRUE}).
 
   If \code{X} is an envelope object and \code{fun=NULL} then
-  the code will re-use the simulated functions stored in \code{X}. 
+  the code will re-use the simulated functions stored in \code{X}.
 }
 \value{
   An object of class \code{"fv"} that can be plotted to
