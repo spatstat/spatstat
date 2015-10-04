@@ -12,9 +12,9 @@
   Maximum Absolute Deviation test for a spatial point pattern.
 }
 \usage{
-dclf.sigtrace(X, ...)
-mad.sigtrace(X, ...)
-mctest.sigtrace(X, fun=Lest, ...,
+dclf.sigtrace(X, \dots)
+mad.sigtrace(X, \dots)
+mctest.sigtrace(X, fun=Lest, \dots,
                 exponent=1, interpolate=FALSE, alpha=0.05, confint=TRUE)
 }
 \arguments{
@@ -146,6 +146,8 @@ mctest.sigtrace(X, fun=Lest, ...,
   
   See \code{\link{plot.fv}} for information on plotting
   objects of class \code{"fv"}.
+
+  See also \code{\link{dg.sigtrace}}.
 }
 \examples{
   plot(dclf.sigtrace(cells, Lest, nsim=19))

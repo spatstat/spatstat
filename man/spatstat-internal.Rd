@@ -379,6 +379,7 @@
 \alias{matrowany}
 \alias{matrowsum}
 \alias{maxflow}
+\alias{mctestSigtraceEngine}
 \alias{meanlistfv}
 \alias{meanX.owin}
 \alias{meanY.owin}
@@ -1167,6 +1168,8 @@ matrowall(x)
 matrowany(x)
 matrowsum(x)
 maxflow(costm)
+mctestSigtraceEngine(R, devdata, devsim, \dots,
+     interpolate, confint, alpha, exponent, unitname)
 meanlistfv(z, \dots)
 meanX.owin(w)            
 meanY.owin(w)

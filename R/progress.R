@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.9 $  $Date: 2015/10/02 09:33:11 $
+#   $Revision: 1.11 $  $Date: 2015/10/04 05:13:00 $
 #
 #   progress plots (envelope representations)
 #
@@ -153,3 +153,82 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
                  scaleR=scr)
   return(result)
 }
+
+dg.progress <- function(X, fun=Lest, ...,   
+                        exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 
+                        interpolate=FALSE) {
+  Xname <- short.deparse(substitute(X))
+  env.here <- sys.frame(sys.nframe())
+  Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
+  if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
+    stop("nsim and nsimsub must be relatively prime")
+  ## determine 'alpha' and 'nrank'
+  if(missing(alpha)) {
+    if((nrank %% 1) != 0)
+      stop("nrank must be an integer")
+    alpha   <- nrank/(nsim + 1)
+  } else {
+    check.1.real(alpha)
+    stopifnot(alpha > 0 && alpha < 1)
+    if(!interpolate) {
+      if(!missing(nrank))
+        warning("nrank was ignored because alpha was given", call.=FALSE)
+      nrank <- alpha * (nsim + 1)
+      if(abs(nrank - round(nrank)) > 1e-2)
+        stop("alpha should be a multiple of 1/(nsim + 1)", call.=FALSE)
+      nrank <- as.integer(round(nrank))
+    }
+  }
+  alphastring <- paste(100 * alpha, "%%", sep="")
+  ## generate or extract simulated patterns and functions
+  E <- envelope(X, fun=fun, ..., nsim=nsim,
+                savepatterns=TRUE, savefuns=TRUE,
+                verbose=FALSE,
+                envir.simul=env.here)
+  ## get progress data
+  PD <- envelopeProgressData(E, fun=fun, ..., nsim=nsim,
+                             exponent=exponent, 
+                             verbose=FALSE)
+  ## get first level MC test significance trace
+  T1 <- mctest.sigtrace(E, fun=fun, nsim=nsim, 
+                        exponent=exponent,
+                        interpolate=interpolate,
+                        confint=FALSE, verbose=FALSE, ...)
+  R    <- T1$R
+  phat <- T1$pest
+  ## second level traces
+  T2list <- lapply(attr(E, "simpatterns"),
+                   mctest.sigtrace,
+                   fun=fun, nsim=nsimsub, 
+                   exponent=exponent,
+                   interpolate=interpolate,
+                   confint=FALSE, verbose=FALSE, ...)
+  phati <- sapply(T2list, getElement, name="pest")
+  ## Dao-Genton procedure
+  dgcritrank <- 1 + rowSums(phat > phati)
+  dgcritrank <- pmin(dgcritrank, nsim)
+  devsim.sort <- t(apply(PD$devsim, 1, sort, decreasing=TRUE, na.last=TRUE))
+  ii <- cbind(seq_along(dgcritrank), dgcritrank)
+  devcrit <- devsim.sort[ii]
+  devdata <- PD$devdata
+  ## create fv object
+  fname  <- if(is.infinite(exponent)) "mad" else
+            if(exponent == 2) "T" else paste("D[",exponent,"]", sep="")
+  ylab <- if(is.infinite(exponent)) quote(mad(R)) else
+          if(exponent == 2) quote(T(R)) else
+          eval(substitute(quote(D[p](R)), list(p=exponent)))
+  df <- data.frame(R=R, obs=devdata, crit=devcrit, zero=0)
+  mcname <- if(interpolate) "interpolated Monte Carlo" else "Monte Carlo"
+  p <- fv(df,
+          argu="R", ylab=ylab, valu="obs", fmla = . ~ R, 
+          desc = c("Interval endpoint R",
+            "observed value of test statistic %s",
+            paste(mcname, alphastring, "critical value for %s"),
+            "zero"),
+          labl=c("R", "%s(R)", "%s[crit](R)", "0"),
+          unitname = unitname(X), fname = fname)
+  fvnames(p, ".") <- c("obs", "crit")
+  fvnames(p, ".s") <- c("zero", "crit")
+  return(p)
+}
+

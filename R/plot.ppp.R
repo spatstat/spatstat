@@ -1,13 +1,17 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.80 $	$Date: 2015/07/10 00:57:57 $
+#	$Revision: 1.81 $	$Date: 2015/10/04 01:28:59 $
 #
 #
 #--------------------------------------------------------------------------
 
 plot.ppp <- local({
 
+  transparencyfun <- function(n) {
+    if(n <= 100) 1 else (0.2 + 0.8 * exp(-(n-100)/1000))
+  }
+  
   ## determine symbol map for marks of points
   default.symap.points <- function(x, ..., 
                                   chars=NULL, cols=NULL, 
@@ -18,10 +22,10 @@ plot.ppp <- local({
       ## consider using transparent colours
       if(is.null(cols) &&
          !any(c("col", "fg", "bg") %in% names(list(...))) &&
-         npoints(x) > 100 &&
+         (nx <- npoints(x)) > 100 &&
          identical(dev.capabilities()$semiTransparency, TRUE) &&
          spatstat.options("transparent"))
-        cols <- rgb(0,0,0,0.2)
+        cols <- rgb(0,0,0,transparencyfun(nx))
       return(symbolmap(..., chars=chars, cols=cols))
     }
     if(!is.null(dim(marx)))

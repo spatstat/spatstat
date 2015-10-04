@@ -10,19 +10,30 @@ dclf.sigtrace <- function(X, ...) mctest.sigtrace(X, ..., exponent=2)
 
 mad.sigtrace <- function(X, ...) mctest.sigtrace(X, ..., exponent=Inf)
 
-mctest.sigtrace <- local({
-  
-  mctest.sigtrace <- function(X, fun=Lest, ..., exponent=1,
+mctest.sigtrace <- function(X, fun=Lest, ..., exponent=1,
                               interpolate=FALSE, alpha=0.05,
                               confint=TRUE) {
-    check.1.real(exponent)
-    explain.ifnot(exponent >= 0)
-    if(missing(fun) && inherits(X, "envelope"))
-      fun <- NULL
-    Z <- envelopeProgressData(X, fun=fun, ..., exponent=exponent)
-    R       <- Z$R
-    devdata <- Z$devdata
-    devsim  <- Z$devsim
+  check.1.real(exponent)
+  explain.ifnot(exponent >= 0)
+  if(missing(fun) && inherits(X, "envelope"))
+    fun <- NULL
+  Z <- envelopeProgressData(X, fun=fun, ..., exponent=exponent)
+  R       <- Z$R
+  devdata <- Z$devdata
+  devsim  <- Z$devsim
+  mctestSigtraceEngine(R, devdata, devsim,
+                       interpolate=interpolate,
+                       confint=confint,
+                       alpha=alpha,
+                       exponent=exponent,
+                       unitname=unitname(X))
+}
+
+mctestSigtraceEngine <- local({
+
+  mctestSigtraceEngine <- function(R, devdata, devsim, ..., 
+                                   interpolate=FALSE, confint=TRUE,
+                                   alpha=0.05, exponent=2, unitname=NULL) {
     nsim     <- ncol(devsim)
     if(!interpolate) {
       #' Monte Carlo p-value
@@ -42,7 +53,7 @@ mctest.sigtrace <- local({
                 "calculated p-value %s",
                 "threshold for significance"), 
               labl=c("R", "%s(R)", paste(alpha)), 
-              unitname = unitname(X), fname = "p")
+              unitname = unitname, fname = "p")
       fvnames(p, ".") <- c("pest", "alpha")
     } else {
       # confidence interval
@@ -72,7 +83,7 @@ mctest.sigtrace <- local({
                 "lower 95%% limit for p-value",
                 "upper 95%% limit for p-value"),
               labl=c("R", "%s(R)", paste(alpha), "lo(R)", "hi(R)"),
-              unitname = unitname(X), fname = "p")
+              unitname = unitname, fname = "p")
       fvnames(p, ".") <- c("pest", "alpha")
       fvnames(p, ".s") <- c("lo", "hi")
     }
@@ -98,8 +109,48 @@ mctest.sigtrace <- local({
     interpol.se(x[-1], x[1])
   }
     
-  mctest.sigtrace
+  mctestSigtraceEngine
 })
 
-  
-  
+
+dg.sigtrace <- function(X, fun=Lest, ...,   
+                        exponent=2, nsim=19, nsimsub=nsim-1,
+                        alternative=c("two.sided", "less", "greater"),
+                        interpolate=FALSE, confint=TRUE, alpha=0.05) {
+  Xname <- short.deparse(substitute(X))
+  alternative <- match.arg(alternative)
+  env.here <- sys.frame(sys.nframe())
+  Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
+  if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
+    stop("nsim and nsimsub must be relatively prime")
+  ## generate or extract simulated patterns and functions
+  E <- envelope(X, fun=fun, ..., nsim=nsim,
+                savepatterns=TRUE, savefuns=TRUE,
+                verbose=FALSE,
+                envir.simul=env.here)
+  ## get first level MC test significance trace
+  T1 <- mctest.sigtrace(E, fun=fun, nsim=nsim, 
+                        exponent=exponent,
+                        alternative=alternative,
+                        interpolate=interpolate,
+                        confint=FALSE, verbose=FALSE, ...)
+  R    <- T1$R
+  phat <- T1$pest
+  ## second level traces
+  T2list <- lapply(attr(E, "simpatterns"),
+                   mctest.sigtrace,
+                   fun=fun, nsim=nsimsub, 
+                   exponent=exponent,
+                   alternative=alternative,
+                   interpolate=interpolate,
+                   confint=FALSE, verbose=FALSE, ...)
+  phati <- sapply(T2list, getElement, name="pest")
+  ## Dao-Genton p-value
+  mctestSigtraceEngine(R, -phat, -phati,
+                       interpolate=FALSE, 
+                       confint=confint,
+                       exponent=exponent,
+                       alpha=alpha,
+                       unitname=unitname(X))
+}
+

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.051
+        CHANGES IN spatstat VERSION 1.42-2.052
 
 OVERVIEW
 
@@ -103,14 +103,20 @@ NEW FUNCTIONS
    dppkernel, dppparbounds, dppspecdenrange, dppspecden
    Helper functions for dpp models.
 
+   o dclf.sigtrace, mad.sigtrace, mctest.sigtrace
+   Significance trace of Monte Carlo test
+
    o dg.test
    Dao-Genton adjusted Monte Carlo goodness-of-fit test.
 
    o dg.envelope
    Simulation envelopes corresponding to Dao-Genton test.
 
-   o dclf.sigtrace, mad.sigtrace, mctest.sigtrace
-   Significance trace of Monte Carlo test
+   o dg.sigtrace
+   Significance trace for Dao-Genton test
+
+   o dg.progress
+   Progress plot for Dao-Genton test
 
    o markcrosscorr
    Mark cross-correlation function for point patterns with
