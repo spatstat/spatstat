@@ -152,6 +152,7 @@
 \alias{envelopeEngine}
 \alias{envelopeProgressData}
 \alias{envelopeTest}
+\alias{envelope.hasenvelope}
 \alias{envelope.matrix}
 \alias{equalpairs}          
 \alias{equalpairs.quad}          
@@ -231,6 +232,7 @@
 \alias{grow.mask}
 \alias{gsubdot}
 \alias{hackglmmPQL}
+\alias{hasenvelope}
 \alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
@@ -485,6 +487,7 @@
 \alias{print.fv}       
 \alias{print.fvfun}       
 \alias{print.funxy}       
+\alias{print.hasenvelope}       
 \alias{print.hierarchicalordering}
 \alias{print.hyperframe}
 \alias{print.influence.ppm}       
@@ -916,12 +919,14 @@ envelopeEngine(X, fun, simul,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent,
                      alternative, scale,
-                     normalize, deflate)
+                     normalize, deflate,
+                     save.envelope, savefuns, savepatterns)
 envelopeTest(X, \dots, exponent, alternative,
-            rinterval, scale, use.theo, tie.rule,
+            rinterval, scale, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
-            Xname, verbose, internal)
+            Xname, verbose)
+\method{envelope}{hasenvelope}(Y, \dots, Yname)
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,
   nsim, nsim2, jsim, jsim.mean,
   type, alternative, scale, csr, use.theory, nrank, ginterval, nSD,
@@ -1008,6 +1013,7 @@ grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots)
+hasenvelope(X, E)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip,
@@ -1317,6 +1323,7 @@ primesbelow(nmax)
 \method{print}{funxy}(x, \dots)
 \method{print}{fv}(x, \dots, tight)
 \method{print}{fvfun}(x, \dots)
+\method{print}{hasenvelope}(x, \dots)
 \method{print}{hierarchicalordering}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)

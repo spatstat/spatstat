@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.052
+        CHANGES IN spatstat VERSION 1.42-2.053
 
 OVERVIEW
 
@@ -220,7 +220,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
    before the comparison is performed.
 
    o dclf.test, mad.test
-   New argument 'interpolate' supports interpolation of p-value
+   New argument 'interpolate' supports interpolation of p-value.
 
    o dclf.progress, mad.progress, mctest.progress
    New argument 'interpolate' supports interpolation of critical value of test.
@@ -311,6 +311,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.mppm
    New argument 'se'.
    
+   o dclf.test, mad.test
+   Formal arguments 'use.theo' and 'internal' have been removed.
+
 BUG FIXES
 
    o lpp

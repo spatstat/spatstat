@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.11 $  $Date: 2015/10/04 05:13:00 $
+#   $Revision: 1.13 $  $Date: 2015/10/05 07:32:55 $
 #
 #   progress plots (envelope representations)
 #
@@ -76,6 +76,7 @@ mctest.progress <- local({
             unitname = unitname(X), fname = fname)
     fvnames(p, ".") <- c("obs", "crit")
     fvnames(p, ".s") <- c("zero", "crit")
+    p <- hasenvelope(p, Z$envelope)  # envelope may be NULL
     return(p)
   }
 
@@ -89,10 +90,14 @@ mctest.progress <- local({
 envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
                                  alternative=c("two.sided", "less", "greater"),
                                  scale=NULL, 
-                                 normalize=FALSE, deflate=FALSE) {
+                                 normalize=FALSE, deflate=FALSE,
+                                 save.envelope = savefuns || savepatterns,
+                                 savefuns = FALSE, 
+                                 savepatterns = FALSE) {
   alt <- alternative <- match.arg(alternative)
   # compute or extract simulated functions
-  X <- envelope(X, fun=fun, ..., alternative=alternative, savefuns=TRUE)
+  X <- envelope(X, fun=fun, ..., alternative=alternative,
+                savefuns=TRUE, savepatterns=savepatterns)
   Y <- attr(X, "simfuns")
   # extract values
   R   <- with(X, .x)
@@ -151,15 +156,17 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   }
   result <- list(R=R, devdata=devdata, devsim=devsim, testname=testname,
                  scaleR=scr)
+  if(save.envelope) 
+    result$envelope <- X
   return(result)
 }
 
 dg.progress <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 
-                        interpolate=FALSE) {
+                        interpolate=FALSE,
+                        savefuns=FALSE, savepatterns=FALSE) {
   Xname <- short.deparse(substitute(X))
   env.here <- sys.frame(sys.nframe())
-  Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
     stop("nsim and nsimsub must be relatively prime")
   ## determine 'alpha' and 'nrank'
@@ -179,7 +186,6 @@ dg.progress <- function(X, fun=Lest, ...,
       nrank <- as.integer(round(nrank))
     }
   }
-  alphastring <- paste(100 * alpha, "%%", sep="")
   ## generate or extract simulated patterns and functions
   E <- envelope(X, fun=fun, ..., nsim=nsim,
                 savepatterns=TRUE, savefuns=TRUE,
@@ -223,12 +229,14 @@ dg.progress <- function(X, fun=Lest, ...,
           argu="R", ylab=ylab, valu="obs", fmla = . ~ R, 
           desc = c("Interval endpoint R",
             "observed value of test statistic %s",
-            paste(mcname, alphastring, "critical value for %s"),
+            paste(mcname, paste0(100 * alpha, "%%"), "critical value for %s"),
             "zero"),
           labl=c("R", "%s(R)", "%s[crit](R)", "0"),
           unitname = unitname(X), fname = fname)
   fvnames(p, ".") <- c("obs", "crit")
   fvnames(p, ".s") <- c("zero", "crit")
+  if(savefuns || savepatterns)
+    p <- hasenvelope(p, E)
   return(p)
 }
 

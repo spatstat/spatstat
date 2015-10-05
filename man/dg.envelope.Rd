@@ -12,6 +12,7 @@ dg.envelope(X, \dots,
             nsim = 19, nsimsub=nsim-1, nrank = 1,
             alternative=c("two.sided", "less", "greater"),
             interpolate = FALSE,
+            savefuns=FALSE, savepatterns=FALSE,
             verbose = TRUE)
 }
 \arguments{
@@ -55,6 +56,14 @@ dg.envelope(X, \dots,
     Logical value indicating whether to interpolate the distribution of
     the test statistic by kernel smoothing, as described in
     Dao and Genton (2014, Section 5).
+  }
+  \item{savefuns}{
+    Logical flag indicating whether to save the simulated
+    function values (from the first stage).
+  }
+  \item{savepatterns}{
+    Logical flag indicating whether to save the simulated
+    point patterns (from the first stage). 
   }
   \item{verbose}{
     Logical value determining whether to print progress reports.

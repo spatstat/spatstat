@@ -1,7 +1,7 @@
 #
 #  sigtrace.R
 #
-#  $Revision: 1.5 $  $Date: 2015/10/03 10:41:01 $
+#  $Revision: 1.6 $  $Date: 2015/10/05 06:27:53 $
 #
 #  Significance traces 
 #
@@ -15,18 +15,20 @@ mctest.sigtrace <- function(X, fun=Lest, ..., exponent=1,
                               confint=TRUE) {
   check.1.real(exponent)
   explain.ifnot(exponent >= 0)
-  if(missing(fun) && inherits(X, "envelope"))
+  if(missing(fun) && inherits(X, c("envelope", "hasenvelope")))
     fun <- NULL
   Z <- envelopeProgressData(X, fun=fun, ..., exponent=exponent)
   R       <- Z$R
   devdata <- Z$devdata
   devsim  <- Z$devsim
-  mctestSigtraceEngine(R, devdata, devsim,
-                       interpolate=interpolate,
-                       confint=confint,
-                       alpha=alpha,
-                       exponent=exponent,
-                       unitname=unitname(X))
+  result <- mctestSigtraceEngine(R, devdata, devsim,
+                                 interpolate=interpolate,
+                                 confint=confint,
+                                 alpha=alpha,
+                                 exponent=exponent,
+                                 unitname=unitname(X))
+  result <- hasenvelope(result, Z$envelope) # envelope may be NULL
+  return(result)
 }
 
 mctestSigtraceEngine <- local({
@@ -116,11 +118,11 @@ mctestSigtraceEngine <- local({
 dg.sigtrace <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1,
                         alternative=c("two.sided", "less", "greater"),
-                        interpolate=FALSE, confint=TRUE, alpha=0.05) {
+                        interpolate=FALSE, confint=TRUE, alpha=0.05,
+                        savefuns=FALSE, savepatterns=FALSE) {
   Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
-  Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
     stop("nsim and nsimsub must be relatively prime")
   ## generate or extract simulated patterns and functions
@@ -146,11 +148,14 @@ dg.sigtrace <- function(X, fun=Lest, ...,
                    confint=FALSE, verbose=FALSE, ...)
   phati <- sapply(T2list, getElement, name="pest")
   ## Dao-Genton p-value
-  mctestSigtraceEngine(R, -phat, -phati,
-                       interpolate=FALSE, 
-                       confint=confint,
-                       exponent=exponent,
-                       alpha=alpha,
-                       unitname=unitname(X))
+  result <- mctestSigtraceEngine(R, -phat, -phati,
+                                 interpolate=FALSE, 
+                                 confint=confint,
+                                 exponent=exponent,
+                                 alpha=alpha,
+                                 unitname=unitname(X))
+  if(savefuns || savepatterns)
+    result <- hasenvelope(result, E)
+  return(result)
 }
 

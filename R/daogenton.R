@@ -9,6 +9,7 @@
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
                     alternative=c("two.sided", "less", "greater"),
                     interpolate=FALSE,
+                    savefuns=FALSE, savepatterns=FALSE,
                     verbose=TRUE) {
   Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -21,7 +22,8 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   tX <- envelopeTest(X, ...,
                      nsim=nsim, alternative=alternative,
                      interpolate=interpolate,
-                     exponent=exponent, savepatterns=TRUE, verbose=FALSE,
+                     exponent=exponent,
+                     savefuns=savefuns, savepatterns=TRUE, verbose=FALSE,
                      envir.simul=env.here)
   if(verbose) cat("Done.\n")
   pX <- tX$p.value
@@ -58,6 +60,8 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   attr(result, "rinterval") <- attr(tX, "rinterval")
   attr(result, "pX") <- pX
   attr(result, "pY") <- sort(pY)
+  if(savefuns || savepatterns)
+    result <- hasenvelope(result, attr(tX, "envelope"))
   return(result)
 }
 
@@ -66,6 +70,7 @@ dg.envelope <- function(X, ..., nsim=19,
                         nrank=1,
                         alternative=c("two.sided", "less", "greater"),
                         interpolate = FALSE,
+                        savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
   #  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
@@ -153,6 +158,8 @@ dg.envelope <- function(X, ..., nsim=19,
   result <- bind.fv(result, newdata, newlabl, newdesc)
   fvnames(result, ".") <- rev(fvnames(result, "."))
   fvnames(result, ".s") <- c("lo", "hi")
+  if(savefuns || savepatterns)
+    result <- hasenvelope(result, envX)
   return(result)
 }
 

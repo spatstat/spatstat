@@ -11,7 +11,8 @@
 dg.test(X, \dots,
         exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
-        interpolate = FALSE, 
+        interpolate = FALSE,
+        savefuns=FALSE, savepatterns=FALSE,
         verbose = TRUE)
 }
 \arguments{
@@ -55,6 +56,14 @@ dg.test(X, \dots,
     Logical value indicating whether to interpolate the distribution of
     the test statistic by kernel smoothing, as described in
     Dao and Genton (2014, Section 5).
+  }
+  \item{savefuns}{
+    Logical flag indicating whether to save the simulated
+    function values (from the first stage).
+  }
+  \item{savepatterns}{
+    Logical flag indicating whether to save the simulated
+    point patterns (from the first stage). 
   }
   \item{verbose}{
     Logical value indicating whether to print progress reports.

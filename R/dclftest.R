@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.28 $  $Date: 2015/10/01 10:16:29 $
+#  $Revision: 1.30 $  $Date: 2015/10/05 06:29:19 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -13,22 +13,22 @@ clf.test <- function(...) {
 
 dclf.test <- function(X, ...,
                       alternative=c("two.sided", "less", "greater"),
-                      rinterval=NULL, use.theo=FALSE, scale=NULL,
+                      rinterval=NULL, scale=NULL,
                       interpolate=FALSE) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=2, alternative=alternative,
-                       use.theo=use.theo, rinterval=rinterval,
+                       rinterval=rinterval,
                        scale=scale, interpolate=interpolate,
                        Xname=Xname)
 }
 
 mad.test <- function(X, ...,
                      alternative=c("two.sided", "less", "greater"),
-                     rinterval=NULL, use.theo=FALSE, scale=NULL,
+                     rinterval=NULL, scale=NULL,
                      interpolate=FALSE) {
   Xname <- short.deparse(substitute(X))
   envelopeTest(X, ..., exponent=Inf, alternative=alternative,
-               use.theo=use.theo, rinterval=rinterval,
+               rinterval=rinterval,
                scale=scale, interpolate=interpolate,
                Xname=Xname)
 }
@@ -66,7 +66,6 @@ envelopeTest <-
            alternative=c("two.sided", "less", "greater"),
            rinterval=NULL,
            scale=NULL, 
-           use.theo=FALSE,
            tie.rule=c("randomise","mean"),
            interpolate=FALSE,
            save.interpolant = TRUE,
@@ -74,29 +73,17 @@ envelopeTest <-
            savefuns = FALSE, 
            savepatterns = FALSE,
            Xname=NULL,
-           verbose=TRUE,
-           internal=NULL) {
+           verbose=TRUE) {
     if(is.null(Xname)) Xname <- short.deparse(substitute(X))
     tie.rule <- match.arg(tie.rule)
     alt <- alternative <- match.arg(alternative)
     force(save.envelope)
     check.1.real(exponent)
     explain.ifnot(exponent >= 0)
-    if(use.theo) {
-      ## using theoretical function as reference.
-      ## ensure resulting envelope object includes theoretical function.
-      internal <- resolve.defaults(internal, list(csr=TRUE))
-    }
-    ## case where X is a previous result of dclf.test, etc
-    if(inherits(X, "htest")) {
-      if(is.null(envX <- attr(X, "envelope")))
-        stop(paste(Xname, "does not contain simulation data"))
-      X <- envX
-    }
     ## compute or extract simulated functions
     X <- envelope(X, ...,
                   savefuns=TRUE, savepatterns=savepatterns,
-                  Yname=Xname, internal=internal, verbose=verbose)
+                  Yname=Xname, verbose=verbose)
     Y <- attr(X, "simfuns")
     ## extract values
     r   <- with(X, .x)
@@ -106,15 +93,16 @@ envelopeTest <-
     nr <- length(r)
     ## choose function as reference
     has.theo <- ("theo" %in% names(X))
+    use.theo <- identical(attr(X, "einfo")$use.theory, TRUE)
     if(use.theo && !has.theo)
-      warning("No theoretical function available; use.theo ignored")
+      warning("No theoretical function available; use.theory ignored")
     if(use.theo && has.theo) {
       reference <- with(X, theo)
-      used.theo <- TRUE
+      theo.used <- TRUE
     } else {
       ## compute sample mean of simulations *and* observed 
       reference <- apply(cbind(sim, obs), 1, mean, na.rm=TRUE)
-      used.theo <- FALSE
+      theo.used <- FALSE
     }
     ## determine interval of r values for computation
     rok <- r
@@ -205,7 +193,7 @@ envelopeTest <-
       testname <- "Maximum absolute deviation test"
     } else {
       L <- if(nr > 1) diff(rinterval) else 1
-      a <- L * (if(used.theo) 1 else ((nsim+1)/nsim)^exponent)
+      a <- L * (if(theo.used) 1 else ((nsim+1)/nsim)^exponent)
       if(exponent == 2) {
         ## Cramer-von Mises
         devdata <- a * mean((Deviant(obs - reference, alt, sc))^2)
@@ -280,7 +268,7 @@ envelopeTest <-
                         "simulations", e$constraints), 
                   paste("Summary function:", fname),
                   paste("Reference function:",
-                        if(used.theo) "theoretical" else "sample mean"),
+                        if(theo.used) "theoretical" else "sample mean"),
                   paste("Alternative:", alternative),
                   paste("Interval of distance values:",
                         prange(rinterval), uname),
@@ -295,7 +283,7 @@ envelopeTest <-
     if(save.interpolant && interpolate)
       attr(result, "density") <- fhat
     if(save.envelope) {
-      attr(result, "envelope") <- X
+      result <- hasenvelope(result, X)
       attr(result, "statistics") <- list(data=devdata, sim=devsim)
       attr(result, "info") <- list(exponent=exponent,
                                    alternative=alternative,

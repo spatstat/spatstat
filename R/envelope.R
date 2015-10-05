@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.77 $  $Date: 2015/10/02 03:50:07 $
+#   $Revision: 2.78 $  $Date: 2015/10/05 05:50:48 $
 #
 
 envelope <- function(Y, fun, ...) {

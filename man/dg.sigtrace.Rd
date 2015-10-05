@@ -11,7 +11,8 @@
   dg.sigtrace(X, fun = Lest, \dots,
               exponent = 2, nsim = 19, nsimsub = nsim - 1,
               alternative = c("two.sided", "less", "greater"),
-              interpolate = FALSE, confint = TRUE, alpha = 0.05)
+              interpolate = FALSE, confint = TRUE, alpha = 0.05,
+              savefuns=FALSE, savepatterns=FALSE)
 }
 \arguments{
   \item{X}{
@@ -62,6 +63,14 @@
   \item{alpha}{
     Significance level to be plotted (this has no effect on the calculation
     but is simply plotted as a reference value).
+  }
+  \item{savefuns}{
+    Logical flag indicating whether to save the simulated
+    function values (from the first stage).
+  }
+  \item{savepatterns}{
+    Logical flag indicating whether to save the simulated
+    point patterns (from the first stage). 
   }
 }
 \details{

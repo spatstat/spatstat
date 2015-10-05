@@ -10,7 +10,8 @@
 \usage{
 dg.progress(X, fun = Lest, \dots,
             exponent = 2, nsim = 19, nsimsub = nsim - 1,
-            nrank = 1, alpha, interpolate = FALSE)
+            nrank = 1, alpha, interpolate = FALSE,
+            savefuns = FALSE, savepatterns = FALSE)
 }
 \arguments{
   \item{X}{
@@ -61,6 +62,14 @@ v    See Details.
     If \code{interpolate=TRUE}, kernel density estimation
     is applied to the simulated values, and the critical value is
     the upper \code{alpha} quantile of this estimated distribution.
+  }
+  \item{savefuns}{
+    Logical flag indicating whether to save the simulated
+    function values (from the first stage).
+  }
+  \item{savepatterns}{
+    Logical flag indicating whether to save the simulated
+    point patterns (from the first stage). 
   }
 }
 \details{
