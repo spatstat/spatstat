@@ -9,9 +9,9 @@
 }
 \usage{dppapproxpcf(model, trunc = 0.99, W = NULL)}
 \arguments{
-  \item{model}{Object of class dppmodel}
+  \item{model}{Object of class \code{"detpointprocfamily"}.}
   \item{trunc}{Numeric specifying how the model truncation is
-    performed. See Details section of \code{\link{simulate.dppmodel}}.}
+    performed. See Details section of \code{\link{simulate.detpointprocfamily}}.}
   \item{W}{Optional window -- undocumented at the moment.}
 }
 \details{This function is usually NOT needed for anything. It

@@ -1,15 +1,17 @@
-\name{reach.dppmodel}
-\alias{reach.dppmodel}
+\name{reach.dppm}
 \alias{reach.dppm}
+\alias{reach.detpointprocfamily}
 \title{Range of Interaction for a Determinantal Point Process Model}
 \description{
   Returns the range of interaction for a determinantal point process model.
 }
 \usage{
-  \method{reach}{dppmodel}(x, \dots)
+  \method{reach}{dppm}(x, \dots)
+
+  \method{reach}{detpointprocfamily}(x, \dots)
 }
 \arguments{
-  \item{x}{Model of class \code{"dppmodel"} or \code{"dppm"}.}
+  \item{x}{Model of class \code{"detpointprocfamily"} or \code{"dppm"}.}
   \item{\dots}{Additional arguments passed to the range function
     of the given model.
   }

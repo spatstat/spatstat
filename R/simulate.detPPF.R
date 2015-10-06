@@ -1,5 +1,6 @@
-## This file contains functions to simulate DPP models. Two simulation functions are visible:
-## - simulate.dppmodel (most useful)
+## This file contains functions to simulate DPP models.
+## Two simulation functions are visible:
+## - simulate.detpointprocfamily (most useful)
 ## - rdpp (more generic workhorse function -- actually the real workhorse is the locally defined rdppp)
 ##
 ## Furthermore the auxilliary function dppeigen is defined here.
@@ -174,7 +175,7 @@ rdpp
 )
 
 simulate.dppm <-
-simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
+simulate.detpointprocfamily <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
                               trunc = .99, correction = "periodic", rbord = reach(object)
                               #  parallel = FALSE
                               ){
@@ -197,16 +198,16 @@ simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
           W <- Window(object$X)
       object <- object$fitted
   }
-  if(!inherits(object, "dppmodel"))
-    stop("The model to simulate must be of class dppmodel")
+  if(!inherits(object, "detpointprocfamily"))
+    stop("The model to simulate must be of class detpointprocfamily")
   if(length(tmp <- object$freepar)>0)
     stop(paste("The model to simulate must be completely specified. The following parameters are unspecified:", tmp))
-  if(!valid.dppmodel(object))
+  if(!valid(object))
     stop("The model is invalid. Please change parameter values to get a valid model")
   if(!is.numeric(nsim)||nsim<1)
     stop(paste(sQuote("nsim"), "must be a numeric greater than or equal to 1"))
   nsim <- floor(nsim)
-  dim <- dim.dppmodel(object)
+  dim <- dim(object)
   basis <- object$basis
   ####### BACKDOOR TO SPHERICAL CASE ########
   if(!is.null(spherefun <- object$sim_engine)){
@@ -298,7 +299,7 @@ simulate.dppmodel <- function(object, nsim = 1, seed = NULL, ..., W = NULL,
 }
 
 dppeigen <- function(model, trunc, Wscale, stationary = FALSE){
-    dim <- dim.dppmodel(model)
+    dim <- dim(model)
     if(stationary&&dim!=2)
         stop("Stationarity can only be exploited in dimension 2 at the moment.")
     

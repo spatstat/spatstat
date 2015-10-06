@@ -7,7 +7,7 @@
 }
 \usage{dppspecden(model)}
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"}.}
+  \item{model}{Model of class \code{"detpointprocfamily"}.}
 }
 \value{A function}
 \author{

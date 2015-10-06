@@ -1,20 +1,21 @@
-\name{simulate.dppmodel}
-\alias{simulate.dppmodel}
+\name{simulate.dppm}
 \alias{simulate.dppm}
+\alias{simulate.detpointprocfamily}
 \title{Simulation of Determinantal Point Process Model}
 \description{
   Generates simulated realisations from a determinantal point process model.
 }
 \usage{
-  \method{simulate}{dppmodel}(object, nsim = 1, seed = NULL, \dots,
-    W = NULL, trunc = 0.99, correction = "periodic", rbord = reach(object))
   \method{simulate}{dppm}(object, nsim = 1, seed = NULL, \dots,
+    W = NULL, trunc = 0.99, correction = "periodic", rbord = reach(object))
+
+  \method{simulate}{detpointprocfamily}(object, nsim = 1, seed = NULL, \dots,
     W = NULL, trunc = 0.99, correction = "periodic", rbord = reach(object))
 }
 \arguments{
   \item{object}{
     Determinantal point process model. An object of class
-    \code{"dppmodel"} or \code{"dppm"}.
+    \code{"detpointprocfamily"} or \code{"dppm"}.
   }
   \item{nsim}{Number of simulated realisations.}
   \item{seed}{
@@ -45,7 +46,7 @@
 }
 \details{
   These functions are methods for the generic function
-  \code{\link[stats]{simulate}} for the classes \code{"dppmodel"} and
+  \code{\link[stats]{simulate}} for the classes \code{"detpointprocfamily"} and
   \code{"dppm"} of determinantal point process models.
 
   The return value is a list of \code{nsim} point patterns.
@@ -66,17 +67,23 @@
   \code{trunc} times the theoretical expected number of points in the
   model. The default is 0.99.
 
-  The window of the returned point pattern(s) can be specified via the argument \code{W}. For a fitted model (of class \code{"dppm"}) it defaults to the observation window of the data used to fit the model. For inhomogeneous models it defaults to the window of the intensity image. Otherwise it defaults to a unit box.
-  For non-rectangular windows simulation is done in the containing rectangle and then restricted to the window.
-  For inhomogeneous models a stationary model is first simulated using the maximum intensity and then the result is obtained by thinning.
+  The window of the returned point pattern(s) can be specified via the
+  argument \code{W}. For a fitted model (of class \code{"dppm"}) it
+  defaults to the observation window of the data used to fit the
+  model. For inhomogeneous models it defaults to the window of the
+  intensity image. Otherwise it defaults to a unit box.  For
+  non-rectangular windows simulation is done in the containing rectangle
+  and then restricted to the window.  For inhomogeneous models a
+  stationary model is first simulated using the maximum intensity and
+  then the result is obtained by thinning.
 
-  The default is to use periodic edge correction for simulation such that opposite edges are glued together.
-  If border correction is used then the simulation is done
-  in an extended window. Edge effects are theoretically completely
-  removed by doubling the size of the window in each spatial dimension,
-  but for practical purposes much less extension may be
-  sufficient. The numeric \code{rbord} determines the extend of the
-  extra space added to the window.
+  The default is to use periodic edge correction for simulation such
+  that opposite edges are glued together.  If border correction is used
+  then the simulation is done in an extended window. Edge effects are
+  theoretically completely removed by doubling the size of the window in
+  each spatial dimension, but for practical purposes much less extension
+  may be sufficient. The numeric \code{rbord} determines the extend of
+  the extra space added to the window.
 }
 \value{
   A list of length \code{nsim} containing simulated point patterns

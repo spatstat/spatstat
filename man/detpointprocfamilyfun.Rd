@@ -1,11 +1,12 @@
-\name{dppfamily}
-\alias{dppfamily}
-\title{Construct a New Determinantal Point Process Model Family}
+\name{detpointprocfamilyfun}
+\alias{detpointprocfamilyfun}
+\title{Construct a New Determinantal Point Process Model Family Function}
 \description{
   Function to ease the implementation of a new determinantal
   point process model family.
 }
-\usage{dppfamily(kernel = NULL, specden = NULL, basis = "fourierbasis", 
+\usage{detpointprocfamilyfun(kernel = NULL,
+    specden = NULL, basis = "fourierbasis", 
     convkernel = NULL, Kfun = NULL, valid = NULL, intensity = NULL, 
     dim = 2, name = "User-defined", isotropic = TRUE, range = NULL, 
     parbounds = NULL, specdenrange = NULL, startpar = NULL, \dots)
@@ -125,7 +126,7 @@
 }
 \examples{
   ## Example of how to define the Gauss family
-exGauss <- dppfamily(
+exGauss <- detpointprocfamilyfun(
     name="Gaussian",
     kernel=function(x, lambda, alpha, d){
         lambda*exp(-(x/alpha)^2)

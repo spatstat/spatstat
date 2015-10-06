@@ -229,7 +229,7 @@ There are two types of points, ``on'' and ``off''.
 plot(amacrine)
 @ 
 <<fig=TRUE,echo=FALSE,results=hide>>=
-setmargins(0,1,0,0)
+setmargins(0,1,2,0)
 plot(amacrine)
 @ 
 
@@ -243,7 +243,7 @@ of sea anemones on a boulder near sea level.
 plot(anemones, markscale=1)
 @ 
 <<fig=TRUE,echo=FALSE,results=hide>>=
-setmargins(0)
+setmargins(0,0,2,0)
 plot(anemones, markscale=1)
 @ 
 
@@ -261,7 +261,7 @@ subsets of the pattern (also supplied here).
 ants.extra$plotit()
 @ %$
 <<fig=TRUE,echo=FALSE,results=hide>>=
-zeromargins()
+setmargins(0,0,1,0)
 ants.extra$plotit()
 @ %$
 
@@ -304,7 +304,7 @@ plot(bei.extra$elev, main="Beilschmiedia")
 plot(bei, add=TRUE, pch=16, cex=0.3)
 @ 
 <<fig=TRUE,echo=FALSE,results=hide>>=
-setmargins(0)
+setmargins(0,0,2,0)
 plot(bei.extra$elev, main="Beilschmiedia")
 plot(bei, add=TRUE, pch=16, cex=0.3)
 @ 
@@ -631,6 +631,7 @@ plot(split(nbfires), use.marks=FALSE, chars=".")
 @ 
 
 <<fig=TRUE>>=
+par(mar=c(0,0,2,0))
 plot(split(nbfires)$"2000", which.marks="fire.type",
      main=c("New Brunswick fires 2000", "by fire type"),
      cols=c("blue", "green", "red", "cyan"),
@@ -810,6 +811,7 @@ plot(urkiola, cex=0.5, cols=2:3)
 Spatial coordinates of each tree, marked by the tree diameter at breast height.
     
 <<fig=TRUE>>=
+par(mar=c(0,0,2,0))
 plot(waka, markscale=0.04, main=c("Waka national park", "tree diameters"))
 @ 
 

@@ -1,13 +1,18 @@
-## This file contains The function `dppfamily` to define new DPP model 
-## families and a print method for class `dppfamily` as well as the
-## currently defined models:
+##    detpointprocfamilyfun.R
+##
+##    $Revision: 1.4 $   $Date: 2015/10/06 11:05:30 $
+##
+## This file contains the function `detpointprocfamilyfun'
+## to define new DPP model family functions
+## and a print method for class `detpointprocfamilyfun'
+## as well as the currently defined 
 ## - dppBessel
 ## - dppCauchy
 ## - dppGauss
 ## - dppMatern
 ## - dppPowerExp
 
-dppfamily <- local({
+detpointprocfamilyfun <- local({
 
 names_formals <- function(f, dots = FALSE){
     nam <- names(formals(f))
@@ -15,11 +20,12 @@ names_formals <- function(f, dots = FALSE){
     return(nam)
 }
 
-dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
-                      convkernel=NULL, Kfun=NULL, valid=NULL,
-                      intensity=NULL, dim=2, name="User-defined",
-                      isotropic=TRUE, range=NULL, parbounds=NULL,
-                      specdenrange=NULL, startpar=NULL, ...)
+detpointprocfamilyfun <-
+  function(kernel=NULL, specden=NULL, basis="fourierbasis",
+           convkernel=NULL, Kfun=NULL, valid=NULL,
+           intensity=NULL, dim=2, name="User-defined",
+           isotropic=TRUE, range=NULL, parbounds=NULL,
+           specdenrange=NULL, startpar=NULL, ...)
 {
   ## Check which functions are given, check them for sanity and
   ## extract argument names and other stuff
@@ -92,7 +98,8 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
 
   ## Create output object.
   out <- function(...){
-    caller <- as.character(match.call()[[1]])
+    caller <- match.call()[[1]]
+    caller <- eval(substitute(caller), parent.frame())
     fixedpar <- list(...)
     nam <- names(fixedpar)
     if(length(fixedpar)>0&&is.null(nam))
@@ -142,20 +149,22 @@ dppfamily <- function(kernel=NULL, specden=NULL, basis="fourierbasis",
                 basis = basis
                 )
     obj <- append(obj, dots)
-    class(obj) <- "dppmodel"
+    class(obj) <- "detpointprocfamily"
     return(obj)
   }
-  class(out) <- c("dppfamily", "function")
+  class(out) <- c("detpointprocfamilyfun",
+                  "pointprocfamilyfun",
+                  class(out))
   attr(out, "parnames") <- parnames
   attr(out, "name") <- name
   return(out)
 }
 
-dppfamily
+detpointprocfamilyfun
 }
 )
 
-print.dppfamily <- function(x, ...){
+print.detpointprocfamilyfun <- function(x, ...){
   cat(paste(attr(x, "name"), "determinantal point process model family\n"))
   cat("The parameters of the family are:\n")
   cat(attr(x, "parnames"), sep = ", ")
@@ -163,7 +172,7 @@ print.dppfamily <- function(x, ...){
   invisible(NULL)
 }
 
-dppBessel <- dppfamily(
+dppBessel <- detpointprocfamilyfun(
   name="Bessel",
   kernel=function(x, lambda, alpha, sigma, d){
     a <- 0.5*(sigma+d)
@@ -218,19 +227,19 @@ dppBessel <- dppfamily(
     }
     if("lambda" %in% model$freepar){
       lambda <- intensity(X)
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, lambda=lambda)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, lambda=lambda)))&&!OK)
         lambda <- lambda/2
       rslt <- c(rslt, "lambda" = lambda)
     }
     if("sigma" %in% model$freepar){
       sigma <- 2
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, sigma=sigma)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, sigma=sigma)))&&!OK)
         sigma <- sigma/2
       rslt <- c(rslt, "sigma" = sigma)
     }
     if("alpha" %in% model$freepar){
       alpha <- .8*dppparbounds(model, "alpha")[2]
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, alpha=alpha)))&&!OK){
+      while(!is.na(OK <- valid(model <- update(model, alpha=alpha)))&&!OK){
         alpha <- alpha/2
       }
       rslt <- c(rslt, "alpha" = alpha)
@@ -239,7 +248,7 @@ dppBessel <- dppfamily(
   }
 )
 
-dppCauchy <- dppfamily(
+dppCauchy <- detpointprocfamilyfun(
   name="Cauchy",
   kernel=function(x, lambda, alpha, nu, d){
     rslt <- lambda * (1+(x/alpha)^2)^(-nu-d/2)
@@ -288,19 +297,19 @@ dppCauchy <- dppfamily(
     rslt <- NULL
     if("lambda" %in% model$freepar){
       lambda <- intensity(X)
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, lambda=lambda)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, lambda=lambda)))&&!OK)
         lambda <- lambda/2
       rslt <- c(rslt, "lambda" = lambda)
     }
     if("nu" %in% model$freepar){
       nu <- 2
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, nu=nu)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, nu=nu)))&&!OK)
         nu <- nu/2
       rslt <- c(rslt, "nu" = nu)
     }
     if("alpha" %in% model$freepar){
       alpha <- .8*dppparbounds(model, "alpha")[2]
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, alpha=alpha)))&&!OK){
+      while(!is.na(OK <- valid(model <- update(model, alpha=alpha)))&&!OK){
         alpha <- alpha/2
       }
       rslt <- c(rslt, "alpha" = alpha)
@@ -309,7 +318,7 @@ dppCauchy <- dppfamily(
   }
 )
 
-dppGauss <- dppfamily(
+dppGauss <- detpointprocfamilyfun(
   name="Gaussian",
   kernel=function(x, lambda, alpha, d){
     rslt <- lambda*exp(-(x/alpha)^2)
@@ -360,7 +369,7 @@ dppGauss <- dppfamily(
   }
 )
 
-dppMatern <- dppfamily(
+dppMatern <- detpointprocfamilyfun(
   name="Whittle-Matern",
   kernel=function(x, lambda, alpha, nu, d){
     rslt <- lambda*2^(1-nu) / gamma(nu) * ((x/alpha)^nu) * besselK(x = x/alpha, nu = nu)
@@ -415,19 +424,19 @@ dppMatern <- dppfamily(
     rslt <- NULL
     if("lambda" %in% model$freepar){
       lambda <- intensity(X)
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, lambda=lambda)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, lambda=lambda)))&&!OK)
         lambda <- lambda/2
       rslt <- c(rslt, "lambda" = lambda)
     }
     if("nu" %in% model$freepar){
       nu <- 2
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, nu=nu)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, nu=nu)))&&!OK)
         nu <- nu/2
       rslt <- c(rslt, "nu" = nu)
     }
     if("alpha" %in% model$freepar){
       alpha <- .8*dppparbounds(model, "alpha")[2]
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, alpha=alpha)))&&!OK){
+      while(!is.na(OK <- valid(model <- update(model, alpha=alpha)))&&!OK){
         alpha <- alpha/2
       }
       rslt <- c(rslt, "alpha" = alpha)
@@ -436,7 +445,7 @@ dppMatern <- dppfamily(
   }
 )
 
-dppPowerExp <- dppfamily(
+dppPowerExp <- detpointprocfamilyfun(
   name="Power Exponential Spectral",
   specden=function(x, lambda, alpha, nu, d){
     lambda * gamma(d/2+1) * alpha^d / (pi^(d/2)*gamma(d/nu+1)) * exp(-(alpha*x)^nu)
@@ -460,19 +469,19 @@ dppPowerExp <- dppfamily(
     rslt <- NULL
     if("lambda" %in% model$freepar){
       lambda <- intensity(X)
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, lambda=lambda)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, lambda=lambda)))&&!OK)
         lambda <- lambda/2
       rslt <- c(rslt, "lambda" = lambda)
     }
     if("nu" %in% model$freepar){
       nu <- 2
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, nu=nu)))&&!OK)
+      while(!is.na(OK <- valid(model <- update(model, nu=nu)))&&!OK)
         nu <- nu/2
       rslt <- c(rslt, "nu" = nu)
     }
     if("alpha" %in% model$freepar){
       alpha <- .8*dppparbounds(model, "alpha")[2]
-      while(!is.na(OK <- valid.dppmodel(model <- update(model, alpha=alpha)))&&!OK){
+      while(!is.na(OK <- valid(model <- update(model, alpha=alpha)))&&!OK){
         alpha <- alpha/2
       }
       rslt <- c(rslt, "alpha" = alpha)

@@ -1,14 +1,14 @@
-\name{valid.dppmodel}
-\alias{valid.dppmodel}
+\name{valid.detpointprocfamily}
+\alias{valid.detpointprocfamily}
 \title{Check Validity of a Determinantal Point Process Model}
 \description{
   Checks the validity of a determinantal point process model.
 }
 \usage{
-   \method{valid}{dppmodel}(object, \dots)
+   \method{valid}{detpointprocfamily}(object, \dots)
 }
 \arguments{
-  \item{object}{Model of class \code{"dppmodel"}.}
+  \item{object}{Model of class \code{"detpointprocfamily"}.}
   \item{\dots}{Ignored.}
 }
 \value{Logical}

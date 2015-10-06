@@ -480,7 +480,8 @@
 \alias{print.colourmap}
 \alias{print.diagppm}
 \alias{print.distfun}
-\alias{print.dppmodel}
+\alias{print.detpointprocfamily}
+\alias{print.detpointprocfamilyfun}
 \alias{print.envelope}
 \alias{print.ewcdf}
 \alias{print.fasp}       
@@ -1316,7 +1317,8 @@ primesbelow(nmax)
 \method{print}{colourmap}(x, \dots)
 \method{print}{diagppm}(x, \dots)
 \method{print}{distfun}(x, \dots)
-\method{print}{dppmodel}(x, \dots)
+\method{print}{detpointprocfamily}(x, \dots)
+\method{print}{detpointprocfamilyfun}(x, \dots)
 \method{print}{envelope}(x, \dots)
 \method{print}{ewcdf}(x, digits, \dots)
 \method{print}{fasp}(x, \dots)

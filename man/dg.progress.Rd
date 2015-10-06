@@ -11,7 +11,7 @@
 dg.progress(X, fun = Lest, \dots,
             exponent = 2, nsim = 19, nsimsub = nsim - 1,
             nrank = 1, alpha, interpolate = FALSE,
-            savefuns = FALSE, savepatterns = FALSE)
+            savefuns = FALSE, savepatterns = FALSE, verbose=TRUE)
 }
 \arguments{
   \item{X}{
@@ -64,12 +64,15 @@ v    See Details.
     the upper \code{alpha} quantile of this estimated distribution.
   }
   \item{savefuns}{
-    Logical flag indicating whether to save the simulated
+    Logical value indicating whether to save the simulated
     function values (from the first stage).
   }
   \item{savepatterns}{
-    Logical flag indicating whether to save the simulated
+    Logical value indicating whether to save the simulated
     point patterns (from the first stage). 
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports.
   }
 }
 \details{

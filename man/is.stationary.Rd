@@ -6,7 +6,7 @@
 \alias{is.stationary.slrm}
 \alias{is.stationary.rmhmodel}
 \alias{is.stationary.dppm}
-\alias{is.stationary.dppmodel}
+\alias{is.stationary.detpointprocfamily}
 \alias{is.poisson}
 \alias{is.poisson.ppm}
 \alias{is.poisson.kppm}
@@ -30,7 +30,7 @@ is.stationary(x)
 \method{is.stationary}{slrm}(x)
 \method{is.stationary}{rmhmodel}(x)
 \method{is.stationary}{dppm}(x)
-\method{is.stationary}{dppmodel}(x)
+\method{is.stationary}{detpointprocfamily}(x)
 
 is.poisson(x)
 \method{is.poisson}{ppm}(x)
@@ -64,7 +64,8 @@ is.poisson(x)
   \code{"rmhmodel"} (model specifications for the
   Metropolis-Hastings algorithm).
   Additionally \code{is.stationary} has a method for
-  class \code{"dppmodel"} and \code{"dppm"} (both determinantal point processes) and
+  classes \code{"detpointprocfamily"} and \code{"dppm"}
+  (both determinantal point processes) and
   \code{is.poisson} has a method for 
   class \code{"interact"} (interaction structures for Gibbs models). 
 

@@ -45,7 +45,7 @@
 }
 \seealso{
   \code{\link{valid.ppm}},
-  \code{\link{valid.dppmodel}}
+  \code{\link{valid.detpointprocfamily}}
 }
 \keyword{spatial}
 \keyword{models}

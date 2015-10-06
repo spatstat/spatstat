@@ -7,7 +7,7 @@
 }
 \usage{dppkernel(model, \dots)}
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"}.}
+  \item{model}{Model of class \code{"detpointprocfamily"}.}
   \item{\dots}{Arguments passed to \code{\link{dppapproxkernel}} if the exact kernel is unknown}
 }
 \value{A function}

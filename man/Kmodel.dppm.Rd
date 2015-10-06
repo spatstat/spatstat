@@ -1,6 +1,6 @@
-\name{Kmodel.dppmodel}
-\alias{Kmodel.dppmodel}
-\alias{pcfmodel.dppmodel}
+\name{Kmodel.dppm}
+\alias{Kmodel.detpointprocfamily}
+\alias{pcfmodel.detpointprocfamily}
 \alias{Kmodel.dppm}
 \alias{pcfmodel.dppm}
 \title{
@@ -12,16 +12,16 @@
   process model as a function of one argument \eqn{r}.
 }
 \usage{
-   \method{Kmodel}{dppmodel}(model, \dots)
-
-   \method{pcfmodel}{dppmodel}(model, \dots)
-
    \method{Kmodel}{dppm}(model, \dots)
 
    \method{pcfmodel}{dppm}(model, \dots)
+
+   \method{Kmodel}{detpointprocfamily}(model, \dots)
+
+   \method{pcfmodel}{detpointprocfamily}(model, \dots)
 }
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"} or \code{"dppm"}.}
+  \item{model}{Model of class \code{"detpointprocfamily"} or \code{"dppm"}.}
   \item{\dots}{Ignored (not quite true -- there is some undocumented internal use)}
 }
 \author{

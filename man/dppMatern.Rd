@@ -23,7 +23,7 @@
     \item the dimension \code{d} as a positive integer
   }
 }
-\value{An object of class \code{"dppmodel"}.}
+\value{An object of class \code{"detpointprocfamily"}.}
 \author{
   Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}

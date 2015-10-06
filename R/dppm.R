@@ -1,10 +1,10 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.1 $   $Date: 2015/09/25 05:54:59 $
+#'     $Revision: 1.2 $   $Date: 2015/10/06 03:25:38 $
 
 dppm <-
-  function(formula, model, data=NULL,
+  function(formula, family, data=NULL,
            ...,
            startpar = NULL,
            method = c("mincon", "clik2", "palm"),
@@ -18,15 +18,17 @@ dppm <-
            use.gam=FALSE,
            nd=NULL, eps=NULL) {
 
-  # Instatiate model if not already done.
-  if(inherits(model, "dppfamily")){
-    model <- short.deparse(substitute(model))
-    model <- do.call(model, args = list())
+  # Instantiate family if not already done.
+  if(is.character(family))
+    family <- get(family, mode="function")
+  if(inherits(family, "detpointprocfamilyfun")) {
+    familyfun <- family
+    family <- familyfun()
   }
-  verifyclass(model, "dppmodel")
+  verifyclass(family, "detpointprocfamily")
 
   # Check for intensity as only unknown and exit (should be changed for likelihood method)
-  if(length(model$freepar)==1 && (model$freepar %in% model$intensity))
+  if(length(family$freepar)==1 && (family$freepar %in% family$intensity))
       stop("Only the intensity needs to be estimated. Please do this with ppm yourself.")
   # Detect missing rhs of 'formula' and fix
   if(inherits(formula, c("ppp", "quad"))){
@@ -36,7 +38,7 @@ dppm <-
   if(!inherits(formula, "formula"))
     stop(paste("Argument 'formula' should be a formula"))
 
-  kppm(formula, DPP = model, data = data, covariates = data,
+  kppm(formula, DPP = family, data = data, covariates = data,
        startpar = startpar, method = method, weightfun = weightfun,
        control = control, algorithm = algorithm, statistic = statistic,
        statargs = statargs, rmax = rmax, covfunargs = covfunargs,
@@ -65,7 +67,7 @@ spatstatDPPModelInfo <- function(model){
       if(length(par)==1 && is.null(names(par)))
         names(par) <- model$freepar
       mod <- update(model, as.list(par))
-      if(!valid.dppmodel(mod)){
+      if(!valid(mod)){
         return(rep(Inf, length(rvals)))
       } else{
         return(Kmodel(mod)(rvals))
@@ -76,7 +78,7 @@ spatstatDPPModelInfo <- function(model){
       if(length(par)==1 && is.null(names(par)))
         names(par) <- model$freepar
       mod <- update(model, as.list(par))
-      if(!valid.dppmodel(mod)){
+      if(!valid(mod)){
         return(rep(Inf, length(rvals)))
       } else{
         return(pcfmodel(mod)(rvals))

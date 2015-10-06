@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.13 $  $Date: 2015/10/05 07:32:55 $
+#   $Revision: 1.14 $  $Date: 2015/10/05 08:58:42 $
 #
 #   progress plots (envelope representations)
 #
@@ -164,7 +164,8 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
 dg.progress <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 
                         interpolate=FALSE,
-                        savefuns=FALSE, savepatterns=FALSE) {
+                        savefuns=FALSE, savepatterns=FALSE,
+                        verbose=TRUE) {
   Xname <- short.deparse(substitute(X))
   env.here <- sys.frame(sys.nframe())
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
@@ -186,6 +187,8 @@ dg.progress <- function(X, fun=Lest, ...,
       nrank <- as.integer(round(nrank))
     }
   }
+  if(verbose)
+    cat("Computing first-level test data...")
   ## generate or extract simulated patterns and functions
   E <- envelope(X, fun=fun, ..., nsim=nsim,
                 savepatterns=TRUE, savefuns=TRUE,
@@ -202,16 +205,26 @@ dg.progress <- function(X, fun=Lest, ...,
                         confint=FALSE, verbose=FALSE, ...)
   R    <- T1$R
   phat <- T1$pest
+  if(verbose) {
+    cat("Done.\nComputing second-level data... ")
+    state <- list()
+  }
   ## second level traces
-  T2list <- lapply(attr(E, "simpatterns"),
-                   mctest.sigtrace,
-                   fun=fun, nsim=nsimsub, 
-                   exponent=exponent,
-                   interpolate=interpolate,
-                   confint=FALSE, verbose=FALSE, ...)
-  phati <- sapply(T2list, getElement, name="pest")
+  simpat <- attr(E, "simpatterns")
+  phat2 <- matrix(, length(R), nsim)
+  for(j in seq_len(nsim)) {
+    simj <- simpat[[j]]
+    sigj <- mctest.sigtrace(simj,
+                            fun=fun, nsim=nsimsub, 
+                            exponent=exponent,
+                            interpolate=interpolate,
+                            confint=FALSE, verbose=FALSE, ...)
+    phat2[,j] <- sigj$pest
+    if(verbose) state <- progressreport(j, nsim, state=state)
+  }
+  if(verbose) cat("Done.\n")
   ## Dao-Genton procedure
-  dgcritrank <- 1 + rowSums(phat > phati)
+  dgcritrank <- 1 + rowSums(phat > phat2)
   dgcritrank <- pmin(dgcritrank, nsim)
   devsim.sort <- t(apply(PD$devsim, 1, sort, decreasing=TRUE, na.last=TRUE))
   ii <- cbind(seq_along(dgcritrank), dgcritrank)

@@ -679,7 +679,7 @@
   )
 
 spatstatClusterModelInfo <- function(name, onlyPCP = FALSE) {
-  if(inherits(name, "dppmodel"))
+  if(inherits(name, "detpointprocfamily"))
     return(spatstatDPPModelInfo(name))
   if(!is.character(name) || length(name) != 1)
     stop("Argument must be a single character string", call.=FALSE)

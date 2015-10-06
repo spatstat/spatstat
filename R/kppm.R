@@ -211,7 +211,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   ## Cluster info:
   info <- spatstatClusterModelInfo(clusters)
   ## Detect DPP usage
-  isDPP <- inherits(clusters, "dppmodel")
+  isDPP <- inherits(clusters, "detpointprocfamily")
   
   if(inherits(X, "ppp")){
       if(is.null(dataname))
@@ -414,7 +414,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   otherargs <- dcm$otherargs
 
   ## Detect DPP usage
-  isDPP <- inherits(clusters, "dppmodel")
+  isDPP <- inherits(clusters, "detpointprocfamily")
 
   # compute intensity at pairs of data points
   # and c.d.f. of interpoint distance in window
@@ -622,7 +622,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
   otherargs <- dcm$otherargs
 
   ## Detect DPP usage
-  isDPP <- inherits(clusters, "dppmodel")
+  isDPP <- inherits(clusters, "detpointprocfamily")
 
   # compute intensity at data points
   # and c.d.f. of interpoint distance in window

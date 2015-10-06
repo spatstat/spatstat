@@ -1,15 +1,17 @@
-\name{intensity.dppmodel}
-\alias{intensity.dppmodel}
+\name{intensity.dppm}
 \alias{intensity.dppm}
+\alias{intensity.detpointprocfamily}
 \title{Intensity of Determinantal Point Process Model}
 \description{Extracts the intensity of a determinantal point process model.}
 \usage{
-  \method{intensity}{dppmodel}(X, \dots)
+  \method{intensity}{detpointprocfamily}(X, \dots)
+
+  \method{intensity}{dppm}(X, \dots)
 }
 \arguments{
   \item{X}{
     A determinantal point process model (object of class
-    \code{"dppmodel"} or \code{"dppm"}).
+    \code{"detpointprocfamily"} or \code{"dppm"}).
   }
   \item{\dots}{Ignored.}
 }

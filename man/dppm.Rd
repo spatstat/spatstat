@@ -1,12 +1,11 @@
 \name{dppm}
 \alias{dppm}
-\title{Fit Cluster or Cox Point Process Model}
+\title{Fit Determinantal Point Process Model}
 \description{
-  Fit a homogeneous or inhomogeneous cluster process or
-  Cox point process model to a point pattern.
+  Fit a determinantal point process model to a point pattern.
 }
 \usage{
-  dppm(formula, model, data=NULL,
+  dppm(formula, family, data=NULL,
        ...,
        startpar = NULL,
        method = c("mincon", "clik2", "palm"),
@@ -22,12 +21,22 @@
 }
 \arguments{
   \item{formula}{
-    A \code{formula} in the \R language defining the model.
-    For a stationary model it suffices to provide a point pattern without a formula. See Details.
+    A \code{formula} in the \R language
+    specifying the data (on the left side) and the
+    form of the model to be fitted (on the right side).
+    For a stationary model it suffices to provide a point pattern
+    without a formula. See Details.
   }
-  \item{model}{
-    A determinantal point process model object (of class \code{"dppmodel"}).
-    Typically one of \code{\link{dppGauss}}, \code{\link{dppMatern}}, \code{\link{dppCauchy}}, \code{\link{dppBessel}} or \code{\link{dppPowerExp}}.
+  \item{family}{
+    Information specifying the family of point processes
+    to be used in the model.
+    Typically one of the family functions
+    \code{\link{dppGauss}}, \code{\link{dppMatern}},
+    \code{\link{dppCauchy}}, \code{\link{dppBessel}}
+    or \code{\link{dppPowerExp}}.
+    Alternatively a character string giving the name
+    of a family function, or the result of calling one of the
+    family functions. See Details.
   }
   \item{data}{
     The values of spatial covariates (other than the Cartesian
@@ -83,16 +92,37 @@
   This function fits a determinantal point process model to a
   point pattern dataset as described in Lavancier et al. (2015).
 
-  The algorithm first estimates the intensity function
-  of the point process using \code{\link{ppm}}.
-  The argument \code{formula} should be a \code{formula} in the
+  The model to be fitted is specified by the arguments
+  \code{formula} and \code{family}.
+  
+  The argument \code{formula} should normally be a \code{formula} in the
   \R language. The left hand side of the formula
   specifies the point pattern dataset to which the model should be fitted.
   This should be a single argument which may be a point pattern
   (object of class \code{"ppp"}) or a quadrature scheme
   (object of class \code{"quad"}). The right hand side of the formula is called
-  the \code{trend} and specifies the form of the intensity of the process.
-  If the trend formula is \code{~1} (the default if a point pattern or quadrature
+  the \code{trend} and specifies the form of the
+  \emph{logarithm of the intensity} of the process.
+  Alternatively the argument \code{formula} may be a point pattern or quadrature
+  scheme, and the trend formula is taken to be \code{~1}.
+
+  The argument \code{family} specifies the family of point processes
+  to be used in the model.
+  It is typically one of the family functions
+  \code{\link{dppGauss}}, \code{\link{dppMatern}},
+  \code{\link{dppCauchy}}, \code{\link{dppBessel}}
+  or \code{\link{dppPowerExp}}. 
+  Alternatively it may be a character string giving the name
+  of a family function, or the result of calling one of the
+  family functions. A family function belongs to class
+  \code{"detpointprocfamilyfun"}. The result of calling a family
+  function is a point process family, which belongs to class
+  \code{"detpointprocfamily"}.   
+  
+  The algorithm first estimates the intensity function
+  of the point process using \code{\link{ppm}}.
+  If the trend formula is \code{~1}
+  (the default if a point pattern or quadrature
   scheme is given rather than a \code{"formula"})
   then the model is \emph{homogeneous}. The algorithm begins by
   estimating the intensity as the number of points divided by
@@ -196,8 +226,8 @@
   (documented in the help for \code{\link[stats]{optim}}).
 
   Finally, it is also possible to fix any parameters desired before the
-  optimisation by specifying them as \code{name=value} in the \code{"dppmodel"}
-  given as the argument \code{model}. See Examples.
+  optimisation by specifying them as \code{name=value}
+  in the call to the family function. See Examples.
 }
 \value{
   An object of class \code{"dppm"} representing the fitted model.
@@ -210,7 +240,7 @@
   \code{\link{fitted.dppm}},
   \code{\link{predict.dppm}},
   \code{\link{simulate.dppm}},
-  \code{\link[spatstat:methods.dppm]{methods.dppm}},
+  \code{\link{methods.dppm}},
   \code{\link{as.ppm.dppm}},
   \code{\link{Kmodel.dppm}},
   \code{\link{pcfmodel.dppm}}.
@@ -258,21 +288,21 @@
 \examples{
   jpines <- residualspaper$Fig1
 
-  dppm(jpines ~ 1, dppGauss())
+  dppm(jpines ~ 1, dppGauss)
 
-  dppm(jpines ~ 1, dppGauss(), method="c")
-  dppm(jpines ~ 1, dppGauss(), method="p")
+  dppm(jpines ~ 1, dppGauss, method="c")
+  dppm(jpines ~ 1, dppGauss, method="p")
 
   # Fixing the intensity to lambda=2 rather than the Poisson MLE 2.04:
   dppm(jpines ~ 1, dppGauss(lambda=2))
 
   \donttest{
    # The following is quite slow (using K-function)
-  dppm(jpines ~ x, dppMatern())
+  dppm(jpines ~ x, dppMatern)
   }
 
    # much faster using pair correlation function
-  dppm(jpines ~ x, dppMatern(), statistic="pcf", statargs=list(stoyan=0.2))
+  dppm(jpines ~ x, dppMatern, statistic="pcf", statargs=list(stoyan=0.2))
 
   # Fixing the Matern shape parameter to nu=2 rather than estimating it:
   dppm(jpines ~ x, dppMatern(nu=2))

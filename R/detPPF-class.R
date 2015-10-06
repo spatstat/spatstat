@@ -1,4 +1,6 @@
-print.dppmodel <- function(x, ...){
+## support for class 'detpointprocfamily'
+
+print.detpointprocfamily <- function(x, ...){
   splat(x$name, "determinantal point process model",
         ifelse(is.numeric(x$dim), paste("in dimension", x$dim), ""))
   #' Not used:
@@ -46,7 +48,7 @@ print.dppmodel <- function(x, ...){
   invisible(NULL)
 }
 
-reach.dppmodel <- function(x, ...){
+reach.detpointprocfamily <- function(x, ...){
     model <- x
     fun <- model$range
     nam <- names(formals(fun))
@@ -56,8 +58,8 @@ reach.dppmodel <- function(x, ...){
 dppparbounds <- function(model, name, ...){
     if(inherits(model, "dppm"))
         model <- model$fitted
-    if(!inherits(model, "dppmodel"))
-        stop("input model must be of class dppmodel or dppm")
+    if(!inherits(model, "detpointprocfamily"))
+        stop("input model must be of class detpointprocfamily or dppm")
     fun <- model$parbounds
     nam <- names(formals(fun))
     if(missing(name))
@@ -74,7 +76,7 @@ dppparbounds <- function(model, name, ...){
     rslt
 }
 
-valid.dppmodel <- function(object, ...){
+valid.detpointprocfamily <- function(object, ...){
   if(length(object$freepar)>0)
       return(NA)
   ## If there is no function for checking validity we always return TRUE:
@@ -157,7 +159,7 @@ dppapproxkernel <- function(model, trunc = .99, W = NULL){
     return(f)
 }
 
-pcfmodel.dppmodel <- function(model, ...){
+pcfmodel.detpointprocfamily <- function(model, ...){
   kernel <- dppkernel(model, ...)
   f <- function(x){
     1 - (kernel(x)/kernel(0))^2
@@ -174,7 +176,7 @@ dppapproxpcf <- function(model, trunc = .99, W = NULL){
   return(f)
 }
 
-Kmodel.dppmodel <- function(model, ...){
+Kmodel.detpointprocfamily <- function(model, ...){
   if(length(model$freepar)>0)
     stop("Cannot extract the K function of a partially specified model. Please supply all parameters.")
   fun <- model$Kfun
@@ -201,7 +203,7 @@ Kmodel.dppmodel <- function(model, ...){
   return(Kfun)
 }
 
-update.dppmodel <- function(object, ...){
+update.detpointprocfamily <- function(object, ...){
      newpar <- list(...)
      if(length(newpar)==1 && is.list(newpar[[1]]) && !is.im(newpar[[1]]))
          newpar <- newpar[[1]]
@@ -216,7 +218,7 @@ update.dppmodel <- function(object, ...){
      return(object)
 }
 
-is.stationary.dppmodel <- function(x){
+is.stationary.detpointprocfamily <- function(x){
     if(is.null(x$intensity))
         return(FALSE)
     lambda <- getElement(x$fixedpar, x$intensity)
@@ -226,7 +228,7 @@ is.stationary.dppmodel <- function(x){
     
 }
 
-intensity.dppmodel <- function(X, ...){
+intensity.detpointprocfamily <- function(X, ...){
     lambda <- NULL
     if(!is.null(X$intensity))
         lambda <- getElement(X$fixedpar, X$intensity)
@@ -238,13 +240,13 @@ intensity.dppmodel <- function(X, ...){
     return(NA)
 }
 
-parameters.dppm <- parameters.dppmodel <- function(model, ...){
+parameters.dppm <- parameters.detpointprocfamily <- function(model, ...){
     if(inherits(object, "dppm"))
         object <- object$fitted
     c(object$fixed, structure(rep(NA,length(object$freepar)), .Names = object$freepar))
 }
 
-dim.dppmodel <- function(x){
+dim.detpointprocfamily <- function(x){
     if(is.numeric(d <- x$dim)){
         return(d)
     } else{

@@ -20,7 +20,7 @@
     \item the dimension \code{d} as a positive integer
   }
 }
-\value{An object of class \code{"dppmodel"}.}
+\value{An object of class \code{"detpointprocfamily"}.}
 \author{
   Frederic Lavancier and Christophe Biscio.
   Modified by Ege Rubak \email{rubak@math.aau.dk},

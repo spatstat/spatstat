@@ -7,7 +7,7 @@
 } 
 \usage{dppspecdenrange(model)}
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"}.}
+  \item{model}{Model of class \code{"detpointprocfamily"}.}
 }
 \value{Numeric value (possibly \code{Inf}).}
 \author{

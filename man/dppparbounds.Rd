@@ -8,7 +8,7 @@
 }
 \usage{dppparbounds(model, name, \dots)}
 \arguments{
-  \item{model}{Model of class \code{"dppmodel"}.}
+  \item{model}{Model of class \code{"detpointprocfamily"}.}
   \item{name}{name of the parameter for which the bound should be computed.}
   \item{\dots}{
     Additional arguments passed to the \code{parbounds} function of the given
