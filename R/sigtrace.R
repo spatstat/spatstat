@@ -120,7 +120,6 @@ dg.sigtrace <- function(X, fun=Lest, ...,
                         alternative=c("two.sided", "less", "greater"),
                         interpolate=FALSE, confint=TRUE, alpha=0.05,
                         savefuns=FALSE, savepatterns=FALSE) {
-  Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))

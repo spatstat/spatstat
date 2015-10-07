@@ -244,7 +244,7 @@ simulate.detpointprocfamily <- function(object, nsim = 1, seed = NULL, ..., W = 
     Wscale <- borderscale*Wscale
   }
   
-  lambda <- intensity(object)
+  ##  lambda <- intensity(object)
   tmp <- dppeigen(object, trunc, Wscale)
   trunc <- tmp$trunc
   prec <- tmp$prec

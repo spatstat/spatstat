@@ -88,7 +88,8 @@ spatstatDPPModelInfo <- function(model){
     selfstart = function(X) {
       return(model$startpar(model, X))
     }
-)
+    )
+  return(out)
 }
 
 ## Auxilliary function used for DPP stuff in kppm.R

@@ -296,9 +296,9 @@
   # Fixing the intensity to lambda=2 rather than the Poisson MLE 2.04:
   dppm(jpines ~ 1, dppGauss(lambda=2))
 
-  \donttest{
+  if(interactive()) {
    # The following is quite slow (using K-function)
-  dppm(jpines ~ x, dppMatern)
+   dppm(jpines ~ x, dppMatern)
   }
 
    # much faster using pair correlation function

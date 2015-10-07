@@ -166,7 +166,6 @@ dg.progress <- function(X, fun=Lest, ...,
                         interpolate=FALSE,
                         savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
-  Xname <- short.deparse(substitute(X))
   env.here <- sys.frame(sys.nframe())
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
     stop("nsim and nsimsub must be relatively prime")

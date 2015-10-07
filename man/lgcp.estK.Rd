@@ -214,12 +214,14 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   \code{\link{Kest}} for the \eqn{K} function.
 }
 \examples{
-    \donttest{
+    if(interactive()) {
       u <- lgcp.estK(redwood)
+    } else {
+      # slightly faster - better starting point
+      u <- lgcp.estK(redwood, c(var=1, scale=0.1))
     }
-    u <- lgcp.estK(redwood, c(var=1, scale=0.1))
     u
-    if(interactive()) plot(u)
+    plot(u)
 
     \testonly{
       if(require(RandomFields)) {
@@ -230,10 +232,9 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
       spatstat.options(op)
       }
     }
-    \donttest{
-      if(require(RandomFields)) {
+    if(FALSE) {
+      ## takes several minutes!
       lgcp.estK(redwood, covmodel=list(model="matern", nu=0.3))
-      }
     }
 }
 \keyword{spatial}
