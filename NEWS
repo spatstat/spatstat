@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.42-2.054
+        CHANGES IN spatstat VERSION 1.42-2.055
 
 OVERVIEW
 
@@ -50,7 +50,7 @@ OVERVIEW
 
    o Minor improvements and bug fixes.
 
-   o Version nickname: "It's So Random"
+   o Version nickname: "Mixed Effects"
 
 NEW DATASET
 
@@ -313,6 +313,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    
    o dclf.test, mad.test
    Formal arguments 'use.theo' and 'internal' have been removed.
+
+   o predict.kppm, residuals.kppm
+   Now issues a warning when the calculation ignores the 
+   cluster/Cox component and treats the model as if it were Poisson.
+   (This currently happens in predict.kppm when se=TRUE or interval != "none",
+   and in residuals.kppm when type != "raw").
 
 BUG FIXES
 

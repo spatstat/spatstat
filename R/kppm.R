@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.109 $ $Date: 2015/07/11 08:19:26 $
+# $Revision: 1.110 $ $Date: 2015/10/07 01:04:47 $
 #
 
 kppm <- function(X, ...) {
@@ -1134,6 +1134,11 @@ plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
 }
 
 predict.kppm <- predict.dppm <- function(object, ...) {
+  se <- resolve.1.default(list(se=FALSE), list(...))
+  interval <- resolve.1.default(list(interval="none"), list(...))
+  if(se) warning("Standard error calculation assumes a Poisson process")
+  if(interval != "none")
+    warning(paste(interval, "interval calculation assumes a Poisson process"))
   predict(as.ppm(object), ...)
 }
 
@@ -1142,6 +1147,10 @@ fitted.kppm <- fitted.dppm <- function(object, ...) {
 }
 
 residuals.kppm <- residuals.dppm <- function(object, ...) {
+  type <- resolve.1.default(list(type="raw"), list(...))
+  if(type != "raw")
+    warning(paste("calculation of", type, "residuals",
+                  "assumes a Poisson process"))
   residuals(as.ppm(object), ...)
 }
 
