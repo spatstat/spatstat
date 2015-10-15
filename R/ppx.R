@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.49 $  $Date: 2015/08/25 08:16:36 $
+#  $Revision: 1.51 $  $Date: 2015/10/15 07:45:40 $
 #
 
 ppx <- local({
@@ -162,9 +162,15 @@ plot.ppx <- function(x, ...) {
 
 "[.ppx" <- function (x, i, drop=FALSE, ...) {
   da <- x$data
-  if(!missing(i))
+  dom <- x$domain
+  if(!missing(i)) {
+    if(inherits(i, c("boxx", "box3"))) {
+      dom <- i
+      i <- inside.boxx(da, w=i)
+    }
     da <- da[i, , drop=FALSE]
-  out <- list(data=da, ctype=x$ctype, domain=x$domain)
+  }
+  out <- list(data=da, ctype=x$ctype, domain=dom)
   class(out) <- "ppx"
   if(drop) {
     # remove unused factor levels
@@ -465,6 +471,49 @@ intensity.ppx <- function(X, ...) {
   v <- volume(domain(X))
   return(n/v)
 }
+
+grow.boxx <- function(W, left, right = left){
+  W <- as.boxx(W)
+  ra <- W$ranges
+  d <- length(ra)
+  if(any(left < 0) || any(right < 0))
+    stop("values of left and right margin must be nonnegative.")
+  if(length(left)==1) left <- rep(left, d)
+  if(length(right)==1) right <- rep(right, d)
+  if(length(left)!=d || length(right)!=d){
+    stop("left and right margin must be either of length 1 or the dimension of the boxx.")
+  }
+  W$ranges[1,] <- ra[1,]-left
+  W$ranges[2,] <- ra[2,]+right
+  return(W)
+}
+
+inside.boxx <- function(..., w = NULL){
+  if(is.null(w))
+    stop("Please provide a boxx using the named argument w.")
+  w <- as.boxx(w)
+  dat <- list(...)
+  if(length(dat)==1){
+    dat1 <- dat[[1]]
+    if(inherits(dat1, "ppx"))
+      dat <- coords(dat1)
+    if(inherits(dat1, "hyperframe"))
+      dat <- as.data.frame(dat1)
+  }
+  ra <- w$ranges
+  if(length(ra)!=length(dat))
+    stop("Mismatch between dimension of boxx and number of coordinate vectors.")
+  ## Check coord. vectors have equal length
+  n <- length(dat[[1]])
+  if(any(sapply(dat, length)!=n))
+    stop("Coordinate vectors have unequal length.")
+  index <- rep(TRUE, n)
+  for(i in seq_along(ra)){
+    index <- index & inside.range(dat[[i]], ra[[i]])
+  }
+  return(index)
+}
+
 
 spatdim <- function(X) {
   if(is.sob(X)) 2L else

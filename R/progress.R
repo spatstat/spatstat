@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.14 $  $Date: 2015/10/05 08:58:42 $
+#   $Revision: 1.15 $  $Date: 2015/10/15 11:54:37 $
 #
 #   progress plots (envelope representations)
 #
@@ -89,12 +89,12 @@ mctest.progress <- local({
 
 envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
                                  alternative=c("two.sided", "less", "greater"),
-                                 scale=NULL, 
+                                 scale=NULL, clamp=FALSE, 
                                  normalize=FALSE, deflate=FALSE,
                                  save.envelope = savefuns || savepatterns,
                                  savefuns = FALSE, 
                                  savepatterns = FALSE) {
-  alt <- alternative <- match.arg(alternative)
+  alternative <- match.arg(alternative)
   # compute or extract simulated functions
   X <- envelope(X, fun=fun, ..., alternative=alternative,
                 savefuns=TRUE, savepatterns=savepatterns)
@@ -108,30 +108,35 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
 
   ## determine rescaling if any
   if(is.null(scale)) {
-    sc <- NULL
+    scaling <- NULL
     scr <- 1
   } else if(is.function(scale)) {
-    sc <- scale(R)
+    scaling <- scale(R)
     sname <- "scale(r)"
-    ans <- check.nvector(sc, length(R), things="values of r",
+    ans <- check.nvector(scaling, length(R), things="values of r",
                          fatal=FALSE, vname=sname)
     if(!ans)
       stop(attr(ans, "whinge"), call.=FALSE)
-    if(any(bad <- (sc <= 0))) {
+    if(any(bad <- (scaling <= 0))) {
       ## issue a warning unless this only happens at r=0
       if(any(bad[R > 0]))
         warning(paste("Some values of", sname, "were negative or zero:",
                       "scale was reset to 1 for these values"),
                 call.=FALSE)
-      sc[bad] <- 1
+      scaling[bad] <- 1
     }
-    scr <- sc
+    scr <- scaling
   } else stop("Argument scale should be a function")
 
+  ## compute raw deviations
+  ddat <- Deviant(obs - reference, alternative, clamp, scaling)
+  dsim <- Deviant(sim - reference, alternative, clamp, scaling)
+
+  ## compute test statistics
   if(is.infinite(exponent)) {
     # MAD
-    devdata <- cummax(Deviant(obs-reference, alt, sc))
-    devsim <- apply(Deviant(sim-reference, alt, sc), 2, cummax)
+    devdata <- cummax(ddat)
+    devsim <- apply(dsim, 2, cummax)
     if(deflate) {
       devdata <- scr * devdata
       devsim <-  scr * devsim
@@ -140,22 +145,27 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   } else {
     dR <- c(0, diff(R))
     a <- (nsim/(nsim - 1))^exponent
-    devdata <- a * cumsum(dR * Deviant(obs - reference, alt, sc)^exponent)
-    devsim <- a * apply(dR * Deviant(sim - reference, alt, sc)^exponent, 2, cumsum)
+    if(clamp) {
+      devdata <- a * cumsum(dR * ddat^exponent)
+      devsim  <- a * apply(dR * dsim^exponent, 2, cumsum)
+    } else {
+      devdata <- a * cumsum(dR * sign(ddat) * abs(ddat)^exponent)
+      devsim  <- a * apply(dR * sign(dsim) * abs(dsim)^exponent, 2, cumsum)
+    }
     if(normalize) {
       devdata <- devdata/R
       devsim <- sweep(devsim, 1, R, "/")
     }
     if(deflate) {
-      devdata <- scr * devdata^(1/exponent)
-      devsim <-  scr * devsim^(1/exponent)
+      devdata <- scr * sign(devdata) * abs(devdata)^(1/exponent) 
+      devsim <-  scr * sign(devsim) * abs(devsim)^(1/exponent) 
     }
     testname <- if(exponent == 2) "Diggle-Cressie-Loosmore-Ford test" else
                 if(exponent == 1) "Integral absolute deviation test" else
                 paste("Integrated", ordinal(exponent), "Power Deviation test")
   }
   result <- list(R=R, devdata=devdata, devsim=devsim, testname=testname,
-                 scaleR=scr)
+                 scaleR=scr, clamp=clamp)
   if(save.envelope) 
     result$envelope <- X
   return(result)

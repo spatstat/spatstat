@@ -1,4 +1,45 @@
 
+        CHANGES IN spatstat VERSION 1.43-1
+
+OVERVIEW
+
+   o More support for multidimensional point patterns.
+
+   o More options for one-sided envelopes.
+
+   o Version nickname: 'Lessons of October'
+
+NEW FUNCTIONS
+
+   o inside.boxx
+     Test whether multidimensional points lie inside a specified 
+     multidimensional box.
+
+   o grow.boxx
+     Expand a multidimensional box.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o rMaternI, rMaternII
+     These functions can now generate random patterns in 
+     three dimensions and higher dimensions, when the argument
+     'win' is of class 'box3' or 'boxx'.
+
+   o [.ppx
+     The subset index 'i' may now be a spatial domain
+     of class 'boxx' or 'box3'.
+
+   o envelope
+   New argument 'clamp' gives greater control over one-sided envelopes.
+
+   o dclf.test, mad.test, dclf.progress, mad.progress, 
+     dclf.sigtrace, mad.sigtrace
+   New argument 'clamp' determines the test statistic for one-sided tests.
+
+BUGS
+
+   o None yet!
+
         CHANGES IN spatstat VERSION 1.43-0
 
 OVERVIEW

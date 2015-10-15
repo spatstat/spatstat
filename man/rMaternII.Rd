@@ -21,6 +21,8 @@
     Window in which to simulate the pattern.
     An object of class \code{"owin"}
     or something acceptable to \code{\link{as.owin}}.
+    Alternatively a higher-dimensional box of class
+    \code{"box3"} or \code{"boxx"}.
   }
   \item{stationary}{
     Logical. Whether to start with a stationary process of proposal points
@@ -36,8 +38,10 @@
   }
 }
 \value{
-  A point pattern (an object of class \code{"ppp"})
+  A point pattern
   if \code{nsim=1}, or a list of point patterns if \code{nsim > 1}.
+  Each point pattern is normally an object of class \code{"ppp"},
+  but may be of class \code{"pp3"} or \code{"ppx"} depending on the window.
 }
 \details{
   This algorithm generates one or more realisations
@@ -73,12 +77,15 @@
  X <- rMaternII(20, 0.05)
  Y <- rMaternII(20, 0.05, stationary=FALSE)
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/},
-  Ute Hahn, 
-  and Rolf Turner
+  Ute Hahn,
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{datagen}

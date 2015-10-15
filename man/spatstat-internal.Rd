@@ -564,6 +564,7 @@
 \alias{rhohatEngine}
 \alias{rhohatCalc}
 \alias{rigidradius}
+\alias{rMaternInhibition}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
 \alias{romansort}
@@ -864,7 +865,7 @@ default.clipwindow(object, epsilon)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force)
-Deviant(x, alternative, scaling)
+Deviant(x, alternative, clamp, scaling)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     weights, edge, varcov,
@@ -912,25 +913,25 @@ envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, 
            verbose, clipdata, 
            transform, global, ginterval, use.theory,
-           alternative, scale,
+           alternative, scale, clamp,
            savefuns, savepatterns, saveresultof,
            weights,
            nsim2, VARIANCE, nSD,
            Yname, maxnerr, internal, cl,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent,
-                     alternative, scale,
+                     alternative, scale, clamp,
                      normalize, deflate,
                      save.envelope, savefuns, savepatterns)
 envelopeTest(X, \dots, exponent, alternative,
-            rinterval, scale, tie.rule,
+            rinterval, scale, clamp, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
             Xname, verbose)
 \method{envelope}{hasenvelope}(Y, \dots, Yname)
 \method{envelope}{matrix}(Y, \dots, rvals, observed, theory, funX,
   nsim, nsim2, jsim, jsim.mean,
-  type, alternative, scale, csr, use.theory, nrank, ginterval, nSD,
+  type, alternative, scale, clamp, csr, use.theory, nrank, ginterval, nSD,
   savefuns, check, Yname, do.pwrong, weights, precomputed)
 equalpairs(U, X, marked=FALSE)
 equalpairs.quad(Q)
@@ -1408,6 +1409,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            bwref, covname, confidence,
            covunits, modelcall, callstring, savestuff)
 rigidradius(X)
+rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
 RmhExpandRule(nama)
 romansort(x)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 

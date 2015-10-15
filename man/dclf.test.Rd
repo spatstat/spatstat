@@ -10,10 +10,10 @@
 }
 \usage{
 dclf.test(X, \dots, alternative=c("two.sided", "less", "greater"),
-                  rinterval = NULL, scale=NULL, interpolate=FALSE)
+                  rinterval = NULL, scale=NULL, clamp=FALSE, interpolate=FALSE)
 
 mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
-                  rinterval = NULL, scale=NULL, interpolate=FALSE)
+                  rinterval = NULL, scale=NULL, clamp=FALSE, interpolate=FALSE)
 }
 \arguments{
   \item{X}{
@@ -47,6 +47,15 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
     distance \eqn{r}. Summary function values for distance \code{r}
     will be \emph{divided} by \code{scale(r)} before the
     test statistic is computed.
+  }
+  \item{clamp}{
+    Logical value indicating how to compute deviations
+    in a one-sided test. Deviations of the observed
+    summary function from the theoretical summary function are initially
+    evaluated as signed real numbers, with large positive values indicating
+    consistency with the alternative hypothesis.
+    If \code{clamp=FALSE} (the default), these values are not changed.
+    If \code{clamp=TRUE}, any negative values are replaced by zero.
   }
   \item{interpolate}{
     Logical value specifying whether to calculate the \eqn{p}-value

@@ -11,7 +11,8 @@
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
-  alternative=c("two.sided", "less", "greater"), scale=NULL, 
+  alternative=c("two.sided", "less", "greater"),
+  scale=NULL, clamp=FALSE,
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -20,7 +21,8 @@
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
   simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
-  alternative=c("two.sided", "less", "greater"), scale=NULL,
+  alternative=c("two.sided", "less", "greater"), 
+  scale=NULL, clamp=FALSE,
   savefuns=FALSE, savepatterns=FALSE,
   nsim2=nsim, VARIANCE=FALSE, nSD=2, Yname=NULL,
   do.pwrong=FALSE, envir.simul=NULL)
@@ -99,6 +101,16 @@
     will be \emph{divided} by \code{scale(r)} before the
     maximum deviation is computed. The resulting global envelopes
     will have width proportional to \code{scale(r)}. 
+  }
+  \item{clamp}{
+    Logical value indicating how to compute envelopes when
+    \code{alternative="less"} or \code{alternative="greater"}.
+    Deviations of the observed
+    summary function from the theoretical summary function are initially
+    evaluated as signed real numbers, with large positive values indicating
+    consistency with the alternative hypothesis.
+    If \code{clamp=FALSE} (the default), these values are not changed.
+    If \code{clamp=TRUE}, any negative values are replaced by zero.
   }
   \item{savefuns}{
     Logical flag indicating whether to save all the simulated

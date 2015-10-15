@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.84 $   $Date: 2015/09/06 03:11:34 $
+##    $Revision: 4.86 $   $Date: 2015/10/15 14:21:10 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -480,65 +480,79 @@ rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
 rMaternI <- function(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE,
                      ..., nsim=1, drop=TRUE)
 {
-  win <- as.owin(win)
-  stopifnot(is.numeric(r) && length(r) == 1)
-  if(stationary) {
-    ## generate in a larger window
-    bigbox <- grow.rectangle(as.rectangle(win), r)
-    X <- rpoispp(kappa, win=bigbox, nsim=nsim)
-  } else {
-    X <- rpoispp(kappa, win=win, nsim=nsim)
-  }
-  result <- if(nsim == 1) solist(X) else X
-  for(isim in 1:nsim) {
-    Y <- result[[isim]]
-    if(npoints(Y) > 1) {
-      d <- nndist(Y)
-      Y <- Y[d > r]
-    }
-    if(stationary)
-      Y <- Y[win]
-    result[[isim]] <- Y
-  }
-  if(nsim == 1 && drop) return(result[[1]])
-  return(as.solist(result))
+  rMaternInhibition(type=1,
+                    kappa=kappa, r=r, win=win, stationary=stationary,
+                    ..., nsim=nsim, drop=drop)
 }
-    
+
 rMaternII <- function(kappa, r, win = owin(c(0,1),c(0,1)), stationary=TRUE,
-                      ..., nsim=1, drop=TRUE)
+                     ..., nsim=1, drop=TRUE)
 {
-  win <- as.owin(win)
+  rMaternInhibition(type=2,
+                    kappa=kappa, r=r, win=win, stationary=stationary,
+                    ..., nsim=nsim, drop=drop)
+}
+
+rMaternInhibition <- function(type, 
+                              kappa, r, win = owin(c(0,1),c(0,1)),
+                              stationary=TRUE,
+                              ..., nsim=1, drop=TRUE) {
   stopifnot(is.numeric(r) && length(r) == 1)
-  if(stationary) {
-    bigbox <- grow.rectangle(as.rectangle(win), r)
-    X <- rpoispp(kappa, win=bigbox, nsim=nsim)
-  } else {
-    X <- rpoispp(kappa, win=win, nsim=nsim)
+  stopifnot(type %in% c(1,2))
+  ## Resolve window class
+  if(!inherits(win, c("owin", "boxx"))) {
+    givenwin <- win
+    win <- try(as.owin(givenwin), silent = TRUE)
+    if(inherits(win, "try-error"))
+      win <- try(as.boxx(givenwin), silent = TRUE)
+    if(inherits(win, "try-error"))
+      stop("Could not coerce argument win to owin or boxx class.")
+  }
+  ## Pick 2-d or general function to grow domain
+  growfun <- if(is.owin(win)) grow.rectangle else grow.boxx
+  ## Enlarge bounding box for simulation if requested
+  bigbox <- if(stationary) growfun(win, r) else win
+  ## Simulate
+  X <- if(is.owin(win)){
+    rpoispp(kappa, win = bigbox, nsim = nsim)
+  } else{
+    rpoisppx(kappa, domain = bigbox, nsim = nsim)
   }
   result <- if(nsim == 1) list(X) else X
   for(isim in 1:nsim) {
     Y <- result[[isim]]
     nY <- npoints(Y)
-    if(nY > 1) {
-      ## matrix of squared pairwise distances
-      d2 <- pairdist(Y, squared=TRUE)
-      close <- (d2 <= r^2)
-      ## random order 1:n
-      age <- sample(seq_len(nY), nY, replace=FALSE)
-      earlier <- outer(age, age, ">")
-      conflict <- close & earlier
-      ## delete <- apply(conflict, 1, any)
-      delete <- matrowany(conflict)
-      Y <- Y[!delete]
+    if(type == 1) {
+      ## Matern Model I
+      if(nY > 1) {
+        d <- nndist(Y)
+        Y <- Y[d > r]
+      }
+    } else {
+      ## Matern Model II
+      if(nY > 1) {
+        ## matrix of squared pairwise distances
+        d2 <- pairdist(Y, squared=TRUE)
+        close <- (d2 <= r^2)
+        ## random order 1:n
+        age <- sample(seq_len(nY), nY, replace=FALSE)
+        earlier <- outer(age, age, ">")
+        conflict <- close & earlier
+        ## delete <- apply(conflict, 1, any)
+        delete <- matrowany(conflict)
+        Y <- Y[!delete]
+      }
     }
     if(stationary)
       Y <- Y[win]
     result[[isim]] <- Y
   }
   if(nsim == 1 && drop) return(result[[1]])
-  return(as.solist(result))
+  if(is.owin(win))
+    result <- as.solist(result)
+  return(result)
 }
-  
+
 rSSI <- function(r, n=Inf, win = square(1), 
                  giveup = 1000, x.init=NULL, ...,
                  f=NULL, fmax=NULL,

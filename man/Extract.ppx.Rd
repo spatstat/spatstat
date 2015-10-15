@@ -13,7 +13,8 @@
   }
   \item{i}{
    Subset index. A valid subset index in the usual \R sense,
-   indicating which points should be retained.
+   indicating which points should be retained;
+   or a spatial domain of class \code{"boxx"} or \code{"box3"}.
   }
   \item{drop}{
     Logical value indicating whether to remove unused levels
@@ -24,8 +25,7 @@
   }
 }
 \value{
-  A multidimensional point pattern (of class \code{"ppx"})
-  in the same domain.
+  A multidimensional point pattern (of class \code{"ppx"}).
 }
 \details{
   This function extracts a designated subset of a multidimensional
@@ -33,16 +33,21 @@
 
   The function \code{[.ppx} is a method for \code{\link{[}} for the
   class \code{"ppx"}. It extracts a designated subset of a point pattern.
-  The argument \code{i} should be a subset index in the usual \R sense:
-  either a numeric vector
-  of positive indices (identifying the points to be retained),
-  a numeric vector of negative indices (identifying the points
-  to be deleted) or a logical vector of length equal to the number of
-  points in the point pattern \code{x}. In the latter case, 
-  the points \code{(x$x[i], x$y[i])} for which 
-  \code{subset[i]=TRUE} will be retained, and the others
-  will be deleted.
- 
+  The argument \code{i} may be either
+  \itemize{
+    \item a subset index in the usual \R sense:
+    either a numeric vector
+    of positive indices (identifying the points to be retained),
+    a numeric vector of negative indices (identifying the points
+    to be deleted) or a logical vector of length equal to the number of
+    points in the point pattern \code{x}. In the latter case, 
+    the points \code{(x$x[i], x$y[i])} for which 
+    \code{subset[i]=TRUE} will be retained, and the others
+    will be deleted.
+  \item
+    a spatial domain of class \code{"boxx"} or \code{"box3"}.
+    Points falling inside this region will be retained.
+  }
   The argument \code{drop} determines whether to remove
   unused levels of a factor, if the point pattern is multitype
   (i.e. the marks are a factor) or if the marks are a data frame or hyperframe
