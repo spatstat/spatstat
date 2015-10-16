@@ -12,7 +12,7 @@
   or logistic likelihood for a fitted Gibbs point process model.
 }
 \usage{
-\method{logLik}{ppm}(object, \dots, new.coef=NULL, warn=TRUE)
+\method{logLik}{ppm}(object, \dots, new.coef=NULL, warn=TRUE, absolute=FALSE)
 
 \method{deviance}{ppm}(object, \dots)
 
@@ -31,6 +31,10 @@
     If \code{TRUE}, a warning is given when the
     pseudolikelihood or logistic likelihood
     is returned instead of the likelihood.
+  }
+  \item{absolute}{
+    Logical value indicating whether to include 
+    constant terms in the loglikelihood. 
   }
   \item{scale}{Ignored.}
   \item{k}{Numeric value specifying the weight of the

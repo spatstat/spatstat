@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.191 $	$Date: 2015/07/14 12:15:45 $
+#	$Revision: 5.192 $	$Date: 2015/10/16 07:21:42 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2015/07/14 12:15:45 $")
+                        date="$Date: 2015/10/16 07:21:42 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -149,6 +149,7 @@ mpl.engine <-
                    fitin       = fii(),
                    Q           = Q,
                    maxlogpl    = maxlogpl,
+                   satlogpl    = NULL,
                    internal    = list(computed=computed, se=se),
                    covariates  = mpl.usable(covariates),
                                         ## covariates are still retained!
@@ -256,11 +257,11 @@ mpl.engine <-
     SUBSET <- glmdata$.mpl.SUBSET        
     Z <- is.data(Q)
     Vnames <- prep$Vnames
-        
+
+    ## saturated log pseudolikelihood
+    satlogpl <- - (sum(log(W[Z & SUBSET])) + sum(Z & SUBSET))
     ## attained value of max log pseudolikelihood
-    maxlogpl <-
-      if(likelihood.is.zero) { -Inf } else 
-    -(deviance(FIT)/2 + sum(log(W[Z & SUBSET])) + sum(Z & SUBSET))
+    maxlogpl <- if(likelihood.is.zero) -Inf else (satlogpl - deviance(FIT)/2)
 
     ## fitted interaction object
     fitin <- if(want.inter) fii(interaction, co, Vnames, IsOffset) else fii()
@@ -278,7 +279,8 @@ mpl.engine <-
            interaction  = if(want.inter) interaction else NULL,
            fitin        = fitin,
            Q            = Q,
-           maxlogpl     = maxlogpl, 
+           maxlogpl     = maxlogpl,
+           satlogpl     = satlogpl,
            internal     = list(glmfit=FIT, glmdata=glmdata, Vnames=Vnames,
                                IsOffset=IsOffset, fmla=fmla, computed=computed),
            covariates   = mpl.usable(covariates),

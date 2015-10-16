@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.19 $  $Date: 2015/04/02 02:17:19 $
+#   $Revision: 1.20 $  $Date: 2015/10/16 07:21:34 $
 #
 #  Logistic likelihood method - under development
 #
@@ -194,15 +194,17 @@ logi.engine <- function(Q,
   co <- coef(fit)
   fitin <- fii(interaction, co, Vnames, IsOffset)
 
+  ## Saturated log-likelihood:
+  satlogpl <- sum(ok*resp*log(B))
   ## Max. value of log-likelihood:
-  maxlogpl <- logLik(fit) + sum(ok*resp*log(B))
+  maxlogpl <- logLik(fit) + satlogpl
 
   # Stamp with spatstat version number
   spv <- package_version(versionstring.spatstat())
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2015/04/02 02:17:19 $")
+                      date="$Date: 2015/10/16 07:21:34 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -218,6 +220,7 @@ logi.engine <- function(Q,
               version     = the.version,
               fitin       = fitin,
               maxlogpl    = maxlogpl,
+              satlogpl    = satlogpl,
               covariates  = mpl.usable(covariates),
 #              varcov      = if(VB) fit$S else NULL,
               internal    = list(Vnames  = Vnames,

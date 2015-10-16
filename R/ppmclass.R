@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.123 $	$Date: 2015/08/27 08:10:31 $
+#	$Revision: 2.127 $	$Date: 2015/10/16 07:47:19 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -562,10 +562,21 @@ emend.ppm <- project.ppm <- local({
 # more methods
 
 deviance.ppm <- function(object, ...) {
-  as.numeric(-2 * logLik(object, ...))
+  satlogpl <- object$satlogpl
+  if(is.null(satlogpl)) {
+    object <- update(object, forcefit=TRUE)
+    satlogpl <- object$satlogpl
+  }
+  if(is.null(satlogpl) || !is.finite(satlogpl))
+    return(NA)
+  ll <- do.call(logLik,
+                resolve.defaults(list(object=object, absolute=FALSE),
+                                 list(...)))
+  ll <- as.numeric(ll)
+  2 * (satlogpl - ll)
 }
 
-logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
+logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE, absolute=FALSE) {
   if(!is.poisson.ppm(object) && warn) 
     warning(paste("log likelihood is not available for non-Poisson model;",
                   "log-pseudolikelihood returned"))
@@ -573,10 +584,19 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
   nip <- if(!inherits(object, "ippm")) 0 else
            length(attr(object$covfunargs, "free"))
   df <- length(coef(object)) + nip
+  ## compute adjustment constant
+  if(absolute && object$method %in% c("exact", "mpl", "ho")) {
+    X <- data.ppm(object)
+    W <- Window(X)
+    areaW <-
+      if(object$correction == "border" && object$rbord > 0) 
+      eroded.areas(W, object$rbord) else area(W)
+    constant <- areaW * markspace.integral(X)
+  } else constant <- 0
   ##
   if(is.null(new.coef)) {
     ## extract from object
-    ll <- object$maxlogpl
+    ll <- object$maxlogpl + constant
     attr(ll, "df") <- df
     class(ll) <- "logLik"
     return(ll)
@@ -605,6 +625,7 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
          stop(paste("Internal error: unrecognised ppm method:",
                     dQuote(method)))
          )
+  ll <- ll + constant
   attr(ll, "df") <- df
   class(ll) <- "logLik"
   return(ll)
@@ -616,10 +637,8 @@ pseudoR2 <- function(object, ...) {
 
 pseudoR2.ppm <- function(object, ...) {
   dres <- deviance(object, ..., warn=FALSE)
-  nullmod <- update(object, . ~ 1)
+  nullmod <- update(object, . ~ 1, forcefit=TRUE)
   dnul <- deviance(nullmod, warn=FALSE)
-#  splat("residual deviance = ", dres)
-#  splat("null deviance = ", dnul)
   return(1 - dres/dnul)
 }
 
