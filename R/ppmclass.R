@@ -561,6 +561,10 @@ emend.ppm <- project.ppm <- local({
 
 # more methods
 
+deviance.ppm <- function(object, ...) {
+  as.numeric(-2 * logLik(object, ...))
+}
+
 logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
   if(!is.poisson.ppm(object) && warn) 
     warning(paste("log likelihood is not available for non-Poisson model;",
@@ -592,7 +596,8 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
            w <- w.quad(Q)
            ll <- sum(log(cifdata[cifdata > 0])) - sum(w * cif)
          },
-         logi={
+         logi=,
+         VBlogi={
            B <- getglmdata(object, drop=TRUE)$.logi.B
            p <- cif/(B+cif)
            ll <- sum(log(p/(1-p))[Z]) + sum(log(1-p)) + sum(log(B[Z]))
@@ -603,6 +608,19 @@ logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE) {
   attr(ll, "df") <- df
   class(ll) <- "logLik"
   return(ll)
+}
+
+pseudoR2 <- function(object, ...) {
+  UseMethod("pseudoR2")
+}
+
+pseudoR2.ppm <- function(object, ...) {
+  dres <- deviance(object, ..., warn=FALSE)
+  nullmod <- update(object, . ~ 1)
+  dnul <- deviance(nullmod, warn=FALSE)
+#  splat("residual deviance = ", dres)
+#  splat("null deviance = ", dnul)
+  return(1 - dres/dnul)
 }
 
 formula.ppm <- function(x, ...) {

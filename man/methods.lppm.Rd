@@ -5,6 +5,7 @@
 \alias{extractAIC.lppm}
 \alias{formula.lppm}
 \alias{logLik.lppm}
+\alias{deviance.lppm}
 \alias{nobs.lppm}
 \alias{print.lppm}
 \alias{summary.lppm}
@@ -30,6 +31,8 @@
   \method{formula}{lppm}(x, ...)
 
   \method{logLik}{lppm}(object, ...)
+
+  \method{deviance}{lppm}(object, ...)
 
   \method{nobs}{lppm}(object, ...)
 
@@ -59,19 +62,20 @@
 }
 \details{
   These are methods for the generic commands
-  \code{\link{coef}},
+  \code{\link[stats]{coef}},
   \code{\link{emend}}, 
-  \code{\link{extractAIC}},
-  \code{\link{formula}},
-  \code{\link{logLik}},
-  \code{\link{nobs}},
-  \code{\link{print}}, 
-  \code{\link{summary}}, 
-  \code{\link{terms}},
-  \code{\link{update}},
+  \code{\link[stats]{extractAIC}},
+  \code{\link[stats]{formula}},
+  \code{\link[stats]{logLik}},
+  \code{\link[stats]{deviance}},
+  \code{\link[stats]{nobs}},
+  \code{\link[base]{print}}, 
+  \code{\link[base]{summary}}, 
+  \code{\link[stats]{terms}},
+  \code{\link[stats]{update}},
   \code{\link{valid}}
   and
-  \code{\link{vcov}}
+  \code{\link[stats]{vcov}}
   for the class \code{"lppm"}. 
 }
 \value{
@@ -98,6 +102,7 @@
   formula(fit)
   terms(fit)
   logLik(fit)
+  deviance(fit)
   nobs(fit)
   extractAIC(fit)
   update(fit, ~1)

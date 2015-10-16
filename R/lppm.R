@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.32 $   $Date: 2015/08/27 08:12:09 $
+#  $Revision: 1.33 $   $Date: 2015/10/16 05:00:05 $
 #
 
 lppm <- function(X, ...) {
@@ -217,6 +217,17 @@ terms.lppm <- function(x, ...) {
 
 logLik.lppm <- function(object, ...) {
   logLik(object$fit, ...)
+}
+
+deviance.lppm <- function(object, ...) {
+  as.numeric(-2 * logLik(object, ...))
+}
+
+pseudoR2.lppm <- function(object, ...) {
+  dres <- deviance(object, ..., warn=FALSE)
+  nullmod <- update(object, . ~ 1)
+  dnul <- deviance(nullmod, warn=FALSE)
+  return(1 - dres/dnul)
 }
 
 formula.lppm <- function(x, ...) {

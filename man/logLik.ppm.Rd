@@ -1,5 +1,6 @@
 \name{logLik.ppm}
 \alias{logLik.ppm}
+\alias{deviance.ppm}
 \alias{AIC.ppm}
 \alias{extractAIC.ppm}
 \alias{nobs.ppm}
@@ -11,10 +12,15 @@
   or logistic likelihood for a fitted Gibbs point process model.
 }
 \usage{
-\method{logLik}{ppm}(object, ..., new.coef=NULL, warn=TRUE)
+\method{logLik}{ppm}(object, \dots, new.coef=NULL, warn=TRUE)
+
+\method{deviance}{ppm}(object, \dots)
+
 \method{AIC}{ppm}(object, \dots, k=2, takeuchi=TRUE)
+
 \method{extractAIC}{ppm}(fit, scale=0, k=2, \dots, takeuchi=TRUE)
-\method{nobs}{ppm}(object, ...)
+
+\method{nobs}{ppm}(object, \dots)
 }
 \arguments{
   \item{object,fit}{Fitted point process model.
@@ -43,9 +49,10 @@
 }
 \details{
   These functions are methods for the generic commands
-  \code{\link{logLik}},
-  \code{\link{extractAIC}}  and
-  \code{\link{nobs}}
+  \code{\link[stats]{logLik}},
+  \code{\link[stats]{deviance}},
+  \code{\link[stats]{extractAIC}}  and
+  \code{\link[stats]{nobs}}
   for the class \code{"ppm"}.
 
   An object of class \code{"ppm"} represents a fitted
@@ -85,7 +92,7 @@
   The method \code{nobs.ppm} returns the number of points
   in the original data point pattern to which the model was fitted.
   
-  The \R function \code{\link{step}} uses these methods.
+  The \R function \code{\link[stats]{step}} uses these methods.
 }
 \value{
   \code{logLik} returns a numerical value, belonging to the class
@@ -134,6 +141,7 @@
   fit <- ppm(cells, ~x)
   nobs(fit)
   logLik(fit)
+  deviance(fit)
   extractAIC(fit)
   AIC(fit)
   step(fit)

@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.43-1
+        CHANGES IN spatstat VERSION 1.43-0.002
 
 OVERVIEW
 
-   o More support for multidimensional point patterns.
+   o More support for multidimensional point patterns and point processes.
 
    o More options for one-sided envelopes.
+
+   o More support for model comparison.
 
    o Version nickname: 'Lessons of October'
 
@@ -18,6 +20,12 @@ NEW FUNCTIONS
    o grow.boxx
      Expand a multidimensional box.
 
+   o deviance.ppm, deviance.lppm
+   Deviance for a fitted point process model.
+
+   o pseudoR2
+   Pseudo-R-squared for a fitted point process model.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o rMaternI, rMaternII
@@ -25,7 +33,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
      three dimensions and higher dimensions, when the argument
      'win' is of class 'box3' or 'boxx'.
 
-   o [.ppx
+   o "[.ppx"
      The subset index 'i' may now be a spatial domain
      of class 'boxx' or 'box3'.
 
