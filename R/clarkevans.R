@@ -1,6 +1,6 @@
 ## clarkevans.R
 ## Clark-Evans statistic and test
-## $Revision: 1.16 $ $Date: 2014/11/10 05:34:18 $
+## $Revision: 1.17 $ $Date: 2015/10/19 05:03:37 $
 
 clarkevans <- function(X, correction=c("none", "Donnelly", "cdf"),
                        clipregion=NULL)
@@ -124,7 +124,7 @@ clarkevans.test <- function(X, ...,
     p.value <- switch(alternative,
                       less=p.lower,
                       greater=p.upper,
-                      two.sided=2*min(p.lower, p.upper))
+                      two.sided=min(1, 2*min(p.lower, p.upper)))
     
     pvblurb <- paste("Monte Carlo test based on",
                      nsim, "simulations of CSR with fixed n")

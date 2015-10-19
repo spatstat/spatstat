@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.69 $ $Date: 2015/06/20 10:56:11 $
+#   $Revision: 1.70 $ $Date: 2015/10/19 09:30:18 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -126,10 +126,6 @@ print.tess <- function(x, ..., brief=FALSE) {
          rect={
            if(full) {
              unitinfo <- summary(unitname(win))
-             equispaced <- function(z) {
-               dz <- diff(z)
-               diff(range(dz))/mean(dz) < 0.01
-             }
              if(equispaced(x$xgrid) && equispaced(x$ygrid)) 
                splat("Tiles are equal rectangles, of dimension",
                      signif(mean(diff(x$xgrid)), 5),
@@ -340,6 +336,23 @@ tiles <- function(x) {
   return(out)
 }
 
+tiles.empty <- function(x) {
+  stopifnot(is.tess(x))
+  switch(x$type,
+         rect = {
+           nx <- length(x$xgrid) - 1
+           ny <- length(x$ygrid) - 1
+           ans <- rep(FALSE, nx * ny)
+         },
+         tiled = {
+           ans <- sapply(x$tiles, is.empty)
+         },
+         image = {
+           ans <- (table(x$image[]) == 0)
+         })
+  return(ans)
+}
+           
 tilenames <- function(x) {
   stopifnot(is.tess(x))
   switch(x$type,

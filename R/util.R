@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.187 $    $Date: 2015/10/01 10:23:50 $
+#    $Revision: 1.191 $    $Date: 2015/10/19 12:52:12 $
 #
 #
 matrowsum <- function(x) {
@@ -1588,4 +1588,40 @@ insertinlist <- function(x, i, y) {
   return(z)
 }
 
-  
+equispaced <- function(z, reltol=0.001) {
+  dz <- diff(z)
+  return(diff(range(dz)) < reltol * mean(dz))
+}
+
+fastFindInterval <- function(x, b, labels=FALSE, reltol=0.001) {
+  nintervals <- length(b) - 1
+  nx <- length(x)
+  if(nx == 0)
+    return(rep(0, nintervals))
+  ##
+  if(equispaced(b, reltol)) {
+    ## breaks are equally spaced
+    zz <- .C("fastinterv",
+             x          = as.double(x),
+             n          = as.integer(nx),
+             brange     = as.double(range(b)),
+             nintervals = as.integer(nintervals),
+             y          = as.integer(integer(nx))
+             )
+    y <- zz$y
+  } else {
+    ## use R's interval search algorithm
+    y <- findInterval(x, b, rightmost.closed=TRUE)
+  }
+  if(labels) {
+    blab <- paste0("[",
+                   b[1:nintervals],
+                   ",",
+                   b[-1],
+                   c(rep(")", nintervals-1), "]"))
+    y <- as.integer(y)
+    levels(y) <- as.character(blab)
+    class(y) <- "factor"
+  }
+  return(y)
+}

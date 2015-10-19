@@ -158,6 +158,7 @@
 \alias{equalpairs.quad}          
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
+\alias{equispaced}          
 \alias{eratosthenes}
 \alias{erodemask}
 \alias{erode.owin}
@@ -186,6 +187,7 @@
 \alias{f3engine}
 \alias{f3Cengine}
 \alias{fasp}
+\alias{fastFindInterval}
 \alias{fillseq}
 \alias{findbestlegendpos}
 \alias{findCovariate}
@@ -936,7 +938,8 @@ envelopeTest(X, \dots, exponent, alternative,
 equalpairs(U, X, marked=FALSE)
 equalpairs.quad(Q)
 equals.quad(Q)          
-equalsfun.quad(Q)          
+equalsfun.quad(Q)
+equispaced(z, reltol)
 eratosthenes(nmax, startset)
 erodemask(w,r,strict)
 erode.owin(\dots)
@@ -968,6 +971,7 @@ fave.order(x)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
+fastFindInterval(x, b, labels, reltol)
 fillseq(x)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)

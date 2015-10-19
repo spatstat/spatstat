@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.50 $  $Date: 2015/05/10 02:22:36 $
+#  $Revision: 1.51 $  $Date: 2015/10/19 08:29:09 $
 #
 
 quadratcount <- function(X, ...) {
@@ -34,7 +34,8 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
                        nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks,
                        keepempty=TRUE)
       # now delete the empty quadrats and the corresponding counts
-      nonempty <- !unlist(lapply(tiles(tess), is.empty))
+      nonempty <- !tiles.empty(tess)
+#     WAS: nonempty <- !unlist(lapply(tiles(tess), is.empty))
       if(!any(nonempty))
         stop("All tiles are empty")
       if(!all(nonempty)) {
@@ -120,13 +121,16 @@ rectquadrat.breaks <- function(xr, yr, nx=5, ny=nx, xbreaks=NULL, ybreaks=NULL) 
 rectquadrat.countEngine <- function(x, y, xbreaks, ybreaks, weights) {
   if(length(x) > 0) {
     # check validity of breaks
-    if(min(x) < min(xbreaks) || max(x) > max(xbreaks))
+    if(!all(inside.range(range(x), range(xbreaks))))
       stop("xbreaks do not span the actual range of x coordinates in data")
-    if(min(y) < min(ybreaks) || max(y) > max(ybreaks))
+    if(!all(inside.range(range(y), range(ybreaks))))
       stop("ybreaks do not span the actual range of y coordinates in data")
   }
-  xg <- cut(x, breaks=xbreaks, include.lowest=TRUE)
-  yg <- cut(y, breaks=ybreaks, include.lowest=TRUE)
+  # WAS: 
+  # xg <- cut(x, breaks=xbreaks, include.lowest=TRUE)
+  # yg <- cut(y, breaks=ybreaks, include.lowest=TRUE)
+  xg <- fastFindInterval(x, xbreaks, labels=TRUE)
+  yg <- fastFindInterval(y, ybreaks, labels=TRUE)
   if(missing(weights)) 
     sumz <- table(list(y=yg, x=xg))
   else {

@@ -1,13 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.004
+        CHANGES IN spatstat VERSION 1.43-0.005
 
 OVERVIEW
 
+   o We thank Jonas Geldmann, Andrew Hardegen, Tom Lawrence, 
+     Robin Milne, Gopalan Nair and Suman Rakshit for contributions.
+  
    o More support for multidimensional point patterns and point processes.
 
    o More options for one-sided envelopes.
 
    o More support for model comparison.
+
+   o Quadrat counting accelerated, in some cases.
 
    o Version nickname: 'Lessons of October'
 
@@ -25,6 +30,9 @@ NEW FUNCTIONS
 
    o pseudoR2
    Pseudo-R-squared for a fitted point process model.
+
+   o tiles.empty
+   Checks whether each tile of a tessellation is empty or nonempty.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -47,9 +55,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o logLik.ppm
    New argument 'absolute'.
 
+   o quadratcount.ppp
+   Computation accelerated in some cases.
+
 BUGS
 
-   o None yet!
+   o quadrat.test, clarkevans.test
+   In rare cases, the computed Monte Carlo p-value could have been
+   greater than 1. This could have occurred only when nsim was an even number
+   and when the correct p-value was equal to 1.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0
 

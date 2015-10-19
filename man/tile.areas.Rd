@@ -25,7 +25,9 @@ tile.areas(x)
 }
 \seealso{
   \code{\link{tess}},
-  \code{\link{tiles}}
+  \code{\link{tiles}},
+  \code{\link{tilenames}},
+  \code{\link{tiles.empty}}
 }
 \examples{
   A <- tess(xgrid=0:2,ygrid=0:2)

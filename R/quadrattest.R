@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.50 $  $Date: 2015/01/22 08:40:19 $
+#   $Revision: 1.51 $  $Date: 2015/10/19 03:50:22 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -259,7 +259,7 @@ X2testEngine <- function(OBS, EXP, ...,
            PVAL <- switch(alternative,
                           clustered = phi,
                           regular   = plo,
-                          two.sided = 2 * min(phi,plo))
+                          two.sided = min(1, 2 * min(phi,plo)))
          })
     result <- structure(list(statistic = X2,
                              parameter = df,

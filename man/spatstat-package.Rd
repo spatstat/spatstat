@@ -1733,6 +1733,7 @@
   Funwi-Gabga Neba,
   Oscar Garcia,
   Agnes Gault,
+  Jonas Geldmann,
   Marc Genton,
   Shaaban Ghalandarayeshi,
   Julian Gilbey,

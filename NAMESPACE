@@ -82,6 +82,7 @@ useDynLib(spatstat,
 "exact_dt_R",
 "fardist2grid",
 "fardistgrid",
+"fastinterv",
 "Fclosepairs",
 "Fcrosspairs",
 "graphVees",
@@ -800,6 +801,7 @@ export("equalpairs")
 export("equalpairs.quad")          
 export("equalsfun.quad")          
 export("equals.quad")          
+export("equispaced")          
 export("eratosthenes")
 export("eroded.areas")
 export("eroded.volumes")
@@ -855,6 +857,7 @@ export("fardist.owin")
 export("fardist.ppp")
 export("[.fasp")
 export("fasp")
+export("fastFindInterval")
 export("fave.order")
 export("Fest")
 export("Fhazard")
@@ -2325,6 +2328,7 @@ export("tileindex")
 export("tilenames<-")
 export("tilenames")
 export("tiles")
+export("tiles.empty")
 export("timed")
 export("to.grey")
 export("to.opaque")
