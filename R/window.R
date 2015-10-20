@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.167 $	$Date: 2015/09/26 03:06:10 $
+#	$Revision: 4.168 $	$Date: 2015/10/20 02:05:23 $
 #
 #
 #	A window may be either
@@ -918,6 +918,15 @@ inside.owin <- function(x, y, w) {
            return(ok)
          },
          polygonal = {
+           ## check scale
+           framesize <- max(diff(xr), diff(yr))
+           if(framesize > 1e6 || framesize < 1e-6) {
+             ## rescale to avoid numerical overflow
+             scalefac <- framesize/100
+             w <- rescale(w, scalefac)
+             x <- x/scalefac
+             y <- y/scalefac
+           }
            xy <- list(x=x,y=y)
            bdry <- w$bdry
            total <- numeric(length(x))

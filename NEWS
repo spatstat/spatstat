@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.005
+        CHANGES IN spatstat VERSION 1.43-0.006
 
 OVERVIEW
 
@@ -65,6 +65,12 @@ BUGS
    greater than 1. This could have occurred only when nsim was an even number
    and when the correct p-value was equal to 1.
    Fixed.
+
+   o point-in-polygon test
+   The function inside.owin could take a very long time to check
+   whether points are inside a polygonal window, if the coordinates
+   were very large numbers. This was due to numerical overflow.
+   (Fixed??)
 
         CHANGES IN spatstat VERSION 1.43-0
 

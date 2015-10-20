@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.43-0.005
+Version: 1.43-0.006
 Nickname: Lessons of October
-Date: 2015-10-19
+Date: 2015-10-20
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
