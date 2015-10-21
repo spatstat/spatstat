@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.30 $  $Date: 2014/11/11 01:25:17 $
+# $Revision: 1.31 $  $Date: 2015/10/21 09:06:57 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -143,7 +143,7 @@ multiplicity.data.frame <- function (x) {
   hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
   counts <- as.integer(1 + .rowSums(hit, nu, nd))
   result[!dup] <- counts
-  dumap <- apply(hit, 2, function(z) min(which(z)))
+  dumap <- apply(hit, 2, match, x=TRUE) # equivalent to min(which(z))
   result[dup] <- counts[dumap]
   return(result)
 }
@@ -189,7 +189,7 @@ multiplicity.default <- function (x) {
   nd <- nrow(dx)
   hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
   counts <- as.integer(1 + .rowSums(hit, nu, nd))
-  dumap <- apply(hit, 2, function(z) min(which(z)))
+  dumap <- apply(hit, 2, match, x=TRUE) # was: function(z) min(which(z)))
   result[dup] <- counts[dumap]
   return(result)
 }

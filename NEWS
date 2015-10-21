@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.006
+        CHANGES IN spatstat VERSION 1.43-0.007
 
 OVERVIEW
 
@@ -55,10 +55,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o logLik.ppm
    New argument 'absolute'.
 
+   o plot.kppm
+   New arguments 'pause' and 'xname'.
+
    o quadratcount.ppp
    Computation accelerated in some cases.
 
 BUGS
+
+   o runifpointx, rpoisppx
+   Crashed if nsim > 1.
+   Fixed.
 
    o quadrat.test, clarkevans.test
    In rare cases, the computed Monte Carlo p-value could have been
@@ -66,11 +73,16 @@ BUGS
    and when the correct p-value was equal to 1.
    Fixed.
 
+   o linearmarkequal
+   Result was a data frame instead of an 'fv' object.
+   Fixed.
+
    o point-in-polygon test
    The function inside.owin could take a very long time to check
    whether points are inside a polygonal window, if the coordinates
    were very large numbers. This was due to numerical overflow.
    (Fixed??)
+
 
         CHANGES IN spatstat VERSION 1.43-0
 

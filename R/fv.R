@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.131 $   $Date: 2015/08/12 10:23:31 $
+##    $Revision: 1.132 $   $Date: 2015/10/21 09:06:57 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -479,20 +479,28 @@ fvexprmap <- function(x) {
   return(umap)
 }
 
-fvlegend <- function(object, elang) {
-  ## Compute mathematical legend(s) for column(s) in fv object 
-  ## transformed by language expression 'elang'.
-  ## The expression must already be in 'expanded' form.
-  ## The result is an expression, or expression vector.
-  ## The j-th entry of the vector is an expression for the
-  ## j-th column of function values.
-  ee <- distributecbind(as.expression(elang))
-  map <- fvlabelmap(object, dot = TRUE)
-  eout <- as.expression(lapply(ee, function(ei, map) {
+fvlegend <- local({
+
+  fvlegend <- function(object, elang) {
+    ## Compute mathematical legend(s) for column(s) in fv object 
+    ## transformed by language expression 'elang'.
+    ## The expression must already be in 'expanded' form.
+    ## The result is an expression, or expression vector.
+    ## The j-th entry of the vector is an expression for the
+    ## j-th column of function values.
+    ee <- distributecbind(as.expression(elang))
+    map <- fvlabelmap(object, dot = TRUE)
+    eout <- as.expression(lapply(ee, invokemap, map=map))
+    return(eout)
+  }
+
+  invokemap <- function(ei, map) {
     eval(substitute(substitute(e, mp), list(e = ei, mp = map)))
-  }, map = map))
-  return(eout)
-}  
+  }
+  
+  fvlegend
+})
+
 
 bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL) {
   verifyclass(x, "fv")
@@ -590,62 +598,68 @@ cbind.fv <- function(...) {
 }
 
 collapse.anylist <-
-collapse.fv <- function(object, ..., same=NULL, different=NULL) {
-  if(is.fv(object)) {
-    x <- list(object, ...)
-  } else if(inherits(object, "anylist")) {
-    x <- append(object, list(...))
-  } else if(is.list(object) && all(sapply(object, is.fv))) {
-    x <- append(object, list(...))
-  } else stop("Format not understood")
-  if(!all(unlist(lapply(x, is.fv))))
-    stop("arguments should be objects of class fv")
-  if(is.null(same)) same <- character(0)
-  if(is.null(different)) different <- character(0)
-  if(anyDuplicated(c(same, different)))
-    stop(paste("The arguments", sQuote("same"), "and", sQuote("different"),
-               "should not have entries in common"))
-  either <- c(same, different)
-  ## validate
-  nbg <- unlist(lapply(x, function(z, e) { e[!(e %in% names(z))] }, e=either))
-  nbg <- unique(nbg)
-  if((nbad <- length(nbg)) > 0)
-    stop(paste(ngettext(nbad, "The name", "The names"),
-               commasep(sQuote(nbg)),
-               ngettext(nbad, "is", "are"),
-               "not present in the function objects"))
-  ## names for different versions
-  versionnames <- names(x)
-  if(is.null(versionnames))
-    versionnames <- paste("x", seq_along(x), sep="")
-  shortnames <- abbreviate(versionnames)
-  ## extract the common values
-  y <- x[[1]]
-  if(length(same) > 0 && !(fvnames(y, ".y") %in% same))
-    fvnames(y, ".y") <- same[1]
-  z <- y[, c(fvnames(y, ".x"), same)]
-  dotnames <- same
-  ## now merge the different values
-  for(i in seq_along(x)) {
-    ## extract values for i-th object
-    xi <- x[[i]]
-    wanted <- (names(xi) %in% different)
-    y <- as.data.frame(xi)[, wanted, drop=FALSE]
-    desc <- attr(xi, "desc")[wanted]
-    labl <- attr(xi, "labl")[wanted]
-    ## relabel
-    prefix <- shortnames[i]
-    preamble <- versionnames[i]
-    names(y) <- if(ncol(y) == 1) prefix else paste(prefix,names(y),sep="")
-    dotnames <- c(dotnames, names(y))
-    ## glue onto fv object
-    z <- bind.fv(z, y,
-                 labl=paste(prefix, labl, sep="~"),
-                 desc=paste(preamble, desc))
+collapse.fv <- local({
+
+  collapse.fv <- function(object, ..., same=NULL, different=NULL) {
+    if(is.fv(object)) {
+      x <- list(object, ...)
+    } else if(inherits(object, "anylist")) {
+      x <- append(object, list(...))
+    } else if(is.list(object) && all(sapply(object, is.fv))) {
+      x <- append(object, list(...))
+    } else stop("Format not understood")
+    if(!all(unlist(lapply(x, is.fv))))
+      stop("arguments should be objects of class fv")
+    if(is.null(same)) same <- character(0)
+    if(is.null(different)) different <- character(0)
+    if(anyDuplicated(c(same, different)))
+      stop(paste("The arguments", sQuote("same"), "and", sQuote("different"),
+                 "should not have entries in common"))
+    either <- c(same, different)
+    ## validate
+    nbg <- unique(unlist(lapply(x, missingnames, expected=either)))
+    if((nbad <- length(nbg)) > 0)
+      stop(paste(ngettext(nbad, "The name", "The names"),
+                 commasep(sQuote(nbg)),
+                 ngettext(nbad, "is", "are"),
+                 "not present in the function objects"))
+    ## names for different versions
+    versionnames <- names(x)
+    if(is.null(versionnames))
+      versionnames <- paste("x", seq_along(x), sep="")
+    shortnames <- abbreviate(versionnames)
+    ## extract the common values
+    y <- x[[1]]
+    if(length(same) > 0 && !(fvnames(y, ".y") %in% same))
+      fvnames(y, ".y") <- same[1]
+    z <- y[, c(fvnames(y, ".x"), same)]
+    dotnames <- same
+    ## now merge the different values
+    for(i in seq_along(x)) {
+      ## extract values for i-th object
+      xi <- x[[i]]
+      wanted <- (names(xi) %in% different)
+      y <- as.data.frame(xi)[, wanted, drop=FALSE]
+      desc <- attr(xi, "desc")[wanted]
+      labl <- attr(xi, "labl")[wanted]
+      ## relabel
+      prefix <- shortnames[i]
+      preamble <- versionnames[i]
+      names(y) <- if(ncol(y) == 1) prefix else paste(prefix,names(y),sep="")
+      dotnames <- c(dotnames, names(y))
+      ## glue onto fv object
+      z <- bind.fv(z, y,
+                   labl=paste(prefix, labl, sep="~"),
+                   desc=paste(preamble, desc))
+    }
+    fvnames(z, ".") <- dotnames
+    return(z)
   }
-  fvnames(z, ".") <- dotnames
-  return(z)
-}
+
+  missingnames <- function(z, expected) { expected[!(expected %in% names(z))] }
+  
+  collapse.fv
+})
 
 ## rename one of the columns of an fv object
 tweak.fv.entry <- function(x, current.tag, new.labl=NULL, new.desc=NULL, new.tag=NULL) {
@@ -1076,43 +1090,53 @@ prefixfv <- function(x, tagprefix="", descprefix="", lablprefix=tagprefix,
   return(y)
 }
 
-reconcile.fv <- function(...) {
-  ## reconcile several fv objects by finding the columns they share in common
-  z <- list(...)
-  if(!all(unlist(lapply(z, is.fv)))) {
-    if(length(z) == 1 && is.list(z[[1]]) && all(unlist(lapply(z[[1]], is.fv))))
-      z <- z[[1]]
-    else    
-      stop("all arguments should be fv objects")
+reconcile.fv <- local({
+
+  reconcile.fv <- function(...) {
+    ## reconcile several fv objects by finding the columns they share in common
+    z <- list(...)
+    if(!all(unlist(lapply(z, is.fv)))) {
+      if(length(z) == 1 &&
+         is.list(z[[1]]) &&
+         all(unlist(lapply(z[[1]], is.fv))))
+        z <- z[[1]]
+      else    
+        stop("all arguments should be fv objects")
+    }
+    n <- length(z)
+    if(n <= 1) return(z)
+    ## find columns that are common to all estimates
+    keepcolumns <- names(z[[1]])
+    keepvalues <- fvnames(z[[1]], "*")
+    for(i in 2:n) {
+      keepcolumns <- intersect(keepcolumns, names(z[[i]]))
+      keepvalues <- intersect(keepvalues, fvnames(z[[i]], "*"))
+    }
+    if(length(keepvalues) == 0)
+      stop("cannot reconcile fv objects: they have no columns in common")
+    ## determine name of the 'preferred' column
+    prefs <- unlist(lapply(z, fvnames, a=".y"))
+    prefskeep <- prefs[prefs %in% keepvalues]
+    if(length(prefskeep) > 0) {
+      ## pick the most popular
+      chosen <- unique(prefskeep)[which.max(table(prefskeep))]
+    } else {
+      ## drat - pick a value arbitrarily
+      chosen <- keepvalues[1]
+    }
+    z <- lapply(z, rebadge.fv, new.preferred=chosen)
+    z <- lapply(z, "[.fv", j=keepcolumns)
+    ## also clip to the same r values
+    rmax <- min(sapply(z, maxrval))
+    z <- lapply(z, cliprmax, rmax=rmax)
+    return(z)
   }
-  n <- length(z)
-  if(n <= 1) return(z)
-  ## find columns that are common to all estimates
-  keepcolumns <- names(z[[1]])
-  keepvalues <- fvnames(z[[1]], "*")
-  for(i in 2:n) {
-    keepcolumns <- intersect(keepcolumns, names(z[[i]]))
-    keepvalues <- intersect(keepvalues, fvnames(z[[i]], "*"))
-  }
-  if(length(keepvalues) == 0)
-    stop("cannot reconcile fv objects: they have no columns in common")
-  ## determine name of the 'preferred' column
-  prefs <- unlist(lapply(z, fvnames, a=".y"))
-  prefskeep <- prefs[prefs %in% keepvalues]
-  if(length(prefskeep) > 0) {
-    ## pick the most popular
-    chosen <- unique(prefskeep)[which.max(table(prefskeep))]
-  } else {
-    ## drat - pick a value arbitrarily
-    chosen <- keepvalues[1]
-  }
-  z <- lapply(z, rebadge.fv, new.preferred=chosen)
-  z <- lapply(z, "[.fv", j=keepcolumns)
-  ## also clip to the same r values
-  rmax <- min(unlist(lapply(z, function(x) { max(with(x, .x)) })))
-  z <- lapply(z, function(x, rmax) { x[ with(x, .x) <= rmax, ] }, rmax=rmax)
-  return(z)
-}
+
+  maxrval <- function(x) { max(with(x, .x)) }
+  cliprmax <- function(x, rmax) { x[ with(x, .x) <= rmax, ] }
+  
+  reconcile.fv
+})
 
 as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
   trap.extra.arguments(...)
@@ -1122,7 +1146,7 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
   yy <- as.data.frame(x)[, fvnames(x, "*"), drop=FALSE]
   ## determine which value(s) to supply
   if(!is.character(value))
-    stop("value should be a character string or vector specifying columns of x")
+    stop("value should be a string or vector specifying columns of x")
   if(!all(value %in% colnames(yy))) {
     expandvalue <- try(fvnames(x, value))
     if(!inherits(expandvalue, "try-error")) {
@@ -1143,11 +1167,8 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
     names(formals(f))[1] <- argname
     body(f)[[4]] <- as.name(argname)
   } else {
-    ## make a list of 'approxfuns' 
-    funs <- lapply(yy,
-                   function(z, u, endrule) { approxfun(x=u, y=z, rule=endrule)},
-                   u=xx,
-                   endrule=endrule)
+    ## make a list of 'approxfuns' with different function values
+    funs <- lapply(yy, approxfun, x = xx, rule = endrule)
     ## return a function which selects the appropriate 'approxfun' and executes
     f <- function(xxxx, what=value) {
       what <- match.arg(what)
@@ -1158,7 +1179,7 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
     ##   indistinguishable from magic' -- Arthur C. Clarke)
     formals(f)[[2]] <- value
     names(formals(f))[1] <- argname
-#    body(f)[[3]][[2]] <- as.name(argname)
+    ##    body(f)[[3]][[2]] <- as.name(argname)
     body(f) <- eval(substitute(substitute(z,
                                           list(xxxx=as.name(argname))),
                                list(z=body(f))))
@@ -1186,7 +1207,7 @@ findcbind <- function(root, depth=0, maxdepth=1000) {
   for(i in 2:length(root)) {
     di <- findcbind(root[[i]], depth+1, maxdepth)
     if(!is.null(di))
-      out <- append(out, lapply(di, function(z,i){ c(i,z)}, i=i))
+      out <- append(out, lapply(di, append, values=i, after=FALSE))
   }
   return(out)
 }
@@ -1196,57 +1217,62 @@ findcbind <- function(root, depth=0, maxdepth=1000) {
                   "&", "|", "!",
                   "==", "!=", "<", "<=", ">=", ">")
 
-distributecbind <- function(x) {
-  ## x is an expression involving a call to 'cbind'
-  ## return a vector of expressions, each obtained by replacing 'cbind(...)'
-  ## by one of its arguments in turn.
-  stopifnot(typeof(x) == "expression")
-  xlang <- x[[1]]
-  locations <- findcbind(xlang)
-  if(length(locations) == 0)
-    return(x)
-  ## cbind might occur more than once
-  ## check that the number of arguments is the same each time
-  narg <-
-    unique(unlist(lapply(locations,
-                         function(loc, y) {
-                           if(length(loc) > 0) length(y[[loc]]) else length(y)
-                         },
-                         y=xlang))) - 1
-  if(length(narg) > 1) 
-    return(NULL)
-  out <- NULL
-  if(narg > 0) {
-    for(i in 1:narg) {
-      ## make a version of the expression
-      ## in which cbind() is replaced by its i'th argument
-      fakexlang <- xlang
-      for(loc in locations) {
-        if(length(loc) > 0) {
-          ## usual case: 'loc' is integer vector representing nested index
-          cbindcall <- xlang[[loc]]
-          ## extract i-th argument
-          argi <- cbindcall[[i+1]]
-          ## if argument is an expression, enclose it in parentheses
-          if(length(argi) > 1 && paste(argi[[1]]) %in% .MathOpNames)
-            argi <- substitute((x), list(x=argi))
-          ## replace cbind call by its i-th argument
-          fakexlang[[loc]] <- argi
-        } else {
-          ## special case: 'loc' = integer(0) representing xlang itself
-          cbindcall <- xlang
-          ## extract i-th argument
-          argi <- cbindcall[[i+1]]
-          ## replace cbind call by its i-th argument
-          fakexlang <- cbindcall[[i+1]]
+distributecbind <- local({
+
+  distributecbind <- function(x) {
+    ## x is an expression involving a call to 'cbind'
+    ## return a vector of expressions, each obtained by replacing 'cbind(...)'
+    ## by one of its arguments in turn.
+    stopifnot(typeof(x) == "expression")
+    xlang <- x[[1]]
+    locations <- findcbind(xlang)
+    if((nloc <- length(locations)) == 0)
+      return(x)
+    ## cbind might occur more than once
+    ## check that the number of arguments is the same each time
+    narg <- unique(sapply(locations, nargs.in.expr, e=xlang))
+    if(length(narg) > 1) 
+      return(NULL)
+    out <- NULL
+    if(narg > 0) {
+      for(i in 1:narg) {
+        ## make a version of the expression
+        ## in which cbind() is replaced by its i'th argument
+        fakexlang <- xlang
+        for(loc in locations) {
+          if(length(loc) > 0) {
+            ## usual case: 'loc' is integer vector representing nested index
+            cbindcall <- xlang[[loc]]
+            ## extract i-th argument
+            argi <- cbindcall[[i+1]]
+            ## if argument is an expression, enclose it in parentheses
+            if(length(argi) > 1 && paste(argi[[1]]) %in% .MathOpNames)
+              argi <- substitute((x), list(x=argi))
+            ## replace cbind call by its i-th argument
+            fakexlang[[loc]] <- argi
+          } else {
+            ## special case: 'loc' = integer(0) representing xlang itself
+            cbindcall <- xlang
+            ## extract i-th argument
+            argi <- cbindcall[[i+1]]
+            ## replace cbind call by its i-th argument
+            fakexlang <- cbindcall[[i+1]]
+          }
         }
+        ## add to final expression
+        out <- c(out, as.expression(fakexlang))
       }
-      ## add to final expression
-      out <- c(out, as.expression(fakexlang))
     }
+    return(out)
   }
-  return(out)
-}
+
+  nargs.in.expr <- function(loc, e) {
+    n <- if(length(loc) > 0) length(e[[loc]]) else length(e)
+    return(n - 1L)
+  }
+
+  distributecbind
+})
 
 ## Form a new 'fv' object as a ratio
 

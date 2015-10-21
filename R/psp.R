@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.79 $ $Date: 2015/05/20 03:07:30 $
+#  $Revision: 1.80 $ $Date: 2015/10/21 09:06:57 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -289,8 +289,7 @@ marks.psp <- function(x, ..., dfok = TRUE) {
             }
             else {
                 if (nrow(m) == 1 || nseg == 0) {
-                  marx <- as.data.frame(lapply(as.list(m),function(x,k) {
-                    rep.int(x, k)}, k = nseg))
+                  marx <- as.data.frame(lapply(as.list(m), rep.int, times=nseg))
                 }
                 else stop("Number of rows of data frame != number of points.\n")
             }

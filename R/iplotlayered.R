@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.11 $   $Date: 2015/05/07 01:56:47 $
+#   $Revision: 1.12 $   $Date: 2015/10/21 09:06:57 $
 #
 #
 
@@ -134,7 +134,7 @@ iplot.layered <- function(x, ..., xname, visible) {
   rpanel::rp.button(p, title="Print summary information",
                     pos=pozzie(nextrow),
                     action=function(panel) {
-                        lapply(panel$x, function(z) print(summary(z)))
+                        lapply(lapply(panel$x, summary), print)
                         return(panel)
                     })
 #  

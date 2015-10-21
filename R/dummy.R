@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.30 $     $Date: 2015/01/31 05:05:17 $
+#       $Revision: 5.31 $     $Date: 2015/10/21 09:06:57 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -121,13 +121,15 @@ cellmiddles <- local({
       Dtile <- eval.im(pmin(Dlines, Dbdry))
       dtile <- as.vector(Dtile[M])
       df <- data.frame(dtile=dtile, id=seq_along(dtile))[badpid, , drop=FALSE]
-      midpix <- by(df, pid[badpid],
-                   function(z) { z$id[which.max(z$dtile)] })
+      midpix <- by(df, pid[badpid], midpixid)
     }
     xmid[!ok] <- xx[midpix]
     ymid[!ok] <- yy[midpix]
     return(list(x=xmid,y=ymid))
   }
+
+  midpixid <- function(z) { z$id[which.max(z$dtile)] }
+  
   cellmiddles
 })
 
@@ -166,8 +168,8 @@ spokes <- function(x, y, nrad = 3, nper = 3, fctr = 1.5, Mdefault=1) {
 # concatenate any number of list(x,y) into a list(x,y)
 		
 concatxy <- function(...) {
-	x <- unlist(lapply(list(...), function(w) {w$x}))
-	y <- unlist(lapply(list(...), function(w) {w$y}))
+	x <- unlist(lapply(list(...), getElement, name="x"))
+	y <- unlist(lapply(list(...), getElement, name="y"))
 	if(length(x) != length(y))
 		stop("Internal error: lengths of x and y unequal")
 	return(list(x=x,y=y))

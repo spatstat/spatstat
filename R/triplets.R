@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.14 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.15 $	$Date: 2015/10/21 09:06:57 $
 #
 #    The triplets interaction
 #

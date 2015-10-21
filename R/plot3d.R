@@ -1,6 +1,6 @@
 #'  perspective plot of 3D 
 #'
-#'  $Revision: 1.3 $ $Date: 2015/01/28 05:12:58 $
+#'  $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
 #'
 
 

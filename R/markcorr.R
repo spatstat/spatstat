@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.74 $ $Date: 2015/08/01 08:43:18 $
+##     $Revision: 1.75 $ $Date: 2015/10/21 09:06:57 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 

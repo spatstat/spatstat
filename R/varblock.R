@@ -3,13 +3,15 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.15 $  $Date: 2015/03/30 03:31:17 $
+#   $Revision: 1.16 $  $Date: 2015/10/21 09:06:57 $
 #
 
 varblock <- local({
 
   rvalues <- function(z) { with(z, .x) }
 
+  maxrvalues <- function(z) { max(rvalues(z)) }
+  
   dofun <- function(domain, fun, Xpp, ...) { fun(Xpp, ..., domain=domain) }
 
   varblock <- function(X, fun=Kest,
@@ -49,7 +51,7 @@ varblock <- local({
       } else {
         ## need to ensure compatible fv objects
         z <- lapply(Y, fun, ...)
-        rmaxes <- unlist(lapply(z, function(x){ max(rvalues(x)) }))
+        rmaxes <- sapply(z, maxrvalues)
         smallest <- which.min(rmaxes)
         r <- rvalues(z[[smallest]])
         z <- lapply(Y, fun, ..., r=r)
@@ -68,7 +70,7 @@ varblock <- local({
       } else {
         ## need to ensure compatible fv objects
         z <- lapply(B, dofun, ..., fun=fun, Xpp=X)
-        rmaxes <- unlist(lapply(z, function(x){ max(rvalues(x)) }))
+        rmaxes <- sapply(z, maxrvalues)
         smallest <- which.min(rmaxes)
         r <- rvalues(z[[smallest]])
         z <- lapply(B, dofun, ..., fun=fun, Xpp=X, r=r)
@@ -82,7 +84,7 @@ varblock <- local({
     ## sample mean
     m <- meanlistfv(z)
     ## sample variance
-    sqdev <- lapply(z, function(x,m){ eval.fv((x-m)^2, dotonly=FALSE) }, m=m)
+    sqdev <- lapply(z, sqdev.fv, m=m)
     v <- meanlistfv(sqdev)
     v <- eval.fv(v * n/(n-1), dotonly=FALSE)
     ## sample standard deviation
@@ -123,7 +125,9 @@ varblock <- local({
     attr(out, "fmla") <- paste(". ~ ", xname)
     return(out)
   }
-
+  
+  sqdev.fv <- function(x,m){ eval.fv((x-m)^2, dotonly=FALSE) }
+  
   varblock
 })
 

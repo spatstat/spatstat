@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.34 $ $Date: 2014/11/12 01:21:02 $
+# $Revision: 1.35 $ $Date: 2015/10/21 09:06:57 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {

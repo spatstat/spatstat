@@ -36,6 +36,7 @@
 \alias{as2vector}
 \alias{asNumericMatrix}
 \alias{augment.msr}
+\alias{BartCalc}
 \alias{badprobability}
 \alias{bbEngine}
 \alias{bermantestEngine}
@@ -203,6 +204,7 @@
 \alias{forbidNA}
 \alias{forbid.logi}
 \alias{FormatFaspFormulae}
+\alias{framebottomleft}
 \alias{fvexprmap}
 \alias{fvlabels}
 \alias{fvlabels<-}
@@ -264,6 +266,7 @@
 \alias{inside.triangle}     
 \alias{inside.xypolygon}     
 \alias{instantiate.interact}
+\alias{interactionfamilyname}
 \alias{intermaker}
 \alias{intersect.ranges}     
 \alias{intX.owin}     
@@ -420,6 +423,7 @@
 \alias{offsetsinformula}
 \alias{onecolumn}
 \alias{optimStatus}
+\alias{orderstats}
 \alias{ordinal}
 \alias{\%orifnull\%}  %DoNotExport
 %NAMESPACE export("%orifnull%")
@@ -429,6 +433,7 @@
 \alias{oversize.quad}    
 \alias{owinpolycheck}
 \alias{owinpoly2mask}
+\alias{owin2polypath}
 \alias{pairs.listof}
 \alias{pairs.solist}
 \alias{param.quad}
@@ -661,6 +666,7 @@
 \alias{smoothcrossEngine}              
 \alias{smoothpointsEngine}              
 \alias{sort.im}
+\alias{sortalongsegment}
 \alias{spatstat.rawdata.location}
 \alias{spatstatClusterModelInfo}
 \alias{spatstatDPPModelInfo}
@@ -727,6 +733,7 @@
 \alias{validposint}        
 \alias{vanilla.fv}        
 \alias{variablesinformula}
+\alias{variablesintext}
 %\alias{vblogit} %DoNotExport
 %\alias{vblogit.fmla} %DoNotExport
 \alias{verbalogic}
@@ -789,6 +796,7 @@ as.units(s)
 as2vector(x)
 asNumericMatrix(x)
 augment.msr(x, \dots, sigma)
+BartCalc(fY, fK)
 badprobability(x, NAvalue)
 bbEngine(\dots)
 bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
@@ -987,6 +995,7 @@ fontify(x, font)
 forbidNA(x, context, xname, fatal, usergiven)
 forbid.logi(object)
 FormatFaspFormulae(f, argname)
+framebottomleft(w)
 fvexprmap(x)
 fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
@@ -1050,6 +1059,7 @@ inside.range(x, r)
 inside.triangle(x, y, xx, yy)
 inside.xypolygon(pts, polly, test01, method)
 instantiate.interact(x, par)
+interactionfamilyname(x)
 intermaker(f, blank)
 intersect.ranges(a,b,fatal)
 intX.owin(w)
@@ -1234,6 +1244,7 @@ onecolumn(m)
 optimStatus(x, call)
 printStatus(x, errors.only)
 signalStatus(x, errors.only)
+orderstats(x, k, decreasing)
 ordinal(k)
 a \%orifnull\% b
 outdated.interact(object)
@@ -1242,6 +1253,7 @@ overlap.xypolygon(P, Q)
 oversize.quad(Q, \dots, nU, nX)
 owinpolycheck(W, verbose=TRUE)
 owinpoly2mask(w, rasta, check=TRUE)
+owin2polypath(w)
 \method{pairs}{listof}(\dots, plot=TRUE)
 \method{pairs}{solist}(\dots, plot=TRUE)
 param.quad(Q)
@@ -1523,6 +1535,7 @@ smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
 smoothpointsEngine(x, values, sigma, \dots,
                     weights, varcov, leaveoneout, sorted)
 \method{sort}{im}(x, \dots)
+sortalongsegment(df)
 spatstat.rawdata.location(\dots)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
@@ -1591,6 +1604,7 @@ validate.quad(Q, fatal, repair, announce)
 validposint(n, caller, fatal)
 vanilla.fv(x)
 variablesinformula(x)
+variablesintext(x)
 %vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)
 %vblogit.fmla(formula, offset, data, subset, weights, verbose, epsilon, \dots)
 verbalogic(x, op)

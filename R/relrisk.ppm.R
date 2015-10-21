@@ -1,7 +1,7 @@
 ##
 ##  relrisk.ppm.R
 ##
-##  $Revision: 1.4 $ $Date: 2015/03/11 10:05:39 $
+##  $Revision: 1.5 $ $Date: 2015/10/21 09:06:57 $
 ##
 
 relrisk.ppm <- local({
@@ -251,6 +251,10 @@ relrisk.ppm <- local({
     return(SE)
   }
 
+  msubtract <- function(z1, z2) mapply("-", e1=z1, e2=z2, SIMPLIFY=FALSE)
+
+  mmultiply <- function(z1, z2) solapply(z1, "*", e2=z2)
+  
   SErelriskPixels <- function(model, riskvalues, icontrol) {
     ## riskvalues is an imlist
     types <- names(riskvalues)
@@ -259,12 +263,11 @@ relrisk.ppm <- local({
     S.um <- model.images(model)
     ## S.um is a hyperframe with one column for each mark value
     ## and one row for each canonical covariate
-    dS.um <- lapply(S.um, 
-                    function(z, z0) mapply("-", e1=z, e2=z0, SIMPLIFY=FALSE),
-                    z0=S.um[,icontrol,drop=TRUE])
-    R.um <- mapply(function(a, b) as.solist(lapply(a, "*", e2=b)),
-                   a=dS.um,
-                   b=riskvalues,
+    dS.um <- lapply(S.um, msubtract, 
+                    z2=S.um[,icontrol,drop=TRUE])
+    R.um <- mapply(mmultiply,
+                   z1=dS.um,
+                   z2=riskvalues,
                    SIMPLIFY=FALSE)
     VAR <- vector(mode="list", length=ntypes)
     ntypes <- length(types)
@@ -286,6 +289,7 @@ relrisk.ppm <- local({
     return(SE)
   }
 
+
   SEprobPixels <- function(model, probvalues) {
     ## probvalues is an imlist
     types <- names(probvalues)
@@ -302,12 +306,12 @@ relrisk.ppm <- local({
                                    SIMPLIFY=FALSE))
     ## Sbar.u is a list of images, one for each canonical covariate
     Sdif.um <- lapply(as.list(S.um), 
-                      function(z, zbar) mapply("-", e1=z, e2=zbar, SIMPLIFY=FALSE),
-                      zbar=Sbar.u)
+                      msubtract,
+                      z2=Sbar.u)
     ## Sdif.um is a list of lists of images.
     ##   List of length ntypes,
     ##   each entry being an imlist of length ncoef
-    P.um <- mapply(function(a, b) as.solist(lapply(a, "*", e2=b)),
+    P.um <- mapply(mmultiply,
                    Sdif.um, 
                    probvalues, 
                    SIMPLIFY=FALSE)

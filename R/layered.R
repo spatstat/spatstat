@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.33 $  $Date: 2015/02/17 07:17:47 $
+#  $Revision: 1.34 $  $Date: 2015/10/21 09:06:57 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -369,7 +369,7 @@ as.layered.ppp <- function(X) {
   mX <- marks(X)
   if(!is.null(d <- dim(mX)) && d[2] > 1) {
     mx <- as.data.frame(marks(X))
-    Y <- lapply(mx, function(z, P) setmarks(P,z), P=X)
+    Y <- lapply(mx, setmarks, x=X)
     return(layered(LayerList=Y))
   }
   return(layered(X))

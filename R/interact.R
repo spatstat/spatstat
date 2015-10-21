@@ -2,7 +2,7 @@
 #	interact.S
 #
 #
-#	$Revision: 1.27 $	$Date: 2015/05/08 04:46:04 $
+#	$Revision: 1.28 $	$Date: 2015/10/21 09:06:57 $
 #
 #	Class 'interact' representing the interpoint interaction
 #               of a point process model
@@ -310,6 +310,12 @@ as.interact.interact <- function(object) {
   return(object)
 }
 
+interactionfamilyname <- function(x) {
+  if(inherits(x, "isf")) return(x$name)
+  x <- as.interact(x)
+  return(x$family$name)
+}
+                                      
 #### internal code for streamlining initialisation of interactions
 #
 #    x should be a partially-completed 'interact' object

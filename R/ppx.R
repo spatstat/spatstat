@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.51 $  $Date: 2015/10/15 07:45:40 $
+#  $Revision: 1.52 $  $Date: 2015/10/21 09:06:57 $
 #
 
 ppx <- local({
@@ -399,34 +399,50 @@ shortside.boxx <- function(x) {
   return(min(sidelengths(x)))
 }
 
-eroded.volumes.boxx <- function(x, r) {
-  len <- sidelengths(x)
-  ero <- sapply(as.list(len), function(z, r) { pmax.int(0, z - 2 * r)}, r=r)
-  apply(ero, 1, prod)
-}
+eroded.volumes.boxx <- local({
+
+  eroded.volumes.boxx <- function(x, r) {
+    len <- sidelengths(x)
+    ero <- sapply(as.list(len), erode1side, r=r)
+    apply(ero, 1, prod)
+  }
+
+  erode1side <- function(z, r) { pmax.int(0, z - 2 * r)}
+  
+  eroded.volumes.boxx
+})
+
 
 runifpointx <- function(n, domain, nsim=1) {
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
-    for(i in 1:n) result[[i]] <- runifpointx(n, domain)
-    result <- as.solist(result)
-    names(result) <- paste("Simulation", 1:n)
+    for(i in 1:nsim) result[[i]] <- runifpointx(n, domain)
+    result <- as.anylist(result)
+    names(result) <- paste("Simulation", 1:nsim)
     return(result)
   }
   stopifnot(inherits(domain, "boxx"))
-  coo <- lapply(domain$ranges,
-                function(ra, n) { runif(n, min=ra[1], max=ra[2]) },
-                n=n)
-  df <- do.call("data.frame", coo)
+  ra <- domain$ranges
+  d <- length(ra)
+  if(n == 0) {
+    coo <- matrix(, nrow=0, ncol=d)
+  } else {
+    coo <- mapply(runif,
+                  n=rep(n, d),
+                  min=ra[1,],
+                  max=ra[2,])
+  }
+  colnames(coo) <- colnames(ra)
+  df <- as.data.frame(coo)
   ppx(df, domain)
 }
 
 rpoisppx <- function(lambda, domain, nsim=1) {
   if(nsim > 1) {
     result <- vector(mode="list", length=nsim)
-    for(i in 1:n) result[[i]] <- rpoisppx(lambda, domain)
-    result <- as.solist(result)
-    names(result) <- paste("Simulation", 1:n)
+    for(i in 1:nsim) result[[i]] <- rpoisppx(lambda, domain)
+    result <- as.anylist(result)
+    names(result) <- paste("Simulation", 1:nsim)
     return(result)
   }
   stopifnot(inherits(domain, "boxx"))

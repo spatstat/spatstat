@@ -3,7 +3,7 @@
 #
 #  Hausdorff distance and Euclidean separation for psp objects
 #
-#  $Revision: 1.10 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.11 $ $Date: 2015/10/21 09:06:57 $
 #
 #
 
@@ -90,7 +90,7 @@ nndist.psp <- function(X, ..., k=1, method="C") {
   if(kmax == 1) 
     NND <- apply(D, 1, min)
   else 
-    NND <- t(apply(D, 1, function(z,k) { sort(z)[k] }, k=k))[, , drop=TRUE]
+    NND <- t(apply(D, 1, orderstats, k=k))[, , drop=TRUE]
   return(NND)
 }
 

@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.77 $    $Date: 2015/03/12 09:05:23 $
+#  $Revision: 1.78 $    $Date: 2015/10/21 09:06:57 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -87,7 +87,7 @@ density.ppp <- function(x, sigma=NULL, ...,
     raw <- divide.by.pixelarea(both$smooth)
     edg <- both$edge
     smo <- if(is.im(raw)) eval.im(raw/edg) else
-           lapply(raw, function(a,b) eval.im(a/b), b=edg)
+           lapply(raw, divideimage, denom=edg)
   } else {
     # edge correction e(x_i)
     edg <- second.moment.calc(x, sigma, what="edge", ..., varcov=varcov)
@@ -128,6 +128,8 @@ density.ppp <- function(x, sigma=NULL, ...,
     result <- list(estimate=result, SE=SE)
   return(result)
 }
+
+divideimage <- function(numer, denom) eval.im(numer/denom)
 
 posify <- function(x, eps=.Machine$double.xmin) {
   force(eps) # scalpel
@@ -192,6 +194,7 @@ denspppSEcalc <- function(x, sigma, varcov, ...,
   V <- V * varconst
   return(sqrt(V))
 }       
+
 
 density.ppp
 

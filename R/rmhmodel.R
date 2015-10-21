@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.68 $  $Date: 2015/08/29 04:36:43 $
+#   $Revision: 1.69 $  $Date: 2015/10/21 09:06:57 $
 #
 #
 
@@ -72,7 +72,7 @@ rmhmodel.default <- local({
                                       w=w, trend=NULL, types=types,
                                       stopinvalid=FALSE)
         ## consolidate Poisson intensity parameters
-        poisbetalist <- lapply(poismodels, function(x){x$C.beta})
+        poisbetalist <- lapply(poismodels, getElement, name="C.beta")
         poisbeta <- Reduce("*", poisbetalist)
         if(all(ispois)) {
           ## model collapses to a Poisson process
@@ -109,7 +109,7 @@ rmhmodel.default <- local({
       ## concatenate for use in C
       C.beta     <- unlist(C.betalist)
       C.ipar     <- unlist(C.iparlist)
-      check <- lapply(models, function(x){x$check})
+      check <- lapply(models, getElement, name="check")
       maxr <- max(unlist(lapply(models, getElement, name="reach")))
       ismulti <- unlist(lapply(models, getElement, name="multitype.interact"))
       multi <- any(ismulti)

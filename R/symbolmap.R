@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.22 $  $Date: 2015/04/28 12:20:31 $
+##   $Revision: 1.23 $  $Date: 2015/10/21 09:06:57 $
 ##
 
 symbolmap <- local({
@@ -39,7 +39,7 @@ symbolmap <- local({
         if(type == "discrete" && any(repairable <- atomic[bad])) {
           ## recycle data to desired length
           parlist[repairable] <- lapply(parlist[repairable],
-                                        function(z, n) rep.int(z, n)[1:n],
+                                        reptolength,
                                         n=length(inputs))
           bad[repairable] <- FALSE
         }
@@ -90,6 +90,8 @@ symbolmap <- local({
     f
   }
 
+  reptolength <- function(z, n) { rep.int(z, n)[1:n] }
+  
   MapDiscrete <- function(f, x, i) {
     if(is.function(f)) f(x) else f[i]
   }

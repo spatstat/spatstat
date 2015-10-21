@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.19 $ $Date: 2013/10/06 08:26:59 $
+# $Revision: 1.20 $ $Date: 2015/10/21 09:06:57 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -53,8 +53,8 @@ is.infline <- function(x) { inherits(x, "infline") }
 
 plot.infline <- function(x, ...) {
   for(i in seq_len(nrow(x))) {
-    xi <- x[i, 1:4]
-    xi <- lapply(as.list(xi), function(z){if(is.na(z)) NULL else z})
+    xi <- as.list(x[i, 1:4])
+    xi[sapply(xi, is.na)] <- NULL
     do.call("abline", append(xi, list(...)))
   }
   return(invisible(NULL))

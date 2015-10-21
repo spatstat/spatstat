@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.70 $ $Date: 2015/10/19 09:30:18 $
+#   $Revision: 1.71 $ $Date: 2015/10/21 09:06:57 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -253,8 +253,8 @@ plot.tess <- local({
       labels <- paste(as.vector(labels))
       til <- tiles(x)
       incircles <- lapply(til, incircle)
-      x0 <- unlist(lapply(incircles, function(z) { z$x }))
-      y0 <- unlist(lapply(incircles, function(z) { z$y }))
+      x0 <- sapply(incircles, getElement, name="x")
+      y0 <- sapply(incircles, getElement, name="y")
       do.call.matched("text.default",
                       resolve.defaults(list(x=x0, y = y0),
                                        list(labels=labels),
@@ -653,7 +653,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE) {
     for(i in seq_along(Xtiles)) {
       Xi <- Xtiles[[i]]
       Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
-      isempty <- unlist(lapply(Ti, function(x) { is.null(x) || is.empty(x)}))
+      isempty <- sapply(Ti, is.empty)
       nonempty <- !isempty
       if(any(nonempty)) {
         Ti <- Ti[nonempty]

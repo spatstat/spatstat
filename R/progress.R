@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.15 $  $Date: 2015/10/15 11:54:37 $
+#   $Revision: 1.16 $  $Date: 2015/10/21 09:06:57 $
 #
 #   progress plots (envelope representations)
 #
@@ -13,8 +13,6 @@ mad.progress <- function(X, ...)
   mctest.progress(X, ..., exponent=Inf)
 
 mctest.progress <- local({
-
-  ordstat <- function(z, k) { sort(z, decreasing=TRUE, na.last=TRUE)[k] }
 
   smoothquantile <- function(z, alpha) {
     min(quantile(density(z), 1-alpha), max(z))
@@ -57,7 +55,7 @@ mctest.progress <- local({
     critval <-
       if(interpolate) apply(devsim, 1, smoothquantile, alpha=alpha) else
       if(nrank == 1) apply(devsim, 1, silentmax) else
-      apply(devsim, 1, ordstat, k=nrank)
+      apply(devsim, 1, orderstats, k=nrank, decreasing=TRUE)
     # create fv object
     fname  <- if(is.infinite(exponent)) "mad" else
               if(exponent == 2) "T" else paste("D[",exponent,"]", sep="")

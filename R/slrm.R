@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.25 $   $Date: 2015/07/11 08:19:26 $
+#  $Revision: 1.26 $   $Date: 2015/10/21 09:06:57 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -130,8 +130,7 @@ slr.prepare <- function(CallInfo, envir, data,
     isfun  <- unlist(lapply(covlist, is.function))
     isspatial <- isim | isowin | isfun
     israster <- isim | ismask
-    isnum <- unlist(lapply(covlist,
-                           function(x) { is.numeric(x) && length(x) == 1} ))
+    isnum <- sapply(covlist, is.numeric) & (sapply(covlist, length) == 1)
   }
   if(!all(ok <- (isspatial | isnum))) {
     n <- sum(!ok)
@@ -537,13 +536,21 @@ update.slrm <- function(object, ..., evaluate=TRUE, env=parent.frame()) {
   return(e)
 }
 
-anova.slrm <- function(object, ..., test=NULL) {
-  objex <- append(list(object), list(...))
-  if(!all(unlist(lapply(objex, is.slrm))))
-    stop("Some arguments are not of class slrm")
-  fitz <- lapply(objex, function(z){z$Fit$FIT})
-  do.call("anova", append(fitz, list(test=test)))
-}
+anova.slrm <- local({
+
+  anova.slrm <- function(object, ..., test=NULL) {
+    objex <- append(list(object), list(...))
+    if(!all(unlist(lapply(objex, is.slrm))))
+      stop("Some arguments are not of class slrm")
+    fitz <- lapply(objex, getFIT)
+    do.call("anova", append(fitz, list(test=test)))
+  }
+
+  getFIT <- function(z) {z$Fit$FIT}
+
+  anova.slrm
+})
+
 
 vcov.slrm <- function(object, ..., what=c("vcov", "corr", "fisher", "Fisher")) {
   stopifnot(is.slrm(object))

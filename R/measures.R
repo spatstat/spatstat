@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.56 $  $Date: 2015/06/03 06:23:58 $
+#  $Revision: 1.57 $  $Date: 2015/10/21 09:06:57 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -184,8 +184,7 @@ augment.msr <- function(x, ..., sigma) {
                                  list(sigma=sigma)))
     if(any(!varble)) 
       smo[!varble] <- lapply(apply(xdensity[, !varble], 2, mean),
-                             function(z, W) as.im(z, W=W),
-                             W=W)
+                             as.im, W=W)
   }
   attr(x, "smoothdensity") <- smo
   return(x)
@@ -356,14 +355,22 @@ shift.msr <- function(X,  ...) {
   putlastshift(X, getlastshift(Xloc))
 }
 
-as.layered.msr <- function(X) {
-  nc <- ncol(X)
-  if(nc == 0) return(layered())
-  if(nc == 1) return(layered(X))
-  Y <- lapply(seq_len(nc), function(j,x) x[,j], x=X)
-  names(Y) <- colnames(X)
-  return(layered(LayerList=Y))
-}
+as.layered.msr <- local({
+
+  as.layered.msr <- function(X) {
+    nc <- ncol(X)
+    if(nc == 0) return(layered())
+    if(nc == 1) return(layered(X))
+    Y <- lapply(seq_len(nc), pickcol, x=X)
+    names(Y) <- colnames(X)
+    return(layered(LayerList=Y))
+  }
+
+  pickcol <- function(j,x) x[,j]
+  
+  as.layered.msr
+})
+
 
 scalardilate.msr <- function(X, f, ...) {
   X$loc <- Xloc <- scalardilate(X$loc, f, ...)

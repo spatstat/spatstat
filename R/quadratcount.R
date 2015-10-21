@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.51 $  $Date: 2015/10/19 08:29:09 $
+#  $Revision: 1.52 $  $Date: 2015/10/21 09:06:57 $
 #
 
 quadratcount <- function(X, ...) {
@@ -9,7 +9,7 @@ quadratcount <- function(X, ...) {
 }
 
 quadratcount.splitppp <- function(X, ...) {
-  as.solist(lapply(X, quadratcount, ...))
+  solapply(X, quadratcount, ...)
 }
 
 quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
@@ -94,9 +94,9 @@ plot.quadratcount <- function(x, ...,
     labels <- paste(as.vector(entries))
     til <- tiles(tess)
     incircles <- lapply(til, incircle)
-    x0 <- unlist(lapply(incircles, function(z) { z$x }))
-    y0 <- unlist(lapply(incircles, function(z) { z$y }))
-    ra <- unlist(lapply(incircles, function(z) { z$r }))
+    x0 <- sapply(incircles, getElement, name="x")
+    y0 <- sapply(incircles, getElement, name="y")
+    ra <- sapply(incircles, getElement, name="r")
     do.call.matched("text.default",
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=labels),

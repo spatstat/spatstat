@@ -2,7 +2,7 @@
 #
 #  defaultwin.R
 #
-#   $Revision: 1.9 $   $Date: 2012/05/11 11:20:09 $
+#   $Revision: 1.10 $   $Date: 2015/10/21 09:06:57 $
 #
 
 default.expand <- function(object, m=2, epsilon=1e-6, w=Window(object)) {

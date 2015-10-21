@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.3 $ $Date: 2013/11/12 15:53:11 $
+#  $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
 #
 
 objsurf <- function(x, ...) {

@@ -2,7 +2,7 @@
 #
 #    ord.S
 #
-#    $Revision: 1.6 $	$Date: 2014/12/07 10:43:43 $
+#    $Revision: 1.7 $	$Date: 2015/10/21 09:06:57 $
 #
 #    Ord process with user-supplied potential
 #

@@ -1,6 +1,6 @@
 #' Dominic Schuhmacher's idea
 #'
-#' $Revision: 1.12 $ $Date: 2015/01/19 11:23:04 $
+#' $Revision: 1.13 $ $Date: 2015/10/21 09:06:57 $
 #'
 
 clickppp <- local({

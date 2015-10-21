@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.20 $	$Date: 2014/10/24 00:22:30 $
+#    $Revision: 2.21 $	$Date: 2015/10/21 09:06:57 $
 #
 #    The Strauss/hard core process
 #

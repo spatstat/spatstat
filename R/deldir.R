@@ -3,7 +3,7 @@
 #
 # Interface to deldir package
 #
-#  $Revision: 1.26 $ $Date: 2015/05/16 05:41:57 $
+#  $Revision: 1.27 $ $Date: 2015/10/21 09:06:57 $
 #
 
 .spst.triEnv <- new.env()
@@ -12,20 +12,27 @@ assign("use.trigraf",  TRUE, envir=.spst.triEnv)
 assign("use.trigrafS", TRUE, envir=.spst.triEnv)
 assign("debug.delaunay", FALSE, envir=.spst.triEnv)
 
-dirichlet <- function(X) {
-  stopifnot(is.ppp(X))
-  X <- unique(X, rule="deldir", warn=TRUE)
-  w <- X$window
-  dd <- safedeldir(X)
-  if(is.null(dd)) return(NULL)
-  pp <- lapply(tile.list(dd), function(z) { owin(poly=z[c("x","y")]) })
-  if(length(pp) == npoints(X))
-    names(pp) <- seq_len(npoints(X))
-  dir <- tess(tiles=pp, window=as.rectangle(w))
-  if(w$type != "rectangle")
-    dir <- intersect.tess(dir, w)
-  return(dir)
-}
+dirichlet <- local({
+
+  dirichlet <- function(X) {
+    stopifnot(is.ppp(X))
+    X <- unique(X, rule="deldir", warn=TRUE)
+    w <- X$window
+    dd <- safedeldir(X)
+    if(is.null(dd)) return(NULL)
+    pp <- lapply(tile.list(dd), df2poly)
+    if(length(pp) == npoints(X))
+      names(pp) <- seq_len(npoints(X))
+    dir <- tess(tiles=pp, window=as.rectangle(w))
+    if(w$type != "rectangle")
+      dir <- intersect.tess(dir, w)
+    return(dir)
+  }
+
+  df2poly <- function(z) { owin(poly=z[c("x","y")]) }
+  
+  dirichlet
+})
 
 delaunay <- function(X) {
   stopifnot(is.ppp(X))

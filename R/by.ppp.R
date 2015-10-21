@@ -1,7 +1,7 @@
 #
 #   by.ppp.R
 #
-#  $Revision: 1.5 $  $Date: 2011/05/18 01:29:48 $
+#  $Revision: 1.6 $  $Date: 2015/10/21 09:06:57 $
 #
 
 by.ppp <- function(data, INDICES=marks(data), FUN, ...) {

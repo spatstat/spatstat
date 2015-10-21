@@ -4,7 +4,7 @@
 #
 #   Functions for manipulating model formulae
 #
-#	$Revision: 1.22 $	$Date: 2015/06/10 08:27:22 $
+#	$Revision: 1.23 $	$Date: 2015/10/21 09:06:57 $
 #
 #   identical.formulae()
 #          Test whether two formulae are identical
@@ -219,6 +219,8 @@ expand.polynom <- local({
                                           powername(y, m), sep="*")))))
   }
 
+  haspolynom <- function(z) { 'polynom' %in% all.names(z) }
+
   fiddle <- function(f) {
     opname <- f[[1]]
     if(identical(opname, as.name('I'))) {
@@ -226,7 +228,7 @@ expand.polynom <- local({
       return(f)
     }
     if(!identical(opname, as.name('polynom'))) {
-      tbd <- unlist(lapply(f, function(z) { 'polynom' %in% all.names(z) }))
+      tbd <- unlist(lapply(f, haspolynom))
       if(any(tbd)) {
         ## descend recursively
         for(i in which(tbd)) 

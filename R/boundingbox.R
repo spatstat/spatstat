@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.6 $ $Date: 2015/03/04 09:34:07 $
+## $Revision: 1.7 $ $Date: 2015/10/21 09:06:57 $
 
 bounding.box <- function(...) {
   .Deprecated("boundingbox", "spatstat")
@@ -126,8 +126,8 @@ bbEngine <- local({
              bdry <- w$bdry
              if(length(bdry) == 0)
                return(NULL)
-             xr <- range(unlist(lapply(bdry, function(a) range(a$x))))
-             yr <- range(unlist(lapply(bdry, function(a) range(a$y))))
+             xr <- range(unlist(lapply(bdry, rangeofx)))
+             yr <- range(unlist(lapply(bdry, rangeofy)))
              return(owin(xr, yr, unitname=unitname(w)))
            },
            mask = {
@@ -142,6 +142,9 @@ bbEngine <- local({
            )
   }
 
+  rangeofx <- function(a) range(a$x)
+  rangeofy <- function(a) range(a$y)
+  
   bbEngine
 })
 

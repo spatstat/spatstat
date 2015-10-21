@@ -4,49 +4,56 @@
 ## P-P and Q-Q versions of fv objects
 ##
 
-PPversion <- function(f, theo="theo", columns=".") {
-  if(!any(colnames(f) == theo))
-    stop(paste(sQuote(theo), "is not the name of a column of f"))
-  ## set up inverse theoretical function f_0: 'theo' |-> 'r'
-  xname <- fvnames(f, ".x")
-  df <- as.data.frame(f)
-  theo.table <- df[,theo]
-  x.table    <- df[,xname]
-  invfun <- approxfun(x=theo.table, y=x.table, rule=1)
-  ## evaluate f_0^{-1}(theo) for evenly-spaced grid of 'theo' values
-  ra <- range(theo.table)
-  theo.seq <- seq(from=ra[1], to=ra[2], length.out=nrow(df))
-  x.vals <- invfun(theo.seq)
-  ## convert f to a function and evaluate at these 'r' values
-  ynames <- setdiff(fvnames(f, columns), theo)
-  ff <- as.function(f, value=ynames)
-  y.vals <- lapply(ynames, function(yn, xx){ ff(xx, what=yn) } , xx=x.vals)
-  ## build data frame
-  all.vals <- append(list(theo=theo.seq), y.vals)
-  names(all.vals) <- c(theo, ynames)
-  DF <- as.data.frame(all.vals)
-  ## set up fv object
-  atr <- attributes(f)
-  cnames <- colnames(f)
-  i.theo <- match(theo,   cnames)
-  i.yval <- match(ynames, cnames)
-  ii <- c(i.theo, i.yval)
-  old.best <- fvnames(f, ".y")
-  best <- if(old.best %in% ynames) old.best else ynames[length(ynames)]
-  result <- fv(DF,
-               argu = theo,
-               ylab = atr$ylab,
-               valu = best,
-               fmla = . ~ .x,
-               alim = ra,
-               labl = atr$labl[ii], 
-               desc = atr$desc[ii],
-               unitname = NULL,
-               fname = atr$fname,
-               yexp = atr$yexp)
-  fvnames(result, ".") <- c(ynames, theo)
-  return(result)
-}
+PPversion <- local({
+
+  PPversion <- function(f, theo="theo", columns=".") {
+    if(!any(colnames(f) == theo))
+      stop(paste(sQuote(theo), "is not the name of a column of f"))
+    ## set up inverse theoretical function f_0: 'theo' |-> 'r'
+    xname <- fvnames(f, ".x")
+    df <- as.data.frame(f)
+    theo.table <- df[,theo]
+    x.table    <- df[,xname]
+    invfun <- approxfun(x=theo.table, y=x.table, rule=1)
+    ## evaluate f_0^{-1}(theo) for evenly-spaced grid of 'theo' values
+    ra <- range(theo.table)
+    theo.seq <- seq(from=ra[1], to=ra[2], length.out=nrow(df))
+    x.vals <- invfun(theo.seq)
+    ## convert f to a function and evaluate at these 'r' values
+    ynames <- setdiff(fvnames(f, columns), theo)
+    ff <- as.function(f, value=ynames)
+    y.vals <- lapply(ynames, evalselected, x=x.vals, f=ff)
+    ## build data frame
+    all.vals <- append(list(theo=theo.seq), y.vals)
+    names(all.vals) <- c(theo, ynames)
+    DF <- as.data.frame(all.vals)
+    ## set up fv object
+    atr <- attributes(f)
+    cnames <- colnames(f)
+    i.theo <- match(theo,   cnames)
+    i.yval <- match(ynames, cnames)
+    ii <- c(i.theo, i.yval)
+    old.best <- fvnames(f, ".y")
+    best <- if(old.best %in% ynames) old.best else ynames[length(ynames)]
+    result <- fv(DF,
+                 argu = theo,
+                 ylab = atr$ylab,
+                 valu = best,
+                 fmla = . ~ .x,
+                 alim = ra,
+                 labl = atr$labl[ii], 
+                 desc = atr$desc[ii],
+                 unitname = NULL,
+                 fname = atr$fname,
+                 yexp = atr$yexp)
+    fvnames(result, ".") <- c(ynames, theo)
+    return(result)
+  }
+
+  evalselected <- function(what, f, x){ f(x, what=what) } 
+
+  PPversion
+})
 
 
 QQversion <- function(f, theo="theo", columns=".") {

@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.14 $ $Date: 2015/02/24 01:39:48 $
+#  $Revision: 1.15 $ $Date: 2015/10/21 09:06:57 $
 #
 
 intensity <- function(X, ...) {

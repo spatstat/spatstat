@@ -1,7 +1,7 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.7 $   $Date: 2014/08/04 05:55:43 $
+#   $Revision: 1.8 $   $Date: 2015/10/21 09:06:57 $
 #
 
 pairs.listof <- pairs.solist <- 

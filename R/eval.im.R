@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.37 $     $Date: 2014/11/10 07:37:31 $
+#     $Revision: 1.38 $     $Date: 2015/10/21 09:06:57 $
 #
 
 eval.im <- local({
@@ -23,14 +23,15 @@ eval.im <- local({
       stop("No variables in this expression")
     ## get the values of the variables
     if(missing(envir)) {
-      envir <- sys.parent()
+      envir <- parent.frame() # WAS: sys.parent()
     } else if(is.list(envir)) {
       envir <- list2env(envir, parent=parent.frame())
     }
-    vars <- lapply(as.list(varnames), function(x, e) get(x, envir=e), e=envir)
-    names(vars) <- varnames
-    funs <- lapply(as.list(funnames), function(x, e) get(x, envir=e), e=envir)
-    names(funs) <- funnames
+    vars <- mget(varnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
+    funs <- mget(funnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
+    ## WAS: vars <- lapply(as.list(varnames), get, envir=envir)
+    ## WAS: funs <- lapply(as.list(funnames), get, envir=envir)
+    ##
     ## find out which variables are images
     ims <- unlist(lapply(vars, is.im))
     if(!any(ims))
@@ -129,7 +130,7 @@ harmonize.im <- harmonise.im <- function(...) {
     if(!all(uok))
       stop("Images have incompatible units of length")
     ## find the image with the highest resolution
-    xsteps <- unlist(lapply(imgs, function(a) { a$xstep }))
+    xsteps <- unlist(lapply(imgs, getElement, name="xstep"))
     which.finest <- which.min(xsteps)
     finest <- imgs[[which.finest]]
     ## get the bounding box
@@ -189,7 +190,7 @@ commonGrid <- local({
       if(!all(uok))
         stop("Objects have incompatible units of length")
       ## find the image/mask with the highest resolution
-      xsteps <- unlist(lapply(rasterlist, function(a) { a$xstep }))
+      xsteps <- unlist(lapply(rasterlist, getElement, name="xstep"))
       which.finest <- which.min(xsteps)
       finest <- rasterlist[[which.finest]]
     }
@@ -207,34 +208,41 @@ commonGrid <- local({
   commonGrid
 })
 
-im.apply <- function(X, FUN, ...) {
-  stopifnot(is.list(X))
-  if(!all(unlist(lapply(X, is.im))))
-    stop("All elements of imlist must be pixel images")
-  fun <- if(is.character(FUN)) get(FUN) else
-         if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
-  ## ensure images are compatible
-  X <- do.call(harmonise.im, X)
-  template <- X[[1]]
-  ## extract numerical values and convert to matrix with one column per image
-  vlist <- lapply(X, function(z) as.vector(as.matrix(z)))
-  vals <- matrix(unlist(vlist), ncol=length(X))
-  colnames(vals) <- names(X)
-  ok <- complete.cases(vals)
-  if(!any(ok)) {
-    ## empty result
-    return(as.im(NA, W=template))
+im.apply <- local({
+
+  im.apply <- function(X, FUN, ...) {
+    stopifnot(is.list(X))
+    if(!all(unlist(lapply(X, is.im))))
+      stop("All elements of imlist must be pixel images")
+    fun <- if(is.character(FUN)) get(FUN) else
+           if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
+    ## ensure images are compatible
+    X <- do.call(harmonise.im, X)
+    template <- X[[1]]
+    ## extract numerical values and convert to matrix with one column per image
+    vlist <- lapply(X, flatten)
+    vals <- matrix(unlist(vlist), ncol=length(X))
+    colnames(vals) <- names(X)
+    ok <- complete.cases(vals)
+    if(!any(ok)) {
+      ## empty result
+      return(as.im(NA, W=template))
+    }
+    ## apply function
+    resultok <- apply(vals[ok,, drop=FALSE], 1, fun, ...)
+    if(length(resultok) != sum(ok))
+      stop("FUN should yield one value per pixel")
+    ## pack up, with attention to type of data
+    d <- dim(template)
+    resultmat <- matrix(resultok[1], d[1], d[2])
+    resultmat[ok] <- resultok
+    resultmat[!ok] <- NA
+    result <- as.im(resultmat, W=X[[1]])
+    if(is.factor(resultok)) levels(result) <- levels(resultok)
+    return(result)
   }
-  ## apply function
-  resultok <- apply(vals[ok,, drop=FALSE], 1, fun, ...)
-  if(length(resultok) != sum(ok))
-    stop("FUN should yield one value per pixel")
-  ## pack up, with attention to type of data
-  d <- dim(template)
-  resultmat <- matrix(resultok[1], d[1], d[2])
-  resultmat[ok] <- resultok
-  resultmat[!ok] <- NA
-  result <- as.im(resultmat, W=X[[1]])
-  if(is.factor(resultok)) levels(result) <- levels(resultok)
-  return(result)
-}
+
+  flatten <- function(z) { as.vector(as.matrix(z)) }
+
+  im.apply
+})

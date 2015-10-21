@@ -6,7 +6,10 @@
   displaying the fitted intensity and the fitted \eqn{K}-function.
 }
 \usage{
-  \method{plot}{kppm}(x, ..., what=c("intensity", "statistic", "cluster"))
+  \method{plot}{kppm}(x, \dots,
+                      what=c("intensity", "statistic", "cluster"),
+                      pause=interactive(),
+                      xname)
 }
 \arguments{
   \item{x}{
@@ -20,10 +23,17 @@
   \item{what}{
     Character vector determining what will be plotted.
   }
+  \item{pause}{
+    Logical value specifying whether to pause between plots.
+  }
+  \item{xname}{
+    Optional. Character string. The name of the object \code{x}
+    for use in the title of the plot.
+  }
 }
 \details{
   This is a method for the generic function
-  \code{\link{plot}} for the class \code{"kppm"} of fitted
+  \code{\link[graphics]{plot}} for the class \code{"kppm"} of fitted
   cluster point process models.
   
   The argument \code{x} should be a cluster point process model
@@ -58,7 +68,6 @@
     explicitly told so, and in that case an additional argument
     \code{locations} (see \code{\link{clusterfield}}) must be given to
     specify where to position the parent point(s) .}
-
   }
 }
 \value{
@@ -73,11 +82,14 @@
   \code{\link{kppm}},
   \code{\link{plot.ppm}},
 }
-\author{Adrian Baddeley
+\author{
+  Adrian Baddeley
   \email{Adrian.Baddeley@uwa.edu.au}
   \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
+  Rolf Turner
   \email{r.turner@auckland.ac.nz}
+  and Ege Rubak
+  \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

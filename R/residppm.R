@@ -4,7 +4,7 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.20 $ $Date: 2014/03/05 08:13:13 $
+# $Revision: 1.21 $ $Date: 2015/10/21 09:06:57 $
 #
 
 residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,

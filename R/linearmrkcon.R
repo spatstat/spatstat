@@ -3,7 +3,7 @@
 #
 # mark connection function & mark equality function for linear networks
 #
-# $Revision: 1.2 $ $Date: 2015/02/25 06:22:30 $
+# $Revision: 1.3 $ $Date: 2015/10/21 08:38:17 $
 #
 
 linearmarkconnect <- function(X, i, j, r=NULL, ...) {
@@ -34,22 +34,30 @@ linearmarkconnect <- function(X, i, j, r=NULL, ...) {
   return(result)
 }
 
-linearmarkequal <- function(X, r=NULL, ...) {
-  if(!is.multitype(X, dfok=FALSE)) 
-	stop("Point pattern must be multitype")
+linearmarkequal <- local({
   
-  # ensure distance information is present
-  X <- as.lpp(X, sparse=FALSE)
+  linearmarkequal <- function(X, r=NULL, ...) {
+    if(!is.multitype(X, dfok=FALSE)) 
+      stop("Point pattern must be multitype")
+  
+    ## ensure distance information is present
+    X <- as.lpp(X, sparse=FALSE)
 
-  lev <- levels(marks(X))
-  v <- list()
-  for(l in lev) v[[l]] <- linearmarkconnect(X, l, l, r=r, ...)
+    lev <- levels(marks(X))
+    v <- list()
+    for(l in lev) v[[l]] <- linearmarkconnect(X, l, l, r=r, ...)
 
-  result <- Reduce("+", v)
-  result <-rebadge.fv(result, 
-                      quote(p[L](r)),
-                      new.fname=c("p", "L"))
-  attr(result, "labl") <- attr(v[[1]], "labl")
-  return(result)
-}
+    result <- Reduce(addfuns, v)
+    result <-rebadge.fv(result, 
+                        quote(p[L](r)),
+                        new.fname=c("p", "L"))
+    attr(result, "labl") <- attr(v[[1]], "labl")
+    return(result)
+  }
+
+  addfuns <- function(f1, f2) eval.fv(f1 + f2)
+
+  linearmarkequal
+})
+
 

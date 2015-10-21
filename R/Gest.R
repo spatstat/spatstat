@@ -3,7 +3,7 @@
 #
 #	Compute estimates of nearest neighbour distance distribution function G
 #
-#	$Revision: 4.30 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 4.31 $	$Date: 2015/10/21 09:06:57 $
 #
 ################################################################################
 #

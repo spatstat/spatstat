@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.168 $	$Date: 2015/10/20 02:05:23 $
+#	$Revision: 4.170 $	$Date: 2015/10/21 09:06:57 $
 #
 #
 #	A window may be either
@@ -171,7 +171,7 @@ owin <- local({
       }
     }
 
-    actual.xrange <- range(unlist(lapply(bdry, function(a) a$x)))
+    actual.xrange <- range(unlist(lapply(bdry, getElement, name="x")))
     if(missing(xrange))
       xrange <- actual.xrange
     else if(check) {
@@ -181,7 +181,7 @@ owin <- local({
         stop("polygon's x coordinates outside xrange")
     }
     
-    actual.yrange <- range(unlist(lapply(bdry, function(a) a$y)))
+    actual.yrange <- range(unlist(lapply(bdry, getElement, name="y")))
     if(missing(yrange))
       yrange <- actual.yrange
     else if(check) {
@@ -858,7 +858,7 @@ complement.owin <- function(w, frame=as.rectangle(w)) {
            if(reframe)
              is.box <- rep.int(FALSE, length(bdry))
            else {
-             nvert <- unlist(lapply(bdry, function(a) { length(a$x) }))
+             nvert <- sapply(lapply(bdry, getElement, name="x"), length)
              areas <- unlist(lapply(bdry, Area.xypolygon))
              boxarea.mineps <- boxarea * (0.99999)
              is.box <- (nvert == 4 & areas >= boxarea.mineps)
@@ -1018,8 +1018,8 @@ summary.owin <- function(object, ...) {
              result$nvertices <- length(poly[[1]]$x)
            } else {
              result$areas <- unlist(lapply(poly, Area.xypolygon))
-             result$nvertices <- unlist(lapply(poly,
-                                               function(a) {length(a$x)}))
+             result$nvertices <- sapply(lapply(poly, getElement, name="x"),
+                                        length)
            }
            result$nhole <- sum(result$areas < 0)
          },
@@ -1137,6 +1137,16 @@ pixelcentres <- function (X, W=NULL,...) {
   if(is.null(W)) W <- as.rectangle(X)
   Y <- as.ppp(raster.xy(X,drop=TRUE),W=W)
   return(Y)
+}
+
+owin2polypath <- function(w) {
+  w <- as.polygonal(w)
+  b <- w$bdry
+  xvectors <- lapply(b, getElement, name="x")
+  yvectors <- lapply(b, getElement, name="y")
+  xx <- unlist(lapply(xvectors, append, values=NA, after=FALSE))[-1]
+  yy <- unlist(lapply(yvectors, append, values=NA, after=FALSE))[-1]
+  return(list(x=xx, y=yy))
 }
 
 ## generics which extract and assign the window of some object

@@ -2,7 +2,7 @@
 #
 #    satpiece.S
 #
-#    $Revision: 1.14 $	$Date: 2012/01/18 11:04:54 $
+#    $Revision: 1.15 $	$Date: 2015/10/21 09:06:57 $
 #
 #    Saturated pairwise interaction process with piecewise constant potential
 #

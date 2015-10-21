@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.24 $  $Date: 2015/05/09 11:52:15 $
+#  $Revision: 1.25 $  $Date: 2015/10/21 09:06:57 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -190,9 +190,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                colnames(result) <- colnames(marx)
              },
              pixels={
-               ratio <- lapply(numerators,
-                               function(a,b) eval.im(a/b),
-                               b=denominator)
+               ratio <- lapply(numerators, "/", e2=denominator)
                if(!is.null(uhoh)) {
                  ## compute nearest neighbour map on same raster
                  distX <- distmap(X, xy=denominator)
@@ -237,7 +235,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   }
   ## wrap up
   attr(result, "warnings") <-
-    unlist(lapply(result, function(x){ attr(x, "warnings") }))
+    unlist(lapply(result, attr, which="warnings"))
   attr(result, "sigma") <- sigma
   attr(result, "varcov") <- varcov
   return(result)

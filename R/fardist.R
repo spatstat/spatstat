@@ -3,7 +3,7 @@
 ##
 ## Farthest distance to boundary, and circumradius
 ##
-##  $Revision: 1.7 $ $Date: 2014/10/24 00:22:30 $
+##  $Revision: 1.8 $ $Date: 2015/10/21 09:06:57 $
 
 fardist <- function(X, ...) {
   UseMethod("fardist")

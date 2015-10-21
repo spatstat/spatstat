@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.18 $   $Date: 2015/02/25 07:04:17 $
+#  $Revision: 1.19 $   $Date: 2015/10/21 09:06:57 $
 #
 #  Image/function on a linear network
 #
@@ -86,7 +86,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   mapXY <- factor(df$mapXY, levels=seq_len(Llines$n))
   dfmap <- split(df, mapXY, drop=TRUE)
   # sort each segment's data by position along segment
-  dfmap <- lapply(dfmap, function(z) { z[fave.order(z$tp), ] })
+  dfmap <- lapply(dfmap, sortalongsegment)
   # plot each segment's data
 #  Lends <- Llines$ends
   Lperp <- angles.psp(Llines) + pi/2
@@ -137,6 +137,10 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   return(invisible(bb))
 }
 
+sortalongsegment <- function(df) {
+  df[fave.order(df$tp), , drop=FALSE]
+}
+
 as.im.linim <- function(X, ...) {
   attr(X, "L") <- attr(X, "df") <- NULL
   class(X) <- "im"
@@ -176,14 +180,12 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
     stop("No variables in this expression")
   # get the values of the variables
   if(missing(envir)) {
-    envir <- sys.parent()
+    envir <- parent.frame() # WAS: sys.parent()
   } else if(is.list(envir)) {
     envir <- list2env(envir, parent=parent.frame())
   }
-  vars <- lapply(as.list(varnames), function(x, e) get(x, envir=e), e=envir)
-  names(vars) <- varnames
-  funs <- lapply(as.list(funnames), function(x, e) get(x, envir=e), e=envir)
-  names(funs) <- funnames
+  vars <- mget(varnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
+  funs <- mget(funnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
   # Find out which variables are (linear) images
   islinim <- unlist(lapply(vars, inherits, what="linim"))
   if(!any(islinim))

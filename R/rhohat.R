@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.63 $  $Date: 2015/02/24 01:44:41 $
+#  $Revision: 1.64 $  $Date: 2015/10/21 09:06:57 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a

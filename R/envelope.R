@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.78 $  $Date: 2015/10/05 05:50:48 $
+#   $Revision: 2.81 $  $Date: 2015/10/21 09:06:57 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1065,8 +1065,6 @@ summary.envelope <- function(object, ...) {
 # theory = funX[["theo"]]
 # observed = fX
 
-envelope.matrix <- local({
-
 envelope.matrix <- function(Y, ...,
                             rvals=NULL, observed=NULL, theory=NULL, 
                             funX=NULL,
@@ -1190,7 +1188,7 @@ envelope.matrix <- function(Y, ...,
                lohi <- apply(simvals, 1,
 #                             function(x, n) { sort(x)[n] },
                              orderstats,
-                             n=c(nrank, nsim-nrank+1))
+                             k=c(nrank, nsim-nrank+1))
              }
              lo <- lohi[1,]
              hi <- lohi[2,]
@@ -1597,12 +1595,6 @@ envelope.matrix <- function(Y, ...,
   return(result)
 }
 
-  orderstats <- function(x, n) { sort(x)[n] }
-
-  envelope.matrix
-  
-})
-
 envelope.envelope <- function(Y, fun=NULL, ...,
                               transform=NULL, global=FALSE, VARIANCE=FALSE) {
 
@@ -1854,7 +1846,8 @@ pool.envelope <- local({
                weightlist <- lapply(Elist, attr, which="weights")
                w.mean <- unlist(lapply(weightlist, sum))
                d.mean <- sum(w.mean)
-               ssw <- unlist(lapply(weightlist, function(x) {sum((x/sum(x))^2)}))
+               ssw <- unlist(lapply(weightlist, meansqfrac))
+               ##  meansqfrac :  function(x) {sum((x/sum(x))^2)}))
                w.var  <- w.mean * (1 - ssw)
                d.var <-  d.mean * (1 - sum(ssw))
              }
@@ -1936,7 +1929,9 @@ pool.envelope <- local({
   getrvals <- function(z) { as.matrix(z)[, fvnames(z, ".x")] }
   
   getdotvals <- function(z) { as.matrix(z)[, fvnames(z, "."), drop=FALSE] }
-  
+
+  meansqfrac <- function(x) {sum((x/sum(x))^2)} 
+
   pool.envelope
 })
 

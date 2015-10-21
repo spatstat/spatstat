@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.15 $ $Date: 2015/05/20 14:41:37 $
+##  $Revision: 1.16 $ $Date: 2015/10/21 09:06:57 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -104,6 +104,8 @@ plot.anylist <- plot.solist <- plot.listof <-
     return(!inherits(y, "try-error"))
   }
 
+  maxassigned <- function(i, values) max(values[i[i > 0]])
+  
   plot.anylist <- function(x, ..., main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
                             main.panel=NULL,
@@ -287,10 +289,10 @@ plot.anylist <- plot.solist <- plot.listof <-
                   byrow=TRUE, ncol=ncols, nrow=nrows)
     if(sizes.known) {
       boxsides <- lapply(scaledboxes, sidelengths)
-      xwidths <- unlist(lapply(boxsides, "[", i=1))
-      xheights <- unlist(lapply(boxsides, "[", i=2))
-      heights <- apply(mat, 1, function(j,h) { max(h[j[j>0]]) }, h=xheights)
-      widths <- apply(mat, 2, function(i,w) { max(w[i[i>0]]) }, w=xwidths)
+      xwidths <- sapply(boxsides, "[", i=1)
+      xheights <- sapply(boxsides, "[", i=2)
+      heights <- apply(mat, 1, maxassigned, values=xheights)
+      widths <- apply(mat, 2, maxassigned, values=xwidths)
     } else {
       heights <- rep.int(1, nrows)
       widths <- rep.int(1, ncols)
@@ -497,13 +499,13 @@ plot.imlist <- local({
                top    = { ribmar[c(3, 1)] <- newmar }
                )
       }
-       ## function executed to plot colour ribbon
+      ## bespoke function executed to plot colour ribbon
       do.ribbon <- function() {
         opa <- par(mar=ribmar)
         do.call("plot", ribstuff)
         par(opa)
       }
-      ## encoded as 'adorn' argument
+      ## ribbon plot function encoded as 'adorn' argument
       ribadorn <- list(adorn=do.ribbon, adorn.size=ribwid)
       names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     }

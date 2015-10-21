@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.8 $ $Date: 2015/04/18 18:11:52 $
+##  $Revision: 1.9 $ $Date: 2015/10/21 09:06:57 $
 
 ### .................. basic graphics .............................
 

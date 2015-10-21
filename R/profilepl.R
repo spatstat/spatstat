@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.36 $  $Date: 2015/07/11 08:19:26 $
+#  $Revision: 1.37 $  $Date: 2015/10/21 09:06:57 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -251,7 +251,7 @@ plot.profilepl <- local({
       lty <- px$lty
     }
     ## strip any column that is entirely NA
-    nacol <- sapply(para, function(z) all(!is.finite(z)))
+    nacol <- sapply(para, none.finite)
     para <- para[, !nacol, drop=FALSE]
     ## 
     npara <- ncol(para)
@@ -348,6 +348,8 @@ plot.profilepl <- local({
     return(NULL)
   }
 
+  none.finite <- function(x) all(!finite(x))
+  
   plot.profilepl
 })
 

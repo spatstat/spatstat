@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.33 $    $Date: 2014/11/22 02:19:30 $
+#      $Revision: 4.34 $    $Date: 2015/10/21 09:06:57 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.

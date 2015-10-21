@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.81 $	$Date: 2015/10/04 01:28:59 $
+#	$Revision: 1.82 $	$Date: 2015/10/21 09:06:57 $
 #
 #
 #--------------------------------------------------------------------------
@@ -206,7 +206,7 @@ plot.ppp <- local({
     do.several <- want.several && !add && multiplot
     if(do.several) {
       ## generate one plot for each column of marks
-      y <- as.solist(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      y <- solapply(mx, setmarks, x=x)
       out <- do.call(plot,
                      resolve.defaults(list(x=y, main=main,
                                            show.window=show.window,

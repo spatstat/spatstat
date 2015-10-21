@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.110 $ $Date: 2015/10/07 01:04:47 $
+# $Revision: 1.112 $ $Date: 2015/10/21 08:59:59 $
 #
 
 kppm <- function(X, ...) {
@@ -1077,61 +1077,72 @@ print.kppm <- print.dppm <- function(x, ...) {
   invisible(NULL)
 }
 
-plot.kppm <- function(x, ..., what=c("intensity", "statistic", "cluster")) {
-  # catch objectname from dots if present otherwise deparse x:
-  objectname <- list(...)$objectname %orifnull% short.deparse(substitute(x))
+plot.kppm <- local({
+
   plotem <- function(x, ..., main=dmain, dmain) { plot(x, ..., main=main) }
-  nochoice <- missing(what)
-  what <- pickoption("plot type", what,
-                    c(statistic="statistic",
-                      intensity="intensity",
-                      cluster="cluster"),
-                    multi=TRUE)
-  # handle older objects
-  Fit <- x$Fit
-  if(is.null(Fit)) {
-    warning("kppm object is in outdated format")
-    Fit <- x
-    Fit$method <- "mincon"
-  }
-  # Catch locations for clusters if given
-  loc <- list(...)$locations
-  inappropriate <- (nochoice & ((what == "intensity") & (x$stationary))) |
-                   ((what == "statistic") & (Fit$method != "mincon")) |
-                   ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp")) |
-                   ((what == "cluster") & ((!x$stationary)) & is.null(loc))
+  
+  plot.kppm <- function(x, ...,
+                        what=c("intensity", "statistic", "cluster"),
+                        pause=interactive(),
+                        xname) {
+    ## catch objectname from dots if present otherwise deparse x:
+    if(missing(xname)) xname <- short.deparse(substitute(x))
+    nochoice <- missing(what)
+    what <- pickoption("plot type", what,
+                       c(statistic="statistic",
+                         intensity="intensity",
+                         cluster="cluster"),
+                       multi=TRUE)
+    ## handle older objects
+    Fit <- x$Fit
+    if(is.null(Fit)) {
+      warning("kppm object is in outdated format")
+      Fit <- x
+      Fit$method <- "mincon"
+    }
+    ## Catch locations for clusters if given
+    loc <- list(...)$locations
+    inappropriate <- (nochoice & ((what == "intensity") & (x$stationary))) |
+             ((what == "statistic") & (Fit$method != "mincon")) |
+             ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp")) |
+             ((what == "cluster") & ((!x$stationary)) & is.null(loc))
 
-  if(!nochoice && !x$stationary && "cluster" %in% what && is.null(loc))
+    if(!nochoice && !x$stationary && "cluster" %in% what && is.null(loc))
       stop("Please specify additional argument ", sQuote("locations"),
-           " which will be passed to the function ", sQuote("clusterfield"), ".")
+           " which will be passed to the function ",
+           sQuote("clusterfield"), ".")
 
-  if(any(inappropriate)) {
-    what <- what[!inappropriate]
-    if(length(what) == 0){
+    if(any(inappropriate)) {
+      what <- what[!inappropriate]
+      if(length(what) == 0){
         message("Nothing meaningful to plot. Exiting...")
         return(invisible(NULL))
+      }
     }
+    pause <- pause && (length(what) > 1)
+    if(pause) opa <- par(ask=TRUE)
+    for(style in what)
+      switch(style,
+             intensity={
+               plotem(x$po, ...,
+                      dmain=c(xname, "Intensity"),
+                      how="image", se=FALSE)
+             },
+             statistic={
+               plotem(Fit$mcfit, ...,
+                      dmain=c(xname, Fit$StatName))
+             },
+             cluster={
+               plotem(clusterfield(x, locations = loc), ...,
+                      dmain=c(xname, "Fitted cluster"))
+             })
+    if(pause) par(opa)
+    return(invisible(NULL))
   }
-  pauseit <- interactive() && (length(what) > 1)
-  if(pauseit) opa <- par(ask=TRUE)
-  for(style in what)
-    switch(style,
-           intensity={
-             plotem(x$po, ...,
-                    dmain=c(objectname, "Intensity"),
-                    how="image", se=FALSE)
-           },
-           statistic={
-             plotem(Fit$mcfit, ...,
-                    dmain=c(objectname, Fit$StatName))
-           },
-           cluster={
-             plotem(clusterfield(x, locations = loc), ...,
-                    dmain=c(objectname, "Fitted cluster"))
-           })
-  if(pauseit) par(opa)
-  return(invisible(NULL))
-}
+
+  plot.kppm
+})
+
 
 predict.kppm <- predict.dppm <- function(object, ...) {
   se <- resolve.1.default(list(se=FALSE), list(...))

@@ -3,7 +3,7 @@
 #
 # Random tessellations
 #
-# $Revision: 1.6 $  $Date: 2011/05/18 09:00:01 $
+# $Revision: 1.7 $  $Date: 2015/10/21 09:06:57 $
 #
 
 # Poisson line tessellation

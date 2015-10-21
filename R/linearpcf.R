@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.13 $ $Date: 2015/02/25 06:22:54 $
+# $Revision: 1.14 $ $Date: 2015/10/21 09:06:57 $
 #
 # pair correlation function for point pattern on linear network
 #

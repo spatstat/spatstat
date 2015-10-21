@@ -2,7 +2,7 @@
 #
 #    hybrid.R
 #
-#    $Revision: 1.5 $	$Date: 2014/12/17 10:54:07 $
+#    $Revision: 1.6 $	$Date: 2015/10/21 09:06:57 $
 #
 #    Hybrid of several interactions
 #
@@ -180,7 +180,7 @@ Hybrid <- local({
             #' Single interaction required.
             #' Extract first entry from each list
             #' (there should be only one entry, but...)
-            qlist <- lapply(projlist, function(z) z[[1]])
+            qlist <- lapply(projlist, "[[", i=1)
             #' replace NULL entries by corresponding original interactions
             isnul <- unlist(lapply(qlist, is.null))
             if(all(isnul))

@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.60 $  $Date: 2015/06/03 11:20:08 $
+# $Revision: 1.61 $  $Date: 2015/10/21 09:06:57 $
 #
 
 hyperframe <- local({
@@ -102,9 +102,7 @@ hyperframe <- local({
     if(any(hyperatoms))
       vclass[hyperatoms] <- unlist(lapply(aarg[hyperatoms], class1))
     if(any(hypercolumns))
-      vclass[hypercolumns] <- unlist(lapply(aarg[hypercolumns],
-                                            function(x) { class1(x[[1]]) }))
-  
+      vclass[hypercolumns] <- unlist(lapply(aarg[hypercolumns], class1of1))
     ## Put the result together
     result <- list(nvars=nvars,
                    ncases=ncases,
@@ -130,11 +128,13 @@ hyperframe <- local({
       return(TRUE)
     if(length(x) <= 1)
       return(TRUE)
-    cla <- class(x[[1]])
-    all(sapply(x, function(xi,cla) { identical(class(xi), cla) }, cla=cla))
+    cla <- lapply(x, class)
+    return(length(unique(cla)) == 1)
   }
 
   class1 <- function(x) { class(x)[1] }
+
+  class1of1 <- function(x) { class(x[[1]])[1] }
   
   hyperframe
 })
@@ -440,9 +440,7 @@ rbind.hyperframe <- function(...) {
       rslt[[k]] <- dfall[,k]
     } else {
       # hypercolumns or hyperatoms: extract them
-      hdata <- lapply(argh,
-                      function(x,nama) { x[, nama, drop=FALSE] },
-                      nama=nama)
+      hdata <- lapply(argh, "[", j=nama, drop=FALSE)
       hdata <- lapply(lapply(hdata, as.list), getElement, name=nama)
       # append them
       hh <- hdata[[1]]

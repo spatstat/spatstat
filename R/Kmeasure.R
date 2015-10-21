@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.50 $    $Date: 2015/01/30 05:35:53 $
+#           $Revision: 1.51 $    $Date: 2015/10/21 09:06:57 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -308,9 +308,9 @@ second.moment.engine <-
   if(what != "edge") {
     # compute Bartlett spectrum
     if(nimages == 1) {
-      bart <- Mod(fY)^2 * fK
+      bart <- BartCalc(fY, fK)  ##  bart <- Mod(fY)^2 * fK
     } else {
-      bartlist <- lapply(fYlist, function(z, fK) { Mod(z)^2 * fK}, fK=fK)
+      bartlist <- lapply(fYlist, BartCalc, fK=fK)
     }
   }
   
@@ -469,6 +469,8 @@ second.moment.engine <-
   return(result)
 }
 
+BartCalc <- function(fY, fK) { Mod(fY)^2 * fK }
+  
 Kest.fft <- function(X, sigma, r=NULL, breaks=NULL) {
   verifyclass(X, "ppp")
   W <- X$window

@@ -53,7 +53,7 @@ plot(localL(swedishpines))
 plot(localK(swedishpines))
 
 ## anisotropic
-plot(Ksector(redwood, 0, pi/2))
+plot(Ksector(redwood, 0, 90))
 plot(Rf <- pairorient(redwood, 0.05, 0.15))
 plot(Df <- deriv(Rf, spar=0.6, Dperiodic=TRUE))
 

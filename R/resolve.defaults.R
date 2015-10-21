@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.25 $ $Date: 2015/04/28 12:26:37 $
+#  $Revision: 1.26 $ $Date: 2015/10/21 09:06:57 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:

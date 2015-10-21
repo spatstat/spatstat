@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.191 $    $Date: 2015/10/19 12:52:12 $
+#    $Revision: 1.194 $    $Date: 2015/10/21 09:06:57 $
 #
 #
 matrowsum <- function(x) {
@@ -1017,7 +1017,7 @@ cat.factor <- function (..., recursive=FALSE) {
 nzpaste <- function(..., sep=" ", collapse=NULL) {
   # Paste only the non-empty strings
   v <- list(...)
-  ok <- unlist(lapply(v, function(z) {any(nzchar(z))}))
+  ok <- sapply(lapply(v, nzchar), any)
   do.call("paste", append(v[ok], list(sep=sep, collapse=collapse)))
 }
 
@@ -1029,11 +1029,15 @@ substringcount <- function(x, y) {
   return(nhits)
 }
 
-is.parseable <- function(x) {
-  unlist(lapply(x, function(z) {
+is.parseable <- local({
+  is.parseable <- function(x) sapply(x, canparse)
+
+  canparse <- function(z) {
     !inherits(try(parse(text=z), silent=TRUE), "try-error")
-  }))
-}
+  }
+
+  is.parseable
+})
 
 make.parseable <- function(x) {
   if(all(is.parseable(x))) x else make.names(x)
@@ -1042,7 +1046,8 @@ make.parseable <- function(x) {
 # paste(expression(..)) seems to be broken
 
 paste.expr <- function(x) {
-  unlist(lapply(x, function(z) { paste(deparse(z), collapse="") }))
+  unlist(lapply(lapply(x, deparse),
+                paste, collapse=""))
 }
 
 #   gsub(".", replacement, x) but only when "." appears as a variable
@@ -1131,6 +1136,11 @@ codetime <- local({
 
 # defines the current favorite algorithm for 'order' 
 fave.order <- function(x) { sort.list(x, method="quick", na.last=NA) }
+
+# order statistic (for use in lapply calls) 
+orderstats <- function(x, k, decreasing=FALSE) {
+  if(decreasing) sort(x, decreasing=TRUE, na.last=TRUE)[k] else sort(x)[k]
+}
 
 # convert any appropriate subset index for a point pattern
 # to a logical vector
@@ -1625,3 +1635,6 @@ fastFindInterval <- function(x, b, labels=FALSE, reltol=0.001) {
   }
   return(y)
 }
+
+variablesintext <- function(x) all.vars(as.expression(parse(text=x)))
+

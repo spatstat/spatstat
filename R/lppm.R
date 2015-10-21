@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.33 $   $Date: 2015/10/16 05:00:05 $
+#  $Revision: 1.34 $   $Date: 2015/10/21 09:06:57 $
 #
 
 lppm <- function(X, ...) {
@@ -179,7 +179,8 @@ anova.lppm <- function(object, ..., test=NULL) {
     stuff <- stuff[-hit]
   }
   #' extract ppm objects where appropriate
-  stuff <- lapply(stuff, function(z) { if(inherits(z, "lppm")) z$fit else z })
+  mod <- sapply(stuff, is.lppm)
+  stuff[mod] <- lapply(stuff[mod], getElement, name="fit")
   #' analysis of deviance or adjusted composite deviance
   do.call("anova.ppm", append(stuff, list(test=test)))
 }
@@ -246,34 +247,35 @@ as.owin.lppm <- function(W, ..., fatal=TRUE) {
 Window.lppm <- function(X, ...) { as.owin(X) }
 
 
-model.images.lppm <- function(object, L=as.linnet(object), ...) {
-  stopifnot(inherits(object, "lppm"))
-  stopifnot(inherits(L, "linnet"))
-  m <- model.images(object$fit, W=as.rectangle(L), ...)
-  if(length(m) > 0) {
-    ## restrict images to L
-    rasta <- as.mask(m[[1]])
-    DL <- as.mask.psp(as.psp(L), xy=rasta)
-    ZL <- as.im(DL)
-    if(!is.hyperframe) {
-      ## list of images
-      m <- lapply(m, function(x, Z) eval.im(x * Z), Z=ZL)
-      ## convert to linim
-      m <- lapply(m, function(x, L) linim(L,x), L=L)
-      return(as.solist(m))
-    } else {
-      ## hyperframe, each column being a list of images
-      mm <- lapply(as.list(m),
-                   function(a) {
-                     b <- lapply(a, function(x, Z) eval.im(x * Z), Z=ZL)
-                     b <- lapply(b, function(x, L) linim(L,x), L=L)
-                     return(as.solist(b))
-                   })
-      m <- do.call(hyperframe, mm)
+model.images.lppm <- local({
+
+  model.images.lppm <- function(object, L=as.linnet(object), ...) {
+    stopifnot(inherits(object, "lppm"))
+    stopifnot(inherits(L, "linnet"))
+    m <- model.images(object$fit, W=as.rectangle(L), ...)
+    if(length(m) > 0) {
+      ## restrict images to L
+      rasta <- as.mask(m[[1]])
+      DL <- as.mask.psp(as.psp(L), xy=rasta)
+      ZL <- as.im(DL)
+      if(!is.hyperframe) {
+        ## list of images: convert to list of linims
+        m <- tolinims(m, L=L, imL=ZL)
+      } else {
+        ## hyperframe, each column being a list of images
+        mm <- lapply(as.list(m), tolinims, L=L, imL=ZL)
+        m <- do.call(hyperframe, mm)
+      }
     }
+    return(m)
   }
-  return(m)
-}
+
+  tolinim <- function(x, L, imL) linim(L, eval.im(x * imL))
+  tolinims <- function(x, L, imL) solapply(x, tolinim, L=L, imL=imL)
+  
+  model.images.lppm
+})
+
   
 model.matrix.lppm <- function(object, data=model.frame(object),
                              ..., keepNA=TRUE) {

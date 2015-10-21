@@ -6,7 +6,7 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.31 $     $Date: 2015/05/16 07:37:40 $
+#     $Revision: 1.32 $     $Date: 2015/10/21 09:06:57 $
 #
 
 eval.fv <- local({
@@ -76,7 +76,7 @@ eval.fv <- local({
     ylabs <- lapply(funs, attr, which="ylab")
     fnames <- lapply(funs, getfname)
     # Repair 'fname' attributes if blank
-    blank <- unlist(lapply(fnames, function(z) { !any(nzchar(z)) }))
+    blank <- unlist(lapply(fnames, isblank))
     if(any(blank)) {
       # Set function names to be object names as used in the expression
       for(i in which(blank))
@@ -158,7 +158,8 @@ eval.fv <- local({
     fvnames(x, ".y") <- mapstrings(fvnames(x, ".y"), map=map)
     return(x)
   }
-
+  isblank <-  function(z) { !any(nzchar(z)) }
+  
   eval.fv
 })
     
@@ -207,59 +208,69 @@ harmonize <- harmonise <- function(...) {
   UseMethod("harmonise")
 }
 
-harmonize.fv <- harmonise.fv <- function(..., strict=FALSE) {
-  argh <- list(...)
-  n <- length(argh)
-  if(n == 0) return(argh)
-  if(n == 1) {
-    a1 <- argh[[1]]
-    if(is.fv(a1)) return(argh)
-    if(is.list(a1) && all(sapply(a1, is.fv))) argh <- a1
+harmonize.fv <- harmonise.fv <- local({
+
+  harmonise.fv <- function(..., strict=FALSE) {
+    argh <- list(...)
+    n <- length(argh)
+    if(n == 0) return(argh)
+    if(n == 1) {
+      a1 <- argh[[1]]
+      if(is.fv(a1)) return(argh)
+      if(is.list(a1) && all(sapply(a1, is.fv))) argh <- a1
+    }
+    isfv <- sapply(argh, is.fv)
+    if(!all(isfv))
+      stop("All arguments must be fv objects")
+    ## determine range of argument
+    ranges <- lapply(argh, argumentrange)
+    xrange <- c(max(unlist(lapply(ranges, min))),
+                min(unlist(lapply(ranges, max))))
+    if(diff(xrange) < 0)
+      stop("No overlap in ranges of argument")
+    if(strict) {
+      ## find common column names and keep these
+      keepnames <- Reduce(intersect, lapply(argh, colnames))
+      argh <- lapply(argh, "[", j=keepnames)
+    }
+    ## determine finest resolution
+    xsteps <- sapply(argh, argumentstep)
+    finest <- which.min(xsteps)
+    ## extract argument values
+    xx <- with(argh[[finest]], .x)
+    xx <- xx[xrange[1] <= xx & xx <= xrange[2]]
+    xrange <- range(xx)
+    ## convert each fv object to a function
+    funs <- lapply(argh, as.function, value="*")
+    ## evaluate at common argument
+    result <- vector(mode="list", length=n)
+    for(i in 1:n) {
+      ai <- argh[[i]]
+      fi <- funs[[i]]
+      xxval <- list(xx=xx)
+      names(xxval) <- fvnames(ai, ".x")
+      starnames <- fvnames(ai, "*")
+      ## ensure they are given in same order as current columns
+      starnames <- colnames(ai)[colnames(ai) %in% starnames]
+      yyval <- lapply(starnames,
+                      function(v,xx,fi) fi(xx, v),
+                      xx=xx, fi=fi)
+      names(yyval) <- starnames
+      ri <- do.call("data.frame", append(xxval, yyval))
+      fva <- .Spatstat.FvAttrib
+      attributes(ri)[fva] <- attributes(ai)[fva]
+      class(ri) <- c("fv", class(ri))
+      attr(ri, "alim") <- intersect.ranges(attr(ai, "alim"), xrange)
+      result[[i]] <- ri
+    }
+    names(result) <- names(argh)
+    return(result)
   }
-  isfv <- sapply(argh, is.fv)
-  if(!all(isfv))
-    stop("All arguments must be fv objects")
-  ## determine range of argument
-  ranges <- lapply(argh, function(f) { range(with(f, .x)) })
-  xrange <- c(max(unlist(lapply(ranges, min))),
-              min(unlist(lapply(ranges, max))))
-  if(diff(xrange) < 0)
-    stop("No overlap in ranges of argument")
-  if(strict) {
-    ## find common column names and keep these
-    keepnames <- Reduce(intersect, lapply(argh, colnames))
-    argh <- lapply(argh, "[", j=keepnames)
-  }
-  ## determine finest resolution
-  xsteps <- unlist(lapply(argh, function(f) { mean(diff(with(f, .x))) }))
-  finest <- which.min(xsteps)
-  ## extract argument values
-  xx <- with(argh[[finest]], .x)
-  xx <- xx[xrange[1] <= xx & xx <= xrange[2]]
-  xrange <- range(xx)
-  ## convert each fv object to a function
-  funs <- lapply(argh, as.function, value="*")
-  ## evaluate at common argument
-  result <- vector(mode="list", length=n)
-  for(i in 1:n) {
-    ai <- argh[[i]]
-    fi <- funs[[i]]
-    xxval <- list(xx=xx)
-    names(xxval) <- fvnames(ai, ".x")
-    starnames <- fvnames(ai, "*")
-    ## ensure they are given in same order as current columns
-    starnames <- colnames(ai)[colnames(ai) %in% starnames]
-    yyval <- lapply(starnames,
-                    function(v,xx,fi) fi(xx, v),
-                    xx=xx, fi=fi)
-    names(yyval) <- starnames
-    ri <- do.call("data.frame", append(xxval, yyval))
-    fva <- .Spatstat.FvAttrib
-    attributes(ri)[fva] <- attributes(ai)[fva]
-    class(ri) <- c("fv", class(ri))
-    attr(ri, "alim") <- intersect.ranges(attr(ai, "alim"), xrange)
-    result[[i]] <- ri
-  }
-  names(result) <- names(argh)
-  return(result)
-}
+
+  argumentrange <- function(f) { range(with(f, .x)) }
+  
+  argumentstep <- function(f) { mean(diff(with(f, .x))) }
+  
+  harmonise.fv
+})
+

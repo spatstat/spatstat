@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.103 $	$Date: 2015/06/22 05:03:45 $
+#	$Revision: 4.104 $	$Date: 2015/10/21 09:06:57 $
 #
 #
 #
@@ -53,6 +53,11 @@ perimeter <- function(w) {
            return(sum(lengths.psp(edges(p))))
          })
   return(NA)
+}
+
+framebottomleft <- function(w) {
+  f <- Frame(w)
+  c(f$xrange[1], f$yrange[1])
 }
 
 sidelengths.owin <- function(x) {

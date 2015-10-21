@@ -3,7 +3,7 @@
 #
 # resample a point pattern by resampling quadrats
 #
-# $Revision: 1.6 $  $Date: 2015/07/11 08:19:26 $
+# $Revision: 1.7 $  $Date: 2015/10/21 09:06:57 $
 #
 
 quadratresample <- function(X, nx, ny=nx, ...,
@@ -18,8 +18,7 @@ quadratresample <- function(X, nx, ny=nx, ...,
   B <- split(X, A)
   nq <- length(B)
   # determine bottom left corner of each tile
-  V <- lapply(B, function(z) { w <- z$window;
-                               c(w$xrange[1], w$yrange[1]) })
+  V <- lapply(B, framebottomleft)
   out <- list()
   if(verbose) {
     cat("Generating resampled patterns...")

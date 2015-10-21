@@ -4,7 +4,7 @@
 #
 #   Random generators for MULTITYPE point processes
 #
-#   $Revision: 1.35 $   $Date: 2015/09/06 03:11:26 $
+#   $Revision: 1.36 $   $Date: 2015/10/21 09:06:57 $
 #
 #   rmpoispp()   random marked Poisson pp
 #   rmpoint()    n independent random marked points
@@ -115,8 +115,8 @@ rmpoispp <- local({
       else maxes <- lmax
 
       ## coerce lambda to a list, to save confusion
-      lam <- if(single.arg) lapply(1:ntypes, function(x, y){y}, y=lambda)
-              else if(vector.arg) as.list(lambda) else lambda
+      lam <- if(single.arg) rep(list(lambda), ntypes) else
+             if(vector.arg) as.list(lambda) else lambda
 
       ## Simulate
       for(i in 1:ntypes) {
@@ -275,8 +275,8 @@ rmpoint <- local({
     else maxes <- fmax
 
     ## coerce f to a list, to save confusion
-    flist <- if(single.arg) lapply(1:ntypes, function(i, f){f}, f=f)
-    else if(vector.arg) as.list(f) else f
+    flist <- if(single.arg) rep(list(f), ntypes) else
+             if(vector.arg) as.list(f) else f
 
     #################### START ##################################
 

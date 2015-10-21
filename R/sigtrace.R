@@ -1,7 +1,7 @@
 #
 #  sigtrace.R
 #
-#  $Revision: 1.6 $  $Date: 2015/10/05 06:27:53 $
+#  $Revision: 1.7 $  $Date: 2015/10/21 09:06:57 $
 #
 #  Significance traces 
 #

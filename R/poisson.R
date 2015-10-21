@@ -2,7 +2,7 @@
 #
 #    poisson.S
 #
-#    $Revision: 1.7 $	$Date: 2012/01/16 08:26:08 $
+#    $Revision: 1.8 $	$Date: 2015/10/21 09:06:57 $
 #
 #    The Poisson process
 #

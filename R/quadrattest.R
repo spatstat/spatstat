@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.51 $  $Date: 2015/10/19 03:50:22 $
+#   $Revision: 1.52 $  $Date: 2015/10/21 09:06:57 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -319,11 +319,11 @@ plot.quadrattest <- local({
                              list(main=xname)))
     # compute locations for text
     til <- tiles(tess)
-    ok <- unlist(lapply(til, function(x) { !is.null(x) && area(x) > 0 }))
+    ok <- sapply(til, haspositivearea)
     incircles <- lapply(til[ok], incircle)
-    x0 <- unlist(lapply(incircles, function(z) { z$x }))
-    y0 <- unlist(lapply(incircles, function(z) { z$y }))
-    ra <- unlist(lapply(incircles, function(z) { z$r }))
+    x0 <- sapply(incircles, getElement, name="x")
+    y0 <- sapply(incircles, getElement, name="y")
+    ra <- sapply(incircles, getElement, name="r")
     # plot observed counts
     cos30 <- sqrt(2)/2
     sin30 <- 1/2
@@ -352,6 +352,8 @@ plot.quadrattest <- local({
                                      list(...)))
   }
 
+  haspositivearea <- function(x) { !is.null(x) && area(x) > 0 }
+  
   plot.quadrattest
 })
 

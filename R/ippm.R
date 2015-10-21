@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.17 $   $Date: 2014/12/22 07:22:51 $
+#   $Revision: 2.18 $   $Date: 2015/10/21 09:06:57 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -219,13 +219,9 @@ update.ippm <- local({
           new.call$trend <- new.fmla
         } else {
           ## find which argument in the original call was a formula
-          wasfmla <- unlist(lapply(old.call,
-                                   function(z) {
-                                     u <- try(eval(z,
-                                                   as.list(envir),
-                                                   enclos=old.callframe))
-                                     inherits(u, "formula")
-                                   }))
+          wasfmla <- sapply(old.call, formulaic,
+                            envir=as.list(envir),
+                            enclos=old.callframe)
           if(any(wasfmla)) {
             new.call[[min(which(wasfmla))]] <- new.fmla
           } else {
@@ -247,6 +243,11 @@ update.ippm <- local({
     }
     result <- eval(new.call, as.list(envir), enclos=old.callframe)
     return(result)
+  }
+
+  formulaic <- function(z, envir, enclos) {
+    u <- try(eval(z, envir, enclos))
+    return(inherits(u, "formula"))
   }
 
   update.ippm

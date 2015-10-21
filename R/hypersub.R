@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.22 $    $Date: 2015/07/09 02:58:10 $
+##  $Revision: 1.23 $    $Date: 2015/10/21 09:06:57 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -13,7 +13,7 @@
     y <- x
     y$df     <- x$df[i, , drop=FALSE]
     y$ncases <- nrow(y$df)
-    y$hypercolumns <- lapply(x$hypercolumns, function(z,k) { z[k] }, k=i)
+    y$hypercolumns <- lapply(x$hypercolumns, "[", i=i)
     x <- y
   }
   if(!missing(j)) {
@@ -184,13 +184,21 @@ function (x, i, j, value)
 }
 
 
-split.hyperframe <- function(x, f, drop=FALSE, ...) {
-  y <- data.frame(id=seq_len(nrow(x)))
-  z <- split(y, f, drop=drop)
-  z <- lapply(z, getElement, name="id")
-  out <- lapply(z, function(i, x) x[i,], x=x)
-  return(out)
-}
+split.hyperframe <- local({
+
+  split.hyperframe <- function(x, f, drop=FALSE, ...) {
+    y <- data.frame(id=seq_len(nrow(x)))
+    z <- split(y, f, drop=drop)
+    z <- lapply(z, getElement, name="id")
+    out <- lapply(z, indexi, x=x)
+    return(out)
+  }
+
+  indexi <- function(i, x) x[i,]
+  
+  split.hyperframe
+})
+
 
 "split<-.hyperframe" <- function(x, f, drop=FALSE, ..., value) {
   ix <- split(seq_len(nrow(x)), f, drop = drop, ...)

@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.5 $ $Date: 2015/08/12 07:24:07 $
+# $Revision: 1.6 $ $Date: 2015/10/21 09:06:57 $
 #
 
 anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
@@ -10,7 +10,7 @@ anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
   objex <- append(list(object), list(...))
 
   # Check each model is an mppm object
-  if(!all(unlist(lapply(objex, function(x) {inherits(x, "mppm")}))))
+  if(!all(unlist(lapply(objex, is.mppm))))
     stop(paste("Arguments must all be", sQuote("mppm"), "objects"))
 
   # Any non-Poisson models?
@@ -23,8 +23,9 @@ anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
       stop(whinge)
   }
 
+  Fits <- lapply(objex, getElement, name="Fit")
   # All models fitted using same method?
-  fitter <- unique(unlist(lapply(objex, function(x) { x$Fit$fitter })))
+  fitter <- unique(unlist(lapply(Fits, getElement, name="fitter")))
   if(length(fitter) > 1)
     stop(paste("Models are incompatible;",
                "they were fitted by different methods (",
@@ -47,8 +48,8 @@ anova.mppm <- function(object, ..., test=NULL, override=FALSE) {
     }
   }
   
-  # Extract fit objects 
-  fitz <- lapply(objex, function(x) { x$Fit$FIT })
+  # Extract glm fit objects 
+  fitz <- lapply(Fits, getElement, name="FIT")
 
   opt <- list(test=test, dispersion=1)
   if(fitter == "glmmPQL") opt <- list(test=test)

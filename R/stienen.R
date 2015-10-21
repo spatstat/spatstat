@@ -2,7 +2,7 @@
 ##
 ##  Stienen diagram with border correction
 ##
-##  $Revision: 1.7 $ $Date: 2014/12/06 02:29:14 $
+##  $Revision: 1.8 $ $Date: 2015/10/21 09:06:57 $
 
 stienen <- function(X, ..., bg="grey", border=list(bg=NULL)) {
   Xname <- short.deparse(substitute(X))

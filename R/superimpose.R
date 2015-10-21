@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.29 $ $Date: 2015/07/09 04:02:55 $
+# $Revision: 1.30 $ $Date: 2015/10/21 09:06:57 $
 #
 #
 ############################# 
@@ -244,7 +244,8 @@ superimposePSP <-
                  none = NULL,
                  vector = {
                    marxlist <- lapply(marxlist,
-                                      function(x){as.data.frame.vector(x,nm="v1")})
+                                      as.data.frame.vector,
+                                      nm="v1")
                    do.call("rbind", marxlist)[,1]
                  },
                  dataframe = do.call("rbind", marxlist))

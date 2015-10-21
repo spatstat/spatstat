@@ -2,7 +2,7 @@
 #
 #    ordthresh.S
 #
-#    $Revision: 1.10 $	$Date: 2012/01/17 01:19:48 $
+#    $Revision: 1.11 $	$Date: 2015/10/21 09:06:57 $
 #
 #    Ord process with threshold potential
 #

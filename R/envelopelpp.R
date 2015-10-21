@@ -1,7 +1,7 @@
 #
 #  envelopelpp.R
 #
-#  $Revision: 1.18 $   $Date: 2015/10/02 03:43:53 $
+#  $Revision: 1.19 $   $Date: 2015/10/21 09:06:57 $
 #
 #  Envelopes for 'lpp' objects
 #

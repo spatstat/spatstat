@@ -3,7 +3,7 @@
 #
 #   Likelihood cross-validation for kernel smoother of point pattern
 #
-#   $Revision: 1.3 $ $Date: 2014/01/09 03:51:59 $
+#   $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
 #
 
 bw.ppl <- function(X, ..., srange=NULL, ns=16, weights=NULL) {

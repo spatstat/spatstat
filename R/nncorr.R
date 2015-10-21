@@ -1,7 +1,7 @@
 #
 # nncorr.R
 #
-# $Revision: 1.10 $  $Date: 2015/04/06 08:53:59 $
+# $Revision: 1.11 $  $Date: 2015/10/21 09:06:57 $
 #
 
 nnmean <- function(X, k=1) {
@@ -23,13 +23,19 @@ nnmean <- function(X, k=1) {
   return(ans)
 }
 
-nnvario <- function(X, k=1) {
-  stopifnot(is.ppp(X) && is.marked(X))
-  m <- numeric.columns(marks(X), logical=TRUE, others="na")
-  f <- function(m1,m2) { ((m1-m2)^2)/2 }
-  ans <- nncorr(X %mark% m, f, k=k, denominator=diag(var(m)))
-  return(ans)
-}
+nnvario <- local({
+
+  nnvario <- function(X, k=1) {
+    stopifnot(is.ppp(X) && is.marked(X))
+    m <- numeric.columns(marks(X), logical=TRUE, others="na")
+    ans <- nncorr(X %mark% m, sqdif, k=k, denominator=diag(var(m)))
+    return(ans)
+  }
+  sqdif <- function(m1,m2) { ((m1-m2)^2)/2 }
+
+  nnvario
+})
+
 
 nncorr <- function(X, f = function(m1,m2) { m1 * m2},
                    k=1,

@@ -3,7 +3,7 @@
 #' 
 #'  Original by Ute Hahn 2014
 #'
-#' $Revision: 1.4 $ $Date: 2015/03/13 07:49:58 $
+#' $Revision: 1.5 $ $Date: 2015/10/21 09:06:57 $
 #' 
 #' Studentized permutation test for comparison of grouped point patterns;
 #' functions to generate these grouped point patterns;
@@ -221,8 +221,9 @@ studpermu.test <-
  
     valu <- attr(fvtemplate, "valu")
     argu <- attr(fvtemplate, "argu")
-  
-    foar <- sapply(fvlist, function(x)x[[valu]][taker])
+
+    foar <- sapply(lapply(fvlist, "[[", valu),
+                   "[", taker)
 
     #' --------- the real stuff --------------
   

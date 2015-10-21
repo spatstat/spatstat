@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.14 $   $Date: 2014/11/10 10:55:29 $
+#  $Revision: 1.15 $   $Date: 2015/10/21 09:06:57 $
 #
 
 nnclean <- function(X, k, ...) {

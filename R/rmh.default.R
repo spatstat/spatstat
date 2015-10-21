@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.100 2015/09/06 03:12:17 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.101 2015/10/21 09:06:57 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -153,9 +153,7 @@ rmh.default <- function(model,start=NULL,
     if(any(images)) {
       iwindows <- lapply(trends[images], as.owin)
       nimages <- length(iwindows)
-      misfit <- !unlist(lapply(iwindows,
-                               function(x,w) { is.subset.owin(w,x) },
-                               w = w.sim))
+      misfit <- !sapply(iwindows, is.subset.owin, A=w.sim)
       nmisfit <- sum(misfit)
       if(nmisfit > 1) 
         stop(paste("Expanded simulation window is not contained in",
@@ -263,7 +261,7 @@ rmh.default <- function(model,start=NULL,
     area.w.clip <- area(w.clip)
     if(trendy) {
       tsummaries <- summarise.trend(trend, w=w.clip, a=area.w.clip)
-      En <- beta * unlist(lapply(tsummaries, function(x) { x$integral }))
+      En <- beta * sapply(tsummaries, getElement, name="integral")
     } else {
       En <- beta * area.w.clip
     }
@@ -373,11 +371,11 @@ rmh.default <- function(model,start=NULL,
     if(verbose)
       cat("Evaluating trend integral...")
     tsummaries <- summarise.trend(trend, w=w.sim, a=area.w.sim)
-    nbg  <- unlist(lapply(tsummaries, function(x) { x$min < 0 }))
-    if(any(nbg))
+    mins  <- sapply(tsummaries, getElement, name="min")
+    if(any(mins < 0))
       stop("Trend has negative values")
-    iota <- unlist(lapply(tsummaries, function(x) { x$integral }))
-    tmax <- unlist(lapply(tsummaries, function(x) { x$max }))
+    iota <- sapply(tsummaries, getElement, name="integral")
+    tmax <- sapply(tsummaries, getElement, name="max")
   } else {
     iota <- area.w.sim
     tmax <- NULL

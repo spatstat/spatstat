@@ -3,7 +3,7 @@
 #
 #  Dao-Genton adjusted p-values
 #
-#  $Revision: 1.8 $  $Date: 2015/08/30 07:46:14 $
+#  $Revision: 1.9 $  $Date: 2015/10/21 09:06:57 $
 #
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,

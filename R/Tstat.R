@@ -1,12 +1,14 @@
 #
 #	tstat.R		Estimation of T function
 #
-#	$Revision: 1.9 $	$Date: 2015/02/22 03:00:48 $
+#	$Revision: 1.10 $	$Date: 2015/10/21 09:06:57 $
 #
 
 Tstat <- local({
   
   # helper functions
+  diffrange <- function(z) diff(range(z, na.rm=TRUE))
+  
   edgetri.Trans <- function(X, triid, trim=spatstat.options("maxedgewt")) {
     triid <- as.matrix(triid)
     ntri <- nrow(triid)
@@ -16,8 +18,8 @@ Tstat <- local({
       stop("Translation correction is only implemented for rectangular windows")
     x <- matrix(X$x[triid], nrow=ntri)
     y <- matrix(X$y[triid], nrow=ntri)
-    dx <- apply(x, 1, function(z) diff(range(z)))
-    dy <- apply(y, 1, function(z) diff(range(z)))
+    dx <- apply(x, 1, diffrange)
+    dy <- apply(y, 1, diffrange)
     wide <- diff(W$xrange)
     high <- diff(W$yrange)
     weight <- wide * high/((wide - dx) * (high - dy))

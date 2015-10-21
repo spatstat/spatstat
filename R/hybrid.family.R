@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.7 $	$Date: 2014/05/21 03:27:15 $
+#    $Revision: 1.8 $	$Date: 2015/10/21 09:06:57 $
 #
 #    Hybrid interactions
 #
@@ -45,7 +45,7 @@ hybrid.family <-
          # extract the component interactions 
          interlist <- inter$par
          # check that they are all pairwise interactions
-         families <- unlist(lapply(interlist, function(x) { x$family$name }))
+         families <- unlist(lapply(interlist, interactionfamilyname))
          if(!separate && !all(families == "pairwise")) {
            warning(paste("Cannot compute the resultant function;",
                          "not all components are pairwise interactions;",

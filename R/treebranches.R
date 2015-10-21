@@ -3,7 +3,7 @@
 #'
 #'  Label branches in a tree
 #'
-#'  $Revision: 1.2 $ $Date: 2015/05/20 09:36:16 $
+#'  $Revision: 1.3 $ $Date: 2015/10/21 09:06:57 $
 
 #' compute branch labels for each *vertex* in the tree L
 

@@ -1,10 +1,12 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.17 $ $Date: 2015/07/07 03:38:19 $
+#   $Revision: 1.18 $ $Date: 2015/10/21 09:06:57 $
 #
 
-effectfun <- function(model, covname, ..., se.fit=FALSE) {
+effectfun <- local({
+
+effectfun <-  function(model, covname, ..., se.fit=FALSE) {
   if(!is.ppm(model)) {
     if(is.kppm(model)) model <- as.ppm(model) else
     if(is.lppm(model)) model <- model$fit else
@@ -109,8 +111,8 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
     lev <- levels(marks(data.ppm(model)))
     fakeloc$marks <- lev[1]
   }
-  fakeloc <- lapply(fakeloc, function(x,N) { rep.int(x[1],N)}, N=N)
-  fakecov <- lapply(dotargs, function(x,N) { rep.int(x[1],N)}, N=N)
+  fakeloc <- lapply(fakeloc, padout, N=N)
+  fakecov <- lapply(dotargs, padout, N=N)
   # Overwrite value for covariate of interest
   if(covname %in% intern.names)
     fakeloc[[covname]] <- Zvals
@@ -161,3 +163,8 @@ effectfun <- function(model, covname, ..., se.fit=FALSE) {
   }
   return(result)
 }
+
+ padout <- function(x,N) { rep.int(x[1],N) }
+
+ effectfun
+})

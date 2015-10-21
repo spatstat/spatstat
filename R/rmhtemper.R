@@ -1,7 +1,7 @@
 #'
 #'      rmhtemper.R
 #'
-#'   $Revision: 1.2 $  $Date: 2015/08/29 04:36:38 $
+#'   $Revision: 1.3 $  $Date: 2015/10/21 09:06:57 $
 #'
 
 reheat <- local({

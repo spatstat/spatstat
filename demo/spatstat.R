@@ -448,8 +448,11 @@ plot(listof(redwood, simT),
      main.panel=c("Redwood", "simulation from\nfitted Thomas model"),
      main="", mar.panel=0.2, equal.scales=TRUE)
 
+mop <- par(mfrow=c(1,2), pty="s", mar=rep(4.4, 4))
+plot(fitT, xname=c("Thomas model", "minimum contrast fit"), pause=FALSE)
+par(mop)
+
 oop <- par(pty="s", mar=0.2+c(4,4,4,2))
-plot(fitT, main=c("Thomas model","minimum contrast fit"))
 os <- objsurf(fitT)
 plot(os, main="Minimum contrast objective function", col=terrain.colors(128))
 contour(os, add=TRUE)

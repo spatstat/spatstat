@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.35 $   $Date: 2015/08/06 11:22:01 $
+#  $Revision: 1.36 $   $Date: 2015/10/21 09:06:57 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -97,7 +97,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
     do.several <- want.several && !add && multiplot
     if(do.several) {
       ## generate one plot for each column of marks
-      y <- as.solist(lapply(mx, function(z, P) setmarks(P,z), P=x))
+      y <- solapply(mx, setmarks, x=x)
       out <- do.call("plot",
                      c(list(x=y, main=main, do.plot=do.plot,
                             show.window=show.window),
