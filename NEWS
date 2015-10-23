@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.007
+        CHANGES IN spatstat VERSION 1.43-0.008
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
    o More options for one-sided envelopes.
 
    o More support for model comparison.
+
+   o Convexifying operation.
 
    o Quadrat counting accelerated, in some cases.
 
@@ -60,6 +62,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o quadratcount.ppp
    Computation accelerated in some cases.
+
+   o tess
+   Argument 'window' is ignored when xgrid, ygrid are given.
 
 BUGS
 

@@ -1226,7 +1226,7 @@ distributecbind <- local({
     stopifnot(typeof(x) == "expression")
     xlang <- x[[1]]
     locations <- findcbind(xlang)
-    if((nloc <- length(locations)) == 0)
+    if(length(locations) == 0)
       return(x)
     ## cbind might occur more than once
     ## check that the number of arguments is the same each time

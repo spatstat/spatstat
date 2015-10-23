@@ -21,8 +21,9 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
   if(isrect) {
     stopifnot(is.numeric(xgrid) && all(diff(xgrid) > 0))
     stopifnot(is.numeric(ygrid) && all(diff(ygrid) > 0))
-    if(is.null(window))
-      window <- owin(range(xgrid), range(ygrid), unitname=uname)
+    if(!is.null(window))
+      warning("Argument 'window' ignored, because xgrid, grid are given")
+    window <- owin(range(xgrid), range(ygrid), unitname=uname)
     ntiles <- (length(xgrid)-1) * (length(ygrid)-1)
     out <- list(type="rect", window=window, xgrid=xgrid, ygrid=ygrid, n=ntiles)
   } else if(istiled) {

@@ -127,6 +127,7 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   } else stop("Argument scale should be a function")
 
   ## compute raw deviations
+  ##   (large positive values favorable to alternative)
   ddat <- Deviant(obs - reference, alternative, clamp, scaling)
   dsim <- Deviant(sim - reference, alternative, clamp, scaling)
 
@@ -143,10 +144,12 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   } else {
     dR <- c(0, diff(R))
     a <- (nsim/(nsim - 1))^exponent
-    if(clamp) {
+    if(clamp || alternative == "two.sided") {
+      ## deviations are nonnegative
       devdata <- a * cumsum(dR * ddat^exponent)
       devsim  <- a * apply(dR * dsim^exponent, 2, cumsum)
     } else {
+      ## sign of deviations should be retained
       devdata <- a * cumsum(dR * sign(ddat) * abs(ddat)^exponent)
       devsim  <- a * apply(dR * sign(dsim) * abs(dsim)^exponent, 2, cumsum)
     }

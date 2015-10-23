@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.31 $  $Date: 2015/10/15 11:29:32 $
+#  $Revision: 1.32 $  $Date: 2015/10/23 09:28:23 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -35,24 +35,25 @@ mad.test <- function(X, ...,
 
 ## measure deviation of summary function
 ## taking account of alternative hypothesis and possible scaling
+## (Large positive values always favorable to alternative)
 
 Deviant <- local({
   
-  plusvalue <- function(x) {
+  positivepart <- function(x) {
     d <- dim(x)
     y <- pmax(0, x)
     if(!is.null(d)) y <- matrix(y, d[1], d[2])
     return(y)
   }
 
-  minusvalue <- function(x) plusvalue(-x)
+  negativepart <- function(x) positivepart(-x)
 
   Deviant <- function(x, alternative, clamp=FALSE, scaling=NULL) {
     if(!is.null(scaling)) x <- x/scaling
     switch(alternative,
            two.sided = abs(x),
-           less = if(clamp) minusvalue(x) else -x,
-           greater = if(clamp) plusvalue(x) else x)
+           less = if(clamp) negativepart(x) else -x,
+           greater = if(clamp) positivepart(x) else x)
   }
 
   Deviant
