@@ -15,7 +15,7 @@ dclf.progress(X, \dots)
 mad.progress(X, \dots)
 mctest.progress(X, fun = Lest, \dots,
                 exponent = 1, nrank = 1,
-                interpolate = FALSE, alpha)
+                interpolate = FALSE, alpha, rmin=0)
 }
 \arguments{
   \item{X}{
@@ -60,6 +60,10 @@ mctest.progress(X, fun = Lest, \dots,
     Equivalent to \code{nrank/(nsim+1)} where \code{nsim} is the
     number of simulations.
   }
+  \item{rmin}{
+    Optional. Left endpoint for the interval of \eqn{r} values
+    on which the test statistic is calculated.
+  }
 }
 \details{
   The Diggle-Cressie-Loosmore-Ford test and the 
@@ -74,9 +78,9 @@ mctest.progress(X, fun = Lest, \dots,
   
   The command \code{dclf.progress} performs 
   \code{\link{dclf.test}} on \code{X} using all possible intervals
-  of the form \eqn{c(0,r)}, and returns the resulting values of the test
+  of the form \eqn{[0,R]}, and returns the resulting values of the test
   statistic, and the corresponding critical values of the test,
-  as a function of \eqn{r}. 
+  as a function of \eqn{R}. 
 
   Similarly \code{mad.progress} performs
   \code{\link{mad.test}} using all possible intervals
@@ -91,6 +95,11 @@ mctest.progress(X, fun = Lest, \dots,
   is the Cressie-Loosmore-Ford test, while \code{exponent=Inf} is the
   MAD test.
 
+  If the argument \code{rmin} is given, it specifies the left endpoint
+  of the interval defining the test statistic: the tests are
+  performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
+  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
+  
   The result of each command is an object of class \code{"fv"}
   that can be plotted to obtain the progress plot. The display shows
   the test statistic (solid black line) and the Monte Carlo

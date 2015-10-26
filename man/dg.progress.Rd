@@ -10,7 +10,7 @@
 \usage{
 dg.progress(X, fun = Lest, \dots,
             exponent = 2, nsim = 19, nsimsub = nsim - 1,
-            nrank = 1, alpha, interpolate = FALSE,
+            nrank = 1, alpha, interpolate = FALSE, rmin=0,
             savefuns = FALSE, savepatterns = FALSE, verbose=TRUE)
 }
 \arguments{
@@ -63,6 +63,10 @@ v    See Details.
     is applied to the simulated values, and the critical value is
     the upper \code{alpha} quantile of this estimated distribution.
   }
+  \item{rmin}{
+    Optional. Left endpoint for the interval of \eqn{r} values
+    on which the test statistic is calculated.
+  }
   \item{savefuns}{
     Logical value indicating whether to save the simulated
     function values (from the first stage).
@@ -87,7 +91,7 @@ v    See Details.
   
   The command \code{dg.progress} effectively performs 
   \code{\link{dg.test}} on \code{X} using all possible intervals
-  of the form \eqn{c(0,R)}, and returns the resulting values of the test
+  of the form \eqn{[0,R]}, and returns the resulting values of the test
   statistic, and the corresponding critical values of the test,
   as a function of \eqn{R}. 
 
@@ -112,6 +116,10 @@ v    See Details.
     Otherwise, new simulations will be performed,
     and \code{fun} defaults to  \code{\link{Lest}}.
   }
+  If the argument \code{rmin} is given, it specifies the left endpoint
+  of the interval defining the test statistic: the tests are
+  performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
+  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
 }
 \value{
   An object of class \code{"fv"} that can be plotted to

@@ -11,8 +11,8 @@
   dg.sigtrace(X, fun = Lest, \dots,
               exponent = 2, nsim = 19, nsimsub = nsim - 1,
               alternative = c("two.sided", "less", "greater"),
-              interpolate = FALSE, confint = TRUE, alpha = 0.05,
-              savefuns=FALSE, savepatterns=FALSE)
+              rmin=0, interpolate = FALSE, confint = TRUE, alpha = 0.05,
+              savefuns=FALSE, savepatterns=FALSE, verbose=FALSE)
 }
 \arguments{
   \item{X}{
@@ -51,6 +51,10 @@
     If \code{alternative="less"} the alternative hypothesis is that the
     true value of the summary function is lower than the theoretical value.
   }
+  \item{rmin}{
+    Optional. Left endpoint for the interval of \eqn{r} values
+    on which the test statistic is calculated.
+  }
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of
     the test statistic by kernel smoothing, as described in
@@ -72,6 +76,9 @@
     Logical flag indicating whether to save the simulated
     point patterns (from the first stage). 
   }
+  \item{verbose}{
+    Logical flag indicating whether to print progress reports.
+  }
 }
 \details{
   The Dao and Genton (2014) test for a spatial point pattern
@@ -86,7 +93,7 @@
   
   The command \code{dg.sigtrace} effectively performs 
   \code{\link{dg.test}} on \code{X} using all possible intervals
-  of the form \eqn{c(0,R)}, and returns the resulting \eqn{p}-values
+  of the form \eqn{[0,R]}, and returns the resulting \eqn{p}-values
   as a function of \eqn{R}.
 
   The result is an object of class \code{"fv"} that can be plotted to
@@ -101,6 +108,11 @@
 
   If \code{X} is an envelope object and \code{fun=NULL} then
   the code will re-use the simulated functions stored in \code{X}.
+
+  If the argument \code{rmin} is given, it specifies the left endpoint
+  of the interval defining the test statistic: the tests are
+  performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
+  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
 }
 \value{
   An object of class \code{"fv"} that can be plotted to

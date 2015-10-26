@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.16 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.17 $  $Date: 2015/10/26 08:43:49 $
 #
 #   progress plots (envelope representations)
 #
@@ -23,12 +23,13 @@ mctest.progress <- local({
   }
 
   mctest.progress <- function(X, fun=Lest, ...,
-                              exponent=1, nrank=1, interpolate=FALSE, alpha) {
+                              exponent=1, nrank=1, interpolate=FALSE,
+                              alpha, rmin=0) {
     check.1.real(exponent)
     explain.ifnot(exponent >= 0)
     if(missing(fun) && inherits(X, "envelope"))
       fun <- NULL
-    Z <- envelopeProgressData(X, fun=fun, ..., exponent=exponent)
+    Z <- envelopeProgressData(X, fun=fun, ..., rmin=rmin, exponent=exponent)
     R       <- Z$R
     devdata <- Z$devdata
     devsim  <- Z$devsim
@@ -89,6 +90,7 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
                                  alternative=c("two.sided", "less", "greater"),
                                  scale=NULL, clamp=FALSE, 
                                  normalize=FALSE, deflate=FALSE,
+                                 rmin=0,
                                  save.envelope = savefuns || savepatterns,
                                  savefuns = FALSE, 
                                  savepatterns = FALSE) {
@@ -104,6 +106,17 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
   sim <- as.matrix(as.data.frame(Y))[, -1]
   nsim <- ncol(sim)
 
+  # restrict range
+  if(rmin > 0) {
+    ok <- (R >= rmin)
+    if(sum(ok) < 2)
+      stop("rmin is too large for the available range of r values")
+    R   <- R[ok]
+    obs <- obs[ok]
+    reference <- reference[ok]
+    sim <- sim[ok, , drop=FALSE]
+  }
+  
   ## determine rescaling if any
   if(is.null(scale)) {
     scaling <- NULL
@@ -174,7 +187,7 @@ envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
 
 dg.progress <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 
-                        interpolate=FALSE,
+                        interpolate=FALSE, rmin=0, 
                         savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
   env.here <- sys.frame(sys.nframe())
@@ -205,13 +218,13 @@ dg.progress <- function(X, fun=Lest, ...,
                 verbose=FALSE,
                 envir.simul=env.here)
   ## get progress data
-  PD <- envelopeProgressData(E, fun=fun, ..., nsim=nsim,
+  PD <- envelopeProgressData(E, fun=fun, ..., rmin=rmin, nsim=nsim,
                              exponent=exponent, 
                              verbose=FALSE)
   ## get first level MC test significance trace
   T1 <- mctest.sigtrace(E, fun=fun, nsim=nsim, 
                         exponent=exponent,
-                        interpolate=interpolate,
+                        interpolate=interpolate, rmin=rmin,
                         confint=FALSE, verbose=FALSE, ...)
   R    <- T1$R
   phat <- T1$pest
@@ -228,6 +241,7 @@ dg.progress <- function(X, fun=Lest, ...,
                             fun=fun, nsim=nsimsub, 
                             exponent=exponent,
                             interpolate=interpolate,
+                            rmin=rmin,
                             confint=FALSE, verbose=FALSE, ...)
     phat2[,j] <- sigj$pest
     if(verbose) state <- progressreport(j, nsim, state=state)

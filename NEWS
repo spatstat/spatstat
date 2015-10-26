@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.008
+        CHANGES IN spatstat VERSION 1.43-0.009
 
 OVERVIEW
 
@@ -53,6 +53,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o dclf.test, mad.test, dclf.progress, mad.progress, 
      dclf.sigtrace, mad.sigtrace
    New argument 'clamp' determines the test statistic for one-sided tests.
+
+   o dclf.progress, mad.progress, dclf.sigtrace, mad.sigtrace,
+    mctest.progress, mctest.sigtrace, dg.progress, dg.sigtrace
+   New argument 'rmin' determines the left endpoint of the test interval.
 
    o logLik.ppm
    New argument 'absolute'.

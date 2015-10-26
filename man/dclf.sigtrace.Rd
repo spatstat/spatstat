@@ -15,7 +15,8 @@
 dclf.sigtrace(X, \dots)
 mad.sigtrace(X, \dots)
 mctest.sigtrace(X, fun=Lest, \dots,
-                exponent=1, interpolate=FALSE, alpha=0.05, confint=TRUE)
+                exponent=1, interpolate=FALSE, alpha=0.05,
+                confint=TRUE, rmin=0)
 }
 \arguments{
   \item{X}{
@@ -25,10 +26,12 @@ mctest.sigtrace(X, fun=Lest, \dots,
     \code{"envelope"}). 
   }
   \item{\dots}{
-    Arguments passed to \code{\link{envelope}}.
+    Arguments passed to \code{\link{envelope}}
+    or \code{\link{mctest.progress}}.
     Useful arguments include \code{fun} to determine the summary
     function, \code{nsim} to specify the number of Monte Carlo
-    simulations, and \code{verbose=FALSE} to turn off the messages.
+    simulations, \code{alternative} to specify a one-sided test,
+    and \code{verbose=FALSE} to turn off the messages.
   }
   \item{fun}{
     Function that computes the desired summary statistic
@@ -57,6 +60,10 @@ mctest.sigtrace(X, fun=Lest, \dots,
     Logical value indicating whether to compute a confidence interval
     for the \sQuote{true} \eqn{p}-value.
   }
+  \item{rmin}{
+    Optional. Left endpoint for the interval of \eqn{r} values
+    on which the test statistic is calculated.
+  }
 }
 \details{
   The Diggle (1986)/ Cressie (1991)/Loosmore and Ford (2006) test and the 
@@ -72,8 +79,8 @@ mctest.sigtrace(X, fun=Lest, \dots,
   
   The command \code{dclf.sigtrace} performs 
   \code{\link{dclf.test}} on \code{X} using all possible intervals
-  of the form \eqn{c(0,r)}, and returns the resulting \eqn{p}-values
-  as a function of \eqn{r}.
+  of the form \eqn{[0,R]}, and returns the resulting \eqn{p}-values
+  as a function of \eqn{R}.
 
   Similarly \code{mad.sigtrace} performs
   \code{\link{mad.test}} using all possible intervals
@@ -88,6 +95,11 @@ mctest.sigtrace(X, fun=Lest, \dots,
   is the Cressie-Loosmore-Ford test, while \code{exponent=Inf} is the
   MAD test.
 
+  If the argument \code{rmin} is given, it specifies the left endpoint
+  of the interval defining the test statistic: the tests are
+  performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
+  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
+  
   The result of each command
   is an object of class \code{"fv"} that can be plotted to
   obtain the significance trace. The plot shows the Monte Carlo

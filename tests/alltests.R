@@ -1,3 +1,18 @@
+## tests/sigtraceprogress.R
+## Tests of *.sigtrace and *.progress
+## $Revision: 1.1 $ $Date: 2015/10/26 09:19:55 $
+
+require(spatstat)
+local({
+  plot(dclf.sigtrace(redwood, nsim=19, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dclf.progress(redwood, nsim=19, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dg.sigtrace(redwood, nsim=5, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dg.progress(redwood, nsim=5, alternative="greater", rmin=0.02,
+                   verbose=FALSE))
+})
 # nndist.R
 # Check that nndist and nnwhich give
 # results consistent with direct calculation from pairdist

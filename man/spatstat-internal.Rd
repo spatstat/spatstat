@@ -931,7 +931,7 @@ envelopeEngine(X, fun, simul,
            envir.user, expected.arg, do.pwrong)
 envelopeProgressData(X, fun, \dots, exponent,
                      alternative, scale, clamp,
-                     normalize, deflate,
+                     normalize, deflate, rmin, 
                      save.envelope, savefuns, savepatterns)
 envelopeTest(X, \dots, exponent, alternative,
             rinterval, scale, clamp, tie.rule,
