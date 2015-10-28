@@ -920,7 +920,7 @@ emptywindow(w)
 ensure2vector(x)
 ensure3Darray(x)
 envelopeEngine(X, fun, simul,
-           nsim, nrank, \dots, 
+           nsim, nrank, \dots, funargs,
            verbose, clipdata, 
            transform, global, ginterval, use.theory,
            alternative, scale, clamp,

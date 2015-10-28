@@ -47,6 +47,7 @@ simulrecipe <- function(type, expr, envir, csr, pois=csr, constraints="") {
 
 envelope.ppp <-
   function(Y, fun=Kest, nsim=99, nrank=1, ...,
+           funargs=list(),
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
@@ -172,7 +173,7 @@ envelope.ppp <-
   }
   
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., 
+                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -185,6 +186,7 @@ envelope.ppp <-
 
 envelope.ppm <- 
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
+           funargs=list(),
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
            start=NULL,
@@ -245,8 +247,8 @@ envelope.ppm <-
     # Processing is deferred to envelopeEngine
     simrecipe <- simulate
   }
-  envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., 
+  envelopeEngine(X=X, fun=fun, simul=simrecipe, 
+                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -259,6 +261,7 @@ envelope.ppm <-
 
 envelope.kppm <-
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
+           funargs=list(),
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -294,8 +297,8 @@ envelope.kppm <-
     # Processing is deferred to envelopeEngine
     simrecipe <- simulate
   }
-  envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., 
+  envelopeEngine(X=X, fun=fun, simul=simrecipe, 
+                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -317,7 +320,7 @@ envelope.kppm <-
 
 envelopeEngine <-
   function(X, fun, simul,
-           nsim=99, nrank=1, ..., 
+           nsim=99, nrank=1, ..., funargs=list(), 
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -511,6 +514,7 @@ envelopeEngine <-
   funX <- do.call(fun,
                   resolve.defaults(list(Xarg),
                                    list(...),
+                                   funargs,
                                    corrx))
                                      
   if(!inherits(funX, "fv"))
@@ -699,7 +703,8 @@ envelopeEngine <-
     
   # arguments for function
   funargs <-
-    resolve.defaults(inferred.r.args,
+    resolve.defaults(funargs,
+                     inferred.r.args,
                      list(...),
                      if(usecorrection) list(correction="best") else NULL)
   

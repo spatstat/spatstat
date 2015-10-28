@@ -11,7 +11,7 @@
   envelope(Y, fun, \dots)
 
   \method{envelope}{ppp}(Y, fun=Kest, nsim=99, nrank=1, \dots,
-  simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
+  funargs=list(), simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"),
@@ -21,7 +21,7 @@
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{ppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
+  funargs=list(), simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   start=NULL, control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
@@ -32,7 +32,7 @@
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{kppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  simulate=NULL,
+  funargs=list(), simulate=NULL,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"), 
@@ -63,6 +63,9 @@
   }
   \item{\dots}{
     Extra arguments passed to \code{fun}.
+  }
+  \item{funargs}{
+    A list, containing extra arguments to be passed to \code{fun}.
   }
   \item{simulate}{
     Optional. Specifies how to generate the simulated point patterns.
@@ -392,9 +395,18 @@
   sample mean, sample variance and other quantities.
 
   Arguments can be passed to the function \code{fun} through
-  \code{...}. In particular, the argument \code{correction}
-  determines the edge correction to be used to calculate the summary statistic.
-  See the section on Edge Corrections, and the Examples.
+  \code{...}. This means that you simply specify these arguments in the call to
+  \code{envelope}, and they will be passed to \code{fun}.
+  In particular, the argument \code{correction}
+  determines the edge correction to be used to calculate the summary
+  statistic. See the section on Edge Corrections, and the Examples.
+
+  Arguments can also be passed to the function \code{fun}
+  through the list \code{funargs}. This mechanism is typically used if
+  an argument of \code{fun} has the same name as an argument of
+  \code{envelope}. The list \code{funargs} should contain
+  entries of the form \code{name=value}, where each \code{name} is the name
+  of an argument of \code{fun}.
 
   If \code{Y} is a fitted cluster point process model (object of
   class \code{"kppm"}), and \code{simulate=NULL},

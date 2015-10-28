@@ -8,7 +8,8 @@
 #
 
 envelope.lpp <-
-  function(Y, fun=linearK, nsim=99, nrank=1, ..., 
+  function(Y, fun=linearK, nsim=99, nrank=1, ...,
+           funargs=list(),
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -54,7 +55,7 @@ envelope.lpp <-
     X <- Y
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., 
+                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
                  verbose=verbose, clipdata=FALSE,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -67,7 +68,7 @@ envelope.lpp <-
 
 envelope.lppm <-
   function(Y, fun=linearK, nsim=99, nrank=1, ..., 
-           simulate=NULL, verbose=TRUE, 
+           funargs=list(), simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
            scale=NULL, clamp=FALSE, 
@@ -112,7 +113,7 @@ envelope.lppm <-
     X <- Y
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., 
+                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
                  verbose=verbose, clipdata=FALSE,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,

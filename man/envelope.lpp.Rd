@@ -9,7 +9,7 @@
 }
 \usage{
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
-  simulate=NULL, verbose=TRUE, 
+  funargs=list(), simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"),
   scale=NULL, clamp=FALSE,
@@ -19,7 +19,7 @@
 
 
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
-  simulate=NULL, verbose=TRUE, 
+  funargs=list(), simulate=NULL, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"), 
   scale=NULL, clamp=FALSE,
@@ -47,6 +47,9 @@
   }
    \item{\dots}{
     Extra arguments passed to \code{fun}.
+  }
+  \item{funargs}{
+    A list, containing extra arguments to be passed to \code{fun}.
   }
   \item{simulate}{
     Optional. Specifies how to generate the simulated point patterns.

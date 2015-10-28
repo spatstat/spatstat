@@ -74,7 +74,7 @@ which can then be fitted to point pattern data.
 
  Strauss, D.J. (1975)
  A model for clustering.
- \emph{Biometrika} \bold{63}, 467--475.
+ \emph{Biometrika} \bold{62}, 467--475.
 }
 \examples{
    Strauss(r=0.1)
