@@ -86,104 +86,115 @@ mctest.progress <- local({
 # Do not call this function.
 # Performs underlying computations
 
-envelopeProgressData <- function(X, fun=Lest, ..., exponent=1,
-                                 alternative=c("two.sided", "less", "greater"),
-                                 scale=NULL, clamp=FALSE, 
-                                 normalize=FALSE, deflate=FALSE,
-                                 rmin=0,
-                                 save.envelope = savefuns || savepatterns,
-                                 savefuns = FALSE, 
-                                 savepatterns = FALSE) {
-  alternative <- match.arg(alternative)
-  # compute or extract simulated functions
-  X <- envelope(X, fun=fun, ..., alternative=alternative,
-                savefuns=TRUE, savepatterns=savepatterns)
-  Y <- attr(X, "simfuns")
-  # extract values
-  R   <- with(X, .x)
-  obs <- with(X, .y)
-  reference <- if("theo" %in% names(X)) with(X, theo) else with(X, mmean)
-  sim <- as.matrix(as.data.frame(Y))[, -1]
-  nsim <- ncol(sim)
+envelopeProgressData <- local({
+  envelopeProgressData <-
+    function(X, fun=Lest, ..., exponent=1,
+             alternative=c("two.sided", "less", "greater"),
+             scale=NULL, clamp=FALSE, 
+             normalize=FALSE, deflate=FALSE,
+             rmin=0,
+             save.envelope = savefuns || savepatterns,
+             savefuns = FALSE, 
+             savepatterns = FALSE) {
+    alternative <- match.arg(alternative)
+    ## compute or extract simulated functions
+    X <- envelope(X, fun=fun, ..., alternative=alternative,
+                  savefuns=TRUE, savepatterns=savepatterns)
+    Y <- attr(X, "simfuns")
+    ## extract values
+    R   <- with(X, .x)
+    obs <- with(X, .y)
+    reference <- if("theo" %in% names(X)) with(X, theo) else with(X, mmean)
+    sim <- as.matrix(as.data.frame(Y))[, -1]
+    nsim <- ncol(sim)
 
-  # restrict range
-  if(rmin > 0) {
-    ok <- (R >= rmin)
-    if(sum(ok) < 2)
-      stop("rmin is too large for the available range of r values")
-    R   <- R[ok]
-    obs <- obs[ok]
-    reference <- reference[ok]
-    sim <- sim[ok, , drop=FALSE]
-  }
+    ## restrict range
+    if(rmin > 0) {
+      if(sum(R >= rmin) < 2)
+        stop("rmin is too large for the available range of r values")
+      nskip <- sum(R < rmin)
+    } else nskip <- 0
   
-  ## determine rescaling if any
-  if(is.null(scale)) {
-    scaling <- NULL
-    scr <- 1
-  } else if(is.function(scale)) {
-    scaling <- scale(R)
-    sname <- "scale(r)"
-    ans <- check.nvector(scaling, length(R), things="values of r",
-                         fatal=FALSE, vname=sname)
-    if(!ans)
-      stop(attr(ans, "whinge"), call.=FALSE)
-    if(any(bad <- (scaling <= 0))) {
-      ## issue a warning unless this only happens at r=0
-      if(any(bad[R > 0]))
-        warning(paste("Some values of", sname, "were negative or zero:",
-                      "scale was reset to 1 for these values"),
-                call.=FALSE)
-      scaling[bad] <- 1
-    }
-    scr <- scaling
-  } else stop("Argument scale should be a function")
+    ## determine rescaling if any
+    if(is.null(scale)) {
+      scaling <- NULL
+      scr <- 1
+    } else if(is.function(scale)) {
+      scaling <- scale(R)
+      sname <- "scale(r)"
+      ans <- check.nvector(scaling, length(R), things="values of r",
+                           fatal=FALSE, vname=sname)
+      if(!ans)
+        stop(attr(ans, "whinge"), call.=FALSE)
+      if(any(bad <- (scaling <= 0))) {
+        ## issue a warning unless this only happens at r=0
+        if(any(bad[R > 0]))
+          warning(paste("Some values of", sname, "were negative or zero:",
+                        "scale was reset to 1 for these values"),
+                  call.=FALSE)
+        scaling[bad] <- 1
+      }
+      scr <- scaling
+    } else stop("Argument scale should be a function")
 
-  ## compute raw deviations
-  ##   (large positive values favorable to alternative)
-  ddat <- Deviant(obs - reference, alternative, clamp, scaling)
-  dsim <- Deviant(sim - reference, alternative, clamp, scaling)
+    ## compute raw deviations
+    ##   (large positive values favorable to alternative)
+    ddat <- Deviant(obs - reference, alternative, clamp, scaling)
+    dsim <- Deviant(sim - reference, alternative, clamp, scaling)
 
-  ## compute test statistics
-  if(is.infinite(exponent)) {
-    # MAD
-    devdata <- cummax(ddat)
-    devsim <- apply(dsim, 2, cummax)
-    if(deflate) {
-      devdata <- scr * devdata
-      devsim <-  scr * devsim
-    }
-    testname <- "Maximum absolute deviation test"
-  } else {
-    dR <- c(0, diff(R))
-    a <- (nsim/(nsim - 1))^exponent
-    if(clamp || alternative == "two.sided") {
-      ## deviations are nonnegative
-      devdata <- a * cumsum(dR * ddat^exponent)
-      devsim  <- a * apply(dR * dsim^exponent, 2, cumsum)
+    ## compute test statistics
+    if(is.infinite(exponent)) {
+      ## MAD
+      devdata <- cummaxskip(ddat, nskip)
+      devsim <- apply(dsim, 2, cummaxskip, nskip=nskip)
+      if(deflate) {
+        devdata <- scr * devdata
+        devsim <-  scr * devsim
+      }
+      testname <- "Maximum absolute deviation test"
     } else {
-      ## sign of deviations should be retained
-      devdata <- a * cumsum(dR * sign(ddat) * abs(ddat)^exponent)
-      devsim  <- a * apply(dR * sign(dsim) * abs(dsim)^exponent, 2, cumsum)
+      dR <- c(0, diff(R))
+      a <- (nsim/(nsim - 1))^exponent
+      if(clamp || alternative == "two.sided") {
+        ## deviations are nonnegative
+        devdata <- a * cumsumskip(dR * ddat^exponent, nskip)
+        devsim  <- a * apply(dR * dsim^exponent, 2, cumsumskip, nskip=nskip)
+      } else {
+        ## sign of deviations should be retained
+        devdata <- a * cumsumskip(dR * sign(ddat) * abs(ddat)^exponent,
+                                  nskip=nskip)
+        devsim  <- a * apply(dR * sign(dsim) * abs(dsim)^exponent,
+                             2, cumsumskip, nskip=nskip)
+      }
+      if(normalize) {
+        devdata <- devdata/R
+        devsim <- sweep(devsim, 1, R, "/")
+      }
+      if(deflate) {
+        devdata <- scr * sign(devdata) * abs(devdata)^(1/exponent) 
+        devsim <-  scr * sign(devsim) * abs(devsim)^(1/exponent) 
+      }
+      testname <- if(exponent == 2) "Diggle-Cressie-Loosmore-Ford test" else
+                  if(exponent == 1) "Integral absolute deviation test" else
+                  paste("Integrated", ordinal(exponent), "Power Deviation test")
     }
-    if(normalize) {
-      devdata <- devdata/R
-      devsim <- sweep(devsim, 1, R, "/")
-    }
-    if(deflate) {
-      devdata <- scr * sign(devdata) * abs(devdata)^(1/exponent) 
-      devsim <-  scr * sign(devsim) * abs(devsim)^(1/exponent) 
-    }
-    testname <- if(exponent == 2) "Diggle-Cressie-Loosmore-Ford test" else
-                if(exponent == 1) "Integral absolute deviation test" else
-                paste("Integrated", ordinal(exponent), "Power Deviation test")
+    result <- list(R=R, devdata=devdata, devsim=devsim, testname=testname,
+                   scaleR=scr, clamp=clamp)
+    if(save.envelope) 
+      result$envelope <- X
+    return(result)
   }
-  result <- list(R=R, devdata=devdata, devsim=devsim, testname=testname,
-                 scaleR=scr, clamp=clamp)
-  if(save.envelope) 
-    result$envelope <- X
-  return(result)
-}
+
+  cumsumskip <- function(x, nskip=0) {
+    if(nskip == 0) cumsum(x) else c(rep(NA, nskip), cumsum(x[-seq_len(nskip)]))
+  }
+
+  cummaxskip <- function(x, nskip=0) {
+    if(nskip == 0) cummax(x) else c(rep(NA, nskip), cummax(x[-seq_len(nskip)]))
+  }
+
+  envelopeProgressData
+})
 
 dg.progress <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 

@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.120 $    $Date: 2015/06/30 12:44:04 $
+#  $Revision: 1.121 $    $Date: 2015/10/28 06:52:18 $
 #
 #
 
@@ -132,7 +132,7 @@ plot.fv <- local({
       colnames(lhsdata) <-
         if(length(lhsvars) == 1) lhsvars else
         if(length(starnames) == 1 && (starnames %in% lhsvars)) starnames else 
-        paste(short.deparse(lhs), collapse="")
+        paste(deparse(lhs), collapse="")
     }
     ## check lhs names exist
     lnames <- colnames(lhsdata)

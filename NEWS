@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.010
+        CHANGES IN spatstat VERSION 1.43-0.011
 
 OVERVIEW
 
@@ -95,6 +95,9 @@ BUGS
    were very large numbers. This was due to numerical overflow.
    (Fixed??)
 
+   o plot.fv
+   Crashed in some obscure cases.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0
 
