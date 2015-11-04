@@ -135,6 +135,7 @@ detpointprocfamilyfun <-
                 kernel = kernel,
                 specden = specden,
                 convkernel = convkernel,
+                Kfun = Kfun,
                 intensity = intensity,
                 thin = thin,
                 dim = dim,
