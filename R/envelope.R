@@ -333,11 +333,20 @@ envelopeEngine <-
            Yname=NULL, maxnerr=nsim, internal=NULL, cl=NULL,
            envir.user=envir.user,
            expected.arg="r",
-           do.pwrong=FALSE) {
+           do.pwrong=FALSE,
+           foreignclass=NULL) {
   #
   envir.here <- sys.frame(sys.nframe())
 
   alternative <- match.arg(alternative)
+
+  foreignclass <- as.character(foreignclass)
+  if(length(foreignclass) != 0 && clipdata) {
+    warning(paste("Ignoring clipdata=TRUE:",
+                  "I don't know how to clip objects of class",
+                  sQuote(paste(foreignclass, collapse=","))))
+    clipdata <- FALSE
+  }
   
   # ----------------------------------------------------------
   # Determine Simulation
@@ -347,6 +356,7 @@ envelopeEngine <-
   Xclass <- if(is.ppp(X)) "ppp" else
             if(is.pp3(X)) "pp3" else
             if(is.ppx(X)) "ppx" else
+            if(inherits(X, foreignclass)) foreignclass else
             stop("Unrecognised class of point pattern")
   Xobjectname <- paste("point pattern of class", sQuote(Xclass))
 
@@ -410,9 +420,7 @@ envelopeEngine <-
       simexpr <- simulate
       envir <- envir.user
     } else if(is.list(simulate) &&
-              (   (is.ppp(X) && all(unlist(lapply(simulate, is.ppp))))
-               || (is.pp3(X) && all(unlist(lapply(simulate, is.pp3))))
-               || (is.ppx(X) && all(unlist(lapply(simulate, is.ppx)))))) {
+              all(sapply(simulate, inherits, what=Xclass))) {
       # The user-supplied list of point patterns will be used
       simtype <- "list"
       SimDataList <- simulate
