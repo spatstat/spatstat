@@ -929,7 +929,7 @@ envelopeEngine(X, fun, simul,
            nsim2, VARIANCE, nSD,
            Yname, maxnerr, internal, cl,
            envir.user, expected.arg, do.pwrong,
-           foreignclass)
+           foreignclass, collectrubbish)
 envelopeProgressData(X, fun, \dots, exponent,
                      alternative, scale, clamp,
                      normalize, deflate, rmin, 

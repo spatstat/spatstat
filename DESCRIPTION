@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.43-0.012
+Version: 1.43-0.013
 Nickname: October Old Style
-Date: 2015-11-04
+Date: 2015-11-09
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

@@ -334,7 +334,8 @@ envelopeEngine <-
            envir.user=envir.user,
            expected.arg="r",
            do.pwrong=FALSE,
-           foreignclass=NULL) {
+           foreignclass=NULL,
+           collectrubbish=FALSE) {
   #
   envir.here <- sys.frame(sys.nframe())
 
@@ -812,6 +813,12 @@ envelopeEngine <-
     simvals[ , i] <- funXsim[[valname]]
     if(verbose)
       pstate <- progressreport(i, Nsim, state=pstate)
+    
+    if(collectrubbish) {
+      rm(Xsim)
+      rm(funXsim)
+      gc()
+    }
   }
   ##  end simulation loop
   
