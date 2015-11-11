@@ -92,31 +92,10 @@
   are defined by the argument \code{interaction}. This is an object of
   class \code{"interact"} which is initialised in a very similar way to the
   usage of family objects in \code{\link{glm}} and \code{gam}.
-  The models currently available are:
-  \code{\link{Poisson}},
-  \code{\link{AreaInter}},
-  \code{\link{BadGey}},
-  \code{\link{Concom}},
-  \code{\link{DiggleGatesStibbard}},
-  \code{\link{DiggleGratton}},
-  \code{\link{Fiksel}},
-  \code{\link{Geyer}},
-  \code{\link{Hardcore}},
-  \code{\link{LennardJones}},
-  \code{\link{MultiStrauss}},
-  \code{\link{MultiStraussHard}},
-  \code{\link{OrdThresh}}, 
-  \code{\link{Ord}},
-  \code{\link{Pairwise}},
-  \code{\link{PairPiece}},
-  \code{\link{Penttinen}},
-  \code{\link{Saturated}},
-  \code{\link{SatPiece}},
-  \code{\link{Softcore}},
-  \code{\link{Strauss}} and 
-  \code{\link{StraussHard}}.
+  The interaction models currently available are:
+  \GibbsInteractionsList.
   See the examples below.
-  It is also possible to combine several interactions
+  Note that it is possible to combine several interactions
   using \code{\link{Hybrid}}.
  
   If \code{interaction} is missing or \code{NULL},
@@ -291,36 +270,14 @@
   \code{\link{ppp}} and \code{\link{quadscheme}}
   for constructing data.
   
-  Interactions: 
-      \code{\link{Poisson}},
-      \code{\link{AreaInter}},
-      \code{\link{BadGey}},
-      \code{\link{DiggleGatesStibbard}},
-      \code{\link{DiggleGratton}},
-      \code{\link{Geyer}},
-      \code{\link{Fiksel}},
-      \code{\link{Hardcore}},
-      \code{\link{Hybrid}},
-      \code{\link{LennardJones}},
-      \code{\link{MultiStrauss}},
-      \code{\link{MultiStraussHard}},
-      \code{\link{OrdThresh}}, 
-      \code{\link{Ord}},
-      \code{\link{Pairwise}},
-      \code{\link{PairPiece}},
-      \code{\link{Penttinen}},
-      \code{\link{Saturated}},
-      \code{\link{SatPiece}},
-      \code{\link{Softcore}},
-      \code{\link{Strauss}} and 
-      \code{\link{StraussHard}}.
+  Interactions: \GibbsInteractionsList.
 
-      See \code{\link{profilepl}} for advice on
-      fitting nuisance parameters in the interaction,
-      and \code{\link{ippm}} for irregular parameters in the trend.
+  See \code{\link{profilepl}} for advice on
+  fitting nuisance parameters in the interaction,
+  and \code{\link{ippm}} for irregular parameters in the trend.
 
-      See \code{\link{valid.ppm}} and \code{\link{project.ppm}} for
-      ensuring the fitted model is a valid point process.
+  See \code{\link{valid.ppm}} and \code{\link{project.ppm}} for
+  ensuring the fitted model is a valid point process.
 }
 \examples{
  # fit the stationary Poisson process
@@ -433,13 +390,8 @@ ppm(X ~ x + f, covfunargs=list(a=1/2))
 \testonly{b <- ppm(ama ~  marks * polynom(x,y,2), Poisson(), nd=16)}
 
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

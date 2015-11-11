@@ -111,42 +111,24 @@
   \code{\link{rmhcontrol}},
   \code{\link{rmhstart}},
   \code{\link{ppm}},
-  \code{\link{AreaInter}},
-  \code{\link{BadGey}},
-  \code{\link{DiggleGatesStibbard}},
-  \code{\link{DiggleGratton}},
-  \code{\link{Fiksel}},
-  \code{\link{Geyer}},
-  \code{\link{Hardcore}},
-  \code{\link{Hybrid}},
-  \code{\link{LennardJones}},
-  \code{\link{MultiStrauss}},
-  \code{\link{MultiStraussHard}},
-  \code{\link{PairPiece}},
-  \code{\link{Poisson}},
-  \code{\link{Softcore}},
-  \code{\link{Strauss}},
-  \code{\link{StraussHard}},
-  \code{\link{Triplets}}
+  \rmhInteractionsList.
 }
 \examples{
-  data(cells)
-  fit1 <- ppm(cells, ~1, Strauss(0.07))
+  fit1 <- ppm(cells ~1, Strauss(0.07))
   mod1 <- rmhmodel(fit1)
 
-  fit2 <- ppm(cells, ~x, Geyer(0.07, 2))
+  fit2 <- ppm(cells ~x, Geyer(0.07, 2))
   mod2 <- rmhmodel(fit2)
 
-  fit3 <- ppm(cells, ~x, Hardcore(0.07))
+  fit3 <- ppm(cells ~x, Hardcore(0.07))
   mod3 <- rmhmodel(fit3)
 
   # Then rmh(mod1), etc
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \adrian
+  and
+  \rolf
 }
 \keyword{spatial}
 \keyword{datagen}

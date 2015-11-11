@@ -429,23 +429,7 @@ otherwise an error is given.
   \code{\link{rmhcontrol}},
   \code{\link{rmhstart}},
   \code{\link{ppm}},
-  \code{\link{AreaInter}},
-  \code{\link{BadGey}},
-  \code{\link{DiggleGatesStibbard}},
-  \code{\link{DiggleGratton}},
-  \code{\link{Fiksel}},
-  \code{\link{Geyer}},
-  \code{\link{Hardcore}},
-  \code{\link{LennardJones}},
-  \code{\link{MultiHard}},
-  \code{\link{MultiStrauss}},
-  \code{\link{MultiStraussHard}},
-  \code{\link{PairPiece}},
-  \code{\link{Poisson}},
-  \code{\link{Softcore}},
-  \code{\link{Strauss}},
-  \code{\link{StraussHard}},
-  \code{\link{Triplets}}
+  \rmhInteractionsList.
 }
 \examples{
    # Strauss process:
@@ -529,11 +513,10 @@ otherwise an error is given.
                              list(beta=1, gamma=0.7,r=0.1, sat=2)),
                     w=square(1))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \adrian
+  and
+  \rolf
 }
 \keyword{spatial}
 \keyword{datagen}
