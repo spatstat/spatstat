@@ -110,11 +110,10 @@
    ppm(cells, ~polynom(x,y,3), BadGey(c(0.07, 0.1, 0.13), 2))
    }
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \adrian
+  and
+  \rolf
   in collaboration with Hao Wang and Jeff Picka
 }
 \keyword{spatial}

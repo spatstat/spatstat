@@ -171,17 +171,14 @@ Vmark(X, r=NULL,
   for factor-valued marks.
 }
 \examples{
-    data(spruces)
-
     plot(Emark(spruces))
     E <- Emark(spruces, method="density", kernel="epanechnikov")
     plot(Vmark(spruces))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \adrian
+  and
+  \rolf
 }
 \keyword{spatial}
 \keyword{nonparametric}

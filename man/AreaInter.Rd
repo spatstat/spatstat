@@ -196,11 +196,10 @@
   \emph{The Journal of Chemical Physics}
   \bold{52} (1970) 1670--1684.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \adrian
+  and
+  \rolf
 }
 \keyword{spatial}
 \keyword{models}

@@ -141,11 +141,8 @@
   Nearest-neighbour Markov point processes and random sets.
   \emph{International Statistical Review} \bold{57}, 89--121.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

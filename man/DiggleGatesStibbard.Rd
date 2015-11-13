@@ -70,22 +70,17 @@ which can then be fitted to point pattern data.
    DiggleGatesStibbard(0.02)
    # prints a sensible description of itself
 
-   data(cells)
-
    \dontrun{
-   ppm(cells, ~1, DiggleGatesStibbard(0.05))
+   ppm(cells ~1, DiggleGatesStibbard(0.05))
    # fit the stationary D-G-S process to `cells'
    }
 
-   ppm(cells, ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
+   ppm(cells ~ polynom(x,y,3), DiggleGatesStibbard(0.05))
    # fit a nonstationary D-G-S process
    # with log-cubic polynomial trend
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}
