@@ -49,11 +49,11 @@ LambertW(x)
   \emph{{NIST} Handbook of Mathematical Functions},
   Cambridge University Press.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \examples{
    LambertW(exp(1))

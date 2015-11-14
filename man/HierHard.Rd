@@ -98,12 +98,12 @@ which can then be fitted to point pattern data.
    ppm(ants ~1, HierHard(h))
    # fit the stationary hierarchical hard core process to ants data
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak.
+\author{\adrian
+  
+  ,
+  \rolf
+  
+  and \ege.
 }
 \references{
   Grabarnik, P. and \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka}, A. (2009)

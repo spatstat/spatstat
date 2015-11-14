@@ -12,7 +12,7 @@
 }
 \usage{data(simplenet)}
 \source{
-  Created by Adrian Baddeley.
+  Created by \adrian.
 }
 \keyword{datasets}
 \keyword{spatial}

@@ -55,11 +55,11 @@
   Fun <- ewcdf(z, w)
   quantile(Fun, c(0.95,0.99))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  ,
+  \rolf
+  
   and Kevin Ummel.
 }
 \keyword{spatial}

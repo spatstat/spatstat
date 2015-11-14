@@ -826,11 +826,11 @@ ppm(X, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
 \testonly{b <- ppm(ama, ~ marks * polynom(x,y,2), Poisson(), nd=16)}
 
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{models}

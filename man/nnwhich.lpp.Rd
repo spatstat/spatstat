@@ -41,9 +41,9 @@
   point 2 is point 4.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \seealso{
   \code{\link{lpp}}

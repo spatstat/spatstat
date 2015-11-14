@@ -74,9 +74,9 @@
   \emph{Stat} \bold{1}, 1, 18--30.
   doi: 10.1002/sta4.5
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+\author{\adrian
+  
+  
   and Gopalan Nair.
 }
 \keyword{spatial}

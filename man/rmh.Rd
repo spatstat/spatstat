@@ -79,11 +79,11 @@ See the last example in the help for \code{\link{rmh.default}}.
     # See examples in rmh.default and rmh.ppm
 }
 
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

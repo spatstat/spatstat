@@ -42,13 +42,13 @@ circdensity(x, sigma = "nrd0", \dots,
   \code{\link[stats]{density.default}}) which can be plotted
   by \code{plot} or by \code{\link{rose}}.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \seealso{
   \code{\link[stats]{density.default}}),

@@ -65,13 +65,13 @@ transmat(m, from, to)
   Another matrix obtained by rearranging the entries of \code{m}.
 }
 \author{
-Adrian Baddeley
-\email{Adrian.Baddeley@uwa.edu.au}
-\url{http://www.maths.uwa.edu.au/~adrian/}
-Rolf Turner
-\email{r.turner@auckland.ac.nz}
-and Ege Rubak
-\email{rubak@math.aau.dk}
+\adrian
+
+
+\rolf
+
+and \ege
+
 }
 \examples{
   opa <- par(mfrow=c(1,2))

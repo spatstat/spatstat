@@ -134,9 +134,9 @@ cauchy.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
-  Adapted for \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Adapted for \pkg{spatstat} by \adrian
+  
+  
 }
 \seealso{
   \code{\link{kppm}},

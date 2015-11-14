@@ -102,9 +102,9 @@ clarkevans(X, correction=c("none", "Donnelly", "cdf"),
 John Rudge
 \email{rudge@esc.cam.ac.uk}
 with modifications by
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \seealso{
   \code{\link{clarkevans.test}},

@@ -1674,12 +1674,12 @@
   General Public License", a copy of which is distributed with the package.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  \adrian
+  
+  ,
+  \rolf
+  
+  and \ege .
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,

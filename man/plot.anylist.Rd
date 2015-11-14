@@ -211,13 +211,13 @@
  plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
       cex=1.5, pch=21, bg='white')
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \keyword{spatial}
 \keyword{hplot}

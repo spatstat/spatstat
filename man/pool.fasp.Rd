@@ -53,11 +53,11 @@
    A2 <- alltypes(amacrine,"K",nsim=10,envelope=TRUE,savefuns=TRUE)
    pool(A1, A2)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{htest}

@@ -59,9 +59,9 @@
    d <- pairdist(X, squared=TRUE)
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
   based on two-dimensional code by 
   Pavel Grabarnik.
 }

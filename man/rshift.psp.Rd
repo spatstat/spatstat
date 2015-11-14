@@ -106,11 +106,11 @@
   X <- psp(runif(20), runif(20), runif(20), runif(20),  window=owin())
   Y <- rshift(X, radius=0.1)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

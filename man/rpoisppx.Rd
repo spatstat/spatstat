@@ -47,11 +47,11 @@ rpoisppx(lambda, domain, nsim=1)
    w <- boxx(x=c(0,1), y=c(0,1), z=c(0,1), t=c(0,3))
    X <- rpoisppx(10, w)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

@@ -84,9 +84,9 @@ rkernel(n, kernel = "gaussian", mean = 0, sd = 1)
   \code{\link[stats]{density.default}},
   \code{\link{kernel.factor}}
 }
-\author{Adrian Baddeley
+\author{\adrian
   \email{adrian@maths.uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  
   and Martin Hazelton
 }
 \keyword{methods}

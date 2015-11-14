@@ -97,12 +97,12 @@
   rose(nnorient(redwood, adjust=0.6), col="grey")
   plot(CDF <- nnorient(redwood, cumulative=TRUE))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  \rolf
+  
+  and \ege
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

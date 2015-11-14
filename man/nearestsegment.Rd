@@ -28,11 +28,11 @@ nearestsegment(X, Y)
   \code{Y[j]} is the line segment lying closest to \code{X[i]}.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+  \adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{project2segment}} to project each point of \code{X} to

@@ -172,11 +172,11 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   \emph{Undocumented} functions for modifying an \code{"fv"} object
   include \code{tweak.fv.entry} and \code{rebadge.fv}.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \examples{
   df <- data.frame(r=seq(0,5,by=0.1))

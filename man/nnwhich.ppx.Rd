@@ -85,9 +85,9 @@
    m2 <- nnwhich(X, k=2)
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{math}

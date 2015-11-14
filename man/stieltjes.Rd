@@ -57,11 +57,11 @@ stieltjes(f, M, ...)
   # estimated probability of a distance in the interval [0.1,0.2]
   stieltjes(function(x,a,b){ (x >= a) & (x <= b)}, G, a=0.1, b=0.2)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{math}

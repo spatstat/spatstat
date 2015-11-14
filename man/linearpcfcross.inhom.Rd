@@ -119,9 +119,9 @@ linearpcfcross.inhom(X, i, j, lambdaI, lambdaJ, r=NULL, \dots,
      linearpcfcross.inhom(chicago, "assault", "robbery", fit, fit)
    }
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+\author{\adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

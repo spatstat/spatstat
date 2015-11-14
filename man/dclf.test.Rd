@@ -213,9 +213,9 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
   John Wiley and Sons.
  }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
+  \adrian
+  
+  ,
   Andrew Hardegen and Suman Rakshit.
 }
 \seealso{

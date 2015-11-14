@@ -39,11 +39,11 @@ commonGrid(\dots)
 \value{
   A binary mask (object of class \code{"owin"} and type \code{"mask"}).
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \examples{
    A <- setcov(square(1))

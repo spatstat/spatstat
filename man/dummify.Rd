@@ -48,8 +48,8 @@ dummify(x)
   A numeric matrix.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian 
+  
 }
 \examples{
    chara <- sample(letters[1:3], 8, replace=TRUE)

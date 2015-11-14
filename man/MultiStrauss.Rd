@@ -102,12 +102,12 @@ which can then be fitted to point pattern data.
   \code{MultiStrauss(types=NULL, radii)}.
   The new code attempts to handle the old syntax as well.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
+\author{\adrian
+  
+  ,
+  \rolf
+  
+  and \ege
 }
 \keyword{spatial}
 \keyword{models}

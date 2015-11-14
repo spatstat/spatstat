@@ -82,13 +82,13 @@
   ys <- shift(ys, c(0, 0.3))
   plot(ys, split=TRUE)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \seealso{
   \code{\link{yardstick}}

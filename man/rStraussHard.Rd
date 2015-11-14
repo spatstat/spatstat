@@ -84,9 +84,9 @@
   Chapman and Hall/CRC.
 }
 \author{
-  Kasper Klitgaard Berthelsen and Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Kasper Klitgaard Berthelsen and \adrian
+  
+  
 }
 \examples{
    Z <- rStraussHard(100,0.7,0.05,0.02)

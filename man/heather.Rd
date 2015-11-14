@@ -49,8 +49,8 @@
       Netherlands) in 1994.
 
       The original hand-drawn map
-      was scanned by Adrian Baddeley, and processed
-      by Chris Jonker, Henk Heijmans and Adrian Baddeley
+      was scanned by \adrian, and processed
+      by Chris Jonker, Henk Heijmans and \adrian
       to yield a clean binary image of 778 by 1570 pixels resolution.
     }
     \item{medium:}{

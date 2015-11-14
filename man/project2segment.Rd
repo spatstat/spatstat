@@ -51,11 +51,11 @@ project2segment(X, Y)
 
   }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+  \adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{nearestsegment}} for a faster way to determine

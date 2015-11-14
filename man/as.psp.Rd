@@ -160,11 +160,11 @@ Whether it gets used or not, column named \code{marks} is
    a <- as.psp(stuff, window=owin())
    b <- as.psp(from=runifpoint(10), to=runifpoint(10))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{manip}

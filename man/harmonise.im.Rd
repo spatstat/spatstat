@@ -46,11 +46,11 @@
   of length equal to the number of arguments \code{\dots},
   whose entries are pixel images.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \examples{
    A <- setcov(square(1))

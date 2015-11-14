@@ -190,13 +190,13 @@ lgcp.estpcf(X,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
   with modifications by Shen Guochun and 
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}
-  and Ege Rubak.
+  and \ege.
 }
 \seealso{
   \code{\link{lgcp.estK}} for alternative method of fitting LGCP.

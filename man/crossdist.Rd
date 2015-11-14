@@ -45,9 +45,9 @@
   \code{\link{nndist}}
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \keyword{spatial}
 

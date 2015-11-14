@@ -70,15 +70,15 @@ QQversion(f, theo = "theo", columns = ".")
 }
 \author{
   Tom Lawrence
-  and Adrian Baddeley.
+  and \adrian.
   Implemented by
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+  \adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \seealso{
   \code{\link{plot.fv}}

@@ -137,11 +137,11 @@ for use by the \pkg{spatstat} package).
  xyzt <- matrix(runif(40), ncol=4)
  Z <- as.ppp(xyzt, square(1))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{manip}

@@ -30,13 +30,13 @@ dirichletAreas(X)
   Numeric vector with one entry for each point of \code{X}.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+  \adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \seealso{
 \code{\link{dirichlet}},

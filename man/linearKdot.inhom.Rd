@@ -113,9 +113,9 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
      linearKdot.inhom(chicago, "assault", fit, fit)
    }
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+\author{\adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

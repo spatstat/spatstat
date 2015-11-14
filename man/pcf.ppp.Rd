@@ -203,11 +203,11 @@
   legend("center", col=c("blue", "green"), lty=1, lwd=2,
          legend=c("divisor=r","divisor=d"))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  ,
+  \rolf
+  
   and Martin Hazelton.
 }
 \keyword{spatial}

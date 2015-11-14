@@ -83,13 +83,13 @@
   \code{\link{dppm}},
   \code{\link{logLik.ppm}}
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \examples{
   fit <- dppm(swedishpines ~ x, dppGauss(), method="palm")

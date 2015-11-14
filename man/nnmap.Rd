@@ -127,11 +127,11 @@
   plot(nnmap(cells, 2, what="which"))
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz},
+  \adrian
+  
+  ,
+  \rolf
+  ,
   and Jens Oehlschlaegel
 }
 \keyword{spatial}

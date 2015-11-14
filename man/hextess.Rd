@@ -80,11 +80,11 @@ hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
   plot(hextess(W, s))
   plot(hexgrid(W, s), add=TRUE)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

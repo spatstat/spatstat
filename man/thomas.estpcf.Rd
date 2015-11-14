@@ -150,9 +150,9 @@ thomas.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \seealso{
   \code{\link{thomas.estK}}

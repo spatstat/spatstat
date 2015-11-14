@@ -53,11 +53,11 @@ transect.im(X, ..., from="bottomleft", to="topright",
   An object of class \code{"fv"} which can be plotted.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+  \adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{im}}

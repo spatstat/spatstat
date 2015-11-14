@@ -52,11 +52,11 @@ rpoispp3(lambda, domain = box3(), nsim=1, drop=TRUE)
 \examples{
    X <- rpoispp3(50)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

@@ -89,7 +89,7 @@ rho2hat(object, cov1, cov2, ..., method=c("ratio", "reweight"))
   \emph{Statistics and Its Interface} \bold{5} (2), 221--236.
 }
 \author{
-  Adrian Baddeley
+  \adrian
 }
 \seealso{
   \code{\link{rhohat}},

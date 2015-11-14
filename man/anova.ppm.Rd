@@ -139,11 +139,11 @@ Performs analysis of deviance for two or more fitted point process models.
   estimation. \emph{Proceedings of the Cambridge Philosophical Society}
   \bold{44}, 50--57.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{models}

@@ -43,11 +43,11 @@ edges2vees(iedge, jedge, nvert=max(iedge, jedge), \dots,
 \seealso{
   \code{\link{edges2triangles}}
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \examples{
  i <- c(1, 2, 5, 5, 1, 4, 2)

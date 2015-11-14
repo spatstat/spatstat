@@ -96,11 +96,11 @@ which can then be fitted to point pattern data.
    coef(fit)
    # corresponding values obtained by Fiksel (1984) were -1.9 and -6.0
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{models}

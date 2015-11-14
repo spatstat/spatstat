@@ -112,9 +112,9 @@ pcf3est(X, ..., rmax = NULL, nrval = 128, correction = c("translation",
   \bold{39}, 172 -- 212.
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
   and Rana Moyeed.
 }
 \seealso{

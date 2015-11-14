@@ -128,11 +128,11 @@ ippm(Q, \dots,
 \value{
   A fitted point process model (object of class \code{"ppm"}).
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{ppm}},

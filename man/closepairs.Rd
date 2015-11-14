@@ -118,11 +118,11 @@ crosspairs(X, Y, rmax, \dots)
   a list with components \code{i} and \code{j},
   and possibly other components as described under Details.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{closepairs.pp3}} for the corresponding

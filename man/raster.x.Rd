@@ -76,12 +76,12 @@
   \dontrun{plot(disc)}
   # approximation to the unit disc
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  ,
+  \rolf
+  
+  and \ege
+  
 }
 \keyword{spatial}
 \keyword{manip}

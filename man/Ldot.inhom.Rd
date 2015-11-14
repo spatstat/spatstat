@@ -95,11 +95,11 @@ Ldot.inhom(X, i, \dots)
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     L <- Ldot.inhom(X, "B",  lambdaI=lamB,     lambdadot=lamdot)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

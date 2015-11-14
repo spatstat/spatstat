@@ -53,9 +53,9 @@ linearpcf(X, r=NULL, ..., correction="Ang")
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

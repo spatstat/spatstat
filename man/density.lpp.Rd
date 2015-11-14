@@ -91,7 +91,7 @@
   Wiley.
 }
 \author{
-  Adrian Baddeley and Greg McSwiggan.
+  \adrian and Greg McSwiggan.
 }
 \seealso{
   \code{\link{lpp}},

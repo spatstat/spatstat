@@ -98,11 +98,11 @@
   mod <- rmhmodel(cif="strauss", par=list(beta=100, gamma=0.5, r=0.07))
   default.expand(fit)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{datagen}

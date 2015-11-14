@@ -225,11 +225,11 @@ obtained by the edge corrections named.
     f2 <- function(X) { marks(X)$height > 3 }
     K <- Kmulti.inhom(finpines, f1, f2)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

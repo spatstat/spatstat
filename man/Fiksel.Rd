@@ -105,11 +105,11 @@ of marked and non-marked Gibbsian point processes.
    fit <- ppm(X ~ 1, Fiksel(r=3.5, kappa=1))
    plot(fitin(fit))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 \keyword{models}

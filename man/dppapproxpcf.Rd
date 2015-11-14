@@ -17,13 +17,13 @@
 \details{This function is usually NOT needed for anything. It
 only exists for investigative purposes.}
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+  \adrian
+  
+  
+  \rolf
+  
+  and \ege
+  
 }
 \examples{
 f <- dppapproxpcf(dppMatern(lambda = 100, alpha=.028, nu=1, d=2))

@@ -80,9 +80,9 @@ linearKcross(X, i, j, r=NULL, \dots, correction="Ang")
    data(chicago)
    K <- linearKcross(chicago, "assault", "robbery")
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+\author{\adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

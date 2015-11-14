@@ -132,11 +132,11 @@ rmhexpand(x = NULL, ..., area = NULL, length = NULL, distance = NULL)
   An object of class \code{"rmhexpand"} specifying the
   expansion rule. There is a \code{print} method for this class.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \seealso{
   \code{\link{expand.owin}} to apply the rule to a window.

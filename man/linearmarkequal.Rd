@@ -68,9 +68,9 @@ linearmarkequal(X, r=NULL, \dots)
    }
    p <- linearmarkequal(X)
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+\author{\adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{nonparametric}

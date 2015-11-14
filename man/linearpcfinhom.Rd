@@ -68,9 +68,9 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

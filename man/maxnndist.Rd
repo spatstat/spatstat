@@ -54,10 +54,10 @@ maxnndist(X, positive=FALSE)
   }
 }
 \author{
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner and Ege Rubak.
+  \adrian
+  
+  ,
+  \rolf and \ege.
 }
 \keyword{spatial}
 \keyword{math}

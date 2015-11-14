@@ -165,9 +165,9 @@
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
-  Adapted for \pkg{spatstat} by Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  Adapted for \pkg{spatstat} by \adrian
+  
+  
 }
 \keyword{spatial}
 \keyword{datagen}

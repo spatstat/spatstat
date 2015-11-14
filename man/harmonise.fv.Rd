@@ -67,12 +67,12 @@
   If the arguments were named (\code{name=value}) then the return value
   also carries these names.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak.
+\author{\adrian
+  
+  ,
+  \rolf
+  
+  and \ege.
 }
 \examples{
    H <- harmonise(K=Kest(cells), G=Gest(cells))

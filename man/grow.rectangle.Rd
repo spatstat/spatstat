@@ -45,12 +45,12 @@
   # and margin of height 4 on top.
   v <- grow.rectangle(w, c(0,3), c(0,4))
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak
-  \email{rubak@math.aau.dk}
+\author{\adrian
+  
+  \rolf
+  
+  and \ege
+  
 }
 \keyword{spatial}
 \keyword{manip}

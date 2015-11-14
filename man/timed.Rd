@@ -75,11 +75,11 @@ timed(x, ..., starttime = NULL, timetaken = NULL)
 \examples{
   timed(envelope(cells, nsim=19))  
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
-  and Rolf Turner
-  \email{r.turner@auckland.ac.nz}
+\author{\adrian
+  
+  
+  and \rolf
+  
 }
 \keyword{spatial}
 % Add one or more standard keywords, see file 'KEYWORDS' in the

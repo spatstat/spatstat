@@ -15,6 +15,6 @@
 \usage{
  data(letterR)
 }
-\source{Adrian Baddeley}
+\source{\adrian}
 \keyword{datasets}
 \keyword{spatial}

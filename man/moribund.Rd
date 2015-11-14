@@ -48,12 +48,12 @@ bermantest.lppm(\dots)
   The \code{bermantest} functions have been superseded by
   \code{\link{berman.test}}.
 }
-\author{Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/},
-  Rolf Turner
-  \email{r.turner@auckland.ac.nz}
-  and Ege Rubak.
+\author{\adrian
+  
+  ,
+  \rolf
+  
+  and \ege.
 }
 \seealso{
   \code{\link{cdf.test}},

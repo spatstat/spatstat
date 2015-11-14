@@ -141,9 +141,9 @@ mincontrast(observed, theoretical, startpar, \dots,
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk},
   adapted for \pkg{spatstat} by
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian
+  
+  
 }
 \seealso{
   \code{\link{kppm}},
