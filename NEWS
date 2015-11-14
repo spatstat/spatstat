@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.015
+        CHANGES IN spatstat VERSION 1.43-0.016
 
 OVERVIEW
 
@@ -97,6 +97,10 @@ BUGS
 
    o plot.fv
    Crashed in some obscure cases.
+   Fixed.
+
+   o collapse.fv
+   Did not allow 'same=NULL'.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0

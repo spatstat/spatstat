@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.132 $   $Date: 2015/10/21 09:06:57 $
+##    $Revision: 1.134 $   $Date: 2015/11/14 03:51:20 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -617,6 +617,10 @@ collapse.fv <- local({
                  "should not have entries in common"))
     either <- c(same, different)
     ## validate
+    if(length(either) == 0)
+      stop(paste("At least one column of values must be selected",
+                 "using the arguments", sQuote("same"), "and",
+                 sQuote("different")))
     nbg <- unique(unlist(lapply(x, missingnames, expected=either)))
     if((nbad <- length(nbg)) > 0)
       stop(paste(ngettext(nbad, "The name", "The names"),
@@ -627,12 +631,20 @@ collapse.fv <- local({
     versionnames <- names(x)
     if(is.null(versionnames))
       versionnames <- paste("x", seq_along(x), sep="")
-    shortnames <- abbreviate(versionnames)
+    shortnames <- abbreviate(versionnames, minlength=12)
     ## extract the common values
     y <- x[[1]]
-    if(length(same) > 0 && !(fvnames(y, ".y") %in% same))
-      fvnames(y, ".y") <- same[1]
-    z <- y[, c(fvnames(y, ".x"), same)]
+    xname <- fvnames(y, ".x")
+    yname <- fvnames(y, ".y")
+    if(length(same) == 0) {
+      ## The column of 'preferred values' .y cannot be deleted
+      ## retain .y for now and delete it later.
+      z <- y[, c(xname, yname)]
+    } else {
+      if(!(yname %in% same))
+        fvnames(y, ".y") <- same[1]
+      z <- y[, c(xname, same)]
+    }
     dotnames <- same
     ## now merge the different values
     for(i in seq_along(x)) {
@@ -651,6 +663,11 @@ collapse.fv <- local({
       z <- bind.fv(z, y,
                    labl=paste(prefix, labl, sep="~"),
                    desc=paste(preamble, desc))
+    }
+    if(length(same) == 0) {
+      ## remove the second column which was retained earlier
+      fvnames(z, ".y") <- names(z)[3]
+      z <- z[, -2]
     }
     fvnames(z, ".") <- dotnames
     return(z)
