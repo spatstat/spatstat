@@ -86,9 +86,7 @@
   Chapman and Hall/CRC.
 }
 \author{
-  \adrian
-  
-  
+  \adrian,
   based on original code for the Strauss process by 
   Kasper Klitgaard Berthelsen.
 }
@@ -97,10 +95,13 @@
 }
 \seealso{
   \code{\link{rmh}},
-  \code{\link{DiggleGatesStibbard}},
+  \code{\link{DiggleGatesStibbard}}.
+
   \code{\link{rStrauss}},
   \code{\link{rHardcore}},
-  \code{\link{rDiggleGratton}}.
+  \code{\link{rStraussHard}},
+  \code{\link{rDiggleGratton}},
+  \code{\link{rPenttinen}}.
 }
 \keyword{spatial}
 \keyword{datagen}

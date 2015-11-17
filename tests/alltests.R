@@ -2464,13 +2464,13 @@ local({
     warning("check.testfun fails to recognise mark product function")
   check.testfun(fs, X=longleaf)
   
-  ## test all is well in markcorrint -> Kinhom 
-  MA <- markcorrint(amacrine,function(m1,m2){m1==m2})
+  ## test all is well in Kmark -> Kinhom 
+  MA <- Kmark(amacrine,function(m1,m2){m1==m2})
   set.seed(42)
   AR <- rlabel(amacrine)
-  MR <- markcorrint(AR,function(m1,m2){m1==m2})
+  MR <- Kmark(AR,function(m1,m2){m1==m2})
   if(isTRUE(all.equal(MA,MR)))
-    stop("markcorrint unexpectedly ignores marks")
+    stop("Kmark unexpectedly ignores marks")
 })
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code

@@ -119,8 +119,6 @@
 \author{
   Kasper Klitgaard Berthelsen,
   adapted for \pkg{spatstat} by \adrian
-  
-  
 }
 \examples{
    X <- rStrauss(0.05,0.2,1.5,square(141.4))
@@ -132,7 +130,8 @@
   \code{\link{rHardcore}},
   \code{\link{rStraussHard}},
   \code{\link{rDiggleGratton}},
-  \code{\link{rDGS}}.
+  \code{\link{rDGS}},
+  \code{\link{rPenttinen}}.
 }
 
 \keyword{spatial}

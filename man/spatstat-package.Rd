@@ -189,10 +189,14 @@
 	simulate Strauss process (perfect simulation)\cr
 	\code{\link{rHardcore}} \tab
 	simulate Hard Core process (perfect simulation)\cr
+	\code{\link{rStraussHard}} \tab
+	simulate Strauss-hard core process (perfect simulation)\cr
 	\code{\link{rDiggleGratton}} \tab
 	simulate Diggle-Gratton process (perfect simulation)\cr
 	\code{\link{rDGS}} \tab
 	simulate Diggle-Gates-Stibbard process (perfect simulation)\cr
+	\code{\link{rPenttinen}} \tab
+	simulate Penttinen process (perfect simulation)\cr
 	\code{\link{rNeymanScott}} \tab
 	simulate a general Neyman-Scott process\cr
 	\code{\link{rPoissonCluster}} \tab
@@ -1421,8 +1425,18 @@
     simulate the \ifelse{latex}{\out{Mat\'ern}}{Matern} Model II inhibition process\cr
     \code{\link{rSSI}} \tab
     simulate Simple Sequential Inhibition process\cr
+    \code{\link{rHardcore}} \tab
+    simulate hard core process (perfect simulation)\cr
     \code{\link{rStrauss}} \tab
     simulate Strauss process (perfect simulation)\cr
+    \code{\link{rStraussHard}} \tab
+    simulate Strauss-hard core process (perfect simulation)\cr
+    \code{\link{rDiggleGratton}} \tab
+    simulate Diggle-Gratton process (perfect simulation)\cr
+    \code{\link{rDGS}} \tab
+    simulate Diggle-Gates-Stibbard process (perfect simulation)\cr
+    \code{\link{rPenttinen}} \tab
+    simulate Penttinen process (perfect simulation)\cr
     \code{\link{rNeymanScott}} \tab
     simulate a general Neyman-Scott process\cr
     \code{\link{rMatClust}} \tab

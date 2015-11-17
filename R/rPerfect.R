@@ -1,13 +1,14 @@
 #
 #  Perfect Simulation 
 #
-#  $Revision: 1.18 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.19 $ $Date: 2015/11/17 07:32:42 $
 #
 #  rStrauss
 #  rHardcore
 #  rStraussHard
 #  rDiggleGratton
 #  rDGS
+#  rPenttinen
 
 rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE, nsim=1) {
 
@@ -299,6 +300,67 @@ rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1) {
     
     if(nout<0)
       stop("internal error: copying failed in PerfectDGS")
+    
+    seqn <- seq_len(nout)
+    P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)
+    if(attr(Wsim, "changed"))
+      P <- P[W]
+
+    if(nsim == 1) return(P)
+    result[[i]] <- P
+  }
+  result <- as.solist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
+}
+
+
+#
+#  Perfect Simulation of Penttinen process
+#
+
+rPenttinen <- function(beta, gamma=1, R, W=owin(), expand=TRUE, nsim=1) {
+  if(!missing(W)) 
+    verifyclass(W, "owin")
+
+  check.1.real(beta)
+  check.1.real(gamma)
+  check.1.real(R)
+
+  check.finite(beta)
+  check.finite(gamma)
+  check.finite(R)
+
+  stopifnot(beta > 0)
+  stopifnot(gamma >= 0)
+  stopifnot(gamma <= 1)
+  stopifnot(R >= 0)
+
+  runif(1)
+
+  Wsim <- expandwinPerfect(W, expand, rmhexpand(distance=2*R))
+  xrange <- Wsim$xrange
+  yrange <- Wsim$yrange
+
+  result <- vector(mode="list", length=nsim)
+
+  for(i in 1:nsim) {
+    storage.mode(beta) <- storage.mode(gamma) <- storage.mode(R) <- "double"
+    storage.mode(xrange) <- storage.mode(yrange) <- "double"
+  
+    z <- .Call("PerfectPenttinen",
+               beta,
+               gamma,
+               R,
+               xrange,
+               yrange)
+
+    X <- z[[1]]
+    Y <- z[[2]]
+    nout <- z[[3]]
+    
+    if(nout<0)
+      stop("internal error: copying failed in PerfectPenttinen")
     
     seqn <- seq_len(nout)
     P <- ppp(X[seqn], Y[seqn], window=Wsim, check=FALSE)

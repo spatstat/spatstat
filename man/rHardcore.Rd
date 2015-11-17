@@ -91,7 +91,10 @@
   \code{\link{rmh}},
   \code{\link{Hardcore}},
   \code{\link{rStrauss}},
+  \code{\link{rStraussHard}},
   \code{\link{rDiggleGratton}}.
+  \code{\link{rDGS}},
+  \code{\link{rPenttinen}}.
 }
 \keyword{spatial}
 \keyword{datagen}

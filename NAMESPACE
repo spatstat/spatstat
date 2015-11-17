@@ -137,6 +137,7 @@ useDynLib(spatstat,
 "PerfectDGS",
 "PerfectDiggleGratton",
 "PerfectHardcore",
+"PerfectPenttinen",
 "PerfectStrauss",
 "PerfectStraussHard",
 "poly2imA",
@@ -2066,6 +2067,7 @@ export("round.ppp")
 export("round.ppx")
 export("row.names<-.hyperframe")
 export("row.names.hyperframe")
+export("rPenttinen")
 export("rpoint")
 export("rpoint.multi")
 export("rpoisline")

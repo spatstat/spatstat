@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.020
+        CHANGES IN spatstat VERSION 1.43-0.021
 
 OVERVIEW
 
@@ -17,9 +17,14 @@ OVERVIEW
 
    o Quadrat counting accelerated, in some cases.
 
+   o Penttinen process can be simulated.
+
    o Version nickname: 'October Old Style'
 
 NEW FUNCTIONS
+
+   o rPenttinen
+     Simulate the Penttinen process using perfect simulation.
 
    o inside.boxx
      Test whether multidimensional points lie inside a specified 
@@ -29,13 +34,14 @@ NEW FUNCTIONS
      Expand a multidimensional box.
 
    o deviance.ppm, deviance.lppm
-   Deviance for a fitted point process model.
+     Deviance for a fitted point process model.
 
    o pseudoR2
-   Pseudo-R-squared for a fitted point process model.
+     Pseudo-R-squared for a fitted point process model.
 
    o tiles.empty
-   Checks whether each tile of a tessellation is empty or nonempty.
+     Checks whether each tile of a tessellation is empty or nonempty.
+
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -47,6 +53,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o "[.ppx"
      The subset index 'i' may now be a spatial domain
      of class 'boxx' or 'box3'.
+
+   o rmh.ppm, rmhmodel.ppm, simulate.ppm
+   A model fitted using the 'Penttinen' interaction can now be simulated.
+
+   o rmh.default, rmhmodel.default
+   These functions now recognise cif='penttinen' for the Penttinen interaction.
 
    o envelope
    New argument 'clamp' gives greater control over one-sided envelopes.
@@ -108,6 +120,12 @@ BUGS
    Did not allow 'same=NULL'.
    Fixed.
 
+   o dclf.progress, mad.progress, dg.progress, 
+     dclf.sigtrace, mad.sigtrace, dg.sigtrace
+   The results could not be re-plotted using a plot formula,
+   because the internal data were slightly corrupted.
+   Fixed.
+
    o crosspairs
    If X and Y were identical point patterns,
    the result was not necessarily symmetric
@@ -116,6 +134,10 @@ BUGS
 
    o plot.fv
    Lines were not correctly clipped to the plot region when 'ylim' was given.
+   Fixed.
+
+   o pool.envelope
+   The 'scale' argument was not handled correctly.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0

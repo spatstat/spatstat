@@ -230,27 +230,7 @@
       class \code{"interact"} which is initialised in a very similar way to the
       usage of family objects in \code{\link{glm}} and \code{gam}.
       The models currently available are:
-      \code{\link{Poisson}},
-      \code{\link{AreaInter}},
-      \code{\link{BadGey}},
-      \code{\link{Concom}},
-      \code{\link{DiggleGatesStibbard}},
-      \code{\link{DiggleGratton}},
-      \code{\link{Fiksel}},
-      \code{\link{Geyer}},
-      \code{\link{Hardcore}},
-      \code{\link{LennardJones}},
-      \code{\link{MultiStrauss}},
-      \code{\link{MultiStraussHard}},
-      \code{\link{OrdThresh}}, 
-      \code{\link{Ord}},
-      \code{\link{Pairwise}},
-      \code{\link{PairPiece}},
-      \code{\link{Saturated}},
-      \code{\link{SatPiece}},
-      \code{\link{Softcore}},
-      \code{\link{Strauss}} and 
-      \code{\link{StraussHard}}.
+      \GibbsInteractionsList.
       See the examples below.
       It is also possible to combine several interactions
       using \code{\link{Hybrid}}.
@@ -597,35 +577,15 @@
   \code{\link{ppp}} and \code{\link{quadscheme}}
   for constructing data.
   
-  Interactions: 
-      \code{\link{Poisson}},
-      \code{\link{AreaInter}},
-      \code{\link{BadGey}},
-      \code{\link{DiggleGatesStibbard}},
-      \code{\link{DiggleGratton}},
-      \code{\link{Geyer}},
-      \code{\link{Fiksel}},
-      \code{\link{Hardcore}},
-      \code{\link{Hybrid}},
-      \code{\link{LennardJones}},
-      \code{\link{MultiStrauss}},
-      \code{\link{MultiStraussHard}},
-      \code{\link{OrdThresh}}, 
-      \code{\link{Ord}},
-      \code{\link{Pairwise}},
-      \code{\link{PairPiece}},
-      \code{\link{Saturated}},
-      \code{\link{SatPiece}},
-      \code{\link{Softcore}},
-      \code{\link{Strauss}} and 
-      \code{\link{StraussHard}}.
+  Interactions:
+  \GibbsInteractionsList.
 
-      See \code{\link{profilepl}} for advice on
-      fitting nuisance parameters in the interaction,
-      and \code{\link{ippm}} for irregular parameters in the trend.
+  See \code{\link{profilepl}} for advice on
+  fitting nuisance parameters in the interaction,
+  and \code{\link{ippm}} for irregular parameters in the trend.
 
-      See \code{\link{valid.ppm}} and \code{\link{emend.ppm}} for
-      ensuring the fitted model is a valid point process.
+  See \code{\link{valid.ppm}} and \code{\link{emend.ppm}} for
+  ensuring the fitted model is a valid point process.
 }
 \section{Warnings}{
   The implementation of the Huang-Ogata method is experimental;

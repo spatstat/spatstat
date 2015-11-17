@@ -77,13 +77,7 @@
   University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

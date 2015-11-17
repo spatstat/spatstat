@@ -1,7 +1,7 @@
 #
 #  sigtrace.R
 #
-#  $Revision: 1.8 $  $Date: 2015/10/26 08:47:11 $
+#  $Revision: 1.9 $  $Date: 2015/11/17 08:34:13 $
 #
 #  Significance traces 
 #
@@ -86,7 +86,7 @@ mctestSigtraceEngine <- local({
                 "upper 95%% limit for p-value"),
               labl=c("R", "%s(R)", paste(alpha), "lo(R)", "hi(R)"),
               unitname = unitname, fname = "p")
-      fvnames(p, ".") <- c("pest", "alpha")
+      fvnames(p, ".") <- c("pest", "alpha", "lo", "hi")
       fvnames(p, ".s") <- c("lo", "hi")
     }
     return(p)

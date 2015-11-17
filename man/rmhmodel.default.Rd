@@ -52,6 +52,7 @@
     \item{\code{'lookup'}}{General isotropic pairwise interaction process,
       with the interaction function specified via a ``lookup table''.}
     \item{\code{'multihard'}}{Multitype hardcore process}
+    \item{\code{'penttinen'}}{The Penttinen process}
     \item{\code{'strauss'}}{The Strauss process}
     \item{\code{'straush'}}{The Strauss process with hard core}
     \item{\code{'sftcr'}}{The Softcore process}
@@ -182,6 +183,15 @@
       where \code{beta} is a vector of base intensities for each type
       of point, and \code{hradii} is a matrix of hard core radii
       between each pair of types. 
+    }
+    \item{penttinen:}{
+      (Penttinen process.) A \bold{named} list with components
+      \code{beta,gamma,r} which are respectively the ``base''
+      intensity, the pairwise interaction parameter, and the disc radius.
+      Note that \code{gamma} must be less than or equal to 1.
+      See \code{\link{Penttinen}} for explanation.
+      (Note that there is also an algorithm for perfect simulation
+      of the Penttinen process, \code{\link{rPenttinen}})
     }
     \item{strauss:}{
       (Strauss process.) A \bold{named} list with components

@@ -9,6 +9,7 @@
 #include <Rdefines.h>
 #include <Rmath.h>
 #include <R_ext/Utils.h>
+#include <R_ext/Constants.h>
 
 // #include <stdio.h>
 // FILE *out;
@@ -845,3 +846,4 @@ void Sampler::Sim(Point2Pattern *p2p, long int *ST, long int *ET) {
 #include "PerfectHardcore.h"
 #include "PerfectDiggleGratton.h"
 #include "PerfectDGS.h"
+#include "PerfectPenttinen.h"

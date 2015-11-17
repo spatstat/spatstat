@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.81 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 2.82 $  $Date: 2015/11/17 08:53:33 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -666,6 +666,8 @@ envelopeEngine <-
                         VARIANCE=VARIANCE,
                         nSD=nSD,
                         alternative=alternative,
+                        scale=scale,
+                        clamp=clamp,
                         use.weights=use.weights,
                         do.pwrong=do.pwrong)
 

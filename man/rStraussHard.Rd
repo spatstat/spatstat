@@ -93,8 +93,13 @@
 }
 \seealso{
   \code{\link{rmh}},
-  \code{\link{rStrauss}},
   \code{\link{StraussHard}}.
+
+  \code{\link{rHardcore}},
+  \code{\link{rStrauss}},
+  \code{\link{rDiggleGratton}},
+  \code{\link{rDGS}},
+  \code{\link{rPenttinen}}.
 }
 
 \keyword{spatial}

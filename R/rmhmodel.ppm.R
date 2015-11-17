@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.59 $   $Date: 2014/12/09 08:49:17 $
+#  $Revision: 2.61 $   $Date: 2015/11/17 07:10:04 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -100,6 +100,14 @@ list(
        r <- inte$par$r
        return(list(cif = "triplets",
                    par = list(gamma = gamma, r = r),
+                   ntypes=1))
+     },
+     "Penttinen process" =
+     function(coeffs, inte) {
+       gamma <- inte$interpret(coeffs,inte)$param$gamma
+       r   <- inte$par$r
+       return(list(cif='penttinen',
+                   par=list(gamma=gamma, r=r),
                    ntypes=1))
      },
      "Multitype Strauss process" =

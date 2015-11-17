@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.17 $  $Date: 2015/10/26 08:43:49 $
+#   $Revision: 1.19 $  $Date: 2015/11/17 08:43:27 $
 #
 #   progress plots (envelope representations)
 #
@@ -19,7 +19,9 @@ mctest.progress <- local({
   }
   
   silentmax <- function(z) {
-    if(all(is.nan(z))) NaN else max(z[is.finite(z)])
+    if(all(is.nan(z))) return(NaN)
+    z <- z[is.finite(z)]
+    if(length(z) == 0) return(NA) else return(max(z))
   }
 
   mctest.progress <- function(X, fun=Lest, ...,
@@ -73,7 +75,7 @@ mctest.progress <- local({
               "zero"),
             labl=c("R", "%s(R)", "%s[crit](R)", "0"),
             unitname = unitname(X), fname = fname)
-    fvnames(p, ".") <- c("obs", "crit")
+    fvnames(p, ".") <- c("obs", "crit", "zero")
     fvnames(p, ".s") <- c("zero", "crit")
     p <- hasenvelope(p, Z$envelope)  # envelope may be NULL
     return(p)
@@ -281,7 +283,7 @@ dg.progress <- function(X, fun=Lest, ...,
             "zero"),
           labl=c("R", "%s(R)", "%s[crit](R)", "0"),
           unitname = unitname(X), fname = fname)
-  fvnames(p, ".") <- c("obs", "crit")
+  fvnames(p, ".") <- c("obs", "crit", "zero")
   fvnames(p, ".s") <- c("zero", "crit")
   if(savefuns || savepatterns)
     p <- hasenvelope(p, E)

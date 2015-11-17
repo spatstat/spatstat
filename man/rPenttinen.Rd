@@ -1,30 +1,26 @@
-\name{rDiggleGratton}
-\alias{rDiggleGratton}
-\title{Perfect Simulation of the Diggle-Gratton Process}
+\name{rPenttinen}
+\alias{rPenttinen}
+\title{Perfect Simulation of the Penttinen Process}
 \description{
   Generate a random pattern of points, a simulated realisation
-  of the Diggle-Gratton process, using a perfect simulation algorithm.
+  of the Penttinen process, using a perfect simulation algorithm.
 }
 \usage{
-  rDiggleGratton(beta, delta, rho, kappa=1, W = owin(), expand=TRUE, nsim=1)
+  rPenttinen(beta, gamma=1, R, W = owin(), expand=TRUE, nsim=1)
 }
 \arguments{
   \item{beta}{
     intensity parameter (a positive number).
   }
-  \item{delta}{
-    hard core distance (a non-negative number).
+  \item{gamma}{
+    Interaction strength parameter (a number between 0 and 1).
   }
-  \item{rho}{
-    interaction range (a number greater than \code{delta}).
-  }
-  \item{kappa}{
-    interaction exponent (a non-negative number).
+  \item{R}{
+    disc radius (a non-negative number).
   }
   \item{W}{
     window (object of class \code{"owin"}) in which to
-    generate the random pattern. Currently this must be a rectangular
-    window.
+    generate the random pattern. 
   }
   \item{expand}{
     Logical. If \code{FALSE}, simulation is performed
@@ -36,38 +32,29 @@
     \code{"rmhexpand"} (see \code{\link{rmhexpand}})
     determining the expansion method.
   }
-  \item{nsim}{Number of simulated realisations to be generated.}
+  \item{nsim}{Number of simulated realisations to be generated.}  
 }
 \details{
   This function generates a realisation of the 
-  Diggle-Gratton point process in the window \code{W}
+  Penttinen point process in the window \code{W}
   using a \sQuote{perfect simulation} algorithm.
 
-  Diggle and Gratton (1984, pages 208-210)
-  introduced the pairwise interaction point
-  process with pair potential \eqn{h(t)} of the form
+  Penttinen (1984, Example 2.1, page 18), citing Cormack (1979),
+  described the pairwise interaction point process with interaction factor
   \deqn{
-    h(t) = \left( \frac{t-\delta}{\rho-\delta} \right)^\kappa
-    \quad\quad \mbox{  if  } \delta \le t \le \rho
+    h(d) = e^{\theta A(d)} = \gamma^{A(d)}
   }{
-    h(t) = ((t - delta)/(rho - delta))^kappa, {    } delta <= t <= rho
+    h(d) = exp(theta * A(d)) = gamma^(A(d))
   }
-  with \eqn{h(t) = 0} for \eqn{t < \delta}{t < delta}
-  and  \eqn{h(t) = 1} for \eqn{t > \rho}{t > rho}.
-  Here \eqn{\delta}{delta}, \eqn{\rho}{rho} and \eqn{\kappa}{kappa}
-  are parameters.
-
-  Note that we use the symbol \eqn{\kappa}{kappa}
-  where Diggle and Gratton (1984) 
-  use \eqn{\beta}{beta}, since in \pkg{spatstat} we reserve the symbol
-  \eqn{\beta}{beta} for an intensity parameter.
-
-  The parameters must all be nonnegative,
-  and must satisfy \eqn{\delta \le \rho}{delta <= rho}.
+  between each pair of points separated by a distance $d$.
+  Here \eqn{A(d)} is the area of intersection between two discs
+  of radius \eqn{R} separated by a distance \eqn{d}, normalised so that
+  \eqn{A(0) = 1}.
 
   The simulation algorithm used to generate the point pattern
   is \sQuote{dominated coupling from the past}
-  as implemented by Berthelsen and \ifelse{latex}{\out{M\o ller}}{Moller} (2002, 2003).
+  as implemented by
+  Berthelsen and \ifelse{latex}{\out{M\o ller}}{Moller} (2002, 2003).
   This is a \sQuote{perfect simulation} or \sQuote{exact simulation}
   algorithm, so called because the output of the algorithm is guaranteed
   to have the correct probability distribution exactly (unlike the
@@ -93,34 +80,40 @@
   path sampling. 
   \emph{Scandinavian Journal of Statistics} 30, 549-564.
 
-  Diggle, P.J. and Gratton, R.J. (1984)
-  Monte Carlo methods of inference for implicit statistical models.
-  \emph{Journal of the Royal Statistical Society, series B}
-  \bold{46}, 193 -- 212.
+  Cormack, R.M. (1979)
+  Spatial aspects of competition between individuals.
+  Pages 151--212 in \emph{Spatial and Temporal Analysis in Ecology},
+  eds. R.M. Cormack and J.K. Ord, International Co-operative
+  Publishing House, Fairland, MD, USA. 
 
   \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
   \emph{Statistical Inference and Simulation for Spatial Point Processes.}
   Chapman and Hall/CRC.
+
+  Penttinen, A. (1984) 
+  \emph{Modelling Interaction in Spatial Point Patterns:
+  Parameter Estimation by the Maximum Likelihood Method.}
+  \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}
+  Studies in Computer Science, Economics and Statistics \bold{7},
+  University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
 }
 \author{
-  \adrian
-  
-  
+  \adrian,
   based on original code for the Strauss process by 
   Kasper Klitgaard Berthelsen.
 }
 \examples{
-   X <- rDiggleGratton(50, 0.02, 0.07)
+   X <- rPenttinen(50, 0.5, 0.02)
 }
 \seealso{
   \code{\link{rmh}},
-  \code{\link{DiggleGratton}}.
+  \code{\link{Penttinen}}.
 
   \code{\link{rStrauss}},
   \code{\link{rHardcore}},
   \code{\link{rStraussHard}},
-  \code{\link{rDGS}},
-  \code{\link{rPenttinen}}.
+  \code{\link{rDiggleGratton}},
+  \code{\link{rDGS}}.
 }
 \keyword{spatial}
 \keyword{datagen}
