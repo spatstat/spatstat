@@ -78,8 +78,6 @@
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{lpp}},

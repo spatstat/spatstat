@@ -19,7 +19,7 @@
   point pattern object.
 }
 \usage{data(simdat)}
-\source{\rolf }
+\source{\rolf}
 \references{
   Baddeley, A. and Turner, R. (2000)
   Practical maximum pseudolikelihood for spatial point patterns.

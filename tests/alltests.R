@@ -2493,4 +2493,13 @@ local({
   cross.ijd <- crosspairs(on, off, r, what="ijd")
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
   stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
+
+  # Rasmus' example
+  R <- 0.04
+  U <- as.ppp(gridcenters(owin(), 50, 50), W=owin())
+  cp <- crosspairs(U, U, R)
+  G <- matrix(0, npoints(U), npoints(U))
+  G[cbind(cp$i, cp$j)] <- 1
+  if(!isSymmetric(G))
+    stop("crosspairs is not symmetric in Rasmus example")
 })

@@ -41,7 +41,7 @@ SEXP CLOSEFUN(SEXP xx,
 	      SEXP nguess) 
 {
   double *x, *y;
-  double xi, yi, rmax, r2max, dx, dy, d2;
+  double xi, yi, rmax, r2max, rmaxplus, dx, dy, d2;
 #ifdef ZCOORD
   double *z;
   double zi, dz;
@@ -106,6 +106,8 @@ SEXP CLOSEFUN(SEXP xx,
   
   r2max = rmax * rmax;
 
+  rmaxplus = rmax + rmax/16.0;
+
 #ifdef THRESH
   s = *(NUMERIC_POINTER(ss));
   s2 = s * s;
@@ -160,7 +162,7 @@ SEXP CLOSEFUN(SEXP xx,
 	  /* scan backward */
 	  for(j = i - 1; j >= 0; j--) {
 	    dx = x[j] - xi;
-	    if(dx < -rmax) 
+	    if(dx < -rmaxplus) 
 	      break;
 	    dy = y[j] - yi;
 	    d2 = dx * dx + dy * dy;
@@ -232,7 +234,7 @@ SEXP CLOSEFUN(SEXP xx,
 	  /* scan forward */
 	  for(j = i + 1; j < n; j++) {
 	    dx = x[j] - xi;
-	    if(dx > rmax) 
+	    if(dx > rmaxplus) 
 	      break;
 	    dy = y[j] - yi;
 	    d2 = dx * dx + dy * dy;
@@ -459,7 +461,7 @@ SEXP CROSSFUN(SEXP xx1,
   /* lengths */
   int n1, n2, nout, noutmax, noutmaxold, maxchunk;
   /* distance parameter */
-  double rmax, r2max;
+  double rmax, r2max, rmaxplus;
   /* indices */
   int i, j, jleft, m;
   /* temporary values */
@@ -532,6 +534,8 @@ SEXP CROSSFUN(SEXP xx1,
   
   r2max = rmax * rmax;
 
+  rmaxplus = rmax + rmax/16.0;
+
 #ifdef THRESH
   s = *(NUMERIC_POINTER(ss));
   s2 = s * s;
@@ -586,18 +590,18 @@ SEXP CROSSFUN(SEXP xx1,
 	/* 
 	   adjust starting point jleft
 	*/
-	xleft = x1i - rmax;
+	xleft = x1i - rmaxplus;
 	while((x2[jleft] < xleft) && (jleft+1 < n2))
 	  ++jleft;
 
 	/* 
-	   process from j = jleft until dx > rmax
+	   process from j = jleft until dx > rmax + epsilon
 	*/
 	for(j=jleft; j < n2; j++) {
 
 	  /* squared interpoint distance */
 	  dx = x2[j] - x1i;
-	  if(dx > rmax)
+	  if(dx > rmaxplus)
 	    break;
 	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;

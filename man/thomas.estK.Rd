@@ -146,8 +146,6 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk}
   Adapted for \pkg{spatstat} by \adrian
-  
-  
 }
 \seealso{
   \code{\link{kppm}},

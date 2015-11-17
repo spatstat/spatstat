@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.017
+        CHANGES IN spatstat VERSION 1.43-0.018
 
 OVERVIEW
 
    o We thank Jonas Geldmann, Andrew Hardegen, Tom Lawrence, 
-     Robin Milne, Gopalan Nair and Suman Rakshit for contributions.
+     Robin Milne, Gopalan Nair, Suman Rakshit and Rasmus Waagepetersen
+     for contributions.
   
    o More support for multidimensional point patterns and point processes.
 
@@ -16,7 +17,7 @@ OVERVIEW
 
    o Quadrat counting accelerated, in some cases.
 
-   o Version nickname: 'Lessons of October'
+   o Version nickname: 'October Old Style'
 
 NEW FUNCTIONS
 
@@ -101,6 +102,12 @@ BUGS
 
    o collapse.fv
    Did not allow 'same=NULL'.
+   Fixed.
+
+   o crosspairs
+   If X and Y were identical point patterns,
+   the result was not necessarily symmetric
+   (on some machines) due to numerical artifacts.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0

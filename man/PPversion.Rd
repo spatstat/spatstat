@@ -70,15 +70,10 @@ QQversion(f, theo = "theo", columns = ".")
 }
 \author{
   Tom Lawrence
-  and \adrian.
+  and Adrian Baddeley.
+  
   Implemented by
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{plot.fv}}
