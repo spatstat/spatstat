@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.112 $ $Date: 2015/10/21 08:59:59 $
+# $Revision: 1.114 $ $Date: 2015/11/17 03:46:51 $
 #
 
 kppm <- function(X, ...) {
@@ -1433,7 +1433,17 @@ unitname.kppm <- unitname.dppm <- function(x) {
   return(x)
 }
 
-as.fv.kppm <- as.fv.dppm <- function(x) as.fv(x$Fit$mcfit)
+as.fv.kppm <- as.fv.dppm <- function(x) {
+  if(x$Fit$method == "mincon")
+    return(as.fv(x$Fit$mcfit))
+  gobs <- pcfinhom(x$X, lambda=x, correction="good", update=FALSE)
+  gfit <- (pcfmodel(x))(gobs$r)
+  g <- bind.fv(gobs,
+               data.frame(fit=gfit), 
+               "%s[fit](r)",
+               "predicted %s for fitted model")
+  return(g)
+}
 
 coef.kppm <- coef.dppm <- function(object, ...) {
   return(coef(object$po))

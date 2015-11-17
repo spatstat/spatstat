@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.121 $    $Date: 2015/10/28 06:52:18 $
+#  $Revision: 1.122 $    $Date: 2015/11/17 03:40:21 $
 #
 #
 
@@ -39,6 +39,11 @@ plot.fv <- local({
 
   pow10 <- function(x) { 10^x }
 
+  clip.to.usr <- function() {
+    usr <- par('usr')
+    clip(usr[1], usr[2], usr[3], usr[4])
+  }
+  
   plot.fv <- function(x, fmla, ..., subset=NULL, lty=NULL, col=NULL, lwd=NULL,
                       xlim=NULL, ylim=NULL, xlab=NULL, ylab=NULL,
                       ylim.covers=NULL, legend=!add, legendpos="topleft",
@@ -294,7 +299,7 @@ plot.fv <- local({
     ## return x, y limits only?
     if(limitsonly)
       return(list(xlim=xlim, ylim=ylim))
-  
+
     ## -------------  work out how to label the plot --------------------
 
     ## extract plot labels, substituting function name
@@ -436,6 +441,7 @@ plot.fv <- local({
       miss2 <- !is.finite(shdata2)
       if(!any(broken <- (miss1 | miss2))) {
         ## single polygon
+        clip.to.usr()
         polygon(xpoly, ypoly, border=shadecol, col=shadecol)
       } else {
         ## interrupted
@@ -446,6 +452,7 @@ plot.fv <- local({
                  with(z, {
                    xp <- c(rhsdata, rev(rhsdata))
                    yp <- c(shdata1, rev(shdata2))
+                   clip.to.usr()
                    polygon(xp, yp, border=shadecol, col=shadecol)
                  })
                })
@@ -475,8 +482,10 @@ plot.fv <- local({
   
     ## ----------------- plot lines ------------------------------
 
-    for(i in allind)
+    for(i in allind) {
+      clip.to.usr()
       lines(rhsdata, lhsdata[,i], lty=lty[i], col=col[i], lwd=lwd[i])
+    }
 
     if(nplots == 1)
       return(invisible(NULL))

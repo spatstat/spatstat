@@ -87,7 +87,7 @@
     these are combined into a single \code{"fv"} object.
     \item
     If \code{x} is an object of class \code{"minconfit"},
-    or an object of class \code{"kppm"} or \code{"dppm"} that was fitted by minimum contrast,
+    or an object of class \code{"kppm"} or \code{"dppm"},
     the result is a function table containing the
     observed summary function and the best fit summary function.
     \item
@@ -101,13 +101,8 @@
   x <- data.frame(r=r, y=r^2)
   as.fv(x)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{manip}

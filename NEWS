@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.018
+        CHANGES IN spatstat VERSION 1.43-0.020
 
 OVERVIEW
 
@@ -96,6 +96,10 @@ BUGS
    were very large numbers. This was due to numerical overflow.
    (Fixed??)
 
+   o as.fv.kppm	
+   Crashed if the model was not fitted by minimum contrast.
+   Fixed.
+
    o plot.fv
    Crashed in some obscure cases.
    Fixed.
@@ -108,6 +112,10 @@ BUGS
    If X and Y were identical point patterns,
    the result was not necessarily symmetric
    (on some machines) due to numerical artifacts.
+   Fixed.
+
+   o plot.fv
+   Lines were not correctly clipped to the plot region when 'ylim' was given.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.43-0
