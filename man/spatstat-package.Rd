@@ -1834,6 +1834,7 @@
   \ifelse{latex}{\out{Fran\c{c}ois S\'{e}m\'{e}curbe}}{Francois Semecurbe},
   Vadim Shcherbakov,
   Shen Guochun,
+  Shi Peijian,
   Harold-Jeffrey Ship,
   Ida-Maria Sintorn,
   Yong Song, 

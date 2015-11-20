@@ -176,10 +176,7 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
    plot(Smooth(finpines, sigma=2))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \references{
   Nadaraya, E.A. (1964) On estimating regression.

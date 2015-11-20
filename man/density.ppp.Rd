@@ -286,12 +286,13 @@
     v <- diag(c(0.05, 0.07)^2)
     plot(density(cells, varcov=v))
   }
-  \testonly{
-     Z <- density(cells, 0.05)
-     Z <- density(cells, 0.05, diggle=TRUE)
-     Z <- density(cells, varcov=diag(c(0.05^2, 0.07^2)))
-     Z <- density(cells, 0.05, weights=data.frame(a=1:42,b=42:1))
-     Z <- density(cells, 0.05, weights=expression(x))
+  \donttest{
+    Z <- density(cells, 0.05)
+    Z <- density(cells, 0.05, diggle=TRUE)
+    Z <- density(cells, 0.05, se=TRUE)
+    Z <- density(cells, varcov=diag(c(0.05^2, 0.07^2)))
+    Z <- density(cells, 0.05, weights=data.frame(a=1:42,b=42:1))
+    Z <- density(cells, 0.05, weights=expression(x))
   }
   # automatic bandwidth selection
   plot(density(cells, sigma=bw.diggle(cells)))
@@ -315,11 +316,10 @@
   Second edition. Arnold.
 }
 
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and
+  \rolf
 }
 \keyword{spatial}
 \keyword{methods}

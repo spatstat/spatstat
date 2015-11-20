@@ -54,13 +54,7 @@
  coef(summary(fit))
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{methods}

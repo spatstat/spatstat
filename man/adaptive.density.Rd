@@ -82,16 +82,14 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
   \emph{Journal of Geophysical Research}, \bold{109}, 2004.
 
   Ogata, Y., Katsura, K. and Tanemura, M. (2003).
-  Modelling heterogeneous space-time occurrences of earthquake and its
+  Modelling heterogeneous space-time occurrences of earthquakes and its
   residual analysis.
   \emph{Applied Statistics} \bold{52} 499--509.
 }
-
 \examples{
   plot(adaptive.density(nztrees, 1), main="Voronoi estimate")
-  if(interactive()) {
-    plot(adaptive.density(nztrees), main="Adaptive estimate")
-  }
+  nr <- if(interactive()) 100 else 5
+  plot(adaptive.density(nztrees, nrep=nr), main="Adaptive estimate")
 }
 \author{
   \adrian

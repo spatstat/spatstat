@@ -2034,6 +2034,21 @@ require(spatstat)
 
 local({
 
+  # test all cases of density.ppp
+  
+  tryit <- function(...) {
+    Z <- density(cells, ..., at="pixels")
+    Z <- density(cells, ..., at="points")
+    return(invisible(NULL))
+  }
+  
+  tryit(0.05)
+  tryit(0.05, diggle=TRUE)
+  tryit(0.05, se=TRUE)
+  tryit(varcov=diag(c(0.05^2, 0.07^2)))
+  tryit(0.05, weights=data.frame(a=1:42,b=42:1))
+  tryit(0.05, weights=expression(x))
+
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)
   
@@ -2053,6 +2068,12 @@ local({
   pants(casecontrol=FALSE,at="points")
   pants(relative=TRUE,at="points")
   pants(casecontrol=FALSE, relative=TRUE,at="points")
+
+
+  Z <- Smooth(longleaf, 5, diggle=TRUE)
+  Z <- Smooth(unmark(longleaf) %mark% 1, 5)
+
+  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
 })
 #
 # tests/slrm.R

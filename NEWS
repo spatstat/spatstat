@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.021
+        CHANGES IN spatstat VERSION 1.43-0.022
 
 OVERVIEW
 
    o We thank Jonas Geldmann, Andrew Hardegen, Tom Lawrence, 
-     Robin Milne, Gopalan Nair, Suman Rakshit and Rasmus Waagepetersen
-     for contributions.
+     Robin Milne, Gopalan Nair, Suman Rakshit, Peijian Shi
+     and Rasmus Waagepetersen for contributions.
   
    o More support for multidimensional point patterns and point processes.
 
@@ -25,6 +25,10 @@ NEW FUNCTIONS
 
    o rPenttinen
      Simulate the Penttinen process using perfect simulation.
+
+   o varcount
+     Given a point process model, compute the predicted variance
+     of the number of points falling in a window.
 
    o inside.boxx
      Test whether multidimensional points lie inside a specified 

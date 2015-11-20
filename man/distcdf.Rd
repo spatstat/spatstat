@@ -65,7 +65,8 @@
   in the window \code{W} with a probability density proportional to
   \code{dW}, and the second point \eqn{X_2}{X2} is random in
   a different window \code{V} with probability density proportional
-  to \code{dV}.
+  to \code{dV}. The values of \code{dW} and \code{dV} must be
+  finite and nonnegative.
 
   The calculation is performed by numerical integration of the set covariance
   function \code{\link{setcov}} for uniformly distributed points, and

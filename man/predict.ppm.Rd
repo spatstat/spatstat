@@ -362,11 +362,9 @@ at new locations.
 
   \testonly{spatstat.options(op)}
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{models}
