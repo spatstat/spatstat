@@ -682,7 +682,7 @@ as.matrix.owin <- function(x, ...) {
 #
 #-----------------------------------------------------------------------------
 #
-as.polygonal <- function(W) {
+as.polygonal <- function(W, repair=FALSE) {
   verifyclass(W, "owin")
   switch(W$type,
          rectangle = {
@@ -693,6 +693,8 @@ as.polygonal <- function(W) {
                        check=FALSE))
          },
          polygonal = {
+           if(repair)
+             W <- owin(poly=W$bdry, unitname=unitname(W))
            return(W)
          },
          mask = {

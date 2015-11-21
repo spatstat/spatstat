@@ -18,28 +18,21 @@ triangulate.owin(W)
 \details{
   The window \code{W} will be decomposed into disjoint triangles.
   The result is a tessellation of \code{W} in which each tile is a
-  triangle.
+  triangle. All triangle vertices lie on the boundary
+  of the original polygon.
   
   The window is first converted to a polygonal window using
   \code{\link{as.polygonal}}. The vertices of the polygonal window
   are extracted, and the Delaunay triangulation of these vertices
-  is computed using \code{\link{delaunay}}. The algorithm then
-  efficiently determines which triangles lie inside the window,
-  and assembles these triangles into a tessellation.
-
-  The vertices of the triangles are vertices of the original polygon.
+  is computed using \code{\link{delaunay}}. Each Delaunay triangle
+  is intersected with the window: if the result is not a triangle, 
+  the triangulation procedure is applied recursively to this smaller polygon. 
 }
 \value{
   Tessellation (object of class \code{"tess"}).
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors
 }
 \seealso{
   \code{\link{tess}},

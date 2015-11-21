@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.023
+        CHANGES IN spatstat VERSION 1.43-0.024
 
 OVERVIEW
 
@@ -48,7 +48,6 @@ NEW FUNCTIONS
    o tiles.empty
      Checks whether each tile of a tessellation is empty or nonempty.
 
-
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o rMaternI, rMaternII
@@ -92,10 +91,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o tess
    Argument 'window' is ignored when xgrid, ygrid are given.
 
+   o as.polygonal
+   Can now repair errors in polygon data, if repair=TRUE.
+
 BUGS
 
    o runifpointx, rpoisppx
    Crashed if nsim > 1.
+   Fixed.
+
+   o triangulate.owin
+   Results were incorrect in some special cases.
    Fixed.
 
    o quadrat.test, clarkevans.test

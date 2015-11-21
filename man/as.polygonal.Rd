@@ -10,11 +10,16 @@ Convert a Window to a Polygonal Window
   that represents the same spatial domain.
 }
 \usage{
-as.polygonal(W)
+as.polygonal(W, repair=FALSE)
 }
 \arguments{
   \item{W}{
     A window (object of class \code{"owin"}).
+  }
+  \item{repair}{
+    Logical value indicating whether to check the validity
+    of the polygon data and repair it,
+    if \code{W} is already a polygonal window.
   }
 }
 \details{
@@ -22,10 +27,14 @@ as.polygonal(W)
   polygonal or binary mask),  this function returns a polygonal window
   that represents the same spatial domain.
 
-  If \code{W} is already polygonal, it is returned without change.
-
   If \code{W} is a rectangle, it is converted to a polygon with
   4 vertices.
+
+  If \code{W} is already polygonal, it is returned unchanged, by default.  
+  However if \code{repair=TRUE} then the validity of the polygonal coordinates
+  will be checked (for example to check the boundary is not self-intersecting)
+  and repaired if necessary, so that the result could be different
+  from \code{W}.
 
   If \code{W} is a binary mask, then each pixel in the
   mask is replaced by a small square or rectangle, and the union of these
@@ -38,11 +47,8 @@ as.polygonal(W)
   A polygonal window (object of class \code{"owin"}
   and of type \code{"polygonal"}). 
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \seealso{
   \code{\link{owin}},
