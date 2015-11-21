@@ -340,11 +340,13 @@ coef(summary(fit1))
  # using the periodic correction.
 
 
-# Compare Maximum Pseudolikelihood and Huang-Ogata fits:
+# Compare Maximum Pseudolikelihood, Huang-Ogata and Variational Bayes fits:
 \dontrun{ppm(swedishpines ~ 1, Strauss(9))}
 
 \dontrun{ppm(swedishpines ~ 1, Strauss(9), method="ho")}
 \testonly{ppm(swedishpines ~ 1, Strauss(9), method="ho", nd=16, nsim=8)}
+
+ppm(swedishpines ~ 1, Strauss(9), method="VBlogi")
 
  # COVARIATES
  #

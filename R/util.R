@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.194 $    $Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.195 $    $Date: 2015/11/21 02:03:24 $
 #
 #
 matrowsum <- function(x) {
@@ -726,18 +726,28 @@ check.nmatrix <- function(m, npoints=NULL, fatal=TRUE, things="data points",
   return(TRUE)
 }
 
-check.named.vector <- function(x, nam, context="", namopt=character(0)) {
+check.named.vector <- function(x, nam, context="", namopt=character(0),
+                               onError=c("fatal", "null")) {
   xtitle <- deparse(substitute(x))
-  check.named.thing(x, nam, namopt, sQuote(xtitle),
-                    is.numeric(x), "vector", context)
+  onError <- match.arg(onError)
+  problem <- check.named.thing(x, nam, namopt, sQuote(xtitle),
+                               is.numeric(x), "vector", context,
+                               fatal=(onError == "fatal"))
+  if(length(problem) > 0 && onError == "null")
+    return(NULL)
   opt <- namopt %in% names(x)
   return(x[c(nam, namopt[opt])])
 }
 
-check.named.list <- function(x, nam, context="", namopt=character(0)) {
+check.named.list <- function(x, nam, context="", namopt=character(0),
+                               onError=c("fatal", "null")) {
   xtitle <- deparse(substitute(x))
-  check.named.thing(x, nam, namopt, sQuote(xtitle),
-                    is.list(x), "list", context)  
+  onError <- match.arg(onError)
+  problem <- check.named.thing(x, nam, namopt, sQuote(xtitle),
+                               is.list(x), "list", context,
+                               fatal=(onError == "fatal"))
+  if(length(problem) > 0 && onError == "null")
+    return(NULL)
   opt <- namopt %in% names(x)
   return(x[c(nam, namopt[opt])])
 }

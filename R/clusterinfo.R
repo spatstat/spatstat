@@ -17,11 +17,12 @@
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
-             nam <- try(check.named.vector(par, c("kappa","sigma2")), silent = TRUE)
-             if(inherits(nam, "try-error")){
-                 check.named.vector(par, c("kappa","scale"))
-                 names(par)[2] <- "sigma2"
-                 par[2] <- par[2]^2
+             nam <- check.named.vector(par, c("kappa","sigma2"),
+                                       onError="null")
+             if(is.null(nam)) {
+               check.named.vector(par, c("kappa","scale"))
+               names(par)[2] <- "sigma2"
+               par[2] <- par[2]^2
              }
              if(!old){
                  names(par)[2] <- "scale"
@@ -129,10 +130,10 @@
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
-             nam <- try(check.named.vector(par, c("kappa","R")), silent = TRUE)
-             if(inherits(nam, "try-error")){
-                 check.named.vector(par, c("kappa","scale"))
-                 names(par)[2] <- "R"
+             nam <- check.named.vector(par, c("kappa","R"), onError="null")
+             if(is.null(nam)) {
+               check.named.vector(par, c("kappa","scale"))
+               names(par)[2] <- "R"
              }
              if(!old){
                  names(par)[2] <- "scale"
@@ -254,8 +255,8 @@
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
-             nam <- try(check.named.vector(par, c("kappa","eta2")), silent = TRUE)
-             if(inherits(nam, "try-error")){
+             nam <- check.named.vector(par, c("kappa","eta2"), onError="null")
+             if(is.null(nam)) {
                  check.named.vector(par, c("kappa","scale"))
                  names(par)[2] <- "eta2"
                  par[2] <- (2*par[2])^2
@@ -350,10 +351,10 @@
                  par <- c(kappa=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
-             nam <- try(check.named.vector(par, c("kappa","eta")), silent = TRUE)
-             if(inherits(nam, "try-error")){
-                 check.named.vector(par, c("kappa","scale"))
-                 names(par)[2] <- "eta"
+             nam <- check.named.vector(par, c("kappa","eta"), onError="null")
+             if(is.null(nam)) {
+               check.named.vector(par, c("kappa","scale"))
+               names(par)[2] <- "eta"
              }
              if(!old) names(par)[2] <- "scale"
              return(par)
@@ -530,8 +531,8 @@
                  par <- c(var=1,scale=1)
              if(any(par<=0))
                  stop("par values must be positive.")
-             nam <- try(check.named.vector(par, c("sigma2","alpha")), silent = TRUE)
-             if(inherits(nam, "try-error")){
+             nam <- check.named.vector(par, c("sigma2","alpha"), onError="null")
+             if(is.null(nam)) {
                  check.named.vector(par, c("var","scale"))
                  names(par) <- c("sigma2", "alpha")
              }

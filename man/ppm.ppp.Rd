@@ -736,11 +736,13 @@ coef(summary(fit1))
  # using the periodic correction.
 
 
-# Compare Maximum Pseudolikelihood and Huang-Ogata fits:
+# Compare Maximum Pseudolikelihood, Huang-Ogata and VB fits:
 \dontrun{ppm(swedishpines, ~1, Strauss(9))}
 
 \dontrun{ppm(swedishpines, ~1, Strauss(9), method="ho")}
 \testonly{ppm(swedishpines, ~1, Strauss(9), method="ho", nd=16, nsim=8)}
+
+ppm(swedishpines, ~1, Strauss(9), method="VBlogi")
 
  # COVARIATES
  #
@@ -786,11 +788,8 @@ ppm(X, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
 \testonly{b <- ppm(ama, ~ marks * polynom(x,y,2), Poisson(), nd=16)}
 
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

@@ -731,7 +731,8 @@
 \alias{validate.mask}        
 \alias{validate.quad}        
 \alias{validposint}        
-\alias{vanilla.fv}        
+\alias{vanilla.fv}
+\alias{varcountEngine}
 \alias{variablesinformula}
 \alias{variablesintext}
 %\alias{vblogit} %DoNotExport
@@ -827,8 +828,8 @@ checksolve(M, action, descrip, target)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)
-check.named.list(x, nam, context, namopt)
-check.named.vector(x, nam, context, namopt)
+check.named.list(x, nam, context, namopt, onError)
+check.named.vector(x, nam, context, namopt, onError)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
 check.nvector(v, npoints, fatal, things, naok, warn, vname)
 check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
@@ -1604,6 +1605,7 @@ validate.mask(w, fatal=TRUE)
 validate.quad(Q, fatal, repair, announce)
 validposint(n, caller, fatal)
 vanilla.fv(x)
+varcountEngine(g, B, lambdaB, f)
 variablesinformula(x)
 variablesintext(x)
 %vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)

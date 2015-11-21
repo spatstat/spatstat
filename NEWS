@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.022
+        CHANGES IN spatstat VERSION 1.43-0.023
 
 OVERVIEW
 
@@ -18,6 +18,8 @@ OVERVIEW
    o Quadrat counting accelerated, in some cases.
 
    o Penttinen process can be simulated.
+
+   o Calculate the predicted variance of number of points.
 
    o Version nickname: 'October Old Style'
 

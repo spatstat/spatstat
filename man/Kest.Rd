@@ -327,10 +327,7 @@ Baddeley, A.J. Spatial sampling and censoring.
  plot(K, sqrt(./pi) ~ r, ylab="L(r)", main="L function for cells")
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{nonparametric}
