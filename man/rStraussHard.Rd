@@ -6,7 +6,8 @@
   of the Strauss-Hardcore process, using a perfect simulation algorithm.
 }
 \usage{
-  rStraussHard(beta, gamma = 1, R = 0, H = 0, W = owin(), expand=TRUE, nsim=1)
+  rStraussHard(beta, gamma = 1, R = 0, H = 0, W = owin(),
+               expand=TRUE, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{beta}{
@@ -37,6 +38,11 @@
     determining the expansion method.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a point pattern.
+  }
 }
 \details{
   This function generates a realisation of the 

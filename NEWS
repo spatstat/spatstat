@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.024
+        CHANGES IN spatstat VERSION 1.43-0.025
 
 OVERVIEW
 
@@ -93,6 +93,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o as.polygonal
    Can now repair errors in polygon data, if repair=TRUE.
+
+   o rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen
+   New argument 'drop'.
 
 BUGS
 

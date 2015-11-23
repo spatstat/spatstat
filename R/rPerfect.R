@@ -1,7 +1,7 @@
 #
 #  Perfect Simulation 
 #
-#  $Revision: 1.19 $ $Date: 2015/11/17 07:32:42 $
+#  $Revision: 1.20 $ $Date: 2015/11/23 07:02:21 $
 #
 #  rStrauss
 #  rHardcore
@@ -10,7 +10,8 @@
 #  rDGS
 #  rPenttinen
 
-rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE, nsim=1) {
+rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE,
+                     nsim=1, drop=TRUE) {
 
   if(!missing(W)) 
     verifyclass(W, "owin")
@@ -61,7 +62,7 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE, nsim=1) {
       P <- P[W]
     attr(P, "times") <- times
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     
     result[[i]] <- P
   }
@@ -72,7 +73,7 @@ rStrauss <- function(beta, gamma=1, R=0, W=owin(), expand=TRUE, nsim=1) {
 
 #  Perfect Simulation of Hardcore process
 
-rHardcore <- function(beta, R=0, W=owin(), expand=TRUE, nsim=1) {
+rHardcore <- function(beta, R=0, W=owin(), expand=TRUE, nsim=1, drop=TRUE) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -115,7 +116,7 @@ rHardcore <- function(beta, R=0, W=owin(), expand=TRUE, nsim=1) {
     if(attr(Wsim, "changed"))
       P <- P[W]
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     result[[i]] <- P
   }
   result <- as.solist(result)
@@ -128,7 +129,8 @@ rHardcore <- function(beta, R=0, W=owin(), expand=TRUE, nsim=1) {
 #        provided gamma <= 1
 #
 
-rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE, nsim=1) {
+rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(),
+                         expand=TRUE, nsim=1, drop=TRUE) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -183,7 +185,7 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE, nsim=1)
     if(attr(Wsim, "changed"))
       P <- P[W]
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     result[[i]] <- P
   }
   result <- as.solist(result)
@@ -196,7 +198,7 @@ rStraussHard <- function(beta, gamma=1, R=0, H=0, W=owin(), expand=TRUE, nsim=1)
 #
 
 rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(),
-                           expand=TRUE, nsim=1) {
+                           expand=TRUE, nsim=1, drop=TRUE) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -249,7 +251,7 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(),
     if(attr(Wsim, "changed"))
       P <- P[W]
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     result[[i]] <- P
   }
   result <- as.solist(result)
@@ -262,7 +264,7 @@ rDiggleGratton <- function(beta, delta, rho, kappa=1, W=owin(),
 #  Perfect Simulation of Diggle-Gates-Stibbard process
 #
 
-rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1) {
+rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1, drop=TRUE) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -306,7 +308,7 @@ rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1) {
     if(attr(Wsim, "changed"))
       P <- P[W]
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     result[[i]] <- P
   }
   result <- as.solist(result)
@@ -319,7 +321,8 @@ rDGS <- function(beta, rho, W=owin(), expand=TRUE, nsim=1) {
 #  Perfect Simulation of Penttinen process
 #
 
-rPenttinen <- function(beta, gamma=1, R, W=owin(), expand=TRUE, nsim=1) {
+rPenttinen <- function(beta, gamma=1, R, W=owin(),
+                       expand=TRUE, nsim=1, drop=TRUE) {
   if(!missing(W)) 
     verifyclass(W, "owin")
 
@@ -367,7 +370,7 @@ rPenttinen <- function(beta, gamma=1, R, W=owin(), expand=TRUE, nsim=1) {
     if(attr(Wsim, "changed"))
       P <- P[W]
 
-    if(nsim == 1) return(P)
+    if(nsim == 1 && drop) return(P)
     result[[i]] <- P
   }
   result <- as.solist(result)
