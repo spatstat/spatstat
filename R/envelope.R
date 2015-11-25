@@ -1226,7 +1226,7 @@ envelope.matrix <- function(Y, ...,
                   },
                   greater = {
                     lo <- rep.int(-Inf, length(lo))
-                    lo.name <- "infinite upper limit"
+                    lo.name <- "infinite lower limit"
                   })
            #
            if(use.theory) {

@@ -39,6 +39,7 @@ useDynLib(spatstat,
 "Ccrosspaircounts",
 "CcrossPdist",
 "Cidw",
+"Clixellate",
 "close3IJpairs",
 "close3pairs",
 "Cmatchxy",
@@ -1282,6 +1283,7 @@ export("[.linnet")
 export("linnet")
 export("[<-.listof")
 export("listof")
+export("lixellate")
 export("local2lpp")
 export("localK")
 export("localKengine")
@@ -1492,6 +1494,8 @@ export("npoints.ppp")
 export("npoints.ppx")
 export("n.quad")
 export("nsegments")
+export("nsegments.linnet")
+export("nsegments.lpp")
 export("nsegments.psp")
 export("nukernel")
 export("numalign")
@@ -3023,6 +3027,8 @@ S3method("nobs", "ppm")
   S3method("npoints", "pp3")
   S3method("npoints", "ppp")
   S3method("npoints", "ppx")
+S3method("nsegments", "linnet")
+S3method("nsegments", "lpp")
    S3method("nsegments", "psp")
 S3method("objsurf", "dppm")
 S3method("objsurf", "kppm")

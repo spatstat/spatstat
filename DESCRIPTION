@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.43-0.025
-Nickname: October Old Style
-Date: 2015-11-23
+Version: 1.43-0.026
+Nickname: Core Dumped
+Date: 2015-11-25
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

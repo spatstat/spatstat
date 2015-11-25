@@ -5,6 +5,7 @@
 \alias{as.linnet.linnet}
 \alias{as.owin.linnet}
 \alias{as.psp.linnet}
+\alias{nsegments.linnet}
 \alias{pixellate.linnet}
 \alias{print.linnet}
 \alias{summary.linnet}
@@ -29,9 +30,11 @@ as.linnet(X, ...)
 
 \method{as.psp}{linnet}(x, ..., fatal=TRUE)
 
-\method{print}{linnet}(x, ...)
+\method{nsegments}{linnet}(x)
 
 \method{pixellate}{linnet}(x, ...)
+
+\method{print}{linnet}(x, ...)
 
 \method{summary}{linnet}(object, ...)
 
@@ -80,6 +83,7 @@ vertexdegree(x)
   The other functions are methods for the generic commands
   \code{\link{as.owin}},
   \code{\link{as.psp}},
+  \code{\link{nsegments}},
   \code{\link{pixellate}},
   \code{\link{print}},
   \code{\link{summary}},
@@ -115,15 +119,16 @@ vertexdegree(x)
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
-  \code{\link{linnet}}
+  \code{\link{linnet}}.
+
+  \code{\link{lixellate}} for dividing segments into shorter segments.
 }
 \examples{
   simplenet
   summary(simplenet)
+  nsegments(simplenet)
   volume(simplenet)
   unitname(simplenet) <- c("cubit", "cubits")
   Window(simplenet)

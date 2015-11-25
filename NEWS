@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.025
+        CHANGES IN spatstat VERSION 1.43-0.026
 
 OVERVIEW
 
@@ -15,13 +15,15 @@ OVERVIEW
 
    o Convexifying operation.
 
+   o Subdivide a linear network.
+
    o Quadrat counting accelerated, in some cases.
 
    o Penttinen process can be simulated.
 
    o Calculate the predicted variance of number of points.
 
-   o Version nickname: 'October Old Style'
+   o Version nickname: 'Core Dumped'
 
 NEW FUNCTIONS
 
@@ -35,6 +37,12 @@ NEW FUNCTIONS
    o inside.boxx
      Test whether multidimensional points lie inside a specified 
      multidimensional box.
+
+   o lixellate
+     Divide each segment of a linear network into smaller segments.
+
+   o nsegments.linnet, nsegments.lpp
+     Count the number of line segments in a linear network.
 
    o grow.boxx
      Expand a multidimensional box.

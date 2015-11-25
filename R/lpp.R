@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.36 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.39 $   $Date: 2015/11/25 02:56:11 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -18,7 +18,7 @@ lpp <- function(X, L, ...) {
     df <- X[, !(names(X) %in% localnames), drop=FALSE]
     # validate local coordinates
     if(nrow(X) > 0) {
-      nedge <- nobjects(as.psp(L))
+      nedge <- nsegments(L)
       if(with(lo, any(seg < 1 || seg > nedge)))
         stop("Segment index coordinate 'seg' exceeds bounds")
       if(with(lo, any(tp < 0 || tp > 1)))
@@ -322,6 +322,10 @@ unmark.lpp <- function(X) {
 as.psp.lpp <- function(x, ..., fatal=TRUE){
   verifyclass(x, "lpp", fatal=fatal)
   return(x$domain$lines)
+}
+
+nsegments.lpp <- function(x) {
+  return(x$domain$lines$n)
 }
 
 local2lpp <- function(L, seg, tp, X=NULL) {

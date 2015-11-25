@@ -9,33 +9,31 @@
 }
 \usage{
    nsegments(x)
+
    \method{nsegments}{psp}(x)
 }
 \arguments{
-  \item{x}{ A line segment pattern, i.e. an object of class \code{psp}.
-}
+  \item{x}{
+    A line segment pattern, i.e. an object of class \code{psp},
+    or an object containing a linear network.
+  }
 }
 \details{
-   This function is generic, but there is at present only one
-   method, that for class \code{psp}.
+   This function is generic, with methods for 
+   classes \code{psp}, \code{linnet} and \code{lpp}.
 }
 \value{
    Integer.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
-
 \seealso{
   \code{\link{npoints}()}, \code{\link{psp.object}()}
 }
 \examples{
-data(copper)
 nsegments(copper$Lines)
 nsegments(copper$SouthLines)
 }
-\keyword{ spatial }
-\keyword{ manip }
+\keyword{spatial}
+\keyword{manip}
