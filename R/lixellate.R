@@ -3,7 +3,7 @@
 #'
 #'   Divide each segment of a linear network into several pieces
 #' 
-#'     $Revision: 1.1 $  $Date: 2015/11/25 01:03:23 $
+#'     $Revision: 1.3 $  $Date: 2015/11/25 04:29:55 $
 #'
 
 lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
@@ -69,6 +69,8 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
           nv = as.integer(nv),
           xv = as.double(c(xv, numeric(sumN1))),
           yv = as.double(c(yv, numeric(sumN1))),
+          svcoarse = as.integer(integer(nv + sumN1)),
+          tvcoarse = as.double(numeric(nv + sumN1)),
           nsplit = as.integer(nsplit),
           np = as.integer(np),
           spcoarse = as.integer(sp[oo]-1),
@@ -79,7 +81,11 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
   Lfine <- with(z, {
     ii <- seq_len(nv)
     Vnew <- ppp(xv[ii], yv[ii], window=Frame(L), check=FALSE)
-    linnet(Vnew, edges=cbind(fromfine,tofine)+1, sparse=sparse)
+    Lfine <- linnet(Vnew, edges=cbind(fromfine,tofine)+1, sparse=sparse)
+    marks(Lfine$vertices) <- markcbind(marks(Lfine$vertices),
+                                       data.frame(segcoarse=svcoarse+1,
+                                                  tpcoarse=tvcoarse))
+    Lfine
   })
   if(rtype == "linnet")
     return(Lfine)

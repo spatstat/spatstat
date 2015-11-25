@@ -10,10 +10,10 @@
 
 void Clixellate(ns, fromcoarse, tocoarse, 
 		fromfine, tofine, 
-		nv, xv, yv, 
+		nv, xv, yv, svcoarse, tvcoarse, 
 		nsplit, 
 		np, spcoarse, tpcoarse, 
-		spfine, tpfine) 
+		spfine, tpfine)
      /* 
 	A linear network with *ns segments and *nv vertices
 	is specified by the vectors from, to, xv, yv.
@@ -27,7 +27,8 @@ void Clixellate(ns, fromcoarse, tocoarse,
 	in the coarse network) will be mapped to the new 'fine' network. 
 	Points are sorted by 'spcoarse' value.
 	
-	'xv', 'yv' must have space for (nv + sum(nsplit-1)) entries.
+	'xv', 'yv', 'svcoarse', 'tvcoarse'
+        must each have space for (nv + sum(nsplit-1)) entries.
 
 	'fromfine', 'tofine' must have length = sum(nsplit).
 
@@ -37,6 +38,8 @@ void Clixellate(ns, fromcoarse, tocoarse,
      int *fromfine, *tofine;  /* endpoints of each segment (output) */
      int *nv; /* number of vertices (input & output) */
      double *xv, *yv; /* cartesian coords of vertices (input & output) */
+     int *svcoarse; /* segment id of new vertex in COARSE network */
+     double *tvcoarse; /* location coordinate of new vertex on COARSE network */
      int *nsplit; /* number of pieces into which each segment should be split */
      int *np; /* number of data points */
      double *tpcoarse, *tpfine; /* location coordinate */
@@ -63,17 +66,22 @@ void Clixellate(ns, fromcoarse, tocoarse,
 
     newlines = nsplit[i]; 
 
+    oldfromi = fromcoarse[i];
+    oldtoi   = tocoarse[i];
+    
+    /* local coordinates of endpoints of segment, in ***coarse*** network */
+    svcoarse[oldfromi] = svcoarse[oldtoi] = i;
+    tvcoarse[oldfromi] = 0.0;
+    tvcoarse[oldtoi] = 1.0;
+    
     if(newlines == 1) {
-      /* copy existing segment to new segment list and advance pointer */
-      fromfine[newNs] = fromcoarse[i];
-      tofine[newNs]   = tocoarse[i];
+      /* copy existing segment to new segment list */
+      fromfine[newNs] = oldfromi;
+      tofine[newNs]   = oldtoi;
+      /* advance pointer */
       ++newNs;
     } else if(newlines > 1) {
-
       /* split segment into 'newlines' pieces */
-      oldfromi = fromcoarse[i];
-      oldtoi   = tocoarse[i];
-
       xstart = xv[oldfromi];
       ystart = yv[oldfromi];
 
@@ -89,9 +97,13 @@ void Clixellate(ns, fromcoarse, tocoarse,
 	/* create new vertex, number 'newNv' */
 	xv[newNv] = xstart + j * xincr;
 	yv[newNv] = ystart + j * yincr;
+	/* local coordinates of new vertex relative to ***coarse*** network */
+	svcoarse[newNv] = i;
+	tvcoarse[newNv] = ((double) j)/((double) newlines);
 	/* create new segment, number 'newNs', ending at new vertex */
 	fromfine[newNs] = (j == 1) ? oldfromi : (newNv-1);
 	tofine[newNs]   = newNv;
+	/* advance */
 	++newNv;
 	++newNs;
       }
