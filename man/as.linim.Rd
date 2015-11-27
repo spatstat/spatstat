@@ -64,11 +64,8 @@
   f <- function(x,y){ x + y }
   plot(as.linim(f, simplenet))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{manip}

@@ -1547,7 +1547,7 @@ spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
          dimyx, eps, jitter, nsim, verbose, modelname, covname, dataname)
 sphere.volume(range, nval = 10)
-%splat(\dots)
+%splat(\dots, indent)
 splitHybridInteraction(coeffs, inte)
 sp.foundclass(cname, inlist, formalname, argsgiven)             
 sp.foundclasses(cnames, inlist, formalname, argsgiven)

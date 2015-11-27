@@ -2,19 +2,25 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.8 $  $Date: 2015/02/11 10:44:08 $
+##  $Revision: 1.9 $  $Date: 2015/11/27 06:59:57 $
 ##
 
 ## 'split cat'
 ## Replacement for 'cat(paste(...))' ensuring a multi-word output string
 ## doesn't extend over text margin
 
-splat <- function(...) {
+splat <- function(..., indent=0) {
   s <- paste(...)
   ## split at newline characters, if present
   ss <- unlist(strsplit(s, "\n"))
-  for(ssi in ss) 
-    cat(unlist(strsplit(ssi, " ")), fill=TRUE)
+  if(indent == 0) {
+    for(ssi in ss) 
+      cat(unlist(strsplit(ssi, " ")), fill=TRUE)
+  } else {
+    ispace <- paste(rep(" ", indent-1), collapse="")
+    for(ssi in ss) 
+      cat(ispace, unlist(strsplit(ssi, " ")), fill=TRUE)
+  }
   return(invisible(NULL))
 }
 

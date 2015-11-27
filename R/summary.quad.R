@@ -3,26 +3,35 @@
 #
 #  summary() method for class "quad"
 #
-#  $Revision: 1.7 $ $Date: 2014/05/08 10:29:25 $
+#  $Revision: 1.8 $ $Date: 2015/11/27 06:59:30 $
 #
-summary.quad <- function(object, ..., checkdup=FALSE) {
-  verifyclass(object, "quad")
-  s <- list(
-       data  = summary.ppp(object$data, checkdup=checkdup),
-       dummy = summary.ppp(object$dummy, checkdup=checkdup),
-       param = object$param)
-  doit <- function(ww) {
+
+summary.quad <- local({
+
+  sumriz <- function(ww) {
     if(length(ww) > 0) 
       return(list(range=range(ww), sum=sum(ww)))
     else
       return(NULL)
   }
-  w <- object$w
-  Z <- is.data(object)
-  s$w <- list(all=doit(w), data=doit(w[Z]), dummy=doit(w[!Z]))
-  class(s) <- "summary.quad"
-  return(s)
-}
+
+  summary.quad <- function(object, ..., checkdup=FALSE) {
+    verifyclass(object, "quad")
+    s <- list(
+      data  = summary.ppp(object$data, checkdup=checkdup),
+      dummy = summary.ppp(object$dummy, checkdup=checkdup),
+      param = object$param)
+    w <- object$w
+    Z <- is.data(object)
+    s$w <- list(all   = sumriz(w),
+                data  = sumriz(w[Z]),
+                dummy = sumriz(w[!Z]))
+    class(s) <- "summary.quad"
+    return(s)
+  }
+
+  summary.quad
+})
 
 print.summary.quad <- local({
 
@@ -41,50 +50,57 @@ print.summary.quad <- local({
   }
 
   print.summary.quad <- function(x, ..., dp=3) {
-    cat("Quadrature scheme = data + dummy + weights\n")
+    splat("Quadrature scheme = data + dummy + weights")
     pa <- x$param
     if(is.null(pa))
-      cat("created by an unknown function.\n")
-    cat("Data pattern:\n")
+      splat("created by an unknown function.")
+    splat("\nData pattern:")
     print(x$data, dp=dp)
     
-    cat("\nDummy quadrature points:\n")
+    splat("\nDummy quadrature points:")
     ## How they were computed
     if(!is.null(pa)) {
       dumpar <- pa$dummy
       if(is.null(dumpar))
-        cat("(provided manually)\n")
+        splat("(provided manually)", indent=5)
+      else if(is.character(dmethod <- dumpar$method))
+        splat(dmethod, indent=5)
       else if(!is.null(nd <- dumpar$nd)) {
         splat(paste0("(",
                      if(dumpar$random) "stratified random points in " else NULL,
                      nd[1], " x ", nd[2], " ",
                      if(!dumpar$quasi) "grid" else
                      paste(" =", prod(nd), "quasirandom points"),
-                     ", plus 4 corner points)"))
+                     ", plus 4 corner points)"),
+              indent=5)
       } else
-      cat("(rule for creating dummy points not understood)")
+      splat("(rule for creating dummy points not understood)", indent=5)
     }
     ## Description of them
     print(x$dummy, dp=dp)
 
-    cat("\nQuadrature weights:\n")
+    splat("Quadrature weights:")
     ## How they were computed
     if(!is.null(pa)) {
       wpar <- pa$weight
       if(is.null(wpar))
-        cat("(values provided manually)\n")
-      else if(!is.null(wpar$method)) {
-        if(wpar$method=="grid") {
-          cat(paste("(counting weights based on",
-                    wpar$ntile[1], "x", wpar$ntile[2],
-                    "array of rectangular tiles)\n"))
-        } else if(wpar$method=="dirichlet") {
-          cat(paste("(Dirichlet tile areas, computed",
-                    if(wpar$exact) "exactly" else "by pixel approximation",
-                    ")\n"))
-        } else
-        cat("(rule for creating dummy points not understood)\n")
-      }
+        splat("(values provided manually)", indent=5)
+      else if(is.character(wmethod <- wpar$method)) {
+        switch(wmethod,
+               grid = {
+                 splat("(counting weights based on",
+                       wpar$ntile[1], "x", wpar$ntile[2],
+                       "array of rectangular tiles)",
+                       indent=5)
+               },
+               dirichlet = {
+                 splat("(Dirichlet tile areas, computed",
+                       if(wpar$exact) "exactly)" else "by pixel approximation)",
+                       indent=5)
+               },
+               splat(wmethod, indent=5)
+               )
+      } else splat("(rule for creating dummy points not understood)")
     }
     summariseweights(x$w$all, "All weights", dp)
     summariseweights(x$w$data, "Weights on data points", dp)
@@ -98,8 +114,8 @@ print.summary.quad <- local({
 
     
 print.quad <- function(x, ...) {
-  cat("Quadrature scheme\n")
-  splat(paste(x$data$n, "data points, ", x$dummy$n, "dummy points"))
-  cat(paste("Total weight ", sum(x$w), "\n"))
+  splat("Quadrature scheme")
+  splat(x$data$n, "data points, ", x$dummy$n, "dummy points")
+  splat("Total weight ", sum(x$w))
   return(invisible(NULL))
 }

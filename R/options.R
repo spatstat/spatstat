@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.67 $   $Date: 2015/09/06 03:23:27 $
+#    $Revision: 1.68 $   $Date: 2015/11/27 05:41:04 $
 #
 #
 
@@ -465,8 +465,20 @@ warn.once <- function(key, ...) {
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
+       ),
+       Clinequad = list(
+         # use C code for 'linequad'
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       developer = list(
+         # general purpose; user is a developer; use experimental code, etc
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
        )
-       )
+    )
 # end of options list
 
 reset.spatstat.options <- function() {
