@@ -17,7 +17,7 @@
     or a pixel image.
   }
   \item{lmax}{
-    An upper bound for the value of \code{lambda(x,y)},
+    Optional. An upper bound for the value of \code{lambda(x,y)},
     if \code{lambda} is a function.
   }
   \item{win}{
@@ -68,7 +68,10 @@
   If \code{lmax} is given,
   it must be an upper bound on the values of \code{lambda(x,y,\dots)}
   for all locations \code{(x, y)}
-  inside the window \code{win}.
+  inside the window \code{win}. That is, we must have
+  \code{lambda(x,y,\dots) <= lmax} for all locations \code{(x,y)}.
+  If this is not true then the results of
+  the algorithm will be incorrect.
 
   If \code{lmax} is missing or \code{NULL},
   an approximate upper bound is computed by finding the maximum value

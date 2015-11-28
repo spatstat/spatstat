@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.028
+        CHANGES IN spatstat VERSION 1.43-0.029
 
 OVERVIEW
 
@@ -23,7 +23,7 @@ OVERVIEW
 
    o Calculate the predicted variance of number of points.
 
-   o Version nickname: 'Core Dumped'
+   o Version nickname: 'The Sound of One Hand Typing'
 
 NEW FUNCTIONS
 

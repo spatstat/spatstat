@@ -3,7 +3,7 @@
 
    Function body definitions with macros
 
-   $Revision: 1.1 $  $Date: 2013/10/21 02:01:39 $
+   $Revision: 1.2 $  $Date: 2015/11/28 02:02:50 $
 
    Macros used:
    FNAME   name of function
@@ -29,7 +29,7 @@ FNAME(np, xp, yp,   /* data points 'from' */
       nndist,  /* nearest neighbour distance for each point */
       nnwhich  /* identifies nearest neighbour */
 #else 
-      nndist,  /* nearest neighbour distance for each point */
+      nndist  /* nearest neighbour distance for each point */
 #endif
 )
   int *np, *nq, *nv, *ns;

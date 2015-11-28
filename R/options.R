@@ -472,6 +472,12 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
+       Cnncrosslpp = list(
+         # use C code for 'nncross.lpp'
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
        developer = list(
          # general purpose; user is a developer; use experimental code, etc
          default=FALSE,

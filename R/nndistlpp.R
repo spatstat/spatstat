@@ -41,6 +41,7 @@ nndist.lpp <- function(X, ..., method="C") {
     from0 <- from - 1L
     to0   <- to - 1L
     segmap <- pro - 1L
+    nseg <- length(from0)
     # upper bound on interpoint distance
     huge <- max(dpath) + 2 * max(lengths.psp(Lseg))
     # space for result
@@ -53,7 +54,7 @@ nndist.lpp <- function(X, ..., method="C") {
              nv = as.integer(Lvert$n),
              xv = as.double(Lvert$x),
              yv = as.double(Lvert$y),
-             ns = as.double(L$n),
+             ns = as.integer(nseg),
              from = as.integer(from0),
              to = as.integer(to0),
              dpath = as.double(dpath),
@@ -102,6 +103,7 @@ nnwhich.lpp <- function(X, ..., method="C") {
     from0 <- from - 1
     to0   <- to - 1
     segmap <- pro - 1
+    nseg <- length(from0)
     # upper bound on interpoint distance
     huge <- max(dpath) + 2 * max(lengths.psp(Lseg))
     # space for result
@@ -115,7 +117,7 @@ nnwhich.lpp <- function(X, ..., method="C") {
              nv = as.integer(Lvert$n),
              xv = as.double(Lvert$x),
              yv = as.double(Lvert$y),
-             ns = as.double(L$n),
+             ns = as.integer(nseg),
              from = as.integer(from0),
              to = as.integer(to0),
              dpath = as.double(dpath),
@@ -137,32 +139,45 @@ nnwhich.lpp <- function(X, ..., method="C") {
 # on the SAME network.
 #
 
-nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., method="C") {
+nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
+                        what = c("dist", "which"), ..., method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(inherits(Y, "lpp"))
   what   <- match.arg(what, choices=c("dist", "which"), several.ok=TRUE)
   stopifnot(method %in% c("C", "interpreted"))
+  if(is.null(iX) != is.null(iY))
+    stop("If one of iX, iY is given, then both must be given")
+  exclude <- (!is.null(iX) || !is.null(iY))
+
   check <- resolve.defaults(list(...), list(check=TRUE))$check
-  #
   if(check && !identical(as.linnet(X, sparse=TRUE),
                          as.linnet(Y, sparse=TRUE)))
     stop("X and Y are on different linear networks")
-  Xsparse <- identical(domain(X)$sparse, TRUE)
-  Ysparse <- identical(domain(Y)$sparse, TRUE)
-  L <- if(!Xsparse && Ysparse) as.linnet(X) else
-       if(Xsparse && !Ysparse) as.linnet(Y) else
-       as.linnet(X, sparse=FALSE)
+
+  fast <- (method == "C") && !exclude && spatstat.options("Cnncrosslpp")
+
+  if(!fast) {
+    ## require dpath matrix
+    Xsparse <- identical(domain(X)$sparse, TRUE)
+    Ysparse <- identical(domain(Y)$sparse, TRUE)
+    L <- if(!Xsparse && Ysparse) as.linnet(X) else
+         if(Xsparse && !Ysparse) as.linnet(Y) else
+         as.linnet(X, sparse=FALSE)
+  } else L <- as.linnet(X)
   #
   nX <- npoints(X)
   nY <- npoints(Y)
   P <- as.ppp(X)
   Q <- as.ppp(Y)
   #
-#  Lseg  <- L$lines
   Lvert <- L$vertices
   from  <- L$from
   to    <- L$to
-  dpath <- L$dpath
+  if(fast) {
+    seglengths <- lengths.psp(as.psp(L))
+  } else {
+    dpath <- L$dpath
+  }
   
   # deal with null cases
   if(nX == 0)
@@ -171,13 +186,12 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
     return(data.frame(dist=rep(Inf, nX), which=rep(NA_integer_, nX))[, what])
 
   # find nearest segment for each point
-  Xpro <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)$seg
-  Ypro <- coords(Y, local=TRUE, spatial=FALSE, temporal=FALSE)$seg
+  Xcoords <- coords(X)
+  Ycoords <- coords(Y)
+  Xpro <- Xcoords$seg
+  Ypro <- Ycoords$seg
 
   # handle serial numbers
-  if(is.null(iX) != is.null(iY))
-    stop("If one of iX, iY is given, then both must be given")
-  exclude <- (!is.null(iX) || !is.null(iY))
   if(exclude) {
     stopifnot(is.integer(iX) && is.integer(iY))
     if(length(iX) != nX)
@@ -197,15 +211,51 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
     # convert indices to start at 0
     from0 <- from - 1
     to0   <- to - 1
+    nseg <- length(from0)
     Xsegmap <- Xpro - 1
     Ysegmap <- Ypro - 1
     # upper bound on interpoint distance
-    huge <- max(dpath) + 2 * diameter(as.rectangle(as.owin(L)))
+    huge <- if(!fast) {
+      max(dpath) + 2 * diameter(Frame(L))
+    } else {
+      sum(seglengths)
+    }
     # space for result
     nnd <- double(nX)
     nnw <- integer(nX)
     # call C
-    if(!exclude) {
+    if(fast) {
+      ## experimental faster code
+      message("Using experimental fast code for nncross.lpp")
+      ooX <- order(Xsegmap)
+      ooY <- order(Ysegmap)
+      tol <- max(.Machine$double.eps,
+                 diameter(Frame(L))/2^20)
+      zz <- .C("linSnndwhich",
+               np = as.integer(nX),
+               sp = as.integer(Xsegmap[ooX]),
+               tp = as.double(Xcoords$tp[ooX]),
+               nq = as.integer(nY),
+               sq = as.integer(Ysegmap[ooY]),
+               tq = as.double(Ycoords$tp[ooY]),
+               nv = as.integer(Lvert$n),
+               ns = as.integer(nseg),
+               from = as.integer(from0),
+               to = as.integer(to0),
+               seglen = as.double(seglengths), 
+               huge = as.double(huge),
+               tol = as.double(tol), 
+               nndist = as.double(nnd),
+               nnwhich = as.integer(nnw))
+      zznd <- zz$nndist
+      zznw <- zz$nnwhich + 1L
+      if(any(notfound <- (zznw == 0))) {
+        zznd[notfound] <- NA
+        zznw[notfound] <- NA
+      }
+      nnd[ooX] <- zznd
+      nnw[ooX] <- ooY[zznw]
+    } else if(!exclude) {
       zz <- .C("linndcross",
                np = as.integer(nX),
                xp = as.double(P$x),
@@ -216,7 +266,7 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
                nv = as.integer(Lvert$n),
                xv = as.double(Lvert$x),
                yv = as.double(Lvert$y),
-               ns = as.double(L$n),
+               ns = as.integer(nseg),
                from = as.integer(from0),
                to = as.integer(to0),
                dpath = as.double(dpath),
@@ -225,7 +275,10 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
                huge = as.double(huge),
                nndist = as.double(nnd),
                nnwhich = as.integer(nnw))
+      nnd <- zz$nndist
+      nnw <- zz$nnwhich + 1L
     } else {
+      ## excluding certain pairs
       zz <- .C("linndxcross",
                np = as.integer(nX),
                xp = as.double(P$x),
@@ -236,7 +289,7 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
                nv = as.integer(Lvert$n),
                xv = as.double(Lvert$x),
                yv = as.double(Lvert$y),
-               ns = as.double(L$n),
+               ns = as.integer(nseg),
                from = as.integer(from0),
                to = as.integer(to0),
                dpath = as.double(dpath),
@@ -247,10 +300,9 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL, what = c("dist", "which"), ..., 
                huge = as.double(huge),
                nndist = as.double(nnd),
                nnwhich = as.integer(nnw))
+      nnd <- zz$nndist
+      nnw <- zz$nnwhich + 1L
     }
-    nnd <- zz$nndist
-    # convert C indexing to R indexing
-    nnw <- zz$nnwhich + 1L
     # any zeroes occur if points have no neighbours.
     nnw[nnw == 0] <- NA
   }

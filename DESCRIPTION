@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.43-0.028
-Nickname: Core Dumped
-Date: 2015-11-27
+Version: 1.43-0.029
+Nickname: The Sound of One Hand Typing
+Date: 2015-11-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
