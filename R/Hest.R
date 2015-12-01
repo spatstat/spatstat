@@ -7,10 +7,28 @@
 Hest <- local({
   Hest <- function(X, r=NULL, breaks=NULL,
                    ...,
+                   W,
                    correction=c("km", "rs", "han"),
                    conditional=TRUE) {
-    if(!(is.ppp(X) || is.psp(X) || is.owin(X)))
-      stop("X should be an object of class ppp, psp or owin")
+    if(is.ppp(X) || is.psp(X)) {
+      XX <- X
+      W0 <- Window(X)
+    } else if(is.owin(X)) {
+      XX <- X
+      W0 <- Frame(X)
+    } else if(is.im(X)) {
+      if(X$type != "logical")
+        stop("When X is an image, its pixel values should be logical values")
+      XX <- solutionset(X)
+      W0 <- Window(X)
+    } else stop("X should be an object of class ppp, psp, owin or im")
+    ##
+    if(given.W <- !missing(W)) {
+      if(!is.subset.owin(W, W0))
+        stop("W is not a subset of the observation window of X")
+    } else {
+      W <- W0
+    }
     ## handle corrections
     if(is.null(correction))
       correction <- c("rs", "km", "cs")
@@ -30,21 +48,27 @@ Hest <- local({
     corx <- as.list(corxtable %in% correction)
     names(corx) <- corxtable
     ## compute distance map
-    D <- distmap(X, ...)
-    B <- attr(D, "bdry")
-    W <- as.owin(D)
+    D <- distmap(XX, ...)
+    if(!given.W && !is.im(X)) {
+      B <- attr(D, "bdry")
+    } else {
+      B <- distmap(W, invert=TRUE, ...)
+      har <- harmonise(D=D, B=B)
+      D <- har$D[W, drop=FALSE]
+      B <- har$B[W, drop=FALSE]
+    }
     ## histogram breakpoints 
-    dmax <- summary(D)$max
+    dmax <- max(D)
     breaks <- handle.r.b.args(r, breaks, W, NULL, rmaxdefault=dmax)
     rval <- breaks$r
     ##  extract distances and censoring distances
     dist <- as.vector(as.matrix(D))
     bdry <- as.vector(as.matrix(B))
-    ok <- !is.na(dist) && !is.na(bdry)
+    ok <- !is.na(dist) & !is.na(bdry)
     dist <- dist[ok]
     bdry <- bdry[ok]
     ## delete zero distances
-    if(is.owin(X)) {
+    if(is.owin(X) || is.im(X)) {
       pos <- (dist > 0)
       areafraction <- 1 - mean(pos)
       dist <- dist[pos]
@@ -63,7 +87,7 @@ Hest <- local({
                         han.denom=if(corx$han) eroded.areas(W, rval) else NULL,
                         tt=dist)
     ## conditional on d > 0 ?
-    if(is.owin(X)) {
+    if(is.owin(X) || is.im(X)) {
       if(conditional) {
         if(corx$km)   Z$km  <- condition(Z$km)
         if(corx$rs)   Z$rs  <- condition(Z$rs)

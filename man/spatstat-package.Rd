@@ -1761,6 +1761,7 @@
   Juha Heikkinen,
   Mandy Hering,
   Markus Herrmann,
+  Kassel Hingee,
   Kurt Hornik,
   Philipp Hunziker,
   Jack Hywood,

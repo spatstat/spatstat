@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.029
+        CHANGES IN spatstat VERSION 1.43-0.030
 
 OVERVIEW
 
-   o We thank Jonas Geldmann, Andrew Hardegen, Tom Lawrence, 
-     Robin Milne, Gopalan Nair, Suman Rakshit, Peijian Shi
+   o We thank Jonas Geldmann, Andrew Hardegen, Kassel Hingee,
+     Tom Lawrence, Robin Milne, Gopalan Nair, Suman Rakshit, Peijian Shi
      and Rasmus Waagepetersen for contributions.
   
    o More support for multidimensional point patterns and point processes.
@@ -86,6 +86,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o envelope
    New argument 'funargs'
+
+   o Hest
+   Argument X can now be a pixel image with logical values.
+   New argument 'W'. [Based on code by Kassel Hingee.]
 
    o logLik.ppm
    New argument 'absolute'.

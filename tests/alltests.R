@@ -2020,6 +2020,35 @@ local({
   # check empty patterns OK
   X <- runiflpp(0, simplenet)
   print(X)
+  
+  ## nearest neighbour distances
+  eps <- sqrt(.Machine$double.eps)
+  f <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k+1) }
+  g <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k+1) }
+
+  XX <- spiders
+  nn <- nndist(XX)
+  nnP <- f(pairdist(XX), 1)
+  if(any(abs(nn - nnP) > eps))
+    stop("nndist.lpp does not agree with pairdist.lpp")
+
+  nw <- nnwhich(XX)
+  nwP <- g(pairdist(XX), 1)
+  if(any(nw != nwP))
+    stop("nnwhich.lpp does not agree with pairdist")
+
+  ZZ <- split(chicago)
+  XX <- ZZ$damage
+  YY <- ZZ$assault
+  op <- spatstat.options(Cnncrosslpp=FALSE)
+  a <- nncross(XX, YY)
+  spatstat.options(Cnncrosslpp=TRUE)
+  b <- nncross(XX, YY)
+  if(any(a$which != b$which))
+    stop("Inconsistent values of nncross.lpp()$which from different C code")
+  if(max(abs(a$dist - b$dist)) > eps)
+    stop("Inconsistent values of nncross.lpp()$dist from different C code")
+  spatstat.options(op)
 })
 
 #
