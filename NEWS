@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.030
+        CHANGES IN spatstat VERSION 1.43-0.031
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
    o Quadrat counting accelerated, in some cases.
 
-   o Penttinen process can be simulated.
+   o Penttinen process can be simulated (by CFTP or Metropolis-Hastings).
 
    o Calculate the predicted variance of number of points.
 
@@ -109,6 +109,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen
    New argument 'drop'.
 
+   o Kest.fft
+   Now has '...' arguments allowing control of spatial resolution.
+
 BUGS
 
    o runifpointx, rpoisppx
@@ -151,6 +154,10 @@ BUGS
      dclf.sigtrace, mad.sigtrace, dg.sigtrace
    The results could not be re-plotted using a plot formula,
    because the internal data were slightly corrupted.
+   Fixed.
+
+   o Kest.fft
+   Result was incorrectly normalised.
    Fixed.
 
    o crosspairs
