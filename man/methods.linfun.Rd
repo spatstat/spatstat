@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \alias{methods.linfun} %DoNotExport
 \alias{print.linfun}
+\alias{summary.linfun}
 \alias{plot.linfun}
 \alias{as.linim.linfun}
 \alias{as.owin.linfun}
@@ -15,6 +16,8 @@
 \usage{
   \method{print}{linfun}(x, \dots)
 
+  \method{summary}{linfun}(object, \dots)
+
   \method{plot}{linfun}(x, \dots, L=NULL,
                      eps = NULL, dimyx = NULL, xy = NULL,
                      main)
@@ -26,7 +29,7 @@
   \method{as.function}{linfun}(x, \dots)
 }
 \arguments{
-  \item{X,x,W}{
+  \item{X,x,object,W}{
     A function on a linear network
     (object of class \code{"linfun"}).
   }
@@ -43,8 +46,8 @@
 }
 \details{
   These are methods for the generic functions
-  \code{\link{plot}}, \code{\link{print}}
-  and the \pkg{spatstat} generic functions
+  \code{\link{plot}}, \code{\link{print}} and \code{\link{summary}},
+  and for the \pkg{spatstat} generic functions
   \code{\link{as.owin}},
   \code{\link{as.linim}}.
 
@@ -61,7 +64,7 @@
   image on the linear network (an object of class \code{"linim"}).
 }
 \value{
-  For \code{print.linfun} the result is \code{NULL}.
+  For \code{print.linfun} and \code{summary.linfun} the result is \code{NULL}.
 
   For \code{plot.linfun} the result is the same as
   for \code{\link{plot.im}}.
@@ -71,7 +74,6 @@
   class \code{"linim"}, and so on.
 }
 \examples{
-   data(letterR)
    X <- runiflpp(3, simplenet)
    f <- nnfun(X)
    f
@@ -80,11 +82,8 @@
    as.owin(f)
    as.linim(f)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{math}

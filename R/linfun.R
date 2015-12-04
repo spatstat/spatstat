@@ -49,6 +49,8 @@ print.linfun <- function(x, ...) {
   invisible(NULL)
 }
 
+summary.linfun <- function(object, ...) { print(object, ...) }
+
 as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
   if(missing(L) || is.null(L))
     L <- as.linnet(X)

@@ -46,10 +46,66 @@ linim <- function(L, Z, ..., df=NULL) {
 }
 
 print.linim <- function(x, ...) {
-  cat("Image on linear network\n")
+  splat("Image on linear network")
   print(attr(x, "L"))
   NextMethod("print")
 }
+
+summary.linim <- function(object, ...) {
+  y <- NextMethod("summary")
+  if("integral" %in% names(y))
+    y$integral <- integral(object)
+  y$network <- summary(as.linnet(object))
+  class(y) <- c("summary.linim", class(y))
+  return(y)
+}
+
+print.summary.linim <- function(x, ...) {
+  splat(paste0(x$type, "-valued"), "pixel image on a linear network")
+  unitinfo <- summary(x$units)
+  pluralunits <- unitinfo$plural
+  sigdig <- getOption('digits')
+  di <- x$dim
+  win <- x$window
+  splat(di[1], "x", di[2], "pixel array (ny, nx)")
+  splat("enclosing rectangle:",
+        prange(signif(x$window$xrange, sigdig)),
+        "x",
+        prange(signif(x$window$yrange, sigdig)),
+        unitinfo$plural,
+        unitinfo$explain)
+  splat("dimensions of each pixel:",
+        signif(x$xstep, 3), "x", signif(x$ystep, sigdig),
+        pluralunits)
+  if(!is.null(explain <- unitinfo$explain))
+    splat(explain)
+  splat("Pixel values (on network):")
+  switch(x$type,
+         integer=,
+         real={
+           splat("\trange =", prange(signif(x$range, sigdig)))
+           splat("\tintegral =", signif(x$integral, sigdig))
+           splat("\tmean =", signif(x$mean, sigdig))
+         },
+         factor={
+           print(x$table)
+         },
+         complex={
+           splat("\trange: Real",
+                 prange(signif(x$Re$range, sigdig)),
+                 "Imaginary",
+                 prange(signif(x$Im$range, sigdig)))
+           splat("\tintegral =", signif(x$integral, sigdig))
+           splat("\tmean =", signif(x$mean, sigdig))
+         },
+         {
+           print(x$summary)
+         })
+  splat("Underlying network:")
+  print(x$network)
+  return(invisible(NULL))
+}
+
 
 plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
                        do.plot=TRUE) {

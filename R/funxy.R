@@ -19,6 +19,8 @@ print.funxy <- function(x, ...) {
   print(as.owin(x))
 }
 
+summary.funxy <- function(object, ...) { print(object, ...) }
+
 as.owin.funxy <- function(W, ..., fatal=TRUE) {
   W <- attr(W, "W")
   as.owin(W, ..., fatal=fatal)

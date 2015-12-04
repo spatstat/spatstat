@@ -531,6 +531,7 @@
 \alias{print.splitppx}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
+\alias{print.summary.linim}
 \alias{print.summary.linnet}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
@@ -690,6 +691,7 @@
 \alias{suffstat.poisson}
 \alias{summarise.trend}
 \alias{summary.envelope}
+\alias{summary.funxy}
 \alias{summary.hyperframe}
 \alias{summary.logiquad}
 \alias{summary.lut}
@@ -1378,6 +1380,7 @@ primesbelow(nmax)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
+\method{print}{summary.linim}(x, \dots)
 \method{print}{summary.linnet}(x, \dots)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
@@ -1562,6 +1565,7 @@ suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
+\method{summary}{funxy}(object,\dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)

@@ -3,6 +3,7 @@
 \alias{methods.linim} %DoNotExport
 \alias{as.im.linim}
 \alias{print.linim}
+\alias{summary.linim}
 \alias{affine.linim}
 \alias{scalardilate.linim}
 \alias{shift.linim}
@@ -15,6 +16,8 @@
 \usage{
   \method{print}{linim}(x, \dots)
 
+  \method{summary}{linim}(object, \dots)
+
   \method{as.im}{linim}(X, \dots)
 
   \method{shift}{linim}(X, \dots)
@@ -24,7 +27,7 @@
   \method{affine}{linim}(X, mat=diag(c(1,1)), vec=c(0,0), \dots)
 }
 \arguments{
-  \item{X,x}{
+  \item{X,x,object}{
     A pixel image on a linear network
     (object of class \code{"linim"}).
   }
@@ -41,8 +44,8 @@
   }
 }
 \details{
-  These are methods for the generic function
-  \code{\link{print}}
+  These are methods for the generic functions
+  \code{\link{print}} and \code{\link{summary}},
   and the \pkg{spatstat} generic functions
   \code{\link{as.im}},
   \code{\link{shift}}, 
@@ -63,6 +66,10 @@
 \value{
   For \code{print.linim} the result is \code{NULL}.
 
+  The function \code{summary.linim} returns an object of class
+  \code{"summary.linim"}. In normal usage this summary is
+  automatically printed by \code{\link{print.summary.linim}}.
+
   For \code{as.im.linim} the result is an object of class \code{"im"}.
   
   For the geometric transformations \code{shift.linim},
@@ -76,13 +83,7 @@
    scalardilate(X, 2)
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{math}

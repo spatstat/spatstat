@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.031
+        CHANGES IN spatstat VERSION 1.43-0.032
 
 OVERVIEW
 
@@ -17,11 +17,13 @@ OVERVIEW
 
    o Subdivide a linear network.
 
-   o Quadrat counting accelerated, in some cases.
-
-   o Penttinen process can be simulated (by CFTP or Metropolis-Hastings).
+   o Penttinen process can be simulated (by Metropolis-Hastings or CFTP).
 
    o Calculate the predicted variance of number of points.
+
+   o Accelerated algorithms for linear networks.
+
+   o Quadrat counting accelerated, in some cases.
 
    o Version nickname: 'The Sound of One Hand Typing'
 
@@ -55,6 +57,9 @@ NEW FUNCTIONS
 
    o tiles.empty
      Checks whether each tile of a tessellation is empty or nonempty.
+
+   o summary.linim
+     Summary for a pixel image on a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -97,9 +102,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o plot.kppm
    New arguments 'pause' and 'xname'.
 
-   o quadratcount.ppp
-   Computation accelerated in some cases.
-
    o tess
    Argument 'window' is ignored when xgrid, ygrid are given.
 
@@ -111,6 +113,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o Kest.fft
    Now has '...' arguments allowing control of spatial resolution.
+
+   o lppm
+   Computation accelerated.
+
+   o nncross.lpp, distfun.lpp
+   Computation accelerated.
+
+   o quadratcount.ppp
+   Computation accelerated in some cases.
 
 BUGS
 

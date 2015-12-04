@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.68 $   $Date: 2015/11/27 05:41:04 $
+#    $Revision: 1.69 $   $Date: 2015/12/04 09:05:55 $
 #
 #
 
@@ -468,13 +468,13 @@ warn.once <- function(key, ...) {
        ),
        Clinequad = list(
          # use C code for 'linequad'
-         default=FALSE,
+         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
        Cnncrosslpp = list(
          # use C code for 'nncross.lpp'
-         default=FALSE,
+         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
