@@ -34,7 +34,8 @@ install.packages('devtools')
 ## Bug reports 
 
 Users of `spatstat` are encouraged to report bugs here 
-(press *issue* in the menu on the right to start a new bug report
+(go to *issues* in the menu above, 
+and press *new issue* to start a new bug report
 or feature request).
 
 ## Making your own changes
