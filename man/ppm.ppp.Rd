@@ -1,6 +1,9 @@
 \name{ppm.ppp}
 \alias{ppm.ppp}
 \alias{ppm.quad}
+\concept{point process model}
+\concept{Poisson point process}
+\concept{Gibbs point process}
 \title{
   Fit Point Process Model to Point Pattern Data
 }

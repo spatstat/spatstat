@@ -1,5 +1,7 @@
 \name{dppm}
 \alias{dppm}
+\concept{point process model}
+\concept{determinantal point process}
 \title{Fit Determinantal Point Process Model}
 \description{
   Fit a determinantal point process model to a point pattern.

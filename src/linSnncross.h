@@ -5,7 +5,7 @@
 
    Sparse representation of network
 
-   $Revision: 1.2 $  $Date: 2015/11/28 10:08:36 $
+   $Revision: 1.3 $  $Date: 2015/12/05 07:26:36 $
 
    Macros used:
    FNAME   name of function
@@ -43,7 +43,7 @@ FNAME(np, sp, tp,  /* data points 'from' (ordered by sp) */
 {
   int Np, Nq, Nv, Ns, i, j, ivleft, ivright, jfirst, jlast, k;
   int segPi, segQj, nbi1, nbi2, nbj1, nbj2; 
-  double eps, d, dmin, hugevalue, slen, dleft, dright, tpi;
+  double eps, d, dmin, hugevalue, slen, dleft, dright, tpi, tqj;
   char converged;
   double *dminvert;  /* min dist from each vertex */
 #ifdef WHICH
@@ -62,99 +62,11 @@ FNAME(np, sp, tp,  /* data points 'from' (ordered by sp) */
   dminvert = (double *) R_alloc(Nv, sizeof(double));
 #ifdef WHICH
   whichvert = (int *) R_alloc(Nv, sizeof(int));
-#endif
-
-#ifdef HUH
-  Rprintf("Initialise dminvert\n");
-#endif
-  /* initialise to huge value */
-  for(i = 0; i < Nv; i++) {
-    dminvert[i] = hugevalue;
-#ifdef WHICH
-    whichvert[i] = -1;
-#endif
-  }
-
-#ifdef HUH
-  Rprintf("Run through target points\n");
-#endif
-  /* assign correct value to endpoints of segments containing target points */
-  for(j = 0; j < Nq; j++) {
-    segQj = sq[j];
-    slen = seglen[segQj];
-    ivleft = from[segQj];
-    d = slen * tq[j];
-    if(d < dminvert[ivleft]) {
-      dminvert[ivleft] = d;
-#ifdef WHICH
-      whichvert[ivleft] = j;
-#endif
-    }
-    ivright = to[segQj];
-    d = slen * (1.0 - tq[j]);
-    if(d < dminvert[ivright]) {
-      dminvert[ivright] = d;
-#ifdef WHICH
-      whichvert[ivright] = j;
-#endif
-    }
-  }
-
-  /* recursively update */
-#ifdef HUH
-  Rprintf("Recursive update\n");
-#endif
-  converged = NO;
-  while(!converged) {
-    converged = YES;
-#ifdef HUH
-    Rprintf("........... starting new pass ...................... \n");
-#endif
-    for(k = 0; k < Ns; k++) {
-      ivleft = from[k];
-      ivright = to[k];
-      slen = seglen[k];
-      dleft = (double) dminvert[ivleft];
-      dright = (double) dminvert[ivright];
-      d = (double) (dleft + slen);
-      if(d < dright - eps) {
-#ifdef HUH
-	Rprintf("Updating ivright=%d using ivleft=%d, from %lf to %lf+%lf=%lf\n",
-		ivright, ivleft, dright, dleft, slen, d);
-#endif
-	converged = NO;
-	dminvert[ivright] = d;
-#ifdef WHICH
-	whichvert[ivright] = whichvert[ivleft];
-#endif
-      } else {
-	d = (double) (dright + slen);
-	if(d < dleft - eps) {
-#ifdef HUH
-	Rprintf("Updating ivleft=%d using ivright=%d, from %lf to %lf+%lf=%lf\n",
-		ivleft, ivright, dleft, dright, slen, d);
-#endif
-	  converged = NO;
-	  dminvert[ivleft] = d;
-#ifdef WHICH
-	  whichvert[ivleft] = whichvert[ivright];
-#endif
-	}
-      }
-    }
-  }
-
-#ifdef HUH
-  Rprintf("Done\nVertex values:\n");
-#ifdef WHICH
-  Rprintf("\ti\twhich\tdist\n");
-  for(i = 0; i < Nv; i++) 
-    Rprintf("\t%d\t%d\t%lf\n", i, whichvert[i], dminvert[i]);
+  Clinvwhichdist(nq, sq, tq, nv, ns, from, to, seglen, huge, tol, 
+		 dminvert, whichvert);
 #else
-  Rprintf("\ti\tdist\n");
-  for(i = 0; i < Nv; i++) 
-    Rprintf("\t%d\t%lf\n", i, dminvert[i]);
-#endif
+  Clinvdist(nq, sq, tq, nv, ns, from, to, seglen, huge, tol, 
+	    dminvert);
 #endif
 
 #ifdef HUH

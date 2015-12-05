@@ -1,6 +1,9 @@
 \name{ppm}
 \alias{ppm}
 \alias{ppm.formula}
+\concept{point process model}
+\concept{Poisson point process}
+\concept{Gibbs point process}
 \title{
   Fit Point Process Model to Data
 }
@@ -52,6 +55,12 @@
   to an observed point pattern.
   The model may include
   spatial trend, interpoint interaction, and dependence on covariates.
+
+  The model fitted by \code{ppm}
+  is either a Poisson point process (in which different points
+  do not interact with each other) or a Gibbs point process (in which
+  different points typically inhibit each other).
+  For clustered point process models, use \code{\link{kppm}}.
 
   The function \code{ppm} is generic, with methods for
   the classes \code{formula}, \code{ppp} and \code{quad}.
@@ -278,6 +287,10 @@
 
   See \code{\link{valid.ppm}} and \code{\link{project.ppm}} for
   ensuring the fitted model is a valid point process.
+
+  See \code{\link{kppm}} for fitting Cox point process models
+  and cluster point process models, and \code{\link{dppm}} for fitting
+  determinantal point process models.
 }
 \examples{
  # fit the stationary Poisson process

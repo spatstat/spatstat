@@ -3,6 +3,10 @@
 \alias{kppm.formula}
 \alias{kppm.ppp}
 \alias{kppm.quad}
+\concept{point process model}
+\concept{Cox point process}
+\concept{cluster process}
+\concept{Neyman-Scott cluster process}
 \title{Fit Cluster or Cox Point Process Model}
 \description{
   Fit a homogeneous or inhomogeneous cluster process or

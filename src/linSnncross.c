@@ -20,6 +20,8 @@
 
 */
 
+void Clinvdist(), Clinvwhichdist();  /* functions from linvdist.c */
+
 #undef HUH
 
 /* definition of linSnndcross */

@@ -5,8 +5,10 @@
 \alias{rhohat.ppm}
 \alias{rhohat.lpp}
 \alias{rhohat.lppm}
+\concept{Resource Selection Function}
+\concept{Prospectivity}
 \title{
-  Smoothing Estimate of Covariate Transformation
+  Smoothing Estimate of Intensity as Function of a Covariate
 }
 \description{
   Computes a smoothing estimate of the intensity of a point process,
@@ -137,6 +139,16 @@ rhohat(object, covariate, ...)
   }
 }
 \details{
+  This command estimates the relationship between
+  point process intensity and a given spatial covariate.
+  Such a relationship is sometimes called a
+  \emph{resource selection function} (if the points are organisms
+  and the covariate is a descriptor of habitat) or
+  a \emph{prospectivity index} (if the points are mineral deposits
+  and the covariate is a geological variable). 
+  This command uses a nonparametric smoothing method which does not assume a
+  particular form for the relationship.  
+  
   If \code{object} is a point pattern, and \code{baseline} is missing or
   null, this command assumes that \code{object} is a realisation of a
   Poisson point process with intensity function
@@ -264,16 +276,16 @@ rhohat(object, covariate, ...)
   ISBN: 0-387-28311-0.  
 }
 \author{
-  \adrian
-  
-  
-  and \rolf
-  
+  \adrian, 
+  Ya-Mei Chang, Yong Song, 
+  and \rolf.
 }
 \seealso{
   \code{\link{rho2hat}},
   \code{\link{methods.rhohat}},
-  \code{\link{parres}}
+  \code{\link{parres}}.
+
+  See \code{\link{ppm}} for a parametric method for the same problem.
 }
 \examples{
   X <-  rpoispp(function(x,y){exp(3+3*x)})
