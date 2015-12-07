@@ -424,6 +424,7 @@
 \alias{onecolumn}
 \alias{optimStatus}
 \alias{orderstats}
+\alias{orderwhich}
 \alias{ordinal}
 \alias{\%orifnull\%}  %DoNotExport
 %NAMESPACE export("%orifnull%")
@@ -1249,6 +1250,7 @@ optimStatus(x, call)
 printStatus(x, errors.only)
 signalStatus(x, errors.only)
 orderstats(x, k, decreasing)
+orderwhich(x, k, decreasing)
 ordinal(k)
 a \%orifnull\% b
 outdated.interact(object)

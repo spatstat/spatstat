@@ -9,7 +9,7 @@
   by the shortest path in the network.
 }
 \usage{
-\method{nndist}{lpp}(X, ..., method="C")
+\method{nndist}{lpp}(X, ..., k=1, method="C")
 }
 \arguments{
   \item{X}{
@@ -18,6 +18,10 @@
   \item{method}{
     Optional string determining the method of calculation.
     Either \code{"interpreted"} or \code{"C"}.
+  }
+  \item{k}{
+    Integer, or integer vector. The algorithm will compute the distance to the
+    \code{k}th nearest neighbour. 
   }
   \item{\dots}{
     Ignored.
@@ -35,12 +39,12 @@
   much slower, but is provided for checking purposes.
 }
 \value{
-  A numeric vector, of length equal to the number of points in \code{X}.
+  A numeric vector, of length equal to the number of points in \code{X},
+  or a matrix, with one row for each point in \code{X} and one column
+  for each entry of \code{k}.
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{lpp}}
@@ -48,5 +52,6 @@
 \examples{
    example(lpp)
    nndist(X)
+   nndist(X, k=2)
 }
 \keyword{spatial}

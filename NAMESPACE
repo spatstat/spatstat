@@ -113,6 +113,7 @@ useDynLib(spatstat,
 "Kwborder",
 "Kwnone",
 "lincrossdist",
+"linknncross",
 "linndcross",
 "linndxcross",
 "linnndist",
@@ -1521,6 +1522,7 @@ export("Ops.linim")
 export("optimStatus")
 export("Ord")
 export("orderstats")
+export("orderwhich")
 export("ord.family")
 export("ordinal")
 export("OrdThresh")

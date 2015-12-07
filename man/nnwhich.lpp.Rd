@@ -9,7 +9,7 @@
   by the shortest path in the network.
 }
 \usage{
-\method{nnwhich}{lpp}(X, ..., method="C")
+\method{nnwhich}{lpp}(X, ..., k=1, method="C")
 }
 \arguments{
   \item{X}{
@@ -18,6 +18,10 @@
   \item{method}{
     Optional string determining the method of calculation.
     Either \code{"interpreted"} or \code{"C"}.
+  }
+  \item{k}{
+    Integer, or integer vector. The algorithm will find the
+    \code{k}th nearest neighbour. 
   }
   \item{\dots}{
     Ignored.
@@ -39,11 +43,12 @@
   \code{X}, identifying the nearest neighbour of each point.
   If \code{nnwhich(X)[2] = 4} then the nearest neighbour of
   point 2 is point 4.
+
+  Alternatively a matrix with one row for each point in \code{X}
+  and one column for each entry of \code{k}.
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{lpp}}
@@ -51,5 +56,6 @@
 \examples{
    example(lpp)
    nnwhich(X)
+   nnwhich(X, k=2)
 }
 \keyword{spatial}

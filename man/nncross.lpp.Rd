@@ -11,6 +11,7 @@
           iX=NULL, iY=NULL,
           what = c("dist", "which"),
           \dots,
+          k = 1,
           method="C")
 }
 \arguments{
@@ -29,6 +30,10 @@
     or both.
   }
   \item{\dots}{Ignored.}
+  \item{k}{
+    Integer, or integer vector. The algorithm will compute the distance to the
+    \code{k}th nearest neighbour, for each value of \code{k}.
+  }
   \item{method}{
     Internal use only.
   }
@@ -66,7 +71,7 @@
   identifier. See the Examples.
 }
 \value{
-  By default (if \code{what=c("dist", "which")})
+  By default (if \code{what=c("dist", "which")} and \code{k=1})
   a data frame with two columns:
   \item{dist}{Nearest neighbour distance}
   \item{which}{Nearest neighbour index in \code{Y}}
@@ -74,10 +79,18 @@
   If \code{what="dist"}, a vector of nearest neighbour distances.
 
   If \code{what="which"}, a vector of nearest neighbour indices.
+
+  If \code{k} is a vector of integers, the result is a matrix
+  with one row for each point in \code{X},
+  giving the distances and/or indices of the \code{k}th nearest
+  neighbours in \code{Y}.
 }
 \seealso{
   \code{\link{nndist.lpp}} for nearest neighbour
   distances in a single point pattern.
+
+  \code{\link{nnwhich.lpp}} to identify which points are nearest
+  neighbours in a single point pattern.
 }
 \examples{
   # two different point patterns
@@ -86,12 +99,15 @@
   nn <- nncross(X,Y)
   nn
   plot(simplenet, main="nncross")
-  plot(X, add=TRUE, col="red")
-  plot(Y, add=TRUE, col="blue")
+  plot(X, add=TRUE, cols="red")
+  plot(Y, add=TRUE, cols="blue", pch=16)
   XX <- as.ppp(X)
   YY <- as.ppp(Y)
   i <- nn$which
   arrows(XX$x, XX$y, YY[i]$x, YY[i]$y, length=0.15)
+
+  # nearest and second-nearest neighbours
+  nncross(X, Y, k=1:2)
 
   # two patterns with some points in common
   X <- Y[1:2]
@@ -100,11 +116,7 @@
   nncross(X,Y, iX, iY)
 }
 \author{
-  \adrian
-  
-   and
-  \rolf
-  ,
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{math}

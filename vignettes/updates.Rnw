@@ -424,6 +424,7 @@ listed alphabetically.
    New argument \texttt{random} is a formula specifying the random effect.
 
  \item \texttt{nncross.lpp, distfun.lpp}:
+   New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
 
  \item \texttt{padimage}:
@@ -796,13 +797,13 @@ of potential impact.
     
 \item \texttt{triangulate.owin}:
    Results were incorrect in some special cases.
-   \bugger{1.42-2}{june 2015}{1.43-1}{december 2015}
+   \bugger{1.42-2}{june 2015}{1.44-0}{december 2015}
   
 \item \texttt{crosspairs}:
    If \texttt{X} and \texttt{Y} were identical point patterns,
    the result was not necessarily symmetric
    (on some machines) due to numerical artifacts.
-   \bugger{1.35-0}{december 2013}{1.43-1}{december 2015}
+   \bugger{1.35-0}{december 2013}{1.44-0}{december 2015}
 
  \item \texttt{bdist.tiles}:
    Values were incorrect in some cases due to numerical error.
@@ -810,7 +811,7 @@ of potential impact.
    
 \item \texttt{Kest.fft}:
   Result was incorrectly normalised.
-   \bugger{1.21-2}{january 2011}{1.43-1}{december 2015}
+   \bugger{1.21-2}{january 2011}{1.44-0}{december 2015}
   
 \item \texttt{crossdist.ppp}:
   Ignored argument \texttt{squared} if \texttt{periodic=FALSE}.

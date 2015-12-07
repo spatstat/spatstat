@@ -2000,7 +2000,7 @@ parres(mod2, "x")
 #
 # Tests for lpp code
 #
-#  $Revision: 1.2 $  $Date: 2013/01/23 08:20:41 $
+#  $Revision: 1.3 $  $Date: 2015/12/07 10:36:03 $
 
 
 require(spatstat)
@@ -2048,6 +2048,32 @@ local({
     stop("Inconsistent values of nncross.lpp()$which from different C code")
   if(max(abs(a$dist - b$dist)) > eps)
     stop("Inconsistent values of nncross.lpp()$dist from different C code")
+
+  spatstat.options(Cnncrosslpp=TRUE)
+  b2 <- nncross(XX, YY, k=1:2, what="which")
+  if(any(b2$which.1 != b$which))
+    stop("inconsistent values of nncross.lpp()$which from k=1:2 and k=1")
+  a2 <- nncross(XX, YY, k=1:2, what="dist")
+  if(max(abs(a2$dist.1 - a$dist)) > eps)
+    stop("Inconsistent values of nncross.lpp()$dist from k=1:2 and k=1")
+
+  spatstat.options(Cnncrosslpp=TRUE)
+  ii <- seq_len(npoints(XX))
+  w1 <- nnwhich(XX)
+  w2 <- nncross(XX, XX, iX=ii, iY=ii, what="which")
+  w3 <- nncross(XX, XX, iX=ii, iY=ii, what="which", method="interpreted")
+  if(any(w1 != w2))
+    stop("nnwhich.lpp disagrees with nncross.lpp(iX, iY)")
+  if(any(w2 != w3))
+    stop("Different results for nncross.lpp(iX, iY, 'which') using R and C")
+  d1 <- nndist(XX)
+  d2 <- nncross(XX, XX, iX=ii, iY=ii, what="dist")
+  d3 <- nncross(XX, XX, iX=ii, iY=ii, what="dist", method="interpreted")
+  if(max(abs(d1-d2)) > eps)
+    stop("nndist.lpp disagrees with nncross.lpp(iX, iY)")
+  if(max(abs(d2-d3)) > eps)
+    stop("Different results for nncross.lpp(iX, iY, 'dist') using R and C")
+  
   spatstat.options(op)
 })
 

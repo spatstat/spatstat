@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.034
+        CHANGES IN spatstat VERSION 1.43-0.035
 
 OVERVIEW
 
@@ -96,6 +96,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Argument X can now be a pixel image with logical values.
    New argument 'W'. [Based on code by Kassel Hingee.]
 
+   o nncross.lpp, distfun.lpp
+   New argument 'k' allows calculation of k-th nearest neighbour.
+   Computation accelerated.
+
    o logLik.ppm
    New argument 'absolute'.
 
@@ -115,9 +119,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
    Now has '...' arguments allowing control of spatial resolution.
 
    o lppm
-   Computation accelerated.
-
-   o nncross.lpp, distfun.lpp
    Computation accelerated.
 
    o quadratcount.ppp

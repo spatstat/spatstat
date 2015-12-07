@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.7 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.11 $ $Date: 2015/12/07 10:23:10 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -9,34 +9,49 @@
 #   Calculates the nearest neighbour distances in the shortest-path metric
 #   for a point pattern on a linear network.
 
-nndist.lpp <- function(X, ..., method="C") {
+nndist.lpp <- function(X, ..., k=1, method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
-  #
-  L <- as.linnet(X$domain, sparse=FALSE)
-  Y <- as.ppp(X)
-  n <- npoints(Y)
-  #
-  Lseg  <- L$lines
-  Lvert <- L$vertices
-  from  <- L$from
-  to    <- L$to
-  dpath <- L$dpath
+  k <- as.integer(k)
+  stopifnot(all(k > 0))
+  kmax <- max(k)
 
-  if(n == 0) return(numeric(0))
-  if(n == 1) return(NA)
+  n <- npoints(X)
+
+  toomany <- (kmax >= n-1)
+  if(toomany) {
+    ## not enough points to define kmax nearest neighbours
+    result <- matrix(Inf, nrow=n, ncol=kmax)
+    if(n <= 1) return(result[,,drop=TRUE])
+    ## reduce kmax to feasible value
+    kmax <- n-1
+    kuse <- k[k <= kmax]
+  } else {
+    kuse <- k
+  }
   
-  # find nearest segment for each point
-  # This is given by local coordinates, if available (spatstat >= 1.28-0)
+  Y <- as.ppp(X)
+  L <- as.linnet(X)
+  sparse <- identical(L$sparse, TRUE)
+
+  ## find nearest segment for each point
+  ## This is given by local coordinates, if available (spatstat >= 1.28-0)
   loco <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)
   pro <- if(!is.null(seg <- loco$seg)) seg else nearestsegment(X, Lseg)
 
   if(method == "interpreted") {
+    ## interpreted code 
     D <- pairdist(X, method="interpreted")
     diag(D) <- Inf
-    return(apply(D, 1, min))
-  } else {
-    # C code
+    ans <- if(kmax == 1) apply(D, 1, min) else
+           t(apply(D, 1, orderstats, k=kuse))[,,drop=TRUE]
+  } else if(!sparse && kmax == 1) {
+    # C code for non-sparse network
+    Lseg  <- L$lines
+    Lvert <- L$vertices
+    from  <- L$from
+    to    <- L$to
+    dpath <- L$dpath
     # convert indices to start at 0
     from0 <- from - 1L
     to0   <- to - 1L
@@ -62,8 +77,17 @@ nndist.lpp <- function(X, ..., method="C") {
              huge = as.double(huge),
              answer = as.double(ans))
     ans <- zz$answer
+  } else {
+    ## use fast code for nncross
+    ans <- nncross(X, X, what="dist", k=kuse+1)
+    if(is.matrix(ans) || is.data.frame(ans))
+      colnames(ans) <- paste0("dist.", kuse)
   }
-  return(ans)
+  if(!toomany)
+    return(ans)
+  result[, kuse] <- as.matrix(ans)
+  colnames(result) <- paste0("dist.", 1:ncol(result))
+  return(result[,k])
 }
 
 # nnwhich.lpp
@@ -71,35 +95,52 @@ nndist.lpp <- function(X, ..., method="C") {
 # for a point pattern on a linear network.
 #
 
-nnwhich.lpp <- function(X, ..., method="C") {
+nnwhich.lpp <- function(X, ..., k=1, method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
+
+  k <- as.integer(k)
+  stopifnot(all(k > 0))
+  kmax <- max(k)
+
+  n <- npoints(X)
+
+  toomany <- (kmax >= n-1)
+  if(toomany) {
+    ## not enough points to define kmax nearest neighbours
+    result <- matrix(NA_integer_, nrow=n, ncol=kmax)
+    if(n <= 1) return(result[,,drop=TRUE])
+    ## reduce kmax to feasible value
+    kmax <- n-1
+    kuse <- k[k <= kmax]
+  } else {
+    kuse <- k
+  }
+  
   #
-  L <- X$domain
   Y <- as.ppp(X)
-  n <- npoints(Y)
-  #
-  Lseg  <- L$lines
-  Lvert <- L$vertices
-  from  <- L$from
-  to    <- L$to
-  dpath <- L$dpath
+  L <- as.linnet(X)
+  sparse <- identical(L$sparse, TRUE)
   
-  if(n == 0) return(integer(0))
-  if(n == 1) return(as.integer(NA))
-  
-  # find nearest segment for each point
-  # This is given by local coordinates, if available (spatstat >= 1.28-0)
+  ## find nearest segment for each point
+  ## This is given by local coordinates, if available (spatstat >= 1.28-0)
   loco <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)
-  pro <- loco$seg %orifnull% nearestsegment(X, L$lines)
+  pro <- if(!is.null(seg <- loco$seg)) seg else nearestsegment(X, Lseg)
 
   if(method == "interpreted") {
     D <- pairdist(X, method="interpreted")
     diag(D) <- Inf
-    return(apply(D, 1, which.min))
-  } else {
-    # C code
-    # convert indices to start at 0
+    nnw <- if(kmax == 1) apply(D, 1, which.min) else
+           t(apply(D, 1, orderwhich, k=kuse))[,,drop=TRUE]
+  } else if(!sparse && kmax == 1) {
+    # C code for non-sparse network
+    ##
+    Lseg  <- L$lines
+    Lvert <- L$vertices
+    from  <- L$from
+    to    <- L$to
+    dpath <- L$dpath
+    ## convert indices to start at 0
     from0 <- from - 1
     to0   <- to - 1
     segmap <- pro - 1
@@ -129,7 +170,17 @@ nnwhich.lpp <- function(X, ..., method="C") {
     nnw <- zz$nnwhich + 1L
     # any zeroes occur if points have no neighbours.
     nnw[nnw == 0] <- NA
+  } else {
+    ## use fast code for nncross
+    nnw <- nncross(X, X, what="which", k=kuse+1)
+    if(is.matrix(nnw) || is.data.frame(nnw))
+      colnames(nnw) <- paste0("which.", kuse)
   }
+  if(!toomany)
+    return(nnw)
+  result[, kuse] <- as.matrix(nnw)
+  colnames(result) <- paste0("which.", 1:ncol(result))
+  return(result[,k])
   return(nnw)
 }
 
@@ -139,8 +190,10 @@ nnwhich.lpp <- function(X, ..., method="C") {
 # on the SAME network.
 #
 
-nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
-                        what = c("dist", "which"), ..., method="C") {
+nncross.lpp <- local({
+
+  nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
+                          what = c("dist", "which"), ..., k=1, method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(inherits(Y, "lpp"))
   what   <- match.arg(what, choices=c("dist", "which"), several.ok=TRUE)
@@ -154,7 +207,31 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
                          as.linnet(Y, sparse=TRUE)))
     stop("X and Y are on different linear networks")
 
-  fast <- (method == "C") && !exclude && spatstat.options("Cnncrosslpp")
+  nX <- npoints(X)
+  nY <- npoints(Y)
+
+  koriginal <- k <- as.integer(k)
+  stopifnot(all(k > 0))
+  kmax <- max(k)
+  if(exclude) {
+    kmax <- kmax+1
+    k <- 1:kmax
+  }
+  
+  toomany <- (kmax > nY-1)
+  if(toomany) {
+    paddist <- matrix(Inf, nX, kmax)
+    padwhich <- matrix(NA_integer_, nX, kmax)
+    kmax <- nY-1
+    kuse <- k[k <= kmax]
+  } else {
+    kuse <- k
+  }
+
+  need.dist <- ("dist" %in% what) || exclude
+  need.which <- ("which" %in% what) || exclude
+  
+  fast <- (method == "C") && spatstat.options("Cnncrosslpp")
 
   if(!fast) {
     ## require dpath matrix
@@ -201,60 +278,106 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
   }
 
   if(method == "interpreted") {
-    D <- crossdist(X, method="interpreted")
+    ## interpreted code
+    D <- crossdist(X, Y, method="interpreted")
     if(exclude)
       D[outer(iX, iY, "==")] <- Inf
-    nnd <- if("dist" %in% what) apply(D, 1, min) else NA
-    nnw <- if("which" %in% what) apply(D, 1, which.min) else NA
+    nnd <- nnw <- NULL
+    if(need.dist) {
+      nnd <- if(kmax == 1) apply(D, 1, min) else
+             t(apply(D, 1, orderstats, k=kuse))[,,drop=TRUE]
+    }
+    if(need.which) {
+      nnw <- if(kmax == 1) apply(D, 1, which.min) else
+             t(apply(D, 1, orderwhich, k=kuse))[,,drop=TRUE]
+    } 
   } else {
-    # C code
-    # convert indices to start at 0
+    ## C code
+    ## convert indices to start at 0
     from0 <- from - 1
     to0   <- to - 1
     nseg <- length(from0)
     Xsegmap <- Xpro - 1
     Ysegmap <- Ypro - 1
-    # upper bound on interpoint distance
+    ## upper bound on interpoint distance
     huge <- if(!fast) {
       max(dpath) + 2 * diameter(Frame(L))
     } else {
       sum(seglengths)
     }
-    # space for result
-    nnd <- double(nX)
-    nnw <- integer(nX)
-    # call C
+    ## space for result
+    nnd <- double(nX * kmax)
+    nnw <- integer(nX * kmax)
+    ## call C
     if(fast) {
       ## experimental faster code
-      message("Using experimental fast code for nncross.lpp")
       ooX <- order(Xsegmap)
       ooY <- order(Ysegmap)
       tol <- max(.Machine$double.eps,
                  diameter(Frame(L))/2^20)
-      zz <- .C("linSnndwhich",
-               np = as.integer(nX),
-               sp = as.integer(Xsegmap[ooX]),
-               tp = as.double(Xcoords$tp[ooX]),
-               nq = as.integer(nY),
-               sq = as.integer(Ysegmap[ooY]),
-               tq = as.double(Ycoords$tp[ooY]),
-               nv = as.integer(Lvert$n),
-               ns = as.integer(nseg),
-               from = as.integer(from0),
-               to = as.integer(to0),
-               seglen = as.double(seglengths), 
-               huge = as.double(huge),
-               tol = as.double(tol), 
-               nndist = as.double(nnd),
-               nnwhich = as.integer(nnw))
-      zznd <- zz$nndist
-      zznw <- zz$nnwhich + 1L
-      if(any(notfound <- (zznw == 0))) {
-        zznd[notfound] <- NA
-        zznw[notfound] <- NA
+      if(kmax > 1) {
+        zz <- .C("linknncross",
+                 kmax = as.integer(kmax),
+                 np = as.integer(nX),
+                 sp = as.integer(Xsegmap[ooX]),
+                 tp = as.double(Xcoords$tp[ooX]),
+                 nq = as.integer(nY),
+                 sq = as.integer(Ysegmap[ooY]),
+                 tq = as.double(Ycoords$tp[ooY]),
+                 nv = as.integer(Lvert$n),
+                 ns = as.integer(nseg),
+                 from = as.integer(from0),
+                 to = as.integer(to0),
+                 seglen = as.double(seglengths), 
+                 huge = as.double(huge),
+                 tol = as.double(tol), 
+                 nndist = as.double(nnd), 
+                 nnwhich = as.integer(nnw))
+        zznd <- matrix(zz$nndist, ncol=kmax, byrow=TRUE)
+        zznw <- matrix(zz$nnwhich + 1L, ncol=kmax, byrow=TRUE)
+        if(any(notfound <- (zznw == 0))) {
+          zznd[notfound] <- NA
+          zznw[notfound] <- NA
+        }
+        nnd <- matrix(nnd, nX, kmax)
+        nnw <- matrix(nnw, nX, kmax)
+        nnd[ooX, ] <- zznd
+        nnw[ooX, ] <- ooY[zznw]
+        colnames(nnd) <- colnames(nnw) <- seq_len(kmax)
+        if(!identical(kuse, seq_len(kmax))) {
+          nnd <- nnd[,kuse,drop=FALSE]
+          nnw <- nnw[,kuse,drop=FALSE]
+          if(length(kuse) == 1) {
+            colnames(nnd) <- paste0("dist.", kuse)
+            colnames(nnw) <- paste0("which.", kuse)
+          }
+        }
+      } else {
+        zz <- .C("linSnndwhich",
+                 np = as.integer(nX),
+                 sp = as.integer(Xsegmap[ooX]),
+                 tp = as.double(Xcoords$tp[ooX]),
+                 nq = as.integer(nY),
+                 sq = as.integer(Ysegmap[ooY]),
+                 tq = as.double(Ycoords$tp[ooY]),
+                 nv = as.integer(Lvert$n),
+                 ns = as.integer(nseg),
+                 from = as.integer(from0),
+                 to = as.integer(to0),
+                 seglen = as.double(seglengths), 
+                 huge = as.double(huge),
+                 tol = as.double(tol), 
+                 nndist = as.double(nnd),
+                 nnwhich = as.integer(nnw))
+        zznd <- zz$nndist
+        zznw <- zz$nnwhich + 1L
+        if(any(notfound <- (zznw == 0))) {
+          zznd[notfound] <- NA
+          zznw[notfound] <- NA
+        }
+        nnd[ooX] <- zznd
+        nnw[ooX] <- ooY[zznw]
       }
-      nnd[ooX] <- zznd
-      nnw[ooX] <- ooY[zznw]
     } else if(!exclude) {
       zz <- .C("linndcross",
                np = as.integer(nX),
@@ -306,6 +429,36 @@ nncross.lpp <- function(X, Y, iX=NULL, iY=NULL,
     # any zeroes occur if points have no neighbours.
     nnw[nnw == 0] <- NA
   }
-  result <- data.frame(dist=nnd, which=nnw)[, what]
+  if(toomany) {
+    ## Nearest neighbours were undefined for some large values of k.
+    ## Insert results obtained for valid 'k' back into matrix of NA/Inf
+    if(need.dist) {
+      paddist[,kuse] <- as.matrix(nnd)
+      nnd <- paddist
+    }
+    if(need.which) {
+      padwhich[,kuse] <- as.matrix(nnw)
+      nnw <- padwhich
+    }
+  }
+  if(exclude) {
+    ## now find neighbours that don't have the same id number
+    avoid <- matrix(iX[as.vector(row(nnw))] != iY[as.vector(nnw)],
+                    nrow=nrow(nnw), ncol=ncol(nnw))
+    colind <- apply(avoid, 1, whichcoltrue, m=seq_len(ncol(avoid)-1))
+    colind <- if(is.matrix(colind)) t(colind) else matrix(colind, ncol=1)
+    rowcol <- cbind(as.vector(row(colind)), as.vector(colind))
+    nnd <- matrix(nnd[rowcol], nrow=nX)
+    nnw <- matrix(nnw[rowcol], nrow=nX)
+    nnd <- nnd[,koriginal]
+    nnw <- nnw[,koriginal]
+  }
+  result <- list(dist=nnd, which=nnw)[what]
+  result <- as.data.frame(result)[,,drop=TRUE]
   return(result)
 }
+
+  whichcoltrue <- function(x, m) which(x)[m]
+  
+  nncross.lpp
+})

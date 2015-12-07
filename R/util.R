@@ -1152,6 +1152,11 @@ orderstats <- function(x, k, decreasing=FALSE) {
   if(decreasing) sort(x, decreasing=TRUE, na.last=TRUE)[k] else sort(x)[k]
 }
 
+# which value is k-th smallest
+orderwhich <- function(x, k, decreasing=FALSE) {
+  if(decreasing) order(x, decreasing=TRUE, na.last=TRUE)[k] else order(x)[k]
+}
+
 # convert any appropriate subset index for a point pattern
 # to a logical vector
 
