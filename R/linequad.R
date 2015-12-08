@@ -1,7 +1,7 @@
 #
 # linequad.R
 #
-#  $Revision: 1.10 $ $Date: 2015/11/27 11:33:53 $
+#  $Revision: 1.11 $ $Date: 2015/12/08 00:52:41 $
 #
 # create quadscheme for a pattern of points lying *on* line segments
 
@@ -44,7 +44,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000) {
   stopifnot(is.numeric(eps) && length(eps) == 1 && is.finite(eps) && eps > 0)
   ##
   if(is.lpp(X) && spatstat.options('Clinequad')) {
-    message("Using experimental C code for 'linequad'")
+#    message("Using experimental C code for 'linequad'")
     L <- as.linnet(X)
     W <- Frame(L)
     V <- vertices(L)
