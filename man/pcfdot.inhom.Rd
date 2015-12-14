@@ -138,10 +138,10 @@ pcfdot.inhom(X, i, lambdaI = NULL, lambdadot = NULL, ...,
   data(amacrine)
   plot(pcfdot.inhom(amacrine, "on", stoyan=0.1), legendpos="bottom")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

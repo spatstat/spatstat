@@ -106,10 +106,10 @@ Pages 79--140.
    ppm(cells, ~1, Geyer(r=0.07, sat=2))
    # fit the stationary saturation process to `cells'
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

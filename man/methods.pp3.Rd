@@ -47,10 +47,10 @@
   For \code{print.pp3} the value is \code{NULL}.
   For \code{unitname.pp3} an object of class \code{"units"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

@@ -79,10 +79,10 @@
   \emph{Sampling techniques}, 3rd edition.
   New York: John Wiley and Sons.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

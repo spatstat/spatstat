@@ -49,8 +49,8 @@
       Netherlands) in 1994.
 
       The original hand-drawn map
-      was scanned by \adrian, and processed
-      by Chris Jonker, Henk Heijmans and \adrian
+      was scanned by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, and processed
+      by Chris Jonker, Henk Heijmans and Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
       to yield a clean binary image of 778 by 1570 pixels resolution.
     }
     \item{medium:}{

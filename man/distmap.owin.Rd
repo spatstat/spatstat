@@ -88,10 +88,10 @@
   Distance functions on digital pictures.
   \emph{Pattern Recognition} \bold{1} (1968) 33-61.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

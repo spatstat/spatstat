@@ -96,7 +96,7 @@
   \bold{39}, 172 -- 212.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
   and Rana Moyeed.

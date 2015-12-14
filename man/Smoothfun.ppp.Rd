@@ -61,12 +61,12 @@ Smoothfun(X, \dots)
   f(120, 80)
   plot(f)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege.
+  and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{methods}

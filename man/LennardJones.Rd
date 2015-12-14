@@ -132,10 +132,10 @@
   Lennard-Jones, J.E. (1924) On the determination of molecular fields.
   \emph{Proc Royal Soc London A} \bold{106}, 463--477.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

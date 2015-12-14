@@ -44,12 +44,12 @@ parameters(model, \dots)
   A named list, whose format depends on the fitted model.
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \seealso{

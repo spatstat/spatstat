@@ -103,7 +103,7 @@
   University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
 }
 \author{
-  \adrian,
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
   based on original code for the Strauss process by 
   Kasper Klitgaard Berthelsen.
 }

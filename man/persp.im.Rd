@@ -140,12 +140,12 @@
          zlab="Elevation", main="", ticktype="detailed",
          expand=6)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

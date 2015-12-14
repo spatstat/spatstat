@@ -225,10 +225,10 @@ obtained by the edge corrections named.
     f2 <- function(X) { marks(X)$height > 3 }
     K <- Kmulti.inhom(finpines, f1, f2)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

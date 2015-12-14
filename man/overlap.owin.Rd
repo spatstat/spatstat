@@ -37,10 +37,10 @@ overlap.owin(A, B)
   B <- shift(A, c(0.3, 0.2))
   overlap.owin(A, B)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

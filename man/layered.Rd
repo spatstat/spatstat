@@ -64,10 +64,10 @@ layered(..., plotargs = NULL, LayerList=NULL)
   There are methods for \code{plot}, \code{"["},
   \code{"shift"}, \code{"affine"}, \code{"rotate"} and \code{"rescale"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

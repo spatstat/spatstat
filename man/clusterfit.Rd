@@ -121,12 +121,12 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63} (2007) 252--258.
 }  
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

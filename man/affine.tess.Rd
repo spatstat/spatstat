@@ -99,10 +99,10 @@ tessellation. Then all tiles are shifted by the same vector.
   sH <- affine(H, shear)
   if(live) plot(sH)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

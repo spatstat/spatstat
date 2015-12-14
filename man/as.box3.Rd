@@ -32,10 +32,10 @@ as.box3(...)
 \value{
   Object of class \code{"box3"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

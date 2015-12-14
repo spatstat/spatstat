@@ -79,10 +79,10 @@ See the last example in the help for \code{\link{rmh.default}}.
     # See examples in rmh.default and rmh.ppm
 }
 
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

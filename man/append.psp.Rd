@@ -37,10 +37,10 @@
   Y <- psp(runif(5), runif(5), runif(5), runif(5),  window=owin())
   append.psp(X,Y)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

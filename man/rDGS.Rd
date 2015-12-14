@@ -91,7 +91,7 @@
   Chapman and Hall/CRC.
 }
 \author{
-  \adrian,
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
   based on original code for the Strauss process by 
   Kasper Klitgaard Berthelsen.
 }

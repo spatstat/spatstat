@@ -77,7 +77,9 @@
   University of \ifelse{latex}{\out{Jyv\"askyl\"a}}{Jyvaskyla}, Finland.
 }
 \author{
-  \spatstatAuthors
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

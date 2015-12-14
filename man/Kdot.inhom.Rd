@@ -239,10 +239,10 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     K <- Kdot.inhom(X, "B",  lambdaI=lamB,     lambdadot=lamdot)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

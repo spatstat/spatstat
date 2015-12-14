@@ -39,7 +39,7 @@ zclustermodel(name = "Thomas", \dots, mu, kappa, scale)
   Object of the experimental class \code{"zclustermodel"}.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 }
 \seealso{
   \code{\link{methods.zclustermodel}}

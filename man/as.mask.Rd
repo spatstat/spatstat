@@ -91,10 +91,10 @@
   y <- seq(0.25, 9.75, by=0.5)
   m <- as.mask(w, xy=list(x=x, y=y))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -68,10 +68,10 @@
    df <- ncol(polynom(x,y,3)) - ncol(harmonic(x,y,3))
    pval <- 1 - pchisq(lrts, df=df)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

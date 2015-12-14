@@ -45,12 +45,12 @@
   Object of the same kind as \code{x}.
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \seealso{

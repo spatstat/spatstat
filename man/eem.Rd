@@ -76,10 +76,10 @@
     Y <- setmarks(cells, ee)
     plot(Y, main="Cells data\n Exponential energy marks")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

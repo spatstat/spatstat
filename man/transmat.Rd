@@ -65,12 +65,12 @@ transmat(m, from, to)
   Another matrix obtained by rearranging the entries of \code{m}.
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \examples{

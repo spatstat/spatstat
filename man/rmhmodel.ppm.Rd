@@ -111,7 +111,15 @@
   \code{\link{rmhcontrol}},
   \code{\link{rmhstart}},
   \code{\link{ppm}},
-  \rmhInteractionsList.
+  \code{\link{AreaInter}}, \code{\link{BadGey}},
+ \code{\link{DiggleGatesStibbard}}, \code{\link{DiggleGratton}},
+ \code{\link{Fiksel}}, \code{\link{Geyer}}, \code{\link{Hardcore}},
+ \code{\link{Hybrid}}, \code{\link{LennardJones}},
+ \code{\link{MultiStrauss}}, \code{\link{MultiStraussHard}},
+ \code{\link{PairPiece}}, \code{\link{Penttinen}},
+ \code{\link{Poisson}}, \code{\link{Softcore}},
+ \code{\link{Strauss}}, \code{\link{StraussHard}}
+ and \code{\link{Triplets}}.
 }
 \examples{
   fit1 <- ppm(cells ~1, Strauss(0.07))
@@ -126,9 +134,9 @@
   # Then rmh(mod1), etc
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \keyword{spatial}
 \keyword{datagen}

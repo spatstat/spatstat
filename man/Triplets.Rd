@@ -92,10 +92,10 @@ which can then be fitted to point pattern data.
    ppm(cells, ~polynom(x,y,3), Triplets(r=0.2))
    # fit a nonstationary Triplets process with log-cubic polynomial trend
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

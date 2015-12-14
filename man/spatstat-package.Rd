@@ -1688,12 +1688,12 @@
   General Public License", a copy of which is distributed with the package.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege .
+  and Ege Rubak \email{rubak@math.aau.dk} .
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,

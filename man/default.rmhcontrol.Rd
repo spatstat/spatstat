@@ -49,10 +49,10 @@
   default.rmhcontrol(fit)
   default.rmhcontrol(fit, w=square(2))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

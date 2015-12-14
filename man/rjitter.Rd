@@ -61,10 +61,10 @@ rjitter(X, radius, retry=TRUE, giveup = 10000, \dots, nsim=1, drop=TRUE)
    plot(Y)
    Z <- rjitter(X)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

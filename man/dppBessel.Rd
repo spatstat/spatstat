@@ -23,11 +23,11 @@
 \value{An object of class \code{"detpointprocfamily"}.}
 \author{
   Frederic Lavancier and Christophe Biscio.
-  Modified by \ege ,
-  \adrian
+  Modified by Ege Rubak \email{rubak@math.aau.dk} ,
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   and 
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \examples{

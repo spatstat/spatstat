@@ -107,10 +107,10 @@ idw(X, power=2, at="pixels", ...)
    plot(idw(finpines))
    idw(finpines, at="points")[1:5,]
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -48,10 +48,10 @@ edges2triangles(iedge, jedge, nvert=max(iedge, jedge), \dots,
 \seealso{
   \code{\link{edges2vees}}
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \examples{

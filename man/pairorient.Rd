@@ -100,11 +100,11 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
   plot(CDF <- pairorient(redwood, 0.05, 0.15, cumulative=TRUE))
   plot(f <- deriv(CDF, spar=0.6, Dperiodic=TRUE))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

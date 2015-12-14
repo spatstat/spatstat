@@ -111,10 +111,10 @@ which can then be fitted to point pattern data.
    # fit a nonstationary Strauss/hard core process
    # with log-cubic polynomial trend
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

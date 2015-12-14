@@ -203,12 +203,12 @@
  plot(D, main="", equal.ribbon=TRUE,
       panel.end=function(i,y,...){contour(y, ...)})
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

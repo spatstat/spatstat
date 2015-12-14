@@ -51,10 +51,10 @@ tweak.colourmap(m, col, ..., inputs=NULL, range=NULL)
   plot(tweak.colourmap(co, inputs=c(0.5, 0.6), "white"))
   plot(tweak.colourmap(co, range=c(0.5,0.6), "white"))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

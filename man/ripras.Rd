@@ -93,10 +93,10 @@
   \emph{Journal of Applied Probability},
   \bold{14}, 483 -- 491.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

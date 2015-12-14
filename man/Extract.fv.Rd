@@ -102,9 +102,9 @@
  K
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \keyword{spatial}
 \keyword{manip}

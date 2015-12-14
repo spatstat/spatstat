@@ -78,12 +78,12 @@
   plot(oa)
   plot(oa, zap=TRUE, do.points=TRUE, col.head="pink", col="red")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

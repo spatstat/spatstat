@@ -106,10 +106,10 @@ rpoisppOnLines(lambda, L, lmax = NULL, ..., nsim=1)
    plot(Y, add=TRUE, pch="+")
   }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

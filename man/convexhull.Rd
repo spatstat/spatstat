@@ -33,10 +33,10 @@ convexhull(x)
    plot(convexhull(W), col="lightblue", border=NA)
    plot(W, add=TRUE, lwd=2)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

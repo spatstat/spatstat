@@ -1,14 +1,14 @@
-#
-#  daogenton.R
-#
-#  Dao-Genton adjusted p-values
-#
-#  $Revision: 1.9 $  $Date: 2015/10/21 09:06:57 $
-#
+##
+##  daogenton.R
+##
+##  Dao-Genton adjusted p-values
+##
+##  $Revision: 1.10 $  $Date: 2015/12/14 07:47:29 $
+##
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
                     alternative=c("two.sided", "less", "greater"),
-                    interpolate=FALSE,
+                    reuse=TRUE, interpolate=FALSE,
                     savefuns=FALSE, savepatterns=FALSE,
                     verbose=TRUE) {
   Xname <- short.deparse(substitute(X))
@@ -18,19 +18,33 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
     stop("nsim and nsimsub must be relatively prime")
   # top-level test
-  if(verbose) cat("Applying test to original data... ")
+  if(verbose) cat("Applying first-stage test to original data... ")
   tX <- envelopeTest(X, ...,
                      nsim=nsim, alternative=alternative,
                      interpolate=interpolate,
                      exponent=exponent,
-                     savefuns=savefuns, savepatterns=TRUE, verbose=FALSE,
+                     savefuns=savefuns,
+                     savepatterns=savepatterns || reuse,
+                     verbose=FALSE,
                      envir.simul=env.here)
-  if(verbose) cat("Done.\n")
   pX <- tX$p.value
-  # extract simulated patterns 
-  Ylist <- attr(attr(tX, "envelope"), "simpatterns")
+  if(!reuse) {
+    if(verbose) cat("Repeating first-stage test... ")
+    tXX <- envelopeTest(X, ...,
+                        nsim=nsim, alternative=alternative,
+                        interpolate=interpolate,
+                        exponent=exponent,
+                        savefuns=savefuns, savepatterns=TRUE, verbose=FALSE,
+                        envir.simul=env.here)
+    ## extract simulated patterns 
+    Ylist <- attr(attr(tXX, "envelope"), "simpatterns")
+  } else {
+    Ylist <- attr(attr(tX, "envelope"), "simpatterns")
+  }
+  if(verbose) cat("Done.\n")
   # apply same test to each simulated pattern
-  if(verbose) cat(paste("Running tests on", nsim, "simulated patterns... "))
+  if(verbose) cat(paste("Running second-stage tests on",
+                        nsim, "simulated patterns... "))
   pY <- numeric(nsim)
   for(i in 1:nsim) {
     if(verbose) progressreport(i, nsim)
@@ -51,6 +65,8 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   method <- c("Dao-Genton adjusted goodness-of-fit test",
               paste("based on", method[1]),
               method[-1])
+  if(!reuse)
+    method <- c(method, "(First and second stages were independent)")
   names(pX) <- "p0"
   result <- structure(list(statistic = pX,
                            p.value = padj,

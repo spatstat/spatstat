@@ -85,10 +85,10 @@ deltametric(A, B, p = 2, c = Inf, ...)
   Pages 59--78.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

@@ -165,10 +165,10 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
   fit <- ppm(X, ~polynom(x,y,2))
   plot(pcfinhom(X, lambda=fit, normpower=2))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

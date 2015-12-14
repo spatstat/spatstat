@@ -670,10 +670,10 @@ trend corresponding to a particular type, there is still a component
 
    if(!interactive()) spatstat.options(oldopt)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

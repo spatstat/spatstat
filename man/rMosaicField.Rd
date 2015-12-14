@@ -38,10 +38,10 @@ rMosaicField(X,
 \value{
   A pixel image (object of class \code{"im"}).
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

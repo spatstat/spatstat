@@ -142,10 +142,10 @@
   plot(p, main="pair correlation function for simdat")
   # indicates inhibition at distances r < 0.3
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

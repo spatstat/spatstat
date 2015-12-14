@@ -42,10 +42,10 @@ layerplotargs(L) <- value
   \code{"layerplotargs<-"} returns the updated object 
   of class \code{"layered"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

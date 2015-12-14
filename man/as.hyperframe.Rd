@@ -72,10 +72,10 @@ as.hyperframe(x, \dots)
   An object of class \code{"hyperframe"} created by
   \code{\link{hyperframe}}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

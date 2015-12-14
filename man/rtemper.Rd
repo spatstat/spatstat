@@ -64,12 +64,12 @@ rtemper(model, invtemp, nrep, \dots, start = NULL, verbose = FALSE)
   A point pattern (object of class \code{"ppp"}).
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

@@ -35,10 +35,10 @@
   point patterns. \emph{Biometrics} \bold{40}, 1089-1094.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

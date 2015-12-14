@@ -88,7 +88,7 @@
   See the documentation on the corresponding generic function.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 }
 \seealso{
   \code{\link{lpp}},

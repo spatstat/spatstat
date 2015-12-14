@@ -111,9 +111,9 @@
    }
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   in collaboration with Hao Wang and Jeff Picka
 }
 \keyword{spatial}

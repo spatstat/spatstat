@@ -105,12 +105,12 @@ symbolmap(\dots, range = NULL, inputs = NULL)
 \value{
   An object of class \code{"symbolmap"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege.
+  and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{plot.symbolmap}} to plot the symbol map itself.

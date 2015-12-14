@@ -79,10 +79,10 @@ in any of several formats, into an object of class \code{"tess"}.
  qNZ <- quadratcount(nztrees, nx=4, ny=3)
  as.tess(qNZ)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

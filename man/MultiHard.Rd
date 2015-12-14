@@ -78,12 +78,12 @@ which can then be fitted to point pattern data.
   \code{MultiHard(types=NULL, hradii)}.
   The new code attempts to handle the old syntax as well.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

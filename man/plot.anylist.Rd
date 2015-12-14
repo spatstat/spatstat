@@ -211,12 +211,12 @@
  plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
       cex=1.5, pch=21, bg='white')
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

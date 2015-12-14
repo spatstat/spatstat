@@ -79,9 +79,9 @@
   vcov(fit, what="f")
 }
 \author{
-  \adrian 
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
   
-  and \rolf .
+  and Rolf Turner \email{r.turner@auckland.ac.nz} .
 }
 \seealso{
   \code{\link{vcov}} for the generic,

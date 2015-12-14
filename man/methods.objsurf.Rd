@@ -42,10 +42,10 @@
   \code{\link{contour.default}} and \code{\link{persp.default}}
   respectively.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \ege.
+  and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{objsurf}}

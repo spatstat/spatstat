@@ -12,7 +12,7 @@
 }
 \usage{data(simplenet)}
 \source{
-  Created by \adrian.
+  Created by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
 }
 \keyword{datasets}
 \keyword{spatial}

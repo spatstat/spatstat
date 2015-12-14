@@ -59,10 +59,10 @@
   w <- gridweights(X, 10)
   w <- gridweights(X, c(10, 10))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -80,10 +80,10 @@
   test2 <- quadrat.test(Y[[2]])
   pool(test1, test2, Xname="Humberside")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

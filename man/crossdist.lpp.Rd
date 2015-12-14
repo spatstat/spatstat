@@ -61,7 +61,7 @@
    d <- crossdist(X, Y)
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

@@ -46,10 +46,10 @@
   For \code{print.ppx} the value is \code{NULL}.
   For \code{unitname.ppx} an object of class \code{"units"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

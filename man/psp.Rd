@@ -84,10 +84,10 @@
   m <- data.frame(A=1:10, B=letters[1:10])
   X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

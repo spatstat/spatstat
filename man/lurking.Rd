@@ -270,10 +270,10 @@ lurking(object, covariate, type="eem",
   lurking(fit, expression(x))
   lurking(fit, expression(x), cumulative=FALSE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

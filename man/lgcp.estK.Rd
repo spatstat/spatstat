@@ -192,11 +192,11 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
 \author{
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}.
-  Adapted for \pkg{spatstat} by \adrian
+  Adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
   Further modifications by Rasmus Waagepetersen
-  and Shen Guochun, and by \ege.
+  and Shen Guochun, and by Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{lgcp.estpcf}} for alternative method of fitting LGCP.

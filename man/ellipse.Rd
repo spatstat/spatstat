@@ -54,10 +54,10 @@
   An object of class \code{owin} (either of type \dQuote{polygonal}
   or of type \dQuote{mask}) specifying an elliptical window.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

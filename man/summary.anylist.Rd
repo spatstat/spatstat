@@ -33,10 +33,10 @@
   x <- anylist(A=runif(10), B=runif(10), C=runif(10))
   summary(x)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

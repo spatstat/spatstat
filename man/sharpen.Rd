@@ -88,10 +88,10 @@ sharpen(X, ...)
   Institute of Mathematical Statistics, Beachwood, Ohio.
   Pages 324--344.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

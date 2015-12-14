@@ -60,10 +60,10 @@ eroded.volumes(x, r)
   For \code{eroded.volumes}, a numeric vector of the same length
   as \code{r}.  
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

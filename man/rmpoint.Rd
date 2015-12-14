@@ -289,10 +289,10 @@ rmpoint(npoints(demopat), 1, types=levels(marks(demopat)), win=Window(demopat),
        ptypes=table(marks(demopat)))
 
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

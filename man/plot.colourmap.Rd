@@ -86,10 +86,10 @@
   ca <- colourmap(rainbow(8), inputs=letters[1:8])
   plot(ca, vertical=TRUE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

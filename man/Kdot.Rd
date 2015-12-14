@@ -203,10 +203,10 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
     K <- Kdot(pp, "a")
     }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

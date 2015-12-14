@@ -108,10 +108,10 @@ x \%mark\% value
    # recode the mark values "off", "on" as 0, 1
    marks(amacrine) <- as.integer(m == "on")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

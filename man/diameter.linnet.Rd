@@ -38,7 +38,7 @@
   A single numeric value.
 }
 \author{
-  \adrian 
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
   
 }
 \seealso{

@@ -79,7 +79,7 @@ lppm(X, ...)
   \code{coef} and similar functions.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

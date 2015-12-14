@@ -65,10 +65,10 @@
    Y <- X[first] \%mark\% m[first]
 }
 
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
   and Sebastian Meyer.
 }

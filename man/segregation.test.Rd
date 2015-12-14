@@ -87,12 +87,12 @@ segregation.test(X, \dots)
 
   if(interactive()) segregation.test(hyytiala, hmin=0.05) 
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

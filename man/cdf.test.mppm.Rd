@@ -152,14 +152,14 @@
   \emph{Applied Statistics} \bold{35}, 54--62.
 }
 \author{
-  \adrian, Ida-Maria Sintorn and Leanne Bischoff.
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \examples{

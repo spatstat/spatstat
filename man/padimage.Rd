@@ -49,12 +49,12 @@ padimage(X, value=NA, n=1, W=NULL)
 \value{
   Another object of class \code{"im"}, of the same type as \code{X}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

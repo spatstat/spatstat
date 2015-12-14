@@ -33,10 +33,10 @@ is.subset.owin(A, B)
   approximation can be controlled: see \code{\link{as.mask}}.
 }
 
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 

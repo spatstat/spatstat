@@ -82,10 +82,10 @@
   plot(letterR, main="erosion(letterR, 0.2)")
   plot(erosion(letterR, 0.2), add=TRUE, col="red")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

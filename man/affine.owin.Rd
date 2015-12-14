@@ -55,10 +55,10 @@
   affine(letterR, shear, c(0, 0.5))
   affine(as.mask(letterR), shear, c(0, 0.5))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

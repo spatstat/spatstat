@@ -27,10 +27,10 @@ clip.infline(L, win)
 \value{
   A line segment pattern (object of class \code{"psp"}).
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

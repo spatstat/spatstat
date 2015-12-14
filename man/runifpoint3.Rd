@@ -42,10 +42,10 @@ runifpoint3(n, domain = box3(), nsim=1, drop=TRUE)
 \examples{
    X <- runifpoint3(50)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

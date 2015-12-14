@@ -102,7 +102,17 @@
   class \code{"interact"} which is initialised in a very similar way to the
   usage of family objects in \code{\link{glm}} and \code{gam}.
   The interaction models currently available are:
-  \GibbsInteractionsList.
+  \code{\link{AreaInter}}, \code{\link{BadGey}},
+ \code{\link{Concom}}, \code{\link{DiggleGatesStibbard}},
+ \code{\link{DiggleGratton}}, \code{\link{Fiksel}},
+ \code{\link{Geyer}}, \code{\link{Hardcore}}, \code{\link{Hybrid}},
+ \code{\link{LennardJones}}, \code{\link{MultiStrauss}},
+ \code{\link{MultiStraussHard}}, \code{\link{OrdThresh}},
+ \code{\link{Ord}}, \code{\link{Pairwise}}, \code{\link{PairPiece}},
+ \code{\link{Penttinen}}, \code{\link{Poisson}},
+ \code{\link{Saturated}}, \code{\link{SatPiece}},
+ \code{\link{Softcore}}, \code{\link{Strauss}},
+ \code{\link{StraussHard}} and \code{\link{Triplets}}.
   See the examples below.
   Note that it is possible to combine several interactions
   using \code{\link{Hybrid}}.
@@ -279,7 +289,17 @@
   \code{\link{ppp}} and \code{\link{quadscheme}}
   for constructing data.
   
-  Interactions: \GibbsInteractionsList.
+  Interactions: \code{\link{AreaInter}}, \code{\link{BadGey}},
+ \code{\link{Concom}}, \code{\link{DiggleGatesStibbard}},
+ \code{\link{DiggleGratton}}, \code{\link{Fiksel}},
+ \code{\link{Geyer}}, \code{\link{Hardcore}}, \code{\link{Hybrid}},
+ \code{\link{LennardJones}}, \code{\link{MultiStrauss}},
+ \code{\link{MultiStraussHard}}, \code{\link{OrdThresh}},
+ \code{\link{Ord}}, \code{\link{Pairwise}}, \code{\link{PairPiece}},
+ \code{\link{Penttinen}}, \code{\link{Poisson}},
+ \code{\link{Saturated}}, \code{\link{SatPiece}},
+ \code{\link{Softcore}}, \code{\link{Strauss}},
+ \code{\link{StraussHard}} and \code{\link{Triplets}}.
 
   See \code{\link{profilepl}} for advice on
   fitting nuisance parameters in the interaction,
@@ -406,7 +426,9 @@ ppm(X ~ x + f, covfunargs=list(a=1/2))
 
 }
 \author{
-  \spatstatAuthors
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

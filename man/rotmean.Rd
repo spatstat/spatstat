@@ -67,12 +67,12 @@ rotmean(X, ..., origin, padzero=TRUE, Xname, result=c("fv", "im"))
 \value{
   An object of class \code{"fv"} or \code{"im"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \examples{

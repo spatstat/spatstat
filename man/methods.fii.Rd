@@ -78,7 +78,7 @@
   depends on the model.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

@@ -98,12 +98,12 @@ which can then be fitted to point pattern data.
    ppm(ants ~1, HierStrauss(r, , c("Messor", "Cataglyphis")))
    # fit the stationary hierarchical Strauss process to ants data
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege.
+  and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \references{
   Grabarnik, P. and \ifelse{latex}{\out{S\"{a}rkk\"{a}}}{Sarkka}, A. (2009)

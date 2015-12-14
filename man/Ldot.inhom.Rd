@@ -95,10 +95,10 @@ Ldot.inhom(X, i, \dots)
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     L <- Ldot.inhom(X, "B",  lambdaI=lamB,     lambdadot=lamdot)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

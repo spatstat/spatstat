@@ -109,7 +109,7 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
   }
 }
 \author{Rob Foxall and
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

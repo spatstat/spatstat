@@ -73,10 +73,10 @@ ppx(data, domain=NULL, coord.type=NULL, simplify=FALSE)
   If \code{simplify=TRUE} the result may be an object of
   class \code{"ppp"} or \code{"pp3"}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

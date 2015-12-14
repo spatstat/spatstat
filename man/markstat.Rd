@@ -99,10 +99,10 @@
   # range of diameters of trees within 10 metre radius
   rd <- markstat(longleaf, range, R=10)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

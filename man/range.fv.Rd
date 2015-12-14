@@ -50,10 +50,10 @@
    min(G)
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf and \ege.
+  Rolf Turner \email{r.turner@auckland.ac.nz} and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{math}

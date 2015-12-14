@@ -80,12 +80,12 @@ spatialcdf(Z, weights = NULL, normalise = FALSE, ..., W = NULL, Zname = NULL)
   \code{"ewcdf"}, \code{"ecdf"} and \code{"stepfun"}.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

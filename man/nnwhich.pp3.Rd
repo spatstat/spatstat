@@ -79,7 +79,7 @@
    m2 <- nnwhich(X, k=2)
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
   based on two-dimensional code by

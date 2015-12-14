@@ -70,10 +70,10 @@
    u <- c(0.5,0.5)
    areaGain(u, cells, 0.1)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

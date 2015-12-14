@@ -185,10 +185,10 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     pp <- runifpoint(30) \%mark\% factor(sample(c("a","b"), 30, replace=TRUE))
     J <- Jcross(pp)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

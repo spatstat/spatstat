@@ -82,10 +82,10 @@ redraw.simplepanel(P, verbose = FALSE)
   The functions \code{clear.simplepanel} and \code{redraw.simplepanel}
   return \code{NULL}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

@@ -106,9 +106,9 @@ of marked and non-marked Gibbsian point processes.
    plot(fitin(fit))
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \keyword{spatial}
 \keyword{models}

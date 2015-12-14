@@ -95,7 +95,7 @@
    d1to3 <- nndist(X, k=1:3)
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

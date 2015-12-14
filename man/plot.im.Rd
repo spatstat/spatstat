@@ -344,10 +344,10 @@
    V <- eval.im(exp(exp(Z+2))/1e4)
    plot(V, log=TRUE, main="Log scale")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -65,10 +65,10 @@ whist(x, breaks, weights = NULL)
   w <- runif(100)
   whist(x,b,w)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
   with thanks to Peter Dalgaard.
 }

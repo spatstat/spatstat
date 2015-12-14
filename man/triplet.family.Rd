@@ -36,10 +36,10 @@
   \emph{Australian and New Zealand Journal of Statistics}
   \bold{42}, 283--322.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

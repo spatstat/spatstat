@@ -57,10 +57,10 @@
   nearest.raster.point(0.5, 0.3, w)
   nearest.raster.point(0.5, 0.3, w, indices=FALSE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

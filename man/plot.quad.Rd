@@ -72,10 +72,10 @@
    plot(Q, main="NZ trees", dum=list(add=FALSE))
    par(oldpar)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -75,10 +75,10 @@
 plot(letterR)
 plot(scalardilate(letterR, 0.7, origin="bot"), col="red", add=TRUE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

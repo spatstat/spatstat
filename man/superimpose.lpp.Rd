@@ -66,12 +66,12 @@
   superimpose(X,Y) # not marked
   superimpose(A=X, B=Y) # multitype with types A and B
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  \ege
+  Ege Rubak \email{rubak@math.aau.dk}
   
   and Greg McSwiggan.
 }

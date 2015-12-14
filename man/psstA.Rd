@@ -166,10 +166,10 @@ psstA(object, r = NULL, breaks = NULL, \dots,
   \emph{Statistical Science} \bold{26}, 613--646.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \ege and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
+  Ege Rubak \email{rubak@math.aau.dk} and Jesper \ifelse{latex}{\out{M\o ller}}{Moller}.
 }
 \seealso{
   Alternative functions:

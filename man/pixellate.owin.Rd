@@ -74,10 +74,10 @@
    W <- grow.rectangle(as.rectangle(letterR), 0.2)
    plot(pixellate(letterR, W, dimyx=15))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

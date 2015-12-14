@@ -32,10 +32,10 @@ tilenames(x) <- value
   tilenames(D)
   tilenames(D) <- paste("Cell", 1:10)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

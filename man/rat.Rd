@@ -53,10 +53,10 @@ rat(ratio, numerator, denominator, check = TRUE)
   except that it also belongs to the class \code{"rat"}
   and has additional attributes \code{numerator} and \code{denominator}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

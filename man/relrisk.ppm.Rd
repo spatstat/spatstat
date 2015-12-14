@@ -177,12 +177,12 @@
   and 1. If \code{relative=TRUE}, the results are either non-negative
   numbers, or the values \code{Inf} or \code{NA}. 
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

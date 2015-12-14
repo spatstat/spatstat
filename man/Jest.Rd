@@ -239,10 +239,10 @@
    plot(J, main="redwood data")
    # values are below J = 1, indicating clustered pattern
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -205,10 +205,10 @@ Kcross(X, i, j, r=NULL, breaks=NULL, correction,
     K <- Kcross(pp, 0, 1) # equivalent
     }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

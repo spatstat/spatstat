@@ -42,10 +42,10 @@
   plot(reflect(as.im(letterR)))
   plot(reflect(letterR), add=TRUE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

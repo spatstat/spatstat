@@ -363,8 +363,8 @@ at new locations.
   \testonly{spatstat.options(op)}
 }
 \author{
-  \adrian
-  and \rolf
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \keyword{spatial}
 \keyword{models}

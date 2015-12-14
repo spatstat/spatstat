@@ -139,10 +139,10 @@ fryplot(amacrine, width=0.2,
                   main="Fry plot centred at an On-cell")
 points(0,0)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

@@ -93,12 +93,12 @@
   ## Make logical image which is TRUE when heat equals 'Moderate': 
   A <- gorillas.extra$heat == "Moderate"
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

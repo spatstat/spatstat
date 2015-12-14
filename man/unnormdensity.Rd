@@ -62,10 +62,10 @@ unnormdensity(x, ..., weights = NULL)
   Object of class \code{"density"} as described in
   \code{\link{density.default}}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

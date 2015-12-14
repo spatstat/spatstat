@@ -94,15 +94,15 @@ dg.envelope(X, \dots,
   Monte Carlo tests. Submitted for publication.
 }
 \author{
-  \adrian, Andrew Hardegen, Tom Lawrence,
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
   Implemented by
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

@@ -11,7 +11,7 @@
 dg.test(X, \dots,
         exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
-        interpolate = FALSE,
+        reuse = TRUE, interpolate = FALSE,
         savefuns=FALSE, savepatterns=FALSE,
         verbose = TRUE)
 }
@@ -19,7 +19,8 @@ dg.test(X, \dots,
   \item{X}{
     Either a point pattern dataset (object of class \code{"ppp"},
     \code{"lpp"} or \code{"pp3"}) or a fitted point process model
-    (object of class \code{"ppm"}, \code{"kppm"} or \code{"slrm"}).
+    (object of class \code{"ppm"}, \code{"kppm"}, \code{"lppm"}
+    or \code{"slrm"}).
   }
   \item{\dots}{
     Arguments passed to \code{\link{dclf.test}} or
@@ -51,6 +52,10 @@ dg.test(X, \dots,
     value postulated under the null hypothesis.
     If \code{alternative="less"} the alternative hypothesis is that the
     true value of the summary function is lower than the theoretical value.
+  }
+  \item{reuse}{
+    Logical value indicating whether to re-use the first stage
+    simulations at the second stage, as described by Dao and Genton (2014).
   }
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of
@@ -94,16 +99,11 @@ dg.test(X, \dots,
   Monte Carlo tests. Submitted for publication.
 }
 \author{
-  \adrian, Andrew Hardegen, Tom Lawrence,
+  Adrian Baddeley, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
-  Implemented by
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  Implemented by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{dclf.test}},

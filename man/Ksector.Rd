@@ -82,12 +82,12 @@ Ksector(X, begin = 0, end = 360, \dots,
  K <- Ksector(swedishpines, 0, 90)
  plot(K)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \keyword{spatial}

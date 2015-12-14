@@ -46,12 +46,12 @@ rnoise(rgen = runif, w = square(1), \dots)
   A pixel image (object of class \code{"im"}).
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \seealso{

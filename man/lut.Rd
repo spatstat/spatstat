@@ -87,10 +87,10 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL)
   ct <- lut(c(0,1), inputs=c(FALSE, TRUE))
   ct(TRUE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

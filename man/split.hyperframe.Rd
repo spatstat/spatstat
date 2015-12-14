@@ -54,12 +54,12 @@
   The replacement method \code{split<-.hyperframe} returns
   a new hyperframe \code{x} for which \code{split(x,f)} equals \code{value}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{hyperframe}}, \code{\link{[.hyperframe}}

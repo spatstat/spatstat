@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.43-0.036
+Version: 1.43-0.037
 Nickname: The Sound of One Hand Typing
-Date: 2015-12-08
+Date: 2015-12-14
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@uwa.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

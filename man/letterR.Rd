@@ -15,6 +15,6 @@
 \usage{
  data(letterR)
 }
-\source{\adrian}
+\source{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}}
 \keyword{datasets}
 \keyword{spatial}

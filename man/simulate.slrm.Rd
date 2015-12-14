@@ -78,10 +78,10 @@
   \code{\link{simulate.kppm}},
   \code{\link[stats]{simulate}}
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

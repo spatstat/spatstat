@@ -225,10 +225,10 @@
    truecoef <- c(log(100), log(0.7))
    res.true <- residuals(fit, new.coef=truecoef)  
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

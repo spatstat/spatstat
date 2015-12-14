@@ -174,10 +174,10 @@ markconnect(X, i, j, r=NULL,
     # Compute for all pairs of types at once
     plot(alltypes(amacrine, markconnect))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

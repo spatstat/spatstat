@@ -133,10 +133,10 @@
   } else message("Simulation requires the RandomFields package")
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
-  Modified by \adrian
+  Modified by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

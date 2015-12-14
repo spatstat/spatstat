@@ -40,10 +40,10 @@ border(w, r, outside=FALSE, ...)
   subtracting the original window \code{w} from the dilated window.
 }
 
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

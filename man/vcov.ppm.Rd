@@ -190,13 +190,13 @@
 }
 \author{
   Original code for Poisson point process was written by
-  \adrian 
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
   
-  and \rolf .
+  and Rolf Turner \email{r.turner@auckland.ac.nz} .
   New code for stationary Gibbs point processes was generously contributed by
-  \ege and Jean-Francois Coeurjolly.
-  New code for generic Gibbs process written by \adrian.
-  New code for logistic method contributed by \ege.
+  Ege Rubak \email{rubak@math.aau.dk} and Jean-Francois Coeurjolly.
+  New code for generic Gibbs process written by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
+  New code for logistic method contributed by Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{vcov}} for the generic,

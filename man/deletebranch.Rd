@@ -63,12 +63,12 @@ extractbranch(X, \dots)
   obtained by deleting or extracting the specified branch.
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \seealso{

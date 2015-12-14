@@ -30,8 +30,8 @@
   D <- density(cells)
   zapsmall.im(D)
 }
-\author{\ege
-  and \adrian
+\author{Ege Rubak \email{rubak@math.aau.dk}
+  and Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

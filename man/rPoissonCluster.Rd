@@ -116,10 +116,10 @@
   }
   plot(rPoissonCluster(15,0.1,nclust2, radius=0.1, n=5))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

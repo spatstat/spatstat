@@ -93,7 +93,7 @@ G3est(X, ..., rmax = NULL, nrval = 128, correction = c("rs", "km", "Hanisch"))
   \bold{15}, 409--412.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
   and Rana Moyeed.

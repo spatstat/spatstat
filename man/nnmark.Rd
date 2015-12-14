@@ -89,12 +89,12 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     nearest neighbours of each point of \code{X}.
   }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

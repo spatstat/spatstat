@@ -25,10 +25,10 @@
   a <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
   a
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

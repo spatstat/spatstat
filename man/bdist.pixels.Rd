@@ -61,10 +61,10 @@
   mean(d >= 0.1)
   # value is approx (1 - 2 * 0.1)^2 = 0.64
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

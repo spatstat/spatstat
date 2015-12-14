@@ -214,10 +214,10 @@
   applynbd(cells, N=1, showoffG, exclude=TRUE, fullpicture=cells)
   }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

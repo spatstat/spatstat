@@ -188,10 +188,10 @@ Jdot(X, i, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     J <- Jdot(pp, "a")
     }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

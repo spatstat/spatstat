@@ -61,10 +61,10 @@ reload.or.compute(filename, expr, objects = NULL, destination = parent.frame())
       })
    }
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{utilities}

@@ -108,7 +108,7 @@
   Providence, RI, USA: American Mathematical Society.
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
 }

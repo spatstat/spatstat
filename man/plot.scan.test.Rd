@@ -60,10 +60,10 @@
   The value of \code{as.im.scan.test} is a pixel image (object of
   class \code{"im"}). The value of \code{plot.scan.test} is \code{NULL}.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

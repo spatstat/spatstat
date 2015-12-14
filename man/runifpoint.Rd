@@ -96,10 +96,10 @@
  runifpoint(npoints(cells), win=Window(cells))
  runifpoint(ex=cells)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

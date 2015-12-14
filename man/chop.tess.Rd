@@ -41,10 +41,10 @@ chop.tess(X, L)
 \value{
   A tessellation (object of class \code{"tess"}).
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

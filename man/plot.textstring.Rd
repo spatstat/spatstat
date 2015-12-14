@@ -33,12 +33,12 @@
   te <- textstring(centroid.owin(W), txt="Humberside", cex=2.5)
   plot(layered(W, te), main="")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
-  and \ege
+  and Ege Rubak \email{rubak@math.aau.dk}
   
 }
 \seealso{

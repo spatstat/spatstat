@@ -130,10 +130,10 @@ scanLRTS(X, r, \dots,
   \emph{Communications in Statistics --- Theory and Methods}
   \bold{26}, 1481--1496.
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \seealso{

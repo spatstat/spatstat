@@ -37,12 +37,12 @@ clusterkernel(model, \dots)
   A function in the \R\ language with arguments \code{x,y,\dots}.
 }
 \author{
-\adrian
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
 
 
-\rolf
+Rolf Turner \email{r.turner@auckland.ac.nz}
 
-and \ege
+and Ege Rubak \email{rubak@math.aau.dk}
 
 }
 \seealso{

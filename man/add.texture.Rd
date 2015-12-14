@@ -57,9 +57,9 @@ add.texture(W, texture = 4, spacing = NULL, ...)
   }
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \seealso{
   \code{\link{owin}}, 

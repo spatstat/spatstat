@@ -78,10 +78,10 @@
  L <- Linhom(X, sigma=0.1)
  plot(L, main="Inhomogeneous L function for Japanese Pines")
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

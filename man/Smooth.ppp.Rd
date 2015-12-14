@@ -175,8 +175,8 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
    # data frame of marks: trees marked by diameter and height
    plot(Smooth(finpines, sigma=2))
 }
-\author{\adrian
-  and \rolf
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
 }
 \references{
   Nadaraya, E.A. (1964) On estimating regression.

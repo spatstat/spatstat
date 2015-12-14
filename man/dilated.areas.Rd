@@ -69,10 +69,10 @@
   X <- runifpoint(10)
   a <- dilated.areas(X, c(0.1,0.2), W=square(1), exact=TRUE)
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   
-  and \rolf
+  and Rolf Turner \email{r.turner@auckland.ac.nz}
   
 }
 \keyword{spatial}

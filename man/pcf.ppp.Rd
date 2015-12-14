@@ -203,10 +203,10 @@
   legend("center", col=c("blue", "green"), lty=1, lwd=2,
          legend=c("divisor=r","divisor=d"))
 }
-\author{\adrian
+\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   
   and Martin Hazelton.
 }

@@ -127,10 +127,10 @@
   plot(nnmap(cells, 2, what="which"))
 }
 \author{
-  \adrian
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   
   ,
-  \rolf
+  Rolf Turner \email{r.turner@auckland.ac.nz}
   ,
   and Jens Oehlschlaegel
 }
