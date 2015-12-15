@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.037
+        CHANGES IN spatstat VERSION 1.43-0.038
 
 OVERVIEW
 
@@ -88,6 +88,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
    o dclf.progress, mad.progress, dclf.sigtrace, mad.sigtrace,
     mctest.progress, mctest.sigtrace, dg.progress, dg.sigtrace
    New argument 'rmin' determines the left endpoint of the test interval.
+
+   o dclf.test, mad.test, dg.test, dg.progress, dg.sigtrace, dg.envelope
+    (also accepted by dclf.progress, mad.progress, dclf.sigtrace, mad.sigtrace)
+   New argument 'leaveout' specifies how to calculate the deviation
+   between the observed summary function and nominal reference value.
 
    o envelope
    New argument 'funargs'

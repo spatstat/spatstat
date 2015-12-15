@@ -10,10 +10,12 @@
 }
 \usage{
 dclf.test(X, \dots, alternative=c("two.sided", "less", "greater"),
-                  rinterval = NULL, scale=NULL, clamp=FALSE, interpolate=FALSE)
+                  rinterval = NULL, leaveout=1,
+                  scale=NULL, clamp=FALSE, interpolate=FALSE)
 
 mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
-                  rinterval = NULL, scale=NULL, clamp=FALSE, interpolate=FALSE)
+                  rinterval = NULL, leaveout=1,
+                  scale=NULL, clamp=FALSE, interpolate=FALSE)
 }
 \arguments{
   \item{X}{
@@ -40,6 +42,12 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
     Interval of values of the summary function argument \code{r}
     over which the maximum absolute deviation, or the integral,
     will be computed for the test. A numeric vector of length 2.
+  }
+  \item{leaveout}{
+    Optional integer 0, 1 or 2 indicating how to calculate the
+    deviation between the observed summary function and the
+    nominal reference value, when the reference value must be estimated
+    by simulation. See Details.
   }
   \item{scale}{
     Optional. A function in the \R language which determines the
@@ -160,7 +168,18 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
   The argument \code{use.theory} passed to \code{\link{envelope}}
   determines whether to compare the summary function for the data
   to its theoretical value for CSR (\code{use.theory=TRUE})
-  or to the sample mean of simulations from CSR (\code{use.theory=FALSE}).
+  or to the sample mean of simulations from CSR
+  (\code{use.theory=FALSE}).
+
+  The argument \code{leaveout} specifies how to calculate the
+  discrepancy between the summary function for the data and the
+  nominal reference value, when the reference value must be estimated
+  by simulation. The values \code{leaveout=0} and
+  \code{leaveout=1} are both algebraically equivalent (Baddeley et al, 2014,
+  Appendix) to computing the difference \code{observed - reference}
+  where the \code{reference} is the mean of simulated values.
+  The value \code{leaveout=2} gives the leave-two-out discrepancy
+  proposed by Dao and Genton (2014).
 }
 \section{Handling Ties}{
   If the observed value of the test statistic is equal to one or more of the
@@ -189,6 +208,12 @@ mad.test(X, \dots,  alternative=c("two.sided", "less", "greater"),
   Cressie, N.A.C. (1991)
   \emph{Statistics for spatial data}.
   John Wiley and Sons, 1991.
+
+  Dao, N.A. and Genton, M. (2014)
+  A Monte Carlo adjusted goodness-of-fit test for
+  parametric models describing spatial point patterns.
+  \emph{Journal of Graphical and Computational Statistics}
+  \bold{23}, 497--517.
 
   Diggle, P. J. (1986).
   Displaced amacrine cells in the retina of a

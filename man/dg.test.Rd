@@ -11,7 +11,7 @@
 dg.test(X, \dots,
         exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
-        reuse = TRUE, interpolate = FALSE,
+        reuse = TRUE, leaveout=1, interpolate = FALSE,
         savefuns=FALSE, savepatterns=FALSE,
         verbose = TRUE)
 }
@@ -57,6 +57,12 @@ dg.test(X, \dots,
     Logical value indicating whether to re-use the first stage
     simulations at the second stage, as described by Dao and Genton (2014).
   }
+  \item{leaveout}{
+    Optional integer 0, 1 or 2 indicating how to calculate the
+    deviation between the observed summary function and the
+    nominal reference value, when the reference value must be estimated
+    by simulation. See Details.
+  }
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of
     the test statistic by kernel smoothing, as described in
@@ -81,6 +87,16 @@ dg.test(X, \dots,
   If \code{X} is a point pattern, the null hypothesis is CSR.
 
   If \code{X} is a fitted model, the null hypothesis is that model.
+
+  The argument \code{leaveout} specifies how to calculate the
+  discrepancy between the summary function for the data and the
+  nominal reference value, when the reference value must be estimated
+  by simulation. The values \code{leaveout=0} and
+  \code{leaveout=1} are both algebraically equivalent (Baddeley et al, 2014,
+  Appendix) to computing the difference \code{observed - reference}
+  where the \code{reference} is the mean of simulated values.
+  The value \code{leaveout=2} gives the leave-two-out discrepancy
+  proposed by Dao and Genton (2014).
 }
 \value{
   A hypothesis test (object of class \code{"htest"}

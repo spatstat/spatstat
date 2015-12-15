@@ -10,7 +10,7 @@
 \usage{
 dg.progress(X, fun = Lest, \dots,
             exponent = 2, nsim = 19, nsimsub = nsim - 1,
-            nrank = 1, alpha, interpolate = FALSE, rmin=0,
+            nrank = 1, alpha, leaveout=1, interpolate = FALSE, rmin=0,
             savefuns = FALSE, savepatterns = FALSE, verbose=TRUE)
 }
 \arguments{
@@ -31,7 +31,7 @@ dg.progress(X, fun = Lest, \dots,
   }  
   \item{exponent}{
     Positive number. The exponent of the \eqn{L^p} distance.
-v    See Details.
+    See Details.
   }
   \item{nsim}{
     Number of repetitions of the basic test.
@@ -52,6 +52,12 @@ v    See Details.
     Optional. The significance level of the test.
     Equivalent to \code{nrank/(nsim+1)} where \code{nsim} is the
     number of simulations.
+  }
+  \item{leaveout}{
+    Optional integer 0, 1 or 2 indicating how to calculate the
+    deviation between the observed summary function and the
+    nominal reference value, when the reference value must be estimated
+    by simulation. See Details.
   }
   \item{interpolate}{
     Logical value indicating how to compute the critical value.
@@ -120,6 +126,16 @@ v    See Details.
   of the interval defining the test statistic: the tests are
   performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
   where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
+
+  The argument \code{leaveout} specifies how to calculate the
+  discrepancy between the summary function for the data and the
+  nominal reference value, when the reference value must be estimated
+  by simulation. The values \code{leaveout=0} and
+  \code{leaveout=1} are both algebraically equivalent (Baddeley et al, 2014,
+  Appendix) to computing the difference \code{observed - reference}
+  where the \code{reference} is the mean of simulated values.
+  The value \code{leaveout=2} gives the leave-two-out discrepancy
+  proposed by Dao and Genton (2014).
 }
 \value{
   An object of class \code{"fv"} that can be plotted to

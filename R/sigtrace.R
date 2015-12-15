@@ -118,7 +118,8 @@ mctestSigtraceEngine <- local({
 dg.sigtrace <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1,
                         alternative=c("two.sided", "less", "greater"),
-                        rmin=0, interpolate=FALSE, confint=TRUE, alpha=0.05,
+                        rmin=0, leaveout=1,
+                        interpolate=FALSE, confint=TRUE, alpha=0.05,
                         savefuns=FALSE, savepatterns=FALSE, verbose=FALSE) {
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
@@ -136,6 +137,7 @@ dg.sigtrace <- function(X, fun=Lest, ...,
                         exponent=exponent,
                         rmin=rmin,
                         alternative=alternative,
+                        leaveout=leaveout,
                         interpolate=interpolate,
                         confint=FALSE, verbose=verbose, ...)
   R    <- T1$R
@@ -149,6 +151,7 @@ dg.sigtrace <- function(X, fun=Lest, ...,
                    exponent=exponent,
                    rmin=rmin,
                    alternative=alternative,
+                   leaveout=leaveout,
                    interpolate=interpolate,
                    confint=FALSE, verbose=FALSE, ...)
   phati <- sapply(T2list, getElement, name="pest")

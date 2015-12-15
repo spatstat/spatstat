@@ -8,7 +8,7 @@
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
                     alternative=c("two.sided", "less", "greater"),
-                    reuse=TRUE, interpolate=FALSE,
+                    reuse=TRUE, leaveout=1, interpolate=FALSE,
                     savefuns=FALSE, savepatterns=FALSE,
                     verbose=TRUE) {
   Xname <- short.deparse(substitute(X))
@@ -21,6 +21,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   if(verbose) cat("Applying first-stage test to original data... ")
   tX <- envelopeTest(X, ...,
                      nsim=nsim, alternative=alternative,
+                     leaveout=leaveout,
                      interpolate=interpolate,
                      exponent=exponent,
                      savefuns=savefuns,
@@ -32,6 +33,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
     if(verbose) cat("Repeating first-stage test... ")
     tXX <- envelopeTest(X, ...,
                         nsim=nsim, alternative=alternative,
+                        leaveout=leaveout,
                         interpolate=interpolate,
                         exponent=exponent,
                         savefuns=savefuns, savepatterns=TRUE, verbose=FALSE,
@@ -53,6 +55,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
     if(Xismodel) Yi <- update(X, Yi)
     tYi <- envelopeTest(Yi, ...,
                         nsim=nsimsub, alternative=alternative,
+                        leaveout=leaveout,
                         interpolate=interpolate,
                         exponent=exponent, savepatterns=TRUE, verbose=FALSE,
                         envir.simul=env.here)
@@ -85,6 +88,7 @@ dg.envelope <- function(X, ..., nsim=19,
                         nsimsub=nsim-1,
                         nrank=1,
                         alternative=c("two.sided", "less", "greater"),
+                        leaveout=1,
                         interpolate = FALSE,
                         savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
@@ -96,6 +100,7 @@ dg.envelope <- function(X, ..., nsim=19,
   if(verbose) cat("Applying test to original data... ")
   tX <- envelopeTest(X, ...,
                      alternative=alternative,
+                     leaveout=leaveout,
                      interpolate = interpolate,
                      nsim=nsim, nrank=nrank,
                      exponent=Inf, savepatterns=TRUE, savefuns=TRUE,
@@ -117,6 +122,7 @@ dg.envelope <- function(X, ..., nsim=19,
     if(Xismodel) Yi <- update(X, Yi)
     tYi <- envelopeTest(Yi, ...,
                         alternative=alternative,
+                        leaveout=leaveout,
                         interpolate = interpolate, save.interpolant = FALSE,
                         nsim=nsimsub, nrank=nrank,
                         exponent=Inf, savepatterns=TRUE, verbose=FALSE,

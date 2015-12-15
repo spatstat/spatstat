@@ -1,7 +1,7 @@
 #
 #   progress.R
 #
-#   $Revision: 1.19 $  $Date: 2015/11/17 08:43:27 $
+#   $Revision: 1.20 $  $Date: 2015/12/15 10:40:12 $
 #
 #   progress plots (envelope representations)
 #
@@ -92,13 +92,15 @@ envelopeProgressData <- local({
   envelopeProgressData <-
     function(X, fun=Lest, ..., exponent=1,
              alternative=c("two.sided", "less", "greater"),
-             scale=NULL, clamp=FALSE, 
+             leaveout=1, scale=NULL, clamp=FALSE, 
              normalize=FALSE, deflate=FALSE,
              rmin=0,
              save.envelope = savefuns || savepatterns,
              savefuns = FALSE, 
              savepatterns = FALSE) {
     alternative <- match.arg(alternative)
+    if(!(leaveout %in% 0:2))
+      stop("Argument leaveout should equal 0, 1 or 2")
     ## compute or extract simulated functions
     X <- envelope(X, fun=fun, ..., alternative=alternative,
                   savefuns=TRUE, savepatterns=savepatterns)
@@ -106,10 +108,27 @@ envelopeProgressData <- local({
     ## extract values
     R   <- with(X, .x)
     obs <- with(X, .y)
-    reference <- if("theo" %in% names(X)) with(X, theo) else with(X, mmean)
     sim <- as.matrix(as.data.frame(Y))[, -1]
     nsim <- ncol(sim)
-
+    ## choose function as reference
+    has.theo <- ("theo" %in% names(X))
+    use.theo <- identical(attr(X, "einfo")$use.theory, TRUE)
+    if(use.theo && !has.theo)
+      warning("No theoretical function available; use.theory ignored")
+    if(use.theo && has.theo) {
+      theo.used <- TRUE
+      reference <- with(X, theo)
+      leaveout <- 0
+    } else {
+      theo.used <- FALSE
+      if(leaveout == 2) {
+        ## use sample mean of simulations only
+        reference <- with(X, mmean)
+      } else {
+        ## use sample mean of simulations *and* observed 
+        reference <- (nsim * with(X, mmean) + obs)/(nsim + 1)
+      }
+    }
     ## restrict range
     if(rmin > 0) {
       if(sum(R >= rmin) < 2)
@@ -139,10 +158,12 @@ envelopeProgressData <- local({
       scr <- scaling
     } else stop("Argument scale should be a function")
 
-    ## compute raw deviations
-    ##   (large positive values favorable to alternative)
-    ddat <- Deviant(obs - reference, alternative, clamp, scaling)
-    dsim <- Deviant(sim - reference, alternative, clamp, scaling)
+    ## compute deviations
+    rawdevDat <- Deviation(obs, reference, leaveout, nsim, sim[,1])
+    rawdevSim <- Deviation(sim, reference, leaveout, nsim)
+    ## evaluate signed/absolute deviation relevant to alternative
+    ddat <- RelevantDeviation(rawdevDat, alternative, clamp, scaling)
+    dsim <- RelevantDeviation(rawdevSim, alternative, clamp, scaling)
 
     ## compute test statistics
     if(is.infinite(exponent)) {
@@ -156,17 +177,16 @@ envelopeProgressData <- local({
       testname <- "Maximum absolute deviation test"
     } else {
       dR <- c(0, diff(R))
-      a <- (nsim/(nsim - 1))^exponent
-      if(clamp || alternative == "two.sided") {
+      if(clamp || (alternative == "two.sided")) {
         ## deviations are nonnegative
-        devdata <- a * cumsumskip(dR * ddat^exponent, nskip)
-        devsim  <- a * apply(dR * dsim^exponent, 2, cumsumskip, nskip=nskip)
+        devdata <- cumsumskip(dR * ddat^exponent, nskip)
+        devsim  <- apply(dR * dsim^exponent, 2, cumsumskip, nskip=nskip)
       } else {
         ## sign of deviations should be retained
-        devdata <- a * cumsumskip(dR * sign(ddat) * abs(ddat)^exponent,
+        devdata <- cumsumskip(dR * sign(ddat) * abs(ddat)^exponent,
                                   nskip=nskip)
-        devsim  <- a * apply(dR * sign(dsim) * abs(dsim)^exponent,
-                             2, cumsumskip, nskip=nskip)
+        devsim  <- apply(dR * sign(dsim) * abs(dsim)^exponent,
+                         2, cumsumskip, nskip=nskip)
       }
       if(normalize) {
         devdata <- devdata/R
@@ -200,7 +220,7 @@ envelopeProgressData <- local({
 
 dg.progress <- function(X, fun=Lest, ...,   
                         exponent=2, nsim=19, nsimsub=nsim-1, nrank=1, alpha, 
-                        interpolate=FALSE, rmin=0, 
+                        leaveout=1, interpolate=FALSE, rmin=0, 
                         savefuns=FALSE, savepatterns=FALSE,
                         verbose=TRUE) {
   env.here <- sys.frame(sys.nframe())
@@ -232,11 +252,12 @@ dg.progress <- function(X, fun=Lest, ...,
                 envir.simul=env.here)
   ## get progress data
   PD <- envelopeProgressData(E, fun=fun, ..., rmin=rmin, nsim=nsim,
-                             exponent=exponent, 
+                             exponent=exponent, leaveout=leaveout,
                              verbose=FALSE)
   ## get first level MC test significance trace
   T1 <- mctest.sigtrace(E, fun=fun, nsim=nsim, 
                         exponent=exponent,
+                        leaveout=leaveout,
                         interpolate=interpolate, rmin=rmin,
                         confint=FALSE, verbose=FALSE, ...)
   R    <- T1$R
@@ -254,6 +275,7 @@ dg.progress <- function(X, fun=Lest, ...,
                             fun=fun, nsim=nsimsub, 
                             exponent=exponent,
                             interpolate=interpolate,
+                            leaveout=leaveout,
                             rmin=rmin,
                             confint=FALSE, verbose=FALSE, ...)
     phat2[,j] <- sigj$pest

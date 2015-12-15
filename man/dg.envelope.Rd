@@ -11,7 +11,7 @@
 dg.envelope(X, \dots,
             nsim = 19, nsimsub=nsim-1, nrank = 1,
             alternative=c("two.sided", "less", "greater"),
-            interpolate = FALSE,
+            leaveout=1, interpolate = FALSE,
             savefuns=FALSE, savepatterns=FALSE,
             verbose = TRUE)
 }
@@ -51,6 +51,12 @@ dg.envelope(X, \dots,
     or a one-sided test with a lower critical boundary
     (\code{alternative="less"}) or a one-sided test
     with an upper critical boundary (\code{alternative="greater"}).
+  }
+  \item{leaveout}{
+    Optional integer 0, 1 or 2 indicating how to calculate the
+    deviation between the observed summary function and the
+    nominal reference value, when the reference value must be estimated
+    by simulation. See Details.
   }
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of

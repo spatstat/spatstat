@@ -113,7 +113,7 @@
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
-\alias{Deviant}
+\alias{Deviation}
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
@@ -565,6 +565,7 @@
 \alias{reduceformula}
 \alias{reheat}
 \alias{relatively.prime}
+\alias{RelevantDeviation}
 \alias{repair.image.xycoords}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
@@ -879,7 +880,7 @@ default.clipwindow(object, epsilon)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force)
-Deviant(x, alternative, clamp, scaling)
+Deviation(x, ref, leaveout, n, xi)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     weights, edge, varcov,
@@ -935,11 +936,11 @@ envelopeEngine(X, fun, simul,
            envir.user, expected.arg, do.pwrong,
            foreignclass, collectrubbish)
 envelopeProgressData(X, fun, \dots, exponent,
-                     alternative, scale, clamp,
+                     alternative, leaveout, scale, clamp,
                      normalize, deflate, rmin, 
                      save.envelope, savefuns, savepatterns)
 envelopeTest(X, \dots, exponent, alternative,
-            rinterval, scale, clamp, tie.rule,
+            rinterval, leaveout, scale, clamp, tie.rule,
             interpolate, save.interpolant,
             save.envelope, savefuns, savepatterns,
             Xname, verbose)
@@ -1416,6 +1417,7 @@ rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
 reduceformula(fmla, deletevar, verbose)
 reheat(model, invtemp)
 relatively.prime(n, m)
+RelevantDeviation(x, alternative, clamp, scaling)
 repair.image.xycoords(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)

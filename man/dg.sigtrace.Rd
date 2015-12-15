@@ -11,7 +11,8 @@
   dg.sigtrace(X, fun = Lest, \dots,
               exponent = 2, nsim = 19, nsimsub = nsim - 1,
               alternative = c("two.sided", "less", "greater"),
-              rmin=0, interpolate = FALSE, confint = TRUE, alpha = 0.05,
+              rmin=0, leaveout=1,
+              interpolate = FALSE, confint = TRUE, alpha = 0.05,
               savefuns=FALSE, savepatterns=FALSE, verbose=FALSE)
 }
 \arguments{
@@ -54,6 +55,12 @@
   \item{rmin}{
     Optional. Left endpoint for the interval of \eqn{r} values
     on which the test statistic is calculated.
+  }
+  \item{leaveout}{
+    Optional integer 0, 1 or 2 indicating how to calculate the
+    deviation between the observed summary function and the
+    nominal reference value, when the reference value must be estimated
+    by simulation. See Details.
   }
   \item{interpolate}{
     Logical value indicating whether to interpolate the distribution of
@@ -113,6 +120,16 @@
   of the interval defining the test statistic: the tests are
   performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
   where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
+
+  The argument \code{leaveout} specifies how to calculate the
+  discrepancy between the summary function for the data and the
+  nominal reference value, when the reference value must be estimated
+  by simulation. The values \code{leaveout=0} and
+  \code{leaveout=1} are both algebraically equivalent (Baddeley et al, 2014,
+  Appendix) to computing the difference \code{observed - reference}
+  where the \code{reference} is the mean of simulated values.
+  The value \code{leaveout=2} gives the leave-two-out discrepancy
+  proposed by Dao and Genton (2014).
 }
 \value{
   An object of class \code{"fv"} that can be plotted to
@@ -149,13 +166,9 @@
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
   Implemented by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{dg.test}} for the Dao-Genton test,
