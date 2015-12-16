@@ -349,6 +349,9 @@ listed alphabetically.
    \item 
      New argument \texttt{rmin} determines the left endpoint
      of the test interval.    
+   \item 
+     New argument \texttt{leaveout} specifies how to calculate
+     discrepancy between observed and simulated function values.
    \item
      New argument \texttt{scale} allows summary function values to be rescaled
      before the comparison is performed.
@@ -423,7 +426,7 @@ listed alphabetically.
    Now handles models with a random effect component.
    New argument \texttt{random} is a formula specifying the random effect.
 
- \item \texttt{nncross.lpp, distfun.lpp}:
+ \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
    New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
 

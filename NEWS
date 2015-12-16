@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.038
+        CHANGES IN spatstat VERSION 1.43-0.039
 
 OVERVIEW
 
@@ -9,17 +9,19 @@ OVERVIEW
   
    o More support for multidimensional point patterns and point processes.
 
-   o More options for one-sided envelopes.
+   o More options for envelopes and related Monte Carlo tests.
 
    o More support for model comparison.
 
-   o Convexifying operation.
-
-   o Subdivide a linear network.
+   o k-th nearest neighbours on a linear network.
 
    o Penttinen process can be simulated (by Metropolis-Hastings or CFTP).
 
    o Calculate the predicted variance of number of points.
+
+   o Convexifying operation for sets.
+
+   o Subdivide a linear network.
 
    o Accelerated algorithms for linear networks.
 

@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.33 $  $Date: 2015/12/15 11:02:48 $
+#  $Revision: 1.34 $  $Date: 2015/12/16 01:12:17 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -316,18 +316,20 @@ envelopeTest <-
                        "Monte Carlo")
     scaleblurb <- if(is.null(scale)) NULL else
                   paste("Scale function:", paste(deparse(scale), collapse=" "))
+    refblurb <- if(theo.used) "theoretical" else "sample mean"
+    leaveblurb <- if(leaveout == 0) paste("observed minus", refblurb) else
+                  if(leaveout == 1) "leave-one-out" else "leave-two-out"
     testname <- c(paste(testname, "of", nullmodel),
                   paste(testtype, "test based on", nsim,
                         "simulations", e$constraints), 
                   paste("Summary function:", fname),
-                  paste("Reference function:",
-                        if(theo.used) "theoretical" else "sample mean"),
+                  paste("Reference function:", refblurb),
                   paste("Alternative:", alternative),
                   paste("Interval of distance values:",
                         prange(rinterval), uname),
                   scaleblurb,
                   paste("Test statistic:", statisticblurb),
-                  paste0("Deviation: leave-", leaveout, "-out")
+                  paste("Deviation =", leaveblurb)
                   )
     result <- structure(list(statistic = statistic,
                              p.value = pvalue,
@@ -343,6 +345,7 @@ envelopeTest <-
       attr(result, "info") <- list(exponent=exponent,
                                    alternative=alternative,
                                    nties=nties,
+                                   leaveout=leaveout,
                                    interpolate=interpolate,
                                    scale=scale, clamp=clamp,
                                    tie.rule=tie.rule,

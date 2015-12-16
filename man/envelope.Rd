@@ -133,6 +133,9 @@
     Logical value indicating whether to use the theoretical value,
     computed by \code{fun}, as the reference value for simultaneous
     envelopes. Applicable only when \code{global=TRUE}.
+    Default is \code{use.theory=TRUE} if \code{Y} is a point pattern,
+    or a point process model equivalent to Complete Spatial Randomness,
+    and \code{use.theory=FALSE} otherwise.
   }
   \item{alternative}{
     Character string determining whether the envelope corresponds

@@ -28,8 +28,9 @@ dg.test(X, \dots,
     control the conduct of the test.
     Useful arguments include \code{fun} to determine the summary
     function, \code{rinterval} to determine the range of
-    \eqn{r} values used in the test, and
-    \code{verbose=FALSE} to turn off the messages.
+    \eqn{r} values used in the test, 
+    \code{verbose=FALSE} to turn off the messages,
+    and \code{use.theory} described under Details. 
   }
   \item{exponent}{
     Exponent used in the test statistic. Use \code{exponent=2}
@@ -87,6 +88,12 @@ dg.test(X, \dots,
   If \code{X} is a point pattern, the null hypothesis is CSR.
 
   If \code{X} is a fitted model, the null hypothesis is that model.
+
+  The argument \code{use.theory} passed to \code{\link{envelope}}
+  determines whether to compare the summary function for the data
+  to its theoretical value for CSR (\code{use.theory=TRUE})
+  or to the sample mean of simulations from CSR
+  (\code{use.theory=FALSE}).
 
   The argument \code{leaveout} specifies how to calculate the
   discrepancy between the summary function for the data and the
