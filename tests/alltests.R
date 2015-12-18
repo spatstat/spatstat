@@ -1,6 +1,6 @@
 ## tests/sigtraceprogress.R
 ## Tests of *.sigtrace and *.progress
-## $Revision: 1.1 $ $Date: 2015/10/26 09:19:55 $
+## $Revision: 1.2 $ $Date: 2015/12/18 08:29:44 $
 
 require(spatstat)
 local({
@@ -12,6 +12,14 @@ local({
                      verbose=FALSE))
   plot(dg.progress(redwood, nsim=5, alternative="greater", rmin=0.02,
                    verbose=FALSE))
+  ## test 'leave-two-out' algorithm
+  a <- dclf.sigtrace(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
+                     verbose=FALSE)
+  aa <- dclf.progress(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
+                      verbose=FALSE)
+  b <- dg.sigtrace(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2)
+  bb <- dg.progress(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2,
+                    verbose=FALSE)
 })
 # nndist.R
 # Check that nndist and nnwhich give

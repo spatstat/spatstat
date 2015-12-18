@@ -3,7 +3,7 @@
 ##
 ##  Dao-Genton adjusted p-values
 ##
-##  $Revision: 1.10 $  $Date: 2015/12/14 07:47:29 $
+##  $Revision: 1.11 $  $Date: 2015/12/18 01:02:52 $
 ##
 
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
@@ -67,9 +67,15 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   method <- tX$method
   method <- c("Dao-Genton adjusted goodness-of-fit test",
               paste("based on", method[1]),
-              method[-1])
-  if(!reuse)
-    method <- c(method, "(First and second stages were independent)")
+              paste("First stage:", method[2]),
+              method[-(1:2)],
+              if(reuse) {
+                paste("Second stage: nested, ", nsimsub,
+                      "simulations for each first-stage simulation")
+              } else {
+                paste("Second stage:", nsim, "*", nsimsub,
+                      "nested simulations independent of first stage")
+              })
   names(pX) <- "p0"
   result <- structure(list(statistic = pX,
                            p.value = padj,
