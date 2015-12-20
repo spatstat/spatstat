@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.43-0.040
+        CHANGES IN spatstat VERSION 1.43-0.041
 
 OVERVIEW
 
@@ -130,6 +130,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
    o quadratcount.ppp
    Computation accelerated in some cases.
+
+   o dg.test
+   Computation accelerated.
 
 BUGS
 
