@@ -715,7 +715,6 @@
 \alias{there.is.no.try}
 \alias{thinjump}
 \alias{tilecentroids}        
-\alias{tileindex}        
 \alias{transradius}
 \alias{trap.extra.arguments}
 \alias{trianglediameters}
@@ -1591,7 +1590,6 @@ test.selfcrossing.psp(A)
 there.is.no.try(\dots)
 thinjump(n, p)
 tilecentroids(W, nx, ny)
-tileindex(x, y, Z)
 transradius(W)
 trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)

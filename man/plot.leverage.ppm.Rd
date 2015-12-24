@@ -1,13 +1,17 @@
 \name{plot.leverage.ppm}
 \alias{plot.leverage.ppm}
+\alias{persp.leverage.ppm}
 \title{
   Plot Leverage Function
 }
 \description{
-  Plots a leverage function that has been computed by \code{\link{leverage.ppm}}.
+  Generate a pixel image plot, or a perspective plot,
+  of a leverage function that has been computed by \code{\link{leverage.ppm}}.
 }
 \usage{
- \method{plot}{leverage.ppm}(x, ..., showcut=TRUE, col.cut=par("fg"))
+ \method{plot}{leverage.ppm}(x, \dots, showcut=TRUE, col.cut=par("fg"))
+
+ \method{persp}{leverage.ppm}(x, \dots, main)
 }
 \arguments{
   \item{x}{
@@ -25,16 +29,28 @@
   \item{col.cut}{
     Optional colour for the contour line.
   }
+  \item{main}{
+    Optional main title.
+  }
 }
 \details{
-  This is the plot method for objects of class \code{"leverage.ppm"}.
-  These objects are computed by the command \code{\link{leverage.ppm}}.
+  These functions are the \code{plot} and \code{persp} methods
+  for objects of class \code{"leverage.ppm"}.
+  Such objects are computed by the command \code{\link{leverage.ppm}}.
 
+  The \code{plot} method displays the leverage function 
+  as a colour pixel image using \code{\link{plot.im}},
+  and draws a single contour line at the mean leverage value
+  using \code{\link{contour.im}}.
   Use the argument \code{clipwin} to restrict the plot to a subset
   of the full data.
+
+  The \code{persp} method displays the leverage function as a surface
+  in perspective view, using \code{\link{persp.im}}.
 }
 \value{
-  None.
+  Same as for \code{\link{plot.im}} 
+  and \code{\link{persp.im}} respectively.
 }
 \references{
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)
@@ -43,16 +59,16 @@
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
 }
 \seealso{
-  \code{\link{leverage.ppm}}
+  \code{\link{leverage.ppm}}.
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
-   fit <- ppm(X, ~x+y)
-   plot(leverage(fit))
+   fit <- ppm(X ~x+y)
+   lef <- leverage(fit)
+   plot(lef)
+   persp(lef)
 }
 \keyword{spatial}
 \keyword{models}

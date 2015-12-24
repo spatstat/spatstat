@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.9 $ $Date: 2015/10/21 09:06:57 $
+##  $Revision: 1.10 $ $Date: 2015/12/24 07:44:55 $
 
 ### .................. basic graphics .............................
 
@@ -260,7 +260,9 @@ textureplot <- local({
       main <- short.deparse(substitute(x))
     if(!(is.im(x) || is.tess(x))) {
       x <- try(as.tess(x), silent=TRUE)
-      if(inherits(x, "try-error"))
+      if(inherits(x, "try-error")) 
+        x <- try(as.im(x), silent=TRUE)
+      if(inherits(x, "try-error")) 
         stop("x must be a pixel image or a tessellation", call.=FALSE)
     }
     leg.side <- match.arg(leg.side)

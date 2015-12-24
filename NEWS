@@ -1,4 +1,32 @@
 
+        CHANGES IN spatstat VERSION 1.44-0.001
+
+OVERVIEW
+
+    o Version nickname: 'Merry Christmas, Where Permitted'
+
+NEW FUNCTIONS
+
+   o as.function.tess
+   Convert a tessellation to a function(x,y). The function value
+   indicates which tile of the tessellation contains the point (x,y).
+
+   o tileindex
+   Determine which tile of a tessellation contains a given point (x,y).
+
+   o persp.leverage.ppm
+   Method for persp plots for objects of class leverage.ppm
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+   o textureplot
+   Argument x can now be something acceptable to as.im
+
+BUG FIXES
+
+  o None yet
+
         CHANGES IN spatstat VERSION 1.44-0
 
 OVERVIEW

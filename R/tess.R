@@ -516,6 +516,13 @@ as.im.tess <- function(X, W=NULL, ...,
   return(out)
 }
 
+as.function.tess <- function(x, ...) {
+  V <- x
+  f <- function(x,y) { tileindex(x,y,V) }
+  g <- funxy(f, Window(V))
+  return(g)
+}
+
 tileindex <- function(x, y, Z) {
   stopifnot(is.tess(Z))
   stopifnot(length(x) == length(y))

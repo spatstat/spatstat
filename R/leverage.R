@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.46 $  $Date: 2015/02/04 08:49:01 $
+#  $Revision: 1.47 $  $Date: 2015/12/23 08:45:13 $
 #
 
 leverage <- function(model, ...) {
@@ -389,6 +389,11 @@ plot.influence.ppm <- function(x, ...) {
                            list(main=defaultmain)))
 }
 
+persp.leverage.ppm <- function(x, ..., main) {
+  if(missing(main)) main <- deparse(substitute(x))
+  persp(as.im(x), main=main, ...)
+}
+  
 as.im.leverage.ppm <- function(X, ...) {
   return(X$lev$smo)
 }
