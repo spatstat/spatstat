@@ -10,7 +10,7 @@
 
   Sparse representation of network
 
-  $Revision: 1.1 $  $Date: 2015/12/07 02:19:49 $
+  $Revision: 1.1 $  $Date: 2015/12/28 02:46:17 $
 
   ! Data points must be ordered by segment index !
 
@@ -120,9 +120,9 @@ void linknncross(kmax,         /* number of neighbours required */
       UPDATENN(i, deltad + VDIST(ivright, k), VWHICH(ivright, k));
 
     /* find any target points in this segment */
-    while(sq[jfirst] < m) jfirst++;
+    while(jfirst < Nq && sq[jfirst] < m) jfirst++;
     jlast = jfirst;
-    while(sq[jlast] == m) jlast++;
+    while(jlast < Nq && sq[jlast] == m) jlast++;
     --jlast;
     /* if there are no such points, then jlast < jfirst */
     if(jfirst <= jlast) {

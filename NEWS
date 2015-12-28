@@ -1,7 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.44-0.001
+        CHANGES IN spatstat VERSION 1.44-0.002
 
 OVERVIEW
+
+    o We thank Brian Ripley for contributions.
+
+    o More support for tessellations.
+
+    o Bug fixes.
 
     o Version nickname: 'Merry Christmas, Where Permitted'
 
@@ -17,15 +23,17 @@ NEW FUNCTIONS
    o persp.leverage.ppm
    Method for persp plots for objects of class leverage.ppm
 
-
 SIGNIFICANT USER-VISIBLE CHANGES
 
    o textureplot
    Argument x can now be something acceptable to as.im
 
-BUG FIXES
+BUGS
 
-  o None yet
+  o nncross.lpp, nnwhich.lpp, distfun.lpp
+  Sometimes caused a segmentation (memory) fault.
+  [Spotted by Brian Ripley.]
+  Fixed.
 
         CHANGES IN spatstat VERSION 1.44-0
 

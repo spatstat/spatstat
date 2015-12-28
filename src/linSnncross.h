@@ -5,7 +5,7 @@
 
    Sparse representation of network
 
-   $Revision: 1.3 $  $Date: 2015/12/05 07:26:36 $
+   $Revision: 1.4 $  $Date: 2015/12/28 02:44:25 $
 
    Macros used:
    FNAME   name of function
@@ -116,9 +116,9 @@ FNAME(np, sp, tp,  /* data points 'from' (ordered by sp) */
 #endif
     }
     /* find any target points in this segment */
-    while(sq[jfirst] < k) jfirst++;
+    while(jfirst < Nq && sq[jfirst] < k) jfirst++;
     jlast = jfirst;
-    while(sq[jlast] == k) jlast++;
+    while(jlast < Nq && sq[jlast] == k) jlast++;
     --jlast;
     /* if there are no such points, then jlast < jfirst */
     if(jfirst <= jlast) {

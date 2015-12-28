@@ -83,6 +83,8 @@ the News and Release Notes for each update.
 \begin{itemize}
    \item \spst\ now depends on the package \pkg{nlme}.
 
+   \item More support for tessellations.
+
    \item More support for multidimensional point patterns and point processes.
 
    \item More options for one-sided envelopes.
@@ -153,6 +155,16 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+   \item \texttt{as.function.tess}:
+   Convert a tessellation to a \texttt{function(x,y)}. The function value
+   indicates which tile of the tessellation contains the point $(x,y)$.
+
+   \item \texttt{tileindex}:
+   Determine which tile of a tessellation contains a given point $(x,y)$.
+
+   \item \texttt{persp.leverage.ppm}:
+   Method for persp plots for objects of class \texttt{leverage.ppm}
+
   \item \texttt{rPenttinen}:
     Simulate the Penttinen process using perfect simulation.
 
@@ -523,9 +535,10 @@ listed alphabetically.
    New argument \texttt{w} controls the window of the simulated patterns.
 
    \item \texttt{spatstat.options}
-   New options \texttt{fastthin} and \texttt{fastpois} enable fast simulation algorithms.
-   Set these options to FALSE to reproduce results obtained with
-   previous versions of spatstat.
+   New options \texttt{fastthin} and \texttt{fastpois} 
+   enable fast simulation algorithms.
+   Set these options to \texttt{FALSE} to reproduce results obtained with
+   previous versions of \spst.
 
    \item \texttt{split.ppp}
    The splitting variable \texttt{f} can now be a logical vector.
@@ -533,6 +546,9 @@ listed alphabetically.
  \item \texttt{tess}:
    Argument \texttt{window} is ignored when xgrid, ygrid are given.
 
+   \item \texttt{textureplot}: 
+     Argument \texttt{x} can now be something acceptable to \texttt{as.im}.
+     
    \item \texttt{to.grey}
    New argument \texttt{transparent}.
 
@@ -832,6 +848,10 @@ of potential impact.
 \item \texttt{pool.envelope}:  
   Did not always respect the value of \texttt{use.theory}.
     \bugger{1.23-5}{september 2011}{1.43-0}{september 2015}
+
+\item \texttt{nncross.lpp}, \texttt{nnwhich.lpp}, \texttt{distfun.lpp}:
+  Sometimes caused a segmentation fault.
+    \bugger{1.44-0}{december 2015}{1.44-1}{february 2016}
 \end{itemize}
 
 

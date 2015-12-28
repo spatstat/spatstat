@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-0.001
+Version: 1.44-0.002
 Nickname: Merry Christmas, Where Permitted
-Date: 2015-12-24
+Date: 2015-12-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
