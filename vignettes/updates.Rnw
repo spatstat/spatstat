@@ -83,9 +83,11 @@ the News and Release Notes for each update.
 \begin{itemize}
    \item \spst\ now depends on the package \pkg{nlme}.
 
+   \item More support for replicated point patterns.
+     
    \item More support for tessellations.
 
-   \item More support for multidimensional point patterns and point processes.
+  \item More support for multidimensional point patterns and point processes.
 
    \item More options for one-sided envelopes.
 
@@ -164,6 +166,12 @@ Following is a list of all the functions that have been added.
 
    \item \texttt{persp.leverage.ppm}:
    Method for persp plots for objects of class \texttt{leverage.ppm}
+
+   \item \texttt{AIC.mppm}, \texttt{extractAIC.mppm}:
+   AIC for point process models fitted to replicated point patterns.
+
+   \item \texttt{nobs.mppm}, \texttt{terms.mppm}, \texttt{getCall.mppm}:
+   Methods for point process models fitted to replicated point patterns.
 
   \item \texttt{rPenttinen}:
     Simulate the Penttinen process using perfect simulation.
@@ -325,6 +333,9 @@ listed alphabetically.
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
 
+\item \texttt{anova.mppm}: Now handles Gibbs models,
+  and performs the adjusted composite likelihood ratio test.
+  
 \item \texttt{as.im.function}:
   New argument \texttt{strict}.
 
@@ -427,6 +438,8 @@ listed alphabetically.
  \item \texttt{logLik.ppm}:
    New argument \texttt{absolute}.
 
+ \item \texttt{logLik.mppm}: new argument \texttt{warn}.
+   
  \item \texttt{lppm}:
    Computation accelerated.
 
@@ -543,7 +556,9 @@ listed alphabetically.
    \item \texttt{split.ppp}
    The splitting variable \texttt{f} can now be a logical vector.
 
- \item \texttt{tess}:
+   \item \texttt{step}: now works for models of class \texttt{"mppm"}.
+
+   \item \texttt{tess}:
    Argument \texttt{window} is ignored when xgrid, ygrid are given.
 
    \item \texttt{textureplot}: 
@@ -555,6 +570,8 @@ listed alphabetically.
   \item \texttt{union.owin}:
    Improved behaviour when there are more than 2 windows.
 
+   \item \texttt{update}: now works for models of class \texttt{"mppm"}.
+     
    \item \texttt{update.kppm}:
    Now handles additional arguments in any order, with or without names.
    Changed arguments. Improved behaviour.
@@ -835,7 +852,7 @@ of potential impact.
 \item \texttt{crossdist.ppp}:
   Ignored argument \texttt{squared} if \texttt{periodic=FALSE}.
     {\small (Bug fixed in \texttt{spatstat 1.38-0}, july 2014)}
-   
+
 \item polygon geometry:
     The point-in-polygon test gave the wrong answer in some boundary cases.
     {\small (Bug fixed in \texttt{spatstat 1.23-2}, august 2011)}
@@ -851,7 +868,13 @@ of potential impact.
 
 \item \texttt{nncross.lpp}, \texttt{nnwhich.lpp}, \texttt{distfun.lpp}:
   Sometimes caused a segmentation fault.
-    \bugger{1.44-0}{december 2015}{1.44-1}{february 2016}
+    \bugger{1.44-0}{december 2015}{1.44-1}{december 2015}
+
+\item \texttt{anova.ppm}:
+  If a single \texttt{object} was given, and it was a Gibbs model,
+  then \texttt{adjust} was effectively set to \texttt{FALSE}.
+  \bugger{1.39-0}{october 2014}{1.44-1}{december 2015}
+
 \end{itemize}
 
 

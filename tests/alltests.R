@@ -1,33 +1,898 @@
-## tests/sigtraceprogress.R
-## Tests of *.sigtrace and *.progress
-## $Revision: 1.2 $ $Date: 2015/12/18 08:29:44 $
+## badwindowcheck.R
+## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
+##
 
 require(spatstat)
 local({
-  plot(dclf.sigtrace(redwood, nsim=19, alternative="greater", rmin=0.02,
-                     verbose=FALSE))
-  plot(dclf.progress(redwood, nsim=19, alternative="greater", rmin=0.02,
-                     verbose=FALSE))
-  plot(dg.sigtrace(redwood, nsim=5, alternative="greater", rmin=0.02,
-                     verbose=FALSE))
-  plot(dg.progress(redwood, nsim=5, alternative="greater", rmin=0.02,
-                   verbose=FALSE))
-  ## test 'leave-two-out' algorithm
-  a <- dclf.sigtrace(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
-                     verbose=FALSE)
-  aa <- dclf.progress(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
-                      verbose=FALSE)
-  b <- dg.sigtrace(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2)
-  bb <- dg.progress(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2,
-                    verbose=FALSE)
+  ## Simple example of self-crossing polygon
+  x <- read.table("selfcross.txt", header=TRUE)
+  ## Auto-repair
+  w <- owin(poly=x)
+
+  ## Real data involving various quirks
+  b <- read.table("badwindow.txt", header=TRUE)
+  b <- split(b, factor(b$i))
+  b <- lapply(b, function(z) { as.list(z[,-3]) })
+  ## make owin without checking
+  W <- owin(poly=b, check=FALSE)
+  ## Apply stringent checks
+  owinpolycheck(W,verbose=FALSE)
+  ## Auto-repair
+  W2 <- owin(poly=b)
 })
-# nndist.R
+
+
+
+
+## tests/cdf.test.R
+## check cdf.test with strange data
+require(spatstat)
+local({
+  # Marked point patterns with some marks not represented
+  AC <- split(ants, un=FALSE)$Cataglyphis
+  AM <- split(ants, un=FALSE)$Messor
+  DM <- distmap(AM)
+  # should produce a warning, rather than a crash:
+  cdf.test(AC, DM)
+  # should be OK:
+  cdf.test(unmark(AC), DM)
+  cdf.test(unmark(AC), DM, "cvm")
+  cdf.test(unmark(AC), DM, "ad")
+  # linear networks
+  set.seed(42)
+  X <- runiflpp(20, simplenet)
+  fit <- lppm(X ~1)
+  cdf.test(fit, "y")
+  cdf.test(fit, "y", "cvm")
+  cdf.test(fit, "y", "ad")
+})
+
+##  tests/closeshave.R
+## check 'closepairs/crosspairs' code
+## validity and memory allocation
+## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+
+local({
+  r <- 0.12
+  close.all <- closepairs(redwood, r)
+  close.ij <- closepairs(redwood, r, what="indices")
+  close.ijd <- closepairs(redwood, r, what="ijd")
+  stopifnot(identical(close.ij, close.all[c("i","j")]))
+  stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
+
+  Y <- split(amacrine)
+  on <- Y$on
+  off <- Y$off
+  cross.all <- crosspairs(on, off, r)
+  cross.ij <- crosspairs(on, off, r, what="indices")
+  cross.ijd <- crosspairs(on, off, r, what="ijd")
+  stopifnot(identical(cross.ij, cross.all[c("i","j")]))
+  stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
+
+  # Rasmus' example
+  R <- 0.04
+  U <- as.ppp(gridcenters(owin(), 50, 50), W=owin())
+  cp <- crosspairs(U, U, R)
+  G <- matrix(0, npoints(U), npoints(U))
+  G[cbind(cp$i, cp$j)] <- 1
+  if(!isSymmetric(G))
+    stop("crosspairs is not symmetric in Rasmus example")
+})
+## tests/colour.R
+##
+## $Revision: 1.1 $ $Date: 2015/12/29 08:54:49 $
+##
+
+require(spatstat)
+
+local({
+   f <- function(n) grey(seq(0,1,length=n))
+   z <- to.grey(f)
+})
+# tests/correctC.R
+# check for agreement between C and interpreted code
+# for interpoint distances etc.
+# $Revision: 1.4 $ $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+
+local({
+  eps <- .Machine$double.eps * 4
+
+  # pairdist.ppp
+  X <- rpoispp(42)
+  dC <- pairdist(X, method="C")
+  dR <- pairdist(X, method="interpreted")
+  if(any(abs(dC - dR) > eps))
+    stop("Algorithms for pairdist() do not agree")
+
+  dC <- pairdist(X, periodic=TRUE, method="C")
+  dR <- pairdist(X, periodic=TRUE, method="interpreted")
+  if(any(abs(dC - dR) > eps))
+    stop("Algorithms for pairdist(periodic=TRUE) do not agree")
+
+  # crossdist.ppp
+  Y <- rpoispp(42)
+  dC <- crossdist(X, Y, method="C")
+  dR <- crossdist(X, Y, method="interpreted")
+  if(any(abs(dC - dR) > eps))
+    stop("Algorithms for crossdist() do not agree")
+
+  dC <- crossdist(X, Y, periodic=TRUE, method="C")
+  dR <- crossdist(X, Y, periodic=TRUE, method="interpreted")
+  if(any(abs(dC - dR) > eps))
+    stop("Algorithms for crossdist(periodic=TRUE) do not agree")
+
+  # nndist.ppp
+  nnC <- nndist(X, method="C")
+  nnI <- nndist(X, method="interpreted")
+  if(any(abs(nnC - nnI) > eps))
+    stop("Algorithms for nndist() do not agree")
+
+  nn3C <- nndist(X, k=3, method="C")
+  nn3I <- nndist(X, k=3, method="interpreted")
+  if(any(abs(nn3C - nn3I) > eps))
+    stop("Algorithms for nndist(k=3) do not agree")
+
+  # nnwhich.ppp
+  nwC <- nnwhich(X, method="C")
+  nwI <- nnwhich(X, method="interpreted")
+  if(any(nwC != nwI))
+    stop("Algorithms for nnwhich() do not agree")
+
+  nw3C <- nnwhich(X, k=3, method="C")
+  nw3I <- nnwhich(X, k=3, method="interpreted")
+  if(any(nw3C != nw3I))
+    stop("Algorithms for nnwhich(k=3) do not agree")
+
+  # whist
+  set.seed(98123)
+  x <- runif(1000)
+  w <- sample(1:5, 1000, replace=TRUE)
+  b <- seq(0,1,length=101)
+  op <- spatstat.options(Cwhist=TRUE)
+  aT <- whist(x,b,w)
+  spatstat.options(Cwhist=FALSE)
+  aF <- whist(x,b,w)
+  if(!all(aT == aF))
+    stop("Algorithms for whist disagree")
+  spatstat.options(op)
+})
+#
+#  tests/density.R
+#
+#  Test behaviour of density methods and inhomogeneous summary functions
+#
+#  $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#
+
+require(spatstat)
+
+local({
+
+  # test all cases of density.ppp
+  
+  tryit <- function(...) {
+    Z <- density(cells, ..., at="pixels")
+    Z <- density(cells, ..., at="points")
+    return(invisible(NULL))
+  }
+  
+  tryit(0.05)
+  tryit(0.05, diggle=TRUE)
+  tryit(0.05, se=TRUE)
+  tryit(varcov=diag(c(0.05^2, 0.07^2)))
+  tryit(0.05, weights=data.frame(a=1:42,b=42:1))
+  tryit(0.05, weights=expression(x))
+
+  lam <- density(redwood)
+  K <- Kinhom(redwood, lam)
+  
+  lamX <- density(redwood, at="points")
+  KX <- Kinhom(redwood, lamX)
+
+  ## test all code cases of new 'relrisk' algorithm
+  pants <- function(...) {
+    a <- relrisk(ants, sigma=100, se=TRUE, ...)
+    return(TRUE)
+  }
+  pants()
+  pants(casecontrol=FALSE)
+  pants(relative=TRUE)
+  pants(casecontrol=FALSE, relative=TRUE)
+  pants(at="points")
+  pants(casecontrol=FALSE,at="points")
+  pants(relative=TRUE,at="points")
+  pants(casecontrol=FALSE, relative=TRUE,at="points")
+
+
+  Z <- Smooth(longleaf, 5, diggle=TRUE)
+  Z <- Smooth(unmark(longleaf) %mark% 1, 5)
+
+  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
+})
+#  tests/emptymarks.R
+#
+# test cases where there are no (rows or columns of) marks
+#
+#  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+local({
+  n <- npoints(cells)
+  df <- data.frame(x=1:n, y=factor(sample(letters, n, replace=TRUE)))
+  nocolumns <- c(FALSE, FALSE)
+  norows <- rep(FALSE, n)
+  X <- cells
+  marks(X) <- df
+  marks(X) <- df[,1]
+  marks(X) <- df[,nocolumns]
+  Z <- Y <- X[integer(0)]
+  marks(Y) <- df[norows,]
+  stopifnot(is.marked(Y))
+  marks(Z) <- df[norows,nocolumns]
+  stopifnot(!is.marked(Z))
+})
+#
+#  tests/envelopes.R
+#
+#  Test validity of envelope data
+#
+#  $Revision: 1.5 $  $Date: 2015/12/29 08:54:49 $
+#
+
+require(spatstat)
+
+local({
+checktheo <- function(fit) {
+  fitname <- deparse(substitute(fit))
+  en <- envelope(fit, nsim=4, verbose=FALSE, nrep=1e3)
+  nama <- names(en)
+  expecttheo <- is.poisson(fit) && is.stationary(fit)
+  context <- paste("Envelope of", fitname)
+  if(expecttheo) {
+    if(!("theo" %in% nama))
+      stop(paste(context, "did not contain", sQuote("theo")))
+    if("mmean" %in% nama)
+      stop(paste(context, "unexpectedly contained", sQuote("mmean")))
+  } else {
+    if("theo" %in% nama)
+      stop(paste(context, "unexpectedly contained", sQuote("theo")))
+    if(!("mmean" %in% nama))
+      stop(paste(context, "did not contain", sQuote("mmean")))
+  }
+  cat(paste(context, "has correct format\n"))
+}
+  
+checktheo(ppm(cells))
+checktheo(ppm(cells ~x))
+checktheo(ppm(cells ~1, Strauss(0.1)))
+
+# check envelope calls from 'alltypes'
+a <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE)
+b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
+
+# check 'transform' idioms
+A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
+B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
+
+#' check savefuns/savepatterns with global 
+fit <- ppm(cells~x)
+Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
+Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
+
+# check conditional simulation
+e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
+e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
+e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
+fit <- ppm(japanesepines ~ 1, Strauss(0.04))
+e4 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
+fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
+e5 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
+
+# check pooling of envelopes in global case
+E1 <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE)
+E2 <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE)
+p12 <- pool(E1, E2)
+E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
+                ginterval=c(0.05, 0.15))
+E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
+                ginterval=c(0.05, 0.15))
+p12r <- pool(E1r, E2r)
+})
+#
+#    tests/factorbugs.R
+#
+# check for various bugs related to factor conversions
+#
+#    $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#
+require(spatstat)
+local({
+  # make a factor image
+  m <- factor(rep(letters[1:4], 4))
+  Z <- im(m, xcol=1:4, yrow=1:4)
+  # make a point pattern
+  set.seed(42)
+  X <- runifpoint(20, win=as.owin(Z))
+  # look up the image at the points of X
+  # (a) internal
+  ans1 <- lookup.im(Z, X$x, X$y)
+  stopifnot(is.factor(ans1))
+  # (b) user level
+  ans2 <- Z[X]
+  stopifnot(is.factor(ans2))
+  # (c) turn the image into a tessellation
+  #  and apply quadratcount
+  V <- tess(image = Z)
+  quadratcount(X, tess=V)
+  # (d) pad image
+  Y <- padimage(Z, factor("b", levels=levels(Z)))
+  stopifnot(Y$type == "factor")
+  U <- padimage(Z, "b")
+  stopifnot(U$type == "factor")
+})
+
+
+#
+#    tests/fastgeyer.R
+#
+# checks validity of fast C implementation of Geyer interaction
+#
+#    $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#
+require(spatstat)
+local({
+  X <- redwood
+  Q <- quadscheme(X)
+  U <- union.quad(Q)
+  EP <- equalpairs.quad(Q)
+  G <- Geyer(0.11, 2)
+# The value r=0.11 is chosen to avoid hardware numerical effects (gcc bug 323).
+# It avoids being close any value of pairdist(redwood).
+# The nearest such values are 0.1077.. and 0.1131..
+# By contrast if r = 0.1 there are values differing from 0.1 by 3e-17
+  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  if(!all(a==b))
+    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match")
+# ...
+# and again for a non-integer value of 'sat'
+# (spotted by Thordis Linda Thorarinsdottir)  
+  G <- Geyer(0.11, 2.5)
+  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  if(!all(a==b))
+    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat is not an integer")
+})
+
+#
+#  tests/fastK.R
+#
+# check fast code for Kest
+#
+#   $Revision: 1.2 $   $Date: 2015/12/29 08:54:49 $
+#
+require(spatstat)
+local({
+  Kb <- Kest(cells, nlarge=0)
+  Ku <- Kest(cells, correction="none")
+  Kbu <- Kest(cells, correction=c("none", "border"))
+})
+
+
+##  
+##     tests/funnymarks.R
+##
+## tests involving strange mark values
+## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+local({
+  ## ppm() where mark levels contain illegal characters
+  hyphenated <- c("a", "not-a")
+  spaced <- c("U", "non U")
+  suffixed <- c("a+", "a*")
+  charred <- c("+", "*")
+
+  irad <- matrix(0.1, 2,2)
+  hrad <- matrix(0.005, 2, 2)
+
+  tryit <- function(types, X, irad, hrad) { 
+    levels(marks(X)) <- types
+    fit <- ppm(X ~marks + polynom(x,y,2),
+               MultiStraussHard(types=types,iradii=irad,hradii=hrad))
+    print(fit)
+    print(coef(fit))
+    val <- fitted(fit)
+    pred <- predict(fit)
+    return(invisible(NULL))
+  }
+
+  tryit(hyphenated, amacrine, irad, hrad)
+  tryit(spaced, amacrine, irad, hrad)
+  tryit(suffixed, amacrine, irad, hrad)
+  tryit(charred, amacrine, irad, hrad)
+
+  ## marks which are dates
+  X <- cells
+  n <- npoints(X)
+  endoftime <- rep(ISOdate(2001,1,1), n)
+  eotDate   <- rep(as.Date("2001-01-01"), n)
+  markformat(endoftime)
+  markformat(eotDate)
+  marks(X) <- endoftime
+  print(X)
+  Y <- X %mark% data.frame(id=1:42, date=endoftime, dd=eotDate)
+  print(Y)
+})
+# 
+#    tests/fvproblems.R
+#
+#    $Revision: 1.6 $  $Date: 2015/12/29 08:57:16 $
+#
+
+require(spatstat)
+
+# This appears in the workshop notes
+# Problem detected by Martin Bratschi
+
+local({
+  Jdif <- function(X, ..., i) {
+    Jidot <- Jdot(X, ..., i=i)
+    J <- Jest(X, ...)
+    dif <- eval.fv(Jidot - J)
+    return(dif)
+  }
+  Z <- Jdif(amacrine, i="on")
+})
+#
+#  Test mathlegend code
+#
+local({
+  K <- Kest(cells)
+  plot(K)
+  plot(K, . ~ r)
+  plot(K, . - theo ~ r)
+  plot(K, sqrt(./pi)  ~ r)
+  plot(K, cbind(iso, theo) ~ r)
+  plot(K, cbind(iso, theo) - theo ~ r)
+  plot(K, sqrt(cbind(iso, theo)/pi)  ~ r)
+  plot(K, cbind(iso/2, -theo) ~ r)
+  plot(K, cbind(iso/2, trans/2) - theo ~ r)
+
+  # test expansion of .x and .y
+  plot(K, . ~ .x)
+  plot(K, . - theo ~ .x)
+  plot(K, .y - theo ~ .x)
+  plot(K, sqrt(.y) - sqrt(theo) ~ .x)
+
+  # problems with parsing weird strings in levels(marks(X))
+  # noted by Ulf Mehlig
+
+  levels(marks(amacrine)) <- c("Nasticreechia krorluppia", "Homo habilis")
+  plot(Kcross(amacrine))
+  plot(alltypes(amacrine, "K"))
+  plot(alltypes(amacrine, "J"))
+  plot(alltypes(amacrine, pcfcross))
+})
+
+#
+#  Test quirks related to 'alim' attribute
+
+local({
+  K <- Kest(cells)
+  attr(K, "alim") <- NULL
+  plot(K)
+  attr(K, "alim") <- c(0, 0.1)
+  plot(tail(K))
+})
+##
+##    tests/gcc323.R
+##
+##    $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+##
+require(spatstat)
+local({
+  # critical R values that provoke GCC bug #323
+  a <- marktable(lansing, R=0.25)
+  a <- marktable(lansing, R=0.21)
+  a <- marktable(lansing, R=0.20)
+  a <- marktable(lansing, R=0.10)
+})
+#       
+#        tests/hobjects.R
+#
+#   Validity of methods for ppm(... method="ho")
+#
+
+require(spatstat)
+
+local({
+  set.seed(42)
+  fit  <- ppm(cells ~1,         Strauss(0.1), method="ho", nsim=10)
+  fitx <- ppm(cells ~offset(x), Strauss(0.1), method="ho", nsim=10)
+
+  a  <- AIC(fit)
+  ax <- AIC(fitx)
+
+  f  <- fitted(fit)
+  fx <- fitted(fitx)
+
+  p  <- predict(fit)
+  px <- predict(fitx)
+})
+
+
+#
+# tests/hyperframe.R
+#
+# test "[.hyperframe" etc
+#
+#  $Revision: 1.3 $  $Date: 2014/08/25 04:43:07 $
+#
+
+  lambda <- runif(4, min=50, max=100)
+  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
+  h <- hyperframe(lambda=lambda, X=X)
+  h$lambda2 <- lambda^2
+  h[, "lambda3"] <- lambda^3
+  h[, "Y"] <- X
+  h[, "X"] <- lapply(X, flipxy)
+  h[, c("X", "Y")] <- hyperframe(X=X, Y=X)
+
+  names(h) <- LETTERS[1:5]
+  print(h)
+
+
+#
+#  tests/imageops.R
+#
+#   $Revision: 1.7 $   $Date: 2015/12/29 08:54:49 $
+#
+
+require(spatstat)
+local({
+  A <- as.im(owin())
+  B <- as.im(owin(c(1.1, 1.9), c(0,1)))
+  Z <- imcov(A, B)
+  stopifnot(abs(max(Z) - 0.8) < 0.1)
+
+  ## handling images with 1 row or column
+  ycov <- function(x, y) y
+  E <- as.im(ycov, owin(), dimyx = c(2,1))
+  G <- cut(E, 2)
+  H <- as.tess(G)
+
+  E12 <- as.im(ycov, owin(), dimyx = c(1,2))
+  G12 <- cut(E12, 2)
+  H12 <- as.tess(G12)
+})
+
+
+
+
+#
+# tests/kppm.R
+#
+# $Revision: 1.9 $ $Date: 2015/12/29 08:54:49 $
+#
+# Test functionality of kppm that depends on RandomFields
+# Test update.kppm for old style kppm objects
+
+require(spatstat)
+local({
+
+ fit <- kppm(redwood, ~1, "Thomas")
+ fitx <- update(fit, ~ . + x)
+ fitM <- update(fit, clusters="MatClust")
+ fitC <- update(fit, cells)
+ fitCx <- update(fit, cells ~ x)
+
+ if(require(RandomFields) && RandomFieldsSafe()) {
+
+    fit0 <- kppm(redwood ~1, "LGCP")
+    Y0 <- simulate(fit0)[[1]]
+    stopifnot(is.ppp(Y0))
+    
+    fit1 <- kppm(redwood ~x, "LGCP",
+                covmodel=list(model="matern", nu=0.3),
+                control=list(maxit=5))
+    Y1 <- simulate(fit1)[[1]]
+    stopifnot(is.ppp(Y1))
+
+# ... and Abdollah's code
+
+    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
+    Y2 <- simulate(fit2)[[1]]
+    stopifnot(is.ppp(Y2))
+  }
+  
+})
+
+
+## 
+##    tests/legacy.R
+##
+## Test that current version of spatstat is compatible with outmoded usage
+## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+local({
+  require(spatstat)
+
+  ## (1) Old syntax of ppm
+  ppm(cells, ~x)
+  
+  ## (2) Old syntax of MultiStrauss etc.
+  r <- matrix(3, 2, 2)
+  a <- MultiStrauss( , r)
+  a <- MultiStrauss(NULL, r)
+  a <- MultiHard(, r)
+  
+  h <- r/2
+  a <- MultiStraussHard( , r, h)
+
+  NULL
+})
+##
+##    tests/linalgeb.R
+##
+## checks validity of linear algebra code
+##
+##  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+##
+require(spatstat)
+local({
+  p <- 3
+  n <- 4
+  x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
+  w <- matrix(1:(n*n), n, n)
+  y <- matrix(numeric(p * p), p, p)
+  for(i in 1:n)
+    for(j in (1:n)[-i])
+      y <- y + w[i,j] * outer(x[,i,j], x[,j,i])
+  z <- sumsymouter(x, w)
+  if(!identical(y,z))
+    stop("sumsymouter gives incorrect result")
+})
+## 
+## tests/localpcf.R
+##
+## temporary test file for localpcfmatrix
+##  $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+local({
+  a <- localpcfmatrix(redwood)
+  a
+  plot(a)
+  a[, 3:5]
+})
+#
+# tests/lppstuff.R
+#
+# Tests for lpp code
+#
+#  $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
+
+
+require(spatstat)
+
+local({
+  # check 'normalise' option in linearKinhom
+  X <- rpoislpp(5, simplenet)
+  fit <- lppm(X ~x)
+  K <- linearKinhom(X, lambda=fit, normalise=FALSE)
+  plot(K)
+  g <- linearpcfinhom(X, lambda=fit, normalise=FALSE)
+  plot(g)
+  K <- linearKinhom(X, lambda=fit, normalise=TRUE)
+  plot(K)
+  g <- linearpcfinhom(X, lambda=fit, normalise=TRUE)
+  plot(g)
+  # check empty patterns OK
+  X <- runiflpp(0, simplenet)
+  print(X)
+  
+  ## nearest neighbour distances
+  eps <- sqrt(.Machine$double.eps)
+  f <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k+1) }
+  g <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k+1) }
+
+  XX <- spiders
+  nn <- nndist(XX)
+  nnP <- f(pairdist(XX), 1)
+  if(any(abs(nn - nnP) > eps))
+    stop("nndist.lpp does not agree with pairdist.lpp")
+
+  nw <- nnwhich(XX)
+  nwP <- g(pairdist(XX), 1)
+  if(any(nw != nwP))
+    stop("nnwhich.lpp does not agree with pairdist")
+
+  ZZ <- split(chicago)
+  XX <- ZZ$damage
+  YY <- ZZ$assault
+  op <- spatstat.options(Cnncrosslpp=FALSE)
+  a <- nncross(XX, YY)
+  spatstat.options(Cnncrosslpp=TRUE)
+  b <- nncross(XX, YY)
+  if(any(a$which != b$which))
+    stop("Inconsistent values of nncross.lpp()$which from different C code")
+  if(max(abs(a$dist - b$dist)) > eps)
+    stop("Inconsistent values of nncross.lpp()$dist from different C code")
+
+  spatstat.options(Cnncrosslpp=TRUE)
+  b2 <- nncross(XX, YY, k=1:2, what="which")
+  if(any(b2$which.1 != b$which))
+    stop("inconsistent values of nncross.lpp()$which from k=1:2 and k=1")
+  a2 <- nncross(XX, YY, k=1:2, what="dist")
+  if(max(abs(a2$dist.1 - a$dist)) > eps)
+    stop("Inconsistent values of nncross.lpp()$dist from k=1:2 and k=1")
+
+  spatstat.options(Cnncrosslpp=TRUE)
+  ii <- seq_len(npoints(XX))
+  w1 <- nnwhich(XX)
+  w2 <- nncross(XX, XX, iX=ii, iY=ii, what="which")
+  w3 <- nncross(XX, XX, iX=ii, iY=ii, what="which", method="interpreted")
+  if(any(w1 != w2))
+    stop("nnwhich.lpp disagrees with nncross.lpp(iX, iY)")
+  if(any(w2 != w3))
+    stop("Different results for nncross.lpp(iX, iY, 'which') using R and C")
+  d1 <- nndist(XX)
+  d2 <- nncross(XX, XX, iX=ii, iY=ii, what="dist")
+  d3 <- nncross(XX, XX, iX=ii, iY=ii, what="dist", method="interpreted")
+  if(max(abs(d1-d2)) > eps)
+    stop("nndist.lpp disagrees with nncross.lpp(iX, iY)")
+  if(max(abs(d2-d3)) > eps)
+    stop("Different results for nncross.lpp(iX, iY, 'dist') using R and C")
+  
+  spatstat.options(op)
+})
+
+##
+##     tests/marcelino.R
+##
+##     $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+##
+require(spatstat)
+
+local({
+  Y <- split(urkiola)
+  B <- Y$birch
+  O <- Y$oak
+  B.lam <- predict (ppm(B ~polynom(x,y,2)), type="trend")
+  O.lam <- predict (ppm(O ~polynom(x,y,2)), type="trend")
+
+  Kinhom(B, lambda=B.lam, correction="iso")
+  Kinhom(B, lambda=B.lam, correction="border")
+
+  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam)
+  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam, correction = "iso")
+  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam, correction = "border")
+})
+
+
+##
+##    tests/markcor.R
+##
+##   Tests of mark correlation code (etc)
+##
+## $Revision: 1.4 $ $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+
+local({
+  ## check.testfun checks equality of functions
+  ##  and is liable to break if the behaviour of all.equal is changed
+  fe <- function(m1, m2) {m1 == m2}
+  fm <- function(m1, m2) {m1 * m2}
+  fs <- function(m1, m2) {sqrt(m1)}
+  if(check.testfun(fe, X=amacrine)$ftype != "equ")
+    warning("check.testfun fails to recognise mark equality function")
+  if(check.testfun(fm, X=longleaf)$ftype != "mul")
+    warning("check.testfun fails to recognise mark product function")
+  check.testfun(fs, X=longleaf)
+  
+  ## test all is well in Kmark -> Kinhom 
+  MA <- Kmark(amacrine,function(m1,m2){m1==m2})
+  set.seed(42)
+  AR <- rlabel(amacrine)
+  MR <- Kmark(AR,function(m1,m2){m1==m2})
+  if(isTRUE(all.equal(MA,MR)))
+    stop("Kmark unexpectedly ignores marks")
+})
+#
+# tests/mppm.R
+#
+# Basic tests of mppm
+#
+# $Revision: 1.4 $ $Date: 2015/09/30 10:30:01 $
+# 
+
+require(spatstat)
+
+local({
+# test interaction formulae and subfits
+fit1 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
+            iformula=~ifelse(group=="control", po, str))
+fit2 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
+            iformula=~id * str)
+fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))), iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
+fit1
+fit2
+fit3
+
+subfits(fit1)
+subfits(fit2)
+subfits(fit3)
+
+# test vcov algorithm
+vcov(fit1)
+vcov(fit2)
+vcov(fit3)
+
+# test summary.mppm which currently sits in spatstat-internal.Rd
+
+summary(fit1)
+summary(fit2)
+summary(fit3)
+
+# test handling of offsets and zero cif values in mppm
+
+H <- hyperframe(Y = waterstriders)
+mppm(Y ~ 1,  data=H, Hardcore(1.5))
+mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+
+# prediction, in training/testing context
+#    (example from Markus Herrmann and Ege Rubak)
+
+X <- waterstriders
+dist <- as.listof(lapply(waterstriders,
+                         function(z) distfun(runifpoint(1, Window(z)))))
+i <- 3
+train <- hyperframe(pattern = X[-i], dist = dist[-i])
+test <- hyperframe(pattern = X[i], dist = dist[i])
+fit <- mppm(pattern ~ dist, data = train)
+pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
+})
+#
+# tests/NAinCov.R
+#
+# Testing the response to the presence of NA's in covariates
+#
+# $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+local({
+  X <- runifpoint(42)
+  Y <- as.im(function(x,y) { x+y }, owin())
+  Y[owin(c(0.2,0.4),c(0.2,0.4))] <- NA
+  # fit model: should produce a warning but no failure
+  misfit <- ppm(X ~Y, covariates=list(Y=Y))
+  # prediction 
+  Z <- predict(misfit, type="trend", se=TRUE)
+  # covariance matrix: all should be silent
+  v <- vcov(misfit)
+  ss <- vcov(misfit, what="internals")
+  NULL
+})
+
+
+
+
+
+#
+#    tests/nndist.R
+#
 # Check that nndist and nnwhich give
 # results consistent with direct calculation from pairdist
-
+#
 # Similarly for nncross and distfun
-
+#
 # Also test whether minnndist(X) == min(nndist(X))
+#
+#   $Revision: 1.16 $  $Date: 2015/12/29 08:54:49 $
+#
 
 require(spatstat)
 local({
@@ -181,124 +1046,57 @@ local({
 })
 
 
-require(spatstat)
-
-local({
-  Y <- split(urkiola)
-  B <- Y$birch
-  O <- Y$oak
-  B.lam <- predict (ppm(B, ~polynom(x,y,2)), type="trend")
-  O.lam <- predict (ppm(O, ~polynom(x,y,2)), type="trend")
-
-  Kinhom(B, lambda=B.lam, correction="iso")
-  Kinhom(B, lambda=B.lam, correction="border")
-
-  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam)
-  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam, correction = "iso")
-  Kcross.inhom(urkiola, i="birch", j="oak", B.lam, O.lam, correction = "border")
-})
-
+## 
+##    tests/percy.R
+##
+## Tests of Percus-Yevick approximations
+##
+##    $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
 
 require(spatstat)
 local({
-  # critical R values that provoke GCC bug #323
-  a <- marktable(lansing, R=0.25)
-  a <- marktable(lansing, R=0.21)
-  a <- marktable(lansing, R=0.20)
-  a <- marktable(lansing, R=0.10)
+  fit <- ppm(swedishpines ~1, DiggleGatesStibbard(6))
+  K <- Kmodel(fit)
 })
-# tests/NAinCov.R
-# Testing the response to the presence of NA's in covariates
-# $Revision: 1.4 $ $Date: 2015/01/09 04:52:43 $
+
+##
+## tests/pixelgripes.R
+##     Problems related to pixellation of windows
+##
+## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
 
 require(spatstat)
 local({
-  X <- runifpoint(42)
-  Y <- as.im(function(x,y) { x+y }, owin())
-  Y[owin(c(0.2,0.4),c(0.2,0.4))] <- NA
-  # fit model: should produce a warning but no failure
-  misfit <- ppm(X, ~Y, covariates=list(Y=Y))
-  # prediction 
-  Z <- predict(misfit, type="trend", se=TRUE)
-  # covariance matrix: all should be silent
-  v <- vcov(misfit)
-  ss <- vcov(misfit, what="internals")
-  NULL
+  ## From Philipp Hunziker: bug in rNeymanScott (etc)
+  ## Create an irregular window
+  PM <- matrix(c(1,0,0.5,1,0,0), 3, 2, byrow=TRUE)
+  P <- owin(poly=PM)
+  ## Generate Matern points
+  X <- rMatClust(50, 0.05, 5, win=P)
+  ## Some distance function as a covariate
+  distorigin <- function(x, y) { sqrt(x^2 + y^2) }
+  ## No covariates: works fine
+  fit0 <- kppm(X ~ 1, clusters="MatClust")
+  Y0 <- simulate(fit0, retry=0)
+  ## Covariates: Simulation fails
+  fit1 <- kppm(X ~ distorigin, clusters="MatClust")
+  Y1 <- simulate(fit1, retry=0)
 })
-
-
-
-
-
-# tests for agreement between C and interpreted code
-# for interpoint distances etc.
-
+## 
+## tests/polygons.R
+##
+##  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+##
 require(spatstat)
-
 local({
-  eps <- .Machine$double.eps * 4
-
-  # pairdist.ppp
-  X <- rpoispp(42)
-  dC <- pairdist(X, method="C")
-  dR <- pairdist(X, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for pairdist() do not agree")
-
-  dC <- pairdist(X, periodic=TRUE, method="C")
-  dR <- pairdist(X, periodic=TRUE, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for pairdist(periodic=TRUE) do not agree")
-
-  # crossdist.ppp
-  Y <- rpoispp(42)
-  dC <- crossdist(X, Y, method="C")
-  dR <- crossdist(X, Y, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for crossdist() do not agree")
-
-  dC <- crossdist(X, Y, periodic=TRUE, method="C")
-  dR <- crossdist(X, Y, periodic=TRUE, method="interpreted")
-  if(any(abs(dC - dR) > eps))
-    stop("Algorithms for crossdist(periodic=TRUE) do not agree")
-
-  # nndist.ppp
-  nnC <- nndist(X, method="C")
-  nnI <- nndist(X, method="interpreted")
-  if(any(abs(nnC - nnI) > eps))
-    stop("Algorithms for nndist() do not agree")
-
-  nn3C <- nndist(X, k=3, method="C")
-  nn3I <- nndist(X, k=3, method="interpreted")
-  if(any(abs(nn3C - nn3I) > eps))
-    stop("Algorithms for nndist(k=3) do not agree")
-
-  # nnwhich.ppp
-  nwC <- nnwhich(X, method="C")
-  nwI <- nnwhich(X, method="interpreted")
-  if(any(nwC != nwI))
-    stop("Algorithms for nnwhich() do not agree")
-
-  nw3C <- nnwhich(X, k=3, method="C")
-  nw3I <- nnwhich(X, k=3, method="interpreted")
-  if(any(nw3C != nw3I))
-    stop("Algorithms for nnwhich(k=3) do not agree")
-
-  # whist
-  set.seed(98123)
-  x <- runif(1000)
-  w <- sample(1:5, 1000, replace=TRUE)
-  b <- seq(0,1,length=101)
-  op <- spatstat.options(Cwhist=TRUE)
-  aT <- whist(x,b,w)
-  spatstat.options(Cwhist=FALSE)
-  aF <- whist(x,b,w)
-  if(!all(aT == aF))
-    stop("Algorithms for whist disagree")
-  spatstat.options(op)
+  co <- as.ppp(corners(letterR), letterR, check=FALSE)
+  co[letterR]
 })
-# ppmBadData.R
-# $Revision: 1.4 $ $Date: 2011/12/05 07:29:16 $
+
+# 
+#   tests/ppmBadData.R
+#
+# $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
 
 # Testing robustness of ppm and support functions
 # when data are rubbish
@@ -320,7 +1118,7 @@ local({
   # V <- eval.im(exp(-6.618913 + 5.855337 * M - 8.432483 * M^2))
   set.seed(SEED)
   Y <- rpoispp(V)
-  fY <- ppm(Y, ~cv + I(cv^2), covariates=list(cv=M), correction="translate")
+  fY <- ppm(Y ~cv + I(cv^2), data=list(cv=M), correction="translate")
   diagnose.ppm(fY)
   lurking(fY, covariate=as.im(function(x,y){x}, square(A)), type="raw")
 })
@@ -345,7 +1143,7 @@ local({
 
   #Fit a point process model to the pattern with rain as a covariate
   # NOTE INCORRECT TREND FORMULA
-  ljtrmod <- ppm(ljtr, trend= ~ Z, interaction=NULL, covariates=list(Z=rain))
+  ljtrmod <- ppm(ljtr, trend= ~ Z, interaction=NULL, data=list(Z=rain))
   ss <- summary(ljtrmod)
 })
 
@@ -354,7 +1152,7 @@ local({
   # Degenerate but non-null argument 'covariates'
   xx <- list()
   names(xx) <- character(0)
-  fit <- ppm(cells, ~x, covariates = xx)
+  fit <- ppm(cells ~x, covariates = xx)
   st <- summary(fit) 
 })
 #
@@ -375,19 +1173,19 @@ local({
 })
 
 #
-#  ppmlogi.R
+#  tests/ppmlogi.R
 #
 # Tests of ppm(method='logi')
 #
-# $Revision: 1.2 $  Date$
+# $Revision: 1.3 $  Date$
 #
 
 require(spatstat)
 local({
-  fit <- ppm(cells, ~x, method="logi")
+  fit <- ppm(cells ~x, method="logi")
   f <- fitted(fit)
   p <- predict(fit)
-  fitS <- ppm(cells, ~x, Strauss(0.08), method="logi")
+  fitS <- ppm(cells ~x, Strauss(0.08), method="logi")
   fS <- fitted(fitS)
   pS <- predict(fitS)
   if(spatstat.options("allow.logi.influence")) {
@@ -399,8 +1197,11 @@ local({
     dS <- dfbetas(fitS)
   }
 })
-# ppmmarkorder.R
-# $Revision: 1.2 $  $Date: 2011/12/05 07:29:16 $
+#
+#   tests/ppmmarkorder.R
+#
+# $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#
 # Test that predict.ppm, plot.ppm and plot.fitin
 # tolerate marks with levels that are not in alpha order
 #
@@ -408,7 +1209,7 @@ require(spatstat)
 local({
   X <- amacrine
   levels(marks(X)) <- c("ZZZ", "AAA")
-  fit <- ppm(X, ~marks, MultiStrauss(c("ZZZ","AAA"), matrix(0.06, 2, 2)))
+  fit <- ppm(X ~marks, MultiStrauss(c("ZZZ","AAA"), matrix(0.06, 2, 2)))
   aa <- predict(fit, type="trend")
   bb <- predict(fit, type="cif")
   plot(fit)
@@ -421,19 +1222,19 @@ local({
 #
 #   Test things that might corrupt the internal format of ppm objects
 #
-#   $Revision: 1.4 $  $Date: 2014/04/05 02:45:41 $
+#   $Revision: 1.5 $  $Date: 2015/12/29 08:54:49 $
 #
 
 require(spatstat)
 local({
   ##   (1) Scoping problem that can arise when ppm splits the data
 
-  fit <- ppm(bei, ~elev, covariates=bei.extra)
+  fit <- ppm(bei ~elev, data=bei.extra)
   mm <- model.matrix(fit)
 
   ##   (2) Fast update mechanism
 
-  fit1 <- ppm(cells, ~x+y, Strauss(0.07))
+  fit1 <- ppm(cells ~x+y, Strauss(0.07))
   fit2 <- update(fit1, ~y)
   fit3 <- update(fit2, ~x)
 
@@ -451,7 +1252,7 @@ local({
 #   Test backdoor exits and hidden options in ppm
 #        and summary.ppm, print.summary.ppm
 #
-#   $Revision: 1.4 $  $Date: 2014/11/10 03:05:01 $
+#   $Revision: 1.5 $  $Date: 2015/12/29 08:54:49 $
 #
 require(spatstat)
 local({
@@ -493,6 +1294,23 @@ local({
 })
 
 #
+# tests/ppx.R
+#
+# Test operations for ppx objects
+#
+#  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+#
+
+require(spatstat)
+
+local({
+  df <- data.frame(x=c(1,2,2,1), y=c(1,2,3,1), z=c(2,3,4,2))
+  X <- ppx(data=df, coord.type=rep("s", 3), domain=box3())
+  unique(X)
+  duplicated(X)
+  multiplicity(X)
+})
+#
 # tests/prediction.R
 #
 # Things that might go wrong with predict()
@@ -518,6 +1336,95 @@ local({
   stopifnot(all(is.finite(as.matrix(p2))))
 })
 
+#
+#     tests/project.ppm.R
+#
+#      $Revision: 1.6 $  $Date: 2015/08/27 08:19:03 $
+#
+#     Tests of projection mechanism
+#
+
+require(spatstat)
+local({
+  chk <- function(m) {
+    if(!valid.ppm(m)) stop("Projected model was still not valid")
+    return(invisible(NULL))
+  }
+  # a very unidentifiable model
+  fit <- ppm(cells ~Z, Strauss(1e-06), covariates=list(Z=0))
+  chk(emend(fit))
+  # multitype
+  r <- matrix(1e-06, 2, 2)
+  fit2 <- ppm(amacrine ~1, MultiStrauss(types=c("off", "on"), radii=r))
+  chk(emend(fit2))
+  # complicated multitype 
+  fit3 <- ppm(amacrine ~1, MultiStraussHard(types=c("off", "on"),
+                                            iradii=r, hradii=r/5))
+  chk(emend(fit3))
+  
+  # hierarchical
+  ra <- r
+  r[2,1] <- NA
+  fit4 <- ppm(amacrine ~1, HierStrauss(types=c("off", "on"), radii=r))
+  chk(emend(fit4))
+  # complicated hierarchical
+  fit5 <- ppm(amacrine ~1, HierStraussHard(types=c("off", "on"),
+                                            iradii=r, hradii=r/5))
+  chk(emend(fit5))
+  
+  # hybrids
+  r0 <- min(nndist(redwood))
+  ra <- 1.25 * r0
+  rb <- 0.8 * r0
+  f1 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f1)
+  f2 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f2)
+  f3 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Strauss(0.1)), project=TRUE)
+  chk(f3)
+  f4 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Strauss(0.1)), project=TRUE)
+  chk(f4)
+  f5 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Strauss(0.1)), project=TRUE)
+  chk(f5)
+  f6 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Geyer(0.1, 2)), project=TRUE)
+  chk(f6)
+  f7 <- ppm(redwood ~1, Hybrid(A=Geyer(rb, 1), B=Strauss(0.1)), project=TRUE)
+  chk(f7)
+
+})
+##
+## tests/rhohat.R
+##
+## Test all combinations of options for rhohatCalc
+##
+## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+
+local({
+  require(spatstat)
+  X <-  rpoispp(function(x,y){exp(3+3*x)})
+  ## done in example(rhohat):
+  ## rhoA <- rhohat(X, "x")
+  ## rhoB <- rhohat(X, "x", method="reweight")
+  ## rhoC <- rhohat(X, "x", method="transform")
+  fit <- ppm(X, ~x)
+  rhofitA <- rhohat(fit, "x")
+  rhofitB <- rhohat(fit, "x", method="reweight")
+  rhofitC <- rhohat(fit, "x", method="transform")
+
+  ## Baseline
+  lam <- predict(fit)
+  rhoAb <- rhohat(X, "x", baseline=lam)
+  rhoBb <- rhohat(X, "x", method="reweight", baseline=lam)
+  rhoCb <- rhohat(X, "x", method="transform", baseline=lam)
+
+  ## Horvitz-Thompson
+  rhoAH <- rhohat(X, "x", horvitz=TRUE) 
+  rhoBH <- rhohat(X, "x", method="reweight", horvitz=TRUE)
+  rhoCH <- rhohat(X, "x", method="transform", horvitz=TRUE)
+  rhofitAH <- rhohat(fit, "x", horvitz=TRUE)
+  rhofitBH <- rhohat(fit, "x", method="reweight", horvitz=TRUE)
+  rhofitCH <- rhohat(fit, "x", method="transform", horvitz=TRUE)
+})
 #
 #  tests/rmhAux.R
 #
@@ -555,6 +1462,11 @@ local({
    stopifnot(max(nncross(X.save, X.nosave)$dist) == 0)
    stopifnot(max(nncross(X.nosave, X.save)$dist) == 0)
 })
+##
+##   tests/rmhBasic.R
+##
+##   $Revision: 1.11 $  $Date: 2015/12/29 08:54:49 $
+#
 # Test examples for rmh.default
 # run to reasonable length
 # and with tests for validity added
@@ -721,6 +1633,11 @@ spatstat.options(expand=1.1)
                            control=list(nrep=nr))
 
 })
+##
+##     tests/rmhErrors.R
+##
+##     $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
+##
 # Things which should cause an error
 require(spatstat)
 
@@ -759,10 +1676,13 @@ if(!identical(wsim, as.owin(cells)))
 })
 
 
+#
 #  tests/rmhMulti.R
 #
 #  tests of rmh, running multitype point processes
 #
+#   $Revision: 1.6 $  $Date: 2015/12/29 08:54:49 $
+
 require(spatstat)
 
 local({
@@ -963,11 +1883,16 @@ local({
   M    <- as.owin(Int)
   MR   <- intersect.owin(M,scalardilate(M,0.5,origin="midpoint"))
   X1 <- X1[MR]
-  Fut  <- ppm(X1,~offset(Lint),covariates=list(Lint=Lint),
+  Fut  <- ppm(X1~offset(Lint),covariates=list(Lint=Lint),
               inter=BadGey(r=c(0.03,0.05),sat=3))
   Y   <- rmh(Fut,control=list(expand=M,nrep=1e3), verbose=FALSE)
 
 })
+#
+#   tests/rmhWeird.R
+#
+#   $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#
 # strange boundary cases
 
 require(spatstat)
@@ -1031,7 +1956,11 @@ local({
     
  })
 #
-# tests of rmhmodel.ppm
+#      tests/rmhmodel.ppm.R
+#
+#    $Revision: 1.8 $  $Date: 2015/12/29 08:54:49 $
+#
+# Case-by-case tests of rmhmodel.ppm
 #
 require(spatstat)
 
@@ -1039,92 +1968,92 @@ local({
 f <- ppm(cells)
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~x)
+f <- ppm(cells ~x)
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, Strauss(0.1))
+f <- ppm(cells ~1, Strauss(0.1))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, StraussHard(r=0.1,hc=0.05))
+f <- ppm(cells ~1, StraussHard(r=0.1,hc=0.05))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, Hardcore(0.07))
+f <- ppm(cells ~1, Hardcore(0.07))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, DiggleGratton(0.05,0.1))
+f <- ppm(cells ~1, DiggleGratton(0.05,0.1))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, Softcore(0.5), correction="isotropic")
+f <- ppm(cells ~1, Softcore(0.5), correction="isotropic")
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, Geyer(0.07,2))
+f <- ppm(cells ~1, Geyer(0.07,2))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, BadGey(c(0.07,0.1,0.13),2))
+f <- ppm(cells ~1, BadGey(c(0.07,0.1,0.13),2))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, PairPiece(r = c(0.05, 0.1, 0.2)))
+f <- ppm(cells ~1, PairPiece(r = c(0.05, 0.1, 0.2)))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~1, AreaInter(r=0.06))
+f <- ppm(cells ~1, AreaInter(r=0.06))
 m <- rmhmodel(f)
 
 # multitype
 
 r <- matrix(0.07, 2, 2)
-f <- ppm(amacrine, ~1, MultiStrauss(c("off","on"),r))
+f <- ppm(amacrine ~1, MultiStrauss(c("off","on"),r))
 m <- rmhmodel(f)
 
 h <- matrix(min(nndist(amacrine))/2, 2, 2)
-f <- ppm(amacrine, ~1, MultiStraussHard(c("off","on"),r, h))
+f <- ppm(amacrine ~1, MultiStraussHard(c("off","on"),r, h))
 m <- rmhmodel(f)
 
 diag(r) <- NA
 diag(h) <- NA
-f <- ppm(amacrine, ~1, MultiStrauss(c("off","on"),r))
+f <- ppm(amacrine ~1, MultiStrauss(c("off","on"),r))
 m <- rmhmodel(f)
 
-f <- ppm(amacrine, ~1, MultiStraussHard(c("off","on"),r, h))
+f <- ppm(amacrine ~1, MultiStraussHard(c("off","on"),r, h))
 m <- rmhmodel(f)
 
 # multitype data, interaction not dependent on type
 
-f <- ppm(amacrine, ~marks, Strauss(0.05))
+f <- ppm(amacrine ~marks, Strauss(0.05))
 m <- rmhmodel(f)
 
 # trends
 
-f <- ppm(cells, ~x, Strauss(0.1))
+f <- ppm(cells ~x, Strauss(0.1))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~y, StraussHard(r=0.1,hc=0.05))
+f <- ppm(cells ~y, StraussHard(r=0.1,hc=0.05))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~x+y, Hardcore(0.07))
+f <- ppm(cells ~x+y, Hardcore(0.07))
 m <- rmhmodel(f)
 
-f <- ppm(cells, ~polynom(x,y,2), Softcore(0.5), correction="isotropic")
+f <- ppm(cells ~polynom(x,y,2), Softcore(0.5), correction="isotropic")
 m <- rmhmodel(f)
 
 # covariates
 
 Z <- as.im(function(x,y){ x^2+y^2 }, as.owin(cells))
-f <- ppm(cells, ~z, covariates=list(z=Z))
+f <- ppm(cells ~z, covariates=list(z=Z))
 m <- rmhmodel(f)
 m <- rmhmodel(f, control=list(p=1))
 
 Zim <- as.im(Z, as.owin(cells))
-f <- ppm(cells, ~z, covariates=list(z=Zim))
+f <- ppm(cells ~z, covariates=list(z=Zim))
 m <- rmhmodel(f)
 
 Z <- as.im(function(x,y){ x^2+y }, as.owin(amacrine))
-f <- ppm(amacrine, ~z + marks, covariates=list(z=Z))
+f <- ppm(amacrine ~z + marks, covariates=list(z=Z))
 m <- rmhmodel(f)
 m <- rmhmodel(f, control=list(p=1))
 m <- rmhmodel(f, control=list(p=1,fixall=TRUE))
 
 Zim <- as.im(Z, as.owin(amacrine))
-f <- ppm(amacrine, ~z + marks, covariates=list(z=Zim))
+f <- ppm(amacrine ~z + marks, covariates=list(z=Zim))
 m <- rmhmodel(f)
 
 })
@@ -1134,7 +2063,7 @@ m <- rmhmodel(f)
 #  Test that rmhmodel.ppm and rmhmodel.default
 #  work on Hybrid interaction models
 #
-#   $Revision: 1.3 $  $Date: 2013/01/29 02:12:13 $
+#   $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
 #
 
 require(spatstat)
@@ -1142,19 +2071,18 @@ require(spatstat)
 local({
   # ......... rmhmodel.ppm .......................
 
-  fit1 <- ppm(redwood, ~1,
+  fit1 <- ppm(redwood ~1,
               Hybrid(A=Strauss(0.02), B=Geyer(0.1, 2), C=Geyer(0.15, 1)))
   m1 <- rmhmodel(fit1)
   m1
   reach(m1)
 
   # Test of handling 'IsOffset' 
-  data(cells)
-  fit2 <- ppm(cells, ~1, Hybrid(H=Hardcore(0.05), G=Geyer(0.15, 2)))
+  fit2 <- ppm(cells ~1, Hybrid(H=Hardcore(0.05), G=Geyer(0.15, 2)))
   rmhmodel(fit2)
 
   # Test of handling Poisson components
-  fit3 <- ppm(cells, ~1, Hybrid(P=Poisson(), S=Strauss(0.05)))
+  fit3 <- ppm(cells ~1, Hybrid(P=Poisson(), S=Strauss(0.05)))
   X3 <- rmh(fit3, control=list(nrep=1e3,expand=1), verbose=FALSE)
 
   # ............ rmhmodel.default ............................
@@ -1191,7 +2119,7 @@ local({
 #
 #  tests/rmh.ppm.R
 #
-#  $Revision: 1.1 $ $Date: 2012/10/14 07:24:21 $
+#  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
 #
 #  Examples removed from rmh.ppm.Rd
 #  stripped down to minimal tests of validity
@@ -1206,10 +2134,10 @@ local({
 
    X <- swedishpines
    # Poisson process
-   fit <- ppm(X, ~1, Poisson())
+   fit <- ppm(X ~1, Poisson())
    Xsim <- rmh(fit)
    # Strauss process   
-   fit <- ppm(X, ~1, Strauss(r=7))
+   fit <- ppm(X ~1, Strauss(r=7))
    Xsim <- rmh(fit)
 
    # Strauss process simulated on a larger window
@@ -1221,31 +2149,31 @@ local({
    Xsim <- simulate(fit, w=square(2))
    
    # Strauss - hard core process
-#   fit <- ppm(X, ~1, StraussHard(r=7,hc=2))
+#   fit <- ppm(X ~1, StraussHard(r=7,hc=2))
 #   Xsim <- rmh(fit, start=list(n.start=X$n))
 
    # Geyer saturation process
-#   fit <- ppm(X, ~1, Geyer(r=7,sat=2))
+#   fit <- ppm(X ~1, Geyer(r=7,sat=2))
 #   Xsim <- rmh(fit, start=list(n.start=X$n))
 
    # Area-interaction process
-     fit <- ppm(X, ~1, AreaInter(r=7))
+     fit <- ppm(X ~1, AreaInter(r=7))
      Xsim <- rmh(fit, start=list(n.start=X$n))
   
      # soft core interaction process
 #     X <- quadscheme(X, nd=50)
-#     fit <- ppm(X, ~1, Softcore(kappa=0.1), correction="isotropic")
+#     fit <- ppm(X ~1, Softcore(kappa=0.1), correction="isotropic")
 #     Xsim <- rmh(fit, start=list(n.start=X$n))
 
      # Diggle-Gratton pairwise interaction model
-#     fit <- ppm(cells, ~1, DiggleGratton(0.05, 0.1))
+#     fit <- ppm(cells ~1, DiggleGratton(0.05, 0.1))
 #     Xsim <- rmh(fit, start=list(n.start=cells$n))
 #     plot(Xsim, main="simulation from fitted Diggle-Gratton model")
    
    X <- rSSI(0.05, 100)
 
    # piecewise-constant pairwise interaction function
-   fit <- ppm(X, ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
+   fit <- ppm(X ~1, PairPiece(seq(0.02, 0.1, by=0.01)))
    Xsim <- rmh(fit)
 
    # marked point pattern
@@ -1255,182 +2183,33 @@ local({
    fit <- ppm(Y)
    Ysim <- rmh(fit)
 
-   fit <- ppm(Y,~marks)
+   fit <- ppm(Y~marks)
    Ysim <- rmh(fit)
 
-   fit <- ppm(Y,~x)
+   fit <- ppm(Y~x)
    Ysim <- rmh(fit)
-#   fit <- ppm(Y,~polynom(x,2))
+#   fit <- ppm(Y~polynom(x,2))
 #   Ysim <- rmh(fit)
 
-   fit <- ppm(Y,~marks+x)
+   fit <- ppm(Y~marks+x)
    Ysim <- rmh(fit)
-#   fit <- ppm(Y,~marks+polynom(x,2))
+#   fit <- ppm(Y~marks+polynom(x,2))
 #   Ysim <- rmh(fit)
 
    # multitype Strauss models
    MS <- MultiStrauss(types = levels(Y$marks),
                       radii=matrix(0.07, ncol=2, nrow=2))
 
-#   fit <- ppm(Y,~marks*polynom(x,2), MS)
-    fit <- ppm(Y,~marks*x, MS)
+#   fit <- ppm(Y~marks*polynom(x,2), MS)
+    fit <- ppm(Y~marks*x, MS)
    Ysim <- rmh(fit)
 
    spatstat.options(op)
  })
-# fvproblems.R
-
-require(spatstat)
-
-# This appears in the workshop notes
-# Problem detected by Martin Bratschi
-
-local({
-  Jdif <- function(X, ..., i) {
-    Jidot <- Jdot(X, ..., i=i)
-    J <- Jest(X, ...)
-    dif <- eval.fv(Jidot - J)
-    return(dif)
-  }
-  Z <- Jdif(amacrine, i="on")
-})
 #
-#  Test mathlegend code
-#
-local({
-  K <- Kest(cells)
-  plot(K)
-  plot(K, . ~ r)
-  plot(K, . - theo ~ r)
-  plot(K, sqrt(./pi)  ~ r)
-  plot(K, cbind(iso, theo) ~ r)
-  plot(K, cbind(iso, theo) - theo ~ r)
-  plot(K, sqrt(cbind(iso, theo)/pi)  ~ r)
-  plot(K, cbind(iso/2, -theo) ~ r)
-  plot(K, cbind(iso/2, trans/2) - theo ~ r)
-
-  # test expansion of .x and .y
-  plot(K, . ~ .x)
-  plot(K, . - theo ~ .x)
-  plot(K, .y - theo ~ .x)
-  plot(K, sqrt(.y) - sqrt(theo) ~ .x)
-
-  # problems with parsing weird strings in levels(marks(X))
-  # noted by Ulf Mehlig
-
-  levels(marks(amacrine)) <- c("Nastricreechia krorluppia", "Homo habilis")
-  plot(Kcross(amacrine))
-  plot(alltypes(amacrine, "K"))
-  plot(alltypes(amacrine, "J"))
-  plot(alltypes(amacrine, pcfcross))
-})
-
-#
-#  Test quirks related to 'alim' attribute
-
-local({
-  K <- Kest(cells)
-  attr(K, "alim") <- NULL
-  plot(K)
-  attr(K, "alim") <- c(0, 0.1)
-  plot(tail(K))
-})
-## tests involving strange mark values
-## $Revision: 1.2 $ $Date: 2014/01/08 11:15:05 $
-
-require(spatstat)
-local({
-  ## ppm() where mark levels contain illegal characters
-  hyphenated <- c("a", "not-a")
-  spaced <- c("U", "non U")
-  suffixed <- c("a+", "a*")
-  charred <- c("+", "*")
-
-  irad <- matrix(0.1, 2,2)
-  hrad <- matrix(0.005, 2, 2)
-
-  tryit <- function(types, X, irad, hrad) { 
-    levels(marks(X)) <- types
-    fit <- ppm(X, ~marks + polynom(x,y,2),
-               MultiStraussHard(types=types,iradii=irad,hradii=hrad))
-    print(fit)
-    print(coef(fit))
-    val <- fitted(fit)
-    pred <- predict(fit)
-    return(invisible(NULL))
-  }
-
-  tryit(hyphenated, amacrine, irad, hrad)
-  tryit(spaced, amacrine, irad, hrad)
-  tryit(suffixed, amacrine, irad, hrad)
-  tryit(charred, amacrine, irad, hrad)
-
-  ## marks which are dates
-  X <- cells
-  n <- npoints(X)
-  endoftime <- rep(ISOdate(2001,1,1), n)
-  eotDate   <- rep(as.Date("2001-01-01"), n)
-  markformat(endoftime)
-  markformat(eotDate)
-  marks(X) <- endoftime
-  print(X)
-  Y <- X %mark% data.frame(id=1:42, date=endoftime, dd=eotDate)
-  print(Y)
-})
-#
-# test cases where there are no (rows or columns of) marks
-#
-
-require(spatstat)
-local({
-  n <- npoints(cells)
-  df <- data.frame(x=1:n, y=factor(sample(letters, n, replace=TRUE)))
-  nocolumns <- c(FALSE, FALSE)
-  norows <- rep(FALSE, n)
-  X <- cells
-  marks(X) <- df
-  marks(X) <- df[,1]
-  marks(X) <- df[,nocolumns]
-  Z <- Y <- X[integer(0)]
-  marks(Y) <- df[norows,]
-  stopifnot(is.marked(Y))
-  marks(Z) <- df[norows,nocolumns]
-  stopifnot(!is.marked(Z))
-})
-# checks validity of fast C implementation of Geyer interaction
-require(spatstat)
-local({
-  X <- redwood
-  Q <- quadscheme(X)
-  U <- union.quad(Q)
-  EP <- equalpairs.quad(Q)
-  G <- Geyer(0.11, 2)
-# The value r=0.11 is chosen to avoid hardware numerical effects (gcc bug 323).
-# It avoids being close any value of pairdist(redwood).
-# The nearest such values are 0.1077.. and 0.1131..
-# By contrast if r = 0.1 there are values differing from 0.1 by 3e-17
-  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
-  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
-  if(!all(a==b))
-    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match")
-# ...
-# and again for a non-integer value of 'sat'
-# (spotted by Thordis Linda Thorarinsdottir)  
-  G <- Geyer(0.11, 2.5)
-  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
-  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
-  if(!all(a==b))
-    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat is not an integer")
-})
-
-require(spatstat)
-local({
-  co <- as.ppp(corners(letterR), letterR, check=FALSE)
-  co[letterR]
-})
-
 #  tests/segments.R
-#  $Revision: 1.7 $  $Date: 2011/12/05 07:29:16 $
+#
+#  $Revision: 1.8 $  $Date: 2015/12/29 08:54:49 $
 
 require(spatstat)
 
@@ -1512,167 +2291,47 @@ if(abs(s1 - s2)/s2 > 0.01) {
 }
 
 })
-# test for step() operation
 #
-require(spatstat)
-local({
-  Z <- as.im(function(x,y){ x^3 - y^2 }, nztrees$window)
-  fitP <- ppm(nztrees, ~x+y+Z, covariates=list(Z=Z))
-  step(fitP)
-  fitS <- update(fitP, Strauss(7))
-  step(fitS)
-  fitM <- ppm(amacrine, ~ marks*(x+y),
-              MultiStrauss(types=levels(marks(amacrine)), radii=matrix(0.04, 2, 2)))
-  step(fitM)
-})
-
-
-## badwindowcheck.R
-## $Revision: 1.2 $  $Date: 2014/01/27 07:18:41 $
-##
+## tests/sigtraceprogress.R
+#
+## Tests of *.sigtrace and *.progress
+#
+## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
 
 require(spatstat)
 local({
-  ## Simple example of self-crossing polygon
-  x <- read.table("selfcross.txt", header=TRUE)
-  ## Auto-repair
-  w <- owin(poly=x)
-
-  ## Real data involving various quirks
-  b <- read.table("badwindow.txt", header=TRUE)
-  b <- split(b, factor(b$i))
-  b <- lapply(b, function(z) { as.list(z[,-3]) })
-  ## make owin without checking
-  W <- owin(poly=b, check=FALSE)
-  ## Apply stringent checks
-  owinpolycheck(W,verbose=FALSE)
-  ## Auto-repair
-  W2 <- owin(poly=b)
+  plot(dclf.sigtrace(redwood, nsim=19, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dclf.progress(redwood, nsim=19, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dg.sigtrace(redwood, nsim=5, alternative="greater", rmin=0.02,
+                     verbose=FALSE))
+  plot(dg.progress(redwood, nsim=5, alternative="greater", rmin=0.02,
+                   verbose=FALSE))
+  ## test 'leave-two-out' algorithm
+  a <- dclf.sigtrace(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
+                     verbose=FALSE)
+  aa <- dclf.progress(redwood, Lest, nsim=9, use.theory=FALSE, leaveout=2,
+                      verbose=FALSE)
+  b <- dg.sigtrace(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2)
+  bb <- dg.progress(redwood, Lest, nsim=5, use.theory=FALSE, leaveout=2,
+                    verbose=FALSE)
 })
-
-
-
-
-#       
-#        tests/hobjects.R
 #
-#   Validity of methods for ppm(... method="ho")
+# tests/slrm.R
+#
+# $Revision: 1.1 $ $Date: 2013/04/19 10:14:52 $
+#
+# Test slrm fitting and prediction when there are NA's
 #
 
 require(spatstat)
-
 local({
-  set.seed(42)
-  fit  <- ppm(cells, ~1,         Strauss(0.1), method="ho", nsim=10)
-  fitx <- ppm(cells, ~offset(x), Strauss(0.1), method="ho", nsim=10)
-
-  a  <- AIC(fit)
-  ax <- AIC(fitx)
-
-  f  <- fitted(fit)
-  fx <- fitted(fitx)
-
-  p  <- predict(fit)
-  px <- predict(fitx)
-})
-
-
-## tests/cdf.test.R
-## check cdf.test with strange data
-require(spatstat)
-local({
-  # Marked point patterns with some marks not represented
-  AC <- split(ants, un=FALSE)$Cataglyphis
-  AM <- split(ants, un=FALSE)$Messor
-  DM <- distmap(AM)
-  # should produce a warning, rather than a crash:
-  cdf.test(AC, DM)
-  # should be OK:
-  cdf.test(unmark(AC), DM)
-  cdf.test(unmark(AC), DM, "cvm")
-  cdf.test(unmark(AC), DM, "ad")
-  # linear networks
-  set.seed(42)
-  X <- runiflpp(20, simplenet)
-  fit <- lppm(X, ~1)
-  cdf.test(fit, "y")
-  cdf.test(fit, "y", "cvm")
-  cdf.test(fit, "y", "ad")
-})
-
-#
-# tests/kppm.R
-#
-# $Revision: 1.8 $ $Date: 2015/01/11 01:25:25 $
-#
-# Test functionality of kppm that depends on RandomFields
-# Test update.kppm for old style kppm objects
-
-require(spatstat)
-local({
-
- fit <- kppm(redwood, ~1, "Thomas")
- fitx <- update(fit, ~ . + x)
- fitM <- update(fit, clusters="MatClust")
- fitC <- update(fit, cells)
- fitCx <- update(fit, cells ~ x)
-
- if(require(RandomFields) && RandomFieldsSafe()) {
-
-    fit0 <- kppm(redwood ~1, "LGCP")
-    Y0 <- simulate(fit0)[[1]]
-    stopifnot(is.ppp(Y0))
-    
-    fit1 <- kppm(redwood ~x, "LGCP",
-                covmodel=list(model="matern", nu=0.3),
-                control=list(maxit=5))
-    Y1 <- simulate(fit1)[[1]]
-    stopifnot(is.ppp(Y1))
-
-# ... and Abdollah's code
-
-    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
-    Y2 <- simulate(fit2)[[1]]
-    stopifnot(is.ppp(Y2))
-  }
-  
-})
-
-
-# temporary test file for localpcfmatrix
-
-require(spatstat)
-local({
-  a <- localpcfmatrix(redwood)
-  a
-  plot(a)
-  a[, 3:5]
-})
-# check for various bugs related to factor conversions
-require(spatstat)
-local({
-  # make a factor image
-  m <- factor(rep(letters[1:4], 4))
-  Z <- im(m, xcol=1:4, yrow=1:4)
-  # make a point pattern
-  set.seed(42)
-  X <- runifpoint(20, win=as.owin(Z))
-  # look up the image at the points of X
-  # (a) internal
-  ans1 <- lookup.im(Z, X$x, X$y)
-  stopifnot(is.factor(ans1))
-  # (b) user level
-  ans2 <- Z[X]
-  stopifnot(is.factor(ans2))
-  # (c) turn the image into a tessellation
-  #  and apply quadratcount
-  V <- tess(image = Z)
-  quadratcount(X, tess=V)
-  # (d) pad image
-  Y <- padimage(Z, factor("b", levels=levels(Z)))
-  stopifnot(Y$type == "factor")
-  U <- padimage(Z, "b")
-  stopifnot(U$type == "factor")
+  X <- copper$SouthPoints
+  W <- owin(poly=list(x=c(0,35,35,1),y=c(1,1,150,150)))
+  Y <- X[W]
+  fit <- slrm(Y ~ x+y)
+  pred <- predict(fit)
 })
 
 
@@ -1683,7 +2342,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.9 $  $Date: 2014/02/05 09:30:38 $
+#  $Revision: 1.10 $  $Date: 2015/12/29 08:54:49 $
 #
 
 require(spatstat)
@@ -1738,260 +2397,69 @@ stopifnot(identical(X, amacrine))
 
 })
 #
-#  tests/imageops.R
+#   tests/step.R
 #
-#   $Revision: 1.6 $   $Date: 2014/03/20 04:02:20 $
+#   $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
 #
-
+# test for step() operation
+#
 require(spatstat)
 local({
-  A <- as.im(owin())
-  B <- as.im(owin(c(1.1, 1.9), c(0,1)))
-  Z <- imcov(A, B)
-  stopifnot(abs(max(Z) - 0.8) < 0.1)
-
-  ## handling images with 1 row or column
-  ycov <- function(x, y) y
-  E <- as.im(ycov, owin(), dimyx = c(2,1))
-  G <- cut(E, 2)
-  H <- as.tess(G)
-
-  E12 <- as.im(ycov, owin(), dimyx = c(1,2))
-  G12 <- cut(E12, 2)
-  H12 <- as.tess(G12)
+  Z <- as.im(function(x,y){ x^3 - y^2 }, nztrees$window)
+  fitP <- ppm(nztrees ~x+y+Z, covariates=list(Z=Z))
+  step(fitP)
+  fitS <- update(fitP, Strauss(7))
+  step(fitS)
+  fitM <- ppm(amacrine ~ marks*(x+y),
+              MultiStrauss(types=levels(marks(amacrine)), radii=matrix(0.04, 2, 2)))
+  step(fitM)
 })
 
 
+##
+## tests/symbolmaps.R
+##
+##   Quirks associated with symbolmaps, etc.
+##
+## $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
 
-
-# tests/triplets.R
-# test code for triplet interaction
-# $Revision: 1.4 $ $Date: 2012/07/12 02:43:32 $
-require(spatstat)
 local({
-  fit <- ppm(redwood, ~1, Triplets(0.1))
-  fit
-  suffstat(fit)
-  # hard core (zero triangles, coefficient is NA)
-  fit0 <- ppm(cells, ~1, Triplets(0.05))
-  fit0
-  suffstat(fit0)
-  # bug case (1 triangle in data)
-  fit1 <- ppm(cells, ~1, Triplets(0.15))
-  fit1
-  suffstat(fit1)
-})
-#
-#     tests/project.ppm.R
-#
-#      $Revision: 1.6 $  $Date: 2015/08/27 08:19:03 $
-#
-#     Tests of projection mechanism
-#
-
-require(spatstat)
-local({
-  chk <- function(m) {
-    if(!valid.ppm(m)) stop("Projected model was still not valid")
-    return(invisible(NULL))
-  }
-  # a very unidentifiable model
-  fit <- ppm(cells ~Z, Strauss(1e-06), covariates=list(Z=0))
-  chk(emend(fit))
-  # multitype
-  r <- matrix(1e-06, 2, 2)
-  fit2 <- ppm(amacrine ~1, MultiStrauss(types=c("off", "on"), radii=r))
-  chk(emend(fit2))
-  # complicated multitype 
-  fit3 <- ppm(amacrine ~1, MultiStraussHard(types=c("off", "on"),
-                                            iradii=r, hradii=r/5))
-  chk(emend(fit3))
+  require(spatstat)
+  set.seed(100)
   
-  # hierarchical
-  ra <- r
-  r[2,1] <- NA
-  fit4 <- ppm(amacrine ~1, HierStrauss(types=c("off", "on"), radii=r))
-  chk(emend(fit4))
-  # complicated hierarchical
-  fit5 <- ppm(amacrine ~1, HierStraussHard(types=c("off", "on"),
-                                            iradii=r, hradii=r/5))
-  chk(emend(fit5))
-  
-  # hybrids
-  r0 <- min(nndist(redwood))
-  ra <- 1.25 * r0
-  rb <- 0.8 * r0
-  f1 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Geyer(0.1, 2)), project=TRUE)
-  chk(f1)
-  f2 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Geyer(0.1, 2)), project=TRUE)
-  chk(f2)
-  f3 <- ppm(redwood ~1, Hybrid(A=Strauss(ra), B=Strauss(0.1)), project=TRUE)
-  chk(f3)
-  f4 <- ppm(redwood ~1, Hybrid(A=Strauss(rb), B=Strauss(0.1)), project=TRUE)
-  chk(f4)
-  f5 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Strauss(0.1)), project=TRUE)
-  chk(f5)
-  f6 <- ppm(redwood ~1, Hybrid(A=Hardcore(rb), B=Geyer(0.1, 2)), project=TRUE)
-  chk(f6)
-  f7 <- ppm(redwood ~1, Hybrid(A=Geyer(rb, 1), B=Strauss(0.1)), project=TRUE)
-  chk(f7)
+  ## spacing too large for tiles - upsets various pieces of code
+  V <- as.im(dirichlet(runifpoint(8)))
+  textureplot(V, spacing=2)
+
+  g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
+  invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
 
 })
 #
-# tests/hyperframe.R
-#
-# test "[.hyperframe" etc
-#
-#  $Revision: 1.3 $  $Date: 2014/08/25 04:43:07 $
-#
-
-  lambda <- runif(4, min=50, max=100)
-  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
-  h <- hyperframe(lambda=lambda, X=X)
-  h$lambda2 <- lambda^2
-  h[, "lambda3"] <- lambda^3
-  h[, "Y"] <- X
-  h[, "X"] <- lapply(X, flipxy)
-  h[, c("X", "Y")] <- hyperframe(X=X, Y=X)
-
-  names(h) <- LETTERS[1:5]
-  print(h)
-
-
-# check fast code for Kest
-require(spatstat)
-local({
-  Kb <- Kest(cells, nlarge=0)
-  Ku <- Kest(cells, correction="none")
-  Kbu <- Kest(cells, correction=c("none", "border"))
-})
-
-
-#
-#  tests/vcovppm.R
-#
-#  Check validity of vcov.ppm algorithms
-#
-#  Thanks to Ege Rubak
-#
-#  $Revision: 1.5 $  $Date: 2014/01/24 05:59:31 $
-#
-
-require(spatstat)
-
-local({
-
-  set.seed(42)
-  X <- rStrauss(200, .5, .05)
-  model <- ppm(X, inter = Strauss(.05))
-
-  b  <- vcov(model, generic = TRUE, algorithm = "basic")
-  v  <- vcov(model, generic = TRUE, algorithm = "vector")
-  vc <- vcov(model, generic = TRUE, algorithm = "vectorclip")
-  vn <- vcov(model, generic = FALSE)
-
-  disagree <- function(x, y, tol=1e-7) { max(abs(x-y)) > tol }
-  asymmetric <- function(x) { disagree(x, t(x)) }
-
-  if(asymmetric(b))
-    stop("Non-symmetric matrix produced by vcov.ppm 'basic' algorithm")
-  if(asymmetric(v))
-    stop("Non-symmetric matrix produced by vcov.ppm 'vector' algorithm")
-  if(asymmetric(vc))
-    stop("Non-symmetric matrix produced by vcov.ppm 'vectorclip' algorithm")
-  if(asymmetric(vn))
-    stop("Non-symmetric matrix produced by vcov.ppm Strauss algorithm")
-  
-  if(disagree(v, b))
-    stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' ")
-  if(disagree(v, vc))
-    stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' ")
-  if(disagree(vn, vc))
-    stop("Disagreement between vcov.ppm generic and Strauss algorithms")
-
-  # Geyer code
-  xx <- c(0.7375956, 0.6851697, 0.6399788, 0.6188382)
-  yy <- c(0.5816040, 0.6456319, 0.5150633, 0.6191592)
-  Y <- ppp(xx, yy, window=square(1))
-  modelY <- ppm(Y, ~1, Geyer(0.1, 1))
-
-  b  <- vcov(modelY, generic = TRUE, algorithm = "basic")
-  v  <- vcov(modelY, generic = TRUE, algorithm = "vector")
-  vc <- vcov(modelY, generic = TRUE, algorithm = "vectorclip")
-
-  if(asymmetric(b))
-    stop("Non-symmetric matrix produced by vcov.ppm 'basic' algorithm for Geyer model")
-  if(asymmetric(v))
-    stop("Non-symmetric matrix produced by vcov.ppm 'vector' algorithm for Geyer model")
-  if(asymmetric(vc))
-    stop("Non-symmetric matrix produced by vcov.ppm 'vectorclip' algorithm for Geyer model")
-  
-  if(disagree(v, b))
-    stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' for Geyer model")
-  if(disagree(v, vc))
-    stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' for Geyer model")
-
-
-  ## tests of 'deltasuffstat' code
-  ##     Handling of offset terms
-  modelH <- ppm(cells ~x, Hardcore(0.05))
-  a <- vcov(modelH, generic=TRUE) ## may fall over
-  b <- vcov(modelH, generic=FALSE)
-  if(disagree(a, b))
-    stop("Disagreement between vcov.ppm algorithms for Hardcore model")
-  
-  ##     Correctness of pairwise.family$delta2
-  modelZ <- ppm(amacrine ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
-  b <- vcov(modelZ, generic=FALSE)
-  g <- vcov(modelZ, generic=TRUE)
-  if(disagree(b, g))
-    stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
-
-  ## Test that 'deltasuffstat' works for Hybrids
-  modHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
-})
-# tests/windows.R
-# Tests of owin geometry code
-
-require(spatstat)
-local({
-  # Ege Rubak spotted this problem in 1.28-1
-  A <- as.owin(ants)
-  B <- dilation(A, 140)
-  if(!is.subset.owin(A, B))
-    stop("is.subset.owin fails in polygonal case")
-
-  # thanks to Tom Rosenbaum
-  A <- shift(square(3), origin="midpoint")
-  B <- shift(square(1), origin="midpoint")
-  AB <- setminus.owin(A, B)
-  D <- shift(square(2), origin="midpoint")
-  if(is.subset.owin(D,AB))
-    stop("is.subset.owin fails for polygons with holes")
-
-  ## thanks to Brian Ripley / SpatialVx
-  M <- as.mask(letterR)
-  stopifnot(area(bdry.mask(M)) > 0)
-  stopifnot(area(convexhull(M)) > 0)
-  R <- as.mask(square(1))
-  stopifnot(area(bdry.mask(R)) > 0)
-  stopifnot(area(convexhull(R)) > 0)
-})
-
+#   tests/testaddvar.R
 #
 # test addvar options
 #
+#   $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
 
 X <-  rpoispp(function(x,y){exp(3+3*x)})
-model <- ppm(X, ~y)
+model <- ppm(X ~y)
 addvar(model, "x", crosscheck=TRUE)
 addvar(model, "x", bw.input="quad")
 w <- square(0.5)
 addvar(model, "x", subregion=w)
 addvar(model, "x", subregion=w, bw.input="points")
+#
+#   tests/testparres.R
+#
 # additional test of parres
+#
+#  $Revision: 1.2 $  $Date: 2015/12/29 08:54:49 $
+#
+require(spatstat)
+local({
 X <-  rpoispp(function(x,y){exp(3+x+2*x^2)})
-model <- ppm(X, ~x+y)
+model <- ppm(X ~x+y)
 
 # options in parres
 parres(model, "x")
@@ -2003,175 +2471,27 @@ parres(model, "x", subregion=w, bw.input="quad")
 # check whether 'update.ppm' has messed up internals
 mod2 <- update(model, ~x)
 parres(mod2, "x")
-#
-# tests/lppstuff.R
-#
-# Tests for lpp code
-#
-#  $Revision: 1.3 $  $Date: 2015/12/07 10:36:03 $
-
-
-require(spatstat)
-
-local({
-  # check 'normalise' option in linearKinhom
-  X <- rpoislpp(5, simplenet)
-  fit <- lppm(X, ~x)
-  K <- linearKinhom(X, lambda=fit, normalise=FALSE)
-  plot(K)
-  g <- linearpcfinhom(X, lambda=fit, normalise=FALSE)
-  plot(g)
-  K <- linearKinhom(X, lambda=fit, normalise=TRUE)
-  plot(K)
-  g <- linearpcfinhom(X, lambda=fit, normalise=TRUE)
-  plot(g)
-  # check empty patterns OK
-  X <- runiflpp(0, simplenet)
-  print(X)
-  
-  ## nearest neighbour distances
-  eps <- sqrt(.Machine$double.eps)
-  f <- function(mat,k) { apply(mat, 1, function(z,n) { sort(z)[n]  }, n=k+1) }
-  g <- function(mat,k) { apply(mat, 1, function(z,n) { order(z)[n] }, n=k+1) }
-
-  XX <- spiders
-  nn <- nndist(XX)
-  nnP <- f(pairdist(XX), 1)
-  if(any(abs(nn - nnP) > eps))
-    stop("nndist.lpp does not agree with pairdist.lpp")
-
-  nw <- nnwhich(XX)
-  nwP <- g(pairdist(XX), 1)
-  if(any(nw != nwP))
-    stop("nnwhich.lpp does not agree with pairdist")
-
-  ZZ <- split(chicago)
-  XX <- ZZ$damage
-  YY <- ZZ$assault
-  op <- spatstat.options(Cnncrosslpp=FALSE)
-  a <- nncross(XX, YY)
-  spatstat.options(Cnncrosslpp=TRUE)
-  b <- nncross(XX, YY)
-  if(any(a$which != b$which))
-    stop("Inconsistent values of nncross.lpp()$which from different C code")
-  if(max(abs(a$dist - b$dist)) > eps)
-    stop("Inconsistent values of nncross.lpp()$dist from different C code")
-
-  spatstat.options(Cnncrosslpp=TRUE)
-  b2 <- nncross(XX, YY, k=1:2, what="which")
-  if(any(b2$which.1 != b$which))
-    stop("inconsistent values of nncross.lpp()$which from k=1:2 and k=1")
-  a2 <- nncross(XX, YY, k=1:2, what="dist")
-  if(max(abs(a2$dist.1 - a$dist)) > eps)
-    stop("Inconsistent values of nncross.lpp()$dist from k=1:2 and k=1")
-
-  spatstat.options(Cnncrosslpp=TRUE)
-  ii <- seq_len(npoints(XX))
-  w1 <- nnwhich(XX)
-  w2 <- nncross(XX, XX, iX=ii, iY=ii, what="which")
-  w3 <- nncross(XX, XX, iX=ii, iY=ii, what="which", method="interpreted")
-  if(any(w1 != w2))
-    stop("nnwhich.lpp disagrees with nncross.lpp(iX, iY)")
-  if(any(w2 != w3))
-    stop("Different results for nncross.lpp(iX, iY, 'which') using R and C")
-  d1 <- nndist(XX)
-  d2 <- nncross(XX, XX, iX=ii, iY=ii, what="dist")
-  d3 <- nncross(XX, XX, iX=ii, iY=ii, what="dist", method="interpreted")
-  if(max(abs(d1-d2)) > eps)
-    stop("nndist.lpp disagrees with nncross.lpp(iX, iY)")
-  if(max(abs(d2-d3)) > eps)
-    stop("Different results for nncross.lpp(iX, iY, 'dist') using R and C")
-  
-  spatstat.options(op)
-})
-
-#
-#  tests/density.R
-#
-#  Test behaviour of density methods and inhomogeneous summary functions
-#
-#  $Revision: 1.2 $  $Date: 2014/11/14 05:58:15 $
-#
-
-require(spatstat)
-
-local({
-
-  # test all cases of density.ppp
-  
-  tryit <- function(...) {
-    Z <- density(cells, ..., at="pixels")
-    Z <- density(cells, ..., at="points")
-    return(invisible(NULL))
-  }
-  
-  tryit(0.05)
-  tryit(0.05, diggle=TRUE)
-  tryit(0.05, se=TRUE)
-  tryit(varcov=diag(c(0.05^2, 0.07^2)))
-  tryit(0.05, weights=data.frame(a=1:42,b=42:1))
-  tryit(0.05, weights=expression(x))
-
-  lam <- density(redwood)
-  K <- Kinhom(redwood, lam)
-  
-  lamX <- density(redwood, at="points")
-  KX <- Kinhom(redwood, lamX)
-
-  ## test all code cases of new 'relrisk' algorithm
-  pants <- function(...) {
-    a <- relrisk(ants, sigma=100, se=TRUE, ...)
-    return(TRUE)
-  }
-  pants()
-  pants(casecontrol=FALSE)
-  pants(relative=TRUE)
-  pants(casecontrol=FALSE, relative=TRUE)
-  pants(at="points")
-  pants(casecontrol=FALSE,at="points")
-  pants(relative=TRUE,at="points")
-  pants(casecontrol=FALSE, relative=TRUE,at="points")
-
-
-  Z <- Smooth(longleaf, 5, diggle=TRUE)
-  Z <- Smooth(unmark(longleaf) %mark% 1, 5)
-
-  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
 })
 #
-# tests/slrm.R
+# tests/triplets.R
 #
-# $Revision: 1.1 $ $Date: 2013/04/19 10:14:52 $
+# test code for triplet interaction
 #
-# Test slrm fitting and prediction when there are NA's
+# $Revision: 1.5 $ $Date: 2015/12/29 08:54:49 $
 #
-
 require(spatstat)
 local({
-  X <- copper$SouthPoints
-  W <- owin(poly=list(x=c(0,35,35,1),y=c(1,1,150,150)))
-  Y <- X[W]
-  fit <- slrm(Y ~ x+y)
-  pred <- predict(fit)
-})
-
-
-# tests/linalgeb.R
-# checks validity of linear algebra code
-#  $Revision: 1.2 $ $Date: 2013/04/18 09:14:37 $
-require(spatstat)
-local({
-  p <- 3
-  n <- 4
-  x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
-  w <- matrix(1:(n*n), n, n)
-  y <- matrix(numeric(p * p), p, p)
-  for(i in 1:n)
-    for(j in (1:n)[-i])
-      y <- y + w[i,j] * outer(x[,i,j], x[,j,i])
-  z <- sumsymouter(x, w)
-  if(!identical(y,z))
-    stop("sumsymouter gives incorrect result")
+  fit <- ppm(redwood ~1, Triplets(0.1))
+  fit
+  suffstat(fit)
+  # hard core (zero triangles, coefficient is NA)
+  fit0 <- ppm(cells ~1, Triplets(0.05))
+  fit0
+  suffstat(fit0)
+  # bug case (1 triangle in data)
+  fit1 <- ppm(cells ~1, Triplets(0.15))
+  fit1
+  suffstat(fit1)
 })
 #
 #  tests/undoc.R
@@ -2189,247 +2509,12 @@ local({
 
 
 
-#
-# tests/mppm.R
-#
-# Basic tests of mppm
-#
-# $Revision: 1.4 $ $Date: 2015/09/30 10:30:01 $
-# 
-
-require(spatstat)
-
-local({
-# test interaction formulae and subfits
-fit1 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~ifelse(group=="control", po, str))
-fit2 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~id * str)
-fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))), iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
-fit1
-fit2
-fit3
-
-subfits(fit1)
-subfits(fit2)
-subfits(fit3)
-
-# test vcov algorithm
-vcov(fit1)
-vcov(fit2)
-vcov(fit3)
-
-# test summary.mppm which currently sits in spatstat-internal.Rd
-
-summary(fit1)
-summary(fit2)
-summary(fit3)
-
-# test handling of offsets and zero cif values in mppm
-
-H <- hyperframe(Y = waterstriders)
-mppm(Y ~ 1,  data=H, Hardcore(1.5))
-mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
-
-# prediction, in training/testing context
-#    (example from Markus Herrmann and Ege Rubak)
-
-X <- waterstriders
-dist <- as.listof(lapply(waterstriders,
-                         function(z) distfun(runifpoint(1, Window(z)))))
-i <- 3
-train <- hyperframe(pattern = X[-i], dist = dist[-i])
-test <- hyperframe(pattern = X[i], dist = dist[i])
-fit <- mppm(pattern ~ dist, data = train)
-pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
-})
-# tests/ppx.R
-#
-# Test operations for ppx objects
-#
-#  $Revision: 1.1 $ $Date: 2013/11/19 03:36:27 $
-#
-
-require(spatstat)
-
-local({
-  df <- data.frame(x=c(1,2,2,1), y=c(1,2,3,1), z=c(2,3,4,2))
-  X <- ppx(data=df, coord.type=rep("s", 3), domain=box3())
-  unique(X)
-  duplicated(X)
-  multiplicity(X)
-})
-## tests/percy.R
-## Tests of Percus-Yevick approximations
-##    $Revision: 1.1 $ $Date: 2014/01/31 11:49:46 $
-
-require(spatstat)
-local({
-  fit <- ppm(swedishpines, ~1, DiggleGatesStibbard(6))
-  K <- Kmodel(fit)
-})
-
-## legacy.R
-## Test that current version of spatstat is compatible with outmoded usage
-## $Revision: 1.1 $ $Date: 2014/04/30 08:05:57 $
-local({
-  require(spatstat)
-
-  ## (1) Old syntax of ppm
-  ppm(cells, ~x)
-  
-  ## (2) Old syntax of MultiStrauss etc.
-  r <- matrix(3, 2, 2)
-  a <- MultiStrauss( , r)
-  a <- MultiStrauss(NULL, r)
-  a <- MultiHard(, r)
-  
-  h <- r/2
-  a <- MultiStraussHard( , r, h)
-
-  NULL
-})
-#
-#  tests/envelopes.R
-#
-#  Test validity of envelope data
-#
-#  $Revision: 1.4 $  $Date: 2015/09/03 10:44:34 $
-#
-
-require(spatstat)
-
-local({
-checktheo <- function(fit) {
-  fitname <- deparse(substitute(fit))
-  en <- envelope(fit, nsim=4, verbose=FALSE, nrep=1e3)
-  nama <- names(en)
-  expecttheo <- is.poisson(fit) && is.stationary(fit)
-  context <- paste("Envelope of", fitname)
-  if(expecttheo) {
-    if(!("theo" %in% nama))
-      stop(paste(context, "did not contain", sQuote("theo")))
-    if("mmean" %in% nama)
-      stop(paste(context, "unexpectedly contained", sQuote("mmean")))
-  } else {
-    if("theo" %in% nama)
-      stop(paste(context, "unexpectedly contained", sQuote("theo")))
-    if(!("mmean" %in% nama))
-      stop(paste(context, "did not contain", sQuote("mmean")))
-  }
-  cat(paste(context, "has correct format\n"))
-}
-  
-checktheo(ppm(cells))
-checktheo(ppm(cells, ~x))
-checktheo(ppm(cells, ~1, Strauss(0.1)))
-
-# check envelope calls from 'alltypes'
-a <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE)
-b <- alltypes(demopat, Kcross, nsim=4, envelope=TRUE, global=TRUE)
-
-# check 'transform' idioms
-A <- envelope(cells, Kest, nsim=4, transform=expression(. - .x))
-B <- envelope(cells, Kest, nsim=4, transform=expression(sqrt(./pi) - .x))
-
-#' check savefuns/savepatterns with global 
-fit <- ppm(cells~x)
-Ef <- envelope(fit, Kest, nsim=4, savefuns=TRUE, global=TRUE)
-Ep <- envelope(fit, Kest, nsim=4, savepatterns=TRUE, global=TRUE)
-
-# check conditional simulation
-e1 <- envelope(cells, Kest, nsim=4, fix.n=TRUE)
-e2 <- envelope(amacrine, Kest, nsim=4, fix.n=TRUE)
-e3 <- envelope(amacrine, Kcross, nsim=4, fix.marks=TRUE)
-fit <- ppm(japanesepines ~ 1, Strauss(0.04))
-e4 <- envelope(fit, Kest, nsim=4, fix.n=TRUE)
-fit2 <- ppm(amacrine ~ 1, Strauss(0.03))
-e5 <- envelope(fit2, Gcross, nsim=4, fix.marks=TRUE)
-
-# check pooling of envelopes in global case
-E1 <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE)
-E2 <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE)
-p12 <- pool(E1, E2)
-E1r <- envelope(cells, Kest, nsim=5, savefuns=TRUE, global=TRUE,
-                ginterval=c(0.05, 0.15))
-E2r <- envelope(cells, Kest, nsim=12, savefuns=TRUE, global=TRUE,
-                ginterval=c(0.05, 0.15))
-p12r <- pool(E1r, E2r)
-})
-## tests/rhohat.R
-## Test all combinations of options for rhohatCalc
-## $Revision: 1.1 $ $Date: 2014/05/16 06:13:25 $
-
-local({
-  require(spatstat)
-  X <-  rpoispp(function(x,y){exp(3+3*x)})
-  ## done in example(rhohat):
-  ## rhoA <- rhohat(X, "x")
-  ## rhoB <- rhohat(X, "x", method="reweight")
-  ## rhoC <- rhohat(X, "x", method="transform")
-  fit <- ppm(X, ~x)
-  rhofitA <- rhohat(fit, "x")
-  rhofitB <- rhohat(fit, "x", method="reweight")
-  rhofitC <- rhohat(fit, "x", method="transform")
-
-  ## Baseline
-  lam <- predict(fit)
-  rhoAb <- rhohat(X, "x", baseline=lam)
-  rhoBb <- rhohat(X, "x", method="reweight", baseline=lam)
-  rhoCb <- rhohat(X, "x", method="transform", baseline=lam)
-
-  ## Horvitz-Thompson
-  rhoAH <- rhohat(X, "x", horvitz=TRUE) 
-  rhoBH <- rhohat(X, "x", method="reweight", horvitz=TRUE)
-  rhoCH <- rhohat(X, "x", method="transform", horvitz=TRUE)
-  rhofitAH <- rhohat(fit, "x", horvitz=TRUE)
-  rhofitBH <- rhohat(fit, "x", method="reweight", horvitz=TRUE)
-  rhofitCH <- rhohat(fit, "x", method="transform", horvitz=TRUE)
-})
-## tests/pixelgripes.R
-##     Problems related to pixellation of windows
-##
-## $Revision: 1.2 $ $Date: 2014/07/08 02:28:33 $
-
-require(spatstat)
-local({
-  ## From Philipp Hunziker: bug in rNeymanScott (etc)
-  ## Create an irregular window
-  PM <- matrix(c(1,0,0.5,1,0,0), 3, 2, byrow=TRUE)
-  P <- owin(poly=PM)
-  ## Generate Matern points
-  X <- rMatClust(50, 0.05, 5, win=P)
-  ## Some distance function as a covariate
-  distorigin <- function(x, y) { sqrt(x^2 + y^2) }
-  ## No covariates: works fine
-  fit0 <- kppm(X ~ 1, clusters="MatClust")
-  Y0 <- simulate(fit0, retry=0)
-  ## Covariates: Simulation fails
-  fit1 <- kppm(X ~ distorigin, clusters="MatClust")
-  Y1 <- simulate(fit1, retry=0)
-})
-## tests/symbolmaps.R
-##   Quirks associated with symbolmaps, etc.
-## $Revision: 1.2 $ $Date: 2014/07/21 07:30:38 $
-
-local({
-  require(spatstat)
-  set.seed(100)
-  
-  ## spacing too large for tiles - upsets various pieces of code
-  V <- as.im(dirichlet(runifpoint(8)))
-  textureplot(V, spacing=2)
-
-  g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
-  invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
-
-})
 ##
 ##  tests/updateppm.R
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.2 $ $Date: 2014/08/24 04:55:27 $
+##  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
 
 local({
     require(spatstat)
@@ -2507,21 +2592,128 @@ local({
     fut0 <- step(fut, trace=0)
     cat("OK\n")
 })
-## tests/colour.R
-##
-## $Revision$ $Date$
-##
+#
+#  tests/vcovppm.R
+#
+#  Check validity of vcov.ppm algorithms
+#
+#  Thanks to Ege Rubak
+#
+#  $Revision: 1.6 $  $Date: 2015/12/29 08:54:49 $
+#
 
 require(spatstat)
 
 local({
-   f <- function(n) grey(seq(0,1,length=n))
-   z <- to.grey(f)
+
+  set.seed(42)
+  X <- rStrauss(200, .5, .05)
+  model <- ppm(X, inter = Strauss(.05))
+
+  b  <- vcov(model, generic = TRUE, algorithm = "basic")
+  v  <- vcov(model, generic = TRUE, algorithm = "vector")
+  vc <- vcov(model, generic = TRUE, algorithm = "vectorclip")
+  vn <- vcov(model, generic = FALSE)
+
+  disagree <- function(x, y, tol=1e-7) { max(abs(x-y)) > tol }
+  asymmetric <- function(x) { disagree(x, t(x)) }
+
+  if(asymmetric(b))
+    stop("Non-symmetric matrix produced by vcov.ppm 'basic' algorithm")
+  if(asymmetric(v))
+    stop("Non-symmetric matrix produced by vcov.ppm 'vector' algorithm")
+  if(asymmetric(vc))
+    stop("Non-symmetric matrix produced by vcov.ppm 'vectorclip' algorithm")
+  if(asymmetric(vn))
+    stop("Non-symmetric matrix produced by vcov.ppm Strauss algorithm")
+  
+  if(disagree(v, b))
+    stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' ")
+  if(disagree(v, vc))
+    stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' ")
+  if(disagree(vn, vc))
+    stop("Disagreement between vcov.ppm generic and Strauss algorithms")
+
+  # Geyer code
+  xx <- c(0.7375956, 0.6851697, 0.6399788, 0.6188382)
+  yy <- c(0.5816040, 0.6456319, 0.5150633, 0.6191592)
+  Y <- ppp(xx, yy, window=square(1))
+  modelY <- ppm(Y ~1, Geyer(0.1, 1))
+
+  b  <- vcov(modelY, generic = TRUE, algorithm = "basic")
+  v  <- vcov(modelY, generic = TRUE, algorithm = "vector")
+  vc <- vcov(modelY, generic = TRUE, algorithm = "vectorclip")
+
+  if(asymmetric(b))
+    stop("Non-symmetric matrix produced by vcov.ppm 'basic' algorithm for Geyer model")
+  if(asymmetric(v))
+    stop("Non-symmetric matrix produced by vcov.ppm 'vector' algorithm for Geyer model")
+  if(asymmetric(vc))
+    stop("Non-symmetric matrix produced by vcov.ppm 'vectorclip' algorithm for Geyer model")
+  
+  if(disagree(v, b))
+    stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' for Geyer model")
+  if(disagree(v, vc))
+    stop("Disagreement between vcov.ppm algorithms 'vector' and 'vectorclip' for Geyer model")
+
+
+  ## tests of 'deltasuffstat' code
+  ##     Handling of offset terms
+  modelH <- ppm(cells ~x, Hardcore(0.05))
+  a <- vcov(modelH, generic=TRUE) ## may fall over
+  b <- vcov(modelH, generic=FALSE)
+  if(disagree(a, b))
+    stop("Disagreement between vcov.ppm algorithms for Hardcore model")
+  
+  ##     Correctness of pairwise.family$delta2
+  modelZ <- ppm(amacrine ~1, MultiStrauss(radii=matrix(0.1, 2, 2)))
+  b <- vcov(modelZ, generic=FALSE)
+  g <- vcov(modelZ, generic=TRUE)
+  if(disagree(b, g))
+    stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
+
+  ## Test that 'deltasuffstat' works for Hybrids
+  modHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
 })
+#
+# tests/windows.R
+#
+# Tests of owin geometry code
+#
+#  $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+
+require(spatstat)
+local({
+  # Ege Rubak spotted this problem in 1.28-1
+  A <- as.owin(ants)
+  B <- dilation(A, 140)
+  if(!is.subset.owin(A, B))
+    stop("is.subset.owin fails in polygonal case")
+
+  # thanks to Tom Rosenbaum
+  A <- shift(square(3), origin="midpoint")
+  B <- shift(square(1), origin="midpoint")
+  AB <- setminus.owin(A, B)
+  D <- shift(square(2), origin="midpoint")
+  if(is.subset.owin(D,AB))
+    stop("is.subset.owin fails for polygons with holes")
+
+  ## thanks to Brian Ripley / SpatialVx
+  M <- as.mask(letterR)
+  stopifnot(area(bdry.mask(M)) > 0)
+  stopifnot(area(convexhull(M)) > 0)
+  R <- as.mask(square(1))
+  stopifnot(area(bdry.mask(R)) > 0)
+  stopifnot(area(convexhull(R)) > 0)
+})
+
 ##
 ## tests/xysegment.R
+##
 ##    Test weird problems and boundary cases for line segment code
-##    $Version$ $Date: 2014/10/24 06:12:05 $ 
+##
+##    $Version$ $Date: 2015/12/29 08:54:49 $ 
+##
 require(spatstat)
 local({
   # segment of length zero
@@ -2529,61 +2721,4 @@ local({
   BB <- angles.psp(B)
   A <- runifpoint(3)
   AB <- project2segment(A,B)
-})
-## tests/markcor.R
-##   Tests of mark correlation code (etc)
-## $Revision: 1.3 $ $Date: 2014/11/09 03:59:41 $
-
-require(spatstat)
-
-local({
-  ## check.testfun checks equality of functions
-  ##  and is liable to break if the behaviour of all.equal is changed
-  fe <- function(m1, m2) {m1 == m2}
-  fm <- function(m1, m2) {m1 * m2}
-  fs <- function(m1, m2) {sqrt(m1)}
-  if(check.testfun(fe, X=amacrine)$ftype != "equ")
-    warning("check.testfun fails to recognise mark equality function")
-  if(check.testfun(fm, X=longleaf)$ftype != "mul")
-    warning("check.testfun fails to recognise mark product function")
-  check.testfun(fs, X=longleaf)
-  
-  ## test all is well in Kmark -> Kinhom 
-  MA <- Kmark(amacrine,function(m1,m2){m1==m2})
-  set.seed(42)
-  AR <- rlabel(amacrine)
-  MR <- Kmark(AR,function(m1,m2){m1==m2})
-  if(isTRUE(all.equal(MA,MR)))
-    stop("Kmark unexpectedly ignores marks")
-})
-##  tests/closeshave.R
-## check 'closepairs/crosspairs' code
-## validity and memory allocation
-## $Revision: 1.1 $ $Date: 2015/02/21 02:56:07 $
-
-local({
-  r <- 0.12
-  close.all <- closepairs(redwood, r)
-  close.ij <- closepairs(redwood, r, what="indices")
-  close.ijd <- closepairs(redwood, r, what="ijd")
-  stopifnot(identical(close.ij, close.all[c("i","j")]))
-  stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
-
-  Y <- split(amacrine)
-  on <- Y$on
-  off <- Y$off
-  cross.all <- crosspairs(on, off, r)
-  cross.ij <- crosspairs(on, off, r, what="indices")
-  cross.ijd <- crosspairs(on, off, r, what="ijd")
-  stopifnot(identical(cross.ij, cross.all[c("i","j")]))
-  stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
-
-  # Rasmus' example
-  R <- 0.04
-  U <- as.ppp(gridcenters(owin(), 50, 50), W=owin())
-  cp <- crosspairs(U, U, R)
-  G <- matrix(0, npoints(U), npoints(U))
-  G[cbind(cp$i, cp$j)] <- 1
-  if(!isSymmetric(G))
-    stop("crosspairs is not symmetric in Rasmus example")
 })

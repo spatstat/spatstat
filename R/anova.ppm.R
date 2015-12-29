@@ -12,7 +12,8 @@ anova.ppm <- local({
   fmlaString <- function(z) { paste(as.expression(formula(z))) }
   interString <- function(z) { as.interact(z)$creator }
 
-  anova.ppm <- function(object, ..., test=NULL, adjust=TRUE, warn=TRUE) {
+  anova.ppm <- function(object, ..., test=NULL, adjust=TRUE, warn=TRUE,
+                        fine=FALSE) {
     gripe <- if(warn) do.gripe else dont.gripe
     if(!is.null(test)) {
       test <- match.arg(test, c("Chisq", "LRT", "Rao", "score", "F", "Cp"))
@@ -29,20 +30,23 @@ anova.ppm <- local({
   
     ## list of models
     objex <- append(list(object), argh)
-    if(!all(unlist(lapply(objex, is.ppm))))
+    if(!all(sapply(objex, is.ppm)))
       stop(paste("Arguments must all be", sQuote("ppm"), "objects"))
     
-    ## non-Poisson models?
-    pois <- all(unlist(lapply(objex, is.poisson.ppm)))
-
-    if(!pois && !is.null(test) && test == "Rao")
+    ## all models Poisson?
+    pois <- all(sapply(objex, is.poisson.ppm))
+    gibbs <- !pois
+    ## any models fitted by ippm?
+    newton <- any(sapply(objex, inherits, what="ippm"))
+    
+    if(gibbs && !is.null(test) && test == "Rao")
       stop("Score test is only implemented for Poisson models",
            call.=FALSE)
     
-    ## handle anova for a single 'ippm' object  
+    ## handle anova for a single object
     expandedfrom1 <- FALSE
-    if(length(objex) == 1 && inherits(object, "ippm")) {
-      ## we can't rely on anova.glm to get the df right in this case
+    if(length(objex) == 1 && (gibbs || newton)) {
+      ## we can't rely on anova.glm in this case
       ## so we have to re-fit explicitly
       Terms <- drop.scope(object)
       if((nT <- length(Terms)) > 0) {
@@ -61,7 +65,7 @@ anova.ppm <- local({
     }
 
     ## all models fitted by same method?
-    fitmethod <- unique(unlist(lapply(objex, getElement, name="method")))
+    fitmethod <- unique(sapply(objex, getElement, name="method"))
     if(length(fitmethod) > 1)
       stop(paste("Models were fitted by different methods",
                  commasep(sQuote(fitmethod)), 
@@ -108,14 +112,14 @@ anova.ppm <- local({
       fitz <- lapply(objex, getglmfit)
 
       ## Any trivial models? (uniform Poisson)
-      trivial <- unlist(lapply(fitz, is.null))
+      trivial <- sapply(fitz, is.null)
       if(any(trivial))
         refitargs$forcefit <- TRUE
     
       ## force all non-trivial models to be fitted using same method
       ## (all using GLM or all using GAM)
-      isgam <- unlist(lapply(fitz, inherits, what="gam"))
-      isglm <- unlist(lapply(fitz, inherits, what="glm"))
+      isgam <- sapply(fitz, inherits, what="gam")
+      isglm <- sapply(fitz, inherits, what="glm")
       usegam <- any(isgam)
       if(usegam && any(isglm)) {
         gripe("Models were re-fitted with use.gam=TRUE")
@@ -141,9 +145,9 @@ anova.ppm <- local({
     }
   
     ## If any models were fitted by ippm we need to correct the df
-    if(any(unlist(lapply(objex, inherits, what="ippm")))) {
-      nfree <- unlist(lapply(lapply(objex, logLik), attr, which="df"))
-      ncanonical <- unlist(lapply(lapply(objex, coef), length))
+    if(newton) {
+      nfree <- sapply(lapply(objex, logLik), attr, which="df")
+      ncanonical <- sapply(lapply(objex, coef), length)
       nextra <- nfree - ncanonical
       if(is.null(fitz))
         fitz <- lapply(objex, getglmfit)
@@ -183,8 +187,8 @@ anova.ppm <- local({
       if(length(objex) > 1 && length(h) > 1) {
         ## anova(mod1, mod2, ...)
         ## change names of models
-        fmlae <- unlist(lapply(objex, fmlaString))
-        intrx <- unlist(lapply(objex, interString))
+        fmlae <- sapply(objex, fmlaString)
+        intrx <- sapply(objex, interString)
         h[2] <- paste("Model",
                       paste0(1:length(objex), ":"),
                       fmlae,
@@ -202,7 +206,7 @@ anova.ppm <- local({
       attr(result, "heading") <- h
     }
   
-    if(adjust && !pois) {
+    if(adjust && gibbs) {
       ## issue warning, if not already given
       if(warn) warn.once("anovaAdjust",
                          "anova.ppm now computes the *adjusted* deviances",
@@ -240,7 +244,7 @@ anova.ppm <- local({
             } else {
               thetaDot <- 0 * coef(bigger)
               thetaDot[injection] <- coef(smaller)
-              JH <- vcov(bigger, what="internals", new.coef=thetaDot)
+              JH <- vcov(bigger, what="internals", new.coef=thetaDot, fine=fine)
               J   <- if(!logi) JH$Sigma else (JH$Sigma1log+JH$Sigma2log)
               H   <- if(!logi) JH$A1 else JH$Slog
               G   <- H%*%solve(J)%*%H
@@ -277,11 +281,11 @@ anova.ppm <- local({
       }
     }
 
-    if(any(unlist(lapply(objex, inherits, what="ippm")))) {
+    if(newton) {
       ## calculation does not include 'covfunargs'
       cfa <- lapply(lapply(objex, getElement, name="covfunargs"), names)
       cfa <- unique(unlist(cfa))
-      action <- if(adjust && !pois) "Adjustment to composite likelihood" else
+      action <- if(adjust && gibbs) "Adjustment to composite likelihood" else
                 if(test == "Rao") "Score test calculation" else NULL
       if(!is.null(action)) 
         gripe(action, "does not account for",

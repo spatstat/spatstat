@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.68 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.69 $   $Date: 2015/12/29 02:40:58 $
 #
 
 mppm <- local({
@@ -550,8 +550,8 @@ windows.mppm <- function(x) {
   solapply(data.mppm(x), Window)
 }
 
-logLik.mppm <- function(object, ...) {
-  if(!is.poisson.mppm(object))
+logLik.mppm <- function(object, ..., warn=TRUE) {
+  if(warn && !is.poisson.mppm(object))
     warning(paste("log likelihood is not available for non-Poisson model;",
                   "log-pseudolikelihood returned"))
   ll <- object$maxlogpl
@@ -564,4 +564,31 @@ logLik.mppm <- function(object, ...) {
   return(ll)
 }
 
+AIC.mppm <- function(object, ..., k=2, takeuchi=TRUE) {
+  ll <- logLik(object, warn=FALSE)
+  pen <- attr(ll, "df")
+  if(takeuchi && !is.poisson(object)) {
+    vv <- vcov(object, what="all")
+    J  <- vv$fisher
+    H  <- vv$internals$A1
+    ## Takeuchi penalty = trace of J H^{-1} = trace of H^{-1} J
+    JiH <- try(solve(H, J), silent=TRUE)
+    if(!inherits(JiH, "try-error")) 
+      pen <- sum(diag(JiH))
+  } 
+  return(- 2 * as.numeric(ll) + k * pen)
+}
+
+extractAIC.mppm <- function(fit, scale = 0, k = 2, ..., takeuchi = TRUE) 
+{
+  edf <- length(coef(fit))
+  aic <- AIC(fit, k = k, takeuchi = takeuchi)
+  c(edf, aic)
+}
+
+getCall.mppm <- function(x, ...) { x$Call$cl }
+
+terms.mppm <- function(x, ...) { terms(formula(x)) }
+
+nobs.mppm <- function(object, ...) { sum(sapply(data.mppm(object), npoints)) }
 

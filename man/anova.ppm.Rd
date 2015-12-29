@@ -2,31 +2,43 @@
 \alias{anova.ppm}
 \title{ANOVA for Fitted Point Process Models}
 \description{
-Performs analysis of deviance for two or more fitted point process models.
+Performs analysis of deviance for one or more fitted point process models.
 }
 \usage{
-  \method{anova}{ppm}(object, \dots, test=NULL, adjust=TRUE, warn=TRUE)
+  \method{anova}{ppm}(object, \dots, test=NULL,
+                      adjust=TRUE, warn=TRUE, fine=FALSE)
 }
 \arguments{
-  \item{object}{A fitted point process model
+  \item{object}{
+    A fitted point process model
     (object of class \code{"ppm"}).
-    }
-    \item{\dots}{
-      One or more fitted point process models.
-    }
-    \item{test}{
-      Character string, partially matching one of
-      \code{"Chisq"}, \code{"LRT"}, \code{"Rao"} or \code{"score"}.
-    }
-    \item{adjust}{
-      Logical value indicating whether to correct the
-      pseudolikelihood ratio when some of the models are not Poisson
-      processes.
-    }
-    \item{warn}{
-      Logical value indicating whether to issue warnings
-      if problems arise.
-    }
+  }
+  \item{\dots}{
+    Optional. Additional objects of class \code{"ppm"}.
+  }
+  \item{test}{
+    Character string, partially matching one of
+    \code{"Chisq"}, \code{"LRT"},
+    \code{"Rao"}, \code{"score"}, \code{"F"} or \code{"Cp"},
+    or \code{NULL} indicating that no test should be performed.
+  }
+  \item{adjust}{
+    Logical value indicating whether to correct the
+    pseudolikelihood ratio when some of the models are not Poisson
+    processes.
+  }
+  \item{warn}{
+    Logical value indicating whether to issue warnings
+    if problems arise.
+  }
+  \item{fine}{
+    Logical value, passed to \code{\link{vcov.ppm}},
+    indicating whether to use a quick estimate 
+    (\code{fine=FALSE}, the default) or a slower, more accurate
+    estimate (\code{fine=TRUE}) of variance terms.
+    Relevant only when some of the models are not Poisson
+    and \code{adjust=TRUE}.
+  }
 }
 \value{
   An object of class \code{"anova"}, or \code{NULL}.
@@ -55,7 +67,7 @@ Performs analysis of deviance for two or more fitted point process models.
   values to the chi-squared distribution. In this case,
   if \code{adjust=TRUE} (the default), the
   pseudo-deviances will be adjusted using the method of Pace et al
-  (2011) so that the chi-squared test is valid.
+  (2011) and Baddeley et al (2015) so that the chi-squared test is valid.
   It is strongly advisable to perform this adjustment.
 }
 \section{Errors and warnings}{
@@ -114,20 +126,25 @@ Performs analysis of deviance for two or more fitted point process models.
 \examples{
  mod0 <- ppm(swedishpines ~1)
  modx <- ppm(swedishpines ~x)
+ # Likelihood ratio test
  anova(mod0, modx, test="Chi")
+ # Score test
  anova(mod0, modx, test="Rao")
 
+ # Single argument
  modxy <- ppm(swedishpines ~x + y)
  anova(modxy, test="Chi")
 
+ # Adjusted composite likelihood ratio test
  modP <- ppm(swedishpines ~1, rbord=9)
  modS <- ppm(swedishpines ~1, Strauss(9))
  anova(modP, modS, test="Chi")
 }
 \references{
-  Baddeley, A., Turner, R. and Rubak, E. (2014)
+  Baddeley, A., Turner, R. and Rubak, E. (2015)
   Adjusted composite likelihood ratio test for Gibbs point processes.
-  Submitted for publication.
+  \emph{Journal of Statistical Computation and Simulation},
+  In press. DOI: 10.1080/00949655.2015.1044530.
 
   Pace, L., Salvan, A. and Sartori, N. (2011)
   Adjusting composite likelihood ratio statistics.
@@ -139,11 +156,10 @@ Performs analysis of deviance for two or more fitted point process models.
   estimation. \emph{Proceedings of the Cambridge Philosophical Society}
   \bold{44}, 50--57.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{models}

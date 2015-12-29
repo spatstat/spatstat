@@ -1,15 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.44-0.002
+        CHANGES IN spatstat VERSION 1.44-1
 
 OVERVIEW
 
     o We thank Brian Ripley for contributions.
 
+    o Urgent bug fix.
+
+    o More support for replicated point patterns.
+
     o More support for tessellations.
 
-    o Bug fixes.
-
-    o Version nickname: 'Merry Christmas, Where Permitted'
+    o Version nickname: 'Gift Horse'
 
 NEW FUNCTIONS
 
@@ -23,16 +25,37 @@ NEW FUNCTIONS
    o persp.leverage.ppm
    Method for persp plots for objects of class leverage.ppm
 
+   o AIC.mppm, extractAIC.mppm
+   AIC for point process models fitted to replicated point patterns.
+
+   o nobs.mppm, terms.mppm, getCall.mppm
+   Methods for point process models fitted to replicated point patterns.
+
 SIGNIFICANT USER-VISIBLE CHANGES
+
+   o anova.mppm
+   Now handles Gibbs models, and performs the
+   adjusted composite likelihood ratio test.
+
+   o update, step
+   These functions now work for models of class 'mppm'.
 
    o textureplot
    Argument x can now be something acceptable to as.im
 
+   o logLik.mppm
+   New argument 'warn'.
+
 BUGS
 
   o nncross.lpp, nnwhich.lpp, distfun.lpp
-  Sometimes caused a segmentation (memory) fault.
+  Caused a segmentation fault.
   [Spotted by Brian Ripley.]
+  Fixed.
+
+  o anova.ppm
+  If a single 'object' was given, and the object was a Gibbs model,
+  then 'adjust' was effectively set to FALSE.
   Fixed.
 
         CHANGES IN spatstat VERSION 1.44-0

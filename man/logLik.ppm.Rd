@@ -76,8 +76,8 @@
     AIC = -2 * log(L) + k * penalty
   }
   where \eqn{L} is the maximised likelihood of the fitted model,
-  and \eqn{\mbox{edf}}{edf} is the effective degrees of freedom
-  of the model.
+  and \eqn{\mbox{penalty}}{penalty} is a penalty for model complexity,
+  usually equal to the effective degrees of freedom of the model.
   The method \code{extractAIC.ppm} returns the \emph{analogous} quantity
   \eqn{AIC*} in which \eqn{L} is replaced by \eqn{L*},
   the quadrature approximation
@@ -88,7 +88,7 @@
   The \eqn{\mbox{penalty}}{penalty} term is calculated
   as follows. If \code{takeuchi=FALSE} then \eqn{\mbox{penalty}}{penalty} is
   the number of fitted parameters. If \code{takeuchi=TRUE} then
-  \eqn{\mbox{penalty} = \mbox{trace}(J H^{-1})}{edf = trace(J H^(-1))}
+  \eqn{\mbox{penalty} = \mbox{trace}(J H^{-1})}{penalty = trace(J H^(-1))}
   where \eqn{J} and \eqn{H} are the estimated variance and hessian,
   respectively, of the composite score.
   These two choices are equivalent for a Poisson process.
