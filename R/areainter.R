@@ -172,7 +172,7 @@ areadelta2 <- local({
       # called once for each interacting pair of points
       xx <- X$x
       yy <- X$y
-      cl <- closepairs(X, 2 * r, what="indices", ordered=FALSE)
+      cl <- closepairs(X, 2 * r, what="indices", twice=FALSE, neat=FALSE)
       I <- cl$i
       J <- cl$j
       eps <- r/spatstat.options("ngrid.disc")

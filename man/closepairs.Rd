@@ -18,8 +18,9 @@ crosspaircounts(X, Y, r)
 
 closepairs(X, rmax, \dots)
 
-\method{closepairs}{ppp}(X, rmax, ordered=TRUE,
-                         what=c("all","indices","ijd"), \dots)
+\method{closepairs}{ppp}(X, rmax, twice=TRUE,
+                         what=c("all","indices","ijd"),
+                         distinct=TRUE, neat=TRUE, \dots)
 
 crosspairs(X, Y, rmax, \dots)
 
@@ -32,12 +33,13 @@ crosspairs(X, Y, rmax, \dots)
   \item{r,rmax}{
     Maximum distance between pairs of points to be counted as close pairs.
   }
-  \item{ordered}{
+  \item{twice}{
     Logical value indicating whether all ordered pairs of close points
-    should be returned. If \code{ordered=TRUE}, each pair will appear twice
-    in the output, as \code{(i,j)} and again as \code{(j,i)}. If
-    \code{ordered=FALSE}, then each pair will appear only once,
-    as the pair \code{(i,j)} such that \code{i < j}.
+    should be returned. If \code{twice=TRUE} (the default),
+    each pair will appear twice in the output, as \code{(i,j)}
+    and again as \code{(j,i)}. If \code{twice=FALSE},
+    then each pair will appear only once, as the pair \code{(i,j)}
+    with \code{i < j}.
   }
   \item{what}{
     String specifying the data to be returned for each close pair of points.
@@ -48,6 +50,16 @@ crosspairs(X, Y, rmax, \dots)
     returned.
     If \code{what="ijd"} then the indices \code{i,j} and the
     distance \code{d} are returned.
+  }
+  \item{distinct}{
+    Logical value indicating whether to return only the
+    pairs of points with different indices \code{i} and \code{j}
+    (\code{distinct=TRUE}, the default) or to also include
+    the pairs where \code{i=j} (\code{distinct=FALSE}).
+  }
+  \item{neat}{
+    Logical value indicating whether to ensure that \code{i < j}
+    in each output pair, when \code{twice=FALSE}. 
   }
   \item{\dots}{Extra arguments, ignored by methods.}
 }
@@ -72,7 +84,7 @@ crosspairs(X, Y, rmax, \dots)
   \code{v} such that \code{v[i]} is the number of neighbours of
   \code{X[i]} in the pattern \code{Y}.
 
-  \code{closepairs(X,rmax)} identifies all pairs of neighbours 
+  \code{closepairs(X,rmax)} identifies all pairs of distinct neighbours 
   in the pattern \code{X} and returns them. The result is
   a list with the following components:
   \describe{

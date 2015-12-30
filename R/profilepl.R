@@ -348,7 +348,7 @@ plot.profilepl <- local({
     return(NULL)
   }
 
-  none.finite <- function(x) all(!finite(x))
+  none.finite <- function(x) all(!is.finite(x))
   
   plot.profilepl
 })

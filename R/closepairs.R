@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.31 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.36 $   $Date: 2015/12/30 11:12:21 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -12,13 +12,20 @@ closepairs <- function(X, rmax, ...) {
   UseMethod("closepairs")
 }
   
-closepairs.ppp <- function(X, rmax, ordered=TRUE,
-                           what=c("all", "indices", "ijd"), ...) {
+closepairs.ppp <- function(X, rmax, twice=TRUE,
+                           what=c("all", "indices", "ijd"),
+                           distinct=TRUE, neat=TRUE, 
+                           ...) {
   verifyclass(X, "ppp")
   what <- match.arg(what)
   stopifnot(is.numeric(rmax) && length(rmax) == 1)
   stopifnot(is.finite(rmax))
   stopifnot(rmax >= 0)
+  ordered <- list(...)$ordered
+  if(missing(twice) && !is.null(ordered)) {
+    warning("Obsolete argument 'ordered' has been replaced by 'twice'")
+    twice <- ordered
+  }
   npts <- npoints(X)
   null.answer <- switch(what,
                         all = {
@@ -41,21 +48,24 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
                                j=integer(0),
                                d=numeric(0))
                         })
-   if(npts == 0)
-     return(null.answer)
+  if(npts == 0)
+    return(null.answer)
   # sort points by increasing x coordinate
   oo <- fave.order(X$x)
   Xsort <- X[oo]
-  # First make an OVERESTIMATE of the number of pairs
-  nsize <- ceiling(4 * pi * (npts^2) * (rmax^2)/area(Window(X)))
+  # First make an OVERESTIMATE of the number of unordered pairs
+  nsize <- ceiling(2 * pi * (npts^2) * (rmax^2)/area(Window(X)))
   nsize <- max(1024, nsize)
   # Now extract pairs
   if(spatstat.options("closepairs.newcode")) {
     # ------------------- use new faster code ---------------------
+    # fast algorithms collect each distinct pair only once
+    got.twice <- FALSE
+    ng <- nsize
+    #
     x <- Xsort$x
     y <- Xsort$y
     r <- rmax
-    ng <- nsize
     storage.mode(x) <- "double"
     storage.mode(y) <- "double"
     storage.mode(r) <- "double"
@@ -96,6 +106,36 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
 
   } else {
     # ------------------- use older code --------------------------
+    if(!distinct) {
+      ii <- seq_len(npts)
+      xx <- X$x
+      yy <- X$y
+      zeroes <- rep(0, npts)
+      null.answer <- switch(what,
+                            all = {
+                              list(i=ii,
+                                   j=ii,
+                                   xi=xx,
+                                   yi=yy,
+                                   xj=xx,
+                                   yj=yy,
+                                   dx=zeroes,
+                                   dy=zeroes,
+                                   d=zeroes)
+                            },
+                            indices = {
+                              list(i=ii,
+                                   j=ii)
+                            },
+                            ijd = {
+                              list(i=ii,
+                                   j=ii,
+                                   d=zeroes)
+                            })
+    }
+
+    got.twice <- TRUE
+    nsize <- nsize * 2
     z <-
       .C("Fclosepairs",
          nxy=as.integer(npts),
@@ -179,27 +219,97 @@ closepairs.ppp <- function(X, rmax, ordered=TRUE,
   # convert i,j indices to original sequence
   i <- oo[i]
   j <- oo[j]
-  # are (i, j) and (j, i) equivalent?
-  if(!ordered) {
-    ok <- (i < j)
-    i  <-  i[ok]
-    j  <-  j[ok]
+  if(twice) {
+    ## both (i, j) and (j, i) should be returned
+    if(!got.twice) {
+      ## duplication required
+      iold <- i
+      jold <- j
+      i <- c(iold, jold)
+      j <- c(jold, iold)
+      switch(what,
+             indices = { },
+             ijd = {
+               d <- rep(d, 2)
+             },
+             all = {
+               xinew <- c(xi, xj)
+               yinew <- c(yi, yj)
+               xjnew <- c(xj, xi)
+               yjnew <- c(yj, yi)
+               xi <- xinew
+               yi <- yinew
+               xj <- xjnew
+               yj <- yjnew
+               dx <- c(dx, -dx)
+               dy <- c(dy, -dy)
+               d <- rep(d, 2)
+             })
+    }
+  } else {
+    ## only one of (i, j) and (j, i) should be returned
+    if(got.twice) {
+      ## remove duplication
+      ok <- (i < j)
+      i  <-  i[ok]
+      j  <-  j[ok]
+      switch(what,
+             indices = { },
+             all = {
+               xi <- xi[ok]
+               yi <- yi[ok]
+               xj <- xj[ok]
+               yj <- yj[ok]
+               dx <- dx[ok]
+               dy <- dy[ok]
+               d  <-  d[ok]
+             },
+             ijd = {
+               d  <-  d[ok]
+             })
+    } else if(neat) {
+      ## enforce i < j
+      swap <- (i > j)
+      tmp <- i[swap]
+      i[swap] <- j[swap]
+      j[swap] <- tmp
+      if(what == "all") {
+        xinew <- ifelse(swap, xj, xi)
+        yinew <- ifelse(swap, yj, yi)
+        xjnew <- ifelse(swap, xi, xj)
+        yjnew <- ifelse(swap, yi, yj)
+        xi <- xinew
+        yi <- yinew
+        xj <- xjnew
+        yj <- yjnew
+        dx[swap] <- -dx[swap]
+        dy[swap] <- -dy[swap]
+      }
+    } ## otherwise no action required
+  }
+  ## add pairs of identical points?
+  if(!distinct) {
+    ii <- seq_len(npts)
+    xx <- X$x
+    yy <- X$y
+    zeroes <- rep(0, npts)
+    i <- c(i, ii)
+    j <- c(j, ii)
     switch(what,
-           indices = { },
-           all = {
-             xi <- xi[ok]
-             yi <- yi[ok]
-             xj <- xj[ok]
-             yj <- yj[ok]
-             dx <- dx[ok]
-             dy <- dy[ok]
-             d  <-  d[ok]
+           ijd={
+             d  <- c(d, zeroes)
            },
-           ijd = {
-             d  <-  d[ok]
+           all = {
+             xi <- c(xi, xx)
+             yi <- c(yi, yy)
+             xj <- c(xj, xx)
+             yi <- c(yi, yy)
+             dx <- c(dx, zeroes)
+             dy <- c(dy, zeroes)
+             d  <- c(d, zeroes)
            })
   }
-  # done
+  ## done
   switch(what,
          all = {
            answer <- list(i=i,
@@ -401,7 +511,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
   return(answer)
 }
 
-closethresh <- function(X, R, S, ordered=TRUE) {
+closethresh <- function(X, R, S, twice=TRUE, ...) {
   # list all R-close pairs
   # and indicate which of them are S-close (S < R)
   # so that results are consistent with closepairs(X,S)
@@ -409,6 +519,11 @@ closethresh <- function(X, R, S, ordered=TRUE) {
   stopifnot(is.numeric(R) && length(R) == 1 && R >= 0)
   stopifnot(is.numeric(S) && length(S) == 1 && S >= 0)
   stopifnot(S < R)
+  ordered <- list(...)$ordered
+  if(missing(twice) && !is.null(ordered)) {
+    warning("Obsolete argument 'ordered' has been replaced by 'twice'")
+    twice <- ordered
+  }
   npts <- npoints(X)
    if(npts == 0)
      return(list(i=integer(0), j=integer(0), t=logical(0)))
@@ -441,7 +556,7 @@ closethresh <- function(X, R, S, ordered=TRUE) {
   i <- oo[i]
   j <- oo[j]
   # are (i, j) and (j, i) equivalent?
-  if(!ordered) {
+  if(!twice) {
     ok <- (i < j)
     i  <-  i[ok]
     j  <-  j[ok]
@@ -466,4 +581,3 @@ crosspairquad <- function(Q, rmax, what=c("all", "indices")) {
   return(result)
 }
 
-  

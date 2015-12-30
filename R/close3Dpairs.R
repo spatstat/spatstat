@@ -8,13 +8,19 @@
 #
 closepairs.pp3 <- local({
 
-  closepairs.pp3 <- function(X, rmax, ordered=TRUE,
-                           what=c("all", "indices"), ...) {
+  closepairs.pp3 <- function(X, rmax, twice=TRUE,
+                             what=c("all", "indices"),
+                             distinct=TRUE, neat=TRUE, ...) {
     verifyclass(X, "pp3")
     what <- match.arg(what)
     stopifnot(is.numeric(rmax) && length(rmax) == 1)
     stopifnot(is.finite(rmax))
     stopifnot(rmax >= 0)
+    ordered <- list(...)$ordered
+    if(missing(twice) && !is.null(ordered)) {
+      warning("Obsolete argument 'ordered' has been replaced by 'twice'")
+      twice <- ordered
+    }
     npts <- npoints(X)
     nama <- switch(what,
                    all = c("i", "j",
@@ -60,13 +66,55 @@ closepairs.pp3 <- local({
     ## convert i,j indices to original sequence
     a$i <- oo[a$i]
     a$j <- oo[a$j]
-    ## are (i, j) and (j, i) equivalent?
-    if(!ordered) {
+    ## handle options
+    if(twice) {
+      ## both (i, j) and (j, i) should be returned
       a <- as.data.frame(a)
-      a <- a[with(a, i < j), , drop=FALSE]
-      a <- as.list(a)
+      a <- as.list(rbind(a, swapdata(a, what)))
+    } else if(neat) {
+      ## enforce i < j
+      swap <- with(a, (j < i))
+      if(any(swap)) {
+        a <- as.data.frame(a)
+        a[swap,] <- swapdata(a[swap, ,drop=FALSE], what)
+        a <- as.list(a)
+      }
     }
+    ## add pairs of identical points?
+    if(!distinct) {
+      ii <- seq_len(npts)
+      xtra <- data.frame(i = ii, j=ii)
+      if(what == "all") {
+        coo <- coords(X)[, c("x","y","z")]
+        zeroes <- rep(0, npts)
+        xtra <- cbind(xtra, coo, coo, zeroes, zeroes, zeroes, zeroes)
+      }
+      a <- as.list(rbind(as.data.frame(a), xtra))
+    }
+    ## done
     return(a)
+  }
+
+  swapdata <- function(a, what) {
+    switch(what,
+           all = {
+             with(a, data.frame(i  =  j,
+                                j  =  i,
+                                xi =  xj,
+                                yi =  yj,
+                                zi =  zj,
+                                xj =  xi,
+                                yj =  yi,
+                                zj =  zi,
+                                dx = -dx,
+                                dy = -dy,
+                                dz = -dz,
+                                d  =  d))
+           },
+           indices = {
+             with(a, data.frame(i=j,
+                                j=i))
+           })
   }
   
   nuttink <- function(x) numeric(0)

@@ -103,7 +103,7 @@ Tstat <- local({
   
       # identify all close pairs
       rmax <- max(r)
-      close <- closepairs(X, rmax, what="ijd", ordered=FALSE)
+      close <- closepairs(X, rmax, what="ijd", twice=FALSE, neat=FALSE)
       I <- close$i
       J <- close$j
       DIJ <- close$d

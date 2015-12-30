@@ -483,6 +483,7 @@ void Fcrosspairs(nn1, x1, y1, nn2, x2, y2, rmaxi, noutmax,
 
 /* ........  versions that return variable-length vectors ......... */
 
+#define SINGLE
 
 /* return i, j only */
 #define CLOSEFUN VcloseIJpairs

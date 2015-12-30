@@ -1,4 +1,42 @@
 
+        CHANGES IN spatstat VERSION 1.44-1.001
+
+OVERVIEW
+
+    o Performance improvements.
+
+    o Bug fixes.
+
+    o Version nickname: 'Happy Whatever'
+
+NEW FUNCTIONS
+
+    o None yet.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o closepairs.ppp, closepairs.pp3
+    New arguments 'distinct' and 'neat' allow more options.
+
+    o closepairs.ppp, closepairs.pp3
+    Argument 'ordered' has been replaced by 'twice'
+    (but is still accepted, with a warning).
+
+    o closepairs.ppp, closepairs.pp3
+    Performance improved (computation time and memory requirements reduced.)
+    This should improve the performance of many functions in spatstat.
+
+BUGS
+
+   o improve.kppm
+   An error message about a missing object 'gminus1' occurred
+   when vcov=TRUE, fast.vcov=FALSE and type="clik1" or "wclik1".
+   Fixed.
+
+   o plot.profilepl
+   Failed with a message about a missing object 'finite'.
+   Fixed.
+
         CHANGES IN spatstat VERSION 1.44-1
 
 OVERVIEW

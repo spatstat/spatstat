@@ -18,7 +18,9 @@
 
   ZCOORD     if defined, coordinates are 3-dimensional
 
-  $Revision: 1.5 $ $Date: 2015/02/21 02:59:59 $
+  SINGLE     if defined, capture only i < j
+
+  $Revision: 1.9 $ $Date: 2015/12/30 04:01:51 $
 
 */
 
@@ -27,7 +29,6 @@
 #else
 #define SPACEDIM 2
 #endif
-
 
 SEXP CLOSEFUN(SEXP xx,
 	      SEXP yy,
@@ -158,6 +159,8 @@ SEXP CLOSEFUN(SEXP xx,
 #ifdef ZCOORD
 	zi = z[i];
 #endif
+
+#ifndef SINGLE
 	if(i > 0) {
 	  /* scan backward */
 	  for(j = i - 1; j >= 0; j--) {
@@ -227,9 +230,9 @@ SEXP CLOSEFUN(SEXP xx,
 	    }
 #endif
 	  }
-
 	}
-      
+#endif
+
 	if(i + 1 < n) {
 	  /* scan forward */
 	  for(j = i + 1; j < n; j++) {
@@ -801,3 +804,365 @@ SEXP CROSSFUN(SEXP xx1,
 
 
 
+/* ........................................................ */
+
+/*  
+    Alternative code for CLOSEFUN, based on algorithm in CROSSFUN
+
+*/
+
+#define ALT_ALGO(NAME) ALT_PREFIX(NAME)
+#define ALT_PREFIX(NAME) alt ## NAME
+
+SEXP ALT_ALGO(CLOSEFUN)(SEXP xx,
+		 SEXP yy,
+#ifdef ZCOORD
+		 SEXP zz,
+#endif
+		 SEXP rr,
+#ifdef THRESH
+		 SEXP ss,
+#endif
+		 SEXP nguess) 
+{
+  /* input vectors */
+  double *x, *y;
+#ifdef ZCOORD
+  double *z;
+#endif
+  /* lengths */
+  int n, nout, noutmax, noutmaxold, maxchunk;
+  /* distance parameter */
+  double rmax, r2max, rmaxplus;
+  /* indices */
+  int i, j, jleft, m;
+  /* temporary values */
+  double xi, yi, xleft, dx, dy, dx2, d2;
+#ifdef ZCOORD
+  double zi, dz;
+#endif
+  /* local storage */
+  int *iout, *jout;
+  /* R objects in return value */
+  SEXP Out, iOut, jOut;
+  /* external storage pointers */
+  int *iOutP, *jOutP;
+#ifdef COORDS
+  SEXP xiOut, yiOut, xjOut, yjOut, dxOut, dyOut;
+  double *xiOutP, *yiOutP, *xjOutP, *yjOutP, *dxOutP, *dyOutP;
+  double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout;
+#ifdef ZCOORD
+  SEXP ziOut, zjOut, dzOut;
+  double *ziOutP, *zjOutP, *dzOutP;
+  double *ziout, *zjout, *dzout;
+#endif
+#endif  
+#ifdef DIST
+  SEXP dOut;
+  double *dOutP;
+  double *dout;
+#endif
+
+#ifdef THRESH
+  double s, s2;
+  int *tout;
+  SEXP tOut;
+  int *tOutP;
+#endif
+  /* protect R objects from garbage collector */
+  PROTECT(xx     = AS_NUMERIC(xx));
+  PROTECT(yy     = AS_NUMERIC(yy));
+#ifdef ZCOORD
+  PROTECT(zz     = AS_NUMERIC(zz));
+#endif
+
+  PROTECT(rr     = AS_NUMERIC(rr));
+  PROTECT(nguess = AS_INTEGER(nguess));
+#ifdef THRESH
+  PROTECT(ss     = AS_NUMERIC(ss));
+#define NINPUTS (SPACEDIM + 3)
+#else
+#define NINPUTS (SPACEDIM + 2)
+#endif
+
+  /* Translate arguments from R to C */
+
+  x = NUMERIC_POINTER(xx);
+  y = NUMERIC_POINTER(yy);
+#ifdef ZCOORD
+  z = NUMERIC_POINTER(zz);
+#endif
+
+  n = LENGTH(xx);
+  rmax = *(NUMERIC_POINTER(rr));
+  noutmax = *(INTEGER_POINTER(nguess));
+  
+  r2max = rmax * rmax;
+
+  rmaxplus = rmax + rmax/16.0;
+
+#ifdef THRESH
+  s = *(NUMERIC_POINTER(ss));
+  s2 = s * s;
+#endif
+
+  nout = 0;   /* nout is the next available storage location 
+		 and also the current length of the list */ 
+
+  if(n > 0 && noutmax > 0) {
+    /* allocate space */
+    iout = (int *) R_alloc(noutmax, sizeof(int));
+    jout = (int *) R_alloc(noutmax, sizeof(int));
+#ifdef COORDS
+    xiout =  (double *) R_alloc(noutmax, sizeof(double));
+    yiout =  (double *) R_alloc(noutmax, sizeof(double));
+    xjout =  (double *) R_alloc(noutmax, sizeof(double));
+    yjout =  (double *) R_alloc(noutmax, sizeof(double));
+    dxout =  (double *) R_alloc(noutmax, sizeof(double));
+    dyout =  (double *) R_alloc(noutmax, sizeof(double));
+#ifdef ZCOORD
+    ziout =  (double *) R_alloc(noutmax, sizeof(double));
+    zjout =  (double *) R_alloc(noutmax, sizeof(double));
+    dzout =  (double *) R_alloc(noutmax, sizeof(double));
+#endif
+#endif
+#ifdef DIST
+    dout  =  (double *) R_alloc(noutmax, sizeof(double));
+#endif
+#ifdef THRESH
+    tout  =  (int *) R_alloc(noutmax, sizeof(int));
+#endif
+    
+    jleft = 0;
+
+    i = 0; maxchunk = 0;
+
+    while(i < n) {
+
+      R_CheckUserInterrupt();
+
+      maxchunk += 65536;
+      if(maxchunk > n) maxchunk = n;
+
+      for( ; i < maxchunk; i++) {
+
+	xi = x[i];
+	yi = y[i];
+#ifdef ZCOORD
+	zi = z[i];
+#endif
+
+	/* 
+	   adjust starting point jleft
+	*/
+	xleft = xi - rmaxplus;
+	while((x[jleft] < xleft) && (jleft+1 < n))
+	  ++jleft;
+
+	/* 
+	   process from j = jleft until dx > rmax + epsilon
+	*/
+	for(j=jleft; j < n; j++) {
+
+	  /* squared interpoint distance */
+	  dx = x[j] - xi;
+	  if(dx > rmaxplus)
+	    break;
+	  dx2 = dx * dx;
+	  dy = y[j] - yi;
+	  d2 = dx2 + dy * dy;
+#ifdef ZCOORD
+	    if(d2 <= r2max) {
+	      dz = z[j] - zi;
+	      d2 = d2 + dz * dz;
+#endif
+	      if(d2 <= r2max) {
+		/* add this (i, j) pair to output */
+		if(nout >= noutmax) {
+		  /* overflow; allocate more space */
+		  noutmaxold = noutmax;
+		  noutmax    = 2 * noutmax;
+		  iout  = intRealloc(iout,  noutmaxold, noutmax);
+		  jout  = intRealloc(jout,  noutmaxold, noutmax);
+#ifdef COORDS
+		  xiout = dblRealloc(xiout, noutmaxold, noutmax); 
+		  yiout = dblRealloc(yiout, noutmaxold, noutmax); 
+		  xjout = dblRealloc(xjout, noutmaxold, noutmax); 
+		  yjout = dblRealloc(yjout, noutmaxold, noutmax); 
+		  dxout = dblRealloc(dxout, noutmaxold, noutmax); 
+		  dyout = dblRealloc(dyout, noutmaxold, noutmax); 
+#ifdef ZCOORD
+		  ziout = dblRealloc(ziout, noutmaxold, noutmax); 
+		  zjout = dblRealloc(zjout, noutmaxold, noutmax); 
+		  dzout = dblRealloc(dzout, noutmaxold, noutmax); 
+#endif
+#endif
+#ifdef DIST
+		  dout  = dblRealloc(dout,  noutmaxold, noutmax); 
+#endif
+#ifdef THRESH
+		  tout  = intRealloc(tout,  noutmaxold, noutmax);
+#endif
+		}
+		iout[nout] = i + 1; /* R indexing */
+		jout[nout] = j + 1;
+#ifdef COORDS
+		xiout[nout] = xi;
+		yiout[nout] = yi;
+		xjout[nout] = x[j];
+		yjout[nout] = y[j];
+		dxout[nout] = dx;
+		dyout[nout] = dy;
+#ifdef ZCOORD
+		ziout[nout] = zi;
+		zjout[nout] = z[j];
+		dzout[nout] = dz;
+#endif
+#endif
+#ifdef DIST
+		dout[nout] = sqrt(d2);
+#endif
+#ifdef THRESH
+		tout[nout] = (d2 <= s2) ? 1 : 0;
+#endif
+		++nout;
+	      }
+#ifdef ZCOORD
+	    }
+#endif
+	}
+      }
+    }
+  }
+
+  /* return a list of vectors */
+  PROTECT(iOut  = NEW_INTEGER(nout));
+  PROTECT(jOut  = NEW_INTEGER(nout));
+#ifdef COORDS
+  PROTECT(xiOut = NEW_NUMERIC(nout));
+  PROTECT(yiOut = NEW_NUMERIC(nout));
+  PROTECT(xjOut = NEW_NUMERIC(nout));
+  PROTECT(yjOut = NEW_NUMERIC(nout));
+  PROTECT(dxOut = NEW_NUMERIC(nout));
+  PROTECT(dyOut = NEW_NUMERIC(nout));
+#ifdef ZCOORD
+  PROTECT(ziOut = NEW_NUMERIC(nout));
+  PROTECT(zjOut = NEW_NUMERIC(nout));
+  PROTECT(dzOut = NEW_NUMERIC(nout));
+#endif
+#endif
+#ifdef DIST
+  PROTECT(dOut  = NEW_NUMERIC(nout));
+#endif
+#ifdef THRESH
+  PROTECT(tOut = NEW_INTEGER(nout));
+#endif
+  if(nout > 0) {
+    iOutP  = INTEGER_POINTER(iOut);
+    jOutP  = INTEGER_POINTER(jOut);
+#ifdef COORDS
+    xiOutP = NUMERIC_POINTER(xiOut);
+    yiOutP = NUMERIC_POINTER(yiOut);
+    xjOutP = NUMERIC_POINTER(xjOut);
+    yjOutP = NUMERIC_POINTER(yjOut);
+    dxOutP = NUMERIC_POINTER(dxOut);
+    dyOutP = NUMERIC_POINTER(dyOut);
+#ifdef ZCOORD
+    ziOutP = NUMERIC_POINTER(ziOut);
+    zjOutP = NUMERIC_POINTER(zjOut);
+    dzOutP = NUMERIC_POINTER(dzOut);
+#endif
+#endif
+#ifdef DIST
+    dOutP  = NUMERIC_POINTER(dOut);
+#endif
+#ifdef THRESH
+    tOutP  = INTEGER_POINTER(tOut);
+#endif
+    for(m = 0; m < nout; m++) {
+      iOutP[m] = iout[m];
+      jOutP[m] = jout[m];
+#ifdef COORDS
+      xiOutP[m] = xiout[m];
+      yiOutP[m] = yiout[m];
+      xjOutP[m] = xjout[m];
+      yjOutP[m] = yjout[m];
+      dxOutP[m] = dxout[m];
+      dyOutP[m] = dyout[m];
+#ifdef ZCOORD
+      ziOutP[m] = ziout[m];
+      zjOutP[m] = zjout[m];
+      dzOutP[m] = dzout[m];
+#endif
+#endif
+#ifdef DIST
+      dOutP[m]  = dout[m];
+#endif
+#ifdef THRESH
+      tOutP[m]  = tout[m];
+#endif
+    }
+  }
+#define HEAD 2
+#ifdef THRESH
+#define NECK 1
+#else
+#define NECK 0
+#endif
+#ifdef COORDS
+#define MIDDLE (3*SPACEDIM)
+#else 
+#define MIDDLE 0
+#endif
+#ifdef DIST
+#define TAIL 1
+#else
+#define TAIL 0
+#endif
+
+  PROTECT(Out   = NEW_LIST(HEAD+NECK+MIDDLE+TAIL));
+
+  SET_VECTOR_ELT(Out, 0,  iOut);
+  SET_VECTOR_ELT(Out, 1,  jOut);
+
+#ifdef THRESH
+  SET_VECTOR_ELT(Out, HEAD,  tOut);
+#endif
+
+#ifdef COORDS
+#ifdef ZCOORD
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, ziOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, zjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+6, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+7, dyOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+8, dzOut);
+#else
+  SET_VECTOR_ELT(Out, HEAD+NECK,   xiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+1, yiOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+2, xjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+3, yjOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+4, dxOut);
+  SET_VECTOR_ELT(Out, HEAD+NECK+5, dyOut);
+#endif
+#endif
+#ifdef DIST
+  SET_VECTOR_ELT(Out, HEAD+NECK+MIDDLE, dOut);
+#endif
+
+  UNPROTECT(NINPUTS+1+HEAD+NECK+MIDDLE+TAIL);   /* 1 is for 'Out' itself */
+
+  return(Out);
+}
+
+#undef NINPUTS
+#undef HEAD
+#undef NECK
+#undef MIDDLE
+#undef TAIL
+
+#undef ALT_ALGO
+#undef ALT_PREFIX

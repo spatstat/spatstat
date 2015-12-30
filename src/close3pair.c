@@ -28,6 +28,9 @@ double sqrt();
 
 /* .......  define functions, using closefuns.h  ........*/
 
+/* return only one of the pairs (i,j) and (j,i) */
+#define SINGLE
+
 /* enable 3D code */
 #define ZCOORD
 

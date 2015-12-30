@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.114 $ $Date: 2015/11/17 03:46:51 $
+# $Revision: 1.115 $ $Date: 2015/12/30 08:13:52 $
 #
 
 kppm <- function(X, ...) {
@@ -850,7 +850,7 @@ improve.kppm <- local({
       Kmax <- 2*pi * integrate(function(r){r * (gfun(r) - 1)},
                                lower=0, upper=rmax)$value * exp(c(Z %*% beta0))
     ## the g()-1 matrix without tapering
-    if (!fast){
+    if (!fast || (vcov && !fast.vcov)){
       if (verbose)
         cat("computing the g(u_i,u_j)-1 matrix ...")
       gminus1 <- matrix(gfun(c(pairdist(U))) - 1, U$n, U$n)
