@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.001
+        CHANGES IN spatstat VERSION 1.44-1.002
 
 OVERVIEW
 
     o Performance improvements.
+
+    o Require a particular version of a package.
 
     o Bug fixes.
 
@@ -11,7 +13,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-    o None yet.
+    o requireversion
+    Require a particular version of a package
+    (for use in stand-alone R scripts).
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

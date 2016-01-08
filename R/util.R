@@ -1653,3 +1653,16 @@ fastFindInterval <- function(x, b, labels=FALSE, reltol=0.001) {
 
 variablesintext <- function(x) all.vars(as.expression(parse(text=x)))
 
+requireversion <- function(pkg, ver) {
+  pkgname <- deparse(substitute(pkg))
+  v <- read.dcf(file=system.file("DESCRIPTION", package=pkgname), 
+                fields="Version")
+  if(package_version(v) < ver)
+    stop(paste("Package",
+               sQuote(pkgname),
+               "is out of date: version >=",
+               ver,
+               "is needed"))
+  invisible(NULL)
+}
+
