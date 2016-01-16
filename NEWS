@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.002
+        CHANGES IN spatstat VERSION 1.44-1.003
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o closepairs.ppp, closepairs.pp3
     Performance improved (computation time and memory requirements reduced.)
     This should improve the performance of many functions in spatstat.
+
+    o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
+    Performance slightly improved, for Gibbs models.
 
 BUGS
 

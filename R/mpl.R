@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.192 $	$Date: 2015/10/16 07:21:42 $
+#	$Revision: 5.193 $	$Date: 2016/01/16 08:08:05 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2015/10/16 07:21:42 $")
+                        date="$Date: 2016/01/16 08:08:05 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1191,10 +1191,8 @@ deltasuffstat <- local({
       ## kill contributions from points outside the domain of pseudolikelihood
       ## (e.g. points in the border region)
       use <- if(dataonly) getppmdatasubset(model) else getglmsubset(model)
-      if(any(kill <- !use)) {
-        kill <- array(outer(kill, kill, "&"), dim=dim(v))
-        v[kill] <- 0
-      }
+      if(any(kill <- !use)) 
+        v[kill,kill,] <- 0
     }
 
     ## Output array: planes must correspond to model coefficients
