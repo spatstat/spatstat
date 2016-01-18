@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.003
+        CHANGES IN spatstat VERSION 1.44-1.004
 
 OVERVIEW
 
     o Performance improvements.
 
-    o Require a particular version of a package.
+    o Stipulate a particular version of a package.
 
     o Bug fixes.
 
@@ -30,6 +30,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Performance improved (computation time and memory requirements reduced.)
     This should improve the performance of many functions in spatstat.
 
+    o Geyer
+    The saturation parameter 'sat' can now be less than 1.
+
     o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
     Performance slightly improved, for Gibbs models.
 
@@ -42,6 +45,10 @@ BUGS
 
    o plot.profilepl
    Failed with a message about a missing object 'finite'.
+   Fixed.
+
+   o ppm
+   Ignored argument 'emend'.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.44-1

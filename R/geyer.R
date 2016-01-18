@@ -30,8 +30,8 @@ Geyer <- local({
                       sat <- self$par$sat
                       if(!is.numeric(r) || length(r) != 1 || r <= 0)
                        stop("interaction distance r must be a positive number")
-                      if(!is.numeric(sat) || length(sat) != 1 || sat < 1)
-                       stop("saturation parameter sat must be a number >= 1")
+                      if(!is.numeric(sat) || length(sat) != 1 || sat <= 0)
+                       stop("saturation parameter sat must be a positive number")
                     },
          update = NULL, # default OK
          print = NULL,    # default OK
@@ -232,7 +232,7 @@ geyerdelta2 <- local({
   geyerdelta2 <- function(X, r, sat) {
     # Sufficient statistic for second order conditional intensity
     # Geyer model
-    stopifnot(is.numeric(sat) && length(sat) == 1 && sat >= 0)
+    stopifnot(is.numeric(sat) && length(sat) == 1 && sat > 0)
     # X could be a ppp or quad.
     if(is.ppp(X)) {
       # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j

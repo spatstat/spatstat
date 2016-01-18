@@ -364,6 +364,13 @@ local({
   b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
   if(!all(a==b))
     stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat is not an integer")
+# and again for sat < 1
+# (spotted by Rolf)  
+  G <- Geyer(0.11, 0.5)
+  a <- pairsat.family$eval(X,U,EP,G$pot,G$par,"border")
+  b <-          G$fasteval(X,U,EP,G$pot,G$par,"border")
+  if(!all(a==b))
+    stop("Results of Geyer()$fasteval and pairsat.family$eval do not match when sat < 1")
 })
 
 #

@@ -206,8 +206,8 @@ function(Q,
     fitLOGI$call <- cl
     fitLOGI$callstring <- callstring
     fitLOGI$callframe <- parent.frame()
-    if(project && !valid.ppm(fitLOGI))
-      fitLOGI <- project.ppm(fitLOGI)
+    if(emend && !valid.ppm(fitLOGI))
+      fitLOGI <- emend.ppm(fitLOGI)
     return(fitLOGI)
   }
   
@@ -237,8 +237,8 @@ function(Q,
   fitMPL$callstring <- callstring
   fitMPL$callframe <- parent.frame()
 
-  if(project && !valid.ppm(fitMPL))
-    fitMPL <- project.ppm(fitMPL)
+  if(emend && !valid.ppm(fitMPL))
+    fitMPL <- emend.ppm(fitMPL)
   
   if(method == "mpl" || is.poisson.ppm(fitMPL))
     return(fitMPL)
@@ -249,8 +249,8 @@ function(Q,
   if(is.null(fitHO))
     return(fitMPL)
   
-  if(project && !valid.ppm(fitHO))
-    fitHO <- project.ppm(fitHO)
+  if(emend && !valid.ppm(fitHO))
+    fitHO <- emend.ppm(fitHO)
   
   return(fitHO)
 }
