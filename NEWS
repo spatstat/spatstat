@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.004
+        CHANGES IN spatstat VERSION 1.44-1.005
 
 OVERVIEW
 
@@ -46,6 +46,16 @@ BUGS
    o plot.profilepl
    Failed with a message about a missing object 'finite'.
    Fixed.
+
+   o suffstat
+   Gave an error for point process models with Geyer interaction.
+   Fixed.
+
+   o ppm
+   Parameter estimates were slightly inaccurate 
+   when the model included the Geyer() interaction 
+   and the "isotropic" edge correction was used.
+   Fixed. 
 
    o ppm
    Ignored argument 'emend'.

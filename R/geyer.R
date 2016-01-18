@@ -30,7 +30,7 @@ Geyer <- local({
                       sat <- self$par$sat
                       if(!is.numeric(r) || length(r) != 1 || r <= 0)
                        stop("interaction distance r must be a positive number")
-                      if(!is.numeric(sat) || length(sat) != 1 || sat <= 0)
+                      if(!is.numeric(sat) || length(sat) != 1 || sat < 0)
                        stop("saturation parameter sat must be a positive number")
                     },
          update = NULL, # default OK

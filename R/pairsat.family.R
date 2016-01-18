@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.42 $	$Date: 2013/09/26 03:47:38 $
+#    $Revision: 1.43 $	$Date: 2016/01/18 09:49:41 $
 #
 #    The saturated pairwise interaction family of point process models
 #
@@ -150,7 +150,7 @@ saturate2 <- array(saturate[slice.index(V, 2)], dim=dim(V))
 saturate3 <- array(saturate[slice.index(POT, 3)], dim=dim(POT))
 #
 # (a) compute SATURATED potential sums
-V.sat <- pmin.int(V, saturate2)
+V.sat <- pmin(V, saturate2)
 
 if(halfway)
   return(V.sat)
@@ -173,9 +173,16 @@ col.is.data <- array(is.data[slice.index(POT, 2)], dim=dim(POT))
 # compute value of unsaturated potential sum for each data point i
 # obtained after addition/deletion of each dummy/data point j
 
-V.after <- V.dat.rep + ifelseNegPos(col.is.data, POT)
-#            The call to ifelseNegPos() is equivalent to
-#                     ifelse(col.is.data, -POT, POT)
+if(!(correction %in% c("isotropic", "Ripley"))) {
+  dV <- ifelseNegPos(col.is.data, POT)
+  ##     equivalent to  ifelse(col.is.data, -POT, POT)
+} else {
+  ## Weighted potential is not exactly symmetric
+  dV <- POT
+  dV[col.is.data] <- - aperm(POT[ , is.data, , drop=FALSE], c(2,1,3))
+}
+V.after <- V.dat.rep + dV
+   
 #
 #
 # (c) difference of SATURATED potential sums for each data point i
