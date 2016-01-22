@@ -77,18 +77,9 @@ of a designed experiment involving
 control and treatment groups, covariates such as temperature,
 and even spatial covariates (such as image data). 
 
-This document describes the capabilities available in the \spst\ package
+This document describes some capabilities available in the \spst\ package
 for analysing such data. 
-{\bf These capabilities are still under development
-  and will be extended soon.}
-
-Our aim is to fit a model to the data which explains 
-the influence of experimental conditions on the point patterns.
-The paper \cite{statpaper} outlines a method for fitting such models
-using maximum product pseudolikelihood.
-This has been implemented in \spst.
-This document is an explanation with examples
-on how to use the code.
+\textbf{For further detail, see Chapter 16 of the spatstat book \cite{TheBook}.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1466,6 +1457,11 @@ A. Baddeley, J. M{\o}ller, and A.G. Pakes.
 \newblock Properties of residuals for spatial point processes.
 \newblock {\em Annals of the Institute of Statistical Mathematics},
   60:627--649, 2008.
+
+\bibitem{TheBook}
+A. Baddeley, E. Rubak, and R. Turner.
+\newblock {\em Spatial Point Patterns: Methodology and Applications with R}.
+\newblock Chapman \& Hall/CRC Press, 2015.
 
 \bibitem{statpaper}
 A. Baddeley, I. Sintorn, L. Bischof, R. Turner, and S. Heggarty.

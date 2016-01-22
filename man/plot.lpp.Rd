@@ -10,7 +10,7 @@
 \usage{
 \method{plot}{lpp}(x, \dots, main, add = FALSE,
                    use.marks=TRUE, which.marks=NULL,
-                   show.all = !add, show.window=FALSE,
+                   show.all = !add, show.window=FALSE, show.network=TRUE, 
                    do.plot = TRUE, multiplot=TRUE) 
 }
 \arguments{
@@ -55,6 +55,9 @@
     Logical value indicating whether to plot the
     window containing the network. Overrides \code{show.all}.
   }
+  \item{show.network}{
+    Logical value indicating whether to plot the network.
+  }
   \item{do.plot}{
     Logical value determining whether to actually perform the plotting.
   }
@@ -76,6 +79,9 @@
     \item \code{legend} and \code{leg.side} to control the graphics
     legend
   }
+
+  Note that the linear network will be plotted
+  even when \code{add=TRUE}, unless \code{show.network=FALSE}.
 }
 \value{
   (Invisible) object of class \code{"symbolmap"}

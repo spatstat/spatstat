@@ -10,7 +10,7 @@ which can then be fitted to point pattern data.
 }
 \arguments{
   \item{r}{Interaction radius. A positive real number.}
-  \item{sat}{Saturation threshold. A positive real number.}
+  \item{sat}{Saturation threshold. A non-negative real number.}
 }
 \value{
   An object of class \code{"interact"}
@@ -24,7 +24,8 @@ which can then be fitted to point pattern data.
   in which the total contribution
   to the potential  from each point (from its pairwise interaction with all 
   other points) is trimmed to a maximum value \eqn{s}. 
-  This model is implemented in the function \code{\link{Geyer}()}.
+  The interaction structure of this
+  model is implemented in the function \code{\link{Geyer}()}.
 
   The saturation point process with interaction radius \eqn{r},
   saturation threshold \eqn{s}, and 
@@ -83,6 +84,17 @@ which can then be fitted to point pattern data.
   are estimated by \code{\link{ppm}()}, not fixed in
   \code{Geyer()}. 
 }
+\section{Zero saturation}{
+  The value \code{sat=0} is permitted by \code{Geyer},
+  but this is not very useful.
+  For technical reasons, when \code{\link{ppm}} fits a
+  Geyer model with \code{sat=0}, the default behaviour is to return
+  an \dQuote{invalid} fitted model in which the estimate of
+  \eqn{\gamma}{gamma} is \code{NA}.  In order to get a Poisson
+  process model returned when \code{sat=0},
+  you would need to set \code{emend=TRUE} in
+  the call to \code{\link{ppm}}. 
+}
 \seealso{
   \code{\link{ppm}},
   \code{\link{pairwise.family}},
@@ -102,15 +114,11 @@ Pages 79--140.
 }
 
 \examples{
-   data(cells) 
    ppm(cells, ~1, Geyer(r=0.07, sat=2))
    # fit the stationary saturation process to `cells'
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
   and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
 }
 \keyword{spatial}
 \keyword{models}

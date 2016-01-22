@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.005
+        CHANGES IN spatstat VERSION 1.44-1.006
 
 OVERVIEW
 
@@ -32,6 +32,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Geyer
     The saturation parameter 'sat' can now be less than 1.
+
+    o plot.lpp
+    New argument 'show.network'
 
     o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
     Performance slightly improved, for Gibbs models.
