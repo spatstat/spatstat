@@ -1732,6 +1732,7 @@
   Robin Corria Ainslie,
   Marcelino de la Cruz,
   Peter Dalgaard,
+  Mario D'Antuono,
   Sourav Das,
   Peter Diggle,
   Patrick Donnelly,

@@ -33,8 +33,19 @@
 }
 \details{
   This function creates an object of class \code{"im"} representing
-  a two-dimensional pixel image. See \code{\link{im.object}}
-  for details of this class.
+  a \sQuote{pixel image} or two-dimensional array of values.
+
+  The pixel grid is rectangular and occupies a rectangular window
+  in the spatial coordinate system. 
+  The pixel values are \emph{scalars}: they can be real numbers, integers, 
+  complex numbers, single characters or strings, 
+  logical values, or categorical values. A pixel's
+  value can also be \code{NA}, meaning that no value is defined
+  at that location, and effectively that pixel is \sQuote{outside} the window. 
+  Although the pixel values must be scalar,
+  photographic colour images (i.e., with red, green, and blue brightness
+  channels) can be represented as character-valued images in \pkg{spatstat},
+  using \R's standard encoding of colours as character strings.
 
   The matrix \code{mat} contains the \sQuote{greyscale} values
   for a rectangular grid of pixels.
@@ -84,11 +95,13 @@
   functions or windows), use \code{\link{as.im}}.
 }
 \seealso{
-  \code{\link{im.object}},
-  \code{\link{as.im}},
+  \code{\link{im.object}} for details of the class.
+  
+  \code{\link{as.im}} for converting other kinds of data to an image.
+  
   \code{\link{as.matrix.im}},
   \code{\link{[.im}},
-  \code{\link{eval.im}}
+  \code{\link{eval.im}} for manipulating images.
 }
 \section{Warnings}{
   The internal representation of images is likely to change in future

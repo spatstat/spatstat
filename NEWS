@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.006
+        CHANGES IN spatstat VERSION 1.44-1.007
 
 OVERVIEW
+
+    o We thank Mario D'Antuono for contributions.
 
     o Performance improvements.
 

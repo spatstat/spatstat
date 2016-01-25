@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.006
+Version: 1.44-1.007
 Nickname: Happy Whatever
-Date: 2016-01-22
+Date: 2016-01-25
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -42,6 +42,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	R. Corria Ainslie;
 	M. de la Cruz; 
 	P. Dalgaard; 
+	M. D'Antuono;
         S. Das;
 	P.J. Diggle; 
 	P. Donnelly;
