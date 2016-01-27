@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.23 $  $Date: 2015/10/21 09:06:57 $
+##   $Revision: 1.25 $  $Date: 2016/01/27 01:41:41 $
 ##
 
 symbolmap <- local({
@@ -11,7 +11,11 @@ symbolmap <- local({
                       "col", "cols", "fg", "bg",
                       "lty", "lwd", "border", "fill",
                       "etch")
-  
+
+  trycolourmap <- function(...) {
+    try(colourmap(...), silent=TRUE)
+  }
+
   symbolmap <- function(..., range=NULL, inputs=NULL) {
     if(!is.null(range) && !is.null(inputs))
       stop("Arguments range and inputs are incompatible")
@@ -42,6 +46,22 @@ symbolmap <- local({
                                         reptolength,
                                         n=length(inputs))
           bad[repairable] <- FALSE
+        }
+        if(type == "continuous") {
+          ## look for vectors of colour values
+          iscol <- bad & sapply(parlist, is.colour) &
+            (names(parlist) %in% c("cols", "col", "fg", "bg"))
+          ## convert colour values to colour map
+          if(any(iscol)) {
+            cmap <- lapply(parlist[iscol], trycolourmap, range=range)
+            success <- sapply(cmap, inherits, what="colourmap")
+            iscol[iscol] <- success
+            if(any(iscol)) {
+              parlist[iscol] <- cmap[success]
+              bad[iscol] <- FALSE
+              functions[iscol] <- TRUE
+            }
+          }
         }
         nbad <- sum(bad)
         if(nbad > 0) 

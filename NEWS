@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.007
+        CHANGES IN spatstat VERSION 1.44-1.008
 
 OVERVIEW
 
     o We thank Mario D'Antuono for contributions.
 
     o Performance improvements.
+
+    o Colour maps for point patterns with continuous marks are easier to define.
 
     o Stipulate a particular version of a package.
 
@@ -20,6 +22,16 @@ NEW FUNCTIONS
     (for use in stand-alone R scripts).
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.ppp, plot.lpp
+    For a point pattern with continuous marks ('real numbers')
+    the colour arguments 'cols', 'fg', 'bg' can now be vectors of 
+    colour values, and will be used to determine the default colour map
+    for the marks.
+
+    o symbolmap
+    Now accepts a vector of colour values for the arguments 'col', 'cols',
+    'fg', 'bg' if argument 'range' is given.
 
     o closepairs.ppp, closepairs.pp3
     New arguments 'distinct' and 'neat' allow more options.
@@ -61,6 +73,10 @@ BUGS
    when the model included the Geyer() interaction 
    and the "isotropic" edge correction was used.
    Fixed. 
+
+   o plot.ppp, plot.lpp
+   Arguments 'chars' and 'cols' were ignored in some cases.
+   Fixed.
 
    o ppm
    Ignored argument 'emend'.

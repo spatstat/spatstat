@@ -87,6 +87,9 @@ symbolmap(\dots, range = NULL, inputs = NULL)
     \item{cex}{
       Graphics character expansion factor.
     }
+    \item{cols}{
+      Colour of plotting characters.
+    }
     \item{fg,bg}{
       Colour of foreground (or symbol border) and background
       (or symbol interior).
@@ -101,16 +104,17 @@ symbolmap(\dots, range = NULL, inputs = NULL)
       Default is \code{FALSE}.
     }
   }
+  A vector of colour values is also acceptable for the arguments
+  \code{col,cols,fg,bg} if
+  \code{range} is specified.
 }
 \value{
   An object of class \code{"symbolmap"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}.
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{plot.symbolmap}} to plot the symbol map itself.
@@ -129,8 +133,9 @@ symbolmap(\dots, range = NULL, inputs = NULL)
                     size=function(x) sqrt(ifelse(x > 0, x/pi, -x)),
                     bg = function(x) ifelse(abs(x) < 1, "red", "black"))
 
-  colmap <- colourmap(terrain.colors(20), range=c(0,10))
-  g3 <- symbolmap(pch=21, fg=colmap, range=c(0,10))
+  colmap <- colourmap(topo.colors(20), range=c(0,10))
+  g3 <- symbolmap(pch=21, bg=colmap, range=c(0,10))
+  plot(g3)
 }
 \keyword{spatial}
 \keyword{hplot}

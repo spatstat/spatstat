@@ -224,18 +224,22 @@
   all points.
   
   The argument \code{cols} determines the colour or colours used to
-  display the points. For an unmarked point pattern, or a
-  marked point pattern with continuous marks, this should be a character string
+  display the points. For an unmarked point pattern,
+  \code{cols} should be a character string
   determining a colour. For a multitype point pattern, \code{cols}
   should be a character vector, of the same length
-  as \code{levels(x$marks)}. The \eqn{i}th level or type will
-  be plotted using colour \code{cols[i]}.
+  as \code{levels(marks(x))}: that is, there is one colour for each
+  possible mark value. The \eqn{i}th level or type will
+  be plotted using colour \code{cols[i]}. For a point pattern with
+  continuous marks, \code{cols} can be either a character string
+  or a character vector specifying colour values: the range of mark
+  values will be mapped to the specified colours.
 
-  If \code{cols} is absent, the colour used to plot \emph{all} the
+  If \code{cols} is absent, the colours used to plot the
   points may be determined by the extra argument \code{fg}
   (for multitype point patterns) or the extra argument \code{col}
-  (for all other cases). Note that \code{col} will also reset the
-  colour of the window.
+  (for all other cases). Note that specifying \code{col} will also
+  apply this colour to the window itself.
 
   The default colour for the points is a semi-transparent grey,
   if this is supported by the plot device. This behaviour can be
@@ -358,13 +362,14 @@
    sy <- symbolmap(pch=21, bg=colmap, range=ra)
    plot(longleaf, symap=sy)
 
+   ## or more compactly..
+   plot(longleaf, bg=terrain.colors(20), pch=21, cex=1)
 }
 
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{hplot}

@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.82 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 1.83 $	$Date: 2016/01/25 09:29:26 $
 #
 #
 #--------------------------------------------------------------------------
@@ -123,7 +123,7 @@ plot.ppp <- local({
                                     list(...),
                                     shapedefault,
                                     sizedefault,
-                                    chars=chars, cols=cols))
+                                    list(chars=chars, cols=cols)))
       return(g)
     }
     ##  ...........  non-numeric marks .........................
