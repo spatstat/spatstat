@@ -1,31 +1,40 @@
 #
 # lpp.R
 #
-#  $Revision: 1.40 $   $Date: 2016/01/22 04:39:23 $
+#  $Revision: 1.41 $   $Date: 2016/01/30 08:35:45 $
 #
 # Class "lpp" of point patterns on linear networks
 
 lpp <- function(X, L, ...) {
   stopifnot(inherits(L, "linnet"))
   localnames <- c("seg", "tp")
+  spatialnames <- c("x", "y")
+  allcoordnames <- c(spatialnames, localnames)
   if(is.matrix(X)) X <- as.data.frame(X)
-  if(checkfields(X, c("x", "y", localnames))) {
-    # includes spatial and local coordinates
+  if(checkfields(X, localnames)) {
+    # X includes at least local coordinates
     X <- as.data.frame(X)
-    # local coords
-    lo <- X[ , localnames, drop=FALSE]
-    # spatial coords and marks
-    df <- X[, !(names(X) %in% localnames), drop=FALSE]
-    # validate local coordinates
+    #' validate local coordinates
     if(nrow(X) > 0) {
       nedge <- nsegments(L)
-      if(with(lo, any(seg < 1 || seg > nedge)))
+      if(with(X, any(seg < 1 || seg > nedge)))
         stop("Segment index coordinate 'seg' exceeds bounds")
-      if(with(lo, any(tp < 0 || tp > 1)))
+      if(with(X, any(tp < 0 || tp > 1)))
         stop("Local coordinate 'tp' outside [0,1]")
     }
+    if(!checkfields(X, spatialnames)) {
+      #' data give local coordinates only
+      #' reconstruct x,y coordinates from local coordinates
+      Y <- local2lpp(L, X$seg, X$tp, df.only=TRUE)
+      X[,spatialnames] <- Y[,spatialnames,drop=FALSE]
+    }
+    #' local coordinates
+    lo <- X[ , localnames, drop=FALSE]
+    #' spatial coords and marks
+    marknames <- setdiff(names(X), allcoordnames)
+    df <- X[, c(spatialnames, marknames), drop=FALSE]
   } else {
-    # local coordinates must be computed
+    # local coordinates must be computed from spatial coordinates
     if(!is.ppp(X))
       X <- as.ppp(X, W=L$window, ...)
     # project to segment
@@ -242,9 +251,9 @@ is.multitype.lpp <- function(X, na.action="warn", ...) {
   return(TRUE)
 }
 
-as.lpp <- function(x, y=NULL, seg=NULL, tp=NULL, ...,
+as.lpp <- function(x=NULL, y=NULL, seg=NULL, tp=NULL, ...,
                    marks=NULL, L=NULL, check=FALSE, sparse) {
-  nomore <- is.null(y) && is.null(seg) && is.null(tp) 
+  nomore <- is.null(y) && is.null(seg) && is.null(tp)
   if(inherits(x, "lpp") && nomore) {
     X <- x
     if(!missing(sparse) && !is.null(sparse))
@@ -256,6 +265,8 @@ as.lpp <- function(x, y=NULL, seg=NULL, tp=NULL, ...,
       L <- as.linnet(L, sparse=sparse)
     if(is.ppp(x) && nomore) {
       X <- lpp(x, L)
+    } else if(is.null(x) && is.null(y) && !is.null(seg) && !is.null(tp)){
+      X <- lpp(data.frame(seg=seg, tp=tp), L=L)
     } else {
       xy <- xy.coords(x,y)[c("x", "y")]
       if(!is.null(seg) && !is.null(tp)) {
@@ -331,7 +342,7 @@ nsegments.lpp <- function(x) {
   return(x$domain$lines$n)
 }
 
-local2lpp <- function(L, seg, tp, X=NULL) {
+local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
   stopifnot(inherits(L, "linnet"))
   if(is.null(X)) {
     # map to (x,y)
@@ -346,6 +357,7 @@ local2lpp <- function(L, seg, tp, X=NULL) {
   }
   # compile into data frame
   data <- data.frame(x=x, y=y, seg=seg, tp=tp)
+  if(df.only) return(data)
   ctype <- c("s", "s", "l", "l")
   out <- ppx(data=data, domain=L, coord.type=ctype)
   class(out) <- c("lpp", class(out))

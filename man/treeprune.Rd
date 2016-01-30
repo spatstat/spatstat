@@ -34,16 +34,17 @@ treeprune(X, root = 1, level = 0)
   Object of the same kind as \code{X}.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-
-
-Rolf Turner \email{r.turner@auckland.ac.nz}
-
-and Ege Rubak \email{rubak@math.aau.dk}
-
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \seealso{
-  \code{\link{linnet}}
+  \code{\link{treebranchlabels}} for calculating the branch labels.
+  
+  \code{\link{deletebranch}} for removing entire branches.
+  \code{\link{extractbranch}} for extracting entire branches.
+
+  \code{\link{linnet}} for creating networks.
 }
 \examples{
   example(treebranchlabels)

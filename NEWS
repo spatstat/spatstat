@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.008
+        CHANGES IN spatstat VERSION 1.44-1.009
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     o Performance improvements.
 
     o Colour maps for point patterns with continuous marks are easier to define.
+
+    o Surgery with linear networks.
 
     o Stipulate a particular version of a package.
 
@@ -20,6 +22,9 @@ NEW FUNCTIONS
     o requireversion
     Require a particular version of a package
     (for use in stand-alone R scripts).
+
+    o insertVertices
+    Insert new vertices in a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -46,6 +51,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Geyer
     The saturation parameter 'sat' can now be less than 1.
+
+    o lpp, as.lpp
+    These functions now handle the case where 'seg' and 'tp' are given
+    but 'x' and 'y' are missing.
 
     o plot.lpp
     New argument 'show.network'

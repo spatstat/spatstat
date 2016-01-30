@@ -8,7 +8,7 @@
   Convert various kinds of data to a point pattern on a linear network.
 }
 \usage{
-  as.lpp(x, y=NULL, seg=NULL, tp=NULL, \dots,
+  as.lpp(x=NULL, y=NULL, seg=NULL, tp=NULL, \dots,
          marks=NULL, L=NULL, check=FALSE, sparse)
 }
 \arguments{
@@ -63,6 +63,9 @@
     network \code{L}, at a fractional position \code{tp[i]} along that
     segment (with \code{tp=0} representing one endpoint and
     \code{tp=1} the other endpoint of the segment).
+    \item
+    \code{x,y} are missing and \code{seg,tp} are vectors of equal length
+    as described above.
     \item
     \code{seg,tp} are \code{NULL}, and \code{x,y} are data in a format
     acceptable to \code{\link[grDevices]{xy.coords}} specifying the

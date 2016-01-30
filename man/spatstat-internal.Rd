@@ -1135,7 +1135,7 @@ listof(\dots)
 localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
-local2lpp(L, seg, tp, X)
+local2lpp(L, seg, tp, X, df.only)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, correction, rbord, covfunargs, allcovar, 

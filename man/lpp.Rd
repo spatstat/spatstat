@@ -37,7 +37,7 @@ lpp(X, L, \dots)
     the first two columns of \code{X} will be interpreted
     as spatial coordinates, and any remaining columns as marks.
     \item 
-    The exception occurs if \code{X} is a data frame with columns named
+    An exception occurs if \code{X} is a data frame with columns named
     \code{x}, \code{y}, \code{seg} and \code{tp}. Then
     \code{x} and \code{y} will be interpreted as spatial
     coordinates, and \code{seg} and \code{tp} as local
@@ -45,6 +45,13 @@ lpp(X, L, \dots)
     \code{L} the point lies on, and \code{tp} indicating how far along
     the segment the point lies (normalised to 1). Any remaining columns
     will be interpreted as marks.
+    \item 
+    Another exception occurs if \code{X} is a data frame with columns named
+    \code{seg} and \code{tp}. Then
+    \code{seg} and \code{tp} will be interpreted as local
+    coordinates, as above, and the spatial coordinates
+    \code{x,y} will be computed from them.
+    Any remaining columns will be interpreted as marks.
   }
 }
 \section{Note on changed format}{
