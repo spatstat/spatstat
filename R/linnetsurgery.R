@@ -3,13 +3,15 @@
 #'
 #' Surgery on linear networks
 #'
-#' $Revision: 1.1 $  $Date: 2016/01/30 08:49:00 $
+#' $Revision: 1.2 $  $Date: 2016/01/30 10:26:00 $
 #'
 
 insertVertices <- function(L, ...) {
   L <- as.linnet(L)
   argh <- list(...)
   X <- as.lpp(..., L=L)
+  if(!identical(as.linnet(L, sparse=TRUE), as.linnet(X, sparse=TRUE)))
+    stop("Point data must be on the same network as L")
   if(npoints(X) == 0) {
     attr(L, "id") <- integer(0)
     return(L)

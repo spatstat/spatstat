@@ -63,7 +63,7 @@ insertVertices(L, \dots)
    plot(vertices(L)[id], add=TRUE, pch=16)
 
    # add new vertices at three randomly-generated points
-   X <- runiflpp(3, L)
+   X <- runiflpp(3, simplenet)
    LL <- insertVertices(simplenet, X)
    plot(LL, main="")
    plot(vertices(LL), add=TRUE)
