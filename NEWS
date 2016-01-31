@@ -1,15 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.010
+        CHANGES IN spatstat VERSION 1.44-1.011
 
 OVERVIEW
 
-    o We thank Mario D'Antuono for contributions.
+    o We thank Mario D'Antuono and Suman Rakshit for contributions.
 
-    o Performance improvements.
+    o Surgery with linear networks.
 
     o Colour maps for point patterns with continuous marks are easier to define.
 
-    o Surgery with linear networks.
+    o Performance improvements.
 
     o Stipulate a particular version of a package.
 
@@ -28,6 +28,11 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o [.linnet, [.lpp
+    New argument 'snip' determines what to do with segments of the network
+    that cross the boundary of the window. 
+    Default behaviour has changed.
+    
     o plot.ppp, plot.lpp
     For a point pattern with continuous marks ('real numbers')
     the colour arguments 'cols', 'fg', 'bg' can now be vectors of 
@@ -56,6 +61,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These functions now handle the case where 'seg' and 'tp' are given
     but 'x' and 'y' are missing.
 
+    o linnet
+    If the argument 'edges' is given, then this argument now determines the
+    ordering of the sequence of line segments. For example, the i-th row
+    of 'edges' specifies the i-th line segment in as.psp(L).
+
     o plot.lpp
     New argument 'show.network'
 
@@ -83,6 +93,10 @@ BUGS
    and the "isotropic" edge correction was used.
    Fixed. 
 
+   o [.ppx
+   Crashed if the number of points selected was less than 2.
+   Fixed.
+
    o plot.ppp, plot.lpp
    Arguments 'chars' and 'cols' were ignored in some cases.
    Fixed.
@@ -90,6 +104,7 @@ BUGS
    o ppm
    Ignored argument 'emend'.
    Fixed.
+
 
         CHANGES IN spatstat VERSION 1.44-1
 

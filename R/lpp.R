@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.41 $   $Date: 2016/01/30 08:35:45 $
+#  $Revision: 1.42 $   $Date: 2016/01/31 08:16:56 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -368,11 +368,11 @@ local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
 # subset extractor
 ####################################################
 
-"[.lpp" <- function (x, i, j, drop=FALSE, ...) {
+"[.lpp" <- function (x, i, j, drop=FALSE, ..., snip=TRUE) {
   if(!missing(i) && !is.null(i)) {
     if(is.owin(i)) {
       # spatial domain: call code for 'j'
-      xi <- x[,i]
+      xi <- x[,i,snip=snip]
     } else {
       # usual row-type index
       da <- x$data
@@ -388,10 +388,18 @@ local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
     return(x)
   stopifnot(is.owin(j))
   W <- j
+  if(snip) {
+    ## Cut segments as they cross boundary of 'W'
+    b <- crossing.psp(as.psp(as.linnet(x)), edges(W))
+    x <- insertVertices(x, b)
+    boundarypoints <- attr(x, "id")
+  }
   L <- x$domain
   da <- x$data
-  # Find vertices that lie inside 'j'
+  # Find vertices that lie inside 'W'
   okvert <- inside.owin(L$vertices, w=W)
+  if(snip)
+    okvert[boundarypoints] <- TRUE
   # find segments whose endpoints both lie in 'upper'
   okedge <- okvert[L$from] & okvert[L$to]
   # assign new serial numbers to vertices, and recode 

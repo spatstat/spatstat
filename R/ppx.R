@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.52 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.53 $  $Date: 2016/01/31 06:50:16 $
 #
 
 ppx <- local({
@@ -211,7 +211,7 @@ coords.ppx <- function(x, ..., spatial=TRUE, temporal=TRUE, local=TRUE) {
   chosen <- (ctype == "spatial" & spatial) |
             (ctype == "temporal" & temporal) | 
             (ctype == "local" & local) 
-  as.data.frame(x$data[, chosen])
+  as.data.frame(x$data[, chosen, drop=FALSE])
 }
 
 coords.ppp <- function(x, ...) { data.frame(x=x$x,y=x$y) }

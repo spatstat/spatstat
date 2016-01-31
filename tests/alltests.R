@@ -679,7 +679,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.4 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.5 $  $Date: 2016/01/31 07:28:58 $
 
 
 require(spatstat)
@@ -752,8 +752,23 @@ local({
     stop("nndist.lpp disagrees with nncross.lpp(iX, iY)")
   if(max(abs(d2-d3)) > eps)
     stop("Different results for nncross.lpp(iX, iY, 'dist') using R and C")
-  
+
   spatstat.options(op)
+
+  ## Test linnet surgery code
+  set.seed(42)
+  X <- runiflpp(30, simplenet)
+  V <- runiflpp(30, simplenet)
+  A <- insertVertices(X, V)
+  projA <- project2segment(as.ppp(A), as.psp(as.linnet(A)))
+  seg.claimed <- coords(A)$seg
+  seg.mapped  <- projA$mapXY
+  if(any(seg.claimed != seg.mapped))
+    stop("Incorrect segment id calculated by insertVertices")
+  tp.claimed <- coords(A)$tp
+  tp.mapped  <- projA$tp
+  if(max(abs(tp.claimed - tp.mapped) > 0.01))
+    stop("Incorrect 'tp' coordinate calculated by insertVertices")
 })
 
 ##

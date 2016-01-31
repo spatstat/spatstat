@@ -50,6 +50,10 @@ linnet(vertices, m, edges, sparse=FALSE)
   and the network adjacency matrix \code{m} will be stored as a
   sparse matrix. This saves a lot of time and memory when creating the
   linear network.
+
+  If the argument \code{edges} is given, then it will also determine
+  the \emph{ordering} of the line segments when they are stored or extracted.
+  For example, \code{edges[i,]} corresponds to \code{as.psp(L)[i]}.
 }
 \value{
   Object of class \code{"linnet"} representing the linear network.

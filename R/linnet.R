@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.39 $    $Date: 2015/11/25 02:53:58 $
+#    $Revision: 1.42 $    $Date: 2016/01/31 07:24:12 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -52,6 +52,11 @@ linnet <- function(vertices, m, edges, sparse=FALSE) {
       diag(m) <- FALSE
     }
     sparse <- !is.matrix(m)
+    ## determine 'from' and 'to' vectors
+    ij <- which(m, arr.ind=TRUE)
+    ij <- ij[ ij[,1] < ij[,2], , drop=FALSE]
+    from <- ij[,1]
+    to   <- ij[,2]
   } else {
     # check (from, to) pairs
     stopifnot(is.matrix(edges) && ncol(edges) == 2)
@@ -64,19 +69,17 @@ linnet <- function(vertices, m, edges, sparse=FALSE) {
     np <- npoints(vertices)
     if(any(edges > np))
       stop("index out-of-bounds in edges list")
+    from <- edges[,1]
+    to   <- edges[,2]
     # convert to adjacency matrix
     if(!sparse) {
       m <- matrix(FALSE, np, np)
       m[edges] <- TRUE
     } else 
-      m <- sparseMatrix(i=edges[,1], j=edges[,2], x=TRUE, dims=c(np, np))
+      m <- sparseMatrix(i=from, j=to, x=TRUE, dims=c(np, np))
     m <- m | t(m)
   }
   # create line segments
-  ij <- which(m, arr.ind=TRUE)
-  ij <- ij[ ij[,1] < ij[,2], , drop=FALSE]
-  from <- ij[,1]
-  to   <- ij[,2]
   xx   <- vertices$x
   yy   <- vertices$y
   lines <- psp(xx[from], yy[from], xx[to], yy[to], window=vertices$window,
@@ -422,11 +425,20 @@ rescale.linnet <- function(X, s, unitname) {
   return(Y)
 }
 
-"[.linnet" <- function(x, i, ...) {
+"[.linnet" <- function(x, i, ..., snip=TRUE) {
   if(!is.owin(i))
     stop("In [.linnet: the index i should be a window", call.=FALSE)
-  # Find vertices that lie inside 'i'
-  okvert <- inside.owin(x$vertices, w=i)
+  w <- i
+  if(snip) {
+    ## Cut segments as they cross boundary of 'i'
+    b <- crossing.psp(as.psp(x), edges(w))
+    x <- insertVertices(x, b)
+    boundarypoints <- attr(x, "id")
+  }
+  # Find vertices that lie inside window
+  okvert <- inside.owin(x$vertices, w=w)
+  if(snip)
+    okvert[boundarypoints] <- TRUE
   # find segments whose endpoints both lie in 'i'
   okedge <- okvert[x$from] & okvert[x$to]
   # assign new serial numbers to vertices, and recode 

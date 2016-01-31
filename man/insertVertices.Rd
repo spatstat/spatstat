@@ -12,7 +12,8 @@ insertVertices(L, \dots)
 }
 \arguments{
   \item{L}{
-    Linear network (object of class \code{"linnet"}).
+    Linear network (object of class \code{"linnet"})
+    or point pattern on a linear network (object of class \code{"lpp"}).
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{as.lpp}}
@@ -20,10 +21,13 @@ insertVertices(L, \dots)
   }
 }
 \details{
-  The new vertices must be locations along the existing network
-  \code{L}. 
-
-  The required locations can be specified either as a
+  This function adds new vertices at locations along an existing
+  linear network.
+  
+  The argument \code{L} can be either a linear network (class
+  \code{"linnet"}) or some other object that includes a linear network.
+ 
+  The new vertex locations can be specified either as a
   point pattern (class \code{"lpp"} or \code{"ppp"})
   or using coordinate vectors \code{x,y} or \code{seg,tp}
   or \code{x,y,seg,tp} as explained in the help for \code{\link{as.lpp}}.
@@ -33,12 +37,14 @@ insertVertices(L, \dots)
   the coordinates \code{seg,tp} and creates new vertices at these
   locations.
 
-  The result is the modified network, with an attribute \code{"id"} such that
-  the point with coordinates \code{seg[i], tp[i]} has become the
-  \code{id[i]}th vertex of the new network
+  The result is the modified object, with an attribute \code{"id"} such that
+  the \code{i}th added vertex has become the
+  \code{id[i]}th vertex of the new network.
 }
 \value{
-  A linear network.
+  An object of the same class as \code{L} representing the result of
+  adding the new vertices.
+  The result also has an attribute \code{"id"} as described in Details.
 }
 \author{
   Adrian Baddeley
