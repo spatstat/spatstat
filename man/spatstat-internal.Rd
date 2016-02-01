@@ -714,6 +714,7 @@
 \alias{test.selfcrossing.psp}
 \alias{there.is.no.try}
 \alias{thinjump}
+\alias{thinNetwork}
 \alias{tilecentroids}        
 \alias{transradius}
 \alias{trap.extra.arguments}
@@ -731,6 +732,7 @@
 \alias{uptrimat}
 \alias{validradius}        
 \alias{validate.angles}        
+\alias{validate.lpp.coords}
 \alias{validate.mask}        
 \alias{validate.quad}        
 \alias{validposint}        
@@ -746,6 +748,8 @@
 \alias{versionstring.spatstat}
 \alias{verifyclass}
 \alias{verify.xypolygon}
+\alias{Window<-.linnet}
+\alias{Window<-.lpp}
 \alias{warn.ignored.args}
 \alias{warn.once}
 \alias{waxlyrical}
@@ -1589,6 +1593,7 @@ test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
 there.is.no.try(\dots)
 thinjump(n, p)
+thinNetwork(X, retainvertices, retainedges)
 tilecentroids(W, nx, ny)
 transradius(W)
 trap.extra.arguments(\dots, .Context, .Fatal)
@@ -1607,6 +1612,7 @@ unparen(x)
 uptrimat(x)
 validradius(r, caller)
 validate.angles(angles, unit, guess)
+validate.lpp.coords(X, fatal, context)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
 validposint(n, caller, fatal)
@@ -1622,6 +1628,8 @@ versionstring.ppm(object)
 versionstring.spatstat()
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 verify.xypolygon(p, fatal=TRUE)
+\method{Window}{linnet}(X, \dots, check=TRUE) <- value
+\method{Window}{lpp}(X, \dots, check=TRUE) <- value
 warn.ignored.args(\dots, context)
 warn.once(key, \dots)
 waxlyrical(type, terse)

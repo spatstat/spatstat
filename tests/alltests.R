@@ -679,7 +679,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.5 $  $Date: 2016/01/31 07:28:58 $
+#  $Revision: 1.6 $  $Date: 2016/02/01 09:44:54 $
 
 
 require(spatstat)
@@ -759,16 +759,13 @@ local({
   set.seed(42)
   X <- runiflpp(30, simplenet)
   V <- runiflpp(30, simplenet)
-  A <- insertVertices(X, V)
-  projA <- project2segment(as.ppp(A), as.psp(as.linnet(A)))
-  seg.claimed <- coords(A)$seg
-  seg.mapped  <- projA$mapXY
-  if(any(seg.claimed != seg.mapped))
-    stop("Incorrect segment id calculated by insertVertices")
-  tp.claimed <- coords(A)$tp
-  tp.mapped  <- projA$tp
-  if(max(abs(tp.claimed - tp.mapped) > 0.01))
-    stop("Incorrect 'tp' coordinate calculated by insertVertices")
+  XV <- insertVertices(X, V)
+  validate.lpp.coords(XV, context="calculated by insertVertices")
+
+  ## Test [.lpp internal data
+  B <- owin(c(0.1,0.7),c(0.19,0.6))
+  XB <- X[B]
+  validate.lpp.coords(XB, context="returned by [.lpp")
 })
 
 ##

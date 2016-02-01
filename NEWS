@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.011
+        CHANGES IN spatstat VERSION 1.44-1.012
 
 OVERVIEW
 
@@ -15,7 +15,7 @@ OVERVIEW
 
     o Bug fixes.
 
-    o Version nickname: 'Happy Whatever'
+    o Version nickname: 'Zero Seconds Remaining'
 
 NEW FUNCTIONS
 
@@ -85,6 +85,11 @@ BUGS
 
    o suffstat
    Gave an error for point process models with Geyer interaction.
+   Fixed.
+
+   o [.lpp
+   The local coordinate 'seg' was calculated incorrectly,
+   when 'i' was a window.
    Fixed.
 
    o ppm

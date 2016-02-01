@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.42 $    $Date: 2016/01/31 07:24:12 $
+#    $Revision: 1.43 $    $Date: 2016/02/01 09:39:45 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -97,7 +97,7 @@ linnet <- function(vertices, m, edges, sparse=FALSE) {
   diag(d) <- 0
   d[m] <- pairdist(vertices)[m]
   ## now compute shortest-path distances between each pair of vertices
-  out$dpath <- dpath <- dist2dpath(d)
+  out$dpath <- dpath <- if(any(m)) dist2dpath(d) else d
   if(any(is.infinite(dpath)))
     warning("Network is not connected")
   # pre-compute circumradius
@@ -197,11 +197,22 @@ nsegments.linnet <- function(x) {
 }
 
 Window.linnet <- function(X, ...) {
-  return(as.owin(as.psp(X)))
+  return(X$window)
+}
+
+"Window<-.linnet" <- function(X, ..., check=TRUE, value) {
+  if(check) {
+    X <- X[value]
+  } else {
+    X$window <- value
+    X$lines$window <- value
+    X$vertices$window <- value
+  }
+  return(X)
 }
 
 as.owin.linnet <- function(W, ...) {
-  return(as.owin(as.psp(W)))
+  return(Window(W))
 }
 
 as.linnet <- function(X, ...) {
@@ -307,6 +318,7 @@ circumradius.linnet <- function(x, ...) {
     return(cr)
   dpath <- x$dpath
   if(is.null(dpath)) return(NULL)
+  if(any(is.infinite(dpath))) return(Inf)
   if(nrow(dpath) <= 1)
     return(max(0,dpath))
   from  <- x$from
@@ -429,25 +441,33 @@ rescale.linnet <- function(X, s, unitname) {
   if(!is.owin(i))
     stop("In [.linnet: the index i should be a window", call.=FALSE)
   w <- i
+  sparse <- x$sparse %orifnull% is.null(x$dpath)
+  ## Find vertices that lie inside window
+  vertinside <- inside.owin(x$vertices, w=w)
+  from <- x$from
+  to   <- x$to
   if(snip) {
-    ## Cut segments as they cross boundary of 'i'
+    ## For efficiency, first restrict network to relevant segments.
+    ## Find segments EITHER OF whose endpoints lie in 'w'
+    okedge <- vertinside[from] | vertinside[to]
+    ## extract relevant subset of network graph
+    x <- thinNetwork(x, retainedges=okedge)
+    ## Now add vertices at crossing points with boundary of 'w'
     b <- crossing.psp(as.psp(x), edges(w))
-    x <- insertVertices(x, b)
+    x <- insertVertices(x, unique(b))
     boundarypoints <- attr(x, "id")
+    ## update data
+    from <- x$from
+    to   <- x$to
+    vertinside <- inside.owin(x$vertices, w=w)
+    vertinside[boundarypoints] <- TRUE
   }
-  # Find vertices that lie inside window
-  okvert <- inside.owin(x$vertices, w=w)
-  if(snip)
-    okvert[boundarypoints] <- TRUE
-  # find segments whose endpoints both lie in 'i'
-  okedge <- okvert[x$from] & okvert[x$to]
-  # assign new serial numbers to vertices, and recode 
-  newserial <- cumsum(okvert)
-  newfrom <- newserial[x$from[okedge]]
-  newto   <- newserial[x$to[okedge]]
-  # make new linear network
-  xnew <- linnet(x$vertices[i], edges=cbind(newfrom, newto),
-                 sparse=x$sparse %orifnull% is.null(x$dpath))
+  ## find segments whose endpoints BOTH lie in 'w'
+  edgeinside <- vertinside[from] & vertinside[to]
+  ## extract relevant subset of network
+  xnew <- thinNetwork(x, retainedges=edgeinside)
+  ## adjust window efficiently
+  Window(xnew, check=FALSE) <- w
   return(xnew)
 }
 

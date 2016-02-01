@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.42 $   $Date: 2016/01/31 08:16:56 $
+#  $Revision: 1.43 $   $Date: 2016/02/01 09:39:29 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -295,6 +295,15 @@ as.ppp.lpp <- function(X, ..., fatal=TRUE) {
 
 Window.lpp <- function(X, ...) { as.owin(X) }
 
+"Window<-.lpp" <- function(X, ..., check=TRUE, value) {
+  if(check) {
+    X <- X[value]
+  } else {
+    Window(X$domain, check=FALSE) <- value
+  }
+  return(X)
+}
+
 as.owin.lpp <- function(W,  ..., fatal=TRUE) {
   as.owin(as.ppp(W, ..., fatal=fatal))
 }
@@ -387,41 +396,36 @@ local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
   if(missing(j) || is.null(j))
     return(x)
   stopifnot(is.owin(j))
-  W <- j
-  if(snip) {
-    ## Cut segments as they cross boundary of 'W'
-    b <- crossing.psp(as.psp(as.linnet(x)), edges(W))
-    x <- insertVertices(x, b)
-    boundarypoints <- attr(x, "id")
-  }
+  w <- j
   L <- x$domain
-  da <- x$data
-  # Find vertices that lie inside 'W'
-  okvert <- inside.owin(L$vertices, w=W)
-  if(snip)
-    okvert[boundarypoints] <- TRUE
-  # find segments whose endpoints both lie in 'upper'
-  okedge <- okvert[L$from] & okvert[L$to]
-  # assign new serial numbers to vertices, and recode 
-  newserial <- cumsum(okvert)
-  newfrom <- newserial[L$from[okedge]]
-  newto   <- newserial[L$to[okedge]]
-  # make new linear network
-  Lnew <- linnet(L$vertices[W], edges=cbind(newfrom, newto))
-  # find data points that lie on accepted segments
-  coo <- coords(x)
-  okxy <- okedge[coo$seg]
-  cook <- coo[okxy,]
-  # make new lpp object
-  dfnew <- data.frame(x=cook$x,
-                      y=cook$y,
-                      seg=cook$seg,
-                      tp=cook$tp)
-  ctype <- c(rep("spatial", 2), rep("local", 2))
-  xj <- ppx(data=dfnew, domain=Lnew, coord.type=ctype)
-  class(xj) <- c("lpp", class(xj))
-  marks(xj) <- marks(x[okxy])
-  return(xj)
+  # Find vertices that lie inside 'w'
+  vertinside <- inside.owin(L$vertices, w=w)
+  from <- L$from
+  to   <- L$to
+  if(snip) {
+    ## For efficiency, first restrict network to relevant segments.
+    ## Find segments EITHER OF whose endpoints lie in 'w'
+    okedge <- vertinside[from] | vertinside[to]
+    ## extract relevant subset of network graph
+    x <- thinNetwork(x, retainedges=okedge)
+    ## Now add vertices at crossing points with boundary of 'w'
+    b <- crossing.psp(as.psp(L), edges(w))
+    x <- insertVertices(x, unique(b))
+    boundarypoints <- attr(x, "id")
+    ## update data
+    L <- x$domain
+    from <- L$from
+    to   <- L$to
+    vertinside <- inside.owin(L$vertices, w=w)
+    vertinside[boundarypoints] <- TRUE
+  }
+  ## find segments whose endpoints BOTH lie in 'w'
+  edgeinside <- vertinside[from] & vertinside[to]
+  ## extract relevant subset of network
+  xnew <- thinNetwork(x, retainedges=edgeinside)
+  ## adjust window without checking
+  Window(xnew, check=FALSE) <- w
+  return(xnew)
 }
 
 ####################################################
