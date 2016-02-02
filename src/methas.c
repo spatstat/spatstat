@@ -264,6 +264,8 @@ SEXP xmethas(
 	model.ipar += plength[k-1];
       cdata[k] = (*(cif[k].init))(state, model, algo);
     }
+    /* keep compiler happy */
+    thecdata = cdata[0];
   }
 
   /* Set the fixed elements of the proposal objects */

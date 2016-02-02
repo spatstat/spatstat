@@ -41,22 +41,17 @@ FNAME(np, sp, tp,  /* data points 'from' (ordered by sp) */
   int *nnwhich; /* identifies nearest neighbour */
 #endif
 {
-  int Np, Nq, Nv, Ns, i, j, ivleft, ivright, jfirst, jlast, k;
-  int segPi, segQj, nbi1, nbi2, nbj1, nbj2; 
-  double eps, d, dmin, hugevalue, slen, dleft, dright, tpi, tqj;
-  char converged;
+  int Np, Nq, Nv, i, j, ivleft, ivright, jfirst, jlast, k;
+  double d, hugevalue, slen, tpi;
   double *dminvert;  /* min dist from each vertex */
 #ifdef WHICH
-  int whichmin;
   int *whichvert;   /* which min from each vertex */
 #endif 
 
   Np = *np;
   Nq = *nq;
   Nv = *nv;
-  Ns = *ns;
   hugevalue = *huge;
-  eps = *tol;
 
   /* First compute min distance to target set from each vertex */
   dminvert = (double *) R_alloc(Nv, sizeof(double));

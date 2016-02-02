@@ -1,6 +1,6 @@
 
 // ........................... Penttinen process ................
-// $Revision: 1.1 $  $Date: 2015/11/17 07:26:06 $
+// $Revision: 1.2 $  $Date: 2016/02/02 01:30:01 $
 
 class PenttProcess : public PointProcess {
  public:
@@ -31,7 +31,7 @@ PenttProcess::PenttProcess(double xmin, double xmax,
 
 double PenttProcess::Interaction(double dsquared)
 {
-  double rtn, z, z2, t;
+  double rtn, z, z2;
   rtn = 1.0;
   if(dsquared < reachsquared) {
     if(ishard) return(0.0);

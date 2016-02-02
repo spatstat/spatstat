@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Rolf Turner and Ege Rubak 2014
   Licence: GPL >= 2
 
-  $Revision: 1.2 $  $Date: 2014/08/31 06:02:18 $
+  $Revision: 1.3 $  $Date: 2016/02/02 01:29:50 $
 
 
 */
@@ -23,7 +23,7 @@ void bdrymask(nx, ny, m, b)
      int *b;
 { 
   int Nxcol, Nyrow, Nx1, Ny1;
-  int i, j, mij, bij;
+  int i, j, mij;
 
   Nxcol   = *nx;
   Nyrow   = *ny;

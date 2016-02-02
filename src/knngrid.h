@@ -19,7 +19,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.5 $  $Date: 2013/10/22 01:33:12 $
+  $Revision: 1.6 $  $Date: 2016/02/02 01:31:50 $
 
 
 */
@@ -71,7 +71,7 @@ void FNAME(nx, x0, xstep,
   if(Npoints == 0)
     return;
 
-  lastmwhich = 0;
+  lastmwhich = mwhich = 0;
 
   /* 
      create space to store the nearest neighbour distances and indices

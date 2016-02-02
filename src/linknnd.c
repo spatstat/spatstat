@@ -10,7 +10,7 @@
 
   Sparse representation of network
 
-  $Revision: 1.1 $  $Date: 2015/12/28 02:46:17 $
+  $Revision: 1.2 $  $Date: 2016/02/02 01:53:59 $
 
   ! Data points must be ordered by segment index !
 
@@ -41,12 +41,9 @@ void linknncross(kmax,         /* number of neighbours required */
   double *nndist;
   int *nnwhich;
 {
-  int Np, Nq, Nv, Ns, Kmax, Nout, i, j, ivleft, ivright, jfirst, jlast, k, m;
-  int segPi, segQj, nbi1, nbi2, nbj1, nbj2; 
-  double eps, d, dmin, hugevalue, slen, dleft, dright, tpi, tqj, deltad;
-  char converged;
+  int Np, Nq, Nv, Kmax, Nout, i, j, ivleft, ivright, jfirst, jlast, k, m;
+  double d, hugevalue, slen, tpi, deltad;
   double *dminvert;  /* min dist from each vertex */
-  int whichmin;
   int *whichvert;   /* which min from each vertex */
   int linvknndist(), UpdateKnnList();
 
@@ -54,9 +51,7 @@ void linknncross(kmax,         /* number of neighbours required */
   Np = *np;
   Nq = *nq;
   Nv = *nv;
-  Ns = *ns;
   hugevalue = *huge;
-  eps = *tol;
 
   /* First compute min distances to target set from each vertex */
 #ifdef HUH

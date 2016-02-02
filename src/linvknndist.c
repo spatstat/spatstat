@@ -11,7 +11,7 @@
 
   Needs only the sparse representation of the network
 
-  $Revision: 1.2 $  $Date: 2015/12/07 04:54:46 $
+  $Revision: 1.3 $  $Date: 2016/02/02 01:53:51 $
 
   ! Data points must be ordered by segment index !
 
@@ -51,10 +51,10 @@ void linvknndist(kmax,         /* number of neighbours required */
   double *dist;
   int *which;
 {
-  int Nq, Nv, Ns, Kmax, Klast, Nout, i, j, k, m;
-  int segQj, ivleft, ivright, whichleft, whichright, changed;
-  double hugevalue, eps, dleft, dright, slen, d, tqj;
-  char converged, matched;
+  int Nq, Nv, Ns, Kmax, Nout, i, j, k, m;
+  int segQj, ivleft, ivright, changed;
+  double hugevalue, eps, slen, d, tqj;
+  char converged;
   int UpdateKnnList();
 
   Kmax = *kmax;
@@ -66,8 +66,6 @@ void linvknndist(kmax,         /* number of neighbours required */
 
   /* number of values in 'dist' and in 'which' */
   Nout = Nv * Kmax;
-  /* nearest neighbour is index 0 */
-  Klast = Kmax - 1;
 
 #ifdef HUH
   Rprintf("Initialise dist\n");

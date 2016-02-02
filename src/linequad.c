@@ -58,19 +58,20 @@ void Clinequad(ns, from, to,
      double *xdum, *ydum; /* spatial coordinates of dummy points */
      int *maxscratch;
 {
-  int Nseg, Nvert, Ndat, Ndum, Lmax, i, j, k, ll, m, fromi, toi;
-  int SegmentForData, nwhole, tmpint, nentries, npieces, npieces1;
+  int Nseg, Ndat, Ndum, Lmax, i, j, k, ll, m, fromi, toi;
+#ifdef HUH
+  int Nvert;
+#endif
+  int SegmentForData, nwhole, nentries, npieces, npieces1;
   double x0, y0, x1, y1, dx, dy;
   double seglength, ratio, epsilon, rump, epsfrac, rumpfrac, halfrumpfrac;
-  double tcurrent, plen, tmpdbl, w;
-  char unsorted, tmpchar, hasdata;
+  double tcurrent, plen, w;
 
   int *serial, *count, *pieceid;
   char *isdata;
   double *tvalue, *pieceweight;
 
   Nseg  = *ns;
-  Nvert = *nv;
   Ndat  = *ndat;
 
   Ndum = 0;
@@ -79,6 +80,7 @@ void Clinequad(ns, from, to,
   epsilon = *eps;
 
 #ifdef HUH
+  Nvert = *nv;
   Rprintf("Nseg=%d, Nvert=%d, Ndat=d, Lmax = %d\n\n", Nseg, Nvert, Ndat, Lmax);
 #endif
 
@@ -293,20 +295,21 @@ void ClineMquad(ns, from, to,
      double *wdat, *wdum; /* quadrature weights */
      int *maxscratch;
 {
-  int Nseg, Nvert, Ndat, Ndum, Ntypes, Lmax, i, k, ll, m, fromi, toi;
-  int SegmentForData, nwhole, tmpint, nentries, npieces, npieces1, nMpieces;
+  int Nseg, Ndat, Ndum, Ntypes, Lmax, i, k, ll, m, fromi, toi;
+#ifdef HUH
+  int Nvert;
+#endif
+  int SegmentForData, nwhole, nentries, npieces, npieces1, nMpieces;
   int jpiece, jentry, jpdata, type, mcurrent;
   double x0, y0, x1, y1, dx, dy, xcurrent, ycurrent;
   double seglength, ratio, epsilon, rump, epsfrac, rumpfrac, halfrumpfrac;
-  double tcurrent, plen, tmpdbl, w;
-  char unsorted, tmpchar, hasdata;
+  double tcurrent, plen, w;
 
   int *serial, *count, *mkpieceid;
   char *isdata;
   double *tvalue, *countingweight;
 
   Nseg  = *ns;
-  Nvert = *nv;
   Ndat  = *ndat;
   Ntypes = *ntypes;
 
@@ -316,6 +319,7 @@ void ClineMquad(ns, from, to,
   epsilon = *eps;
 
 #ifdef HUH
+  Nvert = *nv;
   Rprintf("Nseg=%d, Nvert=%d, Ndat=d, Lmax = %d\n\n", Nseg, Nvert, Ndat, Lmax);
 #endif
 
