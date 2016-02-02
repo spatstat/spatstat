@@ -15,7 +15,7 @@ plot.dppm <- function (x, ..., what = c("intensity", "statistic")){
     objectname <- short.deparse(substitute(x))
     if(missing(what) && is.stationary(x))
         what <- "statistic"
-    plot.kppm(x, ..., objectname = objectname, what = what)
+    plot.kppm(x, ..., xname = objectname, what = what)
 }
 
 Kmodel.dppm <- function (model, ...){

@@ -2,7 +2,7 @@
 \Rdversion{1.1}
 \alias{connected.ppp}
 \title{
-  Connected components of a point pattern
+  Connected Components of a Point Pattern
 }
 \description{
   Finds the topologically-connected components of a point pattern,

@@ -714,7 +714,6 @@
 \alias{test.selfcrossing.psp}
 \alias{there.is.no.try}
 \alias{thinjump}
-\alias{thinNetwork}
 \alias{tilecentroids}        
 \alias{transradius}
 \alias{trap.extra.arguments}
@@ -1593,7 +1592,6 @@ test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
 there.is.no.try(\dots)
 thinjump(n, p)
-thinNetwork(X, retainvertices, retainedges)
 tilecentroids(W, nx, ny)
 transradius(W)
 trap.extra.arguments(\dots, .Context, .Fatal)

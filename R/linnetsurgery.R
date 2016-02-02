@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.7 $  $Date: 2016/02/01 10:04:52 $
+#' $Revision: 1.8 $  $Date: 2016/02/02 02:54:15 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -140,11 +140,10 @@ thinNetwork <- function(X, retainvertices, retainedges) {
     z[retainvertices] <- TRUE
     retainvertices <- z
   }
-  if(gotvert) {
-    ## retain edges between retained vertices
-    retainedges <- retainedges | (retainvertices[from] & retainvertices[to])
-  }
-  if(gotedge) {
+  if(gotvert && !gotedge) {
+    ## retain all edges between retained vertices
+    retainedges <- retainvertices[from] & retainvertices[to]
+  } else if(gotedge) {
     ## retain vertices required for the retained edges
     retainvertices[from[retainedges]] <- TRUE
     retainvertices[to[retainedges]]   <- TRUE

@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.43 $    $Date: 2016/02/01 09:39:45 $
+#    $Revision: 1.47 $    $Date: 2016/02/02 04:18:27 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -30,7 +30,7 @@
 
 # Make an object of class "linnet" from the minimal data
 
-linnet <- function(vertices, m, edges, sparse=FALSE) {
+linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
   if(missing(m) && missing(edges))
     stop("specify either m or edges")
   if(!missing(m) && !missing(edges))
@@ -97,9 +97,9 @@ linnet <- function(vertices, m, edges, sparse=FALSE) {
   diag(d) <- 0
   d[m] <- pairdist(vertices)[m]
   ## now compute shortest-path distances between each pair of vertices
-  out$dpath <- dpath <- if(any(m)) dist2dpath(d) else d
-  if(any(is.infinite(dpath)))
-    warning("Network is not connected")
+  out$dpath <- dpath <- dist2dpath(d)
+  if(warn && any(is.infinite(dpath)))
+    warning("Network is not connected", call.=FALSE)
   # pre-compute circumradius
   out$circumradius <- circumradius(out)
   return(out)  
@@ -493,3 +493,32 @@ iplot.linnet <- function(x, ..., xname) {
 pixellate.linnet <- function(x, ...) {
   pixellate(as.psp(x), ...)
 }
+
+connected.linnet <- function(X, ..., what=c("labels", "components")) {
+  verifyclass(X, "linnet")
+  what <- match.arg(what)
+  nv <- npoints(vertices(X))
+  ie <- X$from - 1L
+  je   <- X$to   - 1L
+  ne <- length(ie)
+  zz <- .C("cocoGraph",
+           nv = as.integer(nv),
+           ne = as.integer(ne), 
+           ie = as.integer(ie),
+           je = as.integer(je),
+           label = as.integer(integer(nv)), 
+           status = as.integer(integer(1)))
+  if (zz$status != 0) 
+    stop("Internal error: connected.linnet did not converge")
+  lab <- zz$label + 1L
+  lab <- as.integer(factor(lab))
+  lab <- factor(lab)
+  if(what == "labels")
+    return(lab)
+  nets <- list()
+  subsets <- split(seq_len(nv), lab)
+  for(i in seq_along(subsets)) 
+    nets[[i]] <- thinNetwork(X, retainvertices=subsets[[i]])
+  return(nets)
+}
+

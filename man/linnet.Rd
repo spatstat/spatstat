@@ -8,7 +8,7 @@
   a network of line segments.
 }
 \usage{
-linnet(vertices, m, edges, sparse=FALSE)
+linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
 }
 \arguments{
   \item{vertices}{
@@ -30,6 +30,10 @@ linnet(vertices, m, edges, sparse=FALSE)
   \item{sparse}{
     Optional. Logical value indicating whether to use a
     sparse matrix representation of the network. See Details.
+  }
+  \item{warn}{
+    Logical value indicating whether to issue a warning if the resulting
+    network is not connected.
   }
 }
 \details{
@@ -61,7 +65,6 @@ linnet(vertices, m, edges, sparse=FALSE)
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
-  
 }
 \seealso{
   \code{\link{simplenet}} for an example of a linear network.
@@ -69,7 +72,11 @@ linnet(vertices, m, edges, sparse=FALSE)
   \code{\link[spatstat:methods.linnet]{methods.linnet}} for
   methods applicable to \code{linnet} objects.
 
-  \code{\link{delaunayNetwork}}.
+  Special tools: \code{\link{thinNetwork}}, \code{\link{insertVertices}},
+  \code{\link{connected.linnet}}, \code{\link{lixellate}}.
+  
+  \code{\link{delaunayNetwork}} for the Delaunay triangulation
+  as a network.
   
   \code{\link{ppp}},
   \code{\link{psp}}.

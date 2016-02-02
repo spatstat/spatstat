@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.012
+        CHANGES IN spatstat VERSION 1.44-1.013
 
 OVERVIEW
 
@@ -25,6 +25,12 @@ NEW FUNCTIONS
 
     o insertVertices
     Insert new vertices in a linear network.
+
+    o thinNetwork
+    Remove vertices and/or segments from a linear network etc
+
+    o connected.linnet
+    Find connected components of a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -69,6 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.lpp
     New argument 'show.network'
 
+    o linnet
+    New argument 'warn'
+
     o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
     Performance slightly improved, for Gibbs models.
 
@@ -102,6 +111,10 @@ BUGS
    Crashed if the number of points selected was less than 2.
    Fixed.
 
+   o linnet
+   Crashed if there were no line segments at all.
+   Fixed.
+
    o plot.ppp, plot.lpp
    Arguments 'chars' and 'cols' were ignored in some cases.
    Fixed.
@@ -110,6 +123,9 @@ BUGS
    Ignored argument 'emend'.
    Fixed.
 
+   o plot.dppm
+   Gave warnings about unrecognised argument 'objectname'.
+   Fixed.
 
         CHANGES IN spatstat VERSION 1.44-1
 

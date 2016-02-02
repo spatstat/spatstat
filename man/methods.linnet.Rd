@@ -123,6 +123,9 @@ vertexdegree(x)
 \seealso{
   \code{\link{linnet}}.
 
+  Special tools: \code{\link{thinNetwork}}, \code{\link{insertVertices}},
+  \code{\link{connected.linnet}}.
+  
   \code{\link{lixellate}} for dividing segments into shorter segments.
 }
 \examples{
