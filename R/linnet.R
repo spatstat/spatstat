@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.47 $    $Date: 2016/02/02 04:18:27 $
+#    $Revision: 1.49 $    $Date: 2016/02/03 08:20:36 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -190,6 +190,11 @@ as.psp.linnet <- function(x, ..., fatal=TRUE) {
 vertices.linnet <- function(w) {
   verifyclass(w, "linnet")
   return(w$vertices)
+}
+
+nvertices.linnet <- function(x, ...) {
+  verifyclass(x, "linnet")
+  return(x$vertices$n)
 }
 
 nsegments.linnet <- function(x) {

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.013
+        CHANGES IN spatstat VERSION 1.44-1.014
 
 OVERVIEW
 
@@ -19,10 +19,6 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-    o requireversion
-    Require a particular version of a package
-    (for use in stand-alone R scripts).
-
     o insertVertices
     Insert new vertices in a linear network.
 
@@ -31,6 +27,14 @@ NEW FUNCTIONS
 
     o connected.linnet
     Find connected components of a linear network.
+
+    o nvertices, nvertices.linnet, nvertices.owin
+    Count the number of vertices in a linear network 
+    or vertices of the boundary of a window.
+
+    o requireversion
+    Require a particular version of a package
+    (for use in stand-alone R scripts).
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -71,6 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     If the argument 'edges' is given, then this argument now determines the
     ordering of the sequence of line segments. For example, the i-th row
     of 'edges' specifies the i-th line segment in as.psp(L).
+
+    o texturemap
+    Argument 'textures' can be missing or NULL.
 
     o plot.lpp
     New argument 'show.network'
@@ -113,6 +120,10 @@ BUGS
 
    o linnet
    Crashed if there were no line segments at all.
+   Fixed.
+
+   o texturemap
+   Crashed if no graphical arguments were specified.
    Fixed.
 
    o plot.ppp, plot.lpp

@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.104 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 4.106 $	$Date: 2016/02/03 07:53:08 $
 #
 #
 #
@@ -753,6 +753,35 @@ bdry.mask <- function(W) {
   W$m <- b
   return(W)
 }
+
+nvertices <- function(x, ...) {
+  UseMethod("nvertices")
+}
+
+nvertices.default <- function(x, ...) {
+  v <- vertices(x)
+  vx <- v$x
+  n <- if(is.null(vx)) NA else length(vx)
+  return(n)
+}
+
+nvertices.owin <- local({
+
+  nvertices.owin <- function(x, ...) {
+    if(is.empty(x))
+      return(0)
+    n <- switch(x$type,
+                rectangle=4,
+                polygonal=sum(sapply(x$bdry, xlength)),
+                mask=sum(bdry.mask(x)$m))
+    return(n)
+  }
+
+  xlength <- function(a) length(a$x)
+
+  nvertices.owin
+})
+
 
 vertices <- function(w) {
   UseMethod("vertices")

@@ -15,7 +15,7 @@ texturemap(inputs, textures, ...)
     that will be mapped to textures.
   }
   \item{textures}{
-    A vector of integer codes specifying the textures
+    Optional. A vector of integer codes specifying the textures
     to which the \code{inputs} will be mapped.
   }
   \item{\dots}{
@@ -36,19 +36,21 @@ texturemap(inputs, textures, ...)
 
   The argument \code{inputs} should be a vector containing all the
   possible data values (such as the levels of a factor) that are to be
-  mapped. The \code{textures} should be integer values between 1 and 8,
+  mapped.
+
+  The \code{textures} should be integer values between 1 and 8,
   representing the eight possible textures
   described in the help for \code{\link{add.texture}}.
+  The default is \code{textures = 1:n} where
+  \code{n} is the length of \code{inputs}.
 }
 \value{
   An object of class \code{"texturemap"} representing the texture map.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{textureplot}}

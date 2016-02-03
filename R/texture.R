@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.10 $ $Date: 2015/12/24 07:44:55 $
+##  $Revision: 1.13 $ $Date: 2016/02/02 05:17:52 $
 
 ### .................. basic graphics .............................
 
@@ -88,8 +88,11 @@ add.texture <- function(W, texture=4, spacing=NULL, ...) {
 
 texturemap <- function(inputs, textures, ...) {
   argh <- list(...)
-  isnul <- unlist(lapply(argh, is.null))
-  argh <- argh[!isnul]
+  if(length(argh) > 0) {
+    isnul <- unlist(lapply(argh, is.null))
+    argh <- argh[!isnul]
+  }
+  if(missing(textures) || is.null(textures)) textures <- seq_along(inputs)
   df <- do.call("data.frame",
                 append(list(input=inputs, texture=textures), argh))
   f <- function(x) {

@@ -94,13 +94,9 @@ textureplot(x, \dots,
   associating a texture with each level of the factor.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-
-
-Rolf Turner \email{r.turner@auckland.ac.nz}
-
-and Ege Rubak \email{rubak@math.aau.dk}
-
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{im}}, 
@@ -108,8 +104,10 @@ and Ege Rubak \email{rubak@math.aau.dk}
   \code{\link{add.texture}}.
 }
 \examples{
-  Z <- cut(setcov(owin()), 3, labels=c("Lo", "Med", "Hi"))
-  textureplot(Z)
+  nd <- if(interactive()) 128 else 32
+  Z <- setcov(owin(), dimyx=nd)
+  Zcut <- cut(Z, 3, labels=c("Lo", "Med", "Hi"))
+  textureplot(Zcut)
   textureplot(dirichlet(runifpoint(6)))
 }
 \keyword{spatial}
