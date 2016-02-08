@@ -1857,6 +1857,7 @@
   Alexendre Villers,
   Fabrice Vinatier,
   Sasha Voss,
+  Sven Wagner,
   Hao Wang,
   H. Wendrock,
   Jan Wild,

@@ -1,6 +1,6 @@
 #  Variance-covariance matrix for mppm objects
 #
-# $Revision: 1.11 $ $Date: 2015/09/30 06:38:33 $
+# $Revision: 1.12 $ $Date: 2016/02/08 09:43:56 $
 #
 #
 
@@ -66,12 +66,29 @@ vcov.mppm <- local({
   }
 
   vcmGibbs <- function(object, ..., what, err,
-                       matrix.action=c("warn", "fatal", "silent")) {
-    matrix.action <- match.arg(matrix.action)
+                       matrix.action=c("warn", "fatal", "silent"),
+                       gam.action=c("warn", "fatal", "silent"),
+                       logi.action=c("warn", "fatal", "silent")
+                       ) {
+    if(!missing(err)) {
+      if(err == "null") err <- "silent" 
+      matrix.action <-
+        if(missing(matrix.action)) err else match.arg(matrix.action)
+      gam.action <- if(missing(gam.action)) err else match.arg(gam.action)
+      logi.action <- if(missing(logi.action)) err else match.arg(logi.action)
+    } else {
+      matrix.action <- match.arg(matrix.action)
+      gam.action <- match.arg(gam.action)
+      logi.action <- match.arg(logi.action)
+    }
     collectmom <- (what %in% c("internals", "all"))
     subs <- subfits(object, what="basicmodels")
     n <- length(subs)
-    guts <- lapply(subs, vcov, what="internals")
+    guts <- lapply(subs, vcov, what="internals",
+                   matrix.action=matrix.action,
+                   gam.action=gam.action,
+                   logi.action=logi.action,
+                   ...)
     fish <- lapply(guts, getElement, name="fisher")
     a1   <- lapply(guts, getElement, name="A1")
     a2   <- lapply(guts, getElement, name="A2")
@@ -100,7 +117,7 @@ vcov.mppm <- local({
     if(what %in% c("vcov", "corr", "all")) {
       #' variance-covariance matrix required
       U <- checksolve(A1, matrix.action, , "variance")
-      vc <- U %*% (A1 + A2 + A3) %*% U
+      vc <- if(is.null(U)) NULL else (U %*% (A1 + A2 + A3) %*% U)
     }
     out <- switch(what,
                   fisher = A1 + A2 + A3,

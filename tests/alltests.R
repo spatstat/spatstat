@@ -825,54 +825,79 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.4 $ $Date: 2015/09/30 10:30:01 $
+# $Revision: 1.5 $ $Date: 2016/02/08 08:54:45 $
 # 
 
 require(spatstat)
 
 local({
-# test interaction formulae and subfits
-fit1 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~ifelse(group=="control", po, str))
-fit2 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), str=Strauss(0.1)),
-            iformula=~id * str)
-fit3 <- mppm(Points ~ group, simba, hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))), iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
-fit1
-fit2
-fit3
+  ## test interaction formulae and subfits
+  fit1 <- mppm(Points ~ group, simba,
+               hyperframe(po=Poisson(), str=Strauss(0.1)),
+               iformula=~ifelse(group=="control", po, str))
+  fit2 <- mppm(Points ~ group, simba,
+               hyperframe(po=Poisson(), str=Strauss(0.1)),
+               iformula=~id * str)
+  fit3 <- mppm(Points ~ group, simba,
+               hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
+        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
+  fit1
+  fit2
+  fit3
 
-subfits(fit1)
-subfits(fit2)
-subfits(fit3)
+  subfits(fit1)
+  subfits(fit2)
+  subfits(fit3)
 
-# test vcov algorithm
-vcov(fit1)
-vcov(fit2)
-vcov(fit3)
+  ## test vcov algorithm
+  vcov(fit1)
+  vcov(fit2)
+  vcov(fit3)
 
-# test summary.mppm which currently sits in spatstat-internal.Rd
+  ## test summary.mppm which currently sits in spatstat-internal.Rd
 
-summary(fit1)
-summary(fit2)
-summary(fit3)
+  summary(fit1)
+  summary(fit2)
+  summary(fit3)
+})
 
-# test handling of offsets and zero cif values in mppm
+local({
 
-H <- hyperframe(Y = waterstriders)
-mppm(Y ~ 1,  data=H, Hardcore(1.5))
-mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+  ## Further test pointed out by Sven Wagner
+  go <- unmark(gorillas)[1:100]
+  A <- hyperframe(G=solist(go, go), 
+                  V=gorillas.extra$vegetation)
+  fit4 <- mppm(G ~ V, data=A)
+  fit5 <- mppm(G ~ V, interaction=Strauss(500), data=A, rbord=0)
+  fit4
+  fit5
+  subfits(fit4)
+  subfits(fit5)
+  vcov(fit4)
+  vcov(fit5, fine=TRUE)
+  summary(fit4)
+  summary(fit5)
 
-# prediction, in training/testing context
-#    (example from Markus Herrmann and Ege Rubak)
+})
 
-X <- waterstriders
-dist <- as.listof(lapply(waterstriders,
-                         function(z) distfun(runifpoint(1, Window(z)))))
-i <- 3
-train <- hyperframe(pattern = X[-i], dist = dist[-i])
-test <- hyperframe(pattern = X[i], dist = dist[i])
-fit <- mppm(pattern ~ dist, data = train)
-pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
+local({
+  
+  ## test handling of offsets and zero cif values in mppm
+  H <- hyperframe(Y = waterstriders)
+  mppm(Y ~ 1,  data=H, Hardcore(1.5))
+  mppm(Y ~ 1,  data=H, StraussHard(7, 1.5))
+
+  ## prediction, in training/testing context
+  ##    (example from Markus Herrmann and Ege Rubak)
+
+  X <- waterstriders
+  dist <- solapply(waterstriders,
+                   function(z) distfun(runifpoint(1, Window(z))))
+  i <- 3
+  train <- hyperframe(pattern = X[-i], dist = dist[-i])
+  test <- hyperframe(pattern = X[i], dist = dist[i])
+  fit <- mppm(pattern ~ dist, data = train)
+  pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
 })
 #
 # tests/NAinCov.R

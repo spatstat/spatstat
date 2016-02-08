@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.014
+        CHANGES IN spatstat VERSION 1.44-1.015
 
 OVERVIEW
 
-    o We thank Mario D'Antuono and Suman Rakshit for contributions.
+    o We thank Mario D'Antuono, Suman Rakshit and Sven Wagner for contributions.
 
     o Surgery with linear networks.
 
@@ -90,6 +90,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUGS
 
+   o subfits
+   Crashed if the model included factor-valued spatial covariates.
+   [Spotted by Sven Wagner]
+   Fixed.
+
    o improve.kppm
    An error message about a missing object 'gminus1' occurred
    when vcov=TRUE, fast.vcov=FALSE and type="clik1" or "wclik1".
@@ -126,6 +131,10 @@ BUGS
    Crashed if no graphical arguments were specified.
    Fixed.
 
+   o vcov.mppm
+   Ignored "..." arguments.
+   Fixed.
+   
    o plot.ppp, plot.lpp
    Arguments 'chars' and 'cols' were ignored in some cases.
    Fixed.

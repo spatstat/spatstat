@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.014
+Version: 1.44-1.015
 Nickname: Zero Seconds Remaining
-Date: 2016-02-03
+Date: 2016-02-08
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -166,6 +166,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	A. Villers; 
         F. Vinatier;
         S. Voss;
+	S. Wagner;
 	H. Wang; 
 	H. Wendrock; 
 	J. Wild;

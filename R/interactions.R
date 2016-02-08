@@ -3,7 +3,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.16 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.18 $  $Date: 2016/02/08 08:34:48 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {
@@ -117,22 +117,38 @@ impliedcoefficients <- function(object, tag) {
   vnames <- Vnamelist[[tag]]
   if(!is.character(vnames))
     stop("Internal error - wrong format for vnames")
+  # Check atomic type of each covariate
+  Moadf <- as.list(object$Fit$moadf)
+  islog <- sapply(Moadf, is.logical)
+  isnum <- sapply(Moadf, is.numeric)
+  isfac <- sapply(Moadf, is.factor)
+  # Interaction variables must be numeric or logical
+  if(any(bad <- !(isnum | islog)[vnames]))
+    stop(paste("Internal error: the",
+               ngettext(sum(bad), "variable", "variables"),
+               commasep(sQuote(vnames[bad])),
+               "should be numeric or logical"),
+         call.=FALSE)
   # The answer is a matrix of coefficients,
   # with one row for each point pattern,
   # and one column for each vname
   answer <- matrix(, nrow=object$npat, ncol=length(vnames))
   colnames(answer) <- vnames
-
+  
   # (1) make a data frame of covariates
   # Names of all columns in glm data frame
-  allnames <- names(object$Fit$moadf)
+  allnames <- names(Moadf)
   # Extract the design covariates
   df <- as.data.frame(object$data, warn=FALSE)
   # Names of all covariates other than design covariates
   othernames <- allnames[!(allnames %in% names(df))]
-  # Add columns in which all other covariates are set to 0
-  for(v in othernames) df[, v] <- 0
-  
+  # Add columns in which all other covariates are set to 0, FALSE, etc
+  for(v in othernames) {
+    df[, v] <- if(isnum[[v]]) 0 else
+               if(islog[[v]]) FALSE else
+               if(isfac[[v]]) levels(Moadf[[v]])[1] else
+               sort(unique(Moadf[[v]]))[1]
+  }
   # (2) evaluate linear predictor
   opt <- options(warn= -1)
   eta0 <- predict(fitobj, newdata=df, type="link")
