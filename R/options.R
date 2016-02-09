@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.69 $   $Date: 2015/12/04 09:05:55 $
+#    $Revision: 1.70 $   $Date: 2016/02/09 04:41:47 $
 #
 #
 
@@ -14,6 +14,9 @@ putSpatstatVariable <- function(name, value) {
 }
 getSpatstatVariable <- function(name) {
   get(name, envir=.spEnv)
+}
+existsSpatstatVariable <- function(name) {
+  exists(name, envir=.spEnv)
 }
 
 putSpatstatVariable("Spatstat.Options", list())

@@ -3,7 +3,7 @@
 #
 # version numbers
 #
-# $Revision: 1.10 $  $Date: 2014/10/24 00:22:30 $
+# $Revision: 1.11 $  $Date: 2016/02/09 04:41:31 $
 #
 #####################
 
@@ -28,9 +28,12 @@ versionstring.interact <- function(object) {
 }
 
 # Get version number of current spatstat installation
-# This is now saved in the spatstat cache environment rather than read from file every time
+# This is now saved in the spatstat cache environment
+# rather than read from file every time
 
 versionstring.spatstat <- function() {
+  if(!existsSpatstatVariable("SpatstatVersion"))
+    store.versionstring.spatstat()    
   getSpatstatVariable("SpatstatVersion")
 }
 

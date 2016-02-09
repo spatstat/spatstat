@@ -175,6 +175,7 @@
 \alias{exactdt}              
 \alias{exactPdt}
 \alias{exhibitStringList}
+\alias{existsSpatstatVariable}
 \alias{expand.polynom}
 \alias{expandSpecialLists}
 \alias{expandwinPerfect}
@@ -974,6 +975,7 @@ evenly.spaced(x, tol)
 exactdt(X, \dots)              
 exactPdt(w)
 exhibitStringList(prefix, strings)
+existsSpatstatVariable(name)
 expand.polynom(f)
 expandSpecialLists(x, special)
 expandwinPerfect(W, expand, amount)
