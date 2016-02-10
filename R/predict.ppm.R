@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.91 $	$Date: 2016/02/10 07:22:52 $
+#	$Revision: 1.92 $	$Date: 2016/02/10 11:25:17 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -669,8 +669,7 @@ model.se.image <- function(fit, W=as.owin(fit), ..., what="sd") {
 
 GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
   ok <- is.finite(coefs)
-  allok <- all(ok)
-  if(!changecoef && allok) {
+  if(!changecoef && all(ok)) {
     answer <- predict(fit, newdata=data, type="response")
   } else {
     # do it by hand
@@ -679,10 +678,11 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
     fram <- model.frame(fmla, data=data)
     # linear predictor
     mm <- model.matrix(fmla, data=fram)
-    # sanity check
-    check.mat.mul(mm, coefs, "sufficient statistics", "coefficients")
+    # ensure all required coefficients are present
+    coefs <- fill.coefs(coefs, colnames(mm))
+    ok <- is.finite(coefs)
     #
-    if(allok) {
+    if(all(ok)) {
       eta <- as.vector(mm %*% coefs)
     } else {
       #' ensure 0 * anything = 0
@@ -736,3 +736,23 @@ equalpairs <- function(U, X, marked=FALSE) {
 }
 
   
+fill.coefs <- function(coefs, required) {
+  # 'coefs' should contain all the 'required' values
+  nama <- names(coefs)
+  stopifnot(is.character(required))
+  if(identical(nama, required)) return(coefs)
+  inject <- match(nama, required)
+  if(any(notneeded <- is.na(inject))) {
+    warning(paste("Internal glitch: some coefficients were not required:",
+                  commasep(sQuote(nama[notneeded]))),
+            call.=FALSE)
+    coefs <- coefs[!notneeded]
+    nama <- names(coefs)
+    inject <- match(nama, required)
+  }
+  y <- numeric(length(required))
+  names(y) <- required
+  y[inject] <- coefs
+  return(y)
+}
+ 

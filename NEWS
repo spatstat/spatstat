@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.017
+        CHANGES IN spatstat VERSION 1.44-1.018
 
 OVERVIEW
 
@@ -99,6 +99,11 @@ BUGS
    [Spotted by Sven Wagner]
    Fixed.
 
+   o subfits
+   If the model included factor-valued spatial covariates, and if
+   not all levels of the factor were present in each row of the data,
+   the resulting objects were malformed and caused errors in other code.
+   
    o improve.kppm
    An error message about a missing object 'gminus1' occurred
    when vcov=TRUE, fast.vcov=FALSE and type="clik1" or "wclik1".

@@ -166,13 +166,15 @@ checksolve <- function(M, action, descrip, target="") {
   return(NULL)
 }
 
-check.mat.mul <- function(A, B, Acols="columns of A", Brows="rows of B") {
+check.mat.mul <- function(A, B, Acols="columns of A", Brows="rows of B",
+                          fatal=TRUE) {
   # check whether A %*% B would be valid: if not, print a useful message
-  if(!is.matrix(A)) A <- matrix(A, nrow=1)
-  if(!is.matrix(B)) B <- matrix(B, ncol=1)
+  if(!is.matrix(A)) A <- matrix(A, nrow=1, dimnames=list(NULL, names(A)))
+  if(!is.matrix(B)) B <- matrix(B, ncol=1, dimnames=list(names(B), NULL))
   nA <- ncol(A)
   nB <- nrow(B) 
-  if(nA == nB) return(invisible(NULL))
+  if(nA == nB) return(TRUE)
+  if(!fatal) return(FALSE)
   if(any(nzchar(Anames <- colnames(A))))
     message(paste0("Names of ", Acols, ": ", commasep(Anames)))
   if(any(nzchar(Bnames <- rownames(B))))

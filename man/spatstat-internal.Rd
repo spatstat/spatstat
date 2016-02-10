@@ -191,6 +191,7 @@
 \alias{f3Cengine}
 \alias{fasp}
 \alias{fastFindInterval}
+\alias{fill.coefs}
 \alias{fillseq}
 \alias{findbestlegendpos}
 \alias{findCovariate}
@@ -836,7 +837,7 @@ checksolve(M, action, descrip, target)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)
-check.mat.mul(A, B, Acols, Brows)
+check.mat.mul(A, B, Acols, Brows, fatal)
 check.named.list(x, nam, context, namopt, onError)
 check.named.vector(x, nam, context, namopt, onError)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)
@@ -992,6 +993,7 @@ f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
 fastFindInterval(x, b, labels, reltol)
+fill.coefs(coefs, required)
 fillseq(x)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)
