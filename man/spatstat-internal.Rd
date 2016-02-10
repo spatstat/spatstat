@@ -65,6 +65,7 @@
 \alias{check.finite}
 \alias{check.hist.lengths}
 \alias{check.in.range}
+\alias{check.mat.mul}
 \alias{check.named.list}
 \alias{check.named.thing}
 \alias{check.named.vector}
@@ -835,6 +836,7 @@ checksolve(M, action, descrip, target)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)
+check.mat.mul(A, B, Acols, Brows)
 check.named.list(x, nam, context, namopt, onError)
 check.named.vector(x, nam, context, namopt, onError)
 check.named.thing(x, nam, namopt, xtitle, valid, type, context, fatal)

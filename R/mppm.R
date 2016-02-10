@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.69 $   $Date: 2015/12/29 02:40:58 $
+#  $Revision: 1.70 $   $Date: 2016/02/10 06:57:10 $
 #
 
 mppm <- local({
@@ -291,9 +291,9 @@ mppm <- local({
       }
 
       ## assemble the Mother Of All Data Frames
-      if(i == 1)
+      if(i == 1) {
         moadf <- glmdat
-      else {
+      } else {
         ## There may be new or missing columns
         recognised <- names(glmdat) %in% names(moadf)
         if(any(!recognised)) {
@@ -308,6 +308,20 @@ mppm <- local({
           zeroes <- as.data.frame(matrix(0, nrow(glmdat), length(absentnames)))
           names(zeroes) <- absentnames
           glmdat <- cbind(glmdat, zeroes)
+        }
+        ## Ensure factor columns are consistent
+        m.isfac <- sapply(as.list(glmdat), is.factor)
+        g.isfac <- sapply(as.list(glmdat), is.factor)
+        if(any(uhoh <- (m.isfac != g.isfac)))
+          errorInconsistentRows("values (factor and non-factor)",
+                                colnames(moadf)[uhoh])
+        if(any(m.isfac)) {
+          m.levels <- lapply(as.list(moadf)[m.isfac], levels)
+          g.levels <- lapply(as.list(glmdat)[g.isfac], levels)
+          clash <- !mapply(identical, x=m.levels, y=g.levels)
+          if(any(clash))
+            errorInconsistentRows("factor levels",
+                                  (colnames(moadf)[m.isfac])[clash])
         }
         ## Finally they are compatible
         moadf <- rbind(moadf, glmdat)
@@ -497,7 +511,17 @@ mppm <- local({
   firstname <- function(z) { z[[1]]$name }
 
   allpoisson <- function(x) all(sapply(x, is.poisson.interact))
-  
+
+  errorInconsistentRows <- function(what, offending) {
+    stop(paste("There are inconsistent",
+               what,
+               "for the",
+               ngettext(length(offending), "variable", "variables"),
+               commasep(sQuote(offending)),
+               "between different rows of the hyperframe 'data'"),
+         call.=FALSE)
+  }
+    
   mppm
 })
 

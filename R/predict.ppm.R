@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.90 $	$Date: 2015/04/21 13:14:28 $
+#	$Revision: 1.91 $	$Date: 2016/02/10 07:22:52 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -669,7 +669,8 @@ model.se.image <- function(fit, W=as.owin(fit), ..., what="sd") {
 
 GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
   ok <- is.finite(coefs)
-  if(!changecoef && all(ok)) {
+  allok <- all(ok)
+  if(!changecoef && allok) {
     answer <- predict(fit, newdata=data, type="response")
   } else {
     # do it by hand
@@ -678,7 +679,10 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
     fram <- model.frame(fmla, data=data)
     # linear predictor
     mm <- model.matrix(fmla, data=fram)
-    if(all(ok)) {
+    # sanity check
+    check.mat.mul(mm, coefs, "sufficient statistics", "coefficients")
+    #
+    if(allok) {
       eta <- as.vector(mm %*% coefs)
     } else {
       #' ensure 0 * anything = 0

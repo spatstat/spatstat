@@ -22,7 +22,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
     ## Leave-one-out calculation for data points only
     if(missing(dataonly)) dataonly <- TRUE
     if(!dataonly)
-      stop("Leave-one-out calculation requires dataonly=FALSE")
+      stop("Leave-one-out calculation requires dataonly=TRUE")
     if(!is.null(new.coef))
       stop("Leave-one-out calculation requires new.coef=NULL")
   }

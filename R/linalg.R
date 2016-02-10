@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.11 $ $Date: 2015/09/30 04:36:17 $
+# $Revision: 1.12 $ $Date: 2016/02/10 07:21:02 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -164,4 +164,20 @@ checksolve <- function(M, action, descrip, target="") {
          warn= warning(whinge, call.=FALSE),
          silent={})
   return(NULL)
+}
+
+check.mat.mul <- function(A, B, Acols="columns of A", Brows="rows of B") {
+  # check whether A %*% B would be valid: if not, print a useful message
+  if(!is.matrix(A)) A <- matrix(A, nrow=1)
+  if(!is.matrix(B)) B <- matrix(B, ncol=1)
+  nA <- ncol(A)
+  nB <- nrow(B) 
+  if(nA == nB) return(invisible(NULL))
+  if(any(nzchar(Anames <- colnames(A))))
+    message(paste0("Names of ", Acols, ": ", commasep(Anames)))
+  if(any(nzchar(Bnames <- rownames(B))))
+    message(paste0("Names of ", Brows, ": ", commasep(Bnames)))
+  stop(paste("Internal error: number of", Acols, paren(nA),
+             "does not match number of", Brows, paren(nB)),
+       call.=FALSE)
 }

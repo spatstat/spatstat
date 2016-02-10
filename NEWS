@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.016
+        CHANGES IN spatstat VERSION 1.44-1.017
 
 OVERVIEW
 
-    o We thank Mario D'Antuono, Suman Rakshit and Sven Wagner for contributions.
+    o We thank Mario D'Antuono, Markus Herrmann,
+    Suman Rakshit and Sven Wagner for contributions.
 
     o Surgery with linear networks.
 
@@ -88,6 +89,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
     Performance slightly improved, for Gibbs models.
 
+    o mppm
+    Performs more checks for consistency of the input data.
+
 BUGS
 
    o subfits
@@ -111,6 +115,7 @@ BUGS
    o mppm, profilepl
    Crashed, with a message about 'SpatstatVersion',
    if the 'spatstat' package was neither loaded nor attached.
+   [Spotted by Markus Herrmann.]
    Fixed.
 
    o [.lpp
