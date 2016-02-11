@@ -1041,7 +1041,7 @@ grid1index(x, xrange, nx)
 grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
-            control, niter, verbose, subset, \dots)
+            control, niter, verbose, subset, \dots, reltol)
 hasenvelope(X, E)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)

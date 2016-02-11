@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.70 $   $Date: 2016/02/10 06:57:10 $
+#  $Revision: 1.74 $   $Date: 2016/02/11 05:07:22 $
 #
 
 mppm <- local({
@@ -11,7 +11,12 @@ mppm <- local({
 #%^!ifdef RANDOMEFFECTS                 
                    random=NULL,
 #%^!endif                 
-                   use.gam=FALSE) {
+                   use.gam=FALSE,
+#%^!ifdef RANDOMEFFECTS                                    
+                   reltol.pql=1e-3,
+#%^!endif                 
+                   gcontrol=list()
+                   ) {
     ## remember call
     cl <- match.call()
     callstring <- paste(short.deparse(sys.call()), collapse="")
@@ -404,24 +409,30 @@ mppm <- local({
     want.trend <- prep0$info$want.trend
     if(want.trend && use.gam) {
       fitter <- "gam"
+      ctrl <- do.call(gam.control, resolve.defaults(gcontrol, list(maxit=50)))
       FIT  <- gam(fmla, family=quasi(link=log, variance=mu), weights=.mpl.W,
                   data=moadf, subset=(.mpl.SUBSET=="TRUE"),
-                  control=gam.control(maxit=50))
+                  control=ctrl)
       deviants <- deviance(FIT)
 #%^!ifdef RANDOMEFFECTS    
     } else if(!is.null(random)) {
       fitter <- "glmmPQL"
+      ctrl <- do.call(lmeControl, resolve.defaults(gcontrol, list(maxIter=50)))
+      attr(fmla, "ctrl") <- ctrl # very strange way to pass argument
+      fixed <- 42 # to satisfy package checker
       FIT  <- hackglmmPQL(fmla, random=random,
                           family=quasi(link=log, variance=mu), weights=.mpl.W,
                           data=moadf, subset=glmmsubset,
-                          control=glm.control(maxit=50))
+                          control=attr(fixed, "ctrl"),
+                          reltol=reltol.pql)
       deviants <-  -2 * logLik(FIT)
 #%^!endif    
     } else {
       fitter <- "glm"
+      ctrl <- do.call(glm.control, resolve.defaults(gcontrol, list(maxit=50)))
       FIT  <- glm(fmla, family=quasi(link="log", variance="mu"), weights=.mpl.W,
                   data=moadf, subset=(.mpl.SUBSET=="TRUE"),
-                  control=glm.control(maxit=50))
+                  control=ctrl)
       deviants <- deviance(FIT)
     }
     ## maximised log-pseudolikelihood

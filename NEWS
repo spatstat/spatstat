@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.018
+        CHANGES IN spatstat VERSION 1.44-1.019
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     Suman Rakshit and Sven Wagner for contributions.
 
     o Surgery with linear networks.
+
+    o Bug fixes in code for replicated patterns.
 
     o Colour maps for point patterns with continuous marks are easier to define.
 
@@ -91,6 +93,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o mppm
     Performs more checks for consistency of the input data.
+    
+    o mppm
+    New arguments 'gcontrol' and 'reltol.pql' control the fitting algorithm.
 
 BUGS
 
@@ -103,7 +108,13 @@ BUGS
    If the model included factor-valued spatial covariates, and if
    not all levels of the factor were present in each row of the data,
    the resulting objects were malformed and caused errors in other code.
-   
+   [Spotted by Sven Wagner]
+   Fixed.
+
+   o subfits
+   Crashed with some random-effects formulas.
+   Fixed.
+
    o improve.kppm
    An error message about a missing object 'gminus1' occurred
    when vcov=TRUE, fast.vcov=FALSE and type="clik1" or "wclik1".

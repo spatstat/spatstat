@@ -3,7 +3,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.18 $  $Date: 2016/02/08 08:34:48 $
+#  $Revision: 1.19 $  $Date: 2016/02/11 00:48:24 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {
@@ -83,7 +83,7 @@ active.interactions <- function(object) {
   answer <- impliedpresence(itags, iformula, dfdata, nondfnames)
 #%^!ifdef RANDOMEFFECTS  
   if(!is.null(random)) {
-    if("/" %in% all.names(random)) {
+    if("|" %in% all.names(random)) {
       ## hack since model.matrix doesn't handle "|" as desired
       rnd <- gsub("|", "/", pasteFormula(random), fixed=TRUE)
       random <- as.formula(rnd, env=environment(random))

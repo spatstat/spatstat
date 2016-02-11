@@ -42,15 +42,11 @@
   London: Chapman and Hall/CRC Press. 
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Ida-Maria Sintorn and Leanne Bischoff.
-  Implemented by 
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
+  Implemented in \pkg{spatstat} by
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{fixef.mppm}},
@@ -58,6 +54,9 @@
 }
 \examples{
  H <- hyperframe(Y = waterstriders)
+ # Tweak data to exaggerate differences
+ H$Y[[1]] <- rthin(H$Y[[1]], 0.3)
+
  m1 <- mppm(Y ~ id,  data=H, Strauss(7))
  ranef(m1)
  m2 <- mppm(Y ~ 1,  random=~1|id, data=H, Strauss(7))

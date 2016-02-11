@@ -11,7 +11,11 @@
 %#%^!ifdef RANDOMEFFECTS
             random=NULL,
 %#%^!endif
-        use.gam = FALSE)
+        use.gam = FALSE,
+%#%^!ifdef RANDOMEFFECTS
+        reltol.pql=1e-3,
+%#%^!endif
+        gcontrol=list())
 }
 \arguments{
   \item{formula}{
@@ -50,7 +54,33 @@
   }
 %#%^!endif  
   \item{use.gam}{Logical flag indicating whether to fit the model
-    using \code{\link{gam}} or \code{\link{glm}}.
+    using \code{\link[mgcv]{gam}} or \code{\link[stats]{glm}}.
+  }
+%#%^!ifdef RANDOMEFFECTS
+  \item{reltol.pql}{
+    Relative tolerance for successive steps in
+    the penalised quasi-likelihood algorithm,
+    used when the model includes random effects.
+    The algorithm terminates when the root mean square of the
+    relative change in coefficients is less than \code{reltol.pql}.
+  }
+%#%^!endif  
+  \item{gcontrol}{
+    List of arguments to control the fitting algorithm.
+    Arguments are passed to \code{\link[stats]{glm.control}}
+    or \code{\link[mgcv]{gam.control}}
+%#%^!ifdef RANDOMEFFECTS
+    or \code{\link[nlme]{lmeControl}}
+%#%^!endif    
+    depending on the kind of model being fitted.
+%#%^!ifdef RANDOMEFFECTS
+    If the model has random effects, the arguments are passed to
+    \code{\link[nlme]{lmeControl}}. Otherwise,
+%#%^!endif    
+    if \code{use.gam=TRUE} the arguments are passed to
+    \code{\link[mgcv]{gam.control}}, and if
+    \code{use.gam=FALSE} (the default) they are passed to
+    \code{\link[stats]{glm.control}}.
   }
 }
 \details{
@@ -210,18 +240,18 @@
 
   Baddeley, A., Rubak, E. and Turner, R. (2015)
   \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  London: Chapman and Hall/CRC Press. 
+  London: Chapman and Hall/CRC Press.
+
+  Bell, M. and Grunwald, G. (2004)
+  Mixed models for the analysis of replicated spatial point patterns.
+  \emph{Biostatistics} \bold{5}, 633--648.
 }
 \author{
   Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
-  Implemented by 
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Implemented in \pkg{spatstat} by 
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{ppm}},

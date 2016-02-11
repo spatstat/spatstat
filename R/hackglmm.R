@@ -1,9 +1,9 @@
 # hackglmm.R
-#  $Revision: 1.3 $ $Date: 2015/08/12 07:25:33 $
+#  $Revision: 1.4 $ $Date: 2016/02/11 00:48:01 $
 
 hackglmmPQL <- 
 function (fixed, random, family, data, correlation, weights,
-    control, niter = 10, verbose = TRUE, subset, ...)
+    control, niter = 10, verbose = TRUE, subset, ..., reltol=1e-3)
 {
     if (is.character(family))
         family <- get(family)
@@ -84,7 +84,7 @@ function (fixed, random, family, data, correlation, weights,
         fit <- eval(mcall)
         etaold <- eta
         eta <- fitted(fit) + off
-        if (sum((eta - etaold)^2) < 1e-06 * sum(eta^2))
+        if (sum((eta - etaold)^2) < (reltol^2) * sum(eta^2))
             break
         mu <- fam$linkinv(eta)
         mu.eta.val <- fam$mu.eta(eta)
