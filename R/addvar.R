@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.7 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.8 $  $Date: 2016/02/11 10:17:12 $
 #
 
 
@@ -350,7 +350,7 @@ plot.addvar <- function(x, ..., do.points=FALSE) {
   # adjust y limits if intending to plot points as well
   ylimcover <- if(do.points) range(yresid, finite=TRUE) else NULL
   #
-  do.call("plot.fv", resolve.defaults(list(x), list(...),
+  do.call(plot.fv, resolve.defaults(list(x), list(...),
                                       list(main=xname,
                                            shade=c("hi", "lo"),
                                            legend=FALSE,

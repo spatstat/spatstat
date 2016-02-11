@@ -4,7 +4,7 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.21 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.22 $ $Date: 2016/02/11 10:17:12 $
 #
 
 residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
@@ -49,7 +49,7 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
         hi.res.quad <- quadscheme(data=data.ppm(object), dummy=quad)
       else {
         # assume 'quad' is a list of arguments to 'quadscheme'
-        hi.res.quad <- do.call("quadscheme",
+        hi.res.quad <- do.call(quadscheme,
                                append(list(data.ppm(object)),
                                       quad))
       }

@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.18 $ $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.19 $ $Date: 2016/02/11 10:17:12 $
 #
 
 effectfun <- local({
@@ -118,8 +118,8 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
     fakeloc[[covname]] <- Zvals
   else fakecov[[covname]] <- Zvals
   # convert to data frame
-  fakeloc <- do.call("data.frame", fakeloc)
-  fakecov <- if(length(fakecov) > 0) do.call("data.frame", fakecov) else NULL
+  fakeloc <- do.call(data.frame, fakeloc)
+  fakecov <- if(length(fakecov) > 0) do.call(data.frame, fakecov) else NULL
   #
   # Now predict
   pred <- predict(model, locations=fakeloc, covariates=fakecov, se=se.fit)

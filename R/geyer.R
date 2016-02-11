@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.28 $	$Date: 2014/12/20 14:21:08 $
+#    $Revision: 2.30 $	$Date: 2016/02/11 10:17:12 $
 #
 #    Geyer's saturation process
 #
@@ -66,7 +66,7 @@ Geyer <- local({
                        "reference value 1"),
                      unitname=unitz)
            if(plotit)
-             do.call("plot.fv",
+             do.call(plot.fv,
                      resolve.defaults(list(fun),
                                       list(...),
                                       list(ylim=range(0,1,y))))

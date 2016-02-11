@@ -1,7 +1,7 @@
 #
 # plot.mppm.R
 #
-#   $Revision: 1.3 $  $Date: 2015/09/27 02:28:17 $
+#   $Revision: 1.4 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -14,11 +14,11 @@ plot.mppm <- function(x, ..., trend=TRUE, cif=FALSE, se=FALSE,
                               list(...),
                               list(main=xname))
   if(trend) 
-    do.call("plot", c(arglist, list(trend=TRUE, cif=FALSE, se=FALSE)))
+    do.call(plot, c(arglist, list(trend=TRUE, cif=FALSE, se=FALSE)))
   if(cif) 
-    do.call("plot", c(arglist, list(trend=FALSE, cif=TRUE, se=FALSE)))
+    do.call(plot, c(arglist, list(trend=FALSE, cif=TRUE, se=FALSE)))
   if(se) 
-    do.call("plot", c(arglist, list(trend=FALSE, cif=FALSE, se=TRUE)))
+    do.call(plot, c(arglist, list(trend=FALSE, cif=FALSE, se=TRUE)))
   invisible(NULL)
 }
 

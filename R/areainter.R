@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.35 $	$Date: 2014/12/22 04:37:56 $
+#    $Revision: 1.37 $	$Date: 2016/02/11 10:17:12 $
 #
 #    The area interaction
 #
@@ -93,7 +93,7 @@ AreaInter <- local({
                        "reference value 1"),
                      unitname=unitz)
            if(plotit)
-             do.call("plot.fv",
+             do.call(plot.fv,
                      resolve.defaults(list(fun),
                                       list(...),
                                       list(ylim=range(0,1,y))))

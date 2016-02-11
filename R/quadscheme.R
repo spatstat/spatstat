@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.34 $    $Date: 2015/10/21 09:06:57 $
+#      $Revision: 4.35 $    $Date: 2016/02/11 10:17:12 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.
@@ -52,10 +52,10 @@ quadscheme <- function(data, dummy, method="grid", ...) {
   mD <- is.marked(dummy)
 
   if(!mX && !mD)
-    Q <- do.call("quadscheme.spatial",
+    Q <- do.call(quadscheme.spatial,
                  append(list(data, dummy, check=FALSE), wp))
   else if(mX && !mD)
-    Q <- do.call("quadscheme.replicated",
+    Q <- do.call(quadscheme.replicated,
                  append(list(data, dummy, check=FALSE), wp))
   else if(!mX && mD)
     stop("dummy points are marked but data are unmarked")

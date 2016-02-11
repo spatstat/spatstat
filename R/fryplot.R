@@ -1,7 +1,7 @@
 #
 #  fryplot.R
 #
-#  $Revision: 1.13 $ $Date: 2014/11/10 07:42:41 $
+#  $Revision: 1.14 $ $Date: 2016/02/11 10:17:12 $
 #
 
 fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
@@ -15,7 +15,7 @@ fryplot <- function(X, ..., width=NULL, from=NULL, to=NULL, axes=FALSE) {
   }
   bb <- owin(c(-1,1) * halfspan[1], c(-1,1) * halfspan[2])
   Y <- frypoints(X, from=from, to=to, dmax=diameter(bb))[bb]
-  do.call("plot.ppp",
+  do.call(plot.ppp,
           resolve.defaults(list(x=Y),
                            list(...),
                            list(main=paste("Fry plot of", Xname))))

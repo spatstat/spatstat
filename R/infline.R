@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.20 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.21 $ $Date: 2016/02/11 10:17:12 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -55,7 +55,7 @@ plot.infline <- function(x, ...) {
   for(i in seq_len(nrow(x))) {
     xi <- as.list(x[i, 1:4])
     xi[sapply(xi, is.na)] <- NULL
-    do.call("abline", append(xi, list(...)))
+    do.call(abline, append(xi, list(...)))
   }
   return(invisible(NULL))
 }

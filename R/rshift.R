@@ -3,7 +3,7 @@
 #
 #   random shift with optional toroidal boundary
 #
-#   $Revision: 1.16 $   $Date: 2013/05/01 08:00:33 $
+#   $Revision: 1.17 $   $Date: 2016/02/11 10:17:12 $
 #
 #
 rshift <- function(X, ...) {
@@ -37,7 +37,7 @@ rshift.splitppp <- function(X, ..., which=seq_along(X))
   }
   # perform shift on selected patterns
   # (setting group = NULL ensures each pattern is not split further)
-  shiftXsub <- do.call("lapply", append(list(X[iwhich], rshift.ppp, group=NULL),
+  shiftXsub <- do.call(lapply, append(list(X[iwhich], rshift.ppp, group=NULL),
                                         arglist))
   # put back
   X[iwhich] <- shiftXsub
@@ -66,7 +66,7 @@ rshift.ppp <- function(X, ..., which=NULL, group)
   # if grouping, use split
   if(!is.null(group)) {
     Y <- split(X, group)
-    split(X, group) <- do.call("rshift.splitppp",
+    split(X, group) <- do.call(rshift.splitppp,
                                append(list(Y, which=which),
                                       arglist))
     return(X)

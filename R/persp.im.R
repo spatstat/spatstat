@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.11 $ $Date: 2015/08/20 02:44:09 $
+##  $Revision: 1.12 $ $Date: 2016/02/11 10:17:12 $
 ##
 
 persp.im <- local({
@@ -139,7 +139,7 @@ persp.im <- local({
                               list(main=xname),
                               .StripNull=TRUE)
 
-    jawab <- do.call.matched("persp", yargh, 
+    jawab <- do.call.matched(persp, yargh, 
                              funargs=.Spatstat.persp.args)
 
     attr(jawab, "expand") <- yargh$expand

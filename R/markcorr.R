@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.75 $ $Date: 2015/10/21 09:06:57 $
+##     $Revision: 1.76 $ $Date: 2016/02/11 10:17:12 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -232,7 +232,7 @@ Kmark <-
            Ef2 <- mean(f1X)^2
          },
          general={
-           fXX <- do.call("outer", append(list(mX, mX, f), fargs))
+           fXX <- do.call(outer, append(list(mX, mX, f), fargs))
            wt <- fXX/lambda^2
            K <- Kinhom(X, r=r, reciplambda2=wt, correction=correction,
                        ..., renormalise=FALSE)
@@ -367,7 +367,7 @@ markcorr <-
                  mcross <- if(is.null(fargs)) {
                    outer(marx, marx, f)
                  } else {
-                   do.call("outer", append(list(marx,marx,f),fargs))
+                   do.call(outer, append(list(marx,marx,f),fargs))
                  }
                  if(unweighted) {
                    mean(mcross)

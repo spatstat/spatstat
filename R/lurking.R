@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.48 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.49 $ $Date: 2016/02/11 10:17:12 $
 #
 
 lurking <- local({
@@ -238,14 +238,14 @@ lurking <- local({
     ##  Estimated by spline smoothing (with x values jittered)
     if(!cumulative) {
       ## fit smoothing spline to (A) 
-      ss <- do.call("smooth.spline",
+      ss <- do.call(smooth.spline,
                     append(list(covsort, cummark),
                            splineargs)
                     )
       ## estimate derivative of (A)
       derivmark <- predict(ss, covsort, deriv=1)$y 
       ## similarly for (B) 
-      ss <- do.call("smooth.spline",
+      ss <- do.call(smooth.spline,
                     append(list(cvalues, mean0),
                            splineargs)
                     )
@@ -426,7 +426,7 @@ plot.lurk <- function(x, ..., shade="grey") {
 
     ## start plot
     vname <- paste(if(cumulative)"cumulative" else "marginal", typename)
-    do.call("plot",
+    do.call(plot,
             resolve.defaults(
               list(covrange, mr),
               list(type="n"),
@@ -467,7 +467,7 @@ plot.lurk <- function(x, ..., shade="grey") {
     ## Empirical
     lines(value ~ covariate, empirical, ...)
     ## Theoretical mean
-    do.call("lines",
+    do.call(lines,
             resolve.defaults(
               list(mean ~ covariate, theoretical),
               list(...),

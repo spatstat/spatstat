@@ -1,7 +1,7 @@
 #
 #      alltypes.R
 #
-#   $Revision: 1.31 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.32 $   $Date: 2016/02/11 10:17:12 $
 #
 #
                                   
@@ -86,7 +86,7 @@ alltypes <- function(X, fun="K", ...,
   # if computing envelopes, first generate simulated patterns
   # using undocumented feature of envelope()
   if(envelope && reuse) {
-    L <- do.call("envelope",
+    L <- do.call(spatstat::envelope,
                  resolve.defaults(
                                   list(X, fun=estimator),
                                   list(internal=list(eject="patterns")),
@@ -110,7 +110,7 @@ alltypes <- function(X, fun="K", ...,
                  estimator(Y, i=ma[i], ...),
                  estimator(Y, i=ma[i], j=ma[j], ...))
         else
-          do.call("envelope",
+          do.call(spatstat::envelope,
                   resolve.defaults(
                                    list(Y, estimator),
                                    list(simulate=L, internal=intern),

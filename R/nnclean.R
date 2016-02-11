@@ -6,7 +6,7 @@
 # Adapted from statlib file NNclean.q
 # Authors: Simon Byers and Adrian Raftery
 #
-#  $Revision: 1.15 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.16 $   $Date: 2016/02/11 10:17:12 $
 #
 
 nnclean <- function(X, k, ...) {
@@ -186,7 +186,7 @@ nncleanEngine <-
       dotargs <- col.args.to.grey(dotargs)
     ## compute plot limits to include both histogram and density
     xlim <- c(0, max(kthNND))
-    H <- do.call("hist",
+    H <- do.call(hist,
                  resolve.defaults(list(kthNND, plot=FALSE, warn.unused=FALSE),
                                   dotargs,
                                   list(nclass=40)))
@@ -198,7 +198,7 @@ nncleanEngine <-
     xlab <- paste("Distance to", ordinal(k), "nearest neighbour")
     ## now plot it (unless overridden by plot=FALSE)
     reallyplot <- resolve.1.default("plot", list(...), list(plot=TRUE))
-    H <- do.call("hist",
+    H <- do.call(hist,
                  resolve.defaults(list(kthNND, probability=TRUE),
                                   dotargs,
                                   list(plot=TRUE,
@@ -214,7 +214,7 @@ nncleanEngine <-
       lineargs <- resolve.defaults(lineargs, list(col="green", lwd=2))
       if(spatstat.options("monochrome"))
         lineargs <- col.args.to.grey(lineargs)
-      do.call("lines", append(list(x=support, y=fittedy), lineargs))
+      do.call(lines, append(list(x=support, y=fittedy), lineargs))
     }
   }
   #

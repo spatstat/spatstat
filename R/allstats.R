@@ -2,7 +2,7 @@
 #
 #   allstats.R
 #
-#   $Revision: 1.17 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.18 $   $Date: 2016/02/11 10:17:12 $
 #
 #
 allstats <- function(pp, ..., dataname=NULL,verb=FALSE) {
@@ -16,7 +16,7 @@ allstats <- function(pp, ..., dataname=NULL,verb=FALSE) {
 
 # estimate F, G and J 
   if(verb) cat("Calculating F, G, J ...")
-  Jout <- do.call.matched("Jest",list(X=pp, ...))
+  Jout <- do.call.matched(Jest,list(X=pp, ...))
   if(verb) cat("ok.\n")
 
 # extract F, G and J
@@ -30,7 +30,7 @@ allstats <- function(pp, ..., dataname=NULL,verb=FALSE) {
 
 # compute second moment function K
   if(verb) cat("Calculating K function...")
-  Kout <- do.call.matched("Kest", list(X=pp, ...))
+  Kout <- do.call.matched(Kest, list(X=pp, ...))
   fns <- append(fns, list("K function"=Kout))
   if(verb) cat("done.\n")
 

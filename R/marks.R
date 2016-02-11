@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.41 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.42 $   $Date: 2016/02/11 10:17:12 $
 #
 # stuff for handling marks
 #
@@ -228,7 +228,7 @@ marksubset <- function(x, index, format=NULL) {
          hyperframe={
            xcols <- as.list(x)
            repxcols <- lapply(xcols, rep, times=n)
-           return(do.call("hyperframe", repxcols))
+           return(do.call(hyperframe, repxcols))
          },
          stop("Internal error: unrecognised format of marks"))
 }
@@ -275,7 +275,7 @@ markappend <- function(...) {
          vector = {
            marxlist <- lapply(marxlist,
                               function(x){as.data.frame.vector(x,nm="v1")})
-           marx <- do.call("rbind", marxlist)[,1]
+           marx <- do.call(rbind, marxlist)[,1]
            return(marx)
          },
          hyperframe =,
@@ -291,7 +291,7 @@ markappend <- function(...) {
                                       y=nama[[1]]))
            if(!all(samenames))
              stop("Data frames of marks have different names.\n")
-           marx <- do.call("rbind", marxlist)
+           marx <- do.call(rbind, marxlist)
            return(marx)
          },
          list = {
@@ -352,7 +352,7 @@ numeric.columns <- function(M, logical=TRUE, others=c("discard", "na")) {
     # return a data frame with no columns
     return(as.data.frame(matrix(, nrow=nrow(M), ncol=0)))
   }
-  Mout <- do.call("data.frame", Mprocessed[!isnul])
+  Mout <- do.call(data.frame, Mprocessed[!isnul])
   if(ncol(M) == 1 && ncol(Mout) == 1)
     colnames(Mout) <- NULL
   return(Mout)

@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.134 $   $Date: 2015/11/14 03:51:20 $
+##    $Revision: 1.136 $   $Date: 2016/02/11 10:17:12 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1047,7 +1047,7 @@ range.fv <- local({
     isfun <- sapply(aarg, is.fv)
     if(any(isfun)) 
       aarg[isfun] <- lapply(aarg[isfun], range1fv, na.rm=na.rm, finite=finite)
-    do.call("range", append(aarg, list(na.rm=na.rm, finite=finite)))
+    do.call(range, append(aarg, list(na.rm=na.rm, finite=finite)))
   }
 
   range.fv

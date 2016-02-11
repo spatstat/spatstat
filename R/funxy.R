@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.3 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.5 $   $Date: 2016/02/11 10:17:12 $
 #
 
 funxy <- function(f, W=NULL) {
@@ -36,7 +36,7 @@ domain.funxy <- Window.funxy <- function(X, ...) { as.owin(X) }
 plot.funxy <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   W <- as.owin(x)
-  do.call("do.as.im",
+  do.call(do.as.im,
           resolve.defaults(list(x, action="plot"),
                            list(...),
                            list(main=xname, W=W)))
@@ -46,7 +46,7 @@ plot.funxy <- function(x, ...) {
 contour.funxy <- function(x, ...) {
   xname <- deparse(substitute(x))
   W <- as.owin(x)
-  do.call("do.as.im",
+  do.call(do.as.im,
           resolve.defaults(list(x, action="contour"),
                            list(...),
                            list(main=xname, W=W)))
@@ -56,7 +56,7 @@ contour.funxy <- function(x, ...) {
 persp.funxy <- function(x, ...) {
   xname <- deparse(substitute(x))
   W <- as.rectangle(as.owin(x))
-  do.call("do.as.im",
+  do.call(do.as.im,
           resolve.defaults(list(x, action="persp"),
                            list(...),
                            list(main=xname, W=W)))

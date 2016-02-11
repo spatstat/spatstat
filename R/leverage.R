@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.47 $  $Date: 2015/12/23 08:45:13 $
+#  $Revision: 1.48 $  $Date: 2016/02/11 10:17:12 $
 #
 
 leverage <- function(model, ...) {
@@ -349,7 +349,7 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
     return(NULL)
   switch(what,
          gradient = {
-           result <- do.call("cbind", unname(lapply(Dlist, as.data.frame)))
+           result <- do.call(cbind, unname(lapply(Dlist, as.data.frame)))
            result <- as.matrix(result)
          },
          hessian = {
@@ -365,12 +365,12 @@ plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
   fitname <- x$fitname
   defaultmain <- paste("Leverage for", fitname)
   y <- x$lev
-  do.call("plot.im",
+  do.call(plot.im,
           resolve.defaults(list(y$smo),
                            list(...),
                            list(main=defaultmain)))
   if(showcut && diff(range(y$smo)) != 0) 
-    do.call.matched("contour.im",
+    do.call.matched(contour.im,
                     resolve.defaults(list(x=y$smo, levels=y$ave,
                                           add=TRUE, col=col.cut),
                                      list(...),
@@ -383,7 +383,7 @@ plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
 plot.influence.ppm <- function(x, ...) {
   fitname <- x$fitname
   defaultmain <- paste("Influence for", fitname)
-  do.call("plot.ppp",
+  do.call(plot.ppp,
           resolve.defaults(list(x$infl),
                            list(...),
                            list(main=defaultmain)))

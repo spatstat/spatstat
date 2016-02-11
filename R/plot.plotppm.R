@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.18 $  $Date: 2015/04/21 13:14:20 $
+# $Revision: 1.19 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -67,14 +67,14 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
       for (style in how) {
         switch(style,
                persp = {
-                 do.call("persp",
+                 do.call(persp,
                          resolve.defaults(list(xs[[i]]),
                                           list(...), 
                                           spatstat.options("par.persp"),
                                           list(xlab="x", zlab=ttt, main=main)))
                },
                image = {
-                 do.call("image",
+                 do.call(image,
                          resolve.defaults(list(xs[[i]]),
                                           list(...),
                                           list(main=main)))
@@ -84,7 +84,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
                  }
                },
                contour = {
-                 do.call("contour",
+                 do.call(contour,
                          resolve.defaults(list(xs[[i]]),
                                           list(...),
                                           list(main=main)))

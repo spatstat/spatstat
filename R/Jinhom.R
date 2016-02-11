@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.9 $ $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.10 $ $Date: 2016/02/11 10:17:12 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,
@@ -285,7 +285,7 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
   yord <- yy[oX]
   vord <- vv[oX]
   # determine pixel grid and compute distance to boundary
-  M <- do.call.matched("as.mask", append(list(w=W), list(...)))
+  M <- do.call.matched(as.mask, append(list(w=W), list(...)))
   bM <- bdist.pixels(M, style="matrix")
   bM <- as.vector(bM)
   # x, y coordinates of pixels are already sorted by increasing x

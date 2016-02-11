@@ -1,24 +1,24 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.4 $  $Date: 2014/05/15 10:09:09 $
+#  $Revision: 1.5 $  $Date: 2016/02/11 10:17:12 $
 #
 
 unnormdensity <- function(x, ..., weights=NULL) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
   if(is.null(weights)) {
-    out <- do.call.matched("density.default", c(list(x=x), list(...)))
+    out <- do.call.matched(density.default, c(list(x=x), list(...)))
     out$y <- length(x) * out$y
   } else if(all(weights == 0)) {
     # result is zero
-    out <- do.call.matched("density.default", c(list(x=x), list(...)))
+    out <- do.call.matched(density.default, c(list(x=x), list(...)))
     out$y <- 0 * out$y
   } else if(all(weights >= 0)) {
     # all masses are nonnegative
     w <- weights
     totmass <- sum(w)
-    out <- do.call.matched("density.default",
+    out <- do.call.matched(density.default,
                            c(list(x=x),
                              list(...),
                              list(weights=w/totmass)))
@@ -27,7 +27,7 @@ unnormdensity <- function(x, ..., weights=NULL) {
     # all masses are nonpositive
     w <- (- weights)
     totmass <- sum(w)
-    out <- do.call.matched("density.default",
+    out <- do.call.matched(density.default,
                            c(list(x=x),
                              list(...),
                              list(weights=w/totmass)))
@@ -39,19 +39,19 @@ unnormdensity <- function(x, ..., weights=NULL) {
     wpos <- pmax.int(0, w)
     wneg <- - pmin.int(0, w)
     # determine bandwidth using absolute masses
-    dabs <- do.call.matched("density.default",
+    dabs <- do.call.matched(density.default,
                             c(list(x=x),
                               list(...),
                               list(weights=wabs/sum(wabs))))
     bw <- dabs$bw
     # compute densities for positive and negative masses separately
-    outpos <- do.call.matched("density.default",
+    outpos <- do.call.matched(density.default,
                       resolve.defaults(list(x=x),
                                        list(bw=bw, adjust=1),
                                        list(weights=wpos/sum(wpos)),
                                        list(...),
                                        .StripNull=TRUE))
-    outneg <- do.call.matched("density.default",
+    outneg <- do.call.matched(density.default,
                       resolve.defaults(list(x=x),
                                        list(bw=bw, adjust=1),
                                        list(weights=wneg/sum(wneg)),

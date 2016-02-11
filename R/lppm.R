@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.34 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.35 $   $Date: 2016/02/11 10:17:12 $
 #
 
 lppm <- function(X, ...) {
@@ -167,7 +167,7 @@ summary.lppm <- function(object, ...) {
 plot.lppm <- function(x, ..., type="trend") {
   xname <- short.deparse(substitute(x))
   y <- predict(x, type=type)
-  do.call("plot", resolve.defaults(list(y),
+  do.call(plot, resolve.defaults(list(y),
                                    list(...),
                                    list(main=xname)))
 }
@@ -182,7 +182,7 @@ anova.lppm <- function(object, ..., test=NULL) {
   mod <- sapply(stuff, is.lppm)
   stuff[mod] <- lapply(stuff[mod], getElement, name="fit")
   #' analysis of deviance or adjusted composite deviance
-  do.call("anova.ppm", append(stuff, list(test=test)))
+  do.call(anova.ppm, append(stuff, list(test=test)))
 }
 
 update.lppm <- function(object, ...) {
@@ -194,7 +194,7 @@ update.lppm <- function(object, ...) {
   islpp <- unlist(lapply(aargh, inherits, what="lpp"))
   if(!any(islpp)) {
     # pass arguments through to update.ppm
-    newfit <- do.call("update.ppm", append(list(fit), aargh))
+    newfit <- do.call(update.ppm, append(list(fit), aargh))
     newX <- X
   } else {
     # trap point pattern argument & convert to quadscheme
@@ -202,7 +202,7 @@ update.lppm <- function(object, ...) {
       stop(paste("Arguments not understood:", npp, "lpp objects given"))
     newX <- aargh[[which(islpp)]]
     newQ <- linequad(newX)
-    newfit <- do.call("update.ppm",
+    newfit <- do.call(update.ppm,
                       append(list(fit, newQ), aargh[!islpp]))
   } 
   if(!is.poisson.ppm(newfit))

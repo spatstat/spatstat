@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.17 $  $Date: 2015/04/14 17:18:06 $
+#  $Revision: 1.18 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -56,7 +56,7 @@ berman.test.ppp <-
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
-    do.call("bermantestEngine",
+    do.call(bermantestEngine,
             resolve.defaults(list(ppm(X), covariate, which, alternative),
                              list(...),
                              list(modelname="CSR",
@@ -75,7 +75,7 @@ berman.test.ppm <- function(model, covariate,
   alternative <- match.arg(alternative)
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
-  do.call("bermantestEngine",
+  do.call(bermantestEngine,
           resolve.defaults(list(model, covariate, which, alternative),
                            list(...),
                            list(modelname=modelname,
@@ -94,7 +94,7 @@ berman.test.lpp <-
     which <- match.arg(which)
     alternative <- match.arg(alternative)
 
-    do.call("bermantestEngine",
+    do.call(bermantestEngine,
             resolve.defaults(list(lppm(X), covariate, which, alternative),
                              list(...),
                              list(modelname="CSR",
@@ -113,7 +113,7 @@ berman.test.lppm <- function(model, covariate,
   alternative <- match.arg(alternative)
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
-  do.call("bermantestEngine",
+  do.call(bermantestEngine,
           resolve.defaults(list(model, covariate, which, alternative),
                            list(...),
                            list(modelname=modelname,
@@ -258,7 +258,7 @@ plot.bermantest <-
                            sQuote(info$covname)),
                      paste("Z1 statistic =", signif(x$statistic, 4)),
                      paste("p-value=", signif(x$p.value, 4)))
-           do.call("plot.default",
+           do.call(plot.default,
                    resolve.defaults(
                                     list(x=xxx, y=yyy, type="l"),
                                     list(...),
@@ -282,7 +282,7 @@ plot.bermantest <-
                            sQuote(info$covname)),
                      paste("Z2 statistic =", signif(x$statistic, 4)),
                      paste("p-value=", signif(x$p.value, 4)))
-           do.call("plot.ecdf",
+           do.call(plot.ecdf,
                    resolve.defaults(
                                     list(cdfU),
                                     list(...),

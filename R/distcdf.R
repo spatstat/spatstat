@@ -3,7 +3,7 @@
 #'
 #' cdf of |X1-X2| when X1,X2 are iid uniform in W, etc
 #'
-#'  $Revision: 1.9 $  $Date: 2015/11/19 00:46:04 $
+#'  $Revision: 1.10 $  $Date: 2016/02/11 10:17:12 $
 #'
 
 distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
@@ -106,7 +106,7 @@ plot.bw.frac <- function(x, ...) {
   g <- attr(x, "g")
   f <- attr(x, "f")
   ropt <- as.numeric(x)
-  do.call("plot",
+  do.call(plot,
           resolve.defaults(list(g),
                              list(...),
                              list(main=xname)))

@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.38 $     $Date: 2015/10/21 09:06:57 $
+#     $Revision: 1.39 $     $Date: 2016/02/11 10:17:12 $
 #
 
 eval.im <- local({
@@ -39,7 +39,7 @@ eval.im <- local({
     images <- vars[ims]
     nimages <- length(images)
     ## test that the images are compatible
-    if(!(do.call("compatible", unname(images)))) {
+    if(!(do.call(compatible, unname(images)))) {
       whinge <- paste(if(nimages > 2) "some of" else NULL,
                       "the images",
                       commasep(sQuote(names(images))),
@@ -49,7 +49,7 @@ eval.im <- local({
         stop(whinge, call.=FALSE)
       } else {
         warning(whinge, call.=FALSE)
-        images <- do.call("harmonise.im", images)
+        images <- do.call(harmonise.im, images)
       }
     }
     ## trap a common error: using fv object as variable
@@ -118,7 +118,7 @@ harmonize.im <- harmonise.im <- function(...) {
   imgs <- argz[isim]
   ## if any windows are present, extract bounding box
   iswin <- unlist(lapply(argz, is.owin))
-  bb0 <- if(!any(iswin)) NULL else do.call("boundingbox", unname(argz[iswin]))
+  bb0 <- if(!any(iswin)) NULL else do.call(boundingbox, unname(argz[iswin]))
   if(length(imgs) == 1 && is.null(bb0)) {
     ## only one 'true' image: use it as template.
     result[isim] <- imgs
@@ -134,7 +134,7 @@ harmonize.im <- harmonise.im <- function(...) {
     which.finest <- which.min(xsteps)
     finest <- imgs[[which.finest]]
     ## get the bounding box
-    bb <- do.call("boundingbox", lapply(unname(imgs), as.rectangle))
+    bb <- do.call(boundingbox, lapply(unname(imgs), as.rectangle))
     if(!is.null(bb0)) bb <- boundingbox(bb, bb0)
     ## determine new raster coordinates
     xcol <- prolongseq(finest$xcol, bb$xrange)
@@ -195,7 +195,7 @@ commonGrid <- local({
       finest <- rasterlist[[which.finest]]
     }
     ## determine the bounding box
-    bb <- do.call("boundingbox", lapply(unname(argz[haswin]), as.rectangle))
+    bb <- do.call(boundingbox, lapply(unname(argz[haswin]), as.rectangle))
     ## determine new raster coordinates
     xcol <- prolongseq(finest$xcol, bb$xrange)
     yrow <- prolongseq(finest$yrow, bb$yrange)

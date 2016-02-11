@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.26 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.27 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -21,9 +21,9 @@ rmhcontrol.list <- function(...) {
   argz <- list(...)
   nama <- names(argz)
   if(length(argz) == 1 && !any(nzchar(nama)))
-    do.call("rmhcontrol.default", argz[[1]])
+    do.call(rmhcontrol.default, argz[[1]])
   else
-    do.call.matched("rmhcontrol.default", argz)
+    do.call.matched(rmhcontrol.default, argz)
 }
 
 rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
@@ -207,7 +207,7 @@ default.rmhcontrol <- function(model, w=NULL) {
 }
 
 update.rmhcontrol <- function(object, ...) {
-  do.call.matched("rmhcontrol.default",
+  do.call.matched(rmhcontrol.default,
                   resolve.defaults(list(...), as.list(object),
                                    .StripNull=TRUE))
 }

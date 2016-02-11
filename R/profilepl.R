@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.37 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.40 $  $Date: 2016/02/11 10:48:03 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -74,7 +74,7 @@ profilepl <- local({
         ## compute rbord = max reach of interactions
         if(verbose) message("(computing rbord)")
         for(i in 1:n) {
-          fi <- do.call("f", as.list(s[i, is.farg, drop=FALSE]))
+          fi <- do.call(f, as.list(s[i, is.farg, drop=FALSE]))
           if(!inherits(fi, "interact"))
             stop(paste("f did not yield an object of class",
                        sQuote("interact")))
@@ -90,7 +90,7 @@ profilepl <- local({
     if(pass.cfa || got.cfa) {
       savecomp <- FALSE
     } else {
-      Q <- do.call("ppm",
+      Q <- do.call(ppm,
                    append(list(...), list(rbord=rbord, justQ=TRUE)),
                    envir=callenv)
       savecomp <- !oversize.quad(Q)
@@ -98,7 +98,7 @@ profilepl <- local({
     ## go
     gc()
     if(verbose) {
-      message(paste("Comparing", n, "models..."))
+      message(paste("comparing", n, "models..."))
       pstate <- list()
     }
     for(i in 1:n) {
@@ -119,7 +119,7 @@ profilepl <- local({
                      callstring="",
                      skip.border=TRUE)
         if(pass.cfa) arg1 <- append(arg1, cfai)
-        fiti <- do.call("ppm", arg1, envir=callenv)
+        fiti <- do.call(ppm, arg1, envir=callenv)
         ## save intermediate computations (pairwise distances, etc)
         precomp <- fiti$internal$computed
         savedargs <- list(...,
@@ -131,9 +131,9 @@ profilepl <- local({
         ## use precomputed data
         argi <- append(savedargs, list(interaction=fi))
         if(pass.cfa) argi <- append(argi, cfai)
-        fiti <- do.call("ppm", argi, envir=callenv)
+        fiti <- do.call(ppm, argi, envir=callenv)
       }
-      ## save log PL for each fit
+      ## save log pl for each fit
       criterion[i] <-
           if(aic) -AIC(fiti) else as.numeric(logLik(fiti, warn=FALSE))
       ## save fitted coefficients for each fit
@@ -144,7 +144,7 @@ profilepl <- local({
       } else
         allcoef <- rbind(allcoef, co)
     }
-    if(verbose) message("Fitting optimal model...")
+    if(verbose) message("fitting optimal model...")
     opti <- which.max(criterion)
     gc()
     optint <- do.call(f, as.list(s[opti, is.farg, drop=FALSE]))
@@ -154,10 +154,10 @@ profilepl <- local({
       attr(optcfa, "fitter") <- "profilepl"
       optarg <- append(optarg, list(covfunargs=optcfa))
     }
-    optfit <- do.call("ppm", optarg, envir=callenv)
+    optfit <- do.call(ppm, optarg, envir=callenv)
     if(verbose) message("done.")
     critname <- if(aic) "-AIC" else
-                if(is.poisson(optfit)) "log L" else
+                if(is.poisson(optfit)) "log l" else
                 if(optfit$method == "logi") "log CL" else "log PL"
     result <- list(param=s,
                    prof=criterion,
@@ -181,7 +181,7 @@ profilepl <- local({
 ##
 
 print.profilepl <- function(x, ...) {
-  head1 <- "Profile log pseudolikelihood"
+  head1 <- "profile log pseudolikelihood"
   head2 <- "for model: "
   psc <- paste(unlist(strsplitretain(format(x$pseudocall))),
                collapse=" ")
@@ -197,8 +197,8 @@ print.profilepl <- function(x, ...) {
     corx <- x$fit$correction
     if(identical(corx, "border") && !is.null(x$rbord))
       splat("fitted with rbord =", x$rbord)
-    splat("Interaction:", x$fname)
-    splat("Irregular",
+    splat("interaction:", x$fname)
+    splat("irregular",
           ngettext(nparm, "parameter:", "parameters:\n"),
           paste(names(x$param),
                 "in",
@@ -206,7 +206,7 @@ print.profilepl <- function(x, ...) {
                 collapse="\n"))
   }
   popt <- x$param[x$iopt,, drop=FALSE]
-  splat("Optimum",
+  splat("optimum",
         ngettext(nparm, "value", "values"),
         "of irregular",
         ngettext(nparm, "parameter: ", "parameters:\n"),
@@ -220,7 +220,7 @@ print.profilepl <- function(x, ...) {
 
 summary.profilepl <- function(object, ...) {
   print(object)
-  cat("\n\nOptimal model:\n")
+  cat("\n\noptimal model:\n")
   print(object$fit)
 }
 
@@ -250,7 +250,7 @@ plot.profilepl <- local({
       lwd <- px$lwd
       lty <- px$lty
     }
-    ## strip any column that is entirely NA
+    ## strip any column that is entirely na
     nacol <- sapply(para, none.finite)
     para <- para[, !nacol, drop=FALSE]
     ## 
@@ -265,26 +265,26 @@ plot.profilepl <- local({
     } else {
       stopifnot(is.character(xvariable))
       if(!(xvariable %in% names(para)))
-        stop("There is no irregular parameter named", sQuote(xvariable))
+        stop("there is no irregular parameter named", sQuote(xvariable))
       xvalues <- para[[xvariable]]
       xname <- xvariable
     }
     ## y variable for plot                  
     if(is.null(coeff)) {
       yvalues <- x$prof
-      ylab <- x$critname %orifnull% "log PL"
+      ylab <- x$critname %orifnull% "log pl"
     } else {
       stopifnot(is.character(coeff))
       allcoef <- x$allcoef
       if(!(coeff %in% names(allcoef)))
-        stop(paste("There is no coefficient named", sQuote(coeff),
+        stop(paste("there is no coefficient named", sQuote(coeff),
                    "in the fitted model"))
       yvalues <- allcoef[[coeff]]
       ylab <- paste("coefficient:", coeff)
     }
     ## start plot
     if(!add)
-      do.call.matched("plot.default",
+      do.call.matched(plot.default,
                       resolve.defaults(list(x=range(xvalues), y=range(yvalues)),
                                        list(type="n", main=main),
                                        list(...),

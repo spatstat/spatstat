@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.51 $	$Date: 2015/08/27 08:28:22 $
+#	$Revision: 1.52 $	$Date: 2016/02/11 09:36:11 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern

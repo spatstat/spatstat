@@ -3,7 +3,7 @@
 # Function to take a matrix of pairwise distances
 # and compile a 'K' function in the format required by spatstat.
 #
-#   $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.8 $  $Date: 2016/02/11 10:17:12 $
 # -------------------------------------------------------------------
 
 compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,
@@ -87,7 +87,7 @@ compilepcf <- function(D, r, weights=NULL, denom=1, check=TRUE,
   gval <- gval/denom
   # edge effect correction at r = 0
   if(endcorrect) {
-    one <- do.call("density",
+    one <- do.call(density,
                    resolve.defaults(
                                     list(seq(rmin,rmax,length=512)),
                                     list(bw=den$bw, adjust=1),

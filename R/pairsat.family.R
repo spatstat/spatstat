@@ -2,7 +2,7 @@
 #
 #    pairsat.family.S
 #
-#    $Revision: 1.43 $	$Date: 2016/01/18 09:49:41 $
+#    $Revision: 1.44 $	$Date: 2016/02/11 09:36:11 $
 #
 #    The saturated pairwise interaction family of point process models
 #

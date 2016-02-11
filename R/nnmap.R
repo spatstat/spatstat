@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.8 $  $Date: 2016/02/11 10:17:12 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -43,7 +43,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   isrect <- is.rectangle(rescue.rectangle(W))
 
   # set up pixel array
-  M <- do.call.matched("as.mask",
+  M <- do.call.matched(as.mask,
                        resolve.defaults(list(...), list(w=W)))
   Mdim <- M$dim
   nxcol <- Mdim[2]

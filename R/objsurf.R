@@ -3,7 +3,7 @@
 #
 #  surface of the objective function for an M-estimator
 #
-#  $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.5 $ $Date: 2016/02/11 10:17:12 $
 #
 
 objsurf <- function(x, ...) {
@@ -58,7 +58,7 @@ objsurfEngine <- function(objfun, optpar, objargs,
   colnames(pargrid) <- names(optpar)
   # evaluate
   if(verbose) cat(paste("Evaluating", nrow(pargrid), "function values..."))
-  values <- do.call("apply",
+  values <- do.call(apply,
                     append(list(pargrid, 1, objfun, objargs=objargs), dotargs))
   if(verbose) cat("Done.\n")
   result <- list(x=xgrid, y=ygrid, z=matrix(values, ngrid[1], ngrid[2]))
@@ -84,7 +84,7 @@ image.objsurf <- plot.objsurf <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
-  do.call("image",
+  do.call(image,
           resolve.defaults(list(x=unclass(x)),
                            list(...),
                            list(xlab=nama[1], ylab=nama[2], main=xname)))
@@ -97,7 +97,7 @@ contour.objsurf <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   optpar <- attr(x, "optpar")
   nama <- names(optpar)
-  do.call("contour",
+  do.call(contour,
           resolve.defaults(list(x=unclass(x)),
                            list(...),
                            list(xlab=nama[1], ylab=nama[2], main=xname)))
@@ -112,7 +112,7 @@ persp.objsurf <- function(x, ...) {
   optpar <- attr(x, "optpar")
   objname <- attr(x, "objname")
   nama <- names(optpar)
-  r <- do.call("persp",
+  r <- do.call(persp,
                resolve.defaults(list(x=x$x, y=x$y, z=x$z),
                                 list(...),
                                 list(xlab=nama[1], ylab=nama[2],

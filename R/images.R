@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.133 $     $Date: 2015/09/01 01:56:46 $
+#      $Revision: 1.134 $     $Date: 2016/02/11 10:17:12 $
 #
 #      The class "im" of raster images
 #
@@ -265,7 +265,7 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
           if(ncolsub > 1) list(xcol = out$xcol[colsub]) else list(xrange=xr)
         yarg <-
           if(nrowsub > 1) list(yrow = out$yrow[rowsub]) else list(yrange=yr)
-        result <- do.call("im", c(marg, xarg, yarg))
+        result <- do.call(im, c(marg, xarg, yarg))
         return(result)
       }
       if(verifyclass(i, "im", fatal=FALSE)) {
@@ -828,7 +828,7 @@ hist.im <- function(x, ..., probability=FALSE) {
       heights <- tab
       ylab <- "Number of pixels"
     }
-    mids <- do.call("barplot",
+    mids <- do.call(barplot,
                    resolve.defaults(list(heights),
                                     list(...),
                                     list(xlab=paste("Pixel value"),
@@ -843,7 +843,7 @@ hist.im <- function(x, ..., probability=FALSE) {
     plotit <- resolve.defaults(list(...), list(plot=TRUE))$plot
     if(plotit) {
       ylab <- if(probability) "Probability density" else "Number of pixels"
-      out <- do.call("hist.default",
+      out <- do.call(hist.default,
                      resolve.defaults(list(values),
                                       list(...),
                                       list(freq=!probability,
@@ -853,7 +853,7 @@ hist.im <- function(x, ..., probability=FALSE) {
       out$xname <- xname
     } else {
       # plot.default whinges if `probability' given when plot=FALSE
-      out <- do.call("hist.default",
+      out <- do.call(hist.default,
                    resolve.defaults(list(values),
                                     list(...)))
       # hack!
@@ -864,7 +864,7 @@ hist.im <- function(x, ..., probability=FALSE) {
 }
 
 plot.barplotdata <- function(x, ...) {
-  do.call("barplot",
+  do.call(barplot,
           resolve.defaults(list(height=x$heights),
                            list(...),
                            list(main=paste("Histogram of ", x$xname))))
@@ -885,7 +885,7 @@ cut.im <- function(x, ...) {
 
 quantile.im <- function(x, ...) {
   verifyclass(x, "im")
-  q <- do.call("quantile",
+  q <- do.call(quantile,
                resolve.defaults(list(as.numeric(as.matrix(x))),
                                 list(...),
                                 list(na.rm=TRUE)))

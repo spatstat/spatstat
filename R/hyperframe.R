@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.61 $  $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.62 $  $Date: 2016/02/11 10:17:12 $
 #
 
 hyperframe <- local({
@@ -79,7 +79,7 @@ hyperframe <- local({
     if(!any(dfcolumns))
       df <- as.data.frame(matrix(, ncases, 0), row.names=row.names)
     else {
-      df <- do.call("data.frame",
+      df <- do.call(data.frame,
                     append(aarg[dfcolumns],
                            list(row.names=row.names,
                                 check.rows=check.rows,
@@ -258,7 +258,7 @@ as.hyperframe.hyperframe <- function(x, ...) {
 
 as.hyperframe.data.frame <- function(x, ..., stringsAsFactors=FALSE) {
   xlist <- if(missing(x)) NULL else as.list(x)
-  do.call("hyperframe",
+  do.call(hyperframe,
           resolve.defaults(
                            xlist,
                            list(...),
@@ -274,7 +274,7 @@ as.hyperframe.listof <- function(x, ...) {
     xlist <- list(x)
     names(xlist) <- xname
   } else xlist <- NULL
-  do.call("hyperframe",
+  do.call(hyperframe,
           resolve.defaults(
                            xlist,
                            list(...),
@@ -311,7 +311,7 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
     if(any(!dfcol)) 
       lx[!dfcol] <- lapply(as.list(vclassstring[!dfcol]),
                            rep.int, times=nrows)
-    df <- do.call("data.frame", append(lx, list(row.names=row.names)))
+    df <- do.call(data.frame, append(lx, list(row.names=row.names)))
     colnames(df) <- ux$vname
   }
   return(df)
@@ -409,7 +409,7 @@ cbind.hyperframe <- function(...) {
       columns <- append(columns, nextcolumn)
     }
   }
-  result <- do.call("hyperframe", columns)
+  result <- do.call(hyperframe, columns)
   return(result)
 }
 
@@ -535,7 +535,7 @@ plot.hyperframe <-
     text(0,0,main, cex=cex)
   }
   # plot panels
-  npa <- do.call("par", parargs)
+  npa <- do.call(par, parargs)
   if(!banner) opa <- npa
   with(x, ee=ee)
   # revert

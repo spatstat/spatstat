@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.7 $ $Date: 2015/10/21 09:06:57 $
+## $Revision: 1.8 $ $Date: 2016/02/11 10:17:12 $
 
 bounding.box <- function(...) {
   .Deprecated("boundingbox", "spatstat")
@@ -13,7 +13,7 @@ boundingbox <- function(...) {
   arglist <- list(...)
   if(any(isnull <- sapply(arglist, is.null))) {
     if(length(arglist[!isnull]))
-       return(do.call("boundingbox", arglist[!isnull]))
+       return(do.call(boundingbox, arglist[!isnull]))
     stop("No non-null arguments given.\n")
   }
   UseMethod("boundingbox")
@@ -61,7 +61,7 @@ bbEngine <- local({
     if(any(isnumvec <- unlist(lapply(wins, is.vector)) &
            unlist(lapply(wins, is.numeric)))) {
       ## invoke default method on these arguments
-      bb <- do.call("boundingbox", wins[isnumvec])
+      bb <- do.call(boundingbox, wins[isnumvec])
       ## repack
       wins <- append(wins[!isnumvec], list(bb))
     }
@@ -192,7 +192,7 @@ boundingbox.default <- local({
       ## handle list(x,y) objects 
       arglist[lxy] <- lapply(arglist[lxy], bb.listxy)
     }
-    result <- do.call("boundingbox",
+    result <- do.call(boundingbox,
                       if(is.null(bb)) arglist else append(list(bb), arglist))
     return(result)
   }

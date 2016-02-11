@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.12 $  $Date: 2015/07/11 08:19:26 $
+#  $Revision: 2.13 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -55,7 +55,7 @@ cdf.test.ppp <-
       model <- ppm(X)
       modelname <- "CSR"
     }
-    do.call("spatialCDFtest",
+    do.call(spatialCDFtest,
             resolve.defaults(list(model, covariate, test=test),
                              list(jitter=jitter),
                              list(...),
@@ -73,7 +73,7 @@ cdf.test.ppm <-
   if(is.character(covariate)) covname <- covariate
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
-  do.call("spatialCDFtest",
+  do.call(spatialCDFtest,
           resolve.defaults(list(model, covariate, test=test),
                            list(jitter=jitter, nsim=nsim, verbose=verbose),
                            list(...),
@@ -110,7 +110,7 @@ cdf.test.lpp <-
       model <- ppm(X)
       modelname <- "CSR"
     }
-    do.call("spatialCDFtest",
+    do.call(spatialCDFtest,
             resolve.defaults(list(model, covariate, test=test),
                              list(jitter=jitter),
                              list(...),
@@ -129,7 +129,7 @@ cdf.test.lppm <- function(model, covariate,
   if(is.character(covariate)) covname <- covariate
   if(is.poisson(model) && is.stationary(model))
     modelname <- "CSR"
-  do.call("spatialCDFtest",
+  do.call(spatialCDFtest,
           resolve.defaults(list(model, covariate, test=test),
                            list(jitter=jitter, nsim=nsim, verbose=verbose),
                            list(...),
@@ -366,7 +366,7 @@ plot.cdftest <- function(x, ..., style=c("cdf", "PP", "QQ"),
            main <- c(x$method,
                      paste("based on distribution of", covdescrip),
                      paste("p-value=", signif(x$p.value, 4)))
-           do.call("plot.default",
+           do.call(plot.default,
                    resolve.defaults(
                                     list(x=qZ, y=pZ, type="l"),
                                     list(...),
@@ -385,7 +385,7 @@ plot.cdftest <- function(x, ..., style=c("cdf", "PP", "QQ"),
            pX <- get("y", environment(FZX))
            qX <- get("x", environment(FZX))
            p0 <- FZ(qX)
-           do.call("plot.default",
+           do.call(plot.default,
                    resolve.defaults(
                                     list(x=p0, y=pX),
                                     list(...),
@@ -408,7 +408,7 @@ plot.cdftest <- function(x, ..., style=c("cdf", "PP", "QQ"),
            Zrange <- range(qZ, qX, qZX)
            xlab <- paste("Theoretical quantile of", covname)
            ylab <- paste("Observed quantile of", covname)
-           do.call("plot.default",
+           do.call(plot.default,
                    resolve.defaults(
                                     list(x=qZX, y=qX),
                                     list(...),

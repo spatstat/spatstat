@@ -1,6 +1,6 @@
 #' Dominic Schuhmacher's idea
 #'
-#' $Revision: 1.13 $ $Date: 2015/10/21 09:06:57 $
+#' $Revision: 1.14 $ $Date: 2016/02/11 10:17:12 $
 #'
 
 clickppp <- local({
@@ -72,7 +72,7 @@ clickppp <- local({
 
   getem <- function(i, instr, ...) {
     main <- paste("Points of type", sQuote(i), "\n", instr)
-    do.call("clickppp", resolve.defaults(list(...), list(main=main)))
+    do.call(clickppp, resolve.defaults(list(...), list(main=main)))
   }
 
   clickppp

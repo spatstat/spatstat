@@ -3,7 +3,7 @@
 #
 #   Rules/data for expanding the simulation window in rmh
 #
-#   $Revision: 1.7 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.8 $  $Date: 2016/02/11 10:17:12 $
 #
 
 # Establish names and rules for each type of expansion
@@ -166,7 +166,7 @@ expand.owin <- function(W, ...) {
   # get an rmhexpand object
   if(inherits(ex[[1]], "rmhexpand")) {
     ex <- ex[[1]]
-  } else ex <- do.call("rmhexpand", ex)
+  } else ex <- do.call(rmhexpand, ex)
   f <- ex$expand
   if(is.null(f)) return(W)
   if(is.owin(f)) return(f)

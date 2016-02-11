@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.170 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 4.171 $	$Date: 2016/02/11 09:36:11 $
 #
 #
 #	A window may be either

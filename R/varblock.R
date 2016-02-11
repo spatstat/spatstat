@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.16 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.17 $  $Date: 2016/02/11 10:17:12 $
 #
 
 varblock <- local({
@@ -140,14 +140,14 @@ meanlistfv <- local({
     ## compute sample mean of a list of fv objects
     if(!is.list(z) || !all(unlist(lapply(z, is.fv))))
       stop("z should be a list of fv objects")
-    if(!do.call("compatible", unname(z)))
+    if(!do.call(compatible, unname(z)))
       stop("Objects are not compatible")
     result <- template <- z[[1]]
     ## extract each object's function values as a matrix
     ynames <- fvnames(template, "*")
     matlist <- unname(lapply(z, getYmatrix, yn=ynames))
     ## stack matrices into an array
-    y <- do.call("abind", append(matlist, list(along=3)))
+    y <- do.call(abind, append(matlist, list(along=3)))
     ## take mean 
     ymean <- apply(y, 1:2, mean, ...)
     result[,ynames] <- ymean

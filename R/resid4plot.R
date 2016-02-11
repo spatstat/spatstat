@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.32 $    $Date: 2015/08/18 08:00:19 $
+#   $Revision: 1.33 $    $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -29,7 +29,7 @@ resid4plot <- local({
   }
 
   do.lines <- function(x, y, defaulty=1, ...) {
-    do.call("lines",
+    do.call(lines,
             resolve.defaults(list(x, y),
                              list(...),
                              list(lty=defaulty)))
@@ -126,7 +126,7 @@ resid4plot <- local({
            Yds <- shift(Ydens, vec)
            Yms <- shift(Ymass, vec)
            Contour(Yds, add=TRUE, ...)
-           do.call("plot",
+           do.call(plot,
                    resolve.defaults(list(x=Yms, add=TRUE),
                                     list(...), 
                                     list(use.marks=showscale,
@@ -149,7 +149,7 @@ resid4plot <- local({
            if(plot.neg == "imagecontour")
              Contour(Yds, add=TRUE, ...)
            ## plot positive masses at atoms
-           do.call("plot",
+           do.call(plot,
                    resolve.defaults(list(x=Yms, add=TRUE),
                                     list(...),
                                     list(use.marks=showscale,
@@ -589,7 +589,7 @@ resid1plot
 resid1panel <- local({
 
   do.lines <- function(x, y, defaulty=1, ...) {
-      do.call("lines",
+      do.call(lines,
               resolve.defaults(list(x, y),
                                list(...),
                                list(lty=defaulty)))

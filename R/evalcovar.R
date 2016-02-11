@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.19 $ $Date: 2015/10/21 09:06:57 $
+#' $Revision: 1.20 $ $Date: 2016/02/11 10:17:12 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -136,7 +136,7 @@ evalCovar.ppm <- local({
         #' tack on mark values
         for(k in seq_along(possmarks))
           locn[[k]] <- cbind(locn[[k]], data.frame(marks=possmarks[k]))
-        loc <- do.call("rbind", locn)
+        loc <- do.call(rbind, locn)
         #' corresponding fitted [conditional] intensity values
         lambda <- predict(model, locations=loc, type=lambdatype)
         #' pixel areas

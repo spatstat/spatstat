@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.35 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.36 $ $Date: 2016/02/11 10:17:12 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
@@ -269,7 +269,7 @@ plot.colourmap <- local({
 
     # .......... initialise plot ...............................
     if(!add)
-      do.call.matched("plot.default",
+      do.call.matched(plot.default,
                       resolve.defaults(list(x=xlim, y=ylim,
                                             type="n", main=main,
                                             axes=FALSE, xlab="", ylab="",
@@ -286,7 +286,7 @@ plot.colourmap <- local({
         z <- matrix(1, 1, 1)
         for(i in 1:n) {
           x <- c(xleft[i], xright[i])
-          do.call.matched("image.default",
+          do.call.matched(image.default,
                       resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
                                        list(col=col[i])),
@@ -301,7 +301,7 @@ plot.colourmap <- local({
         z <- matrix(1, 1, 1)
         for(i in 1:n) {
           y <- c(ylow[i], yupp[i])
-          do.call.matched("image.default",
+          do.call.matched(image.default,
                       resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
                                        list(col=col[i])),
@@ -322,7 +322,7 @@ plot.colourmap <- local({
         z <- matrix(v, nrow=1)
         x <- xlim
       }
-      do.call.matched("image.default",
+      do.call.matched(image.default,
                       resolve.defaults(list(x=x, y=y, z=z, add=TRUE),
                                        list(...),
                                        list(breaks=bks, col=col)),
@@ -349,7 +349,7 @@ plot.colourmap <- local({
         # don't draw axis lines if plotting separate blocks
         lwd0 <- if(separate) 0 else 1
         # draw axis
-        do.call.matched("axis",
+        do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
                                          list(side = 1, pos = pos, at = at),
                                          list(labels=la, lwd=lwd0)),
@@ -375,7 +375,7 @@ plot.colourmap <- local({
         # draw labels horizontally if plotting separate blocks
         las0 <- if(separate) 1 else 0
         # draw axis
-        do.call.matched("axis",
+        do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
                                          list(side=4, pos=pos, at=at),
                                          list(labels=la, lwd=lwd0, las=las0)),

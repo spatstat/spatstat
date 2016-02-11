@@ -3,7 +3,7 @@
 ##
 ## Exact 'funxy' counterpart of Smooth.ppp
 ##
-##  $Revision: 1.1 $ $Date: 2014/04/04 03:04:08 $
+##  $Revision: 1.2 $ $Date: 2016/02/11 10:17:12 $
 
 
 Smoothfun <- function(X, ...) {
@@ -52,7 +52,7 @@ print.Smoothfun <- function(x, ...) {
 as.im.Smoothfun <- function(X, W=NULL, ...) {
   stuff <- get("stuff", envir=environment(X))
   if(!is.null(W)) stuff$X <- stuff$X[W]
-  do.call("Smooth", resolve.defaults(list(...), stuff))
+  do.call(Smooth, resolve.defaults(list(...), stuff))
 }
 
 

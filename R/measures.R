@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.57 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.58 $  $Date: 2016/02/11 10:17:12 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -169,7 +169,7 @@ augment.msr <- function(x, ..., sigma) {
   ##
   if(d == 1) {
     smo <- if(!varble) as.im(mean(xdensity), W=W) else
-           do.call("Smooth",
+           do.call(Smooth,
                    resolve.defaults(list(X=xloc %mark% xdensity),
                                     list(...),
                                     list(sigma=sigma)))
@@ -178,7 +178,7 @@ augment.msr <- function(x, ..., sigma) {
     names(smo) <- colnames(x)
     if(any(varble)) 
       smo[varble] <-
-        do.call("Smooth",
+        do.call(Smooth,
                 resolve.defaults(list(X=xloc %mark% xdensity[,varble]),
                                  list(...),
                                  list(sigma=sigma)))
@@ -229,7 +229,7 @@ plot.msr <- function(x, ..., add=FALSE,
   do.image <-  how %in% c("image", "imagecontour")
   do.contour <-  how %in% c("contour", "imagecontour")
   ## allocate space for plot and legend using do.plot=FALSE mechanism
-  pdata <- do.call.matched("plot.ppp",
+  pdata <- do.call.matched(plot.ppp,
                            resolve.defaults(list(x=xatomic,
                                                  do.plot=FALSE,
                                                  main=main),
@@ -239,7 +239,7 @@ plot.msr <- function(x, ..., add=FALSE,
   result <- pdata
   bb <- attr(pdata, "bbox")
   if(do.image) {
-    idata <- do.call.matched("plot.im",
+    idata <- do.call.matched(plot.im,
                              resolve.defaults(list(x=smo,
                                                    main=main,
                                                    do.plot=FALSE),
@@ -262,13 +262,13 @@ plot.msr <- function(x, ..., add=FALSE,
     }
     ## display density
     if(do.image) 
-      do.call.matched("plot.im",
+      do.call.matched(plot.im,
                       resolve.defaults(list(x=smo, add=TRUE),
                                        list(...),
                                        list(main=main, show.all=TRUE)),
                       extrargs=xtra.im)
     if(do.contour) 
-      do.call.matched("contour.im",
+      do.call.matched(contour.im,
                       resolve.defaults(list(x=smo, add=TRUE),
                                        list(...),
                                        list(main=main,
@@ -277,7 +277,7 @@ plot.msr <- function(x, ..., add=FALSE,
                         ## DO NOT ALLOW 'col' 
                         "drawlabels", "method", "vfont", "lty", "lwd"))
     ## display atoms
-    do.call.matched("plot.ppp",
+    do.call.matched(plot.ppp,
                     resolve.defaults(list(x=xatomic, add=TRUE, main=""),
                                      list(...),
                                      list(show.all=TRUE)),

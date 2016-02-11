@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.30 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.31 $ $Date: 2016/02/11 10:17:12 $
 #
 #
 ############################# 
@@ -9,7 +9,7 @@ superimpose <- function(...) {
   # remove any NULL arguments
   arglist <- list(...)
   if(any(isnull <- sapply(arglist, is.null)))
-    return(do.call("superimpose", arglist[!isnull]))
+    return(do.call(superimpose, arglist[!isnull]))
   UseMethod("superimpose")
 }
 
@@ -38,7 +38,7 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
   }
   
   # concatenate lists of (x,y) coordinates
-  XY <- do.call("concatxy", arglist)
+  XY <- do.call(concatxy, arglist)
   needcheck <- TRUE
 
   # determine whether there is any window information
@@ -108,7 +108,7 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
                     asNumericMatrix)
   
   # tack them together
-  mat <- do.call("rbind", matlist)
+  mat <- do.call(rbind, matlist)
 
   # determine whether there is any window information
   needcheck <- FALSE
@@ -217,7 +217,7 @@ superimposePSP <-
   # extract segment coordinates
   matlist <- lapply(arglist, function(x) { as.matrix(x$ends) })
   # tack them together
-  mat <- do.call("rbind", matlist)
+  mat <- do.call(rbind, matlist)
 
   # extract marks if any
   marxlist <- lapply(arglist, marks)
@@ -246,9 +246,9 @@ superimposePSP <-
                    marxlist <- lapply(marxlist,
                                       as.data.frame.vector,
                                       nm="v1")
-                   do.call("rbind", marxlist)[,1]
+                   do.call(rbind, marxlist)[,1]
                  },
-                 dataframe = do.call("rbind", marxlist))
+                 dataframe = do.call(rbind, marxlist))
 
   # determine window
   if(!is.null(W))

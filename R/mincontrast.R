@@ -225,7 +225,7 @@ print.minconfit <- function(x, ...) {
 
 plot.minconfit <- function(x, ...) {
   xname <- short.deparse(substitute(x))
-  do.call("plot.fv",
+  do.call(plot.fv,
           resolve.defaults(list(x$fit),
                            list(...),
                            list(main=xname)))
@@ -483,7 +483,7 @@ thomas.estpcf <- function(X, startpar=c(kappa=1,scale=1),
     if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
-    g <- do.call("pcf.ppp", append(list(X), pcfargs))
+    g <- do.call(pcf.ppp, append(list(X), pcfargs))
     dataname <- paste("pcf(", dataname, ")", sep="")
     if(is.null(lambda))
       lambda <- summary(X)$intensity
@@ -533,7 +533,7 @@ matclust.estpcf <- function(X, startpar=c(kappa=1,scale=1),
     if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
-    g <- do.call("pcf.ppp", append(list(X), pcfargs))
+    g <- do.call(pcf.ppp, append(list(X), pcfargs))
     dataname <- paste("pcf(", dataname, ")", sep="")
     if(is.null(lambda))
       lambda <- summary(X)$intensity
@@ -585,7 +585,7 @@ lgcp.estpcf <- function(X, startpar=c(var=1,scale=1),
     if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
-    g <- do.call("pcf.ppp", append(list(X), pcfargs))
+    g <- do.call(pcf.ppp, append(list(X), pcfargs))
     dataname <- paste("pcf(", dataname, ")", sep="")
     if(is.null(lambda))
       lambda <- summary(X)$intensity
@@ -688,7 +688,7 @@ cauchy.estpcf <- function(X, startpar=c(kappa=1,scale=1),
     if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
-    g <- do.call("pcf.ppp", append(list(X), pcfargs))
+    g <- do.call(pcf.ppp, append(list(X), pcfargs))
     dataname <- paste("pcf(", dataname, ")", sep="")
     if(is.null(lambda))
       lambda <- summary(X)$intensity
@@ -830,7 +830,7 @@ vargamma.estpcf <- function(X, startpar=c(kappa=1,scale=1), nu=-1/4,
     if(!identical(attr(g, "fname")[1], "g"))
       warning("Argument X does not appear to be a pair correlation function")
   } else if(inherits(X, "ppp")) {
-    g <- do.call("pcf.ppp", append(list(X), pcfargs))
+    g <- do.call(pcf.ppp, append(list(X), pcfargs))
     dataname <- paste("pcf(", dataname, ")", sep="")
     if(is.null(lambda))
       lambda <- summary(X)$intensity

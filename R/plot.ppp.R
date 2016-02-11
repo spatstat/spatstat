@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.83 $	$Date: 2016/01/25 09:29:26 $
+#	$Revision: 1.84 $	$Date: 2016/02/11 10:17:12 $
 #
 #
 #--------------------------------------------------------------------------
@@ -43,7 +43,7 @@ plot.ppp <- local({
       timerange <- range(marx, na.rm=TRUE)
       shapedefault <- if(!assumecircles) list() else list(shape="circles")
       if(sizegiven) {
-        g <- do.call("symbolmap",
+        g <- do.call(symbolmap,
           resolve.defaults(list(range=timerange),
                            list(...),
                            shapedefault,
@@ -65,7 +65,7 @@ plot.ppp <- local({
       }
       formals(sizefun)[[2]] <- scal  ## ensures value of 'scal' is printed
       ##
-      g <- do.call("symbolmap",
+      g <- do.call(symbolmap,
                    resolve.defaults(list(range=timerange),
                                     list(...),
                                     shapedefault,
@@ -80,7 +80,7 @@ plot.ppp <- local({
       markrange <- range(marx)
       ## 
       if(sizegiven) {
-        g <- do.call("symbolmap",
+        g <- do.call(symbolmap,
           resolve.defaults(list(range=markrange),
                            list(...),
                            if(assumecircles) list(shape="circles") else list(),
@@ -118,7 +118,7 @@ plot.ppp <- local({
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
       }
-      g <- do.call("symbolmap",
+      g <- do.call(symbolmap,
                    resolve.defaults(list(range=markrange),
                                     list(...),
                                     shapedefault,
@@ -186,7 +186,7 @@ plot.ppp <- local({
 #    ## plot the window only
 #    xwindow <- x$window
 #    if(do.plot) 
-#      do.call("plot.owin",
+#      do.call(plot.owin,
 #              resolve.defaults(list(xwindow),
 #                               list(...),
 #                               list(main=main, invert=TRUE, add=add,
@@ -340,17 +340,17 @@ plot.ppp <- local({
         rwinpardefault <- list(lty=2,lwd=1,border=1)
         rwinpars <-
           resolve.defaults(par.rejects, rwinpardefault)[names(rwinpardefault)]
-        do.call("plot.owin", append(list(rwin, add=TRUE), rwinpars))
+        do.call(plot.owin, append(list(rwin, add=TRUE), rwinpars))
       }
       ## plot window of main pattern
-      do.call("plot.owin",
+      do.call(plot.owin,
               resolve.defaults(list(x$window, add=TRUE),
                                list(...),
                                list(invert=TRUE)))
     }
     if(type != "n") {
       ## plot reject points
-      do.call("plot.ppp", append(list(rejects, add=TRUE), par.all))
+      do.call(plot.ppp, append(list(rejects, add=TRUE), par.all))
       warning(paste(rejects$n, "illegal points also plotted"))
     }
     ## the rest is added
@@ -362,7 +362,7 @@ plot.ppp <- local({
   xwindow <- x$window
 
   ## Plot observation window (or at least the main title)
-  do.call("plot.owin",
+  do.call(plot.owin,
           resolve.defaults(list(x=xwindow,
                                 add=TRUE,
                                 main=main,
@@ -381,8 +381,8 @@ plot.ppp <- local({
   if(legend) {
     b <- legbox$b
     legendmap <- if(length(leg.args) == 0) symap else 
-                 do.call("update", append(list(object=symap), leg.args))
-    do.call("plot",
+                 do.call(update, append(list(object=symap), leg.args))
+    do.call(plot,
             append(list(x=legendmap, main="", add=TRUE,
                         xlim=b$xrange, ylim=b$yrange),
                    leg.args))
@@ -464,7 +464,7 @@ fakemaintitle <- function(bb, main, ...) {
   parlist <- par(parnames)
   parlist <- resolve.defaults(list(...), parlist)[parnames]
   names(parlist) <- c('cex', 'col', 'font')
-  do.call.matched("text.default",
+  do.call.matched(text.default,
                   resolve.defaults(list(x=x0, y=y0, labels=main),
                                    parlist,    list(...)))
   return(invisible(NULL))

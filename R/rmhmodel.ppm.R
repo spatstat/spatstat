@@ -3,7 +3,7 @@
 #
 #   convert ppm object into format palatable to rmh.default
 #
-#  $Revision: 2.61 $   $Date: 2015/11/17 07:10:04 $
+#  $Revision: 2.62 $   $Date: 2016/02/11 10:17:12 $
 #
 #   .Spatstat.rmhinfo
 #   rmhmodel.ppm()
@@ -415,7 +415,7 @@ rmhResolveExpansion <- function(win, control, imagelist, itype="covariate") {
   # Expansion is limited to domain of image data
   # Determine maximum possible expansion window
   wins <- lapply(imagelist, as.owin)
-  cwin <- do.call("intersect.owin", unname(wins))
+  cwin <- do.call(intersect.owin, unname(wins))
   
   if(!is.subset.owin(wexp, cwin)) {
     # Cannot expand to proposed window

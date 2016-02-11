@@ -1,7 +1,7 @@
 #
 #   quadrattest.R
 #
-#   $Revision: 1.52 $  $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.53 $  $Date: 2016/02/11 10:17:12 $
 #
 
 quadrat.test <- function(X, ...) {
@@ -21,7 +21,7 @@ quadrat.test.ppp <-
    Xname <- short.deparse(substitute(X))
    method <- match.arg(method)
    alternative <- match.arg(alternative)
-   do.call("quadrat.testEngine",
+   do.call(quadrat.testEngine,
           resolve.defaults(list(X, nx=nx, ny=ny,
                                 alternative=alternative,
                                 method=method,
@@ -59,7 +59,7 @@ quadrat.test.ppm <-
     stop("Test is only defined for Poisson point process models")
    if(is.marked(X))
     stop("Sorry, not yet implemented for marked point process models")
-   do.call("quadrat.testEngine",
+   do.call(quadrat.testEngine,
           resolve.defaults(list(data.ppm(X), nx=nx, ny=ny,
                                 alternative=alternative,
                                 method=method,
@@ -287,7 +287,7 @@ print.quadrattest <- function(x, ...) {
      } else {
        splat("Quadrats of component tests:")
      }
-     do.call("print",
+     do.call(print,
              resolve.defaults(list(x=as.tess(x)),
                               list(...),
                               list(brief=TRUE)))
@@ -303,7 +303,7 @@ plot.quadrattest <- local({
     if(!is.atomicQtest(x)) {
       # pooled test - plot the original tests
       tests <- extractAtomicQtests(x)
-      do.call("plot",
+      do.call(plot,
               resolve.defaults(list(x=tests),
                                list(...),
                                list(main=xname)))
@@ -313,7 +313,7 @@ plot.quadrattest <- local({
 
     # plot tessellation
     tess  <- as.tess(Xcount)
-    do.call("plot.tess",
+    do.call(plot.tess,
             resolve.defaults(list(tess),
                              list(...),
                              list(main=xname)))
@@ -345,7 +345,7 @@ plot.quadrattest <- local({
   }
  
   dotext <- function(dx, dy, values, x0, y0, ra, textargs, ...) {
-    do.call.matched("text.default",
+    do.call.matched(text.default,
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=paste(as.vector(values))),
                                      textargs, 
@@ -465,7 +465,7 @@ extractAtomicQtests <- function(x) {
   stopifnot(inherits(x, "quadrattest"))
   tests <- attr(x, "tests")
   y <- lapply(tests, extractAtomicQtests)
-  z <- do.call("c", y)
+  z <- do.call(c, y)
   return(as.solist(z))
 }
 

@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.2 $	$Date: 2015/03/09 09:24:30 $
+#    $Revision: 1.3 $	$Date: 2016/02/11 10:17:12 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -96,7 +96,7 @@ hierpair.family <-
                       title="Fitted pairwise interactions",
                       rowNames=paste(types), colNames=paste(types))
          if(plotit)
-           do.call("plot.fasp",
+           do.call(plot.fasp,
                    resolve.defaults(list(funz),
                                     list(...),
                                     list(ylim=ylim,

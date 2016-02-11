@@ -1,7 +1,7 @@
 #
 #   localpcf.R
 #
-#  $Revision: 1.20 $  $Date: 2014/11/10 11:29:47 $
+#  $Revision: 1.21 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -174,7 +174,7 @@ print.localpcfmatrix <- function(x, ...) {
 plot.localpcfmatrix <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   rval <- attr(x, "r")
-  do.call("matplot",
+  do.call(matplot,
           resolve.defaults(list(rval, x),
                            list(...),
                            list(type="l", main=xname,

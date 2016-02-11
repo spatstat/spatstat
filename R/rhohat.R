@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.64 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.65 $  $Date: 2016/02/11 10:17:12 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -199,7 +199,7 @@ rhohatEngine <- function(model, covariate,
                          modelcall=NULL, callstring="rhohat") {
   reference <- match.arg(reference)
   # evaluate the covariate at data points and at pixels
-  stuff <- do.call("evalCovar",
+  stuff <- do.call(evalCovar,
                    append(list(model, covariate), resolution))
   # unpack
 #  info   <- stuff$info
@@ -544,7 +544,7 @@ plot.rhohat <- function(x, ..., do.rug=TRUE) {
   s <- attr(x, "stuff")
   covname <- s$covname
   asked.rug <- !missing(do.rug) && identical(rug, TRUE)
-  out <- do.call("plot.fv",
+  out <- do.call(plot.fv,
                  resolve.defaults(list(x=x), list(...),
                                   list(main=xname, shade=c("hi", "lo"))))
   if(identical(list(...)$limitsonly, TRUE))

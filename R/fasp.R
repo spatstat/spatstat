@@ -1,7 +1,7 @@
 #
 #	fasp.R
 #
-#	$Revision: 1.33 $	$Date: 2015/10/21 09:06:57 $
+#	$Revision: 1.34 $	$Date: 2016/02/11 10:17:12 $
 #
 #
 #-----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ print.fasp <- function(x, ...) {
 
 # other methods
 
-as.fv.fasp <- function(x) do.call("cbind.fv", x$fns)
+as.fv.fasp <- function(x) do.call(cbind.fv, x$fns)
 
 dimnames.fasp <- function(x) {
   return(dimnames(x$which))
@@ -165,7 +165,7 @@ pool.fasp <- local({
     fns <- result$fns
     for(k in seq_along(fns)) {
       funks <- lapply(Alist, extractfun, k=k)
-      fnk <- do.call("pool.envelope", funks)
+      fnk <- do.call(pool.envelope, funks)
       attr(fnk, "einfo")$Yname <- Yname
       fns[[k]] <- fnk
     }

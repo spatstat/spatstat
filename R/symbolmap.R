@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.25 $  $Date: 2016/01/27 01:41:41 $
+##   $Revision: 1.26 $  $Date: 2016/02/11 10:17:12 $
 ##
 
 symbolmap <- local({
@@ -146,7 +146,7 @@ symbolmaptype <- function(x) { attr(x, "stuff")$type }
 update.symbolmap <- function(object, ...) {
   y <- attr(object, "stuff")
   oldargs <- append(y[["parlist"]], y[c("inputs", "range")])
-  do.call("symbolmap", resolve.defaults(list(...), oldargs))
+  do.call(symbolmap, resolve.defaults(list(...), oldargs))
 }
 
 print.symbolmap <- function(x, ...) {
@@ -217,7 +217,7 @@ invoke.symbolmap <- local({
       if(any(i <- as.logical(etch))) {
         anti.col <- complementarycolour(col)
         anti.lwd <- if(is.numeric(etch)) etch else 2 * lwd
-        do.call.matched("points.default",
+        do.call.matched(points.default,
                         resolve.defaults(list(x=x[i], y=y[i]),
                                          other.fixed,
                                          lapply(other.vec, "[", i=i),
@@ -226,7 +226,7 @@ invoke.symbolmap <- local({
                         extrargs=c("col", "pch", "type", "bg",
                                    "cex", "lwd", "lty"))
       }
-      do.call.matched("points.default",
+      do.call.matched(points.default,
                     resolve.defaults(list(x=x, y=y),
                                      other,
                                      list(col=col, lwd=lwd)),
@@ -263,28 +263,28 @@ invoke.symbolmap <- local({
       }
       ## plot
       if(any(i <- (shape == "circles") & as.logical(etch))) 
-        do.call.matched("symbols",
+        do.call.matched(symbols,
                         c(list(x=x[i], y=y[i], circles=size[i]),
                           other.fixed,
                           lapply(other.vec, "[", i=i),
                           list(lwd=anti.lwd[i], fg=anti.fg[i])),
                         extrargs=c("lwd", "lty"))
       if(any(i <- (shape == "circles")))
-        do.call.matched("symbols",
+        do.call.matched(symbols,
                         c(list(x=x[i], y=y[i], circles=size[i]),
                           other.fixed,
                           lapply(other.vec, "[", i=i),
                           list(lwd=lwd[i], fg=fg[i])),
                         extrargs=c("lwd", "lty"))
       if(any(i <- (shape == "squares") & as.logical(etch)))
-        do.call.matched("symbols",
+        do.call.matched(symbols,
                         c(list(x=x[i], y=y[i], squares=size[i]),
                           other.fixed,
                           lapply(other.vec, "[", i=i),
                           list(lwd=anti.lwd[i], fg=anti.fg[i])),
                         extrargs=c("lwd", "lty"))
       if(any(i <- (shape == "squares"))) 
-        do.call.matched("symbols",
+        do.call.matched(symbols,
                         c(list(x=x[i], y=y[i], squares=size[i]),
                           other.fixed,
                           lapply(other.vec, "[", i=i),
@@ -316,7 +316,7 @@ invoke.symbolmap <- local({
       if(nrow(xydf) == 0)
         return(invisible(maxsize))
       g <- if(prod(dim(g)) == 0) xydf else 
-           do.call("data.frame",
+           do.call(data.frame,
                    c(as.list(g), as.list(xydf), list(stringsAsFactors=FALSE)))
     }
     n <- nrow(g)
@@ -335,7 +335,7 @@ invoke.symbolmap <- local({
     ## display using 'pch'
     zpoints <- z[["points"]]
     if(!is.null(zpoints) && nrow(zpoints) > 0) {
-      ms <- do.call("do.points",
+      ms <- do.call(do.points,
                     resolve.defaults(as.list(zpoints),
                                      list(...),
                                      list(do.plot=do.plot)))
@@ -348,7 +348,7 @@ invoke.symbolmap <- local({
     ## display using 'symbols'
     zsymbols <- z[["symbols"]]
     if(!is.null(zsymbols) && nrow(zsymbols) > 0) {
-      ms <- do.call("do.symbols",
+      ms <- do.call(do.symbols,
                     resolve.defaults(as.list(zsymbols),
                                      list(...),
                                      list(do.plot=do.plot)))
@@ -436,7 +436,7 @@ plot.symbolmap <- function(x, ..., main,
 
   ## .......... initialise plot ...............................
   if(!add)
-    do.call.matched("plot.default",
+    do.call.matched(plot.default,
                     resolve.defaults(list(x=xlim, y=ylim,
                                           type="n", main=main,
                                           axes=FALSE, xlab="", ylab="",
@@ -485,7 +485,7 @@ plot.symbolmap <- function(x, ..., main,
                       "is not consistent with vertical orientation"))
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
-      do.call.matched("axis",
+      do.call.matched(axis,
                       resolve.defaults(list(...),
                                        list(side=sidecode, pos=pos, at=yp,
                                             labels=ll, tick=FALSE, las=1)),
@@ -499,7 +499,7 @@ plot.symbolmap <- function(x, ..., main,
                       "is not consistent with horizontal orientation"))
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
-      do.call.matched("axis",
+      do.call.matched(axis,
                       resolve.defaults(list(...),
                                        list(side = sidecode, pos = pos,
                                             at = xp, labels=ll, tick=FALSE)),

@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.80 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.81 $ $Date: 2016/02/11 10:17:12 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -79,7 +79,7 @@ as.psp <- function(x, ..., from=NULL, to=NULL) {
       stop(paste("The point patterns", sQuote("from"), "and", sQuote("to"),
                  "have different numbers of points.\n"))
     uni <- union.owin(from$window, to$window)
-    Y <- do.call("psp",
+    Y <- do.call(psp,
                  resolve.defaults(list(from$x, from$y, to$x, to$y),
                                   list(...),
                                   list(window=uni)))
@@ -335,7 +335,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
     ## window of x only
     bb.all <- as.rectangle(as.owin(x))
     if(do.plot && show.all)
-      do.call.plotfun("plot.owin", 
+      do.call.plotfun(plot.owin, 
                       resolve.defaults(list(x=x$window, main=main,
                                             add=add, show.all=show.all),
                                        list(...)),
@@ -354,7 +354,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
       pt <- prepareTitle(main)
       ## establish coordinate system
       if(!add)
-      do.call.plotfun("plot.owin",
+      do.call.plotfun(plot.owin,
                       resolve.defaults(list(x=bb.all,
                                             type="n",
                                             main=pt$blank),
@@ -363,7 +363,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
       ## now plot window of x
       ## with title centred on this window
       if(show.all) {
-        do.call.plotfun("plot.owin", 
+        do.call.plotfun(plot.owin, 
                         resolve.defaults(list(x=x$window,
                                               add=TRUE,
                                               main=main,
@@ -411,7 +411,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
 
   if(do.plot) {
     ## plot segments
-    do.call.plotfun("segments",
+    do.call.plotfun(segments,
                     resolve.defaults(as.list(x$ends),
                                      list(...),
                                      list(col=col),

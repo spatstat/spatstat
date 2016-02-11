@@ -1,7 +1,7 @@
 #
 # morisita.R
 #
-#  $Revision: 1.1 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.2 $  $Date: 2016/02/11 10:17:12 $
 #
 
 miplot <- function(X, ...) {
@@ -28,7 +28,7 @@ miplot <- function(X, ...) {
   mindex   <- mindex[ok]
   
   unitinfo <- summary(unitname(W))$axis
-  do.call("plot.default",
+  do.call(plot.default,
           resolve.defaults(list(quadsize, mindex),
                            list(...),
                            list(xlim=c(0,max(quadsize)),

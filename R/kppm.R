@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.115 $ $Date: 2015/12/30 08:13:52 $
+# $Revision: 1.116 $ $Date: 2016/02/11 10:17:12 $
 #
 
 kppm <- function(X, ...) {
@@ -330,7 +330,7 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
   }
   
-  mcfit <- do.call("mincontrast", mcargs)
+  mcfit <- do.call(mincontrast, mcargs)
   # Return results for DPPs
   if(isDPP){
     names(mcfit$par) <- names(startpar)
@@ -407,7 +407,7 @@ kppmComLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
     sumweight <- npairs
   }
   # convert window to mask, saving other arguments for later
-  dcm <- do.call.matched("as.mask",
+  dcm <- do.call.matched(as.mask,
                          append(list(w=W), list(...)),
                          sieve=TRUE)
   M         <- dcm$result
@@ -615,7 +615,7 @@ kppmPalmLik <- function(X, Xname, po, clusters, control, weightfun, rmax,
 #    sumweight <- npairs
   }
   # convert window to mask, saving other arguments for later
-  dcm <- do.call.matched("as.mask",
+  dcm <- do.call.matched(as.mask,
                          append(list(w=W), list(...)),
                          sieve=TRUE)
   M         <- dcm$result

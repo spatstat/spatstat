@@ -1,7 +1,7 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.8 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.9 $   $Date: 2016/02/11 10:17:12 $
 #
 
 pairs.listof <- pairs.solist <- 
@@ -39,14 +39,14 @@ pairs.listof <- pairs.solist <-
   ## extract pixel rasters and reconcile them
   imwins <- lapply(imlist, as.owin)
   names(imwins) <- NULL
-  rasta    <- do.call("intersect.owin", imwins)
+  rasta    <- do.call(intersect.owin, imwins)
   ## extract image pixel values on common raster
   pixvals <- lapply(imlist, "[.im", i=rasta, raster=rasta, drop=TRUE)
   ## combine into data frame
-  pixdf <- do.call("data.frame", pixvals)
+  pixdf <- do.call(data.frame, pixvals)
   ## plot
   if(plot)
-    do.call("pairs", resolve.defaults(list(x=pixdf),
+    do.call(pairs, resolve.defaults(list(x=pixdf),
                                       rest,
                                       list(labels=imnames, pch=".")))
   labels <- resolve.defaults(rest, list(labels=imnames))$labels
@@ -56,7 +56,7 @@ pairs.listof <- pairs.solist <-
 }
 
 plot.plotpairsim <- function(x, ...) {
-  do.call("pairs.default",
+  do.call(pairs.default,
           resolve.defaults(list(x=as.data.frame(x)),
                            list(...),
                            list(pch=".")))
@@ -85,7 +85,7 @@ panel.contour <- function(x, y, ..., sigma=NULL) {
   yy <- scaletointerval(y)
   p <- ppp(xx, yy, window=square(1), check=FALSE)
   Z <- density(p, sigma=sigma)
-  do.call("contour",
+  do.call(contour,
           resolve.defaults(list(x=Z, add=TRUE),
                            list(...),
                            list(drawlabels=FALSE)))
@@ -97,7 +97,7 @@ panel.histogram <- function(x, ...) {
   h <- hist(x, plot = FALSE)
   breaks <- h$breaks; nB <- length(breaks)
   y <- h$counts; y <- y/max(y)
-  do.call("rect",
+  do.call(rect,
           resolve.defaults(list(xleft   = breaks[-nB],
                                 ybottom = 0,
                                 xright  = breaks[-1],

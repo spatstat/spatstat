@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.71 $  $Date: 2015/11/17 07:08:37 $
+#   $Revision: 1.72 $  $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -24,7 +24,7 @@ rmhmodel.rmhmodel <- function(model, ...) {
 rmhmodel.list <- function(model, ...) {
   argnames <- c("cif","par","w","trend","types")
   ok <- argnames %in% names(model)
-  do.call("rmhmodel.default",
+  do.call(rmhmodel.default,
           resolve.defaults(list(...), model[argnames[ok]]))
 }
 

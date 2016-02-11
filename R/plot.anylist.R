@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.16 $ $Date: 2015/10/21 09:06:57 $
+##  $Revision: 1.17 $ $Date: 2016/02/11 10:17:12 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -431,7 +431,7 @@ plot.anylist <- plot.solist <- plot.listof <-
 
 contour.imlist <- contour.listof <- function(x, ...) {
   xname <- short.deparse(substitute(x))
-  do.call("plot.solist",
+  do.call(plot.solist,
           resolve.defaults(list(x=x, plotcommand="contour"),
                            list(...),
                            list(main=xname)))
@@ -446,7 +446,7 @@ plot.imlist <- local({
        (list(plotcommand) %in% list("image", "plot", image, plot))) {
       out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)
     } else {
-      out <- do.call("plot.solist",
+      out <- do.call(plot.solist,
                      resolve.defaults(list(x=x, plotcommand=plotcommand), 
                                       list(...),
                                       list(main=xname)))
@@ -502,7 +502,7 @@ plot.imlist <- local({
       ## bespoke function executed to plot colour ribbon
       do.ribbon <- function() {
         opa <- par(mar=ribmar)
-        do.call("plot", ribstuff)
+        do.call(plot, ribstuff)
         par(opa)
       }
       ## ribbon plot function encoded as 'adorn' argument
@@ -510,7 +510,7 @@ plot.imlist <- local({
       names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     }
     ##
-    do.call("plot.solist",
+    do.call(plot.solist,
             resolve.defaults(list(x=x, plotcommand="image"),
                              list(...),
                              list(mar.panel=mar.panel,

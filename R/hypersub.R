@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.23 $    $Date: 2015/10/21 09:06:57 $
+##  $Revision: 1.24 $    $Date: 2016/02/11 10:17:12 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -106,7 +106,7 @@
       value <- as.list(value)
     y[[name]] <- value
   }
-  z <- do.call("hyperframe", append(y, list(row.names=row.names(x),
+  z <- do.call(hyperframe, append(y, list(row.names=row.names(x),
                                             stringsAsFactors=FALSE)))
   return(z)
 }
@@ -138,7 +138,7 @@ function (x, i, j, value)
       xlist <- as.list(x)
       xlist[j] <- as.list(as.hyperframe(value))
       # the above construction accepts all indices including extra entries
-      y <- do.call("hyperframe", append(xlist,
+      y <- do.call(hyperframe, append(xlist,
                                         list(row.names=row.names(x))))
     }
   } else {
@@ -177,7 +177,7 @@ function (x, i, j, value)
     for(jj in J) 
       xlist[[jj]][I] <- vlist[[jj]][I]
     ## put back together
-    y <- do.call("hyperframe", append(xlist,
+    y <- do.call(hyperframe, append(xlist,
                                       list(row.names=row.names(x))))
   } 
   return(y)

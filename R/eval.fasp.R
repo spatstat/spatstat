@@ -6,7 +6,7 @@
 #
 #        compatible.fasp()       Check whether two fasp objects are compatible
 #
-#     $Revision: 1.10 $     $Date: 2015/10/21 09:06:57 $
+#     $Revision: 1.11 $     $Date: 2016/02/11 10:17:12 $
 #
 
 eval.fasp <- local({
@@ -35,7 +35,7 @@ eval.fasp <- local({
     fasps <- vars[isfasp]
     nfasps <- length(fasps)
     ## test whether the fasp objects are compatible
-    if(nfasps > 1 && !(do.call("compatible", unname(fasps))))
+    if(nfasps > 1 && !(do.call(compatible, unname(fasps))))
       stop(paste(if(nfasps > 2) "some of" else NULL,
                  "the objects",
                  commasep(sQuote(names(fasps))),

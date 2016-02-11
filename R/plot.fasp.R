@@ -1,7 +1,7 @@
 #
 #   plot.fasp.R
 #
-#   $Revision: 1.28 $   $Date: 2014/12/29 03:11:28 $
+#   $Revision: 1.29 $   $Date: 2016/02/11 10:17:12 $
 #
 plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
                       title=NULL, banner=TRUE,
@@ -139,7 +139,7 @@ plot.fasp <- function(x, formule=NULL, ..., subset=NULL,
                 if(nrows == 1) colNames[j] else
                 if(ncols == 1) rowNames[i] else 
                 paren(paste(rowNames[i], colNames[j], sep=","))
-        do.call("plot",
+        do.call(plot,
                 resolve.defaults(list(x=fun, fmla=fmla, subset=sub),
                                  list(...),
                                  list(xlim=xlim, ylim=ylim,

@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.58 $    $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.59 $    $Date: 2016/02/11 10:17:12 $
 #
 #
 #
@@ -291,11 +291,11 @@ update.ppm <- local({
       if(is.marked(Qold)) {
         dpar <- Qold$param$dummy
         wpar <- Qold$param$weight
-        Qnew <- do.call("quadscheme", append(list(X), append(dpar, wpar)))
+        Qnew <- do.call(quadscheme, append(list(X), append(dpar, wpar)))
       } else {
         Dum <- Qold$dummy
         wpar <- Qold$param$weight
-        Qnew <- do.call("quadscheme", append(list(X, Dum), wpar))
+        Qnew <- do.call(quadscheme, append(list(X, Dum), wpar))
       }
       ## replace X by new Q
       call$Q <- Qnew

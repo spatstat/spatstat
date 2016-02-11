@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.19 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.21 $   $Date: 2016/02/11 10:17:12 $
 #
 #  Image/function on a linear network
 #
@@ -113,7 +113,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   style <- match.arg(style)
   # colour style: plot as pixel image
   if(style == "colour" || !do.plot)
-    return(do.call("plot.im",
+    return(do.call(plot.im,
                    resolve.defaults(list(x),
                                     list(...),
                                     list(main=xname, do.plot=do.plot))))
@@ -123,7 +123,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   Llines <- as.psp(L)
   # initialise plot
   W <- as.owin(L)
-  bb <- do.call.matched("plot.owin",
+  bb <- do.call.matched(plot.owin,
                         resolve.defaults(list(x=W, type="n"),
                                          list(...), list(main=xname)),
                         extrargs="type")

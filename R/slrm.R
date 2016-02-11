@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.26 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.27 $   $Date: 2016/02/11 10:17:12 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",
@@ -181,15 +181,15 @@ slr.prepare <- function(CallInfo, envir, data,
     } else {
       # Window extent is union of domains of data
       domains <- lapply(append(spatiallist, list(Y)), as.owin)
-      D <- do.call("union.owin", domains)
+      D <- do.call(union.owin, domains)
     }
     # Create template mask
-    W <- do.call("as.mask", append(list(D), dotargs))
+    W <- do.call(as.mask, append(list(D), dotargs))
     # Convert all spatial objects to this resolution
     spatiallist <- lapply(spatiallist, convert, W=W)
   } else {
     # Pixel resolution is determined implicitly by covariate data
-    W <- do.call("commonGrid", rasterlist)
+    W <- do.call(commonGrid, rasterlist)
     if(clip) {
       # Restrict data to spatial extent of response point pattern
       W <- intersect.owin(W, as.owin(Y))
@@ -237,7 +237,7 @@ slr.prepare <- function(CallInfo, envir, data,
   }
   
   # tack on any numeric values
-  df <- do.call("cbind", append(list(df), numlist))
+  df <- do.call(cbind, append(list(df), numlist))
   
   ### RETURN ALL 
   Data <- list(response=Y,
@@ -443,7 +443,7 @@ predict.slrm <- function(object, ..., type="intensity",
 plot.slrm <- function(x, ..., type="intensity") {
   xname <- short.deparse(substitute(x))
   y <- predict(x, type=type)
-  do.call("plot.im", resolve.defaults(list(x=y), list(...), list(main=xname)))
+  do.call(plot.im, resolve.defaults(list(x=y), list(...), list(main=xname)))
 }
 
 formula.slrm <- function(x, ...) {
@@ -543,7 +543,7 @@ anova.slrm <- local({
     if(!all(unlist(lapply(objex, is.slrm))))
       stop("Some arguments are not of class slrm")
     fitz <- lapply(objex, getFIT)
-    do.call("anova", append(fitz, list(test=test)))
+    do.call(anova, append(fitz, list(test=test)))
   }
 
   getFIT <- function(z) {z$Fit$FIT}

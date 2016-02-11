@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.53 $  $Date: 2016/01/31 06:50:16 $
+#  $Revision: 1.54 $  $Date: 2016/02/11 10:17:12 $
 #
 
 ppx <- local({
@@ -112,7 +112,7 @@ plot.ppx <- function(x, ...) {
     coo <- coo[,1]
     ran <- diff(range(coo))
     ylim <- c(-1,1) * ran/20
-    do.call("plot.default",
+    do.call(plot.default,
             resolve.defaults(list(coo, numeric(length(coo))),
                              list(...),
                              list(asp=1, ylim=ylim,
@@ -122,7 +122,7 @@ plot.ppx <- function(x, ...) {
     if(is.null(dom)) {
       # plot x, y coordinates only
       nama <- names(coo)
-      do.call.matched("plot.default",
+      do.call.matched(plot.default,
                       resolve.defaults(list(x=coo[,1], y=coo[,2], asp=1),
                                        list(...),
                                        list(main=xname),
@@ -131,7 +131,7 @@ plot.ppx <- function(x, ...) {
       add <- resolve.defaults(list(...), list(add=FALSE))$add
       if(!add) {
         # plot domain, whatever it is
-        do.call("plot", resolve.defaults(list(dom),
+        do.call(plot, resolve.defaults(list(dom),
                                        list(...),
                                        list(main=xname)))
       }
@@ -139,7 +139,7 @@ plot.ppx <- function(x, ...) {
       x2 <- ppp(coo[,1], coo[,2], window=as.owin(dom),
                 marks=as.data.frame(marks(x)), check=FALSE)
       # invoke plot.ppp
-      return(do.call("plot", resolve.defaults(list(x2),
+      return(do.call(plot, resolve.defaults(list(x2),
                                               list(add=TRUE),
                                               list(...))))
     }
@@ -150,7 +150,7 @@ plot.ppx <- function(x, ...) {
     x3 <- pp3(coo[,1], coo[,2], coo[,3], dom)
     # invoke plot.pp3
     nama <- names(coo)
-    do.call("plot",
+    do.call(plot,
             resolve.defaults(list(x3),
                              list(...),
                              list(main=xname),
@@ -341,7 +341,7 @@ as.boxx <- function(..., warn.owin = TRUE) {
     if (!is.list(a)) 
       stop("Don't know how to interpret data as a box")
   }
-  return(do.call("boxx", a))
+  return(do.call(boxx, a))
 }
 
 print.boxx <- function(x, ...) {

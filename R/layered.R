@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.34 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.35 $  $Date: 2016/02/11 10:17:12 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -147,7 +147,7 @@ plotEachLayer <- function(x, ..., main,
                         "lpp", "linnet", 
                         "im", "msr", "layered"))) {
         ## plot method for 'xi' has argument 'do.plot'.
-        out[[i]] <- outi <- do.call("plot",
+        out[[i]] <- outi <- do.call(plot,
                                     resolve.defaults(list(x=xi,
                                                           add=add.i,
                                                           do.plot=do.plot),
@@ -335,7 +335,7 @@ as.owin.layered <- local({
     if(length(Wlist) > 1) {
       same <- unlist(lapply(Wlist[-1], identical, y=Z))
       if(!all(same))
-        Z <- do.call("union.owin", Wlist)
+        Z <- do.call(union.owin, Wlist)
     }
     return(Z)
   }

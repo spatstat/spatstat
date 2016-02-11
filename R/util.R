@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.195 $    $Date: 2015/11/21 02:03:24 $
+#    $Revision: 1.197 $    $Date: 2016/02/11 10:17:12 $
 #
 #
 matrowsum <- function(x) {
@@ -267,7 +267,7 @@ padtowidth <- local({
 })
 
 fakecallstring <- function(fname, parlist) {
-  cl <- do.call("call", append(list(name = fname), parlist))
+  cl <- do.call(call, append(list(name = fname), parlist))
   return(format(cl))
 }
 
@@ -1028,7 +1028,7 @@ nzpaste <- function(..., sep=" ", collapse=NULL) {
   # Paste only the non-empty strings
   v <- list(...)
   ok <- sapply(lapply(v, nzchar), any)
-  do.call("paste", append(v[ok], list(sep=sep, collapse=collapse)))
+  do.call(paste, append(v[ok], list(sep=sep, collapse=collapse)))
 }
 
 substringcount <- function(x, y) {

@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.54 $   $Date: 2015/06/11 08:37:46 $
+#   $Revision: 1.55 $   $Date: 2016/02/11 10:17:12 $
 #
 #
 #   calculate pair correlation function
@@ -178,7 +178,7 @@ sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
     }
   }
   wtot <- sum(w)
-  kden <- do.call.matched("density.default",
+  kden <- do.call.matched(density.default,
                   append(list(x=d, weights=w/wtot), denargs))
   r <- kden$x
   y <- kden$y * wtot
@@ -215,7 +215,7 @@ pcf.fv <- local({
   callmatched <- function(fun, argue) {
     formalnames <- names(formals(fun))
     formalnames <- formalnames[formalnames != "..."]
-    do.call("fun", argue[names(argue) %in% formalnames])
+    do.call(fun, argue[names(argue) %in% formalnames])
   }
 
   pcf.fv <- function(X, ..., method="c") {

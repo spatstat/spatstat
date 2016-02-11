@@ -1,5 +1,5 @@
 #
-# $Id: rmh.default.R,v 1.101 2015/10/21 09:06:57 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.102 2016/02/11 10:17:12 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
@@ -486,7 +486,7 @@ rmh.default <- function(model,start=NULL,
   class(InfoList) <- c("rmhInfoList", class(InfoList))
 
   # go
-  do.call("rmhEngine",
+  do.call(rmhEngine,
           append(list(InfoList,
                       verbose=verbose, snoop=snoop, kitchensink=TRUE),
                  f.args))

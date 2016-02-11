@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.6 $ $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.7 $ $Date: 2016/02/11 10:17:12 $
 #
 
 nndist <- function(X, ...) {
@@ -25,7 +25,7 @@ nndist.ppp <- local({
     idX <- seq_len(npoints(X))
     Y <- split(X %mark% idX, f=by, un=FALSE)
     distY <- lapply(Y, nndistsub, XX=X, iX=idX, k=k)
-    result <- do.call("cbind", distY)
+    result <- do.call(cbind, distY)
     return(result)
   }
 
@@ -191,7 +191,7 @@ nnwhich.ppp <- local({
     idX <- seq_len(npoints(X))
     Y <- split(X %mark% idX, f=by, un=FALSE)
     whichY <- lapply(Y, nnwhichsub, XX=X, iX=idX, k=k)
-    result <- do.call("cbind", whichY)
+    result <- do.call(cbind, whichY)
     return(result)
   }
 

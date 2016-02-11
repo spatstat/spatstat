@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.43 $   $Date: 2016/02/01 09:39:29 $
+#  $Revision: 1.44 $   $Date: 2016/02/11 10:17:12 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -108,7 +108,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
     if(do.several) {
       ## generate one plot for each column of marks
       y <- solapply(mx, setmarks, x=x)
-      out <- do.call("plot",
+      out <- do.call(plot,
                      c(list(x=y, main=main, do.plot=do.plot,
                             show.window=show.window),
                        list(...)))
@@ -135,13 +135,13 @@ plot.lpp <- function(x, ..., main, add=FALSE,
   ## plot linear network
   if(show.network) {
     L <- as.linnet(x)
-    do.call.matched("plot.linnet",
+    do.call.matched(plot.linnet,
                     resolve.defaults(list(x=L, add=TRUE),
                                      list(...)),
                     extrargs=c("lty", "lwd", "col"))
   }
   ## plot points, legend, title
-  ans <- do.call.matched("plot.ppp",
+  ans <- do.call.matched(plot.ppp,
                          c(list(x=P, add=TRUE, main=main,
                                 show.all=show.all, show.window=FALSE),
                            list(...)),
@@ -509,7 +509,7 @@ superimpose.lpp <- function(..., L=NULL) {
   if(any(!islpp))
     objects[!islpp] <- lapply(objects[!islpp], lpp, L=L)
   ## concatenate coordinates 
-  locns <- do.call("rbind", lapply(objects, coords))
+  locns <- do.call(rbind, lapply(objects, coords))
   ## concatenate marks (or use names of arguments)
   marx <- superimposeMarks(objects, sapply(objects, npoints))
   ## make combined pattern

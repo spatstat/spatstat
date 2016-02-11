@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.106 $	$Date: 2016/02/03 07:53:08 $
+#	$Revision: 4.107 $	$Date: 2016/02/11 10:17:12 $
 #
 #
 #
@@ -314,10 +314,10 @@ intersect.owin <- function(..., fatal=TRUE, p) {
   if(length(rasterinfo) > 0) {
     # convert to masks with specified parameters, and intersect
     if(Amask) {
-      A <- do.call("as.mask", append(list(A), rasterinfo))
+      A <- do.call(as.mask, append(list(A), rasterinfo))
       return(restrict.mask(A, B))
     } else {
-      B <- do.call("as.mask", append(list(B), rasterinfo))
+      B <- do.call(as.mask, append(list(B), rasterinfo))
       return(restrict.mask(B, A))
     }
   } 

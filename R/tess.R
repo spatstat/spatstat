@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.71 $ $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.73 $ $Date: 2016/02/11 10:17:12 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -203,7 +203,7 @@ plot.tess <- local({
            rect={
              win <- x$window
              result <-
-               do.call.matched("plot.owin",
+               do.call.matched(plot.owin,
                                resolve.defaults(list(x=win, main=main,
                                                      add=add,
                                                      show.all=show.all,
@@ -213,13 +213,13 @@ plot.tess <- local({
              if(do.plot) {
                xg <- x$xgrid
                yg <- x$ygrid
-               do.call.matched("segments",
+               do.call.matched(segments,
                                resolve.defaults(list(x0=xg, y0=win$yrange[1],
                                                      x1=xg, y1=win$yrange[2]),
                                                 list(col=col),
                                                 list(...),
                                                 .StripNull=TRUE))
-               do.call.matched("segments",
+               do.call.matched(segments,
                                resolve.defaults(list(x0=win$xrange[1], y0=yg,
                                                      x1=win$xrange[2], y1=yg),
                                                 list(col=col),
@@ -229,7 +229,7 @@ plot.tess <- local({
            },
            tiled={
              result <-
-               do.call.matched("plot.owin",
+               do.call.matched(plot.owin,
                                resolve.defaults(list(x=x$window, main=main,
                                                      add=add,
                                                      show.all=show.all,
@@ -243,7 +243,7 @@ plot.tess <- local({
            },
            image={
              result <-
-               do.call("plot",
+               do.call(plot,
                        resolve.defaults(list(x$image, add=add, main=main,
                                              show.all=show.all,
                                              do.plot=do.plot),
@@ -256,7 +256,7 @@ plot.tess <- local({
       incircles <- lapply(til, incircle)
       x0 <- sapply(incircles, getElement, name="x")
       y0 <- sapply(incircles, getElement, name="y")
-      do.call.matched("text.default",
+      do.call.matched(text.default,
                       resolve.defaults(list(x=x0, y = y0),
                                        list(labels=labels),
                                        labelargs))

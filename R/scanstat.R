@@ -3,7 +3,7 @@
 ##
 ##  Spatial scan statistics
 ##
-##  $Revision: 1.14 $  $Date: 2015/07/11 08:19:26 $
+##  $Revision: 1.15 $  $Date: 2016/02/11 10:17:12 $
 ##
 
 scanmeasure <- function(X, ...){
@@ -293,7 +293,7 @@ plot.scan.test <- function(x, ..., what=c("statistic", "radius"),
   xname <- short.deparse(substitute(x))
   what <- match.arg(what)
   Z <- as.im(x, what=what)
-  do.call("plot", resolve.defaults(list(x=Z), list(...), list(main=xname)))
+  do.call(plot, resolve.defaults(list(x=Z), list(...), list(main=xname)))
   if(do.window) {
     X <- attr(x, "X")
     plot(as.owin(X), add=TRUE, invert=TRUE)

@@ -3,7 +3,7 @@
 #
 #   method for 'distfun' for class 'lpp'
 #
-#   $Revision: 1.1 $ $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.2 $ $Date: 2016/02/11 09:36:11 $
 #
 
 distfun.lpp <- local({

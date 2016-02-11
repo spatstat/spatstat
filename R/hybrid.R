@@ -2,7 +2,7 @@
 #
 #    hybrid.R
 #
-#    $Revision: 1.6 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.7 $	$Date: 2016/02/11 10:17:12 $
 #
 #    Hybrid of several interactions
 #
@@ -189,7 +189,7 @@ Hybrid <- local({
               qlist[isnul] <- interlist[isnul]
             names(qlist) <- names(interlist)
             #' build hybrid and return
-            result <- do.call("Hybrid", qlist)
+            result <- do.call(Hybrid, qlist)
             return(result)
           } 
           #' Full case
@@ -208,7 +208,7 @@ Hybrid <- local({
                 h <- Poisson()
               } else {
                 if(any(ispois)) qlist <- qlist[!ispois]
-                h <- do.call("Hybrid", qlist)
+                h <- do.call(Hybrid, qlist)
               }
               result <- append(result, list(h))
             }

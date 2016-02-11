@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.23 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.24 $  $Date: 2016/02/11 10:17:12 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -42,7 +42,7 @@ as.box3 <- function(...) {
     if(!is.list(a))
       stop("Don't know how to interpret data as a box")
   }
-  return(do.call("box3", a))
+  return(do.call(box3, a))
 }
 
 print.box3 <- function(x, ...) {

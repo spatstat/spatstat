@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.25 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.26 $  $Date: 2016/02/11 10:17:12 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -95,7 +95,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
       switch(at,
              points={
                result <-
-                 do.call("smoothpointsEngine",
+                 do.call(smoothpointsEngine,
                          resolve.defaults(list(x=X,
                                                values=values, weights=weights,
                                                sigma=sigma, varcov=varcov,
@@ -105,7 +105,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
              pixels={
                values.weights <- if(weightsgiven) values * weights else values
                numerator <-
-                 do.call("density.ppp",
+                 do.call(density.ppp,
                          resolve.defaults(list(x=X,
                                                at="pixels",
                                                weights = values.weights,
@@ -113,7 +113,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                                                edge=FALSE),
                                           list(...)))
                denominator <-
-                 do.call("density.ppp",
+                 do.call(density.ppp,
                          resolve.defaults(list(x=X,
                                                at="pixels",
                                                weights = weights,
@@ -154,7 +154,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     if(any(!isconst)) {
       ## compute denominator
       denominator <-
-        do.call("density.ppp",
+        do.call(density.ppp,
                 resolve.defaults(list(x=X,
                                       at=at,
                                       weights = weights,
@@ -164,7 +164,7 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
       ## compute numerator for each column of marks
       marx.weights <- if(weightsgiven) marx * weights else marx
       numerators <-
-        do.call("density.ppp",
+        do.call(density.ppp,
                 resolve.defaults(list(x=X,
                                       at=at,
                                       weights = marx.weights,
@@ -372,7 +372,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     # compute weighted densities
     if(is.null(weights)) {
       # weights are implicitly equal to 1
-      numerator <- do.call("density.ppp",
+      numerator <- do.call(density.ppp,
                          resolve.defaults(list(x=x, at="points"),
                                           list(weights = values),
                                           list(sigma=sigma, varcov=varcov),
@@ -380,7 +380,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                           list(sorted=sorted),
                                           list(...),
                                           list(edge=FALSE)))
-      denominator <- do.call("density.ppp",
+      denominator <- do.call(density.ppp,
                              resolve.defaults(list(x=x, at="points"),
                                               list(sigma=sigma, varcov=varcov),
                                               list(leaveoneout=leaveoneout),
@@ -388,7 +388,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                               list(...),
                                               list(edge=FALSE)))
     } else {
-      numerator <- do.call("density.ppp",
+      numerator <- do.call(density.ppp,
                            resolve.defaults(list(x=x, at="points"),
                                             list(weights = values * weights),
                                             list(sigma=sigma, varcov=varcov),
@@ -396,7 +396,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                                             list(sorted=sorted),
                                             list(...),
                                             list(edge=FALSE)))
-      denominator <- do.call("density.ppp",
+      denominator <- do.call(density.ppp,
                              resolve.defaults(list(x=x, at="points"),
                                               list(weights = weights),
                                               list(sigma=sigma, varcov=varcov),

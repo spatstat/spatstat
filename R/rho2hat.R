@@ -3,7 +3,7 @@
 #
 #   Relative risk for pairs of covariate values
 #
-#   $Revision: 1.21 $   $Date: 2015/04/28 08:21:12 $
+#   $Revision: 1.22 $   $Date: 2016/02/11 10:17:12 $
 #
 
 rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
@@ -69,7 +69,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
            },
            reweight = {
              # smoothed point pattern with weights = 1/reference
-             W <- do.call.matched("as.mask",
+             W <- do.call.matched(as.mask,
                                   append(list(w=as.owin(X)), list(...)))
              if(!needflip) {
                lambda <- predict(model, locations=W)
@@ -134,7 +134,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
              fhat <- density(Z12points, ...)
              sigma <- attr(fhat, "sigma")
              varcov <- attr(fhat, "varcov")
-             ghat <- do.call("density.ppp",
+             ghat <- do.call(density.ppp,
                              resolve.defaults(list(Z12pixels, weights=wts),
                                               list(...),
                                               list(sigma=sigma,
@@ -178,7 +178,7 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
                               xlab=s$cov1name, ylab=s$cov2name))
   # plot image
   plotparams <- graphicsPars("plot")
-  do.call.matched("plot.im",
+  do.call.matched(plot.im,
                   resolve.defaults(list(x=x, axes=FALSE),
                                    list(...),
                                    list(main=xname, ribargs=list(axes=TRUE))),
@@ -187,7 +187,7 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
   if(rd$axes) {
     axisparams <- graphicsPars("axis")
     Axis <- function(..., extrargs=axisparams) {
-      do.call.matched("axis", resolve.defaults(list(...)), extrargs=extrargs)
+      do.call.matched(axis, resolve.defaults(list(...)), extrargs=extrargs)
     }
     if(s$isxy) {
       # for (x,y) plots the image is at the correct physical scale
@@ -209,7 +209,7 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
     title(ylab=rd$ylab)
   }
   if(do.points) {
-    do.call.matched("plot.ppp",
+    do.call.matched(plot.ppp,
                     resolve.defaults(list(x=s$Z12points, add=TRUE),
                                      list(...)),
                     extrargs=c("pch", "col", "cols", "bg", "cex", "lwd", "lty"))

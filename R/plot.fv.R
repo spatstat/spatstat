@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.122 $    $Date: 2015/11/17 03:40:21 $
+#  $Revision: 1.123 $    $Date: 2016/02/11 10:17:12 $
 #
 #
 
@@ -393,7 +393,7 @@ plot.fv <- local({
 
     ## create new plot
     if(!add)
-      do.call("plot.default",
+      do.call(plot.default,
               resolve.defaults(list(xlim, ylim, type="n", log=log),
                                list(xlab=xlab, ylab=ylab),
                                list(...),
@@ -581,7 +581,7 @@ plot.fv <- local({
     
       ##  ********** plot legend *************************
       if(!is.null(legend) && legend) 
-        do.call("legend",
+        do.call(graphics::legend,
                 resolve.defaults(legendargs,
                                  legendbest,
                                  legendspec,
@@ -655,7 +655,7 @@ findbestlegendpos <- local({
                           preference="float", verbose=FALSE,
                           legendspec=NULL) {
     # find bounding box
-    W <- do.call("boundingbox", lapply(objects, as.rectangle))
+    W <- do.call(boundingbox, lapply(objects, as.rectangle))
     # convert to common box
     objects <- lapply(objects, rebound, rect=W)
     # comp
@@ -690,7 +690,7 @@ findbestlegendpos <- local({
       # evaluate preferred location (check for collision)
       if(!is.null(legendspec)) {
         # pretend to plot the legend as specified
-        legout <- do.call("legend", append(legendspec, list(plot=FALSE)))
+        legout <- do.call(legend, append(legendspec, list(plot=FALSE)))
         # determine bounding box
         legbox <- with(legout$rect, owin(c(left, left+w), c(top-h, top)))
         scaledlegbox <- affine(legbox, mat=mat)

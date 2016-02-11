@@ -4,7 +4,7 @@
 #  Class of optimised bandwidths
 #  Plotting the object displays the optimisation criterion
 #
-#  $Revision: 1.23 $  $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.24 $  $Date: 2016/02/11 10:17:12 $
 #
 
 bw.optim <- function(cv, h, iopt=which.min(cv), ...,
@@ -79,7 +79,7 @@ plot.bw.optim <- function(x, ...,
   # convert to fv object
   xfv <- as.fv(x)
   # plot cross-validation criterion
-  out <- do.call("plot.fv",
+  out <- do.call(plot.fv,
                  resolve.defaults(list(x=xfv),
                                   list(...),
                                   list(main=xname)))
@@ -99,7 +99,7 @@ plot.bw.optim <- function(x, ...,
     hoptim <- as.numeric(x)
     if(spatstat.options('monochrome'))
       optargs <- col.args.to.grey(optargs)
-    do.call("abline", append(list(v=hoptim), optargs))
+    do.call(abline, append(list(v=hoptim), optargs))
   }
   if(is.null(out)) return(invisible(NULL))
   return(out)
