@@ -1762,6 +1762,7 @@
   Juha Heikkinen,
   Mandy Hering,
   Markus Herrmann,
+  Paul Hewson,
   Kassel Hingee,
   Kurt Hornik,
   Philipp Hunziker,

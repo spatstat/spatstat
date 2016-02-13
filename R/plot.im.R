@@ -45,13 +45,13 @@ plot.im <- local({
     if(axes) {
       px <- pretty(xr)
       py <- pretty(yr)
-      do.call.plotfun(axis,
+      do.call.plotfun(graphics::axis,
                       resolve.defaults(
                                        list(side=1, at=px), 
                                        list(...),
                                        list(pos=yr[1])),
                       extrargs=graphicsPars("axis"))
-      do.call.plotfun(axis,
+      do.call.plotfun(graphics::axis,
                       resolve.defaults(
                                        list(side=2, at=py), 
                                        list(...),
@@ -605,7 +605,7 @@ plot.im <- local({
                posargs <- list(pos=bb.rib$yrange[1],
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
-      do.call.plotfun(axis,
+      do.call.plotfun(graphics::axis,
                       resolve.defaults(ribargs,
                                        axisargs, dotargs,
                                        posargs),

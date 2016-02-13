@@ -485,7 +485,7 @@ plot.symbolmap <- function(x, ..., main,
                       "is not consistent with vertical orientation"))
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
-      do.call.matched(axis,
+      do.call.matched(graphics::axis,
                       resolve.defaults(list(...),
                                        list(side=sidecode, pos=pos, at=yp,
                                             labels=ll, tick=FALSE, las=1)),
@@ -499,7 +499,7 @@ plot.symbolmap <- function(x, ..., main,
                       "is not consistent with horizontal orientation"))
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
-      do.call.matched(axis,
+      do.call.matched(graphics::axis,
                       resolve.defaults(list(...),
                                        list(side = sidecode, pos = pos,
                                             at = xp, labels=ll, tick=FALSE)),

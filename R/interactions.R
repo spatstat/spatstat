@@ -3,7 +3,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.19 $  $Date: 2016/02/11 00:48:24 $
+#  $Revision: 1.20 $  $Date: 2016/02/13 04:10:47 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {
@@ -146,7 +146,7 @@ impliedcoefficients <- function(object, tag) {
   for(v in othernames) {
     df[, v] <- if(isnum[[v]]) 0 else
                if(islog[[v]]) FALSE else
-               if(isfac[[v]]) levels(Moadf[[v]])[1] else
+               if(isfac[[v]]) factor(levels(Moadf[[v]]))[1] else
                sort(unique(Moadf[[v]]))[1]
   }
   # (2) evaluate linear predictor

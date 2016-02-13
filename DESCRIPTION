@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.020
-Nickname: Zero Seconds Remaining
-Date: 2016-02-11
+Version: 1.44-1.021
+Nickname: Levity Waves
+Date: 2016-02-13
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -72,6 +72,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	J. Heikkinen; 
 	M. Hering; 
 	M. Herrmann; 
+	P. Hewson;
 	K. Hingee;
 	K. Hornik; 
 	P. Hunziker; 

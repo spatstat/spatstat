@@ -270,8 +270,10 @@ selfcut.psp <- function(A, ..., eps) {
   newends <- as.matrix(eA)
   newends <- newends[-gone, , drop=FALSE]
   newmarx <- marx <- marks(A)
-  if(mama <- !is.null(marx)) 
-    newmarx <- as.data.frame(marx)[-gone, ,drop=FALSE]
+  if(mama <- !is.null(marx)) {
+    marx <- as.data.frame(marx)
+    newmarx <- marx[-gone, ,drop=FALSE]
+  }
   ## cut each segment using the *provided* values of x,y
   for(ii in gone) {
     ## assemble cuts through segment ii

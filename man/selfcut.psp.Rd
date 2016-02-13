@@ -33,13 +33,9 @@ selfcut.psp(A, \dots, eps)
   in the same window as \code{A} with the same kind of marks as \code{A}.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-
-
-Rolf Turner \email{r.turner@auckland.ac.nz}
-
-and Ege Rubak \email{rubak@math.aau.dk}
-
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{selfcrossing.psp}}

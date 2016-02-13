@@ -211,7 +211,6 @@ zeromargins <- function() {
 }
 ## Set 'mar'
 setmargins <- function(...) {
-  par(opa)
   x <- c(...)
   x <- rep(x, 4)[1:4]
   par(mar=x)

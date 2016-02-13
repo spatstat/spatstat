@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.43 $   $Date: 2016/02/11 08:52:20 $
+#  $Revision: 1.45 $   $Date: 2016/02/13 02:53:19 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2016/02/11 08:52:20 $")
+                         date="$Date: 2016/02/13 02:53:19 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -411,9 +411,10 @@ subfits.old <- local({
                    use.gam=use.gam,
                    forcefit=TRUE)
       }
-    
-      ## now reset the coefficients to those obtained from the full fit
-      coefnames.wanted <- names(fiti$coef)
+      ## fiti determines which coefficients are required
+      coefi.fitted <- fiti$coef
+      coefnames.wanted <- names(coefi.fitted)
+      ## take the required coefficients from the full mppm fit
       coefs.avail  <- coefs.full[i,]
       names(coefs.avail) <- coefs.names
       if(nactive == 1) {
@@ -425,8 +426,10 @@ subfits.old <- local({
       }
       if(!all(coefnames.wanted %in% names(coefs.avail))) 
         stop("Internal error: some fitted coefficients not accessible")
-      fiti$theta <- fiti$coef <- coefs.avail[coefnames.wanted]
-      ## ... make sure these coefficients will be used in getglmfit, etc ...
+      coefi.new <- coefs.avail[coefnames.wanted]
+      ## reset coefficients
+      fiti$coef.orig <- coefi.fitted ## (detected by summary.ppm, predict.ppm)
+      fiti$theta <- fiti$coef <- coefi.new
       fiti$method <- "mppm"
       ## ... and replace fake data by true data
       if(has.design) {
@@ -434,9 +437,10 @@ subfits.old <- local({
           fiti$covariates[[nam]] <- imrowi[[nam]]
           fiti$internal$glmdata[[nam]] <- data[i, nam, drop=TRUE]
         }
-        ## ... and tell glm fit object that it has full rank
-        fiti$internal$glmfit$rank <- FIT$rank
       }
+      ## Adjust rank of glm fit object
+#      fiti$internal$glmfit$rank <- FIT$rank 
+      fiti$internal$glmfit$rank <- sum(is.finite(fiti$coef))
       ## Fisher information and variance-covariance if known
       ## Extract submatrices for relevant parameters
       if(!is.null(fisher)) 

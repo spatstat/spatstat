@@ -38,7 +38,7 @@ ewcdf <- function(x, weights=rep(1/length(x), length(x)))
   return(rval)
 }
 
-  # Hacked from stats:::print.ewcdf
+  # Hacked from stats:::print.ecdf
 print.ewcdf <- function (x, digits = getOption("digits") - 2L, ...) {
   cat("Weighted empirical CDF \nCall: ")
   print(attr(x, "call"), ...)

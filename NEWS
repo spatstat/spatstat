@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.020
+        CHANGES IN spatstat VERSION 1.44-1.021
 
 OVERVIEW
 
-    o We thank Mario D'Antuono, Markus Herrmann,
+    o We thank Mario D'Antuono, Markus Herrmann, Paul Hewson,
     Suman Rakshit and Sven Wagner for contributions.
 
     o Surgery with linear networks.
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Bug fixes.
 
-    o Version nickname: 'Zero Seconds Remaining'
+    o Version nickname: 'Levity Waves'
 
 NEW FUNCTIONS
 
@@ -124,6 +124,11 @@ BUGS
 
    o plot.profilepl
    Failed with a message about a missing object 'finite'.
+   Fixed.
+
+   o selfcut.psp
+   Gave an error if marks(A) was a vector rather than a data frame.
+   [Spotted by Paul Hewson.]
    Fixed.
 
    o suffstat

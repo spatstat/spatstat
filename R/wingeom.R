@@ -479,7 +479,7 @@ union.owin <- function(..., p) {
   }
 
   ## Convert C to mask
-  C <- do.call("as.mask", append(list(w=C), rasterinfo))
+  C <- do.call(as.mask, append(list(w=C), rasterinfo))
 
   rxy <- rasterxy.mask(C)
   x <- rxy$x
@@ -564,7 +564,7 @@ setminus.owin <- function(A, B, ..., p) {
       list()
 
   ## Convert A to mask
-  AB <- do.call("as.mask", append(list(w=A), rasterinfo))
+  AB <- do.call(as.mask, append(list(w=A), rasterinfo))
 
   rxy <- rasterxy.mask(AB)
   x <- rxy$x
@@ -798,7 +798,7 @@ vertices.owin <- function(w) {
            vert <- list(x=xr[c(1,2,2,1)], y=yr[c(1,1,2,2)])
          },
          polygonal={
-           vert <- do.call("concatxy",w$bdry)
+           vert <- do.call(concatxy,w$bdry)
          },
          mask={
            bm <- bdry.mask(w)$m

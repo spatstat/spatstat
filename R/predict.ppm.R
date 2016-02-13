@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.92 $	$Date: 2016/02/10 11:25:17 $
+#	$Revision: 1.94 $	$Date: 2016/02/13 04:33:34 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -667,10 +667,12 @@ model.se.image <- function(fit, W=as.owin(fit), ..., what="sd") {
   return(U)
 }
 
-GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
+GLMpredict <- function(fit, data, coefs, changecoef=TRUE,
+                       type=c("response", "link")) {
   ok <- is.finite(coefs)
+  type <- match.arg(type)
   if(!changecoef && all(ok)) {
-    answer <- predict(fit, newdata=data, type="response")
+    answer <- predict(fit, newdata=data, type=type)
   } else {
     # do it by hand
     fmla <- formula(fit)
@@ -701,12 +703,17 @@ GLMpredict <- function(fit, data, coefs, changecoef=TRUE) {
         mo <- apply(mo, 1, sum)
       eta <- mo + eta
     }
-    # response
-    linkinv <- family(fit)$linkinv
-    answer <- linkinv(eta)
+    switch(type,
+           link = {
+             answer <- eta
+           },
+           response = {
+             linkinv <- family(fit)$linkinv
+             answer <- linkinv(eta)
+           })
   }
   # Convert from fitted logistic prob. to lambda for logistic fit
-  if(family(fit)$family=="binomial")
+  if(type == "response" && family(fit)$family=="binomial")
     answer <- fit$data$.logi.B[1] * answer/(1-answer)
   return(answer)
 }

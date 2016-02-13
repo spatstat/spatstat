@@ -690,7 +690,8 @@ findbestlegendpos <- local({
       # evaluate preferred location (check for collision)
       if(!is.null(legendspec)) {
         # pretend to plot the legend as specified
-        legout <- do.call(legend, append(legendspec, list(plot=FALSE)))
+        legout <- do.call(graphics::legend,
+                          append(legendspec, list(plot=FALSE)))
         # determine bounding box
         legbox <- with(legout$rect, owin(c(left, left+w), c(top-h, top)))
         scaledlegbox <- affine(legbox, mat=mat)

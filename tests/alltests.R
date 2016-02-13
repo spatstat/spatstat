@@ -825,7 +825,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.5 $ $Date: 2016/02/08 08:54:45 $
+# $Revision: 1.6 $ $Date: 2016/02/13 03:28:28 $
 # 
 
 require(spatstat)
@@ -845,43 +845,50 @@ local({
   fit2
   fit3
 
-  subfits(fit1)
-  subfits(fit2)
-  subfits(fit3)
+  ## run summary.mppm which currently sits in spatstat-internal.Rd
+  summary(fit1)
+  summary(fit2)
+  summary(fit3)
 
   ## test vcov algorithm
   vcov(fit1)
   vcov(fit2)
   vcov(fit3)
 
-  ## test summary.mppm which currently sits in spatstat-internal.Rd
+  ## test subfits algorithm
+  s1 <- subfits(fit1)
+  s2 <- subfits(fit2)
+  s3 <- subfits(fit3)
 
-  summary(fit1)
-  summary(fit2)
-  summary(fit3)
-})
-
-local({
-
-  ## Further test pointed out by Sven Wagner
-  go <- unmark(gorillas)[1:100]
-  A <- hyperframe(G=solist(go, go), 
-                  V=gorillas.extra$vegetation)
-  fit4 <- mppm(G ~ V, data=A)
-  fit5 <- mppm(G ~ V, interaction=Strauss(500), data=A, rbord=0)
-  fit4
-  fit5
-  subfits(fit4)
-  subfits(fit5)
-  vcov(fit4)
-  vcov(fit5, fine=TRUE)
-  summary(fit4)
-  summary(fit5)
+  ## validity of results of subfits()
+  p1 <- solapply(s1, predict)
+  p2 <- solapply(s2, predict)
+  p3 <- solapply(s3, predict)
 
 })
 
 local({
-  
+  ##  [thanks to Sven Wagner]
+  ## factor covariate, with some levels unused in some rows
+  H <- hyperframe(X=replicate(3, runifpoint(20), simplify=FALSE),
+                  Z=solist(as.im(function(x,y){x}, owin()),
+                    as.im(function(x,y){y}, owin()),
+                    as.im(function(x,y){x+y}, owin())))
+  H$Z <- solapply(H$Z, cut, breaks=(0:4)/2)
+
+  fit6 <- mppm(X ~ Z, H)
+  v6 <- vcov(fit6)
+  s6 <- subfits(fit6)
+  p6 <- solapply(s6, predict)
+
+  # random effects
+  fit7 <- mppm(X ~ Z, H, random=~1|id)
+  v7 <- vcov(fit7)
+  s7 <- subfits(fit7)
+  p7 <- solapply(s7, predict)
+})
+
+local({
   ## test handling of offsets and zero cif values in mppm
   H <- hyperframe(Y = waterstriders)
   mppm(Y ~ 1,  data=H, Hardcore(1.5))
@@ -889,7 +896,6 @@ local({
 
   ## prediction, in training/testing context
   ##    (example from Markus Herrmann and Ege Rubak)
-
   X <- waterstriders
   dist <- solapply(waterstriders,
                    function(z) distfun(runifpoint(1, Window(z))))
@@ -2756,7 +2762,7 @@ local({
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2015/12/29 08:54:49 $ 
+##    $Version$ $Date: 2016/02/12 08:18:08 $ 
 ##
 require(spatstat)
 local({
@@ -2765,4 +2771,11 @@ local({
   BB <- angles.psp(B)
   A <- runifpoint(3)
   AB <- project2segment(A,B)
+
+  # mark inheritance
+  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
+  marks(X) <- 1:10
+  Y <- selfcut.psp(X)
+  marks(X) <- data.frame(A=1:10, B=factor(letters[1:10]))
+  Z <- selfcut.psp(X)
 })

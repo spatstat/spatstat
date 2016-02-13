@@ -187,7 +187,8 @@ plot.rho2hat <- function(x, ..., do.points=FALSE) {
   if(rd$axes) {
     axisparams <- graphicsPars("axis")
     Axis <- function(..., extrargs=axisparams) {
-      do.call.matched(axis, resolve.defaults(list(...)), extrargs=extrargs)
+      do.call.matched(graphics::axis,
+                      resolve.defaults(list(...)), extrargs=extrargs)
     }
     if(s$isxy) {
       # for (x,y) plots the image is at the correct physical scale
