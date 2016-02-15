@@ -317,7 +317,8 @@
   of Baddeley et al (2005), if \code{oldstyle=TRUE},
   the two-standard-deviation limits are calculated
   using the innovation variance, an over-estimate of the true
-  variance of the residuals.
+  variance of the residuals. (However, see the section about
+  Replicated Data).
 
   The argument \code{rv} would normally be used only by experts.
   It enables the user to substitute arbitrary values for the
@@ -351,6 +352,15 @@
   See also the companion functions \code{\link{qqplot.ppm}}, which produces a
   Q-Q plot of the residuals, and \code{\link{lurking}}, which produces
   lurking variable plots for any spatial covariate.
+}
+\section{Replicated Data}{
+  Note that if \code{object} is a model that was obtained by
+  first fitting a model to replicated point pattern data using
+  \code{\link{mppm}} and then using \code{\link{subfits}} to extract
+  a model for one of the individual point patterns, then the
+  variance calculations are only implemented for the
+  innovation variance (\code{oldstyle=TRUE}) and this is the default
+  in such cases.
 }
 \references{
   Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)

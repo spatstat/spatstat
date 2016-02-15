@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.021
+        CHANGES IN spatstat VERSION 1.44-1.022
 
 OVERVIEW
 
@@ -140,6 +140,19 @@ BUGS
    if the 'spatstat' package was neither loaded nor attached.
    [Spotted by Markus Herrmann.]
    Fixed.
+
+   o qqplot.ppm
+   Crashed sometimes when applied to a model obtained from subfits().
+   Fixed.
+
+   o diagnose.ppm
+   When applied to a model obtained from subfits(), 
+   in the default case (oldstyle=FALSE) 
+   the variance calculations were incorrect.
+   Consequently the dotted lines representing significance bands were 
+   incorrect. An error or warning about negative variances occurred sometimes.
+   However, calculations with oldstyle=TRUE were correct.
+   The default has now been changed to oldstyle=TRUE for such models.
 
    o [.lpp
    The local coordinate 'seg' was calculated incorrectly,

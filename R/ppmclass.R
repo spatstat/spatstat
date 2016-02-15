@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.128 $	$Date: 2016/02/11 10:17:12 $
+#	$Revision: 2.129 $	$Date: 2016/02/15 04:34:14 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -863,5 +863,16 @@ as.owin.ppm <- function(W, ..., from=c("points", "covariates"), fatal=TRUE) {
 domain.ppm <- Window.ppm <- function(X, ..., from=c("points", "covariates")) {
   from <- match.arg(from)
   as.owin(X, ..., from=from)
+}
+
+## change the coefficients in a ppm or other model
+
+tweak.coefs <- function(model, new.coef) {
+  if(is.null(new.coef)) return(model)
+  co <- coef(model)
+  check.nvector(new.coef, length(co), things="coefficients")
+  model$coef.orig <- co
+  model$coef <- new.coef
+  return(model)
 }
 

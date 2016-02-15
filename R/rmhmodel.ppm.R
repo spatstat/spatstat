@@ -239,14 +239,9 @@ rmhmodel.ppm <- function(model, w, ...,
   verifyclass(model, "ppm")
   argh <- list(...)
 
-  if(!is.null(new.coef)) {
-    ## hack the coefficients
-    co <- coef(model)
-    check.nvector(new.coef, length(co), things="coefficients")
-    model$coef.orig <- co
-    model$coef <- new.coef
-  }
-
+  if(!is.null(new.coef))
+    model <- tweak.coefs(model, new.coef)
+  
   ## Ensure the fitted model is valid
   ## (i.e. exists mathematically as a point process)
   if(!valid.ppm(model)) {

@@ -825,7 +825,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.6 $ $Date: 2016/02/13 03:28:28 $
+# $Revision: 1.7 $ $Date: 2016/02/15 14:30:18 $
 # 
 
 require(spatstat)
@@ -837,7 +837,7 @@ local({
                iformula=~ifelse(group=="control", po, str))
   fit2 <- mppm(Points ~ group, simba,
                hyperframe(po=Poisson(), str=Strauss(0.1)),
-               iformula=~id * str)
+               iformula=~str/id)
   fit3 <- mppm(Points ~ group, simba,
                hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
         iformula=~I((group=="control") * po) + I((group=="treatment") * pie))

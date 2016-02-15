@@ -724,6 +724,7 @@
 \alias{trim.mask}        
 \alias{truncline}        
 \alias{tweak.fv.entry}
+\alias{tweak.coefs}
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unparen}
@@ -1606,6 +1607,7 @@ trim.mask(M, R, tolerant)
 truncline(x, nc)
 tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL,
 new.tag=NULL)
+tweak.coefs(model, new.coef)
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unparen(x)

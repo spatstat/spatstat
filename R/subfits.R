@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.45 $   $Date: 2016/02/13 02:53:19 $
+#  $Revision: 1.46 $   $Date: 2016/02/15 12:43:49 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2016/02/13 02:53:19 $")
+                         date="$Date: 2016/02/15 12:43:49 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -397,19 +397,14 @@ subfits.old <- local({
       if(nactive == 1){
         interi <- interaction[i, acti, drop=TRUE] 
         tagi <- names(interaction)[acti]
-        fiti <- ppm(Yi, trend, interi, covariates=covariates,
-#%^!ifdef RANDOMEFFECTS                 
-                   allcovar=info$has.random,
-#%^!endif                 
-                   use.gam=use.gam,
-                   forcefit=TRUE, vnamebase=tagi, vnameprefix=tagi)
+        fiti <- PiPiM(Yi, trend, interi, covariates=covariates,
+                      allcovar=info$has.random,
+                      use.gam=use.gam,
+                      vnamebase=tagi, vnameprefix=tagi)
       } else {
-        fiti <- ppm(Yi, trend, Poisson(), covariates=covariates,
-#%^!ifdef RANDOMEFFECTS                 
-                   allcovar=info$has.random,
-#%^!endif                 
-                   use.gam=use.gam,
-                   forcefit=TRUE)
+        fiti <- PiPiM(Yi, trend, Poisson(), covariates=covariates,
+                      allcovar=info$has.random,
+                      use.gam=use.gam)
       }
       ## fiti determines which coefficients are required
       coefi.fitted <- fiti$coef
@@ -456,6 +451,26 @@ subfits.old <- local({
     return(results)
   }
 
+  PiPiM <- function(Y, trend, inter, covariates, ...,
+                    allcovar=FALSE, use.gam=FALSE,
+                    vnamebase=c("Interaction", "Interact."),
+                    vnameprefix=NULL) {
+    # This ensures that the model is fitted in a unique environment
+    # so that it can be updated later.
+    force(Y)
+    force(trend)
+    force(inter)
+    force(covariates)
+    force(allcovar)
+    force(use.gam)
+    force(vnamebase)
+    force(vnameprefix)
+    feet <- ppm(Y, trend, inter, covariates=covariates,
+                allcovar=allcovar, use.gam=use.gam,
+                forcefit=TRUE, vnamebase=vnamebase, vnameprefix=vnameprefix)
+    return(feet)
+  }
+  
   possible <- function(z) {
     if(!is.factor(z)) unique(z) else factor(levels(z), levels=levels(z))
   }

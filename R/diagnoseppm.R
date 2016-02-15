@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.40 $ $Date: 2015/10/20 03:34:56 $
+# $Revision: 1.41 $ $Date: 2016/02/15 04:55:35 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -217,18 +217,26 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
                          typename, check=TRUE, repair=TRUE, oldstyle=FALSE,
                          splineargs=list(spar=0.5))
 {
+  asked.newstyle <- !missing(oldstyle) && !oldstyle
+
   if(is.marked.ppm(object))
     stop("Sorry, this is not yet implemented for marked models")
+  
+  # check whether model originally came from replicated data
+  is.subfit <- (object$method == "mppm")
 
+  Coefs <- coef(object)
   if(check && damaged.ppm(object)) {
     if(!repair)
       stop("object format corrupted; try update(object, use.internal=TRUE)")
     message("object format corrupted; repairing it.")
     object <- update(object, use.internal=TRUE)
-  } else if(compute.sd && is.null(getglmfit(object)))
+    object <- tweak.coefs(object, Coefs)
+  } else if(compute.sd && is.null(getglmfit(object))) {
     object <- update(object, forcefit=TRUE, use.internal=TRUE)
+    object <- tweak.coefs(object, Coefs)
+  }
 
-    
   # -------------  Interpret arguments --------------------------
 
   # edge effect avoidance
@@ -286,6 +294,18 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
   if(missing(compute.sd))
     compute.sd <- plot.sd
 
+  # default for mppm objects is oldstyle=TRUE
+  if(compute.sd && is.subfit) {
+    if(!asked.newstyle) {
+      # silently change default
+      oldstyle <- TRUE
+    } else {
+      stop(paste("Variance calculation for a subfit of an mppm object",
+                 "is only implemented for oldstyle=TRUE"),
+           call.=FALSE)
+    }
+  }
+    
   # interpolate the density of the residual measure?
   if(missing(compute.cts)) {
     plot.neg <- resolve.defaults(list(...),

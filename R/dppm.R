@@ -108,8 +108,7 @@ dppmFixIntensity <- function(DPP, lambda, po){
     ## Overwrite po object with fake version
     X <- po$Q$data
     po <- ppm(X~log(lambda)-1)
-    po$coef.orig <- po$coef
-    po$coef <- 1
+    po <- tweak.coefs(po, 1)
     po$fitter <- "dppm"
     ## update pseudolikelihood value using code in logLik.ppm
     po$maxlogpl.orig <- po$maxlogpl

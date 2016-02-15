@@ -501,7 +501,10 @@ vcalcGibbsGeneral <- function(model,
         ## pairweight[i,j] * outer(momdel[,i,j], momdel[,j,i])
         ## for data points that contributed to the pseudolikelihood
         momdelok <- momdel[ , ok, ok, drop=FALSE]
-        A2 <- sumsymouter(momdelok, w=pairweight[ok, ok])
+        pwok <- pairweight[ok, ok]
+        if(anyNA(momdelok) || anyNA(pwok))
+          stop("Unable to compute variance: NA values present", call.=FALSE)
+        A2 <- sumsymouter(momdelok, w=pwok)
         if(logi){
           ## lam.array[ ,i,j] = lambda(X[i] | X)
           lam.array <- array(lam, c(nX,nX,p))

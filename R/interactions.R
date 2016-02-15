@@ -3,7 +3,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.20 $  $Date: 2016/02/13 04:10:47 $
+#  $Revision: 1.22 $  $Date: 2016/02/15 13:09:12 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {
@@ -101,6 +101,7 @@ impliedcoefficients <- function(object, tag) {
   stopifnot(is.character(tag) && length(tag) == 1)
   fitobj      <- object$Fit$FIT
   Vnamelist   <- object$Fit$Vnamelist
+  has.random  <- object$Info$has.random
 # Not currently used:  
 #  fitter      <- object$Fit$fitter
 #  interaction <- object$Inter$interaction
@@ -146,12 +147,16 @@ impliedcoefficients <- function(object, tag) {
   for(v in othernames) {
     df[, v] <- if(isnum[[v]]) 0 else
                if(islog[[v]]) FALSE else
-               if(isfac[[v]]) factor(levels(Moadf[[v]]))[1] else
-               sort(unique(Moadf[[v]]))[1]
+               if(isfac[[v]]) {
+                 lev <- levels(Moadf[[v]])
+                 factor(lev[1], levels=lev)
+               } else sort(unique(Moadf[[v]]))[1]
   }
   # (2) evaluate linear predictor
+  Coefs <- if(!has.random) coef(fitobj) else fixef(fitobj)
   opt <- options(warn= -1)
-  eta0 <- predict(fitobj, newdata=df, type="link")
+#  eta0 <- predict(fitobj, newdata=df, type="link")
+  eta0 <- GLMpredict(fitobj, data=df, coefs=Coefs, changecoef=TRUE, type="link")
   options(opt)
   
   # (3) for each vname in turn,
@@ -159,7 +164,8 @@ impliedcoefficients <- function(object, tag) {
   for(j in seq(vnames)) {
     df[[vnames[j] ]] <- 1
     opt <- options(warn= -1)
-    etaj <- predict(fitobj, newdata=df, type="link")
+#    etaj <- predict(fitobj, newdata=df, type="link")
+    etaj <- GLMpredict(fitobj, data=df, coefs=Coefs, changecoef=TRUE, type="link")
     options(opt)
     answer[ ,j] <- etaj - eta0
   }
