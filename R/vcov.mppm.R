@@ -1,6 +1,6 @@
 #  Variance-covariance matrix for mppm objects
 #
-# $Revision: 1.14 $ $Date: 2016/02/16 01:39:12 $
+# $Revision: 1.15 $ $Date: 2016/02/16 10:08:00 $
 #
 #
 
@@ -106,9 +106,10 @@ vcov.mppm <- local({
     if(collectmom)
       Mom <- matrix(, 0, nc, dimnames=list(character(0), cnames))
     for(i in seq_len(n)) {
-      A1 <- addsubmatrix(A1, a1[[i]])
-      A2 <- addsubmatrix(A2, a2[[i]])
-      A3 <- addsubmatrix(A3, a3[[i]])
+      coefnames.i <- names(coef(subs[[i]]))
+      A1 <- addsubmatrix(A1, a1[[i]], coefnames.i)
+      A2 <- addsubmatrix(A2, a2[[i]], coefnames.i)
+      A3 <- addsubmatrix(A3, a3[[i]], coefnames.i)
       if(collectmom) Mom <- bindsubmatrix(Mom, sufs[[i]])
     }
     internals <- list(A1=A1, A2=A2, A3=A3)
@@ -136,10 +137,16 @@ vcov.mppm <- local({
     return(out)
   }
 
-  addsubmatrix <- function(A, B) {
+  addsubmatrix <- function(A, B, guessnames) {
     if(is.null(B)) return(A)
+    if(is.null(colnames(B)) && !missing(guessnames)) {
+      if(is.character(guessnames))
+        guessnames <- list(guessnames, guessnames)
+      if(all(lengths(guessnames) == dim(B)))
+        colnames(B) <- guessnames
+    }
     if(is.null(colnames(B))) {
-      if(!all(dim(A) == dim(B)))
+      if(!all(dim(A) == dim(B))) 
         stop("Internal error: no column names, and matrices non-conformable")
       A <- A + B
       return(A)

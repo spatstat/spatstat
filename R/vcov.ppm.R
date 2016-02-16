@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.115 $  $Date: 2016/02/16 01:39:12 $
+##  $Revision: 1.116 $  $Date: 2016/02/16 10:07:51 $
 ##
 
 vcov.ppm <- local({
@@ -505,6 +505,7 @@ vcalcGibbsGeneral <- function(model,
         if(anyNA(momdelok) || anyNA(pwok))
           stop("Unable to compute variance: NA values present", call.=FALSE)
         A2 <- sumsymouter(momdelok, w=pwok)
+        dimnames(A2) <- dimnames(A3) <- dnames
         if(logi){
           ## lam.array[ ,i,j] = lambda(X[i] | X)
           lam.array <- array(lam, c(nX,nX,p))
@@ -518,6 +519,7 @@ vcalcGibbsGeneral <- function(model,
           ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
           ddSlogiok <- ddSlogi[ , ok, ok, drop=FALSE]
           A3log <- sumsymouter(ddSlogiok)
+          dimnames(A2log) <- dimnames(A3log) <- dnames
         }
       }
     }

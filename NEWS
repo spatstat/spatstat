@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.023
+        CHANGES IN spatstat VERSION 1.44-1.024
 
 OVERVIEW
 
@@ -12,11 +12,11 @@ OVERVIEW
 
     o Colour maps for point patterns with continuous marks are easier to define.
 
-    o Performance improvements.
-
     o Stipulate a particular version of a package.
 
     o Fixed namespace problems arising when spatstat is not loaded.
+
+    o Performance improvements.
 
     o Bug fixes.
 
@@ -118,6 +118,7 @@ BUGS
 
    o subfits
    Crashed with some random-effects formulas.
+   [Spotted by Sven Wagner]
    Fixed.
 
    o improve.kppm
