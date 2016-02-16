@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.134 $     $Date: 2016/02/11 10:17:12 $
+#      $Revision: 1.135 $     $Date: 2016/02/16 01:39:12 $
 #
 #      The class "im" of raster images
 #
@@ -667,7 +667,7 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
   # insert into answer
   value[frameok] <- vf
 
-  if(!naok && any(is.na(value)))
+  if(!naok && anyNA(value))
     warning("Internal error: NA's generated")
 
   return(value)

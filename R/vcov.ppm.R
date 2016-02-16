@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.114 $  $Date: 2015/09/30 04:36:48 $
+##  $Revision: 1.115 $  $Date: 2016/02/16 01:39:12 $
 ##
 
 vcov.ppm <- local({
@@ -199,7 +199,7 @@ vcalcPois <- function(object, ...,
                for(i in 1:nrow(mom)) {
                  ro <- mom[i, ]
                  v <- outer(ro, ro, "*") * lambda[i] * wt[i]
-                 if(!any(is.na(v)))
+                 if(!anyNA(v))
                    fisher <- fisher + v
                }
                momnames <- dimnames(mom)[[2]]
@@ -212,9 +212,9 @@ vcalcPois <- function(object, ...,
                  ldu <- lambda[i] * wt[i]
                  v <- outer(ro, ro, "*") * ldu
                  v0 <- outer(ro0, ro0, "*") * matwt[i] * ldu
-                 if(!any(is.na(v)))
+                 if(!anyNA(v))
                    fisher <- fisher + v
-                 if(!any(is.na(v0)))
+                 if(!anyNA(v0))
                    gradient <- gradient + v0
                }
                momnames <- dimnames(mom)[[2]]
@@ -736,7 +736,7 @@ vcalcGibbsGeneral <- function(model,
                      nX.i <- length(J2i)
                      ## index of XJi in X.i
                      J.i <- match(Ji, J2i)
-                     if(any(is.na(J.i)))
+                     if(anyNA(J.i))
                        stop("Internal error: Ji not a subset of J2i")
                      ## equalpairs matrix
                      E.i <- cbind(J.i, seq_len(nJi))

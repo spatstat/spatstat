@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.171 $	$Date: 2016/02/11 09:36:11 $
+#	$Revision: 4.172 $	$Date: 2016/02/16 01:39:12 $
 #
 #
 #	A window may be either
@@ -399,7 +399,7 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     W <- cbind(W, TRUE)
   } 
   mch <- match(c("x", "y"), names(W))
-  if(!any(is.na(mch))) {
+  if(!anyNA(mch)) {
     ix <- mch[1]
     iy <- mch[2]
     iz <- (1:3)[-mch]

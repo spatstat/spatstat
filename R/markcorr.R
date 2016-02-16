@@ -2,7 +2,7 @@
 ##
 ##     markcorr.R
 ##
-##     $Revision: 1.76 $ $Date: 2016/02/11 10:17:12 $
+##     $Revision: 1.77 $ $Date: 2016/02/16 01:39:12 $
 ##
 ##    Estimate the mark correlation function
 ##    and related functions 
@@ -459,7 +459,7 @@ markcorr <-
   else if(!is.numeric(ff))
     stop("function f did not return numeric values")
 
-  if(any(is.na(ff))) 
+  if(anyNA(ff)) 
     switch(ftype,
            mul=,
            equ=stop("some marks were NA"),
@@ -630,7 +630,7 @@ markcrosscorr <-
       ff <- mI * mJ
       ## check values of f(M1, M2)
 
-      if(any(is.na(ff))) 
+      if(anyNA(ff)) 
         stop("some marks were NA", call.=FALSE)
 
       if(any(ff < 0))

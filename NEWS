@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.022
+        CHANGES IN spatstat VERSION 1.44-1.023
 
 OVERVIEW
 
@@ -90,14 +90,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o linnet
     New argument 'warn'
 
-    o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
-    Performance slightly improved, for Gibbs models.
-
     o mppm
     Performs more checks for consistency of the input data.
     
     o mppm
     New arguments 'gcontrol' and 'reltol.pql' control the fitting algorithm.
+
+    o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
+    Performance slightly improved, for Gibbs models.
+
+    o Internal code
+    Performance slightly improved.
 
 BUGS
 

@@ -2,7 +2,7 @@
 #
 #    multistrhard.S
 #
-#    $Revision: 2.37 $	$Date: 2015/05/27 06:42:34 $
+#    $Revision: 2.38 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The multitype Strauss/hardcore process
 #
@@ -154,7 +154,7 @@ doMultiStraussHard <- local({
              if(length(types) == 0)
                stop(paste("The", sQuote("types"),"argument should be",
                           "either NULL or a vector of all possible types"))
-             if(any(is.na(types)))
+             if(anyNA(types))
                stop("NA's not allowed in types")
              if(is.factor(types)) {
                types <- levels(types)

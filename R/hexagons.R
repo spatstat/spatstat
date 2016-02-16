@@ -1,5 +1,5 @@
 ## hexagons.R
-## $Revision: 1.4 $ $Date: 2014/07/21 09:12:05 $
+## $Revision: 1.5 $ $Date: 2016/02/16 01:39:12 $
 
 hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   W <- as.owin(W)
@@ -17,7 +17,7 @@ hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   ## 'even' points
   p0 <- c(startinrange(p0[1], hstep, xr),
           startinrange(p0[2], vstep, yr))
-  if(!any(is.na(p0))) {
+  if(!anyNA(p0)) {
     xeven <- prolongseq(p0[1], xr, step=hstep)
     yeven <- prolongseq(p0[2], yr, step=vstep)
     xyeven <- expand.grid(x=xeven, y=yeven)
@@ -25,7 +25,7 @@ hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   ## 'odd' points
   q0 <- c(startinrange(q0[1], hstep, xr),
           startinrange(q0[2], vstep, yr))
-  if(!any(is.na(q0))) {
+  if(!anyNA(q0)) {
     xodd <- prolongseq(q0[1], xr, step=hstep)
     yodd <- prolongseq(q0[2], yr, step=vstep)
     xyodd <- expand.grid(x=xodd, y=yodd)

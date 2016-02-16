@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.37 $	$Date: 2016/02/11 10:17:12 $
+#    $Revision: 1.38 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The area interaction
 #
@@ -118,7 +118,7 @@ AreaInter <- local({
          },
          irange = function(self, coeffs=NA, epsilon=0, ...) {
            r <- self$par$r
-           if(any(is.na(coeffs)))
+           if(anyNA(coeffs))
              return(2 * r)
            logeta <- coeffs[1]
            if(abs(logeta) <= epsilon)

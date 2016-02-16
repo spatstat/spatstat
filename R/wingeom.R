@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.107 $	$Date: 2016/02/11 10:17:12 $
+#	$Revision: 4.108 $	$Date: 2016/02/16 01:39:12 $
 #
 #
 #
@@ -115,7 +115,7 @@ unit.square <- function() { owin(c(0,1),c(0,1)) }
 
 square <- function(r=1, unitname=NULL) {
   stopifnot(is.numeric(r))
-  if(any(is.na(r) | !is.finite(r)))
+  if(!all(is.finite(r)))
     stop("argument r is NA or infinite")
   if(length(r) == 1) {
     stopifnot(r > 0)

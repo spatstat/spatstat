@@ -1,7 +1,7 @@
 ##
 ##    hierstrhard.R
 ##
-##    $Revision: 1.2 $	$Date: 2015/05/27 06:42:43 $
+##    $Revision: 1.3 $	$Date: 2016/02/16 01:39:12 $
 ##
 ##    The hierarchical Strauss-hard core process
 ##
@@ -145,7 +145,7 @@ HierStraussHard <- local({
         if(length(types) == 0)
           stop(paste("The", sQuote("types"),"argument should be",
                      "either NULL or a vector of all possible types"))
-        if(any(is.na(types)))
+        if(anyNA(types))
           stop("NA's not allowed in types")
         if(is.factor(types)) {
           types <- levels(types)

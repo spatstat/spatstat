@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.113 $	$Date: 2015/03/18 03:16:03 $
+#	$Revision: 5.114 $	$Date: 2016/02/16 01:39:12 $
 #
 #
 # -------- functions ----------------------------------------
@@ -523,7 +523,7 @@ Kborder.engine <- function(X, rmax, nr=100,
     } else {
       wim <- as.im(weights, W)
       weights <- wim[X, drop=FALSE]
-      if(any(is.na(weights)))
+      if(anyNA(weights))
         stop("domain of weights image does not contain all points of X")
     }
     weights.Xsort <- weights[orderX]
@@ -662,7 +662,7 @@ Knone.engine <- function(X, rmax, nr=100,
     } else {
       wim <- as.im(weights, W)
       weights <- wim[X, drop=FALSE]
-      if(any(is.na(weights)))
+      if(anyNA(weights))
         stop("domain of weights image does not contain all points of X")
     }
     weights.Xsort <- weights[orderX]
@@ -796,7 +796,7 @@ Krect.engine <- function(X, rmax, nr=100,
     } else {
       wim <- as.im(weights, W)
       weights <- wim[X, drop=FALSE]
-      if(any(is.na(weights)))
+      if(anyNA(weights))
         stop("domain of weights image does not contain all points of X")
     }
   }

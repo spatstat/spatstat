@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.197 $    $Date: 2016/02/11 10:17:12 $
+#    $Revision: 1.198 $    $Date: 2016/02/16 01:39:12 $
 #
 #
 matrowsum <- function(x) {
@@ -680,7 +680,7 @@ check.nvector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
                     paren(paste0("=", length(v))), 
                     "should equal the number of", things,
                     paren(paste0("=", npoints)))
-  else if(!naok && any(is.na(v)))
+  else if(!naok && anyNA(v))
     whinge <- paste("Some values of", vname, "are NA or NaN")
   #
   if(!is.null(whinge)) {
@@ -703,7 +703,7 @@ check.nmatrix <- function(m, npoints=NULL, fatal=TRUE, things="data points",
     whinge <- paste(mname, "should be a matrix")
   else if(squarematrix && (nrow(m) != ncol(m)))
     whinge <- paste(mname, "should be a square matrix")
-  else if(!naok && any(is.na(m)))
+  else if(!naok && anyNA(m))
     whinge <- paste("Some values of", mname, "are NA or NaN")
   else if(!is.null(npoints)) {
     if(matchto=="nrow" && nrow(m) != npoints)
@@ -792,7 +792,7 @@ check.named.thing <- function(x, nam, namopt=character(0), xtitle=NULL,
 
 forbidNA <- function(x, context="", xname, fatal=TRUE, usergiven=TRUE) {
   if(missing(xname)) xname <- sQuote(deparse(substitute(x)))
-  if(any(is.na(x))) {
+  if(anyNA(x)) {
     if(usergiven) {
       # argument came from user
       offence <- ngettext(length(x), "be NA", "contain NA values")
@@ -1174,7 +1174,7 @@ ppsubset <- function(X, I) {
   # I is now an index vector
   n <- npoints(X)
   i <- try(seq_len(n)[I])
-  if(inherits(i, "try-error") || any(is.na(i))) {
+  if(inherits(i, "try-error") || anyNA(i)) {
     warning(paste("Invalid subset index", sQuote(Iname)),
             call.=FALSE)
     return(NULL)

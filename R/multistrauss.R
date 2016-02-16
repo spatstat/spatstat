@@ -116,7 +116,7 @@ MultiStrauss <- local({
            if(length(types) == 0)
              stop(paste("The", sQuote("types"),"argument should be",
                         "either NULL or a vector of all possible types"))
-           if(any(is.na(types)))
+           if(anyNA(types))
              stop("NA's not allowed in types")
            if(is.factor(types)) {
              types <- levels(types)

@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.21 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 2.22 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The Strauss/hard core process
 #
@@ -89,7 +89,7 @@ StraussHard <- local({
          irange = function(self, coeffs=NA, epsilon=0, ...) {
            r <- self$par$r
            hc <- self$par$hc
-           if(any(is.na(coeffs)))
+           if(anyNA(coeffs))
              return(r)
            loggamma <- coeffs[1]
            if(abs(loggamma) <= epsilon)

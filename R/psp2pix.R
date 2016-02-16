@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.9 $  $Date: 2015/01/30 03:12:34 $
+#  $Revision: 1.10 $  $Date: 2016/02/16 01:39:12 $
 #
 #
 
@@ -77,7 +77,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
     weights <- rep.int(1, nseg)
   else {
     if(!is.numeric(weights)) stop("weights must be numeric")
-    if(any(is.na(weights))) stop("weights must not be NA")
+    if(anyNA(weights)) stop("weights must not be NA")
     if(!all(is.finite(weights))) stop("weights must not be infinite")
     if(length(weights) == 1)
       weights <- rep.int(weights, nseg)

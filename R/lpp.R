@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.44 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.45 $   $Date: 2016/02/16 01:39:12 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -237,7 +237,7 @@ is.multitype.lpp <- function(X, na.action="warn", ...) {
     return(FALSE)
   if(!is.factor(marx))
     return(FALSE)
-  if((length(marx) > 0) && any(is.na(marx)))
+  if((length(marx) > 0) && anyNA(marx))
     switch(na.action,
            warn = {
              warning(paste("some mark values are NA in the point pattern",

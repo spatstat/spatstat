@@ -2,7 +2,7 @@
 #
 #   rmhmodel.R
 #
-#   $Revision: 1.72 $  $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.73 $  $Date: 2016/02/16 01:39:12 $
 #
 #
 
@@ -877,7 +877,7 @@ spatstatRmhInfo <- function(cifname) {
 		nlook <- length(r)
 		if(length(h) != nlook)
                   stop("Mismatch of lengths of h and r lookup vectors.")
-		if(any(is.na(r)))
+		if(anyNA(r))
                   stop("Missing values not allowed in r lookup vector.")
 		if(is.unsorted(r))
                   stop("The r lookup vector must be in increasing order.")

@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.14 $   $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.15 $   $Date: 2016/02/16 01:39:12 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -90,7 +90,7 @@ safelookup <- function(Z, X, factor=2, warn=TRUE) {
     # now blur
     Zblur <- blur(Z, factor * pixdiam, bleed=TRUE, normalise=TRUE)
     Bvals <- Zblur[XX, drop=FALSE]
-    if(any(is.na(Bvals))) 
+    if(anyNA(Bvals)) 
       stop("Internal error: pixel values were NA, even after blurring")
     Zvals[isna] <- Bvals
     if(warn)

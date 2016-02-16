@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.26 $  $Date: 2016/02/11 10:17:12 $
+##   $Revision: 1.27 $  $Date: 2016/02/16 01:39:12 $
 ##
 
 symbolmap <- local({
@@ -131,7 +131,7 @@ symbolmap <- local({
   ApplyDiscreteSymbolMap <- function(x, stuff) {
     with(stuff, {
       ii <- match(x, inputs)
-      if(any(is.na(ii)))
+      if(anyNA(ii))
         stop("Some values do not belong to the domain of the symbol map")
       y <- as.data.frame(lapply(parlist, MapDiscrete, x=x, i=ii),
                          stringsAsFactors=FALSE)

@@ -4,7 +4,7 @@
 #	Class 'quad' to define quadrature schemes
 #	in (rectangular) windows in two dimensions.
 #
-#	$Revision: 4.25 $	$Date: 2016/02/11 10:17:12 $
+#	$Revision: 4.26 $	$Date: 2016/02/16 01:39:12 $
 #
 # An object of class 'quad' contains the following entries:
 #
@@ -130,7 +130,7 @@ is.marked.quad <- function(X, na.action="warn", ...) {
   marx <- marks(X, ...)
   if(is.null(marx))
     return(FALSE)
-  if(any(is.na(marx)))
+  if(anyNA(marx))
     switch(na.action,
            warn = {
              warning(paste("some mark values are NA in the point pattern",
@@ -148,7 +148,7 @@ is.multitype.quad <- function(X, na.action="warn", ...) {
   marx <- marks(X, ...)
   if(is.null(marx))
     return(FALSE)
-  if(any(is.na(marx)))
+  if(anyNA(marx))
     switch(na.action,
            warn = {
              warning(paste("some mark values are NA in the point pattern",

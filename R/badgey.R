@@ -2,7 +2,7 @@
 #
 #    badgey.S
 #
-#    $Revision: 1.14 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.15 $	$Date: 2016/02/16 01:39:12 $
 #
 #    Hybrid Geyer process
 #
@@ -81,7 +81,7 @@ BadGey <- local({
            #   less than 1, if sat = Inf
            gamma <- (self$interpret)(coeffs, self)$param$gammas
            sat <- self$par$sat
-           if(any(is.na(gamma)))
+           if(anyNA(gamma))
              return(FALSE)
            return(all((is.finite(gamma) | sat == 0)
                       & (gamma <= 1 | sat != Inf)))

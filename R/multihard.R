@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.16 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.17 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The Hard core process
 #
@@ -128,7 +128,7 @@ MultiHard <- local({
              stop(paste("The", sQuote("types"),
                         "argument should be",
                         "either NULL or a vector of all possible types"))
-           if(any(is.na(types)))
+           if(anyNA(types))
              stop("NA's not allowed in types")
            if(is.factor(types)) {
              types <- levels(types)

@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.78 $    $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.79 $    $Date: 2016/02/16 01:39:12 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -413,7 +413,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  "in leave-one-out method:",
                  "length(lambda) = ", length(result),
                  "!=", npts, "= npoints"))
-    if(any(is.na(result))) {
+    if(anyNA(result)) {
       nwrong <- sum(is.na(result))
       stop(paste("Internal error:", nwrong, "NA or NaN",
                  ngettext(nwrong, "value", "values"),
@@ -429,7 +429,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  "in leave-one-out method:",
                  "nrow(lambda) = ", nrow(result),
                  "!=", npts, "= npoints"))
-    if(any(is.na(result))) {
+    if(anyNA(result)) {
       nwrong <- sum(!complete.cases(result))
       stop(paste("Internal error:", nwrong,
                  ngettext(nwrong, "row", "rows"),

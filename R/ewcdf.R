@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.8 $  $Date: 2015/05/17 10:30:37 $
+#     $Revision: 1.9 $  $Date: 2016/02/16 01:39:12 $
 #
 #  With contributions from Kevin Ummel
 #

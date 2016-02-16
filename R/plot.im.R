@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.107 $   $Date: 2015/09/27 02:51:17 $
+#  $Revision: 1.108 $   $Date: 2016/02/16 01:39:12 $
 #
 #  Plotting code for pixel images
 #
@@ -418,7 +418,7 @@ plot.im <- local({
       switch(rasterable,
              yes=TRUE,
              no=FALSE,
-             "non-missing"=!any(is.na(x$v)),
+             "non-missing"=!anyNA(x$v),
              FALSE)
     if(is.null(useRaster)) {
       useRaster <- can.use.raster

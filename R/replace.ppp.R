@@ -50,7 +50,7 @@
     if(length(SUB) == 0)
       return(x)
     # sanity checks
-    if(any(is.na(SUB)))
+    if(anyNA(SUB))
       stop("Invalid subset: the resulting subscripts include NAs")
     # exact replacement of this subset?
     if(value$n == length(SUB)) {

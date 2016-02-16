@@ -2,7 +2,7 @@
 #
 #    concom.R
 #
-#    $Revision: 1.2 $	$Date: 2015/02/22 03:00:48 $
+#    $Revision: 1.3 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The connected component interaction
 #
@@ -106,7 +106,7 @@ Concom <- local({
            return(Poisson())
          },
          irange = function(self, coeffs=NA, epsilon=0, ...) {
-           if(any(is.na(coeffs)))
+           if(anyNA(coeffs))
              return(Inf)
            logeta <- coeffs[1]
            if(abs(logeta) <= epsilon)

@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.53 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.54 $  $Date: 2016/02/16 01:39:12 $
 #
 
 quadratcount <- function(X, ...) {
@@ -62,7 +62,7 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     } else {
       # quadrats are another type of tessellation
       Y <- cut(X, tess)
-      if(any(is.na(marks(Y))))
+      if(anyNA(marks(Y)))
         warning("Tessellation does not contain all the points of X")
       Xcount <- table(tile=marks(Y))
     }

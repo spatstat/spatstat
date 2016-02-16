@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.15 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.16 $	$Date: 2016/02/16 01:39:12 $
 #
 #    The triplets interaction
 #
@@ -133,7 +133,7 @@ Triplets <- local({
          },
          irange = function(self, coeffs=NA, epsilon=0, ...) {
            r <- self$par$r
-           if(any(is.na(coeffs)))
+           if(anyNA(coeffs))
              return(r)
            loggamma <- coeffs[1]
            if(abs(loggamma) <= epsilon)

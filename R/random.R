@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.86 $   $Date: 2015/10/15 14:21:10 $
+##    $Revision: 4.87 $   $Date: 2016/02/16 01:39:12 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -932,7 +932,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       else 
         stop("Length of vector P does not match number of points of X")
     }
-    if(any(is.na(pX)))
+    if(anyNA(pX))
       stop("P contains NA's")
   } else if(is.function(P)) {
     ## function - evaluate it at points of X
@@ -941,14 +941,14 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       stop("Function P returned a vector of incorrect length")
     if(!is.numeric(pX))
       stop("Function P returned non-numeric values")
-    if(any(is.na(pX)))
+    if(anyNA(pX))
       stop("Function P returned some NA values")
   } else if(is.im(P)) {
     ## image - look it up
     if(!(P$type %in% c("integer", "real")))
       stop("Values of image P should be numeric")
     pX <- P[X, drop=FALSE]
-    if(any(is.na(pX)))
+    if(anyNA(pX))
       stop("some points of X lie outside the domain of image P")
   } else
   stop("Unrecognised format for P")

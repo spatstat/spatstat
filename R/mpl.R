@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.193 $	$Date: 2016/01/16 08:08:05 $
+#	$Revision: 5.194 $	$Date: 2016/02/16 01:39:12 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/01/16 08:08:05 $")
+                        date="$Date: 2016/02/16 01:39:12 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1210,7 +1210,7 @@ deltasuffstat <- local({
     }
     ## Map planes of 'v' into coefficients
     Imap <- match(Inames, names(coef(model)))
-    if(any(is.na(Imap)))
+    if(anyNA(Imap))
       stop(paste("Internal error: deltasuffstat:",
                  "cannot match interaction coefficients"))
     if(length(Imap) > 0) {
@@ -1279,7 +1279,7 @@ deltasuffstat <- local({
           nX.i <- length(J2i)
           ## index of XJi in X.i
           J.i <- match(Ji, J2i)
-          if(any(is.na(J.i)))
+          if(anyNA(J.i))
             stop("Internal error: Ji not a subset of J2i")
           ## equalpairs matrix
           E.i <- cbind(J.i, seq_len(nJi))
@@ -1389,7 +1389,7 @@ deltasuffstat <- local({
           nX.i <- length(J2i)
           ## index of XJi in X.i 
           J.i <- match(Ji[isd], J2i)
-          if(any(is.na(J.i)))
+          if(anyNA(J.i))
             stop("Internal error: Ji[isd] not a subset of J2i")
           ## index of DJi in superimpose(X.i, DJi)
           JDi <- nX.i + seq_len(sum(!isd))
@@ -1423,7 +1423,7 @@ deltasuffstat <- local({
           nXUi <- length(J2Ui)
           ## index of XJi in X.i 
           J.i <- match(JiData, J2Ui)
-          if(any(is.na(J.i)))
+          if(anyNA(J.i))
             stop("Internal error: Ji[isd] not a subset of J2i")
           ## index of DJi in superimpose(X.i, DJi)
           JDi <- nXUi + seq_len(length(JiDummy))

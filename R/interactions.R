@@ -3,7 +3,7 @@
 #
 # Works out which interaction is in force for a given point pattern
 #
-#  $Revision: 1.22 $  $Date: 2016/02/15 13:09:12 $
+#  $Revision: 1.23 $  $Date: 2016/02/16 01:39:12 $
 #
 #
 impliedpresence <- function(tags, formula, df, extranames=character(0)) {

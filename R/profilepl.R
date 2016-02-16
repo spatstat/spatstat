@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.40 $  $Date: 2016/02/11 10:48:03 $
+#  $Revision: 1.41 $  $Date: 2016/02/16 01:39:12 $
 #
 #  computes profile log pseudolikelihood
 #

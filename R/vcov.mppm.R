@@ -1,6 +1,6 @@
 #  Variance-covariance matrix for mppm objects
 #
-# $Revision: 1.13 $ $Date: 2016/02/11 09:36:11 $
+# $Revision: 1.14 $ $Date: 2016/02/16 01:39:12 $
 #
 #
 
@@ -145,7 +145,7 @@ vcov.mppm <- local({
       return(A)
     }
     j <- match(colnames(B), colnames(A))
-    if(any(is.na(j)))
+    if(anyNA(j))
       stop("Internal error: unmatched column name(s)")
     A[j,j] <- A[j,j] + B
     return(A)
@@ -160,7 +160,7 @@ vcov.mppm <- local({
       return(A)
     }
     j <- match(colnames(B), colnames(A))
-    if(any(is.na(j)))
+    if(anyNA(j))
       stop("Internal error: unmatched column name(s)")
     BB <- matrix(0, nrow(B), ncol(A))
     BB[,j] <- B

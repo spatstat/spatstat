@@ -2,7 +2,7 @@
 #
 #    softcore.S
 #
-#    $Revision: 2.14 $   $Date: 2015/10/21 09:06:57 $
+#    $Revision: 2.15 $   $Date: 2016/02/16 01:39:12 $
 #
 #    Soft core processes.
 #
@@ -85,7 +85,7 @@ Softcore <- local({
        },
        irange = function(self, coeffs=NA, epsilon=0, ...) {
          # distance d beyond which log(interaction factor) <= epsilon
-         if(any(is.na(coeffs)) || epsilon == 0)
+         if(anyNA(coeffs) || epsilon == 0)
            return(Inf)
          theta <- as.numeric(coeffs[1])
          kappa <- self$par$kappa

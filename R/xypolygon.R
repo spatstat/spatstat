@@ -1,7 +1,7 @@
 #
 #    xypolygon.S
 #
-#    $Revision: 1.64 $    $Date: 2015/07/11 08:19:26 $
+#    $Revision: 1.65 $    $Date: 2016/02/16 01:39:12 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -11,7 +11,7 @@ verify.xypolygon <- function(p, fatal=TRUE) {
     whinge <- "polygon must be a list with components x and y"
   else if(is.null(p$x) || is.null(p$y) || !is.numeric(p$x) || !is.numeric(p$y))
     whinge <- "components x and y must be numeric vectors"
-  else if(any(is.na(p$x)) || any(is.na(p$y)))
+  else if(anyNA(p$x) || anyNA(p$y))
     whinge <- "x and y coordinates must not contain NA values"
   else if(length(p$x) != length(p$y))
     whinge <- "lengths of x and y vectors unequal"

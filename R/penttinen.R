@@ -2,7 +2,7 @@
 #
 #    penttinen.R
 #
-#    $Revision: 1.1 $	$Date: 2015/08/30 08:21:55 $
+#    $Revision: 1.2 $	$Date: 2016/02/16 01:39:12 $
 #
 #    Penttinen pairwise interaction
 #
@@ -53,7 +53,7 @@ Penttinen <- local({
        },
        irange = function(self, coeffs=NA, epsilon=0, ...) {
          r <- self$par$r
-         if(any(is.na(coeffs)))
+         if(anyNA(coeffs))
            return(2 * r)
          theta <- coeffs[1]
          if(abs(theta) <= epsilon)

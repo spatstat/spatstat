@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.106 $	$Date: 2015/08/17 07:07:37 $
+#	$Revision: 4.107 $	$Date: 2016/02/16 01:39:12 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -322,7 +322,7 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
             if(nx == 0)
               return(x)
             subset <- seq_len(nx)[i]
-            if(any(is.na(subset)))
+            if(anyNA(subset))
               stop("Index out of bounds in [.ppp", call.=FALSE)
             x <- ppp(x$x[subset], x$y[subset], window=x$window,
                      marks=marksubset(x$marks, subset),

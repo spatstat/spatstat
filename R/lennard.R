@@ -2,7 +2,7 @@
 #
 #    lennard.R
 #
-#    $Revision: 1.19 $	$Date: 2014/12/10 07:23:14 $
+#    $Revision: 1.20 $	$Date: 2016/02/16 01:39:12 $
 #
 #    Lennard-Jones potential
 #
@@ -87,7 +87,7 @@ LennardJones <- local({
            if((self$valid)(coeffs, self)) return(NULL) else return(Poisson())
          },
          irange = function(self, coeffs=NA, epsilon=0, ...) {
-           if(any(is.na(coeffs)) || epsilon == 0)
+           if(anyNA(coeffs) || epsilon == 0)
              return(Inf)
            sig0 <- self$par$sigma0
            if(is.na(sig0)) sig0 <- 1
