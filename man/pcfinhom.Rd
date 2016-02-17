@@ -13,6 +13,7 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
          correction = c("translate", "Ripley"),
          divisor = c("r", "d"),
          renormalise = TRUE, normpower=1,
+         update = TRUE, leaveoneout = TRUE,
          reciplambda = NULL,
          sigma = NULL, varcov = NULL)
 }
@@ -61,6 +62,21 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
   \item{normpower}{
     Integer (usually either 1 or 2).
     Normalisation power. See Details.
+  }
+  \item{update}{
+    Logical. If \code{lambda} is a fitted model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+    and \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
   }
   \item{reciplambda}{
     Alternative to \code{lambda}.
@@ -165,11 +181,10 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
   fit <- ppm(X, ~polynom(x,y,2))
   plot(pcfinhom(X, lambda=fit, normpower=2))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-}
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
+} 
 \keyword{spatial}
 \keyword{nonparametric}

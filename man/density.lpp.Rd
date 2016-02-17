@@ -11,7 +11,9 @@
 }
 \usage{
 \method{density}{lpp}(x, sigma, \dots,
-        kernel="gaussian", continuous=TRUE,
+        weights=NULL,
+        kernel="gaussian",
+        continuous=TRUE,
         epsilon = 1e-06, verbose = TRUE, debug = FALSE, savehistory = TRUE)
 
 \method{density}{splitppx}(x, sigma, \dots)
@@ -28,6 +30,10 @@
   \item{\dots}{
     Arguments passed to \code{\link{as.mask}} determining the
     resolution of the result.
+  }
+  \item{weights}{
+    Optional. Numeric vector of weights associated with the
+    points of \code{x}. Weights may be positive, negative or zero.
   }
   \item{kernel}{
     Character string specifying the smoothing kernel.
@@ -101,6 +107,7 @@
   X <- runiflpp(3, simplenet)
   D <- density(X, 0.2, verbose=FALSE)
   plot(D, style="w", main="", adjust=2)
+  Dw <- density(X, 0.2, weights=c(1,2,-1), verbose=FALSE)
   De <- density(X, 0.2, kernel="epanechnikov", verbose=FALSE)
   Ded <- density(X, 0.2, kernel="epanechnikov", continuous=FALSE, verbose=FALSE)
 }

@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.198 $    $Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.199 $    $Date: 2016/02/17 00:28:45 $
 #
 #
 matrowsum <- function(x) {
@@ -666,18 +666,20 @@ ensure3Darray <- function(x) {
 }
 
 check.nvector <- function(v, npoints=NULL, fatal=TRUE, things="data points",
-                          naok=FALSE, warn=FALSE, vname) {
+                          naok=FALSE, warn=FALSE, vname, oneok=FALSE) {
   # vector of numeric values for each point/thing
   if(missing(vname))
     vname <- sQuote(deparse(substitute(v)))
   whinge <- NULL
+  nv <- length(v)
   if(!is.numeric(v))
     whinge <- paste(vname, "is not numeric")
   else if(!is.atomic(v) || !is.null(dim(v)))  # vector with attributes
     whinge <- paste(vname, "is not a vector")
-  else if(!is.null(npoints) && (length(v) != npoints))
+  else if(!(is.null(npoints) || (nv == npoints)) &&
+          !(oneok && nv == 1)) 
     whinge <- paste("The length of", vname,
-                    paren(paste0("=", length(v))), 
+                    paren(paste0("=", nv)), 
                     "should equal the number of", things,
                     paren(paste0("=", npoints)))
   else if(!naok && anyNA(v))

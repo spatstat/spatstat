@@ -4,17 +4,27 @@
 #  Computationally expensive unless sigma is very small
 #  You Have Been Warned
 #
-#   $Revision: 1.5 $  $Date: 2015/08/07 06:59:51 $
+#   $Revision: 1.6 $  $Date: 2016/02/17 00:30:43 $
 #
 
 density.lpp <- function(x, sigma, ...,
-                        kernel="gaussian",
+                        weights=NULL,
+                        kernel="gaussian", 
                         continuous=TRUE,
                         epsilon=1e-6,
                         verbose=TRUE, debug=FALSE, savehistory=TRUE) {
   stopifnot(inherits(x, "lpp"))
   kernel <- match.kernel(kernel)
   L <- as.linnet(x)
+  # weights
+  np <- npoints(x)
+  if(is.null(weights)) {
+    weights <- rep(1, np)
+  } else {
+    stopifnot(is.numeric(weights))
+    check.nvector(weights, np, oneok=TRUE)
+    if(length(weights) == 1) weights <- rep(weights, np) 
+  }
   # pixellate linear network
   Llines <- as.psp(L)
   linemask <- as.mask.psp(Llines, ...)
@@ -58,7 +68,7 @@ density.lpp <- function(x, sigma, ...,
     stack <- rbind(data.frame(seg = c(segi, segi),
                               from  = c(TRUE, FALSE), 
                               distance = len * c(tpi, 1-tpi),
-                              weight = c(1, 1)),
+                              weight = rep(weights[i], 2)),
                    stack)
   }
   Lfrom <- L$from

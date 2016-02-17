@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.17 $   $Date: 2015/06/22 01:30:38 $
+#   $Revision: 1.18 $   $Date: 2016/02/17 06:58:14 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -13,12 +13,14 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
                      divisor=c("r","d"),
                      renormalise=TRUE,
                      normpower=1,
+                     update=TRUE, leaveoneout=TRUE,
                      reciplambda=NULL, 
                      sigma=NULL, varcov=NULL)
 {
   verifyclass(X, "ppp")
 #  r.override <- !is.null(r)
-
+  miss.update <- missing(update)
+  
   win <- X$window
   areaW <- area(win)
   npts <- npoints(X)
@@ -83,14 +85,35 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
     # lambda values provided
     if(is.im(lambda)) 
       lambda <- safelookup(lambda, X)
-    else if(is.ppm(lambda))
-      lambda <- predict(lambda, locations=X, type="trend")
-    else if(is.function(lambda)) 
+    else if(is.ppm(lambda) || is.kppm(lambda) || is.dppm(lambda)) {
+      model <- lambda
+      if(!update) {
+        ## just use intensity of fitted model
+        lambda <- predict(model, locations=X, type="trend")
+      } else {
+        if(is.ppm(model)) {
+          model <- update(model, Q=X)
+          lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else if(is.kppm(model)) {
+          model <- update(model, X=X)
+          lambda <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else {
+          model <- update(model, X=X)
+          lambda <- fitted(model, dataonly=TRUE)
+        }
+        danger <- FALSE
+        if(miss.update) 
+          warn.once(key="pcfinhom.update",
+                    "The behaviour of pcfinhom when lambda is a ppm object",
+                    "has changed (in spatstat 1.45-0 and later).",
+                    "See help(pcfinhom)")
+      }
+    } else if(is.function(lambda)) 
       lambda <- lambda(X$x, X$y)
     else if(is.numeric(lambda) && is.vector(as.numeric(lambda)))
       check.nvector(lambda, npts)
     else stop(paste(sQuote("lambda"),
-                    "should be a vector, a pixel image, or a function"))
+         "should be a vector, a pixel image, a function, or a fitted model"))
     # evaluate reciprocal
     reciplambda <- 1/lambda
   }

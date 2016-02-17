@@ -5,6 +5,7 @@
 \alias{summary.linfun}
 \alias{plot.linfun}
 \alias{as.linim.linfun}
+\alias{as.data.frame.linfun}
 \alias{as.owin.linfun}
 \alias{as.function.linfun}
 \title{
@@ -23,6 +24,8 @@
                      main)
 
   \method{as.linim}{linfun}(X, L, \dots, eps = NULL, dimyx = NULL, xy = NULL)
+
+  \method{as.data.frame}{linfun}(x, \dots)
 
   \method{as.owin}{linfun}(W, \dots)
 
@@ -46,9 +49,10 @@
 }
 \details{
   These are methods for the generic functions
-  \code{\link{plot}}, \code{\link{print}} and \code{\link{summary}},
+  \code{\link{plot}}, \code{\link{print}}, \code{\link{summary}}
+  \code{\link{as.data.frame}} and \code{\link{as.function}},
   and for the \pkg{spatstat} generic functions
-  \code{\link{as.owin}},
+  \code{\link{as.owin}} and
   \code{\link{as.linim}}.
 
   An object of class \code{"linfun"} represents a
@@ -81,6 +85,7 @@
    as.function(f)
    as.owin(f)
    as.linim(f)
+   head(as.data.frame(f))
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},

@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.024
+Version: 1.44-1.025
 Nickname: Levity Waves
-Date: 2016-02-16
+Date: 2016-02-17
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -16,7 +16,8 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	and 
 	Rasmus Waagepetersen.
 	Additional contributions 
-	by Q.W. Ang; 
+	by M. Adepeju;
+        Q.W. Ang; 
 	S. Azaele; 
 	M. Baddeley;
 	C. Beale; 

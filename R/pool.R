@@ -1,7 +1,7 @@
 #'
 #'     pool.R
 #'
-#'  $Revision: 1.1 $  $Date: 2015/01/25 03:32:22 $
+#'  $Revision: 1.2 $  $Date: 2016/02/17 09:53:14 $
 
 pool <- function(...) {
   UseMethod("pool")
@@ -77,6 +77,9 @@ pool.fv <- local({
                      lablprefix="bold(lo)~")
     ##
     result <- Reduce(bind.fv, list(Ratio, Variance, hiCI, loCI))
+    ## don't plot variances, by default
+    fvnames(result, ".") <- setdiff(fvnames(result, "."),
+                                    fvnames(Variance, "."))
     return(result)
   }
 

@@ -2,6 +2,7 @@
 \Rdversion{1.1}
 \alias{methods.linim} %DoNotExport
 \alias{as.im.linim}
+\alias{as.data.frame.linim}
 \alias{print.linim}
 \alias{summary.linim}
 \alias{affine.linim}
@@ -19,6 +20,8 @@
   \method{summary}{linim}(object, \dots)
 
   \method{as.im}{linim}(X, \dots)
+
+  \method{as.data.frame}{linim}(x, \dots)
 
   \method{shift}{linim}(X, \dots)
 
@@ -45,7 +48,8 @@
 }
 \details{
   These are methods for the generic functions
-  \code{\link{print}} and \code{\link{summary}},
+  \code{\link{print}}, \code{\link{summary}}
+  and \code{\link{as.data.frame}},
   and the \pkg{spatstat} generic functions
   \code{\link{as.im}},
   \code{\link{shift}}, 
@@ -58,6 +62,10 @@
   The method \code{as.im.linim} extracts the pixel values
   and returns a pixel image of class \code{"im"}.
 
+  The method \code{as.data.frame.linim} returns a data frame
+  giving spatial locations (in cartesian and network coordinates)
+  and corresponding function values.
+  
   The methods \code{shift.linim},
   \code{scalardilate.linim} and \code{affine.linim}
   apply geometric transformations to the pixels and the underlying
@@ -81,6 +89,7 @@
    X
    shift(X, c(1,1))
    scalardilate(X, 2)
+   head(as.data.frame(X))
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},

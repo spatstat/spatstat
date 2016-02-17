@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.114 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 5.116 $	$Date: 2016/02/17 05:24:15 $
 #
 #
 # -------- functions ----------------------------------------
@@ -156,8 +156,13 @@ function(X, ..., r=NULL, rmax=NULL, breaks=NULL,
       Kb <- Kborder.engine(X, max(r), length(r), correction, ratio=ratio)
     if(none)
       Kn <- Knone.engine(X, max(r), length(r), ratio=ratio)
-    if(bord && none) 
-      return(cbind.fv(Kb, Kn[, names(Kn) != "theo"]))
+    if(bord && none) {
+      Kn <- Kn[ , names(Kn) != "theo"]
+      yn <- fvnames(Kb, ".y")
+      Kbn <- if(!ratio) bind.fv(Kb, Kn, preferred=yn) else
+             bind.ratfv(Kb, Kn, preferred=yn)
+      return(Kbn)
+    }
     if(bord) return(Kb)
     if(none) return(Kn) 
   }

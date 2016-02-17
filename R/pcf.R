@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.55 $   $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.56 $   $Date: 2016/02/17 09:16:27 $
 #
 #
 #   calculate pair correlation function
@@ -18,7 +18,7 @@ pcf.ppp <- function(X, ..., r=NULL,
                     kernel="epanechnikov", bw=NULL, stoyan=0.15,
                     correction=c("translate", "Ripley"),
                     divisor=c("r", "d"),
-                    domain=NULL)
+                    domain=NULL, ratio=FALSE)
 {
   verifyclass(X, "ppp")
 #  r.override <- !is.null(r)
@@ -43,8 +43,18 @@ pcf.ppp <- function(X, ..., r=NULL,
                 correction=correction, kernel=kernel, bw=bw, stoyan=stoyan,
                 divisor=divisor,
                 ...)
-    # relabel and exit
-    g <- rebadge.fv(g, quote(g(r)), "g")
+    if(!ratio) {
+      ## relabel
+      g <- rebadge.fv(g, quote(g(r)), "g")
+    } else {
+      ## construct ratfv object
+      denom <- sum(indom == "TRUE") * lambda
+      g <- ratfv(as.data.frame(g), NULL, denom,
+                 "r", quote(g(r)),
+                 "theo", NULL, alim,
+                 attr(g, "labl"), attr(g, "desc"), fname="g",
+                 ratio=TRUE)
+    }
     return(g)
   }
 
@@ -110,12 +120,15 @@ pcf.ppp <- function(X, ..., r=NULL,
   # initialise fv object
   
   df <- data.frame(r=r, theo=rep.int(1,length(r)))
-  out <- fv(df, "r",
-            quote(g(r)), "theo", ,
-            alim,
-            c("r","%s[Pois](r)"),
-            c("distance argument r", "theoretical Poisson %s"),
-            fname="g")
+  out <- ratfv(df,
+               NULL, lambda2area,
+               "r", quote(g(r)),
+               "theo", NULL,
+               alim,
+               c("r","%s[Pois](r)"),
+               c("distance argument r", "theoretical Poisson %s"),
+               fname="g",
+               ratio=ratio)
 
   ###### compute #######
 
@@ -125,11 +138,20 @@ pcf.ppp <- function(X, ..., r=NULL,
       edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=win, paired=TRUE)
       gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     } else gT <- undefined
-    out <- bind.fv(out,
-                   data.frame(trans=gT),
-                   "hat(%s)[Trans](r)",
-                   "translation-corrected estimate of %s",
-                   "trans")
+    if(!ratio) {
+      out <- bind.fv(out,
+                     data.frame(trans=gT),
+                     "hat(%s)[Trans](r)",
+                     "translation-corrected estimate of %s",
+                     "trans")
+    } else {
+      out <- bind.ratfv(out,
+                        data.frame(trans=gT * lambda2area),
+                        lambda2area,
+                        "hat(%s)[Trans](r)",
+                        "translation-corrected estimate of %s",
+                        "trans")
+    }
   }
   if(any(correction=="isotropic")) {
     # Ripley isotropic correction
@@ -138,11 +160,20 @@ pcf.ppp <- function(X, ..., r=NULL,
       edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
       gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
     } else gR <- undefined
-    out <- bind.fv(out,
-                   data.frame(iso=gR),
-                   "hat(%s)[Ripley](r)",
-                   "isotropic-corrected estimate of %s",
-                   "iso")
+    if(!ratio) {
+      out <- bind.fv(out,
+                     data.frame(iso=gR),
+                     "hat(%s)[Ripley](r)",
+                     "isotropic-corrected estimate of %s",
+                     "iso")
+    } else {
+      out <- bind.ratfv(out,
+                        data.frame(iso=gR * lambda2area),
+                        lambda2area,
+                        "hat(%s)[Ripley](r)",
+                        "isotropic-corrected estimate of %s",
+                        "iso")
+    }
   }
   
   # sanity check
@@ -155,6 +186,11 @@ pcf.ppp <- function(X, ..., r=NULL,
   formula(out) <- . ~ r
   #
   unitname(out) <- unitname(X)
+
+  # copy to other components
+  if(ratio)
+    out <- conform.ratfv(out)
+  
   return(out)
 }
 

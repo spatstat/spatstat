@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.21 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.22 $   $Date: 2016/02/17 08:35:41 $
 #
 #  Image/function on a linear network
 #
@@ -334,5 +334,12 @@ scalardilate.linim <- function(X, f, ..., origin=NULL) {
   else negorig <- c(0, 0)
   Y <- affine(X, mat = diag(c(f, f)), vec = -negorig)
   return(Y)
+}
+
+as.data.frame.linim <- function(x, ...) {
+  df <- attr(x, "df")
+  if(!is.na(m <- match("mapXY", colnames(df))))
+    colnames(df)[m] <- "seg"
+  return(df)
 }
 

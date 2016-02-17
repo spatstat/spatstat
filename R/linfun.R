@@ -71,7 +71,29 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
   attr(Y, "df") <- df
   return(Y)
 }
-  
+
+as.data.frame.linfun <- function(x, ...) {
+  as.data.frame(as.linim(x, ...))
+}
+
+as.linfun.linim <- function(X, ...) {
+  trap.extra.arguments(..., .Context="as.linfun.linim")
+  ## extract info
+  L <- as.linnet(X)
+  df <- attr(X, "df")
+  ## function values and corresponding locations
+  values <- df$values
+  locations <- with(df, as.lpp(x=x, y=y, seg=mapXY, tp=tp, L=L))
+  ## Function that maps any spatial location to the nearest data location 
+  nearestloc <- nnfun(locations)
+  ## Function that reads value at nearest data location
+  f <- function(x, y, seg, tp) {
+    values[nearestloc(x,y,seg,tp)]
+  }
+  g <- linfun(f, L)
+  return(g)
+}
+
 plot.linfun <- function(x, ..., L=NULL, eps = NULL, dimyx = NULL, xy = NULL,
                         main) {
   if(missing(main)) main <- short.deparse(substitute(x))
@@ -100,3 +122,8 @@ as.function.linfun <- function(x, ...) {
 integral.linfun <- function(f, domain=NULL, ...) {
   integral(as.linim(f), domain=domain, ...)
 }
+
+as.linfun <- function(X, ...) {
+  UseMethod("as.linfun")
+}
+
