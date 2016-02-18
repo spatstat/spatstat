@@ -252,5 +252,8 @@ repair.old.factor.image <- function(x) {
 }
 
 repair.image.xycoords <- function(x) {
-  im(x$v, xrange=x$xrange, yrange=x$yrange, unitname=unitname(x))
+  v <- x$v
+  if(is.null(dim(v))) 
+    dim(v) <- c(length(x$yrow), length(x$xcol))
+  im(v, xrange=x$xrange, yrange=x$yrange, unitname=unitname(x))
 }

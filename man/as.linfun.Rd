@@ -1,6 +1,7 @@
 \name{as.linfun} %DontDeclareMethods
 \alias{as.linfun}
 \alias{as.linfun.linim}
+\alias{as.linfun.lintess}
 \title{
   Convert Data to a Function on a Linear Network
 }
@@ -12,6 +13,8 @@
   as.linfun(X, \dots)
 
   \method{as.linfun}{linim}(X, \dots)
+
+  \method{as.linfun}{lintess}(X, \dots)
 }
 \arguments{
   \item{X}{
@@ -28,6 +31,9 @@
   The function \code{as.linfun} is generic. The method \code{as.linfun.linim}
   converts objects of class \code{"linim"} (pixel images on a linear
   network) to functions on the network.
+  The method \code{as.linfun.lintess} converts a tessellation
+  on a linear network into a function identifying which tile contains
+  any given point.
 }
 \value{
   Object of class \code{"linfun"}.

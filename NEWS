@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.025
+        CHANGES IN spatstat VERSION 1.44-1.026
 
 OVERVIEW
 
     o We thank Monsuru Adepeju, Mario D'Antuono, Markus Herrmann, 
-    Paul Hewson, Suman Rakshit and Sven Wagner for contributions.
+    Paul Hewson, Greg Mcwiggan, Suman Rakshit and Sven Wagner 
+    for contributions.
 
     o Surgery with linear networks.
 
@@ -24,6 +25,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o lintess
+    Tessellation on a linear network.
+
     o insertVertices
     Insert new vertices in a linear network.
 
@@ -41,7 +45,7 @@ NEW FUNCTIONS
     Extract a data frame of spatial locations and function values
     from an object of class 'linim' or 'linfun'.
 
-    o as.linfun, as.linfun.linim
+    o as.linfun, as.linfun.linim, as.linfun.lintess
     Convert other kinds of data to a 'linfun' object.
 
     o requireversion
@@ -98,6 +102,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pcf.ppp
     New argument 'ratio' allows several estimates of pcf to be pooled.
+
+    o summary.ppm
+    New argument 'fine' selects the algorithm for variance estimation.
 
     o texturemap
     Argument 'textures' can be missing or NULL.
@@ -197,6 +204,10 @@ BUGS
 
    o linnet
    Crashed if there were no line segments at all.
+   Fixed.
+
+   o as.linim.default
+   Did not correctly handle factor-valued data.
    Fixed.
 
    o texturemap

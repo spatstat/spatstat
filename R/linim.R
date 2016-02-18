@@ -210,8 +210,8 @@ as.linim <- function(X, ...) {
 as.linim.default <- function(X, L, ...) {
   stopifnot(inherits(L, "linnet"))
   Y <- as.im(X, W=as.rectangle(as.owin(L)), ...)
-  Z <- as.im(as.mask.psp(as.psp(L), as.owin(Y)))
-  Y <- eval.im(Z * Y)
+  M <- as.mask.psp(as.psp(L), as.owin(Y))
+  Y[complement.owin(M)] <- NA
   out <- linim(L, Y)
   return(out)
 }

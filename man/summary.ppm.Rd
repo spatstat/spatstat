@@ -6,13 +6,19 @@
   \code{summary} method for class \code{"ppm"}.
 }
 \usage{
-  \method{summary}{ppm}(object, \dots, quick=FALSE)
+  \method{summary}{ppm}(object, \dots, quick=FALSE, fine=FALSE)
   \method{print}{summary.ppm}(x, \dots)
 }
 \arguments{
   \item{object}{A fitted point process model.}
   \item{\dots}{Ignored.}
   \item{quick}{Logical flag controlling the scope of the summary.}
+  \item{fine}{
+    Logical value passed to \code{\link{vcov.ppm}} determining
+    whether to compute the quick, coarse estimate of variance
+    (\code{fine=FALSE}, the default) or the slower, finer estimate
+    (\code{fine=TRUE}).
+  }
   \item{x}{Object of class \code{"summary.ppm"} as returned by
     \code{summary.ppm}.
   }
@@ -48,11 +54,14 @@
   # invent some data
   X <- rpoispp(42)
   # fit a model to it
-  fit <- ppm(X, ~x, Strauss(r=0.1))
+  fit <- ppm(X ~ x, Strauss(r=0.1))
   # summarize the fitted model
   summary(fit)
   # `quick' option
   summary(fit, quick=TRUE)
+  # coefficients with standard errors and CI
+  coef(summary(fit))
+  coef(summary(fit, fine=TRUE))
 
   # save the full summary
   s <- summary(fit)

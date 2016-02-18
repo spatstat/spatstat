@@ -34,7 +34,7 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
   miss.yrow <- missing(yrow)
   
   # determine dimensions
-  if(is.matrix(mat)) {
+  if(!is.null(dim(mat))) {
     nr <- nrow(mat)
     nc <- ncol(mat)
     if(length(xcol) != nc)

@@ -456,6 +456,7 @@
 \alias{plot.barplotdata}
 \alias{plot.bw.frac}
 \alias{plot.bw.optim}
+\alias{plot.lintess}
 \alias{plot.localpcfmatrix}
 \alias{plot.lurk}
 \alias{plot.minconfit}
@@ -508,6 +509,7 @@
 \alias{print.isf}
 \alias{print.layered}
 \alias{print.leverage.ppm}
+\alias{print.lintess}
 \alias{print.localpcfmatrix}
 \alias{print.lut}
 \alias{print.minconfit}
@@ -1298,6 +1300,7 @@ plotPolygonBdry(x, \dots)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{bw.frac}(x, \dots)
 \method{plot}{bw.optim}(x, \dots, showopt, optargs)
+\method{plot}{lintess}(x, \dots, main)
 \method{plot}{lurk}(x, \dots, shade)
 \method{plot}{minconfit}(x, \dots)
 \method{plot}{parres}(x, \dots)
@@ -1367,6 +1370,7 @@ primesbelow(nmax)
 \method{print}{isf}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
+\method{print}{lintess}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
 \method{print}{mppm}(x, \dots)
