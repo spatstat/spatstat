@@ -53,7 +53,7 @@ hyperframe <- local({
       ncases <- 1
     } else {
       heights <- rep.int(1, nvars)
-      heights[columns] <-  unlist(lapply(aarg[columns], length))
+      heights[columns] <-  lengths(aarg[columns])
       u <- unique(heights)
       if(length(u) > 1) {
         u <- u[u != 1]
@@ -371,7 +371,7 @@ with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
   if(simplify && all(unlist(lapply(out, is.vector)))) {
     # if all results are atomic vectors of equal length,
     # return a matrix or vector.
-    lenfs <- unlist(lapply(out, length))
+    lenfs <- lengths(out)
     if(all(unlist(lapply(out, is.atomic))) &&
             length(unique(lenfs)) == 1) {
       out <- t(as.matrix(as.data.frame(out)))

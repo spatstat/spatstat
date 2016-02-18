@@ -45,7 +45,7 @@ Concom <- local({
                       INDEX=factor(cr$i, levels=1:nU),
                       FUN=unique, 
                       simplify=FALSE)
-    nhit <- unname(unlist(lapply(hitcomp, length)))
+    nhit <- unname(lengths(hitcomp))
     change <- 1 - nhit
     return(change)
   }

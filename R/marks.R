@@ -283,7 +283,7 @@ markappend <- function(...) {
            # check compatibility of data frames
            # (this is redundant but gives more helpful message)
            nama <- lapply(marxlist, names)
-           dims <- unlist(lapply(nama, length))
+           dims <- lengths(nama)
            if(length(unique(dims)) != 1)
              stop("Data frames of marks have different column dimensions.")
            samenames <- unlist(lapply(nama,

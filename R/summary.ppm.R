@@ -166,7 +166,7 @@ summary.ppm <- local({
           y$covar.descrip[isfun] <- unlist(lapply(funs, fdescrip))
           # find any extra arguments (after args 1 & 2) explicitly named
           fargs <- lapply(funs, xargs)
-          nxargs <- unlist(lapply(fargs, length))
+          nxargs <- lengths(fargs)
           y$has.xargs <- any(nxargs > 0)
           if(y$has.xargs) {
             # identify which function arguments are fixed in the call

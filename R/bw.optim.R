@@ -41,8 +41,8 @@ as.data.frame.bw.optim <- function(x, ...) {
   colnames(df) <- labels[c("hname", "cvname")]
   info <- attr(x, "info")
   if(length(info) > 0) {
-    lengths <- unlist(lapply(info, length))
-    if(any(ok <- (lengths == nrow(df)))) {
+    lenfs <- lengths(info)
+    if(any(ok <- (lenfs == nrow(df)))) {
       df <- cbind(df, as.data.frame(info[ok]))
     }
   }

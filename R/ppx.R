@@ -521,7 +521,7 @@ inside.boxx <- function(..., w = NULL){
     stop("Mismatch between dimension of boxx and number of coordinate vectors.")
   ## Check coord. vectors have equal length
   n <- length(dat[[1]])
-  if(any(sapply(dat, length)!=n))
+  if(any(lengths(dat)!=n))
     stop("Coordinate vectors have unequal length.")
   index <- rep(TRUE, n)
   for(i in seq_along(ra)){

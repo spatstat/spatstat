@@ -30,7 +30,7 @@ Iest <- local({
   
     ## J function of subpattern of each type i
     Jii <- lapply(Y, Jest, r=rvals, correction=correction)
-    nrvals <- sapply(lapply(Jii, getElement, name="r"), length)
+    nrvals <- lengths(lapply(Jii, getElement, name="r"))
     if(length(unique(nrvals)) != 1 || nrvals[1] != length(rvals))
       stop("Internal error: J function objects have different lengths")
 

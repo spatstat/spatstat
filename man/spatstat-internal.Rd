@@ -768,6 +768,17 @@
 \alias{xtfrm.im}
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
+%%%% sparse slabs
+\alias{sparseSlab}
+\alias{as.sparseSlab}
+\alias{dim.sparseSlab}
+\alias{dimnames.sparseSlab}
+\alias{dimnames<-.sparseSlab}
+\alias{print.sparseSlab}
+\alias{aperm.sparseSlab}
+\alias{as.array.sparseSlab}
+\alias{[.sparseSlab}
+%%%%
 \description{
   Internal spatstat functions.
 }
@@ -1654,6 +1665,16 @@ X2testEngine(OBS, EXP, \dots, method, CR, df, nsim,
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
+%%% sparse slabs
+sparseSlab(matlist, stackdim)
+as.sparseSlab(x, \dots)
+\method{dim}{sparseSlab}(x)
+\method{dimnames}{sparseSlab}(x)
+\method{dimnames}{sparseSlab}(x) <- value
+\method{print}{sparseSlab}(x, \dots)
+\method{aperm}{sparseSlab}(a, perm, resize, \dots)
+\method{as.array}{sparseSlab}(x, \dots)
+\method{[}{sparseSlab}(x, i, j, k, drop, \dots)
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

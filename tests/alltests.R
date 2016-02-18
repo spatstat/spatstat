@@ -2385,6 +2385,50 @@ local({
 })
 
 
+#'    tests/sparseSlabs.R
+#'  Basic tests of sparseSlabs.R code
+#'  $Revision: 1.2 $ $Date: 2016/02/18 07:46:15 $
+
+require(spatstat)
+local({
+
+  if(require(Matrix)) {
+    m <- replicate(2, 
+                   sparseMatrix(1:5, sample(1:5, replace=TRUE),
+                                x=1:5, dims=c(5,5)))
+    
+    M <- sparseSlab(m)
+    dimnames(M) <- list(letters[1:5], LETTERS[1:5], c("yes", "no"))
+    
+    M
+    
+    U <- aperm(M, c(1,3,2))
+    U
+    
+    M[ 3:4, , ]
+    
+    M[ 3:4, 2:4, ]
+    
+    M[, 3, ]
+
+    M[, 3, , drop=FALSE]
+    
+    MA <- as.array(M)
+    UA <- as.array(U)
+
+    ## a possible application in spatstat
+    cl10 <- closepairs(cells, 0.1)
+    cl12 <- closepairs(cells, 0.12)
+    n <- npoints(cells)
+    m10 <- with(cl10, sparseMatrix(i, j, x=1, dims=c(n,n)))
+    m12 <- with(cl12, sparseMatrix(i, j, x=1, dims=c(n,n)))
+    mlist <- list(m10, m12)
+    names(mlist) <- c("r=0.1", "r=0.12")
+    Z <- sparseSlab(mlist)
+  }
+})
+
+
 #
 #  tests/splitpea.R
 #

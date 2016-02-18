@@ -96,8 +96,8 @@ plot.fv <- local({
       } else {
         ## validate the found variables
         externvars <- lapply(sought, get, envir=env.user)
-        isnum <- unlist(lapply(externvars, is.numeric))
-        len <- unlist(lapply(externvars, length))
+        isnum <- sapply(externvars, is.numeric)
+        len <- lengths(externvars)
         ok <- isnum & (len == 1 | len == nrow(x))
         if(!all(ok)) {
           nnot <- sum(!ok)

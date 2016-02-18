@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.11 $  $Date: 2015/05/17 10:31:04 $
+#'   $Revision: 1.12 $  $Date: 2016/02/18 07:26:34 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -211,7 +211,7 @@ nestsplit <- function(X, ...) {
       sp2.1 <- split(sp2, attr(Xsp1, "fgroup"))
       ll <- mapply(split, Xsp1, sp2.1, SIMPLIFY=FALSE)
     }
-    neach <- sapply(ll, length)
+    neach <- lengths(ll)
     f1 <- rep(factor(lev1, levels=lev1), neach)
     f2 <- rep(factor(lev2, levels=lev2), length(Xsp1))
     pats <- do.call(c, unname(ll))

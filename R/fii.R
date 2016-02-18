@@ -51,8 +51,8 @@ summary.fii <- function(object, ...) {
         # Try to make a thumbnail description
         param <- sensible$param
         ipar <- INTERACT$par
-        if(all(unlist(lapply(param, length)) == 1) &&
-           all(unlist(lapply(ipar, length)) == 1)) {
+        if(all(lengths(param) == 1) &&
+           all(lengths(ipar) == 1)) {
           allargs <- append(ipar, param)
           allargs <- lapply(allargs, signif, digits=4)
           thumbnail <- fakecallstring(INTERACT$creator, allargs)

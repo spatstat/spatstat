@@ -138,7 +138,7 @@ BadGey <- local({
              r <- rep.int(r, length(sat))
            else if(length(sat) == 1)
              sat <- rep.int(sat, length(r))
-           else stop("lengths or r and sat do not match")
+           else stop("lengths of r and sat do not match")
          }
          # first ensure all data points are in U
          nX <- npoints(X)

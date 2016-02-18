@@ -762,11 +762,11 @@ mpl.prepare <- local({
 mpl.usable <- function(x) {
   ## silently remove covariates that don't have recognised format
   if(length(x) == 0 || is.data.frame(x)) return(x)
-  isim   <- unlist(lapply(x, is.im))
-  isfun  <- unlist(lapply(x, is.function))
-  iswin  <- unlist(lapply(x, is.owin))
-  istess <- unlist(lapply(x, is.tess))
-  isnum  <- unlist(lapply(x, is.numeric)) & (unlist(lapply(x, length)) == 1)
+  isim   <- sapply(x, is.im)
+  isfun  <- sapply(x, is.function)
+  iswin  <- sapply(x, is.owin)
+  istess <- sapply(x, is.tess)
+  isnum  <- sapply(x, is.numeric) & (lengths(x) == 1)
   recognised <- isim | isfun | iswin | istess | isnum
   if(!all(recognised)) 
     x <- x[recognised]

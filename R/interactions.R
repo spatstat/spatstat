@@ -228,7 +228,7 @@ illegal.iformula <- local({
     ft.args <- lapply(fterms, variables.in.term, 
                       factors=fax, varnamelist=fv.args)
     ft.itags <- lapply(ft.args, intersect, y=itags)
-    if(any(sapply(ft.itags, length) > 1))
+    if(any(lengths(ft.itags) > 1))
       return("Interaction between itags is not defined")
     return(NULL)
   }

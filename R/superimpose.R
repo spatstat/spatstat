@@ -79,7 +79,7 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
     W <- union.owin(WXY, Wppp)
   }
   # extract the marks if any
-  nobj <- sapply(arglist, function(x) { length(x$x) })
+  nobj <- lengths(lapply(arglist, getElement, name="x"))
   marx  <- superimposeMarks(arglist, nobj)
   #
   ppp(XY$x, XY$y, window=W, marks=marx, check=check & needcheck)
@@ -230,7 +230,7 @@ superimposePSP <-
   mkfmt <- mkfmt[1]
   if(mkfmt=="dataframe") {
 	mcnms <- lapply(marxlist,names)
-	cdim  <- sapply(mcnms,length)
+	cdim  <- lengths(mcnms)
 	OK    <- length(unique(cdim)) == 1
 	if(OK) {
 		allInOne <- sapply(mcnms,paste,collapse="")

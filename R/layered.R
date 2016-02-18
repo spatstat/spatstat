@@ -39,7 +39,7 @@ print.layered <- function(x, ...) {
     print(x[[i]])
   }
   pl <- layerplotargs(x)
-  hasplot <- (unlist(lapply(pl, length)) > 0)
+  hasplot <- (lengths(pl) > 0)
   if(any(hasplot)) 
     splat("Includes plot arguments for", commasep(names(pl)[hasplot]))
   invisible(NULL)
@@ -196,7 +196,7 @@ plotEachLayer <- function(x, ..., main,
     p <- p[i]
     nx <- length(x)
   }
-  isnul <- (unlist(lapply(x, length)) == 0)
+  isnul <- (lengths(x) == 0)
   if(!missing(j) && !is.null(j))
     x[!isnul] <- lapply(x[!isnul], "[", i=j)
   if(drop && nx == 1)

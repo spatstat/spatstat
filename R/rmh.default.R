@@ -745,7 +745,7 @@ rmhEngine <- function(InfoList, ...,
     
   ipar <- model$C.ipar
   iparlist <- if(ncif == 1) list(ipar) else model$C.iparlist
-  iparlen <- unlist(lapply(iparlist, length))
+  iparlen <- lengths(iparlist)
 
   beta <- model$internal$beta
   

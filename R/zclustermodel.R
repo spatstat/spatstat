@@ -34,7 +34,7 @@ print.zclustermodel <- local({
                      ngettext(length(clustargs), "parameter:", "parameters:"))
         if(is.list(clustargs) &&
            all(sapply(clustargs, is.numeric)) &&
-           all(sapply(clustargs, length) == 1)) {
+           all(lengths(clustargs) == 1)) {
           splat(hdr,
                 paste(names(clustargs), as.numeric(clustargs),
                       sep="=",

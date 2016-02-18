@@ -124,13 +124,13 @@ slr.prepare <- function(CallInfo, envir, data,
   if(ncov == 0) {
     isim <- isowin <- ismask <- isfun <- isnum <- isspatial <- israster <- logical(0)
   } else {
-    isim  <- unlist(lapply(covlist, is.im))
-    isowin  <- unlist(lapply(covlist, is.owin))
-    ismask  <- unlist(lapply(covlist, is.mask))
-    isfun  <- unlist(lapply(covlist, is.function))
+    isim  <- sapply(covlist, is.im)
+    isowin  <- sapply(covlist, is.owin)
+    ismask  <- sapply(covlist, is.mask)
+    isfun  <- sapply(covlist, is.function)
     isspatial <- isim | isowin | isfun
     israster <- isim | ismask
-    isnum <- sapply(covlist, is.numeric) & (sapply(covlist, length) == 1)
+    isnum <- sapply(covlist, is.numeric) & (lengths(covlist) == 1)
   }
   if(!all(ok <- (isspatial | isnum))) {
     n <- sum(!ok)

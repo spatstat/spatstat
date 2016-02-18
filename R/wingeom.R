@@ -765,23 +765,15 @@ nvertices.default <- function(x, ...) {
   return(n)
 }
 
-nvertices.owin <- local({
-
-  nvertices.owin <- function(x, ...) {
-    if(is.empty(x))
-      return(0)
-    n <- switch(x$type,
-                rectangle=4,
-                polygonal=sum(sapply(x$bdry, xlength)),
-                mask=sum(bdry.mask(x)$m))
-    return(n)
-  }
-
-  xlength <- function(a) length(a$x)
-
-  nvertices.owin
-})
-
+nvertices.owin <- function(x, ...) {
+  if(is.empty(x))
+    return(0)
+  n <- switch(x$type,
+              rectangle=4,
+              polygonal=sum(lengths(lapply(x$bdry, getElement, name="x"))),
+              mask=sum(bdry.mask(x)$m))
+  return(n)
+}
 
 vertices <- function(w) {
   UseMethod("vertices")

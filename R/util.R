@@ -1037,7 +1037,7 @@ substringcount <- function(x, y) {
   ## count occurrences of 'x' in 'y'
   yy <- paste0("a", y, "a")
   splot <- strsplit(yy, split=x, fixed=TRUE)
-  nhits <- unlist(lapply(splot, length)) - 1
+  nhits <- lengths(splot) - 1
   return(nhits)
 }
 

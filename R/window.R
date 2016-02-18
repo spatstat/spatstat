@@ -860,8 +860,8 @@ complement.owin <- function(w, frame=as.rectangle(w)) {
            if(reframe)
              is.box <- rep.int(FALSE, length(bdry))
            else {
-             nvert <- sapply(lapply(bdry, getElement, name="x"), length)
-             areas <- unlist(lapply(bdry, Area.xypolygon))
+             nvert <- lengths(lapply(bdry, getElement, name="x"))
+             areas <- sapply(bdry, Area.xypolygon)
              boxarea.mineps <- boxarea * (0.99999)
              is.box <- (nvert == 4 & areas >= boxarea.mineps)
              if(sum(is.box) > 1)
@@ -1020,8 +1020,7 @@ summary.owin <- function(object, ...) {
              result$nvertices <- length(poly[[1]]$x)
            } else {
              result$areas <- unlist(lapply(poly, Area.xypolygon))
-             result$nvertices <- sapply(lapply(poly, getElement, name="x"),
-                                        length)
+             result$nvertices <- lengths(lapply(poly, getElement, name="x"))
            }
            result$nhole <- sum(result$areas < 0)
          },

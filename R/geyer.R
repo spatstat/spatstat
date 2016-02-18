@@ -314,7 +314,7 @@ geyerdelta2 <- local({
     # First find all such triples
     # Group close pairs X[k] ~ U[j] by index k
     spl <- split(IzJ, factor(JzJ, levels=1:nX))
-    grlen <- unlist(lapply(spl, length))
+    grlen <- lengths(spl)
     # Assemble list of triples U[i], X[k], U[j]
     # by expanding each pair U[i], X[k]
     JJ <- unlist(spl[JzJ])

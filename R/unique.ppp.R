@@ -123,7 +123,7 @@ multiplicity.ppp <- function(x) {
   if(length(I) == 0)
     return(rep.int(1L, np))
   JbyI <- split(J, factor(I, levels=1:np))
-  result <- 1 + sapply(JbyI, length)
+  result <- 1 + lengths(JbyI)
   return(result)
 }
   

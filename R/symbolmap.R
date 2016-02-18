@@ -37,8 +37,8 @@ symbolmap <- local({
         stop("All graphics parameters must have names")
           atomic <- unlist(lapply(parlist, is.atomic))
       functions <- unlist(lapply(parlist, is.function))
-      lengths <- unlist(lapply(parlist, length))
-      constants <- atomic & (lengths == 1)
+      lenfs <- lengths(parlist)
+      constants <- atomic & (lenfs == 1)
       if(any(bad <- !(constants | functions))) {
         if(type == "discrete" && any(repairable <- atomic[bad])) {
           ## recycle data to desired length
@@ -210,7 +210,7 @@ invoke.symbolmap <- local({
       if(length(etch) == 1) etch <- rep(etch, n)
       ## infer which arguments are parallelised
       other <- append(list(...), list(cex=cex, pch=pch))
-      isvec <- (unlist(lapply(other, length)) == n)
+      isvec <- (lengths(other) == n)
       other.fixed <- other[!isvec]
       other.vec   <- other[isvec]
       ##
@@ -253,7 +253,7 @@ invoke.symbolmap <- local({
       other <- resolve.defaults(list(...),
                                 list(add=TRUE, inches=FALSE))
       ## infer which arguments are parallelised
-      isvec <- (unlist(lapply(other, length)) == n)
+      isvec <- (lengths(other) == n)
       other.fixed <- other[!isvec]
       other.vec   <- other[isvec]
       ##

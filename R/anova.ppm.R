@@ -147,7 +147,7 @@ anova.ppm <- local({
     ## If any models were fitted by ippm we need to correct the df
     if(newton) {
       nfree <- sapply(lapply(objex, logLik), attr, which="df")
-      ncanonical <- sapply(lapply(objex, coef), length)
+      ncanonical <- lengths(lapply(objex, coef))
       nextra <- nfree - ncanonical
       if(is.null(fitz))
         fitz <- lapply(objex, getglmfit)

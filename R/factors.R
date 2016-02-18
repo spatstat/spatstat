@@ -33,7 +33,7 @@ mergeLevels <- function(.f, ...) {
   n <- length(map)
   if(n == 0) return(.f)
   # mapping for 'other'
-  if(any(isnul <- (sapply(map, length) == 0))) {
+  if(any(isnul <- (lengths(map) == 0))) {
     if(sum(isnul) > 1)
       stop("At most one argument should be NULL or character(0)")
     otherlevels <- setdiff(levels(.f), unlist(map))
