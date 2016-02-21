@@ -714,6 +714,7 @@
 \alias{symbolmaptype}
 \alias{sympoly}
 \alias{tail.hyperframe}
+\alias{tensor1x1}
 \alias{termsinformula}
 \alias{test.crossing.psp}
 \alias{test.selfcrossing.psp}
@@ -778,6 +779,7 @@
 \alias{aperm.sparseSlab}
 \alias{as.array.sparseSlab}
 \alias{[.sparseSlab}
+\alias{sumsymouterSparseSlab}
 %%%%
 \description{
   Internal spatstat functions.
@@ -1609,6 +1611,7 @@ superimposeMarks(arglist, nobj)
 symbolmaptype(x)
 sympoly(x, y, n)
 \method{tail}{hyperframe}(x,n,\dots)
+tensor1x1(A,B)
 termsinformula(x)
 test.crossing.psp(A,B)
 test.selfcrossing.psp(A)
@@ -1667,7 +1670,7 @@ xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
 %%% sparse slabs
 sparseSlab(matlist, stackdim)
-as.sparseSlab(x, \dots)
+as.sparseSlab(x, \dots, stackdim)
 \method{dim}{sparseSlab}(x)
 \method{dimnames}{sparseSlab}(x)
 \method{dimnames}{sparseSlab}(x) <- value
@@ -1675,6 +1678,7 @@ as.sparseSlab(x, \dots)
 \method{aperm}{sparseSlab}(a, perm, resize, \dots)
 \method{as.array}{sparseSlab}(x, \dots)
 \method{[}{sparseSlab}(x, i, j, k, drop, \dots)
+sumsymouterSparseSlab(x, w, dbg)
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

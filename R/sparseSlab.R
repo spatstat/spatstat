@@ -9,6 +9,7 @@
 
 sparseSlab <- function(matlist, stackdim=3) {
   stopifnot(is.list(matlist))
+  if(is.null(stackdim)) stackdim <- 3
   stopifnot(stackdim %in% 1:3)
   dims <- lapply(matlist, dim)
   if(any(lengths(dims) != 2))
@@ -25,17 +26,41 @@ sparseSlab <- function(matlist, stackdim=3) {
   return(result)
 }
 
-as.sparseSlab <- function(x, ...) {
-  if(inherits(x, "sparseSlab"))
-    return(x)
-  if(inherits(x, "sparseMatrix"))
-    return(sparseSlab(list(x)))
-  if(is.matrix(x))
-    return(sparseSlab(list(as(x, "sparseMatrix"))))
-  if(is.list(x) && all(sapply(x, is.matrix)))
-    return(sparseSlab(lapply(x, as, Class="sparseMatrix")))
-  warning("I don't know how to convert x to a sparse array")
-  return(NULL)
+as.sparseSlab <- function(x, ..., stackdim=NULL) {
+  if(inherits(x, "sparseSlab")) {
+    y <- x
+  } else if(inherits(x, "sparseMatrix")) {
+    y <- sparseSlab(list(x), stackdim)
+  } else if(is.matrix(x)) {
+    y <- sparseSlab(list(as(x, "sparseMatrix")), stackdim)
+  } else if(is.list(x) && all(sapply(x, is.matrix))) {
+    y <- sparseSlab(lapply(x, as, Class="sparseMatrix"), stackdim)
+  } else if(is.array(x)) {
+    if(is.null(stackdim)) stackdim <- which.min(dim(x))
+    stopifnot(stackdim %in% 1:3)
+    n <- dim(x)[stackdim]
+    d <- dim(x)[-stackdim]
+    matlist <- vector(mode="list", length=n)
+    for(i in seq_len(n)) {
+      mi <- switch(stackdim,
+                   matrix(x[i,,], d[1], d[2]),
+                   matrix(x[,i,], d[1], d[2]),
+                   matrix(x[,,i], d[1], d[2]))
+      matlist[[i]] <- as(mi, Class="sparseMatrix")
+    }
+    y <- sparseSlab(matlist, stackdim)
+  } else {          
+    warning("I don't know how to convert x to a sparse array")
+    return(NULL)
+  }
+  if(!is.null(stackdim) && stackdim != y$stackdim) {
+    d <- integer(3)
+    d[stackdim] <- dim(y)[y$stackdim]
+    d[-stackdim] <- dim(y)[-y$stackdim]
+    y$dim <- d
+    y$stackdim <- stackdim
+  }
+  return(y)
 }
 
 dim.sparseSlab <- function(x) { x$dim }

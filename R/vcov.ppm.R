@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.116 $  $Date: 2016/02/16 10:07:51 $
+##  $Revision: 1.117 $  $Date: 2016/02/21 09:10:50 $
 ##
 
 vcov.ppm <- local({
@@ -515,7 +515,7 @@ vcalcGibbsGeneral <- function(model,
           lamdel.array <- aperm(lamdel.array, c(3,1,2))
           momdellogi <- rho/(lamdel.array+rho)*momdel
           momdellogiok <- momdellogi[ , ok, ok, drop=FALSE]
-          A2log <- sumsymouter(momdellogiok, w=pairweight[ok, ok])
+          A2log <- sumsymouter(momdellogiok, w=pwok)
           ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
           ddSlogiok <- ddSlogi[ , ok, ok, drop=FALSE]
           A3log <- sumsymouter(ddSlogiok)

@@ -56,6 +56,8 @@ useDynLib(spatstat,
 "cross3pairs",
 "crosscount",
 "crsmoopt",
+"CspaSumSymOut",
+"CspaWtSumSymOut",
 "Csumouter",
 "Csumsymouter",
 "Cwhist",
@@ -2350,6 +2352,7 @@ export("summary.units")
 export("summary.vblogit")
 export("sumouter")
 export("sumsymouter")
+export("sumsymouterSparseSlab")
 export("superimpose")
 export("superimpose.default")
 export("superimpose.lpp")
@@ -2363,6 +2366,7 @@ export("symbolmap")
 export("symbolmaptype")
 export("sympoly")
 export("tail.hyperframe")
+export("tensor1x1")
 export("terms.dppm")
 export("termsinformula")
 export("terms.kppm")
