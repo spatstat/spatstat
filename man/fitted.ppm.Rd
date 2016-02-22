@@ -11,7 +11,8 @@
 }
 \usage{
   \method{fitted}{ppm}(object, \dots, type="lambda", dataonly=FALSE,
-  new.coef=NULL, leaveoneout=FALSE, drop=FALSE, check=TRUE, repair=TRUE)
+  new.coef=NULL, leaveoneout=FALSE, drop=FALSE, check=TRUE, repair=TRUE,
+  dropcoef=FALSE)
 }
 \arguments{
   \item{object}{
@@ -53,6 +54,9 @@
   \item{repair}{
     Logical value indicating whether to repair the internal format
     of \code{object}, if it is found to be damaged. 
+  }
+  \item{dropcoef}{
+    Internal use only.
   }
 }
 \value{

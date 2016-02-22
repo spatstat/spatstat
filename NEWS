@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.028
+        CHANGES IN spatstat VERSION 1.44-1.029
 
 OVERVIEW
 
     o We thank Monsuru Adepeju, Mario D'Antuono, Markus Herrmann, 
     Paul Hewson, Greg Mcwiggan, Suman Rakshit and Sven Wagner 
     for contributions.
+
+    o Numerous bug fixes in code for replicated point patterns.
 
     o Surgery with linear networks.
 
@@ -15,11 +17,9 @@ OVERVIEW
 
     o Stipulate a particular version of a package.
 
-    o Performance improvements.
-
     o Fixed namespace problems arising when spatstat is not loaded.
 
-    o Bug fixes.
+    o Bug fixes and performance improvements.
 
     o Version nickname: 'Levity Waves'
 
@@ -79,7 +79,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o closepairs.ppp, closepairs.pp3
     Argument 'ordered' has been replaced by 'twice'
-    (but is still accepted, with a warning).
+    (but 'ordered' is still accepted, with a warning).
 
     o closepairs.ppp, closepairs.pp3
     Performance improved (computation time and memory requirements reduced.)
@@ -176,6 +176,11 @@ BUGS
 
    o qqplot.ppm
    Crashed sometimes when applied to a model obtained from subfits().
+   Fixed.
+
+   o anova.mppm
+   Crashed sometimes with a message about mismatched coefficients.
+   [Spotted by Sven Wagner.]
    Fixed.
 
    o diagnose.ppm

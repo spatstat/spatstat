@@ -131,7 +131,7 @@ vcalcPois <- function(object, ...,
                       method=c("C", "interpreted"),
                       verbose=TRUE,
                       fisher=NULL, 
-                      matwt=NULL, new.coef=NULL,
+                      matwt=NULL, new.coef=NULL, dropcoef=FALSE, 
                       saveterms=FALSE) {
   ## variance-covariance matrix of Poisson model,
   ## or Hessian of Gibbs model
@@ -156,7 +156,8 @@ vcalcPois <- function(object, ...,
     }
     ## compute fitted intensity and sufficient statistic
     ltype <- if(is.poisson(object)) "trend" else "lambda"
-    lambda <- fitted(object, type=ltype, new.coef=new.coef, check=FALSE)
+    lambda <- fitted(object, type=ltype, new.coef=new.coef,
+                     dropcoef=dropcoef, check=FALSE)
     mom <- model.matrix(object)
     nmom <- nrow(mom)
     Q <- quad.ppm(object)
@@ -350,7 +351,7 @@ vcalcGibbsGeneral <- function(model,
                          A1 = NULL,
                          fine = FALSE,
                          hessian = FALSE,
-                         matwt = NULL, new.coef = NULL,
+                         matwt = NULL, new.coef = NULL, dropcoef=FALSE,
                          saveterms = FALSE,
                          parallel = TRUE
                          ) {
@@ -365,7 +366,7 @@ vcalcGibbsGeneral <- function(model,
   asked.parallel <- !missing(parallel)
   
   old.coef <- coef(model)
-  use.coef <- if(!is.null(new.coef)) new.coef else old.coef
+  use.coef <- adaptcoef(new.coef, old.coef, drop=dropcoef)
   p <- length(old.coef)
   if(p == 0) {
     ## this probably can't happen
@@ -400,7 +401,7 @@ vcalcGibbsGeneral <- function(model,
   nX <- npoints(X)
   ## conditional intensity lambda(X[i] | X) = lambda(X[i] | X[-i])
   ## data and dummy:
-  lamall <- fitted(model, check = FALSE, new.coef = new.coef)
+  lamall <- fitted(model, check = FALSE, new.coef = new.coef, dropcoef=dropcoef)
   ## data only:
   lam <- lamall[Z]
   ## sufficient statistic h(X[i] | X) = h(X[i] | X[-i])
@@ -909,7 +910,8 @@ vcalcGibbsGeneral <- function(model,
            model2 <- do.call(ppm, args = arglist)
 
            ## New cif
-           lamall2 <- fitted(model2, check = FALSE, new.coef = new.coef)
+           lamall2 <- fitted(model2, check = FALSE,
+                             new.coef = new.coef, dropcoef=dropcoef)
            ## New model matrix
            mall2 <- model.matrix(model2)
            okall2 <- getglmsubset(model2)

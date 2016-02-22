@@ -88,6 +88,7 @@ vcov.mppm <- local({
                    matrix.action=matrix.action,
                    gam.action=gam.action,
                    logi.action=logi.action,
+                   dropcoef=TRUE,
                    ...)
     fish <- lapply(guts, getElement, name="fisher")
     a1   <- lapply(guts, getElement, name="A1")

@@ -8,6 +8,7 @@
 \alias{acedist.show}
 \alias{acedist.noshow}
 \alias{active.interactions}
+\alias{adaptcoef}
 \alias{adjustthinrange}
 \alias{affinexy}
 \alias{affinexypolygon}
@@ -791,6 +792,7 @@
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
+adaptcoef(new.coef, fitcoef, drop)
 adjustthinrange(ur,vstep,vr)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)

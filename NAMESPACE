@@ -195,6 +195,7 @@ useDynLib(spatstat,
 export("acedist.noshow")
 export("acedist.show")
 export("active.interactions")
+export("adaptcoef")
 export("adaptive.density")
 export("add.texture")
 export("addvar")
