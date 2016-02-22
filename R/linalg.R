@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.13 $ $Date: 2016/02/11 09:36:11 $
+# $Revision: 1.14 $ $Date: 2016/02/22 09:44:16 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -124,6 +124,8 @@ bilinearform <- function(x, v, y) {
 
 sumsymouter <- function(x, w=NULL) {
   # computes the sum of outer(x[,i,j], x[,j,i]) * w[i,j] over all pairs i != j
+  if(inherits(x, "sparseSlab") && (is.null(w) || inherits(w, "sparseMatrix")))
+    return(sumsymouterSparseSlab(x, w))
   stopifnot(is.array(x) && length(dim(x)) == 3)
   if(dim(x)[2] != dim(x)[3])
     stop("The second and third dimensions of x should be equal")

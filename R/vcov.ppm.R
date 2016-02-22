@@ -476,7 +476,7 @@ vcalcGibbsGeneral <- function(model,
     if(parallel) {
       ## compute second order difference
       ##  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
-      ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE)
+      ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=!logi)
       if(is.null(ddS)) {
         if(asked.parallel)
           warning("parallel option not available - reverting to loop")
@@ -489,15 +489,25 @@ vcalcGibbsGeneral <- function(model,
         ## outer(ddS[,i,j], ddS[,j,i])
         ddSok <- ddS[ , ok, ok, drop=FALSE]
         A3 <- sumsymouter(ddSok)
-        ## mom.array[ ,i,j] = h(X[i] | X)
-        mom.array <- array(t(m), dim=c(p, nX, nX))
-        ## momdel[ ,i,j] = h(X[i] | X[-j])
-        momdel <- mom.array - ddS
-        ## lamdel[i,j] = lambda(X[i] | X[-j])
-        lamdel <-
-          matrix(lam, nX, nX) * exp(tensor::tensor(-use.coef, ddS, 1, 1))
-        ##  pairweight[i,j] = lamdel[i,j]/lambda[i] - 1 
-        pairweight <- lamdel / lam - 1
+        ##
+        if(spatstat.options('developer') && inherits(ddS, "sparseSlab")) {
+          ## mom.array[ ,i,j] = h(X[i] | X)
+          mom.array <- mapSparseEntries(ddS, margin=2, values=t(m))
+          ## momdel[ ,i,j] = h(X[i] | X[-j])
+          momdel <- mom.array - ddS
+          pairweight <- expm1(tensor1x1(-use.coef, ddS))
+        } else {
+          ## compute pairweight and other arrays
+          ## mom.array[ ,i,j] = h(X[i] | X)
+          mom.array <- array(t(m), dim=c(p, nX, nX))
+          ## momdel[ ,i,j] = h(X[i] | X[-j])
+          momdel <- mom.array - ddS
+          ## lamdel[i,j] = lambda(X[i] | X[-j])
+          lamdel <-
+            matrix(lam, nX, nX) * exp(tensor::tensor(-use.coef, ddS, 1, 1))
+          ##  pairweight[i,j] = lamdel[i,j]/lambda[i] - 1 
+          pairweight <- lamdel / lam - 1
+        }
         ## now compute sum_{i,j} for i != j
         ## pairweight[i,j] * outer(momdel[,i,j], momdel[,j,i])
         ## for data points that contributed to the pseudolikelihood

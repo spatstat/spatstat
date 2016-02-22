@@ -4,13 +4,12 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.5 $  $Date: 2016/02/18 07:01:21 $
+#' $Revision: 1.11 $  $Date: 2016/02/22 12:03:55 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
   stopifnot(is.list(matlist))
-  if(is.null(stackdim)) stackdim <- 3
-  stopifnot(stackdim %in% 1:3)
+  if(is.null(stackdim)) stackdim <- 3 else stopifnot(stackdim %in% 1:3)
   dims <- lapply(matlist, dim)
   if(any(lengths(dims) != 2))
     stop("Elements of matlist must be matrices [sparse or full]")
@@ -61,6 +60,17 @@ as.sparseSlab <- function(x, ..., stackdim=NULL) {
     y$stackdim <- stackdim
   }
   return(y)
+}
+
+emptySparseSlab <- function(typemaker, dim, stackdim=3) {
+  stopifnot(length(dim) == 3)
+  if(is.null(stackdim)) stackdim <- 3 else stopifnot(stackdim %in% 1:3)
+  dmat <- dim[-stackdim]
+  matlist <- replicate(dim[stackdim],
+                       sparseMatrix(i=integer(0), j=integer(0),
+                                    x=typemaker(0), dims=dmat))
+  result <- sparseSlab(matlist, stackdim)
+  return(result)
 }
 
 dim.sparseSlab <- function(x) { x$dim }
@@ -224,6 +234,83 @@ aperm.sparseSlab <- function(a, perm=NULL, resize=TRUE, ...) {
   subSlab
 })
 
+"[<-.sparseSlab" <- function(x, i, j, k, ..., value) {
+  m <- x$m
+  stackdim <- x$stackdim
+  I <- if(missing(i)) NULL else i
+  J <- if(missing(j)) NULL else j
+  K <- if(missing(k)) NULL else k
+  indices <- list(I,J,K)
+  absent <- sapply(indices, is.null)
+  involves.stackdim <- !absent[stackdim]
+  involves.matrices <- !all(absent[-stackdim])
+  dnx <- dimnames(x)
+  dimX <- dim(x)
+  dimV <- dim(value)
+  if(involves.matrices && !involves.stackdim) {
+    ## replace subset of each sparse matrix
+    for(ii in seq_len(dimX[stackdim])) {
+      ind <- indices[-stackdim]
+      x$m[[ii]][ind[[1]], ind[[2]]] <- value
+    }
+  } else if(involves.stackdim && !involves.matrices) {
+    ## index selects one or more of the sparse matrices
+    stackindex <- positiveIndex(indices[[stackdim]], dnx[[stackdim]])
+    nslice <- length(stackindex)
+    if(nslice == 1) {
+      ## assigning values into a single slice: do it
+      x$m[[stackindex]][] <- value
+    } else if(nslice > 1) {
+      ## assigning values to multiple slices
+      if(length(dimV == 3)) {
+        if(!all(dimV[-stackdim] == dimX[-stackdim]))
+          stop("Replacement dimensions of matrices do not match", call.=FALSE)
+        if(dimV[stackdim] == nslice) {
+          ## inserting 3D slab into 3D slab
+          for(ii in seq_len(nslice)) {
+            sii <- stackindex[ii]
+            vii <- switch(stackdim,
+                          value[ii,,],
+                          value[,ii,],
+                          value[,,ii])
+            if(inherits(vii, "sparseMatrix")) {
+              x$m[[ sii ]] <- vii
+            } else {
+              x$m[[ sii ]] [ ] <- vii[]
+            }
+          } 
+        } else if(dimV[stackdim] == 1) {
+          ## replacing slices by the same slice
+          value <- switch(stackdim,
+                          value[1,,],
+                          value[,1,],
+                          value[,,1])
+          for(ii in seq_len(nslice)) {
+            sii <- stackindex[ii]
+            if(inherits(value, "sparseMatrix")) {
+              x$m[[ sii ]] <- value
+            } else {
+              x$m[[ sii ]] [ ] <- value[]
+            }
+          }
+        } else 
+          stop("I don't know how to match these array indices", call.=FALSE)
+      } else if(length(dimV) == 2) {
+         ## replacing slices by the same matrix
+          for(ii in seq_len(nslice)) 
+            x$m[[ stackindex[ii] ]] <- value
+      } else if(is.null(dimV) && length(value) == 1) {
+        ## replacing slices by a constant 
+          for(ii in seq_len(nslice)) 
+            x$m[[ stackindex[ii] ]] <- value
+      } else stop("Indexing format not understood", call.=FALSE)
+    } else stop("Indexing format not understood", call.=FALSE)
+  } else
+    stop("Sorry, [<-.sparseSlab is not implemented in this case",
+         call.=FALSE)
+  return(x)
+}
+
 as.array.sparseSlab <- function(x, ...) {
   d <- dim(x)
   dn <- dimnames(x)
@@ -239,5 +326,107 @@ as.array.sparseSlab <- function(x, ...) {
   if(!all(dim(z) == d))
     stop("internal error: wrong dimensions")
   return(z)
+}
+
+mapSparseEntries <- function(x, margin, values) {
+  # replace the NONZERO entries of sparse matrix or array
+  # by values[l] where l is one of the slice indices
+  if(inherits(x, "sparseMatrix")) {
+    x <- as(x, Class="TsparseMatrix")
+    stopifnot(margin %in% 1:2)
+    check.nvector(values, dim(x)[margin], things=c("rows","columns")[margin],
+                  oneok=TRUE)
+    if(length(values) == 1) values <- rep(values, dim(x)[margin])
+    i <- x@i + 1L
+    j <- x@j + 1L
+    yindex <- switch(margin, i, j)
+    y <- sparseMatrix(i=i, j=j, x=values[yindex],
+                      dims=dim(x), dimnames=dimnames(x))
+    return(y)
+  }
+  stopifnot(inherits(x, "sparseSlab"))
+  dims <- dim(x)
+  dnx <- dimnames(x)
+  stackdim <- x$stackdim
+  if(!is.matrix(values)) {
+    # vector of values.
+    check.nvector(values, dims[margin], oneok=TRUE,
+                  things=c("rows", "columns", "planes")[margin])
+    if(length(values) == 1) values <- rep(values, dims[margin])
+  } else {
+    # matrix of values.
+    # columns of matrix must match stacking dimension
+    # rows of matrix must match 'margin'
+    if(margin == stackdim)
+      stop("When values are a matrix, margin must not be stacking dimension",
+           call.=FALSE)
+    if(nrow(values) != dims[margin])
+      stop(paste("Number of rows of values", paren(nrow(values)),
+                 "does not match array size in margin", paren(dims[margin])),
+           call.=FALSE)
+    if(ncol(values) != dims[stackdim])
+      stop(paste("Number of columns of values", paren(ncol(values)),
+                 "does not match array size in stacking dimension",
+                 paren(dims[stackdim])),
+           call.=FALSE)
+  }
+  m <- lapply(x$m, as, Class="TsparseMatrix")
+  dim.each <- dims[-stackdim]
+  dn.each <- dnx[-stackdim]
+  for(k in seq_len(dims[stackdim])) {
+    mk <- m[[k]]
+    i <- mk@i + 1L
+    j <- mk@j + 1L
+    yindex <- if(margin == stackdim) k else if(margin == 1) i else j
+    yvalues <- if(is.matrix(values)) values[yindex, k] else values[yindex]
+    m[[k]] <- sparseMatrix(i=i, j=j, x=yvalues,
+                           dims=dim.each, dimnames=dn.each)
+  }
+  x$m <- m
+  return(x)
+}
+
+anyNA.sparseSlab <- function(x, recursive=FALSE) {
+  any(sapply(x$m, anyNA))
+}
+
+Ops.sparseSlab <- function(e1,e2=NULL){
+  unary <- nargs() == 1L
+  if(unary){
+    if(!is.element(.Generic, c("!", "-", "+")))
+      stop("Unary usage is undefined for this operation for sparse slabs.")
+    result <- e1
+    result$m <- lapply(result$m, .Generic)
+  } else {
+    e1val <- if(inherits(e1, "sparseSlab")) e1$m else e1
+    e2val <- if(inherits(e2, "sparseSlab")) e2$m else e2
+    result <- if(inherits(e1, "sparseSlab")) e1 else e2
+    result$m <- mapply(.Generic, e1val, e2val)
+  }
+  return(result)
+}
+
+Math.sparseSlab <- function(x, ...){
+  nslice <- length(x$m)
+  allstuff <- list(x, ...)
+  isslab <- sapply(allstuff, inherits, what="sparseSlab")
+  isspam <- sapply(allstuff, inherits, what="sparseMatrix")
+  for(i in seq_along(allstuff)) {
+    if(isslab[i]) allstuff[[i]] <- allstuff[[i]]$m else
+    if(isspam[i]) allstuff[[i]] <- rep(list(allstuff[[i]]), nslice)
+  }
+  x$m <- do.call(mapply, append(list(.Generic), allstuff))
+  return(x)
+}
+
+Summary.sparseSlab <- function(..., na.rm) {
+  args <- list(...)
+  isslab <- sapply(args, inherits, what="sparseSlab")
+  mats <-
+    if(!any(isslab)) list() else
+    Reduce(append, unname(lapply(args[isslab], getElement, name="m")))
+  matvals <- lapply(unname(mats), .Generic)
+  rslt <- do.call(.Generic, c(matvals, args[!isslab], na.rm=na.rm))
+  return(rslt)
 }
 

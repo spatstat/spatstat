@@ -2416,6 +2416,22 @@ local({
     MA <- as.array(M)
     UA <- as.array(U)
 
+    ## tests of "[<-.sparseSlab"
+    Mflip <- Mzero <- M
+    Mflip[ , , 2:1] <- M
+    stopifnot(Mflip[3,1,1] == M[3,1,2])
+    Mzero[1:3,1:3,] <- 0
+    stopifnot(all(Mzero[1,1,] == 0))
+
+    ## tests of arithmetic (Math, Ops, Summary)
+    negM <- -M
+    oneM <- 1 * M
+    twoM <- M + M
+    range(M)
+
+    ## test of anyNA method
+    anyNA(M)
+    
     ## a possible application in spatstat
     cl10 <- closepairs(cells, 0.1)
     cl12 <- closepairs(cells, 0.12)

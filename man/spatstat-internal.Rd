@@ -349,6 +349,7 @@
 \alias{plan.legend.layout}
 \alias{PoisSaddleApp}
 \alias{polytileareaEngine}
+\alias{positiveIndex}
 \alias{prettyinside}
 \alias{prettydiscrete}
 \alias{putSpatstatVariable}
@@ -780,7 +781,14 @@
 \alias{aperm.sparseSlab}
 \alias{as.array.sparseSlab}
 \alias{[.sparseSlab}
+\alias{[<-.sparseSlab}
 \alias{sumsymouterSparseSlab}
+\alias{emptySparseSlab}
+\alias{mapSparseEntries}
+\alias{anyNA.sparseSlab}
+\alias{Math.sparseSlab}
+\alias{Ops.sparseSlab}
+\alias{Summary.sparseSlab}
 %%%%
 \description{
   Internal spatstat functions.
@@ -903,7 +911,7 @@ datagen.rpoisppOnLines(lambda, L, lmax, \dots, check)
 default.clipwindow(object, epsilon)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
-deltasuffstat(model, \dots, restrict, dataonly, force)
+deltasuffstat(model, \dots, restrict, dataonly, force, sparseOK)
 Deviation(x, ref, leaveout, n, xi)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
@@ -1180,6 +1188,7 @@ plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
 polytileareaEngine(P, xrange, yrange, nx, ny)
+positiveIndex(i, nama)
 prettyinside(x, \dots)
 prettydiscrete(x, n)
 \method{print}{localpcfmatrix}(x, \dots)
@@ -1680,7 +1689,17 @@ as.sparseSlab(x, \dots, stackdim)
 \method{aperm}{sparseSlab}(a, perm, resize, \dots)
 \method{as.array}{sparseSlab}(x, \dots)
 \method{[}{sparseSlab}(x, i, j, k, drop, \dots)
+\method{[}{sparseSlab}(x, i, j, k, \dots) <- value
 sumsymouterSparseSlab(x, w, dbg)
+emptySparseSlab(typemaker, dim, stackdim)
+mapSparseEntries(x, margin, values)
+\method{anyNA}{sparseSlab}(x, recursive)
+\special{Math(x, \dots)}
+\special{Ops(e1, e2)}
+\special{Summary(\dots, na.rm = FALSE)}
+%NAMESPACE S3method("Math", "sparseSlab")
+%NAMESPACE S3method("Ops", "sparseSlab")
+%NAMESPACE S3method("Summary", "sparseSlab")
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

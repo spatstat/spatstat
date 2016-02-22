@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.194 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 5.195 $	$Date: 2016/02/22 12:57:49 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/02/16 01:39:12 $")
+                        date="$Date: 2016/02/22 12:57:49 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1142,8 +1142,10 @@ evalInterEngine <- function(X, P, E,
 deltasuffstat <- local({
   
   deltasuffstat <- function(model, ...,
-                            restrict=TRUE, dataonly=TRUE, force=FALSE) {
+                            restrict=TRUE, dataonly=TRUE, force=FALSE,
+                            sparseOK=FALSE) {
     stopifnot(is.ppm(model))
+    sparseOK <- sparseOK && spatstat.options('developer')
     if(dataonly) {
       X <- data.ppm(model)
       nX <- npoints(X)
@@ -1153,7 +1155,10 @@ deltasuffstat <- local({
     }
     ncoef <- length(coef(model))
     inte <- as.interact(model)
-    zeroes <- array(0, dim=c(nX, nX, ncoef)) 
+    
+    zeroes <- if(!sparseOK) array(0, dim=c(nX, nX, ncoef)) else
+              emptySparseSlab(double, dim=c(nX, nX, ncoef), stackdim=3)
+    
     if(is.poisson(inte))
       return(zeroes)
     
@@ -1169,23 +1174,31 @@ deltasuffstat <- local({
     ## Look for member function $delta2 in the interaction
     v <- NULL
     if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
-      v <- delta2(X, inte, model$correction)
+      v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     }
     ## Look for generic $delta2 function for the family
     if(is.null(v) &&
        !is.null(delta2 <- inte$family$delta2) &&
        is.function(delta2))
-      v <- delta2(X, inte, model$correction)
+      v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     ## no luck?
     if(is.null(v)) {
       if(!force)
         return(NULL)
       ## use brute force algorithm
-      v <- if(dataonly) deltasufX(model) else deltasufQ(model)
+      v <-
+        if(dataonly) deltasufX(model, sparseOK) else deltasufQ(model, sparseOK)
     }
     ## make it a 3D array
-    if(length(dim(v)) == 2)
-      v <- array(v, dim=c(dim(v), 1))
+    if(length(dim(v)) != 3) {
+      if(is.matrix(v)) {
+        v <- array(v, dim=c(dim(v), 1))
+      } else if(inherits(v, "sparseMatrix")) {
+        v <- as.sparseSlab(v, stackdim=3)
+      }
+    }
+    if(!sparseOK && inherits(v, "sparseSlab"))
+      v <- as.array(v)
   
     if(restrict) {
       ## kill contributions from points outside the domain of pseudolikelihood
@@ -1222,7 +1235,7 @@ deltasuffstat <- local({
 
   ## compute deltasuffstat using partialModelMatrix
 
-  deltasufX <- function(model) {
+  deltasufX <- function(model, sparseOK=FALSE) {
     stopifnot(is.ppm(model))
     X <- data.ppm(model)
   
@@ -1311,7 +1324,7 @@ deltasuffstat <- local({
     return(delta)
   }
 
-  deltasufQ <- function(model) {
+  deltasufQ <- function(model, sparseOK) {
     stopifnot(is.ppm(model))
 
     Q <- quad.ppm(model)
