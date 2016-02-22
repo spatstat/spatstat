@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.029
+        CHANGES IN spatstat VERSION 1.44-1.030
 
 OVERVIEW
 
@@ -180,6 +180,11 @@ BUGS
 
    o anova.mppm
    Crashed sometimes with a message about mismatched coefficients.
+   [Spotted by Sven Wagner.]
+   Fixed.
+
+   o anova.mppm
+   Crashed sometimes with a message about unrecognised option 'type="score"'.
    [Spotted by Sven Wagner.]
    Fixed.
 

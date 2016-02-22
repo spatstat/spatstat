@@ -4,12 +4,15 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.22 $ $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.23 $ $Date: 2016/02/22 04:03:50 $
 #
 
-residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
-                 fittedvalues = fitted.ppm(object, check=check, drop=drop),
-                          new.coef=NULL, quad=NULL) {
+residuals.ppm <-
+  function(object, type="raw", ...,
+           check=TRUE, drop=FALSE,
+           fittedvalues = NULL,
+           new.coef=NULL, dropcoef=FALSE,
+           quad=NULL) {
   
   verifyclass(object, "ppm")
   trap.extra.arguments(..., .Context="In residuals.ppm")
@@ -29,17 +32,18 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
   given.fitted <- !missing(fittedvalues) && !is.null(fittedvalues)
 
   # ................. determine fitted values .................
-  
+
+  NewCoef <- NULL
   if(is.null(new.coef) && is.null(quad)) {
     # use 'object' without modification
     # validate 'object'
-    if(check && missing(fittedvalues) && damaged.ppm(object)) 
+    if(check && !given.fitted && damaged.ppm(object)) 
       stop("object format corrupted; try update(object, use.internal=TRUE)")
   } else {
     # determine a new set of model coefficients
     if(!is.null(new.coef)) {
       # use specified model parameters
-      modelcoef <- new.coef
+      NewCoef <- new.coef
     } else {
       # estimate model parameters using a (presumably) denser set of dummy pts
       # Determine new quadrature scheme
@@ -55,12 +59,13 @@ residuals.ppm <- function(object, type="raw", ..., check=TRUE, drop=FALSE,
       }
       # refit the model with new quadscheme
       hi.res.fit <- update(object, hi.res.quad)
-      modelcoef <- coef(hi.res.fit)
+      NewCoef <- coef(hi.res.fit)
     }
-    # now compute fitted values using new coefficients
-    if(!given.fitted) 
-      fittedvalues <- fitted(object, drop=drop, new.coef=modelcoef)
   }
+  #' now compute fitted values using new coefficients
+  if(!given.fitted) 
+    fittedvalues <- fitted(object, drop=drop, check=check,
+                           new.coef=NewCoef, dropcoef=dropcoef)
 
   # ..................... compute residuals .....................
 

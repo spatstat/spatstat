@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.7 $ $Date: 2016/02/11 09:36:11 $
+# $Revision: 1.8 $ $Date: 2016/02/22 04:20:20 $
 #
 
 anova.mppm <- local({
@@ -201,9 +201,12 @@ anova.mppm <- local({
               if(df == 1) {
                 cfac[i] <- H[-injection,-injection]/G[-injection,-injection]
               } else {
-                Res <- residuals(bigger, type="score",
-                                 new.coef=thetaDot, drop=TRUE)
-                U <- integral.msr(Res)
+                Res <- lapply(subfits(bigger),
+                              residuals,
+                              type="score",
+                              drop=TRUE, 
+                              new.coef=thetaDot, dropcoef=TRUE)
+                U <- sumcompatible(lapply(Res, integral.msr), names(thetaDot))
                 Uo <- U[-injection]
                 Uo <- matrix(Uo, ncol=1)
                 Hinv <- solve(H)
@@ -234,6 +237,23 @@ anova.mppm <- local({
     return(result)
   }
 
+  sumcompatible <- function(xlist, required) {
+    result <- numeric(length(required))
+    names(result) <- required
+    for(x in xlist) {
+      namx <- names(x)
+      if(!all(ok <- (namx %in% required)))
+        stop(paste("Internal error in sumcompatible:",
+                   "list entry", i, "contains unrecognised",
+                   ngettext(sum(!ok), "value", "values"),
+                   commasep(sQuote(namx[!ok]))),
+             call.=FALSE)
+      inject <- match(namx, required)
+      result[inject] <- result[inject] + x
+    }
+    return(result)
+  }
+    
   anova.mppm
 })
 

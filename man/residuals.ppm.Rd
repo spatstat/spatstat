@@ -8,9 +8,11 @@
   compute residuals.
 }
 \usage{
-  \method{residuals}{ppm}(object, type="raw", \dots, check=TRUE, drop=FALSE,
-                fittedvalues=fitted.ppm(object, check=check, drop=drop),
-                new.coef=NULL, quad=NULL)
+  \method{residuals}{ppm}(object, type="raw", \dots,
+                check=TRUE, drop=FALSE,
+                fittedvalues=NULL, 
+                new.coef=NULL, dropcoef=FALSE,
+                quad=NULL)
 }
 \arguments{
   \item{object}{
@@ -48,6 +50,9 @@
     Optional. Numeric vector of coefficients for the model,
     replacing \code{coef(object)}.
     See the section on Modified Residuals below.
+  }
+  \item{dropcoef}{
+    Internal use only.
   }
   \item{quad}{
     Optional. Data specifying how to re-fit the model.
