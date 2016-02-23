@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.117 $  $Date: 2016/02/21 09:10:50 $
+##  $Revision: 1.120 $  $Date: 2016/02/23 10:47:30 $
 ##
 
 vcov.ppm <- local({
@@ -476,7 +476,9 @@ vcalcGibbsGeneral <- function(model,
     if(parallel) {
       ## compute second order difference
       ##  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
-      ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=!logi)
+      sparse <- spatstat.options('developer')
+      ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=sparse)
+      sparse <- sparse && inherits(ddS, "sparseSlab")
       if(is.null(ddS)) {
         if(asked.parallel)
           warning("parallel option not available - reverting to loop")
@@ -489,15 +491,16 @@ vcalcGibbsGeneral <- function(model,
         ## outer(ddS[,i,j], ddS[,j,i])
         ddSok <- ddS[ , ok, ok, drop=FALSE]
         A3 <- sumsymouter(ddSok)
-        ##
-        if(spatstat.options('developer') && inherits(ddS, "sparseSlab")) {
+        ## compute pairweight and other arrays
+        if(sparse) {
+          ## Entries are only required for pairs i,j which interact.
           ## mom.array[ ,i,j] = h(X[i] | X)
-          mom.array <- mapSparseEntries(ddS, margin=2, values=t(m))
+          mom.array <- mapSparseEntries(ddS, margin=2, values=m)
           ## momdel[ ,i,j] = h(X[i] | X[-j])
           momdel <- mom.array - ddS
+          ## pairweight[i,j] = lambda(X[i] | X[-j] )/lambda( X[i] | X ) - 1
           pairweight <- expm1(tensor1x1(-use.coef, ddS))
         } else {
-          ## compute pairweight and other arrays
           ## mom.array[ ,i,j] = h(X[i] | X)
           mom.array <- array(t(m), dim=c(p, nX, nX))
           ## momdel[ ,i,j] = h(X[i] | X[-j])
@@ -518,16 +521,34 @@ vcalcGibbsGeneral <- function(model,
         A2 <- sumsymouter(momdelok, w=pwok)
         dimnames(A2) <- dimnames(A3) <- dnames
         if(logi){
-          ## lam.array[ ,i,j] = lambda(X[i] | X)
-          lam.array <- array(lam, c(nX,nX,p))
-          lam.array <- aperm(lam.array, c(3,1,2))
-          ## lamdel.array[,i,j] = lambda(X[i] | X[-j])
-          lamdel.array <- array(lamdel, c(nX,nX,p))
-          lamdel.array <- aperm(lamdel.array, c(3,1,2))
-          momdellogi <- rho/(lamdel.array+rho)*momdel
+          if(!sparse) {
+            ## lam.array[ ,i,j] = lambda(X[i] | X)
+            lam.array <- array(lam, c(nX,nX,p))
+            lam.array <- aperm(lam.array, c(3,1,2))
+            ## lamdel.array[,i,j] = lambda(X[i] | X[-j])
+            lamdel.array <- array(lamdel, c(nX,nX,p))
+            lamdel.array <- aperm(lamdel.array, c(3,1,2))
+            momdellogi <- rho/(lamdel.array+rho)*momdel
+            ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
+          } else {
+            nslice <- dim(ddS)[1]
+            ## lam.array[ ,i,j] = lambda(X[i] | X)
+            lam.array <- mapSparseEntries(ddS, margin=2, lam)
+            ## lamdel.array[,i,j] = lambda(X[i] | X[-j])
+            pairweight.array <-
+              sparseSlab(rep(list(pairweight), nslice), stackdim=1)
+            lamdel.array <- pairweight.array * lam.array + lam.array
+            lamdel.logi <- applySparseEntries(lamdel.array,
+                                              function(y,rho) { rho/(rho+y) },
+                                              rho=rho)
+            lam.logi <- applySparseEntries(lam.array,
+                                          function(y,rho) { rho/(rho+y) },
+                                          rho=rho)
+            momdellogi <- momdel * lamdel.logi
+            ddSlogi <-    mom.array * lam.logi - momdellogi
+          }
           momdellogiok <- momdellogi[ , ok, ok, drop=FALSE]
           A2log <- sumsymouter(momdellogiok, w=pwok)
-          ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
           ddSlogiok <- ddSlogi[ , ok, ok, drop=FALSE]
           A3log <- sumsymouter(ddSlogiok)
           dimnames(A2log) <- dimnames(A3log) <- dnames

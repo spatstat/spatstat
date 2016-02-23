@@ -4,7 +4,7 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.12 $  $Date: 2016/02/23 00:42:05 $
+#' $Revision: 1.13 $  $Date: 2016/02/23 10:47:55 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
@@ -339,7 +339,7 @@ as.array.sparseSlab <- function(x, ...) {
   return(z)
 }
 
-mapSparseEntries <- function(x, margin, values) {
+mapSparseEntries <- function(x, margin, values, conform=TRUE) {
   # replace the NONZERO entries of sparse matrix or array
   # by values[l] where l is one of the slice indices
   if(inherits(x, "sparseMatrix")) {
@@ -381,13 +381,26 @@ mapSparseEntries <- function(x, margin, values) {
                  paren(dims[stackdim])),
            call.=FALSE)
   }
-  m <- lapply(x$m, as, Class="TsparseMatrix")
+  m <- x$m
+  if(!conform) {
+    # use a different pattern of (i,j) for each matrix
+    m <- lapply(m, as, Class="TsparseMatrix")
+  } else {
+    # use a common template pattern of (i,j)
+    m <- lapply(m, as, Class="lgCMatrix")
+    template <- Reduce("|", m)
+    template <- as(template, Class="TsparseMatrix")
+    i <- template@i + 1L
+    j <- template@j + 1L
+  }
   dim.each <- dims[-stackdim]
   dn.each <- dnx[-stackdim]
   for(k in seq_len(dims[stackdim])) {
-    mk <- m[[k]]
-    i <- mk@i + 1L
-    j <- mk@j + 1L
+    if(!conform) {
+      mk <- m[[k]]
+      i <- mk@i + 1L
+      j <- mk@j + 1L
+    }
     yindex <- if(margin == stackdim) k else if(margin == 1) i else j
     yvalues <- if(is.matrix(values)) values[yindex, k] else values[yindex]
     m[[k]] <- sparseMatrix(i=i, j=j, x=yvalues,
@@ -409,10 +422,64 @@ Ops.sparseSlab <- function(e1,e2=NULL){
     result <- e1
     result$m <- lapply(result$m, .Generic)
   } else {
-    e1val <- if(inherits(e1, "sparseSlab")) e1$m else e1
-    e2val <- if(inherits(e2, "sparseSlab")) e2$m else e2
-    result <- if(inherits(e1, "sparseSlab")) e1 else e2
-    result$m <- mapply(.Generic, e1val, e2val)
+    dim1 <- dim(e1)
+    dim2 <- dim(e2)
+    s1 <- inherits(e1, "sparseSlab")
+    s2 <- inherits(e2, "sparseSlab")
+    if(!s1 && !s2) {
+      stop("Internal error: Ops.sparseSlab called on other data", call.=FALSE)
+    }
+    # There is at least one sparseSlab
+    bothslabs <- s1 && s2
+    #
+    if(length(dim1) == length(dim2)) {
+      # both are 3D 
+      if(all(dim1 == dim2)) {
+        if(bothslabs && e1$stackdim == e2$stackdim) {
+          # matching structures: apply Generic to each entry
+          m <- mapply(.Generic, e1=e1$m, e2=e2$m)
+          result <- sparseSlab(m, stackdim=e1$stackdim)
+          return(result)
+        } else {
+          # One argument is not a slab, or stacking dimensions are different.
+          # Convert to arrays
+          result <- do.call(.Generic, list(e1=as.array(e1), e2=as.array(e2)))
+          return(result)
+        }
+      }
+      ## Dimensions do not match; try dropping dimensions
+      if(any(dim1 == 1)) {
+        e1 <- e1[drop=TRUE]
+        dim1 <- dim(e1)
+        s1 <- inherits(e1, "sparseSlab")
+      } else if(any(dim2 == 1)) {
+        e2 <- e2[drop=TRUE]
+        dim2 <- dim(e2)
+        s2 <- inherits(e2, "sparseSlab")
+      } 
+    }
+    # Numbers of dimensions are different
+    if(length(dim1) < length(dim2)) {
+      if(s2 && (e2$stackdim == 3) && identical(dim1, dim2[-3])) {
+        ## sweep the two-dimensional object 'e1' over the slab 'e2'
+        m <- mapply(.Generic, e1=e1, e2=e2$m)
+        result <- sparseSlab(m)
+        return(result)
+      }
+    }
+    if(length(dim2) < length(dim1) &&
+       s1 && (e1$stackdim == 3) && identical(dim2, dim1[-3])) {
+      ## sweep the two-dimensional object 'e2' over the slab 'e1'
+      m <- mapply(.Generic, e1=e1$m, e2=e2)
+      result <- sparseSlab(m)
+      return(result)
+    } 
+    # Give up
+    if(length(dim1) == 3) e1 <- as.array(e1) else
+    if(length(dim1) == 2) e1 <- as.matrix(e1) 
+    if(length(dim2) == 3) e2 <- as.array(e2) else
+    if(length(dim2) == 2) e2 <- as.matrix(e2) 
+    result <- do.call(.Generic, list(e1=e1, e2=e2))
   }
   return(result)
 }
@@ -421,10 +488,9 @@ Math.sparseSlab <- function(x, ...){
   nslice <- length(x$m)
   allstuff <- list(x, ...)
   isslab <- sapply(allstuff, inherits, what="sparseSlab")
-  isspam <- sapply(allstuff, inherits, what="sparseMatrix")
   for(i in seq_along(allstuff)) {
-    if(isslab[i]) allstuff[[i]] <- allstuff[[i]]$m else
-    if(isspam[i]) allstuff[[i]] <- rep(list(allstuff[[i]]), nslice)
+    allstuff[[i]] <-
+      if(isslab[i]) allstuff[[i]]$m else rep(list(allstuff[[i]]), nslice)
   }
   x$m <- do.call(mapply, append(list(.Generic), allstuff))
   return(x)
@@ -440,4 +506,33 @@ Summary.sparseSlab <- function(..., na.rm) {
   rslt <- do.call(.Generic, c(matvals, args[!isslab], na.rm=na.rm))
   return(rslt)
 }
+
+applySparseEntries <- local({
+
+  applySparseEntries <- function(x, f, ...) {
+    ## apply vectorised function 'f' only to the nonzero entries of 'x'
+    if(inherits(x, "sparseMatrix")) {
+      x <- applytoxslot(x, f, ...)
+    } else if(inherits(x, "sparseSlab")) {
+      x$m <- lapply(x$m, applytoxslot, f=f, ...)
+    } else {
+      x <- f(x, ...)
+    }
+    return(x)
+  }
+
+  applytoxslot <- function(x, f, ...) {
+    xx <- x@x
+    n <- length(xx)
+    xx <- f(xx, ...)
+    if(length(xx) != n)
+      stop(paste("Function f returned the wrong number of values:",
+                 length(xx), "instead of", n),
+           call.=FALSE)
+    x@x <- xx
+    return(x)
+  }
+  
+  applySparseEntries
+})
 

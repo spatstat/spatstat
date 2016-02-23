@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.30 $	$Date: 2016/02/11 10:17:12 $
+#    $Revision: 2.32 $	$Date: 2016/02/23 05:43:40 $
 #
 #    Geyer's saturation process
 #
@@ -159,13 +159,13 @@ Geyer <- local({
            answer <- answer[originalrows, , drop=FALSE]
          return(answer)
        },
-       delta2 = function(X,inte,correction, ...) {
+       delta2 = function(X,inte,correction, ..., sparseOK=FALSE) {
          # Sufficient statistic for second order conditional intensity
          # h(X[i] | X) - h(X[i] | X[-j])
          # Geyer interaction
          r   <- inte$par$r
          sat <- inte$par$sat
-         result <- geyerdelta2(X,r,sat)
+         result <- geyerdelta2(X,r,sat,sparseOK)
          return(result)
        }
   )
@@ -229,7 +229,7 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
 
 geyerdelta2 <- local({
 
-  geyerdelta2 <- function(X, r, sat) {
+  geyerdelta2 <- function(X, r, sat, sparseOK) {
     # Sufficient statistic for second order conditional intensity
     # Geyer model
     stopifnot(is.numeric(sat) && length(sat) == 1 && sat > 0)
@@ -237,17 +237,19 @@ geyerdelta2 <- local({
     if(is.ppp(X)) {
       # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
       # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
-      return(geydelppp(X, r, sat))
+      return(geydelppp(X, r, sat, sparseOK))
     } else if(inherits(X, "quad")) {
       # evaluate \Delta_{u_i} \Delta_{u_j} S(x) for quadrature points u_i, u_j
-      return(geydelquad(X, r, sat))
+      return(geydelquad(X, r, sat, sparseOK))
     } else stop("Internal error: X should be a ppp or quad object")
   }
 
-  geydelppp <- function(X, r, sat) {
+  geydelppp <- function(X, r, sat, sparseOK) {
     # initialise
     nX <- npoints(X)
-    result <- matrix(0, nX, nX)
+    result <- if(!sparseOK) matrix(0, nX, nX) else
+              sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
+                           dims=c(nX, nX))
     # identify all r-close pairs (ordered pairs i ~ j)
     a <- closepairs(X, r, what="indices")
     I <- a$i
@@ -269,26 +271,32 @@ geyerdelta2 <- local({
     vees <- edges2vees(I[ord], J[ord], nX)
     # evaluate contribution of (k, i, j)
     KK <- vees$i
-    II <- factor(vees$j, levels=1:nX)
-    JJ <- factor(vees$k, levels=1:nX)
     tKK <- tvals[KK]
     contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1) + pmin(sat, tKK-2)
     # for each (i, j), sum the contributions over k 
-    delta3 <- tapply(contribKK, list(I=II, J=JJ), sum)
-    delta3[is.na(delta3)] <- 0
+    II <- vees$j
+    JJ <- vees$k
+    if(!sparseOK) {
+      II <- factor(II, levels=1:nX)
+      JJ <- factor(JJ, levels=1:nX)
+      delta3 <- tapply(contribKK, list(I=II, J=JJ), sum)
+      delta3[is.na(delta3)] <- 0
+    } else {
+      delta3 <- sparseMatrix(i=II, j=JJ, x=contribKK, dims=c(nX, nX))
+    }
     # symmetrise and combine
     result <- result + delta3 + t(delta3)
-    # if X is a ppp, return now
-    if(is.null(D))
-      return(result)
+    return(result)
   }
 
-  geydelquad <- function(Q, r, sat) {
+  geydelquad <- function(Q, r, sat, sparseOK) {
     Z <- is.data(Q)
     U <- union.quad(Q)
     nU <- npoints(U)
     nX <- npoints(Q$data)
-    result <- matrix(0, nU, nU)
+    result <- if(!sparseOK) matrix(0, nX, nX) else
+              sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
+                           dims=c(nX, nX))
     # identify all r-close pairs U[i], U[j]
     a <- closepairs(U, r, what="indices")
     I <- a$i
@@ -332,11 +340,15 @@ geyerdelta2 <- local({
     tKIJ <- tKK - zII - zJJ 
     contribKK <-
       pmin(sat, tKIJ + 2) - 2 * pmin(sat, tKIJ + 1) + pmin(sat, tKIJ)
-    # for each (i, j), sum the contributions over k 
-    II <- factor(II, levels=1:nU)
-    JJ <- factor(JJ, levels=1:nU)
-    delta4 <- tapply(contribKK, list(I=II, J=JJ), sum)
-    delta4[is.na(delta4)] <- 0
+    # for each (i, j), sum the contributions over k
+    if(!sparseOK) {
+      II <- factor(II, levels=1:nU)
+      JJ <- factor(JJ, levels=1:nU)
+      delta4 <- tapply(contribKK, list(I=II, J=JJ), sum)
+      delta4[is.na(delta4)] <- 0
+    } else {
+      delta4 <- sparseMatrix(i=II, j=JJ, x=contribKK, dims=c(nX, nX))
+    }
     # combine
     result <- result + delta4
     return(result)

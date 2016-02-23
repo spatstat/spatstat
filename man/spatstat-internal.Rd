@@ -785,6 +785,7 @@
 \alias{sumsymouterSparseSlab}
 \alias{emptySparseSlab}
 \alias{mapSparseEntries}
+\alias{applySparseEntries}
 \alias{anyNA.sparseSlab}
 \alias{Math.sparseSlab}
 \alias{Ops.sparseSlab}
@@ -1057,7 +1058,7 @@ getppmOriginalCovariates(object)
 getSpatstatVariable(name)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
-geyerdelta2(X,r,sat)
+geyerdelta2(X,r,sat,sparseOK)
 GLMpredict(fit, data, coefs, changecoef, type)
 good.names(nama, defaults, suffices)
 good.correction.K(X)
@@ -1692,7 +1693,8 @@ as.sparseSlab(x, \dots, stackdim)
 \method{[}{sparseSlab}(x, i, j, k, \dots) <- value
 sumsymouterSparseSlab(x, w, dbg)
 emptySparseSlab(typemaker, dim, stackdim)
-mapSparseEntries(x, margin, values)
+mapSparseEntries(x, margin, values, conform)
+applySparseEntries(x, f, \dots)
 \method{anyNA}{sparseSlab}(x, recursive)
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
