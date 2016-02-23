@@ -4,7 +4,7 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.11 $  $Date: 2016/02/22 12:03:55 $
+#' $Revision: 1.12 $  $Date: 2016/02/23 00:42:05 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
@@ -255,11 +255,22 @@ aperm.sparseSlab <- function(a, perm=NULL, resize=TRUE, ...) {
     }
   } else if(involves.stackdim && !involves.matrices) {
     ## index selects one or more of the sparse matrices
-    stackindex <- positiveIndex(indices[[stackdim]], dnx[[stackdim]])
+    stackindex <- positiveIndex(indices[[stackdim]],
+                                dnx[[stackdim]], dimX[stackdim])
     nslice <- length(stackindex)
     if(nslice == 1) {
       ## assigning values into a single slice: do it
-      x$m[[stackindex]][] <- value
+      if(length(dimV) == 3) {
+        value <- value[drop=TRUE]
+        dimV <- dim(value)
+        if(length(dimV) == 3)
+          stop("Cannot assign a 3D array into a 2D slice", call.=FALSE)
+      }
+      if(inherits(value, "sparseMatrix")) {
+        x$m[[stackindex]] <- value
+      } else {
+        x$m[[stackindex]] [] <- value[ ]
+      }
     } else if(nslice > 1) {
       ## assigning values to multiple slices
       if(length(dimV == 3)) {

@@ -1668,9 +1668,9 @@ requireversion <- function(pkg, ver) {
   invisible(NULL)
 }
 
-positiveIndex <- function(i, nama) {
+positiveIndex <- function(i, nama, len=length(nama)) {
   #' convert any kind of index to a positive integer sequence
-  x <- seq_along(nama)
+  x <- seq_len(len)
   names(x) <- nama
   y <- x[i]
   return(unname(y))

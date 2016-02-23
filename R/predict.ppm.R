@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.94 $	$Date: 2016/02/13 04:33:34 $
+#	$Revision: 1.95 $	$Date: 2016/02/23 02:27:03 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -745,7 +745,19 @@ equalpairs <- function(U, X, marked=FALSE) {
   
 fill.coefs <- function(coefs, required) {
   # 'coefs' should contain all the 'required' values
+  coefsname <- deparse(substitute(coefs))
   nama <- names(coefs)
+  if(is.null(nama)) {
+    #' names cannot be matched
+    if(length(coefs) != length(required))
+      stop(paste("The unnamed argument", sQuote(coefsname),
+                 "has", length(coefs), "entries, but",
+                 length(required), "are required"),
+           call.=FALSE)
+    # blithely assume they match 1-1
+    names(coefs) <- required
+    return(coefs)
+  }
   stopifnot(is.character(required))
   if(identical(nama, required)) return(coefs)
   inject <- match(nama, required)

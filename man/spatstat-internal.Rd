@@ -1188,7 +1188,7 @@ plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
 polytileareaEngine(P, xrange, yrange, nx, ny)
-positiveIndex(i, nama)
+positiveIndex(i, nama, len)
 prettyinside(x, \dots)
 prettydiscrete(x, n)
 \method{print}{localpcfmatrix}(x, \dots)

@@ -1365,7 +1365,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.2 $ $Date: 2014/12/31 04:24:30 $
+#  $Revision: 1.3 $ $Date: 2016/02/23 02:37:41 $
 #
 
 require(spatstat)
@@ -1384,6 +1384,16 @@ local({
   p2 <- predict(fit, type="cif", ngrid=10)
   stopifnot(all(is.finite(as.matrix(p1))))
   stopifnot(all(is.finite(as.matrix(p2))))
+
+  # test of 'new.coef' mechanism
+  fut <- ppm(cells ~ x, Strauss(0.15), rbord=0)
+  p0 <- predict(fut, type="cif")
+  pe <- predict(fut, type="cif", new.coef=coef(fut))
+  pn <- predict(fut, type="cif", new.coef=unname(coef(fut)))
+  if(max(abs(pe-p0)) > 0.01)
+    stop("new.coef mechanism is broken!")
+  if(max(abs(pn-p0)) > 0.01)
+    stop("new.coef mechanism gives wrong answer, for unnamed vectors")
 })
 
 #
@@ -2417,11 +2427,15 @@ local({
     UA <- as.array(U)
 
     ## tests of "[<-.sparseSlab"
-    Mflip <- Mzero <- M
+    Mflip <- Mzero <- MandM <- M
     Mflip[ , , 2:1] <- M
     stopifnot(Mflip[3,1,1] == M[3,1,2])
     Mzero[1:3,1:3,] <- 0
     stopifnot(all(Mzero[1,1,] == 0))
+    M2a <- M[,,2,drop=FALSE]
+    M2d <- M[,,2,drop=TRUE]
+    MandM[,,1] <- M2a
+    MandM[,,1] <- M2d
 
     ## tests of arithmetic (Math, Ops, Summary)
     negM <- -M
