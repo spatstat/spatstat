@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.39 $	$Date: 2016/02/24 09:38:50 $
+#    $Revision: 1.40 $	$Date: 2016/02/24 10:45:53 $
 #
 #    The area interaction
 #
@@ -296,7 +296,7 @@ areadelta2 <- local({
     return(result)
   }
 
-  areadelquad <- function(Q, D, r) {
+  areadelquad <- function(Q, r) {
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
     # Evaluate \Delta_{u_j} \Delta_{u_i} S(x) for quadrature points 
@@ -309,8 +309,8 @@ areadelta2 <- local({
     yy <- U$y
     # identify all close pairs of quadrature points
     cl <- closepairs(U, 2 * r, what="indices")
-    I <- b$i
-    J <- b$j
+    I <- cl$i
+    J <- cl$j
     # find neighbours in X of each quadrature point
     zJ <- Z[J]
     neigh <- split(J[zJ], factor(I[zJ], levels=1:nU))
