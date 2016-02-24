@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.034
+        CHANGES IN spatstat VERSION 1.44-1.035
 
 OVERVIEW
 
     o We thank Monsuru Adepeju, Mario D'Antuono, Markus Herrmann, 
     Paul Hewson, Greg Mcwiggan, Suman Rakshit and Sven Wagner 
     for contributions.
+
+    o Important bug fix in leverage/influence diagnostics for Gibbs models.
 
     o Numerous bug fixes in code for replicated point patterns.
 
@@ -132,6 +134,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Performance slightly improved.
 
 BUGS
+
+   o leverage.ppm, influence.ppm, parres.ppm, addvar.ppm
+   Calculations were completely incorrect for Gibbs models, 
+   due to a coding error.
+   Fixed.
+
+   o leverage.ppm, influence.ppm, parres.ppm, addvar.ppm
+   Crashed for Gibbs models in which the coefficient vector had length 1,
+   such as the stationary Hardcore model.
+   Fixed.
 
    o subfits
    Crashed if the model included factor-valued spatial covariates.

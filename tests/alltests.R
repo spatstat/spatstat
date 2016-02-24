@@ -645,17 +645,27 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.1 $ $Date: 2016/02/24 01:30:31 $
+#'   $Revision: 1.2 $ $Date: 2016/02/24 06:40:35 $
 #' 
 
 require(spatstat)
 local({
+  # Strauss()$delta2
   fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
   leverage(fitS)
   influence(fitS)
+  # Geyer()$delta2
   fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
   leverage(fitG)
   influence(fitG)
+  # pairwise.family$delta2
+  fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
+  leverage(fitD)
+  influence(fitD)
+  # ppmInfluence; offset is present; coefficient vector has length 1
+  fitH <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
+  leverage(fitH)
+  influence(fitH)
 })
 
 ##
