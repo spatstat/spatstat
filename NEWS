@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.035
+        CHANGES IN spatstat VERSION 1.44-1.036
 
 OVERVIEW
 
@@ -137,7 +137,7 @@ BUGS
 
    o leverage.ppm, influence.ppm, parres.ppm, addvar.ppm
    Calculations were completely incorrect for Gibbs models, 
-   due to a coding error.
+   due to a coding error. 
    Fixed.
 
    o leverage.ppm, influence.ppm, parres.ppm, addvar.ppm

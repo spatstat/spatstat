@@ -13,7 +13,7 @@
 
   WEIGHTS   (#ifdef) use weights 
 
-  $Revision: 1.3 $  $Date: 2016/02/20 11:15:05 $
+  $Revision: 1.4 $  $Date: 2016/02/24 09:57:16 $
 
  */
 
@@ -60,7 +60,7 @@ void FNAME(m, n,
   R = *lenw;
 #endif
 
-  if(L <= 1) return;
+  if(L <= 1 || N <= 1 || M <= 0) return;
 
   /* Create space to store array in k-major order*/
   it = (int *) R_alloc(L, sizeof(int));
@@ -84,6 +84,9 @@ void FNAME(m, n,
 
   /* Now process array */
   lstart = tstart = r = 0;
+
+  lend = tend = -1; /* to keep compiler happy */
+
   while(lstart < L && tstart < L) {
     /* Consider a new entry x[,j,k] */
     j = jx[lstart];
@@ -156,8 +159,8 @@ void FNAME(m, n,
 #ifdef WEIGHTS
     }
 #endif
-    lstart = lend+1;
-    tstart = tend+1;
+    lstart = ((lend > lstart) ? lend : lstart) + 1;
+    tstart = ((tend > tstart) ? tend : tstart) + 1;
   }
 }
 

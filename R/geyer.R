@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.33 $	$Date: 2016/02/24 00:44:24 $
+#    $Revision: 2.34 $	$Date: 2016/02/24 09:38:44 $
 #
 #    Geyer's saturation process
 #
@@ -165,7 +165,7 @@ Geyer <- local({
          # Geyer interaction
          r   <- inte$par$r
          sat <- inte$par$sat
-         result <- geyerdelta2(X,r,sat,sparseOK)
+         result <- geyerdelta2(X, r, sat, sparseOK=sparseOK)
          return(result)
        }
   )
@@ -229,7 +229,7 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
 
 geyerdelta2 <- local({
 
-  geyerdelta2 <- function(X, r, sat, sparseOK) {
+  geyerdelta2 <- function(X, r, sat, ..., sparseOK=FALSE) {
     # Sufficient statistic for second order conditional intensity
     # Geyer model
     stopifnot(is.numeric(sat) && length(sat) == 1 && sat > 0)

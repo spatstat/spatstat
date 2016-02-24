@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.38 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.39 $	$Date: 2016/02/24 09:38:50 $
 #
 #    The area interaction
 #
@@ -126,7 +126,7 @@ AreaInter <- local({
            else
              return(2 * r)
          },
-         delta2 = function(X, inte, correction) {
+         delta2 = function(X, inte, correction, ...) {
            # Sufficient statistic for second order conditional intensity
            # Area-interaction model 
            if(!(correction %in% c("border", "none")))
