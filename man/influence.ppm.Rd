@@ -79,8 +79,6 @@
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
 }
 \seealso{
   \code{\link{leverage.ppm}},
@@ -89,7 +87,7 @@
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
-   fit <- ppm(X, ~x+y)
+   fit <- ppm(X ~x+y)
    plot(influence(fit))
 }
 \keyword{spatial}

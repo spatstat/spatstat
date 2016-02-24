@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.32 $	$Date: 2016/02/23 05:43:40 $
+#    $Revision: 2.33 $	$Date: 2016/02/24 00:44:24 $
 #
 #    Geyer's saturation process
 #
@@ -294,9 +294,9 @@ geyerdelta2 <- local({
     U <- union.quad(Q)
     nU <- npoints(U)
     nX <- npoints(Q$data)
-    result <- if(!sparseOK) matrix(0, nX, nX) else
+    result <- if(!sparseOK) matrix(0, nU, nU) else
               sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
-                           dims=c(nX, nX))
+                           dims=c(nU, nU))
     # identify all r-close pairs U[i], U[j]
     a <- closepairs(U, r, what="indices")
     I <- a$i

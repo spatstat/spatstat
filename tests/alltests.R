@@ -640,6 +640,24 @@ local({
 
   NULL
 })
+#'
+#'    tests/leverinf.R
+#'
+#'   leverage and influence for Gibbs models
+#' 
+#'   $Revision: 1.1 $ $Date: 2016/02/24 01:30:31 $
+#' 
+
+require(spatstat)
+local({
+  fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
+  leverage(fitS)
+  influence(fitS)
+  fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
+  leverage(fitG)
+  influence(fitG)
+})
+
 ##
 ##    tests/linalgeb.R
 ##

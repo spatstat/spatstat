@@ -83,8 +83,6 @@ leverage(model, ...)
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
 }
 \seealso{
   \code{\link{influence.ppm}},
@@ -93,7 +91,7 @@ leverage(model, ...)
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
-   fit <- ppm(X, ~x+y)
+   fit <- ppm(X ~x+y)
    plot(leverage(fit))
 }
 \keyword{spatial}

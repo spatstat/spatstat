@@ -4,7 +4,7 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.13 $  $Date: 2016/02/23 10:47:55 $
+#' $Revision: 1.14 $  $Date: 2016/02/23 10:54:42 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
