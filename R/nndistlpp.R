@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.11 $ $Date: 2015/12/07 10:23:10 $
+#  $Revision: 1.12 $ $Date: 2016/02/25 01:35:26 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -218,16 +218,30 @@ nncross.lpp <- local({
     k <- 1:kmax
   }
   
-  toomany <- (kmax > nY-1)
+  toomany <- (kmax > nY)
   if(toomany) {
     paddist <- matrix(Inf, nX, kmax)
     padwhich <- matrix(NA_integer_, nX, kmax)
-    kmax <- nY-1
+    kmax <- nY
     kuse <- k[k <= kmax]
   } else {
     kuse <- k
   }
 
+  if(length(kuse) == 0) {
+    # None of the required values are defined
+    nnd <- paddist
+    nnw <- padwhich
+    maxk <- max(k)
+    colnames(nnd) <- paste0("dist.", seq_len(maxk))
+    colnames(nnd) <- paste0("dist.", seq_len(maxk))
+    nnd <- nnd[,k,drop=TRUE]
+    nnw <- nnw[,k,drop=TRUE]
+    result <- list(dist=nnd, which=nnw)[what]
+    result <- as.data.frame(result)[,,drop=TRUE]
+    return(result)
+  }
+  
   need.dist <- ("dist" %in% what) || exclude
   need.which <- ("which" %in% what) || exclude
   

@@ -783,6 +783,9 @@ local({
 
   spatstat.options(op)
 
+  # test handling marginal cases
+  xyd <- nncross(XX, YY[1])
+
   ## Test linnet surgery code
   set.seed(42)
   X <- runiflpp(30, simplenet)

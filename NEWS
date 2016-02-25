@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.037
+        CHANGES IN spatstat VERSION 1.44-1.038
 
 OVERVIEW
 
@@ -178,6 +178,10 @@ BUGS
 
    o suffstat
    Gave an error for point process models with Geyer interaction.
+   Fixed.
+
+   o nncross.lpp, distfun.lpp
+   Crashed with obscure errors if Y consisted of a single point.
    Fixed.
 
    o mppm, profilepl
