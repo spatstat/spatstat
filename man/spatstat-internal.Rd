@@ -678,6 +678,7 @@
 \alias{sort.im}
 \alias{sortalongsegment}
 \alias{spatstat.rawdata.location}
+\alias{spatstat.xy.coords}
 \alias{spatstatClusterModelInfo}
 \alias{spatstatDPPModelInfo}
 \alias{spatstatLocator}
@@ -1584,6 +1585,7 @@ smoothpointsEngine(x, values, sigma, \dots,
 \method{sort}{im}(x, \dots)
 sortalongsegment(df)
 spatstat.rawdata.location(\dots)
+spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
 spatstatLocator(n, ...)

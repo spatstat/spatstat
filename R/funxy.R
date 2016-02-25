@@ -3,20 +3,50 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.5 $   $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.11 $   $Date: 2016/02/25 06:32:43 $
 #
+
+spatstat.xy.coords <- function(x,y) {
+  if(missing(y) || is.null(y)) {
+    xy <- if(is.ppp(x) || is.lpp(x)) coords(x) else
+          if(checkfields(x, c("x", "y"))) x else 
+          stop("Argument y is missing", call.=FALSE)
+    x <- xy$x
+    y <- xy$y
+  }
+  xy.coords(x,y)[c("x","y")]
+}
 
 funxy <- function(f, W=NULL) {
   stopifnot(is.function(f))
   stopifnot(is.owin(W))
-  class(f) <- c("funxy", class(f))
-  attr(f, "W") <- W
-  return(f)
+  if(!identical(names(formals(f))[1:2], c("x", "y")))
+    stop("The first two arguments of f should be named x and y", call.=FALSE)
+  # copy 'f' including formals, environment, attributes
+  h <- f
+  # make new body: paste body of 'f' into last line of 'spatstat.xy.coords'
+  g <- spatstat.xy.coords
+  nx <- length(body(g)) - 1  # omit last line
+  nf <- length(body(f)) - 1 # omit first brace
+  body(g)[nx + seq_len(nf)] <- body(f)[-1]
+  # transplant the body 
+  body(h) <- body(g)
+  # reinstate attributes
+  attributes(h) <- attributes(f)
+  # stamp it
+  class(h) <- c("funxy", class(h))
+  attr(h, "W") <- W
+  attr(h, "f") <- f
+  return(h)  
 }
 
 print.funxy <- function(x, ...) {
-  cat(paste("function(x,y) of class", sQuote("funxy"), "\n"))
+  nama <- names(formals(x))
+  splat(paste0("function", paren(paste(nama,collapse=","))),
+        "of class", sQuote("funxy"))
   print(as.owin(x))
+  splat("\nOriginal function definition:")
+  print(attr(x, "f"))
 }
 
 summary.funxy <- function(object, ...) { print(object, ...) }

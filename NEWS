@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.038
+        CHANGES IN spatstat VERSION 1.44-1.039
 
 OVERVIEW
 
@@ -99,6 +99,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     ordering of the sequence of line segments. For example, the i-th row
     of 'edges' specifies the i-th line segment in as.psp(L).
 
+    o funxy, distfun
+    The functions created by funxy and distfun have arguments (x,y).
+    The user may now give a ppp or lpp object for the argument 'x',
+    instead of giving two coordinate vectors 'x' and 'y'.
+    
     o density.lpp
     New argument 'weights'.
 

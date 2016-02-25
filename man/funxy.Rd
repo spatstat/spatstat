@@ -35,10 +35,17 @@
 
   The function \code{f} should be vectorised: that is,
   if \code{x} and \code{y} are numeric vectors of the same length
-  \code{n}, then \code{v <- f(x,y)} should be a vector of length \code{n}.
+  \code{n}, then \code{v <- f(x,y)} should be a vector of length
+  \code{n}.
+
+  The resulting function \code{g <- funxy(f, W)} has the same formal
+  arguments as \code{f}. It accepts numeric vectors \code{x,y} as
+  described above, but if \code{y} is missing, then \code{x} may be
+  a point pattern (object of class \code{"ppp"} or \code{"lpp"}) from
+  which the coordinates should be extracted.
 }
 \value{
-  A \code{function}, in fact a copy of \code{f},
+  A \code{function} with the same arguments as \code{f},
   which also belongs to the class \code{"funxy"}.
   This class has methods for
   \code{print}, \code{plot}, \code{contour} and \code{persp}.
@@ -51,12 +58,12 @@
    g <- funxy(f, square(2))
    g(0.2, 0.3)
    g
+   g(cells[1:4])
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{math}
