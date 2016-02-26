@@ -3,10 +3,10 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.21 $   $Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.22 $   $Date: 2016/02/26 10:47:57 $
 #
 #
-crossing.psp <- function(A,B,fatal=TRUE) {
+crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
   verifyclass(A, "psp")
   verifyclass(B, "psp")
   
@@ -57,6 +57,12 @@ crossing.psp <- function(A,B,fatal=TRUE) {
     yy <- matrix(out$yy, na, nb)
     xx <- as.vector(xx[ok])
     yy <- as.vector(yy[ok])
+    if(details) {
+      ia <- as.vector(row(ok)[ok])
+      jb <- as.vector(col(ok)[ok])
+      ta <- as.vector(matrix(out$ta, na, nb)[ok])
+      tb <- as.vector(matrix(out$tb, na, nb)[ok])
+    }
   } else {
     # new
     storage.mode(x0a) <- storage.mode(y0a) <- "double"
@@ -77,8 +83,16 @@ crossing.psp <- function(A,B,fatal=TRUE) {
 #                 PACKAGE="spatstat")
     xx <- out[[5]]
     yy <- out[[6]]
+    if(details) {
+      ia <- out[[1]] + 1L
+      jb <- out[[2]] + 1L
+      ta <- out[[3]]
+      tb <- out[[4]]
+    }
   }
   result <- ppp(xx, yy, window=ABW, check=FALSE)
+  if(details)
+    marks(result) <- data.frame(iA=ia, jB=jb, tA=ta, tB=tb)
   return(result)
 }
 

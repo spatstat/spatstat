@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.040
+        CHANGES IN spatstat VERSION 1.44-1.041
 
 OVERVIEW
 
@@ -103,6 +103,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The functions created by funxy and distfun have arguments (x,y).
     The user may now give a ppp or lpp object for the argument 'x',
     instead of giving two coordinate vectors 'x' and 'y'.
+
+    o crossing.psp
+    New argument 'details' gives more information about the intersections
+    between the segments.
     
     o density.lpp
     New argument 'weights'.
