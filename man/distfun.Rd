@@ -11,13 +11,13 @@
   Compute the distance function of an object, and return it as a function.
 }
 \usage{
-  distfun(X, ...)
+  distfun(X, \dots)
 
-  \method{distfun}{ppp}(X, ..., k=1)
+  \method{distfun}{ppp}(X, \dots, k=1)
 
-  \method{distfun}{psp}(X, ...)
+  \method{distfun}{psp}(X, \dots)
 
-  \method{distfun}{owin}(X, ..., invert=FALSE)
+  \method{distfun}{owin}(X, \dots, invert=FALSE)
 }
 \arguments{
   \item{X}{Any suitable dataset representing a two-dimensional
@@ -91,6 +91,8 @@
    d2 <- distfun(cells, k=2)
    d(0.5, 0.5)
    d2(0.5, 0.5)
+
+   z <- d(japanesepines)
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},

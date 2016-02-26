@@ -580,7 +580,6 @@
 \alias{rhs.of.formula}
 \alias{rhohatEngine}
 \alias{rhohatCalc}
-\alias{rigidradius}
 \alias{rMaternInhibition}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
@@ -619,6 +618,7 @@
 \alias{reverse.xypolygon}    
 \alias{reversePolyclipArgs}
 \alias{revcumsum}
+\alias{rmax.Rigid}
 \alias{rmax.rule}
 \alias{rotxy}
 \alias{rotxypolygon}
@@ -724,7 +724,6 @@
 \alias{there.is.no.try}
 \alias{thinjump}
 \alias{tilecentroids}        
-\alias{transradius}
 \alias{trap.extra.arguments}
 \alias{trianglediameters}
 \alias{trim.mask}        
@@ -1472,7 +1471,6 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            n, bw, adjust, from, to, 
            bwref, covname, confidence,
            covunits, modelcall, callstring, savestuff)
-rigidradius(X)
 rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
 RmhExpandRule(nama)
 romansort(x)
@@ -1522,6 +1520,7 @@ restrict.mask(M, W)
 reverse.xypolygon(p, adjust=FALSE)
 reversePolyclipArgs(x, p)
 revcumsum(x)
+rmax.Rigid(X, g)
 rmax.rule(fun, W, lambda)
 rotxy(X, angle = pi/2)
 rotxypolygon(p, angle = pi/2)
@@ -1632,7 +1631,6 @@ test.selfcrossing.psp(A)
 there.is.no.try(\dots)
 thinjump(n, p)
 tilecentroids(W, nx, ny)
-transradius(W)
 trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)

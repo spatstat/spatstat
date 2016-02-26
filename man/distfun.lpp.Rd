@@ -42,9 +42,11 @@
   in the form \code{v <- f(x,y)}, where \code{x} and \code{y}
   are any numeric vectors of equal length containing coordinates of
   spatial locations, yields the values of the distance function at these
-  locations. More efficiently \code{f} can take the arguments
-  \code{x, y, seg, tp} where \code{seg} and \code{tp} are the local
-  coordinates on the network.
+  locations. More efficiently \code{f} can be called in the form
+  \code{v <- f(x, y, seg, tp)} where \code{seg} and \code{tp} are the local
+  coordinates on the network. It can also be called as
+  \code{v <- f(x)} where \code{x} is a point pattern on the same linear
+  network.
 
   The function \code{f} obtained from \code{f <- distfun(X)}
   also belongs to the class \code{"linfun"}. 
@@ -74,13 +76,14 @@
 
    # using a distfun as a covariate in a point process model:
    Y <- runiflpp(4, simplenet)
-   fit <- lppm(Y, ~D, covariates=list(D=f))
+   fit <- lppm(Y ~D, covariates=list(D=f))
+
+   f(Y)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{math}

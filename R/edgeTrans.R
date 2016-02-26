@@ -1,7 +1,7 @@
 #
 #        edgeTrans.R
 #
-#    $Revision: 1.13 $    $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.14 $    $Date: 2016/02/26 02:24:14 $
 #
 #    Translation edge correction weights
 #
@@ -25,7 +25,8 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
                        ..., 
                        trim=spatstat.options("maxedgewt"),
                        dx=NULL, dy=NULL,
-                       give.rmax=FALSE) {
+                       give.rmax=FALSE,
+                       gW = NULL) {
   given.dxdy <- !is.null(dx) && !is.null(dy)
   if(!given.dxdy) {
     ## dx, dy will be computed from X, Y
@@ -77,7 +78,6 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
            wide <- diff(W$xrange)
            high <- diff(W$yrange)
            weight <- wide * high / ((wide - abs(dx)) * (high - abs(dy)))
-           g <- NULL
          },
          polygonal={
            ## This code is SLOW
@@ -90,13 +90,12 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
              }
              weight <- area(W)/weight
            }
-           g <- NULL
          },
          mask={
            ## compute set covariance of window
-           g <- setcov(W)
+           if(is.null(gW)) gW <- setcov(W)
            ## evaluate set covariance at these vectors
-           gvalues <- lookup.im(g, dx, dy, naok=TRUE, strict=FALSE)
+           gvalues <- lookup.im(gW, dx, dy, naok=TRUE, strict=FALSE)
            weight <- area(W)/gvalues
          }
          )
@@ -109,16 +108,19 @@ edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
     weight <- matrix(weight, nrow=nX, ncol=nY)
 
   if(give.rmax) 
-    attr(weight, "rmax") <- rmax.Trans(W, g)
+    attr(weight, "rmax") <- rmax.Trans(W, gW)
   return(weight)
 }
 
+## maximum radius for translation correction
+## = radius of largest circle centred at 0 contained in W + ^W
+
 rmax.Trans <- function(W, g=setcov(W)) {
-  W <- as.owin(W)
   ## calculate maximum permissible 'r' value
   ## for validity of translation correction
+  W <- as.owin(W)
   if(is.rectangle(W)) 
-    return(min(sidelengths(W)))
+    return(shortside(W))
   ## find support of set covariance
   if(is.null(g)) g <- setcov(W)
   eps <- 2 * max(1, max(g)) * .Machine$double.eps
@@ -126,5 +128,23 @@ rmax.Trans <- function(W, g=setcov(W)) {
   gboundary <- bdry.mask(gsupport)
   xy <- rasterxy.mask(gboundary, drop=TRUE)
   rmax <- with(xy, sqrt(min(x^2 + y^2)))
+  return(rmax)
+}
+
+## maximum radius for rigid motion correction
+## = radius of smallest circle centred at 0 containing W + ^W
+
+rmax.Rigid <- function(X, g=setcov(Window(X))) {
+  stopifnot(is.ppp(X) || is.owin(X))
+  if(is.ppp(X))
+    return(max(pairdist(X[chull(X)])))
+  W <- X
+  if(is.rectangle(W)) return(diameter(W))
+  if(is.null(g)) g <- setcov(W)
+  eps <- 2 * max(1, max(g)) * .Machine$double.eps
+  gsupport <- solutionset(g > eps)
+  gboundary <- bdry.mask(gsupport)
+  xy <- rasterxy.mask(gboundary, drop=TRUE)
+  rmax <- with(xy, sqrt(max(x^2 + y^2)))
   return(rmax)
 }

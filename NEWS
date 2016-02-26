@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.039
+        CHANGES IN spatstat VERSION 1.44-1.040
 
 OVERVIEW
 
@@ -128,9 +128,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o mppm
     New arguments 'gcontrol' and 'reltol.pql' control the fitting algorithm.
 
+    o edge.Trans
+    New argument 'gW' for efficiency.
+
     o pool.fv
     The default plot of the pooled function no longer includes 
     the variance curves.
+
+    o Kest 
+    Accelerated computation (for translation and rigid corrections)
+    when window is an irregular shape.
 
     o vcov.ppm, leverage.ppm, influence.ppm, dfbetas.ppm
     Performance slightly improved, for Gibbs models.
