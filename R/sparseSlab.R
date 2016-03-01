@@ -4,7 +4,7 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.14 $  $Date: 2016/02/23 10:54:42 $
+#' $Revision: 1.16 $  $Date: 2016/02/28 01:28:22 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
@@ -248,10 +248,34 @@ aperm.sparseSlab <- function(a, perm=NULL, resize=TRUE, ...) {
   dimX <- dim(x)
   dimV <- dim(value)
   if(involves.matrices && !involves.stackdim) {
-    ## replace subset of each sparse matrix
-    for(ii in seq_len(dimX[stackdim])) {
+    # replace a specified subset of each sparse matrix
+    if(length(dimV) == 3 && dimV[stackdim] == 1) {
+      value <- switch(stackdim, value[1,,], value[,1,], value[,,1])
+      dimV <- dim(value)
+    }
+    if(length(dimV) <= 2) {
+      ## replace subset of each sparse matrix by the same value
+      for(ii in seq_len(dimX[stackdim])) {
+        ind <- indices[-stackdim]
+        x$m[[ii]][ind[[1]], ind[[2]]] <- value
+      } 
+    } else if(dimV[stackdim] == dimX[stackdim]) {
+      ## replace subset of each sparse matrix by corresponding slice
+      for(ii in seq_len(dimX[stackdim])) {
+        ind <- indices[-stackdim]
+        x$m[[ii]][ind[[1]], ind[[2]]] <-
+          switch(stackdim, value[ii,,], value[,ii,], value[,,ii])
+      } 
+    } else {
+      # give up
+      x <- as.array(x)
+      v <- as.array(value)
       ind <- indices[-stackdim]
-      x$m[[ii]][ind[[1]], ind[[2]]] <- value
+      switch(stackdim,
+             { x[,ind[[1]], ind[[2]]] <- value },
+             { x[ind[[1]], ,ind[[2]]] <- value },
+             { x[ind[[1]], ind[[2]], ] <- value })
+      x <- as.sparseSlab(x, stackdim=stackdim)
     }
   } else if(involves.stackdim && !involves.matrices) {
     ## index selects one or more of the sparse matrices

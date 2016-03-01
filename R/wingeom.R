@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.108 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 4.110 $	$Date: 2016/02/28 00:12:04 $
 #
 #
 #
@@ -154,7 +154,8 @@ overlap.owin <- function(A, B) {
     for(i in seq_along(AA))
       for(j in seq_along(BB))
         area <- area + overlap.xypolygon(AA[[i]], BB[[j]])
-    return(area)
+    # small negative numbers can occur due to numerical error
+    return(max(0, area))
   }
   if(At=="mask") {
     # count pixels in A that belong to B

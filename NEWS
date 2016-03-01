@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.041
+        CHANGES IN spatstat VERSION 1.44-1.042
 
 OVERVIEW
 
@@ -23,7 +23,7 @@ OVERVIEW
 
     o Bug fixes and performance improvements.
 
-    o Version nickname: 'Levity Waves'
+    o Version nickname: 'Transcend Dental Medication'
 
 NEW FUNCTIONS
 
@@ -275,6 +275,11 @@ BUGS
 
    o plot.dppm
    Gave warnings about unrecognised argument 'objectname'.
+   Fixed.
+
+   o overlap.owin
+   Sometimes returned a very small negative value, 
+   when the correct answer was 0.
    Fixed.
 
         CHANGES IN spatstat VERSION 1.44-1

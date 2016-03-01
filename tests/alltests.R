@@ -2426,9 +2426,76 @@ local({
 })
 
 
+#'    tests/sparse3Darrays.R
+#'  Basic tests of sparse3array.R code
+#'  $Revision: 1.3 $ $Date: 2016/02/29 08:31:27 $
+
+require(spatstat)
+local({
+
+  if(require(Matrix)) {
+    M <- sparse3Darray(i=1:4, j=sample(1:4, replace=TRUE),
+                       k=c(1,2,1,2), x=1:4, dims=c(5,5,2))
+
+    M
+
+    dimnames(M) <- list(letters[1:5], LETTERS[1:5], c("yes", "no"))
+    M
+    
+    U <- aperm(M, c(1,3,2))
+    U
+    
+    M[ 3:4, , ]
+    
+    M[ 3:4, 2:4, ]
+    
+    M[, 3, ]
+
+    M[, 3, , drop=FALSE]
+    
+    MA <- as.array(M)
+    UA <- as.array(U)
+
+    ## tests of "[<-.sparse3Darray"
+    Mflip <- Mzero <- MandM <- M
+    Mflip[ , , 2:1] <- M
+    stopifnot(Mflip[3,1,1] == M[3,1,2])
+    Mzero[1:3,1:3,] <- 0
+    stopifnot(all(Mzero[1,1,] == 0))
+    M2a <- M[,,2,drop=FALSE]
+    M2d <- M[,,2,drop=TRUE]
+    MandM[,,1] <- M2a
+    MandM[,,1] <- M2d
+
+    ## tests of arithmetic (Math, Ops, Summary)
+    negM <- -M
+    oneM <- 1 * M
+    twoM <- M + M
+    range(M)
+
+    ## test of anyNA method
+    anyNA(M)
+    
+    ## a possible application in spatstat
+    cl10 <- as.data.frame(closepairs(cells, 0.1))
+    cl12 <- as.data.frame(closepairs(cells, 0.12))
+    cl10$k <- 1
+    cl12$k <- 2
+    cl <- rbind(cl10, cl12)
+    n <- npoints(cells)
+    Z <- with(cl,
+              sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
+    dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
+
+    Z <- aperm(Z, c(3,1,2))
+    stopifnot(all(sumsymouterSparseSlab(Z) == sumsymouter(as.array(Z))))
+  }
+})
+
+
 #'    tests/sparseSlabs.R
 #'  Basic tests of sparseSlabs.R code
-#'  $Revision: 1.2 $ $Date: 2016/02/18 07:46:15 $
+#'  $Revision: 1.3 $ $Date: 2016/02/29 08:31:15 $
 
 require(spatstat)
 local({
@@ -2486,6 +2553,9 @@ local({
     mlist <- list(m10, m12)
     names(mlist) <- c("r=0.1", "r=0.12")
     Z <- sparseSlab(mlist)
+
+    Z <- aperm(Z, c(3,1,2))
+    stopifnot(all(sumsymouterSparseSlab(Z) == sumsymouter(as.array(Z))))
   }
 })
 

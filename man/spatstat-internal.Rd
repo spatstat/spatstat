@@ -279,6 +279,7 @@
 \alias{intY.xypolygon}
 \alias{invokeColourmapRule}
 \alias{is.atomicQtest}
+\alias{is.blank}
 \alias{is.cadlag}
 \alias{is.col.argname}
 \alias{is.data}
@@ -336,6 +337,7 @@
 \alias{localpcfengine}
 \alias{localpcfmatrix}
 \alias{local2lpp}
+\alias{logicalIndex}
 \alias{logi.dummy}
 \alias{logi.engine}
 \alias{logLik.vblogit}
@@ -790,6 +792,31 @@
 \alias{Math.sparseSlab}
 \alias{Ops.sparseSlab}
 \alias{Summary.sparseSlab}
+%%%% sparse 3D arrays
+\alias{sparse3Darray}
+\alias{as.sparse3Darray}
+\alias{dim.sparse3Darray}
+\alias{dim<-.sparse3Darray}
+\alias{dimnames.sparse3Darray}
+\alias{dimnames<-.sparse3Darray}
+\alias{print.sparse3Darray}
+\alias{aperm.sparse3Darray}
+\alias{as.array.sparse3Darray}
+\alias{inside3Darray}
+\alias{[.sparse3Darray}
+\alias{[<-.sparse3Darray}
+% not yet existing {sumsymouterSparse3Darray} %DoNotExport
+% change name later:
+\alias{mapSparse3DEntries} 
+% change name later:
+\alias{applySparse3DEntries} 
+\alias{anyNA.sparse3Darray}
+\alias{RelevantZero}
+\alias{isRelevantZero}
+\alias{unionOfIndices}
+\alias{Math.sparse3Darray}
+\alias{Ops.sparse3Darray}
+\alias{Summary.sparse3Darray}
 %%%%
 \description{
   Internal spatstat functions.
@@ -1109,6 +1136,7 @@ intY.owin(w)
 intY.xypolygon(polly)
 invokeColourmapRule(colfun, x, \dots, zlim, colargs)
 is.atomicQtest(x)
+is.blank(s)
 is.cadlag(s)
 is.col.argname(x)
 is.data(Q)
@@ -1172,6 +1200,7 @@ localKengine(X, \dots, wantL, lambda, correction, verbose, rvalue)
 localpcfengine(X, \dots, delta, rmax, nr, stoyan, lambda)
 localpcfmatrix(X, i, \dots, lambda, delta, rmax, nr, stoyan)
 local2lpp(L, seg, tp, X, df.only)
+logicalIndex(i, nama, len)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
             covariates, subsetexpr, correction, rbord, covfunargs, allcovar, 
@@ -1702,6 +1731,35 @@ applySparseEntries(x, f, \dots)
 %NAMESPACE S3method("Math", "sparseSlab")
 %NAMESPACE S3method("Ops", "sparseSlab")
 %NAMESPACE S3method("Summary", "sparseSlab")
+%%%
+%%% sparse 3D arrays
+sparse3Darray(i,j,k,x,dims,dimnames,strict)
+as.sparse3Darray(x, \dots)
+\method{dim}{sparse3Darray}(x)
+\method{dim}{sparse3Darray}(x) <- value
+\method{dimnames}{sparse3Darray}(x)
+\method{dimnames}{sparse3Darray}(x) <- value
+\method{print}{sparse3Darray}(x, \dots)
+\method{aperm}{sparse3Darray}(a, perm, resize, \dots)
+\method{as.array}{sparse3Darray}(x, \dots)
+inside3Darray(d, i, j, k)
+\method{[}{sparse3Darray}(x, i, j, k, drop, \dots)
+\method{[}{sparse3Darray}(x, i, j, k, \dots) <- value
+% Not yet existing: sumsymouterSparse3Darray(x, w, dbg)
+% change name later:
+mapSparse3DEntries(x, margin, values, conform) 
+% change name later:
+applySparse3DEntries(x, f, \dots)
+\method{anyNA}{sparse3Darray}(x, recursive)
+RelevantZero(x)
+isRelevantZero(x)
+unionOfIndices(A,B)
+\special{Math(x, \dots)}
+\special{Ops(e1, e2)}
+\special{Summary(\dots, na.rm = FALSE)}
+%NAMESPACE S3method("Math", "sparse3Darray")
+%NAMESPACE S3method("Ops", "sparse3Darray")
+%NAMESPACE S3method("Summary", "sparse3Darray")
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

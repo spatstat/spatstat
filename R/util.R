@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.199 $    $Date: 2016/02/17 00:28:45 $
+#    $Revision: 1.200 $    $Date: 2016/02/28 03:57:10 $
 #
 #
 matrowsum <- function(x) {
@@ -237,6 +237,13 @@ truncline <- function(x, nc) {
     z <- substr(z, 1, nc)
   z <- paste0(z, pad)
   return(z)
+}
+
+is.blank <- function(s) {
+  y <- strsplit(s, "")
+  z <- lapply(y, "==", e2=" ")
+  ans <- sapply(z, all)
+  return(ans)
 }
 
 padtowidth <- local({
@@ -1671,7 +1678,27 @@ requireversion <- function(pkg, ver) {
 positiveIndex <- function(i, nama, len=length(nama)) {
   #' convert any kind of index to a positive integer sequence
   x <- seq_len(len)
+  if(is.null(i)) return(x)
+  stopifnot(is.vector(i))
+  if(is.numeric(i) && !all(ok <- (abs(i) <= len))) {
+    warning("Index values lie outside array bounds", call.=FALSE)
+    i <- i[ok]
+  }
   names(x) <- nama
   y <- x[i]
   return(unname(y))
+}
+
+logicalIndex <- function(i, nama, len=length(nama)) {
+  #' convert any kind of index to a logical vector
+  if(is.null(i)) return(rep(TRUE, len))
+  stopifnot(is.vector(i))
+  if(is.numeric(i) && !all(ok <- (abs(i) <= len))) {
+    warning("Index values lie outside array bounds", call.=FALSE)
+    i <- i[ok]
+  }
+  x <- logical(len)
+  names(x) <- nama
+  x[i] <- TRUE
+  return(unname(x))
 }
