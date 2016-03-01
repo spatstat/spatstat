@@ -10,12 +10,16 @@ before_install:
 
 install:
   - ./pkg-build.sh install_deps
+  - ./pkg-build.sh install_github jimhester/covr yihui/knitr
 
 script:
   - ./pkg-build.sh run_tests
 
 after_failure:
   - ./pkg-build.sh dump_logs
+  
+after_success:
+  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(type="all")'; fi
 
 notifications:
   email:
@@ -27,4 +31,4 @@ env:
     - _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
     - RVERSION=release
-    - RVERSION=devel
+    - RVERSION=devel COVERAGE=true R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
