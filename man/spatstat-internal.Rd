@@ -1390,7 +1390,7 @@ pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
             ccode, auction, precision, approximation) 
-ppsubset(X, I)
+ppsubset(X, I, Iname, fatal)
 prange(x)
 \method{predict}{vblogit}(object, newdata, type, se.fit, dispersion,
                           terms, na.action, \dots)

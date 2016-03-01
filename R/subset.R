@@ -3,24 +3,24 @@
 ##
 ## Methods for 'subset'
 ##
-##   $Revision: 1.3 $  $Date: 2015/07/09 03:15:37 $
+##   $Revision: 1.5 $  $Date: 2016/03/01 02:07:34 $
 
 subset.ppp <- function(x, subset, select, drop=FALSE, ...) {
   stopifnot(is.ppp(x))
   w <- as.owin(x)
   y <- as.data.frame(x)
-  r <- if (missing(subset)) 
+  r <- if (missing(subset)) {
     rep_len(TRUE, nrow(y))
-  else {
+  } else {
     e <- substitute(subset)
     r <- eval(e, y, parent.frame())
-    if (!is.logical(r)) 
-      stop("'subset' must be logical")
+    if(!is.logical(r))
+      r <- ppsubset(x, r, "subset", fatal=TRUE)
     r & !is.na(r)
   }
-  vars <- if (missing(select)) 
+  vars <- if (missing(select)) {
     TRUE
-  else {
+  } else {
     ## create an environment in which column names are mapped to their positions
     nl <- as.list(seq_along(y))
     names(nl) <- names(y)
@@ -50,8 +50,8 @@ subset.pp3 <- subset.lpp <- subset.ppx <- function(x, subset, select, drop=FALSE
   else {
     e <- substitute(subset)
     r <- eval(e, y, parent.frame())
-    if (!is.logical(r)) 
-      stop("'subset' must be logical")
+    if(!is.logical(r))
+      r <- ppsubset(x, r, "subset", fatal=TRUE)
     r & !is.na(r)
   }
   vars <- if (missing(select)) 

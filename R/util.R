@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.200 $    $Date: 2016/02/28 03:57:10 $
+#    $Revision: 1.202 $    $Date: 2016/03/01 02:07:13 $
 #
 #
 matrowsum <- function(x) {
@@ -1166,17 +1166,31 @@ orderwhich <- function(x, k, decreasing=FALSE) {
   if(decreasing) order(x, decreasing=TRUE, na.last=TRUE)[k] else order(x)[k]
 }
 
-# convert any appropriate subset index for a point pattern
+# convert any appropriate subset index for any kind of point pattern
 # to a logical vector
 
-ppsubset <- function(X, I) {
-  Iname <- deparse(substitute(I))
+ppsubset <- function(X, I, Iname, fatal=FALSE) {
+  if(missing(Iname))
+    Iname <- deparse(substitute(I))
+  # I could be a window or logical image
+  if(is.im(I))
+    I <- solutionset(I)
+  if((is.ppp(X) || is.lpp(X)) && is.owin(I)) {
+    I <- inside.owin(X, w=I)
+    return(I)
+  }
+  if((is.pp3(X) && inherits(I, "box3")) ||
+     (is.ppx(X) && inherits(I, "boxx"))) {
+    I <- inside.boxx(X, w=I)
+    return(I)
+  }
   # I could be a function to be applied to X
   if(is.function(I)) {
     I <- I(X)
     if(!is.vector(I)) {
-      warning(paste("Function", sQuote(Iname), "did not return a vector"),
-              call.=FALSE)
+      whinge <- paste("Function", sQuote(Iname), "did not return a vector")
+      if(fatal) stop(whinge, call.=FALSE)
+      warning(whinge, call.=FALSE)
       return(NULL)
     }
   }      
@@ -1184,18 +1198,24 @@ ppsubset <- function(X, I) {
   n <- npoints(X)
   i <- try(seq_len(n)[I])
   if(inherits(i, "try-error") || anyNA(i)) {
-    warning(paste("Invalid subset index", sQuote(Iname)),
-            call.=FALSE)
+    whinge <- paste("Invalid subset index", sQuote(Iname))
+    if(fatal) stop(whinge, call.=FALSE)
+    warning(whinge, call.=FALSE)
     return(NULL)
   }
   if(is.logical(I))
     return(I)
   # convert to logical
   Z <- rep.int(FALSE, n)
+  if(is.numeric(I) && any(abs(I) > n)) {
+    whinge <- paste("Indices in", sQuote(Iname), "exceed array limits")
+    if(fatal) stop(whinge, call.=FALSE)
+    warning(whinge, call.=FALSE)
+    return(NULL)
+  }
   Z[I] <- TRUE
   return(Z)
 }
-
 
 trap.extra.arguments <- function(..., .Context="", .Fatal=FALSE) {
   z <- list(...)

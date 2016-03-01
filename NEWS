@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.042
+        CHANGES IN spatstat VERSION 1.44-1.043
 
 OVERVIEW
 
@@ -107,6 +107,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o crossing.psp
     New argument 'details' gives more information about the intersections
     between the segments.
+
+    o subset.ppp, subset.lpp, subset.pp3, subset.ppx
+    The argument 'subset' can now be any argument acceptable to the "[" method.
     
     o density.lpp
     New argument 'weights'.

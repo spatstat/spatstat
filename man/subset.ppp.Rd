@@ -30,10 +30,13 @@
     (\code{x}, \code{y}, etc), the \code{marks}, and
     (if there is more than one column of marks)
     the names of individual columns of marks.
-    Missing values are taken as false.
+    Missing values are taken as false. See Details.
   }
   \item{select}{
     Expression indicating which columns of marks should be kept.
+    The \emph{names} of columns of marks can be used in this expression,
+    and will be treated as if they were column indices.
+    See Details.
   }
   \item{drop}{
     Logical value indicating whether to remove unused levels
@@ -49,7 +52,7 @@
   that satisfy the logical expression
   \code{subset}, and retains only the columns of marks that are
   specified by the expression \code{select}. The result is always a point
-  pattern.
+  pattern, with the same window as \code{x}.
 
   The argument \code{subset} determines the subset of points that
   will be extracted. It should be a logical expression.
@@ -88,18 +91,26 @@
   columns of marks or coordinates as a data frame,
   use \code{subset(as.data.frame(x), ...)}
 }
+\section{Other kinds of subset arguments}{
+  Alternatively the argument \code{subset} can be any kind of subset index
+  acceptable to \code{\link{[.ppp}}, \code{\link{[.pp3}},
+  \code{\link{[.ppx}}. This argument selects which points of \code{x}
+  will be retained.
+
+  \bold{Warning:} if the argument \code{subset} is
+  a window, this is interpreted as specifying the subset of points that fall
+  inside that window, but the resulting point pattern has the same window
+  as the original pattern \code{x}.
+}
 \value{
   A point pattern of the same class as \code{x}, in the same
   spatial window as \code{x}. The result is a subset of \code{x},
   possibly with some columns of marks removed.
 }  
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link[base]{subset}},

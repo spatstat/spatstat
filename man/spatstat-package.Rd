@@ -10,20 +10,25 @@
 }
 \details{
   \pkg{spatstat} is a package for the statistical analysis
-  of spatial data. Currently, it deals mainly with the analysis of
+  of spatial data. Its main focus is the analysis of
   spatial patterns of points in two-dimensional space.
   The points may carry auxiliary data (`marks'),
   and the spatial region in which the points were recorded 
   may have arbitrary shape. 
 
-  The package supports
+  The package is designed to support a complete statistical analysis
+  of spatial data. It supports
   \itemize{
-    \item creation, manipulation and plotting of point patterns
-    \item exploratory data analysis 
-    \item simulation of point process models
-    \item parametric model-fitting
-    \item hypothesis tests and model diagnostics
+    \item creation, manipulation and plotting of point patterns;
+    \item exploratory data analysis;
+    \item spatial random sampling;
+    \item simulation of point process models;
+    \item parametric model-fitting;
+    \item non-parametric smoothing and regression;
+    \item formal inference (hypothesis tests, confidence intervals);
+    \item model diagnostics.
   }
+  
   Apart from two-dimensional point patterns and point processes,
   \pkg{spatstat} also supports point patterns in three dimensions, 
   point patterns in multidimensional space-time,
@@ -41,7 +46,10 @@
     (by Baddeley-Turner approximate maximum pseudolikelihood,
     Coeurjolly-Rubak logistic likelihood, or
     Huang-Ogata approximate maximum likelihood)
-    \item Cox/cluster process models
+    \item Cox/cluster point process models
+    (by Waagepetersen's two-step fitting procedure
+    and minimum contrast, composite likelihood, or Palm likelihood)
+    \item determinantal point process models
     (by Waagepetersen's two-step fitting procedure
     and minimum contrast, composite likelihood, or Palm likelihood)
   }
@@ -55,7 +63,7 @@
 \section{Getting Started}{
   For a quick introduction to \pkg{spatstat}, read
   the package vignette \emph{Getting started with spatstat}
-  installed with \pkg{spatstat}. To see this document, you can either
+  installed with \pkg{spatstat}. To read that document, you can either
   \itemize{
     \item visit \url{cran.r-project.org/web/packages/spatstat}
     and click on \code{Getting Started with Spatstat}
@@ -65,20 +73,34 @@
     start \R, type \code{help.start()} to open the help
     browser, and navigate to \code{Packages > spatstat > Vignettes}.
   }
-  For a complete course on using \pkg{spatstat}, see the
-  forthcoming book Baddeley, Rubak and Turner (2015).
+  Once you have installed \pkg{spatstat}, start \R and type
+  \code{library(spatstat)}. Then type \code{beginner}
+  for a beginner's introduction, or 
+  \code{demo(spatstat)} for a demonstration of the package's capabilities.
 
-  Type \code{demo(spatstat)} for a demonstration 
-  of the package's capabilities.
-  Type \code{demo(data)} to see all the datasets
+  For a complete course on \pkg{spatstat},
+  and on statistical analysis of spatial point patterns,
+  read the book by Baddeley, Rubak and Turner (2015).
+  Other recommended books on spatial point process methods
+  are Diggle (2014), Gelfand et al (2010) and Illian et al (2008).
+
+  The \pkg{spatstat} package includes over 50 datasets,
+  which can be useful when learning the package.
+  Type \code{demo(data)} to see plots of all datasets
   available in the package.
-  
-  For information about handling data in \bold{shapefiles},
-  see the Vignette \emph{Handling shapefiles in the spatstat package}
-  installed with \pkg{spatstat}.
+  Type \code{vignette('datasets')} for detailed background information
+  on these datasets, and plots of each dataset.
+      
+  For information on converting your data into \pkg{spatstat} format,
+  read Chapter 3 of Baddeley, Rubak and Turner (2015).
+  This chapter is available free online, as one of the sample chapters
+  at the book companion website, \url{spatstat.github.io/book}.
 
-  To learn about spatial point process methods, see the short book
-  by Diggle (2003) and the handbook Gelfand et al (2010).
+  For information about handling data in \bold{shapefiles},
+  see Chapter 3, or the Vignette
+  \emph{Handling shapefiles in the spatstat package},
+  installed with \pkg{spatstat}, accessible as
+  \code{vignette('shapefiles')}.
 }
 \section{Updates}{
   New versions of \pkg{spatstat} are released every 8 weeks.
@@ -90,8 +112,8 @@
 
   See the Vignette \emph{Summary of recent updates},
   installed with \pkg{spatstat}, which describes the main changes
-  to \pkg{spatstat} since the workshop notes (Baddeley, 2010)
-  were published.
+  to \pkg{spatstat} since the book (Baddeley, Rubak and Turner, 2015)
+  was published. It is accessible as \code{vignette('updates')}.
   
   Type \code{news(package="spatstat")} to read news documentation about
   all previous versions of the package.
@@ -245,7 +267,7 @@
       Type \code{demo(data)} to see a display of all the datasets
       installed with the package.
 
-      Type \code{vignette(datasets)} for a document giving an overview
+      Type \code{vignette('datasets')} for a document giving an overview
       of all datasets, including background information, and plots.
       
       \tabular{ll}{
@@ -1610,7 +1632,7 @@
   The online manual entries are quite detailed and should be consulted
   first for information about a particular function.
   
-  The forthcoming book
+  The book
   Baddeley, Rubak and Turner (2015) is a complete course
   on analysing spatial point patterns, with full details about
   \pkg{spatstat}.
@@ -1668,6 +1690,10 @@
   \emph{Statistical analysis of spatial point patterns},
   Second edition. Arnold.
 
+  Diggle, P.J. (2014)
+  \emph{Statistical Analysis of Spatial and Spatio-Temporal Point Patterns},
+  Third edition. {Chapman and Hall/CRC}.
+
   Gelfand, A.E., Diggle, P.J., Fuentes, M. and Guttorp, P., editors (2010)
   \emph{Handbook of Spatial Statistics}.
   CRC Press.
@@ -1678,6 +1704,10 @@
   \emph{Journal of Computational and Graphical Statistics}
   \bold{8}, 510--530.
 
+  Illian, J., Penttinen, A., Stoyan, H. and Stoyan, D. (2008)
+  \emph{Statistical Analysis and Modelling of Spatial Point Patterns.}
+  Wiley.
+  
   Waagepetersen, R.
   An estimating function approach to inference for
   inhomogeneous Neyman-Scott processes.
@@ -1688,12 +1718,9 @@
   General Public License", a copy of which is distributed with the package.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk} .
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,
