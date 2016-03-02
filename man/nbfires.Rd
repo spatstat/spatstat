@@ -208,9 +208,9 @@ fin  <- marks(Y.00)$out.julian
 marks(Y.00) <- cbind(marks(Y.00),dur=fin-stt)
 plot(Y.00,which.marks="dur")
 # Look at just the rectangular subwindow (superimposed on the entire window).
-nbw.mask <- as.mask(nbfires$window, dimyx=500)
+nbw.mask <- as.mask(Window(nbfires), dimyx=500)
 plot(nbw.mask, col=c("green", "white"))
-plot(nbfires$window, border="red", add=TRUE)
+plot(Window(nbfires), border="red", add=TRUE)
 plot(Y.00[nbw.rect],use.marks=FALSE,add=TRUE)
 plot(nbw.rect,add=TRUE,border="blue")
 # Look at the K function for the year 2000 forest and grass fires.

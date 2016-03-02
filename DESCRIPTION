@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.043
+Version: 1.44-1.044
 Nickname: Transcend Dental Medication
-Date: 2016-03-01
+Date: 2016-03-02
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

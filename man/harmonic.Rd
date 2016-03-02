@@ -47,32 +47,29 @@
   \code{\link{ppm}}
 }
 \examples{
-   data(longleaf)
-   X <- unmark(longleaf)
    # inhomogeneous point pattern
+   X <- unmark(longleaf)
    \testonly{
-	# smaller dataset
-	longleaf <- longleaf[seq(1,longleaf$n, by=50)]
+     # smaller dataset
+     X <- X[seq(1,npoints(X), by=50)]
    }
 
    # fit Poisson point process with log-cubic intensity
-   fit.3 <- ppm(X, ~ polynom(x,y,3), Poisson())
+   fit.3 <- ppm(X ~ polynom(x,y,3), Poisson())
 
    # fit Poisson process with log-cubic-harmonic intensity
-   fit.h <- ppm(X, ~ harmonic(x,y,3), Poisson())
+   fit.h <- ppm(X ~ harmonic(x,y,3), Poisson())
 
    # Likelihood ratio test
-   lrts <- 2 * (fit.3$maxlogpl - fit.h$maxlogpl)
-   x <- X$x
-   y <- X$y
-   df <- ncol(polynom(x,y,3)) - ncol(harmonic(x,y,3))
+   lrts <- 2 * (logLik(fit.3) - logLik(fit.h))
+   df <- with(coords(X),
+              ncol(polynom(x,y,3)) - ncol(harmonic(x,y,3)))
    pval <- 1 - pchisq(lrts, df=df)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{models}

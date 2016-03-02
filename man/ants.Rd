@@ -112,7 +112,7 @@
 
   # Approximate window used by Takacs and Fiksel (1986)
 
-  tfwindow <- boundingbox(ants$window)
+  tfwindow <- boundingbox(Window(ants))
   antsTF <- ppp(ants$x, ants$y, window=tfwindow)
   plot(antsTF)
 }

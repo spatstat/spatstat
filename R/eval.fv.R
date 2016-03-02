@@ -217,11 +217,15 @@ harmonize.fv <- harmonise.fv <- local({
     if(n == 1) {
       a1 <- argh[[1]]
       if(is.fv(a1)) return(argh)
-      if(is.list(a1) && all(sapply(a1, is.fv))) argh <- a1
+      if(is.list(a1) && all(sapply(a1, is.fv))) {
+        argh <- a1
+        n <- length(argh)
+      }
     }
     isfv <- sapply(argh, is.fv)
     if(!all(isfv))
       stop("All arguments must be fv objects")
+    if(n == 1) return(argh[[1]])
     ## determine range of argument
     ranges <- lapply(argh, argumentrange)
     xrange <- c(max(unlist(lapply(ranges, min))),

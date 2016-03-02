@@ -55,8 +55,6 @@
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
 }
 \seealso{
   \code{\link{linim}},
@@ -71,8 +69,10 @@
   \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 }
 \examples{
-example(linim)
-plot(X)
-plot(X, style="width")
+  X <- linfun(function(x,y,seg,tp){y^2+x}, simplenet)
+  X <- as.linim(X)
+  
+  plot(X)
+  plot(X, style="width")
 }
 \keyword{spatial}

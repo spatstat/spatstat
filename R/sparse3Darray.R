@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.5 $  $Date: 2016/02/29 06:52:56 $
+#' $Revision: 1.7 $  $Date: 2016/03/02 04:51:13 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -47,13 +47,9 @@ as.sparse3Darray <- function(x, ...) {
     if(prod(dimx) == 0) {
       y <- sparse3Darray(, dims=dimx, dimnames=dimnames(x))
     } else {
-      n <- dimx[3]
-      for(k in seq_len(n)) {
-        mk <- as(x[,,k], "TsparseMatrix")
-        dfk <- data.frame(i=mk@i + 1L, j=mk@j + 1L, k=k, x=mk@x)
-        df <- if(k == 1) dfk else rbind(df, dfk)
-      }
-      y <- sparse3Darray(i=df$i, j=df$j, k=df$k, x=df$x,
+      ijk <- which(x != RelevantZero(x), arr.ind=TRUE)
+      ijk <- cbind(as.data.frame(ijk), x[ijk])
+      y <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3], x=ijk[,4],
                          dims=dimx, dimnames=dimnames(x))
     }
   } else if(inherits(x, "sparseVector")) {
@@ -174,20 +170,6 @@ as.array.sparse3Darray <- function(x, ...) {
   return(z)
 }
 
-inside3Darray <- function(d, i, j, k) {
-  stopifnot(length(d) == 3)
-  if(length(dim(i)) == 2 && missing(j) && missing(k)) {
-    stopifnot(ncol(i) == 3)
-    j <- i[,2]
-    k <- i[,3]
-    i <- i[,1]
-  }
-  ans <- inside.range(i, c(1, d[1])) &
-         inside.range(j, c(1, d[2])) &
-         inside.range(k, c(1, d[3]))
-  return(ans)
-}
-
 "[.sparse3Darray" <- function(x, i,j,k, drop=TRUE, ...) {
   dimx <- dim(x)
   dn <- dimnames(x) %orifnull% rep(list(NULL), 3)
@@ -199,7 +181,9 @@ inside3Darray <- function(d, i, j, k) {
     if(ncol(i) != 3)
       stop("If i is a matrix, it should have 3 columns", call.=FALSE)
     ## start with vector of 'zero' answers of the correct type
-    answer <- vector(mode=typeof(x$x), length=nrow(i))
+    answer <- sparseVector(x=RelevantZero(x$x)[integer(0)],
+                           i=integer(0),
+                           length=nrow(i))
     # values outside array return NA
     if(any(bad <- !inside3Darray(dim(x), i)))
       answer[bad] <- NA
@@ -214,21 +198,52 @@ inside3Darray <- function(d, i, j, k) {
     return(answer)
   }
   if(!(missing(i) && missing(j) && missing(k))) {
-    inI <- logicalIndex(if(missing(i)) NULL else i, dn[[1]], dimx[1])
-    inJ <- logicalIndex(if(missing(j)) NULL else j, dn[[2]], dimx[2])
-    inK <- logicalIndex(if(missing(k)) NULL else k, dn[[3]], dimx[3])
+    I <- grokIndexVector(if(missing(i)) NULL else i, dimx[1], dn[[1]])
+    J <- grokIndexVector(if(missing(j)) NULL else j, dimx[2], dn[[2]])
+    K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
+    IJK <- list(I,J,K)
+    if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
+      # indices exceed array bounds; result is a full array containing NA's
+      result <- as.array(x)[I$full$i, J$full$j, K$full$k, drop=drop]
+      return(result)
+    }
+    IJK <- lapply(IJK, getElement, name="strict")
+    I <- IJK[[1]]
+    J <- IJK[[2]]
+    K <- IJK[[3]]
+    #' number of values to be returned along each margin
+    newdims <- sapply(IJK, getElement, name="n")
+    #' dimnames of return array
+    newdn <- lapply(IJK, getElement, name="s")
+    #' find all required data (not necessarily in required order)
+    inI <- I$lo
+    inJ <- J$lo
+    inK <- K$lo
     df <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
     use <- with(df, inI[i] & inJ[j] & inK[k])
     df <- df[use, ,drop=FALSE]
-    Imap <- cumsum(inI)
-    Jmap <- cumsum(inJ)
-    Kmap <- cumsum(inK)
-    df <- transform(df, i=Imap[i], j=Jmap[j], k=Kmap[k])
-    newdims <- c(sum(inI), sum(inJ), sum(inK))
-    newdn <- if(is.null(dimnames(x))) NULL else list(dn[[1]][inI],
-                                                     dn[[2]][inJ],
-                                                     dn[[3]][inK])
-    x <- sparse3Darray(i=df$i, j=df$j, k=df$k, x=df$x,
+    #' contract sub-array to (1:n) * (1:m) * (1:l)
+    df <- transform(df,
+                    i = cumsum(inI)[i],
+                    j = cumsum(inJ)[j],
+                    k = cumsum(inK)[k])
+    #' map to output positions (reorder/repeat entries)
+    outdf <- df[integer(0),,drop=FALSE]
+    Imap <- I$map
+    Jmap <- J$map
+    Kmap <- K$map
+    for(m in seq_len(nrow(df))) {
+      dfm <- df[m,,drop=FALSE]
+      iout <- if(is.null(Imap)) dfm$i else which(Imap == dfm$i)
+      jout <- if(is.null(Jmap)) dfm$j else which(Jmap == dfm$j)
+      kout <- if(is.null(Kmap)) dfm$k else which(Kmap == dfm$k)
+      ijkout <- expand.grid(i=iout, j=jout, k=kout)
+      if(nrow(ijkout) > 0) {
+        ijkout$x <- dfm$x
+        outdf <- rbind(outdf, ijkout)
+      }
+    }
+    x <- sparse3Darray(i=outdf$i, j=outdf$j, k=outdf$k, x=outdf$x,
                        dims=newdims, dimnames=newdn)
     dimx <- newdims
     dn <- newdn
@@ -294,36 +309,49 @@ inside3Darray <- function(d, i, j, k) {
                                    dims=dimx, dimnames=dn))
     return(y)
   }
-  ifull <- missing(i)
-  jfull <- missing(j)
-  kfull <- missing(k)
-  inI <- logicalIndex(if(ifull) NULL else i, dn[[1]], dimx[1])
-  inJ <- logicalIndex(if(jfull) NULL else j, dn[[2]], dimx[2])
-  inK <- logicalIndex(if(kfull) NULL else k, dn[[3]], dimx[3])
-  I <- which(inI)
-  J <- which(inJ)
-  K <- which(inK)
-  #' extract entries
+  I <- grokIndexVector(if(missing(i)) NULL else i, dimx[1], dn[[1]])
+  J <- grokIndexVector(if(missing(j)) NULL else j, dimx[2], dn[[2]])
+  K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
+  IJK <- list(I,J,K)
+  if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
+    warning("indices exceed array bounds; using full array", call.=FALSE)
+    x <- as.array(x)
+    x[I$full$i, J$full$j, K$full$k] <- value
+    x <- as.sparse3Darray(x)
+    return(x)
+  }
+  IJK <- lapply(IJK, getElement, name="strict")
+  I <- IJK[[1]]
+  J <- IJK[[2]]
+  K <- IJK[[3]]
+  #' extract current array entries
   xdata <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
+  #' identify data volume that will be overwritten
+  inI <- I$lo
+  inJ <- J$lo
+  inK <- K$lo
   #' remove data that will be overwritten
   retain <- !with(xdata, inI[i] & inJ[j] & inK[k])
   xdata <- xdata[retain,,drop=FALSE]
-  #' compare dimensions of subset and replacement
-  subdims <- lengths(list(I,J,K))
+  #' expected dimensions of 'value' implied by indices
+  dimVshould <- sapply(IJK, getElement, name="nind")
   dimV <- dim(value)
   if(length(dimV) == 3) {
     #' both source and destination are 3D
-    if(all(subdims == dimV)) {
+    if(all(dimVshould == dimV)) {
       #' replace 3D block by 3D block of same dimensions
       value <- as.sparse3Darray(value)
       vdata <- data.frame(i=value$i, j=value$j, k=value$k, x=value$x)
       # determine positions of replacement data in original array
-      vdata <- transform(vdata, i=I[i], j=J[j], k=K[k])
+      vdata <- transform(vdata,
+                         i=replacementIndex(i, I),
+                         j=replacementIndex(j, J),
+                         k=replacementIndex(k, K))
     } else
       stop(paste("Replacement value has wrong dimensions:",
                  paste(dimV, collapse="x"),
                  "instead of",
-                 paste(subdims, collapse="x")),
+                 paste(dimVshould, collapse="x")),
            call.=FALSE)
   } else if(is.null(dimV)) {
     #' replacement value is a vector or sparseVector
@@ -331,11 +359,11 @@ inside3Darray <- function(d, i, j, k) {
     iv <- value@i
     xv <- value@x
     nv <- value@length
-    collapsing <- (subdims == 1)
+    collapsing <- (dimVshould == 1)
     realdim <- sum(!collapsing)
     if(nv == 1) {
       #' replacement value is a constant, replicated where needed
-      vdata <- expand.grid(i=I, j=J, k=K, x=as.vector(value[1]))
+      vdata <- expand.grid(i=I$i, j=J$i, k=K$i, x=as.vector(value[1]))
     } else if(realdim == 0) {
         stop(paste("Replacement value has too many entries:",
                    nv, "instead of 1"),
@@ -343,69 +371,69 @@ inside3Darray <- function(d, i, j, k) {
     } else if(realdim == 1) {
       theindex <- which(!collapsing)
       # target slice is one-dimensional
-      if(nv != subdims[theindex]) 
+      if(nv != dimVshould[theindex]) 
         stop(paste("Replacement value has wrong number of entries:",
-                   nv, "instead of", subdims[theindex]),
+                   nv, "instead of", dimVshould[theindex]),
              call.=FALSE)
+      newpos <- replacementIndex(iv, IJK[[theindex]])
       vdata <- switch(theindex,
-                      data.frame(i=I[iv], j=J,     k=K,     x=xv),
-                      data.frame(i=I,     j=J[iv], k=K,     x=xv),
-                      data.frame(i=I,     j=J,     k=K[iv], x=xv))
+                      data.frame(i=newpos, j=J$i,    k=K$i,     x=xv),
+                      data.frame(i=I$i,    j=newpos, k=K$i,     x=xv),
+                      data.frame(i=I$i,    j=J$i,    k=newpos,  x=xv))
     } else {
       # target slice is two-dimensional
-      sdim <- subdims[!collapsing]
+      sdim <- dimVshould[!collapsing]
       sd1 <- sdim[1]
       sd2 <- sdim[2]
       if(nv != sd1)
         stop(paste("Length of replacement vector", paren(nv),
                    "does not match dimensions of array subset",
-                   paren(paste(subdims, collapse="x"))),
+                   paren(paste(dimVshould, collapse="x"))),
              call.=FALSE)
-      indices <- list(I,J,K)
-      vars <- which(!collapsing)
-      v1 <- vars[1]
-      v2 <- vars[2]
-      indices[[ v1 ]] <- indices[[ v1 ]] [ rep(iv, sd2) ]
-      indices[[ v2 ]] <- rep(indices[[ v2 ]], each=sd1)
-      vdata <- data.frame(i=indices[[1]],
-                          j=indices[[2]],
-                          k=indices[[3]],
-                          x=rep(xv, sd2))
+      firstindex <- which(!collapsing)[1]
+      secondindex <- which(!collapsing)[2]
+      pos1 <- replacementIndex(iv, IJK[[firstindex]])
+      pos2 <- replacementIndex(seq_len(sd2), IJK[[secondindex]])
+      xv   <- rep(xv, sd2)
+      pos1 <- rep(pos1, sd2)
+      pos2 <- rep(pos2, each=length(pos1))
+      pos3 <- IJK[[which(collapsing)]]$i
+      vdata <- data.frame(i=pos3, j=pos3, k=pos3, x=xv)
+      vdata[,firstindex] <- pos1
+      vdata[,secondindex] <- pos2
     }
-  } else if(identical(subdims[subdims > 1],  dimV[dimV > 1])) {
+  } else if(identical(dimVshould[dimVshould > 1],  dimV[dimV > 1])) {
     #' lower dimensional sets of the same dimension
     value <- value[drop=TRUE]
     dimV <- dim(value)
-    dropping <- (subdims == 1)
+    dropping <- (dimVshould == 1)
     if(length(dimV) == 2) {
       value <- as(value, "TsparseMatrix")
       iv <- value@i + 1L
       jv <- value@j + 1L
       xv <- value@x
-      indices <- list(I,J,K)
-      vars <- which(!dropping)
-      v1 <- vars[1]
-      v2 <- vars[2]
-      indices[[ v1 ]] <- indices[[ v1 ]] [iv]
-      indices[[ v2 ]] <- indices[[ v2 ]] [jv]
-      vdata <- data.frame(i=indices[[1]],
-                          j=indices[[2]],
-                          k=indices[[3]],
-                          x=xv)
+      firstindex <- which(!dropping)[1]
+      secondindex <- which(!dropping)[2]
+      pos1 <- replacementIndex(iv, IJK[[firstindex]])
+      pos2 <- replacementIndex(jv, IJK[[secondindex]])
+      pos3 <- IJK[[which(dropping)]]$i
+      vdata <- data.frame(i=pos3, j=pos3, k=pos3, x=xv)
+      vdata[,firstindex] <- pos1
+      vdata[,secondindex] <- pos2
     } else {
       value <- as(value, "sparseVector")
       iv <- value@i
       xv <- value@x
-      vdata <- data.frame(i=if(dropping[1]) I else I[iv],
-                          j=if(dropping[2]) J else J[iv],
-                          k=if(dropping[3]) K else K[iv],
+      vdata <- data.frame(i=if(dropping[1]) I$i else replacementIndex(iv, I),
+                          j=if(dropping[2]) J$i else replacementIndex(iv, J),
+                          k=if(dropping[3]) K$i else replacementIndex(iv, K),
                           x=xv)
     }
   } else
     stop(paste("Replacement value has wrong dimensions:",
                paste(dimV, collapse="x"),
                "instead of",
-               paste(subdims, collapse="x")),
+               paste(dimVshould, collapse="x")),
          call.=FALSE)
     
   ## combine
@@ -415,89 +443,6 @@ inside3Darray <- function(d, i, j, k) {
   return(y)
 }
 
-mapSparse3DEntries <- function(x, margin, values, conform=TRUE) {
-  # replace the NONZERO entries of sparse matrix or array
-  # by values[l] where l is one of the slice indices
-  if(inherits(x, "sparseMatrix")) {
-    x <- as(x, Class="TsparseMatrix")
-    stopifnot(margin %in% 1:2)
-    check.nvector(values, dim(x)[margin], things=c("rows","columns")[margin],
-                  oneok=TRUE)
-    if(length(values) == 1) values <- rep(values, dim(x)[margin])
-    i <- x@i + 1L
-    j <- x@j + 1L
-    yindex <- switch(margin, i, j)
-    y <- sparseMatrix(i=i, j=j, x=values[yindex],
-                      dims=dim(x), dimnames=dimnames(x))
-    return(y)
-  }
-  if(inherits(x, "sparse3Darray")) {
-    check.nvector(values, dim(x)[margin],
-                  things=c("rows","columns","planes")[margin],
-                  oneok=TRUE)
-    if(length(values) == 1) values <- rep(values, dim(x)[margin])
-    i <- x$i
-    j <- x$j
-    k <- x$k
-    yindex <- switch(margin, i, j, k)
-    y <- sparse3Darray(i=i, j=j, k=k, x=values[yindex],
-                       dims=dim(x), dimnames=dimnames(x))
-    return(y)
-  }
-  stopifnot(inherits(x, "sparseSlab"))
-  dims <- dim(x)
-  dnx <- dimnames(x)
-  stackdim <- x$stackdim
-  if(!is.matrix(values)) {
-    # vector of values.
-    check.nvector(values, dims[margin], oneok=TRUE,
-                  things=c("rows", "columns", "planes")[margin])
-    if(length(values) == 1) values <- rep(values, dims[margin])
-  } else {
-    # matrix of values.
-    # columns of matrix must match stacking dimension
-    # rows of matrix must match 'margin'
-    if(margin == stackdim)
-      stop("When values are a matrix, margin must not be stacking dimension",
-           call.=FALSE)
-    if(nrow(values) != dims[margin])
-      stop(paste("Number of rows of values", paren(nrow(values)),
-                 "does not match array size in margin", paren(dims[margin])),
-           call.=FALSE)
-    if(ncol(values) != dims[stackdim])
-      stop(paste("Number of columns of values", paren(ncol(values)),
-                 "does not match array size in stacking dimension",
-                 paren(dims[stackdim])),
-           call.=FALSE)
-  }
-  m <- x$m
-  if(!conform) {
-    # use a different pattern of (i,j) for each matrix
-    m <- lapply(m, as, Class="TsparseMatrix")
-  } else {
-    # use a common template pattern of (i,j)
-    m <- lapply(m, as, Class="lgCMatrix")
-    template <- Reduce("|", m)
-    template <- as(template, Class="TsparseMatrix")
-    i <- template@i + 1L
-    j <- template@j + 1L
-  }
-  dim.each <- dims[-stackdim]
-  dn.each <- dnx[-stackdim]
-  for(k in seq_len(dims[stackdim])) {
-    if(!conform) {
-      mk <- m[[k]]
-      i <- mk@i + 1L
-      j <- mk@j + 1L
-    }
-    yindex <- if(margin == stackdim) k else if(margin == 1) i else j
-    yvalues <- if(is.matrix(values)) values[yindex, k] else values[yindex]
-    m[[k]] <- sparseMatrix(i=i, j=j, x=yvalues,
-                           dims=dim.each, dimnames=dn.each)
-  }
-  x$m <- m
-  return(x)
-}
 
 anyNA.sparse3Darray <- function(x, recursive=FALSE) {
   anyNA(x$x)
@@ -505,9 +450,9 @@ anyNA.sparse3Darray <- function(x, recursive=FALSE) {
 
 RelevantZero <- function(x) vector(mode=typeof(x), length=1L)
 isRelevantZero <- function(x) identical(x, RelevantZero(x))
+RelevantEmpty <- function(x) vector(mode=typeof(x), length=0L)
 
-
-unionOfIndices <- function(A, B) {
+unionOfSparseIndices <- function(A, B) {
   ijk <- rbind(data.frame(i=A$i, j=A$j, k=A$k),
                data.frame(i=B$i, j=B$j, k=B$k))
   ijk <- ijk[!duplicated(ijk), , drop=FALSE]
@@ -598,8 +543,8 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
   # Result is sparse
   if(identical(dim1, dim2)) {
     #' extents are identical
-    ijk <- unionOfIndices(e1, e2)
-    xijk <- do.call(.Generic, list(e1[ijk], e2[ijk]))
+    ijk <- unionOfSparseIndices(e1, e2)
+    xijk <- as.vector(do.call(.Generic, list(e1[ijk], e2[ijk])))
     dn <- dimnames(e1) %orifnull% dimnames(e2)
     result <- sparse3Darray(i=ijk$i, j=ijk$j, k=ijk$k, x=xijk,
                             dims=dim1, dimnames=dn, strict=TRUE)
@@ -618,7 +563,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk2)
       ijk2 <- as.data.frame(lapply(ijk2, rep, times=n))
       ijk2[,expanding] <- rep(1:n, each=m)
-      ijk <- unionOfIndices(ijk1, ijk2)
+      ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
       ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijk], e2[ijkdrop]))
@@ -639,7 +584,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk1)
       ijk1 <- as.data.frame(lapply(ijk1, rep, times=n))
       ijk1[,expanding] <- rep(1:n, each=m)
-      ijk <- unionOfIndices(ijk1, ijk2)
+      ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
       ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijkdrop], e2[ijk]))
@@ -680,47 +625,4 @@ Summary.sparse3Darray <- function(..., na.rm=FALSE) {
   rslt <- do.call(.Generic, append(argh, list(na.rm=na.rm)))
   return(rslt)
 }
-
-applySparse3DEntries <- local({
-
-  applySparseEntries <- function(x, f, ...) {
-    ## apply vectorised function 'f' only to the nonzero entries of 'x'
-    if(inherits(x, "sparseMatrix")) {
-      x <- applytoxslot(x, f, ...)
-    } else if(inherits(x, "sparse3Dmatrix")) {
-      x <- applytoxentry(x, f, ...)
-    } else if(inherits(x, "sparseSlab")) {
-      x$m <- lapply(x$m, applytoxslot, f=f, ...)
-    } else {
-      x <- f(x, ...)
-    }
-    return(x)
-  }
-
-  applytoxslot <- function(x, f, ...) {
-    xx <- x@x
-    n <- length(xx)
-    xx <- f(xx, ...)
-    if(length(xx) != n)
-      stop(paste("Function f returned the wrong number of values:",
-                 length(xx), "instead of", n),
-           call.=FALSE)
-    x@x <- xx
-    return(x)
-  }
-  
-  applytoxentry <- function(x, f, ...) {
-    xx <- x$x
-    n <- length(xx)
-    xx <- f(xx, ...)
-    if(length(xx) != n)
-      stop(paste("Function f returned the wrong number of values:",
-                 length(xx), "instead of", n),
-           call.=FALSE)
-    x$x <- xx
-    return(x)
-  }
-  
-  applySparseEntries
-})
 

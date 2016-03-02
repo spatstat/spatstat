@@ -44,7 +44,7 @@
   y <- split(amacrine)
   y[1]
   y["off"]
-  y[1] <- list(runifpoint(42, amacrine$window))
+  y[1] <- list(runifpoint(42, Window(amacrine)))
  }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

@@ -84,8 +84,8 @@
   \code{\link{linim}}
 }
 \examples{
-  example(lpp)
-  fit <- lppm(X, ~x)
+  X <- runiflpp(12, simplenet)
+  fit <- lppm(X ~ x)
   v <- predict(fit, type="trend")
   plot(v)
 }

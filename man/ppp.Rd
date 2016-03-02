@@ -186,7 +186,7 @@
 
   # copy the window from another pattern
   data(cells)
-  X <- ppp(x, y, window=cells$window)
+  X <- ppp(x, y, window=Window(cells))
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

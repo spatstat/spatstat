@@ -142,7 +142,6 @@
 # (1) Splitting by marks
 
 # Multitype point pattern: separate into types
- data(amacrine)
  u <- split(amacrine)
 
 # plot them
@@ -151,32 +150,34 @@
 # the following are equivalent:
  amon <- split(amacrine)$on
  amon <- unmark(amacrine[amacrine$marks == "on"])
+ amon <- subset(amacrine, marks == "on", -marks)
    
 # the following are equivalent:
  amon <- split(amacrine, un=FALSE)$on
  amon <- amacrine[amacrine$marks == "on"]
    
 # Scramble the locations of the 'on' cells
- u <- split(amacrine)
- u$on <- runifpoint(amon$n, amon$window)
- split(amacrine) <- u
+ X <- amacrine
+ u <- split(X)
+ u$on <- runifpoint(ex=amon)
+ split(X) <- u
 
 # Point pattern with continuous marks
- data(longleaf)
+ trees <- longleaf
  \testonly{
 	# smaller dataset
-	longleaf <- longleaf[seq(1, longleaf$n, by=80)]
+	trees <- trees[seq(1, npoints(trees), by=80)]
  }
  # cut the range of tree diameters into three intervals
  # using cut.ppp
- long3 <- cut(longleaf, breaks=3)
+ long3 <- cut(trees, breaks=3)
  # now split them
  long3split <- split(long3)
 
 # (2) Splitting by a factor
 
 # Unmarked point pattern
-  data(swedishpines)
+  swedishpines
 # cut & split according to nearest neighbour distance
   f <- cut(nndist(swedishpines), 3)
   u <- split(swedishpines, f)
@@ -195,11 +196,10 @@
   split(X) <- Y
 }
 
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{methods}

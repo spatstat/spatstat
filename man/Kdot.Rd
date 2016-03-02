@@ -126,7 +126,7 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
   Biases due to edge effects are
   treated in the same manner as in \code{\link{Kest}},
@@ -184,15 +184,11 @@ Kdot(X, i, r=NULL, breaks=NULL, correction, ..., ratio=FALSE, from)
 }
 \examples{
      # Lansing woods data: 6 types of trees
-    data(lansing)
+    woods <- lansing
 
-    \dontrun{
-    Kh. <- Kdot(lansing, "hickory") 
-    }
-    \testonly{
-    sub <- lansing[seq(1,lansing$n, by=80), ]
-    Kh. <- Kdot(sub, "hickory") 
-    }
+    \testonly{woods <- woods[seq(1, npoints(woods), by=80)]}
+
+    Kh. <- Kdot(woods, "hickory") 
     # diagnostic plot for independence between hickories and other trees
     plot(Kh.)
 

@@ -19,7 +19,7 @@
 }
 \details{
   This function modifies the point pattern \code{X} by converting its
-  observation window \code{X$window} to a binary pixel image (a window
+  observation window \code{Window(X)} to a binary pixel image (a window
   of type \code{"mask"}). It ensures that no points of \code{X} are
   deleted by the discretisation.
 
@@ -72,16 +72,16 @@
   plot(X, main="original pattern")
   Y <- discretise(X, dimyx=50)
   plot(Y, main="discretise(X)")
-  stopifnot(X$n == Y$n)
+  stopifnot(npoints(X) == npoints(Y))
 
   # what happens if we just convert the window to a mask?
-  W <- X$window
+  W <- Window(X)
   M <- as.mask(W, dimyx=50)
   plot(M, main="window of X converted to mask")
   plot(X, add=TRUE, pch=16)
   plot(X[M], add=TRUE, pch=1, cex=1.5)
   XM <- X[M]
-  cat(paste(X$n - XM$n, "points of X lie outside M\n"))
+  cat(paste(npoints(X) - npoints(XM), "points of X lie outside M\n"))
 }
 \keyword{spatial}
 \keyword{manip}

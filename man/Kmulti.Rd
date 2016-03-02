@@ -125,7 +125,7 @@ This algorithm assumes that \code{X} can be treated
 as a realisation of a stationary (spatially homogeneous) 
 random spatial point process in the plane, observed through
 a bounded window.
-The window (which is specified in \code{X} as \code{X$window})
+The window (which is specified in \code{X} as \code{Window(X)})
 may have arbitrary shape.
 
 Biases due to edge effects are
@@ -198,25 +198,24 @@ Implemented for all window geometries.
 }
 \examples{
      # Longleaf Pine data: marks represent diameter
+    trees <- longleaf
     \testonly{
-        longleaf <- longleaf[seq(1,npoints(longleaf), by=50), ]
+        trees <- trees[seq(1,npoints(trees), by=50), ]
     }
-    K <- Kmulti(longleaf, longleaf$marks <= 15, longleaf$marks >= 25)
+    K <- Kmulti(trees, marks(trees) <= 15, marks(trees) >= 25)
     plot(K)
     # functions determining subsets
     f1 <- function(X) { marks(X) <= 15 }
     f2 <- function(X) { marks(X) >= 15 }
-    K <- Kmulti(longleaf, f1, f2)
+    K <- Kmulti(trees, f1, f2)
    \testonly{
-        rm(longleaf)
+        rm(trees)
     }
- 
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{nonparametric}

@@ -1,6 +1,6 @@
 #' Dominic Schuhmacher's idea
 #'
-#' $Revision: 1.14 $ $Date: 2016/02/11 10:17:12 $
+#' $Revision: 1.15 $ $Date: 2016/03/02 09:41:32 $
 #'
 
 clickppp <- local({
@@ -79,19 +79,32 @@ clickppp <- local({
 })
 
 
-spatstatLocator <- function(n, ...) {
+spatstatLocator <- function(n, type=c("p","l","o","n"), ...) {
   #' remedy for failure of locator(type="p") in RStudio
   if(!identical(TRUE, dev.capabilities()$locator))
     stop("Sorry, this graphics device does not support the locator() function")
+  # validate
+  type <- match.arg(type)
+  do.points <- type %in% c("p","o")
+  do.lines <- type %in% c("l","o")
+  argh <- list(...)
+  pointsArgs <- c("cex", "col", "pch", "fg", "bg")
+  segmentArgs <- graphicsPars("lines")
+  # go
   res <- list(x=numeric(0), y = numeric(0))
   i <- 1
   if(missing(n)) n <- Inf
   while(i<=n){
     tmp <- locator(n=1)
     if(is.null(tmp)) return(res)
-    points(tmp, ...)
+    if(do.points)
+      do.call.matched(points.default, append(tmp, argh), extrargs=pointsArgs)
     res$x <- c(res$x,tmp$x)
     res$y <- c(res$y,tmp$y)
+    if(do.lines && i > 1) {
+      xy <- with(res, list(x0=x[i-1], y0=y[i-1], x1=x[i], y1=y[i]))
+      do.call.matched(segments, append(xy, argh), extrargs=segmentArgs)
+    }
     i <- i+1
   }
   return(res)

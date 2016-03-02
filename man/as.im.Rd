@@ -187,7 +187,7 @@
 \examples{
   data(demopat)
   # window object
-  W <- demopat$window
+  W <- Window(demopat)
   plot(W)
   Z <- as.im(W)
   image(Z)

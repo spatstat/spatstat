@@ -70,10 +70,10 @@
   The quadrature region is the region over which we are
   integrating, and approximating integrals by finite sums.
   If \code{dummy} is a point pattern object (class \code{"ppp"})
-  then the quadrature region is taken to be \code{dummy$window}.
+  then the quadrature region is taken to be \code{Window(dummy)}.
   If \code{dummy} is just a list of \eqn{x, y} coordinates
   then the quadrature region defaults to the observation window
-  of the data pattern, \code{data$window}.
+  of the data pattern, \code{Window(data)}.
 
   If \code{dummy} is missing, then a pattern of dummy points
   will be generated using \code{\link{default.dummy}}, taking account
@@ -141,7 +141,7 @@
 
   # random dummy pattern
   \dontrun{
-  D <- runifpoint(250, simdat$window)
+  D <- runifpoint(250, Window(simdat))
   Q <- quadscheme(simdat, D, method="dirichlet", exact=FALSE)
   }
 
@@ -151,7 +151,7 @@
   Q <- quadscheme(X)
 
   # mask window
-  X$window <- as.mask(X$window)
+  Window(X) <- as.mask(Window(X))
   Q <- quadscheme(X)
   
 }

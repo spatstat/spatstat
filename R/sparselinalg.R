@@ -5,7 +5,7 @@
 #'
 #'   Functions work for 'sparseSlab' or 'sparse3Darray'
 #' 
-#'   $Revision: 1.2 $  $Date: 2016/02/29 08:29:29 $
+#'   $Revision: 1.3 $  $Date: 2016/03/01 09:13:09 $
 
 
 tensor1x1 <- function(A, B) {
@@ -29,7 +29,7 @@ tensor1x1 <- function(A, B) {
   return(result)
 }
 
-sumsymouterSparseSlab <- function(x, w=NULL, dbg=FALSE) {
+sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
   dimx <- dim(x)
   if(length(dimx) != 3) stop("x should be a 3D array")
   stopifnot(dim(x)[2] == dim(x)[3])

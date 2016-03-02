@@ -2428,7 +2428,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of sparse3array.R code
-#'  $Revision: 1.3 $ $Date: 2016/02/29 08:31:27 $
+#'  $Revision: 1.4 $ $Date: 2016/03/02 04:44:37 $
 
 require(spatstat)
 local({
@@ -2473,6 +2473,9 @@ local({
     twoM <- M + M
     range(M)
 
+    stopifnot(all((M+M) == 2*M))     # non-sparse
+    stopifnot(!any((M+M) != 2*M))    # sparse
+    
     ## test of anyNA method
     anyNA(M)
     
@@ -2488,7 +2491,7 @@ local({
     dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
 
     Z <- aperm(Z, c(3,1,2))
-    stopifnot(all(sumsymouterSparseSlab(Z) == sumsymouter(as.array(Z))))
+    stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
   }
 })
 
@@ -2555,7 +2558,7 @@ local({
     Z <- sparseSlab(mlist)
 
     Z <- aperm(Z, c(3,1,2))
-    stopifnot(all(sumsymouterSparseSlab(Z) == sumsymouter(as.array(Z))))
+    stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
   }
 })
 

@@ -125,7 +125,7 @@ with modifications by
 
   # How to specify a clipping region
   clip1 <- owin(c(0.1,0.9),c(0.1,0.9))
-  clip2 <- erosion(cells$window, 0.1)
+  clip2 <- erosion(Window(cells), 0.1)
   clarkevans(cells, clipregion=clip1)
   clarkevans(cells, clipregion=clip2)
 }

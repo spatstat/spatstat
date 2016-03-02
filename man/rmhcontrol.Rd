@@ -263,7 +263,7 @@
     }
     \item{conditioning on the realisation in a subwindow:}{
       Set \code{x.cond} to be a point pattern (object of
-      class \code{"ppp"}). Its window \code{V=x.cond$window} becomes the
+      class \code{"ppp"}). Its window \code{V=Window(x.cond)} becomes the
       conditioning subwindow \eqn{V}.
     }
     \item{Palm conditioning:}{

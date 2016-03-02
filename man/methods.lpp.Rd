@@ -96,7 +96,7 @@
   \code{\link[spatstat:methods.ppx]{methods.ppx}}
 }
 \examples{
-  example(lpp)
+  X <- runiflpp(10, simplenet)
   X
   as.ppp(X)
   summary(X)

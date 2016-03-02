@@ -60,7 +60,7 @@
  data(cells)
  fit <- ppm(cells, ~1, Strauss(r=0.1))
  X <- dummy.ppm(fit)
- X$n
+ npoints(X)
  # this is the number of dummy points in the quadrature scheme
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

@@ -134,7 +134,7 @@ Jdot(X, i, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
   Biases due to edge effects are
   treated in the same manner as in \code{\link{Jest}},
@@ -171,15 +171,15 @@ Jdot(X, i, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
 }
 \examples{
      # Lansing woods data: 6 types of trees
-    data(lansing)
+   woods <- lansing
 
     \testonly{
-        lansing <- lansing[seq(1,lansing$n, by=30), ]
+        woods <- woods[seq(1,npoints(woods), by=30), ]
     }
-    Jh. <- Jdot(lansing, "hickory")
+    Jh. <- Jdot(woods, "hickory")
     plot(Jh.)
     # diagnostic plot for independence between hickories and other trees
-    Jhh <- Jest(lansing[lansing$marks == "hickory", ])
+    Jhh <- Jest(split(woods)$hickory)
     plot(Jhh, add=TRUE, legendpos="bottom")
 
     \dontrun{

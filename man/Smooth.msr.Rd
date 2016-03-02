@@ -63,7 +63,11 @@
   \code{\link{plot.msr}}
 }
 \examples{
-   example(msr)
+   X <- rpoispp(function(x,y) { exp(3+3*x) })
+   fit <- ppm(X, ~x+y)
+   rp <- residuals(fit, type="pearson")
+   rs <- residuals(fit, type="score")
+
    plot(Smooth(rp))
    plot(Smooth(rs))
 }

@@ -31,45 +31,42 @@ which can then be fitted to point pattern data.
   \code{\link{Strauss}}
 }
 \examples{
- data(nztrees)
- ppm(nztrees, ~1, Poisson())
+ ppm(nztrees ~1, Poisson())
  # fit the stationary Poisson process to 'nztrees'
  # no edge correction needed
 
- data(longleaf)
+ lon <- longleaf
  \testonly{
-   longleaf <- longleaf[seq(1, longleaf$n, by=50)]
+   lon <- lon[seq(1, npoints(lon), by=50)]
  }
- longadult <- longleaf[longleaf$marks >= 30, ]
- longadult <- unmark(longadult)
- ppm(longadult, ~ x, Poisson())
+ longadult <- unmark(subset(lon, marks >= 30))
+ ppm(longadult ~ x, Poisson())
  # fit the nonstationary Poisson process 
  # with intensity lambda(x,y) = exp( a + bx)
 
- data(lansing)
  # trees marked by species
+ lans <- lansing
  \testonly{
-     lansing <- lansing[seq(1,lansing$n, by=30), ]
+     lans <- lans[seq(1, npoints(lans), by=30)]
  }
- ppm(lansing, ~ marks, Poisson())
+ ppm(lans ~ marks, Poisson())
  # fit stationary marked Poisson process
  # with different intensity for each species
 
 \dontrun{
- ppm(lansing, ~ marks * polynom(x,y,3), Poisson())
+ ppm(lansing ~ marks * polynom(x,y,3), Poisson())
 }
  # fit nonstationary marked Poisson process
  # with different log-cubic trend for each species
 \testonly{
    # equivalent functionality - smaller dataset
-   ppm(amacrine, ~ marks * polynom(x,y,2), Poisson())
+   ppm(amacrine ~ marks * polynom(x,y,2), Poisson())
 }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{models}

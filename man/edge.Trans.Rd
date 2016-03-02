@@ -9,7 +9,7 @@
   for a point pattern.
 }
 \usage{
-edge.Trans(X, Y = X, W = X$window,
+edge.Trans(X, Y = X, W = Window(X),
       exact = FALSE, paired = FALSE,
       ..., 
       trim = spatstat.options("maxedgewt"),

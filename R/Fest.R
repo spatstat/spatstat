@@ -3,7 +3,7 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.39 $	$Date: 2014/11/10 07:40:28 $
+#	$Revision: 4.41 $	$Date: 2016/03/01 08:24:20 $
 #
 
 Fhazard <- function(X, ...) {
@@ -35,7 +35,8 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   verifyclass(X, "ppp")
   if(!is.null(domain))
       stopifnot(is.subset.owin(domain, Window(X)))
-  
+  rorbgiven <- !is.null(r) || !is.null(breaks)
+    
   ## Intensity estimate
   W <- X$window
   npts <- npoints(X)
@@ -45,13 +46,19 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   dwin <- as.mask(W, eps=eps)
   dX <- ppp(X$x, X$y, window=dwin, check=FALSE)
 
-  ## histogram breakpoints 
+  ## histogram breakpoints
   rmaxdefault <- rmax.rule("F", dwin, lambda)
   breaks <- handle.r.b.args(r, breaks, dwin, eps, 
                                   rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
-  
+
+  if(rorbgiven) check.finespacing(rvals,
+                                  if(is.null(eps)) NULL else eps/4,
+                                  action="fatal",
+                                  rname="r", 
+                                  context="in Fest(X, r)")
+                                
   ## choose correction(s)
 #  correction.given <- !missing(correction) && !is.null(correction)
   if(is.null(correction)) {

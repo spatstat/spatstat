@@ -192,7 +192,7 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
 
   Biases due to edge effects are
@@ -273,7 +273,7 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
 
     # (2) simulated data with independent marks
     X <- rpoispp(100)
-    X <- X \%mark\% runif(X$n)
+    X <- X \%mark\% runif(npoints(X))
     \dontrun{
     Xc <- markcorr(X)
     plot(Xc)

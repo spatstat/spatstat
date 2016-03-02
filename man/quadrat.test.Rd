@@ -265,7 +265,7 @@ quadrat.test(X, ...)
   title(sub=sublab, cex.sub=3)
 
   # quadrats of irregular shape
-  B <- dirichlet(runifpoint(6, simdat$window))
+  B <- dirichlet(runifpoint(6, Window(simdat)))
   qB <- quadrat.test(simdat, tess=B)
   plot(simdat, main="quadrat.test(simdat, tess=B)", pch="+")
   plot(qB, add=TRUE, col="red", lwd=2, cex=1.2)

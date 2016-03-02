@@ -218,19 +218,19 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
 }
 \examples{
     # Lansing Woods data
-    data(lansing)
-    lansing <- lansing[seq(1,lansing$n, by=10)]
-    ma <- split(lansing)$maple
-    lg <- unmark(lansing)
+    woods <- lansing
+    woods <- woods[seq(1,npoints(woods), by=10)]
+    ma <- split(woods)$maple
+    lg <- unmark(woods)
 
     # Estimate intensities by nonparametric smoothing
     lambdaM <- density.ppp(ma, sigma=0.15, at="points")
     lambdadot <- density.ppp(lg, sigma=0.15, at="points")
-    K <- Kdot.inhom(lansing, "maple", lambdaI=lambdaM,
+    K <- Kdot.inhom(woods, "maple", lambdaI=lambdaM,
                                       lambdadot=lambdadot)
 
     # Equivalent
-    K <- Kdot.inhom(lansing, "maple", sigma=0.15)
+    K <- Kdot.inhom(woods, "maple", sigma=0.15)
 
     # synthetic example: type A points have intensity 50,
     #                    type B points have intensity 50 + 100 * x
@@ -239,11 +239,10 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     K <- Kdot.inhom(X, "B",  lambdaI=lamB,     lambdadot=lamdot)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{nonparametric}

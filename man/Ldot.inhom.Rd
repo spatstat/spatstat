@@ -76,16 +76,16 @@ Ldot.inhom(X, i, \dots)
 }
 \examples{
     # Lansing Woods data
-    data(lansing)
-    lansing <- lansing[seq(1,lansing$n, by=10)]
-    ma <- split(lansing)$maple
-    lg <- unmark(lansing)
+    lan <- lansing
+    lan <- lan[seq(1,npoints(lan), by=10)]
+    ma <- split(lan)$maple
+    lg <- unmark(lan)
 
     # Estimate intensities by nonparametric smoothing
     lambdaM <- density.ppp(ma, sigma=0.15, at="points")
     lambdadot <- density.ppp(lg, sigma=0.15, at="points")
-    L <- Ldot.inhom(lansing, "maple", lambdaI=lambdaM,
-                                      lambdadot=lambdadot)
+    L <- Ldot.inhom(lan, "maple", lambdaI=lambdaM,
+                                  lambdadot=lambdadot)
 
 
     # synthetic example: type A points have intensity 50,
@@ -95,11 +95,10 @@ Ldot.inhom(X, i, \dots)
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     L <- Ldot.inhom(X, "B",  lambdaI=lamB,     lambdadot=lamdot)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{nonparametric}

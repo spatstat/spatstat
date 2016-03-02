@@ -47,14 +47,14 @@
 \value{
   Similar to the result of \code{\link{apply}}.
   If each call to \code{FUN} returns a single numeric value,
-  the result is a vector of dimension \code{X$n}, the number of points
+  the result is a vector of dimension \code{npoints(X)}, the number of points
   in \code{X}.
   If each call to \code{FUN} returns a vector of the same length
   \code{m}, then the result is a matrix of dimensions \code{c(m,n)};
   note the transposition of the indices, as usual for the family of
   \code{apply} functions.
   If the calls to \code{FUN} return vectors of different lengths,
-  the result is a list of length \code{X$n}. 
+  the result is a list of length \code{npoints(X)}. 
 }
 \details{
   This is an analogue of \code{\link{apply}}
@@ -153,12 +153,11 @@
   \code{\link{marktable}}
 }
 \examples{
-  data(redwood)
-
+  redwood
   # count the number of points within radius 0.2 of each point of X
-  nneighbours <- applynbd(redwood, R=0.2, function(Y, ...){Y$n-1})
+  nneighbours <- applynbd(redwood, R=0.2, function(Y, ...){npoints(Y)-1})
   # equivalent to:
-  nneighbours <- applynbd(redwood, R=0.2, function(Y, ...){Y$n}, exclude=TRUE)
+  nneighbours <- applynbd(redwood, R=0.2, function(Y, ...){npoints(Y)}, exclude=TRUE)
 
   # compute the distance to the second nearest neighbour of each point
   secondnndist <- applynbd(redwood, N = 2,
@@ -166,15 +165,15 @@
                            exclude=TRUE)
 
   # marked point pattern
-  data(longleaf)
+  trees <- longleaf
   \testonly{
 	# smaller dataset
-	longleaf <- longleaf[seq(1, longleaf$n, by=80)]
+	trees <- trees[seq(1, npoints(trees), by=80)]
   }
   # compute the median of the marks of all neighbours of a point
   # (see also 'markstat')
-  dbh.med <- applynbd(longleaf, R=90, exclude=TRUE,
-                 function(Y, ...) { median(Y$marks)})
+  dbh.med <- applynbd(trees, R=90, exclude=TRUE,
+                 function(Y, ...) { median(marks(Y))})
 
 
   # ANIMATION explaining the definition of the K function
@@ -188,9 +187,9 @@
 	points(u$x,u$y,pch="+",cex=3)
 	theta <- seq(0,2*pi,length=100)
 	polygon(u$x+ rad * cos(theta),u$y+rad*sin(theta))
-	text(u$x+rad/3,u$y+rad/2,Y$n,cex=3)
-	Sys.sleep(if(runif(1) < 0.1) 1.5 else 0.3)
-	return(Y$n - 1)
+	text(u$x+rad/3,u$y+rad/2,npoints(Y),cex=3)
+	if(interactive()) Sys.sleep(if(runif(1) < 0.1) 1.5 else 0.3)
+	return(npoints(Y) - 1)
   }
   applynbd(redwood, R=0.2, showoffK, fullpicture=redwood, rad=0.2, exclude=TRUE)
 
@@ -206,19 +205,17 @@
 	w <- (u + v)/2
 	nnd <- dists[1]
 	text(w[1],w[2],round(nnd,3),cex=2)
-	Sys.sleep(if(runif(1) < 0.1) 1.5 else 0.3)
+	if(interactive()) Sys.sleep(if(runif(1) < 0.1) 1.5 else 0.3)
 	return(nnd)
   }
 
-  data(cells)
   applynbd(cells, N=1, showoffG, exclude=TRUE, fullpicture=cells)
   }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{programming}

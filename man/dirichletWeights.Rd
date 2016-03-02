@@ -34,7 +34,7 @@
   point pattern object. Then the Dirichlet tessellation of the points
   of \code{X} is computed.
   The weight attached to a point of \code{X} is the area of
-  its Dirichlet tile (inside the window \code{X$window}).
+  its Dirichlet tile (inside the window \code{Window(X)}).
 
   If \code{exact=TRUE} the Dirichlet tessellation is computed exactly
   by the Lee-Schachter algorithm using the package \code{deldir}.

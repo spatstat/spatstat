@@ -135,7 +135,7 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
   Biases due to edge effects are
   treated in the same manner as in \code{\link{Jest}},
@@ -172,12 +172,11 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
 }
 \examples{
      # Lansing woods data: 6 types of trees
-    data(lansing)
-
+    woods <- lansing
     \testonly{
-       lansing <- lansing[seq(1,lansing$n, by=30), ]
+       woods <- woods[seq(1,npoints(woods), by=30)]
     }
-    Jhm <- Jcross(lansing, "hickory", "maple")
+    Jhm <- Jcross(woods, "hickory", "maple")
     # diagnostic plot for independence between hickories and maples
     plot(Jhm)
 
@@ -185,11 +184,10 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     pp <- runifpoint(30) \%mark\% factor(sample(c("a","b"), 30, replace=TRUE))
     J <- Jcross(pp)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{nonparametric}

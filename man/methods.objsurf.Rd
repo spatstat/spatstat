@@ -51,7 +51,8 @@
   \code{\link{objsurf}}
 }
 \examples{
-  example(objsurf)
+ fit <- kppm(redwood ~ 1, "Thomas")
+ os <- objsurf(fit)
   os
   plot(os)
   contour(os, add=TRUE)

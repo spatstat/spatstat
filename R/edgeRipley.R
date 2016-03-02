@@ -27,7 +27,7 @@ edge.Ripley <- local({
     answer
   }
 
-  edge.Ripley <- function(X, r, W=X$window, method="C", maxweight=100) {
+  edge.Ripley <- function(X, r, W=Window(X), method="C", maxweight=100) {
     # X is a point pattern, or equivalent
     X <- as.ppp(X, W)
     W <- X$window

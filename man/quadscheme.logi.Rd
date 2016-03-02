@@ -76,10 +76,10 @@
   The quadrature region is the region over which we are
   integrating, and approximating integrals by finite sums.
   If \code{dummy} is a point pattern object (class \code{"ppp"})
-  then the quadrature region is taken to be \code{dummy$window}.
+  then the quadrature region is taken to be \code{Window(dummy)}.
   If \code{dummy} is just a list of \eqn{x, y} coordinates
   then the quadrature region defaults to the observation window
-  of the data pattern, \code{data$window}.
+  of the data pattern, \code{Window(data)}.
 
   If \code{dummy} is missing, then a pattern of dummy points will be
   generated, taking account of the optional arguments \code{dummytype},

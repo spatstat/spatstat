@@ -330,11 +330,10 @@
   \code{\link{pcf}}
 }
 \examples{
-  data(lansing)
   # inhomogeneous pattern of maples
   X <- unmark(split(lansing)$maple)
   \testonly{
-     sub <- sample(c(TRUE,FALSE), X$n, replace=TRUE, prob=c(0.1,0.9))
+     sub <- sample(c(TRUE,FALSE), npoints(X), replace=TRUE, prob=c(0.1,0.9))
      X <- X[sub]
   }
 

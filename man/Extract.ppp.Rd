@@ -119,20 +119,19 @@
 }
 \section{Warnings}{
   The function does not check whether \code{i} is a subset of
-  \code{x$window}. Nor does it check whether \code{value} lies
-  inside \code{x$window}.
+  \code{Window(x)}. Nor does it check whether \code{value} lies
+  inside \code{Window(x)}.
 }
 \examples{
  # Longleaf pines data
+ lon <- longleaf
  \dontrun{
- plot(longleaf)
+ plot(lon)
  }
- \testonly{
-	longleaf <- longleaf[seq(1,longleaf$n,by=10)]
- }
+ \testonly{lon <- lon[seq(1,npoints(lon),by=10)]}
+
  # adult trees defined to have diameter at least 30 cm
- adult <- (longleaf$marks >= 30)
- longadult <- longleaf[adult]
+ longadult <- subset(lon, marks >= 30)
  \dontrun{
  plot(longadult)
  }
@@ -156,19 +155,21 @@
  plot(redwood)
  }
  # Random thinning: delete 60\% of data
- retain <- (runif(redwood$n) < 0.4)
+ retain <- (runif(npoints(redwood)) < 0.4)
  thinred <- redwood[retain]
  \dontrun{
  plot(thinred)
  }
+
  # Scramble 60\% of data
- modif <- (runif(redwood$n) < 0.6)
- scramble <- function(x) { runifpoint(x$n, x$window) }
- redwood[modif] <- scramble(redwood[modif])
+ X <- redwood
+ modif <- (runif(npoints(X)) < 0.6)
+ X[modif] <- runifpoint(ex=X[modif])
 
  # Lansing woods data - multitype points
+ lan <- lansing
  \testonly{
-    lansing <- lansing[seq(1, lansing$n, length=100)]
+    lan <- lan[seq(1, npoints(lan), length=100)]
  }
 
  # Hickory trees
@@ -176,15 +177,15 @@
 
  # Trees in subwindow
   win <- owin(c(0.3, 0.6),c(0.2, 0.5))
-  lsub <- lansing[win]
+  lsub <- lan[win]
 
  # Scramble the locations of trees in subwindow, retaining their marks
-  lansing[win] <- scramble(lsub) \%mark\% (lsub$marks)
+  lan[win] <- runifpoint(ex=lsub) \%mark\% marks(lsub)
 
  # Extract oaks only
  oaknames <- c("redoak", "whiteoak", "blackoak")
- oak <- lansing[marks(lansing) \%in\% oaknames, drop=TRUE]
- oak <- subset(lansing, marks \%in\% oaknames, drop=TRUE)
+ oak <- lan[marks(lan) \%in\% oaknames, drop=TRUE]
+ oak <- subset(lan, marks \%in\% oaknames, drop=TRUE)
 
  # To clip or not to clip
  X <- runifpoint(25, letterR)
@@ -199,9 +200,9 @@
  par(opa)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  and
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{manip}

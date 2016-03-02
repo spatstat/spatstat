@@ -199,15 +199,15 @@
   \code{\link{lohboot}}.
 }
 \examples{
-  data(simdat)
+  X <- simdat
   \testonly{
-    simdat <- simdat[seq(1,simdat$n, by=4)]
+    X <- X[seq(1,npoints(X), by=4)]
   }
-  p <- pcf(simdat)
-  plot(p, main="pair correlation function for simdat")
+  p <- pcf(X)
+  plot(p, main="pair correlation function for X")
   # indicates inhibition at distances r < 0.3
 
-  pd <- pcf(simdat, divisor="d")
+  pd <- pcf(X, divisor="d")
 
   # compare estimates
   plot(p, cbind(iso, theo) ~ r, col=c("blue", "red"),
@@ -218,7 +218,8 @@
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  Rolf Turner \email{r.turner@auckland.ac.nz},
+  Ege Rubak \email{rubak@math.aau.dk}
   and Martin Hazelton.
 }
 \keyword{spatial}

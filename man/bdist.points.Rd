@@ -22,7 +22,7 @@
   \eqn{d(x_i, W^c)}{dist(x[i], W')} from \eqn{x_i}{x[i]}
   to the boundary of the window \eqn{W} of observation.
 
-  If the window \code{X$window} is of type \code{"rectangle"}
+  If the window \code{Window(X)} is of type \code{"rectangle"}
   or \code{"polygonal"}, then these distances are computed by
   analytic geometry and are exact, up to rounding errors.
   If the window is of type \code{"mask"} then the distances

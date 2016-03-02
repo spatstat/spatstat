@@ -90,7 +90,7 @@ lppm(X, ...)
   \code{\link{lpp}}.
 }
 \examples{
-  example(lpp)
+  X <- runiflpp(15, simplenet)
   lppm(X ~1)
   lppm(X ~x)
 }

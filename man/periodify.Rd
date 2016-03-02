@@ -100,7 +100,7 @@ periodify(X, ...)
 \examples{
   data(cells)
   plot(periodify(cells))
-  a <- lapply(periodify(cells$window, combine=FALSE),
+  a <- lapply(periodify(Window(cells), combine=FALSE),
         plot, add=TRUE,lty=2)
 
 }

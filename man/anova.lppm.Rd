@@ -71,9 +71,9 @@ models on a linear network.
   \code{\link{lppm}}
 }
 \examples{
- example(lpp)
- mod0 <- lppm(X, ~1)
- modx <- lppm(X, ~x)
+ X <- runiflpp(10, simplenet)
+ mod0 <- lppm(X ~1)
+ modx <- lppm(X ~x)
  anova(mod0, modx, test="Chi")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

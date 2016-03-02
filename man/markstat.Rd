@@ -35,14 +35,14 @@
 \value{
   Similar to the result of \code{\link{apply}}.
   if each call to \code{fun} returns a single numeric value,
-  the result is a vector of dimension \code{X$n}, the number of points
+  the result is a vector of dimension \code{npoints(X)}, the number of points
   in \code{X}.
   If each call to \code{fun} returns a vector of the same length
   \code{m}, then the result is a matrix of dimensions \code{c(m,n)};
   note the transposition of the indices, as usual for the family of
   \code{apply} functions.
   If the calls to \code{fun} return vectors of different lengths,
-  the result is a list of length \code{X$n}. 
+  the result is a list of length \code{npoints(X)}. 
 }
 \details{
   This algorithm visits each point in the point pattern \code{X},
@@ -88,22 +88,21 @@
   \code{\link{apply}}
 }
 \examples{
-  data(longleaf)
+  trees <- longleaf
   \testonly{
-     longleaf <- longleaf[seq(1, longleaf$n, by=6)]
+     trees <- trees[seq(1, npoints(trees), by=6)]
   }
 
   # average diameter of 5 closest neighbours of each tree
-  md <- markstat(longleaf, mean, N=5)
+  md <- markstat(trees, mean, N=5)
 
   # range of diameters of trees within 10 metre radius
-  rd <- markstat(longleaf, range, R=10)
+  rd <- markstat(trees, range, R=10)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{programming}

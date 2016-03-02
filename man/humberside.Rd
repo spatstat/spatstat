@@ -32,7 +32,7 @@
    humberside
    summary(humberside)
    plot(humberside)
-   plot(humberside.convex$window, add=TRUE, lty=2)
+   plot(Window(humberside.convex), add=TRUE, lty=2)
 }
 \source{
   Dr Ray Cartwright and Dr Freda Alexander.

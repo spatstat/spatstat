@@ -313,12 +313,12 @@ There is never a guarantee that the Metropolis-Hastings algorithm
 has converged to its limiting distribution.
 
 If \code{start$x.start} is specified then \code{expand} is set equal to 1
-and simulation takes place in \code{x.start$window}.  Any specified
+and simulation takes place in \code{Window(x.start)}.  Any specified
 value for \code{expand} is simply ignored.
 
 The presence of both a component \code{w} of \code{model} and a
-non-null value for \code{x.start$window} makes sense ONLY if \code{w}
-is contained in \code{x.start$window}.  
+non-null value for \code{Window(x.start)} makes sense ONLY if \code{w}
+is contained in \code{Window(x.start)}.  
 
 For multitype processes make sure that, even if there is to be no
 trend corresponding to a particular type, there is still a component
@@ -443,7 +443,7 @@ trend corresponding to a particular type, there is still a component
    # polygonal window replace by a rectangular one.  At the end,
    # the generated pattern is clipped to the original polygonal window.
    xxx <- X4.strauss
-   xxx$window <- as.owin(c(0,1,0,1))
+   Window(xxx) <- as.owin(c(0,1,0,1))
    X6.strauss <- rmh(model=mod03,start=list(x.start=xxx),
                      control=list(nrep=nr,nverb=nv))
    

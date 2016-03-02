@@ -39,9 +39,9 @@
   Users are strongly advised not to manipulate these entries
   directly.
   
-  The domain of quadrature is specified by \code{dummy$window}
+  The domain of quadrature is specified by \code{Window(dummy)}
   while the observation window (if this needs to be specified
-  separately) is taken to be \code{data$window}. 
+  separately) is taken to be \code{Window(data)}. 
 
   The weights vector \code{w} may also have an attribute
   \code{attr(w, "zeroes")} equivalent to the logical vector

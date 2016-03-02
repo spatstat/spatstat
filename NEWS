@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.043
+        CHANGES IN spatstat VERSION 1.44-1.044
 
 OVERVIEW
 
     o We thank Monsuru Adepeju, Mario D'Antuono, Markus Herrmann, 
-    Paul Hewson, Greg Mcwiggan, Suman Rakshit and Sven Wagner 
+    Paul Hewson, Greg McSwiggan, Suman Rakshit and Sven Wagner 
     for contributions.
 
     o Important bug fix in leverage/influence diagnostics for Gibbs models.
@@ -142,6 +142,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The default plot of the pooled function no longer includes 
     the variance curves.
 
+    o clickpoly
+    The polygon is now drawn progressively as the user clicks new vertices.
+    
     o Kest 
     Accelerated computation (for translation and rigid corrections)
     when window is an irregular shape.
@@ -151,6 +154,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Internal code
     Performance slightly improved.
+
+    o Fest, Hest
+    Additional checks for errors in input data.
 
 BUGS
 

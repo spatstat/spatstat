@@ -64,17 +64,18 @@
   \code{\link{marks<-}}
 }
 \examples{
-  example(psp)
+  m <- data.frame(A=1:10, B=letters[1:10])
+  X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
+
   marks(X) 
   marks(X)[,2]
   marks(X) <- 42
   marks(X) <- NULL
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{manip}

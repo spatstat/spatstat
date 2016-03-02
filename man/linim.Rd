@@ -66,10 +66,9 @@
   \code{\link{im}}.
 }
 \examples{
-  example(linnet)
-  M <- as.mask.psp(as.psp(letterA))
+  M <- as.mask.psp(as.psp(simplenet))
   Z <- as.im(function(x,y) {x-y}, W=M)
-  X <- linim(letterA, Z)
+  X <- linim(simplenet, Z)
   X
 }
 \references{

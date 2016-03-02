@@ -50,7 +50,7 @@
   \code{\link{lpp}}
 }
 \examples{
-   example(lpp)
+   X <- runiflpp(12, simplenet)
    nndist(X)
    nndist(X, k=2)
 }

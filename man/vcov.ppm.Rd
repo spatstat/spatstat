@@ -173,18 +173,17 @@
   vcov(fit, what="Fish")
 
   # example of singular system
-  data(demopat)
-  m <- ppm(demopat, ~polynom(x,y,2))
+  m <- ppm(demopat ~polynom(x,y,2))
   \dontrun{
     try(v <- vcov(m))
   }
   # rescale x, y coordinates to range [0,1] x [0,1] approximately
-  demopat <- rescale(demopat, 10000)
-  m <- ppm(demopat, ~polynom(x,y,2))
+  demopatScale <- rescale(demopat, 10000)
+  m <- ppm(demopatScale ~ polynom(x,y,2))
   v <- vcov(m)
 
   # Gibbs example
-  fitS <- ppm(swedishpines, ~1, Strauss(9))
+  fitS <- ppm(swedishpines ~1, Strauss(9))
   coef(fitS)
   sqrt(diag(vcov(fitS)))
 }

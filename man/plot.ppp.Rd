@@ -148,7 +148,7 @@
   This is the \code{plot} method for 
   point pattern datasets (of class \code{"ppp"}, see \code{\link{ppp.object}}).
 
-  First the observation window \code{x$window} is plotted
+  First the observation window \code{Window(x)} is plotted
   (if \code{show.window=TRUE}).
   Then the points themselves are plotted,
   in a fashion that depends on their marks,

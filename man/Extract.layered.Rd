@@ -70,7 +70,10 @@
   \code{\link{layered}}
 }
 \examples{
- example(layered)
+ D <- distmap(cells)
+ L <- layered(D, cells,
+              plotargs=list(list(ribbon=FALSE), list(pch=16)))
+
  L[-2]
  L[, square(0.5)]
 

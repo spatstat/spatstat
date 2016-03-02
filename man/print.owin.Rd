@@ -26,7 +26,7 @@
   owin()  # the unit square
 
   data(demopat)
-  W <- demopat$window  
+  W <- Window(demopat)
   W                    # just says it is polygonal
   as.mask(W)           # just says it is a binary image 
 

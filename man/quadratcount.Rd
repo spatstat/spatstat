@@ -68,7 +68,7 @@
   giving the \eqn{x} coordinates of the quadrat boundaries.
   If it is not given, it defaults to a
   sequence of \code{nx+1} values equally spaced
-  over the range of \eqn{x} coordinates in the window \code{X$window}.
+  over the range of \eqn{x} coordinates in the window \code{Window(X)}.
 
   Similarly if \code{ybreaks} is given, it should be a numeric
   vector giving the \eqn{y} coordinates of the quadrat boundaries.

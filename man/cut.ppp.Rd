@@ -85,26 +85,26 @@
 \examples{
  # (1) cutting based on numeric marks of point pattern
  
- data(longleaf)
+ trees <- longleaf
  # Longleaf Pines data
  # the marks are positive real numbers indicating tree diameters.
 
  \testonly{
 	# smaller dataset
-	longleaf <- longleaf[seq(1, longleaf$n, by=80)]
+	trees <- trees[seq(1, npoints(trees), by=80)]
  }
  \dontrun{
- plot(longleaf)
+ plot(trees)
  }
 
  # cut the range of tree diameters into three intervals
- long3 <- cut(longleaf, breaks=3)
+ long3 <- cut(trees, breaks=3)
  \dontrun{
  plot(long3)
  }
 
  # adult trees defined to have diameter at least 30 cm
- long2 <- cut(longleaf, breaks=c(0,30,100), labels=c("Sapling", "Adult"))
+ long2 <- cut(trees, breaks=c(0,30,100), labels=c("Sapling", "Adult"))
  plot(long2)
  plot(long2, cols=c("green","blue"))
 
@@ -112,7 +112,7 @@
  # Divide Swedish Pines data into 3 classes
  # according to nearest neighbour distance
 
- data(swedishpines)
+ swedishpines
  plot(cut(swedishpines, nndist(swedishpines), breaks=3))
 
  # (3) cutting based on tessellation
@@ -124,15 +124,14 @@
  plot(tes, lty=2, add=TRUE)
 
  # (4) multivariate marks
- data(finpines)
+ finpines
  cut(finpines, "height", breaks=4)
 }
 
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{methods}

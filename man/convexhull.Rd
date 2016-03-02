@@ -29,7 +29,7 @@ convexhull(x)
 }
 \examples{
    data(demopat)
-   W <- demopat$window
+   W <- Window(demopat)
    plot(convexhull(W), col="lightblue", border=NA)
    plot(W, add=TRUE, lwd=2)
 }

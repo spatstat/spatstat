@@ -25,7 +25,7 @@
   summary(owin())  # the unit square
 
   data(demopat)
-  W <- demopat$window  # weird polygonal window
+  W <- Window(demopat)  # weird polygonal window
   summary(W)           # describes it
 
   summary(as.mask(W))  # demonstrates current pixel resolution

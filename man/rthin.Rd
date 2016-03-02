@@ -82,7 +82,7 @@ rthin(X, P, \dots, nsim=1, drop=TRUE)
   Y <- rthin(redwood, f)
 
   # pixel image
-  Z <- as.im(f, redwood$window)
+  Z <- as.im(f, Window(redwood))
   Y <- rthin(redwood, Z)
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

@@ -4,7 +4,7 @@
 #' Sparse 3D arrays or 'slabs' (where one of the dimensions is small)
 #' represented as lists of sparse 2D matrices
 #' 
-#' $Revision: 1.16 $  $Date: 2016/02/28 01:28:22 $
+#' $Revision: 1.17 $  $Date: 2016/03/01 09:04:54 $
 #'
 
 sparseSlab <- function(matlist, stackdim=3) {
@@ -363,77 +363,6 @@ as.array.sparseSlab <- function(x, ...) {
   return(z)
 }
 
-mapSparseEntries <- function(x, margin, values, conform=TRUE) {
-  # replace the NONZERO entries of sparse matrix or array
-  # by values[l] where l is one of the slice indices
-  if(inherits(x, "sparseMatrix")) {
-    x <- as(x, Class="TsparseMatrix")
-    stopifnot(margin %in% 1:2)
-    check.nvector(values, dim(x)[margin], things=c("rows","columns")[margin],
-                  oneok=TRUE)
-    if(length(values) == 1) values <- rep(values, dim(x)[margin])
-    i <- x@i + 1L
-    j <- x@j + 1L
-    yindex <- switch(margin, i, j)
-    y <- sparseMatrix(i=i, j=j, x=values[yindex],
-                      dims=dim(x), dimnames=dimnames(x))
-    return(y)
-  }
-  stopifnot(inherits(x, "sparseSlab"))
-  dims <- dim(x)
-  dnx <- dimnames(x)
-  stackdim <- x$stackdim
-  if(!is.matrix(values)) {
-    # vector of values.
-    check.nvector(values, dims[margin], oneok=TRUE,
-                  things=c("rows", "columns", "planes")[margin])
-    if(length(values) == 1) values <- rep(values, dims[margin])
-  } else {
-    # matrix of values.
-    # columns of matrix must match stacking dimension
-    # rows of matrix must match 'margin'
-    if(margin == stackdim)
-      stop("When values are a matrix, margin must not be stacking dimension",
-           call.=FALSE)
-    if(nrow(values) != dims[margin])
-      stop(paste("Number of rows of values", paren(nrow(values)),
-                 "does not match array size in margin", paren(dims[margin])),
-           call.=FALSE)
-    if(ncol(values) != dims[stackdim])
-      stop(paste("Number of columns of values", paren(ncol(values)),
-                 "does not match array size in stacking dimension",
-                 paren(dims[stackdim])),
-           call.=FALSE)
-  }
-  m <- x$m
-  if(!conform) {
-    # use a different pattern of (i,j) for each matrix
-    m <- lapply(m, as, Class="TsparseMatrix")
-  } else {
-    # use a common template pattern of (i,j)
-    m <- lapply(m, as, Class="lgCMatrix")
-    template <- Reduce("|", m)
-    template <- as(template, Class="TsparseMatrix")
-    i <- template@i + 1L
-    j <- template@j + 1L
-  }
-  dim.each <- dims[-stackdim]
-  dn.each <- dnx[-stackdim]
-  for(k in seq_len(dims[stackdim])) {
-    if(!conform) {
-      mk <- m[[k]]
-      i <- mk@i + 1L
-      j <- mk@j + 1L
-    }
-    yindex <- if(margin == stackdim) k else if(margin == 1) i else j
-    yvalues <- if(is.matrix(values)) values[yindex, k] else values[yindex]
-    m[[k]] <- sparseMatrix(i=i, j=j, x=yvalues,
-                           dims=dim.each, dimnames=dn.each)
-  }
-  x$m <- m
-  return(x)
-}
-
 anyNA.sparseSlab <- function(x, recursive=FALSE) {
   any(sapply(x$m, anyNA))
 }
@@ -530,33 +459,4 @@ Summary.sparseSlab <- function(..., na.rm) {
   rslt <- do.call(.Generic, c(matvals, args[!isslab], na.rm=na.rm))
   return(rslt)
 }
-
-applySparseEntries <- local({
-
-  applySparseEntries <- function(x, f, ...) {
-    ## apply vectorised function 'f' only to the nonzero entries of 'x'
-    if(inherits(x, "sparseMatrix")) {
-      x <- applytoxslot(x, f, ...)
-    } else if(inherits(x, "sparseSlab")) {
-      x$m <- lapply(x$m, applytoxslot, f=f, ...)
-    } else {
-      x <- f(x, ...)
-    }
-    return(x)
-  }
-
-  applytoxslot <- function(x, f, ...) {
-    xx <- x@x
-    n <- length(xx)
-    xx <- f(xx, ...)
-    if(length(xx) != n)
-      stop(paste("Function f returned the wrong number of values:",
-                 length(xx), "instead of", n),
-           call.=FALSE)
-    x@x <- xx
-    return(x)
-  }
-  
-  applySparseEntries
-})
 

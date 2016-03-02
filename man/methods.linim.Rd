@@ -85,7 +85,10 @@
   another object of class \code{"linim"}.
 }
 \examples{
-   example(linim)
+   M <- as.mask.psp(as.psp(simplenet))
+   Z <- as.im(function(x,y) {x-y}, W=M)
+   X <- linim(simplenet, Z)
+
    X
    shift(X, c(1,1))
    scalardilate(X, 2)

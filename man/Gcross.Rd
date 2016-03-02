@@ -125,7 +125,7 @@ Gcross(X, i, j, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
   Biases due to edge effects are
   treated in the same manner as in \code{\link{Gest}}.
@@ -232,7 +232,7 @@ Gcross(X, i, j, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
 
     # synthetic example    
     pp <- runifpoispp(30)
-    pp <- pp \%mark\% factor(sample(0:1, pp$n, replace=TRUE))
+    pp <- pp \%mark\% factor(sample(0:1, npoints(pp), replace=TRUE))
     G <- Gcross(pp, "0", "1")   # note: "0" not 0
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

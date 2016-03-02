@@ -64,20 +64,22 @@
   \code{\link{linim}}
 }
 \examples{
-  example(linim)
+  M <- as.mask.psp(as.psp(simplenet))
+  Z <- as.im(function(x,y) {x-y}, W=M)
+  X <- linim(simplenet, Z)
+  X
 
-  Y <- linim(letterA, as.im(function(x,y){y^2+x}, W=M))
+  Y <- linfun(function(x,y,seg,tp){y^2+x}, simplenet)
+  Y <- as.linim(Y)
   
   eval.linim(X + 3)
   eval.linim(X - Y)
   eval.linim(abs(X - Y))
   Z <- eval.linim(sin(X * pi) + Y)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
 }
 \keyword{spatial}
 \keyword{manip}

@@ -47,7 +47,7 @@
   \code{\link{lpp}}
 }
 \examples{
-   example(lpp)
+   X <- runiflpp(12, simplenet)
    pairdist(X)
 }
 \keyword{spatial}

@@ -47,19 +47,19 @@
 }
 \examples{
  # Lansing woods data - multitype points with 6 types
- data(lansing)
+ woods <- lansing
  \testonly{
  # smaller dataset
-   lansing <- lansing[ seq(1,lansing$n,by=45), ]
+   woods <- woods[ seq(1,npoints(woods),by=45)]
  }
  # compute 6 x 6 array of all cross-type K functions
- a <- alltypes(lansing, "K")
+ a <- alltypes(woods, "K")
 
  # extract first three marks only
  b <- a[1:3,1:3]
  \dontrun{plot(b)}
- # subset pertaining to hickories
- h <- a[levels(lansing$marks) == "hickory", ]
+ # subset of array pertaining to hickories
+ h <- a[levels(marks(woods)) == "hickory", ]
  \dontrun{plot(h)}
 }
 \author{

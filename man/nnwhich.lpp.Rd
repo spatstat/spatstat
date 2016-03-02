@@ -54,7 +54,7 @@
   \code{\link{lpp}}
 }
 \examples{
-   example(lpp)
+   X <- runiflpp(10, simplenet)
    nnwhich(X)
    nnwhich(X, k=2)
 }

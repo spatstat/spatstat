@@ -156,7 +156,7 @@ Fhazard(X, \dots)
   by \code{eps}.
 
   If \code{eps} is not specified, the function
-  checks whether the window \code{X$window} contains pixel raster
+  checks whether the window \code{Window(X)} contains pixel raster
   information. If so, then \code{eps} is set equal to the 
   pixel width of the raster; otherwise, \code{eps}
   defaults to 1/100 of the width of the observation window.

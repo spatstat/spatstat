@@ -95,7 +95,7 @@
   \code{\link{plot.lppm}}.
 }
 \examples{
-  example(lpp)
+  X <- runiflpp(15, simplenet)
   fit <- lppm(X ~ x)
   print(fit)
   coef(fit)

@@ -478,7 +478,7 @@ vcalcGibbsGeneral <- function(model,
       ##  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
       sparse <- spatstat.options('developer')
       ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=sparse)
-      sparse <- sparse && inherits(ddS, "sparseSlab")
+      sparse <- sparse && inherits(ddS, c("sparseSlab", "sparse3Darray"))
       if(is.null(ddS)) {
         if(asked.parallel)
           warning("parallel option not available - reverting to loop")

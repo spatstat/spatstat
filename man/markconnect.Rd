@@ -103,7 +103,7 @@ markconnect(X, i, j, r=NULL,
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window.
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape.
 
   Biases due to edge effects are

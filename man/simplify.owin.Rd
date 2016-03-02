@@ -38,21 +38,18 @@ simplify.owin(W, dmin)
   of type \code{"polygonal"}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{owin}}
 }
 \examples{
-  data(letterR)
   plot(letterR, col="red")
   plot(simplify.owin(letterR, 0.3), col="blue", add=TRUE)
-  data(chorley)
-  W <- chorley$window
+
+  W <- Window(chorley)
   plot(W)
   WS <- simplify.owin(W, 2)
   plot(WS, add=TRUE, border="green")

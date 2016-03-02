@@ -81,24 +81,24 @@ Lcross.inhom(X, i, j, \dots)
 }
 \examples{
     # Lansing Woods data
-    data(lansing)
-    lansing <- lansing[seq(1,lansing$n, by=10)]
-    ma <- split(lansing)$maple
-    wh <- split(lansing)$whiteoak
+    woods <- lansing
+    \testonly{woods <- woods[seq(1,npoints(woods), by=10)]}
+    ma <- split(woods)$maple
+    wh <- split(woods)$whiteoak
 
     # method (1): estimate intensities by nonparametric smoothing
     lambdaM <- density.ppp(ma, sigma=0.15, at="points")
     lambdaW <- density.ppp(wh, sigma=0.15, at="points")
-    L <- Lcross.inhom(lansing, "whiteoak", "maple", lambdaW, lambdaM)
+    L <- Lcross.inhom(woods, "whiteoak", "maple", lambdaW, lambdaM)
 
     # method (2): fit parametric intensity model
-    fit <- ppm(lansing, ~marks * polynom(x,y,2))
+    fit <- ppm(woods ~marks * polynom(x,y,2))
     # evaluate fitted intensities at data points
     # (these are the intensities of the sub-processes of each type)
     inten <- fitted(fit, dataonly=TRUE)
     # split according to types of points
-    lambda <- split(inten, lansing$marks)
-    L <- Lcross.inhom(lansing, "whiteoak", "maple",
+    lambda <- split(inten, marks(woods))
+    L <- Lcross.inhom(woods, "whiteoak", "maple",
               lambda$whiteoak, lambda$maple)
     
     # synthetic example: type A points have intensity 50,
@@ -106,7 +106,7 @@ Lcross.inhom(X, i, j, \dots)
     lamB <- as.im(function(x,y){50 + 100 * x}, owin())
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     L <- Lcross.inhom(X, "A", "B",
-        lambdaI=as.im(50, X$window), lambdaJ=lamB)
+        lambdaI=as.im(50, Window(X)), lambdaJ=lamB)
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

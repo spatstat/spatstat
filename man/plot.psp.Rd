@@ -66,10 +66,10 @@
   This is the \code{plot} method for 
   line segment pattern datasets (of class \code{"psp"},
   see \code{\link{psp.object}}).
-  It plots both the observation window \code{x$window}
+  It plots both the observation window \code{Window(x)}
   and the line segments themselves.
   
-  Plotting of the window \code{x$window} is performed by
+  Plotting of the window \code{Window(x)} is performed by
   \code{\link{plot.owin}}. This plot may be modified 
   through the \code{...} arguments. 
 

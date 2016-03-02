@@ -101,7 +101,7 @@
   as a realisation of a stationary (spatially homogeneous) 
   random spatial point process in the plane, observed through
   a bounded window. 
-  The window (which is specified in \code{X} as \code{X$window})
+  The window (which is specified in \code{X} as \code{Window(X)})
   may have arbitrary shape. 
 
   The argument \code{X} is interpreted as a point pattern object 

@@ -42,21 +42,22 @@
   summary(cells)  # plain vanilla point pattern
 
   # multitype point pattern
-  \testonly{lansing <- lansing[seq(1, lansing$n, length=40)]}
-  summary(lansing) # tabulates frequencies of each mark
+  woods <- lansing
+  \testonly{woods <- woods[seq(1, npoints(woods), length=40)]}
+  summary(woods) # tabulates frequencies of each mark
   
   # numeric marks
-  \testonly{longleaf <- longleaf[seq(1, longleaf$n, length=40)]}
-  summary(longleaf) # prints summary.default(x$marks)
+  trees <- longleaf
+  \testonly{trees <- trees[seq(1, npoints(trees), length=40)]}
+  summary(trees) # prints summary.default(marks(trees))
 
   # weird polygonal window
   summary(demopat)  # describes it
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{methods}

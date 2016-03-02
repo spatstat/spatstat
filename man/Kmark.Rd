@@ -169,7 +169,7 @@
 
     # (2) simulated data with independent marks
     X <- rpoispp(100)
-    X <- X \%mark\% runif(X$n)
+    X <- X \%mark\% runif(npoints(X))
     Xc <- Kmark(X)
     plot(Xc)
     

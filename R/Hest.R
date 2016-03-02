@@ -10,6 +10,7 @@ Hest <- local({
                    W,
                    correction=c("km", "rs", "han"),
                    conditional=TRUE) {
+    rorbgiven <- !is.null(r) || !is.null(breaks)
     if(is.ppp(X) || is.psp(X)) {
       XX <- X
       W0 <- Window(X)
@@ -49,6 +50,7 @@ Hest <- local({
     names(corx) <- corxtable
     ## compute distance map
     D <- distmap(XX, ...)
+    pixeps <- with(D, min(xstep, ystep))
     if(!given.W && !is.im(X)) {
       B <- attr(D, "bdry")
     } else {
@@ -61,6 +63,9 @@ Hest <- local({
     dmax <- max(D)
     breaks <- handle.r.b.args(r, breaks, W, NULL, rmaxdefault=dmax)
     rval <- breaks$r
+    if(rorbgiven) check.finespacing(rval, rname="r", eps=pixeps/4,
+                                    context="in Hest(X,r)",
+                                    action="fatal")
     ##  extract distances and censoring distances
     dist <- as.vector(as.matrix(D))
     bdry <- as.vector(as.matrix(B))

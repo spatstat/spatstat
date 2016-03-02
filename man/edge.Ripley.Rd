@@ -9,7 +9,7 @@
   for a point pattern.
 }
 \usage{
-edge.Ripley(X, r, W = X$window, method = "C", maxweight = 100)
+edge.Ripley(X, r, W = Window(X), method = "C", maxweight = 100)
 
 rmax.Ripley(W)
 }

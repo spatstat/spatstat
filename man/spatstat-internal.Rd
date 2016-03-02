@@ -63,6 +63,7 @@
 \alias{checkbigmatrix}          
 \alias{checkfields}          
 \alias{checksolve}          
+\alias{check.finespacing}
 \alias{check.finite}
 \alias{check.hist.lengths}
 \alias{check.in.range}
@@ -237,6 +238,7 @@
 \alias{graphicsPars}            
 \alias{gridindex}            
 \alias{grid1index}
+\alias{grokIndexVector}
 \alias{grow.mask}
 \alias{gsubdot}
 \alias{hackglmmPQL}
@@ -576,6 +578,7 @@
 \alias{relatively.prime}
 \alias{RelevantDeviation}
 \alias{repair.image.xycoords}
+\alias{replacementIndex}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
 \alias{rgbNA}
@@ -784,10 +787,7 @@
 \alias{as.array.sparseSlab}
 \alias{[.sparseSlab}
 \alias{[<-.sparseSlab}
-\alias{sumsymouterSparseSlab}
 \alias{emptySparseSlab}
-\alias{mapSparseEntries}
-\alias{applySparseEntries}
 \alias{anyNA.sparseSlab}
 \alias{Math.sparseSlab}
 \alias{Ops.sparseSlab}
@@ -802,21 +802,21 @@
 \alias{print.sparse3Darray}
 \alias{aperm.sparse3Darray}
 \alias{as.array.sparse3Darray}
-\alias{inside3Darray}
 \alias{[.sparse3Darray}
 \alias{[<-.sparse3Darray}
-% not yet existing {sumsymouterSparse3Darray} %DoNotExport
-% change name later:
-\alias{mapSparse3DEntries} 
-% change name later:
-\alias{applySparse3DEntries} 
 \alias{anyNA.sparse3Darray}
 \alias{RelevantZero}
+\alias{RelevantEmpty}
 \alias{isRelevantZero}
-\alias{unionOfIndices}
+\alias{unionOfSparseIndices}
 \alias{Math.sparse3Darray}
 \alias{Ops.sparse3Darray}
 \alias{Summary.sparse3Darray}
+%% common sparse functions
+\alias{inside3Darray}
+\alias{mapSparseEntries}
+\alias{applySparseEntries}
+\alias{sumsymouterSparse}
 %%%%
 \description{
   Internal spatstat functions.
@@ -888,6 +888,7 @@ change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
 checksolve(M, action, descrip, target)
+check.finespacing(r, eps, context, action, rname)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)
@@ -1092,6 +1093,7 @@ good.correction.K(X)
 graphicsPars(key)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
+grokIndexVector(ind, len, nama)
 grow.mask(M, xmargin=0, ymargin=xmargin)
 gsubdot(replacement, x)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
@@ -1486,6 +1488,7 @@ reheat(model, invtemp)
 relatively.prime(n, m)
 RelevantDeviation(x, alternative, clamp, scaling)
 repair.image.xycoords(x)
+replacementIndex(ii, stuff)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
 rgbNA(red, green, blue, alpha, maxColorValue)
@@ -1616,7 +1619,7 @@ spatstat.rawdata.location(\dots)
 spatstat.xy.coords(x, y)
 spatstatClusterModelInfo(name, onlyPCP)
 spatstatDPPModelInfo(model)
-spatstatLocator(n, ...)
+spatstatLocator(n, type, \dots)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
@@ -1720,10 +1723,7 @@ as.sparseSlab(x, \dots, stackdim)
 \method{as.array}{sparseSlab}(x, \dots)
 \method{[}{sparseSlab}(x, i, j, k, drop, \dots)
 \method{[}{sparseSlab}(x, i, j, k, \dots) <- value
-sumsymouterSparseSlab(x, w, dbg)
 emptySparseSlab(typemaker, dim, stackdim)
-mapSparseEntries(x, margin, values, conform)
-applySparseEntries(x, f, \dots)
 \method{anyNA}{sparseSlab}(x, recursive)
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
@@ -1742,24 +1742,24 @@ as.sparse3Darray(x, \dots)
 \method{print}{sparse3Darray}(x, \dots)
 \method{aperm}{sparse3Darray}(a, perm, resize, \dots)
 \method{as.array}{sparse3Darray}(x, \dots)
-inside3Darray(d, i, j, k)
 \method{[}{sparse3Darray}(x, i, j, k, drop, \dots)
 \method{[}{sparse3Darray}(x, i, j, k, \dots) <- value
-% Not yet existing: sumsymouterSparse3Darray(x, w, dbg)
-% change name later:
-mapSparse3DEntries(x, margin, values, conform) 
-% change name later:
-applySparse3DEntries(x, f, \dots)
 \method{anyNA}{sparse3Darray}(x, recursive)
 RelevantZero(x)
+RelevantEmpty(x)
 isRelevantZero(x)
-unionOfIndices(A,B)
+unionOfSparseIndices(A,B)
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
 \special{Summary(\dots, na.rm = FALSE)}
 %NAMESPACE S3method("Math", "sparse3Darray")
 %NAMESPACE S3method("Ops", "sparse3Darray")
 %NAMESPACE S3method("Summary", "sparse3Darray")
+%% sparse common
+inside3Darray(d, i, j, k)
+mapSparseEntries(x, margin, values, conform, stackmargin)
+applySparseEntries(x, f, \dots)
+sumsymouterSparse(x, w, dbg)
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

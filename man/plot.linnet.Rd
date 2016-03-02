@@ -52,7 +52,6 @@
    \code{\link{linnet}}
 }
 \examples{
-   example(linnet)
-   plot(letterA)
+   plot(simplenet)
 }
 \keyword{spatial}

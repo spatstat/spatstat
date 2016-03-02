@@ -234,27 +234,27 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
 }
 \examples{
     # Lansing Woods data
-    data(lansing)
-    lansing <- lansing[seq(1,lansing$n, by=10)]
-    ma <- split(lansing)$maple
-    wh <- split(lansing)$whiteoak
+    woods <- lansing
+    \testonly{woods <- woods[seq(1,npoints(woods), by=10)]}
+    ma <- split(woods)$maple
+    wh <- split(woods)$whiteoak
 
     # method (1): estimate intensities by nonparametric smoothing
     lambdaM <- density.ppp(ma, sigma=0.15, at="points")
     lambdaW <- density.ppp(wh, sigma=0.15, at="points")
-    K <- Kcross.inhom(lansing, "whiteoak", "maple", lambdaW, lambdaM)
+    K <- Kcross.inhom(woods, "whiteoak", "maple", lambdaW, lambdaM)
 
     # method (2): leave-one-out
-    K <- Kcross.inhom(lansing, "whiteoak", "maple", sigma=0.15)
+    K <- Kcross.inhom(woods, "whiteoak", "maple", sigma=0.15)
 
     # method (3): fit parametric intensity model
-    fit <- ppm(lansing, ~marks * polynom(x,y,2))
+    fit <- ppm(woods ~marks * polynom(x,y,2))
     # evaluate fitted intensities at data points
     # (these are the intensities of the sub-processes of each type)
     inten <- fitted(fit, dataonly=TRUE)
     # split according to types of points
-    lambda <- split(inten, lansing$marks)
-    K <- Kcross.inhom(lansing, "whiteoak", "maple",
+    lambda <- split(inten, marks(woods))
+    K <- Kcross.inhom(woods, "whiteoak", "maple",
               lambda$whiteoak, lambda$maple)
     
     # synthetic example: type A points have intensity 50,
@@ -262,13 +262,12 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
     lamB <- as.im(function(x,y){50 + 100 * x}, owin())
     X <- superimpose(A=runifpoispp(50), B=rpoispp(lamB))
     K <- Kcross.inhom(X, "A", "B",
-        lambdaI=as.im(50, X$window), lambdaJ=lamB)
+        lambdaI=as.im(50, Window(X)), lambdaJ=lamB)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{nonparametric}

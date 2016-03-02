@@ -21,7 +21,7 @@
 #
 #######################################################################
 
-edge.Trans <- function(X, Y=X, W=X$window, exact=FALSE, paired=FALSE,
+edge.Trans <- function(X, Y=X, W=Window(X), exact=FALSE, paired=FALSE,
                        ..., 
                        trim=spatstat.options("maxedgewt"),
                        dx=NULL, dy=NULL,
