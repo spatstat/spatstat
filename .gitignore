@@ -11,5 +11,10 @@
 # R-studio files
 spatstat.Rproj
 
+# covr files
+src/*.gcov
+src/*.gcda
+src/*.gcno
+
 # .o files
 src/*o
