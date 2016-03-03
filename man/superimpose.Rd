@@ -183,7 +183,9 @@
 
   # being unreasonable
   \dontrun{
-  crud <- superimpose(p1,p2,X,Y) # Gives an error, of course!
+   if(FALSE) {
+    crud <- try(superimpose(p1,p2,X,Y)) # Gives an error, of course!
+   }
   }
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

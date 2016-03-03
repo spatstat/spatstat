@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.31 $ $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.32 $ $Date: 2016/03/03 10:00:02 $
 #
 #
 ############################# 
@@ -34,7 +34,8 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
     stop(paste(ngettext(nbad, "Argument", "Arguments"),
                commasep(which(bad)),
                ngettext(nbad, "does not", "do not"),
-               "have components x and y"))
+               "have components x and y"),
+         call.=FALSE)
   }
   
   # concatenate lists of (x,y) coordinates
@@ -57,13 +58,13 @@ superimpose.ppp <- function(..., W=NULL, check=TRUE) {
       # Apply function to the x,y coordinates; it should return an owin
       WXY <- W(XY)
       if(!is.owin(WXY))
-        stop("Function W did not return an owin object")
+        stop("Function W did not return an owin object", call.=FALSE)
     }
     if(is.character(W)) {
       # character string identifies a function
       pW <- pmatch(W, c("convex", "rectangle", "bbox", "none"))
       if(is.na(pW))
-        stop(paste("Unrecognised option W=", sQuote(W)))
+        stop(paste("Unrecognised option W=", sQuote(W)), call.=FALSE)
       WXY <- switch(pW,
                     convex=ripras(XY),
                     rectangle=ripras(XY, shape="rectangle"),
@@ -101,7 +102,7 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
   misscheck <- missing(check)
 
   if(!all(sapply(arglist, is.psp)))
-    stop("Patterns to be superimposed must all be psp objects")
+    stop("Patterns to be superimposed must all be psp objects", call.=FALSE)
 
   # extract segment coordinates
   matlist <- lapply(lapply(arglist, getElement, name="ends"),
@@ -131,13 +132,13 @@ superimpose.psp <- function(..., W=NULL, check=TRUE) {
         # Apply function to the x,y coordinates; it should return an owin
         WXY <- W(XY)
         if(!is.owin(WXY))
-          stop("Function W did not return an owin object")
+          stop("Function W did not return an owin object", call.=FALSE)
       }
       if(is.character(W)) {
         # character string identifies a function
         pW <- pmatch(W, c("convex", "rectangle", "bbox", "none"))
         if(is.na(pW))
-          stop(paste("Unrecognised option W=", sQuote(W)))
+          stop(paste("Unrecognised option W=", sQuote(W)), call.=FALSE)
         WXY <- switch(pW,
                       convex=ripras(XY),
                       rectangle=ripras(XY, shape="rectangle"),
@@ -188,7 +189,7 @@ superimposePSP <-
 
   nargue <- length(arglist)
   if(nargue == 0)
-    stop("No line segment patterns given")
+    stop("No line segment patterns given", call.=FALSE)
   
   # catch possible abuses
   if(is.null(W) && any(suspicious <- (names(arglist) == "window"))) {
@@ -212,7 +213,7 @@ superimposePSP <-
   arglist <- arglist[!isnull]
   
   if(!all(unlist(lapply(arglist, is.psp))))
-    stop("Some of the arguments are not psp objects")
+    stop("Some of the arguments are not psp objects", call.=FALSE)
   
   # extract segment coordinates
   matlist <- lapply(arglist, function(x) { as.matrix(x$ends) })
@@ -225,8 +226,9 @@ superimposePSP <-
   # check on compatibility of marks
   mkfmt <- sapply(marxlist,markformat)
   if(length(unique(mkfmt))>1)
-	stop(paste("Marks of some patterns are of different format\n",
-                   "  from those of other patterns.\n",sep=""))
+	stop(paste("The marks of the point patterns have different formats:",
+                   commasep(sQuote(mkfmt))),
+             call.=FALSE)
   mkfmt <- mkfmt[1]
   if(mkfmt=="dataframe") {
 	mcnms <- lapply(marxlist,names)
@@ -235,8 +237,10 @@ superimposePSP <-
 	if(OK) {
 		allInOne <- sapply(mcnms,paste,collapse="")
 		OK <- length(unique(allInOne)) == 1
-		if(!OK) stop("Data frames of marks have different names.\n")
-	} else stop("Data frames of marks have different column dimensions.\n")
+		if(!OK)
+                  stop("Data frames of marks have different names", call.=FALSE)
+	} else stop("Data frames of marks have different column dimensions",
+                    call.=FALSE)
   }
  
   # combine the marks

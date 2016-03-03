@@ -104,18 +104,20 @@
   
  w <- owin(c(0,1), c(0,2))
  \dontrun{
- plot(w)
- # plots edges of a box 1 unit x 2 units
- v <- locator() 
- # click on points in the plot window
- # to be the vertices of a polygon 
- # traversed in anticlockwise order 
- u <- owin(c(0,1), c(0,2), poly=v)
- plot(u)
- # plots polygonal boundary using polygon()
- plot(as.mask(u, eps=0.02))
- # plots discrete pixel approximation to polygon
+ if(FALSE) {
+   plot(w)
+   # plots edges of a box 1 unit x 2 units
+   v <- locator() 
+   # click on points in the plot window
+   # to be the vertices of a polygon 
+   # traversed in anticlockwise order 
+   u <- owin(c(0,1), c(0,2), poly=v)
+   plot(u)
+   # plots polygonal boundary using polygon()
+   plot(as.mask(u, eps=0.02))
+   # plots discrete pixel approximation to polygon
  }
+}
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

@@ -179,7 +179,7 @@
   # ANIMATION explaining the definition of the K function
   # (arguments `fullpicture' and 'rad' are passed to FUN)
 
-  \dontrun{
+  if(interactive()) {
   showoffK <- function(Y, current, dists, dranks, fullpicture,rad) { 
 	plot(fullpicture, main="")
 	points(Y, cex=2)

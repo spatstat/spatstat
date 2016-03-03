@@ -165,9 +165,11 @@ describing a window in the two-dimensional plane.
           # discrete approximation to the unit disc
 
   \dontrun{
-  plot(c(0,1),c(0,1),type="n")
-  bdry <- locator()
-  # click the vertices of a polygon (anticlockwise)
+  if(FALSE) {
+    plot(c(0,1),c(0,1),type="n")
+    bdry <- locator()
+    # click the vertices of a polygon (anticlockwise)
+  }
   }
   \testonly{
   bdry <- list(x=c(0.1,0.3,0.7,0.4,0.2),

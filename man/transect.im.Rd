@@ -66,7 +66,9 @@ transect.im(X, ..., from="bottomleft", to="topright",
   Z <- density(redwood)
   plot(transect.im(Z))
   \dontrun{
+   if(FALSE) {
     plot(transect.im(Z, click=TRUE))
+   }
   }
 }
 \keyword{spatial}

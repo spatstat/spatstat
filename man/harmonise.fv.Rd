@@ -79,7 +79,7 @@
    H
    \dontrun{
       ## generates a warning about duplicated columns
-      cbind(H$K, H$G)
+      try(cbind(H$K, H$G))
    }
 }
 \seealso{

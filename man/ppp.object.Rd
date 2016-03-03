@@ -111,6 +111,7 @@
   mmleft <- mm[ , lu]
   \dontrun{plot(mmleft)}
   \dontrun{
+  if(FALSE) {
   # input data from file
   qq <- scanpp("my.table", unit.square())
 
@@ -119,6 +120,7 @@
   X <- as.ppp(locator(10), unit.square())
   plot(X)
   }
+ }
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

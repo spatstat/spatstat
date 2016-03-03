@@ -55,10 +55,12 @@ reload.or.compute(filename, expr, objects = NULL, destination = parent.frame())
 }
 \examples{
    \dontrun{
+    if(FALSE) {
      reload.or.compute("mydata.rda", {
         x <- very.long.computation()
         y <- 42
       })
+   }
    }
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
