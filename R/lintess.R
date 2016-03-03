@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.3 $   $Date: 2016/02/18 02:52:18 $
+#'   $Revision: 1.5 $   $Date: 2016/03/03 05:59:56 $
 #'
 
 lintess <- function(L, df) {
@@ -83,4 +83,77 @@ as.linfun.lintess <- function(X, ...) {
   g <- linfun(f, L)
   return(g)
 }
+
+#'  Divide a linear network into tiles demarcated by
+#' the points of a point pattern
+
+divide.linnet <- local({
+  
+  divide.linnet <- function(X) {
+    stopifnot(is.lpp(X))
+    L <- as.linnet(X)
+    coo <- coords(X)
+    #' add identifiers of endpoints
+    coo$from <- L$from[coo$seg]
+    coo$to   <- L$to[coo$seg]
+    #' group data by segment, sort by increasing 'tp'
+    coo <- coo[with(coo, order(seg, tp)), , drop=FALSE]
+    bits <- split(coo, coo$seg)
+    #' expand as a sequence of intervals
+    bits <- lapply(bits, expanddata)
+    #' reassemble as data frame
+    df <- Reduce(rbind, bits)
+    #' find all undivided segments
+    other <- setdiff(seq_len(nsegments(L)), unique(coo$seg))
+    #' add a single line for each undivided segment
+    df <- rbind(df, data.frame(seg=other, t0=0, t1=1,
+                               from=L$from[other], to=L$to[other]))
+    #' We now have a tessellation 
+    #' Sort again
+    df <- df[with(df, order(seg, t0)), , drop=FALSE]
+    #' Now identify connected components
+    #' Two intervals are connected if they share an endpoint
+    #' that is a vertex of the network.
+    nvert <- nvertices(L)
+    nbits <- nrow(df)
+    iedge <- jedge <- integer(0)
+    for(iv in seq_len(nvert)) {
+      joined <- with(df, which(from == iv | to == iv))
+      njoin <- length(joined)
+      if(njoin > 1)
+        iedge <- c(iedge, joined[-njoin])
+      jedge <- c(jedge, joined[-1])
+    }
+    nedge <- length(iedge)
+    zz <- .C("cocoGraph",
+             nv = as.integer(nbits),
+             ne = as.integer(nedge), 
+             ie = as.integer(iedge - 1L),
+             je = as.integer(jedge - 1L),
+             label = as.integer(integer(nbits)), 
+             status = as.integer(integer(1)))
+    if (zz$status != 0) 
+      stop("Internal error: connectedness algorithm did not converge")
+    lab <- zz$label + 1L
+    lab <- as.integer(factor(lab))
+    df <- df[,c("seg", "t0", "t1")]
+    df$tile <- lab
+    return(lintess(L, df))
+  }
+
+  expanddata <- function(z) {
+    df <- with(z,
+               data.frame(seg=c(seg[1], seg),
+                          t0 = c(0, tp),
+                          t1 = c(tp, 1),
+                          from=NA_integer_,
+                          to=NA_integer_))
+    df$from[1] <- z$from[1]
+    df$to[nrow(df)] <- z$to[1]
+    return(df)
+  }
+
+  divide.linnet
+})
+
 

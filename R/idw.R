@@ -3,7 +3,7 @@
 #
 #  Inverse-distance weighted smoothing
 #
-#  $Revision: 1.6 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.7 $ $Date: 2016/03/03 02:04:56 $
 
 idw <- function(X, power=2, at="pixels", ...) {
   stopifnot(is.ppp(X) && is.marked(X))
@@ -48,6 +48,7 @@ idw <- function(X, power=2, at="pixels", ...) {
                    den    = as.double(numeric(npixels)),
                    rat    = as.double(numeric(npixels)))
            out <- as.im(matrix(z$rat, dim[1], dim[2]), W=W)
+           out <- out[W, drop=FALSE]
          },
          points={
            npts <- npoints(X)

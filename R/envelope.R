@@ -47,7 +47,7 @@ simulrecipe <- function(type, expr, envir, csr, pois=csr, constraints="") {
 
 envelope.ppp <-
   function(Y, fun=Kest, nsim=99, nrank=1, ...,
-           funargs=list(),
+           funargs=list(), funYargs=funargs,
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
@@ -173,7 +173,8 @@ envelope.ppp <-
   }
   
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
+                 nsim=nsim, nrank=nrank, ...,
+                 funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -186,7 +187,7 @@ envelope.ppp <-
 
 envelope.ppm <- 
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
-           funargs=list(),
+           funargs=list(), funYargs=funargs,
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
            start=NULL,
@@ -248,7 +249,8 @@ envelope.ppm <-
     simrecipe <- simulate
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe, 
-                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
+                 nsim=nsim, nrank=nrank, ...,
+                 funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -261,7 +263,7 @@ envelope.ppm <-
 
 envelope.kppm <-
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
-           funargs=list(),
+           funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -298,7 +300,8 @@ envelope.kppm <-
     simrecipe <- simulate
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe, 
-                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
+                 nsim=nsim, nrank=nrank, ...,
+                 funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,
@@ -320,7 +323,7 @@ envelope.kppm <-
 
 envelopeEngine <-
   function(X, fun, simul,
-           nsim=99, nrank=1, ..., funargs=list(), 
+           nsim=99, nrank=1, ..., funargs=list(), funYargs=funargs,
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -523,7 +526,7 @@ envelopeEngine <-
   funX <- do.call(fun,
                   resolve.defaults(list(Xarg),
                                    list(...),
-                                   funargs,
+                                   funYargs,
                                    corrx))
                                      
   if(!inherits(funX, "fv"))
@@ -712,7 +715,7 @@ envelopeEngine <-
   } else
   stop(paste("Don't know how to infer values of", commasep(expected.arg)))
     
-  # arguments for function
+  # arguments for function when applied to simulated patterns
   funargs <-
     resolve.defaults(funargs,
                      inferred.r.args,

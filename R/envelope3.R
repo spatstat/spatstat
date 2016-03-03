@@ -8,7 +8,7 @@
 
 envelope.pp3 <-
   function(Y, fun=K3est, nsim=99, nrank=1, ...,
-           funargs=list(),
+           funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -60,7 +60,8 @@ envelope.pp3 <-
     X <- Y
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
-                 nsim=nsim, nrank=nrank, ..., funargs=funargs,
+                 nsim=nsim, nrank=nrank, ...,
+                 funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=FALSE,
                  transform=transform,
                  global=global, ginterval=ginterval, use.theory=use.theory,

@@ -344,6 +344,7 @@
 \alias{logi.engine}
 \alias{logLik.vblogit}
 \alias{lty2char}
+\alias{maskLaslett}
 \alias{padtowidth}
 \alias{parameters.interact}
 \alias{parameters.fii}
@@ -352,6 +353,7 @@
 \alias{paste.expr}
 \alias{plan.legend.layout}
 \alias{PoisSaddleApp}
+\alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{positiveIndex}
 \alias{prettyinside}
@@ -513,6 +515,7 @@
 \alias{print.interact}       
 \alias{print.intermaker}       
 \alias{print.isf}
+\alias{print.laslett}
 \alias{print.layered}
 \alias{print.leverage.ppm}
 \alias{print.lintess}
@@ -986,7 +989,7 @@ emptywindow(w)
 ensure2vector(x)
 ensure3Darray(x)
 envelopeEngine(X, fun, simul,
-           nsim, nrank, \dots, funargs,
+           nsim, nrank, \dots, funargs, funYargs,
            verbose, clipdata, 
            transform, global, ginterval, use.theory,
            alternative, scale, clamp,
@@ -1210,6 +1213,7 @@ logi.engine(Q, trend, interaction, \dots,
             VB)
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
+maskLaslett(X, \dots, oldX, verbose, plotit)
 padtowidth(a, b, justify)
 \method{parameters}{interact}(model, \dots)
 \method{parameters}{fii}(model, \dots)
@@ -1219,6 +1223,7 @@ paste.expr(x)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
+polyLaslett(X, \dots, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny)
 positiveIndex(i, nama, len)
 prettyinside(x, \dots)
@@ -1424,6 +1429,7 @@ primesbelow(nmax)
 \method{print}{interact}(x, \dots, family, brief, banner)       
 \method{print}{intermaker}(x, \dots)
 \method{print}{isf}(x, \dots)
+\method{print}{laslett}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
 \method{print}{lintess}(x, \dots)

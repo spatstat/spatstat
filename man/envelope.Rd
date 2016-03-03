@@ -11,7 +11,8 @@
   envelope(Y, fun, \dots)
 
   \method{envelope}{ppp}(Y, fun=Kest, nsim=99, nrank=1, \dots,
-  funargs=list(), simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
+  funargs=list(), funYargs=funargs,
+  simulate=NULL,  fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"),
@@ -21,7 +22,8 @@
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{ppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  funargs=list(), simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
+  funargs=list(), funYargs=funargs,
+  simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
   verbose=TRUE, clipdata=TRUE,
   start=NULL, control=update(default.rmhcontrol(Y), nrep=nrep), nrep=1e5,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
@@ -32,7 +34,8 @@
   do.pwrong=FALSE, envir.simul=NULL)
 
   \method{envelope}{kppm}(Y, fun=Kest, nsim=99, nrank=1, \dots, 
-  funargs=list(), simulate=NULL,
+  funargs=list(), funYargs=funargs,
+  simulate=NULL,
   verbose=TRUE, clipdata=TRUE,
   transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL, 
   alternative=c("two.sided", "less", "greater"), 
@@ -66,6 +69,10 @@
   }
   \item{funargs}{
     A list, containing extra arguments to be passed to \code{fun}.
+  }
+  \item{funYargs}{
+    Optional. A list, containing extra arguments to be passed to
+    \code{fun} when applied to the original data \code{Y} only.
   }
   \item{simulate}{
     Optional. Specifies how to generate the simulated point patterns.
@@ -410,6 +417,17 @@
   \code{envelope}. The list \code{funargs} should contain
   entries of the form \code{name=value}, where each \code{name} is the name
   of an argument of \code{fun}.
+
+  There is also an option, rarely used, in which different function
+  arguments are used when computing the summary function
+  for the data \code{Y} and for the simulated patterns.
+  If \code{funYargs} is given, it will be used
+  when the summary function for the data \code{Y} is computed,
+  while \code{funargs} will be used when computing the summary function
+  for the simulated patterns.
+  This option is only needed in rare cases: usually the basic principle
+  requires that the data and simulated patterns must be treated
+  equally, so that \code{funargs} and \code{funYargs} be identical.
 
   If \code{Y} is a fitted cluster point process model (object of
   class \code{"kppm"}), and \code{simulate=NULL},

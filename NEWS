@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.045
+        CHANGES IN spatstat VERSION 1.44-1.046
 
 OVERVIEW
 
     o We thank Monsuru Adepeju, Mario D'Antuono, Markus Herrmann, 
-    Paul Hewson, Greg McSwiggan, Suman Rakshit and Sven Wagner 
+    Paul Hewson, Kassel Hingee, Greg McSwiggan, Suman Rakshit and Sven Wagner 
     for contributions.
 
     o Important bug fix in leverage/influence diagnostics for Gibbs models.
@@ -12,6 +12,8 @@ OVERVIEW
     o Numerous bug fixes in code for replicated point patterns.
 
     o Surgery with linear networks.
+
+    o Laslett's Transform.
 
     o Colour maps for point patterns with continuous marks are easier to define.
 
@@ -23,12 +25,19 @@ OVERVIEW
 
     o Bug fixes and performance improvements.
 
-    o Version nickname: 'Transcend Dental Medication'
+    o Version nickname: 'Helping Police With Their Inquiries'
 
 NEW FUNCTIONS
 
+    o laslett
+    Laslett's Transform.
+    [Thanks to Kassel Hingee]
+
     o lintess
     Tessellation on a linear network.
+
+    o divide.linnet 
+    Divide a linear network into pieces demarcated by a point pattern.
 
     o insertVertices
     Insert new vertices in a linear network.
@@ -65,7 +74,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Default behaviour is changed when 'lambda' is a fitted model.
     The default is now to re-fit the model to the data before computing pcf.
     New arguments 'update' and 'leaveoneout' control this.
-    
+
+    o envelope methods
+    New argument 'funYargs' contains arguments to the summary function
+    when applied to the data pattern only.
+
     o plot.ppp, plot.lpp
     For a point pattern with continuous marks ('real numbers')
     the colour arguments 'cols', 'fg', 'bg' can now be vectors of 
@@ -248,8 +261,13 @@ BUGS
    The default has now been changed to oldstyle=TRUE for such models.
 
    o [.lpp
-   The local coordinate 'seg' was calculated incorrectly,
+   The local coordinate 'seg' was completely incorrect,
    when 'i' was a window.
+   Fixed.
+
+   o idw
+   The result was a pixel image defined in the rectangle Frame(X)
+   instead of Window(X). 
    Fixed.
 
    o ppm
