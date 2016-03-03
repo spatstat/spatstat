@@ -91,9 +91,6 @@ using the Fast Fourier Transform.
 }
 \examples{
  pp <- runifpoint(10000)
- \dontrun{
- spatstat.options(npixel=512)
- }
  \testonly{
   op <- spatstat.options(npixel=125)
  }

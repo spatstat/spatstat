@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.116 $ $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.117 $ $Date: 2016/03/03 00:03:02 $
 #
 
 kppm <- function(X, ...) {
@@ -43,9 +43,12 @@ kppm.formula <-
     thecall[ncall + 1:nargh] <- argh
     names(thecall)[ncall + 1:nargh] <- names(argh)
   }
-  result <- eval(thecall, 
-                 envir=if(!is.null(data)) data else parent.frame(),
-                 enclos=if(!is.null(data)) parent.frame() else baseenv())
+#  result <- eval(thecall, 
+#                 envir=if(!is.null(data)) data else parent.frame(),
+#                 enclos=if(!is.null(data)) parent.frame() else baseenv())
+  callenv <- parent.frame()
+  if(!is.null(data)) callenv <- list2env(data, parent=callenv)
+  result <- eval(thecall, envir=callenv, enclos=baseenv())
 
   result$call <- cl
   result$callframe <- parent.frame()

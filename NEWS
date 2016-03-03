@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.044
+        CHANGES IN spatstat VERSION 1.44-1.045
 
 OVERVIEW
 
@@ -207,6 +207,15 @@ BUGS
 
    o nncross.lpp, distfun.lpp
    Crashed with obscure errors if Y consisted of a single point.
+   Fixed.
+
+   o scan.test, scanmeasure
+   Crashed sometimes with an error message from 'grow.mask'.
+   Fixed.
+
+   o dppm
+   Crashed sometimes with a message that the point pattern could not be found.
+   [Scoping bug.]
    Fixed.
 
    o mppm, profilepl

@@ -150,9 +150,9 @@ scan.test(X, r, ...,
 }
 \examples{
    nsim <- if(interactive()) 19 else 2
-   r <- if(interactive()) seq(0.5, 1, by=0.1) else c(0.5, 1)
-   scan.test(redwood, 0.1 * r, method="poisson", nsim=nsim)
-   scan.test(chorley, r, method="binomial", case="larynx", nsim=nsim)
+   rr <- if(interactive()) seq(0.5, 1, by=0.1) else c(0.5, 1)
+   scan.test(redwood, 0.1 * rr, method="poisson", nsim=nsim)
+   scan.test(chorley, rr, method="binomial", case="larynx", nsim=nsim)
 }
 \keyword{htest}
 \keyword{spatial}

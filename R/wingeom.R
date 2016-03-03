@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.110 $	$Date: 2016/02/28 00:12:04 $
+#	$Revision: 4.111 $	$Date: 2016/03/03 00:20:56 $
 #
 #
 #
@@ -718,8 +718,8 @@ grow.mask <- function(M, xmargin=0, ymargin=xmargin) {
   nright <- attr(xcolplus, "nright")
   nbot <- attr(yrowplus, "nleft")
   ntop <- attr(yrowplus, "nright")
-  mplus[ (nleft+1):(length(yrowplus)-nright),
-         (nbot+1):(length(xcolplus)-ntop) ] <- m
+  mplus[ (nbot+1):(length(yrowplus)-ntop),
+         (nleft+1):(length(xcolplus)-nright) ] <- m
   ## pack up
   result <- owin(xrange=Rplus$xrange,
                  yrange=Rplus$yrange,

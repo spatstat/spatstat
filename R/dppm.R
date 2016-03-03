@@ -1,7 +1,7 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.4 $   $Date: 2016/02/16 01:39:12 $
+#'     $Revision: 1.6 $   $Date: 2016/03/03 01:01:30 $
 
 dppm <-
   function(formula, family, data=NULL,
@@ -38,11 +38,32 @@ dppm <-
   if(!inherits(formula, "formula"))
     stop(paste("Argument 'formula' should be a formula"))
 
-  kppm(formula, DPP = family, data = data, covariates = data,
-       startpar = startpar, method = method, weightfun = weightfun,
-       control = control, algorithm = algorithm, statistic = statistic,
-       statargs = statargs, rmax = rmax, covfunargs = covfunargs,
-       use.gam = use.gam, nd = nd, eps = eps, ...)
+#  kppm(formula, DPP = family, data = data, covariates = data,
+#       startpar = startpar, method = method, weightfun = weightfun,
+#       control = control, algorithm = algorithm, statistic = statistic,
+#       statargs = statargs, rmax = rmax, covfunargs = covfunargs,
+#       use.gam = use.gam, nd = nd, eps = eps, ...)
+
+  thecall <- call("kppm",
+                  X=formula,
+                  DPP=family,
+                  data = data, covariates = data,
+                  startpar = startpar, method = method,
+                  weightfun = weightfun, control = control,
+                  algorithm = algorithm, statistic = statistic,
+                  statargs = statargs, rmax = rmax, covfunargs = covfunargs,
+                  use.gam = use.gam, nd = nd, eps = eps)
+  ncall <- length(thecall)
+  argh <- list(...)
+  nargh <- length(argh)
+  if(nargh > 0) {
+    thecall[ncall + 1:nargh] <- argh
+    names(thecall)[ncall + 1:nargh] <- names(argh)
+  }
+  callenv <- parent.frame()
+  if(!is.null(data)) callenv <- list2env(data, parent=callenv)
+  result <- eval(thecall, envir=callenv, enclos=baseenv())
+  return(result)
 }
 
 ## Auxiliary function to mimic cluster models for DPPs in kppm code
