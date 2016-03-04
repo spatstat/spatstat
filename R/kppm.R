@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.117 $ $Date: 2016/03/03 00:03:02 $
+# $Revision: 1.122 $ $Date: 2016/03/04 10:47:08 $
 #
 
 kppm <- function(X, ...) {
@@ -46,8 +46,7 @@ kppm.formula <-
 #  result <- eval(thecall, 
 #                 envir=if(!is.null(data)) data else parent.frame(),
 #                 enclos=if(!is.null(data)) parent.frame() else baseenv())
-  callenv <- parent.frame()
-  if(!is.null(data)) callenv <- list2env(data, parent=callenv)
+  callenv <- list2env(as.list(data), parent=parent.frame())
   result <- eval(thecall, envir=callenv, enclos=baseenv())
 
   result$call <- cl
@@ -94,9 +93,8 @@ kppm.ppp <- kppm.quad <-
                       statistic=statistic,
                       statargs=statargs,
                       rmax = rmax)
-  X <- eval(substitute(X),
-            envir=if(!is.null(data)) data else parent.frame(),
-            enclos=if(!is.null(data)) parent.frame() else baseenv())
+  Xenv <- list2env(as.list(covariates), parent=parent.frame())
+  X <- eval(substitute(X), envir=Xenv, enclos=baseenv())
   isquad <- inherits(X, "quad")
   if(!is.ppp(X) && !isquad)
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
@@ -951,7 +949,8 @@ improve.kppm <- local({
     out <- object
     out$po$coef.orig <- beta0
     out$po$coef <- bt
-    out$lambda <- predict(out$po, locations = as.mask(out$lambda))
+    loc <- if(is.sob(out$lambda)) as.mask(out$lambda) else mask
+    out$lambda <- predict(out$po, locations = loc)
     out$improve <- list(type = type,
                         rmax = rmax,
                         dimyx = dimyx,
@@ -1355,6 +1354,7 @@ update.kppm <- function(object, ...) {
   envir <- environment(terms(object))
   #' look for a formula argument
   fmla <- formula(object)
+  jf <- integer(0)
   if(!is.null(trend <- argh$trend)) {
     if(!can.be.formula(trend))
       stop("Argument \"trend\" should be a formula")
@@ -1371,7 +1371,6 @@ update.kppm <- function(object, ...) {
     fmla <- argh[[jf]]
     fmla <- newformula(formula(object), fmla, callframe, envir)
   }
-  jf <- integer(0)
 
   #' look for a point pattern or quadscheme
   if(!is.null(X <- argh$X)) {
@@ -1392,8 +1391,10 @@ update.kppm <- function(object, ...) {
     X <- object$X
     jX <- integer(0)
   }
-  #' remove used arguments
-  argh <- argh[-c(jf, jX)]
+  #' remove arguments just recognised, if any
+  jused <- c(jf, jX)
+  if(length(jused) > 0)
+    argh <- argh[-jused]
   #' update
   if(is.null(lhs.of.formula(fmla))) {
     #' kppm(X, ~trend, ...) 

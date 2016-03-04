@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.52 $	$Date: 2016/02/11 09:36:11 $
+#	$Revision: 1.53 $	$Date: 2016/03/04 09:34:17 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -42,8 +42,7 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL, subset) {
     thecall[ncall + 1:nargh] <- argh
     names(thecall)[ncall + 1:nargh] <- names(argh)
   }
-  callenv <- parent.frame()
-  if(!is.null(data)) callenv <- list2env(data, parent=callenv)
+  callenv <- list2env(as.list(data), parent=parent.frame())
   result <- eval(thecall, envir=callenv)
 
   result$call <- cl

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.048
+        CHANGES IN spatstat VERSION 1.44-1.049
 
 OVERVIEW
 
@@ -178,6 +178,26 @@ BUGS
    due to a coding error. 
    Fixed.
 
+   o update.kppm
+   If the call to 'update' did not include a formula argument
+   or a point pattern argument, then all arguments were ignored. 
+   Example: update(fit, improve.type="quasi") was identical to 'fit'.
+   Fixed.
+
+   o diagnose.ppm
+   When applied to a model obtained from subfits(), 
+   in the default case (oldstyle=FALSE) 
+   the variance calculations were incorrect.
+   Consequently the dotted lines representing significance bands were 
+   incorrect. An error or warning about negative variances occurred sometimes.
+   However, calculations with oldstyle=TRUE were correct.
+   The default has now been changed to oldstyle=TRUE for such models.
+
+   o [.lpp
+   The local coordinate 'seg' was completely incorrect,
+   when 'i' was a window.
+   Fixed.
+
    o leverage.ppm, influence.ppm, parres.ppm, addvar.ppm
    Crashed for Gibbs models in which the coefficient vector had length 1,
    such as the stationary Hardcore model.
@@ -251,20 +271,6 @@ BUGS
    [Spotted by Sven Wagner.]
    Fixed.
 
-   o diagnose.ppm
-   When applied to a model obtained from subfits(), 
-   in the default case (oldstyle=FALSE) 
-   the variance calculations were incorrect.
-   Consequently the dotted lines representing significance bands were 
-   incorrect. An error or warning about negative variances occurred sometimes.
-   However, calculations with oldstyle=TRUE were correct.
-   The default has now been changed to oldstyle=TRUE for such models.
-
-   o [.lpp
-   The local coordinate 'seg' was completely incorrect,
-   when 'i' was a window.
-   Fixed.
-
    o idw
    The result was a pixel image defined in the rectangle Frame(X)
    instead of Window(X). 
@@ -282,6 +288,10 @@ BUGS
 
    o linnet
    Crashed if there were no line segments at all.
+   Fixed.
+
+   o kppm, improve.kppm
+   Crashed if the model was stationary and improve.type != "none".
    Fixed.
 
    o as.linim.default

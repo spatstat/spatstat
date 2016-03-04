@@ -56,7 +56,14 @@ laslett(X, \dots, verbose = FALSE, plotit = TRUE, discretise = FALSE)
   }
 }
 \references{
-  To Be Provided.
+  Barbour, A.D. and Schmidt, V. (2001)
+  On Laslett's Transform for the Boolean Model.
+  \emph{Advances in Applied Probability} 
+  \bold{33}(1), 1--5.
+
+  Cressie, N.A.C. (1993)
+  \emph{Statistics for spatial data}, second edition.
+  John Wiley and Sons.
 }
 \author{
   Kassel Hingee and Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.

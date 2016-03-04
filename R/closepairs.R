@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.36 $   $Date: 2015/12/30 11:12:21 $
+#   $Revision: 1.37 $   $Date: 2016/03/04 10:06:34 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -555,12 +555,13 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   # convert i,j indices to original sequence
   i <- oo[i]
   j <- oo[j]
-  # are (i, j) and (j, i) equivalent?
-  if(!twice) {
-    ok <- (i < j)
-    i  <-  i[ok]
-    j  <-  j[ok]
-    th <- th[ok]
+  # fast C code only returns i < j
+  if(twice) {
+    iold <- i
+    jold <- j
+    i <- c(iold, jold)
+    j <- c(jold, iold)
+    th <- rep(th, 2)
   }
   # done
   return(list(i=i, j=j, th=th))

@@ -50,7 +50,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+## $Revision: 1.3 $ $Date: 2016/03/04 10:10:18 $
 
 local({
   r <- 0.12
@@ -69,6 +69,14 @@ local({
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
   stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
 
+  # closethresh vs closepairs: EXACT agreement
+  thresh <- 0.08
+  clt <- closethresh(redwood, r, thresh)
+  cl <- with(closepairs(redwood, r),
+             list(i=i, j=j, th = (d <= thresh)))
+  if(!identical(cl, clt))
+    stop("closepairs and closethresh disagree")
+  
   # Rasmus' example
   R <- 0.04
   U <- as.ppp(gridcenters(owin(), 50, 50), W=owin())
@@ -77,6 +85,7 @@ local({
   G[cbind(cp$i, cp$j)] <- 1
   if(!isSymmetric(G))
     stop("crosspairs is not symmetric in Rasmus example")
+
 })
 ## tests/colour.R
 ##
@@ -163,7 +172,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.3 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.5 $  $Date: 2016/03/04 03:09:00 $
 #
 
 require(spatstat)
@@ -191,9 +200,9 @@ local({
   lamX <- density(redwood, at="points")
   KX <- Kinhom(redwood, lamX)
 
-  ## test all code cases of new 'relrisk' algorithm
-  pants <- function(...) {
-    a <- relrisk(ants, sigma=100, se=TRUE, ...)
+  ## test all code cases of new 'relrisk.ppp' algorithm
+  pants <- function(..., X=ants) {
+    a <- relrisk(X, sigma=100, se=TRUE, ...)
     return(TRUE)
   }
   pants()
@@ -205,7 +214,12 @@ local({
   pants(relative=TRUE,at="points")
   pants(casecontrol=FALSE, relative=TRUE,at="points")
 
+  ## more than 2 types
+  pants(X=sporophores)
+  pants(X=sporophores, at="points")
+  pants(X=sporophores, relative=TRUE, at="points")
 
+  ## Smooth.ppp
   Z <- Smooth(longleaf, 5, diggle=TRUE)
   Z <- Smooth(unmark(longleaf) %mark% 1, 5)
 
@@ -582,7 +596,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.9 $ $Date: 2015/12/29 08:54:49 $
+# $Revision: 1.11 $ $Date: 2016/03/04 10:48:03 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -614,7 +628,13 @@ local({
     Y2 <- simulate(fit2)[[1]]
     stopifnot(is.ppp(Y2))
   }
-  
+
+ # improve.kppm
+ fitI <- update(fit, improve.type="quasi")
+ fitxI <- update(fitx, improve.type="quasi")
+ # vcov.kppm
+ vc <- vcov(fitxI)
+ 
 })
 
 
@@ -1396,7 +1416,7 @@ local({
 #
 # Things that might go wrong with predict()
 #
-#  $Revision: 1.3 $ $Date: 2016/02/23 02:37:41 $
+#  $Revision: 1.4 $ $Date: 2016/03/04 03:14:40 $
 #
 
 require(spatstat)
@@ -1425,6 +1445,17 @@ local({
     stop("new.coef mechanism is broken!")
   if(max(abs(pn-p0)) > 0.01)
     stop("new.coef mechanism gives wrong answer, for unnamed vectors")
+
+  # tests of relrisk.ppm
+  fut <- ppm(amacrine ~ x * marks)
+  a <- relrisk(fut, control=2, relative=TRUE)
+  a <- relrisk(fut, se=TRUE)
+  a <- relrisk(fut, relative=TRUE, se=TRUE)
+  fut <- ppm(sporophores ~ marks + x)
+  a <- relrisk(fut, control=2, relative=TRUE)
+  a <- relrisk(fut, se=TRUE)
+  a <- relrisk(fut, relative=TRUE, se=TRUE)
+  
 })
 
 #
