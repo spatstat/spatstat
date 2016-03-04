@@ -821,6 +821,7 @@
 \alias{applySparseEntries}
 \alias{sumsymouterSparse}
 %%%%
+\alias{spatstatDiagnostic}
 \description{
   Internal spatstat functions.
 }
@@ -1766,6 +1767,8 @@ inside3Darray(d, i, j, k)
 mapSparseEntries(x, margin, values, conform, stackmargin)
 applySparseEntries(x, f, \dots)
 sumsymouterSparse(x, w, dbg)
+%%
+spatstatDiagnostic(msg)
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called

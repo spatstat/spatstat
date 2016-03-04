@@ -46,7 +46,7 @@ zclustermodel(name = "Thomas", \dots, mu, kappa, scale)
 }
 \examples{
   m <- zclustermodel("Thomas", kappa=10, mu=5, scale=0.1)
-  cat("End of examples code reached!!!\n")
+  spatstatDiagnostic("End of examples code reached!!!")
 }
 \keyword{spatial}
 \keyword{models}

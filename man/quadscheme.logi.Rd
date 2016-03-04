@@ -130,7 +130,8 @@ weights are never used and only appear to be compatible with the class
   data(simdat)
 
   Q <- quadscheme.logi(simdat)
-  
+
+  spatstatDiagnostic("finished quadscheme.logi")  
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

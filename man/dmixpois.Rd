@@ -85,6 +85,8 @@ rmixpois(n, mu, sd, invlink = exp)
   x <- rmixpois(100, log(10), log(1.2))
   mean(x)
   var(x)
+
+  spatstatDiagnostic("finished dmixpois")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

@@ -146,6 +146,7 @@
   levels(v) <- letters[seq(length(levels(v)))]
   E <- tess(image=v)
   E
+  spatstatDiagnostic("finished tess")
 }
 \author{
 Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

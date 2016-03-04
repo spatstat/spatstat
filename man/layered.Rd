@@ -87,6 +87,8 @@ layered(..., plotargs = NULL, LayerList=NULL)
 
    layerplotargs(L)[[1]] <- list(.plot="contour")
    plot(L)
+
+   spatstatDiagnostic("finished layered")
 }
 \keyword{spatial}
 \keyword{hplot}

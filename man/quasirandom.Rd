@@ -95,6 +95,8 @@ Hammersley(n, bases = 2, raw = FALSE, simplify = TRUE)
    plot(Halton(256, c(2,3)))
 
    plot(Hammersley(256, 3))
+
+   spatstatDiagnostic("finished quasirandom")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

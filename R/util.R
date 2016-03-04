@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.203 $    $Date: 2016/03/02 01:27:39 $
+#    $Revision: 1.204 $    $Date: 2016/03/04 00:42:30 $
 #
 #
 matrowsum <- function(x) {
@@ -1645,3 +1645,9 @@ requireversion <- function(pkg, ver) {
   invisible(NULL)
 }
 
+spatstatDiagnostic <- function(msg) {
+  cat("-----------------------------\n")
+  cat(paste(" >>> Spatstat Diagnostic: ", msg, "<<<\n"))
+  cat("-----------------------------\n")
+  invisible(NULL)
+}

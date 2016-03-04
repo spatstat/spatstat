@@ -263,9 +263,10 @@ markappend <- function(...) {
   marxlist <- list(...)
   # check on compatibility of marks
   mkfmt <- sapply(marxlist,markformat)
-  if(length(unique(mkfmt))>1)
-    stop(paste("Marks of some patterns are of different format",
-               "from those of other patterns."))
+  if(length(ufm <- unique(mkfmt))>1)
+    stop(paste("Cannot append marks of different formats:",
+               commasep(sQuote(ufm))),
+         call.=FALSE)
   mkfmt <- mkfmt[1]
   # combine the marks
   switch(mkfmt,

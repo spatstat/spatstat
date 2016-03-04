@@ -57,5 +57,7 @@ gauss.hermite(f, mu = 0, sd = 1, ..., order = 5)
 }
 \examples{
   gauss.hermite(function(x) x^2, 3, 1)
+
+  spatstatDiagnostic("finished gauss.hermite")
 }
 \keyword{math}

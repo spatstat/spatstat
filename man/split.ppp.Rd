@@ -194,6 +194,7 @@
   Y <- split(X)
   Y$on <- rjitter(Y$on, 0.1)
   split(X) <- Y
+  spatstatDiagnostic("finished split.ppp")
 }
 
 \author{

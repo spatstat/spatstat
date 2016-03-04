@@ -64,6 +64,7 @@ whist(x, breaks, weights = NULL)
   b <- seq(-1,1,length=21)
   w <- runif(100)
   whist(x,b,w)
+  spatstatDiagnostic("finished whist")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

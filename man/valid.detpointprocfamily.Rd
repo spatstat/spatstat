@@ -26,6 +26,7 @@ model1 <- dppMatern(lambda=100, alpha=.01, nu=1, d=2)
 valid(model1)
 model2 <- dppMatern(lambda=100, alpha=1, nu=1, d=2)
 valid(model2)
+  spatstatDiagnostic("finished valid.detpointprocfamily")
 }
 \seealso{
   \code{\link{valid}}

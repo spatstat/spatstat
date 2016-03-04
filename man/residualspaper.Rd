@@ -73,6 +73,7 @@
   # reproduce Figure 7 (a)
   residualspaper$plotfig("7a")
 }
+  spatstatDiagnostic("finished residualspaper")
 }
 \source{
   Figure 1: Prof M. Numata. Data kindly supplied by Professor Y. Ogata

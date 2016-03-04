@@ -343,6 +343,7 @@
    # log scale
    V <- eval.im(exp(exp(Z+2))/1e4)
    plot(V, log=TRUE, main="Log scale")
+   spatstatDiagnostic("finished plot.im")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

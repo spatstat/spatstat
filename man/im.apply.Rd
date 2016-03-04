@@ -43,6 +43,8 @@ im.apply(X, FUN, ...)
   DA <- density(split(amacrine))
   DA
   im.apply(DA, max)
+
+  spatstatDiagnostic("finished im.apply")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

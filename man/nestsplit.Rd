@@ -80,6 +80,8 @@ and Ege Rubak \email{rubak@math.aau.dk}
   Td <- dirichlet(runifpoint(5, Window(redwood)))
   Ntt <- nestsplit(redwood, Td, Tx)
   Ntt2 <- nestsplit(redwood, Td, ny=3)
+
+  spatstatDiagnostic("finished nestsplit")
 }
 \keyword{spatial}
 \keyword{manip}
