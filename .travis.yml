@@ -19,7 +19,7 @@ after_failure:
   - ./pkg-build.sh dump_logs
   
 after_success:
-  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(type="all")'; fi
+  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(type=Sys.getenv("COVERAGE"), quiet = FALSE)'; fi
 
 notifications:
   email:
@@ -31,4 +31,6 @@ env:
     - _R_CHECK_FORCE_SUGGESTS_=false
   matrix:
     - RVERSION=release
-    - RVERSION=devel COVERAGE=true R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+    - RVERSION=devel COVERAGE=vignette R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+    - RVERSION=devel COVERAGE=test R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+    - RVERSION=devel COVERAGE=example R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
