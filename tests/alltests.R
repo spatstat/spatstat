@@ -402,6 +402,39 @@ local({
 })
 
 
+#' tests/formuli.R
+#'
+#'  Test machinery for manipulating formulae
+#' 
+#' $Revision: 1.2 $  $Date: 2016/03/05 02:24:32 $
+
+require(spatstat)
+local({
+
+  ff <- function(A, deletevar, B) {
+    D <- reduceformula(A, deletevar)
+    if(!identical.formulae(D, B)) {
+      AD <- as.expression(substitute(reduceformula(A,d),
+                                     list(A=A, d=deletevar)))
+      stop(paste(AD, "\n\tyields ", pasteFormula(D),
+                 " instead of ", pasteFormula(B)),
+           call.=FALSE)
+    }
+    invisible(NULL)
+  }
+
+  ff(~ x + z, "x", ~z)
+
+  ff(y ~ x + z, "x", y~z)
+
+  ff(~ I(x^2) + z, "x",  ~z)
+
+  ff(y ~ poly(x,2) + poly(z,3), "x", y ~poly(z,3))
+
+})
+
+
+
 ##  
 ##     tests/funnymarks.R
 ##
@@ -2601,7 +2634,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.10 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.11 $  $Date: 2016/03/05 01:33:47 $
 #
 
 require(spatstat)
@@ -2653,6 +2686,16 @@ X <- amacrine
 Y <- split(X)
 split(X) <- Y
 stopifnot(identical(X, amacrine))
+
+#' split.ppx
+df <- data.frame(x=runif(4),y=runif(4),t=runif(4),
+                 age=rep(c("old", "new"), 2),
+                 mineral=factor(rep(c("Au","Cu"), each=2),
+                                levels=c("Au", "Cu", "Pb")),
+                 size=runif(4))
+X <- ppx(data=df, coord.type=c("s","s","t","m", "m","m"))
+Y <- split(X, "age")
+Y <- split(X, "mineral", drop=TRUE)
 
 })
 #

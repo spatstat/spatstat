@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.049
+        CHANGES IN spatstat VERSION 1.44-1.050
 
 OVERVIEW
 
@@ -269,6 +269,10 @@ BUGS
    o anova.mppm
    Crashed sometimes with a message about unrecognised option 'type="score"'.
    [Spotted by Sven Wagner.]
+   Fixed.
+
+   o split.ppx
+   Crashed if 'f' was not a factor.
    Fixed.
 
    o idw

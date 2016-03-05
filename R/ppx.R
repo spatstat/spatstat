@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.54 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.55 $  $Date: 2016/03/05 01:33:03 $
 #
 
 ppx <- local({
@@ -101,7 +101,7 @@ print.ppx <- function(x, ...) {
   invisible(NULL)
 }
 
-summary.ppx <- function(object, ...) { print(object, ...) }
+summary.ppx <- function(object, ...) { object }
 
 plot.ppx <- function(x, ...) {
   xname <- short.deparse(substitute(x))

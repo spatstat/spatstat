@@ -1,7 +1,7 @@
 #
 #  reduceformula.R
 #
-#  $Revision: 1.5 $   $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.6 $   $Date: 2016/03/05 02:25:21 $
 #
 # delete variable from formula 
 #
@@ -36,6 +36,7 @@ reduceformula <- function(fmla, deletevar, verbose=FALSE) {
   if(repo != 0) {
     vars <- vars[-repo]
     varstrings <- varstrings[-repo]
+    varexprs <- varexprs[-repo]
     v.is.offset <- v.is.offset[-repo]
   }
   ## a term may be a variable name
