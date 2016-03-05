@@ -93,6 +93,9 @@ lppm(X, ...)
   X <- runiflpp(15, simplenet)
   lppm(X ~1)
   lppm(X ~x)
+  marks(X) <- factor(rep(letters[1:3], 5))
+  lppm(X ~ marks)
+  lppm(X ~ marks * x)
 }
 \references{
   Ang, Q.W. (2010)

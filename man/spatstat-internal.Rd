@@ -1740,7 +1740,7 @@ emptySparseSlab(typemaker, dim, stackdim)
 %NAMESPACE S3method("Summary", "sparseSlab")
 %%%
 %%% sparse 3D arrays
-sparse3Darray(i,j,k,x,dims,dimnames,strict)
+sparse3Darray(i,j,k,x,dims,dimnames,strict,nonzero)
 as.sparse3Darray(x, \dots)
 \method{dim}{sparse3Darray}(x)
 \method{dim}{sparse3Darray}(x) <- value

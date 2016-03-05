@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.5 $  $Date: 2016/03/02 05:23:00 $
+#'   $Revision: 1.6 $  $Date: 2016/03/05 09:40:19 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -46,19 +46,23 @@ grokIndexVector <- function(ind, len, nama=NULL) {
   if(is.logical(ind)) {
     # logical (subset) index into 1:len
     lo <- ind
-    n <- length(lo)
-    if(n < len) {
+    m <- length(lo)
+    if(m < len) {
       #' recycle
-      lo <- rep(lo, ceiling(len/n))[1:len]
-      n <- len
+      oldlo <- lo
+      lo <- logical(len)
+      lo[oldlo] <- TRUE
+      m <- len
     }
-    if(n == len) {
-      result <- list(strict=list(lo=lo, i=which(lo), n=len, s=nama, map=NULL))
+    if(m == len) {
+      n <- sum(lo)
+      result <- list(strict=list(lo=lo, i=which(lo), n=n, s=nama,
+                       nind=n, map=NULL))
       return(result)
     }
     #' new elements implied
     lostrict <- lo[1:len]
-    newones <- (len+1):n
+    newones <- (len+1):m
     nstrict <- sum(lostrict)
     strict <- list(lo=lostrict,
                    i=which(lostrict),
@@ -68,7 +72,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
                    map=NULL)
     nfull <- sum(lo)
     full <- list(newones=newones,
-                 fullset=1:n,
+                 fullset=1:m,
                  lo=lo,
                  i=which(lo),
                  n=nfull,

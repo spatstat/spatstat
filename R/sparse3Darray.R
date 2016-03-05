@@ -3,14 +3,19 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.7 $  $Date: 2016/03/02 04:51:13 $
+#' $Revision: 1.8 $  $Date: 2016/03/05 10:29:35 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
                           x=numeric(0),
                           dims=c(max(i),max(j),max(k)),
-                          dimnames=NULL, strict=FALSE) {
+                          dimnames=NULL, strict=FALSE, nonzero=FALSE) {
   dat <- data.frame(i, j, k, x)
+  if(typeof(x) == "complex")
+    warn.once("sparse.complex",
+              "complex-valued sparse 3D arrays are supported in spatstat,",
+              "but complex-valued sparse matrices",
+              "are not yet supported by the Matrix package")
   stopifnot(length(dims) == 3)
   dims <- as.integer(dims)
   if(!all(inside.range(i, c(1, dims[1])))) stop("indices i are outside range")
@@ -22,9 +27,25 @@ sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
     notnull <- !sapply(dimnames, is.null)
     dimnames[notnull] <- lapply(dimnames[notnull], as.character)
   }
-  if(strict) {
+  if(nonzero || strict) {
+    #' drop zeroes
     ok <- (x != RelevantZero(x))
     dat <- dat[ok, , drop=FALSE]
+  }
+  if(strict) {
+    #' arrange in 'R order'
+    dat <- dat[with(dat, order(k,j,i)), , drop=FALSE]
+    #' duplicates will be adjacent
+    dup <- with(dat, c(FALSE, diff(i) == 0 & diff(j) == 0 & diff(k) == 0))
+    if(any(dup)) {
+      #' accumulate values at the same array location
+      retain <- !dup
+      newrow <- cumsum(retain)
+      newx <- as(tapply(dat$x, newrow, sum), typeof(dat$x))
+      newdat <- dat[retain,,drop=FALSE]
+      newdat$x <- newx
+      dat <- newdat
+    }
   }
   result <- append(as.list(dat),
                    list(dim=dims, dimnames=dimnames))
@@ -136,16 +157,20 @@ print.sparse3Darray <- function(x, ...) {
   pieces <- split(df, factor(df$k, levels=1:d3))
   dim2 <- dimx[1:2]
   dn2 <- dn[1:2]
-  for(k in seq_along(pieces)) {
-    cat(paste0("\n\t[ , , ", dn3[k], "]\n\n"))
-    Mi <- with(pieces[[k]],
-               sparseMatrix(i=i, j=j, x=x, dims=dim2, dimnames=dn2))
-    stuff <- capture.output(eval(Mi))
-    # Remove 'sparse Matrix' header blurb
-    stuff <- stuff[-1]
-    if(is.blank(stuff[1]))
+  if(typeof(x$x) == "complex") {
+    splat("\t[Complex-valued sparse matrices are not printable]")
+  } else {
+    for(k in seq_along(pieces)) {
+      cat(paste0("\n\t[ , , ", dn3[k], "]\n\n"))
+      Mi <- with(pieces[[k]],
+                 sparseMatrix(i=i, j=j, x=x, dims=dim2, dimnames=dn2))
+      stuff <- capture.output(eval(Mi))
+      #' Remove 'sparse Matrix' header blurb
       stuff <- stuff[-1]
-    cat(stuff, sep="\n")
+      if(is.blank(stuff[1]))
+        stuff <- stuff[-1]
+      cat(stuff, sep="\n")
+    }
   }
   return(invisible(NULL))
 }
@@ -263,7 +288,17 @@ as.array.sparse3Darray <- function(x, ...) {
       #' sparse vector
       retained <- which(retain)
       newi <- getElement(x, name=c("i","j","k")[retained])
-      x <- sparseVector(x=x$x, i=newi, length=dimx[retained])
+      #' ensure 'strict' 
+      ord <- order(newi)
+      newi <- newi[ord]
+      newx <- x$x[ord]
+      if(any(dup <- c(FALSE, diff(newi) == 0))) {
+        retain <- !dup
+        ii <- cumsum(retain)
+        newi <- newi[retain]
+        newx <- as(tapply(newx, ii, sum), typeof(newx))
+      }
+      x <- sparseVector(x=newx, i=newi, length=dimx[retained])
     } else if(nretain == 0) {
       #' single value
       x <- as.vector(as.array(x))
@@ -306,7 +341,7 @@ as.array.sparse3Darray <- function(x, ...) {
     ## combine
     ydata <- rbind(xdata, vdata)
     y <- with(ydata, sparse3Darray(i=i,j=j,k=k,x=x,
-                                   dims=dimx, dimnames=dn))
+                                   dims=dimx, dimnames=dn, strict=TRUE))
     return(y)
   }
   I <- grokIndexVector(if(missing(i)) NULL else i, dimx[1], dn[[1]])
@@ -439,7 +474,7 @@ as.array.sparse3Darray <- function(x, ...) {
   ## combine
   ydata <- rbind(xdata, vdata)
   y <- with(ydata, sparse3Darray(i=i,j=j,k=k,x=x,
-                                 dims=dimx, dimnames=dn))
+                                 dims=dimx, dimnames=dn, strict=TRUE))
   return(y)
 }
 
