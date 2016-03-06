@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.196 $	$Date: 2016/03/01 09:26:08 $
+#	$Revision: 5.197 $	$Date: 2016/03/06 03:13:03 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/03/01 09:26:08 $")
+                        date="$Date: 2016/03/06 03:13:03 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1146,7 +1146,6 @@ deltasuffstat <- local({
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
     sparseOK <- sparseOK && spatstat.options('developer')
-    sparsetype <- spatstat.options('sparsetype')
 
     if(dataonly) {
       X <- data.ppm(model)
@@ -1158,15 +1157,8 @@ deltasuffstat <- local({
     ncoef <- length(coef(model))
     inte <- as.interact(model)
 
-    zeroes <-
-      if(!sparseOK) array(0, dim=c(nX, nX, ncoef)) else
-      switch(sparsetype,
-             sparseSlab={
-               emptySparseSlab(double, dim=c(nX, nX, ncoef), stackdim=3)
-             },
-             sparse3Darray={
-               sparse3Darray(dims=c(nX, nX, ncoef))
-             })
+    zeroes <- if(!sparseOK) array(0, dim=c(nX, nX, ncoef)) else
+                            sparse3Darray(dims=c(nX, nX, ncoef))
     
     if(is.poisson(inte))
       return(zeroes)
@@ -1203,12 +1195,10 @@ deltasuffstat <- local({
       if(is.matrix(v)) {
         v <- array(v, dim=c(dim(v), 1))
       } else if(inherits(v, "sparseMatrix")) {
-        v <- switch(sparsetype,
-                    sparseSlab    = as.sparseSlab(v, stackdim=3),
-                    sparse3Darray = as.sparse3Darray(v))
+        v <- as.sparse3Darray(v)
       }
     }
-    if(!sparseOK && inherits(v, c("sparseSlab", "sparse3Darray")))
+    if(!sparseOK && inherits(v, "sparse3Darray"))
       v <- as.array(v)
   
     if(restrict) {

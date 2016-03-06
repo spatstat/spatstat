@@ -3,9 +3,8 @@
 #'
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
-#'   Functions work for 'sparseSlab' or 'sparse3Darray'
 #' 
-#'   $Revision: 1.3 $  $Date: 2016/03/01 09:13:09 $
+#'   $Revision: 1.5 $  $Date: 2016/03/06 02:57:54 $
 
 
 tensor1x1 <- function(A, B) {
@@ -22,12 +21,84 @@ tensor1x1 <- function(A, B) {
                            x=B$x * A[B$i], # values for same (i,j) are summed
                            dims=dim(B)[-1],
                            dimnames=dimnames(B)[2:3])
-  } else if(inherits(B, "sparseSlab")) {
-    stopifnot(B$stackdim == 1)
-    result <- Reduce("+", mapply("*", as.list(A), B$m))
   } else stop("Format of B not understood", call.=FALSE)
   return(result)
 }
+
+tenseur <- local({
+
+  tenseur <- function(A, B, alongA=integer(0), alongB=integer(0)) {
+    #' full arrays?
+    if((is.array(A) || is.matrix(A)) && (is.array(B) || is.matrix(B)))
+      return(tensor::tensor(A=A, B=B, alongA=alongA, alongB=alongB))
+    #' check dimensions
+    dimA <- dim(A) %orifnull% length(A)
+    dnA <- dimnames(A)
+    if (nnA <- is.null(dnA)) 
+      dnA <- rep(list(NULL), length(dimA))
+    dimB <- dim(B) %orifnull% length(B)
+    dnB <- dimnames(B)
+    if (nnB <- is.null(dnB)) 
+      dnB <- rep(list(NULL), length(dimB))
+    #' check 'along'
+    if (length(alongA) != length(alongB)) 
+      stop("\"along\" vectors must be same length")
+    mtch <- dimA[alongA] == dimB[alongB]
+    if (any(is.na(mtch)) || !all(mtch)) 
+      stop("Mismatch in \"along\" dimensions")
+    #' dimensions of result
+    retainA <- !(seq_along(dimA) %in% alongA)
+    retainB <- !(seq_along(dimB) %in% alongB)
+    dimC <- c(dimA[retainA], dimB[retainB])
+    nC <- length(dimC)
+    if(nC > 3)
+      stop("Sorry, sparse arrays of more than 3 dimensions are not supported",
+           call.=FALSE)
+    #' extract indices and values of nonzero entries
+    dfA <- SparseEntries(A)
+    dfB <- SparseEntries(B)
+    #' assemble all tuples which contribute 
+    if(length(alongA) == 0) {
+      #' outer product
+      dfC <- outersparse(dfA, dfB)
+    } else {
+      if(length(alongA) == 1) {
+        Acode <- dfA[,alongA]
+        Bcode <- dfB[,alongB]
+      } else {
+        Along <- unname(as.list(dfA[,alongA, drop=FALSE]))
+        Blong <- unname(as.list(dfB[,alongB, drop=FALSE]))
+        Acode <- do.call(paste, append(Along, list(sep=",")))
+        Bcode <- do.call(paste, append(Blong, list(sep=",")))
+      }
+      lev <- unique(c(Acode,Bcode))
+      Acode <- factor(Acode, levels=lev)
+      Bcode <- factor(Bcode, levels=lev)
+      splitA <- split(dfA, Acode)
+      splitB <- split(dfB, Bcode)
+      splitC <- mapply(outersparse, splitA, splitB, SIMPLIFY=FALSE)
+      dfC <- Reduce(rbind, splitC)
+    }
+    #' form product of contributing entries
+    dfC$x <- with(dfC, A.x * B.x)
+    #' retain only appropriate columns
+    retain <- c(retainA, FALSE, retainB, FALSE, TRUE)
+    dfC <- dfC[, retain, drop=FALSE]
+    #' collect result
+    result <- EntriesToSparse(dfC, dimC)
+    return(result)
+  }
+
+  outersparse <- function(dfA, dfB) {
+    if(is.null(dfA) || is.null(dfB)) return(NULL)
+    IJ <- expand.grid(I=seq_len(nrow(dfA)),
+                      J=seq_len(nrow(dfB)))
+    dfC <- with(IJ, cbind(A=dfA[I,,drop=FALSE], B=dfB[J,,drop=FALSE]))
+    return(dfC)
+  }
+
+  tenseur
+})
 
 sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
   dimx <- dim(x)
@@ -44,19 +115,6 @@ sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
                      j = x$j - 1L,
                      k = x$k - 1L,
                      value = x$x)
-  } else if(inherits(x, "sparseSlab")) {
-    if(x$stackdim != 1)
-      stop("x should be stacked along the first dimension", call.=FALSE)
-    #' Extract triplet representation of x
-    mlist <- lapply(x$m, as, Class="TsparseMatrix")
-    dflist <- list()
-    for(i in seq_along(mlist)) {
-      mi <- mlist[[i]]
-      dflist[[i]] <- data.frame(i=rep(i-1, length(mi@i)),
-                                j=mi@i, k=mi@j, value=mi@x)
-      #' note these indices are 0-based
-    }
-    df <- Reduce(rbind, dflist)
   } else stop("x is not a recognised kind of sparse array")
   # trivial?
   if(nrow(df) < 2) {

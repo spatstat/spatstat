@@ -481,12 +481,6 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
-       sparsetype = list(
-         # type of experimental sparse array to be used
-         default = "sparseSlab",
-         check=function(x) { x %in% c("sparseSlab", "sparse3Darray") },
-         valid="one of the strings 'sparseSlab' or 'sparse3Darray'"
-       ),
        developer = list(
          # general purpose; user is a developer; use experimental code, etc
          default=FALSE,

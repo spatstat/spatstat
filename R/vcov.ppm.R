@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.120 $  $Date: 2016/02/23 10:47:30 $
+##  $Revision: 1.123 $  $Date: 2016/03/06 05:01:18 $
 ##
 
 vcov.ppm <- local({
@@ -478,7 +478,7 @@ vcalcGibbsGeneral <- function(model,
       ##  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
       sparse <- spatstat.options('developer')
       ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=sparse)
-      sparse <- sparse && inherits(ddS, c("sparseSlab", "sparse3Darray"))
+      sparse <- sparse && inherits(ddS, "sparse3Darray")
       if(is.null(ddS)) {
         if(asked.parallel)
           warning("parallel option not available - reverting to loop")
@@ -495,7 +495,8 @@ vcalcGibbsGeneral <- function(model,
         if(sparse) {
           ## Entries are only required for pairs i,j which interact.
           ## mom.array[ ,i,j] = h(X[i] | X)
-          mom.array <- mapSparseEntries(ddS, margin=2, values=m)
+          mom.array <- mapSparseEntries(ddS, margin=2, values=m,
+                                        conform=TRUE, across=1)
           ## momdel[ ,i,j] = h(X[i] | X[-j])
           momdel <- mom.array - ddS
           ## pairweight[i,j] = lambda(X[i] | X[-j] )/lambda( X[i] | X ) - 1
@@ -531,12 +532,11 @@ vcalcGibbsGeneral <- function(model,
             momdellogi <- rho/(lamdel.array+rho)*momdel
             ddSlogi <- rho/(lam.array+rho)*mom.array - momdellogi
           } else {
-            nslice <- dim(ddS)[1]
             ## lam.array[ ,i,j] = lambda(X[i] | X)
-            lam.array <- mapSparseEntries(ddS, margin=2, lam)
+            lam.array <- mapSparseEntries(ddS, margin=2, lam,
+                                          conform=TRUE, across=1)
             ## lamdel.array[,i,j] = lambda(X[i] | X[-j])
-            pairweight.array <-
-              sparseSlab(rep(list(pairweight), nslice), stackdim=1)
+            pairweight.array <- aperm(as.sparse3Darray(pairweight), c(3,1,2))
             lamdel.array <- pairweight.array * lam.array + lam.array
             lamdel.logi <- applySparseEntries(lamdel.array,
                                               function(y,rho) { rho/(rho+y) },

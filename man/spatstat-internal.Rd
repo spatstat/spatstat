@@ -779,22 +779,6 @@
 \alias{xtfrm.im}
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
-%%%% sparse slabs
-\alias{sparseSlab}
-\alias{as.sparseSlab}
-\alias{dim.sparseSlab}
-\alias{dimnames.sparseSlab}
-\alias{dimnames<-.sparseSlab}
-\alias{print.sparseSlab}
-\alias{aperm.sparseSlab}
-\alias{as.array.sparseSlab}
-\alias{[.sparseSlab}
-\alias{[<-.sparseSlab}
-\alias{emptySparseSlab}
-\alias{anyNA.sparseSlab}
-\alias{Math.sparseSlab}
-\alias{Ops.sparseSlab}
-\alias{Summary.sparseSlab}
 %%%% sparse 3D arrays
 \alias{sparse3Darray}
 \alias{as.sparse3Darray}
@@ -815,11 +799,13 @@
 \alias{Math.sparse3Darray}
 \alias{Ops.sparse3Darray}
 \alias{Summary.sparse3Darray}
-%% common sparse functions
 \alias{inside3Darray}
+\alias{SparseEntries}
+\alias{EntriesToSparse}
 \alias{mapSparseEntries}
 \alias{applySparseEntries}
 \alias{sumsymouterSparse}
+\alias{tenseur}
 %%%%
 \alias{spatstatDiagnostic}
 \description{
@@ -1719,26 +1705,6 @@ X2testEngine(OBS, EXP, \dots, method, CR, df, nsim,
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
-%%% sparse slabs
-sparseSlab(matlist, stackdim)
-as.sparseSlab(x, \dots, stackdim)
-\method{dim}{sparseSlab}(x)
-\method{dimnames}{sparseSlab}(x)
-\method{dimnames}{sparseSlab}(x) <- value
-\method{print}{sparseSlab}(x, \dots)
-\method{aperm}{sparseSlab}(a, perm, resize, \dots)
-\method{as.array}{sparseSlab}(x, \dots)
-\method{[}{sparseSlab}(x, i, j, k, drop, \dots)
-\method{[}{sparseSlab}(x, i, j, k, \dots) <- value
-emptySparseSlab(typemaker, dim, stackdim)
-\method{anyNA}{sparseSlab}(x, recursive)
-\special{Math(x, \dots)}
-\special{Ops(e1, e2)}
-\special{Summary(\dots, na.rm = FALSE)}
-%NAMESPACE S3method("Math", "sparseSlab")
-%NAMESPACE S3method("Ops", "sparseSlab")
-%NAMESPACE S3method("Summary", "sparseSlab")
-%%%
 %%% sparse 3D arrays
 sparse3Darray(i,j,k,x,dims,dimnames,strict,nonzero)
 as.sparse3Darray(x, \dots)
@@ -1762,11 +1728,13 @@ unionOfSparseIndices(A,B)
 %NAMESPACE S3method("Math", "sparse3Darray")
 %NAMESPACE S3method("Ops", "sparse3Darray")
 %NAMESPACE S3method("Summary", "sparse3Darray")
-%% sparse common
 inside3Darray(d, i, j, k)
-mapSparseEntries(x, margin, values, conform, stackmargin)
+SparseEntries(x)
+EntriesToSparse(df, dims)
+mapSparseEntries(x, margin, values, conform, across)
 applySparseEntries(x, f, \dots)
 sumsymouterSparse(x, w, dbg)
+tenseur(A, B, alongA, alongB)
 %%
 spatstatDiagnostic(msg)
 }

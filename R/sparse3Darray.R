@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.8 $  $Date: 2016/03/05 10:29:35 $
+#' $Revision: 1.10 $  $Date: 2016/03/06 03:08:43 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -603,7 +603,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijk], e2[ijkdrop]))
       result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
-                              x=xout,
+                              x=as.vector(xout),
                               dims=dim1, dimnames=dimnames(e1), strict=TRUE)
       return(result)
     }
@@ -624,7 +624,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijkdrop], e2[ijk]))
       result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
-                              x=xout,
+                              x=as.vector(xout),
                               dims=dim2, dimnames=dimnames(e2), strict=TRUE)
       return(result)
     }
@@ -661,3 +661,49 @@ Summary.sparse3Darray <- function(..., na.rm=FALSE) {
   return(rslt)
 }
 
+
+SparseEntries <- function(x) {
+  #' extract entries of sparse vector/matrix/array
+  nd <- length(dim(x))
+  if(nd > 3)
+    stop("Arrays of more than 3 dimensions are not supported", call.=FALSE)
+  if(nd == 0 || nd == 1) {
+    x <- as(x, "sparseVector")
+    df <- data.frame(i=x@i, x=x@x)
+  } else if(nd == 2) {
+    x <- as(x, "TsparseMatrix")
+    df <- data.frame(i=x@i + 1L, j=x@j + 1L, x=x@x)
+  } else if(nd == 3) {
+    x <- as.sparse3Darray(x)
+    df <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
+  }
+  return(df)
+}
+
+EntriesToSparse <- function(df, dims) {
+  #' convert data frame of indices and values
+  #' to sparse vector/matrix/array
+  nd <- length(dims)
+  if(nd == 0)
+    return(with(df, as(sum(x), typeof(x))))
+  sn <- seq_len(nd)
+  colnames(df)[sn] <- c("i","j","k")[sn]
+  if(nd == 1) {
+    #' sparse vector: duplicate entries not allowed
+    df <- df[with(df, order(i)), , drop=FALSE]
+    dup <- with(df, diff(i) == 0)
+    if(any(dup)) {
+      #' accumulate values at the same array location
+      first <- !dup
+      newi <- cumsum(first)
+      newx <- as(tapply(df$x, newi, sum), typeof(df$x))
+      df <- data.frame(i=newi[first], x=newx)
+    }
+    result <- with(df, sparseVector(i=i, x=x, length=dims))
+  } else if(nd == 2) {
+    result <- with(df, sparseMatrix(i=i, j=j, x=x, dims=dims))
+  } else if(nd == 3) {
+    result <- with(df, sparse3Darray(i=i, j=j, k=k, x=x, dims=dims))
+  }
+  return(result)
+}

@@ -2492,7 +2492,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of sparse3array.R code
-#'  $Revision: 1.4 $ $Date: 2016/03/02 04:44:37 $
+#'  $Revision: 1.5 $ $Date: 2016/03/06 02:24:57 $
 
 require(spatstat)
 local({
@@ -2539,7 +2539,16 @@ local({
 
     stopifnot(all((M+M) == 2*M))     # non-sparse
     stopifnot(!any((M+M) != 2*M))    # sparse
-    
+
+    ## tensor operator
+
+    tenseur(c(1,-1), M, 1, 3)
+    tenseur(M, M, 1:2, 1:2)
+    tenseur(M, M, 1:2, 2:1)
+    V <- sparseVector(i=c(1,3,6),x=1:3, length=7)
+    tenseur(V,V)
+    tenseur(V,V,1,1)
+
     ## test of anyNA method
     anyNA(M)
     
@@ -2553,73 +2562,6 @@ local({
     Z <- with(cl,
               sparse3Darray(i=i, j=j, k=k, x=1, dims=c(n,n,2)))
     dimnames(Z) <- list(NULL, NULL, c("r=0.1", "r=0.12"))
-
-    Z <- aperm(Z, c(3,1,2))
-    stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
-  }
-})
-
-
-#'    tests/sparseSlabs.R
-#'  Basic tests of sparseSlabs.R code
-#'  $Revision: 1.3 $ $Date: 2016/02/29 08:31:15 $
-
-require(spatstat)
-local({
-
-  if(require(Matrix)) {
-    m <- replicate(2, 
-                   sparseMatrix(1:5, sample(1:5, replace=TRUE),
-                                x=1:5, dims=c(5,5)))
-    
-    M <- sparseSlab(m)
-    dimnames(M) <- list(letters[1:5], LETTERS[1:5], c("yes", "no"))
-    
-    M
-    
-    U <- aperm(M, c(1,3,2))
-    U
-    
-    M[ 3:4, , ]
-    
-    M[ 3:4, 2:4, ]
-    
-    M[, 3, ]
-
-    M[, 3, , drop=FALSE]
-    
-    MA <- as.array(M)
-    UA <- as.array(U)
-
-    ## tests of "[<-.sparseSlab"
-    Mflip <- Mzero <- MandM <- M
-    Mflip[ , , 2:1] <- M
-    stopifnot(Mflip[3,1,1] == M[3,1,2])
-    Mzero[1:3,1:3,] <- 0
-    stopifnot(all(Mzero[1,1,] == 0))
-    M2a <- M[,,2,drop=FALSE]
-    M2d <- M[,,2,drop=TRUE]
-    MandM[,,1] <- M2a
-    MandM[,,1] <- M2d
-
-    ## tests of arithmetic (Math, Ops, Summary)
-    negM <- -M
-    oneM <- 1 * M
-    twoM <- M + M
-    range(M)
-
-    ## test of anyNA method
-    anyNA(M)
-    
-    ## a possible application in spatstat
-    cl10 <- closepairs(cells, 0.1)
-    cl12 <- closepairs(cells, 0.12)
-    n <- npoints(cells)
-    m10 <- with(cl10, sparseMatrix(i, j, x=1, dims=c(n,n)))
-    m12 <- with(cl12, sparseMatrix(i, j, x=1, dims=c(n,n)))
-    mlist <- list(m10, m12)
-    names(mlist) <- c("r=0.1", "r=0.12")
-    Z <- sparseSlab(mlist)
 
     Z <- aperm(Z, c(3,1,2))
     stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
