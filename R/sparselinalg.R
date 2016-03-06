@@ -4,8 +4,27 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.5 $  $Date: 2016/03/06 02:57:54 $
+#'   $Revision: 1.8 $  $Date: 2016/03/06 09:47:18 $
 
+marginSums <- function(X, MARGIN) {
+  #' equivalent to apply(X, MARGIN, sum)
+  if(length(MARGIN) == 0) return(sum(X))
+  if(is.array(X) || is.matrix(X))
+    return(apply(X, MARGIN, sum))
+  dimX <- dim(X)
+  if(length(MARGIN) == length(dimX)) 
+    return(aperm(X, MARGIN))
+  if(any(huh <- (MARGIN < 0 | MARGIN > length(dimX))))
+    stop(paste(commasep(sQuote(paste0("MARGIN=", MARGIN[huh]))),
+               ngettext(sum(huh), "is", "are"), "not defined"), call.=FALSE)
+  df <- SparseEntries(X)
+  # discard other indices
+  nonmargin <- setdiff(seq_along(dimX), MARGIN)
+  df <- df[ , -nonmargin, drop=FALSE]
+  # implicitly accumulate
+  result <- EntriesToSparse(df, dimX[MARGIN])
+  return(result)
+}
 
 tensor1x1 <- function(A, B) {
   ## equivalent of tensor(A, B, 1, 1)
@@ -29,7 +48,7 @@ tenseur <- local({
 
   tenseur <- function(A, B, alongA=integer(0), alongB=integer(0)) {
     #' full arrays?
-    if((is.array(A) || is.matrix(A)) && (is.array(B) || is.matrix(B)))
+    if(isfull(A) && isfull(B))
       return(tensor::tensor(A=A, B=B, alongA=alongA, alongB=alongB))
     #' check dimensions
     dimA <- dim(A) %orifnull% length(A)
@@ -77,7 +96,7 @@ tenseur <- local({
       splitA <- split(dfA, Acode)
       splitB <- split(dfB, Bcode)
       splitC <- mapply(outersparse, splitA, splitB, SIMPLIFY=FALSE)
-      dfC <- Reduce(rbind, splitC)
+      dfC <- rbindCompatibleDataFrames(splitC)
     }
     #' form product of contributing entries
     dfC$x <- with(dfC, A.x * B.x)
@@ -89,6 +108,13 @@ tenseur <- local({
     return(result)
   }
 
+  isfull <- function(z) {
+    if(is.array(z) || is.matrix(z) || is.data.frame(z)) return(TRUE)
+    if(inherits(z, c("sparseVector", "sparseMatrix", "sparse3Darray")))
+      return(FALSE)
+    return(TRUE)
+  }
+  
   outersparse <- function(dfA, dfB) {
     if(is.null(dfA) || is.null(dfB)) return(NULL)
     IJ <- expand.grid(I=seq_len(nrow(dfA)),

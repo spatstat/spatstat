@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.10 $  $Date: 2016/03/06 03:08:43 $
+#' $Revision: 1.13 $  $Date: 2016/03/06 10:07:32 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -195,117 +195,148 @@ as.array.sparse3Darray <- function(x, ...) {
   return(z)
 }
 
-"[.sparse3Darray" <- function(x, i,j,k, drop=TRUE, ...) {
-  dimx <- dim(x)
-  dn <- dimnames(x) %orifnull% rep(list(NULL), 3)
-  if(!missing(i) && length(dim(i)) == 2) {
-    ## matrix index
-    i <- as.matrix(i)
-    if(!(missing(j) && missing(k)))
-      stop("If i is a matrix, j and k should not be given", call.=FALSE)
-    if(ncol(i) != 3)
-      stop("If i is a matrix, it should have 3 columns", call.=FALSE)
-    ## start with vector of 'zero' answers of the correct type
-    answer <- sparseVector(x=RelevantZero(x$x)[integer(0)],
-                           i=integer(0),
-                           length=nrow(i))
-    # values outside array return NA
-    if(any(bad <- !inside3Darray(dim(x), i)))
-      answer[bad] <- NA
-    # convert triples of integers to character codes
-    icode <- apply(i, 1, paste, collapse=",")
-    dcode <- paste(x$i, x$j, x$k, sep=",")
-    ## match them
-    m <- match(icode, dcode)
-    # insert any found elements
-    found <- !is.na(m)
-    answer[found] <- x$x[m[found]]
-    return(answer)
-  }
-  if(!(missing(i) && missing(j) && missing(k))) {
-    I <- grokIndexVector(if(missing(i)) NULL else i, dimx[1], dn[[1]])
-    J <- grokIndexVector(if(missing(j)) NULL else j, dimx[2], dn[[2]])
-    K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
-    IJK <- list(I,J,K)
-    if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
-      # indices exceed array bounds; result is a full array containing NA's
-      result <- as.array(x)[I$full$i, J$full$j, K$full$k, drop=drop]
-      return(result)
+"[.sparse3Darray" <- local({
+
+  Extract <- function(x, i,j,k, drop=TRUE, ...) {
+    dimx <- dim(x)
+    dn <- dimnames(x) %orifnull% rep(list(NULL), 3)
+    if(!missing(i) && length(dim(i)) == 2) {
+      ## matrix index
+      i <- as.matrix(i)
+      if(!(missing(j) && missing(k)))
+        stop("If i is a matrix, j and k should not be given", call.=FALSE)
+      if(ncol(i) != 3)
+        stop("If i is a matrix, it should have 3 columns", call.=FALSE)
+      ## start with vector of 'zero' answers of the correct type
+      answer <- sparseVector(x=RelevantZero(x$x)[integer(0)],
+                             i=integer(0),
+                             length=nrow(i))
+      ## values outside array return NA
+      if(any(bad <- !inside3Darray(dim(x), i)))
+        answer[bad] <- NA
+      ## convert triples of integers to character codes
+      # icode <- apply(i, 1, paste, collapse=",") << is too slow >>
+      icode <- paste(i[,1], i[,2], i[,3], sep=",")
+      dcode <- paste(x$i, x$j, x$k, sep=",")
+      ## match them
+      m <- match(icode, dcode)
+      ## insert any found elements
+      found <- !is.na(m)
+      answer[found] <- x$x[m[found]]
+      return(answer)
     }
-    IJK <- lapply(IJK, getElement, name="strict")
-    I <- IJK[[1]]
-    J <- IJK[[2]]
-    K <- IJK[[3]]
-    #' number of values to be returned along each margin
-    newdims <- sapply(IJK, getElement, name="n")
-    #' dimnames of return array
-    newdn <- lapply(IJK, getElement, name="s")
-    #' find all required data (not necessarily in required order)
-    inI <- I$lo
-    inJ <- J$lo
-    inK <- K$lo
-    df <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
-    use <- with(df, inI[i] & inJ[j] & inK[k])
-    df <- df[use, ,drop=FALSE]
-    #' contract sub-array to (1:n) * (1:m) * (1:l)
-    df <- transform(df,
-                    i = cumsum(inI)[i],
-                    j = cumsum(inJ)[j],
-                    k = cumsum(inK)[k])
-    #' map to output positions (reorder/repeat entries)
-    outdf <- df[integer(0),,drop=FALSE]
-    Imap <- I$map
-    Jmap <- J$map
-    Kmap <- K$map
-    for(m in seq_len(nrow(df))) {
-      dfm <- df[m,,drop=FALSE]
-      iout <- if(is.null(Imap)) dfm$i else which(Imap == dfm$i)
-      jout <- if(is.null(Jmap)) dfm$j else which(Jmap == dfm$j)
-      kout <- if(is.null(Kmap)) dfm$k else which(Kmap == dfm$k)
-      ijkout <- expand.grid(i=iout, j=jout, k=kout)
-      if(nrow(ijkout) > 0) {
-        ijkout$x <- dfm$x
-        outdf <- rbind(outdf, ijkout)
+    if(!(missing(i) && missing(j) && missing(k))) {
+      I <- grokIndexVector(if(missing(i)) NULL else i, dimx[1], dn[[1]])
+      J <- grokIndexVector(if(missing(j)) NULL else j, dimx[2], dn[[2]])
+      K <- grokIndexVector(if(missing(k)) NULL else k, dimx[3], dn[[3]])
+      IJK <- list(I,J,K)
+      if(!all(sapply(lapply(IJK, getElement, name="full"), is.null))) {
+        ## indices exceed array bounds; result is a full array containing NA's
+        result <- as.array(x)[I$full$i, J$full$j, K$full$k, drop=drop]
+        return(result)
+      }
+      IJK <- lapply(IJK, getElement, name="strict")
+      I <- IJK[[1]]
+      J <- IJK[[2]]
+      K <- IJK[[3]]
+      #' number of values to be returned along each margin
+      newdims <- sapply(IJK, getElement, name="n")
+      #' dimnames of return array
+      newdn <- lapply(IJK, getElement, name="s")
+      #' find all required data (not necessarily in required order)
+      inI <- I$lo
+      inJ <- J$lo
+      inK <- K$lo
+      df <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
+      use <- with(df, inI[i] & inJ[j] & inK[k])
+      df <- df[use, ,drop=FALSE]
+      #' contract sub-array to (1:n) * (1:m) * (1:l)
+      df <- transform(df,
+                      i = cumsum(inI)[i],
+                      j = cumsum(inJ)[j],
+                      k = cumsum(inK)[k])
+      Imap <- I$map
+      Jmap <- J$map
+      Kmap <- K$map
+      if(nrow(df) == 0 || (is.null(Imap) && is.null(Jmap) && is.null(Kmap))) {
+        ## return values are already in correct position
+        outdf <- df
+      } else {
+        #' invert map to determine output positions (reorder/repeat entries)
+        imap <- Imap %orifnull% df$i
+        jmap <- Jmap %orifnull% df$j
+        kmap <- Kmap %orifnull% df$k
+        sn <- seq_len(nrow(df))
+        whichi <- split(seq_along(imap), factor(imap, levels=sn))
+        whichj <- split(seq_along(jmap), factor(jmap, levels=sn))
+        whichk <- split(seq_along(kmap), factor(kmap, levels=sn))
+        dat.i <- whichi[df$i]
+        dat.j <- whichj[df$j]
+        dat.k <- whichk[df$k]
+        stuff <- mapply(expandwithdata,
+                        i=dat.i, j=dat.j, k=dat.k, x=df$x)
+        outdf <- rbindCompatibleDataFrames(stuff)
+      }
+      x <- sparse3Darray(i=outdf$i, j=outdf$j, k=outdf$k, x=outdf$x,
+                         dims=newdims, dimnames=newdn)
+      dimx <- newdims
+      dn <- newdn
+    }
+    if(drop) {
+      retain <- (dimx > 1)
+      nretain <- sum(retain)
+      if(nretain == 2) {
+        #' result is a matrix
+        retained <- which(retain)
+        newi <- getElement(x, name=c("i","j","k")[ retained[1] ])
+        newj <- getElement(x, name=c("i","j","k")[ retained[2] ])
+        newdim <- dimx[retain]
+        newdn <- dn[retain]
+        return(sparseMatrix(i=newi, j=newj, x=x$x, dims=newdim, dimnames=newdn))
+      } else if(nretain == 1) {
+        #' sparse vector
+        retained <- which(retain)
+        newi <- getElement(x, name=c("i","j","k")[retained])
+        #' ensure 'strict' 
+        ord <- order(newi)
+        newi <- newi[ord]
+        newx <- x$x[ord]
+        if(any(dup <- c(FALSE, diff(newi) == 0))) {
+          retain <- !dup
+          ii <- cumsum(retain)
+          newi <- newi[retain]
+          newx <- as(tapply(newx, ii, sum), typeof(newx))
+        }
+        x <- sparseVector(x=newx, i=newi, length=dimx[retained])
+      } else if(nretain == 0) {
+        #' single value
+        x <- as.vector(as.array(x))
       }
     }
-    x <- sparse3Darray(i=outdf$i, j=outdf$j, k=outdf$k, x=outdf$x,
-                       dims=newdims, dimnames=newdn)
-    dimx <- newdims
-    dn <- newdn
+    return(x)
   }
-  if(drop) {
-    retain <- (dimx > 1)
-    nretain <- sum(retain)
-    if(nretain == 2) {
-      #' result is a matrix
-      retained <- which(retain)
-      newi <- getElement(x, name=c("i","j","k")[ retained[1] ])
-      newj <- getElement(x, name=c("i","j","k")[ retained[2] ])
-      newdim <- dimx[retain]
-      newdn <- dn[retain]
-      return(sparseMatrix(i=newi, j=newj, x=x$x, dims=newdim, dimnames=newdn))
-    } else if(nretain == 1) {
-      #' sparse vector
-      retained <- which(retain)
-      newi <- getElement(x, name=c("i","j","k")[retained])
-      #' ensure 'strict' 
-      ord <- order(newi)
-      newi <- newi[ord]
-      newx <- x$x[ord]
-      if(any(dup <- c(FALSE, diff(newi) == 0))) {
-        retain <- !dup
-        ii <- cumsum(retain)
-        newi <- newi[retain]
-        newx <- as(tapply(newx, ii, sum), typeof(newx))
-      }
-      x <- sparseVector(x=newx, i=newi, length=dimx[retained])
-    } else if(nretain == 0) {
-      #' single value
-      x <- as.vector(as.array(x))
-    }
+
+  expandwithdata <- function(i, j, k, x) {
+    z <- expand.grid(i=i, j=j, k=k)
+    if(nrow(z) > 0)
+      z$x <- x
+    return(z)
   }
-  return(x)
+
+  Extract
+})
+
+
+rbindCompatibleDataFrames <- function(x) {
+  #' faster version of Reduce(rbind, x) when entries are known to be compatible
+  nama2 <- colnames(x[[1]])
+  y <- vector(mode="list", length=length(nama2))
+  names(y) <- nama2
+  for(nam in nama2)
+    y[[nam]] <- unlist(lapply(x, getElement, name=nam))
+  return(as.data.frame(y))
 }
+
 
 "[<-.sparse3Darray" <- function(x, i, j, k, ..., value) {
   dimx <- dim(x)
@@ -324,7 +355,8 @@ as.array.sparse3Darray <- function(x, ...) {
     xdata <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
     ##
     ## convert triples of integers to character codes
-    icode <- apply(ijk, 1, paste, collapse=",")
+    ## icode <- apply(ijk, 1, paste, collapse=",") << is too slow >>
+    icode <- paste(ijk[,1], ijk[,2], ijk[,3], sep=",")
     xcode <- paste(x$i, x$j, x$k, sep=",")
     ## match them *backwards*
     m <- match(xcode, icode)
@@ -691,7 +723,7 @@ EntriesToSparse <- function(df, dims) {
   if(nd == 1) {
     #' sparse vector: duplicate entries not allowed
     df <- df[with(df, order(i)), , drop=FALSE]
-    dup <- with(df, diff(i) == 0)
+    dup <- c(FALSE, with(df, diff(i) == 0))
     if(any(dup)) {
       #' accumulate values at the same array location
       first <- !dup
@@ -707,3 +739,4 @@ EntriesToSparse <- function(df, dims) {
   }
   return(result)
 }
+

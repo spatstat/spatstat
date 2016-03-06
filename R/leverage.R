@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.49 $  $Date: 2016/02/24 06:09:41 $
+#  $Revision: 1.51 $  $Date: 2016/03/06 09:47:40 $
 #
 
 leverage <- function(model, ...) {
@@ -50,12 +50,14 @@ dfbetas.ppm <- function(model, ...,
 
 
 ppmInfluence <- function(fit,
-                          what=c("leverage", "influence", "dfbetas",
-                            "derivatives", "increments"),
-                          ..., iScore=NULL, iHessian=NULL, iArgs=NULL,
-                          drop=FALSE,
-                          method=c("C", "interpreted"),
-                          precomputed=list()) {
+                         what=c("leverage", "influence", "dfbetas",
+                                "derivatives", "increments"),
+                         ...,
+                         iScore=NULL, iHessian=NULL, iArgs=NULL,
+                         drop=FALSE,
+                         method=c("C", "interpreted"),
+                          precomputed=list(),
+                         sparseOK=FALSE) {
   stopifnot(is.ppm(fit))
   what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
@@ -69,6 +71,7 @@ ppmInfluence <- function(fit,
     stop("Must supply iHessian")
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
     stop("ppm influence measures are not yet implemented for method=logi")
+  sparse <- sparseOK && spatstat.options('developer')
   #
   # extract precomputed values if given
   theta  <- precomputed$coef   %orifnull% coef(fit)
@@ -96,7 +99,8 @@ ppmInfluence <- function(fit,
   # ddS[i,j, ] = Delta_i Delta_j S(x)
   ddS <- NULL
   if(!all(what == "derivatives") && !is.poisson(fit)) {
-    ddS <- deltasuffstat(fit, dataonly=FALSE)
+    ddS <- deltasuffstat(fit, dataonly=FALSE, sparseOK=sparse)
+    sparse <- inherits(ddS, "sparse3Darray")
     if(is.null(ddS))
       warning("Second order interaction terms are not implemented for this model; they are treated as zero")
   }
@@ -222,34 +226,50 @@ ppmInfluence <- function(fit,
   if(!is.poisson(fit) && !is.null(ddS)) {
     # effect of addition/deletion of U[j] on score contribution from data points
     ddSX <- ddS[isdata, , , drop=FALSE]
-    eff.data <- apply(ddSX, c(2,3), sum)
+    eff.data <- marginSums(ddSX, c(2,3))
     # check if any quadrature points have zero conditional intensity;
     # these do not contribute; the associated values of the sufficient
     # statistic may be Infinite and must be explicitly set to zero.
     zerocif <- (lam == 0)
     anyzerocif <- any(zerocif)
     if(anyzerocif)
-      eff.data[zerocif, ] <- 0
-    # model matrix after addition/deletion of each U[j]
-    # mombefore[i,j,] <- mom[i,]
-    di <- dim(ddS)
-    mombefore <- array(apply(mom, 2, rep, times=di[2]), dim=di)
+      eff.data[zerocif, ] <- 0 
+    ## effect of addition/deletion of U[j] on integral term in score
     changesign <- ifelse(isdata, -1, 1)
-    momchange <- ddS
-    momchange[ , isdata, ] <- - momchange[, isdata, ]
-    momafter <- mombefore + momchange
-    # effect of addition/deletion of U[j] on lambda(U[i], X)
-    lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE], theta, 3, 1))
-    lamratio <- array(lamratio, dim=dim(momafter))
-    # integrate 
-    ddSintegrand <- lam * (momafter * lamratio - mombefore)
+    if(!sparse) {
+      ## model matrix after addition/deletion of each U[j]
+      ## mombefore[i,j,] <- mom[i,]
+      di <- dim(ddS)
+      mombefore <- array(apply(mom, 2, rep, times=di[2]), dim=di)
+      momchange <- ddS
+      momchange[ , isdata, ] <- - momchange[, isdata, ]
+      momafter <- mombefore + momchange
+      ## effect of addition/deletion of U[j] on lambda(U[i], X)
+      lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE], theta, 3, 1))
+      lamratio <- array(lamratio, dim=dim(momafter))
+      ddSintegrand <- lam * (momafter * lamratio - mombefore)
+    } else {
+      ## Entries are required only for pairs i,j which interact.
+      ## mombefore[i,j,] <- mom[i,]
+      mombefore <- mapSparseEntries(ddS, 1, mom, conform=TRUE, across=3)
+      momchange <- ddS
+      momchange[ , isdata, ] <- - momchange[, isdata, ]
+      momafter <- mombefore + momchange
+      ## lamarray[i,j,k] <- lam[i]
+      lamarray <- mapSparseEntries(ddS, 1, lam, conform=TRUE, across=3)
+      lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE], theta, 3, 1))
+      lamratiominus1 <- as.sparse3Darray(lamratiominus1)
+      ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
+    }
     if(anyzerocif) {
       ddSintegrand[zerocif,,] <- 0
       ddSintegrand[,zerocif,] <- 0
     }
-    eff.back <- changesign * tensor::tensor(ddSintegrand, w, 1, 1)
+    ## integrate 
+    eff.back <- changesign * tenseur(ddSintegrand, w, 1, 1)
     # total
     eff <- eff + eff.data - eff.back
+    eff <- as.matrix(eff)
   } else ddSintegrand <- NULL
 
   # 

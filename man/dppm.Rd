@@ -289,6 +289,10 @@
 }
 \examples{
   jpines <- residualspaper$Fig1
+  \testonly{
+     # smaller dataset for testing
+    jpines <- jpines[c(TRUE,FALSE)]
+  }
 
   dppm(jpines ~ 1, dppGauss)
 

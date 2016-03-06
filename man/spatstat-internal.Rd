@@ -806,6 +806,8 @@
 \alias{applySparseEntries}
 \alias{sumsymouterSparse}
 \alias{tenseur}
+\alias{marginSums}
+\alias{rbindCompatibleDataFrames}
 %%%%
 \alias{spatstatDiagnostic}
 \description{
@@ -1379,7 +1381,7 @@ ppllengine(X, Y, action="project", check=FALSE)
 ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluence(fit, what, \dots, iScore, iHessian, iArgs,
-              drop, method, precomputed)
+              drop, method, precomputed, sparseOK)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
@@ -1735,6 +1737,8 @@ mapSparseEntries(x, margin, values, conform, across)
 applySparseEntries(x, f, \dots)
 sumsymouterSparse(x, w, dbg)
 tenseur(A, B, alongA, alongB)
+marginSums(X, MARGIN)
+rbindCompatibleDataFrames(x)
 %%
 spatstatDiagnostic(msg)
 }
