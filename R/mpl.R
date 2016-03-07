@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.197 $	$Date: 2016/03/06 03:13:03 $
+#	$Revision: 5.198 $	$Date: 2016/03/07 02:46:03 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/03/06 03:13:03 $")
+                        date="$Date: 2016/03/07 02:46:03 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1145,8 +1145,8 @@ deltasuffstat <- local({
                             restrict=TRUE, dataonly=TRUE, force=FALSE,
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
-    sparseOK <- sparseOK && spatstat.options('developer')
-
+    sparsegiven <- !missing(sparseOK)
+    
     if(dataonly) {
       X <- data.ppm(model)
       nX <- npoints(X)
@@ -1156,6 +1156,14 @@ deltasuffstat <- local({
     }
     ncoef <- length(coef(model))
     inte <- as.interact(model)
+
+    sparseOK <- sparseOK && spatstat.options('developer')
+    if(!sparseOK && exceedsMaxArraySize(nX, nX, ncoef)) {
+      if(sparsegiven || !spatstat.options("developer"))
+        stop("Array dimensions too large", call.=FALSE)
+      warning("Switching to sparse array code", call.=FALSE)
+      sparseOK <- TRUE
+    }
 
     zeroes <- if(!sparseOK) array(0, dim=c(nX, nX, ncoef)) else
                             sparse3Darray(dims=c(nX, nX, ncoef))

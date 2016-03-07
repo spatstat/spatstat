@@ -1651,3 +1651,7 @@ spatstatDiagnostic <- function(msg) {
   cat("-----------------------------\n")
   invisible(NULL)
 }
+
+exceedsMaxArraySize <- function(...) {
+  (prod(as.numeric(c(...))) > .Machine$integer.max)
+}

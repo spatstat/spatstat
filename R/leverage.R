@@ -227,6 +227,8 @@ ppmInfluence <- function(fit,
     # effect of addition/deletion of U[j] on score contribution from data points
     ddSX <- ddS[isdata, , , drop=FALSE]
     eff.data <- marginSums(ddSX, c(2,3))
+    rm(ddSX)
+    gc()
     # check if any quadrature points have zero conditional intensity;
     # these do not contribute; the associated values of the sufficient
     # statistic may be Infinite and must be explicitly set to zero.
@@ -248,6 +250,8 @@ ppmInfluence <- function(fit,
       lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE], theta, 3, 1))
       lamratio <- array(lamratio, dim=dim(momafter))
       ddSintegrand <- lam * (momafter * lamratio - mombefore)
+      rm(lamratio, momchange, mombefore, momafter)
+      gc()
     } else {
       ## Entries are required only for pairs i,j which interact.
       ## mombefore[i,j,] <- mom[i,]
@@ -260,6 +264,8 @@ ppmInfluence <- function(fit,
       lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE], theta, 3, 1))
       lamratiominus1 <- as.sparse3Darray(lamratiominus1)
       ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
+      rm(lamratiominus1, lamarray, momchange, mombefore, momafter)
+      gc()
     }
     if(anyzerocif) {
       ddSintegrand[zerocif,,] <- 0

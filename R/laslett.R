@@ -3,21 +3,46 @@
 #' Adapted by Adrian Baddeley
 #' Copyright (C) 2016 Kassel Hingee and Adrian Baddeley
 
-# $Revision: 1.3 $  $Date: 2016/03/03 06:42:12 $
+# $Revision: 1.6 $  $Date: 2016/03/07 07:38:55 $
 
 laslett <- function(X, ...,
                     verbose=FALSE, plotit=TRUE,
-                    discretise=FALSE){
+                    discretise=FALSE,
+                    type = c("lower", "upper", "left", "right")){
   #' validate X and convert to a logical matrix
+  type <- match.arg(type)
   oldX <- X
-  if(is.owin(X)) {
-    if(!discretise && (is.polygonal(X) || is.rectangle(X)))
-      return(polyLaslett(X, ..., verbose=verbose, plotit=plotit))
-    X <- as.mask(X, ...)
-  } else if(is.im(X)) {
+  argh <- list(...)
+
+  if(is.im(X)) {
     X <- solutionset(X != 0)
-  } else stop("X should be an image or a window")
-  return(maskLaslett(X, ..., oldX=oldX, verbose=verbose, plotit=plotit))
+  } else if(!is.owin(X)) 
+    stop("X should be an image or a window", call.=FALSE)
+
+  if(type != "lower") {
+    nrot <- match(type, c("right", "upper", "left"))
+    theta <- nrot * pi/2
+    X <- rotate(X, angle=-theta)
+  }
+  
+  if(!discretise && (is.polygonal(X) || is.rectangle(X))) {
+    result <- polyLaslett(X, ..., oldX=oldX, verbose=verbose, plotit=FALSE)
+  } else {
+    result <- maskLaslett(X, ..., oldX=oldX, verbose=verbose, plotit=FALSE)
+  }
+
+  if(type != "lower") {
+    #' rotate back
+    prods <- c("TanOld", "TanNew", "Rect")
+    result[prods] <- lapply(result[prods], rotate, angle=theta)
+  }
+
+  if(plotit)
+    plot(result, ...)
+
+  result$type <- type
+  
+  return(result)
 }
 
 maskLaslett <- local({
@@ -25,9 +50,10 @@ maskLaslett <- local({
   sumtoright <- function(x) { rev(cumsum(rev(x))) - x }
 
   maskLaslett <- function(X, ...,
+                          eps=NULL, dimyx=NULL, xy=NULL, 
                           oldX=X, verbose=FALSE, plotit=TRUE) {
-    stopifnot(is.mask(X))
     if(is.null(oldX)) oldX <- X
+    X <- as.mask(X, eps=eps, dimyx=dimyx, xy=xy)
     unitX <- unitname(X)
     if(is.empty(X))
       stop("Empty window!")
@@ -78,7 +104,7 @@ maskLaslett <- local({
                      FutureInsideBelow=FutureInside[below])
     #' identify candidates for tangents
     df$IsCandidate <-
-      with(df, Enter & InsideBelow & (newcol < TotFalse[row]))
+      with(df, Enter & !InsideBelow & (newcol < TotFalse[row]))
     #' collect data for each horizontal line (row)
     #' then sort by increasing x (column) within each line.
     oo <- with(df, order(row, col))
@@ -158,7 +184,8 @@ print.laslett <- function(x, ...) {
       "square", unitinfo$plural, unitinfo$explain,
       fill=TRUE)
   cat("\n")
-  cat(npoints(x$TanNew), "lower tangent points found.", fill=TRUE)
+  type <- x$type %orifnull% "lower"
+  cat(npoints(x$TanNew), type, "tangent points found.", fill=TRUE)
   return(invisible(NULL))
 }
   
@@ -175,15 +202,21 @@ plot.laslett <- function(x, ...,
                          layered(TanNew,
                                  Rect, 
                                  plotargs=list(pointpars, rectpars))))
+
+  #' ignore arguments intended for as.mask
+  argh <- list(...)
+  if(any(bad <- names(argh) %in% c("eps", "dimyx", "xy")))
+    argh <- argh[!bad]
+
   do.call(plot,
           resolve.defaults(list(x=Display),
-                           list(...),
+                           argh,
                            list(main="", mar.panel=0, hsep=1,
                                 equal.scales=TRUE)))
   return(invisible(NULL))
 }
 
-polyLaslett <- function(X, ..., verbose=FALSE, plotit=TRUE) {
+polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   X <- as.polygonal(X)
   if(is.empty(X))
     stop("Empty window!")
@@ -299,7 +332,7 @@ polyLaslett <- function(X, ..., verbose=FALSE, plotit=TRUE) {
   dfnew <- as.data.frame(TanNew)
   df <- data.frame(xold=TanOld$x, xnew=TanNew$x, y=TanNew$y)
   #
-  result <- list(oldX=X,
+  result <- list(oldX=oldX,
                  TanOld=TanOld, TanNew=TanNew, Rect=Rect,
                  df=df)
   class(result) <- c("laslett", class(result))

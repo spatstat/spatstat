@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.44-1.053
+Version: 1.44-1.054
 Nickname: Helping Police With Their Inquiries
-Date: 2016-03-06
+Date: 2016-03-07
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

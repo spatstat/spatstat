@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.13 $  $Date: 2016/03/06 10:07:32 $
+#' $Revision: 1.14 $  $Date: 2016/03/07 02:44:50 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -429,8 +429,18 @@ rbindCompatibleDataFrames <- function(x) {
     collapsing <- (dimVshould == 1)
     realdim <- sum(!collapsing)
     if(nv == 1) {
-      #' replacement value is a constant, replicated where needed
-      vdata <- expand.grid(i=I$i, j=J$i, k=K$i, x=as.vector(value[1]))
+      #' replacement value is a constant
+      value <- as.vector(value[1])
+      if(identical(value, RelevantZero(x$x))) {
+        #' assignment causes relevant entries to be set to zero;
+        #' these entries have already been deleted from 'xdata';
+        #' nothing to add
+        vdata <- data.frame(i=integer(0), j=integer(0), k=integer(0),
+                            x=x$x[integer(0)])
+      } else {
+        #' replicate the constant
+        vdata <- expand.grid(i=I$i, j=J$i, k=K$i, x=as.vector(value[1]))
+      }
     } else if(realdim == 0) {
         stop(paste("Replacement value has too many entries:",
                    nv, "instead of 1"),
@@ -504,8 +514,9 @@ rbindCompatibleDataFrames <- function(x) {
          call.=FALSE)
     
   ## combine
-  ydata <- rbind(xdata, vdata)
-  y <- with(ydata, sparse3Darray(i=i,j=j,k=k,x=x,
+  if(nrow(vdata) > 0)
+    xdata <- rbind(xdata, vdata)
+  y <- with(xdata, sparse3Darray(i=i,j=j,k=k,x=x,
                                  dims=dimx, dimnames=dn, strict=TRUE))
   return(y)
 }

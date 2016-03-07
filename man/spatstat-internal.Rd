@@ -808,6 +808,7 @@
 \alias{tenseur}
 \alias{marginSums}
 \alias{rbindCompatibleDataFrames}
+\alias{exceedsMaxArraySize}
 %%%%
 \alias{spatstatDiagnostic}
 \description{
@@ -1202,7 +1203,7 @@ logi.engine(Q, trend, interaction, \dots,
             VB)
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
-maskLaslett(X, \dots, oldX, verbose, plotit)
+maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 padtowidth(a, b, justify)
 \method{parameters}{interact}(model, \dots)
 \method{parameters}{fii}(model, \dots)
@@ -1212,7 +1213,7 @@ paste.expr(x)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
-polyLaslett(X, \dots, verbose, plotit)
+polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny)
 positiveIndex(i, nama, len)
 prettyinside(x, \dots)
@@ -1739,6 +1740,7 @@ sumsymouterSparse(x, w, dbg)
 tenseur(A, B, alongA, alongB)
 marginSums(X, MARGIN)
 rbindCompatibleDataFrames(x)
+exceedsMaxArraySize(\dots)
 %%
 spatstatDiagnostic(msg)
 }
