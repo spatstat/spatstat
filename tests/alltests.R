@@ -483,7 +483,7 @@ local({
 # 
 #    tests/fvproblems.R
 #
-#    $Revision: 1.6 $  $Date: 2015/12/29 08:57:16 $
+#    $Revision: 1.7 $  $Date: 2016/03/08 00:26:23 $
 #
 
 require(spatstat)
@@ -541,6 +541,18 @@ local({
   attr(K, "alim") <- c(0, 0.1)
   plot(tail(K))
 })
+
+#
+# Check that default 'r' vector passes the test for fine spacing
+
+local({
+  a <- Fest(cells)
+  A <- Fest(cells, r=a$r)
+  b <- Hest(heather$coarse)
+  B <- Hest(heather$coarse, r=b$r)
+})
+
+  
 ##
 ##    tests/gcc323.R
 ##
@@ -2758,7 +2770,7 @@ local({
 ##
 ##  Check validity of update.ppm
 ##
-##  $Revision: 1.3 $ $Date: 2015/12/29 08:54:49 $
+##  $Revision: 1.4 $ $Date: 2016/03/08 06:30:46 $
 
 local({
     require(spatstat)
@@ -2835,6 +2847,19 @@ local({
     fut <- ppm(X ~ Z + x + y, nd=8)
     fut0 <- step(fut, trace=0)
     cat("OK\n")
+})
+
+# test update.lppm
+
+local({
+  X <- runiflpp(20, simplenet)
+  fit0 <- lppm(X ~ 1)
+  fit1 <- update(fit0, ~ x)
+  anova(fit0, fit1, test="LR")
+  cat("update.lppm(fit, ~trend) is OK\n")
+  fit2 <- update(fit0, . ~ x)
+  anova(fit0, fit2, test="LR")
+  cat("update.lppm(fit, . ~ trend) is OK\n")
 })
 #
 #  tests/vcovppm.R

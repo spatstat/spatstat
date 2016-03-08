@@ -668,6 +668,8 @@ plot(letterR, add=TRUE, col="red")
 plot(v, add=TRUE, col="blue")
 par(nopa)
 
+laslett(heather$fine, main="Laslett's Transform")
+
 fanfare("IX. Operations on pixel images")
 
 Z <- distmap(swedishpines, dimyx=512)
@@ -702,7 +704,6 @@ plot(letterR, add=TRUE)
 plot(blur(Z, 0.3, bleed=FALSE))
 plot(letterR, add=TRUE)
           
-
 fanfare("X. Programming tools")
 
 showoffK <- function(Y, current, ..., fullpicture,rad) { 

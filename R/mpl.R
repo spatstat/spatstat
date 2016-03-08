@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.198 $	$Date: 2016/03/07 02:46:03 $
+#	$Revision: 5.199 $	$Date: 2016/03/08 04:30:01 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/03/07 02:46:03 $")
+                        date="$Date: 2016/03/08 04:30:01 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1143,6 +1143,7 @@ deltasuffstat <- local({
   
   deltasuffstat <- function(model, ...,
                             restrict=TRUE, dataonly=TRUE, force=FALSE,
+                            quadsub=NULL,
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
     sparsegiven <- !missing(sparseOK)
@@ -1152,6 +1153,13 @@ deltasuffstat <- local({
       nX <- npoints(X)
     } else {
       X <- quad.ppm(model)
+      if(!is.null(quadsub)) {
+        z <- is.data(X)
+        z[quadsub] <- FALSE
+        if(any(z))
+          stop("subset 'quadsub' must include all data points", call.=FALSE)
+        X <- X[quadsub]
+      }
       nX <- n.quad(X)
     }
     ncoef <- length(coef(model))

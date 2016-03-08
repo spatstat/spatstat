@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.35 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.36 $   $Date: 2016/03/08 05:43:58 $
 #
 
 lppm <- function(X, ...) {
@@ -190,24 +190,38 @@ update.lppm <- function(object, ...) {
   X <- object$X
   fit <- object$fit
   Xname <- object$Xname
+  callframe <- environment(formula(fit))
   aargh <- list(...)
-  islpp <- unlist(lapply(aargh, inherits, what="lpp"))
-  if(!any(islpp)) {
-    # pass arguments through to update.ppm
-    newfit <- do.call(update.ppm, append(list(fit), aargh))
-    newX <- X
-  } else {
+  islpp <- sapply(aargh, is.lpp)
+  if(any(islpp)) {
     # trap point pattern argument & convert to quadscheme
-    if((npp <- sum(islpp)) > 1)
+    ii <- which(islpp)
+    if((npp <- length(ii)) > 1)
       stop(paste("Arguments not understood:", npp, "lpp objects given"))
-    newX <- aargh[[which(islpp)]]
-    newQ <- linequad(newX)
-    newfit <- do.call(update.ppm,
-                      append(list(fit, newQ), aargh[!islpp]))
-  } 
+    X <- aargh[[ii]]
+    aargh[[ii]] <- linequad(X)
+  }
+  isfmla <- sapply(aargh, inherits, what="formula")
+  if(any(isfmla)) {
+    # trap formula pattern argument, update it, evaluate LHS if required
+    jj <- which(isfmla)
+    if((nf <- length(jj)) > 1)
+      stop(paste("Arguments not understood:", nf, "formulae given"))
+    fmla <- aargh[[jj]]
+    fmla <- update(formula(object), fmla)
+    if(!is.null(lhs <- lhs.of.formula(fmla))) {
+      X <- eval(lhs, envir=list2env(list("."=X), parent=callframe))
+      Qpos <- if(any(islpp)) ii else (length(aargh) + 1L)
+      aargh[[Qpos]] <- linequad(X)
+    }
+    aargh[[jj]] <- rhs.of.formula(fmla)
+  }
+  newfit <- do.call(update.ppm,
+                    append(list(fit), aargh),
+                    envir=callframe)
   if(!is.poisson.ppm(newfit))
     warning("Non-Poisson models currently use Euclidean distance")
-  out <- list(X=newX, fit=newfit, Xname=Xname)
+  out <- list(X=X, fit=newfit, Xname=Xname)
   class(out) <- "lppm"
   return(out)
 }

@@ -3,7 +3,7 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.41 $	$Date: 2016/03/01 08:24:20 $
+#	$Revision: 4.42 $	$Date: 2016/03/08 00:23:33 $
 #
 
 Fhazard <- function(X, ...) {
@@ -55,6 +55,7 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
 
   if(rorbgiven) check.finespacing(rvals,
                                   if(is.null(eps)) NULL else eps/4,
+                                  dwin,
                                   action="fatal",
                                   rname="r", 
                                   context="in Fest(X, r)")
