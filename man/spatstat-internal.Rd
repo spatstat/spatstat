@@ -481,6 +481,7 @@
 \alias{ppmCovariates}
 \alias{ppmDerivatives}
 \alias{ppmInfluence}
+\alias{ppmInfluenceEngine}
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
 \alias{ppsubset}
@@ -571,6 +572,7 @@
 \alias{putlastshift}
 \alias{quad}
 \alias{quad.mppm}
+\alias{quadBlockSizes}
 \alias{RandomFieldsSafe}
 \alias{ratfv}
 \alias{recognise.spatstat.type}
@@ -808,6 +810,7 @@
 \alias{tenseur}
 \alias{marginSums}
 \alias{rbindCompatibleDataFrames}
+\alias{bind.sparse3Darray}
 \alias{exceedsMaxArraySize}
 %%%%
 \alias{spatstatDiagnostic}
@@ -1319,7 +1322,7 @@ a \%orifnull\% b
 outdated.interact(object)
 overlap.trapezium(xa, ya, xb, yb, verb = FALSE)
 overlap.xypolygon(P, Q)
-oversize.quad(Q, \dots, nU, nX)
+oversize.quad(Q, \dots, nU, nX, p)
 owinpolycheck(W, verbose=TRUE)
 owinpoly2mask(w, rasta, check=TRUE)
 owin2polypath(w)
@@ -1383,6 +1386,10 @@ ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluence(fit, what, \dots, iScore, iHessian, iArgs,
               drop, method, precomputed, sparseOK)
+ppmInfluenceEngine(fit, what, iScore, iHessian, iArgs,
+           drop, method, sparse,
+           vc, fush, hess,
+           Q, theta, lam, mom) 
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
@@ -1474,6 +1481,7 @@ prolongseq(x, newrange, step)
 putlastshift(X, vec)
 quad(data, dummy, w, param)
 quad.mppm(x)
+quadBlockSizes(nX, nD, p, nMAX, announce)
 RandomFieldsSafe()
 ratfv(df, numer, denom, \dots, ratio)
 recognise.spatstat.type(x)
@@ -1740,6 +1748,7 @@ sumsymouterSparse(x, w, dbg)
 tenseur(A, B, alongA, alongB)
 marginSums(X, MARGIN)
 rbindCompatibleDataFrames(x)
+bind.sparse3Darray(A, B, along)
 exceedsMaxArraySize(\dots)
 %%
 spatstatDiagnostic(msg)

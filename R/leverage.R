@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.51 $  $Date: 2016/03/06 09:47:40 $
+#  $Revision: 1.54 $  $Date: 2016/03/09 10:31:14 $
 #
 
 leverage <- function(model, ...) {
@@ -78,7 +78,7 @@ ppmInfluence <- function(fit,
   lam    <- precomputed$lambda %orifnull% fitted(fit, check=FALSE)
   mom    <- precomputed$mom    %orifnull% model.matrix(fit)
   # 
-  p <- length(theta)
+#  p <- length(theta)
   vc <- vcov(fit, hessian=TRUE)
   fush <- hess <- solve(vc)
   Q <- quad.ppm(fit)
@@ -88,24 +88,44 @@ ppmInfluence <- function(fit,
   # vc = solve(fush)
   #
   w <- w.quad(Q)
-  loc <- union.quad(Q)
-  isdata <- is.data(Q)
+#  loc <- union.quad(Q)
+#  isdata <- is.data(Q)
   #
   if(length(w) != length(lam))
     stop(paste("Internal error: length(w) = ", length(w),
                "!=", length(lam), "= length(lam)\n"))
-  # 
-  # second order interaction terms
-  # ddS[i,j, ] = Delta_i Delta_j S(x)
-  ddS <- NULL
-  if(!all(what == "derivatives") && !is.poisson(fit)) {
-    ddS <- deltasuffstat(fit, dataonly=FALSE, sparseOK=sparse)
-    sparse <- inherits(ddS, "sparse3Darray")
-    if(is.null(ddS))
-      warning("Second order interaction terms are not implemented for this model; they are treated as zero")
-  }
-  #
-  # 
+
+  a <- ppmInfluenceEngine(fit      = fit,
+                          what     = what,
+                          iScore   = iScore,
+                          iHessian = iHessian,
+                          iArgs    = iArgs,
+                          drop     = drop,
+                          method   = method,
+                          sparse   = sparse,
+                          vc       = vc,
+                          fush     = fush,
+                          hess     = hess,
+                          Q        = Q,
+                          theta    = theta,
+                          lam      = lam,
+                          mom      = mom)
+  return(a)
+}
+
+ppmInfluenceEngine <-
+  function(fit, what, iScore, iHessian, iArgs,
+           drop, method, sparse,
+           vc, fush, hess,
+           Q, theta, lam, mom) {
+  gotScore <- !is.null(iScore)
+  gotHess <- !is.null(iHessian)
+  influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
+  needHess <- gotScore && influencecalc
+  p <- length(theta)
+  w <- w.quad(Q)
+  loc <- union.quad(Q)
+  isdata <- is.data(Q)
   ## evaluate additional (`irregular') components of score
   iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
   gotScore <- !is.null(iscoremat)
@@ -118,12 +138,6 @@ ppmInfluence <- function(fit,
     mom <- cbind(mom, iscoremat)
     REG <- 1:nreg
     IRR <- nreg + 1:nirr
-    ## add extra planes of zeroes to second-order model matrix
-    ## (zero because the irregular components are part of the trend)
-    if(!is.null(ddS)) {
-      paddim <- c(dim(ddS)[1:2], nirr)
-      ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
-    }
     ## evaluate additional (`irregular') entries of Hessian
     ihessmat <- ppmDerivatives(fit, "hessian", iHessian, loc, covfunargs=iArgs)
     if(gotHess <- !is.null(ihessmat))
@@ -168,10 +182,10 @@ ppmInfluence <- function(fit,
              fush <- sumouter(mom, wlam)
              if(gotHess) {
                # integral term
-               ok <- is.finite(wlam) & apply(is.finite(ihessmat), 1, all)
+               isfin <- is.finite(wlam) & apply(is.finite(ihessmat), 1, all)
                vintegral <-
-                 if(all(ok)) wlam %*% ihessmat else
-                             wlam[ok] %*% ihessmat[ok,, drop=FALSE]
+                 if(all(isfin)) wlam %*% ihessmat else
+                             wlam[isfin] %*% ihessmat[isfin,, drop=FALSE]
                # sum over data points
                vdata <- .colSums(ihessmat[isdata, , drop=FALSE],
                                  sum(isdata), ncol(ihessmat),
@@ -195,16 +209,45 @@ ppmInfluence <- function(fit,
     invhess <- vc
   }
   #
+  ok <- NULL
   if(drop) {
     ok <- complete.cases(mom)
-    Q <- Q[ok]
-    mom <- mom[ok, , drop=FALSE]
-    loc <- loc[ok]
-    lam <- lam[ok]
-    w   <- w[ok]
-    isdata <- isdata[ok]
-    if(!is.null(ddS)) ddS <- ddS[ok, ok, , drop=FALSE]
+    if(all(ok)) {
+      ok <- NULL
+    } else {
+      Q <- Q[ok]
+      mom <- mom[ok, , drop=FALSE]
+      loc <- loc[ok]
+      lam <- lam[ok]
+      w   <- w[ok]
+      isdata <- isdata[ok]
+    }
+  } 
+  
+  # second order interaction terms
+  # ddS[i,j, ] = Delta_i Delta_j S(x)
+  ddS <- NULL
+  if(!all(what == "derivatives") && !is.poisson(fit)) {
+    ddS <- deltasuffstat(fit, dataonly=FALSE, quadsub=ok, sparseOK=sparse)
+    if(is.null(ddS)) {
+      warning("Second order interaction terms are not implemented for this model; they are treated as zero")
+    } else {
+      sparse <- inherits(ddS, "sparse3Darray")
+      if(gotScore) {
+        ## add extra planes of zeroes to second-order model matrix
+        ## (zero because the irregular components are part of the trend)
+        paddim <- c(dim(ddS)[1:2], nirr)
+        if(!sparse) {
+          ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
+        } else {
+          ddS <- bind.sparse3Darray(ddS,
+                                    sparse3Darray(dims=paddim),
+                                    along=3)
+        }
+      }
+    }
   }
+
   # ........  start assembling results .....................
   # 
   result <- list()
@@ -351,6 +394,17 @@ ppmInfluence <- function(fit,
   }
   return(result)
 }
+
+## ppmInfluenceRecombine <- function(indices, values) {
+  #'  indices is a list of subset index vectors for each block
+  #'  values is a list containing the computed values for each block
+#           nblocks <- length(indices)
+  # deriv: list(mom, score, fush, vc, hess, invhess)
+  # increm: list(ddS, ddSintegrand, isdata, wQ)
+  # lev: list(val, smo, ave)
+  # infl: V
+  # dfbetas: msr(Q, dis[isdata, ], con)
+# }
 
 ## extract derivatives from covariate functions
 ## WARNING: these are not the score components in general

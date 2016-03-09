@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.14 $  $Date: 2016/03/07 02:44:50 $
+#' $Revision: 1.15 $  $Date: 2016/03/09 10:28:40 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -519,6 +519,38 @@ rbindCompatibleDataFrames <- function(x) {
   y <- with(xdata, sparse3Darray(i=i,j=j,k=k,x=x,
                                  dims=dimx, dimnames=dn, strict=TRUE))
   return(y)
+}
+
+bind.sparse3Darray <- function(A,B,along) {
+  A <- as.sparse3Darray(A)
+  B <- as.sparse3Darray(B)
+  check.1.integer(along)
+  stopifnot(along %in% 1:3)
+  dimA <- dim(A)
+  dimB <- dim(B)
+  if(!all(dimA[-along] == dimB[-along]))
+    stop("dimensions of A and B do not match")
+  dimC <- dimA
+  dimC[along] <- dimA[along] + dimB[along]
+  # extract data
+  Adf <- SparseEntries(A)
+  Bdf <- SparseEntries(B)
+  # realign 'B' coordinate
+  Bdf[,along] <- Bdf[,along] + dimA[along]
+  # combine
+  C <- EntriesToSparse(rbind(Adf, Bdf), dimC)
+  # add dimnames
+  dnA <- dimnames(A)
+  dnB <- dimnames(B)
+  if(!is.null(dnA) || !is.null(dnB)) {
+    if(length(dnA) != 3) dnA <- rep(list(NULL), 3)
+    if(length(dnB) != 3) dnB <- rep(list(NULL), 3)
+    dnC <- dnA
+    dnC[[along]] <- c(dnA[[along]] %orifnull% rep("", dimA[along]),
+                      dnB[[along]] %orifnull% rep("", dimB[along]))
+    dimnames(C) <- dnC
+  }
+  return(C)
 }
 
 

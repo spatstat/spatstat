@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.199 $	$Date: 2016/03/08 04:30:01 $
+#	$Revision: 5.202 $	$Date: 2016/03/09 01:59:27 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -101,7 +101,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/03/08 04:30:01 $")
+                        date="$Date: 2016/03/09 01:59:27 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -934,22 +934,64 @@ partialModelMatrix <- function(X, D, model, callstring="", ...) {
   return(mom)
 }
   
-oversize.quad <- function(Q, ..., nU, nX) {
+oversize.quad <- function(Q, ..., nU, nX, p=1) {
   ## Determine whether the quadrature scheme is
   ## too large to handle in one piece (in mpl)
   ## for a generic interaction
   ##    nU = number of quadrature points
   ##    nX = number of data points
+  ##    p = dimension of statistic 
   if(missing(nU))
     nU <- n.quad(Q)
   if(missing(nX))
     nX <- npoints(Q$data)
   nmat <- as.double(nU) * nX
-  nMAX <- spatstat.options("maxmatrix")
+  nMAX <- spatstat.options("maxmatrix")/p
   needsplit <- (nmat > nMAX)
   return(needsplit)
 }
 
+quadBlockSizes <- function(nX, nD, p=1,
+                           nMAX=spatstat.options("maxmatrix")/p,
+                           announce=TRUE) {
+  if(inherits(nX, "quad") && missing(nD)) {
+    nD <- npoints(nX$dummy)
+    nX <- npoints(nX$data)
+  }
+  ## Calculate number of dummy points in largest permissible X * (X+D) matrix 
+  nperblock <- max(1, floor(nMAX/nX - nX))
+  ## determine number of such blocks 
+  nblocks <- ceiling(nD/nperblock)
+  ## make blocks roughly equal (except for the last one)
+  nperblock <- min(nperblock, ceiling(nD/nblocks))
+  ## announce
+  if(announce && nblocks > 1) {
+    msg <- paste("Large quadrature scheme",
+                 "split into blocks to avoid memory size limits;",
+                 nD, "dummy points split into",
+                 nblocks, "blocks,")
+    nfull <- nblocks - 1
+    nlastblock <- nD - nperblock * nfull
+    if(nlastblock == nperblock) {
+      msg <- paste(msg,
+                   "each containing",
+                   nperblock, "dummy points")
+    } else {
+      msg <- paste(msg,
+                   "the first",
+                   ngettext(nfull, "block", paste(nfull, "blocks")),
+                   "containing",
+                   nperblock,
+                   ngettext(nperblock, "dummy point", "dummy points"),
+                   "and the last block containing",
+                   nlastblock, 
+                   ngettext(nlastblock, "dummy point", "dummy points"))
+    }
+    message(msg)
+  } else nlastblock <- nperblock
+  return(list(nblocks=nblocks, nperblock=nperblock, nlastblock=nlastblock))
+}
+    
 ## function that should be called to evaluate interaction terms
 ## between quadrature points and data points
 
@@ -1012,41 +1054,11 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     Pall <- seq_len(nP)
     Pdummy <- if(length(Pdata) > 0) Pall[-Pdata] else Pall
     nD <- length(Pdummy)
-    ## size of full matrix
-#    nmat <- (nD + nX) * nX
-    nMAX <- spatstat.options("maxmatrix")
-    ## Calculate number of dummy points in largest permissible X * (X+D) matrix 
-    nperblock <- max(1, floor(nMAX/nX - nX))
-    ## determine number of such blocks 
-    nblocks <- ceiling(nD/nperblock)
-    ## make blocks roughly equal (except for the last one)
-    nperblock <- min(nperblock, ceiling(nD/nblocks))
-    ## announce
-    if(nblocks > 1) {
-      msg <- paste("Large quadrature scheme",
-                   "split into blocks to avoid memory size limits;",
-                   nD, "dummy points split into",
-                   nblocks, "blocks,")
-      nfull <- nblocks - 1
-      nlastblock <- nD - nperblock * nfull
-      if(nlastblock == nperblock) {
-        msg <- paste(msg,
-                     "each containing",
-                     nperblock, "dummy points")
-      } else {
-        msg <- paste(msg,
-                     "the first",
-                     ngettext(nfull, "block", paste(nfull, "blocks")),
-                     "containing",
-                     nperblock,
-                     ngettext(nperblock, "dummy point", "dummy points"),
-                     "and the last block containing",
-                     nlastblock, 
-                     ngettext(nlastblock, "dummy point", "dummy points"))
-      }
-      message(msg)
-    }
-    ##
+    ## calculate block sizes
+    bls <- quadBlockSizes(nX, nD, announce=TRUE)
+    nblocks    <- bls$nblocks
+    nperblock  <- bls$nperblock
+    nlastblock <- bls$nlastblock
     ##
     seqX <- seq_len(nX)
     EX <- cbind(seqX, seqX)
@@ -1203,8 +1215,8 @@ deltasuffstat <- local({
       if(!force)
         return(NULL)
       ## use brute force algorithm
-      v <-
-        if(dataonly) deltasufX(model, sparseOK) else deltasufQ(model, sparseOK)
+      v <- if(dataonly) deltasufX(model, sparseOK) else
+           deltasufQ(model, quadsub, sparseOK)
     }
     ## make it a 3D array
     if(length(dim(v)) != 3) {
@@ -1220,7 +1232,9 @@ deltasuffstat <- local({
     if(restrict) {
       ## kill contributions from points outside the domain of pseudolikelihood
       ## (e.g. points in the border region)
-      use <- if(dataonly) getppmdatasubset(model) else getglmsubset(model)
+      use <- if(dataonly) getppmdatasubset(model) else
+             if(is.null(quadsub)) getglmsubset(model) else
+             getglmsubset(model)[quadsub]
       if(any(kill <- !use)) 
         v[kill,kill,] <- 0
     }
@@ -1341,22 +1355,29 @@ deltasuffstat <- local({
     return(delta)
   }
 
-  deltasufQ <- function(model, sparseOK) {
+  deltasufQ <- function(model, quadsub, sparseOK) {
     stopifnot(is.ppm(model))
 
+    p <- length(coef(model))
+    
     Q <- quad.ppm(model)
-    X <- data.ppm(model)
+    m <- model.matrix(model)
+    ok <- getglmsubset(model)
+
+    if(!is.null(quadsub)) {
+      Q <- Q[quadsub]
+      m <- m[quadsub, , drop=FALSE]
+      ok <- ok[quadsub]
+    }
+    
+    X <- Q$data
     U <- union.quad(Q)
     nU <- npoints(U)
     nX <- npoints(X)
     isdata <- is.data(Q)
     isdummy <- !isdata
-  
-    p <- length(coef(model))
+    m <- m[isdata, ,drop=FALSE]
     
-    m <- model.matrix(model)[isdata, ]
-    ok <- getglmsubset(model)
-
     ## canonical statistic before and after adding/deleting U[j]
     mafter <- mbefore <- array(t(m), dim=c(p, nU, nU))
     delta <- array(0, dim=dim(mafter))
