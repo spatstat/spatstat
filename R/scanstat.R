@@ -235,16 +235,19 @@ scan.test <- function(X, r, ...,
              nullname <- "Complete Spatial Randomness (CSR)"
              lambda <- intensity(X)
              simexpr <- expression(runifpoispp(lambda, Xwin))
+             dont.complain.about(lambda)
            } else if(is.ppm(baseline)) {
              nullname <- baseline$callstring
              rmhstuff <- rmh(baseline, preponly=TRUE, verbose=FALSE)
              simexpr <- expression(rmhEngine(rmhstuff))
+             dont.complain.about(rmhstuff)
            } else if(is.im(baseline) || is.function(baseline)) {
              nullname <- "Poisson process with intensity proportional to baseline"
              base <- as.im(baseline, W=Xmask)
              alpha <- npoints(X)/integral.im(base)
              lambda <- eval.im(alpha * base)
              simexpr <- expression(rpoispp(lambda))
+             dont.complain.about(lambda)
            } else stop(paste("baseline should be",
                              "a pixel image, a function, or a fitted model"))
            methodname <- c("Spatial scan test",

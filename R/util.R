@@ -1655,3 +1655,10 @@ spatstatDiagnostic <- function(msg) {
 exceedsMaxArraySize <- function(...) {
   (prod(as.numeric(c(...))) > .Machine$integer.max)
 }
+
+dont.complain.about <- function(...) {
+  #' prevents code checkers complaining about 'unused variables'
+  #' Typically needed where the variables in question
+  #' are referenced in an expression that will be evaluated elsewhere. 
+  return(invisible(NULL))
+}

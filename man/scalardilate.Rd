@@ -74,7 +74,6 @@
 \examples{
 plot(letterR)
 plot(scalardilate(letterR, 0.7, origin="bot"), col="red", add=TRUE)
-spatstatDiagnostic("finished scalardilate")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

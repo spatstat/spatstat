@@ -446,7 +446,6 @@ rescale.linnet <- function(X, s, unitname) {
   if(!is.owin(i))
     stop("In [.linnet: the index i should be a window", call.=FALSE)
   w <- i
-  sparse <- x$sparse %orifnull% is.null(x$dpath)
   ## Find vertices that lie inside window
   vertinside <- inside.owin(x$vertices, w=w)
   from <- x$from

@@ -17,7 +17,6 @@ insertVertices <- function(L, ...) {
     segXold <- cooXold$seg 
     tpXold  <- cooXold$tp  
   }
-  nsegL <- nsegments(L)
   ## validate new vertices
   V <- as.lpp(..., L=L)
   if(!identical(as.linnet(L, sparse=TRUE), as.linnet(V, sparse=TRUE)))
@@ -73,7 +72,7 @@ insertVertices <- function(L, ...) {
     nnewseg <- nnew + 1
     ## add new vertices and edges to running total
     nadd <- nadd + nnew
-    vadd <- concatxy(vadd, list(x=xnew, y=ynew))
+    vadd <- concatxy(vadd, vnew)
     fromadd <- c(fromadd, fromnew)
     toadd <- c(toadd, tonew)
     id <- c(id, idadd)

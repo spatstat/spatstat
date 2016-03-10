@@ -92,7 +92,6 @@ objsurf(x, \dots)
      contour(os, add=TRUE)
      persp(os)
    }
-   spatstatDiagnostic("finished objsurf")
 }
 \keyword{spatial}
 \keyword{models}

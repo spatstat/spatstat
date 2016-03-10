@@ -180,6 +180,8 @@ logi.engine <- function(Q,
   .logi.w <- wei
   .logi.ok  <- ok
   .logi.Y   <- resp
+  # suppress warnings from code checkers
+  dont.complain.about(.logi.B, .logi.w, .logi.ok, .logi.Y)
   # go
   ##fit <- glm(fmla, data=glmdata,
   ##           family=binomial(), subset = .logi.ok, weights = .logi.w)

@@ -54,6 +54,7 @@ lurking <- local({
     if(is.ppp(object)) {
       X <- object
       object <- ppm(X ~1, forcefit=TRUE)
+      dont.complain.about(X)
     } else verifyclass(object, "ppm")
 
     ## may need to refit the model

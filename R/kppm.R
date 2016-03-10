@@ -1235,22 +1235,26 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
            kappa <- mp$kappa
            sigma <- mp$sigma
            cmd <- expression(rThomas(kappa,sigma,mu,win))
+           dont.complain.about(kappa, sigma, mu)
          },
          MatClust={
            kappa <- mp$kappa
            r     <- mp$R
            cmd   <- expression(rMatClust(kappa,r,mu,win))
+           dont.complain.about(kappa, r)
          },
          Cauchy = {
            kappa <- mp$kappa
            omega <- mp$omega
            cmd   <- expression(rCauchy(kappa, omega, mu, win))
+           dont.complain.about(kappa, omega, mu)
          },
          VarGamma = {
            kappa  <- mp$kappa
            omega  <- mp$omega
            nu.ker <- object$covmodel$margs$nu.ker
            cmd    <- expression(rVarGamma(kappa, nu.ker, omega, mu, win))
+           dont.complain.about(kappa, nu.ker, omega, mu)
          },
          LGCP={
            sigma2 <- mp$sigma2
@@ -1275,6 +1279,8 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
              rfmod <- try(rLGCP(model, mu=mu, param=param, 
                               ..., modelonly=TRUE))
            }
+           #' suppress warnings from code checker
+           dont.complain.about(model, mu, param)
            #' check that model is recognised
            if(inherits(rfmod, "try-error"))
              stop(paste("Internal error in simulate.kppm:",

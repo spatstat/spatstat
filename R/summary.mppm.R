@@ -162,7 +162,7 @@ summary.mppm <- function(object, ..., brief=FALSE) {
 print.summary.mppm <- function(x, ..., brief=x$brief) {
   # NB: x is an object of class "summary.mppm"
   npat <- x$npat
-  Inter <- x$Inter
+#  Inter <- x$Inter
 #  ninteract   <- Inter$ninteract
 #  interaction   <- Inter$interaction
 #  iused     <- Inter$iused
@@ -172,7 +172,7 @@ print.summary.mppm <- function(x, ..., brief=x$brief) {
 #  itags   <- Inter$itags
 #  trivial  <- Inter$trivial
 #%^!ifdef RANDOMEFFECTS  
-  random   <- x$random
+#  random   <- x$random
 #%^!endif  
 
   FIT <- x$Fit$FIT

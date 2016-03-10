@@ -145,6 +145,7 @@
 \alias{do.call.without}
 \alias{do.istat}
 \alias{doMultiStraussHard}
+\alias{dont.complain.about}
 \alias{dotexpr.to.call}
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
@@ -973,6 +974,7 @@ do.call.plotfun(fun, arglist, \dots)
 do.call.without(fun, \dots, avoid)
 do.istat(panel)
 doMultiStraussHard(iradii, hradii, types)
+dont.complain.about(\dots)
 dotexpr.to.call(expr, dot, evaluator)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)

@@ -69,9 +69,9 @@ print.summary.linim <- function(x, ...) {
   win <- x$window
   splat(di[1], "x", di[2], "pixel array (ny, nx)")
   splat("enclosing rectangle:",
-        prange(signif(x$window$xrange, sigdig)),
+        prange(signif(win$xrange, sigdig)),
         "x",
-        prange(signif(x$window$yrange, sigdig)),
+        prange(signif(win$yrange, sigdig)),
         unitinfo$plural,
         unitinfo$explain)
   splat("dimensions of each pixel:",

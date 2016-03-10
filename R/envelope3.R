@@ -46,6 +46,8 @@ envelope.pp3 <-
       } else {
         stop("Sorry, simulation of marked 3D point patterns is not yet implemented")
       }
+    # suppress warnings from code checkers
+    dont.complain.about(Yintens, Ydomain)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "csr",
                              expr = simexpr,

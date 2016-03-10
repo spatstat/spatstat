@@ -93,6 +93,5 @@ and Ege Rubak \email{rubak@math.aau.dk}
   plot(roc(swedishpines, "x"))
   fit <- ppm(swedishpines ~ x+y)
   plot(roc(fit))
-  spatstatDiagnostic("finished roc")
 }
 \keyword{spatial}

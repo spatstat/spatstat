@@ -1058,7 +1058,6 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     bls <- quadBlockSizes(nX, nD, announce=TRUE)
     nblocks    <- bls$nblocks
     nperblock  <- bls$nperblock
-    nlastblock <- bls$nlastblock
     ##
     seqX <- seq_len(nX)
     EX <- cbind(seqX, seqX)

@@ -63,7 +63,6 @@ padimage(X, value=NA, n=1, W=NULL)
 \examples{
  Z <- setcov(owin())
  plot(padimage(Z, 1, 10))
- spatstatDiagnostic("finished padimage")
 }
 \keyword{spatial}
 \keyword{manip}

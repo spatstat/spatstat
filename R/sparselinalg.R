@@ -53,11 +53,11 @@ tenseur <- local({
     #' check dimensions
     dimA <- dim(A) %orifnull% length(A)
     dnA <- dimnames(A)
-    if (nnA <- is.null(dnA)) 
+    if(is.null(dnA))
       dnA <- rep(list(NULL), length(dimA))
     dimB <- dim(B) %orifnull% length(B)
     dnB <- dimnames(B)
-    if (nnB <- is.null(dnB)) 
+    if(is.null(dnB))
       dnB <- rep(list(NULL), length(dimB))
     #' check 'along'
     if (length(alongA) != length(alongB)) 

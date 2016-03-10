@@ -31,7 +31,7 @@ subfits.new <- local({
     itags    <- Inter$itags
     Vnamelist <- object$Fit$Vnamelist
     has.design <- info$has.design
-    has.random <- info$has.random
+#    has.random <- info$has.random
     announce("done.\n")
 
     ## fitted parameters
@@ -246,7 +246,7 @@ subfits.old <- local({
     announce <- if(verbose) Announce else Ignore
     
     announce("Extracting stuff...")
-    FIT      <- object$Fit$FIT
+#    FIT      <- object$Fit$FIT
     trend    <- object$trend
     random   <- object$random
     use.gam  <- object$Fit$use.gam
@@ -398,12 +398,12 @@ subfits.old <- local({
         interi <- interaction[i, acti, drop=TRUE] 
         tagi <- names(interaction)[acti]
         fiti <- PiPiM(Yi, trend, interi, covariates=covariates,
-                      allcovar=info$has.random,
+                      allcovar=has.random,
                       use.gam=use.gam,
                       vnamebase=tagi, vnameprefix=tagi)
       } else {
         fiti <- PiPiM(Yi, trend, Poisson(), covariates=covariates,
-                      allcovar=info$has.random,
+                      allcovar=has.random,
                       use.gam=use.gam)
       }
       ## fiti determines which coefficients are required

@@ -308,6 +308,9 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
 
     ## Construct a matrix index call for possible re-use
     M <- as.matrix(x)
+    ## suppress warnings from code checkers
+    dont.complain.about(M)
+    ##
     ycall <- switch(itype,
                     given = {
                       switch(jtype,

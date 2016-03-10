@@ -237,7 +237,6 @@
     fit <- ppm(redwood, ~1, Hybrid(A=Strauss(0.02), B=Geyer(0.1, 2)))
     Y <- rmh(fit)
   }
-  spatstatDiagnostic("finished rmh.ppm")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

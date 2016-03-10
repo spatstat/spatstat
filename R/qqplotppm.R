@@ -81,6 +81,9 @@ qqplot.ppm <- local({
       expr <- expression(
         refit(fit, 
               rmhEngine(rmhinfolist, verbose=FALSE)))
+
+      ## pacify code checkers
+      dont.complain.about(rmhinfolist)
     }
 
     ######  Perform simulations

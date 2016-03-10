@@ -35,7 +35,6 @@
   \dontrun{plot(U)}
   # equivalent:
   U <- as.ppp(Q)
-  spatstatDiagnostic("finished union.quad")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

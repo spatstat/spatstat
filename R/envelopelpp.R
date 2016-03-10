@@ -41,6 +41,7 @@ envelope.lpp <-
     Yintens <- nY/totlen
     # expression that will be evaluated
     simexpr <- expression(rpoislpp(Yintens, NETWORK))
+    dont.complain.about(Yintens, NETWORK)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "csr",
                              expr = simexpr,
@@ -100,6 +101,7 @@ envelope.lppm <-
     LMAX <-
       if(is.im(lambdaFit)) max(lambdaFit) else unlist(lapply(lambdaFit, max))
     simexpr <- expression(rpoislpp(lambdaFit, NETWORK, lmax=LMAX))
+    dont.complain.about(NETWORK, LMAX)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "lppm",
                              expr = simexpr,

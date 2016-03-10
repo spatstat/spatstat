@@ -107,6 +107,7 @@ envelope.ppp <-
           A %mark% Ymarx[j, , drop=FALSE]
         })
       }
+    dont.complain.about(Yintens, Ywin)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "csr",
                              expr = simexpr,
@@ -125,6 +126,8 @@ envelope.ppp <-
     Ymarx <- marks(Y)
     # expression that will be evaluated
     simexpr <- expression(runifpoint(nY, Ywin) %mark% Ymarx)
+    # suppress warnings from code checkers
+    dont.complain.about(nY, Ywin, Ymarx)
     # simulation constraints (explanatory string)
     constraints <- if(ismulti) "with fixed number of points of each type" else
                    "with fixed number of points and fixed marks"
@@ -163,6 +166,7 @@ envelope.ppp <-
         A %mark% Ymarx[j, ,drop=FALSE]
       })
     }
+    dont.complain.about(nY, Ywin)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "csr",
                              expr = simexpr,
@@ -235,6 +239,7 @@ envelope.ppm <-
     rmhinfolist <- rmh(rmodel, rstart, rcontr, preponly=TRUE, verbose=FALSE)
     # expression that will be evaluated
     simexpr <- expression(rmhEngine(rmhinfolist, verbose=FALSE))
+    dont.complain.about(rmhinfolist)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type  = type,
                              expr  = simexpr,
@@ -287,6 +292,7 @@ envelope.kppm <-
     kmodel <- Y
     # expression that will be evaluated
     simexpr <- expression(simulate(kmodel)[[1]])
+    dont.complain.about(kmodel)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "kppm",
                              expr = simexpr,
@@ -430,6 +436,7 @@ envelopeEngine <-
       SimDataList <- simulate
       # expression that will be evaluated
       simexpr <- expression(SimDataList[[i]])
+      dont.complain.about(SimDataList)
       envir <- envir.here
       # ensure that `i' is defined
       i <- 1
@@ -1721,6 +1728,7 @@ envelope.envelope <- function(Y, fun=NULL, ...,
     dnames <- dnames[dnames %in% fvnames(result, ".")]
     # expand "."
     ud <- as.call(lapply(c("cbind", dnames), as.name))
+    dont.complain.about(ud)
     expandtransform <- eval(substitute(substitute(tr, list(.=ud)),
                                        list(tr=transform[[1]])))
     # compute new labels 

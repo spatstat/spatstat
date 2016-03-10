@@ -46,7 +46,6 @@ rpoisppx(lambda, domain, nsim=1)
 \examples{
    w <- boxx(x=c(0,1), y=c(0,1), z=c(0,1), t=c(0,3))
    X <- rpoisppx(10, w)
-   spatstatDiagnostic("finished rpoisppx")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

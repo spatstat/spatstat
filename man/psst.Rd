@@ -151,7 +151,6 @@ psst(object, fun, r = NULL, breaks = NULL, ...,
     G0 <- psst(fit0, Gest)
     G0
     if(interactive()) plot(G0)
-    spatstatDiagnostic("finished psst")
 }
 \keyword{spatial}
 \keyword{models}

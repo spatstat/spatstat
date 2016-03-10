@@ -939,6 +939,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   expandelang <- eval(substitute(substitute(ee,
                                       list(.=ud, .x=ux, .y=uy, .s=us, .a=ua)),
                            list(ee=elang)))
+  dont.complain.about(ua, ud, us, ux, uy)
   evars <- all.vars(expandelang)
   used.dotnames <- evars[evars %in% dnames]
   ## evaluate expression

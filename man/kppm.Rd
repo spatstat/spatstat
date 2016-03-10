@@ -362,8 +362,6 @@
 
   # fit intensity with quasi-likelihood method
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
-
-  spatstatDiagnostic("finished kppm.Rd")
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},

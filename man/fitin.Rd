@@ -78,8 +78,6 @@ fitin(object)
    f <- fitin(model)
    f
    plot(f)
-
-   spatstatDiagnostic("finished fitin")
 }
 \keyword{spatial}
 \keyword{models}

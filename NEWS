@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.44-1.057
+        CHANGES IN spatstat VERSION 1.45-0
 
 OVERVIEW
 
@@ -11,7 +11,9 @@ OVERVIEW
 
     o Numerous bug fixes in code for replicated point patterns.
 
-    o Surgery with linear networks.
+    o Surgery on linear networks.
+
+    o Tessellations on a linear network.
 
     o Laslett's Transform.
 
@@ -25,7 +27,9 @@ OVERVIEW
 
     o Bug fixes and performance improvements.
 
-    o Version nickname: 'Helping Police With Their Inquiries'
+    o spatstat now contains 100,000 lines of R code. 
+
+    o Version nickname: 'One Lakh'
 
 NEW FUNCTIONS
 

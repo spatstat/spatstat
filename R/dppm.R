@@ -128,6 +128,7 @@ dppmFixIntensity <- function(DPP, lambda, po){
     lambda <- intensity(clusters)
     ## Overwrite po object with fake version
     X <- po$Q$data
+    dont.complain.about(X)
     po <- ppm(X~log(lambda)-1)
     po <- tweak.coefs(po, 1)
     po$fitter <- "dppm"

@@ -65,8 +65,6 @@
    df <- with(coords(X),
               ncol(polynom(x,y,3)) - ncol(harmonic(x,y,3)))
    pval <- 1 - pchisq(lrts, df=df)
-
-   spatstatDiagnostic("finished harmonic")
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},

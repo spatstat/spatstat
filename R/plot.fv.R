@@ -195,6 +195,7 @@ plot.fv <- local({
           uy <- as.name(fvnames(x, ".y"))
           foo <- eval(substitute(substitute(fom, list(.=u, .x=ux, .y=uy)),
                                  list(fom=fmla.original)))
+          dont.complain.about(u, ux, uy)
           lhsnew <- foo[[2]]
           morelhs <- eval(lhsnew, envir=indata)
           success <- identical(colnames(morelhs), extrashadevars)

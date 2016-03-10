@@ -116,11 +116,11 @@ envelopeProgressData <- local({
     if(use.theo && !has.theo)
       warning("No theoretical function available; use.theory ignored")
     if(use.theo && has.theo) {
-      theo.used <- TRUE
+#      theo.used <- TRUE
       reference <- with(X, theo)
       leaveout <- 0
     } else {
-      theo.used <- FALSE
+#      theo.used <- FALSE
       if(leaveout == 2) {
         ## use sample mean of simulations only
         reference <- with(X, mmean)

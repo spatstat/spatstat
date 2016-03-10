@@ -47,9 +47,10 @@ newdat <- changes[["ndatasets"]]
 
 The current version of \spst\ is \texttt{\Sexpr{sversion}}.
 It contains \Sexpr{changes[["nobjects"]]} new functions
-and \Sexpr{newdat} new \Sexpr{ngettext(newdat, "dataset.", "datasets.")}
-This document summarises the most important changes.
-It also lists all important bugs detected since 2010.
+and \Sexpr{newdat} new \Sexpr{ngettext(newdat, "dataset", "datasets")}
+introduced after May 2015. This document summarises the most important changes.
+
+This document also lists all \emph{important} bugs detected \emph{since 2010}.
 
 <<echo=FALSE,results=hide,fig=FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar=0.2+c(2,4,2,0))))
@@ -82,6 +83,23 @@ the News and Release Notes for each update.
 
 \begin{itemize}
    \item \spst\ now depends on the package \pkg{nlme}.
+
+   \item Fixed namespace problems arising when spatstat is not loaded.
+
+   \item Important bug fix in leverage/influence diagnostics for Gibbs models.
+
+   \item Surgery with linear networks.
+   
+   \item Tessellations on a linear network.
+
+   \item Laslett's Transform.
+
+   \item Colour maps for point patterns with continuous marks
+     are easier to define.
+
+   \item Pair correlation function estimates can be pooled.
+
+   \item Stipulate a particular version of a package.
 
    \item More support for replicated point patterns.
      
@@ -157,7 +175,41 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
-   \item \texttt{as.function.tess}:
+
+\item \texttt{laslett}:
+  Laslett's Transform.
+
+\item \texttt{lintess}: 
+  Tessellation on a linear network.
+
+\item \texttt{divide.linnet}:
+  Divide a linear network into pieces demarcated by a point pattern.
+
+\item \texttt{insertVertices}:
+  Insert new vertices in a linear network.
+
+\item \texttt{thinNetwork}:
+  Remove vertices and/or segments from a linear network etc.
+
+\item \texttt{connected.linnet}:
+  Find connected components of a linear network.
+
+\item \texttt{nvertices}, \texttt{nvertices.linnet}, \texttt{nvertices.owin}:
+  Count the number of vertices in a linear network 
+  or vertices of the boundary of a window.
+
+\item \texttt{as.data.frame.linim}, \texttt{as.data.frame.linfun}:
+  Extract a data frame of spatial locations and function values
+  from an object of class \texttt{linim} or \texttt{linfun}.
+
+\item \texttt{as.linfun}, \texttt{as.linfun.linim}, \texttt{as.linfun.lintess}:
+  Convert other kinds of data to a \texttt{linfun} object.
+
+\item \texttt{requireversion}:
+    Require a particular version of a package
+    (for use in stand-alone R scripts).
+
+  \item \texttt{as.function.tess}:
    Convert a tessellation to a \texttt{function(x,y)}. The function value
    indicates which tile of the tessellation contains the point $(x,y)$.
 
@@ -330,6 +382,7 @@ Here is a list of all changes made to existing functions,
 listed alphabetically.
 
 \begin{itemize}
+%%A
 \item \texttt{affine.owin}:
   Allows transformation matrix to be singular, if the window is polygonal.
 
@@ -342,8 +395,23 @@ listed alphabetically.
 \item \texttt{as.polygonal}:
   Can now repair errors in polygon data, if \texttt{repair=TRUE}.
 
+%%B
  \item \texttt{bw.ppl}:
    New argument \texttt{weights}.
+   
+%%C
+ \item \texttt{clickpoly}:
+    The polygon is now drawn progressively as the user clicks new vertices.
+
+ \item \texttt{closepairs.ppp}, \texttt{closepairs.pp3}:
+   \begin{itemize}
+   \item New arguments \texttt{distinct} and \texttt{neat} allow more options.
+   \item Argument \texttt{ordered} has been replaced by \texttt{twice}
+    (but \texttt{ordered} is still accepted, with a warning).
+  \item  
+    Performance improved (computation time and memory requirements reduced.)
+    This should improve the performance of many functions in \texttt{spatstat}.
+   \end{itemize}
 
  \item \texttt{clusterset}:
    Improved behaviour.
@@ -362,7 +430,13 @@ listed alphabetically.
    If \texttt{col} is a colour map, then the contours are drawn 
    in different colours.
 
- \item \texttt{dclf.test, mad.test, dclf.progress, mad.progress,} 
+ \item \texttt{crossing.psp}:
+    New argument \texttt{details} gives more information about the intersections
+    between the segments.
+
+%%D
+    
+  \item \texttt{dclf.test, mad.test, dclf.progress, mad.progress,} 
    \texttt{dclf.sigtrace, mad.sigtrace}, 
    \texttt{dg.progress, dg.sigtrace}:
    \begin{itemize}
@@ -398,11 +472,28 @@ listed alphabetically.
      Now supports both the `equal-split continuous' and 
      `equal-split discontinuous' smoothers. New argument \texttt{continuous} 
      determines the choice of smoother.
+   \item 
+     New argument \texttt{weights}.
    \end{itemize}
    
+ \item \texttt{dfbetas.ppm}:
+    Performance slightly improved, for Gibbs models.
+    
  \item \texttt{diagnose.ppm, plot.diagppm}:
    New arguments \texttt{col.neg, col.smooth} control the colour maps.
 
+  \item \texttt{distfun}:
+    When the user calls a distance function 
+    that was created by \texttt{distfun},
+    the user may now give a \texttt{ppp} or \texttt{lpp}
+    object for the argument \texttt{x},
+    instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
+
+%%E
+    
+  \item \texttt{edge.Trans}:
+    New argument \texttt{gW} for efficiency.
+    
  \item \texttt{envelope}:
    \begin{itemize}
    \item 
@@ -413,8 +504,47 @@ listed alphabetically.
      New argument \texttt{scale} allows global envelopes to have 
      width proportional to a specified function of $r$,
      rather than constant width.
+   \item 
+     New argument \texttt{funYargs} contains arguments to the summary function
+     when applied to the data pattern only.
    \end{itemize}
-     
+
+%%F
+   
+ \item \texttt{Fest}:
+   Additional checks for errors in input data.
+   
+  \item \texttt{funxy}:
+    When the user calls a function that was created by \texttt{funxy},
+    the user may now give a \texttt{ppp} or \texttt{lpp}
+    object for the argument \texttt{x},
+    instead of giving two coordinate vectors \texttt{x} and \texttt{y}.
+
+%%G
+    
+  \item \texttt{Geyer}:
+   The saturation parameter \texttt{sat} can now be less than 1.
+   
+%%H
+   
+ \item \texttt{Hest}:
+   \begin{itemize}
+   \item Argument \texttt{X} can now be a pixel image with logical values.
+   \item New argument \texttt{W}. [Based on code by Kassel Hingee.]
+   \item Additional checks for errors in input data.
+   \end{itemize}
+   
+%%I
+ \item \texttt{influence.ppm}:
+    Performance slightly improved, for Gibbs models.
+
+%%J
+%%K
+
+ \item \texttt{Kest}
+    Accelerated computation (for translation and rigid corrections)
+    when window is an irregular shape.
+    
  \item \texttt{Kest.fft}:
    Now has \verb!...! arguments allowing control of spatial resolution.
 
@@ -431,44 +561,107 @@ listed alphabetically.
  \item \texttt{kppm}:
    Left hand side of formula can now involve entries in the list \texttt{data}.
 
- \item \texttt{Hest}:
-   Argument \texttt{X} can now be a pixel image with logical values.
-   New argument \texttt{W}. [Based on code by Kassel Hingee.]
+%%L
    
+ \item \texttt{leverage.ppm}:
+    Performance slightly improved, for Gibbs models.
+
+ \item \texttt{linnet}:
+   \begin{itemize}
+   \item 
+    If the argument \texttt{edges} is given, then this argument
+    now determines the
+    ordering of the sequence of line segments. For example, the \texttt{i}-th
+    row of \texttt{edges} specifies the \texttt{i}-th line segment in 
+    \texttt{as.psp(L)}.
+  \item New argument \texttt{warn}.
+   \end{itemize}
+
  \item \texttt{logLik.ppm}:
    New argument \texttt{absolute}.
 
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
+ \item \texttt{lpp}, \texttt{as.lpp}: 
+   These functions now handle the case where coordinates
+   \texttt{seg} and \texttt{tp} are given
+    but \texttt{x} and \texttt{y} are missing.
+
  \item \texttt{lppm}:
    Computation accelerated.
-
+   
+%%M
+   
  \item \texttt{markcorr}:
    New argument \texttt{weights} allows computation of the weighted version
    of the mark correlation function.
 
  \item \texttt{mppm}:
-   Now handles models with a random effect component.
-   New argument \texttt{random} is a formula specifying the random effect.
+   \begin{itemize}
+   \item 
+     Now handles models with a random effect component.
+     (This is covered in [Chap.\ 16]\cite{baddrubaturn15}.)
+   \item 
+     New argument \texttt{random} is a formula specifying the random effect.
+     (This is covered in [Chap.\ 16]\cite{baddrubaturn15}.)
+   \item 
+     Performs more checks for consistency of the input data.
+   \item 
+     New arguments \texttt{gcontrol} and \texttt{reltol.pql} control 
+     the fitting algorithm. 
+   \end{itemize}
 
+%%N
+   
  \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
    New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
 
+%%O
+%%P
+   
  \item \texttt{padimage}:
    New argument \texttt{W} allows an image to be padded out to fill any window.
+
+ \item \texttt{pcf.ppp}: 
+   New argument \texttt{ratio} allows several estimates of pcf to be pooled.
+   
+ \item \texttt{pcfinhom}:
+    Default behaviour is changed when \texttt{lambda} is a fitted model.
+    The default is now to re-fit the model to the data before computing pcf.
+    New arguments \texttt{update} and \texttt{leaveoneout} control this.
 
  \item \texttt{plot.kppm}:
    New arguments \texttt{pause} and \texttt{xname}.
 
+   \item \texttt{plot.lpp}:
+     \begin{itemize}
+     \item New argument \texttt{show.network}.
+     \item 
+     For a point pattern with continuous marks (``real numbers'')
+    the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
+    be vectors of colour values, and will be used to determine
+    the default colour map for the marks.
+     \end{itemize}
+
    \item \texttt{plot.mppm}
    New argument \texttt{se}.
    
-   \item \texttt{plot.ppp}
-   The default colour for the points is now a transparent grey,
-   if this is supported by the plot device.
+   \item \texttt{plot.ppp}:
+     \begin{itemize}
+     \item  The default colour for the points is now a transparent grey,
+       if this is supported by the plot device.
+     \item For a point pattern with continuous marks (``real numbers'')
+    the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
+    be vectors of colour values, and will be used to determine
+    the default colour map for the marks.
+     \end{itemize}
 
-   \item \texttt{ppm.ppp, ppm.quad}
+   \item \texttt{pool.fv}:
+    The default plot of the pooled function no longer includes 
+    the variance curves.
+
+  \item \texttt{ppm.ppp, ppm.quad}
    New argument \texttt{emend}, equivalent to \texttt{project}.
 
   \item \texttt{predict.kppm, residuals.kppm}
@@ -481,9 +674,13 @@ listed alphabetically.
    New argument \texttt{state}
    New option: \verb!style="tk"!
 
+%%Q
+   
  \item \texttt{quadratcount.ppp}:
    Computation accelerated in some cases.
 
+%%R
+   
    \item \texttt{rgbim, hsvim}
    New argument \texttt{A} controls the alpha (transparency) channel.
 
@@ -516,7 +713,6 @@ listed alphabetically.
    New arguments \texttt{start} and \texttt{clockwise} specify the convention
    for measuring and plotting angles.
 
-
  \item \texttt{rotmean}:
    New argument \texttt{padzero}. 
    Default behaviour has changed.
@@ -535,7 +731,7 @@ listed alphabetically.
    This avoids computations which would require huge amounts of memory. 
    New argument \texttt{poisthresh} controls this behaviour.
 
-
+%%S   
       \item Simulation:
    Several basic simulation algorithms have been accelerated.
    Consequently, simulation outcomes are not identical to 
@@ -558,15 +754,35 @@ listed alphabetically.
 
    \item \texttt{step}: now works for models of class \texttt{"mppm"}.
 
+  \item \texttt{subset.ppp}, \texttt{subset.lpp}, \texttt{subset.pp3}, 
+     \texttt{subset.ppx}:
+    The argument \texttt{subset} can now be any argument acceptable to
+    the \verb!"["! method.
+    
+   \item \texttt{summary.ppm}:
+    New argument \texttt{fine} selects the algorithm for variance estimation.
+
+  \item \texttt{symbolmap}: 
+     Now accepts a vector of colour values for the arguments \texttt{col}, 
+     \texttt{cols}, \texttt{fg}, \texttt{bg} if the argument \texttt{range}
+     is given.
+
+%%T
+     
    \item \texttt{tess}:
    Argument \texttt{window} is ignored when xgrid, ygrid are given.
 
+  \item \texttt{texturemap}:
+    Argument \texttt{textures} can be missing or NULL.
+    
    \item \texttt{textureplot}: 
      Argument \texttt{x} can now be something acceptable to \texttt{as.im}.
      
    \item \texttt{to.grey}
    New argument \texttt{transparent}.
 
+%%U
+   
   \item \texttt{union.owin}:
    Improved behaviour when there are more than 2 windows.
 
@@ -576,14 +792,29 @@ listed alphabetically.
    Now handles additional arguments in any order, with or without names.
    Changed arguments. Improved behaviour.
 
+%%V
+   
    \item \texttt{valid.ppm}
    This is now a method for the generic function \texttt{valid}.
 
    \item \texttt{vcov.mppm}:
-   Now handles models with Gibbs interactions.
+     Now handles models with Gibbs interactions.
 
+   \item \texttt{vcov.ppm}:
+     Performance slightly improved, for Gibbs models.
+
+%%W
+%%X
+%%Y
+%%Z
+   
  \item \verb![<-.im!
   Accepts an array for \texttt{value}.
+
+ \item \verb![.linnet!, \verb![.lpp!:
+    New argument \texttt{snip} determines what to do with segments 
+    of the network that cross the boundary of the window. 
+    Default behaviour has changed.
 
 \item \verb![.ppx!:
   The subset index \texttt{i} may now be a spatial domain
@@ -699,6 +930,13 @@ of potential impact.
    the results were usually incorrect, or an error was generated.
    \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
      
+ \item \texttt{update.kppm}:
+  If the call to \texttt{update} did not include a formula argument
+   or a point pattern argument, then all arguments were ignored. 
+   Example: \texttt{update(fit, improve.type="quasi")} was identical to 
+   \texttt{fit}.
+   \bugger{1.42-2}{june 2015}{1.45-0}{march 2016}
+     
 \item \texttt{envelope.ppm}:
    If the model was an inhomogeneous Poisson process, 
    the resulting envelope object was incorrect
@@ -708,7 +946,7 @@ of potential impact.
 
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
    Results were incorrect for non-Poisson processes.  
-   \bugger{1.25-0}{december 2011}{1.34-0}{october 2013}
+   \bugger{1.25-0}{december 2011}{1.45-0}{march 2016}
    
 \item \texttt{rVarGamma}:
    Simulations were incorrect; they were generated using the wrong value
@@ -732,6 +970,11 @@ of potential impact.
    with a non-integer value of the saturation parameter \texttt{sat}.
    \bugger{1.20-0}{july 2010}{1.31-2}{april 2013}
    
+ \item \verb![.lpp!:
+   The local coordinate \texttt{seg} was completely incorrect,
+   when \texttt{i} was a window.
+   \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
+   
  \item \texttt{lppm}:
    For multitype patterns, the fitted model was completely incorrect
    due to an error in constructing the quadrature scheme.
@@ -747,6 +990,16 @@ of potential impact.
    for marked point process models.   
    \bugger{1.27-0}{may 2012}{1.29-0}{october 2012}
    
+ \item \texttt{diagnose.ppm}:
+   When applied to a model obtained from \texttt{subfits()}, 
+   in the default case (\texttt{oldstyle=FALSE}) 
+   the variance calculations were incorrect.
+   Consequently the dotted lines representing significance bands were 
+   incorrect. An error or warning about negative variances occurred sometimes.
+   However, calculations with \texttt{oldstyle=TRUE} were correct.
+   The default has now been changed to \texttt{oldstyle=TRUE} for such models.
+   \bugger{1.35-0}{december 2013}{1.45-0}{march 2016}
+
  \item \texttt{linearK}, \texttt{linearKinhom}:
    If any data points were located exactly at a vertex of the 
    linear network, the weights for Ang's correction were incorrect, 

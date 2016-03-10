@@ -173,7 +173,6 @@ markconnect(X, i, j, r=NULL,
 
     # Compute for all pairs of types at once
     plot(alltypes(amacrine, markconnect))
-    spatstatDiagnostic("finished markconnect")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   

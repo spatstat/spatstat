@@ -3,7 +3,7 @@
 #' Adapted by Adrian Baddeley
 #' Copyright (C) 2016 Kassel Hingee and Adrian Baddeley
 
-# $Revision: 1.6 $  $Date: 2016/03/07 07:38:55 $
+# $Revision: 1.7 $  $Date: 2016/03/10 04:05:05 $
 
 laslett <- function(X, ...,
                     verbose=FALSE, plotit=TRUE,
@@ -12,7 +12,6 @@ laslett <- function(X, ...,
   #' validate X and convert to a logical matrix
   type <- match.arg(type)
   oldX <- X
-  argh <- list(...)
 
   if(is.im(X)) {
     X <- solutionset(X != 0)
@@ -115,7 +114,6 @@ maskLaslett <- local({
     tangents <- data.frame(row=integer(0), col=integer(0), newcol=integer(0))
     #' process each hztal line
     for(p in g) {
-      n <- nrow(p)
       tangents <-
         with(p, {
           candidates <- which(IsCandidate) # indices are row numbers in 'p'
@@ -280,9 +278,9 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
     xx <- P$x
     yy <- P$y
     nn <- length(xx)
-    xnext <- c(xx[-1], xx[1])
+#    xnext <- c(xx[-1], xx[1])
     ynext <- c(yy[-1], yy[1])
-    xprev <- c(xx[nn], xx[-nn])
+#    xprev <- c(xx[nn], xx[-nn])
     yprev <- c(yy[nn], yy[-nn])
     is.candidate[cumnv + seq_len(nn)] <- 
       if(!is.hole.xypolygon(P)) {
@@ -296,7 +294,6 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   #' reject candidates lying too close to boundary
   tooclose <- (bdist.points(V[is.candidate]) < diameter(Frame(V))/1000)
   is.candidate[is.candidate][tooclose] <- FALSE
-  was.tooclose <- was.candidate & !is.candidate
   #' evaluate candidate points
   #' make tiny boxes around vertex
   candidates <- which(is.candidate)
@@ -313,7 +310,7 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
     xi <- v$x[i]
     yi <- v$y[i]
     Below <- owin(xi + c(-eps,eps), yi + c(-eps, 0))
-    Above <- owin(xi + c(-eps, eps), yi + c(0, eps))
+#    Above <- owin(xi + c(-eps, eps), yi + c(0, eps))
     UpLeft <- owin(xi + c(-eps, 0), yi + c(0, eps))
     is.tangent[i] <- (overlap.owin(X, Below) <= tiny) &&
                      (overlap.owin(X, UpLeft) < eps^2)
@@ -328,8 +325,6 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   #  maximal rectangle
   Rect <- owin(c(X$xrange[1], minxright), X$yrange, unitname=unitX)
   #
-  dfold <- as.data.frame(TanOld)
-  dfnew <- as.data.frame(TanNew)
   df <- data.frame(xold=TanOld$x, xnew=TanNew$x, y=TanNew$y)
   #
   result <- list(oldX=oldX,
