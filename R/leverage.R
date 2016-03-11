@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.54 $  $Date: 2016/03/09 10:31:14 $
+#  $Revision: 1.58 $  $Date: 2016/03/11 08:23:35 $
 #
 
 leverage <- function(model, ...) {
@@ -14,11 +14,11 @@ leverage.ppm <- function(model, ...,
                          drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
-  s <- ppmInfluence(model, what="leverage", drop=drop,
-                         iScore=iScore, iHessian=iHessian, iArgs=iArgs,
-                         ...)
-  a <- append(u, s)
+  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  a <- ppmInfluence(model, what="leverage", drop=drop,
+                    iScore=iScore, iHessian=iHessian, iArgs=iArgs,
+                    ...,
+                    info=info)
   class(a) <- "leverage.ppm"
   return(a)
 }
@@ -27,11 +27,11 @@ influence.ppm <- function(model, ...,
                           drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
-  s <- ppmInfluence(model, what="influence", drop=drop,
-                         iScore=iScore, iHessian=iHessian, iArgs=iArgs,
-                         ...)
-  a <- append(u, s)
+  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  a <- ppmInfluence(model, what="influence", drop=drop,
+                    iScore=iScore, iHessian=iHessian, iArgs=iArgs,
+                    ...,
+                    info=info)
   class(a) <- "influence.ppm"
   return(a)
 }
@@ -39,12 +39,13 @@ influence.ppm <- function(model, ...,
 dfbetas.ppm <- function(model, ...,
                         drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL) {
   fitname <- short.deparse(substitute(model))
-  u <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
+  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
   s <- ppmInfluence(model, what="dfbetas", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
-                     ...)
+                     ...,
+                    info=info)
   a <- s$dfbetas
-  attr(a, "info") <- u
+  attr(a, "info") <- s[names(info)]
   return(a)
 }
 
@@ -56,8 +57,13 @@ ppmInfluence <- function(fit,
                          iScore=NULL, iHessian=NULL, iArgs=NULL,
                          drop=FALSE,
                          method=c("C", "interpreted"),
-                          precomputed=list(),
-                         sparseOK=FALSE) {
+                         precomputed=list(),
+                         sparseOK=FALSE,
+                         info=NULL) {
+  if(is.null(info)) {
+    fitname <- short.deparse(substitute(fit))
+    info <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
+  }
   stopifnot(is.ppm(fit))
   what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
@@ -78,7 +84,7 @@ ppmInfluence <- function(fit,
   lam    <- precomputed$lambda %orifnull% fitted(fit, check=FALSE)
   mom    <- precomputed$mom    %orifnull% model.matrix(fit)
   # 
-#  p <- length(theta)
+  p <- length(theta)
   vc <- vcov(fit, hessian=TRUE)
   fush <- hess <- solve(vc)
   Q <- quad.ppm(fit)
@@ -88,44 +94,13 @@ ppmInfluence <- function(fit,
   # vc = solve(fush)
   #
   w <- w.quad(Q)
-#  loc <- union.quad(Q)
-#  isdata <- is.data(Q)
+  loc <- union.quad(Q)
+  isdata <- is.data(Q)
   #
   if(length(w) != length(lam))
     stop(paste("Internal error: length(w) = ", length(w),
                "!=", length(lam), "= length(lam)\n"))
 
-  a <- ppmInfluenceEngine(fit      = fit,
-                          what     = what,
-                          iScore   = iScore,
-                          iHessian = iHessian,
-                          iArgs    = iArgs,
-                          drop     = drop,
-                          method   = method,
-                          sparse   = sparse,
-                          vc       = vc,
-                          fush     = fush,
-                          hess     = hess,
-                          Q        = Q,
-                          theta    = theta,
-                          lam      = lam,
-                          mom      = mom)
-  return(a)
-}
-
-ppmInfluenceEngine <-
-  function(fit, what, iScore, iHessian, iArgs,
-           drop, method, sparse,
-           vc, fush, hess,
-           Q, theta, lam, mom) {
-  gotScore <- !is.null(iScore)
-  gotHess <- !is.null(iHessian)
-  influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
-  needHess <- gotScore && influencecalc
-  p <- length(theta)
-  w <- w.quad(Q)
-  loc <- union.quad(Q)
-  isdata <- is.data(Q)
   ## evaluate additional (`irregular') components of score
   iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
   gotScore <- !is.null(iscoremat)
@@ -215,6 +190,10 @@ ppmInfluenceEngine <-
     if(all(ok)) {
       ok <- NULL
     } else {
+      if((nbad <- sum(isdata[!ok])) > 0)
+        warning(paste("NA value of canonical statistic at",
+                      nbad, ngettext(nbad, "data point", "data points")),
+                call.=FALSE)
       Q <- Q[ok]
       mom <- mom[ok, , drop=FALSE]
       loc <- loc[ok]
@@ -223,34 +202,10 @@ ppmInfluenceEngine <-
       isdata <- isdata[ok]
     }
   } 
-  
-  # second order interaction terms
-  # ddS[i,j, ] = Delta_i Delta_j S(x)
-  ddS <- NULL
-  if(!all(what == "derivatives") && !is.poisson(fit)) {
-    ddS <- deltasuffstat(fit, dataonly=FALSE, quadsub=ok, sparseOK=sparse)
-    if(is.null(ddS)) {
-      warning("Second order interaction terms are not implemented for this model; they are treated as zero")
-    } else {
-      sparse <- inherits(ddS, "sparse3Darray")
-      if(gotScore) {
-        ## add extra planes of zeroes to second-order model matrix
-        ## (zero because the irregular components are part of the trend)
-        paddim <- c(dim(ddS)[1:2], nirr)
-        if(!sparse) {
-          ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
-        } else {
-          ddS <- bind.sparse3Darray(ddS,
-                                    sparse3Darray(dims=paddim),
-                                    along=3)
-        }
-      }
-    }
-  }
 
   # ........  start assembling results .....................
   # 
-  result <- list()
+  result <- as.list(info)
   # 
   if("derivatives" %in% what) {
     rawresid <- isdata - lam * w
@@ -265,63 +220,161 @@ ppmInfluenceEngine <-
   # compute effect of adding/deleting each quadrature point
   #    columns index the point being added/deleted
   #    rows index the points affected
+  #  ........ Poisson case ..................................
   eff <- mom
-  if(!is.poisson(fit) && !is.null(ddS)) {
-    # effect of addition/deletion of U[j] on score contribution from data points
-    ddSX <- ddS[isdata, , , drop=FALSE]
-    eff.data <- marginSums(ddSX, c(2,3))
-    rm(ddSX)
-    gc()
-    # check if any quadrature points have zero conditional intensity;
-    # these do not contribute; the associated values of the sufficient
-    # statistic may be Infinite and must be explicitly set to zero.
+  # ........  Gibbs case ....................................
+  ## second order interaction terms
+  ddS <- ddSintegrand <- NULL
+  if(!is.poisson(fit)) {
+    ## goal is to compute these effect matrices:
+    eff.data <- eff.back  <- matrix(0, nrow(eff), ncol(eff),
+                                    dimnames=dimnames(eff))
+    U <- union.quad(Q)
+    nU <- npoints(U)
     zerocif <- (lam == 0)
     anyzerocif <- any(zerocif)
-    if(anyzerocif)
-      eff.data[zerocif, ] <- 0 
-    ## effect of addition/deletion of U[j] on integral term in score
-    changesign <- ifelse(isdata, -1, 1)
-    if(!sparse) {
-      ## model matrix after addition/deletion of each U[j]
-      ## mombefore[i,j,] <- mom[i,]
-      di <- dim(ddS)
-      mombefore <- array(apply(mom, 2, rep, times=di[2]), dim=di)
-      momchange <- ddS
-      momchange[ , isdata, ] <- - momchange[, isdata, ]
-      momafter <- mombefore + momchange
-      ## effect of addition/deletion of U[j] on lambda(U[i], X)
-      lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE], theta, 3, 1))
-      lamratio <- array(lamratio, dim=dim(momafter))
-      ddSintegrand <- lam * (momafter * lamratio - mombefore)
-      rm(lamratio, momchange, mombefore, momafter)
-      gc()
-    } else {
-      ## Entries are required only for pairs i,j which interact.
-      ## mombefore[i,j,] <- mom[i,]
-      mombefore <- mapSparseEntries(ddS, 1, mom, conform=TRUE, across=3)
-      momchange <- ddS
-      momchange[ , isdata, ] <- - momchange[, isdata, ]
-      momafter <- mombefore + momchange
-      ## lamarray[i,j,k] <- lam[i]
-      lamarray <- mapSparseEntries(ddS, 1, lam, conform=TRUE, across=3)
-      lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE], theta, 3, 1))
-      lamratiominus1 <- as.sparse3Darray(lamratiominus1)
-      ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
-      rm(lamratiominus1, lamarray, momchange, mombefore, momafter)
-      gc()
+    ## decide whether to split into blocks
+    nX <- Q$data$n
+    nD <- Q$dummy$n
+    bls <- quadBlockSizes(nX, nD, p, announce=TRUE)
+    nblocks    <- bls$nblocks
+    nperblock  <- bls$nperblock
+    ##
+    if(nblocks > 1 && ("increments" %in% what)) {
+      warning("Oversize quadrature scheme: cannot return array of increments",
+              call.=FALSE)
+      what <- setdiff(what, "increments")
     }
-    if(anyzerocif) {
-      ddSintegrand[zerocif,,] <- 0
-      ddSintegrand[,zerocif,] <- 0
+    R <- reach(fit)
+    ## indices into original quadrature scheme
+    whichok <- if(!is.null(ok)) which(ok) else seq_len(nX+nD) 
+    whichokdata <- whichok[isdata]
+    whichokdummy <- whichok[!isdata]
+    ## loop 
+    for(iblock in 1:nblocks) {
+      first <- min(nD, (iblock - 1) * nperblock + 1)
+      last  <- min(nD, iblock * nperblock)
+      # corresponding subset of original quadrature scheme
+      if(!is.null(ok) || nblocks > 1) {
+        ## subset for which we will compute the effect
+        current <- c(whichokdata, whichokdummy[first:last])
+        ## find neighbours, needed for calculation
+        other <- setdiff(seq_len(nU), current)
+        crx <- crosspairs(U[current], U[other], R, what="indices")
+        nabers <- other[unique(crx$j)]
+        ## subset actually requested
+        requested <- c(current, nabers)
+        ## corresponding stuff ('B' for block)
+        isdataB <- isdata[requested]
+        zerocifB <- zerocif[requested]
+        anyzerocifB <- any(zerocifB)
+        momB <- mom[requested, , drop=FALSE]
+        lamB <- lam[requested]
+        wB <- w[requested]
+        currentB <- seq_along(current)
+      } else {
+        requested <- NULL
+        isdataB <- isdata
+        zerocifB <- zerocif
+        anyzerocifB <- anyzerocif
+        momB <- mom
+        lamB <- lam
+        wB <- w
+      }
+      ## compute second order terms 
+      ## ddS[i,j, ] = Delta_i Delta_j S(x)
+      ddS <- deltasuffstat(fit, dataonly=FALSE, quadsub=requested,
+                           sparseOK=sparse)
+      ## 
+      if(is.null(ddS)) {
+        warning("Second order interaction terms are not implemented",
+                " for this model; they are treated as zero", call.=FALSE)
+        break
+      } else {
+        sparse <- inherits(ddS, "sparse3Darray")
+        if(gotScore) {
+          ## add extra planes of zeroes to second-order model matrix
+          ## (zero because the irregular components are part of the trend)
+          paddim <- c(dim(ddS)[1:2], nirr)
+          if(!sparse) {
+            ddS <- abind::abind(ddS, array(0, dim=paddim), along=3)
+          } else {
+            ddS <- bind.sparse3Darray(ddS,
+                                      sparse3Darray(dims=paddim),
+                                      along=3)
+          }
+        }
+      }
+      ## effect of addition/deletion of U[j]
+      ## on score contribution from data points
+      ddSX <- ddS[isdataB, , , drop=FALSE]
+      eff.data.B <- marginSums(ddSX, c(2,3))
+      ## check if any quadrature points have zero conditional intensity;
+      ## these do not contribute; the associated values of the sufficient
+      ## statistic may be Infinite and must be explicitly set to zero.
+      if(anyzerocifB)
+        eff.data.B[zerocifB, ] <- 0
+      ## save results for current subset of quadrature points 
+      if(is.null(requested)) {
+        eff.data <- eff.data.B
+      } else {
+        eff.data[current,] <- eff.data.B[currentB,,drop=FALSE]
+      }
+      ## 
+      rm(ddSX, eff.data.B)
+      gc()
+      ## effect of addition/deletion of U[j] on integral term in score
+      changesignB <- ifelse(isdataB, -1, 1)
+      if(!sparse) {
+        ## model matrix after addition/deletion of each U[j]
+        ## mombefore[i,j,] <- mom[i,]
+        di <- dim(ddS)
+        mombefore <- array(apply(momB, 2, rep, times=di[2]), dim=di)
+        momchange <- ddS
+        momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+        momafter <- mombefore + momchange
+        ## effect of addition/deletion of U[j] on lambda(U[i], X)
+        lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE],
+                                       theta, 3, 1))
+        lamratio <- array(lamratio, dim=dim(momafter))
+        ddSintegrand <- lamB * (momafter * lamratio - mombefore)
+        rm(lamratio, momchange, mombefore, momafter)
+        gc()
+      } else {
+        ## Entries are required only for pairs i,j which interact.
+        ## mombefore[i,j,] <- mom[i,]
+        mombefore <- mapSparseEntries(ddS, 1, momB, conform=TRUE, across=3)
+        momchange <- ddS
+        momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+        momafter <- mombefore + momchange
+        ## lamarray[i,j,k] <- lam[i]
+        lamarray <- mapSparseEntries(ddS, 1, lamB, conform=TRUE, across=3)
+        lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE],
+                                          theta, 3, 1))
+        lamratiominus1 <- as.sparse3Darray(lamratiominus1)
+        ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
+        rm(lamratiominus1, lamarray, momchange, mombefore, momafter)
+        gc()
+      }
+      if(anyzerocifB) {
+        ddSintegrand[zerocifB,,] <- 0
+        ddSintegrand[,zerocifB,] <- 0
+      }
+      ## integrate 
+      eff.back.B <- changesignB * tenseur(ddSintegrand, wB, 1, 1)
+      ## save contribution
+      if(is.null(requested)) {
+        eff.back <- eff.back.B
+      } else {
+        eff.back[current,] <- eff.back.B[currentB, , drop=FALSE]
+      }
     }
-    ## integrate 
-    eff.back <- changesign * tenseur(ddSintegrand, w, 1, 1)
-    # total
+    
+    ## total
     eff <- eff + eff.data - eff.back
     eff <- as.matrix(eff)
-  } else ddSintegrand <- NULL
-
-  # 
+  }
+  
   if("increments" %in% what) {
     result$increm <- list(ddS=ddS,
                           ddSintegrand=ddSintegrand,
@@ -394,17 +447,6 @@ ppmInfluenceEngine <-
   }
   return(result)
 }
-
-## ppmInfluenceRecombine <- function(indices, values) {
-  #'  indices is a list of subset index vectors for each block
-  #'  values is a list containing the computed values for each block
-#           nblocks <- length(indices)
-  # deriv: list(mom, score, fush, vc, hess, invhess)
-  # increm: list(ddS, ddSintegrand, isdata, wQ)
-  # lev: list(val, smo, ave)
-  # infl: V
-  # dfbetas: msr(Q, dis[isdata, ], con)
-# }
 
 ## extract derivatives from covariate functions
 ## WARNING: these are not the score components in general

@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.9 $	$Date: 2016/02/11 10:17:12 $
+#    $Revision: 1.11 $	$Date: 2016/03/11 07:53:25 $
 #
 #    Hybrid interactions
 #
@@ -137,7 +137,7 @@ hybrid.family <-
            attr(V, "IsOffset") <- IsOffset
          return(V)
        },
-       delta2 = function(X, inte, correction, ...) {
+       delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
          ## Sufficient statistic for second order conditional intensity
          result <- NULL
          interlist <- inte$par
@@ -145,17 +145,23 @@ hybrid.family <-
            v <- NULL
            ## look for 'delta2' in component interaction 'ii'
            if(!is.null(delta2 <- ii$delta2) && is.function(delta2)) 
-             v <- delta2(X, ii, correction)
+             v <- delta2(X, ii, correction, sparseOK=sparseOK)
            ## look for 'delta2' in family of component 'ii'
            if(is.null(v) &&
               !is.null(delta2 <- ii$family$delta2) &&
               is.function(delta2))
-             v <- delta2(X, ii, correction)
+             v <- delta2(X, ii, correction, sparseOK=sparseOK)
            if(is.null(v)) {
              ## no special algorithm available: generic algorithm needed
              return(NULL)
            }
-           result <- abind(result, v, along=3)
+           if(is.null(result)) {
+             result <- v
+           } else if(inherits(v, c("sparse3Darray", "sparseMatrix"))) {
+             result <- bind.sparse3Darray(result, v, along=3)
+           } else {
+             result <- abind::abind(as.array(result), v, along=3)
+           }
          }
          return(result)
        },

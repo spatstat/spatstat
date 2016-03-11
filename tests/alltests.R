@@ -710,27 +710,49 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.2 $ $Date: 2016/02/24 06:40:35 $
+#'   $Revision: 1.3 $ $Date: 2016/03/11 06:58:17 $
 #' 
 
 require(spatstat)
 local({
   # Strauss()$delta2
   fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
-  leverage(fitS)
-  influence(fitS)
+  levS <- leverage(fitS)
+  infS <- influence(fitS)
+  dfbS <- dfbetas(fitS)
   # Geyer()$delta2
   fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
-  leverage(fitG)
-  influence(fitG)
+  levG <- leverage(fitG)
+  infG <- influence(fitG)
   # pairwise.family$delta2
   fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
-  leverage(fitD)
-  influence(fitD)
+  levD <- leverage(fitD)
+  infD <- influence(fitD)
   # ppmInfluence; offset is present; coefficient vector has length 1
   fitH <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
-  leverage(fitH)
-  influence(fitH)
+  levH <- leverage(fitH)
+  infH <- influence(fitH)
+
+  ## divide and recombine algorithm
+  op <- spatstat.options(maxmatrix=50000)
+  levSB <- leverage(fitS)
+  infSB <- influence(fitS)
+  dfbSB <- dfbetas(fitS)
+
+  chk <- function(x, y, what, thresh=1e-12) {
+    if(max(abs(x-y)) > thresh)
+      stop(paste("Different results for", what,
+                 "obtained from single-block and multi-block algorithms"),
+           call.=FALSE)
+    invisible(NULL)
+  }
+
+  chk(marks(as.ppp(infS)), marks(as.ppp(infSB)), "influence")
+  chk(as.im(levS),         as.im(levSB),         "leverage")
+  chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
+  chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
+
+  spatstat.options(op)
 })
 
 ##

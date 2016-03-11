@@ -1,4 +1,18 @@
 
+        CHANGES IN spatstat VERSION 1.45-0.001
+
+OVERVIEW
+
+    o Version nickname: 'Agile and Disruptive'
+
+    o Leverage and influence code handles bigger datasets.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    For Gibbs models, memory usage has been dramatically reduced, 
+    so the code can handle larger datasets and finer quadrature schemes.
+
         CHANGES IN spatstat VERSION 1.45-0
 
 OVERVIEW
