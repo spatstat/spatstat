@@ -76,12 +76,11 @@ iHessian=NULL, iArgs=NULL)
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
 }
 \seealso{
   \code{\link{leverage.ppm}},
-  \code{\link{influence.ppm}}
+  \code{\link{influence.ppm}},
+  \code{\link{ppmInfluence}}
 }
 \examples{
    \testonly{op <- spatstat.options(npixel=32)}

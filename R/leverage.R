@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.58 $  $Date: 2016/03/11 08:23:35 $
+#  $Revision: 1.60 $  $Date: 2016/03/12 12:07:05 $
 #
 
 leverage <- function(model, ...) {
@@ -14,59 +14,81 @@ leverage.ppm <- function(model, ...,
                          drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
   a <- ppmInfluence(model, what="leverage", drop=drop,
                     iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                     ...,
-                    info=info)
-  class(a) <- "leverage.ppm"
-  return(a)
+                    fitname=fitname)
+  return(a$leverage)
 }
 
 influence.ppm <- function(model, ...,
                           drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 {
   fitname <- short.deparse(substitute(model))
-  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
   a <- ppmInfluence(model, what="influence", drop=drop,
                     iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                     ...,
-                    info=info)
-  class(a) <- "influence.ppm"
-  return(a)
+                    fitname=fitname)
+  return(a$influence)
 }
 
 dfbetas.ppm <- function(model, ...,
                         drop=FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL) {
   fitname <- short.deparse(substitute(model))
-  info <- list(fitname=fitname, fit.is.poisson=is.poisson(model))
-  s <- ppmInfluence(model, what="dfbetas", drop=drop,
+  a <- ppmInfluence(model, what="dfbetas", drop=drop,
                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
                      ...,
-                    info=info)
-  a <- s$dfbetas
-  attr(a, "info") <- s[names(info)]
-  return(a)
+                    fitname=fitname)
+  return(a$dfbetas)
 }
 
-
 ppmInfluence <- function(fit,
+                         what=c("leverage", "influence", "dfbetas"),
+                         ..., 
+                         iScore=NULL, iHessian=NULL, iArgs=NULL,
+                         drop=FALSE,
+                         fitname=NULL) {
+  stuff <- ppmInfluenceEngine(fit, what=what,
+                          ..., 
+                          iScore=iScore, iHessian=iHessian, iArgs=iArgs,
+                          drop=drop, fitname=fitname)
+  fnam <- c("fitname", "fit.is.poisson")
+  result <- list()
+  if("lev" %in% names(stuff)) {
+    lev <- stuff[c(fnam, "lev")]
+    class(lev) <- "leverage.ppm"
+    result$leverage <- lev
+  }
+  if("infl" %in% names(stuff)) {
+    infl <- stuff[c(fnam, "infl")]
+    class(infl) <- "influence.ppm"
+    result$influence <- infl
+  }
+  if(!is.null(dfb <- stuff$dfbetas)) {
+    attr(dfb, "info") <- stuff[fnam]
+    result$dfbetas <- dfb
+  }
+  other <- setdiff(names(stuff), c("lev", "infl", "dfbetas"))
+  result[other] <- stuff[other]
+  return(result)
+}
+
+ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
-                                "derivatives", "increments"),
+                           "derivatives", "increments"),
                          ...,
                          iScore=NULL, iHessian=NULL, iArgs=NULL,
                          drop=FALSE,
                          method=c("C", "interpreted"),
                          precomputed=list(),
                          sparseOK=FALSE,
-                         info=NULL) {
-  if(is.null(info)) {
+                         fitname=NULL) {
+  if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
-    info <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
-  }
   stopifnot(is.ppm(fit))
   what <- match.arg(what, several.ok=TRUE)
   method <- match.arg(method)
+  info <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
   if(is.null(iArgs))
     iArgs <- fit$covfunargs
   gotScore <- !is.null(iScore)
@@ -206,6 +228,7 @@ ppmInfluence <- function(fit,
   # ........  start assembling results .....................
   # 
   result <- as.list(info)
+  class(result) <- "ppmInfluence"
   # 
   if("derivatives" %in% what) {
     rawresid <- isdata - lam * w
@@ -443,6 +466,7 @@ ppmInfluence <- function(fit,
              con[lam == 0,] <- 0
            })
     colnames(dis) <- colnames(con) <- colnames(mom)
+    # result is a vector valued measure
     result$dfbetas <- msr(Q, dis[isdata, ], con)
   }
   return(result)

@@ -87,6 +87,7 @@ leverage(model, ...)
 \seealso{
   \code{\link{influence.ppm}},
   \code{\link{dfbetas.ppm}},
+  \code{\link{ppmInfluence}},
   \code{\link{plot.leverage.ppm}}
 }
 \examples{

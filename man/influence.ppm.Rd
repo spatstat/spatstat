@@ -83,6 +83,7 @@
 \seealso{
   \code{\link{leverage.ppm}},
   \code{\link{dfbetas.ppm}},
+  \code{\link{ppmInfluence}},
   \code{\link{plot.influence.ppm}}
 }
 \examples{

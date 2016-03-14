@@ -481,7 +481,7 @@
 \alias{ppm.default}
 \alias{ppmCovariates}
 \alias{ppmDerivatives}
-\alias{ppmInfluence}
+\alias{ppmInfluenceEngine}
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
 \alias{ppsubset}
@@ -1385,8 +1385,8 @@ ppllengine(X, Y, action="project", check=FALSE)
        verb, callstring)
 ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
-ppmInfluence(fit, what, \dots, iScore, iHessian, iArgs,
-              drop, method, precomputed, sparseOK, info)
+ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
+              drop, method, precomputed, sparseOK, fitname)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
