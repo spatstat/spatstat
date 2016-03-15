@@ -3,7 +3,7 @@
 #
 #  Huang-Ogata method 
 #
-#  $Revision: 1.16 $ $Date: 2015/07/11 08:19:26 $
+#  $Revision: 1.17 $ $Date: 2016/03/15 07:42:26 $
 #
 
 ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
@@ -53,6 +53,12 @@ ho.engine <- function(model, ..., nsim=100, nrmh=1e5,
   # Newton-Raphson update
   Vinverse <- solve(svar)
   theta <- theta0 + as.vector(Vinverse %*% (sobs - smean))
+  ## appropriate names
+  nama <- names(theta0)
+  if(!is.null(nama)) {
+    names(theta) <- nama
+    dimnames(svar) <- dimnames(Vinverse) <- list(nama, nama)
+  }
   ## update model
   newmodel <- model
   newmodel$coef <- theta

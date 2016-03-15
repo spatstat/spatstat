@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.002
+        CHANGES IN spatstat VERSION 1.45-0.003
 
 OVERVIEW
 
@@ -7,16 +7,22 @@ OVERVIEW
 
     o Leverage and influence code handles bigger datasets.
 
+NEW FUNCTIONS
+
+    o ppmInfluence
+    Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
-NEW FUNCTIONS
+BUG FIXES
 
-    o ppmInfluence
-    Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently
+    o vcov.ppm
+    The result had no 'dimnames', if the model was fitted using method="ho".
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.45-0
 

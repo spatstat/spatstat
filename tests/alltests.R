@@ -710,7 +710,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.3 $ $Date: 2016/03/11 06:58:17 $
+#'   $Revision: 1.4 $ $Date: 2016/03/14 07:15:33 $
 #' 
 
 require(spatstat)
@@ -739,10 +739,12 @@ local({
   infSB <- influence(fitS)
   dfbSB <- dfbetas(fitS)
 
-  chk <- function(x, y, what, thresh=1e-12) {
+  chk <- function(x, y, what,
+                  from="single-block and multi-block",
+                  thresh=1e-12) {
     if(max(abs(x-y)) > thresh)
-      stop(paste("Different results for", what,
-                 "obtained from single-block and multi-block algorithms"),
+      stop(paste("Different results for", what, "obtained from",
+                 from, "algorithms"),
            call.=FALSE)
     invisible(NULL)
   }
@@ -753,6 +755,22 @@ local({
   chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
 
   spatstat.options(op)
+
+  ## sparse algorithm
+  opa <- spatstat.options(developer=TRUE)
+  pmi <- ppmInfluence(fitS, sparseOK=TRUE)
+  levSp <- pmi$leverage
+  infSp <- pmi$influence
+  dfbSp <- pmi$dfbetas
+
+  chks <- function(...) chk(..., from="sparse and non-sparse")
+  
+  chks(marks(as.ppp(infS)), marks(as.ppp(infSp)), "influence")
+  chks(as.im(levS),         as.im(levSp),         "leverage")
+  chks(dfbS$val,            dfbSp$val,            "dfbetas$value")
+  chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
+
+  spatstat.options(opa)
 })
 
 ##
