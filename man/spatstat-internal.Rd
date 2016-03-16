@@ -347,8 +347,6 @@
 \alias{lty2char}
 \alias{maskLaslett}
 \alias{padtowidth}
-\alias{parameters.interact}
-\alias{parameters.fii}
 \alias{parbreak}
 \alias{passthrough}
 \alias{paste.expr}
@@ -743,7 +741,6 @@
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unparen}
-\alias{update.interact}
 \alias{update.im}
 \alias{update.ippm}
 \alias{update.rmhstart}
@@ -1209,8 +1206,6 @@ logi.engine(Q, trend, interaction, \dots,
 lty2char(i)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 padtowidth(a, b, justify)
-\method{parameters}{interact}(model, \dots)
-\method{parameters}{fii}(model, \dots)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)

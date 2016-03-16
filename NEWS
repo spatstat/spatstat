@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.003
+        CHANGES IN spatstat VERSION 1.45-0.004
 
 OVERVIEW
+
+    o We thank Sven Wagner for contributions.
 
     o Version nickname: 'Agile and Disruptive'
 
@@ -18,7 +20,19 @@ SIGNIFICANT USER-VISIBLE CHANGES
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
+    o update.interact
+    This existing function is now documented.
+
+    o parameters.interact, parameters.fii
+    These existing functions are now documented.
+
 BUG FIXES
+
+    o subfits
+    The coefficients of the submodels were incorrect
+    for Gibbs models with a multitype interaction (MultiStrauss, etc).
+    [Spotted by Sven Wagner.]
+    Fixed.
 
     o vcov.ppm
     The result had no 'dimnames', if the model was fitted using method="ho".

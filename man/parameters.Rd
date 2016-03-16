@@ -4,6 +4,8 @@
 \alias{parameters.kppm}
 \alias{parameters.ppm}
 \alias{parameters.profilepl}
+\alias{parameters.interact}
+\alias{parameters.fii}
 \title{
   Extract Model Parameters in Understandable Form
 }
@@ -22,6 +24,10 @@ parameters(model, \dots)
 \method{parameters}{ppm}(model, \dots)
 
 \method{parameters}{profilepl}(model, \dots)
+
+\method{parameters}{fii}(model, \dots)
+
+\method{parameters}{interact}(model, \dots)
 }
 \arguments{
   \item{model}{
@@ -38,19 +44,15 @@ parameters(model, \dots)
 
   The function \code{parameters} is generic, with methods
   for class \code{"ppm"}, \code{"kppm"}, \code{"dppm"} and \code{"profilepl"}
-  and possibly for other classes.
+  and other classes.
 }
 \value{
   A named list, whose format depends on the fitted model.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-
-
-Rolf Turner \email{r.turner@auckland.ac.nz}
-
-and Ege Rubak \email{rubak@math.aau.dk}
-
+Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \seealso{
   \code{\link{coef}}

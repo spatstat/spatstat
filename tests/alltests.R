@@ -1041,6 +1041,19 @@ local({
   fit <- mppm(pattern ~ dist, data = train)
   pred <- predict(fit, type="cif", newdata=test, verbose=TRUE)
 })
+
+local({
+  ## test handling of interaction coefficients in multitype case
+  set.seed(42)
+  XX <- as.solist(replicate(3, rthin(amacrine, 0.8), simplify=FALSE))
+  H <- hyperframe(X=XX)
+  M <- MultiStrauss(matrix(0.1, 2, 2), levels(marks(amacrine)))
+  fit <- mppm(X ~ 1, H, M)
+  co <- coef(fit)
+  subco <- sapply(subfits(fit), coef)
+  if(max(abs(subco - co)) > 0.001)
+    stop("Wrong coefficient values in subfits, for multitype interaction")
+})
 #
 # tests/NAinCov.R
 #
