@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.46 $   $Date: 2016/02/15 12:43:49 $
+#  $Revision: 1.47 $   $Date: 2016/03/16 10:31:35 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2016/02/15 12:43:49 $")
+                         date="$Date: 2016/03/16 10:31:35 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -246,7 +246,6 @@ subfits.old <- local({
     announce <- if(verbose) Announce else Ignore
     
     announce("Extracting stuff...")
-#    FIT      <- object$Fit$FIT
     trend    <- object$trend
     random   <- object$random
     use.gam  <- object$Fit$use.gam
@@ -258,8 +257,13 @@ subfits.old <- local({
     Vnamelist <- object$Fit$Vnamelist
     has.design <- info$has.design
     has.random <- info$has.random
+    moadf    <- object$Fit$moadf
     announce("done.\n")
 
+    ## levels of any factors
+    levelslist <- lapply(as.list(moadf), levelsAsFactor)
+    isfactor <- !sapply(levelslist, is.null)
+    
     ## fitted parameters
     coefs.full <- coef(object)
     if(is.null(dim(coefs.full))) {
@@ -376,19 +380,32 @@ subfits.old <- local({
       Yi <- Y[[i]]
       Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
       ## assemble relevant covariate images
-      covariates <-
-        if(has.covar) covariates.hf[i, , drop=TRUE, strip=FALSE] else NULL
-      if(has.covar && has.design) {
-        ## Convert each data frame covariate value to an image
-        imrowi <- lapply(covariates[dfvar], as.im, W=Wi)
-        ## Problem: constant covariate leads to singular fit
-        ## --------------- Hack: ---------------------------
-        ##  Construct fake data by resampling from possible values
-        covar.vals <- lapply(as.list(covariates[dfvar, drop=FALSE]), possible)
-        fake.imrowi <- lapply(covar.vals, scramble, W=Wi, Y=Yi$data)
-        ## insert fake data into covariates 
-        covariates[dfvar] <- fake.imrowi
-        ## ------------------ end hack ----------------------------
+      if(!has.covar) { 
+        covariates <- NULL
+      } else {
+        covariates <- covariates.hf[i, , drop=TRUE, strip=FALSE] 
+        if(has.design) {
+          ## Convert each data frame covariate value to an image
+          imrowi <- lapply(covariates[dfvar], as.im, W=Wi)
+          ## Problem: constant covariate leads to singular fit
+          ## --------------- Hack: ---------------------------
+          ##  Construct fake data by resampling from possible values
+          covar.vals <- lapply(as.list(covariates[dfvar, drop=FALSE]), possible)
+          fake.imrowi <- lapply(covar.vals, scramble, W=Wi, Y=Yi$data)
+          ## insert fake data into covariates 
+          covariates[dfvar] <- fake.imrowi
+          ## ------------------ end hack ----------------------------
+        }
+        ## identify factor-valued spatial covariates
+        spatialfactors <- !dfvar & isfactor[names(covariates)]
+        if(any(spatialfactors)) {
+          ## problem: factor levels may be dropped
+          ## more fakery...
+          spfnames <- names(spatialfactors)[spatialfactors]
+          covariates[spatialfactors] <-
+            lapply(levelslist[spfnames],
+                   scramble, W=Wi, Y=Yi$data)
+        }
       }
       ## Fit ppm to data for case i only
       ## using relevant interaction

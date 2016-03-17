@@ -1006,6 +1006,7 @@ local({
 local({
   ##  [thanks to Sven Wagner]
   ## factor covariate, with some levels unused in some rows
+  set.seed(14921788)
   H <- hyperframe(X=replicate(3, runifpoint(20), simplify=FALSE),
                   Z=solist(as.im(function(x,y){x}, owin()),
                     as.im(function(x,y){y}, owin()),
@@ -1022,6 +1023,19 @@ local({
   v7 <- vcov(fit7)
   s7 <- subfits(fit7)
   p7 <- solapply(s7, predict)
+
+  # multitype: collisions in vcov.ppm
+  H$X <- lapply(H$X, rlabel, labels=factor(c("a","b")), permute=FALSE)
+  M <- MultiStrauss(matrix(0.1, 2, 2), c("a","b"))
+  fit8 <- mppm(X ~ Z, H, M)
+  v8 <- vcov(fit8, fine=TRUE)
+  s8 <- subfits(fit8)
+  p8 <- lapply(s8, predict)
+
+  fit9 <- mppm(X ~ Z, H, M, iformula=~Interaction * id)
+  v9 <- vcov(fit9, fine=TRUE)
+  s9 <- subfits(fit9)
+  p9 <- lapply(s9, predict)
 })
 
 local({

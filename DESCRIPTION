@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.45-0.004
+Version: 1.45-0.005
 Nickname: Agile and Disruptive
-Date: 2016-03-16
+Date: 2016-03-17
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

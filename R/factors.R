@@ -57,5 +57,8 @@ mergeLevels <- function(.f, ...) {
   return(newf)
 }
 
-
-
+levelsAsFactor <- function(x) {
+  lev <- levels(x)
+  if(is.null(lev)) return(NULL)
+  return(factor(lev, levels=lev))
+}

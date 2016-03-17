@@ -325,6 +325,7 @@
 \alias{least.common.multiple}
 \alias{levels.im}
 \alias{levels<-.im}
+\alias{levelsAsFactor}
 \alias{lhs.of.formula}
 \alias{linequad}
 \alias{linearKengine}
@@ -1178,6 +1179,7 @@ kraever(package, fatal)
 least.common.multiple(n,m)
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
+levelsAsFactor(x)
 lhs.of.formula(x)
 linequad(X, Y, \dots, eps, nd)
 linearKengine(X, \dots, r, reweight, denom, correction, showworking)

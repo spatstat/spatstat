@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.53 $	$Date: 2016/03/04 09:34:17 $
+#	$Revision: 1.55 $	$Date: 2016/03/17 02:09:42 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -16,6 +16,13 @@ ppm.formula <- function(Q, interaction=NULL, ..., data=NULL, subset) {
   callstring <- short.deparse(sys.call())
   cl <- match.call()
 
+  ## trap a common error to give a more informative message
+  if(is.sob(data) || is.function(data)) 
+    stop(paste("The argument", sQuote("data"),
+               "should not be a spatial object;",
+               "it should be a list of spatial objects"),
+         call.=FALSE)
+  
   ########### INTERPRET FORMULA ##############################
   
   if(!inherits(Q, "formula"))
@@ -85,6 +92,8 @@ function(Q,
 
   subsetexpr <- if(!missing(subset)) substitute(subset) else NULL
 
+  datalistname <- if(missing(covariates)) "data" else "covariates"
+
   if(!(method %in% c("mpl", "ho", "logi", "VBlogi")))
       stop(paste("Unrecognised fitting method", sQuote(method)))
 
@@ -104,7 +113,13 @@ function(Q,
   } else{
       VB <- FALSE
   }
-  
+
+  if(is.sob(covariates) || is.function(covariates))
+    stop(paste("The argument", sQuote(datalistname),
+               "should not be a spatial object;",
+               "it should be a list of spatial objects"),
+         call.=FALSE)
+    
   if(inherits(Q, "logiquad")){
     if(missing(method))
       method <- "logi"

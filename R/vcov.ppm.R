@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.123 $  $Date: 2016/03/06 05:01:18 $
+##  $Revision: 1.124 $  $Date: 2016/03/16 10:38:52 $
 ##
 
 vcov.ppm <- local({
@@ -374,6 +374,7 @@ vcalcGibbsGeneral <- function(model,
   }
   pnames <- names(old.coef)
   dnames <- list(pnames, pnames)
+  # (may be revised later)
   
   internals <- list()
   ##
@@ -407,6 +408,17 @@ vcalcGibbsGeneral <- function(model,
   ## sufficient statistic h(X[i] | X) = h(X[i] | X[-i])
   ## data and dummy:
   mall <- model.matrix(model)
+  ## check dimension of canonical statistic 
+  if(ncol(mall) != length(pnames)) {
+    if(!dropcoef)
+      stop(paste("Internal error: dimension of sufficient statistic = ",
+                 ncol(mall), "does not match length of coefficient vector =",
+                 length(pnames)),
+           call.=FALSE)
+    p <- length(pnames)
+    pnames <- colnames(mall)
+    dnames <- list(pnames, pnames)
+  }
   ## save
   if(saveterms) 
     internals <- append(internals,

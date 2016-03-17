@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.004
+        CHANGES IN spatstat VERSION 1.45-0.005
 
 OVERVIEW
 
     o We thank Sven Wagner for contributions.
 
-    o Version nickname: 'Agile and Disruptive'
-
     o Leverage and influence code handles bigger datasets.
+
+    o More bug fixes for replicated patterns.
+
+    o Version nickname: 'Agile and Disruptive'
 
 NEW FUNCTIONS
 
@@ -27,6 +29,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These existing functions are now documented.
 
 BUG FIXES
+
+    o subfits
+    Crashed when a Gibbs model included factor-valued spatial covariates
+    and not all levels of the factor were present in each row of the data.
+    [Spotted by Sven Wagner.]
+    Fixed.
 
     o subfits
     The coefficients of the submodels were incorrect
