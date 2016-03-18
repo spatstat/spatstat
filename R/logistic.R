@@ -231,6 +231,8 @@ logi.engine <- function(Q,
                                  glmfit = fit,
                                  logistic = Dinfo,
                                  computed = computed,
+                                 vnamebase=vnamebase,
+                                 vnameprefix=vnameprefix,
                                  VB = if(VB) TRUE else NULL,
                                  priors = if(VB) fit$priors else NULL
                                  )

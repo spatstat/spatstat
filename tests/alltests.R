@@ -1024,18 +1024,20 @@ local({
   s7 <- subfits(fit7)
   p7 <- solapply(s7, predict)
 
-  # multitype: collisions in vcov.ppm
+  # multitype: collisions in vcov.ppm, predict.ppm
   H$X <- lapply(H$X, rlabel, labels=factor(c("a","b")), permute=FALSE)
   M <- MultiStrauss(matrix(0.1, 2, 2), c("a","b"))
   fit8 <- mppm(X ~ Z, H, M)
   v8 <- vcov(fit8, fine=TRUE)
   s8 <- subfits(fit8)
   p8 <- lapply(s8, predict)
+  c8 <- lapply(s8, predict, type="cif")
 
   fit9 <- mppm(X ~ Z, H, M, iformula=~Interaction * id)
   v9 <- vcov(fit9, fine=TRUE)
   s9 <- subfits(fit9)
   p9 <- lapply(s9, predict)
+  c9 <- lapply(s9, predict, type="cif")
 })
 
 local({

@@ -282,7 +282,9 @@ mpl.engine <-
            maxlogpl     = maxlogpl,
            satlogpl     = satlogpl,
            internal     = list(glmfit=FIT, glmdata=glmdata, Vnames=Vnames,
-                               IsOffset=IsOffset, fmla=fmla, computed=computed),
+                               IsOffset=IsOffset, fmla=fmla, computed=computed,
+                               vnamebase=prep$vnamebase,
+                               vnameprefix=prep$vnameprefix),
            covariates   = mpl.usable(covariates),
            covfunargs   = covfunargs,
            subsetexpr   = subsetexpr,
@@ -730,7 +732,8 @@ mpl.prepare <- local({
                    problems=problems,
                    likelihood.is.zero=likelihood.is.zero,
                    is.identifiable=is.identifiable,
-                   computed=computed)
+                   computed=computed,
+                   vnamebase=vnamebase, vnameprefix=vnameprefix)
     return(result)
   }
 

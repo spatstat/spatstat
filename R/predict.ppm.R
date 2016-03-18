@@ -399,6 +399,7 @@ predict.ppm <- local({
 
     if(!trivial) {
       Vnames <- model$internal$Vnames
+      vnameprefix <- model$internal$vnameprefix
       glmdata <- getglmdata(model)
       glmfit <- getglmfit(model)
       if(object$method=="logi")
@@ -509,7 +510,7 @@ predict.ppm <- local({
         ## Assign values to a column of the same name in newdata
         newdata[[Vnames]] <- as.vector(Vnew)
       ##
-      } else if(is.null(dimnames(Vnew)[[2]])) {
+      } else if(is.null(avail <- colnames(Vnew))) {
         ## Potential is vector-valued (Vnew is a matrix)
         ## with unnamed components.
         ## Assign the components, in order of their appearance,
@@ -521,9 +522,20 @@ predict.ppm <- local({
         ## Potential is vector-valued (Vnew is a matrix)
         ## with named components.
         ## Match variables by name
-        for(vn in Vnames)    
-          newdata[[vn]] <- Vnew[,vn]
-        ##
+        if(all(Vnames %in% avail)) {
+          for(vn in Vnames)
+            newdata[[ vn ]] <- Vnew[ , vn]
+        } else if(all(Vnames %in% (Pavail <- paste0(vnameprefix, avail)))) {
+          for(vn in Vnames)
+            newdata[[ vn ]] <- Vnew[ , match(vn, Pavail)]
+        } else
+          stop(paste(
+            "Internal error: unable to match names",
+            "of available interaction terms",
+            commasep(sQuote(avail)),
+            "to required interaction terms",
+            commasep(sQuote(Vnames))
+            ), call.=FALSE)
       }
       ## invoke predict.glm or compute prediction
       z <- GLMpredict(glmfit, newdata, coeffs, 

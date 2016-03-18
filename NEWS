@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.005
+        CHANGES IN spatstat VERSION 1.45-0.006
 
 OVERVIEW
 
@@ -37,7 +37,13 @@ BUG FIXES
     Fixed.
 
     o subfits
-    The coefficients of the submodels were incorrect
+    For Gibbs models with a multitype interaction (MultiStrauss, etc),
+    computation of the conditional intensity caused an error.
+    [Spotted by Sven Wagner.]
+    Fixed.
+
+    o subfits
+    The interaction coefficients of the submodels were incorrect
     for Gibbs models with a multitype interaction (MultiStrauss, etc).
     [Spotted by Sven Wagner.]
     Fixed.
