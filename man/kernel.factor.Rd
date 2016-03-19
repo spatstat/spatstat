@@ -39,14 +39,13 @@
 }
 \seealso{
   \code{\link[stats]{density.default}},
-  \code{\link{dkernel}}
+  \code{\link{dkernel}},
+  \code{\link{kernel.moment}}
 }
 \examples{
    kernel.factor("epa")
 }
 \author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  \email{adrian@maths.uwa.edu.au}
-  
   and Martin Hazelton
 }
 \keyword{methods}

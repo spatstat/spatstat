@@ -29,11 +29,13 @@
   \item{clicks}{
     A list of \R functions, of the same length as \code{boxes},
     specifying the operations to be performed when each button
-    is clicked. See Details.
+    is clicked. Entries can also be \code{NULL} indicating that no
+    action should occur. See Details.
   }
   \item{redraws}{
     Optional list of \R functions, of the same length as \code{boxes},
-    specifying how to redraw each button. See Details.
+    specifying how to redraw each button. Entries can also be
+    \code{NULL} indicating a simple default. See Details.
   }
   \item{exit}{
     An \R function specifying actions to be taken when the
@@ -96,8 +98,9 @@
     \code{B} and \code{boxes}.
     \item 
     The argument \code{clicks} must be a list of functions
-    specifying the action to be taken when each button is clicked.
-    The list entries should have names.
+    specifying the action to be taken when each button is clicked
+    (or \code{NULL} to indicate that no action should be taken).
+    The list entries should have names (but there are sensible defaults).
     Each function should be of the form \code{function(env, xy)} where
     \code{env} is an \code{environment} that may contain shared data,
     and \code{xy} gives the coordinates of the mouse click, in the format
@@ -116,7 +119,8 @@
     The function returns \code{TRUE} if the
     panel should continue running, and \code{FALSE} if the panel
     should terminate. 
-    If \code{redraws} is not given, the default action is to draw a pink
+    If \code{redraws} is not given (or if one of the entries in
+    \code{redraws} is \code{NULL}), the default action is to draw a pink
     rectangle showing the button position,
     draw the name of the button in the middle of this rectangle,
     and return \code{TRUE}. 
@@ -194,6 +198,11 @@
     assign("answer", ans + 1, envir=e)
     return(TRUE)
   }
+  # 'Clear' button
+  Cclear <- function(e, xy) {
+    assign("answer", 0, envir=e)
+    return(TRUE)
+  }
   # quit button
   Cdone <- function(e, xy) { return(FALSE) }
 
@@ -217,6 +226,10 @@
                    redraws = list(NULL, Rvalue, NULL, NULL),
                    exit=myexit, env=myenv)
   P
+  # ( type run.simplepanel(P) to run the panel interactively )
+
+  # add another button to right
+  Pplus <- grow.simplepanel(P, "right", new.clicks=list(clear=Cclear))
 }
 \keyword{iplot}
 \keyword{utilities}

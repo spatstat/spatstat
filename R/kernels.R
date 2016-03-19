@@ -3,7 +3,7 @@
 #
 #  rXXX, dXXX, pXXX and qXXX for kernels
 #
-#  $Revision: 1.12 $  $Date: 2015/07/23 08:46:10 $
+#  $Revision: 1.15 $  $Date: 2016/03/18 10:17:47 $
 #
 
 match.kernel <- function(kernel) {
@@ -195,54 +195,73 @@ qkernel <- function(p, kernel="gaussian", mean=0, sd=1, lower.tail=TRUE) {
 }
 
 # integral of t^m k(t) dt from -Inf to r
+# was:    nukernel(r, m, kernel)
 
-nukernel <- function(r, m, kernel="gaussian") {
-  ker <- match.kernel(kernel)
-  if(ker != "gaussian") {
-    r <- pmin(r, 1)
-    r <- pmax(r, -1)
+kernel.moment <- local({
+
+  kernel.moment <- function(m, r, kernel="gaussian") {
+    ker <- match.kernel(kernel)
+    if(ker != "gaussian") {
+      r <- pmin(r, 1)
+      r <- pmax(r, -1)
+    }
+    stopifnot(length(m) == 1)
+    if(!(m %in% c(0,1,2)) || (ker %in% c("cosine", "optcosine"))) {
+      ## use generic integration
+      neginf <- if(ker == "gaussian") -10 else -1
+      result <- numeric(length(r))
+      for(i in seq_along(r))
+        result[i] <- integralvalue(kintegrand, lower=neginf, upper=r[i],
+                                   m=m, ker=ker)
+      return(result)
+    }
+    switch(ker,
+           gaussian={
+             if(m == 0) return(pnorm(r)) else
+             if(m == 1) return(-dnorm(r)) else
+             return(pnorm(r) - r * dnorm(r))
+           },
+           rectangular = {
+             if(m == 0) return((r + 1)/2) else
+             if(m == 1) return((r^2 - 1)/4) else
+             return((r^3 + 1)/6)
+           },
+           triangular={
+             m1 <- m+1
+             m2 <- m+2
+             const <- ((-1)^m1)/m1 + ((-1)^m2)/m2
+             answer <- (r^m1)/m1 + ifelse(r < 0, 1, -1) * (r^m2)/m2 - const
+             return(answer)
+           },
+           epanechnikov = {
+             if(m == 0)
+               return((2 + 3*r - r^3)/4)
+             else if(m == 1)
+               return((-3 + 6*r^2 - 3*r^4)/16)
+             else
+               return(( 2 + 5*r^3  - 3* r^5)/20)
+           },
+           biweight = {
+             if(m == 0)
+               return((3*r^5 - 10*r^3 + 15*r + 8)/16)
+             else if(m == 1)
+               return((5*r^6 - 15*r^4 + 15*r^2 -5)/32)
+             else 
+               return((15*r^7 - 42*r^5 + 35*r^3 + 8)/112)
+           },
+           # never reached!
+           cosine={stop("Sorry, not yet implemented for cosine kernel")},
+           optcosine={stop("Sorry, not yet implemented for optcosine kernel")}
+           )
   }
-  stopifnot(length(m) == 1)
-  if(!(m %in% c(0,1,2)))
-    stop("Only implemented for m = 0, 1 or 2")
-  switch(ker,
-         gaussian={
-           if(m == 0) return(pnorm(r)) else
-           if(m == 1) return(-dnorm(r)) else
-           return(pnorm(r) - r * dnorm(r))
-         },
-         rectangular = {
-           if(m == 0) return((r + 1)/2) else
-           if(m == 1) return((r^2 - 1)/4) else
-           return((r^3 + 1)/6)
-         },
-         triangular={
-           m1 <- m+1
-           m2 <- m+2
-           const <- ((-1)^m1)/m1 + ((-1)^m2)/m2
-           answer <- (r^m1)/m1 + ifelse(r < 0, 1, -1) * (r^m2)/m2 - const
-           return(answer)
-         },
-         epanechnikov = {
-           if(m == 0)
-             return((2 + 3*r - r^3)/4)
-           else if(m == 1)
-             return((-3 + 6*r^2 - 3*r^4)/16)
-           else
-             return(( 2 + 5*r^3  - 3* r^5)/20)
-         },
-         biweight = {
-           if(m == 0)
-             return((3*r^5 - 10*r^3 + 15*r + 8)/16)
-           else if(m == 1)
-             return((5*r^6 - 15*r^4 + 15*r^2 -5)/32)
-           else 
-             return((15*r^7 - 42*r^5 + 35*r^3 + 8)/112)
-         },
-         cosine={stop("Sorry, not yet implemented for cosine kernel")},
-         optcosine={stop("Sorry, not yet implemented for optcosine kernel")}
-         )
-}
+
+  integralvalue <- function(...) integrate(...)$value
+  
+  kintegrand <- function(x, m, ker) { x^m * dkernel(x, ker) }
+
+  kernel.moment
+})
+
   
   
          

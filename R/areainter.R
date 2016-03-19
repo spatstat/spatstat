@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.40 $	$Date: 2016/02/24 10:45:53 $
+#    $Revision: 1.41 $	$Date: 2016/03/19 04:50:33 $
 #
 #    The area interaction
 #
@@ -126,13 +126,13 @@ AreaInter <- local({
            else
              return(2 * r)
          },
-         delta2 = function(X, inte, correction, ...) {
+         delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
            # Sufficient statistic for second order conditional intensity
            # Area-interaction model 
            if(!(correction %in% c("border", "none")))
              return(NULL)
            r <- inte$par$r
-           areadelta2(X, r)
+           areadelta2(X, r, sparseOK=sparseOK)
          },
        version=NULL # to be added
   )
@@ -150,21 +150,25 @@ AreaInter <- local({
 
 areadelta2 <- local({
 
-  areadelta2 <- function(X, r, ...) {
+  areadelta2 <- function(X, r, ..., sparseOK=FALSE) {
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
-    if(is.ppp(X)) return(areadelppp(X, r, ...)) else
-    if(inherits(X, "quad")) return(areadelquad(X, r)) else
+    if(is.ppp(X)) return(areadelppp(X, r, ..., sparseOK=sparseOK)) else
+    if(inherits(X, "quad")) return(areadelquad(X, r, sparseOK=sparseOK)) else
     stop("internal error: X should be a ppp or quad object")
   }
 
-  areadelppp <- function(X, r, algorithm=c("C", "nncross", "nnmap")) {
+  areadelppp <- function(X, r, algorithm=c("C", "nncross", "nnmap"),
+                         sparseOK=FALSE) {
     # Evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
     # i.e.  h(X[i]|X) - h(X[i]|X[-j])
     #       where h is first order cif statistic
     algorithm <- match.arg(algorithm)
     nX <- npoints(X)
-    result <- matrix(0, nX, nX)
+    sparseOK <- sparseOK && spatstat.options('developer')
+    result <- if(!sparseOK) matrix(0, nX, nX) else
+              sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
+                           dims=c(nX,nX))
     if(nX < 2)
       return(result)
     if(algorithm == "C") {
@@ -203,16 +207,17 @@ areadelta2 <- local({
       result <- result * (eps^2)/(pi * r^2)
       return(result)
     }
-    # remove any non-interacting points
+
+    # non-C algorithms
+    # confine attention to points which are interacting
     relevant <- (nndist(X) <= 2 * r)
     if(!all(relevant)) {
-      answer <- matrix(0, nX, nX)
       if(any(relevant)) {
         # call self on subset
-        Dok <- areadelppp(X[relevant], r, algorithm)
-        answer[relevant,relevant] <- Dok
+        Dok <- areadelppp(X[relevant], r, algorithm, sparseOK=sparseOK)
+        result[relevant,relevant] <- Dok
       }
-      return(answer)
+      return(result)
     }
 
     # .............. algorithm using interpreted code ...........
@@ -296,7 +301,7 @@ areadelta2 <- local({
     return(result)
   }
 
-  areadelquad <- function(Q, r) {
+  areadelquad <- function(Q, r, sparseOK=FALSE) {
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
     # Evaluate \Delta_{u_j} \Delta_{u_i} S(x) for quadrature points 
@@ -315,7 +320,9 @@ areadelta2 <- local({
     zJ <- Z[J]
     neigh <- split(J[zJ], factor(I[zJ], levels=1:nU))
     # 
-    result <- matrix(0, nU, nU)
+    result <- if(!sparseOK) matrix(0, nU, nU) else
+              sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
+                           dims=c(nU,nU))
     eps <- r/spatstat.options("ngrid.disc")
     #
     for(k in seq_along(I)) {

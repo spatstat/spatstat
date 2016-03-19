@@ -426,7 +426,6 @@
 \alias{nobjects.ppx}
 \alias{nobjects.psp}
 \alias{n.quad}
-\alias{nukernel}
 \alias{numalign}
 \alias{numeric.columns}
 \alias{nzpaste}
@@ -832,7 +831,7 @@ apply23sum(x)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
 Area.xypolygon(polly)
-areadelta2(X, r, \dots)
+areadelta2(X, r, \dots, sparseOK)
 areaGain.diri(u, X, r, \dots, W)
 areaGain.grid(u, X, r, \dots, W, ngrid)
 areaLoss.diri(X, r, \dots, W, subset)
@@ -1301,7 +1300,6 @@ nobjects(x)
 \method{nobjects}{ppx}(x)
 \method{nobjects}{psp}(x)
 n.quad(Q)
-nukernel(r, m, kernel)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)
 nzpaste(\dots, sep, collapse)

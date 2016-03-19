@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.006
+        CHANGES IN spatstat VERSION 1.45-0.007
 
 OVERVIEW
 
@@ -14,7 +14,10 @@ OVERVIEW
 NEW FUNCTIONS
 
     o ppmInfluence
-    Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently
+    Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently.
+
+    o kernel.moment
+    Moment or incomplete moment of smoothing kernel.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -22,11 +25,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
+    o plot.im
+    Now handles complex-valued images.
+
     o update.interact
-    This existing function is now documented.
+    Update the parameters of an interpoint interaction.
+    [This existing function is now documented.]
 
     o parameters.interact, parameters.fii
-    These existing functions are now documented.
+    Extract parameters from interpoint interactions.
+    [These existing functions are now documented.]
 
 BUG FIXES
 

@@ -89,17 +89,20 @@
 }
 \examples{
   ## Convert gradient values to angle of inclination:
-  inc <- atan(bei.extra$grad) * 180/pi
+  V <- atan(bei.extra$grad) * 180/pi
   ## Make logical image which is TRUE when heat equals 'Moderate': 
-  A <- gorillas.extra$heat == "Moderate"
+  A <- (gorillas.extra$heat == "Moderate")
+  ## Summary:
+  any(A)
+  ## Complex:
+  Z <- exp(1 + V * 1i)
+  Z
+  Re(Z)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{methods}

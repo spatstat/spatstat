@@ -279,6 +279,12 @@
   and a ribbon will not be plotted.
 
 }
+\section{Complex-valued images}{
+  If the pixel values in \code{x} are complex numbers,
+  they will be converted into four images containing the real and
+  imaginary parts and the modulus and argument, 
+  and plotted side-by-side using \code{\link{plot.imlist}}.
+}
 \section{Monochrome colours}{
   If \code{spatstat.options("monochrome")} has been set to \code{TRUE},
   then \bold{the image will be plotted in greyscale}.
@@ -343,12 +349,14 @@
    # log scale
    V <- eval.im(exp(exp(Z+2))/1e4)
    plot(V, log=TRUE, main="Log scale")
+   # it's complex
+   Y <- exp(Z + V * 1i)
+   plot(Y)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
  

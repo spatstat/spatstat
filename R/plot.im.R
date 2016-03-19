@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.108 $   $Date: 2016/02/16 01:39:12 $
+#  $Revision: 1.109 $   $Date: 2016/03/18 08:17:09 $
 #
 #  Plotting code for pixel images
 #
@@ -91,6 +91,14 @@ plot.im <- local({
                      do.plot=TRUE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
+    if(x$type == "complex") {
+      cl <- match.call()
+      cl$x <- solist(Re=Re(x), Im=Im(x), Mod=Mod(x), Arg=Arg(x))
+      cl[[1]] <- as.name('plot')
+      cl$main <- main
+      out <- eval(cl, parent.frame())
+      return(invisible(out))
+    }
     ribside <- match.arg(ribside)
     col.given <- !is.null(col)
     dotargs <- list(...)
