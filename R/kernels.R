@@ -169,10 +169,8 @@ qkernel <- function(p, kernel="gaussian", mean=0, sd=1, lower.tail=TRUE) {
                ok <- abs(Im(sol)) < 1e-6
                realpart <- Re(sol)
                ok <- ok & (abs(realpart) <= 1)
-               if(sum(ok) != 1) {
-                 browser()
+               if(sum(ok) != 1) 
                  stop(paste("Internal error:", sum(ok), "roots of polynomial"))
-               }
                yy[i] <- realpart[ok]
              }
              yy

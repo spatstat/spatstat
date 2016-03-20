@@ -360,6 +360,7 @@ as.layered <- function(X) {
 }
 
 as.layered.default <- function(X) {
+  if(is.list(X) && all(sapply(X, is.sob))) layered(LayerList=X) else 
   layered(X)
 }
 

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.007
+        CHANGES IN spatstat VERSION 1.45-0.008
 
 OVERVIEW
 
@@ -35,6 +35,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o parameters.interact, parameters.fii
     Extract parameters from interpoint interactions.
     [These existing functions are now documented.]
+
+    o as.layered
+    Default method now handles a (vanilla) list of spatial objects.
 
 BUG FIXES
 
