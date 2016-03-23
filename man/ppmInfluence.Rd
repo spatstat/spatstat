@@ -68,11 +68,11 @@
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })
-   fit <- ppm(X ~x+y)
-   a <- ppmInfluence(fit)
-   a$influence
-   a$leverage
-   a$dfbetas
+   fit <- ppm(X ~ x+y)
+   fI <- ppmInfluence(fit)
+   fI$influence
+   fI$leverage
+   fI$dfbetas
 }
 \keyword{spatial}
 \keyword{models}

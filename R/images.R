@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.135 $     $Date: 2016/02/16 01:39:12 $
+#      $Revision: 1.136 $     $Date: 2016/03/23 09:23:28 $
 #
 #      The class "im" of raster images
 #
@@ -805,6 +805,48 @@ min.im <- function(x, ...) {
   return(min(xvalues, ...))
 }
 
+where.max <- function(x, first=TRUE) {
+  stopifnot(is.im(x))
+  if(first) { 
+    ## find the first maximum
+    v <- x$v
+    locn <- which.max(as.vector(v))  # ignores NA, NaN
+    locrow <- as.vector(row(v))[locn]
+    loccol <- as.vector(col(v))[locn]
+  } else {
+    ## find all maxima
+    xmax <- max(x)
+    M <- solutionset(x == xmax)
+    loc <- which(M$m, arr.ind=TRUE)
+    locrow <- loc[,1]
+    loccol <- loc[,2]
+  }
+  xx <- x$xcol[loccol]
+  yy <- x$yrow[locrow]
+  return(ppp(x=xx, y=yy, window=Window(x)))
+}
+
+where.min <- function(x, first=TRUE) {
+  stopifnot(is.im(x))
+  if(first) { 
+    ## find the first minimum
+    v <- x$v
+    locn <- which.min(as.vector(v))  # ignores NA, NaN
+    locrow <- as.vector(row(v))[locn]
+    loccol <- as.vector(col(v))[locn]
+  } else {
+    ## find all minima
+    xmin <- min(x)
+    M <- solutionset(x == xmin)
+    loc <- which(M$m, arr.ind=TRUE)
+    locrow <- loc[,1]
+    loccol <- loc[,2]
+  }
+  xx <- x$xcol[loccol]
+  yy <- x$yrow[locrow]
+  return(ppp(x=xx, y=yy, window=Window(x)))
+}
+
 ## the following ensures that 'sd' works
 
 as.double.im <- function(x, ...) { as.double(x[], ...) }
@@ -1134,3 +1176,4 @@ as.function.im <- function(x, ...) {
   g <- funxy(f, Window(x))
   return(g)
 }
+

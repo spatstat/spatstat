@@ -144,20 +144,20 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
 }
 \examples{
     # one irregular parameter
-    s <- data.frame(r=seq(0.05,0.15, by=0.01))
+    rr <- data.frame(r=seq(0.05,0.15, by=0.01))
     \testonly{
-      s <- data.frame(r=c(0.05,0.1,0.15))
+      rr <- data.frame(r=c(0.05,0.1,0.15))
     }
-    ps <- profilepl(s, Strauss, cells)
+    ps <- profilepl(rr, Strauss, cells)
     ps
     if(interactive()) plot(ps)
 
     # two irregular parameters
-    s <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
+    rs <- expand.grid(r=seq(0.05,0.15, by=0.01),sat=1:3)
     \testonly{
-      s <- expand.grid(r=c(0.07,0.12),sat=1:2)
+      rs <- expand.grid(r=c(0.07,0.12),sat=1:2)
     }
-    pg <- profilepl(s, Geyer, cells)
+    pg <- profilepl(rs, Geyer, cells)
     pg
     if(interactive()) {
       plot(pg)
@@ -166,9 +166,9 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
 
     # multitype pattern with a common interaction radius
     \dontrun{
-     s <- data.frame(R=seq(0.03,0.05,by=0.01))
+     RR <- data.frame(R=seq(0.03,0.05,by=0.01))
      MS <- function(R) { MultiStrauss(radii=diag(c(R,R))) }
-     pm <- profilepl(s, MS, amacrine, ~marks)
+     pm <- profilepl(RR, MS, amacrine ~marks)
     }
     ## more information 
     summary(pg)

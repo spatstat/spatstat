@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.008
+        CHANGES IN spatstat VERSION 1.45-0.009
 
 OVERVIEW
 
@@ -9,15 +9,21 @@ OVERVIEW
 
     o More bug fixes for replicated patterns.
 
+    o More support for pixel images.
+
     o Version nickname: 'Agile and Disruptive'
 
 NEW FUNCTIONS
 
+    o kernel.moment
+    Moment or incomplete moment of smoothing kernel.
+
     o ppmInfluence
     Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently.
 
-    o kernel.moment
-    Moment or incomplete moment of smoothing kernel.
+    o where.max, where.min
+    Find the spatial location(s) where a pixel image achieves its
+    maximum or minimum value.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
