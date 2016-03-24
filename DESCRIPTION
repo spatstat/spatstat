@@ -1,5 +1,5 @@
 Package: spatstat
-Version: 1.45-0.011
+Version: 1.45-0.012
 Nickname: Now With Added Minkowski
 Date: 2016-03-24
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
