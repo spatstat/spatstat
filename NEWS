@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.010
+        CHANGES IN spatstat VERSION 1.45-0.011
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
     o Leverage and influence code handles bigger datasets.
 
-    o Minkowski sum.
+    o Minkowski sum, morphological dilation and erosion with any shape.
 
     o More bug fixes for replicated patterns.
 
@@ -16,6 +16,9 @@ OVERVIEW
     o Version nickname: 'Now With Added Minkowski'
 
 NEW FUNCTIONS
+
+    o dilationAny, erosionAny, %-%
+    Morphological dilation and erosion by any shape.
 
     o kernel.moment
     Moment or incomplete moment of smoothing kernel.

@@ -1,9 +1,9 @@
 #'
 #'       minkowski.R
 #' 
-#'  Minkowski Sum
+#'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.2 $ $Date: 2016/03/24 03:08:09 $
+#'  $Revision: 1.4 $ $Date: 2016/03/24 04:26:04 $
 
 
 "%+%" <- MinkowskiSum <- local({
@@ -43,3 +43,14 @@
   MinkowskiSum
 })
 
+dilationAny <- function(A, B) { MinkowskiSum(A, reflect(B)) }
+
+"%-%" <- erosionAny <- function(A, B) {
+  D <- Frame(A)
+  Ac <- complement.owin(A, grow.rectangle(D, 0.1*shortside(D)))
+  AcB <- MinkowskiSum(Ac, reflect(B))
+  if(is.subset.owin(D, AcB))
+    return(emptywindow(D))
+  C <- complement.owin(AcB[D], D)
+  return(C)
+}

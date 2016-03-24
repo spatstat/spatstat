@@ -3,10 +3,10 @@
 \alias{erosion.owin}
 \alias{erosion.ppp}
 \alias{erosion.psp}
-\title{Morphological Erosion}
+\title{Morphological Erosion by a Disc}
 \description{
   Perform morphological erosion of a window, a line segment pattern
-  or a point pattern.
+  or a point pattern by a disc.
 }
 \usage{
  erosion(w, r, \dots)
@@ -73,6 +73,8 @@
 }
 \seealso{
   \code{\link{dilation}} for the opposite operation.
+
+  \code{\link{erosionAny}} for morphological erosion using any shape.
   
   \code{\link{owin}},
   \code{\link{as.owin}},
@@ -82,11 +84,10 @@
   plot(letterR, main="erosion(letterR, 0.2)")
   plot(erosion(letterR, 0.2), add=TRUE, col="red")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{math}

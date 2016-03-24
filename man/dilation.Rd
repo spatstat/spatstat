@@ -62,6 +62,8 @@
 \seealso{
   \code{\link{erosion}} for the opposite operation.
   
+  \code{\link{dilationAny}} for morphological dilation using any shape.
+  
   \code{\link{owin}},
   \code{\link{as.owin}}
 }
@@ -73,11 +75,10 @@
   plot(dilation(X, 0.1))
   plot(X, add=TRUE, col="red")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{math}

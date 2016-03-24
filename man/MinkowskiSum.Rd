@@ -2,6 +2,7 @@
 \alias{MinkowskiSum}
 \alias{\%+\%}  %DoNotExport 
 %NAMESPACE export("%+%")
+\alias{dilationAny}
 \title{Minkowski Sum of Windows}
 \description{
   Compute the Minkowski sum of two spatial windows.
@@ -10,6 +11,8 @@
 MinkowskiSum(A, B)
 
 A \%+\% B
+
+dilationAny(A, B)
 }
 \arguments{
   \item{A,B}{
@@ -23,7 +26,9 @@ A \%+\% B
   The operator \code{A \%+\% B} and function \code{MinkowskiSum(A,B)}
   are synonymous: they both compute the
   Minkowski sum of the windows \code{A} and \code{B}.
-
+  The function \code{dilationAny} computes the Minkowski dilation
+  \code{A \%+\% reflect(B)}.
+  
   The Minkowski sum 
   of two spatial regions \eqn{A} and \eqn{B}
   is another region, formed by taking all possible pairs of points,
@@ -55,12 +60,20 @@ A \%+\% B
     See \code{\link{dilation}}.
   }
 
-  The algorithm currently computes the Minkowski sum as a polygonal
+  The Minkowski dilation is the closely-related region
+  \eqn{A \oplus (-B)}{A \%+\% (-B)}
+  where \eqn{(-B)} is the reflection of \eqn{B} through the origin.
+  The Minkowski dilation is the set of all vectors \eqn{z}
+  such that, if \eqn{B} is shifted by \eqn{z}, the resulting set
+  \eqn{B+z} has nonempty intersection with \eqn{A}.
+  
+  The algorithm currently computes the result as a polygonal
   window using the \pkg{polyclip} library. 
   It will be quite slow if applied to binary mask windows.
 }
 \seealso{
-  \code{\link{dilation}}
+  \code{\link{dilation}},
+  \code{\link{erosionAny}}
 }
 \examples{
   opa <- par(mfrow=c(1,2))
