@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.009
+        CHANGES IN spatstat VERSION 1.45-0.010
 
 OVERVIEW
 
@@ -7,16 +7,21 @@ OVERVIEW
 
     o Leverage and influence code handles bigger datasets.
 
+    o Minkowski sum.
+
     o More bug fixes for replicated patterns.
 
     o More support for pixel images.
 
-    o Version nickname: 'Agile and Disruptive'
+    o Version nickname: 'Now With Added Minkowski'
 
 NEW FUNCTIONS
 
     o kernel.moment
     Moment or incomplete moment of smoothing kernel.
+
+    o MinkowskiSum, %+%
+    Minkowski sum of two windows: A %+% B, or MinkowskiSum(A,B)
 
     o ppmInfluence
     Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently.
