@@ -373,7 +373,7 @@ prolongseq <- function(x, newrange, step=NULL) {
 }
 
 ## fill gaps in a sequence
-fillseq <- function(x) {
+fillseq <- function(x, step=NULL) {
   xname <- short.deparse(substitute(x))
   n <- length(x)
   if(n <= 1) return(x)
@@ -382,8 +382,10 @@ fillseq <- function(x) {
   if(any(dx < 0)) stop(paste(xname, "should be an increasing sequence"),
                        call.=FALSE)
   ## guess step length
-  eps <- diff(rx)/1e7
-  step <- min(dx[dx > eps])
+  if(is.null(step)) {
+    eps <- diff(rx)/1e7
+    step <- min(dx[dx > eps])
+  }
   ## make new sequence
   y <- seq(rx[1], rx[2], by=step)
   ny <- length(y)
@@ -1662,3 +1664,17 @@ dont.complain.about <- function(...) {
   #' are referenced in an expression that will be evaluated elsewhere. 
   return(invisible(NULL))
 }
+
+matchNameOrPosition <- function(expected, avail) {
+  if(length(avail) < length(expected))
+    stop("Not enough arguments to match", call.=FALSE)
+  j <- match(expected, avail)
+  if(!anyNA(j)) return(j)
+  everything <- seq_along(avail)
+  for(k in seq_along(expected)) {
+    if(is.na(j[k]))
+      j[k] <- min(setdiff(everything, j[-k]))
+  }
+  return(j)
+}
+

@@ -10,6 +10,7 @@
 \alias{as.im.distfun}
 \alias{as.im.nnfun}
 \alias{as.im.Smoothfun}
+\alias{as.im.data.frame}
 \alias{as.im.default}
 \title{Convert to Pixel Image}
 \description{
@@ -50,6 +51,8 @@
 
   \method{as.im}{leverage.ppm}(X, \dots)
 
+  \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
+
   \method{as.im}{default}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         na.replace=NULL)
@@ -80,6 +83,23 @@
     \code{X}. If \code{strict=TRUE}, only named arguments
     are passed, and only if they match the names of formal arguments of
     \code{X}. 
+  }
+  \item{step}{
+    Optional. A single number, or numeric vector of length 2,
+    giving the grid step lengths
+    in the \eqn{x} and \eqn{y} directions.
+  }
+  \item{fatal}{
+    Logical value indicating what to do if the resulting image
+    would be too large for available memory. If \code{fatal=TRUE} (the
+    default), an error occurs. If \code{fatal=FALSE}, a warning is
+    issued and \code{NULL} is returned.
+  }
+  \item{drop}{
+    Logical value indicating what to do when \code{X}
+    is a data frame with 3 columns. If \code{drop=TRUE} (the default),
+    the result is a pixel image. If \code{drop=FALSE}, the result is
+    a list containing one image.
   }
 }
 \details{
@@ -142,6 +162,14 @@
     \item
     a point pattern (object of class \code{"ppp"}).
     See the separate documentation for \code{\link{as.im.ppp}}.
+    \item
+    A data frame with at least three columns.
+    Columns named \code{x}, \code{y} and \code{z}, if present,
+    will be assumed to contain the spatial coordinates and the pixel
+    values, respectively. Otherwise the \code{x} and \code{y}
+    coordinates will be taken from the first two columns of the
+    data frame, and any remaining columns will be interpreted as
+    pixel values.
   }
 
   The spatial domain (enclosing rectangle) of the pixel image
@@ -177,9 +205,19 @@
   of \pkg{spatstat}, the command \code{X <- as.im(X)} will
   repair the internal format of \code{X} so that it conforms to the
   current version of \pkg{spatstat}.
+
+  If \code{X} is a data frame with \code{m} columns,
+  then \code{m-2} columns of data are interpreted as pixel values,
+  yielding \code{m-2} pixel images. The result of
+  \code{as.im.data.frame} is a list of pixel
+  images, belonging to the class \code{"imlist"}.
+  If \code{m = 3} and \code{drop=TRUE} (the default), then the
+  result is a pixel image rather than a list containing this image.
 }
 \value{
-  An image object of class \code{"im"}.
+  A pixel image (object of class \code{"im"}),
+  or a list of pixel images, 
+  or \code{NULL} if the conversion failed.
 }
 \seealso{
   Separate documentation for \code{\link{as.im.ppp}}
@@ -214,12 +252,18 @@
   Di <- dirichlet(runifpoint(10))
   plot(as.im(Di))
   plot(Di, add=TRUE)
+
+  # as.im.data.frame is the reverse of as.data.frame.im
+  grad <- bei.extra$grad
+  slopedata <- as.data.frame(grad)
+  slope <- as.im(slopedata)
+  unitname(slope) <- c("metre","metres")
+  all.equal(slope, grad) # TRUE
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

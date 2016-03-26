@@ -347,6 +347,7 @@
 \alias{logLik.vblogit}
 \alias{lty2char}
 \alias{maskLaslett}
+\alias{matchNameOrPosition}
 \alias{padtowidth}
 \alias{parbreak}
 \alias{passthrough}
@@ -1043,7 +1044,7 @@ f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
 fastFindInterval(x, b, labels, reltol)
 fill.coefs(coefs, required)
-fillseq(x)
+fillseq(x, step)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)
 findcbind(root, depth, maxdepth)
@@ -1206,6 +1207,7 @@ logi.engine(Q, trend, interaction, \dots,
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
+matchNameOrPosition(expected, avail)
 padtowidth(a, b, justify)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)

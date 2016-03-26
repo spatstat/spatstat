@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.172 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 4.173 $	$Date: 2016/03/26 08:43:45 $
 #
 #
 #	A window may be either
@@ -385,9 +385,16 @@ as.owin.tess <- function(W, ..., fatal=TRUE) {
   return(W$window)
 }
 
-as.owin.data.frame <- function(W, ..., fatal=TRUE) {
+as.owin.data.frame <- function(W, ..., step, fatal=TRUE) {
   if(!verifyclass(W, "data.frame", fatal=fatal))
     return(NULL)
+  if(missing(step)) {
+    xstep <- ystep <- NULL
+  } else {
+    step <- ensure2vector(step)
+    xstep <- step[1]
+    ystep <- step[2]
+  }
   if(!(ncol(W) %in% c(2,3))) {
     whinge <- "need exactly 2 or 3 columns of data"
     if(fatal) stop(whinge)
@@ -398,30 +405,24 @@ as.owin.data.frame <- function(W, ..., fatal=TRUE) {
     # assume data is a list of TRUE pixels
     W <- cbind(W, TRUE)
   } 
-  mch <- match(c("x", "y"), names(W))
-  if(!anyNA(mch)) {
-    ix <- mch[1]
-    iy <- mch[2]
-    iz <- (1:3)[-mch]
-  } else {
-    ix <- 1
-    iy <- 2
-    iz <- 3
-  }
+  mch <- matchNameOrPosition(c("x", "y", "z"), names(W))
+  ix <- mch[1]
+  iy <- mch[2]
+  iz <- mch[3]
   df <- data.frame(x=W[,ix], y=W[,iy], z=as.logical(W[,iz]))
   with(df, {
-    xx <- with(df, sort(unique(x)))
-    yy <- with(df, sort(unique(y)))
-    jj <- with(df, match(x, xx))
-    ii <- with(df, match(y, yy))
+    xx <- sort(unique(x))
+    yy <- sort(unique(y))
+    jj <- match(x, xx)
+    ii <- match(y, yy)
     ## make logical matrix (for incomplete x, y sequence)
     ok <- checkbigmatrix(length(xx), length(yy), fatal=fatal)
     if(!ok) return(NULL)
     mm <- matrix(FALSE, length(yy), length(xx))
     mm[cbind(ii,jj)] <- z
     ## ensure xx and yy are complete equally-spaced sequences
-    fx <- fillseq(xx)
-    fy <- fillseq(yy)
+    fx <- fillseq(xx, step=xstep)
+    fy <- fillseq(yy, step=ystep)
     xcol <- fx[[1]]
     yrow <- fy[[1]]
     ## trap very large matrices

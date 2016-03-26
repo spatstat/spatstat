@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.012
+        CHANGES IN spatstat VERSION 1.45-0.013
 
 OVERVIEW
 
@@ -16,6 +16,12 @@ OVERVIEW
     o Version nickname: 'Now With Added Minkowski'
 
 NEW FUNCTIONS
+
+    o as.im.data.frame
+    Build a pixel image from a data frame of coordinates and pixel values.
+
+    o covering
+    Cover a window using discs of a given radius.
 
     o dilationAny, erosionAny, %-%
     Morphological dilation and erosion by any shape.
@@ -52,6 +58,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.layered
     Default method now handles a (vanilla) list of spatial objects.
+
+    o as.owin.data.frame
+    New argument 'step'
 
 BUG FIXES
 

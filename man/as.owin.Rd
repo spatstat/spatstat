@@ -62,7 +62,7 @@ in any of several formats, into an object of class \code{"owin"}.
 
  \method{as.owin}{layered}(W, \dots, fatal=TRUE)
 
- \method{as.owin}{data.frame}(W, \dots, fatal=TRUE)
+ \method{as.owin}{data.frame}(W, \dots, step, fatal=TRUE)
 
  \method{as.owin}{distfun}(W, \dots, fatal=TRUE)
 
@@ -89,6 +89,11 @@ in any of several formats, into an object of class \code{"owin"}.
   }
   \item{\dots}{Ignored.}
   \item{from}{Character string. See Details.}
+  \item{step}{
+    Optional. A single number, or numeric vector of length 2,
+    giving the grid step lengths
+    in the \eqn{x} and \eqn{y} directions.
+  }
 }
 \value{
   An object of class \code{"owin"} (see \code{\link{owin.object}})
@@ -198,6 +203,9 @@ in any of several formats, into an object of class \code{"owin"}.
   be generated (if \code{fatal=TRUE}) or a value of \code{NULL}
   will be returned (if \code{fatal=FALSE}).
 
+  When \code{W} is a data frame, the argument \code{step}
+  can be used to specify the pixel grid spacing; otherwise, the spacing
+  will be guessed from the data.
 }
 \seealso{
   \code{\link{owin.object}},

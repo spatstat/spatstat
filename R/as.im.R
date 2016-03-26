@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.44 $   $Date: 2015/09/11 11:50:58 $
+#    $Revision: 1.45 $   $Date: 2016/03/26 09:48:23 $
 #
 #    as.im()
 #
@@ -214,6 +214,65 @@ as.im.default <- function(X, W=NULL, ...,
 as.im.ppp <- function(X, ...) {
   pixellate(X, ..., weights=NULL, zeropad=FALSE)
 }
+
+as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
+  if(missing(step)) {
+    xstep <- ystep <- NULL
+  } else {
+    step <- ensure2vector(step)
+    xstep <- step[1]
+    ystep <- step[2]
+  }
+  if(ncol(X) < 3) {
+    whinge <- "Argument 'X' must have at least 3 columns of data"
+    if(fatal) stop(whinge)
+    warning(whinge)
+    return(NULL)
+  }
+  ## extract (x,y) coordinates
+  mch <- matchNameOrPosition(c("x", "y", "z"), names(X))
+  x <- X[, mch[1]]
+  y <- X[, mch[2]]
+  z <- X[, -mch[1:2], drop=FALSE]
+  ## unique x,y coordinates
+  xx <- sort(unique(x))
+  yy <- sort(unique(y))
+  jj <- match(x, xx)
+  ii <- match(y, yy)
+  iijj <- cbind(ii, jj)
+  ## make matrix (for incomplete x, y sequence)
+  ok <- checkbigmatrix(length(xx), length(yy), fatal=fatal)
+  if(!ok) return(NULL)
+  mm <- matrix(NA, length(yy), length(xx))
+  ## ensure xx and yy are complete equally-spaced sequences
+  fx <- fillseq(xx, step=xstep)
+  fy <- fillseq(yy, step=ystep)
+  xcol <- fx[[1]]
+  yrow <- fy[[1]]
+  ## trap very large matrices
+  ok <- checkbigmatrix(length(xcol), length(yrow), fatal=fatal)
+  if(!ok) return(NULL)
+  ## mapping from xx to xcol, yy to yrow
+  jjj <- fx[[2]]
+  iii <- fy[[2]]
+  ## make matrix for full sequence
+  m <- matrix(NA, length(yrow), length(xcol))
+  ## run through columns of pixel values
+  nz <- ncol(z)
+  result <- vector(mode="list", length=nz)
+  names(result) <- colnames(z)
+  for(k in seq_len(nz)) {
+    zk <- z[,k]
+    mm[iijj] <- zk
+    m[iii,jjj] <- mm
+    lev <- levels(zk)
+    mo <- if(is.null(lev)) m else factor(as.vector(m), levels=lev)
+    result[[k]] <- im(mat=mo, xcol=xcol, yrow=yrow) 
+  }
+  if(nz == 1 && drop) result <- result[[1]]
+  return(result)
+}
+
 
 # convert to image from some other format, then do something
 
