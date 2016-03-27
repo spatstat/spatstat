@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.014
+        CHANGES IN spatstat VERSION 1.45-0.015
 
 OVERVIEW
 
@@ -9,11 +9,15 @@ OVERVIEW
 
     o Minkowski sum, morphological dilation and erosion with any shape.
 
+    o Recursive-partition point process models.
+
     o More bug fixes for replicated patterns.
 
     o More support for pixel images.
 
-    o Version nickname: 'Now With Added Minkowski'
+    o spatstat now Suggests the package 'rpart'
+
+    o Version nickname: 'Matryoshka'
 
 NEW FUNCTIONS
 
@@ -34,6 +38,9 @@ NEW FUNCTIONS
 
     o ppmInfluence
     Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently.
+
+    o rppm, plot.rppm, predict.rppm, prune.rppm
+    Recursive-partition point process models
 
     o where.max, where.min
     Find the spatial location(s) where a pixel image achieves its

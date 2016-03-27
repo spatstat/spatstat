@@ -203,6 +203,7 @@
 \alias{firstfactor}
 \alias{fii}
 \alias{fillNA}
+\alias{fitted.rppm}
 \alias{flat.deparse}
 \alias{flatfname}
 \alias{flipxypolygon}
@@ -539,6 +540,7 @@
 \alias{print.rmhmodel}
 \alias{print.rmhstart}
 \alias{print.rmhInfoList}
+\alias{print.rppm}
 \alias{print.splitppp}
 \alias{print.simplepanel}
 \alias{print.Smoothfun}       
@@ -1052,6 +1054,7 @@ findfirstfactor(x)
 firstfactor(x)
 fii(interaction, coefs, Vnames, IsOffset)
 fillNA(x, value)
+\method{fitted}{rppm}(object, \dots)
 flat.deparse(x)
 flatfname(x)
 flipxypolygon(p)
@@ -1443,6 +1446,7 @@ primesbelow(nmax)
 \method{print}{rmhmodel}(x, \dots)
 \method{print}{rmhstart}(x, \dots)
 \method{print}{rmhInfoList}(x, \dots)
+\method{print}{rppm}(x, \dots)
 \method{print}{simplepanel}(x, \dots)
 \method{print}{Smoothfun}(x, \dots)
 \method{print}{solist}(x, \dots)

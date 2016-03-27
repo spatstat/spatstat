@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.45-0.014
-Nickname: Now With Added Minkowski
+Version: 1.45-0.015
+Nickname: Matryoshka
 Date: 2016-03-27
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
@@ -179,7 +179,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	and
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.2.2), stats, graphics, grDevices, utils, methods, nlme
+Depends: R (>= 3.2.2), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.5-0), goftest
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot, RandomFields (>= 3.0.0)
 Description: Comprehensive open-source toolbox for analysing spatial data, mainly Spatial Point Patterns, including multi-type/marked points and spatial covariates, in any two-dimensional spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, and point patterns on a linear network. 

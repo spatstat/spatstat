@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.95 $	$Date: 2016/02/23 02:27:03 $
+#	$Revision: 1.98 $	$Date: 2016/03/27 07:17:21 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -53,9 +53,9 @@ predict.ppm <- local({
     out
   }
 
-  typeaccept <- c("trend", "cif", "lambda", "intensity", "count", "se", "SE")
-  typeuse    <- c("trend", "cif", "cif",    "intensity", "count", "se", "se")
   typepublic <- c("trend", "cif", "intensity", "count")
+  typeaccept <- c(typepublic, "lambda", "se", "SE", "covariates")
+  typeuse    <- c(typepublic, "cif",    "se", "se", "covariates")
   
   predict.ppm <- function(object, window=NULL, ngrid=NULL, locations=NULL,
                           covariates=NULL,
@@ -405,7 +405,11 @@ predict.ppm <- local({
       if(object$method=="logi")
         newdata$.logi.B <- rep(glmdata$.logi.B[1], nrow(newdata))
     }
-  
+
+    ## Undocumented secret exit
+    if(type == "covariates")
+      return(list(newdata=newdata, mask=if(want.image) masque else NULL))
+             
     ## ##########  COMPUTE PREDICTION ##############################
     ##
     ##   Compute the predicted value z[i] for each row of 'newdata'
