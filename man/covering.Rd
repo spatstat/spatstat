@@ -37,11 +37,12 @@
   no more than \code{r} units away from one of the points.
 }
 \examples{
-  X <- covering(letterR, 0.3)
-  Window(X) <- grow.rectangle(Frame(X), 0.3)
-  plot(discs(X, 0.3))
-  plot(letterR, add=TRUE)
-  plot(X, add=TRUE)
+  rr <- 0.5
+  X <- covering(letterR, rr)
+  plot(grow.rectangle(Frame(X), rr), type="n", main="")
+  plot(X, pch=16, add=TRUE, col="red")
+  plot(letterR, add=TRUE, lwd=3)
+  plot(X \%mark\% (2*rr), add=TRUE, markscale=1)
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.013
+        CHANGES IN spatstat VERSION 1.45-0.014
 
 OVERVIEW
 
@@ -61,6 +61,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.owin.data.frame
     New argument 'step'
+
+    o discs
+    Now accepts a single numeric value for 'radii'.
 
 BUG FIXES
 
