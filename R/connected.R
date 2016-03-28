@@ -15,20 +15,16 @@ connected <- function(X, ...) {
 }
 
 connected.im <- function(X, ..., background=NA, method="C") {
-  method <- pickoption("algorithm choice", method,
-                       c(C="C", interpreted="interpreted"))
-  if(!is.na(background))
-    X <- solutionset(X != background)
-  else
-    X <- as.mask(as.owin(X))
-  connected.owin(X, method=method)
+  W <- if(!is.na(background)) solutionset(X != background) else 
+       if(X$type == "logical") solutionset(X) else as.owin(X)
+  connected.owin(W, method=method, ...)
 }
 
 connected.owin <- function(X, ..., method="C") {
   method <- pickoption("algorithm choice", method,
                        c(C="C", interpreted="interpreted"))
   # convert X to binary mask
-  X <- as.mask(X)
+  X <- as.mask(X, ...)
   #     
   Y <- X$m
   nr <- X$dim[1]

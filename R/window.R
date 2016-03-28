@@ -1156,3 +1156,4 @@ owin2polypath <- function(w) {
 Window <- function(X, ...) { UseMethod("Window") }
 
 "Window<-" <- function(X, ..., value) { UseMethod("Window<-") }
+

@@ -834,7 +834,7 @@ applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
 Area.xypolygon(polly)
 areadelta2(X, r, \dots, sparseOK)
-areaGain.diri(u, X, r, \dots, W)
+areaGain.diri(u, X, r, \dots, W, verbose)
 areaGain.grid(u, X, r, \dots, W, ngrid)
 areaLoss.diri(X, r, \dots, W, subset)
 areaLoss.grid(X, r, \dots, W, subset,

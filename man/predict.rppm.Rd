@@ -70,7 +70,7 @@
   \code{\link{plot.rppm}}  
 }
 \examples{
-    fit <- rppm(unmark(gorillas) ~ vegetation + heat, data=gorillas.extra)
+    fit <- rppm(unmark(gorillas) ~ vegetation, data=gorillas.extra)
     plot(predict(fit))
     lambdaX <- fitted(fit)
     lambdaX[1:5]

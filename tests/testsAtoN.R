@@ -240,6 +240,22 @@ local({
 
   Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
 })
+#'
+#'  tests/discarea.R
+#'
+#'   $Revision: 1.1 $ $Date: 2016/03/28 09:16:03 $
+#'
+
+require(spatstat)
+local({
+  u <- c(0.5,0.5)
+  B <- owin(poly=list(x=c(0.3, 0.5, 0.7, 0.4), y=c(0.3, 0.3, 0.6, 0.8)))
+  areaGain(u, cells, 0.1, exact=TRUE)
+  areaGain(u, cells, 0.1, W=NULL)
+  areaGain(u, cells, 0.1, W=B)
+
+  areaLoss(cells[square(0.4)], 0.1, exact=TRUE)
+})
 #  tests/emptymarks.R
 #
 # test cases where there are no (rows or columns of) marks
@@ -648,6 +664,10 @@ local({
   E12 <- as.im(ycov, owin(), dimyx = c(1,2))
   G12 <- cut(E12, 2)
   H12 <- as.tess(G12)
+
+  ##
+  d <- distmap(cells, dimyx=32)
+  Z <- connected(d <= 0.06, method="interpreted")
 })
 
 

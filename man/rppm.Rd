@@ -51,6 +51,11 @@
   \code{\link{prune.rppm}}.
 }
 \examples{
+    # New Zealand trees data: trees planted along border
+    # Use covariates 'x', 'y'
+    nzfit <- rppm(nztrees ~ x + y)
+    nzfit
+    prune(nzfit, cp=0.035)
     # Murchison gold data: numeric and logical covariates
     mur <- solapply(murchison, rescale, s=1000, unitname="km")
     mur$dfault <- distfun(mur$faults)

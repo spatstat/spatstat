@@ -3,27 +3,37 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.7 $  $Date: 2016/03/27 10:18:07 $
+#'  $Revision: 1.8 $  $Date: 2016/03/28 05:05:44 $
 
 rppm <- function(..., rpargs=list()) {
-  fit <- ppm(..., forcefit=TRUE)
-  if(!is.poisson(fit))
+  ## do the equivalent of ppm(...)
+  cl <- match.call()
+  cl[[1]] <- as.name('ppm')
+  if("rpargs" %in% names(cl)) cl$rpargs <- NULL
+  cl$forcefit <- TRUE
+  pfit <- eval(cl, envir=parent.frame())
+  ## 
+  if(!is.poisson(pfit))
     warning("Interpoint interaction will be ignored", call.=FALSE)
-  df <- getglmdata(fit)
-  gf <- getglmfit(fit)
+  df <- getglmdata(pfit)
+  gf <- getglmfit(pfit)
+  sf <- getglmsubset(pfit)
   rp <- do.call(rpart,
-                resolve.defaults(list(formula=formula(gf), data=df),
+                resolve.defaults(list(formula=formula(gf),
+                                      data=df,
+                                      subset=sf,
+                                      weights=df$.mpl.W),
                                  rpargs,
                                  list(method="poisson")))
-  result <- list(fit=fit, rp=rp)
+  result <- list(pfit=pfit, rp=rp)
   class(result) <- c("rppm", class(result))
   return(result)
 }
 
 print.rppm <- function(x, ...) {
   splat("Point process model with recursive partitioning")
-  splat("Data:", sQuote(x$fit$Qname))
-  splat("Covariates:", commasep(sQuote(variablesinformula(formula(x$fit)))))
+  splat("Data:", sQuote(x$pfit$Qname))
+  splat("Covariates:", commasep(sQuote(variablesinformula(formula(x$pfit)))))
   splat("Regression tree:")
   print(x$rp)
   invisible(NULL)
@@ -57,7 +67,7 @@ prune.rppm <- function(tree, ...) {
 #' predict method
 
 predict.rppm <- function(object, ...) {
-  model <- object$fit
+  model <- object$pfit
   tree  <- object$rp
   #' assemble covariates for prediction, using rules of predict.ppm
   co <- predict(model, ..., type="covariates", check=FALSE, repair=FALSE)
@@ -86,6 +96,6 @@ predict.rppm <- function(object, ...) {
 }
     
 fitted.rppm <- function(object, ...) {
-  predict(object, locations=data.ppm(object$fit))
+  predict(object, locations=data.ppm(object$pfit))
 }
 

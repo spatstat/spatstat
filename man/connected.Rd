@@ -31,7 +31,8 @@ connected(X, \dots)
     or \code{"interpreted"}. See Details.
   }
   \item{\dots}{
-    Other arguments, not recognised by these methods.
+    Arguments passed to \code{\link{as.mask}} to determine the
+    pixel resolution.
   }
 }
 \details{
@@ -96,12 +97,13 @@ connected(X, \dots)
   the connected components include a large number of pixels).
 }
 \examples{
-  data(cells)
   d <- distmap(cells, dimyx=256)
-  X <- levelset(d, 0.06)
+  X <- levelset(d, 0.07)
   plot(X)
   Z <- connected(X)
   plot(Z)
+  # or equivalently
+  Z <- connected(d <= 0.07)
 
   # number of components
   nc <- length(levels(Z))
@@ -115,10 +117,7 @@ connected(X, \dots)
   Original \R code by Julian Burgos, University of Washington.
   Adapted for \pkg{spatstat} by
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+  and Rolf Turner \email{r.turner@auckland.ac.nz}.
 }
 \keyword{spatial}
 \keyword{math}

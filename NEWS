@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.016
+        CHANGES IN spatstat VERSION 1.45-0.017
 
 OVERVIEW
 
@@ -36,11 +36,19 @@ NEW FUNCTIONS
     o MinkowskiSum, %+%
     Minkowski sum of two windows: A %+% B, or MinkowskiSum(A,B)
 
+    o parameters.interact, parameters.fii
+    Extract parameters from interpoint interactions.
+    [These existing functions are now documented.]
+
     o ppmInfluence
     Calculate leverage.ppm, influence.ppm and dfbetas.ppm efficiently.
 
     o rppm, plot.rppm, predict.rppm, prune.rppm
     Recursive-partition point process models
+
+    o update.interact
+    Update the parameters of an interpoint interaction.
+    [This existing function is now documented.]
 
     o where.max, where.min
     Find the spatial location(s) where a pixel image achieves its
@@ -55,13 +63,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Now handles complex-valued images.
 
-    o update.interact
-    Update the parameters of an interpoint interaction.
-    [This existing function is now documented.]
+    o connected.im
+    Now handles a logical-valued image properly.
 
-    o parameters.interact, parameters.fii
-    Extract parameters from interpoint interactions.
-    [These existing functions are now documented.]
+    o connected.im, connected.owin
+    Arguments '...' now determine pixel resolution.
 
     o as.layered
     Default method now handles a (vanilla) list of spatial objects.

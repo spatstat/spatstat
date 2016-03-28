@@ -625,9 +625,8 @@ trim.mask <- function(M, R, tolerant=TRUE) {
     }
 
     ## Extract subset of image grid
-    within.range <- function(u, v) { (u >= v[1]) & (u <= v[2]) }
-    yrowok <- within.range(M$yrow, R$yrange)
-    xcolok <- within.range(M$xcol, R$xrange)
+    yrowok <- inside.range(M$yrow, R$yrange)
+    xcolok <- inside.range(M$xcol, R$xrange)
     if((ny <- sum(yrowok)) == 0 || (nx <- sum(xcolok)) == 0) 
       return(emptywindow(R))
     Z <- M
