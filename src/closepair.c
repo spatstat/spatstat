@@ -2,7 +2,7 @@
 
   closepair.c
 
-  $Revision: 1.32 $     $Date: 2015/02/21 02:39:35 $
+  $Revision: 1.33 $     $Date: 2016/03/28 03:46:26 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
@@ -330,7 +330,7 @@ void Fclosepairs(nxy, x, y, r, noutmax,
 
       if(i > 0) {
 	/* scan backwards */
-	for(j = i - 1; j >= 0; j++) {
+	for(j = i - 1; j >= 0; j--) {
 	  dx = x[j] - xi;
 	  dx2 = dx * dx;
 	  if(dx2 > r2max)

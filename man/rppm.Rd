@@ -33,7 +33,7 @@
 }
 \value{
   An object of class \code{"rppm"}. There are methods
-  for \code{print}, \code{plot}, \code{predict} and
+  for \code{print}, \code{plot}, \code{fitted}, \code{predict} and
   \code{prune} for this class.
 }
 \references{
@@ -43,7 +43,7 @@
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
  Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{plot.rppm}}, 

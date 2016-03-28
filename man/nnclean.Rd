@@ -120,7 +120,7 @@
 }
 \examples{
   data(shapley)
-  X <- nnclean(shapley, k=17)
+  X <- nnclean(shapley, k=17, plothist=TRUE)
   plot(X, which.marks=1, chars=c(".", "+"), cols=1:2)
   plot(X, which.marks=2, cols=function(x)hsv(0.2+0.8*(1-x),1,1))
   Y <- split(X, un=TRUE)

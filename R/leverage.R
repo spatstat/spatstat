@@ -99,7 +99,7 @@ ppmInfluenceEngine <- function(fit,
     stop("Must supply iHessian")
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
     stop("ppm influence measures are not yet implemented for method=logi")
-  sparse <- sparseOK && spatstat.options('developer')
+  sparse <- sparseOK 
   #
   # extract precomputed values if given
   theta  <- precomputed$coef   %orifnull% coef(fit)

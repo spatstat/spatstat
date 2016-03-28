@@ -23,7 +23,7 @@
 }
 \details{
   These functions are methods for the generic functions
-  \code{\link{fitted}} and \code{\link{predict}}.
+  \code{\link[stats]{fitted}} and \code{\link[stats]{predict}}.
   The argument \code{object} should be a cluster point process model
   (object of class \code{"kppm"}) obtained using
   the function \code{\link{kppm}}.

@@ -165,7 +165,7 @@ areadelta2 <- local({
     #       where h is first order cif statistic
     algorithm <- match.arg(algorithm)
     nX <- npoints(X)
-    sparseOK <- sparseOK && spatstat.options('developer')
+    sparseOK <- sparseOK
     result <- if(!sparseOK) matrix(0, nX, nX) else
               sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
                            dims=c(nX,nX))

@@ -1,4 +1,5 @@
 \name{predict.rppm}
+\alias{fitted.rppm}
 \alias{predict.rppm}
 \title{
   Make Predictions From a Recursively Partitioned Point Process Model
@@ -10,6 +11,8 @@
 }
 \usage{
 \method{predict}{rppm}(object, \dots)
+
+\method{fitted}{rppm}(object, \dots)
 }
 \arguments{
   \item{object}{
@@ -19,11 +22,21 @@
   \item{\dots}{
     Optional arguments passed to \code{\link{predict.ppm}}
     to specify the locations where prediction is required.
+    (Ignored by \code{fitted.rppm})
   }
 }
 \details{
-  This function computes the predicted intensity of the
-  fitted model \code{object}. By default, predictions are
+  These functions are methods for the generic functions
+  \code{\link[stats]{fitted}} and \code{\link[stats]{predict}}.
+  They compute the fitted intensity of a point process model.
+  The argument \code{object} should be a fitted point process model
+  of class \code{"rppm"} produced by the function \code{\link{rppm}}.
+
+  The \code{fitted} method computes the fitted intensity at the original data
+  points, yielding a numeric vector with one entry for each data point.
+
+  The \code{predict} method computes the fitted intensity at
+  any locations. By default, predictions are
   calculated at a regular grid of spatial locations, and the result
   is a pixel image giving the predicted intensity values at these
   locations.
@@ -42,13 +55,15 @@
   to each set of covariate values.
 }
 \value{
-  A pixel image, a list of pixel images,
+  The result of \code{fitted.rppm} is a numeric vector.
+
+  The result of \code{predict.rppm} is a pixel image, a list of pixel images,
   or a numeric vector.
 }
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
  Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \seealso{
   \code{\link{rppm}},
@@ -57,6 +72,8 @@
 \examples{
     fit <- rppm(unmark(gorillas) ~ vegetation + heat, data=gorillas.extra)
     plot(predict(fit))
+    lambdaX <- fitted(fit)
+    lambdaX[1:5]
     # Mondriaan pictures
     plot(predict(rppm(redwoodfull ~ x + y)))
     points(redwoodfull)

@@ -1,15 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.015
+        CHANGES IN spatstat VERSION 1.45-0.016
 
 OVERVIEW
 
     o We thank Sven Wagner for contributions.
 
-    o Leverage and influence code handles bigger datasets.
+    o Recursive-partition point process models.
 
     o Minkowski sum, morphological dilation and erosion with any shape.
 
-    o Recursive-partition point process models.
+    o Leverage and influence code handles bigger datasets.
 
     o More bug fixes for replicated patterns.
 

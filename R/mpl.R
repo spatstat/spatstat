@@ -1179,9 +1179,8 @@ deltasuffstat <- local({
     ncoef <- length(coef(model))
     inte <- as.interact(model)
 
-    sparseOK <- sparseOK && spatstat.options('developer')
     if(!sparseOK && exceedsMaxArraySize(nX, nX, ncoef)) {
-      if(sparsegiven || !spatstat.options("developer"))
+      if(sparsegiven)
         stop("Array dimensions too large", call.=FALSE)
       warning("Switching to sparse array code", call.=FALSE)
       sparseOK <- TRUE

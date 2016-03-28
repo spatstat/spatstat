@@ -203,7 +203,6 @@
 \alias{firstfactor}
 \alias{fii}
 \alias{fillNA}
-\alias{fitted.rppm}
 \alias{flat.deparse}
 \alias{flatfname}
 \alias{flipxypolygon}
@@ -1054,7 +1053,6 @@ findfirstfactor(x)
 firstfactor(x)
 fii(interaction, coefs, Vnames, IsOffset)
 fillNA(x, value)
-\method{fitted}{rppm}(object, \dots)
 flat.deparse(x)
 flatfname(x)
 flipxypolygon(p)

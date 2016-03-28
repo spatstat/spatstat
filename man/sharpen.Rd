@@ -6,9 +6,9 @@
   Performs Choi-Hall data sharpening of a spatial point pattern.
 }
 \usage{
-sharpen(X, ...)
-\method{sharpen}{ppp}(X, sigma=NULL, ..., varcov=NULL,
-                        edgecorrect=FALSE)
+sharpen(X, \dots)
+\method{sharpen}{ppp}(X, sigma=NULL, \dots,
+                      varcov=NULL, edgecorrect=FALSE)
 }
 \arguments{
   \item{X}{A marked point pattern (object of class \code{"ppp"}).}
@@ -78,6 +78,12 @@ sharpen(X, ...)
    if(!(interactive())) X <- rthin(X, 0.05)
    }
    Y <- sharpen(X, sigma=0.5)
+   Z <- sharpen(X, sigma=0.5, edgecorrect=TRUE)
+   opa <- par(mar=rep(0.2, 4))
+   plot(solist(X, Y, Z), main= " ",
+        main.panel=c("data", "sharpen", "sharpen, correct"),
+        pch=".", equal.scales=TRUE, mar.panel=0.2)
+   par(opa)
 }
 \references{
   Choi, E. and Hall, P. (2001)
@@ -88,11 +94,10 @@ sharpen(X, ...)
   Institute of Mathematical Statistics, Beachwood, Ohio.
   Pages 324--344.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{nonparametric}
