@@ -349,7 +349,8 @@ plot.quadrattest <- local({
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=paste(as.vector(values))),
                                      textargs, 
-                                     list(...)))
+                                     list(...)),
+                    funargs=graphicsPars("text"))
   }
 
   haspositivearea <- function(x) { !is.null(x) && area(x) > 0 }

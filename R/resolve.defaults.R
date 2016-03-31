@@ -133,7 +133,10 @@ graphicsPars <- local({
         "cex.axis", "cex.lab", "cex.main", "cex.sub",
         "col.axis", "col.lab", "col.main", "col.sub",
         "font.axis", "font.lab", "font.main", "font.sub")
-    
+
+    TextDefArgs <- setdiff(names(formals(text.default)), "...")
+    TextArgs <- c(TextDefArgs, "srt", "family", "xpd")
+                        
   TheTable <- 
     list(plot = PlotArgs,
          image = c(
@@ -160,7 +163,8 @@ graphicsPars <- local({
            "xaxs", "yaxs",
            "claim.title.space"),
          lines = c("lwd", "lty", "col", "lend", "ljoin", "lmitre"),
-         symbols = c(PlotArgs, "fg", "bg")
+         symbols = c(PlotArgs, "fg", "bg"),
+         text = TextArgs
          )
 
     TheTable$ppp <- unique(c(TheTable$owin,

@@ -343,7 +343,8 @@ plot.profilepl <- local({
       ii <- which.max(pz)
       do.call.matched(text.default,
                       list(x=fz[ii], y=pz[ii], labels=label,
-                           col=col, ...))
+                           col=col, ...),
+                      funargs=graphicsPars("text"))
     }
     return(NULL)
   }

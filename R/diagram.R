@@ -68,7 +68,7 @@ plot.textstring <- function(x, ..., do.plot=TRUE) {
                               resolve.defaults(list(...),
                                                list(x=x$x, y=x$y, labels=txt),
                                                otha),
-                              extrargs=c("srt", "family", "xpd"))
+                              funargs=graphicsPars("text"))
   return(invisible(Frame(x)))
 }
 
@@ -189,7 +189,7 @@ plot.yardstick <- local({
                                        list(labels=txt, pos=pos),
                                        argh,
                                        .MatchNull=FALSE),
-                      extrargs=c("srt", "family", "xpd"))
+                      funargs=graphicsPars("text"))
     }
     return(invisible(Window(x)))
   }
@@ -315,7 +315,7 @@ plot.onearrow <- function(x, ...,
                         list(x=H[1], y=H[2]),
                         argh,
                         list(labels=txt, pos=3 + (V[2] != 0))),
-                      extrargs=c("srt", "family", "xpd"))
+                      funargs=graphicsPars("text"))
     }
   }
   return(invisible(result))

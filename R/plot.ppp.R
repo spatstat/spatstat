@@ -466,6 +466,7 @@ fakemaintitle <- function(bb, main, ...) {
   names(parlist) <- c('cex', 'col', 'font')
   do.call.matched(text.default,
                   resolve.defaults(list(x=x0, y=y0, labels=main),
-                                   parlist,    list(...)))
+                                   parlist,    list(...)),
+                  funargs=graphicsPars("text"))
   return(invisible(NULL))
 }

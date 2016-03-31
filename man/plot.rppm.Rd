@@ -16,19 +16,21 @@
     Fitted point process model of class \code{"rppm"}
     produced by the function \code{\link{rppm}}.
   }
-  \item{\dots}{
-    Arguments passed to \code{\link[rpart]{plot.rpart}}
-    or \code{\link{plot.im}}
-    controlling the appearance of the plot.
-  }
   \item{what}{
     Character string (partially matched) specifying whether to plot the
     partition tree or the fitted intensity.
   }
+  \item{\dots}{
+    Arguments passed to \code{\link[rpart]{plot.rpart}}
+    and \code{\link[rpart]{text.rpart}} (if \code{what="tree"})
+    or passed to \code{\link{plot.im}} (if \code{what="spatial"})
+    controlling the appearance of the plot.
+  }
 }
 \details{
   If \code{what="tree"} (the default), the partition tree will be plotted
-  using \code{\link[rpart]{plot.rpart}}.
+  using \code{\link[rpart]{plot.rpart}}, and labelled using
+  \code{\link[rpart]{text.rpart}}.
 
   If \code{what="spatial"}, the predicted intensity
   will be computed using \code{\link{predict.rppm}}, and
@@ -53,8 +55,11 @@
     mur$dfault <- distfun(mur$faults)
     # 
     fit <- rppm(gold ~ dfault + greenstone, data=mur)
+    #
+    opa <- par(mfrow=c(1,2))
     plot(fit)
     plot(fit, what="spatial")
+    par(opa)
 }
 \keyword{spatial}
 \keyword{hplot}

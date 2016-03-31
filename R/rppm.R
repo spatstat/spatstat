@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.8 $  $Date: 2016/03/28 05:05:44 $
+#'  $Revision: 1.9 $  $Date: 2016/03/31 01:25:30 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)
@@ -39,23 +39,43 @@ print.rppm <- function(x, ...) {
   invisible(NULL)
 }
 
-plot.rppm <- function(x, ..., what=c("tree", "spatial")) {
-  xname <- short.deparse(substitute(x))
-  what <- match.arg(what)
-  switch(what,
-         tree = {
-           out <- plot(x$rp, ...)
-           text(x$rp, ...)
-         },
-         spatial = {
-           p <- predict(x)
-           out <- do.call("plot",
-                          resolve.defaults(list(x=p),
-                                           list(...),
-                                           list(main=xname)))
-         })
-  return(invisible(out))
-}
+plot.rppm <- local({
+
+  argsPlotRpart <- c("x", "uniform", "branch",
+                     "compress", "margin", "minbranch")
+  argsTextRpart <- c("splits", "label", "FUN", "all", "pretty",
+                     "digits", "use.n", "fancy",
+                     "fwidth", "fheight", "bg", "minlength")
+  
+  plot.rppm <- function(x, ..., what=c("tree", "spatial")) {
+    xname <- short.deparse(substitute(x))
+    what <- match.arg(what)
+    switch(what,
+           tree = {
+             out <- do.call.matched(plot,
+                                    list(x=x$rp, ...),
+                                    funargs=argsPlotRpart,
+                                    extrargs=graphicsPars("plot"))
+             # note: plot.rpart does not pass arguments to 'lines'
+             do.call.matched(text,
+                             list(x=x$rp, ...),
+                             funargs=argsTextRpart,
+                             extrargs=graphicsPars("text"))
+           },
+           spatial = {
+             p <- predict(x)
+             out <- do.call("plot",
+                            resolve.defaults(list(x=p),
+                                             list(...),
+                                             list(main=xname)))
+           })
+    return(invisible(out))
+  }
+
+  plot.rppm
+
+})
+
 
 #' prune method
 

@@ -101,7 +101,8 @@ plot.quadratcount <- function(x, ...,
                     resolve.defaults(list(x=x0 + dx * ra, y = y0 + dy * ra),
                                      list(labels=labels),
                                      textargs, 
-                                     list(...)))
+                                     list(...)),
+                    funargs=graphicsPars("text"))
   }
   return(invisible(NULL))
 }

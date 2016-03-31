@@ -259,7 +259,8 @@ plot.tess <- local({
       do.call.matched(text.default,
                       resolve.defaults(list(x=x0, y = y0),
                                        list(labels=labels),
-                                       labelargs))
+                                       labelargs),
+                      funargs=graphicsPars("text"))
     }
     return(invisible(result))
   }
