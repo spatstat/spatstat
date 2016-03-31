@@ -1,37 +1,35 @@
-language: c
-sudo: required
+language: r
+r:
+  - release
+  - devel
+sudo: false 
+cache: packages
+warnings_are_errors: false
+
+os:
+  - linux
+  - osx
 
 before_install:
-  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
-  - chmod 755 pkg-build.sh
-  - ./pkg-build.sh bootstrap
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libgsl0-dev bwidget
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then tlmgr install anysize; fi
 
-install:
-  - ./pkg-build.sh install_deps
-  - ./pkg-build.sh install_github jimhester/covr yihui/knitr 
-  - ./pkg-build.sh install_github baddstats/polyclip
+addons:
+  apt:
+    packages:
+      - libgsl0-dev
+brew_packages:
+  - gsl
 
-script:
-  - ./pkg-build.sh run_tests
+r_github_packages: 
+  - baddstats/polyclip
+  - jimhester/covr
+  - yihui/knitr
 
-after_failure:
-  - ./pkg-build.sh dump_logs
-  
 after_success:
-  - if [[ ! -z "$COVERAGE" ]];then ./pkg-build.sh run_script -e 'covr::codecov(type=Sys.getenv("COVERAGE"), quiet = FALSE)'; fi
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then R CMD INSTALL $PKG_TARBALL; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then Rscript -e 'covr::codecov(type = "vignette", quiet = FALSE)'; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then Rscript -e 'covr::codecov(type = "test", quiet = FALSE)'; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then Rscript -e 'covr::codecov(type = "example", quiet = FALSE)'; fi
 
 env:
-  global:
-    - _R_CHECK_FORCE_SUGGESTS_=false
-  matrix:
-    - RVERSION=release
-    - RVERSION=devel COVERAGE=vignette R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
-    - RVERSION=devel COVERAGE=test R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
-    - RVERSION=devel COVERAGE=example R_CHECK_ARGS="--no-tests --no-build-vignettes --no-manual"
+  - _R_CHECK_FORCE_SUGGESTS_=false
