@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.13 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 2.14 $  $Date: 2016/04/01 01:03:02 $
 #
 #
 
@@ -236,10 +236,10 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
   ## 
   if(!ispois) {
     ## Gibbs model: perform Monte Carlo test
-    result$poisson.p.value <- result$p.value
-    pobs <- result$p.value
+    result$poisson.p.value <- pobs <- result$p.value
+    result$poisson.statistic <- tobs <- result$statistic
     Xsim <- simulate(model, nsim=nsim, progress=verbose)
-    pvals <- numeric(nsim)
+    sim.pvals <- sim.stats <- numeric(nsim)
     if(verbose) {
       cat("Processing.. ")
       state <- list()
@@ -255,12 +255,21 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                       ks  = ks.test(U.i, "punif", ...),
                       cvm = cvm.test(U.i, "punif", ...),
                       ad = ad.test(U.i, "punif", ...))     
-      pvals[i] <- res.i$p.value
+      sim.pvals[i] <- res.i$p.value
+      sim.stats[i] <- res.i$statistic
       if(verbose) state <- progressreport(i, nsim, state=state)
     }
     if(verbose) cat("Done.\n")
-    ## insert Monte Carlo p-value
-    result$p.value <- mean(pobs <= c(pobs, pvals))
+    result$sim.pvals <- sim.pvals
+    result$sim.stats <- sim.stats
+    ## Monte Carlo p-value
+    ## For tied p-values, first compare values of test statistics
+    ## (because p = 0 may occur due to rounding)
+    ## otherwise resolve ties by randomisation
+    nless <- sum(sim.pvals < pobs)
+    nplus <- sum(sim.pvals == pobs & sim.stats > tobs)
+    nties <- sum(sim.pvals == pobs & sim.stats == tobs) 
+    result$p.value <- (nless + nplus + sample(0:nties, 1))/(nsim+1)
   }
   ## 
   # modify the 'htest' entries

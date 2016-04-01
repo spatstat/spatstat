@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.018
+        CHANGES IN spatstat VERSION 1.45-0.019
 
 OVERVIEW
 
@@ -15,9 +15,11 @@ OVERVIEW
 
     o More support for pixel images.
 
-    o spatstat now Suggests the package 'rpart'
+    o Bug fix in spatial CDF tests.
 
-    o Version nickname: 'Matryoshka'
+    o spatstat now Depends on the package 'rpart'
+
+    o Version nickname: 'Poisson d'Avril'
 
 NEW FUNCTIONS
 
@@ -81,7 +83,21 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp, plot.profilepl, plot.quadratcount, plot.quadrattest, plot.tess
     Now recognise graphics parameters for text, such as 'family' and 'srt'
 
+    o cdf.test
+    Calculations are more robust against numerical rounding effects.
+
 BUG FIXES
+
+    o cdf.test
+    Calculation of p-values was completely incorrect.
+    [Spotted by Sven Wagner.]
+    Fixed.
+
+    o subfits
+    The interaction coefficients of the submodels were incorrect
+    for Gibbs models with a multitype interaction (MultiStrauss, etc).
+    [Spotted by Sven Wagner.]
+    Fixed.
 
     o subfits
     Crashed when a Gibbs model included factor-valued spatial covariates
@@ -92,12 +108,6 @@ BUG FIXES
     o subfits
     For Gibbs models with a multitype interaction (MultiStrauss, etc),
     computation of the conditional intensity caused an error.
-    [Spotted by Sven Wagner.]
-    Fixed.
-
-    o subfits
-    The interaction coefficients of the submodels were incorrect
-    for Gibbs models with a multitype interaction (MultiStrauss, etc).
     [Spotted by Sven Wagner.]
     Fixed.
 
