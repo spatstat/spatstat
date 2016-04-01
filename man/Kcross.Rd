@@ -49,6 +49,7 @@ Kcross(X, i, j, r=NULL, breaks=NULL, correction,
     \code{"translation"},
     \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{\dots}{Ignored.}
   \item{ratio}{

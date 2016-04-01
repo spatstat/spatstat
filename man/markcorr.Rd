@@ -32,6 +32,7 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
     options \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
     \code{"translation"}, \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{method}{
     A character vector indicating the user's choice of

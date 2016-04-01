@@ -29,6 +29,7 @@
     Character vector specifying edge correction or corrections.
     Options are \code{"none"}, \code{"bord.modif"}, 
     \code{"good"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{k}{
     Integer. The \eqn{k}th nearest neighbour will be used.

@@ -5,7 +5,8 @@
 #
 
 pickoption <- function(what="option", key, keymap, ...,
-                       exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE)
+                       exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE,
+                       allow.all=TRUE)
 {
   keyname <- short.deparse(substitute(key))
 
@@ -17,12 +18,16 @@ pickoption <- function(what="option", key, keymap, ...,
   key <- unique(key)
   if(!multi && length(key) > 1)
     stop(paste("Must specify only one", what, sQuote(keyname)))
+  allow.all <- allow.all && multi
 
   id <-
-    if(exact)
+    if(allow.all && identical(key, "all")) {
+      seq_along(keymap)
+    } else if(exact) {
       match(key, names(keymap), nomatch=NA)
-    else
+    } else {
       pmatch(key, names(keymap), nomatch=NA)
+    }
   
   if(any(nbg <- is.na(id))) {
     # no match

@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.117 $	$Date: 2016/02/26 02:23:20 $
+#	$Revision: 5.118 $	$Date: 2016/04/01 05:55:30 $
 #
 #
 # -------- functions ----------------------------------------
@@ -36,7 +36,7 @@
 
 "Lest" <- function(X, ...) {
   K <- Kest(X, ...)
-  L <- eval.fv(sqrt(K/pi))
+  L <- eval.fv(sqrt(K/pi), dotonly=FALSE)
   # handle variance estimates
   if(any(varcols <- colnames(K) %in% c("rip", "ls"))) {
     r <- with(L, .x)
@@ -755,7 +755,7 @@ implemented.for.K <- function(correction, windowtype, explicit) {
   pixels <- (windowtype == "mask")
   if(any(correction == "best")) {
     # select best available correction
-    correction <- if(!pixels) "isotropic" else "translate"
+    correction[correction == "best"] <- if(!pixels) "isotropic" else "translate"
   } else {
     # available selection of edge corrections depends on window
     if(pixels) {

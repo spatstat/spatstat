@@ -145,6 +145,7 @@
     If \code{correction=c("translate", "Ripley")} then both estimates
     will be computed.
   }
+  Alternatively \code{correction="all"} selects all options.
   
   The choice of smoothing kernel is controlled by the 
   argument \code{kernel} which is passed to \code{\link{density}}.

@@ -41,6 +41,7 @@ Gdot(X, i, r=NULL, breaks=NULL, \dots, correction=c("km", "rs", "han"))
     Optional. Character string specifying the edge correction(s)
     to be used. Options are \code{"none"}, \code{"rs"}, \code{"km"},
     \code{"hanisch"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
 }
 \value{

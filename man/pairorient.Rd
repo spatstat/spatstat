@@ -33,6 +33,7 @@ pairorient(X, r1, r2, ..., cumulative=FALSE,
     Character vector specifying edge correction or corrections.
     Options are \code{"none"}, \code{"isotropic"}, \code{"translate"},
     \code{"good"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{ratio}{
     Logical. 

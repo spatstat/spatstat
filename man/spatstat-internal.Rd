@@ -1340,7 +1340,8 @@ pcfmulti.inhom(X, I, J, lambdaI = NULL, lambdaJ = NULL, \dots,
                Iname = "points satisfying condition I",
                Jname = "points satisfying condition J")
 pickoption(what="option", key, keymap, \dots,
-           exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE)
+           exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE,
+           allow.all=TRUE)
 plotEachLayer(x, \dots, main, plotargs, add, show.all, do.plot)
 ploterodewin(W1, W2, col.edge, col.inside, do.plot, \dots)
 ploterodeimage(W, Z, \dots, Wcol, rangeZ, colsZ, do.plot)

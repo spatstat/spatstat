@@ -50,6 +50,7 @@ Jcross(X, i, j, eps=NULL, r=NULL, breaks=NULL, \dots, correction=NULL)
     Optional. Character string specifying the edge correction(s)
     to be used. Options are \code{"none"}, \code{"rs"}, \code{"km"},
     \code{"Hanisch"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
 }
 \value{

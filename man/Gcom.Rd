@@ -44,6 +44,7 @@ Gcom(object, r = NULL, breaks = NULL, ...,
   \item{correction}{
     Edge correction(s) to be employed in calculating the compensator.
     Options are \code{"border"}, \code{"Hanisch"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{conditional}{
     Optional. Logical value indicating whether to 

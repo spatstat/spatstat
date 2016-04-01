@@ -58,6 +58,7 @@
     \code{"translate"}, \code{"translation"},
     \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{renormalise}{
     Logical. Whether to renormalise the estimate. See Details.

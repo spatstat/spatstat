@@ -33,6 +33,7 @@
     character strings. Options are \code{"trend"} for the spatial trend
     (first-order term) and \code{"cif"} or \code{"lambda"} for the
     conditional intensity.
+    Alternatively \code{type="all"} selects all options.
   }
   \item{ngrid}{
     Dimensions of the grid of spatial locations at which prediction will be

@@ -32,6 +32,7 @@ Tstat(X, ..., r = NULL, rmax = NULL,
     options \code{"none"}, \code{"border"}, \code{"bord.modif"},
     \code{"translate"}, \code{"translation"}, or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{ratio}{
     Logical. 

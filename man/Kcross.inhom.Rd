@@ -73,6 +73,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
     \code{"translation"},
     \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{\dots}{
     Ignored.

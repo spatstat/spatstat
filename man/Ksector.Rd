@@ -44,6 +44,7 @@ Ksector(X, begin = 0, end = 360, \dots,
     \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
     \code{"translation"}, \code{"none"}, \code{"good"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{domain}{
     Optional window. The first point \eqn{x_i}{x[i]} of each pair of points

@@ -33,6 +33,7 @@
     A character vector containing any selection of the
     options \code{"isotropic"}, \code{"Ripley"} or \code{"translate"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{\dots}{
     Ignored.

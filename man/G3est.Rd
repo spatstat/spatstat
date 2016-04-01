@@ -71,6 +71,7 @@ G3est(X, ..., rmax = NULL, nrval = 128, correction = c("rs", "km", "Hanisch"))
       the Hanisch estimator (Hanisch, 1984).
     }
   }
+  Alternatively \code{correction="all"} selects all options.
 }
 \value{
   A function value table (object of class \code{"fv"}) that can be

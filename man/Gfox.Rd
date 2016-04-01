@@ -37,6 +37,7 @@ Jfox(X, Y, r = NULL, breaks = NULL, correction = c("km", "rs", "han"), ...)
     A vector of character strings selected from
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"cs"}
     and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{\dots}{
     Extra arguments affecting the discretisation of distances.

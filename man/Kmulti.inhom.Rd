@@ -66,6 +66,7 @@
     \code{"isotropic"}, \code{"Ripley"}, \code{"translate"},
     \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{lambdaIJ}{
     Optional. A matrix containing estimates of

@@ -72,6 +72,8 @@ clarkevans(X, correction=c("none", "Donnelly", "cdf"),
       distribution is calculated from the cdf. 
     }
   }
+  Alternatively \code{correction="all"} selects all options.
+
   If the argument \code{clipregion} is given, then the selected
   edge corrections will be assumed to include \code{correction="guard"}.
 

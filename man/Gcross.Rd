@@ -48,6 +48,7 @@ Gcross(X, i, j, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
     Optional. Character string specifying the edge correction(s)
     to be used. Options are \code{"none"}, \code{"rs"}, \code{"km"},
     \code{"hanisch"} and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
 }
 \value{

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.019
+        CHANGES IN spatstat VERSION 1.45-0.020
 
 OVERVIEW
 
@@ -9,13 +9,15 @@ OVERVIEW
 
     o Minkowski sum, morphological dilation and erosion with any shape.
 
-    o Leverage and influence code handles bigger datasets.
+    o Important bug fix in spatial CDF tests.
 
     o More bug fixes for replicated patterns.
 
-    o More support for pixel images.
+    o Summary functions recognise correction="all"
 
-    o Bug fix in spatial CDF tests.
+    o Leverage and influence code handles bigger datasets.
+
+    o More support for pixel images.
 
     o spatstat now Depends on the package 'rpart'
 
@@ -74,6 +76,28 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.layered
     Default method now handles a (vanilla) list of spatial objects.
 
+    o summary functions
+    The argument 'correction="all"' is now recognised: it selects
+    all the available options. 
+        This applies to Fest, F3est, Gest, Gcross, Gdot, Gmulti, G3est, Gfox,
+    	Gcom, Gres, Hest, Jest, Jmulti, Jcross, Jdot, Jfox,
+	Kest, Kinhom, Kmulti, Kcross, Kdot, Kcom, Kres, 
+	Kmulti.inhom, Kcross.inhom, Kdot.inhom, Kscaled, Ksector, Kmark, 
+	K3est, Lscaled, markcorr, markcrosscorr,
+	nnorient, pairorient, pcfinhom, pcfcross.inhom, pcfcross, pcf, Tstat.
+
+    o clarkevans
+    The argument 'correction="all"' is now recognised: it selects
+    all the available options. [This is also the default.]
+
+    o predict.mppm
+    The argument 'type="all"' is now recognised: it selects
+    all the available options. [This is also the default.]
+
+    o plot.kppm
+    The argument 'what="all"' is now recognised: it selects
+    all the available options. [This is also the default.]
+
     o as.owin.data.frame
     New argument 'step'
 
@@ -89,7 +113,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
     o cdf.test
-    Calculation of p-values was completely incorrect.
+    Calculation of p-values was incorrect: 1-p was computed instead of p.
     [Spotted by Sven Wagner.]
     Fixed.
 

@@ -75,6 +75,7 @@
       Ripley's isotropic edge correction (Ripley, 1977; Baddeley et al, 1993).
     }
   }
+  Alternatively \code{correction="all"} selects all options.
 }
 \value{
   A function value table (object of class \code{"fv"}) that can be

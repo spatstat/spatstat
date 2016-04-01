@@ -68,7 +68,8 @@
     explicitly told so, and in that case an additional argument
     \code{locations} (see \code{\link{clusterfield}}) must be given to
     specify where to position the parent point(s) .}
-  }
+}
+Alternatively \code{what="all"} selects all available options.
 }
 \value{
   Null.

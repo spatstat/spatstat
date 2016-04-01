@@ -42,6 +42,7 @@ Fhazard(X, \dots)
     A vector of character strings selected from
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"cs"}
     and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{domain}{
     Optional. Calculations will be restricted to this subset

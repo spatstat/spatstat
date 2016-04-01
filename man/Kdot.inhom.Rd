@@ -67,6 +67,7 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     \code{"translation"},
     \code{"none"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{sigma}{
     Standard deviation of isotropic Gaussian smoothing kernel,

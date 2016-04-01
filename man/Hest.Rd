@@ -39,6 +39,7 @@ Hest(X, r=NULL, breaks=NULL, ...,
     A vector of character strings selected from
     \code{"none"}, \code{"rs"}, \code{"km"}, \code{"han"}
     and \code{"best"}.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{conditional}{
     Logical value indicating whether to compute the

@@ -83,6 +83,7 @@ F3est(X, ..., rmax = NULL, nrval = 128, vside = NULL,
       the Chiu-Stoyan or Hanisch estimator (Chiu and Stoyan, 1998).
     }
   }
+  Alternatively \code{correction="all"} selects all options.
 
   The result includes a column \code{theo} giving the 
   theoretical value of \eqn{F_3(r)}{F3(r)} for

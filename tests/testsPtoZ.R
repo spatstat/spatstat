@@ -1355,6 +1355,9 @@ local({
     twoM <- M + M
     range(M)
 
+    cosM <- cos(M)  # non-sparse
+    sinM <- sin(M)  # sparse
+    
     stopifnot(all((M+M) == 2*M))     # non-sparse
     stopifnot(!any((M+M) != 2*M))    # sparse
 

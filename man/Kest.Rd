@@ -35,6 +35,7 @@ from a point pattern in a window of arbitrary shape.
     \code{"translation"}, \code{"rigid"},
     \code{"none"}, \code{"good"} or \code{"best"}.
     It specifies the edge correction(s) to be applied.
+    Alternatively \code{correction="all"} selects all options.
   }
   \item{nlarge}{
     Optional. Efficiency threshold.
@@ -316,9 +317,8 @@ Baddeley, A.J. Spatial sampling and censoring.
   estimators.
 }
 \examples{
- pp <- runifpoint(50)
- K <- Kest(pp)
- data(cells)
+ X <- runifpoint(50)
+ K <- Kest(X)
  K <- Kest(cells, correction="isotropic")
  plot(K)
  plot(K, main="K function for cells")

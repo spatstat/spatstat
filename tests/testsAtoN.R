@@ -421,15 +421,18 @@ local({
 #
 #  tests/fastK.R
 #
-# check fast code for Kest
+# check fast and slow code for Kest
 #
 #   $Revision: 1.2 $   $Date: 2015/12/29 08:54:49 $
 #
 require(spatstat)
 local({
+  ## fast code
   Kb <- Kest(cells, nlarge=0)
   Ku <- Kest(cells, correction="none")
   Kbu <- Kest(cells, correction=c("none", "border"))
+  ## slow code, full set of corrections, sqrt transformation
+  Ldd <- Lest(unmark(demopat), correction="all", var.approx=TRUE)
 })
 
 
