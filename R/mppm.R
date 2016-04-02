@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.74 $   $Date: 2016/02/11 05:07:22 $
+#  $Revision: 1.75 $   $Date: 2016/04/02 04:21:21 $
 #
 
 mppm <- local({
@@ -627,3 +627,18 @@ terms.mppm <- function(x, ...) { terms(formula(x)) }
 
 nobs.mppm <- function(object, ...) { sum(sapply(data.mppm(object), npoints)) }
 
+simulate.mppm <- function(object, nsim=1, ...) {
+  subs <- subfits(object)
+  sims <- lapply(subs, simulate, ..., nsim=nsim, drop=FALSE)
+  sim1list <- lapply(sims, "[[", i=1)
+  h <- hyperframe("Sim1"=sim1list)
+  if(nsim > 1) {
+    for(j in 2:nsim) {
+      simjlist <- lapply(sims, "[[", i=j)
+      hj <- hyperframe(Sim=simjlist)
+      names(hj) <- paste0("Sim", j)
+      h <- cbind(h, hj)
+    }
+  }
+  return(h)
+}

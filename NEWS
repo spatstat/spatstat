@@ -13,6 +13,8 @@ OVERVIEW
 
     o More bug fixes for replicated patterns.
 
+    o Simulate a model fitted to replicated point patterns.
+
     o Summary functions recognise correction="all"
 
     o Leverage and influence code handles bigger datasets.
@@ -21,7 +23,7 @@ OVERVIEW
 
     o spatstat now Depends on the package 'rpart'
 
-    o Version nickname: 'Poisson d'Avril'
+    o Version nickname: 'Djeran' (Flying Ant Season)
 
 NEW FUNCTIONS
 
@@ -49,6 +51,9 @@ NEW FUNCTIONS
 
     o rppm, plot.rppm, predict.rppm, prune.rppm
     Recursive-partition point process models
+
+    o simulate.mppm
+    Simulate a point process model fitted to replicated point patterns.
 
     o update.interact
     Update the parameters of an interpoint interaction.

@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.62 $  $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.63 $  $Date: 2016/04/02 05:08:51 $
 #
 
 hyperframe <- local({
@@ -470,7 +470,7 @@ plot.hyperframe <-
     ok <- (summary(x)$storage %in% c("hypercolumn", "hyperatom"))
     if(any(ok)) {
       j <- min(which(ok))
-      x <- x[,j, drop=TRUE]
+      x <- x[,j, drop=TRUE, strip=FALSE]
       x <- as.solist(x, demote=TRUE)
       plot(x, ..., main=main, arrange=arrange, nrows=nrows, ncols=ncols)
       return(invisible(NULL))

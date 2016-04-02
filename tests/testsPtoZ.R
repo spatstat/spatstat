@@ -365,6 +365,25 @@ local({
   chk(f7)
 
 })
+#'  tests/randoms.R
+#'   Further tests of random generation code
+#'  $Revision: 1.1 $ $Date: 2016/04/02 04:03:46 $
+
+require(spatstat)
+local({
+  A <- runifrect(6, nsim=2)
+  A <- runifdisc(6, nsim=2)
+  A <- runifpoispp(5, nsim=2)
+  A <- runifpoispp(0, nsim=2)
+  Z <- as.im(function(x,y) 10*x, square(1))
+  A <- rpoint(n=6, f=Z, fmax=10, nsim=2)
+  A <- rSSI(0.05, 6, nsim=2)
+  A <- rstrat(nx=4, nsim=2)
+  A <- rsyst(nx=4, nsim=2)
+  A <- rthin(cells, P=0.5, nsim=2)
+  A <- rjitter(cells, nsim=2, retry=FALSE)
+})
+
 ##
 ## tests/rhohat.R
 ##
