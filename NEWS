@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.020
+        CHANGES IN spatstat VERSION 1.45-0.022
 
 OVERVIEW
 
@@ -75,8 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o connected.im
     Now handles a logical-valued image properly.
 
-    o connected.im, connected.owin
-    Arguments '...' now determine pixel resolution.
+    o qqplot.ppm
+    Argument 'expr' can now be a list of point patterns,
+    or an envelope object containing a list of point patterns.
 
     o as.layered
     Default method now handles a (vanilla) list of spatial objects.
@@ -102,6 +103,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.kppm
     The argument 'what="all"' is now recognised: it selects
     all the available options. [This is also the default.]
+
+    o connected.im, connected.owin
+    Arguments '...' now determine pixel resolution.
 
     o as.owin.data.frame
     New argument 'step'

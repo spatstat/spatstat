@@ -3,7 +3,7 @@
 #
 #  qqplot.ppm()       QQ plot (including simulation)
 #
-#  $Revision: 1.28 $   $Date: 2016/02/15 10:49:54 $
+#  $Revision: 1.29 $   $Date: 2016/04/04 01:54:02 $
 #
 
 qqplot.ppm <- local({
@@ -30,7 +30,7 @@ qqplot.ppm <- local({
              monochrome=FALSE,
              limcol=if(monochrome) "black" else "red",
              maxerr=max(100, ceiling(nsim/10)),
-             check=TRUE, repair=TRUE) {
+             check=TRUE, repair=TRUE, envir.expr) {
     verifyclass(fit, "ppm")
 
     if(check && damaged.ppm(fit)) {
@@ -56,18 +56,17 @@ qqplot.ppm <- local({
 
     ##################  How to perform simulations?  #######################
 
-    simulate.from.fit <- is.null(expr)
+    envir.call <- sys.parent()
+    envir.here <- sys.frame(sys.nframe())
 
-    how.simulating <- if(simulate.from.fit)
-      "simulating from fitted model" else paste("evaluating", sQuote("expr"))  
-
-    if(!simulate.from.fit) {
-      ## 'expr' will be evaluated 'nsim' times
-      if(!is.expression(expr))
-        stop(paste("Argument", sQuote("expr"), "should be an expression"))
-    } else{
+    extract.from.list <- FALSE
+    inext <- 0 # to placate package checker
+    
+    if(is.null(expr)) {
       ## We will simulate from the fitted model 'nsim' times
       ## and refit the model to these simulations
+      simsource <- "fit"
+      how.simulating <- "simulating from fitted model" 
 
       ## prepare rmh arguments
       rcontrol <- rmhcontrol(control)
@@ -81,10 +80,40 @@ qqplot.ppm <- local({
       expr <- expression(
         refit(fit, 
               rmhEngine(rmhinfolist, verbose=FALSE)))
+      envir.expr <- envir.here
 
       ## pacify code checkers
       dont.complain.about(rmhinfolist)
-    }
+    } else if(is.expression(expr)) {
+      simsource <- "expr"
+      how.simulating <- paste("evaluating", sQuote("expr"))  
+      if(missing(envir.expr) || is.null(envir.expr))
+        envir.expr <- parent.frame()
+    } else if(inherits(expr, "envelope")) {
+      simpat <- attr(expr, "simpatterns")
+      if(!is.null(simpat) && all(sapply(simpat, is.ppp))) {
+        expr <- expression(simpat[[inext]])
+        envir.expr <- envir.here
+        dont.complain.about(simpat)
+        simsource <- "list"
+        how.simulating <- "extracting point pattern from list"
+      } else stop(paste("Argument", sQuote("expr"),
+                        "is an envelope object,",
+                        "but does not contain point patterns"),
+                  call.=FALSE)
+    } else if(is.list(expr) && all(sapply(expr, is.ppp))) {
+      simpat <- expr
+      expr <- expression(simpat[[inext]])
+      envir.expr <- envir.here
+      dont.complain.about(simpat)
+      simsource <- "list"
+      how.simulating <- "extracting point pattern from list"
+    } else stop(paste(sQuote("expr"),
+                      "should be an expression, or an envelope object,",
+                      "or a list of point patterns"),
+                call.=FALSE)
+
+    exprstring <- if(simsource == "expr") deparse(expr) else NULL
 
     ######  Perform simulations
     if(verbose) {
@@ -92,24 +121,25 @@ qqplot.ppm <- local({
       pstate <- list()
     }
     simul.sizes <- numeric(nsim)
-    i <- 0
+    isim <- 0
     ierr <- 0
     repeat {
+      inext <- isim + 1
       ## protect from randomly-generated crashes in gam
-      ei <- try(eval(expr),silent=!verbose)
+      ei <- try(eval(expr, envir=envir.expr), silent=!verbose)
       if(inherits(ei, "try-error")) {
         ## error encountered in evaluating 'expr'
         ierr <- ierr + 1
         if(ierr > maxerr) 
           stop(paste("Exceeded maximum of", maxerr,
                      "failures in", how.simulating,
-                     "after generating only", i, "realisations"))
+                     "after generating only", isim, "realisations"))
         else break
       } else {
         ## simulation successful
-        i <- i + 1
-        fiti <-
-          if(simulate.from.fit)
+        isim <- isim + 1
+        fiti <- 
+          if(simsource == "fit")
             ei
           else if(is.ppm(ei))
             ei
@@ -118,15 +148,15 @@ qqplot.ppm <- local({
           else
             stop("result of eval(expr) is not a ppm or ppp object")
         ## diagnostic info
-        simul.sizes[i] <- data.ppm(fiti)$n
+        simul.sizes[isim] <- data.ppm(fiti)$n
         ## compute residual field
         resi <- residualfield(fiti, type=type, ..., dimyx=dimyx)
-        if(i == 1)
+        if(isim == 1)
           sim <- array(, dim=c(dim(resi), nsim))
-        sim[,,i] <- resi
+        sim[,,isim] <- resi
         if(verbose) 
-          pstate <- progressreport(i, nsim, state=pstate)
-        if(i >= nsim)
+          pstate <- progressreport(isim, nsim, state=pstate)
+        if(isim >= nsim)
           break
       }
     }
@@ -165,9 +195,8 @@ qqplot.ppm <- local({
                                    rtype=type,
                                    nsim=nsim,
                                    fit=fit,
-                                   expr= if(simulate.from.fit) NULL else
-                                         deparse(expr),
-                                   simulate.from.fit=simulate.from.fit
+                                   expr=exprstring,
+                                   simsource = simsource
                                    )
                               )
            },
@@ -214,8 +243,8 @@ qqplot.ppm <- local({
                             rtype=type,
                             nsim=nsim,
                             fit=fit,
-                            expr=if(simulate.from.fit) NULL else deparse(expr),
-                            simulate.from.fit=simulate.from.fit)
+                            expr=exprstring,
+                            simsource=simsource)
            },
            stop(paste("Unrecognised option for", sQuote("style")))
            )
@@ -239,17 +268,25 @@ qqplot.ppm <- local({
 })
 
 
-plot.qqppm <- function(x, ..., limits=TRUE,
-                       monochrome=spatstat.options('monochrome'),
-                       limcol=if(monochrome) "black" else "red") {
-  stopifnot(inherits(x, "qqppm"))
-  default.type <- if(length(x$x) > 150) "l" else "p"
+plot.qqppm <- local({
+
+  plot.qqppm <- function(x, ..., limits=TRUE,
+                         monochrome=spatstat.options('monochrome'),
+                         limcol=if(monochrome) "black" else "red") {
+    stopifnot(inherits(x, "qqppm"))
+    default.type <- if(length(x$x) > 150) "l" else "p"
+    do.call(myplot,
+            resolve.defaults(list(x, ..., type=default.type,
+                                  limits=limits, limcol=limcol)))
+    return(invisible(x))
+  }
+
   myplot <- function(object,
                      xlab = object$xlab, ylab = object$ylab,
                      xlim = object$xlim, ylim = object$ylim,
                      asp = 1,
                      type = default.type,
-                     ..., limits=TRUE) {
+                     ..., limits=TRUE, limcol="red") {
     plot(object$x, object$y, xlab = xlab, ylab = ylab,
          xlim = xlim, ylim = ylim, asp = asp, type = type, ...)
     abline(0, 1)
@@ -262,25 +299,34 @@ plot.qqppm <- function(x, ..., limits=TRUE,
     }
     title(sub=paste("Residuals:", object$rtype))
   }
-  myplot(x, ..., limits=limits)
-  return(invisible(x))
-}
 
-  
+  plot.qqppm
+})
+
+
 print.qqppm <- function(x, ...) {
   stopifnot(inherits(x, "qqppm"))
-  splat(paste0("Q-Q plot of point process residuals ",
-               "of type", sQuote(x$rtype), "\n",
-               "based on ", x$nsim, " simulations"))
-  if(x$simulate.from.fit) {
-    fit  <- x$fit
-    sumfit <- if(is.ppm(fit)) summary(fit, quick=TRUE)
-              else if(inherits(fit, "summary.ppm")) fit
-              else list(name="(unrecognised format)")
-    splat(paste("\nSimulations from fitted model:", sumfit$name))
-  } else {
-    splat("Simulations obtained by evaluating the following expression:")
-    print(x$expr)
-  } 
+  splat("Q-Q plot of point process residuals",
+        "of type", sQuote(x$rtype), "\n",
+        "based on", x$nsim, "simulations")
+  simsource <- x$simsource
+  if(is.null(simsource)) # old version
+    simsource <- if(x$simulate.from.fit) "fit" else "expr"
+  switch(simsource,
+         fit = {
+           fit  <- x$fit
+           sumfit <- if(is.ppm(fit)) summary(fit, quick=TRUE)
+                     else if(inherits(fit, "summary.ppm")) fit
+                     else list(name="(unrecognised format)")
+           splat("\nSimulations from fitted model:", sumfit$name)
+         },
+         expr = {
+           splat("Simulations obtained by evaluating the following expression:")
+           print(x$expr)
+         },
+         list = {
+           splat("Simulated point patterns were provided in a list")
+         })
   invisible(NULL)
 }
+
