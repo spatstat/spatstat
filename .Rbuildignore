@@ -4,3 +4,4 @@
 \.gcov$
 \.gcda$
 \.gcno$
+^appveyor\.yml$
