@@ -14,7 +14,7 @@ install:
 
 environment:
   global:
-    WARNINGS_ARE_ERRORS: 1
+    WARNINGS_ARE_ERRORS: 0
   access_token:
     secure: GCPohlv0NVqq0Cv3wh0Luw1OgO3jS4hyU7zUkA4a/TPMsqq1mYSm0/8Qb3uPrR7d
 
