@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.173 $	$Date: 2016/03/26 08:43:45 $
+#	$Revision: 4.174 $	$Date: 2016/04/10 06:43:34 $
 #
 #
 #	A window may be either
@@ -76,6 +76,10 @@ owin <- local({
   owin <- function(xrange=c(0,1), yrange=c(0,1),
                  ..., poly=NULL, mask=NULL, unitname=NULL, xy=NULL) {
 
+  # trap a common abuse of syntax
+  if(nargs() == 1 && !missing(xrange) && is.owin(xrange))
+    return(xrange)
+  
   unitname <- as.units(unitname)
 
   ## Exterminate ambiguities

@@ -122,6 +122,7 @@ that are supplied with the current installation of \spst:
 {\tt paracou} & trees & adult/juvenile & \nocov & \recto \\
 {\tt ponderosa} & trees & \nomarks & \nocov & \recto \\
 {\tt redwood} & saplings & \nomarks & \nocov & \recto \\
+{\tt redwood3} & saplings & \nomarks & \nocov & \recto \\
 {\tt redwoodfull} & saplings & 
               \nomarks & zones & \recto \\
 {\tt shapley} & galaxies & magnitude, recession, SE & \nocov & \convpoly \\
@@ -701,7 +702,7 @@ pyr$grp <- abbreviate(pyramidal$group, minlength=7)
 plot(pyr, quote(plot(Neurons, pch=16, main=grp)), main="Pyramidal Neurons")
 @ 
 
-\subsubsection*{\texttt{redwood}, \texttt{redwoodfull}: Redwood seedlings and saplings}
+\subsubsection*{\texttt{redwood}, \texttt{redwood3}, \texttt{redwoodfull}: Redwood seedlings and saplings}
 
 California Redwood seedlings and saplings in a forest.
 There are two versions of this dataset:
@@ -712,11 +713,15 @@ It is spatially inhomogeneous in density and spacing of points.
 
 The \texttt{redwood} dataset is a subset of the full data,
 selected because it is apparently homogeneous, and has often 
-been used as a demonstration example.
+been used as a demonstration example. This comes in two versions
+commonly used in the literature:
+\texttt{redwood} (coordinates given to 2 decimal places)
+and \texttt{redwood3} (coordinates given to 3 decimal places).
 
 
 <<fig=TRUE>>=
 plot(redwood)
+plot(redwood3, add=TRUE, pch=20)
 @ 
 
 <<fig=TRUE>>=

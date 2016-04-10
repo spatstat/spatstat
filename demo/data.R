@@ -104,6 +104,7 @@ plot(pyr, quote(plot(Neurons, pch=16, main=grp)), main="Pyramidal Neurons")
 rm(pyr)
 
 plot(redwood)
+plot(redwood3, add=TRUE, pch=20)
 
 redwoodfull.extra$plotit()
 

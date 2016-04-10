@@ -1,5 +1,6 @@
 \name{redwood}
 \alias{redwood}
+\alias{redwood3}
 \docType{data}
 \title{
   California Redwoods Point Pattern (Ripley's Subset)
@@ -14,10 +15,19 @@
   the present data are a subset extracted by Ripley (1977) 
   in a subregion that has been rescaled to a unit square.
 
-  The coordinates are rounded to the nearest 0.01 units,
-  except for one point which has an \eqn{x} coordinate
+  Two versions of this dataset are provided: \code{redwood}
+  and \code{redwood3}.
+
+  The dataset \code{redwood} was obtained from the \pkg{spatial} package. 
+  In this version the coordinates are given to 2 decimal places
+  (multiples of 0.01 units) except for one point which has an \eqn{x} coordinate
   of 0.999, presumably to ensure that it is properly inside the window.
- 
+
+  The dataset \code{redwood3} was obtained from Peter Diggle's webpage.
+  In this version the coordinates are given to 3 decimal places
+  (multiples of 0.001 units). The ordering of the points is not the same
+  in the two datasets.
+  
   There are many further analyses of this dataset. It is often used as a 
   canonical example of a clustered point pattern
   (see e.g. Diggle, 1983).
@@ -34,7 +44,11 @@
   point pattern object.
 }
 \usage{data(redwood)}
-\source{Strauss (1975), subset extracted by Ripley (1977)}
+\source{
+  Original data of Strauss (1975), subset extracted by Ripley (1977).
+  Data obtained from Ripley's package \pkg{spatial}
+  and from Peter Diggle's website.
+}
 \seealso{
   \code{\link{redwoodfull}}
 }

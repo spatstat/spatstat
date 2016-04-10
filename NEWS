@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.022
+        CHANGES IN spatstat VERSION 1.45-0.023
 
 OVERVIEW
 
@@ -21,9 +21,16 @@ OVERVIEW
 
     o More support for pixel images.
 
+    o New dataset 'redwood3'
+
     o spatstat now Depends on the package 'rpart'
 
     o Version nickname: 'Djeran' (Flying Ant Season)
+
+NEW DATASETS
+
+    o redwood3
+    A more accurate version of the 'redwood' data.
 
 NEW FUNCTIONS
 
