@@ -6,7 +6,7 @@
   point process model that was fitted to several point patterns.
 }
 \usage{
-  \method{simulate}{mppm}(object, nsim=1, \dots)
+  \method{simulate}{mppm}(object, nsim=1, \dots, verbose=TRUE)
 }
 \arguments{
   \item{object}{
@@ -19,6 +19,9 @@
   \item{\dots}{
     Further arguments passed to \code{\link{simulate.ppm}}
     to control the simulation.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports.
   }
 }
 \details{
@@ -43,7 +46,7 @@
 \examples{
   H <- hyperframe(Bugs=waterstriders)
   fit <- mppm(Bugs ~ id, H)
-  y <- simulate(fit, nsim=2, progress=FALSE)
+  y <- simulate(fit, nsim=2)
   y
   plot(y[1,,drop=TRUE], main="Simulations for Waterstriders pattern 1")
   plot(y[,1,drop=TRUE], main="Simulation 1 for each Waterstriders pattern")

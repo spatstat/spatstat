@@ -7,14 +7,10 @@
 }
 \usage{
    mppm(formula, data, interaction=Poisson(), ...,
-            iformula=NULL,
-%#%^!ifdef RANDOMEFFECTS
-            random=NULL,
-%#%^!endif
-        use.gam = FALSE,
-%#%^!ifdef RANDOMEFFECTS
+        iformula=NULL, 
+        random=NULL,
+        use.gam = FALSE, 
         reltol.pql=1e-3,
-%#%^!endif
         gcontrol=list())
 }
 \arguments{
@@ -45,18 +41,15 @@
     in the hyperframe \code{interaction}, or the name of a column
     in the hyperframe \code{data} that is a vector or factor.
   }
-%#%^!ifdef RANDOMEFFECTS  
   \item{random}{
     Optional. A formula (with no left hand side)
     describing a random effect. Variable names in the formula
     may be any of the column names of \code{data} and \code{interaction}.
     The formula must be recognisable to \code{\link{lme}}. 
   }
-%#%^!endif  
   \item{use.gam}{Logical flag indicating whether to fit the model
     using \code{\link[mgcv]{gam}} or \code{\link[stats]{glm}}.
   }
-%#%^!ifdef RANDOMEFFECTS
   \item{reltol.pql}{
     Relative tolerance for successive steps in
     the penalised quasi-likelihood algorithm,
@@ -64,19 +57,14 @@
     The algorithm terminates when the root mean square of the
     relative change in coefficients is less than \code{reltol.pql}.
   }
-%#%^!endif  
   \item{gcontrol}{
     List of arguments to control the fitting algorithm.
     Arguments are passed to \code{\link[stats]{glm.control}}
     or \code{\link[mgcv]{gam.control}}
-%#%^!ifdef RANDOMEFFECTS
     or \code{\link[nlme]{lmeControl}}
-%#%^!endif    
     depending on the kind of model being fitted.
-%#%^!ifdef RANDOMEFFECTS
     If the model has random effects, the arguments are passed to
     \code{\link[nlme]{lmeControl}}. Otherwise,
-%#%^!endif    
     if \code{use.gam=TRUE} the arguments are passed to
     \code{\link[mgcv]{gam.control}}, and if
     \code{use.gam=FALSE} (the default) they are passed to
@@ -157,10 +145,8 @@
   interaction terms that belong to a specified list, including
   for example the Poisson process, Strauss process, Geyer's saturation
   model, and piecewise constant pairwise interaction models.
-%#%^!ifdef RANDOMEFFECTS  
   Additionally, it is possible to include random effects
   as explained in the section on Random Effects below.
-%#%^!endif
   
   The stochastic part of the model is determined by
   the arguments \code{interaction} and (optionally) \code{iformula}.
@@ -203,7 +189,6 @@
   model with interpoint interaction \code{B} to be fitted
   with different interaction parameters for each level of \code{group}.
 }
-%#%^!ifdef RANDOMEFFECTS
 \section{Random Effects}{
   It is also possible to include random effects in the
   trend term. The argument \code{random} is a formula,
@@ -219,13 +204,18 @@
   serial number (\eqn{1} to \eqn{n}) of the point pattern in the
   list \code{X}.
 }
-%#%^!endif
 \value{
   An object of class \code{"mppm"} representing the
   fitted model.
 
   There are methods for
-  \code{print}, \code{summary} and \code{coef} for this class.
+  \code{print}, \code{summary}, \code{coef},
+  \code{AIC}, \code{anova}, \code{fitted}, \code{fixef}, \code{logLik},
+  \code{plot}, \code{predict}, \code{ranef}, \code{residuals},
+  \code{summary}, \code{terms} and \code{vcov} for this class.
+
+  The default methods for \code{\link[stats]{update}}
+  and \code{\link[stats]{formula}} also work on this class.
 }
 \references{
   Baddeley, A. and Turner, R.

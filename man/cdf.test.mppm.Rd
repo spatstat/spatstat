@@ -3,16 +3,16 @@
 \title{Spatial Distribution Test for Multiple Point Process Model} 
 \description{
   Performs a spatial distribution test
-  of a Poisson point process model fitted to multiple spatial point
+  of a point process model fitted to multiple spatial point
   patterns.  The test compares the observed
   and predicted distributions of the values of a spatial covariate,
   using either the Kolmogorov-Smirnov,
   \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
-  or Anderson-Darling test of goodness-of-fit.
+  or Anderson-Darling test of goodness-of-fit. 
 }
 \usage{
 \method{cdf.test}{mppm}(model, covariate, test=c("ks", "cvm", "ad"), ...,
-            verbose=TRUE, interpolate=FALSE, fast=TRUE, jitter=TRUE)
+            nsim=19, verbose=TRUE, interpolate=FALSE, fast=TRUE, jitter=TRUE)
 }
 \arguments{
   \item{model}{
@@ -22,8 +22,9 @@
   \item{covariate}{
     The spatial covariate on which the test will be based.
     A function, a pixel image, a list of functions, a list of pixel
-    images, a hyperframe, or a character string containing the name
-    of one of the covariates in \code{model}.
+    images, a hyperframe, a character string containing the name
+    of one of the covariates in \code{model}, or one of the strings
+    \code{"x"} or \code{"y"}.
   }
   \item{test}{
     Character string identifying the test to be performed:
@@ -34,6 +35,10 @@
   \item{\dots}{
     Arguments passed to \code{\link{cdf.test}}
     to control the test.
+  }
+  \item{nsim}{
+    Number of simulated realisations which should be generated,
+    if a Monte Carlo test is required.
   }
   \item{verbose}{Logical flag indicating whether to print
     progress reports.
@@ -65,11 +70,17 @@
   The observed distribution
   of the values of a spatial covariate at the data points,
   and the predicted distribution of the same values under the model,
-  are compared using the Kolmogorov-Smirnov test. 
+  are compared using the Kolmogorov-Smirnov,
+  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  or Anderson-Darling test of goodness-of-fit.
+  These are exact tests if the model is Poisson;
+  otherwise, for a Gibbs model, a Monte Carlo p-value is computed by
+  generating simulated realisations of the model and applying the
+  selected goodness-of-fit test to each simulation.
   
   The argument \code{model} should be a fitted point process model
   fitted to multiple point patterns
-  (object of class \code{"mppm"}). It should be a Poisson point process.
+  (object of class \code{"mppm"}). 
   
   The argument \code{covariate} contains the values of a spatial
   function. It can be
@@ -82,7 +93,9 @@
     of which the first
     column will be taken as containing the covariate
     \item a character string giving the name of one of the covariates
-    in \code{model}.
+    in \code{model}
+    \item one of the character strings \code{"x"} or \code{"y"},
+    indicating the spatial coordinates.
   }
   If \code{covariate} is an image, it should have numeric values,
   and its domain should cover the observation window of the
@@ -112,10 +125,6 @@
   to these numbers using \code{\link[stats]{ks.test}},
   \code{\link[goftest]{cvm.test}} or \code{\link[goftest]{ad.test}}.
 
-  This test was apparently first described (in the context of
-  spatial data, and for Kolmogorov-Smirnov) by Berman (1986).
-  See also Baddeley et al (2005).
-
   The argument \code{interpolate} determines 
   how pixel values will be handled when code{covariate} is a pixel image.
   The value of the covariate at a data point is obtained
@@ -124,7 +133,29 @@
   between the values of the four nearest pixels 
   if \code{interpolate=TRUE}. Linear interpolation is slower,
   but is sometimes necessary to avoid tied values of the covariate
-  arising when the pixel grid is coarse. 
+  arising when the pixel grid is coarse.
+
+  If \code{model} is a Poisson point process, then the 
+  Kolmogorov-Smirnov,
+  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  and Anderson-Darling tests are theoretically exact.
+  This test was apparently first described (in the context of
+  spatial data, and for Kolmogorov-Smirnov) by Berman (1986).
+  See also Baddeley et al (2005).
+
+  If \code{model} is not a Poisson point process, then the
+  Kolmogorov-Smirnov,
+  \ifelse{latex}{\out{Cram\'er}}{Cramer}-von Mises 
+  and Anderson-Darling tests are biased.
+  Instead they are used as the basis of a Monte Carlo test.
+  First \code{nsim} simulated realisations of the model will be generated.
+  Each simulated realisation consists of a list of simulated point
+  patterns, one for each of the original data patterns. This
+  can take a very long time. The model is then re-fitted to each
+  simulation, and the refitted model is subjected to the goodness-of-fit
+  test described above. A Monte Carlo p-value is then computed by
+  comparing the p-value of the original test with the
+  p-values obtained from the simulations.
 }
 \value{
   An object of class \code{"cdftest"} and \code{"htest"}
@@ -154,13 +185,9 @@
 \author{
   Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \examples{
    # three i.i.d. realisations of nonuniform Poisson process
@@ -172,13 +199,10 @@
    # fit correct nonuniform Poisson process
    fit1 <- mppm(X~x, dat)
 
-   # test covariate = x coordinate
-   xcoord <- function(x,y) { x }
-
    # test wrong model
-   cdf.test(fit0, xcoord)
+   cdf.test(fit0, "x")
    # test right model
-   cdf.test(fit1, xcoord)
+   cdf.test(fit1, "x")
 }
 \keyword{htest}
 \keyword{spatial}

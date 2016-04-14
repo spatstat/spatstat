@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.023
+        CHANGES IN spatstat VERSION 1.45-0.024
 
 OVERVIEW
 
@@ -72,6 +72,10 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o cdf.test.mppm
+    Now handles Gibbs models.
+    Now recognises covariate="x" or "y".
+
     o leverage.ppm, influence.ppm, dfbetas.ppm
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
@@ -126,10 +130,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o cdf.test
     Calculations are more robust against numerical rounding effects.
 
+    o simulate.ppm
+    New argument 'verbose'
+
 BUG FIXES
 
-    o cdf.test
-    Calculation of p-values was incorrect: 1-p was computed instead of p.
+    o cdf.test.ppm
+    Calculation of p-values was incorrect for Gibbs models: 
+    1-p was computed instead of p.
     [Spotted by Sven Wagner.]
     Fixed.
 
