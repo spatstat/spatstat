@@ -56,8 +56,15 @@
 \value{
   A numeric matrix (or \code{NA} or \code{NULL}).
 }
+\section{Error messages}{
+  An error message that reports
+  \emph{system is computationally singular} indicates that the
+  determinant of the Fisher information matrix of one of the models
+  was either too large or too small for reliable numerical calculation.
+  See \code{\link{vcov.ppm}} for suggestions on how to handle this.
+}
 \seealso{
-  \code{\link{vcov}},
+  \code{\link{vcov}}, \code{\link{vcov.ppm}},
   \code{\link{mppm}}
 }
 \examples{
@@ -70,15 +77,11 @@
   London: Chapman and Hall/CRC Press. 
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Ida-Maria Sintorn and Leanne Bischoff.
+  Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{methods}

@@ -92,9 +92,11 @@ models on a linear network.
   ecology and criminology.
   \emph{Scandinavian Journal of Statistics} \bold{39}, 591--617.
 
-  Baddeley, A., Turner, R. and Rubak, E. (2014)
+  Baddeley, A., Turner, R. and Rubak, E. (2015)
   Adjusted composite likelihood ratio test for Gibbs point processes.
-  Submitted for publication.
+  \emph{Journal of Statistical Computation and Simulation}
+  \bold{86} (5) 922--941.
+   DOI: 10.1080/00949655.2015.1044530.
 
   McSwiggan, G., Nair, M.G. and Baddeley, A. (2012)
   Fitting Poisson point process models to events 

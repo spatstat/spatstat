@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.024
+        CHANGES IN spatstat VERSION 1.45-0.025
 
 OVERVIEW
 
@@ -117,6 +117,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o connected.im, connected.owin
     Arguments '...' now determine pixel resolution.
+
+    o anova.mppm
+    New argument 'fine'
 
     o as.owin.data.frame
     New argument 'step'

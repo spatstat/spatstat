@@ -155,13 +155,17 @@
   \emph{system is computationally singular} indicates that the
   determinant of the Fisher information matrix was either too large 
   or too small for reliable numerical calculation.
-  This can occur because of numerical overflow or
+
+  If this message occurs, try repeating the calculation
+  using \code{fine=TRUE}. 
+
+  Singularity can occur because of numerical overflow or
   collinearity in the covariates. To check this, rescale the 
   coordinates of the data points and refit the model. See the Examples.
 
   In a Gibbs model, a singular matrix may also occur if the
   fitted model is a hard core process: this is a feature of the
-  variance estimator.
+  variance estimator. 
 }
 \value{
   A square matrix.

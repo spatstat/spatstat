@@ -121,7 +121,15 @@ Performs analysis of deviance for one or more fitted point process models.
   }
 }
 \seealso{
-  \code{\link{ppm}}
+  \code{\link{ppm}},
+  \code{\link{vcov.ppm}}
+}
+\section{Error messages}{
+  An error message that reports
+  \emph{system is computationally singular} indicates that the
+  determinant of the Fisher information matrix of one of the models
+  was either too large or too small for reliable numerical calculation.
+  See \code{\link{vcov.ppm}} for suggestions on how to handle this.
 }
 \examples{
  mod0 <- ppm(swedishpines ~1)
@@ -143,8 +151,9 @@ Performs analysis of deviance for one or more fitted point process models.
 \references{
   Baddeley, A., Turner, R. and Rubak, E. (2015)
   Adjusted composite likelihood ratio test for Gibbs point processes.
-  \emph{Journal of Statistical Computation and Simulation},
-  In press. DOI: 10.1080/00949655.2015.1044530.
+  \emph{Journal of Statistical Computation and Simulation}
+  \bold{86} (5) 922--941.
+   DOI: 10.1080/00949655.2015.1044530.
 
   Pace, L., Salvan, A. and Sartori, N. (2011)
   Adjusting composite likelihood ratio statistics.

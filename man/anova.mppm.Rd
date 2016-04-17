@@ -6,7 +6,9 @@
   point process models fitted to replicated point pattern data.
 }
 \usage{
-  \method{anova}{mppm}(object, \dots, test=NULL, adjust=TRUE, warn=TRUE)
+  \method{anova}{mppm}(object, \dots,
+                  test=NULL, adjust=TRUE,
+                  fine=FALSE, warn=TRUE)
 }
 \arguments{
   \item{object}{
@@ -27,6 +29,15 @@
     Logical value indicating whether to correct the
     pseudolikelihood ratio when some of the models are not Poisson
     processes.
+  }
+  \item{fine}{
+    Logical value passed to \code{\link{vcov.ppm}}
+    indicating whether to use a quick estimate 
+    (\code{fine=FALSE}, the default) or a slower, more accurate
+    estimate (\code{fine=TRUE}) of the variance of the fitted
+    coefficients of each model. 
+    Relevant only when some of the models are not Poisson
+    and \code{adjust=TRUE}.
   }
   \item{warn}{
     Logical value indicating whether to issue warnings
@@ -73,6 +84,13 @@
   For random effects models, only \code{"Chisq"} is
   available, and again gives the likelihood ratio test.
 }
+\section{Error messages}{
+  An error message that reports
+  \emph{system is computationally singular} indicates that the
+  determinant of the Fisher information matrix of one of the models
+  was either too large or too small for reliable numerical calculation.
+  See \code{\link{vcov.ppm}} for suggestions on how to handle this.
+}
 \seealso{
   \code{\link{mppm}}
 }
@@ -93,8 +111,9 @@
 
   Baddeley, A., Turner, R. and Rubak, E. (2015)
   Adjusted composite likelihood ratio test for Gibbs point processes.
-  \emph{Journal of Statistical Computation and Simulation},
-  In press. DOI: 10.1080/00949655.2015.1044530.
+  \emph{Journal of Statistical Computation and Simulation}
+  \bold{86} (5) 922--941.
+  DOI: 10.1080/00949655.2015.1044530.
 
   Pace, L., Salvan, A. and Sartori, N. (2011)
   Adjusting composite likelihood ratio statistics.
