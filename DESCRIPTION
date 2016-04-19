@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.45-0.025
+Version: 1.45-0.026
 Nickname: Djeran
-Date: 2016-04-17
+Date: 2016-04-19
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -109,6 +109,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	R.K. Milne; 
         E. Miranda;
 	J. Moller; 
+	V. Morera Pujol; 
 	E. Mudrak;
         G.M. Nair;
 	N. Nava;

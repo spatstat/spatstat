@@ -5,7 +5,7 @@
 #         resid1plot       one or more unrelated individual plots 
 #         resid1panel      one panel of resid1plot
 #
-#   $Revision: 1.33 $    $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.34 $    $Date: 2016/04/19 00:11:51 $
 #
 #
 
@@ -654,8 +654,9 @@ ploterodeimage <- function(W, Z, ..., Wcol=grey(0.75), rangeZ, colsZ,
   # Image Z is assumed to live on a subset of mask W
   # colsZ are the colours for the values in the range 'rangeZ'
 
-  if(W$type != "mask" && do.plot) {
-    plot(W, add=TRUE)
+  if(!is.mask(W)) {
+    if(do.plot)
+      plot(W, add=TRUE)
     W <- as.mask(W)
   }
   

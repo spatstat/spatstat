@@ -392,8 +392,12 @@
     \dontrun{
     diagnose.ppm(fit, type="pearson")
     }
+
     diagnose.ppm(fit, which="marks")
+
     diagnose.ppm(fit, type="raw", plot.neg="discrete")
+
+    diagnose.ppm(fit, type="pearson", which="smooth")
 
     # save the diagnostics and plot them later
     u <- diagnose.ppm(fit, rbord=0.15, plot.it=FALSE)
@@ -402,11 +406,9 @@
     plot(u, which="marks")
     }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
   and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
 }
 \keyword{spatial}
 \keyword{models}

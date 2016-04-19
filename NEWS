@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.025
+        CHANGES IN spatstat VERSION 1.45-0.026
 
 OVERVIEW
 
-    o We thank Sven Wagner for contributions.
+    o We thank Virginia Morera Pujol and Sven Wagner for contributions.
 
     o Recursive-partition point process models.
 
@@ -160,6 +160,11 @@ BUG FIXES
     For Gibbs models with a multitype interaction (MultiStrauss, etc),
     computation of the conditional intensity caused an error.
     [Spotted by Sven Wagner.]
+    Fixed.
+
+    o diagnose.ppm
+    Crashed if what="smooth", when the original window was a rectangle.
+    [Spotted by Virginia Morera Pujol.]
     Fixed.
 
     o vcov.ppm
