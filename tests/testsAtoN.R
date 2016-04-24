@@ -1059,6 +1059,11 @@ local({
   s7 <- subfits(fit7)
   p7 <- solapply(s7, predict)
 
+  fit7a <- mppm(X ~ Z, H, random=~x|id)
+  v7a <- vcov(fit7a)
+  s7a <- subfits(fit7a)
+  p7a <- solapply(s7a, predict)
+
   # multitype: collisions in vcov.ppm, predict.ppm
   H$X <- lapply(H$X, rlabel, labels=factor(c("a","b")), permute=FALSE)
   M <- MultiStrauss(matrix(0.1, 2, 2), c("a","b"))

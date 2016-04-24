@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.026
+        CHANGES IN spatstat VERSION 1.45-0.027
 
 OVERVIEW
 
@@ -25,7 +25,7 @@ OVERVIEW
 
     o spatstat now Depends on the package 'rpart'
 
-    o Version nickname: 'Djeran' (Flying Ant Season)
+    o Version nickname: 'But Wait, There's More'
 
 NEW DATASETS
 
@@ -165,6 +165,12 @@ BUG FIXES
     o diagnose.ppm
     Crashed if what="smooth", when the original window was a rectangle.
     [Spotted by Virginia Morera Pujol.]
+    Fixed.
+
+    o mppm
+    The x and y coordinates were not permitted in the 
+    random-effects formula 'random'.
+    [Spotted by Sven Wagner.]
     Fixed.
 
     o vcov.ppm

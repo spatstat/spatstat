@@ -428,7 +428,7 @@
   for the simulated patterns.
   This option is only needed in rare cases: usually the basic principle
   requires that the data and simulated patterns must be treated
-  equally, so that \code{funargs} and \code{funYargs} be identical.
+  equally, so that \code{funargs} and \code{funYargs} should be identical.
 
   If \code{Y} is a fitted cluster point process model (object of
   class \code{"kppm"}), and \code{simulate=NULL},

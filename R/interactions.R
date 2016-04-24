@@ -75,6 +75,7 @@ active.interactions <- function(object) {
   datanames <- names(dat)
   dfnames <- summary(dat)$dfnames
   nondfnames <- datanames[!(datanames %in% dfnames)]
+  nondfnames <- union(nondfnames, c("x", "y"))
   
   # extract data-frame values
   dfdata <- as.data.frame(dat[, dfnames, drop=FALSE], warn=FALSE)

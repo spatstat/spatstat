@@ -14,7 +14,7 @@
                "     ",
                paren(paste("nickname:", sQuote(ni))),
                "\nFor an introduction to spatstat, type",
-               sQuote("beginner"))
+               sQuote("beginner"), "\n")
   packageStartupMessage(msg)
   if(exists("getRversion") && getRversion() >= "3.2.2") {
     ## check versions

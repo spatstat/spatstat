@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.77 $   $Date: 2016/04/14 02:59:47 $
+#  $Revision: 1.78 $   $Date: 2016/04/24 07:16:59 $
 #
 
 mppm <- local({
@@ -110,7 +110,7 @@ mppm <- local({
         stop(paste("The random effects formula",
                    sQuote("random"),
                    "should not have a left hand side"))
-      checkvars(random, itags, extra=c(data.sumry$col.names, "id"),
+      checkvars(random, itags, extra=c(data.sumry$col.names, "x", "y", "id"),
                 bname="either data or interaction")
       allvars <- c(allvars, variablesinformula(random))
     }
