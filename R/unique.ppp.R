@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.31 $  $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.32 $  $Date: 2016/04/25 02:34:40 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 

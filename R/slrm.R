@@ -3,7 +3,7 @@
 #
 #  Spatial Logistic Regression
 #
-#  $Revision: 1.27 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.28 $   $Date: 2016/04/25 02:34:40 $
 #
 
 slrm <- function(formula, ..., data=NULL, offset=TRUE, link="logit",

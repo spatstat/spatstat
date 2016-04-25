@@ -1,7 +1,7 @@
 #
 #        edgeTrans.R
 #
-#    $Revision: 1.14 $    $Date: 2016/02/26 02:24:14 $
+#    $Revision: 1.15 $    $Date: 2016/04/25 02:34:40 $
 #
 #    Translation edge correction weights
 #

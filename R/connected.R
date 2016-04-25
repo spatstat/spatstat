@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.17 $  $Date: 2014/10/24 00:22:30 $
+#    $Revision: 1.18 $  $Date: 2016/04/25 02:34:40 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley

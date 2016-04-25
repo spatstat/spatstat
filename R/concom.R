@@ -2,7 +2,7 @@
 #
 #    concom.R
 #
-#    $Revision: 1.3 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.4 $	$Date: 2016/04/25 02:34:40 $
 #
 #    The connected component interaction
 #

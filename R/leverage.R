@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.60 $  $Date: 2016/03/12 12:07:05 $
+#  $Revision: 1.61 $  $Date: 2016/04/25 02:34:40 $
 #
 
 leverage <- function(model, ...) {

@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.8 $  $Date: 2016/02/02 02:54:15 $
+#' $Revision: 1.9 $  $Date: 2016/04/25 02:34:40 $
 #'
 
 insertVertices <- function(L, ...) {

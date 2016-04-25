@@ -4,7 +4,7 @@
 #  Computationally expensive unless sigma is very small
 #  You Have Been Warned
 #
-#   $Revision: 1.6 $  $Date: 2016/02/17 00:30:43 $
+#   $Revision: 1.7 $  $Date: 2016/04/25 02:34:40 $
 #
 
 density.lpp <- function(x, sigma, ...,

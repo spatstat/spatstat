@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.204 $    $Date: 2016/03/04 00:42:30 $
+#    $Revision: 1.205 $    $Date: 2016/04/25 02:34:40 $
 #
 #
 matrowsum <- function(x) {

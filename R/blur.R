@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.15 $   $Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.16 $   $Date: 2016/04/25 02:34:40 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -67,22 +67,22 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
   return(Z)
 }
   
-safelookup <- function(Z, X, factor=2, warn=TRUE) {
-  # X is a ppp
-  # evaluates Z[X], replacing any NA's by blur(Z)[X]
-  Zvals <- Z[X, drop=FALSE]
+safelookup <- function(Z, x, factor=2, warn=TRUE) {
+  # x is a ppp
+  # evaluates Z[x], replacing any NA's by blur(Z)[x]
+  Zvals <- Z[x, drop=FALSE]
   if(any(isna <- is.na(Zvals))) {
     # First pass - look up values at neighbouring pixels if valid
-    XX <- X[isna]
+    XX <- x[isna]
     rc <- nearest.valid.pixel(XX$x, XX$y, Z)
     Zvals[isna] <- Z$v[cbind(rc$row, rc$col)]
   }
   if(any(isna <- is.na(Zvals))) {
     # Second pass - extrapolate
-    XX <- X[isna]
+    XX <- x[isna]
     pixdiam <- sqrt(Z$xstep^2 + Z$ystep^2)
     # expand domain of Z 
-    RX <- as.rectangle(X)
+    RX <- as.rectangle(x)
     RZ <- as.rectangle(Z)
     bb <- boundingbox(RX, RZ)
     big <- grow.rectangle(bb, 2 * pixdiam)
@@ -94,7 +94,7 @@ safelookup <- function(Z, X, factor=2, warn=TRUE) {
       stop("Internal error: pixel values were NA, even after blurring")
     Zvals[isna] <- Bvals
     if(warn)
-      warning(paste(sum(isna), "out of", X$n, "pixel values",
+      warning(paste(sum(isna), "out of", npoints(x), "pixel values",
                     "were outside the pixel image domain",
                     "and were estimated by convolution"))
   }

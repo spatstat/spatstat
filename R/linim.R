@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.22 $   $Date: 2016/02/17 08:35:41 $
+#  $Revision: 1.23 $   $Date: 2016/04/25 02:34:40 $
 #
 #  Image/function on a linear network
 #

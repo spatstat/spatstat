@@ -2,7 +2,7 @@
 #
 #    badgey.S
 #
-#    $Revision: 1.15 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.16 $	$Date: 2016/04/25 02:34:40 $
 #
 #    Hybrid Geyer process
 #

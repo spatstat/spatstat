@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.124 $    $Date: 2016/02/16 01:39:12 $
+#  $Revision: 1.125 $    $Date: 2016/04/25 02:34:23 $
 #
 #
 
@@ -721,7 +721,8 @@ findbestlegendpos <- local({
                           NULL)
         if(!is.null(testloc)) {
           # look up distance value at preferred location
-          val <- safelookup(D, list(x=testloc[1], y=testloc[2]))
+          testpat <- ppp(x=testloc[1], y=testloc[2], xr, yr, check=FALSE)
+          val <- safelookup(D, testpat)
           crit <- 0.15 * min(diff(xr), diff(yr))
           if(verbose)
             cat(paste("val=",val, ", crit=", crit, "\n"))

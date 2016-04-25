@@ -4,7 +4,7 @@
 #  Class of optimised bandwidths
 #  Plotting the object displays the optimisation criterion
 #
-#  $Revision: 1.24 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.25 $  $Date: 2016/04/25 02:34:40 $
 #
 
 bw.optim <- function(cv, h, iopt=which.min(cv), ...,

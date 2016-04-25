@@ -1,7 +1,7 @@
 #
 #   anova.ppm.R
 #
-#  $Revision: 1.23 $   $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.24 $   $Date: 2016/04/25 02:34:40 $
 #
 
 anova.ppm <- local({

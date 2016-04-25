@@ -3,7 +3,7 @@
 #
 #  rXXX, dXXX, pXXX and qXXX for kernels
 #
-#  $Revision: 1.15 $  $Date: 2016/03/18 10:17:47 $
+#  $Revision: 1.16 $  $Date: 2016/04/25 02:34:40 $
 #
 
 match.kernel <- function(kernel) {

@@ -4,7 +4,7 @@
 #'   Counterpart of linalg.R for sparse matrices/arrays
 #'
 #' 
-#'   $Revision: 1.8 $  $Date: 2016/03/06 09:47:18 $
+#'   $Revision: 1.9 $  $Date: 2016/04/25 02:34:40 $
 
 marginSums <- function(X, MARGIN) {
   #' equivalent to apply(X, MARGIN, sum)

@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.47 $   $Date: 2016/03/16 10:31:35 $
+#  $Revision: 1.48 $   $Date: 2016/04/25 02:34:40 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2016/03/16 10:31:35 $")
+                         date="$Date: 2016/04/25 02:34:40 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
