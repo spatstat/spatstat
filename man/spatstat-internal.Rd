@@ -91,8 +91,6 @@
 \alias{compatible.rat}
 \alias{complaining}
 \alias{compileCDF}
-\alias{compileK}
-\alias{compilepcf}
 \alias{conform.ratfv}
 \alias{crosspairquad}
 \alias{cobble.xy}
@@ -911,8 +909,6 @@ coerce.marks.numeric(X, warn)
 \method{compatible}{rat}(A, B, \dots) 
 complaining(whinge, fatal, value)
 compileCDF(D, B, r, \dots, han.denom, check)
-compileK(D, r, weights, denom, check, ratio, fname)
-compilepcf(D, r, weights, denom, check, endcorrect, \dots, fname)
 conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)

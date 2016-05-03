@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.029
+        CHANGES IN spatstat VERSION 1.45-0.030
 
 OVERVIEW
 
@@ -140,6 +140,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o simulate.ppm
     New argument 'verbose'
+
+    o compileK, compilepcf
+    These internal functions are now documented.
 
 BUG FIXES
 
