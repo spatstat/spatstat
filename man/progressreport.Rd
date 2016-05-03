@@ -7,10 +7,11 @@
 \usage{
 progressreport(i, n,
                every = min(100,max(1, ceiling(n/100))),
-               nperline = min(charsperline,
-                              every * ceiling(charsperline/(every + 3))),
-               charsperline = 60,
-               style=spatstat.options("progress"),
+               tick = 1,
+               nperline = NULL,
+               charsperline = getOption("width"),
+               style = spatstat.options("progress"),
+               showtime = NULL,
                state=NULL)
 }
 \arguments{
@@ -21,19 +22,27 @@ progressreport(i, n,
     Integer. The (maximum) number of iterations to be computed.
   }
   \item{every}{
-    Optional integer. The number of iterations between successive
-    reports.
+    Optional integer. Iteration number will be printed 
+    when \code{i} is a multiple of \code{every}.
+  }
+  \item{tick}{
+    Optional integer. A tick mark or dot will be printed
+    when \code{i} is a multiple of \code{tick}.
   }
   \item{nperline}{
-    Optional integer. The maximum number of reports to be printed per
-    line of output.
+    Optional integer. Number of iterations per line of output.
   }
   \item{charsperline}{
     Optional integer. The number of characters in a line of output.
   }
   \item{style}{
     Character string determining the style of display.
+    Options are \code{"tty"} (the default), \code{"tk"} and \code{"txtbar"}.
     See Details.
+  }
+  \item{showtime}{
+    Optional. Logical value indicating whether to print the estimated
+    time remaining. Applies only when \code{style="tty"}.
   }
   \item{state}{
     Optional. A list containing the internal data.
@@ -44,17 +53,39 @@ progressreport(i, n,
   during an iterative sequence of calculations
   or a suite of simulations.
 
-  If \code{style="tk"} then \code{tcltk::tkProgressBar} is
-  used to pop-up a new graphics window showing a progress bar.
-  This requires the package \pkg{tcltk}.
+  \itemize{
+    \item 
+    If \code{style="tk"} then \code{tcltk::tkProgressBar} is
+    used to pop-up a new graphics window showing a progress bar.
+    This requires the package \pkg{tcltk}.
+    As \code{i} increases from 1 to \code{n}, the bar will lengthen.
+    The arguments \code{every, tick, nperline, showtime} are ignored.
+    \item 
+    If \code{style="txtbar"} then \code{\link[utils]{txtProgressBar}} is
+    used to represent progress as a bar made of text characters in the
+    \R interpreter window.
+    As \code{i} increases from 1 to \code{n}, the bar will lengthen.
+    The arguments \code{every, tick, nperline, showtime} are ignored.
+    \item 
+    If \code{style="tty"} (the default),
+    then progress reports are printed to the
+    console. This only seems to work well under Linux.
+    As \code{i} increases from 1 to \code{n}, 
+    the output will be a sequence of dots (one dot for every \code{tick}
+    iterations), iteration numbers (printed when iteration number is
+    a multiple of \code{every} or is less than 4),
+    and optionally the estimated time
+    remaining. For example \code{[etd 1:20:05]} means an estimated time
+    of 1 hour, 20 minutes and 5 seconds until finished.
 
-  If \code{style="txtbar"} then \code{\link[utils]{txtProgressBar}} is
-  used to represent progress as a bar made of text characters in the
-  \R interpreter window.
-
-  If \code{style="tty"}, then progress reports are printed using
-  \code{cat}. This only seems to work well under Linux.
-
+    The estimated time remaining will be printed only if
+    \code{style="tty"}, and the argument \code{state} is given,
+    and either \code{showtime=TRUE}, or \code{showtime=NULL} and the
+    iterations are slow (defined as: the estimated time remaining
+    is longer than 3 minutes, or the average time per iteration is
+    longer than 20 seconds).
+  }
+  
   It is optional, but strongly advisable, to use the argument \code{state}
   to store and update the internal data for the progress reports
   (such as the cumulative time taken for computation)
@@ -67,13 +98,9 @@ progressreport(i, n,
   Otherwise the result is the updated value of \code{state}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \examples{
   for(i in 1:40) {
@@ -83,7 +110,7 @@ progressreport(i, n,
      progressreport(i, 40)
   }
 
-  # saving internal state
+  # saving internal state: *recommended*
   sta <- list()
   for(i in 1:20) {
      # some code ...

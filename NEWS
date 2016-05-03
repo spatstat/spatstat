@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.028
+        CHANGES IN spatstat VERSION 1.45-0.029
 
 OVERVIEW
 
@@ -20,6 +20,8 @@ OVERVIEW
     o Leverage and influence code handles bigger datasets.
 
     o More support for pixel images.
+
+    o Improved progress reports.
 
     o New dataset 'redwood3'
 
@@ -132,6 +134,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o cdf.test
     Calculations are more robust against numerical rounding effects.
+
+    o progressreport
+    Behaviour improved. New arguments 'tick', 'showtime'.
 
     o simulate.ppm
     New argument 'verbose'

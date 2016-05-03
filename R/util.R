@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.205 $    $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.206 $    $Date: 2016/05/02 12:02:34 $
 #
 #
 matrowsum <- function(x) {
@@ -482,20 +482,54 @@ progressreport <- local({
     }
     return(value)
   }
+
+  IterationsPerLine <- function(charsperline, n, every, tick,
+                                showtime, showevery) {
+    # Calculate number of iterations that triggers a newline.
+    # A dot is printed every 'tick' iterations
+    # Iteration number is printed every 'every' iterations.
+    # If showtime=TRUE, the time is shown every 'showevery' iterations
+    # where showevery \in {1, every, n}.
+    chars.report <- ceiling(log10(n))
+    if(showtime) {
+      chars.time <- nchar(' [etd 12:00:00] ')
+      timesperreport <- if(showevery == 1) every else
+                        if(showevery == every) 1 else 0
+      chars.report <- chars.report + timesperreport * chars.time
+    }
+    chars.ticks <- floor((every-1)/tick)
+    chars.block <- chars.report + chars.ticks
+    nblocks <- max(1, floor(charsperline/chars.block))
+    nperline <- nblocks * every
+    leftover <- charsperline - nblocks * chars.block
+    if(leftover > 0)
+      nperline <- nperline + min(leftover * tick, showevery - 1)
+    return(nperline)
+  }
   
-  progressreport <- function(i, n, every=min(100,max(1, ceiling(n/100))),
-                             nperline=min(charsperline,
-                               every * ceiling(charsperline /(every+3))),
-                             charsperline=60,
+  progressreport <- function(i, n,
+                             every=min(100,max(1, ceiling(n/100))),
+                             tick=1,
+                             nperline=NULL,
+                             charsperline=getOption("width"),
                              style=spatstat.options("progress"),
+                             showtime=NULL,
                              state=NULL) {
     missevery <- missing(every)
+    nperline.fixed <- !is.null(nperline)
+    showtime.optional <- is.null(showtime)
+    if(showtime.optional) showtime <- FALSE # initialise only
     if(i > n) {
       warning(paste("progressreport called with i =", i, "> n =", n))
       return(invisible(NULL))
     }
-    if(style == "tk" && !requireNamespace("tcltk"))
+    if(style == "tk" && !requireNamespace("tcltk")) {
+      warning("tcltk is unavailable; switching to style='txtbar'", call.=FALSE)
       style <- "txtbar"
+    }
+    if(is.null(state) && style != "tty")
+      stop(paste("Argument 'state' is required when style =",sQuote(style)),
+           call.=FALSE)
     switch(style,
            txtbar={
              if(i == 1) {
@@ -536,19 +570,23 @@ progressreport <- local({
            },
            tty={
              now <- proc.time()
-             if(i == 1) {
+             if(i == 1 || is.null(state)) {
                ## Initialise stuff
-               if(missevery && every > 1 && n > 10) {
+               if(missevery && every > 1 && n > 10) 
                  every <- niceround(every)
-                 nperline <- min(charsperline,
-                                 every * ceiling(charsperline /(every+3)))
-               }
-               showtime <- FALSE
-               showevery <- n
+               showevery <- if(showtime) every else n
+               if(!nperline.fixed) 
+                 nperline <- IterationsPerLine(charsperline, n, every, tick,
+                                               showtime, showevery)
                state <- Put("ProgressData",
-                            list(every=every, nperline=nperline,
+                            list(every=every,
+                                 tick=tick,
+                                 nperline=nperline,
                                  starttime=now,
-                                 showtime=FALSE, showevery=n),
+                                 showtime=showtime,
+                                 showevery=showevery,
+                                 nperline.fixed=nperline.fixed,
+                                 showtime.optional=showtime.optional),
                             state)
              } else {
                pd <- Get("ProgressData", state)
@@ -556,35 +594,50 @@ progressreport <- local({
                  stop(paste("progressreport called with i =", i,
                             "before i = 1"))
                every     <- pd$every
+               tick      <- pd$tick
                nperline  <- pd$nperline
                showtime  <- pd$showtime
                showevery <- pd$showevery
+               showtime.optional <- pd$showtime.optional
+               nperline.fixed    <- pd$nperline.fixed
                if(i < n) {
-                 ## estimate time remaining
-                 starttime <- pd$starttime
-                 elapsed <- now - starttime
-                 elapsed <- unname(elapsed[3])
-                 rate <- elapsed/(i-1)
-                 remaining <- rate * (n-i)
-                 if(!showtime) {
-                   ## show time remaining if..
-                   if(rate > 20) {
-                     ## .. rate is very slow
-                     showtime <- TRUE
-                     showevery <- 1
-                   } else if(remaining > 180) {
-                     ## ... more than 3 minutes remaining
-                     showtime <- TRUE
-                     showevery <- every
-                     aminute <- ceiling(60/rate)
-                     if(aminute < showevery) 
-                       showevery <- min(niceround(aminute), showevery)
+                 if(showtime || showtime.optional) {
+                   ## estimate time remaining
+                   starttime <- pd$starttime
+                   elapsed <- now - starttime
+                   elapsed <- unname(elapsed[3])
+                   rate <- elapsed/(i-1)
+                   remaining <- rate * (n-i)
+                   if(!showtime) {
+                     ## show time remaining if..
+                     if(rate > 20) {
+                       ## .. rate is very slow
+                       showtime <- TRUE
+                       showevery <- 1
+                     } else if(remaining > 180) {
+                       ## ... more than 3 minutes remaining
+                       showtime <- TRUE
+                       showevery <- every
+                       aminute <- ceiling(60/rate)
+                       if(aminute < showevery) 
+                         showevery <- min(niceround(aminute), showevery)
+                     }
+                     # update number of iterations per line
+                     if(showtime && !nperline.fixed) 
+                       nperline <- IterationsPerLine(charsperline,
+                                                     n, every, tick,
+                                                     showtime, showevery)
                    }
                  }
                  state <- Put("ProgressData",
-                              list(every=every, nperline=nperline,
+                              list(every=every,
+                                   tick=tick,
+                                   nperline=nperline,
                                    starttime=starttime,
-                                   showtime=showtime, showevery=showevery),
+                                   showtime=showtime,
+                                   showevery=showevery,
+                                   nperline.fixed=nperline.fixed,
+                                   showtime.optional=showtime.optional),
                               state)
                }
              }
@@ -595,7 +648,7 @@ progressreport <- local({
              else {
                if(i %% every == 0) 
                  cat(i)
-               else
+               else if(i %% tick == 0)
                  cat(".")
                if(i %% nperline == 0)
                  cat("\n")
