@@ -9,26 +9,40 @@
 \alias{as.ppp.default}
 \title{Convert Data To Class ppp}
 \description{
-Tries to coerce any reasonable kind of data to a spatial point pattern
-(an object of class \code{"ppp"})
-for use by the \pkg{spatstat} package).
+  Tries to coerce any reasonable kind of data to a spatial point pattern
+  (an object of class \code{"ppp"})
+  for use by the \pkg{spatstat} package).
 }
 \usage{
   as.ppp(X, \dots, fatal=TRUE)
+
   \method{as.ppp}{ppp}(X, \dots, fatal=TRUE)
+
   \method{as.ppp}{psp}(X, \dots, fatal=TRUE)
+
   \method{as.ppp}{quad}(X, \dots, fatal=TRUE)
+
   \method{as.ppp}{matrix}(X, W=NULL, \dots, fatal=TRUE)
+
   \method{as.ppp}{data.frame}(X, W=NULL, \dots, fatal=TRUE)
+
   \method{as.ppp}{influence.ppm}(X, \dots)
+
   \method{as.ppp}{default}(X, W=NULL, \dots, fatal=TRUE)
 }
 \arguments{
   \item{X}{Data which will be converted into a point pattern}
-  \item{W}{Data which define a window for the pattern
-    when \code{X} does not contain a window}
+  \item{W}{
+    Data which define a window for the pattern,
+    when \code{X} does not contain a window.
+    (Ignored if \code{X} contains window information.)
+  }
   \item{\dots}{Ignored.}
-  \item{fatal}{Logical value. See Details.}
+  \item{fatal}{
+    Logical value specifying what to do if the
+    data cannot be converted.
+    See Details.
+  }
 }
 \value{
   An object of class \code{"ppp"} (see \code{\link{ppp.object}})
@@ -46,6 +60,10 @@ for use by the \pkg{spatstat} package).
   coordinates, it is normally easier to use the creator function
   \code{\link{ppp}}.
 
+  The function \code{as.ppp} is generic, with methods for the
+  classes \code{"ppp"}, \code{"psp"}, \code{"quad"}, \code{"matrix"},
+  \code{"data.frame"} and a default method.
+
   The dataset \code{X} may be:
   \itemize{
     \item
@@ -53,8 +71,7 @@ for use by the \pkg{spatstat} package).
     \item
     an object of class \code{"psp"}
     \item
-    an object of class \code{"spp"} as defined in the 
-    \pkg{spatial} library
+    a point pattern object created by the \pkg{spatial} library
     \item
     an object of class \code{"quad"} representing a quadrature scheme
     (see \code{\link{quad.object}})
@@ -88,39 +105,32 @@ for use by the \pkg{spatstat} package).
   will be generated; if \code{fatal=FALSE}, the
   value \code{NULL} is returned.
 
-  An \code{spp} object is the representation of a point pattern
-  in the \pkg{spatial} library. Our implementation recognises
-  the following formats:
+  In the \pkg{spatial} library, a point pattern is represented
+  in either of the following formats:
   \itemize{
     \item
+    (in \pkg{spatial} versions 1 to 6)
     a structure with entries \code{x}, \code{y}
     \code{xl}, \code{xu}, \code{yl}, \code{yu}
     \item
+    (in \pkg{spatial} version 7)
     a structure with entries
     \code{x}, \code{y} and \code{area},
     where \code{area} is a structure with entries
     \code{xl}, \code{xu}, \code{yl}, \code{yu}
   }
-  (used in \pkg{spatial} versions 1 to 6 and version 7.1 respectively)
   where \code{x} and \code{y} are vectors of equal length
   giving the point coordinates, and \code{xl}, \code{xu}, \code{yl},
   \code{yu} are numbers giving the dimensions of a rectangular window.
 
-  The function \code{as.ppp} is generic, with methods for the
-  classes \code{"ppp"}, \code{"psp"}, \code{"quad"}, \code{"matrix"},
-  \code{"data.frame"} and a default method.
-
   Point pattern datasets can also be created by the function
   \code{\link{ppp}}.
-} \seealso{
+}
+\seealso{
   \code{\link{ppp}}, \code{\link{ppp.object}}, \code{\link{as.owin}},
   \code{\link{owin.object}}
-} \section{Warnings}{
-  If the format of \code{spp} objects is changed in future versions
-  of the \pkg{spatial} library, then \code{as.ppp} may not be able to
-  interpret them.  It currently handles all versions of \pkg{spatial}
-  up to 7.1-4.
-} \examples{
+}
+\examples{
  xy <- matrix(runif(40), ncol=2)
  pp <- as.ppp(xy, c(0,1,0,1))
 
@@ -137,11 +147,10 @@ for use by the \pkg{spatstat} package).
  xyzt <- matrix(runif(40), ncol=4)
  Z <- as.ppp(xyzt, square(1))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{manip}

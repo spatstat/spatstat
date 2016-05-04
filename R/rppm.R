@@ -3,7 +3,7 @@
 #' 
 #'  Recursive Partitioning for Point Process Models
 #'
-#'  $Revision: 1.10 $  $Date: 2016/04/25 02:34:40 $
+#'  $Revision: 1.11 $  $Date: 2016/05/04 02:22:17 $
 
 rppm <- function(..., rpargs=list()) {
   ## do the equivalent of ppm(...)
@@ -47,11 +47,13 @@ plot.rppm <- local({
                      "digits", "use.n", "fancy",
                      "fwidth", "fheight", "bg", "minlength")
   
-  plot.rppm <- function(x, ..., what=c("tree", "spatial")) {
+  plot.rppm <- function(x, ..., what=c("tree", "spatial"), treeplot=NULL) {
     xname <- short.deparse(substitute(x))
     what <- match.arg(what)
     switch(what,
            tree = {
+             if(is.function(treeplot)) 
+               return(treeplot(x$rp, ...))
              out <- do.call.matched(plot,
                                     list(x=x$rp, ...),
                                     funargs=argsPlotRpart,

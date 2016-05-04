@@ -9,7 +9,7 @@
   or the fitted intensity.
 }
 \usage{
-\method{plot}{rppm}(x, \dots, what = c("tree", "spatial"))
+\method{plot}{rppm}(x, \dots, what = c("tree", "spatial"), treeplot=NULL)
 }
 \arguments{
   \item{x}{
@@ -26,11 +26,21 @@
     or passed to \code{\link{plot.im}} (if \code{what="spatial"})
     controlling the appearance of the plot.
   }
+  \item{treeplot}{
+    Optional. A function to be used to plot and label the partition tree,
+    replacing the two functions  \code{\link[rpart]{plot.rpart}}
+    and \code{\link[rpart]{text.rpart}}.
+  }
 }
 \details{
   If \code{what="tree"} (the default), the partition tree will be plotted
   using \code{\link[rpart]{plot.rpart}}, and labelled using
   \code{\link[rpart]{text.rpart}}.
+
+  If the argument \code{treeplot} is
+  given, then plotting and labelling will be performed by
+  \code{treeplot} instead. A good choice is the function
+  \code{prp} in package \pkg{rpart.plot}.
 
   If \code{what="spatial"}, the predicted intensity
   will be computed using \code{\link{predict.rppm}}, and
