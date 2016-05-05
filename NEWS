@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.031
+        CHANGES IN spatstat VERSION 1.45-0.032
 
 OVERVIEW
 
-    o We thank Virginia Morera Pujol and Sven Wagner for contributions.
+    o We thank Ottmar Cronie, Virginia Morera Pujol,
+    Sven Wagner and Marie-Colette van Lieshout for contributions.
 
     o Recursive-partition point process models.
 
@@ -44,6 +45,9 @@ NEW FUNCTIONS
 
     o dilationAny, erosionAny, %-%
     Morphological dilation and erosion by any shape.
+
+    o FmultiInhom, GmultiInhom
+    Inhomogeneous multitype/marked versions of the summary functions Fest, Gest.
 
     o kernel.moment
     Moment or incomplete moment of smoothing kernel.

@@ -1724,6 +1724,7 @@
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,
+  Ottmar Cronie, 
   Ute Hahn,
   Abdollah Jalilian,
   Marie-Colette van Lieshout,

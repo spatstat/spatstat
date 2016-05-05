@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.206 $    $Date: 2016/05/02 12:02:34 $
+#    $Revision: 1.207 $    $Date: 2016/05/04 09:13:28 $
 #
 #
 matrowsum <- function(x) {
@@ -1731,3 +1731,8 @@ matchNameOrPosition <- function(expected, avail) {
   return(j)
 }
 
+natozero <- function(x) {
+  #' map NA to zero (e.g. in tapply)
+  x[is.na(x)] <- 0
+  return(x)
+}

@@ -1,13 +1,14 @@
 Package: spatstat
-Version: 1.45-0.031
+Version: 1.45-0.032
 Nickname: But Wait, There's More
-Date: 2016-05-04
+Date: 2016-05-05
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
         and Ege Rubak <rubak@math.aau.dk>,
 	with substantial contributions of code by 
 	Kasper Klitgaard Berthelsen;
+	Ottmar Cronie;
 	Ute Hahn;
 	Abdollah Jalilian;
 	Marie-Colette van Lieshout;

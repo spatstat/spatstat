@@ -412,6 +412,7 @@
 \alias{names.hyperframe}
 \alias{names<-.fv}
 \alias{names<-.hyperframe}
+\alias{natozero}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
 \alias{newformula}
@@ -1285,6 +1286,7 @@ na.handle.im(X, na.replace)
 \method{names}{fv}(x) <- value
 \method{names}{hyperframe}(x)
 \method{names}{hyperframe}(x) <- value
+natozero(x)
 nearest.pixel(x, y, im)
 nearest.valid.pixel(x, y, im)
 newformula(old, change, eold, enew)
