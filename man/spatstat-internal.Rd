@@ -421,10 +421,6 @@
 \alias{nncleanEngine}
 \alias{nndcumfun}
 \alias{no.trend.ppm}
-\alias{nobjects}
-\alias{nobjects.ppp}
-\alias{nobjects.ppx}
-\alias{nobjects.psp}
 \alias{n.quad}
 \alias{numalign}
 \alias{numeric.columns}
@@ -1296,10 +1292,6 @@ nncleanEngine(kthNND, k, d, \dots, tol, maxit,
               plothist, lineargs, verbose, Xname)
 nndcumfun(X, \dots, r)
 no.trend.ppm(x)
-nobjects(x)
-\method{nobjects}{ppp}(x)
-\method{nobjects}{ppx}(x)
-\method{nobjects}{psp}(x)
 n.quad(Q)
 numalign(i, nmax, zero)
 numeric.columns(M, logical, others)

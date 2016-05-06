@@ -5,15 +5,19 @@
 }
 \description{
   Convert a tessellation into a function of the \eqn{x} and \eqn{y} coordinates.
-  The function values are factor levels specifying which tile of the
+  The default function values are factor levels specifying which tile of the
   tessellation contains the point \eqn{(x,y)}.
 }
 \usage{
-  \method{as.function}{tess}(x,\dots)
+  \method{as.function}{tess}(x,\dots,values=NULL)
 }
 \arguments{
   \item{x}{
     A tessellation (object of class \code{"tess"}).
+  }
+  \item{values}{
+    Optional. A vector giving the values of the function for each tile
+    of \code{x}.
   }
   \item{\dots}{
     Ignored.
@@ -25,7 +29,11 @@
   where the arguments \code{x} and \code{y} are (vectors of) spatial
   coordinates. The corresponding function values are factor levels
   identifying which tile of the tessellation contains each point.
-  Values are \code{NA} if the corresponding point lies outside the tessellation.
+  Values are \code{NA} if the corresponding point lies outside the
+  tessellation.
+
+  If the argument \code{values} is given, then it determines the value
+  of the function in each tile of \code{x}.
 }
 \value{
   A function in the \R language, also belonging to the

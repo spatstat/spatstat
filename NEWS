@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.032
+        CHANGES IN spatstat VERSION 1.45-0.033
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
     o More bug fixes for replicated patterns.
 
     o Simulate a model fitted to replicated point patterns.
+
+    o Inhomogeneous multitype F and G functions.
 
     o Summary functions recognise correction="all"
 
@@ -54,6 +56,10 @@ NEW FUNCTIONS
 
     o MinkowskiSum, %+%
     Minkowski sum of two windows: A %+% B, or MinkowskiSum(A,B)
+
+    o nobjects
+    New generic function for counting the number of 'things' in a dataset.
+    There are methods for ppp, ppx, psp, tess.
 
     o parameters.interact, parameters.fii
     Extract parameters from interpoint interactions.
@@ -135,6 +141,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.ppp, plot.profilepl, plot.quadratcount, plot.quadrattest, plot.tess
     Now recognise graphics parameters for text, such as 'family' and 'srt'
+
+    o as.function.tess
+    New argument 'values' specifies the function values.
 
     o cdf.test
     Calculations are more robust against numerical rounding effects.

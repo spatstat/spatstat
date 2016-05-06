@@ -517,9 +517,22 @@ as.im.tess <- function(X, W=NULL, ...,
   return(out)
 }
 
-as.function.tess <- function(x, ...) {
+nobjects.tess <- function(x) {
+  switch(x$type,
+         image = length(levels(x$image)),
+         rect = (length(x$xgrid)-1) * (length(x$ygrid)-1),
+         tiled = length(x$tiles))
+}
+  
+as.function.tess <- function(x, ..., values=NULL) {
   V <- x
-  f <- function(x,y) { tileindex(x,y,V) }
+  if(is.null(values)) {
+    f <- function(x,y) { tileindex(x,y,V) }
+  } else {
+    if(length(values) != nobjects(x))
+      stop("Length of 'values' should equal the number of tiles", call.=FALSE)
+    f <- function(x,y) { values[as.integer(tileindex(x,y,V))] }
+  }
   g <- funxy(f, Window(V))
   return(g)
 }
