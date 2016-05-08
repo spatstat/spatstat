@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-0.033
+        CHANGES IN spatstat VERSION 1.45-1
 
 OVERVIEW
 
@@ -30,7 +30,7 @@ OVERVIEW
 
     o spatstat now Depends on the package 'rpart'
 
-    o Version nickname: 'But Wait, There's More'
+    o Version nickname: 'Double Disillusion'
 
 NEW DATASETS
 

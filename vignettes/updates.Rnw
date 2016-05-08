@@ -47,7 +47,7 @@ newdat <- changes[["ndatasets"]]
 
 The current version of \spst\ is \texttt{\Sexpr{sversion}}.
 It contains \Sexpr{changes[["nobjects"]]} new functions
-and \Sexpr{newdat} new \Sexpr{ngettext(newdat, "dataset", "datasets")}
+and \Sexpr{newdat} new datasets
 introduced after May 2015. This document summarises the most important changes.
 
 This document also lists all \emph{important} bugs detected \emph{since 2010}.
@@ -82,9 +82,31 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-   \item \spst\ now depends on the package \pkg{nlme}.
+   \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
 
-   \item Fixed namespace problems arising when spatstat is not loaded.
+   \item Recursive-partition point process models.
+
+   \item Minkowski sum, morphological dilation and erosion with any shape.
+
+   \item Important bug fix in spatial CDF tests.
+
+   \item  More bug fixes for replicated patterns.
+
+   \item Simulate a model fitted to replicated point patterns.
+
+   \item Inhomogeneous multitype $F$ and $G$ functions.
+
+   \item Summary functions recognise \texttt{correction="all"}
+
+   \item Leverage and influence code handles bigger datasets.
+
+   \item More support for pixel images.
+
+   \item Improved progress reports.
+
+   \item New dataset \texttt{redwood3}
+
+    \item Fixed namespace problems arising when spatstat is not loaded.
 
    \item Important bug fix in leverage/influence diagnostics for Gibbs models.
 
@@ -168,6 +190,7 @@ The following datasets have been added to the package.
 \begin{itemize}
 \item \texttt{austates}: The states and large mainland territories of Australia
    represented as polygonal regions forming a tessellation.
+ \item \texttt{redwood3}: a more accurate version of the \texttt{redwood} data.
 \end{itemize}
 
 \section{New Functions}
@@ -176,7 +199,58 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
-\item \texttt{laslett}:
+\item \texttt{as.im.data.frame}:
+  Build a pixel image from a data frame of coordinates and pixel values.
+
+\item \texttt{covering}:
+    Cover a window using discs of a given radius.
+
+\item \texttt{dilationAny}, \texttt{erosionAny}, \verb!%-%! :
+    Morphological dilation and erosion by any shape.
+
+\item \texttt{FmultiInhom}, \texttt{GmultiInhom}
+  Inhomogeneous multitype/marked versions of the summary functions 
+  \texttt{Fest}, \texttt{Gest}.
+
+\item \texttt{kernel.moment}
+    Moment or incomplete moment of smoothing kernel.
+
+\item \texttt{MinkowskiSum}, \verb!%+%!: 
+    Minkowski sum of two windows: \verb!A %+% B!, or \texttt{MinkowskiSum(A,B)}
+
+\item \texttt{nobjects}:
+  New generic function for counting the number of 'things' in a dataset.
+  There are methods for \texttt{ppp}, \texttt{ppx}, \texttt{psp}, \texttt{tess}.
+
+ \item \texttt{parameters.interact}, \texttt{parameters.fii}:
+    Extract parameters from interpoint interactions.
+    (These existing functions are now documented.)
+
+ \item \texttt{ppmInfluence}:
+  Calculate \texttt{leverage.ppm}, \texttt{influence.ppm} and 
+  \texttt{dfbetas.ppm} efficiently.
+
+  \item \texttt{rppm}, \texttt{plot.rppm}, \texttt{predict.rppm}, 
+    \texttt{prune.rppm}:
+    Recursive-partition point process models.
+
+ \item \texttt{simulate.mppm}
+   Simulate a point process model fitted to replicated point patterns.
+
+ \item \texttt{update.interact}:
+    Update the parameters of an interpoint interaction.
+    [This existing function is now documented.]
+
+ \item \texttt{where.max}, \texttt{where.min}
+    Find the spatial location(s) where a pixel image achieves its
+    maximum or minimum value.
+    
+ \item \texttt{compileK}, \texttt{compilepcf}:
+   make a $K$ function or pair correlation function
+   given the pairwise distances and their weights.
+   [These existing internal functions are now documented.]
+    
+  \item \texttt{laslett}:
   Laslett's Transform.
 
 \item \texttt{lintess}: 
@@ -388,11 +462,21 @@ listed alphabetically.
 
 \item \texttt{anova.mppm}: Now handles Gibbs models,
   and performs the adjusted composite likelihood ratio test.
+  New argument \texttt{fine}.
   
-\item \texttt{as.im.function}:
+ \item \texttt{as.function.tess}:
+    New argument \texttt{values} specifies the function values.
+
+  \item \texttt{as.im.function}:
   New argument \texttt{strict}.
 
-\item \texttt{as.polygonal}:
+\item \texttt{as.layered}:
+    Default method now handles a (vanilla) list of spatial objects.
+
+\item \texttt{as.owin.data.frame}:
+    New argument \texttt{step}
+
+  \item \texttt{as.polygonal}:
   Can now repair errors in polygon data, if \texttt{repair=TRUE}.
 
 %%B
@@ -400,7 +484,20 @@ listed alphabetically.
    New argument \texttt{weights}.
    
 %%C
- \item \texttt{clickpoly}:
+ \item \texttt{cdf.test}:
+   Calculations are more robust against numerical rounding effects.
+   
+ \item \texttt{cdf.test.mppm}:
+   \begin{itemize}
+   \item     Now handles Gibbs models.
+   \item     Now recognises \texttt{covariate="x"} or \texttt{"y"}.
+   \end{itemize}
+    
+ \item \texttt{clarkevans}:
+    The argument \texttt{correction="all"} is now recognised: it selects
+    all the available options. [This is also the default.]
+
+  \item \texttt{clickpoly}:
     The polygon is now drawn progressively as the user clicks new vertices.
 
  \item \texttt{closepairs.ppp}, \texttt{closepairs.pp3}:
@@ -425,7 +522,14 @@ listed alphabetically.
    generic \texttt{collapse}.
    Its syntax has been adjusted slightly.
 
- \item \texttt{contour.im}:
+\item \texttt{connected.im}:
+    Now handles a logical-valued image properly.
+    Arguments \texttt{...} now determine pixel resolution.
+    
+\item \texttt{connected.owin}:    
+    Arguments \texttt{...} now determine pixel resolution.
+
+  \item \texttt{contour.im}:
    New argument \texttt{col} specifies the colour of the contour lines.
    If \texttt{col} is a colour map, then the contours are drawn 
    in different colours.
@@ -477,10 +581,15 @@ listed alphabetically.
    \end{itemize}
    
  \item \texttt{dfbetas.ppm}:
-    Performance slightly improved, for Gibbs models.
+    For Gibbs models, memory usage has been dramatically reduced, 
+    so the code can handle larger datasets and finer quadrature schemes.
+
     
  \item \texttt{diagnose.ppm, plot.diagppm}:
    New arguments \texttt{col.neg, col.smooth} control the colour maps.
+
+ \item \texttt{discs}:
+    Now accepts a single numeric value for \texttt{radii}.
 
   \item \texttt{distfun}:
     When the user calls a distance function 
@@ -536,7 +645,8 @@ listed alphabetically.
    
 %%I
  \item \texttt{influence.ppm}:
-    Performance slightly improved, for Gibbs models.
+    For Gibbs models, memory usage has been dramatically reduced, 
+    so the code can handle larger datasets and finer quadrature schemes.
 
 %%J
 %%K
@@ -564,7 +674,8 @@ listed alphabetically.
 %%L
    
  \item \texttt{leverage.ppm}:
-    Performance slightly improved, for Gibbs models.
+    For Gibbs models, memory usage has been dramatically reduced, 
+    so the code can handle larger datasets and finer quadrature schemes.
 
  \item \texttt{linnet}:
    \begin{itemize}
@@ -631,8 +742,17 @@ listed alphabetically.
     The default is now to re-fit the model to the data before computing pcf.
     New arguments \texttt{update} and \texttt{leaveoneout} control this.
 
+ \item \texttt{plot.im}:
+    Now handles complex-valued images.
+
  \item \texttt{plot.kppm}:
+   \begin{itemize}
+   \item 
    New arguments \texttt{pause} and \texttt{xname}.
+ \item 
+    The argument \texttt{what="all"} is now recognised: it selects
+    all the available options. [This is also the default.]
+   \end{itemize}
 
    \item \texttt{plot.lpp}:
      \begin{itemize}
@@ -655,7 +775,14 @@ listed alphabetically.
     the colour arguments \texttt{cols}, \texttt{fg}, \texttt{bg} can now 
     be vectors of colour values, and will be used to determine
     the default colour map for the marks.
+  \item Now recognises graphics parameters for text, such as 
+    \texttt{family} and \texttt{srt}
      \end{itemize}
+
+   \item \texttt{plot.profilepl} ,\texttt{plot.quadratcount}, 
+     \texttt{plot.quadrattest}, \texttt{plot.tess}:
+     Now recognise graphics parameters for text, such as 
+    \texttt{family} and \texttt{srt}
 
    \item \texttt{pool.fv}:
     The default plot of the pooled function no longer includes 
@@ -670,15 +797,27 @@ listed alphabetically.
    (This currently happens in predict.kppm when se=TRUE or interval != "none",
    and in residuals.kppm when type != "raw").
 
-   \item \texttt{progressreport}
-   New argument \texttt{state}
-   New option: \verb!style="tk"!
+  \item \texttt{predict.mppm}:
+    The argument \texttt{type="all"} is now recognised: it selects
+    all the available options. [This is also the default.]
+
+  \item \texttt{progressreport}
+    \begin{itemize}
+    \item Behaviour improved. 
+    \item New arguments \texttt{state}, \texttt{tick}, \texttt{showtime}.
+    \item New option: \verb!style="tk"!
+    \end{itemize}
+
 
 %%Q
    
  \item \texttt{quadratcount.ppp}:
    Computation accelerated in some cases.
 
+ \item \texttt{qqplot.ppm}
+    Argument \texttt{expr} can now be a list of point patterns,
+    or an envelope object containing a list of point patterns.
+    
 %%R
    
    \item \texttt{rgbim, hsvim}
@@ -742,7 +881,8 @@ listed alphabetically.
 
    \item \texttt{simulate.ppm}
    New argument \texttt{w} controls the window of the simulated patterns.
-
+   New argument \texttt{verbose}.
+   
    \item \texttt{spatstat.options}
    New options \texttt{fastthin} and \texttt{fastpois} 
    enable fast simulation algorithms.
@@ -758,6 +898,27 @@ listed alphabetically.
      \texttt{subset.ppx}:
     The argument \texttt{subset} can now be any argument acceptable to
     the \verb!"["! method.
+
+  \item summary functions
+    The argument \texttt{correction="all"} is now recognised: it selects
+    all the available options. 
+    \begin{quote}
+        This applies to
+        \texttt{Fest}, \texttt{F3est}, \texttt{Gest}, 
+        \texttt{Gcross}, \texttt{Gdot}, \texttt{Gmulti}, \texttt{G3est},
+        \texttt{Gfox}, \texttt{Gcom}, \texttt{Gres}, \texttt{Hest}, 
+        \texttt{Jest}, \texttt{Jmulti}, \texttt{Jcross}, \texttt{Jdot}, 
+        \texttt{Jfox}, \texttt{Kest}, \texttt{Kinhom},
+        \texttt{Kmulti}, \texttt{Kcross}, \texttt{Kdot}, \texttt{Kcom}, 
+        \texttt{Kres}, 
+	\texttt{Kmulti.inhom}, \texttt{Kcross.inhom}, 
+        \texttt{Kdot.inhom}, \texttt{Kscaled}, \texttt{Ksector}, 
+        \texttt{Kmark}, \texttt{K3est}, \texttt{Lscaled}, \texttt{markcorr}, 
+        \texttt{markcrosscorr},
+	\texttt{nnorient}, \texttt{pairorient}, \texttt{pcfinhom}, 
+        \texttt{pcfcross.inhom}, \texttt{pcfcross}, \texttt{pcf}, 
+        \texttt{Tstat}.
+    \end{quote}
     
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
@@ -872,6 +1033,11 @@ of potential impact.
   Results were completely incorrect in some cases.
   \bugger{1.32-0}{august 2013}{1.34-0}{october 2013}
 
+ \item \texttt{cdf.test.ppm}:
+    Calculation of $p$-values was incorrect for Gibbs models: 
+    $1-p$ was computed instead of $p$.
+  \bugger{1.40-0}{december 2014}{1.45-1}{may 2016}
+  
 \item \texttt{rmh}:
   
    \begin{itemize}
@@ -957,7 +1123,12 @@ of potential impact.
    Simulations were incorrect; they were generated using the wrong value
    of the parameter \texttt{omega}.
    \bugger{1.25-0}{december 2011}{1.25-2}{january 2012}
-
+   
+\item \texttt{subfits}:
+    The interaction coefficients of the submodels were incorrect
+    for Gibbs models with a multitype interaction (\texttt{MultiStrauss}, etc).
+   \bugger{1.35-0}{december 2013}{1.45-1}{may 2016}
+   
  \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
     The pair correlation function of the M\'atern Cluster Process
     was evaluated incorrectly at distances close to 0.
