@@ -205,7 +205,7 @@ Following is a list of all the functions that have been added.
 \item \texttt{covering}:
     Cover a window using discs of a given radius.
 
-\item \texttt{dilationAny}, \texttt{erosionAny}, \verb!%-%! :
+\item \texttt{dilationAny}, \texttt{erosionAny}, \verb!%(-)%! :
     Morphological dilation and erosion by any shape.
 
 \item \texttt{FmultiInhom}, \texttt{GmultiInhom}
@@ -215,8 +215,9 @@ Following is a list of all the functions that have been added.
 \item \texttt{kernel.moment}
     Moment or incomplete moment of smoothing kernel.
 
-\item \texttt{MinkowskiSum}, \verb!%+%!: 
-    Minkowski sum of two windows: \verb!A %+% B!, or \texttt{MinkowskiSum(A,B)}
+\item \texttt{MinkowskiSum}, \verb!%(+)%!: 
+    Minkowski sum of two windows: \verb!A %(+)% B!, 
+    or \texttt{MinkowskiSum(A,B)}
 
 \item \texttt{nobjects}:
   New generic function for counting the number of 'things' in a dataset.
@@ -1036,7 +1037,7 @@ of potential impact.
  \item \texttt{cdf.test.ppm}:
     Calculation of $p$-values was incorrect for Gibbs models: 
     $1-p$ was computed instead of $p$.
-  \bugger{1.40-0}{december 2014}{1.45-1}{may 2016}
+  \bugger{1.40-0}{december 2014}{1.45-2}{may 2016}
   
 \item \texttt{rmh}:
   
@@ -1127,7 +1128,7 @@ of potential impact.
 \item \texttt{subfits}:
     The interaction coefficients of the submodels were incorrect
     for Gibbs models with a multitype interaction (\texttt{MultiStrauss}, etc).
-   \bugger{1.35-0}{december 2013}{1.45-1}{may 2016}
+   \bugger{1.35-0}{december 2013}{1.45-2}{may 2016}
    
  \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
     The pair correlation function of the M\'atern Cluster Process

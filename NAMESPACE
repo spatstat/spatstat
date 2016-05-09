@@ -2628,8 +2628,8 @@ export("zapsmall.im")
 export("zclustermodel")
 
 # .......  Special cases ........... 
-export("%-%")
-export("%+%")
+export("%(-)%")
+export("%(+)%")
 export("%mapp%")
 export("%mark%")
 export("%mrep%")

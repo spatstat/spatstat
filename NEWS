@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-1
+        CHANGES IN spatstat VERSION 1.45-2
 
 OVERVIEW
 
@@ -30,7 +30,7 @@ OVERVIEW
 
     o spatstat now Depends on the package 'rpart'
 
-    o Version nickname: 'Double Disillusion'
+    o Version nickname: 'Caretaker Mode'
 
 NEW DATASETS
 
@@ -45,7 +45,7 @@ NEW FUNCTIONS
     o covering
     Cover a window using discs of a given radius.
 
-    o dilationAny, erosionAny, %-%
+    o dilationAny, erosionAny, %(-)%
     Morphological dilation and erosion by any shape.
 
     o FmultiInhom, GmultiInhom
@@ -54,8 +54,8 @@ NEW FUNCTIONS
     o kernel.moment
     Moment or incomplete moment of smoothing kernel.
 
-    o MinkowskiSum, %+%
-    Minkowski sum of two windows: A %+% B, or MinkowskiSum(A,B)
+    o MinkowskiSum, %(+)%
+    Minkowski sum of two windows: A %(+)% B, or MinkowskiSum(A,B)
 
     o nobjects
     New generic function for counting the number of 'things' in a dataset.

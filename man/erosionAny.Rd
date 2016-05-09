@@ -1,7 +1,7 @@
 \name{erosionAny}
 \alias{erosionAny}
-\alias{\%-\%}  %DoNotExport 
-%NAMESPACE export("%-%")
+\alias{\%(-)\%}  %DoNotExport 
+%NAMESPACE export("%(-)%")
 \title{Morphological Erosion of Windows}
 \description{
   Compute the morphological erosion of one spatial window by another.
@@ -9,7 +9,7 @@
 \usage{
 erosionAny(A, B)
 
-A \%-\% B
+A \%(-)\% B
 }
 \arguments{
   \item{A,B}{
@@ -20,12 +20,12 @@ A \%-\% B
   Another window (object of class \code{"owin"}).
 }
 \details{
-  The operator \code{A \%-\% B} and function \code{erosionAny(A,B)}
+  The operator \code{A \%(-)\% B} and function \code{erosionAny(A,B)}
   are synonymous: they both compute the
   morphological erosion of the window \code{A} by the window \code{B}.
 
   The morphological erosion
-  \eqn{A \ominus B}{A \%-\% B}
+  \eqn{A \ominus B}{A \%(-)\% B}
   of region \eqn{A} by region \eqn{B}
   is the spatial region consisting of all vectors \eqn{z}
   such that, when \eqn{B} is shifted by the vector \eqn{z}, the result
@@ -56,7 +56,7 @@ A \%-\% B
 }
 \examples{
   B <- square(c(-0.1, 0.1))
-  RminusB <- letterR \%-\% B
+  RminusB <- letterR \%(-)\% B
   FR <- grow.rectangle(Frame(letterR), 0.3)
   plot(FR, main="", type="n")
   plot(letterR, add=TRUE, lwd=2, hatch=TRUE, box=FALSE)

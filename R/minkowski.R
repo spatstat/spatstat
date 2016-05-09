@@ -6,7 +6,7 @@
 #'  $Revision: 1.5 $ $Date: 2016/03/24 11:26:37 $
 
 
-"%+%" <- MinkowskiSum <- local({
+"%(+)%" <- MinkowskiSum <- local({
 
   poly2owin <- function(z) owin(poly=z, check=FALSE)
 
@@ -45,7 +45,7 @@
 
 dilationAny <- function(A, B) { MinkowskiSum(A, reflect(B)) }
 
-"%-%" <- erosionAny <- function(A, B) {
+"%(-)%" <- erosionAny <- function(A, B) {
   D <- Frame(A)
   Dplus <- grow.rectangle(D, 0.1 * shortside(D))
   Ac <- complement.owin(A, Dplus)
