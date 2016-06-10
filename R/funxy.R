@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.11 $   $Date: 2016/02/25 06:32:43 $
+#   $Revision: 1.13 $   $Date: 2016/06/10 15:04:32 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -22,18 +22,19 @@ funxy <- function(f, W=NULL) {
   stopifnot(is.owin(W))
   if(!identical(names(formals(f))[1:2], c("x", "y")))
     stop("The first two arguments of f should be named x and y", call.=FALSE)
-  # copy 'f' including formals, environment, attributes
+  if(is.primitive(f))
+    stop("Not implemented for primitive functions", call.=FALSE)
+  ## copy 'f' including formals, environment, attributes
   h <- f
-  # make new body: paste body of 'f' into last line of 'spatstat.xy.coords'
-  g <- spatstat.xy.coords
-  nx <- length(body(g)) - 1  # omit last line
-  nf <- length(body(f)) - 1 # omit first brace
-  body(g)[nx + seq_len(nf)] <- body(f)[-1]
-  # transplant the body 
-  body(h) <- body(g)
-  # reinstate attributes
+  ## make new function body:
+  ## paste body of 'f' into last line of 'spatstat.xy.coords'
+  b <- body(spatstat.xy.coords)
+  b[[length(b)]] <- body(f)
+  ## transplant the body 
+  body(h) <- b
+  ## reinstate attributes
   attributes(h) <- attributes(f)
-  # stamp it
+  ## stamp it
   class(h) <- c("funxy", class(h))
   attr(h, "W") <- W
   attr(h, "f") <- f

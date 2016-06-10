@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat VERSION 1.45-2.001
+
+OVERVIEW
+
+    o We thank Sebastian Meyer for contributions.
+
+    o Nickname: 'One-Liner'
+
+BUG FIXES
+
+    o funxy
+    Did not correctly handle one-line functions:
+    the resulting objects evaluated the wrong function.
+    [Spotted by Sebastian Meyer. Bug introduced in spatstat 1.45-0]
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.45-2
 
 OVERVIEW
