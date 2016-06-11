@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.50 $ $Date: 2016/04/25 02:34:40 $
+# $Revision: 1.51 $ $Date: 2016/06/11 08:36:09 $
 #
 
 lurking <- local({
@@ -194,8 +194,9 @@ lurking <- local({
     #######################################################################
     ## START ANALYSIS
     ## Clip to subwindow if needed
-    clip <- !is.poisson.ppm(object) ||
-            (!missing(clipwindow) && !is.null(clipwindow))
+    clip <-
+      (!is.poisson.ppm(object) || !missing(clipwindow)) &&
+      !is.null(clipwindow)
     if(clip) {
       covq <- covq[clipwindow]
       res <- res[clipwindow]

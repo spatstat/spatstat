@@ -54,6 +54,7 @@
     The diagnostic calculations
     will be confined to those points of the data pattern which are
     at least \code{rbord} units away from the edge of the window.
+    (An infinite value of \code{rbord} will be ignored.)
   }
   \item{cumulative}{
     Logical flag indicating whether the lurking variable plots

@@ -3,12 +3,12 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.41 $ $Date: 2016/02/15 04:55:35 $
+# $Revision: 1.42 $ $Date: 2016/06/11 09:00:55 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
                                 sigma=NULL,
-                                rbord = reach(object),
+                                rbord=reach(object),
                                 compute.sd=is.poisson(object),
                                 compute.cts=TRUE,
                                 envelope=FALSE, nsim=39, nrank=1,
@@ -23,6 +23,9 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   Q <- quad.ppm(object)
   U <- union.quad(Q)
   Qweights <- w.quad(Q)
+
+  # edge correction used
+  correction <- object$correction
   
   # -------------- Calculate residuals/weights -------------------
 
@@ -96,7 +99,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   W <- Y$window
 
   # Erode window if required
-  clip <- (rbord > 0)
+  clip <- !is.null(rbord) && is.finite(rbord) && (rbord > 0) 
   if(clip) {
     Wclip <- erosion.owin(W, rbord)
     Yclip <- Y[Wclip]
@@ -210,7 +213,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
 
 diagnose.ppm <- function(object, ..., type="raw", which="all", 
                          sigma=NULL, 
-                         rbord = reach(object), cumulative=TRUE,
+                         rbord =reach(object), cumulative=TRUE,
                          plot.it = TRUE, rv = NULL, 
                          compute.sd=is.poisson(object), compute.cts=TRUE,
                          envelope=FALSE, nsim=39, nrank=1,
@@ -239,18 +242,13 @@ diagnose.ppm <- function(object, ..., type="raw", which="all",
 
   # -------------  Interpret arguments --------------------------
 
-  # edge effect avoidance
-  if(!is.finite(rbord)) {
-    if(missing(rbord))
-      stop(paste(sQuote("rbord"),
-                 "must be specified; the model has infinite range"))
-    else
-      stop(paste(sQuote("rbord"), "is infinite"))
+  # Edge-effect avoidance
+  if(missing(rbord) && !is.finite(rbord)) {
+    ## Model has infinite reach
+    ## Use correction rule employed when fitting
+    rbord <- if(object$correction == "border") object$rbord else 0
   }
   
-#  # whether window should be clipped
-#  clip <- (rbord > 0)
-
   # match type argument
   type <- pickoption("type", type,
                      c(eem="eem",
@@ -351,6 +349,15 @@ plot.diagppm <-
   plot.smooth <- match.arg(plot.smooth)
   
   if(!missing(which)) {
+    witches <- c("all", "marks", "smooth", "x", "y", "sum")
+    unknown <- is.na(match(which, witches))
+    if(any(unknown))
+      warning(paste("Unrecognised",
+                    ngettext(sum(unknown), "option", "options"),
+                    "which =",
+                    commasep(sQuote(which[unknown])),
+                    ": valid options are",
+                    commasep(sQuote(witches))), call.=FALSE)
     oldopt <- opt
     newopt <- list()
     newopt$all <- "all" %in% which

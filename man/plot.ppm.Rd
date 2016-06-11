@@ -168,18 +168,14 @@
   See warnings in \code{\link{predict.ppm}}.
 }
 \examples{
- \dontrun{
- data(cells)
- m <- ppm(cells, ~1, Strauss(0.05))
+ m <- ppm(cells ~1, Strauss(0.05))
  pm <- plot(m) # The object ``pm'' will be plotted as well as saved
                # for future plotting.
- }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
-  
+\author{
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}
 }
 \keyword{spatial}
 \keyword{hplot}

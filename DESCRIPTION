@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.45-2.001
+Version: 1.45-2.002
 Nickname: One-Liner
-Date: 2016-06-10
+Date: 2016-06-11
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

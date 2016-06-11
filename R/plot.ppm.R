@@ -1,7 +1,7 @@
 #
 #    plot.ppm.S
 #
-#    $Revision: 2.11 $    $Date: 2015/02/15 01:30:07 $
+#    $Revision: 2.12 $    $Date: 2016/06/11 08:02:17 $
 #
 #    plot.ppm()
 #         Plot a point process model fitted by ppm().
@@ -23,7 +23,7 @@ plot.ppm <- function(x, ngrid = c(40,40),
 #
 #       find out what kind of model it is
 #
-  mod <- summary(model)
+  mod <- summary(model, quick="entries")
   stationary <- mod$stationary
   poisson    <- mod$poisson
   marked     <- mod$marked
