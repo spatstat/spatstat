@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.113 $	$Date: 2016/04/25 02:34:40 $
+#	$Revision: 4.114 $	$Date: 2016/06/14 10:31:52 $
 #
 #
 #
@@ -498,12 +498,13 @@ union.owin <- function(..., p) {
 }
 
 setminus.owin <- function(A, B, ..., p) {
-  if(is.null(A) || is.empty(A)) return(B)
-  if(is.null(B) || is.empty(B)) return(A)
-  verifyclass(A, "owin")
+  if(is.null(B)) return(A)
   verifyclass(B, "owin")
+  if(is.null(A)) return(emptywindow(Frame(B)))
+  verifyclass(A, "owin")
+  if(is.empty(A) || is.empty(B)) return(A)
   if(identical(A, B))
-    return(emptywindow(as.rectangle(A)))
+    return(emptywindow(Frame(A)))
 
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
@@ -523,8 +524,10 @@ setminus.owin <- function(A, B, ..., p) {
 
   ## Case where A and B are both rectangular
   if(Arect && Brect) {
+    if(is.subset.owin(A, B))
+      return(emptywindow(B))
     C <- intersect.owin(A, B, fatal=FALSE)
-    if(is.null(C)) return(A)
+    if(is.null(C) || is.empty(C)) return(A)
     return(complement.owin(C, A))
   }
     
@@ -539,7 +542,7 @@ setminus.owin <- function(A, B, ..., p) {
                               fillA="nonzero", fillB="nonzero"),
                          p))
     if(length(ab) == 0)
-      return(emptywindow(A))
+      return(emptywindow(B))
     ## ensure correct polarity
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
