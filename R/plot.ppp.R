@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.85 $	$Date: 2016/04/25 02:34:40 $
+#	$Revision: 1.87 $	$Date: 2016/06/14 02:26:13 $
 #
 #
 #--------------------------------------------------------------------------
@@ -171,9 +171,13 @@ plot.ppp <- local({
               "Interpretation of arguments maxsize and markscale",
               "has changed (in spatstat version 1.37-0 and later).",
               "Size of a circle is now measured by its diameter.")
-  
-  if(!is.null(clipwin))
+
+  if(clipped <- !is.null(clipwin)) {
+    stopifnot(is.owin(clipwin))
+    W <- Window(x)
+    clippy <- if(is.mask(W)) intersect.owin(W, clipwin) else edges(W)[clipwin]
     x <- x[clipwin]
+  } else clippy <- NULL
   
   ## sensible default position
   legend <- legend && show.all
@@ -209,11 +213,12 @@ plot.ppp <- local({
       y <- solapply(mx, setmarks, x=x)
       out <- do.call(plot,
                      resolve.defaults(list(x=y, main=main,
-                                           show.window=show.window,
+                                           show.window=show.window && !clipped,
                                            do.plot=do.plot,
                                            type=type),
                                       list(...),
-                                      list(equal.scales=TRUE), 
+                                      list(equal.scales=TRUE),
+                                      list(panel.end=clippy),
                                       list(legend=legend,
                                            leg.side=leg.side,
                                            leg.args=leg.args),
@@ -343,10 +348,12 @@ plot.ppp <- local({
         do.call(plot.owin, append(list(rwin, add=TRUE), rwinpars))
       }
       ## plot window of main pattern
-      do.call(plot.owin,
-              resolve.defaults(list(x$window, add=TRUE),
-                               list(...),
-                               list(invert=TRUE)))
+      if(!clipped) {
+        do.call(plot.owin,
+                resolve.defaults(list(x$window, add=TRUE),
+                                 list(...),
+                                 list(invert=TRUE)))
+      } else plot(clippy, add=TRUE, ...)
     }
     if(type != "n") {
       ## plot reject points
@@ -366,10 +373,13 @@ plot.ppp <- local({
           resolve.defaults(list(x=xwindow,
                                 add=TRUE,
                                 main=main,
-                                type=if(show.window) "w" else "n",
+                                type=if(show.window && !clipped) "w" else "n",
                                 show.all=show.all),
                            list(...),
                            list(invert=TRUE)))
+  ## If clipped, plot visible part of original window
+  if(show.window && clipped)
+    plot(clippy, add=TRUE, ...)
   # else if(show.all) fakemaintitle(as.rectangle(xwindow), main, ...)
 
   if(type != "n") {

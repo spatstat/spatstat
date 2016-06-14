@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.002
+        CHANGES IN spatstat VERSION 1.45-2.003
 
 OVERVIEW
 
@@ -12,6 +12,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o diagnose.ppm
     Infinite values of 'rbord' are now ignored and treated as zero.
 
+    o plot.ppp
+    When 'clipwin' is given, any parts of the boundary of the window of x
+    that lie inside 'clipwin' will also be plotted.
+  
 BUG FIXES
 
     o funxy
