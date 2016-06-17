@@ -16,6 +16,11 @@ residuals.ppm <-
   
   verifyclass(object, "ppm")
   trap.extra.arguments(..., .Context="In residuals.ppm")
+
+  if(is.marked(object))
+    warning(paste("residuals for marked point patterns",
+                  "are not yet fully supported"),
+            call.=FALSE)
   
   type <- pickoption("type", type,
                      c(inverse="inverse",

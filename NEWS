@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.004
+        CHANGES IN spatstat VERSION 1.45-2.005
 
 OVERVIEW
 
@@ -17,12 +17,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp
     When 'clipwin' is given, any parts of the boundary of the window of x
     that lie inside 'clipwin' will also be plotted.
-  
+
 BUG FIXES
 
     o funxy
     Did not correctly handle one-line functions:
-    the resulting objects evaluated the wrong function.
+    the resulting objects evaluated the wrong function in some cases.
     [Spotted by Sebastian Meyer. Bug introduced in spatstat 1.45-0]
     Fixed.
 

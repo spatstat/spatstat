@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.61 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.62 $  $Date: 2016/06/16 08:41:38 $
 #
 
 leverage <- function(model, ...) {
@@ -96,9 +96,13 @@ ppmInfluenceEngine <- function(fit,
   influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
   needHess <- gotScore && influencecalc
   if(!gotHess && needHess)
-    stop("Must supply iHessian")
+    stop("Must supply iHessian", call.=FALSE)
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
-    stop("ppm influence measures are not yet implemented for method=logi")
+    stop("ppm influence measures are not yet implemented for method=logi",
+         call.=FALSE)
+  if(is.marked(fit))
+    stop("ppm influence measures are not yet implemented for multitype models",
+         call.=FALSE)
   sparse <- sparseOK 
   #
   # extract precomputed values if given
