@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.005
+        CHANGES IN spatstat VERSION 1.45-2.006
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Nickname: 'One-Liner'
+    o Version nickname: 'One-Liner'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.5 $  $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.6 $  $Date: 2016/06/19 03:32:35 $
 #
 
 parres <- function(model, covariate, ...,
@@ -18,6 +18,9 @@ parres <- function(model, covariate, ...,
     covname <- sensiblevarname(deparse(substitute(covariate)), "X")
   callstring <- paste(deparse(sys.call()), collapse = "")
 
+  if(is.marked(model))
+    stop("Sorry, this is not yet implemented for marked models")
+      
   if(!is.null(subregion)) 
     stopifnot(is.owin(subregion))
   
