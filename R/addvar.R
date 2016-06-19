@@ -19,6 +19,9 @@ addvar <- function(model, covariate, ...,
     covname <- sensiblevarname(deparse(substitute(covariate)), "X")
   callstring <- paste(deparse(sys.call()), collapse = "")
   
+  if(is.marked(model))
+    stop("Sorry, this is not yet implemented for marked models")
+      
   if(is.null(adjust)) adjust <- 1
   
   bw.input <- match.arg(bw.input)
