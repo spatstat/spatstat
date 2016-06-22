@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.006
+        CHANGES IN spatstat VERSION 1.45-2.007
 
 OVERVIEW
 
@@ -7,7 +7,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'One-Liner'
+    o Version nickname: 'Logout Denied'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -24,6 +24,11 @@ BUG FIXES
     Did not correctly handle one-line functions:
     the resulting objects evaluated the wrong function in some cases.
     [Spotted by Sebastian Meyer. Bug introduced in spatstat 1.45-0]
+    Fixed.
+
+    o Smooth.ppp, bw.smoothppp
+    Crashed if X had two columns of marks and one column was constant.
+    [Bug introduced in spatstat 1.38-0]
     Fixed.
 
     o plot.ppm

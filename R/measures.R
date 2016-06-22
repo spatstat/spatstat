@@ -114,15 +114,21 @@ with.msr <- function(data, expr, ...) {
 }
 
 print.msr <- function(x, ...) {
-  n <- npoints(x$loc)
+  xloc <- x$loc
+  n <- npoints(xloc)
   d <- ncol(as.matrix(x$val))
   splat(paste0(if(d == 1) "Scalar" else paste0(d, "-dimensional vector"),
                "-valued measure"))
   if(d > 1 && !is.null(cn <- colnames(x$val)) && waxlyrical("space"))
     splat("vector components:", commasep(sQuote(cn)))
+  if(is.marked(xloc)) {
+    splat("\tDefined on 2-dimensional space x marks")
+    if(is.multitype(xloc))
+      exhibitStringList("\tPossible marks: ", levels(marks(xloc)))
+  } 
   if(waxlyrical("gory")) {
     splat("Approximated by", n, "quadrature points")
-    print(as.owin(x$loc))
+    print(as.owin(xloc))
     splat(sum(x$atoms), "atoms")
   }
   if(waxlyrical("extras")) {
