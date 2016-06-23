@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.58 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.59 $  $Date: 2016/06/23 06:32:21 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -150,6 +150,44 @@ print.msr <- function(x, ...) {
   return(invisible(NULL))
 }
 
+split.msr <- function(x, f, drop=FALSE, ...) {
+  xloc <- x$loc
+  ## determine split using rules for split.ppp
+  locsplit <- if(missing(f))
+    split(xloc, drop=drop) else split(xloc, f, drop=drop)
+  ## extract grouping factor 
+  g <- attr(locsplit, "fgroup")
+  ## split contributions to measure
+  atomsplit <- split(x$atoms, g, drop=drop) # hyuk
+  wtsplit <- split(x$wt, g, drop=drop)
+  if(ncol(x) == 1) {
+    ## scalar measure
+    valsplit  <- split(x$val, g, drop=drop)
+    discsplit <- split(x$discrete, g, drop=drop)
+    denssplit <- split(x$density, g, drop=drop)
+  } else {
+    ## vector measure
+    valsplit  <- split(as.data.frame(x$val), g, drop=drop)
+    discsplit <- split(as.data.frame(x$discrete), g, drop=drop)
+    denssplit <- split(as.data.frame(x$density), g, drop=drop)
+  }
+  ## form the component measures
+  result <- mapply(list,
+                   loc=locsplit,
+                   val=valsplit,
+                   atoms=atomsplit,
+                   discrete=discsplit,
+                   density=denssplit,
+                   wt=wtsplit,
+                   SIMPLIFY=FALSE)
+  names(result) <- names(locsplit)
+  result <- lapply(result, "class<-", value="msr")
+  if(drop && any(isnul <- (sapply(locsplit, npoints) == 0)))
+    result[isnul] <- NULL
+  result <- as.solist(result)
+  return(result)
+}
+
 integral.msr <- function(f, domain=NULL, ...) {
   stopifnot(inherits(f, "msr"))
   if(!is.null(domain)) {
@@ -168,6 +206,23 @@ augment.msr <- function(x, ..., sigma) {
   xloc <- x$loc
   W <- as.owin(xloc)
   if(missing(sigma)) sigma <- maxnndist(xloc, positive=TRUE)
+  if(is.multitype(xloc)) {
+    ## multitype case - split by type, smooth, sum
+    y <- lapply(split(x), augment.msr, sigma=sigma, ...)
+    z <- lapply(y, attr, which="smoothdensity")
+    if((nc <- ncol(x)) == 1) {
+      ## scalar valued
+      smo <- Reduce("+", z)
+    } else {
+      ## vector valued
+      smo <- vector(mode="list", length=nc)
+      for(j in 1:nc) 
+        smo[[j]] <- Reduce("+", lapply(z, "[[", i=j))
+      smo <- as.solist(smo)
+    }
+    attr(x, "smoothdensity") <- smo
+    return(x)
+  }   
   ## smooth density unless constant
   xdensity <- as.matrix(x$density)
   ra <- apply(xdensity, 2, range)
@@ -185,12 +240,13 @@ augment.msr <- function(x, ..., sigma) {
     if(any(varble)) 
       smo[varble] <-
         do.call(Smooth,
-                resolve.defaults(list(X=xloc %mark% xdensity[,varble]),
+                resolve.defaults(list(X=xloc %mark% xdensity[,varble, drop=FALSE]),
                                  list(...),
                                  list(sigma=sigma)))
     if(any(!varble)) 
-      smo[!varble] <- lapply(apply(xdensity[, !varble], 2, mean),
+      smo[!varble] <- lapply(apply(xdensity[, !varble, drop=FALSE], 2, mean),
                              as.im, W=W)
+    smo <- as.solist(smo)
   }
   attr(x, "smoothdensity") <- smo
   return(x)

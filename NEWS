@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.007
+        CHANGES IN spatstat VERSION 1.45-2.008
 
 OVERVIEW
 
@@ -7,7 +7,12 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Logout Denied'
+    o Version nickname: 'Desperate Measures'
+
+NEW FUNCTIONS
+
+    o split.msr
+    Decompose a measure into parts.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -4,17 +4,20 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.17 $ $Date: 2016/02/11 10:17:12 $
+##  $Revision: 1.18 $ $Date: 2016/06/23 08:02:48 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
   local({
 
   ## auxiliary functions
+
+  has.multiplot <- function(x) { is.ppp(x) }
+  
   extraplot <- function(nnn, x, ..., add=FALSE, extrargs=list(),
                         panel.args=NULL, plotcommand="plot") {
     argh <- list(...)
-    if(is.ppp(x) && identical(plotcommand,"plot"))
+    if(has.multiplot(x) && identical(plotcommand,"plot"))
       argh <- c(argh, list(multiplot=FALSE))
     if(!is.null(panel.args)) {
       xtra <- if(is.function(panel.args)) panel.args(nnn) else panel.args
@@ -34,11 +37,12 @@ plot.anylist <- plot.solist <- plot.listof <-
 
   exec.or.plot <- function(cmd, i, xi, ..., extrargs=list(), add=FALSE) {
     if(is.null(cmd)) return(NULL)
-    argh <- resolve.defaults(list(...),
-                             extrargs,
-                             ## some plot commands don't recognise 'add' 
-                             if(add) list(add=TRUE) else NULL,
-                             if(is.ppp(cmd)) list(multiplot=FALSE) else NULL)
+    argh <-
+      resolve.defaults(list(...),
+                       extrargs,
+                       ## some plot commands don't recognise 'add' 
+                       if(add) list(add=TRUE) else NULL,
+                       if(has.multiplot(cmd)) list(multiplot=FALSE) else NULL)
     if(is.function(cmd)) {
       do.call(cmd, resolve.defaults(list(i, xi), argh))
     } else {
@@ -49,11 +53,12 @@ plot.anylist <- plot.solist <- plot.listof <-
   exec.or.plotshift <- function(cmd, i, xi, ..., vec=vec,
                                 extrargs=list(), add=FALSE) {
     if(is.null(cmd)) return(NULL)
-    argh <- resolve.defaults(list(...),
-                             extrargs,
-                             ## some plot commands don't recognise 'add' 
-                             if(add) list(add=TRUE) else NULL,
-                             if(is.ppp(cmd)) list(multiplot=FALSE) else NULL)
+    argh <-
+      resolve.defaults(list(...),
+                       extrargs,
+                       ## some plot commands don't recognise 'add' 
+                       if(add) list(add=TRUE) else NULL,
+                       if(has.multiplot(cmd)) list(multiplot=FALSE) else NULL)
     if(is.function(cmd)) {
       do.call(cmd, resolve.defaults(list(i, xi), argh))
     } else {
@@ -62,12 +67,15 @@ plot.anylist <- plot.solist <- plot.listof <-
     }
   }
 
+  classes.with.do.plot <- c("im", "ppp", "psp", "msr", "layered", "tess")
+  
   ## bounding box, including ribbon for images, legend for point patterns
   getplotbox <- function(x, ..., do.plot, plotcommand="plot") {
-    if(inherits(x, c("im", "ppp", "psp", "msr", "layered", "tess"))) {
+    if(inherits(x, classes.with.do.plot)) {
       if(identical(plotcommand, "plot")) {
-        y <- if(is.ppp(x)) plot(x, ..., multiplot=FALSE, do.plot=FALSE) else 
-                           plot(x, ..., do.plot=FALSE)      
+        y <- if(has.multiplot(x))
+          plot(x, ..., multiplot=FALSE, do.plot=FALSE) else 
+          plot(x, ..., do.plot=FALSE)
         return(as.owin(y))
       } else if(identical(plotcommand, "contour")) {
         y <- contour(x, ..., do.plot=FALSE)      
