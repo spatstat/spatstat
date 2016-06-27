@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.12 $ $Date: 2015/06/05 08:52:38 $
+## $Revision: 1.13 $ $Date: 2016/06/27 06:59:28 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -71,8 +71,11 @@ is.sob <- local({
                       "quadratcount", "quadrattest", 
                       "layered",
                       "funxy", "distfun", "nnfun", 
-                      "lpp", "linnet", "linfun",
+                      "lpp", "linnet", "linfun",      
                       "influence.ppm", "leverage.ppm")
+  # Note 'linim' inherits 'im'
+  #      'dfbetas.ppm' inherits 'msr'
+
   is.sob <- function(x) { inherits(x, what=sobjectclasses) }
   is.sob
 })

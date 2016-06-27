@@ -264,6 +264,7 @@
 \alias{implemented.for.K}
 \alias{impliedpresence}
 \alias{impliedcoefficients}
+\alias{indexCartesian}
 \alias{inject.expr}
 \alias{inpoint}
 \alias{insertinlist}     
@@ -738,6 +739,9 @@
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unparen}
+\alias{unstack.solist}
+\alias{unstack.layered}
+\alias{unstackFilter}
 \alias{update.im}
 \alias{update.ippm}
 \alias{update.rmhstart}
@@ -1111,6 +1115,7 @@ illegal.iformula(ifmla, itags, dfvarnames)
 implemented.for.K(correction, windowtype, explicit)
 impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)
+indexCartesian(nn)
 inject.expr(base, expr)
 inpoint(W)
 insertinlist(x, i, y)
@@ -1664,6 +1669,9 @@ tweak.coefs(model, new.coef)
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unparen(x)
+\method{unstack}{solist}(x, \dots)
+\method{unstack}{layered}(x, \dots)
+unstackFilter(x)
 \method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 
 \method{update}{rmhstart}(object, \dots)

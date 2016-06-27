@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.207 $    $Date: 2016/05/04 09:13:28 $
+#    $Revision: 1.208 $    $Date: 2016/06/27 08:47:31 $
 #
 #
 matrowsum <- function(x) {
@@ -1736,3 +1736,11 @@ natozero <- function(x) {
   x[is.na(x)] <- 0
   return(x)
 }
+
+indexCartesian <- function(nn) {
+  # enumerate the elements of the Cartesian product of sets,
+  # where nn[i] is the size of the i-th set
+  as.matrix(do.call(expand.grid, lapply(nn, seq_len)))
+}
+
+  

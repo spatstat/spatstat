@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.008
+        CHANGES IN spatstat VERSION 1.45-2.009
 
 OVERVIEW
 
@@ -14,10 +14,20 @@ NEW FUNCTIONS
     o split.msr
     Decompose a measure into parts.
 
+    o unstack.msr
+    Decompose a vector-valued measure into its component measures.
+
+    o unstack.ppp, unstack.psp, unstack.lpp
+    Given a spatial pattern with several columns of marks,
+    separate the columns and return a list of spatial patterns, 
+    each having only one column of marks.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o diagnose.ppm
     Infinite values of 'rbord' are now ignored and treated as zero.
+    This ensures that diagnose.ppm has a sensible default
+    when the fitted model has infinite reach.
 
     o plot.ppp
     When 'clipwin' is given, any parts of the boundary of the window of x
@@ -33,6 +43,12 @@ BUG FIXES
 
     o Smooth.ppp, bw.smoothppp
     Crashed if X had two columns of marks and one column was constant.
+    [Bug introduced in spatstat 1.38-0]
+    Fixed.
+
+    o Smooth.ppp
+    Results for 'at="points"' were garbled, for some values of 'sigma',
+    if X had more than one column of marks.
     [Bug introduced in spatstat 1.38-0]
     Fixed.
 

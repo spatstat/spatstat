@@ -238,12 +238,14 @@ local({
   Z <- Smooth(longleaf, 5, diggle=TRUE)
   Z <- Smooth(unmark(longleaf) %mark% 1, 5)
 
-  ## drop-dimension error
+  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
+
+  ## drop-dimension errors
   X <- longleaf
   marks(X) <- cbind(marks(X), 1)
   Z <- Smooth(X, 5)
 
-  Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
+  ZZ <- bw.smoothppp(finpines, hmin=0.01, hmax=0.012, nh=2) # reshaping problem
 })
 #'
 #'  tests/discarea.R

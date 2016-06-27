@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.45-2.008
+Version: 1.45-2.009
 Nickname: Desperate Measures
-Date: 2016-06-23
+Date: 2016-06-27
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
