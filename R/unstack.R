@@ -3,7 +3,7 @@
 #'
 #'   Methods for generic 'unstack'
 #' 
-#'   $Revision: 1.2 $  $Date: 2016/06/27 09:54:30 $
+#'   $Revision: 1.3 $  $Date: 2016/06/28 04:01:40 $
 
 unstack.ppp <- unstack.psp <- unstack.lpp <- function(x, ...) {
   trap.extra.arguments(...)
@@ -49,7 +49,7 @@ unstack.solist <- function(x, ...) {
 unstack.layered <- function(x, ...) {
   trap.extra.arguments(...)
   y <- lapply(x, unstackFilter)
-  ny <- sapply(y, length)
+  ny <- lengths(y)
   nx <- length(ny)
   if(all(ny == 1) || nx == 0) return(solist(x))
   pa <- layerplotargs(x)

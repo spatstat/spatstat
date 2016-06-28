@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.45 $	$Date: 2015/02/22 03:00:48 $
+#	$Revision: 1.47 $	$Date: 2016/06/28 04:37:31 $
 #
 #
 # ------------------------------------------------------------------------
@@ -50,13 +50,15 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
          r=NULL, breaks=NULL,
          correction = c("border", "isotropic", "Ripley", "translate"),
          sigma=NULL, varcov=NULL,
-         lambdaIJ=NULL)
+         lambdaIJ=NULL,
+         lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
 {
   verifyclass(X, "ppp")
   if(!is.multitype(X, dfok=FALSE))
 	stop("Point pattern must be multitype")
   if(missing(correction))
     correction <- NULL
+  miss.update <- missing(update)
   marx <- marks(X)
   if(missing(i))
     i <- levels(marx)[1]
@@ -69,7 +71,9 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
   K <- Kmulti.inhom(X, I, J, lambdaI, lambdaJ, ...,
                     r=r,breaks=breaks,correction=correction,
                     sigma=sigma, varcov=varcov,
-                    lambdaIJ=lambdaIJ, Iname=Iname, Jname=Jname)
+                    lambdaIJ=lambdaIJ, Iname=Iname, Jname=Jname,
+                    lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
+                    miss.update=miss.update)
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
   result <-
@@ -88,13 +92,15 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
          r=NULL, breaks=NULL,
          correction = c("border", "isotropic", "Ripley", "translate"),
          sigma=NULL, varcov=NULL, 
-         lambdaIdot=NULL)
+         lambdaIdot=NULL,
+         lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
 {
   verifyclass(X, "ppp")
   if(!is.multitype(X, dfok=FALSE))
 	stop("Point pattern must be multitype")
   if(missing(correction))
     correction <- NULL
+  miss.update <- missing(update)
 
   marx <- marks(X)
   if(missing(i))
@@ -109,7 +115,9 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
                     r=r,breaks=breaks,correction=correction,
                     sigma=sigma, varcov=varcov,
                     lambdaIJ=lambdaIdot,
-                    Iname=Iname, Jname=Jname)
+                    Iname=Iname, Jname=Jname,
+                    lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
+                    miss.update=miss.update)
   iname <- make.parseable(paste(i))
   result <-
     rebadge.fv(K,
@@ -132,17 +140,20 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
          r=NULL, breaks=NULL,
          correction = c("border", "isotropic", "Ripley", "translate"),
          lambdaIJ=NULL,
-         sigma=NULL, varcov=NULL)
+         sigma=NULL, varcov=NULL,
+         lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
 {
   verifyclass(X, "ppp")
 
   extrargs <- resolve.defaults(list(...),
                                list(Iname="points satisfying condition I",
-                                    Jname="points satisfying condition J"))
-  if(length(extrargs) > 2)
+                                    Jname="points satisfying condition J",
+                                    miss.update=missing(update)))
+  if(length(extrargs) > 3)
     warning("Additional arguments unrecognised")
   Iname <- extrargs$Iname
   Jname <- extrargs$Jname
+  miss.update <- extrargs$miss.update
   
         
   npts <- npoints(X)
@@ -173,7 +184,9 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   J <- ppsubset(X, J)
   if(is.null(I) || is.null(J))
     stop("I and J must be valid subset indices")
-	
+  XI <- X[I]
+  XJ <- X[J]
+  
   nI <- sum(I)
   nJ <- sum(J)
   if(nI == 0) stop(paste("There are no", Iname))
@@ -185,60 +198,174 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
   r <- breaks$r
   rmax <- breaks$max
 
-  dangerous <- c("lambdaI", "lambdaJ", "lambdaIJ")
+  dangerous <- c("lambdaI", "lambdaJ")
   dangerI <- dangerJ <- TRUE
 
   ## intensity data
-  if(is.null(lambdaI)) {
-    # estimate intensity
-    dangerI <- FALSE
-    lambdaI <- density(X[I], ..., sigma=sigma, varcov=varcov,
-                       at="points", leaveoneout=TRUE)
-  } else if(is.im(lambdaI)) {
-    # look up intensity values
-    lambdaI <- safelookup(lambdaI, X[I])
-  } else if(is.function(lambdaI)) {
-    # evaluate function at locations
-    XI <- X[I]
-    lambdaI <- lambdaI(XI$x, XI$y)
-  } else if(is.numeric(lambdaI) && is.vector(as.numeric(lambdaI))) {
-    # validate intensity vector
-    if(length(lambdaI) != nI)
-      stop(paste("The length of", sQuote("lambdaI"),
-                 "should equal the number of", Iname))
-  } else 
-  stop(paste(sQuote("lambdaI"), "should be a vector or an image"))
+  if(!is.null(lambdaX)) {
+    ## Intensity values for all points of X
+    if(!is.null(lambdaI))
+      warning("lambdaI was ignored, because lambdaX was given", call.=FALSE)
+    if(!is.null(lambdaJ))
+      warning("lambdaJ was ignored, because lambdaX was given", call.=FALSE)
+    if(is.im(lambdaX)) {
+      ## Look up intensity values
+      lambdaI <- safelookup(lambdaX, X[I])
+      lambdaJ <- safelookup(lambdaX, X[J])
+    } else if(is.function(lambdaX)) {
+      ## evaluate function at locations
+      lambdaI <- lambdaX(XI$x, XI$y)
+      lambdaJ <- lambdaX(XJ$x, XJ$y)
+    } else if(is.numeric(lambdaX) && is.vector(as.numeric(lambdaX))) {
+      ## vector of intensity values
+      if(length(lambdaX) != npts)
+        stop(paste("The length of", sQuote("lambdaX"),
+                   "should equal the number of points of X"))
+      lambdaI <- lambdaX[I]
+      lambdaJ <- lambdaX[J]
+    } else if(is.ppm(lambdaX) || is.kppm(lambdaX) || is.dppm(lambdaX)) {
+      ## point process model provides intensity
+      model <- lambdaX
+      if(!update) {
+        ## just use intensity of fitted model
+        lambdaI <- predict(model, locations=XI, type="trend")
+        lambdaJ <- predict(model, locations=XJ, type="trend")
+      } else {
+        ## re-fit model to data X
+        if(is.ppm(model)) {
+          model <- update(model, Q=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else if(is.kppm(model)) {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE)
+        }
+        lambdaI <- lambdaX[I]
+        lambdaJ <- lambdaX[J]
+        dangerI <- dangerJ <- FALSE
+        dangerous <- "lambdaIJ"
+        if(miss.update) 
+          warn.once(key="Kmulti.inhom.update",
+                    "The behaviour of Kmulti.inhom when lambda is a ppm object",
+                    "has changed (in spatstat 1.43-0 and later).",
+                    "See help(Kmulti.inhom)")
+      }
+    } else stop(paste("Argument lambdaX is not understood:",
+                      "it should be a numeric vector,",
+                      "an image, a function(x,y)",
+                      "or a fitted point process model (ppm, kppm or dppm)"))
+  } else {
+    ## lambdaI, lambdaJ expected
+    if(is.null(lambdaI)) {
+      ## estimate intensity
+      dangerI <- FALSE
+      dangerous <- setdiff(dangerous, "lambdaI")
+      lambdaI <- density(X[I], ..., sigma=sigma, varcov=varcov,
+                         at="points", leaveoneout=leaveoneout)
+    } else if(is.im(lambdaI)) {
+      ## look up intensity values
+      lambdaI <- safelookup(lambdaI, X[I])
+    } else if(is.function(lambdaI)) {
+      ## evaluate function at locations
+      lambdaI <- lambdaI(XI$x, XI$y)
+    } else if(is.numeric(lambdaI) && is.vector(as.numeric(lambdaI))) {
+      ## validate intensity vector
+      if(length(lambdaI) != nI)
+        stop(paste("The length of", sQuote("lambdaI"),
+                   "should equal the number of", Iname))
+    } else if(is.ppm(lambdaI) || is.kppm(lambdaI) || is.dppm(lambdaI)) {
+      ## point process model provides intensity
+      model <- lambdaI
+      if(!update) {
+        ## just use intensity of fitted model
+        lambdaI <- predict(model, locations=XI, type="trend")
+      } else {
+        ## re-fit model to data X
+        if(is.ppm(model)) {
+          model <- update(model, Q=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else if(is.kppm(model)) {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE)
+        }
+        lambdaI <- lambdaX[I]
+        dangerI <- FALSE
+        dangerous <- setdiff(dangerous, "lambdaI")
+        if(miss.update) 
+          warn.once(key="Kmulti.inhom.update",
+                    "The behaviour of Kmulti.inhom when lambda is a ppm object",
+                    "has changed (in spatstat 1.43-0 and later).",
+                    "See help(Kmulti.inhom)")
+      }
+    } else stop(paste(sQuote("lambdaI"), "should be a vector or an image"))
 
-  if(is.null(lambdaJ)) {
-    # estimate intensity
-    dangerJ <- FALSE
-    lambdaJ <- density(X[J], ..., sigma=sigma, varcov=varcov,
-                       at="points", leaveoneout=TRUE)
-  } else if(is.im(lambdaJ)) {
-    # look up intensity values
-    lambdaJ <- safelookup(lambdaJ, X[J])
-  } else if(is.function(lambdaJ)) {
-    # evaluate function at locations
-    XJ <- X[J]
-    lambdaJ <- lambdaJ(XJ$x, XJ$y)
-  } else if(is.numeric(lambdaJ) && is.vector(as.numeric(lambdaJ))) {
-    # validate intensity vector
-    if(length(lambdaJ) != nJ)
-      stop(paste("The length of", sQuote("lambdaJ"),
-                 "should equal the number of", Jname))
-  } else 
-  stop(paste(sQuote("lambdaJ"), "should be a vector or an image"))
+    if(is.null(lambdaJ)) {
+      ## estimate intensity
+      dangerJ <- FALSE
+      dangerous <- setdiff(dangerous, "lambdaJ")
+      lambdaJ <- density(X[J], ..., sigma=sigma, varcov=varcov,
+                         at="points", leaveoneout=leaveoneout)
+    } else if(is.im(lambdaJ)) {
+      ## look up intensity values
+      lambdaJ <- safelookup(lambdaJ, X[J])
+    } else if(is.function(lambdaJ)) {
+      ## evaluate function at locations
+      XJ <- X[J]
+      lambdaJ <- lambdaJ(XJ$x, XJ$y)
+    } else if(is.numeric(lambdaJ) && is.vector(as.numeric(lambdaJ))) {
+      ## validate intensity vector
+      if(length(lambdaJ) != nJ)
+        stop(paste("The length of", sQuote("lambdaJ"),
+                   "should equal the number of", Jname))
+    } else if(is.ppm(lambdaJ) || is.kppm(lambdaJ) || is.dppm(lambdaJ)) {
+      ## point process model provides intensity
+      model <- lambdaJ
+      if(!update) {
+        ## just use intensity of fitted model
+        lambdaJ <- predict(model, locations=XJ, type="trend")
+      } else {
+        ## re-fit model to data X
+        if(is.ppm(model)) {
+          model <- update(model, Q=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else if(is.kppm(model)) {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
+        } else {
+          model <- update(model, X=X)
+          lambdaX <- fitted(model, dataonly=TRUE)
+        }
+        lambdaJ <- lambdaX[J]
+        dangerJ <- FALSE
+        dangerous <- setdiff(dangerous, "lambdaJ")
+        if(miss.update) 
+          warn.once(key="Kmulti.inhom.update",
+                    "The behaviour of Kmulti.inhom when lambda is a ppm object",
+                    "has changed (in spatstat 1.43-0 and later).",
+                    "See help(Kmulti.inhom)")
+      }
+    } else 
+      stop(paste(sQuote("lambdaJ"), "should be a vector or an image"))
+  }
 
-  # Weight for each pair
+  ## Weight for each pair
   if(!is.null(lambdaIJ)) {
     dangerIJ <- TRUE
+    dangerous <- union(dangerous, "lambdaIJ")
     if(!is.matrix(lambdaIJ))
       stop("lambdaIJ should be a matrix")
     if(nrow(lambdaIJ) != nI)
       stop(paste("nrow(lambdaIJ) should equal the number of", Iname))
     if(ncol(lambdaIJ) != nJ)
       stop(paste("ncol(lambdaIJ) should equal the number of", Jname))
-  } else dangerIJ <- FALSE
+  } else {
+    dangerIJ <- FALSE
+  }
 
   danger <- dangerI || dangerJ || dangerIJ
 
@@ -258,8 +385,6 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
           yexp=quote(K[list(inhom,I,J)](r)))
 
 # identify close pairs of points
-  XI <- X[I]
-  XJ <- X[J]
   close <- crosspairs(XI, XJ, max(r), what="ijd")
 # map (i,j) to original serial numbers in X
   orig <- seq_len(npts)

@@ -1038,7 +1038,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.7 $ $Date: 2016/02/15 14:30:18 $
+# $Revision: 1.8 $ $Date: 2016/06/28 04:19:08 $
 # 
 
 require(spatstat)
@@ -1120,6 +1120,9 @@ local({
   s9 <- subfits(fit9)
   p9 <- lapply(s9, predict)
   c9 <- lapply(s9, predict, type="cif")
+
+  # and a simple error in recognising 'marks'
+  fit10 <- mppm(X ~ marks, H)
 })
 
 local({

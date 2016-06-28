@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.78 $   $Date: 2016/04/24 07:16:59 $
+#  $Revision: 1.79 $   $Date: 2016/06/28 04:13:46 $
 #
 
 mppm <- local({
@@ -54,7 +54,8 @@ mppm <- local({
     ##------  Trend Formula ------------------
     
     ## check all variables in trend formula are recognised
-    checkvars(formula, data.sumry$col.names, extra=c("x","y","id"), bname="data")
+    checkvars(formula, data.sumry$col.names,
+              extra=c("x","y","id","marks"), bname="data")
     ## check formula has LHS and RHS. Extract them
     if(length(formula) < 3)
       stop(paste("Argument", sQuote("formula"),

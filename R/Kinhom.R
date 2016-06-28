@@ -160,7 +160,7 @@
           model <- lambda
           if(!update) {
             ## just use intensity of fitted model
-            lambda <- predict(lambda, locations=X, type="trend")
+            lambda <- predict(model, locations=X, type="trend")
           } else {
             ## re-fit model to data X
             if(is.ppm(model)) {

@@ -13,7 +13,8 @@
 \usage{
 Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
          correction = c("border", "isotropic", "Ripley", "translate"),
-         sigma=NULL, varcov=NULL, lambdaIdot=NULL)
+         sigma=NULL, varcov=NULL, lambdaIdot=NULL,
+         lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -35,6 +36,8 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     Either a pixel image (object of class \code{"im"}),
     a numeric vector containing the intensity values
     at each of the type \code{i} points in \code{X},
+    a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
     or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
@@ -43,7 +46,9 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     Values of the estimated intensity of the entire point process,
     Either a pixel image (object of class \code{"im"}),
     a numeric vector containing the intensity values at each of the 
-    points in \code{X}, or a \code{function(x,y)} which
+    points in \code{X}, a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
+    or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
   \item{\dots}{
@@ -85,6 +90,35 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     product of the intensities \code{lambdaI} and \code{lambdadot}
     for each pair of points, the first point of type \code{i} and
     the second of any type.
+  }
+  \item{lambdaX}{
+    Optional. Values of the intensity for all points of \code{X}.
+    Either a pixel image (object of class \code{"im"}),
+    a numeric vector containing the intensity values
+    at each of the points in \code{X},
+    a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
+    or a \code{function(x,y)} which
+    can be evaluated to give the intensity value at any location.
+    If present, this argument overrides both \code{lambdaI} and
+    \code{lambdadot}.
+  }
+  \item{update}{
+    Logical value indicating what to do when
+    \code{lambdaI}, \code{lambdadot} or \code{lambdaX}
+    is a fitted point process model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
   }
 }
 \value{
@@ -160,13 +194,20 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
       which can be evaluated to give values of the intensity at
       any locations.
     }
-    \item{omitted:}{
+     \item{a fitted point process model}{
+      (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+      whose fitted \emph{trend} can be used as the fitted intensity.
+      (If \code{update=TRUE} the model will first be refitted to the
+      data \code{X} before the trend is computed.)
+    }
+   \item{omitted:}{
       if \code{lambdaI} is omitted then it will be estimated
       using a leave-one-out kernel smoother. 
     }
   }
   If \code{lambdaI} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
+  a `leave-one-out' kernel smoother, as described in Baddeley,
+  \ifelse{latex}{\out{M\o ller}}{Moller} 
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -180,6 +221,14 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
   It may be either a pixel image, a numeric vector of length equal
   to the number of points in \code{X}, a function, or omitted.
 
+  Alternatively if the argument \code{lambdaX} is given, then it specifies
+  the intensity values for all points of \code{X}, and the
+  arguments \code{lambdaI}, \code{lambdadot} will be ignored.
+  (The two arguments \code{lambdaI}, \code{lambdadot} allow the user
+  to specify two different methods for calculating the intensities of
+  the two kinds of points, while \code{lambdaX} ensures that the same
+  method is used for both kinds of points.)
+  
   For advanced use only, the optional argument \code{lambdaIdot}
   is a matrix containing estimated
   values of the products of these two intensities for each pair of

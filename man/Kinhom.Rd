@@ -65,9 +65,9 @@
     Normalisation power. See Details.
   }
   \item{update}{
-    Logical. If \code{lambda} is a fitted model
-    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
-    and \code{update=TRUE} (the default),
+    Logical value indicating what to do when \code{lambda} is a fitted model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    If \code{update=TRUE} (the default),
     the model will first be refitted to the data \code{X}
     (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
     before the fitted intensity is computed.
@@ -190,7 +190,7 @@
       at all locations in the window. 
     }
     \item{a fitted point process model}{
-      (object of class \code{"ppm"} or \code{"kppm"})
+      (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
       whose fitted \emph{trend} can be used as the fitted intensity.
       (If \code{update=TRUE} the model will first be refitted to the
       data \code{X} before the trend is computed.)

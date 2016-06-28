@@ -1,10 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.009
+        CHANGES IN spatstat VERSION 1.45-2.010
 
 OVERVIEW
 
-    o We thank Sebastian Meyer for contributions.
+    o We thank Corey Anderson and Sebastian Meyer for contributions.
 
+    o Improvements to inhomogeneous multitype K and L functions.
+
+    o Functions for extracting components of vector-valued objects.
+   
     o Minor improvements and bug fixes.
 
     o Version nickname: 'Desperate Measures'
@@ -23,6 +27,11 @@ NEW FUNCTIONS
     each having only one column of marks.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Kcross.inhom, Kdot.inhom, Kmulti.inhom, Ldot.inhom, Lcross.inhom
+    These functions now allow intensity values to be given by
+    a fitted point process model.
+    New arguments 'update', 'leaveoneout', 'lambdaX'.
 
     o diagnose.ppm
     Infinite values of 'rbord' are now ignored and treated as zero.

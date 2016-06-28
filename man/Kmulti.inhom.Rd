@@ -16,7 +16,8 @@
           r=NULL, breaks=NULL,
           correction=c("border", "isotropic", "Ripley", "translate"),
           lambdaIJ=NULL,
-          sigma=NULL, varcov=NULL)
+          sigma=NULL, varcov=NULL,
+          lambdaX=NULL, update=TRUE, leaveoneout=TRUE)
 }
 \arguments{
   \item{X}{The observed point pattern, 
@@ -37,8 +38,10 @@
     Either a pixel image (object of class \code{"im"}),
     a numeric vector containing the intensity values
     at each of the points in \code{X[I]},
+    a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
     or a \code{function(x,y)} which
-    can be evaluated to give the intensity value at any location.
+    can be evaluated to give the intensity value at any location,
   }
  \item{lambdaJ}{
     Optional.
@@ -46,6 +49,8 @@
     Either a pixel image (object of class \code{"im"}),
     a numeric vector containing the intensity values
     at each of the points in \code{X[J]},
+    a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
     or a \code{function(x,y)} which
     can be evaluated to give the intensity value at any location.
   }
@@ -71,12 +76,42 @@
   \item{lambdaIJ}{
     Optional. A matrix containing estimates of
     the product of the intensities \code{lambdaI} and \code{lambdaJ}
-    for each pair of points, the first point 
+    for each pair of points, the first point belonging to subset
+    \code{I} and the second point to subset \code{J}.
   }
   \item{sigma,varcov}{
     Optional arguments passed to  \code{\link{density.ppp}}
     to control the smoothing bandwidth, when \code{lambda} is
     estimated by kernel smoothing.
+  }
+  \item{lambdaX}{
+    Optional. Values of the intensity for all points of \code{X}.
+    Either a pixel image (object of class \code{"im"}),
+    a numeric vector containing the intensity values
+    at each of the points in \code{X},
+    a fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}),
+    or a \code{function(x,y)} which
+    can be evaluated to give the intensity value at any location.
+    If present, this argument overrides both \code{lambdaI} and
+    \code{lambdaJ}.
+  }
+  \item{update}{
+    Logical value indicating what to do when
+    \code{lambdaI}, \code{lambdaJ} or \code{lambdaX}
+    is a fitted point process model
+    (class \code{"ppm"}, \code{"kppm"} or \code{"dppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.ppm}} or \code{\link{update.kppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{density.ppp}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity.
   }
 }
 \value{
@@ -153,13 +188,20 @@ obtained by the edge corrections named.
       which can be evaluated to give values of the intensity at
       any locations.
     }
+    \item{a fitted point process model}{
+      (object of class \code{"ppm"}, \code{"kppm"} or \code{"dppm"})
+      whose fitted \emph{trend} can be used as the fitted intensity.
+      (If \code{update=TRUE} the model will first be refitted to the
+      data \code{X} before the trend is computed.)
+    }
     \item{omitted:}{
       if \code{lambdaI} is omitted then it will be estimated
       using a leave-one-out kernel smoother. 
     }
   }
   If \code{lambdaI} is omitted, then it will be estimated using
-  a `leave-one-out' kernel smoother, as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
+  a `leave-one-out' kernel smoother, as described in Baddeley,
+  \ifelse{latex}{\out{M\o ller}}{Moller} 
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -170,6 +212,10 @@ obtained by the edge corrections named.
 
   Similarly \code{lambdaJ} supplies the values
   of the intensity of the sub-process identified by index \code{J}.
+
+  Alternatively if the argument \code{lambdaX} is given, then it specifies
+  the intensity values for all points of \code{X}, and the
+  arguments \code{lambdaI}, \code{lambdaJ} will be ignored.
 
   The argument \code{r} is the vector of values for the
   distance \eqn{r} at which \eqn{K_{IJ}(r)}{KIJ(r)} should be evaluated. 
