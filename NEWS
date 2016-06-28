@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.010
+        CHANGES IN spatstat VERSION 1.45-2.011
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
    
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Desperate Measures'
+    o Version nickname: 'Autopilot Disconnected'
 
 NEW FUNCTIONS
 
@@ -48,6 +48,10 @@ BUG FIXES
     Did not correctly handle one-line functions:
     the resulting objects evaluated the wrong function in some cases.
     [Spotted by Sebastian Meyer. Bug introduced in spatstat 1.45-0]
+    Fixed.
+
+    o mppm
+    Did not recognise the variable 'marks' in a formula.
     Fixed.
 
     o Smooth.ppp, bw.smoothppp

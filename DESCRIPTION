@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.45-2.010
-Nickname: Desperate Measures
+Version: 1.45-2.011
+Nickname: Autopilot Disconnected
 Date: 2016-06-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,

@@ -1,7 +1,7 @@
 #
 #	Kmulti.inhom.S		
 #
-#	$Revision: 1.47 $	$Date: 2016/06/28 04:37:31 $
+#	$Revision: 1.50 $	$Date: 2016/06/28 08:06:01 $
 #
 #
 # ------------------------------------------------------------------------
@@ -59,6 +59,7 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
   if(missing(correction))
     correction <- NULL
   miss.update <- missing(update)
+  miss.leave <- missing(leaveoneout)
   marx <- marks(X)
   if(missing(i))
     i <- levels(marx)[1]
@@ -73,7 +74,7 @@ function(X, i, j, lambdaI=NULL, lambdaJ=NULL, ...,
                     sigma=sigma, varcov=varcov,
                     lambdaIJ=lambdaIJ, Iname=Iname, Jname=Jname,
                     lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
-                    miss.update=miss.update)
+                    miss.update=miss.update, miss.leave=miss.leave)
   iname <- make.parseable(paste(i))
   jname <- make.parseable(paste(j))
   result <-
@@ -101,6 +102,7 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
   if(missing(correction))
     correction <- NULL
   miss.update <- missing(update)
+  miss.leave <- missing(leaveoneout)
 
   marx <- marks(X)
   if(missing(i))
@@ -117,7 +119,7 @@ function(X, i, lambdaI=NULL, lambdadot=NULL, ...,
                     lambdaIJ=lambdaIdot,
                     Iname=Iname, Jname=Jname,
                     lambdaX=lambdaX, update=update, leaveoneout=leaveoneout,
-                    miss.update=miss.update)
+                    miss.update=miss.update, miss.leave=miss.leave)
   iname <- make.parseable(paste(i))
   result <-
     rebadge.fv(K,
@@ -145,16 +147,18 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
 {
   verifyclass(X, "ppp")
 
-  extrargs <- resolve.defaults(list(...),
-                               list(Iname="points satisfying condition I",
-                                    Jname="points satisfying condition J",
-                                    miss.update=missing(update)))
-  if(length(extrargs) > 3)
+  dflt <- list(Iname="points satisfying condition I",
+               Jname="points satisfying condition J",
+               miss.update=missing(update),
+               miss.leave=missing(leaveoneout))
+
+  extrargs <- resolve.defaults(list(...), dflt)
+  if(length(extrargs) > length(dflt))
     warning("Additional arguments unrecognised")
   Iname <- extrargs$Iname
   Jname <- extrargs$Jname
   miss.update <- extrargs$miss.update
-  
+  miss.leave <- extrargs$miss.leave
         
   npts <- npoints(X)
   W <- as.owin(X)
@@ -240,6 +244,10 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
+          if(leaveoneout && !miss.leave)
+            warn.once("dppm.leaveoneout",
+                      "fitted.dppm(leaveoneout=TRUE)",
+                      "is not yet implemented")
           lambdaX <- fitted(model, dataonly=TRUE)
         }
         lambdaI <- lambdaX[I]
@@ -291,6 +299,10 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
+          if(leaveoneout && !miss.leave)
+            warn.once("dppm.leaveoneout",
+                      "fitted.dppm(leaveoneout=TRUE)",
+                      "is not yet implemented")
           lambdaX <- fitted(model, dataonly=TRUE)
         }
         lambdaI <- lambdaX[I]
@@ -332,12 +344,17 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         ## re-fit model to data X
         if(is.ppm(model)) {
           model <- update(model, Q=X)
+          if(leaveoneout && !miss.leave)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else if(is.kppm(model)) {
           model <- update(model, X=X)
           lambdaX <- fitted(model, dataonly=TRUE, leaveoneout=leaveoneout)
         } else {
           model <- update(model, X=X)
+          if(leaveoneout && !miss.leave)
+            warn.once("dppm.leaveoneout",
+                      "fitted.pppm(leaveoneout=TRUE)",
+                      "is not yet implemented")
           lambdaX <- fitted(model, dataonly=TRUE)
         }
         lambdaJ <- lambdaX[J]

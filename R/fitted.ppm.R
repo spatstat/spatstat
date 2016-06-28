@@ -85,7 +85,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
 
   if(leaveoneout) {
     ## Perform leverage calculation
-    dfb <- dfbetas(object)
+    dfb <- dfbetas(object, multitypeOK=TRUE)
     delta <- with(dfb, 'discrete')[with(dfb, 'is.atom'),,drop=FALSE]
     ## adjust fitted value
     mom <- model.matrix(object)[is.data(quad.ppm(object)),,drop=FALSE]

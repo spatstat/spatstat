@@ -82,7 +82,8 @@ ppmInfluenceEngine <- function(fit,
                          method=c("C", "interpreted"),
                          precomputed=list(),
                          sparseOK=FALSE,
-                         fitname=NULL) {
+                         fitname=NULL,
+                         multitypeOK=FALSE) {
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
   stopifnot(is.ppm(fit))
@@ -100,7 +101,7 @@ ppmInfluenceEngine <- function(fit,
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
     stop("ppm influence measures are not yet implemented for method=logi",
          call.=FALSE)
-  if(is.marked(fit))
+  if(!multitypeOK && is.marked(fit))
     stop("ppm influence measures are not yet implemented for multitype models",
          call.=FALSE)
   sparse <- sparseOK 
