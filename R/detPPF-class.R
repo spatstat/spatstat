@@ -241,9 +241,9 @@ intensity.detpointprocfamily <- function(X, ...){
 }
 
 parameters.dppm <- parameters.detpointprocfamily <- function(model, ...){
-    if(inherits(object, "dppm"))
-        object <- object$fitted
-    c(object$fixed, structure(rep(NA,length(object$freepar)), .Names = object$freepar))
+    if(inherits(model, "dppm"))
+        model <- model$fitted
+    c(model$fixed, structure(rep(NA,length(model$freepar)), .Names = model$freepar))
 }
 
 dim.detpointprocfamily <- function(x){
