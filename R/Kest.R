@@ -364,8 +364,8 @@ function(X, ..., r=NULL, rmax=NULL, breaks=NULL,
   ## default plot will display all edge corrections
   formula(K) <- . ~ r
   nama <- rev(colnames(K))
-  nama <- nama[!(nama %in% c("r", "rip", "ls"))]
-  fvnames(K, ".") <- nama
+  fvnames(K, ".") <- setdiff(nama, c("r", "rip", "ls"))
+  ##
   unitname(K) <- unitname(X)
   # copy to other components
   if(ratio)

@@ -10,6 +10,7 @@
                     stoyan=0.15,
                     correction=c("translate", "Ripley"),
                     divisor = c("r", "d"),
+                    var.approx = FALSE,
                     domain=NULL,
                     ratio=FALSE)
 }
@@ -42,6 +43,10 @@
     Choice of divisor in the estimation formula:
     either \code{"r"} (the default) or \code{"d"}. See Details.
   }
+  \item{var.approx}{
+    Logical value indicating whether to compute an analytic
+    approximation to the variance of the estimated pair correlation.
+  }
   \item{domain}{
     Optional. Calculations will be restricted to this subset
     of the window. See Details.
@@ -69,13 +74,19 @@
   \item{iso}{vector of values of \eqn{g(r)}
     estimated by Ripley isotropic correction
   }
+  \item{v}{vector of approximate values of the variance of
+    the estimate of \eqn{g(r)}
+  }
   as required.
 
   If \code{ratio=TRUE} then the return value also has two
   attributes called \code{"numerator"} and \code{"denominator"}
   which are \code{"fv"} objects
   containing the numerators and denominators of each
-  estimate of \eqn{g(r)}. 
+  estimate of \eqn{g(r)}.
+
+  The return value also has an attribute \code{"bw"} giving the
+  smoothing bandwidth that was used.
 }
 \details{
   The pair correlation function \eqn{g(r)} 
@@ -166,7 +177,9 @@
   See equation (15.16).
   If \code{bw} is missing, then this rule of thumb will be applied.
   The argument \code{stoyan} determines the value of \eqn{c}.
-
+  The smoothing bandwidth that was used in the calculation is returned
+  as an attribute of the final result.
+  
   The argument \code{r} is the vector of values for the
   distance \eqn{r} at which \eqn{g(r)} should be evaluated.
   There is a sensible default.
@@ -186,11 +199,22 @@
 
   To compute a confidence band for the true value of the
   pair correlation function, use \code{\link{lohboot}}.
+
+  If \code{var.approx = TRUE}, the variance of the
+  estimate of the pair correlation will also be calculated using
+  an analytic approximation (Illian et al, 2008, page 234)
+  which is valid for stationary point processes which are not
+  too clustered. This calculation is not yet implemented when
+  the argument \code{domain} is given.
 }
 \references{
+  Illian, J., Penttinen, A., Stoyan, H. and Stoyan, D. (2008)
+  \emph{Statistical Analysis and Modelling of Spatial Point Patterns.}
+  Wiley.
+
   Stoyan, D. and Stoyan, H. (1994)
-  Fractals, random shapes and point fields:
-  methods of geometrical statistics.
+  \emph{Fractals, random shapes and point fields:
+  methods of geometrical statistics.}
   John Wiley and Sons.
 }
 \seealso{
@@ -216,11 +240,13 @@
   plot(pd, iso ~ r, col="green", lwd=2, add=TRUE)
   legend("center", col=c("blue", "green"), lty=1, lwd=2,
          legend=c("divisor=r","divisor=d"))
+
+  # calculate approximate variance and show POINTWISE confidence bands
+  pv <- pcf(X, var.approx=TRUE)
+  plot(pv, cbind(iso, iso+2*sqrt(v), iso-2*sqrt(v)) ~ r)
 }
 \author{
-  \adrian,
-  \rolf,
-  \ege
+  \spatstatAuthors
   and Martin Hazelton.
 }
 \keyword{spatial}

@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.56 $   $Date: 2016/02/17 09:16:27 $
+#   $Revision: 1.59 $   $Date: 2016/06/30 09:49:39 $
 #
 #
 #   calculate pair correlation function
@@ -18,6 +18,7 @@ pcf.ppp <- function(X, ..., r=NULL,
                     kernel="epanechnikov", bw=NULL, stoyan=0.15,
                     correction=c("translate", "Ripley"),
                     divisor=c("r", "d"),
+                    var.approx=FALSE,
                     domain=NULL, ratio=FALSE)
 {
   verifyclass(X, "ppp")
@@ -55,6 +56,8 @@ pcf.ppp <- function(X, ..., r=NULL,
                  attr(g, "labl"), attr(g, "desc"), fname="g",
                  ratio=TRUE)
     }
+    if(var.approx)
+      warning("var.approx is not implemented when 'domain' is given")
     return(g)
   }
 
@@ -132,11 +135,15 @@ pcf.ppp <- function(X, ..., r=NULL,
 
   ###### compute #######
 
+  bw.used <- NULL
+  
   if(any(correction=="translate")) {
     # translation correction
     if(npts > 1) {
       edgewt <- edge.Trans(dx=close$dx, dy=close$dy, W=win, paired=TRUE)
-      gT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+      kdenT <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)
+      gT <- kdenT$g
+      bw.used <- attr(kdenT, "bw")
     } else gT <- undefined
     if(!ratio) {
       out <- bind.fv(out,
@@ -158,7 +165,9 @@ pcf.ppp <- function(X, ..., r=NULL,
     if(npts > 1) {
       XI <- ppp(close$xi, close$yi, window=win, check=FALSE)
       edgewt <- edge.Ripley(XI, matrix(dIJ, ncol=1))
-      gR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)$g
+      kdenR <- sewpcf(dIJ, edgewt, denargs, lambda2area, divisor)
+      gR <- kdenR$g
+      bw.used <- attr(kdenR, "bw")
     } else gR <- undefined
     if(!ratio) {
       out <- bind.fv(out,
@@ -181,16 +190,43 @@ pcf.ppp <- function(X, ..., r=NULL,
     warning("Nothing computed - no edge corrections chosen")
     return(NULL)
   }
-  
-  # default is to display all corrections
-  formula(out) <- . ~ r
-  #
-  unitname(out) <- unitname(X)
 
-  # copy to other components
+  ## variance approximation
+  ## Illian et al 2008 p 234
+  if(var.approx) {
+    gr <- if(any(correction == "isotropic")) gR else gT
+    hh <- bw.used * sqrt(5)
+    gWbar <- as.function(rotmean(setcov(win), result="fv"))
+    vest <- gr * areaW^2/(npts^2 * 2 * pi * r * hh * gWbar(r))
+    if(!ratio) {
+      out <- bind.fv(out,
+                     data.frame(v=vest),
+                     "v(r)",
+                     "approximate variance of %s",
+                     "v")
+    } else {
+      vden <- rep((npts-1)^2, length(vest))
+      vnum <- vden * vest
+      out <- bind.ratfv(out,
+                        data.frame(v=vnum),
+                        data.frame(c=vden),
+                        "v(r)", 
+                        "approximate variance of %s",
+                        "v")
+    }
+  }
+
+  ## Finish off
+  ## default is to display all corrections
+  formula(out) <- . ~ r
+  fvnames(out, ".") <- setdiff(rev(colnames(out)), c("r", "v"))
+  ##
+  unitname(out) <- unitname(X)
+  ## copy to other components
   if(ratio)
     out <- conform.ratfv(out)
-  
+
+  attr(out, "bw") <- bw.used
   return(out)
 }
 
@@ -221,7 +257,9 @@ sewpcf <- function(d, w, denargs, lambda2area, divisor=c("r","d")) {
   if(divisor == "r")
     y <- y/r
   g <- y/(2 * pi * lambda2area)
-  return(data.frame(r=r,g=g))
+  result <- data.frame(r=r,g=g)
+  attr(result, "bw") <- kden$bw
+  return(result)
 }
 
 #

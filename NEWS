@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.014
+        CHANGES IN spatstat VERSION 1.45-2.015
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     o spatstat now depends on R 3.3.0 or later.
 
     o Improvements to inhomogeneous multitype K and L functions.
+
+    o Variance approximation for pair correlation function.
 
     o Functions for extracting components of vector-valued objects.
    
@@ -40,6 +42,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This ensures that diagnose.ppm has a sensible default
     when the fitted model has infinite reach.
 
+    o pcf.ppp
+    Now calculates an analytic approximation to the variance of
+    the estimate of the pair correlation function (when var.approx=TRUE).
+    Now returns the smoothing bandwidth used, as an attribute of the result.
+    
     o plot.ppp
     When 'clipwin' is given, any parts of the boundary of the window of x
     that lie inside 'clipwin' will also be plotted.
