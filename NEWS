@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.011
+        CHANGES IN spatstat VERSION 1.45-2.013
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
    
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Autopilot Disconnected'
+    o Version nickname: 'Glideslope'
 
 NEW FUNCTIONS
 
@@ -42,6 +42,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     When 'clipwin' is given, any parts of the boundary of the window of x
     that lie inside 'clipwin' will also be plotted.
 
+    o plot.msr
+    Now handles multitype measures.
+    New argument 'multiplot'.
+
 BUG FIXES
 
     o funxy
@@ -65,12 +69,24 @@ BUG FIXES
     [Bug introduced in spatstat 1.38-0]
     Fixed.
 
+    o plot.layered
+    Crashed if one layer was a point pattern with several columns of marks.
+    Fixed. 
+
     o plot.ppm
     Sometimes gave a spurious warning about a singular matrix.
     Fixed.
 
     o setminus.owin
     Gave wrong or strange answer if the correct answer was empty.
+    Fixed.
+
+    o parameters.dppm
+    Crashed, due to a typo.
+    Fixed.
+
+    o progressreport
+    Crashed if n = 1. 
     Fixed.
 
         CHANGES IN spatstat VERSION 1.45-2

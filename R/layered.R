@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.36 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.37 $  $Date: 2016/06/29 03:20:37 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -147,11 +147,14 @@ plotEachLayer <- function(x, ..., main,
                         "lpp", "linnet", 
                         "im", "msr", "layered"))) {
         ## plot method for 'xi' has argument 'do.plot'.
+        mplf <-
+          if(inherits(xi, c("ppp", "lpp"))) list(multiplot=FALSE) else list()
         out[[i]] <- outi <- do.call(plot,
                                     resolve.defaults(list(x=xi,
                                                           add=add.i,
                                                           do.plot=do.plot),
                                                      list(...),
+                                                     mplf,
                                                      pla.i,
                                                      dflt))
         boxes[[i]] <- as.rectangle(as.owin(outi))

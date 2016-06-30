@@ -257,7 +257,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         if(miss.update) 
           warn.once(key="Kmulti.inhom.update",
                     "The behaviour of Kmulti.inhom when lambda is a ppm object",
-                    "has changed (in spatstat 1.43-0 and later).",
+                    "has changed (in spatstat 1.45-3 and later).",
                     "See help(Kmulti.inhom)")
       }
     } else stop(paste("Argument lambdaX is not understood:",
@@ -311,7 +311,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         if(miss.update) 
           warn.once(key="Kmulti.inhom.update",
                     "The behaviour of Kmulti.inhom when lambda is a ppm object",
-                    "has changed (in spatstat 1.43-0 and later).",
+                    "has changed (in spatstat 1.45-3 and later).",
                     "See help(Kmulti.inhom)")
       }
     } else stop(paste(sQuote("lambdaI"), "should be a vector or an image"))
@@ -363,7 +363,7 @@ function(X, I, J, lambdaI=NULL, lambdaJ=NULL,
         if(miss.update) 
           warn.once(key="Kmulti.inhom.update",
                     "The behaviour of Kmulti.inhom when lambda is a ppm object",
-                    "has changed (in spatstat 1.43-0 and later).",
+                    "has changed (in spatstat 1.45-3 and later).",
                     "See help(Kmulti.inhom)")
       }
     } else 

@@ -294,9 +294,11 @@
 \alias{is.infline}
 \alias{is.interact}
 \alias{is.marked.default}    
+\alias{is.marked.msr}    
 \alias{is.marked.psp}    
 \alias{is.marked.quad}
 \alias{is.mppm}
+\alias{is.multitype.msr}    
 \alias{is.multitype.quad}    
 \alias{is.multitype.default}    
 \alias{is.parseable}
@@ -1145,10 +1147,12 @@ is.hyperframe(x)
 is.infline(x)
 is.interact(x)
 \method{is.marked}{default}(\dots)  
+\method{is.marked}{msr}(X, \dots)
 \method{is.marked}{psp}(X, \dots)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 is.mppm(x)
 \method{is.multitype}{default}(X, \dots)  
+\method{is.multitype}{msr}(X, \dots)
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
 is.parseable(x)
 \method{is.poisson}{mppm}(x)

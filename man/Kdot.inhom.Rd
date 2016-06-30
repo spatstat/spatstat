@@ -282,6 +282,10 @@ Kdot.inhom(X, i, lambdaI=NULL, lambdadot=NULL, \dots, r=NULL, breaks=NULL,
     # Equivalent
     K <- Kdot.inhom(woods, "maple", sigma=0.15)
 
+    # Fit model
+    fit <- ppm(woods ~ marks * polynom(x,y,2))
+    K <- Kdot.inhom(woods, "maple", lambdaX=fit, update=FALSE)
+    
     # synthetic example: type A points have intensity 50,
     #                    type B points have intensity 50 + 100 * x
     lamB <- as.im(function(x,y){50 + 100 * x}, owin())

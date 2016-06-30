@@ -29,6 +29,10 @@
   will be restricted to this window. If \code{domain} is a tessellation
   (class \code{"tess"}) then the integral of \code{f} in each
   tile of \code{domain} will be computed.
+
+  For a multitype measure \code{m}, use \code{\link{split.msr}}
+  to separate the contributions for each type of point,
+  as shown in the Examples.
 }
 \value{
   A numeric value (for a signed measure)
@@ -39,18 +43,27 @@
   \code{\link{integral}}
 }
 \examples{
-   fit <- ppm(cells, ~x)
-   rp <- residuals(fit)
-   integral(rp)
+   fit <- ppm(cells ~ x)
+   rr <- residuals(fit)
+   integral(rr)
+
+   # vector-valued measure
+   rs <- residuals(fit, type="score")
+   integral(rs)
+
+   # multitype
+   fitA <- ppm(amacrine ~ x)
+   rrA <- residuals(fitA)
+   sapply(split(rrA), integral)
+
+   # multitype and vector-valued
+   rsA <- residuals(fitA, type="score")
+   sapply(split(rsA), integral)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  
-  
-  Rolf Turner \email{r.turner@auckland.ac.nz}
-  
-  and Ege Rubak \email{rubak@math.aau.dk}
-  
+  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
+ Rolf Turner \email{r.turner@auckland.ac.nz}
+ and Ege Rubak \email{rubak@math.aau.dk}.
 }
 \keyword{spatial}
 \keyword{math}

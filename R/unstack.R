@@ -22,10 +22,15 @@ unstack.msr <- function(x, ...) {
   trap.extra.arguments(...)
   d <- dim(x)
   if(is.null(d)) return(solist(x))
+  smo <- attr(x, "smoothdensity")
+  if(!inherits(smo, "imlist")) smo <- NULL
   nc <- d[2]
   y <- vector(mode="list", length=nc)
-  for(j in seq_len(nc))
-    y[[j]] <- x[,j,drop=FALSE]
+  for(j in seq_len(nc)) {
+    xj <- x[,j,drop=FALSE]
+    if(!is.null(smo)) attr(xj, "smoothdensity") <- smo[[j]]
+    y[[j]] <- xj
+  }
   names(y) <- colnames(x)
   return(as.solist(y))
 }

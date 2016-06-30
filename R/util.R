@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.208 $    $Date: 2016/06/27 08:47:31 $
+#    $Revision: 1.209 $    $Date: 2016/06/30 01:37:39 $
 #
 #
 matrowsum <- function(x) {
@@ -490,7 +490,7 @@ progressreport <- local({
     # Iteration number is printed every 'every' iterations.
     # If showtime=TRUE, the time is shown every 'showevery' iterations
     # where showevery \in {1, every, n}.
-    chars.report <- ceiling(log10(n))
+    chars.report <- max(1, ceiling(log10(n)))
     if(showtime) {
       chars.time <- nchar(' [etd 12:00:00] ')
       timesperreport <- if(showevery == 1) every else

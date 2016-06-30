@@ -294,7 +294,12 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
 
     # method (3): fit parametric intensity model
     fit <- ppm(woods ~marks * polynom(x,y,2))
-    # evaluate fitted intensities at data points
+    # alternative (a): use fitted model as 'lambda' argument
+    K <- Kcross.inhom(woods, "whiteoak", "maple",
+                      lambdaI=fit, lambdaJ=fit, update=FALSE)
+    K <- Kcross.inhom(woods, "whiteoak", "maple",
+                      lambdaX=fit, update=FALSE)
+    # alternative (b): evaluate fitted intensities at data points
     # (these are the intensities of the sub-processes of each type)
     inten <- fitted(fit, dataonly=TRUE)
     # split according to types of points
