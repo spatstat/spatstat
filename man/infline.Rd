@@ -84,10 +84,10 @@ infline(a = NULL, b = NULL, h = NULL, v = NULL, p = NULL, theta = NULL)
   plot(c(-1,1),c(-1,1),type="n",xlab="",ylab="", asp=1)
   plot(infline(p=0.4, theta=seq(0,pi,length=20)))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

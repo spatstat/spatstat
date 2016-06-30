@@ -77,7 +77,7 @@ linearKdot(X, i, r=NULL, \dots, correction="Ang")
    data(chicago)
    K <- linearKdot(chicago, "assault")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

@@ -47,9 +47,9 @@
   y[1] <- list(runifpoint(42, Window(amacrine)))
  }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   and
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
 }
 \keyword{spatial}
 \keyword{manip}

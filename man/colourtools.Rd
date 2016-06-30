@@ -157,10 +157,10 @@ to.transparent(x, fraction)
   For \code{samecolour} and \code{is.grey},
   a logical value or logical vector.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

@@ -62,7 +62,7 @@
   an edge.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
+  \adrian 
   
 }
 \seealso{

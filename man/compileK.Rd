@@ -99,7 +99,7 @@ compilepcf(D, r, weights = NULL, denom = 1,
   An object of class \code{"fv"} representing the estimated function.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{Kest}},

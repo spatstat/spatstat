@@ -41,7 +41,7 @@
   See the help files for the corresponding generic functions.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

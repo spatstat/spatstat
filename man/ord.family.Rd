@@ -53,10 +53,10 @@
   \emph{Journal of the Royal Statistical Society, Series B},
   \bold{39}, 172 -- 212.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

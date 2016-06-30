@@ -54,10 +54,10 @@ quadratresample(X, nx, ny=nx, ...,
   A point pattern (if \code{nsamples = 1}) or a 
   list of point patterns (if \code{nsamples > 1}).
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

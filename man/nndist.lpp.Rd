@@ -44,7 +44,7 @@
   for each entry of \code{k}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{lpp}}

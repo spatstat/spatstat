@@ -105,12 +105,12 @@
   pixel images (objects of class \code{"im"}).
   For \code{model.images.lppm}, the images are also of class \code{"linim"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

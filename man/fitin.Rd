@@ -46,10 +46,10 @@ fitin(object)
   An object of class \code{"fii"} representing the fitted
   interpoint interaction. This object can be printed and plotted.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

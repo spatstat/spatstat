@@ -43,10 +43,10 @@
   fit <- slrm(X ~ x+y)
   plot(fitted(fit))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   \email{adrian@maths.uwa.edu.au}
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

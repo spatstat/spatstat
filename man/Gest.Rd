@@ -230,10 +230,10 @@ Gest(X, r=NULL, breaks=NULL, \dots,
      plot(G, asin(sqrt(.)) ~ asin(sqrt(theo)))
   }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

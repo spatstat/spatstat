@@ -48,7 +48,7 @@ lintess(L, df)
   There are methods for printing and plotting this object.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} and Greg McSwiggan.
+  \adrian and Greg McSwiggan.
 }
 \seealso{
   \code{\link{linnet}} for linear networks.

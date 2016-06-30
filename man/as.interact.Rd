@@ -46,10 +46,10 @@ as.interact(object)
   An object of class \code{"interact"} representing the 
   interpoint interaction. This object can be printed and plotted.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

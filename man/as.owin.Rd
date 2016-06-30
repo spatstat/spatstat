@@ -227,12 +227,12 @@ in any of several formats, into an object of class \code{"owin"}.
  w <- as.owin(towns)
  detach(package:spatial)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \keyword{spatial}

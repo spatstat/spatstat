@@ -116,8 +116,8 @@ connected(X, \dots)
 \author{
   Original \R code by Julian Burgos, University of Washington.
   Adapted for \pkg{spatstat} by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
-  and Rolf Turner \email{r.turner@auckland.ac.nz}.
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{math}

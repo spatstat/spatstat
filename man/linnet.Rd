@@ -64,7 +64,7 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
+  \adrian 
 }
 \seealso{
   \code{\link{simplenet}} for an example of a linear network.

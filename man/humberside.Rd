@@ -39,7 +39,7 @@
   Published and analysed in Cuzick and Edwards (1990), see Table 1.
   Pentagonal boundary from Diggle and Chetwynd (1991), Figure 1.
   Point coordinates and pentagonal boundary supplied by Andrew Lawson.
-  Detailed region boundary was digitised by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, 2005, from
+  Detailed region boundary was digitised by \adrian, 2005, from
   a reprint of Cuzick and Edwards (1990).
 }
 \section{Notes}{

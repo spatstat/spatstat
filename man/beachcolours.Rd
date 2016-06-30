@@ -84,10 +84,10 @@ beachcolourmap(range, ...)
 \examples{
   plot(beachcolourmap(c(-2,2)))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

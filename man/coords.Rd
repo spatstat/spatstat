@@ -60,10 +60,10 @@
   containing the coordinates.
   \code{coords<-} returns the altered point pattern.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

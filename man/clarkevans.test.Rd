@@ -90,7 +90,7 @@ clarkevans.test(X, ...,
   Cambridge University Press, pp 91--95.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

@@ -168,10 +168,10 @@
   Z <- as.im(function(x,y){ 5 * exp(2 * x - 1) }, owin())
   Y <- rThomas(10, 0.2, Z)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

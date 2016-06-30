@@ -65,7 +65,7 @@ thinNetwork(X, retainvertices, retainedges)
   An object of the same kind as \code{X}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   and Suman Rakshit.
 }
 \seealso{

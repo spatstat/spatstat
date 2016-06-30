@@ -181,10 +181,10 @@ slrm(formula, ..., data = NULL, offset = TRUE, link = "logit",
      dat <- list(A=X, V=Z)
      slrm(A ~ V, data=dat)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   \email{adrian@maths.uwa.edu.au}
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

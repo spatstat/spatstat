@@ -43,7 +43,7 @@
   Same as for other methods.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{zclustermodel}}

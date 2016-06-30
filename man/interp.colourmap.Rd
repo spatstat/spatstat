@@ -45,10 +45,10 @@ interp.colourmap(m, n = 512)
   co <- colourmap(inputs=c(0, 0.5, 1), c("black", "red", "white"))
   plot(interp.colourmap(co))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

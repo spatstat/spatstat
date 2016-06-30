@@ -44,7 +44,7 @@
    pairdist(X)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

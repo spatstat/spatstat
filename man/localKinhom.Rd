@@ -128,10 +128,10 @@
 }
 \author{
   Mike Kuhn,
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

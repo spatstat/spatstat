@@ -67,10 +67,10 @@
    data(cells)
    Y <- rlabel(cells, labels=factor(c("A", "B")), permute=FALSE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

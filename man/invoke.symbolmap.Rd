@@ -47,12 +47,12 @@ invoke.symbolmap(map, values, x, y = NULL, \dots, add = FALSE,
 \value{
   (Invisibly) the maximum diameter of the symbols, in user coordinate units.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \seealso{
   \code{\link{plot.symbolmap}} to plot the graphics map itself.

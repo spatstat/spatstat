@@ -97,7 +97,7 @@
   Wiley.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} and Greg McSwiggan.
+  \adrian and Greg McSwiggan.
 }
 \seealso{
   \code{\link{lpp}},

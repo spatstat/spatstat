@@ -9,9 +9,9 @@
 
 \value{A single logical value.}
 
-\author{Ege Rubak \email{rubak@math.aau.dk} <rubak@math.aau.dk>,
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} <Adrian.Baddeley@uwa.edu.au>
-and Rolf Turner \email{r.turner@auckland.ac.nz} <r.turner@auckland.ac.nz>}
+\author{\ege <rubak@math.aau.dk>,
+\adrian <Adrian.Baddeley@uwa.edu.au>
+and \rolf <r.turner@auckland.ac.nz>}
 
 \keyword{spatial}
 \keyword{manip}

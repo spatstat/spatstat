@@ -218,9 +218,9 @@
          legend=c("divisor=r","divisor=d"))
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
-  Rolf Turner \email{r.turner@auckland.ac.nz},
-  Ege Rubak \email{rubak@math.aau.dk}
+  \adrian,
+  \rolf,
+  \ege
   and Martin Hazelton.
 }
 \keyword{spatial}

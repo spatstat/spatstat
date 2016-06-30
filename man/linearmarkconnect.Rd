@@ -83,7 +83,7 @@ linearmarkconnect(X, i, j, r=NULL, \dots)
    plot(alltypes(chicago, linearmarkconnect))
   }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

@@ -40,9 +40,7 @@
   class \code{"funxy"}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
 }
 \seealso{
   \code{\link{tileindex}} for the low-level calculation of tile index.

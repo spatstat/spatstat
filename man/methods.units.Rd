@@ -60,10 +60,10 @@
   For \code{rescale.units} the value is another object of class \code{"units"}.
   For \code{compatible.units} the result is logical.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

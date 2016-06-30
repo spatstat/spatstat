@@ -134,10 +134,10 @@
    # values are below I= 0, suggesting negative association
    # between 'on' and 'off' cells.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

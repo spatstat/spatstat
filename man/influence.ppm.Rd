@@ -78,7 +78,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{leverage.ppm}},

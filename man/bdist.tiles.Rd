@@ -37,10 +37,10 @@
   # identify tiles that do not touch the boundary
   plot(X[B > 0], add=TRUE, col="green", lwd=3)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

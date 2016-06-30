@@ -39,10 +39,10 @@
   For \code{print.box3} the value is \code{NULL}.
   For \code{unitname.box3} an object of class \code{"units"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

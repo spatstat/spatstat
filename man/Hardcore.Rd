@@ -87,10 +87,10 @@ which can then be fitted to point pattern data.
    # fit a nonstationary hard core process
    # with log-cubic polynomial trend
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

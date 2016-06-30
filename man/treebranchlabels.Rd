@@ -51,9 +51,7 @@
   \code{vertices(L)}.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+\spatstatAuthors
 }
 \seealso{
   \code{\link{deletebranch}}, \code{\link{extractbranch}},

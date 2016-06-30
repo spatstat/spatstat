@@ -172,10 +172,10 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   \emph{Undocumented} functions for modifying an \code{"fv"} object
   include \code{tweak.fv.entry} and \code{rebadge.fv}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \examples{

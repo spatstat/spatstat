@@ -81,7 +81,7 @@
 }
 \author{
   Ottmar Cronie and Marie-Colette van Lieshout.
-  Rewritten for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
+  Rewritten for \pkg{spatstat} by \adrian.
 }
 \seealso{
   \code{\link{Ginhom}},

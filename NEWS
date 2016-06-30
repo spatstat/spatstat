@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.013
+        CHANGES IN spatstat VERSION 1.45-2.014
 
 OVERVIEW
 
     o We thank Corey Anderson and Sebastian Meyer for contributions.
+
+    o spatstat now depends on R 3.3.0 or later.
 
     o Improvements to inhomogeneous multitype K and L functions.
 
@@ -11,7 +13,7 @@ OVERVIEW
    
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Glideslope'
+    o Version nickname: 'Bank Angle'
 
 NEW FUNCTIONS
 

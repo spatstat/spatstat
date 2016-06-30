@@ -45,7 +45,7 @@
   plot(X \%mark\% (2*rr), add=TRUE, markscale=1)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \keyword{spatial}
 \keyword{math}

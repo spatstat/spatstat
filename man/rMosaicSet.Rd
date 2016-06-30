@@ -36,10 +36,10 @@ rMosaicSet(X, p=0.5)
   A random set process in the plane with a Markovian property.
   \emph{Annals of Mathematical Statistics} \bold{36} (1965) 1859--1863.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

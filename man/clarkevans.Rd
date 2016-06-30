@@ -104,7 +104,7 @@ clarkevans(X, correction=c("none", "Donnelly", "cdf"),
 John Rudge
 \email{rudge@esc.cam.ac.uk}
 with modifications by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

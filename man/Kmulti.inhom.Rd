@@ -201,7 +201,7 @@ obtained by the edge corrections named.
   }
   If \code{lambdaI} is omitted, then it will be estimated using
   a `leave-one-out' kernel smoother, as described in Baddeley,
-  \ifelse{latex}{\out{M\o ller}}{Moller} 
+  \Moller 
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -272,10 +272,10 @@ obtained by the edge corrections named.
     f2 <- function(X) { marks(X)$height > 3 }
     K <- Kmulti.inhom(finpines, f1, f2)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

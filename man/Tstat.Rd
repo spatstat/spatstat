@@ -83,7 +83,7 @@ Tstat(X, ..., r = NULL, rmax = NULL,
 \examples{
   plot(Tstat(redwood))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

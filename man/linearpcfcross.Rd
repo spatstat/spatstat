@@ -84,7 +84,7 @@ linearpcfcross(X, i, j, r=NULL, \dots, correction="Ang")
    data(chicago)
    g <- linearpcfcross(chicago, "assault")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

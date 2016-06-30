@@ -99,10 +99,10 @@ unitname(x) <- value
   containing the name of the unit of length in \code{x}. There are
   methods for \code{print} and \code{summary}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

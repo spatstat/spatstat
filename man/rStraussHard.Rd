@@ -90,7 +90,7 @@
   Chapman and Hall/CRC.
 }
 \author{
-  Kasper Klitgaard Berthelsen and Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Kasper Klitgaard Berthelsen and \adrian
   
   
 }

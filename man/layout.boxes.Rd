@@ -46,10 +46,10 @@ layout.boxes(B, n, horizontal = FALSE, aspect = 0.5, usefrac = 0.9)
   plot(B, main="", col="blue")
   niets <- lapply(boxes, plot, add=TRUE, col="grey")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

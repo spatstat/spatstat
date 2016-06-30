@@ -45,7 +45,7 @@
 \examples{
    kernel.factor("epa")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   and Martin Hazelton
 }
 \keyword{methods}

@@ -30,10 +30,10 @@ pp3(x, y, z, ...)
   Object of class \code{"pp3"} representing a three dimensional
   point pattern. Also belongs to class \code{"ppx"}. 
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

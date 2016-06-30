@@ -53,10 +53,10 @@ transect.im(X, ..., from="bottomleft", to="topright",
   An object of class \code{"fv"} which can be plotted.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

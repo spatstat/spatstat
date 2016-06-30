@@ -141,7 +141,7 @@ vargamma.estK(X, startpar=c(kappa=1,scale=1), nu = -1/4, lambda=NULL,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
-  Adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Adapted for \pkg{spatstat} by \adrian
   
   
 }

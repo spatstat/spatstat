@@ -159,15 +159,15 @@ dg.progress(X, fun = Lest, \dots,
   \bold{23}, 497--517.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, Andrew Hardegen, Tom Lawrence,
+  \adrian, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
   Implemented by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

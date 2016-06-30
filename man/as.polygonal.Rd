@@ -48,9 +48,7 @@ as.polygonal(W, repair=FALSE)
   and of type \code{"polygonal"}). 
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
 }
 \seealso{
   \code{\link{owin}},

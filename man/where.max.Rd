@@ -43,7 +43,7 @@
   A point pattern (object of class \code{"ppp"}).
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{max.im}},

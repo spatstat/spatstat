@@ -92,9 +92,9 @@ adaptive.density(X, f = 0.1, ..., nrep = 1, verbose=TRUE)
   plot(adaptive.density(nztrees, nrep=nr), main="Adaptive estimate")
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   and
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
 }
 \keyword{spatial}
 \keyword{methods}

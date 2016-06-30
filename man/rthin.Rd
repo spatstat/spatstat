@@ -85,10 +85,10 @@ rthin(X, P, \dots, nsim=1, drop=TRUE)
   Z <- as.im(f, Window(redwood))
   Y <- rthin(redwood, Z)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

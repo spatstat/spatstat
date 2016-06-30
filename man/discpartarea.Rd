@@ -64,10 +64,10 @@ discpartarea(X, r, W=as.owin(X))
   X <- runifpoint(3, letterR)
   discpartarea(X, 0.2)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

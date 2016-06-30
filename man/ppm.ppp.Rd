@@ -233,17 +233,7 @@
       class \code{"interact"} which is initialised in a very similar way to the
       usage of family objects in \code{\link{glm}} and \code{gam}.
       The models currently available are:
-      \code{\link{AreaInter}}, \code{\link{BadGey}},
- \code{\link{Concom}}, \code{\link{DiggleGatesStibbard}},
- \code{\link{DiggleGratton}}, \code{\link{Fiksel}},
- \code{\link{Geyer}}, \code{\link{Hardcore}}, \code{\link{Hybrid}},
- \code{\link{LennardJones}}, \code{\link{MultiStrauss}},
- \code{\link{MultiStraussHard}}, \code{\link{OrdThresh}},
- \code{\link{Ord}}, \code{\link{Pairwise}}, \code{\link{PairPiece}},
- \code{\link{Penttinen}}, \code{\link{Poisson}},
- \code{\link{Saturated}}, \code{\link{SatPiece}},
- \code{\link{Softcore}}, \code{\link{Strauss}},
- \code{\link{StraussHard}} and \code{\link{Triplets}}.
+      \GibbsInteractionsList.
       See the examples below.
       It is also possible to combine several interactions
       using \code{\link{Hybrid}}.
@@ -591,17 +581,7 @@
   for constructing data.
   
   Interactions:
-  \code{\link{AreaInter}}, \code{\link{BadGey}},
- \code{\link{Concom}}, \code{\link{DiggleGatesStibbard}},
- \code{\link{DiggleGratton}}, \code{\link{Fiksel}},
- \code{\link{Geyer}}, \code{\link{Hardcore}}, \code{\link{Hybrid}},
- \code{\link{LennardJones}}, \code{\link{MultiStrauss}},
- \code{\link{MultiStraussHard}}, \code{\link{OrdThresh}},
- \code{\link{Ord}}, \code{\link{Pairwise}}, \code{\link{PairPiece}},
- \code{\link{Penttinen}}, \code{\link{Poisson}},
- \code{\link{Saturated}}, \code{\link{SatPiece}},
- \code{\link{Softcore}}, \code{\link{Strauss}},
- \code{\link{StraussHard}} and \code{\link{Triplets}}.
+  \GibbsInteractionsList.
 
   See \code{\link{profilepl}} for advice on
   fitting nuisance parameters in the interaction,
@@ -812,9 +792,7 @@ ppm(X, ~x + f, covariates=list(f=f), covfunargs=list(a=1/2))
 
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

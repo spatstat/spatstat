@@ -50,7 +50,7 @@
   None.
 }
 \author{
-  Kassel Hingee and Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
+  Kassel Hingee and \adrian.
 }
 \seealso{
   \code{\link{laslett}}

@@ -69,10 +69,10 @@
   plot(convolve.im(X, Y, reflectX=TRUE))
   plot(convolve.im(X))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

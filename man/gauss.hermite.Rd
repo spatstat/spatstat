@@ -48,12 +48,12 @@ gauss.hermite(f, mu = 0, sd = 1, ..., order = 5)
 \value{
   Numeric value, vector or matrix.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \examples{
   gauss.hermite(function(x) x^2, 3, 1)

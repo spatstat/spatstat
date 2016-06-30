@@ -79,10 +79,10 @@
   \code{\link{reduced.sample}},
   \code{\link{kaplan.meier}}
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
   }
 \keyword{spatial}

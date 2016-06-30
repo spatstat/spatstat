@@ -74,9 +74,9 @@
 }
 \author{
   Abdollah Jalilian and Rasmus Waagepetersen.
-  Ported to \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Ported to \pkg{spatstat} by \adrian
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \seealso{
   \code{\link{kppm}}, 

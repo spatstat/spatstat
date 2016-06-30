@@ -68,7 +68,7 @@ linearmarkequal(X, r=NULL, \dots)
    }
    p <- linearmarkequal(X)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

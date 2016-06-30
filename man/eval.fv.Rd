@@ -116,10 +116,10 @@
   # Hanisch and Chiu-Stoyan estimators are cognate
   Dc <- eval.fv(Fc - Gc, equiv=list(cs="han"))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

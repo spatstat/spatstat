@@ -54,7 +54,7 @@
   area that will be plotted, including the colour ribbon.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{linim}},

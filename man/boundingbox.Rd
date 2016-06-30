@@ -67,10 +67,10 @@ boundingbox(\dots)
   r <- boundingbox(w, w2)
   # returns rectangle [0,3] x [0,7]
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

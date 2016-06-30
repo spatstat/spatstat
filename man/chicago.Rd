@@ -46,7 +46,7 @@ plot(as.ppp(chicago), add=TRUE, col="red", chars=c(16,2,22,17,24,15,6))
 }
 \source{
   Chicago Weekly News, 2002.
-  Manually digitised by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
+  Manually digitised by \adrian.
 }
 \references{
   Ang, Q.W. (2010)

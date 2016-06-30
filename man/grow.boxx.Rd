@@ -39,11 +39,11 @@
   # and margin of size 3 to the right end points.
   v <- grow.boxx(w, c(2,2,2), c(3,3,3))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \keyword{spatial}

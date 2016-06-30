@@ -111,7 +111,7 @@
 }
 \author{
   Original by Simon Byers and Adrian Raftery.
-  Adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}.
+  Adapted for \pkg{spatstat} by \adrian.
 }
 \seealso{
   \code{\link{nndist}}, 

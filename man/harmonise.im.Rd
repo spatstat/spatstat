@@ -46,10 +46,10 @@
   of length equal to the number of arguments \code{\dots},
   whose entries are pixel images.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \examples{

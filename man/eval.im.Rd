@@ -79,10 +79,10 @@
   ## Use of 'envir'
   W <- eval.im(sin(U), list(U=density(cells)))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

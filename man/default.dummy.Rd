@@ -104,10 +104,10 @@
   Q <- quadscheme(P, D, "grid")
   \dontrun{plot(union.quad(Q))}
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

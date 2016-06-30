@@ -177,10 +177,10 @@ parres(model, covariate, ...,
   \bold{22}, 886--905.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   ,
   Ya-Mei Chang and Yong Song.
 }

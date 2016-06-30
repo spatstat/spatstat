@@ -136,10 +136,10 @@ scan.test(X, r, ...,
   \emph{Communications in Statistics --- Theory and Methods}
   \bold{26}, 1481--1496.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

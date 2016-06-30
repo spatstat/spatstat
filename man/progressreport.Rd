@@ -98,9 +98,7 @@ progressreport(i, n,
   Otherwise the result is the updated value of \code{state}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \examples{
   for(i in 1:40) {

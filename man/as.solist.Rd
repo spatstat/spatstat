@@ -40,12 +40,12 @@ as.solist(x, \dots)
   x <- list(cells, density(cells))
   y <- as.solist(x)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \keyword{spatial}

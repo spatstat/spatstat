@@ -59,7 +59,7 @@
    d <- pairdist(X, squared=TRUE)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
   based on two-dimensional code by 

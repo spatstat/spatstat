@@ -62,12 +62,12 @@ yardstick(x0, y0, x1, y1, txt = NULL, \dots)
   or \code{"yardstick"}. There are methods for \code{plot},
   \code{print}, \code{"["} and \code{\link{shift}}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

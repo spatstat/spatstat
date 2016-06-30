@@ -60,10 +60,10 @@
    is.multitype(longleaf) #FALSE - real valued marks
    is.multitype(amacrine) #TRUE
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

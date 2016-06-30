@@ -93,10 +93,10 @@ blur(x, sigma = NULL, ..., normalise=FALSE, bleed = TRUE, varcov=NULL)
    plot(letterR, add=TRUE)
    par(mfrow=c(1,1))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -34,7 +34,7 @@ requireversion(pkg, ver)
   Null.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \examples{
    \dontrun{

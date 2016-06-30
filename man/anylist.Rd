@@ -37,12 +37,12 @@ as.anylist(x)
   A list, belonging to the class \code{"anylist"},
   containing the original objects.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

@@ -130,10 +130,10 @@ crosspairs(X, Y, rmax, \dots)
   a list with components \code{i} and \code{j},
   and possibly other components as described under Details.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

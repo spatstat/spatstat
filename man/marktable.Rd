@@ -75,10 +75,10 @@
   head(marktable(amacrine, 0.1, exclude=FALSE))
   marktable(amacrine, N=1, collapse=TRUE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

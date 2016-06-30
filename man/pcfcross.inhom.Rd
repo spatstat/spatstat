@@ -141,10 +141,10 @@ pcfcross.inhom(X, i, j, lambdaI = NULL, lambdaJ = NULL, ...,
   plot(pcfcross.inhom(amacrine, "on", "off", stoyan=0.1),
        legendpos="bottom")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

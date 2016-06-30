@@ -58,7 +58,7 @@
   For other functions, the value is \code{NULL}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

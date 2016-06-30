@@ -44,10 +44,10 @@
 \value{
   A matrix. Columns of the matrix are canonical covariates in the model.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

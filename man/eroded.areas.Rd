@@ -48,10 +48,10 @@
   w <- owin(c(0,1),c(0,1))
   a <- eroded.areas(w, seq(0.01,0.49,by=0.01))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -87,12 +87,12 @@ auc(X, \dots)
   \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\adrian
 
 
-Rolf Turner \email{r.turner@auckland.ac.nz}
+\rolf
 
-and Ege Rubak \email{rubak@math.aau.dk}
+and \ege
 
 }
 \seealso{

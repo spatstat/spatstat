@@ -216,7 +216,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
   }
   If \code{lambdaI} is omitted, then it will be estimated using
   a `leave-one-out' kernel smoother,
-  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller} 
+  as described in Baddeley, \Moller 
   and Waagepetersen (2000).  The estimate of \code{lambdaI} for a given
   point is computed by removing the point from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -315,9 +315,7 @@ Kcross.inhom(X, i, j, lambdaI=NULL, lambdaJ=NULL, \dots,  r=NULL, breaks=NULL,
         lambdaI=as.im(50, Window(X)), lambdaJ=lamB)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}

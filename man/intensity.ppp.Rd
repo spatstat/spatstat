@@ -82,10 +82,10 @@
   # expression for weights
   intensity(finpines, weights=expression((pi/4) * height * diameter^2))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

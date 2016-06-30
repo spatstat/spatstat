@@ -62,7 +62,7 @@
    d <- crossdist(X, Y, periodic=TRUE)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
   based on code for two dimensions by 

@@ -124,7 +124,7 @@ vertexdegree(x)
   generic function.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{linnet}}.

@@ -62,7 +62,7 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   see \code{\link{mincontrast}}.
   
   The Thomas point process is described in
-  \ifelse{latex}{\out{M\o ller}}{Moller} and Waagepetersen (2003, pp. 61--62). It is a cluster
+  \Moller and Waagepetersen (2003, pp. 61--62). It is a cluster
   process formed by taking a pattern of parent points, generated
   according to a Poisson process with intensity \eqn{\kappa}{kappa}, and
   around each parent point, generating a random number of offspring
@@ -131,7 +131,7 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   Statistical analysis of spatial point patterns by
   means of distance methods. \emph{Biometrics} \bold{32} 659--667.
 
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2003).
+  \Moller, J. and Waagepetersen, R. (2003).
   Statistical Inference and Simulation for Spatial Point Processes.
   Chapman and Hall/CRC, Boca Raton.
 
@@ -146,7 +146,7 @@ thomas.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
 \author{
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}
-  Adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Adapted for \pkg{spatstat} by \adrian
 }
 \seealso{
   \code{\link{kppm}},

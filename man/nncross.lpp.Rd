@@ -116,9 +116,7 @@
   nncross(X,Y, iX, iY)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{math}

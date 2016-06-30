@@ -171,7 +171,7 @@
 
   If \code{lambda} is omitted, then it will be estimated using
   a `leave-one-out' kernel smoother,
-  as described in Baddeley, \ifelse{latex}{\out{M\o ller}}{Moller}
+  as described in Baddeley, \Moller
   and Waagepetersen (2000).  The estimate \code{lambda[i]} for the
   point \code{X[i]} is computed by removing \code{X[i]} from the
   point pattern, applying kernel smoothing to the remaining points using
@@ -198,7 +198,7 @@
 }
 \references{
   Baddeley, A.,
-  \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Waagepetersen, R. (2000)
+  \Moller, J. and Waagepetersen, R. (2000)
   Non- and semiparametric estimation of interaction in
   inhomogeneous point patterns.
   \emph{Statistica Neerlandica} \bold{54}, 329--350.
@@ -212,7 +212,7 @@
   Inhomogeneous spatial point processes by location-dependent scaling.
   \emph{Advances in Applied Probability} \bold{35}, 319--336.
 
-  \ifelse{latex}{\out{Proke\u{s}ov{\'{a}}}}{Prokesova}, M.,
+  \Prokesova, M.,
   Hahn, U. and Vedel Jensen, E.B. (2006)
   Statistics for locally scaled point patterns.
   In A. Baddeley, P. Gregori, J. Mateu, R. Stoica and D. Stoyan (eds.)
@@ -233,10 +233,10 @@
   K <- Kscaled(X, lam)
 }
 \author{Ute Hahn,
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

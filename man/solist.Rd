@@ -75,12 +75,12 @@ solist(\dots, check=TRUE, promote=TRUE, demote=FALSE)
 \value{
   A list, usually belonging to the class \code{"solist"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

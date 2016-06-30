@@ -175,10 +175,10 @@
  p <- pcfcross(amacrine, "off", "on", stoyan=0.1)
  plot(p)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -57,9 +57,9 @@
   par(p)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
-  Rolf Turner \email{r.turner@auckland.ac.nz},
-  Ege Rubak \email{rubak@math.aau.dk}
+  \adrian,
+  \rolf,
+  \ege
   and Suman Rakshit.
 }
 \keyword{spatial}

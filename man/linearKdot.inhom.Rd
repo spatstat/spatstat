@@ -113,7 +113,7 @@ linearKdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
      linearKdot.inhom(chicago, "assault", fit, fit)
    }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

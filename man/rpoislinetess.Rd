@@ -38,10 +38,10 @@ rpoislinetess(lambda, win = owin())
   Also has an attribute \code{"lines"} containing the realisation of the
   Poisson line process, as an object of class \code{"infline"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

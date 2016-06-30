@@ -73,10 +73,10 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL)
 \value{
   An object of class \code{"fv"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \examples{

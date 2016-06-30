@@ -236,10 +236,10 @@ Gcross(X, i, j, r=NULL, breaks=NULL, \dots, correction=c("rs", "km", "han"))
     pp <- pp \%mark\% factor(sample(0:1, npoints(pp), replace=TRUE))
     G <- Gcross(pp, "0", "1")   # note: "0" not 0
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

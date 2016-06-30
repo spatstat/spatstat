@@ -124,9 +124,7 @@ dg.test(X, \dots,
 \author{
   Adrian Baddeley, Andrew Hardegen, Tom Lawrence,
   Robin Milne, Gopalan Nair and Suman Rakshit.
-  Implemented by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  Implemented by \spatstatAuthors.
 }
 \seealso{
   \code{\link{dclf.test}},

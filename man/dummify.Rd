@@ -48,7 +48,7 @@ dummify(x)
   A numeric matrix.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} 
+  \adrian 
   
 }
 \examples{

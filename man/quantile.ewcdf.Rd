@@ -55,10 +55,10 @@
   Fun <- ewcdf(z, w)
   quantile(Fun, c(0.95,0.99))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
   and Kevin Ummel.
 }

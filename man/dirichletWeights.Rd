@@ -51,10 +51,10 @@
   X <- as.ppp(Q) # data and dummy points together
   w <- dirichletWeights(X, exact=FALSE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

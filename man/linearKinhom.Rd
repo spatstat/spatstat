@@ -68,7 +68,7 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

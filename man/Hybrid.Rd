@@ -91,10 +91,10 @@ Hybrid(...)
   plot(fitin(fit2))
   plot(fitin(fit2), separate=TRUE, mar.panel=rep(4,4))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

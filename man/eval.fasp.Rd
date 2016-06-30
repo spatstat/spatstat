@@ -85,10 +85,10 @@
   ## Use of 'envir'
   S <- eval.fasp(1-G, list(G=alltypes(amacrine, "G")))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -76,7 +76,7 @@ models on a linear network.
  modx <- lppm(X ~x)
  anova(mod0, modx, test="Chi")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

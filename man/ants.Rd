@@ -118,7 +118,7 @@
 }
 \source{Harkness and Isham (1983).
   Nest coordinates kindly provided by Prof Valerie Isham.
-  Polygon coordinates digitised by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} from
+  Polygon coordinates digitised by \adrian from
   a reprint of Harkness \& Isham (1983).
 }
 \references{

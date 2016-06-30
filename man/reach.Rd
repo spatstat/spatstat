@@ -144,10 +144,10 @@
     reach(MultiStrauss(matrix(c(1,3,3,1),2,2)))
     # returns 3
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

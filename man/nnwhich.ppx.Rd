@@ -85,7 +85,7 @@
    m2 <- nnwhich(X, k=2)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

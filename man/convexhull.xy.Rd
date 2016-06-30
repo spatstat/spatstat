@@ -44,10 +44,10 @@ convexhull.xy(x, y=NULL)
   plot(X, main="convexhull.xy(X)")
   plot(convexhull.xy(X), add=TRUE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

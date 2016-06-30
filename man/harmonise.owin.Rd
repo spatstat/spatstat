@@ -47,10 +47,10 @@
   A list of windows, of length equal to the number of arguments
   \code{\dots}. The list belongs to the class \code{"solist"}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \examples{

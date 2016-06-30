@@ -37,10 +37,10 @@ runifpointx(n, domain, nsim=1)
    w <- boxx(x=c(0,1), y=c(0,1), z=c(0,1), t=c(0,3))
    X <- runifpointx(50, w)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

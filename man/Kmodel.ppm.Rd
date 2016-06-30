@@ -74,7 +74,7 @@
   \emph{Stat} \bold{1}, 1, 18--30.
   doi: 10.1002/sta4.5
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
   and Gopalan Nair.

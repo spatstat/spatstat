@@ -124,10 +124,10 @@ improve.kppm(object, type=c("quasi", "wclik1", "clik1"), rmax = NULL,
 %  \url{http://www.razi.ac.ir/ajalilian/}
   and Rasmus Waagepetersen
   \email{rw@math.aau.dk}
-  adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  adapted for \pkg{spatstat} by \adrian
   
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \keyword{spatial}

@@ -141,7 +141,7 @@ mincontrast(observed, theoretical, startpar, \dots,
 \author{Rasmus Waagepetersen
   \email{rw@math.auc.dk},
   adapted for \pkg{spatstat} by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

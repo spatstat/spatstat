@@ -52,9 +52,7 @@
   If \code{what="spatial"}, the return value of \code{\link{plot.im}}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
 }
 \seealso{
   \code{\link{rppm}}

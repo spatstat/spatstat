@@ -39,10 +39,10 @@
   as.data.frame(h, discard=TRUE, warn=FALSE)
   as.data.frame(h, discard=FALSE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

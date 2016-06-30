@@ -41,7 +41,7 @@
   Coordinates of cases were provided by the
   Chorley and South Ribble Health Authority, and were
   kindly supplied by Professor Peter Diggle.
-  Region boundary was digitised by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, 2005, from
+  Region boundary was digitised by \adrian, 2005, from
   a photograph of an Ordnance Survey map.
 }
 \section{Notes}{

@@ -76,7 +76,7 @@ objsurf(x, \dots)
   giving the parameter values and objective function values.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au} and Ege Rubak \email{rubak@math.aau.dk}.
+  \adrian and \ege.
 }
 \seealso{
   \code{\link{methods.objsurf}},

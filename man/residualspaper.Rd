@@ -78,9 +78,9 @@
   Figure 1: Prof M. Numata. Data kindly supplied by Professor Y. Ogata
   with kind permission of Prof M. Tanemura.
   
-  Figure 3:  Professor P.J. Diggle (rescaled by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au})
+  Figure 3:  Professor P.J. Diggle (rescaled by \adrian)
 
-  Figure 4 (a,b,c): Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Figure 4 (a,b,c): \adrian
 }
 \references{
   Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)

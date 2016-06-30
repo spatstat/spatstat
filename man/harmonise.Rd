@@ -37,12 +37,12 @@ harmonize(\dots)
   If the arguments were named (\code{name=value}) then the return value
   also carries these names.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \seealso{
   \code{\link{compatible}},

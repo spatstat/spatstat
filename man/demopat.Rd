@@ -18,7 +18,7 @@
   point pattern object.
 }
 \usage{data(demopat)}
-\source{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}}
+\source{\adrian}
 \keyword{datasets}
 \keyword{spatial}
 

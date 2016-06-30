@@ -309,10 +309,10 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
    a <- marks(betacells)$area
    v <- markcorr(Y, weights=a)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

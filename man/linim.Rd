@@ -54,7 +54,7 @@
   There is a special method for plotting this class.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

@@ -123,7 +123,7 @@
 }
 \author{
   Kasper Klitgaard Berthelsen,
-  adapted for \pkg{spatstat} by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  adapted for \pkg{spatstat} by \adrian
 }
 \examples{
    X <- rStrauss(0.05,0.2,1.5,square(141.4))

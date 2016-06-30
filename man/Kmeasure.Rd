@@ -168,10 +168,10 @@ from a point pattern in a window of arbitrary shape.
  sector <- solutionset(ang > 0 & ang < 1 & rad < 0.6)
  integral.im(M[sector, drop=FALSE])
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

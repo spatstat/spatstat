@@ -1718,9 +1718,7 @@
   General Public License", a copy of which is distributed with the package.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,

@@ -208,10 +208,10 @@ cdf.test(...)
   \eqn{p}-values will not be exactly the same. To avoid this behaviour,
   set \code{jitter=FALSE}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

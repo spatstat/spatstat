@@ -90,10 +90,10 @@ which can then be fitted to point pattern data.
    ppm(cells, ~polynom(x,y,3), Strauss(r=0.07))
    # fit a nonstationary Strauss process with log-cubic polynomial trend
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

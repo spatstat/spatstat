@@ -53,10 +53,10 @@
   # rescale y coordinates by factor 0.2
   affine(X, diag(c(1,0.2)))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

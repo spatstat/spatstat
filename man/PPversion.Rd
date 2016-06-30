@@ -73,9 +73,7 @@ QQversion(f, theo = "theo", columns = ".")
   and Adrian Baddeley.
   
   Implemented by
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{plot.fv}}

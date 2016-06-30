@@ -108,10 +108,10 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
   ct <- colourmap(c("red", "green"), inputs=c(FALSE, TRUE))
   ct(TRUE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -53,10 +53,10 @@ rknn(n, k = 1, d = 2, lambda = 1)
   \emph{Statistics for spatial data}.
   John Wiley and Sons, 1991.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \examples{

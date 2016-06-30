@@ -94,9 +94,7 @@ textureplot(x, \dots,
   associating a texture with each level of the factor.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{im}}, 

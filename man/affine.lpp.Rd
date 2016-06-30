@@ -86,10 +86,10 @@
   shear <- matrix(c(1,0,0.6,1),ncol=2, nrow=2)
   Z <- affine(X, mat=shear, vec=c(0, 1))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

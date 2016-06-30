@@ -163,8 +163,8 @@ addvar(model, covariate, ...,
   \emph{Technometrics} \bold{27}, 273--276.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
-  Rolf Turner \email{r.turner@auckland.ac.nz},
+  \adrian,
+  \rolf,
   Ya-Mei Chang and Yong Song.
 }
 \seealso{

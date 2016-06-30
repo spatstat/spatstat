@@ -48,10 +48,10 @@ inradius(W)
   Rc <- incircle(W)
   plot(disc(Rc$r, c(Rc$x, Rc$y)), add=TRUE)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

@@ -276,9 +276,9 @@ rhohat(object, covariate, ...)
   ISBN: 0-387-28311-0.  
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}, 
+  \adrian, 
   Ya-Mei Chang, Yong Song, 
-  and Rolf Turner \email{r.turner@auckland.ac.nz}.
+  and \rolf.
 }
 \seealso{
   \code{\link{rho2hat}},

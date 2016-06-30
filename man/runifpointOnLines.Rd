@@ -53,10 +53,10 @@ runifpointOnLines(n, L, nsim=1)
   plot(Y, add=TRUE)
   Z <- runifpointOnLines(c(5,5), X)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

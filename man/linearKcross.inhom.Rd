@@ -117,7 +117,7 @@ linearKcross.inhom(X, i, j, lambdaI, lambdaJ,
      linearKcross.inhom(chicago, "assault", "robbery", fit, fit)
    }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

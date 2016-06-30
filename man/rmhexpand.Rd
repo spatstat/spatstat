@@ -132,10 +132,10 @@ rmhexpand(x = NULL, ..., area = NULL, length = NULL, distance = NULL)
   An object of class \code{"rmhexpand"} specifying the
   expansion rule. There is a \code{print} method for this class.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

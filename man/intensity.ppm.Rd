@@ -65,7 +65,7 @@
   fitSx <- ppm(swedishpines ~ x, Strauss(9))
   lamSx <- intensity(fitSx)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
   and Gopal Nair.

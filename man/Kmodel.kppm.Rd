@@ -59,10 +59,10 @@
   K(c(0.1, 0.2))
   curve(K(x), from=0, to=0.25)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

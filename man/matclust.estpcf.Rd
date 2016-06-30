@@ -151,7 +151,7 @@ matclust.estpcf(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   \emph{Biometrics} \bold{63}, 252--258.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

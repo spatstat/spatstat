@@ -44,10 +44,10 @@
   # and margin of height 4 from top edge.
   v <- trim.rectangle(w, c(0,3), c(0,4))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

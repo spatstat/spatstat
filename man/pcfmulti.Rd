@@ -137,10 +137,10 @@ using kernel methods.
   juvenile <- !adult
   p <- pcfmulti(longleaf, adult, juvenile)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

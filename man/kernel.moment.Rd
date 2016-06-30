@@ -58,7 +58,7 @@
    curve(kernel.moment(2, x, "epa"), from=-1, to=1)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   and Martin Hazelton.
 }
 \keyword{methods}

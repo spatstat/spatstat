@@ -82,9 +82,9 @@
     plot(b, add=TRUE, col="red")
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   and
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
 }
 \keyword{spatial}
 \keyword{manip}

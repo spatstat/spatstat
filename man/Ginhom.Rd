@@ -177,10 +177,10 @@
 }
 \author{
   Original code by Marie-Colette van Lieshout.
-  C implementation and R adaptation by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  C implementation and R adaptation by \adrian
   
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \keyword{spatial}
 \keyword{nonparametric}

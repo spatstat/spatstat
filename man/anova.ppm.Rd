@@ -166,9 +166,7 @@ Performs analysis of deviance for one or more fitted point process models.
   \bold{44}, 50--57.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

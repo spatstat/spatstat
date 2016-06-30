@@ -53,7 +53,7 @@
   \bold{60}, 627--649.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

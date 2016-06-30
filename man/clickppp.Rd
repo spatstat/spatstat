@@ -77,10 +77,10 @@
   \code{\link{clickdist}}
 }
 \author{Original by Dominic Schuhmacher.
-  Adapted by Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  Adapted by \adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

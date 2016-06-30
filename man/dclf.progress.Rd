@@ -139,7 +139,7 @@ mctest.progress(X, fun = Lest, \dots,
   \emph{Ecological Monographs} \bold{84} (3) 477--489.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   ,
   Andrew Hardegen, Tom Lawrence, Gopal Nair and

@@ -148,12 +148,12 @@ berman.test(...)
   The meaning of a one-sided test must be carefully scrutinised: see
   the printed output.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   ,
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}.
+  and \ege.
 }
 \seealso{
   \code{\link{cdf.test}},

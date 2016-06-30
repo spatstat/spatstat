@@ -101,10 +101,10 @@
   Kernel estimation of relative risk.
   \emph{Bernoulli} \bold{1}, 3--16.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

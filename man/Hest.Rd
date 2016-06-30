@@ -159,9 +159,7 @@ Hest(X, r=NULL, breaks=NULL, ...,
    H <- Hest(Z)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
   with contributions from Kassel Hingee.
 }
 \keyword{spatial}

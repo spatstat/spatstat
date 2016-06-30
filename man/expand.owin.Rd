@@ -45,10 +45,10 @@
    expand.owin(letterR, length=2)
    expand.owin(letterR, distance=0.1)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

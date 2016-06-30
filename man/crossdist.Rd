@@ -45,7 +45,7 @@
   \code{\link{nndist}}
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
 }

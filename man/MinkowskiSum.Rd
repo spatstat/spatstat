@@ -92,7 +92,7 @@ dilationAny(A, B)
   par(opa)
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \keyword{spatial}
 \keyword{math}

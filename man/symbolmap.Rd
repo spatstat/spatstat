@@ -112,9 +112,7 @@ symbolmap(\dots, range = NULL, inputs = NULL)
   An object of class \code{"symbolmap"}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{plot.symbolmap}} to plot the symbol map itself.

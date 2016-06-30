@@ -108,10 +108,10 @@ Lcross.inhom(X, i, j, \dots)
     L <- Lcross.inhom(X, "A", "B",
         lambdaI=as.im(50, Window(X)), lambdaJ=lamB)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

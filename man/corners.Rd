@@ -34,10 +34,10 @@
   corners(w)
        # returns list(x=c(0,1,0,1),y=c(0,0,1,1))
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

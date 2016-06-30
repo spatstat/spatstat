@@ -80,7 +80,7 @@ linearpcfdot(X, i, r=NULL, \dots, correction="Ang")
    data(chicago)
    g <- linearpcfdot(chicago, "assault")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

@@ -94,12 +94,12 @@ hopskel.test(X, \dots,
   hopskel(redwood)
   hopskel.test(redwood, alternative="clustered")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \keyword{spatial}

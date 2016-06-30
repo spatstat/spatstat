@@ -28,10 +28,10 @@ nearestsegment(X, Y)
   \code{Y[j]} is the line segment lying closest to \code{X[i]}.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \seealso{

@@ -130,12 +130,12 @@ rose(x, \dots)
   \code{start="N"} and \code{clockwise=TRUE}.  
 }
 \value{A window (class \code{"owin"}) containing the plotted region.}
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  Rolf Turner \email{r.turner@auckland.ac.nz}
+  \rolf
   
-  and Ege Rubak \email{rubak@math.aau.dk}
+  and \ege
   
 }
 \seealso{

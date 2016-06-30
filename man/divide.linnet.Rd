@@ -31,9 +31,7 @@
   A tessellation on a linear network (object of class \code{"lintess"}).
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+  \spatstatAuthors
   and Greg McSwiggan.
 }
 \seealso{

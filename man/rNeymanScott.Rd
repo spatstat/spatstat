@@ -219,10 +219,10 @@
   inhomogeneous Neyman-Scott processes.
   \emph{Biometrics} \bold{63}, 252--258.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

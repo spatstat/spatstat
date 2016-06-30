@@ -108,9 +108,7 @@ idw(X, power=2, at="pixels", ...)
    idw(finpines, at="points")[1:5,]
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

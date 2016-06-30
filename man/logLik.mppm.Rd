@@ -113,9 +113,7 @@
 \author{
   Adrian Baddeley, Ida-Maria Sintorn and Leanne Bischoff.
   Implemented by 
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}.
+  \spatstatAuthors.
 }
 \examples{
   fit <- mppm(Bugs ~ x, hyperframe(Bugs=waterstriders))

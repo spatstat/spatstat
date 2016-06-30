@@ -115,7 +115,7 @@ linearpcfdot.inhom(X, i, lambdaI, lambdadot, r=NULL, \dots,
      linearpcfdot.inhom(chicago, "assault", fit, fit)
    }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }

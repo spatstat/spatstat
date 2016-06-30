@@ -110,7 +110,7 @@
   Providence, RI, USA: American Mathematical Society.
 }
 \author{
-  Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+  \adrian
 }
 \seealso{
   \code{\link{plot.msr}},

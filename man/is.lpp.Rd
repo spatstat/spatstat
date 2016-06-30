@@ -20,10 +20,10 @@ is.lpp(x)
   \code{TRUE} if \code{x} is a point pattern of class \code{"lpp"},
   otherwise \code{FALSE}.
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

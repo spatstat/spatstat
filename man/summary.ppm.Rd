@@ -86,10 +86,10 @@
   fitX <- ppm(X, ~Z, covariates=list(Z=function(x,y){x+y}))
   summary(fitX)
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

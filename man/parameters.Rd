@@ -50,9 +50,7 @@ parameters(model, \dots)
   A named list, whose format depends on the fitted model.
 }
 \author{
-Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au},
- Rolf Turner \email{r.turner@auckland.ac.nz}
- and Ege Rubak \email{rubak@math.aau.dk}
+\spatstatAuthors
 }
 \seealso{
   \code{\link{coef}}

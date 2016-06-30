@@ -801,10 +801,10 @@ nsim=3, global=TRUE))
  EG <- envelope(X, Gest, nsim=3, simulate=EK)
 }
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
-  and Rolf Turner \email{r.turner@auckland.ac.nz}
+  and \rolf
   
 }
 \keyword{spatial}

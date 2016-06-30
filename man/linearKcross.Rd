@@ -80,7 +80,7 @@ linearKcross(X, i, j, r=NULL, \dots, correction="Ang")
    data(chicago)
    K <- linearKcross(chicago, "assault", "robbery")
 }
-\author{Adrian Baddeley \email{Adrian.Baddeley@curtin.edu.au}
+\author{\adrian
   
   
 }
