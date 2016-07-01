@@ -178,7 +178,7 @@ density.ppplist <- function(x, ..., se=FALSE) {
 }
 
 expandSpecialLists <- function(x, special="solist") {
-  ## x is a list which may include entries which are lists, of class 'lclass'
+  ## x is a list which may include entries which are lists, of class 'special'
   ## unlist these entries only
   hit <- sapply(x, inherits, what=special) 
   if(!any(hit)) return(x)

@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.18 $ $Date: 2016/06/23 08:02:48 $
+##  $Revision: 1.19 $ $Date: 2016/07/01 11:54:57 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -133,6 +133,10 @@ plot.anylist <- plot.solist <- plot.listof <-
                             halign=FALSE, valign=FALSE) {
     xname <- short.deparse(substitute(x))
 
+    ## recursively expand entries which are 'anylist' etc
+    while(any(sapply(x, inherits, what="anylist"))) 
+      x <- as.solist(expandSpecialLists(x, "anylist"), demote=TRUE)
+    
     isSo <- inherits(x, "solist")
     isIm <- inherits(x, "imlist") || (isSo && all(unlist(lapply(x, is.im))))
     

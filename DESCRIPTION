@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.45-2.015
+Version: 1.45-2.016
 Nickname: Bank Angle
-Date: 2016-06-30
+Date: 2016-07-01
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

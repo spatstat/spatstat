@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.015
+        CHANGES IN spatstat VERSION 1.45-2.016
 
 OVERVIEW
 
@@ -55,6 +55,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Now handles multitype measures.
     New argument 'multiplot'.
 
+    o plot.anylist
+    If a list entry x[[i]] belongs to class 'anylist', it will be expanded
+    so that each entry x[[i]][[j]] will be plotted as a separate panel.
+    
 BUG FIXES
 
     o funxy

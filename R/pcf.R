@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.59 $   $Date: 2016/06/30 09:49:39 $
+#   $Revision: 1.60 $   $Date: 2016/07/01 10:32:32 $
 #
 #
 #   calculate pair correlation function
@@ -192,12 +192,14 @@ pcf.ppp <- function(X, ..., r=NULL,
   }
 
   ## variance approximation
-  ## Illian et al 2008 p 234
+  ## Illian et al 2008 p 234 equation 4.3.42
   if(var.approx) {
     gr <- if(any(correction == "isotropic")) gR else gT
-    hh <- bw.used * sqrt(5)
+    # integral of squared kernel
+    intk2 <- density.default(give.Rkern=TRUE, kernel=kernel)/bw.used
+    # isotropised set covariance of window
     gWbar <- as.function(rotmean(setcov(win), result="fv"))
-    vest <- gr * areaW^2/(npts^2 * 2 * pi * r * hh * gWbar(r))
+    vest <- gr * intk2/(pi * r * gWbar(r) * lambda^2)
     if(!ratio) {
       out <- bind.fv(out,
                      data.frame(v=vest),
