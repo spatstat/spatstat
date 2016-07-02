@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.016
+        CHANGES IN spatstat VERSION 1.45-2.017
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ NEW FUNCTIONS
     Given a spatial pattern with several columns of marks,
     separate the columns and return a list of spatial patterns, 
     each having only one column of marks.
+
+    o kernel.squint
+    Integral of squared kernel, for the kernels used in density estimation.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

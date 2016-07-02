@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.60 $   $Date: 2016/07/01 10:32:32 $
+#   $Revision: 1.61 $   $Date: 2016/07/02 03:37:21 $
 #
 #
 #   calculate pair correlation function
@@ -196,7 +196,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   if(var.approx) {
     gr <- if(any(correction == "isotropic")) gR else gT
     # integral of squared kernel
-    intk2 <- density.default(give.Rkern=TRUE, kernel=kernel)/bw.used
+    intk2 <- kernel.squint(kernel, bw.used)
     # isotropised set covariance of window
     gWbar <- as.function(rotmean(setcov(win), result="fv"))
     vest <- gr * intk2/(pi * r * gWbar(r) * lambda^2)
