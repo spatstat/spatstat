@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.017
+        CHANGES IN spatstat VERSION 1.45-2.018
 
 OVERVIEW
 
@@ -11,11 +11,13 @@ OVERVIEW
 
     o Variance approximation for pair correlation function.
 
+    o Leverage and influence for multitype point process models.
+
     o Functions for extracting components of vector-valued objects.
    
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'Bank Angle'
+    o Version nickname: 'MultiPass'
 
 NEW FUNCTIONS
 
@@ -61,7 +63,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.anylist
     If a list entry x[[i]] belongs to class 'anylist', it will be expanded
     so that each entry x[[i]][[j]] will be plotted as a separate panel.
-    
+
+    o influence.ppm, leverage.ppm
+    These can now be applied to multitype point process models
+    and the results can be plotted.
+
+    o plot.influence.ppm
+    New argument 'multiplot'.
+
+    o plot.anylist, plot.solist, plot.listof
+    New arguments panel.begin.args, panel.end.args
+
 BUG FIXES
 
     o funxy

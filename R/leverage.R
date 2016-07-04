@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.62 $  $Date: 2016/06/16 08:41:38 $
+#  $Revision: 1.64 $  $Date: 2016/07/03 05:10:19 $
 #
 
 leverage <- function(model, ...) {
@@ -100,9 +100,6 @@ ppmInfluenceEngine <- function(fit,
     stop("Must supply iHessian", call.=FALSE)
   if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
     stop("ppm influence measures are not yet implemented for method=logi",
-         call.=FALSE)
-  if(!multitypeOK && is.marked(fit))
-    stop("ppm influence measures are not yet implemented for multitype models",
          call.=FALSE)
   sparse <- sparseOK 
   #
@@ -432,13 +429,20 @@ ppmInfluenceEngine <- function(fit,
   # .......... leverage .............
   
   if("leverage" %in% what) {
-    # values of leverage (diagonal) at points of 'loc'
+    ## values of leverage (diagonal) at points of 'loc'
     h <- b * lam
-    levval <- loc %mark% h
-    levval <- levval[is.finite(h)]
-    levsmo <- Smooth(levval, sigma=maxnndist(loc))
-    # nominal mean level
-    a <- area(loc$window)
+    ok <- is.finite(h)
+    if(mt <- is.multitype(loc))
+      h <- data.frame(leverage=h, type=marks(loc))
+    levval <- (loc %mark% h)[ok]
+    if(!mt) {
+      levsmo <- Smooth(levval, sigma=maxnndist(loc))
+    } else {
+      levsplit <- split(levval, reduce=TRUE)
+      levsmo <- Smooth(levsplit, sigma=max(sapply(levsplit, maxnndist)))
+    }
+    ## nominal mean level
+    a <- area(Window(loc)) * markspace.integral(loc)
     levmean <- p/a
     lev <- list(val=levval, smo=levsmo, ave=levmean)
     result$lev <- lev
@@ -448,6 +452,8 @@ ppmInfluenceEngine <- function(fit,
     # values of influence at data points
     X <- loc[isdata]
     M <- (1/p) * b[isdata]
+    if(is.multitype(X))
+      M <- data.frame(influence=M, type=marks(X))
     V <- X %mark% M
     result$infl <- V
   }
@@ -513,37 +519,68 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
   return(result)
 }
 
-plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
-  fitname <- x$fitname
-  defaultmain <- paste("Leverage for", fitname)
-  y <- x$lev
-  do.call(plot.im,
-          resolve.defaults(list(y$smo),
-                           list(...),
-                           list(main=defaultmain)))
-  if(showcut && diff(range(y$smo)) != 0) 
-    do.call.matched(contour.im,
-                    resolve.defaults(list(x=y$smo, levels=y$ave,
-                                          add=TRUE, col=col.cut),
-                                     list(...),
-                                     list(drawlabels=FALSE)),
-                    extrargs=c("levels", "drawlabels",
-                      "labcex", "col", "lty", "lwd", "frameplot"))
-  invisible(NULL)
-}
+plot.leverage.ppm <- local({
 
-plot.influence.ppm <- function(x, ...) {
+  plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
+    fitname <- x$fitname
+    defaultmain <- paste("Leverage for", fitname)
+    y <- x$lev
+    smo <- y$smo
+    if(is.im(smo)) {
+      do.call(plot.im,
+              resolve.defaults(list(smo),
+                               list(...),
+                               list(main=defaultmain)))
+      if(showcut)
+        onecontour(0, x=smo, ..., level.cut=y$ave, col.cut=col.cut)
+    } else if(inherits(smo, "imlist")) {
+      xtra <- list(panel.end=onecontour,
+                   panel.end.args=list(level.cut=y$ave, col.cut=col.cut))
+      do.call(plot.solist,
+              resolve.defaults(list(smo),
+                               list(...),
+                               list(main=defaultmain),
+                               if(showcut) xtra else list()))
+    } 
+    invisible(NULL)
+  }
+
+  onecontour <- function(i, x, ..., level.cut, col.cut) {
+    if(diff(range(x)) > 0)
+      do.call.matched(contour.im,
+                      resolve.defaults(list(x=x, levels=level.cut,
+                                            add=TRUE, col=col.cut),
+                                       list(...),
+                                       list(drawlabels=FALSE)),
+                      extrargs=c("levels", "drawlabels",
+                        "labcex", "col", "lty", "lwd", "frameplot"))
+  }
+
+  plot.leverage.ppm
+})
+                           
+plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
   fitname <- x$fitname
   defaultmain <- paste("Influence for", fitname)
-  do.call(plot.ppp,
-          resolve.defaults(list(x$infl),
+  y <- x$infl
+  if(multiplot && isTRUE(ncol(marks(y)) > 1)) 
+    y <- split(y, reduce=TRUE)
+  do.call(plot,
+          resolve.defaults(list(y),
                            list(...),
-                           list(main=defaultmain)))
+                           list(main=defaultmain,
+                                multiplot=multiplot,
+                                which.marks=1)))
 }
 
 persp.leverage.ppm <- function(x, ..., main) {
   if(missing(main)) main <- deparse(substitute(x))
-  persp(as.im(x), main=main, ...)
+  y <- as.im(x)
+  if(is.im(y)) return(persp(y, main=main, ...))
+  pa <- par(ask=TRUE)
+  lapply(y, persp, main=main, ...)
+  par(pa)
+  return(invisible(NULL))
 }
   
 as.im.leverage.ppm <- function(X, ...) {
@@ -555,7 +592,9 @@ as.ppp.influence.ppm <- function(X, ...) {
 }
 
 as.owin.leverage.ppm <- function(W, ..., fatal=TRUE) {
-  as.owin(as.im(W), ..., fatal=fatal)
+  y <- as.im(W)
+  if(inherits(y, "imlist")) y <- y[[1]]
+  as.owin(y, ..., fatal=fatal)
 }
 
 as.owin.influence.ppm <- function(W, ..., fatal=TRUE) {
@@ -593,9 +632,11 @@ print.influence.ppm <- function(x, ...) {
 "[.leverage.ppm" <- function(x, i, ...) {
   if(missing(i)) return(x)
   y <- x$lev
-  y$smo <- vi <- y$smo[i, ...]
-  if(!is.im(vi)) return(vi)
+  smoi <- if(is.im(y$smo)) y$smo[i, ...] else solapply(y$smo, "[", i=i, ...)
+  if(!inherits(smoi, c("im", "imlist"))) return(smoi)
+  y$smo <- smoi
   y$val <- y$val[i, ...]
+  y$ave <- if(is.im(smoi)) mean(smoi) else mean(sapply(smoi, mean))
   x$lev <- y
   return(x)
 }
@@ -611,7 +652,9 @@ print.influence.ppm <- function(x, ...) {
 shift.leverage.ppm <- function(X, ...) {
   vec <- getlastshift(shift(as.owin(X), ...))
   X$lev$val <- shift(X$lev$val, vec=vec)
-  X$lev$smo <- shift(X$lev$smo, vec=vec)
+  smo <- X$lev$smo
+  X$lev$smo <-
+    if(is.im(smo)) shift(smo, vec=vec) else solapply(smo, shift, vec=vec)
   return(putlastshift(X, vec))
 }
 
