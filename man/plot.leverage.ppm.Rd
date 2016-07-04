@@ -9,7 +9,8 @@
   of a leverage function that has been computed by \code{\link{leverage.ppm}}.
 }
 \usage{
- \method{plot}{leverage.ppm}(x, \dots, showcut=TRUE, col.cut=par("fg"))
+ \method{plot}{leverage.ppm}(x, \dots, showcut=TRUE, col.cut=par("fg"),
+                             multiplot=TRUE)
 
  \method{persp}{leverage.ppm}(x, \dots, main)
 }
@@ -28,6 +29,10 @@
   }
   \item{col.cut}{
     Optional colour for the contour line.
+  }
+  \item{multiplot}{
+    Logical value indicating whether it is permissible to display
+    several plot panels.
   }
   \item{main}{
     Optional main title.

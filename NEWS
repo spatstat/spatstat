@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.018
+        CHANGES IN spatstat VERSION 1.45-2.019
 
 OVERVIEW
 
@@ -68,7 +68,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     These can now be applied to multitype point process models
     and the results can be plotted.
 
-    o plot.influence.ppm
+    o plot.influence.ppm, plot.leverage.ppm
     New argument 'multiplot'.
 
     o plot.anylist, plot.solist, plot.listof

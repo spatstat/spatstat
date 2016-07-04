@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.64 $  $Date: 2016/07/03 05:10:19 $
+#  $Revision: 1.65 $  $Date: 2016/07/04 08:06:34 $
 #
 
 leverage <- function(model, ...) {
@@ -521,21 +521,28 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
 
 plot.leverage.ppm <- local({
 
-  plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg")) {
+  plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg"),
+                                multiplot=TRUE) {
     fitname <- x$fitname
     defaultmain <- paste("Leverage for", fitname)
     y <- x$lev
     smo <- y$smo
+    ave <- y$ave
+    if(!multiplot && inherits(smo, "imlist")) {
+      ave <- ave * length(smo)
+      smo <- Reduce("+", smo)
+      defaultmain <- c(defaultmain, "(sum over all types of point)")
+    }
     if(is.im(smo)) {
       do.call(plot.im,
               resolve.defaults(list(smo),
                                list(...),
                                list(main=defaultmain)))
       if(showcut)
-        onecontour(0, x=smo, ..., level.cut=y$ave, col.cut=col.cut)
+        onecontour(0, x=smo, ..., level.cut=ave, col.cut=col.cut)
     } else if(inherits(smo, "imlist")) {
       xtra <- list(panel.end=onecontour,
-                   panel.end.args=list(level.cut=y$ave, col.cut=col.cut))
+                   panel.end.args=list(level.cut=ave, col.cut=col.cut))
       do.call(plot.solist,
               resolve.defaults(list(smo),
                                list(...),

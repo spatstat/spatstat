@@ -10,7 +10,7 @@
 
   Calculation of density estimate at data points
 
-  $Revision: 1.13 $     $Date: 2014/04/02 07:30:05 $
+  $Revision: 1.14 $     $Date: 2016/07/04 07:55:40 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 
@@ -180,6 +180,7 @@ void smoopt(nxy, x, y, v, self, rmaxi, sig, result)
   if(n == 0) 
     return;
 
+  if(countself != 0) {
   PAIRLOOP({ numer = denom = 0.0; },
 	   { \
 	     wij = exp(-d2/twosig2);		\
@@ -187,12 +188,21 @@ void smoopt(nxy, x, y, v, self, rmaxi, sig, result)
 	     numer += wij * v[j];		\
 	   },					
 	   {					\
-	     if(countself != 0) {		\
-	       numer += 1;			\
-	       denom += v[i];			\
-	     }					\
+	     numer += 1;			\
+	     denom += v[i];			\
 	     result[i] = numer/denom;		\
 	   })
+    } else {
+  PAIRLOOP({ numer = denom = 0.0; },
+	   { \
+	     wij = exp(-d2/twosig2);		\
+	     denom += wij;			\
+	     numer += wij * v[j];		\
+	   },					
+	   {					\
+	     result[i] = numer/denom;		\
+	   })
+    }
  }
 
 
@@ -221,6 +231,7 @@ void wtsmoopt(nxy, x, y, v, self, rmaxi, sig, weight, result)
   if(n == 0) 
     return;
 
+  if(countself != 0) {
   PAIRLOOP({ numer = denom = 0.0; },
 	   {						\
 	     wij = weight[j] * exp(-d2/twosig2);	\
@@ -228,12 +239,21 @@ void wtsmoopt(nxy, x, y, v, self, rmaxi, sig, weight, result)
 	     numer += wij * v[j];			\
 	   },						
 	   {						\
-	     if(countself != 0) {			\
-	       numer += weight[i];			\
-	       denom += weight[i] * v[i];		\
-	     }						\
+	     numer += weight[i];			\
+	     denom += weight[i] * v[i];		\
 	     result[i] = numer/denom;			\
 	   })
+  } else {
+  PAIRLOOP({ numer = denom = 0.0; },
+	   {						\
+	     wij = weight[j] * exp(-d2/twosig2);	\
+	     denom += wij;				\
+	     numer += wij * v[j];			\
+	   },						
+	   {						\
+	     result[i] = numer/denom;			\
+	   })
+    }
 }
 
 /* ------------- anisotropic versions -------------------- */
@@ -264,6 +284,7 @@ void asmoopt(nxy, x, y, v, self, rmaxi, sinv, result)
   if(n == 0) 
     return;
 
+  if(countself != 0) {
   PAIRLOOP({ numer = denom = 0.0; },
 	   {							\
 	     wij = exp(-(dx * (dx * s11 + dy * s12)		\
@@ -272,12 +293,22 @@ void asmoopt(nxy, x, y, v, self, rmaxi, sinv, result)
 	     numer += wij * v[j];				\
 	   },
 	   {					\
-	     if(countself != 0) {		\
-	       numer += 1;			\
-	       denom += v[i];			\
-	     }					\
+	     numer += 1;			\
+	     denom += v[i];			\
 	     result[i] = numer/denom;		\
 	   })
+    } else {
+  PAIRLOOP({ numer = denom = 0.0; },
+	   {							\
+	     wij = exp(-(dx * (dx * s11 + dy * s12)		\
+			 + dy * (dx * s21 + dy * s22))/2.0);	\
+	     denom += wij;					\
+	     numer += wij * v[j];				\
+	   },
+	   {					\
+	     result[i] = numer/denom;		\
+	   })
+    }
 }
 
 
@@ -309,6 +340,7 @@ void awtsmoopt(nxy, x, y, v, self, rmaxi, sinv, weight, result)
   if(n == 0) 
     return;
 
+  if(countself != 0) {
   PAIRLOOP({ numer = denom = 0.0; },
 	   {								\
 	     wij = weight[j] * exp(-(dx * (dx * s11 + dy * s12)		\
@@ -317,11 +349,21 @@ void awtsmoopt(nxy, x, y, v, self, rmaxi, sinv, weight, result)
 	     numer += wij * v[j];					\
 	   },
 	   {					\
-	     if(countself != 0) {		\
-	       numer += weight[i];		\
-	       denom += weight[i] * v[i];	\
-	     }					\
+	     numer += weight[i];		\
+	     denom += weight[i] * v[i];	\
 	     result[i] = numer/denom;		\
 	   })
+    } else {
+  PAIRLOOP({ numer = denom = 0.0; },
+	   {								\
+	     wij = weight[j] * exp(-(dx * (dx * s11 + dy * s12)		\
+				     + dy * (dx * s21 + dy * s22))/2.0); \
+	     denom += wij;						\
+	     numer += wij * v[j];					\
+	   },
+	   {					\
+	     result[i] = numer/denom;		\
+	   })
+    }
 }
 
