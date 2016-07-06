@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.019
+        CHANGES IN spatstat VERSION 1.45-2.020
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ OVERVIEW
     o Leverage and influence for multitype point process models.
 
     o Functions for extracting components of vector-valued objects.
+
+    o Important bug fix in Smooth.ppp
    
     o Minor improvements and bug fixes.
 
@@ -76,6 +78,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o Smooth.ppp
+    Results were incorrect when at='points' and leaveoneout=FALSE.
+    [Bug introduced in spatstat 1.20-5, October 2010.]
+    Fixed.
+
     o funxy
     Did not correctly handle one-line functions:
     the resulting objects evaluated the wrong function in some cases.
@@ -88,13 +95,13 @@ BUG FIXES
 
     o Smooth.ppp, bw.smoothppp
     Crashed if X had two columns of marks and one column was constant.
-    [Bug introduced in spatstat 1.38-0]
+    [Bug introduced in spatstat 1.38-0, October 2014]
     Fixed.
 
     o Smooth.ppp
     Results for 'at="points"' were garbled, for some values of 'sigma',
     if X had more than one column of marks.
-    [Bug introduced in spatstat 1.38-0]
+    [Bug introduced in spatstat 1.38-0, October 2014]
     Fixed.
 
     o plot.layered

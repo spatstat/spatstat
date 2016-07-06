@@ -187,7 +187,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.5 $  $Date: 2016/03/04 03:09:00 $
+#  $Revision: 1.6 $  $Date: 2016/07/06 03:42:14 $
 #
 
 require(spatstat)
@@ -236,11 +236,25 @@ local({
 
   ## Smooth.ppp
   Z <- Smooth(longleaf, 5, diggle=TRUE)
-  Z <- Smooth(unmark(longleaf) %mark% 1, 5)
-
   Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
 
-  ## drop-dimension errors
+  ## Smooth.ppp(at='points')
+  X <- longleaf %mark% 42
+  Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
+
+  ZX <- Smooth(X, 5, at="points", leaveoneout=TRUE)
+  ZY <- Smooth(Y, 5, at="points", leaveoneout=TRUE)
+  rZY <- range(ZY)
+  if(rZY[1] < 40 || rZY[2] > 44)
+    stop("Implausible results from Smooth.ppp(at=points, leaveoneout=TRUE)")
+  
+  ZX <- Smooth(X, 5, at="points", leaveoneout=FALSE)
+  ZY <- Smooth(Y, 5, at="points", leaveoneout=FALSE)
+  rZY <- range(ZY)
+  if(rZY[1] < 40 || rZY[2] > 44)
+    stop("Implausible results from Smooth.ppp(at=points, leaveoneout=FALSE)")
+  
+  ## drop-dimension coding errors
   X <- longleaf
   marks(X) <- cbind(marks(X), 1)
   Z <- Smooth(X, 5)

@@ -84,10 +84,20 @@ the News and Release Notes for each update.
 \begin{itemize}
    \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
 
-   \item Recursive-partition point process models.
+   \item Improvements to inhomogeneous multitype $K$ and $L$ functions.
+
+   \item Variance approximation for pair correlation function.
+
+   \item Leverage and influence for multitype point process models.
+
+   \item Functions for extracting components of vector-valued objects.
+
+  \item Recursive-partition point process models.
 
    \item Minkowski sum, morphological dilation and erosion with any shape.
 
+   \item Important bug fix in Smooth.ppp
+ 
    \item Important bug fix in spatial CDF tests.
 
    \item  More bug fixes for replicated patterns.
@@ -199,7 +209,21 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
-\item \texttt{as.im.data.frame}:
+ \item \texttt{split.msr}:
+    Decompose a measure into parts.
+
+  \item \texttt{unstack.msr}:
+    Decompose a vector-valued measure into its component measures.
+
+  \item \texttt{unstack.ppp}, \texttt{unstack.psp}, \texttt{unstack.lpp}:
+    Given a spatial pattern with several columns of marks,
+    separate the columns and return a list of spatial patterns, 
+    each having only one column of marks.
+
+ \item \texttt{kernel.squint}:
+    Integral of squared kernel, for the kernels used in density estimation.
+
+ \item \texttt{as.im.data.frame}:
   Build a pixel image from a data frame of coordinates and pixel values.
 
 \item \texttt{covering}:
@@ -586,7 +610,12 @@ listed alphabetically.
     so the code can handle larger datasets and finer quadrature schemes.
 
     
- \item \texttt{diagnose.ppm, plot.diagppm}:
+  \item \texttt{diagnose.ppm}:
+    Infinite values of \texttt{rbord} are now ignored and treated as zero.
+    This ensures that \texttt{diagnose.ppm} has a sensible default
+    when the fitted model has infinite reach.
+  
+  \item \texttt{diagnose.ppm, plot.diagppm}:
    New arguments \texttt{col.neg, col.smooth} control the colour maps.
 
  \item \texttt{discs}:
@@ -652,6 +681,11 @@ listed alphabetically.
 %%J
 %%K
 
+ \item \texttt{Kcross.inhom}, \texttt{Kdot.inhom}, \texttt{Kmulti.inhom}:
+    These functions now allow intensity values to be given by
+    a fitted point process model.
+    New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{lambdaX}.
+
  \item \texttt{Kest}
     Accelerated computation (for translation and rigid corrections)
     when window is an irregular shape.
@@ -674,6 +708,11 @@ listed alphabetically.
 
 %%L
    
+ \item \texttt{Lcross.inhom}, \texttt{Ldot.inhom}:
+    These functions now allow intensity values to be given by
+    a fitted point process model.
+    New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{lambdaX}.
+
  \item \texttt{leverage.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
@@ -735,16 +774,41 @@ listed alphabetically.
  \item \texttt{padimage}:
    New argument \texttt{W} allows an image to be padded out to fill any window.
 
- \item \texttt{pcf.ppp}: 
-   New argument \texttt{ratio} allows several estimates of pcf to be pooled.
+ \item \texttt{pcf.ppp}:
+   \begin{itemize}
+   \item 
+     New argument \texttt{ratio} allows several estimates of pcf to be pooled.
+   \item 
+     Now calculates an analytic approximation to the variance of
+     the estimate of the pair correlation function 
+     (when \texttt{var.approx=TRUE}).
+   \item 
+     Now returns the smoothing bandwidth used, as an attribute of the result.
+   \end{itemize}
+
+
    
  \item \texttt{pcfinhom}:
     Default behaviour is changed when \texttt{lambda} is a fitted model.
     The default is now to re-fit the model to the data before computing pcf.
     New arguments \texttt{update} and \texttt{leaveoneout} control this.
 
+ \item \texttt{plot.anylist}:
+   \begin{itemize}
+   \item 
+   If a list entry \verb!x[[i]]! 
+   belongs to class \texttt{"anylist"}, it will be expanded
+   so that each entry \verb!x[[i]][[j]]! will be plotted as a separate panel.
+   \item 
+     New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
+   \end{itemize}
+
+
  \item \texttt{plot.im}:
     Now handles complex-valued images.
+
+ \item \texttt{plot.influence.ppm}:
+   New argument \texttt{multiplot}.
 
  \item \texttt{plot.kppm}:
    \begin{itemize}
@@ -754,6 +818,9 @@ listed alphabetically.
     The argument \texttt{what="all"} is now recognised: it selects
     all the available options. [This is also the default.]
    \end{itemize}
+
+ \item \texttt{plot.leverage.ppm}:
+   New argument \texttt{multiplot}.
 
    \item \texttt{plot.lpp}:
      \begin{itemize}
@@ -765,8 +832,12 @@ listed alphabetically.
     the default colour map for the marks.
      \end{itemize}
 
-   \item \texttt{plot.mppm}
+   \item \texttt{plot.mppm}:
    New argument \texttt{se}.
+   
+   \item \texttt{plot.msr}:
+   Now handles multitype measures.
+    New argument \texttt{multiplot}.
    
    \item \texttt{plot.ppp}:
      \begin{itemize}
@@ -778,13 +849,20 @@ listed alphabetically.
     the default colour map for the marks.
   \item Now recognises graphics parameters for text, such as 
     \texttt{family} and \texttt{srt}
-     \end{itemize}
+  \item 
+    When \texttt{clipwin} is given, any parts of the boundary 
+    of the window of \texttt{x} that lie inside \texttt{clipwin} 
+    will also be plotted.
+  \end{itemize}
 
    \item \texttt{plot.profilepl} ,\texttt{plot.quadratcount}, 
      \texttt{plot.quadrattest}, \texttt{plot.tess}:
      Now recognise graphics parameters for text, such as 
     \texttt{family} and \texttt{srt}
 
+    \item \texttt{plot.solist}:
+     New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
+     
    \item \texttt{pool.fv}:
     The default plot of the pooled function no longer includes 
     the variance curves.
@@ -1026,7 +1104,6 @@ of potential impact.
   
 \begin{itemize}
 \item \texttt{nncross.ppp}:
-
   Results were completely incorrect if $k > 1$.
   \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
 
@@ -1038,6 +1115,11 @@ of potential impact.
     Calculation of $p$-values was incorrect for Gibbs models: 
     $1-p$ was computed instead of $p$.
   \bugger{1.40-0}{december 2014}{1.45-2}{may 2016}
+
+\item \texttt{Smooth.ppp}:
+  Results of \verb!Smooth(X, at="points", leaveoneout=FALSE)!
+  were completely incorrect.
+  \bugger{1.20-5}{august 2010}{1.46-0}{july 2016}
   
 \item \texttt{rmh}:
   
@@ -1152,6 +1234,11 @@ of potential impact.
    due to an error in constructing the quadrature scheme.
    \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
    
+ \item \texttt{funxy}: 
+   Did not correctly handle one-line functions. 
+   The resulting objects evaluated the wrong function in some cases.
+   \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
+   
  \item \texttt{Geyer}:
    For point process models with the \texttt{Geyer} interaction, 
    \texttt{vcov.ppm} and \texttt{suffstat} sometimes gave incorrect answers.
@@ -1172,6 +1259,11 @@ of potential impact.
    The default has now been changed to \texttt{oldstyle=TRUE} for such models.
    \bugger{1.35-0}{december 2013}{1.45-0}{march 2016}
 
+ \item \texttt{Smooth.ppp}:
+   Results for \verb!at="points"! were garbled, for some values of 
+   \texttt{sigma}, if \texttt{X} had more than one column of marks.
+   \bugger{1.38-0}{october 2014}{1.46-0}{july 2016}
+    
  \item \texttt{linearK}, \texttt{linearKinhom}:
    If any data points were located exactly at a vertex of the 
    linear network, the weights for Ang's correction were incorrect, 
