@@ -3,7 +3,7 @@
 #
 # Makes diagnostic plots based on residuals or energy weights
 #
-# $Revision: 1.42 $ $Date: 2016/06/11 09:00:55 $
+# $Revision: 1.43 $ $Date: 2016/07/06 06:56:56 $
 #
 
 diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
@@ -24,9 +24,6 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   U <- union.quad(Q)
   Qweights <- w.quad(Q)
 
-  # edge correction used
-  correction <- object$correction
-  
   # -------------- Calculate residuals/weights -------------------
 
   # Discretised residuals

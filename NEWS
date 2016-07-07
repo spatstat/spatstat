@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.45-2.020
+        CHANGES IN spatstat VERSION 1.46-0
 
 OVERVIEW
 
@@ -16,10 +16,10 @@ OVERVIEW
     o Functions for extracting components of vector-valued objects.
 
     o Important bug fix in Smooth.ppp
-   
+
     o Minor improvements and bug fixes.
 
-    o Version nickname: 'MultiPass'
+    o Version nickname: 'Multidimensional Toothbrush'
 
 NEW FUNCTIONS
 
@@ -75,6 +75,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.anylist, plot.solist, plot.listof
     New arguments panel.begin.args, panel.end.args
+
+    o influence.ppm, leverage.ppm, dfbetas.ppm
+    For Gibbs models, memory usage has been dramatically reduced, 
+    so the code can handle larger datasets and finer quadrature schemes.
 
 BUG FIXES
 

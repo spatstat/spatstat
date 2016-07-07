@@ -56,11 +56,12 @@ qqplot.ppm <- local({
 
     ##################  How to perform simulations?  #######################
 
-    envir.call <- sys.parent()
+    ## envir.call <- sys.parent()
     envir.here <- sys.frame(sys.nframe())
 
-    extract.from.list <- FALSE
+    ## extract.from.list <- FALSE
     inext <- 0 # to placate package checker
+    dont.complain.about(inext)
     
     if(is.null(expr)) {
       ## We will simulate from the fitted model 'nsim' times

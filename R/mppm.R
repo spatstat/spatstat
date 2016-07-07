@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.79 $   $Date: 2016/06/28 04:13:46 $
+#  $Revision: 1.80 $   $Date: 2016/07/06 07:06:03 $
 #
 
 mppm <- local({
@@ -642,7 +642,7 @@ simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
                                                   nsim=nsim, drop=FALSE),
                                              list(...),
                                              list(progress=FALSE)))
-    if(verbose) progressreport(irow, nr)
+    if(verbose) state <- progressreport(irow, nr, state=state)
   }
   sim1list <- lapply(sims, "[[", i=1)
   h <- hyperframe("Sim1"=sim1list)

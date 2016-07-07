@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.65 $  $Date: 2016/07/04 08:06:34 $
+#  $Revision: 1.66 $  $Date: 2016/07/06 08:25:35 $
 #
 
 leverage <- function(model, ...) {
@@ -81,7 +81,7 @@ ppmInfluenceEngine <- function(fit,
                          drop=FALSE,
                          method=c("C", "interpreted"),
                          precomputed=list(),
-                         sparseOK=FALSE,
+                         sparseOK=TRUE,
                          fitname=NULL,
                          multitypeOK=FALSE) {
   if(is.null(fitname)) 

@@ -10,7 +10,7 @@
 #'     GmultiInhom
 #'     FmultiInhom
 #'
-#'      $Revision: 1.4 $ $Date: 2016/05/05 05:36:55 $
+#'      $Revision: 1.5 $ $Date: 2016/07/06 07:01:22 $
 
 GmultiInhom <- function(X, I, J, 
                         lambda=NULL, lambdaI=NULL, lambdaJ=NULL,
@@ -101,10 +101,10 @@ GmultiInhom <- function(X, I, J,
   #' Calculate (1 - lambda_min/lambda(x_i,y_i,m_i))
   #'           for all (x_i,y_i,m_i) with m_i in J
   Coeff <- 1-(lambdamin/lambdaJ)
-  CoeffMatrix <- matrix(rep(Coeff,times=nI), nrow=nI, byrow=TRUE)
+  ## CoeffMatrix <- matrix(rep(Coeff,times=nI), nrow=nI, byrow=TRUE)
 
   #' distances
-  DistanceXItoXJ <- crossdist(XI,XJ)
+  ## DistanceXItoXJ <- crossdist(XI,XJ)
 
   #' eroded areas and boundary distances
   areaWr <- eroded.areas(W, r)
@@ -113,7 +113,7 @@ GmultiInhom <- function(X, I, J,
   #' for each point x in XI, determine largest r such that x \in W-r
   ibI <- fastFindInterval(bdistXI, r, labels=TRUE)
   #' count of points inside W-r for each r
-  NumberEroded <- revcumsum(table(ibI))
+  ## NumberEroded <- revcumsum(table(ibI))
     
   #' denominator
   #' sum invlambdaI for all points x \in W-r
@@ -212,7 +212,6 @@ FmultiInhom <- function(X, J,
                         r=NULL) {
   if(!is.ppp(X) || !is.marked(X))
     stop("X should be a marked point pattern")
-  W <- Window(X)
   nX <- npoints(X)
   
   #' Accept any kind of index for J; convert it to a logical index

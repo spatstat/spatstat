@@ -151,7 +151,7 @@
   Linux systems support
   the graphics device \code{X11(type="cairo")} (see \code{\link{X11}})
   provided the external library \pkg{cairo} is installed
-  on the computer. See \url{http://www.cairographics.org/download}
+  on the computer. See \code{www.cairographics.org}
   for instructions on obtaining and installing \pkg{cairo}.  After having
   installed \pkg{cairo} one needs to re-install \R from source so
   that it has \pkg{cairo} capabilites.  To check whether your

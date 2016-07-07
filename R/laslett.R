@@ -290,7 +290,8 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
       }
     cumnv <- cumnv + nn
   }
-  was.candidate <- is.candidate
+  ##  was.candidate <- is.candidate
+  
   #' reject candidates lying too close to boundary
   tooclose <- (bdist.points(V[is.candidate]) < diameter(Frame(V))/1000)
   is.candidate[is.candidate][tooclose] <- FALSE

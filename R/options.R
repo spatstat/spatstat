@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.70 $   $Date: 2016/02/09 04:41:47 $
+#    $Revision: 1.71 $   $Date: 2016/07/06 07:15:05 $
 #
 #
 
@@ -498,9 +498,9 @@ reset.spatstat.options <- function() {
 
 reset.spatstat.options()
 
-"spatstat.options" <-
-function (...) 
-{
+spatstat.options <- local({
+
+  spatstat.options <- function (...) {
     Spatstat.Options <- getSpatstatVariable("Spatstat.Options")
     called <- list(...)    
 
@@ -534,23 +534,21 @@ function (...)
             return(Spatstat.Options[choices])
 	} else {
 	   wrong <- called[!ischar]
-	   offending <- unlist(lapply(wrong,
-	   		function(x) { y <- x;
-	     		short.deparse(substitute(y)) }))
+	   offending <- sapply(wrong, ShortDeparse)
 	   offending <- paste(offending, collapse=",")
            stop(paste("Unrecognised mode of argument(s) [",
 		offending,
 	   "]: should be character string or name=value pair"))
     	}
     }
-# spatstat.options(name=value, name2=value2,...)
+    ## spatstat.options(name=value, name2=value2,...)
     assignto <- names(called)
     if (is.null(assignto) || !all(nzchar(assignto)))
         stop("options must all be identified by name=value")
     recog <- assignto %in% names(.Spat.Stat.Opt.Table)
     if(!all(recog))
 	stop(paste("Unrecognised option(s):", assignto[!recog]))
-# validate new values
+    ## validate new values
     for(i in seq_along(assignto)) {
       nama <- assignto[i]
       valo <- called[[i]]
@@ -560,12 +558,21 @@ function (...)
         stop(paste("Parameter", dQuote(nama), "should be",
                    entry$valid))
     }
-# reassign
-  changed <- Spatstat.Options[assignto]
-  Spatstat.Options[assignto] <- called
-  putSpatstatVariable("Spatstat.Options", Spatstat.Options)
+    ## reassign
+    changed <- Spatstat.Options[assignto]
+    Spatstat.Options[assignto] <- called
+    putSpatstatVariable("Spatstat.Options", Spatstat.Options)
   
-# return 
+    ## return 
     invisible(changed)
-}
+  }
+
+  ShortDeparse <- function(x) {
+    y <- x
+    dont.complain.about(y)
+    short.deparse(substitute(y))
+  }
+    
+  spatstat.options
+})
 

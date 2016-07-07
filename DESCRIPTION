@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.45-2.020
-Nickname: MultiPass
+Version: 1.46-0
+Nickname: Multidimensional Toothbrush
 Date: 2016-07-06
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,

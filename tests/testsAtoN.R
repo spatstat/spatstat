@@ -804,34 +804,38 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.4 $ $Date: 2016/03/14 07:15:33 $
+#'   $Revision: 1.5 $ $Date: 2016/07/06 08:29:49 $
 #' 
 
 require(spatstat)
 local({
+  # original non-sparse algorithm
+  Leverage <- function(...) leverage(..., sparseOK=FALSE)
+  Influence <- function(...) influence(..., sparseOK=FALSE)
+  Dfbetas <- function(...) dfbetas(..., sparseOK=FALSE)
   # Strauss()$delta2
   fitS <- ppm(cells ~ x, Strauss(0.12), rbord=0)
-  levS <- leverage(fitS)
-  infS <- influence(fitS)
-  dfbS <- dfbetas(fitS)
+  levS <- Leverage(fitS)
+  infS <- Influence(fitS)
+  dfbS <- Dfbetas(fitS)
   # Geyer()$delta2
   fitG <- ppm(redwood ~ 1, Geyer(0.1, 2), rbord=0)
-  levG <- leverage(fitG)
-  infG <- influence(fitG)
+  levG <- Leverage(fitG)
+  infG <- Influence(fitG)
   # pairwise.family$delta2
   fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
-  levD <- leverage(fitD)
-  infD <- influence(fitD)
+  levD <- Leverage(fitD)
+  infD <- Influence(fitD)
   # ppmInfluence; offset is present; coefficient vector has length 1
   fitH <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
-  levH <- leverage(fitH)
-  infH <- influence(fitH)
+  levH <- Leverage(fitH)
+  infH <- Influence(fitH)
 
   ## divide and recombine algorithm
   op <- spatstat.options(maxmatrix=50000)
-  levSB <- leverage(fitS)
-  infSB <- influence(fitS)
-  dfbSB <- dfbetas(fitS)
+  levSB <- Leverage(fitS)
+  infSB <- Influence(fitS)
+  dfbSB <- Dfbetas(fitS)
 
   chk <- function(x, y, what,
                   from="single-block and multi-block",

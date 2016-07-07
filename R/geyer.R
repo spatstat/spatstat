@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.34 $	$Date: 2016/02/24 09:38:44 $
+#    $Revision: 2.35 $	$Date: 2016/07/06 09:49:20 $
 #
 #    Geyer's saturation process
 #
@@ -347,7 +347,7 @@ geyerdelta2 <- local({
       delta4 <- tapply(contribKK, list(I=II, J=JJ), sum)
       delta4[is.na(delta4)] <- 0
     } else {
-      delta4 <- sparseMatrix(i=II, j=JJ, x=contribKK, dims=c(nX, nX))
+      delta4 <- sparseMatrix(i=II, j=JJ, x=contribKK, dims=c(nU, nU))
     }
     # combine
     result <- result + delta4
