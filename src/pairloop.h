@@ -17,7 +17,7 @@
        double xi, yi, dx, dy, dx2, d2, r2max;
        double *x, *y;
 
-  $Revision: 1.3 $  $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.4 $  $Date: 2016/07/08 03:37:11 $
 
 */
 
@@ -36,7 +36,7 @@
       INITIAL_I;					\
                                                         \
       if(i > 0) {					\
-	for(j=i-1; j > 0; j--) {			\
+	for(j=i-1; j >= 0; j--) {			\
 	  dx = x[j] - xi;				\
 	  dx2 = dx * dx;				\
 	  if(dx2 > r2max)				\

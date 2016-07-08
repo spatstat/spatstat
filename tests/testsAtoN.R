@@ -209,6 +209,23 @@ local({
   tryit(0.05, weights=data.frame(a=1:42,b=42:1))
   tryit(0.05, weights=expression(x))
 
+  ## compare results with different algorithms
+  opa <- spatstat.options(densityC=FALSE, densityTransform=FALSE)
+  val.interpreted <- density(redwood, at="points", sigma=0.13, edge=FALSE)
+  spatstat.options(densityC=TRUE, densityTransform=FALSE)
+  val.C <- density(redwood, at="points", sigma=0.13, edge=FALSE)
+  spatstat.options(densityC=TRUE, densityTransform=TRUE)
+  val.Transform <- density(redwood, at="points", sigma=0.13, edge=FALSE)
+  spatstat.options(opa)
+
+  if(max(abs(val.interpreted - val.C)) > 0.001)
+    stop(paste("Numerical discrepancy between R and C algorithms",
+               "in density.ppp(at=points)"))
+  if(max(abs(val.C - val.Transform)) > 0.001)
+    stop(paste("Numerical discrepancy between C algorithms",
+               "using transformed and untransformed coordinates",
+               "in density.ppp(at=points)"))
+  
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)
   
@@ -247,7 +264,7 @@ local({
   rZY <- range(ZY)
   if(rZY[1] < 40 || rZY[2] > 44)
     stop("Implausible results from Smooth.ppp(at=points, leaveoneout=TRUE)")
-  
+
   ZX <- Smooth(X, 5, at="points", leaveoneout=FALSE)
   ZY <- Smooth(Y, 5, at="points", leaveoneout=FALSE)
   rZY <- range(ZY)

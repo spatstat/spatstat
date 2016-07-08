@@ -348,6 +348,7 @@
 \alias{logLik.vblogit}
 \alias{lty2char}
 \alias{maskLaslett}
+\alias{matsqrt}
 \alias{matchNameOrPosition}
 \alias{padtowidth}
 \alias{parbreak}
@@ -942,7 +943,7 @@ densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     diggle, sorted)
 densitypointsEngine(x, sigma, \dots,
                     weights, edge, varcov,
-                    leaveoneout, diggle, sorted, spill)
+                    leaveoneout, diggle, sorted, spill, cutoff)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
                          sigma, rbord, compute.sd, compute.cts,
                          envelope, nsim, nrank,
@@ -1210,6 +1211,7 @@ logi.engine(Q, trend, interaction, \dots,
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
+matsqrt(x)
 matchNameOrPosition(expected, avail)
 padtowidth(a, b, justify)
 parbreak(terse)

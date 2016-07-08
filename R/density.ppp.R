@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.79 $    $Date: 2016/02/16 01:39:12 $
+#  $Revision: 1.80 $    $Date: 2016/07/08 08:16:20 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -203,7 +203,8 @@ density.ppp
 densitypointsEngine <- function(x, sigma, ...,
                                 weights=NULL, edge=TRUE, varcov=NULL,
                                 leaveoneout=TRUE, diggle=FALSE,
-                                sorted=FALSE, spill=FALSE) {
+                                sorted=FALSE, spill=FALSE, cutoff=NULL) {
+  debugging <- spatstat.options("developer")
   if(is.null(varcov)) {
     const <- 1/(2 * pi * sigma^2)
   } else {
@@ -217,7 +218,10 @@ densitypointsEngine <- function(x, sigma, ...,
   # cutoff: contributions from pairs of distinct points
   # closer than 8 standard deviations
   sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
-  cutoff <- 8 * sd
+  if(is.null(cutoff)) 
+    cutoff <- 8 * sd
+  if(debugging)
+    cat(paste("cutoff=", cutoff, "\n"))
 #  nnd <- nndist(x)
 #  nnrange <- range(nnd)
 #  if(nnrange[1] > cutoff) {
@@ -232,6 +236,8 @@ densitypointsEngine <- function(x, sigma, ...,
     # ensure each point has its closest neighbours within the cutoff
     nndmax <- maxnndist(x)
     cutoff <- max(2 * nndmax, cutoff)
+    if(debugging)
+      cat(paste("adjusted cutoff=", cutoff, "\n"))
   }
   # validate weights
   if(is.null(weights)) {
@@ -274,9 +280,72 @@ densitypointsEngine <- function(x, sigma, ...,
       }
     }
   }
-  
-  if(spatstat.options("densityC") || k > 1) {
-    # .................. new C code ...........................
+
+  if(spatstat.options("densityTransform") && spatstat.options("densityC")) {
+    ## .................. experimental C code .....................
+    if(debugging)
+      cat('Using experimental code!\n')
+    npts <- npoints(x)
+    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
+    xx <- x$x
+    yy <- x$y
+    ## transform to standard coordinates
+    if(is.null(varcov)) {
+      xx <- xx/(sqrt(2) * sigma)
+      yy <- yy/(sqrt(2) * sigma)
+    } else {
+      xy <- cbind(xx, yy) %*% matsqrt(Sinv/2)
+      xx <- xy[,1]
+      yy <- xy[,2]
+      sorted <- FALSE
+    }
+    ## cutoff in standard coordinates
+    cutoff <- cutoff/(sqrt(2) * sd)
+    ## sort into increasing order of x coordinate (required by C code)
+    if(!sorted) {
+      oo <- fave.order(xx)
+      xx <- xx[oo]
+      yy <- yy[oo]
+    }
+    if(is.null(weights)) {
+      zz <- .C("Gdenspt",
+               nxy     = as.integer(npts),
+               x       = as.double(xx),
+               y       = as.double(yy),
+               rmaxi   = as.double(cutoff),
+               result  = as.double(double(npts)))
+      if(sorted) result <- zz$result else result[oo] <- zz$result
+      result <- result * const
+    } else if(k == 1) {
+      wtsort <- if(sorted) weights else weights[oo]
+      zz <- .C("Gwtdenspt",
+               nxy     = as.integer(npts),
+               x       = as.double(xx),
+               y       = as.double(yy),
+               rmaxi   = as.double(cutoff),
+               weight  = as.double(wtsort),
+               result  = as.double(double(npts)))
+      if(sorted) result <- zz$result else result[oo] <- zz$result 
+      result <- result * const
+    } else {
+      ## matrix of weights
+      wtsort <- if(sorted) weights else weights[oo, ]
+      for(j in 1:k) {
+        zz <- .C("Gwtdenspt",
+                 nxy     = as.integer(npts),
+                 x       = as.double(xx),
+                 y       = as.double(yy),
+                 rmaxi   = as.double(cutoff),
+                 weight  = as.double(wtsort[,j]),
+                 result  = as.double(double(npts)))
+        if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
+      }
+      result <- result * const
+    }
+  } else if(spatstat.options("densityC") || k > 1) {
+    # .................. C code ...........................
+    if(debugging)
+      cat('Using standard code.\n')
     npts <- npoints(x)
     result <- if(k == 1) numeric(npts) else matrix(, npts, k)
     # sort into increasing order of x coordinate (required by C code)

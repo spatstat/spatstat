@@ -1121,6 +1121,13 @@ of potential impact.
   were completely incorrect.
   \bugger{1.20-5}{august 2010}{1.46-0}{july 2016}
   
+\item \texttt{density.ppp}:
+  Values of \verb!density(X, at="points")!
+  and \verb!Smooth(X, at="points")!
+  were sometimes incorrect, due to omission of
+  the contribution from the data point with the smallest $x$ coordinate.
+  \bugger{1.26-0}{april 2012}{1.46-1}{july 2016}
+  
 \item \texttt{rmh}:
   
    \begin{itemize}

@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.15 $ $Date: 2016/03/01 09:12:46 $
+# $Revision: 1.16 $ $Date: 2016/07/07 09:47:59 $
 #
 
 sumouter <- function(x, w=NULL) {
@@ -186,4 +186,18 @@ check.mat.mul <- function(A, B, Acols="columns of A", Brows="rows of B",
   stop(paste("Internal error: number of", Acols, paren(nA),
              "does not match number of", Brows, paren(nB)),
        call.=FALSE)
+}
+
+matsqrt <- function(x) {
+  ## matrix square root
+  if(length(dim(x)) != 2)
+    stop("x must be a matrix")
+  if(!is.matrix(x))
+    x <- as.matrix(x)
+  stopifnot(is.numeric(x))
+  s <- svd(x)
+  y <- with(s, v %*% (sqrt(d) * t(u)))
+  if(!is.null(dn <- dimnames(x)))
+    dimnames(y) <- rev(dn)
+  return(y)
 }

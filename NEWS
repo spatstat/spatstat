@@ -1,4 +1,21 @@
 
+        CHANGES IN spatstat VERSION 1.46-1
+
+OVERVIEW
+
+    o Important bug fix.
+
+    o Version nickname: 'Spoiler Alert'
+
+BUG FIXES
+
+    o density.ppp, Smooth.ppp
+    The results of density(X, at="points") and Smooth(X, at="points")
+    were incorrect in some cases. The contribution from the 
+    left-most data point (the point with the smallest x coordinate) 
+    was omitted.   [Bug introduced in spatstat 1.26-0, April 2012.]
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.46-0
 
 OVERVIEW

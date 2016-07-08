@@ -90,7 +90,9 @@ useDynLib(spatstat,
 "fastinterv",
 "Fclosepairs",
 "Fcrosspairs",
+"Gdenspt",
 "graphVees",
+"Gwtdenspt",
 "Idist2dpath",
 "idwloo",
 "inxyp",
@@ -1434,6 +1436,7 @@ export("matrixsample")
 export("matrowall")
 export("matrowany")
 export("matrowsum")
+export("matsqrt")
 export("maxflow")
 export("max.fv")
 export("max.im")
