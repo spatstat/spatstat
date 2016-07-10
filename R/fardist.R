@@ -1,9 +1,9 @@
 ##
 ##  fardist.R
 ##
-## Farthest distance to boundary, and circumradius
+## Farthest distance to boundary
 ##
-##  $Revision: 1.8 $ $Date: 2015/10/21 09:06:57 $
+##  $Revision: 1.9 $ $Date: 2016/07/10 03:09:45 $
 
 fardist <- function(X, ...) {
   UseMethod("fardist")
@@ -57,13 +57,5 @@ fardist.ppp <- function(X, ..., squared=FALSE) {
   D2 <- crossdist(X$x, X$y, V$x, V$y, squared=TRUE) 
   D2max <- apply(D2, 1, max)
   if(squared) return(D2max) else return(sqrt(D2max))
-}
-
-circumradius <- function(x, ...) {
-  UseMethod("circumradius")
-}
-
-circumradius.owin <- function(x, ...) {
-  sqrt(min(fardist(x, ..., squared=TRUE)))
 }
 

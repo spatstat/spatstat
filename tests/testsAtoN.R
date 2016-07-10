@@ -187,7 +187,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.6 $  $Date: 2016/07/06 03:42:14 $
+#  $Revision: 1.7 $  $Date: 2016/07/10 04:44:22 $
 #
 
 require(spatstat)
@@ -209,23 +209,32 @@ local({
   tryit(0.05, weights=data.frame(a=1:42,b=42:1))
   tryit(0.05, weights=expression(x))
 
-  ## compare results with different algorithms
-  opa <- spatstat.options(densityC=FALSE, densityTransform=FALSE)
-  val.interpreted <- density(redwood, at="points", sigma=0.13, edge=FALSE)
-  spatstat.options(densityC=TRUE, densityTransform=FALSE)
-  val.C <- density(redwood, at="points", sigma=0.13, edge=FALSE)
-  spatstat.options(densityC=TRUE, densityTransform=TRUE)
-  val.Transform <- density(redwood, at="points", sigma=0.13, edge=FALSE)
-  spatstat.options(opa)
+  ## compare density.ppp results with different algorithms
+  crosscheque <- function(expr) {
+    e <- as.expression(substitute(expr))
+    ename <- sQuote(deparse(substitute(expr)))
+    ## interpreted R
+    opa <- spatstat.options(densityC=FALSE, densityTransform=FALSE)
+    val.interpreted <- eval(e)
+    ## established C algorithm 'denspt'
+    spatstat.options(densityC=TRUE, densityTransform=FALSE)
+    val.C <- eval(e)
+    ## new C algorithm 'Gdenspt' using transformed coordinates
+    spatstat.options(densityC=TRUE, densityTransform=TRUE)
+    val.Transform <- eval(e)
+    spatstat.options(opa)
+    if(max(abs(val.interpreted - val.C)) > 0.001)
+      stop(paste("Numerical discrepancy between R and C algorithms in",
+                 ename))
+    if(max(abs(val.C - val.Transform)) > 0.001)
+      stop(paste("Numerical discrepancy between C algorithms",
+                 "using transformed and untransformed coordinates in",
+                 ename))
+    invisible(NULL)
+  }
 
-  if(max(abs(val.interpreted - val.C)) > 0.001)
-    stop(paste("Numerical discrepancy between R and C algorithms",
-               "in density.ppp(at=points)"))
-  if(max(abs(val.C - val.Transform)) > 0.001)
-    stop(paste("Numerical discrepancy between C algorithms",
-               "using transformed and untransformed coordinates",
-               "in density.ppp(at=points)"))
-  
+  crosscheque(density(redwood, at="points", sigma=0.13, edge=FALSE))
+
   lam <- density(redwood)
   K <- Kinhom(redwood, lam)
   
@@ -256,21 +265,21 @@ local({
   Z <- Smooth(longleaf, 1e-6) # generates warning about small bandwidth
 
   ## Smooth.ppp(at='points')
-  X <- longleaf %mark% 42
   Y <- longleaf %mark% runif(npoints(longleaf), min=41, max=43)
 
-  ZX <- Smooth(X, 5, at="points", leaveoneout=TRUE)
-  ZY <- Smooth(Y, 5, at="points", leaveoneout=TRUE)
-  rZY <- range(ZY)
-  if(rZY[1] < 40 || rZY[2] > 44)
+  Z <- Smooth(Y, 5, at="points", leaveoneout=TRUE)
+  rZ <- range(Z)
+  if(rZ[1] < 40 || rZ[2] > 44)
     stop("Implausible results from Smooth.ppp(at=points, leaveoneout=TRUE)")
 
-  ZX <- Smooth(X, 5, at="points", leaveoneout=FALSE)
-  ZY <- Smooth(Y, 5, at="points", leaveoneout=FALSE)
-  rZY <- range(ZY)
-  if(rZY[1] < 40 || rZY[2] > 44)
+  Z <- Smooth(Y, 5, at="points", leaveoneout=FALSE)
+  rZ <- range(Z)
+  if(rZ[1] < 40 || rZ[2] > 44)
     stop("Implausible results from Smooth.ppp(at=points, leaveoneout=FALSE)")
-  
+
+  ## compare Smooth.ppp results with different algorithms
+  crosscheque(Smooth(longleaf, at="points", sigma=6))
+
   ## drop-dimension coding errors
   X <- longleaf
   marks(X) <- cbind(marks(X), 1)

@@ -1,16 +1,39 @@
 \name{circumradius}
 \alias{circumradius}
+\alias{circumcentre}
+\alias{circumcircle}
 \alias{circumradius.owin}
+\alias{circumcentre.owin}
+\alias{circumcircle.owin}
+\alias{circumradius.ppp}
+\alias{circumcentre.ppp}
+\alias{circumcircle.ppp}
 \title{
-  Circumradius of a Window
+  Smallest Enclosing Circle
 }
 \description{
-  Compute the circumradius of a window or other spatial object.
+  Find the smallest circle enclosing a spatial window
+  or other object. Return its radius, or the location of its centre,
+  or the circle itself.
 }
 \usage{
 circumradius(x, \dots)
 
+circumcentre(x, \dots)
+
+circumcircle(x, \dots)
+
 \method{circumradius}{owin}(x, \dots)
+
+\method{circumcentre}{owin}(x, \dots)
+
+\method{circumcircle}{owin}(x, \dots)
+
+\method{circumradius}{ppp}(x, \dots)
+
+\method{circumcentre}{ppp}(x, \dots)
+
+\method{circumcircle}{ppp}(x, \dots)
 }
 \arguments{
   \item{x}{
@@ -22,24 +45,41 @@ circumradius(x, \dots)
   }
 }
 \details{
-  The circumradius of a spatial region \eqn{W} is the radius of the
-  smallest circle that contains \eqn{W}. 
+  The circumcircle of a spatial region \eqn{W} is the smallest circle
+  that contains \eqn{W}. The circumradius is the radius of this circle,
+  and the circumcentre is the centre of the circle.
   
-  The function \code{circumradius} is generic, with methods
-  for objects of class \code{"owin"} and \code{"linnet"}.
+  The functions \code{circumcircle}, \code{circumcentre} and
+  \code{circumradius} are generic. There are methods
+  for objects of class \code{"owin"}, \code{"ppp"} and \code{"linnet"}.
 }
 \value{
-  A single numeric value.
+  The result of \code{circumradius} is a single numeric value.
+
+  The result of \code{circumcentre} is a point pattern containing a
+  single point.
+
+  The result of \code{circumcircle} is a window representing the
+  circumcircle.
 }
 \author{
   \adrian 
-  
 }
 \seealso{
  \code{\link{circumradius.linnet}}
 }
 \examples{
   circumradius(letterR)
+
+  plot(grow.rectangle(Frame(letterR), 0.2), main="", type="n")
+  plot(letterR, add=TRUE, col="grey")
+  plot(circumcircle(letterR), add=TRUE, border="green", lwd=2)
+  plot(circumcentre(letterR), pch="+", cex=2, col="blue", add=TRUE)
+
+  X <- runifpoint(5)
+  plot(X)
+  plot(circumcircle(X), add=TRUE)
+  plot(circumcentre(X), pch="+", cex=2, col="blue", add=TRUE)
 }
 \keyword{spatial}
 \keyword{math}

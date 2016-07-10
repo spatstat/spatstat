@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.29 $  $Date: 2016/06/27 09:21:45 $
+#  $Revision: 1.31 $  $Date: 2016/07/10 04:14:40 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -251,27 +251,24 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
 smoothpointsEngine <- function(x, values, sigma, ...,
                                weights=NULL, varcov=NULL,
                                leaveoneout=TRUE,
-                               sorted=FALSE) {
+                               sorted=FALSE, cutoff=NULL) {
+  debugging <- spatstat.options("developer")
   stopifnot(is.logical(leaveoneout))
-#  if(is.null(varcov)) {
-#    const <- 1/(2 * pi * sigma^2)
-#  } else {
-#    detSigma <- det(varcov)
-#    Sinv <- solve(varcov)
-#    const <- 1/(2 * pi * sqrt(detSigma))
-#  }
-  # detect constant values
+  #' detect constant values
   if(diff(range(values, na.rm=TRUE)) == 0) { 
     result <- values
     attr(result, "sigma") <- sigma
     attr(result, "varcov") <- varcov
     return(result)
   }
-  # Contributions from pairs of distinct points
-  # closer than 8 standard deviations
+  #' Contributions from pairs of distinct points
+  #' closer than 8 standard deviations
   sd <- if(is.null(varcov)) sigma else sqrt(sum(diag(varcov)))
-  cutoff <- 8 * sd
-
+  if(is.null(cutoff)) 
+    cutoff <- 8 * sd
+  if(debugging)
+    cat(paste("cutoff=", cutoff, "\n"))
+  
   ## Handle weights that are meant to be null
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
      weights <- NULL
@@ -296,8 +293,66 @@ smoothpointsEngine <- function(x, values, sigma, ...,
     # ensure cutoff includes at least one point
     cutoff <- max(1.1 * nnrange[2], cutoff)
   }
-  if(spatstat.options("densityC")) {
-    # .................. new C code ...........................
+  if(spatstat.options("densityTransform") && spatstat.options("densityC")) {
+    ## .................. experimental C code .....................
+    if(debugging)
+      cat('Using experimental code!\n')
+    npts <- npoints(x)
+    result <- numeric(npts)
+    ## transform to standard coordinates
+    xx <- x$x
+    yy <- x$y
+    if(is.null(varcov)) {
+      xx <- xx/(sqrt(2) * sigma)
+      yy <- yy/(sqrt(2) * sigma)
+    } else {
+      Sinv <- solve(varcov)
+      xy <- cbind(xx, yy) %*% matsqrt(Sinv/2)
+      xx <- xy[,1]
+      yy <- xy[,2]
+      sorted <- FALSE
+    }
+    ## cutoff in standard coordinates
+    cutoff <- cutoff/(sqrt(2) * sd)
+    ## sort into increasing order of x coordinate (required by C code)
+    if(!sorted) {
+      oo <- fave.order(xx)
+      xx <- xx[oo]
+      yy <- yy[oo]
+      vv <- values[oo]
+    }
+    if(is.null(weights)) {
+      zz <- .C("Gsmoopt",
+               nxy     = as.integer(npts),
+               x       = as.double(xx),
+               y       = as.double(yy),
+               v       = as.double(vv),
+               self    = as.integer(!leaveoneout),
+               rmaxi   = as.double(cutoff),
+               result  = as.double(double(npts)))
+      if(sorted) result <- zz$result else result[oo] <- zz$result
+    } else {
+      wtsort <- weights[oo]
+      zz <- .C("Gwtsmoopt",
+               nxy     = as.integer(npts),
+               x       = as.double(xx),
+               y       = as.double(yy),
+               v       = as.double(vv),
+               self    = as.integer(!leaveoneout),
+               rmaxi   = as.double(cutoff),
+               weight  = as.double(wtsort),
+               result  = as.double(double(npts)))
+      if(sorted) result <- zz$result else result[oo] <- zz$result
+    }
+    if(any(nbg <- (is.infinite(result) | is.nan(result)))) {
+      # NaN or +/-Inf can occur if bandwidth is small
+      # Use mark of nearest neighbour (by l'Hopital's rule)
+      result[nbg] <- values[nnwhich(x)[nbg]]
+    }
+  } else if(spatstat.options("densityC")) {
+    # .................. C code ...........................
+    if(debugging)
+      cat('Using standard code.\n')
     npts <- npoints(x)
     result <- numeric(npts)
     # sort into increasing order of x coordinate (required by C code)

@@ -1,4 +1,17 @@
 
+        CHANGES IN spatstat VERSION 1.46-1.001
+
+OVERVIEW
+
+    o Circumcentre and circumcircle.
+
+    o Version nickname: 'Ultracrepidarian'
+
+NEW FUNCTIONS
+
+    o circumcircle, circumcentre
+    Find the smallest circle enclosing a window or point pattern.
+
         CHANGES IN spatstat VERSION 1.46-1
 
 OVERVIEW

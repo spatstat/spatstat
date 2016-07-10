@@ -92,7 +92,9 @@ useDynLib(spatstat,
 "Fcrosspairs",
 "Gdenspt",
 "graphVees",
+"Gsmoopt",
 "Gwtdenspt",
+"Gwtsmoopt",
 "Idist2dpath",
 "idwloo",
 "inxyp",
@@ -512,9 +514,16 @@ export("chop.tess")
 export("choptext")
 export("circdensity")
 export("circticks")
+export("circumcentre")
+export("circumcentre.owin")
+export("circumcentre.ppp")
+export("circumcircle")
+export("circumcircle.owin")
+export("circumcircle.ppp")
 export("circumradius")
 export("circumradius.linnet")
 export("circumradius.owin")
+export("circumradius.ppp")
 export("clarkevans")
 export("clarkevansCalc")
 export("clarkevans.test")
@@ -2835,8 +2844,13 @@ S3method("cdf.test", "mppm")
 S3method("cdf.test", "ppm")
 S3method("cdf.test", "ppp")
 S3method("cdf.test", "slrm")
+S3method("circumcentre", "owin")
+S3method("circumcentre", "ppp")
+S3method("circumcircle", "owin")
+S3method("circumcircle", "ppp")
 S3method("circumradius", "linnet")
 S3method("circumradius", "owin")
+S3method("circumradius", "ppp")
 S3method("closepairs", "pp3")
 S3method("closepairs", "ppp")
  S3method("closing", "owin")

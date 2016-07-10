@@ -1615,7 +1615,7 @@ slrAssemblePixelData(Y, Yname, W, covimages, dataAtPoints, pixelarea)
 smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,
-                    weights, varcov, leaveoneout, sorted)
+                    weights, varcov, leaveoneout, sorted, cutoff)
 \method{sort}{im}(x, \dots)
 sortalongsegment(df)
 spatstat.rawdata.location(\dots)
