@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.52 $    $Date: 2015/12/04 00:29:38 $
+#           $Revision: 1.54 $    $Date: 2016/07/10 08:06:15 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -148,6 +148,9 @@ second.moment.engine <-
            npts=NULL, debug=FALSE)
 {
   what <- match.arg(what)
+
+  validate2Dkernel(kernel)
+  
   if(is.ppp(x)) {
     # convert list of points to mass distribution
     X <- pixellate(x, ..., padzero=TRUE)
@@ -212,23 +215,12 @@ second.moment.engine <-
     } else 
       stop("Must specify either sigma or varcov")
   } else {
+    ## non-Gaussian kernel
     ## evaluate kernel at array of points
     xker <- as.vector(xcol.ker[col(Ypad)])
     yker <- as.vector(yrow.ker[row(Ypad)])
-    if(is.function(kernel)) {
-      argh <- list(...)
-      if(length(argh) > 0)
-        argh <- argh[names(argh) %in% names(formals(kernel))]
-      Kern <- do.call(kernel, append(list(xker, yker), argh))
-      if(anyNA(Kern))
-        stop("NA values returned from kernel function")
-      if(length(Kern) != length(xker))
-        stop("Kernel function returned the wrong number of values")
-    } else if(is.im(kernel)) {
-      Kern <- kernel[list(x=xker, y=yker)]
-      if(anyNA(Kern))
-        stop("Domain of kernel image is not large enough")
-    } else stop("kernel must be a function(x,y) or a pixel image")
+    Kern <- evaluate2Dkernel(kernel, xker, yker,
+                             sigma=sigma, varcov=varcov, ...) * kerpixarea
     Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
   }
   # these options call for several image outputs

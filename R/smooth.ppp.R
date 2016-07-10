@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.31 $  $Date: 2016/07/10 04:14:40 $
+#  $Revision: 1.32 $  $Date: 2016/07/10 11:00:49 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -320,6 +320,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       xx <- xx[oo]
       yy <- yy[oo]
       vv <- values[oo]
+    } else {
+      vv <- values
     }
     if(is.null(weights)) {
       zz <- .C("Gsmoopt",

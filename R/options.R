@@ -124,7 +124,7 @@ warn.once <- function(key, ...) {
        ),
        densityTransform=list(
          ## use experimental new C routines for 'density.ppp'
-         default=FALSE,
+         default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),

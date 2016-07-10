@@ -5,10 +5,12 @@
   Compute a kernel smoothed intensity function from a point pattern.
 }
 \usage{
-  \method{density}{ppp}(x, sigma, \dots,
+  \method{density}{ppp}(x, sigma=NULL, \dots,
         weights=NULL, edge=TRUE, varcov=NULL,
         at="pixels", leaveoneout=TRUE,
         adjust=1, diggle=FALSE, se=FALSE,
+        kernel="gaussian",
+        scalekernel=is.character(kernel), 
         positive=FALSE) 
 }
 \arguments{
@@ -16,7 +18,7 @@
     Point pattern (object of class \code{"ppp"}).
   }
   \item{sigma}{
-    Standard deviation of isotropic Gaussian smoothing kernel.
+    Standard deviation of isotropic smoothing kernel.
     Either a numerical value, or a function that computes an
     appropriate value of \code{sigma}.
   }
@@ -33,7 +35,7 @@
     Logical value indicating whether to apply edge correction.
   }
   \item{varcov}{
-    Variance-covariance matrix of anisotropic Gaussian kernel.
+    Variance-covariance matrix of anisotropic smoothing kernel.
     Incompatible with \code{sigma}.
   }
   \item{at}{
@@ -52,6 +54,23 @@
     Logical. If \code{TRUE}, use Diggle's edge correction,
     which is more accurate but slower to compute than the
     correction described under Details.
+  }
+  \item{kernel}{
+    The smoothing kernel.
+    A character string specifying the smoothing kernel
+    (current options are \code{"gaussian"}, \code{"epanechnikov"}
+    or \code{"disc"}), or a pixel image (object of class \code{"im"})
+    containing values of the kernel, or a \code{function(x,y)} which
+    yields values of the kernel.
+  }
+  \item{scalekernel}{
+    Logical value.
+    If \code{scalekernel=TRUE}, then the kernel will be rescaled
+    to the bandwidth determined by \code{sigma} and \code{varcov}:
+    this is the default behaviour when \code{kernel} is a character string.
+    If \code{scalekernel=FALSE}, then \code{sigma} and \code{varcov}
+    will be ignored: this is the default behaviour when \code{kernel} is a
+    function or a pixel image.
   }
   \item{se}{
     Logical value indicating whether to compute standard errors as well.
@@ -300,6 +319,8 @@
   plot(density(cells, bw.diggle))
   # evaluate intensity at points
   density(cells, 0.05, at="points")
+
+  plot(density(cells, sigma=0.4, kernel="epanechnikov"))
 }
 \references{
   Baddeley, A., Rubak, E. and Turner, R. (2015)
@@ -317,9 +338,7 @@
 }
 
 \author{
-  \adrian
-  and
-  \rolf
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{methods}

@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.001
+        CHANGES IN spatstat VERSION 1.46-1.002
 
 OVERVIEW
 
     o Circumcentre and circumcircle.
+
+    o Non-Gaussian smoothing kernels.
 
     o Version nickname: 'Ultracrepidarian'
 
@@ -11,6 +13,15 @@ NEW FUNCTIONS
 
     o circumcircle, circumcentre
     Find the smallest circle enclosing a window or point pattern.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o density.ppp, Smooth.ppp
+    New argument 'kernel' allows the user to specify the smoothing kernel.
+
+    o density.ppp, Smooth.ppp
+    Computation accelerated by about 15% 
+    in the case where at='points' and kernel='gaussian'.
 
         CHANGES IN spatstat VERSION 1.46-1
 

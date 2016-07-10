@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.80 $    $Date: 2016/07/08 08:16:20 $
+#  $Revision: 1.83 $    $Date: 2016/07/10 09:51:02 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -16,21 +16,22 @@ density.ppp <- local({
 density.ppp <- function(x, sigma=NULL, ...,
                         weights=NULL, edge=TRUE, varcov=NULL,
                         at="pixels", leaveoneout=TRUE,
-                        adjust=1, diggle=FALSE,
-                        se=FALSE, positive=FALSE) {
+                        adjust=1, diggle=FALSE, se=FALSE, 
+                        kernel="gaussian",
+                        scalekernel=is.character(kernel),
+                        positive=FALSE) {
   verifyclass(x, "ppp")
 
   output <- pickoption("output location type", at,
                        c(pixels="pixels",
                          points="points"))
 
-  if("kernel" %in% names(list(...))) {
+  if(!identical(kernel, "gaussian")) {
+    validate2Dkernel(kernel)
     ## kernel is only partly implemented!
-    if(output == "points")
-      stop("Non-Gaussian kernel is not implemented for at='points'")
     if(se)
       stop("Standard errors are not implemented for non-Gaussian kernel")
-    if(is.function(sigma))
+    if(is.function(sigma) || (is.null(sigma) && is.null(varcov)))
       warning("Bandwidth selection will be based on Gaussian kernel")
   }
   
@@ -55,7 +56,10 @@ density.ppp <- function(x, sigma=NULL, ...,
                          
   if(output == "points") {
     # VALUES AT DATA POINTS ONLY
-    result <- densitypointsEngine(x, sigma, varcov=varcov,
+    result <- densitypointsEngine(x, sigma,
+                                  varcov=varcov,
+                                  kernel=kernel,
+                                  scalekernel=scalekernel,
                                   weights=weights, edge=edge,
                                   leaveoneout=leaveoneout,
                                   diggle=diggle, ...)
@@ -77,20 +81,26 @@ density.ppp <- function(x, sigma=NULL, ...,
     # no edge correction
     edg <- NULL
     raw <- second.moment.calc(x, sigma, what="smooth", ...,
+                              kernel=kernel,
+                              scalekernel=scalekernel,
                               weights=weights, varcov=varcov)
     raw <- divide.by.pixelarea(raw) 
     smo <- raw
   } else if(!diggle) {
     # edge correction e(u)
     both <- second.moment.calc(x, sigma, what="smoothedge", ...,
-                              weights=weights, varcov=varcov)
+                               kernel=kernel,
+                               scalekernel=scalekernel,
+                               weights=weights, varcov=varcov)
     raw <- divide.by.pixelarea(both$smooth)
     edg <- both$edge
     smo <- if(is.im(raw)) eval.im(raw/edg) else
            lapply(raw, divideimage, denom=edg)
   } else {
     # edge correction e(x_i)
-    edg <- second.moment.calc(x, sigma, what="edge", ..., varcov=varcov)
+    edg <- second.moment.calc(x, sigma, what="edge", ...,
+                              scalekernel=scalekernel,
+                              kernel=kernel, varcov=varcov)
     wi <- 1/safelookup(edg, x, warn=FALSE)
     wi[!is.finite(wi)] <- 0
     # edge correction becomes weight attached to points
@@ -104,6 +114,8 @@ density.ppp <- function(x, sigma=NULL, ...,
       newweights <- weights * wi
     }
     raw <- second.moment.calc(x, sigma, what="smooth", ...,
+                              kernel=kernel,
+                              scalekernel=scalekernel,
                               weights=newweights, varcov=varcov)
     raw <- divide.by.pixelarea(raw)
     smo <- raw
@@ -124,6 +136,7 @@ density.ppp <- function(x, sigma=NULL, ...,
   # normal return
   attr(result, "sigma") <- sigma
   attr(result, "varcov") <- varcov
+  attr(result, "kernel") <- kernel
   if(se)
     result <- list(estimate=result, SE=SE)
   return(result)
@@ -201,17 +214,38 @@ density.ppp
 })
 
 densitypointsEngine <- function(x, sigma, ...,
+                                kernel="gaussian", 
+                                scalekernel=is.character(kernel),
                                 weights=NULL, edge=TRUE, varcov=NULL,
                                 leaveoneout=TRUE, diggle=FALSE,
                                 sorted=FALSE, spill=FALSE, cutoff=NULL) {
   debugging <- spatstat.options("developer")
+  stopifnot(is.logical(leaveoneout))
+
+  available.kernels <- c("gaussian", "epanechnikov")
+  if(is.character(kernel)) {
+    kernel <- match.arg(kernel, available.kernels)
+  } else if(!is.function(kernel) && !is.im(kernel)) {
+    stop(paste("kernel must be a function(x,y) or a pixel image",
+               "or one of the strings",
+               commasep(available.kernels, " or ")),
+         call.=FALSE)
+  }
+  isgauss <- identical(kernel, "gaussian")
+
+  # constant factor in density computations
   if(is.null(varcov)) {
-    const <- 1/(2 * pi * sigma^2)
+    const <- 1/sigma^2 
   } else {
     detSigma <- det(varcov)
     Sinv <- solve(varcov)
-    const <- 1/(2 * pi * sqrt(detSigma))
+    const <- 1/sqrt(detSigma)
   }
+  if(isgauss) {
+    # absorb leading constant in Gaussian density
+    const <- const/(2 * pi)
+  }
+  
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
     weights <- NULL
   # Leave-one-out computation
@@ -222,16 +256,7 @@ densitypointsEngine <- function(x, sigma, ...,
     cutoff <- 8 * sd
   if(debugging)
     cat(paste("cutoff=", cutoff, "\n"))
-#  nnd <- nndist(x)
-#  nnrange <- range(nnd)
-#  if(nnrange[1] > cutoff) {
-#    npts <- npoints(x)
-#    result <- if(leaveoneout) numeric(npts) else rep.int(const, npts)
-#    attr(result, "sigma") <- sigma
-#    attr(result, "varcov") <- varcov
-#    attr(result, "warnings") <- "underflow"
-#    return(result)
-#  }
+
   if(leaveoneout && npoints(x) > 1) {
     # ensure each point has its closest neighbours within the cutoff
     nndmax <- maxnndist(x)
@@ -254,7 +279,7 @@ densitypointsEngine <- function(x, sigma, ...,
   # evaluate edge correction weights at points 
   if(edge) {
     win <- x$window
-    if(is.null(varcov) && win$type == "rectangle") {
+    if(isgauss && is.null(varcov) && win$type == "rectangle") {
       # evaluate Gaussian probabilities directly
       xr <- win$xrange
       yr <- win$yrange
@@ -266,7 +291,10 @@ densitypointsEngine <- function(x, sigma, ...,
         pnorm(yr[2], mean=yy, sd=sigma) - pnorm(yr[1], mean=yy, sd=sigma)
       edgeweight <- xprob * yprob
     } else {
-      edg <- second.moment.calc(x, sigma=sigma, what="edge", varcov=varcov)
+      edg <- second.moment.calc(x, sigma=sigma,
+                                kernel=kernel,
+                                scalekernel=scalekernel,
+                                what="edge", varcov=varcov)
       edgeweight <- safelookup(edg, x, warn=FALSE)
     }
     if(diggle) {
@@ -281,7 +309,8 @@ densitypointsEngine <- function(x, sigma, ...,
     }
   }
 
-  if(spatstat.options("densityTransform") && spatstat.options("densityC")) {
+  if(isgauss &&
+     spatstat.options("densityTransform") && spatstat.options("densityC")) {
     ## .................. experimental C code .....................
     if(debugging)
       cat('Using experimental code!\n')
@@ -342,7 +371,7 @@ densitypointsEngine <- function(x, sigma, ...,
       }
       result <- result * const
     }
-  } else if(spatstat.options("densityC") || k > 1) {
+  } else if(isgauss && spatstat.options("densityC")) {
     # .................. C code ...........................
     if(debugging)
       cat('Using standard code.\n')
@@ -438,26 +467,41 @@ densitypointsEngine <- function(x, sigma, ...,
       }
     }
   } else {
-      # ..... interpreted code .........................................
+    # ..... interpreted code .........................................
     close <- closepairs(x, cutoff)
     i <- close$i
     j <- close$j
     d <- close$d
+    npts <- npoints(x)
+    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
     # evaluate contribution from each close pair (i,j)
-    if(is.null(varcov)) {
-      contrib <- const * exp(-d^2/(2 * sigma^2))
+    if(isgauss) { 
+      if(is.null(varcov)) {
+        contrib <- const * exp(-d^2/(2 * sigma^2))
+      } else {
+        ## anisotropic kernel
+        dx <- close$dx
+        dy <- close$dy
+        contrib <- const * exp(-(dx * (dx * Sinv[1,1] + dy * Sinv[1,2])
+                                 + dy * (dx * Sinv[2,1] + dy * Sinv[2,2]))/2)
+      }
     } else {
-      # anisotropic kernel
-      dx <- close$dx
-      dy <- close$dy
-      contrib <- const * exp(-(dx * (dx * Sinv[1,1] + dy * Sinv[1,2])
-                               + dy * (dx * Sinv[2,1] + dy * Sinv[2,2]))/2)
+      contrib <- evaluate2Dkernel(kernel, close$dx, close$dy,
+                                  sigma=sigma, varcov=varcov, ...)
     }
-    # multiply by weights
-    if(!is.null(weights))
-      contrib <- contrib * weights[j]
-    # sum
-    result <- tapply(contrib, factor(i, levels=1:(x$n)), sum)
+    ## sum (weighted) contributions
+    ifac <- factor(i, levels=1:npts)
+    if(is.null(weights)) {
+      result <- tapply(contrib, ifac, sum)
+    } else if(k == 1) {
+      wcontrib <- contrib * weights[j]
+      result <- tapply(wcontrib, ifac, sum)
+    } else {
+      for(kk in 1:k) {
+        wcontribkk <- contrib * weights[j, kk]
+        result[,kk] <- tapply(wcontribkk, ifac, sum)
+      }
+    }
     result[is.na(result)] <- 0
     #
   }

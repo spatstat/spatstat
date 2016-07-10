@@ -172,6 +172,7 @@
 \alias{evalInteraction}
 \alias{evalInterEngine}
 \alias{evalPairPotential}
+\alias{evaluate2Dkernel}
 \alias{even.breaks.owin}
 \alias{evenly.spaced}
 \alias{exactdt}              
@@ -363,6 +364,7 @@
 \alias{prettydiscrete}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
+\alias{lookup2Dkernel}
 \alias{majorminorversion}
 \alias{make.even.breaks}
 \alias{makefvlabel}
@@ -749,7 +751,8 @@
 \alias{update.ippm}
 \alias{update.rmhstart}
 \alias{uptrimat}
-\alias{validradius}        
+\alias{validradius}
+\alias{validate2Dkernel}
 \alias{validate.angles}        
 \alias{validate.lpp.coords}
 \alias{validate.mask}        
@@ -942,6 +945,7 @@ densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     weights, edge, varcov,
                     diggle, sorted)
 densitypointsEngine(x, sigma, \dots,
+                    kernel, scalekernel,
                     weights, edge, varcov,
                     leaveoneout, diggle, sorted, spill, cutoff)
 diagnose.ppm.engine(object, \dots, type, typename, opt,
@@ -1024,6 +1028,7 @@ evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R)
+evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
 even.breaks.owin(w)
 evenly.spaced(x, tol)
 exactdt(X, \dots)              
@@ -1231,6 +1236,7 @@ putSpatstatVariable(name, value)
 \method{[}{localpcfmatrix}(x, i, \dots)
 \method{[}{pp3}(x, i, drop, \dots)
 lookup.im(Z, x, y, naok, strict)
+lookup2Dkernel(kernel)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
 makefvlabel(op, accent, fname, sub, argname)
@@ -1684,6 +1690,7 @@ unstackFilter(x)
 \method{update}{rmhstart}(object, \dots)
 uptrimat(x)
 validradius(r, caller)
+validate2Dkernel(kernel)
 validate.angles(angles, unit, guess)
 validate.lpp.coords(X, fatal, context)
 validate.mask(w, fatal=TRUE)        
