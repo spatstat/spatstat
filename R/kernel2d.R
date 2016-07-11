@@ -3,75 +3,87 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.4 $ $Date: 2016/07/10 08:41:07 $
+#'  $Revision: 1.6 $ $Date: 2016/07/11 02:49:37 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
+  #' table entries:
+  #'   d = density of standardised kernel
+  #'   sd = standard deviation of x coordinate, for standardised kernel
+  #'   hw = halfwidth of support of standardised kernel (hw=1 for Gaussian)
   gaussian=list(
-    d = function(x,y, ...) { dnorm(x) * dnorm(y) },
-    a = 1),
+    d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
+    sd  = 1,
+    hw = 8),
   Gaussian=list(
-    d = function(x,y, ...) { dnorm(x) * dnorm(y) },
-    a = 1),
+    d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
+    sd = 1,
+    hw = 8),
   epanechnikov=list(
-    d = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
-    a = sqrt(6)),
+    d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
+    sd = 1/sqrt(6),
+    hw = 1),
   Epanechnikov=list(
-    d = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
-    a = sqrt(6)),
+    d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
+    sd = 1/sqrt(6),
+    hw = 1),
   disc=list(
-    d = function(x,y,...) { (1/pi) * as.numeric(x^2 + y^2 <= 1) },
-    a = 2)
+    d  = function(x,y,...) { (1/pi) * as.numeric(x^2 + y^2 <= 1) },
+    sd = 1/2,
+    hw = 1)
 )
 
-lookup2Dkernel <- function(kernel) {
+validate2Dkernel <- function(kernel, fatal=TRUE) {
+  if(is.im(kernel) || is.function(kernel)) return(TRUE)
   nama <- names(.Spatstat.2D.KernelTable)
-  if(!is.character(kernel) || is.na(m <- pmatch(kernel, nama))) 
+  if(!is.character(kernel) || is.na(m <- pmatch(kernel, nama))) {
+    if(!fatal) return(FALSE)
     stop(paste("kernel must be one of the strings",
                commasep(nama, " or "),
                "or a function(x,y) or a pixel image"),
          call.=FALSE)
-  return(.Spatstat.2D.KernelTable[[m]])
+  }
+  return(TRUE)
 }
 
-validate2Dkernel <- function(kernel) {
-  if(is.im(kernel) || is.function(kernel)) return(TRUE)
-  lookup2Dkernel(kernel)
-  return(TRUE)
+lookup2Dkernel <- function(kernel) {
+  validate2Dkernel(kernel)
+  if(!is.character(kernel)) return(NULL)
+  return(.Spatstat.2D.KernelTable[[kernel]])
 }
 
 evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
                              scalekernel=is.character(kernel)) {
 
+  info <- lookup2Dkernel(kernel)
+
   if(scalekernel) {
-    ## kernel adjustment factor 'a'
-    a <- 1
-    if(is.character(kernel)) {
-      info <- lookup2Dkernel(kernel)
-      kerfun <- info$d
-      a <- info$a  ## kerfun(a * x, a * y) has bandwidth 1
-                   ## kerfun() has bandwidth 1/a
-    }
+    ## kernel adjustment factor 
+    sdK <- if(is.character(kernel)) info$sd else 1
     ## transform coordinates to x',y' such that kerfun(x', y')
     ## yields density k(x,y) at desired bandwidth
     if(is.null(varcov)) {
-      aos <- a/sigma
-      x <- x * aos
-      y <- y * aos
-      const <- aos^2
+      rr <- sdK/sigma
+      x <- x * rr
+      y <- y * rr
+      const <- rr^2
     } else {
       SinvH <- matsqrt(solve(varcov))
-      XY <- cbind(x, y) %*% (a * SinvH)
+      rSinvH <- sdK * SinvH
+      XY <- cbind(x, y) %*% rSinvH
       x <- XY[,1]
       y <- XY[,2]
-      const <- det(a * SinvH)
+      const <- det(rSinvH)
     }
-  }
+  } 
 
   ## now evaluate kernel
   
   if(is.character(kernel)) {
-    result <- const * kerfun(x, y)
+    kerfun <- info$d
+    result <- kerfun(x, y)
+    if(scalekernel)
+      result <- const * result
     return(result)
   }
 
