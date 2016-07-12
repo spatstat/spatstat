@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.87 $   $Date: 2016/02/16 01:39:12 $
+##    $Revision: 4.88 $   $Date: 2016/07/12 10:41:45 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -836,18 +836,43 @@ rsyst <- function(win=square(1), nx=NULL, ny=nx, ..., dx=NULL, dy=dx,
   return(as.solist(result))
 }
 
-rcellnumber <- function(n, N=10) {
-  if(!missing(N)) {
-    if(round(N) != N) stop("N must be an integer")
-    stopifnot(is.finite(N))
-    stopifnot(N > 1)
+rcellnumber <- local({
+
+  rcellnumber <- function(n, N=10, mu=1) {
+    if(missing(mu) || mu == 1) {
+      z <- rCellUnit(n=n, N=N)
+    } else {
+      z <- replicate(n, rCellCumul(x=mu, N=N))
+    }
+    return(z)
   }
-  u <- runif(n, min=0, max=1)
-  p0 <- 1/N
-  pN <- 1/(N * (N-1))
-  k <- ifelse(u < p0, 0, ifelse(u < (1 - pN), 1, N))
-  return(k)
-}
+  
+  rCellUnit <- function(n, N=10) {
+    if(!missing(N)) {
+      if(round(N) != N) stop("N must be an integer")
+      stopifnot(is.finite(N))
+      stopifnot(N > 1)
+    }
+    u <- runif(n, min=0, max=1)
+    p0 <- 1/N
+    pN <- 1/(N * (N-1))
+    k <- ifelse(u < p0, 0, ifelse(u < (1 - pN), 1, N))
+    return(k)
+  }
+  
+  rCellCumul <- function(x, N=10) {
+    check.1.real(x)
+    n <- ceiling(x)
+    if(n <= 0) return(0)
+    y <- rCellUnit(n=n, N=N)
+    if(n == x) return(sum(y))
+    p <- x - (n-1)
+    z <- sum(y[-1]) + rbinom(1, size=y[1], prob=p)
+    return(z)
+  }
+
+  rcellnumber
+})
 
 rcell <- function(win=square(1), nx=NULL, ny=nx, ...,
                   dx=NULL, dy=dx, N=10, nsim=1, drop=TRUE) {
