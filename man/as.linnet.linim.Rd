@@ -2,6 +2,7 @@
 \alias{as.linnet.lpp}
 \alias{as.linnet.linim}
 \alias{as.linnet.linfun}
+\alias{as.linnet.lintess}
 \title{
   Extract Linear Network from Data on a Linear Network
 }
@@ -14,13 +15,17 @@
 
  \method{as.linnet}{linfun}(X, \dots)
 
+ \method{as.linnet}{lintess}(X, \dots)
+
  \method{as.linnet}{lpp}(X, \dots, fatal=TRUE, sparse)
 }
 \arguments{
   \item{X}{
     Data on a linear network.
     A point pattern (class \code{"lpp"}),
-    pixel image (class \code{"linim"}) or function (class \code{"linfun"}).
+    pixel image (class \code{"linim"}), function (class
+    \code{"linfun"}) or tessellation (class \code{"lintess"})
+    on a linear network.
   }
   \item{\dots}{
     Ignored.
@@ -46,13 +51,7 @@
   A linear network (object of class \code{"linnet"}).
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{linnet}}, 

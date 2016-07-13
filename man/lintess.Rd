@@ -53,7 +53,7 @@ lintess(L, df)
 \seealso{
   \code{\link{linnet}} for linear networks.
   
-  \code{\link{as.linfun.lintess}} and
+  \code{\link{as.linfun.lintess}}, \code{\link{as.linnet.lintess}} and
   \code{\link{as.linim}} to convert to other classes.
 }
 \examples{

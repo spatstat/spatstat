@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.5 $   $Date: 2016/03/03 05:59:56 $
+#'   $Revision: 1.7 $   $Date: 2016/07/13 08:13:24 $
 #'
 
 lintess <- function(L, df) {
@@ -66,6 +66,8 @@ plot.lintess <- function(x, ..., main) {
   plot(as.linfun(x), main=main, ...)
 }
 
+as.linnet.lintess <- function(X, ...) { X$L }
+
 as.linfun.lintess <- function(X, ...) {
   L <- X$L
   df <- X$df
@@ -106,8 +108,9 @@ divide.linnet <- local({
     #' find all undivided segments
     other <- setdiff(seq_len(nsegments(L)), unique(coo$seg))
     #' add a single line for each undivided segment
-    df <- rbind(df, data.frame(seg=other, t0=0, t1=1,
-                               from=L$from[other], to=L$to[other]))
+    if(length(other) > 0)
+      df <- rbind(df, data.frame(seg=other, t0=0, t1=1,
+                                 from=L$from[other], to=L$to[other]))
     #' We now have a tessellation 
     #' Sort again
     df <- df[with(df, order(seg, t0)), , drop=FALSE]
@@ -155,5 +158,4 @@ divide.linnet <- local({
 
   divide.linnet
 })
-
 
