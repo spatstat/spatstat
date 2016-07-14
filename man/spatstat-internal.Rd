@@ -75,6 +75,7 @@
 \alias{check.nmatrix}
 \alias{check.1.integer}
 \alias{check.1.real}
+\alias{check.1.string}
 \alias{check.range}
 \alias{check.testfun}
 \alias{choptext}
@@ -351,6 +352,7 @@
 \alias{maskLaslett}
 \alias{matsqrt}
 \alias{matchNameOrPosition}
+\alias{match2DkernelName}
 \alias{padtowidth}
 \alias{parbreak}
 \alias{passthrough}
@@ -364,7 +366,7 @@
 \alias{prettydiscrete}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
-\alias{lookup2Dkernel}
+\alias{lookup2DkernelInfo}
 \alias{majorminorversion}
 \alias{make.even.breaks}
 \alias{makefvlabel}
@@ -900,6 +902,7 @@ check.nvector(v, npoints, fatal, things, naok, warn, vname, oneok)
 check.nmatrix(m, npoints, fatal, things, naok, squarematrix, matchto, warn)
 check.1.integer(x, context, fatal)
 check.1.real(x, context, fatal)
+check.1.string(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
 choptext(\dots, prefix)
@@ -1218,6 +1221,7 @@ lty2char(i)
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 matsqrt(x)
 matchNameOrPosition(expected, avail)
+match2DkernelName(kernel)
 padtowidth(a, b, justify)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
@@ -1236,7 +1240,7 @@ putSpatstatVariable(name, value)
 \method{[}{localpcfmatrix}(x, i, \dots)
 \method{[}{pp3}(x, i, drop, \dots)
 lookup.im(Z, x, y, naok, strict)
-lookup2Dkernel(kernel)
+lookup2DkernelInfo(kernel)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
 makefvlabel(op, accent, fname, sub, argname)

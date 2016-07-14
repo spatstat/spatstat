@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.6 $ $Date: 2016/07/11 02:49:37 $
+#'  $Revision: 1.7 $ $Date: 2016/07/14 10:34:36 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -15,15 +15,7 @@
     d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
     sd  = 1,
     hw = 8),
-  Gaussian=list(
-    d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
-    sd = 1,
-    hw = 8),
   epanechnikov=list(
-    d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
-    sd = 1/sqrt(6),
-    hw = 1),
-  Epanechnikov=list(
     d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
     sd = 1/sqrt(6),
     hw = 1),
@@ -34,28 +26,38 @@
 )
 
 validate2Dkernel <- function(kernel, fatal=TRUE) {
+  if(is.character(match2DkernelName(kernel))) return(TRUE)
   if(is.im(kernel) || is.function(kernel)) return(TRUE)
-  nama <- names(.Spatstat.2D.KernelTable)
-  if(!is.character(kernel) || is.na(m <- pmatch(kernel, nama))) {
-    if(!fatal) return(FALSE)
-    stop(paste("kernel must be one of the strings",
-               commasep(nama, " or "),
-               "or a function(x,y) or a pixel image"),
+  if(!fatal) return(FALSE)
+  if(is.character(kernel))
+    stop(paste("Unrecognised choice of kernel", sQuote(kernel),
+               paren(paste("options are",
+                           commasep(sQuote(names(.Spatstat.2D.KernelTable)))))),
          call.=FALSE)
-  }
-  return(TRUE)
+  stop(paste("kernel should be a character string,",
+             "a pixel image, or a function (x,y)"),
+       call.=FALSE)
 }
 
-lookup2Dkernel <- function(kernel) {
+match2DkernelName <- function(kernel) {
+  if(!is.character(kernel) || length(kernel) != 1) return(NULL)
+  nama <- names(.Spatstat.2D.KernelTable)
+  m <- pmatch(kernel, nama)
+  if(is.na(m)) return(NULL)
+  return(nama[m])
+}
+
+lookup2DkernelInfo <- function(kernel) {
   validate2Dkernel(kernel)
-  if(!is.character(kernel)) return(NULL)
+  kernel <- match2DkernelName(kernel)
+  if(is.null(kernel)) return(NULL)
   return(.Spatstat.2D.KernelTable[[kernel]])
 }
 
 evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
                              scalekernel=is.character(kernel)) {
 
-  info <- lookup2Dkernel(kernel)
+  info <- lookup2DkernelInfo(kernel)
 
   if(scalekernel) {
     ## kernel adjustment factor 

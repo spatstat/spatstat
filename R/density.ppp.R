@@ -222,15 +222,8 @@ densitypointsEngine <- function(x, sigma, ...,
   debugging <- spatstat.options("developer")
   stopifnot(is.logical(leaveoneout))
 
-  available.kernels <- c("gaussian", "epanechnikov")
-  if(is.character(kernel)) {
-    kernel <- match.arg(kernel, available.kernels)
-  } else if(!is.function(kernel) && !is.im(kernel)) {
-    stop(paste("kernel must be a function(x,y) or a pixel image",
-               "or one of the strings",
-               commasep(available.kernels, " or ")),
-         call.=FALSE)
-  }
+  validate2Dkernel(kernel)
+  if(is.character(kernel)) kernel <- match2DkernelName(kernel)
   isgauss <- identical(kernel, "gaussian")
 
   # constant factor in density computations

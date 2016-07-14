@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.209 $    $Date: 2016/06/30 01:37:39 $
+#    $Revision: 1.210 $    $Date: 2016/07/14 08:50:37 $
 #
 #
 matrowsum <- function(x) {
@@ -972,6 +972,16 @@ check.1.integer <- function(x, context="", fatal=TRUE) {
   xname <- deparse(substitute(x))
   if(!is.numeric(x) || length(x) != 1 || !is.finite(x) || x %% 1 != 0) {
     whinge <-  paste(sQuote(xname), "should be a single finite integer")
+    if(nzchar(context)) whinge <- paste(context, whinge)
+    return(complaining(whinge, fatal=fatal, value=FALSE))
+  }
+  return(TRUE)
+}
+
+check.1.string <- function(x, context="", fatal=TRUE) {
+  xname <- deparse(substitute(x))
+  if(!is.character(x) || length(x) != 1) {
+    whinge <-  paste(sQuote(xname), "should be a single character string")
     if(nzchar(context)) whinge <- paste(context, whinge)
     return(complaining(whinge, fatal=fatal, value=FALSE))
   }
