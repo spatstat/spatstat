@@ -100,8 +100,9 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
   out$dpath <- dpath <- dist2dpath(d)
   if(warn && any(is.infinite(dpath)))
     warning("Network is not connected", call.=FALSE)
-  # pre-compute circumradius
+  # pre-compute circumradius and tolerance
   out$circumradius <- circumradius(out)
+  out$toler <- default.linnet.tolerance(out)
   return(out)  
 }
 

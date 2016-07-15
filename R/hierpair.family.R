@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.3 $	$Date: 2016/02/11 10:17:12 $
+#    $Revision: 1.5 $	$Date: 2016/07/15 10:22:18 $
 #
 #    The family of hierarchical pairwise interactions
 #

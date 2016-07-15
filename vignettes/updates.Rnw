@@ -84,6 +84,8 @@ the News and Release Notes for each update.
 \begin{itemize}
    \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
 
+   \item Non-Gaussian smoothing kernels.
+
    \item Improvements to inhomogeneous multitype $K$ and $L$ functions.
 
    \item Variance approximation for pair correlation function.
@@ -592,6 +594,7 @@ listed alphabetically.
  \item \texttt{default.rmhcontrol, default.rmhexpand}:
    New argument \texttt{w}.
 
+   
  \item \texttt{density.lpp}:
    \begin{itemize}
    \item 
@@ -605,6 +608,14 @@ listed alphabetically.
      New argument \texttt{weights}.
    \end{itemize}
    
+ \item \texttt{density.ppp}:
+   \begin{itemize}
+   \item A non-Gaussian kernel can now be specified
+   using the argument \texttt{kernel}.
+   \item Accelerated by about 15\%
+   \end{itemize}
+
+ 
  \item \texttt{dfbetas.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
@@ -899,7 +910,10 @@ listed alphabetically.
     
 %%R
    
-   \item \texttt{rgbim, hsvim}
+   \item \texttt{rcellnumber}:
+     New argument \texttt{mu}.
+
+   \item \texttt{rgbim, hsvim}:
    New argument \texttt{A} controls the alpha (transparency) channel.
 
    \item \texttt{rgb2hex, col2hex, paletteindex, is.colour, samecolour,}
@@ -962,6 +976,10 @@ listed alphabetically.
    New argument \texttt{w} controls the window of the simulated patterns.
    New argument \texttt{verbose}.
    
+ \item \texttt{Smooth.ppp}:
+   A non-Gaussian kernel can now be specified
+   using the argument \texttt{kernel}.
+ 
    \item \texttt{spatstat.options}
    New options \texttt{fastthin} and \texttt{fastpois} 
    enable fast simulation algorithms.
@@ -1174,7 +1192,14 @@ of potential impact.
      \bugger{1.17-0}{october 2009}{1.31-1}{march 2013}
    \end{itemize}
    
-\item \texttt{nncross}, \texttt{distfun}, \texttt{AreaInter}:
+ \item \texttt{linearK}, \texttt{linearpcf},
+   \texttt{linearKinhom}, \texttt{linearpcfinhom}
+   and multitype versions:
+    These functions were sometimes greatly underestimated
+    when the network had segments shorter than 10 coordinate units.
+   \bugger{1.44-0}{december 2015}{1.46-2}{july 2016}
+
+ \item \texttt{nncross}, \texttt{distfun}, \texttt{AreaInter}:
   Results of \texttt{nncross} were possibly incorrect 
   when \code{X} and \code{Y} did not have the same window. 
   This bug affected values of \texttt{distfun} and may also 

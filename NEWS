@@ -1,11 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.006
+        CHANGES IN spatstat VERSION 1.46-1.007
 
 OVERVIEW
+
+    o We thank Mehdi Moradi and Jorge Mateu for contributions.
 
     o Circumcentre and circumcircle.
 
     o Non-Gaussian smoothing kernels.
+
+    o Important bug fix in linearK, linearpcf
 
     o Version nickname: 'Ultracrepidarian'
 
@@ -26,6 +30,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Computation accelerated by about 15% 
     in the case where at='points' and kernel='gaussian'.
 
+    o linearK, linearpcf
+    Accelerated.
+
+BUG FIXES
+
+    o linearK, linearpcf, and relatives:
+    These functions were sometimes greatly underestimated
+    when the network had segments shorter than 10 coordinate units.
+    [Bug introduced in spatstat 1.44-0, december 2015.]
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.46-1
 
 OVERVIEW

@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.7 $ $Date: 2015/02/25 06:23:05 $
+# $Revision: 1.8 $ $Date: 2016/07/15 12:09:29 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -257,20 +257,22 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
      edgewt <- 1
   else {
      # inverse m weights (Ang's correction)
+     # determine tolerance
+     toler <- default.linnet.tolerance(L)
      # compute m[i,j]
      m <- matrix(1, nI, nJ)
      XPI <- XP[I]
      if(!has.clash) {
        for(k in seq_len(nJ)) {
          j <- whichJ[k]
-         m[,k] <- countends(L, XPI, DIJ[, k])
+         m[,k] <- countends(L, XPI, DIJ[, k], toler=toler)
        }
      } else {
        # don't count identical pairs
        for(k in seq_len(nJ)) {
          j <- whichJ[k]
          inotj <- (whichI != j)
-         m[inotj, k] <- countends(L, XPI[inotj], DIJ[inotj, k])
+         m[inotj, k] <- countends(L, XPI[inotj], DIJ[inotj, k], toler=toler)
        }
      }
      edgewt <- 1/m

@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.12 $ $Date: 2016/02/11 10:17:12 $
+##  $Revision: 1.14 $ $Date: 2016/07/15 10:21:56 $
 ##
 
 persp.im <- local({

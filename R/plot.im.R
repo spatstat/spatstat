@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.110 $   $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.112 $   $Date: 2016/07/15 10:21:40 $
 #
 #  Plotting code for pixel images
 #

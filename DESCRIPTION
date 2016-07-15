@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.006
+Version: 1.46-1.007
 Nickname: Ultracrepidarian
-Date: 2016-07-14
+Date: 2016-07-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -111,6 +111,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	R.K. Milne; 
         E. Miranda;
 	J. Moller; 
+	M. Moradi;
 	V. Morera Pujol; 
 	E. Mudrak;
         G.M. Nair;

@@ -1827,6 +1827,7 @@
   Robin Milne,
   Enrique Miranda,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
+  Mehdi Moradi,
   Virginia Morera Pujol,
   Erika Mudrak,
   Gopalan Nair,

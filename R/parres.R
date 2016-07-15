@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.6 $  $Date: 2016/06/19 03:32:35 $
+#   $Revision: 1.8 $  $Date: 2016/07/15 10:22:03 $
 #
 
 parres <- function(model, covariate, ...,
@@ -432,7 +432,7 @@ parres <- function(model, covariate, ...,
   ####################################################
   # Determine recommended plot range
 
-  xr <- range(x[Z], finite=TRUE)
+  xr <- range(as.vector(x[Z]), finite=TRUE)
   alim <- xr + 0.1 * diff(xr) * c(-1,1)
   alim <- intersect.ranges(alim, c(from, to))
   

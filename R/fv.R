@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.139 $   $Date: 2016/04/25 02:34:40 $
+##    $Revision: 1.141 $   $Date: 2016/07/15 13:25:54 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -67,7 +67,7 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
   if(missing(alim)) {
     ## Note: if alim is given as NULL, it is not changed.
     argue <- x[[argu]]
-    alim <- range(argue[is.finite(argue)], na.rm=TRUE)
+    alim <- range(argue[is.finite(argue)])
   } else if(!is.null(alim)) {
     if(!is.numeric(alim) || length(alim) != 2)
       stop(paste(sQuote("alim"), "should be a vector of length 2"))
@@ -1036,19 +1036,20 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
 
 range.fv <- local({
 
-  range1fv <- function(x, ..., na.rm=TRUE, finite=na.rm) {
+  getValues <- function(x) {
     xdat <- as.matrix(as.data.frame(x))
     yall <- fvnames(x, ".")
-    ydat <- xdat[, yall]
-    range(ydat, na.rm=na.rm, finite=finite)
+    vals <- xdat[, yall]
+    return(as.vector(vals))
   }
   
   range.fv <- function(..., na.rm=TRUE, finite=na.rm) {
     aarg <- list(...)
     isfun <- sapply(aarg, is.fv)
     if(any(isfun)) 
-      aarg[isfun] <- lapply(aarg[isfun], range1fv, na.rm=na.rm, finite=finite)
-    do.call(range, append(aarg, list(na.rm=na.rm, finite=finite)))
+      aarg[isfun] <- lapply(aarg[isfun], getValues)
+    z <- do.call(range, append(aarg, list(na.rm=na.rm, finite=finite)))
+    return(z)
   }
 
   range.fv

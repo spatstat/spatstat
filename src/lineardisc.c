@@ -7,7 +7,7 @@
 
    Disc of radius r in linear network
 
-   $Revision: 1.10 $  $Date: 2013/05/27 02:09:10 $
+   $Revision: 1.12 $  $Date: 2016/07/15 13:56:07 $
 
 */
 
@@ -163,6 +163,10 @@ Ccountends(np, f, seg, /* centres of discs (local coords) */
   Ns = *ns;
   tol = *toler;
 
+#ifdef DEBUG
+  Rprintf("\nTolerance = %lf\n", tol);
+#endif
+
   covered = (int *) R_alloc((size_t) Nv, sizeof(int));
   terminal = (int *) R_alloc((size_t) Nv, sizeof(int));
   resid = (double *) R_alloc((size_t) Nv, sizeof(double));
@@ -189,10 +193,17 @@ Ccountends(np, f, seg, /* centres of discs (local coords) */
       dxA = f0 * length0;
       dxB = (1-f0) * length0;
 
+#ifdef DEBUG
+      Rprintf("Distances to endpoints: dxA=%lf, dxB=%lf\n", dxA, dxB);
+#endif
+
       nends = 0;
 
       /* visit vertices */
       for(i = 0; i < Nv; i++) {
+#ifdef DEBUG
+	Rprintf("\nConsidering vertex %d\n", i);
+#endif
 	/* distance going through A */
 	dxAvi = dxA + DPATH(A,i);
 	/* distance going through B */
@@ -201,13 +212,23 @@ Ccountends(np, f, seg, /* centres of discs (local coords) */
 	dxvi = (dxAvi < dxBvi) ? dxAvi : dxBvi;
 	/* distance left to 'spend' from this vertex */
 	residue = rad - dxvi;
+#ifdef DEBUG
+	Rprintf("dxAvi = %lf; dxBvi = %lf; residue = %lf\n", 
+		dxAvi, dxBvi, residue);
+#endif
 	if(residue > tol) {
 	  resid[i] = residue;
 	  covered[i] = YES;
 	  terminal[i] = NO;
+#ifdef DEBUG
+	  Rprintf("Vertex is covered\n");
+#endif
 	} else if(residue < -tol) {
 	  resid[i] = 0;
 	  covered[i] = terminal[i] = NO;
+#ifdef DEBUG
+	  Rprintf("Vertex is not covered\n");
+#endif
 	} else {
 	  /* vertex is within 'tol' of an endpoint 
 	   - deem it to be one 
@@ -216,6 +237,9 @@ Ccountends(np, f, seg, /* centres of discs (local coords) */
 	  covered[i] = terminal[i] = YES;
 	  /* vertex is an endpoint of disc */
 	  ++nends;  
+#ifdef DEBUG
+	  Rprintf("Vertex is a terminal endpoint\n");
+#endif
 	}
       }
 

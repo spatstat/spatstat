@@ -112,6 +112,7 @@
 \alias{datagen.runifpoisppOnLines}
 \alias{datagen.rpoisppOnLines}
 \alias{default.clipwindow}
+\alias{default.linnet.tolerance}
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
@@ -939,6 +940,7 @@ datagen.runifpointOnLines(n, L)
 datagen.runifpoisppOnLines(lambda, L)
 datagen.rpoisppOnLines(lambda, L, lmax, \dots, check)
 default.clipwindow(object, epsilon)
+default.linnet.tolerance(L)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force, quadsub, sparseOK)

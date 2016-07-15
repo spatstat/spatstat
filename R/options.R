@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.71 $   $Date: 2016/07/06 07:15:05 $
+#    $Revision: 1.72 $   $Date: 2016/07/15 03:13:27 $
 #
 #
 
@@ -477,6 +477,12 @@ warn.once <- function(key, ...) {
        ),
        Clinequad = list(
          # use C code for 'linequad'
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       Ccountends = list(
+         # use C code for 'countends'
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"

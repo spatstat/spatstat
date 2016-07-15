@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.21 $ $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.24 $ $Date: 2016/07/15 12:05:06 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -165,6 +165,14 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   np <- npoints(x)
   if(length(r) != np)
     stop("Length of vector r does not match number of points in x")
+  #
+  if(!spatstat.options("Ccountends")) {
+    #' interpreted code
+    result <- integer(np)
+    for(i in seq_len(np)) 
+      result[i] <- npoints(lineardisc(L, x[i], r[i], plotit=FALSE)$endpoints)
+    return(result)
+  }
   # project x to nearest segment
   pro <- project2segment(x, lines)
   # which segment?
@@ -177,8 +185,7 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   from0 <- L$from - 1L
   to0   <- L$to - 1L
   if(is.null(toler)) {
-    toler <- 0.001 * min(lengths[lengths > 0])
-    toler <- max(.Machine$double.xmin, toler, finite=TRUE)
+    toler <- default.linnet.tolerance(L)
   } else {
     check.1.real(toler)
     stopifnot(toler > 0)
@@ -199,4 +206,13 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
            toler=as.double(toler),
            nendpoints = as.integer(integer(np)))
   zz$nendpoints
+}
+
+default.linnet.tolerance <- function(L) {
+  if(!is.null(toler <- L$toler)) return(toler)
+  lenfs <- lengths.psp(as.psp(L))
+  toler <- 0.001 * min(lenfs[lenfs > 0])
+  toler <- max(sqrt(.Machine$double.xmin),
+               toler[is.finite(toler)], na.rm=TRUE)
+  return(toler)
 }

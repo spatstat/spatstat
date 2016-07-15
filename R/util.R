@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.210 $    $Date: 2016/07/14 08:50:37 $
+#    $Revision: 1.213 $    $Date: 2016/07/15 10:22:54 $
 #
 #
 matrowsum <- function(x) {
@@ -1753,4 +1753,3 @@ indexCartesian <- function(nn) {
   as.matrix(do.call(expand.grid, lapply(nn, seq_len)))
 }
 
-  

@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.14 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.15 $ $Date: 2016/07/15 12:08:39 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -125,10 +125,12 @@ linearpcfengine <- function(X, ..., r=NULL,
      edgewt <- 1
   else {
      # inverse m weights (Wei's correction)
+     # determine tolerance
+     toler <- default.linnet.tolerance(L)
      # compute m[i,j]
      m <- matrix(1, np, np)
      for(j in 1:np) 
-       m[ -j, j] <- countends(L, Y[-j], D[-j,j])
+       m[ -j, j] <- countends(L, Y[-j], D[-j,j], toler=toler)
      edgewt <- 1/m
   }
   # compute pcf

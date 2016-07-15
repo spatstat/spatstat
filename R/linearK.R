@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.35 $ $Date: 2015/10/21 09:06:57 $
+# $Revision: 1.37 $ $Date: 2016/07/15 12:09:15 $
 #
 # K function for point pattern on linear network
 #
@@ -156,10 +156,12 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
      edgewt <- 1
   else {
      # inverse m weights (Wei's correction)
+     # determine tolerance
+     toler <- default.linnet.tolerance(L)
      # compute m[i,j]
      m <- matrix(1, np, np)
      for(j in 1:np) 
-       m[ -j, j] <- countends(L, Y[-j], D[-j,j])
+       m[ -j, j] <- countends(L, Y[-j], D[-j,j], toler=toler)
      if(any(uhoh <- (m == 0))) {
        warning("Internal error: disc boundary count equal to zero")
        m[uhoh] <- 1
