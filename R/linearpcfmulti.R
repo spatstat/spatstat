@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.7 $ $Date: 2016/07/15 12:08:51 $
+# $Revision: 1.8 $ $Date: 2016/07/16 03:08:23 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -198,7 +198,7 @@ linearPCFmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   XP <- as.ppp(X)
   W <- as.owin(XP)
   # determine r values
-  rmaxdefault <- 0.98 * circumradius(L)
+  rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max

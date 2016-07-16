@@ -1,17 +1,17 @@
 \name{diameter.linnet}
-\alias{circumradius.linnet}
+\alias{boundingradius.linnet}
 \alias{diameter.linnet}
 \title{
-  Circumradius and Diameter of a Linear Network
+  Diameter and Bounding Radius of a Linear Network
 }
 \description{
-  Compute the circumradius or diameter of a linear network
+  Compute the diameter or bounding radius of a linear network
   measured using the shortest path distance.
 }
 \usage{
-\method{circumradius}{linnet}(x, \dots)
-
 \method{diameter}{linnet}(x)
+
+\method{boundingradius}{linnet}(x, \dots)
 }
 \arguments{
   \item{x}{
@@ -24,30 +24,29 @@
   is the maximum value of the shortest-path distance between any
   two points \eqn{u} and \eqn{v} on the network.
 
-  The circumradius of a linear network (in the shortest path distance)
+  The bounding radius of a linear network (in the shortest path distance)
   is the minimum value, over all points \eqn{u} on the network,
   of the maximum shortest-path distance from \eqn{u} to another point
   \eqn{v} on the network.
   
-  The functions \code{\link{circumradius}} and
+  The functions \code{\link{boundingradius}} and
   \code{\link{diameter}} are generic;
-  the functions \code{circumradius.linnet} and \code{diameter.linnet}
+  the functions \code{boundingradius.linnet} and \code{diameter.linnet}
   are the methods for objects of class \code{linnet}.
 }
 \value{
   A single numeric value.
 }
 \author{
-  \adrian 
-  
+  \adrian
 }
 \seealso{
- \code{\link{circumradius}}, \code{\link{diameter}}, 
+ \code{\link{boundingradius}}, \code{\link{diameter}}, 
  \code{\link{linnet}}
 }
 \examples{
    diameter(simplenet)
-   circumradius(simplenet)
+   boundingradius(simplenet)
 }
 \keyword{spatial}
 \keyword{math}

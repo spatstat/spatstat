@@ -933,7 +933,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.6 $  $Date: 2016/02/01 09:44:54 $
+#  $Revision: 1.7 $  $Date: 2016/07/16 03:59:27 $
 
 
 require(spatstat)
@@ -1023,6 +1023,27 @@ local({
   B <- owin(c(0.1,0.7),c(0.19,0.6))
   XB <- X[B]
   validate.lpp.coords(XB, context="returned by [.lpp")
+
+  ## Tests related to linearK, etc
+  testcountends <- function(X, r=100, s=1) {
+    if(s != 1) {
+      X <- rescale(X, s)
+      r <- r/s
+    }
+    L <- as.linnet(X)
+    n1 <- countends(L, X[1], r)
+    n2 <- npoints(lineardisc(L, X[1], r, plotit=FALSE)$endpoints)
+    if(n1 != n2)
+      stop(paste("Incorrect result from countends:",
+                 n1, "!=", n2, 
+                 paren(paste("scale=", 1/s))),
+           call.=FALSE)
+  }
+  # original scale
+  X <- unmark(chicago)
+  testcountends(X)
+  # finer scale
+  testcountends(X, s=1000)
 })
 
 ##

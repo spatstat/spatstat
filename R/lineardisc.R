@@ -209,10 +209,21 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
 }
 
 default.linnet.tolerance <- function(L) {
+  # L could be a linnet or psp
   if(!is.null(toler <- L$toler)) return(toler)
-  lenfs <- lengths.psp(as.psp(L))
-  toler <- 0.001 * min(lenfs[lenfs > 0])
-  toler <- max(sqrt(.Machine$double.xmin),
-               toler[is.finite(toler)], na.rm=TRUE)
+  len2 <- lengths.psp(as.psp(L), squared=TRUE)
+  len2pos <- len2[len2 > 0]
+  toler <- if(length(len2pos) == 0) 0 else (0.001 * sqrt(min(len2pos)))
+  toler <- makeLinnetTolerance(toler)
   return(toler)
 }
+
+makeLinnetTolerance <- function(toler) {
+  max(sqrt(.Machine$double.xmin),
+      toler[is.finite(toler)], na.rm=TRUE)
+}
+
+
+
+
+  

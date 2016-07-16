@@ -350,6 +350,7 @@
 \alias{logi.engine}
 \alias{logLik.vblogit}
 \alias{lty2char}
+\alias{makeLinnetTolerance}
 \alias{maskLaslett}
 \alias{matsqrt}
 \alias{matchNameOrPosition}
@@ -1220,6 +1221,7 @@ logi.engine(Q, trend, interaction, \dots,
             VB)
 \method{logLik}{vblogit}(object, \dots) 
 lty2char(i)
+makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 matsqrt(x)
 matchNameOrPosition(expected, avail)

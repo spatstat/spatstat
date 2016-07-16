@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.118 $	$Date: 2016/04/01 05:55:30 $
+#	$Revision: 5.119 $	$Date: 2016/07/16 03:08:23 $
 #
 #
 # -------- functions ----------------------------------------
@@ -292,7 +292,7 @@ function(X, ..., r=NULL, rmax=NULL, breaks=NULL,
       wh <- whist(DIJ, breaks$val, edgewt)
       numKiso <- cumsum(wh)
       denKiso <- lambda2 * areaW
-      h <- circumradius(W)
+      h <- boundingradius(W)
       numKiso[r >= h] <- NA
       K <- bind.ratfv(K,
                       data.frame(iso=numKiso),

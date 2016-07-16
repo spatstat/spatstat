@@ -3,7 +3,7 @@
 #'
 #'  Label branches in a tree
 #'
-#'  $Revision: 1.3 $ $Date: 2015/10/21 09:06:57 $
+#'  $Revision: 1.4 $ $Date: 2016/07/16 03:14:51 $
 
 #' compute branch labels for each *vertex* in the tree L
 
@@ -114,9 +114,10 @@ extractbranch.linnet <- function(X, code, labels, ..., which=NULL) {
               sparse=sparse,
               window=V$window)
   class(out) <- c("linnet", class(out))
-  #' pre-compute circumradius
+  #' pre-compute bounding radius
   if(sparse)
-    out$circumradius <- circumradius(out)
+    out$boundingradius <- boundingradius(out)
+  out$toler <- default.linnet.tolerance(out)
   attr(out, "which") <- vin
   return(out)  
 }
@@ -169,9 +170,10 @@ deletebranch.linnet <- function(X, code, labels, ...) {
               sparse=sparse,
               window=V$window)
   class(out) <- c("linnet", class(out))
-  #' recompute circumradius
+  #' recompute bounding radius
   if(sparse)
-    out$circumradius <- circumradius(out)
+    out$boundingradius <- boundingradius(out)
+  out$toler <- default.linnet.tolerance(out)
   attr(out, "which") <- vkeep
   return(out)  
 }

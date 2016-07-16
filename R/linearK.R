@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.37 $ $Date: 2016/07/15 12:09:15 $
+# $Revision: 1.38 $ $Date: 2016/07/16 03:08:23 $
 #
 # K function for point pattern on linear network
 #
@@ -122,7 +122,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   Y <- as.ppp(X)
   W <- Y$window
   # determine r values
-  rmaxdefault <- 0.98 * circumradius(L)
+  rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max

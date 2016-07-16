@@ -1,21 +1,21 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.007
+        CHANGES IN spatstat VERSION 1.46-1.008
 
 OVERVIEW
 
     o We thank Mehdi Moradi and Jorge Mateu for contributions.
 
-    o Circumcentre and circumcircle.
-
     o Non-Gaussian smoothing kernels.
 
     o Important bug fix in linearK, linearpcf
 
-    o Version nickname: 'Ultracrepidarian'
+    o Bounding circle of a spatial object.
+
+    o Version nickname: 'Pons Asinorum'
 
 NEW FUNCTIONS
 
-    o circumcircle, circumcentre
+    o boundingcircle, boundingcentre
     Find the smallest circle enclosing a window or point pattern.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -26,12 +26,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o rcellnumber
     New argument 'mu'.
 
+    o lengths.psp
+    New argument 'squared'.
+
     o density.ppp, Smooth.ppp
     Computation accelerated by about 15% 
     in the case where at='points' and kernel='gaussian'.
 
     o linearK, linearpcf
     Accelerated.
+
+    o circumradius
+    This function is now deprecated, in favour of 'boundingradius'
 
 BUG FIXES
 

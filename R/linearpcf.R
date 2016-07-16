@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.15 $ $Date: 2016/07/15 12:08:39 $
+# $Revision: 1.16 $ $Date: 2016/07/16 03:08:23 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -91,7 +91,7 @@ linearpcfengine <- function(X, ..., r=NULL,
   Y <- as.ppp(X)
   W <- Y$window
   # determine r values
-  rmaxdefault <- 0.98 * circumradius(L)
+  rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
   r <- breaks$r
   rmax <- breaks$max

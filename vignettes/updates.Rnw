@@ -211,6 +211,9 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
+ \item \texttt{boundingcircle}, \texttt{boundingcentre}:
+   Smallest circle enclosing a spatial object.
+
  \item \texttt{split.msr}:
     Decompose a measure into parts.
 
@@ -613,6 +616,8 @@ listed alphabetically.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
    \item Accelerated by about 15\%
+     in the case where \texttt{at="points"}
+     and \texttt{kernel="gaussian"}.
    \end{itemize}
 
  
@@ -724,10 +729,14 @@ listed alphabetically.
     a fitted point process model.
     New arguments \texttt{update}, \texttt{leaveoneout}, \texttt{lambdaX}.
 
+ \item \texttt{lengths.psp}: New argument \texttt{squared}.
+   
  \item \texttt{leverage.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
+ \item \texttt{linearK}, \texttt{linearpcf} and relatives: Accelerated.
+   
  \item \texttt{linnet}:
    \begin{itemize}
    \item 
@@ -977,8 +986,13 @@ listed alphabetically.
    New argument \texttt{verbose}.
    
  \item \texttt{Smooth.ppp}:
-   A non-Gaussian kernel can now be specified
+   \begin{itemize}
+   \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
+   \item Accelerated by about 15\% in the case where \texttt{at="points"}
+     and \texttt{kernel="gaussian"}.
+   \end{itemize}
+
  
    \item \texttt{spatstat.options}
    New options \texttt{fastthin} and \texttt{fastpois} 

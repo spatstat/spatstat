@@ -1,7 +1,7 @@
 #
 #        edgeRipley.R
 #
-#    $Revision: 1.13 $    $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.15 $    $Date: 2016/07/16 03:11:15 $
 #
 #    Ripley isotropic edge correction weights
 #
@@ -173,11 +173,11 @@ edge.Ripley <- local({
 rmax.Ripley <- function(W) {
   W <- as.owin(W)
   if(is.rectangle(W))
-    return(circumradius(W))
+    return(boundingradius(W))
   if(is.polygonal(W) && length(W$bdry) == 1)
-    return(circumradius(W))
+    return(boundingradius(W))
   ## could have multiple connected components
   pieces <- tiles(tess(image=connected(W)))
-  answer <- sapply(pieces, circumradius)
+  answer <- sapply(pieces, boundingradius)
   return(as.numeric(answer))
 }

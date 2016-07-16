@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.007
-Nickname: Ultracrepidarian
-Date: 2016-07-15
+Version: 1.46-1.008
+Nickname: Pons Asinorum
+Date: 2016-07-16
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

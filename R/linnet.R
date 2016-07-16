@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.50 $    $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.54 $    $Date: 2016/07/16 02:38:47 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -84,9 +84,12 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
   yy   <- vertices$y
   lines <- psp(xx[from], yy[from], xx[to], yy[to], window=vertices$window,
                check=FALSE)
+  # tolerance
+  toler <- default.linnet.tolerance(lines)
   ## pack up
   out <- list(vertices=vertices, m=m, lines=lines, from=from, to=to,
-              sparse=sparse, window=vertices$window)
+              sparse=sparse, window=vertices$window,
+              toler=toler)
   class(out) <- c("linnet", class(out))
   ## finish ?
   if(sparse)
@@ -100,9 +103,8 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
   out$dpath <- dpath <- dist2dpath(d)
   if(warn && any(is.infinite(dpath)))
     warning("Network is not connected", call.=FALSE)
-  # pre-compute circumradius and tolerance
-  out$circumradius <- circumradius(out)
-  out$toler <- default.linnet.tolerance(out)
+  # pre-compute bounding radius 
+  out$boundingradius <- boundingradius(out)
   return(out)  
 }
 
@@ -130,8 +132,9 @@ summary.linnet <- function(object, ...) {
                  sparse = sparse)
   if(!sparse) {
     result$diam <- diameter(object)
-    result$circrad <- circumradius(object)
+    result$boundrad <- boundingradius(object)
   }
+  result$toler <- object$toler
   class(result) <- c("summary.linnet", class(result))
   result
 }
@@ -148,8 +151,10 @@ print.summary.linnet <- function(x, ...) {
     splat("Maximum vertex degree:", maxdegree)
     if(sparse) splat("[Sparse matrix representation]") else {
       splat("Diameter:", signif(diam, dig), unitinfo$plural)
-      splat("Circumradius:", signif(circrad, dig), unitinfo$plural)
+      splat("Bounding radius:", signif(boundrad, dig), unitinfo$plural)
     }
+    if(!is.null(toler))
+      splat("Numerical tolerance:", signif(toler, dig), unitinfo$plural)
     print(win, prefix="Enclosing window: ")
   })
   return(invisible(NULL))
@@ -248,11 +253,13 @@ as.linnet.linnet <- function(X, ..., sparse) {
     d[edges] <- sqrt(rowSums((coo[from, 1:2] - coo[to, 1:2])^2))
     # compute shortest path distance matrix
     X$dpath <- dist2dpath(d)
-    # compute circumradius
-    X$circumradius <- circumradius(X)
+    # compute bounding radius
+    X$boundingradius <- boundingradius(X)
     X$m <- m
     X$sparse <- FALSE
   }
+  X$circumradius <- NULL
+  X$toler <- default.linnet.tolerance(X)
   return(X)
 }
 
@@ -318,8 +325,13 @@ vertexdegree <- function(x) {
 }
 
 circumradius.linnet <- function(x, ...) {
+  .Deprecated("boundingradius.linnet")
+  boundingradius.linnet(x, ...)
+}
+
+boundingradius.linnet <- function(x, ...) {
   stopifnot(inherits(x, "linnet"))
-  cr <- x$circumradius
+  cr <- x$boundingradius %orifnull% x$circumradius
   if(!is.null(cr))
     return(cr)
   dpath <- x$dpath
@@ -382,8 +394,11 @@ scalardilate.linnet <- function(X, f, ...) {
   Y$window       <- scalardilate(X$window, f=f)
   if(!is.null(X$dpath)) {
     Y$dpath        <- f * X$dpath
-    Y$circumradius <- f * X$circumradius
+    Y$boundingradius <- f * (X$boundingradius %orifnull% X$circumradius)
+    Y$circumradius <- NULL
   }
+  if(!is.null(X$toler))
+    X$toler <- makeLinnetTolerance(f * X$toler)
   return(Y)
 }
 
@@ -398,8 +413,11 @@ affine.linnet <- function(X,  mat=diag(c(1,1)), vec=c(0,0), ...) {
     Y$window       <- affine(X$window,   mat=mat, vec=vec, ...)
     if(!is.null(X$dpath)) {
       Y$dpath        <- scal * X$dpath
-      Y$circumradius <- scal * X$circumradius
+      Y$boundingradius <- scal * (X$boundingradius %orifnull% X$circumradius)
+      X$circumradius <- NULL
     }
+    if(!is.null(Y$toler))
+      Y$toler <- makeLinnetTolerance(scal * Y$toler)
   } else {
     # general case
     vertices <- affine(X$vertices, mat=mat, vec=vec, ...)
