@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.54 $    $Date: 2016/07/16 02:38:47 $
+#    $Revision: 1.55 $    $Date: 2016/07/16 04:40:37 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -153,8 +153,8 @@ print.summary.linnet <- function(x, ...) {
       splat("Diameter:", signif(diam, dig), unitinfo$plural)
       splat("Bounding radius:", signif(boundrad, dig), unitinfo$plural)
     }
-    if(!is.null(toler))
-      splat("Numerical tolerance:", signif(toler, dig), unitinfo$plural)
+    if(!is.null(x$toler))
+      splat("Numerical tolerance:", signif(x$toler, dig), unitinfo$plural)
     print(win, prefix="Enclosing window: ")
   })
   return(invisible(NULL))
