@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.57 $	$Date: 2016/02/11 10:17:12 $
+#	$Revision: 1.58 $	$Date: 2016/07/16 06:11:47 $
 #
 #
 #
@@ -69,7 +69,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                      list(xlim=xlim, ylim=ylim,
                                           ann=FALSE, axes=FALSE,
                                           asp=1.0,
-                                          xaxs="i", yaxs="i")))
+                                          xaxs="i", yaxs="i"),
+                                     .MatchNull=FALSE))
   }
   if(show.all && nlines > 0) {
     ## add title 

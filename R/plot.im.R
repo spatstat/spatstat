@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.112 $   $Date: 2016/07/15 10:21:40 $
+#  $Revision: 1.113 $   $Date: 2016/07/16 06:37:59 $
 #
 #  Plotting code for pixel images
 #
@@ -583,7 +583,15 @@ plot.im <- local({
     # scale axis for ribbon image
     ribaxis <- !(identical(resol$axes, FALSE) || identical(resol$ann, FALSE))
     if(ribaxis) {
-      axisargs <- list(side=rib.iside, labels=ribbonlabels)
+      ribaxis.iside <- rib.iside
+      ## check for user-supplied xlim, ylim with reverse order
+      ll <- resolve.defaults(ribargs, dotargs, list(xlim=NULL, ylim=NULL))
+      xlimflip <- is.numeric(ll$xlim) && (diff(ll$xlim) < 0)
+      ylimflip <- is.numeric(ll$ylim) && (diff(ll$ylim) < 0)
+      if(xlimflip) ribaxis.iside <- c(1, 4, 3, 2)[ribaxis.iside] 
+      if(ylimflip) ribaxis.iside <- c(3, 2, 1, 4)[ribaxis.iside]
+      ##
+      axisargs <- list(side=ribaxis.iside, labels=ribbonlabels)
       switch(ribside,
              right={
                scal <- diff(bb.rib$yrange)/diff(ribbonrange)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.009
+        CHANGES IN spatstat VERSION 1.46-1.010
 
 OVERVIEW
 
@@ -45,6 +45,10 @@ BUG FIXES
     These functions were sometimes greatly underestimated
     when the network had segments shorter than 10 coordinate units.
     [Bug introduced in spatstat 1.44-0, december 2015.]
+    Fixed.
+
+    o plot.ppp, plot.im
+    Ignored xlim, ylim. 
     Fixed.
     
         CHANGES IN spatstat VERSION 1.46-1

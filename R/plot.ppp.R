@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.87 $	$Date: 2016/06/14 02:26:13 $
+#	$Revision: 1.88 $	$Date: 2016/07/16 06:11:56 $
 #
 #
 #--------------------------------------------------------------------------
@@ -333,9 +333,12 @@ plot.ppp <- local({
   main <- pt$main
   nlines <- pt$nlines
   blankmain <- if(nlines == 0) "" else rep("  ", nlines)
-  cex.main <- resolve.1.default(list(cex.main=1), list(...))
+  rez <- resolve.defaults(list(...),
+                          list(cex.main=1,
+                               xlim=NULL,
+                               ylim=NULL))
   plot(BB, type="n", add=add, main=blankmain, show.all=show.all,
-       cex.main=cex.main)
+       cex.main=rez$cex.main, xlim=rez$xlim, ylim=rez$ylim)
 
   if(sick) {
     if(show.window) {
