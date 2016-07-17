@@ -8,7 +8,7 @@
   a pixel image on a linear network.
 }
 \usage{
-  linim(L, Z, ..., df=NULL)
+  linim(L, Z, \dots, df=NULL)
 }
 \arguments{
   \item{L}{
@@ -55,8 +55,6 @@
 }
 \author{
   \adrian
-  
-  
 }
 \seealso{
   \code{\link{plot.linim}},

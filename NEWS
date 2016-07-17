@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.010
+        CHANGES IN spatstat VERSION 1.46-1.011
 
 OVERVIEW
 
@@ -17,6 +17,16 @@ NEW FUNCTIONS
 
     o boundingcircle, boundingcentre
     Find the smallest circle enclosing a window or point pattern.
+
+    o "[.linim"
+    Subset operator for pixel images on a linear network.
+
+    o mean.linim, median.linim, quantile.linim
+    The mean, median, or quantiles of pixel values in a 
+    pixel image on a linear network.
+
+    o weighted.median, weighted.quantile
+    Median or quantile of numerical data with associated weights.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -45,6 +55,11 @@ BUG FIXES
     These functions were sometimes greatly underestimated
     when the network had segments shorter than 10 coordinate units.
     [Bug introduced in spatstat 1.44-0, december 2015.]
+    Fixed.
+
+    o integral.linim, integral.linfun
+    Results were slightly inaccurate because of a bias in the
+    distribution of sample points.
     Fixed.
 
     o plot.ppp, plot.im

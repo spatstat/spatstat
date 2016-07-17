@@ -56,14 +56,15 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
     L <- as.linnet(X)
   # create template
   Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy)
-  # extract (x,y) and local coordinates
+  # extract coordinates of sample points along network
   df <- attr(Y, "df")
   coo <- df[, c("x", "y", "mapXY", "tp")]
   colnames(coo)[3] <- "seg"
-  # evaluate function
+  # evaluate function at sample points
   vals <- do.call(X, append(as.list(coo), list(...)))
-  # replace values
+  # write values in data frame
   df$values <- vals
+  # write values in pixel array
   typ <- typeof(vals)
   storage.mode(Y$v) <- typ
   Y[] <- vals

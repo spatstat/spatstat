@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.213 $    $Date: 2016/07/15 10:22:54 $
+#    $Revision: 1.215 $    $Date: 2016/07/17 03:39:28 $
 #
 #
 matrowsum <- function(x) {
@@ -42,41 +42,6 @@ apply23sum <- function(x) {
     result[,k] <- matcolsum(x[,,k])
   }
   result
-}
-    
-#######################
-#
-#    whist      weighted histogram
-#
-
-whist <- function(x, breaks, weights=NULL) {
-    N <- length(breaks)
-    if(length(x) == 0) 
-      h <- numeric(N+1)
-    else {
-      # classify data into histogram cells (breaks need not span range of data)
-      cell <- findInterval(x, breaks, rightmost.closed=TRUE)
-      # values of 'cell' range from 0 to N.
-      nb <- N + 1L
-      if(is.null(weights)) {
-        ## histogram
-        h <- tabulate(cell+1L, nbins=nb)
-      } else {
-        ##  weighted histogram
-        if(!spatstat.options("Cwhist")) {
-          cell <- factor(cell, levels=0:N)
-          h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
-        } else {
-          h <- .Call("Cwhist",
-                     as.integer(cell), as.double(weights), as.integer(nb))
-        }
-      }
-    }
-    h <- as.numeric(h)
-    y <- h[2:N]
-    attr(y, "low") <- h[1]
-    attr(y, "high") <- h[N+1]
-    return(y)
 }
 
 ######################
@@ -1346,20 +1311,6 @@ print.timed <- function(x, ...) {
   return(invisible(NULL))
 }
 
-# wrapper for computing weighted variance of a vector
-# Note: this includes a factor 1 - sum(v^2) in the denominator
-# where v = w/sum(w). See help(cov.wt)
-
-weighted.var <- function(x, w, na.rm=FALSE) {
-  bad <- is.na(w) | is.na(x)
-  if(any(bad)) {
-    if(!na.rm) return(NA_real_)
-    ok <- !bad
-    x <- x[ok]
-    w <- w[ok]
-  }
-  cov.wt(matrix(x, ncol=1),w)$cov[]
-}
 
 # efficient replacements for ifelse()
 # 'a' and 'b' are single values

@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.45 $   $Date: 2016/02/16 01:39:12 $
+#  $Revision: 1.46 $   $Date: 2016/07/17 05:08:14 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -268,7 +268,11 @@ as.lpp <- function(x=NULL, y=NULL, seg=NULL, tp=NULL, ...,
     } else if(is.null(x) && is.null(y) && !is.null(seg) && !is.null(tp)){
       X <- lpp(data.frame(seg=seg, tp=tp), L=L)
     } else {
-      xy <- xy.coords(x,y)[c("x", "y")]
+      if(is.numeric(x) && length(x) == 2 && is.null(y)) {
+        xy <- list(x=x[1], y=x[2])
+      } else  {
+        xy <- xy.coords(x,y)[c("x", "y")]
+      }
       if(!is.null(seg) && !is.null(tp)) {
         # add segment map information
         xy <- append(xy, list(seg=seg, tp=tp))

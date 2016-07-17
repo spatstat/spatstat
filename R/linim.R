@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.23 $   $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.24 $   $Date: 2016/07/17 04:05:37 $
 #
 #  Image/function on a linear network
 #
@@ -288,17 +288,66 @@ as.linnet.linim <- function(X, ...) {
   attr(X, "L")
 }
 
+"[.linim" <- function(x, i, ...) {
+  #' first apply subset method for 'im'
+  y <- NextMethod("[")
+  if(!is.im(y)) return(y) # vector of pixel values
+  #' handle linear network info
+  L <- attr(x, "L")
+  df <- attr(x, "df")
+  #' clip to new window
+  W <- Window(y)
+  attr(y, "L") <- L[W]
+  attr(y, "df") <- df[inside.owin(df$xc, df$yc, W), , drop=FALSE]
+  return(y)
+}
+
 integral.linim <- function(f, domain=NULL, ...){
   verifyclass(f, "linim")
+  if(!is.null(domain)) 
+    f <- f[domain]
+  #' extract data
+  df <- attr(f, "df")
   L <- as.linnet(f)
-  if(is.null(domain)) {
-    mu <- mean(f)
-    len <- volume(L)
-  } else {
-    mu <- mean(f[domain])
-    len <- sum(lengths.psp(as.psp(L)[domain]))
+  #' take average of data on each segment
+  seg <- factor(df$mapXY, levels=1:nsegments(L))
+  vals <- df$values
+  mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
+  mu[is.na(mu)] <- 0
+  #' weighted sum
+  len <- lengths.psp(as.psp(L))
+  if(anyNA(vals)) {
+    p <- as.numeric(by(!is.na(vals), seg, mean, ..., na.rm=TRUE))
+    p[is.na(p)] <- 0
+    len <- len * p
   }
-  return(mu * len)
+  return(sum(mu * len))
+}
+
+mean.linim <- function(x, ...) {
+  trap.extra.arguments(...)
+  integral(x)/sum(lengths.psp(as.psp(as.linnet(x))))
+}
+
+quantile.linim <- function(x, probs = seq(0,1,0.25), ...) {
+  verifyclass(x, "linim")
+  #' extract data
+  df <- attr(x, "df")
+  L <- as.linnet(x)
+  vals <- df$values
+  #' count sample points on each segment
+  seg <- factor(df$mapXY, levels=1:nsegments(L))
+  nvals <- table(seg)
+  #' calculate weights
+  len <- lengths.psp(as.psp(L))
+  iseg <- as.integer(seg)
+  wts <- len[iseg]/nvals[iseg]
+  return(weighted.quantile(vals, wts, probs))
+}
+
+median.linim <- function(x, ...) {
+  trap.extra.arguments(...)
+  return(unname(quantile(x, 0.5)))
 }
 
 shift.linim <- function (X, ...) {

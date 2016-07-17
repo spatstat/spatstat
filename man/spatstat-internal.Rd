@@ -779,7 +779,6 @@
 \alias{warn.ignored.args}
 \alias{warn.once}
 \alias{waxlyrical}
-\alias{weighted.var}
 \alias{windows.mppm}
 \alias{w.quad}               
 \alias{x.quad}
@@ -1721,7 +1720,6 @@ verify.xypolygon(p, fatal=TRUE)
 warn.ignored.args(\dots, context)
 warn.once(key, \dots)
 waxlyrical(type, terse)
-weighted.var(x, w, na.rm)
 windows.mppm(x)
 w.quad(Q)               
 x.quad(Q)

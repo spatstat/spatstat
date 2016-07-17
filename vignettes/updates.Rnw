@@ -42,11 +42,12 @@ released in May 2015.
 z <- read.table("packagesizes.txt", header=TRUE)
 z$date <- as.Date(z$date)
 changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
-newdat <- changes[["ndatasets"]]
+newobj <- changes[["nobjects"]]
+newdat <- changes[["ndatasets"]] + 1  # counting rule doesn't detect redwood3
 @ %$
 
 The current version of \spst\ is \texttt{\Sexpr{sversion}}.
-It contains \Sexpr{changes[["nobjects"]]} new functions
+It contains \Sexpr{newobj} new functions
 and \Sexpr{newdat} new datasets
 introduced after May 2015. This document summarises the most important changes.
 
@@ -211,7 +212,17 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
 
- \item \texttt{boundingcircle}, \texttt{boundingcentre}:
+  \item \texttt{weighted.median}, \texttt{weighted.quantile}:
+    Median or quantile of numerical data with associated weights.
+
+  \item \verb!"[.linim"!:
+    Subset operator for pixel images on a linear network.
+
+  \item \texttt{mean.linim}, \texttt{median.linim}, \texttt{quantile.linim}:
+    The mean, median, or quantiles of pixel values in a 
+    pixel image on a linear network.
+  
+  \item \texttt{boundingcircle}, \texttt{boundingcentre}:
    Smallest circle enclosing a spatial object.
 
  \item \texttt{split.msr}:

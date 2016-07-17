@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.24 $ $Date: 2016/07/15 12:05:06 $
+#   $Revision: 1.25 $ $Date: 2016/07/17 04:16:06 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -159,8 +159,8 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   # get x
   if(missing(x))
     x <- clickppp(1, win, add=TRUE)
-  else
-    x <- as.ppp(x, win)
+  if(!inherits(x, "lpp"))
+    x <- as.lpp(x, L=L)
   #
   np <- npoints(x)
   if(length(r) != np)
@@ -173,17 +173,17 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
       result[i] <- npoints(lineardisc(L, x[i], r[i], plotit=FALSE)$endpoints)
     return(result)
   }
-  # project x to nearest segment
-  pro <- project2segment(x, lines)
-  # which segment?
-  startsegment <- pro$mapXY
+  # extract coordinates
+  coo <- coords(x)
+  #' which segment
+  startsegment <- coo$seg 
   # parametric position of x along this segment
-  startfraction <- pro$tp
-
+  startfraction <- coo$tp
   # convert indices to C 
   seg0 <- startsegment - 1L
   from0 <- L$from - 1L
   to0   <- L$to - 1L
+  # determine numerical tolerance
   if(is.null(toler)) {
     toler <- default.linnet.tolerance(L)
   } else {
