@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.7 $ $Date: 2016/07/14 10:34:36 $
+#'  $Revision: 1.8 $ $Date: 2016/07/17 07:11:45 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -18,6 +18,10 @@
   epanechnikov=list(
     d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
     sd = 1/sqrt(6),
+    hw = 1),
+  quartic=list(
+    d  = function(x,y, ...) { (3/pi) * pmax(1 - (x^2+y^2), 0)^2 },
+    sd = 1/sqrt(32),
     hw = 1),
   disc=list(
     d  = function(x,y,...) { (1/pi) * as.numeric(x^2 + y^2 <= 1) },

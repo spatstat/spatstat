@@ -58,8 +58,9 @@
   \item{kernel}{
     The smoothing kernel.
     A character string specifying the smoothing kernel
-    (current options are \code{"gaussian"}, \code{"epanechnikov"}
-    or \code{"disc"}), or a pixel image (object of class \code{"im"})
+    (current options are \code{"gaussian"}, \code{"epanechnikov"},
+    \code{"quartic"} or \code{"disc"}),
+    or a pixel image (object of class \code{"im"})
     containing values of the kernel, or a \code{function(x,y)} which
     yields values of the kernel.
   }

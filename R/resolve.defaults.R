@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.28 $ $Date: 2016/07/16 06:18:13 $
+#  $Revision: 1.29 $ $Date: 2016/07/17 06:27:48 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -166,7 +166,15 @@ graphicsPars <- local({
            "claim.title.space"),
          lines = c("lwd", "lty", "col", "lend", "ljoin", "lmitre"),
          symbols = c(PlotArgs, "fg", "bg"),
-         text = TextArgs
+         text = TextArgs,
+         persp = c("x", "y", "z",
+           "xlim", "ylim", "zlim",
+           "xlab", "ylab", "zlab",
+           "main", "sub",
+           "theta", "phi", "r", "d", "scale",
+           "expand", "col", "border",
+           "ltheta", "lphi", "shade", "box",
+           "axes", "nticks", "ticktype")
          )
 
     TheTable$ppp <- unique(c(TheTable$owin,

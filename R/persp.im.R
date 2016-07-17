@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.14 $ $Date: 2016/07/15 10:21:56 $
+##  $Revision: 1.15 $ $Date: 2016/07/17 06:29:08 $
 ##
 
 persp.im <- local({
@@ -140,7 +140,7 @@ persp.im <- local({
                               .StripNull=TRUE)
 
     jawab <- do.call.matched(persp, yargh, 
-                             funargs=.Spatstat.persp.args)
+                             funargs=graphicsPars("persp"))
 
     attr(jawab, "expand") <- yargh$expand
     
@@ -225,15 +225,6 @@ persp.im <- local({
   persp.im
 })
 
-
-.Spatstat.persp.args <- c("x", "y", "z",
-                          "xlim", "ylim", "zlim",
-                          "xlab", "ylab", "zlab",
-                          "main", "sub",
-                          "theta", "phi", "r", "d", "scale",
-                          "expand", "col", "border",
-                          "ltheta", "lphi", "shade", "box",
-                          "axes", "nticks", "ticktype")
 
 perspPoints <- function(x, y=NULL, ..., Z, M) {
   xy <- xy.coords(x, y)
