@@ -3,14 +3,14 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.8 $ $Date: 2016/07/17 07:11:45 $
+#'  $Revision: 1.9 $ $Date: 2016/07/17 08:08:36 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
   #' table entries:
   #'   d = density of standardised kernel
   #'   sd = standard deviation of x coordinate, for standardised kernel
-  #'   hw = halfwidth of support of standardised kernel (hw=1 for Gaussian)
+  #'   hw = halfwidth of support of standardised kernel 
   gaussian=list(
     d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
     sd  = 1,
@@ -21,7 +21,7 @@
     hw = 1),
   quartic=list(
     d  = function(x,y, ...) { (3/pi) * pmax(1 - (x^2+y^2), 0)^2 },
-    sd = 1/sqrt(32),
+    sd = 1/sqrt(8),
     hw = 1),
   disc=list(
     d  = function(x,y,...) { (1/pi) * as.numeric(x^2 + y^2 <= 1) },
