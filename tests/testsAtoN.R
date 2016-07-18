@@ -933,7 +933,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.7 $  $Date: 2016/07/16 03:59:27 $
+#  $Revision: 1.8 $  $Date: 2016/07/18 06:43:57 $
 
 
 require(spatstat)
@@ -1044,6 +1044,17 @@ local({
   testcountends(X)
   # finer scale
   testcountends(X, s=1000)
+
+  ## Test algorithms for boundingradius.linnet
+  L <- as.linnet(chicago, sparse=TRUE)
+  opa <- spatstat.options(Clinearradius=FALSE)
+  bR <- as.linnet(L, sparse=FALSE)$boundingradius
+  spatstat.options(Clinearradius=TRUE)
+  bC <- as.linnet(L, sparse=FALSE)$boundingradius
+  spatstat.options(opa)
+  if(abs(bR-bC) > 0.001 * (bR+bC)/2)
+    stop("Disagreement between R and C algorithms for boundingradius.linnet",
+         call.=FALSE)
 })
 
 ##

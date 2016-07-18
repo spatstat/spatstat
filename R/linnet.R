@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.56 $    $Date: 2016/07/18 03:58:39 $
+#    $Revision: 1.57 $    $Date: 2016/07/18 06:37:24 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -347,6 +347,23 @@ boundingradius.linnet <- function(x, ...) {
   lines <- x$lines
   nseg  <- lines$n
   leng  <- lengths.psp(lines)
+  if(spatstat.options("Clinearradius")) {
+    fromC <- from - 1L
+    toC   <- to - 1L
+    nv <- npoints(vertices(x))
+    huge <- sum(leng)
+    z <- .C("linearradius",
+            ns = as.integer(nseg),
+            from = as.integer(fromC),
+            to = as.integer(toC),
+            lengths = as.double(leng),
+            nv = as.integer(nv), 
+            dpath = as.double(dpath), 
+            huge = as.double(huge), 
+            result = as.double(numeric(1))
+            )
+    return(z$result)
+  }
   sA <- sB <- matrix(Inf, nseg, nseg)
   for(i in 1:nseg) {
     # endpoints of segment i

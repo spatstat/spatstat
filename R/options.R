@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.72 $   $Date: 2016/07/15 03:13:27 $
+#    $Revision: 1.73 $   $Date: 2016/07/18 06:46:18 $
 #
 #
 
@@ -483,6 +483,12 @@ warn.once <- function(key, ...) {
        ),
        Ccountends = list(
          # use C code for 'countends'
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       Clinearradius = list(
+         # use C code for 'boundingradius.linnet'
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
