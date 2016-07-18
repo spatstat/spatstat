@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.013
+        CHANGES IN spatstat VERSION 1.46-1.014
 
 OVERVIEW
 
@@ -8,6 +8,10 @@ OVERVIEW
     o Non-Gaussian smoothing kernels.
 
     o Important bug fix in linearK, linearpcf
+
+    o Changed internal format of linnet and lpp objects.
+
+    o Faster computation in linear networks.
 
     o Bounding circle of a spatial object.
 
@@ -30,6 +34,14 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o linear networks
+    The internal format of a 'linnet' (linear network) object
+    has been changed. Existing datasets of class 'linnet' and 'lpp'
+    are still supported. However, computation will be faster if they
+    are converted to the new format. To convert a linnet object L
+    to the new format, use L <- as.linnet(L). To convert an lpp object X 
+    to the new format, use X <- as.lpp(X).
+
     o density.ppp, Smooth.ppp
     New argument 'kernel' allows the user to specify the smoothing kernel.
 
@@ -44,7 +56,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     in the case where at='points' and kernel='gaussian'.
 
     o linearK, linearpcf
-    Accelerated.
+    Accelerated by about 40%.
 
     o circumradius
     This function is now deprecated, in favour of 'boundingradius'

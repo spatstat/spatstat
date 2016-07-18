@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.55 $    $Date: 2016/07/16 04:40:37 $
+#    $Revision: 1.56 $    $Date: 2016/07/18 03:58:39 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -241,7 +241,7 @@ as.linnet.linnet <- function(X, ..., sparse) {
     X$sparse <- TRUE
   } else if(!sparse && X$sparse) {
     # convert adjacency to matrix
-    m <- as.matrix(X$m)
+    X$m <- m <- as.matrix(X$m)
     edges <- which(m, arr.ind=TRUE)
     from <- edges[,1]
     to   <- edges[,2]
@@ -255,9 +255,12 @@ as.linnet.linnet <- function(X, ..., sparse) {
     X$dpath <- dist2dpath(d)
     # compute bounding radius
     X$boundingradius <- boundingradius(X)
-    X$m <- m
     X$sparse <- FALSE
+  } else if(!sparse) {
+    # possibly update internals
+    X$boundingradius <- boundingradius(X)
   }
+  # possibly update internals
   X$circumradius <- NULL
   X$toler <- default.linnet.tolerance(X)
   return(X)

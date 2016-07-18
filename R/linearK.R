@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.38 $ $Date: 2016/07/16 03:08:23 $
+# $Revision: 1.40 $ $Date: 2016/07/18 03:48:10 $
 #
 # K function for point pattern on linear network
 #
@@ -14,9 +14,8 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
                              best="Ang"),
                            multi=FALSE)
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
   # compute K
   denom <- np * (np - 1)/lengthL
   K <- linearKengine(X, r=r, denom=denom, correction=correction, ...)
@@ -45,9 +44,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   if(is.null(lambda))
     linearK(X, r=r, ..., correction=correction)
   # extract info about pattern
-  sX <- summary(X)
-#  np <- sX$npoints
-  lengthL <- sX$totlength
+  lengthL <- volume(domain(X))
   #
   lambdaX <- getlambda.lpp(lambda, X, ...)
   #
@@ -113,14 +110,10 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   # ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-#  lengthL <- sX$totlength
+  np <- npoints(X)
   # extract linear network
   L <- domain(X)
-  # extract points
-  Y <- as.ppp(X)
-  W <- Y$window
+  W <- Window(L)
   # determine r values
   rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
@@ -161,7 +154,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
      # compute m[i,j]
      m <- matrix(1, np, np)
      for(j in 1:np) 
-       m[ -j, j] <- countends(L, Y[-j], D[-j,j], toler=toler)
+       m[ -j, j] <- countends(L, X[-j], D[-j,j], toler=toler)
      if(any(uhoh <- (m == 0))) {
        warning("Internal error: disc boundary count equal to zero")
        m[uhoh] <- 1

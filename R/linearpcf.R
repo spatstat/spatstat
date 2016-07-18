@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.16 $ $Date: 2016/07/16 03:08:23 $
+# $Revision: 1.18 $ $Date: 2016/07/18 03:48:05 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -14,9 +14,8 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang") {
                              best="Ang"),
                            multi=FALSE)
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
   # compute
   denom <- np * (np - 1)/lengthL
   g <- linearpcfengine(X, r=r, ..., denom=denom, correction=correction)
@@ -45,9 +44,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
   if(is.null(lambda))
     linearpcf(X, r=r, ..., correction=correction)
   # extract info about pattern
-  sX <- summary(X)
-#  np <- sX$npoints
-  lengthL <- sX$totlength
+  lengthL <- volume(domain(X))
   #
   lambdaX <- getlambda.lpp(lambda, X, ...)
   #
@@ -81,15 +78,10 @@ linearpcfengine <- function(X, ..., r=NULL,
   # ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
-#  sX <- summary(X)
-#  np <- sX$npoints
-#  lengthL <- sX$totlength
   np <- npoints(X)
   # extract linear network
-  L <- X$domain
-  # extract points
-  Y <- as.ppp(X)
-  W <- Y$window
+  L <- domain(X)
+  W <- Window(L)
   # determine r values
   rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
@@ -130,7 +122,7 @@ linearpcfengine <- function(X, ..., r=NULL,
      # compute m[i,j]
      m <- matrix(1, np, np)
      for(j in 1:np) 
-       m[ -j, j] <- countends(L, Y[-j], D[-j,j], toler=toler)
+       m[ -j, j] <- countends(L, X[-j], D[-j,j], toler=toler)
      edgewt <- 1/m
   }
   # compute pcf

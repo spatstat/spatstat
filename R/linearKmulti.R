@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.9 $ $Date: 2016/07/16 03:08:23 $
+# $Revision: 1.11 $ $Date: 2016/07/18 03:48:00 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -57,9 +57,8 @@ linearKmulti <- function(X, I, J, r=NULL, ..., correction="Ang") {
                            multi=FALSE)
   
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
   # validate I, J
   if(!is.logical(I) || !is.logical(J))
     stop("I and J must be logical vectors")
@@ -150,9 +149,8 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
                            multi=FALSE)
   
   # extract info about pattern
-  sX <- summary(X)
-  np <- sX$npoints
-  lengthL <- sX$totlength
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
   # validate I, J
   if(!is.logical(I) || !is.logical(J))
     stop("I and J must be logical vectors")
@@ -189,15 +187,10 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
   # ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
-#  sX <- summary(X)
-#  np <- sX$npoints
-#  lengthL <- sX$totlength
   np <- npoints(X)
   # extract linear network
   L <- domain(X)
-  # extract points
-  XP <- as.ppp(X)
-  W <- as.owin(XP)
+  W <- Window(L)
   # determine r values
   rmaxdefault <- 0.98 * boundingradius(L)
   breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
@@ -261,18 +254,18 @@ linearKmultiEngine <- function(X, I, J, ..., r=NULL, reweight=NULL, denom=1,
      toler <- default.linnet.tolerance(L)
      # compute m[i,j]
      m <- matrix(1, nI, nJ)
-     XPI <- XP[I]
+     XI <- X[I]
      if(!has.clash) {
        for(k in seq_len(nJ)) {
          j <- whichJ[k]
-         m[,k] <- countends(L, XPI, DIJ[, k], toler=toler)
+         m[,k] <- countends(L, XI, DIJ[, k], toler=toler)
        }
      } else {
        # don't count identical pairs
        for(k in seq_len(nJ)) {
          j <- whichJ[k]
          inotj <- (whichI != j)
-         m[inotj, k] <- countends(L, XPI[inotj], DIJ[inotj, k], toler=toler)
+         m[inotj, k] <- countends(L, XI[inotj], DIJ[inotj, k], toler=toler)
        }
      }
      edgewt <- 1/m
