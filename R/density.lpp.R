@@ -4,7 +4,7 @@
 #  Computationally expensive unless sigma is very small
 #  You Have Been Warned
 #
-#   $Revision: 1.7 $  $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.8 $  $Date: 2016/07/18 07:59:21 $
 #
 
 density.lpp <- function(x, sigma, ...,
@@ -59,7 +59,7 @@ density.lpp <- function(x, sigma, ...,
     segi <- seg[i]
     tpi  <- tp[i]
     len <- Llengths[segi]
-    # Gaussian density on segment containing x[i]
+    # evaluate kernel on segment containing x[i]
     relevant <- (projmap$mapXY == segi)
     values[relevant] <- values[relevant] +
       dkernel(len * (projmap$tp[relevant] - tpi),

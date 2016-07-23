@@ -73,7 +73,8 @@ symbolmap(\dots, range = NULL, inputs = NULL)
   \describe{
     \item{shape}{
       The shape of the symbol: currently
-      either \code{"circles"} or \code{"squares"} or \code{NA}.
+      either \code{"circles"}, \code{"squares"}, \code{"arrows"}
+      or \code{NA}.
       This parameter takes precedence over \code{pch}.
     }
     \item{size}{
@@ -102,6 +103,18 @@ symbolmap(\dots, range = NULL, inputs = NULL)
       by a border drawn in the opposite colour,
       which improves its visibility against the background.
       Default is \code{FALSE}.
+    }
+    \item{direction,headlength,headangle,arrowtype}{
+      Numeric parameters of arrow symbols, applicable when
+      \code{shape="arrows"}. Here \code{direction} is the direction
+      of the arrow in degrees anticlockwise from the \eqn{x} axis;
+      \code{headlength} is the length of the head of the arrow in
+      coordinate units; \code{headangle} is the angle subtended by the point
+      of the arrow; and \code{arrowtype} is an integer code
+      specifying which ends of the shaft have arrowheads
+      attached (0 means no arrowheads, 1 is an arrowhead at the start
+      of the shaft, 2 is an arrowhead at the end of the shaft, and
+      3 is arrowheads at both ends). 
     }
   }
   A vector of colour values is also acceptable for the arguments

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.015
+        CHANGES IN spatstat VERSION 1.46-1.016
 
 OVERVIEW
 
@@ -15,7 +15,9 @@ OVERVIEW
 
     o Bounding circle of a spatial object.
 
-    o Version nickname: 'Pons Asinorum'
+    o Option to plot marked points as arrows.
+
+    o Version nickname: 'Elefuga'
 
 NEW FUNCTIONS
 
@@ -44,6 +46,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp, Smooth.ppp
     New argument 'kernel' allows the user to specify the smoothing kernel.
+
+    o symbolmap, plot.ppp, plot.lpp
+    New option: shape="arrows" 
 
     o rcellnumber
     New argument 'mu'.
@@ -74,10 +79,14 @@ BUG FIXES
     distribution of sample points.
     Fixed.
 
+    o plot.ppp, plot.lpp
+    Crashed if the argument 'shape' was given.
+    Fixed.
+     
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
     Fixed.
-    
+
         CHANGES IN spatstat VERSION 1.46-1
 
 OVERVIEW

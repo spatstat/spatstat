@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.88 $	$Date: 2016/07/16 06:11:56 $
+#	$Revision: 1.89 $	$Date: 2016/07/23 06:38:50 $
 #
 #
 #--------------------------------------------------------------------------
@@ -129,11 +129,25 @@ plot.ppp <- local({
     ##  ...........  non-numeric marks .........................
     um <- if(is.factor(marx)) levels(marx) else sort(unique(marx))
     ntypes <- length(um)
-    ## resolve parameters 'chars' and 'cols'
-    chars <- default.charmap(ntypes, chars)
     if(!is.null(cols))
       cols <- rep.int(cols, ntypes)[1:ntypes]
-    g <- symbolmap(inputs=um, ..., chars=chars, cols=cols)
+    if(shapegiven && sizegiven) {
+      #' values mapped to symbols (shape and size specified)
+      g <- symbolmap(inputs=um, ..., cols=cols)
+    } else if(!shapegiven) {
+      #' values mapped to 'pch'
+      chars <- default.charmap(ntypes, chars)
+      g <- symbolmap(inputs=um, ..., chars=chars, cols=cols)
+    } else {
+      #' values mapped to symbols
+      #' determine size
+      scal <- mark.scale.default(rep(1, npoints(x)),
+                                 Window(x), 
+                                 maxsize=maxsize,
+                                 meansize=meansize,
+                                 characters=FALSE)
+      g <- symbolmap(inputs=um, ..., size=scal, cols=cols)
+    }
     return(g)
   }
                                   
