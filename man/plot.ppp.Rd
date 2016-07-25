@@ -338,6 +338,9 @@
    plot(amacrine, shape=c("circles", "squares"), size=0.04)
    plot(amacrine, shape="arrows", direction=c(0,90), size=0.07)
 
+   ## plot trees as trees!
+   plot(lansing, shape="arrows", direction=90, cols=1:6)
+
    # controlling MARK SCALE for pattern with numeric marks
    plot(longleaf, markscale=0.1)
    plot(longleaf, maxsize=5)

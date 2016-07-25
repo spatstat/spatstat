@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.89 $	$Date: 2016/07/23 06:38:50 $
+#	$Revision: 1.90 $	$Date: 2016/07/25 09:26:31 $
 #
 #
 #--------------------------------------------------------------------------
@@ -101,7 +101,7 @@ plot.ppp <- local({
         shapedefault <-
           if(!assumecircles) list() else list(shape="circles")
         cexfun <- function(x, scal=1) { scal * x }
-        circfun <- function(x, scal=1) { scal * x/2 }
+        circfun <- function(x, scal=1) { scal * x }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         sizedefault <-
           if(sizegiven) list() else
@@ -112,7 +112,7 @@ plot.ppp <- local({
           if(!assumecircles) list() else
           list(shape=function(x) { ifelse(x >= 0, "circles", "squares") })
         cexfun <- function(x, scal=1) { scal * abs(x) }
-        circfun <- function(x, scal=1) { scal * ifelse(x >= 0, x/2, -x) }
+        circfun <- function(x, scal=1) { scal * abs(x) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         sizedefault <-
           if(sizegiven) list() else
