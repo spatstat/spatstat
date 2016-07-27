@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.017
+        CHANGES IN spatstat VERSION 1.46-1.018
 
 OVERVIEW
 
@@ -85,6 +85,10 @@ BUG FIXES
      
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
+    Fixed.
+
+    o stieltjes
+    Returned NA if some values of f were not finite.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.46-1

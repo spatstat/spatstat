@@ -6,7 +6,7 @@
   and returns another object of the same kind.
 }
 \usage{
-  eval.fv(expr, envir, dotonly=TRUE, equiv=NULL)
+  eval.fv(expr, envir, dotonly=TRUE, equiv=NULL, relabel=TRUE)
 }
 \arguments{
   \item{expr}{An expression.}
@@ -18,6 +18,12 @@
   \item{dotonly}{Logical. See Details.}
   \item{equiv}{Mapping between column names of different objects
     that are deemed to be equivalent. See Details.}
+  \item{relabel}{
+    Logical value indicating whether to
+    compute appropriate labels for the resulting function.
+    This should normally be \code{TRUE} (the default).
+    See Details.
+  }
 }
 \details{
   This is a wrapper to make it easier to perform
@@ -84,6 +90,16 @@
   character strings, indicating the pairing of equivalent names.
   (Without this argument, these columns would be discarded.)
   See the Examples.
+
+  The argument \code{relabel} should normally be \code{TRUE} (the default).
+  It determines whether to compute appropriate mathematical labels and
+  descriptions for the resulting function object
+  (used when the object is printed or plotted).
+  If \code{relabel=FALSE} then this does not occur,
+  and the mathematical labels and descriptions
+  in the result are taken from the function object
+  that appears first in the expression. This reduces computation time
+  slightly (for advanced use only).
 }
 \value{
   Another object of class \code{"fv"}.

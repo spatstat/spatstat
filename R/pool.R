@@ -1,7 +1,7 @@
 #'
 #'     pool.R
 #'
-#'  $Revision: 1.2 $  $Date: 2016/02/17 09:53:14 $
+#'  $Revision: 1.4 $  $Date: 2016/07/26 10:41:19 $
 
 pool <- function(...) {
   UseMethod("pool")
@@ -9,9 +9,9 @@ pool <- function(...) {
 
 pool.fv <- local({
 
-  Square <- function(A) { force(A); eval.fv(A^2) }
-  Add <- function(A,B){ force(A); force(B); eval.fv(A+B) }
-  Cmul <- function(A, f) { force(A); force(f); eval.fv(f * A) }
+  Square <- function(A) { force(A); eval.fv(A^2, relabel=FALSE) }
+  Add <- function(A,B){ force(A); force(B); eval.fv(A+B, relabel=FALSE) }
+  Cmul <- function(A, f) { force(A); force(f); eval.fv(f * A, relabel=FALSE) }
 
   pool.fv <- function(..., weights=NULL) {
     argh <- list(...)
@@ -40,22 +40,24 @@ pool.fv <- local({
     sumY <- Reduce(Add, Y)
     attributes(sumY) <- attributes(template)
     ## ratio-of-sums
-    Ratio <- eval.fv(sumY/sumX)
+    Ratio <- eval.fv(sumY/sumX, relabel=FALSE)
     ## variance calculation
     meanX <- sumX/n
-    meanY <- eval.fv(sumY/n)
+    meanY <- eval.fv(sumY/n, relabel=FALSE)
     sumY2 <- Reduce(Add, lapply(Y, Square))
     varX   <- (sumX2 - n * meanX^2)/(n-1)
-    varY   <- eval.fv((sumY2 - n * meanY^2)/(n-1))
+    varY   <- eval.fv((sumY2 - n * meanY^2)/(n-1), relabel=FALSE)
     sumXY <- Reduce(Add, XY)
-    covXY <- eval.fv((sumXY - n * meanX * meanY)/(n-1))
+    covXY <- eval.fv((sumXY - n * meanX * meanY)/(n-1), relabel=FALSE)
     ## variance by delta method
     relvar <- eval.fv(pmax.int(0, varY/meanY^2 + varX/meanX^2
-                               - 2 * covXY/(meanX * meanY)))
-    Variance <- eval.fv(Ratio^2 * relvar/n)
+                               - 2 * covXY/(meanX * meanY)),
+                      relabel=FALSE)
+    Variance <- eval.fv(Ratio^2 * relvar/n,
+                        relabel=FALSE)
     ## two sigma CI
-    hiCI <- eval.fv(Ratio + 2 * sqrt(Variance))
-    loCI <- eval.fv(Ratio - 2 * sqrt(Variance))
+    hiCI <- eval.fv(Ratio + 2 * sqrt(Variance), relabel=FALSE)
+    loCI <- eval.fv(Ratio - 2 * sqrt(Variance), relabel=FALSE)
     ## relabel
     attributes(Ratio) <- attributes(Variance) <- attributes(template)
     Ratio <- prefixfv(Ratio,

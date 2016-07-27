@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.141 $   $Date: 2016/07/15 13:25:54 $
+##    $Revision: 1.142 $   $Date: 2016/07/26 08:18:09 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1084,9 +1084,10 @@ stieltjes <- function(f, M, ...) {
   ## increments of measure
   dM <- apply(Mother, 2, diff)
   dM <- rbind(dM, 0)
-  dM[is.na(dM)] <- 0
   ## integrate f(x) dM(x)
-  results <- apply(fx * dM, 2, sum)
+  f.dM <- fx * dM
+  f.dM[!is.finite(f.dM)] <- 0
+  results <- colSums(f.dM)
   results <- as.list(results)
   names(results) <- valuenames
   return(results)

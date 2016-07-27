@@ -6,13 +6,13 @@
 #
 #        compatible.fv()       Check whether two fv objects are compatible
 #
-#     $Revision: 1.34 $     $Date: 2016/04/25 02:34:40 $
+#     $Revision: 1.35 $     $Date: 2016/07/26 10:30:13 $
 #
 
 eval.fv <- local({
 
   # main function
-  eval.fv <- function(expr, envir, dotonly=TRUE, equiv=NULL) {
+  eval.fv <- function(expr, envir, dotonly=TRUE, equiv=NULL, relabel=TRUE) {
     # convert syntactic expression to 'expression' object
     e <- as.expression(substitute(expr))
     # convert syntactic expression to call
@@ -68,6 +68,8 @@ eval.fv <- local({
       # evaluate
       result[[yn]] <- eval(e, vars, enclos=envir)
     }
+    if(!relabel)
+      return(result)
     # determine mathematical labels.
     # 'yexp' determines y axis label
     # 'ylab' determines y label in printing and description
