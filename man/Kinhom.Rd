@@ -241,12 +241,16 @@
   of \eqn{K_{\rm inhom}}{Kinhom}.
   Each edge-corrected estimate of \eqn{K_{\rm inhom}(r)}{Kinhom(r)} is
   of the form
-  \deqn{\widehat K_{\rm inhom}(r) = \sum_i \sum_j \frac{1\{d_{ij} \le
-      r\} e(x_i,x_j,r)}{\lambda(x_i)\lambda(x_j)}
-  }{K^inhom(r)= sum[i] sum[j] 1(d[i,j] <= r) * 
+  \deqn{
+    \widehat K_{\rm inhom}(r) = (1/A)
+    \sum_i \sum_j \frac{1\{d_{ij} \le r\}
+      e(x_i,x_j,r)}{\lambda(x_i)\lambda(x_j)}
+  }{
+    K^inhom(r)= (1/A) sum[i] sum[j] 1(d[i,j] <= r) * 
     e(x[i],x[j],r)/(lambda(x[i]) * lambda(x[j]))
   }
-  where \eqn{d_{ij}}{d[i,j]} is the distance between points
+  where \code{A} is a constant denominator, 
+  \eqn{d_{ij}}{d[i,j]} is the distance between points
   \eqn{x_i}{x[i]} and \eqn{x_j}{x[j]}, and
   \eqn{e(x_i,x_j,r)}{e(x[i],x[j],r)} is
   an edge correction factor. For the `border' correction,
@@ -285,8 +289,9 @@
   where \eqn{g(x_i,x_j)}{g(x[i],x[j])} is the fraction of the
   circumference of the circle with centre \eqn{x_i}{x[i]} and radius
   \eqn{||x_i - x_j||}{||x[i]-x[j]||} which lies inside the window.
-  
-  If \code{renormalise=TRUE} (the default), then the estimates 
+
+  If \code{renormalise=TRUE} (the default), then the estimates
+  described above 
   are multiplied by \eqn{c^{\mbox{normpower}}}{c^normpower} where 
   \eqn{
     c = \mbox{area}(W)/\sum (1/\lambda(x_i)).

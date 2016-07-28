@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.018
+        CHANGES IN spatstat VERSION 1.46-1.019
 
 OVERVIEW
 
@@ -47,6 +47,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o density.ppp, Smooth.ppp
     New argument 'kernel' allows the user to specify the smoothing kernel.
 
+    o linearKinhom, linearpcfinhom
+    New argument 'normpower'.
+
     o symbolmap, plot.ppp, plot.lpp
     New option: shape="arrows" 
 
@@ -82,7 +85,12 @@ BUG FIXES
     o plot.ppp, plot.lpp
     Crashed if the argument 'shape' was given.
     Fixed.
-     
+
+    o pool.anylist
+    Crashed with a message about buffer size,
+    if the list was longer than about 100 items.
+    Fixed.
+      
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
     Fixed.

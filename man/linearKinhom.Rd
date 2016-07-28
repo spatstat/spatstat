@@ -8,7 +8,8 @@
   for a point pattern on a linear network.
 }
 \usage{
-linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
+linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
+             normalise=TRUE, normpower=1)
 }
 \arguments{
   \item{X}{
@@ -38,6 +39,10 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
     points), which reduces the sampling variability.
     If \code{FALSE}, the denominator is the length of the network.
   }
+  \item{normpower}{
+    Integer (usually either 1 or 2).
+    Normalisation power. See Details.
+  }
 }
 \details{
   This command computes the inhomogeneous version of the 
@@ -61,7 +66,47 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
   If \code{correction="none"}, the calculations do not include
   any correction for the geometry of the linear network.
   If \code{correction="Ang"}, the pair counts are weighted using
-  Ang's correction (Ang, 2010). 
+  Ang's correction (Ang, 2010).
+
+  Each estimate is initially computed as 
+  \deqn{
+    \widehat K_{\rm inhom}(r) = \frac{1}{\mbox{length}(L)}
+    \sum_i \sum_j \frac{1\{d_{ij} \le r\}
+      e(x_i,x_j)}{\lambda(x_i)\lambda(x_j)}
+  }{
+    K^inhom(r)= (1/length(L)) sum[i] sum[j] 1(d[i,j] <= r) * 
+    e(x[i],x[j])/(lambda(x[i]) * lambda(x[j]))
+  }
+  where \code{L} is the linear network,
+  \eqn{d_{ij}}{d[i,j]} is the distance between points
+  \eqn{x_i}{x[i]} and \eqn{x_j}{x[j]}, and
+  \eqn{e(x_i,x_j)}{e(x[i],x[j])} is a weight.
+  If \code{correction="none"} then this weight is equal to 1,
+  while if  \code{correction="Ang"} the weight is
+  \eqn{e(x_i,x_j,r) = 1/m(x_i, d_{ij})}{e(x[i],x[j],r) = 1/m(x[i],d[i,j])}
+  where \eqn{m(u,t)} is the number of locations on the network that lie
+  exactly \eqn{t} units distant from location \eqn{u} by the shortest
+  path.
+
+  If \code{normalise=TRUE} (the default), then the estimates
+  described above
+  are multiplied by \eqn{c^{\mbox{normpower}}}{c^normpower} where 
+  \eqn{
+    c = \mbox{length}(L)/\sum (1/\lambda(x_i)).
+  }{
+    c = length(L)/sum[i] (1/lambda(x[i])).
+  }
+  This rescaling reduces the variability and bias of the estimate
+  in small samples and in cases of very strong inhomogeneity.
+  The default value of \code{normpower} is 1 (for consistency with
+  previous versions of \pkg{spatstat})
+  but the most sensible value is 2, which would correspond to rescaling
+  the \code{lambda} values so that
+  \eqn{
+    \sum (1/\lambda(x_i)) = \mbox{area}(W).
+  }{
+    sum[i] (1/lambda(x[i])) = area(W).
+  }
 }
 \value{
   Function value table (object of class \code{"fv"}).
@@ -69,8 +114,6 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
   \adrian
-  
-  
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

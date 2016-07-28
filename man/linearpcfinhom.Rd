@@ -8,7 +8,8 @@
   for a point pattern on a linear network.
 }
 \usage{
-linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
+linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
+               normalise=TRUE, normpower=1)
 }
 \arguments{
   \item{X}{
@@ -37,6 +38,10 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang", normalise=TRUE)
     data-dependent (equal to the sum of the reciprocal intensities at the data
     points), which reduces the sampling variability.
     If \code{FALSE}, the denominator is the length of the network.
+  }
+  \item{normpower}{
+    Integer (usually either 1 or 2).
+    Normalisation power. See explanation in \code{\link{linearKinhom}}.
   }
 }
 \details{

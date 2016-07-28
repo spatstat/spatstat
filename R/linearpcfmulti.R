@@ -1,7 +1,7 @@
 #
 # linearpcfmulti.R
 #
-# $Revision: 1.10 $ $Date: 2016/07/18 03:47:55 $
+# $Revision: 1.11 $ $Date: 2016/07/28 08:13:26 $
 #
 # pair correlation functions for multitype point pattern on linear network
 #
@@ -139,7 +139,8 @@ linearpcfcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
 
 linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
                                r=NULL, ...,
-                               correction="Ang", normalise=TRUE) {
+                               correction="Ang",
+                               normalise=TRUE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -165,7 +166,7 @@ linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
 
   # compute pcf
   weightsIJ <- outer(1/lambdaI, 1/lambdaJ, "*")
-  denom <- if(!normalise) lengthL else sum(1/lambdaI)
+  denom <- if(!normalise) lengthL else sum(1/lambdaI) 
   g <- linearPCFmultiEngine(X, I, J, r=r,
                             reweight=weightsIJ, denom=denom,
                             correction=correction, ...)

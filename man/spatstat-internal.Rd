@@ -1198,7 +1198,8 @@ lhs.of.formula(x)
 linequad(X, Y, \dots, eps, nd)
 linearKengine(X, \dots, r, reweight, denom, correction, showworking)
 linearKmulti(X, I, J, r, \dots, correction)
-linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction, normalise)
+linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,
+             normalise)
 linearpcfengine(X, \dots, r, reweight, denom, correction)
 linearpcfmulti(X, I, J, r, \dots, correction)
 linearpcfmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots,

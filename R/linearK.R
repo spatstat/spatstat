@@ -34,7 +34,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
 }
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
-                         correction="Ang", normalise=TRUE) {
+                         correction="Ang", normalise=TRUE, normpower=1) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -43,6 +43,10 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                            multi=FALSE)
   if(is.null(lambda))
     linearK(X, r=r, ..., correction=correction)
+  if(normalise) {
+    check.1.real(normpower)
+    stopifnot(normpower >= 1)
+  }
   # extract info about pattern
   lengthL <- volume(domain(X))
   #
@@ -50,7 +54,9 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   #
   invlam <- 1/lambdaX
   invlam2 <- outer(invlam, invlam, "*")
-  denom <- if(!normalise) lengthL else sum(invlam)
+  denom <- if(!normalise) lengthL else
+           if(normpower == 1) sum(invlam) else
+           lengthL * (sum(invlam)/lengthL)^normpower
   K <- linearKengine(X, ...,
                      r=r, reweight=invlam2, denom=denom, correction=correction)
   # set appropriate y axis label

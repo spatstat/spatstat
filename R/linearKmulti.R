@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.11 $ $Date: 2016/07/18 03:48:00 $
+# $Revision: 1.12 $ $Date: 2016/07/28 08:13:43 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -151,6 +151,7 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
   # extract info about pattern
   np <- npoints(X)
   lengthL <- volume(domain(X))
+  #
   # validate I, J
   if(!is.logical(I) || !is.logical(J))
     stop("I and J must be logical vectors")
@@ -166,7 +167,7 @@ linearKmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
 
   # compute K
   weightsIJ <- outer(1/lambdaI, 1/lambdaJ, "*")
-  denom <- if(!normalise) lengthL else sum(1/lambdaI)
+  denom <- if(!normalise) lengthL else sum(1/lambdaI) 
   K <- linearKmultiEngine(X, I, J, r=r,
                           reweight=weightsIJ, denom=denom,
                           correction=correction, ...)
