@@ -1,7 +1,4 @@
 language: r
-r:
-- release
-- devel
 sudo: required
 warnings_are_errors: false
 os:
