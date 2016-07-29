@@ -17,7 +17,7 @@ addons:
 brew_packages:
 - gsl
 r_github_packages:
-- baddstats/polyclip
+- rubak/gsl
 - jimhester/covr
 - yihui/knitr
 after_success:
