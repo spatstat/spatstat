@@ -1821,6 +1821,7 @@
   Monia Mahling,
   Jorge Mateu Mahiques,
   Ulf Mehlig,
+  Frederico Mestre,
   Sebastian Wastl Meyer,
   Mi Xiangcheng,
   Lore De Middeleer,

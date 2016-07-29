@@ -114,27 +114,22 @@
 \code{\link{rMaternII}}.
 }
 \examples{
- Vinf <- rSSI(0.05)
+ Vinf <- rSSI(0.07)
 
- V100 <- rSSI(0.05, 100)
+ V100 <- rSSI(0.07, 100)
 
  X <- runifpoint(100)
  Y <- rSSI(0.03,142,x.init=X) # Y consists of X together with
                               # 42 added points.
- if(interactive()) {
-  plot(Y, main="rSSI")
-  plot(X,add=TRUE,chars=20,cols="red")
- }
- Z <- rSSI(0.05, 100, f=function(x,y){x})
+ plot(Y, main="rSSI")
+ plot(X,add=TRUE,chars=20,cols="red")
+
+ ## inhomogeneous
+ Z <- rSSI(0.07, 50, f=function(x,y){x})
+ plot(Z)
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+\spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{datagen}

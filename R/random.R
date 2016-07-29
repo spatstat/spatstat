@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.88 $   $Date: 2016/07/12 10:41:45 $
+##    $Revision: 4.89 $   $Date: 2016/07/29 00:39:05 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -630,8 +630,10 @@ rSSI <- function(r, n=Inf, win = square(1),
     qq <- if(is.null(f)) runifpoint(1, win) else rpoint(1, f, fmax, win)
     dx <- qq$x[1] - X$x
     dy <- qq$y[1] - X$y
-    if(all(dx^2 + dy^2 > r2))
+    if(all(dx^2 + dy^2 > r2)) {
       X <- superimpose(X, qq, W=win, check=FALSE)
+      ntries <- 0
+    }
     if(X$n >= n)
       return(if(drop) X else solist(X))
   }

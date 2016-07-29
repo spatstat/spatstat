@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.019
+        CHANGES IN spatstat VERSION 1.46-1.020
 
 OVERVIEW
 
-    o We thank Mehdi Moradi and Jorge Mateu for contributions.
+    o We thank Frederico Mestre, Mehdi Moradi and Jorge Mateu for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -97,6 +97,11 @@ BUG FIXES
 
     o stieltjes
     Returned NA if some values of f were not finite.
+    Fixed.
+
+    o rSSI
+    Sometimes terminated prematurely.
+    [Spotted by Frederico Mestre.]
     Fixed.
 
         CHANGES IN spatstat VERSION 1.46-1
