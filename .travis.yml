@@ -2,8 +2,7 @@ language: r
 r:
 - release
 - devel
-sudo: false
-cache: packages
+sudo: required
 warnings_are_errors: false
 os:
 - linux
@@ -17,6 +16,15 @@ addons:
     - bwidget
 brew_packages:
 - gsl
+r_binary_packages:
+- maptools
+- abind
+- rpart
+- deldir
+- tensor
+- spatial
+- sm
+- mgcv
 r_github_packages:
 - rubak/gsl
 - jimhester/covr
