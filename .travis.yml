@@ -14,17 +14,10 @@ addons:
     packages:
     - libgsl0-dev
     - bwidget
+    - tcl8.5-dev
+    - tk8.5-dev
 brew_packages:
 - gsl
-r_binary_packages:
-- maptools
-- abind
-- rpart
-- deldir
-- tensor
-- spatial
-- sm
-- mgcv
 r_github_packages:
 - rubak/gsl
 - jimhester/covr
