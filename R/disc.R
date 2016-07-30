@@ -3,7 +3,7 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.15 $ $Date: 2014/09/22 11:01:39 $
+## $Revision: 1.17 $ $Date: 2016/07/30 08:51:42 $
 ##
 
 disc <- local({
@@ -15,16 +15,16 @@ disc <- local({
     stopifnot(length(radius) == 1)
     stopifnot(radius > 0)
     centre <- as2vector(centre)
-    if(!missing(npoly) && !is.null(delta))
+    if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
       stop("Specify either npoly or delta")
-    if(!missing(npoly)) {
+    if(!missing(npoly) && !is.null(npoly)) {
       stopifnot(length(npoly) == 1)
       stopifnot(npoly >= 3)
     } else if(!is.null(delta)) {
       check.1.real(delta)
       stopifnot(delta > 0)
       npoly <- pmax(16, ceiling(2 * pi * radius/delta))
-    }
+    } else npoly <- 128
     if(!mask) {
       theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1)]
       x <- centre[1] + radius * cos(theta)

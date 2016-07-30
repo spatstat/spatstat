@@ -23,7 +23,8 @@
   \item{r}{positive number: the radius of dilation.}
   \item{\dots}{extra arguments passed to \code{\link{as.mask}}
     controlling the pixel resolution, if the pixel approximation is
-    used.
+    used; or passed to \code{\link{disc}} if the polygonal approximation
+    is used.
   }
   \item{polygonal}{
     Logical flag indicating whether to compute a polygonal

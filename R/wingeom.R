@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.114 $	$Date: 2016/06/14 10:31:52 $
+#	$Revision: 4.117 $	$Date: 2016/07/30 09:19:06 $
 #
 #
 #
@@ -966,24 +966,19 @@ emptywindow <- function(w) {
 }
 
 discs <- function(centres, radii=marks(centres)/2, ..., 
-                  separate=FALSE, mask=FALSE, trim=TRUE, delta=NULL) {
+                  separate=FALSE, mask=FALSE, trim=TRUE,
+                  delta=NULL, npoly=NULL) {
   stopifnot(is.ppp(centres))
   n <- npoints(centres)
   if(n == 0) return(emptywindow(Frame(centres)))
   check.nvector(radii, npoints(centres), oneok=TRUE)
   stopifnot(all(radii > 0))
-  if(is.null(delta)) delta <- 2 * pi * min(radii)/16
-  if(length(radii) == 1)
+  
+  if(sameradius <- (length(radii) == 1)) 
     radii <- rep(radii, npoints(centres))
-  if(separate) {
-    D <- list()
-    W <- disc(centre=centres[1], radius=radii[1], delta=delta)
-    D[[1]] <- W
-    if(n == 1) return(D)
-    for(i in 2:n) 
-      D[[i]] <- disc(centre=centres[i], radius=radii[i], delta=delta)
-    return(D)
-  } else if(mask) {
+
+  if(!separate && mask) {
+    #' compute pixel approximation
     M <- as.mask(Window(centres), ...)
     z <- .C("discs2grid",
             nx    = as.integer(M$dim[2]),
@@ -999,16 +994,35 @@ discs <- function(centres, radii=marks(centres)/2, ...,
             out   = as.integer(integer(prod(M$dim))))
     M$m[] <- as.logical(z$out)
     return(M)
-  } else {
-    W <- disc(centre=centres[1], radius=radii[1], delta=delta)
-    if(n == 1) return(W)
-    for(i in 2:n) {
-      Di <- disc(centre=centres[i], radius=radii[i], delta=delta)
-      W <- union.owin(W, Di)
-    }
-    if(trim) W <- intersect.owin(W, Window(centres))
-    return(W)
   }
+  #' construct a list of discs
+  D <- list()
+  if(!sameradius && length(unique(radii)) > 1) {
+    if(is.null(delta) && is.null(npoly)) {
+      ra <- range(radii)
+      rr <- ra[2]/ra[1]
+      mm <- ceiling(128/rr)
+      mm <- max(16, mm) ## equals 16 unless ra[2]/ra[1] < 8 
+      delta <- 2 * pi * ra[1]/mm
+    }
+    for(i in 1:n)
+      D[[i]] <- disc(centre=centres[i], radius=radii[i],
+                     delta=delta, npoly=npoly)
+  } else {
+    #' congruent discs -- use 'shift'
+    W0 <- disc(centre=c(0,0), radius=radii[1],
+               delta=delta, npoly=npoly)
+    for(i in 1:n) 
+      D[[i]] <- shift(W0, vec=centres[i])
+  } 
+  D <- as.solist(D)
+  #' return list of discs?
+  if(separate)
+    return(D)
+  #' return union of discs
+  W <- union.owin(D)
+  if(trim) W <- intersect.owin(W, Window(centres))
+  return(W)
 }
 
 harmonise.owin <- harmonize.owin <- function(...) {

@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.28 $   $Date: 2015/08/15 05:23:15 $
+#  $Revision: 1.30 $   $Date: 2016/07/30 05:13:53 $
 #
 
 # ............ generic  ............................
@@ -327,11 +327,14 @@ dilation.ppp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
   } else {
     # compute polygonal approximation
     # generate discs
-    out <- NULL
-    for(i in seq_len(x$n)) {
-      balli <- disc(r, c(x$x[i], x$y[i]))
-      out <- union.owin(out, balli)
-    }
+    coo <- coords(x)
+    nn <- npoints(x)
+    balls <- vector(mode="list", length=nn)
+    ball0 <- disc(r, c(0,0), ...)
+    for(i in seq_len(nn))
+      balls[[i]] <- shift(ball0, vec=coo[i,])
+    class(balls) <- c("solist", class(balls))
+    out <- union.owin(balls)
     return(out)
   }
 }

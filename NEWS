@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.020
+        CHANGES IN spatstat VERSION 1.46-1.021
 
 OVERVIEW
 
@@ -17,7 +17,7 @@ OVERVIEW
 
     o Option to plot marked points as arrows.
 
-    o Version nickname: 'Elefuga'
+    o Version nickname: 'Pokelypse'
 
 NEW FUNCTIONS
 
@@ -65,6 +65,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o linearK, linearpcf
     Accelerated by about 40%.
+
+    o dilation.ppp
+    Improved geometrical accuracy.
+    Now accepts arguments to control resolution of polygonal approximation.
+
+    o discs
+    New argument 'npoly'. 
+    Accelerated in some cases. 
 
     o circumradius
     This function is now deprecated, in favour of 'boundingradius'

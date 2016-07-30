@@ -9,7 +9,8 @@
 }
 \usage{
   discs(centres, radii = marks(centres)/2, \dots,
-        separate = FALSE, mask = FALSE, trim = TRUE, delta = NULL)
+        separate = FALSE, mask = FALSE, trim = TRUE,
+        delta = NULL, npoly=NULL)
 }
 \arguments{
   \item{centres}{
@@ -45,6 +46,13 @@
     Argument passed to \code{\link{disc}} to determine the 
     tolerance for the polygonal approximation of each disc.
     Applies only when \code{mask=FALSE}.
+    Incompatible with \code{npoly}.
+  }
+  \item{npoly}{
+    Argument passed to \code{\link{disc}} to determine the 
+    number of edges in the polygonal approximation of each disc.
+    Applies only when \code{mask=FALSE}.
+    Incompatible with \code{delta}.
   }
 }
 \details{
@@ -66,23 +74,21 @@
   really necessary.
 
   If \code{mask=FALSE}, the discs will be constructed as polygons
-  by the function \code{\link{disc}}. To avoid computational problems, the discs
-  will all be constructed using the same physical tolerance value \code{delta}
+  by the function \code{\link{disc}}. To avoid computational problems,
+  by default, the discs will all be constructed using
+  the same physical tolerance value \code{delta}
   passed to \code{\link{disc}}. The default is such that the smallest
   disc will be approximated by a 16-sided polygon.
+  (The argument \code{npoly} should not normally be used, to avoid
+  computational problems arising with small radii.)
 }
 \value{
   If \code{separate=FALSE}, a window (object of class \code{"owin"}).
 
   If \code{separate=TRUE}, a list of windows.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{disc}},
