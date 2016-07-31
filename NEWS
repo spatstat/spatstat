@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.021
+        CHANGES IN spatstat VERSION 1.46-1.022
 
 OVERVIEW
 
@@ -49,6 +49,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o linearKinhom, linearpcfinhom
     New argument 'normpower'.
+
+    o rmh.default, rmh.ppm
+    New arguments 'nsim', 'saveinfo'.
 
     o symbolmap, plot.ppp, plot.lpp
     New option: shape="arrows" 

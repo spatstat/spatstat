@@ -10,7 +10,8 @@
 \usage{
    \method{rmh}{default}(model, start=NULL,
    control=default.rmhcontrol(model),
-   \dots, 
+   \dots,
+   nsim=1, drop=TRUE, saveinfo=TRUE,
    verbose=TRUE, snoop=FALSE)
 }
 
@@ -28,22 +29,36 @@
     Further arguments passed to \code{\link{rmhcontrol}}
     or to trend functions in \code{model}.
   }
-  \item{verbose}{Logical flag indicating whether to print progress
-    reports.
+  \item{nsim}{
+    Number of simulated point patterns that should be generated.
+  }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a single point pattern.
+  }
+  \item{saveinfo}{
+    Logical value indicating whether to save auxiliary information.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports.
   }
   \item{snoop}{
     Logical. If \code{TRUE}, activate the visual debugger. 
   }
 }
 
-\value{A point pattern (an object of class \code{"ppp"}, see
-  \code{\link{ppp.object}}).
+\value{
+  A point pattern (an object of class \code{"ppp"}, see
+  \code{\link{ppp.object}}) or a list of point patterns.
 
   The returned value has an attribute \code{info} containing
   modified versions of the arguments
   \code{model}, \code{start}, and \code{control} which together specify
   the exact simulation procedure. The \code{info} attribute can be
   printed (and is printed automatically by \code{\link{summary.ppp}}).
+  For computational efficiency, the \code{info} attribute can be omitted
+  by setting \code{saveinfo=FALSE}.
 
   The value of \code{\link[base:Random]{.Random.seed}} at the start
   of the simulations is also saved and returned as an attribute

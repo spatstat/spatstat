@@ -12,7 +12,9 @@
                     control=default.rmhcontrol(model, w=w),
                     \dots,
                     w = NULL, 
-                    project=TRUE, verbose=TRUE, new.coef=NULL)
+                    project=TRUE,
+                    nsim=1, drop=TRUE, saveinfo=TRUE,
+                    verbose=TRUE, new.coef=NULL)
 }
 
 \arguments{
@@ -45,6 +47,17 @@
     If \code{project=TRUE} the closest valid model will be simulated;
     if \code{project=FALSE} an error will occur.
   }
+  \item{nsim}{
+    Number of simulated point patterns that should be generated.
+  }
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a single point pattern.
+  }
+  \item{saveinfo}{
+    Logical value indicating whether to save auxiliary information.
+  }
   \item{verbose}{
     Logical flag indicating whether to print progress reports.
   }
@@ -54,8 +67,9 @@
   }
 }
 
-\value{A point pattern (an object of class \code{"ppp"}; see
-  \code{\link{ppp.object}}).
+\value{
+  A point pattern (an object of class \code{"ppp"}; see
+  \code{\link{ppp.object}}) or a list of point patterns.
 }
 
 \details{

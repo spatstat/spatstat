@@ -144,7 +144,8 @@ laslett(X, \dots, verbose = FALSE, plotit = TRUE, discretise = FALSE,
 \examples{
 a <- laslett(heather$coarse)
 with(a, clarkevans.test(TanNew[Rect], correction="D", nsim=39))
-b <- laslett(discs(runifpoint(15) \%mark\% 0.2))
+X <- discs(runifpoint(15) \%mark\% 0.2, npoly=16)
+b <- laslett(X)
 }
 \keyword{spatial}
 \keyword{manip}

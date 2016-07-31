@@ -1,13 +1,15 @@
 #
 # simulation of FITTED model
 #
-#  $Revision: 1.33 $ $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.34 $ $Date: 2016/07/31 07:39:32 $
 #
 #
 rmh.ppm <- function(model, start = NULL,
                     control = default.rmhcontrol(model, w=w),
                     ...,
-                    w = NULL, project=TRUE, verbose=TRUE,
+                    w = NULL, project=TRUE,
+                    nsim=1, drop=TRUE, saveinfo=TRUE,
+                    verbose=TRUE,
                     new.coef=NULL) {
   verifyclass(model, "ppm")
   argh <- list(...)
@@ -40,6 +42,7 @@ rmh.ppm <- function(model, start = NULL,
 
   Y <- do.call(rmh.default,
                append(list(model=X, start=start, control=control,
+                           nsim=nsim, drop=drop, saveinfo=saveinfo,
                            verbose=verbose),
                       fargs))
   return(Y)

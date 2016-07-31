@@ -1,9 +1,11 @@
 #
-# $Id: rmh.default.R,v 1.103 2016/04/25 02:34:40 adrian Exp adrian $
+# $Id: rmh.default.R,v 1.105 2016/07/31 08:21:00 adrian Exp adrian $
 #
 rmh.default <- function(model,start=NULL,
                         control=default.rmhcontrol(model),
-                        ..., verbose=TRUE, snoop=FALSE) {
+                        ...,
+                        nsim=1, drop=TRUE, saveinfo=TRUE,
+                        verbose=TRUE, snoop=FALSE) {
 #
 # Function rmh.  To simulate realizations of 2-dimensional point
 # patterns, given the conditional intensity function of the 
@@ -32,6 +34,8 @@ rmh.default <- function(model,start=NULL,
     control <- update(control, ...)
 
   control <- rmhResolveControl(control, model)
+
+  saveinfo <- as.logical(saveinfo)
   
   # retain "..." arguments unrecognised by rmhcontrol
   # These are assumed to be arguments of functions defining the trend
@@ -486,10 +490,33 @@ rmh.default <- function(model,start=NULL,
   class(InfoList) <- c("rmhInfoList", class(InfoList))
 
   # go
-  do.call(rmhEngine,
-          append(list(InfoList,
-                      verbose=verbose, snoop=snoop, kitchensink=TRUE),
-                 f.args))
+  if(nsim == 1 && drop) {
+    result <- do.call(rmhEngine,
+                      append(list(InfoList,
+                                  verbose=verbose,
+                                  snoop=snoop,
+                                  kitchensink=saveinfo),
+                             f.args))
+  } else {
+    result <- vector(mode="list", length=nsim)
+    if(verbose) {
+      splat("Generating", nsim, "point patterns...")
+      pstate <- list()
+    }
+    subverb <- verbose && (nsim == 1)
+    for(isim in 1:nsim) {
+      if(verbose) pstate <- progressreport(isim, nsim, state=pstate)
+      result[[isim]] <- do.call(rmhEngine,
+                                append(list(InfoList,
+                                            verbose=subverb,
+                                            snoop=snoop,
+                                            kitchensink=saveinfo),
+                                       f.args))
+    }
+    result <- as.solist(result)
+    if(verbose) splat("Done.\n")
+  }
+  return(result)
 }
 
 print.rmhInfoList <- function(x, ...) {
