@@ -12,11 +12,13 @@ of `spatstat` on CRAN. Each official release of `spatstat` has a
 version number like `1.2-3` while the development version has a 
 version number like `1.2-3.004`. Official releases occur every 8 weeks
 (the minimum time permitted by CRAN policies) while the development code
-is updated almost every day.
+is updated almost every day. 
 
-The following status badges are not currently working:
+The development version is also tracked by
+Travis and Codecov:
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
+but these badges are currently not working correctly.
 
 ## Installation
 
