@@ -1,8 +1,6 @@
 spatstat
 ========
 
-[![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
-[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat)
 [![Research software impact](http://depsy.org/api/package/cran/spatstat/badge.svg)](http://depsy.org/package/r/spatstat)
 
@@ -15,6 +13,10 @@ version number like `1.2-3` while the development version has a
 version number like `1.2-3.004`. Official releases occur every 8 weeks
 (the minimum time permitted by CRAN policies) while the development code
 is updated almost every day.
+
+The following status badges are not currently working:
+[![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
+[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
 ## Installation
 
