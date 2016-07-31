@@ -15,10 +15,10 @@ version number like `1.2-3.004`. Official releases occur every 8 weeks
 is updated almost every day. 
 
 The development version is also tracked by
-Travis and Codecov:
+Travis and Codecov, but these badges are currently not working correctly:
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
-but these badges are currently not working correctly.
+
 
 ## Installation
 
