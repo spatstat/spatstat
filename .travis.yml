@@ -1,5 +1,9 @@
 language: r
-sudo: required
+r:
+- release
+- devel
+sudo: false
+cache: packages
 warnings_are_errors: false
 os:
 - linux
@@ -11,14 +15,10 @@ addons:
     packages:
     - libgsl0-dev
     - bwidget
-    - tcl8.5-dev
-    - tk8.5-dev
 brew_packages:
 - gsl
-r_github_packages:
-- rubak/gsl
-- jimhester/covr
-- yihui/knitr
+r_packages:
+- covr
 after_success:
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then R CMD INSTALL $PKG_TARBALL; fi
