@@ -22,14 +22,14 @@ r_packages:
 after_success:
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then R CMD INSTALL $PKG_TARBALL; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then Rscript -e 'covr::codecov(type = "vignette",
+- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then Rscript -e 'covr::codecov(type = "vignette",
   quiet = FALSE)'; fi
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then Rscript -e 'covr::codecov(type = "test",
   quiet = FALSE)'; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then Rscript -e 'covr::codecov(type = "example",
+- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then Rscript -e 'covr::codecov(type = "example",
   quiet = FALSE)'; fi
 env:
-- _R_CHECK_FORCE_SUGGESTS_=false DISPLAY=":0"
+- _R_CHECK_FORCE_SUGGESTS_=false
 deploy:
   provider: releases
   api_key:
