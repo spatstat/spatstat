@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.022
+        CHANGES IN spatstat VERSION 1.46-1.023
 
 OVERVIEW
 
-    o We thank Frederico Mestre, Mehdi Moradi and Jorge Mateu for contributions.
+    o We thank Tilman Davies, Frederico Mestre, Mehdi Moradi
+    and Jorge Mateu for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -17,7 +18,9 @@ OVERVIEW
 
     o Option to plot marked points as arrows.
 
-    o Version nickname: 'Pokelypse'
+    o Kernel smoothing accelerated.
+
+    o Version nickname: 'Idiopathic'
 
 NEW FUNCTIONS
 
@@ -69,6 +72,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o linearK, linearpcf
     Accelerated by about 40%.
 
+    o pixellate.ppp
+    Accelerated in the case where weights are given
+
+    o density.ppp
+    Accelerated in the cases where weights are given or 'diggle=TRUE'
+    
     o dilation.ppp
     Improved geometrical accuracy.
     Now accepts arguments to control resolution of polygonal approximation.
@@ -76,6 +85,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o discs
     New argument 'npoly'. 
     Accelerated in some cases. 
+
+    o quadrat.test.ppm
+    Accelerated in the case where the original window is a rectangle.
 
     o circumradius
     This function is now deprecated, in favour of 'boundingradius'

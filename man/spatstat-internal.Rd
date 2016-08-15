@@ -742,7 +742,8 @@
 \alias{trap.extra.arguments}
 \alias{trianglediameters}
 \alias{trim.mask}        
-\alias{truncline}        
+\alias{truncline}
+\alias{tapplysum}
 \alias{tweak.fv.entry}
 \alias{tweak.coefs}
 \alias{unitname.default}
@@ -1684,8 +1685,8 @@ trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
 truncline(x, nc)
-tweak.fv.entry(x, current.tag, new.labl=NULL, new.desc=NULL,
-new.tag=NULL)
+tapplysum(x, flist, do.names)
+tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
 tweak.coefs(model, new.coef)
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 

@@ -152,6 +152,8 @@ useDynLib(spatstat,
 "PerfectPenttinen",
 "PerfectStrauss",
 "PerfectStraussHard",
+"ply2sum",
+"ply3sum",
 "poly2imA",
 "poly2imI",
 "prdist2segs",
@@ -2453,6 +2455,7 @@ export("symbolmap")
 export("symbolmaptype")
 export("sympoly")
 export("tail.hyperframe")
+export("tapplysum")
 export("tenseur")
 export("tensor1x1")
 export("terms.dppm")
@@ -2497,7 +2500,7 @@ export("trim.mask")
 export("trim.rectangle")
 export("triplet.family")
 export("Triplets")
-export("truncline")        
+export("truncline")
 export("Tstat")
 export("tweak.coefs")
 export("tweak.colourmap")

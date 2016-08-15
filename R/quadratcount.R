@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.55 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.57 $  $Date: 2016/08/15 03:05:15 $
 #
 
 quadratcount <- function(X, ...) {
@@ -132,12 +132,14 @@ rectquadrat.countEngine <- function(x, y, xbreaks, ybreaks, weights) {
   # yg <- cut(y, breaks=ybreaks, include.lowest=TRUE)
   xg <- fastFindInterval(x, xbreaks, labels=TRUE)
   yg <- fastFindInterval(y, ybreaks, labels=TRUE)
-  if(missing(weights)) 
+  if(missing(weights)) {
     sumz <- table(list(y=yg, x=xg))
-  else {
-    sumz <- tapply(weights, list(y=yg, x=xg), sum)
-    if(any(nbg <- is.na(sumz)))
-      sumz[nbg] <- 0
+  } else {
+    # was: 
+    # sumz <- tapply(weights, list(y=yg, x=xg), sum)
+    # if(any(nbg <- is.na(sumz)))
+    #  sumz[nbg] <- 0
+    sumz <- tapplysum(weights, list(y=yg, x=xg), do.names=TRUE)
   }
   # reverse order of y 
   sumz <- sumz[rev(seq_len(nrow(sumz))), ]

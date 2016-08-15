@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.022
-Nickname: Pokelypse
-Date: 2016-07-31
+Version: 1.46-1.023
+Nickname: Idiopathic
+Date: 2016-08-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -47,6 +47,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	P. Dalgaard; 
 	M. D'Antuono;
         S. Das;
+	T. Davies;
 	P.J. Diggle; 
 	P. Donnelly;
 	I. Dryden; 

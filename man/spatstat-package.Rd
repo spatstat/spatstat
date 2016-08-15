@@ -1762,6 +1762,7 @@
   Peter Dalgaard,
   Mario D'Antuono,
   Sourav Das,
+  Tilman Davies,
   Peter Diggle,
   Patrick Donnelly,
   Ian Dryden,

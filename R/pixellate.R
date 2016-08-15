@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.18 $    $Date: 2016/02/11 10:17:12 $
+#           $Revision: 1.19 $    $Date: 2016/08/15 02:45:24 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -69,14 +69,18 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
   if(is.null(weights)) {
     ta <- table(row = rowfac, col = colfac)
   } else if(k == 1) {
-    ta <- tapply(weights, list(row = rowfac, col=colfac), sum)
-    ta[is.na(ta)] <- 0
+    # was:
+    # ta <- tapply(weights, list(row = rowfac, col=colfac), sum)
+    # ta[is.na(ta)] <- 0
+    ta <- tapplysum(weights, list(row = rowfac, col=colfac))
   } else {
     ta <- list()
     for(j in 1:k) {
-      taj <- tapply(weights[,j], list(row = rowfac, col=colfac), sum)
-      taj[is.na(taj)] <- 0
-      ta[[j]] <- taj
+      # was:
+      # taj <- tapply(weights[,j], list(row = rowfac, col=colfac), sum)
+      # taj[is.na(taj)] <- 0
+      # ta[[j]] <- taj
+      ta[[j]] <- tapplysum(weights[,j], list(row = rowfac, col=colfac))
     }
   }
 
