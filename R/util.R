@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.215 $    $Date: 2016/07/17 03:39:28 $
+#    $Revision: 1.217 $    $Date: 2016/08/21 04:50:28 $
 #
 #
 matrowsum <- function(x) {
@@ -249,7 +249,9 @@ prange <- function(x) {
 }
 
   
-ordinal <- function(k) {
+ordinal <- function(k) paste(k, ordinalsuffix(k), sep="")
+
+ordinalsuffix <- function(k) {
   last <- abs(k) %% 10
   lasttwo <- abs(k) %% 100
   isteen <- (lasttwo > 10 & lasttwo < 20)
@@ -258,7 +260,7 @@ ordinal <- function(k) {
                           ifelse(last == 2, "nd",
                                  ifelse(last == 3, "rd",
                                         "th"))))
-  return(paste(k, ending, sep=""))
+  return(ending)
 }
 
 articlebeforenumber <- function(k) {

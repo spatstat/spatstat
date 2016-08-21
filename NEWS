@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.023
+        CHANGES IN spatstat VERSION 1.46-1.024
 
 OVERVIEW
 
@@ -65,6 +65,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lengths.psp
     New argument 'squared'.
 
+    o plot.linfun
+    Now passes arguments to the function being plotted.
+
     o density.ppp, Smooth.ppp
     Computation accelerated by about 15% 
     in the case where at='points' and kernel='gaussian'.
@@ -85,6 +88,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o discs
     New argument 'npoly'. 
     Accelerated in some cases. 
+
+    o nnfun.lpp
+    New argument 'k'.
 
     o quadrat.test.ppm
     Accelerated in the case where the original window is a rectangle.
@@ -114,6 +120,11 @@ BUG FIXES
     if the list was longer than about 100 items.
     Fixed.
       
+    o rSSI
+    Sometimes terminated prematurely.
+    [Spotted by Frederico Mestre.]
+    Fixed.
+
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
     Fixed.
@@ -122,9 +133,8 @@ BUG FIXES
     Returned NA if some values of f were not finite.
     Fixed.
 
-    o rSSI
-    Sometimes terminated prematurely.
-    [Spotted by Frederico Mestre.]
+    o nnfun.lpp
+    Print method gave incorrect information about the point pattern.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.46-1

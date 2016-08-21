@@ -3,7 +3,7 @@
 #
 #   Class of functions of location on a linear network
 #
-#   $Revision: 1.9 $   $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.10 $   $Date: 2016/08/21 03:52:39 $
 #
 
 linfun <- function(f, L) {
@@ -99,8 +99,18 @@ plot.linfun <- function(x, ..., L=NULL, eps = NULL, dimyx = NULL, xy = NULL,
                         main) {
   if(missing(main)) main <- short.deparse(substitute(x))
   if(is.null(L)) L <- as.linnet(x)
-  Z <- as.linim(x, eps=eps, dimyx=dimyx, xy=xy, L=L)
-  plot(Z, ..., main=main)
+  argh <- list(...)
+  otherfargs <- get("otherfargs", envir=environment(x))
+  xtra <- names(argh) %in% otherfargs
+  if(!any(xtra)) {
+    Z <- as.linim(x, eps=eps, dimyx=dimyx, xy=xy, L=L)
+    rslt <- plot(Z, ..., main=main)
+  } else {
+    Z <- do.call(as.linim, append(list(x, eps=eps, dimyx=dimyx, xy=xy, L=L),
+                                  argh[xtra]))
+    rslt <- do.call(plot.linim, append(list(Z, main=main), argh[!xtra]))
+  }
+  return(invisible(rslt))
 }
 
 as.owin.linfun <- function(W, ...) {

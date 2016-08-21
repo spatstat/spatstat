@@ -8,15 +8,19 @@
   Compute the nearest neighbour function of a point pattern on a linear network.
 }
 \usage{
-  \method{nnfun}{lpp}(X, ...)
+  \method{nnfun}{lpp}(X, ..., k=1)
 }
 \arguments{
   \item{X}{
     A point pattern on a linear network
     (object of class \code{"lpp"}).
   }
+  \item{k}{
+    Integer. The algorithm finds the \code{k}th nearest neighbour in
+    \code{X} from any spatial location.    
+  }
   \item{\dots}{
-    Extra arguments are ignored. 
+    Other arguments are ignored. 
   }
 }
 \details{

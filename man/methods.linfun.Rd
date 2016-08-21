@@ -43,7 +43,7 @@
   }
   \item{\dots}{
     Extra arguments passed to \code{\link{plot.im}} or
-    \code{\link{print.default}}.
+    \code{\link{print.default}}, or passed to the function itself.
   }
   \item{main}{Main title for plot.}
 }
@@ -60,12 +60,19 @@
   on a linear network. It is essentially an \R \code{function} with some
   extra attributes.
 
-  The method \code{as.linnet.linfun} extracts the linear network
-  on which the function is defined.
   The method \code{as.owin.linfun} extracts the two-dimensional spatial
   window containing the linear network.
   The method \code{as.linim.linfun} converts the function to a pixel
   image on the linear network (an object of class \code{"linim"}).
+
+  The method \code{plot.linfun} first converts the function to a
+  pixel image using \code{as.linim.linfun}, then plots the image using
+  \code{\link{plot.linim}}.
+
+  Note that a \code{linfun} function may have additional arguments,
+  other than those which specify the location on the network
+  (see \code{\link{linfun}}). These additional arguments may be passed
+  to \code{as.linim} and to \code{plot.linfun}. 
 }
 \value{
   For \code{print.linfun} and \code{summary.linfun} the result is \code{NULL}.

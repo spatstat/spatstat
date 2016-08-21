@@ -68,10 +68,7 @@
   f(X)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

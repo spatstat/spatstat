@@ -442,6 +442,7 @@
 \alias{orderstats}
 \alias{orderwhich}
 \alias{ordinal}
+\alias{ordinalsuffix}
 \alias{\%orifnull\%}  %DoNotExport
 %NAMESPACE export("%orifnull%")
 \alias{outdated.interact}
@@ -1333,6 +1334,7 @@ signalStatus(x, errors.only)
 orderstats(x, k, decreasing)
 orderwhich(x, k, decreasing)
 ordinal(k)
+ordinalsuffix(k)
 a \%orifnull\% b
 outdated.interact(object)
 overlap.trapezium(xa, ya, xb, yb, verb = FALSE)
