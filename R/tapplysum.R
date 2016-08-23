@@ -4,7 +4,7 @@
 #'
 #'  Adrian Baddeley and Tilman Davies
 #' 
-#'  $Revision: 1.6 $  $Date: 2016/08/15 06:53:23 $
+#'  $Revision: 1.7 $  $Date: 2016/08/23 05:37:19 $
 
 tapplysum <- function(x, flist, do.names=FALSE) {
   stopifnot(is.numeric(x))
@@ -45,39 +45,47 @@ tapplysum <- function(x, flist, do.names=FALSE) {
   n <- length(ii)
   #' 
   if(nfac == 2) {
-    oo <- order(ii, jj)
-    zz <- .C("ply2sum",
-             nin = as.integer(n),
-             xin = as.double(x[oo]),
-             iin = as.integer(ii[oo]),
-             jin = as.integer(jj[oo]),
-             nout = as.integer(integer(1)),
-             xout = as.double(numeric(n)),
-             iout = as.integer(integer(n)),
-             jout = as.integer(integer(n)))
-    nout <- zz$nout
-    ijout <- cbind(zz$iout, zz$jout)[1:nout,,drop=FALSE]
-    xout  <- zz$xout[1:nout]
     result <- matrix(0, mi, mj)
-    result[ijout] <- xout
+    if(n > 0) {
+      oo <- order(ii, jj)
+      zz <- .C("ply2sum",
+               nin = as.integer(n),
+               xin = as.double(x[oo]),
+               iin = as.integer(ii[oo]),
+               jin = as.integer(jj[oo]),
+               nout = as.integer(integer(1)),
+               xout = as.double(numeric(n)),
+               iout = as.integer(integer(n)),
+               jout = as.integer(integer(n)))
+      nout <- zz$nout
+      if(nout > 0) {
+        ijout <- cbind(zz$iout, zz$jout)[1:nout,,drop=FALSE]
+        xout  <- zz$xout[1:nout]
+        result[ijout] <- xout
+      }
+    }
   } else {
-    oo <- order(ii, jj, kk)
-    zz <- .C("ply3sum",
-             nin = as.integer(n),
-             xin = as.double(x[oo]),
-             iin = as.integer(ii[oo]),
-             jin = as.integer(jj[oo]),
-             kin = as.integer(kk[oo]),
-             nout = as.integer(integer(1)),
-             xout = as.double(numeric(n)),
-             iout = as.integer(integer(n)),
-             jout = as.integer(integer(n)),
-             kout = as.integer(integer(n)))
-    nout <- zz$nout
-    ijkout <- cbind(zz$iout, zz$jout, zz$kout)[1:nout,,drop=FALSE]
-    xout  <- zz$xout[1:nout]
     result <- array(0, dim=c(mi, mj, mk))
-    result[ijkout] <- xout
+    if(n > 0) {
+      oo <- order(ii, jj, kk)
+      zz <- .C("ply3sum",
+               nin = as.integer(n),
+               xin = as.double(x[oo]),
+               iin = as.integer(ii[oo]),
+               jin = as.integer(jj[oo]),
+               kin = as.integer(kk[oo]),
+               nout = as.integer(integer(1)),
+               xout = as.double(numeric(n)),
+               iout = as.integer(integer(n)),
+               jout = as.integer(integer(n)),
+               kout = as.integer(integer(n)))
+      nout <- zz$nout
+      if(nout > 0) {
+        ijkout <- cbind(zz$iout, zz$jout, zz$kout)[1:nout,,drop=FALSE]
+        xout  <- zz$xout[1:nout]
+        result[ijkout] <- xout
+      }
+    }
   }
   if(do.names) 
     dimnames(result) <- lapply(flist, levels)
