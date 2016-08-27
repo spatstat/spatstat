@@ -16,11 +16,16 @@ dilationAny(A, B)
 }
 \arguments{
   \item{A,B}{
-    Windows (objects of class \code{"owin"}).
+    Windows (objects of class \code{"owin"}),
+    point patterns (objects of class \code{"ppp"})
+    or line segment patterns (objects of class \code{"psp"})
+    in any combination.
   }
 }
 \value{
-  Another window (object of class \code{"owin"}).
+  A window (object of class \code{"owin"}) except that
+  if \code{A} is a point pattern, then the result is an object of the same
+  type as \code{B} (and vice versa).
 }
 \details{
   The operator \code{A \%(+)\% B} and function \code{MinkowskiSum(A,B)}
@@ -70,6 +75,13 @@ dilationAny(A, B)
   The algorithm currently computes the result as a polygonal
   window using the \pkg{polyclip} library. 
   It will be quite slow if applied to binary mask windows.
+
+  The arguments \code{A} and \code{B} can also be point patterns or line
+  segment patterns. These are interpreted as spatial regions, the
+  Minkowski sum is computed, and the result is returned as an object of
+  the most appropriate type. The Minkowski sum of two point patterns is
+  another point pattern. The Minkowski sum of a point pattern and a line
+  segment pattern is another line segment pattern.
 }
 \seealso{
   \code{\link{dilation}},
@@ -90,6 +102,8 @@ dilationAny(A, B)
   plot(RplusB, add=TRUE, border="blue", lwd=2,
          hatch=TRUE, hatchargs=list(col="blue"))
   par(opa)
+
+  plot(cells \%(+)\% square(0.1))
 }
 \author{
   \adrian

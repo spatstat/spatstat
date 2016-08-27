@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.32 $ $Date: 2016/03/03 10:00:02 $
+# $Revision: 1.35 $ $Date: 2016/08/27 10:18:45 $
 #
 #
 ############################# 
@@ -15,14 +15,15 @@ superimpose <- function(...) {
 
 superimpose.default <- function(...) {
   argh <- list(...)
+  #' First expand any arguments which are lists of objects
+  argh <- expandSpecialLists(argh, "solist")
+  #' Now dispatch
   if(any(sapply(argh, is.lpp)) || any(sapply(argh, inherits, what="linnet")))
-    return(superimpose.lpp(...))
-  ispl <- sapply(argh, inherits, what="ppplist")
-  if(!any(ispl))
-    return(superimpose.ppp(...))
-  yargh <- argh[!ispl]
-  for(i in which(ispl)) yargh <- append(yargh, argh[[i]])
-  return(do.call(superimpose.ppp, yargh))
+    return(do.call(superimpose.lpp, argh))
+  if(any(sapply(argh, is.psp)))
+    return(do.call(superimpose.psp, argh))
+  #' default
+  return(do.call(superimpose.ppp, argh))
 }
 
 superimpose.ppp <- function(..., W=NULL, check=TRUE) {

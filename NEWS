@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.026
+        CHANGES IN spatstat VERSION 1.46-1.027
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
     o Faster computation in linear networks.
 
     o Bounding circle of a spatial object.
+
+    o Minkowski sum also applicable to point patterns and line segment patterns.
 
     o Option to plot marked points as arrows.
 
@@ -54,6 +56,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp, Smooth.ppp
     New argument 'kernel' allows the user to specify the smoothing kernel.
+
+    o MinkowskiSum, %(+)%
+    Now accepts arguments which are point patterns or line segment patterns
+    as well as windows.
 
     o linearKinhom, linearpcfinhom
     New argument 'normpower'.
@@ -124,6 +130,10 @@ BUG FIXES
 
     o plot.ppp, plot.lpp
     Crashed if the argument 'shape' was given.
+    Fixed.
+
+    o superimpose
+    Crashed if the argument was a 'solist' containing line segment patterns.
     Fixed.
 
     o pool.anylist
