@@ -26,6 +26,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o anyNA.im
+    Method for 'anyNA' for pixel images.
+
     o boundingcircle, boundingcentre
     Find the smallest circle enclosing a window or point pattern.
 
