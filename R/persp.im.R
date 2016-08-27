@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.15 $ $Date: 2016/07/17 06:29:08 $
+##  $Revision: 1.18 $ $Date: 2016/08/27 03:02:20 $
 ##
 
 persp.im <- local({
@@ -174,7 +174,8 @@ persp.im <- local({
     PZ <- as.matrix(X)
     ok <- !is.na(PZ)
     PZ[ok] <- pz
-    maxslip <- max(abs(apply(PZ, 1, diff)), abs(apply(PZ, 2, diff)))
+    maxslip <- max(0, abs(apply(PZ, 1, diff)),
+                      abs(apply(PZ, 2, diff)), na.rm=TRUE)
     ## determine which pixels are in front
     d <- ceiling(dim(X)/2)
     jx <- cut(px, breaks=d[2])
@@ -219,6 +220,9 @@ persp.im <- local({
     ## put into image
     Y <- eval.im(X > 0)
     Y[] <- isvis
+    ## replace 'NA' by 'FALSE'
+    if(anyNA(Y))
+      Y <- as.im(Y, na.replace=FALSE)
     return(Y)
   }
 
@@ -230,7 +234,7 @@ perspPoints <- function(x, y=NULL, ..., Z, M) {
   xy <- xy.coords(x, y)
   stopifnot(is.im(Z))
   X <- as.ppp(xy, W=Frame(Z))
-  if(!is.matrix(M) && all(dim(M) == 4))
+  if(!(is.matrix(M) && all(dim(M) == 4)))
     stop("M should be a 4 x 4 matrix, returned from persp()")
   V <- attr(M, "visible")
   if(is.null(V)) {
@@ -238,7 +242,9 @@ perspPoints <- function(x, y=NULL, ..., Z, M) {
                "it should be recomputed by persp() with visible=TRUE"))
   } else {
     ## restrict to visible points
-    X <- X[V[X]]
+    VX <- V[X, drop=FALSE]
+    VX[is.na(VX)] <- FALSE
+    X <- X[VX]
   }
   points(trans3d(X$x, X$y, Z[X], M), ...)
 }
@@ -246,7 +252,7 @@ perspPoints <- function(x, y=NULL, ..., Z, M) {
 perspSegments <- local({
   perspSegments <- function(x0, y0=NULL, x1=NULL, y1=NULL, ..., Z, M) {
     stopifnot(is.im(Z))
-    if(!is.matrix(M) && all(dim(M) == 4))
+    if(!(is.matrix(M) && all(dim(M) == 4)))
       stop("M should be a 4 x 4 matrix, returned from persp()")
     V <- attr(M, "visible")
     if(is.null(V))
@@ -271,7 +277,10 @@ perspSegments <- local({
       eps <- with(Z, min(xstep,ystep))
       Y <- do.call(rbind, lapply(as.data.frame(t(eX)), chopsegment, eps=eps))
       ## determine which segments are visible
-      ok <- V[list(x=Y[,1], y=Y[,2])] & V[list(x=Y[,3], y=Y[,4])]
+      yleft  <- list(x=Y[,1], y=Y[,2])
+      yright <- list(x=Y[,3], y=Y[,4])
+      ok <- V[yleft, drop=FALSE] & V[yright, drop=FALSE]
+      ok[is.na(ok)] <- FALSE
       Y <- Y[ok, ,drop=FALSE]
     }
     if(nrow(Y) == 0) return(invisible(NULL))

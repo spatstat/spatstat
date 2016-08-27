@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.025
+        CHANGES IN spatstat VERSION 1.46-1.026
 
 OVERVIEW
 
-    o We thank Tilman Davies, Frederico Mestre, Mehdi Moradi
-    and Jorge Mateu for contributions.
+    o We thank Guy Bayegnak, Tilman Davies, Frederico Mestre, 
+    Mehdi Moradi and Jorge Mateu for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -20,7 +20,9 @@ OVERVIEW
 
     o Kernel smoothing accelerated.
 
-    o Version nickname: 'Idiopathic'
+    o Bug fixes and improvements.
+
+    o Version nickname: 'Iatrogenic'
 
 NEW FUNCTIONS
 
@@ -109,6 +111,12 @@ BUG FIXES
     o integral.linim, integral.linfun
     Results were slightly inaccurate because of a bias in the
     distribution of sample points.
+    Fixed.
+
+    o perspPoints
+    Crashed if the image Z contained NA 
+    (i.e. if Z was only defined on a subset of the bounding frame).
+    Spotted by Guy Bayegnak.
     Fixed.
 
     o plot.ppp, plot.lpp

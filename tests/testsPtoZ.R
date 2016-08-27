@@ -11,6 +11,21 @@ local({
   K <- Kmodel(fit)
 })
 
+#'   tests/perspim.R
+#'
+#'   Check persp.im handling of NA, etc
+#' 
+#'   $Revision: 1.1 $  $Date: 2016/08/27 02:53:35 $
+
+require(spatstat)
+
+local({
+  set.seed(42)
+  Z <- distmap(letterR, invert=TRUE)[letterR, drop=FALSE]
+  X <- runifpoint(100, Frame(Z))
+  M <- persp(Z, colin=Z, visible=TRUE)
+  perspPoints(X, Z=Z, M=M)
+})
 ##
 ## tests/pixelgripes.R
 ##     Problems related to pixellation of windows

@@ -65,6 +65,7 @@
   \code{\link{median.default}},
   \code{\link{range.default}},
   \code{\link{quantile.im}},
+  \code{\link{anyNA.im}},
   \code{\link{im.object}},
   \code{\link{summary.im}}.
 }

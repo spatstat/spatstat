@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.136 $     $Date: 2016/03/23 09:23:28 $
+#      $Revision: 1.137 $     $Date: 2016/08/27 02:42:09 $
 #
 #      The class "im" of raster images
 #
@@ -1175,5 +1175,9 @@ as.function.im <- function(x, ...) {
   f <- function(x,y) { Z[list(x=x, y=y)] }
   g <- funxy(f, Window(x))
   return(g)
+}
+
+anyNA.im <- function(x, recursive=FALSE) {
+  anyNA(x$v)
 }
 

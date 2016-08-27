@@ -46,6 +46,9 @@
   \code{summary.im} returns an object of class \code{"summary.im"},
   while \code{print.summary.im} returns \code{NULL}.
 }
+\seealso{
+  \code{\link{mean.im}}, \code{\link{integral.im}}, \code{\link{anyNA.im}}
+}
 \examples{
   # make an image
   X <- as.im(function(x,y) {x^2}, unit.square())
@@ -62,10 +65,7 @@
   X$integral
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}
