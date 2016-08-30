@@ -41,6 +41,10 @@
 
   It would be wise to check the result by plotting the degree
   of each vertex, as shown in the Examples.
+
+  If \code{X} has marks, then these are stored in
+  the resulting linear network \code{Y <- as.linnet(X)},
+  and can be extracted as \code{marks(as.psp(Y))} or \code{marks(Y$lines)}.
 }
 \value{
 A linear network (object of class \code{"linnet"}).

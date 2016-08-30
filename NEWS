@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.028
+        CHANGES IN spatstat VERSION 1.46-1.029
 
 OVERVIEW
 
@@ -78,6 +78,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.linfun
     Now passes arguments to the function being plotted.
+
+    o as.linnet.psp
+    If the line segment pattern has marks, then the resulting linear network
+    also carries these marks in the $lines component.
 
     o density.ppp, Smooth.ppp
     Computation accelerated by about 15% 
