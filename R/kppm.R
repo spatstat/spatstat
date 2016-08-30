@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.123 $ $Date: 2016/04/25 02:34:40 $
+# $Revision: 1.124 $ $Date: 2016/08/30 01:38:40 $
 #
 
 kppm <- function(X, ...) {
@@ -1106,8 +1106,8 @@ plot.kppm <- local({
     loc <- list(...)$locations
     inappropriate <- (nochoice & ((what == "intensity") & (x$stationary))) |
              ((what == "statistic") & (Fit$method != "mincon")) |
-             ((what == "cluster") & (Fit$mcfit$internal$model == "lgcp")) |
-             ((what == "cluster") & ((!x$stationary)) & is.null(loc))
+             ((what == "cluster") & (identical(x$isPCP, FALSE))) | 
+             ((what == "cluster") & (!x$stationary) & is.null(loc))
 
     if(!nochoice && !x$stationary && "cluster" %in% what && is.null(loc))
       stop("Please specify additional argument ", sQuote("locations"),

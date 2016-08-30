@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.027
+        CHANGES IN spatstat VERSION 1.46-1.028
 
 OVERVIEW
 
@@ -130,6 +130,10 @@ BUG FIXES
 
     o plot.ppp, plot.lpp
     Crashed if the argument 'shape' was given.
+    Fixed.
+
+    o plot.kppm
+    Crashed if the model was not fitted by minimum contrast.
     Fixed.
 
     o superimpose

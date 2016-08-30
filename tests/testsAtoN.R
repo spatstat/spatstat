@@ -799,6 +799,14 @@ local({
  fitxI <- update(fitx, improve.type="quasi")
  # vcov.kppm
  vc <- vcov(fitxI)
+
+  # plot.kppm including predict.kppm
+ fitMC <- kppm(redwood ~ x, "Thomas")
+ fitCL <- kppm(redwood ~ x, "Thomas", method="c")
+ fitPA <- kppm(redwood ~ x, "Thomas", method="p")
+ plot(fitMC)
+ plot(fitCL)
+ plot(fitPA)
  
 })
 

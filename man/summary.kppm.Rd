@@ -42,11 +42,29 @@
 
   You can also type \code{coef(summary(object))} to extract a table
   of the fitted coefficients of the point process model \code{object}
-  together with standard errors and confidence limits. 
+  together with standard errors and confidence limits.
 }
 \value{
   \code{summary.kppm} returns an object of class \code{"summary.kppm"},
   while \code{print.summary.kppm} returns \code{NULL}.
+
+  The result of \code{summary.kppm} includes at least the
+  following components:
+  \item{Xname}{character string name of the original point pattern data}
+  \item{stationary}{logical value indicating whether the model is
+    stationary}
+  \item{clusters}{the \code{clusters} argument to \code{\link{kppm}}}
+  \item{modelname}{character string describing the model}
+  \item{isPCP}{\code{TRUE} if the model is a Poisson cluster process,
+    \code{FALSE} if it is a log-Gaussian Cox process}
+  \item{lambda}{Estimated intensity: numeric value, or pixel image}
+  \item{mu}{Mean cluster size: numeric value, pixel image, or
+    \code{NULL}}
+  \item{clustpar}{list of fitted parameters for the cluster model}
+  \item{clustargs}{list of fixed parameters for the cluster model, if
+    any}
+  \item{callstring}{character string representing the original call to
+    \code{\link{kppm}}}
 }
 \examples{
  fit <- kppm(redwood ~ 1, "Thomas")
