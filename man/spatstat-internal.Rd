@@ -238,6 +238,7 @@
 \alias{good.names}
 \alias{good.correction.K}
 \alias{graphicsPars}            
+\alias{gridadjacencymatrix}
 \alias{gridindex}            
 \alias{grid1index}
 \alias{grokIndexVector}
@@ -1099,6 +1100,7 @@ GLMpredict(fit, data, coefs, changecoef, type)
 good.names(nama, defaults, suffices)
 good.correction.K(X)
 graphicsPars(key)
+gridadjacencymatrix(dims)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
 grokIndexVector(ind, len, nama)
