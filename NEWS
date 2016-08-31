@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.030
+        CHANGES IN spatstat VERSION 1.46-1.031
 
 OVERVIEW
 
@@ -7,8 +7,6 @@ OVERVIEW
     Mehdi Moradi and Jorge Mateu for contributions.
 
     o Non-Gaussian smoothing kernels.
-
-    o Barry-McIntyre density estimator.
 
     o Important bug fix in linearK, linearpcf
 
@@ -29,10 +27,6 @@ OVERVIEW
     o Version nickname: 'Iatrogenic'
 
 NEW FUNCTIONS
-
-    o densitybm
-    Barry-McIntyre estimator of density (intensity) of point pattern.
-    An alternative to density.ppp and adaptive.density.
 
     o anyNA.im
     Method for 'anyNA' for pixel images.
