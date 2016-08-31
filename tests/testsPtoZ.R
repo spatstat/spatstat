@@ -1344,7 +1344,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of sparse3array.R code
-#'  $Revision: 1.5 $ $Date: 2016/03/06 02:24:57 $
+#'  $Revision: 1.6 $ $Date: 2016/08/31 12:24:25 $
 
 require(spatstat)
 local({
@@ -1395,6 +1395,8 @@ local({
     stopifnot(all((M+M) == 2*M))     # non-sparse
     stopifnot(!any((M+M) != 2*M))    # sparse
 
+    zM <- (1:5) * M  # vector premultiplication
+    
     ## tensor operator
 
     tenseur(c(1,-1), M, 1, 3)

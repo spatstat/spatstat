@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.15 $  $Date: 2016/03/09 10:28:40 $
+#' $Revision: 1.16 $  $Date: 2016/08/31 12:05:16 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -705,6 +705,16 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
     }
   }
 
+  if(all(drop1[-1]) && dim1[1] == dim2[1]) {
+    #' e1 is a (sparse) vector matching the first extent of e2
+    ijk <- data.frame(i=e2$i, j=e2$j, k=e2$k)
+    xout <- do.call(.Generic, list(e1[ijk$i], e2[ijk]))
+    result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
+                            x=as.vector(xout),
+                            dims=dim2, dimnames=dimnames(e2), strict=TRUE)
+    return(result)
+  }
+  
   stop(paste("Non-conformable arrays:",
              paste(dim1, collapse="x"), "and", paste(dim2, collapse="x")),
        call.=FALSE)
