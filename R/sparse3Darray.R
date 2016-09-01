@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.16 $  $Date: 2016/08/31 12:05:16 $
+#' $Revision: 1.18 $  $Date: 2016/09/01 02:08:09 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -214,10 +214,32 @@ as.array.sparse3Darray <- function(x, ...) {
       ## values outside array return NA
       if(any(bad <- !inside3Darray(dim(x), i)))
         answer[bad] <- NA
-      ## convert triples of integers to character codes
-      # icode <- apply(i, 1, paste, collapse=",") << is too slow >>
-      icode <- paste(i[,1], i[,2], i[,3], sep=",")
-      dcode <- paste(x$i, x$j, x$k, sep=",")
+      ## if entire array is zero, there is nothing to match
+      if(length(x$x) == 0)
+        return(answer)
+      ## match desired indices to sparse entries
+      varies <- (dimx > 1)
+      nvary <- sum(varies)
+      varying <- which(varies)
+      if(nvary == 3) {
+        ## convert triples of integers to character codes
+        ## icode <- apply(i, 1, paste, collapse=",") << is too slow >>
+        icode <- paste(i[,1], i[,2], i[,3], sep=",")
+        dcode <- paste(x$i, x$j, x$k, sep=",")
+      } else if(nvary == 2) {
+        ## effectively a sparse matrix
+        icode <- paste(i[,varying[1]], i[,varying[2]], sep=",")
+        ijk <- cbind(x$i, x$j, x$k)
+        dcode <- paste(ijk[,varying[1]], ijk[,varying[2]], sep=",")
+      } else if(nvary == 1) {
+        ## effectively a sparse vector
+        icode <- i[,varying]
+        dcode <- switch(varying, x$i, x$j, x$k)
+      } else {
+        ## effectively a single value
+        icode <- rep(1, nrow(i))
+        dcode <- 1  # since we know length(x$x) > 0
+      }
       ## match them
       m <- match(icode, dcode)
       ## insert any found elements
@@ -707,11 +729,21 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
 
   if(all(drop1[-1]) && dim1[1] == dim2[1]) {
     #' e1 is a (sparse) vector matching the first extent of e2
-    ijk <- data.frame(i=e2$i, j=e2$j, k=e2$k)
-    xout <- do.call(.Generic, list(e1[ijk$i], e2[ijk]))
-    result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
-                            x=as.vector(xout),
-                            dims=dim2, dimnames=dimnames(e2), strict=TRUE)
+    if(.Generic %in% c("*", "&")) {
+      # result is sparse
+      ijk <- data.frame(i=e2$i, j=e2$j, k=e2$k)
+      ones <- rep(1, nrow(ijk))
+      i11 <- data.frame(i=e2$i, j=ones, k=ones)
+      xout <- do.call(.Generic, list(e1[i11], e2[ijk]))
+      result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
+                              x=as.vector(xout),
+                              dims=dim2, dimnames=dimnames(e2), strict=TRUE)
+    } else {
+      # result is full array
+      e1 <- as.array(e1)[,,,drop=TRUE]
+      e2 <- as.array(e2)
+      result <- do.call(.Generic, list(e1, e2))
+    }
     return(result)
   }
   
