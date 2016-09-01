@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.174 $	$Date: 2016/04/10 06:43:34 $
+#	$Revision: 4.175 $	$Date: 2016/09/01 05:52:38 $
 #
 #
 #	A window may be either
@@ -1012,6 +1012,7 @@ summary.owin <- function(object, ...) {
                  type=object$type,
                  area=area(object),
                  units=unitname(object))
+  result$areafraction <- with(result, area/(diff(xrange) * diff(yrange)))
   switch(object$type,
          rectangle={
          },
@@ -1093,6 +1094,8 @@ print.summary.owin <- function(x, ...) {
         if(Area == 1) singularunits else pluralunits)
   if(!is.null(ledge <- unitinfo$legend))
     splat(ledge)
+  if(x$type != "rectangle")
+    splat("Fraction of frame area:", signif(x$areafraction, 3))
   return(invisible(x))
 }
 

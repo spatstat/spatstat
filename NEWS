@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.033
+        CHANGES IN spatstat VERSION 1.46-1.034
 
 OVERVIEW
 
@@ -82,6 +82,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.linnet.psp
     If the line segment pattern has marks, then the resulting linear network
     also carries these marks in the $lines component.
+
+    o summary.owin, summary.im
+    The fraction of frame area that is occupied by the window/image
+    is now reported.
 
     o density.ppp, Smooth.ppp
     Computation accelerated by about 15% 

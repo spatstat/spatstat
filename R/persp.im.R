@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.18 $ $Date: 2016/08/27 03:02:20 $
+##  $Revision: 1.20 $ $Date: 2016/09/01 05:49:42 $
 ##
 
 persp.im <- local({
@@ -246,7 +246,10 @@ perspPoints <- function(x, y=NULL, ..., Z, M) {
     VX[is.na(VX)] <- FALSE
     X <- X[VX]
   }
-  points(trans3d(X$x, X$y, Z[X], M), ...)
+  #' determine heights
+  ZX <- Z[X, drop=FALSE] # may contain NA
+  #' transform and plot
+  points(trans3d(X$x, X$y, ZX, M), ...)
 }
 
 perspSegments <- local({
@@ -285,8 +288,8 @@ perspSegments <- local({
     }
     if(nrow(Y) == 0) return(invisible(NULL))
     ## map to projected plane
-    x0y0 <- trans3d(Y[,1], Y[,2], Z[list(x=Y[,1],y=Y[,2])], M)
-    x1y1 <- trans3d(Y[,3], Y[,4], Z[list(x=Y[,3],y=Y[,4])], M)
+    x0y0 <- trans3d(Y[,1], Y[,2], Z[list(x=Y[,1],y=Y[,2]), drop=FALSE], M)
+    x1y1 <- trans3d(Y[,3], Y[,4], Z[list(x=Y[,3],y=Y[,4]), drop=FALSE], M)
     segments(x0y0$x, x0y0$y, x1y1$x, x1y1$y, ...)
   }
 
@@ -323,5 +326,4 @@ perspContour <- function(Z, M, ...,
   }
   invisible(NULL)
 }
-
 

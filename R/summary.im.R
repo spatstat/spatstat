@@ -3,7 +3,7 @@
 #
 #    summary() method for class "im"
 #
-#    $Revision: 1.20 $   $Date: 2015/06/23 02:26:24 $
+#    $Revision: 1.21 $   $Date: 2016/09/01 02:31:52 $
 #
 #    summary.im()
 #    print.summary.im()
@@ -89,7 +89,8 @@ print.summary.im <- function(x, ...) {
         pluralunits)
   if(!is.null(explain <- unitinfo$explain))
     splat(explain)
-  if(x$fullgrid) {
+  fullgrid <- x$fullgrid
+  if(fullgrid) {
     splat("Image is defined on the full rectangular grid")
     whatpart <- "Frame"
   } else {
@@ -97,7 +98,11 @@ print.summary.im <- function(x, ...) {
     whatpart <- "Subset"
   }
   splat(whatpart, "area =", win$area, "square", pluralunits)
-  if(x$fullgrid) splat("Pixel values") else
+  if(!fullgrid) {
+    af <- signif(win$areafraction, min(3, sigdig))
+    splat(whatpart, "area fraction =", af)
+  }
+  if(fullgrid) splat("Pixel values") else
                  splat("Pixel values (inside window):")
   switch(x$type,
          integer=,
