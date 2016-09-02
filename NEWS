@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.034
+        CHANGES IN spatstat VERSION 1.46-1.035
 
 OVERVIEW
 
@@ -130,6 +130,11 @@ BUG FIXES
     distribution of sample points.
     Fixed.
 
+    o rSSI
+    Sometimes terminated prematurely.
+    [Spotted by Frederico Mestre.]
+    Fixed.
+
     o perspPoints
     Crashed if the image Z contained NA 
     (i.e. if Z was only defined on a subset of the bounding frame).
@@ -152,12 +157,11 @@ BUG FIXES
     Crashed with a message about buffer size,
     if the list was longer than about 100 items.
     Fixed.
-      
-    o rSSI
-    Sometimes terminated prematurely.
-    [Spotted by Frederico Mestre.]
-    Fixed.
 
+    o diagnose.ppm, plot.diagppm
+    Crashed in some cases when cumulative=FALSE.
+    Fixed.
+   
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
     Fixed.

@@ -17,6 +17,21 @@ local({
   A <- rjitter(cells, nsim=2, retry=FALSE)
 })
 
+#'  tests/resid.R
+#'
+#'  Stuff related to residuals and residual diagnostics
+#'
+#'   $Revision: 1.1 $  $Date: 2016/09/02 10:56:59 $
+#'
+
+require(spatstat)
+local({
+  fit <- ppm(cells ~x, Strauss(r=0.15))
+  diagnose.ppm(fit, cumulative=FALSE)
+  diagnose.ppm(fit, cumulative=FALSE, type="pearson")
+})
+
+
 ##
 ## tests/rhohat.R
 ##

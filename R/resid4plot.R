@@ -189,7 +189,7 @@ resid4plot <- local({
     observedX <-    a$x
     theoreticalV <- a$ExZ
     theoreticalX <- a$x
-    theoreticalSD <- NULL
+    theoreticalSD <- theoreticalHI <- theoreticalLO <- NULL
     if(is.null(rlab)) rlab <- paste("marginal of", typename)
   } else if(!is.null(RES$xcumul)) {
     a <- RES$xcumul
