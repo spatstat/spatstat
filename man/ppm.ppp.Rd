@@ -590,6 +590,59 @@
   See \code{\link{valid.ppm}} and \code{\link{emend.ppm}} for
   ensuring the fitted model is a valid point process.
 }
+\section{Error and Warning Messages}{
+  Some common error messages and warning messages 
+  are listed below, with explanations.
+  \describe{
+    \item{\dQuote{System is computationally singular}}{
+      The Fisher information matrix of the fitted model has a
+      determinant close to zero, so that the matrix cannot be inverted,
+      and the software cannot calculate standard errors or confidence intervals.
+      This error is usually reported when the model is printed,
+      because the \code{print} method calculates standard errors for the
+      fitted parameters. Singularity usually occurs because the spatial
+      coordinates in the original data were very large numbers
+      (e.g. expressed in metres) so that the fitted coefficients were
+      very small numbers. The simple remedy is to
+      \bold{rescale the data}, for example, to convert from metres to
+      kilometres by \code{X <- \link{rescale}(X, 1000)}, then re-fit the
+      model. Singularity can also occur if the covariate values are
+      very large numbers, or if the covariates are approximately
+      collinear.       
+    }
+    \item{\dQuote{Covariate values were NA or undefined at X\%
+	(M out of N) of the quadrature points}}{
+      The covariate data (typically a pixel image) did not provide
+      values of the covariate at some of the spatial locations in the 
+      observation window of the point pattern. This means that the
+      spatial domain of the pixel image does not completely cover the
+      observation window of the point pattern. If the percentage
+      is small, this warning can be ignored - typically it happens
+      because of rounding effects which cause the pixel image
+      to be one-pixel-width narrower than the observation window.
+      However if more than a few percent of covariate values are
+      undefined, it would be prudent to check that the pixel images
+      are correct, and are correctly registered in their spatial relation to
+      the observation window.
+    }
+    \item{\dQuote{Model is unidentifiable}}{
+      It is not possible to estimate all the model parameters
+      from this dataset. The error message gives a further explanation,
+      such as \dQuote{data pattern is empty}.
+      Choose a simpler model, or check the data.
+    }
+    \item{\dQuote{N data points are illegal (zero conditional intensity)}}{
+      In a Gibbs model (i.e. with interaction between
+      points), the conditional intensity may be zero at some spatial
+      locations, indicating that the model forbids the presence of a 
+      point at these locations. However if the conditional intensity is
+      zero \emph{at a data point}, this means that the model is
+      inconsistent with the data. Modify the interaction parameters so
+      that the data point is not illegal (e.g. reduce the value of the
+      hard core radius) or choose a different interaction.
+    }
+  }
+}
 \section{Warnings}{
   The implementation of the Huang-Ogata method is experimental;
   several bugs were fixed in \pkg{spatstat} 1.19-0.

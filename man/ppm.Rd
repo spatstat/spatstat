@@ -229,6 +229,10 @@
   and Newton-Raphson maximisation, implemented in the
   experimental command \code{\link{ippm}}.
 }
+\section{Technical Warnings and Error Messages}{
+  See \code{\link{ppm.ppp}} for some technical warnings about the
+  weaknesses of the algorithm, and explanation of some common error messages.
+}
 \references{
   Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)
   Logistic regression for spatial Gibbs point processes.
@@ -268,7 +272,6 @@
   \emph{Annals of the Institute of Statistical Mathematics}
   \bold{46}, 475--486.
 }
-
 \seealso{
   \code{\link{ppm.ppp}} and \code{\link{ppm.quad}} for
   more details on the fitting technique and edge correction.

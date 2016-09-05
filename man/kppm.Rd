@@ -283,6 +283,10 @@
   There are methods for printing, plotting, predicting, simulating
   and updating objects of this class.
 }
+\section{Error and warning messages}{
+  See \code{\link{ppm.ppp}} for a list of common error messages
+  and warnings originating from the first stage of model-fitting.
+}
 \seealso{
   methods for \code{kppm} objects:
   \code{\link{plot.kppm}},

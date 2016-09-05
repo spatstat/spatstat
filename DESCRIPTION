@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.035
+Version: 1.46-1.036
 Nickname: Iatrogenic
-Date: 2016-09-02
+Date: 2016-09-05
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
