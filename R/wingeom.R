@@ -2,7 +2,7 @@
 #	wingeom.S	Various geometrical computations in windows
 #
 #
-#	$Revision: 4.117 $	$Date: 2016/07/30 09:19:06 $
+#	$Revision: 4.118 $	$Date: 2016/09/10 10:46:22 $
 #
 #
 #
@@ -697,7 +697,13 @@ trim.rectangle <- function(W, xmargin=0, ymargin=xmargin) {
        unitname=unitname(W))
 }
 
-grow.rectangle <- function(W, xmargin=0, ymargin=xmargin) {
+grow.rectangle <- function(W, xmargin=0, ymargin=xmargin, fraction=NULL) {
+  if(!is.null(fraction)) {
+    fraction <- ensure2vector(fraction)
+    if(any(fraction < 0)) stop("fraction must be non-negative")
+    if(missing(xmargin) xmargin <- fraction[1] * diff(W$xrange)
+    if(missing(ymargin) ymargin <- fraction[2] * diff(W$yrange)
+  }
   xmargin <- ensure2vector(xmargin)
   ymargin <- ensure2vector(ymargin)
   if(any(xmargin < 0) || any(ymargin < 0))

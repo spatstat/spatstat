@@ -14,7 +14,7 @@
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), colargs=list(),
-                   useRaster=NULL,
+                   useRaster=NULL, workaround=FALSE,
                    do.plot=TRUE) 
 
   \method{image}{im}(x, \dots,
@@ -25,7 +25,7 @@
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), colargs=list(),
-                   useRaster=NULL,
+                   useRaster=NULL, workaround=FALSE, 
                    do.plot=TRUE) 
 }
 \arguments{
@@ -106,6 +106,12 @@
     Bitmap raster display tends to produce better results,
     but is not supported on all graphics devices.
     The default is to use bitmap raster display if it is supported.
+  }
+  \item{workaround}{
+    Logical value, specifying whether to use a workaround to avoid a bug
+    which occurs with some device drivers in \R, in which the image
+    has the wrong spatial orientation. See the section on
+    \bold{Image is Displayed in Wrong Spatial Orientation} below.
   }
   \item{do.plot}{
     Logical value indicating whether to actually plot the image
@@ -309,7 +315,7 @@
   try setting \code{useRaster=FALSE} in the call to \code{plot.im}.
   If the ribbon colours are not displayed, set
   \code{ribargs=list(useRaster=FALSE)}.
-  
+
   Errors may occur on some graphics devices if the image is very
   large. If this happens, try setting \code{useRaster=FALSE} in the
   call to \code{plot.im}.
@@ -321,6 +327,24 @@
   This occurs with some images created by earlier versions of \pkg{spatstat}.
   To repair the coordinates in an image \code{X}, type
   \code{X <- as.im(X)}.
+}
+\section{Image is Displayed in Wrong Spatial Orientation}{
+  If the image is displayed in the wrong spatial orientation,
+  and you created the image data directly, 
+  please check that you understand the \pkg{spatstat} convention for
+  the spatial orientation of pixel images. The row index of the matrix
+  of pixel values corresponds to the increasing \eqn{y} coordinate; the
+  column index of the matrix corresponds to the increasing \eqn{x} coordinate
+  (Baddeley, Rubak and Turner, 2015, section 3.6.3, pages 66--67).
+
+  Images can be displayed in the wrong spatial orientation
+  on some devices, due to a bug in the device driver. This occurs only
+  when the plot coordinates are \emph{reversed}, that is, when 
+  the plot was initialised with coordinate limits \code{xlim, ylim}
+  such that \code{xlim[1] > xlim[2]} or \code{ylim[1] > ylim[2]} or
+  both. This bug is reported to occur only when \code{useRaster=TRUE}.
+  To fix this, try setting \code{workaround=TRUE}, or if that is
+  unsuccessful, \code{useRaster=FALSE}.
 }
 \seealso{
   \code{\link{im.object}},
@@ -352,6 +376,11 @@
    # it's complex
    Y <- exp(Z + V * 1i)
    plot(Y)
+}
+\references{
+  Baddeley, A., Rubak, E. and Turner, R. (2015)
+  \emph{Spatial Point Patterns: Methodology and Applications with R}.
+  Chapman and Hall/CRC Press.
 }
 \author{
   \spatstatAuthors.

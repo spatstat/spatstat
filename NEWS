@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.036
+        CHANGES IN spatstat VERSION 1.46-1.037
 
 OVERVIEW
 
-    o We thank Guy Bayegnak, Tilman Davies, Frederico Mestre, 
-    Mehdi Moradi and Jorge Mateu for contributions.
+    o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, 
+    Frederico Mestre, Mehdi Moradi and Jorge Mateu for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -22,9 +22,11 @@ OVERVIEW
 
     o Kernel smoothing accelerated.
 
+    o Workaround for bug in some graphics drivers affecting image orientation.
+
     o Bug fixes and improvements.
 
-    o Version nickname: 'Iatrogenic'
+    o Version nickname: 'Displacement Activity'
 
 NEW FUNCTIONS
 
@@ -60,6 +62,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o MinkowskiSum, %(+)%
     Now accepts arguments which are point patterns or line segment patterns
     as well as windows.
+
+    o plot.im
+    New argument 'workaround' to avoid a bug in some device drivers
+    that causes the image to be displayed in the wrong spatial orientation.
+    [Thanks to Marcel Austenfeld for drawing attention to this.]
 
     o linearKinhom, linearpcfinhom
     New argument 'normpower'.
@@ -107,6 +114,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o discs
     New argument 'npoly'. 
     Accelerated in some cases. 
+
+    o grow.rectangle
+    New argument 'fraction'.
 
     o nnfun.lpp
     New argument 'k'.

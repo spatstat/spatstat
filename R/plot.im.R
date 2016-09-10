@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.113 $   $Date: 2016/07/16 06:37:59 $
+#  $Revision: 1.115 $   $Date: 2016/09/10 10:23:21 $
 #
 #  Plotting code for pixel images
 #
@@ -16,7 +16,8 @@ plot.im <- local({
   ## auxiliary functions
 
   image.doit <- function(imagedata, ...,
-                         extrargs=graphicsPars("image"), W) {
+                         extrargs=graphicsPars("image"), W,
+                         workaround=FALSE) {
     aarg <- resolve.defaults(...)
     add      <- resolve.1.default(list(add=FALSE),     aarg)
     show.all <- resolve.1.default(list(show.all=!add), aarg)
@@ -26,6 +27,21 @@ plot.im <- local({
       do.call.matched(plot.owin,
                       resolve.defaults(list(x=W, type="n"), aarg), 
                       extrargs=graphicsPars("owin"))
+    }
+    if(workaround && identical(aarg$useRaster, TRUE)) {
+      #' workaround for bug 16035
+      #' detect reversed coordinates
+      usr <- par('usr')
+      xrev <- (diff(usr[1:2]) < 0) 
+      yrev <- (diff(usr[3:4]) < 0)
+      if(xrev || yrev) {
+        #' flip matrix of pixel values, because the device driver does not
+        z <- imagedata$z
+        d <- dim(z) # z is in the orientation expected for image.default
+        if(xrev) z <- z[d[1]:1,       , drop=FALSE]
+        if(yrev) z <- z[      , d[2]:1, drop=FALSE]
+        imagedata$z <- z
+      }
     }
     extrargs <- setdiff(extrargs, c("claim.title.space", "box"))
     do.call.matched(image.default,
@@ -87,7 +103,7 @@ plot.im <- local({
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), colargs=list(),
-                     useRaster=NULL,
+                     useRaster=NULL, workaround=FALSE,
                      do.plot=TRUE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
@@ -451,6 +467,7 @@ plot.im <- local({
                                 y=cellbreaks(x$yrow, x$ystep),
                                 z=t(x$v)),
                  W=xbox,
+                 workaround=workaround,
                  dotargs,
                  list(useRaster=useRaster, add=add, show.all=show.all),
                  colourinfo,
@@ -528,6 +545,7 @@ plot.im <- local({
                               y=cellbreaks(x$yrow, x$ystep),
                               z=t(x$v)),
                W=xbox,
+               workaround=workaround,
                list(add=TRUE, show.all=show.all),
                dotargs,
                list(useRaster=useRaster),
@@ -569,6 +587,7 @@ plot.im <- local({
                               y=rib.ycoords,
                               z=t(rib.z)),
                W=bb.rib,
+               workaround=workaround,
                list(add=TRUE,
                     show.all=show.all),
                ribargs,

@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.036
-Nickname: Iatrogenic
-Date: 2016-09-05
+Version: 1.46-1.037
+Nickname: Displacement Activity
+Date: 2016-09-10
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -20,6 +20,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	by M. Adepeju;
         C. Anderson; 
         Q.W. Ang; 
+        M. Austenfeld;
 	S. Azaele; 
 	M. Baddeley;
 	C. Beale; 
