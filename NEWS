@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.037
+        CHANGES IN spatstat VERSION 1.46-1.038
 
 OVERVIEW
 
@@ -21,6 +21,8 @@ OVERVIEW
     o Option to plot marked points as arrows.
 
     o Kernel smoothing accelerated.
+
+    o spatstat now 'Imports' the package 'RandomFields'.
 
     o Workaround for bug in some graphics drivers affecting image orientation.
 
@@ -124,6 +126,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o quadrat.test.ppm
     Accelerated in the case where the original window is a rectangle.
 
+    o kppm, mincontrast, cauchy.estpcf, lgcp.estpcf, matclust.estpcf,
+    thomas.estpcf, vargamma.estpcf
+    A warning about infinite values of the summary function 
+    no longer occurs when the default settings are used.
+    
     o circumradius
     This function is now deprecated, in favour of 'boundingradius'
 

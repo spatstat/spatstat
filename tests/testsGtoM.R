@@ -90,7 +90,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.11 $ $Date: 2016/03/04 10:48:03 $
+# $Revision: 1.12 $ $Date: 2016/09/11 11:39:51 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -104,24 +104,21 @@ local({
  fitC <- update(fit, cells)
  fitCx <- update(fit, cells ~ x)
 
- if(require(RandomFields) && RandomFieldsSafe()) {
-
-    fit0 <- kppm(redwood ~1, "LGCP")
-    Y0 <- simulate(fit0)[[1]]
-    stopifnot(is.ppp(Y0))
+ fit0 <- kppm(redwood ~1, "LGCP")
+ Y0 <- simulate(fit0)[[1]]
+ stopifnot(is.ppp(Y0))
     
-    fit1 <- kppm(redwood ~x, "LGCP",
-                covmodel=list(model="matern", nu=0.3),
-                control=list(maxit=5))
-    Y1 <- simulate(fit1)[[1]]
-    stopifnot(is.ppp(Y1))
+ fit1 <- kppm(redwood ~x, "LGCP",
+              covmodel=list(model="matern", nu=0.3),
+              control=list(maxit=5))
+ Y1 <- simulate(fit1)[[1]]
+ stopifnot(is.ppp(Y1))
 
 # ... and Abdollah's code
 
-    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
-    Y2 <- simulate(fit2)[[1]]
-    stopifnot(is.ppp(Y2))
-  }
+ fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
+ Y2 <- simulate(fit2)[[1]]
+ stopifnot(is.ppp(Y2))
 
  # improve.kppm
  fitI <- update(fit, improve.type="quasi")

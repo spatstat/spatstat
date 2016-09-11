@@ -230,6 +230,7 @@
 \alias{getlastshift}
 \alias{getppmdatasubset}
 \alias{getppmOriginalCovariates}
+\alias{getRandomFieldsModel}
 \alias{getSpatstatVariable}
 \alias{getSumFun}
 \alias{geyercounts}
@@ -1092,6 +1093,7 @@ getlambda.lpp(lambda, X, \dots, update)
 getlastshift(X)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
+getRandomFieldsModel(model)
 getSpatstatVariable(name)
 getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)

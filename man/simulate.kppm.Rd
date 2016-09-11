@@ -82,11 +82,8 @@
   \code{\link{simulate.ppm}},
   \code{\link[stats]{simulate}}
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{models}

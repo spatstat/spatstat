@@ -4,10 +4,18 @@ import(stats,graphics,grDevices,utils,methods)
 import(polyclip,goftest)
 import(Matrix)
 import(nlme,rpart)
-importFrom(deldir,deldir,duplicatedxy,tile.list)
+importFrom(deldir,
+           deldir,duplicatedxy,tile.list)
 importFrom(abind,abind)
 importFrom(tensor,tensor)
-importFrom(mgcv,gam,gam.control,anova.gam,formula.gam,predict.gam,print.gam,summary.gam,vcov.gam,s)
+importFrom(mgcv,
+           gam,gam.control,anova.gam,formula.gam,predict.gam,
+           print.gam,summary.gam,vcov.gam,s)
+importFrom(RandomFields,
+           RFoptions,RFcov,RFsimulate,
+           RMcauchy,RMexp,RMgencauchy,RMgauss,
+           RMgneiting,RMmatern,RMnugget,RMspheric,
+           RMstable,RMwhittle)
 
 # Do not edit the following.
 # It is generated automatically.
@@ -1010,6 +1018,7 @@ export("getlambda.lpp")
 export("getlastshift")
 export("getppmdatasubset")
 export("getppmOriginalCovariates")
+export("getRandomFieldsModel")
 export("getSpatstatVariable")
 export("getSumFun")
 export("Geyer")

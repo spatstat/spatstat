@@ -555,15 +555,9 @@
              cmod <- dots$covmodel
              model <- cmod$model %orifnull% dots$model %orifnull% "exponential"
              margs <- NULL
-             if(model != "exponential") {
-               kraever("RandomFields")
+             if(!identical(model, "exponential")) {
                ## get the 'model generator' 
-               modgen <- try(getExportedValue("RandomFields", 
-                                              paste0("RM", model)),
-                             silent=TRUE)
-               if(inherits(modgen, "try-error") ||
-                  !inherits(modgen, "RMmodelgenerator"))
-                 stop(paste("Model", sQuote(model), "is not recognised"))
+               modgen <- getRandomFieldsModel(model)
                attr(model, "modgen") <- modgen
                if(is.null(cmod)){
                  margsnam <- names(formals(modgen))
@@ -589,7 +583,6 @@
              ## For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
-             kraever("RandomFields")
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
@@ -633,7 +626,6 @@
              ## For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
-             kraever("RandomFields")
              modgen <- attr(model, "modgen")
              if(length(margs) == 0) {
                mod <- modgen(var=par[1], scale=par[2])
@@ -650,15 +642,9 @@
            if(!is.character(model))
              stop("Covariance function model should be specified by name")
            margs <- c(...)
-           if(model != "exponential") {
-             kraever("RandomFields")
+           if(!identical(model, "exponential")) {
              ## get the 'model generator' 
-             modgen <- try(getExportedValue("RandomFields", 
-                                            paste0("RM", model)),
-                           silent=TRUE)
-             if(inherits(modgen, "try-error") ||
-                !inherits(modgen, "RMmodelgenerator"))
-               stop(paste("Model", sQuote(model), "is not recognised"))
+             modgen <- getRandomFieldsModel(model)
              attr(model, "modgen") <- modgen
            }
            return(list(type="Covariance", model=model, margs=margs))

@@ -157,7 +157,6 @@
   require additional arguments passed through \code{\dots}; see
   \code{\link{rLGCP}} for details on argument names).
   The first four models are Neyman-Scott cluster processes.
-  Fitting the LGCP model requires the \pkg{RandomFields} package.
   
   The algorithm first estimates the intensity function
   of the point process using \code{\link{ppm}}.
@@ -358,12 +357,9 @@
   kppm(redwood ~ 1, "LGCP", statistic="pcf")
   kppm(redwood ~ x, cluster="Cauchy", statistic="K")
   kppm(redwood, cluster="VarGamma", nu = 0.5, statistic="pcf")
-  if(requireNamespace("RandomFields")) {
-     kppm(redwood ~ x, "LGCP", statistic="pcf",
-           model="matern", nu=0.3,
-           control=list(maxit=10))
-  }
-
+  kppm(redwood ~ x, "LGCP", statistic="pcf",
+                            model="matern", nu=0.3,
+                            control=list(maxit=10))
   # fit intensity with quasi-likelihood method
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 }

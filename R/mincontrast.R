@@ -53,8 +53,12 @@ mincontrast <- local({
       stopifnot(rmin < rmax && rmin >= 0)
     else {
       alim <- attr(observed, "alim") %orifnull% range(rvals)
-      if(is.null(rmin)) rmin <- alim[1]
       if(is.null(rmax)) rmax <- alim[2]
+      if(is.null(rmin)) {
+        rmin <- alim[1]
+        if(rmin == 0 && identical(explain$fname,"g"))
+          rmin <- rmax/1e3 # avoid artefacts at zero in pcf
+      }
     }
     ## extract vector of observed values of statistic
     valu <- fvnames(observed, ".y")

@@ -40,9 +40,13 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
   }
 }
 \details{
-  This algorithm fits a log-Gaussian Cox point process model
-  to a point pattern dataset
-  by the Method of Minimum Contrast, using the K function.
+  This algorithm fits a log-Gaussian Cox point process (LGCP) model
+  to a point pattern dataset by the Method of Minimum Contrast,
+  using the K function of the point pattern.
+
+  The shape of the covariance of the LGCP must be specified:
+  the default is the exponential covariance function,
+  but other covariance models can be selected.
 
   The argument \code{X} can be either
   \describe{
@@ -224,13 +228,11 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
     plot(u)
 
     \testonly{
-      if(require(RandomFields)) {
       K <- Kest(redwood, r=seq(0, 0.1, length=9))
       op <- spatstat.options(fastK.lgcp=TRUE)
       lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
                 control=list(maxit=2))
       spatstat.options(op)
-      }
     }
     if(FALSE) {
       ## takes several minutes!
