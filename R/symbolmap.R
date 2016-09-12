@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.32 $  $Date: 2016/07/23 06:38:27 $
+##   $Revision: 1.34 $  $Date: 2016/09/12 10:50:51 $
 ##
 
 symbolmap <- local({
@@ -353,19 +353,19 @@ invoke.symbolmap <- local({
   }
   
   ## main function
-  invoke.symbolmap <- function(map, values, x, y=NULL, ...,
+  invoke.symbolmap <- function(map, values, x=NULL, y=NULL, ...,
                                  add=FALSE, do.plot=TRUE,
                                  started = add && do.plot) {
     if(!inherits(map, "symbolmap"))
       stop("map should be an object of class 'symbolmap'")
-    ## function will return maximum size of symbols plotted.
-    maxsize <- 0
-    if(do.plot) {
+    if(hasxy <- (!is.null(x) || !is.null(y))) {
       xy <- xy.coords(x, y)
       x <- xy$x
       y <- xy$y
-      if(!add) plot(x, y, type="n", ...)
-    }
+    } 
+    ## function will return maximum size of symbols plotted.
+    maxsize <- 0
+    if(do.plot && !add) plot(x, y, type="n", ...)
     force(values)
     g <- map(values)
     parnames <- colnames(g)
@@ -400,7 +400,7 @@ invoke.symbolmap <- local({
       ## value is max(cex)
       ## guess size of one character
       charsize <- if(started) max(par('cxy')) else
-                    max(sidelengths(boundingbox(x,y))/40)
+                  if(hasxy) max(sidelengths(boundingbox(x,y))/40) else 1/40
       maxsize <- max(maxsize, charsize * ms)
     }
     ## display using 'symbols'
@@ -476,7 +476,8 @@ plot.symbolmap <- function(x, ..., main,
     if(is.null(ylim)) ylim <- usr[3:4]
   } else {
     ## create new plot
-    zz <- c(0, 1)
+    maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=FALSE)
+    zz <- c(0, max(1, maxdiam))
     if(is.null(xlim) && is.null(ylim)) {
       if(vertical) {
         xlim <- zz

@@ -8,7 +8,7 @@
   plot the resulting symbols.
 }
 \usage{
-invoke.symbolmap(map, values, x, y = NULL, \dots, add = FALSE,
+invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
                do.plot = TRUE, started = add && do.plot)
 }
 \arguments{

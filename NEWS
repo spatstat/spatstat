@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.039
+        CHANGES IN spatstat VERSION 1.46-1.040
 
 OVERVIEW
 
@@ -179,12 +179,17 @@ BUG FIXES
     Crashed in some cases when cumulative=FALSE.
     Fixed.
    
-    o plot.ppp, plot.im
-    Ignored xlim, ylim. 
-    Fixed.
-
     o stieltjes
     Returned NA if some values of f were not finite.
+    Fixed.
+
+    o plot.symbolmap
+    If a new plot window was initialised, it was sometimes too small
+    to contain the geometric figures (circles, squares etc) in the symbol map.
+    Fixed.
+
+    o plot.ppp, plot.im
+    Ignored xlim, ylim. 
     Fixed.
 
     o nnfun.lpp
