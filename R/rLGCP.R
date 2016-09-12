@@ -5,7 +5,7 @@
 #
 #   original code by Abdollah Jalilian
 #
-#  $Revision: 1.18 $    $Date: 2016/09/11 10:34:26 $
+#  $Revision: 1.19 $    $Date: 2016/09/12 02:08:18 $
 #
 
 rLGCP <- local({
@@ -31,7 +31,7 @@ rLGCP <- local({
                        modelonly=FALSE, nsim=1, drop=TRUE) {
     ## make RF model object from RandomFields package
     ## get the 'model generator'
-    modgen <- getRandomFieldsModel(model)
+    modgen <- getRandomFieldsModelGen(model)
     ## now create a RandomFields 'model' object
     rfmodel <- do.call(modgen, append(as.list(param), list(...)))
     if(!inherits(rfmodel, "RMmodel"))

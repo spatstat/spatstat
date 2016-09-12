@@ -52,6 +52,9 @@
       }
     }
   }
+  # hack to avoid namespace/load quirks 
+  # .C("attachRFoptions", package="RandomFields")  #DontDeclare
+  #
   invisible(NULL)
 }
 

@@ -557,7 +557,7 @@
              margs <- NULL
              if(!identical(model, "exponential")) {
                ## get the 'model generator' 
-               modgen <- getRandomFieldsModel(model)
+               modgen <- getRandomFieldsModelGen(model)
                attr(model, "modgen") <- modgen
                if(is.null(cmod)){
                  margsnam <- names(formals(modgen))
@@ -644,7 +644,7 @@
            margs <- c(...)
            if(!identical(model, "exponential")) {
              ## get the 'model generator' 
-             modgen <- getRandomFieldsModel(model)
+             modgen <- getRandomFieldsModelGen(model)
              attr(model, "modgen") <- modgen
            }
            return(list(type="Covariance", model=model, margs=margs))

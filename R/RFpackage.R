@@ -3,9 +3,9 @@
 #' 
 #'    Dealing with the RandomFields package
 #' 
-#'    $Revision: 1.5 $  $Date: 2016/09/11 11:39:18 $
+#'    $Revision: 1.6 $  $Date: 2016/09/12 02:07:11 $
 
-getRandomFieldsModel <- function(model) {
+getRandomFieldsModelGen <- function(model) {
   if(inherits(model, "RMmodelgenerator"))
     return(model)
   if(!is.character(model))

@@ -90,7 +90,7 @@ local({
 #
 # tests/kppm.R
 #
-# $Revision: 1.12 $ $Date: 2016/09/11 11:39:51 $
+# $Revision: 1.14 $ $Date: 2016/09/12 02:48:57 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -107,14 +107,22 @@ local({
  fit0 <- kppm(redwood ~1, "LGCP")
  Y0 <- simulate(fit0)[[1]]
  stopifnot(is.ppp(Y0))
-    
+
+ # fit LGCP using K function: slow
  fit1 <- kppm(redwood ~x, "LGCP",
               covmodel=list(model="matern", nu=0.3),
-              control=list(maxit=5))
+              control=list(maxit=3))
  Y1 <- simulate(fit1)[[1]]
  stopifnot(is.ppp(Y1))
 
-# ... and Abdollah's code
+ # fit LGCP using pcf
+ fit1p <- kppm(redwood ~x, "LGCP",
+              covmodel=list(model="matern", nu=0.3),
+              statistic="pcf")
+ Y1p <- simulate(fit1p)[[1]]
+ stopifnot(is.ppp(Y1p))
+  
+ # ... and Abdollah's code
 
  fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
  Y2 <- simulate(fit2)[[1]]
