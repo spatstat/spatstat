@@ -228,11 +228,13 @@ lgcp.estK(X, startpar=c(var=1,scale=1),
     plot(u)
 
     \testonly{
-      K <- Kest(redwood, r=seq(0, 0.1, length=9))
-      op <- spatstat.options(fastK.lgcp=TRUE)
-      lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
-                control=list(maxit=2))
-      spatstat.options(op)
+      if(require(RandomFields)) {
+        K <- Kest(redwood, r=seq(0, 0.1, length=9))
+        op <- spatstat.options(fastK.lgcp=TRUE)
+        lgcp.estK(K, covmodel=list(model="matern", nu=0.3),
+                  control=list(maxit=2))
+        spatstat.options(op)
+      }
     }
     if(FALSE) {
       ## takes several minutes!

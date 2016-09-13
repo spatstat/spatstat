@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.74 $   $Date: 2016/09/11 10:47:39 $
+#    $Revision: 1.76 $   $Date: 2016/09/13 04:51:32 $
 #
 #
 
@@ -466,6 +466,18 @@ warn.once <- function(key, ...) {
        check.rpanel.loaded=list(
          # internal debugging
          default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       check.RandomFields.loaded=list(
+         # this is working OK so no need to check unless debugging
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       check.RandomFieldsUtils.loaded=list(
+         # this is working OK so no need to check unless debugging
+         default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),

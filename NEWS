@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.040
+        CHANGES IN spatstat VERSION 1.46-1.041
 
 OVERVIEW
 
@@ -21,8 +21,6 @@ OVERVIEW
     o Option to plot marked points as arrows.
 
     o Kernel smoothing accelerated.
-
-    o spatstat now 'Imports' the package 'RandomFields'.
 
     o Workaround for bug in some graphics drivers affecting image orientation.
 

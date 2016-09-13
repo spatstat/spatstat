@@ -1,11 +1,40 @@
 #'
-#'           RFpackage.R
+#'           otherpackages.R
 #' 
-#'    Dealing with the RandomFields package
+#'    Dealing with other packages
 #' 
-#'    $Revision: 1.6 $  $Date: 2016/09/12 02:07:11 $
+#'    $Revision: 1.11 $  $Date: 2016/09/13 06:14:40 $
+
+kraeverRandomFields <- function() {
+  kraever("RandomFieldsUtils")
+  kraever("RandomFields")
+  a <- capture.output(RandomFieldsUtils:::.onLoad())
+  b <- capture.output(RandomFields:::.onLoad())
+  return(invisible(NULL))
+}
+
+# require a namespace and optionally check whether it is attached
+kraever <- function(package, fatal=TRUE) {
+  if(!requireNamespace(package, quietly=TRUE)) {
+    if(fatal)
+      stop(paste("The package", sQuote(package), "is required"),
+           call.=FALSE)
+    return(FALSE)
+  }
+  if(spatstat.options(paste("check", package, "loaded", sep=".")) &&
+    !isNamespaceLoaded(package)){
+    if(fatal)
+      stop(paste("The package", sQuote(package),
+                 "must be loaded: please type",
+                 sQuote(paste0("library", paren(package)))),
+           call.=FALSE)
+    return(FALSE)
+  }
+  return(TRUE)
+}
 
 getRandomFieldsModelGen <- function(model) {
+  kraeverRandomFields()
   if(inherits(model, "RMmodelgenerator"))
     return(model)
   if(!is.character(model))
@@ -35,5 +64,4 @@ getRandomFieldsModelGen <- function(model) {
            modgen
          })
 }
-
 

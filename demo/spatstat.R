@@ -716,7 +716,7 @@ showoffK <- function(Y, current, ..., fullpicture,rad) {
 	polygon(u[1]+ rad * cos(theta),u[2]+rad*sin(theta))
 	text(u[1]+rad/3,u[2]+rad/2,Y$n,cex=3)
         if(runif(1) < 0.2) Sys.sleep(runif(1, max=0.4))
-	return(Y$n)
+	return(npoints(Y))
 }
 par(ask=FALSE)
 applynbd(redwood, R=0.2, showoffK, fullpicture=redwood, rad=0.2, exclude=TRUE)

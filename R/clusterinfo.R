@@ -583,6 +583,7 @@
              ## For efficiency and to avoid need for RandomFields package
              integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
            } else {
+             kraeverRandomFields()
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
@@ -626,6 +627,7 @@
              ## For efficiency and to avoid need for RandomFields package
              gtheo <- exp(par[1]*exp(-rvals/par[2]))
            } else {
+             kraeverRandomFields()
              modgen <- attr(model, "modgen")
              if(length(margs) == 0) {
                mod <- modgen(var=par[1], scale=par[2])

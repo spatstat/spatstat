@@ -194,8 +194,6 @@ lgcp.estpcf(X,
 }
 \author{
   \adrian
-  
-  
   with modifications by Shen Guochun and 
   Rasmus Waagepetersen
   \email{rw@math.auc.dk}
@@ -221,7 +219,9 @@ lgcp.estpcf(X,
     u <- lgcp.estpcf(redwood, c(var=1, scale=0.1))
     u
     plot(u)
-    lgcp.estpcf(redwood, covmodel=list(model="matern", nu=0.3))
+    if(require(RandomFields)) {
+      lgcp.estpcf(redwood, covmodel=list(model="matern", nu=0.3))
+    }
 }
 \keyword{spatial}
 \keyword{models}

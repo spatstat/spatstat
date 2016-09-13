@@ -327,6 +327,7 @@
 \alias{kppmMinCon}
 \alias{kppmPalmLik}
 \alias{kraever}
+\alias{kraeverRandomFields}
 \alias{labels.ppm}
 \alias{least.common.multiple}
 \alias{levels.im}
@@ -1195,6 +1196,7 @@ kppmMinCon(X, Xname, po, clusters, control, statistic, statargs,
 kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax, 
            algorithm, DPP, \dots)
 kraever(package, fatal)
+kraeverRandomFields()
 \method{labels}{ppm}(object, \dots)
 least.common.multiple(n,m)
 \method{levels}{im}(x)

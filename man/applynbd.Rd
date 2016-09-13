@@ -183,13 +183,14 @@
   showoffK <- function(Y, current, dists, dranks, fullpicture,rad) { 
 	plot(fullpicture, main="")
 	points(Y, cex=2)
-        u <- current
-	points(u$x,u$y,pch="+",cex=3)
+        ux <- current[["x"]]
+        uy <- current[["y"]]
+	points(ux, uy, pch="+",cex=3)
 	theta <- seq(0,2*pi,length=100)
-	polygon(u$x+ rad * cos(theta),u$y+rad*sin(theta))
-	text(u$x+rad/3,u$y+rad/2,npoints(Y),cex=3)
+	polygon(ux + rad * cos(theta), uy+rad*sin(theta))
+	text(ux + rad/3, uy + rad/2,npoints(Y),cex=3)
 	if(interactive()) Sys.sleep(if(runif(1) < 0.1) 1.5 else 0.3)
-	return(npoints(Y) - 1)
+	return(npoints(Y))
   }
   applynbd(redwood, R=0.2, showoffK, fullpicture=redwood, rad=0.2, exclude=TRUE)
 

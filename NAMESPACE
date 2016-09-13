@@ -11,11 +11,12 @@ importFrom(tensor,tensor)
 importFrom(mgcv,
            gam,gam.control,anova.gam,formula.gam,predict.gam,
            print.gam,summary.gam,vcov.gam,s)
-importFrom(RandomFields,
-           RFoptions,RFcov,RFsimulate,
-           RMcauchy,RMexp,RMgencauchy,RMgauss,
-           RMgneiting,RMmatern,RMnugget,RMspheric,
-           RMstable,RMwhittle)
+# Removed again!
+# importFrom(RandomFields,
+#            RFoptions,RFcov,RFsimulate,
+#            RMcauchy,RMexp,RMgencauchy,RMgauss,
+#            RMgneiting,RMmatern,RMnugget,RMspheric,
+#            RMstable,RMwhittle)
 
 # Do not edit the following.
 # It is generated automatically.
@@ -1293,6 +1294,7 @@ export("kppmPalmLik")
 export("kppm.ppp")
 export("kppm.quad")
 export("kraever")
+export("kraeverRandomFields")
 export("Krect.engine")
 export("Kres")
 export("Kscaled")

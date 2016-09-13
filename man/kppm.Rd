@@ -276,6 +276,10 @@
   Useful control arguments include
   \code{trace}, \code{maxit} and \code{abstol}
   (documented in the help for \code{\link[stats]{optim}}).
+
+  Fitting the LGCP model requires the \pkg{RandomFields} package
+  except in the default case where the exponential covariance
+  is assumed.
 }
 \value{
   An object of class \code{"kppm"} representing the fitted model.
@@ -287,7 +291,7 @@
   and warnings originating from the first stage of model-fitting.
 }
 \seealso{
-  methods for \code{kppm} objects:
+  Methods for \code{kppm} objects:
   \code{\link{plot.kppm}},
   \code{\link{fitted.kppm}},
   \code{\link{predict.kppm}},
@@ -354,12 +358,17 @@
 
   kppm(redwood ~ x, "MatClust") 
   kppm(redwood ~ x, "MatClust", statistic="pcf", statargs=list(stoyan=0.2)) 
-  kppm(redwood ~ 1, "LGCP", statistic="pcf")
   kppm(redwood ~ x, cluster="Cauchy", statistic="K")
   kppm(redwood, cluster="VarGamma", nu = 0.5, statistic="pcf")
-  kppm(redwood ~ x, "LGCP", statistic="pcf",
-                            model="matern", nu=0.3,
-                            control=list(maxit=10))
+
+  # LGCP models
+  kppm(redwood ~ 1, "LGCP", statistic="pcf")
+  if(require("RandomFields")) {
+    kppm(redwood ~ x, "LGCP", statistic="pcf",
+                              model="matern", nu=0.3,
+                              control=list(maxit=10))
+  }
+
   # fit intensity with quasi-likelihood method
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 }

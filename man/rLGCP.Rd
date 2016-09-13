@@ -115,6 +115,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{25}, 451--482.
 }
 \examples{
+  if(require(RandomFields)) {
   # homogeneous LGCP with exponential covariance function
   X <- rLGCP("exp", 3, var=0.2, scale=.1)
 
@@ -129,6 +130,7 @@
              var=2, scale=0.7, nu=0.5,
              win = owin(c(0, 10), c(0, 10)))
   plot(X)
+  }
 }
 \author{Abdollah Jalilian and Rasmus Waagepetersen.
   Modified by \spatstatAuthors.
