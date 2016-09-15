@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.041
+        CHANGES IN spatstat VERSION 1.46-1.042
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
     o Changed internal format of linnet and lpp objects.
 
     o Faster computation in linear networks.
+
+    o Bias correction techniques.
 
     o Bounding circle of a spatial object.
 
@@ -33,6 +35,10 @@ NEW FUNCTIONS
     o anyNA.im
     Method for 'anyNA' for pixel images.
 
+    o bc
+    Bias correction (Newton-Raphson) for fitted model parameters. 
+    See also 'rex'.
+
     o boundingcircle, boundingcentre
     Find the smallest circle enclosing a window or point pattern.
 
@@ -42,6 +48,10 @@ NEW FUNCTIONS
     o mean.linim, median.linim, quantile.linim
     The mean, median, or quantiles of pixel values in a 
     pixel image on a linear network.
+
+    o rex
+    Richardson extrapolation for numerical integrals and 
+    statistical model parameter estimates. 
 
     o weighted.median, weighted.quantile
     Median or quantile of numerical data with associated weights.
