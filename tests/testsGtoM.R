@@ -174,7 +174,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.5 $ $Date: 2016/07/06 08:29:49 $
+#'   $Revision: 1.6 $ $Date: 2016/09/16 03:38:53 $
 #' 
 
 require(spatstat)
@@ -203,6 +203,7 @@ local({
 
   ## divide and recombine algorithm
   op <- spatstat.options(maxmatrix=50000)
+  ## non-sparse
   levSB <- Leverage(fitS)
   infSB <- Influence(fitS)
   dfbSB <- Dfbetas(fitS)
@@ -222,9 +223,12 @@ local({
   chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
   chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
 
+  ## sparse algorithm, with blocks
+  pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
+
   spatstat.options(op)
 
-  ## sparse algorithm
+  ## sparse algorithm, no blocks
   pmi <- ppmInfluence(fitS, sparseOK=TRUE)
   levSp <- pmi$leverage
   infSp <- pmi$influence

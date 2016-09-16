@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.66 $  $Date: 2016/07/06 08:25:35 $
+#  $Revision: 1.67 $  $Date: 2016/09/16 03:27:38 $
 #
 
 leverage <- function(model, ...) {
@@ -343,7 +343,7 @@ ppmInfluenceEngine <- function(fit,
       if(is.null(requested)) {
         eff.data <- eff.data.B
       } else {
-        eff.data[current,] <- eff.data.B[currentB,,drop=FALSE]
+        eff.data[current,] <- as.matrix(eff.data.B[currentB,,drop=FALSE])
       }
       ## 
       rm(ddSX, eff.data.B)
@@ -391,7 +391,7 @@ ppmInfluenceEngine <- function(fit,
       if(is.null(requested)) {
         eff.back <- eff.back.B
       } else {
-        eff.back[current,] <- eff.back.B[currentB, , drop=FALSE]
+        eff.back[current,] <- as.matrix(eff.back.B[currentB, , drop=FALSE])
       }
     }
     

@@ -1,10 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.042
+        CHANGES IN spatstat VERSION 1.46-1.043
 
 OVERVIEW
 
     o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, 
-    Frederico Mestre, Mehdi Moradi and Jorge Mateu for contributions.
+    Jorge Mateu, Frederico Mestre, Mehdi Moradi and Virginia Morera Pujol
+    for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -186,7 +187,12 @@ BUG FIXES
     o diagnose.ppm, plot.diagppm
     Crashed in some cases when cumulative=FALSE.
     Fixed.
-   
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Crashed sometimes with a message about wrong replacement length.
+    [Spotted by Virginia Morera Pujol.]
+    Fixed.
+
     o stieltjes
     Returned NA if some values of f were not finite.
     Fixed.
