@@ -35,7 +35,8 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
   }
   \item{weights}{
     Optional weights attached to the observations.
-    A numeric vector, numeric matrix, or an \code{expression}.
+    A numeric vector, numeric matrix, an \code{expression}
+    or a pixel image.
     See \code{\link{density.ppp}}.
   }
   \item{at}{

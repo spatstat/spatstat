@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.32 $  $Date: 2016/07/10 11:00:49 $
+#  $Revision: 1.33 $  $Date: 2016/09/19 08:02:58 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -55,10 +55,19 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     return(Y)
   }
   ## weights
-  weightsgiven <- !missing(weights) && !is.null(weights) && (length(weights)>0)
+  weightsgiven <- !missing(weights) && !is.null(weights) 
+  if(weightsgiven) {
+    if(is.im(weights)) {
+      weights <- safelookup(weights, X) # includes warning if NA
+    } else if(is.expression(weights)) 
+      weights <- eval(weights, envir=as.data.frame(X), enclos=parent.frame())
+    if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
+      weightsgiven <- FALSE
+  }
   if(weightsgiven) {
     check.nvector(weights, npoints(X))
   } else weights <- NULL
+
   if(diggle) {
     ## absorb Diggle edge correction into weights vector
     edg <- second.moment.calc(X, sigma, what="edge", ..., varcov=varcov)

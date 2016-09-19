@@ -24,7 +24,8 @@
   }
   \item{weights}{
     Optional weights to be attached to the points.
-    A numeric vector, numeric matrix, or an \code{expression}.
+    A numeric vector, numeric matrix, an \code{expression},
+    or a pixel image.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{pixellate.ppp}}
@@ -233,6 +234,11 @@
   coordinates, the symbol \code{marks} representing the mark values
   if there is only one column of marks, and the names of the columns of
   marks if there are several columns.  
+
+  The argument \code{weights} can also be a pixel image
+  (object of class \code{"im"}). numerical weights for the data points
+  will be extracted from this image (by looking up the pixel values
+  at the locations of the data points in \code{x}).
   
   To select the bandwidth \code{sigma} automatically by
   cross-validation, use \code{\link{bw.diggle}} or \code{\link{bw.ppl}}.
@@ -322,6 +328,12 @@
   density(cells, 0.05, at="points")
 
   plot(density(cells, sigma=0.4, kernel="epanechnikov"))
+
+  # relative risk 
+  lung <- split(chorley)$lung
+  larynx <- split(chorley)$larynx
+  D <- density(lung, sigma=2)
+  plot(density(larynx, weights=1/D))
 }
 \references{
   Baddeley, A., Rubak, E. and Turner, R. (2015)

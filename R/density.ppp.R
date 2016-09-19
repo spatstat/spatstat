@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.83 $    $Date: 2016/07/10 09:51:02 $
+#  $Revision: 1.84 $    $Date: 2016/09/19 07:57:18 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -39,7 +39,9 @@ density.ppp <- function(x, sigma=NULL, ...,
   sigma <- ker$sigma
   varcov <- ker$varcov
 
-  if(is.expression(weights)) 
+  if(is.im(weights)) {
+    weights <- safelookup(weights, x) # includes warning if NA
+  } else if(is.expression(weights)) 
     weights <- eval(weights, envir=as.data.frame(x), enclos=parent.frame())
   if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
     weights <- NULL 

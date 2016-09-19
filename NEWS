@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.043
+        CHANGES IN spatstat VERSION 1.46-1.044
 
 OVERVIEW
 
@@ -69,6 +69,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp, Smooth.ppp
     New argument 'kernel' allows the user to specify the smoothing kernel.
+
+    o density.ppp, Smooth.ppp
+    Argument 'weights' can now be a pixel image.
 
     o MinkowskiSum, %(+)%
     Now accepts arguments which are point patterns or line segment patterns
