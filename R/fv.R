@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.142 $   $Date: 2016/07/26 08:18:09 $
+##    $Revision: 1.143 $   $Date: 2016/09/21 07:36:51 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -815,6 +815,7 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
     selected <- as.vector(nameindices[j])
   }
 
+  # validate choice of selected/dropped columns
   nama <- names(z)
   argu <- attr(x, "argu")
   if(!(argu %in% nama))
@@ -824,6 +825,12 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
     stop(paste("The default column of function values",
                sQuote(valu), "must not be removed"))
 
+  # if the plot formula involves explicit mention of dropped columns,
+  # replace it by a generic formula
+  fmla <- as.formula(attr(x, "fmla"))
+  if(!all(variablesinformula(fmla) %in% nama)) 
+    fmla <- as.formula(. ~ .x, env=environment(fmla))
+  
   ## If range of argument was implicitly changed, adjust "alim"
   alim <- attr(x, "alim")
   rang <- range(z[[argu]])
@@ -832,7 +839,7 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
   result <- fv(z, argu=attr(x, "argu"),
                ylab=attr(x, "ylab"),
                valu=attr(x, "valu"),
-               fmla=attr(x, "fmla"),
+               fmla=fmla,
                alim=alim,
                labl=attr(x, "labl")[selected],
                desc=attr(x, "desc")[selected],

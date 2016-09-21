@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.044
+        CHANGES IN spatstat VERSION 1.46-1.045
 
 OVERVIEW
 
     o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, 
-    Jorge Mateu, Frederico Mestre, Mehdi Moradi and Virginia Morera Pujol
-    for contributions.
+    Jorge Mateu, Frederico Mestre, Mehdi Moradi, Virginia Morera Pujol
+    and Sven Wagner for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -180,6 +180,11 @@ BUG FIXES
 
     o superimpose
     Crashed if the argument was a 'solist' containing line segment patterns.
+    Fixed.
+
+    o plot.studpermutest
+    Crashed when the summary statistic was a multitype pair correlation 
+    function or multitype K function. [Spotted by Sven Wagner.]
     Fixed.
 
     o pool.anylist

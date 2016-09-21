@@ -1,7 +1,7 @@
 #
 #   pcfmulti.inhom.R
 #
-#   $Revision: 1.14 $   $Date: 2015/02/22 02:58:48 $
+#   $Revision: 1.15 $   $Date: 2016/09/21 07:28:42 $
 #
 #   inhomogeneous multitype pair correlation functions
 #
@@ -282,14 +282,13 @@ pcfmulti.inhom <- function(X, I, J, lambdaI=NULL, lambdaJ=NULL, ...,
   }
   
   # which corrections have been computed?
-  nama2 <- names(out)
-  corrxns <- rev(nama2[nama2 != "r"])
+  corrxns <- rev(setdiff(names(out), "r"))
 
   # default is to display them all
-  formula(out) <- deparse(as.formula(paste(
-                       "cbind(",
-                        paste(corrxns, collapse=","),
-                        ") ~ r")))
+  formula(out) <- . ~ r
+  fvnames(out, ".") <- corrxns
+
+  #
   unitname(out) <- unitname(X)
 
   if(danger)

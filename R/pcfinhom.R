@@ -207,14 +207,12 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   }
   
   # which corrections have been computed?
-  nama2 <- names(out)
-  corrxns <- rev(nama2[nama2 != "r"])
+  corrxns <- rev(setdiff(names(out), "r"))
 
   # default is to display them all
-  formula(out) <- deparse(as.formula(paste(
-                       "cbind(",
-                        paste(corrxns, collapse=","),
-                        ") ~ r")))
+  formula(out) <- . ~ r
+  fvnames(out, ".") <- corrxns
+
   unitname(out) <- unitname(X)
   if(danger)
     attr(out, "dangerous") <- dangerous

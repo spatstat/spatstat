@@ -1,7 +1,7 @@
 #
 #   pcfmulti.R
 #
-#   $Revision: 1.7 $   $Date: 2015/02/22 03:00:48 $
+#   $Revision: 1.8 $   $Date: 2016/09/21 07:28:58 $
 #
 #   multitype pair correlation functions
 #
@@ -240,14 +240,13 @@ pcfmulti <- function(X, I, J, ...,
   }
   
   # which corrections have been computed?
-  nama2 <- names(out)
-  corrxns <- rev(nama2[nama2 != "r"])
+  corrxns <- rev(setdiff(names(out), "r"))
 
   # default is to display them all
-  formula(out) <- deparse(as.formula(paste(
-                       "cbind(",
-                        paste(corrxns, collapse=","),
-                        ") ~ r")))
+  formula(out) <- . ~ r
+  fvnames(out, ".") <- corrxns
+
+  # 
   unitname(out) <- unitname(X)
   return(out)
 }
