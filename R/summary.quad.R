@@ -3,7 +3,7 @@
 #
 #  summary() method for class "quad"
 #
-#  $Revision: 1.9 $ $Date: 2016/09/22 00:26:24 $
+#  $Revision: 1.10 $ $Date: 2016/09/22 03:57:43 $
 #
 
 summary.quad <- local({
@@ -128,23 +128,21 @@ print.quad <- function(x, ...) {
     quasi <- identical(dpar$quasi, TRUE)
     random <- identical(dpar$random, TRUE)
     if(quasi) {
-      splat(ndum, "quasirandom dummy points plus 4 corner points")
+      splat(ndum, "quasirandom dummy points plus 4 corner points", indent=5)
     } else if(random && !is.null(nd)) {
       splat("systematic random dummy points in", nd[1], "x", nd[2], "grid",
-            "plus 4 corner points")
+            "plus 4 corner points", indent=5)
     } else {
-      eps <- dpar$orig$eps
-      if(is.null(eps) && !is.null(nd)) {
-        splat(nd[1], "x", nd[2], "grid of dummy points",
-              "plus 4 corner points")
-      } else if(!is.null(eps) && is.null(dpar$orig$nd)) {
-        splat("grid of dummy points with spacing",
-              numberwithunit(eps, unitname(x)), 
-              "plus 4 corner points")
-      }
+      if(!is.null(nd)) 
+        splat(nd[1], "x", nd[2],
+              "grid of dummy points, plus 4 corner points",
+              indent=5)
+      if(!is.null(eps <- dpar$orig$eps))
+        splat("originally specified dummy spacing",
+              eps %unit% unitname(x), indent=5)
     }
   }
-  splat("Total weight ", sum(x$w))
+  splat("Total weight", sum(x$w), indent=5)
   return(invisible(NULL))
 }
 

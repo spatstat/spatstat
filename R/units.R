@@ -79,6 +79,7 @@ makeunits <- function(sing="unit", plur="units", mul = 1) {
 }
   
 as.units <- function(s) {
+  if(inherits(s, "units")) return(s)
   s <- as.list(s)
   n <- length(s)
   if(n > 3)
@@ -174,9 +175,9 @@ compatible.units <- function(A, B, ..., coerce=TRUE) {
 # class 'numberwithunit':  numeric value(s) with unit of length
 
 numberwithunit <- function(x, u) {
-  stopifnot(inherits(u, "units"))
+  u <- as.units(u)
   x <- as.numeric(x)
-  attr(x, "units") <- u
+  unitname(x) <- u
   class(x) <- c(class(x), "numberwithunit")
   return(x)
 }
@@ -193,6 +194,10 @@ format.numberwithunit <- as.character.numberwithunit <-
 
 print.numberwithunit <- function(x, ...) {
   print(as.character(x, ...))
+}
+
+"%unit%" <- function(x, u) {
+  format(numberwithunit(x, u))
 }
 
     

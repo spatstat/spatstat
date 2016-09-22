@@ -10,7 +10,7 @@
 ## doesn't extend over text margin
 
 splat <- function(..., indent=0) {
-  s <- paste(...)
+  s <- pasteN(...) # removes NULL arguments without making a space
   ## split at newline characters, if present
   ss <- unlist(strsplit(s, "\n"))
   if(indent == 0) {

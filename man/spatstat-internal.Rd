@@ -754,6 +754,8 @@
 \alias{tapplysum}
 \alias{tweak.fv.entry}
 \alias{tweak.coefs}
+\alias{\%unit\%} %DoNotExport
+%NAMESPACE export("%unit%")
 \alias{unitname.default}
 \alias{unitname<-.default}
 \alias{unparen}
@@ -1704,6 +1706,7 @@ truncline(x, nc)
 tapplysum(x, flist, do.names)
 tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
 tweak.coefs(model, new.coef)
+x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
 unparen(x)
