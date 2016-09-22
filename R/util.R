@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.218 $    $Date: 2016/09/13 03:14:42 $
+#    $Revision: 1.219 $    $Date: 2016/09/21 23:54:15 $
 #
 #
 matrowsum <- function(x) {
@@ -1685,5 +1685,12 @@ indexCartesian <- function(nn) {
   # enumerate the elements of the Cartesian product of sets,
   # where nn[i] is the size of the i-th set
   as.matrix(do.call(expand.grid, lapply(nn, seq_len)))
+}
+
+pasteN <- function(...) {
+  # remove NULL arguments then paste
+  argh <- list(...)
+  argh <- argh[!sapply(argh, is.null)]
+  do.call(paste, argh)
 }
 

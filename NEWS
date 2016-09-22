@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.045
+        CHANGES IN spatstat VERSION 1.46-1.046
 
 OVERVIEW
 
@@ -142,9 +142,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     thomas.estpcf, vargamma.estpcf
     A warning about infinite values of the summary function 
     no longer occurs when the default settings are used.
-    
+
     o circumradius
     This function is now deprecated, in favour of 'boundingradius'
+
+    o print.quad
+    More information is printed.
 
 BUG FIXES
 
@@ -216,6 +219,10 @@ BUG FIXES
 
     o nnfun.lpp
     Print method gave incorrect information about the point pattern.
+    Fixed.
+
+    o "[.fv"
+    The default plot formula was not updated.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.46-1

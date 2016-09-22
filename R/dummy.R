@@ -183,8 +183,12 @@ default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
   # regular grid of nd[1] * nd[2] points
   # plus corner points of window frame,
   # all clipped to window.
+  orig <- list(nd=nd, eps=eps, ntile=ntile, npix=npix)
+  orig <- orig[!sapply(orig, is.null)]
+  # 
   X <- as.ppp(X)
   win <- X$window
+  #
   #
   # default dimensions
   a <- default.n.tiling(X, nd=nd, ntile=ntile, npix=npix,
@@ -210,10 +214,11 @@ default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
   if(dummy$n == 0)
     stop("None of the dummy points lies inside the window")
   # pass parameters for computing weights
-  attr(dummy, "dummy.parameters") <-
-    list(nd=nd, random=random, quasi=quasi, verbose=verbose)
   attr(dummy, "weight.parameters") <-
     append(list(...), list(ntile=ntile, verbose=verbose, npix=npix))
+  # record parameters used to create dummy locations
+  attr(dummy, "dummy.parameters") <-
+    list(nd=nd, random=random, quasi=quasi, verbose=verbose, orig=orig)
   return(dummy)
 }
 

@@ -210,6 +210,7 @@
 \alias{fontify}
 \alias{forbidNA}
 \alias{forbid.logi}
+\alias{format.numberwithunit}
 \alias{FormatFaspFormulae}
 \alias{framebottomleft}
 \alias{fvexprmap}
@@ -362,6 +363,7 @@
 \alias{parbreak}
 \alias{passthrough}
 \alias{paste.expr}
+\alias{pasteN}
 \alias{plan.legend.layout}
 \alias{PoisSaddleApp}
 \alias{polyLaslett}
@@ -436,6 +438,7 @@
 \alias{no.trend.ppm}
 \alias{n.quad}
 \alias{numalign}
+\alias{numberwithunit}
 \alias{numeric.columns}
 \alias{nzpaste}
 \alias{objsurfEngine}
@@ -534,6 +537,7 @@
 \alias{print.mppm}
 \alias{print.msr}
 \alias{print.nnfun}
+\alias{print.numberwithunit}
 \alias{print.onearrow}
 \alias{print.parres}
 \alias{print.plotpairsim}
@@ -766,7 +770,7 @@
 \alias{validate.lpp.coords}
 \alias{validate.mask}        
 \alias{validate.quad}        
-\alias{validposint}        
+\alias{validposint}
 \alias{vanilla.fv}
 \alias{varcountEngine}
 \alias{variablesinformula}
@@ -1074,6 +1078,7 @@ flipxypolygon(p)
 fontify(x, font)
 forbidNA(x, context, xname, fatal, usergiven)
 forbid.logi(object)
+\method{format}{numberwithunit}(x, \dots, collapse)
 FormatFaspFormulae(f, argname)
 framebottomleft(w)
 fvexprmap(x)
@@ -1238,6 +1243,7 @@ padtowidth(a, b, justify)
 parbreak(terse)
 passthrough(.Fun, \dots, .Fname)
 paste.expr(x)
+pasteN(\dots)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
@@ -1327,6 +1333,7 @@ nndcumfun(X, \dots, r)
 no.trend.ppm(x)
 n.quad(Q)
 numalign(i, nmax, zero)
+numberwithunit(x, u)
 numeric.columns(M, logical, others)
 nzpaste(\dots, sep, collapse)
 objsurfEngine(objfun, optpar, objargs,
@@ -1456,6 +1463,7 @@ primesbelow(nmax)
 \method{print}{mppm}(x, \dots)
 \method{print}{msr}(x, \dots)
 \method{print}{nnfun}(x, \dots)
+\method{print}{numberwithunit}(x, \dots)
 \method{print}{onearrow}(x, \dots)
 \method{print}{parres}(x, \dots)
 \method{print}{plotppm}(x, \dots)
