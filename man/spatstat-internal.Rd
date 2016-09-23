@@ -79,6 +79,7 @@
 \alias{check.range}
 \alias{check.testfun}
 \alias{choptext}
+\alias{choptextline}
 \alias{circticks}
 \alias{clarkevansCalc}
 \alias{clip.psp}
@@ -917,7 +918,8 @@ check.1.real(x, context, fatal)
 check.1.string(x, context, fatal)
 check.range(x, fatal)
 check.testfun(f, f1, X)
-choptext(\dots, prefix)
+choptext(\dots, prefix, indent)
+choptextline(st, w, prefix, indent)
 circticks(R, at, unit, start, clockwise, labels)
 clarkevansCalc(X, correction, clipregion, working)
 clip.psp(x, window, check=TRUE)

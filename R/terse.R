@@ -2,7 +2,7 @@
 ##
 ##  code to control terseness and layout of printed output
 ##
-##  $Revision: 1.9 $  $Date: 2015/11/27 06:59:57 $
+##  $Revision: 1.11 $  $Date: 2016/09/23 02:07:24 $
 ##
 
 ## 'split cat'
@@ -10,54 +10,70 @@
 ## doesn't extend over text margin
 
 splat <- function(..., indent=0) {
-  s <- pasteN(...) # removes NULL arguments without making a space
+  st <- pasteN(...) # removes NULL arguments without making a space
   ## split at newline characters, if present
-  ss <- unlist(strsplit(s, "\n"))
-  if(indent == 0) {
+  ss <- unlist(strsplit(st, "\n"))
+  ## 
+  if(is.numeric(indent)) {
+    nindent <- indent
+    indent <- paste(rep(" ", nindent), collapse="")
+  } else if(is.character(indent)) {
+    nindent <- nchar(indent)
+  } else stop("indent should be character or numeric")
+  w <- getOption('width')
+  if(nindent >= w) {
+    warning("indentation is more than the permissible text width: ignored")
+    nindent <- 0
+  }
+  ##
+  if(nindent == 0) {
     for(ssi in ss) 
       cat(unlist(strsplit(ssi, " ")), fill=TRUE)
   } else {
-    ispace <- paste(rep(" ", indent-1), collapse="")
-    for(ssi in ss) 
-      cat(ispace, unlist(strsplit(ssi, " ")), fill=TRUE)
+    wfill <- w - nindent
+    for(ssi in ss) {
+      vi <- choptextline(ssi, w=w, indent=indent)
+      for(vij in vi) {
+        cat(indent)
+        cat(vij, fill=wfill)
+      }
+    }
   }
   return(invisible(NULL))
 }
 
-choptext <- local({
+choptext <- function(..., prefix="", indent="") {
+  s <- paste(...)
+  ## split at newline characters, if present
+  lines <- unlist(strsplit(s, "\n"))
+  ## cut into pieces that don't overreach width
+  w <- getOption('width')
+  lines <- sapply(lines, choptextline, w=w, prefix=prefix, indent=indent)
+  lines <- unname(as.vector(lines))
+  return(lines)
+}
 
-  choptext <- function(..., prefix="") {
-    s <- paste(...)
-    ## split at newline characters, if present
-    lines <- unlist(strsplit(s, "\n"))
-    ## cut into pieces that don't overreach width
-    w <- getOption('width')
-    lines <- sapply(lines, chopline, w=w, prefix=prefix)
-    return(lines)
+choptextline <- function(st, w=getOption('width'), prefix="", indent="") {
+  words <- unlist(strsplit(st, " "))
+  nwords <- length(words)
+  wordlengths <- nchar(words)
+  lines <- character(0)
+  prefixlength <- nchar(prefix)
+  indentlength <- nchar(indent)
+  while(nwords > 0) {
+    inset <- prefixlength + indentlength
+    wordends <- cumsum(wordlengths + c(inset, rep(1, nwords-1)))
+    n <- which.max(wordends * (wordends <= w))
+    if(n == 0) n <- 1
+    lines <- c(lines, paste(words[1:n], collapse=" "))
+    words <- words[-(1:n)]
+    wordlengths <- wordlengths[-(1:n)]
+    nwords <- nwords - n
+    prefixlength <- 0
   }
-
-  chopline <- function(s, w=getOption('width'), prefix="") {
-    words <- unlist(strsplit(s, " "))
-    nwords <- length(words)
-    wordlengths <- nchar(words)
-    lines <- character(0)
-    prefixlength <- nchar(prefix)
-    while(nwords > 0) {
-      wordends <- cumsum(wordlengths + c(prefixlength, rep(1, nwords-1)))
-      n <- which.max(wordends * (wordends <= w))
-      if(n == 0) n <- 1
-      lines <- c(lines, paste(words[1:n], collapse=" "))
-      words <- words[-(1:n)]
-      wordlengths <- wordlengths[-(1:n)]
-      nwords <- nwords - n
-      prefixlength <- 0
-    }
-    return(lines)
-  }
+  return(lines)
+}
                          
-  choptext
-})
-
 exhibitStringList <- function(prefix, strings) {
   shortblurb <- paste(prefix, paste(strings, collapse=", "), "\n")
   if(nchar(shortblurb) < options("width")[[1]]) {

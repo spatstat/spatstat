@@ -118,7 +118,7 @@ print.summary.quad <- local({
 
 print.quad <- function(x, ...) {
   splat("Quadrature scheme")
-  splat(x$data$n, "data points, ", x$dummy$n, "dummy points")
+  splat(x$data$n, "data points,", x$dummy$n, "dummy points")
   if(!is.null(dpar <- x$param$dummy) && waxlyrical('extras')) {
     nd   <- dpar$nd  # actual grid numbers used
     if(!is.null(nd)) {
@@ -132,17 +132,27 @@ print.quad <- function(x, ...) {
     } else if(random && !is.null(nd)) {
       splat("systematic random dummy points in", nd[1], "x", nd[2], "grid",
             "plus 4 corner points", indent=5)
-    } else {
-      if(!is.null(nd)) 
-        splat(nd[1], "x", nd[2],
-              "grid of dummy points, plus 4 corner points",
+    } else if(!is.null(nd)) {
+      splat(nd[1], "x", nd[2],
+            "grid of dummy points, plus 4 corner points",
+            indent=5)
+      eps.actual <- unique(sidelengths(Frame(x$dummy))/nd)
+      if(!is.null(eps0 <- dpar$orig$eps)) {
+        splat("dummy spacing:",
+              eps0 %unit% unitname(x),
+              "requested,", 
+              eps.actual %unit% unitname(x),
+              "actual",
               indent=5)
-      if(!is.null(eps <- dpar$orig$eps))
-        splat("originally specified dummy spacing",
-              eps %unit% unitname(x), indent=5)
+      } else {
+        splat("dummy spacing:",
+              eps.actual %unit% unitname(x),
+              indent=5)
+      }
     }
   }
   splat("Total weight", sum(x$w), indent=5)
   return(invisible(NULL))
 }
+
 
