@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.22 $   $Date: 2016/09/22 00:17:11 $
+#   $Revision: 1.23 $   $Date: 2016/09/23 07:42:46 $
 #
 #
 
@@ -182,22 +182,27 @@ numberwithunit <- function(x, u) {
   return(x)
 }
 
-format.numberwithunit <- as.character.numberwithunit <-
-  function(x, ..., collapse=" x ") {
+"%unit%" <- function(x, u) {
+  numberwithunit(x, u)
+}
+
+format.numberwithunit <- function(x, ..., collapse=" x ", modifier=NULL) {
   u <- summary(unitname(x))
   uname <- if(all(x == 1)) u$singular else u$plural
   y <- format(as.numeric(x), ...)
   z <- pasteN(paste(y, collapse=collapse), 
-              uname, u$explain)
+              modifier, uname, u$explain)
   return(z)
 }
 
-print.numberwithunit <- function(x, ...) {
-  print(as.character(x, ...))
+as.character.numberwithunit <- function(x, ...) {
+  return(format(x))
 }
 
-"%unit%" <- function(x, u) {
-  format(numberwithunit(x, u))
+print.numberwithunit <- function(x, ...) {
+  cat(format(x, ...), fill=TRUE)
+  return(invisible(NULL))
 }
+
 
     

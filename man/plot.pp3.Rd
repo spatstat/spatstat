@@ -9,7 +9,9 @@
 }
 \usage{
  \method{plot}{pp3}(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
-                    type=c("p", "n", "h"))
+                    type=c("p", "n", "h"),
+                    box.back=list(col="pink"),
+                    box.front=list(col="blue", lwd=2))
 }
 \arguments{
   \item{x}{
@@ -37,6 +39,12 @@
     \code{type="h"} for points on vertical lines,
     \code{type="n"} for box only.
   }
+  \item{box.front,box.back}{
+    How to plot the three-dimensional box that contains the points.
+    A list of graphical arguments passed to \code{\link[graphics]{segments}},
+    or a logical value indicating whether or not to plot
+    the relevant part of the box. See Details.
+  }
 }
 \details{
   This is the plot method for objects of class \code{"pp3"}.
@@ -45,18 +53,19 @@
   location specified by \code{eye} (or from the direction
   specified by \code{theta} and \code{phi}). 
 
+  The edges of the box at the \sQuote{back} of the scene (as viewed from the
+  eye position) are plotted first. Then the points are added. Finally the
+  remaining \sQuote{front} edges are plotted. The arguments
+  \code{box.back} and \code{box.front} specify graphical parameters for
+  drawing the back and front edges, respectively. Alternatively
+  \code{box.back=FALSE} specifies that the back edges shall not be drawn.
+  
   Note that default values of arguments to \code{plot.pp3}
   can be set by \code{\link{spatstat.options}("par.pp3")}.
 }
 \value{Null.}
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{pp3}},
@@ -66,6 +75,7 @@ and \ege
   X <- osteo$pts[[1]]
   plot(X, main="Osteocyte lacunae, animal 1, brick 1",
        cex=1.5, pch=16)
+  plot(X, main="", box.back=list(lty=3))
 }
 \keyword{spatial}
 \keyword{hplot}

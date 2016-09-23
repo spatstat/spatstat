@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.29 $ $Date: 2016/07/17 06:27:48 $
+#  $Revision: 1.31 $ $Date: 2016/09/23 04:32:13 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -12,9 +12,10 @@
 resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
   # Each argument is a list. Append them.
   argue <- c(...)
-  # is NULL a possible value?
+  # does a NULL value 
+  # overwrite a non-null value occurring later in the sequence?
   if(!.MatchNull) {
-    isnul <- unlist(lapply(argue, is.null))
+    isnul <- sapply(argue, is.null)
     argue <- argue[!isnul]
   }
   if(!is.null(nam <- names(argue))) {
@@ -25,7 +26,7 @@ resolve.defaults <- function(..., .MatchNull=TRUE, .StripNull=FALSE) {
       arg.named <- arg.named[!discard]
     argue <- append(arg.unnamed, arg.named)
   }
-  # should NULL become a missing argument?
+  # should a NULL value mean that the argument is missing?
   if(.StripNull) {
     isnull <- sapply(argue, is.null)
     argue <- argue[!isnull]

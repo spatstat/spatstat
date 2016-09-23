@@ -3,7 +3,7 @@
 #
 #  summary() method for class "quad"
 #
-#  $Revision: 1.10 $ $Date: 2016/09/22 03:57:43 $
+#  $Revision: 1.11 $ $Date: 2016/09/23 07:38:07 $
 #
 
 summary.quad <- local({
@@ -17,10 +17,51 @@ summary.quad <- local({
 
   summary.quad <- function(object, ..., checkdup=FALSE) {
     verifyclass(object, "quad")
+    X <- object$data
+    D <- object$dummy
     s <- list(
-      data  = summary.ppp(object$data, checkdup=checkdup),
-      dummy = summary.ppp(object$dummy, checkdup=checkdup),
+      data  = summary.ppp(X, checkdup=checkdup),
+      dummy = summary.ppp(D, checkdup=checkdup),
       param = object$param)
+    ## make description of dummy point arrangement
+    dpar <- object$param$dummy
+    eps.given <- dpar$orig$eps # could be NULL
+    eps.actual <- NULL
+    if(is.null(dpar)) {
+      descrip <- "(provided manually)"
+    } else if(is.character(dmethod <- dpar$method)) {
+      descrip <- dmethod
+    } else if(identical(dpar$quasi, TRUE)) {
+      descrip <- paste(npoints(D), "quasirandom dummy points",
+                       "plus 4 corner points")
+      eps.actual <- 1/(2 * sqrt(intensity(D)))
+    } else if(!is.null(nd <- dpar$nd)) {
+      nd <- ensure2vector(nd)
+      eps.actual <- unique(sidelengths(Frame(D))/nd)
+      if(identical(dpar$random, TRUE)) {
+        descrip <- paste("systematic random dummy points in",
+                         nd[1], "x", nd[2], "grid",
+                         "plus 4 corner points")
+      } else {
+        descrip <- paste(nd[1], "x", nd[2],
+                         "grid of dummy points, plus 4 corner points")
+      }
+    } else descrip <- "(rule for creating dummy points not understood)"
+    
+    if(!is.null(eps.actual)) {
+      uD <- unitname(D)
+      s$resolution <- numberwithunit(eps.actual, uD)
+      if(!is.null(eps.given)) {
+        descrip2 <- paste("dummy spacing:",
+                          format(eps.given %unit% uD), "requested,", 
+                          format(eps.actual %unit% uD), "actual")
+      } else {
+        descrip2 <- paste("dummy spacing:", format(eps.actual %unit% uD))
+      }
+      descrip <- c(descrip, descrip2)
+    }
+    s$descrip <- descrip
+    
     w <- object$w
     Z <- is.data(object)
     s$w <- list(all   = sumriz(w),
@@ -54,33 +95,23 @@ print.summary.quad <- local({
     pa <- x$param
     if(is.null(pa))
       splat("created by an unknown function.")
-    splat("\nData pattern:")
-    print(x$data, dp=dp)
-    
-    splat("\nDummy quadrature points:")
-    ## How they were computed
-    if(!is.null(pa)) {
-      dumpar <- pa$dummy
-      if(is.null(dumpar))
-        splat("(provided manually)", indent=5)
-      else if(is.character(dmethod <- dumpar$method))
-        splat(dmethod, indent=5)
-      else if(!is.null(nd <- dumpar$nd)) {
-        splat(paste0("(",
-                     if(dumpar$random) "stratified random points in " else NULL,
-                     nd[1], " x ", nd[2], " ",
-                     if(!dumpar$quasi) "grid" else
-                     paste(" =", prod(nd), "quasirandom points"),
-                     ", plus 4 corner points)"),
-              indent=5)
-      } else
-      splat("(rule for creating dummy points not understood)", indent=5)
 
-      if(!is.null(orig <- dumpar$orig))
-        splat("Original dummy parameters:",
-              paste0(names(orig), "=", orig, collapse=", "))
-    }
-    ## Description of them
+    parbreak()
+
+    splat("Data pattern:")
+    print(x$data, dp=dp)
+
+    parbreak()
+
+    splat("Dummy quadrature points:")
+    ## How they were computed
+    splat(x$descrip, indent=5)
+    parbreak()
+    ## What arguments were given
+    if(!is.null(orig <- pa$dummy$orig))
+      splat("Original dummy parameters:",
+            paste0(names(orig), "=", orig, collapse=", "))
+    ## Description of the dummy points
     print(x$dummy, dp=dp)
 
     splat("Quadrature weights:")
@@ -106,10 +137,11 @@ print.summary.quad <- local({
                )
       } else splat("(rule for creating dummy points not understood)")
     }
-    summariseweights(x$w$all, "All weights", dp)
-    summariseweights(x$w$data, "Weights on data points", dp)
-    summariseweights(x$w$dummy, "Weights on dummy points", dp)
-
+    if(waxlyrical('extras')) {
+      summariseweights(x$w$all, "All weights", dp)
+      summariseweights(x$w$data, "Weights on data points", dp)
+      summariseweights(x$w$dummy, "Weights on dummy points", dp)
+    }
     return(invisible(NULL))
   }
 
@@ -119,37 +151,9 @@ print.summary.quad <- local({
 print.quad <- function(x, ...) {
   splat("Quadrature scheme")
   splat(x$data$n, "data points,", x$dummy$n, "dummy points")
-  if(!is.null(dpar <- x$param$dummy) && waxlyrical('extras')) {
-    nd   <- dpar$nd  # actual grid numbers used
-    if(!is.null(nd)) {
-      nd <- ensure2vector(nd)
-      ndum <- prod(nd)
-    } else ndum <- NULL
-    quasi <- identical(dpar$quasi, TRUE)
-    random <- identical(dpar$random, TRUE)
-    if(quasi) {
-      splat(ndum, "quasirandom dummy points plus 4 corner points", indent=5)
-    } else if(random && !is.null(nd)) {
-      splat("systematic random dummy points in", nd[1], "x", nd[2], "grid",
-            "plus 4 corner points", indent=5)
-    } else if(!is.null(nd)) {
-      splat(nd[1], "x", nd[2],
-            "grid of dummy points, plus 4 corner points",
-            indent=5)
-      eps.actual <- unique(sidelengths(Frame(x$dummy))/nd)
-      if(!is.null(eps0 <- dpar$orig$eps)) {
-        splat("dummy spacing:",
-              eps0 %unit% unitname(x),
-              "requested,", 
-              eps.actual %unit% unitname(x),
-              "actual",
-              indent=5)
-      } else {
-        splat("dummy spacing:",
-              eps.actual %unit% unitname(x),
-              indent=5)
-      }
-    }
+  if(waxlyrical('extras')) {
+    sx <- summary(x)
+    splat(sx$descrip, indent=5)
   }
   splat("Total weight", sum(x$w), indent=5)
   return(invisible(NULL))

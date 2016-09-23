@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.049
+        CHANGES IN spatstat VERSION 1.46-1.050
 
 OVERVIEW
 
@@ -128,6 +128,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o discs
     New argument 'npoly'. 
     Accelerated in some cases. 
+
+    o plot.pp3
+    New arguments 'box.front', 'box.back' control plotting of the box.
 
     o grow.rectangle
     New argument 'fraction'.

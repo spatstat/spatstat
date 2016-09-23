@@ -1,6 +1,6 @@
 #'  perspective plot of 3D 
 #'
-#'  $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
+#'  $Revision: 1.5 $ $Date: 2016/09/23 04:57:43 $
 #'
 
 
@@ -78,6 +78,14 @@ plot3Dpoints <- local({
                            ) {
     if(missing(main)) main <- short.deparse(substitute(xyz))
     type <- match.arg(type)
+    #'
+    if(is.null(box.back) || (is.logical(box.back) && box.back))
+      box.back <- list(col="pink")
+    if(is.null(box.front) || (is.logical(box.front) && box.front))
+      box.front <- list(col="blue", lwd=2)
+    stopifnot(is.list(box.back) || is.logical(box.back))
+    stopifnot(is.list(box.front) || is.logical(box.front))
+    #'
     stopifnot(is.matrix(xyz) && ncol(xyz) == 3)
     if(nrow(xyz) > 0) {
       if(missing(xlim)) xlim <- range(pretty(xyz[,1]))
@@ -86,19 +94,24 @@ plot3Dpoints <- local({
       if(missing(org)) org <- c(mean(xlim), mean(ylim), mean(zlim))
     }
     if(!add) {
+      #' initialise plot
       bb <- plot3Dbox(xlim, ylim, zlim, eye=eye, org=org, do.plot=FALSE)
       plot(bb$xlim, bb$ylim, axes=FALSE, asp=1, type="n",
            xlab="", ylab="", main=main)
     }
-    do.call(plot3DboxPart,
-            resolve.defaults(list(xlim=xlim,
-                                  ylim=ylim,
-                                  zlim=zlim,
-                                  eye=eye, org=org,
-                                  part="back"),
-                             box.back,
-                             list(...)))
+    if(is.list(box.back)) {
+      #' plot rear of box
+      do.call(plot3DboxPart,
+              resolve.defaults(list(xlim=xlim,
+                                    ylim=ylim,
+                                    zlim=zlim,
+                                    eye=eye, org=org,
+                                    part="back"),
+                               box.back,
+                               list(...)))
+    }
     if(type != "n") {
+      #' plot points
       uv <- project3Dhom(xyz, eye=eye, org=org)
       uv <- as.data.frame(uv)
       dord <- order(uv$d, decreasing=TRUE)
@@ -116,14 +129,15 @@ plot3Dpoints <- local({
       }
       with(uv, points(x/d, y/d, cex=cex * min(d)/d, ...))
     }
-    do.call(plot3DboxPart,
-            resolve.defaults(list(xlim=xlim,
-                                  ylim=ylim,
-                                  zlim=zlim,
-                                  eye=eye, org=org,
-                                  part="front"),
-                             box.front,
-                             list(...)))
+    if(is.list(box.front)) 
+      do.call(plot3DboxPart,
+              resolve.defaults(list(xlim=xlim,
+                                    ylim=ylim,
+                                    zlim=zlim,
+                                    eye=eye, org=org,
+                                    part="front"),
+                               box.front,
+                               list(...)))
     return(invisible(NULL))
   }
 

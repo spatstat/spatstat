@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.24 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.25 $  $Date: 2016/09/23 04:58:05 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -145,7 +145,9 @@ print.summary.pp3 <- function(x, ...) {
 }
 
 plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
-                     type=c("p", "n", "h")) {
+                     type=c("p", "n", "h"),
+                     box.back=list(col="pink"),
+                     box.front=list(col="blue", lwd=2)) {
   xname <- short.deparse(substitute(x))
   type <- match.arg(type)
   coo <- as.matrix(coords(x))
@@ -168,7 +170,9 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
                            list(main=xname,
                                 xlim=x$domain$xrange,
                                 ylim=x$domain$yrange,
-                                zlim=x$domain$zrange)))
+                                zlim=x$domain$zrange,
+                                box.front=box.front,
+                                box.back=box.back)))
 }
 
 "[.pp3" <- function(x, i, drop=FALSE, ...) {
