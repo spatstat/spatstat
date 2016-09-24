@@ -162,6 +162,12 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
     eye <- org + d * c(cos(phi) * c(sin(theta), -cos(theta)), sin(phi))
   }
   deefolts <- spatstat.options('par.pp3')
+  if(!missing(box.back)){
+    deefolts$box.back <- box.back
+  }
+  if(!missing(box.front)){
+    deefolts$box.front <- box.front
+  }
   ## determine default eye position and centre of view
   do.call(plot3Dpoints,
           resolve.defaults(list(xyz=coo, eye=eye, org=org, type=type),
