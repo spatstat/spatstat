@@ -221,6 +221,7 @@
 \alias{fvlegend}
 \alias{g3engine}
 \alias{g3Cengine}
+\alias{geomseq}
 \alias{greatest.common.divisor}
 \alias{getdataname}
 \alias{getdataobjects}
@@ -1092,6 +1093,7 @@ fvlabelmap(x, dot=TRUE)
 fvlegend(object, elang)
 g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
+geomseq(from, to, length.out)
 greatest.common.divisor(n,m)
 getdataname(defaultvalue, \dots, dataname)
 getdataobjects(nama, envir, datalist, fatal)

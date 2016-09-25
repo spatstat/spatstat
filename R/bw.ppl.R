@@ -3,7 +3,7 @@
 #
 #   Likelihood cross-validation for kernel smoother of point pattern
 #
-#   $Revision: 1.5 $ $Date: 2016/09/25 03:11:06 $
+#   $Revision: 1.6 $ $Date: 2016/09/25 10:22:36 $
 #
 
 bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL, weights=NULL) {
@@ -16,7 +16,7 @@ bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL, weights=NULL) {
       nnd <- nndist(X)
       srange <- c(min(nnd[nnd > 0]), diameter(as.owin(X))/2)
     }
-    sigma <- exp(seq(log(srange[1]), log(srange[2]), length=ns))
+    sigma <- geomseq(from=srange[1], to=srange[2], length.out=ns)
   }
   cv <- numeric(ns)
   for(i in 1:ns) {

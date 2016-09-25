@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.30 $  $Date: 2015/03/11 10:05:47 $
+#  $Revision: 1.31 $  $Date: 2016/09/25 10:22:46 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -424,7 +424,7 @@ bw.relrisk <- function(X, method="likelihood",
     }
   } else stopifnot(hmin < hmax)
   ##
-  h <- exp(seq(from=log(hmin), to=log(hmax), length.out=nh))
+  h <- geomseq(from=hmin, to=hmax, length.out=nh)
   cv <- numeric(nh)
   ## 
   ## compute cross-validation criterion

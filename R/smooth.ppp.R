@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.33 $  $Date: 2016/09/19 08:02:58 $
+#  $Revision: 1.34 $  $Date: 2016/09/25 10:23:12 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -542,7 +542,7 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
     }
   } else stopifnot(hmin < hmax)
   #
-  h <- exp(seq(from=log(hmin), to=log(hmax), length.out=nh))
+  h <- geomseq(from=hmin, to=hmax, length.out=nh)
   cv <- numeric(nh)
   # 
   # compute cross-validation criterion

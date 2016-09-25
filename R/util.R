@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.219 $    $Date: 2016/09/21 23:54:15 $
+#    $Revision: 1.223 $    $Date: 2016/09/25 10:54:34 $
 #
 #
 matrowsum <- function(x) {
@@ -290,6 +290,8 @@ revcumsum <- function(x) {
   }
 }
 
+## ............. sequences ...................
+
 prolongseq <- function(x, newrange, step=NULL) {
   ## Extend a sequence x so that it covers the new range.
   stopifnot(length(newrange) == 2 && newrange[1] < newrange[2])
@@ -362,6 +364,16 @@ fillseq <- function(x, step=NULL) {
   return(list(xnew=y, i=i))
 }
 
+geomseq <- function(from, to, length.out) {
+  if(from <= 0 || to <= 0) stop("range limits must be positive")
+  y <- exp(seq(from=log(from), to=log(to), length.out=length.out))
+  y[1] <- from  #' avoid numerical error
+  y[length.out] <- to
+  return(y)
+}
+
+## ............. ranges ...................
+
 intersect.ranges <- function(a, b, fatal=TRUE) {
   if(!is.null(a) && !is.null(b)) {
     lo <- max(a[1],b[1])
@@ -430,6 +442,8 @@ niceround <- function(x, m=c(1,2,5,10)) {
   z <- y[which.min(abs(y - x))]
   return(z)
 }
+
+## ........... progress reports .....................
 
 progressreport <- local({
 
@@ -1072,6 +1086,13 @@ nzpaste <- function(..., sep=" ", collapse=NULL) {
   do.call(paste, append(v[ok], list(sep=sep, collapse=collapse)))
 }
 
+pasteN <- function(...) {
+  # remove NULL arguments then paste
+  argh <- list(...)
+  argh <- argh[!sapply(argh, is.null)]
+  do.call(paste, argh)
+}
+
 substringcount <- function(x, y) {
   ## count occurrences of 'x' in 'y'
   yy <- paste0("a", y, "a")
@@ -1687,10 +1708,4 @@ indexCartesian <- function(nn) {
   as.matrix(do.call(expand.grid, lapply(nn, seq_len)))
 }
 
-pasteN <- function(...) {
-  # remove NULL arguments then paste
-  argh <- list(...)
-  argh <- argh[!sapply(argh, is.null)]
-  do.call(paste, argh)
-}
 
