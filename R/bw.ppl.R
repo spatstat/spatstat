@@ -3,16 +3,21 @@
 #
 #   Likelihood cross-validation for kernel smoother of point pattern
 #
-#   $Revision: 1.4 $ $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.5 $ $Date: 2016/09/25 03:11:06 $
 #
 
-bw.ppl <- function(X, ..., srange=NULL, ns=16, weights=NULL) {
+bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL, weights=NULL) {
   stopifnot(is.ppp(X))
-  if(!is.null(srange)) check.range(srange) else {
-    nnd <- nndist(X)
-    srange <- c(min(nnd[nnd > 0]), diameter(as.owin(X))/2)
+  if(!is.null(sigma)) {
+    stopifnot(is.numeric(sigma) && is.vector(sigma))
+    ns <- length(sigma)
+  } else {
+    if(!is.null(srange)) check.range(srange) else {
+      nnd <- nndist(X)
+      srange <- c(min(nnd[nnd > 0]), diameter(as.owin(X))/2)
+    }
+    sigma <- exp(seq(log(srange[1]), log(srange[2]), length=ns))
   }
-  sigma <- exp(seq(log(srange[1]), log(srange[2]), length=ns))
   cv <- numeric(ns)
   for(i in 1:ns) {
     si <- sigma[i]

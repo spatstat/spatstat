@@ -8,7 +8,7 @@
   for the kernel estimation of point process intensity.
 }
 \usage{
-   bw.ppl(X, \dots, srange=NULL, ns=16, weights=NULL)
+   bw.ppl(X, \dots, srange=NULL, ns=16, sigma=NULL, weights=NULL)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,10 @@
   \item{ns}{
     Optional integer giving the number of values of
     bandwidth to search.
+  }
+  \item{sigma}{
+    Optional. Vector of values of the bandwidth to be searched.
+    Overrides the values of \code{ns} and \code{srange}.
   }
   \item{weights}{
     Optional. Numeric vector of weights for the points of \code{X}.

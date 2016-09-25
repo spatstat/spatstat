@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.050
+        CHANGES IN spatstat VERSION 1.46-1.051
 
 OVERVIEW
 
@@ -29,7 +29,7 @@ OVERVIEW
 
     o Bug fixes and improvements.
 
-    o Version nickname: 'Displacement Activity'
+    o Version nickname: 'Parthian Shot'
 
 NEW FUNCTIONS
 
@@ -137,6 +137,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o nnfun.lpp
     New argument 'k'.
+
+    o bw.ppl
+    New argument 'sigma'.
 
     o quadrat.test.ppm
     Accelerated in the case where the original window is a rectangle.

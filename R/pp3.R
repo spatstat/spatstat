@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.25 $  $Date: 2016/09/23 04:58:05 $
+#  $Revision: 1.26 $  $Date: 2016/09/23 11:02:36 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -162,10 +162,13 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
     eye <- org + d * c(cos(phi) * c(sin(theta), -cos(theta)), sin(phi))
   }
   deefolts <- spatstat.options('par.pp3')
+  bf <- if(!missing(box.front)) list(box.front=box.front) else list()
+  bb <- if(!missing(box.back)) list(box.back=box.back) else list()
   ## determine default eye position and centre of view
   do.call(plot3Dpoints,
           resolve.defaults(list(xyz=coo, eye=eye, org=org, type=type),
                            list(...),
+                           bf, bb, 
                            deefolts,
                            list(main=xname,
                                 xlim=x$domain$xrange,
