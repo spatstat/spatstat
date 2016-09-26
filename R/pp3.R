@@ -150,6 +150,13 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
                      box.front=list(col="blue", lwd=2)) {
   xname <- short.deparse(substitute(x))
   type <- match.arg(type)
+  # given arguments
+  argh <- list(...)
+  if(!missing(box.front)) argh$box.front <- box.front
+  if(!missing(box.back))  argh$box.back  <- box.back
+  # Now apply formal defaults above
+  formaldefaults <- list(box.front=box.front, box.back=box.back)
+  #'
   coo <- as.matrix(coords(x))
   xlim <- x$domain$xrange
   ylim <- x$domain$yrange
@@ -162,20 +169,16 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
     eye <- org + d * c(cos(phi) * c(sin(theta), -cos(theta)), sin(phi))
   }
   deefolts <- spatstat.options('par.pp3')
-  bf <- if(!missing(box.front)) list(box.front=box.front) else list()
-  bb <- if(!missing(box.back)) list(box.back=box.back) else list()
   ## determine default eye position and centre of view
   do.call(plot3Dpoints,
           resolve.defaults(list(xyz=coo, eye=eye, org=org, type=type),
-                           list(...),
-                           bf, bb, 
+                           argh,
                            deefolts,
+                           formaldefaults,
                            list(main=xname,
-                                xlim=x$domain$xrange,
-                                ylim=x$domain$yrange,
-                                zlim=x$domain$zrange,
-                                box.front=box.front,
-                                box.back=box.back)))
+                                xlim=xlim,
+                                ylim=ylim,
+                                zlim=zlim)))
 }
 
 "[.pp3" <- function(x, i, drop=FALSE, ...) {
