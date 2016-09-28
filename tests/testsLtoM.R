@@ -132,7 +132,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.8 $  $Date: 2016/07/18 06:43:57 $
+#  $Revision: 1.9 $  $Date: 2016/09/28 04:28:05 $
 
 
 require(spatstat)
@@ -211,6 +211,14 @@ local({
   # test handling marginal cases
   xyd <- nncross(XX, YY[1])
 
+  ## as.linnet.psp (Suman's example)
+  Lines <- as.data.frame(as.psp(simplenet))
+  newseg <- c(Lines[1,1:2], Lines[10,3:4])
+  Lines <- rbind(Lines, newseg)
+  Y <- as.psp(Lines, window=Window(simplenet))
+  marks(Y) <- c(3, 4, 5, 5, 3, 4, 5, 5,5, 5,1)
+  Z <- as.linnet(Y) # can crash if marks don't match segments
+  
   ## Test linnet surgery code
   set.seed(42)
   X <- runiflpp(30, simplenet)

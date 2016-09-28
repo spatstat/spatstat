@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.58 $    $Date: 2016/08/30 07:15:32 $
+#    $Revision: 1.59 $    $Date: 2016/09/28 04:16:06 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -287,9 +287,10 @@ as.linnet.psp <- local({
     second <- endpoints.psp(X, "second")
     from <- nncross(first, V, what="which")
     to   <- nncross(second, V, what="which")
-    join <- cbind(from, to)[from != to, , drop=FALSE]
+    nontrivial <- (from != to)
+    join <- cbind(from, to)[nontrivial, , drop=FALSE]
     result <- linnet(V, edges=join, sparse=sparse)
-    if(is.marked(X)) marks(result$lines) <- marks(X)
+    if(is.marked(X)) marks(result$lines) <- marks(X[nontrivial])
     return(result)
   }
 

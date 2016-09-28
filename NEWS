@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.053
+        CHANGES IN spatstat VERSION 1.46-1.054
 
 OVERVIEW
 
     o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, 
-    Jorge Mateu, Frederico Mestre, Mehdi Moradi, Virginia Morera Pujol
-    and Sven Wagner for contributions.
+    Jorge Mateu, Frederico Mestre, Mehdi Moradi, Virginia Morera Pujol,
+    Suman Rakshit and Sven Wagner for contributions.
 
     o Non-Gaussian smoothing kernels.
 
@@ -208,6 +208,11 @@ BUG FIXES
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Crashed sometimes with a message about wrong replacement length.
     [Spotted by Virginia Morera Pujol.]
+    Fixed.
+
+    o as.linnet.psp
+    Crashed with marked segment patterns, if any segments were very short.
+    [Spotted by Suman Rakshit.]
     Fixed.
 
     o stieltjes
