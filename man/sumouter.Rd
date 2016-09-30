@@ -7,7 +7,7 @@
   Calculates certain quadratic forms of matrices.
 }
 \usage{
-  sumouter(x, w=NULL)
+  sumouter(x, w=NULL, y=x)
   quadform(x, v)
   bilinearform(x, v, y)
 }
@@ -20,20 +20,22 @@
   A vector or matrix.
 }
 \details{
-  The matrix \code{x} will be interpreted as a collection of row vectors.
+  The matrices \code{x} and \code{y} will be interpreted as
+  collections of row vectors. They must have the same number of rows.
+
   The command \code{sumouter} computes the sum of the outer
-  products of these vectors, weighted by the entries of \code{w}:
+  products of corresponding row vectors, weighted by the entries of \code{w}:
   \deqn{
-    M = \sum_i w_i x_i x_i^\top
+    M = \sum_i w_i x_i y_i^\top
   }{
-    M = sum[i] (w[i] * outer(x[i,], x[i,]))
+    M = sum[i] (w[i] * outer(x[i,], y[i,]))
   }
-  where the sum is over all rows of \code{x}
+  where the sum is over all rows of \code{x} 
   (after removing any rows containing \code{NA} or other non-finite
   values).
   If \code{w} is missing, the weights will be taken as 1.
-  The result is a \eqn{p \times p}{p * p} matrix where
-  \code{p = ncol(x)}.
+  The result is a \eqn{p \times q}{p * q} matrix where
+  \code{p = ncol(x)} and \code{q = ncol(y)}.
   
   The command \code{quadform} evaluates the quadratic form, defined by
   the matrix \code{v}, for each of the row vectors of \code{x}:
@@ -48,7 +50,7 @@
 
   The command \code{bilinearform} evaluates the more general bilinear
   form defined by the matrix \code{v}. Here \code{x} and \code{y} must
-  be matrices of the same dimensins. For each of the row vectors of
+  be matrices of the same dimensions. For each row vector of
   \code{x} and corresponding row vector of \code{y}, the bilinear form is
  \deqn{ 
    z_i = x_i V y_i^\top

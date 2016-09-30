@@ -3,49 +3,90 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.16 $ $Date: 2016/07/07 09:47:59 $
+# $Revision: 1.17 $ $Date: 2016/09/30 10:40:42 $
 #
 
-sumouter <- function(x, w=NULL) {
+sumouter <- function(x, w=NULL, y=x) {
+  #' compute sum_i (w[i] * outer(x[i,], y[i,]))
   stopifnot(is.matrix(x))
-  p <- ncol(x)
-  n <- nrow(x)
-  nama <- colnames(x)
-  # transpose (compute outer squares of columns)
-  tx <- t(x)
-  ok <- apply(is.finite(tx), 2, all)
-  if(!is.null(w)) {
-    if(length(w) != n)
-      stop(paste("The length of w does not match the number of rows of x",
-                 "\t(", length(w), "!=", n, ")"))
-    ok <- ok & is.finite(w)
+  weighted <- !is.null(w)
+  symmetric <- missing(y) || identical(x,y)
+  if(weighted) {
+    if(length(dim(w)) > 1) stop("w should be a vector")
+    w <- as.numeric(w)
+    check.nvector(w, nrow(x), things="rows of x")
   }
+  if(!symmetric) {
+    stopifnot(is.matrix(y))
+    stopifnot(nrow(x) == nrow(y))
+  }
+  #' transpose (compute outer squares of columns)
+  tx <- t(x)
+  if(!symmetric) ty <- t(y)
+  #' check for NA etc
+  ok <- apply(is.finite(tx), 2, all)
+  if(!symmetric) ok <- ok & apply(is.finite(ty), 2, all)
+  if(weighted) ok <- ok & is.finite(w)
+  #' remove NA etc
   if(!all(ok)) {
     tx <- tx[ , ok, drop=FALSE]
-    if(!is.null(w)) w <- w[ok]
-    n <- ncol(tx)
-  } 
-  if(is.null(w)) {
-    z <- .C("Csumouter",
-            x=as.double(tx),
-            n=as.integer(n),
-            p=as.integer(p),
-            y=as.double(numeric(p * p)))
-  } else {
-    z <- .C("Cwsumouter",
-            x=as.double(tx),
-            n=as.integer(n),
-            p=as.integer(p),
-            w=as.double(w),
-            y=as.double(numeric(p * p)))
+    if(!symmetric) ty <- ty[ , ok, drop=FALSE]
+    if(weighted) w <- w[ok]
   }
-  out <- matrix(z$y, p, p)
-  if(!is.null(nama))
-     dimnames(out) <- list(nama, nama)
+  #' call C code
+  if(symmetric) {
+    n <- ncol(tx)
+    p <- nrow(tx)
+    if(is.null(w)) {
+      zz <- .C("Csumouter",
+               x=as.double(tx),
+               n=as.integer(n),
+               p=as.integer(p),
+               y=as.double(numeric(p * p)))
+    } else {
+      zz <- .C("Cwsumouter",
+               x=as.double(tx),
+               n=as.integer(n),
+               p=as.integer(p),
+               w=as.double(w),
+               y=as.double(numeric(p * p)))
+    }
+    out <- matrix(zz$y, p, p)
+    if(!is.null(nama <- colnames(x)))
+      dimnames(out) <- list(nama, nama)
+  } else {
+    n <- ncol(tx)
+    px <- nrow(tx)
+    py <- nrow(ty)
+    if(is.null(w)) {
+      zz <- .C("Csum2outer",
+               x=as.double(tx),
+               y=as.double(ty),
+               n=as.integer(n),
+               px=as.integer(px),
+               py=as.integer(py),
+               z=as.double(numeric(px * py)))
+    } else {
+      zz <- .C("Cwsum2outer",
+               x=as.double(tx),
+               y=as.double(ty),
+               n=as.integer(n),
+               px=as.integer(px),
+               py=as.integer(py),
+               w=as.double(w),
+               z=as.double(numeric(px * py)))
+    }
+    out <- matrix(zz$z, px, py)
+    namx <- colnames(x)
+    namy <- colnames(y)
+    if(!is.null(namx) || !is.null(namy))
+      dimnames(out) <- list(namx, namy)
+  }
   return(out)
 }
 
 quadform <- function(x, v) {
+  #' compute sum_i (x[i, ] %*% v %*% t(x[i,]))
   stopifnot(is.matrix(x))
   p <- ncol(x)
   n <- nrow(x)
@@ -82,6 +123,7 @@ quadform <- function(x, v) {
 }
 
 bilinearform <- function(x, v, y) {
+  #' compute sum_i (x[i, ] %*% v %*% t(y[i,]))
   stopifnot(is.matrix(x))
   stopifnot(is.matrix(y))
   stopifnot(identical(dim(x), dim(y)))
@@ -123,7 +165,9 @@ bilinearform <- function(x, v, y) {
 }
 
 sumsymouter <- function(x, w=NULL) {
-  # computes the sum of outer(x[,i,j], x[,j,i]) * w[i,j] over all pairs i != j
+  ## x is a 3D array
+  ## w is a matrix
+  ## Computes the sum of outer(x[,i,j], x[,j,i]) * w[i,j] over all pairs i != j
   if(inherits(x, c("sparseSlab", "sparse3Darray")) &&
      (is.null(w) || inherits(w, "sparseMatrix")))
     return(sumsymouterSparse(x, w))

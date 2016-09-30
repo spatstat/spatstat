@@ -104,6 +104,24 @@ require(spatstat)
 local({
   p <- 3
   n <- 4
+
+  x <- matrix(1:(n*p), n, p)
+  w <- rep(2, n)
+  z <- matrix(0, p, p)
+  for(i in 1:n)
+    z <- z + w[i] * outer(x[i,],x[i,])
+  zC <- sumouter(x, w)
+  if(!identical(zC, z))
+    stop("sumouter gives incorrect result in symmetric case")
+
+  y <- matrix(1:(2*n), n, 2)
+  z <- matrix(0, p, 2)
+  for(i in 1:n)
+    z <- z + w[i] * outer(x[i,],y[i,])
+  zC <- sumouter(x, w, y)
+  if(!identical(zC, z))
+      stop("sumouter gives incorrect result in ASYMMETRIC case")
+  
   x <- array(as.numeric(1:(p * n * n)), dim=c(p, n, n))
   w <- matrix(1:(n*n), n, n)
   y <- matrix(numeric(p * p), p, p)

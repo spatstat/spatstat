@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.054
+        CHANGES IN spatstat VERSION 1.46-1.055
 
 OVERVIEW
 
@@ -81,6 +81,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'workaround' to avoid a bug in some device drivers
     that causes the image to be displayed in the wrong spatial orientation.
     [Thanks to Marcel Austenfeld for drawing attention to this.]
+
+    o sumouter
+    New argument 'y' allows computation of asymmetric outer products.
 
     o linearKinhom, linearpcfinhom
     New argument 'normpower'.
@@ -234,6 +237,10 @@ BUG FIXES
 
     o "[.fv"
     The default plot formula was not updated.
+    Fixed.
+
+    o fitted.ppm
+    The result was sometimes a 1-dimensional array rather than a numeric vector.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.46-1

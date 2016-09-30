@@ -5,10 +5,12 @@
 
    Yes, really
 
-   $Revision: 1.9 $ $Date: 2013/09/25 06:07:24 $ 
+   $Revision: 1.11 $ $Date: 2016/09/30 10:57:20 $ 
 
    Csumouter
    Cwsumouter
+   Csum2outer
+   Cwsum2outer
    Cquadform
    Csumsymouter
    Cwsumsymouter
@@ -19,6 +21,8 @@
 #include "chunkloop.h"
 
 /* ............... matrices ..............................*/
+
+/* ........................sums of outer products ........*/
 
 /*
     Csumouter
@@ -86,6 +90,79 @@ void Cwsumouter(x, n, p, w, y)
     }
   }
 }
+
+/*
+    Csum2outer
+    computes the sum of outer products of columns of x and y
+    z = sum[j] (x[,j] %o% y[,j])
+*/
+
+void Csum2outer(x, y, n, px, py, z) 
+   double *x, *y;    /* matrices (px by n) and (py by n) */
+   int *n, *px, *py;
+   double *z;    /* output matrix px by py, initialised to zero */
+{
+  int N, Px, Py;
+  register int i, j, k, maxchunk;
+  register double xij, ykj;
+  register double *xcolj, *ycolj;
+  N = *n; 
+  Px = *px;
+  Py = *py;
+  OUTERCHUNKLOOP(j, N, maxchunk, 2048) {
+    R_CheckUserInterrupt();
+    INNERCHUNKLOOP(j, N, maxchunk, 2048) {
+      xcolj = x + j * Px;
+      ycolj = y + j * Py;
+      for(i = 0; i < Px; i++) {
+	xij = xcolj[i];
+	for(k = 0; k < Py; k++) {
+	  ykj = ycolj[k];
+	  y[k * Px + i] += xij * ykj;
+	}
+      }
+    }
+  }
+}
+
+/*
+    Cwsum2outer
+    computes the weighted sum of outer products of columns of x and y
+    z = sum[j] (w[j] * x[,j] %o% y[,j])
+*/
+
+void Cwsum2outer(x, y, n, px, py, w, z) 
+   double *x, *y;    /* matrices (px by n) and (py by n) */
+   int *n, *px, *py;
+   double *w;    /* weight vector, length n */
+   double *z;    /* output matrix px by py, initialised to zero */
+{
+  int N, Px, Py;
+  register int i, j, k, maxchunk;
+  register double wj, xij, wjxij, ykj;
+  register double *xcolj, *ycolj;
+  N = *n; 
+  Px = *px;
+  Py = *py;
+  OUTERCHUNKLOOP(j, N, maxchunk, 2048) {
+    R_CheckUserInterrupt();
+    INNERCHUNKLOOP(j, N, maxchunk, 2048) {
+      wj = w[j];
+      xcolj = x + j * Px;
+      ycolj = y + j * Py;
+      for(i = 0; i < Px; i++) {
+	xij = xcolj[i];
+	wjxij = wj * xij;
+	for(k = 0; k < Py; k++) {
+	  ykj = ycolj[k];
+	  z[k * Px + i] += wjxij * ykj;
+	}
+      }
+    }
+  }
+}
+
+/* ........................quadratic/bilinear forms ......*/
 
 /*
     computes the quadratic form values

@@ -3,7 +3,7 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.14 $   $Date: 2016/02/22 02:36:43 $
+#   $Revision: 1.15 $   $Date: 2016/09/30 11:58:16 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
@@ -93,6 +93,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
       mom[, Vnames] <- 0
     lambda <- lambda * exp(- rowSums(delta * mom))
   }
+  lambda <- unname(as.vector(lambda))
   return(lambda)
 }
 
