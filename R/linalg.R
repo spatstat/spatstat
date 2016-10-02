@@ -3,11 +3,11 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.17 $ $Date: 2016/09/30 10:40:42 $
+# $Revision: 1.18 $ $Date: 2016/10/01 05:00:23 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
-  #' compute sum_i (w[i] * outer(x[i,], y[i,]))
+  #' compute matrix sum_i (w[i] * outer(x[i,], y[i,]))
   stopifnot(is.matrix(x))
   weighted <- !is.null(w)
   symmetric <- missing(y) || identical(x,y)
@@ -86,7 +86,7 @@ sumouter <- function(x, w=NULL, y=x) {
 }
 
 quadform <- function(x, v) {
-  #' compute sum_i (x[i, ] %*% v %*% t(x[i,]))
+  #' compute vector of values y[i] = x[i, ] %*% v %*% t(x[i,]
   stopifnot(is.matrix(x))
   p <- ncol(x)
   n <- nrow(x)
@@ -123,7 +123,7 @@ quadform <- function(x, v) {
 }
 
 bilinearform <- function(x, v, y) {
-  #' compute sum_i (x[i, ] %*% v %*% t(y[i,]))
+  #' compute vector of values z[i] = x[i, ] %*% v %*% t(y[i,])
   stopifnot(is.matrix(x))
   stopifnot(is.matrix(y))
   stopifnot(identical(dim(x), dim(y)))

@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.126 $  $Date: 2016/03/28 02:56:20 $
+##  $Revision: 1.127 $  $Date: 2016/10/02 02:46:15 $
 ##
 
 vcov.ppm <- local({
@@ -873,6 +873,8 @@ vcalcGibbsGeneral <- function(model,
         if(logi)
            list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog) else NULL,
         if(reweighting) list(gradient=gradient) else NULL,
+        list(hessian = if(reweighting) gradient else A1,
+             fisher = Sigma),
         if(saveterms) list(lamdel=lamdel, momdel=momdel) else NULL)
     ## return internal data if no further calculation needed
     if(!spill.vc && !logi)

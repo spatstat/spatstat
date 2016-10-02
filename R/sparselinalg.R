@@ -33,7 +33,7 @@ tensor1x1 <- function(A, B) {
   A <- as.vector(as.matrix(A))
   stopifnot(length(A) == dim(B)[1])
   if(is.array(B)) {
-    result <- tensor(A,B,1,1)
+    result <- tensor::tensor(A,B,1,1)
   } else if(inherits(B, "sparse3Darray")) {
     result <- sparseMatrix(i=B$j,
                            j=B$k,
