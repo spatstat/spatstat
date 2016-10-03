@@ -1,11 +1,11 @@
 #
 # linequad.R
 #
-#  $Revision: 1.11 $ $Date: 2015/12/08 00:52:41 $
+#  $Revision: 1.12 $ $Date: 2016/10/03 08:55:55 $
 #
 # create quadscheme for a pattern of points lying *on* line segments
 
-linequad <- function(X, Y, ..., eps=NULL, nd=1000) {
+linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
   epsgiven <- !is.null(eps)
   if(is.lpp(X)) {
     # extract local coordinates from lpp object
@@ -44,7 +44,6 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000) {
   stopifnot(is.numeric(eps) && length(eps) == 1 && is.finite(eps) && eps > 0)
   ##
   if(is.lpp(X) && spatstat.options('Clinequad')) {
-#    message("Using experimental C code for 'linequad'")
     L <- as.linnet(X)
     W <- Frame(L)
     V <- vertices(L)
@@ -58,25 +57,47 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000) {
     maxdataperseg <- max(table(factor(coordsX$seg, levels=1:nsegments(L))))
     maxscratch <- max(ndumeach) + maxdataperseg
     if(!ismulti) {
-      z <- .C("Clinequad",
-              ns    = as.integer(nseg),
-              from  = as.integer(L$from-1),
-              to    = as.integer(L$to-1), 
-              nv    = as.integer(nV),
-              xv    = as.double(coordsV$x),
-              yv    = as.double(coordsV$y), 
-              eps   = as.double(eps),
-              ndat  = as.integer(nX),
-              sdat  = as.integer(coordsX$seg[ooX]-1),
-              tdat  = as.double(coordsX$tp[ooX]),
-              wdat  = as.double(numeric(nX)),
-              ndum  = as.integer(integer(1)),
-              xdum  = as.double(numeric(ndummax)),
-              ydum  = as.double(numeric(ndummax)),
-              sdum  = as.integer(integer(ndummax)),
-              tdum  = as.double(numeric(ndummax)),
-              wdum  = as.double(numeric(ndummax)),
-              maxscratch = as.integer(maxscratch))
+      if(!random) {
+        z <- .C("Clinequad",
+                ns    = as.integer(nseg),
+                from  = as.integer(L$from-1),
+                to    = as.integer(L$to-1), 
+                nv    = as.integer(nV),
+                xv    = as.double(coordsV$x),
+                yv    = as.double(coordsV$y), 
+                eps   = as.double(eps),
+                ndat  = as.integer(nX),
+                sdat  = as.integer(coordsX$seg[ooX]-1),
+                tdat  = as.double(coordsX$tp[ooX]),
+                wdat  = as.double(numeric(nX)),
+                ndum  = as.integer(integer(1)),
+                xdum  = as.double(numeric(ndummax)),
+                ydum  = as.double(numeric(ndummax)),
+                sdum  = as.integer(integer(ndummax)),
+                tdum  = as.double(numeric(ndummax)),
+                wdum  = as.double(numeric(ndummax)),
+                maxscratch = as.integer(maxscratch))
+      } else {
+        z <- .C("ClineRquad",
+                ns    = as.integer(nseg),
+                from  = as.integer(L$from-1),
+                to    = as.integer(L$to-1), 
+                nv    = as.integer(nV),
+                xv    = as.double(coordsV$x),
+                yv    = as.double(coordsV$y), 
+                eps   = as.double(eps),
+                ndat  = as.integer(nX),
+                sdat  = as.integer(coordsX$seg[ooX]-1),
+                tdat  = as.double(coordsX$tp[ooX]),
+                wdat  = as.double(numeric(nX)),
+                ndum  = as.integer(integer(1)),
+                xdum  = as.double(numeric(ndummax)),
+                ydum  = as.double(numeric(ndummax)),
+                sdum  = as.integer(integer(ndummax)),
+                tdum  = as.double(numeric(ndummax)),
+                wdum  = as.double(numeric(ndummax)),
+                maxscratch = as.integer(maxscratch))
+      }
       seqdum <- seq_len(z$ndum)
       dum <- with(z, ppp(xdum[seqdum], ydum[seqdum], window=W, check=FALSE))
       wdum <- z$wdum[seqdum]
@@ -87,30 +108,57 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000) {
       ntypes <- length(flev)
       ndummax <- ntypes * (ndummax + nX)
       maxscratch <- ntypes * maxscratch
-      z <- .C("ClineMquad",
-              ns    = as.integer(nseg),
-              from  = as.integer(L$from-1),
-              to    = as.integer(L$to-1), 
-              nv    = as.integer(nV),
-              xv    = as.double(coordsV$x),
-              yv    = as.double(coordsV$y), 
-              eps   = as.double(eps),
-              ntypes = as.integer(ntypes),
-              ndat  = as.integer(nX),
-              xdat  = as.double(coordsX$x),
-              ydat  = as.double(coordsX$y),
-              mdat  = as.integer(as.integer(marx)-1),
-              sdat  = as.integer(coordsX$seg[ooX]-1),
-              tdat  = as.double(coordsX$tp[ooX]),
-              wdat  = as.double(numeric(nX)),
-              ndum  = as.integer(integer(1)),
-              xdum  = as.double(numeric(ndummax)),
-              ydum  = as.double(numeric(ndummax)),
-              mdum  = as.integer(integer(ndummax)),
-              sdum  = as.integer(integer(ndummax)),
-              tdum  = as.double(numeric(ndummax)),
-              wdum  = as.double(numeric(ndummax)),
-              maxscratch = as.integer(maxscratch))
+      if(!random) {
+        z <- .C("ClineMquad",
+                ns    = as.integer(nseg),
+                from  = as.integer(L$from-1),
+                to    = as.integer(L$to-1), 
+                nv    = as.integer(nV),
+                xv    = as.double(coordsV$x),
+                yv    = as.double(coordsV$y), 
+                eps   = as.double(eps),
+                ntypes = as.integer(ntypes),
+                ndat  = as.integer(nX),
+                xdat  = as.double(coordsX$x),
+                ydat  = as.double(coordsX$y),
+                mdat  = as.integer(as.integer(marx)-1),
+                sdat  = as.integer(coordsX$seg[ooX]-1),
+                tdat  = as.double(coordsX$tp[ooX]),
+                wdat  = as.double(numeric(nX)),
+                ndum  = as.integer(integer(1)),
+                xdum  = as.double(numeric(ndummax)),
+                ydum  = as.double(numeric(ndummax)),
+                mdum  = as.integer(integer(ndummax)),
+                sdum  = as.integer(integer(ndummax)),
+                tdum  = as.double(numeric(ndummax)),
+                wdum  = as.double(numeric(ndummax)),
+                maxscratch = as.integer(maxscratch))
+      } else {
+        z <- .C("ClineRMquad",
+                ns    = as.integer(nseg),
+                from  = as.integer(L$from-1),
+                to    = as.integer(L$to-1), 
+                nv    = as.integer(nV),
+                xv    = as.double(coordsV$x),
+                yv    = as.double(coordsV$y), 
+                eps   = as.double(eps),
+                ntypes = as.integer(ntypes),
+                ndat  = as.integer(nX),
+                xdat  = as.double(coordsX$x),
+                ydat  = as.double(coordsX$y),
+                mdat  = as.integer(as.integer(marx)-1),
+                sdat  = as.integer(coordsX$seg[ooX]-1),
+                tdat  = as.double(coordsX$tp[ooX]),
+                wdat  = as.double(numeric(nX)),
+                ndum  = as.integer(integer(1)),
+                xdum  = as.double(numeric(ndummax)),
+                ydum  = as.double(numeric(ndummax)),
+                mdum  = as.integer(integer(ndummax)),
+                sdum  = as.integer(integer(ndummax)),
+                tdum  = as.double(numeric(ndummax)),
+                wdum  = as.double(numeric(ndummax)),
+                maxscratch = as.integer(maxscratch))
+      }
       seqdum <- seq_len(z$ndum)
       marques <- factor(z$mdum[seqdum] + 1, labels=flev)
       dum <- with(z, ppp(xdum[seqdum], ydum[seqdum], marks=marques,

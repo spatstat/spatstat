@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.65 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.67 $  $Date: 2016/10/03 08:57:38 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -141,7 +141,7 @@ rhohat.lpp <- rhohat.lppm <-
   # validate model
   if(is.lpp(object)) {
     X <- object
-    model <- lppm(object, ~1)
+    model <- lppm(object, ~1, eps=eps, nd=nd, random=TRUE)
     reference <- "Lebesgue"
     modelcall <- NULL
   } else if(inherits(object, "lppm")) {

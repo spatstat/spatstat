@@ -1214,7 +1214,7 @@ least.common.multiple(n,m)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
 lhs.of.formula(x)
-linequad(X, Y, \dots, eps, nd)
+linequad(X, Y, \dots, eps, nd, random)
 linearKengine(X, \dots, r, reweight, denom, correction, showworking)
 linearKmulti(X, I, J, r, \dots, correction)
 linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,

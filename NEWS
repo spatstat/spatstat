@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.056
+        CHANGES IN spatstat VERSION 1.46-1.057
 
 OVERVIEW
 
@@ -229,6 +229,10 @@ BUG FIXES
 
     o plot.ppp, plot.im
     Ignored xlim, ylim. 
+    Fixed.
+
+    o rhohat.lpp
+    Ignored nd, eps.
     Fixed.
 
     o nnfun.lpp
