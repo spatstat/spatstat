@@ -3,16 +3,15 @@
 #	Usual invocation to compute J function
 #	if F and G are not required 
 #
-#	$Revision: 4.19 $	$Date: 2014/11/10 08:23:33 $
+#	$Revision: 4.21 $	$Date: 2016/10/04 02:33:50 $
 #
 #
 #
-"Jest" <-
-function(X, ..., eps=NULL, r=NULL, breaks=NULL, correction=NULL) {
+Jest <- function(X, ..., eps=NULL, r=NULL, breaks=NULL, correction=NULL) {
   X <- as.ppp(X)
-  W<- X$window
-  rmaxdefault <- rmax.rule("J", W)
-  brks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)$val
+  W <- Window(X)
+  rmaxdefault <- rmax.rule("J", W, intensity(X))
+  brks <- handle.r.b.args(r, breaks, W, rmaxdefault=rmaxdefault)
   # compute F and G 
   FF <- Fest(X, eps, breaks=brks, correction=correction)
   G <- Gest(X, breaks=brks, correction=correction)
@@ -30,33 +29,28 @@ function(X, ..., eps=NULL, r=NULL, breaks=NULL, correction=NULL) {
           fname="J")
   # compute J function estimates
   # this has to be done manually because of the mismatch between names
-  ratio <- function(a, b) {
-    result <- a/b
-    result[ b == 0 ] <- NA
-    result
-  }
   Fnames <- names(FF)
   Gnames <- names(G)
   if("raw" %in% Gnames && "raw" %in% Fnames) {
-    Jun <- ratio(1-G$raw, 1-FF$raw)
+    Jun <- ratiotweak(1-G$raw, 1-FF$raw)
     Z <- bind.fv(Z, data.frame(un=Jun), "hat(%s)[un](r)",
                  "uncorrected estimate of %s", "un")
     attr(Z, "alim") <- range(rvals[FF$raw <= 0.9])
   }
   if("rs" %in% Gnames && "rs" %in% Fnames) {
-    Jrs <- ratio(1-G$rs, 1-FF$rs)
+    Jrs <- ratiotweak(1-G$rs, 1-FF$rs)
     Z <- bind.fv(Z, data.frame(rs=Jrs), "hat(%s)[rs](r)",
                  "border corrected estimate of %s", "rs")
     attr(Z, "alim") <- range(rvals[FF$rs <= 0.9])
   }
   if("han" %in% Gnames && "cs" %in% Fnames) {
-    Jhan <- ratio(1-G$han, 1-FF$cs)
+    Jhan <- ratiotweak(1-G$han, 1-FF$cs)
     Z <- bind.fv(Z, data.frame(han=Jhan), "hat(%s)[han](r)",
                  "Hanisch-style estimate of %s", "han")
     attr(Z, "alim") <- range(rvals[FF$cs <= 0.9])
   }
   if("km" %in% Gnames && "km" %in% Fnames) {
-    Jkm <- ratio(1-G$km, 1-FF$km)
+    Jkm <- ratiotweak(1-G$km, 1-FF$km)
     Z <- bind.fv(Z, data.frame(km=Jkm), "hat(%s)[km](r)",
                  "Kaplan-Meier estimate of %s", "km")
     attr(Z, "alim") <- range(rvals[FF$km <= 0.9])

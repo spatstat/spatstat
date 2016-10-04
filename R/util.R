@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.223 $    $Date: 2016/09/25 10:54:34 $
+#    $Revision: 1.226 $    $Date: 2016/10/04 02:58:56 $
 #
 #
 matrowsum <- function(x) {
@@ -1696,6 +1696,18 @@ matchNameOrPosition <- function(expected, avail) {
   return(j)
 }
 
+ratiotweak <- function(a, b, overzero=NA, zerozero=overzero) {
+  # map x/0 to 'overzero' and 0/0 to 'zerozero'
+  result <- a/b
+  bzero <- (b == 0)
+  result[ bzero ] <- overzero
+  if(!missing(zerozero)) {
+    abzero <- bzero & (a == 0)
+    result[ abzero ] <- zerozero
+  }
+  return(result)
+}
+
 natozero <- function(x) {
   #' map NA to zero (e.g. in tapply)
   x[is.na(x)] <- 0
@@ -1707,5 +1719,4 @@ indexCartesian <- function(nn) {
   # where nn[i] is the size of the i-th set
   as.matrix(do.call(expand.grid, lapply(nn, seq_len)))
 }
-
 

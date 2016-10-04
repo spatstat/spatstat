@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.057
+        CHANGES IN spatstat VERSION 1.46-1.058
 
 OVERVIEW
 
-    o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, 
+    o We thank Marcel Austenfeld, Guy Bayegnak, Tilman Davies, Cenk Icos, 
     Jorge Mateu, Frederico Mestre, Mehdi Moradi, Virginia Morera Pujol,
     Suman Rakshit and Sven Wagner for contributions.
 
@@ -192,6 +192,11 @@ BUG FIXES
 
     o superimpose
     Crashed if the argument was a 'solist' containing line segment patterns.
+    Fixed.
+
+    o Jest
+    Crashed sometimes, depending on the shape of the observation window.
+    [Spotted by Cenk Icos.]
     Fixed.
 
     o plot.studpermutest

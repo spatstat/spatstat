@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.19 $	$Date: 2016/03/08 00:24:06 $
+#	$Revision: 1.20 $	$Date: 2016/10/04 01:02:27 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -189,13 +189,14 @@ handle.r.b.args <- function(r=NULL, breaks=NULL, window, pixeps=NULL,
 }
 
 check.finespacing <- function(r, eps=NULL, win=NULL,
+                              rmaxdefault = max(r), 
                               context="",
                               action=c("fatal", "warn", "silent"),
                               rname) {
   if(missing(rname)) rname <- deparse(substitute(r))
   action <- match.arg(action)
   if(is.null(eps)) {
-    b <- handle.r.b.args(window=win, rmaxdefault=max(r))
+    b <- handle.r.b.args(window=win, rmaxdefault=rmaxdefault)
     eps <- b$step
   }
   dr <- max(diff(r))

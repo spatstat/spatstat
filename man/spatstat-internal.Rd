@@ -590,6 +590,7 @@
 \alias{quadBlockSizes}
 \alias{RandomFieldsSafe}
 \alias{ratfv}
+\alias{ratiotweak}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
@@ -904,7 +905,7 @@ change.default.expand(x, newdefault)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
 checksolve(M, action, descrip, target)
-check.finespacing(r, eps, win, context, action, rname)
+check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
 check.finite(x, context, xname, fatal, usergiven)
 check.hist.lengths(hist,breaks)
 check.in.range(x, r, fatal)
@@ -1520,6 +1521,7 @@ quad.mppm(x)
 quadBlockSizes(nX, nD, p, nMAX, announce)
 RandomFieldsSafe()
 ratfv(df, numer, denom, \dots, ratio)
+ratiotweak(a, b, overzero, zerozero)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)

@@ -666,6 +666,11 @@ local({
   A <- Fest(cells, r=a$r)
   b <- Hest(heather$coarse)
   B <- Hest(heather$coarse, r=b$r)
+  # from Cenk Icos
+  X <- runifpoint(100, owin(c(0,3), c(0,10)))
+  FX <- Fest(X)
+  FXr <- Fest(X, r=FX$r)
+  JX <- Jest(X)
 })
 
   

@@ -3,7 +3,7 @@
 #
 #	Computes estimates of the empty space function
 #
-#	$Revision: 4.42 $	$Date: 2016/03/08 00:23:33 $
+#	$Revision: 4.43 $	$Date: 2016/10/04 01:04:13 $
 #
 
 Fhazard <- function(X, ...) {
@@ -49,13 +49,14 @@ Fest <- function(X, ..., eps = NULL, r=NULL, breaks=NULL,
   ## histogram breakpoints
   rmaxdefault <- rmax.rule("F", dwin, lambda)
   breaks <- handle.r.b.args(r, breaks, dwin, eps, 
-                                  rmaxdefault=rmaxdefault)
+                            rmaxdefault=rmaxdefault)
   rvals <- breaks$r
   rmax  <- breaks$max
 
   if(rorbgiven) check.finespacing(rvals,
                                   if(is.null(eps)) NULL else eps/4,
                                   dwin,
+                                  rmaxdefault=rmaxdefault,
                                   action="fatal",
                                   rname="r", 
                                   context="in Fest(X, r)")

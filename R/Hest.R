@@ -64,6 +64,7 @@ Hest <- local({
     breaks <- handle.r.b.args(r, breaks, W, NULL, rmaxdefault=dmax)
     rval <- breaks$r
     if(rorbgiven) check.finespacing(rval, rname="r", eps=pixeps/4, W,
+                                    rmaxdefault=dmax,
                                     context="in Hest(X,r)",
                                     action="fatal")
     ##  extract distances and censoring distances
