@@ -13,7 +13,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
     mapXY <- coo$seg
     tp    <- coo$tp
     Xproj <- as.ppp(X)
-    if(!missing(Y))
+    if(!missing(Y) && !is.null(Y))
       warning("Argument Y ignored when X is an lpp object")
     Y <- as.psp(X)
   } else if(is.ppp(X)) {

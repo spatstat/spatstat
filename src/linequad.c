@@ -31,3 +31,5 @@
 #include "linequad.h"
 #undef FUNNAME
 #undef FMKNAME
+#undef ALEA
+

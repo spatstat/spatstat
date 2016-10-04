@@ -52,7 +52,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
-       nd=1000, eps=NULL,
+       nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
        covname, confidence=0.95)
@@ -62,7 +62,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
-       nd=1000, eps=NULL,
+       nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
        covname, confidence=0.95)
@@ -103,7 +103,7 @@ rhohat(object, covariate, ...)
   \item{smoother}{
     Character string determining the smoothing algorithm. See Details.
   }
-  \item{dimyx,eps,nd}{
+  \item{dimyx,eps,nd,random}{
     Arguments controlling the pixel
     resolution at which the covariate will be evaluated.
     See Details.
@@ -230,16 +230,17 @@ rhohat(object, covariate, ...)
   
   The covariate will be evaluated on a fine grid of locations,
   with spatial resolution controlled by the arguments
-  \code{dimyx,eps,nd}. 
+  \code{dimyx,eps,nd,random}. 
   In two dimensions (i.e.
   if \code{object} is of class \code{"ppp"}, \code{"ppm"} or
   \code{"quad"}) the arguments \code{dimyx, eps} are
   passed to \code{\link{as.mask}} to control the pixel
   resolution. On a linear network (i.e. if \code{object} is of class
-  \code{"lpp"} or \code{"lppm"}) the argument \code{nd} specifies the
+  \code{"lpp"}) the argument \code{nd} specifies the
   total number of test locations on the linear
-  network, and \code{eps} specifies the linear separation between test
-  locations.
+  network, \code{eps} specifies the linear separation between test
+  locations, and \code{random} specifies whether the test locations
+  have a randomised starting position.
 
   If the argument \code{weights} is present, then the contribution
   from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is

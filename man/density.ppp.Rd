@@ -52,9 +52,9 @@
     Optional. Adjustment factor for the smoothing parameter.
   }
   \item{diggle}{
-    Logical. If \code{TRUE}, use Diggle's edge correction,
-    which is more accurate but slower to compute than the
-    correction described under Details.
+    Logical. If \code{TRUE}, use Diggle's improved edge correction,
+    which is more accurate but slower to compute than the default
+    correction.
   }
   \item{kernel}{
     The smoothing kernel.
@@ -123,6 +123,7 @@
     \item If \code{diggle=FALSE} (the default) the intensity estimate is
     correted by dividing it by the convolution of the
     Gaussian kernel with the window of observation.
+    This is the approach originally described in Diggle (1985).
     Thus the intensity value at a point \eqn{u} is
     \deqn{
       \hat\lambda(u) = e(u) \sum_i k(x_i - u) w_i
@@ -133,8 +134,10 @@
     \eqn{e(u)} is an edge correction factor, 
     and \eqn{w_i}{w[i]} are the weights.
     \item
-    If \code{diggle=TRUE} then the method of Diggle (1985)
-    is followed exactly.
+    If \code{diggle=TRUE} then the code uses the improved edge correction
+    described in equation (18.9) of Diggle (2010), which has been shown
+    to have better performance (Jones, 1993) but is slightly slower to
+    compute. 
     The intensity value at a point \eqn{u} is 
     \deqn{
       \hat\lambda(u) = \sum_i k(x_i - u) w_i e(x_i)
@@ -144,7 +147,6 @@
     where again \eqn{k} is the Gaussian smoothing kernel,
     \eqn{e(x_i)}{e(x[i])} is an edge correction factor, 
     and \eqn{w_i}{w[i]} are the weights.
-    This computation is slightly slower but more accurate.
   }
   In both cases, the edge correction term \eqn{e(u)} is the reciprocal of the
   kernel mass inside the window:
@@ -285,7 +287,7 @@
   Inspecting an estimate of the intensity function is usually the
   first step in exploring a spatial point pattern dataset.
   For more explanation, see Baddeley, Rubak and Turner (2015)
-  or Diggle (2003).
+  or Diggle (2003, 2010).
 
   If you have two (or more) types of points, and you want a
   probability map or relative risk surface (the spatially-varying
@@ -348,6 +350,17 @@
   Diggle, P.J. (2003)
   \emph{Statistical analysis of spatial point patterns},
   Second edition. Arnold.
+
+  Diggle, P.J. (2010)
+  Nonparametric methods.
+  Chapter 18, pp. 299--316 in
+  A.E. Gelfand, P.J. Diggle, M. Fuentes and P. Guttorp (eds.)
+  \emph{Handbook of Spatial Statistics},
+  CRC Press, Boca Raton, FL.
+
+  Jones, M.C. (1993)
+  Simple boundary corrections for kernel density estimation.
+  \emph{Statistics and Computing} \bold{3}, 135--146.
 }
 
 \author{

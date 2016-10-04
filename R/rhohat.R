@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.67 $  $Date: 2016/10/03 08:57:38 $
+#  $Revision: 1.68 $  $Date: 2016/10/04 08:10:11 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -128,7 +128,7 @@ rhohat.lpp <- rhohat.lppm <-
            method=c("ratio", "reweight", "transform"),
            horvitz=FALSE,
            smoother=c("kernel", "local"),
-           nd=1000, eps=NULL,
+           nd=1000, eps=NULL, random=TRUE, 
            n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
            bwref=bw, covname, confidence=0.95) {
   callstring <- short.deparse(sys.call())
@@ -141,7 +141,7 @@ rhohat.lpp <- rhohat.lppm <-
   # validate model
   if(is.lpp(object)) {
     X <- object
-    model <- lppm(object, ~1, eps=eps, nd=nd, random=TRUE)
+    model <- lppm(object, ~1, eps=eps, nd=nd, random=random)
     reference <- "Lebesgue"
     modelcall <- NULL
   } else if(inherits(object, "lppm")) {
@@ -178,7 +178,7 @@ rhohat.lpp <- rhohat.lppm <-
                method=method,
                horvitz=horvitz,
                smoother=smoother,
-               resolution=list(nd=nd, eps=eps),
+               resolution=list(nd=nd, eps=eps, random=random),
                n=n, bw=bw, adjust=adjust, from=from, to=to,
                bwref=bwref, covname=covname, covunits=covunits,
                confidence=confidence,

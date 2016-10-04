@@ -49,7 +49,7 @@ lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
   return(result)
 }
 
-lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
+lppm.lpp <- function(X, ..., eps=NULL, nd=1000, random=FALSE) {
   Xname <- short.deparse(substitute(X))
   callstring <- paste(short.deparse(sys.call()), collapse = "")
   cl <- match.call()
@@ -60,7 +60,7 @@ lppm.lpp <- function(X, ..., eps=NULL, nd=1000) {
                   commasep(sQuote(resv[clash])),
                   "must not be used"))
   stopifnot(inherits(X, "lpp"))
-  Q <- linequad(X, eps=eps, nd=nd)
+  Q <- linequad(X, eps=eps, nd=nd, random=random)
   fit <- ppm(Q, ..., method="mpl", forcefit=TRUE)
   if(!is.poisson.ppm(fit))
     warning("Non-Poisson models currently use Euclidean distance")

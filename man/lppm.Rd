@@ -13,7 +13,7 @@ lppm(X, ...)
 
 \method{lppm}{formula}(X, interaction=NULL, ..., data=NULL)
 
-\method{lppm}{lpp}(X, ..., eps=NULL, nd=1000)
+\method{lppm}{lpp}(X, ..., eps=NULL, nd=1000, random=FALSE)
 }
 \arguments{
   \item{X}{
@@ -41,8 +41,12 @@ lppm(X, ...)
     network. 
   }
   \item{nd}{
-    Optional. Number of dummy points equally spaced along each segment
-    of the network. Ignored if \code{eps} is given.
+    Optional. Total number of dummy points placed on 
+    the network. Ignored if \code{eps} is given.
+  }
+  \item{random}{
+    Logical value indicating whether the grid of dummy points should be
+    placed at a randomised starting position.
   }
 }
 \details{
@@ -80,8 +84,7 @@ lppm(X, ...)
 }
 \author{
   \adrian
-  
-  
+  and Greg McSwiggan.
 }
 \seealso{
   \code{\link{methods.lppm}},

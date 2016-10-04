@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.058
+        CHANGES IN spatstat VERSION 1.46-1.059
 
 OVERVIEW
 
@@ -29,7 +29,7 @@ OVERVIEW
 
     o Bug fixes and improvements.
 
-    o Version nickname: 'Parthian Shot'
+    o Version nickname: 'Soon To Be a Major Motion Picture'
 
 NEW FUNCTIONS
 
@@ -143,6 +143,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o bw.ppl
     New argument 'sigma'.
+
+    o lppm
+    New argument 'random' controls placement of dummy points.
+
+    o rhohat.lpp
+    New argument 'random' controls placement of dummy points.
 
     o quadrat.test.ppm
     Accelerated in the case where the original window is a rectangle.

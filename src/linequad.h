@@ -11,7 +11,7 @@
   HUH        #defined if debugging is on
   SWAP       swap macro
 
-  $Revision: 1.1 $ $Date: 2016/10/03 08:43:27 $
+  $Revision: 1.2 $ $Date: 2016/10/04 06:24:22 $
 
 */
 
@@ -97,6 +97,10 @@ void FUNNAME(ns, from, to,
   */
   k = 0;
   SegmentForData = (Ndat > 0) ? sdat[0] : -1;
+
+#ifdef ALEA
+  GetRNGstate();
+#endif
 
   /* loop over line segments */
   for(i = 0; i < Nseg; i++) {
@@ -242,7 +246,13 @@ void FUNNAME(ns, from, to,
       }
     }
   }
+
   *ndum = Ndum;
+
+#ifdef ALEA
+  PutRNGstate();
+#endif
+
 }
 
 void FMKNAME(ns, from, to, 
@@ -340,6 +350,10 @@ void FMKNAME(ns, from, to,
   */
   k = 0;
   SegmentForData = (Ndat > 0) ? sdat[0] : -1;
+
+#ifdef ALEA
+  GetRNGstate();
+#endif
 
   /* loop over line segments */
   for(i = 0; i < Nseg; i++) {
@@ -515,5 +529,11 @@ void FMKNAME(ns, from, to,
       }
     }
   }
+
   *ndum = Ndum;
+
+#ifdef ALEA
+  PutRNGstate();
+#endif
+
 }
