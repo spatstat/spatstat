@@ -62,7 +62,7 @@ void FUNNAME(ns, from, to,
   int SegmentForData, nwhole, nentries, npieces, npieces1;
   double x0, y0, x1, y1, dx, dy;
   double seglength, ratio, epsilon, rump, epsfrac, rumpfrac, gridstart;
-  double tcurrent, plen, w;
+  double tfirst, tlast, tcurrent, plen, w;
 
   int *serial, *count, *pieceid;
   char *isdata;
@@ -130,33 +130,46 @@ void FUNNAME(ns, from, to,
     rump = (seglength - nwhole * epsilon)/2.0;
     epsfrac = epsilon/seglength;
     rumpfrac = rump/seglength;
+    /* 
+       There are nwhole+2 pieces, with endpoints
+       0, rumpfrac, rumpfrac+epsfrac, rumpfrac+2*epsfrac, ..., 1-rumpfrac, 1
+    */
+
+    /* Now place dummy points in these pieces */
 #ifdef ALEA
-    gridstart = rumpfrac * unif_rand();
+    tfirst = rumpfrac * unif_rand();
 #else
-    gridstart = rumpfrac/2.0;
+    tfirst = rumpfrac/2.0;
 #endif
 #ifdef HUH
-    Rprintf("\tnwhole=%d, epsfrac=%lf, rumpfrac=%lf, gridstart=%lf\n", 
-	    nwhole, epsfrac, rumpfrac, gridstart);
+    Rprintf("\tnwhole=%d, epsfrac=%lf, rumpfrac=%lf, tfirst=%lf\n", 
+	    nwhole, epsfrac, rumpfrac, tfirst);
+    Rprintf("\tsegment length %lf divided into %d pieces\n",
+	    seglength, nwhole+2);
 #endif
 
-    /* create a new dummy point at the middle of each piece */
+    /* create a new dummy point in each piece */
 #ifdef HUH
     Rprintf("\tMaking left dummy point %d\n", Ndum);
 #endif
-    tvalue[0] = gridstart;
+    tvalue[0] = tfirst;
     serial[0] = Ndum;  
     isdata[0] = NO;
     count[0] = 1;
     pieceid[0] = 0;
-    xdum[Ndum] = x0 + dx * gridstart;
-    ydum[Ndum] = y0 + dy * gridstart;
+    xdum[Ndum] = x0 + dx * tfirst;
+    ydum[Ndum] = y0 + dy * tfirst;
     sdum[Ndum] = i;
-    tdum[Ndum] = gridstart;
+    tdum[Ndum] = tfirst;
     ++Ndum;
     if(nwhole > 0) {
 #ifdef HUH
       Rprintf("\tMaking %d middle dummy points\n", nwhole);
+#endif
+#ifdef ALEA
+      gridstart = rumpfrac - unif_rand() * epsfrac;
+#else
+      gridstart = rumpfrac - epsfrac/2.0;
 #endif
       for(j = 1; j <= nwhole; j++) {
 	serial[j] = Ndum;
@@ -170,20 +183,20 @@ void FUNNAME(ns, from, to,
 	tdum[Ndum] = tcurrent;
 	++Ndum;
       }
-    }
+    } 
     j = nwhole + 1;
 #ifdef HUH
     Rprintf("\tMaking right dummy point %d\n", Ndum);
 #endif
     serial[j] = Ndum;
     isdata[j] = NO;
-    tvalue[j] = tcurrent = 1.0 - rumpfrac + gridstart;
+    tvalue[j] = tlast = 1.0 - tfirst;
     count[j] = 1;
     pieceid[j] = j;
-    xdum[Ndum] = x0 + dx * tcurrent;
-    ydum[Ndum] = y0 + dy * tcurrent;
+    xdum[Ndum] = x0 + dx * tlast;
+    ydum[Ndum] = y0 + dy * tlast;
     sdum[Ndum] = i;
-    tdum[Ndum] = tcurrent;
+    tdum[Ndum] = tlast;
     ++Ndum;
 
     nentries = npieces = nwhole + 2;
@@ -198,12 +211,8 @@ void FUNNAME(ns, from, to,
       tvalue[nentries] = tcurrent = tdat[k];
       isdata[nentries] = YES;
       /* determine which piece contains the data point */
-      if(tcurrent < gridstart) {
-	ll = 0;
-      } else {
-	ll = (int) ceil((tcurrent - gridstart)/epsfrac);
-	if(ll < 0) ll = 0; else if(ll >= npieces) ll = npieces1;
-      }
+      ll = (int) ceil((tcurrent - rumpfrac)/epsfrac);
+      if(ll < 0) ll = 0; else if(ll >= npieces) ll = npieces1;
 #ifdef HUH
       Rprintf("\tData point %d mapped to piece %d\n", k, ll);
 #endif
@@ -314,7 +323,7 @@ void FMKNAME(ns, from, to,
   int jpiece, jentry, jpdata, type, mcurrent;
   double x0, y0, x1, y1, dx, dy, xcurrent, ycurrent;
   double seglength, ratio, epsilon, rump, epsfrac, rumpfrac, gridstart;
-  double tcurrent, plen, w;
+  double tfirst, tlast, tcurrent, plen, w;
 
   int *serial, *count, *mkpieceid;
   char *isdata;
@@ -384,14 +393,23 @@ void FMKNAME(ns, from, to,
     rump = (seglength - nwhole * epsilon)/2.0;
     epsfrac = epsilon/seglength;
     rumpfrac = rump/seglength;
+    /* 
+       There are nwhole+2 pieces, with endpoints
+       0, rumpfrac, rumpfrac+epsfrac, rumpfrac+2*epsfrac, ..., 1-rumpfrac, 1
+    */
+
+    /* Now place dummy points in these pieces */
 #ifdef ALEA
-    gridstart = rumpfrac * unif_rand();
+    tfirst = rumpfrac * unif_rand();
+    gridstart = rumpfrac - epsfrac * unif_rand();
 #else
-    gridstart = rumpfrac/2.0;
+    tfirst = rumpfrac/2.0;
+    gridstart = rumpfrac - epsfrac/2.0;
 #endif
+    tlast = 1.0 - tfirst;
 #ifdef HUH
-    Rprintf("\tnwhole=%d, epsfrac=%lf, rumpfrac=%lf, gridstart=%lf\n", 
-	    nwhole, epsfrac, rumpfrac, gridstart);
+    Rprintf("\tnwhole=%d, epsfrac=%lf, rumpfrac=%lf, tfirst=%lf\n", 
+	    nwhole, epsfrac, rumpfrac, tfirst);
     Rprintf("\tsegment length %lf divided into %d pieces\n",
 	    seglength, npieces);
 #endif
@@ -411,12 +429,12 @@ void FMKNAME(ns, from, to,
 	      npieces, Ntypes, npieces * Ntypes);
 #endif
 
-    /* create a new dummy point at the middle of each piece */
+    /* create a new dummy point in each piece */
     npieces1 = npieces-1;
     for(jpiece = 0; jpiece < npieces; jpiece++) {
-      tcurrent = gridstart + 
-	(jpiece == 0) ? 0.0 :
-	(jpiece == npieces1) ? (1.0 - rumpfrac): (((double) jpiece) * epsfrac);
+      tcurrent = (jpiece == 0) ? tfirst :
+	(jpiece == npieces1) ? tlast : 
+	(gridstart + ((double) jpiece) * epsfrac);
       xcurrent = x0 + dx * tcurrent;
       ycurrent = y0 + dy * tcurrent;
       
@@ -453,12 +471,8 @@ void FMKNAME(ns, from, to,
       tcurrent = tdat[k];
       mcurrent = mdat[k];
       /* determine which piece contains the data point */
-      if(tcurrent < gridstart) {
-	jpdata = 0;
-      } else {
-	jpdata = (int) ceil((tcurrent - gridstart)/epsfrac);
-	if(jpdata < 0) jpdata = 0; else if(jpdata >= npieces) jpdata = npieces1;
-      }
+      jpdata = (int) ceil((tcurrent - rumpfrac)/epsfrac);
+      if(jpdata < 0) jpdata = 0; else if(jpdata >= npieces) jpdata = npieces1;
 #ifdef HUH
       Rprintf("\tData point %d falls in piece %d\n", k, jpdata);
 #endif
