@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.46-1.060
+Version: 1.46-1.061
 Nickname: Soon To Be a Major Motion Picture
-Date: 2016-10-05
+Date: 2016-10-09
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

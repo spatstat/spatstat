@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.15 $ $Date: 2015/10/21 09:06:57 $
+#  $Revision: 1.16 $ $Date: 2016/10/09 02:13:53 $
 #
 
 intensity <- function(X, ...) {
@@ -124,9 +124,9 @@ PoisSaddleApp <- function(beta, fi) {
                "Mayer cluster integral is negative"))
   ## solve
   if(is.im(beta)) {
-    lambda <- if(G == 0) eval.im(0 * beta) else eval.im(LambertW(G * beta)/G)
+    lambda <- if(G == 0) beta else eval.im(LambertW(G * beta)/G)
   } else {
-    lambda <- if(G == 0) numeric(length(beta)) else LambertW(G * beta)/G
+    lambda <- if(G == 0) beta else (LambertW(G * beta)/G)
     if(length(lambda) == 1) lambda <- unname(lambda)
   }
   return(lambda)
