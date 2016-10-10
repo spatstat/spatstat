@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.46-1.061
+        CHANGES IN spatstat VERSION 1.46-1.062
 
 OVERVIEW
 
@@ -175,12 +175,14 @@ BUG FIXES
     o integral.linim, integral.linfun
     Results were slightly inaccurate because of a bias in the
     distribution of sample points.
+    [Bug introduced in spatstat 1.41-0, february 2015.]
     Fixed.
 
     o intensity.ppm
-    Result was incorrect for Gibbs models if the model was 
-    exactly equivalent to a Poisson process (i.e. if all interaction
+    Result was incorrect for Gibbs models if the model was *exactly* 
+    equivalent to a Poisson process (i.e. if all interaction
     coefficients were exactly zero).
+    [Bug introduced in spatstat 1.28-1, june 2012.]
     Fixed.
 
     o rSSI

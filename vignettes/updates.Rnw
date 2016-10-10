@@ -85,7 +85,23 @@ the News and Release Notes for each update.
 \begin{itemize}
    \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
 
-   \item Non-Gaussian smoothing kernels.
+  \item Important bug fix in \code{linearK}, \code{linearpcf}
+
+  \item Changed internal format of \code{linnet} and \code{lpp} objects.
+
+  \item Faster computation in linear networks.
+
+  \item Bias correction techniques.
+  
+  \item Bounding circle of a spatial object.
+
+  \item Option to plot marked points as arrows.
+
+  \item Kernel smoothing accelerated.
+
+  \item Workaround for bug in some graphics drivers affecting image orientation.
+
+  \item Non-Gaussian smoothing kernels.
 
    \item Improvements to inhomogeneous multitype $K$ and $L$ functions.
 
@@ -99,6 +115,8 @@ the News and Release Notes for each update.
 
    \item Minkowski sum, morphological dilation and erosion with any shape.
 
+  \item Minkowski sum also applicable to point patterns and line segment patterns.
+    
    \item Important bug fix in Smooth.ppp
  
    \item Important bug fix in spatial CDF tests.
@@ -211,6 +229,26 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+  
+    \item \texttt{anyNA.im}:
+    Method for \texttt{anyNA} for pixel images.
+
+    \item \texttt{bc}:
+    Bias correction (Newton-Raphson) for fitted model parameters. 
+
+    \item \texttt{rex}:
+    Richardson extrapolation for numerical integrals and 
+    statistical model parameter estimates. 
+
+    \item \texttt{boundingcircle}, \texttt{boundingcentre}:
+    Find the smallest circle enclosing a window or point pattern.
+
+    \item \verb![.linim! : 
+    Subset operator for pixel images on a linear network.
+
+    \item \texttt{mean.linim}, \texttt{median.linim}, \texttt{quantile.linim}:
+    The mean, median, or quantiles of pixel values in a 
+    pixel image on a linear network.
 
   \item \texttt{weighted.median}, \texttt{weighted.quantile}:
     Median or quantile of numerical data with associated weights.
@@ -514,7 +552,11 @@ listed alphabetically.
 \item \texttt{as.layered}:
     Default method now handles a (vanilla) list of spatial objects.
 
-\item \texttt{as.owin.data.frame}:
+  \item \texttt{as.linnet.psp}:
+If the line segment pattern has marks, then the resulting linear network
+also carries these marks in the \verb!$lines! component.
+
+  \item \texttt{as.owin.data.frame}:
     New argument \texttt{step}
 
   \item \texttt{as.polygonal}:
@@ -522,7 +564,7 @@ listed alphabetically.
 
 %%B
  \item \texttt{bw.ppl}:
-   New argument \texttt{weights}.
+   New arguments \texttt{weights} and \texttt{sigma}.
    
 %%C
  \item \texttt{cdf.test}:
@@ -626,9 +668,12 @@ listed alphabetically.
    \begin{itemize}
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
+ \item Argument \texttt{weights} can now be a pixel image.
    \item Accelerated by about 15\%
      in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.
+  \item \texttt{density.ppp}: 
+     Accelerated in the cases where weights are given or \texttt{diggle=TRUE}.
    \end{itemize}
 
  
@@ -645,8 +690,17 @@ listed alphabetically.
   \item \texttt{diagnose.ppm, plot.diagppm}:
    New arguments \texttt{col.neg, col.smooth} control the colour maps.
 
+  \item \texttt{dilation.ppp}:
+    Improved geometrical accuracy.
+    Now accepts arguments to control resolution of polygonal approximation.
+
  \item \texttt{discs}:
-    Now accepts a single numeric value for \texttt{radii}.
+   \begin{itemize}
+   \item     Now accepts a single numeric value for \texttt{radii}.
+   \item New argument \texttt{npoly}.
+   \item Accelerated in some cases. 
+   \end{itemize}
+
 
   \item \texttt{distfun}:
     When the user calls a distance function 
@@ -691,6 +745,8 @@ listed alphabetically.
   \item \texttt{Geyer}:
    The saturation parameter \texttt{sat} can now be less than 1.
    
+   \item \texttt{grow.rectangle}:
+     New argument \texttt{fraction}.
 %%H
    
  \item \texttt{Hest}:
@@ -728,11 +784,17 @@ listed alphabetically.
    \item
      New argument \texttt{algorithm} specifies the choice 
      of optimisation algorithm.
-   \end{itemize}
-     
- \item \texttt{kppm}:
-   Left hand side of formula can now involve entries in the list \texttt{data}.
-
+     \item 
+       Left hand side of formula can now involve entries 
+       in the list \texttt{data}.
+     \item 
+    A warning about infinite values of the summary function 
+    no longer occurs when the default settings are used.
+    Also affects \texttt{mincontrast}, 
+    \texttt{cauchy.estpcf}, \texttt{lgcp.estpcf}, \texttt{matclust.estpcf},
+    \texttt{thomas.estpcf}, \texttt{vargamma.estpcf}.
+  \end{itemize}
+  
 %%L
    
  \item \texttt{Lcross.inhom}, \texttt{Ldot.inhom}:
@@ -746,10 +808,23 @@ listed alphabetically.
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
- \item \texttt{linearK}, \texttt{linearpcf} and relatives: Accelerated.
+ \item \texttt{linearK}, \texttt{linearpcf} and relatives: 
+   substantially accelerated.
+   
+ \item \texttt{linearKinhom}:
+   new argument \texttt{normpower}.
+   
+ \item \texttt{linearpcf}:
+   new argument \texttt{normpower}.
    
  \item \texttt{linnet}:
    \begin{itemize}
+   \item
+     The internal format of a \texttt{linnet} (linear network) object
+    has been changed. Existing datasets of class \texttt{linnet} 
+    are still supported. However, computation will be faster if they
+    are converted to the new format. To convert a linnet object \texttt{L}
+    to the new format, use \verb!L <- as.linnet(L)!.
    \item 
     If the argument \texttt{edges} is given, then this argument
     now determines the
@@ -764,14 +839,24 @@ listed alphabetically.
 
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
- \item \texttt{lpp}, \texttt{as.lpp}: 
+ \item \texttt{lpp}:
+    The internal format of an \texttt{lpp} object
+    has been changed. Existing datasets of class \texttt{lpp} 
+    are still supported. However, computation will be faster if they
+    are converted to the new format. To convert an \texttt{lpp} 
+    object \texttt{X} to the new format, use \verb!X <- as.lpp(X)!.
+
+  \item \texttt{lpp}, \texttt{as.lpp}: 
    These functions now handle the case where coordinates
    \texttt{seg} and \texttt{tp} are given
     but \texttt{x} and \texttt{y} are missing.
 
  \item \texttt{lppm}:
-   Computation accelerated.
-   
+   \begin{itemize}
+   \item New argument \texttt{random} controls placement of dummy points.
+   \item    Computation accelerated.
+   \end{itemize}
+
 %%M
    
  \item \texttt{markcorr}:
@@ -782,10 +867,10 @@ listed alphabetically.
    \begin{itemize}
    \item 
      Now handles models with a random effect component.
-     (This is covered in [Chap.\ 16]\cite{baddrubaturn15}.)
+     (This is covered in \cite[Chap.\ 16]{baddrubaturn15}.)
    \item 
      New argument \texttt{random} is a formula specifying the random effect.
-     (This is covered in [Chap.\ 16]\cite{baddrubaturn15}.)
+     (This is covered in \cite[Chap.\ 16]{baddrubaturn15}.)
    \item 
      Performs more checks for consistency of the input data.
    \item 
@@ -799,6 +884,7 @@ listed alphabetically.
    New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
 
+   \texttt{nnfun.lpp}: New argument \texttt{k}.
 %%O
 %%P
    
@@ -824,6 +910,9 @@ listed alphabetically.
     The default is now to re-fit the model to the data before computing pcf.
     New arguments \texttt{update} and \texttt{leaveoneout} control this.
 
+  \item \texttt{pixellate.ppp}: 
+     Accelerated in the case where weights are given.
+
  \item \texttt{plot.anylist}:
    \begin{itemize}
    \item 
@@ -836,7 +925,12 @@ listed alphabetically.
 
 
  \item \texttt{plot.im}:
-    Now handles complex-valued images.
+   \begin{itemize}
+   \item  Now handles complex-valued images.
+   \item  New argument \texttt{workaround} to avoid a bug in some MacOS
+     device drivers that causes the image to be displayed
+     in the wrong spatial orientation.
+   \end{itemize}
 
  \item \texttt{plot.influence.ppm}:
    New argument \texttt{multiplot}.
@@ -852,6 +946,9 @@ listed alphabetically.
 
  \item \texttt{plot.leverage.ppm}:
    New argument \texttt{multiplot}.
+
+ \item \texttt{plot.linfun}:
+    Now passes arguments to the function being plotted.
 
    \item \texttt{plot.lpp}:
      \begin{itemize}
@@ -869,7 +966,11 @@ listed alphabetically.
    \item \texttt{plot.msr}:
    Now handles multitype measures.
     New argument \texttt{multiplot}.
-   
+
+  \item \texttt{plot.pp3}:
+    New arguments \texttt{box.front}, \texttt{box.back} 
+    control plotting of the box.
+    
    \item \texttt{plot.ppp}:
      \begin{itemize}
      \item  The default colour for the points is now a transparent grey,
@@ -911,6 +1012,8 @@ listed alphabetically.
     The argument \texttt{type="all"} is now recognised: it selects
     all the available options. [This is also the default.]
 
+  \item \texttt{print.quad}: More information is printed.
+    
   \item \texttt{progressreport}
     \begin{itemize}
     \item Behaviour improved. 
@@ -922,6 +1025,9 @@ listed alphabetically.
 %%Q
    
  \item \texttt{quadratcount.ppp}:
+   Computation accelerated in some cases.
+
+ \item \texttt{quadrat.test.ppm}:
    Computation accelerated in some cases.
 
  \item \texttt{qqplot.ppm}
@@ -940,11 +1046,14 @@ listed alphabetically.
    \texttt{complementarycolour, is.grey, to.grey}
    These colour tools now handle transparent colours.
 
-   \item \texttt{rgb2hex}
+   \item \texttt{rgb2hex}:
    New argument \texttt{maxColorValue}
 
-   \item \texttt{rLGCP}
-   This function no longer requires the package \pkg{RandomFields}
+   \texttt{rhohat.lpp}:
+   New argument \texttt{random} controls placement of dummy points.
+
+ \item \texttt{rLGCP}:
+    This function no longer requires the package \pkg{RandomFields}
    to be loaded explicitly. 
 
   \item \texttt{rMaternI, rMaternII}:
@@ -956,9 +1065,15 @@ listed alphabetically.
    A model fitted using the \texttt{Penttinen} interaction can now be simulated.
 
  \item \texttt{rmh.default, rmhmodel.default}:
-   These functions now recognise \verb!cif='penttinen'!
-   for the Penttinen interaction.
-   \item \texttt{rose.default}
+   \begin{itemize}
+   \item 
+     These functions now recognise \verb!cif='penttinen'!
+     for the Penttinen interaction.
+   \item 
+     New arguments \texttt{nsim}, \texttt{saveinfo}.
+   \end{itemize}
+
+ \item \texttt{rose.default}
    New argument \texttt{weights}.
 
    \item \texttt{rose}
@@ -1000,6 +1115,7 @@ listed alphabetically.
    \begin{itemize}
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
+   \item Argument \texttt{weights} can now be a pixel image.
    \item Accelerated by about 15\% in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.
    \end{itemize}
@@ -1045,10 +1161,22 @@ listed alphabetically.
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
 
-  \item \texttt{symbolmap}: 
+   \item \texttt{summary.owin}, \texttt{summary.im}:
+    The fraction of frame area that is occupied by the window/image
+    is now reported.
+
+  \item \texttt{sumouter}:
+    New argument \texttt{y} allows computation of asymmetric outer products.
+  
+  \item \texttt{symbolmap}:
+    \begin{itemize}
+    \item 
      Now accepts a vector of colour values for the arguments \texttt{col}, 
      \texttt{cols}, \texttt{fg}, \texttt{bg} if the argument \texttt{range}
      is given.
+   \item New option: \texttt{shape="arrows"}.
+    \end{itemize}
+
 
 %%T
      
@@ -1253,8 +1381,8 @@ of potential impact.
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
    Results were incorrect for non-Poisson processes.  
    \bugger{1.25-0}{december 2011}{1.45-0}{march 2016}
-   
-\item \texttt{rVarGamma}:
+
+ \item \texttt{rVarGamma}:
    Simulations were incorrect; they were generated using the wrong value
    of the parameter \texttt{nu.ker}.  
    \bugger{1.25-0}{december 2011}{1.35-0}{december 2013}
@@ -1290,6 +1418,17 @@ of potential impact.
    For multitype patterns, the fitted model was completely incorrect
    due to an error in constructing the quadrature scheme.
    \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
+   
+ \item \texttt{integral.linim}, \texttt{integral.linfun}:
+   results were slightly inaccurate because of a bias in the distribution of
+   sample points.
+   \bugger{1.41-0}{february 2015}{1.47-0}{october 2016}
+   
+ \item \texttt{intensity.ppm}:
+   Result was incorrect for Gibbs models if the model was 
+    exactly equivalent to a Poisson process (i.e. if all interaction
+    coefficients were exactly zero).
+   \bugger{1.28-1}{june 2012}{1.47-0}{october 2016}
    
  \item \texttt{funxy}: 
    Did not correctly handle one-line functions. 
