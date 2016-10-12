@@ -3,13 +3,14 @@
 #' 
 #'    Dealing with other packages
 #' 
-#'    $Revision: 1.11 $  $Date: 2016/09/13 06:14:40 $
+#'    $Revision: 1.13 $  $Date: 2016/10/12 01:28:18 $
 
 kraeverRandomFields <- function() {
   kraever("RandomFieldsUtils")
   kraever("RandomFields")
-  a <- capture.output(RandomFieldsUtils:::.onLoad())
-  b <- capture.output(RandomFields:::.onLoad())
+# should no longer be needed:  
+#  capture.output(RandomFieldsUtils:::.onLoad())
+#  capture.output(RandomFields:::.onLoad())
   return(invisible(NULL))
 }
 
