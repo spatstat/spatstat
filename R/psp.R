@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.84 $ $Date: 2016/07/16 01:13:41 $
+#  $Revision: 1.85 $ $Date: 2016/10/14 01:57:34 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -316,7 +316,10 @@ unmark.psp <- function(X) {
 #  plot and print methods
 #################################################
 
-plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
+plot.psp <- function(x, ..., main, add=FALSE,
+                     show.all=!add, 
+                     show.window=show.all,
+                     which.marks=1,
                      ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE) {
   if(missing(main) || is.null(main))
@@ -334,10 +337,12 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
   if(!do.ribbon) {
     ## window of x only
     bb.all <- as.rectangle(as.owin(x))
-    if(do.plot && show.all)
+    if(do.plot && !add)
       do.call.plotfun(plot.owin, 
                       resolve.defaults(list(x=x$window, main=main,
-                                            add=add, show.all=show.all),
+                                            add=add,
+                                            type = if(show.window) "w" else "n",
+                                            show.all=show.all),
                                        list(...)),
                       extrargs=owinpars)
   } else {
@@ -362,7 +367,7 @@ plot.psp <- function(x, ..., main, add=FALSE, show.all=!add, which.marks=1,
                       extrargs=owinpars)
       ## now plot window of x
       ## with title centred on this window
-      if(show.all) {
+      if(show.window) {
         do.call.plotfun(plot.owin, 
                         resolve.defaults(list(x=x$window,
                                               add=TRUE,

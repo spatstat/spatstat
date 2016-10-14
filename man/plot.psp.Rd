@@ -5,8 +5,10 @@
   Plot a two-dimensional line segment pattern
 }
 \usage{
-  \method{plot}{psp}(x, \dots, main, add=FALSE, show.all=!add, which.marks=1,
-                     ribbon=show.all, ribsep=0.15, ribwid=0.05, ribn=1024,
+  \method{plot}{psp}(x, \dots, main, add=FALSE,
+                     show.all=!add, show.window=show.all,
+                     which.marks=1, ribbon=show.all,
+                     ribsep=0.15, ribwid=0.05, ribn=1024,
                      do.plot=TRUE)
 }
 \arguments{
@@ -33,6 +35,9 @@
   \item{show.all}{
     Logical value specifying whether to plot everything
     including the window, main title, and colour ribbon.
+  }
+  \item{show.window}{
+    Logical value specifying whether to plot the window.
   }
   \item{which.marks}{
     Index determining which column of marks to use,

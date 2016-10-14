@@ -144,7 +144,10 @@ Whether it gets used or not, column named \code{marks} is
   \code{\link{psp}},
   \code{\link{psp.object}},
   \code{\link{as.owin}},
-  \code{\link{owin.object}}
+  \code{\link{owin.object}}.
+
+  See \code{\link{edges}} for extracting the edges of a polygonal window
+  as a \code{"psp"} object.
 }
 \examples{
    mat <- matrix(runif(40), ncol=4)
@@ -160,11 +163,8 @@ Whether it gets used or not, column named \code{marks} is
    a <- as.psp(stuff, window=owin())
    b <- as.psp(from=runifpoint(10), to=runifpoint(10))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

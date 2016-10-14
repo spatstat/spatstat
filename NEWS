@@ -1,4 +1,23 @@
 
+        CHANGES IN spatstat VERSION 1.47-0.001
+
+OVERVIEW
+
+    o Nickname: 'Recurring Dream'
+
+NEW FUNCTIONS
+
+    o is.close
+    Faster way to check whether a point has a close neighbour.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Niente.
+
+BUG FIXES
+
+    o None!
+
         CHANGES IN spatstat VERSION 1.47-0
 
 OVERVIEW

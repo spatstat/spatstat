@@ -112,6 +112,9 @@ useDynLib(spatstat,
 "idwloo",
 "inxyp",
 "irevcumsum",
+"isX3close",
+"isXclose",
+"isXYclose",
 "KborderD",
 "KborderI",
 "knnd3D",
@@ -1183,6 +1186,10 @@ export("ippm")
 export("is.atomicQtest")
 export("is.blank")
 export("is.cadlag")
+export("is.close")
+export("is.close.default")
+export("is.close.pp3")
+export("is.close.ppp")
 export("is.col.argname")
 export("is.colour")
 export("is.convex")
@@ -3116,6 +3123,9 @@ S3method("intensity", "splitppp")
  S3method("iplot", "linnet")
  S3method("iplot", "lpp")
  S3method("iplot", "ppp")
+  S3method("is.close", "default")
+  S3method("is.close", "pp3")
+  S3method("is.close", "ppp")
 S3method("is.empty", "default")
 S3method("is.empty", "owin")
 S3method("is.empty", "ppp")

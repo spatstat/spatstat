@@ -42,12 +42,8 @@
   edges(square(1))
   edges(letterR)
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}
