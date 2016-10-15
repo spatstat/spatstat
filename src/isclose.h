@@ -12,7 +12,9 @@
 
   ZCOORD     if defined, coordinates are 3-dimensional
 
-  $Revision: 1.3 $ $Date: 2016/10/14 07:41:03 $
+  TORUS      if defined, distances are periodic
+
+  $Revision: 1.7 $ $Date: 2016/10/15 08:22:32 $
 
 */
 
@@ -23,24 +25,48 @@ void CLOSEFUN(n,
 	      z,
 #endif
 	      r,  /* distance deemed 'close' */
+#ifdef TORUS
+	      b,  /* box dimensions */
+#endif
 	      t)  /* result: true/false */
      int *n, *t;
      double *x, *y, *r;
 #ifdef ZCOORD
      double *z;
 #endif
+#ifdef TORUS
+     double *b;
+#endif
 {
-  double xi, yi, rmax, r2max, rmaxplus, dx, dy, d2;
+  double xi, yi, rmax, r2max, rmaxplus, dx, dy, d2minr2;
 #ifdef ZCOORD
   double zi, dz;
 #endif
   int N, maxchunk, i, j;
 
+#ifdef TORUS
+  double Bx, By, Hx, Hy;
+#ifdef ZCOORD
+  double Bz, Hz;
+#endif
+#endif
+
   N = *n;
   rmax = *r;
-  
+
   r2max = rmax * rmax;
   rmaxplus = rmax + rmax/16.0;
+
+#ifdef TORUS
+  Bx = b[0];
+  By = b[1];
+  Hx = Bx/2.0;
+  Hy = By/2.0;
+#ifdef ZCOORD
+  Bz = b[2];
+  Hz = Bz/2.0;
+#endif
+#endif
 
   /* loop in chunks of 2^16 */
 
@@ -61,19 +87,27 @@ void CLOSEFUN(n,
 #endif
 
       if(i > 0) {
-	/* scan backward */
+	/* scan backward from i */
 	for(j = i - 1; j >= 0; j--) {
 	  dx = xi - x[j];
 	  if(dx > rmaxplus) 
 	    break;
 	  dy = y[j] - yi;
-	  d2 = dx * dx + dy * dy;
-#ifdef ZCOORD
-	  if(d2 <= r2max) {
-	    dz = z[j] - zi;
-	    d2 = d2 + dz * dz;
+#ifdef TORUS
+	  if(dy < 0.0) dy = -dy;
+	  if(dy > Hy) dy = By - dy;
 #endif
-	    if(d2 <= r2max) {
+	  d2minr2 = dx * dx + dy * dy - r2max;
+#ifdef ZCOORD
+	  if(d2minr2 <= 0.0) {
+	    dz = z[j] - zi;
+#ifdef TORUS
+	    if(dz < 0.0) dz = -dz;
+	    if(dz > Hz) dz = Bz - dz;
+#endif
+	    d2minr2 = d2minr2 + dz * dz;
+#endif
+	    if(d2minr2 <= 0.0) {
 	      /* pair (i, j) is close */
 	      t[i] = t[j] = 1;
 	    }
@@ -81,6 +115,37 @@ void CLOSEFUN(n,
 	  }
 #endif
 	}
+#ifdef TORUS
+	/* wrap-around */
+	/* scan forward from 0 */
+	for(j = 0; j < i; j++) {
+	  dx = Bx + x[j] - xi;
+	  if(dx > rmaxplus) 
+	    break;
+	  dy = y[j] - yi;
+#ifdef TORUS
+	  if(dy < 0.0) dy = -dy;
+	  if(dy > Hy) dy = By - dy;
+#endif
+	  d2minr2 = dx * dx + dy * dy - r2max;
+#ifdef ZCOORD
+	  if(d2minr2 <= 0.0) {
+	    dz = z[j] - zi;
+#ifdef TORUS
+	    if(dz < 0.0) dz = -dz;
+	    if(dz > Hz) dz = Bz - dz;
+#endif
+	    d2minr2 = d2minr2 + dz * dz;
+#endif
+	    if(d2minr2 <= 0.0) {
+	      /* pair (i, j) is close */
+	      t[i] = t[j] = 1;
+	    }
+#ifdef ZCOORD
+	  }
+#endif
+	}
+#endif
       }
     }
   }
@@ -101,11 +166,17 @@ void CROSSFUN(n1,
 	      z2,
 #endif
 	      r,
+#ifdef TORUS
+	      b,  /* box dimensions (same for both patterns!!) */
+#endif
 	      t)
      int *n1, *n2, *t;
      double *x1, *y1, *x2, *y2, *r;
 #ifdef ZCOORD
      double *z1, *z2;
+#endif
+#ifdef TORUS
+     double *b;
 #endif
 {
   /* lengths */
@@ -115,9 +186,17 @@ void CROSSFUN(n1,
   /* indices */
   int i, j, jleft;
   /* temporary values */
-  double x1i, y1i, xleft, dx, dy, dx2, d2;
+  double x1i, y1i, xleft, dx, dy, dx2, d2minr2;
 #ifdef ZCOORD
   double z1i, dz;
+#endif
+
+#ifdef TORUS
+  double Bx, By, Hx, Hy;
+  int jright;
+#ifdef ZCOORD
+  double Bz, Hz;
+#endif
 #endif
 
   N1 = *n1;
@@ -127,9 +206,20 @@ void CROSSFUN(n1,
   r2max = rmax * rmax;
   rmaxplus = rmax + rmax/16.0;
 
+#ifdef TORUS
+  Bx = b[0];
+  By = b[1];
+  Hx = Bx/2.0;
+  Hy = By/2.0;
+#ifdef ZCOORD
+  Bz = b[2];
+  Hz = Bz/2.0;
+#endif
+#endif
+
   if(N1 > 0 && N2 > 0) {
 
-    i = 0; maxchunk = 0;
+    i = 0; maxchunk = 0; jleft = 0;
 
     while(i < N1) {
 
@@ -157,20 +247,26 @@ void CROSSFUN(n1,
 	   process from j = jleft until dx > rmax + epsilon
 	*/
 	for(j=jleft; j < N2; j++) {
-
-	  /* squared interpoint distance */
 	  dx = x2[j] - x1i;
 	  if(dx > rmaxplus)
 	    break;
 	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;
-	  d2 = dx2 + dy * dy;
-#ifdef ZCOORD
-	    if(d2 <= r2max) {
-	      dz = z2[j] - z1i;
-	      d2 = d2 + dz * dz;
+#ifdef TORUS
+	  if(dy < 0.0) dy = -dy;
+	  if(dy > Hy) dy = By - dy;
 #endif
-	      if(d2 <= r2max) {
+	  d2minr2 = dx2 + dy * dy - r2max;
+#ifdef ZCOORD
+	    if(d2minr2 <= 0.0) {
+	      dz = z2[j] - z1i;
+#ifdef TORUS
+	      if(dz < 0.0) dz = -dz;
+	      if(dz > Hz) dz = Bz - dz;
+#endif
+	      d2minr2 = d2minr2 + dz * dz;
+#endif
+	      if(d2minr2 <= 0.0) {
 		/* point i has a close neighbour */
 		t[i] = 1;
 		break;
@@ -179,8 +275,69 @@ void CROSSFUN(n1,
 	    }
 #endif
 	}
+
+#ifdef TORUS
+	jright = j;
+	/* wrap-around at start */
+	for(j=0; j < jleft; j++) {
+	  dx = x1i - x2[j];
+	  if(dx < 0.0) dx = -dx;
+	  if(dx > Hx) dx = Bx - dx;
+	  if(dx > rmaxplus)
+	    break;
+	  dx2 = dx * dx;
+	  dy = y2[j] - y1i;
+	  if(dy < 0.0) dy = -dy;
+	  if(dy > Hy) dy = By - dy;
+	  d2minr2 = dx2 + dy * dy - r2max;
+#ifdef ZCOORD
+	    if(d2minr2 <= 0.0) {
+	      dz = z2[j] - z1i;
+	      if(dz < 0.0) dz = -dz;
+	      if(dz > Hz) dz = Bz - dz;
+	      d2minr2 = d2minr2 + dz * dz;
+#endif
+	      if(d2minr2 <= 0.0) {
+		/* point i has a close neighbour */
+		t[i] = 1;
+		break;
+	      }
+#ifdef ZCOORD
+	    }
+#endif
+	}
+	/* wrap around at end */
+	for(j=N2-1; j >= jright; j++) {
+	  dx = x1i - x2[j];
+	  if(dx < 0.0) dx = -dx;
+	  if(dx > Hx) dx = Bx - dx;
+	  if(dx > rmaxplus)
+	    break;
+	  dx2 = dx * dx;
+	  dy = y2[j] - y1i;
+	  if(dy < 0.0) dy = -dy;
+	  if(dy > Hy) dy = By - dy;
+	  d2minr2 = dx2 + dy * dy - r2max;
+#ifdef ZCOORD
+	    if(d2minr2 <= 0.0) {
+	      dz = z2[j] - z1i;
+	      if(dz < 0.0) dz = -dz;
+	      if(dz > Hz) dz = Bz - dz;
+	      d2minr2 = d2minr2 + dz * dz;
+#endif
+	      if(d2minr2 <= 0.0) {
+		/* point i has a close neighbour */
+		t[i] = 1;
+		break;
+	      }
+#ifdef ZCOORD
+	    }
+#endif
+	}
+#endif
       }
     }
   }
 }
+
 

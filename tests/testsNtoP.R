@@ -188,6 +188,26 @@ local({
     stop("maxnndist(X) disagrees with max(nndist(X))")
 })
 
+local({
+  # tests for is.close()
+  # (the default method uses nndist or pairdist, and can be trusted!)
+  a <- is.close(redwood, 0.05)
+  b <- is.close.default(redwood, 0.05)
+  if(any(a != b)) stop("Incorrect result for is.close(X, r)")
+
+  a <- is.close(redwood, 0.05, periodic=TRUE)
+  a <- is.close.default(redwood, 0.05, periodic=TRUE)
+  if(any(a != b)) stop("Incorrect result for is.close(X, r, periodic=TRUE)")
+
+  Y <- split(amacrine)
+  a <- with(Y, is.close(on, 0.05, off))
+  b <- with(Y, is.close.default(on, 0.05, off))
+  if(any(a != b)) stop("Incorrect result for is.close(X, r, Y)")
+
+  a <- with(Y, is.close(on, 0.05, off, periodic=TRUE))
+  b <- with(Y, is.close.default(on, 0.05, off, periodic=TRUE))
+  if(any(a != b)) stop("Incorrect result for is.close(X, r, Y, periodic=TRUE)")
+})
 
 ## 
 ##    tests/percy.R

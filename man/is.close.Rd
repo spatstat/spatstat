@@ -11,13 +11,13 @@
   point has a close neighbour in the same pattern.
 }
 \usage{
-  is.close(X, r, Y=NULL)
+  is.close(X, r, Y=NULL, \dots)
 
-  \method{is.close}{default}(X,r, Y=NULL)
+  \method{is.close}{default}(X,r, Y=NULL, \dots, periodic=FALSE)
 
-  \method{is.close}{ppp}(X,r, Y=NULL)
+  \method{is.close}{ppp}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
 
-  \method{is.close}{pp3}(X,r, Y=NULL)
+  \method{is.close}{pp3}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
 }
 \arguments{
   \item{X,Y}{
@@ -26,6 +26,17 @@
   \item{r}{
     Threshold distance: a number greater than zero.
   }
+  \item{periodic}{
+    Logical value indicating whether to measure distances in the
+    periodic sense, so that opposite sides of the (rectangular) window
+    are treated as identical.
+  }
+  \item{sorted}{
+    Logical value, indicating whether the points of \code{X}
+    (and \code{Y}, if given) are already sorted into increasing order of the
+    \eqn{x} coordinates.
+  }
+  \item{\dots}{Other arguments are ignored.}
 }
 \details{
   This is simply a faster version of \code{(nndist(X) <= r)}
