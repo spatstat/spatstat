@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.002
+        CHANGES IN spatstat VERSION 1.47-0.003
 
 OVERVIEW
 
@@ -10,13 +10,20 @@ NEW FUNCTIONS
     o is.close
     Faster way to check whether a point has a close neighbour.
 
+    o rags
+    Alternating Gibbs Sampler for multitype point processes.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o Niente.
+    o None so far.
 
 BUG FIXES
 
-    o None!
+    o superimpose
+    Point patterns containing 0 points were ignored
+    when determining the list of possible marks.
+    Fixed.
+    
 
         CHANGES IN spatstat VERSION 1.47-0
 
