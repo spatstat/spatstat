@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.229 $    $Date: 2016/10/18 02:57:58 $
+#    $Revision: 1.231 $    $Date: 2016/10/18 04:05:52 $
 #
 #
 matrowsum <- function(x) {
@@ -1318,7 +1318,8 @@ timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
   object <- x
   if(is.null(timetaken))
     timetaken <- proc.time() - starttime
-  class(object) <- c("timed", class(object))
+  if(!inherits(object, "timed"))
+    class(object) <- c("timed", class(object))
   attr(object, "timetaken") <- timetaken
   return(object)
 }
@@ -1342,6 +1343,7 @@ timeTaken <- function(..., warn=TRUE) {
     warning("Some arguments did not contain timing information")
   times <- sapply(allargs[hastime], attr, which="timetaken")
   tottime <- rowSums(times)
+  class(tottime) <- "proc_time"
   return(tottime)
 }
 
