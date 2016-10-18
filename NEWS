@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.003
+        CHANGES IN spatstat VERSION 1.47-0.004
 
 OVERVIEW
 
     o Nickname: 'Recurring Dream'
+
+    o Alternating Gibbs Sampler for multitype point processes.
 
 NEW FUNCTIONS
 
@@ -12,6 +14,9 @@ NEW FUNCTIONS
 
     o rags
     Alternating Gibbs Sampler for multitype point processes.
+
+    o timeTaken
+    Extract the timing data from a 'timed' object or objects.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -23,7 +28,10 @@ BUG FIXES
     Point patterns containing 0 points were ignored
     when determining the list of possible marks.
     Fixed.
-    
+
+    o timed
+    Argument 'timetaken' was ignored.
+    Fixed.    
 
         CHANGES IN spatstat VERSION 1.47-0
 

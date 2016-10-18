@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.226 $    $Date: 2016/10/04 02:58:56 $
+#    $Revision: 1.229 $    $Date: 2016/10/18 02:57:58 $
 #
 #
 matrowsum <- function(x) {
@@ -1312,11 +1312,12 @@ dropifsingle <- function(x) if(length(x) == 1) x[[1]] else x
 # timed objects
 
 timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
-  if(is.null(starttime)) # time starts now.
+  if(is.null(starttime) && is.null(timetaken)) # time starts now.
     starttime <- proc.time()
   # evaluate expression if any
   object <- x
-  timetaken <- proc.time() - starttime
+  if(is.null(timetaken))
+    timetaken <- proc.time() - starttime
   class(object) <- c("timed", class(object))
   attr(object, "timetaken") <- timetaken
   return(object)
@@ -1334,6 +1335,15 @@ print.timed <- function(x, ...) {
   return(invisible(NULL))
 }
 
+timeTaken <- function(..., warn=TRUE) {
+  allargs <- list(...)
+  hastime <- sapply(allargs, inherits, what="timed")
+  if(warn && !all(hastime))
+    warning("Some arguments did not contain timing information")
+  times <- sapply(allargs[hastime], attr, which="timetaken")
+  tottime <- rowSums(times)
+  return(tottime)
+}
 
 # efficient replacements for ifelse()
 # 'a' and 'b' are single values
