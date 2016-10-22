@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.124 $ $Date: 2016/08/30 01:38:40 $
+# $Revision: 1.125 $ $Date: 2016/10/22 07:56:22 $
 #
 
 kppm <- function(X, ...) {
@@ -1577,3 +1577,16 @@ extractAIC.kppm <- extractAIC.dppm <- function (fit, scale = 0, k = 2, ...)
 
 nobs.kppm <- nobs.dppm <- function(object, ...) { nobs(as.ppm(object)) }
 
+psib <- function(object) UseMethod("psib")
+
+psib.kppm <- function(object) {
+  clus <- object$clusters
+  info <- spatstatClusterModelInfo(clus)
+  if(!info$isPCP) {
+    warning("The model is not a cluster process")
+    return(NA)
+  }
+  g <- pcfmodel(object)
+  p <- 1 - 1/g(0)
+  return(p)
+}

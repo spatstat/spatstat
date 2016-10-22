@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.47-0.005
+Version: 1.47-0.006
 Nickname: Recurring Dream
-Date: 2016-10-18
+Date: 2016-10-22
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

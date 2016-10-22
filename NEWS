@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.005
+        CHANGES IN spatstat VERSION 1.47-0.006
 
 OVERVIEW
 
@@ -7,13 +7,37 @@ OVERVIEW
 
     o Alternating Gibbs Sampler for multitype point processes.
 
+    o New class of spatially sampled functions.
+
+    o Faster low-level code.
+
+NEW CLASSES
+
+    o ssf
+    Class of spatially sampled functions.
+
 NEW FUNCTIONS
 
     o is.close
     Faster way to check whether a point has a close neighbour.
 
+    o psib
+    Sibling probability (index of clustering strength in a cluster process).
+    
     o rags
     Alternating Gibbs Sampler for multitype point processes.
+
+    o ssf
+    Create a spatially sampled function
+
+    o print.ssf, plot.ssf, contour.ssf, image.ssf
+    Display a spatially sampled function
+
+    o as.im.ssf, as.ppp.ssf, marks.ssf, marks<-.ssf, unmark.ssf, [.ssf, with.ssf
+    Manipulate data in a spatially sampled function
+
+    o integral.ssf
+    Approximate integral of spatially sampled function
 
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
