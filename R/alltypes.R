@@ -1,7 +1,7 @@
 #
 #      alltypes.R
 #
-#   $Revision: 1.33 $   $Date: 2016/02/16 01:39:12 $
+#   $Revision: 1.34 $   $Date: 2016/10/23 10:36:58 $
 #
 #
                                   
@@ -72,14 +72,14 @@ alltypes <- function(X, fun="K", ...,
 # determine array dimensions and margin labels
   witch <-
     if(nmarks == 0)
-      matrix(1, nrow=1, ncol=1, dimnames=list("",""))
+      matrix(1L, nrow=1L, ncol=1L, dimnames=list("",""))
     else if (nmarks == 1) 
-      matrix(1, nrow=1, ncol=1, dimnames=list(marklabels, marklabels))
+      matrix(1L, nrow=1L, ncol=1L, dimnames=list(marklabels, marklabels))
     else if(indices.expected != 2)
-      matrix(1:nmarks, nrow=nmarks, ncol=1,
+      matrix(1L:nmarks, nrow=nmarks, ncol=1L,
              dimnames=list(marklabels, ""))
     else 
-      matrix(1:(nmarks^2),ncol=nmarks,nrow=nmarks, byrow=TRUE,
+      matrix(1L:(nmarks^2),ncol=nmarks,nrow=nmarks, byrow=TRUE,
              dimnames=list(marklabels, marklabels))
 
   # ------------ start computing -------------------------------  
@@ -99,13 +99,13 @@ alltypes <- function(X, fun="K", ...,
   fns  <- list()
   k   <- 0
 
-  for(i in 1:nrow(witch)) {
+  for(i in 1L:nrow(witch)) {
     Y <- if(apply.to.split) ppsplit[[i]] else X
-    for(j in 1:ncol(witch)) {
+    for(j in 1L:ncol(witch)) {
       if(verb) cat("i =",i,"j =",j,"\n")
       currentfv <- 
         if(!envelope) 
-          switch(1+indices.expected,
+          switch(1L+indices.expected,
                  estimator(Y, ...),
                  estimator(Y, i=ma[i], ...),
                  estimator(Y, i=ma[i], j=ma[j], ...))
@@ -117,7 +117,7 @@ alltypes <- function(X, fun="K", ...,
                                    list(verbose=FALSE),
                                    list(...),
                                    list(Yname=dataname),
-                                   switch(1+indices.expected,
+                                   switch(1L+indices.expected,
                                           NULL,
                                           list(i=ma[i]),
                                           list(i=ma[i], j=ma[j]),

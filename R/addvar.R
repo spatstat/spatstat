@@ -3,7 +3,7 @@
 #
 # added variable plot
 #
-#   $Revision: 1.10 $  $Date: 2016/07/15 10:24:09 $
+#   $Revision: 1.11 $  $Date: 2016/10/23 10:36:58 $
 #
 
 
@@ -277,7 +277,7 @@ addvar <- function(model, covariate, ...,
   given <- paste("|", given)
   xlab <- sprintf("r(paste(%s, '|', %s))", covname, givenlab)
   ylab <- sprintf("r(paste(points, '|', %s))", givenlab)
-  yexpr <- parse(text=ylab)[[1]]
+  yexpr <- parse(text=ylab)[[1L]]
   desc <- c(paste("Pearson residual of covariate", covname, given),
             paste("Smoothed Pearson residual of point process", given),
             "Null expected value of point process residual",
@@ -300,7 +300,7 @@ addvar <- function(model, covariate, ...,
              fname=ylab)
   attr(rslt, "dotnames") <- c("rpts", "theo", "hi", "lo")
   # data associated with quadrature points
-  reserved <- (substr(colnames(df), 1, 4) == ".mpl")
+  reserved <- (substr(colnames(df), 1L, 4L) == ".mpl")
   isxy <- colnames(df) %in% c("x", "y")
   dfpublic <- cbind(df[, !(reserved | isxy)], data.frame(xresid, yresid))
   attr(rslt, "spatial") <- union.quad(Q) %mark% dfpublic

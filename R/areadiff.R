@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.31 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.32 $  $Date: 2016/10/23 10:36:58 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -47,7 +47,7 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
   else if(npts == 1) 
     return(matrix(discpartarea(X, r, W), nrow=1))
   # set up output array
-  indices <- 1:npts
+  indices <- 1L:npts
   if(!is.null(subset))
     indices <- indices[subset]
   out <- matrix(, nrow=length(indices), ncol=nr)
@@ -56,8 +56,8 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
   pir2 <- pi * r^2
   # dirichlet neighbour relation in entire pattern 
   dd <- deldir(X$x, X$y, rw=c(w$xrange, w$yrange))
-  a <- dd$delsgs[,5]
-  b <- dd$delsgs[,6]
+  a <- dd$delsgs[,5L]
+  b <- dd$delsgs[,6L]
   for(k in seq_along(indices)) {
     i <- indices[k]
     # find all Delaunay neighbours of i 
@@ -106,15 +106,15 @@ areaGain.diri <- function(u, X, r, ..., W=as.owin(X), verbose=FALSE) {
   wbox <- as.rectangle(as.owin(X))
   #
   state <- list()
-  for(i in 1:nY) {
+  for(i in 1L:nY) {
     if(verbose) state <- progressreport(i, nY, state=state)
     V <- superimpose(Y[i], X, W=wbox, check=FALSE)
     # Dirichlet neighbour relation for V
     dd <- deldir(V$x, V$y, rw=c(wbox$xrange, wbox$yrange))
-    aa <- dd$delsgs[,5]
-    bb <- dd$delsgs[,6]
+    aa <- dd$delsgs[,5L]
+    bb <- dd$delsgs[,6L]
     # find all Delaunay neighbours of Y[1] in V
-    jj <- c(bb[aa==1], aa[bb==1])
+    jj <- c(bb[aa==1L], aa[bb==1L])
     jj <- sort(unique(jj))
     # extract only these points
     Zminus <- V[jj]
@@ -184,7 +184,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
   yy <- X$y
   result <- matrix(, nrow=nu, ncol=nr)
   #
-  for(i in 1:nu) {
+  for(i in 1L:nu) {
     # shift u[i] to origin
     xu <- u$x[i]
     yu <- u$y[i]
@@ -212,10 +212,10 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               y   = as.double(yshift[close]),
               nn  = as.integer(nclose),
               ngrid = as.integer(ngrid),
-              x0 = as.double(W$xrange[1] - xu),
-              y0 = as.double(W$yrange[1] - yu),
-              x1 = as.double(W$xrange[2] - xu),
-              y1 = as.double(W$yrange[2] - yu),
+              x0 = as.double(W$xrange[1L] - xu),
+              y0 = as.double(W$yrange[1L] - yu),
+              x1 = as.double(W$xrange[2L] - xu),
+              y1 = as.double(W$yrange[2L] - yu),
               answer = as.double(numeric(nr)))
       result[i,] <- z$answer
     }
@@ -231,7 +231,7 @@ areaLoss.grid <- function(X, r, ...,
   verifyclass(X, "ppp")
   n <- npoints(X)
   nr <- length(r)
-  indices <- if(is.null(subset)) 1:n else (1:n)[subset]
+  indices <- if(is.null(subset)) 1L:n else (1L:n)[subset]
   answer <- matrix(, nrow=length(indices), ncol=nr)
   if(missing(method)) {
     method <- if(nr <= 20 || exact) "count" else "distmap"

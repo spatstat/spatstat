@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.48 $	$Date: 2015/06/22 05:09:59 $
+#	$Revision: 1.49 $	$Date: 2016/10/23 10:36:58 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -12,9 +12,9 @@ affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
     vec <- - as.numeric(invmat %*% vec)
   }
   # Y = M X + V
-  ans <- mat %*% rbind(X$x, X$y) + matrix(vec, nrow=2, ncol=length(X$x))
-  return(list(x = ans[1,],
-              y = ans[2,]))
+  ans <- mat %*% rbind(X$x, X$y) + matrix(vec, nrow=2L, ncol=length(X$x))
+  return(list(x = ans[1L,],
+              y = ans[2L,]))
 }
 
 affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
@@ -48,8 +48,8 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
          rectangle={
            if(diagonalmatrix) {
              # result is a rectangle
-             Y <- owin(range(mat[1,1] * X$xrange + vec[1]),
-                       range(mat[2,2] * X$yrange + vec[2]))
+             Y <- owin(range(mat[1L,1L] * X$xrange + vec[1L]),
+                       range(mat[2L,2L] * X$yrange + vec[2L]))
              unitname(Y) <- newunits
              return(Y)
            } else {
@@ -108,7 +108,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
     stop("Matrix of linear transformation is singular")
   #
   diagonalmatrix <- all(mat == diag(diag(mat)))
-  scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1)
+  scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1L)
   newunits <- if(scaletransform) unitname(X) else as.units(NULL)
   newpixels <- (length(list(...)) > 0)
   #
@@ -117,19 +117,19 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
     v      <- X$v
     d      <- X$dim
     newbox <- affine(as.rectangle(X), mat=mat, vec=vec)
-    xscale <- diag(mat)[1]
-    yscale <- diag(mat)[2]
-    xcol <- xscale * X$xcol + vec[1]
-    yrow <- yscale * X$yrow + vec[2]
+    xscale <- diag(mat)[1L]
+    yscale <- diag(mat)[2L]
+    xcol <- xscale * X$xcol + vec[1L]
+    yrow <- yscale * X$yrow + vec[2L]
     if(xscale < 0) {
       # x scale is negative
       xcol <- rev(xcol)
-      v <- v[, (d[2]:1)]
+      v <- v[, (d[2L]:1)]
     }
     if(yscale < 0) {
       # y scale is negative
       yrow <- rev(yrow)
-      v <- v[(d[1]:1), ]
+      v <- v[(d[1L]:1), ]
     }
     Y <- im(v, xcol=xcol, yrow=yrow,
             xrange=newbox$xrange, yrange=newbox$yrange,
@@ -180,7 +180,7 @@ reflect.default <- function(X) { affine(X, mat=diag(c(-1,-1))) }
 reflect.im <- function(X) {
   stopifnot(is.im(X))
   out <- with(X,
-              list(v      = v[dim[1]:1, dim[2]:1],
+              list(v      = v[dim[1L]:1, dim[2L]:1],
                    dim    = dim,
                    xrange = rev(-xrange),
                    yrange = rev(-yrange),
@@ -205,8 +205,8 @@ shiftxy <- function(X, vec=c(0,0)) {
     warning("Null displacement vector; treated as zero")
     return(X)
   }
-  list(x = X$x + vec[1],
-       y = X$y + vec[2])
+  list(x = X$x + vec[1L],
+       y = X$y + vec[2L])
 }
 
 shiftxypolygon <- function(p, vec=c(0,0)) {
@@ -229,14 +229,14 @@ shiftxypolygon <- function(p, vec=c(0,0)) {
       locn <- switch(origin,
                      centroid={ unlist(centroid.owin(X)) },
                      midpoint={ c(mean(X$xrange), mean(X$yrange)) },
-                     bottomleft={ c(X$xrange[1], X$yrange[1]) })
+                     bottomleft={ c(X$xrange[1L], X$yrange[1L]) })
     } else stop("origin must be a character string or a numeric vector")
     return(shift(X, -locn))
   }
   vec <- as2vector(vec)
   # Shift the bounding box
-  X$xrange <- X$xrange + vec[1]
-  X$yrange <- X$yrange + vec[2]
+  X$xrange <- X$xrange + vec[1L]
+  X$yrange <- X$yrange + vec[2L]
   switch(X$type,
          rectangle={
          },
@@ -246,8 +246,8 @@ shiftxypolygon <- function(p, vec=c(0,0)) {
          },
          mask={
            # Shift the pixel coordinates
-           X$xcol <- X$xcol + vec[1]
-           X$yrow <- X$yrow + vec[2]
+           X$xcol <- X$xcol + vec[1L]
+           X$yrow <- X$yrow + vec[2L]
            # That's all --- the mask entries are unchanged
          },
          stop("Unrecognised window type")
@@ -273,7 +273,7 @@ shiftxypolygon <- function(p, vec=c(0,0)) {
       locn <- switch(origin,
                      centroid={ unlist(centroid.owin(W)) },
                      midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                     bottomleft={ c(W$xrange[1], W$yrange[1]) })
+                     bottomleft={ c(W$xrange[1L], W$yrange[1L]) })
     } else stop("origin must be a character string or a numeric vector")
     vec <- -locn
   }
@@ -291,10 +291,10 @@ getlastshift <- function(X) {
   v <- attr(X, "lastshift")
   if(is.null(v))
     stop(paste("Internal error: shifted object of class",
-               sQuote(as.character(class(X))[1]),
+               sQuote(as.character(class(X))[1L]),
                "does not have \"lastshift\" attribute"),
          call.=FALSE)
-  if(!(is.numeric(v) && length(v) == 2))
+  if(!(is.numeric(v) && length(v) == 2L))
     stop("Internal error: \"lastshift\" attribute is not a vector",
          call.=FALSE)
   return(v)

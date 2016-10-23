@@ -8,7 +8,8 @@
   using the alternating Gibbs sampler.
 }
 \usage{
-ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL, ncycles = 100)
+ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL,
+              periodic=FALSE, ncycles = 100)
 }
 \arguments{
   \item{beta}{
@@ -28,6 +29,11 @@ ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL, ncycles = 100)
 }
   \item{bmax}{
     Optional upper bound on \code{beta}.
+  }
+  \item{periodic}{
+    Logical value indicating whether to measure distances in the
+    periodic sense, so that opposite sides of the (rectangular) window
+    are treated as identical.
   }
   \item{ncycles}{
     Number of cycles of the sampler to be performed.
@@ -71,6 +77,7 @@ ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL, ncycles = 100)
   b <- c(30,20)
   h <- 0.05 * matrix(c(0,1,1,0), 2, 2)
   ragsMultiHard(b, h, ncycles=10)
+  ragsMultiHard(b, h, ncycles=5, periodic=TRUE)
 }
 \keyword{spatial}
 \keyword{datagen}

@@ -1,6 +1,6 @@
 # 	applynbd.R
 #
-#     $Revision: 1.16 $     $Date: 2014/10/24 00:22:30 $
+#     $Revision: 1.17 $     $Date: 2016/10/23 10:36:58 $
 #
 #  applynbd()
 # For each point, identify either
@@ -28,7 +28,7 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
 
   # compute row ranks (avoid ties)
   rankit <- function(x) {  u <- numeric(length(x)); u[fave.order(x)] <- seq_along(x); return(u) }
-  drank <- t(apply(dist, 1, rankit)) - 1
+  drank <- t(apply(dist, 1L, rankit)) - 1L
 
   included <- matrix(TRUE, npts, npts)
   if(!is.null(R)) {
@@ -46,7 +46,7 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
   }
   if(!is.null(criterion)) {
     # some funny criterion
-    for(i in 1:npts) 
+    for(i in 1L:npts) 
       included[i,] <- included[i,] & criterion(dist[i,], drank[i,])
   }
      
@@ -59,10 +59,10 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
   # what to do with a[i, , ]
   if(!is.marked(X)) 
     go <- function(ai, Z, fun, ...) { 
-      which <- as.logical(ai[,1])
-      distances <- ai[,2]
-      dranks <- ai[,3]
-      here <- ai[1,4]
+      which <- as.logical(ai[,1L])
+      distances <- ai[,2L]
+      dranks <- ai[,3L]
+      here <- ai[1L,4L]
       fun(Y=Z[which],
           current=c(x=Z$x[here], y=Z$y[here]),
           dists=distances[which], dranks=dranks[which],
@@ -70,10 +70,10 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
     }
   else
     go <- function(ai, Z, fun, ...) { 
-      which <- as.logical(ai[,1])
-      distances <- ai[,2]
-      dranks <- ai[,3]
-      here <- ai[1,4]
+      which <- as.logical(ai[,1L])
+      distances <- ai[,2L]
+      dranks <- ai[,3L]
+      here <- ai[1L,4L]
       fun(Y=Z[which],
           current=Z[here],
           dists=distances[which], dranks=dranks[which],

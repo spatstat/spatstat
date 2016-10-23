@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.9 $ $Date: 2016/04/25 02:34:40 $
+# $Revision: 1.10 $ $Date: 2016/10/23 10:36:58 $
 #
 
 anova.mppm <- local({
@@ -48,14 +48,14 @@ anova.mppm <- local({
       if((nT <- length(Terms)) > 0) {
         ## generate models by adding terms sequentially
         objex <- vector(mode="list", length=nT+1)
-        for(n in 1:nT) {
+        for(n in 1L:nT) {
           ## model containing terms 1, ..., n-1
           fmla <- paste(". ~ . - ", paste(Terms[n:nT], collapse=" - "))
           fmla <- as.formula(fmla)
           objex[[n]] <- update(object, fmla)
         }
         ## full model
-        objex[[nT+1]] <- object
+        objex[[nT+1L]] <- object
         expandedfrom1 <- TRUE
       }
     }
@@ -116,7 +116,7 @@ anova.mppm <- local({
     ## replace 'residual df' by number of parameters in model
     if("Resid. Df" %in% names(result)) {
       ## count number of quadrature points used in each model
-      nq <- totalusedquad(objex[[1]])
+      nq <- totalusedquad(objex[[1L]])
       result[, "Resid. Df"] <- nq - result[, "Resid. Df"]
       names(result)[match("Resid. Df", names(result))] <- "Npar"
     }
@@ -131,15 +131,15 @@ anova.mppm <- local({
       h <- gsub("Model: binomial, link: logit", "", h)
       h <- gsub("Response: ", "", h)
       ## remove blank lines (up to 4 consecutive blanks can occur)
-      for(i in 1:5)
+      for(i in 1L:5L)
         h <- gsub("\n\n", "\n", h)
       if(length(objex) > 1 && length(h) > 1) {
         ## anova(mod1, mod2, ...)
         ## change names of models
         fmlae <- unlist(lapply(objex, fmlaString))
 #        intrx <- unlist(lapply(objex, interString))
-        h[2] <- paste("Model",
-                      paste0(1:length(objex), ":"),
+        h[2L] <- paste("Model",
+                      paste0(1L:length(objex), ":"),
                       fmlae,
 #                      "\t",
 #                      intrx,
@@ -147,7 +147,7 @@ anova.mppm <- local({
       }
       ## Add explanation if we did the stepwise thing ourselves
       if(expandedfrom1)
-        h <- c(h[1], "Terms added sequentially (first to last)\n", h[-1])
+        h <- c(h[1L], "Terms added sequentially (first to last)\n", h[-1])
       ## Contract spaces in output if spatstat.options('terse') >= 2
       if(!waxlyrical('space'))
         h <- gsub("\n$", "", h)
@@ -227,8 +227,8 @@ anova.mppm <- local({
         cn <- colnames(result)
         colnames(result)[cn == "Deviance"] <- "AdjDeviance"
         if("Pr(>Chi)" %in% colnames(result)) 
-          result[["Pr(>Chi)"]] <- c(NA, pchisq(abs(AdjDev[-1]),
-                                               df=abs(result$Df[-1]),
+          result[["Pr(>Chi)"]] <- c(NA, pchisq(abs(AdjDev[-1L]),
+                                               df=abs(result$Df[-1L]),
                                                lower.tail=FALSE))
         class(result) <- class(oldresult)
         attr(result, "heading") <- attr(oldresult, "heading")

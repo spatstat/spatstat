@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.45 $   $Date: 2016/03/26 09:48:23 $
+#    $Revision: 1.46 $   $Date: 2016/10/23 10:36:58 $
 #
 #    as.im()
 #
@@ -46,7 +46,7 @@ as.im.owin <- function(X, W=NULL, ...,
     M <- as.mask(X, eps=eps, dimyx=dimyx, xy=xy)
     # convert mask to image
     d <- M$dim
-    v <- matrix(value, d[1], d[2])
+    v <- matrix(value, d[1L], d[2L])
     m <- M$m
     v[!m] <- if(is.null(na.replace)) NA else na.replace
     out <- im(v, M$xcol, M$yrow,
@@ -58,7 +58,7 @@ as.im.owin <- function(X, W=NULL, ...,
     # raster dimensions determined by W
     # convert W to zero image
     d <- W$dim
-    Z <- im(matrix(0, d[1], d[2]), W$xcol, W$yrow, unitname=unitname(X))    
+    Z <- im(matrix(0, d[1L], d[2L]), W$xcol, W$yrow, unitname=unitname(X))    
     # adjust values to indicator of X
     Z[X] <- 1
     if(missing(value) && is.null(na.replace)) {
@@ -66,7 +66,7 @@ as.im.owin <- function(X, W=NULL, ...,
       out <- Z
     } else {
       # map {0, 1} to {na.replace, value}
-      v <- matrix(ifelseAB(Z$v == 0, na.replace, value), d[1], d[2])
+      v <- matrix(ifelseAB(Z$v == 0, na.replace, value), d[1L], d[2L])
       out <- im(v, W$xcol, W$yrow, unitname=unitname(X))
     }
     return(out)
@@ -75,7 +75,7 @@ as.im.owin <- function(X, W=NULL, ...,
     # raster dimensions determined by X
     # convert X to image
     d <- X$dim
-    v <- matrix(value, d[1], d[2])
+    v <- matrix(value, d[1L], d[2L])
     m <- X$m
     v[!m] <- if(is.null(na.replace)) NA else na.replace
     out <- im(v, xcol=X$xcol, yrow=X$yrow,
@@ -88,7 +88,7 @@ as.im.owin <- function(X, W=NULL, ...,
   M <- as.mask(X)
   # convert mask to image
   d <- M$dim
-  v <- matrix(value, d[1], d[2])
+  v <- matrix(value, d[1L], d[2L])
   m <- M$m
   v[!m] <- if(is.null(na.replace)) NA else na.replace
   out <- im(v, M$xcol, M$yrow, unitname=unitname(X))
@@ -130,7 +130,7 @@ as.im.function <- function(X, W=NULL, ...,
         vector(mode=typeof(val), length=msize)
       else {
         lev <- levels(val)
-        factor(rep.int(lev[1], msize), levels=lev)
+        factor(rep.int(lev[1L], msize), levels=lev)
       }
     # copy values, assigning NA outside window
     values[inside] <- val
@@ -192,11 +192,11 @@ as.im.default <- function(X, W=NULL, ...,
     lx <- length(x)
     ly <- length(y)
     if(lx == nr + 1)
-      x <- (x[-1] + x[-lx])/2
+      x <- (x[-1L] + x[-lx])/2
     else if(lx != nr)
       stop("length of x coordinate vector does not match number of rows of z")
     if(ly == nc + 1)
-      y <- (y[-1] + y[-ly])/2
+      y <- (y[-1L] + y[-ly])/2
     else if(ly != nc)
       stop("length of y coordinate vector does not match number of columns of z")
     # convert to class "im"
@@ -220,8 +220,8 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
     xstep <- ystep <- NULL
   } else {
     step <- ensure2vector(step)
-    xstep <- step[1]
-    ystep <- step[2]
+    xstep <- step[1L]
+    ystep <- step[2L]
   }
   if(ncol(X) < 3) {
     whinge <- "Argument 'X' must have at least 3 columns of data"
@@ -231,8 +231,8 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
   }
   ## extract (x,y) coordinates
   mch <- matchNameOrPosition(c("x", "y", "z"), names(X))
-  x <- X[, mch[1]]
-  y <- X[, mch[2]]
+  x <- X[, mch[1L]]
+  y <- X[, mch[2L]]
   z <- X[, -mch[1:2], drop=FALSE]
   ## unique x,y coordinates
   xx <- sort(unique(x))
@@ -247,14 +247,14 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
   ## ensure xx and yy are complete equally-spaced sequences
   fx <- fillseq(xx, step=xstep)
   fy <- fillseq(yy, step=ystep)
-  xcol <- fx[[1]]
-  yrow <- fy[[1]]
+  xcol <- fx[[1L]]
+  yrow <- fy[[1L]]
   ## trap very large matrices
   ok <- checkbigmatrix(length(xcol), length(yrow), fatal=fatal)
   if(!ok) return(NULL)
   ## mapping from xx to xcol, yy to yrow
-  jjj <- fx[[2]]
-  iii <- fy[[2]]
+  jjj <- fx[[2L]]
+  iii <- fy[[2L]]
   ## make matrix for full sequence
   m <- matrix(NA, length(yrow), length(xcol))
   ## run through columns of pixel values
@@ -269,7 +269,7 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
     mo <- if(is.null(lev)) m else factor(as.vector(m), levels=lev)
     result[[k]] <- im(mat=mo, xcol=xcol, yrow=yrow) 
   }
-  if(nz == 1 && drop) result <- result[[1]]
+  if(nz == 1 && drop) result <- result[[1L]]
   return(result)
 }
 

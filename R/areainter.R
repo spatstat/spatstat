@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.42 $	$Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.43 $	$Date: 2016/10/23 10:36:58 $
 #
 #    The area interaction
 #
@@ -32,11 +32,11 @@ AreaInter <- local({
       if(is.null(r)) stop("internal error: r parameter not found")
       n <- U$n
       areas <- numeric(n)
-      dummies <- !(seq_len(n) %in% EqualPairs[,2])
+      dummies <- !(seq_len(n) %in% EqualPairs[,2L])
       if(sum(dummies) > 0)
         areas[dummies] <- areaGain(U[dummies], X, r, W=W)
-      ii <- EqualPairs[,1]
-      jj <- EqualPairs[,2]
+      ii <- EqualPairs[,1L]
+      jj <- EqualPairs[,2L]
       areas[jj] <- areaLoss(X, r, subset=ii, W=W)
       return(1 - areas/(pi * r^2))
     }
@@ -101,7 +101,7 @@ AreaInter <- local({
          },
          #' end of function 'plot'
          interpret =  function(coeffs, self) {
-           logeta <- as.numeric(coeffs[1])
+           logeta <- as.numeric(coeffs[1L])
            eta <- exp(logeta)
            return(list(param=list(eta=eta),
                        inames="interaction parameter eta",
@@ -120,7 +120,7 @@ AreaInter <- local({
            r <- self$par$r
            if(anyNA(coeffs))
              return(2 * r)
-           logeta <- coeffs[1]
+           logeta <- coeffs[1L]
            if(abs(logeta) <= epsilon)
              return(0)
            else
@@ -245,8 +245,8 @@ areadelta2 <- local({
       ntile0 <- ceiling(npix/(2^20))
       tile0area <- area(B)/ntile0
       tile0side <- sqrt(tile0area)
-      nx <- ceiling(sidelengths(B)[1]/tile0side)
-      ny <- ceiling(sidelengths(B)[2]/tile0side)
+      nx <- ceiling(sidelengths(B)[1L]/tile0side)
+      ny <- ceiling(sidelengths(B)[2L]/tile0side)
       tile <- tiles(quadrats(B, nx, ny))
     }
            
@@ -266,8 +266,8 @@ areadelta2 <- local({
         if(any(ok)) {
           v <- v[ok, , drop=FALSE]
           # accumulate pixel counts -> areas
-          counts <- with(v, table(i=factor(which.1, levels=1:nX),
-                                  j=factor(which.2, levels=1:nX)))
+          counts <- with(v, table(i=factor(which.1, levels=1L:nX),
+                                  j=factor(which.2, levels=1L:nX)))
           pixarea <- with(Z, xstep * ystep)
           result <- result + pixarea * (counts + t(counts))
         }
@@ -277,16 +277,16 @@ areadelta2 <- local({
         stuff <- nnmap(X, k=1:3, W=Wi, eps=eps,
                        is.sorted.X=TRUE, sortby="x",
                        outputarray=TRUE)
-        dist.2 <- stuff$dist[2,,]
-        dist.3 <- stuff$dist[3,,]
-        which.1 <- stuff$which[1,,]
-        which.2 <- stuff$which[2,,]
+        dist.2 <- stuff$dist[2L,,]
+        dist.3 <- stuff$dist[3L,,]
+        which.1 <- stuff$which[1L,,]
+        which.2 <- stuff$which[2L,,]
         ok <- (dist.3 > r & dist.2 <= r)
         if(any(ok)) {
           which.1 <- as.vector(which.1[ok])
           which.2 <- as.vector(which.2[ok])
-          counts <- table(i=factor(which.1, levels=1:nX),
-                          j=factor(which.2, levels=1:nX))
+          counts <- table(i=factor(which.1, levels=1L:nX),
+                          j=factor(which.2, levels=1L:nX))
           pixarea <- attr(stuff, "pixarea")
           result <- result + pixarea * (counts + t(counts))
         }
@@ -318,7 +318,7 @@ areadelta2 <- local({
     J <- cl$j
     # find neighbours in X of each quadrature point
     zJ <- Z[J]
-    neigh <- split(J[zJ], factor(I[zJ], levels=1:nU))
+    neigh <- split(J[zJ], factor(I[zJ], levels=1L:nU))
     # 
     result <- if(!sparseOK) matrix(0, nU, nU) else
               sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
