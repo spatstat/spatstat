@@ -11,7 +11,7 @@
 #endif
 
 /*
-	$Revision: 1.3 $	$Date: 2011/11/20 04:19:10 $
+	$Revision: 1.4 $	$Date: 2016/10/23 04:24:03 $
 
 	3D distance transform
 
@@ -371,7 +371,7 @@ hist3dCen(v, vside, count)	/* four censoring-related histograms */
 	realval = scale * val;
 
 	kval = (int) ceil((realval - count->t0)/width);
-	kval = MIN(kval, count->n - 1);
+	/* this could exceed array limits; that will be detected below */
 
 #ifdef DEBUG
 	Rprintf("border=%lf\tkbord=%d\tval=%lf\tkval=%d\n", 

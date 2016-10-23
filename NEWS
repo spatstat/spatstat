@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.007
+        CHANGES IN spatstat VERSION 1.47-0.008
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
     o New class of spatially sampled functions.
 
     o Faster low-level code.
+
+    o Bug fixes.
 
 NEW CLASSES
 
@@ -47,6 +49,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o None so far.
 
 BUG FIXES
+
+    o F3est
+    Estimates of F(r) for the largest value of r were wildly incorrect.
+    Fixed.
 
     o superimpose
     Point patterns containing 0 points were ignored
