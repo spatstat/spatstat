@@ -192,9 +192,9 @@
       less than \code{rmax},
       and the double integral is taken over all pairs of locations
       \eqn{u,v} in the spatial window of the data.
-      Here \eqn{\rho(d;\theta)}{rho(d;theta)} is the
+      Here \eqn{\rho(d;\theta)}{\rho(d;\theta)} is the
       pair correlation function of the model with
-      cluster parameters \eqn{\theta}{theta}.
+      cluster parameters \eqn{\theta}{\theta}.
 
       The function \eqn{w} in the composite likelihood
       is a weighting function and may be chosen arbitrarily.
@@ -211,11 +211,11 @@
 	\sum_{i,j} w(x_i, x_j) \log \lambda_P(x_j \mid x_i; \theta)
 	- \int_D w(x_i, u) \lambda_P(u \mid x_i; \theta) {\rm d} u
       }{
-	sum[i,j] w(x[i], x[j]) log(lambdaP(x[j] | x[i]; theta)
-	- integral[D] w(x[i], u) lambdaP(u | x[i]; theta) du
+	sum[i,j] w(x[i], x[j]) log(\lambda[P](x[j] | x[i]; theta)
+	- integral[D] w(x[i], u) \lambda[P](u | x[i]; theta) du
       }
       with the same notation as above. Here
-      \eqn{\lambda_P(u|v;\theta}{lambdaP(u|v;theta)} is the Palm intensity of
+      \eqn{\lambda_P(u|v;\theta}{\lambda[P](u|v;\theta)} is the Palm intensity of
       the model at location \eqn{u} given there is a point at \eqn{v}.
     }
   }

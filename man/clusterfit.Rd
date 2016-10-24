@@ -100,7 +100,7 @@ clusterfit(X, clusters, lambda = NULL, startpar = NULL,
 
   After the clustering parameters of the model have been estimated by
   minimum contrast \code{lambda} (if non-null) is used to compute the
-  additional model parameter \eqn{\mu}{mu}.
+  additional model parameter \eqn{\mu}{\mu}.
 }
 \value{
   An object of class \code{"minconfit"}. There are methods for printing

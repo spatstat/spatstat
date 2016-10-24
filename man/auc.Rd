@@ -60,7 +60,7 @@ auc(X, \dots)
   into areas of high and low density of points.
   Suppose \eqn{\lambda(u)}{\lambda(u)} is the intensity function of the model.
   The AUC is the probability that
-  \eqn{\lambda(x_i) > \lambda(U)}{lambda(x[i]) > lambda(U)}.
+  \eqn{\lambda(x_i) > \lambda(U)}{\lambda(x[i]) > \lambda(U)}.
   That is, AUC is the probability that a randomly-selected data point
   has higher predicted intensity than does a randomly-selected spatial
   location.

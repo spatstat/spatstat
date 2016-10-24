@@ -464,7 +464,7 @@
       For example, 
       the conventional way to normalise the \eqn{K} function
       (Ripley, 1981) is to transform it to the \eqn{L} function
-      \eqn{L(r) = \sqrt{K(r)/\pi}}{L(r) = sqrt(K(r)/pi)}
+      \eqn{L(r) = \sqrt{K(r)/\pi}}{L(r) = sqrt(K(r)/\pi)}
       and this is implemented by setting
       \code{transform=expression(sqrt(./pi))}.
     }

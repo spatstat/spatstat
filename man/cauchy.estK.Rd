@@ -65,20 +65,20 @@ cauchy.estK(X, startpar=c(kappa=1,scale=1), lambda=NULL,
   The model is described in Jalilian et al (2013).
   It is a cluster process formed by taking a 
   pattern of parent points, generated according to a Poisson process
-  with intensity \eqn{\kappa}{kappa}, and around each parent point,
+  with intensity \eqn{\kappa}{\kappa}, and around each parent point,
   generating a random number of offspring points, such that the
   number of offspring of each parent is a Poisson random variable with mean
-  \eqn{\mu}{mu}, and the locations of the offspring points of one parent
+  \eqn{\mu}{\mu}, and the locations of the offspring points of one parent
   follow a common distribution described in Jalilian et al (2013).
 
   If the argument \code{lambda} is provided, then this is used
-  as the value of the point process intensity \eqn{\lambda}{lambda}.
+  as the value of the point process intensity \eqn{\lambda}{\lambda}.
   Otherwise, if \code{X} is a
-  point pattern, then  \eqn{\lambda}{lambda}
+  point pattern, then  \eqn{\lambda}{\lambda}
   will be estimated from \code{X}. 
   If \code{X} is a summary statistic and \code{lambda} is missing,
-  then the intensity \eqn{\lambda}{lambda} cannot be estimated, and
-  the parameter \eqn{\mu}{mu} will be returned as \code{NA}.
+  then the intensity \eqn{\lambda}{\lambda} cannot be estimated, and
+  the parameter \eqn{\mu}{\mu} will be returned as \code{NA}.
 
   The remaining arguments \code{rmin,rmax,q,p} control the
   method of minimum contrast; see \code{\link{mincontrast}}.

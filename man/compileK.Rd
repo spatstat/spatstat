@@ -82,7 +82,7 @@ compilepcf(D, r, weights = NULL, denom = 1,
   }
   where \eqn{d_{ij}}{d[i,j]} is the distance between spatial points
   \eqn{i} and \eqn{j}, with corresponding weight \eqn{w_{ij}}{w[i,j]},
-  and \eqn{v(r)} is a specified denominator. Here \eqn{\kappa}{kappa}
+  and \eqn{v(r)} is a specified denominator. Here \eqn{\kappa}{\kappa}
   is a fixed-bandwidth smoothing kernel. 
 
   For a point pattern in two dimensions, the usual denominator \eqn{v(r)}

@@ -33,19 +33,19 @@
   for the kernel estimator of point process intensity
   computed by \code{\link{density.ppp}}.
 
-  The bandwidth \eqn{\sigma}{sigma} is chosen to 
+  The bandwidth \eqn{\sigma}{\sigma} is chosen to 
   minimise the mean-square error criterion defined by Diggle (1985).
   The algorithm uses the method of Berman and Diggle (1989) to
   compute the quantity
   \deqn{
     M(\sigma) = \frac{\mbox{MSE}(\sigma)}{\lambda^2} - g(0)
   }{
-    M(sigma) = MSE(sigma)/lambda^2 - g(0)
+    M(\sigma) = MSE(\sigma)/\lambda^2 - g(0)
   }
-  as a function of bandwidth \eqn{\sigma}{sigma},
-  where \eqn{\mbox{MSE}(\sigma)}{MSE(sigma)} is the
-  mean squared error at bandwidth \eqn{\sigma}{sigma},
-  while \eqn{\lambda}{lambda} is the mean intensity,
+  as a function of bandwidth \eqn{\sigma}{\sigma},
+  where \eqn{\mbox{MSE}(\sigma)}{MSE(\sigma)} is the
+  mean squared error at bandwidth \eqn{\sigma}{\sigma},
+  while \eqn{\lambda}{\lambda} is the mean intensity,
   and \eqn{g} is the pair correlation function. 
   See Diggle (2003, pages 115-118) for a summary of this method.
 

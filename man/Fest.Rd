@@ -108,9 +108,9 @@ Fhazard(X, \dots)
   true value of \eqn{F} for a completely random (Poisson) point process,
   which is
   \deqn{F(r) = 1 - e^{ - \lambda \pi r^2}}{%
-    F(r) = 1 - exp( - lambda * pi * r^2)      %
+    F(r) = 1 - exp( - \lambda * \pi * r^2)      %
   }
-  where \eqn{\lambda}{lambda}
+  where \eqn{\lambda}{\lambda}
   is the intensity (expected number of points per unit area).
   Deviations between the empirical and theoretical \eqn{F} curves
   may suggest spatial clustering or spatial regularity.

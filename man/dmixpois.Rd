@@ -51,7 +51,7 @@ rmixpois(n, mu, sd, invlink = exp)
 
   In effect, the Poisson mean parameter \code{lambda} is randomised
   by setting \code{lambda = invlink(Z)} where \code{Z}
-  has a Gaussian \eqn{N(\mu,\sigma^2)}{N(mu, sigma^2)} distribution.
+  has a Gaussian \eqn{N(\mu,\sigma^2)}{N(\mu, \sigma^2)} distribution.
   The default is \code{invlink=exp} which means that
   \code{lambda} is lognormal. Set \code{invlink=I} to assume
   that \code{lambda} is approximately Normal.

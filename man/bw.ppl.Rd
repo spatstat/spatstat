@@ -37,26 +37,26 @@
   for the kernel estimator of point process intensity
   computed by \code{\link{density.ppp}}.
 
-  The bandwidth \eqn{\sigma}{sigma} is chosen to 
+  The bandwidth \eqn{\sigma}{\sigma} is chosen to 
   maximise the point process likelihood cross-validation criterion
   \deqn{
     \mbox{LCV}(\sigma) =
     \sum_i \log\hat\lambda_{-i}(x_i) - \int_W \hat\lambda(u) \, {\rm d}u
   }{
-    LCV(sigma) = sum[i] log(lambda[-i](x[i])) - integral[W] lambda(u) du
+    LCV(\sigma) = sum[i] log(\lambda[-i](x[i])) - integral[W] \lambda(u) du
   }
   where the sum is taken over all the data points \eqn{x_i}{x[i]},
-  where \eqn{\hat\lambda_{-i}(x_i)}{lambda[-i](x_i)} is the
+  where \eqn{\hat\lambda_{-i}(x_i)}{\lambda[-i](x_i)} is the
   leave-one-out kernel-smoothing estimate of the intensity at
-  \eqn{x_i}{x[i]} with smoothing bandwidth \eqn{\sigma}{sigma},
-  and \eqn{\hat\lambda(u)}{lambda(u)} is the kernel-smoothing estimate
+  \eqn{x_i}{x[i]} with smoothing bandwidth \eqn{\sigma}{\sigma},
+  and \eqn{\hat\lambda(u)}{\lambda(u)} is the kernel-smoothing estimate
   of the intensity at a spatial location \eqn{u} with smoothing
-  bandwidth \eqn{\sigma}{sigma}.
+  bandwidth \eqn{\sigma}{\sigma}.
   See Loader(1999, Section 5.3).
 
-  The value of \eqn{\mbox{LCV}(\sigma)}{LCV(sigma)} is computed
+  The value of \eqn{\mbox{LCV}(\sigma)}{LCV(\sigma)} is computed
   directly, using \code{\link{density.ppp}}, 
-  for \code{ns} different values of \eqn{\sigma}{sigma}
+  for \code{ns} different values of \eqn{\sigma}{\sigma}
   between \code{srange[1]} and \code{srange[2]}.
 
   The result is a numerical value giving the selected bandwidth.
