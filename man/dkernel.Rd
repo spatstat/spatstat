@@ -31,7 +31,7 @@ rkernel(n, kernel = "gaussian", mean = 0, sd = 1)
   \item{mean}{Mean of distribution.}
   \item{sd}{Standard deviation of distribution.}
   \item{lower.tail}{logical; if \code{TRUE} (the default),
-    then probabilities are \eqn{P(X \le x)}{P[X <= x]},
+    then probabilities are \eqn{P(X \le x)}{P[X \le x]},
     otherwise, \eqn{P(X > x)}.
   }
 }

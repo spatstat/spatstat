@@ -28,11 +28,11 @@
   distances. 
 
   The BadGey point process with interaction radii
-  \eqn{r_1,\ldots,r_k}{r[1], ..., r[k]},
-  saturation thresholds \eqn{s_1,\ldots,s_k}{s[1],...,s[k]},
-  intensity parameter \eqn{\beta}{beta} and
+  \eqn{r_1,\ldots,r_k}{r[1], \ldots, r[k]},
+  saturation thresholds \eqn{s_1,\ldots,s_k}{s[1],\ldots,s[k]},
+  intensity parameter \eqn{\beta}{\beta} and
   interaction parameters
-  \eqn{\gamma_1,\ldots,gamma_k}{gamma[1], ..., gamma[k]},
+  \eqn{\gamma_1,\ldots,gamma_k}{\gamma[1], \ldots, \gamma[k]},
   is the point process
   in which each point
   \eqn{x_i}{x[i]} in the pattern \eqn{X}
@@ -40,14 +40,14 @@
   \deqn{
     \beta \gamma_1^{v_1(x_i, X)} \ldots gamma_k^{v_k(x_i,X)}
   }{
-    beta gamma[1]^v(1, x_i, X) ... gamma[k]^v(k, x_i, X)
+    \beta \gamma[1]^v(1, x_i, X) \ldots \gamma[k]^v(k, x_i, X)
   }
   to the probability density of the point pattern,
   where
   \deqn{
     v_j(x_i, X) = \min( s_j, t_j(x_i,X) )
   }{
-    v(j, x_i, X) = min(s[j], t(j, x_i, X))
+    v(j, x[i], X) = min(s[j], t(j, x[i], X))
   }
   where \eqn{t_j(x_i, X)}{t(j,x[i],X)} denotes the
   number of points in the pattern \eqn{X} which lie
@@ -77,14 +77,14 @@
 
   Infinite values of the
   saturation parameters are also permitted; in this case
-  \eqn{v_j(x_i,X) = t_j(x_i,X)}{v(j, x_i, X) = t(j, x_i, X)}
+  \eqn{v_j(x_i,X) = t_j(x_i,X)}{v(j, x[i], X) = t(j, x[i], X)}
   and there is effectively no `saturation' for the distance range in
   question. If all the saturation parameters are set to \code{Inf} then
   the model is effectively a pairwise interaction process, equivalent to
   \code{\link{PairPiece}} (however the interaction parameters
-  \eqn{\gamma}{gamma} obtained from \code{\link{BadGey}}
+  \eqn{\gamma}{\gamma} obtained from \code{\link{BadGey}}
   have a complicated relationship to the interaction
-  parameters \eqn{\gamma}{gamma} obtained from \code{\link{PairPiece}}).
+  parameters \eqn{\gamma}{\gamma} obtained from \code{\link{PairPiece}}).
    
   If \code{r} is a single number, this model is virtually equivalent to the 
   Geyer process, see \code{\link{Geyer}}. 

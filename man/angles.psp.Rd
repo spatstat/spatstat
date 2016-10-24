@@ -27,16 +27,16 @@
   If \code{directed=TRUE}, the directed angle of orientation
   is computed. The angle respects the
   sense of direction from \code{(x0,y0)} to \code{(x1,y1)}.
-  The values returned are angles in the full range from \eqn{-\pi}{-pi}
-  to \eqn{\pi}{pi}. The angle is computed as 
+  The values returned are angles in the full range from \eqn{-\pi}{-\pi}
+  to \eqn{\pi}{\pi}. The angle is computed as 
   \code{atan2(y1-y0,x1-x0)}. See \code{\link{atan2}}.
 
   If \code{directed=FALSE}, the undirected angle of orientation
-  is computed. Angles differing by \eqn{pi} are
+  is computed. Angles differing by \eqn{\pi} are
   regarded as equivalent. The values returned are angles
-  in the range from \eqn{0} to \eqn{\pi}{pi}. These angles are
+  in the range from \eqn{0} to \eqn{\pi}{\pi}. These angles are
   computed by first computing the directed angle,
-  then adding \eqn{\pi}{pi} to any negative angles.
+  then adding \eqn{\pi}{\pi} to any negative angles.
 }
 \seealso{
   \code{\link{summary.psp}},

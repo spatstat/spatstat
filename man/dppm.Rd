@@ -182,9 +182,9 @@
 	- \left( \sum_{i,j} w(d_{ij}) \right)
 	\log \int_D \int_D w(\|u-v\|) \rho(\|u-v\|; \theta)\, du\, dv
       }{
-	sum[i,j] w(d[i,j]) log(rho(d[i,j]; theta))
-	- (sum[i,j] w(d[i,j]))
-	log(integral[D,D] w(||u-v||) rho(||u-v||; theta) du dv)
+	\sum[i,j] w(d[i,j]) log(\rho(d[i,j]; \theta))
+	- (\sum[i,j] w(d[i,j]))
+	log(integral[D,D] w(||u-v||) \rho(||u-v||; \theta) du dv)
       }
       where the sums are taken over all pairs of data points
       \eqn{x_i, x_j}{x[i], x[j]} separated by a distance
@@ -201,7 +201,7 @@
       It is specified by the argument \code{weightfun}.
       If this is missing or \code{NULL} then the default is
       a threshold weight function,
-      \eqn{w(d) = 1(d \le R)}{w(d) = 1(d <= R)}, where \eqn{R} is \code{rmax/2}.
+      \eqn{w(d) = 1(d \le R)}{w(d) = 1(d \le R)}, where \eqn{R} is \code{rmax/2}.
     }
     \item{Palm likelihood:}{
       If \code{method = "palm"} the interaction parameters of the
@@ -211,8 +211,8 @@
 	\sum_{i,j} w(x_i, x_j) \log \lambda_P(x_j \mid x_i; \theta)
 	- \int_D w(x_i, u) \lambda_P(u \mid x_i; \theta) {\rm d} u
       }{
-	sum[i,j] w(x[i], x[j]) log(\lambda[P](x[j] | x[i]; theta)
-	- integral[D] w(x[i], u) \lambda[P](u | x[i]; theta) du
+	\sum[i,j] w(x[i], x[j]) log(\lambda[P](x[j] | x[i]; \theta)
+	- integral[D] w(x[i], u) \lambda[P](u | x[i]; \theta) du
       }
       with the same notation as above. Here
       \eqn{\lambda_P(u|v;\theta}{\lambda[P](u|v;\theta)} is the Palm intensity of

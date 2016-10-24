@@ -45,7 +45,7 @@
   \code{eps[2]} in the \eqn{y} direction.
 
   If \code{dimyx} is given, then the pixel grid will be an
-  \eqn{m \times n}{m x n} rectangular grid
+  \eqn{m \times n}{m * n} rectangular grid
   where \eqn{m, n} are given by \code{dimyx[2]}, \code{dimyx[1]}
   respectively. \bold{Warning:} \code{dimyx[1]} is the number of
   pixels in the \eqn{y} direction, and \code{dimyx[2]} is the number

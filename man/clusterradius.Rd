@@ -53,12 +53,13 @@ clusterradius(model, \dots)
   For the Cauchy model (see e.g. \code{\link{rCauchy}}) and the Variance
   Gamma (Bessel) model (see e.g. \code{\link{rVarGamma}}) the value of
   \code{thresh} defaults to 0.001, and then this is used to compute the
-  range numerically as follows. If \eqn{k(x,y)=k_0(r)} with \eqn{r=\sqrt(x^2+y^2)}{r=sqrt(x^2+y^2)}
+  range numerically as follows. If \eqn{k(x,y)=k_0(r)}{k(x,y)=k0(r)}
+  with \eqn{r=\sqrt(x^2+y^2)}{r=sqrt(x^2+y^2)}
   denotes the isotropic cluster kernel then \eqn{f(r) = 2 \pi r
-  k_0(r)}{f(r) = 2 pi r k_0(r)} is the
+  k_0(r)}{f(r) = 2 \pi r k0(r)} is the
   density function of the offspring distance from the parent. The range
   is determined as the value of \eqn{r} where \eqn{f(r)} falls below
-  \code{thresh} times \eqn{k_0(r)}.
+  \code{thresh} times \eqn{k_0(r)}{k0(r)}.
   
   If \code{precision=TRUE} the precision related to the chosen range is
   returned as an attribute. Here the precision is defined as the polar

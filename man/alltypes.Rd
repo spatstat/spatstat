@@ -74,7 +74,7 @@
 
   If \code{fun="F"} then this routine
   calculates, for each possible type \eqn{i},
-  an estimate of the Empty Space Function \eqn{F_i(r)} of
+  an estimate of the Empty Space Function \eqn{F_i(r)}{F[i](r)} of
   \eqn{X_i}{X[i]}. See \code{\link{Fest}}
   for explanation of the empty space function.
   The estimate is computed by applying \code{\link{Fest}}

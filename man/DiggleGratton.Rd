@@ -9,8 +9,8 @@
   DiggleGratton(delta=NA, rho)
 }
 \arguments{
-  \item{delta}{lower threshold \eqn{\delta}{delta}}
-  \item{rho}{upper threshold \eqn{\rho}{rho}}
+  \item{delta}{lower threshold \eqn{\delta}{\delta}}
+  \item{rho}{upper threshold \eqn{\rho}{\rho}}
 }
 \value{
   An object of class \code{"interact"}
@@ -25,32 +25,32 @@
     h(t) = \left( \frac{t-\delta}{\rho-\delta} \right)^\kappa
     \quad\quad \mbox{  if  } \delta \le t \le \rho
   }{
-    h(t) = ((t - delta)/(rho - delta))^kappa, {    } delta <= t <= rho
+    h(t) = ((t - \delta)/(\rho - \delta))^\kappa, {    } \delta \le t \le \rho
   }
-  with \eqn{h(t) = 0} for \eqn{t < \delta}{t < delta}
-  and  \eqn{h(t) = 1} for \eqn{t > \rho}{t > rho}.
-  Here \eqn{\delta}{delta}, \eqn{\rho}{rho} and \eqn{\kappa}{kappa}
+  with \eqn{h(t) = 0} for \eqn{t < \delta}{t < \delta}
+  and  \eqn{h(t) = 1} for \eqn{t > \rho}{t > \rho}.
+  Here \eqn{\delta}{\delta}, \eqn{\rho}{\rho} and \eqn{\kappa}{\kappa}
   are parameters.
 
-  Note that we use the symbol \eqn{\kappa}{kappa}
+  Note that we use the symbol \eqn{\kappa}{\kappa}
   where Diggle and Gratton (1984) and Diggle, Gates and Stibbard (1987)
-  use \eqn{\beta}{beta}, since in \pkg{spatstat} we reserve the symbol
-  \eqn{\beta}{beta} for an intensity parameter.
+  use \eqn{\beta}{\beta}, since in \pkg{spatstat} we reserve the symbol
+  \eqn{\beta}{\beta} for an intensity parameter.
 
   The parameters must all be nonnegative,
-  and must satisfy \eqn{\delta \le \rho}{delta <= rho}.
+  and must satisfy \eqn{\delta \le \rho}{\delta \le \rho}.
 
   The potential is inhibitory, i.e.\ this model is only appropriate for
   regular point patterns. The strength of inhibition increases with
-  \eqn{\kappa}{kappa}. For \eqn{\kappa=0}{kappa=0} the model is
-  a hard core process with hard core radius \eqn{\delta}{delta}.
-  For \eqn{\kappa=\infty}{kappa=infinity} the model is a hard core
-  process with hard core radius \eqn{\rho}{rho}.
+  \eqn{\kappa}{\kappa}. For \eqn{\kappa=0}{\kappa=0} the model is
+  a hard core process with hard core radius \eqn{\delta}{\delta}.
+  For \eqn{\kappa=\infty}{\kappa=Inf} the model is a hard core
+  process with hard core radius \eqn{\rho}{\rho}.
 
   The irregular parameters 
-  \eqn{\delta, \rho}{delta, rho} must be given in the call to
+  \eqn{\delta, \rho}{\delta, \rho} must be given in the call to
   \code{DiggleGratton}, while the
-  regular parameter \eqn{\kappa}{kappa} will be estimated.
+  regular parameter \eqn{\kappa}{\kappa} will be estimated.
 
   If the lower threshold \code{delta} is missing or \code{NA},
   it will be estimated from the data when \code{\link{ppm}} is called.

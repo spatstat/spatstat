@@ -109,10 +109,10 @@ berman.test(...)
     \item If \code{which="Z1"},
     the test statistic \eqn{Z_1}{Z[1]} is computed as follows.
     The sum \eqn{S} of the covariate values at all data
-    points is evaluated. The predicted mean \eqn{\mu}{mu} and variance
-    \eqn{\sigma^2}{sigma^2} of \eqn{S} are computed
+    points is evaluated. The predicted mean \eqn{\mu}{\mu} and variance
+    \eqn{\sigma^2}{\sigma^2} of \eqn{S} are computed
     from the values of the covariate at all locations in the window.
-    Then we compute \eqn{Z_1 = (S-\mu)/\sigma}{Z[1]=(S-mu)/sigma}.
+    Then we compute \eqn{Z_1 = (S-\mu)/\sigma}{Z[1]=(S-\mu)/\sigma}.
     Closely-related tests were proposed independently 
     by Waller et al (1993) and Lawson (1993)
     so this test is often termed the 

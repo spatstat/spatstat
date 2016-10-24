@@ -128,7 +128,7 @@
     \deqn{
       \hat\lambda(u) = e(u) \sum_i k(x_i - u) w_i
     }{
-      lambda(u) = e(u) sum[i] k(x[i] - u) w[i]
+      \lambda(u) = e(u) \sum[i] k(x[i] - u) w[i]
     }
     where \eqn{k} is the Gaussian smoothing kernel,
     \eqn{e(u)} is an edge correction factor, 
@@ -142,7 +142,7 @@
     \deqn{
       \hat\lambda(u) = \sum_i k(x_i - u) w_i e(x_i)
     }{
-      lambda(u) = sum[i] k(x[i] - u) w[i] e(x[i])
+      \lambda(u) = \sum[i] k(x[i] - u) w[i] e(x[i])
     }
     where again \eqn{k} is the Gaussian smoothing kernel,
     \eqn{e(x_i)}{e(x[i])} is an edge correction factor, 
@@ -207,13 +207,13 @@
   \deqn{
     \hat\lambda(x_i) = e(x_i) \sum_j k(x_j - x_i) w_j
   }{
-    lambda(x[i]) = e(x[i]) sum[j] k(x[j] - x[i]) w[j]
+    \lambda(x[i]) = e(x[i]) \sum[j] k(x[j] - x[i]) w[j]
   }
   or (if \code{diggle=TRUE})
   \deqn{
     \hat\lambda(x_i) = \sum_j k(x_j - x_i) w_j e(x_j)
   }{
-    lambda(x[i]) = sum[j] k(x[j] - x[i]) w[j] e(x[j])
+    \lambda(x[i]) = \sum[j] k(x[j] - x[i]) w[j] e(x[j])
   }
   If \code{leaveoneout=TRUE} (the default), then the sum in the equation
   is taken over all \eqn{j} not equal to \eqn{i},

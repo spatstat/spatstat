@@ -40,7 +40,7 @@
   \deqn{
     \lambda(u,x) = \exp(\theta S(u,x))
   }{
-    lambda(u,x) = exp(theta . S(u,x))
+    \lambda(u,x) = \exp(\theta . S(u,x))
   }
   where \eqn{S(u,x)} is a (vector-valued) statistic.
 

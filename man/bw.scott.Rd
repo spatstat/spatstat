@@ -20,7 +20,7 @@
   for the kernel estimator of point process intensity
   computed by \code{\link{density.ppp}}.
 
-  The bandwidth \eqn{\sigma}{sigma} is computed by the rule of thumb
+  The bandwidth \eqn{\sigma}{\sigma} is computed by the rule of thumb
   of Scott (1992, page 152). It is very fast to compute.
 
   This rule is designed for density

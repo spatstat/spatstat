@@ -48,7 +48,7 @@ rmax.Ripley(W)
   \deqn{
     e(u, r) = \frac{2\pi r}{\mbox{length}(c(u,r) \cap W)}
   }{
-    e(u, r) = 2 * pi * r/length(intersection(c(u,r), W))
+    e(u, r) = 2 * \pi * r/length(intersection(c(u,r), W))
   }
   where \eqn{c(u,r)} is the circle of radius \eqn{r} centred at the
   point \eqn{u}. The denominator is the length of the overlap between

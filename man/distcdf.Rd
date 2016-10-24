@@ -49,7 +49,7 @@
   \eqn{
     CDF(r) = Prob(T \le r)
   }{
-    CDF(r) = Prob(T <= r)
+    CDF(r) = Prob(T \le r)
   }
   of the Euclidean distance \eqn{T = \|X_1 - X_2\|}{T = |X1-X2|}
   between two independent random points \eqn{X_1}{X1} and \eqn{X_2}{X2}.

@@ -41,20 +41,20 @@ deltametric(A, B, p = 2, c = Inf, ...)
     \left| \min(c, d(x,A)) - \min(c, d(x,B)) \right|^p \, {\rm d}x
     \right]^{1/p}
   }{
-    Delta(A,B) = [ (1/|W|) * integral of |min(c, d(x,A))-min(c, d(x,B))|^p dx ]^(1/p)
+    \Delta(A,B) = [ (1/|W|) * integral of |min(c, d(x,A))-min(c, d(x,B))|^p dx ]^(1/p)
   }
-  where \eqn{c \ge 0}{c >= 0} is a distance threshold parameter,
-  \eqn{0 < p \le \infty}{0 < p <= Inf} is the exponent parameter,
+  where \eqn{c \ge 0}{c \ge 0} is a distance threshold parameter,
+  \eqn{0 < p \le \infty}{0 < p \le Inf} is the exponent parameter,
   and \eqn{d(x,A)} denotes the 
   shortest distance from a point \eqn{x} to the set \eqn{A}.
   Also \code{|W|} denotes the area or volume of the containing space \eqn{W}.
 
   This is defined so that it is a \emph{metric}, i.e.
   \itemize{
-    \item \eqn{\Delta(A,B)=0}{Delta(A,B)=0} if and only if \eqn{A=B}
-    \item \eqn{\Delta(A,B)=\Delta(B,A)}{Delta(A,B)=Delta(B,A)}
-    \item \eqn{\Delta(A,C) \le \Delta(A,B) + \Delta(B,C)}{Delta(A,C) <=
-      Delta(A,B) + Delta(B,C)}
+    \item \eqn{\Delta(A,B)=0}{\Delta(A,B)=0} if and only if \eqn{A=B}
+    \item \eqn{\Delta(A,B)=\Delta(B,A)}{\Delta(A,B)=\Delta(B,A)}
+    \item \eqn{\Delta(A,C) \le \Delta(A,B) + \Delta(B,C)}{\Delta(A,C) \le
+      \Delta(A,B) + \Delta(B,C)}
   }
   It is topologically equivalent to the Hausdorff metric
   (Baddeley, 1992a) but has better stability properties

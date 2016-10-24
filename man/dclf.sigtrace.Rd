@@ -98,7 +98,7 @@ mctest.sigtrace(X, fun=Lest, \dots,
   If the argument \code{rmin} is given, it specifies the left endpoint
   of the interval defining the test statistic: the tests are
   performed using intervals \eqn{[r_{\mbox{\scriptsize min}},R]}{[rmin,R]}
-  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R >= rmin}.
+  where \eqn{R \ge r_{\mbox{\scriptsize min}}}{R \ge rmin}.
   
   The result of each command
   is an object of class \code{"fv"} that can be plotted to

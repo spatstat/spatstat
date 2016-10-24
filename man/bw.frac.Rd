@@ -32,7 +32,7 @@
   for the kernel estimator of point process intensity
   computed by \code{\link{density.ppp}}.
 
-  The bandwidth \eqn{\sigma}{sigma} is computed as a 
+  The bandwidth \eqn{\sigma}{\sigma} is computed as a 
   quantile of the distance between two independent random points
   in the window. The default is the lower quartile of this
   distribution.

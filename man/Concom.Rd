@@ -30,20 +30,20 @@
 
   In \bold{standard form}, the connected component process
   (Baddeley and \ifelse{latex}{\out{M\o ller}}{Moller}, 1989) with disc radius \eqn{r},
-  intensity parameter \eqn{\kappa}{kappa} and interaction parameter
-  \eqn{\gamma}{gamma} is a point process with probability density
+  intensity parameter \eqn{\kappa}{\kappa} and interaction parameter
+  \eqn{\gamma}{\gamma} is a point process with probability density
   \deqn{
     f(x_1,\ldots,x_n) =
     \alpha \kappa^{n(x)} \gamma^{-C(x)}
   }{
     f(x[1],\ldots,x[n]) =
-    alpha . kappa^n(x) . gamma^(-C(x))
+    \alpha . \kappa^n(x) . \gamma^(-C(x))
   }
   for a point pattern \eqn{x}, where 
   \eqn{x_1,\ldots,x_n}{x[1],\ldots,x[n]} represent the 
   points of the pattern, \eqn{n(x)} is the number of points in the
   pattern, and \eqn{C(x)} is defined below.
-  Here \eqn{\alpha}{alpha} is a normalising constant.
+  Here \eqn{\alpha}{\alpha} is a normalising constant.
 
   To define the term \code{C(x)}, suppose that we construct a planar
   graph by drawing an edge between 
@@ -52,11 +52,11 @@
   of this graph if they are joined by a path in the graph.
   Then \eqn{C(x)} is the number of connected components of the graph.
 
-  The interaction parameter \eqn{\gamma}{gamma} can be any positive number.
-  If \eqn{\gamma = 1}{gamma = 1} then the model reduces to a Poisson
-  process with intensity \eqn{\kappa}{kappa}.
-  If \eqn{\gamma < 1}{gamma < 1} then the process is regular,
-  while if \eqn{\gamma > 1}{gamma > 1} the process is clustered.
+  The interaction parameter \eqn{\gamma}{\gamma} can be any positive number.
+  If \eqn{\gamma = 1}{\gamma = 1} then the model reduces to a Poisson
+  process with intensity \eqn{\kappa}{\kappa}.
+  If \eqn{\gamma < 1}{\gamma < 1} then the process is regular,
+  while if \eqn{\gamma > 1}{\gamma > 1} the process is clustered.
   Thus, a connected-component interaction process can be used to model either
   clustered or regular point patterns.
   
@@ -68,13 +68,13 @@
     \alpha \beta^{n(x)} \gamma^{-U(x)}
   }{
     f(x_1,\ldots,x_n) =
-    alpha . beta^n(x) gamma^(-U(x))
+    \alpha . \beta^n(x) \gamma^(-U(x))
   }
-  where \eqn{\beta}{beta} is the new intensity parameter and
+  where \eqn{\beta}{\beta} is the new intensity parameter and
   \eqn{U(x) = C(x) - n(x)} is the interaction potential. 
   In this formulation, each isolated point of the pattern contributes a
-  factor \eqn{\beta}{beta} to the probability density (so the
-  first order trend is \eqn{\beta}{beta}). The quantity 
+  factor \eqn{\beta}{\beta} to the probability density (so the
+  first order trend is \eqn{\beta}{\beta}). The quantity 
   \eqn{U(x)} is a true interaction potential, in the sense that
   \eqn{U(x) = 0} if the point pattern \eqn{x} does not contain any
   points that lie close together.
@@ -86,22 +86,22 @@
   The increase is a positive integer \eqn{k} if there are
   \eqn{k} different connected components of \eqn{x} that lie close to \eqn{u}.
   Addition of the point
-  \eqn{u} contributes a factor \eqn{\beta \eta^\delta}{beta * eta^delta}
-  to the probability density, where \eqn{\delta}{delta} is the
+  \eqn{u} contributes a factor \eqn{\beta \eta^\delta}{\beta * \eta^\delta}
+  to the probability density, where \eqn{\delta}{\delta} is the
   increase in potential.
 
-  If desired, the original parameter \eqn{\kappa}{kappa} can be recovered from
-  the canonical parameter by \eqn{\kappa = \beta\gamma}{kappa = beta * gamma}.
+  If desired, the original parameter \eqn{\kappa}{\kappa} can be recovered from
+  the canonical parameter by \eqn{\kappa = \beta\gamma}{\kappa = \beta * \gamma}.
 
   The \emph{nonstationary} connected component process is similar except that 
   the contribution of each individual point \eqn{x_i}{x[i]}
-  is a function \eqn{\beta(x_i)}{beta(x[i])}
+  is a function \eqn{\beta(x_i)}{\beta(x[i])}
   of location, rather than a constant beta. 
  
   Note the only argument of \code{Concom()} is the threshold distance \code{r}.
   When \code{r} is fixed, the model becomes an exponential family.
-  The canonical parameters \eqn{\log(\beta)}{log(beta)}
-  and \eqn{\log(\gamma)}{log(gamma)}
+  The canonical parameters \eqn{\log(\beta)}{log(\beta)}
+  and \eqn{\log(\gamma)}{log(\gamma)}
   are estimated by \code{\link{ppm}()}, not fixed in
   \code{Concom()}.
 }

@@ -71,14 +71,14 @@ compilepcf(D, r, weights = NULL, denom = 1,
   \deqn{
     \hat K(r) = (1/v(r)) \sum_i \sum_j 1\{ d_{ij} \le r\} w_{ij}
   }{
-    K(r) = (1/v(r)) sum[i] sum[j] 1(d[i,j] <= r) w[i,j]
+    K(r) = (1/v(r)) \sum[i] \sum[j] 1(d[i,j] \le r) w[i,j]
   }
   and \code{compilepcf} calculates the weighted estimate of the
   pair correlation function,
   \deqn{
     \hat g(r) = (1/v(r)) \sum_i \sum_j \kappa( d_{ij} - r ) w_{ij}
   }{
-    g(r) = (1/v(r)) sum[i] sum[j] kappa ( d[i,j] - r) w[i,j]
+    g(r) = (1/v(r)) \sum[i] \sum[j] \kappa ( d[i,j] - r) w[i,j]
   }
   where \eqn{d_{ij}}{d[i,j]} is the distance between spatial points
   \eqn{i} and \eqn{j}, with corresponding weight \eqn{w_{ij}}{w[i,j]},

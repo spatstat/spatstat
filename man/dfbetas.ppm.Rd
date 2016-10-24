@@ -39,15 +39,15 @@ iHessian=NULL, iArgs=NULL)
   
   This is a method for the generic function \code{\link[stats]{dfbetas}}.
 
-  The influence measure for each parameter \eqn{\theta}{theta} is a
+  The influence measure for each parameter \eqn{\theta}{\theta} is a
   signed measure in two-dimensional space. It consists of a discrete
   mass on each data point (i.e. each point in the point pattern to which
   the \code{model} was originally fitted) and a continuous density at
   all locations. The mass at a data point represents the change in the 
-  fitted value of the parameter \eqn{\theta}{theta} that would occur
+  fitted value of the parameter \eqn{\theta}{\theta} that would occur
   if this data point were to be deleted.
   The density at other non-data locations represents the
-  effect (on the fitted value of \eqn{\theta}{theta})
+  effect (on the fitted value of \eqn{\theta}{\theta})
   of deleting these locations (and their associated covariate values)
   from the input to the fitting procedure.
   

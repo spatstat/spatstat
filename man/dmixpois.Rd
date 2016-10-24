@@ -34,7 +34,7 @@ rmixpois(n, mu, sd, invlink = exp)
   }
   \item{lower.tail}{
     Logical. If \code{TRUE} (the default), probabilities are
-    \eqn{P[X <= x]}, otherwise, \eqn{P[X > x]}.
+    \eqn{P[X \le x]}, otherwise, \eqn{P[X > x]}.
   }
   \item{GHorder}{
     Number of quadrature points in the Gauss-Hermite quadrature approximation.
