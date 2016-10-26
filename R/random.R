@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.89 $   $Date: 2016/07/29 00:39:05 $
+##    $Revision: 4.90 $   $Date: 2016/10/26 11:00:17 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -645,7 +645,7 @@ rSSI <- function(r, n=Inf, win = square(1),
 
 rPoissonCluster <-
   function(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)), ...,
-           lmax=NULL, nsim=1, drop=TRUE)
+           lmax=NULL, nsim=1, drop=TRUE, saveparents=TRUE)
 {
   ## Generic Poisson cluster process
   ## Implementation for bounded cluster radius
@@ -714,10 +714,12 @@ rPoissonCluster <-
       parentid <- integer(0)
     }
 
-    attr(result, "parents") <- parents
-    attr(result, "parentid") <- parentid
-    attr(result, "expand") <- expand
-
+    if(saveparents) {
+      attr(result, "parents") <- parents
+      attr(result, "parentid") <- parentid
+      attr(result, "expand") <- expand
+    }
+    
     resultlist[[isim]] <- result
   }
 

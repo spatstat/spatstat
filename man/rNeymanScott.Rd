@@ -7,7 +7,8 @@
 }
 \usage{
  rNeymanScott(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
-              \dots, lmax=NULL, nsim=1, drop=TRUE, nonempty=TRUE)
+              \dots, lmax=NULL, nsim=1, drop=TRUE,
+              nonempty=TRUE, saveparents=TRUE)
 }
 \arguments{
   \item{kappa}{
@@ -48,6 +49,10 @@
     even if they have no offspring. Both choices are valid; the default
     is recommended unless you need to simulate all the parent points
     for some other purpose.
+  }
+  \item{saveparents}{
+    Logical value indicating whether to save the locations of the
+    parent points as an attribute.
   }
 }
 \value{

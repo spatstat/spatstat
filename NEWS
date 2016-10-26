@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.012
+        CHANGES IN spatstat VERSION 1.47-0.013
 
 OVERVIEW
 
@@ -51,6 +51,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o cut.ppp
     Argument z can be "x" or "y" indicating one of the spatial coordinates.
+
+    o rThomas, rMatClust, rCauchy, rVarGamma, rPoissonCluster, rNeymanScott
+    New argument 'saveparents'.
 
 BUG FIXES
 

@@ -7,7 +7,7 @@
 }
 \usage{
  rPoissonCluster(kappa, expand, rcluster, win = owin(c(0,1),c(0,1)),
-                 \dots, lmax=NULL, nsim=1, drop=TRUE)
+                 \dots, lmax=NULL, nsim=1, drop=TRUE, saveparents=TRUE)
 }
 \arguments{
   \item{kappa}{
@@ -38,6 +38,10 @@
     Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
     result will be a point pattern, rather than a list 
     containing a point pattern.
+  }
+  \item{saveparents}{
+    Logical value indicating whether to save the locations of the
+    parent points as an attribute.
   }
 }
 \value{
@@ -90,6 +94,8 @@
   The attribute \code{"parents"} is the point pattern of parent points.
   The attribute \code{"parentid"} is an integer vector specifying
   the parent for each of the points in the simulated pattern.
+  (If these data are not required, it is more efficient to
+  set \code{saveparents=FALSE}.)
 }
 \seealso{
   \code{\link{rpoispp}},
