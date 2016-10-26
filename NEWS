@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.011
+        CHANGES IN spatstat VERSION 1.47-0.012
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
 
     o New class of spatially sampled functions.
 
-    o Faster low-level code.
+    o More low-level functionality
 
     o Bug fixes.
 
@@ -19,6 +19,9 @@ NEW CLASSES
     Class of spatially sampled functions.
 
 NEW FUNCTIONS
+
+    o cut.lpp
+    Method for 'cut' for point patterns on a linear network.
 
     o is.close
     Faster way to check whether a point has a close neighbour.
@@ -46,7 +49,8 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None so far.
+    o cut.ppp
+    Argument z can be "x" or "y" indicating one of the spatial coordinates.
 
 BUG FIXES
 

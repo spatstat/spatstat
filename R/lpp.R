@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.46 $   $Date: 2016/07/17 05:08:14 $
+#  $Revision: 1.49 $   $Date: 2016/10/26 10:11:28 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -551,4 +551,48 @@ identify.lpp <- function(x, ...) {
   out <- cbind(data.frame(id=id), marks)
   row.names(out) <- NULL
   return(out)
+}
+
+cut.lpp <- function(x, z=marks(x), ...) {
+  if(missing(z) || is.null(z)) {
+    z <- marks(x, dfok=TRUE)
+    if(is.null(z))
+      stop("x has no marks to cut")
+  } else {
+    #' special objects
+    if(inherits(z, "linim")) {
+      z <- z[x, drop=FALSE]
+    } else if(inherits(z, "linfun")) {
+      z <- z(x)
+    } else if(inherits(z, "lintess")) {
+      z <- (as.linfun(z))(x)
+    }
+  }
+  #' standard data types
+  if(is.character(z)) {
+    if(length(z) == npoints(x)) {
+      # interpret as a factor
+      z <- factor(z)
+    } else if((length(z) == 1) && (z %in% colnames(df <- as.data.frame(x)))) {
+      # interpret as the name of a column of marks or a coordinate
+      zname <- z
+      z <- df[, zname]
+      if(zname == "seg") z <- factor(z)
+    } else stop("format of argument z not understood") 
+  }
+  if(is.factor(z) || is.vector(z)) {
+    stopifnot(length(z) == npoints(x))
+    g <- if(is.factor(z)) z else if(is.numeric(z)) cut(z, ...) else factor(z)
+    marks(x) <- g
+    return(x)
+  }
+  if(is.data.frame(z) || is.matrix(z)) {
+    stopifnot(nrow(z) == npoints(x))
+    # take first column 
+    z <- z[,1]
+    g <- if(is.numeric(z)) cut(z, ...) else factor(z)
+    marks(x) <- g
+    return(x)
+  }
+  stop("Format of z not understood")
 }

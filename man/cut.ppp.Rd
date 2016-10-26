@@ -17,7 +17,7 @@
   \item{z}{
     Data determining the classification. A numeric vector,
     a factor, a pixel image, a window, a tessellation, or a string
-    giving the name of a column of marks.
+    giving the name of a column of marks or the name of a spatial coordinate.
   }
   \item{\dots}{
     Arguments passed to \code{\link{cut.default}}.
@@ -60,6 +60,9 @@
     \item
     a character string, giving the name of one of the columns
     of \code{marks(x)}, if this is a data frame.
+    \item
+    a character string \code{"x"} or \code{"y"} identifying one of the
+    spatial coordinates.
   }
   The default is to take \code{z} to be the vector of marks in
   \code{x} (or the first column in the data frame of marks of \code{x},
@@ -74,8 +77,8 @@
   which has numeric marks into a multitype point pattern,
   for example to plot it or analyse it. See the examples.
 
-  To select some points from a point pattern, use the subset operator
-  \code{\link{[.ppp}} instead.
+  To select some points from a point pattern, use the subset operators
+  \code{\link{[.ppp}} or \code{\link{subset.ppp}} instead.
 }
 \seealso{
   \code{\link{cut}},

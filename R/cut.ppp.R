@@ -3,7 +3,7 @@
 #
 #  cut method for ppp objects
 #
-#  $Revision: 1.14 $   $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.15 $   $Date: 2016/10/26 09:29:57 $
 #
 
 cut.ppp <- function(x, z=marks(x), ...) {
@@ -17,11 +17,9 @@ cut.ppp <- function(x, z=marks(x), ...) {
     if(length(z) == npoints(x)) {
       # interpret as a factor
       z <- factor(z)
-    } else if((length(z) == 1) && (z %in% colnames(marks(x)))) {
-      # interpret as the name of a column of marks
-      zname <- z
-      m <- marks(x)
-      z <- m[, zname]
+    } else if((length(z) == 1) && (z %in% colnames(df <- as.data.frame(x)))) {
+      # interpret as the name of a column of marks or coordinates
+      z <- df[, z]
     } else stop("format of argument z not understood") 
   }
   if(is.factor(z) || is.vector(z)) {
