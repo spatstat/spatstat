@@ -3,11 +3,21 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.7 $   $Date: 2016/07/13 08:13:24 $
+#'   $Revision: 1.10 $   $Date: 2016/10/28 07:28:01 $
 #'
 
 lintess <- function(L, df) {
   verifyclass(L, "linnet")
+  if(missing(df) || is.null(df)) {
+    # tessellation consisting of a single tile
+    ns <- nsegments(L)
+    df <- data.frame(seg=seq_len(ns), t0=0, t1=1, tile=1)
+    out <- list(L=L, df=df)
+    class(out) <- c("lintess", class(out))
+    return(out)
+  } 
+  # validate 'df'
+  stopifnot(is.data.frame(df))
   needed <- c("seg", "t0", "t1", "tile")
   if(any(bad <- is.na(match(needed, colnames(df)))))
     stop(paste(ngettext(sum(bad), "Column", "Columns"),
@@ -65,6 +75,10 @@ plot.lintess <- function(x, ..., main) {
   if(missing(main)) main <- short.deparse(substitute(x))
   plot(as.linfun(x), main=main, ...)
 }
+
+as.owin.lintess <- function(W, ...) { as.owin(as.linnet(W), ...) }
+
+Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 as.linnet.lintess <- function(X, ...) { X$L }
 

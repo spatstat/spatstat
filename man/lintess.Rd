@@ -42,6 +42,9 @@ lintess(L, df)
   The \code{tile} column specifies which tile of the tessellation
   includes this sub-segment. It will be coerced to a factor and its
   levels will be the names of the tiles.
+
+  If \code{df} is missing or \code{NULL}, the result is a tessellation
+  with only one tile, consisting of the entire network \code{L}.
 }
 \value{
   An object of class \code{"lintess"}.
@@ -55,6 +58,9 @@ lintess(L, df)
   
   \code{\link{as.linfun.lintess}}, \code{\link{as.linnet.lintess}} and
   \code{\link{as.linim}} to convert to other classes.
+
+  The undocumented methods \code{Window.lintess} and
+  \code{as.owin.lintess} extract the spatial window.
 }
 \examples{
    # tessellation consisting of one tile for each existing segment

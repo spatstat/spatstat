@@ -1,48 +1,54 @@
 #
 # lpp.R
 #
-#  $Revision: 1.49 $   $Date: 2016/10/26 10:11:28 $
+#  $Revision: 1.50 $   $Date: 2016/10/28 07:18:23 $
 #
 # Class "lpp" of point patterns on linear networks
 
 lpp <- function(X, L, ...) {
   stopifnot(inherits(L, "linnet"))
-  localnames <- c("seg", "tp")
-  spatialnames <- c("x", "y")
-  allcoordnames <- c(spatialnames, localnames)
-  if(is.matrix(X)) X <- as.data.frame(X)
-  if(checkfields(X, localnames)) {
-    # X includes at least local coordinates
-    X <- as.data.frame(X)
-    #' validate local coordinates
-    if(nrow(X) > 0) {
-      nedge <- nsegments(L)
-      if(with(X, any(seg < 1 || seg > nedge)))
-        stop("Segment index coordinate 'seg' exceeds bounds")
-      if(with(X, any(tp < 0 || tp > 1)))
-        stop("Local coordinate 'tp' outside [0,1]")
-    }
-    if(!checkfields(X, spatialnames)) {
-      #' data give local coordinates only
-      #' reconstruct x,y coordinates from local coordinates
-      Y <- local2lpp(L, X$seg, X$tp, df.only=TRUE)
-      X[,spatialnames] <- Y[,spatialnames,drop=FALSE]
-    }
-    #' local coordinates
-    lo <- X[ , localnames, drop=FALSE]
-    #' spatial coords and marks
-    marknames <- setdiff(names(X), allcoordnames)
-    df <- X[, c(spatialnames, marknames), drop=FALSE]
+  if(missing(X) || is.null(X)) {
+    ## empty pattern
+    df <- data.frame(x=numeric(0), y=numeric(0))
+    lo <- data.frame(seg=integer(0), tp=numeric(0))
   } else {
-    # local coordinates must be computed from spatial coordinates
-    if(!is.ppp(X))
-      X <- as.ppp(X, W=L$window, ...)
-    # project to segment
-    pro <- project2segment(X, as.psp(L))
-    # projected points (spatial coordinates and marks)
-    df  <- as.data.frame(pro$Xproj)
-    # local coordinates
-    lo  <- data.frame(seg=pro$mapXY, tp=pro$tp)
+    localnames <- c("seg", "tp")
+    spatialnames <- c("x", "y")
+    allcoordnames <- c(spatialnames, localnames)
+    if(is.matrix(X)) X <- as.data.frame(X)
+    if(checkfields(X, localnames)) {
+      #' X includes at least local coordinates
+      X <- as.data.frame(X)
+      #' validate local coordinates
+      if(nrow(X) > 0) {
+        nedge <- nsegments(L)
+        if(with(X, any(seg < 1 || seg > nedge)))
+          stop("Segment index coordinate 'seg' exceeds bounds")
+        if(with(X, any(tp < 0 || tp > 1)))
+          stop("Local coordinate 'tp' outside [0,1]")
+      }
+      if(!checkfields(X, spatialnames)) {
+        #' data give local coordinates only
+        #' reconstruct x,y coordinates from local coordinates
+        Y <- local2lpp(L, X$seg, X$tp, df.only=TRUE)
+        X[,spatialnames] <- Y[,spatialnames,drop=FALSE]
+      }
+      #' local coordinates
+      lo <- X[ , localnames, drop=FALSE]
+      #' spatial coords and marks
+      marknames <- setdiff(names(X), allcoordnames)
+      df <- X[, c(spatialnames, marknames), drop=FALSE]
+    } else {
+      #' local coordinates must be computed from spatial coordinates
+      if(!is.ppp(X))
+        X <- as.ppp(X, W=L$window, ...)
+      #' project to segment
+      pro <- project2segment(X, as.psp(L))
+      #' projected points (spatial coordinates and marks)
+      df  <- as.data.frame(pro$Xproj)
+      #' local coordinates
+      lo  <- data.frame(seg=pro$mapXY, tp=pro$tp)
+    }
   }
   # combine spatial, local, marks
   nmark <- ncol(df) - 2

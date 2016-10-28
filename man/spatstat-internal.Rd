@@ -33,6 +33,7 @@
 \alias{as.double.im}
 \alias{as.list.hyperframe}
 \alias{as.listof}
+\alias{as.owin.lintess}
 \alias{as.units}
 \alias{as2vector}
 \alias{asNumericMatrix}
@@ -787,6 +788,7 @@
 \alias{versionstring.spatstat}
 \alias{verifyclass}
 \alias{verify.xypolygon}
+\alias{Window.lintess}
 \alias{Window<-.linnet}
 \alias{Window<-.lpp}
 \alias{warn.ignored.args}
@@ -872,6 +874,7 @@ as.breakpts(\dots)
 \method{as.double}{im}(x, \dots)
 \method{as.list}{hyperframe}(x, \dots)
 as.listof(x)
+\method{as.owin}{lintess}(W, \dots)
 as.units(s)
 as2vector(x)
 asNumericMatrix(x)
@@ -1740,6 +1743,7 @@ versionstring.ppm(object)
 versionstring.spatstat()
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 verify.xypolygon(p, fatal=TRUE)
+\method{Window}{lintess}(X, \dots)
 \method{Window}{linnet}(X, \dots, check=TRUE) <- value
 \method{Window}{lpp}(X, \dots, check=TRUE) <- value
 warn.ignored.args(\dots, context)

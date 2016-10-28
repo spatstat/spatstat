@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.013
+        CHANGES IN spatstat VERSION 1.47-0.014
 
 OVERVIEW
 
@@ -47,6 +47,9 @@ NEW FUNCTIONS
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
 
+    o whichhalfplane
+    Determine which side of an infinite line a point lies on.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o cut.ppp
@@ -54,6 +57,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rThomas, rMatClust, rCauchy, rVarGamma, rPoissonCluster, rNeymanScott
     New argument 'saveparents'.
+
+    o lintess
+    Argument 'df' can be missing or NULL, 
+    resulting in a tesellation with only one tile.
+
+    o lpp
+    X can be missing or NULL, resulting in an empty point pattern.
 
 BUG FIXES
 
@@ -64,6 +74,11 @@ BUG FIXES
     o superimpose
     Point patterns containing 0 points were ignored
     when determining the list of possible marks.
+    Fixed.
+
+    o chop.tess
+    Vertical lines were not handled correctly 
+    with pixellated tessellations.
     Fixed.
 
     o timed

@@ -78,17 +78,20 @@ infline(a = NULL, b = NULL, h = NULL, v = NULL, p = NULL, theta = NULL)
   Entries may be \code{NA} if a coordinate is not applicable to
   a particular line. 
 }
+\seealso{
+  \code{\link{clip.infline}},
+  \code{\link{chop.tess}},
+  \code{\link{whichhalfplane}}
+}
 \examples{
   infline(a=10:13,b=1)
   infline(p=1:3, theta=pi/4)
   plot(c(-1,1),c(-1,1),type="n",xlab="",ylab="", asp=1)
   plot(infline(p=0.4, theta=seq(0,pi,length=20)))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

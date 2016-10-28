@@ -53,6 +53,8 @@ lpp(X, L, \dots)
     \code{x,y} will be computed from them.
     Any remaining columns will be interpreted as marks.
   }
+  If \code{X} is missing or \code{NULL}, the result is an empty
+  point pattern (i.e. containing no points).
 }
 \section{Note on changed format}{
   The internal format of \code{"lpp"} objects was changed in
@@ -116,5 +118,8 @@ lpp(X, L, \dots)
   plot(X)
   X
   summary(X)
+
+  # empty pattern
+  lpp(L=letterA)
 }
 \keyword{spatial}

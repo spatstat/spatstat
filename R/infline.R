@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.21 $ $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.23 $ $Date: 2016/10/28 08:24:18 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -125,7 +125,7 @@ chop.tess <- function(X, L) {
       } else if(!is.na(v <- L[i, "v"])) {
         # vertical line
         if(v > xr[1] && v < xr[2])
-          Zmat <- 2 * Zmat + (xmat < h)
+          Zmat <- 2 * Zmat + (xmat < v)
       } else {
         # generic line y = a + bx
         a <- L[i, "a"]
@@ -191,5 +191,27 @@ chop.tess <- function(X, L) {
   return(X)
 }
 
-
-
+whichhalfplane <- function(L, x, y=NULL) {
+  verifyclass(L, "infline")
+  xy <- xy.coords(x, y)
+  x <- xy$x
+  y <- xy$y
+  m <- length(x)
+  n <- nrow(L)
+  Z <- matrix(as.logical(NA_integer_), n, m)
+  for(i in seq_len(n)) {
+    if(!is.na(h <- L[i, "h"])) {
+      #' horizontal line
+      Z[i,] <- (y < h)
+    } else if(!is.na(v <- L[i, "v"])) {
+      #' vertical line
+      Z[i,] <- (x < v)
+    } else {
+      #' generic line y = a + bx
+      a <- L[i, "a"]
+      b <- L[i, "b"]
+      Z[i,] <- (y < a + b * x)
+    }
+  }
+  return(Z)
+}
