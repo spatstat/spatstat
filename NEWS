@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.014
+        CHANGES IN spatstat VERSION 1.47-0.015
 
 OVERVIEW
 
@@ -47,6 +47,9 @@ NEW FUNCTIONS
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
 
+    o rotate.infline, shift.infline, reflect.infline, flipxy.infline
+    Geometrical transformations for infinite straight lines.
+
     o whichhalfplane
     Determine which side of an infinite line a point lies on.
 
@@ -69,6 +72,11 @@ BUG FIXES
 
     o F3est
     Estimates of F(r) for the largest value of r were wildly incorrect.
+    Fixed.
+
+    o clip.infline
+    Results were incorrect unless the midpoint of the window
+    was the coordinate origin.
     Fixed.
 
     o superimpose

@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.23 $ $Date: 2016/10/28 08:24:18 $
+# $Revision: 1.25 $ $Date: 2016/10/29 02:51:48 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -81,17 +81,21 @@ clip.infline <- function(L, win) {
   height <- diff(yr)
   rmax <- sqrt(width^2 + height^2)/2
   boundbox <- owin(xmid + c(-1,1) * rmax, ymid + c(-1,1) * rmax)
-  # compute intersection points with circumcircle 
+  # convert line coordinates to origin (xmid, ymid)
   p <- L$p
   theta <- L$theta
+  co <- cos(theta)
+  si <- sin(theta)
+  p <- p - xmid * co - ymid * si
+  # compute intersection points with circumcircle 
   hit <- (abs(p) < rmax)
   if(!any(hit)) 
     return(psp(numeric(0),numeric(0),numeric(0),numeric(0), window=win))
   p <- p[hit]
   theta <- theta[hit]
   q <- sqrt(rmax^2 - p^2)
-  co <- cos(theta)
-  si <- sin(theta)
+  co <- co[hit]
+  si <- si[hit]
   X <- psp(x0= xmid + p * co + q * si,
            y0= ymid + p * si - q * co,
            x1= xmid + p * co - q * si,
@@ -215,3 +219,32 @@ whichhalfplane <- function(L, x, y=NULL) {
   }
   return(Z)
 }
+
+rotate.infline <- function(X, angle=pi/2, ...) {
+  if(nrow(X) == 0) return(X)
+  Y <- with(X, infline(p = p, theta=theta + angle))
+  return(Y)
+}
+
+shift.infline <- function(X, vec=c(0,0), ...) {
+  if(nrow(X) == 0) return(X)
+  vec <- as2vector(vec)
+  Y <- with(X, infline(p = p + vec[1L] * cos(theta) + vec[2L] * sin(theta),
+                       theta=theta))
+  return(Y)
+}
+
+reflect.infline <- function(X) {
+  if(nrow(X) == 0) return(X)
+  Y <- with(X, infline(p = p,
+                       theta=(theta + pi) %% (2 * pi)))
+  return(Y)
+}
+
+flipxy.infline <- function(X) {
+  if(nrow(X) == 0) return(X)
+  Y <- with(X, infline(p = p,
+                       theta=(pi/2 - theta) %% (2 * pi)))
+  return(Y)
+}
+

@@ -8,7 +8,9 @@
 }
 \usage{
 infline(a = NULL, b = NULL, h = NULL, v = NULL, p = NULL, theta = NULL)
+
 \method{print}{infline}(x, \dots)
+
 \method{plot}{infline}(x, \dots)
 }
 \arguments{
@@ -79,6 +81,7 @@ infline(a = NULL, b = NULL, h = NULL, v = NULL, p = NULL, theta = NULL)
   a particular line. 
 }
 \seealso{
+  \code{\link{rotate.infline}},
   \code{\link{clip.infline}},
   \code{\link{chop.tess}},
   \code{\link{whichhalfplane}}
