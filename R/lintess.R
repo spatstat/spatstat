@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.10 $   $Date: 2016/10/28 07:28:01 $
+#'   $Revision: 1.11 $   $Date: 2016/10/29 10:05:39 $
 #'
 
 lintess <- function(L, df) {
@@ -11,7 +11,7 @@ lintess <- function(L, df) {
   if(missing(df) || is.null(df)) {
     # tessellation consisting of a single tile
     ns <- nsegments(L)
-    df <- data.frame(seg=seq_len(ns), t0=0, t1=1, tile=1)
+    df <- data.frame(seg=seq_len(ns), t0=0, t1=1, tile=factor(1))
     out <- list(L=L, df=df)
     class(out) <- c("lintess", class(out))
     return(out)
@@ -71,9 +71,50 @@ print.lintess <- function(x, ...) {
   return(invisible(NULL))
 }
 
-plot.lintess <- function(x, ..., main) {
+plot.lintess <- function(x, ..., main, add=FALSE,
+                         style=c("segments", "image"),
+                         col=NULL) {
   if(missing(main)) main <- short.deparse(substitute(x))
-  plot(as.linfun(x), main=main, ...)
+  style <- match.arg(style)
+  if(style == "image") {
+    z <- plot(as.linfun(x), main=main, ..., add=add)
+    return(invisible(z))
+  }
+  #' determine colour map
+  df <- x$df
+  lev <- levels(df$tile)
+  if(is.null(col)) {
+    col <- rainbow(length(lev))
+    cmap <- colourmap(col, inputs=lev)
+  } else if(inherits(col, "colourmap")) {
+    cmap <- col
+    col <- cmap(lev)
+  } else if(is.colour(col)) {
+    if(length(col) == 1) col <- rep(col, length(lev))
+    if(length(col) != length(lev))
+      stop(paste(length(col), "colours provided but",
+                 length(lev), "colours needed"))
+    cmap <- colourmap(col, inputs=lev)
+  } else stop("col should be a vector of colours, or a colourmap object")
+  #' determine segment coordinates
+  L <- as.linnet(x)
+  from <- L$from[df$seg]
+  to   <- L$to[df$seg]
+  V <- vertices(L)
+  vx <- V$x
+  vy <- V$y
+  #' plot
+  if(!add) plot(Frame(x), main=main, type="n")
+  with(df,
+       segments(
+         vx[from] * (1-t0) + vx[to] * t0,
+         vy[from] * (1-t0) + vy[to] * t0,
+         vx[from] * (1-t1) + vx[to] * t1,
+         vy[from] * (1-t1) + vy[to] * t1,
+         col=col[as.integer(tile)],
+         ...)
+       )
+  return(invisible(cmap))
 }
 
 as.owin.lintess <- function(W, ...) { as.owin(as.linnet(W), ...) }

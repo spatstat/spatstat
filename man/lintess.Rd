@@ -21,8 +21,8 @@ lintess(L, df)
 \details{
   A tessellation on a linear network \code{L} is a partition of the
   network into non-overlapping pieces (tiles). Each tile consists of one
-  or more line segments which are subsets of the line segments connecting
-  vertices of the network. A tile can consist of several disjoint pieces.
+  or more line segments which are subsets of the line segments making up
+  the network. A tile can consist of several disjoint pieces.
   
   The data frame \code{df} should have columns named
   \code{seg}, \code{t0}, \code{t1} and \code{tile}.
@@ -55,6 +55,11 @@ lintess(L, df)
 }
 \seealso{
   \code{\link{linnet}} for linear networks.
+
+  \code{\link{plot.lintess}} for plotting.
+
+  \code{\link{divide.linnet}} to make a tessellation demarcated by
+  given points.
   
   \code{\link{as.linfun.lintess}}, \code{\link{as.linnet.lintess}} and
   \code{\link{as.linim}} to convert to other classes.

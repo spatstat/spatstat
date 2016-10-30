@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.015
+        CHANGES IN spatstat VERSION 1.47-0.016
 
 OVERVIEW
 
-    o Nickname: 'Recurring Dream'
+    o Nickname: 'Geeky Knitting'
 
     o Alternating Gibbs Sampler for multitype point processes.
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o More low-level functionality
 
-    o Bug fixes.
+    o Improvements and bug fixes.
 
 NEW CLASSES
 
@@ -67,6 +67,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lpp
     X can be missing or NULL, resulting in an empty point pattern.
+
+    o plot.lintess
+    Improved plot method, with more options.
 
 BUG FIXES
 

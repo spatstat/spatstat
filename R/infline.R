@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.25 $ $Date: 2016/10/29 02:51:48 $
+# $Revision: 1.26 $ $Date: 2016/10/29 08:19:25 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -72,6 +72,10 @@ clip.infline <- function(L, win) {
   # clip a set of infinite straight lines to a window
   win <- as.owin(win)
   stopifnot(inherits(L, "infline"))
+  nL <- nrow(L)
+  if(nL == 0)
+    return(psp(numeric(0),numeric(0),numeric(0),numeric(0), window=win))
+  seqL <- seq_len(nL)
   # determine circumcircle of win
   xr <- win$xrange
   yr <- win$yrange
@@ -96,10 +100,12 @@ clip.infline <- function(L, win) {
   q <- sqrt(rmax^2 - p^2)
   co <- co[hit]
   si <- si[hit]
+  id <- seqL[hit]
   X <- psp(x0= xmid + p * co + q * si,
            y0= ymid + p * si - q * co,
            x1= xmid + p * co - q * si,
            y1= ymid + p * si + q * co,
+           marks = factor(id, levels=seqL),
            window=boundbox, check=FALSE)
   # clip to window
   X <- X[win]

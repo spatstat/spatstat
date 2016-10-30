@@ -2,7 +2,7 @@
 
   isclose.c
 
-  $Revision: 1.2 $ $Date: 2016/10/15 06:50:24 $
+  $Revision: 1.3 $ $Date: 2016/10/30 01:21:05 $
 
   Determine whether a point has a neighbour closer than 'r'
   
@@ -10,6 +10,8 @@
 */
 
 #include <R.h>
+
+#undef BUG
 
 #undef TORUS
 

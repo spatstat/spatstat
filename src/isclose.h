@@ -14,7 +14,9 @@
 
   TORUS      if defined, distances are periodic
 
-  $Revision: 1.7 $ $Date: 2016/10/15 08:22:32 $
+  BUG        debugger flag
+
+  $Revision: 1.8 $ $Date: 2016/10/30 01:21:17 $
 
 */
 
@@ -211,6 +213,9 @@ void CROSSFUN(n1,
   By = b[1];
   Hx = Bx/2.0;
   Hy = By/2.0;
+#ifdef BUG
+  Rprintf("=> PERIODIC:  Bx = %lf, By = %lf  <= \n", Bx, By);
+#endif
 #ifdef ZCOORD
   Bz = b[2];
   Hz = Bz/2.0;
@@ -236,6 +241,10 @@ void CROSSFUN(n1,
 	z1i = z1[i];
 #endif
 
+#ifdef BUG
+	Rprintf("------ i = %d --------\n", i);
+	Rprintf(" [%d] = (%lf, %lf)\n", i, x1i, y1i);
+#endif
 	/* 
 	   adjust starting point jleft
 	*/
@@ -243,18 +252,31 @@ void CROSSFUN(n1,
 	while((x2[jleft] < xleft) && (jleft+1 < N2))
 	  ++jleft;
 
+#ifdef BUG
+	Rprintf("\t jleft = %d\n", jleft);
+#endif
+
 	/* 
 	   process from j = jleft until dx > rmax + epsilon
 	*/
 	for(j=jleft; j < N2; j++) {
 	  dx = x2[j] - x1i;
+#ifdef BUG
+	  Rprintf("\t Central loop, j = %d, dx = %lf\n", j, dx);
+#endif
 	  if(dx > rmaxplus)
 	    break;
 	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;
+#ifdef BUG
+	  Rprintf("\t\t Did not break\n\t\t dy = %lf\n", dy);
+#endif
 #ifdef TORUS
 	  if(dy < 0.0) dy = -dy;
 	  if(dy > Hy) dy = By - dy;
+#ifdef BUG
+	  Rprintf("\t\t periodic dy = %lf\n", dy);
+#endif
 #endif
 	  d2minr2 = dx2 + dy * dy - r2max;
 #ifdef ZCOORD
@@ -267,6 +289,9 @@ void CROSSFUN(n1,
 	      d2minr2 = d2minr2 + dz * dz;
 #endif
 	      if(d2minr2 <= 0.0) {
+#ifdef BUG
+		Rprintf("\t\t Point %d has close neighbour\n", i);
+#endif
 		/* point i has a close neighbour */
 		t[i] = 1;
 		break;
@@ -279,16 +304,31 @@ void CROSSFUN(n1,
 #ifdef TORUS
 	jright = j;
 	/* wrap-around at start */
+#ifdef BUG
+	Rprintf("\t Wrap around at start for j = 0 to %d\n", jleft);
+#endif
 	for(j=0; j < jleft; j++) {
 	  dx = x1i - x2[j];
+#ifdef BUG
+	  Rprintf("\t\t j = %d, dx = %lf\n", j, dx);
+#endif
 	  if(dx < 0.0) dx = -dx;
 	  if(dx > Hx) dx = Bx - dx;
+#ifdef BUG
+	  Rprintf("\t\t periodic dx = %lf\n", dx);
+#endif
 	  if(dx > rmaxplus)
 	    break;
 	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;
+#ifdef BUG
+	  Rprintf("\t\t Did not break\n\t\t dy = %lf\n", dy);
+#endif
 	  if(dy < 0.0) dy = -dy;
 	  if(dy > Hy) dy = By - dy;
+#ifdef BUG
+	  Rprintf("\t\t periodic dy = %lf\n", dy);
+#endif
 	  d2minr2 = dx2 + dy * dy - r2max;
 #ifdef ZCOORD
 	    if(d2minr2 <= 0.0) {
@@ -299,6 +339,9 @@ void CROSSFUN(n1,
 #endif
 	      if(d2minr2 <= 0.0) {
 		/* point i has a close neighbour */
+#ifdef BUG
+		Rprintf("\t\t Point %d has close neighbour\n", i);
+#endif
 		t[i] = 1;
 		break;
 	      }
@@ -307,16 +350,31 @@ void CROSSFUN(n1,
 #endif
 	}
 	/* wrap around at end */
-	for(j=N2-1; j >= jright; j++) {
+#ifdef BUG
+	Rprintf("\t Wrap around at end for j = %d to %d\n", N2-1, jright);
+#endif
+	for(j=N2-1; j >= jright; j--) {
 	  dx = x1i - x2[j];
+#ifdef BUG
+	  Rprintf("\t\t j = %d, dx = %lf\n", j, dx);
+#endif
 	  if(dx < 0.0) dx = -dx;
 	  if(dx > Hx) dx = Bx - dx;
+#ifdef BUG
+	  Rprintf("\t\t periodic dx = %lf\n", dx);
+#endif
 	  if(dx > rmaxplus)
 	    break;
 	  dx2 = dx * dx;
 	  dy = y2[j] - y1i;
+#ifdef BUG
+	  Rprintf("\t\t Did not break\n\t\t dy = %lf\n", dy);
+#endif
 	  if(dy < 0.0) dy = -dy;
 	  if(dy > Hy) dy = By - dy;
+#ifdef BUG
+	  Rprintf("\t\t periodic dy = %lf\n", dy);
+#endif
 	  d2minr2 = dx2 + dy * dy - r2max;
 #ifdef ZCOORD
 	    if(d2minr2 <= 0.0) {
@@ -326,6 +384,9 @@ void CROSSFUN(n1,
 	      d2minr2 = d2minr2 + dz * dz;
 #endif
 	      if(d2minr2 <= 0.0) {
+#ifdef BUG
+		Rprintf("\t\t Point %d has close neighbour\n", i);
+#endif
 		/* point i has a close neighbour */
 		t[i] = 1;
 		break;
