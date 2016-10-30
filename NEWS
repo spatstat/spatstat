@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.016
+        CHANGES IN spatstat VERSION 1.47-0.017
 
 OVERVIEW
 
@@ -8,6 +8,10 @@ OVERVIEW
     o Alternating Gibbs Sampler for multitype point processes.
 
     o New class of spatially sampled functions.
+
+    o More support for tessellations on a linear network.
+
+    o More support for infinite straight lines
 
     o More low-level functionality
 
@@ -70,6 +74,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.lintess
     Improved plot method, with more options.
+
+    o rpoisline
+    Also returns information about the original infinite random lines.
 
 BUG FIXES
 

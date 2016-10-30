@@ -1,7 +1,7 @@
 #
 # randomseg.R
 #
-# $Revision: 1.9 $ $Date: 2014/02/22 02:43:07 $
+# $Revision: 1.10 $ $Date: 2016/10/30 03:24:55 $
 #
 
 rpoisline <- function(lambda, win=owin()) {
@@ -17,9 +17,12 @@ rpoisline <- function(lambda, win=owin()) {
   boundbox <- owin(xmid + c(-1,1) * rmax, ymid + c(-1,1) * rmax)
   # generate poisson lines through circumcircle
   n <- rpois(1, lambda * 2 * pi * rmax)
-  if(n == 0)
-    return(psp(numeric(0), numeric(0), numeric(0), numeric(0),
-               window=win))
+  if(n == 0) {
+    X <- psp(numeric(0), numeric(0), numeric(0), numeric(0),
+             window=win)
+    attr(X, "lines") <- infline(p=numeric(0), theta=numeric(0))
+    attr(X, "linemap") <- integer(0)
+  }
   theta <- runif(n, max= 2 * pi)
   p <- runif(n, max=rmax)
   # compute intersection points with circle
@@ -30,9 +33,18 @@ rpoisline <- function(lambda, win=owin()) {
            y0= ymid + p * si - q * co,
            x1= xmid + p * co - q * si,
            y1= ymid + p * si + q * co,
+           marks = 1:n,
            window=boundbox, check=FALSE)
+  # infinite lines
+  L <- infline(p = p + xmid * co + ymid * si,
+               theta = theta)
   # clip to window
   X <- X[win]
+  # append info
+  linemap <- as.integer(marks(X))
+  X <- unmark(X)
+  attr(X, "lines") <- L
+  attr(X, "linemap") <- linemap
   return(X)
 }
 
