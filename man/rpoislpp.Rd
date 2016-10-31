@@ -8,7 +8,7 @@
   with specified intensity on the given linear network.
 }
 \usage{
-rpoislpp(lambda, L, ..., nsim=1)
+rpoislpp(lambda, L, \dots, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{lambda}{
@@ -26,6 +26,12 @@ rpoislpp(lambda, L, ..., nsim=1)
     Arguments passed to \code{\link{rpoisppOnLines}}.
   }
   \item{nsim}{Number of simulated realisations to generate.}
+  \item{drop}{
+    Logical value indicating what to do when \code{nsim=1}.
+    If \code{drop=TRUE} (the default), the result is a point pattern.
+    If \code{drop=FALSE}, the result is a list with one entry which is a
+    point pattern.
+  }
 }
 \details{
   This function uses \code{\link{rpoisppOnLines}}
@@ -36,14 +42,14 @@ rpoislpp(lambda, L, ..., nsim=1)
   \code{"linfun"}) or a pixel image on a linear network (\code{"linim"}).
 }
 \value{
-  If \code{nsim = 1}, a point pattern on the linear network,
+  If \code{nsim = 1} and \code{drop=TRUE},
+  a point pattern on the linear network,
   i.e.\ an object of class \code{"lpp"}.
-  If \code{nsim > 1}, a list of such point patterns.
+  Otherwise, a list of such point patterns.
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
   \adrian 
-  
 }
 \seealso{
  \code{\link{runiflpp}},

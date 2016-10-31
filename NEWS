@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.017
+        CHANGES IN spatstat VERSION 1.47-0.018
 
 OVERVIEW
 
@@ -102,6 +102,10 @@ BUG FIXES
     o timed
     Argument 'timetaken' was ignored.
     Fixed.    
+
+    o rpoislpp, runiflpp
+    Crashed if nsim > 1.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.47-0
 
