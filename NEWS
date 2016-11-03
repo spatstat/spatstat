@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.018
+        CHANGES IN spatstat VERSION 1.47-0.019
 
 OVERVIEW
 
@@ -11,9 +11,9 @@ OVERVIEW
 
     o More support for tessellations on a linear network.
 
-    o More support for infinite straight lines
+    o More support for infinite straight lines.
 
-    o More low-level functionality
+    o More low-level functionality.
 
     o Improvements and bug fixes.
 
@@ -44,6 +44,9 @@ NEW FUNCTIONS
 
     o as.im.ssf, as.ppp.ssf, marks.ssf, marks<-.ssf, unmark.ssf, [.ssf, with.ssf
     Manipulate data in a spatially sampled function
+
+    o Smooth.ssf
+    Smooth a spatially sampled function 
 
     o integral.ssf
     Approximate integral of spatially sampled function
@@ -107,6 +110,11 @@ BUG FIXES
     Crashed if nsim > 1.
     Fixed.
 
+    o any, all
+    When applied to pixel images (objects of class 'im') the result 
+    was sometimes NA when a finite value should have been returned.
+    Fixed.    
+    
         CHANGES IN spatstat VERSION 1.47-0
 
 OVERVIEW

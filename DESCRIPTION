@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.47-0.018
+Version: 1.47-0.019
 Nickname: Geeky Knitting
-Date: 2016-10-31
+Date: 2016-11-03
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

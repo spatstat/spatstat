@@ -1,7 +1,7 @@
 #
 #  tests/segments.R
 #
-#  $Revision: 1.8 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.9 $  $Date: 2016/10/31 06:38:25 $
 
 require(spatstat)
 
@@ -16,6 +16,11 @@ X[W]
 X <- psp(runif(10),runif(10),runif(10),runif(10), window=owin())
 Z <- as.mask.psp(X)
 Z <- pixellate(X)
+
+# more tests of lppm code
+
+fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
+Z <- predict(fit)
 
 # test of distppll pointed out by Ang Qi Wei
 

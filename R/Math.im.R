@@ -1,7 +1,7 @@
 ##
 ##   Math.im.R
 ##
-##   $Revision: 1.3 $ $Date: 2015/02/15 04:43:35 $
+##   $Revision: 1.4 $ $Date: 2016/11/03 09:11:24 $
 ##
 
 Ops.im <- function(e1,e2=NULL){
@@ -25,9 +25,10 @@ Math.im <- function(x, ...){
 }
 
 Summary.im <- function(..., na.rm){
-    args <- list(...)
-    args <- lapply(args, as.matrix)
-    do.call(.Generic, c(args, na.rm = na.rm))
+  argh <- list(...)
+  ims <- sapply(argh, is.im)
+  argh[ims] <- lapply(argh[ims], "[")
+  do.call(.Generic, argh)
 }
 
 Complex.im <- function(z){
