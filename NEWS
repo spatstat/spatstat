@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.019
+        CHANGES IN spatstat VERSION 1.47-0.020
 
 OVERVIEW
 
@@ -12,6 +12,8 @@ OVERVIEW
     o More support for tessellations on a linear network.
 
     o More support for infinite straight lines.
+
+    o Kernel smoothing accelerated.
 
     o More low-level functionality.
 
@@ -80,6 +82,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rpoisline
     Also returns information about the original infinite random lines.
+
+    o density.ppp, Smooth.ppp
+    Accelerated.
 
 BUG FIXES
 

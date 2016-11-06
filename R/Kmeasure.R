@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.54 $    $Date: 2016/07/10 08:06:15 $
+#           $Revision: 1.56 $    $Date: 2016/11/06 00:47:46 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -40,20 +40,19 @@ Kmeasure <- function(X, sigma, edge=TRUE, ..., varcov=NULL) {
 }
 
 second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
-                               what="Kmeasure", debug=FALSE, ...,
-                               varcov=NULL, expand=FALSE) {
+                               what=c("Kmeasure", "kernel", "smooth", 
+                                 "Bartlett", "edge", "smoothedge", "all"),
+                               ..., 
+                               varcov=NULL, expand=FALSE, debug=FALSE) {
   if(is.null(sigma) && is.null(varcov))
     stop("must specify sigma or varcov")
-  choices <- c("kernel", "smooth", "Kmeasure", "Bartlett", "edge", "all", "smoothedge")
-  if(!(what %in% choices))
-    stop(paste("Unknown choice: what = ", sQuote(what),
-               "; available options are:",
-               paste(sQuote(choices), collapse=", ")))
+  what <- match.arg(what)
   sig <- if(!is.null(sigma)) sigma else max(c(diag(varcov), sqrt(det(varcov))))
 
   xtype <- if(is.ppp(x)) "ppp" else
-           if(is.im(x)) "im" else 
-           if(all(unlist(lapply(x, is.im)))) "imlist" else
+           if(is.im(x)) "im" else
+           if(inherits(x, "imlist")) "imlist" else 
+           if(all(sapply(x, is.im))) "imlist" else
            stop("x should be a point pattern or a pixel image")
 
   nimages <- switch(xtype,
@@ -148,7 +147,8 @@ second.moment.engine <-
            npts=NULL, debug=FALSE)
 {
   what <- match.arg(what)
-
+  is.second.order <- what %in% c("Kmeasure", "Bartlett", "all")
+  
   validate2Dkernel(kernel)
   
   if(is.ppp(x)) {
@@ -228,7 +228,7 @@ second.moment.engine <-
     result <- list()
   
   if(what %in% c("kernel", "all")) {
-    # return the kernel
+    # kernel will be returned
     # first rearrange it into spatially sensible order (monotone x and y)
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
@@ -272,7 +272,7 @@ second.moment.engine <-
     }
   }
   if(what %in% c("smooth", "all", "smoothedge")) {
-    # return the smoothed point pattern without edge correction
+    # compute smoothed point pattern without edge correction
     if(nimages == 1) {
       smo <- im(Re(sm)[1:nr, 1:nc],
                 xcol.pad[1:nc], yrow.pad[1:nr],
@@ -297,7 +297,7 @@ second.moment.engine <-
     }
   }
 
-  if(what != "edge") {
+  if(is.second.order) {
     # compute Bartlett spectrum
     if(nimages == 1) {
       bart <- BartCalc(fY, fK)  ##  bart <- Mod(fY)^2 * fK
@@ -307,7 +307,7 @@ second.moment.engine <-
   }
   
   if(what %in% c("Bartlett", "all")) {
-     # return Bartlett spectrum
+     # Bartlett spectrum will be returned
      # rearrange into spatially sensible order (monotone x and y)
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
@@ -334,7 +334,7 @@ second.moment.engine <-
   
   #### ------- Second moment measure --------------
   #
-  if(what != "edge") {
+  if(is.second.order) {
     if(nimages == 1) {
       mom <- fft(bart, inverse=TRUE)/lengthYpad
       if(debug) {
@@ -371,14 +371,14 @@ second.moment.engine <-
   }
   # edge correction
   if(edge || what %in% c("edge", "all", "smoothedge")) {
-    # compute kernel-smoothed set covariance
     M <- as.mask(obswin, dimyx=c(nr, nc))$m
     # previous line ensures M has same dimensions and scale as Y 
     Mpad <- matrix(0, ncol=2*nc, nrow=2*nr)
     Mpad[1:nr, 1:nc] <- M
     lengthMpad <- 4 * nc * nr
     fM <- fft(Mpad)
-    if(edge && what != "edge") {
+    if(edge && is.second.order) {
+      # compute kernel-smoothed set covariance
       # apply edge correction      
       co <- fft(Mod(fM)^2 * fK, inverse=TRUE)/lengthMpad
       co <- Mod(co) 
@@ -403,8 +403,9 @@ second.moment.engine <-
       }
     }
   }
-  if(what != "edge") {
-    # rearrange into spatially sensible order (monotone x and y)
+  if(is.second.order) {
+    # rearrange second moment measure
+    # into spatially sensible order (monotone x and y)
     rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
     ctwist <- (-nc):(nc-1) %% (2*nc) + 1
     if(nimages == 1) {

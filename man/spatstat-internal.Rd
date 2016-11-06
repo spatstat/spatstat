@@ -1626,8 +1626,8 @@ scanmeasure(X, \dots)
 \method{scanmeasure}{im}(X, r, \dots)
 scanPoisLRTS(nZ, nG, muZ, muG, alternative)
 scanBinomLRTS(nZ, nG, muZ, muG, alternative)
-second.moment.calc(x, sigma=NULL, edge=TRUE, what="Kmeasure", debug=FALSE,
-\dots, varcov=NULL, expand=FALSE)
+second.moment.calc(x, sigma, edge, what, \dots,
+                   varcov=NULL, expand=FALSE, debug=FALSE)
 second.moment.engine(x, sigma, edge, what, \dots,
       kernel, obswin, varcov, npts, debug)
 sensiblevarname(guess, fallback, maxlen)
