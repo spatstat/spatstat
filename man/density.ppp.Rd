@@ -331,11 +331,11 @@
 
   plot(density(cells, sigma=0.4, kernel="epanechnikov"))
 
-  # relative risk 
+  # relative risk calculation by hand (see relrisk.ppp)
   lung <- split(chorley)$lung
   larynx <- split(chorley)$larynx
   D <- density(lung, sigma=2)
-  plot(density(larynx, weights=1/D))
+  plot(density(larynx, sigma=2, weights=1/D))
 }
 \references{
   Baddeley, A., Rubak, E. and Turner, R. (2015)

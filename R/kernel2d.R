@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.9 $ $Date: 2016/07/17 08:08:36 $
+#'  $Revision: 1.10 $ $Date: 2016/11/06 02:14:09 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -14,19 +14,23 @@
   gaussian=list(
     d  = function(x,y, ...) { dnorm(x) * dnorm(y) },
     sd  = 1,
-    hw = 8),
+    hw = 8,
+    symmetric = TRUE),
   epanechnikov=list(
     d  = function(x,y, ...) { (2/pi) * pmax(1 - (x^2+y^2), 0) },
     sd = 1/sqrt(6),
-    hw = 1),
+    hw = 1,
+    symmetric = TRUE),
   quartic=list(
     d  = function(x,y, ...) { (3/pi) * pmax(1 - (x^2+y^2), 0)^2 },
     sd = 1/sqrt(8),
-    hw = 1),
+    hw = 1,
+    symmetric = TRUE),
   disc=list(
     d  = function(x,y,...) { (1/pi) * as.numeric(x^2 + y^2 <= 1) },
     sd = 1/2,
-    hw = 1)
+    hw = 1,
+    symmetric = TRUE)
 )
 
 validate2Dkernel <- function(kernel, fatal=TRUE) {

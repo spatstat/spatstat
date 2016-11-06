@@ -147,10 +147,15 @@ second.moment.engine <-
            npts=NULL, debug=FALSE)
 {
   what <- match.arg(what)
-  is.second.order <- what %in% c("Kmeasure", "Bartlett", "all")
-  
   validate2Dkernel(kernel)
+
+  is.second.order <- what %in% c("Kmeasure", "Bartlett", "all")
+  needs.kernel <- what %in% c("kernel", "all", "Kmeasure")
+  returns.several <- what %in% c("all", "smoothedge")
   
+  if(returns.several)
+    result <- list() # several results will be returned in a list
+
   if(is.ppp(x)) {
     # convert list of points to mass distribution
     X <- pixellate(x, ..., padzero=TRUE)
@@ -174,9 +179,6 @@ second.moment.engine <-
   # go to work
   Y <- X$v
   Ylist <- lapply(Xlist, getElement, name="v")
-  #
-#  xw <- X$xrange
-#  yw <- X$yrange
   # pad with zeroes
   nr <- nrow(Y)
   nc <- ncol(Y)
@@ -187,64 +189,71 @@ second.moment.engine <-
   Ypad <- Ypadlist[[1]]
   lengthYpad <- 4 * nc * nr
   # corresponding coordinates
-#  xw.pad <- xw[1] + 2 * c(0, diff(xw))
-#  yw.pad <- yw[1] + 2 * c(0, diff(yw))
   xcol.pad <- X$xcol[1] + X$xstep * (0:(2*nc-1))
   yrow.pad <- X$yrow[1] + X$ystep * (0:(2*nr-1))
-  # set up kernel
-  xcol.ker <- X$xstep * c(0:(nc-1),-(nc:1))
-  yrow.ker <- X$ystep * c(0:(nr-1),-(nr:1))
-  kerpixarea <- X$xstep * X$ystep
-  if(identical(kernel, "gaussian")) {
-    if(!is.null(sigma)) {
-      densX.ker <- dnorm(xcol.ker, sd=sigma)
-      densY.ker <- dnorm(yrow.ker, sd=sigma)
-      Kern <- outer(densY.ker, densX.ker, "*") * kerpixarea
-    } else if(!is.null(varcov)) {
-      ## anisotropic kernel
-      detSigma <- det(varcov)
-      Sinv <- solve(varcov)
-      halfSinv <- Sinv/2
-      constker <- kerpixarea/(2 * pi * sqrt(detSigma))
-      xsq <- matrix((xcol.ker^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
-      ysq <- matrix((yrow.ker^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
-      xy <- outer(yrow.ker, xcol.ker, "*")
-      Kern <- constker * exp(-(xsq * halfSinv[1,1]
-                               + xy * (halfSinv[1,2]+halfSinv[2,1])
-                               + ysq * halfSinv[2,2]))
-    } else 
-      stop("Must specify either sigma or varcov")
+  # compute kernel and its Fourier transform
+  if(!needs.kernel && 
+     identical(kernel, "gaussian") &&
+     is.numeric(sigma) && (length(sigma) == 1) &&
+     spatstat.options('developer')) {
+    # compute Fourier transform of kernel directly (*experimental*)
+    ii <- c(0:(nr-1), nr:1)
+    jj <- c(0:(nc-1), nc:1)
+    fK <- exp(-sigma^2 * (pi^2/2) * outer(ii^2, jj^2, "+"))
   } else {
-    ## non-Gaussian kernel
-    ## evaluate kernel at array of points
-    xker <- as.vector(xcol.ker[col(Ypad)])
-    yker <- as.vector(yrow.ker[row(Ypad)])
-    Kern <- evaluate2Dkernel(kernel, xker, yker,
-                             sigma=sigma, varcov=varcov, ...) * kerpixarea
-    Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
-  }
-  # these options call for several image outputs
-  if(what %in% c("all", "smoothedge"))
-    result <- list()
-  
-  if(what %in% c("kernel", "all")) {
-    # kernel will be returned
-    # first rearrange it into spatially sensible order (monotone x and y)
-    rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
-    ctwist <- (-nc):(nc-1) %% (2*nc) + 1
-    if(debug) {
-      if(any(fave.order(xcol.ker) != rtwist))
-        cat("something round the twist\n")
+    # set up kernel
+    xcol.ker <- X$xstep * c(0:(nc-1),-(nc:1))
+    yrow.ker <- X$ystep * c(0:(nr-1),-(nr:1))
+    kerpixarea <- X$xstep * X$ystep
+    if(identical(kernel, "gaussian")) {
+      if(!is.null(sigma)) {
+        densX.ker <- dnorm(xcol.ker, sd=sigma)
+        densY.ker <- dnorm(yrow.ker, sd=sigma)
+        Kern <- outer(densY.ker, densX.ker, "*") * kerpixarea
+      } else if(!is.null(varcov)) {
+        ## anisotropic kernel
+        detSigma <- det(varcov)
+        Sinv <- solve(varcov)
+        halfSinv <- Sinv/2
+        constker <- kerpixarea/(2 * pi * sqrt(detSigma))
+        xsq <- matrix((xcol.ker^2)[col(Ypad)], ncol=2*nc, nrow=2*nr)
+        ysq <- matrix((yrow.ker^2)[row(Ypad)], ncol=2*nc, nrow=2*nr)
+        xy <- outer(yrow.ker, xcol.ker, "*")
+        Kern <- constker * exp(-(xsq * halfSinv[1,1]
+                                 + xy * (halfSinv[1,2]+halfSinv[2,1])
+                                 + ysq * halfSinv[2,2]))
+      } else 
+        stop("Must specify either sigma or varcov")
+    } else {
+      ## non-Gaussian kernel
+      ## evaluate kernel at array of points
+      xker <- as.vector(xcol.ker[col(Ypad)])
+      yker <- as.vector(yrow.ker[row(Ypad)])
+      Kern <- evaluate2Dkernel(kernel, xker, yker,
+                               sigma=sigma, varcov=varcov, ...) * kerpixarea
+      Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
     }
-    Kermit <- Kern[ rtwist, ctwist]
-    ker <- im(Kermit, xcol.ker[ctwist], yrow.ker[ rtwist], unitname=unitsX)
-    if(what == "kernel")
-      return(ker)
-    else 
-      result$kernel <- ker
+
+    if(what %in% c("kernel", "all")) {
+      ## kernel will be returned
+      ## first rearrange it into spatially sensible order (monotone x and y)
+      rtwist <- ((-nr):(nr-1)) %% (2 * nr) + 1
+      ctwist <- (-nc):(nc-1) %% (2*nc) + 1
+      if(debug) {
+        if(any(fave.order(xcol.ker) != rtwist))
+          cat("something round the twist\n")
+      }
+      Kermit <- Kern[ rtwist, ctwist]
+      ker <- im(Kermit, xcol.ker[ctwist], yrow.ker[ rtwist], unitname=unitsX)
+      if(what == "kernel")
+        return(ker)
+      else 
+        result$kernel <- ker
+    }
+    ## convolve using fft
+    fK <- fft(Kern)
   }
-  # convolve using fft
-  fK <- fft(Kern)
+  
   if(what != "edge") {
     if(nimages == 1) {
       fY <- fft(Ypad)
