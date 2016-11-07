@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.56 $    $Date: 2016/11/06 00:47:46 $
+#           $Revision: 1.58 $    $Date: 2016/11/07 09:05:24 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -199,7 +199,10 @@ second.moment.engine <-
     # compute Fourier transform of kernel directly (*experimental*)
     ii <- c(0:(nr-1), nr:1)
     jj <- c(0:(nc-1), nc:1)
-    fK <- exp(-sigma^2 * (pi^2/2) * outer(ii^2, jj^2, "+"))
+    zz <- -sigma^2 * pi^2/2
+    uu <- exp(zz * ii^2)
+    vv <- exp(zz * jj^2)
+    fK <- outer(uu, vv, "*")
   } else {
     # set up kernel
     xcol.ker <- X$xstep * c(0:(nc-1),-(nc:1))
