@@ -4,15 +4,17 @@
 #'
 #'  Adrian Baddeley and Tilman Davies
 #' 
-#'  $Revision: 1.8 $  $Date: 2016/09/15 04:23:38 $
+#'  $Revision: 1.10 $  $Date: 2016/11/08 10:46:55 $
 
-tapplysum <- function(x, flist, do.names=FALSE) {
+tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
   stopifnot(is.numeric(x))
   stopifnot(is.list(flist))
   stopifnot(all(lengths(flist) == length(x)))
   stopifnot(all(sapply(flist, is.factor)))
   nfac <- length(flist)
-  if(!(nfac %in% 2:3)) {
+  goodx <- is.finite(x)
+  if(na.rm) goodx <- goodx || is.na(x)
+  if(!(nfac %in% 2:3) || !all(goodx)) {
     y <- tapply(x, flist, sum)
     y[is.na(y)] <- 0
     return(y)

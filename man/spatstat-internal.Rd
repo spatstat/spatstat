@@ -1708,7 +1708,7 @@ trap.extra.arguments(\dots, .Context, .Fatal)
 trianglediameters(iedge, jedge, edgelength, \dots, nvert, check)
 trim.mask(M, R, tolerant)
 truncline(x, nc)
-tapplysum(x, flist, do.names)
+tapplysum(x, flist, do.names, na.rm)
 tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
 tweak.coefs(model, new.coef)
 x \%unit\% u
