@@ -1,7 +1,10 @@
 \name{roc}
 \alias{roc}
 \alias{roc.ppp}
+\alias{roc.lpp}
 \alias{roc.ppm}
+\alias{roc.kppm}
+\alias{roc.lppm}
 \title{
   Receiver Operating Characteristic
 }
@@ -15,11 +18,18 @@
 \method{roc}{ppp}(X, covariate, \dots, high = TRUE)
 
 \method{roc}{ppm}(X, \dots)
+
+\method{roc}{kppm}(X, \dots)
+
+\method{roc}{lpp}(X, covariate, \dots, high = TRUE)
+
+\method{roc}{lppm}(X, \dots)
 }
 \arguments{
   \item{X}{
-    Point pattern (object of class \code{"ppp"})
-    or fitted point process model (object of class \code{"ppm"}).
+    Point pattern (object of class \code{"ppp"} or \code{"lpp"})
+    or fitted point process model
+    (object of class \code{"ppm"} or \code{"kppm"} or \code{"lppm"}).
   }
   \item{covariate}{
     Spatial covariate. Either a \code{function(x,y)},

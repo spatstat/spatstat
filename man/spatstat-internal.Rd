@@ -608,6 +608,7 @@
 \alias{rMaternInhibition}
 \alias{RmhExpandRule}
 \alias{rmhsnoop}
+\alias{rocModel}
 \alias{romansort}
 \alias{roseContinuous}
 \alias{ruletextline}
@@ -1546,6 +1547,7 @@ rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
            covunits, modelcall, callstring, savestuff)
 rMaternInhibition(type, kappa, r, win, stationary, \dots, nsim, drop)
 RmhExpandRule(nama)
+rocModel(lambda, nullmodel, \dots, high)
 romansort(x)
 rmhsnoop(\dots, Wsim, Wclip, R, xcoords, ycoords, mlevels, mcodes, irep, itype, 
      proptype, proplocn, propmark, propindx, numerator, denominator)

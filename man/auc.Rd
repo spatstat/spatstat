@@ -1,7 +1,10 @@
 \name{auc}
 \alias{auc}
 \alias{auc.ppp}
+\alias{auc.lpp}
 \alias{auc.ppm}
+\alias{auc.kppm}
+\alias{auc.lppm}
 \title{
   Area Under ROC Curve
 }
@@ -15,11 +18,18 @@ auc(X, \dots)
 \method{auc}{ppp}(X, covariate, \dots, high = TRUE)
 
 \method{auc}{ppm}(X, \dots)
+
+\method{auc}{kppm}(X, \dots)
+
+\method{auc}{lpp}(X, covariate, \dots, high = TRUE)
+
+\method{auc}{lppm}(X, \dots)
 }
 \arguments{
   \item{X}{
-    Point pattern (object of class \code{"ppp"})
-    or fitted point process model (object of class \code{"ppm"}).
+    Point pattern (object of class \code{"ppp"} or \code{"lpp"})
+    or fitted point process model (object of class \code{"ppm"}
+    or \code{"kppm"} or \code{"lppm"}).
   }
   \item{covariate}{
     Spatial covariate. Either a \code{function(x,y)},
@@ -87,13 +97,7 @@ auc(X, \dots)
   \ifelse{latex}{\out{Birkh{\"a}user}}{Birkhauser}, Basel.
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{roc}}

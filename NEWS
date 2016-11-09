@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.023
+        CHANGES IN spatstat VERSION 1.47-0.024
 
 OVERVIEW
 
-    o Nickname: 'Geeky Knitting'
+    o Nickname: 'Model Village'
 
     o Alternating Gibbs Sampler for multitype point processes.
 
     o New class of spatially sampled functions.
+
+    o ROC and AUC extended to other types of point patterns and models.
 
     o More support for tessellations on a linear network.
 
@@ -52,6 +54,14 @@ NEW FUNCTIONS
 
     o integral.ssf
     Approximate integral of spatially sampled function
+
+    o roc.kppm, roc.lppm, roc.lpp
+    Methods for 'roc' for fitted models of class 'kppm' and 'lppm'
+    and point patterns of class 'lpp'
+
+    o auc.kppm, auc.lppm, auc.lpp
+    Methods for 'auc' for fitted models of class 'kppm' and 'lppm'
+    and point patterns of class 'lpp'
 
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
