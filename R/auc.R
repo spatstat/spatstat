@@ -3,7 +3,7 @@
 ##
 ##  Calculate ROC curve or area under it
 ##
-## $Revision: 1.5 $ $Date: 2016/11/09 10:57:14 $
+## $Revision: 1.6 $ $Date: 2016/11/10 01:08:04 $
 
 roc <- function(X, ...) { UseMethod("roc") }
 
@@ -76,7 +76,8 @@ rocModel <- function(lambda, nullmodel, ..., high) {
   p <- seq(0,1,length=1024)
   fobs <- ec(p)
   FZ <- d$values$FZ
-  F1Z <- ewcdf(lambda[], lambda[]/sum(lambda))
+  lambdavalues <- if(is.im(lambda)) lambda[] else unlist(lapply(lambda, "["))
+  F1Z <- ewcdf(lambdavalues, lambdavalues/sum(lambdavalues))    
   pZ <- get("y", environment(FZ))
   qZ <- get("x", environment(FZ))
   FZinverse <- approxfun(pZ, qZ, rule=2)

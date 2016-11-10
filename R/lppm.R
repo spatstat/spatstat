@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.36 $   $Date: 2016/03/08 05:43:58 $
+#  $Revision: 1.37 $   $Date: 2016/11/10 01:02:33 $
 #
 
 lppm <- function(X, ...) {
@@ -132,8 +132,8 @@ predict.lppm <- function(object, ...,
       df <- cbind(projdata, values)
       out[[k]] <- linim(L, Z, df=df)
     }
+    out <- as.solist(out)
     names(out) <- as.character(lev)
-    class(out) <- as.solist(out)
   }
   return(out)
 }

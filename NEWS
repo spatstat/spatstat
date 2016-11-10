@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.024
+        CHANGES IN spatstat VERSION 1.47-0.025
 
 OVERVIEW
 
@@ -105,6 +105,11 @@ BUG FIXES
     o clip.infline
     Results were incorrect unless the midpoint of the window
     was the coordinate origin.
+    Fixed.
+
+    o predict.lppm
+    Bizarre error messages about 'class too long' or 'names too long'
+    occurred if the model was multitype.
     Fixed.
 
     o superimpose
