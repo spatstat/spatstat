@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.18 $ $Date: 2016/10/01 05:00:23 $
+# $Revision: 1.19 $ $Date: 2016/11/11 10:14:11 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -232,15 +232,21 @@ check.mat.mul <- function(A, B, Acols="columns of A", Brows="rows of B",
        call.=FALSE)
 }
 
-matsqrt <- function(x) {
+matsqrt <- function(x, complexOK=TRUE) {
   ## matrix square root
   if(length(dim(x)) != 2)
     stop("x must be a matrix")
   if(!is.matrix(x))
     x <- as.matrix(x)
   stopifnot(is.numeric(x))
-  s <- svd(x)
-  y <- with(s, v %*% (sqrt(d) * t(u)))
+  e <- eigen(x)
+  values <- e$values
+  vectors <- e$vectors
+  sv <- if(all(values >= 0)) sqrt(values) else
+        if(complexOK) sqrt(values + 0i) else
+        stop("matrix has negative eigenvalues: square root is complex",
+             call.=FALSE)
+  y <- vectors %*% diag(sv) %*% t(vectors)
   if(!is.null(dn <- dimnames(x)))
     dimnames(y) <- rev(dn)
   return(y)

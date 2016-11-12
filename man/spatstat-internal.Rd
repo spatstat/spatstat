@@ -1244,7 +1244,7 @@ logi.engine(Q, trend, interaction, \dots,
 lty2char(i)
 makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
-matsqrt(x)
+matsqrt(x, complexOK)
 matchNameOrPosition(expected, avail)
 match2DkernelName(kernel)
 padtowidth(a, b, justify)
