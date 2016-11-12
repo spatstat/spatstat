@@ -51,7 +51,10 @@ which can then be fitted to point pattern data.
   \code{\link{ppm.object}},
   \code{\link{MultiStrauss}},
   \code{\link{MultiStraussHard}},
-  \code{\link{Strauss}}
+  \code{\link{Strauss}}.
+
+  See \code{\link{ragsMultiHard}} and \code{\link{rmh}} for
+  simulation.
 }
 \examples{
    h <- matrix(c(1,2,2,1), nrow=2,ncol=2)

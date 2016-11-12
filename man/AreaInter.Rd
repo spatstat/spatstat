@@ -146,6 +146,9 @@
   \code{\link{ppm}},
   \code{\link{pairwise.family}},
   \code{\link{ppm.object}}
+
+  \code{\link{ragsAreaInter}} and \code{\link{rmh}} for simulation
+  of area-interaction models.
 }
 \section{Warnings}{
   The interaction distance of this process is equal to

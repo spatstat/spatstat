@@ -50,7 +50,8 @@ ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL,
 
   This is an experimental implementation which currently works only
   for multitype hard core processes (see \code{\link{MultiHard}})
-  in which there is no interaction between points of the same type. 
+  in which there is no interaction between points of the same type,
+  and for the area-interaction process (see \code{\link{ragsAreaInter}}).
 
   The argument \code{beta} gives the first order trend for
   each possible type of point. It may be a single number, a numeric
@@ -71,7 +72,8 @@ ragsMultiHard(beta, hradii, \dots, types=NULL, bmax = NULL,
   \adrian
 }
 \seealso{
-  \code{\link{rags}}
+  \code{\link{rags}},
+  \code{\link{ragsAreaInter}}
 }
 \examples{
   b <- c(30,20)

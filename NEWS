@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.026
+        CHANGES IN spatstat VERSION 1.47-0.027
 
 OVERVIEW
 
     o Nickname: 'Model Village'
 
-    o Alternating Gibbs Sampler for multitype point processes.
+    o Alternating Gibbs Sampler for point process simulation.
 
     o New class of spatially sampled functions.
 
@@ -37,8 +37,8 @@ NEW FUNCTIONS
     o psib
     Sibling probability (index of clustering strength in a cluster process).
     
-    o rags
-    Alternating Gibbs Sampler for multitype point processes.
+    o rags, ragsAreaInter, ragsMultiHard
+    Alternating Gibbs Sampler for point processes.
 
     o ssf
     Create a spatially sampled function

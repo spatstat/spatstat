@@ -49,7 +49,8 @@ rags(model, \dots, ncycles = 100)
   \adrian
 }
 \seealso{
-  \code{\link{ragsMultiHard}}
+  \code{\link{ragsMultiHard}},
+  \code{\link{ragsAreaInter}}
 }
 \examples{
   mo <- list(beta=c(30, 20),
