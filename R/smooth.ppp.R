@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.34 $  $Date: 2016/09/25 10:23:12 $
+#  $Revision: 1.35 $  $Date: 2016/11/13 01:55:53 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -316,7 +316,7 @@ smoothpointsEngine <- function(x, values, sigma, ...,
       yy <- yy/(sqrt(2) * sigma)
     } else {
       Sinv <- solve(varcov)
-      xy <- cbind(xx, yy) %*% matsqrt(Sinv/2)
+      xy <- cbind(xx, yy) %*% matrixsqrt(Sinv/2)
       xx <- xy[,1]
       yy <- xy[,2]
       sorted <- FALSE

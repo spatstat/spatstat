@@ -3,7 +3,7 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.84 $    $Date: 2016/09/19 07:57:18 $
+#  $Revision: 1.85 $    $Date: 2016/11/13 01:54:32 $
 #
 
 ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
@@ -318,7 +318,7 @@ densitypointsEngine <- function(x, sigma, ...,
       xx <- xx/(sqrt(2) * sigma)
       yy <- yy/(sqrt(2) * sigma)
     } else {
-      xy <- cbind(xx, yy) %*% matsqrt(Sinv/2)
+      xy <- cbind(xx, yy) %*% matrixsqrt(Sinv/2)
       xx <- xy[,1]
       yy <- xy[,2]
       sorted <- FALSE

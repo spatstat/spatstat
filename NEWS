@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.027
+        CHANGES IN spatstat VERSION 1.47-0.028
 
 OVERVIEW
 
@@ -71,6 +71,9 @@ NEW FUNCTIONS
 
     o whichhalfplane
     Determine which side of an infinite line a point lies on.
+
+    o matrixpower, matrixsqrt, matrixinvsqrt
+    Raise a matrix to any power.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

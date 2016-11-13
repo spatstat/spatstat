@@ -358,7 +358,6 @@
 \alias{lty2char}
 \alias{makeLinnetTolerance}
 \alias{maskLaslett}
-\alias{matsqrt}
 \alias{matchNameOrPosition}
 \alias{match2DkernelName}
 \alias{padtowidth}
@@ -1244,7 +1243,6 @@ logi.engine(Q, trend, interaction, \dots,
 lty2char(i)
 makeLinnetTolerance
 maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
-matsqrt(x, complexOK)
 matchNameOrPosition(expected, avail)
 match2DkernelName(kernel)
 padtowidth(a, b, justify)
