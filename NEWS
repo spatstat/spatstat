@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.028
+        CHANGES IN spatstat VERSION 1.47-0.029
 
 OVERVIEW
 
@@ -74,6 +74,9 @@ NEW FUNCTIONS
 
     o matrixpower, matrixsqrt, matrixinvsqrt
     Raise a matrix to any power.
+
+    o points.lpp
+    Method for 'points' for point patterns on a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

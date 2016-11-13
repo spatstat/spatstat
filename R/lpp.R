@@ -602,3 +602,7 @@ cut.lpp <- function(x, z=marks(x), ...) {
   }
   stop("Format of z not understood")
 }
+
+points.lpp <- function(x, ...) {
+  points(coords(x, spatial=TRUE, local=FALSE), ...)
+}

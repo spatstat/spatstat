@@ -90,17 +90,16 @@
 }
 \seealso{
   \code{\link{lpp}}.
-  
+
   See \code{\link{plot.ppp}} for options for representing the points.
+
+  See also \code{\link{points.lpp}}.
 }
 \examples{
   plot(chicago, cols=1:6)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}
