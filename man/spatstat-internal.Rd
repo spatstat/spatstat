@@ -54,6 +54,11 @@
 \alias{breakpts.from.r}
 \alias{bt.frame}
 \alias{bw.optim}
+\alias{calc.DR}
+\alias{calc.NNIR}
+\alias{calc.SAVE}
+\alias{calc.SIR}
+\alias{calc.TSE}
 \alias{can.be.formula}
 \alias{cannot.update}
 \alias{cartesian}
@@ -895,6 +900,11 @@ breakpts.from.r(r)
 bt.frame(Q, trend, interaction, \dots, covariates,
          correction, rbord, use.gam, allcovar)
 bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
+calc.DR(COV, z, Dim)
+calc.NNIR(COV, z, pos, Dim)
+calc.SAVE(COV, z, Dim)
+calc.SIR(COV, z)
+calc.TSE(COV, z, pos, Dim1, Dim2)
 can.be.formula(x)
 cannot.update(\dots)
 cartesian(pp, markset, fac = TRUE)

@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.47-0.029
-Nickname: Model Village
-Date: 2016-11-13
+Version: 1.47-0.030
+Nickname: Imaginary Component
+Date: 2016-11-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -9,13 +9,15 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	with substantial contributions of code by 
 	Kasper Klitgaard Berthelsen;
 	Ottmar Cronie;
+	Yongtao Guan;
 	Ute Hahn;
 	Abdollah Jalilian;
 	Marie-Colette van Lieshout;
 	Tuomas Rajala;
+	Suman Rakshit;
 	Dominic Schuhmacher;
-	and 
-	Rasmus Waagepetersen.
+	Rasmus Waagepetersen;
+ 	and Hangsheng Wang.
 	Additional contributions 
 	by M. Adepeju;
         C. Anderson; 

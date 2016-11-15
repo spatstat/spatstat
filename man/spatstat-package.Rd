@@ -1722,16 +1722,20 @@
 }
 \section{Acknowledgements}{
   Kasper Klitgaard Berthelsen,
-  Ottmar Cronie, 
+  Ottmar Cronie,
+  Yongtao Guan,
   Ute Hahn,
   Abdollah Jalilian,
   Marie-Colette van Lieshout,
   Tuomas Rajala,
-  Dominic Schuhmacher and
+  Suman Rakshit,
+  Dominic Schuhmacher,
   Rasmus Waagepetersen
+  and
+  Hangsheng Wang
   made substantial contributions of code.
 
-  Additional contributions by
+  Additional contributions and suggestions from
   Monsuru Adepeju,
   Corey Anderson,
   Ang Qi Wei,

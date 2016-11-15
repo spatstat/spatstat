@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.24 $   $Date: 2016/07/17 04:05:37 $
+#  $Revision: 1.28 $   $Date: 2016/11/15 04:46:31 $
 #
 #  Image/function on a linear network
 #
@@ -392,3 +392,61 @@ as.data.frame.linim <- function(x, ...) {
   return(df)
 }
 
+pairs.linim <- function(..., plot=TRUE, eps=NULL) {
+  argh <- list(...)
+  ## unpack single argument which is a list of images
+  if(length(argh) == 1) {
+    arg1 <- argh[[1]]
+    if(is.list(arg1) && all(sapply(arg1, is.im)))
+      argh <- arg1
+  }
+  ## identify which arguments are images
+  isim <- sapply(argh, is.im)
+  nim <- sum(isim)
+  if(nim == 0) 
+    stop("No images provided")
+  ## separate image arguments from others
+  imlist <- argh[isim]
+  rest   <- argh[!isim]
+  ## identify which arguments are images on a network
+  islinim <- sapply(imlist, inherits, what="linim")
+  if(!any(islinim)) # shouldn't be here
+    return(pairs.im(argh, plot=plot))
+  ## adjust names
+  imnames <- names(imlist) %orifnull% rep("", length(imlist))
+  if(any(needsname <- !nzchar(imnames))) 
+    imnames[needsname] <- paste0("V", seq_len(nim)[needsname])
+  names(imlist) <- imnames
+  ## choose resolution
+  if(is.null(eps)) {
+    xstep <- min(sapply(imlist, getElement, name="xstep"))
+    ystep <- min(sapply(imlist, getElement, name="ystep"))
+    eps <- min(xstep, ystep)
+  }
+  ## extract linear network
+  Z1 <- imlist[[min(which(islinim))]]
+  L <- as.linnet(Z1)
+  ## construct equally-spaced sample points
+  X <- pointsOnLines(as.psp(L), eps=eps)
+  ## sample each image
+  pixvals <- lapply(imlist, "[", i=X, drop=FALSE)
+  pixdf <- as.data.frame(pixvals)
+  ## pairs plot
+  if(plot) {
+    if(nim > 1) 
+      do.call(pairs.default, resolve.defaults(list(x=pixdf),
+                                              rest,
+                                              list(labels=imnames, pch=".")))
+    labels <- resolve.defaults(rest, list(labels=imnames))$labels
+    colnames(pixdf) <- labels
+  } else {
+    do.call(hist.default,
+            resolve.defaults(list(x=pixdf[,1]),
+                             rest,
+                             list(main=paste("Histogram of", imnames[1]),
+                                  xlab=imnames[1])))
+  }
+  class(pixdf) <- unique(c("plotpairsim", class(pixdf)))
+  attr(pixdf, "eps") <- eps
+  return(invisible(pixdf))
+}

@@ -1,9 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.029
+        CHANGES IN spatstat VERSION 1.47-0.030
 
 OVERVIEW
 
-    o Nickname: 'Model Village'
+    o We thank Yongtao Guan, Suman Rakshit and Hangsheng Wang
+     for contributions.
+
+    o Sufficient Dimension Reduction for point processes.
 
     o Alternating Gibbs Sampler for point process simulation.
 
@@ -21,12 +24,18 @@ OVERVIEW
 
     o Improvements and bug fixes.
 
+    o Nickname: 'Imaginary Component'
+
 NEW CLASSES
 
     o ssf
     Class of spatially sampled functions.
 
 NEW FUNCTIONS
+
+    o sdr, dimhat
+    Sufficient Dimension Reduction for point processes.
+    Matlab code contributed by Yongtao Guan, translated by Suman Rakshit.
 
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.
@@ -77,6 +86,9 @@ NEW FUNCTIONS
 
     o points.lpp
     Method for 'points' for point patterns on a linear network.
+
+    o pairs.linim
+    Pairs plot for images on a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

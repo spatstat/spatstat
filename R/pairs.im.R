@@ -1,11 +1,20 @@
 #
 #   pairs.im.R
 #
-#   $Revision: 1.9 $   $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.11 $   $Date: 2016/11/15 03:47:29 $
 #
 
-pairs.listof <- pairs.solist <- 
-  pairs.im <- function(..., plot=TRUE) {
+pairs.listof <- pairs.solist <- function(..., plot=TRUE) {
+  argh <- expandSpecialLists(list(...), special=c("solist", "listof"))
+  haslines <- any(sapply(argh, inherits, what="linim"))
+  if(haslines) {
+    do.call(pairs.linim, append(argh, list(plot=plot)))
+  } else {
+    do.call(pairs.im, append(argh, list(plot=plot)))
+  }
+}
+
+pairs.im <- function(..., plot=TRUE) {
   argh <- list(...)
   cl <- match.call()
   ## unpack single argument which is a list of images
@@ -19,11 +28,6 @@ pairs.listof <- pairs.solist <-
   nim <- sum(isim)
   if(nim == 0) 
     stop("No images provided")
-  if(nim == 1) {
-    ## one image: plot histogram
-    h <- hist(..., plot=plot)
-    return(invisible(h))
-  }
   ## separate image arguments from others
   imlist <- argh[isim]
   rest   <- argh[!isim]
@@ -36,16 +40,26 @@ pairs.listof <- pairs.solist <-
     imnames <- backupnames
   else if(any(needname <- !nzchar(imnames)))
     imnames[needname] <- backupnames[needname]
-  ## extract pixel rasters and reconcile them
-  imwins <- lapply(imlist, as.owin)
-  names(imwins) <- NULL
-  rasta    <- do.call(intersect.owin, imwins)
-  ## extract image pixel values on common raster
-  pixvals <- lapply(imlist, "[.im", i=rasta, raster=rasta, drop=TRUE)
+  ## 
+  if(nim == 1) {
+    ## one image: plot histogram
+    hist(..., plot=plot)
+    ## save pixel values
+    Z <- imlist[[1]]
+    pixvals <- list(Z[])
+    names(pixvals) <- imnames
+  } else {
+    ## extract pixel rasters and reconcile them
+    imwins <- lapply(imlist, as.owin)
+    names(imwins) <- NULL
+    rasta    <- do.call(intersect.owin, imwins)
+    ## extract image pixel values on common raster
+    pixvals <- lapply(imlist, "[.im", i=rasta, raster=rasta, drop=TRUE)
+  }
   ## combine into data frame
   pixdf <- do.call(data.frame, pixvals)
-  ## plot
-  if(plot)
+  ## pairs plot
+  if(plot && nim > 1)
     do.call(pairs, resolve.defaults(list(x=pixdf),
                                       rest,
                                       list(labels=imnames, pch=".")))
@@ -56,10 +70,19 @@ pairs.listof <- pairs.solist <-
 }
 
 plot.plotpairsim <- function(x, ...) {
-  do.call(pairs.default,
-          resolve.defaults(list(x=as.data.frame(x)),
-                           list(...),
-                           list(pch=".")))
+  xname <- short.deparse(substitute(x))
+  x <- as.data.frame(x)
+  if(ncol(x) == 1) {
+    do.call(hist.default,
+            resolve.defaults(list(x=x[,1]),
+                             list(...),
+                             list(main=xname)))
+  } else {
+    do.call(pairs.default,
+            resolve.defaults(list(x=x),
+                             list(...),
+                             list(pch=".")))
+  }
   return(invisible(NULL))
 }
 
