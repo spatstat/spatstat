@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.47-0.030
+Version: 1.47-0.031
 Nickname: Imaginary Component
-Date: 2016-11-15
+Date: 2016-11-16
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

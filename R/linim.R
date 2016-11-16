@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.28 $   $Date: 2016/11/15 04:46:31 $
+#  $Revision: 1.29 $   $Date: 2016/11/16 09:07:11 $
 #
 #  Image/function on a linear network
 #
@@ -433,18 +433,19 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   pixdf <- as.data.frame(pixvals)
   ## pairs plot
   if(plot) {
-    if(nim > 1) 
+    if(nim > 1) {
       do.call(pairs.default, resolve.defaults(list(x=pixdf),
                                               rest,
                                               list(labels=imnames, pch=".")))
-    labels <- resolve.defaults(rest, list(labels=imnames))$labels
-    colnames(pixdf) <- labels
-  } else {
-    do.call(hist.default,
-            resolve.defaults(list(x=pixdf[,1]),
-                             rest,
-                             list(main=paste("Histogram of", imnames[1]),
-                                  xlab=imnames[1])))
+      labels <- resolve.defaults(rest, list(labels=imnames))$labels
+      colnames(pixdf) <- labels
+    } else {
+      do.call(hist.default,
+              resolve.defaults(list(x=pixdf[,1]),
+                               rest,
+                               list(main=paste("Histogram of", imnames[1]),
+                                    xlab=imnames[1])))
+    }
   }
   class(pixdf) <- unique(c("plotpairsim", class(pixdf)))
   attr(pixdf, "eps") <- eps
