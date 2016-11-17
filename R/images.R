@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.137 $     $Date: 2016/08/27 02:42:09 $
+#      $Revision: 1.138 $     $Date: 2016/11/17 11:10:49 $
 #
 #      The class "im" of raster images
 #
@@ -1181,3 +1181,6 @@ anyNA.im <- function(x, recursive=FALSE) {
   anyNA(x$v)
 }
 
+qqnorm.im <- function(y, ...) {
+  qqnorm(y[], ...)
+}

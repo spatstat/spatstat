@@ -49,6 +49,8 @@
 \seealso{
   \code{\link{spatialcdf}} for the cumulative distribution function
   of an image.
+
+  \code{\link{qqnorm.im}} for a normal quantile plot.
   
   \code{\link{hist}},
   \code{\link{hist.default}},
@@ -63,11 +65,9 @@
   hist(X)
   hist(cut(X,3))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}
