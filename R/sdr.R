@@ -9,13 +9,13 @@
 #'
 #'  GNU Public Licence 2.0 || 3.0
 #'
-#'    $Revision: 1.6 $  $Date: 2016/11/14 13:49:07 $
+#'    $Revision: 1.10 $  $Date: 2016/11/17 02:20:01 $
 #'
 
 sdr <- local({
 
   sdr <- function(X, covariates, method=c("DR", "NNIR", "SAVE", "SIR", "TSE"),
-                  Dim1=1, Dim2=1) {
+                  Dim1=1, Dim2=1, predict=FALSE) {
     stopifnot(is.ppp(X))
     method <- match.arg(method)
     #' ensure 'covariates' is a list of compatible images
@@ -58,6 +58,7 @@ sdr <- local({
     } else {
       result$M <- namez(result$M)
     }
+    if(predict) result$Y <- sdrPredict(covariates, result$B)
     return(result)
   }
 
@@ -71,6 +72,24 @@ sdr <- local({
   
   sdr
 })
+
+sdrPredict <- function(covariates, B) {
+  if(!is.matrix(B)) {
+    if(is.list(B) && is.matrix(BB <- B$B)) B <- BB else
+    stop("B should be a matrix, or the result of a call to sdr()",
+         call.=FALSE)
+  }
+  if(!inherits(covariates, "imlist") && !all(sapply(covariates, is.im)))
+    stop("Argument 'covariates' must be a list of images")
+  stopifnot(nrow(B) == length(covariates))
+  result <- vector(mode="list", length=ncol(B))
+  for(j in seq_along(result)) {
+    cj <- as.list(B[,j])
+    result[[j]] <- Reduce("+", mapply("*", cj, covariates, SIMPLIFY=FALSE))
+  }
+  names(result) <- colnames(B)
+  return(as.solist(result))
+}
 
 ##............ DR (Directional Regression) ..........................
 calc.DR <- function(COV, z, Dim){
