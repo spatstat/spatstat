@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.21 $  $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.22 $  $Date: 2016/11/22 08:51:50 $
 #
 #  Logistic likelihood method - under development
 #
@@ -100,11 +100,12 @@ logi.engine <- function(Q,
     tvars <- variablesinformula(trend)
     if(want.subset)
       tvars <- union(tvars, all.vars(subsetexpr))
-    ## resolve 'external' covariates
-    externalvars <- setdiff(tvars, c("x", "y", "marks"))
-    tenv <- environment(trend)
-    covariates <- getdataobjects(externalvars, tenv, covariates, fatal=TRUE)
-    ## 
+    if(!is.data.frame(covariates)) {
+      ## resolve 'external' covariates
+      externalvars <- setdiff(tvars, c("x", "y", "marks"))
+      tenv <- environment(trend)
+      covariates <- getdataobjects(externalvars, tenv, covariates, fatal=TRUE)
+    }
     wantxy <- c("x", "y") %in% tvars
     wantxy <- wantxy | rep.int(allcovar, 2)
     cvdf <- data.frame(x=U$x, y=U$y)[, wantxy, drop=FALSE]
@@ -206,7 +207,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2016/04/25 02:34:40 $")
+                      date="$Date: 2016/11/22 08:51:50 $")
 
   ## Compile results
   fit <- list(method      = "logi",

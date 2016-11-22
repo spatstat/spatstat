@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.11 $  $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.13 $  $Date: 2016/11/22 09:19:19 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -47,7 +47,8 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
 # compute triangle diameters as well
 
 trianglediameters <- function(iedge, jedge, edgelength, ..., 
-                              nvert=max(iedge, jedge), check=TRUE) {
+                              nvert=max(iedge, jedge),
+                              dmax=Inf, check=TRUE) {
   if(check) {
     stopifnot(length(iedge) == length(jedge))
     stopifnot(length(iedge) == length(edgelength))
@@ -57,9 +58,10 @@ trianglediameters <- function(iedge, jedge, edgelength, ...,
       stopifnot(all(iedge <= nvert))
       stopifnot(all(jedge <= nvert))
     }
+    if(is.finite(dmax)) check.1.real(dmax)
   }
   # zero length data
-  if(length(iedge) == 0)
+  if(length(iedge) == 0 || dmax < 0)
     return(data.frame(i=integer(0),
                       j=integer(0),
                       k=integer(0),
@@ -68,12 +70,24 @@ trianglediameters <- function(iedge, jedge, edgelength, ...,
   # call C
   storage.mode(nvert) <- storage.mode(iedge) <- storage.mode(jedge) <- "integer"
   storage.mode(edgelength) <- "double"
-  zz <- .Call("triDgraph",
-              nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength)
-#              PACKAGE="spatstat")
+  if(is.infinite(dmax)) {
+    zz <- .Call("triDgraph",
+                nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength)
+  } else {
+    storage.mode(dmax) <- "double"
+    zz <- .Call("triDRgraph",
+                nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength,
+                dmax=dmax)
+  }    
   df <- as.data.frame(zz)
   colnames(df) <- c("i", "j", "k", "diam")
   return(df)
+}
+
+closetriples <- function(X, rmax) {
+  a <- closepairs(X, rmax, what="ijd", twice=FALSE, neat=FALSE)
+  tri <- trianglediameters(a$i, a$j, a$d, nvert=npoints(X), dmax=rmax)
+  return(tri)
 }
 
 # extract 'vees', i.e. triples (i, j, k) where i ~ j and i ~ k

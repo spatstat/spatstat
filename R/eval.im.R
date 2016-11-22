@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.39 $     $Date: 2016/02/11 10:17:12 $
+#     $Revision: 1.41 $     $Date: 2016/11/18 08:40:40 $
 #
 
 eval.im <- local({
@@ -212,8 +212,8 @@ im.apply <- local({
 
   im.apply <- function(X, FUN, ...) {
     stopifnot(is.list(X))
-    if(!all(unlist(lapply(X, is.im))))
-      stop("All elements of imlist must be pixel images")
+    if(!all(sapply(X, is.im)))
+      stop("All elements of X must be pixel images")
     fun <- if(is.character(FUN)) get(FUN) else
            if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
     ## ensure images are compatible

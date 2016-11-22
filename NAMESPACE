@@ -192,6 +192,7 @@ useDynLib(spatstat,
 "smoopt",
 "thinjumpequal",
 "triDgraph",
+"triDRgraph",
 "trigraf",
 "trigrafS",
 "triograph",
@@ -587,6 +588,7 @@ export("closepairs")
 export("closepairs.pp3")
 export("closepairs.ppp")
 export("closethresh")
+export("closetriples")
 export("closing")
 export("closing.owin")
 export("closing.ppp")
@@ -2038,7 +2040,6 @@ export("putSpatstatVariable")
 export("qkernel")
 export("qknn")
 export("qmixpois")
-export("qqnorm.im")
 export("qqplot.ppm")
 export("QQversion")
 export("[.quad")
@@ -3590,7 +3591,6 @@ S3method("prune", "rppm")
   S3method("pseudoR2", "ppm")
   S3method("psib", "kppm")
   S3method("[", "psp")
-  S3method("qqnorm", "im")
   S3method("[", "quad")
   S3method("quadratcount", "ppp")
   S3method("quadratcount", "splitppp")

@@ -352,7 +352,6 @@
   \code{\link{contour.im}},
   \code{\link{persp.im}},
   \code{\link{hist.im}},
-  \code{\link{qqnorm.im}},
   \code{\link[graphics]{image.default}},
   \code{\link{spatstat.options}}
 }

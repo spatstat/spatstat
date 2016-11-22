@@ -4,7 +4,7 @@
 
   Form list of all triangles in a planar graph, given list of edges
   
-  $Revision: 1.13 $     $Date: 2012/04/06 09:26:50 $
+  $Revision: 1.14 $     $Date: 2016/11/22 09:19:42 $
 
   Form list of all triangles in a planar graph, given list of edges
 
@@ -991,6 +991,221 @@ SEXP triDgraph(SEXP nv,  /* number of vertices */
   SET_VECTOR_ELT(out, 3, dTout);
 
   UNPROTECT(9);
+  return(out);
+}
+
+/* 
+   same as triDgraph but returns only triangles with diameter <= dmax
+*/
+
+SEXP triDRgraph(SEXP nv,  /* number of vertices */
+		SEXP iedge,  /* vectors of indices of ends of each edge */   
+		SEXP jedge,
+		SEXP edgelength, /* edge lengths */
+		SEXP dmax)   
+{
+  int Nv, Ne;
+  int *ie, *je;         /* edges */
+  double *edgelen;      
+
+  int *it, *jt, *kt;    /* vectors of indices of vertices of triangles */ 
+  double *dt;           /* diameters (max edge lengths) of triangles */
+  int Nt, Ntmax;        /* number of triangles */
+
+  /* scratch storage */
+  int Nj;
+  int *jj; 
+  double *dd;
+
+  int i, j, k, m, mj, mk, Nmore, maxchunk;
+  double dij, dik, djk, diam, Dmax;
+  
+  /* output */
+  SEXP iTout, jTout, kTout, dTout, out;
+  int *ito, *jto, *kto;
+  double *dto;
+  
+  /* =================== Protect R objects from garbage collector ======= */
+  PROTECT(nv = AS_INTEGER(nv));
+  PROTECT(iedge = AS_INTEGER(iedge));
+  PROTECT(jedge = AS_INTEGER(jedge));
+  PROTECT(edgelength = AS_NUMERIC(edgelength));
+  PROTECT(dmax = AS_NUMERIC(dmax));
+  /* That's 5 protected objects */
+
+  /* numbers of vertices and edges */
+  Nv = *(INTEGER_POINTER(nv)); 
+  Ne = LENGTH(iedge);
+
+  /* input arrays */
+  ie = INTEGER_POINTER(iedge);
+  je = INTEGER_POINTER(jedge);
+  edgelen = NUMERIC_POINTER(edgelength);
+
+  /* maximum diameter */
+  Dmax = *(NUMERIC_POINTER(dmax));
+
+  /* initialise storage (with a guess at max size) */
+  Ntmax = 3 * Ne;
+  it = (int *) R_alloc(Ntmax, sizeof(int));
+  jt = (int *) R_alloc(Ntmax, sizeof(int));
+  kt = (int *) R_alloc(Ntmax, sizeof(int));
+  dt = (double *) R_alloc(Ntmax, sizeof(double));
+  Nt = 0;
+
+  /* initialise scratch storage */
+  jj = (int *) R_alloc(Ne, sizeof(int));
+  dd = (double *) R_alloc(Ne, sizeof(double));
+
+  XOUTERCHUNKLOOP(i, 1, Nv, maxchunk, 8196) {
+    R_CheckUserInterrupt();
+    XINNERCHUNKLOOP(i, 1, Nv, maxchunk, 8196) {
+
+#ifdef DEBUGTRI
+      Rprintf("i=%d ---------- \n", i);
+#endif
+
+      /* Find triangles involving vertex 'i'
+	 in which 'i' is the lowest-numbered vertex */
+
+      /* First, find vertices j > i connected to i */
+      Nj = 0;
+      for(m = 0; m < Ne; m++) {
+	if(ie[m] == i) {
+	  j = je[m];
+	  if(j > i) {
+	    jj[Nj] = j;
+	    dd[Nj] = edgelen[m];
+	    Nj++;
+	  }
+	} else if(je[m] == i) {
+	  j = ie[m];
+	  if(j > i) {
+	    jj[Nj] = j;
+	    dd[Nj] = edgelen[m];
+	    Nj++;
+	  }
+	}
+      }
+
+      /* 
+	 Determine which pairs of vertices j, k are joined by an edge;
+	 save triangles (i,j,k) 
+      */
+
+#ifdef DEBUGTRI
+      Rprintf("Nj = %d\n", Nj);
+#endif
+
+      if(Nj > 1) {
+#ifdef DEBUGTRI
+	Rprintf("i=%d\njj=\n", i);
+	for(mj = 0; mj < Nj; mj++) Rprintf("%d ", jj[mj]);
+	Rprintf("\n\n");
+#endif
+	/* Sort jj in ascending order */
+	for(mj = 0; mj < Nj-1; mj++) {
+	  j = jj[mj];
+	  for(mk = mj+1; mk < Nj; mk++) {
+	    k = jj[mk];
+	    if(k < j) {
+	      /* swap */
+	      jj[mk] = j;
+	      jj[mj] = k;
+	      dik = dd[mj];
+	      dd[mj] = dd[mk];
+	      dd[mk] = dik;
+	      j = k;
+	    }
+	  }
+	}
+#ifdef DEBUGTRI
+	Rprintf("sorted=\n", i);
+	for(mj = 0; mj < Nj; mj++) Rprintf("%d ", jj[mj]);
+	Rprintf("\n\n");
+#endif
+
+	for(mj = 0; mj < Nj-1; mj++) {
+	  j = jj[mj];
+	  dij = dd[mj];
+	  for(mk = mj+1; mk < Nj; mk++) {
+	    k = jj[mk];
+	    dik = dd[mk];
+	    if(j != k) {
+	      /* Run through edges to determine whether j, k are neighbours */
+	      for(m = 0; m < Ne; m++) {
+		if((ie[m] == j && je[m] == k)
+		   || (ie[m] == k && je[m] == j)) {
+		  /* triangle (i, j, k) */
+		  /* determine triangle diameter */
+		  diam = (dij > dik) ? dij : dik;
+		  djk = edgelen[m];
+		  if(djk > diam) diam = djk; 
+		  if(diam <= Dmax) {
+		    /* add (i, j, k) to list of triangles */
+		    if(Nt >= Ntmax) {
+		      /* overflow - allocate more space */
+		      Nmore = 2 * Ntmax;
+#ifdef DEBUGTRI
+		      Rprintf("Doubling space from %d to %d\n", Ntmax, Nmore);
+#endif
+		      it = (int *) S_realloc((char *) it,
+					     Nmore,  Ntmax,
+					     sizeof(int));
+		      jt = (int *) S_realloc((char *) jt,
+					     Nmore,  Ntmax,
+					     sizeof(int));
+		      kt = (int *) S_realloc((char *) kt,
+					     Nmore,  Ntmax,
+					     sizeof(int));
+		      dt = (double *) S_realloc((char *) dt,
+						Nmore,  Ntmax,
+						sizeof(double));
+		      Ntmax = Nmore;
+		    }
+		    it[Nt] = i;
+		    jt[Nt] = j;
+		    kt[Nt] = k;
+		    dt[Nt] = diam; 
+		    Nt++;
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  /* allocate space for output */
+  PROTECT(iTout = NEW_INTEGER(Nt));
+  PROTECT(jTout = NEW_INTEGER(Nt));
+  PROTECT(kTout = NEW_INTEGER(Nt));
+  PROTECT(dTout = NEW_NUMERIC(Nt));
+  PROTECT(out   = NEW_LIST(4));
+  /* that's 5+5=10 protected objects */
+  
+  ito = INTEGER_POINTER(iTout);
+  jto = INTEGER_POINTER(jTout);
+  kto = INTEGER_POINTER(kTout);
+  dto = NUMERIC_POINTER(dTout);
+  
+  /* copy triangle indices to output vectors */
+  for(m = 0; m < Nt; m++) {
+    ito[m] = it[m];
+    jto[m] = jt[m];
+    kto[m] = kt[m];
+    dto[m] = dt[m];
+  }
+  
+  /* insert output vectors in output list */
+  SET_VECTOR_ELT(out, 0, iTout);
+  SET_VECTOR_ELT(out, 1, jTout);
+  SET_VECTOR_ELT(out, 2, kTout);
+  SET_VECTOR_ELT(out, 3, dTout);
+
+  UNPROTECT(10);
   return(out);
 }
 
