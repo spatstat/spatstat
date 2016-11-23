@@ -3,7 +3,7 @@
 #
 #  Random point pattern generators for a linear network
 #
-#  $Revision: 1.5 $   $Date: 2016/10/31 00:49:56 $
+#  $Revision: 1.9 $   $Date: 2016/11/23 07:25:50 $
 #
 
 rpoislpp <- function(lambda, L, ..., nsim=1, drop=TRUE) {
@@ -40,4 +40,62 @@ runiflpp <- function(n, L, nsim=1, drop=TRUE) {
   result <- as.solist(result)
   if(nsim > 0) names(result) <- paste("Simulation", 1:nsim)
   return(result)
+}
+
+rlpp <- function(n, f, ..., nsim=1, drop=TRUE) {
+  if(inherits(f, "linfun")) 
+    f <- as.linim(f, ...)
+  if(!inherits(f, "linim") && is.list(f) &&
+     all(sapply(f, inherits, what=c("linim", "linfun")))) {
+    #' f is a list of densities for each type of point
+    stopifnot(length(n) == length(f))
+    Y <- mapply(rlpp, n=as.list(n), f=f,
+                MoreArgs=list(nsim=nsim, drop=FALSE, ...),
+                SIMPLIFY=FALSE)
+    Z <- do.call(mapply, c(list(superimpose), Y, list(SIMPLIFY=FALSE)))
+    if(nsim == 1 && drop) return(Z[[1]])
+    return(as.solist(Z))
+  }
+  if(!inherits(f, "linim"))
+    stop("f should be a linfun or linim object")
+  if(length(n) > 1) {
+    flist <- rep(list(f), length(n))
+    return(rlpp(n, flist, nsim=nsim, drop=drop, ...))
+  }
+  check.1.integer(nsim)
+  if(nsim <= 0) return(list())
+  #' extract data
+  L <- as.linnet(f)
+  df <- attr(f, "df")
+  seglen <- lengths.psp(as.psp(L))
+  #' sort into segments, left-to-right within segments
+  df <- df[order(df$mapXY, df$tp), , drop=FALSE]
+  nr <- nrow(df)
+  fvals <- df$values
+  if(anyNA(fvals)) stop("f has some NA values")
+  if(min(fvals) < 0) stop("f has some negative values")
+  #' find interval corresponding to each sample point
+  sameseg <- (diff(df$mapXY) == 0)
+  sharenext     <- c(sameseg, FALSE)
+  shareprevious <- c(FALSE, sameseg)
+  tcur   <- df$tp
+  tnext  <- c(tcur[-1], NA)
+  tprev  <- c(NA, tcur[-nr])
+  tleft  <- ifelse(shareprevious, (tcur + tprev)/2, 0)
+  tright <- ifelse(sharenext,     (tcur + tnext)/2, 1)
+  #' compute probability of each interval
+  probs <- fvals * (tright - tleft) * seglen[df$mapXY]
+  probs <- probs/sum(probs)
+  #' 
+  result <- list()
+  for(isim in 1:nsim) {
+    #' sample intervals and place point uniformly in each interval
+    ii <- sample.int(nr, size=n, replace=TRUE, prob=probs)
+    seg <- df[ii, "mapXY"]
+    tp  <- runif(n, tleft[ii], tright[ii])
+    result[[isim]] <- as.lpp(seg=seg, tp=tp, L=L)
+  }
+  if(nsim == 1 && drop) return(result[[1]])
+  names(result) <- paste("Simulation", 1:nsim)
+  return(as.solist(result))
 }

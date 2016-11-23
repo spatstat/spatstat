@@ -43,7 +43,9 @@ runiflpp(n, L, nsim=1, drop=TRUE)
   \adrian 
 }
 \seealso{
- \code{\link{rpoislpp}},
+ \code{\link{rlpp}} for non-uniform random points;
+ \code{\link{rpoislpp}} for Poisson point process;
+ 
  \code{\link{lpp}},
  \code{\link{linnet}}
 }

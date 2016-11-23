@@ -53,6 +53,7 @@ rpoislpp(lambda, L, \dots, nsim=1, drop=TRUE)
 }
 \seealso{
  \code{\link{runiflpp}},
+ \code{\link{rlpp}},
  \code{\link{lpp}},
  \code{\link{linnet}}
 }

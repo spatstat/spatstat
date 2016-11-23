@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.034
+        CHANGES IN spatstat VERSION 1.47-0.035
 
 OVERVIEW
 
@@ -14,7 +14,7 @@ OVERVIEW
 
     o ROC and AUC extended to other types of point patterns and models.
 
-    o More support for tessellations on a linear network.
+    o More support for linear networks.
 
     o More support for infinite straight lines.
 
@@ -36,6 +36,9 @@ NEW FUNCTIONS
     o sdr, dimhat
     Sufficient Dimension Reduction for point processes.
     Matlab code contributed by Yongtao Guan, translated by Suman Rakshit.
+
+    o rlpp
+    Random points on a linear network with a specified probability density.
 
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.
@@ -94,6 +97,10 @@ NEW FUNCTIONS
     Find close triples of points.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o envelope.lpp, envelope.lppm
+    New arguments 'fix.n' and 'fix.marks' allow envelopes to be computed
+    using simulations conditional on the observed number of points.
 
     o cut.ppp
     Argument z can be "x" or "y" indicating one of the spatial coordinates.

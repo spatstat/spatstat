@@ -9,7 +9,8 @@
 }
 \usage{
   \method{envelope}{lpp}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
-  funargs=list(), funYargs=funargs, simulate=NULL, verbose=TRUE, 
+  funargs=list(), funYargs=funargs,
+  simulate=NULL, fix.n=FALSE, fix.marks=FALSE, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"),
   scale=NULL, clamp=FALSE,
@@ -19,7 +20,8 @@
 
 
   \method{envelope}{lppm}(Y, fun=linearK, nsim=99, nrank=1, \dots, 
-  funargs=list(), funYargs=funargs, simulate=NULL, verbose=TRUE, 
+  funargs=list(), funYargs=funargs,
+  simulate=NULL, fix.n=FALSE, fix.marks=FALSE, verbose=TRUE, 
   transform=NULL,global=FALSE,ginterval=NULL,use.theory=NULL,
   alternative=c("two.sided", "less", "greater"), 
   scale=NULL, clamp=FALSE,
@@ -66,6 +68,17 @@
     the envelopes are computed.
     Alternatively \code{simulate} may be an object produced by the
     \code{envelope} command: see Details.
+  }
+  \item{fix.n}{
+    Logical. If \code{TRUE}, simulated patterns will have the
+    same number of points as the original data pattern.
+  }
+  \item{fix.marks}{
+    Logical. If \code{TRUE}, simulated patterns will have the
+    same number of points \emph{and} the same marks as the
+    original data pattern. In a multitype point pattern this means that
+    the simulated patterns will have the same number of points
+    \emph{of each type} as the original data.
   }
   \item{verbose}{
     Logical flag indicating whether to print progress reports
@@ -233,10 +246,15 @@
      np <- 40
    } else { ns <- np <- 3 }
    X <- runiflpp(np, simplenet)
-   # uniform Poisson
+
+   # uniform Poisson: random numbers of points
    envelope(X, nsim=ns)
+
+   # uniform Poisson: conditional on observed number of points
+   envelope(X, fix.n=TRUE, nsim=ns)
+
    # nonuniform Poisson
-   fit <- lppm(X, ~x)
+   fit <- lppm(X ~x)
    envelope(fit, nsim=ns)
 
    #multitype
