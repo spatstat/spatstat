@@ -108,16 +108,16 @@ useDynLib(spatstat,
 "Gsmoopt",
 "Gwtdenspt",
 "Gwtsmoopt",
+"hasX3close",
+"hasX3pclose",
+"hasXclose",
+"hasXpclose",
+"hasXYclose",
+"hasXYpclose",
 "Idist2dpath",
 "idwloo",
 "inxyp",
 "irevcumsum",
-"isX3close",
-"isX3pclose",
-"isXclose",
-"isXpclose",
-"isXYclose",
-"isXYpclose",
 "KborderD",
 "KborderI",
 "knnd3D",
@@ -1094,6 +1094,10 @@ export("harmonize")
 export("harmonize.fv")
 export("harmonize.im")
 export("harmonize.owin")
+export("has.close")
+export("has.close.default")
+export("has.close.pp3")
+export("has.close.ppp")
 export("hasenvelope")
 export("has.offset")
 export("has.offset.term")
@@ -1209,10 +1213,6 @@ export("ippm")
 export("is.atomicQtest")
 export("is.blank")
 export("is.cadlag")
-export("is.close")
-export("is.close.default")
-export("is.close.pp3")
-export("is.close.ppp")
 export("is.col.argname")
 export("is.colour")
 export("is.convex")
@@ -3159,6 +3159,9 @@ S3method("harmonise", "owin")
 S3method("harmonize", "fv")
 S3method("harmonize", "im")
 S3method("harmonize", "owin")
+  S3method("has.close", "default")
+  S3method("has.close", "pp3")
+  S3method("has.close", "ppp")
 S3method("head", "hyperframe")
   S3method("hist", "im")
   S3method("[", "hyperframe")
@@ -3192,9 +3195,6 @@ S3method("intensity", "splitppp")
  S3method("iplot", "linnet")
  S3method("iplot", "lpp")
  S3method("iplot", "ppp")
-  S3method("is.close", "default")
-  S3method("is.close", "pp3")
-  S3method("is.close", "ppp")
 S3method("is.empty", "default")
 S3method("is.empty", "owin")
 S3method("is.empty", "ppp")

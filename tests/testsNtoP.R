@@ -34,7 +34,7 @@ local({
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.16 $  $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.17 $  $Date: 2016/11/29 06:25:15 $
 #
 
 require(spatstat)
@@ -189,24 +189,24 @@ local({
 })
 
 local({
-  # tests for is.close()
+  # tests for has.close()
   # (the default method uses nndist or pairdist, and can be trusted!)
-  a <- is.close(redwood, 0.05)
-  b <- is.close.default(redwood, 0.05)
-  if(any(a != b)) stop("Incorrect result for is.close(X, r)")
+  a <- has.close(redwood, 0.05)
+  b <- has.close.default(redwood, 0.05)
+  if(any(a != b)) stop("Incorrect result for has.close(X, r)")
 
-  a <- is.close(redwood, 0.05, periodic=TRUE)
-  a <- is.close.default(redwood, 0.05, periodic=TRUE)
-  if(any(a != b)) stop("Incorrect result for is.close(X, r, periodic=TRUE)")
+  a <- has.close(redwood, 0.05, periodic=TRUE)
+  a <- has.close.default(redwood, 0.05, periodic=TRUE)
+  if(any(a != b)) stop("Incorrect result for has.close(X, r, periodic=TRUE)")
 
   Y <- split(amacrine)
-  a <- with(Y, is.close(on, 0.05, off))
-  b <- with(Y, is.close.default(on, 0.05, off))
-  if(any(a != b)) stop("Incorrect result for is.close(X, r, Y)")
+  a <- with(Y, has.close(on, 0.05, off))
+  b <- with(Y, has.close.default(on, 0.05, off))
+  if(any(a != b)) stop("Incorrect result for has.close(X, r, Y)")
 
-  a <- with(Y, is.close(on, 0.05, off, periodic=TRUE))
-  b <- with(Y, is.close.default(on, 0.05, off, periodic=TRUE))
-  if(any(a != b)) stop("Incorrect result for is.close(X, r, Y, periodic=TRUE)")
+  a <- with(Y, has.close(on, 0.05, off, periodic=TRUE))
+  b <- with(Y, has.close.default(on, 0.05, off, periodic=TRUE))
+  if(any(a != b)) stop("Incorrect result for has.close(X, r, Y, periodic=TRUE)")
 })
 
 ## 

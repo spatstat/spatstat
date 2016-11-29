@@ -1,15 +1,15 @@
 #'
-#'     isclose.R
+#'     hasclose.R
 #'
 #'    Determine whether each point has a close neighbour
 #'
-#'    $Revision: 1.7 $  $Date: 2016/10/15 09:25:25 $
+#'    $Revision: 1.8 $  $Date: 2016/11/29 04:58:47 $
 
-is.close <- function(X, r, Y=NULL, ...) {
-  UseMethod("is.close")
+has.close <- function(X, r, Y=NULL, ...) {
+  UseMethod("has.close")
 }
 
-is.close.default <- function(X, r, Y=NULL, ..., periodic=FALSE) {
+has.close.default <- function(X, r, Y=NULL, ..., periodic=FALSE) {
   trap.extra.arguments(...)
   if(!periodic) {
     nd <- if(is.null(Y)) nndist(X) else nncross(X, Y, what="dist")
@@ -24,7 +24,7 @@ is.close.default <- function(X, r, Y=NULL, ..., periodic=FALSE) {
   return(apply(pd <= r, 1, any))
 }
 
-is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
+has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   trap.extra.arguments(...)
   nX <- npoints(X)
   if(nX <= 1) return(logical(nX))
@@ -36,7 +36,7 @@ is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   }
   if(is.null(Y)) {
     if(!periodic) {
-      zz <- .C("isXclose",
+      zz <- .C("hasXclose",
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -44,7 +44,7 @@ is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                t = as.integer(integer(nX)))
     } else {
       b <- sidelengths(Frame(X))
-      zz <- .C("isXpclose",
+      zz <- .C("hasXpclose",
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -63,7 +63,7 @@ is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       cY <- cY[ooY, , drop=FALSE]
     }
     if(!periodic) {
-      zz <- .C("isXYclose",
+      zz <- .C("hasXYclose",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -77,7 +77,7 @@ is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       bY <- sidelengths(Frame(Y))
       if(any(bX != bY))
         warning("Windows are not equal: periodic distance may be erroneous")
-      zz <- .C("isXYpclose",
+      zz <- .C("hasXYpclose",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -97,7 +97,7 @@ is.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   return(ans)
 }
 
-is.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
+has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   trap.extra.arguments(...)
   nX <- npoints(X)
   if(nX <= 1) return(logical(nX))
@@ -109,7 +109,7 @@ is.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   }
   if(is.null(Y)) {
     if(!periodic) {
-      zz <- .C("isX3close",
+      zz <- .C("hasX3close",
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -118,7 +118,7 @@ is.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                t = as.integer(integer(nX)))
     } else {
       b <- sidelengths(as.box3(X))
-      zz <- .C("isX3pclose",
+      zz <- .C("hasX3pclose",
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -138,7 +138,7 @@ is.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       cY <- cY[ooY, , drop=FALSE]
     }
     if(!periodic) {
-      zz <- .C("isXYclose",
+      zz <- .C("hasXYclose",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -154,7 +154,7 @@ is.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       bY <- sidelengths(as.box3(Y))
       if(any(bX != bY))
         warning("Domains are not equal: periodic distance may be erroneous")
-      zz <- .C("isXYclose",
+      zz <- .C("hasXYclose",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),

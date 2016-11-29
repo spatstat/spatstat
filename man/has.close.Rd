@@ -1,8 +1,8 @@
-\name{is.close}
-\alias{is.close}
-\alias{is.close.default}
-\alias{is.close.ppp}
-\alias{is.close.pp3}
+\name{has.close}
+\alias{has.close}
+\alias{has.close.default}
+\alias{has.close.ppp}
+\alias{has.close.pp3}
 \title{
   Check Whether Points Have Close Neighbours
 }
@@ -11,13 +11,13 @@
   point has a close neighbour in the same pattern.
 }
 \usage{
-  is.close(X, r, Y=NULL, \dots)
+  has.close(X, r, Y=NULL, \dots)
 
-  \method{is.close}{default}(X,r, Y=NULL, \dots, periodic=FALSE)
+  \method{has.close}{default}(X,r, Y=NULL, \dots, periodic=FALSE)
 
-  \method{is.close}{ppp}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
+  \method{has.close}{ppp}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
 
-  \method{is.close}{pp3}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
+  \method{has.close}{pp3}(X,r, Y=NULL, \dots, periodic=FALSE, sorted=FALSE)
 }
 \arguments{
   \item{X,Y}{
@@ -42,15 +42,15 @@
   This is simply a faster version of \code{(nndist(X) <= r)}
   or \code{(nncross(X,Y,what="dist") <= r)}.
 
-  \code{is.close(X,r)} determines, for each point in the pattern \code{X},
+  \code{has.close(X,r)} determines, for each point in the pattern \code{X},
   whether or not this point has a neighbour in the same pattern \code{X}
   which lies at a distance less than or equal to \code{r}.
 
-  \code{is.close(X,r,Y)} determines, for each point in the pattern \code{X},
+  \code{has.close(X,r,Y)} determines, for each point in the pattern \code{X},
   whether or not this point has a neighbour in the \emph{other} pattern
   \code{Y} which lies at a distance less than or equal to \code{r}.
 
-  The function \code{is.close} is generic, with methods for
+  The function \code{has.close} is generic, with methods for
   \code{"ppp"} and \code{"pp3"} and a default method.
 }
 \value{
@@ -63,8 +63,8 @@
   \code{\link{nndist}}
 }
 \examples{
-  is.close(redwood, 0.05)
-  with(split(amacrine), is.close(on, 0.05, off))
+  has.close(redwood, 0.05)
+  with(split(amacrine), has.close(on, 0.05, off))
 }
 \keyword{spatial}
 \keyword{math}

@@ -3,7 +3,7 @@
 #'
 #'   Alternating Gibbs Sampler
 #'
-#'      $Revision: 1.5 $  $Date: 2016/10/23 10:06:38 $
+#'      $Revision: 1.6 $  $Date: 2016/11/29 05:01:51 $
 #'
 #' Initial implementation for multitype hard core process
 #' without interaction within types
@@ -38,7 +38,7 @@ ragsMultiHard <- function(beta, hradii, ...,
       ok <- TRUE
       for(j in (1:ntypes)[-i]) {
         if(!any(ok)) break;
-        ok <- ok & !is.close(Xi, hradii[i,j], Y[[j]], sorted=TRUE,
+        ok <- ok & !has.close(Xi, hradii[i,j], Y[[j]], sorted=TRUE,
                              periodic=periodic)
       }
       Y[[i]] <- Xi[ok]

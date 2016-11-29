@@ -1,7 +1,7 @@
 /*
-  isclose.h
+  hasclose.h
 
-  Function definitions to be #included in isclose.c
+  Function definitions to be #included in hasclose.c
   several times with different values of macros.
 
   Macros used:
@@ -16,7 +16,7 @@
 
   BUG        debugger flag
 
-  $Revision: 1.8 $ $Date: 2016/10/30 01:21:17 $
+  $Revision: 1.9 $ $Date: 2016/11/29 05:09:31 $
 
 */
 

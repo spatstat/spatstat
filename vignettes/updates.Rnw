@@ -258,7 +258,7 @@ Following is a list of all the functions that have been added.
     \item \texttt{cut.lpp}:
     Method for \texttt{cut} for point patterns on a linear network.
 
-    \item \texttt{is.close}:
+    \item \texttt{has.close}:
     Faster way to check whether a point has a close neighbour.
 
     \item \texttt{psib}:

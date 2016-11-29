@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.036
+        CHANGES IN spatstat VERSION 1.47-0.037
 
 OVERVIEW
 
@@ -37,20 +37,27 @@ NEW FUNCTIONS
     Sufficient Dimension Reduction for point processes.
     Matlab code contributed by Yongtao Guan, translated by Suman Rakshit.
 
+    o rags, ragsAreaInter, ragsMultiHard
+    Alternating Gibbs Sampler for point processes.
+
+    o psib
+    Sibling probability (index of clustering strength in a cluster process).
+    
+    o roc.kppm, roc.lppm, roc.lpp
+    Methods for 'roc' (receiver operating characteristic curve)
+    for fitted models of class 'kppm' and 'lppm'
+    and point patterns of class 'lpp'
+
+    o auc.kppm, auc.lppm, auc.lpp
+    Methods for 'auc' (area under the ROC curve)
+    for fitted models of class 'kppm' and 'lppm'
+    and point patterns of class 'lpp'
+
     o rlpp
     Random points on a linear network with a specified probability density.
 
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.
-
-    o is.close
-    Faster way to check whether a point has a close neighbour.
-
-    o psib
-    Sibling probability (index of clustering strength in a cluster process).
-    
-    o rags, ragsAreaInter, ragsMultiHard
-    Alternating Gibbs Sampler for point processes.
 
     o ssf
     Create a spatially sampled function
@@ -67,14 +74,6 @@ NEW FUNCTIONS
     o integral.ssf
     Approximate integral of spatially sampled function
 
-    o roc.kppm, roc.lppm, roc.lpp
-    Methods for 'roc' for fitted models of class 'kppm' and 'lppm'
-    and point patterns of class 'lpp'
-
-    o auc.kppm, auc.lppm, auc.lpp
-    Methods for 'auc' for fitted models of class 'kppm' and 'lppm'
-    and point patterns of class 'lpp'
-
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
 
@@ -84,17 +83,20 @@ NEW FUNCTIONS
     o whichhalfplane
     Determine which side of an infinite line a point lies on.
 
-    o matrixpower, matrixsqrt, matrixinvsqrt
-    Raise a matrix to any power.
-
     o points.lpp
     Method for 'points' for point patterns on a linear network.
 
     o pairs.linim
     Pairs plot for images on a linear network.
 
+    o has.close
+    Faster way to check whether a point has a close neighbour.
+
     o closetriples
-    Find close triples of points.
+    Low-level function to find all close triples of points.
+
+    o matrixpower, matrixsqrt, matrixinvsqrt
+    Raise a matrix to any power.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
