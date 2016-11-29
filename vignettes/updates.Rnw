@@ -83,7 +83,19 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
-   \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
+  \item Sufficient Dimension Reduction for point processes.
+
+  \item Alternating Gibbs Sampler for point process simulation.
+
+  \item New class of spatially sampled functions.
+
+  \item ROC and AUC extended to other types of point patterns and models.
+
+  \item More support for linear networks.
+
+  \item More support for infinite straight lines.
+
+  \item \spst\ now depends on the packages \pkg{nlme} and \pkg{rpart}.
 
   \item Important bug fix in \code{linearK}, \code{linearpcf}
 
@@ -224,12 +236,85 @@ The following datasets have been added to the package.
  \item \texttt{redwood3}: a more accurate version of the \texttt{redwood} data.
 \end{itemize}
 
+\section{New classes}
+
+\begin{itemize}
+\item \texttt{ssf}:
+  Class of spatially sampled functions.
+\end{itemize}
+
 \section{New Functions}
 
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{sdr}, \texttt{dimhat}:
+    Sufficient Dimension Reduction for point processes.
+
+    \item \texttt{rlpp}:
+    Random points on a linear network with a specified probability density.
+
+    \item \texttt{cut.lpp}:
+    Method for \texttt{cut} for point patterns on a linear network.
+
+    \item \texttt{is.close}:
+    Faster way to check whether a point has a close neighbour.
+
+    \item \texttt{psib}:
+    Sibling probability (index of clustering strength in a cluster process).
+    
+    \item \texttt{rags}, \texttt{ragsAreaInter}, \texttt{ragsMultiHard}:
+    Alternating Gibbs Sampler for point processes.
+
+    \item \texttt{ssf}:
+    Create a spatially sampled function
+
+    \item \texttt{print.ssf}, \texttt{plot.ssf}, \texttt{contour.ssf}, 
+      \texttt{image.ssf}:
+    Display a spatially sampled function
+
+    \item \texttt{as.im.ssf}, \texttt{as.ppp.ssf}, \texttt{marks.ssf}, 
+      \verb!marks<-.ssf!, \texttt{unmark.ssf}, \verb![.ssf!, \texttt{with.ssf}:
+    Manipulate data in a spatially sampled function
+
+    \item \texttt{Smooth.ssf}:
+    Smooth a spatially sampled function 
+
+    \item \texttt{integral.ssf}:
+    Approximate integral of spatially sampled function
+
+    \item \texttt{roc.kppm}, \texttt{roc.lppm}, \texttt{roc.lpp}:
+      Methods for \texttt{roc} for fitted models of class \texttt{"kppm"} and 
+      \texttt{"lppm"} and point patterns of class \texttt{"lpp"}
+
+    \item \texttt{auc.kppm}, \texttt{auc.lppm}, \texttt{auc.lpp}:
+      Methods for \texttt{auc} for fitted models of class \texttt{"kppm"} and 
+      \texttt{"lppm"} and point patterns of class \texttt{"lpp"}
+      
+    \item \texttt{timeTaken}:
+    Extract the timing data from a \texttt{"timed"} object or objects.
+
+    \item \texttt{rotate.infline}, 
+      \texttt{shift.infline}, \texttt{reflect.infline}, 
+      \texttt{flipxy.infline}:
+    Geometrical transformations for infinite straight lines.
+
+    \item \texttt{whichhalfplane}:
+    Determine which side of an infinite line a point lies on.
+
+    \item \texttt{matrixpower}, \texttt{matrixsqrt}, \texttt{matrixinvsqrt}:
+    Raise a matrix to any power.
+
+    \item \texttt{points.lpp}:
+    Method for \texttt{points} for point patterns on a linear network.
+
+    \item \texttt{pairs.linim}:
+    Pairs plot for images on a linear network.
+
+    \item \texttt{closetriples}:
+    Find close triples of points.
+    
     \item \texttt{anyNA.im}:
     Method for \texttt{anyNA} for pixel images.
 
@@ -621,6 +706,10 @@ also carries these marks in the \verb!$lines! component.
     New argument \texttt{details} gives more information about the intersections
     between the segments.
 
+ \item \texttt{cut.ppp}:
+    Argument \texttt{z} can be \texttt{"x"} or \texttt{"y"}
+    indicating one of the spatial coordinates.    
+    
 %%D
     
   \item \texttt{dclf.test, mad.test, dclf.progress, mad.progress,} 
@@ -669,10 +758,12 @@ also carries these marks in the \verb!$lines! component.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
  \item Argument \texttt{weights} can now be a pixel image.
+   \item
+     Accelerated by about 30\% when \texttt{at="pixels"}.
    \item Accelerated by about 15\%
      in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.
-  \item \texttt{density.ppp}: 
+  \item 
      Accelerated in the cases where weights are given or \texttt{diggle=TRUE}.
    \end{itemize}
 
@@ -729,6 +820,11 @@ also carries these marks in the \verb!$lines! component.
      when applied to the data pattern only.
    \end{itemize}
 
+ \item \texttt{envelope.lpp}, \texttt{envelope.lppm}:
+    New arguments \texttt{fix.n} and \texttt{fix.marks}
+    allow envelopes to be computed
+    using simulations conditional on the observed number of points.   
+    
 %%F
    
  \item \texttt{Fest}:
@@ -834,17 +930,27 @@ also carries these marks in the \verb!$lines! component.
   \item New argument \texttt{warn}.
    \end{itemize}
 
- \item \texttt{logLik.ppm}:
+  \item \texttt{lintess}:
+    Argument \texttt{df} can be missing or \texttt{NULL}, 
+    resulting in a tesellation with only one tile.
+  
+  \item \texttt{logLik.ppm}:
    New argument \texttt{absolute}.
 
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
  \item \texttt{lpp}:
+   \begin{itemize}
+   \item 
     The internal format of an \texttt{lpp} object
     has been changed. Existing datasets of class \texttt{lpp} 
     are still supported. However, computation will be faster if they
     are converted to the new format. To convert an \texttt{lpp} 
     object \texttt{X} to the new format, use \verb!X <- as.lpp(X)!.
+   \item
+     \texttt{X} can be missing or \texttt{NULL}, 
+     resulting in an empty point pattern.
+   \end{itemize}
 
   \item \texttt{lpp}, \texttt{as.lpp}: 
    These functions now handle the case where coordinates
@@ -949,6 +1055,9 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{plot.linfun}:
     Now passes arguments to the function being plotted.
+
+ \item \texttt{plot.lintess}:
+   Improved plot method, with more options.
 
    \item \texttt{plot.lpp}:
      \begin{itemize}
@@ -1087,16 +1196,24 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{rpoispp}
    Accelerated, when \texttt{lambda} is a pixel image.
 
+   \item \texttt{rpoisline}:
+     Also returns information about the original infinite random lines.
+
  \item \texttt{rStrauss, rHardcore, rStraussHard, rDiggleGratton, rDGS, rPenttinen:}
    New argument \texttt{drop}.
 
    \item \texttt{rthin}
    Accelerated, when \texttt{P} is a single number.
 
-   \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}
-   When the model is approximately Poisson, it is simulated using rpoispp. 
-   This avoids computations which would require huge amounts of memory. 
-   New argument \texttt{poisthresh} controls this behaviour.
+   \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}:
+     \begin{itemize}
+     \item 
+       When the model is approximately Poisson, it is simulated using rpoispp. 
+       This avoids computations which would require huge amounts of memory. 
+       New argument \texttt{poisthresh} controls this behaviour.
+     \item 
+       New argument \texttt{saveparents}.
+     \end{itemize}
 
 %%S   
       \item Simulation:
@@ -1116,6 +1233,7 @@ also carries these marks in the \verb!$lines! component.
    \item A non-Gaussian kernel can now be specified
    using the argument \texttt{kernel}.
    \item Argument \texttt{weights} can now be a pixel image.
+   \item Accelerated by about 30\% in the case where \texttt{at="pixels"}.
    \item Accelerated by about 15\% in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.
    \end{itemize}
@@ -1274,6 +1392,9 @@ of potential impact.
 }
   
 \begin{itemize}
+  
+  %% LEVEL 1: always completely wrong, broad impact
+  
 \item \texttt{nncross.ppp}:
   Results were completely incorrect if $k > 1$.
   \bugger{1.31-2}{april 2013}{1.35-0}{december 2013}
@@ -1291,13 +1412,6 @@ of potential impact.
   Results of \verb!Smooth(X, at="points", leaveoneout=FALSE)!
   were completely incorrect.
   \bugger{1.20-5}{august 2010}{1.46-0}{july 2016}
-  
-\item \texttt{density.ppp}:
-  Values of \verb!density(X, at="points")!
-  and \verb!Smooth(X, at="points")!
-  were sometimes incorrect, due to omission of
-  the contribution from the data point with the smallest $x$ coordinate.
-  \bugger{1.26-0}{april 2012}{1.46-1}{july 2016}
   
 \item \texttt{rmh}:
   
@@ -1344,7 +1458,40 @@ of potential impact.
      while long runs were correct.
      \bugger{1.17-0}{october 2009}{1.31-1}{march 2013}
    \end{itemize}
+
+ \item \texttt{rVarGamma}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{nu.ker}.  
+   \bugger{1.25-0}{december 2011}{1.35-0}{december 2013}
+
+ \item \texttt{rCauchy}:
+   Simulations were incorrect; they were generated using the wrong value
+   of the parameter \texttt{omega}.
+   \bugger{1.25-0}{december 2011}{1.25-2}{january 2012}
    
+ \item \texttt{lppm}:
+   For multitype patterns, the fitted model was completely incorrect
+   due to an error in constructing the quadrature scheme.
+   \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
+   
+ \item \verb![.lpp!:
+   The local coordinate \texttt{seg} was completely incorrect,
+   when \texttt{i} was a window.
+   \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
+   
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were incorrect for non-Poisson processes.  
+   \bugger{1.25-0}{december 2011}{1.45-0}{march 2016}
+
+   %% LEVEL 2: often completely wrong, moderate impact
+   
+\item \texttt{envelope.ppm}:
+   If the model was an inhomogeneous Poisson process, 
+   the resulting envelope object was incorrect
+   (the simulations were correct, but the envelopes were calculated
+   assuming the model was CSR). 
+   \bugger{1.23-5}{september 2011}{1.23-6}{october 2011}
+
  \item \texttt{linearK}, \texttt{linearpcf},
    \texttt{linearKinhom}, \texttt{linearpcfinhom}
    and multitype versions:
@@ -1359,43 +1506,41 @@ of potential impact.
   have affected ppm objects with interaction \texttt{AreaInter}.
   \bugger{1.9-4}{june 2006}{1.25-2}{january 2012}
 
- \item \texttt{update.ppm}:
-   If the argument \texttt{Q} was given,
-   the results were usually incorrect, or an error was generated.
-   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
-     
  \item \texttt{update.kppm}:
   If the call to \texttt{update} did not include a formula argument
    or a point pattern argument, then all arguments were ignored. 
    Example: \texttt{update(fit, improve.type="quasi")} was identical to 
    \texttt{fit}.
    \bugger{1.42-2}{june 2015}{1.45-0}{march 2016}
-     
-\item \texttt{envelope.ppm}:
-   If the model was an inhomogeneous Poisson process, 
-   the resulting envelope object was incorrect
-   (the simulations were correct, but the envelopes were calculated
-   assuming the model was CSR). 
-   \bugger{1.23-5}{september 2011}{1.23-6}{october 2011}
 
- \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
-   Results were incorrect for non-Poisson processes.  
-   \bugger{1.25-0}{december 2011}{1.45-0}{march 2016}
+  \item \texttt{markcorrint}:
+   Results were completely incorrect.
+   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
 
- \item \texttt{rVarGamma}:
-   Simulations were incorrect; they were generated using the wrong value
-   of the parameter \texttt{nu.ker}.  
-   \bugger{1.25-0}{december 2011}{1.35-0}{december 2013}
+  %% LEVEL 3: substantially incorrect, moderate impact
+  
+\item \texttt{density.ppp}:
+  Values of \verb!density(X, at="points")!
+  and \verb!Smooth(X, at="points")!
+  were sometimes incorrect, due to omission of
+  the contribution from the data point with the smallest $x$ coordinate.
+  \bugger{1.26-0}{april 2012}{1.46-1}{july 2016}
+  
+ \item \texttt{update.ppm}:
+   If the argument \texttt{Q} was given,
+   the results were usually incorrect, or an error was generated.
+   \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
 
- \item \texttt{rCauchy}:
-   Simulations were incorrect; they were generated using the wrong value
-   of the parameter \texttt{omega}.
-   \bugger{1.25-0}{december 2011}{1.25-2}{january 2012}
-   
 \item \texttt{subfits}:
     The interaction coefficients of the submodels were incorrect
     for Gibbs models with a multitype interaction (\texttt{MultiStrauss}, etc).
    \bugger{1.35-0}{december 2013}{1.45-2}{may 2016}
+   
+\item \texttt{F3est}:
+   Estimates of $F(r)$ for the largest value of $r$ 
+   were wildly incorrect. 
+     {\small (Bug was present since about 2010.
+       Fixed in \texttt{spatstat 1.47-1}, december 2016)}
    
  \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
     The pair correlation function of the M\'atern Cluster Process
@@ -1409,20 +1554,10 @@ of potential impact.
    with a non-integer value of the saturation parameter \texttt{sat}.
    \bugger{1.20-0}{july 2010}{1.31-2}{april 2013}
    
- \item \verb![.lpp!:
-   The local coordinate \texttt{seg} was completely incorrect,
-   when \texttt{i} was a window.
-   \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
-   
- \item \texttt{lppm}:
-   For multitype patterns, the fitted model was completely incorrect
-   due to an error in constructing the quadrature scheme.
-   \bugger{1.23-0}{july 2011}{1.30-0}{december 2012}
-   
- \item \texttt{integral.linim}, \texttt{integral.linfun}:
-   results were slightly inaccurate because of a bias in the distribution of
-   sample points.
-   \bugger{1.41-0}{february 2015}{1.47-0}{october 2016}
+ \item \texttt{clip.infline}: 
+   Results were incorrect unless the midpoint of the window
+   was the coordinate origin.
+   \bugger{1.15-1}{april 2009}{1.47-1}{december 2016}
    
  \item \texttt{intensity.ppm}:
    Result was incorrect for Gibbs models if the model was 
@@ -1434,7 +1569,13 @@ of potential impact.
    Did not correctly handle one-line functions. 
    The resulting objects evaluated the wrong function in some cases.
    \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
+
+   %% LEVEL 4: partially incorrect
    
+ \item \texttt{selfcrossing.psp}:
+   $y$ coordinate values were incorrect.   
+   \bugger{1.23-2}{august 2011}{1.25-3}{february 2012}
+     
  \item \texttt{Geyer}:
    For point process models with the \texttt{Geyer} interaction, 
    \texttt{vcov.ppm} and \texttt{suffstat} sometimes gave incorrect answers.
@@ -1476,15 +1617,16 @@ of potential impact.
    Ignored argument \texttt{reciplambda2} in some cases.
    \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
 
-  \item \texttt{markcorrint}:
-   Results were completely incorrect.
-   \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
-
  \item \texttt{Kinhom}, \texttt{Linhom}:
    Calculations were incorrect if \texttt{lambda} was a fitted point
    process model.
    \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
      
+ \item \texttt{integral.linim}, \texttt{integral.linfun}:
+   results were slightly inaccurate because of a bias in the distribution of
+   sample points.
+   \bugger{1.41-0}{february 2015}{1.47-0}{october 2016}
+   
  \item \texttt{predict.ppm}:
    Calculation of the conditional intensity omitted the edge correction
    if \texttt{correction='translate'} or \texttt{correction='periodic'}. 
@@ -1506,10 +1648,6 @@ of potential impact.
    range of values in the result, and therefore the appearance of plots.
    {\small (Bug fixed in \texttt{spatstat 1.40-0}, december 2014)}
 
- \item \texttt{selfcrossing.psp}:
-   $y$ coordinate values were incorrect.   
-   \bugger{1.23-2}{august 2011}{1.25-3}{february 2012}
-     
  \item \texttt{predict.slrm}:
    Results of \texttt{predict(object, newdata)} were incorrect 
    if the spatial domain of \texttt{newdata}

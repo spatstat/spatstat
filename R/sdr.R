@@ -9,7 +9,7 @@
 #'
 #'  GNU Public Licence 2.0 || 3.0
 #'
-#'    $Revision: 1.10 $  $Date: 2016/11/17 02:20:01 $
+#'    $Revision: 1.11 $  $Date: 2016/11/26 07:41:34 $
 #'
 
 sdr <- local({
@@ -130,7 +130,7 @@ calc.NNIR <- function(COV, z, pos, Dim) {
   ##   M - the kernel matrix
 
   ss   <- nrow(z)   # sample size
-  ncov <- ncol(z)   # predictor dimension
+#  ncov <- ncol(z)   # predictor dimension
   jj <- nnwhich(pos) # identify nearest neighbour of each point
   dir <- z - z[jj, , drop=FALSE] # empirical direction
   IM <- sumouter(dir) # inverse of kernel matrix: sum of outer(dir[i,], dir[i,])
@@ -150,7 +150,7 @@ calc.SAVE <- function(COV, z, Dim){
   ## Value
   ##   B - the estimated CS basis
   ##   M - the kernel matrix
-  ss <- nrow(z)
+#  ss <- nrow(z)
   ncov <- ncol(z)
   M <- diag(1,ncov) - cov(z)
   M <- M %*% M
@@ -192,7 +192,7 @@ calc.TSE <- function(COV, z, pos, Dim1, Dim2) {
   ##   M2  - the kernel matrix of NNIR, which might be subject 
   ##         to some change, depending on the results of M1.
 
-  ss   <- nrow(z)  # sample size
+#  ss   <- nrow(z)  # sample size
   ncov <- ncol(z)  # predictor dimension
 
   est1 <- calc.DR(COV, z, ncov)           # do DR estimation
@@ -233,7 +233,7 @@ subspaceDistance <- function(B0,B1) {
   lam <- svd(B1) # check whether B1 is singular
   U <- lam$u
   D <- lam$d
-  V <- lam$v
+#  V <- lam$v
   B2 <- U[, D > 1e-09] # keep non-singular directions
   Proj1 <- B2 %*% solve((t(B2) %*% B2)) %*% t(B2) # Proj matrix on S(B.hat)
   Svd <- svd(Proj0 - Proj1)  # Do svd for P0-P1
