@@ -50,14 +50,17 @@ which can then be fitted to point pattern data.
 
   The interaction parameter \eqn{\gamma}{gamma} may take any
   positive value (unlike the case for the Strauss process).
-  If \eqn{\gamma = 1}{gamma = 1}, the process reduces to a classical
-  hard core process.
   If \eqn{\gamma < 1}{gamma < 1},
   the model describes an ``ordered'' or ``inhibitive'' pattern.
   If \eqn{\gamma > 1}{gamma > 1},
   the model is ``ordered'' or ``inhibitive'' up to the distance
   \eqn{h}, but has an ``attraction'' between points lying at
   distances in the range between \eqn{h} and \eqn{r}.
+
+  If \eqn{\gamma = 1}{gamma = 1}, the process reduces to a classical
+  hard core process with hard core distance \eqn{h}.
+  If \eqn{\gamma = 0}{gamma = 0}, the process reduces to a classical
+  hard core process with hard core distance \eqn{r}.
   
   The function \code{\link{ppm}()}, which fits point process models to 
   point pattern data, requires an argument 

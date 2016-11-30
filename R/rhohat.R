@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.68 $  $Date: 2016/10/04 08:10:11 $
+#  $Revision: 1.70 $  $Date: 2016/11/29 09:45:40 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -584,8 +584,7 @@ plot.rhohat <- function(x, ..., do.rug=TRUE) {
 }
 
 predict.rhohat <- function(object, ..., relative=FALSE) {
-  if(length(list(...)) > 0)
-    warning("Additional arguments ignored in predict.rhohat")
+  trap.extra.arguments(..., .Context="in predict.rhohat")
   # extract info
   s <- attr(object, "stuff")
   reference <- s$reference
@@ -596,7 +595,7 @@ predict.rhohat <- function(object, ..., relative=FALSE) {
   # extract image of covariate
   Z <- s$Zimage
   # apply rho to Z
-  Y <- eval.im(rho(Z))
+  Y <- if(inherits(Z, "linim")) eval.linim(rho(Z)) else eval.im(rho(Z))
   # adjust to reference baseline
   if(reference != "Lebesgue" && !relative) {
     lambda <- s$lambda
@@ -607,4 +606,15 @@ predict.rhohat <- function(object, ..., relative=FALSE) {
 
 as.function.rhohat <- function(x, ..., value=".y", extrapolate=TRUE) {
   NextMethod("as.function")
+}
+
+simulate.rhohat <- function(object, nsim=1, ..., drop=TRUE) {
+  trap.extra.arguments(..., .Context="in simulate.rhohat")
+  lambda <- predict(object)
+  if(inherits(lambda, "linim")) {
+    result <- rpoislpp(lambda, nsim=nsim, drop=drop)
+  } else {
+    result <- rpoispp(lambda, nsim=nsim, drop=drop)
+  }
+  return(result)
 }

@@ -252,6 +252,10 @@ Following is a list of all the functions that have been added.
     \item \texttt{sdr}, \texttt{dimhat}:
     Sufficient Dimension Reduction for point processes.
 
+    \item \texttt{simulate.rhohat}:
+    Simulate a Poisson point process with the
+    intensity estimated by \texttt{rhohat}.
+
     \item \texttt{rlpp}:
     Random points on a linear network with a specified probability density.
 

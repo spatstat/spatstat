@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.037
+        CHANGES IN spatstat VERSION 1.47-0.038
 
 OVERVIEW
 
@@ -17,6 +17,8 @@ OVERVIEW
     o More support for linear networks.
 
     o More support for infinite straight lines.
+
+    o Simulation of 'rhohat' objects.
 
     o Kernel smoothing accelerated.
 
@@ -73,6 +75,10 @@ NEW FUNCTIONS
 
     o integral.ssf
     Approximate integral of spatially sampled function
+
+    o simulate.rhohat
+    Generate a Poisson random point pattern with intensity that is
+    a function of a covariate, given by a 'rhohat' object.
 
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
@@ -169,7 +175,12 @@ BUG FIXES
     When applied to pixel images (objects of class 'im') the result 
     was sometimes NA when a finite value should have been returned.
     Fixed.    
-    
+   
+    o predict.rhohat
+    When the original data were on a linear network,
+    the result of predict.rhohat did not belong to the correct class 'linim'.
+    Fixed.
+ 
         CHANGES IN spatstat VERSION 1.47-0
 
 OVERVIEW
