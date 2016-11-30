@@ -35,9 +35,11 @@
 
   If \code{X} is another Gibbs point process model, the intensity is
   computed approximately using the Poisson-saddlepoint approximation
-  (Baddeley and Nair, 2012a, 2012b). Currently this is implemented only for
-  pairwise interactions. In the non-stationary case the 
+  (Baddeley and Nair, 2012a, 2012b, 2016). 
+  In the non-stationary case the 
   pseudostationary solution (Baddeley and Nair, 2012b) is used.
+  The approximation is currently available for pairwise-interaction
+  models and for the Geyer saturation model.
 }
 \value{
   A numeric value (if the model is stationary)
@@ -52,6 +54,11 @@
   Approximating the moments of a spatial point process.
   \emph{Stat} \bold{1}, 1, 18--30.
   doi: 10.1002/sta4.5
+
+  Baddeley, A. and Nair, G. (2016)
+  Poisson-saddlepoint approximation for spatial point processes
+  with infinite order interaction.
+  Submitted for publication.
 }
 \seealso{
   \code{\link{intensity}},
@@ -64,6 +71,8 @@
   intensity(fitS)
   fitSx <- ppm(swedishpines ~ x, Strauss(9))
   lamSx <- intensity(fitSx)
+  fitG <- ppm(swedishpines ~ 1, Geyer(9, 1))
+  lamG <- intensity(fitG)
 }
 \author{\adrian
   

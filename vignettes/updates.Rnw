@@ -39,7 +39,8 @@ covers everything in \spst\ up to version \texttt{1.42-0},
 released in May 2015.
 
 <<echo=FALSE,results=hide>>=
-z <- read.table("packagesizes.txt", header=TRUE)
+fname <- system.file("doc", "packagesizes.txt", package="spatstat")
+z <- read.table(fname, header=TRUE)
 z$date <- as.Date(z$date)
 changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
 newobj <- changes[["nobjects"]]

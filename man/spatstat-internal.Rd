@@ -372,6 +372,8 @@
 \alias{pasteN}
 \alias{plan.legend.layout}
 \alias{PoisSaddleApp}
+\alias{PoisSaddleGeyer}
+\alias{PoisSaddlePairwise}
 \alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{positiveIndex}
@@ -1263,6 +1265,8 @@ pasteN(\dots)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 PoisSaddleApp(beta, fi)
+PoisSaddleGeyer(beta, fi)
+PoisSaddlePairwise(beta, fi)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny)
 positiveIndex(i, nama, len)

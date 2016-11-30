@@ -3,7 +3,7 @@
 #
 # Code related to intensity and intensity approximations
 #
-#  $Revision: 1.16 $ $Date: 2016/10/09 02:13:53 $
+#  $Revision: 1.17 $ $Date: 2016/11/30 10:38:54 $
 #
 
 intensity <- function(X, ...) {
@@ -107,9 +107,16 @@ PoisSaddleApp <- function(beta, fi) {
   ## given first order term and fitted interaction
   stopifnot(inherits(fi, "fii"))
   inte <- as.interact(fi)
-  if(!identical(inte$family$name, "pairwise"))
-    stop("Intensity approximation is only available for pairwise interaction models")
-  # Stationary, pairwise interaction
+  if(identical(inte$family$name, "pairwise"))
+    return(PoisSaddlePairwise(beta, fi))
+  if(identical(inte$name, "Geyer saturation process"))
+    return(PoisSaddleGeyer(beta, fi))
+  stop(paste("Intensity approximation is not yet available for",
+             inte$name), call.=FALSE)
+}
+
+PoisSaddlePairwise <- function(beta, fi) {
+  inte <- as.interact(fi)
   Mayer <- inte$Mayer
   if(is.null(Mayer))
     stop(paste("Sorry, not yet implemented for", inte$name))
@@ -152,5 +159,61 @@ LambertW <- local({
   }
 
   W
+})
+
+PoisSaddleGeyer <- local({
+
+  PoisSaddleGeyer <- function(beta, fi) {
+    gamma <- summary(fi)$sensible$param$gamma
+    if(gamma == 1) return(beta)
+    inte <- as.interact(fi)
+    sat <- inte$par$sat
+    R   <- inte$par$r
+    #' get probability distribution of Geyer statistic under reference model
+    z <- Spatstat.Geyer.Nulldist # from sysdata
+    if(is.na(m <- match(sat, z$sat)))
+      stop(paste("Sorry, the Poisson-saddlepoint approximation",
+                 "is not implemented for Geyer models with sat =", sat),
+           call.=FALSE)
+    probmatrix <- z$prob[[m]]
+    maxachievable <- max(which(colSums(probmatrix) > 0)) - 1
+    gammarange <- sort(c(1, gamma^maxachievable))
+    #'
+    betavalues <- beta[]
+    nvalues <- length(betavalues)
+    lambdavalues <- numeric(nvalues)
+    for(i in seq_len(nvalues)) {
+      beta.i <- betavalues[i]
+      ra <- beta.i * gammarange
+      lambdavalues[i] <- uniroot(diffapproxGeyer, ra, beta=beta.i,
+                                 gamma=gamma, R=R, sat=sat,
+                                 probmatrix=probmatrix)$root
+    }
+    if(!is.im(beta)) 
+      return(lambdavalues)
+    lambda <- beta
+    lambda[] <- lambdavalues
+    return(lambda)
+  }
+
+  diffapproxGeyer <- function(lambda, beta, gamma, R, sat, probmatrix) {
+    lambda - approxEpoisGeyerT(lambda, beta, gamma, R, sat, probmatrix)
+  }
+  approxEpoisGeyerT <- function(lambda, beta=1, gamma=1, R=1, sat=1,
+                                probmatrix) {
+    #' Compute approximation to E_Pois(lambda) Lambda(0,X) for Geyer
+    #' ('probmatrix' contains distribution of geyerT(0, Z_n) for each n,
+    #' where 'sat' is given, and Z_n is runifdisc(n, radius=2*R).
+    possT <- 0:(ncol(probmatrix)-1)
+    possN <- 0:(nrow(probmatrix)-1)
+    pN <- dpois(possN, lambda * pi * (2*R)^2)
+    EgamT <- pN %*% probmatrix %*% (gamma^possT)
+    #' assume that, for n > max(possN),
+    #' distribution of T is concentrated on T=sat
+    EgamT <- EgamT + (gamma^sat) * (1-sum(pN))
+    return(beta * EgamT)
+  }
+
+  PoisSaddleGeyer
 })
 

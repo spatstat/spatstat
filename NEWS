@@ -1,14 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.038
+        CHANGES IN spatstat VERSION 1.47-0.039
 
 OVERVIEW
 
-    o We thank Kim Colyvas, Yongtao Guan, Nader Najari, Suman Rakshit, 
-    Ian Renner and Hangsheng Wang for contributions.
+    o We thank Kim Colyvas, Yongtao Guan, Gopalan Nair, 
+    Nader Najari, Suman Rakshit, Ian Renner and Hangsheng Wang 
+    for contributions.
 
     o Sufficient Dimension Reduction for point processes.
 
     o Alternating Gibbs Sampler for point process simulation.
+
+    o Intensity approximation for Geyer model.
 
     o New class of spatially sampled functions.
 
@@ -105,6 +108,10 @@ NEW FUNCTIONS
     Raise a matrix to any power.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o intensity.ppm
+    Intensity approximation is now available for the Geyer saturation process
+    (results of research with Gopalan Nair).
 
     o envelope.lpp, envelope.lppm
     New arguments 'fix.n' and 'fix.marks' allow envelopes to be computed
