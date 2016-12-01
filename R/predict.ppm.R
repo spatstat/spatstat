@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.98 $	$Date: 2016/03/27 07:17:21 $
+#	$Revision: 1.99 $	$Date: 2016/12/01 01:21:28 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -460,7 +460,7 @@ predict.ppm <- local({
                                 changecoef=changedcoef)
       ##
       if(type == "intensity") 
-        z <- PoisSaddleApp(z, fitin(model))
+        z <- PoisSaddle(z, fitin(model))
       
       ##
       if(needSE) {

@@ -371,7 +371,8 @@
 \alias{paste.expr}
 \alias{pasteN}
 \alias{plan.legend.layout}
-\alias{PoisSaddleApp}
+\alias{PoisSaddle}
+\alias{PoisSaddleArea}
 \alias{PoisSaddleGeyer}
 \alias{PoisSaddlePairwise}
 \alias{polyLaslett}
@@ -514,6 +515,7 @@
 \alias{print.anylist}    
 \alias{print.autoexec}    
 \alias{print.bt.frame}
+\alias{print.bugtable}
 \alias{print.bw.frac}
 \alias{print.bw.optim}
 \alias{print.colourmap}
@@ -1264,7 +1266,8 @@ paste.expr(x)
 pasteN(\dots)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
-PoisSaddleApp(beta, fi)
+PoisSaddle(beta, fi)
+PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)
 PoisSaddlePairwise(beta, fi)
 polyLaslett(X, \dots, oldX, verbose, plotit)
@@ -1453,6 +1456,7 @@ primesbelow(nmax)
 \method{print}{anylist}(x, \dots)
 \method{print}{autoexec}(x, \dots)
 \method{print}{bt.frame}(x, \dots)
+\method{print}{bugtable}(x, \dots)
 \method{print}{bw.frac}(x, \dots)
 \method{print}{bw.optim}(x, \dots)
 \method{print}{colourmap}(x, \dots)

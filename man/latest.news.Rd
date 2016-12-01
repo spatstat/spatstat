@@ -32,14 +32,13 @@ latest.news(package = "spatstat")
 \value{
   Null.
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \seealso{
-  \code{\link[utils]{news}}
+  \code{\link[utils]{news}},
+  \code{\link{bugfixes}}
 }
 \examples{
   if(interactive()) {

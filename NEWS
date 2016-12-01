@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.039
+        CHANGES IN spatstat VERSION 1.47-0.040
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o Alternating Gibbs Sampler for point process simulation.
 
-    o Intensity approximation for Geyer model.
+    o Intensity approximation for area-interaction and Geyer models.
 
     o New class of spatially sampled functions.
 
@@ -47,7 +47,10 @@ NEW FUNCTIONS
 
     o psib
     Sibling probability (index of clustering strength in a cluster process).
-    
+
+    o bugfixes    
+    List all bug fixes in recent versions of a package.
+
     o roc.kppm, roc.lppm, roc.lpp
     Methods for 'roc' (receiver operating characteristic curve)
     for fitted models of class 'kppm' and 'lppm'
@@ -111,7 +114,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o intensity.ppm
     Intensity approximation is now available for the Geyer saturation process
-    (results of research with Gopalan Nair).
+    and the area-interaction process (results of research with Gopalan Nair).
 
     o envelope.lpp, envelope.lppm
     New arguments 'fix.n' and 'fix.marks' allow envelopes to be computed

@@ -272,6 +272,9 @@ Following is a list of all the functions that have been added.
     \item \texttt{rags}, \texttt{ragsAreaInter}, \texttt{ragsMultiHard}:
     Alternating Gibbs Sampler for point processes.
 
+    \item \texttt{bugfixes}:
+      List all bug fixes in recent versions of a package.
+      
     \item \texttt{ssf}:
     Create a spatially sampled function
 
@@ -862,6 +865,10 @@ also carries these marks in the \verb!$lines! component.
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
+ \item \texttt{intensity.ppm}:
+   Intensity approximation is now implemented for
+   area-interaction model, and Geyer saturation model.
+   
 %%J
 %%K
 
