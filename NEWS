@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.040
+        CHANGES IN spatstat VERSION 1.47-0.041
 
 OVERVIEW
 
@@ -179,6 +179,10 @@ BUG FIXES
 
     o rpoislpp, runiflpp
     Crashed if nsim > 1.
+    Fixed.
+
+    o rpoisline
+    Crashed if zero lines were generated.
     Fixed.
 
     o any, all

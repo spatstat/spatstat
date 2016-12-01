@@ -1,7 +1,7 @@
 #
 # randomseg.R
 #
-# $Revision: 1.10 $ $Date: 2016/10/30 03:24:55 $
+# $Revision: 1.12 $ $Date: 2016/12/01 09:32:41 $
 #
 
 rpoisline <- function(lambda, win=owin()) {
@@ -19,9 +19,11 @@ rpoisline <- function(lambda, win=owin()) {
   n <- rpois(1, lambda * 2 * pi * rmax)
   if(n == 0) {
     X <- psp(numeric(0), numeric(0), numeric(0), numeric(0),
+             marks=integer(0), 
              window=win)
     attr(X, "lines") <- infline(p=numeric(0), theta=numeric(0))
     attr(X, "linemap") <- integer(0)
+    return(X)
   }
   theta <- runif(n, max= 2 * pi)
   p <- runif(n, max=rmax)
@@ -33,7 +35,7 @@ rpoisline <- function(lambda, win=owin()) {
            y0= ymid + p * si - q * co,
            x1= xmid + p * co - q * si,
            y1= ymid + p * si + q * co,
-           marks = 1:n,
+           marks = seq_len(n),
            window=boundbox, check=FALSE)
   # infinite lines
   L <- infline(p = p + xmid * co + ymid * si,

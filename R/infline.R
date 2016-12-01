@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.26 $ $Date: 2016/10/29 08:19:25 $
+# $Revision: 1.27 $ $Date: 2016/12/01 09:29:35 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -62,8 +62,7 @@ plot.infline <- function(x, ...) {
 
 print.infline <- function(x, ...) {
   n <- nrow(x)
-  cat(paste(if(n > 1) n else NULL, "infinite ",
-            ngettext(n, "line", "lines"), "\n"))
+  splat(n, "infinite", ngettext(n, "line", "lines"))
   print(as.data.frame(x), ...)
   return(invisible(NULL))
 }
