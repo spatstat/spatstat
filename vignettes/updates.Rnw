@@ -775,7 +775,12 @@ also carries these marks in the \verb!$lines! component.
      Accelerated in the cases where weights are given or \texttt{diggle=TRUE}.
    \end{itemize}
 
- 
+ \item \texttt{density.psp}:
+   \begin{itemize}
+   \item New argument \texttt{method}.
+   \item Accelerated by 1 to 2 orders of magnitude.
+   \end{itemize}
+
  \item \texttt{dfbetas.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.

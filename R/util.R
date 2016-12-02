@@ -1,7 +1,7 @@
 #
 #    util.S    miscellaneous utilities
 #
-#    $Revision: 1.231 $    $Date: 2016/10/18 04:05:52 $
+#    $Revision: 1.232 $    $Date: 2016/12/02 09:51:01 $
 #
 #
 matrowsum <- function(x) {
@@ -1673,7 +1673,8 @@ requireversion <- function(pkg, ver) {
                sQuote(pkgname),
                "is out of date: version >=",
                ver,
-               "is needed"))
+               "is needed"),
+         call.=FALSE)
   invisible(NULL)
 }
 

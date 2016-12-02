@@ -2,7 +2,7 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.7 $    $Date: 2016/12/02 08:49:40 $
+#  $Revision: 1.8 $    $Date: 2016/12/02 10:41:25 $
 #
 #
 
@@ -62,6 +62,7 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
          },
          FFT = {
            L <- pixellate(x, ...)
+           L <- L/with(L, xstep * ystep)
            dens <- blur(L, sigma, normalise=edge, bleed=FALSE)
          })
   unitname(dens) <- unitname(x)
