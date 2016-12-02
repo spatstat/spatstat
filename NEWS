@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.041
+        CHANGES IN spatstat VERSION 1.47-0.042
 
 OVERVIEW
 
@@ -141,6 +141,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp, Smooth.ppp
     Accelerated.
+
+    o density.psp
+    New argument 'method' controls the method of computation.
+    New faster option 'method="FFT"'    
 
 BUG FIXES
 

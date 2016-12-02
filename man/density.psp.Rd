@@ -5,7 +5,8 @@
   Compute a kernel smoothed intensity function from a line segment pattern.
 }
 \usage{
-  \method{density}{psp}(x, sigma, \dots, edge=TRUE)
+  \method{density}{psp}(x, sigma, \dots, edge=TRUE,
+                   method=c("FFT", "C", "interpreted"))
 }
 \arguments{
   \item{x}{
@@ -21,6 +22,11 @@
   \item{edge}{
     Logical flag indicating whether to apply edge correction.
   }
+  \item{method}{
+    Character string (partially matched) specifying the method of
+    computation. Option \code{"FFT"} is the fastest, while
+    \code{"C"} is the most accurate.
+  }
 }
 \value{
   A pixel image (object of class \code{"im"}).
@@ -32,12 +38,22 @@
   is computed. The result is 
   the convolution of the isotropic Gaussian kernel, of
   standard deviation \code{sigma}, with the line segments.
-  Computation is performed analytically.
-  
+  The result is computed as follows:
+  \itemize{
+    \item if \code{method="FFT"}, the line segments are discretised
+    using \code{\link{pixellate.psp}}, then the Fast Fourier Transform
+    is used to calculate the convolution. This method is the fastest,
+    but is slightly less accurate.
+    \item if \code{method="C"} the exact value of the convolution at the
+    centre of each pixel is computed analytically using \code{C} code;
+    \item if \code{method="interpreted"},
+    the exact value of the convolution at the
+    centre of each pixel is computed analytically using \code{R} code.
+    This method is the slowest.
+  }
   If \code{edge=TRUE} this result is adjusted for edge effects
   by dividing it by the convolution of the same Gaussian kernel
   with the observation window.
-  
 }
 \seealso{
   \code{\link{psp.object}},
