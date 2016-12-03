@@ -1640,9 +1640,16 @@ of potential impact.
    \bugger{1.38-0}{august 2014}{1.38-1}{august 2014}
      
  \item \texttt{integral.linim}, \texttt{integral.linfun}:
-   results were slightly inaccurate because of a bias in the distribution of
+   \begin{itemize}
+   \item 
+   results were inaccurate because of a bias in the distribution of
    sample points.
    \bugger{1.41-0}{february 2015}{1.47-0}{october 2016}
+   \item 
+   results were inaccurate if many of the segment lengths were
+   shorter than the width of a pixel.
+   \bugger{1.41-0}{february 2015}{1.47-1}{december 2016}
+   \end{itemize}
    
  \item \texttt{predict.ppm}:
    Calculation of the conditional intensity omitted the edge correction

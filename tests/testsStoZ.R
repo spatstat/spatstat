@@ -1,7 +1,7 @@
 #
 #  tests/segments.R
 #
-#  $Revision: 1.9 $  $Date: 2016/10/31 06:38:25 $
+#  $Revision: 1.10 $  $Date: 2016/12/03 02:57:32 $
 
 require(spatstat)
 
@@ -86,6 +86,16 @@ if(abs(s1 - s2)/s2 > 0.01) {
              "sum(pixellate(X)) = ", s1,
              "!=", s2, "= sum(lengths.psp(X))"))
 }
+
+#' tests of density.psp
+Y <- as.psp(simplenet)
+YC <- density(Y, 0.2, method="C", edge=FALSE, dimyx=64)
+YI <- density(Y, 0.2, method="interpreted", edge=FALSE, dimyx=64)
+YF <- density(Y, 0.2, method="FFT", edge=FALSE, dimyx=64)
+xCI <- max(abs(YC/YI - 1))
+xFI <- max(abs(YF/YI - 1))
+if(xCI > 0.01) stop(paste("density.psp C algorithm relative error =", xCI))
+if(xFI > 0.01) stop(paste("density.psp FFT algorithm relative error =", xFI))
 
 })
 #

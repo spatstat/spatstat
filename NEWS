@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.043
+        CHANGES IN spatstat VERSION 1.47-0.044
 
 OVERVIEW
 
@@ -155,6 +155,11 @@ BUG FIXES
     o clip.infline
     Results were incorrect unless the midpoint of the window
     was the coordinate origin.
+    Fixed.
+
+    o integral.linim
+    Results were inaccurate if many of the segment lengths were 
+    shorter than the width of a pixel.
     Fixed.
 
     o predict.lppm

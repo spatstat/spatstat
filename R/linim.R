@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.29 $   $Date: 2016/11/16 09:07:11 $
+#  $Revision: 1.30 $   $Date: 2016/12/03 10:51:56 $
 #
 #  Image/function on a linear network
 #
@@ -307,11 +307,21 @@ integral.linim <- function(f, domain=NULL, ...){
   if(!is.null(domain)) 
     f <- f[domain]
   #' extract data
-  df <- attr(f, "df")
   L <- as.linnet(f)
-  #' take average of data on each segment
-  seg <- factor(df$mapXY, levels=1:nsegments(L))
+  ns <- nsegments(L)
+  df <- attr(f, "df")
   vals <- df$values
+  seg <- factor(df$mapXY, levels=1:ns)
+  #' ensure each segment has at least one sample point
+  nper <- table(seg)
+  if(any(missed <- (nper == 0))) {
+    missed <- unname(which(missed))
+    xy <- midpoints.psp(as.psp(L)[missed])
+    valxy <- f[xy]
+    seg <- c(seg, factor(missed, levels=1:ns))
+    vals <- c(vals, valxy)
+  }
+  #' take average of data on each segment
   mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
   mu[is.na(mu)] <- 0
   #' weighted sum
