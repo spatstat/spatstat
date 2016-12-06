@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.76 $   $Date: 2016/09/13 04:51:32 $
+#    $Revision: 1.77 $   $Date: 2016/12/06 02:23:48 $
 #
 #
 
@@ -495,6 +495,12 @@ warn.once <- function(key, ...) {
        ),
        Clinearradius = list(
          # use C code for 'boundingradius.linnet'
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
+       Cnndistlpp = list(
+         # use C code for 'nndist.lpp'/'nnwhich.lpp'
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"

@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.16 $ $Date: 2016/12/05 10:17:34 $
+#  $Revision: 1.18 $ $Date: 2016/12/06 02:23:37 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -77,7 +77,7 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
              huge = as.double(huge),
              answer = as.double(ans))
     ans <- zz$answer
-  } else if(spatstat.options('developer')) {
+  } else if(spatstat.options('Cnndistlpp')) {
     ## use new C routine
     Lseg  <- L$lines
     Lvert <- L$vertices
@@ -128,6 +128,8 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
     if(is.matrix(ans) || is.data.frame(ans))
       colnames(ans) <- paste0("dist.", kuse)
   }
+  ans <- as.matrix(ans)
+  rownames(ans) <- NULL
   if(!toomany)
     return(ans)
   result[, kuse] <- as.matrix(ans)
@@ -215,7 +217,7 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
     nnw <- zz$nnwhich + 1L
     # any zeroes occur if points have no neighbours.
     nnw[nnw == 0] <- NA
-  } else if(spatstat.options('developer')) {
+  } else if(spatstat.options('Cnndistlpp')) {
     ## use new C routine
     Lseg  <- L$lines
     Lvert <- L$vertices
@@ -266,12 +268,13 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
     if(is.matrix(nnw) || is.data.frame(nnw))
       colnames(nnw) <- paste0("which.", kuse)
   }
+  nnw <- as.matrix(nnw)
+  rownames(nnw) <- NULL
   if(!toomany)
     return(nnw)
   result[, kuse] <- as.matrix(nnw)
   colnames(result) <- paste0("which.", 1:ncol(result))
   return(result[,k])
-  return(nnw)
 }
 
 # nncross.lpp
