@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.12 $ $Date: 2016/02/25 01:35:26 $
+#  $Revision: 1.16 $ $Date: 2016/12/05 10:17:34 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -38,7 +38,7 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
   ## This is given by local coordinates, if available (spatstat >= 1.28-0)
   loco <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)
   pro <- if(!is.null(seg <- loco$seg)) seg else nearestsegment(X, Lseg)
-
+  
   if(method == "interpreted") {
     ## interpreted code 
     D <- pairdist(X, method="interpreted")
@@ -77,7 +77,52 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
              huge = as.double(huge),
              answer = as.double(ans))
     ans <- zz$answer
-  } else {
+  } else if(spatstat.options('developer')) {
+    ## use new C routine
+    Lseg  <- L$lines
+    Lvert <- L$vertices
+    from  <- L$from
+    to    <- L$to
+    ##
+    nseg <- length(from)
+    seglen <- lengths.psp(Lseg)
+    ## convert indices to start at 0
+    from0 <- from - 1L
+    to0   <- to - 1L
+    segmap <- pro - 1L
+    tp <- loco$tp
+    ## sort by segment index
+    oo <- order(segmap, tp)
+    segmap <- segmap[oo]
+    tp <- tp[oo]
+    # upper bound on interpoint distance
+    huge <- sum(seglen)
+    #' numerical tolerance
+    tol <- max(.Machine$double.eps,
+               diameter(Frame(L))/2^20)
+    #'
+    kmax1 <- kmax + 1L
+    zz <- .C("linknnd",
+             kmax = as.integer(kmax1),
+             np = as.integer(n),
+             sp = as.integer(segmap),
+             tp = as.double(tp), 
+             nv = as.integer(Lvert$n),
+             ns = as.integer(nseg),
+             from = as.integer(from0),
+             to = as.integer(to0),
+             seglen = as.double(seglen),
+             huge = as.double(huge),
+             tol = as.double(tol),
+             nndist = as.double(numeric(n * kmax1)),
+             nnwhich = as.integer(integer(n * kmax1)))
+    ans <- matrix(, n, kmax1)
+    ans[oo, ] <- matrix(zz$nndist, n, kmax1, byrow=TRUE)
+    # drop first column which is zero corresponding to j = i
+    ans <- ans[, -1, drop=FALSE]
+    colnames(ans) <- paste0("dist.", 1:ncol(ans))
+    ans <- ans[,kuse]
+  } else {    
     ## use fast code for nncross
     ans <- nncross(X, X, what="dist", k=kuse+1)
     if(is.matrix(ans) || is.data.frame(ans))
@@ -141,9 +186,9 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
     to    <- L$to
     dpath <- L$dpath
     ## convert indices to start at 0
-    from0 <- from - 1
-    to0   <- to - 1
-    segmap <- pro - 1
+    from0 <- from - 1L
+    to0   <- to - 1L
+    segmap <- pro - 1L
     nseg <- length(from0)
     # upper bound on interpoint distance
     huge <- max(dpath) + 2 * max(lengths.psp(Lseg))
@@ -170,6 +215,51 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
     nnw <- zz$nnwhich + 1L
     # any zeroes occur if points have no neighbours.
     nnw[nnw == 0] <- NA
+  } else if(spatstat.options('developer')) {
+    ## use new C routine
+    Lseg  <- L$lines
+    Lvert <- L$vertices
+    from  <- L$from
+    to    <- L$to
+    ##
+    nseg <- length(from)
+    seglen <- lengths.psp(Lseg)
+    ## convert indices to start at 0
+    from0 <- from - 1L
+    to0   <- to - 1L
+    segmap <- pro - 1L
+    tp <- loco$tp
+    ## sort by segment index
+    oo <- order(segmap, tp)
+    segmap <- segmap[oo]
+    tp <- tp[oo]
+    # upper bound on interpoint distance
+    huge <- sum(seglen)
+    #' numerical tolerance
+    tol <- max(.Machine$double.eps,
+               diameter(Frame(L))/2^20)
+    #'
+    kmax1 <- kmax + 1L
+    zz <- .C("linknnd",
+             kmax = as.integer(kmax1),
+             np = as.integer(n),
+             sp = as.integer(segmap),
+             tp = as.double(tp), 
+             nv = as.integer(Lvert$n),
+             ns = as.integer(nseg),
+             from = as.integer(from0),
+             to = as.integer(to0),
+             seglen = as.double(seglen),
+             huge = as.double(huge),
+             tol = as.double(tol),
+             nndist = as.double(numeric(n * kmax1)),
+             nnwhich = as.integer(integer(n * kmax1)))
+    nnw <- matrix(, n, kmax1)
+    nnw[oo, ] <- matrix(oo[zz$nnwhich + 1L], n, kmax1, byrow=TRUE)
+    # drop first column which is j = i
+    nnw <- nnw[, -1, drop=FALSE]
+    colnames(nnw) <- paste0("which.", 1:ncol(nnw))
+    nnw <- nnw[,kuse]
   } else {
     ## use fast code for nncross
     nnw <- nncross(X, X, what="which", k=kuse+1)
@@ -308,11 +398,11 @@ nncross.lpp <- local({
   } else {
     ## C code
     ## convert indices to start at 0
-    from0 <- from - 1
-    to0   <- to - 1
+    from0 <- from - 1L
+    to0   <- to - 1L
     nseg <- length(from0)
-    Xsegmap <- Xpro - 1
-    Ysegmap <- Ypro - 1
+    Xsegmap <- Xpro - 1L
+    Ysegmap <- Ypro - 1L
     ## upper bound on interpoint distance
     huge <- if(!fast) {
       max(dpath) + 2 * diameter(Frame(L))

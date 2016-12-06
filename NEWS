@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.044
+        CHANGES IN spatstat VERSION 1.47-0.045
 
 OVERVIEW
 
@@ -145,6 +145,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o density.psp
     New argument 'method' controls the method of computation.
     New faster option 'method="FFT"'    
+
+    o nndist.lpp
+    Accelerated.
 
 BUG FIXES
 
