@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.18 $ $Date: 2016/12/06 02:23:37 $
+#  $Revision: 1.19 $ $Date: 2016/12/07 10:06:39 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -128,8 +128,10 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
     if(is.matrix(ans) || is.data.frame(ans))
       colnames(ans) <- paste0("dist.", kuse)
   }
-  ans <- as.matrix(ans)
-  rownames(ans) <- NULL
+  if(!is.null(dim(ans))) {
+    ans <- as.matrix(ans)
+    rownames(ans) <- NULL
+  } 
   if(!toomany)
     return(ans)
   result[, kuse] <- as.matrix(ans)
@@ -268,8 +270,10 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
     if(is.matrix(nnw) || is.data.frame(nnw))
       colnames(nnw) <- paste0("which.", kuse)
   }
-  nnw <- as.matrix(nnw)
-  rownames(nnw) <- NULL
+  if(!is.null(dim(nnw))) {
+    nnw <- as.matrix(nnw)
+    rownames(nnw) <- NULL
+  }
   if(!toomany)
     return(nnw)
   result[, kuse] <- as.matrix(nnw)
