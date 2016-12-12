@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.047
+        CHANGES IN spatstat VERSION 1.47-0.048
 
 OVERVIEW
 
@@ -119,6 +119,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o envelope.lpp, envelope.lppm
     New arguments 'fix.n' and 'fix.marks' allow envelopes to be computed
     using simulations conditional on the observed number of points.
+
+    o "[.im"
+    The subset index "i" can now be a linear network (object of class 'linnet').
+    The result of "x[i, drop=FALSE]" is then a pixel image of class 'linim'.
 
     o cut.ppp
     Argument z can be "x" or "y" indicating one of the spatial coordinates.

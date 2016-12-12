@@ -1357,6 +1357,11 @@ also carries these marks in the \verb!$lines! component.
  \item \verb![<-.im!
   Accepts an array for \texttt{value}.
 
+ \item \verb![.im!
+   The subset index \texttt{i} can now be a linear network.
+   Then the result of \verb!x[i, drop=FALSE]! is a pixel image of
+   class \texttt{linim}.
+
  \item \verb![.linnet!, \verb![.lpp!:
     New argument \texttt{snip} determines what to do with segments 
     of the network that cross the boundary of the window. 

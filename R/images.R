@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.139 $     $Date: 2016/11/22 09:00:31 $
+#      $Revision: 1.140 $     $Date: 2016/12/12 06:06:12 $
 #
 #      The class "im" of raster images
 #
@@ -279,6 +279,17 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         } else stop("Subset argument \'i\' is an image, but not of logical type")
       }
 
+      if(inherits(i, "linnet")) {
+        #' linear network
+        if(jtype == "given")
+          warning("Argument j ignored")
+        W <- raster %orifnull% as.owin(x)
+        M <- as.mask.psp(as.psp(i), W=W, ...)
+        xM <- x[M, drop=drop]
+        if(is.im(xM)) xM <- linim(i, xM)
+        return(xM)
+      }
+      
       if(is.ppp(i)) {
         ## 'i' is a point pattern 
         if(jtype == "given")

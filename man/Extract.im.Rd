@@ -16,7 +16,8 @@
   \item{i}{
     Object defining the subregion or subset to be extracted.
     Either a spatial window (an object of class \code{"owin"}), or a
-    pixel image with logical values, or a point pattern (an object
+    pixel image with logical values, or a linear network (object of
+    class \code{"linnet"}) or a point pattern (an object
     of class \code{"ppp"}), or any type of index that applies to a
     matrix, or something that can be converted to a point pattern
     by \code{\link{as.ppp}} (using the window of \code{x}).
@@ -62,7 +63,8 @@
   \enumerate{
     \item
     \code{i} is a spatial object such as a window,
-    a pixel image with logical values, or a point pattern;  or
+    a pixel image with logical values,
+    a linear network, or a point pattern;  or
     \item
     \code{i,j} are indices for the matrix \code{as.matrix(x)}; or
     \item
@@ -75,6 +77,9 @@
   the values of the image inside this window are extracted
   (after first clipping the window to the spatial domain of the image
   if necessary).
+
+  If \code{i} is a linear network (object of class \code{"linnet"}),
+  the values of the image on this network are extracted.
 
   If \code{i} is a pixel image with logical values,
   it is interpreted as a spatial window (with \code{TRUE} values
@@ -101,11 +106,17 @@
   those pixel values which are not \code{NA}. It may be shorter.
 
   If \code{i} is a spatial window then \code{X[i, drop=FALSE]} is
-  another pixel image of the same dimensions as \code{x} obtained
+  another pixel image of the same dimensions as \code{X} obtained
   by setting all pixels outside the window \code{i} to have value
   \code{NA}. When the result is displayed by \code{\link{plot.im}}
   the effect is that the pixel image \code{x} is clipped to the
   window \code{i}.
+
+  If \code{i} is a linear network (object of class \code{"linnet"})
+  then \code{X[i, drop=FALSE]} is another pixel image of the same
+  dimensions as \code{X} obtained by restricting the pixel image
+  \code{X} to the linear network. The result also belongs to the
+  class \code{"linim"} (pixel image on a linear network). 
 
   If \code{i} is a spatial window then \code{X[i, drop=TRUE]}
   is either:
