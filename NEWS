@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.048
+        CHANGES IN spatstat VERSION 1.47-0.050
 
 OVERVIEW
 
@@ -199,6 +199,12 @@ BUG FIXES
 
     o rpoisline
     Crashed if zero lines were generated.
+    Fixed.
+
+    o model.frame.ppm
+    Crashed if the original model was fitted to a data frame of covariates
+    and there were NA's amongst the covariate values.
+    [Spotted by Kim Colyvas.]
     Fixed.
 
     o any, all

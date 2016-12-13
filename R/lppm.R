@@ -291,9 +291,11 @@ model.images.lppm <- local({
 })
 
   
-model.matrix.lppm <- function(object, data=model.frame(object),
+model.matrix.lppm <- function(object,
+                              data=model.frame(object, na.action=NULL),
                              ..., keepNA=TRUE) {
-  stopifnot(inherits(object, "lppm"))
+  stopifnot(is.lppm(object))
+  if(missing(data)) data <- NULL
   model.matrix(object$fit, data=data, ..., keepNA=keepNA)
 }
 

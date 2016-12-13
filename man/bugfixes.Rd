@@ -4,7 +4,10 @@
   List Recent Bug Fixes
 }
 \description{
-  List all bug fixes in a package, from a certain date onwards.
+  List all bug fixes in a package, starting from a certain date or
+  version of the package. Fixes are sorted alphabetically by the name of the
+  affected function. The default is to list bug fixes in the latest
+  version of the \pkg{spatstat} package.  
 }
 \usage{
   bugfixes(sinceversion = NULL, sincedate = NULL,
@@ -19,10 +22,10 @@
   \item{sincedate}{
     Earliest release date of \code{package}
     for which bugs should be listed.
-    or a \code{Date} object.
+    A character string or a date-time object.
   }
   \item{package}{
-    The name of the package for which bugs are to be listed.
+    Character string. The name of the package for which bugs are to be listed.
   }
   \item{show}{
     Logical value indicating whether to display the bug table
@@ -41,7 +44,7 @@
   The argument \code{sinceversion} should be a character string
   like \code{"1.2-3"}. The default is the current installed version of the
   package. The argument \code{sincedata} should be a 
-  character string like \code{"2015-05-01"}, or a date-time object.
+  character string like \code{"2015-05-27"}, or a date-time object.
 
   Typing \code{bugfixes} without parentheses will display a table of
   all bug fixes in the current installed version of \pkg{spatstat}.

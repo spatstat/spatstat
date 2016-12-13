@@ -4,7 +4,7 @@
 #'
 #'  Adrian Baddeley and Tilman Davies
 #' 
-#'  $Revision: 1.10 $  $Date: 2016/11/08 10:46:55 $
+#'  $Revision: 1.11 $  $Date: 2016/12/12 09:07:06 $
 
 tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
   stopifnot(is.numeric(x))
@@ -13,7 +13,7 @@ tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
   stopifnot(all(sapply(flist, is.factor)))
   nfac <- length(flist)
   goodx <- is.finite(x)
-  if(na.rm) goodx <- goodx || is.na(x)
+  if(na.rm) goodx <- goodx | is.na(x)
   if(!(nfac %in% 2:3) || !all(goodx)) {
     y <- tapply(x, flist, sum)
     y[is.na(y)] <- 0

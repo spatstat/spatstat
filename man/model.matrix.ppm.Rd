@@ -10,16 +10,24 @@
   this function extracts the design matrix of the model.
 }
 \usage{
-   \method{model.matrix}{ppm}(object, data=model.frame(object), \dots, 
+   \method{model.matrix}{ppm}(object,
+                              data=model.frame(object, na.action=NULL),
+                              \dots, 
                               Q=NULL, keepNA=TRUE)
 
-   \method{model.matrix}{kppm}(object, data=model.frame(object), \dots,
+   \method{model.matrix}{kppm}(object,
+                              data=model.frame(object, na.action=NULL),
+                              \dots, 
                               Q=NULL, keepNA=TRUE)
 
-   \method{model.matrix}{dppm}(object, data=model.frame(object), \dots,
+   \method{model.matrix}{dppm}(object,
+                              data=model.frame(object, na.action=NULL),
+                              \dots, 
                               Q=NULL, keepNA=TRUE)
 
-   \method{model.matrix}{lppm}(object, data=model.frame(object), \dots,
+   \method{model.matrix}{lppm}(object,
+                              data=model.frame(object, na.action=NULL),
+                              \dots, 
                               keepNA=TRUE)
 }
 \arguments{
@@ -46,8 +54,9 @@
 }
 \details{
   These commands are methods for the generic function
-  \code{\link{model.matrix}}. They extracts the design matrix of a
-  spatial point process model (class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}
+  \code{\link{model.matrix}}.
+  They extract the design matrix of a spatial point process model
+  (class \code{"ppm"} or \code{"kppm"} or \code{"dppm"}
   or \code{"lppm"}).
 
   More precisely, this command extracts
@@ -55,12 +64,15 @@
   a spatial point process model. 
   
   The \code{object} must be a fitted point process model
-  (object of class \code{"ppm"} or \code{"kppm"} or \code{"dppm"} or \code{"lppm"})
+  (object of class \code{"ppm"} or \code{"kppm"}
+  or \code{"dppm"} or \code{"lppm"})
   fitted to spatial point pattern data.
   Such objects are produced by the model-fitting
-  functions \code{\link{ppm}}, \code{\link{kppm}}, \code{\link{dppm}} and \code{\link{lppm}}.
+  functions \code{\link{ppm}}, \code{\link{kppm}}, \code{\link{dppm}}
+  and \code{\link{lppm}}.
 
-  The methods \code{model.matrix.ppm}, \code{model.matrix.kppm}, \code{model.matrix.dppm}
+  The methods \code{model.matrix.ppm},
+  \code{model.matrix.kppm}, \code{model.matrix.dppm}
   and \code{model.matrix.lppm} 
   extract the model matrix for the GLM.
 
@@ -83,13 +95,8 @@
   Rows of the matrix correspond to quadrature points
   in the fitting procedure (provided \code{keepNA=TRUE}).
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{model.matrix}},

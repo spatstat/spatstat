@@ -8,11 +8,15 @@
   or another specified package.
 }
 \usage{
-latest.news(package = "spatstat")
+latest.news(package = "spatstat", doBrowse=FALSE)
 }
 \arguments{
   \item{package}{
     Name of package for which the latest news should be printed.
+  }
+  \item{doBrowse}{
+    Logical value indicating whether to display the results in a browser
+    window instead of printing them.
   }
 }
 \details{

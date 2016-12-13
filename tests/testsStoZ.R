@@ -401,7 +401,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.1 $   $Date: 2013/07/25 10:26:09 $
+#   $Revision: 1.2 $   $Date: 2016/12/12 09:14:05 $
 #
 #  Test undocumented hacks, etc
 
@@ -409,6 +409,18 @@ require(spatstat)
 local({
   # pixellate.ppp accepts a data frame of weights
   pixellate(cells, weights=data.frame(a=1:42, b=42:1))
+
+  # tapplysum
+  aa <- factor(letters[1:3])
+  bb <- factor(letters[1:4])[c(1,2,2)]
+  xx <- round(runif(3), 3)
+  yy <- tapplysum(xx, list(A=aa, B=bb), do.names=TRUE)
+  zz <- tapply(xx, list(A=aa, B=bb), sum)
+  zz[is.na(zz)] <- 0
+  if(any(yy != zz))
+    stop("tapplysum does not agree with tapply(, sum)")
+  # tapplysum with zero-length data
+  tapplysum(xx[FALSE], list(A=aa[FALSE], B=bb[FALSE]), do.names=TRUE)
 })
 
 

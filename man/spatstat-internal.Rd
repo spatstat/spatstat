@@ -425,6 +425,7 @@
 \alias{meanX.owin}
 \alias{meanY.owin}
 \alias{model.se.image}
+\alias{modelFrameGam}
 \alias{mpl.engine}
 \alias{mpl.get.covariates}
 \alias{mpl.prepare}
@@ -1322,6 +1323,7 @@ meanlistfv(z, \dots)
 meanX.owin(w)            
 meanY.owin(w)
 model.se.image(fit, W, \dots, what)
+modelFrameGam(formula, \dots)
 mpl.engine(Q, trend, interaction, \dots,
          covariates, subsetexpr, covfunargs, correction,
 	 rbord, use.gam, gcontrol, famille,

@@ -1528,18 +1528,22 @@ as.owin.kppm <- as.owin.dppm <- function(W, ..., from=c("points", "covariates"),
   as.owin(as.ppm(W), ..., from=from, fatal=fatal)
 }
 
-domain.kppm <- Window.kppm <- domain.dppm <- Window.dppm <- function(X, ..., from=c("points", "covariates")) {
+domain.kppm <- Window.kppm <- domain.dppm <-
+  Window.dppm <- function(X, ..., from=c("points", "covariates")) {
   from <- match.arg(from)
   as.owin(X, from=from)
 }
 
-model.images.kppm <- model.images.dppm <- function(object, W=as.owin(object), ...) {
+model.images.kppm <-
+  model.images.dppm <- function(object, W=as.owin(object), ...) {
   model.images(as.ppm(object), W=W, ...)
 }
 
-model.matrix.kppm <- model.matrix.dppm <- function(object, data=model.frame(object), ...,
-                              Q=NULL, 
-                              keepNA=TRUE) {
+model.matrix.kppm <-
+  model.matrix.dppm <- function(object,
+                                data=model.frame(object, na.action=NULL), ...,
+                                Q=NULL, 
+                                keepNA=TRUE) {
   if(missing(data)) data <- NULL
   model.matrix(as.ppm(object), data=data, ..., Q=Q, keepNA=keepNA)
 }

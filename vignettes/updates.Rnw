@@ -1562,7 +1562,7 @@ of potential impact.
    Estimates of $F(r)$ for the largest value of $r$ 
    were wildly incorrect. 
      {\small (Bug was present since about 2010.
-       Fixed in \texttt{spatstat 1.47-1}, december 2016)}
+       Fixed in \texttt{spatstat 1.48-0}, december 2016)}
    
  \item \texttt{kppm}, \texttt{matclust.estpcf}, \texttt{pcfmodel}:
     The pair correlation function of the M\'atern Cluster Process
@@ -1579,7 +1579,7 @@ of potential impact.
  \item \texttt{clip.infline}: 
    Results were incorrect unless the midpoint of the window
    was the coordinate origin.
-   \bugger{1.15-1}{april 2009}{1.47-1}{december 2016}
+   \bugger{1.15-1}{april 2009}{1.48-0}{december 2016}
    
  \item \texttt{intensity.ppm}:
    Result was incorrect for Gibbs models if the model was 
@@ -1653,7 +1653,7 @@ of potential impact.
    \item 
    results were inaccurate if many of the segment lengths were
    shorter than the width of a pixel.
-   \bugger{1.41-0}{february 2015}{1.47-1}{december 2016}
+   \bugger{1.41-0}{february 2015}{1.48-0}{december 2016}
    \end{itemize}
    
  \item \texttt{predict.ppm}:

@@ -3,12 +3,12 @@
 #
 #  News and warnings
 #
-latest.news <- function(package="spatstat") {
+latest.news <- function(package="spatstat", doBrowse=FALSE) {
   # get version number
   v <- read.dcf(file=system.file("DESCRIPTION", package=package),
                 fields="Version")
   ne <- eval(substitute(news(Version >= v0, package=package), list(v0=v)))
-  page(ne, method="print")
+  page(ne, method="print", doBrowse=doBrowse)
   return(invisible(ne))
 }
 
