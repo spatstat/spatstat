@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.47-0.050
+Version: 1.47-0.051
 Nickname: Batteries Not Included
-Date: 2016-12-13
+Date: 2016-12-14
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

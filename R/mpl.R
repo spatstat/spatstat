@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.203 $	$Date: 2016/04/25 02:34:40 $
+#	$Revision: 5.204 $	$Date: 2016/12/14 06:33:07 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -37,6 +37,9 @@ mpl.engine <-
            rbord = 0,
            use.gam=FALSE,
            gcontrol=list(),
+           GLM=NULL,
+           GLMfamily=NULL,
+           GLMcontrol=NULL,
            famille=NULL,
            forcefit=FALSE,
            nd = NULL,
@@ -50,6 +53,7 @@ mpl.engine <-
            justQ = FALSE,
            weightfactor = NULL)
   {
+    GLMname <- if(!missing(GLM)) short.deparse(substitute(GLM)) else NULL
     ## Extract precomputed data if available
     if(!is.null(precomputed$Q)) {
       Q <- precomputed$Q
@@ -101,7 +105,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2016/04/25 02:34:40 $")
+                        date="$Date: 2016/12/14 06:33:07 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -213,36 +217,51 @@ mpl.engine <-
 
     ## determine algorithm control parameters
     if(is.null(gcontrol)) gcontrol <- list() else stopifnot(is.list(gcontrol))
-    gc <- if(use.gam) "gam.control" else "glm.control"
-    gcontrol <- do.call(gc, gcontrol)
+    gcontrol <- if(!is.null(GLMcontrol)) do.call(GLMcontrol, gcontrol) else
+                if(use.gam) do.call(mgcv::gam.control, gcontrol) else
+                do.call(stats::glm.control, gcontrol)
   
     ## Fit the generalized linear/additive model.
 
-    if(is.null(famille)) {
+    if(is.null(GLM) && is.null(famille)) {
       ## the sanctioned technique, using `quasi' family
-      if(want.trend && use.gam)
+      if(want.trend && use.gam) {
         FIT  <- gam(fmla, family=quasi(link="log", variance="mu"),
                     weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol)
-      else
+        fittername <- "gam"
+      } else {
         FIT  <- glm(fmla, family=quasi(link="log", variance="mu"),
                     weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol, model=FALSE)
+        fittername <- "glm"
+      }
+    } else if(!is.null(GLM)) {
+      ## alternative GLM fitting function or penalised GLM etc
+      fam <- GLMfamily %orifnull% quasi(link="log", variance="mu")
+      FIT <- GLM(fmla, family=fam,
+                 weights=.mpl.W,
+                 data=glmdata, subset=.mpl.SUBSET,
+                 control=gcontrol)
+      fittername <- GLMname
     } else {
-      ## for experimentation only!
+      ## experimentation only!
       if(is.function(famille))
         famille <- famille()
       stopifnot(inherits(famille, "family"))
-      if(want.trend && use.gam)
+      if(want.trend && use.gam) {
         FIT  <- gam(fmla, family=famille, weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol)
-      else
+        fittername <- "experimental"
+      } else {
         FIT  <- glm(fmla, family=famille, weights=.mpl.W,
                     data=glmdata, subset=.mpl.SUBSET,
                     control=gcontrol, model=FALSE)
+        fittername <- "experimental"
+      }
     }
     environment(FIT$terms) <- sys.frame(sys.nframe())
 
@@ -272,7 +291,7 @@ mpl.engine <-
     rslt <-
       list(
            method       = "mpl",
-           fitter       = if(use.gam) "gam" else "glm",
+           fitter       = fittername,
            projected    = FALSE,
            coef         = co,
            trend        = trend,

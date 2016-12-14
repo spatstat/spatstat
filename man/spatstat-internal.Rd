@@ -1326,7 +1326,8 @@ model.se.image(fit, W, \dots, what)
 modelFrameGam(formula, \dots)
 mpl.engine(Q, trend, interaction, \dots,
          covariates, subsetexpr, covfunargs, correction,
-	 rbord, use.gam, gcontrol, famille,
+	 rbord, use.gam, gcontrol,
+         GLM, GLMfamily, GLMcontrol, famille,
          forcefit, nd, eps, allcovar, callstring,
          precomputed, savecomputed, preponly,
          rename.intercept, justQ, weightfactor)
