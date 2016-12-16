@@ -355,7 +355,7 @@ local({
 #
 # Tests of ppm(method='logi')
 #
-# $Revision: 1.3 $  Date$
+# $Revision: 1.4 $  Date$
 #
 
 require(spatstat)
@@ -363,9 +363,11 @@ local({
   fit <- ppm(cells ~x, method="logi")
   f <- fitted(fit)
   p <- predict(fit)
+  u <- summary(fit)
   fitS <- ppm(cells ~x, Strauss(0.08), method="logi")
   fS <- fitted(fitS)
   pS <- predict(fitS)
+  uS <- summary(fitS)
   if(spatstat.options("allow.logi.influence")) {
     a <- leverage(fit)
     b <- influence(fit)
@@ -374,6 +376,16 @@ local({
     bS <- influence(fitS)
     dS <- dfbetas(fitS)
   }
+})
+
+local({
+  #' logistic fit to data frame of covariates
+  z <- c(rep(TRUE, 5), rep(FALSE, 5))
+  df <- data.frame(A=z + 2* runif(10),
+                   B=runif(10))
+  Y <- quadscheme.logi(runifpoint(5), runifpoint(5))
+  fut <- ppm(Y ~ A+B, data=df, method="logi")
+  sf <- summary(fut)
 })
 #
 #   tests/ppmmarkorder.R
