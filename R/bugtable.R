@@ -1,7 +1,7 @@
 #'
 #'        bugtable.R
 #' 
-#'    $Revision: 1.1 $ $Date: 2016/12/01 02:03:21 $
+#'    $Revision: 1.2 $ $Date: 2016/12/16 06:34:24 $
 
 bugfixes <- function(sinceversion=NULL, sincedate=NULL,
                      package="spatstat",
@@ -63,7 +63,7 @@ bugfixes <- function(sinceversion=NULL, sincedate=NULL,
 class(bugfixes) <- "autoexec"
               
 print.bugtable <- function(x, ...) {
-  hprev <- fprev <- ""
+  hprev <- ""
   for(i in seq_len(nrow(x))) {
     h <- x$Header[i]
     f <- x$Firstline[i]
@@ -73,7 +73,6 @@ print.bugtable <- function(x, ...) {
     }
     cat(x$Version[i], ":", f, fill=TRUE)
     cat(x$Body[i], "\n", fill=TRUE)
-    fprev <- f
     hprev <- h
   }
   return(invisible(NULL))
