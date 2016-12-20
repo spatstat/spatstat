@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.131 $	$Date: 2016/12/13 08:29:00 $
+#	$Revision: 2.132 $	$Date: 2016/12/19 06:09:50 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -772,12 +772,12 @@ model.matrix.ppm <- function(object,
   if(!keepNA) {
     # extract model matrix of glm fit object
     # restricting to its 'subset' 
-    mm <- model.matrix(gf, data=data, ...)
+    mm <- model.matrix(gf, ...)
     return(mm)
   }
   
   # extract model matrix for all cases
-  mm <- model.matrix(gf, data, ..., subset=NULL)
+  mm <- model.matrix(gf, ..., subset=NULL, na.action=NULL)
   cn <- colnames(mm)
   gd <- getglmdata(object, drop=FALSE)
   if(nrow(mm) != nrow(gd)) {

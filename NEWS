@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.053
+        CHANGES IN spatstat VERSION 1.47-0.054
 
 OVERVIEW
 
@@ -24,6 +24,8 @@ OVERVIEW
     o Simulation of 'rhohat' objects.
 
     o Kernel smoothing accelerated.
+
+    o Methods for 'head' and 'tail' for spatial patterns.
 
     o More low-level functionality.
 
@@ -63,6 +65,10 @@ NEW FUNCTIONS
 
     o rlpp
     Random points on a linear network with a specified probability density.
+
+    o head.ppp, head.ppx, head.psp, head.tess, 
+    tail.ppp, tail.ppx, tail.psp, tail.tess
+    Methods for 'head' and 'tail' for spatial patterns.
 
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.

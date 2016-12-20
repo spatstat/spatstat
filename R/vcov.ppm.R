@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.127 $  $Date: 2016/10/02 02:46:15 $
+##  $Revision: 1.128 $  $Date: 2016/12/19 09:21:33 $
 ##
 
 vcov.ppm <- local({
@@ -345,6 +345,7 @@ vcalcGibbsGeneral <- function(model,
                          ...,
                          spill = FALSE,
                          spill.vc = FALSE,
+                         na.action=c("warn", "fatal", "silent"),
                          matrix.action=c("warn", "fatal", "silent"),
                          logi.action=c("warn", "fatal", "silent"),
                          algorithm=c("vectorclip", "vector", "basic"),
@@ -356,6 +357,7 @@ vcalcGibbsGeneral <- function(model,
                          parallel = TRUE,
                          sparseOK = FALSE
                          ) {
+  na.action <- match.arg(na.action)
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
   algorithm <- match.arg(algorithm)
@@ -398,14 +400,27 @@ vcalcGibbsGeneral <- function(model,
   ## sum/integral in the pseudolikelihood
   ## (e.g. some points may be excluded by the border correction)
   okall <- getglmsubset(model)
-  ## data only:
-  ok <- okall[Z]
-  nX <- npoints(X)
   ## conditional intensity lambda(X[i] | X) = lambda(X[i] | X[-i])
   ## data and dummy:
   lamall <- fitted(model, check = FALSE, new.coef = new.coef, dropcoef=dropcoef)
+  if(anyNA(lamall)) {
+    whinge <- "Some values of the fitted conditional intensity are NA"
+    switch(na.action,
+           fatal = {
+             stop(whinge, call.=FALSE)
+           },
+           warn = {
+             warning(whinge, call.=FALSE)
+             okall <- okall & !is.na(lamall)
+           },
+           silent = {
+             okall <- okall & !is.na(lamall)
+           })
+  }
   ## data only:
   lam <- lamall[Z]
+  ok <- okall[Z]
+  nX <- npoints(X)
   ## sufficient statistic h(X[i] | X) = h(X[i] | X[-i])
   ## data and dummy:
   mall <- model.matrix(model)
