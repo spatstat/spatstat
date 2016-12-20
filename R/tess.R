@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.74 $ $Date: 2016/04/25 02:34:40 $
+#   $Revision: 1.75 $ $Date: 2016/12/20 04:06:47 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -867,3 +867,26 @@ rotate.tess <- function(X, angle=pi/2, ..., centre=NULL) {
   return(Y)
 }
   
+as.data.frame.tess <- function(x, ...) {
+  switch(x$type,
+         rect =,
+         tiled = {
+           y <- lapply(tiles(x), as.data.frame, ...)
+           z <- mapply(assignDFcolumn,
+                       x=y, value=tilenames(x),
+                       MoreArgs=list(name="Tile", ...),
+                       SIMPLIFY=FALSE)
+           z <- do.call(rbind, z)
+           row.names(z) <- NULL
+         },
+         image = {
+           z <- as.data.frame(x$image, ...)
+           if(!is.na(m <- match("value", colnames(z))))
+             colnames(z)[m] <- "Tile"
+         },
+         {
+           z <- NULL
+           warning("Unrecognised type of tessellation")
+         })
+  return(z)
+}

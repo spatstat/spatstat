@@ -37,6 +37,7 @@
 \alias{as.units}
 \alias{as2vector}
 \alias{asNumericMatrix}
+\alias{assignDFcolumn}
 \alias{augment.msr}
 \alias{BartCalc}
 \alias{badprobability}
@@ -888,6 +889,7 @@ as.listof(x)
 as.units(s)
 as2vector(x)
 asNumericMatrix(x)
+assignDFcolumn(x, name, value, \dots)
 augment.msr(x, \dots, sigma)
 BartCalc(fY, fK)
 badprobability(x, NAvalue)

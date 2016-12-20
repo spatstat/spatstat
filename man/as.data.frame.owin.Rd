@@ -45,13 +45,7 @@
   and possibly other columns.
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{as.data.frame.im}}

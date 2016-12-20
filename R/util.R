@@ -931,6 +931,12 @@ onecolumn <- function(m) {
          NA)
 }
 
+assignDFcolumn <- function(x, name, value, ...) {    # for use in mapply 
+  dx <- list(value)
+  names(dx) <- name
+  data.frame(append(c(as.list(x), dx), list(...)))
+}
+
 # errors and checks
 
 complaining <- function(whinge, fatal=FALSE, value=NULL) {

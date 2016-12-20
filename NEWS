@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.054
+        CHANGES IN spatstat VERSION 1.47-0.055
 
 OVERVIEW
 
@@ -31,7 +31,7 @@ OVERVIEW
 
     o Improvements and bug fixes.
 
-    o Nickname: 'Batteries Not Included'
+    o Nickname: 'Unreachable Code'
 
 NEW CLASSES
 
@@ -66,10 +66,6 @@ NEW FUNCTIONS
     o rlpp
     Random points on a linear network with a specified probability density.
 
-    o head.ppp, head.ppx, head.psp, head.tess, 
-    tail.ppp, tail.ppx, tail.psp, tail.tess
-    Methods for 'head' and 'tail' for spatial patterns.
-
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.
 
@@ -91,6 +87,13 @@ NEW FUNCTIONS
     o simulate.rhohat
     Generate a Poisson random point pattern with intensity that is
     a function of a covariate, given by a 'rhohat' object.
+
+    o head.ppp, head.ppx, head.psp, head.tess, 
+    tail.ppp, tail.ppx, tail.psp, tail.tess
+    Methods for 'head' and 'tail' for spatial patterns.
+
+    o as.data.frame.tess
+    Convert a tessellation to a data frame.
 
     o timeTaken
     Extract the timing data from a 'timed' object or objects.
