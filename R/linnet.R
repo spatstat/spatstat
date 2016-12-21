@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.59 $    $Date: 2016/09/28 04:16:06 $
+#    $Revision: 1.60 $    $Date: 2016/12/21 08:56:23 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -568,3 +568,28 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
   return(nets)
 }
 
+crossing.linnet <- function(X, Y) {
+  X <- as.linnet(X)
+  if(!inherits(Y, c("linnet", "infline", "psp")))
+    stop("L should be an object of class psp, linnet or infline", call.=FALSE)
+  ## convert infinite lines to segments
+  if(inherits(Y, "linnet")) Y <- as.psp(Y)
+  if(inherits(Y, "infline")) {
+    Y <- clip.infline(Y, Frame(X))
+    id <- marks(Y)
+    lev <- levels(id)
+  } else {
+    id <- lev <- seq_len(nsegments(Y))
+  }
+  ## extract segments of network
+  S <- as.psp(X)
+  ## find crossing points
+  SY <- crossing.psp(S, Y, fatal=FALSE, details=TRUE)
+  if(is.null(SY) || npoints(SY) == 0)
+    return(lpp(L=X))
+  SY <- as.data.frame(SY)
+  Z <- with(as.data.frame(SY),
+            as.lpp(x=x, y=y, seg=iA, tp=tA, L=X,
+                   marks=factor(id[as.integer(jB)], levels=lev)))
+  return(Z)
+}

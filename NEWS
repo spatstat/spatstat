@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.055
+        CHANGES IN spatstat VERSION 1.47-0.056
 
 OVERVIEW
 
@@ -30,6 +30,8 @@ OVERVIEW
     o More low-level functionality.
 
     o Improvements and bug fixes.
+
+    o spatstat now has more than 1000 help files.
 
     o Nickname: 'Unreachable Code'
 
@@ -68,6 +70,9 @@ NEW FUNCTIONS
 
     o cut.lpp
     Method for 'cut' for point patterns on a linear network.
+
+    o crossing.linnet
+    Find crossing points between a linear network and another set of lines.
 
     o ssf
     Create a spatially sampled function

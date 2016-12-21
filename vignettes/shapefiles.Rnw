@@ -260,7 +260,7 @@ The list structure will reflect the list structure of the original
 \texttt{SpatialLines} object \texttt{x}. If that's not what you want,
 then use \verb!curvelist <- do.call("c", out)! or
 <<eval=FALSE>>=
-curvegroup <- lapply(out, function(z) { do.call("superimposePSP", z)})
+curvegroup <- lapply(out, function(z) { do.call("superimpose", z)})
 @ 
 to collapse the list-of-lists-of-\texttt{psp}'s 
 into a list-of-\texttt{psp}'s. In the first case, \texttt{curvelist[[i]]}
