@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.47-0.056
+        CHANGES IN spatstat VERSION 1.48-0
 
 OVERVIEW
 
@@ -33,7 +33,7 @@ OVERVIEW
 
     o spatstat now has more than 1000 help files.
 
-    o Nickname: 'Unreachable Code'
+    o Nickname: 'Model Prisoner'
 
 NEW CLASSES
 
