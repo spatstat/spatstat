@@ -46,7 +46,7 @@ Concom <- local({
                       FUN=unique, 
                       simplify=FALSE)
     nhit <- unname(lengths(hitcomp))
-    change <- 1 - nhit
+    change <- 1L - nhit
     return(change)
   }
 
@@ -64,13 +64,13 @@ Concom <- local({
       answer <- numeric(n)
       r <- pars$r
       if(is.null(r)) stop("internal error: r parameter not found")
-      dummies <- !(seq_len(n) %in% EqualPairs[,2])
+      dummies <- !(seq_len(n) %in% EqualPairs[,2L])
       if(sum(dummies) > 0)
         answer[dummies] <- -cocoAdd(U[dummies], X, r)
-      ii <- EqualPairs[,1]
-      jj <- EqualPairs[,2]
+      ii <- EqualPairs[,1L]
+      jj <- EqualPairs[,2L]
       answer[jj] <- cocoDel(X, r, subset=ii)
-      return(answer + 1)
+      return(answer + 1L)
     }
 
   # template object without family, par, version
@@ -84,13 +84,13 @@ Concom <- local({
          parnames = "distance threshold",
          init     = function(self) {
                       r <- self$par$r
-                      if(!is.numeric(r) || length(r) != 1 || r <= 0)
+                      if(!is.numeric(r) || length(r) != 1L || r <= 0)
                        stop("distance threshold r must be a positive number")
                     },
          update = NULL,  # default OK
          print = NULL,    # default OK
          interpret =  function(coeffs, self) {
-           logeta <- as.numeric(coeffs[1])
+           logeta <- as.numeric(coeffs[1L])
            eta <- exp(logeta)
            return(list(param=list(eta=eta),
                        inames="interaction parameter eta",
@@ -108,7 +108,7 @@ Concom <- local({
          irange = function(self, coeffs=NA, epsilon=0, ...) {
            if(anyNA(coeffs))
              return(Inf)
-           logeta <- coeffs[1]
+           logeta <- coeffs[1L]
            if(abs(logeta) <= epsilon)
              return(0)
            else

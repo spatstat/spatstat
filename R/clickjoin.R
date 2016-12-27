@@ -23,7 +23,7 @@ clickjoin <- function(X, ..., add=TRUE, m=NULL, join=TRUE) {
     n <- length(twoid)
     if(n == 0) break
     if(n == 2) {
-      m[twoid[1],twoid[2]] <- m[twoid[2],twoid[1]] <- join
+      m[twoid[1L],twoid[2L]] <- m[twoid[2L],twoid[1L]] <- join
       lines(X$x[twoid], X$y[twoid], ...)
     }
   }

@@ -17,7 +17,7 @@ cut.ppp <- function(x, z=marks(x), ...) {
     if(length(z) == npoints(x)) {
       # interpret as a factor
       z <- factor(z)
-    } else if((length(z) == 1) && (z %in% colnames(df <- as.data.frame(x)))) {
+    } else if((length(z) == 1L) && (z %in% colnames(df <- as.data.frame(x)))) {
       # interpret as the name of a column of marks or coordinates
       z <- df[, z]
     } else stop("format of argument z not understood") 
@@ -31,7 +31,7 @@ cut.ppp <- function(x, z=marks(x), ...) {
   if(is.data.frame(z) || is.matrix(z)) {
     stopifnot(nrow(z) == npoints(x))
     # take first column 
-    z <- z[,1]
+    z <- z[,1L]
     g <- if(is.numeric(z)) cut(z, ...) else factor(z)
     marks(x) <- g
     return(x)

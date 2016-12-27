@@ -148,7 +148,7 @@ BadGey <- local({
            # no data points currently included 
            missingdata <- rep.int(TRUE, nX)
          } else {
-           Xused <- EqualPairs[,1]
+           Xused <- EqualPairs[,1L]
            missingdata <- !(Xseq %in% Xused)
          }
          somemissing <- any(missingdata)
@@ -176,8 +176,8 @@ BadGey <- local({
              answer[,k] <- 2 * satcounts
            else {
              # extract counts for data points
-             Uindex <- EqualPairs[,2]
-             Xindex <- EqualPairs[,1]
+             Uindex <- EqualPairs[,2L]
+             Xindex <- EqualPairs[,1L]
              Xcounts <- integer(npoints(X))
              Xcounts[Xindex] <- counts[Uindex]
              # evaluate change in saturated counts of other data points

@@ -21,12 +21,12 @@
                                        onError="null")
              if(is.null(nam)) {
                check.named.vector(par, c("kappa","scale"))
-               names(par)[2] <- "sigma2"
-               par[2] <- par[2]^2
+               names(par)[2L] <- "sigma2"
+               par[2L] <- par[2L]^2
              }
              if(!old){
-                 names(par)[2] <- "scale"
-                 par[2] <- sqrt(par[2])
+                 names(par)[2L] <- "scale"
+                 par[2L] <- sqrt(par[2L])
              }
              return(par)
          },
@@ -54,7 +54,7 @@
              dots <- list(...)
              par <- dots$par
              # Choose the first of the possible supplied values for scale:
-             scale <- c(dots$scale, dots$par[["scale"]], dots$sigma, dots$par[["sigma"]])[1]
+             scale <- c(dots$scale, dots$par[["scale"]], dots$sigma, dots$par[["sigma"]])[1L]
              if(is.null(scale))
                  stop("Argument ", sQuote("scale"), " must be given.")
              thresh <- dots$thresh
@@ -73,7 +73,7 @@
              return(rmax)
          },
          kernel = function(par, rvals, ...) {
-             scale <- sqrt(par[2])
+             scale <- sqrt(par[2L])
              dnorm(rvals, 0, scale)/sqrt(2*pi*scale^2)
          },
          isPCP=TRUE,
@@ -81,13 +81,13 @@
          K = function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           pi*rvals^2+(1-exp(-rvals^2/(4*par[2])))/par[1]
+           pi*rvals^2+(1-exp(-rvals^2/(4*par[2L])))/par[1L]
          },
          ## pair correlation function
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           1 + exp(-rvals^2/(4 * par[2]))/(4 * pi * par[1] * par[2])
+           1 + exp(-rvals^2/(4 * par[2L]))/(4 * pi * par[1L] * par[2L])
          },
          ## sensible starting parameters
          selfstart = function(X) {
@@ -105,13 +105,13 @@
          },
          ## Experimental: convert to/from canonical cluster parameters
          tocanonical = function(par) {
-           kappa <- par[[1]]
-           sigma2 <- par[[2]]
+           kappa <- par[[1L]]
+           sigma2 <- par[[2L]]
            c(strength=1/kappa, decay=1/sqrt(sigma2))
          },
          tohuman = function(can) {
-           strength <- can[[1]]
-           decay <- can[[2]]
+           strength <- can[[1L]]
+           decay <- can[[2L]]
            c(kappa=1/strength, sigma2=1/decay^2)
          }
          ),
@@ -133,10 +133,10 @@
              nam <- check.named.vector(par, c("kappa","R"), onError="null")
              if(is.null(nam)) {
                check.named.vector(par, c("kappa","scale"))
-               names(par)[2] <- "R"
+               names(par)[2L] <- "R"
              }
              if(!old){
-                 names(par)[2] <- "scale"
+                 names(par)[2L] <- "scale"
              }
              return(par)
          },
@@ -149,7 +149,7 @@
              dots <- list(...)
              par <- dots$par
              # Choose the first of the possible supplied values for scale:
-             scale <- c(dots$scale, dots$par[["scale"]], dots$R, dots$par[["R"]])[1]
+             scale <- c(dots$scale, dots$par[["scale"]], dots$R, dots$par[["R"]])[1L]
              if(is.null(scale))
                  stop("Argument ", sQuote("scale"), " must be given.")
            if(!is.null(dots$thresh))
@@ -172,15 +172,15 @@
              return(out)
          },
          kernel = function(par, rvals, ...) {
-             scale <- par[2]
+             scale <- par[2L]
              ifelse(rvals>scale, 0, 1/(pi*scale^2))
          },
          isPCP=TRUE,
          K = function(par,rvals, ..., funaux){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           kappa <- par[1]
-           R <- par[2]
+           kappa <- par[1L]
+           R <- par[2L]
            Hfun <- funaux$Hfun
            y <- pi * rvals^2 + (1/kappa) * Hfun(rvals/(2 * R))
            return(y)
@@ -188,8 +188,8 @@
          pcf= function(par,rvals, ..., funaux){
              if(any(par <= 0))
                return(rep.int(Inf, length(rvals)))
-             kappa <- par[1]
-             R <- par[2]
+             kappa <- par[1L]
+             R <- par[2L]
              g <- funaux$g
              y <- 1 + (1/(pi * kappa * R^2)) * g(rvals/(2 * R))
              return(y)
@@ -258,12 +258,12 @@
              nam <- check.named.vector(par, c("kappa","eta2"), onError="null")
              if(is.null(nam)) {
                  check.named.vector(par, c("kappa","scale"))
-                 names(par)[2] <- "eta2"
-                 par[2] <- (2*par[2])^2
+                 names(par)[2L] <- "eta2"
+                 par[2L] <- (2*par[2L])^2
              }
              if(!old){
-                 names(par)[2] <- "scale"
-                 par[2] <- sqrt(par[2])/2
+                 names(par)[2L] <- "scale"
+                 par[2L] <- sqrt(par[2L])/2
              }
              return(par)
          },
@@ -290,7 +290,7 @@
          range = function(...){
              dots <- list(...)
              # Choose the first of the possible supplied values for scale:
-             scale <- c(dots$scale, dots$par[["scale"]])[1]
+             scale <- c(dots$scale, dots$par[["scale"]])[1L]
              if(is.null(scale))
                  stop("Argument ", sQuote("scale"), " must be given.")
              thresh <- dots$thresh %orifnull% 0.01
@@ -305,19 +305,19 @@
              return(rmax)
          },
          kernel = function(par, rvals, ...) {
-             scale <- sqrt(par[2])/2
+             scale <- sqrt(par[2L])/2
              1/(2*pi*scale^2)*((1 + (rvals/scale)^2)^(-3/2))
          },
          isPCP=TRUE,
          K = function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           pi*rvals^2 + (1 - 1/sqrt(1 + rvals^2/par[2]))/par[1]
+           pi*rvals^2 + (1 - 1/sqrt(1 + rvals^2/par[2L]))/par[1L]
          },
          pcf= function(par,rvals, ...){
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
-           1 + ((1 + rvals^2/par[2])^(-1.5))/(2 * pi * par[2] * par[1])
+           1 + ((1 + rvals^2/par[2L])^(-1.5))/(2 * pi * par[2L] * par[1L])
          },
          selfstart = function(X) {
            kappa <- intensity(X)
@@ -354,9 +354,9 @@
              nam <- check.named.vector(par, c("kappa","eta"), onError="null")
              if(is.null(nam)) {
                check.named.vector(par, c("kappa","scale"))
-               names(par)[2] <- "eta"
+               names(par)[2L] <- "eta"
              }
-             if(!old) names(par)[2] <- "scale"
+             if(!old) names(par)[2L] <- "scale"
              return(par)
          },
          checkclustargs = function(margs, old = TRUE){
@@ -401,7 +401,7 @@
          range = function(...){
              dots <- list(...)
              # Choose the first of the possible supplied values for scale:
-             scale <- c(dots$scale, dots$par[["scale"]])[1]
+             scale <- c(dots$scale, dots$par[["scale"]])[1L]
              if(is.null(scale))
                  stop("Argument ", sQuote("scale"), " must be given.")
              # Find value of nu:
@@ -425,7 +425,7 @@
          },
          ## kernel function in polar coordinates (no angular argument).
          kernel = function(par, rvals, ..., margs) {
-             scale <- as.numeric(par[2])
+             scale <- as.numeric(par[2L])
              nu <- margs$nu
              if(is.null(nu))
                  stop("Argument ", sQuote("nu"), " is missing.")
@@ -439,8 +439,8 @@
            ## K function requires integration of pair correlation
            xgx <- function(x, par, nu.pcf) {
              ## x * pcf(x) without check on par values
-             numer <- (x/par[2])^nu.pcf * besselK(x/par[2], nu.pcf)
-             denom <- 2^(nu.pcf+1) * pi * par[2]^2 * par[1] * gamma(nu.pcf + 1)
+             numer <- (x/par[2L])^nu.pcf * besselK(x/par[2L], nu.pcf)
+             denom <- 2^(nu.pcf+1) * pi * par[2L]^2 * par[1L] * gamma(nu.pcf + 1)
              return(x * (1 + numer/denom))
            }
            vargammaK <- function(par,rvals, ..., margs){
@@ -466,14 +466,14 @@
            ##     return(rep.int(Inf, length(rvals)))
            ##   nu.pcf <- margs$nu.pcf
            ##   out <- numeric(length(rvals))
-           ##   out[1] <- if(rvals[1] == 0) 0 else 
-           ##   integrate(xgx, lower=0, upper=rvals[1],
+           ##   out[1L] <- if(rvals[1L] == 0) 0 else 
+           ##   integrate(xgx, lower=0, upper=rvals[1L],
            ##             par = par, nu.pcf=nu.pcf)$value
            ##   for (i in 2:length(rvals)) {
            ##     delta <- integrate(xgx,
-           ##                        lower=rvals[i-1], upper=rvals[i],
+           ##                        lower=rvals[i-1L], upper=rvals[i],
            ##                        par=par, nu.pcf=nu.pcf)
-           ##     out[i]=out[i-1]+delta$value
+           ##     out[i]=out[i-1L]+delta$value
            ##   }
            ##   return(out)
            ## }
@@ -484,9 +484,9 @@
            if(any(par <= 0))
              return(rep.int(Inf, length(rvals)))
            nu.pcf <- margs$nu.pcf
-           sig2 <- 1 / (4 * pi * (par[2]^2) * nu.pcf * par[1])
+           sig2 <- 1 / (4 * pi * (par[2L]^2) * nu.pcf * par[1L])
            denom <- 2^(nu.pcf - 1) * gamma(nu.pcf)
-           rr <- rvals / par[2]
+           rr <- rvals / par[2L]
            ## Matern correlation function
            fr <- ifelseXB(rr > 0,
                         (rr^nu.pcf) * besselK(rr, nu.pcf) / denom,
@@ -581,16 +581,16 @@
              return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
              ## For efficiency and to avoid need for RandomFields package
-             integrand <- function(r,par,...) 2*pi*r*exp(par[1]*exp(-r/par[2]))
+             integrand <- function(r,par,...) 2*pi*r*exp(par[1L]*exp(-r/par[2L]))
            } else {
              kraeverRandomFields()
              integrand <- function(r,par,model,margs) {
                modgen <- attr(model, "modgen")
                if(length(margs) == 0) {
-                 mod <- modgen(var=par[1], scale=par[2])
+                 mod <- modgen(var=par[1L], scale=par[2L])
                } else {
                  mod <- do.call(modgen,
-                                append(list(var=par[1], scale=par[2]),
+                                append(list(var=par[1L], scale=par[2L]),
                                        margs))
                }
                2*pi *r *exp(RandomFields::RFcov(model=mod, x=r))
@@ -601,21 +601,21 @@
            if(spatstat.options("fastK.lgcp")) {
              ## integrate using Simpson's rule
              fvals <- integrand(r=rvals, par=par, model=model, margs=margs)
-             th[1] <- rvals[1] * fvals[1]/2
+             th[1L] <- rvals[1L] * fvals[1L]/2
              if(nr > 1)
                for(i in 2:nr)
-                 th[i] <- th[i-1] +
-                   (rvals[i] - rvals[i-1]) * (fvals[i] + fvals[i-1])/2
+                 th[i] <- th[i-1L] +
+                   (rvals[i] - rvals[i-1L]) * (fvals[i] + fvals[i-1L])/2
            } else {
              ## integrate using 'integrate'
-             th[1] <- if(rvals[1] == 0) 0 else 
-             integrate(integrand,lower=0,upper=rvals[1],
+             th[1L] <- if(rvals[1L] == 0) 0 else 
+             integrate(integrand,lower=0,upper=rvals[1L],
                        par=par,model=model,margs=margs)$value
              for (i in 2:length(rvals)) {
                delta <- integrate(integrand,
-                                  lower=rvals[i-1],upper=rvals[i],
+                                  lower=rvals[i-1L],upper=rvals[i],
                                   par=par,model=model,margs=margs)
-               th[i]=th[i-1]+delta$value
+               th[i]=th[i-1L]+delta$value
              }
            }
            return(th)
@@ -625,15 +625,15 @@
              return(rep.int(Inf, length(rvals)))
            if(model == "exponential") {
              ## For efficiency and to avoid need for RandomFields package
-             gtheo <- exp(par[1]*exp(-rvals/par[2]))
+             gtheo <- exp(par[1L]*exp(-rvals/par[2L]))
            } else {
              kraeverRandomFields()
              modgen <- attr(model, "modgen")
              if(length(margs) == 0) {
-               mod <- modgen(var=par[1], scale=par[2])
+               mod <- modgen(var=par[1L], scale=par[2L])
              } else {
                mod <- do.call(modgen,
-                              append(list(var=par[1], scale=par[2]),
+                              append(list(var=par[1L], scale=par[2L]),
                                      margs))
              }
              gtheo <- exp(RandomFields::RFcov(model=mod, x=rvals))

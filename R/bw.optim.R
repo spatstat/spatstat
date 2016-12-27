@@ -53,13 +53,13 @@ as.fv.bw.optim <- function(x) {
   # convert to fv object
   df <- as.data.frame(x)
   dfnames <- colnames(df)
-  hname <- dfnames[1]
-  cvname <- dfnames[2]
+  hname <- dfnames[1L]
+  cvname <- dfnames[2L]
   descrip <- c("smoothing parameter",
                paste(attr(x, "criterion"), "criterion"))
   if(ncol(df) > 2)
     descrip <- c(descrip, paste("Additional variable", sQuote(dfnames[-(1:2)])))
-  labl <- c(hname, paste0(dfnames[-1], paren(hname)))
+  labl <- c(hname, paste0(dfnames[-1L], paren(hname)))
   yexp <- substitute(CV(h), list(CV=as.name(cvname), h=as.name(hname)))
   xfv <- fv(df,
             argu=hname,

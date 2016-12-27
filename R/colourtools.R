@@ -8,7 +8,7 @@
 rgb2hex <- function(v, maxColorValue=255) {
   stopifnot(is.numeric(v))
   if(!is.matrix(v))
-    v <- matrix(v, nrow=1)
+    v <- matrix(v, nrow=1L)
   if(ncol(v) %in% c(3, 4)) {
     out <- rgb(v, maxColorValue=maxColorValue)
     return(out)
@@ -22,11 +22,11 @@ rgb2hsva <- function(red, green=NULL, blue=NULL, alpha=NULL,
     ## red should be a 3-row matrix of RGB values
     ## or a 4-row matrix of RGBA values 
     if(!is.matrix(red))
-      red <- matrix(red, ncol=1)
+      red <- matrix(red, ncol=1L)
     ## check for an alpha channel
     if(nrow(red) == 4) {
-      alpha <- red[4,]
-      red <- red[-4, , drop=FALSE]
+      alpha <- red[4L,]
+      red <- red[-4L, , drop=FALSE]
     }
   }
   y <- rgb2hsv(red, green, blue, maxColorValue=maxColorValue)
@@ -121,13 +121,13 @@ to.grey <- function(x, weights=c(0.299, 0.587, 0.114), transparent=FALSE) {
     yy <- col2rgb(x, alpha=TRUE)
     y <- yy[1:3, , drop=FALSE]
     g <- (weights %*% y)/(255 * sum(weights))
-    z <- grey(g, alpha=y[4,])
+    z <- grey(g, alpha=y[4L,])
   }
   return(z)
 }
 
 is.col.argname <- function(x) {
-  return(nzchar(x) & ((x == "col") | (substr(x, 1, 4) == "col.")))
+  return(nzchar(x) & ((x == "col") | (substr(x, 1L, 4L) == "col.")))
 }
 
 col.args.to.grey <- function(x, ...) {

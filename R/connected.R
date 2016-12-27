@@ -27,8 +27,8 @@ connected.owin <- function(X, ..., method="C") {
   X <- as.mask(X, ...)
   #     
   Y <- X$m
-  nr <- X$dim[1]
-  nc <- X$dim[2]
+  nr <- X$dim[1L]
+  nc <- X$dim[2L]
 
   if(method == "C") {
 ################ COMPILED CODE #########################
@@ -55,36 +55,36 @@ connected.owin <- function(X, ..., method="C") {
     padY <- cbind(0, padY, 0)
     # Initialise 
     Z <- matrix(0, nrow(padY), ncol(padY))
-    currentlab <- 1
+    currentlab <- 1L
     todo <- as.vector(t(Y))
     equiv <- NULL
   
     # ........ main loop ..........................
     while(any(todo)){
       # pick first unresolved pixel
-      one <- which(todo)[1]
+      one <- which(todo)[1L]
       onerow <- ceiling(one/nc)
-      onecol <- one -((onerow-1)*nc)
-      parow=onerow+1 # Equivalent rows & column in padded matrix
-      pacol=onecol+1
+      onecol <- one -((onerow-1L)*nc)
+      parow=onerow+1L # Equivalent rows & column in padded matrix
+      pacol=onecol+1L
       #Examine four previously scanned neighbors
       # (use padded matrix to avoid edge issues)
-      nbrs <- rbind(c(parow-1,pacol-1),
-                    c(parow-1,pacol),
-                    c(parow,  pacol-1),
-                    c(parow-1,pacol+1))
+      nbrs <- rbind(c(parow-1L,pacol-1L),
+                    c(parow-1L,pacol),
+                    c(parow,  pacol-1L),
+                    c(parow-1L,pacol+1L))
       px <- sum(padY[nbrs])
       if (px==0){
         # no neighbours: new component
         Z[parow,pacol] <- currentlab
-        currentlab <- currentlab+1
+        currentlab <- currentlab+1L
         todo[one] <- FALSE
-      } else if(px==1) {
+      } else if(px==1L) {
         # one neighbour: assign existing label
         labs <- unique(Z[nbrs], na.rm=TRUE)
         labs <- labs[labs != 0]
-        Z[parow,pacol] <- labs[1]
-        currentlab <- max(Z)+1
+        Z[parow,pacol] <- labs[1L]
+        currentlab <- max(Z)+1L
         todo[one] <- FALSE
       } else {
         # more than one neighbour: possible merger of labels
@@ -92,26 +92,26 @@ connected.owin <- function(X, ..., method="C") {
         labs <- labs[labs != 0]
         labs <- sort(labs)
         equiv <- rbind(equiv,c(labs,rep.int(0,times=4-length(labs))))
-        Z[parow,pacol] <- labs[1]
-        currentlab <- max(Z)+1
+        Z[parow,pacol] <- labs[1L]
+        currentlab <- max(Z)+1L
         todo[one] <- FALSE
       }
     }
     # ........... end of loop ............
     # Resolve equivalences ................
 
-    if(length(equiv)>1){
-      merges <- (equiv[,2] > 1)
+    if(length(equiv)>1L){
+      merges <- (equiv[,2L] > 1L)
       nmerge <- sum(merges)
-      if(nmerge==1)
+      if(nmerge==1L)
         equiv <- equiv[which(merges), , drop=FALSE]
-      else if(nmerge > 1) {
-        relevant <- (equiv[,2] > 0)
+      else if(nmerge > 1L) {
+        relevant <- (equiv[,2L] > 0)
         equiv <- equiv[relevant, , drop=FALSE]
-        equiv <- equiv[fave.order(equiv[,1]),]
+        equiv <- equiv[fave.order(equiv[,1L]),]
       }
       for (i in 1:nrow(equiv)){
-        current <- equiv[i, 1]
+        current <- equiv[i, 1L]
         for (j in 2:4){
           twin <- equiv[i,j]
           if (twin>0){
@@ -138,7 +138,7 @@ connected.owin <- function(X, ..., method="C") {
   Z[!mapped] <- NA
   
   # strip borders
-  Z <- Z[2:(nrow(Z)-1),2:(ncol(Z)-1)]
+  Z <- Z[2:(nrow(Z)-1L),2:(ncol(Z)-1L)]
   # dress up 
   Z <- im(factor(Z, levels=1:nlabs),
           xcol=X$xcol, yrow=X$yrow, unitname=unitname(X))
@@ -161,7 +161,7 @@ connected.ppp <- function(X, R, ...) {
            ie=as.integer(ie),
            je=as.integer(je),
            label=as.integer(integer(nv)),
-           status=as.integer(integer(1)))
+           status=as.integer(integer(1L)))
   if(zz$status != 0)
     stop("Internal error: connected.ppp did not converge")
   if(internal)

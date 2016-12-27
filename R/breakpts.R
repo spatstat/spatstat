@@ -56,7 +56,7 @@
 #       
 # --------------------------------------------------------------------
 breakpts <- function(val, maxi, even=FALSE, npos=NULL, step=NULL) {
-  out <- list(val=val, max=maxi, ncells=length(val)-1, r = val[-1],
+  out <- list(val=val, max=maxi, ncells=length(val)-1L, r = val[-1L],
               even=even, npos=npos, step=step)
   class(out) <- "breakpts"
   out
@@ -84,13 +84,13 @@ function(bmax, npos, bstep) {
                "or", sQuote("npos")))
   if(!missing(npos)) {
     bstep <- bmax/npos
-    val <- seq(from=0, to=bmax, length.out=npos+1)
+    val <- seq(from=0, to=bmax, length.out=npos+1L)
     val <- c(-bstep,val)
     right <- bmax
   } else {
     npos <- ceiling(bmax/bstep)
     right <- bstep * npos
-    val <- seq(from=0, to=right, length.out=npos+1)
+    val <- seq(from=0, to=right, length.out=npos+1L)
     val <- c(-bstep,val)
   }
   breakpts(val, right, TRUE, npos, bstep)
@@ -100,9 +100,9 @@ function(bmax, npos, bstep) {
 
   XL <- list(...)
 
-  if(length(XL) == 1) {
+  if(length(XL) == 1L) {
     # single argument
-    X <- XL[[1]]
+    X <- XL[[1L]]
 
     if(!is.null(class(X)) && class(X) == "breakpts")
     # X already in correct form
@@ -110,13 +110,13 @@ function(bmax, npos, bstep) {
   
     if(is.vector(X) && length(X) > 2) {
     # it's a vector
-      if(X[2] != 0)
+      if(X[2L] != 0)
         stop("breakpoints do not satisfy breaks[2] = 0")
       # The following test for equal spacing is used in hist.default
       steps <- diff(X)
       if(diff(range(steps)) < 1e-07 * mean(steps))
         # equally spaced
-        return(breakpts(X, max(X), TRUE, length(X)-2, steps[1]))
+        return(breakpts(X, max(X), TRUE, length(X)-2, steps[1L]))
       else
         # unknown spacing
         return(breakpts(X, max(X), FALSE))
@@ -127,7 +127,7 @@ function(bmax, npos, bstep) {
   
     # exactly two arguments - interpret as even.breaks()
     if(length(XL) == 2)
-      return(make.even.breaks(XL[[1]], XL[[2]]))
+      return(make.even.breaks(XL[[1L]], XL[[2L]]))
 
     # two arguments 'max' and 'npos'
   
@@ -155,11 +155,11 @@ breakpts.from.r <- function(r) {
     stop("r must be a numeric vector")
   if(length(r) < 2)
     stop(paste("r has length", length(r), "- must be at least 2"))
-  if(r[1] != 0)
+  if(r[1L] != 0)
     stop("First r value must be 0")
   if(any(diff(r) <= 0))
     stop("successive values of r must be increasing")
-  dr <- r[2] - r[1]
+  dr <- r[2L] - r[1L]
   b <- c(-dr, r)
   return(as.breakpts(b))
 }

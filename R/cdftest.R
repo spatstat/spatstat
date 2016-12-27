@@ -269,7 +269,7 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
     nless <- sum(sim.pvals < pobs)
     nplus <- sum(sim.pvals == pobs & sim.stats > tobs)
     nties <- sum(sim.pvals == pobs & sim.stats == tobs) 
-    result$p.value <- (nless + nplus + sample(0:nties, 1))/(nsim+1)
+    result$p.value <- (nless + nplus + sample(0:nties, 1L))/(nsim+1L)
   }
   ## 
   # modify the 'htest' entries

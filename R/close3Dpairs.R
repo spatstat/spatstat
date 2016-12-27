@@ -13,7 +13,7 @@ closepairs.pp3 <- local({
                              distinct=TRUE, neat=TRUE, ...) {
     verifyclass(X, "pp3")
     what <- match.arg(what)
-    stopifnot(is.numeric(rmax) && length(rmax) == 1)
+    stopifnot(is.numeric(rmax) && length(rmax) == 1L)
     stopifnot(is.finite(rmax))
     stopifnot(rmax >= 0)
     ordered <- list(...)$ordered
@@ -136,7 +136,7 @@ crosspairs.pp3 <- local({
     verifyclass(X, "pp3")
     verifyclass(Y, "pp3")
     what <- match.arg(what)
-    stopifnot(is.numeric(rmax) && length(rmax) == 1 && rmax >= 0)
+    stopifnot(is.numeric(rmax) && length(rmax) == 1L && rmax >= 0)
     nama <- switch(what,
                    all = c("i", "j",
                            "xi", "yi", "zi",

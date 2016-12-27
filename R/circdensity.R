@@ -26,7 +26,7 @@ circdensity <- function(x, sigma="nrd0", ..., bw=NULL,
   }
   if(is.function(sigma)) {
     sigma <- sigma(x)
-    if(!(is.numeric(sigma) && length(sigma) == 1 && sigma > 0))
+    if(!(is.numeric(sigma) && length(sigma) == 1L && sigma > 0))
       stop("Bandwidth selector should return a single positive number")
   }
   check.1.real(sigma)

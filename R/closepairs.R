@@ -18,7 +18,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                            ...) {
   verifyclass(X, "ppp")
   what <- match.arg(what)
-  stopifnot(is.numeric(rmax) && length(rmax) == 1)
+  stopifnot(is.numeric(rmax) && length(rmax) == 1L)
   stopifnot(is.finite(rmax))
   stopifnot(rmax >= 0)
   ordered <- list(...)$ordered
@@ -81,32 +81,32 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                         xx=x, yy=y, rr=r, nguess=ng)
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vclosepairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
-             xi <- z[[3]]
-             yi <- z[[4]]
-             xj <- z[[5]]
-             yj <- z[[6]]
-             dx <- z[[7]]
-             dy <- z[[8]]
-             d  <- z[[9]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             xi <- z[[3L]]
+             yi <- z[[4L]]
+             xj <- z[[5L]]
+             yj <- z[[6L]]
+             dx <- z[[7L]]
+             dy <- z[[8L]]
+             d  <- z[[9L]]
            },
            indices = {
              z <- .Call("VcloseIJpairs",
                         xx=x, yy=y, rr=r, nguess=ng)
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcloseIJpairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
            },
            ijd = {
              z <- .Call("VcloseIJDpairs",
                         xx=x, yy=y, rr=r, nguess=ng)
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcloseIJDpairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
-             d  <- z[[3]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             d  <- z[[3L]]
            })
 
   } else {
@@ -148,7 +148,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
          y=as.double(Xsort$y),
          r=as.double(rmax),
          noutmax=as.integer(nsize), 
-         nout=as.integer(integer(1)),
+         nout=as.integer(integer(1L)),
          iout=as.integer(integer(nsize)),
          jout=as.integer(integer(nsize)), 
          xiout=as.double(numeric(nsize)),
@@ -158,7 +158,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1)))
+         status=as.integer(integer(1L)))
 
     if(z$status != 0) {
       # Guess was insufficient
@@ -170,7 +170,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                   x=as.double(Xsort$x),
                   y=as.double(Xsort$y),
                   rmaxi=as.double(rmaxplus),
-                  count=as.integer(integer(1)))$count
+                  count=as.integer(integer(1L)))$count
       if(nsize <= 0)
         return(null.answer)
       # add a bit more for safety
@@ -183,7 +183,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            y=as.double(Xsort$y),
            r=as.double(rmax),
            noutmax=as.integer(nsize), 
-           nout=as.integer(integer(1)),
+           nout=as.integer(integer(1L)),
            iout=as.integer(integer(nsize)),
            jout=as.integer(integer(nsize)), 
            xiout=as.double(numeric(nsize)),
@@ -193,7 +193,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            dxout=as.double(numeric(nsize)),
            dyout=as.double(numeric(nsize)),
            dout=as.double(numeric(nsize)),
-           status=as.integer(integer(1)))
+           status=as.integer(integer(1L)))
       if(z$status != 0)
         stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     }
@@ -346,7 +346,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
   verifyclass(X, "ppp")
   verifyclass(Y, "ppp")
   what <- match.arg(what)
-  stopifnot(is.numeric(rmax) && length(rmax) == 1 && rmax >= 0)
+  stopifnot(is.numeric(rmax) && length(rmax) == 1L && rmax >= 0)
   null.answer <- switch(what,
                         all = {
                           list(i=integer(0),
@@ -406,15 +406,15 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                         rr=r, nguess=ng)
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vcrosspairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
-             xi <- z[[3]]
-             yi <- z[[4]]
-             xj <- z[[5]]
-             yj <- z[[6]]
-             dx <- z[[7]]
-             dy <- z[[8]]
-             d  <- z[[9]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             xi <- z[[3L]]
+             yi <- z[[4L]]
+             xj <- z[[5L]]
+             yj <- z[[6L]]
+             dx <- z[[7L]]
+             dy <- z[[8L]]
+             d  <- z[[9L]]
            },
            indices = {
              z <- .Call("VcrossIJpairs",
@@ -423,8 +423,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                         rr=r, nguess=ng)
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcrossIJpairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
            }, 
            ijd = {
              z <- .Call("VcrossIJDpairs",
@@ -433,9 +433,9 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                         rr=r, nguess=ng)
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcrossIJDpairs")
-             i  <- z[[1]]  # NB no increment required
-             j  <- z[[2]]
-             d  <- z[[3]]
+             i  <- z[[1L]]  # NB no increment required
+             j  <- z[[2L]]
+             d  <- z[[3L]]
            })
            
   } else {
@@ -451,7 +451,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                 x2=as.double(Ysort$x),
                 y2=as.double(Ysort$y),
                 rmaxi=as.double(rmaxplus),
-                count=as.integer(integer(1)))$count
+                count=as.integer(integer(1L)))$count
     if(nsize <= 0)
       return(null.answer)
 
@@ -469,7 +469,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
          y2=as.double(Ysort$y),
          r=as.double(rmax),
          noutmax=as.integer(nsize), 
-         nout=as.integer(integer(1)),
+         nout=as.integer(integer(1L)),
          iout=as.integer(integer(nsize)),
          jout=as.integer(integer(nsize)), 
          xiout=as.double(numeric(nsize)),
@@ -479,7 +479,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1)))
+         status=as.integer(integer(1L)))
     if(z$status != 0)
       stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     # trim vectors to the length indicated
@@ -527,8 +527,8 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   # and indicate which of them are S-close (S < R)
   # so that results are consistent with closepairs(X,S)
   verifyclass(X, "ppp")
-  stopifnot(is.numeric(R) && length(R) == 1 && R >= 0)
-  stopifnot(is.numeric(S) && length(S) == 1 && S >= 0)
+  stopifnot(is.numeric(R) && length(R) == 1L && R >= 0)
+  stopifnot(is.numeric(S) && length(S) == 1L && S >= 0)
   stopifnot(S < R)
   ordered <- list(...)$ordered
   if(missing(twice) && !is.null(ordered)) {
@@ -564,9 +564,9 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
              xx=x, yy=y, rr=r, ss=s, nguess=ng)
   if(length(z) != 3)
     stop("Internal error: incorrect format returned from Vclosethresh")
-  i  <- z[[1]]  # NB no increment required
-  j  <- z[[2]]
-  th <- as.logical(z[[3]])
+  i  <- z[[1L]]  # NB no increment required
+  j  <- z[[2L]]
+  th <- as.logical(z[[3L]])
   
   # convert i,j indices to original sequence
   i <- oo[i]

@@ -36,7 +36,7 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
     stop(paste("One of the arguments",
                sQuote("range"), ",", sQuote("breaks"), "or", sQuote("inputs"),
                "should be given"))
-  if(ngiven > 1) {
+  if(ngiven > 1L) {
     offending <- names(breaks)[given]
     stop(paste("The arguments",
                commasep(sQuote(offending)),
@@ -57,13 +57,13 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
     # date/time interval mapped to colours
     timeclass <- if(inherits(range, "Date")) "Date" else "POSIXt"
     if(is.null(breaks)) {
-      breaks <- seq(from=range[1], to=range[2], length.out=length(outputs)+1)
+      breaks <- seq(from=range[1L], to=range[2L], length.out=length(outputs)+1L)
     } else {
       if(!inherits(breaks, timeclass))
         stop(paste("breaks should belong to class", dQuote(timeclass)),
              call.=FALSE)
       stopifnot(length(breaks) >= 2)
-      stopifnot(length(breaks) == length(outputs) + 1)
+      stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
         stop("breaks must be increasing")
     }
@@ -80,10 +80,10 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
   } else {
     # interval of real line mapped to colours
     if(is.null(breaks)) {
-      breaks <- seq(from=range[1], to=range[2], length.out=length(outputs)+1)
+      breaks <- seq(from=range[1L], to=range[2L], length.out=length(outputs)+1L)
     } else {
-      stopifnot(is.numeric(breaks) && length(breaks) >= 2)
-      stopifnot(length(breaks) == length(outputs) + 1)
+      stopifnot(is.numeric(breaks) && length(breaks) >= 2L)
+      stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
         stop("breaks must be increasing")
     }
@@ -124,13 +124,13 @@ print.lut <- function(x, ...) {
     out <- data.frame(input=stuff$inputs, output=stuff$outputs)
   } else {
     b <- stuff$breaks
-    cat(paste(tablename, "for the range", prange(b[c(1,n+1)]), "\n"))
+    cat(paste(tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
     rightend <- c(rep(")", n-1), "]")
-    inames <- paste(leftend, b[-(n+1)], ", ", b[-1], rightend, sep="")
+    inames <- paste(leftend, b[-(n+1L)], ", ", b[-1L], rightend, sep="")
     out <- data.frame(interval=inames, output=stuff$outputs)
   }
-  colnames(out)[2] <- outputname
+  colnames(out)[2L] <- outputname
   print(out)
   invisible(NULL)
 }
@@ -163,13 +163,13 @@ print.summary.lut <- function(x, ...) {
     out <- data.frame(input=x$inputs, output=x$outputs)
   } else {
     b <- x$breaks
-    cat(paste(x$tablename, "for the range", prange(b[c(1,n+1)]), "\n"))
+    cat(paste(x$tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
-    rightend <- c(rep(")", n-1), "]")
-    inames <- paste(leftend, b[-(n+1)], ", ", b[-1], rightend, sep="")
+    rightend <- c(rep(")", n-1L), "]")
+    inames <- paste(leftend, b[-(n+1L)], ", ", b[-1L], rightend, sep="")
     out <- data.frame(interval=inames, output=x$outputs)
   }
-  colnames(out)[2] <- x$outputname
+  colnames(out)[2L] <- x$outputname
   print(out)  
 }
 
@@ -190,7 +190,7 @@ plot.colourmap <- local({
                   "tck", "tcl", "xpd")
 
   linmap <- function(x, from, to) {
-    to[1] + diff(to) * (x - from[1])/diff(from)
+    to[1L] + diff(to) * (x - from[1L])/diff(from)
   }
 
   # rules to determine the ribbon dimensions when one dimension is given
@@ -221,7 +221,7 @@ plot.colourmap <- local({
     separate <- discrete && (gap > 0)
     if(is.null(labelmap)) {
       labelmap <- function(x) x
-    } else if(is.numeric(labelmap) && length(labelmap) == 1 && !discrete) {
+    } else if(is.numeric(labelmap) && length(labelmap) == 1L && !discrete) {
       labscal <- labelmap
       labelmap <- function(x) { x * labscal }
     } else stopifnot(is.function(labelmap))
@@ -232,7 +232,7 @@ plot.colourmap <- local({
       # real numbers: continuous ribbon
       bks <- stuff$breaks
       rr <- range(bks)
-      v <- seq(from=rr[1], to=rr[2], length.out=max(n+1, 1024))
+      v <- seq(from=rr[1L], to=rr[2L], length.out=max(n+1L, 1024))
     } else if(!separate) {
       # discrete values: blocks of colour, run together
       v <- (1:n) - 0.5
@@ -240,7 +240,7 @@ plot.colourmap <- local({
       rr <- c(0,n)
     } else {
       # discrete values: separate blocks of colour
-      vleft <- (1+gap) * (0:(n-1))
+      vleft <- (1+gap) * (0:(n-1L))
       vright <- vleft + 1
       v <- vleft + 0.5
       rr <- c(0, n + (n-1)*gap)
@@ -283,7 +283,7 @@ plot.colourmap <- local({
         xleft <- linmap(vleft, rr, xlim)
         xright <- linmap(vright, rr, xlim)
         y <- ylim
-        z <- matrix(1, 1, 1)
+        z <- matrix(1, 1L, 1L)
         for(i in 1:n) {
           x <- c(xleft[i], xright[i])
           do.call.matched(image.default,
@@ -298,7 +298,7 @@ plot.colourmap <- local({
         x <- xlim 
         ylow <- linmap(vleft, rr, ylim)
         yupp <- linmap(vright, rr, ylim)
-        z <- matrix(1, 1, 1)
+        z <- matrix(1, 1L, 1L)
         for(i in 1:n) {
           y <- c(ylow[i], yupp[i])
           do.call.matched(image.default,
@@ -315,11 +315,11 @@ plot.colourmap <- local({
         # horizontal colour ribbon
         x <- linmap(v, rr, xlim)
         y <- ylim
-        z <- matrix(v, ncol=1)
+        z <- matrix(v, ncol=1L)
       } else {
         # vertical colour ribbon
         y <- linmap(v, rr, ylim)
-        z <- matrix(v, nrow=1)
+        z <- matrix(v, nrow=1L)
         x <- xlim
       }
       do.call.matched(image.default,
@@ -341,17 +341,17 @@ plot.colourmap <- local({
           la <- labelmap(la)
         }
         # default axis position is below the ribbon (side=1)
-        sidecode <- resolve.1.default("side", list(...), list(side=1))
-        if(!(sidecode %in% c(1,3)))
+        sidecode <- resolve.1.default("side", list(...), list(side=1L))
+        if(!(sidecode %in% c(1L,3L)))
           warning(paste("side =", sidecode,
                         "is not consistent with horizontal orientation"))
-        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        pos <- c(ylim[1L], xlim[1L], ylim[2L], xlim[2L])[sidecode]
         # don't draw axis lines if plotting separate blocks
         lwd0 <- if(separate) 0 else 1
         # draw axis
         do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
-                                         list(side = 1, pos = pos, at = at),
+                                         list(side = 1L, pos = pos, at = at),
                                          list(labels=la, lwd=lwd0)),
                         extrargs=axisparams)
       } else {
@@ -366,10 +366,10 @@ plot.colourmap <- local({
         }
         # default axis position is to the right of ribbon (side=4)
         sidecode <- resolve.1.default("side", list(...), list(side=4))
-        if(!(sidecode %in% c(2,4)))
+        if(!(sidecode %in% c(2L,4L)))
           warning(paste("side =", sidecode,
                         "is not consistent with vertical orientation"))
-        pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
+        pos <- c(ylim[1L], xlim[1L], ylim[2L], xlim[2L])[sidecode]
         # don't draw axis lines if plotting separate blocks
         lwd0 <- if(separate) 0 else 1
         # draw labels horizontally if plotting separate blocks
@@ -406,15 +406,15 @@ interp.colourmap <- function(m, n=512) {
     # Find midpoints of intervals
     bks <- st$breaks
     nb <- length(bks)
-    xknots <- (bks[-1] + bks[-nb])/2
+    xknots <- (bks[-1L] + bks[-nb])/2
   }
   # corresponding colours in hsv coordinates
   yknots.hsv <- rgb2hsva(col2rgb(st$outputs, alpha=TRUE))
   # transform 'hue' from polar to cartesian coordinate
   # divide domain into n equal intervals
   xrange <- range(xknots)
-  xbreaks <- seq(xrange[1], xrange[2], length=n+1)
-  xx <- (xbreaks[-1] + xbreaks[-(n+1)])/2
+  xbreaks <- seq(xrange[1L], xrange[2L], length=n+1L)
+  xx <- (xbreaks[-1L] + xbreaks[-(n+1L)])/2
   # interpolate saturation and value in hsv coordinates
   yy.sat <- approx(x=xknots, y=yknots.hsv["s", ], xout=xx)$y
   yy.val <- approx(x=xknots, y=yknots.hsv["v", ], xout=xx)$y
@@ -450,8 +450,8 @@ tweak.colourmap <- local({
 
   is.hex <- function(z) {
     is.character(z) &&
-    all(nchar(z, keepNA=TRUE) %in% c(7,9)) &&
-    identical(substr(z, 1, 7), substr(col2hex(z), 1, 7))
+    all(nchar(z, keepNA=TRUE) %in% c(7L,9L)) &&
+    identical(substr(z, 1L, 7L), substr(col2hex(z), 1L, 7L))
   }
 
   tweak.colourmap <- function(m, col, ..., inputs=NULL, range=NULL) {
@@ -467,10 +467,10 @@ tweak.colourmap <- local({
     } else {
       if(!(is.numeric(range) && length(range) == 2 && diff(range) > 0))
         stop("range should be a numeric vector of length 2 giving (min, max)")
-      if(length(col2hex(col)) != 1)
+      if(length(col2hex(col)) != 1L)
         stop("When range is given, col should be a single colour value")
       ixr <- m(range, what="index")
-      ix <- (ixr[1]):(ixr[2])
+      ix <- (ixr[1L]):(ixr[2L])
     }
     ## reassign colours
     st <- attr(m, "stuff")
@@ -494,7 +494,7 @@ tweak.colourmap <- local({
       ## hex codes may be 7 or 9 characters
       outlen <- nchar(outputs)
       collen <- nchar(col)
-      if(length(unique(c(outlen, collen))) > 1) {
+      if(length(unique(c(outlen, collen))) > 1L) {
         ## convert all to 9 characters
         if(any(bad <- (outlen == 7))) 
           outputs[bad] <- paste0(outputs[bad], "FF")

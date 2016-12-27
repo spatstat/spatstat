@@ -94,14 +94,14 @@ bbEngine <- local({
       ## that unit name to the bounding box.
       youse <- unique(t(sapply(boxes,unitname)))
       if(nrow(youse)==1) {
-        ute <- unlist(youse[1,])
+        ute <- unlist(youse[1L,])
         unitname(W) <- ute
       }
       return(W)
     }
 
     ## single argument
-    w <- wins[[1]]
+    w <- wins[[1L]]
     if(is.null(w))
       return(NULL)
     
@@ -167,8 +167,8 @@ boundingbox.default <- local({
                    nvec, "were supplied"),
              call.=FALSE)
       vecs <- arglist[isnumvec]
-      x <- vecs[[1]]
-      y <- vecs[[2]]
+      x <- vecs[[1L]]
+      y <- vecs[[2L]]
       bb <- if(length(x) == length(y)) owin(range(x), range(y)) else NULL
       arglist <- arglist[!isnumvec]
     }

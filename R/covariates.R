@@ -14,7 +14,7 @@ evalCovariate <- function(covariate, locations) {
     else if(is.function(covariate)) 
       covariate(locations$x, locations$y)
     else if(is.numeric(covariate) || is.factor(covariate)) {
-      if(length(covariate) == 1)
+      if(length(covariate) == 1L)
         rep.int(covariate, length(locations$x))
       else if(length(covariate) == length(locations$x))
         covariate

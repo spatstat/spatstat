@@ -38,7 +38,7 @@ compareFit <- function(object, Fun, r=NULL, breaks=NULL,
   # fix a common vector of r values
   if(is.null(r)) {
     # compute first function 
-    fun1 <- with(h[1,,drop=TRUE,strip=FALSE],
+    fun1 <- with(h[1L,,drop=TRUE,strip=FALSE],
                  do.call(Fun,
                          append(list(object=obj,
                                      trend=tren,
@@ -50,10 +50,10 @@ compareFit <- function(object, Fun, r=NULL, breaks=NULL,
     r <- with(fun1, .x)
   }
   # compute the subsequent functions
-  if(N == 1)
+  if(N == 1L)
     funs2toN <- NULL
   else 
-    funs2toN <- with(h[-1, , drop=TRUE, strip=FALSE],
+    funs2toN <- with(h[-1L, , drop=TRUE, strip=FALSE],
                      do.call(Fun,
                              append(list(object=obj,
                                          trend=tren,

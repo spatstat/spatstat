@@ -17,9 +17,9 @@ beachcolours <- function(range, sealevel = 0, monochrome=FALSE,
     return(grey(seq(from=0,to=1,length.out=ncolours)))
   stopifnot(is.numeric(range) && length(range) == 2)
   stopifnot(all(is.finite(range)))
-  depths <- range[1]
-  peaks <- range[2]
-  dv <- diff(range)/(ncolours - 1)
+  depths <- range[1L]
+  peaks <- range[2L]
+  dv <- diff(range)/(ncolours - 1L)
   epsilon <- nbeach * dv/2
   lowtide <- max(sealevel - epsilon, depths)
   hightide <-  min(sealevel + epsilon, peaks)

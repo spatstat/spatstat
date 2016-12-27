@@ -57,7 +57,7 @@ cdf.test.mppm <- local({
     nless <- sum(sim.pvals < pobs)
     nplus <- sum(sim.pvals == pobs & sim.stats > tobs)
     nties <- sum(sim.pvals == pobs & sim.stats == tobs) 
-    result$p.value <- (nless + nplus + sample(0:nties, 1))/(nsim+1)
+    result$p.value <- (nless + nplus + sample(0:nties, 1L))/(nsim+1L)
     ##
     result$method <- c("Monte Carlo test of fitted Gibbs model",
                        paste("based on", nsim, "repetitions of"),
@@ -105,7 +105,7 @@ cdf.test.mppm <- local({
                    "number of point patterns in data of original model"))
     } else if(is.hyperframe(covariate)) {
       ## extract first column
-      covariate <- covariate[,1, drop=TRUE]
+      covariate <- covariate[,1L, drop=TRUE]
       if(length(covariate) != npat)
         stop(paste("Number of rows of covariate hyperframe does not match",
                    "number of point patterns in data of original model"))
@@ -222,9 +222,9 @@ cdf.test.mppm <- local({
       ## jitter observed values to avoid ties
       grain <- min(diff(sort(unique(ZX))))/8
       jit <- runif(length(ZX), min=0, max=grain)
-      sgn <- sample(c(-1,1), length(ZX), replace=TRUE)
-      sgn[ZX==min(xxx)] <- 1
-      sgn[ZX==max(xxx)] <- -1
+      sgn <- sample(c(-1L,1L), length(ZX), replace=TRUE)
+      sgn[ZX==min(xxx)] <- 1L
+      sgn[ZX==max(xxx)] <- -1L
       U <- FZ(ZX + sgn*jit)
     }
 

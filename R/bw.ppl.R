@@ -16,7 +16,7 @@ bw.ppl <- function(X, ..., srange=NULL, ns=16, sigma=NULL, weights=NULL) {
       nnd <- nndist(X)
       srange <- c(min(nnd[nnd > 0]), diameter(as.owin(X))/2)
     }
-    sigma <- geomseq(from=srange[1], to=srange[2], length.out=ns)
+    sigma <- geomseq(from=srange[1L], to=srange[2L], length.out=ns)
   }
   cv <- numeric(ns)
   for(i in 1:ns) {

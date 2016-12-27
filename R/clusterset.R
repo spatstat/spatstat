@@ -71,6 +71,6 @@ clusterset <- function(X, what=c("marks", "domain"),
     out$domain <- domain
     if(verbose) cat("done.\n")
   }
-  out <- if(length(what) == 1) out[[what]] else out
+  out <- if(length(what) == 1L) out[[what]] else out
   return(out)
 }

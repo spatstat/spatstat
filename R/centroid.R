@@ -29,8 +29,8 @@ intX.xypolygon <- function(polly) {
   y <- y - min(y) 
 
   # join vertex n to vertex 1
-  xr <- c(x, x[1])
-  yr <- c(y, y[1])
+  xr <- c(x, x[1L])
+  yr <- c(y, y[1L])
 
   # slope
   dx <- diff(xr)
@@ -100,8 +100,8 @@ intY.xypolygon <- function(polly) {
   y <- y - yadjust 
 
   # join vertex n to vertex 1
-  xr <- c(x, x[1])
-  yr <- c(y, y[1])
+  xr <- c(x, x[1L])
+  yr <- c(y, y[1L])
 
   # slope
   dx <- diff(xr)

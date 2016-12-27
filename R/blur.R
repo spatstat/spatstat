@@ -32,7 +32,7 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
     stopifnot(is.matrix(varcov) && nrow(varcov) == 2 && ncol(varcov) ==
               2)
   ngiven <- varcov.given + sigma.given
-  switch(ngiven + 1,
+  switch(ngiven + 1L,
          {
            sigma <- (1/8) * min(diff(x$xrange), diff(x$yrange))
          }, {

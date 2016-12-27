@@ -49,7 +49,7 @@ bc.ppm <- function(fit, ..., nfine=256) {
   # Newton-Raphson
   Iinv <- vcov(fit, hessian=TRUE)
   theta <- theta0 + Iinv %*% score
-  theta <- theta[ , 1, drop=TRUE]
+  theta <- theta[ , 1L, drop=TRUE]
   #
 #  return(list(theta0=theta0, theta=theta))
   return(theta)
@@ -65,7 +65,7 @@ rex <- function(x, r=2, k=1, recursive=FALSE) {
   if(!is.matrix(x)) x <- matrix(x, nrow=1)
   if(ncol(x) <= 1) return(x)
   rk <- r^k
-  y <- (rk * x[, -1, drop=FALSE] - x[, -ncol(x), drop=FALSE])/(rk - 1)
+  y <- (rk * x[, -1L, drop=FALSE] - x[, -ncol(x), drop=FALSE])/(rk - 1)
   if(recursive)
     y <- rex(y, r=r, k=k+1, recursive=TRUE)
   return(y)

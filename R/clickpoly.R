@@ -7,7 +7,7 @@
 #
 
 clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
-  if((!add) | dev.cur() == 1) {
+  if((!add) | dev.cur() == 1L) {
     plot(0,0,type="n", xlab="", ylab="", xlim=c(0,1), ylim=c(0,1), asp=1.0,
          axes=FALSE)
     rect(0,0,1,1)

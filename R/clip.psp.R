@@ -71,13 +71,13 @@ cliprect.psp <- function(x, window) {
     result <- ifelseXB(betwee, tval, NA)
     return(result)
   }
-  between <- function(x, r) { ((x-r[1]) * (x-r[2])) <= 0 }
+  between <- function(x, r) { ((x-r[1L]) * (x-r[2L])) <= 0 }
   tx <- cbind(ifelse0NA(between(ends$x0, window$xrange)),
               ifelse1NA(between(ends$x1, window$xrange)),
-              tvalue(ends$x0, ends$x1, window$xrange[1]),
-              tvalue(ends$x0, ends$x1, window$xrange[2]))
+              tvalue(ends$x0, ends$x1, window$xrange[1L]),
+              tvalue(ends$x0, ends$x1, window$xrange[2L]))
   # discard segments which do not lie in the x range 
-  nx <- apply(!is.na(tx), 1, sum)
+  nx <- apply(!is.na(tx), 1L, sum)
   ok <- (nx >= 2)
   if(!any(ok))
     return(x.inside)
@@ -87,8 +87,8 @@ cliprect.psp <- function(x, window) {
   in1  <- in1[ok]
   marx <- marx %msub% ok
   # Clip the segments to the x range
-  tmin <- apply(tx, 1, min, na.rm=TRUE)
-  tmax <- apply(tx, 1, max, na.rm=TRUE)
+  tmin <- apply(tx, 1L, min, na.rm=TRUE)
+  tmax <- apply(tx, 1L, max, na.rm=TRUE)
   dx <- ends$x1 - ends$x0
   dy <- ends$y1 - ends$y0
   ends.xclipped <- data.frame(x0=ends$x0 + tmin * dx,
@@ -101,10 +101,10 @@ cliprect.psp <- function(x, window) {
   in1 <- inside.owin(ends$x1, ends$y1, window)
   ty <- cbind(ifelse0NA(in0),
               ifelse1NA(in1),
-              tvalue(ends$y0, ends$y1, window$yrange[1]),
-              tvalue(ends$y0, ends$y1, window$yrange[2]))
+              tvalue(ends$y0, ends$y1, window$yrange[1L]),
+              tvalue(ends$y0, ends$y1, window$yrange[2L]))
   # discard segments which do not lie in the y range 
-  ny <- apply(!is.na(ty), 1, sum)
+  ny <- apply(!is.na(ty), 1L, sum)
   ok <- (ny >= 2)
   if(!any(ok))
     return(x.inside)
@@ -114,8 +114,8 @@ cliprect.psp <- function(x, window) {
   in1  <- in1[ok]
   marx <- marx %msub% ok
   # Clip the segments to the y range
-  tmin <- apply(ty, 1, min, na.rm=TRUE)
-  tmax <- apply(ty, 1, max, na.rm=TRUE)
+  tmin <- apply(ty, 1L, min, na.rm=TRUE)
+  tmax <- apply(ty, 1L, max, na.rm=TRUE)
   dx <- ends$x1 - ends$x0
   dy <- ends$y1 - ends$y0
   ends.clipped <- data.frame(x0=ends$x0 + tmin * dx,

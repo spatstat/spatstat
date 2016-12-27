@@ -24,7 +24,7 @@ compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,
     stopifnot(is.matrix(weights) && all(dim(weights)==dim(D)))
     wvalues <- weights[ok]
   } else wvalues <- NULL
-  # count the number of D values in each interval (r[k], r[k+1]]
+  # count the number of D values in each interval (r[k], r[k+1L]]
   counts <- whist(Dvalues, breaks=breaks$val, weights=wvalues)
   # cumulative counts: number of D values in [0, r[k])
   Kcount <- cumsum(counts)
