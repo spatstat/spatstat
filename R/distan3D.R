@@ -20,8 +20,8 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
   # special cases
   if(n == 0)
     return(matrix(numeric(0), nrow=0, ncol=0))
-  else if(n == 1)
-    return(matrix(0,nrow=1,ncol=1))
+  else if(n == 1L)
+    return(matrix(0,nrow=1L,ncol=1L))
   #
   if(!periodic) {
     Cout <- .C("D3pairdist",
@@ -69,7 +69,7 @@ nndist.pp3 <- function(X, ..., k=1) {
   # k can be a single integer or an integer vector
   if(length(k) == 0)
     stop("k is an empty vector")
-  else if(length(k) == 1) {
+  else if(length(k) == 1L) {
     if(k != round(k) || k <= 0)
       stop("k is not a positive integer")
   } else {
@@ -81,7 +81,7 @@ nndist.pp3 <- function(X, ..., k=1) {
   kmax <- max(k)
 
   # trivial cases
-  if(n <= 1) {
+  if(n <= 1L) {
     # empty pattern => return numeric(0)
     # or pattern with only 1 point => return Inf
     nnd <- matrix(Inf, nrow=n, ncol=kmax)
@@ -90,11 +90,11 @@ nndist.pp3 <- function(X, ..., k=1) {
   }
   
   # number of neighbours that are well-defined
-  kmaxcalc <- min(n-1, kmax)
+  kmaxcalc <- min(n-1L, kmax)
 
   # calculate k-nn distances for k <= kmaxcalc
   
-  if(kmaxcalc == 1) {
+  if(kmaxcalc == 1L) {
     # calculate nearest neighbour distance only
     nnd<-numeric(n)
     o <- fave.order(z)
@@ -105,7 +105,7 @@ nndist.pp3 <- function(X, ..., k=1) {
                y= as.double(y[o]),
                z= as.double(z[o]),
                nnd= as.double(nnd),
-               nnwhich = as.integer(integer(1)),
+               nnwhich = as.integer(integer(1L)),
                huge=as.double(big))
     nnd[o] <- Cout$nnd
   } else {
@@ -120,7 +120,7 @@ nndist.pp3 <- function(X, ..., k=1) {
                y    = as.double(y[o]),
                z    = as.double(z[o]),
                nnd  = as.double(nnd),
-               nnwhich = as.integer(integer(1)),
+               nnwhich = as.integer(integer(1L)),
                huge = as.double(big))
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
@@ -151,7 +151,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
   # k can be a single integer or an integer vector
   if(length(k) == 0)
     stop("k is an empty vector")
-  else if(length(k) == 1) {
+  else if(length(k) == 1L) {
     if(k != round(k) || k <= 0)
       stop("k is not a positive integer")
   } else {
@@ -170,7 +170,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
   z <- xyz$z
   
   # special cases
-  if(n <= 1) {
+  if(n <= 1L) {
     # empty pattern => return integer(0)
     # or pattern with only 1 point => return NA
     nnw <- matrix(as.integer(NA), nrow=n, ncol=kmax)
@@ -179,11 +179,11 @@ nnwhich.pp3 <- function(X, ..., k=1) {
   }
 
   # number of neighbours that are well-defined
-  kmaxcalc <- min(n-1, kmax)
+  kmaxcalc <- min(n-1L, kmax)
 
   # identify k-nn for k <= kmaxcalc
 
-  if(kmaxcalc == 1) {
+  if(kmaxcalc == 1L) {
     # identify nearest neighbour only
     nnw <- integer(n)
     o <- fave.order(z)
@@ -193,7 +193,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                x = as.double(x[o]),
                y = as.double(y[o]),
                z = as.double(z[o]),
-               nnd = as.double(numeric(1)),
+               nnd = as.double(numeric(1L)),
                nnwhich = as.integer(nnw),
                huge = as.double(big))
     # [sic] Conversion from C to R indexing is done in C code.
@@ -214,7 +214,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                x = as.double(x[o]),
                y = as.double(y[o]),
                z = as.double(z[o]),
-               nnd = as.double(numeric(1)),
+               nnd = as.double(numeric(1L)),
                nnwhich = as.integer(nnw),
                huge = as.double(big))
     # [sic] Conversion from C to R indexing is done in C code.

@@ -149,8 +149,8 @@ dppmFixAlgorithm <- function(algorithm, changealgorithm, clusters, startpar){
     bb <- dppparbounds(clusters, names(startpar))
     if(all(is.finite(bb))){
       algorithm <- "Brent"
-      lower <- bb[1]
-      upper <- bb[2]
+      lower <- bb[1L]
+      upper <- bb[2L]
     } else{
       algorithm <- "BFGS"
     }

@@ -23,7 +23,7 @@ density.lpp <- function(x, sigma, ...,
   } else {
     stopifnot(is.numeric(weights))
     check.nvector(weights, np, oneok=TRUE)
-    if(length(weights) == 1) weights <- rep(weights, np) 
+    if(length(weights) == 1L) weights <- rep(weights, np) 
   }
   # pixellate linear network
   Llines <- as.psp(L)
@@ -68,7 +68,7 @@ density.lpp <- function(x, sigma, ...,
     stack <- rbind(data.frame(seg = c(segi, segi),
                               from  = c(TRUE, FALSE), 
                               distance = len * c(tpi, 1-tpi),
-                              weight = rep(weights[i], 2)),
+                              weight = rep(weights[i], 2L)),
                    stack)
   }
   Lfrom <- L$from
@@ -89,12 +89,12 @@ density.lpp <- function(x, sigma, ...,
     maxmass <- max(masses)
     if(savehistory)
       history <- rbind(history,
-                       data.frame(iter=nrow(history)+1,
+                       data.frame(iter=nrow(history)+1L,
                                   qlen=nrow(stack),
                                   totmass=totmass,
                                   maxmass=maxmass))
     if(verbose) {
-      niter <- niter + 1
+      niter <- niter + 1L
       cat(paste("Iteration", niter, "\tStack length", nrow(stack), "\n"))
       cat(paste("Total stack mass", totmass, "\tMaximum", maxmass, "\n"))
     }
@@ -111,8 +111,8 @@ density.lpp <- function(x, sigma, ...,
     if(nrow(stack) == 0)
       break;
     # pop the top of the stack
-    H  <- stack[1, , drop=FALSE]
-    stack <- stack[-1, , drop=FALSE]
+    H  <- stack[1L, , drop=FALSE]
+    stack <- stack[-1L, , drop=FALSE]
     # segment and vertex
     Hseg <- H$seg
     Hvert <- if(H$from) Lfrom[Hseg] else Lto[Hseg]

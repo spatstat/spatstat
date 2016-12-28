@@ -31,7 +31,7 @@ distfun.lpp <- local({
     splat("Distance function for lpp object")
     envx <- environment(x)
     k <-  get("k", envir=envx)
-    if(k != 1)
+    if(k != 1L)
       splat("Yields distance to", ordinal(k), "nearest point")
     X <-  get("X", envir=envx)
     print(X)

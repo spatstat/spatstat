@@ -57,7 +57,7 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
                           constrained=TRUE,
                           exact=FALSE) {
   if(is.matrix(r)) {
-    if(sum(dim(r) > 1) > 1)
+    if(sum(dim(r) > 1) > 1L)
       stop("r should be a vector or single value")
     r <- as.vector(r)
   }
@@ -90,7 +90,7 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
   nr <- length(r)
   if(npts == 0)
     return(numeric(nr))
-  else if(npts == 1) 
+  else if(npts == 1L) 
     return(discpartarea(X, r, W))
   samebox <- (W$type == "rectangle") &&
               identical(all.equal(W, as.owin(X)), "TRUE")

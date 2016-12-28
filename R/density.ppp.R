@@ -261,15 +261,15 @@ densitypointsEngine <- function(x, sigma, ...,
   }
   # validate weights
   if(is.null(weights)) {
-    k <- 1
+    k <- 1L
   } else if(is.matrix(weights) || is.data.frame(weights)) {
     k <- ncol(weights)
     stopifnot(nrow(weights) == npoints(x))
     weights <- as.data.frame(weights)
     weightnames <- colnames(weights)
   } else {
-    k <- 1
-    stopifnot(length(weights) == npoints(x) || length(weights) == 1)
+    k <- 1L
+    stopifnot(length(weights) == npoints(x) || length(weights) == 1L)
   }
   # evaluate edge correction weights at points 
   if(edge) {
@@ -281,9 +281,9 @@ densitypointsEngine <- function(x, sigma, ...,
       xx <- x$x
       yy <- x$y
       xprob <-
-        pnorm(xr[2], mean=xx, sd=sigma) - pnorm(xr[1], mean=xx, sd=sigma)
+        pnorm(xr[2L], mean=xx, sd=sigma) - pnorm(xr[1L], mean=xx, sd=sigma)
       yprob <-
-        pnorm(yr[2], mean=yy, sd=sigma) - pnorm(yr[1], mean=yy, sd=sigma)
+        pnorm(yr[2L], mean=yy, sd=sigma) - pnorm(yr[1L], mean=yy, sd=sigma)
       edgeweight <- xprob * yprob
     } else {
       edg <- second.moment.calc(x, sigma=sigma,
@@ -296,7 +296,7 @@ densitypointsEngine <- function(x, sigma, ...,
       # Diggle edge correction
       # edgeweight is attached to each point
       if(is.null(weights)) {
-        k <- 1
+        k <- 1L
         weights <- 1/edgeweight
       } else {
         weights <- weights/edgeweight
@@ -310,7 +310,7 @@ densitypointsEngine <- function(x, sigma, ...,
     if(debugging)
       cat('Using experimental code!\n')
     npts <- npoints(x)
-    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
+    result <- if(k == 1L) numeric(npts) else matrix(, npts, k)
     xx <- x$x
     yy <- x$y
     ## transform to standard coordinates
@@ -319,8 +319,8 @@ densitypointsEngine <- function(x, sigma, ...,
       yy <- yy/(sqrt(2) * sigma)
     } else {
       xy <- cbind(xx, yy) %*% matrixsqrt(Sinv/2)
-      xx <- xy[,1]
-      yy <- xy[,2]
+      xx <- xy[,1L]
+      yy <- xy[,2L]
       sorted <- FALSE
     }
     ## cutoff in standard coordinates
@@ -340,7 +340,7 @@ densitypointsEngine <- function(x, sigma, ...,
                result  = as.double(double(npts)))
       if(sorted) result <- zz$result else result[oo] <- zz$result
       result <- result * const
-    } else if(k == 1) {
+    } else if(k == 1L) {
       wtsort <- if(sorted) weights else weights[oo]
       zz <- .C("Gwtdenspt",
                nxy     = as.integer(npts),
@@ -371,7 +371,7 @@ densitypointsEngine <- function(x, sigma, ...,
     if(debugging)
       cat('Using standard code.\n')
     npts <- npoints(x)
-    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
+    result <- if(k == 1L) numeric(npts) else matrix(, npts, k)
     # sort into increasing order of x coordinate (required by C code)
     if(sorted) {
       xx <- x$x
@@ -392,7 +392,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  sig     = as.double(sd),
                  result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
-      } else if(k == 1) {
+      } else if(k == 1L) {
         wtsort <- if(sorted) weights else weights[oo]
         zz <- .C("wtdenspt",
                  nxy     = as.integer(npts),
@@ -431,7 +431,7 @@ densitypointsEngine <- function(x, sigma, ...,
                  sinv    = as.double(flatSinv),
                  result  = as.double(double(npts)))
         if(sorted) result <- zz$result else result[oo] <- zz$result 
-      } else if(k == 1) {
+      } else if(k == 1L) {
         # vector of weights
         wtsort <- if(sorted) weights else weights[oo]
         zz <- .C("awtdenspt",
@@ -468,7 +468,7 @@ densitypointsEngine <- function(x, sigma, ...,
     j <- close$j
     d <- close$d
     npts <- npoints(x)
-    result <- if(k == 1) numeric(npts) else matrix(, npts, k)
+    result <- if(k == 1L) numeric(npts) else matrix(, npts, k)
     # evaluate contribution from each close pair (i,j)
     if(isgauss) { 
       if(is.null(varcov)) {
@@ -477,8 +477,8 @@ densitypointsEngine <- function(x, sigma, ...,
         ## anisotropic kernel
         dx <- close$dx
         dy <- close$dy
-        contrib <- const * exp(-(dx * (dx * Sinv[1,1] + dy * Sinv[1,2])
-                                 + dy * (dx * Sinv[2,1] + dy * Sinv[2,2]))/2)
+        contrib <- const * exp(-(dx * (dx * Sinv[1L,1L] + dy * Sinv[1L,2L])
+                                 + dy * (dx * Sinv[2L,1L] + dy * Sinv[2L,2L]))/2)
       }
     } else {
       contrib <- evaluate2Dkernel(kernel, close$dx, close$dy,
@@ -488,7 +488,7 @@ densitypointsEngine <- function(x, sigma, ...,
     ifac <- factor(i, levels=1:npts)
     if(is.null(weights)) {
       result <- tapply(contrib, ifac, sum)
-    } else if(k == 1) {
+    } else if(k == 1L) {
       wcontrib <- contrib * weights[j]
       result <- tapply(wcontrib, ifac, sum)
     } else {
@@ -514,7 +514,7 @@ densitypointsEngine <- function(x, sigma, ...,
 
   # ............. validate .................................
   npts <- npoints(x)
-  if(k == 1) {
+  if(k == 1L) {
     result <- as.numeric(result)
     if(length(result) != npts) 
       stop(paste("Internal error: incorrect number of lambda values",
@@ -566,7 +566,7 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
     # interpret the result as either sigma or varcov
     if(!is.numeric(bw))
       stop("bandwidth selector returned a non-numeric result")
-    if(length(bw) %in% c(1,2)) {
+    if(length(bw) %in% c(1L,2L)) {
       sigma <- as.numeric(bw)
       if(!all(sigma > 0)) {
         gripe <- "bandwidth selector returned negative value(s)"
@@ -582,7 +582,7 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
   varcov.given <- !is.null(varcov)
   if(sigma.given) {
     stopifnot(is.numeric(sigma))
-    stopifnot(length(sigma) %in% c(1,2))
+    stopifnot(length(sigma) %in% c(1L,2L))
     if(!allow.zero)
       stopifnot(all(sigma > 0))
   }
@@ -590,7 +590,7 @@ resolve.2D.kernel <- function(..., sigma=NULL, varcov=NULL, x, mindist=NULL,
     stopifnot(is.matrix(varcov) && nrow(varcov) == 2 && ncol(varcov)==2 )
   # reconcile
   ngiven <- varcov.given + sigma.given
-  switch(ngiven+1,
+  switch(ngiven+1L,
          {
            # default
            w <- x$window
@@ -635,15 +635,15 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
   cutoff <- 8 * sd
   # validate weights
   if(is.null(weights)) {
-    k <- 1
+    k <- 1L
   } else if(is.matrix(weights) || is.data.frame(weights)) {
     k <- ncol(weights)
     stopifnot(nrow(weights) == npoints(Xdata))
     weights <- as.data.frame(weights)
     weightnames <- colnames(weights)
   } else {
-    k <- 1
-    stopifnot(length(weights) == npoints(Xdata) || length(weights) == 1)
+    k <- 1L
+    stopifnot(length(weights) == npoints(Xdata) || length(weights) == 1L)
   }
   # evaluate edge correction weights at points 
   if(edge) {
@@ -666,9 +666,9 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
       xx <- xedge$x
       yy <- xedge$y
       xprob <-
-        pnorm(xr[2], mean=xx, sd=sigma) - pnorm(xr[1], mean=xx, sd=sigma)
+        pnorm(xr[2L], mean=xx, sd=sigma) - pnorm(xr[1L], mean=xx, sd=sigma)
       yprob <-
-        pnorm(yr[2], mean=yy, sd=sigma) - pnorm(yr[1], mean=yy, sd=sigma)
+        pnorm(yr[2L], mean=yy, sd=sigma) - pnorm(yr[1L], mean=yy, sd=sigma)
       edgeweight <- xprob * yprob
     } else {
       edg <- second.moment.calc(Xdata, sigma=sigma,
@@ -679,7 +679,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
       ## Diggle edge correction
       ## edgeweight is attached to each data point
       if(is.null(weights)) {
-        k <- 1
+        k <- 1L
         weights <- 1/edgeweight
       } else {
         weights <- weights/edgeweight
@@ -689,7 +689,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
   
   ndata <- npoints(Xdata)
   nquery <- npoints(Xquery)
-  result <- if(k == 1) numeric(nquery) else matrix(, nquery, k)
+  result <- if(k == 1L) numeric(nquery) else matrix(, nquery, k)
   ## coordinates
   xq <- Xquery$x
   yq <- Xquery$y
@@ -718,7 +718,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                sig     = as.double(sd),
                result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
-    } else if(k == 1) {
+    } else if(k == 1L) {
       wtsort <- if(sorted) weights else weights[ood]
       zz <- .C("wtcrdenspt",
                nquery  = as.integer(nquery),
@@ -767,7 +767,7 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                sinv    = as.double(flatSinv),
                result  = as.double(double(nquery)))
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
-    } else if(k == 1) {
+    } else if(k == 1L) {
       ## vector of weights
       wtsort <- if(sorted) weights else weights[ood]
       zz <- .C("awtcrdenspt",

@@ -22,8 +22,8 @@ deriv.fv <- local({
     method <- match.arg(method)
 
     ## select columns
-    ##  if(length(which) == 1 && which %in% .Spatstat.FvAbbrev) {
-    if(length(which) == 1) {
+    ##  if(length(which) == 1L && which %in% .Spatstat.FvAbbrev) {
+    if(length(which) == 1L) {
       if(which == ".x")
         stop("Cannot smooth the function argument")
       which <- fvnames(f, which)
@@ -47,19 +47,19 @@ deriv.fv <- local({
       ## Derivative should be periodic
       ## Recycle data to imitate periodicity
       DR <- diff(range(rvals))
-      rvals <- c(rvals[-nr] - DR, rvals, rvals[-1] + DR)
+      rvals <- c(rvals[-nr] - DR, rvals, rvals[-1L] + DR)
       yleft <- yvals[-nr, , drop=FALSE]
-      yright <-  yvals[-1, , drop=FALSE]
+      yright <-  yvals[-1L, , drop=FALSE]
       if(!periodic) {
         ## original data are not periodic (e.g. cdf of angular variable)
         ## but derivative must be periodic
-        jump <- matrix(as.numeric(yvals[nr,] - yvals[1, ]),
-                       nr-1, ncol(yvals), byrow=TRUE)
+        jump <- matrix(as.numeric(yvals[nr,] - yvals[1L, ]),
+                       nr-1L, ncol(yvals), byrow=TRUE)
         yleft <- yleft - jump
         yright <- yright + jump
       }
       yvals <- rbind(yleft, yvals, yright)
-      actual <- nr:(2*nr - 1)
+      actual <- nr:(2*nr - 1L)
       NR <- length(rvals)
     } else {
       NR <- nr
@@ -73,8 +73,8 @@ deriv.fv <- local({
       if(periodic) 
         kinks <- c(kinks-DR, kinks, kinks+DR)
       breaks <- sort(unique(kinks))
-      if(breaks[1] > rr[1]) breaks <- c(rr[1], breaks)
-      if(max(breaks) < rr[2]) breaks <- c(breaks, rr[2])
+      if(breaks[1L] > rr[1L]) breaks <- c(rr[1L], breaks)
+      if(max(breaks) < rr[2L]) breaks <- c(breaks, rr[2L])
       cutx <- cut(rvals, breaks=breaks, include.lowest=TRUE)
     }
     ## process

@@ -17,8 +17,8 @@
 	
 corners <- function(window) {
 	window <- as.owin(window)
-	x <- window$xrange[c(1,2,1,2)]
-	y <- window$yrange[c(1,1,2,2)]
+	x <- window$xrange[c(1L,2L,1L,2L)]
+	y <- window$yrange[c(1L,1L,2L,2L)]
 	return(list(x=x, y=y))
 }
 
@@ -27,8 +27,8 @@ gridcentres <- function(window, nx, ny) {
 	window <- as.owin(window)
 	xr <- window$xrange
 	yr <- window$yrange
-	x <- seq(from=xr[1], to=xr[2], length.out = 2 * nx + 1)[2 * (1:nx)]
-	y <- seq(from=yr[1], to=yr[2], length.out = 2 * ny + 1)[2 * (1:ny)]
+	x <- seq(from=xr[1L], to=xr[2L], length.out = 2L * nx + 1L)[2L * (1:nx)]
+	y <- seq(from=yr[1L], to=yr[2L], length.out = 2L * ny + 1L)[2L * (1:ny)]
 	x <- rep.int(x, ny)
 	y <- rep.int(y, rep.int(nx, ny))
 	return(list(x=x, y=y))
@@ -78,7 +78,7 @@ cellmiddles <- local({
 
   dcut <- function(x, nx, xrange) {
     dx <- diff(xrange)/nx
-    fx <- ((x - xrange[1])/dx) %% 1
+    fx <- ((x - xrange[1L])/dx) %% 1
     bx <- dx * pmin(fx, 1-fx)
     bx
   }
@@ -201,8 +201,8 @@ default.dummy <- function(X, nd=NULL, random=FALSE, ntile=NULL, npix = NULL,
                   all(nd %% win$dim == 0)
   # make dummy points
   dummy <- if(quasi) rQuasi(prod(nd), as.rectangle(win)) else
-           if(random) stratrand(win, nd[1], nd[2], 1) else 
-           cellmiddles(win, nd[1], nd[2], npix)
+           if(random) stratrand(win, nd[1L], nd[2L], 1) else 
+           cellmiddles(win, nd[1L], nd[2L], npix)
   dummy <- as.ppp(dummy, win, check=FALSE)
   # restrict to window
   if(!is.rectangle(win) && !periodsample)
@@ -242,7 +242,7 @@ default.n.tiling <- local({
     xname <- short.deparse(substitute(x))
     x <- ensure2vector(x)
     if(verbose)
-      cat(paste(blah, xname, "=", x[1], "*", x[2], "\n"))
+      cat(paste(blah, xname, "=", x[1L], "*", x[2L], "\n"))
     x
   }
   minmultiple <- function(n, lo, hi) {
@@ -270,21 +270,21 @@ default.n.tiling <- local({
   }
 
   min2mul <- function(n, lo, hi) 
-    c(minmultiple(n[1], lo[1], hi[1]),
-      minmultiple(n[2], lo[2], hi[2]))
+    c(minmultiple(n[1L], lo[1L], hi[1L]),
+      minmultiple(n[2L], lo[2L], hi[2L]))
 
   min2div <- function(N, lo, Nbig) 
-    c(mindivisor(N[1], lo[1], Nbig[1]),
-      mindivisor(N[2], lo[2], Nbig[2]))
+    c(mindivisor(N[1L], lo[1L], Nbig[1L]),
+      mindivisor(N[2L], lo[2L], Nbig[2L]))
 
   maxdiv <- function(n, k=1) {
-    if(length(n) > 1)
-      return(c(maxdiv(n[1], k),
-               maxdiv(n[2], k)))
+    if(length(n) > 1L)
+      return(c(maxdiv(n[1L], k),
+               maxdiv(n[2L], k)))
     ## k-th largest divisor other than n
     d <- divisors(n)
     m <- length(d)
-    ans <- if(m == 2) n else if(m < 2+k) d[2] else d[m-k]
+    ans <- if(m == 2L) n else if(m < 2+k) d[2L] else d[m-k]
     return(ans)
   }
 
@@ -359,7 +359,7 @@ default.n.tiling <- local({
      if(!pixels) {
        nd <- ntile <- ensure2vector(ndminX)
        if(verbose)
-         cat(paste("nd and ntile default to", nd[1], "*", nd[2], "\n"))
+         cat(paste("nd and ntile default to", nd[1L], "*", nd[2L], "\n"))
      } else {
        # find suitable divisors of the number of pixels
        nd <- ntile <- min2div(Nmin, ndminX, Nmax)
@@ -377,7 +377,7 @@ default.n.tiling <- local({
 
   if(!ntile.given && quasi) {
     if(verbose) cat("Adjusting ntile because quasi=TRUE\n")
-    ntile <- maxdiv(ntile, if(pixels) 2 else 1)
+    ntile <- maxdiv(ntile, if(pixels) 2L else 1L)
   } 
  
   if(!npix.given && pixels) 
@@ -388,13 +388,13 @@ default.n.tiling <- local({
       cat(paste("dummy points:",
                 paste0(if(random) "stratified random in" else NULL,
                        "grid"),
-                nd[1], "x", nd[2], "\n"))
+                nd[1L], "x", nd[2L], "\n"))
     else
       cat(paste("dummy points:",
-                nd[1], "x", nd[2], "=", prod(nd),
+                nd[1L], "x", nd[2L], "=", prod(nd),
                 "quasirandom points\n"))
-    cat(paste("weighting tiles", ntile[1], "x", ntile[2], "\n"))
-    if(pixels) cat(paste("pixel grid", npix[1], "x", npix[2], "\n"))
+    cat(paste("weighting tiles", ntile[1L], "x", ntile[2L], "\n"))
+    if(pixels) cat(paste("pixel grid", npix[1L], "x", npix[2L], "\n"))
   }
 
   if(pixels) 

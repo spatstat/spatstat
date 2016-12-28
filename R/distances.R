@@ -42,16 +42,16 @@ pairdist.default <-
   # special cases
   if(n == 0)
     return(matrix(numeric(0), nrow=0, ncol=0))
-  else if(n == 1)
-    return(matrix(0,nrow=1,ncol=1))
+  else if(n == 1L)
+    return(matrix(0,nrow=1L,ncol=1L))
 
   if((periodic<- !is.null(period))) {
     stopifnot(is.numeric(period))
     stopifnot(length(period) == 2 || length(period) == 1)
     stopifnot(all(period > 0))
     if(length(period) == 1) period <- rep.int(period, 2)
-    wide <- period[1]
-    high <- period[2]
+    wide <- period[1L]
+    high <- period[2L]
   }
 
   switch(method,
@@ -145,9 +145,9 @@ crossdist.default <-
     stopifnot(is.numeric(period))
     stopifnot(length(period) == 2 || length(period) == 1)
     stopifnot(all(period > 0))
-    if(length(period) == 1) period <- rep.int(period, 2)
-    wide <- period[1]
-    high <- period[2]
+    if(length(period) == 1L) period <- rep.int(period, 2)
+    wide <- period[1L]
+    high <- period[2L]
   }
 
    switch(method,

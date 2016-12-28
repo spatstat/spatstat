@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.48-0.001
+Version: 1.48-0.002
 Nickname: Present Company Excepted
-Date: 2016-12-27
+Date: 2016-12-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

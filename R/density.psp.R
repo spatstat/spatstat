@@ -36,7 +36,7 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
              u2 <- - dx * zin[i] + dy * coz[i]
              value <- dnorm(u2, sd=sigma) *
                (pnorm(u1, sd=sigma) - pnorm(u1-len[i], sd=sigma))
-             totvalue <- if(i == 1) value else (value + totvalue)
+             totvalue <- if(i == 1L) value else (value + totvalue)
            }
            dens <- im(totvalue, w$xcol, w$yrow)
          },

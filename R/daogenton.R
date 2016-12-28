@@ -77,8 +77,8 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   # pack up
   method <- tX$method
   method <- c("Dao-Genton adjusted goodness-of-fit test",
-              paste("based on", method[1]),
-              paste("First stage:", method[2]),
+              paste("based on", method[1L]),
+              paste("First stage:", method[2L]),
               method[-(1:2)],
               if(afortiori) {
                 paren(paste("Second stage was omitted: p0 =", pX,
@@ -190,13 +190,13 @@ dg.envelope <- function(X, ..., nsim=19,
          two.sided = { },
          less = {
            newdata$hi <- Inf
-           newlabl[1] <- "infinity"
-           newdesc[1] <- "infinite upper limit"
+           newlabl[1L] <- "infinity"
+           newdesc[1L] <- "infinite upper limit"
          },
          greater = {
            newdata$lo <- -Inf
-           newlabl[2] <- "infinity"
-           newdesc[2] <- "infinite lower limit"
+           newlabl[2L] <- "infinity"
+           newdesc[2L] <- "infinite lower limit"
          })
   result <- bind.fv(result, newdata, newlabl, newdesc)
   fvnames(result, ".") <- rev(fvnames(result, "."))

@@ -58,7 +58,7 @@ DiggleGatesStibbard <- local({
          parnames = "interaction range", 
          init   = function(self) {
            rho <- self$par$rho
-           if(!is.numeric(rho) || length(rho) != 1 || rho <= 0)
+           if(!is.numeric(rho) || length(rho) != 1L || rho <= 0)
              stop("interaction range rho must be a positive number")
          },
          update = NULL,       # default OK
@@ -89,10 +89,10 @@ DiggleGatesStibbard <- local({
              message("Using fast eval for DiggleGatesStibbard")
            rho <- potpars$rho
            idX <- seq_len(npoints(X))
-           idU <- rep.int(-1, npoints(U))
-           idU[EqualPairs[,2]] <- EqualPairs[,1]
+           idU <- rep.int(-1L, npoints(U))
+           idU[EqualPairs[,2L]] <- EqualPairs[,1L]
            v <- dgsTerms(U, X, idU, idX, rho)
-           v <- matrix(v, ncol=1)
+           v <- matrix(v, ncol=1L)
            attr(v, "IsOffset") <- TRUE
            return(v)
          },

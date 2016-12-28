@@ -46,7 +46,7 @@ nndist.ppx <- function(X, ..., k=1) {
 
   if(m == 0) {
     warning("nndist.ppx: Zero-dimensional coordinates: returning NA")
-    if(length(k) == 1)
+    if(length(k) == 1L)
       return(rep.int(NA_real_, n))
     else
       return(matrix(NA_real_, n, length(k)))
@@ -55,7 +55,7 @@ nndist.ppx <- function(X, ..., k=1) {
   # k can be a single integer or an integer vector
   if(length(k) == 0)
     stop("k is an empty vector")
-  else if(length(k) == 1) {
+  else if(length(k) == 1L) {
     if(k != round(k) || k <= 0)
       stop("k is not a positive integer")
   } else {
@@ -67,7 +67,7 @@ nndist.ppx <- function(X, ..., k=1) {
   kmax <- max(k)
 
   # trivial cases
-  if(n <= 1) {
+  if(n <= 1L) {
     # empty pattern => return numeric(0)
     # or pattern with only 1 point => return Inf
     nnd <- matrix(Inf, nrow=n, ncol=kmax)
@@ -76,14 +76,14 @@ nndist.ppx <- function(X, ..., k=1) {
   }
   
   # number of neighbours that are well-defined
-  kmaxcalc <- min(n-1, kmax)
+  kmaxcalc <- min(n-1L, kmax)
 
   # calculate k-nn distances for k <= kmaxcalc
   
-  if(kmaxcalc == 1) {
+  if(kmaxcalc == 1L) {
     # calculate nearest neighbour distance only
     nnd<-numeric(n)
-    o <- fave.order(coo[,1])
+    o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
     Cout <- .C("nndMD",
                n= as.integer(n),
@@ -95,7 +95,7 @@ nndist.ppx <- function(X, ..., k=1) {
   } else {
     # case kmaxcalc > 1
     nnd<-numeric(n * kmaxcalc)
-    o <- fave.order(coo[,1])
+    o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
     Cout <- .C("knndMD",
                n    = as.integer(n),
@@ -128,7 +128,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
   # k can be a single integer or an integer vector
   if(length(k) == 0)
     stop("k is an empty vector")
-  else if(length(k) == 1) {
+  else if(length(k) == 1L) {
     if(k != round(k) || k <= 0)
       stop("k is not a positive integer")
   } else {
@@ -146,14 +146,14 @@ nnwhich.ppx <- function(X, ..., k=1) {
   
   if(m == 0) {
     warning("nnwhich.ppx: Zero-dimensional coordinates: returning NA")
-    if(length(k) == 1)
+    if(length(k) == 1L)
       return(rep.int(NA_real_, n))
     else
       return(matrix(NA_real_, n, length(k)))
   }
   
   # special cases
-  if(n <= 1) {
+  if(n <= 1L) {
     # empty pattern => return integer(0)
     # or pattern with only 1 point => return NA
     nnw <- matrix(NA_integer_, nrow=n, ncol=kmax)
@@ -162,14 +162,14 @@ nnwhich.ppx <- function(X, ..., k=1) {
   }
 
   # number of neighbours that are well-defined
-  kmaxcalc <- min(n-1, kmax)
+  kmaxcalc <- min(n-1L, kmax)
 
   # identify k-nn for k <= kmaxcalc
 
-  if(kmaxcalc == 1) {
+  if(kmaxcalc == 1L) {
     # identify nearest neighbour only
     nnw <- integer(n)
-    o <- fave.order(coo[,1])
+    o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
     Cout <- .C("nnwMD",
                n = as.integer(n),
@@ -187,7 +187,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
   } else {
     # case kmaxcalc > 1
     nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
-    o <- fave.order(coo[,1])
+    o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
     Cout <- .C("knnwMD",
                n = as.integer(n),

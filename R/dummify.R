@@ -24,9 +24,9 @@ dummify <- function(x) {
     # convert to dummy variables
     nx <- length(x)
     lev <- levels(x)
-    y <- matrix(0, nrow=nx, ncol=length(lev))
+    y <- matrix(0L, nrow=nx, ncol=length(lev))
     colnames(y) <- lev
-    y[cbind(seq_len(nx), as.integer(x))] <- 1
+    y[cbind(seq_len(nx), as.integer(x))] <- 1L
     return(y)
   }
   # convert to numeric

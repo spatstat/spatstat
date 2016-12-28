@@ -26,15 +26,15 @@ disc <- local({
       npoly <- pmax(16, ceiling(2 * pi * radius/delta))
     } else npoly <- 128
     if(!mask) {
-      theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1)]
-      x <- centre[1] + radius * cos(theta)
-      y <- centre[2] + radius * sin(theta)
+      theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1L)]
+      x <- centre[1L] + radius * cos(theta)
+      y <- centre[2L] + radius * sin(theta)
       W <- owin(poly=list(x=x, y=y), check=FALSE)
     } else {
-      xr <- centre[1] + radius * c(-1,1)
-      yr <- centre[2] + radius * c(-1,1)
+      xr <- centre[1L] + radius * c(-1,1)
+      yr <- centre[2L] + radius * c(-1,1)
       B <- owin(xr,yr)
-      IW <- as.im(indic, B, x0=centre[1], y0=centre[2], r=radius, ...)
+      IW <- as.im(indic, B, x0=centre[1L], y0=centre[2L], r=radius, ...)
       W <- levelset(IW, 1, "==")
     }
     return(W)
@@ -74,23 +74,23 @@ ellipse <- local({
       xm <- a*co*cos(tx) - b*si*sin(tx)
       ym <- a*si*cos(ty) + b*co*sin(ty)
       ## Range of x and y.
-      xr <- xm*c(-1,1)+centre[1]
-      yr <- ym*c(-1,1)+centre[2]
+      xr <- xm*c(-1,1)+centre[1L]
+      yr <- ym*c(-1,1)+centre[2L]
       ## Wrecked-angle to contain the mask.
       B  <- as.mask(owin(xr,yr),...)
       ## Build the mask as a level set.
-      IW <- as.im(indic, B, x0=centre[1], y0=centre[2], a=a, b=b, co=co, si=si)
+      IW <- as.im(indic, B, x0=centre[1L], y0=centre[2L], a=a, b=b, co=co, si=si)
       return(levelset(IW, 1, "=="))
     }
     ## Polygonal.
     ## Build "horizontal" ellipse centred at 0:
-    theta <- seq(0, 2 * pi, length = npoly+1)[-(npoly+1)]
+    theta <- seq(0, 2 * pi, length = npoly+1)[-(npoly+1L)]
     xh <-  a * cos(theta)
     yh <-  b * sin(theta)
 
     ## Rotate through angle phi and shift centre:
-    x  <- centre[1] + co*xh - si*yh
-    y  <- centre[2] + si*xh + co*yh
+    x  <- centre[1L] + co*xh - si*yh
+    y  <- centre[2L] + si*xh + co*yh
     owin(poly=list(x = x, y = y))
   }
 

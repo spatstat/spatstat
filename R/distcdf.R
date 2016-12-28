@@ -24,7 +24,7 @@ distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
       #' dW should be a weight or vector of weights
       if(!is.vector(dW) || !is.numeric(dW))
         stop("If W is a point pattern, dW should be a vector of weights")
-      if(length(dW) == 1) {
+      if(length(dW) == 1L) {
         dW <- rep(dW, npoints(W))
       } else stopifnot(length(dW) == npoints(W))
       dW <- pixellate(W, weights=dW, ...)
@@ -42,7 +42,7 @@ distcdf <- function(W, V=W, ..., dW=1, dV=dW, nr=1024, regularise=TRUE) {
       #' dV should be a weight or vector of weights
       if(!is.vector(dV) || !is.numeric(dV))
         stop("If V is a point pattern, dV should be a vector of weights")
-      if(length(dV) == 1) {
+      if(length(dV) == 1L) {
         dV <- rep(dV, npoints(V))
       } else stopifnot(length(dV) == npoints(V))
       dV <- pixellate(V, weights=dV, ...)

@@ -39,7 +39,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
     residobj <-
       if(!is.null(rv)) rv else residuals.ppm(object, type=type, check=FALSE)
     residval <- with(residobj, "increment")
-    if(ncol(as.matrix(residval)) > 1)
+    if(ncol(as.matrix(residval)) > 1L)
       stop("Not implemented for vector-valued residuals; use [.msr to split into separate components")
     Y <- U %mark% residval
   }
@@ -74,7 +74,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
           Ydens <- as.im(-1, Y$window)
         } else if(is.stationary.ppm(object) && is.poisson.ppm(object)) {
           # all values of `cts' will be equal
-          Ydens <- as.im(cts[1], Y$window)
+          Ydens <- as.im(cts[1L], Y$window)
         } else {
           smallsigma <- maxnndist(Ycts)
           Ujitter <- U
@@ -147,7 +147,7 @@ diagnose.ppm.engine <- function(object, ..., type="eem", typename, opt,
   }
   
   if(opt$ymargin) {
-    yZ <- apply(Z$v, 1, sum, na.rm=TRUE) * Z$ystep
+    yZ <- apply(Z$v, 1L, sum, na.rm=TRUE) * Z$ystep
     if(type == "eem")
       EyZ <- rowSums(!is.na(Z$v)) * Z$ystep
     else

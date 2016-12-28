@@ -7,7 +7,7 @@
 #
 
 deltametric <- function(A, B, p=2, c=Inf, ...) {
-  stopifnot(is.numeric(p) && length(p) == 1 && p > 0)
+  stopifnot(is.numeric(p) && length(p) == 1L && p > 0)
   # ensure frames are identical
   bb <- boundingbox(as.rectangle(A), as.rectangle(B))
   # enforce identical frames

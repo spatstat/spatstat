@@ -115,7 +115,7 @@ dppkernel <- function(model, ...){
     return(dppapproxkernel(model, ...))
   if(length(model$freepar)>0)
     stop("Cannot extract the kernel of a partially specified model. Please supply all parameters.")
-  firstarg <- names(formals(fun))[1]
+  firstarg <- names(formals(fun))[1L]
   kernel <- function(x){
     allargs <- c(structure(list(x), .Names=firstarg), model$fixedpar)
     do.call(fun, allargs)
@@ -141,7 +141,7 @@ dppapproxkernel <- function(model, trunc = .99, W = NULL){
     W <- as.boxx(W)
     if(d!=ncol(W$ranges))
         stop(paste("The dimension of the window:", ncol(W$ranges), "is inconsistent with the dimension of the model:", d))
-    Wscale <- as.numeric(W$ranges[2,]-W$ranges[1,])
+    Wscale <- as.numeric(W$ranges[2L,]-W$ranges[1L,])
     tmp <- dppeigen(model, trunc, Wscale, stationary=FALSE)
     index <- tmp$index
     eig <- tmp$eig
@@ -150,7 +150,7 @@ dppapproxkernel <- function(model, trunc = .99, W = NULL){
     rm(tmp)
     f <- function(r){
         x <- matrix(0, nrow=length(r), ncol=d)
-        x[,1] <- r
+        x[,1L] <- r
         basis <- fourierbasis(x, index, win = W)
         approx <- matrix(eig, nrow=length(eig), ncol=length(r)) * basis
         return(Re(colSums(approx)))
@@ -181,7 +181,7 @@ Kmodel.detpointprocfamily <- function(model, ...){
     stop("Cannot extract the K function of a partially specified model. Please supply all parameters.")
   fun <- model$Kfun
   if(!is.null(fun)){
-      firstarg <- names(formals(fun))[1]
+      firstarg <- names(formals(fun))[1L]
       Kfun <- function(r){
           allargs <- c(structure(list(r), .Names=firstarg), model$fixedpar)
           do.call(fun, allargs)
@@ -193,10 +193,10 @@ Kmodel.detpointprocfamily <- function(model, ...){
       }
       Kfun <- function(r){
           r <- sort(r)
-          if(r[1]<0)
+          if(r[1L]<0)
               stop("Negative values not allowed in K function!")
           r <- c(0,r)
-          int <- unlist(lapply(2:length(r), function(i) integrate(intfun, r[i-1], r[i], subdivisions=10)$value))
+          int <- unlist(lapply(2:length(r), function(i) integrate(intfun, r[i-1L], r[i], subdivisions=10)$value))
           return(cumsum(int))
       }
   }
@@ -205,8 +205,8 @@ Kmodel.detpointprocfamily <- function(model, ...){
 
 update.detpointprocfamily <- function(object, ...){
      newpar <- list(...)
-     if(length(newpar)==1 && is.list(newpar[[1]]) && !is.im(newpar[[1]]))
-         newpar <- newpar[[1]]
+     if(length(newpar)==1L && is.list(newpar[[1L]]) && !is.im(newpar[[1L]]))
+         newpar <- newpar[[1L]]
      nam <- names(newpar)
      if(length(newpar)>0&&is.null(nam))
          stop(paste("Named arguments are required. Please supply parameter values in a", sQuote("tag=value"), "form"))

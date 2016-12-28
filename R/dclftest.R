@@ -57,7 +57,7 @@ RelevantDeviation <- local({
   positivepart <- function(x) {
     d <- dim(x)
     y <- pmax(0, x)
-    if(!is.null(d)) y <- matrix(y, d[1], d[2])
+    if(!is.null(d)) y <- matrix(y, d[1L], d[2L])
     return(y)
   }
 
@@ -114,7 +114,7 @@ envelopeTest <-
     ## extract values
     r   <- with(X, .x)
     obs <- with(X, .y)
-    sim <- as.matrix(as.data.frame(Y))[, -1]
+    sim <- as.matrix(as.data.frame(Y))[, -1L]
     nsim <- ncol(sim)
     nr <- length(r)
     ## choose function as reference
@@ -130,17 +130,17 @@ envelopeTest <-
       theo.used <- FALSE
       if(leaveout == 2) {
         ## use sample mean of simulations only
-        reference <- apply(sim, 1, mean, na.rm=TRUE)
+        reference <- apply(sim, 1L, mean, na.rm=TRUE)
       } else {
         ## use sample mean of simulations *and* observed 
-        reference <- apply(cbind(sim, obs), 1, mean, na.rm=TRUE)
+        reference <- apply(cbind(sim, obs), 1L, mean, na.rm=TRUE)
       }
     }
     ## determine interval of r values for computation
     rok <- r
     if(!is.null(rinterval)) {
       check.range(rinterval)
-      if(max(r) < rinterval[2]) {
+      if(max(r) < rinterval[2L]) {
         oldrinterval <- rinterval
         rinterval <- intersect.ranges(rinterval, range(r), fatal=FALSE)
         if(is.null(rinterval))
@@ -156,12 +156,12 @@ envelopeTest <-
                         "is too large for the available data;",
                         "it has been trimmed to", prange(rinterval)))
       }
-      ok <- (rinterval[1] <= r & r <= rinterval[2])
+      ok <- (rinterval[1L] <= r & r <= rinterval[2L])
       nr <- sum(ok)
       if(nr == 0) {
         ## rinterval is very short: pick nearest r value
         ok <- which.min(abs(r - mean(rinterval)))
-        nr <- 1
+        nr <- 1L
       }
       rok <- r[ok]
       obs <- obs[ok]
@@ -169,17 +169,17 @@ envelopeTest <-
       reference <- reference[ok]
     } else {
       rinterval <- range(r)
-      bad <- !apply(is.finite(as.matrix(X)), 1, all)
+      bad <- !apply(is.finite(as.matrix(X)), 1L, all)
       if(any(bad)) {
-        if(bad[1] && !any(bad[-1])) {
+        if(bad[1L] && !any(bad[-1L])) {
           ## ditch r = 0
-          rinterval <- c(r[2], max(r))
+          rinterval <- c(r[2L], max(r))
           if(verbose)
             warning(paste("Some function values were infinite or NaN",
                           "at distance r = 0;",
                           "interval of r values was reset to",
                           prange(rinterval)))
-          ok <- (rinterval[1] <= r & r <= rinterval[2])
+          ok <- (rinterval[1L] <= r & r <= rinterval[2L])
           rok <- r[ok]
           obs <- obs[ok]
           sim <- sim[ok, ]
@@ -217,7 +217,7 @@ envelopeTest <-
     } else stop("Argument scale should be a function")
 
     ## compute deviations
-    rawdevDat <- Deviation(obs, reference, leaveout, nsim, sim[,1])
+    rawdevDat <- Deviation(obs, reference, leaveout, nsim, sim[,1L])
     rawdevSim <- Deviation(sim, reference, leaveout, nsim)
     ## evaluate signed/absolute deviation relevant to alternative
     ddat <- RelevantDeviation(rawdevDat, alternative, clamp, scaling)
@@ -276,14 +276,14 @@ envelopeTest <-
       if(nties > 0) {
         tierank <- switch(tie.rule,
                           mean = nties/2,
-                          randomise = sample(1:nties, 1))
+                          randomise = sample(1:nties, 1L))
         datarank <- datarank + tierank
         if(verbose) message("Ties were encountered")
       }
       pvalue <- datarank/(nsim+1)
       ## bookkeeping
       statistic <- data.frame(devdata, rank=datarank)
-      colnames(statistic)[1] <- names(devdata)
+      colnames(statistic)[1L] <- names(devdata)
     } else {
       ## Dao-Genton style interpolation
       fhat <- density(devsim)
@@ -292,7 +292,7 @@ envelopeTest <-
         mean(y[x >= devdata]) * (max(x) - devdata)
       })
       statistic <- data.frame(devdata)
-      colnames(statistic)[1] <- names(devdata)
+      colnames(statistic)[1L] <- names(devdata)
       nties <- 0
     }
     e <- attr(X, "einfo")

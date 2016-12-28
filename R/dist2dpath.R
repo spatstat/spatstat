@@ -17,7 +17,7 @@ dist2dpath <- function(dist, method="C") {
     stop("Some distances are negative")
   ##
   n <- nrow(dist)
-  if(n <= 1) return(dist)
+  if(n <= 1L) return(dist)
   cols <- col(dist)
   ##
   tol <- .Machine$double.eps
@@ -34,7 +34,7 @@ dist2dpath <- function(dist, method="C") {
            changed <- TRUE
            while(changed) {
              for(j in 1:n) 
-               dpathnew[,j] <- apply(dpath + dist[j,][cols], 1, min)
+               dpathnew[,j] <- apply(dpath + dist[j,][cols], 1L, min)
              unequal <- (dpathnew != dpath)
              changed <- any(unequal) & any(abs(dpathnew-dpath)[unequal] > tol)
              dpath <- dpathnew
@@ -51,9 +51,9 @@ dist2dpath <- function(dist, method="C") {
                    adj=as.integer(adj),
                    dpath=as.double(numeric(n*n)),
                    tol=as.double(tol),
-                   niter=as.integer(integer(1)),
-                   status=as.integer(integer(1)))
-           if(z$status == -1)
+                   niter=as.integer(integer(1L)),
+                   status=as.integer(integer(1L)))
+           if(z$status == -1L)
              warning(paste("C algorithm did not converge to tolerance", tol,
                            "after", z$niter, "iterations",
                            "on", n, "vertices and",

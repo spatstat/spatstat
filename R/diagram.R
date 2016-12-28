@@ -137,12 +137,12 @@ plot.yardstick <- local({
       up <- arlen * (rot %*% c(co, si))
       lo <- arlen * (rot %*% c(co, -si))
       if(left) {
-        mysegments(x0, y0, x0+up[1], y0+up[2], ...)
-        mysegments(x0, y0, x0+lo[1], y0+lo[2], ...)
+        mysegments(x0, y0, x0+up[1L], y0+up[2L], ...)
+        mysegments(x0, y0, x0+lo[1L], y0+lo[2L], ...)
       }
       if(right) {
-        mysegments(x1, y1, x1-up[1], y1-up[2], ...)
-        mysegments(x1, y1, x1-lo[1], y1-lo[2], ...)
+        mysegments(x1, y1, x1-up[1L], y1-up[2L], ...)
+        mysegments(x1, y1, x1-lo[1L], y1-lo[2L], ...)
       }
     }
     return(invisible(NULL))
@@ -160,31 +160,31 @@ plot.yardstick <- local({
     if(do.plot) {
       txt <- attr(x, "txt")
       argh <- resolve.defaults(list(...), attr(x, "otherargs"))
-      A <- as.numeric(coords(x)[1,])
-      B <- as.numeric(coords(x)[2,])
+      A <- as.numeric(coords(x)[1L,])
+      B <- as.numeric(coords(x)[2L,])
       M <- (A+B)/2
       if(!split) {
         ## double-headed arrow
-        myarrows(A[1], A[2], B[1], y1=B[2],
+        myarrows(A[1L], A[2L], B[1L], y1=B[2L],
                  angle=angle, frac=frac, moreargs=argh)
         if(is.null(pos) && !("adj" %in% names(txt.args)))
-          pos <- if(abs(A[1] - B[1]) < abs(A[2] - B[2])) 4 else 3
+          pos <- if(abs(A[1L] - B[1L]) < abs(A[2L] - B[2L])) 4 else 3
       } else {
         ## two single-headed arrows with text 
         dM <- (shrink/2) * (B - A)
         AM <- M - dM
         BM <- M + dM
         newfrac <- frac/((1-shrink)/2)
-        myarrows(AM[1], AM[2], A[1], A[2],
+        myarrows(AM[1L], AM[2L], A[1L], A[2L],
                  angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
-        myarrows(BM[1], BM[2], B[1], B[2], 
+        myarrows(BM[1L], BM[2L], B[1L], B[2L], 
                  angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
       }
       if(is.null(txt.shift)) txt.shift <- rep(0, 2) else 
                              txt.shift <- ensure2vector(unlist(txt.shift))
       do.call.matched(text.default,
-                      resolve.defaults(list(x=M[1] + txt.shift[1],
-                                            y=M[2] + txt.shift[2]),
+                      resolve.defaults(list(x=M[1L] + txt.shift[1L],
+                                            y=M[2L] + txt.shift[2L]),
                                        txt.args,
                                        list(labels=txt, pos=pos),
                                        argh,
@@ -202,7 +202,7 @@ print.yardstick <- function(x, ...) {
   if(!is.null(txt <- attr(x, "txt")))
     splat("Text:", txt)
   ui <- summary(unitname(x))
-  splat("Length:", pairdist(x)[1,2], ui$plural, ui$explain)
+  splat("Length:", pairdist(x)[1L,2L], ui$plural, ui$explain)
   splat("Midpoint:",
         paren(paste(signif(c(mean(x$x), mean(x$y)), 3), collapse=", ")))
   dx <- diff(range(x$x))
@@ -274,8 +274,8 @@ plot.onearrow <- function(x, ...,
       plot(Frame(x), main="", type="n")
     txt <- attr(x, "txt")
     argh <- resolve.defaults(list(...), attr(x, "otherargs"))
-    A <- as.numeric(coords(x)[1,])
-    B <- as.numeric(coords(x)[2,])
+    A <- as.numeric(coords(x)[1L,])
+    B <- as.numeric(coords(x)[2L,])
     V <- B - A
     AR <- A + retract * V
     BR <- B - retract * V
@@ -283,7 +283,7 @@ plot.onearrow <- function(x, ...,
     HN <- H + headnick * headfraction * V
     headlength <- headfraction * sqrt(sum(V^2))
     halfwidth <- headlength * tan((headangle/2) * pi/180)
-    alpha <- atan2(V[2], V[1]) + pi/2
+    alpha <- atan2(V[2L], V[1L]) + pi/2
     U <- c(cos(alpha), sin(alpha))
     HL <- H + halfwidth * U
     HR <- H - halfwidth * U
@@ -298,7 +298,7 @@ plot.onearrow <- function(x, ...,
     } else {
       M <- (AR+HN)/2
       dM <- (zapfraction/2) * (1-headfraction) * V
-      dM <- dM + c(-dM[2], dM[1])
+      dM <- dM + c(-dM[2L], dM[1L])
       ML <- M + dM
       MR <- M - dM
       Tail <- rbind(AR, ML, MR)
@@ -312,9 +312,9 @@ plot.onearrow <- function(x, ...,
       H <- (A+B)/2
       do.call.matched(text.default,
                       resolve.defaults(
-                        list(x=H[1], y=H[2]),
+                        list(x=H[1L], y=H[2L]),
                         argh,
-                        list(labels=txt, pos=3 + (V[2] != 0))),
+                        list(labels=txt, pos=3 + (V[2L] != 0))),
                       funargs=graphicsPars("text"))
     }
   }

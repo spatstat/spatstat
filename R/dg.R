@@ -84,11 +84,11 @@ DiggleGratton <- local({
          init = function(self) {
            delta <- self$par$delta
            rho   <- self$par$rho
-           if(!is.numeric(rho) || length(rho) != 1)
+           if(!is.numeric(rho) || length(rho) != 1L)
              stop("upper limit rho must be a single number")
            stopifnot(is.finite(rho))
            if(!is.na(delta)) {
-             if(!is.numeric(delta) || length(delta) != 1)
+             if(!is.numeric(delta) || length(delta) != 1L)
                stop("lower limit delta must be a single number")
              stopifnot(delta >= 0)
              stopifnot(rho > delta)
@@ -97,17 +97,17 @@ DiggleGratton <- local({
          update = NULL, # default OK
          print = NULL,    # default OK
          interpret =  function(coeffs, self) {
-           kappa <- as.numeric(coeffs[1])
+           kappa <- as.numeric(coeffs[1L])
            return(list(param=list(kappa=kappa),
                        inames="exponent kappa",
                        printable=dround(kappa)))
          },
          valid = function(coeffs, self) {
-           kappa <- as.numeric(coeffs[1])
+           kappa <- as.numeric(coeffs[1L])
            return(is.finite(kappa) && (kappa >= 0))
          },
          project = function(coeffs, self) {
-           kappa <- as.numeric(coeffs[1])
+           kappa <- as.numeric(coeffs[1L])
            if(is.finite(kappa) && (kappa >= 0))
              return(NULL)
            return(Poisson())
@@ -116,7 +116,7 @@ DiggleGratton <- local({
            rho <- self$par$rho
            if(all(is.na(coeffs)))
              return(rho)
-           kappa <- coeffs[1]
+           kappa <- coeffs[1L]
            delta <- self$par$delta
            if(abs(kappa) <= epsilon)
              return(delta)
@@ -136,18 +136,18 @@ DiggleGratton <- local({
          delta <- potpars$delta
          rho   <- potpars$rho
          idX <- seq_len(npoints(X))
-         idU <- rep.int(-1, npoints(U))
-         idU[EqualPairs[,2]] <- EqualPairs[,1]
+         idU <- rep.int(-1L, npoints(U))
+         idU[EqualPairs[,2L]] <- EqualPairs[,1L]
          answer <- diggraterms(U, X, idU, idX, delta, rho)
          answer <- log(pmax.int(0, answer))
-         return(matrix(answer, ncol=1))
+         return(matrix(answer, ncol=1L))
        },
        Mayer=function(coeffs, self) {
          # second Mayer cluster integral
          rho   <- self$par$rho
          delta <- self$par$delta
          width <- rho - delta
-         kappa <- coeffs[1]
+         kappa <- coeffs[1L]
          ans <- pi * (rho^2
                       - 2 * rho* width/(kappa + 1)
                       + 2 * width^2/((kappa + 1) * (kappa + 2)))

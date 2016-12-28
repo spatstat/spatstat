@@ -67,8 +67,8 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
       X <- complement.owin(X)
     xc <- X$xcol
     yr <- X$yrow
-    nr <- X$dim[1]
-    nc <- X$dim[2]
+    nr <- X$dim[1L]
+    nc <- X$dim[2L]
 # pad out the input image with a margin of width 1 on all sides
     mat <- X$m
     pad <- invert # boundary condition is opposite of value inside W
@@ -76,10 +76,10 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
     mat <- rbind(pad, mat, pad)
 # call C routine
     res <- .C("distmapbin",
-              as.double(X$xrange[1]),
-              as.double(X$yrange[1]),
-              as.double(X$xrange[2]),
-              as.double(X$yrange[2]),
+              as.double(X$xrange[1L]),
+              as.double(X$yrange[1L]),
+              as.double(X$xrange[2L]),
+              as.double(X$yrange[2L]),
               nr = as.integer(nr),
               nc = as.integer(nc),
               as.logical(t(mat)),
@@ -124,7 +124,7 @@ distmap.psp <- function(X, ...) {
   xc <- W$xcol
   yr <- W$yrow
   Dist <- im(array(sqrt(z$dist2), dim=W$dim), xc, yr, unitname=uni)
-  Indx <- im(array(z$index + 1, dim=W$dim), xc, yr, unitname=uni)
+  Indx <- im(array(z$index + 1L, dim=W$dim), xc, yr, unitname=uni)
   Bdry <- im(bdist.pixels(W, style="matrix"), xc, yr, unitname=uni)
   attr(Dist, "index") <- Indx
   attr(Dist, "bdry")  <- Bdry
