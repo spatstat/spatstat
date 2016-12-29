@@ -85,7 +85,7 @@ quantile.ewcdf <- function(x, probs=seq(0,1,0.25), names=TRUE, ..., type=1) {
       for(k in 1:np) {
         pk <- probs[k]
         ik <- min(which(Fxx >= probs[k]))
-        qs[k] <- if(Fxx[ik] > pk) (xx[ik] + xx[ik-1])/2 else xx[ik]
+        qs[k] <- if(Fxx[ik] > pk) (xx[ik] + xx[ik-1L])/2 else xx[ik]
       }
     }
   } else {

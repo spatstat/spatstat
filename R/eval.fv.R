@@ -43,7 +43,7 @@ eval.fv <- local({
     if(!is.null(equiv))
       funs <- lapply(funs, mapnames, map=equiv)
     # test whether the fv objects are compatible
-    if(nfuns > 1 && !(do.call(compatible, unname(funs)))) {
+    if(nfuns > 1L && !(do.call(compatible, unname(funs)))) {
       warning(paste(if(nfuns > 2) "some of" else NULL,
                     "the functions",
                     commasep(sQuote(names(funs))),
@@ -51,7 +51,7 @@ eval.fv <- local({
       funs <- do.call(harmonise, append(funs, list(strict=TRUE)))
     }
     # copy first object as template
-    result <- funs[[1]]
+    result <- funs[[1L]]
     labl <- attr(result, "labl")
     origdotnames   <- fvnames(result, ".")
     origshadenames <- fvnames(result, ".s")
@@ -116,16 +116,16 @@ eval.fv <- local({
     attr(result, "ylab") <- eval(substitute(substitute(e, ylabs),
                                             list(e=elang)))
     # compute fname equivalent to expression
-    if(nfuns > 1) {
+    if(nfuns > 1L) {
       # take original expression
       the.fname <- paren(flatten(deparse(elang)))
-    } else if(nzchar(oldname <- flatfname(funs[[1]]))) {
+    } else if(nzchar(oldname <- flatfname(funs[[1L]]))) {
       # replace object name in expression by its function name
       namemap <- list(as.name(oldname)) 
-      names(namemap) <- names(funs)[1]
+      names(namemap) <- names(funs)[1L]
       the.fname <- deparse(eval(substitute(substitute(e, namemap),
                                            list(e=elang))))
-    } else the.fname <- names(funs)[1]
+    } else the.fname <- names(funs)[1L]
     attr(result, "fname") <- the.fname
     # now compute the [modified] y labels
     labelmaps <- lapply(funs, fvlabelmap, dot=FALSE)
@@ -217,7 +217,7 @@ harmonize.fv <- harmonise.fv <- local({
     n <- length(argh)
     if(n == 0) return(argh)
     if(n == 1) {
-      a1 <- argh[[1]]
+      a1 <- argh[[1L]]
       if(is.fv(a1)) return(argh)
       if(is.list(a1) && all(sapply(a1, is.fv))) {
         argh <- a1
@@ -227,7 +227,7 @@ harmonize.fv <- harmonise.fv <- local({
     isfv <- sapply(argh, is.fv)
     if(!all(isfv))
       stop("All arguments must be fv objects")
-    if(n == 1) return(argh[[1]])
+    if(n == 1) return(argh[[1L]])
     ## determine range of argument
     ranges <- lapply(argh, argumentrange)
     xrange <- c(max(unlist(lapply(ranges, min))),
@@ -244,7 +244,7 @@ harmonize.fv <- harmonise.fv <- local({
     finest <- which.min(xsteps)
     ## extract argument values
     xx <- with(argh[[finest]], .x)
-    xx <- xx[xrange[1] <= xx & xx <= xrange[2]]
+    xx <- xx[xrange[1L] <= xx & xx <= xrange[2L]]
     xrange <- range(xx)
     ## convert each fv object to a function
     funs <- lapply(argh, as.function, value="*")

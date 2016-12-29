@@ -1,9 +1,22 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.002
+        CHANGES IN spatstat VERSION 1.48-0.003
 
 OVERVIEW
 
     o Nothing yet.
+
+NEW FUNCTIONS
+
+    o None.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o stieltjes
+    Argument 'M' can be a stepfun object (such as an empirical CDF).
+
+BUG FIXES
+
+    o None.
 
         CHANGES IN spatstat VERSION 1.48-0
 

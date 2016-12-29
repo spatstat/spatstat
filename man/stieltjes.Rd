@@ -14,7 +14,7 @@ stieltjes(f, M, ...)
   }
   \item{M}{
     The cumulative function against which \code{f} will be
-    integrated. An object of class \code{"fv"}.
+    integrated. An object of class \code{"fv"} or \code{"stepfun"}.
   }
   \item{\dots}{
     Additional arguments passed to \code{f}.
@@ -35,9 +35,13 @@ stieltjes(f, M, ...)
   It should accept a numeric vector argument \code{x} and should return
   a numeric vector of the same length.
 
-  The argument \code{M} should be a function value table
+  The argument \code{M} should be either a step function
+  (object of class \code{"stepfun"}) or a function value table
   (object of class \code{"fv"}, see \code{\link{fv.object}}).
-  Such objects are returned
+  Objects of class \code{"stepfun"} are returned by
+  \code{\link[stats]{ecdf}}, \code{\link{ewcdf}},
+  \code{\link{spatialcdf}} and other utilities.
+  Objects of class \code{"fv"} are returned
   by the commands \code{\link{Kest}}, \code{\link{Gest}}, etc.
 }
 \value{
@@ -49,19 +53,19 @@ stieltjes(f, M, ...)
   \code{\link{Gest}}
 }
 \examples{
-  data(redwood)
-  # estimate cdf of nearest neighbour distance
+  # estimate cdf of nearest neighbour distance in redwood data
   G <- Gest(redwood)
   # compute estimate of mean nearest neighbour distance
   stieltjes(function(x){x}, G)
   # estimated probability of a distance in the interval [0.1,0.2]
   stieltjes(function(x,a,b){ (x >= a) & (x <= b)}, G, a=0.1, b=0.2)
+
+  # stepfun example
+  H <- spatialcdf(bei.extra$elev, normalise=TRUE)
+  stieltjes(function(x){x}, H)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

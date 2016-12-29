@@ -12,8 +12,8 @@
   if(w$type != "mask")
     stop(paste("Input must be a window of type", sQuote("mask")))
 #	
-  nr <- w$dim[1]
-  nc <- w$dim[2]
+  nr <- w$dim[1L]
+  nc <- w$dim[2L]
 # input image will be padded out with a margin of width 2 on all sides
   mr <- mc <- 2L
   # full dimensions of padded image
@@ -21,19 +21,19 @@
   Nnc <- nc + 2 * mc
   N <- Nnr * Nnc
   # output image (subset): rows & columns (R indexing)
-  rmin <- mr + 1
+  rmin <- mr + 1L
   rmax <- Nnr - mr
-  cmin <- mc + 1
+  cmin <- mc + 1L
   cmax <- Nnc - mc
   # do padding
   x <- matrix(FALSE, nrow=Nnr, ncol=Nnc)
   x[rmin:rmax, cmin:cmax] <- w$m
   #
   res <- .C("ps_exact_dt_R",
-            as.double(w$xrange[1]),
-            as.double(w$yrange[1]),
-            as.double(w$xrange[2]),
-            as.double(w$yrange[2]),
+            as.double(w$xrange[1L]),
+            as.double(w$yrange[1L]),
+            as.double(w$xrange[2L]),
+            as.double(w$yrange[2L]),
             nr = as.integer(nr),
             nc = as.integer(nc),
             mr = as.integer(mr),

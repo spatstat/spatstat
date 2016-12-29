@@ -73,10 +73,10 @@ edge.Ripley <- local({
 
              # perpendicular distance from point to each edge of rectangle
              # L = left, R = right, D = down, U = up
-             dL  <- x - W$xrange[1]
-             dR  <- W$xrange[2] - x
-             dD  <- y - W$yrange[1]
-             dU  <- W$yrange[2] - y
+             dL  <- x - W$xrange[1L]
+             dR  <- W$xrange[2L] - x
+             dD  <- y - W$yrange[1L]
+             dU  <- W$yrange[2L] - y
 
              # detect whether any points are corners of the rectangle
              corner <- (small(dL) + small(dR) + small(dD) + small(dU) >= 2)
@@ -133,10 +133,10 @@ edge.Ripley <- local({
                               y=as.double(y),
                               rmat=as.double(r),
                               nr=as.integer(Nc), #sic
-                              xmin=as.double(W$xrange[1]),
-                              ymin=as.double(W$yrange[1]),
-                              xmax=as.double(W$xrange[2]),
-                              ymax=as.double(W$yrange[2]),
+                              xmin=as.double(W$xrange[1L]),
+                              ymin=as.double(W$yrange[1L]),
+                              xmax=as.double(W$xrange[2L]),
+                              ymax=as.double(W$yrange[2L]),
                               epsilon=as.double(.Machine$double.eps),
                               out=as.double(numeric(Nr * Nc)))
                       weight <- matrix(z$out, nrow=Nr, ncol=Nc)
@@ -174,7 +174,7 @@ rmax.Ripley <- function(W) {
   W <- as.owin(W)
   if(is.rectangle(W))
     return(boundingradius(W))
-  if(is.polygonal(W) && length(W$bdry) == 1)
+  if(is.polygonal(W) && length(W$bdry) == 1L)
     return(boundingradius(W))
   ## could have multiple connected components
   pieces <- tiles(tess(image=connected(W)))

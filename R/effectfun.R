@@ -43,12 +43,12 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
     covtype <- "real"
     W <- as.owin(data.ppm(model))
     Zr <- W$xrange
-    Zvals <- seq(from=Zr[1], to=Zr[2], length.out=N0)
+    Zvals <- seq(from=Zr[1L], to=Zr[2L], length.out=N0)
   } else if(covname == "y") {
     covtype <- "real"
     W <- as.owin(data.ppm(model))
     Zr <- W$yrange
-    Zvals <- seq(from=Zr[1], to=Zr[2], length.out=N0)
+    Zvals <- seq(from=Zr[1L], to=Zr[2L], length.out=N0)
   } else if(covname == "marks") {
     covtype <- "factor"
     Zvals <- levels(marks(data.ppm(model)))
@@ -62,11 +62,11 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
       switch(covtype,
              real={
                Zr <- range(Z)
-               Zvals <- seq(from=Zr[1], to=Zr[2], length.out=N0)
+               Zvals <- seq(from=Zr[1L], to=Zr[2L], length.out=N0)
              },
              integer={
                Zr <- range(Z)
-               Zvals <- seq(from=Zr[1], to=Zr[2], by=ceiling((diff(Zr)+1)/N0))
+               Zvals <- seq(from=Zr[1L], to=Zr[2L], by=ceiling((diff(Zr)+1)/N0))
              },
              factor={
                Zvals <- levels(Z)
@@ -79,7 +79,7 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
     } else {
       Z <- getdataobjects(covname,
                           environment(formula(model)),
-                          model$covariates)[[1]]
+                          model$covariates)[[1L]]
       if(is.null(Z))
         stop(paste("Cannot find covariate", sQuote(covname)),
              call.=FALSE)
@@ -90,7 +90,7 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
       switch(covtype,
              real={
                Zr <- summary(Z)$range
-               Zvals <- seq(from=Zr[1], to=Zr[2], length.out=N0)
+               Zvals <- seq(from=Zr[1L], to=Zr[2L], length.out=N0)
              },
              factor={
                Zvals <- levels(Z)
@@ -109,7 +109,7 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
                               list(x=0, y=0))[c("x","y")]
   if(is.marked.ppm(model)) {
     lev <- levels(marks(data.ppm(model)))
-    fakeloc$marks <- lev[1]
+    fakeloc$marks <- lev[1L]
   }
   fakeloc <- lapply(fakeloc, padout, N=N)
   fakecov <- lapply(dotargs, padout, N=N)
@@ -164,7 +164,7 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
   return(result)
 }
 
- padout <- function(x,N) { rep.int(x[1],N) }
+ padout <- function(x,N) { rep.int(x[1L],N) }
 
  effectfun
 })

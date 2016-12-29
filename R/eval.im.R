@@ -58,7 +58,7 @@ eval.im <- local({
       stop("Cannot use objects of class fv as variables in eval.im")
     ## replace each image by its matrix of pixel values, and evaluate
     imagevalues <- lapply(images, getImValues)
-    template <- images[[1]]
+    template <- images[[1L]]
     ## This bit has been repaired:
     vars[ims] <- imagevalues
     v <- eval(e, append(vars, funs))
@@ -119,14 +119,14 @@ harmonize.im <- harmonise.im <- function(...) {
   ## if any windows are present, extract bounding box
   iswin <- unlist(lapply(argz, is.owin))
   bb0 <- if(!any(iswin)) NULL else do.call(boundingbox, unname(argz[iswin]))
-  if(length(imgs) == 1 && is.null(bb0)) {
+  if(length(imgs) == 1L && is.null(bb0)) {
     ## only one 'true' image: use it as template.
     result[isim] <- imgs
-    Wtemplate <- imgs[[1]]
+    Wtemplate <- imgs[[1L]]
   } else {
     ## test for compatible units
     un <- lapply(imgs, unitname)
-    uok <- unlist(lapply(un, compatible.units, y=un[[1]]))
+    uok <- unlist(lapply(un, compatible.units, y=un[[1L]]))
     if(!all(uok))
       stop("Images have incompatible units of length")
     ## find the image with the highest resolution
@@ -180,13 +180,13 @@ commonGrid <- local({
     }
 
     ## Find raster object with finest resolution
-    if(length(rasterlist) == 1) {
+    if(length(rasterlist) == 1L) {
       ## only one raster object
-      finest <- rasterlist[[1]]
+      finest <- rasterlist[[1L]]
     } else {
       ## test for compatible units
       un <- lapply(rasterlist, unitname)
-      uok <- unlist(lapply(un, compatible.units, y=un[[1]]))
+      uok <- unlist(lapply(un, compatible.units, y=un[[1L]]))
       if(!all(uok))
         stop("Objects have incompatible units of length")
       ## find the image/mask with the highest resolution
@@ -218,7 +218,7 @@ im.apply <- local({
            if(is.function(FUN)) FUN else stop("Unrecognised format for FUN")
     ## ensure images are compatible
     X <- do.call(harmonise.im, X)
-    template <- X[[1]]
+    template <- X[[1L]]
     ## extract numerical values and convert to matrix with one column per image
     vlist <- lapply(X, flatten)
     vals <- matrix(unlist(vlist), ncol=length(X))
@@ -229,15 +229,15 @@ im.apply <- local({
       return(as.im(NA, W=template))
     }
     ## apply function
-    resultok <- apply(vals[ok,, drop=FALSE], 1, fun, ...)
+    resultok <- apply(vals[ok,, drop=FALSE], 1L, fun, ...)
     if(length(resultok) != sum(ok))
       stop("FUN should yield one value per pixel")
     ## pack up, with attention to type of data
     d <- dim(template)
-    resultmat <- matrix(resultok[1], d[1], d[2])
+    resultmat <- matrix(resultok[1L], d[1L], d[2L])
     resultmat[ok] <- resultok
     resultmat[!ok] <- NA
-    result <- as.im(resultmat, W=X[[1]])
+    result <- as.im(resultmat, W=X[[1L]])
     if(is.factor(resultok)) levels(result) <- levels(resultok)
     return(result)
   }

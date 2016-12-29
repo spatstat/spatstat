@@ -17,7 +17,7 @@ exactMPLEstrauss <- local({
     bR <- (bdist.points(X) >= R)
     nR <- sum(bR)
     # evaluate neighbour counts for data points
-    Tcounts <- crosspaircounts(X, X, R) - 1
+    Tcounts <- crosspaircounts(X, X, R) - 1L
     sumT  <- sum(Tcounts[bR])
     # determine the coefficients a_k for k = 0, 1, ...
     Z <- scanmeasure(X, R, dimyx=ngrid)
@@ -41,7 +41,7 @@ exactMPLEstrauss <- local({
       abline(v=loggamma, lty=3)
     }
     # derive optimal beta 
-    kmax <-length(A) - 1
+    kmax <-length(A) - 1L
     polypart <- A %*% exp(outer(0:kmax, loggamma))
     beta <- nR/polypart
     logbeta <- log(beta)
@@ -53,13 +53,13 @@ exactMPLEstrauss <- local({
   # helper functions (vectorised)
   # log pseudolikelihood
   lpl <- function(theta, A=A, sumT=sumT, nR=nR) {
-    kmax <-length(A) - 1
+    kmax <-length(A) - 1L
     polypart <- A %*% exp(outer(0:kmax, theta))
     nR * (log(nR) - log(polypart) - 1) + theta * sumT
   }
   # pseudoscore
   sco <- function(theta, A=A, sumT=sumT, nR=nR) {
-    kmax <- length(A) - 1
+    kmax <- length(A) - 1L
     kseq <- 0:kmax
     mat <- exp(outer(kseq, theta))
     polypart <- A %*% mat

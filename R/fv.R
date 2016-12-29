@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.143 $   $Date: 2016/09/21 07:36:51 $
+##    $Revision: 1.144 $   $Date: 2016/12/29 08:35:40 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -1075,29 +1075,41 @@ max.fv <- function(..., na.rm=TRUE, finite=na.rm) {
 
 stieltjes <- function(f, M, ...) {
   ## stieltjes integral of f(x) dM(x)
-  if(!is.fv(M))
-    stop("M must be an object of class fv")
-  if(!is.function(f))
-    stop("f must be a function")
-  ## integration variable
-  argu <- attr(M, "argu")
-  x <- M[[argu]]
-  ## values of integrand
-  fx <- f(x, ...)
-  ## estimates of measure
-  valuenames <- names(M) [names(M) != argu]
-  Mother <- as.data.frame(M)[, valuenames]
-  Mother <- as.matrix(Mother, nrow=nrow(M))
-  ## increments of measure
-  dM <- apply(Mother, 2, diff)
-  dM <- rbind(dM, 0)
-  ## integrate f(x) dM(x)
-  f.dM <- fx * dM
-  f.dM[!is.finite(f.dM)] <- 0
-  results <- colSums(f.dM)
-  results <- as.list(results)
-  names(results) <- valuenames
-  return(results)
+  stopifnot(is.function(f))
+  if(is.stepfun(M)) {
+    envM <- environment(M)
+    #' jump locations
+    x <- get("x", envir=envM)
+    #' values of integrand
+    fx <- f(x, ...)
+    #' jump amounts
+    xx <- c(-Inf, (x[-1L] + x[-length(x)])/2, Inf)
+    dM <- diff(M(xx))
+    #' integrate f(x) dM(x)
+    f.dM <- fx * dM
+    result <- sum(f.dM[is.finite(f.dM)])
+    return(list(result))
+  } else if(is.fv(M)) {
+    ## integration variable
+    argu <- attr(M, "argu")
+    x <- M[[argu]]
+    ## values of integrand
+    fx <- f(x, ...)
+    ## estimates of measure
+    valuenames <- names(M) [names(M) != argu]
+    Mother <- as.data.frame(M)[, valuenames]
+    Mother <- as.matrix(Mother, nrow=nrow(M))
+    ## increments of measure
+    dM <- apply(Mother, 2, diff)
+    dM <- rbind(dM, 0)
+    ## integrate f(x) dM(x)
+    f.dM <- fx * dM
+    f.dM[!is.finite(f.dM)] <- 0
+    results <- colSums(f.dM)
+    results <- as.list(results)
+    names(results) <- valuenames
+    return(results)
+  } else stop("M must be an object of class fv or stepfun")
 }
 
 prefixfv <- function(x, tagprefix="", descprefix="", lablprefix=tagprefix,

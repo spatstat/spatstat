@@ -202,7 +202,7 @@ evalCovar.ppm <- local({
   pixarea <- function(z) { z$xstep * z$ystep }
   npixdefined <- function(z) { sum(!is.na(z$v)) }
   functioncaller <- function(x,y,m,f) { f(x,y,m) }
-  pixelvalues <- function(z) { as.data.frame(z)[,3] }
+  pixelvalues <- function(z) { as.data.frame(z)[,3L] }
   getxy <- function(z) { z[,c("x","y")] }
   
   evalCovar.ppm

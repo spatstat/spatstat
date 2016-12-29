@@ -35,13 +35,13 @@ eval.fasp <- local({
     fasps <- vars[isfasp]
     nfasps <- length(fasps)
     ## test whether the fasp objects are compatible
-    if(nfasps > 1 && !(do.call(compatible, unname(fasps))))
+    if(nfasps > 1L && !(do.call(compatible, unname(fasps))))
       stop(paste(if(nfasps > 2) "some of" else NULL,
                  "the objects",
                  commasep(sQuote(names(fasps))),
                  "are not compatible"))
     ## copy first object as template
-    result <- fasps[[1]]
+    result <- fasps[[1L]]
     which <- result$which
     nr <- nrow(which)
     nc <- ncol(which)
@@ -80,8 +80,8 @@ compatible.fasp <- function(A, B, ...) {
   dimB <- dim(B$which)
   if(!all(dimA == dimB))
     return(FALSE)
-  for(i in seq_len(dimA[1])) 
-    for(j in seq_len(dimA[2])) {
+  for(i in seq_len(dimA[1L])) 
+    for(j in seq_len(dimA[2L])) {
       Aij <- as.fv(A[i,j])
       Bij <- as.fv(B[i,j])
       if(!compatible.fv(Aij, Bij))

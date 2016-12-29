@@ -291,7 +291,7 @@ envelope.kppm <-
     # will be generated using simulate.kppm
     kmodel <- Y
     # expression that will be evaluated
-    simexpr <- expression(simulate(kmodel)[[1]])
+    simexpr <- expression(simulate(kmodel)[[1L]])
     dont.complain.about(kmodel)
     # evaluate in THIS environment
     simrecipe <- simulrecipe(type = "kppm",
@@ -439,7 +439,7 @@ envelopeEngine <-
       dont.complain.about(SimDataList)
       envir <- envir.here
       # ensure that `i' is defined
-      i <- 1
+      i <- 1L
       # any messages?
       if(!is.null(mess <- attr(simulate, "internal"))) {
         # determine whether these point patterns are realisations of CSR
@@ -760,7 +760,7 @@ envelopeEngine <-
         wti <- weightfun(Xsim)
         if(!is.numeric(wti))
           stop("weightfun did not return a numeric value")
-        if(length(wti) != 1)
+        if(length(wti) != 1L)
           stop("weightfun should return a single numeric value")
         weights[i] <- wti
       }
@@ -770,7 +770,7 @@ envelopeEngine <-
       ok <- !inherits(funXsim, "try-error")
       
       if(!ok) {
-        nerr <- nerr + 1
+        nerr <- nerr + 1L
         if(nerr > maxnerr)
           stop("Exceeded maximum number of errors")
         cat("[retrying]\n")
@@ -778,7 +778,7 @@ envelopeEngine <-
     }
 
     # sanity checks
-    if(i == 1) {
+    if(i == 1L) {
       if(!inherits(funXsim, "fv"))
         stop(paste("When applied to a simulated pattern, the function",
                    fname, "did not return an object of class",
@@ -1053,8 +1053,8 @@ summary.envelope <- function(object, ...) {
           e$nSD, "sample standard deviations")
   } else {
     # critical envelopes
-    lo.ord <- if(nr == 1) "minimum" else paste(ordinal(nr), "smallest")
-    hi.ord <- if(nr == 1) "maximum" else paste(ordinal(nr), "largest")
+    lo.ord <- if(nr == 1L) "minimum" else paste(ordinal(nr), "smallest")
+    hi.ord <- if(nr == 1L) "maximum" else paste(ordinal(nr), "largest")
     if(g) 
       splat(switch(alternative,
                    two.sided = "Envelopes",
@@ -1214,16 +1214,16 @@ envelope.matrix <- function(Y, ...,
              }
              nsim <- ncol(simvals)
              nsim.mean <- NULL
-             if(nrank == 1) {
-               lohi <- apply(simvals, 1, range)
+             if(nrank == 1L) {
+               lohi <- apply(simvals, 1L, range)
              } else {
-               lohi <- apply(simvals, 1,
+               lohi <- apply(simvals, 1L,
 #                             function(x, n) { sort(x)[n] },
                              orderstats,
-                             k=c(nrank, nsim-nrank+1))
+                             k=c(nrank, nsim-nrank+1L))
              }
-             lo <- lohi[1,]
-             hi <- lohi[2,]
+             lo <- lohi[1L,]
+             hi <- lohi[2L,]
            }
            lo.name <- "lower pointwise envelope of %s from simulations"
            hi.name <- "upper pointwise envelope of %s from simulations"
@@ -1247,8 +1247,8 @@ envelope.matrix <- function(Y, ...,
                                    hi=hi)
            } else {
              m <- if(cheat) precomputed$mmean else 
-                  if(!use.weights) apply(simvals, 1, mean, na.rm=TRUE) else
-                  apply(simvals, 1, weighted.mean, w=weights, na.rm=TRUE)
+                  if(!use.weights) apply(simvals, 1L, mean, na.rm=TRUE) else
+                  apply(simvals, 1L, weighted.mean, w=weights, na.rm=TRUE)
              results <- data.frame(r=rvals,
                                    obs=fX,
                                    mmean=m,
@@ -1264,7 +1264,7 @@ envelope.matrix <- function(Y, ...,
              } else {
                dataranks <- t(apply(simvals, 1, rank, ties.method="random"))
                upper.signif <- (dataranks <= nrank)
-               lower.signif <- (dataranks >= nsim-nrank+1)
+               lower.signif <- (dataranks >= nsim-nrank+1L)
                is.signif <- switch(alternative,
                                    less = lower.signif,
                                    greater = upper.signif,
@@ -1292,7 +1292,7 @@ envelope.matrix <- function(Y, ...,
            } else {
              # ... normal case: compute envelopes from simulations
              if(!is.null(ginterval)) {
-               domain <- (rvals >= ginterval[1]) & (rvals <= ginterval[2])
+               domain <- (rvals >= ginterval[1L]) & (rvals <= ginterval[2L])
                funX <- funX[domain, ]
                simvals <- simvals[domain, ]
              } else domain <- rep.int(TRUE, length(rvals))
@@ -1310,8 +1310,8 @@ envelope.matrix <- function(Y, ...,
                simvals.mean <- simvals[, jsim.mean]
                # mmean <-
                reference <- 
-                 if(!use.weights) apply(simvals.mean, 1, mean, na.rm=TRUE) else
-                 apply(simvals.mean, 1, weighted.mean, w=weights[jsim.mean],
+                 if(!use.weights) apply(simvals.mean, 1L, mean, na.rm=TRUE) else
+                 apply(simvals.mean, 1L, weighted.mean, w=weights[jsim.mean],
                        na.rm=TRUE)
                nsim.mean <- ncol(simvals.mean)
                # retain only columns used for envelope
@@ -1324,13 +1324,13 @@ envelope.matrix <- function(Y, ...,
                }
                # mmean <-
                reference <- 
-                 if(!use.weights) apply(simvals.mean, 1, mean, na.rm=TRUE) else
-                 apply(simvals.mean, 1, weighted.mean, w=weights, na.rm=TRUE)
+                 if(!use.weights) apply(simvals.mean, 1L, mean, na.rm=TRUE) else
+                 apply(simvals.mean, 1L, weighted.mean, w=weights, na.rm=TRUE)
                nsim.mean <- NULL
              }
              nsim <- ncol(simvals)
              # compute deviations
-             deviations <- sweep(simvals, 1, reference)
+             deviations <- sweep(simvals, 1L, reference)
              deviations <-
                switch(alternative,
                       two.sided = abs(deviations),
@@ -1357,12 +1357,12 @@ envelope.matrix <- function(Y, ...,
                            call.=FALSE)
                  sc[bad] <- 1
                }
-               deviations <- sweep(deviations, 1, sc, "/")
+               deviations <- sweep(deviations, 1L, sc, "/")
              }
              ## compute max (scaled) deviations
-             suprema <- apply(deviations, 2, max, na.rm=TRUE)
+             suprema <- apply(deviations, 2L, max, na.rm=TRUE)
              # ranked deviations
-             dmax <- sort(suprema)[nsim-nrank+1]
+             dmax <- sort(suprema)[nsim-nrank+1L]
              # simultaneous bands
              lo <- reference - sc * dmax
              hi <- reference + sc * dmax
@@ -1415,11 +1415,11 @@ envelope.matrix <- function(Y, ...,
              }
              nsim <- ncol(simvals)
              if(!use.weights) {
-               Ef   <- apply(simvals, 1, mean, na.rm=TRUE)
-               varf <- apply(simvals, 1, var,  na.rm=TRUE)
+               Ef   <- apply(simvals, 1L, mean, na.rm=TRUE)
+               varf <- apply(simvals, 1L, var,  na.rm=TRUE)
              } else {
-               Ef   <- apply(simvals, 1, weighted.mean, w=weights, na.rm=TRUE)
-               varf <- apply(simvals, 1, weighted.var,  w=weights, na.rm=TRUE)
+               Ef   <- apply(simvals, 1L, weighted.mean, w=weights, na.rm=TRUE)
+               varf <- apply(simvals, 1L, weighted.var,  w=weights, na.rm=TRUE)
              }
            }
            nsim.mean <- NULL
@@ -1730,7 +1730,7 @@ envelope.envelope <- function(Y, fun=NULL, ...,
     ud <- as.call(lapply(c("cbind", dnames), as.name))
     dont.complain.about(ud)
     expandtransform <- eval(substitute(substitute(tr, list(.=ud)),
-                                       list(tr=transform[[1]])))
+                                       list(tr=transform[[1L]])))
     # compute new labels 
     attr(result, "fname") <- attr(Yorig, "fname")
     mathlabl <- as.character(fvlegend(result, expandtransform))
@@ -1757,7 +1757,7 @@ pool.envelope <- local({
 
   pool.envelope <- function(..., savefuns=FALSE, savepatterns=FALSE) {
     Yname <- short.deparse(sys.call())
-    if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1, 40), "[..]")
+    if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1L, 40L), "[..]")
     Elist <- unname(list(...))
     nE <-  length(Elist)
     if(nE == 0) return(NULL)
@@ -1775,7 +1775,7 @@ pool.envelope <- local({
     }
     ## Only one envelope?
     if(nE == 1)
-      return(Elist[[1]])
+      return(Elist[[1L]])
     ## envelopes must be compatible
     ok <- do.call(compatible, Elist)
     if(!ok)
@@ -1821,7 +1821,7 @@ pool.envelope <- local({
       }
       ## Simulated functions must be the same function
       fnames <- unique(lapply(SFlist, attr, which="fname"))
-      if(length(fnames) > 1) {
+      if(length(fnames) > 1L) {
         fnames <- unlist(lapply(fnames, flatfname))
         stop(paste("Envelope objects contain values",
                    "of different functions:",
@@ -1829,7 +1829,7 @@ pool.envelope <- local({
       }
       ## vectors of r values must be identical
       rlist <- lapply(SFlist, getrvals)
-      rvals <- rlist[[1]]
+      rvals <- rlist[[1L]]
       samer <- unlist(lapply(rlist, identical, y=rvals))
       if(!all(samer))
         stop(paste("Simulated function values are not compatible",
@@ -1841,7 +1841,7 @@ pool.envelope <- local({
     ## compute pooled envelope
     switch(type,
            pointwise = {
-             result <- envelope(SFmatrix, funX=Elist[[1]],
+             result <- envelope(SFmatrix, funX=Elist[[1L]],
                                 type=type, alternative=alternative,
                                 clamp=clamp,
                                 csr=csr, use.theory=use.theory,
@@ -1852,10 +1852,10 @@ pool.envelope <- local({
              simfunmatrix <- if(is.null(ginterval)) SFmatrix else {
                ## savefuns have not yet been clipped to ginterval
                ## while envelope data have been clipped.
-               domain <- (rvals >= ginterval[1]) & (rvals <= ginterval[2])
+               domain <- (rvals >= ginterval[1L]) & (rvals <= ginterval[2L])
                SFmatrix[domain, , drop=FALSE]
              }
-             result <- envelope(simfunmatrix, funX=Elist[[1]],
+             result <- envelope(simfunmatrix, funX=Elist[[1L]],
                                 type=type, alternative=alternative,
                                 scale=scale, clamp=clamp,
                                 csr=csr, use.theory=use.theory,
@@ -1884,15 +1884,15 @@ pool.envelope <- local({
                w.var  <- w.mean * (1 - ssw)
                d.var <-  d.mean * (1 - sum(ssw))
              }
-             poolmmean <- as.numeric(mmeans %*% matrix(w.mean/d.mean, ncol=1))
-             within <- vars %*% matrix(w.var, ncol=1)
-             between <- ((mmeans - poolmmean[])^2) %*% matrix(w.mean, ncol=1)
+             poolmmean <- as.numeric(mmeans %*% matrix(w.mean/d.mean, ncol=1L))
+             within <- vars %*% matrix(w.var, ncol=1L)
+             between <- ((mmeans - poolmmean[])^2) %*% matrix(w.mean, ncol=1L)
              poolvar <- as.numeric((within + between)/d.var)
              ## feed precomputed data to envelope.matrix
              pc <- list(Ef=poolmmean[],
                         varf=poolvar[])
              nsim <- sum(nsims)
-             result <- envelope.matrix(NULL, funX=Elist[[1]],
+             result <- envelope.matrix(NULL, funX=Elist[[1L]],
                                        type=type, alternative=alternative,
                                        csr=csr, Yname=Yname,
                                        weights=weights,
@@ -1903,7 +1903,7 @@ pool.envelope <- local({
   
     ## Copy envelope info that is not handled by envelope.matrix
     copyacross <- c("Yname", "csr.theo", "use.theory", "simtype", "constraints")
-    attr(result, "einfo")[copyacross] <- attr(Elist[[1]], "einfo")[copyacross]
+    attr(result, "einfo")[copyacross] <- attr(Elist[[1L]], "einfo")[copyacross]
   
     ## ..............saved patterns .....................
     if(savepatterns) {
@@ -1929,7 +1929,7 @@ pool.envelope <- local({
       simnames <- paste0("sim", 1:Nsim)
       colnames(alldata) <- c("r", simnames)
       alldata <- as.data.frame(alldata)
-      SFtemplate <- SFlist[[1]]
+      SFtemplate <- SFlist[[1L]]
       SimFuns <- fv(alldata,
                     argu="r",
                     ylab=attr(SFtemplate, "ylab"),
@@ -1947,12 +1947,12 @@ pool.envelope <- local({
     } 
   
     dotnames   <- lapply(Elist, fvnames, a=".")
-    dn <- dotnames[[1]]
+    dn <- dotnames[[1L]]
     if(all(unlist(lapply(dotnames, identical, y=dn))))
       fvnames(result, ".") <- dn
     
     shadenames <- lapply(Elist, fvnames, a=".s")
-    sh <- shadenames[[1]]
+    sh <- shadenames[[1L]]
     if(all(unlist(lapply(shadenames, identical, y=sh))))
       fvnames(result, ".s") <- sh
   
@@ -1974,12 +1974,12 @@ pool.envelope <- local({
 resolveEinfo <- function(x, what, fallback, warn, atomic=TRUE) {
   if(atomic) {
     y <- unique(unlist(lapply(x, getElement, name=what)))
-    if(length(y) == 1)
+    if(length(y) == 1L)
       return(y)
   } else {
     y <- unique(lapply(x, getElement, name=what))
-    if(length(y) == 1)
-      return(y[[1]])
+    if(length(y) == 1L)
+      return(y[[1L]])
   }
   if(missing(warn))
     warn <- paste("Envelopes were generated using different values",

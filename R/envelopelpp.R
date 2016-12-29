@@ -187,7 +187,7 @@ envelope.lppm <-
       PROB <- EN/sum(EN)
       dont.complain.about(PROB)
       simexpr <- expression(
-        rlpp(as.integer(rmultinom(1, nX, PROB)), lambdaFit)
+        rlpp(as.integer(rmultinom(1L, nX, PROB)), lambdaFit)
       )
     } else {
       #' Fixed number of points of each type 
