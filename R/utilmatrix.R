@@ -82,7 +82,8 @@ matrixsample <- function(mat, newdim, phase=c(0,0), scale, na.value=NA) {
 # wrangle data.frames
 
 findfirstfactor <- function(x) {
-  stopifnot(is.data.frame(x) || is.hyperframe(x))
+  if(!inherits(x, c("data.frame", "hyperframe")))
+    stop("x should be a data frame or hyperframe")
   isfac <- unlist(lapply(as.list(x), is.factor))
   if(!any(isfac)) 
     return(NULL)
@@ -93,14 +94,6 @@ firstfactor <- function(x) {
   j <- findfirstfactor(x)
   if(is.null(j)) return(NULL)
   return(x[, j, drop=TRUE])
-}
-
-onecolumn <- function(m) {
-  switch(markformat(m),
-         none=stop("No marks provided"),
-         vector=m,
-         dataframe=m[,1, drop=TRUE],
-         NA)
 }
 
 assignDFcolumn <- function(x, name, value, ...) {    # for use in mapply 
@@ -157,16 +150,6 @@ asNumericMatrix <- function(x) {
   x
 }
 
-
-checkbigmatrix <- function(n, m, fatal=FALSE, silent=FALSE) {
-  if(n * m <= spatstat.options("maxmatrix"))
-    return(TRUE)
-  whinge <- paste("Attempted to create binary mask with",
-                  n, "*", m, "=", n * m, "entries")
-  if(fatal) stop(whinge, call.=FALSE)
-  if(!silent) warning(whinge, call.=FALSE)
-  return(FALSE)
-}
 
 exceedsMaxArraySize <- function(...) {
   (prod(as.numeric(c(...))) > .Machine$integer.max)
