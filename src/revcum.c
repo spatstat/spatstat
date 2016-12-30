@@ -1,10 +1,10 @@
 /* 
 
-   utils.c
+   revcum.c
 
-   $Revision: 1.2 $  $Date: 2006/10/19 10:22:21 $
+   $Revision: 1.3 $  $Date: 2016/12/30 07:28:13 $
 
-   Small utilities
+   Reverse cumulative sums
 
 */
 
