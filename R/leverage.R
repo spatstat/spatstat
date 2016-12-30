@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.67 $  $Date: 2016/09/16 03:27:38 $
+#  $Revision: 1.68 $  $Date: 2016/12/30 01:44:07 $
 #
 
 leverage <- function(model, ...) {
@@ -181,7 +181,7 @@ ppmInfluenceEngine <- function(fit,
              fush <- sumouter(mom, wlam)
              if(gotHess) {
                # integral term
-               isfin <- is.finite(wlam) & apply(is.finite(ihessmat), 1, all)
+               isfin <- is.finite(wlam) & matrowall(is.finite(ihessmat))
                vintegral <-
                  if(all(isfin)) wlam %*% ihessmat else
                              wlam[isfin] %*% ihessmat[isfin,, drop=FALSE]

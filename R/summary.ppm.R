@@ -3,7 +3,7 @@
 #
 #    summary() method for class "ppm"
 #
-#    $Revision: 1.76 $   $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.77 $   $Date: 2016/12/30 01:44:07 $
 #
 #    summary.ppm()
 #    print.summary.ppm()
@@ -260,7 +260,7 @@ summary.ppm <- local({
         trendbits <- COEFS
       else {
         agree <- outer(names(COEFS), Vnames, "==")
-        whichbits <- apply(!agree, 1, all)
+        whichbits <- matrowall(!agree)
         trendbits <- COEFS[whichbits]
       }
       y$trend$label <- ngettext(length(trendbits),

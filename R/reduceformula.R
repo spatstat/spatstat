@@ -1,7 +1,7 @@
 #
 #  reduceformula.R
 #
-#  $Revision: 1.6 $   $Date: 2016/03/05 02:25:21 $
+#  $Revision: 1.7 $   $Date: 2016/12/30 01:44:07 $
 #
 # delete variable from formula 
 #
@@ -72,7 +72,7 @@ reduceformula <- function(fmla, deletevar, verbose=FALSE) {
     allterms <- colnames(fax)
     ## Find all columns containing a 1 in a row that is to be deleted
     if(any(condemned.row)) {
-      condemned.column <- apply(fax[condemned.row, , drop=FALSE] != 0, 2, any)
+      condemned.column <- matcolany(fax[condemned.row, , drop=FALSE] != 0)
       retained.terms <- allterms[!condemned.column]
     } else retained.terms <- allterms
   }

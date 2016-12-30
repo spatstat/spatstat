@@ -1,31 +1,37 @@
 #
-#    util.S    miscellaneous utilities
+#    util.R    miscellaneous utilities
 #
-#    $Revision: 1.232 $    $Date: 2016/12/02 09:51:01 $
+#    $Revision: 1.235 $    $Date: 2016/12/30 01:59:25 $
 #
 #
 matrowsum <- function(x) {
-  x %*% rep.int(1, ncol(x))
+  # was:    x %*% rep.int(1, ncol(x))
+  rowSums(x)
 }
 
 matcolsum <- function(x) {
-  rep.int(1, nrow(x)) %*% x
+  # was:   rep.int(1, nrow(x)) %*% x
+  colSums(x)
 }
   
 matrowany <- function(x) {
-  (matrowsum(x) > 0)
+  # currently faster than apply(x, 1, any) for logical arrays
+  (rowSums(x) > 0)
 }
 
 matrowall <- function(x) {
-  (matrowsum(x) == ncol(x))
+  # currently faster than apply(x, 1, all) for logical arrays
+  (rowSums(x) == ncol(x))
 }
 
 matcolany <- function(x) {
-  (matcolsum(x) > 0)
+  # currently faster than apply(x, 2, any) for logical arrays
+  (colSums(x) > 0)
 }
 
 matcolall <- function(x) {
-  (matcolsum(x) == nrow(x))
+  # currently faster than apply(x, 2, all) for logical arrays
+  (colSums(x) == nrow(x))
 }
 
 ########

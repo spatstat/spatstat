@@ -1,7 +1,7 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.34 $  $Date: 2015/12/16 01:12:17 $
+#  $Revision: 1.35 $  $Date: 2016/12/30 01:44:07 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
@@ -169,7 +169,7 @@ envelopeTest <-
       reference <- reference[ok]
     } else {
       rinterval <- range(r)
-      bad <- !apply(is.finite(as.matrix(X)), 1L, all)
+      bad <- !matrowall(is.finite(as.matrix(X)))
       if(any(bad)) {
         if(bad[1L] && !any(bad[-1L])) {
           ## ditch r = 0

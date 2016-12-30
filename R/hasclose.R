@@ -3,7 +3,7 @@
 #'
 #'    Determine whether each point has a close neighbour
 #'
-#'    $Revision: 1.8 $  $Date: 2016/11/29 04:58:47 $
+#'    $Revision: 1.9 $  $Date: 2016/12/30 01:44:07 $
 
 has.close <- function(X, r, Y=NULL, ...) {
   UseMethod("has.close")
@@ -21,7 +21,8 @@ has.close.default <- function(X, r, Y=NULL, ..., periodic=FALSE) {
   } else {
     pd <- crossdist(X, Y, periodic=TRUE)
   }
-  return(apply(pd <= r, 1, any))
+#  return(apply(pd <= r, 1, any))
+  return(matrowany(pd <= r))
 }
 
 has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {

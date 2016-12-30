@@ -1,9 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.003
+        CHANGES IN spatstat VERSION 1.48-0.004
 
 OVERVIEW
 
-    o Nothing yet.
+    o Extension to stieltjes integral
+
+    o Some computations accelerated.
 
 NEW FUNCTIONS
 

@@ -3,7 +3,7 @@
 #
 #   Variance estimation using block subdivision
 #
-#   $Revision: 1.19 $  $Date: 2016/03/08 00:48:06 $
+#   $Revision: 1.20 $  $Date: 2016/12/30 01:44:50 $
 #
 
 varblock <- local({
@@ -112,7 +112,7 @@ varblock <- local({
     ## tack together 
     out <- cbind(fX,m,v,sd,upper,lower)
     ## restrict r domain
-    bad <- apply(!is.finite(as.matrix(as.data.frame(out))), 1, all)
+    bad <- matrowall(!is.finite(as.matrix(as.data.frame(out))))
     rmax <- max(getrvalues(out)[!bad])
     alim <- c(0, rmax)
     if(!canrestrict) alim <- intersect.ranges(attr(out, "alim"), alim)

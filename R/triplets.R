@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.16 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.17 $	$Date: 2016/12/30 01:44:07 $
 #
 #    The triplets interaction
 #
@@ -78,7 +78,7 @@ Triplets <- local({
     tcount <- .rowSums(tcount, nrow(tcount), ncol(tcount))
     # select triangles consisting only of data points
     triX <- matrix(mapUX[tri], nrow=nrow(tri))
-    isX <- apply(!is.na(triX), 1, all)
+    isX <- matrowall(!is.na(triX))
     triX <- triX[isX, , drop=FALSE]
     #
     if(nrow(triX) > 0) {

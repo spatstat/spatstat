@@ -1,7 +1,7 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.127 $    $Date: 2016/07/15 10:21:49 $
+#  $Revision: 1.128 $    $Date: 2016/12/30 01:44:07 $
 #
 #
 
@@ -281,7 +281,7 @@ plot.fv <- local({
         lhsdata <- lhsdata[ok, , drop=FALSE]
       } else { ## actual range of values to be plotted
         if(xlogscale) {
-          ok <- is.finite(rhsdata) & (rhsdata > 0) & apply(lhsdata > 0, 1, any)
+          ok <- is.finite(rhsdata) & (rhsdata > 0) & matrowany(lhsdata > 0)
           xlim <- range(rhsdata[ok])
         } else {
           xlim <- range(rhsdata, na.rm=TRUE)

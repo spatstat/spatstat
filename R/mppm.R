@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.80 $   $Date: 2016/07/06 07:06:03 $
+#  $Revision: 1.81 $   $Date: 2016/12/30 01:44:07 $
 #
 
 mppm <- local({
@@ -165,7 +165,8 @@ mppm <- local({
         else NULL
       if(has.design) {
         ## check for NA's in design covariates
-        if(any(nbg <- apply(is.na(datadf), 2, any)))
+#        if(any(nbg <- apply(is.na(datadf), 2, any)))
+        if(any(nbg <- matcolany(is.na(datadf))))
           stop(paste("There are NA's in the",
                      ngettext(sum(nbg), "covariate", "covariates"),
                      commasep(dQuote(names(datadf)[nbg]))))
@@ -234,7 +235,7 @@ mppm <- local({
     ## check that iformula does not combine two interactions on one row
     nondfnames <- datanames[!(datanames %in% data.sumry$dfnames)]
     ip <- impliedpresence(itags, iformula, datadf, nondfnames)
-    if(any(apply(ip, 1, sum) > 1))
+    if(any(rowSums(ip) > 1))
       stop("iformula invokes more than one interaction on a single row")
   
     ##

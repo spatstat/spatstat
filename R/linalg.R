@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.20 $ $Date: 2016/11/13 01:51:03 $
+# $Revision: 1.21 $ $Date: 2016/12/30 01:44:07 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -133,7 +133,7 @@ bilinearform <- function(x, v, y) {
   # transpose (evaluate quadratic form for each column)
   tx <- t(x)
   ty <- t(y)
-  ok <- apply(is.finite(tx), 2, all) & apply(is.finite(ty), 2, all)
+  ok <- matcolall(is.finite(tx)) & matcolall(is.finite(ty))
   allok <- all(ok)
   if(!allok) {
     tx <- tx[ , ok, drop=FALSE]

@@ -3,7 +3,7 @@
 #
 # engine of plot method for ppm
 #
-# $Revision: 1.19 $  $Date: 2016/02/11 10:17:12 $
+# $Revision: 1.20 $  $Date: 2016/12/30 01:44:07 $
 #
 #
 
@@ -41,7 +41,7 @@ plot.plotppm <- function(x,data=NULL,trend=TRUE,cif=TRUE,se=TRUE,
 
   # plotting style
   howmat <- outer(how, c("persp", "image", "contour"), "==")
-  howmatch <- apply(howmat, 1, any)
+  howmatch <- matrowany(howmat)
   if (any(!howmatch)) 
     stop(paste("unrecognised option", how[!howmatch]))
 

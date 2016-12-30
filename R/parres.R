@@ -3,7 +3,7 @@
 #
 # code to plot transformation diagnostic
 #
-#   $Revision: 1.8 $  $Date: 2016/07/15 10:22:03 $
+#   $Revision: 1.9 $  $Date: 2016/12/30 01:44:07 $
 #
 
 parres <- function(model, covariate, ...,
@@ -166,14 +166,14 @@ parres <- function(model, covariate, ...,
       # check whether covariate is separable
       if(any(conflict <- dmat[relevant, othercov, drop=FALSE])) {
         ## identify entangled covariates
-        entangled <- colnames(conflict)[apply(conflict, 2, any)]
+        entangled <- colnames(conflict)[matcolany(conflict)]
         ## not problematic if constant
         ok <- unlist(isconstant[entangled])
         conflict[ , ok] <- FALSE
         ## re-test
         if(any(conflict)) {
-          conflictterms <- apply(conflict, 1, any)
-          conflictcovs  <- apply(conflict, 2, any)
+          conflictterms <- matrowany(conflict)
+          conflictcovs  <- matcolany(conflict)
           stop(paste("The covariate", sQuote(covname),
                      "cannot be separated from the",
                      ngettext(sum(conflictcovs), "covariate", "covariates"),
@@ -238,14 +238,14 @@ parres <- function(model, covariate, ...,
       # check whether covariate is separable
       if(any(conflict<- offmat[relevant, othercov, drop=FALSE])) {
         ## identify entangled covariates
-        entangled <- colnames(conflict)[apply(conflict, 2, any)]
+        entangled <- colnames(conflict)[matcolany(conflict)]
         ## not problematic if constant
         ok <- unlist(isconstant[entangled])
         conflict[ , ok] <- FALSE
         ## re-test
         if(any(conflict)) {
-          conflictterms <- apply(conflict, 1, any)
-          conflictcovs  <- apply(conflict, 2, any)
+          conflictterms <- matrowany(conflict)
+          conflictcovs  <- matcolany(conflict)
           stop(paste("The covariate", sQuote(covname),
                      "cannot be separated from the",
                      ngettext(sum(conflictcovs), "covariate", "covariates"),
@@ -271,7 +271,7 @@ parres <- function(model, covariate, ...,
                    offnames[nbg],
                    "not found in model frame"))
       effex <- mf[, offnames, drop=FALSE]
-      effect <- effect + apply(effex, 1, sum)
+      effect <- effect + rowSums(effex)
       #
       # construct the corresponding function
       gd <- getglmdata(model)
@@ -293,7 +293,7 @@ parres <- function(model, covariate, ...,
         if(!all(d$offnames %in% colnames(mf))) 
           stop("Internal error: mismatch in term names in effectFun")
         moff <- mf[, d$offnames, drop=FALSE]
-        y <- apply(moff, 1, sum)
+        y <- rowSums(moff)
         return(y)
       }
     }

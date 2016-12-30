@@ -3,7 +3,7 @@
 #
 #   computes simulation envelopes 
 #
-#   $Revision: 2.84 $  $Date: 2016/04/25 02:34:40 $
+#   $Revision: 2.85 $  $Date: 2016/12/30 01:44:07 $
 #
 
 envelope <- function(Y, fun, ...) {
@@ -1269,7 +1269,8 @@ envelope.matrix <- function(Y, ...,
                                    less = lower.signif,
                                    greater = upper.signif,
                                    two.sided = lower.signif | upper.signif)
-               is.signif.somewhere <- apply(is.signif, 2, any)
+#               is.signif.somewhere <- apply(is.signif, 2, any)
+               is.signif.somewhere <- matcolany(is.signif)
                pwrong <- sum(is.signif.somewhere)/nsim
              }
            }
@@ -1521,7 +1522,8 @@ envelope.matrix <- function(Y, ...,
                                    less = lower.signif,
                                    greater = upper.signif,
                                    two.sided = lower.signif | upper.signif)
-               is.signif.somewhere <- apply(is.signif, 2, any)
+#               is.signif.somewhere <- apply(is.signif, 2, any)
+               is.signif.somewhere <- matcolany(is.signif)
                pwrong <- sum(is.signif.somewhere)/nsim
              }
            }
