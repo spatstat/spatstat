@@ -1,13 +1,20 @@
-#
-#  primefactors.R
-#
-#  $Revision: 1.8 $   $Date: 2016/12/31 08:58:36 $
-#
+/*
+  
+  primefax.c
 
-# all primes below 2^13=8192
+  Prime numbers and prime factorisation
 
-primestable <-
-  c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,  
+  $Revision: 1.2 $  $Date: 2016/12/31 08:40:29 $
+
+*/
+
+#include <R.h>
+#include <Rmath.h>
+#include <R_ext/Utils.h>
+
+
+int primetable[] = {
+    2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,  
     59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113,  
     127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191,  
     193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263,  
@@ -97,104 +104,72 @@ primestable <-
     7793, 7817, 7823, 7829, 7841, 7853, 7867, 7873, 7877, 7879, 7883,  
     7901, 7907, 7919, 7927, 7933, 7937, 7949, 7951, 7963, 7993, 8009,
     8011, 8017, 8039, 8053, 8059, 8069, 8081, 8087, 8089, 8093, 8101,
-    8111, 8117, 8123, 8147, 8161, 8167, 8171, 8179, 8191)
+    8111, 8117, 8123, 8147, 8161, 8167, 8171, 8179, 8191,
+    0  /* end marker */
+};
 
-primestableMax <- 8192
+#define PMAX 8192
 
-primesbelow <- function(nmax) {
-  if(nmax <= primestableMax) return(primestable[primestable <= nmax])
-  eratosthenes(nmax, c(primestable, primestableMax:nmax))
-}
-
-eratosthenes <- function(nmax, startset=2:nmax) {
-  # The Sieve of Eratosthenes
-  if(nmax < 2) return(numeric(0))
-  numbers <- startset
-  prime <- startset[1]
-  repeat{
-    retain <-  (numbers <= prime) | (numbers %% prime != 0)
-    numbers <- numbers[retain]
-    remaining <- (numbers > prime)
-    if(!any(remaining))
-      break
-    prime <- min(numbers[remaining])
-  }
-  return(numbers)
-}
-
-primefactors <- function(n, method=c("C", "interpreted")) {
-  method <- match.arg(method)
-  switch(method,
-         interpreted = {
-           prmax <- floor(sqrt(n))
-           result <- findprimefactors(n, primesbelow(prmax))
-         },
-         C = {
-           check.1.integer(n)
-           kmax <- ceiling(log2(n))
-           z <- .C("primefax",
-                   n=as.integer(n),
-                   factors=as.integer(integer(kmax)),
-                   nfactors=as.integer(integer(1)))
-           result <- z$factors[seq_len(z$nfactors)]
-         },
-         stop("Unrecognised method"))
-  return(result)
-}
-
-findprimefactors <- function(n, primes) {
-  divides.n <- (n %% primes == 0)
-  if(!any(divides.n)) 
-    return(n)
-  divisors <- primes[divides.n]
-  m <- n/prod(divisors)
-  if(m == 1) return(divisors)
-  mfactors <- findprimefactors(m, divisors)
-  return(sort(c(divisors, mfactors)))
-}
-
-is.prime <- function(n) { length(primefactors(n)) == 1 }
-
-relatively.prime <- function(n, m) {
-  cf <- intersect(primefactors(n), primefactors(m))
-  return(length(cf) == 0)
-}
-
-least.common.multiple <- function(n, m) {
-  nf <- primefactors(n)
-  mf <- primefactors(m)
-  p <- sort(unique(c(nf,mf)))
-  nfac <- table(factor(nf, levels=p))
-  mfac <- table(factor(mf, levels=p))
-  prod(p^pmax.int(nfac,mfac))
-}
-
-greatest.common.divisor <- function(n, m) {
-  nf <- primefactors(n)
-  mf <- primefactors(m)
-  p <- sort(unique(c(nf,mf)))
-  nfac <- table(factor(nf, levels=p))
-  mfac <- table(factor(mf, levels=p))
-  prod(p^pmin.int(nfac,mfac))
-}
+#undef BUGGY
   
-divisors <- local({
+void primefax(n, factors, nfactors) 
+     int *n;
+     int *factors; 
+     int *nfactors;
+{
+  int m, p, dmax, k, d;
+  int *ptr;
 
-  divisors <- function(n) {
-    p <- primefactors(n)
-    up <- sort(unique(p))
-    k <- table(factor(p, levels=up))
-    return(rest(k, up))
+  m = *n;
+  k = 0;
+  /* upper limit on divisors */
+  dmax = (int) ceil(sqrt((double) m));
+
+#ifdef BUGGY
+  Rprintf("n = %d, dmax=%d\n", m, dmax);
+#endif
+
+  /* search for prime divisors in table of primes */
+  for(ptr = primetable; *ptr != 0; ++ptr) {
+    p = *ptr;
+#ifdef BUGGY
+    Rprintf("m = %d, p = %d\n", m, p);
+#endif
+    while(m % p == 0) {
+#ifdef BUGGY
+      Rprintf("\tdivides!\n");
+#endif
+      factors[k] = p;
+      ++k;
+      m = m/p;
+    }
+    if(p > m || p > dmax) break;
   }
 
-  rest <- function(kk, uu) {
-    powers <- uu[1]^(0:(kk[1]))
-    if(length(uu) == 1)
-      return(powers)
-    rr <- rest(kk[-1], uu[-1])
-    products <- as.vector(outer(powers, rr, "*"))
-    return(sort(unique(products)))
+  if(m > 1 && dmax > PMAX) {
+    /* search for divisors above PMAX */
+#ifdef BUGGY
+    Rprintf("searching beyond table..\n");
+#endif
+    for(d = PMAX; d * d <= m; ++d) {
+      while(m % d == 0) {
+	factors[k] = d;
+	k++;
+	m = m/d;
+      }
+      if(d > dmax) break;
+    }
   }
 
-  divisors
-})
+  if(m == 1) {
+    /* n has been factorised */
+    *nfactors = k;
+    return;
+  }
+
+  /* m is prime */
+  factors[k] = m;
+  ++k;
+  *nfactors = k;
+  return;
+}

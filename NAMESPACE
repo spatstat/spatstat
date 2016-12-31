@@ -177,6 +177,7 @@ useDynLib(spatstat,
 "poly2imA",
 "poly2imI",
 "prdist2segs",
+"primefax",
 "ps_exact_dt_R",
 "RcallF3",
 "RcallF3cen",
@@ -979,6 +980,7 @@ export("findbestlegendpos")
 export("findcbind")
 export("findCovariate")
 export("findfirstfactor")
+export("findprimefactors")       
 export("Finhom")
 export("firstfactor")
 export("fitin")

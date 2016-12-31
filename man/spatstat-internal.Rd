@@ -511,6 +511,7 @@
 \alias{prefixfv}
 \alias{prepareTitle}
 \alias{primefactors}       
+\alias{findprimefactors}       
 \alias{primesbelow}
 \alias{printStatus}
 \alias{print.addvar}    
@@ -1456,7 +1457,8 @@ prange(x)
                           terms, na.action, \dots)
 prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
 prepareTitle(main)
-primefactors(n, prmax)
+primefactors(n, method)
+findprimefactors(n, primes)
 primesbelow(nmax)
 \method{print}{addvar}(x, \dots)
 \method{print}{anylist}(x, \dots)
