@@ -1,7 +1,7 @@
 #
 #   resolve.defaults.R
 #
-#  $Revision: 1.31 $ $Date: 2016/09/23 04:32:13 $
+#  $Revision: 1.32 $ $Date: 2017/01/02 04:48:09 $
 #
 # Resolve conflicts between several sets of defaults
 # Usage:
@@ -73,22 +73,6 @@ do.call.matched <- function(fun, arglist, funargs,
   if(sieve)
     out <- list(result=out, otherargs=arglist[!matched])
   return(out)
-}
-
-## This function traps the colour arguments
-## and converts to greyscale if required.
-
-do.call.plotfun <- function(fun, arglist, ...) {
-  if(spatstat.options("monochrome")) {
-    keys <- names(arglist)
-    if(!is.null(keys)) {
-      cols <- nzchar(keys) & ((keys %in% c("border", "col", "fg", "bg")) |
-                              (substr(keys, 1, 4) == "col."))
-      if(any(cols))
-        arglist[cols] <- lapply(arglist[cols], to.grey)
-    }
-  }
-  do.call.matched(fun, arglist, ...)
 }
 
 

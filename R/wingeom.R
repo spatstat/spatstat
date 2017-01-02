@@ -1,13 +1,8 @@
 #
-#	wingeom.S	Various geometrical computations in windows
+#	wingeom.R	Various geometrical computations in windows
 #
+#	$Revision: 4.120 $	$Date: 2017/01/02 09:00:25 $
 #
-#	$Revision: 4.119 $	$Date: 2016/09/11 04:22:53 $
-#
-#
-#
-#
-#-------------------------------------
 
 volume.owin <- function(x) { area.owin(x) }
 
@@ -125,6 +120,190 @@ square <- function(r=1, unitname=NULL) {
   } else stop("argument r must be a single number, or a vector of length 2")
   owin(r,r, unitname=unitname)
 }
+
+# convert polygonal window to mask window 
+owinpoly2mask <- function(w, rasta, check=TRUE) {
+  if(check) {
+    verifyclass(w, "owin")
+    stopifnot(w$type == "polygonal")
+    verifyclass(rasta, "owin")
+    stopifnot(rasta$type == "mask")
+  }
+  
+  bdry <- w$bdry
+
+  x0    <- rasta$xcol[1]
+  y0    <- rasta$yrow[1]
+  xstep <- rasta$xstep
+  ystep <- rasta$ystep
+  dimyx <- rasta$dim
+  nx    <- dimyx[2]
+  ny    <- dimyx[1]
+
+  epsilon <- with(.Machine, double.base^floor(double.ulp.digits/2))
+
+  score <- numeric(nx*ny)
+  
+  for(i in seq_along(bdry)) {
+    p <- bdry[[i]]
+    xp <- p$x
+    yp <- p$y
+    np <- length(p$x)
+    # repeat last vertex
+    xp <- c(xp, xp[1])
+    yp <- c(yp, yp[1])
+    np <- np + 1
+    # rescale coordinates so that pixels are at integer locations
+    xp <- (xp - x0)/xstep
+    yp <- (yp - y0)/ystep
+    # avoid exact integer locations for vertices
+    whole <- (ceiling(xp) == floor(xp))
+    xp[whole] <-  xp[whole] + epsilon
+    whole <- (ceiling(yp) == floor(yp))
+    yp[whole] <-  yp[whole] + epsilon
+    # call C
+    z <- .C("poly2imI",
+            xp=as.double(xp),
+            yp=as.double(yp),
+            np=as.integer(np),
+            nx=as.integer(nx),
+            ny=as.integer(ny),
+            out=as.integer(integer(nx * ny)))
+#            PACKAGE="spatstat")
+    if(i == 1)
+      score <- z$out
+    else 
+      score <- score + z$out
+  }
+  status <- (score != 0)
+  out <- owin(rasta$xrange, rasta$yrange, mask=matrix(status, ny, nx))
+  return(out)
+}
+
+
+#' check validity of a polygonal owin
+
+owinpolycheck <- function(W, verbose=TRUE) {
+  verifyclass(W, "owin")
+  stopifnot(W$type == "polygonal")
+
+  # extract stuff
+  B <- W$bdry
+  npoly <- length(B)
+  outerframe <- owin(W$xrange, W$yrange)
+  # can't use as.rectangle here; we're still checking validity
+  boxarea.mineps <- area.owin(outerframe) * (1 - 0.00001)
+
+  # detect very large datasets
+  BS <- object.size(B)
+  blowbyblow <- verbose & (BS > 1e4 || npoly > 20)
+  #
+  
+  answer <- TRUE
+  notes <- character(0)
+  err <- character(0)
+  
+  # check for duplicated points, self-intersection, outer frame
+  if(blowbyblow) {
+    cat(paste("Checking", npoly, ngettext(npoly, "polygon...", "polygons...")))
+    pstate <- list()
+  }
+
+  dup <- self <- is.box <- logical(npoly)
+  
+  for(i in 1:npoly) {
+    if(blowbyblow && npoly > 1)
+      pstate <- progressreport(i, npoly, state=pstate)
+    Bi <- B[[i]]
+    # check for duplicated vertices
+    dup[i] <- as.logical(anyDuplicated(ppp(Bi$x, Bi$y,
+                                           window=outerframe, check=FALSE)))
+    if(dup[i] && blowbyblow)
+      message(paste("Polygon", i, "contains duplicated vertices"))
+    # check for self-intersection
+    self[i] <- xypolyselfint(B[[i]], proper=TRUE, yesorno=TRUE)
+    if(self[i] && blowbyblow)
+      message(paste("Polygon", i, "is self-intersecting"))
+    # check whether one of the current boundary polygons
+    # is the bounding box itself (with + sign)
+    is.box[i] <- (length(Bi$x) == 4) && (Area.xypolygon(Bi) >= boxarea.mineps)
+  }
+  if(blowbyblow)
+    cat("done.\n")
+  
+  if((ndup <- sum(dup)) > 0) {
+    whinge <- paste(ngettext(ndup, "Polygon", "Polygons"),
+                    if(npoly == 1) NULL else
+                    commasep(which(dup)), 
+                    ngettext(ndup, "contains", "contain"),
+                    "duplicated vertices")
+    notes <- c(notes, whinge)
+    err <- c(err, "duplicated vertices")
+    if(verbose) 
+      message(whinge)
+    answer <- FALSE
+  }
+  
+  if((nself <- sum(self)) > 0) {
+    whinge <-  paste(ngettext(nself, "Polygon", "Polygons"),
+                     if(npoly == 1) NULL else
+                     commasep(which(self)),
+                     ngettext(nself, "is", "are"),
+                     "self-intersecting")
+    notes <- c(notes, whinge)
+    if(verbose) 
+      message(whinge)
+    err <- c(err, "self-intersection")
+    answer <- FALSE
+  }
+  
+  if(sum(is.box) > 1) {
+    answer <- FALSE
+    whinge <- paste("Polygons",
+                    commasep(which(is.box)),
+                    "coincide with the outer frame")
+    notes <- c(notes, whinge)
+    err <- c(err, "polygons duplicating the outer frame")
+  }
+  
+  # check for crossings between different polygons
+  cross <- matrix(FALSE, npoly, npoly)
+  if(npoly > 1) {
+    if(blowbyblow) {
+      cat(paste("Checking for cross-intersection between",
+                npoly, "polygons..."))
+      pstate <- list()
+    }
+    P <- lapply(B, xypolygon2psp, w=outerframe, check=FALSE)
+    for(i in seq_len(npoly-1)) {
+      if(blowbyblow)
+        pstate <- progressreport(i, npoly-1, state=pstate)
+      Pi <- P[[i]]
+      for(j in (i+1):npoly) {
+        crosses <- if(is.box[i] || is.box[j]) FALSE else {
+          anycrossing.psp(Pi, P[[j]])
+        }
+        cross[i,j] <- cross[j,i] <- crosses
+        if(crosses) {
+          answer <- FALSE
+          whinge <- paste("Polygons", i, "and", j, "cross over")
+          notes <- c(notes, whinge)
+          if(verbose) 
+            message(whinge)
+          err <- c(err, "overlaps between polygons")
+        }
+      }
+    }
+    if(blowbyblow)
+      cat("done.\n")
+  }
+
+  err <- unique(err)
+  attr(answer, "notes") <- notes
+  attr(answer, "err") <-  err
+  return(answer)
+}
+
 
 overlap.owin <- function(A, B) {
   # compute the area of overlap between two windows

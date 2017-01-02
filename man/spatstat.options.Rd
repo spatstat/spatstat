@@ -28,7 +28,7 @@
   allows the user to examine and reset the values
   of global parameters which control actions in the
   \pkg{spatstat} package.
-  It is analogous to the system function \code{\link{options}}.
+  It is analogous to the system function \code{\link[base]{options}}.
 
   The function \code{reset.spatstat.options} resets all the
   global parameters in \pkg{spatstat} to their original,
@@ -38,7 +38,7 @@
   \describe{
     \item{checkpolygons}{
       Logical flag indicating whether the functions
-      \code{\link{owin}} and \code{\link{as.owin}} should
+      \code{\link[spatstat]{owin}} and \code{\link[spatstat]{as.owin}} should
       apply very strict checks on the validity of polygon data. 
       These strict checks are no longer necessary, and the default is
       \code{checkpolygons=FALSE}.
@@ -46,7 +46,7 @@
     }
     \item{checksegments}{
       Logical flag indicating whether the functions
-      \code{\link{psp}} and \code{\link{as.psp}} should check
+      \code{\link[spatstat]{psp}} and \code{\link[spatstat]{as.psp}} should check
       the validity of line segment data (in particular, checking that
       the endpoints of the line segments are inside the specified
       window). It is advisable to leave this flag set to \code{TRUE}. 
@@ -54,11 +54,11 @@
     \item{eroded.intensity}{
       Logical flag affecting the behaviour of the
       score and pseudo-score residual functions
-      \code{\link{Gcom}}, \code{\link{Gres}}
-      \code{\link{Kcom}}, \code{\link{Kres}}, 
-      \code{\link{psstA}}, 
-      \code{\link{psstG}}, 
-      \code{\link{psst}}.
+      \code{\link[spatstat]{Gcom}}, \code{\link[spatstat]{Gres}}
+      \code{\link[spatstat]{Kcom}}, \code{\link[spatstat]{Kres}}, 
+      \code{\link[spatstat]{psstA}}, 
+      \code{\link[spatstat]{psstG}}, 
+      \code{\link[spatstat]{psst}}.
       The flag indicates whether to compute intensity estimates
       on an eroded window (\code{eroded.intensity=TRUE})
       or on the original data window
@@ -67,11 +67,11 @@
     \item{expand}{
       The default expansion factor (area inflation factor)
       for expansion of the simulation window in
-      \code{\link{rmh}} (see \code{\link{rmhcontrol}}).
+      \code{\link[spatstat]{rmh}} (see \code{\link[spatstat]{rmhcontrol}}).
       Initialised to \code{2}.
     }
     \item{expand.polynom}{
-      Logical. Whether expressions involving \code{\link{polynom}}
+      Logical. Whether expressions involving \code{\link[spatstat]{polynom}}
       in a model formula should be expanded, so that
       \code{polynom(x,2)} is replaced by \code{x + I(x^2)} and so on.
       Initialised to \code{TRUE}.
@@ -79,7 +79,7 @@
     \item{fastpois}{
       Logical. Whether to use a fast algorithm
       (introduced in \pkg{spatstat 1.42-3}) for
-      simulating the Poisson point process in \code{\link{rpoispp}}
+      simulating the Poisson point process in \code{\link[spatstat]{rpoispp}}
       when the argument \code{lambda} is a pixel image.
       Initialised to \code{TRUE}.
       Should be set to \code{FALSE} if needed to guarantee repeatability
@@ -88,7 +88,7 @@
     \item{fastthin}{
       Logical. Whether to use a fast C language algorithm
       (introduced in \pkg{spatstat 1.42-3}) for
-      random thinning in \code{\link{rthin}} when the argument
+      random thinning in \code{\link[spatstat]{rthin}} when the argument
       \code{P} is a single number.
       Initialised to \code{TRUE}.
       Should be set to \code{FALSE} if needed to guarantee repeatability
@@ -97,7 +97,7 @@
     \item{fastK.lgcp}{
       Logical. Whether to use fast or slow algorithm to compute the
       (theoretical) \eqn{K}-function of a log-Gaussian Cox process
-      for use in \code{\link{lgcp.estK}} or \code{\link{Kmodel}}.
+      for use in \code{\link[spatstat]{lgcp.estK}} or \code{\link[spatstat]{Kmodel}}.
       The slow algorithm uses accurate numerical integration; the
       fast algorithm uses Simpson's Rule for numerical integration,
       and is about two orders of magnitude faster.
@@ -105,7 +105,7 @@
     }
     \item{fixpolygons}{
       Logical flag indicating whether the functions
-      \code{\link{owin}} and \code{\link{as.owin}} should
+      \code{\link[spatstat]{owin}} and \code{\link[spatstat]{as.owin}} should
       repair errors in polygon data. For example,
       self-intersecting polygons and overlapping polygons will
       be repaired. The default is \code{fixpolygons=TRUE}.
@@ -120,18 +120,18 @@
       not generate an error (possible errors include failure to allocate
       sufficient memory, and integer overflow of \code{n}).
       An attempt to generate more than this number of random points
-      triggers a warning from \code{\link{runifpoint}} and other
+      triggers a warning from \code{\link[spatstat]{runifpoint}} and other
       functions. Defaults to \code{1e6}.
     }
     \item{image.colfun}{
       Function determining the default colour map for
-      \code{\link{plot.im}}. When called with one integer argument
+      \code{\link[spatstat]{plot.im}}. When called with one integer argument
       \code{n}, this function should return a character vector of length
       \code{n} specifying \code{n} different colours.
     }
     \item{Kcom.remove.zeroes}{
       Logical value, determining whether the algorithm in
-      \code{\link{Kcom}} and \code{\link{Kres}}
+      \code{\link[spatstat]{Kcom}} and \code{\link[spatstat]{Kres}}
       removes or retains the contributions to the function
       from pairs of points that are identical. If these are
       retained then the function has a jump at \eqn{r=0}.
@@ -141,13 +141,13 @@
       Edge correction weights will be trimmed
       so as not to exceed this value.
       This applies to the weights computed by
-      \code{\link{edge.Trans}} or \code{\link{edge.Ripley}}
-      and used in \code{\link{Kest}} and its relatives.
+      \code{\link[spatstat]{edge.Trans}} or \code{\link[spatstat]{edge.Ripley}}
+      and used in \code{\link[spatstat]{Kest}} and its relatives.
     }
     \item{maxmatrix}{
       The maximum permitted size (rows times columns)
       of matrices generated by \pkg{spatstat}'s internal code.
-      Used by \code{\link{ppm}} and \code{\link{predict.ppm}}
+      Used by \code{\link[spatstat]{ppm}} and \code{\link[spatstat]{predict.ppm}}
       (for example) to decide when to
       split a large calculation into blocks.
       Defaults to \code{2^24=16777216}. 
@@ -159,12 +159,12 @@
     }
     \item{n.bandwidth}{
       Integer. Number of trial values of smoothing bandwidth to use for
-      cross-validation in \code{\link{bw.relrisk}} and similar
+      cross-validation in \code{\link[spatstat]{bw.relrisk}} and similar
       functions.
     }
     \item{ndummy.min}{
       The minimum number of dummy points in a quadrature scheme
-      created by \code{\link{default.dummy}}.
+      created by \code{\link[spatstat]{default.dummy}}.
       Either an integer or a pair of integers
       giving the minimum number of dummy points in the \code{x} and \code{y}
       directions respectively. 
@@ -172,7 +172,7 @@
     \item{ngrid.disc}{
       Number of points in the square grid used to compute
       a discrete approximation to the areas of discs
-      in \code{\link{areaLoss}} and \code{\link{areaGain}}
+      in \code{\link[spatstat]{areaLoss}} and \code{\link[spatstat]{areaGain}}
       when exact calculation is not available.
       A single integer.
     }
@@ -184,38 +184,40 @@
     }
     \item{nvoxel}{
       Default number of voxels in a 3D image,
-      typically for calculating the distance transform in \code{\link{F3est}}.
+      typically for calculating the distance transform in \code{\link[spatstat]{F3est}}.
       Initialised to 4 megavoxels: \code{nvoxel = 2^22 = 4194304}.
     }
     \item{par.binary}{
-      List of arguments to be passed to the function \code{\link{image}}
-      when displaying a binary image mask (in \code{\link{plot.owin}}
-      or \code{\link{plot.ppp}}).
+      List of arguments to be passed to the function
+      \code{\link[graphics]{image}}
+      when displaying a binary image mask (in \code{\link[spatstat]{plot.owin}}
+      or \code{\link[spatstat]{plot.ppp}}).
       Typically used to reset the colours of foreground and background.
     }
     \item{par.contour}{
       List of arguments controlling contour plots of pixel images
-      by \code{\link{contour.im}}.
+      by \code{\link[spatstat]{contour.im}}.
     }
     \item{par.fv}{
       List of arguments controlling the plotting of functions 
-      by \code{\link{plot.fv}} and its relatives.
+      by \code{\link[spatstat]{plot.fv}} and its relatives.
     }
     \item{par.persp}{
-      List of arguments to be passed to the function \code{\link{persp}}
+      List of arguments to be passed to the function
+      \code{\link[graphics]{persp}}
       when displaying a real-valued image, such as the fitted surfaces
-      in \code{\link{plot.ppm}}.
+      in \code{\link[spatstat]{plot.ppm}}.
     }
     \item{par.points}{
       List of arguments controlling the plotting of point patterns
-      by \code{\link{plot.ppp}}.
+      by \code{\link[spatstat]{plot.ppp}}.
     }
     \item{par.pp3}{
       List of arguments controlling the plotting of three-dimensional
-      point patterns by \code{\link{plot.pp3}}.
+      point patterns by \code{\link[spatstat]{plot.pp3}}.
     }
     \item{print.ppm.SE}{
-      Default rule used by \code{\link{print.ppm}}
+      Default rule used by \code{\link[spatstat]{print.ppm}}
       to decide whether to calculate and print standard errors
       of the estimated coefficients of the model.
       One of the strings \code{"always"}, \code{"never"} or
@@ -226,20 +228,20 @@
     }
     \item{progress}{
       Character string determining the style of progress reports
-      printed by \code{\link{progressreport}}. Either
+      printed by \code{\link[spatstat]{progressreport}}. Either
       \code{"tty"}, \code{"tk"} or \code{"txtbar"}.
-      For explanation of these options, see \code{\link{progressreport}}.
+      For explanation of these options, see \code{\link[spatstat]{progressreport}}.
     }
     \item{project.fast}{
       Logical. If \code{TRUE}, the algorithm of
-      \code{\link{project.ppm}}
+      \code{\link[spatstat]{project.ppm}}
       will be accelerated using a shorcut.
       Initialised to \code{FALSE}.
     }
     \item{psstA.ngrid}{
       Single integer, 
       controlling the accuracy of the discrete approximation
-      of areas computed in the function \code{\link{psstA}}.
+      of areas computed in the function \code{\link[spatstat]{psstA}}.
       The area of a disc is approximated by counting points on
       an \eqn{n \times n}{n * n} grid.
       Initialised to 32.
@@ -247,13 +249,13 @@
     \item{psstA.nr}{
       Single integer,
       determining the number of distances \eqn{r}
-      at which the function \code{\link{psstA}} will be evaluated
+      at which the function \code{\link[spatstat]{psstA}} will be evaluated
       (in the default case where argument \code{r} is absent).
       Initialised to 30.
     }
     \item{psstG.remove.zeroes}{
       Logical value, determining whether the algorithm in
-      \code{\link{psstG}} 
+      \code{\link[spatstat]{psstG}} 
       removes or retains the contributions to the function
       from pairs of points that are identical. If these are
       retained then the function has a jump at \eqn{r=0}.
@@ -263,7 +265,7 @@
       New default values for the parameters \code{p}, \code{q}
       and \code{nrep} in the Metropolis-Hastings simulation
       algorithm. These override the defaults
-      in \code{\link{rmhcontrol.default}}.
+      in \code{\link[spatstat]{rmhcontrol.default}}.
     }
     \item{scalable}{
       Logical flag indicating whether the new code in \code{rmh.default}
@@ -271,7 +273,7 @@
       should be used.  In order to recover former behaviour (so that
       previous results can be reproduced) set this option equal to
       \code{FALSE}.  See the \dQuote{Warning} section in the help for
-      \code{\link{rmh}()} for more detail.
+      \code{\link[spatstat]{rmh}()} for more detail.
     }
     \item{terse}{
       Integer between 0 and 4.
@@ -292,13 +294,13 @@
       Logical value indicating whether default colour maps
       are allowed to include semi-transparent colours, where possible.
       Default is \code{TRUE}.
-      Currently this only affects \code{\link{plot.ppp}}. 
+      Currently this only affects \code{\link[spatstat]{plot.ppp}}. 
     }
     \item{units.paren}{
       The kind of parenthesis which encloses the text that
       explains a \code{unitname}. This text is seen in
-      the text output of functions like \code{\link{print.ppp}} and
-      in the graphics generated by \code{\link{plot.fv}}.
+      the text output of functions like \code{\link[spatstat]{print.ppp}} and
+      in the graphics generated by \code{\link[spatstat]{plot.fv}}.
       The value should be one of the character strings \code{'('}, \code{'['},
       \code{'{'} or \code{''}. The default is \code{'('}.
     }
@@ -330,17 +332,17 @@
     }
     \item{closepairs.newcode}{
       Logical. Whether to use new version of the
-      code for \code{\link{closepairs}}.
+      code for \code{\link[spatstat]{closepairs}}.
       Initialised to \code{TRUE}.
     }
     \item{crossing.psp.useCall}{
       Logical. Whether to use new version of the
-      code for \code{\link{crossing.psp}}.
+      code for \code{\link[spatstat]{crossing.psp}}.
       Initialised to \code{TRUE}.
     }
     \item{crosspairs.newcode}{
       Logical. Whether to use new version of the
-      code for \code{\link{crosspairs}}.
+      code for \code{\link[spatstat]{crosspairs}}.
       Initialised to \code{TRUE}.
     }
     \item{densityC}{
@@ -368,7 +370,7 @@
     }
     \item{selfcrossing.psp.useCall}{
       Logical. Whether to use new version of the
-      code for \code{\link{selfcrossing.psp}}.
+      code for \code{\link[spatstat]{selfcrossing.psp}}.
       Initialised to \code{TRUE}.
     }
     \item{use.Krect}{
@@ -379,7 +381,7 @@
   }
 }
 \seealso{
-  \code{\link{options}}
+  \code{\link[base]{options}}
 }
 \examples{
   # save current values

@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.008
+        CHANGES IN spatstat VERSION 1.48-0.009
 
 OVERVIEW
 
-    o Extension to stieltjes integral
+    o Extension to Stieltjes integral
 
     o Some computations accelerated.
 
@@ -15,6 +15,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o stieltjes
     Argument 'M' can be a stepfun object (such as an empirical CDF).
+
+    o polynom
+    This function now has a help file.
 
 BUG FIXES
 

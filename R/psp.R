@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.85 $ $Date: 2016/10/14 01:57:34 $
+#  $Revision: 1.86 $ $Date: 2017/01/02 09:00:40 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -190,6 +190,7 @@ as.psp.owin <- function(x, ..., window=NULL,
   edges(x, ..., window=window, check=check)
 }
 
+
 edges <- function(x, ...,
                   window=NULL, check=FALSE) {
   x <- as.owin(x)
@@ -210,6 +211,13 @@ edges <- function(x, ...,
   return(out)
 }
 
+xypolygon2psp <- function(p, w, check=spatstat.options("checksegments")) {
+  verify.xypolygon(p)
+  n <- length(p$x)
+  nxt <- c(2:n, 1)
+  return(psp(p$x, p$y, p$x[nxt], p$y[nxt], window=w, check=check))
+}
+         
 
 #################
 

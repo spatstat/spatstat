@@ -44,7 +44,8 @@
   for fitting nonstationary spatial trend to point process models.
 }
 \seealso{
-  \code{\link{ppm}}
+  \code{\link{ppm}},
+  \code{\link{polynom}}
 }
 \examples{
    # inhomogeneous point pattern

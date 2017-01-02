@@ -497,7 +497,6 @@
 \alias{plot.qqppm}
 \alias{plot.spatialcdf}
 \alias{plot.studpermutest}
-\alias{polynom}
 \alias{ppllengine}
 \alias{ppm.default}
 \alias{ppmCovariates}
@@ -1434,7 +1433,6 @@ plotPolygonBdry(x, \dots)
         main = if (meanonly) "group means" else NULL,
         xlim = NULL, ylim = NULL, ylab = NULL, legend = !add,
         legendpos = "topleft", lbox = FALSE, add = FALSE)
-polynom(x, \dots)
 ppllengine(X, Y, action="project", check=FALSE)
 \method{ppm}{default}(Q, trend, interaction,
        \dots, covariates, data, covfunargs, subset, 

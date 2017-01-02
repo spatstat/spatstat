@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.17 $   $Date: 2015/07/08 10:23:36 $
+#   $Revision: 1.18 $   $Date: 2017/01/02 04:47:50 $
 #
 
 
@@ -164,5 +164,21 @@ hsvNA <- function(h, s, v, alpha=NULL) {
     with(df, hsv(h[ok], s[ok], v[ok], alpha[ok]))
   }
   return(result)
+}
+
+## This function traps the colour arguments
+## and converts to greyscale if required.
+
+do.call.plotfun <- function(fun, arglist, ...) {
+  if(spatstat.options("monochrome")) {
+    keys <- names(arglist)
+    if(!is.null(keys)) {
+      cols <- nzchar(keys) & ((keys %in% c("border", "col", "fg", "bg")) |
+                              (substr(keys, 1, 4) == "col."))
+      if(any(cols))
+        arglist[cols] <- lapply(arglist[cols], to.grey)
+    }
+  }
+  do.call.matched(fun, arglist, ...)
 }
 

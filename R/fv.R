@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.144 $   $Date: 2016/12/29 08:35:40 $
+##    $Revision: 1.145 $   $Date: 2017/01/02 09:50:23 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -900,8 +900,11 @@ formula.fv <- function(x, ...) {
   attr(x, "fmla")
 }
 
-## method for 'formula<-'
-## (generic is defined in formulae.R)
+# new generic
+
+"formula<-" <- function(x, ..., value) {
+  UseMethod("formula<-")
+}
 
 "formula<-.fv" <- function(x, ..., value) {
   if(is.null(value))
