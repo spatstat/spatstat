@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.009
+        CHANGES IN spatstat VERSION 1.48-0.010
 
 OVERVIEW
 
@@ -18,6 +18,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o polynom
     This function now has a help file.
+
+    o quantile.ewcdf
+    The function is now normalised to the range [0,1]
+    before the quantiles are computed. 
+    This can be suppressed by setting normalise=FALSE.
+    
 
 BUG FIXES
 

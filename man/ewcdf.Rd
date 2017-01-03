@@ -42,11 +42,8 @@ ewcdf(x, weights = rep(1/length(x), length(x)))
   A function, of class \code{"ewcdf"}, inheriting from 
   \code{"ecdf"} and \code{"stepfun"}. 
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{ecdf}}.

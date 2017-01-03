@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.9 $  $Date: 2016/02/16 01:39:12 $
+#     $Revision: 1.10 $  $Date: 2017/01/03 11:08:09 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -58,13 +58,16 @@ print.ewcdf <- function (x, digits = getOption("digits") - 2L, ...) {
   invisible(x)
 }
 
-quantile.ewcdf <- function(x, probs=seq(0,1,0.25), names=TRUE, ..., type=1) {
+quantile.ewcdf <- function(x, probs=seq(0,1,0.25), names=TRUE, ...,
+                           normalise=TRUE, type=1) {
   trap.extra.arguments(..., .Context="quantile.ewcdf")
   if(!(type %in% c(1,2)))
     stop("Only quantiles of type 1 and 2 are implemented", call.=FALSE)
   env <- environment(x)
   xx <- get("x", envir=env)
   Fxx <- get("y", envir=env)
+  if(normalise)
+    Fxx <- Fxx/max(Fxx)
   n <- length(xx)
   eps <- 100 * .Machine$double.eps
   if(any((p.ok <- !is.na(probs)) & (probs < -eps | probs > 1 + eps))) 

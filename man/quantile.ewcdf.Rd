@@ -8,7 +8,8 @@
 }
 \usage{
   \method{quantile}{ewcdf}(x, probs = seq(0, 1, 0.25),
-                 names = TRUE, \dots, type=1)
+                 names = TRUE, \dots,
+                 normalise = TRUE, type=1)
 }
 \arguments{
   \item{x}{
@@ -27,6 +28,10 @@
   \item{\dots}{
     Ignored.
   }
+  \item{normalise}{
+    Logical value indicating whether \code{x} should first be normalised
+    so that it ranges between 0 and 1. 
+  }
   \item{type}{
     Integer specifying the type of quantile to be calculated,
     as explained in \code{\link[stats]{quantile.default}}.
@@ -40,7 +45,12 @@
 
   The quantile for a probability \code{p} is computed
   as the right-continuous inverse of the cumulative
-  distribution function (assuming \code{type=1}, the default).
+  distribution function \code{x} (assuming \code{type=1}, the default).
+
+  If \code{normalise=TRUE} (the default),
+  the weighted cumulative function \code{x} is first normalised to
+  have total mass \code{1} so that it can be interpreted as a
+  cumulative probability distribution function. 
 }
 \value{
   Numeric vector of quantiles, of the same length as \code{probs}.
@@ -55,11 +65,8 @@
   Fun <- ewcdf(z, w)
   quantile(Fun, c(0.95,0.99))
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
+\author{
+  \spatstatAuthors
   and Kevin Ummel.
 }
 \keyword{spatial}
