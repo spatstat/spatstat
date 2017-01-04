@@ -108,6 +108,8 @@
   Diestel, J. and Uhl, J.J. Jr (1977)
   \emph{Vector measures}.
   Providence, RI, USA: American Mathematical Society.
+
+  Halmos, P.R. (1950) \emph{Measure Theory}. Van Nostrand.
 }
 \author{
   \adrian
@@ -117,7 +119,9 @@
   \code{\link{Smooth.msr}},
   \code{\link{[.msr}},
   \code{\link{with.msr}},
-  \code{\link{split.msr}}
+  \code{\link{split.msr}},
+  \code{\link{Ops.msr}},
+  \code{\link{measureVariation}}.
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })

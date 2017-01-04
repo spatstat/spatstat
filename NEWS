@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.012
+        CHANGES IN spatstat VERSION 1.48-0.013
 
 OVERVIEW
+
+    o Operations on signed measures.
 
     o Extension to Stieltjes integral
 
@@ -13,7 +15,11 @@ OVERVIEW
 
 NEW FUNCTIONS
 
-    o None.
+    o Ops.msr
+    Arithmetic operations for measures.
+
+    o measurePositive, measureNegative, measureVariation
+    Positive and negative parts of a measure, and variation of a measure.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

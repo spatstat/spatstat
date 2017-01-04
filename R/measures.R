@@ -477,3 +477,95 @@ scalardilate.msr <- function(X, f, ...) {
   X$loc <- Xloc <- scalardilate(X$loc, f, ...)
   putlastshift(X, getlastshift(Xloc))
 }
+
+Ops.msr <- function(e1,e2=NULL){
+  vn <- c("val", "discrete", "density")
+  if(nargs() == 1L) {
+    #' unary operator
+    if(!is.element(.Generic, c("+", "-")))
+      stop(paste("Unary operation",
+                 sQuote(paste0(.Generic, "A")),
+                 "is undefined for a measure A."),
+           call.=FALSE)
+    e1 <- unclass(e1)
+    e1[vn] <- lapply(e1[vn], .Generic)
+    class(e1) <- "msr"
+    return(e1)
+  } else {
+    #' binary operator
+    m1 <- inherits(e1, "msr")
+    m2 <- inherits(e2, "msr")
+    if(m1 && m2) {
+      if(!is.element(.Generic, c("+", "-")))
+        stop(paste("Operation", sQuote(paste0("A", .Generic, "B")),
+                   "is undefined for measures A, B"),
+             call.=FALSE)
+      if(!identical(e1$loc, e2$loc))
+        stop(paste("Cannot perform operation",
+                   paste0(sQuote(.Generic), ":"),
+                   "measures are defined on different quadrature schemes"),
+             call.=FALSE)
+      e1 <- unclass(e1)
+      e2 <- unclass(e2)
+      e1[vn] <- mapply(.Generic, e1[vn], e2[vn],
+                       SIMPLIFY=FALSE)
+      class(e1) <- "msr"
+      return(e1)
+    } else if(m1 && is.numeric(e2)) {
+      if(!is.element(.Generic, c("/", "*")))
+        stop(paste("Operation",
+                   sQuote(paste0("A", .Generic, "z")),
+                   "is undefined for a measure A and numeric z."),
+             call.=FALSE)
+      e1 <- unclass(e1)
+      e1[vn] <- lapply(e1[vn], .Generic, e2=e2)
+      class(e1) <- "msr"
+      return(e1)
+    } else if(m2 && is.numeric(e1)) {
+      if(.Generic != "*") 
+        stop(paste("Operation",
+                   sQuote(paste0("z", .Generic, "A")),
+                   "is undefined for a measure A and numeric z."),
+             call.=FALSE)
+      e2 <- unclass(e2)
+      e2[vn] <- lapply(e2[vn], .Generic, e1=e1)
+      class(e2) <- "msr"
+      return(e2)
+    }
+    stop(paste("Operation", sQuote(paste0("e1", .Generic, "e2")),
+               "is undefined for this kind of data"),
+         call.=FALSE)
+  }
+}
+
+measurePositive <- function(x) {
+  if(!inherits(x, "msr"))
+    stop("x must be a measure", call.=FALSE)
+  y <- x
+  y$discrete <- pmax(0, x$discrete)
+  y$density  <- pmax(0, x$density)
+  y$val      <- y$discrete + y$wt * y$density
+  return(y)
+}
+
+measureNegative <- function(x) {
+  if(!inherits(x, "msr"))
+    stop("x must be a measure", call.=FALSE)
+  y <- x
+  y$discrete <- -pmin(0, x$discrete)
+  y$density  <- -pmin(0, x$density)
+  y$val      <- y$discrete + y$wt * y$density
+  return(y)
+}
+
+measureVariation <- function(x) {
+  if(!inherits(x, "msr"))
+    stop("x must be a measure", call.=FALSE)
+  y <- x
+  y$discrete <- abs(x$discrete)
+  y$density  <- abs(x$density)
+  y$val      <- y$discrete + y$wt * y$density
+  return(y)
+}
+
+  
