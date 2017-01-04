@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.010
+        CHANGES IN spatstat VERSION 1.48-0.011
 
 OVERVIEW
 
     o Extension to Stieltjes integral
 
     o Some computations accelerated.
+
+    o Bug fixes.
 
 NEW FUNCTIONS
 
@@ -27,7 +29,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-    o None.
+    o plot.msr
+    If one of 'nrows' or 'ncols' was specified, but not both,
+    an obscure error occurred.
+
+    o plot.solist, plot.imlist, plot.anylist
+    Crashed if 'nrows' and 'ncols' were given values implying
+    that some rows or columns would not contain any plots.
+
+    o as.ppp.lpp
+    Crashed if there was more than one column of marks.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.48-0
 

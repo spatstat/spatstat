@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.21 $ $Date: 2016/07/03 05:06:29 $
+##  $Revision: 1.22 $ $Date: 2017/01/04 02:40:40 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -112,7 +112,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     return(!inherits(y, "try-error"))
   }
 
-  maxassigned <- function(i, values) max(values[i[i > 0]])
+  maxassigned <- function(i, values) max(-1, values[i[i > 0]])
   
   plot.anylist <- function(x, ..., main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
@@ -315,8 +315,11 @@ plot.anylist <- plot.solist <- plot.listof <-
       heights <- rep.int(1, nrows)
       widths <- rep.int(1, ncols)
     }
-    meanheight <- mean(heights)
-    meanwidth  <- mean(widths)
+    #' negative heights/widths arise if a row/column is not used.
+    meanheight <- mean(heights[heights > 0])
+    meanwidth  <- mean(widths[heights > 0])
+    heights[heights <= 0] <- meanheight
+    widths[widths <= 0] <- meanwidth
     nall <- n
     ##
     if(single.plot) {

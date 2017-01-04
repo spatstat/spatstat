@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.50 $   $Date: 2016/10/28 07:18:23 $
+#  $Revision: 1.51 $   $Date: 2017/01/04 03:01:42 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -299,7 +299,10 @@ as.ppp.lpp <- function(X, ..., fatal=TRUE) {
   L <- X$domain
   Y <- as.ppp(coords(X, temporal=FALSE, local=FALSE),
               W=L$window, check=FALSE)
-  marks(Y) <- marks(X)
+  if(!is.null(marx <- marks(X))) {
+    if(is.hyperframe(marx)) marx <- as.data.frame(marx)
+    marks(Y) <- marx
+  }
   return(Y)
 }
 

@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.60 $  $Date: 2016/06/30 03:57:09 $
+#  $Revision: 1.61 $  $Date: 2017/01/04 02:20:38 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -308,9 +308,12 @@ plot.msr <- function(x, ..., add=FALSE,
 
   if(length(y) > 1) {
     ## plot as an array of panels
+    userarg <- list(...)
+    rowcol <- list(nrows=k, ncols=d)
+    if(any(c("nrows", "ncols") %in% names(userarg))) rowcol <- list()
     result <- do.call(plot.solist, resolve.defaults(list(y),
-                                                    list(...),
-                                                    list(nrows=k, ncols=d),
+                                                    userarg,
+                                                    rowcol,
                                                     list(how=how,
                                                          main=main,
                                                          equal.scales=TRUE)))
