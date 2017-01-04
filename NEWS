@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.011
+        CHANGES IN spatstat VERSION 1.48-0.012
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     o Some computations accelerated.
 
     o Bug fixes.
+
+    o Version nickname: 'The Rug Less Vacuumed'
 
 NEW FUNCTIONS
 
