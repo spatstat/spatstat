@@ -39,19 +39,19 @@ install.packages('devtools')
 
 ## Bug reports 
 
-Users are encouraged to report bugs here 
-(go to *issues* in the menu above, 
-and press *new issue* to start a new bug report).
-You can post bug reports, documentation corrections, 
-and feature requests. 
+Please report bugs here.
+Go to 
+[[issues](https://github.com/spatstat/spatstat/issues)] in the menu above, 
+and press *new issue* to start a new bug report, documentation correction
+or feature request.
 
-Please do not post questions on the Issues page
+Please do not post *questions* on the Issues page
 because it's too clunky for correspondence.
 
 ## Questions about spatstat
 
-For questions about `spatstat`, first check the `spatstat` topic page
-on the question-and-answer website [[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)](http://stackoverflow.com).
+For questions about `spatstat`, first check 
+the question-and-answer website [[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)](http://stackoverflow.com).
 If your question is not listed,
 you can either post your question at stackoverflow, or
 email the authors.
