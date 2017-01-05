@@ -117,8 +117,13 @@ print.solist <- function (x, ...) {
 
 "[.solist" <- function(x, i, ...) {
   cl <- oldClass(x)
-  ## invoke list method
-  y <- NextMethod("[")
+  if(!missing(i) && is.owin(i)) {
+    ## spatial subset
+    y <- lapply(unclass(x), "[", i=i)
+  } else {
+    ## invoke list method
+    y <- NextMethod("[")
+  }
   if(length(y) == 0) return(list())
   class(y) <- cl
   return(y)

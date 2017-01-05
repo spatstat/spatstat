@@ -189,19 +189,29 @@ plotEachLayer <- function(x, ..., main,
 
 
 "[.layered" <- function(x, i, j, drop=FALSE, ...) {
-  if(missing(i) && missing(j))
+  i.given <- !missing(i) && !is.null(i)
+  j.given <- !missing(j) && !is.null(j)
+  if(!i.given && !j.given)
     return(x)
   p <- attr(x, "plotargs")
   x <- unclass(x)
   nx <- length(x)
-  if(!missing(i) && !is.null(i)) {
-    x <- x[i]
-    p <- p[i]
-    nx <- length(x)
+  if(i.given) {
+    if(is.owin(i)) {
+      #' spatial window subset
+      isnul <- (lengths(x) == 0)
+      x[!isnul] <- lapply(x[!isnul], "[", i=i)
+    } else {
+      #' vector subset index
+      x <- x[i]
+      p <- p[i]
+      nx <- length(x)
+    }
   }
-  isnul <- (lengths(x) == 0)
-  if(!missing(j) && !is.null(j))
+  if(j.given) {
+    isnul <- (lengths(x) == 0)
     x[!isnul] <- lapply(x[!isnul], "[", i=j)
+  }
   if(drop && nx == 1)
     return(x[[1]])
   y <- layered(LayerList=x, plotargs=p)

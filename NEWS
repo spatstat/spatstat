@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.013
+        CHANGES IN spatstat VERSION 1.48-0.014
 
 OVERVIEW
 
     o Operations on signed measures.
 
-    o Extension to Stieltjes integral
+    o Extension to Stieltjes integral.
 
     o Some computations accelerated.
+
+    o Extensions to subset operators.
 
     o Bug fixes.
 
@@ -33,7 +35,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The function is now normalised to the range [0,1]
     before the quantiles are computed. 
     This can be suppressed by setting normalise=FALSE.
-    
+
+    o "[.layered"
+    Subset index i can now be an 'owin' object.
+
+    o "[.solist"
+    Subset index i can now be an 'owin' object.
+
 
 BUG FIXES
 
