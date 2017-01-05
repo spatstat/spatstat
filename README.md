@@ -43,15 +43,17 @@ Users are encouraged to report bugs here
 (go to *issues* in the menu above, 
 and press *new issue* to start a new bug report).
 You can post bug reports, documentation corrections, 
-and feature requests. Please do not post questions on the Issues page
+and feature requests. 
+
+Please do not post questions on the Issues page
 because it's too clunky for correspondence.
 
 ## Questions about spatstat
 
-For questions about `spatstat`, please first check whether 
-your question has already been posed by someone else at
-[[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)](http://stackoverflow.com).
-If not, you can either post your question at stackoverflow, or
+For questions about `spatstat`, first check the `spatstat` topic page
+on the question-and-answer website [[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)](http://stackoverflow.com).
+If your question is not listed,
+you can either post your question at stackoverflow, or
 email the authors.
 
 ## Making your own changes
