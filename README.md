@@ -39,9 +39,9 @@ install.packages('devtools')
 
 ## Bug reports 
 
-Please report bugs here.
+Users are encouraged to report bugs here.
 Go to 
-[[issues](https://github.com/spatstat/spatstat/issues)] in the menu above, 
+[[issues](https://github.com/spatstat/spatstat/issues)](https://github.com/spatstat/spatstat/issues) in the menu above, 
 and press *new issue* to start a new bug report, documentation correction
 or feature request.
 
