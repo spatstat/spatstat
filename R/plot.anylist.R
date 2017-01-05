@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.22 $ $Date: 2017/01/04 02:40:40 $
+##  $Revision: 1.23 $ $Date: 2017/01/05 08:44:41 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -198,15 +198,17 @@ plot.anylist <- plot.solist <- plot.listof <-
     
     if(!arrange) {
       ## sequence of plots
+      result <- vector(mode="list", length=n)
       for(i in 1:n) {
         xi <- x[[i]]
         exec.or.plot(panel.begin, i, xi, main=main.panel[i],
                      extrargs=extrargs.begin)
-        extraplot(i, xi, ...,
-                  add=!is.null(panel.begin),
-                  main=main.panel[i],
-                  panel.args=panel.args, extrargs=extrargs,
-                  plotcommand=plotcommand)
+        result[[i]] <-
+          extraplot(i, xi, ...,
+                    add=!is.null(panel.begin),
+                    main=main.panel[i],
+                    panel.args=panel.args, extrargs=extrargs,
+                    plotcommand=plotcommand) %orifnull% list()
         exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
       }
       if(!is.null(adorn.left))
@@ -217,7 +219,7 @@ plot.anylist <- plot.solist <- plot.listof <-
         warning("adorn.top was ignored because arrange=FALSE")
       if(!is.null(adorn.bottom))
         warning("adorn.bottom was ignored because arrange=FALSE")
-      return(invisible(NULL))
+      return(invisible(result))
     }
 
     ## ARRAY of plots
@@ -343,6 +345,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex.main')
       plot(bigbox, type="n", main=main, cex.main=cex)
       ## plot individual objects
+      result <- vector(mode="list", length=n)
       for(i in 1:n) {
         ## determine shift vector that moves bottom left corner of spatial box
         ## to bottom left corner of target area on plot device
@@ -357,16 +360,18 @@ plot.anylist <- plot.solist <- plot.listof <-
                             main=main.panel[i], show.all=TRUE,
                             extrargs=extrargs.begin,
                             vec=vec)
-        extraplot(i, xishift, ...,
-                  add=TRUE, show.all=is.null(panel.begin),
-                  main=main.panel[i],
-                  extrargs=extrargs,
-                  panel.args=panel.args, plotcommand=plotcommand)
+        result[[i]] <-
+          extraplot(i, xishift, ...,
+                    add=TRUE, show.all=is.null(panel.begin),
+                    main=main.panel[i],
+                    extrargs=extrargs,
+                    panel.args=panel.args,
+                    plotcommand=plotcommand) %orifnull% list()
         exec.or.plotshift(panel.end, i, xishift, add=TRUE,
                           extrargs=extrargs.end,
                           vec=vec)
       }
-      return(invisible(NULL))
+      return(invisible(result))
     }
     ## ................. multiple logical plots using 'layout' ..............
     ## adjust panel margins to accommodate desired extra separation
@@ -418,15 +423,18 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## plot panels
     npa <- par(mar=mar.panel)
     if(!banner) opa <- npa
+    result <- vector(mode="list", length=n)
     for(i in 1:n) {
       xi <- x[[i]]
       exec.or.plot(panel.begin, i, xi, main=main.panel[i],
                    extrargs=extrargs.begin)
-      extraplot(i, xi, ...,
-                add = !is.null(panel.begin), 
-                main = main.panel[i],
-                extrargs=extrargs,
-                panel.args=panel.args, plotcommand=plotcommand)
+      result <-
+        extraplot(i, xi, ...,
+                  add = !is.null(panel.begin), 
+                  main = main.panel[i],
+                  extrargs=extrargs,
+                  panel.args=panel.args,
+                  plotcommand=plotcommand) %orifnull% list()
       exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
     }
     ## adornments
@@ -444,7 +452,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## revert
     layout(1)
     par(opa)
-    return(invisible(NULL))
+    return(invisible(result))
   }
 
   plot.anylist
@@ -532,14 +540,15 @@ plot.imlist <- local({
       names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     }
     ##
-    do.call(plot.solist,
-            resolve.defaults(list(x=x, plotcommand="image"),
-                             list(...),
-                             list(mar.panel=mar.panel,
-                                  main=xname,
-                                  col=imcolmap, zlim=zlim,
-                                  ribbon=FALSE),
-                             ribadorn))
+    result <- do.call(plot.solist,
+                      resolve.defaults(list(x=x, plotcommand="image"),
+                                       list(...),
+                                       list(mar.panel=mar.panel,
+                                            main=xname,
+                                            col=imcolmap, zlim=zlim,
+                                            ribbon=FALSE),
+                                       ribadorn))
+    return(invisible(result))
   }
 
   plot.imlist

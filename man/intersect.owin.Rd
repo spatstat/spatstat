@@ -12,8 +12,7 @@
    setminus.owin(A, B, \dots, p)
 }
 \arguments{
-  \item{A,B}{Windows (objects of class \code{"owin"})
-    or data acceptable to \code{\link{as.owin}}.}
+  \item{A,B}{Windows (objects of class \code{"owin"}).}
   \item{\dots}{
     Windows,
     or arguments passed to \code{\link{as.mask}}

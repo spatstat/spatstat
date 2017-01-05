@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.014
+        CHANGES IN spatstat VERSION 1.48-0.015
 
 OVERVIEW
 
@@ -41,6 +41,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o "[.solist"
     Subset index i can now be an 'owin' object.
+
+    o plot.solist, plot.imlist, plot.anylist
+    Result is now an (invisible) list containing the result
+    from executing the plot of each panel.
 
 
 BUG FIXES
