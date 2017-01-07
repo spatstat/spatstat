@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.016
+        CHANGES IN spatstat VERSION 1.48-0.017
 
 OVERVIEW
 
@@ -57,13 +57,19 @@ BUG FIXES
     o plot.msr
     If one of 'nrows' or 'ncols' was specified, but not both,
     an obscure error occurred.
+    Fixed.
 
     o plot.solist, plot.imlist, plot.anylist
     Crashed if 'nrows' and 'ncols' were given values implying
     that some rows or columns would not contain any plots.
+    Fixed.
 
     o as.ppp.lpp
     Crashed if there was more than one column of marks.
+    Fixed.
+
+    o bugfixes
+    Output was garbled, in rare cases.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.48-0
