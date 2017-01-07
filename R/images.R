@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.140 $     $Date: 2016/12/12 06:06:12 $
+#      $Revision: 1.141 $     $Date: 2017/01/07 02:40:24 $
 #
 #      The class "im" of raster images
 #
@@ -779,41 +779,27 @@ as.data.frame.im <- function(x, ...) {
   # 
   data.frame(x=xx, y=yy, value=vv, ...)
 }
-  
+
 mean.im <- function(x, ...) {
   verifyclass(x, "im")
   xvalues <- x[drop=TRUE]
-  return(mean(xvalues))
+  return(mean(xvalues, ...))
 }
-
-sum.im <- function(x, ...) {
-  verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(sum(xvalues, ...))
-}
-
 median.im <- function(x, ...) {
   verifyclass(x, "im")
   xvalues <- x[drop=TRUE]
-  return(median(xvalues, ...))
+  return(median(xvalues))
 }
 
-range.im <- function(x, ...) {
+#' the following could be subsumed in Math.im
+sum.im <- range.im <- max.im <- min.im <- function(x, ...) {
   verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(range(xvalues, ...))
-}
-
-max.im <- function(x, ...) {
-  verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(max(xvalues, ...))
-}
-
-min.im <- function(x, ...) {
-  verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(min(xvalues, ...))
+  argh <- list(x, ...)
+  isim <- sapply(argh, is.im)
+  argh[isim] <- lapply(argh[isim], "[", drop=TRUE)
+  names(argh)[isim] <- ""
+  y <- do.call(.Generic, argh)
+  return(y)
 }
 
 where.max <- function(x, first=TRUE) {

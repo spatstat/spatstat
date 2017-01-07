@@ -2,6 +2,7 @@
 \alias{measureVariation}
 \alias{measurePositive}
 \alias{measureNegative}
+\alias{totalVariation}
 \title{
   Positive and Negative Parts, and Variation, of a Measure
 }
@@ -14,6 +15,7 @@
 measurePositive(x)
 measureNegative(x)
 measureVariation(x)
+totalVariation(x)
 }
 \arguments{
   \item{x}{
@@ -23,25 +25,32 @@ measureVariation(x)
 \details{
   The functions \code{measurePositive} and \code{measureNegative}
   return the positive and negative parts of the measure,
-  and \code{measureVariation} returns the variation.
+  and \code{measureVariation} returns the variation (sum of positive and
+  negative parts). The function \code{totalVariation} returns the total
+  variation norm.
 
   If \eqn{\mu} is a signed measure,
   it can be represented as
   \deqn{\mu = \mu_{+} - \mu_{-}}{\mu = \mu[+] - \mu[-]}
   where \eqn{\mu_{+}}{\mu[+]} and \eqn{\mu_{-}}{\mu[-]}
   are \emph{nonnegative} measures called the positive and negative
-  parts.
+  parts of \eqn{\mu}.
   In a nutshell, the positive part of \eqn{\mu}
   consists of all positive contributions or increments,
-  and the negative part consists of all negative contributions.
+  and the negative part consists of all negative contributions
+  multiplied by \code{-1}. 
 
   The variation \eqn{|\mu|} is defined by 
   \deqn{\mu = \mu_{+} + \mu_{-}}{\mu = \mu[+] + \mu[-]}
   and is also a nonnegative measure.
+
+  The total variation norm is the integral of the variation. 
 }
 \value{
-  Another measure (object of class \code{"msr"})
+  The result of \code{measurePositive}, \code{measureNegative}
+  and \code{measureVariation} is another measure (object of class \code{"msr"})
   on the same spatial domain.
+  The result of \code{totalVariation} is a non-negative number.
 }
 \references{
   Halmos, P.R. (1950) \emph{Measure Theory}. Van Nostrand.
@@ -62,7 +71,7 @@ measureVariation(x)
    measureVariation(rp)
 
    # total variation norm
-   integral(measureVariation(rp))
+   totalVariation(rp)
 }
 \keyword{spatial}
 \keyword{math}

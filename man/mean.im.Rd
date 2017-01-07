@@ -21,7 +21,9 @@
 }
 \arguments{
   \item{x}{A pixel image (object of class \code{"im"}).}
-  \item{\dots}{Arguments passed to \code{\link{mean.default}}.}
+  \item{\dots}{
+    Additional arguments passed to the default method.
+  }
 }
 \details{
   These functions calculate the mean, median, range, sum, maximum
@@ -33,9 +35,10 @@
   for details of this class.
 
   The function \code{mean.im} is a method for the generic
-  function \code{\link{mean}} for the class \code{"im"}.
+  function \code{\link[base]{mean}} for the class \code{"im"}.
   Similarly \code{median.im} is a method for the generic
-  \code{\link{median}} and \code{range.im} is a method for \code{\link{range}}.
+  \code{\link[stats]{median}}
+  and \code{range.im} is a method for \code{\link[base]{range}}.
   
   If the image \code{x} is logical-valued, the mean value of \code{x} is
   the fraction of pixels that have the value \code{TRUE}. The median is
@@ -46,24 +49,28 @@
   are not defined.
 
   Any arguments in \code{...} are passed to the default method,
-  for example \code{\link{mean.default}}.
+  for example \code{\link[base]{mean.default}}.
   In particular, using the argument \code{trim} will compute the
-  trimmed mean, as explained in the help for \code{\link{mean.default}}.
+  trimmed mean, as explained in the help for \code{\link[base]{mean.default}}.
 
   Other information about an image can be obtained using
   \code{\link{summary.im}} or \code{\link{quantile.im}}.
+
+  More general mathematical operations on images are supported by
+  \code{\link{Math.im}}.
 }
 \value{
-  A single number.
+  Numeric vector of length 1 or 2.
 }
 \seealso{
-  \code{\link{mean}},
-  \code{\link{median}},
-  \code{\link{range}},
-  \code{\link{sum}},
-  \code{\link{mean.default}},
-  \code{\link{median.default}},
-  \code{\link{range.default}},
+  \code{\link{Math.im}} for other operations.
+
+  Generics and default methods:
+  \code{\link[base]{mean}},
+  \code{\link[stats]{median}},
+  \code{\link[base]{range}},
+  \code{\link[base]{sum}}.
+  
   \code{\link{quantile.im}},
   \code{\link{anyNA.im}},
   \code{\link{im.object}},
@@ -77,11 +84,9 @@
 
   mean(X, trim=0.05)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

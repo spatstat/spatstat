@@ -1,15 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.015
+        CHANGES IN spatstat VERSION 1.48-0.016
 
 OVERVIEW
 
     o Operations on signed measures.
 
-    o Extension to Stieltjes integral.
+    o Operations on lists of pixel images.
+
+    o Stieltjes integral extended.
+
+    o Subset operators extended.
 
     o Some computations accelerated.
-
-    o Extensions to subset operators.
 
     o Bug fixes.
 
@@ -20,7 +22,10 @@ NEW FUNCTIONS
     o Ops.msr
     Arithmetic operations for measures.
 
-    o measurePositive, measureNegative, measureVariation
+    o Math.imlist, Ops.imlist, Summary.imlist, Complex.imlist
+    Arithmetic operations for lists of pixel images.
+
+    o measurePositive, measureNegative, measureVariation, totalVariation
     Positive and negative parts of a measure, and variation of a measure.
 
 SIGNIFICANT USER-VISIBLE CHANGES

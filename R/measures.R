@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.61 $  $Date: 2017/01/04 02:20:38 $
+#  $Revision: 1.62 $  $Date: 2017/01/07 02:50:14 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -568,4 +568,5 @@ measureVariation <- function(x) {
   return(y)
 }
 
+totalVariation <- function(x) integral(measureVariation(x))
   
