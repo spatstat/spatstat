@@ -4,7 +4,7 @@
 
   Distances between pairs of points
 
-  $Revision: 1.30 $     $Date: 2013/11/03 03:35:34 $
+  $Revision: 1.31 $     $Date: 2017/01/08 00:32:52 $
 
   Cpairdist      Pairwise distances
   Cpair2dist     Pairwise distances squared
@@ -14,8 +14,6 @@
   Ccrossdist     Pairwise distances for two sets of points
   Ccross2dist    Pairwise distances squared, for two sets of points
   CcrossPdist    Pairwise distances for two sets of points, periodic correction
-
-  Cmatchxy       Find matches between two sets of points   
 
  */
 
@@ -430,41 +428,3 @@ void CcrossP2dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
   }
 }
 
-/*
-
-  matchxy
-
-  Find matches between two lists of points
-
- */
-
-void Cmatchxy(na, xa, ya, nb, xb, yb, match)
-     /* inputs */
-     int *na, *nb;
-     double *xa, *ya, *xb, *yb;
-     /* output */
-     int *match; 
-     /* match[i] = j+1 if xb[j], yb[j] matches xa[i], ya[i] */
-     /* match[i] = 0   if no such point matches xa[i], ya[i] */
-{ 
-  int i, j, Na, Nb, maxchunk; 
-  double xai, yai;
-
-  Na = *na;
-  Nb = *nb;
-
-  OUTERCHUNKLOOP(i, Na, maxchunk, 16384) {
-    R_CheckUserInterrupt();
-    INNERCHUNKLOOP(i, Na, maxchunk, 16384) {
-      xai = xa[i];
-      yai = ya[i];
-      match[i] = 0;
-      for (j=0; j < Nb; j++) {
-	if(xai == xb[j] && yai == yb[j]) {
-	  match[i] = j+1;
-	  break;
-	}
-      }
-    }
-  }
-}

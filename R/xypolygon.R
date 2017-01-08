@@ -1,7 +1,7 @@
 #
 #    xypolygon.R
 #
-#    $Revision: 1.66 $    $Date: 2017/01/02 09:00:10 $
+#    $Revision: 1.67 $    $Date: 2017/01/08 00:38:10 $
 #
 #    low-level functions defined for polygons in list(x,y) format
 #
@@ -373,70 +373,6 @@ overlap.trapezium <- function(xa, ya, xb, yb, verb=FALSE) {
   return(signfactor * areaT)
 }
 
-xypolyselfint <- function(p, eps=.Machine$double.eps,
-                          proper=FALSE, yesorno=FALSE, checkinternal=FALSE) {
-  verify.xypolygon(p)
-  n <- length(p$x)
-  verbose <- (n > 1000)
-  if(verbose)
-    cat(paste("[Checking polygon with", n, "edges..."))
-  x0 <- p$x
-  y0 <- p$y
-  dx <- diff(x0[c(1:n,1)])
-  dy <- diff(y0[c(1:n,1)])
-  if(yesorno) {
-    # get a yes-or-no answer
-    answer <- .C("xypsi",
-                 n=as.integer(n),
-                 x0=as.double(x0),
-                 y0=as.double(y0),
-                 dx=as.double(dx),
-                 dy=as.double(dy),
-                 xsep=as.double(2 * max(abs(dx))),
-                 ysep=as.double(2 * max(abs(dy))),
-                 eps=as.double(eps),
-                 proper=as.integer(proper),
-                 answer=as.integer(integer(1)))$answer
-    if(verbose)
-      cat("]\n")
-    return(answer != 0)
-  }
-  out <- .C("Cxypolyselfint",
-            n=as.integer(n),
-            x0=as.double(x0),
-            y0=as.double(y0),
-            dx=as.double(dx),
-            dy=as.double(dy), 
-            eps=as.double(eps),
-            xx=as.double(numeric(n^2)),
-            yy=as.double(numeric(n^2)),
-            ti=as.double(numeric(n^2)),
-            tj=as.double(numeric(n^2)),
-            ok=as.integer(integer(n^2)))
-
-  uhoh <- (matrix(out$ok, n, n) != 0)
-  if(proper) {
-    # ignore cases where two vertices coincide 
-    ti <- matrix(out$ti, n, n)[uhoh]
-    tj <- matrix(out$tj, n, n)[uhoh]
-    i.is.vertex <- (abs(ti) < eps) | (abs(ti - 1) < eps)
-    j.is.vertex <- (abs(tj) < eps) | (abs(tj - 1) < eps)
-    dup <- i.is.vertex & j.is.vertex
-    uhoh[uhoh] <- !dup
-  }
-  if(checkinternal && any(uhoh != t(uhoh)))
-    warning("Internal error: incidence matrix is not symmetric")
-  xx <- matrix(out$xx, n, n)
-  yy <- matrix(out$yy, n, n)
-  uptri <- (row(uhoh) < col(uhoh))
-  xx <- as.vector(xx[uhoh & uptri])
-  yy <- as.vector(yy[uhoh & uptri])
-  result <- list(x=xx, y=yy)
-  if(verbose)
-    cat("]\n")
-  return(result)
-}
-  
 
 simplify.xypolygon <- function(p, dmin) {
   verify.xypolygon(p)
