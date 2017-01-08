@@ -4,7 +4,7 @@
 #
 #   Random generators for MULTITYPE point processes
 #
-#   $Revision: 1.36 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.37 $   $Date: 2017/01/08 06:24:51 $
 #
 #   rmpoispp()   random marked Poisson pp
 #   rmpoint()    n independent random marked points
@@ -81,8 +81,8 @@ rmpoispp <- local({
         if(single.arg) {
           stop(paste(sQuote("types"), "must be given explicitly when",
                      sQuote("lambda"), "is a constant, a function or an image"))
-        } else if(vector.arg && !is.null(nama <- names(lambda)) &&
-                sum(nzchar(nama)) == length(lambda)) {
+        } else if(!is.null(nama <- names(lambda)) &&
+                  sum(nzchar(nama)) == length(lambda)) {
           types <- nama
         } else {
           types <- seq_along(lambda)

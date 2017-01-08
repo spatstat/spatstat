@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.018
+        CHANGES IN spatstat VERSION 1.48-0.019
 
 OVERVIEW
 
@@ -66,6 +66,11 @@ BUG FIXES
 
     o as.ppp.lpp
     Crashed if there was more than one column of marks.
+    Fixed.
+
+    o rmpoispp
+    If 'lambda' was a list of images, 'names(lambda)' was ignored,
+    rather than serving as the default value of 'types'.
     Fixed.
 
     o bugfixes
