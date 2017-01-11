@@ -796,8 +796,8 @@ sum.im <- range.im <- max.im <- min.im <- function(x, ...) {
   verifyclass(x, "im")
   argh <- list(x, ...)
   if(length(argh)>=2) {
-     if("na.rm" %in% names(argh) && argh[["na.rm"]]){
-         warning("function always ignores NA values, consider using sum(image[,], na.rm=TRUE) instead")
+     if("na.rm" %in% names(argh) && (argh[["na.rm"]]!=TRUE)){
+         warning("function always ignores NA and NaN values, consider using sum(image[,], na.rm=FALSE) instead")
      }
   }
 
