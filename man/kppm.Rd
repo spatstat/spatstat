@@ -369,6 +369,9 @@
                               control=list(maxit=10))
   }
 
+  # fit with composite likelihood method
+  kppm(redwood ~ x, "VarGamma", method="clik2", nu.ker=-3/8)
+  
   # fit intensity with quasi-likelihood method
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 }
