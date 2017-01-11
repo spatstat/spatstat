@@ -795,6 +795,12 @@ median.im <- function(x, ...) {
 sum.im <- range.im <- max.im <- min.im <- function(x, ...) {
   verifyclass(x, "im")
   argh <- list(x, ...)
+  if(length(argh)>=2) {
+     if("na.rm" %in% names(argh) && argh[["na.rm"]]){
+         warning("function always ignores NA values, consider using sum(image[,], na.rm=TRUE) instead")
+     }
+  }
+
   isim <- sapply(argh, is.im)
   argh[isim] <- lapply(argh[isim], "[", drop=TRUE)
   names(argh)[isim] <- ""
