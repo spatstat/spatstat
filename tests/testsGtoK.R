@@ -118,6 +118,9 @@ local({
  plot(fitCL)
  plot(fitPA)
 
+ # fit with composite likelihood method [thanks to Abdollah Jalilian]
+ fut <- kppm(redwood ~ x, "VarGamma", method="clik2", nu.ker=-3/8)
+  
  if(require(RandomFields)) {
    fit0 <- kppm(redwood ~1, "LGCP")
    Y0 <- simulate(fit0)[[1]]
@@ -142,6 +145,7 @@ local({
    fit2 <- kppm(redwood ~x, cluster="Cauchy", statistic="K")
    Y2 <- simulate(fit2)[[1]]
    stopifnot(is.ppp(Y2))
+
  }
 
 })

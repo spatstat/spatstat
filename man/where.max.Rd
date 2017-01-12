@@ -46,9 +46,11 @@
   \adrian
 }
 \seealso{
-  \code{\link{max.im}},
-  \code{\link{eval.im}},
-  \code{\link{solutionset}}
+  \code{\link{Summary.im}} for computing the minimum and maximum
+  of pixel values;
+  \code{\link{eval.im}} and \code{\link{Math.im}} for mathematical
+  expressions involving images; \code{\link{solutionset}} for finding
+  the set of pixels where a statement is true.
 }
 \examples{
    D <- distmap(letterR, invert=TRUE)

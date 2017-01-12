@@ -15,7 +15,7 @@
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
 \special{Complex(z)}
-\special{Summary(\dots, na.rm = FALSE)}
+\special{Summary(\dots, na.rm = TRUE)}
 %NAMESPACE S3method("Math", "imlist")
 %NAMESPACE S3method("Ops", "imlist")
 %NAMESPACE S3method("Complex", "imlist")

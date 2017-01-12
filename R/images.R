@@ -780,26 +780,16 @@ as.data.frame.im <- function(x, ...) {
   data.frame(x=xx, y=yy, value=vv, ...)
 }
 
-mean.im <- function(x, ...) {
+mean.im <- function(x, trim=0, na.rm=TRUE, ...) {
   verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(mean(xvalues, ...))
-}
-median.im <- function(x, ...) {
-  verifyclass(x, "im")
-  xvalues <- x[drop=TRUE]
-  return(median(xvalues))
+  xvalues <- x[drop=na.rm]
+  return(mean(xvalues, trim=trim, na.rm=na.rm))
 }
 
-#' the following could be subsumed in Math.im
-sum.im <- range.im <- max.im <- min.im <- function(x, ...) {
+median.im <- function(x, na.rm=TRUE) {
   verifyclass(x, "im")
-  argh <- list(x, ...)
-  isim <- sapply(argh, is.im)
-  argh[isim] <- lapply(argh[isim], "[", drop=TRUE)
-  names(argh)[isim] <- ""
-  y <- do.call(.Generic, argh)
-  return(y)
+  xvalues <- x[drop=na.rm]
+  return(median(xvalues))
 }
 
 where.max <- function(x, first=TRUE) {

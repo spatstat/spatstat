@@ -1,34 +1,33 @@
 \name{mean.im}
-\alias{max.im}
-\alias{min.im}
 \alias{mean.im}
 \alias{median.im}
-\alias{range.im}
-\alias{sum.im}
-\title{Maximum, Minimum, Mean, Median, Range or Sum
-  of Pixel Values in an Image}
+\title{Mean and Median of Pixel Values in an Image}
 \description{
-  Calculates the mean, median, range, sum, maximum or minimum
+  Calculates the mean or median
   of the pixel values in a pixel image.
 }
 \usage{
-  \method{max}{im}(x, \dots)
-  \method{min}{im}(x, \dots)
-  \method{mean}{im}(x, \dots)
-  \method{median}{im}(x, \dots)
-  \method{range}{im}(x, \dots)
-  \method{sum}{im}(x, \dots)
+  \method{mean}{im}(x, trim=0, na.rm=TRUE, \dots)
+
+  \method{median}{im}(x, na.rm=TRUE)
 }
 \arguments{
   \item{x}{A pixel image (object of class \code{"im"}).}
+  \item{na.rm}{
+    Logical value indicating whether \code{NA} values should be
+    stripped before the computation proceeds.
+  }
+  \item{trim}{
+    The fraction (0 to 0.5) of pixel values to be trimmed from
+    each end of their range, before the mean is computed.
+  }
   \item{\dots}{
-    Additional arguments passed to the default method.
+    Ignored.
   }
 }
 \details{
-  These functions calculate the mean, median, range, sum, maximum
-  or minimum of the pixel values in the image
-  \code{x}.
+  These functions calculate the mean and median
+  of the pixel values in the image \code{x}.
 
   An object of class \code{"im"}
   describes a pixel image. See \code{\link{im.object}})
@@ -37,39 +36,32 @@
   The function \code{mean.im} is a method for the generic
   function \code{\link[base]{mean}} for the class \code{"im"}.
   Similarly \code{median.im} is a method for the generic
-  \code{\link[stats]{median}}
-  and \code{range.im} is a method for \code{\link[base]{range}}.
+  \code{\link[stats]{median}}.
   
   If the image \code{x} is logical-valued, the mean value of \code{x} is
   the fraction of pixels that have the value \code{TRUE}. The median is
   not defined. 
 
   If the image \code{x} is factor-valued, then the mean of \code{x}
-  is the mean of the integer codes of the pixel values. The median and range
+  is the mean of the integer codes of the pixel values. The median is
   are not defined.
 
-  Any arguments in \code{...} are passed to the default method,
-  for example \code{\link[base]{mean.default}}.
-  In particular, using the argument \code{trim} will compute the
-  trimmed mean, as explained in the help for \code{\link[base]{mean.default}}.
+  Other mathematical operations on images are supported by
+  \code{\link{Math.im}}, \code{\link{Summary.im}}
+  and \code{\link{Complex.im}}.
 
   Other information about an image can be obtained using
   \code{\link{summary.im}} or \code{\link{quantile.im}}.
-
-  More general mathematical operations on images are supported by
-  \code{\link{Math.im}}.
 }
 \value{
-  Numeric vector of length 1 or 2.
+  A single number.
 }
 \seealso{
   \code{\link{Math.im}} for other operations.
 
   Generics and default methods:
   \code{\link[base]{mean}},
-  \code{\link[stats]{median}},
-  \code{\link[base]{range}},
-  \code{\link[base]{sum}}.
+  \code{\link[stats]{median}}.
   
   \code{\link{quantile.im}},
   \code{\link{anyNA.im}},
@@ -80,13 +72,10 @@
   X <- as.im(function(x,y) {x^2}, unit.square())
   mean(X)
   median(X)
-  range(X)
-
   mean(X, trim=0.05)
 }
 \author{
-  \adrian
-  and \rolf
+  \spatstatAuthors and Kassel Hingee.
 }
 \keyword{spatial}
 \keyword{methods}

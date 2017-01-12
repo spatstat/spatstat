@@ -12,13 +12,13 @@ Complex.imlist <- function(z){
   solapply(z, .Generic)
 }
 
-Summary.imlist <- function(..., na.rm){
+Summary.imlist <- function(..., na.rm=TRUE){
   argh <- expandSpecialLists(list(...))
   if(length(names(argh)) > 0) {
     isim <- sapply(argh, is.im)
     names(argh)[isim] <- ""
   }
-  do.call(.Generic, argh)
+  do.call(.Generic, c(argh, list(na.rm=na.rm)))
 }
 
 Ops.imlist <- function(e1,e2=NULL){

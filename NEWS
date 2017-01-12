@@ -1,7 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.019
+        CHANGES IN spatstat VERSION 1.48-0.020
 
 OVERVIEW
+
+    o We thank Kassel Hingee and Abdollah Jalilian for contributions.
 
     o Operations on signed measures.
 
@@ -51,6 +53,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Result is now an (invisible) list containing the result
     from executing the plot of each panel.
 
+    o Summary.im
+    Argument 'na.rm' is no longer ignored.
+
+    o sum.im, range.im, max.im, min.im
+    These functions have been removed, as they are now subsumed in Summary.im.
 
 BUG FIXES
 
@@ -75,6 +82,11 @@ BUG FIXES
 
     o bugfixes
     Output was garbled, in rare cases.
+    Fixed.
+
+    o kppm
+    Result was malformed when clusters="VarGamma" and method="clik2".
+    Spotted by Abdollah Jalilian.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.48-0
