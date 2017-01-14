@@ -6,7 +6,8 @@
   a point pattern dataset in the two-dimensional plane.
 }
 \usage{
-  ppp(x,y, \dots, window, marks, check=TRUE, drop=TRUE)
+  ppp(x,y, \dots, window, marks,
+      check=TRUE, checkdup=check, drop=TRUE)
 }
 \arguments{
   \item{x}{Vector of \eqn{x} coordinates of data points}
@@ -17,10 +18,15 @@
     window, if \code{window} is missing}
   \item{marks}{(optional) mark values for the points.
     A vector or data frame.}
-  \item{check}{Logical flag indicating whether to check
+  \item{check}{
+    Logical value indicating whether to check
     that all the \eqn{(x,y)} points lie inside the specified window.
-    Do not set this to \code{FALSE} unless you are sure that this
-    check is unnecessary.
+    Do not set this to \code{FALSE} unless you are absolutely sure that this
+    check is unnecessary. See Warnings below.
+  }
+  \item{checkdup}{
+    Logical value indicating whether to check for duplicated
+    coordinates. See Warnings below.
   }
   \item{drop}{
     Logical flag indicating whether to simplify data frames of marks.
@@ -151,7 +157,35 @@
   you will need to find a larger window that contains them,
   and use this larger window in a call to \code{ppp}.
 }
+\section{Warnings}{
+  The code will check for problems with the data,
+  and issue a warning if any problems are found.
+  The checks and warnings can be switched off, for efficiency's sake,
+  but this should only be done if you are confident that the data
+  do not have these problems. 
 
+  Setting \code{check=FALSE} will disable all the checking procedures:
+  the check for points outside the window, and the check for
+  duplicated points. This is extremely dangerous, because points lying
+  outside the window will break many of the procedures in
+  \pkg{spatstat}, causing crashes and strange errors.
+  Set \code{check=FALSE} only if you are absolutely
+  sure that there are no points outside the window.
+
+  If duplicated points are found, a warning is issued, but no action is
+  taken. Duplicated points are not illegal, but may cause unexpected problems
+  later. Setting \code{checkdup=FALSE} will disable the check for duplicated
+  points. Do this only if you already know the answer.
+
+  Methodology and software for spatial point patterns often assume
+  that all points are distinct so that there are no duplicated points.
+  If duplicated points are present, the consequence could be
+  an incorrect result or a software crash. To the best of our knowledge,
+  all \pkg{spatstat} code handles duplicated points correctly.
+  However, if duplicated points are present, we advise using
+  \code{\link{unique.ppp}} or \code{\link{multiplicity.ppp}}
+  to eliminate duplicated points and re-analyse the data.
+}
 \seealso{
   \code{\link{ppp.object}},
   \code{\link{as.ppp}},
@@ -189,10 +223,7 @@
   X <- ppp(x, y, window=Window(cells))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

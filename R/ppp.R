@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.107 $	$Date: 2016/02/16 01:39:12 $
+#	$Revision: 4.108 $	$Date: 2017/01/13 11:08:06 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -24,7 +24,8 @@
 #			'marks' attached to the corresponding points.	
 #	
 #--------------------------------------------------------------------------
-ppp <- function(x, y, ..., window, marks, check=TRUE, drop=TRUE) {
+ppp <- function(x, y, ..., window, marks,
+                check=TRUE, checkdup=check, drop=TRUE) {
   # Constructs an object of class 'ppp'
   #
   if(!missing(window))
@@ -63,7 +64,8 @@ ppp <- function(x, y, ..., window, marks, check=TRUE, drop=TRUE) {
     if(nout > 0) {
       warning(paste(nout,
                     ngettext(nout, "point was", "points were"),
-                    "rejected as lying outside the specified window"))
+                    "rejected as lying outside the specified window"),
+              call.=FALSE)
       rr <- ripras(x,y)
       bb <- boundingbox(x,y)
       bb <- boundingbox(rr, bb, window)
@@ -128,8 +130,8 @@ ppp <- function(x, y, ..., window, marks, check=TRUE, drop=TRUE) {
     pp$marks <- marks
   }
   class(pp) <- "ppp"
-  if(check && anyDuplicated(pp))
-    warning("data contain duplicated points")
+  if(checkdup && anyDuplicated(pp))
+    warning("data contain duplicated points", call.=FALSE)
   if(nout > 0) 
     attr(pp, "rejects") <- rejects
   pp

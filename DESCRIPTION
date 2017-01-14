@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.48-0.020
+Version: 1.48-0.021
 Nickname: The Rug Less Vacuumed
-Date: 2017-01-12
+Date: 2017-01-14
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

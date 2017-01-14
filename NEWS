@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.020
+        CHANGES IN spatstat VERSION 1.48-0.021
 
 OVERVIEW
 
@@ -52,6 +52,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.solist, plot.imlist, plot.anylist
     Result is now an (invisible) list containing the result
     from executing the plot of each panel.
+
+    o ppp
+    New argument 'checkdup'.
 
     o Summary.im
     Argument 'na.rm' is no longer ignored.
