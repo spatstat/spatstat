@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.021
+        CHANGES IN spatstat VERSION 1.48-0.022
 
 OVERVIEW
 
@@ -17,9 +17,12 @@ OVERVIEW
 
     o Bug fixes.
 
-    o Version nickname: 'The Rug Less Vacuumed'
+    o Version nickname: 'Please Dispose of Thoughtfully'
 
 NEW FUNCTIONS
+
+    o hexagon, regularpolygon
+    Create regular polygons.
 
     o Ops.msr
     Arithmetic operations for measures.

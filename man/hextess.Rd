@@ -68,6 +68,8 @@ hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
 }
 \seealso{
   \code{\link{tess}}
+
+  \code{\link{hexagon}}
 }
 \examples{
   if(interactive()) {
@@ -80,11 +82,8 @@ hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
   plot(hextess(W, s))
   plot(hexgrid(W, s), add=TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{datagen}

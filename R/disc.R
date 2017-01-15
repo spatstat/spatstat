@@ -3,7 +3,7 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.17 $ $Date: 2016/07/30 08:51:42 $
+## $Revision: 1.18 $ $Date: 2017/01/15 05:25:16 $
 ##
 
 disc <- local({
@@ -12,7 +12,7 @@ disc <- local({
   
   disc <- function(radius=1, centre=c(0,0), ...,
                    mask=FALSE, npoly=128, delta=NULL) {
-    stopifnot(length(radius) == 1)
+    check.1.real(radius)
     stopifnot(radius > 0)
     centre <- as2vector(centre)
     if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
@@ -42,6 +42,35 @@ disc <- local({
 
   disc
 })
+
+hexagon <- function(edge=1, centre=c(0,0), ...,
+                    align=c("bottom", "top", "left", "right", "no")) {
+  regularpolygon(6, edge, centre, align=align)
+}
+
+regularpolygon <- function(n, edge=1, centre=c(0,0), ...,
+                           align=c("bottom", "top", "left", "right", "no")) {
+  check.1.integer(n)
+  check.1.real(edge)
+  stopifnot(n >= 3)
+  stopifnot(edge > 0)
+  align <- match.arg(align)
+  theta <- 2 * pi/n
+  radius <- edge/(2 * sin(theta/2))
+  result <- disc(radius, centre, npoly=n, mask=FALSE)
+  if(align != "no") {
+    k <- switch(align,
+                bottom = 3/4,
+                top = 1/4,
+                left = 1/2,
+                right = 1)
+    alpha <- theta * (1/2 - (k * n) %% 1)
+    result <- rotate(result, -alpha)
+  }
+  Frame(result) <- boundingbox(result)
+  return(result)
+}
+
 
 ellipse <- local({
   

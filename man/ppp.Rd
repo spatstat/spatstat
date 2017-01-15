@@ -76,7 +76,12 @@
     the window.
     \item
     \code{window} is an object of class \code{"owin"}
-    (see \code{\link{owin.object}}) specifying the window.
+    specifying the window. A window object can be created
+    by \code{\link{owin}} from raw coordinate data. Special shapes
+    of windows can be created by the functions
+    \code{\link{square}}, \code{\link{hexagon}},
+    \code{\link{regularpolygon}}, \code{\link{disc}}
+    and \code{\link{ellipse}}. See the Examples.
   }
   The arguments \code{xrange, yrange} or \code{poly}
   or \code{mask} are passed to the window creator function
@@ -217,6 +222,9 @@
   # polygonal window
   X <- ppp(x, y, poly=list(x=c(0,10,0), y=c(0,0,10)))
   \dontrun{plot(X)}
+
+  # circular window of radius 2
+  X <- ppp(x, y, window=disc(2))
 
   # copy the window from another pattern
   data(cells)

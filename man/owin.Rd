@@ -132,13 +132,16 @@ describing a window in the two-dimensional plane.
   To disable the repair process, set \code{spatstat.options(fixpolygons=FALSE)}.
 }
 \seealso{
-  \code{\link{square}},
-  \code{\link{disc}},
   \code{\link{owin.object}},
   \code{\link{as.owin}},
   \code{\link{complement.owin}},
   \code{\link{ppp.object}},
   \code{\link{ppp}}
+
+  \code{\link{square}},
+  \code{\link{hexagon}},
+  \code{\link{regularpolygon}}, \code{\link{disc}},
+  \code{\link{ellipse}}. 
 }
 \examples{
   w <- owin()
