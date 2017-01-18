@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.022
+        CHANGES IN spatstat VERSION 1.48-0.023
 
 OVERVIEW
 
@@ -61,6 +61,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Summary.im
     Argument 'na.rm' is no longer ignored.
+
+    o cdf.test 
+    The methods for classes ppp, ppm, lpp, lppm, slrm
+    have a new argument 'interpolate'.
 
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.

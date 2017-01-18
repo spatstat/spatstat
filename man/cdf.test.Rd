@@ -18,16 +18,18 @@
 \usage{
 cdf.test(...)
 
-\method{cdf.test}{ppp}(X, covariate, test=c("ks", "cvm", "ad"), \dots, jitter=TRUE)
+\method{cdf.test}{ppp}(X, covariate, test=c("ks", "cvm", "ad"), \dots,
+                       interpolate=TRUE, jitter=TRUE)
 
 \method{cdf.test}{ppm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots,
-          jitter=TRUE, nsim=99, verbose=TRUE)
+          interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE)
 
-\method{cdf.test}{lpp}(X, covariate,  test=c("ks", "cvm", "ad"), \dots, jitter=TRUE)
+\method{cdf.test}{lpp}(X, covariate,  test=c("ks", "cvm", "ad"), \dots,
+        interpolate=TRUE, jitter=TRUE)
 
 \method{cdf.test}{lppm}(model, covariate,  test=c("ks", "cvm", "ad"),
 \dots,
-          jitter=TRUE, nsim=99, verbose=TRUE)
+          interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE)
 
 \method{cdf.test}{slrm}(model, covariate,  test=c("ks", "cvm", "ad"), \dots, modelname=NULL, covname=NULL)
 }
@@ -57,6 +59,13 @@ cdf.test(...)
     \code{\link[goftest]{cvm.test}} or
     \code{\link[goftest]{ad.test}} (from the \pkg{goftest} package)
     to control the test.
+  }
+  \item{interpolate}{
+    Logical flag indicating whether to interpolate pixel images.
+    If \code{interpolate=TRUE}, the value of the covariate
+    at each point of \code{X} will be approximated by interpolating
+    the nearby pixel values.
+    If \code{interpolate=FALSE}, the nearest pixel value will be used.
   }
   \item{jitter}{
     Logical flag. If \code{jitter=TRUE}, values of the covariate

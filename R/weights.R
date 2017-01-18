@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.38 $	$Date: 2015/05/16 05:16:46 $
+#	$Revision: 4.39 $	$Date: 2017/01/18 06:28:17 $
 #
 #
 # Main functions:
@@ -59,7 +59,7 @@ countingweights <- function(id, areas, check=TRUE) {
       lostfrac <- 1 - sum(w)/sum(areas)
       lostpc <- round(100 * lostfrac, 1)
       if(lostpc >= 1) 
-        warning(paste("some times with positive area",
+        warning(paste("some tiles with positive area",
                       "do not contain any quadrature points:",
                       "relative error =",
                       paste0(lostpc, "%")))

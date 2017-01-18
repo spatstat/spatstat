@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.14 $  $Date: 2016/04/01 01:03:02 $
+#  $Revision: 2.15 $  $Date: 2017/01/18 07:58:44 $
 #
 #
 
@@ -27,7 +27,8 @@ cdf.test <- function(...) {
 }
 
 cdf.test.ppp <-
-  function(X, covariate, test=c("ks", "cvm", "ad"), ..., jitter=TRUE) {
+  function(X, covariate, test=c("ks", "cvm", "ad"), ...,
+           interpolate=TRUE, jitter=TRUE) {
     Xname <- short.deparse(substitute(X))
     covname <- singlestring(short.deparse(substitute(covariate)))
     test <- match.arg(test)
@@ -57,7 +58,7 @@ cdf.test.ppp <-
     }
     do.call(spatialCDFtest,
             resolve.defaults(list(model, covariate, test=test),
-                             list(jitter=jitter),
+                             list(interpolate=interpolate, jitter=jitter),
                              list(...),
                              list(modelname=modelname,
                                   covname=covname, dataname=Xname)))
@@ -65,7 +66,7 @@ cdf.test.ppp <-
 
 cdf.test.ppm <- 
   function(model, covariate, test=c("ks", "cvm", "ad"), ...,
-           jitter=TRUE, nsim=99, verbose=TRUE) {
+           interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE) {
   modelname <- short.deparse(substitute(model))
   covname <- singlestring(short.deparse(substitute(covariate)))
   test <- match.arg(test)
@@ -75,14 +76,16 @@ cdf.test.ppm <-
     modelname <- "CSR"
   do.call(spatialCDFtest,
           resolve.defaults(list(model, covariate, test=test),
-                           list(jitter=jitter, nsim=nsim, verbose=verbose),
+                           list(interpolate=interpolate, jitter=jitter,
+                                nsim=nsim, verbose=verbose),
                            list(...),
                            list(modelname=modelname,
                                 covname=covname)))
 }
 
 cdf.test.lpp <-
-  function(X, covariate, test=c("ks", "cvm", "ad"), ..., jitter=TRUE) {
+  function(X, covariate, test=c("ks", "cvm", "ad"), ...,
+           interpolate=TRUE, jitter=TRUE) {
     Xname <- short.deparse(substitute(X))
     covname <- singlestring(short.deparse(substitute(covariate)))
     test <- match.arg(test)
@@ -112,7 +115,7 @@ cdf.test.lpp <-
     }
     do.call(spatialCDFtest,
             resolve.defaults(list(model, covariate, test=test),
-                             list(jitter=jitter),
+                             list(interpolate=interpolate, jitter=jitter),
                              list(...),
                              list(modelname=modelname,
                                   covname=covname, dataname=Xname)))
@@ -120,7 +123,7 @@ cdf.test.lpp <-
 
 cdf.test.lppm <- function(model, covariate,
                           test=c("ks", "cvm", "ad"),
-                          ..., jitter=TRUE,
+                          ..., interpolate=TRUE, jitter=TRUE,
                           nsim=99, verbose=TRUE) {
   modelname <- short.deparse(substitute(model))
   covname <- singlestring(short.deparse(substitute(covariate)))
@@ -131,7 +134,8 @@ cdf.test.lppm <- function(model, covariate,
     modelname <- "CSR"
   do.call(spatialCDFtest,
           resolve.defaults(list(model, covariate, test=test),
-                           list(jitter=jitter, nsim=nsim, verbose=verbose),
+                           list(interpolate=interpolate, jitter=jitter,
+                                nsim=nsim, verbose=verbose),
                            list(...),
                            list(modelname=modelname,
                                 covname=covname)))
@@ -211,7 +215,7 @@ cdf.test.slrm <- function(model, covariate,
 spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                            ...,
                            dimyx=NULL, eps=NULL,
-                           jitter=TRUE, nsim=99, verbose=TRUE,
+                           interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE,
                            modelname=NULL, covname=NULL, dataname=NULL) {
   # conduct test based on comparison of CDF's of covariate values
   test <- match.arg(test)
@@ -219,7 +223,8 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
   # compute the essential data
   fra <- spatialCDFframe(model, covariate,
                          dimyx=dimyx, eps=eps,
-                         jitter=jitter, modelname=modelname,
+                         interpolate=interpolate, jitter=jitter,
+                         modelname=modelname,
                          covname=covname, dataname=dataname)
   values <- fra$values
   info   <- fra$info
@@ -248,7 +253,8 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
       model.i <- update(model, Xsim[[i]])
       fra.i <- spatialCDFframe(model.i, covariate,
                                dimyx=dimyx, eps=eps,
-                               jitter=jitter, modelname=modelname,
+                               interpolate=interpolate, jitter=jitter,
+                               modelname=modelname,
                                covname=covname, dataname=dataname)
       U.i <- fra.i$values$U
       res.i <- switch(test,

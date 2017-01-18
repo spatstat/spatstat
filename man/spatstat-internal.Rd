@@ -1059,9 +1059,9 @@ erodemask(w,r,strict)
 erode.owin(\dots)
 evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
-          dimyx, eps, jitter, modelname, covname, dataname) 
+          dimyx, eps, interpolate, jitter, modelname, covname, dataname) 
 \method{evalCovar}{lppm}(model, covariate, \dots, lambdatype, 
-          eps, nd, jitter, modelname, covname, dataname)
+          eps, nd, interpolate, jitter, modelname, covname, dataname)
 evalCovariate(covariate, locations)
 evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,\dots,
@@ -1689,7 +1689,8 @@ spatstatLocator(n, type, \dots)
 spatstatRmhInfo(cifname)
 spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
-         dimyx, eps, jitter, nsim, verbose, modelname, covname, dataname)
+         dimyx, eps, interpolate, jitter,
+         nsim, verbose, modelname, covname, dataname)
 sphere.volume(range, nval = 10)
 %splat(\dots, indent)
 splitHybridInteraction(coeffs, inte)

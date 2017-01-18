@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.20 $ $Date: 2016/02/11 10:17:12 $
+#' $Revision: 1.21 $ $Date: 2017/01/18 07:29:46 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -15,7 +15,7 @@ evalCovar.ppm <- local({
   evalCovar.ppm <- function(model, covariate, ...,
                             lambdatype=c("cif", "trend", "intensity"),
                             dimyx=NULL, eps=NULL,
-                            jitter=TRUE, 
+                            interpolate=TRUE, jitter=TRUE, 
                             modelname=NULL, covname=NULL,
                             dataname=NULL) {
     lambdatype <- match.arg(lambdatype)
@@ -61,11 +61,16 @@ evalCovar.ppm <- local({
       #' ...................  unmarked .......................
       if(is.im(covariate)) {
         type <- "im"
-        #' evaluate at data points by interpolation
-        ZX <- interp.im(covariate, X$x, X$y)
-        #' fix boundary glitches
-        if(any(uhoh <- is.na(ZX)))
-          ZX[uhoh] <- safelookup(covariate, X[uhoh])
+        if(!interpolate) {
+          #' look up covariate values 
+          ZX <- safelookup(covariate, X)
+        } else {
+          #' evaluate at data points by interpolation
+          ZX <- interp.im(covariate, X$x, X$y)
+          #' fix boundary glitches
+          if(any(uhoh <- is.na(ZX)))
+            ZX[uhoh] <- safelookup(covariate, X[uhoh])
+        }
         #' covariate values for pixels inside window
         Z <- covariate[W, drop=FALSE]
         #' corresponding mask
@@ -114,15 +119,21 @@ evalCovar.ppm <- local({
         type <- "im"
         if(length(covariate) != length(possmarks))
           stop("Number of images does not match number of possible marks")
-        #' evaluate covariate at each data point by interpolation
+        #' evaluate covariate at each data point 
         ZX <- numeric(npts)
         for(k in seq_along(possmarks)) {
           ii <- (marx == possmarks[k])
           covariate.k <- covariate[[k]]
-          values <- interp.im(covariate.k, x=X$x[ii], y=X$y[ii])
-          #' fix boundary glitches
-          if(any(uhoh <- is.na(values)))
-            values[uhoh] <- safelookup(covariate.k, X[ii][uhoh])
+          if(!interpolate) {
+            #' look up covariate values 
+            values <- safelookup(covariate, X)
+          } else {
+            #' interpolate
+            values <- interp.im(covariate.k, x=X$x[ii], y=X$y[ii])
+            #' fix boundary glitches
+            if(any(uhoh <- is.na(values)))
+              values[uhoh] <- safelookup(covariate.k, X[ii][uhoh])
+          }
           ZX[ii] <- values
         }
         #' restrict covariate images to window 
@@ -213,7 +224,7 @@ evalCovar.lppm <- local({
   evalCovar.lppm <- function(model, covariate, ...,
                              lambdatype=c("cif", "trend", "intensity"),
                              eps=NULL, nd=1000,
-                             jitter=TRUE, 
+                             interpolate=TRUE, jitter=TRUE, 
                              modelname=NULL, covname=NULL,
                              dataname=NULL) {
     lambdatype <- match.arg(lambdatype)
@@ -269,11 +280,16 @@ evalCovar.lppm <- local({
           type <- "im"
           Zimage <- as.linim(covariate, L)
         }
-        #' evaluate at quadrature points by interpolation
-        Zvalues <- interp.im(covariate, U$x, U$y)
-        #' fix boundary glitches
-        if(any(uhoh <- is.na(Zvalues)))
-          Zvalues[uhoh] <- safelookup(covariate, U[uhoh])
+        if(!interpolate) {
+          #' look up covariate values at quadrature points
+          Zvalues <- safelookup(covariate, U)
+        } else {
+          #' evaluate at quadrature points by interpolation
+          Zvalues <- interp.im(covariate, U$x, U$y)
+          #' fix boundary glitches
+          if(any(uhoh <- is.na(Zvalues)))
+            Zvalues[uhoh] <- safelookup(covariate, U[uhoh])
+        }
         #' extract data values
         ZX <- Zvalues[isdat]
       } else if(is.function(covariate)) {
@@ -322,10 +338,16 @@ evalCovar.lppm <- local({
         for(k in seq_along(possmarks)) {
           ii <- (marx == possmarks[k])
           covariate.k <- covariate[[k]]
-          values <- interp.im(covariate.k, x=U$x[ii], y=U$y[ii])
-          #' fix boundary glitches
-          if(any(uhoh <- is.na(values)))
-            values[uhoh] <- safelookup(covariate.k, U[ii][uhoh])
+          if(!interpolate) {
+            #' direct lookup
+            values <- safelookup(covariate.k, U[ii])
+          } else {
+            #' interpolation
+            values <- interp.im(covariate.k, x=U$x[ii], y=U$y[ii])
+            #' fix boundary glitches
+            if(any(uhoh <- is.na(values)))
+              values[uhoh] <- safelookup(covariate.k, U[ii][uhoh])
+          }
           Zvalues[ii] <- values
         }
         #' extract data values
