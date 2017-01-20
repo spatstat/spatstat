@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.023
+        CHANGES IN spatstat VERSION 1.48-0.024
 
 OVERVIEW
 
@@ -65,6 +65,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o cdf.test 
     The methods for classes ppp, ppm, lpp, lppm, slrm
     have a new argument 'interpolate'.
+
+    o as.solist
+    The argument x can now be a spatial object;
+    as.solist(cells) is the same as solist(cells).
 
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.

@@ -48,6 +48,7 @@ useDynLib(spatstat,
 "Ccrosspaircounts",
 "CcrossPdist",
 "Cidw",
+"circXseg",
 "ClineMquad",
 "Clinequad",
 "ClineRMquad",
@@ -2790,6 +2791,7 @@ export("xtfrm.im")
 export("xy.grid")
 export("xypolygon2psp")
 export("xypolyselfint")
+export("xysegXcircle")
 export("yardstick")
 export("y.quad")
 export("zapsmall.im")

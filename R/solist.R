@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.13 $ $Date: 2016/06/27 06:59:28 $
+## $Revision: 1.14 $ $Date: 2017/01/20 10:06:37 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -101,7 +101,7 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE) {
 as.solist <- function(x, ...) {
   if(inherits(x, "solist") && length(list(...)) == 0)
     return(x)
-  if(!is.list(x))
+  if(!is.list(x) || is.sob(x))
     x <- list(x)
   return(do.call(solist, append(x, list(...))))
 }
