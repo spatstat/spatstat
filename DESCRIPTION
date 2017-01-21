@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.48-0.024
+Version: 1.48-0.025
 Nickname: Please Dispose of Thoughtfully
-Date: 2017-01-20
+Date: 2017-01-21
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

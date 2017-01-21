@@ -1,13 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.024
+        CHANGES IN spatstat VERSION 1.48-0.025
 
 OVERVIEW
 
-    o We thank Kassel Hingee and Abdollah Jalilian for contributions.
+    o We thank Tilman Davies, Kassel Hingee and Abdollah Jalilian 
+    for contributions.
 
     o Operations on signed measures.
 
     o Operations on lists of pixel images.
+
+    o Improved pixellation of point patterns.
 
     o Stieltjes integral extended.
 
@@ -38,13 +41,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o stieltjes
     Argument 'M' can be a stepfun object (such as an empirical CDF).
 
-    o polynom
-    This function now has a help file.
-
     o quantile.ewcdf
     The function is now normalised to the range [0,1]
     before the quantiles are computed. 
     This can be suppressed by setting normalise=FALSE.
+
+    o pixellate.ppp
+    New arguments 'fractional' and 'preserve' for more accurate discretisation.
 
     o "[.layered"
     Subset index i can now be an 'owin' object.
@@ -70,6 +73,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The argument x can now be a spatial object;
     as.solist(cells) is the same as solist(cells).
 
+    o polynom
+    This function now has a help file.
+
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.
 
@@ -89,6 +95,13 @@ BUG FIXES
     Crashed if there was more than one column of marks.
     Fixed.
 
+    o "[.im"
+    For a pixel image Z with an irregular boundary,
+    and a set of locations X given as a point pattern or a list(x,y),
+    the results of Z[X] were sometimes incorrect 
+    at locations near the boundary of the window.
+    Fixed.
+    
     o rmpoispp
     If 'lambda' was a list of images, 'names(lambda)' was ignored,
     rather than serving as the default value of 'types'.

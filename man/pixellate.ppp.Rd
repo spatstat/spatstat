@@ -8,7 +8,8 @@
   either 0 or 1.
 }
 \usage{
-\method{pixellate}{ppp}(x, W=NULL, \dots, weights = NULL, padzero=FALSE)
+\method{pixellate}{ppp}(x, W=NULL, \dots, weights = NULL,
+                        padzero=FALSE, fractional=FALSE, preserve=FALSE)
 
 \method{as.im}{ppp}(X, \dots)
 }
@@ -20,8 +21,13 @@
     the pixel raster.
   }
   \item{weights}{Optional vector of weights associated with the points.}
-  \item{padzero}{Logical flag indicating whether to set pixel values
+  \item{padzero}{
+    Logical value indicating whether to set pixel values
     to zero outside the window. 
+  }
+  \item{fractional,preserve}{
+    Logical values determining the type of discretisation.
+    See Details.
   }
 }
 \details{
@@ -66,6 +72,27 @@
   spatial domain as the window of the point pattern \code{x}. If
   \code{zeropad=TRUE} then the resulting pixel image has a rectangular
   domain; pixels outside the original window are assigned the value zero.
+
+  The discretisation procedure is controlled by the arguments
+  \code{fractional} and \code{preserve}.
+  \itemize{
+    \item 
+    The argument \code{fractional} specifies how data points are mapped to
+    pixels. If \code{fractional=FALSE} (the default),
+    each data point is allocated to the nearest pixel centre.
+    If \code{fractional=TRUE}, each data point is allocated
+    with fractional weight to four pixel centres
+    (the corners of a rectangle containing the data
+    point).
+    \item
+    The argument \code{preserve} specifies what to do with pixels
+    lying near the boundary of the window, if the window is not a rectangle.
+    If \code{preserve=FALSE} (the default), any contributions
+    that are attributed to pixel centres lying outside the window
+    are reset to zero. If \code{preserve=TRUE}, any such contributions
+    are shifted to the nearest pixel lying inside the window, so that
+    the total mass is preserved.
+  }
 }
 \value{
   A pixel image (object of class \code{"im"}).
@@ -78,12 +105,10 @@
 \examples{
   data(humberside)
   plot(pixellate(humberside))
+  plot(pixellate(humberside, fractional=TRUE))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

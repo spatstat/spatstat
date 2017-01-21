@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.19 $    $Date: 2016/08/15 02:45:24 $
+#           $Revision: 1.21 $    $Date: 2017/01/21 05:49:44 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -16,18 +16,24 @@ pixellate <- function(x, ...) {
   UseMethod("pixellate")
 }
 
-pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
+pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
+                          fractional=FALSE, preserve=FALSE) {
   verifyclass(x, "ppp")
 
   if(is.null(W))
     W <- Window(x)
-
+  isrect <- is.rectangle(W)
+  
   W <- do.call.matched(as.mask,
                        resolve.defaults(list(...),
                                         list(w=W)))
+
+  nx <- npoints(x)
   
   insideW <- W$m
   dimW   <- W$dim
+  nr <- dimW[1]
+  nc <- dimW[2]
   xcolW <- W$xcol
   yrowW <- W$yrow
   xrangeW <- W$xrange
@@ -48,7 +54,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
   }
 
   # handle empty point pattern
-  if(x$n == 0) {
+  if(nx == 0) {
     zeroimage <- as.im(as.double(0), W)
     if(padzero) # map NA to 0
       zeroimage <- na.handle.im(zeroimage, 0)
@@ -60,26 +66,61 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE) {
     return(result)
   }
 
-  # perform calculation
-  pixels <- nearest.raster.point(x$x, x$y, W)
-  nr <- dimW[1]
-  nc <- dimW[2]
-  rowfac <- factor(pixels$row, levels=1:nr)
-  colfac <- factor(pixels$col, levels=1:nc)
+  # map points to pixels 
+  xx <- x$x
+  yy <- x$y
+  if(!fractional) {
+    #' map (x,y) to nearest raster point
+    pixels <- if(preserve && !isrect) nearest.valid.pixel(xx, yy, W) else 
+              nearest.raster.point(xx, yy, W)
+    rowfac <- factor(pixels$row, levels=1:nr)
+    colfac <- factor(pixels$col, levels=1:nc)
+  } else {
+    #' attribute fractional weights to the 4 pixel centres surrounding (x,y)
+    #' find surrounding pixel centres
+    jj <- findInterval(xx, xcolW, rightmost.closed=TRUE)
+    ii <- findInterval(yy, yrowW, rightmost.closed=TRUE)
+    jleft <- pmax(jj, 1)
+    jright <- pmin(jj + 1, nr) 
+    ibot <- pmax(ii, 1)
+    itop <- pmin(ii+1, nc)
+    #' compute fractional weights
+    dx <- mean(diff(xcolW))
+    dy <- mean(diff(yrowW))
+    wleft <- abs(xcolW[jright] - xx)/dx
+    wright <- 1 - wleft
+    wbot <- abs(yrowW[itop] - yy)/dy
+    wtop <- 1 - wbot
+    #' pack together
+    ww <- c(wleft * wbot, wleft * wtop, wright * wbot, wright * wtop)
+    rowfac <- factor(c(ibot, itop, ibot, itop), levels=1:nr)
+    colfac <- factor(c(jleft, jleft, jright, jright), levels=1:nc)
+    if(preserve && !isrect) {
+      #' normalise fractions for each data point to sum to 1 inside window
+      ok <- insideW[cbind(as.integer(rowfac), as.integer(colfac))]
+      wwok <- ww * ok
+      denom <- .colSums(wwok, 4, nx, na.rm=TRUE)
+      recip <- ifelse(denom == 0, 1, 1/denom)
+      ww <- wwok * rep(recip, each=4)
+    }
+    #' data weights must be replicated
+    if(is.null(weights)) {
+      weights <- ww
+    } else if(k == 1) {
+      weights <- ww * rep(weights, 4)
+    } else {
+      weights <- ww * apply(weights, 2, rep, times=4)
+    }
+  }
+  
+  #' sum weights
   if(is.null(weights)) {
     ta <- table(row = rowfac, col = colfac)
   } else if(k == 1) {
-    # was:
-    # ta <- tapply(weights, list(row = rowfac, col=colfac), sum)
-    # ta[is.na(ta)] <- 0
     ta <- tapplysum(weights, list(row = rowfac, col=colfac))
   } else {
     ta <- list()
     for(j in 1:k) {
-      # was:
-      # taj <- tapply(weights[,j], list(row = rowfac, col=colfac), sum)
-      # taj[is.na(taj)] <- 0
-      # ta[[j]] <- taj
       ta[[j]] <- tapplysum(weights[,j], list(row = rowfac, col=colfac))
     }
   }

@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.141 $     $Date: 2017/01/07 02:40:24 $
+#      $Revision: 1.143 $     $Date: 2017/01/21 05:48:50 $
 #
 #      The class "im" of raster images
 #
@@ -581,13 +581,13 @@ update.im <- function(object, ...) {
 # the third argument 'im' and the different idiom for calculating
 # row & column - which could be used in nearest.raster.point()
 
-nearest.pixel <- function(x,y,im) {
-  verifyclass(im, "im")
+nearest.pixel <- function(x,y, Z) {
+  stopifnot(is.im(Z) || is.mask(Z))
   if(length(x) > 0) {
-    nr <- im$dim[1]
-    nc <- im$dim[2]
-    cc <- round(1 + (x - im$xcol[1])/im$xstep)
-    rr <- round(1 + (y - im$yrow[1])/im$ystep)
+    nr <- Z$dim[1]
+    nc <- Z$dim[2]
+    cc <- round(1 + (x - Z$xcol[1])/Z$xstep)
+    rr <- round(1 + (y - Z$yrow[1])/Z$ystep)
     cc <- pmax.int(1,pmin.int(cc, nc))
     rr <- pmax.int(1,pmin.int(rr, nr))
   } else cc <- rr <- integer(0)
@@ -597,27 +597,27 @@ nearest.pixel <- function(x,y,im) {
 # Explores the 3 x 3 neighbourhood of nearest.pixel
 # and finds the nearest pixel that is not NA
 
-nearest.valid.pixel <- function(x,y,im) {
-  rc <- nearest.pixel(x,y,im)
+nearest.valid.pixel <- function(x, y, Z) {
+  rc <- nearest.pixel(x,y,Z) # checks that Z is an 'im' or 'mask'
   rr <- rc$row
   cc <- rc$col
   # check whether any pixels are outside image domain
-  outside <- is.na(im$v)
-  miss <- outside[cbind(rr, cc)]
+  inside <- as.owin(Z)$m
+  miss <- !inside[cbind(rr, cc)]
   if(!any(miss))
     return(rc)
   # for offending pixels, explore 3 x 3 neighbourhood
-  nr <- im$dim[1]
-  nc <- im$dim[2]
-  xcol <- im$xcol
-  yrow <- im$yrow
+  nr <- Z$dim[1]
+  nc <- Z$dim[2]
+  xcol <- Z$xcol
+  yrow <- Z$yrow
   for(i in which(miss)) {
     rows <- rr[i] + c(-1,0,1)
     cols <- cc[i] + c(-1,0,1)
     rows <- unique(pmax.int(1, pmin.int(rows, nr)))
     cols <- unique(pmax.int(1, pmin.int(cols, nc)))
     rcp <- expand.grid(row=rows, col=cols)
-    ok <- !outside[as.matrix(rcp)]
+    ok <- inside[as.matrix(rcp)]
     if(any(ok)) {
       # At least one of the neighbours is valid
       # Find the closest one
