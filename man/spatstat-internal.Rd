@@ -815,6 +815,8 @@
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
 \alias{xysegXcircle}
+\alias{xysegMcircle}
+\alias{xysegPcircle}
 %%%% sparse 3D arrays
 \alias{sparse3Darray}
 \alias{as.sparse3Darray}
@@ -1785,7 +1787,9 @@ X2testEngine(OBS, EXP, \dots, method, CR, df, nsim,
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
-xysegXcircle(xcentres, ycentres, radii, x0, y0, x1, y1, check)
+xysegXcircle(xcentres, ycentres, radii,  x0, y0, x1, y1, check)
+xysegMcircle(xcentres, ycentres, radmat, x0, y0, x1, y1, check)
+xysegPcircle(xc, yc, rc, x0, y0, x1, y1, check)
 %%% sparse 3D arrays
 sparse3Darray(i,j,k,x,dims,dimnames,strict,nonzero)
 as.sparse3Darray(x, \dots)

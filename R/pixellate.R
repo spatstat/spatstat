@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.21 $    $Date: 2017/01/21 05:49:44 $
+#           $Revision: 1.22 $    $Date: 2017/01/21 09:54:39 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -85,11 +85,9 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     ibot <- pmax(ii, 1)
     itop <- pmin(ii+1, nc)
     #' compute fractional weights
-    dx <- mean(diff(xcolW))
-    dy <- mean(diff(yrowW))
-    wleft <- abs(xcolW[jright] - xx)/dx
+    wleft <- pmin(1, abs(xcolW[jright] - xx)/W$xstep)
     wright <- 1 - wleft
-    wbot <- abs(yrowW[itop] - yy)/dy
+    wbot <- pmin(1, abs(yrowW[itop] - yy)/W$ystep)
     wtop <- 1 - wbot
     #' pack together
     ww <- c(wleft * wbot, wleft * wtop, wright * wbot, wright * wtop)
