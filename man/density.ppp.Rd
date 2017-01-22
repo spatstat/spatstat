@@ -190,13 +190,21 @@
     multiplied by \code{adjust^2}. To double the smoothing bandwidth, set
     \code{adjust=2}.
   }
-  
-  By default the intensity values are
+
+  If \code{at="pixels"} (the default), intensity values are
   computed at every location \eqn{u} in a fine grid,
-  and are returned as a pixel image.
-  Computation is performed using the Fast Fourier Transform.
-  Accuracy depends on the pixel resolution, controlled by the arguments
-  \code{\dots} passed to \code{\link{as.mask}}.
+  and are returned as a pixel image. The point pattern is first discretised 
+  using \code{\link{pixellate.ppp}}, then the intensity is
+  computed using the Fast Fourier Transform.
+  Accuracy depends on the pixel resolution and the discretisation rule.
+  The pixel resolution is controlled by the arguments
+  \code{\dots} passed to \code{\link{as.mask}} (specify the number of
+  pixels by \code{dimyx} or the pixel size by \code{eps}). 
+  The discretisation rule is controlled by the arguments
+  \code{\dots} passed to \code{\link{pixellate.ppp}}
+  (the default rule is that each point is allocated to the nearest
+  pixel centre; this can be modified using the arguments
+  \code{fractional} and \code{preserve}).
 
   If \code{at="points"}, the intensity values are computed 
   to high accuracy at the points of \code{x} only. Computation is

@@ -187,7 +187,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.7 $  $Date: 2016/07/10 04:44:22 $
+#  $Revision: 1.8 $  $Date: 2017/01/22 01:50:49 $
 #
 
 require(spatstat)
@@ -209,7 +209,12 @@ local({
   tryit(0.05, weights=data.frame(a=1:42,b=42:1))
   tryit(0.05, weights=expression(x))
 
-  ## compare density.ppp results with different algorithms
+  # apply different discretisation rules
+  Z <- density(cells, 0.05, fractional=TRUE)
+  Z <- density(cells, 0.05, preserve=TRUE)
+  Z <- density(cells, 0.05, fractional=TRUE, preserve=TRUE)
+        
+  ## compare density.ppp(at="points") results with different algorithms
   crosscheque <- function(expr) {
     e <- as.expression(substitute(expr))
     ename <- sQuote(deparse(substitute(expr)))
