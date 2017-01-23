@@ -79,9 +79,11 @@ QQversion(f, theo = "theo", columns = ".")
   \code{\link{plot.fv}}
 }
 \examples{
+  opa <- par(mar=0.1+c(5,5,4,2))
   G <- Gest(redwoodfull)
   plot(PPversion(G))
   plot(QQversion(G))
+  par(opa)
 }
 \keyword{spatial}
 \keyword{nonparametric}

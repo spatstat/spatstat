@@ -86,6 +86,8 @@ QQversion <- function(f, theo="theo", columns=".") {
   } else {
     theo.string <- fvlabels(f, expand=TRUE)[[theo]]
   }
+  ## remove '(r)' from outer function
+  theo.string <- sub(paren(xname), "", theo.string, fixed=TRUE)
   theo.expr <- parse(text=theo.string)
   theo.lang <- theo.expr[[1]]
   ylab <- substitute({{THEO}^{-1}}(FUN),

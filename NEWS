@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.027
+        CHANGES IN spatstat VERSION 1.48-0.028
 
 OVERVIEW
 
@@ -114,6 +114,10 @@ BUG FIXES
     o kppm
     Result was malformed when clusters="VarGamma" and method="clik2".
     Spotted by Abdollah Jalilian.
+    Fixed.
+
+    o QQversion
+    Plotting labels were malformed.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.48-0
