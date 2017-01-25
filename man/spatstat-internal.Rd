@@ -130,6 +130,7 @@
 \alias{densitypointsEngine}
 \alias{diagnose.ppm.engine}
 \alias{diagramobj}
+\alias{digestCovariates}
 \alias{digital.volume}
 \alias{dilate.owin}
 \alias{dim.fasp}               
@@ -322,6 +323,7 @@
 \alias{is.ppx}
 \alias{is.prime}
 \alias{is.psp}
+\alias{is.scov}
 \alias{is.sob}
 \alias{is.tess}
 \alias{k3engine}
@@ -995,6 +997,7 @@ diagnose.ppm.engine(object, \dots, type, typename, opt,
                          envelope, nsim, nrank,
                          rv, oldstyle, splineargs, verbose)
 diagramobj(X, \dots)
+digestCovariates(\dots, W)
 digital.volume(range, nval, vside)
 dilate.owin(\dots)
 \method{dim}{fasp}(x)
@@ -1212,6 +1215,7 @@ is.pp3(x)
 is.ppx(x)
 is.prime(n)
 is.psp(x)
+is.scov(x)
 is.sob(x)
 is.tess(x)
 k3engine(x, y, z, box, rmax, nrval, correction)
