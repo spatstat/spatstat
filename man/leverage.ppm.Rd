@@ -74,7 +74,8 @@ leverage(model, ...)
 \value{
   An object of class \code{"leverage.ppm"} that can be plotted
   (by \code{\link{plot.leverage.ppm}}). There are also methods
-  for \code{print}, \code{[}, \code{as.im} and \code{as.owin}.
+  for \code{persp}, \code{print}, \code{[}, \code{as.im}, \code{as.function}
+  and \code{as.owin}.
 }
 \references{
   Baddeley, A., Chang, Y.M. and Song, Y. (2013)
@@ -89,6 +90,7 @@ leverage(model, ...)
   \code{\link{dfbetas.ppm}},
   \code{\link{ppmInfluence}},
   \code{\link{plot.leverage.ppm}}
+  \code{\link{as.function.leverage.ppm}}
 }
 \examples{
    X <- rpoispp(function(x,y) { exp(3+3*x) })

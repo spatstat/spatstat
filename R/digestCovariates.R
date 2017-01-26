@@ -1,16 +1,21 @@
-## Determines whether something is a single valid candidate for a spatial covariate
-is.scov <- function(covar, warn = TRUE){
-  # Spatial object is OK
-  if(is.sob(covar))
+#'
+#'    digestCovariates.R
+#'
+#'     $Revision: 1.2 $  $Date: 2017/01/26 00:22:14 $
+#' 
+
+is.scov <- function(x) {
+  #' Determines whether x is a valid candidate for a spatial covariate
+  #' A spatial object is OK if it can be coerced to a function
+  if(inherits(x, c("im", "funxy", "owin", "tess", "ssf", "leverage.ppm")))
     return(TRUE)
-  # A function(x,y,...) is OK
-  if(is.function(covar) && identical(names(formals(covar))[1:2], c("x", "y")))
+  #' A function(x,y,...) is OK
+  if(is.function(x) && identical(names(formals(x))[1:2], c("x", "y")))
     return(TRUE)
-  # A single character "x" or "y" is OK
-  if(is.character(covar) && length(covar) == 1 && (covar %in% c("x", "y"))) {
+  #' A single character "x" or "y" is OK
+  if(is.character(x) && length(x) == 1 && (x %in% c("x", "y"))) 
     return(TRUE)
-  }
-  # Can't handle input
+  #' Can't handle input
   return(FALSE)
 }
   
@@ -18,22 +23,23 @@ is.scov <- function(covar, warn = TRUE){
 ## Returns a `solist` with possibly a unitname attribute
 digestCovariates <- function(..., W = NULL) {
   x <- list(...)
-  # Find individual covariates in list
+  #' Find individual covariates in list
   valid <- sapply(x, is.scov)
   covs <- x[valid]
-  # The remaining entries are assumed to be lists of covariates so we unlist them
+  #' The remaining entries are assumed to be lists of covariates
+  #' so we unlist them
   x <- unlist(x[!valid], recursive = FALSE)
   valid <- sapply(x, is.scov)
   if(!all(valid))
     stop("Couldn't interpret all input as spatial covariates.")
   covs <- append(covs, x)
 
-  needW <- !sapply(covs, is.sob)
-  if(any(needW) && is.null(W)){
-    windows <- sapply(covs[!needW], as.owin, fatal = FALSE)
-    W <- do.call(boundingbox, windows)
+  if(any(needW <- !sapply(covs, is.sob))) {
+    if(is.null(W)){
+      boxes <- sapply(covs[!needW], Frame, fatal = FALSE)
+      W <- do.call(boundingbox, boxes)
+    } else stopifnot(is.owin(W))
   }
-  stopifnot(is.owin(W))
   
   covunits <- vector("list", length(covs))
   # Now covs is a list of valid covariates we can loop through
@@ -49,7 +55,7 @@ digestCovariates <- function(..., W = NULL) {
       }
       covunits[[i]] <- unitname(W)
     }
-    if(is.function(covar)){
+    if(is.function(covar) && !inherits(covar, "funxy")){
       covar <- funxy(f = covar, W = W)
     }
     covs[[i]] <- covar

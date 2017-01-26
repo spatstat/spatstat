@@ -4,6 +4,7 @@
 \alias{marks<-.ssf}
 \alias{unmark.ssf}
 \alias{as.im.ssf}
+\alias{as.function.ssf}
 \alias{as.ppp.ssf}
 \alias{print.ssf}
 \alias{range.ssf}
@@ -23,6 +24,8 @@
   \method{unmark}{ssf}(X)
 
   \method{as.im}{ssf}(X, \dots)
+
+  \method{as.function}{ssf}(x, \dots)
 
   \method{as.ppp}{ssf}(X, \dots)
 
@@ -61,6 +64,8 @@
   \code{as.ppp} and \code{unmark}
   return a point pattern (object of class \code{"ppp"}).
 
+  \code{as.function} returns a \code{function(x,y)} of class \code{"funxy"}.
+  
   \code{print} returns \code{NULL}.
 
   \code{range} returns a numeric vector of length 2.
@@ -74,10 +79,13 @@
   function (real- or vector-valued) that has been
   sampled at a finite set of points.
 
-  The commands documented here provided methods for this class,
+  The commands documented here are methods for this class,
   for the generic commands
   \code{\link[spatstat]{marks}},
   \code{\link[spatstat]{marks<-}},
+  \code{\link[spatstat]{unmark}},
+  \code{\link[spatstat]{as.im}},
+  \code{\link{as.function}},
   \code{\link[spatstat]{as.ppp}},
   \code{\link{print}},
   \code{\link{range}},

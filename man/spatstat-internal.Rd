@@ -536,6 +536,7 @@
 \alias{print.hasenvelope}       
 \alias{print.hierarchicalordering}
 \alias{print.hyperframe}
+\alias{print.indicfun}       
 \alias{print.influence.ppm}       
 \alias{print.interact}       
 \alias{print.intermaker}       
@@ -1486,6 +1487,7 @@ primesbelow(nmax)
 \method{print}{hasenvelope}(x, \dots)
 \method{print}{hierarchicalordering}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
+\method{print}{indicfun}(x, \dots)
 \method{print}{influence.ppm}(x, \dots)
 \method{print}{interact}(x, \dots, family, brief, banner)       
 \method{print}{intermaker}(x, \dots)

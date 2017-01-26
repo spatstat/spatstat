@@ -3,7 +3,7 @@
 #
 #  spatially sampled functions
 #
-#  $Revision: 1.16 $  $Date: 2016/10/22 08:24:57 $
+#  $Revision: 1.17 $  $Date: 2017/01/26 00:55:22 $
 #
 
 ssf <- function(loc, val) {
@@ -48,7 +48,33 @@ image.ssf <- function(x, ...) {
   do.call("plot", resolve.defaults(list(x, how="smoothed"), list(...)))
 }
 
-as.im.ssf <- function(X, ...) nnmark(X)
+as.im.ssf <- function(X, ...) nnmark(X, ...)
+
+as.function.ssf <- function(x, ...) {
+  X <- x
+  mX <- marks(X)
+  switch(markformat(X),
+         vector = {
+           g <- function(x, y=NULL) {
+             Y <- xy.coords(x,y)[c("x","y")]
+             J <- nncross(Y, X, what="which")
+             result <- mX[J]
+             return(unname(result))
+           }
+         },
+         dataframe = {
+           g <- function(x, y=NULL) {
+             Y <- xy.coords(x,y)[c("x","y")]
+             J <- nncross(Y, X, what="which")
+             result <-  mX[J,,drop=FALSE]
+             row.names(result) <- NULL
+             return(result)
+           }
+         },
+         stop("Marks must be a vector or data.frame"))
+  h <- funxy(g, Frame(X))
+  return(h)
+}
 
 plot.ssf <- function(x, ..., how=c("smoothed", "nearest", "points"),
                      style = c("image", "contour", "imagecontour"),

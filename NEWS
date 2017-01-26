@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.028
+        CHANGES IN spatstat VERSION 1.48-0.029
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Bug fixes.
 
-    o Version nickname: 'Please Dispose of Thoughtfully'
+    o Version nickname: 'Alternative Facts'
 
 NEW FUNCTIONS
 
@@ -35,6 +35,15 @@ NEW FUNCTIONS
 
     o measurePositive, measureNegative, measureVariation, totalVariation
     Positive and negative parts of a measure, and variation of a measure.
+
+    o as.function.owin
+    Convert a spatial window to a function (x,y), the indicator function.
+
+    o as.function.ssf
+    Convert an object of class 'ssf' to a function(x,y)
+
+    o as.function.leverage.ppm
+    Convert an object of class 'leverage.ppm' to a function(x,y)
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -95,13 +104,6 @@ BUG FIXES
     Crashed if there was more than one column of marks.
     Fixed.
 
-    o "[.im"
-    For a pixel image Z with an irregular boundary,
-    and a set of locations X given as a point pattern or a list(x,y),
-    the results of Z[X] were sometimes incorrect 
-    at locations near the boundary of the window.
-    Fixed.
-    
     o rmpoispp
     If 'lambda' was a list of images, 'names(lambda)' was ignored,
     rather than serving as the default value of 'types'.

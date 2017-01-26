@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.68 $  $Date: 2016/12/30 01:44:07 $
+#  $Revision: 1.69 $  $Date: 2017/01/26 01:10:25 $
 #
 
 leverage <- function(model, ...) {
@@ -591,7 +591,13 @@ persp.leverage.ppm <- function(x, ..., main) {
 }
   
 as.im.leverage.ppm <- function(X, ...) {
-  return(X$lev$smo)
+  return(X$lev$smo) # could be either an image or a list of images
+}
+
+as.function.leverage.ppm <- function(x, ...) {
+  X <- x$lev$val
+  S <- ssf(unmark(X), marks(X))
+  return(as.function(S))
 }
 
 as.ppp.influence.ppm <- function(X, ...) {
