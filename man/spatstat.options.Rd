@@ -110,6 +110,15 @@
       self-intersecting polygons and overlapping polygons will
       be repaired. The default is \code{fixpolygons=TRUE}.
     }
+    \item{fftw}{
+      Logical value indicating whether the two-dimensional
+      Fast Fourier Transform
+      should be computed using the package \pkg{fftwtools},
+      instead of the \code{fft} function in the \pkg{stats} package.
+      This affects the speed of \code{\link[spatstat]{density.ppp}},
+      \code{\link[spatstat]{density.psp}}, \code{\link[spatstat]{blur}}
+      \code{\link[spatstat]{setcov}} and \code{\link[spatstat]{Smooth.ppp}}.
+    }
     \item{gpclib}{
       Defunct. This parameter was used to permit or forbid the use of the
       package \pkg{gpclib}, because of its restricted software licence.

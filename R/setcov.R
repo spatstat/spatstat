@@ -2,7 +2,7 @@
 #
 #     setcov.R
 #
-#     $Revision: 1.12 $ $Date: 2017/01/27 07:21:24 $
+#     $Revision: 1.13 $ $Date: 2017/01/27 09:07:42 $
 #
 #    Compute the set covariance function of a window
 #    or the (noncentred) spatial covariance function of an image
@@ -32,8 +32,7 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   have.Y <- !missing(Y) && !is.null(Y)
   crosscov <- have.Y || reflectX || reflectY
   trap.extra.arguments(..., .Context="In convolve.im")
-  FFT <- if(requireNamespace("fftwtools", quietly=TRUE))
-         fftwtools::fftw2d else fft
+  FFT <- if(spatstat.options('fftw')) fftwtools::fftw2d else fft
   #
   if(have.Y) {
     # cross-covariance 

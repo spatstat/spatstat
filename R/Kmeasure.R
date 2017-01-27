@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.59 $    $Date: 2017/01/27 07:21:14 $
+#           $Revision: 1.60 $    $Date: 2017/01/27 09:07:49 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -153,8 +153,7 @@ second.moment.engine <-
   needs.kernel <- what %in% c("kernel", "all", "Kmeasure")
   returns.several <- what %in% c("all", "smoothedge")
 
-  FFT <- if(requireNamespace("fftwtools", quietly=TRUE))
-         fftwtools::fftw2d else fft
+  FFT <- if(spatstat.options("fftw")) fftwtools::fftw2d else fft
   
   if(returns.several)
     result <- list() # several results will be returned in a list

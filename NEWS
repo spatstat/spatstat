@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.030
+        CHANGES IN spatstat VERSION 1.48-0.031
 
 OVERVIEW
 
@@ -83,6 +83,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.solist
     The argument x can now be a spatial object;
     as.solist(cells) is the same as solist(cells).
+
+    o spatstat.options
+    New option 'fftw' specifies whether the Fast Fourier Transform
+    should be computed using the package 'fftwtools' instead of the 
+    fft in the 'stats' package.
 
     o polynom
     This function now has a help file.
