@@ -2,7 +2,7 @@
 #
 #     setcov.R
 #
-#     $Revision: 1.11 $ $Date: 2012/10/10 06:48:16 $
+#     $Revision: 1.12 $ $Date: 2017/01/27 07:21:24 $
 #
 #    Compute the set covariance function of a window
 #    or the (noncentred) spatial covariance function of an image
@@ -32,6 +32,8 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   have.Y <- !missing(Y) && !is.null(Y)
   crosscov <- have.Y || reflectX || reflectY
   trap.extra.arguments(..., .Context="In convolve.im")
+  FFT <- if(requireNamespace("fftwtools", quietly=TRUE))
+         fftwtools::fftw2d else fft
   #
   if(have.Y) {
     # cross-covariance 
@@ -62,20 +64,20 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   Mpad <- matrix(0, ncol=2*nc, nrow=2*nr)
   Mpad[1:nr, 1:nc] <- M
   lengthMpad <- 4 * nc * nr
-  fM <- fft(Mpad)
+  fM <- FFT(Mpad)
   if(!crosscov) {
     # compute convolution square
-    G <- fft(fM^2, inverse=TRUE)/lengthMpad
+    G <- FFT(fM^2, inverse=TRUE)/lengthMpad
   } else {
-    # compute set cross-covariance or convolution by fft
+    # compute set cross-covariance or convolution by FFT
     N <- Y$v
     N[is.na(N)] <- 0
     Npad <- matrix(0, ncol=2*nc, nrow=2*nr)
     Npad[1:nr, 1:nc] <- N
-    fN <- fft(Npad)
+    fN <- FFT(Npad)
     if(reflectY) fN <- Conj(fN)
     if(reflectX) fM <- Conj(fM)
-    G <- fft(fM * fN, inverse=TRUE)/lengthMpad
+    G <- FFT(fM * fN, inverse=TRUE)/lengthMpad
   }
 #  cat(paste("maximum imaginary part=", max(Im(G)), "\n"))
   G <- Mod(G) * xstep * ystep

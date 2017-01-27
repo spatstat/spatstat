@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.029
+        CHANGES IN spatstat VERSION 1.48-0.030
 
 OVERVIEW
 
     o We thank Tilman Davies, Kassel Hingee and Abdollah Jalilian 
     for contributions.
+
+    o spatstat now 'Suggests' the package 'fftwtools'.
 
     o Operations on signed measures.
 

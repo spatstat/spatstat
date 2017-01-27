@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.58 $    $Date: 2016/11/07 09:05:24 $
+#           $Revision: 1.59 $    $Date: 2017/01/27 07:21:14 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -152,6 +152,9 @@ second.moment.engine <-
   is.second.order <- what %in% c("Kmeasure", "Bartlett", "all")
   needs.kernel <- what %in% c("kernel", "all", "Kmeasure")
   returns.several <- what %in% c("all", "smoothedge")
+
+  FFT <- if(requireNamespace("fftwtools", quietly=TRUE))
+         fftwtools::fftw2d else fft
   
   if(returns.several)
     result <- list() # several results will be returned in a list
@@ -254,13 +257,13 @@ second.moment.engine <-
         result$kernel <- ker
     }
     ## convolve using fft
-    fK <- fft(Kern)
+    fK <- FFT(Kern)
   }
   
   if(what != "edge") {
     if(nimages == 1) {
-      fY <- fft(Ypad)
-      sm <- fft(fY * fK, inverse=TRUE)/lengthYpad
+      fY <- FFT(Ypad)
+      sm <- FFT(fY * fK, inverse=TRUE)/lengthYpad
       if(debug) {
         cat(paste("smooth: maximum imaginary part=",
                   signif(max(Im(sm)),3), "\n"))
@@ -271,8 +274,8 @@ second.moment.engine <-
     } else {
       fYlist <- smlist <- blanklist
       for(i in 1:nimages) {
-        fYlist[[i]] <- fY.i <- fft(Ypadlist[[i]])
-        smlist[[i]] <- sm.i <- fft(fY.i * fK, inverse=TRUE)/lengthYpad
+        fYlist[[i]] <- fY.i <- FFT(Ypadlist[[i]])
+        smlist[[i]] <- sm.i <- FFT(fY.i * fK, inverse=TRUE)/lengthYpad
         if(debug) {
           cat(paste("smooth component", i, ": maximum imaginary part=",
                     signif(max(Im(sm.i)),3), "\n"))
@@ -348,7 +351,7 @@ second.moment.engine <-
   #
   if(is.second.order) {
     if(nimages == 1) {
-      mom <- fft(bart, inverse=TRUE)/lengthYpad
+      mom <- FFT(bart, inverse=TRUE)/lengthYpad
       if(debug) {
         cat(paste("2nd moment measure: maximum imaginary part=",
                   signif(max(Im(mom)),3), "\n"))
@@ -364,7 +367,7 @@ second.moment.engine <-
     } else {
       momlist <- blanklist
       for(i in 1:nimages) {
-        mom.i <- fft(bartlist[[i]], inverse=TRUE)/lengthYpad
+        mom.i <- FFT(bartlist[[i]], inverse=TRUE)/lengthYpad
         if(debug) {
           cat(paste("2nd moment measure: maximum imaginary part=",
                     signif(max(Im(mom.i)),3), "\n"))
@@ -388,11 +391,11 @@ second.moment.engine <-
     Mpad <- matrix(0, ncol=2*nc, nrow=2*nr)
     Mpad[1:nr, 1:nc] <- M
     lengthMpad <- 4 * nc * nr
-    fM <- fft(Mpad)
+    fM <- FFT(Mpad)
     if(edge && is.second.order) {
       # compute kernel-smoothed set covariance
       # apply edge correction      
-      co <- fft(Mod(fM)^2 * fK, inverse=TRUE)/lengthMpad
+      co <- FFT(Mod(fM)^2 * fK, inverse=TRUE)/lengthMpad
       co <- Mod(co) 
       a <- sum(M)
       wt <- a/co
@@ -433,7 +436,7 @@ second.moment.engine <-
   if(what %in% c("edge", "all", "smoothedge")) {
     # return convolution of window with kernel
     # (evaluated inside window only)
-    con <- fft(fM * fK, inverse=TRUE)/lengthMpad
+    con <- FFT(fM * fK, inverse=TRUE)/lengthMpad
     edg <- Mod(con[1:nr, 1:nc])
     edg <- im(edg, xcol.pad[1:nc], yrow.pad[1:nr], unitname=unitsX)
     if(what == "edge") 
