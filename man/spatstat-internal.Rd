@@ -913,7 +913,7 @@ breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
 breakpts.from.r(r)
 bt.frame(Q, trend, interaction, \dots, covariates,
          correction, rbord, use.gam, allcovar)
-bw.optim(cv, h, iopt, \dots, cvname, hname, criterion)
+bw.optim(cv, h, iopt, \dots, cvname, hname, criterion, unitname)
 calc.DR(COV, z, Dim)
 calc.NNIR(COV, z, pos, Dim)
 calc.SAVE(COV, z, Dim)

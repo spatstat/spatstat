@@ -3,7 +3,7 @@
 #
 #   Estimation of relative risk
 #
-#  $Revision: 1.32 $  $Date: 2016/12/30 01:44:07 $
+#  $Revision: 1.33 $  $Date: 2017/01/28 06:29:07 $
 #
 
 relrisk <- function(X, ...) UseMethod("relrisk")
@@ -479,7 +479,8 @@ bw.relrisk <- function(X, method="likelihood",
   result <- bw.optim(cv, h, iopt,
                      hname="sigma", 
                      creator="bw.relrisk",
-                     criterion=paste(methodname, "Cross-Validation"))
+                     criterion=paste(methodname, "Cross-Validation"),
+                     unitname=unitname(X))
   return(result)
 }
 

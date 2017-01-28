@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.48-0.031
+Version: 1.48-0.032
 Nickname: Alternative Facts
-Date: 2017-01-27
+Date: 2017-01-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

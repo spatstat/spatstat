@@ -82,7 +82,8 @@ bw.diggle <- local({
                        creator="bw.diggle",
                        criterion="Berman-Diggle Cross-Validation",
                        J=J,
-                       lambda=lambda)
+                       lambda=lambda,
+                       unitname=unitname(X))
     return(result)
   }
 

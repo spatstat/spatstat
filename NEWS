@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.031
+        CHANGES IN spatstat VERSION 1.48-0.032
 
 OVERVIEW
 
@@ -89,6 +89,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     should be computed using the package 'fftwtools' instead of the 
     fft in the 'stats' package.
 
+    o bw.diggle, bw.ppl, bw.relrisk, bw.smoothppp
+    These functions now extract and store the name of the unit of length
+    from the point pattern dataset. When the bandwidth selection criterion
+    is plotted, the name of the unit of length is shown on the x-axis.
+    
     o polynom
     This function now has a help file.
 

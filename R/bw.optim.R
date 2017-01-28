@@ -9,7 +9,8 @@
 
 bw.optim <- function(cv, h, iopt=which.min(cv), ...,
                      cvname, hname,
-                     criterion="cross-validation") {
+                     criterion="cross-validation",
+                     unitname=NULL) {
   if(missing(cvname) || is.null(cvname)) cvname <- deparse(substitute(cv))
   if(missing(hname) || is.null(hname)) hname <- deparse(substitute(h))
   stopifnot(is.numeric(cv))
@@ -22,6 +23,7 @@ bw.optim <- function(cv, h, iopt=which.min(cv), ...,
   attr(result, "labels") <- list(hname=hname, cvname=cvname)
   attr(result, "info") <- list(...)
   attr(result, "criterion") <- criterion
+  attr(result, "units") <- unitname
   class(result) <- "bw.optim"
   return(result)
 }
@@ -70,6 +72,7 @@ as.fv.bw.optim <- function(x) {
             fname=cvname,
             yexp=yexp)
   fvnames(xfv, ".") <- cvname
+  unitname(xfv) <- unitname(x)
   return(xfv)
 }
 
