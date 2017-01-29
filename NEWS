@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.032
+        CHANGES IN spatstat VERSION 1.48-0.033
 
 OVERVIEW
 
-    o We thank Tilman Davies, Kassel Hingee and Abdollah Jalilian 
-    for contributions.
+    o We thank Tilman Davies, Kassel Hingee, Abdollah Jalilian 
+    and Dominic Schuhmacher for contributions.
 
     o spatstat now 'Suggests' the package 'fftwtools'.
 
@@ -96,6 +96,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o polynom
     This function now has a help file.
+
+    o rmhcontrol
+    New parameter 'pstage' determines when to generate random proposal points.
+
+    o rmh
+    Accelerated, in the case where multiple patterns are saved using 'nsave'.
 
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.

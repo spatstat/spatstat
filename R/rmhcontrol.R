@@ -2,7 +2,7 @@
 #
 #   rmhcontrol.R
 #
-#   $Revision: 1.27 $  $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.30 $  $Date: 2017/01/29 07:20:51 $
 #
 #
 
@@ -29,7 +29,8 @@ rmhcontrol.list <- function(...) {
 rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
                         expand=NULL, periodic=NULL, ptypes=NULL,
                         x.cond=NULL, fixall=FALSE, nverb=0,
-                        nsave=NULL, nburn=nsave, track=FALSE)
+                        nsave=NULL, nburn=nsave, track=FALSE,
+                        pstage=c("block", "start"))
 {
   argh <- list(...)
   nargh <- length(argh)
@@ -70,6 +71,7 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
     if(!is.null(nburn)) stopifnot(nburn + nsave <= nrep)
   }
   stopifnot(is.logical(track))
+  pstage <- match.arg(pstage) 
 
 #################################################################
 # Conditioning on point configuration
@@ -149,7 +151,7 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
               condtype=condtype,
               x.cond=x.cond,
               saving=saving, nsave=nsave, nburn=nburn,
-              track=track)
+              track=track, pstage=pstage)
   class(out) <- c("rmhcontrol", class(out))
   return(out)
 }
@@ -157,33 +159,38 @@ rmhcontrol.default <- function(..., p=0.9, q=0.5, nrep=5e5,
 print.rmhcontrol <- function(x, ...) {
   verifyclass(x, "rmhcontrol")
 
-  cat("Metropolis-Hastings algorithm control parameters\n")
-  cat(paste("Probability of shift proposal: p =", x$p, "\n"))
+  splat("Metropolis-Hastings algorithm control parameters")
+  splat("Probability of shift proposal: p =", x$p)
   if(x$fixing == "none") {
-    cat(paste("Conditional probability of death proposal: q =", x$q, "\n"))
+    splat("Conditional probability of death proposal: q =", x$q)
     if(!is.null(x$ptypes)) {
-      cat("Birth proposal probabilities for each type of point:\n")
+      splat("Birth proposal probabilities for each type of point:")
       print(x$ptypes)
     }
   }
   switch(x$fixing,
          none={},
-         n.total=cat("The total number of points is fixed\n"),
-         n.each.type=cat("The number of points of each type is fixed\n"))
+         n.total=splat("The total number of points is fixed"),
+         n.each.type=splat("The number of points of each type is fixed"))
   switch(x$condtype,
          none={},
          window={
-           cat(paste("Conditional simulation given the",
-                     "configuration in a subwindow\n"))
+           splat("Conditional simulation given the",
+                 "configuration in a subwindow")
            print(x$x.cond$window)
          },
          Palm={
-           cat("Conditional simulation of Palm type\n")
+           splat("Conditional simulation of Palm type")
          })
-  cat(paste("Number of M-H iterations: nrep =", x$nrep, "\n"))
+  splat("Number of M-H iterations: nrep =", x$nrep)
   if(x$saving) 
-    cat(paste("Save point pattern every", x$nsave, "iterations",
-              "after a burn-in of", x$nburn, "iterations\n"))
+    splat("Save point pattern every", x$nsave, "iterations",
+          "after a burn-in of", x$nburn, "iterations.")
+  pstage <- x$pstage %orifnull% "start"
+  hdr <- "Generate random proposal points:"
+  switch(pstage,
+         start = splat(hdr, "at start of simulations."),
+         block = splat(hdr, "before each block of", x$nsave, "iterations."))
   cat(paste("Track proposal type and acceptance/rejection?",
             if(x$track) "yes" else "no", "\n"))
   if(x$nverb > 0)
@@ -198,6 +205,7 @@ print.rmhcontrol <- function(x, ...) {
   if(is.null(x$periodic)) cat("Not yet determined.\n") else 
   if(x$periodic) cat("Yes.\n") else cat("No.\n")
   #
+  
   return(invisible(NULL))
 }
 

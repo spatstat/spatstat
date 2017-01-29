@@ -12,7 +12,8 @@
    \method{rmhcontrol}{default}(\dots, p=0.9, q=0.5, nrep=5e5,
                       expand=NULL, periodic=NULL, ptypes=NULL,
                       x.cond=NULL, fixall=FALSE, nverb=0,
-                      nsave=NULL, nburn=nsave, track=FALSE)
+                      nsave=NULL, nburn=nsave, track=FALSE,
+                      pstage=c("block", "start"))
 }
 \arguments{
   \item{\dots}{Arguments passed to methods.}
@@ -53,6 +54,10 @@
   \item{track}{
     Logical flag indicating whether to save the transition
     history of the simulations.
+  }
+  \item{pstage}{
+    Character string specifying when to generate
+    proposal points. Either \code{"start"} or \code{"block"}.
   }
 }
 
@@ -210,6 +215,21 @@
       history of the simulations (i.e. information specifying
       what type of proposal was made, and whether it was accepted
       or rejected, for each iteration).
+    }
+    \item{pstage}{
+      Character string specifying the stage of the algorithm
+      at which the randomised proposal points should be generated.
+      If \code{pstage="start"} or if \code{nsave=0},
+      the entire sequence of \code{nrep}
+      random proposal points is generated at the start of the
+      algorithm. This is the original
+      behaviour of the code, and should be used in order to maintain
+      consistency with older versions of \pkg{spatstat}.
+      If \code{pstage="block"} and \code{nsave > 0}, then
+      a set of \code{nsave} random proposal points will be generated
+      before each block of \code{nsave} iterations. This is much more
+      efficient.
+      The default is \code{pstage="block"}.
     }
   }
 }

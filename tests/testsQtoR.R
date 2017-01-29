@@ -96,7 +96,9 @@ local({
    X.save <- rmh(model=mod,
                  start=list(n.start=50),
                  control=list(nrep=1e3, periodic=FALSE, expand=1,
-                   nburn=0, nsave=1))
+                   nburn=0, nsave=1, pstage="start"))
+   #' Need to set pstage='start' so that proposals are generated
+   #' at the start of the procedure in both cases.
 
    stopifnot(npoints(X.save) == npoints(X.nosave))
    stopifnot(max(nncross(X.save, X.nosave)$dist) == 0)
