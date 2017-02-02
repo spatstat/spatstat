@@ -6,7 +6,7 @@
   from each pixel in a window to the boundary of the window.
 }
 \usage{
- bdist.pixels(w, \dots, style="image")
+ bdist.pixels(w, \dots, style="image", method=c("C", "interpreted"))
 }
 \arguments{
   \item{w}{A window (object of class \code{"owin"}).}
@@ -16,6 +16,7 @@
     the output: either \code{"matrix"}, \code{"coords"} or
     \code{"image"}.
   }
+  \item{method}{Choice of algorithm to use when \code{w} is polygonal.}
 }
 \value{
   If \code{style="image"}, a pixel image (object of class \code{"im"})
@@ -43,15 +44,27 @@
   \eqn{d(u, W^c)}{dist(u, W')} from \eqn{u}
   to the boundary of \eqn{W}.
 
-  If the window is not of type \code{"mask"} then it is first
-  converted to that type. The arguments \code{"\dots"} are
-  passed to \code{\link{as.mask}} to determine the pixel resolution.
+  If the window is a binary mask then the distance from each pixel
+  to the boundary is computed using the distance transform algorithm
+  \code{\link{distmap.owin}}. The result is equivalent to
+  \code{distmap(W, invert=TRUE)}.
+
+  If the window is a rectangle or a polygonal region,
+  the grid of pixels is determined by the arguments \code{"\dots"} 
+  passed to \code{\link{as.mask}}. The distance from each pixel to the
+  boundary is calculated exactly, using analytic geometry.
+  This is slower but more accurate than in the case of a binary mask.
+
+  For software testing purposes, there are two implementations
+  available when \code{w} is a polygon: the default is \code{method="C"}
+  which is much faster than \code{method="interpreted"}.
 }
 \seealso{
   \code{\link{owin.object}},
   \code{\link{erosion}},
   \code{\link{bdist.points}},
-  \code{\link{bdist.tiles}}.
+  \code{\link{bdist.tiles}},
+  \code{\link{distmap.owin}}.
 }
 \examples{
   u <- owin(c(0,1),c(0,1))

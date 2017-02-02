@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.39 $	$Date: 2015/02/17 07:02:46 $
+#	$Revision: 4.42 $	$Date: 2017/02/01 10:26:09 $
 #
 # -------- functions ----------------------------------------
 #
@@ -63,7 +63,8 @@ function(X)
         return(result)
 }
 
-"bdist.pixels" <- function(w, ..., style="image") {
+"bdist.pixels" <- function(w, ..., style="image",
+                           method=c("C", "interpreted")) {
 	verifyclass(w, "owin")
 
         masque <- as.mask(w, ...)
@@ -86,6 +87,7 @@ function(X)
                },
                polygonal = {
                  # set up pixel raster
+                 method <- match.arg(method)
                  rxy <- rasterxy.mask(masque)
                  x <- rxy$x
                  y <- rxy$y
@@ -94,18 +96,27 @@ function(X)
                  inside <- inside.owin(x, y, w)
                  # compute distances for these pixels
                  xy <- cbind(x[inside], y[inside])
-                 dxy <- rep.int(Inf, sum(inside))
-                 bdry <- w$bdry
-                 for(i in seq_along(bdry)) {
-                   polly <- bdry[[i]]
-                   nsegs <- length(polly$x)
-                   for(j in 1:nsegs) {
-                     j1 <- if(j < nsegs) j + 1L else 1L
-                     seg <- c(polly$x[j],  polly$y[j],
-                              polly$x[j1], polly$y[j1])
-                     dxy <- pmin.int(dxy, distppl(xy, seg))
-                   }
-                 }
+                 switch(method,
+                        C = {
+                          #' C code
+                          ll <- as.data.frame(edges(w))
+                          dxy <- distppllmin(xy, ll)$min.d
+                        },
+                        interpreted = {
+                          #' ancient R code
+                          dxy <- rep.int(Inf, sum(inside))
+                          bdry <- w$bdry
+                          for(i in seq_along(bdry)) {
+                            polly <- bdry[[i]]
+                            nsegs <- length(polly$x)
+                            for(j in 1:nsegs) {
+                              j1 <- if(j < nsegs) j + 1L else 1L
+                              seg <- c(polly$x[j],  polly$y[j],
+                                       polly$x[j1], polly$y[j1])
+                              dxy <- pmin.int(dxy, distppl(xy, seg))
+                            }
+                          }
+                        })
                  b[inside] <- dxy
                },
                stop("unrecognised window type", w$type)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.033
+        CHANGES IN spatstat VERSION 1.48-0.034
 
 OVERVIEW
 
@@ -18,11 +18,24 @@ OVERVIEW
 
     o Subset operators extended.
 
+    o Greatly accelerated 'rmh' when using 'nsave'
+
     o Some computations accelerated.
 
     o Bug fixes.
 
     o Version nickname: 'Alternative Facts'
+
+NEW DEPENDENCIES
+
+    o fftwtools
+    spatstat now 'Suggests' the package 'fftwtools'.
+    This package provides a very fast implementation of 
+    the Fast Fourier Transform, leading to much faster computation
+    in the spatstat functions 'density.ppp', 'relrisk.ppp', 'convolve.im',
+    'blur', 'scan.test' and many other functions.
+    The 'fftwtools' package requires the external software library 'fftw'.
+    We strongly recommend installing this library if possible.
 
 NEW FUNCTIONS
 
@@ -102,6 +115,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rmh
     Accelerated, in the case where multiple patterns are saved using 'nsave'.
+
+    o bdist.pixels
+    Accelerated for polygonal windows. New argument 'method'.
 
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.
