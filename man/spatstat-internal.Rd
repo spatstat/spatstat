@@ -204,6 +204,7 @@
 \alias{f3Cengine}
 \alias{fasp}
 \alias{fastFindInterval}
+\alias{fft2D}
 \alias{fill.coefs}
 \alias{fillseq}
 \alias{findbestlegendpos}
@@ -1095,6 +1096,7 @@ f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
 fastFindInterval(x, b, labels, reltol)
+fft2D(z, inverse, west)
 fill.coefs(coefs, required)
 fillseq(x, step)
 findbestlegendpos(\dots)

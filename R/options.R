@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.78 $   $Date: 2017/01/27 09:12:11 $
+#    $Revision: 1.79 $   $Date: 2017/02/04 10:27:18 $
 #
 #
 
@@ -509,16 +509,6 @@ warn.once <- function(key, ...) {
          # use C code for 'nncross.lpp'
          default=TRUE,
          check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
-       fftw = list(
-         # whether to use package 'fftwtools'
-         default=FALSE,
-         check=function(x) {
-           ok <- is.logical(x) && length(x) == 1
-           if(ok && x) requireNamespace("fftwtools")
-           return(ok)
-         },
          valid="a single logical value"
        ),
        developer = list(

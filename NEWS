@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.034
+        CHANGES IN spatstat VERSION 1.48-0.035
 
 OVERVIEW
 
@@ -96,11 +96,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.solist
     The argument x can now be a spatial object;
     as.solist(cells) is the same as solist(cells).
-
-    o spatstat.options
-    New option 'fftw' specifies whether the Fast Fourier Transform
-    should be computed using the package 'fftwtools' instead of the 
-    fft in the 'stats' package.
 
     o bw.diggle, bw.ppl, bw.relrisk, bw.smoothppp
     These functions now extract and store the name of the unit of length
