@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.036
+        CHANGES IN spatstat VERSION 1.48-0.037
 
 OVERVIEW
 
@@ -21,6 +21,8 @@ OVERVIEW
     o Greatly accelerated 'rmh' when using 'nsave'
 
     o Some computations accelerated.
+
+    o Size of namespace reduced, for efficiency.
 
     o Bug fixes.
 
@@ -113,6 +115,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o bdist.pixels
     Accelerated for polygonal windows. New argument 'method'.
+
+    o spatstat namespace
+    The namespace of the spatstat package has been shortened
+    (by internally registering the native routines) which should
+    make the package run faster.
 
     o sum.im, range.im, max.im, min.im
     These functions have been removed, as they are now subsumed in Summary.im.
