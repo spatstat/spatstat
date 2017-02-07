@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.37 $   $Date: 2016/11/10 01:02:33 $
+#  $Revision: 1.38 $   $Date: 2017/02/07 08:12:05 $
 #
 
 lppm <- function(X, ...) {
@@ -28,8 +28,8 @@ lppm.formula <- function(X, interaction=NULL, ..., data=NULL) {
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
-  Yexpr <- formula[[2]]
-  trend <- formula[c(1,3)]
+  Yexpr <- formula[[2L]]
+  trend <- formula[c(1L,3L)]
   
   ## FIT #######################################
   thecall <- call("lppm", X=Yexpr, trend=trend,
@@ -269,7 +269,7 @@ model.images.lppm <- local({
     m <- model.images(object$fit, W=as.rectangle(L), ...)
     if(length(m) > 0) {
       ## restrict images to L
-      rasta <- as.mask(m[[1]])
+      rasta <- as.mask(m[[1L]])
       DL <- as.mask.psp(as.psp(L), xy=rasta)
       ZL <- as.im(DL)
       if(!is.hyperframe) {

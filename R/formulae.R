@@ -4,7 +4,7 @@
 #
 #   Functions for manipulating model formulae
 #
-#	$Revision: 1.24 $	$Date: 2017/01/02 10:25:44 $
+#	$Revision: 1.25 $	$Date: 2017/02/07 07:22:47 $
 #
 #   identical.formulae()
 #          Test whether two formulae are identical
@@ -51,7 +51,7 @@ offsetsinformula <- function(x) {
   offs <- attr(tums, "offset")
   if(length(offs) == 0) return(character(0))
   vars <- attr(tums, "variables")
-  termnames <- unlist(lapply(vars, deparse))[-1]
+  termnames <- unlist(lapply(vars, deparse))[-1L]
   termnames[offs]
 }
   
@@ -60,7 +60,7 @@ lhs.of.formula <- function(x) {
     stop("x must be a formula")
   if(length(as.list(x)) == 3) {
     # formula has a response: return it
-    return(x[[2]])
+    return(x[[2L]])
   }
   return(NULL)
 }
@@ -70,10 +70,10 @@ rhs.of.formula <- function(x, tilde=TRUE) {
     stop("x must be a formula")
   if(length(as.list(x)) == 3) {
     # formula has a response: strip it
-    x <- x[-2]
+    x <- x[-2L]
   }
   if(!tilde) # remove the "~"
-    x <- x[[2]]
+    x <- x[[2L]]
   return(x)
 }
 
@@ -138,7 +138,7 @@ expand.polynom <- local({
   haspolynom <- function(z) { 'polynom' %in% all.names(z) }
 
   fiddle <- function(f) {
-    opname <- f[[1]]
+    opname <- f[[1L]]
     if(identical(opname, as.name('I'))) {
       ## expressions enclosed in I() are protected
       return(f)
@@ -162,16 +162,16 @@ expand.polynom <- local({
       stop("degree of polynomial should be a positive integer")
     if(n == 3) {
       ## polynom(x, d)
-      xlang <- f[[2]]
+      xlang <- f[[2L]]
       xstring <- if(length(xlang) == 1) paste(xlang) else paren(format(xlang))
       xpowers <- power1name(xstring, 1:degree)
       xpolystring <- paste(xpowers, collapse=" + ")
-      xpolylang <- as.formula(paste("~", xpolystring))[[2]]
+      xpolylang <- as.formula(paste("~", xpolystring))[[2L]]
       return(xpolylang)
     } else if(n == 4) {
       ## polynom(x, y, d)
-      xlang <- f[[2]]
-      ylang <- f[[3]]
+      xlang <- f[[2L]]
+      ylang <- f[[3L]]
       xstring <- if(length(xlang) == 1) paste(xlang) else paren(format(xlang))
       ystring <- if(length(ylang) == 1) paste(ylang) else paren(format(ylang))
       mat <- matrix(, 1+degree, 1+degree)
@@ -182,7 +182,7 @@ expand.polynom <- local({
       ydeg <- yd[xd >= 0]
       xypowers <- power2name(xstring, ystring, xdeg, ydeg)[xdeg + ydeg > 0]
       xypolystring <- paste(xypowers, collapse=" + ")
-      xypolylang <- as.formula(paste("~", xypolystring))[[2]]
+      xypolylang <- as.formula(paste("~", xypolystring))[[2L]]
       return(xypolylang)
     }
   }

@@ -2,7 +2,7 @@
 #
 #   disc.R
 #
-#   $Revision: 1.25 $ $Date: 2016/07/17 04:16:06 $
+#   $Revision: 1.26 $ $Date: 2017/02/07 08:12:05 $
 #
 #   Compute the disc of radius r in a linear network
 #
@@ -136,9 +136,9 @@ lineardisc <- function(L, x=locator(1), r, plotit=TRUE,
       # null device - initialise a plot
       plot(L, main="")
     }
-    points(x, col=cols[1], pch=16)
-    plot(disclines, add=TRUE, col=cols[2], lwd=2)
-    plot(discends, add=TRUE, col=cols[3], pch=16)
+    points(x, col=cols[1L], pch=16)
+    plot(disclines, add=TRUE, col=cols[2L], lwd=2)
+    plot(discends, add=TRUE, col=cols[3L], pch=16)
   }
   return(list(lines=disclines, endpoints=discends))
 }

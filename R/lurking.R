@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.51 $ $Date: 2016/06/11 08:36:09 $
+# $Revision: 1.52 $ $Date: 2017/02/07 08:12:05 $
 #
 
 lurking <- local({
@@ -224,8 +224,8 @@ lurking <- local({
     covqmarks <- marks(covq)
     covrange <- range(covqmarks, na.rm=TRUE)
     ## Suitable breakpoints
-    cvalues <- seq(from=covrange[1], to=covrange[2], length.out=100)
-    csmall <- cvalues[1] - diff(cvalues[1:2])
+    cvalues <- seq(from=covrange[1L], to=covrange[2L], length.out=100)
+    csmall <- cvalues[1L] - diff(cvalues[1:2])
     cbreaks <- c(csmall, cvalues)
     ## cumulative area as function of covariate values
     covclass <- cut(covqmarks, breaks=cbreaks)
@@ -350,12 +350,12 @@ lurking <- local({
       if(any(nbg)) {
         ran <- range(varR)
         varR[nbg] <- 0
-        relerr <- abs(ran[1]/ran[2])
+        relerr <- abs(ran[1L]/ran[2L])
         nerr <- sum(nbg)
         if(relerr > 1e-6) {
           warning(paste(nerr, "negative",
                         ngettext(nerr, "value (", "values (min="),
-                        signif(ran[1], 4), ")",
+                        signif(ran[1L], 4), ")",
                         "of residual variance reset to zero",
                         "(out of", length(varR), "values)"))
         }
@@ -389,8 +389,8 @@ lurking <- local({
       if(verbose) cat("Done.\n")
       hilo <- if(nrank == 1) apply(values, 1, range) else
                  apply(values, 1, orderstats, k=c(nrank, nsim-nrank+1))
-      theoretical$upper <- hilo[1,]
-      theoretical$lower <- hilo[2,]
+      theoretical$upper <- hilo[1L,]
+      theoretical$lower <- hilo[2L,]
     }
     ## ----------------  RETURN COORDINATES ----------------------------
     stuff <- list(empirical=empirical,

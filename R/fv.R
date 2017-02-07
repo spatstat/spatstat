@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.145 $   $Date: 2017/01/02 09:50:23 $
+##    $Revision: 1.146 $   $Date: 2017/02/07 07:22:47 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -138,7 +138,7 @@ as.fv.fv <- function(x) x
 
 as.fv.data.frame <- function(x) {
   if(ncol(x) < 2) stop("Need at least 2 columns")
-  return(fv(x, names(x)[1], , names(x)[2]))
+  return(fv(x, names(x)[1L], , names(x)[2L]))
 }
 
 as.fv.matrix <- function(x)  {
@@ -190,7 +190,7 @@ print.fv <- local({
     ## Labels ..
     labl <- fvlabels(x, expand=TRUE)
     ## Avoid overrunning text margin
-    maxlinewidth <- options('width')[[1]]
+    maxlinewidth <- options('width')[[1L]]
     key.width <- max(nchar(nama))
     labl.width <- if(showlabels) max(nchar(labl), nchar("Math.label")) else 0
     desc.width <- max(nchar(desc), nchar("Description"))
@@ -218,7 +218,7 @@ print.fv <- local({
                      Description=desc,
                      row.names=nama,
                      stringsAsFactors=FALSE)
-    if(!showlabels) df <- df[,-1,drop=FALSE]
+    if(!showlabels) df <- df[,-1L,drop=FALSE]
     print(df, right=FALSE)
   ##
     if(showextras) {
@@ -399,7 +399,7 @@ fvlabels <- function(x, expand=FALSE) {
 flatfname <- function(x) {
   fn <- if(is.character(x)) x else attr(x, "fname")
   if(length(fn) > 1)
-    fn <- paste0(fn[1], "[", paste(fn[-1], collapse=" "), "]")
+    fn <- paste0(fn[1L], "[", paste(fn[-1L], collapse=" "), "]")
   as.name(fn)
 }
 
@@ -451,7 +451,7 @@ fvlabelmap <- local({
                               ".y"=map[[fvnames(x, ".y")]]))
       if(!is.null(fvnames(x, ".s"))) {
         shex <- unname(map[fvnames(x, ".s")])
-        shadexpr <- substitute(c(A,B), list(A=shex[[1]], B=shex[[2]]))
+        shadexpr <- substitute(c(A,B), list(A=shex[[1L]], B=shex[[2L]]))
         map <- append(map, list(".s" = shadexpr))
       }
     }
@@ -472,8 +472,8 @@ fvexprmap <- function(x) {
   umap <- list(.=u, .a=u, .x=ux, .y=uy)
   if(!is.null(fvnames(x, ".s"))) {
     shnm <- fvnames(x, ".s")
-    shadexpr <- substitute(cbind(A,B), list(A=as.name(shnm[1]),
-                                            B=as.name(shnm[2])))
+    shadexpr <- substitute(cbind(A,B), list(A=as.name(shnm[1L]),
+                                            B=as.name(shnm[2L])))
     umap <- append(umap, list(.s = shadexpr))
   }
   return(umap)
@@ -582,13 +582,13 @@ cbind.fv <- function(...) {
     return(NULL)
   if(n == 1) {
     ## single argument - extract it
-    a <- a[[1]]
+    a <- a[[1L]]
     ## could be an fv object 
     if(is.fv(a))
       return(a)
     n <- length(a)
   }
-  z <- a[[1]]
+  z <- a[[1L]]
   if(!is.fv(z))
     stop("First argument should be an object of class fv")
   if(n > 1)
@@ -633,7 +633,7 @@ collapse.fv <- local({
       versionnames <- paste("x", seq_along(x), sep="")
     shortnames <- abbreviate(versionnames, minlength=12)
     ## extract the common values
-    y <- x[[1]]
+    y <- x[[1L]]
     xname <- fvnames(y, ".x")
     yname <- fvnames(y, ".y")
     if(length(same) == 0) {
@@ -642,7 +642,7 @@ collapse.fv <- local({
       z <- y[, c(xname, yname)]
     } else {
       if(!(yname %in% same))
-        fvnames(y, ".y") <- same[1]
+        fvnames(y, ".y") <- same[1L]
       z <- y[, c(xname, same)]
     }
     dotnames <- same
@@ -666,8 +666,8 @@ collapse.fv <- local({
     }
     if(length(same) == 0) {
       ## remove the second column which was retained earlier
-      fvnames(z, ".y") <- names(z)[3]
-      z <- z[, -2]
+      fvnames(z, ".y") <- names(z)[3L]
+      z <- z[, -2L]
     }
     fvnames(z, ".") <- dotnames
     return(z)
@@ -886,7 +886,7 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
   }
   if(length(j) == 0) {
     ## new column
-    df <- data.frame(1:nrow(x), value)[,-1,drop=FALSE]
+    df <- data.frame(1:nrow(x), value)[,-1L,drop=FALSE]
     colnames(df) <- name
     y <- bind.fv(x, df, desc=paste("Additional variable", sQuote(name)))
     return(y)
@@ -986,7 +986,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   results <- data.frame(results)
   ## check for alteration of column names
   oldnames <- resultnames
-  resultnames <- colnames(results)[-1]
+  resultnames <- colnames(results)[-1L]
   if(any(resultnames != oldnames))
     warning("some column names were illegal and have been changed")
   ## determine mapping (if any) from columns of output to columns of input
@@ -994,7 +994,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
   okmap <- !is.na(namemap)
   ## Build up fv object
   ## decide which of the columns should be the preferred value
-  newyname <- if(yname %in% resultnames) yname else resultnames[1]
+  newyname <- if(yname %in% resultnames) yname else resultnames[1L]
   ## construct default plot formula
   fmla <- flat.deparse(as.formula(paste(". ~", xname)))
   dotnames <- resultnames
@@ -1014,7 +1014,7 @@ with.fv <- function(data, expr, ..., fun=NULL, enclos=NULL) {
                 paste(used.dotnames, collapse=","),
                 ")", sep="")
     compresselang <- gsub(cb, ".", flat.deparse(expandelang), fixed=TRUE)
-    compresselang <- as.formula(paste(compresselang, "~1"))[[2]]
+    compresselang <- as.formula(paste(compresselang, "~1"))[[2L]]
     ## construct mapping using original function name
     labmap <- fvlabelmap(data, dot=TRUE)
     labmap[["."]] <- oldyexp
@@ -1066,11 +1066,11 @@ range.fv <- local({
 })
 
 min.fv <- function(..., na.rm=TRUE, finite=na.rm) {
-  range(..., na.rm=TRUE, finite=na.rm)[1]
+  range(..., na.rm=TRUE, finite=na.rm)[1L]
 }
 
 max.fv <- function(..., na.rm=TRUE, finite=na.rm) {
-  range(..., na.rm=TRUE, finite=na.rm)[2]
+  range(..., na.rm=TRUE, finite=na.rm)[2L]
 }
 
   
@@ -1139,17 +1139,17 @@ reconcile.fv <- local({
     z <- list(...)
     if(!all(unlist(lapply(z, is.fv)))) {
       if(length(z) == 1 &&
-         is.list(z[[1]]) &&
-         all(unlist(lapply(z[[1]], is.fv))))
-        z <- z[[1]]
+         is.list(z[[1L]]) &&
+         all(unlist(lapply(z[[1L]], is.fv))))
+        z <- z[[1L]]
       else    
         stop("all arguments should be fv objects")
     }
     n <- length(z)
     if(n <= 1) return(z)
     ## find columns that are common to all estimates
-    keepcolumns <- names(z[[1]])
-    keepvalues <- fvnames(z[[1]], "*")
+    keepcolumns <- names(z[[1L]])
+    keepvalues <- fvnames(z[[1L]], "*")
     for(i in 2:n) {
       keepcolumns <- intersect(keepcolumns, names(z[[i]]))
       keepvalues <- intersect(keepvalues, fvnames(z[[i]], "*"))
@@ -1164,7 +1164,7 @@ reconcile.fv <- local({
       chosen <- unique(prefskeep)[which.max(table(prefskeep))]
     } else {
       ## drat - pick a value arbitrarily
-      chosen <- keepvalues[1]
+      chosen <- keepvalues[1L]
     }
     z <- lapply(z, rebadge.fv, new.preferred=chosen)
     z <- lapply(z, "[.fv", j=keepcolumns)
@@ -1206,8 +1206,8 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
     ## make a single 'approxfun' and return it
     f <- approxfun(xx, yy, rule=endrule)
     ## magic
-    names(formals(f))[1] <- argname
-    body(f)[[4]] <- as.name(argname)
+    names(formals(f))[1L] <- argname
+    body(f)[[4L]] <- as.name(argname)
   } else {
     ## make a list of 'approxfuns' with different function values
     funs <- lapply(yy, approxfun, x = xx, rule = endrule)
@@ -1219,9 +1219,9 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
     ## recast function definition
     ## ('any sufficiently advanced technology is
     ##   indistinguishable from magic' -- Arthur C. Clarke)
-    formals(f)[[2]] <- value
-    names(formals(f))[1] <- argname
-    ##    body(f)[[3]][[2]] <- as.name(argname)
+    formals(f)[[2L]] <- value
+    names(formals(f))[1L] <- argname
+    ##    body(f)[[3L]][[2L]] <- as.name(argname)
     body(f) <- eval(substitute(substitute(z,
                                           list(xxxx=as.name(argname))),
                                list(z=body(f))))
@@ -1244,7 +1244,7 @@ findcbind <- function(root, depth=0, maxdepth=1000) {
   ## recursive search through a parse tree to find calls to 'cbind'
   if(depth > maxdepth) stop("Reached maximum depth")
   if(length(root) == 1) return(NULL)
-  if(identical(as.name(root[[1]]), as.name("cbind"))) return(list(numeric(0)))
+  if(identical(as.name(root[[1L]]), as.name("cbind"))) return(list(numeric(0)))
   out <- NULL
   for(i in 2:length(root)) {
     di <- findcbind(root[[i]], depth+1, maxdepth)
@@ -1266,7 +1266,7 @@ distributecbind <- local({
     ## return a vector of expressions, each obtained by replacing 'cbind(...)'
     ## by one of its arguments in turn.
     stopifnot(typeof(x) == "expression")
-    xlang <- x[[1]]
+    xlang <- x[[1L]]
     locations <- findcbind(xlang)
     if(length(locations) == 0)
       return(x)
@@ -1288,7 +1288,7 @@ distributecbind <- local({
             ## extract i-th argument
             argi <- cbindcall[[i+1]]
             ## if argument is an expression, enclose it in parentheses
-            if(length(argi) > 1 && paste(argi[[1]]) %in% .MathOpNames)
+            if(length(argi) > 1 && paste(argi[[1L]]) %in% .MathOpNames)
               argi <- substitute((x), list(x=argi))
             ## replace cbind call by its i-th argument
             fakexlang[[loc]] <- argi
@@ -1296,9 +1296,9 @@ distributecbind <- local({
             ## special case: 'loc' = integer(0) representing xlang itself
             cbindcall <- xlang
             ## extract i-th argument
-            argi <- cbindcall[[i+1]]
+            argi <- cbindcall[[i+1L]]
             ## replace cbind call by its i-th argument
-            fakexlang <- cbindcall[[i+1]]
+            fakexlang <- cbindcall[[i+1L]]
           }
         }
         ## add to final expression

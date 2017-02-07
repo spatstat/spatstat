@@ -3,7 +3,7 @@
 #'
 #'   Divide each segment of a linear network into several pieces
 #' 
-#'     $Revision: 1.3 $  $Date: 2015/11/25 04:29:55 $
+#'     $Revision: 1.4 $  $Date: 2017/02/07 08:12:05 $
 #'
 
 lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
@@ -62,8 +62,8 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
   
   z <- .C("Clixellate",
           ns=as.integer(ns),
-          fromcoarse=as.integer(from-1),
-          tocoarse = as.integer(to-1),
+          fromcoarse=as.integer(from-1L),
+          tocoarse = as.integer(to-1L),
           fromfine=as.integer(integer(sumN)),
           tofine = as.integer(integer(sumN)),
           nv = as.integer(nv),
@@ -73,7 +73,7 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
           tvcoarse = as.double(numeric(nv + sumN1)),
           nsplit = as.integer(nsplit),
           np = as.integer(np),
-          spcoarse = as.integer(sp[oo]-1),
+          spcoarse = as.integer(sp[oo]-1L),
           tpcoarse = as.double(tp[oo]),
           spfine = as.integer(integer(np)),
           tpfine = as.double(numeric(np)))
@@ -91,7 +91,7 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
     return(Lfine)
 
   ## put coordinates back in original order
-  sp[oo] <- as.integer(z$spfine + 1)
+  sp[oo] <- as.integer(z$spfine + 1L)
   tp[oo] <- z$tpfine
   coordsX$seg <- sp
   coordsX$tp <- tp

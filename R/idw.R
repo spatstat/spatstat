@@ -3,7 +3,7 @@
 #
 #  Inverse-distance weighted smoothing
 #
-#  $Revision: 1.7 $ $Date: 2016/03/03 02:04:56 $
+#  $Revision: 1.8 $ $Date: 2017/02/07 07:47:20 $
 
 idw <- function(X, power=2, at="pixels", ...) {
   stopifnot(is.ppp(X) && is.marked(X))
@@ -20,7 +20,7 @@ idw <- function(X, power=2, at="pixels", ...) {
              points = { out <- as.data.frame(out) })
       return(out)
     } else 
-      marx <- marx[,1]
+      marx <- marx[,1L]
   }
   if(!is.numeric(marx))
     stop("Marks must be numeric")
@@ -37,17 +37,17 @@ idw <- function(X, power=2, at="pixels", ...) {
                    y = as.double(X$y),
                    v = as.double(marx),
                    n = as.integer(npoints(X)),
-                   xstart = as.double(W$xcol[1]),
+                   xstart = as.double(W$xcol[1L]),
                    xstep  = as.double(W$xstep),
-                   nx     = as.integer(dim[2]),
-                   ystart = as.double(W$yrow[1]),
+                   nx     = as.integer(dim[2L]),
+                   ystart = as.double(W$yrow[1L]),
                    ystep  = as.double(W$ystep),
-                   ny     = as.integer(dim[1]),
+                   ny     = as.integer(dim[1L]),
                    power  = as.double(power),
                    num    = as.double(numeric(npixels)),
                    den    = as.double(numeric(npixels)),
                    rat    = as.double(numeric(npixels)))
-           out <- as.im(matrix(z$rat, dim[1], dim[2]), W=W)
+           out <- as.im(matrix(z$rat, dim[1L], dim[2L]), W=W)
            out <- out[W, drop=FALSE]
          },
          points={

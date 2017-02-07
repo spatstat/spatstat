@@ -141,7 +141,7 @@ multiplicity.data.frame <- function (x) {
   nu <- nrow(ux)
   nd <- nrow(dx)
   hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
-  counts <- as.integer(1 + .rowSums(hit, nu, nd))
+  counts <- as.integer(1L + .rowSums(hit, nu, nd))
   result[!dup] <- counts
   dumap <- apply(hit, 2, match, x=TRUE) # equivalent to min(which(z))
   result[dup] <- counts[dumap]
@@ -188,7 +188,7 @@ multiplicity.default <- function (x) {
   nu <- nrow(ux)
   nd <- nrow(dx)
   hit <- outer(seq_len(nu), seq_len(nd), IdenticalRows, a=ux, b=dx)
-  counts <- as.integer(1 + .rowSums(hit, nu, nd))
+  counts <- as.integer(1L + .rowSums(hit, nu, nd))
   dumap <- apply(hit, 2, match, x=TRUE) # was: function(z) min(which(z)))
   result[dup] <- counts[dumap]
   return(result)

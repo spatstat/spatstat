@@ -3,7 +3,7 @@
 #'
 #'  Two-dimensional smoothing kernels
 #'
-#'  $Revision: 1.11 $ $Date: 2016/11/13 01:54:57 $
+#'  $Revision: 1.12 $ $Date: 2017/02/07 07:50:52 $
 #'
 
 .Spatstat.2D.KernelTable <- list(
@@ -81,8 +81,8 @@ evaluate2Dkernel <- function(kernel, x, y, sigma=NULL, varcov=NULL, ...,
       SinvH <- matrixinvsqrt(varcov)
       rSinvH <- sdK * SinvH
       XY <- cbind(x, y) %*% rSinvH
-      x <- XY[,1]
-      y <- XY[,2]
+      x <- XY[,1L]
+      y <- XY[,2L]
       const <- det(rSinvH)
     }
   } 

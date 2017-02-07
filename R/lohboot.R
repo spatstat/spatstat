@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.13 $   $Date: 2014/10/08 10:25:26 $
+#  $Revision: 1.14 $   $Date: 2017/02/07 08:12:05 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -28,7 +28,7 @@ lohboot <-
   alpha <- 1 - confidence
   if(!global) {
     probs <- c(alpha/2, 1-alpha/2)
-    rank <- nsim * probs[2]
+    rank <- nsim * probs[2L]
   } else {
     probs <- 1-alpha
     rank <- nsim * probs
@@ -84,9 +84,9 @@ lohboot <-
   df <- data.frame(r=f$r,
                    theo=theo,
                    ymean,
-                   lo=hilo[1,],
-                   hi=hilo[2,])
-  colnames(df)[3] <- ctag
+                   lo=hilo[1L,],
+                   hi=hilo[2L,])
+  colnames(df)[3L] <- ctag
   CIlevel <- paste(100 * confidence, "%% confidence", sep="")
   desc <- c("distance argument r",
             "theoretical Poisson %s",

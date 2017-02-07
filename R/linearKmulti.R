@@ -1,7 +1,7 @@
 #
 # linearKmulti
 #
-# $Revision: 1.12 $ $Date: 2016/07/28 08:13:43 $
+# $Revision: 1.13 $ $Date: 2017/02/07 08:12:05 $
 #
 # K functions for multitype point pattern on linear network
 #
@@ -12,7 +12,7 @@ linearKdot <- function(X, i, r=NULL, ..., correction="Ang") {
 	stop("Point pattern must be multitype")
   marx <- marks(X)
   lev <- levels(marx)
-  if(missing(i)) i <- lev[1] else
+  if(missing(i)) i <- lev[1L] else
     if(!(i %in% lev)) stop(paste("i = ", i , "is not a valid mark"))  
   I <- (marx == i)
   J <- rep(TRUE, npoints(X))  # i.e. all points
@@ -29,9 +29,9 @@ linearKcross <- function(X, i, j, r=NULL, ..., correction="Ang") {
 	stop("Point pattern must be multitype")
   marx <- marks(X)
   lev <- levels(marx)
-  if(missing(i)) i <- lev[1] else
+  if(missing(i)) i <- lev[1L] else
     if(!(i %in% lev)) stop(paste("i = ", i , "is not a valid mark"))
-  if(missing(j)) j <- lev[2] else
+  if(missing(j)) j <- lev[2L] else
     if(!(j %in% lev)) stop(paste("j = ", j , "is not a valid mark"))
   #
   if(i == j) {
@@ -93,7 +93,7 @@ linearKdot.inhom <- function(X, i, lambdaI, lambdadot,
 	stop("Point pattern must be multitype")
   marx <- marks(X)
   lev <- levels(marx)
-  if(missing(i)) i <- lev[1] else
+  if(missing(i)) i <- lev[1L] else
     if(!(i %in% lev)) stop(paste("i = ", i , "is not a valid mark"))  
   I <- (marx == i)
   J <- rep(TRUE, npoints(X))  # i.e. all points
@@ -115,9 +115,9 @@ linearKcross.inhom <- function(X, i, j, lambdaI, lambdaJ,
 	stop("Point pattern must be multitype")
   marx <- marks(X)
   lev <- levels(marx)
-  if(missing(i)) i <- lev[1] else
+  if(missing(i)) i <- lev[1L] else
     if(!(i %in% lev)) stop(paste("i = ", i , "is not a valid mark"))
-  if(missing(j)) j <- lev[2] else
+  if(missing(j)) j <- lev[2L] else
     if(!(j %in% lev)) stop(paste("j = ", j , "is not a valid mark"))
   #
   if(i == j) {

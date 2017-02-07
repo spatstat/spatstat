@@ -3,7 +3,7 @@
 #' Adapted by Adrian Baddeley
 #' Copyright (C) 2016 Kassel Hingee and Adrian Baddeley
 
-# $Revision: 1.7 $  $Date: 2016/03/10 04:05:05 $
+# $Revision: 1.8 $  $Date: 2017/02/07 08:12:05 $
 
 laslett <- function(X, ...,
                     verbose=FALSE, plotit=TRUE,
@@ -65,15 +65,15 @@ maskLaslett <- local({
     Laz <- owin(mask=Laz, xrange=X$xrange, yrange=X$yrange, unitname=unitX)
     #' Largest sub-rectangle of transformed set
     width <- min(TotFalse) * X$xstep
-    Rect <- owin(X$xrange[1] + c(0, width), X$yrange, unitname=unitX)
+    Rect <- owin(X$xrange[1L] + c(0, width), X$yrange, unitname=unitX)
     #' Along each horizontal line (row),
     #' compute a running count of FALSE pixels.
     #' This is the mapping for the set transform
     #' (the value at any pixel gives the new column number
     #' for the transformed pixel)
-    CumulFalse <- t(apply(!M, 1, cumsum))
+    CumulFalse <- t(apply(!M, 1L, cumsum))
     #' discard one column for consistency with other matrices below
-    CumulFalse <- CumulFalse[,-1,drop=FALSE]
+    CumulFalse <- CumulFalse[,-1L,drop=FALSE]
 
     #' ....... Find lower tangent points .................
 
@@ -85,14 +85,14 @@ maskLaslett <- local({
     Change <- Exit | Enter
     #' form a running total of the number of pixels inside X
     #' to the **right** of the current pixel
-    FutureInside <- t(apply(M, 1, sumtoright))[,-1,drop=FALSE]
+    FutureInside <- t(apply(M, 1, sumtoright))[,-1L,drop=FALSE]
     #' find locations of changes 
     loc <- which(Change, arr.ind=TRUE)
     #' don't consider entries/exits in the bottom row
     ok <- (loc[,"row"] > 1) 
     loc <- loc[ok, , drop=FALSE]
     #' corresponding locations on horizontal line below current line
-    below <- cbind(loc[,"row"]-1, loc[,"col"])
+    below <- cbind(loc[,"row"]-1L, loc[,"col"])
     #' look up data at these locations
     df <- data.frame(row=loc[,"row"],
                      col=loc[,"col"],
@@ -222,8 +222,8 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   # expand frame slightly
   B <- Frame(X)
   B <- grow.rectangle(B, max(sidelengths(B))/8)
-  x0 <- B$xrange[1]
-  x1 <- B$xrange[2]
+  x0 <- B$xrange[1L]
+  x1 <- B$xrange[2L]
   # extract vertices
   v <- vertices(X)
   nv <- length(v$x)
@@ -261,8 +261,8 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
     Ty <- c(Ty, Ty[nT])
     Tx <- c(Tx, x0)
   }
-  if(Tx[1] > x0) {
-    Ty <- c(Ty[1], Ty)
+  if(Tx[1L] > x0) {
+    Ty <- c(Ty[1L], Ty)
     Tx <- c(x0,    Tx)
   }
   TX <- owin(B$xrange, B$yrange, poly=list(x=Tx, y=Ty), check=FALSE)
@@ -278,8 +278,8 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
     xx <- P$x
     yy <- P$y
     nn <- length(xx)
-#    xnext <- c(xx[-1], xx[1])
-    ynext <- c(yy[-1], yy[1])
+#    xnext <- c(xx[-1L], xx[1L])
+    ynext <- c(yy[-1L], yy[1L])
 #    xprev <- c(xx[nn], xx[-nn])
     yprev <- c(yy[nn], yy[-nn])
     is.candidate[cumnv + seq_len(nn)] <- 
@@ -324,7 +324,7 @@ polyLaslett <- function(X, ..., oldX=X, verbose=FALSE, plotit=TRUE) {
   xnew <- x0 + emptylenleft[is.tangent]
   TanNew <- ppp(xnew, ynew, window=TX, check=FALSE, unitname=unitX)
   #  maximal rectangle
-  Rect <- owin(c(X$xrange[1], minxright), X$yrange, unitname=unitX)
+  Rect <- owin(c(X$xrange[1L], minxright), X$yrange, unitname=unitX)
   #
   df <- data.frame(xold=TanOld$x, xnew=TanNew$x, y=TanNew$y)
   #

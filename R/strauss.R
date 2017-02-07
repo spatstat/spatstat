@@ -124,7 +124,7 @@ strausscounts <- function(U, X, r, EqualPairs=NULL) {
   # subtract counts of identical pairs
   if(length(EqualPairs) > 0) {
     nU <- npoints(U)
-    idcount <- as.integer(table(factor(EqualPairs[,2], levels=1:nU)))
+    idcount <- as.integer(table(factor(EqualPairs[,2L], levels=1:nU)))
     answer <- answer - idcount
   }
   return(answer)

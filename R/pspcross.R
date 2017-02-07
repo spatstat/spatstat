@@ -84,10 +84,10 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
     xx <- out[[5]]
     yy <- out[[6]]
     if(details) {
-      ia <- out[[1]] + 1L
-      jb <- out[[2]] + 1L
-      ta <- out[[3]]
-      tb <- out[[4]]
+      ia <- out[[1L]] + 1L
+      jb <- out[[2L]] + 1L
+      ta <- out[[3L]]
+      tb <- out[[4L]]
     }
   }
   result <- ppp(xx, yy, window=ABW, check=FALSE)
@@ -167,7 +167,7 @@ anycrossing.psp <- function(A,B) {
             dxb=as.double(dxb),
             dyb=as.double(dyb), 
             eps=as.double(eps),
-            ok=as.integer(integer(1)))
+            ok=as.integer(integer(1L)))
   hit <- (out$ok != 0)
   return(hit)
 }
@@ -216,8 +216,8 @@ selfcrossing.psp <- function(A) {
                  dy, 
     	         eps)
 #                 PACKAGE="spatstat")
-    xx <- out[[5]]
-    yy <- out[[6]]
+    xx <- out[[5L]]
+    yy <- out[[6L]]
   }
   result <- ppp(xx, yy, window=A$window, check=FALSE)
   return(result)

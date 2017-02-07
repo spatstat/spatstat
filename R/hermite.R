@@ -3,7 +3,7 @@
 ##
 ##  Gauss-Hermite quadrature
 ##
-##  $Revision: 1.4 $  $Date: 2014/04/13 08:24:52 $
+##  $Revision: 1.5 $  $Date: 2017/02/07 07:35:32 $
 ##
 
 HermiteCoefs <- function(order) {
@@ -11,7 +11,7 @@ HermiteCoefs <- function(order) {
   x <- 1
   if(order > 0) 
     for(n in 1:order)
-      x <- c(0, 2 * x) - c(((0:(n-1)) * x)[-1], 0, 0)
+      x <- c(0, 2 * x) - c(((0:(n-1)) * x)[-1L], 0, 0)
   return(x)
 }
 

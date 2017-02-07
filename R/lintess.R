@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.11 $   $Date: 2016/10/29 10:05:39 $
+#'   $Revision: 1.12 $   $Date: 2017/02/07 08:12:05 $
 #'
 
 lintess <- function(L, df) {
@@ -46,7 +46,7 @@ lintess <- function(L, df) {
     for(piece in pieces) {
       t0 <- piece$t0
       t1 <- piece$t1
-      thedata <- paste("Data for segment", piece$seg[[1]])
+      thedata <- paste("Data for segment", piece$seg[[1L]])
       if(!any(t0 == 0))
         stop(paste(thedata, "do not contain an entry with t0 = 0"),
              call.=FALSE)
@@ -180,7 +180,7 @@ divide.linnet <- local({
       njoin <- length(joined)
       if(njoin > 1)
         iedge <- c(iedge, joined[-njoin])
-      jedge <- c(jedge, joined[-1])
+      jedge <- c(jedge, joined[-1L])
     }
     nedge <- length(iedge)
     zz <- .C("cocoGraph",
@@ -189,7 +189,7 @@ divide.linnet <- local({
              ie = as.integer(iedge - 1L),
              je = as.integer(jedge - 1L),
              label = as.integer(integer(nbits)), 
-             status = as.integer(integer(1)))
+             status = as.integer(integer(1L)))
     if (zz$status != 0) 
       stop("Internal error: connectedness algorithm did not converge")
     lab <- zz$label + 1L
@@ -201,13 +201,13 @@ divide.linnet <- local({
 
   expanddata <- function(z) {
     df <- with(z,
-               data.frame(seg=c(seg[1], seg),
+               data.frame(seg=c(seg[1L], seg),
                           t0 = c(0, tp),
                           t1 = c(tp, 1),
                           from=NA_integer_,
                           to=NA_integer_))
-    df$from[1] <- z$from[1]
-    df$to[nrow(df)] <- z$to[1]
+    df$from[1L] <- z$from[1L]
+    df$to[nrow(df)] <- z$to[1L]
     return(df)
   }
 

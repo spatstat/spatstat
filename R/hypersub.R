@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.24 $    $Date: 2016/02/11 10:17:12 $
+##  $Revision: 1.25 $    $Date: 2017/02/07 07:35:32 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -39,8 +39,8 @@
       ## return a single object 
       y <- switch(as.character(x$vtype),
                   dfcolumn    = x$df[, , drop=TRUE],
-                  hypercolumn = (x$hypercolumns[[1]])[[1]],
-                  hyperatom   = x$hyperatoms[[1]])
+                  hypercolumn = (x$hypercolumns[[1L]])[[1L]],
+                  hyperatom   = x$hyperatoms[[1L]])
       return(y)
     } else if(nrows == 1) {
       ## return the row as a vector or a list
@@ -54,7 +54,7 @@
         y[[i]] <- switch(as.character(x$vtype[i]),
                          dfcolumn = x$df[ , nami, drop=TRUE],
                          hyperatom = x$hyperatoms[[nami]],
-                         hypercolumn = (x$hypercolumns[[nami]])[[1]]
+                         hypercolumn = (x$hypercolumns[[nami]])[[1L]]
                          )
       }
       return(as.solist(y, demote=TRUE))
@@ -65,13 +65,13 @@
                return(x$df[, , drop=TRUE])
              },
              hypercolumn = {
-               y <- as.solist(x$hypercolumns[[1]], demote=TRUE)
+               y <- as.solist(x$hypercolumns[[1L]], demote=TRUE)
                names(y) <- row.names(x$df)
                return(y)
              },
              hyperatom = {
                ## replicate it to make a hypercolumn
-               ha <- x$hyperatoms[1]
+               ha <- x$hyperatoms[1L]
                names(ha) <- NULL
                hc <- rep.int(ha, x$ncases)
                hc <- as.solist(hc, demote=TRUE)
@@ -119,8 +119,8 @@ function (x, i, j, value)
   dimx <- sumry$dim
   igiven <- !missing(i)
   jgiven <- !missing(j)
-  if(!igiven) i <- seq_len(dimx[1])
-  if(!jgiven) j <- seq_len(dimx[2])
+  if(!igiven) i <- seq_len(dimx[1L])
+  if(!jgiven) j <- seq_len(dimx[2L])
 #  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
 #                   || (is.character(i) && length(i) == 1)
 #                   || (is.logical(i) && sum(i) == 1))
@@ -144,8 +144,8 @@ function (x, i, j, value)
   } else {
     ## x[, ] <- value or x[i, ] <- value or x[i,j] <- value 
     ## convert indices to positive integers
-    rowseq <- seq_len(dimx[1])
-    colseq <- seq_len(dimx[2])
+    rowseq <- seq_len(dimx[1L])
+    colseq <- seq_len(dimx[2L])
     names(rowseq) <- row.names(x)
     names(colseq) <- colnam
     I <- rowseq[i]
@@ -155,8 +155,8 @@ function (x, i, j, value)
     hv <- if(is.hyperframe(value)) value else
           as.hyperframe(as.solist(value, demote=TRUE))
     vlist <- as.list(hv)
-    nrowV <- dim(hv)[1]
-    ncolV <- dim(hv)[2]
+    nrowV <- dim(hv)[1L]
+    ncolV <- dim(hv)[2L]
     if(nrowV != length(I)) {
       if(nrowV == 1) {
         ## replicate
@@ -205,7 +205,7 @@ split.hyperframe <- local({
   n <- length(value)
   j <- 0
   for (i in ix) {
-    j <- j%%n + 1
+    j <- j%%n + 1L
     x[i, ] <- value[[j]]
   }
   x

@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.60 $    $Date: 2016/12/21 08:56:23 $
+#    $Revision: 1.61 $    $Date: 2017/02/07 08:12:05 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -54,23 +54,23 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
     sparse <- !is.matrix(m)
     ## determine 'from' and 'to' vectors
     ij <- which(m, arr.ind=TRUE)
-    ij <- ij[ ij[,1] < ij[,2], , drop=FALSE]
-    from <- ij[,1]
-    to   <- ij[,2]
+    ij <- ij[ ij[,1L] < ij[,2L], , drop=FALSE]
+    from <- ij[,1L]
+    to   <- ij[,2L]
   } else {
     # check (from, to) pairs
     stopifnot(is.matrix(edges) && ncol(edges) == 2)
     if(any((edges %% 1) != 0))
       stop("Entries of edges list should be integers")
-    if(any(self <- (edges[,1] == edges[,2]))) {
+    if(any(self <- (edges[,1L] == edges[,2L]))) {
       warning("edge list should not join a vertex to itself; ignored")
       edges <- edges[!self, , drop=FALSE]
     }
     np <- npoints(vertices)
     if(any(edges > np))
       stop("index out-of-bounds in edges list")
-    from <- edges[,1]
-    to   <- edges[,2]
+    from <- edges[,1L]
+    to   <- edges[,2L]
     # convert to adjacency matrix
     if(!sparse) {
       m <- matrix(FALSE, np, np)
@@ -243,8 +243,8 @@ as.linnet.linnet <- function(X, ..., sparse) {
     # convert adjacency to matrix
     X$m <- m <- as.matrix(X$m)
     edges <- which(m, arr.ind=TRUE)
-    from <- edges[,1]
-    to   <- edges[,2]
+    from <- edges[,1L]
+    to   <- edges[,2L]
     # compute distances to one-step neighbours
     n <- nrow(m)
     d <- matrix(Inf, n, n)
@@ -553,7 +553,7 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
            ie = as.integer(ie),
            je = as.integer(je),
            label = as.integer(integer(nv)), 
-           status = as.integer(integer(1)))
+           status = as.integer(integer(1L)))
   if (zz$status != 0) 
     stop("Internal error: connected.linnet did not converge")
   lab <- zz$label + 1L

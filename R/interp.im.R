@@ -1,14 +1,14 @@
 #
 # interp.im.R
 #
-#  $Revision: 1.3 $  $Date: 2014/10/24 00:22:30 $
+#  $Revision: 1.4 $  $Date: 2017/02/07 07:47:20 $
 #
 
 interp.im <- local({
 
   lukimyu <- function(ccc, rrr, mat, defaults) {
     dimm <- dim(mat)
-    within <- (rrr >= 1 & rrr <= dimm[1] & ccc >= 1 & ccc <= dimm[2])
+    within <- (rrr >= 1 & rrr <= dimm[1L] & ccc >= 1 & ccc <= dimm[2L])
     result <- defaults
     result[within] <- mat[cbind(rrr[within], ccc[within])]
     result
@@ -27,14 +27,14 @@ interp.im <- local({
     ## Transform to grid coordinates
     ## so that pixel centres are at integer points,
     ## bottom left of image is (0,0)
-    xx <- (x[ok] - Z$xcol[1])/Z$xstep
-    yy <- (y[ok] - Z$yrow[1])/Z$ystep
+    xx <- (x[ok] - Z$xcol[1L])/Z$xstep
+    yy <- (y[ok] - Z$yrow[1L])/Z$ystep
     ## find grid point to left and below
     ## (may transgress boundary)
     xlower <- floor(xx)
     ylower <- floor(yy)
-    cc <- as.integer(xlower) + 1
-    rr <- as.integer(ylower) + 1
+    cc <- as.integer(xlower) + 1L
+    rr <- as.integer(ylower) + 1L
     ## determine whether (x,y) is above or below antidiagonal in square
     dx <- xx - xlower
     dy <- yy - ylower

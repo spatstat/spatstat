@@ -37,7 +37,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
   dup <- self <- is.box <- logical(npoly)
   
   for(i in 1:npoly) {
-    if(blowbyblow && npoly > 1)
+    if(blowbyblow && npoly > 1L)
       pstate <- progressreport(i, npoly, state=pstate)
     Bi <- B[[i]]
     # check for duplicated vertices
@@ -58,7 +58,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
   
   if((ndup <- sum(dup)) > 0) {
     whinge <- paste(ngettext(ndup, "Polygon", "Polygons"),
-                    if(npoly == 1) NULL else
+                    if(npoly == 1L) NULL else
                     commasep(which(dup)), 
                     ngettext(ndup, "contains", "contain"),
                     "duplicated vertices")
@@ -71,7 +71,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
   
   if((nself <- sum(self)) > 0) {
     whinge <-  paste(ngettext(nself, "Polygon", "Polygons"),
-                     if(npoly == 1) NULL else
+                     if(npoly == 1L) NULL else
                      commasep(which(self)),
                      ngettext(nself, "is", "are"),
                      "self-intersecting")
@@ -82,7 +82,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
     answer <- FALSE
   }
   
-  if(sum(is.box) > 1) {
+  if(sum(is.box) > 1L) {
     answer <- FALSE
     whinge <- paste("Polygons",
                     commasep(which(is.box)),
@@ -93,18 +93,18 @@ owinpolycheck <- function(W, verbose=TRUE) {
   
   # check for crossings between different polygons
   cross <- matrix(FALSE, npoly, npoly)
-  if(npoly > 1) {
+  if(npoly > 1L) {
     if(blowbyblow) {
       cat(paste("Checking for cross-intersection between",
                 npoly, "polygons..."))
       pstate <- list()
     }
     P <- lapply(B, xypolygon2psp, w=outerframe, check=FALSE)
-    for(i in seq_len(npoly-1)) {
+    for(i in seq_len(npoly-1L)) {
       if(blowbyblow)
-        pstate <- progressreport(i, npoly-1, state=pstate)
+        pstate <- progressreport(i, npoly-1L, state=pstate)
       Pi <- P[[i]]
-      for(j in (i+1):npoly) {
+      for(j in (i+1L):npoly) {
         crosses <- if(is.box[i] || is.box[j]) FALSE else {
           anycrossing.psp(Pi, P[[j]])
         }
@@ -140,8 +140,8 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
     cat(paste("[Checking polygon with", n, "edges..."))
   x0 <- p$x
   y0 <- p$y
-  dx <- diff(x0[c(1:n,1)])
-  dy <- diff(y0[c(1:n,1)])
+  dx <- diff(x0[c(1:n,1L)])
+  dy <- diff(y0[c(1:n,1L)])
   if(yesorno) {
     # get a yes-or-no answer
     answer <- .C("xypsi",
@@ -154,7 +154,7 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
                  ysep=as.double(2 * max(abs(dy))),
                  eps=as.double(eps),
                  proper=as.integer(proper),
-                 answer=as.integer(integer(1)))$answer
+                 answer=as.integer(integer(1L)))$answer
     if(verbose)
       cat("]\n")
     return(answer != 0)

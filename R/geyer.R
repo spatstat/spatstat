@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.36 $	$Date: 2016/08/15 02:44:04 $
+#    $Revision: 2.37 $	$Date: 2017/02/07 07:35:32 $
 #
 #    Geyer's saturation process
 #
@@ -74,14 +74,14 @@ Geyer <- local({
          },
          #' end of function 'plot'
          interpret =  function(coeffs, self) {
-           loggamma <- as.numeric(coeffs[1])
+           loggamma <- as.numeric(coeffs[1L])
            gamma <- exp(loggamma)
            return(list(param=list(gamma=gamma),
                        inames="interaction parameter gamma",
                        printable=dround(gamma)))
          },
          valid = function(coeffs, self) {
-           loggamma <- as.numeric(coeffs[1])
+           loggamma <- as.numeric(coeffs[1L])
            sat <- self$par$sat
            return(is.finite(loggamma) && (is.finite(sat) || loggamma <= 0))
          },
@@ -91,7 +91,7 @@ Geyer <- local({
          irange = function(self, coeffs=NA, epsilon=0, ...) {
            r <- self$par$r
            if(any(!is.na(coeffs))) {
-             loggamma <- coeffs[1]
+             loggamma <- coeffs[1L]
              if(!is.na(loggamma) && (abs(loggamma) <= epsilon))
                return(0)
            }
@@ -119,7 +119,7 @@ Geyer <- local({
            # no data points currently included 
            missingdata <- rep.int(TRUE, nX)
          } else {
-           Xused <- EqualPairs[,1]
+           Xused <- EqualPairs[,1L]
            missingdata <- !(Xseq %in% Xused)
          }
          somemissing <- any(missingdata)
@@ -146,8 +146,8 @@ Geyer <- local({
            answer <- 2 * satcounts
          } else {
            # extract counts for data points
-           Uindex <- EqualPairs[,2]
-           Xindex <- EqualPairs[,1]
+           Uindex <- EqualPairs[,2L]
+           Xindex <- EqualPairs[,1L]
            Xcounts <- integer(npoints(X))
            Xcounts[Xindex] <- counts[Uindex]
            # evaluate change in saturated counts of other data points
@@ -204,12 +204,12 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
   rankU <- integer(nU)
   rankU[oU] <- seq_len(nU)
   # map from quadrature points to data points
-  Uindex <- EqualPairs[,2]
-  Xindex <- EqualPairs[,1]
+  Uindex <- EqualPairs[,2L]
+  Xindex <- EqualPairs[,1L]
   Xsortindex <- rankX[Xindex]
   Usortindex <- rankU[Uindex]
-  Cmap <- rep.int(-1, nU)
-  Cmap[Usortindex] <- Xsortindex - 1
+  Cmap <- rep.int(-1L, nU)
+  Cmap[Usortindex] <- Xsortindex - 1L
   # call C routine
   zz <- .C("Egeyer",
            nnquad = as.integer(nU),
@@ -317,8 +317,8 @@ geyerdelta2 <- local({
     tJ <- tvals[J]
     tIJ <- tI - zJ
     tJI <- tJ - zI
-    result[IJ] <-  pmin(sat, tIJ + 1) - pmin(sat, tIJ) +
-                   pmin(sat, tJI + 1) - pmin(sat, tJI) 
+    result[IJ] <-  pmin(sat, tIJ + 1L) - pmin(sat, tIJ) +
+                   pmin(sat, tJI + 1L) - pmin(sat, tJI) 
     # Compute indirect part
     # (arising when U[i]~X[k] and U[j]~X[k] for another point X[k])
     # First find all such triples

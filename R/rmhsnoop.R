@@ -42,7 +42,7 @@ rmhSnoopEnv <- function(Xinit, Wclip, R) {
   assign("xcoords",  coords(X)[,1],   envir=e)
   assign("ycoords",  coords(X)[,2],   envir=e)
   if(is.multitype(X)) {
-    mcodes <- as.integer(marks(X)) - 1
+    mcodes <- as.integer(marks(X)) - 1L
     mlevels <- levels(marks(X))
     assign("mcodes",  mcodes,  envir=e)
     assign("mlevels", mlevels, envir=e)

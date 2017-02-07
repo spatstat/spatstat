@@ -1,7 +1,7 @@
 #
 #	fasp.R
 #
-#	$Revision: 1.34 $	$Date: 2016/02/11 10:17:12 $
+#	$Revision: 1.35 $	$Date: 2017/02/07 07:22:47 $
 #
 #
 #-----------------------------------------------------------------------------
@@ -31,7 +31,7 @@ fasp <- function(fns, which, formulae=NULL,
     # verify format and convert to character vector
     formulae <- FormatFaspFormulae(formulae, "formulae")
     # ensure length matches length of "fns"
-    if(length(formulae) == 1 && n > 1)
+    if(length(formulae) == 1L && n > 1L)
         # single formula - replicate it
         formulae <- rep.int(formulae, n)
     else 
@@ -68,8 +68,8 @@ fasp <- function(fns, which, formulae=NULL,
         included[w] <- TRUE
 
         # if only one cell selected, and drop=TRUE:
-        if((sum(included) == 1) && drop)
-          return(x$fns[included][[1]])
+        if((sum(included) == 1L) && drop)
+          return(x$fns[included][[1L]])
         
         # determine positions in shortened lists
         whichIJ <- x$which[I,J,drop=FALSE]
@@ -99,7 +99,7 @@ print.fasp <- function(x, ...) {
   verifyclass(x, "fasp")
   cat(paste("Function array (class", sQuote("fasp"), ")\n"))
   dim <- dim(x$which)
-  cat(paste("Dimensions: ", dim[1], "x", dim[2], "\n"))
+  cat(paste("Dimensions: ", dim[1L], "x", dim[2L], "\n"))
   cat(paste("Title:", if(is.null(x$title)) "(None)" else x$title, "\n"))
   invisible(NULL)
 }
@@ -124,7 +124,7 @@ pool.fasp <- local({
   pool.fasp <- function(...) {
     Alist <- list(...)
     Yname <- short.deparse(sys.call())
-    if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1, 40), "[..]")
+    if(nchar(Yname) > 60) Yname <- paste(substr(Yname, 1L, 40L), "[..]")
     nA <-  length(Alist)
     if(nA == 0) return(NULL)
     ## validate....
@@ -150,18 +150,18 @@ pool.fasp <- local({
       stop(why)
     }
   
-    if(nA == 1) return(Alist[[1]])
+    if(nA == 1L) return(Alist[[1L]])
   
     ## All arguments must have the same dimensions
     witches <- lapply(Alist, getElement, name="which")
-    witch1 <- witches[[1]]
+    witch1 <- witches[[1L]]
     same <- unlist(lapply(witches, identical, y=witch1))
     if(!all(same))
       stop("Function arrays do not have the same array dimensions")
   
     ## OK.
     ## Pool envelopes at each position
-    result <- Alist[[1]]
+    result <- Alist[[1L]]
     fns <- result$fns
     for(k in seq_along(fns)) {
       funks <- lapply(Alist, extractfun, k=k)

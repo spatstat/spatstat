@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.24 $	$Date: 2015/05/14 10:57:14 $
+#	$Revision: 1.25 $	$Date: 2017/02/07 07:22:47 $
 #
 #	Estimates of F, G and K for three-dimensional point patterns
 #
@@ -290,9 +290,9 @@ k3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
   res <- .C("RcallK3",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
-            as.double(box[1]), as.double(box[2]), 
-            as.double(box[3]), as.double(box[4]), 
-            as.double(box[5]), as.double(box[6]), 
+            as.double(box[1L]), as.double(box[2L]), 
+            as.double(box[3L]), as.double(box[4L]), 
+            as.double(box[5L]), as.double(box[6L]), 
             as.double(0), as.double(rmax), 
             as.integer(nrval),
             f = as.double(numeric(nrval)),
@@ -313,9 +313,9 @@ g3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 	res <- .C("RcallG3",
 		as.double(x), as.double(y), as.double(z), 
 		as.integer(length(x)),
-		as.double(box[1]), as.double(box[2]), 
-		as.double(box[3]), as.double(box[4]), 
-		as.double(box[5]), as.double(box[6]), 
+		as.double(box[1L]), as.double(box[2L]), 
+		as.double(box[3L]), as.double(box[4L]), 
+		as.double(box[5L]), as.double(box[6L]), 
 		as.double(0), as.double(rmax), 
 		as.integer(nrval),
 		f = as.double(numeric(nrval)),
@@ -337,16 +337,16 @@ f3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 	res <- .C("RcallF3",
 		as.double(x), as.double(y), as.double(z), 
 		as.integer(length(x)),
-		as.double(box[1]), as.double(box[2]), 
-		as.double(box[3]), as.double(box[4]), 
-		as.double(box[5]), as.double(box[6]), 
+		as.double(box[1L]), as.double(box[2L]), 
+		as.double(box[3L]), as.double(box[4L]), 
+		as.double(box[5L]), as.double(box[6L]), 
 		as.double(vside), 
-		as.double(range[1]), as.double(range[2]),
+		as.double(range[1L]), as.double(range[2L]),
 		m=as.integer(nval),
 		num = as.integer(integer(nval)),
 		denom = as.integer(integer(nval)),
 		as.integer(code))
-	r <- seq(from=range[1], to=range[2], length.out=nval)
+	r <- seq(from=range[1L], to=range[2L], length.out=nval)
 	f <- with(res, ifelseXB(denom > 0, num/denom, 1))
 
 	return(list(r = r, f = f, num=res$num, denom=res$denom, 
@@ -360,9 +360,9 @@ f3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
   res <- .C("RcallF3cen",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
-            as.double(box[1]), as.double(box[2]), 
-            as.double(box[3]), as.double(box[4]), 
-            as.double(box[5]), as.double(box[6]), 
+            as.double(box[1L]), as.double(box[2L]), 
+            as.double(box[3L]), as.double(box[4L]), 
+            as.double(box[5L]), as.double(box[6L]), 
             as.double(vside), 
             as.double(0), as.double(rmax),
             m=as.integer(nrval),
@@ -370,8 +370,8 @@ f3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
             nco = as.integer(integer(nrval)),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
-            upperobs = as.integer(integer(1)),
-            uppercen = as.integer(integer(1)))
+            upperobs = as.integer(integer(1L)),
+            uppercen = as.integer(integer(1L)))
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -399,17 +399,17 @@ g3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
   res <- .C("RcallG3cen",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
-            as.double(box[1]), as.double(box[2]), 
-            as.double(box[3]), as.double(box[4]), 
-            as.double(box[5]), as.double(box[6]), 
+            as.double(box[1L]), as.double(box[2L]), 
+            as.double(box[3L]), as.double(box[4L]), 
+            as.double(box[5L]), as.double(box[6L]), 
             as.double(0), as.double(rmax),
             m=as.integer(nrval),
             obs = as.integer(integer(nrval)),
             nco = as.integer(integer(nrval)),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
-            upperobs = as.integer(integer(1)),
-            uppercen = as.integer(integer(1)))
+            upperobs = as.integer(integer(1L)),
+            uppercen = as.integer(integer(1L)))
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -437,9 +437,9 @@ pcf3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
   res <- .C("Rcallpcf3",
             as.double(x), as.double(y), as.double(z), 
             as.integer(length(x)),
-            as.double(box[1]), as.double(box[2]), 
-            as.double(box[3]), as.double(box[4]), 
-            as.double(box[5]), as.double(box[6]), 
+            as.double(box[1L]), as.double(box[2L]), 
+            as.double(box[3L]), as.double(box[4L]), 
+            as.double(box[5L]), as.double(box[6L]), 
             as.double(0), as.double(rmax), 
             as.integer(nrval),
             f = as.double(numeric(nrval)),
@@ -458,7 +458,7 @@ pcf3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 
 sphere.volume <- function(range=c(0,1.414), nval=10) 
 {
-  rr <- seq(from=range[1], to=range[2], length.out=nval)
+  rr <- seq(from=range[1L], to=range[2L], length.out=nval)
   return( (4/3) * pi * rr^3)
 }
 
@@ -470,16 +470,16 @@ digital.volume <- function(range=c(0, 1.414),  nval=25, vside= 0.05)
 #
 #	This takes EIGHT TIMES AS LONG as the corresponding empirical F-hat !!!
 #
-	w <- 2 * range[2] + 2 * vside
+	w <- 2 * range[2L] + 2 * vside
 #
 	dvol <- .C("RcallF3",
                    as.double(w/2), as.double(w/2), as.double(w/2),
-                   as.integer(1),
+                   as.integer(1L),
                    as.double(0), as.double(w), 
                    as.double(0), as.double(w), 
                    as.double(0), as.double(w), 
                    as.double(vside),
-                   as.double(range[1]), as.double(range[2]),
+                   as.double(range[1L]), as.double(range[2L]),
                    as.integer(nval),
                    num = as.integer(integer(nval)),
                    denom = as.integer(integer(nval)),

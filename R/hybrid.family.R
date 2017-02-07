@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.11 $	$Date: 2016/03/11 07:53:25 $
+#    $Revision: 1.12 $	$Date: 2017/02/07 07:35:32 $
 #
 #    Hybrid interactions
 #
@@ -91,14 +91,14 @@ hybrid.family <-
            return(invisible(results))
          }
          # multiply together to obtain resultant pairwise interaction
-         ans <- results[[1]]
+         ans <- results[[1L]]
          if(ninter >= 2) {
            for(i in 2:ninter) {
              Fi <- results[[i]]
              ans <- eval.fv(ans * Fi)
            }
            copyover <- c("ylab", "yexp", "labl", "desc", "fname")
-           attributes(ans)[copyover] <- attributes(results[[1]])[copyover]
+           attributes(ans)[copyover] <- attributes(results[[1L]])[copyover]
          }
          main0 <- "Resultant pairwise interaction"
          if(plotit)
@@ -122,7 +122,7 @@ hybrid.family <-
              if(ncol(VI) > 1 && is.null(colnames(VI))) # make up names
                colnames(VI) <- paste("Interaction", seq(ncol(VI)), sep=".")
              # prefix label with name of i-th component 
-             colnames(VI) <- paste(nameI, dimnames(VI)[[2]], sep=".")
+             colnames(VI) <- paste(nameI, dimnames(VI)[[2L]], sep=".")
              # handle IsOffset
              offI <- attr(VI, "IsOffset")
              if(is.null(offI))

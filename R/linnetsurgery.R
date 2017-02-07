@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.9 $  $Date: 2016/04/25 02:34:40 $
+#' $Revision: 1.10 $  $Date: 2017/02/07 08:12:05 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -82,7 +82,7 @@ insertVertices <- function(L, ...) {
       ttt <- c(0, tt, 1)
       m <- findInterval(tx, ttt, rightmost.closed=TRUE, all.inside=TRUE)
       t0 <- ttt[m]
-      t1 <- ttt[m+1]
+      t1 <- ttt[m+1L]
       tpXnew <- (tx - t0)/(t1-t0)
       tpXnew <- pmin(1, pmax(0, tpXnew))
       n0 <- nunsplit + length(fromadd) - nnewseg

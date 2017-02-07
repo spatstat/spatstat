@@ -3,7 +3,7 @@
 ##
 ## Farthest distance to boundary
 ##
-##  $Revision: 1.9 $ $Date: 2016/07/10 03:09:45 $
+##  $Revision: 1.10 $ $Date: 2017/02/07 07:22:47 $
 
 fardist <- function(X, ...) {
   UseMethod("fardist")
@@ -13,10 +13,10 @@ fardist.owin <- function(X, ..., squared=FALSE) {
   verifyclass(X, "owin")
   M <- as.mask(X, ...)
   V <- if(is.mask(X)) vertices(M) else vertices(X)
-  nx <- dim(M)[2]
-  ny <- dim(M)[1]
-  x0 <- M$xcol[1]
-  y0 <- M$yrow[1]
+  nx <- dim(M)[2L]
+  ny <- dim(M)[1L]
+  x0 <- M$xcol[1L]
+  y0 <- M$yrow[1L]
   xstep <- M$xstep
   ystep <- M$ystep
   if(squared) {
@@ -55,7 +55,7 @@ fardist.ppp <- function(X, ..., squared=FALSE) {
   verifyclass(X, "ppp")
   V <- vertices(Window(X))
   D2 <- crossdist(X$x, X$y, V$x, V$y, squared=TRUE) 
-  D2max <- apply(D2, 1, max)
+  D2max <- apply(D2, 1L, max)
   if(squared) return(D2max) else return(sqrt(D2max))
 }
 

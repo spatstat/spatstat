@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.37 $  $Date: 2016/06/29 03:20:37 $
+#  $Revision: 1.38 $  $Date: 2017/02/07 08:12:05 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -213,7 +213,7 @@ plotEachLayer <- function(x, ..., main,
     x[!isnul] <- lapply(x[!isnul], "[", i=j)
   }
   if(drop && nx == 1)
-    return(x[[1]])
+    return(x[[1L]])
   y <- layered(LayerList=x, plotargs=p)
   return(y)
 }
@@ -285,7 +285,7 @@ shift.layered <- function(X, vec=c(0,0), ...) {
     if(!missing(vec)) 
       warning("Argument vec ignored; overridden by other arguments")
     ## ensure the same shift is applied to all layers
-    s <- shift(X[[1]], ...)
+    s <- shift(X[[1L]], ...)
     vec <- getlastshift(s)
   }
   Y <- applytolayers(X, shift, vec=vec)
@@ -344,9 +344,9 @@ as.owin.layered <- local({
     Wlist <- lapply(unname(W), as.owin, ..., fatal=fatal)
     Wlist <- lapply(Wlist, rescue.rectangle)
     Wlist <- lapply(Wlist, puffbox)
-    Z <- Wlist[[1]]
+    Z <- Wlist[[1L]]
     if(length(Wlist) > 1) {
-      same <- unlist(lapply(Wlist[-1], identical, y=Z))
+      same <- unlist(lapply(Wlist[-1L], identical, y=Z))
       if(!all(same))
         Z <- do.call(union.owin, Wlist)
     }
@@ -357,8 +357,8 @@ as.owin.layered <- local({
     ## union.owin will delete boxes that have width zero or height zero
     ## so 'puff' them out slightly
     ss <- sidelengths(Frame(W))
-    if(ss[1] == 0) W$xrange <- W$xrange + 1e-6 * c(-1,1) * ss[2]
-    if(ss[2] == 0) W$yrange <- W$yrange + 1e-6 * c(-1,1) * ss[1]
+    if(ss[1L] == 0) W$xrange <- W$xrange + 1e-6 * c(-1,1) * ss[2L]
+    if(ss[2L] == 0) W$yrange <- W$yrange + 1e-6 * c(-1,1) * ss[1L]
     return(W)
   }
   
@@ -381,7 +381,7 @@ as.layered.ppp <- function(X) {
   if(!is.marked(X)) return(layered(X))
   if(is.multitype(X)) return(layered(LayerList=split(X)))
   mX <- marks(X)
-  if(!is.null(d <- dim(mX)) && d[2] > 1) {
+  if(!is.null(d <- dim(mX)) && d[2L] > 1) {
     mx <- as.data.frame(marks(X))
     Y <- lapply(mx, setmarks, x=X)
     return(layered(LayerList=Y))

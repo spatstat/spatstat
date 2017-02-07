@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.63 $  $Date: 2016/04/02 05:08:51 $
+# $Revision: 1.64 $  $Date: 2017/02/07 07:35:32 $
 #
 
 hyperframe <- local({
@@ -69,7 +69,7 @@ hyperframe <- local({
       }
       if(any(stubs <- hypercolumns & (heights != ncases))) {
         ## hypercolumns of height 1 should be hyperatoms
-        aarg[stubs] <- lapply(aarg[stubs], "[[", i=1)
+        aarg[stubs] <- lapply(aarg[stubs], "[[", i=1L)
         hypercolumns[stubs] <- FALSE
         hyperatoms[stubs] <- TRUE
       }
@@ -132,9 +132,9 @@ hyperframe <- local({
     return(length(unique(cla)) == 1)
   }
 
-  class1 <- function(x) { class(x)[1] }
+  class1 <- function(x) { class(x)[1L] }
 
-  class1of1 <- function(x) { class(x[[1]])[1] }
+  class1of1 <- function(x) { class(x[[1L]])[1L] }
   
   hyperframe
 })
@@ -422,7 +422,7 @@ rbind.hyperframe <- function(...) {
   #
   nargh <- length(argh)
   if(nargh == 1)
-    return(argh[[1]])
+    return(argh[[1L]])
   # check for compatibility of dimensions & names
   dfs <- lapply(argh, as.data.frame, discard=FALSE)
   dfall <- do.call(rbind, dfs)
@@ -443,7 +443,7 @@ rbind.hyperframe <- function(...) {
       hdata <- lapply(argh, "[", j=nama, drop=FALSE)
       hdata <- lapply(lapply(hdata, as.list), getElement, name=nama)
       # append them
-      hh <- hdata[[1]]
+      hh <- hdata[[1L]]
       for(j in 2:nargh) {
         hh <- append(hh, hdata[[j]])
       }
@@ -520,7 +520,7 @@ plot.hyperframe <-
     # Increment existing panel numbers
     # New panel 1 is the banner
     panels <- (mat > 0)
-    mat[panels] <- mat[panels] + 1
+    mat[panels] <- mat[panels] + 1L
     mat <- rbind(rep.int(1,ncols), mat)
     heights <- c(0.1 * (1 + nlines), heights)
   }
@@ -550,12 +550,12 @@ str.hyperframe <- function(object, ...) {
   x <- unclass(object)
   argh <- resolve.defaults(list(...), list(nest.lev=0, indent.str="  .."))
   cat(paste("'hyperframe':\t",
-            d[1], ngettext(d[1], "row", "rows"),
+            d[1L], ngettext(d[1L], "row", "rows"),
             "and",
-            d[2], ngettext(d[2], "column", "columns"),
+            d[2L], ngettext(d[2L], "column", "columns"),
             "\n"))
-  nr <- d[1]
-  nc <- d[2]
+  nr <- d[1L]
+  nc <- d[2L]
   if(nc > 0) {
     vname <- x$vname
     vclass <- x$vclass

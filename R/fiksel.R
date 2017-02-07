@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.12 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.13 $	$Date: 2017/02/07 07:22:47 $
 #
 #    Fiksel interaction 
 #    
@@ -20,7 +20,7 @@ Fiksel <- local({
     nU <- npoints(U)
     # subtract contrinbutions from identical pairs (exp(-0) = 1 for each)
     if(length(EqualPairs) > 0) {
-      idcount <- as.integer(table(factor(EqualPairs[,2], levels=1:nU)))
+      idcount <- as.integer(table(factor(EqualPairs[,2L], levels=1:nU)))
       answer <- answer - idcount
     }
     return(answer)
@@ -106,7 +106,7 @@ Fiksel <- local({
          update = NULL,       # default OK
          print = NULL,         # default OK
          interpret =  function(coeffs, self) {
-           a <- as.numeric(coeffs[1])
+           a <- as.numeric(coeffs[1L])
            return(list(param=list(a=a),
                        inames="interaction strength a",
                        printable=signif(a)))
@@ -126,7 +126,7 @@ Fiksel <- local({
            hc <- self$par$hc
            if(anyNA(coeffs))
              return(r)
-           a <- coeffs[1]
+           a <- coeffs[1L]
            if(abs(a) <= epsilon)
              return(hc)
            else
@@ -153,7 +153,7 @@ Fiksel <- local({
        },
        Mayer=function(coeffs, self) {
          # second Mayer cluster integral
-         a <- as.numeric(coeffs[1])
+         a <- as.numeric(coeffs[1L])
          r     <- self$par$r
          hc    <- self$par$hc
          kappa <- self$par$kappa

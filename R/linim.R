@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.30 $   $Date: 2016/12/03 10:51:56 $
+#  $Revision: 1.31 $   $Date: 2017/02/07 08:12:05 $
 #
 #  Image/function on a linear network
 #
@@ -67,7 +67,7 @@ print.summary.linim <- function(x, ...) {
   sigdig <- getOption('digits')
   di <- x$dim
   win <- x$window
-  splat(di[1], "x", di[2], "pixel array (ny, nx)")
+  splat(di[1L], "x", di[2L], "pixel array (ny, nx)")
   splat("enclosing rectangle:",
         prange(signif(win$xrange, sigdig)),
         "x",
@@ -132,12 +132,12 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
   # rescale values to a plottable range
   vr <- range(df$values)
-  vr[1] <- min(0, vr[1])
+  vr[1L] <- min(0, vr[1L])
   if(missing(scale)) {
     maxsize <- mean(distmap(Llines))/2
     scale <- maxsize/diff(vr)
   } 
-  df$values <- adjust * scale * (df$values - vr[1])/2
+  df$values <- adjust * scale * (df$values - vr[1L])/2
   # split data by segment
   mapXY <- factor(df$mapXY, levels=seq_len(Llines$n))
   dfmap <- split(df, mapXY, drop=TRUE)
@@ -151,11 +151,11 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
   Lvert <- L$vertices
   Ljoined  <- (vertexdegree(L) > 1)
   # precompute coordinates of dodecagon
-  dodo <- disc(npoly=12)$bdry[[1]]
+  dodo <- disc(npoly=12)$bdry[[1L]]
   #
   for(i in seq(length(dfmap))) {
     z <- dfmap[[i]]
-    segid <- unique(z$mapXY)[1]
+    segid <- unique(z$mapXY)[1L]
     xx <- z$x
     yy <- z$y
     vv <- z$values
@@ -166,8 +166,8 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
     rightend <- Lvert[iright]
     xx <- c(leftend$x, xx, rightend$x)
     yy <- c(leftend$y, yy, rightend$y)
-    vv <- c(vv[1],     vv, vv[length(vv)])
-    rleft <- vv[1]
+    vv <- c(vv[1L],     vv, vv[length(vv)])
+    rleft <- vv[1L]
     rright <- vv[length(vv)]
     # draw polygon around segment
     xx <- c(xx, rev(xx))
@@ -249,7 +249,7 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
   # ....................................
   # Evaluate the pixel values using eval.im
   # ....................................
-  sc[[1]] <- as.name('eval.im')
+  sc[[1L]] <- as.name('eval.im')
   sc$envir <- envir
   Y <- eval(sc)
   # .........................................
@@ -265,7 +265,7 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
     # all images are 'linim' objects
     # Check that the images refer to the same linear network
     if(nlinims > 1) {
-      agree <- unlist(lapply(nets[-1], identical, y=nets[[1]]))
+      agree <- unlist(lapply(nets[-1L], identical, y=nets[[1L]]))
       if(!all(agree))
         stop(paste("Images do not refer to the same linear network"))
     }
@@ -276,11 +276,11 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
       # now evaluate expression
       Yvalues <- eval(e, append(vars, funs))
       # pack up
-      dfY <- dframes[[1]]
+      dfY <- dframes[[1L]]
       dfY$values <- Yvalues
     }
   }
-  result <- linim(nets[[1]], Y, df=dfY)
+  result <- linim(nets[[1L]], Y, df=dfY)
   return(result)
 }
 
@@ -406,7 +406,7 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
   argh <- list(...)
   ## unpack single argument which is a list of images
   if(length(argh) == 1) {
-    arg1 <- argh[[1]]
+    arg1 <- argh[[1L]]
     if(is.list(arg1) && all(sapply(arg1, is.im)))
       argh <- arg1
   }
@@ -451,10 +451,10 @@ pairs.linim <- function(..., plot=TRUE, eps=NULL) {
       colnames(pixdf) <- labels
     } else {
       do.call(hist.default,
-              resolve.defaults(list(x=pixdf[,1]),
+              resolve.defaults(list(x=pixdf[,1L]),
                                rest,
-                               list(main=paste("Histogram of", imnames[1]),
-                                    xlab=imnames[1])))
+                               list(main=paste("Histogram of", imnames[1L]),
+                                    xlab=imnames[1L])))
     }
   }
   class(pixdf) <- unique(c("plotpairsim", class(pixdf)))

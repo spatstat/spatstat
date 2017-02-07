@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.27 $ $Date: 2016/12/01 09:29:35 $
+# $Revision: 1.28 $ $Date: 2017/02/07 07:47:20 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -129,11 +129,11 @@ chop.tess <- function(X, L) {
       # line i chops window into two pieces
       if(!is.na(h <- L[i, "h"])) {
         # horizontal line
-        if(h > yr[1] && h < yr[2]) 
+        if(h > yr[1L] && h < yr[2L]) 
           Zmat <- 2 * Zmat + (ymat > h)
       } else if(!is.na(v <- L[i, "v"])) {
         # vertical line
-        if(v > xr[1] && v < xr[2])
+        if(v > xr[1L] && v < xr[2L])
           Zmat <- 2 * Zmat + (xmat < v)
       } else {
         # generic line y = a + bx
@@ -159,20 +159,20 @@ chop.tess <- function(X, L) {
     # line i chops box B into two pieces
     if(!is.na(h <- L[i, "h"])) {
       # horizontal line
-      if(h < yr[1] || h > yr[2])
+      if(h < yr[1L] || h > yr[2L])
         Z <- NULL
       else {
-        lower <- owin(xr, c(yr[1], h))
-        upper <- owin(xr, c(h, yr[2]))
+        lower <- owin(xr, c(yr[1L], h))
+        upper <- owin(xr, c(h, yr[2L]))
         Z <- tess(tiles=list(lower,upper), window=B)
       }
     } else if(!is.na(v <- L[i, "v"])) {
       # vertical line
-      if(v < xr[1] || v > xr[2])
+      if(v < xr[1L] || v > xr[2L])
         Z <- NULL
       else {
-        left <- owin(c(xr[1], v), yr)
-        right <- owin(c(v, xr[2]), yr)
+        left <- owin(c(xr[1L], v), yr)
+        right <- owin(c(v, xr[2L]), yr)
         Z <- tess(tiles=list(left,right), window=B)
       }
     } else {
@@ -180,13 +180,13 @@ chop.tess <- function(X, L) {
       a <- L[i, "a"]
       b <- L[i, "b"]
       # Intersect with extended left and right sides of B
-      yleft <- a + b * xr[1]
-      yright <- a + b * xr[2]
-      ylo <- min(yleft, yright, yr[1]) - 1
-      yhi <- max(yleft, yright, yr[2]) + 1
-      lower <- owin(poly=list(x=xr[c(1,1,2,2)],
+      yleft <- a + b * xr[1L]
+      yright <- a + b * xr[2L]
+      ylo <- min(yleft, yright, yr[1L]) - 1
+      yhi <- max(yleft, yright, yr[2L]) + 1
+      lower <- owin(poly=list(x=xr[c(1L,1L,2L,2L)],
                               y=c(yleft,ylo,ylo,yright)))
-      upper <- owin(poly=list(x=xr[c(1,2,2,1)],
+      upper <- owin(poly=list(x=xr[c(1L,2L,2L,1L)],
                               y=c(yleft,yright,yhi,yhi)))
       Bplus <- owin(xr, c(ylo, yhi), unitname=unitname(B))
       Z <- tess(tiles=list(lower,upper), window=Bplus)

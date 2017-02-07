@@ -3,7 +3,7 @@
 #
 # flip x and y coordinates
 #
-# $Revision: 1.2 $ $Date: 2014/09/29 04:20:32 $ 
+# $Revision: 1.3 $ $Date: 2017/02/07 07:22:47 $ 
 #
 
 flipxy <- function(X) {
@@ -48,7 +48,7 @@ flipxy.owin <- function(X) {
 
 flipxy.psp <- function(X) {
   stopifnot(is.psp(X))
-  flipends <- (X$ends)[, c(2,1,4,3), drop=FALSE]
+  flipends <- (X$ends)[, c(2L,1L,4L,3L), drop=FALSE]
   as.psp(flipends, window=flipxy(X$window), marks=X$marks,
          unitname=unitname(X), check=FALSE)
 }

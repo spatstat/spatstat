@@ -2,7 +2,7 @@
 #
 #    hybrid.R
 #
-#    $Revision: 1.7 $	$Date: 2016/02/11 10:17:12 $
+#    $Revision: 1.8 $	$Date: 2017/02/07 07:35:32 $
 #
 #    Hybrid of several interactions
 #
@@ -36,15 +36,15 @@ Hybrid <- local({
       i <- min(which(ishybrid))
       n <- length(interlist)
       expandi <- interlist[[i]]$par
-      interlist <- c(if(i > 1) interlist[1:(i-1)] else NULL,
+      interlist <- c(if(i > 1) interlist[1:(i-1L)] else NULL,
                      expandi,
-                     if(i < n) interlist[(i+1):n] else NULL)
+                     if(i < n) interlist[(i+1L):n] else NULL)
     }
     #' 
     ncomponents <- length(interlist)
     if(ncomponents == 1) {
       #' single interaction - return it
-      return(interlist[[1]])
+      return(interlist[[1L]])
     }
     #' ensure all components have names
     names(interlist) <- good.names(names(interlist),
@@ -166,7 +166,7 @@ Hybrid <- local({
               nproj[i] <- 0
             } else if(is.interact(p)) {
               p <- list(p)
-              nproj[i] <- 1
+              nproj[i] <- 1L
             } else if(is.list(p) && all(unlist(lapply(p, is.interact)))) {
               nproj[i] <- length(p)
             } else
@@ -180,7 +180,7 @@ Hybrid <- local({
             #' Single interaction required.
             #' Extract first entry from each list
             #' (there should be only one entry, but...)
-            qlist <- lapply(projlist, "[[", i=1)
+            qlist <- lapply(projlist, "[[", i=1L)
             #' replace NULL entries by corresponding original interactions
             isnul <- unlist(lapply(qlist, is.null))
             if(all(isnul))
@@ -215,7 +215,7 @@ Hybrid <- local({
           }
           #' 'result' is a list of interactions, each a hybrid
           if(length(result) == 1)
-            result <- result[[1]]
+            result <- result[[1L]]
           return(result)
         },
         irange = function(self, coeffs=NA, epsilon=0, ...) {

@@ -1,5 +1,5 @@
 ## hexagons.R
-## $Revision: 1.5 $ $Date: 2016/02/16 01:39:12 $
+## $Revision: 1.6 $ $Date: 2017/02/07 07:35:32 $
 
 hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   W <- as.owin(W)
@@ -15,19 +15,19 @@ hexgrid <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   p0 <- p0 + as2vector(offset)
   q0 <- p0 + c(hstep, vstep)/2
   ## 'even' points
-  p0 <- c(startinrange(p0[1], hstep, xr),
-          startinrange(p0[2], vstep, yr))
+  p0 <- c(startinrange(p0[1L], hstep, xr),
+          startinrange(p0[2L], vstep, yr))
   if(!anyNA(p0)) {
-    xeven <- prolongseq(p0[1], xr, step=hstep)
-    yeven <- prolongseq(p0[2], yr, step=vstep)
+    xeven <- prolongseq(p0[1L], xr, step=hstep)
+    yeven <- prolongseq(p0[2L], yr, step=vstep)
     xyeven <- expand.grid(x=xeven, y=yeven)
   } else xyeven <- list(x=numeric(0), y=numeric(0))
   ## 'odd' points
-  q0 <- c(startinrange(q0[1], hstep, xr),
-          startinrange(q0[2], vstep, yr))
+  q0 <- c(startinrange(q0[1L], hstep, xr),
+          startinrange(q0[2L], vstep, yr))
   if(!anyNA(q0)) {
-    xodd <- prolongseq(q0[1], xr, step=hstep)
-    yodd <- prolongseq(q0[2], yr, step=vstep)
+    xodd <- prolongseq(q0[1L], xr, step=hstep)
+    yodd <- prolongseq(q0[2L], yr, step=vstep)
     xyodd <- expand.grid(x=xodd, y=yodd)
   } else xyodd <- list(x=numeric(0), y=numeric(0))
   ##
@@ -45,7 +45,7 @@ hextess <- function(W, s, offset=c(0,0), origin=NULL, trim=TRUE) {
   if(trim && is.mask(W)) {
     ## Result is a pixel image tessellation
     ## Determine pixel resolution by extending 'W' to larger domain of 'G'
-    rasta <- harmonise.im(as.im(1, W), as.owin(G))[[1]]
+    rasta <- harmonise.im(as.im(1, W), as.owin(G))[[1L]]
     rasta <- as.mask(rasta)
     ## Tweak G to have mask window
     G$window <- rasta

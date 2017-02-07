@@ -32,8 +32,8 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   
   insideW <- W$m
   dimW   <- W$dim
-  nr <- dimW[1]
-  nc <- dimW[2]
+  nr <- dimW[1L]
+  nc <- dimW[2L]
   xcolW <- W$xcol
   yrowW <- W$yrow
   xrangeW <- W$xrange
@@ -136,7 +136,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   } else {
     # case k > 1
     # create template image to reduce overhead
-    template <- im(ta[[1]],
+    template <- im(ta[[1L]],
                    xcol = xcolW, yrow = yrowW,
                    xrange = xrangeW, yrange = yrangeW,
                    unitname=unitsW)
@@ -171,7 +171,7 @@ pixellate.owin <- function(x, W=NULL, ...) {
                        resolve.defaults(list(...),
                                         list(w=W)))
   ## compute
-  Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2], ny=W$dim[1])
+  Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2L], ny=W$dim[1L])
   ## convert to image
   Z <- im(Zmat, xcol=W$xcol, yrow=W$yrow, xrange=W$xrange, yrange=W$yrange,
           unitname=unitname(W))
@@ -179,8 +179,8 @@ pixellate.owin <- function(x, W=NULL, ...) {
 }
 
 polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
-  x0 <- xrange[1]
-  y0 <- yrange[1]
+  x0 <- xrange[1L]
+  y0 <- yrange[1L]
   dx <- diff(xrange)/nx
   dy <- diff(yrange)/ny
   # process each component polygon
@@ -196,8 +196,8 @@ polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
     yy <- RR$y
     nn <- length(xx)
     # close polygon
-    xx <- c(xx, xx[1])
-    yy <- c(yy, yy[1])
+    xx <- c(xx, xx[1L])
+    yy <- c(yy, yy[1L])
     nn <- nn+1
     # call C routine
     zz <- .C("poly2imA",
@@ -207,7 +207,7 @@ polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
              ypoly=as.double(yy),
              npoly=as.integer(nn),
              out=as.double(numeric(nx * ny)),
-             status=as.integer(integer(1)))
+             status=as.integer(integer(1L)))
     if(zz$status != 0)
       stop("Internal error")
     # increment output 

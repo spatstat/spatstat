@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.143 $     $Date: 2017/01/21 05:48:50 $
+#      $Revision: 1.144 $     $Date: 2017/02/07 07:47:20 $
 #
 #      The class "im" of raster images
 #
@@ -66,24 +66,24 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
   if((miss.xcol || length(xcol) <= 1) && !is.null(xrange) ) {
     # use 'xrange' 
     xstep <- diff(xrange)/nc
-    xcol <- seq(from=xrange[1] + xstep/2, to=xrange[2] - xstep/2, length.out=nc)
+    xcol <- seq(from=xrange[1L] + xstep/2, to=xrange[2L] - xstep/2, length.out=nc)
   } else if(length(xcol) > 1) {
     # use 'xcol'
     # ensure spacing is constant
     xcol <- seq(from=min(xcol), to=max(xcol), length.out=length(xcol))
-    xstep <- diff(xcol)[1]
+    xstep <- diff(xcol)[1L]
     xrange <- range(xcol) + c(-1,1) * xstep/2
   } else stop("Cannot determine pixel width")
   
   if((miss.yrow || length(yrow) <= 1) && !is.null(yrange)) {
     # use 'yrange'
     ystep <- diff(yrange)/nr
-    yrow <- seq(from=yrange[1] + ystep/2, to=yrange[2] - ystep/2, length.out=nr)
+    yrow <- seq(from=yrange[1L] + ystep/2, to=yrange[2L] - ystep/2, length.out=nr)
   } else if(length(yrow) > 1) {
     # use 'yrow'
     # ensure spacing is constant
     yrow <- seq(from=min(yrow), to=max(yrow), length.out=length(yrow))
-    ystep <- diff(yrow)[1]
+    ystep <- diff(yrow)[1L]
     yrange <- range(yrow) + c(-1,1) * ystep/2
   }  else stop("Cannot determine pixel height")
 
@@ -135,13 +135,13 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
     locn <- switch(origin,
                    centroid={ unlist(centroid.owin(W)) },
                    midpoint={ c(mean(W$xrange), mean(W$yrange)) },
-                   bottomleft={ c(W$xrange[1], W$yrange[1]) })
+                   bottomleft={ c(W$xrange[1L], W$yrange[1L]) })
     return(shift(X, -locn))
   }
-  X$xrange <- X$xrange + vec[1]
-  X$yrange <- X$yrange + vec[2]
-  X$xcol <- X$xcol + vec[1]
-  X$yrow <- X$yrow + vec[2]
+  X$xrange <- X$xrange + vec[1L]
+  X$yrange <- X$yrange + vec[2L]
+  X$xcol <- X$xcol + vec[1L]
+  X$yrow <- X$yrow + vec[2L]
   attr(X, "lastshift") <- vec
   return(X)
 }
@@ -158,9 +158,9 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
 
 "[.im" <- local({
 
-  disjoint <- function(r, s) { (r[2] < s[1]) || (r[1] > s[2])  }
-  clip <- function(r, s) { c(max(r[1],s[1]), min(r[2],s[2])) }
-  inrange <- function(x, r) { (x >= r[1]) & (x <= r[2]) }
+  disjoint <- function(r, s) { (r[2L] < s[1L]) || (r[1L] > s[2L])  }
+  clip <- function(r, s) { c(max(r[1L],s[1L]), min(r[2L],s[2L])) }
+  inrange <- function(x, r) { (x >= r[1L]) & (x <= r[2L]) }
 
   Extract.im <- function(x, i, j, ...,
                          drop=TRUE, tight=FALSE, raster=NULL,
@@ -350,9 +350,9 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         RR <- row(x$v)
         CC <- col(x$v)
         rcall <- ycall
-        rcall[[2]] <- quote(RR)
+        rcall[[2L]] <- quote(RR)
         ccall <- ycall
-        ccall[[2]] <- quote(CC)
+        ccall[[2L]] <- quote(CC)
         rr <- eval(as.call(rcall))
         cc <- eval(as.call(ccall))
         rseq <- sort(unique(as.vector(rr)))
@@ -584,10 +584,10 @@ update.im <- function(object, ...) {
 nearest.pixel <- function(x,y, Z) {
   stopifnot(is.im(Z) || is.mask(Z))
   if(length(x) > 0) {
-    nr <- Z$dim[1]
-    nc <- Z$dim[2]
-    cc <- round(1 + (x - Z$xcol[1])/Z$xstep)
-    rr <- round(1 + (y - Z$yrow[1])/Z$ystep)
+    nr <- Z$dim[1L]
+    nc <- Z$dim[2L]
+    cc <- round(1 + (x - Z$xcol[1L])/Z$xstep)
+    rr <- round(1 + (y - Z$yrow[1L])/Z$ystep)
     cc <- pmax.int(1,pmin.int(cc, nc))
     rr <- pmax.int(1,pmin.int(rr, nr))
   } else cc <- rr <- integer(0)
@@ -607,13 +607,13 @@ nearest.valid.pixel <- function(x, y, Z) {
   if(!any(miss))
     return(rc)
   # for offending pixels, explore 3 x 3 neighbourhood
-  nr <- Z$dim[1]
-  nc <- Z$dim[2]
+  nr <- Z$dim[1L]
+  nc <- Z$dim[2L]
   xcol <- Z$xcol
   yrow <- Z$yrow
   for(i in which(miss)) {
-    rows <- rr[i] + c(-1,0,1)
-    cols <- cc[i] + c(-1,0,1)
+    rows <- rr[i] + c(-1L,0L,1L)
+    cols <- cc[i] + c(-1L,0L,1L)
     rows <- unique(pmax.int(1, pmin.int(rows, nr)))
     cols <- unique(pmax.int(1, pmin.int(cols, nc)))
     rcp <- expand.grid(row=rows, col=cols)
@@ -657,8 +657,8 @@ lookup.im <- function(Z, x, y, naok=FALSE, strict=TRUE) {
   xr <- Z$xrange
   yr <- Z$yrange
   eps <- sqrt(.Machine$double.eps)
-  frameok <- (x >= xr[1] - eps) & (x <= xr[2] + eps) & 
-             (y >= yr[1] - eps) & (y <= yr[2] + eps)
+  frameok <- (x >= xr[1L] - eps) & (x <= xr[2L] + eps) & 
+             (y >= yr[1L] - eps) & (y <= yr[2L] + eps)
   
   if(!any(frameok)) {
     # all points OUTSIDE range - no further work needed
@@ -805,8 +805,8 @@ where.max <- function(x, first=TRUE) {
     xmax <- max(x)
     M <- solutionset(x == xmax)
     loc <- which(M$m, arr.ind=TRUE)
-    locrow <- loc[,1]
-    loccol <- loc[,2]
+    locrow <- loc[,1L]
+    loccol <- loc[,2L]
   }
   xx <- x$xcol[loccol]
   yy <- x$yrow[locrow]
@@ -826,8 +826,8 @@ where.min <- function(x, first=TRUE) {
     xmin <- min(x)
     M <- solutionset(x == xmin)
     loc <- which(M$m, arr.ind=TRUE)
-    locrow <- loc[,1]
-    loccol <- loc[,2]
+    locrow <- loc[,1L]
+    loccol <- loc[,2L]
   }
   xx <- x$xcol[loccol]
   yy <- x$yrow[locrow]
@@ -988,17 +988,17 @@ rebound.im <- function(x, rect) {
   stopifnot(is.subset.owin(as.rectangle(x), rect))
   # compute number of extra rows/columns
   dx <- x$xstep
-  nleft  <- max(0, floor((x$xrange[1]-rect$xrange[1])/dx))
-  nright <- max(0, floor((rect$xrange[2]-x$xrange[2])/dx))
+  nleft  <- max(0, floor((x$xrange[1L]-rect$xrange[1L])/dx))
+  nright <- max(0, floor((rect$xrange[2L]-x$xrange[2L])/dx))
   dy <- x$ystep
-  nbot <- max(0, floor((x$yrange[1]-rect$yrange[1])/dy))
-  ntop <- max(0, floor((rect$yrange[2]-x$yrange[2])/dy))
+  nbot <- max(0, floor((x$yrange[1L]-rect$yrange[1L])/dy))
+  ntop <- max(0, floor((rect$yrange[2L]-x$yrange[2L])/dy))
   # determine exact x and y ranges (to preserve original pixel locations)
   xrange.new <- x$xrange + c(-nleft, nright) * dx
   yrange.new <- x$yrange + c(-nbot,  ntop) * dy
   # expand pixel data matrix
-  nr <- x$dim[1]
-  nc <- x$dim[2]
+  nr <- x$dim[1L]
+  nc <- x$dim[2L]
   nrnew <- nbot  + nr + ntop
   ncnew <- nleft + nc + nright
   naval <- switch(x$type,
@@ -1068,7 +1068,7 @@ scaletointerval.default <- function(x, from=0, to=1, xrange=range(x)) {
   rr <- if(missing(xrange)) range(x, na.rm=TRUE) else as.numeric(xrange)
   b <- as.numeric(to - from)/diff(rr)
   if(is.finite(b)) {
-    y <- from + b * (x - rr[1])
+    y <- from + b * (x - rr[1L])
   } else {
     y <- (from+to)/2 + 0 * x
   }
@@ -1115,34 +1115,34 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
   if(!padW) {
     ## pad by 'n' pixels
     nn <- rep(n, 4)
-    nleft   <- nn[1]
-    nright  <- nn[2]
-    nbottom <- nn[3]
-    ntop    <- nn[4]
+    nleft   <- nn[1L]
+    nright  <- nn[2L]
+    nbottom <- nn[3L]
+    ntop    <- nn[4L]
   } else {
     ## pad out to window W
     FX <- Frame(X)
     B <- boundingbox(Frame(W), FX)
-    nleft   <- max(1, round((FX$xrange[1] - B$xrange[1])/X$xstep))
-    nright  <- max(1, round((B$xrange[2] - FX$xrange[2])/X$xstep))
-    nbottom <- max(1, round((FX$yrange[1] - B$yrange[1])/X$ystep))
-    ntop    <- max(1, round((B$yrange[2] - FX$yrange[2])/X$ystep))
+    nleft   <- max(1, round((FX$xrange[1L] - B$xrange[1L])/X$xstep))
+    nright  <- max(1, round((B$xrange[2L] - FX$xrange[2L])/X$xstep))
+    nbottom <- max(1, round((FX$yrange[1L] - B$yrange[1L])/X$ystep))
+    ntop    <- max(1, round((B$yrange[2L] - FX$yrange[2L])/X$ystep))
   }
   mX <- as.matrix(X)
   dd <- dim(mX)
-  mX <- cbind(matrix(value, dd[1], nleft, byrow=TRUE),
+  mX <- cbind(matrix(value, dd[1L], nleft, byrow=TRUE),
               as.matrix(X),
-              matrix(value, dd[1], nright, byrow=TRUE))
+              matrix(value, dd[1L], nright, byrow=TRUE))
   dd <- dim(mX)
-  mX <- rbind(matrix(rev(value), nbottom, dd[2]),
+  mX <- rbind(matrix(rev(value), nbottom, dd[2L]),
               mX,
-              matrix(value, ntop, dd[2]))
+              matrix(value, ntop, dd[2L]))
   xcol <- with(X,
-               c(xcol[1]     - (nleft:1) * xstep,
+               c(xcol[1L]     - (nleft:1) * xstep,
                  xcol,
                  xcol[length(xcol)] + (1:nright) * xstep))
   yrow <- with(X,
-               c(yrow[1]     - (nbottom:1) * ystep,
+               c(yrow[1L]     - (nbottom:1) * ystep,
                  yrow,
                  yrow[length(yrow)] + (1:ntop) * ystep))
   xr <- with(X, xrange + c(-nleft, nright) * xstep)

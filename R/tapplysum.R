@@ -19,14 +19,14 @@ tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
     y[is.na(y)] <- 0
     return(y)
   }
-  ifac <- flist[[1]]
-  jfac <- flist[[2]]
+  ifac <- flist[[1L]]
+  jfac <- flist[[2L]]
   mi <- length(levels(ifac))
   mj <- length(levels(jfac))
   ii <- as.integer(ifac)
   jj <- as.integer(jfac)
   if(nfac == 3) {
-    kfac <- flist[[3]]
+    kfac <- flist[[3L]]
     mk <- length(levels(kfac))
     kk <- as.integer(kfac)
   }
@@ -58,7 +58,7 @@ tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
                xin = as.double(x[oo]),
                iin = as.integer(ii[oo]),
                jin = as.integer(jj[oo]),
-               nout = as.integer(integer(1)),
+               nout = as.integer(integer(1L)),
                xout = as.double(numeric(n)),
                iout = as.integer(integer(n)),
                jout = as.integer(integer(n)))
@@ -79,7 +79,7 @@ tapplysum <- function(x, flist, do.names=FALSE, na.rm=TRUE) {
                iin = as.integer(ii[oo]),
                jin = as.integer(jj[oo]),
                kin = as.integer(kk[oo]),
-               nout = as.integer(integer(1)),
+               nout = as.integer(integer(1L)),
                xout = as.double(numeric(n)),
                iout = as.integer(integer(n)),
                jout = as.integer(integer(n)),

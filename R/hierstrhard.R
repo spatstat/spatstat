@@ -1,7 +1,7 @@
 ##
 ##    hierstrhard.R
 ##
-##    $Revision: 1.3 $	$Date: 2016/02/16 01:39:12 $
+##    $Revision: 1.4 $	$Date: 2017/02/07 07:35:32 $
 ##
 ##    The hierarchical Strauss-hard core process
 ##
@@ -123,7 +123,7 @@ HierStraussHard <- local({
         marx <- marks(X)
         d <- nndist(X, by=marx)
         h <- aggregate(d, by=list(from=marx), min)
-        h <- as.matrix(h[, -1, drop=FALSE])
+        h <- as.matrix(h[, -1L, drop=FALSE])
         m <- table(marx)
         mm <- outer(m, m, pmin)
         hradii <- h * mm/(mm+1)

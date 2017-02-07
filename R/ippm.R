@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.20 $   $Date: 2016/02/16 01:39:12 $
+#   $Revision: 2.21 $   $Date: 2017/02/07 07:47:20 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -23,7 +23,7 @@ ippm <- local({
     callstring <- short.deparse(sys.call())
     ##
     ppmcall <- cl[!(names(cl) %in% chucknames)]
-    ppmcall[[1]] <- as.name('ppm')
+    ppmcall[[1L]] <- as.name('ppm')
     ## validate
     if(!is.list(start))
       stop("start should be a list of initial values for irregular parameters")
@@ -61,7 +61,7 @@ ippm <- local({
     for(j in 1:length(pnames))
       depmat[,j] <- unlist(lapply(covfuns, hasarg, pnames[j]))
     ## find covariates that depend on ANY irregular parameter 
-    depvar <- rownames(depmat)[apply(depmat, 1, any)]
+    depvar <- rownames(depmat)[apply(depmat, 1L, any)]
     ## check that these covariates appear only in offset terms
     covnames.fitted <- model.covariates(fit0, fitted=TRUE,  offset=FALSE)
     if(any(uhoh <- depvar %in% covnames.fitted))
@@ -71,7 +71,7 @@ ippm <- local({
     ## check that every irregular parameter to be updated appears somewhere 
     cov.names.offset <- model.covariates(fit0, fitted=FALSE,  offset=TRUE)
     covfun.names.offset <- intersect(cov.names.offset, names(covfuns))
-    usearg <- apply(depmat[covfun.names.offset, , drop=FALSE], 2, any)
+    usearg <- apply(depmat[covfun.names.offset, , drop=FALSE], 2L, any)
     if(!all(usearg)) {
       if(warn.unused) {
         nbad <- sum(!usearg)
@@ -200,7 +200,7 @@ update.ippm <- local({
         ## formula will replace 'Q'
         if(is.null(lhs.of.formula(new.fmla))) {
           f <- (. ~ x)
-          f[[3]] <- new.fmla[[2]]
+          f[[3L]] <- new.fmla[[2L]]
           new.fmla <- f
         }
         new.call$Q <- newformula(Qold, new.fmla, old.callframe, envir)

@@ -107,7 +107,7 @@ rmh.default <- function(model,start=NULL,
     if(is.im(trend))
       as.owin(trend)
     else if(is.list(trend) && any(ok <- unlist(lapply(trend, is.im))))
-      as.owin((trend[ok])[[1]])
+      as.owin((trend[ok])[[1L]])
     else NULL
 
 ##  Clipping window (for final result)
@@ -622,7 +622,7 @@ rmhEngine <- function(InfoList, ...,
 #############################################  
   
   if(!exists(".Random.seed"))
-    runif(1)
+    runif(1L)
 
   saved.seed <- .Random.seed
   
@@ -709,7 +709,7 @@ rmhEngine <- function(InfoList, ...,
              },
              x = {
                # x.start given
-               as.integer(marks(x.start, dfok=FALSE))-1
+               as.integer(marks(x.start, dfok=FALSE))-1L
              },
              stop("internal error: start$given unrecognised")
              )
@@ -738,21 +738,21 @@ rmhEngine <- function(InfoList, ...,
     x <- c(x.condpp$x, x)
     y <- c(x.condpp$y, y)
     if(mtype)
-      Cmarks <- c(as.integer(marks(x.condpp))-1, Cmarks)
+      Cmarks <- c(as.integer(marks(x.condpp))-1L, Cmarks)
   }
 
   if(!is.null(overrideXstart)) {
     #' override the previous data
     x <- overrideXstart$x
     y <- overrideXstart$y
-    if(mtype) Cmarks <- as.integer(marks(overrideXstart))-1
+    if(mtype) Cmarks <- as.integer(marks(overrideXstart))-1L
   }
 
 # decide whether to activate visual debugger
   if(snoop) {
     Xinit <- ppp(x, y, window=w.sim)
     if(mtype)
-      marks(Xinit) <- Cmarks + 1
+      marks(Xinit) <- Cmarks + 1L
     if(verbose) cat("\nCreating debugger environment..")
     snoopenv <- rmhSnoopEnv(Xinit=Xinit, Wclip=w.clip, R=reach(model))
     if(verbose) cat("Done.\n")
@@ -873,10 +873,10 @@ rmhEngine <- function(InfoList, ...,
 #                 PACKAGE="spatstat")
   
     # Extract the point pattern returned from C
-    X <- ppp(x=out[[1]], y=out[[2]], window=w.state, check=FALSE)
+    X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
     if(mtype) {
       # convert integer marks from C to R
-      marx <- factor(out[[3]], levels=0:(ntypes-1))
+      marx <- factor(out[[3L]], levels=0:(ntypes-1))
       # then restore original type levels
       levels(marx) <- types
       # glue to points
@@ -906,10 +906,10 @@ rmhEngine <- function(InfoList, ...,
   } else {
     # ////////// Multiple blocks /////////////////////////////////
     # determine length of each block of simulations
-    nblocks <- as.integer(1 + ceiling((nrep - nburn)/nsave))
-    block <- c(nburn, rep.int(nsave, nblocks-1))
+    nblocks <- as.integer(1L + ceiling((nrep - nburn)/nsave))
+    block <- c(nburn, rep.int(nsave, nblocks-1L))
     block[nblocks] <- block[nblocks] - (sum(block)-nrep)
-    block <- block[block >= 1]
+    block <- block[block >= 1L]
     nblocks <- length(block)
     blockend <- cumsum(block)
     # set up list to contain the saved point patterns
@@ -986,10 +986,10 @@ rmhEngine <- function(InfoList, ...,
                    temper,
                    invertemp)
       # Extract the point pattern returned from C
-      X <- ppp(x=out[[1]], y=out[[2]], window=w.state, check=FALSE)
+      X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
       if(mtype) {
         # convert integer marks from C to R
-        marx <- factor(out[[3]], levels=0:(ntypes-1))
+        marx <- factor(out[[3L]], levels=0:(ntypes-1))
         # then restore original type levels
         levels(marx) <- types
         # glue to points
@@ -1023,8 +1023,8 @@ rmhEngine <- function(InfoList, ...,
       }
 
       # update 'previous state'
-      xprev <- out[[1]]
-      yprev <- out[[2]]
+      xprev <- out[[1L]]
+      yprev <- out[[2L]]
       Cmarksprev <- if(!mtype) 0 else out[[3]]
       storage.mode(xprev) <- storage.mode(yprev) <- "double"
       storage.mode(Cmarksprev) <- "integer"
@@ -1072,8 +1072,8 @@ summarise.trend <- local({
     } else {
       Z  <- as.im(x, w)[w, drop=FALSE]
       ran <- range(Z)
-      mini <- ran[1]
-      maxi <- ran[2]
+      mini <- ran[1L]
+      maxi <- ran[2L]
       integ <- integral.im(Z)
     }
     return(list(min=mini, max=maxi, integral=integ))

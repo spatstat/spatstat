@@ -1,7 +1,7 @@
 #
 # linequad.R
 #
-#  $Revision: 1.12 $ $Date: 2016/10/03 08:55:55 $
+#  $Revision: 1.13 $ $Date: 2017/02/07 08:12:05 $
 #
 # create quadscheme for a pattern of points lying *on* line segments
 
@@ -38,10 +38,10 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
   len <- lengths.psp(Y)
   nseg <- length(len)
   if(is.null(eps)) {
-    stopifnot(is.numeric(nd) && length(nd) == 1 & is.finite(nd) && nd > 0)
+    stopifnot(is.numeric(nd) && length(nd) == 1L & is.finite(nd) && nd > 0)
     eps <- sum(len)/nd
   } else
-  stopifnot(is.numeric(eps) && length(eps) == 1 && is.finite(eps) && eps > 0)
+  stopifnot(is.numeric(eps) && length(eps) == 1L && is.finite(eps) && eps > 0)
   ##
   if(is.lpp(X) && spatstat.options('Clinequad')) {
     L <- as.linnet(X)
@@ -52,7 +52,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
     coordsX <- coords(X)
     nX <- npoints(X)
     ooX <- order(coordsX$seg)
-    ndumeach <- ceiling(len/eps) + 1
+    ndumeach <- ceiling(len/eps) + 1L
     ndummax <- sum(ndumeach)
     maxdataperseg <- max(table(factor(coordsX$seg, levels=1:nsegments(L))))
     maxscratch <- max(ndumeach) + maxdataperseg
@@ -60,17 +60,17 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
       if(!random) {
         z <- .C("Clinequad",
                 ns    = as.integer(nseg),
-                from  = as.integer(L$from-1),
-                to    = as.integer(L$to-1), 
+                from  = as.integer(L$from-1L),
+                to    = as.integer(L$to-1L), 
                 nv    = as.integer(nV),
                 xv    = as.double(coordsV$x),
                 yv    = as.double(coordsV$y), 
                 eps   = as.double(eps),
                 ndat  = as.integer(nX),
-                sdat  = as.integer(coordsX$seg[ooX]-1),
+                sdat  = as.integer(coordsX$seg[ooX]-1L),
                 tdat  = as.double(coordsX$tp[ooX]),
                 wdat  = as.double(numeric(nX)),
-                ndum  = as.integer(integer(1)),
+                ndum  = as.integer(integer(1L)),
                 xdum  = as.double(numeric(ndummax)),
                 ydum  = as.double(numeric(ndummax)),
                 sdum  = as.integer(integer(ndummax)),
@@ -80,17 +80,17 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
       } else {
         z <- .C("ClineRquad",
                 ns    = as.integer(nseg),
-                from  = as.integer(L$from-1),
-                to    = as.integer(L$to-1), 
+                from  = as.integer(L$from-1L),
+                to    = as.integer(L$to-1L), 
                 nv    = as.integer(nV),
                 xv    = as.double(coordsV$x),
                 yv    = as.double(coordsV$y), 
                 eps   = as.double(eps),
                 ndat  = as.integer(nX),
-                sdat  = as.integer(coordsX$seg[ooX]-1),
+                sdat  = as.integer(coordsX$seg[ooX]-1L),
                 tdat  = as.double(coordsX$tp[ooX]),
                 wdat  = as.double(numeric(nX)),
-                ndum  = as.integer(integer(1)),
+                ndum  = as.integer(integer(1L)),
                 xdum  = as.double(numeric(ndummax)),
                 ydum  = as.double(numeric(ndummax)),
                 sdum  = as.integer(integer(ndummax)),
@@ -111,8 +111,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
       if(!random) {
         z <- .C("ClineMquad",
                 ns    = as.integer(nseg),
-                from  = as.integer(L$from-1),
-                to    = as.integer(L$to-1), 
+                from  = as.integer(L$from-1L),
+                to    = as.integer(L$to-1L), 
                 nv    = as.integer(nV),
                 xv    = as.double(coordsV$x),
                 yv    = as.double(coordsV$y), 
@@ -121,11 +121,11 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 ndat  = as.integer(nX),
                 xdat  = as.double(coordsX$x),
                 ydat  = as.double(coordsX$y),
-                mdat  = as.integer(as.integer(marx)-1),
-                sdat  = as.integer(coordsX$seg[ooX]-1),
+                mdat  = as.integer(as.integer(marx)-1L),
+                sdat  = as.integer(coordsX$seg[ooX]-1L),
                 tdat  = as.double(coordsX$tp[ooX]),
                 wdat  = as.double(numeric(nX)),
-                ndum  = as.integer(integer(1)),
+                ndum  = as.integer(integer(1L)),
                 xdum  = as.double(numeric(ndummax)),
                 ydum  = as.double(numeric(ndummax)),
                 mdum  = as.integer(integer(ndummax)),
@@ -136,8 +136,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
       } else {
         z <- .C("ClineRMquad",
                 ns    = as.integer(nseg),
-                from  = as.integer(L$from-1),
-                to    = as.integer(L$to-1), 
+                from  = as.integer(L$from-1L),
+                to    = as.integer(L$to-1L), 
                 nv    = as.integer(nV),
                 xv    = as.double(coordsV$x),
                 yv    = as.double(coordsV$y), 
@@ -146,11 +146,11 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 ndat  = as.integer(nX),
                 xdat  = as.double(coordsX$x),
                 ydat  = as.double(coordsX$y),
-                mdat  = as.integer(as.integer(marx)-1),
-                sdat  = as.integer(coordsX$seg[ooX]-1),
+                mdat  = as.integer(as.integer(marx)-1L),
+                sdat  = as.integer(coordsX$seg[ooX]-1L),
                 tdat  = as.double(coordsX$tp[ooX]),
                 wdat  = as.double(numeric(nX)),
-                ndum  = as.integer(integer(1)),
+                ndum  = as.integer(integer(1L)),
                 xdum  = as.double(numeric(ndummax)),
                 ydum  = as.double(numeric(ndummax)),
                 mdum  = as.integer(integer(ndummax)),
@@ -160,7 +160,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 maxscratch = as.integer(maxscratch))
       }
       seqdum <- seq_len(z$ndum)
-      marques <- factor(z$mdum[seqdum] + 1, labels=flev)
+      marques <- factor(z$mdum[seqdum] + 1L, labels=flev)
       dum <- with(z, ppp(xdum[seqdum], ydum[seqdum], marks=marques,
                          window=W, check=FALSE))
       wdum <- z$wdum[seqdum]
@@ -188,7 +188,7 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
       brks <- c(0, rump + (0:nwhole) * eps, leni)
       nbrks <- length(brks)
       ## dummy points at middle of each piece
-      sdum <- (brks[-1] + brks[-nbrks])/2
+      sdum <- (brks[-1L] + brks[-nbrks])/2
       x <- with(YY, x0[i] + (sdum/leni) * (x1[i]-x0[i]))
       y <- with(YY, y0[i] + (sdum/leni) * (y1[i]-y0[i]))
       newdum <- list(x=x, y=y)

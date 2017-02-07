@@ -1,7 +1,7 @@
 #
 # interactive plot for ppp objects using rpanel
 #
-#   $Revision: 1.22 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.23 $   $Date: 2017/02/07 07:47:20 $
 #
 #
 
@@ -43,7 +43,7 @@ iplot.ppp <- function(x, ..., xname) {
     marks(x) <- as.data.frame(as.hyperframe(marks(x)))
   if(markformat(x) == "dataframe" && ncol(marks(x)) > 1) {
     warning("Using only the first column of marks")
-    marks(x) <- marks(x)[,1]
+    marks(x) <- marks(x)[,1L]
   }
   mtype <- if(is.multitype(x)) "multitype" else if(is.marked(x)) "marked" else "unmarked"
 
@@ -111,7 +111,7 @@ iplot.ppp <- function(x, ..., xname) {
       c("Symbols depending on mark", ptlabels)
     else c("Circles proportional to mark", ptlabels)
   }
-  pointmap <- ptvalues[1]
+  pointmap <- ptvalues[1L]
   rpanel::rp.radiogroup(p, pointmap, vals=ptvalues, labels=ptlabels,
                         title="how to plot points", action=redraw.iplot.ppp,
                         pos=pozzie(nextrow))
@@ -156,7 +156,7 @@ iplot.ppp <- function(x, ..., xname) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        height <- sidelengths(bb)[2]
+                        height <- sidelengths(bb)[2L]
                         stepsize <- (height/4)/zo
                         panel$zoomcentre <- ce + c(0, stepsize)
                         CommitAndRedraw(panel)
@@ -168,7 +168,7 @@ iplot.ppp <- function(x, ..., xname) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        width <- sidelengths(bb)[1]
+                        width <- sidelengths(bb)[1L]
                         stepsize <- (width/4)/zo
                         panel$zoomcentre <- ce - c(stepsize, 0)
                         CommitAndRedraw(panel)
@@ -179,7 +179,7 @@ iplot.ppp <- function(x, ..., xname) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        width <- sidelengths(bb)[1]
+                        width <- sidelengths(bb)[1L]
                         stepsize <- (width/4)/zo
                         panel$zoomcentre <- ce + c(stepsize, 0)
                         CommitAndRedraw(panel)
@@ -191,7 +191,7 @@ iplot.ppp <- function(x, ..., xname) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        height <- sidelengths(bb)[2]
+                        height <- sidelengths(bb)[2L]
                         stepsize <- (height/4)/zo
                         panel$zoomcentre <- ce - c(0, stepsize)
                         CommitAndRedraw(panel)

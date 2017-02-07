@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.5 $	$Date: 2016/07/15 10:22:18 $
+#    $Revision: 1.6 $	$Date: 2017/02/07 07:35:32 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -67,9 +67,9 @@ hierpair.family <-
          p <- pairpot(dd, tx, ty, potpars)
          if(length(dim(p))==2)
            p <- array(p, dim=c(dim(p),1), dimnames=NULL)
-         if(dim(p)[3] != length(coeff))
+         if(dim(p)[3L] != length(coeff))
            stop("Dimensions of potential do not match coefficient vector")
-         for(k in seq_len(dim(p)[3]))
+         for(k in seq_len(dim(p)[3L]))
            p[,,k] <- multiply.only.finite.entries( p[,,k] , coeff[k] )
          y <- exp(apply(p, c(1,2), sum))
          ylim <- range(0, 1.1, y, finite=TRUE)
@@ -78,7 +78,7 @@ hierpair.family <-
          for(i in seq_len(m)) {
            for(j in seq_len(m)) {
              ## relevant position in matrix
-             ijpos <- i + (j-1) * m
+             ijpos <- i + (j-1L) * m
              which[i,j] <- ijpos
              ## extract values of potential
              yy <- y[tx == types[i], j]
@@ -210,7 +210,7 @@ if(correction == "translate" || correction == "translation") {
 
 # No pair potential term between a point and itself
 if(length(EqualPairs) > 0) {
-  nplanes <- dim(POT)[3]
+  nplanes <- dim(POT)[3L]
   for(k in 1:nplanes)
     POT[cbind(EqualPairs, k)] <- 0
 }

@@ -200,7 +200,7 @@ areadelta2 <- local({
                 yother = as.double(yy[K]),
                 radius = as.double(r),
                 epsilon = as.double(eps),
-                pixcount = as.integer(integer(1)))
+                pixcount = as.integer(integer(1L)))
         result[i,j] <- result[j,i] <- z$pixcount
       }
       # normalise
@@ -345,7 +345,7 @@ areadelta2 <- local({
             yother = as.double(yy[K]),
             radius = as.double(r),
             epsilon = as.double(eps),
-            pixcount = as.integer(integer(1)))
+            pixcount = as.integer(integer(1L)))
       result[i,j] <- z$pixcount
     }
     # normalise

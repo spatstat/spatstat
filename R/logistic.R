@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.22 $  $Date: 2016/11/22 08:51:50 $
+#   $Revision: 1.23 $  $Date: 2017/02/07 08:12:05 $
 #
 #  Logistic likelihood method - under development
 #
@@ -131,7 +131,7 @@ logi.engine <- function(Q,
     Vnames <- colnames(V)
     if(is.null(Vnames)) {
       nc <- ncol(V)
-      Vnames <- if(nc == 1) vnamebase[1] else paste(vnamebase[2], 1:nc, sep="")
+      Vnames <- if(nc == 1) vnamebase[1L] else paste(vnamebase[2L], 1:nc, sep="")
       colnames(V) <- Vnames
     } else if(!is.null(vnameprefix)) {
       Vnames <- paste(vnameprefix, Vnames, sep="")
@@ -207,7 +207,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2016/11/22 08:51:50 $")
+                      date="$Date: 2017/02/07 08:12:05 $")
 
   ## Compile results
   fit <- list(method      = "logi",
@@ -269,32 +269,32 @@ logi.dummy <- function(X, dummytype = "stratrand", nd = NULL, mark.repeat = FALS
   W <- as.owin(X)
   type <- match.arg(dummytype, c("stratrand", "binomial", "poisson", "grid", "transgrid"))
   B <- boundingbox(W)
-  rho <- nd[1]*nd[2]/area(B)
+  rho <- nd[1L]*nd[2L]/area(B)
   Dinfo <- list(nd=nd, rho=rho, how=type)
   ## Repeating dummy process for each mark type 1:N (only once if unmarked or mark.repeat = FALSE)
   for(i in 1:N){
     switch(type,
            stratrand={
-             D <- as.ppp(stratrand(B, nd[1], nd[2]), W = B)
+             D <- as.ppp(stratrand(B, nd[1L], nd[2L]), W = B)
              inD <- which(inside.owin(D, w = W))
              D <- D[W]
              inD <- paste(i,inD,sep="_")
            },
            binomial={
-             D <- runifpoint(nd[1]*nd[2], win=B)
+             D <- runifpoint(nd[1L]*nd[2L], win=B)
              D <- D[W]
            },
            poisson={
              D <- rpoispp(rho, win = W)
            },
            grid={
-             D <- as.ppp(gridcenters(B, nd[1], nd[2]), W = B)
+             D <- as.ppp(gridcenters(B, nd[1L], nd[2L]), W = B)
              inD <- which(inside.owin(D, w = W))
              D <- D[W]
              inD <- paste(i,inD,sep="_")
            },
            transgrid={
-             D <- as.ppp(gridcenters(B, nd[1], nd[2]), W = B)
+             D <- as.ppp(gridcenters(B, nd[1L], nd[2L]), W = B)
              dxy <- c(diff(D$window$xrange),diff(D$window$yrange))/(2*nd)
              coords(D) <- coords(D)+matrix(runif(2,-dxy,dxy),npoints(D),2,byrow=TRUE)
              inD <- which(inside.owin(D, w = W))

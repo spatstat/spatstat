@@ -113,9 +113,9 @@ owin <- local({
   if(!poly.given && !mask.given) {
     ######### rectangle #################
     if(check) {
-      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2] < xrange[1])
+      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
         stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2] < yrange[1])
+      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
         stop("yrange should be a vector of length 2 giving (ymin, ymax)")
     }
     w <- list(type="rectangle", xrange=xrange, yrange=yrange, units=unitname)
@@ -127,9 +127,9 @@ owin <- local({
     if(length(poly) == 0) {
       # empty polygon
       if(check) {
-        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2] < xrange[1])
+        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
           stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2] < yrange[1])
+        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
           stop("yrange should be a vector of length 2 giving (ymin, ymax)")
       }
       w <- list(type="polygonal", xrange=xrange, yrange=yrange,
@@ -179,7 +179,7 @@ owin <- local({
     if(missing(xrange))
       xrange <- actual.xrange
     else if(check) {
-      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2] <= xrange[1])
+      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] <= xrange[1L])
         stop("xrange should be a vector of length 2 giving (xmin, xmax)")
       if(!all(xrange == range(c(xrange, actual.xrange))))
         stop("polygon's x coordinates outside xrange")
@@ -189,7 +189,7 @@ owin <- local({
     if(missing(yrange))
       yrange <- actual.yrange
     else if(check) {
-      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2] <= yrange[1])
+      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] <= yrange[1L])
         stop("yrange should be a vector of length 2 giving (ymin, ymax)")
       if(!all(yrange == range(c(yrange, actual.yrange))))
       stop("polygon's y coordinates outside yrange")
@@ -216,11 +216,11 @@ owin <- local({
     }
     if(check && fix) {
       if(length(bdry) == 1 &&
-         length(bx <- bdry[[1]]$x) == 4 &&
+         length(bx <- bdry[[1L]]$x) == 4 &&
          length(unique(bx)) == 2 &&
-         length(unique(bdry[[1]]$y)) == 2) {
+         length(unique(bdry[[1L]]$y)) == 2) {
         ## it's really a rectangle
-        if(Area.xypolygon(bdry[[1]]) < 0)
+        if(Area.xypolygon(bdry[[1L]]) < 0)
           w$bdry <- lapply(bdry, reverse.xypolygon)
       } else {
         ## repair polygon data by invoking polyclip
@@ -279,8 +279,8 @@ owin <- local({
       if(!evenly.spaced(yrow))
         stop("xy$y is not evenly spaced")
       # determine other parameters
-      xstep <- diff(xcol)[1]
-      ystep <- diff(yrow)[1]
+      xstep <- diff(xcol)[1L]
+      ystep <- diff(yrow)[1L]
       if(missing(xrange) && missing(yrange)) {
         xrange <- range(xcol) + c(-1,1) * xstep/2
         yrange <- range(yrow) + c(-1,1) * ystep/2
@@ -292,15 +292,15 @@ owin <- local({
         xrange <- c(0,nc)
         yrange <- c(0,nr)
       } else if(check) {
-        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2] <= xrange[1])
+        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] <= xrange[1L])
           stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2] <= yrange[1])
+        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] <= yrange[1L])
           stop("yrange should be a vector of length 2 giving (ymin, ymax)")
       }
       xstep <- diff(xrange)/nc
       ystep <- diff(yrange)/nr
-      xcol  <- seq(from=xrange[1]+xstep/2, to=xrange[2]-xstep/2, length.out=nc)
-      yrow  <- seq(from=yrange[1]+ystep/2, to=yrange[2]-ystep/2, length.out=nr)
+      xcol  <- seq(from=xrange[1L]+xstep/2, to=xrange[2L]-xstep/2, length.out=nc)
+      yrow  <- seq(from=yrange[1L]+ystep/2, to=yrange[2L]-ystep/2, length.out=nr)
     }
 
     out <- list(type     = "mask",
@@ -396,8 +396,8 @@ as.owin.data.frame <- function(W, ..., step, fatal=TRUE) {
     xstep <- ystep <- NULL
   } else {
     step <- ensure2vector(step)
-    xstep <- step[1]
-    ystep <- step[2]
+    xstep <- step[1L]
+    ystep <- step[2L]
   }
   if(!(ncol(W) %in% c(2,3))) {
     whinge <- "need exactly 2 or 3 columns of data"
@@ -410,9 +410,9 @@ as.owin.data.frame <- function(W, ..., step, fatal=TRUE) {
     W <- cbind(W, TRUE)
   } 
   mch <- matchNameOrPosition(c("x", "y", "z"), names(W))
-  ix <- mch[1]
-  iy <- mch[2]
-  iz <- mch[3]
+  ix <- mch[1L]
+  iy <- mch[2L]
+  iz <- mch[3L]
   df <- data.frame(x=W[,ix], y=W[,iy], z=as.logical(W[,iz]))
   with(df, {
     xx <- sort(unique(x))
@@ -427,14 +427,14 @@ as.owin.data.frame <- function(W, ..., step, fatal=TRUE) {
     ## ensure xx and yy are complete equally-spaced sequences
     fx <- fillseq(xx, step=xstep)
     fy <- fillseq(yy, step=ystep)
-    xcol <- fx[[1]]
-    yrow <- fy[[1]]
+    xcol <- fx[[1L]]
+    yrow <- fy[[1L]]
     ## trap very large matrices
     ok <- checkbigmatrix(length(xcol), length(yrow), fatal=fatal)
     if(!ok) return(NULL)
     ## mapping from xx to xcol, yy to yrow
-    jjj <- fx[[2]]
-    iii <- fy[[2]]
+    jjj <- fx[[2L]]
+    iii <- fy[[2L]]
     ## make logical matrix for full sequence
     m <- matrix(FALSE, length(yrow), length(xcol))
     m[iii,jjj] <- mm
@@ -543,14 +543,14 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
 # First determine row & column dimensions
     if(!is.null(dimyx)) {
       dimyx <- ensure2vector(dimyx)
-      nr <- dimyx[1]
-      nc <- dimyx[2]
+      nr <- dimyx[1L]
+      nc <- dimyx[2L]
     } else {
     # use pixel size 'eps'
       if(!is.null(eps)) {
         eps <- ensure2vector(eps)
-        nc <- diff(w$xrange)/eps[1]
-        nr <- diff(w$yrange)/eps[2]
+        nc <- diff(w$xrange)/eps[1L]
+        nr <- diff(w$yrange)/eps[2L]
         if(nr < 1 || nc < 1)
           warning("pixel size parameter eps > size of window")
         nr <- ceiling(nr)
@@ -559,10 +559,10 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
     # use spatstat defaults
         np <- spatstat.options("npixel")
         if(length(np) == 1)
-          nr <- nc <- np[1]
+          nr <- nc <- np[1L]
         else {
-          nr <- np[2]  
-          nc <- np[1]
+          nr <- np[2L]  
+          nc <- np[1L]
         }
       }
     }
@@ -628,8 +628,8 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
                     xstep    = xstep,
                     ystep    = ystep,
                     warnings = .Spatstat.Image.Warning,
-                    xcol    = seq(from=xr[1], to=xr[2], length.out=nc),
-                    yrow    = seq(from=yr[1], to=yr[2], length.out=nr),
+                    xcol    = seq(from=xr[1L], to=xr[2L], length.out=nc),
+                    yrow    = seq(from=yr[1L], to=yr[2L], length.out=nr),
                     m       = matrix(TRUE, nr, nc),
                     units   = uname)
       class(rasta) <- "owin"
@@ -659,8 +659,8 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
              yrow <- rasta$yrow
              wx <- w$xrange
              wy <- w$yrange
-             badrow <- which(yrow > wy[2] | yrow < wy[1])
-             badcol <- which(xcol > wx[2] | xcol < wx[1])
+             badrow <- which(yrow > wy[2L] | yrow < wy[1L])
+             badcol <- which(xcol > wx[2L] | xcol < wx[1L])
              out$m[badrow , ] <- FALSE
              out$m[ , badcol] <- FALSE
            }
@@ -804,13 +804,13 @@ rasterxy.mask <- function(w, drop=FALSE) {
 
 nearest.raster.point <- function(x,y,w, indices=TRUE) {
   stopifnot(is.mask(w) || is.im(w))
-  nr <- w$dim[1]
-  nc <- w$dim[2]
+  nr <- w$dim[1L]
+  nc <- w$dim[2L]
   if(length(x) == 0) {
     cc <- rr <- integer(0)
   } else {
-    cc <- 1 + round((x - w$xcol[1])/w$xstep)
-    rr <- 1 + round((y - w$yrow[1])/w$ystep)
+    cc <- 1 + round((x - w$xcol[1L])/w$xstep)
+    rr <- 1 + round((y - w$yrow[1L])/w$ystep)
     cc <- pmax.int(1,pmin.int(cc, nc))
     rr <- pmax.int(1,pmin.int(rr, nr))
   }
@@ -913,8 +913,8 @@ inside.owin <- function(x, y, w) {
   xr <- w$xrange
   yr <- w$yrange
   eps <- sqrt(.Machine$double.eps)
-  frameok <- (x >= xr[1] - eps) & (x <= xr[2] + eps) & 
-             (y >= yr[1] - eps) & (y <= yr[2] + eps)
+  frameok <- (x >= xr[1L] - eps) & (x <= xr[2L] + eps) & 
+             (y >= yr[1L] - eps) & (y <= yr[2L] + eps)
  
   if(!any(frameok))  # all points OUTSIDE window - no further work needed
     return(frameok)
@@ -992,7 +992,7 @@ print.owin <- function(x, ..., prefix="window: ") {
          mask={
            splat(paste0(prefix, "binary image mask"))
            di <- x$dim
-           splat(di[1], "x", di[2], "pixel array (ny, nx)")
+           splat(di[1L], "x", di[2L], "pixel array (ny, nx)")
            rectname <- "enclosing rectangle:"
          }
          )
@@ -1022,8 +1022,8 @@ summary.owin <- function(object, ...) {
            if(npoly == 0) {
              result$areas <- result$nvertices <- numeric(0)
            } else if(npoly == 1) {
-             result$areas <- Area.xypolygon(poly[[1]])
-             result$nvertices <- length(poly[[1]]$x)
+             result$areas <- Area.xypolygon(poly[[1L]])
+             result$nvertices <- length(poly[[1L]]$x)
            } else {
              result$areas <- unlist(lapply(poly, Area.xypolygon))
              result$nvertices <- lengths(lapply(poly, getElement, name="x"))
@@ -1077,7 +1077,7 @@ print.summary.owin <- function(x, ...) {
          mask={
            splat("binary image mask")
            di <- x$npixels
-           splat(di[1], "x", di[2], "pixel array (ny, nx)")
+           splat(di[1L], "x", di[2L], "pixel array (ny, nx)")
            splat("pixel size:",
                  signif(x$xstep,3), "by", signif(x$ystep,3),
                  pluralunits)
@@ -1115,7 +1115,7 @@ as.data.frame.owin <- function(x, ..., drop=TRUE) {
   b <- lapply(b, as.data.frame, ...)
   nb <- length(b)
   if(nb == 1)
-    return(b[[1]])
+    return(b[[1L]])
   dfs <- mapply(cbind, b, id=as.list(seq_len(nb)), sign=as.list(sign),
                 SIMPLIFY=FALSE)
   df <- do.call(rbind, dfs)

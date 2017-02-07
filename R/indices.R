@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.6 $  $Date: 2016/03/05 09:40:19 $
+#'   $Revision: 1.7 $  $Date: 2017/02/07 07:47:20 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -62,7 +62,7 @@ grokIndexVector <- function(ind, len, nama=NULL) {
     }
     #' new elements implied
     lostrict <- lo[1:len]
-    newones <- (len+1):m
+    newones <- (len+1L):m
     nstrict <- sum(lostrict)
     strict <- list(lo=lostrict,
                    i=which(lostrict),

@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.126 $ $Date: 2017/01/12 02:36:29 $
+# $Revision: 1.127 $ $Date: 2017/02/07 07:50:52 $
 #
 
 kppm <- function(X, ...) {
@@ -30,8 +30,8 @@ kppm.formula <-
   ## check formula has LHS and RHS. Extract them
   if(length(formula) < 3)
     stop(paste("Formula must have a left hand side"))
-  Yexpr <- formula[[2]]
-  trend <- formula[c(1,3)]
+  Yexpr <- formula[[2L]]
+  trend <- formula[c(1L,3L)]
   
   ## FIT #######################################
   thecall <- call("kppm", X=Yexpr, trend=trend,
@@ -249,13 +249,13 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
       StatFun <- paste0(stattype)
       StatName <- NULL
       if(is.null(statistic)){
-          if(is.null(stattype) || !is.element(stattype[1], c("K", "pcf")))
+          if(is.null(stattype) || !is.element(stattype[1L], c("K", "pcf")))
               stop("Cannot infer the type of summary statistic from argument ",
                    sQuote("X"), " please specify this via argument ",
                    sQuote("statistic"))
-          statistic <- stattype[1]
+          statistic <- stattype[1L]
       }
-      if(stattype[1]!=statistic)
+      if(stattype[1L]!=statistic)
           stop("Statistic inferred from ", sQuote("X"),
                " not equal to supplied argument ",
                sQuote("statistic"))
@@ -275,8 +275,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   if(statistic=="pcf"){
       argu <- fvnames(Stat, ".x")
       rvals <- Stat[[argu]]
-      if(rvals[1] == 0 && (is.null(rmin) || rmin == 0)) {
-          rmin <- rvals[2]
+      if(rvals[1L] == 0 && (is.null(rmin) || rmin == 0)) {
+          rmin <- rvals[2L]
       }
   }
 
@@ -1330,7 +1330,7 @@ simulate.kppm <- function(object, nsim=1, seed=NULL, ...,
     cat("Done.\n")
   # pack up
   if(nsim == 1 && drop) {
-    out <- out[[1]]
+    out <- out[[1L]]
   } else {
     out <- as.solist(out)
     if(nsim > 0)
@@ -1420,7 +1420,7 @@ update.kppm <- function(object, ...) {
   #' update name of data
   if(length(jX) == 1) {
     mc <- match.call()
-    Xlang <- mc[[2+jX]]
+    Xlang <- mc[[2L+jX]]
     out$Xname <- short.deparse(Xlang)
   }
   #'

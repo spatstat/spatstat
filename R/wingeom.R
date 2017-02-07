@@ -52,7 +52,7 @@ perimeter <- function(w) {
 
 framebottomleft <- function(w) {
   f <- Frame(w)
-  c(f$xrange[1], f$yrange[1])
+  c(f$xrange[1L], f$yrange[1L])
 }
 
 sidelengths.owin <- function(x) {
@@ -116,7 +116,7 @@ square <- function(r=1, unitname=NULL) {
     stopifnot(r > 0)
     r <- c(0,r)
   } else if(length(r) == 2) {
-    stopifnot(r[1] < r[2])
+    stopifnot(r[1L] < r[2L])
   } else stop("argument r must be a single number, or a vector of length 2")
   owin(r,r, unitname=unitname)
 }
@@ -132,13 +132,13 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
   
   bdry <- w$bdry
 
-  x0    <- rasta$xcol[1]
-  y0    <- rasta$yrow[1]
+  x0    <- rasta$xcol[1L]
+  y0    <- rasta$yrow[1L]
   xstep <- rasta$xstep
   ystep <- rasta$ystep
   dimyx <- rasta$dim
-  nx    <- dimyx[2]
-  ny    <- dimyx[1]
+  nx    <- dimyx[2L]
+  ny    <- dimyx[1L]
 
   epsilon <- with(.Machine, double.base^floor(double.ulp.digits/2))
 
@@ -150,8 +150,8 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
     yp <- p$y
     np <- length(p$x)
     # repeat last vertex
-    xp <- c(xp, xp[1])
-    yp <- c(yp, yp[1])
+    xp <- c(xp, xp[1L])
+    yp <- c(yp, yp[1L])
     np <- np + 1
     # rescale coordinates so that pixels are at integer locations
     xp <- (xp - x0)/xstep
@@ -192,11 +192,11 @@ overlap.owin <- function(A, B) {
   At <- A$type
   Bt <- B$type
   if(At=="rectangle" && Bt=="rectangle") {
-    xmin <- max(A$xrange[1],B$xrange[1])
-    xmax <- min(A$xrange[2],B$xrange[2])
+    xmin <- max(A$xrange[1L],B$xrange[1L])
+    xmax <- min(A$xrange[2L],B$xrange[2L])
     if(xmax <= xmin) return(0)
-    ymin <- max(A$yrange[1],B$yrange[1])
-    ymax <- min(A$yrange[2],B$yrange[2])
+    ymin <- max(A$yrange[1L],B$yrange[1L])
+    ymax <- min(A$yrange[2L],B$yrange[2L])
     if(ymax <= ymin) return(0)
     return((xmax-xmin) * (ymax-ymin))
   }
@@ -285,10 +285,10 @@ intersect.owin <- function(..., fatal=TRUE, p) {
   }
 
   ## at least one window
-  A <- argh[[1]]
+  A <- argh[[1L]]
   if(nwin == 1) return(A)
   ## at least two windows
-  B <- argh[[2]]
+  B <- argh[[2L]]
   
   if(nwin > 2) {
     ## handle union of more than two windows
@@ -450,7 +450,7 @@ union.owin <- function(..., p) {
     return(NULL)
   }
   ## at least one window
-  A <- argh[[1]]
+  A <- argh[[1L]]
   if(nwin == 1) return(A)
 
   ## more than two windows
@@ -462,7 +462,7 @@ union.owin <- function(..., p) {
       p <- commonPolyclipArgs(do.call(boundingbox, argh), p=p)
       ## apply these parameters now to avoid numerical errors
       argh <- applyPolyclipArgs(argh, p=p)
-      A <- argh[[1]]
+      A <- argh[[1L]]
     } 
     ## absorb all windows into A without rescaling
     nullp <- list(eps=1, x0=0, y0=0)
@@ -478,7 +478,7 @@ union.owin <- function(..., p) {
   }
 
   ## Exactly two windows
-  B <- argh[[2]]
+  B <- argh[[2L]]
   if(identical(A, B))
     return(A)
 
@@ -757,8 +757,8 @@ grow.rectangle <- function(W, xmargin=0, ymargin=xmargin, fraction=NULL) {
   if(!is.null(fraction)) {
     fraction <- ensure2vector(fraction)
     if(any(fraction < 0)) stop("fraction must be non-negative")
-    if(missing(xmargin)) xmargin <- fraction[1] * diff(W$xrange)
-    if(missing(ymargin)) ymargin <- fraction[2] * diff(W$yrange)
+    if(missing(xmargin)) xmargin <- fraction[1L] * diff(W$xrange)
+    if(missing(ymargin)) ymargin <- fraction[2L] * diff(W$yrange)
   }
   xmargin <- ensure2vector(xmargin)
   ymargin <- ensure2vector(ymargin)
@@ -971,7 +971,7 @@ is.convex <- function(x) {
            b <- x$bdry
            if(length(b) > 1)
              return(FALSE)
-           b <- b[[1]]
+           b <- b[[1L]]
            xx <- b$x
            yy <- b$y
            ch <- chull(xx,yy)
@@ -1043,11 +1043,11 @@ discs <- function(centres, radii=marks(centres)/2, ...,
     #' compute pixel approximation
     M <- as.mask(Window(centres), ...)
     z <- .C("discs2grid",
-            nx    = as.integer(M$dim[2]),
-            x0    = as.double(M$xcol[1]),
+            nx    = as.integer(M$dim[2L]),
+            x0    = as.double(M$xcol[1L]),
             xstep = as.double(M$xstep),  
-            ny    = as.integer(M$dim[1]),
-            y0    = as.double(M$yrow[1]),
+            ny    = as.integer(M$dim[1L]),
+            y0    = as.double(M$yrow[1L]),
             ystep = as.double(M$ystep), 
             nd    = as.integer(n),
             xd    = as.double(centres$x),
@@ -1062,17 +1062,17 @@ discs <- function(centres, radii=marks(centres)/2, ...,
   if(!sameradius && length(unique(radii)) > 1) {
     if(is.null(delta) && is.null(npoly)) {
       ra <- range(radii)
-      rr <- ra[2]/ra[1]
+      rr <- ra[2L]/ra[1L]
       mm <- ceiling(128/rr)
       mm <- max(16, mm) ## equals 16 unless ra[2]/ra[1] < 8 
-      delta <- 2 * pi * ra[1]/mm
+      delta <- 2 * pi * ra[1L]/mm
     }
     for(i in 1:n)
       D[[i]] <- disc(centre=centres[i], radius=radii[i],
                      delta=delta, npoly=npoly)
   } else {
     #' congruent discs -- use 'shift'
-    W0 <- disc(centre=c(0,0), radius=radii[1],
+    W0 <- disc(centre=c(0,0), radius=radii[1L],
                delta=delta, npoly=npoly)
     for(i in 1:n) 
       D[[i]] <- shift(W0, vec=centres[i])

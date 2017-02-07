@@ -135,7 +135,7 @@ primefactors <- function(n, method=c("C", "interpreted")) {
            z <- .C("primefax",
                    n=as.integer(n),
                    factors=as.integer(integer(kmax)),
-                   nfactors=as.integer(integer(1)))
+                   nfactors=as.integer(integer(1L)))
            result <- z$factors[seq_len(z$nfactors)]
          },
          stop("Unrecognised method"))

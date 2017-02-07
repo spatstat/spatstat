@@ -1,7 +1,7 @@
 #
 # interactive plot 
 #
-#   $Revision: 1.12 $   $Date: 2015/10/21 09:06:57 $
+#   $Revision: 1.13 $   $Date: 2017/02/07 07:47:20 $
 #
 #
 
@@ -37,7 +37,7 @@ iplot.layered <- local({
       pl <- layerplotargs(x)
       n <- length(x)
       xpre <- if(ii == 1) NULL else x[1:ii]
-      xpost <- if(ii == n) NULL else x[(ii+1):n]
+      xpost <- if(ii == n) NULL else x[(ii+1L):n]
       ppre <- if(ii == 1) NULL else pl[1:ii]
       ppost <- if(ii == n) NULL else pl[(ii+1):n]
       a <- as.psp(as.linnet(x[[ii]]))
@@ -148,7 +148,7 @@ iplot.layered <- function(x, ..., xname, visible) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        height <- sidelengths(bb)[2]
+                        height <- sidelengths(bb)[2L]
                         stepsize <- (height/4)/zo
                         panel$zoomcentre <- ce + c(0, stepsize)
                         CommitAndRedraw(panel)
@@ -160,7 +160,7 @@ iplot.layered <- function(x, ..., xname, visible) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        width <- sidelengths(bb)[1]
+                        width <- sidelengths(bb)[1L]
                         stepsize <- (width/4)/zo
                         panel$zoomcentre <- ce - c(stepsize, 0)
                         CommitAndRedraw(panel)
@@ -171,7 +171,7 @@ iplot.layered <- function(x, ..., xname, visible) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        width <- sidelengths(bb)[1]
+                        width <- sidelengths(bb)[1L]
                         stepsize <- (width/4)/zo
                         panel$zoomcentre <- ce + c(stepsize, 0)
                         CommitAndRedraw(panel)
@@ -183,7 +183,7 @@ iplot.layered <- function(x, ..., xname, visible) {
                         zo <- panel$zoomfactor
                         ce <- panel$zoomcentre
                         bb <- panel$bb
-                        height <- sidelengths(bb)[2]
+                        height <- sidelengths(bb)[2L]
                         stepsize <- (height/4)/zo
                         panel$zoomcentre <- ce - c(0, stepsize)
                         CommitAndRedraw(panel)
