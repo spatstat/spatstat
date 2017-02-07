@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.20 $     $Date: 2014/10/24 00:22:30 $
+#      $Revision: 1.21 $     $Date: 2017/02/07 02:24:27 $
 #
 #
 #     Distance transforms
@@ -76,13 +76,13 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
     mat <- rbind(pad, mat, pad)
 # call C routine
     res <- .C("distmapbin",
-              as.double(X$xrange[1L]),
-              as.double(X$yrange[1L]),
-              as.double(X$xrange[2L]),
-              as.double(X$yrange[2L]),
+              xmin=as.double(X$xrange[1L]),
+              ymin=as.double(X$yrange[1L]),
+              xmax=as.double(X$xrange[2L]),
+              ymax=as.double(X$yrange[2L]),
               nr = as.integer(nr),
               nc = as.integer(nc),
-              as.logical(t(mat)),
+              inp = as.integer(as.logical(t(mat))),
               distances = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
               boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)))
   # strip off margins again

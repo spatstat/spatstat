@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.48-0.035
+        CHANGES IN spatstat VERSION 1.48-0.036
 
 OVERVIEW
 
-    o We thank Tilman Davies, Kassel Hingee, Abdollah Jalilian 
-    and Dominic Schuhmacher for contributions.
+    o We thank Tilman Davies, Kassel Hingee, Abdollah Jalilian,
+    Brian Ripley and Dominic Schuhmacher for contributions.
 
     o spatstat now 'Suggests' the package 'fftwtools'.
 
@@ -24,7 +24,7 @@ OVERVIEW
 
     o Bug fixes.
 
-    o Version nickname: 'Unpresidented'
+    o Version nickname: 'So-Called Software'
 
 NEW DEPENDENCIES
 
@@ -131,6 +131,10 @@ BUG FIXES
 
     o as.ppp.lpp
     Crashed if there was more than one column of marks.
+    Fixed.
+
+    o has.close.pp3
+    Results were incorrect, or a crash occurred, when argument 'Y' was given.
     Fixed.
 
     o rmpoispp

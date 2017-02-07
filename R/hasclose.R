@@ -3,7 +3,7 @@
 #'
 #'    Determine whether each point has a close neighbour
 #'
-#'    $Revision: 1.9 $  $Date: 2016/12/30 01:44:07 $
+#'    $Revision: 1.10 $  $Date: 2017/02/06 10:44:44 $
 
 has.close <- function(X, r, Y=NULL, ...) {
   UseMethod("has.close")
@@ -139,7 +139,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       cY <- cY[ooY, , drop=FALSE]
     }
     if(!periodic) {
-      zz <- .C("hasXYclose",
+      zz <- .C("hasXY3close",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -155,7 +155,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       bY <- sidelengths(as.box3(Y))
       if(any(bX != bY))
         warning("Domains are not equal: periodic distance may be erroneous")
-      zz <- .C("hasXYclose",
+      zz <- .C("hasXY3pclose",
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
