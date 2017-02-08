@@ -3,12 +3,11 @@
 #' 
 #'    Dealing with other packages
 #' 
-#'    $Revision: 1.15 $  $Date: 2017/02/04 10:31:46 $
+#'    $Revision: 1.16 $  $Date: 2017/02/08 08:34:29 $
 
 fft2D <- function(z, inverse=FALSE,
                   west=requireNamespace("fftwtools", quietly=TRUE)) {
-  if(west && spatstat.options("developer"))
-    return(fftwtools::fftw2d(data=z, inverse=inverse))
+  if(west) return(fftwtools::fftw2d(data=z, inverse=inverse))
   return(stats::fft(z=z, inverse=inverse))
 }
   
