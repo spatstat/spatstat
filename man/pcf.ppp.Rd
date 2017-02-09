@@ -12,7 +12,7 @@
                     divisor = c("r", "d"),
                     var.approx = FALSE,
                     domain=NULL,
-                    ratio=FALSE)
+                    ratio=FALSE, close=NULL)
 }
 \arguments{
   \item{X}{
@@ -56,6 +56,9 @@
     If \code{TRUE}, the numerator and denominator of
     each edge-corrected estimate will also be saved,
     for use in analysing replicated point patterns.
+  }
+  \item{close}{
+    Advanced use only. Precomputed data. See section on Advanced Use.
   }
 } 
 \value{
@@ -206,6 +209,13 @@
   which is valid for stationary point processes which are not
   too clustered. This calculation is not yet implemented when
   the argument \code{domain} is given.
+}
+\section{Advanced Use}{
+  To perform the same computation using several different bandwidths \code{bw},
+  it is efficient to use the argument \code{close}.
+  This should be the result of \code{\link{closepairs}(X, rmax)}
+  for a suitably large value of \code{rmax}, namely
+  \code{rmax >= max(r) + 3 * bw}.
 }
 \references{
   Illian, J., Penttinen, A., Stoyan, H. and Stoyan, D. (2008)

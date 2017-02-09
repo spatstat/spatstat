@@ -1,137 +1,161 @@
-## bandwidth selection with Least-Squres Cross-Validation method
-# By: Rasmus Waagepetersen and Abdollah Jalilian
-# reference
-# Guan, Y. (2007). A composite likelihood cross-validation approach in 
-#   selecting bandwidth for the estimation of the pair correlation function. 
-#   Scandinavian Journal of Statistics, 34(2), 336–346. 
-#   DOI: http://doi.org/10.1111/j.1467-9469.2006.00533.x
-# Guan, Y. (2007). A least-squares cross-validation bandwidth 
-#   selection approach in pair correlation function estimations. 
-#   Statistics & Probability Letters, 77(18), 1722–1729. 
-#   DOI: http://doi.org/10.1016/j.spl.2007.04.016
+#'
+#' bw.pcf.R
+#'
+#' $Revision: 1.3 $  $Date: 2017/02/09 03:15:02 $
+#'
+#' bandwidth selection for pcf
+#' with least-squares cross-validation method
+#' 
+#' Original code by: Rasmus Waagepetersen and Abdollah Jalilian
+#'
+#' References:
+#' Guan, Y. (2007). A composite likelihood cross-validation approach in 
+#'   selecting bandwidth for the estimation of the pair correlation function. 
+#'   Scandinavian Journal of Statistics, 34(2), 336–346. 
+#'   DOI: http://doi.org/10.1111/j.1467-9469.2006.00533.x
+#' Guan, Y. (2007). A least-squares cross-validation bandwidth 
+#'   selection approach in pair correlation function estimations. 
+#'   Statistics & Probability Letters, 77(18), 1722–1729. 
+#'   DOI: http://doi.org/10.1016/j.spl.2007.04.016
 
 bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r", 
                    kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
-                   cv.method="compLik", simple=TRUE, ...)
+                   cv.method=c("compLik", "leastSQ"), simple=TRUE,
+                   srange=NULL, ...)
 {
+  stopifnot(is.ppp(X))
+  X <- unmark(X)
   win <- Window(X)
   areaW <- area(win)
+  nX <- npoints(X)
+
+  cv.method <- match.arg(cv.method)
+  kernel <- match.kernel(kernel)
   
-  # maximum distance lag: rmax
+  #' maximum distance lag: rmax
   if (is.null(rmax))
-    rmax <- rmax.rule("K", win,  npoints(X)/areaW)
-  #rmax <- rmax + 0.15/sqrt(npoints(X)/areaW)
-  # number of subintervals for discretization of [0, rmax]: nr
-  # length of subintervals
+    rmax <- rmax.rule("K", win,  nX/areaW)
+  if(is.null(srange))
+    srange <- c(0, rmax/4)
+  #' number of subintervals for discretization of [0, rmax]: nr
+  #' length of subintervals
   discr <- rmax / nr
-  # breaks of subintervals
+  #' breaks of subintervals
   rs <- seq(0, rmax, length.out= nr + 1)
   
   cp <- closepairs(X, rmax, what="all", twice=TRUE)
-  # closepairs distances: \\ u - v \\
+  #' closepairs distances: \\ u - v \\
   ds <- cp$d
-  # determining closepairs distances are in which subinterval
+  #' determining closepairs distances are in which subinterval
   idx <- round(ds / discr) + 1
   
-  # translation edge correction faqctor: /W|/|W \cap W_{u-v}|
+  #' translation edge correction faqctor: /W|/|W \cap W_{u-v}|
   edgewt <- edge.Trans(dx=cp$dx, dy=cp$dy, W=win, paired=TRUE)
   
-  if (is.null(lambda))
-  {
-    # homogeneous case
-    lambda <- npoints(X)/areaW
+  if(homogeneous <- is.null(lambda)) {
+    #' homogeneous case
+    lambda <- nX/areaW
     lambda2area <- lambda^2 * areaW
-    gfun <- function(bw)
-    {
-      pcf(X, r=rs, bw=bw, divisor=divisor, kernel=kernel,
-          correction="translate")$trans
-    }
+    pcfargs <- list(X=X, r=rs,
+                    divisor=divisor, kernel=kernel, correction="translate",
+                    close=cp)
     renorm.factor <- 1
-  } else
-  {
-    # inhomogeneous case: lambda is asssumed to be a numeric vector giving
-    # the intenisty at the points of the point pattern X
+  } else {
+    # inhomogeneous case: lambda is assumed to be a numeric vector giving
+    # the intensity at the points of the point pattern X
+    check.nvector(lambda, nX)
     lambda2area <- lambda[cp$i] * lambda[cp$j] * areaW
-    gfun <- function(bw)
-    {
-      pcfinhom(X, r=rs, lambda=lambda, bw=bw, divisor=divisor, 
-               kernel=kernel, correction="translate")$trans
-    }
+    pcfargs <- list(X=X, lambda=lambda, r=rs,
+                    divisor=divisor, kernel=kernel, correction="translate",
+                    close=cp)
     renorm.factor <- (areaW/sum(1/lambda))
   }
   
-  # kernel function
-  # integral of kernel function: int_{-h}^{d} k(r) dr
-  switch(kernel, epanechnikov={
-    kerfun <- function(d, bw)
-    {
-      h <- sqrt(5) * bw
-      ifelse(abs(d) < h, 0.75 * (1 - (d/h)^2)/h, 0)
-    }
-    integkerfun <- function(d, bw)
-    {
-      h <- sqrt(5) * bw
-      ifelse(d <= h, 3/4 * (1 + d / h) - 1/4 * (1 + d^3 / h^3), 1)
-    }
-  }, rectangular={
-    kerfun <- function(d, bw) 
-    {
-      h <- sqrt(3) * bw
-      ifelse(abs(d) < h, 0.5/h, 0)
-    }
-    integkerfun <- function(d, bw)
-    {
-      h <- sqrt(3) * bw
-      ifelse(d <= h, 1/2 * (1 + d/h), 1)
-    }
-  }, stop("the specified kernel is not implemented yet!"))
-  
-  cvfun <- function(bw)
-  {
-    # values of pair correlation at breaks of subintervals 
-    grs <- gfun(bw)
-    # bias correction
-    if (bias.correct)
-    {
-      grs <- grs / integkerfun(rs, bw)
-      dcorrec <- integkerfun(ds, bw)
-    } else{
-      dcorrec <- 1
-    }
-    # make sure that the estimated pair correlation at origin is finite
-    if (!is.finite(grs[1]))
-      grs[1] <- grs[2]
-    # approximate the pair correlation values at closepairs distances
-    gds <- grs[idx]
-    wt <- edgewt / (2 * pi * ds * lambda2area * dcorrec) * renorm.factor
-    # remove pairs to approximate the cross-validation term: g^{-(u, v)}
-    if (simple)
-    {
-      gds <- gds - 2 * wt * kerfun(0, bw)
-    } else{
-      for (k in 1:length(ds))
-      {
-        exclude <- (cp$i == cp$i[k]) | (cp$j == cp$j[k])
-        gds[k] <- gds[k] - 2 * sum(wt[exclude] * 
-                                     kerfun(ds[k] - ds[exclude], bw))
-      }
-    }
-    
-    switch(cv.method, compLik={  # composite likelihood cross-validation
-      # the integral term: 2 \pi \int_{0}^{rmax} \hat g(r) r dr
-      normconst <- 2 * pi * sum(grs * rs) * discr
-      return(mean(log(gds)) - log(normconst))
-    }, leastSQ={  # least squares cross-validation
-      # the integral term: 2 \pi \int_{0}^{rmax} \hat g^2(r) r dr
-      normconst <- 2 * pi * sum(grs^2 * rs) * discr
-      return(2 * sum(gds * edgewt / (lambda2area)) - normconst)
-    }, stop("wrong cross-validation method"))
-  }
-  
-  dyt <- optimize(cvfun, lower=0, upper=rmax / 4, maximum=TRUE)
-  
-  return(dyt$maximum)
+  stuff <- list(cv.method=cv.method,
+                kernel=kernel,
+                homogeneous=homogeneous,
+                bias.correct=bias.correct,
+                simple = simple,
+                discr=discr,
+                rs=rs,
+                cp=cp,
+                ds=ds,
+                idx=idx,
+                edgewt=edgewt,
+                pcfargs=pcfargs,
+                lambda=lambda,
+                lambda2area=lambda2area,
+                renorm.factor=renorm.factor)
+  stuff <- list2env(stuff)
+
+  #' find optimum bandwidth
+  z <- optimizeWithTrace(CVforPCF, srange, maximum=TRUE, stuff=stuff)
+
+  #' pack up
+  ox <- order(z$x)
+  sigma  <- z$x[ox]
+  cv     <- z$y[ox]
+  criterion <- switch(cv.method,
+                      compLik = "composite likelihood cross-validation",
+                      leastSQ = "least squares cross-validation")
+  result <- bw.optim(cv, sigma, which.max(cv),
+                     criterion = criterion,
+                     unitname=unitname(X))
+  return(result)
 }
 
-# example
-# bw.pcf(redwood)
+CVforPCF <- function(bw, stuff) {
+  cat(paste("bw=", bw, "\n"))
+  assign("bw", bw, envir=stuff)
+  with(stuff, {
+    #' values of pair correlation at breaks of subintervals
+    a <- append(pcfargs, list(bw=bw))
+    grs <- if(homogeneous) do.call(pcf.ppp, a) else do.call(pcfinhom, a)
+    grs <- grs$trans
+    #' bias correction
+    if (bias.correct) {
+      grs <- grs / pkernel(rs, kernel, 0, bw)
+      dcorrec <- pkernel(ds, kernel, 0, bw)
+    } else {
+      dcorrec <- 1
+    }
+    #' make sure that the estimated pair correlation at origin is finite
+    if (!is.finite(grs[1]))
+      grs[1] <- grs[2]
+    #' approximate the pair correlation values at closepairs distances
+    gds <- grs[idx]
+    wt <- edgewt / (2 * pi * ds * lambda2area * dcorrec) * renorm.factor
+    #' remove pairs to approximate the cross-validation term: g^{-(u, v)}
+    if (simple) {
+      gds <- gds - 2 * wt * dkernel(0, kernel, 0, bw)
+    } else {
+      cpi <- cp$i
+      cpj <- cp$j
+      for (k in 1:length(ds)) {
+        exclude <- (cpi == cpi[k]) | (cpj == cpj[k])
+        gds[k] <- gds[k] - 2 * sum(wt[exclude] * 
+                                   dkernel(ds[k] - ds[exclude],
+                                           kernel, 0, bw))
+      }
+    }
+    #' remove negative and zero values
+    gds <- pmax.int(.Machine$double.eps, 0)
+    switch(cv.method,
+           compLik={
+             #' composite likelihood cross-validation
+             #' the integral term: 2 \pi \int_{0}^{rmax} \hat g(r) r dr
+             normconst <- 2 * pi * sum(grs * rs) * discr
+             value <- mean(log(gds)) - log(normconst)
+           },
+           leastSQ={
+             #' least squares cross-validation
+             #' the integral term: 2 \pi \int_{0}^{rmax} \hat g^2(r) r dr
+             normconst <- 2 * pi * sum(grs^2 * rs) * discr
+             value <- 2 * sum(gds * edgewt / (lambda2area)) - normconst
+           },
+           stop("Unrecognised cross-validation method"))
+    cat(paste("value=", value, "\n"))
+    return(value)
+  })
+}
+

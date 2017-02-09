@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.18 $   $Date: 2016/02/17 06:58:14 $
+#   $Revision: 1.20 $   $Date: 2017/02/09 03:59:29 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #
@@ -15,7 +15,7 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
                      normpower=1,
                      update=TRUE, leaveoneout=TRUE,
                      reciplambda=NULL, 
-                     sigma=NULL, varcov=NULL)
+                     sigma=NULL, varcov=NULL, close=NULL)
 {
   verifyclass(X, "ppp")
 #  r.override <- !is.null(r)
@@ -150,7 +150,18 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   # compute pairwise distances
 
   if(npts > 1) {
-    close <- closepairs(X, rmax+hmax)
+    if(is.null(close)) {
+      #' find close pairs
+      close <- closepairs(X, rmax+hmax)
+    } else {
+      #' check 'close' has correct format
+      needed <- c("i", "j", "xi", "yi", "xj", "yj", "dx", "dy", "d")
+      if(any(is.na(match(needed, names(close)))))
+        stop(paste("Argument", sQuote("close"),
+                   "should have components named",
+                   commasep(sQuote(needed))),
+             call.=FALSE)
+    }
     dIJ <- close$d
     I <- close$i
     J <- close$j

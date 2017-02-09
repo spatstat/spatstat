@@ -11,7 +11,7 @@
 \usage{
   bw.pcf(X, rmax=NULL, lambda=NULL, divisor="r", 
          kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
-         cv.method="compLik", simple=TRUE, ...)
+         cv.method=c("compLik", "leastSQ"), simple=TRUE, srange=NULL, \dots)
 }
 \arguments{
   \item{X}{
@@ -45,11 +45,17 @@
     estimate. See Details.
   }
   \item{cv.method}{
-    Choice of cross validation method.
+    Choice of cross validation method: either
+    \code{"compLik"} or \code{"leastSQ"} (partially matched).
   }
   \item{simple}{
     Logical. Whether to use simple removal of spatial lag 
     distances. See Details.
+  }
+  \item{srange}{
+    Optional. Numeric vector of length 2 giving the range of
+    bandwidth values that should be searched to find the optimum
+    bandwidth.
   }
   \item{\dots}{
     Other arguments, passed to \code{\link{pcf}} or 
@@ -64,12 +70,12 @@
   (inhomogeneous case).
 
   With \code{cv.method="leastSQ"}, the bandwidth 
-  \eqn{h}{h} is chosen to minimise an unbiased 
+  \eqn{h} is chosen to minimise an unbiased 
   estimate of the integrated mean-square error criterion 
   \eqn{M(h)} defined in equation (4) in Guan (2007a).
   
   With \code{cv.method="compLik"}, the bandwidth 
-  \eqn{h}{h} is chosen to maximise a likelihood 
+  \eqn{h} is chosen to maximise a likelihood 
   cross-validation criterion \eqn{CV(h)} defined in 
   equation (6) of Guan (2007b).
   
@@ -101,9 +107,8 @@
   \code{\link{pcfinhom}}
 }
 \examples{
-  data(redwood)
-  bw <- bw.pcf(redwood)
-  plot(pcf(redwood, bw=bw))
+  b <- bw.pcf(redwood)
+  plot(pcf(redwood, bw=b))
 }
 \references{
   Guan, Y. (2007a). 
@@ -120,8 +125,7 @@
 }
 \author{
   Rasmus Waagepetersen and Abdollah Jalilian. 
-  Adapted for spatstat by \adrian
-  and \rolf
+  Adapted for \pkg{spatstat} by \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

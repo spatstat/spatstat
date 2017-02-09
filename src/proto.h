@@ -8,6 +8,12 @@
 
 */
 
+/*
+  
+                  Functions invoked by .C
+
+*/
+
 void areadifs(double *, int *, double *, double *, int *, int *, double *); 
 void areaBdif(double *, int *, double *, double *, int *, int *, double *, double *, double *, double *, double *);
 void delta2area(double *, double *, double *, double *, int *, double *, double *, double *, double *, int *); 
@@ -189,6 +195,11 @@ void Cmatchxy(int *, double *, double *, int *, double *, double *, int *);
 void inxyp(double *, double *, double *, double *, int *, int *, int *, int *);
 void prdist2segs(double *, double *, int *, double *, double *, double *, double *, int *, double *, double *); 
 void nndist2segs(double *, double *, int *, double *, double *, double *, double *, int *, double *, double *, int *);
+/*
+
+             Functions invoked by .Call
+
+*/
 SEXP close3pairs(SEXP, SEXP, SEXP, SEXP, SEXP); 
 SEXP close3IJpairs(SEXP, SEXP, SEXP, SEXP, SEXP); 
 SEXP cross3pairs(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP); 

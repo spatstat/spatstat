@@ -1,7 +1,7 @@
 #
 #   pcf.R
 #
-#   $Revision: 1.61 $   $Date: 2016/07/02 03:37:21 $
+#   $Revision: 1.63 $   $Date: 2017/02/09 03:15:14 $
 #
 #
 #   calculate pair correlation function
@@ -19,7 +19,8 @@ pcf.ppp <- function(X, ..., r=NULL,
                     correction=c("translate", "Ripley"),
                     divisor=c("r", "d"),
                     var.approx=FALSE,
-                    domain=NULL, ratio=FALSE)
+                    domain=NULL, ratio=FALSE,
+                    close=NULL)
 {
   verifyclass(X, "ppp")
 #  r.override <- !is.null(r)
@@ -113,8 +114,20 @@ pcf.ppp <- function(X, ..., r=NULL,
   
   # compute pairwise distances
   if(npts > 1) {
-    what <- if(any(correction %in% c("translate", "isotropic"))) "all" else "ijd" 
-    close <- closepairs(X, rmax + hmax, what=what)
+    needall <- any(correction %in% c("translate", "isotropic"))
+    if(is.null(close)) {
+      what <- if(needall) "all" else "ijd"
+      close <- closepairs(X, rmax + hmax, what=what)
+    } else {
+      #' check 'close' has correct format
+      needed <- if(!needall) c("i", "j", "d") else
+                 c("i", "j", "xi", "yi", "xj", "yj", "dx", "dy", "d")
+      if(any(is.na(match(needed, names(close)))))
+        stop(paste("Argument", sQuote("close"),
+                   "should have components named",
+                   commasep(sQuote(needed))),
+             call.=FALSE)
+    }
     dIJ <- close$d
   } else {
     undefined <- rep(NaN, length(r))

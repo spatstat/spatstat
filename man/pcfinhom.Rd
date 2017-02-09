@@ -15,7 +15,7 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
          renormalise = TRUE, normpower=1,
          update = TRUE, leaveoneout = TRUE,
          reciplambda = NULL,
-         sigma = NULL, varcov = NULL)
+         sigma = NULL, varcov = NULL, close=NULL)
 }
 \arguments{
   \item{X}{
@@ -94,6 +94,9 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     to control the smoothing bandwidth, when \code{lambda} is
     estimated by kernel smoothing.
   }
+  \item{close}{
+    Advanced use only. Precomputed data. See section on Advanced Use.
+  }
 }
 \details{
   The inhomogeneous pair correlation function \eqn{g_{\rm inhom}(r)}{ginhom(r)}
@@ -168,6 +171,13 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     estimated by Ripley isotropic correction
   }
   as required.
+}
+\section{Advanced Use}{
+  To perform the same computation using several different bandwidths \code{bw},
+  it is efficient to use the argument \code{close}.
+  This should be the result of \code{\link{closepairs}(X, rmax)}
+  for a suitably large value of \code{rmax}, namely
+  \code{rmax >= max(r) + 3 * bw}.
 }
 \seealso{
   \code{\link{pcf}}, 

@@ -1,4 +1,29 @@
 
+        CHANGES IN spatstat VERSION 1.49-0.001
+
+OVERVIEW
+
+    o We thank Abdollah Jalilian and Rasmus Waagepetersen for contributions.
+
+    o Bandwidth selection for pair correlation function.
+
+    o Version nickname: 'Bigly'
+
+NEW FUNCTIONS
+
+    o bw.pcf
+    Bandwidth selection for pair correlation function.
+    Original code contributed by Abdollah Jalilian and Rasmus Waagepetersen.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o pcf, pcfinhom
+    New argument 'close' for advanced use.
+
+BUG FIXES
+
+    o None
+
         CHANGES IN spatstat VERSION 1.49-0
 
 OVERVIEW

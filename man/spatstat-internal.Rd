@@ -114,6 +114,7 @@
 \alias{CressieReadStatistic}
 \alias{CressieReadSymbol}
 \alias{CressieReadName}
+\alias{CVforPCF}
 \alias{damaged.ppm}
 \alias{data.mppm}
 \alias{datagen.runifpointOnLines}
@@ -458,6 +459,7 @@
 \alias{objsurfEngine}
 \alias{offsetsinformula}
 \alias{onecolumn}
+\alias{optimizeWithTrace}
 \alias{optimStatus}
 \alias{orderstats}
 \alias{orderwhich}
@@ -975,6 +977,7 @@ countingweights(id, areas, check = TRUE)
 CressieReadStatistic(OBS,EXP,lambda)
 CressieReadSymbol(lambda)
 CressieReadName(lambda)
+CVforPCF(bw, stuff)
 damaged.ppm(object)
 data.mppm(x)
 datagen.runifpointOnLines(n, L)
@@ -1380,6 +1383,7 @@ objsurfEngine(objfun, optpar, objargs,
               ngrid, ratio, verbose)
 offsetsinformula(x)
 onecolumn(m)
+optimizeWithTrace(f, interval, \dots, lower, upper)
 optimStatus(x, call)
 printStatus(x, errors.only)
 signalStatus(x, errors.only)
