@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sequences, vectors, ranges of values
 #'
-#'       $Revision$ $Date$
+#'       $Revision: 1.1 $ $Date: 2017/02/12 09:08:55 $
 #'
 
 dropifsingle <- function(x) if(length(x) == 1) x[[1]] else x
@@ -164,10 +164,10 @@ geomseq <- function(from, to, length.out) {
 
 ## ............. ranges ...................
 
-intersect.ranges <- function(a, b, fatal=TRUE) {
-  if(!is.null(a) && !is.null(b)) {
-    lo <- max(a[1],b[1])
-    hi <- min(a[2],b[2])
+intersect.ranges <- function(r, s, fatal=TRUE) {
+  if(!is.null(r) && !is.null(s)) {
+    lo <- max(r[1],s[1])
+    hi <- min(r[2],s[2])
     if(lo <= hi)
       return(c(lo, hi))
   }
@@ -217,12 +217,12 @@ prettydiscrete <- function(x, n=10) {
 }
 
 
-check.range <- function(x, fatal=TRUE) {
-  xname <- deparse(substitute(x))
-  if(is.numeric(x) && identical(x, range(x, na.rm=TRUE)))
+check.range <- function(r, fatal=TRUE) {
+  rname <- deparse(substitute(r))
+  if(is.numeric(r) && identical(r, range(r, na.rm=TRUE)))
     return(TRUE)
   if(fatal) 
-    stop(paste(xname, "should be a vector of length 2 giving (min, max)"))
+    stop(paste(rname, "should be a vector of length 2 giving (min, max)"))
   return(FALSE)
 }
 

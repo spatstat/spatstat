@@ -374,9 +374,9 @@ cat.factor <- function (..., recursive=FALSE) {
   return(do.call(rbind,lll)[,1])
 }
 
-prange <- function(x) {
-  stopifnot(length(x) == 2)
-  paren(paste(x, collapse=", "), "[")
+prange <- function(r) {
+  stopifnot(length(r) == 2)
+  paren(paste(r, collapse=", "), "[")
 }
 
 #   gsub(".", replacement, x) but only when "." appears as a variable

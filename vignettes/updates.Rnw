@@ -84,6 +84,21 @@ Here is the text from the `overview' sections of
 the News and Release Notes for each update. 
 
 \begin{itemize}
+
+  \item \spst\ now suggests the package \pkg{fftwtools}.
+
+  \item Operations on signed measures.
+
+   \item Operations on lists of pixel images.
+
+   \item Improved pixellation of point patterns.
+
+   \item Stieltjes integral extended.
+
+   \item Subset operators extended.
+
+   \item Greatly accelerated \texttt{rmh} when using \texttt{nsave}
+
   \item Sufficient Dimension Reduction for point processes.
 
   \item Alternating Gibbs Sampler for point process simulation.
@@ -250,7 +265,34 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
-    \item \texttt{sdr}, \texttt{dimhat}:
+    \item \texttt{bw.pcf}:
+      Bandwidth selection for pair correlation function.
+          
+    \item \texttt{hexagon}, \texttt{regularpolygon}:
+    Create regular polygons.
+
+    \item \texttt{Ops.msr}:
+    Arithmetic operations for measures.
+
+    \item \texttt{Math.imlist}, \texttt{Ops.imlist}, 
+      \texttt{Summary.imlist}, \texttt{Complex.imlist}:
+    Arithmetic operations for lists of pixel images.
+
+    \item \texttt{measurePositive}, \texttt{measureNegative}, 
+      \texttt{measureVariation}, \texttt{totalVariation}:
+    Positive and negative parts of a measure, and variation of a measure.
+
+    \item \texttt{as.function.owin}:
+    Convert a spatial window to a \texttt{function(x,y)}, 
+    the indicator function.
+
+    \item \texttt{as.function.ssf}:
+    Convert an object of class \texttt{ssf} to a \texttt{function(x,y)}
+
+    \item \texttt{as.function.leverage.ppm}
+    Convert an object of class \texttt{leverage.ppm} to a \texttt{function(x,y)}
+
+  \item \texttt{sdr}, \texttt{dimhat}:
     Sufficient Dimension Reduction for point processes.
 
     \item \texttt{simulate.rhohat}:
@@ -655,13 +697,31 @@ also carries these marks in the \verb!$lines! component.
   \item \texttt{as.polygonal}:
   Can now repair errors in polygon data, if \texttt{repair=TRUE}.
 
+  \item \texttt{as.solist}:
+    The argument \texttt{x} can now be a spatial object;
+    \texttt{as.solist(cells)} is the same as \texttt{solist(cells)}.
+
 %%B
+ \item \texttt{bdist.pixels}:
+   Accelerated for polygonal windows. New argument \texttt{method}.
+   
  \item \texttt{bw.ppl}:
    New arguments \texttt{weights} and \texttt{sigma}.
    
+ \item \texttt{bw.diggle}, \texttt{bw.ppl}, \texttt{bw.relrisk}, 
+   \texttt{bw.smoothppp}, 
+    These functions now extract and store the name of the unit of length
+    from the point pattern dataset. When the bandwidth selection criterion
+    is plotted, the name of the unit of length is shown on the x-axis.
+   
 %%C
  \item \texttt{cdf.test}:
-   Calculations are more robust against numerical rounding effects.
+   \begin{itemize}
+   \item    Calculations are more robust against numerical rounding effects.
+   \item The methods for classes \texttt{ppp}, \texttt{ppm}, \texttt{lpp}, 
+     \texttt{lppm}, \texttt{slrm} have a new argument \texttt{interpolate}.
+   \end{itemize}
+
    
  \item \texttt{cdf.test.mppm}:
    \begin{itemize}
@@ -1024,17 +1084,29 @@ also carries these marks in the \verb!$lines! component.
      (when \texttt{var.approx=TRUE}).
    \item 
      Now returns the smoothing bandwidth used, as an attribute of the result.
+   \item 
+     New argument \texttt{close} for advanced use.
    \end{itemize}
 
 
    
  \item \texttt{pcfinhom}:
+   \begin{itemize}
+   \item 
     Default behaviour is changed when \texttt{lambda} is a fitted model.
     The default is now to re-fit the model to the data before computing pcf.
     New arguments \texttt{update} and \texttt{leaveoneout} control this.
+   \item 
+     New argument \texttt{close} for advanced use.
+   \end{itemize}
 
-  \item \texttt{pixellate.ppp}: 
-     Accelerated in the case where weights are given.
+  \item \texttt{pixellate.ppp}:
+    \begin{itemize}
+    \item      Accelerated in the case where weights are given.
+    \item New arguments \texttt{fractional} and \texttt{preserve}
+      for more accurate discretisation.
+    \end{itemize}
+
 
  \item \texttt{plot.anylist}:
    \begin{itemize}
@@ -1044,6 +1116,8 @@ also carries these marks in the \verb!$lines! component.
    so that each entry \verb!x[[i]][[j]]! will be plotted as a separate panel.
    \item 
      New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
+   \item  Result is now an (invisible) list containing the result
+    from executing the plot of each panel.
    \end{itemize}
 
 
@@ -1054,6 +1128,10 @@ also carries these marks in the \verb!$lines! component.
      device drivers that causes the image to be displayed
      in the wrong spatial orientation.
    \end{itemize}
+
+ \item \texttt{plot.imlist}:
+   Result is now an (invisible) list containing the result
+   from executing the plot of each panel.
 
  \item \texttt{plot.influence.ppm}:
    New argument \texttt{multiplot}.
@@ -1119,7 +1197,15 @@ also carries these marks in the \verb!$lines! component.
     \texttt{family} and \texttt{srt}
 
     \item \texttt{plot.solist}:
-     New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
+      \begin{itemize}
+      \item 
+        New arguments \texttt{panel.begin.args}, \texttt{panel.end.args}
+      \item 
+        Result is now an (invisible) list containing the result
+        from executing the plot of each panel.
+      \end{itemize}
+
+   \item \texttt{polynom}: This function now has a help file.
      
    \item \texttt{pool.fv}:
     The default plot of the pooled function no longer includes 
@@ -1128,6 +1214,8 @@ also carries these marks in the \verb!$lines! component.
   \item \texttt{ppm.ppp, ppm.quad}
    New argument \texttt{emend}, equivalent to \texttt{project}.
 
+ \item \texttt{ppp}: New argument \texttt{checkdup}.
+   
   \item \texttt{predict.kppm, residuals.kppm}
    Now issues a warning when the calculation ignores the 
    cluster/Cox component and treats the model as if it were Poisson.
@@ -1155,6 +1243,11 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{quadrat.test.ppm}:
    Computation accelerated in some cases.
+
+ \item \texttt{quantile.ewcdf}:
+    The function is now normalised to the range \verb![0,1]!
+    before the quantiles are computed. 
+    This can be suppressed by setting \texttt{normalise=FALSE}.
 
  \item \texttt{qqplot.ppm}
     Argument \texttt{expr} can now be a list of point patterns,
@@ -1187,6 +1280,10 @@ also carries these marks in the \verb!$lines! component.
     three dimensions and higher dimensions, when the argument
     \texttt{win} is of class \texttt{box3} or \texttt{boxx}.
 
+  \item \texttt{rmh}:
+    Accelerated, in the case where multiple patterns are saved 
+    using \texttt{nsave}.
+  
   \item \texttt{rmh.ppm, rmhmodel.ppm, simulate.ppm}:
    A model fitted using the \texttt{Penttinen} interaction can now be simulated.
 
@@ -1199,6 +1296,10 @@ also carries these marks in the \verb!$lines! component.
      New arguments \texttt{nsim}, \texttt{saveinfo}.
    \end{itemize}
 
+  \item \texttt{rmhcontrol}:
+    New parameter \texttt{pstage} determines when to generate
+    random proposal points.
+    
  \item \texttt{rose.default}
    New argument \texttt{weights}.
 
@@ -1233,7 +1334,7 @@ also carries these marks in the \verb!$lines! component.
      \end{itemize}
 
 %%S   
-      \item Simulation:
+   \item Simulation:
    Several basic simulation algorithms have been accelerated.
    Consequently, simulation outcomes are not identical to 
    those obtained with previous versions of \spst, even when the
@@ -1266,6 +1367,9 @@ also carries these marks in the \verb!$lines! component.
    The splitting variable \texttt{f} can now be a logical vector.
 
    \item \texttt{step}: now works for models of class \texttt{"mppm"}.
+
+   \item \texttt{stieltjes}:
+    Argument \texttt{M} can be a stepfun object (such as an empirical CDF).
 
   \item \texttt{subset.ppp}, \texttt{subset.lpp}, \texttt{subset.pp3}, 
      \texttt{subset.ppx}:
@@ -1362,6 +1466,9 @@ also carries these marks in the \verb!$lines! component.
    Then the result of \verb!x[i, drop=FALSE]! is a pixel image of
    class \texttt{linim}.
 
+ \item \verb![.layered!:
+       Subset index \texttt{i} can now be an \texttt{owin} object.
+       
  \item \verb![.linnet!, \verb![.lpp!:
     New argument \texttt{snip} determines what to do with segments 
     of the network that cross the boundary of the window. 
@@ -1383,6 +1490,8 @@ also carries these marks in the \verb!$lines! component.
    These methods now have an argument \texttt{drop} which determines
    whether to remove unused levels of a factor.
 
+ \item \verb![.solist!:
+       Subset index \texttt{i} can now be an \texttt{owin} object.
  \end{itemize}
  
 \section{Serious Bugs Fixed}
