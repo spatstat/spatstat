@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.49-0.002
+Version: 1.49-0.003
 Nickname: Bigly
-Date: 2017-02-12
+Date: 2017-02-13
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

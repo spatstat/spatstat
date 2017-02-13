@@ -925,7 +925,7 @@ calc.TSE(COV, z, pos, Dim1, Dim2)
 can.be.formula(x)
 cannot.update(\dots)
 cartesian(pp, markset, fac = TRUE)
-cat.factor(\dots, recursive=FALSE)
+cat.factor(\dots)
 cellmiddles(W, nx, ny, npix, distances)
 censtimeCDFest(o, cc, d, breaks, \dots,
      KM, RS, HAN, RAW, han.denom, tt, pmax)

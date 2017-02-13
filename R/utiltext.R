@@ -3,7 +3,7 @@
 #'
 #'   Utilities for text output, etc
 #'
-#'   $Revision: 1.1 $ $Date: 2016/12/30 03:23:09 $
+#'   $Revision: 1.3 $ $Date: 2017/02/13 08:37:21 $
 #'
 
 # text magic
@@ -222,7 +222,7 @@ ordinalsuffix <- function(k) {
 
 articlebeforenumber <- function(k) {
   k <- abs(k)
-  if(k == 11) return("an")
+  if(k == 11 || k == 18) return("an")
   leading <- floor(k/10^floor(log10(k)))
   if(leading == 8) return("an")
   return("a")
@@ -365,11 +365,11 @@ pasteFormula <- function(f) {
   return(sf)
 }
 
-cat.factor <- function (..., recursive=FALSE) {
+cat.factor <- function (...) {
   lll <- list(...)
   chk <- sapply(lll,is.factor)
   if(!all(chk))
-    stop("First argument is a factor and at least one other argument is not.\n")
+    warning("Some arguments were not factors (but were converted to factors)")
   lll <- lapply(lll,as.data.frame,nm="v1")
   return(do.call(rbind,lll)[,1])
 }

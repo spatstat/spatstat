@@ -28,6 +28,11 @@ orderwhich <- function(x, k, decreasing=FALSE) {
 
 revcumsum <- function(x) {
   #' equivalent to rev(cumsum(rev(x)))
+  if(is.complex(x)) {
+    a <- revcumsum(Re(x))
+    b <- revcumsum(Im(x))
+    return(complex(real=a, imaginary=b))
+  }
   n <- length(x)
   if(identical(storage.mode(x), "integer")) {
     z <- .C("irevcumsum",
