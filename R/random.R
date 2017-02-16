@@ -3,7 +3,7 @@
 ##
 ##    Functions for generating random point patterns
 ##
-##    $Revision: 4.90 $   $Date: 2016/10/26 11:00:17 $
+##    $Revision: 4.91 $   $Date: 2017/02/16 04:05:57 $
 ##
 ##
 ##    runifpoint()      n i.i.d. uniform random points ("binomial process")
@@ -500,25 +500,25 @@ rMaternInhibition <- function(type,
   stopifnot(is.numeric(r) && length(r) == 1)
   stopifnot(type %in% c(1,2))
   ## Resolve window class
-  if(!inherits(win, c("owin", "boxx"))) {
+  if(!inherits(win, c("owin", "box3", "boxx"))) {
     givenwin <- win
     win <- try(as.owin(givenwin), silent = TRUE)
     if(inherits(win, "try-error"))
       win <- try(as.boxx(givenwin), silent = TRUE)
     if(inherits(win, "try-error"))
-      stop("Could not coerce argument win to owin or boxx class.")
+      stop("Could not coerce argument win to a window (owin, box3 or boxx).")
   }
-  ## Pick 2-d or general function to grow domain
-  growfun <- if(is.owin(win)) grow.rectangle else grow.boxx
-  ## Enlarge bounding box for simulation if requested
-  bigbox <- if(stationary) growfun(win, r) else win
-  ## Simulate
-  X <- if(is.owin(win)){
-    rpoispp(kappa, win = bigbox, nsim = nsim)
-  } else{
-    rpoisppx(kappa, domain = bigbox, nsim = nsim)
+  dimen <- spatdim(win)
+  if(dimen == 2) {
+    bigbox <- if(stationary) grow.rectangle(win, r) else win
+    result <- rpoispp(kappa, win = bigbox, nsim = nsim, drop=FALSE)
+  } else if(dimen == 3) {
+    bigbox <- if(stationary) grow.box3(win, r) else win
+    result <- rpoispp3(kappa, domain = bigbox, nsim = nsim, drop=FALSE)
+  } else {
+    bigbox <- if(stationary) grow.boxx(win, r) else win
+    result <- rpoisppx(kappa, domain = bigbox, nsim = nsim, drop=FALSE)
   }
-  result <- if(nsim == 1) list(X) else X
   for(isim in 1:nsim) {
     Y <- result[[isim]]
     nY <- npoints(Y)

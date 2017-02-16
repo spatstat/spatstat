@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.55 $  $Date: 2016/03/05 01:33:03 $
+#  $Revision: 1.57 $  $Date: 2017/02/16 04:02:46 $
 #
 
 ppx <- local({
@@ -413,43 +413,45 @@ eroded.volumes.boxx <- local({
 })
 
 
-runifpointx <- function(n, domain, nsim=1) {
-  if(nsim > 1) {
-    result <- vector(mode="list", length=nsim)
-    for(i in 1:nsim) result[[i]] <- runifpointx(n, domain)
-    result <- as.anylist(result)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(result)
-  }
+runifpointx <- function(n, domain, nsim=1, drop=TRUE) {
+  check.1.integer(n)
+  check.1.integer(nsim)
   stopifnot(inherits(domain, "boxx"))
   ra <- domain$ranges
   d <- length(ra)
-  if(n == 0) {
-    coo <- matrix(, nrow=0, ncol=d)
-  } else {
-    coo <- mapply(runif,
-                  n=rep(n, d),
-                  min=ra[1,],
-                  max=ra[2,])
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) {
+    if(n == 0) {
+      coo <- matrix(, nrow=0, ncol=d)
+    } else {
+      coo <- mapply(runif,
+                    n=rep(n, d),
+                    min=ra[1,],
+                    max=ra[2,])
+    }
+    colnames(coo) <- colnames(ra)
+    df <- as.data.frame(coo)
+    result[[i]] <- ppx(df, domain)
   }
-  colnames(coo) <- colnames(ra)
-  df <- as.data.frame(coo)
-  ppx(df, domain)
+  if(nsim == 1 && drop)
+    return(result[[1]])
+  result <- as.anylist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
-rpoisppx <- function(lambda, domain, nsim=1) {
-  if(nsim > 1) {
-    result <- vector(mode="list", length=nsim)
-    for(i in 1:nsim) result[[i]] <- rpoisppx(lambda, domain)
-    result <- as.anylist(result)
-    names(result) <- paste("Simulation", 1:nsim)
-    return(result)
-  }
+rpoisppx <- function(lambda, domain, nsim=1, drop=TRUE) {
   stopifnot(inherits(domain, "boxx"))
-  vol <- volume.boxx(domain)
   stopifnot(is.numeric(lambda) && length(lambda) == 1 && lambda >= 0)
-  n <- rpois(1, lambda * vol)
-  runifpointx(n, domain)
+  n <- rpois(nsim, lambda * volume.boxx(domain))
+  result <- vector(mode="list", length=nsim)
+  for(i in 1:nsim) 
+    result[[i]] <- runifpointx(n[i], domain)
+  if(nsim == 1 && drop)
+    return(result[[1]])
+  result <- as.anylist(result)
+  names(result) <- paste("Simulation", 1:nsim)
+  return(result)
 }
 
 unique.ppx <- function(x, ..., warn=FALSE) {
@@ -533,5 +535,7 @@ inside.boxx <- function(..., w = NULL){
 
 spatdim <- function(X) {
   if(is.sob(X)) 2L else
+  if(inherits(X, "box3")) 3 else
+  if(inherits(X, "boxx")) length(X$ranges) else 
   if(is.ppx(X)) as.integer(sum(X$ctype == "spatial")) else NA_integer_
 }

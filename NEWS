@@ -1,13 +1,14 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.003
+        CHANGES IN spatstat VERSION 1.49-0.004
 
 OVERVIEW
 
-    o We thank Abdollah Jalilian and Rasmus Waagepetersen for contributions.
+    o We thank Adrian Heyner, Abdollah Jalilian and Rasmus Waagepetersen
+    for contributions.
 
     o Bandwidth selection for pair correlation function.
 
-    o Version nickname: 'Bigly'
+    o Version nickname: 'Instinctively Correct'
 
 NEW FUNCTIONS
 
@@ -15,14 +16,35 @@ NEW FUNCTIONS
     Bandwidth selection for pair correlation function.
     Original code contributed by Abdollah Jalilian and Rasmus Waagepetersen.
 
+    o grow.box3
+    Expand a three-dimensional box.
+
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o as.owin
+    Now refuses to convert a 'box3' to a two-dimensional window.
+
+    o pixellate.ppp
+    If the pattern is empty, the result is an integer-valued image
+    (by default) for consistency with the results for non-empty patterns.
+
+    o ppp
+    If the coordinate vectors x and y contain NA, NaN or infinite values,
+    these points are deleted with a warning, instead of causing a fatal error.
 
     o pcf, pcfinhom
     New argument 'close' for advanced use.
 
+    o runifpointx, rpoisppx
+    New argument 'drop'.
+
 BUG FIXES
 
-    o None
+    o rMaternI, rMaternII
+    If 'win' was a three-dimensional box of class 'box3', 
+    the result was a two-dimensional point pattern.
+    [Spotted by Adrian Heyner.]
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.49-0
 

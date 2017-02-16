@@ -62,6 +62,10 @@ unitname.box3 <- function(x) { x$units }
   return(x)
 }
 
+grow.box3 <- function(W, left, right=left) {
+  as.box3(grow.boxx(as.boxx(W), left, right))
+}
+
 eroded.volumes <- function(x, r) { UseMethod("eroded.volumes") }
 
 eroded.volumes.box3 <- function(x, r) {

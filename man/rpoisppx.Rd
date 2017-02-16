@@ -8,7 +8,7 @@
   using the homogeneous Poisson process.
 }
 \usage{
-rpoisppx(lambda, domain, nsim=1)
+rpoisppx(lambda, domain, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{lambda}{
@@ -20,10 +20,16 @@ rpoisppx(lambda, domain, nsim=1)
     An object of class \code{"boxx"}.
   }
   \item{nsim}{Number of simulated realisations to be generated.}
+  \item{drop}{
+    Logical. If \code{nsim=1} and \code{drop=TRUE} (the default), the
+    result will be a point pattern, rather than a list 
+    containing a single point pattern.
+  }
 }
 \value{
-  If \code{nsim = 1}, a point pattern (an object of class \code{"ppx"}).
-  If \code{nsim > 1}, a list of such point patterns.
+  If \code{nsim = 1} and \code{drop=TRUE},
+  a point pattern (an object of class \code{"ppx"}).
+  If \code{nsim > 1} or \code{drop=FALSE}, a list of such point patterns.
 }
 \details{
   This function generates a realisation

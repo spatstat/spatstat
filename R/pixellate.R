@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.22 $    $Date: 2017/01/21 09:54:39 $
+#           $Revision: 1.23 $    $Date: 2017/02/16 02:11:16 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -23,6 +23,8 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   if(is.null(W))
     W <- Window(x)
   isrect <- is.rectangle(W)
+  preserve <- preserve && !isrect
+  iscount <- is.null(weights) && !fractional && !preserve
   
   W <- do.call.matched(as.mask,
                        resolve.defaults(list(...),
@@ -55,9 +57,10 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
 
   # handle empty point pattern
   if(nx == 0) {
-    zeroimage <- as.im(as.double(0), W)
+    zerovalue <- if(iscount) 0L else as.double(0)
+    zeroimage <- as.im(zerovalue, W)
     if(padzero) # map NA to 0
-      zeroimage <- na.handle.im(zeroimage, 0)
+      zeroimage <- na.handle.im(zeroimage, zerovalue)
     result <- zeroimage
     if(k > 1) {
       result <- as.solist(rep(list(zeroimage), k))
@@ -71,7 +74,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   yy <- x$y
   if(!fractional) {
     #' map (x,y) to nearest raster point
-    pixels <- if(preserve && !isrect) nearest.valid.pixel(xx, yy, W) else 
+    pixels <- if(preserve) nearest.valid.pixel(xx, yy, W) else 
               nearest.raster.point(xx, yy, W)
     rowfac <- factor(pixels$row, levels=1:nr)
     colfac <- factor(pixels$col, levels=1:nc)
@@ -93,7 +96,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     ww <- c(wleft * wbot, wleft * wtop, wright * wbot, wright * wtop)
     rowfac <- factor(c(ibot, itop, ibot, itop), levels=1:nr)
     colfac <- factor(c(jleft, jleft, jright, jright), levels=1:nc)
-    if(preserve && !isrect) {
+    if(preserve) {
       #' normalise fractions for each data point to sum to 1 inside window
       ok <- insideW[cbind(as.integer(rowfac), as.integer(colfac))]
       wwok <- ww * ok

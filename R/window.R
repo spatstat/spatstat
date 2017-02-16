@@ -461,6 +461,13 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
   ##	a structure with entries xl, xu, yl, yu
   ##	an object with attribute "bbox"
 
+  if(inherits(W, "box3")) {
+    #' cannot be flattened
+    if(fatal)
+      stop("3D box cannot be converted to a 2D window")
+    return(NULL)
+  }
+  
   if(checkfields(W, c("xrange", "yrange"))) {
     Z <- owin(W$xrange, W$yrange)
     return(Z)

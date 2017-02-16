@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.108 $	$Date: 2017/01/13 11:08:06 $
+#	$Revision: 4.109 $	$Date: 2017/02/16 02:57:42 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -43,15 +43,34 @@ ppp <- function(x, y, ..., window, marks,
   # validate x, y coordinates
   stopifnot(is.numeric(x))
   stopifnot(is.numeric(y))
-  ok <- is.finite(x) & is.finite(y)
-  if(any(!ok)) {
-    nbg <- is.na(x) | is.na(y)
-    if(any(nbg)) {
-      howmany <- if(all(nbg)) "all" else paste(sum(nbg),  "out of", length(nbg))
-      stop(paste(howmany, "coordinate values are NA or NaN"))
+  good <- is.finite(x) & is.finite(y)
+  if(naughty <- !all(good)) {
+    #' bad values will be discarded
+    nbad <- sum(!good)
+    nna <- sum(is.na(x) | is.na(y))
+    ninf <- nbad - nna
+    if(nna > 0) {
+      if(nna == n)
+        warning(paste("All points had NA or NaN coordinate values,",
+                      "and were discarded"))
+      else 
+        warning(paste(nna,  "out of", n, ngettext(n, "point", "points"),
+                      "had NA or NaN coordinate values, and",
+                      ngettext(nna, "was", "were"), "discarded"))
     }
-    howmany <- if(!any(ok)) "all" else paste(sum(!ok),  "out of", length(ok))
-    stop(paste(howmany, "coordinate values are infinite"))
+    if(ninf > 0) {
+      if(ninf == n)
+        warning(paste("All points had NA or NaN coordinate values,",
+                      "and were discarded"))
+      else 
+        warning(paste(ninf,  "out of", n, ngettext(n, "point", "points"),
+                      "had infinite coordinate values, and",
+                      ngettext(ninf, "was", "were"), "discarded"))
+    }
+    #' chuck out
+    x <- x[good]
+    y <- y[good]
+    n <- sum(good)
   }
 
   names(x) <- NULL
@@ -102,9 +121,14 @@ ppp <- function(x, y, ..., window, marks,
   } else if(is.data.frame(marks)) {
     # data frame of marks
     pp$markformat <- "dataframe"
+    if(naughty) {
+      #' remove marks attached to discarded points with non-finite coordinates
+      marks <- marks[good, ]
+    }
     if(nout > 0) {
-      marks <- marks[ok, ]
+      #' sequester marks of points falling outside window
       marks(rejects) <- marks[!ok,]
+      marks <- marks[ok, ]
     }
     if(nrow(marks) != n)
       stop("number of rows of marks != length of x and y")
@@ -120,7 +144,12 @@ ppp <- function(x, y, ..., window, marks,
       stop("Format of marks not understood")
     # OK, it's a vector or factor
     pp$markformat <- "vector"
+    if(naughty) {
+      #' remove marks attached to discarded points with non-finite coordinates
+      marks <- marks[good]
+    }
     if(nout > 0) {
+      #' sequester marks of points falling outside window
       marks(rejects) <- marks[!ok]
       marks <- marks[ok]
     }
