@@ -1,7 +1,7 @@
 #
 #  tests/segments.R
 #
-#  $Revision: 1.10 $  $Date: 2016/12/03 02:57:32 $
+#  $Revision: 1.11 $  $Date: 2017/02/20 10:15:30 $
 
 require(spatstat)
 
@@ -21,15 +21,6 @@ Z <- pixellate(X)
 
 fit <- lppm(unmark(chicago) ~ polynom(x,y,2))
 Z <- predict(fit)
-
-# test of distppll pointed out by Ang Qi Wei
-
-p <- matrix(c(1.5, 0), 1, 2)
-l <- matrix(c(0,0,1,0,1,0,2,0), 2, 4, byrow=T)
-a <- distppll(p, l, mintype=2, method="interpreted")
-d <- distppll(p, l, mintype=2, method="C")
-if(a$min.which != d$min.which)
-  stop("conflict between C and interpreted code in distppll")
 
 # tests of pixellate.psp -> seg2pixL
 
@@ -401,7 +392,7 @@ local({
 #
 #  tests/undoc.R
 #
-#   $Revision: 1.2 $   $Date: 2016/12/12 09:14:05 $
+#   $Revision: 1.3 $   $Date: 2017/02/20 10:51:56 $
 #
 #  Test undocumented hacks, etc
 
@@ -409,18 +400,6 @@ require(spatstat)
 local({
   # pixellate.ppp accepts a data frame of weights
   pixellate(cells, weights=data.frame(a=1:42, b=42:1))
-
-  # tapplysum
-  aa <- factor(letters[1:3])
-  bb <- factor(letters[1:4])[c(1,2,2)]
-  xx <- round(runif(3), 3)
-  yy <- tapplysum(xx, list(A=aa, B=bb), do.names=TRUE)
-  zz <- tapply(xx, list(A=aa, B=bb), sum)
-  zz[is.na(zz)] <- 0
-  if(any(yy != zz))
-    stop("tapplysum does not agree with tapply(, sum)")
-  # tapplysum with zero-length data
-  tapplysum(xx[FALSE], list(A=aa[FALSE], B=bb[FALSE]), do.names=TRUE)
 })
 
 

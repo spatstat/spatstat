@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.109 $	$Date: 2017/02/16 02:57:42 $
+#	$Revision: 4.110 $	$Date: 2017/02/16 06:25:25 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -49,24 +49,14 @@ ppp <- function(x, y, ..., window, marks,
     nbad <- sum(!good)
     nna <- sum(is.na(x) | is.na(y))
     ninf <- nbad - nna
-    if(nna > 0) {
-      if(nna == n)
-        warning(paste("All points had NA or NaN coordinate values,",
-                      "and were discarded"))
-      else 
-        warning(paste(nna,  "out of", n, ngettext(n, "point", "points"),
-                      "had NA or NaN coordinate values, and",
-                      ngettext(nna, "was", "were"), "discarded"))
-    }
-    if(ninf > 0) {
-      if(ninf == n)
-        warning(paste("All points had NA or NaN coordinate values,",
-                      "and were discarded"))
-      else 
-        warning(paste(ninf,  "out of", n, ngettext(n, "point", "points"),
-                      "had infinite coordinate values, and",
-                      ngettext(ninf, "was", "were"), "discarded"))
-    }
+    if(nna > 0) 
+      warning(paste(nna,  "out of", n, ngettext(n, "point", "points"),
+                    "had NA or NaN coordinate values, and",
+                    ngettext(nna, "was", "were"), "discarded"))
+    if(ninf > 0) 
+      warning(paste(ninf,  "out of", n, ngettext(n, "point", "points"),
+                    "had infinite coordinate values, and",
+                    ngettext(ninf, "was", "were"), "discarded"))
     #' chuck out
     x <- x[good]
     y <- y[good]

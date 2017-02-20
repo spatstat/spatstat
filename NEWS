@@ -1,12 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.004
+        CHANGES IN spatstat VERSION 1.49-0.005
 
 OVERVIEW
 
     o We thank Adrian Heyner, Abdollah Jalilian and Rasmus Waagepetersen
     for contributions.
 
+    o spatstat now 'Imports' the package 'spatstat.utils'.
+
     o Bandwidth selection for pair correlation function.
+
+    o Improvements and bug fixes.
 
     o Version nickname: 'Instinctively Correct'
 
@@ -37,6 +41,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o runifpointx, rpoisppx
     New argument 'drop'.
+
+    o shapley, ponderosa
+    In these installed datasets, the functions shapley.extra$plotit
+    and ponderosa.extra$plotit have changed slightly (to accommodate the
+    dependence on the package spatstat.utils).
 
 BUG FIXES
 

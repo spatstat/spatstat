@@ -103,7 +103,7 @@ and \ege
   plot(A, ribargs=list(las=1))
   
   B <- quantess(bei, bei.extra$elev, 4)
-  tilenames(B) <- paste(ordinal(1:4), "quartile")
+  tilenames(B) <- paste(spatstat.utils::ordinal(1:4), "quartile")
   plot(B, ribargs=list(las=1))
   points(bei, pch=".", cex=2, col="white")
   par(opa)

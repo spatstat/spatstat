@@ -45,7 +45,9 @@
 
   The vectors \code{x} and \code{y} must be numeric vectors of
   equal length. They are interpreted as the cartesian coordinates
-  of the points in the pattern.
+  of the points in the pattern. Note that \code{x} and \code{y} are
+  permitted to have length zero, corresponding to an empty point
+  pattern; this is the default if these arguments are missing.
 
   A point pattern dataset is assumed to have been observed within a specific
   region of the plane called the observation window.
@@ -142,6 +144,12 @@
   Users would normally invoke \code{ppp} to create a point pattern,
   but the functions \code{\link{as.ppp}} and 
   \code{scanpp} may sometimes be convenient.
+}
+\section{Invalid coordinate values}{
+  The coordinate vectors \code{x} and \code{y} must contain only
+  finite numerical values. If the coordinates include
+  any of the values \code{NA}, \code{NaN}, \code{Inf} or \code{-Inf},
+  these will be removed. 
 }
 \section{Rejected points}{
   The points with coordinates \code{x} and \code{y}

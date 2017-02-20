@@ -67,8 +67,7 @@ void nndMD(int *, int *, double *, double *, double *);
 void knndMD(int *, int *, int *, double *, double *, double *); 
 void nnwMD(int *, int *, double *, double *, int *, double *); 
 void knnwMD(int *, int *, int *, double *, double *, int *, double *);
-void distmapbin(double *, double *, double *, double *, int *, int *, int *, double *, double *); 
-void nndist2segs(double *, double *, int *, double *, double *, double *, double *, int *, double *, double *, int *);
+void distmapbin(double *, double *, double *, double *, int *, int *, int *, double *, double *);
 void ripleybox(int *, double *, double *, double *, int *, double *, double *, double *, double *, double *, double *); 
 void ripleypoly(int *, double *, double *, int *, double *, int *, double *, double *, double *, double *, double *);
 void exact_dt_R(double *, double *, int *, double *, double *, double *, double *, int *, int *, int *, int *, double *, int *, double *);
@@ -158,7 +157,6 @@ void dwpure(int *, int *, int *, int *, int *, int *);
 void dinfty_R(int *, int *, int *); 
 void dwpure(int *, int *, int *, int *, int *, int *); 
 void dwpure(int *, int *, int *, int *, int *, int *);
-void primefax(int *, int *, int *);
 void seg2pixI(int *, double *, double *, double *, double *, int *, int *, int *); 
 void seg2pixL(int *, double *, double *, double *, double *, double *, double *, double *, int *, int *, double *); 
 void seg2pixN(int *, double *, double *, double *, double *, double *, int *, int *, double *);
@@ -184,17 +182,9 @@ void CspaSumSymOut(int *, int *, int *, int *, int *, int *, double *, int *, do
 void CspaWtSumSymOut(int *, int *, int *, int *, int *, int *, double *, int *, int *, int *, int *, double *, double *);
 void Ccrosspaircounts(int *, double *, double *, int *, double *, double *, double *, int *); 
 void Cclosepaircounts(int *, double *, double *, double *, int *);
-void ply2sum(int *, double *, int *, int *, int *, double *, int *, int *); 
-void ply3sum(int *, double *, int *, int *, int *, int *, double *, int *, int *, int *);
-void irevcumsum(int *, int *); void drevcumsum(double *, int *); 
-void fastinterv(double *, int *, double *, int *, int *);
 void poly2imI(double *, double *, int *, int *, int *, int *); 
 void bdrymask(int *, int *, int *, int *); 
 void discs2grid(int *, double *, double *, int *, double *, double *, int *, double *, double *, double *, int *);
-void Cmatchxy(int *, double *, double *, int *, double *, double *, int *); 
-void inxyp(double *, double *, double *, double *, int *, int *, int *, int *);
-void prdist2segs(double *, double *, int *, double *, double *, double *, double *, int *, double *, double *); 
-void nndist2segs(double *, double *, int *, double *, double *, double *, double *, int *, double *, double *, int *);
 /*
 
              Functions invoked by .Call
@@ -228,6 +218,3 @@ SEXP PerfectDiggleGratton(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 SEXP PerfectDGS(SEXP, SEXP, SEXP, SEXP); 
 SEXP PerfectPenttinen(SEXP, SEXP, SEXP, SEXP, SEXP);
 SEXP Cwhist(SEXP, SEXP, SEXP);
-SEXP circXseg(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP); 
-SEXP circMseg(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP); 
-SEXP circXseg(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);

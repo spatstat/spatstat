@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.21 $     $Date: 2017/02/07 02:24:27 $
+#      $Revision: 1.22 $     $Date: 2017/02/20 06:32:32 $
 #
 #
 #     Distance transforms
@@ -100,31 +100,18 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
 
 distmap.psp <- function(X, ...) {
   verifyclass(X, "psp")
-  W <- as.mask(X$window, ...)
+  W <- as.mask(Window(X), ...)
   uni <- unitname(W)
   rxy <- rasterxy.mask(W)
   xp <- rxy$x
   yp <- rxy$y
-  np <- length(xp)
   E <- X$ends
-  big <- 2 * diameter(as.rectangle(W))^2
-  dist2 <- rep.int(big, np)
-  z <- .C("nndist2segs",
-          xp=as.double(xp),
-          yp=as.double(yp),
-          npoints=as.integer(np),
-          x0=as.double(E$x0),
-          y0=as.double(E$y0),
-          x1=as.double(E$x1),
-          y1=as.double(E$y1),
-          nsegments=as.integer(nrow(E)),
-          epsilon=as.double(.Machine$double.eps),
-          dist2=as.double(dist2),
-          index=as.integer(integer(np)))
+  big <- 2 * diameter(Frame(W))^2
+  z <- NNdist2segments(xp, yp, E$x0, E$y0, E$x1, E$y1, big)
   xc <- W$xcol
   yr <- W$yrow
   Dist <- im(array(sqrt(z$dist2), dim=W$dim), xc, yr, unitname=uni)
-  Indx <- im(array(z$index + 1L, dim=W$dim), xc, yr, unitname=uni)
+  Indx <- im(array(z$index, dim=W$dim), xc, yr, unitname=uni)
   Bdry <- im(bdist.pixels(W, style="matrix"), xc, yr, unitname=uni)
   attr(Dist, "index") <- Indx
   attr(Dist, "bdry")  <- Bdry

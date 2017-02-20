@@ -492,18 +492,18 @@ local({
 #'
 #'  Test machinery for manipulating formulae
 #' 
-#' $Revision: 1.2 $  $Date: 2016/03/05 02:24:32 $
+#' $Revision: 1.4 $  $Date: 2017/02/20 07:35:47 $
 
 require(spatstat)
 local({
 
   ff <- function(A, deletevar, B) {
     D <- reduceformula(A, deletevar)
-    if(!identical.formulae(D, B)) {
+    if(!spatstat.utils::identical.formulae(D, B)) {
       AD <- as.expression(substitute(reduceformula(A,d),
                                      list(A=A, d=deletevar)))
-      stop(paste(AD, "\n\tyields ", pasteFormula(D),
-                 " instead of ", pasteFormula(B)),
+      stop(paste(AD, "\n\tyields ", spatstat.utils::pasteFormula(D),
+                 " instead of ", spatstat.utils::pasteFormula(B)),
            call.=FALSE)
     }
     invisible(NULL)
