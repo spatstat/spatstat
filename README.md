@@ -20,6 +20,13 @@ but these badges are currently not working correctly:
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
+## Important Note
+
+Recently we have started the process of splitting `spatstat` into several
+packages (to satisfy the requirements of CRAN). Currently there are two
+pieces, called `spatstat.utils` and `spatstat`. The current development version
+of `spatstat.utils` is 
+[[here](https://github.com/spatstat/spatstat.utils)](https://github.com/spatstat/spatstat.utils).
 
 ## Installation
 
@@ -28,6 +35,7 @@ from github is through the `devtools` package:
 
 ```R
 require(devtools)
+install_github('spatstat/spatstat.utils')
 install_github('spatstat/spatstat')
 ```
 
