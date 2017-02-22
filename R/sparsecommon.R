@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.4 $  $Date: 2016/04/25 02:34:40 $
+#'  $Revision: 1.5 $  $Date: 2017/02/22 08:00:18 $
 #'
 
 #'  .............. completely generic ....................
@@ -32,6 +32,10 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
   dimx <- dim(x)
   if(inherits(x, "sparseMatrix")) {
     x <- as(x, Class="TsparseMatrix")
+    if(length(x$i) == 0) {
+      # no entries
+      return(x)
+    }
     stopifnot(margin %in% 1:2)
     check.nvector(values, dimx[margin], things=c("rows","columns")[margin],
                   oneok=TRUE)
@@ -44,6 +48,10 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
     return(y)
   }
   if(inherits(x, "sparse3Darray")) {
+    if(length(x$i) == 0) {
+      # no entries
+      return(x)
+    }
     ijk <- cbind(i=x$i, j=x$j, k=x$k)
     if(conform) {
       #' ensure common pattern of sparse values

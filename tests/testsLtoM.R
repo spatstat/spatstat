@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.6 $ $Date: 2016/09/16 03:38:53 $
+#'   $Revision: 1.7 $ $Date: 2017/02/22 09:35:15 $
 #' 
 
 require(spatstat)
@@ -74,8 +74,15 @@ local({
   chk(dfbS$val,            dfbSB$val,            "dfbetas$value")
   chk(dfbS$density,        dfbSB$density,        "dfbetas$density")
 
+  # also check case of zero cif
+  levHB <- Leverage(fitH)
+  infHB <- Influence(fitH)
+  dfbHB <- Dfbetas(fitH)
+  
   ## sparse algorithm, with blocks
   pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
+  # also check case of zero cif
+  pmiHSB <- ppmInfluence(fitH, sparseOK=TRUE)
 
   spatstat.options(op)
 
@@ -84,13 +91,15 @@ local({
   levSp <- pmi$leverage
   infSp <- pmi$influence
   dfbSp <- pmi$dfbetas
-
   chks <- function(...) chk(..., from="sparse and non-sparse")
   
   chks(marks(as.ppp(infS)), marks(as.ppp(infSp)), "influence")
   chks(as.im(levS),         as.im(levSp),         "leverage")
   chks(dfbS$val,            dfbSp$val,            "dfbetas$value")
   chks(dfbS$density,        dfbSp$density,        "dfbetas$density")
+
+  # case of zero cif
+  pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
 })
 
 ##

@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.18 $  $Date: 2016/09/01 02:08:09 $
+#' $Revision: 1.22 $  $Date: 2017/02/22 10:19:33 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -60,8 +60,9 @@ as.sparse3Darray <- function(x, ...) {
     z <- as(x, Class="TsparseMatrix")
     dn <- dimnames(x)
     dn <- if(is.null(dn)) NULL else c(dn, list(NULL))
-    y <- sparse3Darray(i=z@i + 1L, j=z@j + 1L, k=1, x=z@x,
-                       dims=c(dim(x), 1), dimnames=dn)
+    one <- if(length(z@i) > 0) 1L else integer(0)
+    y <- sparse3Darray(i=z@i + 1L, j=z@j + 1L, k=one, x=z@x,
+                       dims=c(dim(x), 1L), dimnames=dn)
   } else if(is.array(x)) {
     stopifnot(length(dim(x)) == 3)
     dimx <- dim(x)
@@ -70,18 +71,20 @@ as.sparse3Darray <- function(x, ...) {
     } else {
       ijk <- which(x != RelevantZero(x), arr.ind=TRUE)
       ijk <- cbind(as.data.frame(ijk), x[ijk])
-      y <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3], x=ijk[,4],
+      y <- sparse3Darray(i=ijk[,1L], j=ijk[,2L], k=ijk[,3L], x=ijk[,4L],
                          dims=dimx, dimnames=dimnames(x))
     }
   } else if(inherits(x, "sparseVector")) {
-    y <- sparse3Darray(i=z@i, j=1, k=1, x=z@x,
-                       dims=c(x@length, 1, 1))
+    one <- if(length(z@i) > 0) 1L else integer(0)
+    y <- sparse3Darray(i=z@i, j=one, k=one, x=z@x,
+                       dims=c(x@length, 1L, 1L))
   } else if(is.null(dim(x)) && is.atomic(x)) {
     n <- length(x)
     dn <- names(x)
     if(!is.null(dn)) dn <- list(dn, NULL, NULL)
-    y <- sparse3Darray(i=seq_len(n), j=1, k=1, x=x,
-                       dims=c(n, 1, 1), dimnames=dn)
+    one <- if(n > 0) 1L else integer(0)
+    y <- sparse3Darray(i=seq_len(n), j=one, k=one, x=x,
+                       dims=c(n, 1L, 1L), dimnames=dn)
     
   } else if(is.list(x) && length(x) > 0) {
     n <- length(x)
@@ -91,15 +94,16 @@ as.sparse3Darray <- function(x, ...) {
     } else if(all(sapply(x, inherits, what="sparseMatrix"))) {
       dimlist <- unique(lapply(x, dim))
       if(length(dimlist) > 1) stop("Dimensions of matrices do not match")
-      dimx <- c(dimlist[[1]], n)
+      dimx <- c(dimlist[[1L]], n)
       dnlist <- lapply(x, dimnames)
       isnul <- sapply(dnlist, is.null)
       dnlist <- unique(dnlist[!isnul])
       if(length(dnlist) > 1) stop("Dimnames of matrices do not match")
-      dn <- if(length(dnlist) == 0) NULL else c(dn[[1]], NULL)
+      dn <- if(length(dnlist) == 0) NULL else c(dn[[1L]], NULL)
       for(k in seq_len(n)) {
         mk <- as(x[[k]], "TsparseMatrix")
-        dfk <- data.frame(i=mk@i + 1L, j=mk@j + 1L, k=k, x=mk@x)
+        kvalue <- if(length(mk@i) > 0) k else integer(0)
+        dfk <- data.frame(i=mk@i + 1L, j=mk@j + 1L, k=kvalue, x=mk@x)
         df <- if(k == 1) dfk else rbind(df, dfk)
       }
       y <- sparse3Darray(i=df$i, j=df$j, k=df$k, x=df$x,
@@ -373,6 +377,8 @@ rbindCompatibleDataFrames <- function(x) {
       stop("If i is a matrix, it should have 3 columns", call.=FALSE)
     if(!all(inside3Darray(dimx, i)))
       stop("Some indices lie outside array limits", call.=FALSE)
+    if(nrow(ijk) == 0)
+      return(x) # no items to replace
     ## assemble data frame
     xdata <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
     ##
@@ -410,6 +416,10 @@ rbindCompatibleDataFrames <- function(x) {
     return(x)
   }
   IJK <- lapply(IJK, getElement, name="strict")
+  if(all(sapply(IJK, getElement, name="nind") == 0)) {
+    # no elements are indexed
+    return(x)
+  }
   I <- IJK[[1]]
   J <- IJK[[2]]
   K <- IJK[[3]]
@@ -694,12 +704,12 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       n <- dim1[expanding]
       m <- nrow(ijk2)
       ijk2 <- as.data.frame(lapply(ijk2, rep, times=n))
-      ijk2[,expanding] <- rep(1:n, each=m)
+      ijk2[,expanding] <- rep(seq_len(n), each=m)
       ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
-      ijkdrop[,expanding] <- 1
+      if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijk], e2[ijkdrop]))
-      result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
+      result <- sparse3Darray(i=ijk[,1L], j=ijk[,2L], k=ijk[,3L],
                               x=as.vector(xout),
                               dims=dim1, dimnames=dimnames(e1), strict=TRUE)
       return(result)
@@ -715,27 +725,27 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       n <- dim2[expanding]
       m <- nrow(ijk1)
       ijk1 <- as.data.frame(lapply(ijk1, rep, times=n))
-      ijk1[,expanding] <- rep(1:n, each=m)
+      ijk1[,expanding] <- rep(seq_len(n), each=m)
       ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
-      ijkdrop[,expanding] <- 1
+      if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1L
       xout <- do.call(.Generic, list(e1[ijkdrop], e2[ijk]))
-      result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
+      result <- sparse3Darray(i=ijk[,1L], j=ijk[,2L], k=ijk[,3L],
                               x=as.vector(xout),
                               dims=dim2, dimnames=dimnames(e2), strict=TRUE)
       return(result)
     }
   }
 
-  if(all(drop1[-1]) && dim1[1] == dim2[1]) {
+  if(all(drop1[-1]) && dim1[1L] == dim2[1L]) {
     #' e1 is a (sparse) vector matching the first extent of e2
     if(.Generic %in% c("*", "&")) {
       # result is sparse
       ijk <- data.frame(i=e2$i, j=e2$j, k=e2$k)
-      ones <- rep(1, nrow(ijk))
+      ones <- rep(1L, nrow(ijk))
       i11 <- data.frame(i=e2$i, j=ones, k=ones)
       xout <- do.call(.Generic, list(e1[i11], e2[ijk]))
-      result <- sparse3Darray(i=ijk[,1], j=ijk[,2], k=ijk[,3],
+      result <- sparse3Darray(i=ijk[,1L], j=ijk[,2L], k=ijk[,3L],
                               x=as.vector(xout),
                               dims=dim2, dimnames=dimnames(e2), strict=TRUE)
     } else {

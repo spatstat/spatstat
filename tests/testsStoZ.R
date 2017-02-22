@@ -135,7 +135,7 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of sparse3array.R code
-#'  $Revision: 1.7 $ $Date: 2016/09/01 01:09:33 $
+#'  $Revision: 1.8 $ $Date: 2017/02/22 09:00:27 $
 
 require(spatstat)
 local({
@@ -217,6 +217,10 @@ local({
 
     Z <- aperm(Z, c(3,1,2))
     stopifnot(all(sumsymouterSparse(Z) == sumsymouter(as.array(Z))))
+
+    # no entries indexed
+    Z[integer(0), integer(0), integer(0)] <- 42
+    Z[matrix(, 0, 3)] <- 42
   }
 })
 

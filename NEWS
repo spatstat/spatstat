@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.006
+        CHANGES IN spatstat VERSION 1.49-0.007
 
 OVERVIEW
 
@@ -53,6 +53,10 @@ BUG FIXES
     If 'win' was a three-dimensional box of class 'box3', 
     the result was a two-dimensional point pattern.
     [Spotted by Adrian Heyner.]
+    Fixed.
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Crashed when applied to some hard-core models.
     Fixed.
 
         CHANGES IN spatstat VERSION 1.49-0
