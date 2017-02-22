@@ -107,12 +107,13 @@
          tocanonical = function(par) {
            kappa <- par[[1L]]
            sigma2 <- par[[2L]]
-           c(strength=1/kappa, decay=1/sqrt(sigma2))
+           c(strength=1/(kappa * sigma2), scale=sqrt(sigma2))
          },
          tohuman = function(can) {
            strength <- can[[1L]]
-           decay <- can[[2L]]
-           c(kappa=1/strength, sigma2=1/decay^2)
+           scale <- can[[2L]]
+           sigma2 <- scale^2
+           c(kappa=1/(strength * sigma2), sigma2=sigma2)
          }
          ),
        ## ...............................................
