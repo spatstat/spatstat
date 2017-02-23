@@ -25,7 +25,7 @@ local({
 #'
 #'   leverage and influence for Gibbs models
 #' 
-#'   $Revision: 1.7 $ $Date: 2017/02/22 09:35:15 $
+#'   $Revision: 1.8 $ $Date: 2017/02/23 05:30:18 $
 #' 
 
 require(spatstat)
@@ -47,10 +47,14 @@ local({
   fitD <- ppm(cells ~ 1, DiggleGatesStibbard(0.12), rbord=0)
   levD <- Leverage(fitD)
   infD <- Influence(fitD)
-  # ppmInfluence; offset is present; coefficient vector has length 1
-  fitH <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
+  # ppmInfluence; offset is present; coefficient vector has length 0
+  fitH <- ppm(cells ~ 1, Hardcore(0.07))
   levH <- Leverage(fitH)
   infH <- Influence(fitH)
+  # ppmInfluence; offset is present; coefficient vector has length 1
+  fitHx <- ppm(cells ~ x, Hardcore(0.07), rbord=0)
+  levHx <- Leverage(fitHx)
+  infHx <- Influence(fitHx)
 
   ## divide and recombine algorithm
   op <- spatstat.options(maxmatrix=50000)
@@ -78,11 +82,15 @@ local({
   levHB <- Leverage(fitH)
   infHB <- Influence(fitH)
   dfbHB <- Dfbetas(fitH)
+  levHxB <- Leverage(fitHx)
+  infHxB <- Influence(fitHx)
+  dfbHxB <- Dfbetas(fitHx)
   
   ## sparse algorithm, with blocks
   pmiSSB <- ppmInfluence(fitS, sparseOK=TRUE)
   # also check case of zero cif
   pmiHSB <- ppmInfluence(fitH, sparseOK=TRUE)
+  pmiHxSB <- ppmInfluence(fitHx, sparseOK=TRUE)
 
   spatstat.options(op)
 
@@ -100,6 +108,7 @@ local({
 
   # case of zero cif
   pmiH <- ppmInfluence(fitH, sparseOK=TRUE)
+  pmiHx <- ppmInfluence(fitHx, sparseOK=TRUE)
 })
 
 ##

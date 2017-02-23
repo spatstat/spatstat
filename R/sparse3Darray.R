@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.22 $  $Date: 2017/02/22 10:19:33 $
+#' $Revision: 1.23 $  $Date: 2017/02/23 05:30:04 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -506,7 +506,7 @@ rbindCompatibleDataFrames <- function(x) {
       xv   <- rep(xv, sd2)
       pos1 <- rep(pos1, sd2)
       pos2 <- rep(pos2, each=length(pos1))
-      pos3 <- IJK[[which(collapsing)]]$i
+      pos3 <- if(length(pos1)) IJK[[which(collapsing)]]$i else integer(0)
       vdata <- data.frame(i=pos3, j=pos3, k=pos3, x=xv)
       vdata[,firstindex] <- pos1
       vdata[,secondindex] <- pos2
@@ -525,7 +525,7 @@ rbindCompatibleDataFrames <- function(x) {
       secondindex <- which(!dropping)[2]
       pos1 <- replacementIndex(iv, IJK[[firstindex]])
       pos2 <- replacementIndex(jv, IJK[[secondindex]])
-      pos3 <- IJK[[which(dropping)]]$i
+      pos3 <- if(length(pos1)) IJK[[which(dropping)]]$i else integer(0)
       vdata <- data.frame(i=pos3, j=pos3, k=pos3, x=xv)
       vdata[,firstindex] <- pos1
       vdata[,secondindex] <- pos2
