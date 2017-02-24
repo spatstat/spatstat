@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.008
+        CHANGES IN spatstat VERSION 1.49-0.009
 
 OVERVIEW
 
@@ -35,6 +35,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ppp
     If the coordinate vectors x and y contain NA, NaN or infinite values,
     these points are deleted with a warning, instead of causing a fatal error.
+
+    o ppm
+    Argument 'interaction' can now be a function that makes an interaction,
+    such as Poisson, Hardcore, MultiHard.
 
     o pcf, pcfinhom
     New argument 'close' for advanced use.

@@ -81,12 +81,8 @@ which can then be fitted to point pattern data.
   \code{MultiHard(types=NULL, hradii)}.
   The new code attempts to handle the old syntax as well.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

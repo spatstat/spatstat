@@ -70,7 +70,8 @@
   \item{interaction}{
     An object of class \code{"interact"}
     describing the point process interaction
-    structure, or \code{NULL} indicating that a Poisson process (stationary
+    structure, or a function that makes such an object,
+    or \code{NULL} indicating that a Poisson process (stationary
     or nonstationary) should be fitted.
   }
   \item{\dots}{Ignored.}
@@ -524,8 +525,20 @@
 
   To determine the irregular parameters, there are several
   practical techniques, but no general statistical theory available.
-  One useful technique is maximum profile pseudolikelihood, which
-  is implemented in the command \code{\link{profilepl}}.   
+  Useful techniques include maximum profile pseudolikelihood, which
+  is implemented in the command \code{\link{profilepl}},
+  and Newton-Raphson maximisation, implemented in the
+  experimental command \code{\link{ippm}}. 
+
+  Some irregular parameters can be estimated directly from data:
+  the hard-core radius in the model \code{\link{Hardcore}}
+  and the matrix of hard-core radii in \code{\link{MultiHard}} can be
+  estimated easily from data. In these cases, \code{ppm} allows the user
+  to specify the interaction without giving
+  the value of the irregular parameter. The user can give the
+  hard core interaction as \code{interaction=Hardcore()}
+  or even \code{interaction=Hardcore}, and 
+  the hard core radius will then be estimated from the data.
 }
 \references{
   Baddeley, A., Coeurjolly, J.-F., Rubak, E. and Waagepetersen, R. (2014)

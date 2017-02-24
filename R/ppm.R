@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.55 $	$Date: 2016/03/17 02:09:42 $
+#	$Revision: 1.56 $	$Date: 2017/02/24 00:03:27 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -141,9 +141,16 @@ function(Q,
   }
   X <- if(is.ppp(Q)) Q else Q$data
 
-  ## Ensure interaction is fully defined  
-  if(is.null(interaction)) 
+  ## Validate interaction
+  if(is.null(interaction)) {
     interaction <- Poisson()
+  } else if(inherits(interaction, "intermaker")) {
+    ## e.g. 'interaction=Hardcore': invoke it without arguments
+    interaction <- (f <- interaction)()
+  } else if(!is.interact(interaction))
+    stop("Argument 'interaction' must be an object of class 'interact'")
+  
+  ## Ensure interaction is fully defined  
   if(!is.null(ss <- interaction$selfstart)) {
     # invoke selfstart mechanism to fix all parameters
     interaction <- ss(X, interaction)
