@@ -39,9 +39,28 @@ covers everything in \spst\ up to version \texttt{1.42-0},
 released in May 2015.
 
 <<echo=FALSE,results=hide>>=
-fname <- system.file("doc", "packagesizes.txt", package="spatstat")
-z <- read.table(fname, header=TRUE)
-z$date <- as.Date(z$date)
+getSizeTable <- function(packagename="spatstat") {
+  fname <- system.file("doc", "packagesizes.txt", package=packagename)
+  if(!file.exists(fname)) 
+    return(NULL)
+  a <- read.table(fname, header=TRUE)
+  a$date <- as.Date(a$date)
+  return(a)
+}
+counts <- c("nhelpfiles", "nobjects", "ndatasets", "Rlines", "srclines")
+mergeSizeTables <- function(a, b) {
+  if(is.null(b)) return(a)
+  for(i in seq_len(nrow(a))) {
+    j <- which(b$date <= a$date[i])
+    if(length(j) > 0) 
+      a[i,counts] <- a[i,counts] + b[max(j), counts]
+  }
+  return(a)
+}
+z <- getSizeTable()
+zutils <- getSizeTable("spatstat.utils")
+z <- mergeSizeTables(z, zutils)
+#
 changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
 newobj <- changes[["nobjects"]]
 newdat <- changes[["ndatasets"]] + 1  # counting rule doesn't detect redwood3

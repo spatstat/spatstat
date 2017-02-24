@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.130 $ $Date: 2017/02/22 07:10:48 $
+# $Revision: 1.132 $ $Date: 2017/02/24 05:52:53 $
 #
 
 kppm <- function(X, ...) {
@@ -108,6 +108,8 @@ kppm.ppp <- kppm.quad <-
   if(is.null(weightfun) && method != "mincon") {
     RmaxW <- (rmax %orifnull% rmax.rule("K", Window(XX), intensity(XX))) / 2
     weightfun <- function(d, rr=RmaxW) { as.integer(d <= rr) }
+    formals(weightfun)[[2]] <- RmaxW
+    attr(weightfun, "selfprint") <- paste0("Indicator(distance <= ", RmaxW, ")")
   }
   # fit
   out <- switch(method,
@@ -1072,22 +1074,24 @@ print.kppm <- print.dppm <- function(x, ...) {
              splat("Fitted by maximum second order composite likelihood")
              splat("\trmax =", x$Fit$rmax)
              if(!is.null(wtf <- x$Fit$weightfun)) {
-               cat("\tweight function: ")
-               print(wtf)
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
              }
            },
            palm = {
              splat("Fitted by maximum Palm likelihood")
              splat("\trmax =", x$Fit$rmax)
              if(!is.null(wtf <- x$Fit$weightfun)) {
-               cat("\tweight function: ")
-               print(wtf)
+               a <- attr(wtf, "selfprint") %orifnull% pasteFormula(wtf)
+               splat("\tweight function:", a)
              }
            },
            warning(paste("Unrecognised fitting method", sQuote(x$Fit$method)))
            )
   }
 
+  parbreak(terselevel)
+  
   # ............... trend .........................
 
   if(!(isDPP && is.null(x$fitted$intensity)))

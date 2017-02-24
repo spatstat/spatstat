@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.009
+        CHANGES IN spatstat VERSION 1.49-0.010
 
 OVERVIEW
 
@@ -50,6 +50,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     In these installed datasets, the functions shapley.extra$plotit
     and ponderosa.extra$plotit have changed slightly (to accommodate the
     dependence on the package spatstat.utils).
+
+    o kppm
+    Improved printed output.
 
 BUG FIXES
 
