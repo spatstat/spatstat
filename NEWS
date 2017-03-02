@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.010
+        CHANGES IN spatstat VERSION 1.49-0.011
 
 OVERVIEW
 
@@ -64,6 +64,15 @@ BUG FIXES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Crashed when applied to some hard-core models.
+    Fixed.
+
+    o "[.ppx"
+    The format of the result was slightly malformed 
+    if exactly one point was selected.
+    Fixed.
+
+    o unmark.lpp, marks<-.lpp
+    The result had class c("lpp", "lpp", "ppx") instead of c("lpp", "ppx").
     Fixed.
 
         CHANGES IN spatstat VERSION 1.49-0

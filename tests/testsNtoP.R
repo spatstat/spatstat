@@ -488,7 +488,7 @@ local({
 #
 # Test operations for ppx objects
 #
-#  $Revision: 1.2 $ $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.3 $ $Date: 2017/03/02 01:19:13 $
 #
 
 require(spatstat)
@@ -499,6 +499,9 @@ local({
   unique(X)
   duplicated(X)
   multiplicity(X)
+
+  stopifnot(identical(unmark(chicago[1]),
+                      unmark(chicago)[1]))
 })
 #
 # tests/prediction.R

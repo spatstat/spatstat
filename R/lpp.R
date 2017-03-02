@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.52 $   $Date: 2017/02/07 08:12:05 $
+#  $Revision: 1.54 $   $Date: 2017/03/02 01:27:45 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -344,15 +344,11 @@ unitname.lpp <- function(x) {
 }
 
 "marks<-.lpp" <- function(x, ..., value) {
-  Y <- NextMethod("marks<-")
-  class(Y) <- c("lpp", class(Y))
-  Y
+  NextMethod("marks<-")
 }
   
 unmark.lpp <- function(X) {
-  Y <- NextMethod("unmark")
-  class(Y) <- c("lpp", class(Y))
-  Y
+  NextMethod("unmark")
 }
 
 as.psp.lpp <- function(x, ..., fatal=TRUE){
@@ -450,8 +446,8 @@ scalardilate.lpp <- function(X, f, ...) {
   check.1.real(f, "In scalardilate(X,f)")
   stopifnot(is.finite(f) && f > 0)
   Y <- X
-  Y$data$x <- f * X$data$x
-  Y$data$y <- f * X$data$y
+  Y$data$x <- f * as.numeric(X$data$x)
+  Y$data$y <- f * as.numeric(X$data$y)
   Y$domain <- scalardilate(X$domain, f)
   return(Y)
 }

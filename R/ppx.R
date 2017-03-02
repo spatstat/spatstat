@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.57 $  $Date: 2017/02/16 04:02:46 $
+#  $Revision: 1.59 $  $Date: 2017/03/02 01:27:04 $
 #
 
 ppx <- local({
@@ -259,7 +259,7 @@ marks.ppx <- function(x, ..., drop=TRUE) {
 "marks<-.ppx" <- function(x, ..., value) {
   ctype <- x$ctype
   retain <- (ctype != "mark")
-  coorddata <- x$data[, retain, drop=TRUE]
+  coorddata <- x$data[, retain, drop=FALSE]
   if(is.null(value)) {
     newdata <- coorddata
     newctype <- ctype[retain]
@@ -285,7 +285,7 @@ marks.ppx <- function(x, ..., drop=TRUE) {
     }
   }
   out <- list(data=newdata, ctype=newctype, domain=x$domain)
-  class(out) <- "ppx"
+  class(out) <- class(x)
   return(out)
 }
 
