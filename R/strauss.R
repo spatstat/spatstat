@@ -151,7 +151,8 @@ crosspaircounts <- function(X, Y, r) {
             xtarget  = as.double(Ysort$x),
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
-            counts   = as.integer(integer(nX)))
+            counts   = as.integer(integer(nX)),
+            PACKAGE = "spatstat")
   answer <- integer(nX)
   answer[oX] <- out$counts
   return(answer)
@@ -172,7 +173,8 @@ closepaircounts <- function(X, r) {
             x      = as.double(Xsort$x),
             y      = as.double(Xsort$y),
             rmaxi  = as.double(r),
-            counts = as.integer(integer(nX)))
+            counts = as.integer(integer(nX)),
+            PACKAGE = "spatstat")
   answer <- integer(nX)
   answer[oX] <- out$counts
   return(answer)

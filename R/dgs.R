@@ -35,7 +35,8 @@ DiggleGatesStibbard <- local({
             ytarget  = as.double(Ysort$y),
             idtarget = as.integer(idYsort),
             rrho     = as.double(rho),
-            values   = as.double(double(nX)))
+            values   = as.double(double(nX)),
+            PACKAGE = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

@@ -30,7 +30,8 @@ fardist.owin <- function(X, ..., squared=FALSE) {
             np = as.integer(length(V$x)),
             xp = as.double(V$x),
             yp = as.double(V$y),
-            dfar = as.double(numeric(nx * ny)))
+            dfar = as.double(numeric(nx * ny)),
+            PACKAGE = "spatstat")
   } else {
     z <- .C("fardistgrid",
             nx = as.integer(nx),
@@ -42,7 +43,8 @@ fardist.owin <- function(X, ..., squared=FALSE) {
             np = as.integer(length(V$x)),
             xp = as.double(V$x),
             yp = as.double(V$y),
-            dfar = as.double(numeric(nx * ny)))
+            dfar = as.double(numeric(nx * ny)),
+            PACKAGE = "spatstat")
   }
   out <- im(z$dfar, xcol=M$xcol, yrow=M$yrow,
             xrange=M$xrange, yrange=M$yrange, unitname=unitname(M))

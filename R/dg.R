@@ -35,7 +35,8 @@ DiggleGratton <- local({
               idtarget = as.integer(idYsort),
               ddelta   = as.double(delta),
               rrho     = as.double(rho),
-              values   = as.double(double(nX)))
+              values   = as.double(double(nX)),
+              PACKAGE = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

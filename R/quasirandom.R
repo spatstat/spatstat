@@ -11,7 +11,8 @@ vdCorput <- function(n, base) {
   z <- .C("Corput",
           base=as.integer(base),
           n=as.integer(n),
-          result=as.double(numeric(n)))
+          result=as.double(numeric(n)),
+          PACKAGE = "spatstat")
   return(z$result)
 }
 

@@ -337,7 +337,8 @@ densitypointsEngine <- function(x, sigma, ...,
                x       = as.double(xx),
                y       = as.double(yy),
                rmaxi   = as.double(cutoff),
-               result  = as.double(double(npts)))
+               result  = as.double(double(npts)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result
       result <- result * const
     } else if(k == 1L) {
@@ -348,7 +349,8 @@ densitypointsEngine <- function(x, sigma, ...,
                y       = as.double(yy),
                rmaxi   = as.double(cutoff),
                weight  = as.double(wtsort),
-               result  = as.double(double(npts)))
+               result  = as.double(double(npts)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result 
       result <- result * const
     } else {
@@ -361,7 +363,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  y       = as.double(yy),
                  rmaxi   = as.double(cutoff),
                  weight  = as.double(wtsort[,j]),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
       }
       result <- result * const
@@ -390,7 +393,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  y       = as.double(yy),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1L) {
         wtsort <- if(sorted) weights else weights[oo]
@@ -401,7 +405,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
        } else {
         # matrix of weights
@@ -414,7 +419,8 @@ densitypointsEngine <- function(x, sigma, ...,
                    rmaxi   = as.double(cutoff),
                    sig     = as.double(sd),
                    weight  = as.double(wtsort[,j]),
-                   result  = as.double(double(npts)))
+                   result  = as.double(double(npts)),
+                   PACKAGE = "spatstat")
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result
         }
       }
@@ -429,7 +435,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else if(k == 1L) {
         # vector of weights
@@ -442,7 +449,8 @@ densitypointsEngine <- function(x, sigma, ...,
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
                  weight  = as.double(wtsort),
-                 result   = as.double(double(npts)))
+                 result   = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result 
       } else {
         # matrix of weights
@@ -456,7 +464,8 @@ densitypointsEngine <- function(x, sigma, ...,
                    detsigma = as.double(detSigma),
                    sinv    = as.double(flatSinv),
                    weight  = as.double(wtsort[,j]),
-                   result  = as.double(double(npts)))
+                   result  = as.double(double(npts)),
+                   PACKAGE = "spatstat")
           if(sorted) result[,j] <- zz$result else result[oo,j] <- zz$result 
         }
       }
@@ -716,7 +725,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                yd      = as.double(yd),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)))
+               result  = as.double(double(nquery)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else if(k == 1L) {
       wtsort <- if(sorted) weights else weights[ood]
@@ -730,7 +740,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                wd      = as.double(wtsort),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)))
+               result  = as.double(double(nquery)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else {
       ## matrix of weights
@@ -746,7 +757,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  wd      = as.double(wtsort[,j]),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(nquery)))
+                 result  = as.double(double(nquery)),
+                 PACKAGE = "spatstat")
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result
       }
       colnames(result) <- weightnames
@@ -765,7 +777,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                rmaxi   = as.double(cutoff),
                detsigma = as.double(detSigma),
                sinv    = as.double(flatSinv),
-               result  = as.double(double(nquery)))
+               result  = as.double(double(nquery)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else if(k == 1L) {
       ## vector of weights
@@ -781,7 +794,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                rmaxi   = as.double(cutoff),
                detsigma = as.double(detSigma),
                sinv    = as.double(flatSinv),
-               result   = as.double(double(nquery)))
+               result   = as.double(double(nquery)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result 
     } else {
       ## matrix of weights
@@ -798,7 +812,8 @@ densitycrossEngine <- function(Xdata, Xquery, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  detsigma = as.double(detSigma),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)))
+                 result  = as.double(double(nquery)),
+                 PACKAGE = "spatstat")
         if(sorted) result[,j] <- zz$result else result[ooq,j] <- zz$result 
       }
       colnames(result) <- weightnames

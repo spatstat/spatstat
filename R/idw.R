@@ -46,7 +46,8 @@ idw <- function(X, power=2, at="pixels", ...) {
                    power  = as.double(power),
                    num    = as.double(numeric(npixels)),
                    den    = as.double(numeric(npixels)),
-                   rat    = as.double(numeric(npixels)))
+                   rat    = as.double(numeric(npixels)),
+                   PACKAGE = "spatstat")
            out <- as.im(matrix(z$rat, dim[1L], dim[2L]), W=W)
            out <- out[W, drop=FALSE]
          },
@@ -60,7 +61,8 @@ idw <- function(X, power=2, at="pixels", ...) {
                    power  = as.double(power),
                    num    = as.double(numeric(npts)),
                    den    = as.double(numeric(npts)),
-                   rat    = as.double(numeric(npts)))
+                   rat    = as.double(numeric(npts)),
+                   PACKAGE = "spatstat")
            out <- z$rat
          })
   return(out)

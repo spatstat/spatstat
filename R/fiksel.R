@@ -45,7 +45,8 @@ Fiksel <- local({
             ytarget  = as.double(Ysort$y),
             rrmax    = as.double(r),
             kkappa   = as.double(kappa),
-            values   = as.double(double(nX)))
+            values   = as.double(double(nX)),
+            PACKAGE = "spatstat")
     answer <- integer(nX)
     answer[oX] <- out$values
     return(answer)

@@ -56,7 +56,8 @@ exactdt <- local({
               mc = as.integer(mc),
               distances = as.double(double(N)),
               indices = as.integer(integer(N)),
-              boundary = as.double(double(N)))
+              boundary = as.double(double(N)),
+              PACKAGE = "spatstat")
     ## extract 
     dist <- matrix(res$distances,
                    ncol=Nnc, nrow=Nnr, byrow = TRUE)[rmin:rmax, cmin:cmax]

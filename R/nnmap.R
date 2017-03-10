@@ -116,7 +116,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
-               huge = as.double(huge))
+               huge = as.double(huge),
+               PACKAGE = "spatstat")
     } else {
       zz <- .C("knnGinterface",
                nx = as.integer(nxcol),
@@ -133,7 +134,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                wantwhich = as.integer(want.which),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
-               huge = as.double(huge))
+               huge = as.double(huge),
+               PACKAGE = "spatstat")
     }
     
     # extract results

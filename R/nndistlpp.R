@@ -75,7 +75,8 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
              dpath = as.double(dpath),
              segmap = as.integer(segmap),
              huge = as.double(huge),
-             answer = as.double(ans))
+             answer = as.double(ans),
+             PACKAGE = "spatstat")
     ans <- zz$answer
   } else if(spatstat.options('Cnndistlpp')) {
     ## use new C routine
@@ -115,7 +116,8 @@ nndist.lpp <- function(X, ..., k=1, method="C") {
              huge = as.double(huge),
              tol = as.double(tol),
              nndist = as.double(numeric(n * kmax1)),
-             nnwhich = as.integer(integer(n * kmax1)))
+             nnwhich = as.integer(integer(n * kmax1)),
+             PACKAGE = "spatstat")
     ans <- matrix(, n, kmax1)
     ans[oo, ] <- matrix(zz$nndist, n, kmax1, byrow=TRUE)
     # drop first column which is zero corresponding to j = i
@@ -214,7 +216,8 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
              segmap = as.integer(segmap),
              huge = as.double(huge),
              nndist = as.double(nnd),
-             nnwhich = as.integer(nnw))
+             nnwhich = as.integer(nnw),
+             PACKAGE = "spatstat")
     # convert C indexing to R indexing
     nnw <- zz$nnwhich + 1L
     # any zeroes occur if points have no neighbours.
@@ -257,7 +260,8 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
              huge = as.double(huge),
              tol = as.double(tol),
              nndist = as.double(numeric(n * kmax1)),
-             nnwhich = as.integer(integer(n * kmax1)))
+             nnwhich = as.integer(integer(n * kmax1)),
+             PACKAGE = "spatstat")
     nnw <- matrix(, n, kmax1)
     nnw[oo, ] <- matrix(oo[zz$nnwhich + 1L], n, kmax1, byrow=TRUE)
     # drop first column which is j = i
@@ -443,7 +447,8 @@ nncross.lpp <- local({
                  huge = as.double(huge),
                  tol = as.double(tol), 
                  nndist = as.double(nnd), 
-                 nnwhich = as.integer(nnw))
+                 nnwhich = as.integer(nnw),
+                 PACKAGE = "spatstat")
         zznd <- matrix(zz$nndist, ncol=kmax, byrow=TRUE)
         zznw <- matrix(zz$nnwhich + 1L, ncol=kmax, byrow=TRUE)
         if(any(notfound <- (zznw == 0))) {
@@ -479,7 +484,8 @@ nncross.lpp <- local({
                  huge = as.double(huge),
                  tol = as.double(tol), 
                  nndist = as.double(nnd),
-                 nnwhich = as.integer(nnw))
+                 nnwhich = as.integer(nnw),
+                 PACKAGE = "spatstat")
         zznd <- zz$nndist
         zznw <- zz$nnwhich + 1L
         if(any(notfound <- (zznw == 0))) {
@@ -508,7 +514,8 @@ nncross.lpp <- local({
                qsegmap = as.integer(Ysegmap),
                huge = as.double(huge),
                nndist = as.double(nnd),
-               nnwhich = as.integer(nnw))
+               nnwhich = as.integer(nnw),
+               PACKAGE = "spatstat")
       nnd <- zz$nndist
       nnw <- zz$nnwhich + 1L
     } else {
@@ -533,7 +540,8 @@ nncross.lpp <- local({
                idQ = as.integer(iY),
                huge = as.double(huge),
                nndist = as.double(nnd),
-               nnwhich = as.integer(nnw))
+               nnwhich = as.integer(nnw),
+               PACKAGE = "spatstat")
       nnd <- zz$nndist
       nnw <- zz$nnwhich + 1L
     }

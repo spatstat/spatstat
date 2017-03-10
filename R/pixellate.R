@@ -210,7 +210,8 @@ polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
              ypoly=as.double(yy),
              npoly=as.integer(nn),
              out=as.double(numeric(nx * ny)),
-             status=as.integer(integer(1L)))
+             status=as.integer(integer(1L)),
+             PACKAGE = "spatstat")
     if(zz$status != 0)
       stop("Internal error")
     # increment output 

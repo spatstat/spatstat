@@ -99,7 +99,8 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
              dpath = as.double(dpath),
              psegmap = as.integer(Xsegmap),
              qsegmap = as.integer(Ysegmap),
-             answer = as.double(crossdistmat))
+             answer = as.double(crossdistmat),
+             PACKAGE = "spatstat")
     crossdistmat <- matrix(zz$answer, nX, nY)
   }
   return(crossdistmat)

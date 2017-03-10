@@ -76,7 +76,8 @@ lixellate <- function(X, ..., nsplit, eps, sparse=TRUE) {
           spcoarse = as.integer(sp[oo]-1L),
           tpcoarse = as.double(tp[oo]),
           spfine = as.integer(integer(np)),
-          tpfine = as.double(numeric(np)))
+          tpfine = as.double(numeric(np)),
+          PACKAGE = "spatstat")
 
   Lfine <- with(z, {
     ii <- seq_len(nv)

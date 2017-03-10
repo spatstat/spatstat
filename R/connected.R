@@ -43,7 +43,8 @@ connected.owin <- function(X, ..., method="C") {
     z <- .C("cocoImage",
             mat=as.integer(t(L)),
             nr=as.integer(nr),
-            nc=as.integer(nc))
+            nc=as.integer(nc),
+            PACKAGE = "spatstat")
     # unpack
     Z <- matrix(z$mat, nr+2, nc+2, byrow=TRUE)
   } else {
@@ -161,7 +162,8 @@ connected.ppp <- function(X, R, ...) {
            ie=as.integer(ie),
            je=as.integer(je),
            label=as.integer(integer(nv)),
-           status=as.integer(integer(1L)))
+           status=as.integer(integer(1L)),
+           PACKAGE = "spatstat")
   if(zz$status != 0)
     stop("Internal error: connected.ppp did not converge")
   if(internal)

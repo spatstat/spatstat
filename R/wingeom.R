@@ -168,8 +168,8 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
             np=as.integer(np),
             nx=as.integer(nx),
             ny=as.integer(ny),
-            out=as.integer(integer(nx * ny)))
-#            PACKAGE="spatstat")
+            out=as.integer(integer(nx * ny)),
+            PACKAGE="spatstat")
     if(i == 1)
       score <- z$out
     else 
@@ -812,7 +812,8 @@ bdry.mask <- function(W) {
             nx = as.integer(nc),
             ny = as.integer(nr),
             m = as.integer(m),
-            b = as.integer(b))
+            b = as.integer(b),
+            PACKAGE = "spatstat")
     b <- matrix(as.logical(z$b), nr, nc)
   }
   W$m <- b
@@ -1053,7 +1054,8 @@ discs <- function(centres, radii=marks(centres)/2, ...,
             xd    = as.double(centres$x),
             yd    = as.double(centres$y),
             rd    = as.double(radii), 
-            out   = as.integer(integer(prod(M$dim))))
+            out   = as.integer(integer(prod(M$dim))),
+            PACKAGE = "spatstat")
     M$m[] <- as.logical(z$out)
     return(M)
   }

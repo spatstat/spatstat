@@ -138,7 +138,8 @@ edge.Ripley <- local({
                               xmax=as.double(W$xrange[2L]),
                               ymax=as.double(W$yrange[2L]),
                               epsilon=as.double(.Machine$double.eps),
-                              out=as.double(numeric(Nr * Nc)))
+                              out=as.double(numeric(Nr * Nc)),
+                              PACKAGE = "spatstat")
                       weight <- matrix(z$out, nrow=Nr, ncol=Nc)
                     },
                     polygonal={
@@ -154,7 +155,8 @@ edge.Ripley <- local({
                               y0=as.double(Y$ends$y0),
                               x1=as.double(Y$ends$x1),
                               y1=as.double(Y$ends$y1),
-                              out=as.double(numeric(Nr * Nc)))
+                              out=as.double(numeric(Nr * Nc)),
+                              PACKAGE = "spatstat")
                       angles <- matrix(z$out, nrow = Nr, ncol = Nc)
                       weight <- 2 * pi/angles
                     }

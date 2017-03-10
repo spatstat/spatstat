@@ -19,14 +19,16 @@ minnndist <- function(X, positive=FALSE) {
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)))
+              result = as.double(numeric(1)),
+              PACKAGE = "spatstat")
   } else {
       z <- .C("minnnd2",
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)))
+              result = as.double(numeric(1)),
+              PACKAGE = "spatstat")
   }
   return(sqrt(z$result))
 }
@@ -45,14 +47,16 @@ maxnndist <- function(X, positive=FALSE) {
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)))
+              result = as.double(numeric(1)),
+              PACKAGE = "spatstat")
   } else {
       z <- .C("maxnnd2",
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
-              result = as.double(numeric(1)))
+              result = as.double(numeric(1)),
+              PACKAGE = "spatstat")
   }
   return(sqrt(z$result))
 }

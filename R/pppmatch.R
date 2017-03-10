@@ -439,7 +439,8 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
                     price = as.double(rep(0,n)),
                     profit = as.double(rep(0,n)),
                     as.integer(neps),
-                    as.double(epsvec))
+                    as.double(epsvec),
+  	                PACKAGE = "spatstat")
       am <- matrix(0, n, n)
       am[cbind(1:n,res$pers_to_obj+1)] <- 1
     }
@@ -450,7 +451,8 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
              as.integer(rep.int(1,n)),
              as.integer(n),
              as.integer(n),
-             flowmatrix = as.integer(integer(n^2)))
+             flowmatrix = as.integer(integer(n^2)),
+             PACKAGE = "spatstat")
       am <- matrix(res$flowmatrix, n, n)
     }
   }
@@ -675,7 +677,8 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
                       price = as.double(rep(0,n)),
                       profit = as.double(rep(0,n)),
                       as.integer(neps),
-                      as.double(epsvec))
+                      as.double(epsvec),
+  	                  PACKAGE = "spatstat")
         am <- matrix(0, n, n)
         am[cbind(1:n,res$pers_to_obj+1)] <- 1
       }
@@ -686,7 +689,8 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
                  as.integer(rep.int(1,n)),
                  as.integer(n),
                  as.integer(n),
-                 flowmatrix = as.integer(integer(n^2)))
+                 flowmatrix = as.integer(integer(n^2)),
+                 PACKAGE = "spatstat")
         am <- matrix(res$flowmatrix, n, n)
       }
     }
@@ -712,7 +716,8 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
     res <- .C("dinfty_R",
              as.integer(d),
              as.integer(n),
-             assignment = as.integer(rep.int(-1,n)))
+             assignment = as.integer(rep.int(-1,n)),
+             PACKAGE = "spatstat")
     assig <- res$assignment
     am <- matrix(0, n, n)
     am[cbind(1:n, assig[1:n])] <- 1
@@ -773,7 +778,8 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
              as.integer(rep.int(mass2,n2)),
              as.integer(n1),
              as.integer(n2),
-             flowmatrix = as.integer(integer(n1*n2)))
+             flowmatrix = as.integer(integer(n1*n2)),
+             PACKAGE = "spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     resdist <- max(dfix[am > 0])
   }
@@ -799,7 +805,8 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
              as.integer(rep.int(mass2,n2)),
              as.integer(n1),
              as.integer(n2),
-             flowmatrix = as.integer(integer(n1*n2)))
+             flowmatrix = as.integer(integer(n1*n2)),
+             PACKAGE = "spatstat")
     am <- matrix(res$flowmatrix/(max(n1,n2)/gcd), n1, n2)
     # our "adjacency matrix" in this case is standardized to have
     # rowsum 1 if n1 <= n2 and colsum 1 if n1 >= n2

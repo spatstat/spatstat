@@ -148,7 +148,8 @@ GmultiInhom <- function(X, I, J,
           vdata = as.double(vJord),
           nr = as.integer(nr),
           rmax = as.double(rmax),
-          ans = as.double(numeric(nI * nr)))
+          ans = as.double(numeric(nI * nr)),
+          PACKAGE = "spatstat")
   ans <- matrix(z$ans, nrow=nr, ncol=nI)
   #' revert to original ordering
   loccumprod <- matrix(,  nrow=nr, ncol=nI)

@@ -84,7 +84,8 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
               nc = as.integer(nc),
               inp = as.integer(as.logical(t(mat))),
               distances = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
-              boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)))
+              boundary = as.double(matrix(0, ncol = nc + 2, nrow = nr + 2)),
+              PACKAGE = "spatstat")
   # strip off margins again
     dist <- matrix(res$distances,
                    ncol = nc + 2, byrow = TRUE)[2:(nr + 1), 2:(nc +1)]

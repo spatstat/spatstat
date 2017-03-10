@@ -171,7 +171,8 @@ sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
             kx = as.integer(df$k),
             x  = as.double(df$value),
             flip = as.integer(ff - 1L), # convert 1-based to 0-based
-            y  = as.double(numeric(m * m)))
+            y  = as.double(numeric(m * m)),
+            PACKAGE = "spatstat")
   } else {
     # extract triplet representation of w
     w <- as(w, Class="TsparseMatrix")
@@ -191,7 +192,8 @@ sumsymouterSparse <- function(x, w=NULL, dbg=FALSE) {
             jw = as.integer(dfw$j),
             kw = as.integer(dfw$k),
             w = as.double(dfw$w),
-            y  = as.double(numeric(m * m)))
+            y  = as.double(numeric(m * m)),
+            PACKAGE = "spatstat")
   }
   y <- matrix(z$y, m, m)
   dimnames(y) <- rep(dimnames(x)[1], 2)

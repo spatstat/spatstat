@@ -135,7 +135,8 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge))
+            huge=as.double(huge),
+            PACKAGE = "spatstat")
 
     if(want.which) {
       # conversion to R indexing is done in C code
@@ -183,7 +184,8 @@ nncross.pp3 <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge))
+            huge=as.double(huge),
+            PACKAGE = "spatstat")
 
     # extract results
     nnD <- z$nnd

@@ -189,7 +189,8 @@ divide.linnet <- local({
              ie = as.integer(iedge - 1L),
              je = as.integer(jedge - 1L),
              label = as.integer(integer(nbits)), 
-             status = as.integer(integer(1L)))
+             status = as.integer(integer(1L)),
+             PACKAGE = "spatstat")
     if (zz$status != 0) 
       stop("Internal error: connectedness algorithm did not converge")
     lab <- zz$label + 1L

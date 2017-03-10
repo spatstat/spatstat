@@ -83,7 +83,8 @@ pairdist.lpp <- function(X, ..., method="C") {
              to = as.integer(to0),
              dpath = as.double(dpath),
              segmap = as.integer(segmap),
-             answer = as.double(pairdistmat))
+             answer = as.double(pairdistmat),
+             PACKAGE = "spatstat")
     pairdistmat <- matrix(zz$answer, n, n)
   }
   return(pairdistmat)

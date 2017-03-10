@@ -200,7 +200,8 @@ rmhmodel.default <- local({
     if(!is.na(C.id)) {
       z <- .C("knownCif",
               cifname=as.character(C.id),
-              answer=as.integer(0))
+              answer=as.integer(0),
+              PACKAGE = "spatstat")
       ok <- as.logical(z$answer)
       if(!ok)
         stop(paste("Internal error: the cif", sQuote(C.id),

@@ -222,7 +222,8 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
            tdata  = as.integer(Xcountsort),
            rrmax  = as.double(r),
            ssat   = as.double(sat),
-           result = as.double(numeric(nU)))
+           result = as.double(numeric(nU)),
+           PACKAGE = "spatstat")
   result <- zz$result[rankU]
   return(result)
 }

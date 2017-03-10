@@ -80,7 +80,8 @@ pairdist.default <-
                       x= as.double(x),
                       y= as.double(y),
                       squared=as.integer(squared),
-                      d= as.double(d))
+                      d= as.double(d),
+                      PACKAGE = "spatstat")
            } else {
              z <- .C("CpairPdist",
                      n = as.integer(n),
@@ -89,7 +90,8 @@ pairdist.default <-
                      xwidth=as.double(wide),
                      yheight=as.double(high),
                      squared = as.integer(squared),
-                     d= as.double(d))
+                     d= as.double(d),
+                     PACKAGE = "spatstat")
            }
            dout <- matrix(z$d, nrow=n, ncol=n)
          },
@@ -177,7 +179,8 @@ crossdist.default <-
                           xto = as.double(x2),
                           yto = as.double(y2),
                           squared = as.integer(squared),
-                          d = as.double(matrix(0, nrow=n1, ncol=n2)))
+                          d = as.double(matrix(0, nrow=n1, ncol=n2)),
+                          PACKAGE = "spatstat")
                  } else {
                    z<- .C("CcrossPdist",
                           nfrom = as.integer(n1),
@@ -189,7 +192,8 @@ crossdist.default <-
                           xwidth = as.double(wide),
                           yheight = as.double(high),
                           squared = as.integer(squared),
-                          d = as.double(matrix(0, nrow=n1, ncol=n2)))
+                          d = as.double(matrix(0, nrow=n1, ncol=n2)),
+                          PACKAGE = "spatstat")
                  }
                  return(matrix(z$d, nrow=n1, ncol=n2))
                },

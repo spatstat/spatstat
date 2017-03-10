@@ -43,7 +43,8 @@ scanmeasure.ppp <- function(X, r, ..., method=c("counts", "fft")) {
                     nr=as.integer(nr),
                     nc=as.integer(nc),
                     R=as.double(r),
-                    counts=as.integer(numeric(prod(dimyx))))
+                    counts=as.integer(numeric(prod(dimyx))),
+                    PACKAGE = "spatstat")
            zzz <- matrix(zz$counts, nrow=dimyx[1], ncol=dimyx[2], byrow=TRUE)
            Z <- im(zzz, xrange=xr, yrange=yr, unitname=unitname(X))
          },

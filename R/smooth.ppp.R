@@ -340,7 +340,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                v       = as.double(vv),
                self    = as.integer(!leaveoneout),
                rmaxi   = as.double(cutoff),
-               result  = as.double(double(npts)))
+               result  = as.double(double(npts)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result
     } else {
       wtsort <- weights[oo]
@@ -352,7 +353,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                self    = as.integer(!leaveoneout),
                rmaxi   = as.double(cutoff),
                weight  = as.double(wtsort),
-               result  = as.double(double(npts)))
+               result  = as.double(double(npts)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[oo] <- zz$result
     }
     if(any(nbg <- (is.infinite(result) | is.nan(result)))) {
@@ -388,7 +390,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -401,7 +404,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sig     = as.double(sd),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     } else {
@@ -417,7 +421,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  self    = as.integer(!leaveoneout),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       } else {
         wtsort <- weights[oo]
@@ -430,7 +435,8 @@ smoothpointsEngine <- function(x, values, sigma, ...,
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
                  weight  = as.double(wtsort),
-                 result  = as.double(double(npts)))
+                 result  = as.double(double(npts)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[oo] <- zz$result
       }
     }
@@ -682,7 +688,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                vd      = as.double(vd),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)))
+               result  = as.double(double(nquery)),
+               PACKAGE = "spatstat")
       if(sorted) result <- zz$result else result[ooq] <- zz$result
     } else {
       wtsort <- weights[ood]
@@ -697,7 +704,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                wd      = as.double(wtsort),
                rmaxi   = as.double(cutoff),
                sig     = as.double(sd),
-               result  = as.double(double(nquery)))
+               result  = as.double(double(nquery)),
+               PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       }
     } else {
@@ -715,7 +723,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                  vd      = as.double(vd),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)))
+                 result  = as.double(double(nquery)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       } else {
         wtsort <- weights[ood]
@@ -730,7 +739,8 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
                  wd      = as.double(wtsort),
                  rmaxi   = as.double(cutoff),
                  sinv    = as.double(flatSinv),
-                 result  = as.double(double(nquery)))
+                 result  = as.double(double(nquery)),
+                 PACKAGE = "spatstat")
         if(sorted) result <- zz$result else result[ooq] <- zz$result
       }
     }
