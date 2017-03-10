@@ -869,8 +869,8 @@ rmhEngine <- function(InfoList, ...,
                  thin,
                  snoopenv,
                  temper,
-                 invertemp)
-#                 PACKAGE="spatstat")
+                 invertemp,
+                 PACKAGE="spatstat")
   
     # Extract the point pattern returned from C
     X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
@@ -984,7 +984,8 @@ rmhEngine <- function(InfoList, ...,
                    thin,
                    snoopenv,
                    temper,
-                   invertemp)
+                   invertemp,
+                   PACKAGE = "spatstat")
       # Extract the point pattern returned from C
       X <- ppp(x=out[[1L]], y=out[[2L]], window=w.state, check=FALSE)
       if(mtype) {

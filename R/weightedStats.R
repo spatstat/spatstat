@@ -30,7 +30,8 @@ whist <- function(x, breaks, weights=NULL) {
           h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
         } else {
           h <- .Call("Cwhist",
-                     as.integer(cell), as.double(weights), as.integer(nb))
+                     as.integer(cell), as.double(weights), as.integer(nb),
+                     PACKAGE = "spatstat")
         }
       }
     }

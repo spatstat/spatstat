@@ -78,7 +78,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     switch(what,
            all = {
              z <- .Call("Vclosepairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vclosepairs")
              i  <- z[[1L]]  # NB no increment required
@@ -93,7 +94,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            },
            indices = {
              z <- .Call("VcloseIJpairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcloseIJpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -101,7 +103,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            },
            ijd = {
              z <- .Call("VcloseIJDpairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcloseIJDpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -406,7 +409,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("Vcrosspairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vcrosspairs")
              i  <- z[[1L]]  # NB no increment required
@@ -423,7 +427,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("VcrossIJpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcrossIJpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -433,7 +438,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("VcrossIJDpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcrossIJDpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -566,7 +572,8 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   storage.mode(s) <- "double"
   storage.mode(ng) <- "integer"
   z <- .Call("Vclosethresh",
-             xx=x, yy=y, rr=r, ss=s, nguess=ng)
+             xx=x, yy=y, rr=r, ss=s, nguess=ng,
+             PACKAGE = "spatstat")
   if(length(z) != 3)
     stop("Internal error: incorrect format returned from Vclosethresh")
   i  <- z[[1L]]  # NB no increment required

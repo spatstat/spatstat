@@ -921,7 +921,8 @@ thinjump <- function(n, p) {
   if(p > 0.5) return(-thinjump(n, 1-p))
   guessmaxlength <- ceiling(n * p + 2 * sqrt(n * p * (1-p)))
   i <- .Call("thinjumpequal",
-             n, p, guessmaxlength)
+             n, p, guessmaxlength,
+             PACKAGE = "spatstat")
   return(i)
 }
   

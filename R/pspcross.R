@@ -80,8 +80,8 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
                  y0b, 
                  dxb, 
                  dyb, 
-    	         eps)
-#                 PACKAGE="spatstat")
+    	           eps,
+                 PACKAGE="spatstat")
     xx <- out[[5]]
     yy <- out[[6]]
     if(details) {
@@ -218,8 +218,8 @@ selfcrossing.psp <- function(A) {
                  y0, 
                  dx, 
                  dy, 
-    	         eps)
-#                 PACKAGE="spatstat")
+    	           eps,
+                 PACKAGE="spatstat")
     xx <- out[[5L]]
     yy <- out[[6L]]
   }
@@ -276,7 +276,8 @@ selfcut.psp <- function(A, ..., eps) {
               y0, 
               dx, 
               dy, 
-              eps)
+              eps,
+              PACKAGE = "spatstat")
   if(length(zz[[1]]) == 0)
     return(A)
   ##
