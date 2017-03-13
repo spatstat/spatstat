@@ -62,8 +62,8 @@ closepairs.pp3 <- local({
     a <- switch(what,
                 all = {
                   .Call("close3pairs",
-                        xx=x, yy=y, zz=z, rr=r, nguess=ng),
-                        PACKAGE = "spatstat"
+                        xx=x, yy=y, zz=z, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
                 },
                 indices = {
                   .Call("close3IJpairs",
