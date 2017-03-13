@@ -1,7 +1,12 @@
 language: r
-r:
-- release
-- devel
+matrix:
+  include:
+    - os: osx
+      env: R_CODECOV_TEST=true
+    - os: osx
+      env: R_CODECOV_EXAMPLE=true
+    - os: osx
+      env: R_CODECOV_VIGNETTE=true
 sudo: false
 cache: packages
 warnings_are_errors: false
@@ -20,14 +25,9 @@ brew_packages:
 r_packages:
 - covr
 after_success:
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then R CMD INSTALL $PKG_TARBALL; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then Rscript -e 'covr::codecov(type = "vignette",
-  quiet = FALSE)'; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then Rscript -e 'covr::codecov(type = "test",
-  quiet = FALSE)'; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "linux") ]]; then Rscript -e 'covr::codecov(type = "example",
-  quiet = FALSE)'; fi
+ - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test")'; fi
+ - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example")'; fi
+ - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette")'; fi
 env:
 - _R_CHECK_FORCE_SUGGESTS_=false
 deploy:
