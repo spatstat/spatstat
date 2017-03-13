@@ -1,5 +1,6 @@
 # History files
 .Rhistory
+*.Rapp.history
 
 # Example code in package build process
 *-Ex.R
@@ -10,6 +11,7 @@
 
 # R-studio files
 spatstat.Rproj
+
 
 # covr files
 src/*.gcov
