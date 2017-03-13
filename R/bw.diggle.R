@@ -69,7 +69,8 @@ bw.diggle <- local({
                      nr=as.integer(nr),
                      nrmax=as.integer(nrmax),
                      ndK=as.integer(ndK),
-                     J=as.double(numeric(nrmax)))
+                     J=as.double(numeric(nrmax)),
+                     PACKAGE = "spatstat")
              J <- z$J
              rvals <- rvals[ok]
            })

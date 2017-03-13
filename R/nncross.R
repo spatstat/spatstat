@@ -147,7 +147,8 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge))
+            huge=as.double(huge),
+            PACKAGE = "spatstat")
 
     if(want.which) {
       nnwcode <- z$nnwhich #sic. C code now increments by 1
@@ -193,7 +194,8 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             wantwhich = as.integer(want.which),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
-            huge=as.double(huge))
+            huge=as.double(huge),
+            PACKAGE = "spatstat")
 
     # extract results
     nnD <- z$nnd

@@ -73,7 +73,8 @@ delaunay <- function(X) {
             it = as.integer(integer(ne)),
             jt = as.integer(integer(ne)),
             kt = as.integer(integer(ne)),
-            status = as.integer(integer(1L)))
+            status = as.integer(integer(1L)),
+            PACKAGE = "spatstat")
     if(z$status != 0)
       stop("Internal error: overflow in trigrafS")
     tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
@@ -91,7 +92,8 @@ delaunay <- function(X) {
             it = as.integer(integer(ntmax)),
             jt = as.integer(integer(ntmax)),
             kt = as.integer(integer(ntmax)),
-            status = as.integer(integer(1L)))
+            status = as.integer(integer(1L)),
+            PACKAGE = "spatstat")
     if(z$status != 0)
       stop("Internal error: overflow in trigraf")
     tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
@@ -228,7 +230,8 @@ delaunayDistance <- function(X) {
           dpath = as.integer(integer(nY * nY)),
           tol = as.integer(0),
           niter = as.integer(integer(1L)), 
-          status = as.integer(integer(1L)))
+          status = as.integer(integer(1L)),
+          PACKAGE = "spatstat")
   if (z$status == -1L)
     warning(paste("graph connectivity algorithm did not converge after", 
                   z$niter, "iterations", "on", nY, "vertices and", 

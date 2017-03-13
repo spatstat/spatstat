@@ -50,7 +50,8 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
               yy=as.double(numeric(na * nb)),
               ta=as.double(numeric(na * nb)),
               tb=as.double(numeric(na * nb)),
-              ok=as.integer(integer(na * nb)))
+              ok=as.integer(integer(na * nb)),
+              PACKAGE = "spatstat")
     
     ok <- (matrix(out$ok, na, nb) != 0)
     xx <- matrix(out$xx, na, nb)
@@ -79,8 +80,8 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
                  y0b, 
                  dxb, 
                  dyb, 
-    	         eps)
-#                 PACKAGE="spatstat")
+    	           eps,
+                 PACKAGE="spatstat")
     xx <- out[[5]]
     yy <- out[[6]]
     if(details) {
@@ -128,7 +129,8 @@ test.crossing.psp <- function(A,B) {
             dxb=as.double(dxb),
             dyb=as.double(dyb), 
             eps=as.double(eps),
-            ok=as.integer(integer(na * nb)))
+            ok=as.integer(integer(na * nb)),
+            PACKAGE = "spatstat")
 
   hit <- (matrix(out$ok, na, nb) != 0)
   return(hit)
@@ -167,7 +169,8 @@ anycrossing.psp <- function(A,B) {
             dxb=as.double(dxb),
             dyb=as.double(dyb), 
             eps=as.double(eps),
-            ok=as.integer(integer(1L)))
+            ok=as.integer(integer(1L)),
+            PACKAGE = "spatstat")
   hit <- (out$ok != 0)
   return(hit)
 }
@@ -197,7 +200,8 @@ selfcrossing.psp <- function(A) {
               yy=as.double(numeric(n^2)),
               ti=as.double(numeric(n^2)),
               tj=as.double(numeric(n^2)),
-              ok=as.integer(integer(n^2)))
+              ok=as.integer(integer(n^2)),
+              PACKAGE = "spatstat")
 
     ok <- (matrix(out$ok, n, n) != 0)
     xx <- matrix(out$xx, n, n)
@@ -214,8 +218,8 @@ selfcrossing.psp <- function(A) {
                  y0, 
                  dx, 
                  dy, 
-    	         eps)
-#                 PACKAGE="spatstat")
+    	           eps,
+                 PACKAGE="spatstat")
     xx <- out[[5L]]
     yy <- out[[6L]]
   }
@@ -242,7 +246,8 @@ test.selfcrossing.psp <- function(A) {
             dx=as.double(dx),
             dy=as.double(dy), 
             eps=as.double(eps),
-            ok=as.integer(integer(n*n)))
+            ok=as.integer(integer(n*n)),
+            PACKAGE = "spatstat")
   hit <- (matrix(out$ok, n, n) != 0)
   return(hit)
 }
@@ -271,7 +276,8 @@ selfcut.psp <- function(A, ..., eps) {
               y0, 
               dx, 
               dy, 
-              eps)
+              eps,
+              PACKAGE = "spatstat")
   if(length(zz[[1]]) == 0)
     return(A)
   ##

@@ -127,7 +127,8 @@ Ginhom <- function(X, lambda=NULL, lmin=NULL,
           v = as.double(vord),
           nr = as.integer(nr),
           rmax = as.double(rmax),
-          ans = as.double(numeric(npts * nr)))
+          ans = as.double(numeric(npts * nr)),
+          PACKAGE = "spatstat")
   ans <- matrix(z$ans, nrow=nr, ncol=npts)
   # revert to original ordering
   loccumprod <- matrix(,  nrow=nr, ncol=npts)
@@ -303,7 +304,8 @@ Finhom <- function(X, lambda=NULL, lmin=NULL,
          vdata = as.double(vord),
          nr = as.integer(nr),
          rmax = as.double(rmax),
-         ans = as.double(numeric(nM * nr)))
+         ans = as.double(numeric(nM * nr)),
+         PACKAGE = "spatstat")
   loccumprod <- matrix(z$ans, nrow=nr, ncol=nM)
   # border correction
   ok <- outer(r, bM, "<=")

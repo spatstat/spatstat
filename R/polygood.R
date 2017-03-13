@@ -154,7 +154,8 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
                  ysep=as.double(2 * max(abs(dy))),
                  eps=as.double(eps),
                  proper=as.integer(proper),
-                 answer=as.integer(integer(1L)))$answer
+                 answer=as.integer(integer(1L)),
+                 PACKAGE = "spatstat")$answer
     if(verbose)
       cat("]\n")
     return(answer != 0)
@@ -170,7 +171,8 @@ xypolyselfint <- function(p, eps=.Machine$double.eps,
             yy=as.double(numeric(n^2)),
             ti=as.double(numeric(n^2)),
             tj=as.double(numeric(n^2)),
-            ok=as.integer(integer(n^2)))
+            ok=as.integer(integer(n^2)),
+            PACKAGE = "spatstat")
 
   uhoh <- (matrix(out$ok, n, n) != 0)
   if(proper) {

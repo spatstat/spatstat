@@ -298,7 +298,8 @@ k3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
             f = as.double(numeric(nrval)),
             num = as.double(numeric(nrval)),
             denom = as.double(numeric(nrval)),
-            as.integer(code))
+            as.integer(code),
+            PACKAGE = "spatstat")
   return(list(range = c(0,rmax),
               f = res$f, num=res$num, denom=res$denom, 
               correction=correction))
@@ -321,7 +322,8 @@ g3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 		f = as.double(numeric(nrval)),
 		num = as.double(numeric(nrval)),
 		denom = as.double(numeric(nrval)),
-		as.integer(code))
+		as.integer(code),
+	  PACKAGE = "spatstat")
 	return(list(range = range, f = res$f, num=res$num, denom=res$denom, 
 		correction=correction))
 }
@@ -345,7 +347,8 @@ f3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
 		m=as.integer(nval),
 		num = as.integer(integer(nval)),
 		denom = as.integer(integer(nval)),
-		as.integer(code))
+		as.integer(code),
+	  PACKAGE = "spatstat")
 	r <- seq(from=range[1L], to=range[2L], length.out=nval)
 	f <- with(res, ifelseXB(denom > 0, num/denom, 1))
 
@@ -371,7 +374,8 @@ f3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
             upperobs = as.integer(integer(1L)),
-            uppercen = as.integer(integer(1L)))
+            uppercen = as.integer(integer(1L)),
+            PACKAGE = "spatstat")
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -409,7 +413,8 @@ g3Cengine <- function(x, y, z, box=c(0,1,0,1,0,1),
             cen = as.integer(integer(nrval)),
             ncc = as.integer(integer(nrval)),
             upperobs = as.integer(integer(1L)),
-            uppercen = as.integer(integer(1L)))
+            uppercen = as.integer(integer(1L)),
+            PACKAGE = "spatstat")
   r <- seq(from=0, to=rmax, length.out=nrval)
   #
   obs <- res$obs
@@ -446,7 +451,8 @@ pcf3engine <- function(x, y, z, box=c(0,1,0,1,0,1),
             num = as.double(numeric(nrval)),
             denom = as.double(numeric(nrval)),
             method=as.integer(code),
-            delta=as.double(delta))
+            delta=as.double(delta),
+            PACKAGE = "spatstat")
 	return(list(range = c(0,rmax),
                     f = res$f, num=res$num, denom=res$denom, 
                     correction=correction))
@@ -483,7 +489,8 @@ digital.volume <- function(range=c(0, 1.414),  nval=25, vside= 0.05)
                    as.integer(nval),
                    num = as.integer(integer(nval)),
                    denom = as.integer(integer(nval)),
-                   as.integer(0))$num
+                   as.integer(0),
+	                 PACKAGE = "spatstat")$num
 #	
         (vside^3) * dvol 
       }

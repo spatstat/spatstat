@@ -78,7 +78,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     switch(what,
            all = {
              z <- .Call("Vclosepairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vclosepairs")
              i  <- z[[1L]]  # NB no increment required
@@ -93,7 +94,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            },
            indices = {
              z <- .Call("VcloseIJpairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcloseIJpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -101,7 +103,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            },
            ijd = {
              z <- .Call("VcloseIJDpairs",
-                        xx=x, yy=y, rr=r, nguess=ng)
+                        xx=x, yy=y, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcloseIJDpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -158,7 +161,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1L)))
+         status=as.integer(integer(1L)),
+         PACKAGE = "spatstat")
 
     if(z$status != 0) {
       # Guess was insufficient
@@ -170,7 +174,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                   x=as.double(Xsort$x),
                   y=as.double(Xsort$y),
                   rmaxi=as.double(rmaxplus),
-                  count=as.integer(integer(1L)))$count
+                  count=as.integer(integer(1L)),
+                  PACKAGE = "spatstat")$count
       if(nsize <= 0)
         return(null.answer)
       # add a bit more for safety
@@ -193,7 +198,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
            dxout=as.double(numeric(nsize)),
            dyout=as.double(numeric(nsize)),
            dout=as.double(numeric(nsize)),
-           status=as.integer(integer(1L)))
+           status=as.integer(integer(1L)),
+           PACKAGE = "spatstat")
       if(z$status != 0)
         stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     }
@@ -403,7 +409,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("Vcrosspairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 9)
                stop("Internal error: incorrect format returned from Vcrosspairs")
              i  <- z[[1L]]  # NB no increment required
@@ -420,7 +427,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("VcrossIJpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 2)
                stop("Internal error: incorrect format returned from VcrossIJpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -430,7 +438,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              z <- .Call("VcrossIJDpairs",
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
              if(length(z) != 3)
                stop("Internal error: incorrect format returned from VcrossIJDpairs")
              i  <- z[[1L]]  # NB no increment required
@@ -451,7 +460,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                 x2=as.double(Ysort$x),
                 y2=as.double(Ysort$y),
                 rmaxi=as.double(rmaxplus),
-                count=as.integer(integer(1L)))$count
+                count=as.integer(integer(1L)),
+                PACKAGE = "spatstat")$count
     if(nsize <= 0)
       return(null.answer)
 
@@ -479,7 +489,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
          dxout=as.double(numeric(nsize)),
          dyout=as.double(numeric(nsize)),
          dout=as.double(numeric(nsize)),
-         status=as.integer(integer(1L)))
+         status=as.integer(integer(1L)),
+         PACKAGE = "spatstat")
     if(z$status != 0)
       stop(paste("Internal error: C routine complains that insufficient space was allocated:", nsize))
     # trim vectors to the length indicated
@@ -561,7 +572,8 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   storage.mode(s) <- "double"
   storage.mode(ng) <- "integer"
   z <- .Call("Vclosethresh",
-             xx=x, yy=y, rr=r, ss=s, nguess=ng)
+             xx=x, yy=y, rr=r, ss=s, nguess=ng,
+             PACKAGE = "spatstat")
   if(length(z) != 3)
     stop("Internal error: incorrect format returned from Vclosethresh")
   i  <- z[[1L]]  # NB no increment required

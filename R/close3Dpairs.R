@@ -62,11 +62,13 @@ closepairs.pp3 <- local({
     a <- switch(what,
                 all = {
                   .Call("close3pairs",
-                        xx=x, yy=y, zz=z, rr=r, nguess=ng)
+                        xx=x, yy=y, zz=z, rr=r, nguess=ng),
+                        PACKAGE = "spatstat"
                 },
                 indices = {
                   .Call("close3IJpairs",
-                        xx=x, yy=y, zz=z, rr=r, nguess=ng)
+                        xx=x, yy=y, zz=z, rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
                 })
     names(a) <- nama
     ## convert i,j indices to original sequence
@@ -186,13 +188,15 @@ crosspairs.pp3 <- local({
                   .Call("cross3pairs",
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
                 },
                 indices = {
                   .Call("cross3IJpairs",
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
-                        rr=r, nguess=ng)
+                        rr=r, nguess=ng,
+                        PACKAGE = "spatstat")
                 })
     names(a) <- nama
     ## convert i,j indices to original sequence

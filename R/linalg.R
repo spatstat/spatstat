@@ -42,14 +42,16 @@ sumouter <- function(x, w=NULL, y=x) {
                x=as.double(tx),
                n=as.integer(n),
                p=as.integer(p),
-               y=as.double(numeric(p * p)))
+               y=as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
     } else {
       zz <- .C("Cwsumouter",
                x=as.double(tx),
                n=as.integer(n),
                p=as.integer(p),
                w=as.double(w),
-               y=as.double(numeric(p * p)))
+               y=as.double(numeric(p * p)),
+               PACKAGE = "spatstat")
     }
     out <- matrix(zz$y, p, p)
     if(!is.null(nama <- colnames(x)))
@@ -65,7 +67,8 @@ sumouter <- function(x, w=NULL, y=x) {
                n=as.integer(n),
                px=as.integer(px),
                py=as.integer(py),
-               z=as.double(numeric(px * py)))
+               z=as.double(numeric(px * py)),
+               PACKAGE = "spatstat")
     } else {
       zz <- .C("Cwsum2outer",
                x=as.double(tx),
@@ -111,7 +114,8 @@ quadform <- function(x, v) {
           n=as.integer(n),
           p=as.integer(p),
           v=as.double(v),
-          y=as.double(numeric(n)))
+          y=as.double(numeric(n)),
+          PACKAGE = "spatstat")
   result <- z$y
   names(result) <- nama[ok]
   if(allok)
@@ -153,7 +157,8 @@ bilinearform <- function(x, v, y) {
           n=as.integer(n),
           p=as.integer(p),
           v=as.double(v),
-          z=as.double(numeric(n)))
+          z=as.double(numeric(n)),
+          PACKAGE = "spatstat")
   result <- z$z
   names(result) <- nama[ok]
   if(allok)
@@ -187,14 +192,16 @@ sumsymouter <- function(x, w=NULL) {
              x = as.double(x),
              p = as.integer(p),
              n = as.integer(n),
-             y = as.double(numeric(p * p)))
+             y = as.double(numeric(p * p)),
+             PACKAGE = "spatstat")
   } else {
     zz <- .C("Cwsumsymouter",
              x = as.double(x),
              w = as.double(w),
              p = as.integer(p),
              n = as.integer(n),
-             y = as.double(numeric(p * p)))
+             y = as.double(numeric(p * p)),
+             PACKAGE = "spatstat")
   }
   matrix(zz$y, p, p)
 }

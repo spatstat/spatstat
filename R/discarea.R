@@ -44,7 +44,8 @@ discpartarea <- function(X, r, W=as.owin(X)) {
           x1=as.double(Y$ends$x1),
           y1=as.double(Y$ends$y1),
           eps=as.double(.Machine$double.eps),
-          out=as.double(numeric(length(r))))
+          out=as.double(numeric(length(r))),
+          PACKAGE = "spatstat")
   areas <- matrix(z$out, n, nr)
   return(areas)
 }

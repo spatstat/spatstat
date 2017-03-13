@@ -76,7 +76,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 sdum  = as.integer(integer(ndummax)),
                 tdum  = as.double(numeric(ndummax)),
                 wdum  = as.double(numeric(ndummax)),
-                maxscratch = as.integer(maxscratch))
+                maxscratch = as.integer(maxscratch),
+                PACKAGE = "spatstat")
       } else {
         z <- .C("ClineRquad",
                 ns    = as.integer(nseg),
@@ -96,7 +97,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 sdum  = as.integer(integer(ndummax)),
                 tdum  = as.double(numeric(ndummax)),
                 wdum  = as.double(numeric(ndummax)),
-                maxscratch = as.integer(maxscratch))
+                maxscratch = as.integer(maxscratch),
+                PACKAGE = "spatstat")
       }
       seqdum <- seq_len(z$ndum)
       dum <- with(z, ppp(xdum[seqdum], ydum[seqdum], window=W, check=FALSE))
@@ -132,7 +134,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 sdum  = as.integer(integer(ndummax)),
                 tdum  = as.double(numeric(ndummax)),
                 wdum  = as.double(numeric(ndummax)),
-                maxscratch = as.integer(maxscratch))
+                maxscratch = as.integer(maxscratch),
+                PACKAGE = "spatstat")
       } else {
         z <- .C("ClineRMquad",
                 ns    = as.integer(nseg),
@@ -157,7 +160,8 @@ linequad <- function(X, Y, ..., eps=NULL, nd=1000, random=FALSE) {
                 sdum  = as.integer(integer(ndummax)),
                 tdum  = as.double(numeric(ndummax)),
                 wdum  = as.double(numeric(ndummax)),
-                maxscratch = as.integer(maxscratch))
+                maxscratch = as.integer(maxscratch),
+                PACKAGE = "spatstat")
       }
       seqdum <- seq_len(z$ndum)
       marques <- factor(z$mdum[seqdum] + 1L, labels=flev)

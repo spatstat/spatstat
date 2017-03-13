@@ -363,8 +363,8 @@ boundingradius.linnet <- function(x, ...) {
             nv = as.integer(nv), 
             dpath = as.double(dpath), 
             huge = as.double(huge), 
-            result = as.double(numeric(1))
-            )
+            result = as.double(numeric(1)),
+            PACKAGE = "spatstat")
     return(z$result)
   }
   sA <- sB <- matrix(Inf, nseg, nseg)
@@ -553,7 +553,8 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
            ie = as.integer(ie),
            je = as.integer(je),
            label = as.integer(integer(nv)), 
-           status = as.integer(integer(1L)))
+           status = as.integer(integer(1L)),
+           PACKAGE = "spatstat")
   if (zz$status != 0) 
     stop("Internal error: connected.linnet did not converge")
   lab <- zz$label + 1L

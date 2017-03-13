@@ -57,7 +57,8 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
                    np = as.integer(np),
                    xp = as.double(xp), 
                    yp = as.double(yp),
-                   z = as.double(numeric(np)))
+                   z = as.double(numeric(np)),
+                   PACKAGE = "spatstat")
            dens <- im(z$z, w$xcol, w$yrow)
          },
          FFT = {

@@ -42,7 +42,8 @@
             distances = as.double (double(N)),
             rows      = as.integer(integer(N)),
             cols      = as.integer(integer(N)),
-            boundary  = as.double (double(N)))
+            boundary  = as.double (double(N)),
+            PACKAGE = "spatstat")
   dist <- matrix(res$distances,
                  ncol=Nnc, nrow=Nnr, byrow = TRUE)[rmin:rmax, cmin:cmax]
   rows <- matrix(res$rows,

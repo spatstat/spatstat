@@ -204,7 +204,8 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
            dpath = as.double(dpath),
            lengths = as.double(lengths),
            toler=as.double(toler),
-           nendpoints = as.integer(integer(np)))
+           nendpoints = as.integer(integer(np)),
+           PACKAGE = "spatstat")
   zz$nendpoints
 }
 

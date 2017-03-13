@@ -178,7 +178,8 @@ clippoly.psp <- function(s, window) {
             yy=as.double(numeric(ns * nw)),
             ta=as.double(numeric(ns * nw)),
             tb=as.double(numeric(ns * nw)),
-            ok=as.integer(integer(ns * nw)))
+            ok=as.integer(integer(ns * nw)),
+            PACKAGE = "spatstat")
 
   ok <- (matrix(out$ok, ns, nw) != 0)
   ts <- matrix(out$ta, ns, nw)

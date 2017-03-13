@@ -475,7 +475,8 @@ Kborder.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.integer(integer(nr)),
-                denom=as.integer(integer(nr)))
+                denom=as.integer(integer(nr)),
+                PACKAGE = "spatstat")
     } else {
       # no - need double precision storage
       res <- .C("KborderD",
@@ -486,7 +487,8 @@ Kborder.engine <- function(X, rmax, nr=100,
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
                 numer=as.double(numeric(nr)),
-                denom=as.double(numeric(nr)))
+                denom=as.double(numeric(nr)),
+                PACKAGE = "spatstat")
     }
     if("bord.modif" %in% correction) {
       denom.area <- eroded.areas(W, r)
@@ -547,7 +549,8 @@ Kborder.engine <- function(X, rmax, nr=100,
               nr=as.integer(nr),
               rmax=as.double(rmax),
               numer=as.double(numeric(nr)),
-              denom=as.double(numeric(nr)))
+              denom=as.double(numeric(nr)),
+              PACKAGE = "spatstat")
     if("border" %in% correction) {
       bord <- res$numer/res$denom
       Kfv <- bind.fv(Kfv, data.frame(border=bord), "hat(%s)[bord](r)",
@@ -650,7 +653,8 @@ Knone.engine <- function(X, rmax, nr=100,
                 y=as.double(y),
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
-                numer=as.integer(integer(nr)))
+                numer=as.integer(integer(nr)),
+                PACKAGE = "spatstat")
     } else {
       # no - need double precision storage
       res <- .C("KnoneD",
@@ -659,7 +663,8 @@ Knone.engine <- function(X, rmax, nr=100,
                 y=as.double(y),
                 nr=as.integer(nr),
                 rmax=as.double(rmax),
-                numer=as.double(numeric(nr)))
+                numer=as.double(numeric(nr)),
+                PACKAGE = "spatstat")
     }
 
     numKun <- res$numer
@@ -684,7 +689,8 @@ Knone.engine <- function(X, rmax, nr=100,
               w=as.double(weights.Xsort),
               nr=as.integer(nr),
               rmax=as.double(rmax),
-              numer=as.double(numeric(nr)))
+              numer=as.double(numeric(nr)),
+              PACKAGE = "spatstat")
     numKun <- res$numer
     denKun <- sum(weights)
     Kun <- numKun/denKun
@@ -875,7 +881,8 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.double(zbnumer),
               bdenom=as.double(zbdenom),
-              unco=as.double(zunco))
+              unco=as.double(zunco),
+              PACKAGE = "spatstat")
   } else if(npts < sqrt(.Machine$integer.max)) {
     ## unweighted
     ## numerator of border correction can be stored as an integer
@@ -900,7 +907,8 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.integer(zbnumer),
               bdenom=as.integer(zbdenom),
-              unco=as.integer(zunco))
+              unco=as.integer(zunco),
+              PACKAGE = "spatstat")
   } else {
     ## unweighted
     ## need double precision storage
@@ -924,7 +932,8 @@ Krect.engine <- function(X, rmax, nr=100,
               trans=as.double(ztrans),
               bnumer=as.double(zbnumer),
               bdenom=as.double(zbdenom),
-              unco=as.double(zunco))
+              unco=as.double(zunco),
+              PACKAGE = "spatstat")
   }
 
   ## Process corrections in reverse order of priority

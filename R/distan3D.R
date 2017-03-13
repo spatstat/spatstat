@@ -30,7 +30,8 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                y = as.double(y),
                z = as.double(z),
                squared = as.integer(squared),
-               d = as.double(numeric(n*n)))
+               d = as.double(numeric(n*n)),
+               PACKAGE = "spatstat")
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
@@ -45,7 +46,8 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
                yheight=as.double(high),
                zdepth=as.double(deep),
                squared = as.integer(squared),
-               d= as.double(numeric(n*n)))
+               d= as.double(numeric(n*n)),
+               PACKAGE = "spatstat")
   }
   dout <- matrix(Cout$d, nrow=n, ncol=n)
   return(dout)
@@ -106,7 +108,8 @@ nndist.pp3 <- function(X, ..., k=1) {
                z= as.double(z[o]),
                nnd= as.double(nnd),
                nnwhich = as.integer(integer(1L)),
-               huge=as.double(big))
+               huge=as.double(big),
+               PACKAGE = "spatstat")
     nnd[o] <- Cout$nnd
   } else {
     # case kmaxcalc > 1
@@ -121,7 +124,8 @@ nndist.pp3 <- function(X, ..., k=1) {
                z    = as.double(z[o]),
                nnd  = as.double(nnd),
                nnwhich = as.integer(integer(1L)),
-               huge = as.double(big))
+               huge = as.double(big),
+               PACKAGE = "spatstat")
     nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
     nnd[o, ] <- matrix(Cout$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
   }
@@ -195,7 +199,8 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                z = as.double(z[o]),
                nnd = as.double(numeric(1L)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big))
+               huge = as.double(big),
+               PACKAGE = "spatstat")
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich
     if(any(witch <= 0))
@@ -216,7 +221,8 @@ nnwhich.pp3 <- function(X, ..., k=1) {
                z = as.double(z[o]),
                nnd = as.double(numeric(1L)),
                nnwhich = as.integer(nnw),
-               huge = as.double(big))
+               huge = as.double(big),
+               PACKAGE = "spatstat")
     # [sic] Conversion from C to R indexing is done in C code.
     witch <- Cout$nnwhich 
     witch <- matrix(witch, nrow=n, ncol=kmaxcalc, byrow=TRUE)
@@ -265,7 +271,8 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
                yto = as.double(cY$y),
                zto = as.double(cY$z),
                squared = as.integer(squared),
-               d = as.double(matrix(0, nrow=nX, ncol=nY)))
+               d = as.double(matrix(0, nrow=nX, ncol=nY)),
+               PACKAGE = "spatstat")
   } else {
     b <- as.box3(X)
     wide <- diff(b$xrange)
@@ -284,7 +291,8 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
                yheight = as.double(high),
                zheight = as.double(deep),
                squared = as.integer(squared),
-               d = as.double(matrix(0, nrow=nX, ncol=nY)))
+               d = as.double(matrix(0, nrow=nX, ncol=nY)),
+               PACKAGE = "spatstat")
   }
   return(matrix(Cout$d, nrow=nX, ncol=nY))
 }

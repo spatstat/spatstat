@@ -42,7 +42,8 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                x = as.double(cX$x),
                y = as.double(cX$y),
                r = as.double(r),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     } else {
       b <- sidelengths(Frame(X))
       zz <- .C("hasXpclose",
@@ -51,7 +52,8 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                y = as.double(cX$y),
                r = as.double(r),
                b = as.double(b),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     }
   } else {
     stopifnot(is.ppp(Y))
@@ -72,7 +74,8 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                x2 = as.double(cY$x),
                y2 = as.double(cY$y),
                r = as.double(r),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     } else {
       bX <- sidelengths(Frame(X))
       bY <- sidelengths(Frame(Y))
@@ -87,7 +90,8 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                y2 = as.double(cY$y),
                r = as.double(r),
                b = as.double(bX),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     }
   }
   tt <- as.logical(zz$t)
@@ -116,7 +120,8 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                y = as.double(cX$y),
                z = as.double(cX$z),
                r = as.double(r),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     } else {
       b <- sidelengths(as.box3(X))
       zz <- .C("hasX3pclose",
@@ -126,7 +131,8 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                z = as.double(cX$z),
                r = as.double(r),
                b = as.double(b), 
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     }
   } else {
     stopifnot(is.pp3(Y))
@@ -149,7 +155,8 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                y2 = as.double(cY$y),
                z2 = as.double(cY$z),
                r = as.double(r),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     } else {
       bX <- sidelengths(as.box3(X))
       bY <- sidelengths(as.box3(Y))
@@ -166,7 +173,8 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                z2 = as.double(cY$z),
                r = as.double(r),
                b = as.double(bX),
-               t = as.integer(integer(nX)))
+               t = as.integer(integer(nX)),
+               PACKAGE = "spatstat")
     }
   }
   tt <- as.logical(zz$t)

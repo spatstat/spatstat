@@ -52,7 +52,8 @@ dist2dpath <- function(dist, method="C") {
                    dpath=as.double(numeric(n*n)),
                    tol=as.double(tol),
                    niter=as.integer(integer(1L)),
-                   status=as.integer(integer(1L)))
+                   status=as.integer(integer(1L)),
+                   PACKAGE = "spatstat")
            if(z$status == -1L)
              warning(paste("C algorithm did not converge to tolerance", tol,
                            "after", z$niter, "iterations",
