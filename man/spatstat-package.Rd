@@ -1765,6 +1765,7 @@
   Jean-Francois Coeurjolly,
   Kim Colyvas,
   Robin Corria Ainslie,
+  Richard Cotton,
   Marcelino de la Cruz,
   Peter Dalgaard,
   Mario D'Antuono,

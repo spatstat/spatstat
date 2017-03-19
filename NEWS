@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.011
+        CHANGES IN spatstat VERSION 1.49-0.012
 
 OVERVIEW
 
-    o We thank Adrian Heyner, Abdollah Jalilian and Rasmus Waagepetersen
-    for contributions.
+    o We thank Richard Cotton, Adrian Heyner, Abdollah Jalilian
+    and Rasmus Waagepetersen for contributions.
 
     o spatstat now 'Imports' the package 'spatstat.utils'.
 
