@@ -25,10 +25,10 @@ void segdens(sigma, ns, xs, ys, alps, lens, np, xp, yp, z)
      double *xp, *yp; /* pixel coordinates */
      double *z; /* result, assumed initially 0 */
 {
-  int i, j, Ns, Np, maxchunk;
+  int i, j, Ns, Np;
   double Sigma;
   double xsi, ysi, angi, leni, cosi, sini;
-  double xpj, ypj, dx, dy, u1, u2;
+  double dx, dy, u1, u2;
 
   Ns = *ns;
   Np = *np;

@@ -478,7 +478,6 @@ void Gwtsmoopt(nxy, x, y, v, self, rmaxi, weight, result)
 {
   STD_DECLARATIONS;
   int countself;
-  double sigma, twosig2;
   double numer, denom, wij; 
 
   STD_INITIALISE;
