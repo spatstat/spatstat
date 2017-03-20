@@ -21,7 +21,7 @@ but these badges are currently not working correctly:
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
 For the most recent _public release_ of
-`spatstat`, see the [[CRAN page](https://cran.r-project.org/web/packages/spatstat)](https://cran.r-project.org/web/packages/spatstat).
+`spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 
 ## Important Note
 
@@ -29,7 +29,7 @@ Recently we have started the process of splitting `spatstat` into several
 packages (to satisfy the requirements of CRAN). Currently there are two
 pieces, called `spatstat.utils` and `spatstat`. The current development version
 of `spatstat.utils` is 
-[[here](https://github.com/spatstat/spatstat.utils)](https://github.com/spatstat/spatstat.utils).
+[here](https://github.com/spatstat/spatstat.utils).
 
 ## Installation
 
@@ -52,7 +52,7 @@ install.packages('devtools')
 
 Users are encouraged to report bugs here.
 Go to 
-[[issues](https://github.com/spatstat/spatstat/issues)](https://github.com/spatstat/spatstat/issues) in the menu above, 
+[issues](https://github.com/spatstat/spatstat/issues) in the menu above, 
 and press *new issue* to start a new bug report, documentation correction
 or feature request.
 
@@ -62,7 +62,7 @@ because it's too clunky for correspondence.
 ## Questions about spatstat
 
 For questions about `spatstat`, first check 
-the question-and-answer website [[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)](http://stackoverflow.com).
+the question-and-answer website [stackoverflow](http://stackoverflow.com/questions/tagged/spatstat).
 If your question is not listed,
 you can either post your question at stackoverflow, or
 email the authors.
