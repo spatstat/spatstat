@@ -20,6 +20,9 @@ but these badges are currently not working correctly:
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
+For the most recent _public release_ of
+`spatstat`, see the [[CRAN page](https://cran.r-project.org/web/packages/spatstat)](https://cran.r-project.org/web/packages/spatstat).
+
 ## Important Note
 
 Recently we have started the process of splitting `spatstat` into several
