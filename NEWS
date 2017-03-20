@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.012
+        CHANGES IN spatstat VERSION 1.49-0.013
 
 OVERVIEW
 
@@ -13,6 +13,22 @@ OVERVIEW
     o Improvements and bug fixes.
 
     o Version nickname: 'Instinctively Correct'
+
+NEW PACKAGE STRUCTURE
+
+    o spatstat is being split into several sub-packages, to satisfy
+    the requirements of CRAN. This should not affect the user:
+    existing code will continue to work in the same way.
+    Currently there are two sub-packages, called 'spatstat.utils'
+    and 'spatstat'. Typing 'library(spatstat)' will load the familiar
+    'spatstat' package which can be used as before, and will silently
+    import the 'spatstat.utils' package. The 'spatstat.utils' package
+    contains utility functions that were originally written for 'spatstat':
+    they were undocumented internal functions in 'spatstat', but are now
+    documented and accessible in a separate package because they may be
+    useful for other purposes. To access these functions, you need to
+    type 'library(spatstat.utils)'. 
+    
 
 NEW FUNCTIONS
 

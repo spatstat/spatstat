@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.49-0.012
+Version: 1.49-0.013
 Nickname: Instinctively Correct
-Date: 2017-03-19
+Date: 2017-03-20
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
