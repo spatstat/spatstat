@@ -3,6 +3,8 @@ spatstat
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat)
 [![Research software impact](http://depsy.org/api/package/cran/spatstat/badge.svg)](http://depsy.org/package/r/spatstat)
+[![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
+[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
 This repository holds a copy of the _current development version_ 
 of the contributed R-package `spatstat`.
@@ -14,12 +16,6 @@ version number like `1.2-3.004`. Official releases occur every 8 weeks
 (the minimum time permitted by CRAN policies) while the development code
 is updated almost every day. 
 
-The development version is also tracked by the
-software testing services Travis and Codecov, 
-but these badges are currently not working correctly:
-[![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
-[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
-
 For the most recent _public release_ of
 `spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
 
@@ -27,8 +23,8 @@ For the most recent _public release_ of
 
 Recently we have started the process of splitting `spatstat` into several
 packages (to satisfy the requirements of CRAN). Currently there are two
-pieces, called `spatstat.utils` and `spatstat`. The current development version
-of `spatstat.utils` is 
+pieces, called `spatstat.utils` and `spatstat`, which both need to be installed.
+The current development version of `spatstat.utils` is 
 [here](https://github.com/spatstat/spatstat.utils).
 
 ## Installation
