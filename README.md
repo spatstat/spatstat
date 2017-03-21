@@ -22,15 +22,16 @@ For the most recent _public release_ of
 ## Important Note
 
 Recently we have started the process of splitting `spatstat` into several
-packages (to satisfy the requirements of CRAN). This should not affect the
-user, and existing code will still work:
+packages (to satisfy the requirements of CRAN).
+Currently there are two pieces, called `spatstat.utils` and `spatstat`.
+The current development version of `spatstat.utils` is 
+[here](https://github.com/spatstat/spatstat.utils).
+
+This split should not affect the user, and existing code will still work:
 typing `library(spatstat)` will still give you
 access to all the functions in `spatstat` that you know from previous versions.
 However, messages from `R` about the installation and loading of the package
 will now show that `spatstat` consists of several pieces.
-Currently there are two pieces, called `spatstat.utils` and `spatstat`.
-The current development version of `spatstat.utils` is 
-[here](https://github.com/spatstat/spatstat.utils).
 
 ## Installation
 
