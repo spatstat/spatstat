@@ -32,8 +32,9 @@ convolve.im <- function(X, Y=X, ..., reflectX=FALSE, reflectY=FALSE) {
   have.Y <- !missing(Y) && !is.null(Y)
   crosscov <- have.Y || reflectX || reflectY
   trap.extra.arguments(..., .Context="In convolve.im")
-  west <- requireNamespace("fftwtools", quietly=TRUE)
-  #
+  #' Check whether Fastest Fourier Transform in the West is available
+  west <- fftwAvailable()
+  #'
   if(have.Y) {
     # cross-covariance 
     stopifnot(is.im(Y))

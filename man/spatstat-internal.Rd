@@ -156,6 +156,7 @@
 \alias{f3Cengine}
 \alias{fasp}
 \alias{fft2D}
+\alias{fftwAvailable}
 \alias{fill.coefs}
 \alias{findbestlegendpos}
 \alias{findCovariate}
@@ -892,6 +893,7 @@ f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
 fft2D(z, inverse, west)
+fftwAvailable()
 fill.coefs(coefs, required)
 findbestlegendpos(\dots)
 findCovariate(covname, scope, scopename=NULL)

@@ -5,12 +5,18 @@
 #' 
 #'    $Revision: 1.16 $  $Date: 2017/02/08 08:34:29 $
 
-fft2D <- function(z, inverse=FALSE,
-                  west=requireNamespace("fftwtools", quietly=TRUE)) {
+fft2D <- function(z, inverse=FALSE, west=fftwAvailable()) {
   if(west) return(fftwtools::fftw2d(data=z, inverse=inverse))
   return(stats::fft(z=z, inverse=inverse))
 }
-  
+
+fftwAvailable <- function() {
+  # including temporary check for recent version
+  ok <- (requireNamespace("fftwtools", quietly=TRUE) &&
+          (packageVersion("fftwtools") > "0.9-8"))
+  return(ok)
+}
+
 kraeverRandomFields <- function() {
   kraever("RandomFieldsUtils")
   kraever("RandomFields")

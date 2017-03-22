@@ -154,7 +154,7 @@ second.moment.engine <-
   returns.several <- what %in% c("all", "smoothedge")
 
   # check whether Fastest Fourier Transform in the West is available
-  west <- requireNamespace("fftwtools", quietly=TRUE)
+  west <- fftwAvailable()
   
   if(returns.several)
     result <- list() # several results will be returned in a list
