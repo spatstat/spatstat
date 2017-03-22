@@ -97,6 +97,26 @@ text(as.Date("2013-01-01"), 50, "R code")
 
 \newpage
 
+\section{\pkg{spatstat} is splitting into parts}
+
+    \pkg{spatstat} is being split into several sub-packages, to satisfy
+    the requirements of CRAN. This should not affect the user:
+    existing code will continue to work in the same way.
+
+    Currently there are two sub-packages, called \pkg{spatstat.utils}
+    and \pkg{spatstat}.
+
+    Typing \code{library(spatstat)} will load the familiar
+    \pkg{spatstat} package which can be used as before, and will silently
+    import the \pkg{spatstat.utils} package.
+
+    The \pkg{spatstat.utils} package
+    contains utility functions that were originally written for \pkg{spatstat}:
+    they were undocumented internal functions in \pkg{spatstat}, but are now
+    documented and accessible in a separate package because they may be
+    useful for other purposes. To access these functions, you need to
+    type \code{library(spatstat.utils)}. 
+
 \section{Precis of all changes}
 
 Here is the text from the `overview' sections of 
@@ -104,8 +124,12 @@ the News and Release Notes for each update.
 
 \begin{itemize}
 
+  \item \spst\ now Imports the package \pkg{spatstat.utils}.
+
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Bandwidth selection for pair correlation function.
+  
   \item Operations on signed measures.
 
    \item Operations on lists of pixel images.
@@ -286,7 +310,10 @@ Following is a list of all the functions that have been added.
   
     \item \texttt{bw.pcf}:
       Bandwidth selection for pair correlation function.
-          
+
+    \item \texttt{grow.box3}:
+    Expand a three-dimensional box.
+    
     \item \texttt{hexagon}, \texttt{regularpolygon}:
     Create regular polygons.
 
@@ -710,6 +737,9 @@ listed alphabetically.
 If the line segment pattern has marks, then the resulting linear network
 also carries these marks in the \verb!$lines! component.
 
+  \item \texttt{as.owin}:
+    Now refuses to convert a \code{box3} to a two-dimensional window.
+
   \item \texttt{as.owin.data.frame}:
     New argument \texttt{step}
 
@@ -985,6 +1015,8 @@ also carries these marks in the \verb!$lines! component.
     Also affects \texttt{mincontrast}, 
     \texttt{cauchy.estpcf}, \texttt{lgcp.estpcf}, \texttt{matclust.estpcf},
     \texttt{thomas.estpcf}, \texttt{vargamma.estpcf}.
+    \item
+    Improved printed output.
   \end{itemize}
   
 %%L
@@ -1095,6 +1127,8 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{pcf.ppp}:
    \begin{itemize}
+   \item
+	New argument \code{close} for advanced use.
    \item 
      New argument \texttt{ratio} allows several estimates of pcf to be pooled.
    \item 
@@ -1111,6 +1145,8 @@ also carries these marks in the \verb!$lines! component.
    
  \item \texttt{pcfinhom}:
    \begin{itemize}
+   \item
+	New argument \code{close} for advanced use.
    \item 
     Default behaviour is changed when \texttt{lambda} is a fitted model.
     The default is now to re-fit the model to the data before computing pcf.
@@ -1121,6 +1157,8 @@ also carries these marks in the \verb!$lines! component.
 
   \item \texttt{pixellate.ppp}:
     \begin{itemize}
+    \item If the pattern is empty, the result is an integer-valued image
+    (by default) for consistency with the results for non-empty patterns.
     \item      Accelerated in the case where weights are given.
     \item New arguments \texttt{fractional} and \texttt{preserve}
       for more accurate discretisation.
@@ -1224,17 +1262,33 @@ also carries these marks in the \verb!$lines! component.
         from executing the plot of each panel.
       \end{itemize}
 
+   \item \code{ponderosa}:
+    In this installed dataset, the function \code{ponderosa.extra\$plotit}
+    has changed slightly (to accommodate the
+    dependence on the package \pkg{spatstat.utils}).
    \item \texttt{polynom}: This function now has a help file.
      
    \item \texttt{pool.fv}:
     The default plot of the pooled function no longer includes 
     the variance curves.
 
-  \item \texttt{ppm.ppp, ppm.quad}
+  \item \texttt{ppm}:
+  Argument \code{interaction} can now be a function that makes an interaction,
+    such as \code{Poisson}, \code{Hardcore}, \code{MultiHard}.
+
+  \item \texttt{ppm.ppp, ppm.quad}:
    New argument \texttt{emend}, equivalent to \texttt{project}.
 
- \item \texttt{ppp}: New argument \texttt{checkdup}.
-   
+ \item \texttt{ppp}:
+       \begin{itemize}
+       \item New argument \texttt{checkdup}.
+       \item 
+       If the coordinate vectors \code{x} and \code{y} contain \code{NA},
+       \code{NaN} or infinite values,
+       these points are deleted with a warning,
+       instead of causing a fatal error.
+       \end{itemize}
+
   \item \texttt{predict.kppm, residuals.kppm}
    Now issues a warning when the calculation ignores the 
    cluster/Cox component and treats the model as if it were Poisson.
@@ -1330,9 +1384,12 @@ also carries these marks in the \verb!$lines! component.
    New argument \texttt{padzero}. 
    Default behaviour has changed.
 
-   \item \texttt{rpoispp}
+   \item \texttt{rpoispp}:
    Accelerated, when \texttt{lambda} is a pixel image.
 
+   \item \texttt{rpoisppx}:
+   	New argument \code{drop}.
+	
    \item \texttt{rpoisline}:
      Also returns information about the original infinite random lines.
 
@@ -1352,6 +1409,9 @@ also carries these marks in the \verb!$lines! component.
        New argument \texttt{saveparents}.
      \end{itemize}
 
+   \item \texttt{runifpointx}:
+   	New argument \code{drop}.
+	
 %%S   
    \item Simulation:
    Several basic simulation algorithms have been accelerated.
@@ -1361,6 +1421,11 @@ also carries these marks in the \verb!$lines! component.
    versions of spatstat, revert to the slower code by setting
    \texttt{spatstat.options(fastthin=FALSE, fastpois=FALSE)}.
 
+   \item \code{shapley}:
+    In this installed dataset, the function \code{shapley.extra\$plotit}
+    has changed slightly (to accommodate the
+    dependence on the package \pkg{spatstat.utils}).
+   
    \item \texttt{simulate.ppm}
    New argument \texttt{w} controls the window of the simulated patterns.
    New argument \texttt{verbose}.
