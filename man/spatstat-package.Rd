@@ -1650,8 +1650,9 @@
 \references{
   Baddeley, A. (2010)
   \emph{Analysing spatial point patterns in R}.
-  Workshop notes. Version 4.1. CSIRO online technical publication.
-  \url{https://research.csiro.au/software/r-workshop-notes/}
+  Workshop notes, Version 4.1.
+  Online technical publication, CSIRO.
+  \url{https://research.csiro.au/software/wp-content/uploads/sites/6/2015/02/Rspatialcourse_CMIS_PDF-Standard.pdf}
 
   Baddeley, A., Rubak, E. and Turner, R. (2015)
   \emph{Spatial Point Patterns: Methodology and Applications with R}.
