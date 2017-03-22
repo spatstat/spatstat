@@ -786,10 +786,19 @@ mean.im <- function(x, trim=0, na.rm=TRUE, ...) {
   return(mean(xvalues, trim=trim, na.rm=na.rm))
 }
 
-median.im <- function(x, na.rm=TRUE) {
-  verifyclass(x, "im")
-  xvalues <- x[drop=na.rm]
-  return(median(xvalues))
+## arguments of generic 'median' will change in R 3.4
+median.im <- if("..." %in% names(formals(median))) {
+   function(x, na.rm=TRUE, ...) {
+    verifyclass(x, "im")
+    xvalues <- x[drop=na.rm]
+    return(median(xvalues, ...))
+  }
+} else {
+   function(x, na.rm=TRUE) {
+    verifyclass(x, "im")
+    xvalues <- x[drop=na.rm]
+    return(median(xvalues))
+  }
 }
 
 where.max <- function(x, first=TRUE) {
