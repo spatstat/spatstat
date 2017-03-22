@@ -11,11 +11,11 @@
 #' References:
 #' Guan, Y. (2007). A composite likelihood cross-validation approach in 
 #'   selecting bandwidth for the estimation of the pair correlation function. 
-#'   Scandinavian Journal of Statistics, 34(2), 336–346. 
+#'   Scandinavian Journal of Statistics, 34(2), 336--346. 
 #'   DOI: http://doi.org/10.1111/j.1467-9469.2006.00533.x
 #' Guan, Y. (2007). A least-squares cross-validation bandwidth 
 #'   selection approach in pair correlation function estimations. 
-#'   Statistics & Probability Letters, 77(18), 1722–1729. 
+#'   Statistics & Probability Letters, 77(18), 1722--1729. 
 #'   DOI: http://doi.org/10.1016/j.spl.2007.04.016
 
 bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r", 
