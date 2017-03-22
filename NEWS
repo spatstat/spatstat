@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.014
+        CHANGES IN spatstat VERSION 1.50-0
 
 OVERVIEW
 
@@ -10,12 +10,9 @@ OVERVIEW
 
     o Bandwidth selection for pair correlation function.
 
-    o Some undocumented internal functions in 'spatstat'
-    have been moved into 'spatstat.utils'.
-    
     o Improvements and bug fixes.
 
-    o Version nickname: 'Instinctively Correct'
+    o Version nickname: 'Bunyip Aristocracy'
 
 NEW PACKAGE STRUCTURE
 
