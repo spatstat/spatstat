@@ -1,15 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.49-0.013
+        CHANGES IN spatstat VERSION 1.49-0.014
 
 OVERVIEW
 
-    o We thank Richard Cotton, Adrian Heyner, Abdollah Jalilian
-    and Rasmus Waagepetersen for contributions.
+    o We thank Richard Cotton, Adrian Heyner, Abdollah Jalilian,
+    Dominic Schuhmacher and Rasmus Waagepetersen for contributions.
 
     o spatstat now 'Imports' the package 'spatstat.utils'.
 
     o Bandwidth selection for pair correlation function.
 
+    o Some undocumented internal functions in 'spatstat'
+    have been moved into 'spatstat.utils'.
+    
     o Improvements and bug fixes.
 
     o Version nickname: 'Instinctively Correct'
@@ -78,6 +81,11 @@ BUG FIXES
     [Spotted by Adrian Heyner.]
     Fixed.
 
+    o rmhmodel.ppm, simulate.ppm
+    Crashed when applied to a fitted Lennard-Jones model.
+    [Spotted by Dominic Schuhmacher.]
+    Fixed.
+    
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Crashed when applied to some hard-core models.
     Fixed.
