@@ -47,7 +47,7 @@ void CLOSEFUN(n,
   int N, maxchunk, i, j;
 
 #ifdef TORUS
-  double Bx, By, Hx, Hy;
+  double Bx, By, Hy;
 #ifdef ZCOORD
   double Bz, Hz;
 #endif
@@ -62,7 +62,6 @@ void CLOSEFUN(n,
 #ifdef TORUS
   Bx = b[0];
   By = b[1];
-  Hx = Bx/2.0;
   Hy = By/2.0;
 #ifdef ZCOORD
   Bz = b[2];
