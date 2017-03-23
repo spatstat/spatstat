@@ -1,4 +1,4 @@
-\name{distmap.ppp}  %DontDeclareMethods
+\name{distmap.ppp}  
 \alias{distmap.ppp}
 \title{
   Distance Map of Point Pattern

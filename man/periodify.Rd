@@ -1,4 +1,4 @@
-\name{periodify} %DontDeclareMethods
+\name{periodify} 
 \alias{periodify}
 \alias{periodify.owin}
 \alias{periodify.ppp}

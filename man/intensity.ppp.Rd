@@ -1,4 +1,4 @@
-\name{intensity.ppp}  %DontDeclareMethods
+\name{intensity.ppp}  
 \alias{intensity.ppp}
 \alias{intensity.splitppp}
 \title{

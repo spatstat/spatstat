@@ -1,4 +1,4 @@
-\name{affine.owin} %DontDeclareMethods
+\name{affine.owin} 
 \alias{affine.owin} 
 \title{Apply Affine Transformation To Window}
 \description{

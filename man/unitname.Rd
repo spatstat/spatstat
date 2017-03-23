@@ -1,4 +1,4 @@
-\name{unitname}  %DontDeclareMethods
+\name{unitname}  
 \alias{unitname}
 \alias{unitname.dppm}
 \alias{unitname.im}

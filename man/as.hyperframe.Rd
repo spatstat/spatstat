@@ -1,4 +1,4 @@
-\name{as.hyperframe} %DontDeclareMethods
+\name{as.hyperframe} 
 \Rdversion{1.1}
 \alias{as.hyperframe}
 \alias{as.hyperframe.default}

@@ -1,4 +1,4 @@
-\name{compatible.im}  %DontDeclareMethods
+\name{compatible.im}  
 \alias{compatible.im}
 \title{Test Whether Pixel Images Are Compatible}
 \description{

@@ -1,4 +1,4 @@
-\name{affine.psp}  %DontDeclareMethods
+\name{affine.psp}  
 \alias{affine.psp}
 \title{Apply Affine Transformation To Line Segment Pattern}
 \description{

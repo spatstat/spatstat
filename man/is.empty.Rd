@@ -1,4 +1,4 @@
-\name{is.empty}  %DontDeclareMethods
+\name{is.empty}  
 \alias{is.empty}
 \alias{is.empty.owin}
 \alias{is.empty.ppp}

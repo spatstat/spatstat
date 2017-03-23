@@ -1,4 +1,4 @@
-\name{crossdist.ppp} %DontDeclareMethods
+\name{crossdist.ppp} 
 \alias{crossdist.ppp}
 \title{Pairwise distances between two different point patterns}
 \description{

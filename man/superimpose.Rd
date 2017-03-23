@@ -1,4 +1,4 @@
-\name{superimpose}  %DontDeclareMethods
+\name{superimpose}  
 \alias{superimpose}
 \alias{superimpose.ppp}
 \alias{superimpose.splitppp}

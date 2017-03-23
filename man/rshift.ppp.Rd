@@ -1,4 +1,4 @@
-\name{rshift.ppp}  %DontDeclareMethods
+\name{rshift.ppp}  
 \alias{rshift.ppp}
 \title{Randomly Shift a Point Pattern}
 \description{

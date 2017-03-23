@@ -1,4 +1,4 @@
-\name{closing} %DontDeclareMethods
+\name{closing} 
 \alias{closing}
 \alias{closing.owin}
 \alias{closing.ppp}

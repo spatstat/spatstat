@@ -1,4 +1,4 @@
-\name{affine.lpp} %DontDeclareMethods
+\name{affine.lpp} 
 \alias{affine.lpp} 
 \alias{shift.lpp} 
 \alias{rotate.lpp}

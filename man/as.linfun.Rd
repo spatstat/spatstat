@@ -1,4 +1,4 @@
-\name{as.linfun} %DontDeclareMethods
+\name{as.linfun} 
 \alias{as.linfun}
 \alias{as.linfun.linim}
 \alias{as.linfun.lintess}

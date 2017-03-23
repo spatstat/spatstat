@@ -1,4 +1,4 @@
-\name{rounding} %DontDeclareMethods
+\name{rounding} 
 \alias{rounding}
 \alias{rounding.default}
 \alias{rounding.ppp}

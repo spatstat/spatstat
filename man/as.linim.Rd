@@ -1,4 +1,4 @@
-\name{as.linim} %DontDeclareMethods
+\name{as.linim} 
 \alias{as.linim}
 \alias{as.linim.linim}
 \alias{as.linim.default}

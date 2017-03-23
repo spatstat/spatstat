@@ -1,4 +1,4 @@
-\name{connected}  %DontDeclareMethods
+\name{connected}  
 \Rdversion{1.1}
 \alias{connected}
 \alias{connected.im}

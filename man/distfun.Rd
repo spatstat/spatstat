@@ -1,4 +1,4 @@
-\name{distfun}  %DontDeclareMethods
+\name{distfun}  
 \Rdversion{1.1}
 \alias{distfun}
 \alias{distfun.ppp}

@@ -1,4 +1,4 @@
-\name{pixellate.ppp} %DontDeclareMethods
+\name{pixellate.ppp} 
 \alias{pixellate.ppp}
 \alias{as.im.ppp}
 \title{Convert Point Pattern to Pixel Image}

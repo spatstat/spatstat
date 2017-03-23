@@ -1,4 +1,4 @@
-\name{reflect} %DontDeclareMethods
+\name{reflect} 
 \alias{reflect}
 \alias{reflect.im}
 \alias{reflect.default}

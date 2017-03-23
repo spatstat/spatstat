@@ -1,4 +1,4 @@
-\name{affine.im} %DontDeclareMethods
+\name{affine.im}
 \alias{affine.im} 
 \title{Apply Affine Transformation To Pixel Image}
 \description{

@@ -1,4 +1,4 @@
-\name{sharpen} %DontDeclareMethods
+\name{sharpen} 
 \alias{sharpen}
 \alias{sharpen.ppp}
 \title{Data Sharpening of Point Pattern}

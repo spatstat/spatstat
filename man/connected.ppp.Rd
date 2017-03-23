@@ -1,4 +1,4 @@
-\name{connected.ppp}  %DontDeclareMethods
+\name{connected.ppp}  
 \Rdversion{1.1}
 \alias{connected.ppp}
 \title{

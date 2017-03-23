@@ -1,4 +1,4 @@
-\name{compatible.fv}  %DontDeclareMethods
+\name{compatible.fv}  
 \alias{compatible.fv}
 \title{Test Whether Function Objects Are Compatible}
 \description{

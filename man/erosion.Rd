@@ -1,4 +1,4 @@
-\name{erosion}  %DontDeclareMethods
+\name{erosion}  
 \alias{erosion}
 \alias{erosion.owin}
 \alias{erosion.ppp}

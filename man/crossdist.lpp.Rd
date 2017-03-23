@@ -1,4 +1,4 @@
-\name{crossdist.lpp} %DontDeclareMethods
+\name{crossdist.lpp} 
 \alias{crossdist.lpp}
 \title{Pairwise distances between two point patterns on a linear network}
 \description{

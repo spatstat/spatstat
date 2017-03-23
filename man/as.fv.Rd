@@ -1,4 +1,4 @@
-\name{as.fv} %DontDeclareMethods
+\name{as.fv} 
 \alias{as.fv}
 \alias{as.fv.fv}
 \alias{as.fv.fasp}

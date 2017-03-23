@@ -1,4 +1,4 @@
-\name{affine.linnet} %DontDeclareMethods
+\name{affine.linnet} 
 \alias{affine.linnet} 
 \alias{shift.linnet}
 \alias{rotate.linnet}

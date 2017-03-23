@@ -1,4 +1,4 @@
-\name{is.hybrid}  %DontDeclareMethods
+\name{is.hybrid}  
 \alias{is.hybrid}
 \alias{is.hybrid.ppm}
 \alias{is.hybrid.interact}

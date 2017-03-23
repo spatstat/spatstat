@@ -1,4 +1,4 @@
-\name{affine.ppp} %DontDeclareMethods
+\name{affine.ppp} 
 \alias{affine.ppp} 
 \title{Apply Affine Transformation To Point Pattern}
 \description{

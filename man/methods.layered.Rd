@@ -1,4 +1,4 @@
-\name{methods.layered} %DontDeclareMethods
+\name{methods.layered} 
 \Rdversion{1.1}
 \alias{methods.layered} %DoNotExport
 \alias{shift.layered}

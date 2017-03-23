@@ -1,4 +1,4 @@
-\name{rshift.splitppp}  %DontDeclareMethods
+\name{rshift.splitppp}  
 \alias{rshift.splitppp}
 \title{Randomly Shift a List of Point Patterns}
 \description{

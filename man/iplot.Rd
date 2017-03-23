@@ -1,4 +1,4 @@
-\name{iplot} %DontDeclareMethods
+\name{iplot} 
 \alias{iplot}
 \alias{iplot.ppp}
 \alias{iplot.layered}

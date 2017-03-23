@@ -1,4 +1,4 @@
-\name{pixellate.owin}  %DontDeclareMethods
+\name{pixellate.owin}  
 \Rdversion{1.1}
 \alias{pixellate.owin}
 \title{

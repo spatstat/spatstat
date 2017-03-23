@@ -1,4 +1,4 @@
-\name{scalardilate} %DontDeclareMethods
+\name{scalardilate} 
 \alias{scalardilate}
 \alias{scalardilate.im}
 \alias{scalardilate.owin}

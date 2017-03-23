@@ -1,4 +1,4 @@
-\name{distmap.owin}  %DontDeclareMethods
+\name{distmap.owin}  
 \alias{distmap.owin}
 \title{Distance Map of Window}
 \description{
