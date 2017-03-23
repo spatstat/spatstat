@@ -6,6 +6,8 @@ spatstat
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
 [![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
+## This is the development version
+
 This repository holds a copy of the _current development version_ 
 of the contributed R-package `spatstat`.
 
@@ -16,22 +18,40 @@ version number like `1.2-3.004`. Official releases occur every 8 weeks
 (the minimum time permitted by CRAN policies) while the development code
 is updated almost every day. 
 
-For the most recent _public release_ of
-`spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat).
+## Where is the official release?
 
-## Important Note
+For the most recent **official release** of 
+`spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat). To install it, just type
+
+```R
+install.packages('spatstat')
+```
+
+## spatstat is now split into several packages
 
 Recently we have started the process of splitting `spatstat` into several
-packages (to satisfy the requirements of CRAN).
-Currently there are two pieces, called `spatstat.utils` and `spatstat`.
-The current development version of `spatstat.utils` is 
-[here](https://github.com/spatstat/spatstat.utils).
+packages (as mandated by CRAN, because `spatstat` is very large).
 
-This split should not affect the user, and existing code will still work:
+Your existing code will still work:
 typing `library(spatstat)` will still give you
 access to all the functions in `spatstat` that you know from previous versions.
+
 However, messages from `R` about the installation and loading of the package
 will now show that `spatstat` consists of several pieces.
+Currently there are two pieces:
+
+  . `spatstat`: contains the main functionality of the `spatstat` family.
+
+  . `spatstat.utils`: utility functions originally included in `spatstat`
+  which are now accessible as a separate package. The current development
+  version of `spatstat.utils` is [here](https://github.com/spatstat/spatstat.utils).
+
+When you type `library(spatstat)` this will load the main `spatstat` library
+and will also *import* the `spatstat.utils` library. This means that
+`spatstat.utils` functions can be used by `spatstat` but cannot be accessed by
+the user. To access these utility functions directly, you need to type
+`library(spatstat.utils)`.
+
 
 ## Installation
 
