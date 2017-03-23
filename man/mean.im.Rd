@@ -1,4 +1,4 @@
-\name{mean.im}
+\name{mean.im} %DontDeclareMethods
 \alias{mean.im}
 \alias{median.im}
 \title{Mean and Median of Pixel Values in an Image}
@@ -6,20 +6,16 @@
   Calculates the mean or median
   of the pixel values in a pixel image.
 }
-% \usage{
-%  \method{mean}{im}(x, trim=0, na.rm=TRUE, \dots) % DontDeclare
-%   R < 3.4:
-%  \method{median}{im}(x, na.rm=TRUE)              % DontDeclare
-%   R >= 3.4:
-%  \method{median}{im}(x, na.rm=TRUE, \dots)       % DontDeclare
-%}
-\Sexpr[results=rd,stage=install]{%
-  c("\\\\usage{", %
-     "\\\\method{mean}{im}(x, trim=0, na.rm=TRUE, \\\\dots)", % 
-     if(getRversion() < "3.4") %
-         "\\\\method{median}{im}(x, na.rm=TRUE)" else % 
-	 "\\\\method{median}{im}(x, na.rm=TRUE, \\\\dots)", % DontDeclare
-   "}")}
+%NAMESPACE S3method("mean", "im")
+%NAMESPACE S3method("median", "im")
+\usage{
+## S3 method for class 'im'
+## mean(x, trim=0, na.rm=TRUE, ...) 
+
+## S3 method for class 'im'
+## median(x, na.rm=TRUE)        [R < 3.4.0]
+## median(x, na.rm=TRUE, ...)   [R >= 3.4.0]
+}
 \arguments{
   \item{x}{A pixel image (object of class \code{"im"}).}
   \item{na.rm}{
