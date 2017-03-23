@@ -7,15 +7,15 @@
 #'
 
 circumradius <- function(x, ...) {
-  .Deprecated(boundingradius)
+  .Deprecated("boundingradius")
   UseMethod("boundingradius")
 }
 circumradius.owin <- function(x, ...) {
-  .Deprecated(boundingradius.owin)
+  .Deprecated("boundingradius.owin")
   boundingradius.owin(x, ...)
 }
 circumradius.ppp <- function(x, ...) {
-  .Deprecated(boundingradius.ppp)
+  .Deprecated("boundingradius.ppp")
   boundingradius.ppp(x, ...)
 }
 
