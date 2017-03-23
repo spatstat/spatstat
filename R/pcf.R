@@ -77,7 +77,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   divisor <- match.arg(divisor)
   
   # bandwidth
-  if(is.null(bw) && kernel=="epanechnikov") {
+  if(is.null(bw) && !is.na(pmatch(kernel, "epanechnikov"))) {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
     h <- stoyan /sqrt(lambda)
     hmax <- h
@@ -108,7 +108,8 @@ pcf.ppp <- function(X, ..., r=NULL,
   # arguments for 'density'
   denargs <- resolve.defaults(list(kernel=kernel, bw=bw),
                               list(...),
-                              list(n=length(r), from=0, to=rmax))
+                              list(n=length(r), from=0, to=rmax),
+                              .StripNull = TRUE)
   
   #################################################
   
