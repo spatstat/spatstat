@@ -301,7 +301,8 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
 
    \testonly{
     niets <- markcorr(amacrine, function(m1,m2){m1 == m2}, method="loess")
-    niets <- markcorr(X, correction="isotropic", method="smrep", hmult=2)
+    if(require(sm))
+      niets <- markcorr(X, correction="isotropic", method="smrep", hmult=2)
     }
 
    # weighted mark correlation
@@ -309,11 +310,8 @@ markcorr(X, f = function(m1, m2) { m1 * m2}, r=NULL,
    a <- marks(betacells)$area
    v <- markcorr(Y, weights=a)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}
