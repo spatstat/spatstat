@@ -69,7 +69,10 @@ codetime <- local({
     paste(sgn, h, m, s, sep="")
   }
   codetime <- function(x, hms=TRUE, what=c("elapsed","user","system")) {
-    if(inherits(x, "proc_time")) x <- summary(x)[[match.arg(what)]] 
+    if(inherits(x, "proc_time")) {
+      what <- match.arg(what)
+      x <- summary(x)[[match(what, c("user", "system", "elapsed"))]]
+    }
     if(!is.numeric(x) || length(x) != 1)
       stop("codetime: x must be a proc_time object or a single number")
     sgn <- if(x < 0) "-" else ""

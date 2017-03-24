@@ -1,4 +1,22 @@
 
+        CHANGES IN spatstat VERSION 1.50-0.001
+
+OVERVIEW
+
+    o Improvements and bug fixes
+
+    o Version nickname: 'Wombat Combat'
+
+BUG FIXES
+
+    o 'timed' class
+    Printing of these objects did not work in some locales.
+    Fixed.
+
+    o pcf.ppp, pcfinhom
+    Crashed if kernel="epa" rather than "epanechnikov".
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.50-0
 
 OVERVIEW
