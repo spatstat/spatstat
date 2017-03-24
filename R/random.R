@@ -108,7 +108,7 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
 
   switch(win$type,
          rectangle = {
-           return(runifrect(n, win, nsim=nsim))
+           return(runifrect(n, win, nsim=nsim, drop=drop))
          },
          mask = {
            dx <- win$xstep
