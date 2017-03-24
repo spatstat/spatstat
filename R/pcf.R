@@ -31,6 +31,8 @@ pcf.ppp <- function(X, ..., r=NULL,
   lambda <- npts/areaW
   lambda2area <- areaW * lambda^2
 
+  kernel <- match.kernel(kernel)
+  
   if(!is.null(domain)) {
     # estimate based on contributions from a subdomain
     domain <- as.owin(domain)
@@ -77,7 +79,7 @@ pcf.ppp <- function(X, ..., r=NULL,
   divisor <- match.arg(divisor)
   
   # bandwidth
-  if(is.null(bw) && !is.na(pmatch(kernel, "epanechnikov"))) {
+  if(is.null(bw) && (kernel == "epanechnikov")) {
     # Stoyan & Stoyan 1995, eq (15.16), page 285
     h <- stoyan /sqrt(lambda)
     hmax <- h

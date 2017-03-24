@@ -24,6 +24,8 @@ pcfinhom <- function(X, lambda=NULL, ..., r=NULL,
   win <- X$window
   areaW <- area(win)
   npts <- npoints(X)
+
+  kernel <- match.kernel(kernel)
   
   correction.given <- !missing(correction)
   correction <- pickoption("correction", correction,
