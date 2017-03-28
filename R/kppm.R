@@ -1483,7 +1483,7 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
          {
            oldformula <- as.formula(getCall(object)$trend)
            thecall$trend <- newformula(oldformula, fmla, callframe, envir)
-           knownnames <- names(formals(kppm.ppm))
+           knownnames <- names(formals(kppm.ppp))
          })
   ok <- nama %in% knownnames
   thecall <- replace(thecall, nama[ok], argh[ok])
