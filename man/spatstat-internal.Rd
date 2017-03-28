@@ -702,6 +702,8 @@
 %%
 \alias{lhs.of.formula<-}
 \alias{rhs.of.formula<-}
+\alias{as.ppplist}
+\alias{as.imlist}
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -1532,6 +1534,8 @@ spatstatDiagnostic(msg)
 %%
 lhs.of.formula(x) <- value
 rhs.of.formula(x) <- value
+as.ppplist(x, check)
+as.imlist(x, check)
 %%%%%%%
 }
 \details{

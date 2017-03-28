@@ -159,6 +159,31 @@ as.layered.solist <- function(X) {
   layered(LayerList=X)
 }
 
+#'  ----- ppplist and imlist ----------------------------
+#'  for efficiency only
+
+as.ppplist <- function(x, check=TRUE) {
+  if(check) {
+     x <- as.solist(x)
+     if(inherits(x, "ppplist"))
+       return(x)
+     stop("some entries are not point patterns")
+  }
+  class(x) <- unique(c("ppplist", "solist", "anylist", "listof", class(x)))
+  return(x)
+}
+
+as.imlist <- function(x, check=TRUE) {
+  if(check) {
+     x <- as.solist(x)
+     if(inherits(x, "imlist"))
+       return(x)
+     stop("some entries are not images")
+  }
+  class(x) <- unique(c("imlist", "solist", "anylist", "listof", class(x)))
+  return(x)
+}
+
 # --------------- counterparts of 'lapply' --------------------
 
 anylapply <- function(X, FUN, ...) {
