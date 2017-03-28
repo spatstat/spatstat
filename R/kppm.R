@@ -1477,6 +1477,7 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
   methodname <- as.character(thecall[[1L]])
   switch(methodname,
          kppm.formula = {
+	   # original call has X = [formula with lhs]
 	   if(!is.null(Xexpr)) {
 	     lhs.of.formula(fmla) <- Xexpr
 	   } else if(is.null(lhs.of.formula(fmla))) {
@@ -1486,10 +1487,21 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
            thecall$X <- newformula(oldformula, fmla, callframe, envir)
          },
          {
+	   # original call has X = ppp and trend = [formula without lhs]
            oldformula <- as.formula(getCall(object)$trend)
-           thecall$trend <- newformula(oldformula, fmla, callframe, envir)
-	   if(length(jX) > 0)
-  	     thecall$X <- X
+	   fom <-  newformula(oldformula, fmla, callframe, envir)
+	   if(!is.null(Xexpr))
+	      lhs.of.formula(fom) <- Xexpr
+	   if(is.null(lhs.of.formula(fom))) {
+	      # new call has same format
+	      thecall$trend <- fom
+  	      if(length(jX) > 0)
+  	        thecall$X <- X
+	   } else {
+	      # new call has formula with lhs
+	      thecall$trend <- NULL
+	      thecall$X <- fom
+	   }
          })
   knownnames <- union(names(formals(kppm.ppp)), names(formals(mincontrast)))
   knownnames <- setdiff(knownnames, c("X", "trend", "observed", "theoretical"))
