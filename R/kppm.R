@@ -889,6 +889,7 @@ improve.kppm <- local({
     wt <- wt[mask]
     Uxy <- rasterxy.mask(mask)
     U <- ppp(Uxy$x, Uxy$y, window = win, check=FALSE)
+    U <- U[mask]
 #    nU <- npoints(U)
     Yu <- pixellate(X, W = mask)
     Yu <- Yu[mask]
