@@ -1423,7 +1423,7 @@ labels.kppm <- labels.dppm <- function(object, ...) {
   labels(object$po, ...)
 }
 
-update.kppm <- function(object, ...) {
+update.kppm <- function(object, ..., evaluate=TRUE) {
   argh <- list(...)
   nama <- names(argh)
   callframe <- object$callframe
@@ -1471,22 +1471,26 @@ update.kppm <- function(object, ...) {
   jused <- c(jf, jX)
   if(length(jused) > 0)
     argh <- argh[-jused]
-  #' update
-  if(is.null(lhs.of.formula(fmla))) {
-    #' kppm(X, ~trend, ...) 
-    out <- do.call(kppm,
-                   resolve.defaults(list(X=X, trend=fmla),
-                                    argh,
-                                    object$ClusterArgs,
-                                    list(clusters=object$clusters)))
-  } else {
-    #' kppm(X ~trend, ...) 
-    out <- do.call(kppm,
-                   resolve.defaults(list(X=fmla), 
-                                    argh,
-                                    object$ClusterArgs,
-                                    list(clusters=object$clusters)))
-  }
+  #' update the call call
+  thecall <- getCall(object)
+  methodname <- as.character(thecall[[1L]])
+  switch(methodname,
+         kppm.formula = {
+           oldformula <- as.formula(getCall(object)$X)
+           thecall$X <- newformula(oldformula, fmla, callframe, envir)
+           knownnames <- names(formals(kppm.formula))
+         },
+         {
+           oldformula <- as.formula(getCall(object)$trend)
+           thecall$trend <- newformula(oldformula, fmla, callframe, envir)
+           knownnames <- names(formals(kppm.ppm))
+         })
+  ok <- nama %in% knownnames
+  thecall <- replace(thecall, nama[ok], argh[ok])
+  thecall$formula <- NULL # artefact of 'step', etc
+  if(!evaluate)
+    return(thecall)
+  out <- eval(thecall, envir=callframe, enclos=envir)
   #' update name of data
   if(length(jX) == 1) {
     mc <- match.call()

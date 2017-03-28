@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.001
+        CHANGES IN spatstat VERSION 1.50-0.002
 
 OVERVIEW
 
@@ -7,7 +7,21 @@ OVERVIEW
 
     o Version nickname: 'Wombat Combat'
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o update.kppm
+    New argument 'evaluate'.
+
 BUG FIXES
+
+    o step, kppm, update.kppm
+    'step' did not work for kppm objects in some cases
+    due to a scoping problem in update.kppm.
+    Fixed.
+    
+    o improve.kppm
+    Crashed if the window was not a rectangle.
+    Fixed.
 
     o 'timed' class
     Printing of these objects did not work in some locales.
