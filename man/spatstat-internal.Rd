@@ -699,6 +699,10 @@
 \alias{bind.sparse3Darray}
 %%%%
 \alias{spatstatDiagnostic}
+%%
+\alias{lhs.of.formula<-}
+\alias{rhs.of.formula<-}
+%%%%%%%
 \description{
   Internal spatstat functions.
 }
@@ -1525,6 +1529,10 @@ rbindCompatibleDataFrames(x)
 bind.sparse3Darray(A, B, along)
 %%
 spatstatDiagnostic(msg)
+%%
+lhs.of.formula(x) <- value
+rhs.of.formula(x) <- value
+%%%%%%%
 }
 \details{
   These internal \pkg{spatstat} functions are not usually called
