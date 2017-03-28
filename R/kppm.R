@@ -1467,30 +1467,39 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
     X <- object$X
     jX <- integer(0)
   }
+  Xexpr <- if(length(jX) > 0) sys.call()[[2L + jX]] else NULL
   #' remove arguments just recognised, if any
   jused <- c(jf, jX)
   if(length(jused) > 0)
     argh <- argh[-jused]
-  #' update the call call
+  #' update the matched call
   thecall <- getCall(object)
   methodname <- as.character(thecall[[1L]])
   switch(methodname,
          kppm.formula = {
+	   if(!is.null(Xexpr)) {
+	     lhs.of.formula(fmla) <- Xexpr
+	   } else if(is.null(lhs.of.formula(fmla))) {
+	     lhs.of.formula(fmla) <- as.name('.')
+	   }
            oldformula <- as.formula(getCall(object)$X)
            thecall$X <- newformula(oldformula, fmla, callframe, envir)
-           knownnames <- names(formals(kppm.formula))
          },
          {
            oldformula <- as.formula(getCall(object)$trend)
            thecall$trend <- newformula(oldformula, fmla, callframe, envir)
-           knownnames <- names(formals(kppm.ppp))
+	   if(length(jX) > 0)
+  	     thecall$X <- X
          })
+  knownnames <- union(names(formals(kppm.ppp)), names(formals(mincontrast)))
+  knownnames <- setdiff(knownnames, c("X", "trend", "observed", "theoretical"))
   ok <- nama %in% knownnames
   thecall <- replace(thecall, nama[ok], argh[ok])
   thecall$formula <- NULL # artefact of 'step', etc
+  thecall[[1L]] <- as.name("kppm")
   if(!evaluate)
     return(thecall)
-  out <- eval(thecall, envir=callframe, enclos=envir)
+  out <- eval(thecall, envir=parent.frame(), enclos=envir)
   #' update name of data
   if(length(jX) == 1) {
     mc <- match.call()
