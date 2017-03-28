@@ -175,7 +175,7 @@ runifpoint <- function(n, win=owin(c(0,1),c(0,1)),
   
   ## list of point patterns produced.
   if(nsim == 1 && drop)
-    return(result[[1]])
+    return(result[[1L]])
   names(result) <- paste("Simulation", 1:nsim)
   return(as.ppplist(result))
 }
@@ -459,7 +459,7 @@ rpoispp <- function(lambda, lmax=NULL, win = owin(), ...,
           prob <- lambda[X]/lmax
           u <- runif(X$n)
           retain <- (u <= prob)
-          result[[isim]] <- X[retain, ]
+          result[[isim]] <- X[retain]
         }
       }
       if(nsim == 1 && drop)
@@ -966,7 +966,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       result[[isim]] <- Y
     }
     if(nsim == 1 && drop)
-      result <- result[[1L]]
+      return(result[[1L]])
     names(result) <- paste("Simulation", 1:nsim)
     return(as.ppplist(result))
   }
