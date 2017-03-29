@@ -31,8 +31,8 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
   
   uniform <- is.poisson.ppm(object) && no.trend.ppm(object)
 
-  typelist <- c("lambda", "cif",    "trend")
-  typevalu <- c("lambda", "lambda", "trend")
+  typelist <- c("lambda", "cif",    "trend", "link")
+  typevalu <- c("lambda", "lambda", "trend", "link")
   if(is.na(m <- pmatch(type, typelist)))
     stop(paste("Unrecognised choice of ", sQuote("type"),
                ": ", sQuote(type), sep=""))
@@ -55,6 +55,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
              # zero the interaction statistics
              glmdata[ , Vnames] <- 0
            },
+           link=,
            lambda={
              # Find any dummy points with zero conditional intensity
              forbid <- matrowany(as.matrix(glmdata[, Vnames]) == -Inf)
@@ -64,8 +65,9 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
 
     # Compute predicted [conditional] intensity values
     changecoef <- !is.null(new.coef) || (object$method != "mpl")
-    lambda <- GLMpredict(glmfit, glmdata, coeffs, changecoef=changecoef)
-    
+    lambda <- GLMpredict(glmfit, glmdata, coeffs, changecoef=changecoef,
+                         type = ifelse(type == "link", "link", "response"))
+
     # Note: the `newdata' argument is necessary in order to obtain
     # predictions at all quadrature points. If it is omitted then
     # we would only get predictions at the quadrature points j
