@@ -2,10 +2,10 @@ language: r
 os: osx
 r:
 - release
-- devel
 env:
 - _R_CHECK_FORCE_SUGGESTS_=false
 sudo: false
+cache: packages
 warnings_are_errors: false
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then tlmgr install anysize; fi
