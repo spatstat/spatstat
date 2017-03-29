@@ -19,7 +19,7 @@ before_install:
   - ./run.sh bootstrap
 
 install:
-  - ./run.sh install_aptget r-cran-mgcv r-cran-matrix r-cran-deldir r-cran-abind r-tensor r-cran-polyclip
+  - ./run.sh install_aptget r-cran-mgcv r-cran-matrix r-cran-deldir r-cran-abind r-cran-tensor r-cran-polyclip
   - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-spatial r-cran-tkrplot 
   - ./run.sh install_aptget libgsl0-dev libfftw3-dev
   - ./run.sh install_r spatstat.utils goftest gsl locfit RandomFields RandomFieldsUtils fftwtools
@@ -32,9 +32,6 @@ script:
   - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE)'; fi
   - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE)'; fi
   - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE)'; fi
-
-after_failure:
-  - ./run.sh dump_logs
 
 notifications:
   email:
