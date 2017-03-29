@@ -1,12 +1,10 @@
 language: r
-matrix:
-  include:
-    - os: osx
-      env: _R_CHECK_FORCE_SUGGESTS_=false
-    - os: osx
-      env: _R_CHECK_FORCE_SUGGESTS_=false
-    - os: osx
-      env: _R_CHECK_FORCE_SUGGESTS_=false
+os: osx
+r:
+- release
+- devel
+env:
+- _R_CHECK_FORCE_SUGGESTS_=false
 sudo: false
 cache: packages
 warnings_are_errors: false
@@ -19,6 +17,8 @@ addons:
     - bwidget
 brew_packages:
 - gsl
+after_success:
+- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
 deploy:
   provider: releases
   api_key:
