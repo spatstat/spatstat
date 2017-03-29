@@ -8,7 +8,7 @@ env:
   matrix:
   - R_CODECOV_TEST=true
   - R_CODECOV_EXAMPLE=true
-  - R_CODECOV_VIGNETTE=true
+  - R_CODECOV_VIGNETTE=true BOOTSTRAP_LATEX=true
 
 sudo: required
 
@@ -19,11 +19,10 @@ before_install:
   - ./run.sh bootstrap
 
 install:
-  - ./run.sh install_aptget r-cran-mgcv r-cran-matrix r-cran-deldir r-cran-abind r-cran-tensor r-cran-polyclip
-  - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-spatial r-cran-tkrplot 
-  - ./run.sh install_aptget libgsl0-dev libfftw3-dev texinfo
-  - ./run.sh install_r spatstat.utils goftest gsl locfit RandomFields RandomFieldsUtils fftwtools
-  - ./run.sh install_r covr
+  - ./run.sh install_aptget r-cran-spatstat.utils r-cran-deldir r-cran-abind r-cran-tensor r-cran-polyclip r-cran-goftest
+  - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-gsl r-cran-locfit r-cran-spatial r-cran-tkrplot r-cran-randomfields r-cran-randomfieldsutils r-cran-fftwtools
+  - ./run.sh install_aptget r-cran-covr
+  - ./run.sh install_aptget texinfo
 
 script:
   - cd ../..
