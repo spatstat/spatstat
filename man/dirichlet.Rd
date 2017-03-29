@@ -1,5 +1,6 @@
 \name{dirichlet}
 \alias{dirichlet}
+\alias{dirichlet.ppp}
 \title{Dirichlet Tessellation of Point Pattern}
 \description{
   Computes the Dirichlet tessellation of a spatial point pattern.
@@ -7,6 +8,8 @@
 }
 \usage{
 dirichlet(X)
+
+\method{dirichlet}{ppp}(X)
 }
 \arguments{
   \item{X}{Spatial point pattern (object of class \code{"ppp"}).}
