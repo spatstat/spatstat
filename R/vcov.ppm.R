@@ -84,8 +84,8 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
              silent={})
     }
     ## ++++ perform main calculation ++++
-    if((is.poisson(object) || hessian) && object$method != "logi") {
-      ## Poisson model, or Hessian of Gibbs model
+    if((is.poisson(object) || (hessian && what!="internals")) && object$method != "logi") {
+      ## Poisson model, or Hessian of Gibbs model without internals
       results <- vcalcPois(object, ..., what=what,
                            matrix.action=matrix.action,
                            verbose=verbose, fisher=fisher)
@@ -93,7 +93,8 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
       ## Gibbs model 
       results <- vcalcGibbs(object, ..., what=what,
                             fine=fine,
-                            matrix.action=matrix.action)
+                            matrix.action=matrix.action,
+                            hessian = hessian)
     }
     varcov <- results$varcov
     fisher <- results$fisher
@@ -888,7 +889,7 @@ vcalcGibbsGeneral <- function(model,
         if(logi)
            list(A1log=A1log, A2log=A2log, A3log=A3log, Slog=Slog) else NULL,
         if(reweighting) list(gradient=gradient) else NULL,
-        list(hessian = if(reweighting) gradient else A1,
+        list(hessian = if(reweighting) gradient else if(logi) Slog else A1,
              fisher = Sigma),
         if(saveterms) list(lamdel=lamdel, momdel=momdel) else NULL)
     ## return internal data if no further calculation needed
