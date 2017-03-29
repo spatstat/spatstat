@@ -24,6 +24,8 @@ importFrom(mgcv,
 
 useDynLib(spatstat, .registration=TRUE)
 
+export("lineardirichlet")
+
 # .................................................. 
 # Automatically-generated list of documented objects 
 # .................................................. 

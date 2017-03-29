@@ -171,6 +171,8 @@ static const R_CMethodDef CEntries[] = {
     {"xysi",             (DL_FUNC) &xysi,             12},
     {"xysiANY",          (DL_FUNC) &xysiANY,          12},
     {"xysxi",            (DL_FUNC) &xysxi,             7},
+    {"Clinvwhichdist",   (DL_FUNC) &Clinvwhichdist,   12},
+    {"Clinvdist",        (DL_FUNC) &Clinvdist,        11},
     {NULL, NULL, 0}
 };
 

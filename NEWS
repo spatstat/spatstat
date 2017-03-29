@@ -1,13 +1,21 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.003
+        CHANGES IN spatstat VERSION 1.50-0.004
 
 OVERVIEW
 
     o We thank Tammy L Silva for contributions.
+
+    o Dirichlet/Voronoi tessellation on a linear network.
     
     o Improvements and bug fixes
 
     o Version nickname: 'Wombat Combat'
+
+NEW FUNCTIONS
+
+    o lineardirichlet
+    Computes the Dirichlet-Voronoi tessellation associated with a
+    point pattern on a linear network.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

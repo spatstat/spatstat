@@ -8,6 +8,22 @@
 
 */
 
+void Clinvwhichdist(int *, int *, double *,
+		    int *,
+		    int *, int *, int *,
+		    double *,
+		    double *,
+		    double *,
+		    double *,
+		    int *);
+
+void Clinvdist(int *, int *, double *,
+	       int *,
+	       int *, int *, int *,
+	       double *,
+	       double *,
+	       double *,
+	       double *);
 /*
   
                   Functions invoked by .C
