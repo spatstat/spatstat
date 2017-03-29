@@ -4,7 +4,7 @@ spatstat
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat)](http://cran.r-project.org/web/packages/spatstat)
 [![Research software impact](http://depsy.org/api/package/cran/spatstat/badge.svg)](http://depsy.org/package/r/spatstat)
 [![Travis-CI Build Status](https://travis-ci.org/spatstat/spatstat.png?branch=master)](https://travis-ci.org/spatstat/spatstat)
-[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=master)](https://codecov.io/github/spatstat/spatstat?branch=master)
+[![codecov.io](https://codecov.io/github/spatstat/spatstat/coverage.svg?branch=covr)](https://codecov.io/github/spatstat/spatstat?branch=master)
 
 ## This is the development version
 
