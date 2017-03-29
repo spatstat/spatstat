@@ -1,37 +1,43 @@
-language: r
-matrix:
-  include:
-    - os: osx
-      env: R_CODECOV_TEST=true _R_CHECK_FORCE_SUGGESTS_=false
-    - os: osx
-      env: R_CODECOV_EXAMPLE=true _R_CHECK_FORCE_SUGGESTS_=false
-    - os: osx
-      env: R_CODECOV_VIGNETTE=true _R_CHECK_FORCE_SUGGESTS_=false
-sudo: false
-cache: packages
-warnings_are_errors: false
+# Run Travis CI for R using https://eddelbuettel.github.io/r-travis/
+
+language: c
+
+env:
+  global:
+    - _R_CHECK_FORCE_SUGGESTS_=false
+  matrix:
+  - R_CODECOV_TEST=true
+  - R_CODECOV_EXAMPLE=true
+  - R_CODECOV_VIGNETTE=true
+
+sudo: required
+
+dist: trusty
+
 before_install:
-- if [ "$TRAVIS_OS_NAME" == "linux" ]; then tlmgr install anysize; fi
-addons:
-  apt:
-    packages:
-    - libgsl0-dev
-    - bwidget
-brew_packages:
-- gsl
-r_packages:
-- covr
-after_success:
- - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE)'; fi
- - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE)'; fi
- - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE)'; fi
-deploy:
-  provider: releases
-  api_key:
-    secure: ClD8ervG1XqpUlcx61m1DScZz8gTORHtVjQqepLfSDsdBq0Jr4fNgQ3HJSWYO7kqm2VVz5WN1KAl83WrOereirQZjHAVmiIwnA769RohxCupc+6tIXfJvJF64V+RX001+ZcboKdFTYhsAe8kbdVbrUOoeo/edx3fvvJTflpYk/oTqIe4IVLG6OM1VyM/XhfRM1n0PnjlLxFfWxM4xtcxwfKfdXN1SQaqIuncyHQB/sgpqXkQV9GnHJNZ0eucopmh8a7IUgqh5vJqRiC4+ioP1GdxvAvhE0p8VkJaOiy46MPjM5Jghg4K26KDgRXhtlR9iaovI58zds0pL5QI3uevxuPtYYqW1AQ0/qGzpLCDKWHutilGNusT6cQhIYxpo/bS875DXExBN4G3NuHJOXW6lxO0bYNWh+3LpU8tamp2E76+JuNSWHZISxLbU965N45DoYJh8BkIzMUJUTlF9OlUnK5B3eeCigaKqk/y23f6qEg0SmOsK5rA+dI6qS6xl6ZpC0F6nugwS/YHWKQlNG9R02U8WSy0frrSYFoWD50nIfm2cvbGcwT723L5JSlJoNutjGNsS7Gug+H828mbPbR8/ZAFvBruOPUKJlPlh4d/8HD3CJoTxVTE18GzJRIfyxuwhVk/4Y7kAklULEsBwGku4JqCBzE9Vvu99JLqJkrTW/A=
-  skip_cleanup: true
-  file_glob: true
-  file: spatstat_*.t*gz
-  on:
-    tags: true
-    condition: "$TRAVIS_R_VERSION != devel && ($TRAVIS_OS_NAME == osx)"
+  - curl -OLs http://eddelbuettel.github.io/r-travis/run.sh && chmod 0755 run.sh
+  - ./run.sh bootstrap
+
+install:
+  - ./run.sh install_aptget r-cran-mgcv r-cran-matrix r-cran-deldir r-cran-abind r-tensor r-cran-polyclip
+  - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-spatial r-cran-tkrplot 
+  - ./run.sh install_aptget libgsl0-dev libfftw3-dev
+  - ./run.sh install_r spatstat.utils goftest gsl locfit RandomFields RandomFieldsUtils fftwtools
+
+script:
+  - cd ../..
+  - rm -rf spatstat/spatstat
+  - git clone --depth=50 --branch=master https://github.com/spatstat/spatstat.git spatstat/spatstat
+  - cd spatstat/spatstat
+  - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE)'; fi
+  - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE)'; fi
+  - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE)'; fi
+
+after_failure:
+  - ./run.sh dump_logs
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+
