@@ -35,7 +35,7 @@ lineardirichlet(X)
 }
 \examples{
   X <- runiflpp(5, simplenet)
-  plot(lineardirichlet(X))
+  plot(lineardirichlet(X), lwd=3)
   points(X)
 }
 \keyword{spatial}
