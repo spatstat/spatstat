@@ -23,6 +23,7 @@ install:
   - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-spatial r-cran-tkrplot 
   - ./run.sh install_aptget libgsl0-dev libfftw3-dev
   - ./run.sh install_r spatstat.utils goftest gsl locfit RandomFields RandomFieldsUtils fftwtools
+  - ./run.sh install_r covr
 
 script:
   - cd ../..
