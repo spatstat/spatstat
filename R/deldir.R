@@ -12,11 +12,9 @@ assign("use.trigraf",  TRUE, envir=.spst.triEnv)
 assign("use.trigrafS", TRUE, envir=.spst.triEnv)
 assign("debug.delaunay", FALSE, envir=.spst.triEnv)
 
-dirichlet <- function(X) { UseMethod("dirichlet") }
+dirichlet <- local({
 
-dirichlet.ppp <- local({
-
-  dirichlet.ppp <- function(X) {
+  dirichlet <- function(X) {
     stopifnot(is.ppp(X))
     X <- unique(X, rule="deldir", warn=TRUE)
     w <- X$window
@@ -33,7 +31,7 @@ dirichlet.ppp <- local({
 
   df2poly <- function(z) { owin(poly=z[c("x","y")]) }
   
-  dirichlet.ppp
+  dirichlet
 })
 
 delaunay <- function(X) {
