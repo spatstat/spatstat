@@ -90,13 +90,30 @@ Strauss <- local({
          return(y)
        },
        delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
-         if(!(correction %in% c("border", "none")))
-           return(NULL)
          r <- inte$par$r
          X <- as.ppp(X) # algorithm is the same for data and dummy points
          nX <- npoints(X)
-         cl <- closepairs(X, r, what="indices")
-         v <- sparseMatrix(i=cl$i, j=cl$j, x=1,
+	 switch(correction,
+	        none = ,
+		border = {
+                  cl <- closepairs(X, r, what="indices")
+		  weight <- 1
+		},
+		isotropic = ,
+		Ripley = {
+                  cl <- closepairs(X, r, what="ijd")
+		  weight <- edge.Ripley(X[cl$i], cl$d)
+		},
+		translate = {
+                  cl <- closepairs(X, r, what="all")
+		  weight <- edge.Trans(dx = cl$dx,
+		   	    	       dy = cl$dy,
+		                       W = Window(X),
+				       paired=TRUE)
+		},
+		return(NULL)
+		)
+         v <- sparseMatrix(i=cl$i, j=cl$j, x=as.numeric(weight),
                            dims=c(nX, nX))
          if(!sparseOK)
            v <- as.matrix(v)
