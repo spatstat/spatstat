@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.004
+        CHANGES IN spatstat VERSION 1.50-0.005
 
 OVERVIEW
 
-    o We thank Tammy L Silva for contributions.
+    o We thank Mehdi Moradi and Tammy L Silva for contributions.
 
     o Dirichlet/Voronoi tessellation on a linear network.
     
