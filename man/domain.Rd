@@ -16,6 +16,7 @@
 \alias{domain.quadratcount}
 \alias{domain.quadrattest}
 \alias{domain.tess}
+\alias{domain.lintess}
 \alias{domain.im}
 \alias{domain.layered}
 \alias{domain.distfun}
@@ -65,6 +66,8 @@
  \method{domain}{quadrattest}(X, \dots)
 
  \method{domain}{tess}(X, \dots)
+
+ \method{domain}{lintess}(X, \dots)
 
  \method{domain}{im}(X, \dots)
 

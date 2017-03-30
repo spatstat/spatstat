@@ -71,6 +71,35 @@ print.lintess <- function(x, ...) {
   return(invisible(NULL))
 }
 
+summary.lintess <- function(object, ...) {
+  df <- object$df
+  lev <- levels(df$tile)
+  nt <- length(lev)
+  nr <- nrow(df)
+  seglen <- lengths.psp(as.psp(object$L))
+  df$fraglen <- with(df, seglen[seg] * (t1-t0))
+  tilelen <- with(df, tapply(fraglen, tile, sum))
+  y <- list(nt=nt, nr=nr, lev=lev, seglen=seglen, tilelen=tilelen)
+  class(y) <- c("summary.lintess", class(y))
+  return(y)
+}
+
+print.summary.lintess <- function(x, ...) {
+  splat("Tessellation on a linear network")
+  with(x, {
+    splat(nt, "tiles")
+    if(nt <= 30) {
+      splat("Tile labels:", paste(lev, collapse=" "))
+      splat("Tile lengths:")
+      print(signif(tilelen, 4))
+    } else {
+      splat("Tile lengths (summary):")
+      print(summary(tilelen))
+    }
+  })
+  return(invisible(NULL))
+}
+
 plot.lintess <- function(x, ..., main, add=FALSE,
                          style=c("segments", "image"),
                          col=NULL) {
@@ -121,7 +150,7 @@ as.owin.lintess <- function(W, ...) { as.owin(as.linnet(W), ...) }
 
 Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
-as.linnet.lintess <- function(X, ...) { X$L }
+domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
 
 as.linfun.lintess <- function(X, ..., values) {
   L <- X$L

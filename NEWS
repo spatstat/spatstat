@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.005
+        CHANGES IN spatstat VERSION 1.50-0.006
 
 OVERVIEW
 
     o We thank Mehdi Moradi and Tammy L Silva for contributions.
 
     o Dirichlet/Voronoi tessellation on a linear network.
+
+    o More support for tessellations on a linear network.
     
     o Improvements and bug fixes
 
@@ -17,6 +19,12 @@ NEW FUNCTIONS
     Computes the Dirichlet-Voronoi tessellation associated with a
     point pattern on a linear network.
 
+    o domain.lintess
+    Extract the linear network from a 'lintess' object.
+
+    o summary.lintess
+    Summary of a tessellation on a linear network.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o update.kppm

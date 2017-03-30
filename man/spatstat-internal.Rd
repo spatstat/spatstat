@@ -460,6 +460,7 @@
 \alias{print.summary.listof}
 \alias{print.summary.linim}
 \alias{print.summary.linnet}
+\alias{print.summary.lintess}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
 \alias{print.summary.mppm}
@@ -607,6 +608,7 @@
 \alias{summary.envelope}
 \alias{summary.funxy}
 \alias{summary.hyperframe}
+\alias{summary.lintess}
 \alias{summary.logiquad}
 \alias{summary.lut}
 \alias{summary.mppm}
@@ -1262,6 +1264,7 @@ prepareTitle(main)
 \method{print}{summary.hyperframe}(x, \dots)
 \method{print}{summary.linim}(x, \dots)
 \method{print}{summary.linnet}(x, \dots)
+\method{print}{summary.lintess}(x, \dots)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)
@@ -1435,6 +1438,7 @@ summarise.trend(trend, w, a)
 \method{summary}{envelope}(object,\dots)
 \method{summary}{funxy}(object,\dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
+\method{summary}{lintess}(object, \dots)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
 \method{summary}{mppm}(object, \dots, brief=FALSE)
