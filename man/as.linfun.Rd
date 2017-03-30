@@ -14,7 +14,7 @@
 
   \method{as.linfun}{linim}(X, \dots)
 
-  \method{as.linfun}{lintess}(X, \dots)
+  \method{as.linfun}{lintess}(X, \dots, values)
 }
 \arguments{
   \item{X}{
@@ -22,6 +22,10 @@
   }
   \item{\dots}{
     Other arguments passed to methods.
+  }
+  \item{values}{
+    Vector of function values,
+    one entry associated with each tile of the tessellation.
   }
 }
 \details{
@@ -31,9 +35,15 @@
   The function \code{as.linfun} is generic. The method \code{as.linfun.linim}
   converts objects of class \code{"linim"} (pixel images on a linear
   network) to functions on the network.
+
   The method \code{as.linfun.lintess} converts a tessellation
-  on a linear network into a function identifying which tile contains
-  any given point.
+  on a linear network into a function with a different value
+  on each tile of the tessellation.
+  If the argument \code{values} is missing or null,
+  then the function returns factor values identifying which tile
+  contains each given point. If \code{values} is given,
+  it should be a vector with one entry for each tile of the tessellation:
+  any point lying in tile number \code{i} will return the value \code{v[i]}.
 }
 \value{
   Object of class \code{"linfun"}.
@@ -45,13 +55,22 @@
   \code{\link{linfun}}
 }
 \examples{
-   D <- density(runiflpp(4, simplenet), 0.1, verbose=FALSE)
+   X <- runiflpp(2, simplenet)
+   Y <- runiflpp(5, simplenet)
+
+   # image on network
+   D <- density(Y, 0.1, verbose=FALSE)
 
    f <- as.linfun(D)
    f
-   
-   X <- runiflpp(2, simplenet)
    f(X)
+
+   # tessellation on network
+   Z <- lineardirichlet(Y)
+   g <- as.linfun(Z)
+   g(X)
+   h <- as.linfun(Z, values = runif(5))
+   h(X)
 }
 \keyword{spatial}
 \keyword{manip}

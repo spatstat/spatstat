@@ -123,17 +123,24 @@ Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 as.linnet.lintess <- function(X, ...) { X$L }
 
-as.linfun.lintess <- function(X, ...) {
+as.linfun.lintess <- function(X, ..., values) {
   L <- X$L
   df <- X$df
+  if(missing(values) || is.null(values)) {
+    rowvalues <- df$tile
+  } else {
+    if(length(values) != length(levels(df$tile)))
+      stop("Length of 'values' should equal the number of tiles", call.=FALSE)
+    rowvalues <- values[as.integer(df$tile)]    
+  }
   f <- function(x, y, seg, tp) {
-    result <- df$tile[integer(0)]
+    result <- rowvalues[integer(0)]
     for(i in seq_along(seg)) {
       tpi <- tp[i]
       segi <- seg[i]
       j <- which(df$seg == segi)
       kk <- which(df[j, "t0"] <= tpi & df[j, "t1"] >= tpi)
-      result[i] <- if(length(kk) == 0) NA else df$tile[j[min(kk)]]
+      result[i] <- if(length(kk) == 0) NA else rowvalues[j[min(kk)]]
     }
     return(result)
   }
