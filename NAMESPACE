@@ -25,6 +25,9 @@ importFrom(mgcv,
 useDynLib(spatstat, .registration=TRUE)
 
 export("lineardirichlet")
+export("summary.lintess")
+export("domain.lintess")
+export("print.summary.lintess")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
@@ -3670,3 +3673,7 @@ S3method("Window<-", "lpp")
 # ......................................... 
 #      End of methods                       
 # ......................................... 
+
+S3method("domain", "lintess")
+S3method("summary", "lintess")
+S3method("print", "summary.lintess")
