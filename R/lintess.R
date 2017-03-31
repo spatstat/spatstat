@@ -78,7 +78,7 @@ summary.lintess <- function(object, ...) {
   nr <- nrow(df)
   seglen <- lengths.psp(as.psp(object$L))
   df$fraglen <- with(df, seglen[seg] * (t1-t0))
-  tilelen <- with(df, tapply(fraglen, tile, sum))
+  tilelen <- with(df, tapplysum(fraglen, tile))
   y <- list(nt=nt, nr=nr, lev=lev, seglen=seglen, tilelen=tilelen)
   class(y) <- c("summary.lintess", class(y))
   return(y)
