@@ -163,6 +163,8 @@ Geyer <- local({
          # Sufficient statistic for second order conditional intensity
          # h(X[i] | X) - h(X[i] | X[-j])
          # Geyer interaction
+         if(!(correction %in% c("border", "none")))
+           return(NULL)
          r   <- inte$par$r
          sat <- inte$par$sat
          result <- geyerdelta2(X, r, sat, sparseOK=sparseOK)
