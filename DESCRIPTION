@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.50-0.009
+Version: 1.50-0.010
 Nickname: Wombat Combat
-Date: 2017-04-01
+Date: 2017-04-02
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

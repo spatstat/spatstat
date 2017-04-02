@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.009
+        CHANGES IN spatstat VERSION 1.50-0.010
 
 OVERVIEW
 
@@ -7,9 +7,9 @@ OVERVIEW
 
     o Dirichlet/Voronoi tessellation on a linear network.
 
-    o More support for tessellations on a linear network.
-    
-    o Improvements and bug fixes
+    o More support for functions and tessellations on a linear network.
+
+    o Improvements and bug fixes.
 
     o Version nickname: 'Wombat Combat'
 
@@ -29,6 +29,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o update.kppm
     New argument 'evaluate'.
+
+    o integral.linfun
+    New argument 'delta' controls step length of approximation to integral.
+
+    o as.linim.default
+    New argument 'delta' controls spacing of sample points in internal data.
 
 BUG FIXES
 

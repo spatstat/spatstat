@@ -11,7 +11,7 @@
 \usage{
 \method{integral}{linim}(f, domain=NULL, ...)
 
-\method{integral}{linfun}(f, domain=NULL, ...)
+\method{integral}{linfun}(f, domain=NULL, ..., delta)
 }
 \arguments{
   \item{f}{
@@ -23,6 +23,12 @@
   }
   \item{\dots}{
     Ignored.
+  }
+  \item{delta}{
+    Optional. 
+    The step length (in coordinate units)
+    for computing the approximate integral.
+    A single positive number.
   }
 }
 \details{

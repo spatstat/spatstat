@@ -130,8 +130,9 @@ as.function.linfun <- function(x, ...) {
   return(x)
 }
 
-integral.linfun <- function(f, domain=NULL, ...) {
-  integral(as.linim(f), domain=domain, ...)
+integral.linfun <- function(f, domain=NULL, ..., delta) {
+  if(missing(delta)) delta <- NULL
+  integral(as.linim(f, delta=delta), domain=domain, ...)
 }
 
 as.linfun <- function(X, ...) {

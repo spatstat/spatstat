@@ -11,7 +11,7 @@
 
   \method{as.linim}{linim}(X, \dots)
 
-  \method{as.linim}{default}(X, L, \dots)
+  \method{as.linim}{default}(X, L, \dots, delta)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,10 @@
   \item{\dots}{Additional arguments passed to \code{X} when \code{X}
     is a function, or arguments passed to \code{\link{as.mask}}
     which determine the pixel array geometry.
+  }
+  \item{delta}{
+    Optional. Numeric value giving the approximate spacing of
+    sample points along each segment of the network.
   }
 }
 \details{
@@ -53,6 +57,15 @@
   linear network. If \code{L} is missing or \code{NULL},
   then \code{X} should be an object of class \code{"linim"},
   and \code{L} defaults to the linear network on which \code{X} is defined.
+
+  If the argument \code{delta} is present, then in addition to converting the
+  function to a pixel image, the algorithm also generates a fine grid of
+  sample points evenly spaced along each segment of the network
+  (with spacing at most \code{delta} coordinate units). The function values
+  at these sample points are stored in the resulting object as a data frame
+  (the argument \code{df} of \code{\link{linim}}). This mechanism allows
+  greater accuracy for some calculations (such as
+  \code{\link{integral.linim}}).
 }
 \value{
   An image object on a linear network; an object of class \code{"linim"}.
