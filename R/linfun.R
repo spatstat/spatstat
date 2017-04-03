@@ -51,11 +51,12 @@ print.linfun <- function(x, ...) {
 
 summary.linfun <- function(object, ...) { print(object, ...) }
 
-as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL) {
+as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
+                                       delta=NULL) {
   if(missing(L) || is.null(L))
     L <- as.linnet(X)
   # create template
-  Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy)
+  Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
   # extract coordinates of sample points along network
   df <- attr(Y, "df")
   coo <- df[, c("x", "y", "mapXY", "tp")]
@@ -95,21 +96,15 @@ as.linfun.linim <- function(X, ...) {
   return(g)
 }
 
-plot.linfun <- function(x, ..., L=NULL, eps = NULL, dimyx = NULL, xy = NULL,
-                        main) {
+plot.linfun <- function(x, ..., L=NULL, main) {
   if(missing(main)) main <- short.deparse(substitute(x))
   if(is.null(L)) L <- as.linnet(x)
   argh <- list(...)
-  otherfargs <- get("otherfargs", envir=environment(x))
-  xtra <- names(argh) %in% otherfargs
-  if(!any(xtra)) {
-    Z <- as.linim(x, eps=eps, dimyx=dimyx, xy=xy, L=L)
-    rslt <- plot(Z, ..., main=main)
-  } else {
-    Z <- do.call(as.linim, append(list(x, eps=eps, dimyx=dimyx, xy=xy, L=L),
-                                  argh[xtra]))
-    rslt <- do.call(plot.linim, append(list(Z, main=main), argh[!xtra]))
-  }
+  fargnames <- get("otherfargs", envir=environment(x))
+  resolution <- c("eps", "dimyx", "xy", "delta")
+  convert <- names(argh) %in% c(fargnames, resolution)
+  Z <- do.call(as.linim, append(list(x, L=L), argh[convert]))
+  rslt <- do.call(plot.linim, append(list(Z, main=main), argh[!convert]))
   return(invisible(rslt))
 }
 

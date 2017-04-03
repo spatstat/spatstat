@@ -207,13 +207,14 @@ as.linim <- function(X, ...) {
   UseMethod("as.linim")
 }
 
-as.linim.default <- function(X, L, ..., delta) {
+as.linim.default <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
+                                        delta = NULL) {
   stopifnot(inherits(L, "linnet"))
-  Y <- as.im(X, W=as.rectangle(as.owin(L)), ...)
+  Y <- as.im(X, W=as.rectangle(as.owin(L)), ..., eps=eps, dimyx=dimyx, xy=xy)
   M <- as.mask.psp(as.psp(L), as.owin(Y))
   Y[complement.owin(M)] <- NA
   df <- NULL
-  if(!missing(delta) && !is.null(delta)) {
+  if(!is.null(delta)) {
     df <- pointsAlongNetwork(L, delta)
     pix <- nearest.valid.pixel(df$x, df$y, Y)
     df$xc <- Y$xcol[pix$col]
