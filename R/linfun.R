@@ -65,11 +65,12 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
   vals <- do.call(X, append(as.list(coo), list(...)))
   # write values in data frame
   df$values <- vals
-  # write values in pixel array
-  typ <- typeof(vals)
-  storage.mode(Y$v) <- typ
-  Y[] <- vals
+  # overwrite values in pixel array 
+  storage.mode(Y$v) <- typ <- typeof(vals)
   Y$type <- if(typ == "double") "real" else typ
+  pix <- nearest.raster.point(df$x, df$y, Y)
+  Y$v[cbind(pix$row, pix$col)] <- vals
+  #
   attr(Y, "df") <- df
   return(Y)
 }
