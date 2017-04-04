@@ -58,7 +58,7 @@ packages include
 
 ### Installing the official release
 
-To install the official release, start `R` and type
+To install the official release of `spatstat` from CRAN, start `R` and type
 
 ```R
 install.packages('spatstat')
@@ -67,7 +67,7 @@ install.packages('spatstat')
 ### Installing the development version
 
 The easiest way to install the development version of `spatstat` 
-from github is through the `devtools` package:
+from github is through the `devtools` package. Start `R` and type
 
 ```R
 require(devtools)
