@@ -594,10 +594,18 @@ RelevantZero <- function(x) vector(mode=typeof(x), length=1L)
 isRelevantZero <- function(x) identical(x, RelevantZero(x))
 RelevantEmpty <- function(x) vector(mode=typeof(x), length=0L)
 
-unionOfSparseIndices <- function(A, B) {
-  ijk <- rbind(data.frame(i=A$i, j=A$j, k=A$k),
-               data.frame(i=B$i, j=B$j, k=B$k))
-  ijk <- ijk[!duplicated(ijk), , drop=FALSE]
+unionOfSparseIndices <- function(A, B, d=NULL) {
+  #' A, B are data frames of indices i, j, k
+  #' d is the dimension vector
+  ijk <- rbind(A, B)
+  if(is.null(d)) {
+     dup <- duplicated(ijk)  #' duplicated.data.frame matches character codes
+  } else {
+     ijkcode <-
+     (ijk$i - 1L) + d[1L] * (ijk$j - 1L) + d[1L] * d[2L] * (ijk$k - 1L)
+     dup <- duplicated(as.integer(ijkcode)) #' match integers
+  }
+  ijk <- ijk[!dup, , drop=FALSE]
   colnames(ijk) <- c("i", "j", "k")
   return(ijk)
 }
@@ -685,11 +693,20 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
   # Result is sparse
   if(identical(dim1, dim2)) {
     #' extents are identical
-    ijk <- unionOfSparseIndices(e1, e2)
-    xijk <- as.vector(do.call(.Generic, list(e1[ijk], e2[ijk])))
+    ijk1 <- SparseIndices(e1)
+    ijk2 <- SparseIndices(e2)
+    if(identical(ijk1, ijk2)) {
+      #' patterns of nonzero entries are identical
+      ijk <- ijk1
+      values <- do.call(.Generic, list(e1$x, e2$x))
+    } else {			   
+      #' different patterns of nonzero entries
+      ijk <- unionOfSparseIndices(ijk1, ijk2, dim1)
+      values <- as.vector(do.call(.Generic, list(e1[ijk], e2[ijk])))
+    }			      
     dn <- dimnames(e1) %orifnull% dimnames(e2)
-    result <- sparse3Darray(i=ijk$i, j=ijk$j, k=ijk$k, x=xijk,
-                            dims=dim1, dimnames=dn, strict=TRUE)
+    result <- sparse3Darray(i=ijk$i, j=ijk$j, k=ijk$k, x=values,
+                              dims=dim1, dimnames=dn, strict=TRUE)
     return(result)
   }
 
@@ -705,7 +722,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk2)
       ijk2 <- as.data.frame(lapply(ijk2, rep, times=n))
       ijk2[,expanding] <- rep(seq_len(n), each=m)
-      ijk <- unionOfSparseIndices(ijk1, ijk2)
+      ijk <- unionOfSparseIndices(ijk1, ijk2, dim1)
       ijkdrop <- ijk
       if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijk], e2[ijkdrop]))
@@ -726,7 +743,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk1)
       ijk1 <- as.data.frame(lapply(ijk1, rep, times=n))
       ijk1[,expanding] <- rep(seq_len(n), each=m)
-      ijk <- unionOfSparseIndices(ijk1, ijk2)
+      ijk <- unionOfSparseIndices(ijk1, ijk2, dim2)
       ijkdrop <- ijk
       if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1L
       xout <- do.call(.Generic, list(e1[ijkdrop], e2[ijk]))
@@ -788,6 +805,24 @@ Summary.sparse3Darray <- function(..., na.rm=FALSE) {
   return(rslt)
 }
 
+
+SparseIndices <- function(x) {
+  #' extract indices of entries of sparse vector/matrix/array
+  nd <- length(dim(x))
+  if(nd > 3)
+    stop("Arrays of more than 3 dimensions are not supported", call.=FALSE)
+  if(nd == 0 || nd == 1) {
+    x <- as(x, "sparseVector")
+    df <- data.frame(i=x@i)
+  } else if(nd == 2) {
+    x <- as(x, "TsparseMatrix")
+    df <- data.frame(i=x@i + 1L, j=x@j + 1L)
+  } else if(nd == 3) {
+    x <- as.sparse3Darray(x)
+    df <- data.frame(i=x$i, j=x$j, k=x$k)
+  }
+  return(df)
+}
 
 SparseEntries <- function(x) {
   #' extract entries of sparse vector/matrix/array

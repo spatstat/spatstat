@@ -691,6 +691,7 @@
 \alias{Summary.sparse3Darray}
 \alias{inside3Darray}
 \alias{SparseEntries}
+\alias{SparseIndices}
 \alias{EntriesToSparse}
 \alias{mapSparseEntries}
 \alias{applySparseEntries}
@@ -1517,7 +1518,7 @@ as.sparse3Darray(x, \dots)
 RelevantZero(x)
 RelevantEmpty(x)
 isRelevantZero(x)
-unionOfSparseIndices(A,B)
+unionOfSparseIndices(A,B,d)
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
 \special{Summary(\dots, na.rm = FALSE)}
@@ -1526,6 +1527,7 @@ unionOfSparseIndices(A,B)
 %NAMESPACE S3method("Summary", "sparse3Darray")
 inside3Darray(d, i, j, k)
 SparseEntries(x)
+SparseIndices(x)
 EntriesToSparse(df, dims)
 mapSparseEntries(x, margin, values, conform, across)
 applySparseEntries(x, f, \dots)
