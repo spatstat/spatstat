@@ -21,11 +21,7 @@ is updated almost every day.
 ## Where is the official release?
 
 For the most recent **official release** of 
-`spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat). To install it, just type
-
-```R
-install.packages('spatstat')
-```
+`spatstat`, see the [CRAN page](https://cran.r-project.org/web/packages/spatstat). 
 
 ## spatstat is now split into several packages
 
@@ -59,6 +55,16 @@ packages include
 [spatstat.sphere](https://github.com/spatstat/spatstat.sphere).
 
 ## Installation
+
+### Installing the official release
+
+To install the official release, start `R` and type
+
+```R
+install.packages('spatstat')
+```
+
+### Installing the development version
 
 The easiest way to install the development version of `spatstat` 
 from github is through the `devtools` package:

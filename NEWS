@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.013
+        CHANGES IN spatstat VERSION 1.50-0.014
 
 OVERVIEW
 
     o We thank Mehdi Moradi and Tammy L Silva for contributions.
 
     o Dirichlet/Voronoi tessellation on a linear network.
+
+    o Thinning of point patterns on a linear network.
 
     o More support for functions and tessellations on a linear network.
 
@@ -26,6 +28,9 @@ NEW FUNCTIONS
     Summary of a tessellation on a linear network.
     
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rthin
+    Argument X can now be a point pattern on a linear network (class 'lpp').
 
     o update.kppm
     New argument 'evaluate'.

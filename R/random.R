@@ -939,9 +939,9 @@ thinjump <- function(n, p) {
              PACKAGE = "spatstat")
   return(i)
 }
-  
+
 rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
-  verifyclass(X, "ppp")
+  stopifnot(is.ppp(X) || is.lpp(X))
   if(!missing(nsim)) {
     check.1.integer(nsim)
     stopifnot(nsim >= 1)
@@ -951,7 +951,8 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
     if(nsim == 1 && drop) return(X)
     result <- rep(list(X), nsim)
     names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
+    return(result)
   }
 
   if(is.numeric(P) && length(P) == 1 && spatstat.options("fastthin")) {
@@ -968,7 +969,8 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
     if(nsim == 1 && drop)
       return(result[[1L]])
     names(result) <- paste("Simulation", 1:nsim)
-    return(as.ppplist(result))
+    result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
+    return(result)
   }
 
   if(is.numeric(P)) {
@@ -984,7 +986,7 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
       stop("P contains NA's")
   } else if(is.function(P)) {
     ## function - evaluate it at points of X
-    pX <- P(X$x, X$y, ...)
+    pX <- if(inherits(P, c("linfun", "funxy"))) P(X, ...) else P(X$x, X$y, ...)
     if(length(pX) != nX)
       stop("Function P returned a vector of incorrect length")
     if(!is.numeric(pX))
@@ -1016,7 +1018,8 @@ rthin <- function(X, P, ..., nsim=1, drop=TRUE) {
   if(nsim == 1 && drop)
     return(result[[1L]])
   names(result) <- paste("Simulation", 1:nsim)
-  return(as.ppplist(result))
+  result <- if(is.ppp(X)) as.ppplist(result) else as.solist(result)
+  return(result)
 }
 
 
