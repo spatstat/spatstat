@@ -1518,7 +1518,7 @@ as.sparse3Darray(x, \dots)
 RelevantZero(x)
 RelevantEmpty(x)
 isRelevantZero(x)
-unionOfSparseIndices(A,B,d)
+unionOfSparseIndices(A,B)
 \special{Math(x, \dots)}
 \special{Ops(e1, e2)}
 \special{Summary(\dots, na.rm = FALSE)}

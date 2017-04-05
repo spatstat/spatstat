@@ -57,6 +57,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
       #' ensure common pattern of sparse values
       #' in each slice on 'across' margin
       nslice <- dimx[across]
+      #' pick one representative of each equivalence class
       dup <- duplicated(ijk[,-across,drop=FALSE])
       ijk <- ijk[!dup, , drop=FALSE]
       npattern <- nrow(ijk)

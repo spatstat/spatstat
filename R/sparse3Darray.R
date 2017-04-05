@@ -594,18 +594,9 @@ RelevantZero <- function(x) vector(mode=typeof(x), length=1L)
 isRelevantZero <- function(x) identical(x, RelevantZero(x))
 RelevantEmpty <- function(x) vector(mode=typeof(x), length=0L)
 
-unionOfSparseIndices <- function(A, B, d=NULL) {
+unionOfSparseIndices <- function(A, B) {
   #' A, B are data frames of indices i, j, k
-  #' d is the dimension vector
-  ijk <- rbind(A, B)
-  if(is.null(d)) {
-     dup <- duplicated(ijk)  #' duplicated.data.frame matches character codes
-  } else {
-     ijkcode <-
-     (ijk$i - 1L) + d[1L] * (ijk$j - 1L) + d[1L] * d[2L] * (ijk$k - 1L)
-     dup <- duplicated(as.integer(ijkcode)) #' match integers
-  }
-  ijk <- ijk[!dup, , drop=FALSE]
+  ijk <- unique(rbind(A, B))
   colnames(ijk) <- c("i", "j", "k")
   return(ijk)
 }
@@ -701,7 +692,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       values <- do.call(.Generic, list(e1$x, e2$x))
     } else {			   
       #' different patterns of nonzero entries
-      ijk <- unionOfSparseIndices(ijk1, ijk2, dim1)
+      ijk <- unionOfSparseIndices(ijk1, ijk2)
       values <- as.vector(do.call(.Generic, list(e1[ijk], e2[ijk])))
     }			      
     dn <- dimnames(e1) %orifnull% dimnames(e2)
@@ -722,7 +713,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk2)
       ijk2 <- as.data.frame(lapply(ijk2, rep, times=n))
       ijk2[,expanding] <- rep(seq_len(n), each=m)
-      ijk <- unionOfSparseIndices(ijk1, ijk2, dim1)
+      ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
       if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1
       xout <- do.call(.Generic, list(e1[ijk], e2[ijkdrop]))
@@ -743,7 +734,7 @@ Ops.sparse3Darray <- function(e1,e2=NULL){
       m <- nrow(ijk1)
       ijk1 <- as.data.frame(lapply(ijk1, rep, times=n))
       ijk1[,expanding] <- rep(seq_len(n), each=m)
-      ijk <- unionOfSparseIndices(ijk1, ijk2, dim2)
+      ijk <- unionOfSparseIndices(ijk1, ijk2)
       ijkdrop <- ijk
       if(nrow(ijkdrop) > 0) ijkdrop[,expanding] <- 1L
       xout <- do.call(.Generic, list(e1[ijkdrop], e2[ijk]))
