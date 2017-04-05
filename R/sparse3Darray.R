@@ -75,8 +75,8 @@ as.sparse3Darray <- function(x, ...) {
                          dims=dimx, dimnames=dimnames(x))
     }
   } else if(inherits(x, "sparseVector")) {
-    one <- if(length(z@i) > 0) 1L else integer(0)
-    y <- sparse3Darray(i=z@i, j=one, k=one, x=z@x,
+    one <- if(length(x@i) > 0) 1L else integer(0)
+    y <- sparse3Darray(i=x@i, j=one, k=one, x=x@x,
                        dims=c(x@length, 1L, 1L))
   } else if(is.null(dim(x)) && is.atomic(x)) {
     n <- length(x)

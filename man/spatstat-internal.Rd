@@ -708,6 +708,7 @@
 \alias{as.ppplist}
 \alias{as.imlist}
 \alias{pointsAlongNetwork}
+\alias{outerSparse}
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -1544,6 +1545,7 @@ rhs.of.formula(x) <- value
 as.ppplist(x, check)
 as.imlist(x, check)
 pointsAlongNetwork(L, delta)
+outerSparse(x, n, across)
 %%%%%%%
 }
 \details{
