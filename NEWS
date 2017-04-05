@@ -26,12 +26,16 @@ NEW FUNCTIONS
 
     o summary.lintess
     Summary of a tessellation on a linear network.
+
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o rthin
     Argument X can now be a point pattern on a linear network (class 'lpp').
 
+    o fitted.ppm
+    New option: type = "link"
+    
     o update.kppm
     New argument 'evaluate'.
 
@@ -41,6 +45,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.linim.default
     New argument 'delta' controls spacing of sample points in internal data.
 
+    o as.linfun.lintess
+    New argument 'values' specifies the function value for each tile.
+    
 BUG FIXES
 
     o step, kppm, update.kppm
@@ -59,6 +66,13 @@ BUG FIXES
     o pcf.ppp, pcfinhom
     Crashed if kernel="epa" rather than "epanechnikov".
     Fixed.
+
+    o leverage.ppm, influence.ppm, dfbetas.ppm, ppmInfluence
+    Calculations were incorrect for a Geyer model fitted using
+    an edge correction other than "border" or "none".
+    
+    o runifpoint
+    Ignored 'drop' argument if the window was a rectangle.
 
         CHANGES IN spatstat VERSION 1.50-0
 

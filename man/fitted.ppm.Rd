@@ -23,8 +23,9 @@
   }
   \item{type}{
     String (partially matched) indicating whether the fitted value is the
-    conditional intensity (\code{"lambda"}) or the trend
-    (\code{"trend"}).
+    conditional intensity (\code{"lambda"} or \code{"cif"}) or
+    the first order trend (\code{"trend"})
+    or the logarithm of conditional intensity (\code{"link"}).
   }
   \item{dataonly}{
     Logical. If \code{TRUE}, then values will only be computed
@@ -60,8 +61,8 @@
   }
 }
 \value{
-  A vector containing the values of the fitted conditional intensity
-  or (if \code{type="trend"}) the fitted spatial trend.
+  A vector containing the values of the fitted conditional intensity,
+  fitted spatial trend, or logarithm of the fitted conditional intensity.
   
   Entries in this vector correspond to the quadrature points (data or
   dummy points) used to fit the model. The quadrature points can be
@@ -128,11 +129,8 @@
 
     lambdaX <- fitted(str, leaveoneout=TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}
