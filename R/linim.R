@@ -311,6 +311,19 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
     }
     dfempty <- unlist(lapply(dframes, is.null))
     if(!any(dfempty)) {
+      # ensure data frames are compatible
+      if(length(dframes) > 1 && (
+          length(unique(nr <- sapply(dframes, nrow))) > 1   ||
+           !allElementsIdentical(dframes, "seg")            ||
+   	   !allElementsIdentical(dframes, "tp")
+	)) {
+        # find the one with finest spacing
+	imax <- which.max(nr)
+	# resample the others
+	dframes[-imax] <- lapply(dframes[-imax],
+	                         resampleNetworkDataFrame,
+	                         template=dframes[[imax]])
+      }
       # replace each image variable by its data frame column of values
       vars[islinim] <- lapply(dframes, getElement, "values")
       # now evaluate expression
@@ -322,6 +335,27 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
   }
   result <- linim(nets[[1L]], Y, df=dfY)
   return(result)
+}
+
+resampleNetworkDataFrame <- function(df, template) {
+  # resample 'df' at the points of 'template'
+  invalues  <- df$values
+  insegment <- df$mapXY
+  inteepee  <- df$tp
+  out <- template
+  n <- nrow(out)
+  outvalues <- vector(mode = typeof(invalues), length=n)
+  outsegment <- out$mapXY
+  outteepee  <- out$tp
+  for(i in seq_len(n)) {
+    relevant <- which(insegment == outsegment[i])
+    if(length(relevant) > 0) {
+      j <- which.min(abs(inteepee[relevant] - outteepee[i]))
+      outvalues[i] <- invalues[relevant[j]]
+    }
+  }
+  out$values <- outvalues
+  return(out)
 }
 
 as.linnet.linim <- function(X, ...) {

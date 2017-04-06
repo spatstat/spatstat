@@ -709,6 +709,8 @@
 \alias{as.imlist}
 \alias{pointsAlongNetwork}
 \alias{outerSparse}
+\alias{allElementsIdentical}
+\alias{resampleNetworkDataFrame}
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -1546,6 +1548,8 @@ as.ppplist(x, check)
 as.imlist(x, check)
 pointsAlongNetwork(L, delta)
 outerSparse(x, n, across)
+allElementsIdentical(x, entry)
+resampleNetworkDataFrame(df, template)
 %%%%%%%
 }
 \details{

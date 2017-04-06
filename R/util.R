@@ -364,3 +364,18 @@ spatstatDiagnostic <- function(msg) {
    x[[3L]] <- value
    return(x)
 }
+
+allElementsIdentical <- function(x, entry=NULL) {
+  if(length(x) <= 1) return(TRUE)
+  if(!is.null(entry)) {
+    x1 <- x[[1]]
+    for(i in 2:length(x))
+      if(!identical(x[[i]], x1)) return(FALSE)
+  } else {
+    e1 <- x[[1]][[entry]]
+    for(i in 2:length(x))
+      if(!identical(x[[i]][[entry]], e1)) return(FALSE)
+  }
+  return(TRUE)
+}
+
