@@ -133,7 +133,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
       ijk <- apply(ijk, 2, rep, times=nslice)
       ijk[, across] <- rep(seq_len(nslice), each=npattern)
     }
-    if(length(dimx) == 1) {
+    if(is.vector(values)) {
       # vector of values matching margin extent
       check.nvector(values, dimx[margin],
                     things=c("rows","columns","planes")[margin],
@@ -146,7 +146,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
                          x=values[yindex],
                          dims=dimx, dimnames=dimnames(x))
       return(y)
-    } else {
+    } else if(is.matrix(values)) {
       #' matrix of values.
       force(across)
       stopifnot(across != margin) 
@@ -168,9 +168,9 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
                          x=values[cbind(yindex,zindex)],
                          dims=dimx, dimnames=dimnames(x))
       return(y)
-    } 
+    } else stop("Format of values not understood", call.=FALSE)
   }
-  stop("Format of x not understood")
+  stop("Format of x not understood", call.=FALSE)
 }
 
 
