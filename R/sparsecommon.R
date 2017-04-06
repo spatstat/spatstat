@@ -23,7 +23,7 @@ inside3Darray <- function(d, i, j, k) {
   return(ans)
 }
 
-#'  .............. sparse3Darray ....................
+#'  .............. code that mentions sparse3Darray ................
 
 outerSparse <- function(x, n, across) {
   #' x is a sparse vector/matrix; replicate it 'n' times
@@ -92,12 +92,18 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
   # replace the NONZERO entries of sparse matrix or array
   # by values[l] where l is one of the slice indices
   dimx <- dim(x)
+  if(is.null(dimx)) {
+    if(inherits(x, "sparseVector")) dimx <- x@length else
+    if(is.vector(x)) dimx <- length(x) else
+    stop("Format of x is not understood", call.=FALSE)
+  }
   if(inherits(x, "sparseMatrix")) {
     x <- as(x, Class="TsparseMatrix")
     if(length(x$i) == 0) {
       # no entries
       return(x)
     }
+    check.1.integer(margin)
     stopifnot(margin %in% 1:2)
     check.nvector(values, dimx[margin], things=c("rows","columns")[margin],
                   oneok=TRUE)
@@ -127,7 +133,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
       ijk <- apply(ijk, 2, rep, times=nslice)
       ijk[, across] <- rep(seq_len(nslice), each=npattern)
     }
-    if(!is.matrix(values)) {
+    if(length(dimx) == 1) {
       # vector of values matching margin extent
       check.nvector(values, dimx[margin],
                     things=c("rows","columns","planes")[margin],
