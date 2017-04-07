@@ -73,6 +73,55 @@ tenseur <- local({
     if(nC > 3)
       stop("Sorry, sparse arrays of more than 3 dimensions are not supported",
            call.=FALSE)
+    #' fast code for special cases
+    if(length(dimA) == 1 && !isfull(B)) {
+      ijk <- SparseIndices(B)
+      nB <- ncol(ijk)
+      if(nB > 1) ijout <- ijk[,-alongB,drop=FALSE]
+      kalong  <- ijk[,alongB]
+      ABalong <- B$x * A[kalong]
+      switch(nB,
+          { 
+            result <- sum(ABalong)
+	  },
+	  {
+	    result <- sparseVector(i=ijout[,1],
+	                           x=ABalong, # values aggregated by i
+				   length=dimC)
+          },			
+	  {
+	    result <- sparseMatrix(i=ijout[,1],
+            	                   j=ijout[,2],
+                    		   x=ABalong, # values aggregated by (i,j)
+                                   dims=dimC,
+                                   dimnames=dnB[-alongB])
+	  })
+      return(result)			     
+    }
+    if(length(dimB) == 1 && !isfull(A)) {
+      ijk <- SparseIndices(A)
+      nA <- ncol(ijk)
+      if(nA > 1) ijout <- ijk[,-alongA,drop=FALSE]
+      kalong  <- ijk[,alongA]
+      ABalong <- A$x * B[kalong]
+      switch(nA,
+          { 
+            result <- sum(ABalong)
+	  },
+	  {
+	    result <- sparseVector(i=ijout[,1],
+	                           x=ABalong, # values aggregated by i
+				   length=dimC)
+          },			
+	  {
+	    result <- sparseMatrix(i=ijout[,1],
+            	                   j=ijout[,2],
+                    		   x=ABalong, # values aggregated by (i,j)
+                                   dims=dimC,
+                                   dimnames=dnA[-alongA])
+	  })
+      return(result)			     
+    }
     #' extract indices and values of nonzero entries
     dfA <- SparseEntries(A)
     dfB <- SparseEntries(B)
