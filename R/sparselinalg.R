@@ -74,51 +74,59 @@ tenseur <- local({
       stop("Sorry, sparse arrays of more than 3 dimensions are not supported",
            call.=FALSE)
     #' fast code for special cases
-    if(length(dimA) == 1 && !isfull(B)) {
-      ijk <- SparseIndices(B)
-      nB <- ncol(ijk)
-      if(nB > 1) ijout <- ijk[,-alongB,drop=FALSE]
+    if(length(dimA) == 1 && length(alongA) == 1 && !isfull(B)) {
+      BB <- SparseEntries(B)
+      Bx  <- BB[,ncol(BB)]
+      ijk <- BB[,-ncol(BB),drop=FALSE]
       kalong  <- ijk[,alongB]
-      ABalong <- B$x * A[kalong]
-      switch(nB,
+      ABalong <- as.numeric(Bx * A[kalong])
+      ndimB <- ncol(ijk)
+      switch(ndimB,
           { 
             result <- sum(ABalong)
 	  },
 	  {
-	    result <- sparseVector(i=ijout[,1],
-	                           x=ABalong, # values aggregated by i
-				   length=dimC)
+	    iout <- ijk[,-alongB]
+	    result <- sparseVectorCumul(i=iout,
+	                                x=ABalong, # values aggregated by i
+				        length=dimC)
           },			
 	  {
+	    ijout <- ijk[,-alongB,drop=FALSE]
 	    result <- sparseMatrix(i=ijout[,1],
             	                   j=ijout[,2],
                     		   x=ABalong, # values aggregated by (i,j)
                                    dims=dimC,
                                    dimnames=dnB[-alongB])
+	    result <- drop0(result)			   
 	  })
       return(result)			     
     }
-    if(length(dimB) == 1 && !isfull(A)) {
-      ijk <- SparseIndices(A)
-      nA <- ncol(ijk)
-      if(nA > 1) ijout <- ijk[,-alongA,drop=FALSE]
+    if(length(dimB) == 1 && length(alongB) == 1 && !isfull(A)) {
+      AA <- SparseEntries(A)
+      Ax <- AA[,ncol(AA)]
+      ijk <- AA[,-ncol(AA),drop=FALSE]
       kalong  <- ijk[,alongA]
-      ABalong <- A$x * B[kalong]
+      ABalong <- as.numeric(Ax * B[kalong])
+      nA <- ncol(ijk)
       switch(nA,
           { 
             result <- sum(ABalong)
 	  },
 	  {
-	    result <- sparseVector(i=ijout[,1],
-	                           x=ABalong, # values aggregated by i
-				   length=dimC)
+            iout <- ijk[,-alongA]
+	    result <- sparseVectorCumul(i=iout,
+   	                                x=ABalong, # values aggregated by i
+				        length=dimC)
           },			
 	  {
+            ijout <- ijk[,-alongA,drop=FALSE]
 	    result <- sparseMatrix(i=ijout[,1],
             	                   j=ijout[,2],
                     		   x=ABalong, # values aggregated by (i,j)
                                    dims=dimC,
                                    dimnames=dnA[-alongA])
+	    result <- drop0(result)			   
 	  })
       return(result)			     
     }

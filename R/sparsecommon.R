@@ -23,9 +23,19 @@ inside3Darray <- function(d, i, j, k) {
   return(ans)
 }
 
+#'  .............. depends on Matrix package ................
+
+sparseVectorCumul <- function(x, i, length) {
+  #' extension of 'sparseVector' to allow repeated indices 
+  #'   (the corresponding entries are added)
+  z <- tapply(x, list(factor(i, levels=1:length)), sum)
+  z <- z[!is.na(z)]
+  sparseVector(i=as.integer(names(z)), x=as.numeric(z), length=length)
+}
+
 #'  .............. code that mentions sparse3Darray ................
 
-outerSparse <- function(x, n, across) {
+expandSparse <- function(x, n, across) {
   #' x is a sparse vector/matrix; replicate it 'n' times
   #' and form a sparse matrix/array
   #' in which each slice along the 'across' dimension is identical to 'x'

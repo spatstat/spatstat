@@ -708,9 +708,10 @@
 \alias{as.ppplist}
 \alias{as.imlist}
 \alias{pointsAlongNetwork}
-\alias{outerSparse}
+\alias{expandSparse}
 \alias{allElementsIdentical}
 \alias{resampleNetworkDataFrame}
+\alias{sparseVectorCumul}
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -1547,9 +1548,10 @@ rhs.of.formula(x) <- value
 as.ppplist(x, check)
 as.imlist(x, check)
 pointsAlongNetwork(L, delta)
-outerSparse(x, n, across)
+expandSparse(x, n, across)
 allElementsIdentical(x, entry)
 resampleNetworkDataFrame(df, template)
+sparseVectorCumul(x, i, length)
 %%%%%%%
 }
 \details{
