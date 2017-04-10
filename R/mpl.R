@@ -1175,11 +1175,13 @@ evalInterEngine <- function(X, P, E,
 deltasuffstat <- local({
   
   deltasuffstat <- function(model, ...,
-                            restrict=TRUE, dataonly=TRUE, force=FALSE,
+                            restrict=c("pairs", "first", "none"),
+			    dataonly=TRUE, force=FALSE,
                             quadsub=NULL,
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
     sparsegiven <- !missing(sparseOK)
+    restrict <- match.arg(restrict)
     
     if(dataonly) {
       X <- data.ppm(model)
@@ -1248,15 +1250,18 @@ deltasuffstat <- local({
     }
     if(!sparseOK && inherits(v, "sparse3Darray"))
       v <- as.array(v)
-  
-    if(restrict) {
+
+    if(restrict != "none") {
       ## kill contributions from points outside the domain of pseudolikelihood
       ## (e.g. points in the border region)
       use <- if(dataonly) getppmdatasubset(model) else
              if(is.null(quadsub)) getglmsubset(model) else
              getglmsubset(model)[quadsub]
-      if(any(kill <- !use)) 
-        v[kill,kill,] <- 0
+      if(any(kill <- !use))
+        switch(restrict,
+ 	       pairs = { v[kill,kill,] <- 0 },
+	       first = { v[kill,,] <- 0 },
+	       none = {})
     }
 
     ## Output array: planes must correspond to model coefficients

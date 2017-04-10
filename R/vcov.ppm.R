@@ -505,7 +505,8 @@ vcalcGibbsGeneral <- function(model,
     if(parallel) {
       ## compute second order difference
       ##  ddS[i,j,] = h(X[i] | X) - h(X[i] | X[-j])
-      ddS <- deltasuffstat(model, restrict=TRUE, force=FALSE, sparseOK=sparseOK)
+      ddS <- deltasuffstat(model, restrict="pairs",
+      	                   force=FALSE, sparseOK=sparseOK)
       sparse <- inherits(ddS, "sparse3Darray")
       if(is.null(ddS)) {
         if(asked.parallel)
