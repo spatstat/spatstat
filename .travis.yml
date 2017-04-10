@@ -9,7 +9,6 @@ cache: packages
 warnings_are_errors: false
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "linux" ]; then tlmgr install anysize; fi
-- if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then echo "options(pkgType = 'source')" > ~/.Rprofile; fi
 addons:
   apt:
     packages:
@@ -17,6 +16,7 @@ addons:
     - bwidget
 brew_packages:
 - gsl
+- fftw
 after_success:
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
 deploy:
