@@ -29,6 +29,9 @@ export("summary.lintess")
 export("domain.lintess")
 export("print.summary.lintess")
 export("SparseIndices")
+export("expandSparse")
+export("resampleNetworkDataFrame")
+export("allElementsIdentical")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
