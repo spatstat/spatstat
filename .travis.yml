@@ -29,9 +29,9 @@ script:
   - rm -rf spatstat/spatstat
   - git clone --depth=50 --branch=master https://github.com/spatstat/spatstat.git spatstat/spatstat
   - cd spatstat/spatstat
-  - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE)'; fi
-  - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE)'; fi
-  - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE)'; fi
+  - if [[ "${R_CODECOV_TEST}" ]]; then R -e 'covr::codecov(type = "test", quiet = FALSE, commit = covr:::current_commit(), branch = local_branch())'; fi
+  - if [[ "${R_CODECOV_EXAMPLE}" ]]; then R -e 'covr::codecov(type = "example", quiet = FALSE, commit = covr:::current_commit(), branch = local_branch())'; fi
+  - if [[ "${R_CODECOV_VIGNETTE}" ]]; then R -e 'covr::codecov(type = "vignette", quiet = FALSE, commit = covr:::current_commit(), branch = local_branch())'; fi
 
 notifications:
   email:
