@@ -27,7 +27,12 @@
     the current plot; if \code{FALSE}, generate a new plot.
   }
   \item{\dots}{
-    extra arguments passed to the generic \code{\link{plot}} function.
+    extra arguments controlling the appearance of the plot.
+    These arguments are passed to \code{\link[graphics]{polygon}}
+    if \code{x} is a
+    polygonal or rectangular window, or passed to
+    \code{\link[graphics]{image.default}}
+    if \code{x} is a binary mask. See Details.
   }
   \item{box}{
     logical flag; if \code{TRUE}, plot the enclosing rectangular box
@@ -89,17 +94,18 @@
   \code{\link{spatstat.options}}.
 
   When \code{x} is of type \code{"rectangle"} or \code{"polygonal"}, it
-  is plotted by the \R function \code{\link{polygon}}. To control the
+  is plotted by the \R function \code{\link[graphics]{polygon}}. To control the
   appearance (colour, fill density, line density etc) of the polygon
-  plot, determine the required argument of \code{\link{polygon}} and
+  plot, determine the required argument of \code{\link[graphics]{polygon}} and
   pass it through \code{...} For example, to paint the interior of the
   polygon in red, use the argument \code{col="red"}. To draw the polygon
   edges in green, use \code{border="green"}. To suppress the drawing of
   polygon edges, use \code{border=NA}.
 
   When \code{x} is of type \code{"mask"}, it is plotted by
-  \code{\link{image.default}}. The appearance of the image plot
-  can be controlled by passing arguments to \code{\link{image.default}}
+  \code{\link[graphics]{image.default}}. The appearance of the image plot
+  can be controlled by passing arguments to
+  \code{\link[graphics]{image.default}}
   through \code{...}. The default appearance can also be changed
   by setting the parameter \code{par.binary} of
   \code{\link{spatstat.options}}. 
@@ -111,18 +117,19 @@
   graphics device).
 }
 \section{Notes on Filled Polygons with Holes}{
-  The function \code{\link{polygon}} can only handle
+  The function \code{\link[graphics]{polygon}} can only handle
   polygons without holes. To plot polygons with holes in a solid colour,
   we have implemented two workarounds.
   
   \describe{
     \item{polypath function:}{
       The first workaround uses
-      the relatively new function \code{\link{polypath}} which
+      the relatively new function \code{\link[graphics]{polypath}} which
       \emph{does} have the capability to handle polygons with holes.
-      However, not all graphics devices support \code{\link{polypath}}.
+      However, not all graphics devices support
+      \code{\link[graphics]{polypath}}.
       The older devices \code{\link{xfig}} and \code{\link{pictex}}
-      do not support \code{\link{polypath}}.
+      do not support \code{\link[graphics]{polypath}}.
       On a Windows system, the default graphics device
 #ifdef windows      
       \code{\link{windows}} 
@@ -130,10 +137,11 @@
 #ifndef windows      
       \code{windows}
 #endif
-      supports \code{\link{polypath}}.
+      supports \code{\link[graphics]{polypath}}.
 #ifdef unix
       On a Linux system, the default graphics device
-      \code{X11(type="Xlib")} does \emph{not} support \code{\link{polypath}}
+      \code{X11(type="Xlib")} does \emph{not} support
+      \code{\link[graphics]{polypath}}
       but \code{X11(type="cairo")} does support it.
       See \code{\link{X11}} and the section on Cairo below.
 #endif
@@ -171,8 +179,8 @@
 \seealso{
   \code{\link{owin.object}},
   \code{\link{plot.ppp}},
-  \code{\link{polygon}},
-  \code{\link{image.default}},
+  \code{\link[graphics]{polygon}},
+  \code{\link[graphics]{image.default}},
   \code{\link{spatstat.options}}
 }
 \examples{
