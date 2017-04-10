@@ -13,7 +13,7 @@ fft2D <- function(z, inverse=FALSE, west=fftwAvailable()) {
 fftwAvailable <- function() {
   # including temporary check for recent version
   ok <- (requireNamespace("fftwtools", quietly=TRUE) &&
-          (packageVersion("fftwtools") > "0.9-8"))
+          (packageVersion("fftwtools") >= "0.9-8"))
   return(ok)
 }
 
