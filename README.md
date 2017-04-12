@@ -67,18 +67,18 @@ install.packages('spatstat')
 ### Installing the development version
 
 The easiest way to install the development version of `spatstat` 
-from github is through the `devtools` package. Start `R` and type
+from github is through the `remotes` package. Start `R` and type
 
 ```R
-require(devtools)
+require(remotes)
 install_github('spatstat/spatstat.utils')
 install_github('spatstat/spatstat')
 ```
 
-If you don't have `devtools` installed you should first run
+If you don't have `remotes` installed you should first run
 
 ```R
-install.packages('devtools')
+install.packages('remotes')
 ```
 
 ## Bug reports 
