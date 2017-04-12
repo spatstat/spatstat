@@ -141,6 +141,7 @@
 \alias{evalInteraction}
 \alias{evalInterEngine}
 \alias{evalPairPotential}
+\alias{evalSparse3Dentrywise}
 \alias{evaluate2Dkernel}
 \alias{even.breaks.owin}
 \alias{exactdt}              
@@ -893,6 +894,7 @@ evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R)
+evalSparse3Dentrywise(expr, envir)
 evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
 even.breaks.owin(w)
 exactdt(X, \dots)              

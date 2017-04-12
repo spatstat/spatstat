@@ -874,3 +874,44 @@ EntriesToSparse <- function(df, dims) {
   return(result)
 }
 
+evalSparse3Dentrywise <- function(expr, envir) {
+  ## DANGER: this assumes all sparse arrays in the expression
+  ##         have the same pattern of nonzero elements!
+  e <- as.expression(substitute(expr))
+  ## get names of all variables in the expression
+  varnames <- all.vars(e)
+  allnames <- all.names(e, unique=TRUE)
+  funnames <- allnames[!(allnames %in% varnames)]
+  if(length(varnames) == 0)
+    stop("No variables in this expression")
+  ## get the values of the variables
+  if(missing(envir)) {
+    envir <- parent.frame() # WAS: sys.parent()
+  } else if(is.list(envir)) {
+    envir <- list2env(envir, parent=parent.frame())
+  }
+  vars <- mget(varnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
+  funs <- mget(funnames, envir=envir, inherits=TRUE, ifnotfound=list(NULL))
+  ## find out which variables are sparse3Darray
+  isSpud <- sapply(vars, inherits, what="sparse3Darray")
+  if(!any(isSpud))
+    stop("No sparse 3D arrays in this expression")
+  spuds <- vars[isSpud]
+  nspud <- sum(isSpud)
+  template <- spuds[[1L]]
+  ## replace each array by its entries, and evaluate
+  spudvalues <- lapply(spuds, getElement, name="x")
+  ## minimal safety check
+  if(length(unique(lengths(spudvalues))) > 1)
+    stop("Different numbers of sparse entries", call.=FALSE)
+  vars[isSpud] <- spudvalues
+  v <- eval(e, append(vars, funs))
+  ## reshape as 3D array
+  result <- sparse3Darray(x=v,
+  	                  i=template$i,
+  	                  j=template$j,
+  	                  k=template$k,
+			  dims=dim(template),
+			  dimnames=dimnames(template))
+  return(result)
+}
