@@ -32,6 +32,7 @@ export("SparseIndices")
 export("expandSparse")
 export("resampleNetworkDataFrame")
 export("allElementsIdentical")
+export("evalSparse3Dentrywise")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
