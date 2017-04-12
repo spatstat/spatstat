@@ -226,26 +226,37 @@ as.array.sparse3Darray <- function(x, ...) {
       nvary <- sum(varies)
       varying <- which(varies)
       if(nvary == 3) {
+        ## ---- older code -----
         ## convert triples of integers to character codes
-        ## icode <- apply(i, 1, paste, collapse=",") << is too slow >>
-        icode <- paste(i[,1], i[,2], i[,3], sep=",")
-        dcode <- paste(x$i, x$j, x$k, sep=",")
+        #### icode <- apply(i, 1, paste, collapse=",") << is too slow >>
+        ## icode <- paste(i[,1], i[,2], i[,3], sep=",")
+        ## dcode <- paste(x$i, x$j, x$k, sep=",")
+	## ------------------
+	m <- matchIntegerDataFrames(i, cbind(x$i, x$j, x$k))
       } else if(nvary == 2) {
         ## effectively a sparse matrix
-        icode <- paste(i[,varying[1]], i[,varying[2]], sep=",")
-        ijk <- cbind(x$i, x$j, x$k)
-        dcode <- paste(ijk[,varying[1]], ijk[,varying[2]], sep=",")
+        ## ---- older code -----
+        ## icode <- paste(i[,varying[1]], i[,varying[2]], sep=",")
+        ## ijk <- cbind(x$i, x$j, x$k)
+        ## dcode <- paste(ijk[,varying[1]], ijk[,varying[2]], sep=",")
+	## ------------------
+	ijk <- cbind(x$i, x$j, x$k)
+	m <- matchIntegerDataFrames(i[,varying,drop=FALSE],
+	                            ijk[,varying,drop=FALSE])
       } else if(nvary == 1) {
         ## effectively a sparse vector
-        icode <- i[,varying]
-        dcode <- switch(varying, x$i, x$j, x$k)
+        ## ---- older code -----
+        ## icode <- i[,varying]
+        ## dcode <- switch(varying, x$i, x$j, x$k)
+	## ------------------
+	m <- match(i[,varying], switch(varying, x$i, x$j, x$k))
       } else {
         ## effectively a single value
-        icode <- rep(1, nrow(i))
-        dcode <- 1  # since we know length(x$x) > 0
+        ## ---- older code -----
+        ## icode <- rep(1, nrow(i))
+        ## dcode <- 1  # since we know length(x$x) > 0
+	m <- 1
       }
-      ## match them
-      m <- match(icode, dcode)
       ## insert any found elements
       found <- !is.na(m)
       answer[found] <- x$x[m[found]]
@@ -381,13 +392,15 @@ rbindCompatibleDataFrames <- function(x) {
       return(x) # no items to replace
     ## assemble data frame
     xdata <- data.frame(i=x$i, j=x$j, k=x$k, x=x$x)
-    ##
+    ## match xdata into ijk (not necessarily the first match in original order)
+    m <- matchIntegerDataFrames(xdata[,1:3,drop=FALSE], ijk)
+    ## ------- OLDER VERSION: --------
     ## convert triples of integers to character codes
     ## icode <- apply(ijk, 1, paste, collapse=",") << is too slow >>
-    icode <- paste(ijk[,1], ijk[,2], ijk[,3], sep=",")
-    xcode <- paste(x$i, x$j, x$k, sep=",")
-    ## match them *backwards*
-    m <- match(xcode, icode)
+    ## icode <- paste(ijk[,1], ijk[,2], ijk[,3], sep=",")
+    ## xcode <- paste(x$i, x$j, x$k, sep=",")
+    ##  m <- match(xcode, icode)
+    ## -------------------------------
     ## remove any matches, retaining only data that do not match 'i'
     xdata <- xdata[is.na(m), , drop=FALSE]   # sic
     ## ensure replacement value is vector-like

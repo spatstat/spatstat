@@ -136,8 +136,13 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
       #' in each slice on 'across' margin
       nslice <- dimx[across]
       #' pick one representative of each equivalence class
-      dup <- duplicated(ijk[,-across,drop=FALSE])
-      ijk <- ijk[!dup, , drop=FALSE]
+      ## ---- old code ---------
+      ## dup <- duplicated(ijk[,-across,drop=FALSE])
+      ## ijk <- ijk[!dup, , drop=FALSE]
+      ## ---------------------
+      use <- representativeRows(ijk[,-across,drop=FALSE])
+      ijk <- ijk[use, , drop=FALSE]
+      ## 
       npattern <- nrow(ijk)
       #' repeat this pattern in each 'across' slice
       ijk <- apply(ijk, 2, rep, times=nslice)

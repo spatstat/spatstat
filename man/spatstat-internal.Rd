@@ -494,6 +494,7 @@
 \alias{RelevantDeviation}
 \alias{repair.image.xycoords}
 \alias{replacementIndex}
+\alias{representativeRows}
 \alias{resolveEinfo}
 \alias{resolve.vargamma.shape}
 \alias{rgbNA}
@@ -1305,6 +1306,7 @@ reheat(model, invtemp)
 RelevantDeviation(x, alternative, clamp, scaling)
 repair.image.xycoords(x)
 replacementIndex(ii, stuff)
+representativeRows(x)
 resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
 rgbNA(red, green, blue, alpha, maxColorValue)
