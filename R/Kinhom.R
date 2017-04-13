@@ -66,6 +66,7 @@
             nlarge = 1000, 
             lambda2=NULL,
             reciplambda=NULL, reciplambda2=NULL,
+	    diagonal=TRUE,
             sigma=NULL, varcov=NULL)
 {
     verifyclass(X, "ppp")
@@ -130,7 +131,9 @@
       if(renormalise) {
         check.1.real(normpower)
         stopifnot(normpower %in% 1:2)
-        renorm.factor <- (areaW^2/sum(reciplambda2))^(normpower/2)
+	rlam2 <- reciplambda2
+	if(!diagonal) diag(rlam2) <- 0
+	renorm.factor <- (areaW^2/sum(rlam2))^(normpower/2)
       } 
     } else {
       # Vector lambda or reciplambda is required
@@ -193,7 +196,11 @@
       if(renormalise) {
         check.1.real(normpower)
         stopifnot(normpower %in% 1:2)
-        renorm.factor <- (areaW/sum(reciplambda))^normpower
+        if(!diagonal && normpower == 2) {
+	  renorm.factor <- (areaW^2)/(sum(reciplambda)^2 - sum(reciplambda^2))
+	} else {
+          renorm.factor <- (areaW/sum(reciplambda))^normpower
+        }
       } 
     }
 

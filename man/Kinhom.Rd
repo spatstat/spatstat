@@ -14,6 +14,7 @@
     leaveoneout=TRUE,
     nlarge = 1000,
     lambda2=NULL, reciplambda=NULL, reciplambda2=NULL,
+    diagonal=TRUE,
     sigma=NULL, varcov=NULL)
 }
 \arguments{
@@ -108,6 +109,9 @@
     \eqn{1/\lambda(x_i)\lambda(x_j)}{1/(lambda(x[i]) * lambda(x[j]))}
     of the intensities at each pair of data points 
     \eqn{x_i}{x[i]} and \eqn{x_j}{x[j]}. 
+  }
+  \item{diagonal}{
+    Do not use this argument.
   }
   \item{sigma,varcov}{
     Optional arguments passed to  \code{\link{density.ppp}}
