@@ -98,7 +98,7 @@ ppmInfluenceEngine <- function(fit,
   needHess <- gotScore && influencecalc
   if(!gotHess && needHess)
     stop("Must supply iHessian", call.=FALSE)
-  if(fit$method == "logi" && !spatstat.options("allow.logi.influence"))
+  if(fit$method == "logi")
     stop("ppm influence measures are not yet implemented for method=logi",
          call.=FALSE)
   sparse <- sparseOK 

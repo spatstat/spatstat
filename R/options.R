@@ -81,13 +81,6 @@ warn.once <- function(key, ...) {
 
 ".Spat.Stat.Opt.Table" <-
   list(
-       allow.logi.influence=list(
-         ## whether leverage/influence calculations are permitted
-         ## on a fitted model with method='logi'
-         default=FALSE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
        checkpolygons = list(
          ## superseded
          superseded=TRUE,

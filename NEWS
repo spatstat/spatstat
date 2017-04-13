@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.025
+        CHANGES IN spatstat VERSION 1.50-0.026
 
 OVERVIEW
 
@@ -47,7 +47,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.linfun.lintess
     New argument 'values' specifies the function value for each tile.
-    
+
 BUG FIXES
 
     o step, kppm, update.kppm

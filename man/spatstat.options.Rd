@@ -333,12 +333,6 @@
   \code{spatstat.options} but are intended for
   software development or testing purposes.
   \describe{
-    \item{allow.logi.influence}{
-      Logical. For software development purposes only:
-      prevents \pkg{spatstat} from performing incorrect calculations
-      in cases which are not yet supported.
-      Initialised to \code{FALSE}.
-    }
     \item{closepairs.newcode}{
       Logical. Whether to use new version of the
       code for \code{\link[spatstat]{closepairs}}.
