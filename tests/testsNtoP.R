@@ -368,7 +368,7 @@ local({
   fS <- fitted(fitS)
   pS <- predict(fitS)
   uS <- summary(fitS)
-  if(spatstat.options("allow.logi.influence")) {
+  if(FALSE) { # fix later
     a <- leverage(fit)
     b <- influence(fit)
     d <- dfbetas(fit)
