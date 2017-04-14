@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.70 $  $Date: 2017/02/07 08:12:05 $
+#          CORRECTED VERSION !!
 #
 
 leverage <- function(model, ...) {
@@ -83,7 +83,9 @@ ppmInfluenceEngine <- function(fit,
                          precomputed=list(),
                          sparseOK=TRUE,
                          fitname=NULL,
-                         multitypeOK=FALSE) {
+                         multitypeOK=FALSE,
+                         entrywise = TRUE) {
+  logi <- fit$method == "logi"
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
   stopifnot(is.ppm(fit))
@@ -98,9 +100,6 @@ ppmInfluenceEngine <- function(fit,
   needHess <- gotScore && influencecalc
   if(!gotHess && needHess)
     stop("Must supply iHessian", call.=FALSE)
-  if(fit$method == "logi")
-    stop("ppm influence measures are not yet implemented for method=logi",
-         call.=FALSE)
   sparse <- sparseOK 
   #
   # extract precomputed values if given
@@ -109,8 +108,19 @@ ppmInfluenceEngine <- function(fit,
   mom    <- precomputed$mom    %orifnull% model.matrix(fit)
   # 
   p <- length(theta)
+  if(logi){
+    ## Intensity of dummy points
+    rho <- fit$Q$param$rho %orifnull% intensity(as.ppp(fit$Q))
+    logiprob <- lam / (lam + rho)
+    vclist <- vcov(fit, what = "internals")
+    hess <- vclist$Slog
+    fush <- vclist$fisher
+    invhess <- solve(hess)
+    vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
+  } else{
   vc <- vcov(fit, hessian=TRUE)
   fush <- hess <- solve(vc)
+  }
   Q <- quad.ppm(fit)
   # hess = negative hessian of log (pseudo) likelihood
   # fush = E(hess)
@@ -130,6 +140,8 @@ ppmInfluenceEngine <- function(fit,
   gotScore <- !is.null(iscoremat)
   needHess <- gotScore && influencecalc
   if(gotScore) {
+    if(logi)
+      stop("ppm influence measures are not yet implemented for method=logi with irregular parameters.")
     ## count regular and irregular parameters
     nreg <- ncol(mom)
     nirr <- ncol(iscoremat)
@@ -204,8 +216,10 @@ ppmInfluenceEngine <- function(fit,
   }
   
   if(!needHess) {
+    if(!logi){
     hess <- fush
     invhess <- vc
+    }
   }
   #
   ok <- NULL
@@ -295,6 +309,7 @@ ppmInfluenceEngine <- function(fit,
         anyzerocifB <- any(zerocifB)
         momB <- mom[requested, , drop=FALSE]
         lamB <- lam[requested]
+        if(logi) logiprobB <- logiprob[requested]
         wB <- w[requested]
         currentB <- seq_along(current)
       } else {
@@ -304,12 +319,13 @@ ppmInfluenceEngine <- function(fit,
         anyzerocifB <- anyzerocif
         momB <- mom
         lamB <- lam
+        if(logi) logiprobB <- logiprob
         wB <- w
       }
       ## compute second order terms 
       ## ddS[i,j, ] = Delta_i Delta_j S(x)
-      ddS <- deltasuffstat(fit, dataonly=FALSE, quadsub=requested,
-                           sparseOK=sparse)
+      ddS <- deltasuffstat(fit, restrict = "first", dataonly=FALSE,
+                           quadsub=requested, sparseOK=sparse)
       ## 
       if(is.null(ddS)) {
         warning("Second order interaction terms are not implemented",
@@ -331,7 +347,9 @@ ppmInfluenceEngine <- function(fit,
         }
       }
       ## effect of addition/deletion of U[j]
-      ## on score contribution from data points
+      ## on score contribution from data points (sum automatically restricted to
+      ## interior for border correction by earlier call to
+      ## deltasuffstat(..., restrict = "first"))
       ddSX <- ddS[isdataB, , , drop=FALSE]
       eff.data.B <- marginSums(ddSX, c(2,3))
       ## check if any quadrature points have zero conditional intensity;
@@ -347,46 +365,114 @@ ppmInfluenceEngine <- function(fit,
       }
       ## 
       rm(ddSX, eff.data.B)
-      gc()
       ## effect of addition/deletion of U[j] on integral term in score
       changesignB <- ifelse(isdataB, -1, 1)
       if(!sparse) {
-        ## model matrix after addition/deletion of each U[j]
-        ## mombefore[i,j,] <- mom[i,]
-        di <- dim(ddS)
-        mombefore <- array(apply(momB, 2L, rep, times=di[2L]), dim=di)
-        momchange <- ddS
-        momchange[ , isdataB, ] <- - momchange[, isdataB, ]
-        momafter <- mombefore + momchange
-        ## effect of addition/deletion of U[j] on lambda(U[i], X)
-        lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE],
-                                       theta, 3, 1))
-        lamratio <- array(lamratio, dim=dim(momafter))
-        ddSintegrand <- lamB * (momafter * lamratio - mombefore)
-        rm(lamratio, momchange, mombefore, momafter)
+        if(logi){
+          stop("Non-sparse method is not implemented for method = 'logi'!")
+        } else{
+          ## model matrix after addition/deletion of each U[j]
+          ## mombefore[i,j,] <- mom[i,]
+          di <- dim(ddS)
+          mombefore <- array(apply(momB, 2, rep, times=di[2]), dim=di)
+          momchange <- ddS
+          momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+          momafter <- mombefore + momchange
+          ## effect of addition/deletion of U[j] on lambda(U[i], X)
+          if(gotScore){
+            lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE],
+                                           theta, 3, 1))
+          } else{
+            lamratio <- exp(tensor::tensor(momchange, theta, 3, 1))
+          }
+          lamratio <- array(lamratio, dim=dim(momafter))
+          ddSintegrand <- lamB * (momafter * lamratio - mombefore)
+          rm(lamratio)
+        }
+        rm(momchange, mombefore, momafter)
         gc()
       } else {
-        ## Entries are required only for pairs i,j which interact.
-        ## mombefore[i,j,] <- mom[i,]
-        mombefore <- mapSparseEntries(ddS, 1, momB, conform=TRUE, across=3)
-        momchange <- ddS
-        momchange[ , isdataB, ] <- - momchange[, isdataB, ]
-        momafter <- mombefore + momchange
-        ## lamarray[i,j,k] <- lam[i]
-        lamarray <- mapSparseEntries(ddS, 1L, lamB, conform=TRUE, across=3)
-        lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE],
-                                          theta, 3, 1))
-        lamratiominus1 <- as.sparse3Darray(lamratiominus1)
-        ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
-        rm(lamratiominus1, lamarray, momchange, mombefore, momafter)
-        gc()
+        if(logi){
+          ## Delta suff. stat. with sign change for data/dummy (sparse3Darray)
+          momchange <- ddS
+          momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+          ## theta^T %*% ddS (with sign -1/+1 according to data/dummy) as triplet sparse matrix
+          if(gotScore){
+            momchangeeffect <- tenseur(momchange[,,REG,drop=FALSE], theta, 3, 1)
+          } else{
+            momchangeeffect <- tenseur(momchange, theta, 3, 1)
+          }
+          momchangeeffect <- expandSparse(momchangeeffect, n = dim(ddS)[3], across = 3)
+          ijk <- SparseIndices(momchangeeffect)
+          ## Entrywise calculations below
+          momchange <- as.numeric(momchange[ijk])
+          ## Transform to change in probability
+          expchange <- exp(momchangeeffect$x)
+          lamBi <- lamB[ijk$i]
+          logiprobBi <- logiprobB[ijk$i]
+          changesignBj <- changesignB[ijk$j]
+          pchange <- changesignBj*(lamBi * expchange / (lamBi*expchange + rho) - logiprobBi)
+          mombefore <- mom[cbind(ijk$i,ijk$k)]
+          ## Note: changesignBj * momchange == as.numeric(ddS[ijk])
+          ddSintegrand <- (mombefore + momchange) * pchange + logiprobBi * changesignBj * momchange
+          ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k, x = ddSintegrand,
+                                        dims = dim(ddS))
+        } else{
+          if(entrywise){
+            momchange <- ddS
+            momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+            if(gotScore){
+              lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE],
+                                              theta, 3, 1))
+            } else{
+              lamratiominus1 <- expm1(tenseur(momchange, theta, 3, 1))
+            }
+            lamratiominus1 <- expandSparse(lamratiominus1, n = dim(ddS)[3], across = 3)
+            ijk <- SparseIndices(lamratiominus1)
+            ## Everything entrywise with ijk now:
+            # lamratiominus1 <- lamratiominus1[cbind(ijk$i, ijk$j)]
+            lamratiominus1 <- as.numeric(lamratiominus1$x)
+            momchange <- as.numeric(momchange[ijk])
+            mombefore <- momB[cbind(ijk$i, ijk$k)]
+            momafter <- mombefore + momchange
+            ## lamarray[i,j,k] <- lam[i]
+            lamarray <- lamB[ijk$i]
+            ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
+            ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k, x = ddSintegrand,
+                                          dims = dim(ddS))
+          } else{
+            ## Entries are required only for pairs i,j which interact.
+            ## mombefore[i,j,] <- mom[i,]
+            mombefore <- mapSparseEntries(ddS, 1, momB, conform=TRUE, across=3)
+            momchange <- ddS
+            momchange[ , isdataB, ] <- - momchange[, isdataB, ]
+            momafter <- evalSparse3Dentrywise(mombefore + momchange)
+            ## lamarray[i,j,k] <- lam[i]
+            lamarray <- mapSparseEntries(ddS, 1, lamB, conform=TRUE, across=3)
+            if(gotScore){
+              lamratiominus1 <- expm1(tenseur(momchange[,,REG,drop=FALSE],
+                                              theta, 3, 1))
+            } else{
+              lamratiominus1 <- expm1(tenseur(momchange,theta, 3, 1))
+            }
+            lamratiominus1 <- expandSparse(lamratiominus1, n = dim(ddS)[3], across = 3)
+            ddSintegrand <- evalSparse3Dentrywise(lamarray * (momafter* lamratiominus1 + momchange))
+          }
+          rm(lamratiominus1, lamarray, momafter)
+        }
+        rm(momchange, mombefore)
       }
       if(anyzerocifB) {
         ddSintegrand[zerocifB,,] <- 0
         ddSintegrand[,zerocifB,] <- 0
       }
-      ## integrate 
-      eff.back.B <- changesignB * tenseur(ddSintegrand, wB, 1, 1)
+      ## integrate
+      if(logi){
+        # eff.back.B <- tenseur(ddSintegrand, rep(1, length(wB)), 1, 1)
+        eff.back.B <- marginSums(ddSintegrand, c(2,3))
+      } else{
+        eff.back.B <- changesignB * tenseur(ddSintegrand, wB, 1, 1)
+      }
       ## save contribution
       if(is.null(requested)) {
         eff.back <- eff.back.B
@@ -435,11 +521,12 @@ ppmInfluenceEngine <- function(fit,
     if(mt <- is.multitype(loc))
       h <- data.frame(leverage=h, type=marks(loc))
     levval <- (loc %mark% h)[ok]
+    levvaldum <- levval[!isdata[ok]]
     if(!mt) {
-      levsmo <- Smooth(levval, sigma=maxnndist(loc))
+      levsmo <- Smooth(levvaldum, sigma=maxnndist(loc))
     } else {
-      levsplit <- split(levval, reduce=TRUE)
-      levsmo <- Smooth(levsplit, sigma=max(sapply(levsplit, maxnndist)))
+      levsplitdum <- split(levvaldum, reduce=TRUE)
+      levsmo <- Smooth(levsplitdum, sigma=max(sapply(levsplitdum, maxnndist)))
     }
     ## nominal mean level
     a <- area(Window(loc)) * markspace.integral(loc)
@@ -449,9 +536,15 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... influence .............
   if("influence" %in% what) {
-    # values of influence at data points
-    X <- loc[isdata]
-    M <- (1/p) * b[isdata]
+    if(logi){
+      X <- loc
+      effX <- as.numeric(isdata) * eff - mom * logiprob
+    } else{
+      # values of influence at data points
+      X <- loc[isdata]
+      effX <- eff[isdata, ,drop=FALSE]
+    }
+    M <- (1/p) * quadform(effX, invhess)
     if(is.multitype(X))
       M <- data.frame(influence=M, type=marks(X))
     V <- X %mark% M
@@ -459,26 +552,36 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... dfbetas .............
   if("dfbetas" %in% what) {
-    vex <- invhess %*% t(eff)
-    switch(method,
-           interpreted = {
-             dis <- con <- matrix(0, nloc, ncol(mom))
-             for(i in seq(nloc)) {
-               vexi <- vex[,i, drop=FALSE]
-               dis[i, ] <- if(isdata[i]) vexi else 0
-               con[i, ] <- - lam[i] * vexi
-             }
-           },
-           C = {
-             tvex <- t(vex)
-             dis <- tvex
-             dis[!isdata,] <- 0
-             con <- - lam  * tvex
-             con[lam == 0,] <- 0
-           })
-    colnames(dis) <- colnames(con) <- colnames(mom)
-    # result is a vector valued measure
-    result$dfbetas <- msr(Q, dis[isdata, ], con)
+    if(logi){
+      M <- as.numeric(isdata) * eff - mom * logiprob
+      M <- t(invhess %*% t(M))
+      if(is.multitype(loc))
+        M <- data.frame(influence=M, type=marks(loc))
+      V <- loc %mark% M
+      result$dfbetas <- V
+    } else{
+      vex <- invhess %*% t(mom)
+      dex <- invhess %*% t(eff)
+      switch(method,
+             interpreted = {
+               dis <- con <- matrix(0, nloc, ncol(mom))
+               for(i in seq(nloc)) {
+                 vexi <- vex[,i, drop=FALSE]
+                 dexi <- dex[,i, drop=FALSE]
+                 dis[i, ] <- if(isdata[i]) dexi else 0
+                 con[i, ] <- - lam[i] * vexi
+               }
+             },
+             C = {
+               dis <- t(dex)
+               dis[!isdata,] <- 0
+               con <- - lam * t(vex)
+               con[lam == 0,] <- 0
+             })
+      colnames(dis) <- colnames(con) <- colnames(mom)
+      # result is a vector valued measure
+      result$dfbetas <- msr(Q, dis[isdata, ], con)
+    }
   }
   return(result)
 }
