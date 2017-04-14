@@ -23,7 +23,6 @@ install:
   - ./run.sh install_aptget r-cran-sm r-cran-maptools r-cran-gsl r-cran-locfit r-cran-spatial r-cran-tkrplot r-cran-randomfields r-cran-randomfieldsutils r-cran-fftwtools
   - ./run.sh install_aptget r-cran-covr r-cran-devtools
   - ./run.sh install_aptget texinfo
-  - ./run.sh install_aptget r-cran-remotes
   - ./run.sh install_github spatstat/spatstat.utils
 
 script:
