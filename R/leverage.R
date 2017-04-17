@@ -545,8 +545,12 @@ ppmInfluenceEngine <- function(fit,
       effX <- eff[isdata, ,drop=FALSE]
     }
     M <- (1/p) * quadform(effX, invhess)
-    if(is.multitype(X))
-      M <- data.frame(influence=M, type=marks(X))
+    if(logi || is.multitype(X)) {
+      # result will have several columns of marks
+      M <- data.frame(influence=M)
+      if(logi) M$isdata <- isdata
+      if(is.multitype(X)) M$type <- marks(X)
+    } 
     V <- X %mark% M
     result$infl <- V
   }
