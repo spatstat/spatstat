@@ -548,7 +548,7 @@ ppmInfluenceEngine <- function(fit,
     if(logi || is.multitype(X)) {
       # result will have several columns of marks
       M <- data.frame(influence=M)
-      if(logi) M$isdata <- isdata
+      if(logi) M$isdata <- factor(isdata, levels = c(TRUE, FALSE), labels = c("data", "dummy"))
       if(is.multitype(X)) M$type <- marks(X)
     } 
     V <- X %mark% M
@@ -559,10 +559,10 @@ ppmInfluenceEngine <- function(fit,
     if(logi){
       M <- as.numeric(isdata) * eff - mom * logiprob
       M <- t(invhess %*% t(M))
-      if(is.multitype(loc))
-        M <- data.frame(influence=M, type=marks(loc))
-      V <- loc %mark% M
-      result$dfbetas <- V
+      Mdum <- M
+      Mdum[isdata,] <- 0
+      Mdum <- Mdum / w.quad(Q)
+      result$dfbetas <- msr(Q, M[isdata, ], Mdum)
     } else{
       vex <- invhess %*% t(mom)
       dex <- invhess %*% t(eff)
