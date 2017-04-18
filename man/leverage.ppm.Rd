@@ -9,6 +9,7 @@
 }
 \usage{
 leverage(model, ...)
+
 \method{leverage}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{

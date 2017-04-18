@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.026
+        CHANGES IN spatstat VERSION 1.50-0.027
 
 OVERVIEW
 
@@ -11,9 +11,12 @@ OVERVIEW
 
     o More support for functions and tessellations on a linear network.
 
+    o Leverage and influence diagnostics extended to Poisson/Gibbs models
+      fitted by logistic composite likelihood.
+      
     o Improvements and bug fixes.
 
-    o Version nickname: 'Automation Surprise'
+    o Version nickname: 'Revolutionary Defeatist'
 
 NEW FUNCTIONS
 
@@ -30,6 +33,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    These methods now work for models that were fitted by logistic
+    composite likelihood (method='logi').
+    
     o rthin
     Argument X can now be a point pattern on a linear network (class 'lpp').
 
@@ -50,6 +57,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Results for Gibbs models were incorrect due to a mathematical error.
+    (Results for Poisson models were correct). 
+    Fixed.
+    
     o step, kppm, update.kppm
     'step' did not work for kppm objects in some cases
     due to a scoping problem in update.kppm.
