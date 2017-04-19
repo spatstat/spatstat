@@ -78,7 +78,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
 }
 \author{
-  \adrian
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{leverage.ppm}},

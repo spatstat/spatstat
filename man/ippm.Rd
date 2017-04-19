@@ -59,19 +59,19 @@ ippm(Q, \dots,
 
   For the sake of explanation,
   consider a Poisson point process with intensity function
-  \eqn{\lambda(u)}{lambda(u)} at location \eqn{u}. Assume that
+  \eqn{\lambda(u)}{\lambda(u)} at location \eqn{u}. Assume that
   \deqn{
     \lambda(u) = \exp(\alpha + \beta Z(u)) \, f(u, \gamma)
   }{
-    lambda(u) = \exp(alpha + beta * Z(u)) * f(u, gamma)
+    \lambda(u) = exp(\alpha + \beta * Z(u)) * f(u, \gamma)
   }
-  where \eqn{\alpha,\beta,\gamma}{alpha,beta,gamma} are
+  where \eqn{\alpha,\beta,\gamma} are
   parameters to be estimated, \eqn{Z(u)} is a spatial covariate
   function, and \eqn{f} is some known function.
   Then the parameters
-  \eqn{\alpha,\beta}{alpha,beta} are called \emph{regular} because they
+  \eqn{\alpha,\beta} are called \emph{regular} because they
   appear in a loglinear form; the parameter 
-  \eqn{\gamma}{gamma} is called \emph{irregular}.
+  \eqn{\gamma} is called \emph{irregular}.
   
   To fit this model using \code{ippm}, we specify the
   intensity using the \code{trend} formula
@@ -81,7 +81,7 @@ ippm(Q, \dots,
   \deqn{
     \log\lambda(u) = \alpha + \beta Z(u) + \log f(u, \gamma)
   }{
-    log(lambda(u)) =  alpha + beta * Z(u) + log(f(u, gamma))
+    log(\lambda(u)) =  \alpha + \beta * Z(u) + log(f(u, \gamma))
   }
   So the model above would be encoded with the trend formula
   \code{~Z + offset(log(f))}. Note that the irregular part of the model
@@ -89,11 +89,11 @@ ippm(Q, \dots,
   as it is, without being multiplied by another regular parameter.
 
   The optimisation runs faster if we specify the derivative
-  of \eqn{\log f(u,\gamma)}{log(f(u,gamma))} with
-  respect to \eqn{\gamma}{gamma}. We call this the
+  of \eqn{\log f(u,\gamma)}{log(f(u,\gamma))} with
+  respect to \eqn{\gamma}. We call this the
   \emph{irregular score}. To specify this, the user must write an \R function
   that computes the irregular score for any value of
-  \eqn{\gamma}{gamma} at any location \code{(x,y)}.
+  \eqn{\gamma} at any location \code{(x,y)}.
   
   Thus, to code such a problem,
   \enumerate{
@@ -114,7 +114,7 @@ ippm(Q, \dots,
   \deqn{
     f((x,y), (\gamma, \delta)) = 1 + \exp(\gamma - \delta x^3)
   }{
-    f((x,y), (gamma, delta)) = 1 + \exp(gamma - delta * x^3)
+    f((x,y), (\gamma, \delta)) = 1 + \exp(\gamma - \delta * x^3)
   }
 
   Arguments \code{\dots} passed to \code{\link{ppm}} may
@@ -128,12 +128,7 @@ ippm(Q, \dots,
 \value{
   A fitted point process model (object of class \code{"ppm"}).
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
-}
+\author{\spatstatAuthors.}
 \seealso{
   \code{\link{ppm}},
   \code{\link{profilepl}}

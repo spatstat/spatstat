@@ -16,7 +16,7 @@
 }
 \arguments{
   \item{x}{
-    Leverage measure (object of class \code{"leverage.ppm"}) computed by
+    Leverage function (object of class \code{"leverage.ppm"}) computed by
     \code{\link{leverage.ppm}}.
   }
   \item{\dots}{
@@ -63,7 +63,7 @@
   \emph{Scandinavian Journal of Statistics} \bold{40}, 86--104.
 }
 \author{
-  \adrian
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{leverage.ppm}}.
