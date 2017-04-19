@@ -677,8 +677,22 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
   fitname <- x$fitname
   defaultmain <- paste("Influence for", fitname)
   y <- x$infl
-  if(multiplot && isTRUE(ncol(marks(y)) > 1)) 
-    y <- split(y, reduce=TRUE)
+  if(multiplot && isTRUE(ncol(marks(y)) > 1)) {
+    # apart from the influence value, there may be additional columns of marks
+    # containing factors: {type of point}, { data vs dummy in logistic case }
+    ma <- as.data.frame(marks(y))
+    fax <- sapply(ma, is.factor)
+    nfax <- sum(fax)
+    if(nfax == 1) {
+      # split on first available factor, and remove this factor
+      y <- split(y, reduce=TRUE)
+    } else if(nfax > 1) {
+      # several factors: split according to them all, and remove them all
+      f.all <- do.call(interaction, ma[fax])
+      z <- y %mark% ma[,!fax]
+      y <- split(z, f.all)
+    }
+  }
   do.call(plot,
           resolve.defaults(list(y),
                            list(...),
