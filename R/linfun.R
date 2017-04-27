@@ -56,7 +56,7 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
   if(missing(L) || is.null(L))
     L <- as.linnet(X)
   # create template
-  Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
+  Y <- as.linim(NA, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
   # extract coordinates of sample points along network
   df <- attr(Y, "df")
   coo <- df[, c("x", "y", "mapXY", "tp")]
@@ -68,7 +68,7 @@ as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
   # overwrite values in pixel array 
   storage.mode(Y$v) <- typ <- typeof(vals)
   Y$type <- if(typ == "double") "real" else typ
-  pix <- nearest.raster.point(df$x, df$y, Y)
+  pix <- nearest.raster.point(df$xc, df$yc, Y)
   Y$v[cbind(pix$row, pix$col)] <- vals
   #
   attr(Y, "df") <- df

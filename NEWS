@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.029
+        CHANGES IN spatstat VERSION 1.50-0.030
 
 OVERVIEW
 
@@ -62,6 +62,11 @@ BUG FIXES
     (Results for Poisson models were correct). 
     Fixed.
     
+    o leverage.ppm, influence.ppm, dfbetas.ppm, ppmInfluence
+    Calculations were incorrect for a Geyer model fitted using
+    an edge correction other than "border" or "none".
+    Fixed.
+    
     o step, kppm, update.kppm
     'step' did not work for kppm objects in some cases
     due to a scoping problem in update.kppm.
@@ -71,18 +76,14 @@ BUG FIXES
     Crashed if the window was not a rectangle.
     Fixed.
 
-    o 'timed' class
-    Printing of these objects did not work in some locales.
-    Fixed.
-
     o pcf.ppp, pcfinhom
     Crashed if kernel="epa" rather than "epanechnikov".
     Fixed.
 
-    o leverage.ppm, influence.ppm, dfbetas.ppm, ppmInfluence
-    Calculations were incorrect for a Geyer model fitted using
-    an edge correction other than "border" or "none".
-    
+    o 'timed' class
+    Printing of these objects did not work in some locales.
+    Fixed.
+
     o runifpoint
     Ignored 'drop' argument if the window was a rectangle.
 
