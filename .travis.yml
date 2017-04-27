@@ -2,6 +2,7 @@ language: r
 os: osx
 r:
 - release
+- devel
 env:
 - _R_CHECK_FORCE_SUGGESTS_=false
 sudo: false
