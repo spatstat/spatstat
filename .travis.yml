@@ -18,6 +18,12 @@ addons:
 brew_packages:
 - gsl
 - fftw
+r_packages:
+- abind
+- deldir
+- goftest
+- polyclip
+- tensor
 after_success:
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
 deploy:
