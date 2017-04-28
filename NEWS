@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.032
+        CHANGES IN spatstat VERSION 1.50-0.033
 
 OVERVIEW
 
@@ -54,6 +54,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o as.linfun.lintess
     New argument 'values' specifies the function value for each tile.
+    New argument 'navalue'.
 
 BUG FIXES
 

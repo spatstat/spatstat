@@ -152,7 +152,7 @@ Window.lintess <- function(X, ...) { as.owin(as.linnet(X)) }
 
 domain.lintess <- as.linnet.lintess <- function(X, ...) { X$L }
 
-as.linfun.lintess <- function(X, ..., values) {
+as.linfun.lintess <- function(X, ..., values, navalue=NA) {
   L <- X$L
   df <- X$df
   if(missing(values) || is.null(values)) {
@@ -169,7 +169,7 @@ as.linfun.lintess <- function(X, ..., values) {
       segi <- seg[i]
       j <- which(df$seg == segi)
       kk <- which(df[j, "t0"] <= tpi & df[j, "t1"] >= tpi)
-      result[i] <- if(length(kk) == 0) NA else rowvalues[j[min(kk)]]
+      result[i] <- if(length(kk) == 0) navalue else rowvalues[j[min(kk)]]
     }
     return(result)
   }

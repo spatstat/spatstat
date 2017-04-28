@@ -14,7 +14,7 @@
 
   \method{as.linfun}{linim}(X, \dots)
 
-  \method{as.linfun}{lintess}(X, \dots, values)
+  \method{as.linfun}{lintess}(X, \dots, values, navalue=NA)
 }
 \arguments{
   \item{X}{
@@ -24,8 +24,12 @@
     Other arguments passed to methods.
   }
   \item{values}{
-    Vector of function values,
+    Optional. Vector of function values,
     one entry associated with each tile of the tessellation.
+  }
+  \item{navalue}{
+    Optional. Function value associated with locations that
+    do not belong to a tile of the tessellation.
   }
 }
 \details{
