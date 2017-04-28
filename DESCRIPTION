@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.50-0.031
-Nickname: Revolutionary Defeatist
-Date: 2017-04-27
+Version: 1.50-0.032
+Nickname: Oxbow Code
+Date: 2017-04-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

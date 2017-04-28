@@ -49,6 +49,7 @@ lineardirichlet <- function(X) {
 	  PACKAGE = "spatstat")
    vnndist <- z$dist
    vnnwhich <- z$which + 1L  # index into sorted unique point pattern
+   vnnwhich[vnnwhich == 0] <- NA # possible if network is disconnected
    vnnlab <- coUXord$lab[vnnwhich] # index into original data pattern
    #' initialise tessellation data
    df <- data.frame(seg=integer(0),
@@ -132,9 +133,10 @@ lineardirichlet <- function(X) {
       jB <- vnnlab[B]
       dA <- vnndist[A]
       dB <- vnndist[B]
-      if(jA == jB) {
+      if(is.na(jA) || is.na(jB) || jA == jB) {
         #' entire segment is covered by one tile
-	newdf <- data.frame(seg=sygmund, t0=0.0, t1=1.0, tile=jA)
+        thetile <- if(is.na(jA)) jB else jA
+	newdf <- data.frame(seg=sygmund, t0=0.0, t1=1.0, tile=thetile)
       } else {
         #' split somewhere
 	tx <- (dB - dA + lenf)/(2 * lenf)

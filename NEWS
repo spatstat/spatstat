@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.031
+        CHANGES IN spatstat VERSION 1.50-0.032
 
 OVERVIEW
 
@@ -16,7 +16,7 @@ OVERVIEW
       
     o Improvements and bug fixes.
 
-    o Version nickname: 'Revolutionary Defeatist'
+    o Version nickname: 'Oxbow Code'
 
 NEW FUNCTIONS
 
