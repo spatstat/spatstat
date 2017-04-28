@@ -16,6 +16,7 @@
 \alias{domain.quadratcount}
 \alias{domain.quadrattest}
 \alias{domain.tess}
+\alias{domain.linfun}
 \alias{domain.lintess}
 \alias{domain.im}
 \alias{domain.layered}
@@ -66,6 +67,8 @@
  \method{domain}{quadrattest}(X, \dots)
 
  \method{domain}{tess}(X, \dots)
+
+ \method{domain}{linfun}(X, \dots)
 
  \method{domain}{lintess}(X, \dots)
 
@@ -126,16 +129,12 @@
   a three-dimensional box (\code{"box3"}), a multidimensional
   box (\code{"boxx"}) or a linear network (\code{"linnet"}).
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
-  \code{\link{domain}}
+  \code{\link{Window}},
+  \code{\link{Frame}}
 }
 \examples{
   domain(cells)

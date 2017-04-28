@@ -12,11 +12,13 @@
 
   \method{as.linim}{linim}(X, \dots)
 
-  \method{as.linim}{default}(X, L, \dots, eps = NULL, dimyx = NULL, xy = NULL,
-                                          delta=NULL)
+  \method{as.linim}{default}(X, L, \dots,
+                             eps = NULL, dimyx = NULL, xy = NULL,
+                             delta=NULL)
 
-  \method{as.linim}{linfun}(X, L, \dots, eps = NULL, dimyx = NULL, xy = NULL,
-                                         delta=NULL)
+  \method{as.linim}{linfun}(X, L=domain(X), \dots,
+                            eps = NULL, dimyx = NULL, xy = NULL,
+                            delta=NULL)
 }
 \arguments{
   \item{X}{

@@ -51,10 +51,11 @@ print.linfun <- function(x, ...) {
 
 summary.linfun <- function(object, ...) { print(object, ...) }
 
-as.linim.linfun <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
+as.linim.linfun <- function(X, L=domain(X),
+                            ..., eps = NULL, dimyx = NULL, xy = NULL,
                                        delta=NULL) {
-  if(missing(L) || is.null(L))
-    L <- as.linnet(X)
+  if(is.null(L))
+    L <- domain(X)
   # create template
   Y <- as.linim(1, L, eps=eps, dimyx=dimyx, xy=xy, delta=delta)
   # extract coordinates of sample points along network
@@ -114,7 +115,7 @@ as.owin.linfun <- function(W, ...) {
   as.owin(as.linnet(W))
 }
 
-as.linnet.linfun <- function(X, ...) {
+domain.linfun <- as.linnet.linfun <- function(X, ...) {
   attr(X, "L")
 }
 

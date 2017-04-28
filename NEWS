@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.033
+        CHANGES IN spatstat VERSION 1.50-0.034
 
 OVERVIEW
 
@@ -24,8 +24,8 @@ NEW FUNCTIONS
     Computes the Dirichlet-Voronoi tessellation associated with a
     point pattern on a linear network.
 
-    o domain.lintess
-    Extract the linear network from a 'lintess' object.
+    o domain.lintess, domain.linfun
+    Extract the linear network from a 'lintess' or 'linfun' object.
 
     o summary.lintess
     Summary of a tessellation on a linear network.

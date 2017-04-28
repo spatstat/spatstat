@@ -27,6 +27,7 @@ useDynLib(spatstat, .registration=TRUE)
 export("lineardirichlet")
 export("summary.lintess")
 export("domain.lintess")
+export("domain.linfun")
 export("print.summary.lintess")
 export("SparseIndices")
 export("expandSparse")
@@ -3679,6 +3680,7 @@ S3method("Window<-", "lpp")
 #      End of methods                       
 # ......................................... 
 
+S3method("domain", "linfun")
 S3method("domain", "lintess")
 S3method("summary", "lintess")
 S3method("print", "summary.lintess")

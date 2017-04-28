@@ -23,6 +23,14 @@ lineardirichlet(X)
   lying closer to \code{X[i]} than to any other data point \code{X[j]},
   where distance is measured by the shortest path.
 }
+\section{Missing tiles}{
+  If the linear network is not connected, and if one of the connected
+  components contains no data points, then the Dirichlet tessellation
+  is mathematically undefined inside this component.
+  The resulting tessellation object includes
+  a tile with label \code{NA}, which contains this component of the network.
+  A plot of the tessellation will not show this tile. 
+}
 \value{
   A tessellation on a linear network
   (object of class \code{"lintess"}).
