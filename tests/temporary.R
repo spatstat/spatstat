@@ -10,3 +10,16 @@ plot(influence(fitP))
 plot(influence(fitS))
 plot(dfbetas(fitP))
 plot(dfbetas(fitS))
+
+#' disconnected linear network
+m <- simplenet$m
+m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- FALSE
+L <- linnet(vertices(simplenet), m)
+L
+summary(L)
+Z <- connected(L, what="components")
+#' point pattern with no points in one connected component
+X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
+B <- lineardirichlet(X)
+plot(B)
+summary(B)

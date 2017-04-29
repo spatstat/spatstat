@@ -115,6 +115,8 @@ print.linnet <- function(x, ...) {
         nv, ngettext(nv, "vertex", "vertices"), 
         "and",
         nl, ngettext(nl, "line", "lines"))
+  if(!is.null(br <- x$boundingradius) && is.infinite(br))
+     splat("[Network is not connected]")
   print(as.owin(x), prefix="Enclosing window: ")
   return(invisible(NULL))
 }
@@ -128,6 +130,7 @@ summary.linnet <- function(object, ...) {
                  unitinfo = summary(unitname(object)),
                  totlength = sum(lengths.psp(object$lines)),
                  maxdegree = max(deg),
+		 ncomponents = length(levels(connected(object, what="labels"))),
                  win = as.owin(object),
                  sparse = sparse)
   if(!sparse) {
@@ -149,9 +152,16 @@ print.summary.linnet <- function(x, ...) {
     splat("Total length", signif(totlength, dig), 
           unitinfo$plural, unitinfo$explain)
     splat("Maximum vertex degree:", maxdegree)
-    if(sparse) splat("[Sparse matrix representation]") else {
-      splat("Diameter:", signif(diam, dig), unitinfo$plural)
-      splat("Bounding radius:", signif(boundrad, dig), unitinfo$plural)
+    if(sparse) splat("[Sparse matrix representation]") else
+    	       splat("[Non-sparse matrix representation]")
+    if(ncomponents > 1) {
+      splat("Network is disconnected: ", ncomponents, "connected components")
+    } else {
+      splat("Network is connected")
+      if(!sparse) {
+        splat("Diameter:", signif(diam, dig), unitinfo$plural)
+        splat("Bounding radius:", signif(boundrad, dig), unitinfo$plural)
+      }
     }
     if(!is.null(x$toler))
       splat("Numerical tolerance:", signif(x$toler, dig), unitinfo$plural)
@@ -327,7 +337,7 @@ volume.linnet <- function(x) {
 
 vertexdegree <- function(x) {
   verifyclass(x, "linnet")
-  return(rowSums(x$m))
+  return(rowSums(m))
 }
 
 circumradius.linnet <- function(x, ...) {

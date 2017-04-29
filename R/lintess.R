@@ -68,6 +68,7 @@ print.lintess <- function(x, ...) {
   splat("Tessellation on a linear network")
   nt <- length(levels(x$df$tile))
   splat(nt, "tiles")
+  if(anyNA(x$df$tile)) splat("[An additional tile is labelled NA]")
   return(invisible(NULL))
 }
 
@@ -79,7 +80,10 @@ summary.lintess <- function(object, ...) {
   seglen <- lengths.psp(as.psp(object$L))
   df$fraglen <- with(df, seglen[seg] * (t1-t0))
   tilelen <- with(df, tapplysum(fraglen, list(tile)))
-  y <- list(nt=nt, nr=nr, lev=lev, seglen=seglen, tilelen=tilelen)
+  hasna <- anyNA(df$tile)
+  nalen <- if(hasna) (sum(seglen) - sum(tilelen)) else 0
+  y <- list(nt=nt, nr=nr, lev=lev, seglen=seglen, tilelen=tilelen,
+            hasna=hasna, nalen=nalen)
   class(y) <- c("summary.lintess", class(y))
   return(y)
 }
@@ -88,6 +92,7 @@ print.summary.lintess <- function(x, ...) {
   splat("Tessellation on a linear network")
   with(x, {
     splat(nt, "tiles")
+    if(hasna) splat("[An additional tile is labelled NA]")
     if(nt <= 30) {
       splat("Tile labels:", paste(lev, collapse=" "))
       splat("Tile lengths:")
@@ -96,6 +101,7 @@ print.summary.lintess <- function(x, ...) {
       splat("Tile lengths (summary):")
       print(summary(tilelen))
     }
+    if(hasna) splat("Tile labelled NA has length", nalen)
   })
   return(invisible(NULL))
 }
