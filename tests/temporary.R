@@ -13,7 +13,7 @@ plot(dfbetas(fitS))
 
 #' disconnected linear network
 m <- simplenet$m
-m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- FALSE
+m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- m[4,6] <- m[6,4] <- FALSE
 L <- linnet(vertices(simplenet), m)
 L
 summary(L)
@@ -24,4 +24,5 @@ B <- lineardirichlet(X)
 plot(B)
 summary(B)
 D <- pairdist(X)
-
+A <- nndist(X)
+H <- nnwhich(X)

@@ -12,17 +12,33 @@
 nndist.lpp <- function(X, ..., k=1, method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
+  n <- npoints(X)
   k <- as.integer(k)
   stopifnot(all(k > 0))
   kmax <- max(k)
 
-  n <- npoints(X)
-
+  if(is.null(br <- X$boundingradius) || is.infinite(br)) {
+    # network may be disconnected
+    lab <- connected(domain(X), what="labels")
+    if(length(levels(lab)) > 1L) {
+      # network is disconnected
+      result <- matrix(Inf, n, length(k))
+      # handle each connected component separately
+      subsets <- split(seq_len(nvertices(L)), lab)
+      for(i in seq_along(subsets)) {
+        Xi <- thinNetwork(X, retainvertices=subsets[[i]])
+        witch <- attr(Xi, "retainpoints")      
+        result[witch, ] <- nndist.lpp(Xi, k=k, method=method)
+      }
+      return(result)
+    }
+  }
+  
   toomany <- (kmax >= n-1)
   if(toomany) {
     ## not enough points to define kmax nearest neighbours
     result <- matrix(Inf, nrow=n, ncol=kmax)
-    if(n <= 1) return(result[,,drop=TRUE])
+    if(n <= 1) return(result[,k,drop=TRUE])
     ## reduce kmax to feasible value
     kmax <- n-1
     kuse <- k[k <= kmax]
@@ -156,11 +172,28 @@ nnwhich.lpp <- function(X, ..., k=1, method="C") {
 
   n <- npoints(X)
 
+  if(is.null(br <- X$boundingradius) || is.infinite(br)) {
+    # network may be disconnected
+    lab <- connected(domain(X), what="labels")
+    if(length(levels(lab)) > 1L) {
+      # network is disconnected
+      result <- matrix(NA_integer_, n, length(k))
+      # handle each connected component separately
+      subsets <- split(seq_len(nvertices(L)), lab)
+      for(i in seq_along(subsets)) {
+        Xi <- thinNetwork(X, retainvertices=subsets[[i]])
+        witch <- attr(Xi, "retainpoints")      
+        result[witch, ] <- nnwhich.lpp(Xi, k=k, method=method)
+      }
+      return(result)
+    }
+  }
+  
   toomany <- (kmax >= n-1)
   if(toomany) {
     ## not enough points to define kmax nearest neighbours
     result <- matrix(NA_integer_, nrow=n, ncol=kmax)
-    if(n <= 1) return(result[,,drop=TRUE])
+    if(n <= 1) return(result[,k,drop=TRUE])
     ## reduce kmax to feasible value
     kmax <- n-1
     kuse <- k[k <= kmax]

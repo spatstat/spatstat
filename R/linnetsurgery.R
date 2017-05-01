@@ -167,7 +167,7 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   dsub <- dat[ok, , drop=FALSE]
   ## compute new serial numbers for retained segments
   segmap <- cumsum(retainedges)
-  dsub$seg <- segmap[dsub$seg]
+  dsub$seg <- segmap[as.integer(dsub$seg)]
   # make new lpp object
   Y <- ppx(data=dsub, domain=Lsub, coord.type=as.character(X$ctype))
   class(Y) <- c("lpp", class(Y))
