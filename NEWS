@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.035
+        CHANGES IN spatstat VERSION 1.50-0.036
 
 OVERVIEW
 
@@ -81,13 +81,18 @@ BUG FIXES
     Crashed if kernel="epa" rather than "epanechnikov".
     Fixed.
 
+    o alltypes
+    Crashed if envelope=TRUE and reuse=FALSE.
+    Fixed.
+    
     o 'timed' class
     Printing of these objects did not work in some locales.
     Fixed.
 
     o runifpoint
     Ignored 'drop' argument if the window was a rectangle.
-
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.50-0
 
 OVERVIEW

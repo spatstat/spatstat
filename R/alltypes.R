@@ -91,9 +91,14 @@ alltypes <- function(X, fun="K", ...,
                                   list(X, fun=estimator),
                                   list(internal=list(eject="patterns")),
                                   list(...),
+				  switch(1L+indices.expected,
+                                          NULL,
+                                          list(i=ma[1L]),
+                                          list(i=ma[1L], j=ma[2L]),
+                                          NULL),
                                   list(verbose=verb)))
     intern <- attr(L, "internal")
-  } else intern <- NULL
+  } else intern <- L <- NULL
 
   # compute function array and build up 'fasp' object
   fns  <- list()
