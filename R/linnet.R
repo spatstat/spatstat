@@ -337,7 +337,7 @@ volume.linnet <- function(x) {
 
 vertexdegree <- function(x) {
   verifyclass(x, "linnet")
-  return(rowSums(m))
+  return(rowSums(x$m))
 }
 
 circumradius.linnet <- function(x, ...) {
