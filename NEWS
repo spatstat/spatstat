@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.038
+        CHANGES IN spatstat VERSION 1.50-0.039
 
 OVERVIEW
 
@@ -85,7 +85,7 @@ BUG FIXES
     Crashed if envelope=TRUE and reuse=FALSE.
     Fixed.
 
-    o pairdist.lpp, nndist.lpp, nnwhich.lpp
+    o pairdist.lpp, nndist.lpp, nnwhich.lpp, nncross.lpp
     Crashed if the network was disconnected.
     Fixed.
     
