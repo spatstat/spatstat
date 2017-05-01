@@ -13,11 +13,25 @@ pairdist.lpp <- function(X, ..., method="C") {
   stopifnot(inherits(X, "lpp"))
   stopifnot(method %in% c("C", "interpreted"))
   #
-  L <- as.linnet(X, sparse=FALSE)
-  Y <- as.ppp(X)
-  n <- npoints(Y)
+  n <- npoints(X)
+  pairdistmat <- matrix(Inf,n,n)
+  diag(pairdistmat) <- 0
   #
-#  Lseg  <- L$lines
+  L <- as.linnet(X, sparse=FALSE)
+  #
+  if(any(is.infinite(L$dpath))) {
+    #' disconnected network
+    lab <- connected(L, what="labels")
+    subsets <- split(seq_len(nvertices(L)), lab)
+    for(i in seq_along(subsets)) {
+      Xi <- thinNetwork(X, retainvertices=subsets[[i]])
+      witch <- attr(Xi, "retainpoints")      
+      pairdistmat[witch, witch] <- pairdist.lpp(Xi, method=method)
+    }
+    return(pairdistmat)
+  }
+  # 
+  Y <- as.ppp(X)
   Lvert <- L$vertices
   from  <- L$from
   to    <- L$to
@@ -25,8 +39,6 @@ pairdist.lpp <- function(X, ..., method="C") {
   
   # nearest segment for each point
   pro <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)$seg
-
-  pairdistmat <- matrix(0,n,n)
 
   if(method == "interpreted") {
     # loop through all pairs of data points
@@ -83,7 +95,7 @@ pairdist.lpp <- function(X, ..., method="C") {
              to = as.integer(to0),
              dpath = as.double(dpath),
              segmap = as.integer(segmap),
-             answer = as.double(pairdistmat),
+             answer = as.double(numeric(n*n)),
              PACKAGE = "spatstat")
     pairdistmat <- matrix(zz$answer, n, n)
   }

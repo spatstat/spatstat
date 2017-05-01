@@ -154,6 +154,9 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   newto   <- newserial[to[retainedges]]
   ## extract relevant subset of network
   Lsub <- linnet(Vsub, edges=cbind(newfrom, newto), sparse=sparse)
+  ## tack on information about subset
+  attr(Lsub, "retainvertices") <- retainvertices
+  attr(Lsub, "retainedges") <- retainedges
   ## done?
   if(inherits(X, "linnet"))
     return(Lsub)
@@ -168,6 +171,8 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   # make new lpp object
   Y <- ppx(data=dsub, domain=Lsub, coord.type=as.character(X$ctype))
   class(Y) <- c("lpp", class(Y))
+  ## tack on information about subset
+  attr(Y, "retainpoints") <- ok
   return(Y)
 }
 

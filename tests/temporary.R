@@ -23,3 +23,5 @@ X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 B <- lineardirichlet(X)
 plot(B)
 summary(B)
+D <- pairdist(X)
+

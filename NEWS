@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.036
+        CHANGES IN spatstat VERSION 1.50-0.037
 
 OVERVIEW
 
@@ -83,6 +83,10 @@ BUG FIXES
 
     o alltypes
     Crashed if envelope=TRUE and reuse=FALSE.
+    Fixed.
+
+    o pairdist.lpp
+    Crashed if the network was disconnected.
     Fixed.
     
     o 'timed' class
