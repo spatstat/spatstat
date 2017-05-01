@@ -18,6 +18,7 @@ L <- linnet(vertices(simplenet), m)
 L
 summary(L)
 Z <- connected(L, what="components")
+
 #' point pattern with no points in one connected component
 X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 B <- lineardirichlet(X)
@@ -26,3 +27,7 @@ summary(B)
 D <- pairdist(X)
 A <- nndist(X)
 H <- nnwhich(X)
+Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
+G <- nncross(X, Y)
+
+
