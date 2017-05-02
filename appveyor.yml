@@ -43,13 +43,13 @@ artifacts:
     name: Bits
 
   - path: '\*_*.zip'
-    name: Bits
+    name: WinBinary
 
 deploy:
   provider: GitHub
   auth_token:
     secure: GCPohlv0NVqq0Cv3wh0Luw1OgO3jS4hyU7zUkA4a/TPMsqq1mYSm0/8Qb3uPrR7d
-  artifact: /\*_*.zip/
+  artifact: WinBinary
   on:
     branch:
       - master
