@@ -43,11 +43,8 @@
   \code{\link{clickdist}},
   \code{\link[graphics]{locator}}
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{iplot}

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.041
+        CHANGES IN spatstat VERSION 1.50-0.042
 
 OVERVIEW
 
@@ -30,6 +30,9 @@ NEW FUNCTIONS
     o summary.lintess
     Summary of a tessellation on a linear network.
 
+    o clicklpp
+    Interactively add points on a linear network.
+    
     o envelopeArray
     (Currently undocumented) generate an array of envelopes
     using a function that returns 'fasp' objects.

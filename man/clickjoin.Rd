@@ -9,7 +9,7 @@
   allowing the user to join pairs of selected vertices by edges.
 }
 \usage{
-  clickjoin(X, ..., add = TRUE, m = NULL, join = TRUE)
+  clickjoin(X, \dots, add = TRUE, m = NULL, join = TRUE)
 }
 \arguments{
   \item{X}{
@@ -62,8 +62,7 @@
   an edge.
 }
 \author{
-  \adrian 
-  
+  \adrian.
 }
 \seealso{
   \code{\link{linnet}},

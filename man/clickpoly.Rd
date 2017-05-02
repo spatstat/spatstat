@@ -6,7 +6,7 @@
   point-and-click in the display.
 }
 \usage{
-  clickpoly(add=FALSE, nv=NULL, np=1, ...)
+  clickpoly(add=FALSE, nv=NULL, np=1, \dots)
 }
 \arguments{
   \item{add}{
@@ -47,7 +47,7 @@
   passed to \code{\link[graphics]{locator}} through \code{\dots} include
   \code{pch} (plotting character), \code{cex} (character expansion
   factor) and \code{col} (colour). See \code{\link[graphics]{locator}}
-  and \code{\link{par}}.
+  and \code{\link[graphics]{par}}.
 
   Multiple polygons can also be drawn, by specifying
   \code{np > 1}. The polygons must be disjoint. The result is 
@@ -60,11 +60,9 @@
   \code{\link{clickdist}},
   \code{\link[graphics]{locator}}
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{iplot}

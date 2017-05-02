@@ -363,32 +363,36 @@ as.linnet.linim <- function(X, ...) {
 }
 
 "[.linim" <- function(x, i, ..., drop=TRUE) {
-  if(inherits(i, "lpp") && !is.null(df <- attr(x, "df"))) {
+  if(is.lpp(i)) {
     n <- npoints(i)
     result <- vector(mode=typeof(x$v), length=n)
     if(n == 0) return(result)
-    #' extract local coordinates of query points
-    coo <- coords(i)
-    queryseg <- coo$seg
-    querytp  <- coo$tp
-    #' get sample points along network
-    knownseg <- df$mapXY
-    knowntp  <- df$tp
-    knownval <- df$values
-    for(j in 1:n) {
-      relevant <- (knownseg == queryseg[j])
-      if(!any(relevant)) {
-        result[j] <- NA
-      } else {
-        k <- which.min(abs(knowntp[relevant] - querytp[j]))
-        result[j] <- knownval[relevant][k]
+    if(!is.null(df <- attr(x, "df"))) {
+      #' use data frame of sample points along network
+      knownseg <- df$mapXY
+      knowntp  <- df$tp
+      knownval <- df$values
+      #' extract local coordinates of query points
+      coo <- coords(i)
+      queryseg <- coo$seg
+      querytp  <- coo$tp
+      #' match to nearest sample point
+      for(j in 1:n) {
+        relevant <- (knownseg == queryseg[j])
+        if(!any(relevant)) {
+          result[j] <- NA
+        } else {
+          k <- which.min(abs(knowntp[relevant] - querytp[j]))
+          result[j] <- knownval[relevant][k]
+        }
       }
+      if(drop && anyNA(result))
+        result <- result(!is.na(result))
+      return(result)
     }
-    if(drop && anyNA(result))
-      result <- result(!is.na(result))
-    return(result)
+    #' give up and use pixel image
   }
-  #' first apply subset method for 'im'
+  #' apply subset method for 'im'
   y <- NextMethod("[")
   if(!is.im(y)) return(y) # vector of pixel values
   #' handle linear network info

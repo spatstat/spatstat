@@ -27,16 +27,12 @@
 \seealso{
   \code{\link[graphics]{locator}},
   \code{\link{clickppp}},
+  \code{\link{clicklpp}},
   \code{\link{clickpoly}},
   \code{\link{clickbox}}
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{iplot}

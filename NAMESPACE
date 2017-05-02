@@ -37,6 +37,7 @@ export("resampleNetworkDataFrame")
 export("allElementsIdentical")
 export("evalSparse3Dentrywise")
 export("envelopeArray")
+export("clicklpp")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
