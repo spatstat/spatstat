@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.043
+        CHANGES IN spatstat VERSION 1.50-0.044
 
 OVERVIEW
 
@@ -93,6 +93,10 @@ BUG FIXES
 
     o pairdist.lpp, nndist.lpp, nnwhich.lpp, nncross.lpp
     Crashed if the network was disconnected.
+    Fixed.
+
+    o as.im.linim, as.linim.linim
+    Additional arguments such as 'eps' and 'dimyx' were ignored.
     Fixed.
     
     o 'timed' class

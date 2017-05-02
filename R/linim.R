@@ -200,6 +200,8 @@ sortalongsegment <- function(df) {
 as.im.linim <- function(X, ...) {
   attr(X, "L") <- attr(X, "df") <- NULL
   class(X) <- "im"
+  if(length(list(...)) > 0)
+    X <- as.im(X, ...)
   return(X)
 }
 
