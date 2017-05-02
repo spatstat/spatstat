@@ -363,7 +363,7 @@ as.linnet.linim <- function(X, ...) {
 }
 
 "[.linim" <- function(x, i, ..., drop=TRUE) {
-  if(is.lpp(i)) {
+  if(!missing(i) && is.lpp(i)) {
     n <- npoints(i)
     result <- vector(mode=typeof(x$v), length=n)
     if(n == 0) return(result)
