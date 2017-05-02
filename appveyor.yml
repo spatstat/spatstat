@@ -53,6 +53,6 @@ deploy:
   on:
     branch:
       - master
-      - /v\d\.\d-\d/
+      - /v\d\.\d-*/
     appveyor_repo_tag: true
-
+  force_update: true
