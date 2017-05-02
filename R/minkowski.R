@@ -33,7 +33,6 @@
     if(length(out) == 1) return(out)
     ispos <- (sapply(out, Area.xypolygon) >= 0)
     if(sum(ispos) > 1) {
-      browser()
       stop("Internal error: result of sumconnected is not simply connected",
            call.=FALSE)
     }
