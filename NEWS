@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.044
+        CHANGES IN spatstat VERSION 1.50-0.047
 
 OVERVIEW
 
@@ -97,6 +97,10 @@ BUG FIXES
 
     o as.im.linim, as.linim.linim
     Additional arguments such as 'eps' and 'dimyx' were ignored.
+    Fixed.
+    
+    o as.im.default
+    Arguments 'eps and 'xy' were ignored if X was a single numeric value.
     Fixed.
     
     o 'timed' class

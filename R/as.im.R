@@ -177,7 +177,7 @@ as.im.default <- function(X, W=NULL, ...,
     # numerical value: interpret as constant function
     xvalue <- X
     X <- function(xx, yy, ...) { rep.int(xvalue, length(xx)) }
-    return(as.im(X, W, ..., dimyx=dimyx, na.replace=na.replace))
+    return(as.im(X, W, ..., eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace))
   }
   
   if(is.list(X) && checkfields(X, c("x","y","z"))) {
