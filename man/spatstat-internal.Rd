@@ -123,6 +123,7 @@
 \alias{dppmFixAlgorithm}
 \alias{dppmFixIntensity}
 \alias{emptywindow}
+\alias{envelopeArray}
 \alias{envelopeEngine}
 \alias{envelopeProgressData}
 \alias{envelopeTest}
@@ -853,6 +854,7 @@ doMultiStraussHard(iradii, hradii, types)
 dppmFixIntensity(DPP, lambda, po)
 dppmFixAlgorithm(algorithm, changealgorithm, clusters, startpar)
 emptywindow(w)
+envelopeArray(X, fun, \dots, dataname=NULL,verb=FALSE,reuse=TRUE)
 envelopeEngine(X, fun, simul,
            nsim, nrank, \dots, funargs, funYargs,
            verbose, clipdata, 

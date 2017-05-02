@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.039
+        CHANGES IN spatstat VERSION 1.50-0.040
 
 OVERVIEW
 
@@ -30,6 +30,9 @@ NEW FUNCTIONS
     o summary.lintess
     Summary of a tessellation on a linear network.
 
+    o envelopeArray
+    (Currently undocumented) generate an array of envelopes
+    using a function that returns 'fasp' objects.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

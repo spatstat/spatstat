@@ -24,6 +24,8 @@ importFrom(mgcv,
 
 useDynLib(spatstat, .registration=TRUE)
 
+# .. manual additions to namespace ...
+
 export("lineardirichlet")
 export("summary.lintess")
 export("domain.lintess")
@@ -34,6 +36,7 @@ export("expandSparse")
 export("resampleNetworkDataFrame")
 export("allElementsIdentical")
 export("evalSparse3Dentrywise")
+export("envelopeArray")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
