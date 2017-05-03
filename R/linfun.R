@@ -137,3 +137,4 @@ as.linfun <- function(X, ...) {
   UseMethod("as.linfun")
 }
 
+as.linfun.linfun <- function(X, ...) { return(X) }

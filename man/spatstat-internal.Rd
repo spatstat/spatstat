@@ -27,6 +27,7 @@
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
+\alias{as.linfun.linfun}
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.owin.lintess}
@@ -750,6 +751,7 @@ as.breakpts(\dots)
 \method{as.data.frame}{fv}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.double}{im}(x, \dots)
+\method{as.linfun}{linfun}(X, \dots)
 \method{as.list}{hyperframe}(x, \dots)
 as.listof(x)
 \method{as.owin}{lintess}(W, \dots)

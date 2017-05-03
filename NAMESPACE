@@ -38,6 +38,7 @@ export("allElementsIdentical")
 export("evalSparse3Dentrywise")
 export("envelopeArray")
 export("clicklpp")
+export("as.linfun.linfun")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
@@ -3684,6 +3685,7 @@ S3method("Window<-", "lpp")
 #      End of methods                       
 # ......................................... 
 
+S3method("as.linfun", "linfun")
 S3method("domain", "linfun")
 S3method("domain", "lintess")
 S3method("summary", "lintess")
