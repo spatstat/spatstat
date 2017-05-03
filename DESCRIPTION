@@ -1,6 +1,6 @@
 Package: spatstat
-Version: 1.50-0.047
-Nickname: Oxbow Code
+Version: 1.50-0.048
+Nickname: Data Wrangler
 Date: 2017-05-03
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
@@ -13,6 +13,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Ute Hahn;
 	Abdollah Jalilian;
 	Marie-Colette van Lieshout;
+	Greg McSwiggan;
 	Tuomas Rajala;
 	Suman Rakshit;
 	Dominic Schuhmacher;

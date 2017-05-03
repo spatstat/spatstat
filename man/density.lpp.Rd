@@ -6,8 +6,7 @@
 }
 \description{
   Estimates the intensity of a point process on a linear network
-  by applying kernel smoothing to the point pattern data,
-  using the equal-split continuous algorithm.
+  by applying kernel smoothing to the point pattern data.
 }
 \usage{
 \method{density}{lpp}(x, sigma, \dots,
@@ -62,37 +61,47 @@
 }
 \details{
   Kernel smoothing is applied to the points of \code{x}
-  using one of the algorithms described in Okabe and Sugihara (2012).
+  using one of the rules described in Okabe and Sugihara (2012)
+  and McSwiggan et al (2016).
   The result is a pixel image on the linear network (class
   \code{"linim"}) which can be plotted.
 
   If \code{continuous=TRUE} (the default), smoothing is performed
   using the \dQuote{equal-split continuous} rule described in
-  Section 9.2.3 of Okabe and Sugihara (2012). The resulting function
-  is continuous on the linear network.
+  Section 9.2.3 of Okabe and Sugihara (2012).
+  The resulting function is continuous on the linear network.
 
   If \code{continuous=FALSE}, smoothing is performed
   using the \dQuote{equal-split discontinuous} rule described in
-  Section 9.2.2 of Okabe and Sugihara (2012). This algorithm is
-  faster, but the resulting function is not continuous.  
+  Section 9.2.2 of Okabe and Sugihara (2012). The
+  resulting function is not continuous.
+
+  In the default case
+  (where \code{continuous=TRUE} and \code{kernel="gaussian"}),
+  computation is performed rapidly by solving the classical heat equation
+  on the network, as described in McSwiggan et al (2016).
+  Computational time is short, but increases quadratically with \code{sigma}.
+  The arguments \code{epsilon,debug,verbose,savehistory} are ignored.
+  
+  In all other cases, computation is performed by path-tracing
+  as described in Okabe and Sugihara (2012);
+  computation can be extremely slow, and time
+  increases exponentially with \code{sigma}.
 
   There is also a method for split point patterns on a linear network
   (class \code{"splitppx"}) which will return a list of pixel images.
 }
-\section{WARNING}{
-  \bold{THIS ALGORITHM CAN BE EXTREMELY SLOW} for large values of \code{sigma}.
-
-  The computational complexity increases exponentially with
-  \code{sigma}.
-  
-  You Have Been Warned.
-}
 \value{
   Pixel image on the linear network (class
-  \code{"linim"}).
+  \code{"linim"}) or a function on the linear network (class \code{"linfun"}).
 }
 \references{
-  Okabe, A. and Sugihara, K. (2012)
+McSwiggan, G., Baddeley, A. and Nair, G. (2016)
+Kernel density estimation on a linear network.
+\emph{Scandinavian Journal of Statistics},
+In press.
+
+Okabe, A. and Sugihara, K. (2012)
   \emph{Spatial analysis along networks}.
   Wiley.
 }

@@ -1,11 +1,10 @@
-#
-# kernel smoothing on linear network
-# (Okabe algorithms)
-#  Computationally expensive unless sigma is very small
-#  You Have Been Warned
-#
-#   $Revision: 1.8 $  $Date: 2016/07/18 07:59:21 $
-#
+#'
+#'    density.lpp.R
+#'
+#'    Method for 'density' for lpp objects
+#'
+#'    Copyright (C) 2017 Greg McSwiggan and Adrian Baddeley
+#'
 
 density.lpp <- function(x, sigma, ...,
                         weights=NULL,
@@ -15,6 +14,10 @@ density.lpp <- function(x, sigma, ...,
                         verbose=TRUE, debug=FALSE, savehistory=TRUE) {
   stopifnot(inherits(x, "lpp"))
   kernel <- match.kernel(kernel)
+
+  if(continuous && (kernel == "gaussian"))
+     return(PDEdensityLPP(x, sigma, ..., weights=weights))
+
   L <- as.linnet(x)
   # weights
   np <- npoints(x)
@@ -162,4 +165,109 @@ density.splitppx <- function(x, sigma, ...) {
   if(!all(sapply(x, is.lpp)))
     stop("Only implemented for patterns on a linear network")
   solapply(x, density.lpp, sigma=sigma, ...)
+}
+
+PDEdensityLPP <- function(x, sigma, ..., weights=NULL, 
+                        dx=NULL, dt=NULL) {
+  stopifnot(is.lpp(x))
+  L <- as.linnet(x)
+  check.1.real(sigma)
+  check.finite(sigma)
+  if(!is.null(weights)) 
+    check.nvector(weights, npoints(x))
+  if(is.null(dx)) {
+    #' segment lengths
+    lenths <- lengths.psp(as.psp(L))
+    lbar <- mean(lenths)
+    ltot <- sum(lenths)
+    #' specify 30 steps per segment, on average
+    dx <- lbar/30
+    D <- ceiling(ltot/dx)
+    dx <- ltot/D
+  } 
+  verdeg <- vertexdegree(L)
+  amb <- max(verdeg[L$from] + verdeg[L$to])
+  dtmax <- min(0.95 * (dx^2)/amb, sigma^2/(2 * 10), sigma * dx/6)
+  if(is.null(dt)) {
+    dt <- dtmax
+  } else if(dt > dtmax) {
+    stop(paste("dt is too large: maximum value", dtmax),
+         call.=FALSE)
+  }
+  a <- FDMKERNEL(lppobj=x, sigma=sigma, dtx=dx, dtt=dt,
+                 weights=weights,
+                 iterMax=1e6, sparse=TRUE)
+  result <- a$kernel_fun
+  attr(result, "sigma") <- sigma
+  attr(result, "dx") <- a$deltax
+  attr(result, "dt") <- a$deltat
+  return(result)
+}
+
+# Greg's code 
+FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000, 
+	              sparse=FALSE, dtx) {
+  net2 <- as.linnet(lppobj)
+  ends1 <- net2$lines$ends
+  lenfs <- lengths.psp(as.psp(net2))
+  seg_in_lengths <- pmax(1, round(lenfs/dtx))
+  new_lpp <- lixellate(lppobj, nsplit=seg_in_lengths)
+  net_nodes <- as.linnet(new_lpp)
+  vvv <- as.data.frame(vertices(net_nodes)) 
+  vertco_new <- vvv[, c("x", "y")]
+  vertseg_new <- vvv$segcoarse # marks
+  verttp_new <- vvv$tpcoarse   # marks
+  if(npoints(lppobj) == 0) {
+    U0 <- numeric(npoints(net_nodes$vertices))
+  } else {
+    tp1 <- as.numeric(new_lpp$data$tp)
+    tp2 <- as.vector(rbind(1 - tp1, tp1))
+    newseg <- as.integer(new_lpp$data$seg)
+    vert_init_events1 <- as.vector(rbind(net_nodes$from[newseg],
+                                         net_nodes$to[newseg]))
+    highest_vert <- npoints(net_nodes$vertices)
+    vert_numbers <- seq_len(highest_vert)
+    ff <- factor(vert_init_events1, levels=vert_numbers)
+    ww <- if(is.null(weights)) tp2 else (rep(weights, each=2) * tp2)
+    ww <- ww/dtx
+    U0 <- tapply(ww, ff, sum)
+    U0[is.na(U0)] <- 0
+  } 
+  M <- round((sigma^2)/(2*dtt))
+  if(M < 10) stop("No of time iterations must be > 10, decrease dtt")
+  if(M > iterMax)
+    stop("No of time iterations exceeds iterMax; increase dtt or increase iterMax")
+
+  alpha <- dtt/(dtx^2)
+
+  A1 <- net_nodes$m *1
+  ml <- nrow(net_nodes$m)
+
+  degree <- colSums(A1)
+  dmax <- max(degree)
+
+  A2 <- A1 * alpha
+  diag(A2) <- 1 - alpha * degree
+  
+  if(1 - dmax*alpha < 0)
+     stop("alpha must satisfy (1 - HIGHEST VERTEX DEGREE * ALPHA) > 0; decrease dtt or decrease D")
+
+  if(npoints(lppobj) > 0) {
+    v <- as.numeric(U0)
+    for(j in 1:M)
+      v <- A2 %*% v
+    finalU <- as.numeric(v)
+  } else finalU <- U0
+  vert_new <- cbind(vertco_new, vertseg_new, verttp_new)
+  colnames(vert_new) <- c("x", "y", "seg", "tp")
+  Nodes <- lpp(vert_new, net2, check=FALSE)
+  nodemap <- nnfun(Nodes)
+  interpUxyst <- function(x, y, seg, tp) {
+    finalU[nodemap(x,y,seg,tp)]
+  }
+  interpU <- linfun(interpUxyst, net2)
+  out <- list(kernel_fun   = interpU,
+              deltax       = dtx,
+              deltat       = dtt)
+  return(out)
 }

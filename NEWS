@@ -1,10 +1,12 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.047
+        CHANGES IN spatstat VERSION 1.50-0.048
 
 OVERVIEW
 
-    o We thank Mehdi Moradi and Tammy L Silva for contributions.
+    o We thank Greg McSwiggan, Mehdi Moradi and Tammy L Silva for contributions.
 
+    o New fast algorithm for kernel smoothing on a linear network.
+    
     o Dirichlet/Voronoi tessellation on a linear network.
 
     o Thinning of point patterns on a linear network.
@@ -16,7 +18,7 @@ OVERVIEW
       
     o Improvements and bug fixes.
 
-    o Version nickname: 'Oxbow Code'
+    o Version nickname: 'Data Wrangler'
 
 NEW FUNCTIONS
 
@@ -39,6 +41,11 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o density.lpp
+    New fast algorithm (up to 1000 times faster) for the default case
+    where kernel="gaussian" and continuous=TRUE.
+    Generously contributed by Greg McSwiggan.
+    
     o leverage.ppm, influence.ppm, dfbetas.ppm
     These methods now work for models that were fitted by logistic
     composite likelihood (method='logi').

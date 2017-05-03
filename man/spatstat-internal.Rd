@@ -157,6 +157,7 @@
 \alias{f3engine}
 \alias{f3Cengine}
 \alias{fasp}
+\alias{FDMKERNEL}
 \alias{fft2D}
 \alias{fftwAvailable}
 \alias{fill.coefs}
@@ -290,6 +291,7 @@
 \alias{match2DkernelName}
 \alias{parbreak}
 \alias{plan.legend.layout}
+\alias{PDEdensityLPP}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
 \alias{PoisSaddleGeyer}
@@ -911,6 +913,7 @@ fakemaintitle(bb, main, \dots)
 f3engine(x, y, z, box, vside, range, nval, correction)
 f3Cengine(x, y, z, box, vside, rmax, nrval)
 fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
+FDMKERNEL(lppobj, sigma, dtt, weights, iterMax, sparse, dtx)
 fft2D(z, inverse, west)
 fftwAvailable()
 fill.coefs(coefs, required)
@@ -1057,6 +1060,7 @@ match2DkernelName(kernel)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
+PDEdensityLPP(x, sigma, \dots, weights, dx, dt)
 PoisSaddle(beta, fi)
 PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)
