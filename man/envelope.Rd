@@ -801,11 +801,8 @@ nsim=3, global=TRUE))
  EG <- envelope(X, Gest, nsim=3, simulate=EK)
 }
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{htest}

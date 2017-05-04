@@ -128,6 +128,17 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item New fast algorithm for kernel smoothing on a linear network.
+    
+  \item Dirichlet/Voronoi tessellation on a linear network.
+
+  \item Thinning of point patterns on a linear network.
+
+  \item More support for functions and tessellations on a linear network.
+
+  \item Leverage and influence diagnostics extended to Poisson/Gibbs models
+        fitted by logistic composite likelihood.
+
   \item Bandwidth selection for pair correlation function.
   
   \item Operations on signed measures.
@@ -308,6 +319,24 @@ Following is a list of all the functions that have been added.
 
 \begin{itemize}
   
+    \item \texttt{lineardirichlet}:
+    Computes the Dirichlet-Voronoi tessellation associated with a
+    point pattern on a linear network.
+
+    \item \texttt{domain.lintess}, \texttt{domain.linfun}:
+    Extract the linear network from a
+    \texttt{lintess} or \texttt{linfun} object.
+
+    \item \texttt{summary.lintess}:
+    Summary of a tessellation on a linear network.
+
+    \item \texttt{clicklpp}:
+    Interactively add points on a linear network.
+    
+    \item \texttt{envelopeArray}:
+    Ggenerate an array of envelopes
+    using a function that returns \texttt{fasp} objects.
+
     \item \texttt{bw.pcf}:
       Bandwidth selection for pair correlation function.
 
@@ -733,11 +762,21 @@ listed alphabetically.
 \item \texttt{as.layered}:
     Default method now handles a (vanilla) list of spatial objects.
 
+\item \texttt{as.linfun.lintess}:
+\begin{itemize}
+\item New argument \texttt{values} specifies the function value for each tile.
+\item New argument \texttt{navalue}.
+\end{itemize}
+
+\item \texttt{as.linim.default}:
+   New argument \texttt{delta} controls spacing of sample points
+   in internal data.
+
   \item \texttt{as.linnet.psp}:
 If the line segment pattern has marks, then the resulting linear network
 also carries these marks in the \verb!$lines! component.
 
-  \item \texttt{as.owin}:
+\item \texttt{as.owin}:
     Now refuses to convert a \code{box3} to a two-dimensional window.
 
   \item \texttt{as.owin.data.frame}:
@@ -859,6 +898,10 @@ also carries these marks in the \verb!$lines! component.
    
  \item \texttt{density.lpp}:
    \begin{itemize}
+   \item
+    New fast algorithm (up to 1000 times faster) for the default case
+    where \texttt{kernel="gaussian"} and \texttt{continuous=TRUE}.
+    Generously contributed by Greg McSwiggan.
    \item 
      New argument \texttt{kernel} specifies the smoothing kernel.
      Any of the standard one-dimensional smoothing kernels can be used.
@@ -951,7 +994,10 @@ also carries these marks in the \verb!$lines! component.
    
  \item \texttt{Fest}:
    Additional checks for errors in input data.
-   
+
+ \item \texttt{fitted.ppm}:
+  New option, \texttt{type="link"}.
+  
   \item \texttt{funxy}:
     When the user calls a function that was created by \texttt{funxy},
     the user may now give a \texttt{ppp} or \texttt{lpp}
@@ -979,7 +1025,11 @@ also carries these marks in the \verb!$lines! component.
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
 
- \item \texttt{intensity.ppm}:
+ \item \texttt{integral.linfun}:
+   New argument \texttt{delta} controls step length of
+   approximation to integral.
+
+\item \texttt{intensity.ppm}:
    Intensity approximation is now implemented for
    area-interaction model, and Geyer saturation model.
    
@@ -1031,6 +1081,11 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{leverage.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
+
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+    These methods now work for models that were fitted by logistic
+    composite likelihood (\texttt{method='logi'}).
+    
 
  \item \texttt{linearK}, \texttt{linearpcf} and relatives: 
    substantially accelerated.
@@ -1397,7 +1452,13 @@ also carries these marks in the \verb!$lines! component.
    New argument \texttt{drop}.
 
    \item \texttt{rthin}
-   Accelerated, when \texttt{P} is a single number.
+   \begin{itemize}
+      \item	
+      Accelerated, when \texttt{P} is a single number.
+      \item
+       \texttt{X} can now be a point pattern on a linear network
+     (class \texttt{lpp}).
+   \end{itemize}
 
    \item \texttt{rThomas, rMatClust, rCauchy, rVarGamma}:
      \begin{itemize}
@@ -1523,8 +1584,12 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{update}: now works for models of class \texttt{"mppm"}.
      
    \item \texttt{update.kppm}:
-   Now handles additional arguments in any order, with or without names.
-   Changed arguments. Improved behaviour.
+   \begin{itemize}
+   \item New argument \texttt{evaluate}.
+   \item Now handles additional arguments in any order, with or without names.
+   \item Changed arguments.
+   \item Improved behaviour.
+   \end{itemize}
 
 %%V
    
@@ -1695,8 +1760,9 @@ of potential impact.
    \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
    
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
-   Results were incorrect for non-Poisson processes.  
-   \bugger{1.25-0}{december 2011}{1.45-0}{march 2016}
+   Results were incorrect for non-Poisson processes
+   due to a mathematical error.
+   \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
 
    %% LEVEL 2: often completely wrong, moderate impact
    
@@ -1785,7 +1851,7 @@ of potential impact.
    The resulting objects evaluated the wrong function in some cases.
    \bugger{1.45-0}{march 2016}{1.46-0}{july 2016}   
 
-   %% LEVEL 4: partially incorrect
+%% LEVEL 4: partially incorrect
    
  \item \texttt{selfcrossing.psp}:
    $y$ coordinate values were incorrect.   
@@ -1796,6 +1862,11 @@ of potential impact.
    \texttt{vcov.ppm} and \texttt{suffstat} sometimes gave incorrect answers.
    \bugger{1.27-0}{may 2012}{1.30-0}{december 2012}
    
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+    Calculations were incorrect for a Geyer model fitted using
+    an edge correction other than \texttt{"border"} or \texttt{"none"}.
+   \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
+
  \item \texttt{vcov.ppm}, \texttt{suffstat}:
    These functions sometimes gave incorrect values 
    for marked point process models.   

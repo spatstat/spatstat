@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.50-0.049
+        CHANGES IN spatstat VERSION 1.51-0
 
 OVERVIEW
 
@@ -18,7 +18,7 @@ OVERVIEW
       
     o Improvements and bug fixes.
 
-    o Version nickname: 'Data Wrangler'
+    o Version nickname: 'Poetic Licence'
 
 NEW FUNCTIONS
 
@@ -36,8 +36,7 @@ NEW FUNCTIONS
     Interactively add points on a linear network.
     
     o envelopeArray
-    (Currently undocumented) generate an array of envelopes
-    using a function that returns 'fasp' objects.
+    Generate an array of envelopes using a function that returns 'fasp' objects.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
