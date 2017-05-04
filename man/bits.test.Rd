@@ -9,9 +9,9 @@
 }
 \usage{
 bits.test(X, \dots,
-        exponent = 2, nsim=19, nsimsub=nsim-1,
+        exponent = 2, nsim=19, 
         alternative=c("two.sided", "less", "greater"),
-        reuse = TRUE, leaveout=1, interpolate = FALSE,
+        leaveout=1, interpolate = FALSE,
         savefuns=FALSE, savepatterns=FALSE,
         verbose = TRUE)
 }
@@ -37,13 +37,9 @@ bits.test(X, \dots,
     for the Maximum Absolute Deviation test.
   }
   \item{nsim}{
-    Number of repetitions of the basic test.
-  }
-  \item{nsimsub}{
-    Number of simulations in each basic test. There will be \code{nsim}
-    repetitions of the basic test, each involving \code{nsimsub} simulated
-    realisations, so there will be a total
-    of \code{nsim * (nsimsub + 1)} simulations.
+    Number of replicates in each stage of the test.
+    A total of \code{nsim * (nsim + 1)} simulated point patterns will be
+    generated, and the \eqn{p}-value will be a multiple of \code{1/(nsim+1)}.
   }
   \item{alternative}{
     Character string specifying the alternative hypothesis.
@@ -52,10 +48,6 @@ bits.test(X, \dots,
     value postulated under the null hypothesis.
     If \code{alternative="less"} the alternative hypothesis is that the
     true value of the summary function is lower than the theoretical value.
-  }
-  \item{reuse}{
-    Logical value indicating whether to re-use the first stage
-    simulations at the second stage, as described by Dao and Genton (2014).
   }
   \item{leaveout}{
     Optional integer 0, 1 or 2 indicating how to calculate the
