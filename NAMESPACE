@@ -39,6 +39,7 @@ export("evalSparse3Dentrywise")
 export("envelopeArray")
 export("clicklpp")
 export("as.linfun.linfun")
+export("bits.test")
 
 # .................................................. 
 # Automatically-generated list of documented objects 

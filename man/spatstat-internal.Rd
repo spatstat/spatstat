@@ -636,6 +636,7 @@
 \alias{trim.mask}        
 \alias{tweak.fv.entry}
 \alias{tweak.coefs}
+\alias{twostage.test}
 \alias{\%unit\%} %DoNotExport
 %NAMESPACE export("%unit%")
 \alias{unitname.default}
@@ -1478,6 +1479,9 @@ trianglediameters(iedge, jedge, edgelength, \dots,
 trim.mask(M, R, tolerant)
 tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
 tweak.coefs(model, new.coef)
+twostage.test(X, \dots, exponent, nsim, nsimsub,
+              alternative, reuse, leaveout, interpolate,
+              savefuns, savepatterns, verbose, testblurb)
 x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 

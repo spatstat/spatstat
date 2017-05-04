@@ -1545,8 +1545,8 @@
 
 \section{VIII. TESTS AND DIAGNOSTICS}{
 
-  \bold{Classical hypothesis tests:}
-  
+  \bold{Hypothesis tests:}
+
   \tabular{ll}{
     \code{\link{quadrat.test}} \tab \eqn{\chi^2}{chi^2} goodness-of-fit
     test on quadrat counts \cr
@@ -1558,13 +1558,20 @@
     \code{\link{scan.test}} \tab spatial scan statistic/test \cr
     \code{\link{dclf.test}} \tab Diggle-Cressie-Loosmore-Ford test \cr
     \code{\link{mad.test}} \tab Mean Absolute Deviation test \cr
-    \code{\link{dclf.progress}} \tab Progress plot for DCLF test \cr
-    \code{\link{mad.progress}} \tab Progress plot for MAD test \cr
     \code{\link{anova.ppm}} \tab Analysis of Deviance for
     point process models 
   }
 
-  \bold{Sensitivity diagnostics:}
+  More recently-developed tests:
+  
+  \tabular{ll}{
+    \code{\link{dg.test}} \tab Dao-Genton test \cr
+    \code{\link{bits.test}} \tab Balanced independent two-stage test \cr
+    \code{\link{dclf.progress}} \tab Progress plot for DCLF test \cr
+    \code{\link{mad.progress}} \tab Progress plot for MAD test
+  }
+
+\bold{Sensitivity diagnostics:}
 
   Classical measures of model sensitivity such as leverage and influence
   have been adapted to point process models.

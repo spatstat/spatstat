@@ -6,6 +6,11 @@ OVERVIEW
     o We thank Greg McSwiggan, Mehdi Moradi and Tammy L Silva for contributions.
 
     o New fast algorithm for kernel smoothing on a linear network.
+
+    o Leverage and influence diagnostics extended to Poisson/Gibbs models
+      fitted by logistic composite likelihood.
+      
+    o Two-stage Monte Carlo test.
     
     o Dirichlet/Voronoi tessellation on a linear network.
 
@@ -13,14 +18,15 @@ OVERVIEW
 
     o More support for functions and tessellations on a linear network.
 
-    o Leverage and influence diagnostics extended to Poisson/Gibbs models
-      fitted by logistic composite likelihood.
-      
     o Improvements and bug fixes.
 
     o Version nickname: 'Poetic Licence'
 
 NEW FUNCTIONS
+
+    o bits.test:
+    Balanced Independent Two-Stage Monte Carlo test,
+    an improvement on the Dao-Genton test.
 
     o lineardirichlet
     Computes the Dirichlet-Voronoi tessellation associated with a
@@ -47,7 +53,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o leverage.ppm, influence.ppm, dfbetas.ppm
     These methods now work for models that were fitted by logistic
-    composite likelihood (method='logi').
+    composite likelihood (method='logi'). 
     
     o rthin
     Argument X can now be a point pattern on a linear network (class 'lpp').

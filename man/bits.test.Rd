@@ -1,14 +1,14 @@
-\name{dg.test}
-\alias{dg.test}
+\name{bits.test}
+\alias{bits.test}
 \title{
-  Dao-Genton Adjusted Goodness-Of-Fit Test
+  Balanced Independent Two-Stage Monte Carlo Test
 }
 \description{
-  Performs the Dao and Genton (2014) adjusted
-  goodness-of-fit test of spatial pattern.
+  Performs a Balanced Independent Two-Stage Monte Carlo test
+  of goodness-of-fit for spatial pattern.
 }
 \usage{
-dg.test(X, \dots,
+bits.test(X, \dots,
         exponent = 2, nsim=19, nsimsub=nsim-1,
         alternative=c("two.sided", "less", "greater"),
         reuse = TRUE, leaveout=1, interpolate = FALSE,
@@ -81,8 +81,9 @@ dg.test(X, \dots,
   }
 }
 \details{
-  Performs the Dao-Genton (2014) adjusted Monte Carlo goodness-of-fit
-  test, in the equivalent form described by Baddeley et al (2014).
+  Performs the Balanced Independent Two-Stage Monte Carlo test
+  proposed by Baddeley et al (2017),
+  an improvement of the Dao-Genton (2014) test.
   
   If \code{X} is a point pattern, the null hypothesis is CSR.
 
@@ -103,10 +104,6 @@ dg.test(X, \dots,
   where the \code{reference} is the mean of simulated values.
   The value \code{leaveout=2} gives the leave-two-out discrepancy
   proposed by Dao and Genton (2014).
-
-  The Dao-Genton test is biased when the significance level is very small
-  (small \eqn{p}-values are not reliable) and
-  we recommend \code{\link{bits.test}} in this case.
 }
 \value{
   A hypothesis test (object of class \code{"htest"}
@@ -134,15 +131,15 @@ dg.test(X, \dots,
   Implemented by \spatstatAuthors.
 }
 \seealso{
-  \code{\link{bits.test}},
+  \code{\link{dg.test}},
   \code{\link{dclf.test}},
   \code{\link{mad.test}}
 }
 \examples{
  ns <- if(interactive()) 19 else 4
- dg.test(cells, nsim=ns)
- dg.test(cells, alternative="less", nsim=ns)
- dg.test(cells, nsim=ns, interpolate=TRUE)
+ bits.test(cells, nsim=ns)
+ bits.test(cells, alternative="less", nsim=ns)
+ bits.test(cells, nsim=ns, interpolate=TRUE)
 }
 \keyword{spatial}
 \keyword{htest}

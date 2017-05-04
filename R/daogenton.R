@@ -6,17 +6,46 @@
 ##  $Revision: 1.13 $  $Date: 2015/12/20 09:05:27 $
 ##
 
+bits.test <- function(X, ..., exponent=2, nsim=19,
+                    alternative=c("two.sided", "less", "greater"),
+                    leaveout=1, interpolate=FALSE,
+                    savefuns=FALSE, savepatterns=FALSE,
+                    verbose=TRUE) {
+  twostage.test(X, ..., exponent=exponent,
+                 nsim=nsim, nsimsub=nsim, reuse=FALSE, 
+                 alternative=match.arg(alternative),
+                 leaveout=leaveout, interpolate=interpolate,
+                 savefuns=savefuns, savepatterns=savepatterns,
+                 verbose=verbose,
+		 testblurb="Balanced Independent Two-stage Test") 
+}		    
+
 dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
                     alternative=c("two.sided", "less", "greater"),
                     reuse=TRUE, leaveout=1, interpolate=FALSE,
                     savefuns=FALSE, savepatterns=FALSE,
                     verbose=TRUE) {
+  if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
+    stop("nsim and nsimsub must be relatively prime")
+  twostage.test(X, ..., exponent=exponent,
+                 nsim=nsim, nsimsub=nsimsub, reuse=reuse, 
+                 alternative=match.arg(alternative),
+                 leaveout=leaveout, interpolate=interpolate,
+                 savefuns=savefuns, savepatterns=savepatterns,
+                 verbose=verbose,
+		 testblurb="Dao-Genton adjusted goodness-of-fit test")
+}		 
+		    
+twostage.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim,
+                    alternative=c("two.sided", "less", "greater"),
+                    reuse=FALSE, leaveout=1, interpolate=FALSE,
+                    savefuns=FALSE, savepatterns=FALSE,
+                    verbose=TRUE,
+		    testblurb="Two-stage Monte Carlo test") {
   Xname <- short.deparse(substitute(X))
   alternative <- match.arg(alternative)
   env.here <- sys.frame(sys.nframe())
   Xismodel <- is.ppm(X) || is.kppm(X) || is.lppm(X) || is.slrm(X)
-  if(!missing(nsimsub) && !relatively.prime(nsim, nsimsub))
-    stop("nsim and nsimsub must be relatively prime")
   # top-level test
   if(verbose) cat("Applying first-stage test to original data... ")
   tX <- envelopeTest(X, ...,
@@ -76,7 +105,7 @@ dg.test <- function(X, ..., exponent=2, nsim=19, nsimsub=nsim-1,
   }
   # pack up
   method <- tX$method
-  method <- c("Dao-Genton adjusted goodness-of-fit test",
+  method <- c(testblurb,
               paste("based on", method[1L]),
               paste("First stage:", method[2L]),
               method[-(1:2)],

@@ -130,14 +130,16 @@ the News and Release Notes for each update.
 
   \item New fast algorithm for kernel smoothing on a linear network.
     
+  \item Leverage and influence diagnostics extended to Poisson/Gibbs models
+        fitted by logistic composite likelihood.
+
+  \item Two-stage Monte Carlo test.
+  
   \item Dirichlet/Voronoi tessellation on a linear network.
 
   \item Thinning of point patterns on a linear network.
 
   \item More support for functions and tessellations on a linear network.
-
-  \item Leverage and influence diagnostics extended to Poisson/Gibbs models
-        fitted by logistic composite likelihood.
 
   \item Bandwidth selection for pair correlation function.
   
@@ -318,7 +320,11 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
-  
+
+    \item \texttt{bits.test}:
+    Balanced Independent Two-Stage Monte Carlo test,
+    an improvement on the Dao-Genton test.
+    
     \item \texttt{lineardirichlet}:
     Computes the Dirichlet-Voronoi tessellation associated with a
     point pattern on a linear network.
