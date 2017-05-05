@@ -47,6 +47,7 @@ simulrecipe <- function(type, expr, envir, csr, pois=csr, constraints="") {
 
 envelope.ppp <-
   function(Y, fun=Kest, nsim=99, nrank=1, ...,
+           type = "pointwise",
            funargs=list(), funYargs=funargs,
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
@@ -178,6 +179,7 @@ envelope.ppp <-
   
   envelopeEngine(X=X, fun=fun, simul=simrecipe,
                  nsim=nsim, nrank=nrank, ...,
+                 etype=type, givenargs = names(as.list(match.call())[-1]),
                  funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
@@ -190,7 +192,8 @@ envelope.ppp <-
 }
 
 envelope.ppm <- 
-  function(Y, fun=Kest, nsim=99, nrank=1, ..., 
+  function(Y, fun=Kest, nsim=99, nrank=1, ...,
+           type = "pointwise",
            funargs=list(), funYargs=funargs,
            simulate=NULL, fix.n=FALSE, fix.marks=FALSE,
            verbose=TRUE, clipdata=TRUE, 
@@ -255,6 +258,7 @@ envelope.ppm <-
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe, 
                  nsim=nsim, nrank=nrank, ...,
+                 etype=type, givenargs = names(as.list(match.call())[-1]),
                  funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
@@ -268,6 +272,7 @@ envelope.ppm <-
 
 envelope.kppm <-
   function(Y, fun=Kest, nsim=99, nrank=1, ..., 
+           type="pointwise",
            funargs=list(), funYargs=funargs,
            simulate=NULL, verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
@@ -307,6 +312,7 @@ envelope.kppm <-
   }
   envelopeEngine(X=X, fun=fun, simul=simrecipe, 
                  nsim=nsim, nrank=nrank, ...,
+                 etype=type, givenargs = names(as.list(match.call())[-1]),
                  funargs=funargs, funYargs=funYargs,
                  verbose=verbose, clipdata=clipdata,
                  transform=transform,
@@ -329,7 +335,8 @@ envelope.kppm <-
 
 envelopeEngine <-
   function(X, fun, simul,
-           nsim=99, nrank=1, ..., funargs=list(), funYargs=funargs,
+           nsim=99, nrank=1, ..., etype="pointwise", givenargs=NULL,
+           funargs=list(), funYargs=funargs,
            verbose=TRUE, clipdata=TRUE, 
            transform=NULL, global=FALSE, ginterval=NULL, use.theory=NULL,
            alternative=c("two.sided", "less", "greater"),
@@ -504,6 +511,43 @@ envelopeEngine <-
   
   # ---------------------------------------------------------------------
   # validate other arguments
+  # First resolve the envelope type
+  if(!("type" %in% givenargs)){
+    # This silently picks global over VARIANCE if both are TRUE
+    etype <- if(global) "global" else if(VARIANCE) "variance" else "pointwise"
+  }
+  etype <- pickoption("type", etype, c(pointwise = "pointwise",
+                                       global = "global",
+                                       variance = "variance",
+                                       rank = "rank",
+                                       stud = "studentised",
+                                       student = "studentised",
+                                       studentised = "studentised",
+                                       studentized = "studentised",
+                                       quantile = "quantile"))
+
+  if(etype %in% c("pointwise", "variance")){
+    # Non global types
+    if(global)
+      warning("Ignoring global=TRUE for envelope type ", etype)
+    if(!is.null(ginterval))
+      warning("Ignoring non-NULL ginterval for envelope type ", etype)
+    global <- FALSE
+    ginterval <- NULL
+  } else{
+    global <- TRUE
+  }
+  isGET <- etype %in% c("rank", "studentised", "quantile")
+  if(!("nsim" %in% givenargs) && isGET)
+    nsim <- 2499 # nsim silently changed from default
+  GETignore <- c("clamp", "nrank", "scale", "do.pwrong")
+  if(isGET && any(ignored <- givenargs %in% GETignore)){
+    warning("Supplied argument(s) ignored by envelope type ",
+            etype, " : ",
+            paste(givenargs[ignored], collapse = ", "))
+    nrank <- 1
+    scale <- clamp <- NULL
+  }
   if((nrank %% 1) != 0)
     stop("nrank must be an integer")
   if((nsim %% 1) != 0)
@@ -669,6 +713,7 @@ envelopeEngine <-
                         nrank=nrank,
                         nsim=nsim,
                         Nsim=Nsim,
+                        etype=etype,
                         global=global,
                         ginterval=ginterval,
                         dual=dual,
@@ -866,7 +911,6 @@ envelopeEngine <-
 
   ######### COMPUTE ENVELOPES #######################
 
-  etype <- if(global) "global" else if(VARIANCE) "variance" else "pointwise"
   if(dual) {
     jsim <- 1:nsim
     jsim.mean <- nsim + 1:nsim2
@@ -1102,7 +1146,7 @@ envelope.matrix <- function(Y, ...,
                             funX=NULL,
                             nsim=NULL, nsim2=NULL,
                             jsim=NULL, jsim.mean=NULL,
-                            type=c("pointwise", "global", "variance"),
+                            type=c("pointwise", "global", "variance", "rank", "studentised", "quantile"),
                             alternative=c("two.sided", "less", "greater"),
                             scale = NULL, clamp=FALSE,
                             csr=FALSE, use.theory = csr, 
@@ -1527,6 +1571,42 @@ envelope.matrix <- function(Y, ...,
                pwrong <- sum(is.signif.somewhere)/nsim
              }
            }
+         },
+         {
+           if(!requireNamespace("GET", quietly = TRUE))
+             stop("Package GET needed for this type of envelope.")
+           curveset <- list(r = rvals, obs = observed, sim_m = simvals)
+           if(use.theory)
+             curveset <- append(curveset, list(theo = theory))
+           curveset <- GET::create_curve_set(curveset)
+           if(!is.null(ginterval))
+             curveset <- GET::crop_curves(curveset, ginterval[1], ginterval[2])
+           GETfun <- switch(type,
+                            rank = GET::rank_envelope,
+                            studentised = GET::st_envelope,
+                            quantile = GET::qdir_envelope)
+           GETrslt <- GETfun(curveset, ...)
+           lo.name <- "lower critical boundary for %s"
+           hi.name <- "upper critical boundary for %s"
+           nsim.mean <- if(dual) length(jsim.mean) else NULL
+           
+           switch(alternative,
+                  two.sided = { },
+                  less = {
+                    hi.name <- "infinite upper boundary"
+                  },
+                  greater = {
+                    lo.name <- "infinite lower boundary"
+                  })
+           
+           results <- with(GETrslt, data.frame(r = r,
+                                               obs = data_curve,
+                                               theo = central_curve,
+                                               lo = lower,
+                                               hi = upper))
+           if(!use.theory)
+             names(results)[3] <- "mmean"
+           shadenames <- c("lo", "hi")
          }
          )
 
@@ -1580,9 +1660,11 @@ envelope.matrix <- function(Y, ...,
   unitname(result) <- unitname(funX)
   class(result) <- c("envelope", class(result))
 
+  isGET <- (type %in% c("rank", "studentised", "quantile"))
   # tack on envelope information
-  attr(result, "einfo") <- list(global = (type =="global"),
+  attr(result, "einfo") <- list(global = (type == "global" | isGET),
                                 ginterval = ginterval,
+                                type = type,
                                 alternative=alternative,
                                 scale = scale,
                                 clamp = clamp,
@@ -1602,6 +1684,13 @@ envelope.matrix <- function(Y, ...,
                                 Yname = Yname,
                                 do.pwrong=do.pwrong,
                                 use.weights=use.weights)
+  
+  if(isGET){
+    GETentries <- c("p", "ties", "p_interval", "k_alpha", "k")
+    GETentries <- GETentries[GETentries %in% names(GETrslt)]
+    attr(result, "einfo") <- append(attr(result, "einfo"),
+                                    GETrslt[GETentries])
+  }
 
   # tack on saved functions
   if(savefuns) {
