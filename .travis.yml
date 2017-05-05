@@ -26,7 +26,6 @@ r_packages:
 - tensor
 after_success:
 - if [[ "$TRAVIS_R_VERSION" != "devel" && ("$TRAVIS_OS_NAME" == "osx") ]]; then R CMD INSTALL --build $PKG_TARBALL; fi
-before_deploy: "ls spatstat_*"
 deploy:
   provider: releases
   api_key:
@@ -37,7 +36,3 @@ deploy:
   on:
     tags: true
     condition: "$TRAVIS_R_VERSION != devel && ($TRAVIS_OS_NAME == osx)"
-after_deploy:
-  - pwd
-  - ls
-  
