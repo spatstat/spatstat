@@ -40,6 +40,7 @@ export("envelopeArray")
 export("clicklpp")
 export("as.linfun.linfun")
 export("bits.test")
+export("as.data.frame.envelope")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
@@ -3691,3 +3692,4 @@ S3method("domain", "linfun")
 S3method("domain", "lintess")
 S3method("summary", "lintess")
 S3method("print", "summary.lintess")
+S3method("as.data.frame", "envelope")

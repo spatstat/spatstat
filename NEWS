@@ -1,4 +1,26 @@
 
+        CHANGES IN spatstat VERSION 1.51-0.001
+
+OVERVIEW
+
+    o Version nickname: 'Unrecognised Error'
+
+NEW FUNCTIONS
+
+    o as.data.frame.envelope
+    Extract function data from an envelope object,
+    including the functions for the simulated data ('simfuns')
+    if they were saved.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o bind.fv
+    New argument 'clip'.
+
+BUG FIXES
+
+    o None!
+
         CHANGES IN spatstat VERSION 1.51-0
 
 OVERVIEW

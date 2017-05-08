@@ -11,7 +11,7 @@
 }
 \usage{
 \method{cbind}{fv}(...)
-bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL)
+bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL, clip=FALSE)
 }
 \arguments{
   \item{\dots}{
@@ -35,6 +35,13 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL)
     Character string specifying the column which is to be the
     new recommended value of the function.
   }
+  \item{clip}{
+    Logical value indicating whether each object must have exactly the
+    same domain, that is, the same sequence of values of the function argument
+    (\code{clip=FALSE}, the default) or whether objects with different
+    domains are permissible and will be restricted
+    to a common domain (\code{clip=TRUE}).
+  }  
 }
 \details{
   This documentation is provided
@@ -73,11 +80,8 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL)
 \value{
   An object of class \code{"fv"}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \examples{
    data(cells)

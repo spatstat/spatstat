@@ -25,6 +25,7 @@
 \alias{as.breakpts}
 \alias{as.character.units}
 \alias{as.data.frame.bw.optim}
+\alias{as.data.frame.envelope}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
 \alias{as.linfun.linfun}
@@ -748,8 +749,9 @@ assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.character}{units}(x, \dots)
-\method{as.data.frame}{fv}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
+\method{as.data.frame}{envelope}(x, \dots, simfuns)
+\method{as.data.frame}{fv}(x, \dots)
 \method{as.double}{im}(x, \dots)
 \method{as.linfun}{linfun}(X, \dots)
 \method{as.list}{hyperframe}(x, \dots)

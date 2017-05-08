@@ -502,7 +502,7 @@ fvlegend <- local({
 })
 
 
-bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL) {
+bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL, clip=FALSE) {
   verifyclass(x, "fv")
   ax <- attributes(x)
   if(is.fv(y)) {
@@ -521,9 +521,18 @@ bind.fv <- function(x, y, labl=NULL, desc=NULL, preferred=NULL) {
     yr <- ay$argu
     rx <- x[[xr]]
     ry <- y[[yr]]
-    if((length(rx) != length(rx)) || 
-               (max(abs(rx-ry)) > .Machine$double.eps))
-      stop("fv objects x and y have incompatible domains")
+    if(length(rx) != length(ry)) {
+      if(!clip) 
+        stop("fv objects x and y have incompatible domains")
+      # restrict both objects to a common domain
+      ra <- intersect.ranges(range(rx), range(ry))
+      x <- x[inside.range(rx, ra), ]
+      y <- y[inside.range(ry, ra), ]
+      rx <- x[[xr]]
+      ry <- y[[yr]]
+    }
+    if(length(rx) != length(ry) || max(abs(rx-ry)) > .Machine$double.eps)
+      stop("fv objects x and y have incompatible values of r")
     ## reduce y to data frame and strip off 'r' values
     ystrip <- as.data.frame(y)
     yrpos <- which(colnames(ystrip) == yr)

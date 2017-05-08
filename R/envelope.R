@@ -1992,3 +1992,11 @@ resolveEinfo <- function(x, what, fallback, warn, atomic=TRUE) {
   return(fallback)
 }
 
+as.data.frame.envelope <- function(x, ..., simfuns=FALSE) {
+  if(simfuns && !is.null(sf <- attr(x, "simfuns"))) {
+    # tack on the simulated functions as well
+    y <- as.data.frame(bind.fv(x, sf, clip=TRUE))
+    return(y)
+  } 
+  NextMethod("as.data.frame")
+}
