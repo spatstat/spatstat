@@ -67,9 +67,9 @@ domain.distfun <- Window.distfun <- function(X, ...) { as.owin(X) }
 
 as.im.distfun <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
-                           na.replace=NULL) {
+                           na.replace=NULL, approx=TRUE) {
   k <- attr(X, "k")
-  if(is.null(W) && (is.null(k) || (k == 1))) {
+  if(approx && is.null(W) && (is.null(k) || (k == 1))) {
     # use 'distmap' for speed
     env <- environment(X)
     Xdata  <- get("X",      envir=env)

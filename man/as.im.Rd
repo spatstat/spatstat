@@ -41,7 +41,7 @@
 
   \method{as.im}{distfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
-        na.replace=NULL)
+        na.replace=NULL, approx=TRUE)
 
   \method{as.im}{nnfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
@@ -100,6 +100,11 @@
     is a data frame with 3 columns. If \code{drop=TRUE} (the default),
     the result is a pixel image. If \code{drop=FALSE}, the result is
     a list containing one image.
+  }
+  \item{approx}{
+   Logical value indicating whether to compute an approximate result
+   at faster speed, by using \code{\link{distmap}}, when \code{X} is
+   a distance function.
   }
 }
 \details{

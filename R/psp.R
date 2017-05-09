@@ -345,9 +345,10 @@ plot.psp <- function(x, ..., main, add=FALSE,
   if(!do.ribbon) {
     ## window of x only
     bb.all <- as.rectangle(as.owin(x))
-    if(do.plot && !add)
+    if(do.plot && (!add || show.window))
       do.call.plotfun(plot.owin, 
-                      resolve.defaults(list(x=x$window, main=main,
+                      resolve.defaults(list(x=x$window,
+		                            main=if(show.all) main else "",
                                             add=add,
                                             type = if(show.window) "w" else "n",
                                             show.all=show.all),

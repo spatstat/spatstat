@@ -179,6 +179,7 @@ plot.ppp <- local({
     main <- short.deparse(substitute(x))
 
   type <- match.arg(type)
+  if(missing(legend)) legend <- (type == "p")
 
   if(!missing(maxsize) || !missing(markscale) || !missing(meansize))
     warn.once("circlescale",

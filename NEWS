@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.001
+        CHANGES IN spatstat VERSION 1.51-0.002
 
 OVERVIEW
 
@@ -17,10 +17,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o bind.fv
     New argument 'clip'.
 
+    o as.im.distfun
+    New argument 'approx'.
+
 BUG FIXES
 
-    o None!
+    o plot.ppp
+    The argument 'type="n"' did not suppress plotting of the legend,
+    for marked point patterns.
+    Fixed.
 
+    o plot.psp
+    Ignored 'show.all' when 'add=TRUE'.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.51-0
 
 OVERVIEW

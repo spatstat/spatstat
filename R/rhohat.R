@@ -475,7 +475,8 @@ rhohatCalc <- local({
                unitname=covunits,
                fname="rho",
                yexp=substitute(rho(X), list(X=as.name(covname))))
-    attr(rslt, "dotnames") <- c("rho", "hi", "lo")
+    fvnames(rslt, ".")  <- c("rho", "hi", "lo")
+    fvnames(rslt, ".s") <- c("hi", "lo")
     ## pack up
     class(rslt) <- c("rhohat", class(rslt))
     ## add info
