@@ -15,7 +15,8 @@
 
 \method{plot}{rhohat}(x, ..., do.rug=TRUE)
 
-\method{predict}{rhohat}(object, ..., relative=FALSE)
+\method{predict}{rhohat}(object, ..., relative=FALSE,
+             what=c("rho", "lo", "hi", "se"))
 
 \method{simulate}{rhohat}(object, nsim=1, ..., drop=TRUE)
 }
@@ -46,6 +47,13 @@
     If \code{drop=FALSE}, a list of length 1 containing a point pattern
     is returned.
   }
+  \item{what}{
+    Optional character string (partially matched) specifying which
+    value should be calculated: either the function estimate (\code{what="rho"},
+    the default), the lower or upper end of the confidence interval
+    (\code{what="lo"} or \code{what="hi"}) or the standard error
+    (\code{what="se"}).
+  }	 
 }
 \details{
   These functions are methods for the generic commands
@@ -99,6 +107,7 @@
   plot(predict(rho))
   plot(predict(rho, relative=TRUE))
   par(opa)
+  plot(predict(rho, what="se"))
 }
 \keyword{spatial}
 \keyword{methods}

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.003
+        CHANGES IN spatstat VERSION 1.51-0.004
 
 OVERVIEW
 
@@ -24,6 +24,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'fragments' specifies whether to keep fragments of
     line segments that are cut by the new window, or only to retain
     segments that lie entirely inside the window.
+
+    o predict.rhohat
+    New argument 'what' determines which value should be calculated:
+    the function estimate, the upper/lower confidence limits, or the
+    standard error.
+    
+    o logLik.ppm
+    The warning about pseudolikelihood ('log likelihood not available')
+    is given only once, and is not repeated in subsequent calls,
+    within a spatstat session.
     
 BUG FIXES
 

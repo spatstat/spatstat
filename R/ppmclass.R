@@ -578,8 +578,9 @@ deviance.ppm <- function(object, ...) {
 
 logLik.ppm <- function(object, ..., new.coef=NULL, warn=TRUE, absolute=FALSE) {
   if(!is.poisson.ppm(object) && warn) 
-    warning(paste("log likelihood is not available for non-Poisson model;",
-                  "log-pseudolikelihood returned"))
+    warn.once("ppmLogLik",
+              "log likelihood is not available for non-Poisson model;",
+              "log pseudolikelihood returned")
   ## degrees of freedom
   nip <- if(!inherits(object, "ippm")) 0 else
            length(attr(object$covfunargs, "free"))

@@ -584,19 +584,21 @@ plot.rhohat <- function(x, ..., do.rug=TRUE) {
   invisible(NULL)
 }
 
-predict.rhohat <- function(object, ..., relative=FALSE) {
+predict.rhohat <- function(object, ..., relative=FALSE,
+                    what=c("rho", "lo", "hi", "se")) {
   trap.extra.arguments(..., .Context="in predict.rhohat")
+  what <- match.arg(what)
   # extract info
   s <- attr(object, "stuff")
   reference <- s$reference
   # convert to (linearly interpolated) function 
   x <- with(object, .x)
-  y <- with(object, .y)
-  rho <- approxfun(x, y, rule=2)
+  y <- if(what == "se") sqrt(object[["var"]]) else object[[what]]
+  fun <- approxfun(x, y, rule=2)
   # extract image of covariate
   Z <- s$Zimage
-  # apply rho to Z
-  Y <- if(inherits(Z, "linim")) eval.linim(rho(Z)) else eval.im(rho(Z))
+  # apply fun to Z
+  Y <- if(inherits(Z, "linim")) eval.linim(fun(Z)) else eval.im(fun(Z))
   # adjust to reference baseline
   if(reference != "Lebesgue" && !relative) {
     lambda <- s$lambda
