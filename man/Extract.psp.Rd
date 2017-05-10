@@ -5,7 +5,7 @@
   Extract a subset of a line segment pattern.
 }
 \usage{
-  \method{[}{psp}(x, i, j, drop, ...)
+  \method{[}{psp}(x, i, j, drop, \dots, fragments=TRUE)
 }
 \arguments{
   \item{x}{
@@ -26,6 +26,12 @@
   }
   \item{\dots}{
     Ignored.
+  }
+  \item{fragments}{
+    Logical value indicating whether to retain all pieces of line segments
+    that intersect the new window (\code{fragments=TRUE}, the default)
+    or to retain only those line segments
+    that lie entirely inside the new window (\code{fragments=FALSE}).
   }
 } 
 \value{
@@ -60,7 +66,8 @@
   trimmed. Line segments of \code{x} lying inside the new
   \code{window} will be retained unchanged. Line segments lying
   partially inside the new \code{window} and partially outside it
-  will be clipped so that they lie entirely inside.
+  will, by default, be clipped so that they lie entirely inside the window;
+  but if \code{fragments=FALSE}, such segments will be removed.
  
   Both ``thinning'' and ``trimming'' can be performed together.
 }
@@ -79,12 +86,13 @@
     plot(a)
     w <- owin(c(0.1,0.7), c(0.2, 0.8))
     b <- a[w]
-    plot(b, add=TRUE, col="red")
+    plot(b, add=TRUE, col="red", lwd=2)
+    plot(w, add=TRUE)
+    u <- a[w, fragments=FALSE]
+    plot(u, add=TRUE, col="blue", lwd=3)
 }
 \author{
-  \adrian
-  and
-  \rolf
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

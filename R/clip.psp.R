@@ -9,7 +9,7 @@
 # clipping operation (for subset)
 ########################################################
 
-clip.psp <- function(x, window, check=TRUE) {
+clip.psp <- function(x, window, check=TRUE, fragments=TRUE) {
   verifyclass(x, "psp")
   verifyclass(window, "owin")
   if(check && !is.subset.owin(window, x$window))
@@ -21,13 +21,13 @@ clip.psp <- function(x, window, check=TRUE) {
   }
   switch(window$type,
          rectangle={
-           result <- cliprect.psp(x, window)
+           result <- cliprect.psp(x, window, fragments=fragments)
          },
          polygonal={
-           result <- clippoly.psp(x, window)
+           result <- clippoly.psp(x, window, fragments=fragments)
          },
          mask={
-           result <- clippoly.psp(x, as.polygonal(window))
+           result <- clippoly.psp(x, as.polygonal(window), fragments=fragments)
            result$window <- window
          })
   return(result)
@@ -38,7 +38,7 @@ clip.psp <- function(x, window, check=TRUE) {
 #
 #  clipping to a rectangle
 #
-cliprect.psp <- function(x, window) {
+cliprect.psp <- function(x, window, fragments=TRUE) {
   verifyclass(x, "psp")
   verifyclass(window, "owin")
   ends <- x$ends
@@ -55,6 +55,8 @@ cliprect.psp <- function(x, window) {
   ends.inside <- ends[ok, , drop=FALSE]
   marks.inside <- marx %msub% ok
   x.inside <- as.psp(ends.inside, window=window, marks=marks.inside, check=FALSE)
+  if(!fragments)
+    return(x.inside)
   # now consider the rest
   ends <- ends[!ok, , drop=FALSE]
   in0 <- in0[!ok] 
@@ -136,7 +138,7 @@ cliprect.psp <- function(x, window) {
 #   clipping to a polygonal window
 #
 
-clippoly.psp <- function(s, window) {
+clippoly.psp <- function(s, window, fragments=TRUE) {
   verifyclass(s, "psp")
   verifyclass(window, "owin")
   stopifnot(window$type == "polygonal")
@@ -181,9 +183,21 @@ clippoly.psp <- function(s, window) {
             ok=as.integer(integer(ns * nw)),
             PACKAGE = "spatstat")
 
-  ok <- (matrix(out$ok, ns, nw) != 0)
+  hitting <- (matrix(out$ok, ns, nw) != 0)
   ts <- matrix(out$ta, ns, nw)
 
+  anyhit <- matrowany(hitting)
+  
+  if(!fragments) {
+    #' retain only segments that avoid the boundary entirely
+    leftin <- inside.owin(es$x0, es$y0, window)
+    rightin <- inside.owin(es$x1, es$y1, window)
+    ok <- !anyhit & leftin & rightin
+    return(as.psp(es[ok,,drop=FALSE],
+                  window=window,
+		  marks=marx %msub% ok,
+		  check=FALSE))
+  }
   # form all the chopped segments (whether in or out)
 
   chopped <- s[numeric(0)]
@@ -191,15 +205,14 @@ clippoly.psp <- function(s, window) {
     
   for(seg in seq_len(ns)) {
     segment <- s$ends[seg, , drop=FALSE]
-    hit <- ok[seg, ]
-    if(!any(hit)) {
+    if(!anyhit[seg]) {
       # no intersection with boundary - add single segment
       chopped$ends <- rbind(chopped$ends, segment)
     if(has.marks) chopped$marks <- (chopped$marks) %mapp% (marx %msub% seg)
     } else {
       # crosses boundary - add several pieces
       tvals <- ts[seg,]
-      tvals <- sort(tvals[hit])
+      tvals <- sort(tvals[hitting[seg,]])
       x0 <- segment$x0
       dx <- segment$x1 - x0
       y0 <- segment$y0

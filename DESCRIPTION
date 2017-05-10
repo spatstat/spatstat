@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.51-0.002
+Version: 1.51-0.003
 Nickname: Unrecognised Error
-Date: 2017-05-09
+Date: 2017-05-10
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

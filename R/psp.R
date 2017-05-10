@@ -596,7 +596,7 @@ print.summary.psp <- function(x, ...) {
 ########################################################
 
 "[.psp" <-
-  function(x, i, j, drop, ...) {
+  function(x, i, j, drop, ..., fragments=TRUE) {
 
     verifyclass(x, "psp")
     
@@ -607,7 +607,7 @@ print.summary.psp <- function(x, ...) {
       style <- if(inherits(i, "owin")) "window" else "index"
       switch(style,
              window={
-               x <- clip.psp(x, window=i, check=FALSE)
+               x <- clip.psp(x, window=i, check=FALSE, fragments=fragments)
              },
              index={
                enz <- x$ends[i, ]

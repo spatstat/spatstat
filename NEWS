@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.002
+        CHANGES IN spatstat VERSION 1.51-0.003
 
 OVERVIEW
 
@@ -18,8 +18,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'clip'.
 
     o as.im.distfun
-    New argument 'approx'.
+    New argument 'approx' specifies the choice of algorithm.
 
+    o "[.psp"
+    New argument 'fragments' specifies whether to keep fragments of
+    line segments that are cut by the new window, or only to retain
+    segments that lie entirely inside the window.
+    
 BUG FIXES
 
     o plot.ppp
