@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.009
+        CHANGES IN spatstat VERSION 1.51-0.010
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'what' determines which value should be calculated:
     the function estimate, the upper/lower confidence limits, or the
     standard error.
+
+    o pool.fv
+    New arguments 'relabel' and 'variance'
     
     o logLik.ppm
     The warning about pseudolikelihood ('log likelihood not available')
@@ -54,6 +57,15 @@ BUG FIXES
     The assignment marks(X) <- a, where 'a' is a single atomic value,
     caused an error if 'X' contained zero points.
     Fixed
+
+    o pool.fv
+    Crashed sometimes, if the arguments did not have the same set of
+    column names.
+    Fixed.
+
+    o linearK
+    The 'theo' column was missing if npoints(X) < 2 and correction="Ang".
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
 

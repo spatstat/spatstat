@@ -611,6 +611,7 @@ connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
     if(is.infinite(R)) {
       Y <- X %mark% factor(1)
       attr(Y, "retainpoints") <- attr(X, "retainpoints")
+      return(Y)
     }
     check.1.real(R)
     stopifnot(R >= 0)

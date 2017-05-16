@@ -13,7 +13,7 @@ pool.fv <- local({
   Add <- function(A,B){ force(A); force(B); eval.fv(A+B, relabel=FALSE) }
   Cmul <- function(A, f) { force(A); force(f); eval.fv(f * A, relabel=FALSE) }
 
-  pool.fv <- function(..., weights=NULL) {
+  pool.fv <- function(..., weights=NULL, relabel=TRUE, variance=TRUE) {
     argh <- list(...)
     n <- narg <- length(argh)
     if(narg == 0) return(NULL)
@@ -22,7 +22,7 @@ pool.fv <- local({
     isfv <- unlist(lapply(argh, is.fv))
     if(!all(isfv))
       stop("All arguments must be fv objects")
-    argh <- do.call(harmonise, argh)
+    argh <- do.call(harmonise, append(argh, list(strict=TRUE)))
     template <- vanilla.fv(argh[[1]])
     ## compute products
     if(!is.null(weights)) {
@@ -41,6 +41,15 @@ pool.fv <- local({
     attributes(sumY) <- attributes(template)
     ## ratio-of-sums
     Ratio <- eval.fv(sumY/sumX, relabel=FALSE)
+    attributes(Ratio) <- attributes(template)
+    ## tweak labels
+    if(relabel)
+      Ratio <- prefixfv(Ratio,
+                        tagprefix="pool",
+                        descprefix="pooled ",
+                        lablprefix="")
+    if(!variance)
+      return(Ratio)
     ## variance calculation
     meanX <- sumX/n
     meanY <- eval.fv(sumY/n, relabel=FALSE)
@@ -59,11 +68,7 @@ pool.fv <- local({
     hiCI <- eval.fv(Ratio + 2 * sqrt(Variance), relabel=FALSE)
     loCI <- eval.fv(Ratio - 2 * sqrt(Variance), relabel=FALSE)
     ## relabel
-    attributes(Ratio) <- attributes(Variance) <- attributes(template)
-    Ratio <- prefixfv(Ratio,
-                      tagprefix="pool",
-                      descprefix="pooled ",
-                      lablprefix="")
+    attributes(Variance) <- attributes(template)
     Variance <- prefixfv(Variance,
                          tagprefix="var",
                          descprefix="delta-method variance estimate of ",

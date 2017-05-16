@@ -150,6 +150,12 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
             c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
             fname = fname)
+    if(correction == "Ang") {
+      # tack on theoretical value
+      K <- bind.fv(K, data.frame(theo=r),
+                   makefvlabel(NULL, NULL, fname, "theo"),
+                  "theoretical Poisson %s")
+    }
     return(K)
   }
   # compute pairwise distances  
@@ -234,7 +240,9 @@ ApplyConnected <- function(X, Engine, r=NULL,
     denoms[i] <- stuff.i$denom %orifnull% 1
     results[[i]] <- do.call(Engine, append(list(X=X.i, r=r), stuff.i))
   }
-  result <- do.call(pool, append(results, list(weights=denoms)))
+  result <- do.call(pool, append(results,
+                                 list(weights=denoms,
+				      relabel=FALSE, variance=FALSE)))
   return(result)
 }
 

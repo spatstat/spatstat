@@ -5,7 +5,7 @@
   Combine several summary functions into a single function.
 }
 \usage{
-\method{pool}{fv}(..., weights=NULL)
+\method{pool}{fv}(..., weights=NULL, relabel=TRUE, variance=TRUE)
 }
 \arguments{
   \item{\dots}{
@@ -13,6 +13,14 @@
   }
   \item{weights}{
     Optional numeric vector of weights for the functions.
+  }
+  \item{relabel}{
+    Logical value indicating whether the columns of the resulting function
+    should be labelled to show that they were obtained by pooling.
+  }
+  \item{variance}{
+    Logical value indicating whether to compute the sample variance
+    and related terms.
   }
 }
 \details{
@@ -45,13 +53,7 @@
               main="Pooled K function of waterstriders")
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{htest}

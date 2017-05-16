@@ -1191,6 +1191,7 @@ reconcile.fv <- local({
 
 as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
   trap.extra.arguments(...)
+  value.orig <- value
   ## extract function argument
   xx <- with(x, .x)
   ## extract all function values 
@@ -1204,16 +1205,16 @@ as.function.fv <- function(x, ..., value=".y", extrapolate=FALSE) {
       value <- expandvalue
     } else stop("Unable to determine columns of x")
   }
-  yy <- yy[,value]
+  yy <- yy[,value, drop=FALSE]
   argname <- fvnames(x, ".x")
   ## determine extrapolation rule (1=NA, 2=most extreme value)
   stopifnot(is.logical(extrapolate))
   stopifnot(length(extrapolate) %in% 1:2)
   endrule <- 1 + extrapolate
   ## make function(s)
-  if(length(value) == 1) {
+  if(length(value) == 1 && !identical(value.orig, "*")) {
     ## make a single 'approxfun' and return it
-    f <- approxfun(xx, yy, rule=endrule)
+    f <- approxfun(xx, yy[,,drop=TRUE], rule=endrule)
     ## magic
     names(formals(f))[1L] <- argname
     body(f)[[4L]] <- as.name(argname)
