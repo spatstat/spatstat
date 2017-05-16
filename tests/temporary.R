@@ -38,6 +38,7 @@ G <- nncross(X, Y)
 #' second moment functions under development
 spatstat.options(developer=TRUE)
 K <- linearK(X)
+KI <- linearKinhom(X, lambda=rep(intensity(X), npoints(X)))
 spatstat.options(developer=FALSE)
 
 

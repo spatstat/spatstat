@@ -64,18 +64,43 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
     check.1.real(normpower)
     stopifnot(normpower >= 1)
   }
+  X <- as.lpp(X, sparse=FALSE)
+  L <- domain(X)
   # extract info about pattern
-  lengthL <- volume(domain(X))
+  lengthL <- volume(L)
   #
   lambdaX <- getlambda.lpp(lambda, X, ...)
   #
   invlam <- 1/lambdaX
-  invlam2 <- outer(invlam, invlam, "*")
-  denom <- if(!normalise) lengthL else
-           if(normpower == 1) sum(invlam) else
-           lengthL * (sum(invlam)/lengthL)^normpower
-  K <- linearKengine(X, ...,
-                     r=r, reweight=invlam2, denom=denom, correction=correction)
+
+  if(!spatstat.options("developer")) {
+    # original code, requires connected network
+    if(any(is.infinite(L$dpath)))
+      stop(paste("Network is not connected;",
+                 "linearK is not yet implemented for this case"),
+           call.=FALSE)
+    invlam2 <- outer(invlam, invlam, "*")
+    denom <- if(!normalise) lengthL else
+             if(normpower == 1) sum(invlam) else
+             lengthL * (sum(invlam)/lengthL)^normpower
+    K <- linearKengine(X, ...,
+                       r=r, reweight=invlam2, denom=denom,
+		       correction=correction)
+  } else {
+    oxdata <- list(invlam=invlam)
+    myrule <- function(X, auxdata, ..., normpower) {
+      invlam <- auxdata$invlam
+      invlam2 <- outer(invlam, invlam, "*")
+      lengthL <- volume(domain(X))
+      denom <- if(!normalise) lengthL else
+               if(normpower == 1) sum(invlam) else
+               lengthL * (sum(invlam)/lengthL)^normpower
+      return(list(reweight=invlam2, denom=denom))	       
+    }
+    K <- ApplyConnected(X, linearKengine, r=r,
+                        rule=myrule, auxdata=oxdata,
+			correction=correction, normpower=normpower, ...)
+  }
   # set appropriate y axis label
   switch(correction,
          Ang  = {
