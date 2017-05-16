@@ -608,7 +608,10 @@ points.lpp <- function(x, ...) {
 
 connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
   if(!dismantle) {
-    if(is.infinite(R)) return(X %mark% factor(1))
+    if(is.infinite(R)) {
+      Y <- X %mark% factor(1)
+      attr(Y, "retainpoints") <- attr(X, "retainpoints")
+    }
     check.1.real(R)
     stopifnot(R >= 0)
     nv <- npoints(X)
@@ -635,6 +638,7 @@ connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
     lab <- factor(lab)
     # Apply to points
     Y <- X %mark% lab
+    attr(Y, "retainpoints") <- attr(X, "retainpoints")
     return(Y)
   }
   # first break the *network* into connected components
