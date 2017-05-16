@@ -202,7 +202,7 @@ ApplyConnected <- function(X, Engine, r=NULL,
   } else XX <- NULL
   # determine r values
   rmaxdefault <- 0.98 * br
-  breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
+  breaks <- handle.r.b.args(r, NULL, Window(L), rmaxdefault=rmaxdefault)
   r <- breaks$r
   if(!disco) {
     # single connected network
