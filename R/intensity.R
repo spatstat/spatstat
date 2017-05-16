@@ -194,6 +194,7 @@ PoisSaddleGeyer <- local({
     #' return result in same format as 'beta'
     lambda <- beta
     lambda[] <- lambdavalues
+    if(length(lambda) == 1) lambda <- unname(lambda)
     return(lambda)
   }
 
@@ -246,6 +247,7 @@ PoisSaddleArea <- local({
     #' return result in same format as 'beta'
     lambda <- beta
     lambda[] <- lambdavalues
+    if(length(lambda) == 1) lambda <- unname(lambda)
     return(lambda)
   }
 

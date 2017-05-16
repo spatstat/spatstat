@@ -45,6 +45,10 @@ BUG FIXES
     o plot.psp
     Ignored 'show.all' when 'add=TRUE'.
     Fixed.
+
+    o intensity.ppm
+    Result had incorrect 'names' attribute in some cases.
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
 
