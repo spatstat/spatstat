@@ -555,7 +555,7 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
   what <- match.arg(what)
   nv <- npoints(vertices(X))
   ie <- X$from - 1L
-  je   <- X$to   - 1L
+  je   <- X$to - 1L
   ne <- length(ie)
   zz <- .C("cocoGraph",
            nv = as.integer(nv),
