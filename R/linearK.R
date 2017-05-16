@@ -13,12 +13,23 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
                              Ang="Ang",
                              best="Ang"),
                            multi=FALSE)
-  # extract info about pattern
-  np <- npoints(X)
-  lengthL <- volume(domain(X))
-  # compute K
-  denom <- np * (np - 1)/lengthL
-  K <- linearKengine(X, r=r, denom=denom, correction=correction, ...)
+  if(!spatstat.options("developer")) {
+    # original code, assumes connected network
+    # extract info about pattern
+    np <- npoints(X)
+    lengthL <- volume(domain(X))
+    # compute K
+    denom <- np * (np - 1)/lengthL
+    K <- linearKengine(X, r=r, denom=denom, correction=correction, ...)
+  } else {
+    myrule <- function(X, ...) {
+      np <- npoints(X)
+      lengthL <- volume(domain(X))
+      denom <- np * (np - 1)/lengthL
+      return(list(denom=denom))
+    }
+    K <- ApplyConnected(X, linearKengine, r=r, rule=myrule, ...)
+  }
   # set appropriate y axis label
   switch(correction,
          Ang  = {
