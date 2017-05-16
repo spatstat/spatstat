@@ -13,6 +13,7 @@
 \alias{affinexypolygon}
 \alias{ang2rad}
 \alias{anycrossing.psp}
+\alias{ApplyConnected}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
 \alias{areadelta2}       
@@ -735,6 +736,7 @@ affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
 ang2rad(ang, unit, start, clockwise)
 anycrossing.psp(A,B)
+ApplyConnected(X, Engine, r, \dots, rule, auxdata)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
 areadelta2(X, r, \dots, sparseOK)

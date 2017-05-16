@@ -184,3 +184,46 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   return(K)
 }
 
+ApplyConnected <- function(X, Engine, r=NULL,
+                           ..., rule, auxdata=NULL) {
+  # Apply 'Engine' to each connected component of domain(X)
+  stopifnot(is.function(rule))
+  # Ensure distance information is present
+  X <- as.lpp(X, sparse=FALSE)
+  nX <- npoints(X)
+  L <- domain(X)
+  # check network connectivity
+  br <- boundingradius(L)
+  if(disco <- is.infinite(br)) {
+    # disconnected network
+    XX <- connected(X)
+    LL <- lapply(XX, domain)
+    br <- max(sapply(LL, boundingradius))
+  } else XX <- NULL
+  # determine r values
+  rmaxdefault <- 0.98 * br
+  breaks <- handle.r.b.args(r, NULL, W, rmaxdefault=rmaxdefault)
+  r <- breaks$r
+  if(!disco) {
+    # single connected network
+    stuff <- rule(X=X, auxdata=auxdata, ...)
+    result <- do.call(Engine, append(list(X=X, r=r), stuff))
+    return(result)
+  }
+  # disconnected network
+  nsub <- length(XX)
+  results <- anylist()
+  denoms <- numeric(nsub)
+  for(i in seq_len(nsub)) {
+    X.i <- XX[[i]]
+    sub.i <- attr(X.i, "retainpoints") # identifies which points of X
+    aux.i <- if(length(auxdata) == 0) NULL else
+             lapply(auxdata, marksubset, index=sub.i)
+    stuff.i <- rule(X=X.i, auxdata=aux.i, ...)
+    denoms[i] <- stuff.i$denom %orifnull% 1
+    results[[i]] <- do.call(Engine, append(list(X=X.i, r=r), stuff.i))
+  }
+  result <- do.call(pool, append(results, list(weights=denoms)))
+  return(result)
+}
+
