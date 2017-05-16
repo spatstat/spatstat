@@ -11,6 +11,11 @@ plot(influence(fitS))
 plot(dfbetas(fitP))
 plot(dfbetas(fitS))
 
+#' ppx with zero points
+U <- chicago[integer(0)]
+V <- U %mark% 1
+V <- U %mark% factor("a")
+
 #' disconnected linear network
 m <- simplenet$m
 m[4,5] <- m[5,4] <- m[6,10] <- m[10,6] <- m[4,6] <- m[6,4] <- FALSE

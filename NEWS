@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.006
+        CHANGES IN spatstat VERSION 1.51-0.007
 
 OVERVIEW
 
@@ -49,6 +49,11 @@ BUG FIXES
     o intensity.ppm
     Result had incorrect 'names' attribute in some cases.
     Fixed.
+
+    o marks<-.ppx
+    The assignment marks(X) <- a, where 'a' is a single atomic value,
+    caused an error if 'X' contained zero points.
+    Fixed
     
         CHANGES IN spatstat VERSION 1.51-0
 

@@ -278,6 +278,8 @@ marks.ppx <- function(x, ..., drop=TRUE) {
       newdata <- coorddata
       newctype <- ctype[retain]
     } else {
+      if(nrow(coorddata) == 0) 
+        value <- value[integer(0), , drop=FALSE]
       newdata <- cbind(coorddata, value)
       newctype <- factor(c(as.character(ctype[retain]),
                            rep.int("mark", ncol(value))),
