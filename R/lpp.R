@@ -605,3 +605,52 @@ cut.lpp <- function(x, z=marks(x), ...) {
 points.lpp <- function(x, ...) {
   points(coords(x, spatial=TRUE, local=FALSE), ...)
 }
+
+connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
+  if(!dismantle) {
+    if(is.infinite(R)) return(X %mark% factor(1))
+    check.1.real(R)
+    stopifnot(R >= 0)
+    nv <- npoints(X)
+    close <- (pairdist(X) <= R)
+    diag(close) <- FALSE
+    ij <- which(close, arr.ind=TRUE)
+    ie <- ij[,1] - 1L
+    je <- ij[,2] - 1L
+    ne <- length(ie)
+    zz <- .C("cocoGraph",
+           nv=as.integer(nv),
+           ne=as.integer(ne),
+           ie=as.integer(ie),
+           je=as.integer(je),
+           label=as.integer(integer(nv)),
+           status=as.integer(integer(1L)),
+           PACKAGE = "spatstat")
+    if(zz$status != 0)
+      stop("Internal error: connected.ppp did not converge")
+    lab <- zz$label + 1L
+    # Renumber labels sequentially 
+    lab <- as.integer(factor(lab))
+    # Convert labels to factor
+    lab <- factor(lab)
+    # Apply to points
+    Y <- X %mark% lab
+    return(Y)
+  }
+  # first break the *network* into connected components
+  L <- domain(X)
+  lab <- connected(L, what="labels")
+  if(length(levels(lab)) == 1) {
+    XX <- solist(X)
+  } else {
+    subsets <- split(seq_len(nvertices(L)), lab)
+    XX <- solist()
+    for(i in seq_along(subsets)) 
+      XX[[i]] <- thinNetwork(X, retainvertices=subsets[[i]])
+  }
+  # now find R-connected components in each dismantled piece
+  YY <- solapply(XX, connected.lpp, R=R, dismantle=FALSE)
+  if(length(YY) == 1)
+    YY <- YY[[1]]
+  return(YY)
+}
