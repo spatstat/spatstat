@@ -14,10 +14,16 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
                              best="Ang"),
                            multi=FALSE)
   if(!spatstat.options("developer")) {
-    # original code, assumes connected network
+    # original code, requires connected network
+    X <- as.lpp(X, sparse=FALSE)
+    L <- domain(X)
+    if(any(is.infinite(L$dpath)))
+      stop(paste("Network is not connected;",
+                 "linearK is not yet implemented for this case"),
+           call.=FALSE)
     # extract info about pattern
     np <- npoints(X)
-    lengthL <- volume(domain(X))
+    lengthL <- volume(L)
     # compute K
     denom <- np * (np - 1)/lengthL
     K <- linearKengine(X, r=r, denom=denom, correction=correction, ...)

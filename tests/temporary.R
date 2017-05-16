@@ -35,4 +35,10 @@ H <- nnwhich(X)
 Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 G <- nncross(X, Y)
 
+#' second moment functions under development
+spatstat.options(developer=TRUE)
+K <- linearK(X)
+spatstat.options(developer=FALSE)
+
+
 
