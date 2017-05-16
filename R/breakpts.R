@@ -176,6 +176,10 @@ handle.r.b.args <- function(r=NULL, breaks=NULL, window, pixeps=NULL,
         } else if(!is.null(r)) {
           breaks <- breakpts.from.r(r)
 	} else {
+	   #' determine rmax
+	   #' ignore infinite or NA values of rmaxdefault
+          if(!is.null(rmaxdefault) && !is.finite(rmaxdefault))
+	     rmaxdefault <- NULL
           rmax <- rmaxdefault %orifnull% diameter(Frame(window))
           if(is.null(pixeps)) {
             pixeps <- if(is.mask(window))
