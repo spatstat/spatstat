@@ -9,8 +9,8 @@
   from raw numerical data. 
 }
 \usage{
-fv(x, argu = "r", ylab = NULL, valu, fmla = NULL, alim = NULL, labl =
-names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
+fv(x, argu = "r", ylab = NULL, valu, fmla = NULL, alim = NULL,
+   labl = names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
 }
 \arguments{
   \item{x}{
@@ -122,17 +122,22 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   of the plot, or when printing a description of the
   function. It should be an \R language object. 
   For example the \eqn{K} function's mathematical name \eqn{K(r)} is rendered
-  by \code{ylab=substitute(K(r), NULL)}.
+  by \code{ylab=quote(K(r))}. 
 
   If \code{yexp} is present, then \code{ylab} will be
   used only for printing, and \code{yexp} will be used for
   annotating axes in a plot. (Otherwise \code{yexp} defaults to \code{ylab}).
   For example the cross-type \eqn{K} function
   \eqn{K_{1,2}(r)}{K[1,2](r)} is rendered by something like
-  \code{ylab=substitute(Kcross[i,j](r), list(i=1,j=2))}
+  \code{ylab=quote(Kcross[1,2](r))}
   and 
-  \code{yexp=substitute(Kcross[list(i,j)](r), list(i=1,j=2))}
+  \code{yexp=quote(Kcross[list(1,2)](r))}
   to get the most satisfactory behaviour.
+
+  (A useful tip: use \code{\link{substitute}} instead of
+  \code{\link{quote}} to insert values of variables into an expression,
+  e.g. \code{substitute(Kcross[i,j](r), list(i=42,j=97))}
+  yields the same as \code{quote(Kcross[42, 97](r))}.)
 
   \code{labl} is a character vector specifying plot labels
   for each column of \code{x}. These labels will appear on the
@@ -140,14 +145,15 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
   Entries in \code{labl}
   may contain the string \code{"\%s"} which will be replaced
   by \code{fname}. For example the border-corrected estimate
-  of the \eqn{K} function has label \code{"\%sbord(r)"} which
-  becomes \code{"Kbord(r)"}.
+  of the \eqn{K} function has label \code{"\%s[bord](r)"} which
+  becomes \code{"K[bord](r)"}.
 
   \code{desc} is a character vector containing intelligible
   explanations of each column of \code{x}. Entries in
   \code{desc} may contain the string \code{"\%s"} which will be replaced
   by \code{ylab}. For example the border correction estimate of the
   \eqn{K} function has description \code{"border correction estimate of \%s"}.
+
 }
 \value{
   An object of class \code{"fv"}, see \code{\link{fv.object}}.
@@ -181,7 +187,7 @@ names(x), desc = NULL, unitname = NULL, fname = NULL, yexp = ylab)
 \examples{
   df <- data.frame(r=seq(0,5,by=0.1))
   df <- transform(df, a=pi*r^2, b=3*r^2)
-  X <- fv(df, "r", substitute(A(r), NULL),
+  X <- fv(df, "r", quote(A(r)),
               "a", cbind(a, b) ~ r,
               alim=c(0,4),
               labl=c("r", "\%s[true](r)", "\%s[approx](r)"),
