@@ -11,7 +11,7 @@
         adjust=1, diggle=FALSE, se=FALSE,
         kernel="gaussian",
         scalekernel=is.character(kernel), 
-        positive=FALSE) 
+        positive=FALSE, verbose=TRUE) 
 }
 \arguments{
   \item{x}{
@@ -80,6 +80,10 @@
   \item{positive}{
     Logical value indicating whether to force all density values to
     be positive numbers. Default is \code{FALSE}.
+  }
+  \item{verbose}{
+    Logical value indicating whether to issue warnings
+    about numerical problems and conditions.
   }
 }
 \value{

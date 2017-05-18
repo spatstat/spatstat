@@ -19,7 +19,7 @@ density.ppp <- function(x, sigma=NULL, ...,
                         adjust=1, diggle=FALSE, se=FALSE, 
                         kernel="gaussian",
                         scalekernel=is.character(kernel),
-                        positive=FALSE) {
+                        positive=FALSE, verbose=TRUE) {
   verifyclass(x, "ppp")
 
   output <- pickoption("output location type", at,
@@ -31,7 +31,7 @@ density.ppp <- function(x, sigma=NULL, ...,
     ## kernel is only partly implemented!
     if(se)
       stop("Standard errors are not implemented for non-Gaussian kernel")
-    if(is.function(sigma) || (is.null(sigma) && is.null(varcov)))
+    if(verbose && (is.function(sigma) || (is.null(sigma) && is.null(varcov))))
       warning("Bandwidth selection will be based on Gaussian kernel")
   }
   
@@ -65,7 +65,7 @@ density.ppp <- function(x, sigma=NULL, ...,
                                   weights=weights, edge=edge,
                                   leaveoneout=leaveoneout,
                                   diggle=diggle, ...)
-    if(!is.null(uhoh <- attr(result, "warnings"))) {
+    if(verbose && !is.null(uhoh <- attr(result, "warnings"))) {
       switch(uhoh,
              underflow=warning("underflow due to very small bandwidth"),
              warning(uhoh))

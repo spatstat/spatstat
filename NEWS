@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.013
+        CHANGES IN spatstat VERSION 1.51-0.014
 
 OVERVIEW
 
@@ -37,6 +37,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The warning about pseudolikelihood ('log likelihood not available')
     is given only once, and is not repeated in subsequent calls,
     within a spatstat session.
+
+    o density.ppp
+    New argument 'verbose'.
     
 BUG FIXES
 
