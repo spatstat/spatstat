@@ -1,6 +1,13 @@
 #' temporary file of additional tests
 require(spatstat)
 
+#' as.data.frame.envelope
+Nsim <- 5
+E <- envelope(cells, nsim=Nsim, savefuns=TRUE)
+A <- as.data.frame(E)
+B <- as.data.frame(E, simfuns=TRUE)
+stopifnot(ncol(B) - ncol(A) == Nsim)
+
 #' leverage and influence for logistic fits
 fitP <- ppm(swedishpines ~x, method="logi")
 fitS <- ppm(swedishpines ~x, Strauss(9), method="logi")
@@ -40,6 +47,4 @@ spatstat.options(developer=TRUE)
 K <- linearK(X)
 KI <- linearKinhom(X, lambda=rep(intensity(X), npoints(X)))
 spatstat.options(developer=FALSE)
-
-
 
