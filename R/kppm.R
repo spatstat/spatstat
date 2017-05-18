@@ -305,15 +305,15 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     adjdata <- list(paircorr = info[["pcf"]],
                     pairWcdf = distcdf(W),
 		    tohuman  = NULL)
-    adjfun <- function(par, adjdata, ...) {
-      with(adjdata, {
+    adjfun <- function(theo, par, auxdata, ...) {
+      with(auxdata, {
         if(!is.null(tohuman))
 	  par <- tohuman(par)
-        a <- as.numeric(stieltjes(paircorr, pairWcdf, par=par))
-	return(1/a)
+        a <- as.numeric(stieltjes(paircorr, pairWcdf, par=par, ...))
+	return(theo/a)
       })
     }
-    adjustment <- list(fun=adjfun, data=adjdata)
+    adjustment <- list(fun=adjfun, auxdata=adjdata)
   } else adjustment <- NULL
     
   #' ............ experimental .........................

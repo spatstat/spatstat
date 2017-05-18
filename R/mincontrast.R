@@ -17,10 +17,11 @@ mincontrast <- local({
       if(length(theo) != nrvals)
         stop("theoretical function did not return the correct number of values")
       if(!is.null(adjustment)) {
-        a <- adjustment$fun(par=par, adjustment$data)
-	if(!is.vector(a) || !is.numeric(a) || length(a) != 1)
-	  stop("adjustment function did not return a numeric value")
-	theo <- a * theo
+        theo <- adjustment$fun(theo=theo, par=par, auxdata=adjustment$auxdata)
+        if(!is.vector(theo) || !is.numeric(theo))
+	  stop("adjustment did not return a numeric vector")
+        if(length(theo) != nrvals)
+          stop("adjustment did not return the correct number of values")
       }	
       discrep <- (abs(theo^qq - obsq))^pp
       value <- mean(discrep)
@@ -119,10 +120,19 @@ mincontrast <- local({
     label <- fvlab$label
     desc  <- fvlab$desc
     if(is.null(label))
-      label <- paste("fit(", argu, ")", collapse="")
+      label <- paste0("fit(", argu, ")")
     fitfv <- bind.fv(observed[sub, ],
                      data.frame(fit=fittheo),
                      label, desc)
+    if(!is.null(adjustment)) {
+      adjtheo <- adjustment$fun(theo=fittheo,
+      	                        par=minimum$par,
+				auxdata=adjustment$auxdata)
+      fitfv <- bind.fv(fitfv,
+                       data.frame(adjfit=adjtheo),
+		       paste0("adj", label),
+		       paste("adjusted", desc))
+    }				
     result <- list(par      = minimum$par,
                    fit      = fitfv,
                    opt      = minimum,
