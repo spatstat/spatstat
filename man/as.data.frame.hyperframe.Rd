@@ -10,7 +10,7 @@
                                   discard=TRUE, warn=TRUE)
 }
 \arguments{
-  \item{x}{Point pattern (object of class \code{"hyperframe"}).}
+  \item{x}{Hyperframe (object of class \code{"hyperframe"}).}
   \item{row.names}{Optional character vector of row names.}
   \item{optional}{Argument passed to \code{\link{as.data.frame}}
     controlling what happens to row names.}
