@@ -117,10 +117,8 @@ mincontrast <- local({
     ## evaluate the fitted theoretical curve
     fittheo <- theoretical(minimum$par, rvals, ...)
     ## pack it up as an `fv' object
-    label <- fvlab$label
+    label <- fvlab$label %orifnull% "%s[fit](r)"
     desc  <- fvlab$desc
-    if(is.null(label))
-      label <- paste0("fit(", argu, ")")
     fitfv <- bind.fv(observed[sub, ],
                      data.frame(fit=fittheo),
                      label, desc)
@@ -130,7 +128,7 @@ mincontrast <- local({
 				auxdata=adjustment$auxdata)
       fitfv <- bind.fv(fitfv,
                        data.frame(adjfit=adjtheo),
-		       paste0("adj", label),
+		       "%s[adjfit](r)",
 		       paste("adjusted", desc))
     }				
     result <- list(par      = minimum$par,
