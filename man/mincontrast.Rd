@@ -9,7 +9,8 @@
 mincontrast(observed, theoretical, startpar, \dots,
           ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
           fvlab=list(label=NULL, desc="minimum contrast fit"),
-          explain=list(dataname=NULL, modelname=NULL, fname=NULL))
+          explain=list(dataname=NULL, modelname=NULL, fname=NULL),
+	  adjustment=NULL)
 }
 \arguments{
   \item{observed}{
@@ -38,6 +39,9 @@ mincontrast(observed, theoretical, startpar, \dots,
   \item{explain}{
     Optional. List containing strings that give a human-readable description
     of the model, the data and the summary statistic.
+  }
+  \item{adjustment}{
+    Internal use only.
   }
 }
 \details{

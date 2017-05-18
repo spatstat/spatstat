@@ -456,6 +456,12 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
+       kppm.adjusted=list(
+         ## experimental
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
        check.rpanel.loaded=list(
          # internal debugging
          default=TRUE,

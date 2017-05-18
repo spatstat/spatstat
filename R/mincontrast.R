@@ -16,6 +16,12 @@ mincontrast <- local({
         stop("theoretical function did not return a numeric vector")
       if(length(theo) != nrvals)
         stop("theoretical function did not return the correct number of values")
+      if(!is.null(adjustment)) {
+        a <- adjustment$fun(par=par, adjustment$data)
+	if(!is.vector(a) || !is.numeric(a) || length(a) != 1)
+	  stop("adjustment function did not return a numeric value")
+	theo <- a * theo
+      }	
       discrep <- (abs(theo^qq - obsq))^pp
       value <- mean(discrep)
       value <- min(value, .Machine$double.xmax)
@@ -28,8 +34,10 @@ mincontrast <- local({
                           ctrl=list(q = 1/4, p = 2, rmin=NULL, rmax=NULL),
                           fvlab=list(label=NULL, desc="minimum contrast fit"),
                           explain=list(dataname=NULL,
-                            modelname=NULL, fname=NULL)) {
+                            modelname=NULL, fname=NULL),
+			  adjustment=NULL) {
     verifyclass(observed, "fv")
+
     stopifnot(is.function(theoretical))
     if(!any("par" %in% names(formals(theoretical))))
       stop(paste("Theoretical function does not include an argument called",
@@ -99,7 +107,8 @@ mincontrast <- local({
                     qq          = ctrl$q,
                     pp          = ctrl$p,
                     rmin        = rmin,
-                    rmax        = rmax)
+                    rmax        = rmax,
+		    adjustment  = adjustment)
     ## go
     minimum <- optim(startpar, fn=contrast.objective, objargs=objargs, ...)
     ## if convergence failed, issue a warning 

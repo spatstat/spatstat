@@ -299,6 +299,24 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
   desc <- paste("minimum contrast fit of", info$descname)
 
   #' ............ experimental .........................
+  do.adjust <- spatstat.options("kppm.adjusted")
+  if(do.adjust) {
+    W <- Window(X)
+    adjdata <- list(paircorr = info[["pcf"]],
+                    pairWcdf = distcdf(W),
+		    tohuman  = NULL)
+    adjfun <- function(par, adjdata, ...) {
+      with(adjdata, {
+        if(!is.null(tohuman))
+	  par <- tohuman(par)
+        a <- as.numeric(stieltjes(paircorr, pairWcdf, par=par))
+	return(1/a)
+      })
+    }
+    adjustment <- list(fun=adjfun, data=adjdata)
+  } else adjustment <- NULL
+    
+  #' ............ experimental .........................
   usecanonical <- spatstat.options("kppm.canonical")
   if(usecanonical) {
      tocanonical <- info$tocanonical
@@ -313,6 +331,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
     htheo <- theoret
     startpar <- tocanonical(startpar)
     theoret <- function(par, ...) { htheo(tohuman(par), ...) }
+    if(do.adjust)
+      adjustment$data$tohuman <- tohuman
   }
   #' ...................................................
   
@@ -328,7 +348,8 @@ clusterfit <- function(X, clusters, lambda = NULL, startpar = NULL,
                                       modelname=info$modelname),
                                   margs=dots$margs,
                                   model=dots$model,
-                                  funaux=info$funaux),
+                                  funaux=info$funaux,
+				  adjustment=adjustment),
                              list(...))
   if(isDPP && algorithm=="Brent" && changealgorithm){
     mcargs <- resolve.defaults(mcargs, list(lower=alg$lower, upper=alg$upper))
@@ -1205,7 +1226,7 @@ plot.kppm <- local({
                       dmain=c(xname, Fit$StatName))
              },
              cluster={
-               plotem(clusterfield(x, locations = loc), ...,
+               plotem(clusterfield(x, locations = loc, verbose=FALSE), ...,
                       dmain=c(xname, "Fitted cluster"))
              })
     if(pause) par(opa)
@@ -1689,3 +1710,4 @@ psib.kppm <- function(object) {
   p <- 1 - 1/g(0)
   return(p)
 }
+
