@@ -349,22 +349,6 @@ spatstatDiagnostic <- function(msg) {
   invisible(NULL)
 }
 
-"lhs.of.formula<-" <- function(x, value) {
-   if(!inherits(x, "formula"))
-      stop("x must be a formula")
-   if(length(as.list(x)) == 2) 
-      x[[3L]] <- x[[2L]]
-   x[[2L]] <- value
-   return(x)
-}
-
-"rhs.of.formula<-" <- function(x, value) {
-   if(!inherits(x, "formula"))
-      stop("x must be a formula")
-   x[[3L]] <- value
-   return(x)
-}
-
 allElementsIdentical <- function(x, entry=NULL) {
   if(length(x) <= 1) return(TRUE)
   if(!is.null(entry)) {

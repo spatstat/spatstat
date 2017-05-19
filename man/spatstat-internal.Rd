@@ -710,8 +710,6 @@
 %%%%
 \alias{spatstatDiagnostic}
 %%
-\alias{lhs.of.formula<-}
-\alias{rhs.of.formula<-}
 \alias{as.ppplist}
 \alias{as.imlist}
 \alias{pointsAlongNetwork}
@@ -1559,8 +1557,6 @@ bind.sparse3Darray(A, B, along)
 %%
 spatstatDiagnostic(msg)
 %%
-lhs.of.formula(x) <- value
-rhs.of.formula(x) <- value
 as.ppplist(x, check)
 as.imlist(x, check)
 pointsAlongNetwork(L, delta)
