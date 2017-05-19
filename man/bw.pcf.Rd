@@ -11,7 +11,8 @@
 \usage{
   bw.pcf(X, rmax=NULL, lambda=NULL, divisor="r", 
          kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
-         cv.method=c("compLik", "leastSQ"), simple=TRUE, srange=NULL, \dots)
+         cv.method=c("compLik", "leastSQ"), simple=TRUE, srange=NULL,
+	 \dots, verbose=FALSE)
 }
 \arguments{
   \item{X}{
@@ -60,6 +61,10 @@
   \item{\dots}{
     Other arguments, passed to \code{\link{pcf}} or 
     \code{\link{pcfinhom}}.
+  }
+  \item{verbose}{
+    Logical value indicating whether to print progress reports
+    during the optimization procedure.
   }
 }
 \details{

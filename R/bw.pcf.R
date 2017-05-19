@@ -21,7 +21,7 @@
 bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r", 
                    kernel="epanechnikov", nr=10000, bias.correct=TRUE, 
                    cv.method=c("compLik", "leastSQ"), simple=TRUE,
-                   srange=NULL, ...)
+                   srange=NULL, ..., verbose=FALSE)
 {
   stopifnot(is.ppp(X))
   X <- unmark(X)
@@ -42,14 +42,24 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
   discr <- rmax / nr
   #' breaks of subintervals
   rs <- seq(0, rmax, length.out= nr + 1)
-  
-  cp <- closepairs(X, rmax, what="all", twice=TRUE)
+
   #' closepairs distances: \\ u - v \\
+  #' Pre-compute close pair distances for use in 'pcf'
+  #'   we need close pairs up to a distance rmax + smax
+  #'   where 'smax' is the maximum halfwidth of the support of the kernel
+  smax <- srange[2] * (if(kernel == "gaussian") 2 else kernel.factor(kernel))
+  cpfull <- closepairs(X, rmax + smax, what="all", twice=TRUE)
+  
+  #' For cross-validation, restrict close pairs to distance rmax 
+  ok <- (cpfull$d <= rmax)
+  cp <- lapply(cpfull, "[", i=ok)
+
   ds <- cp$d
   #' determining closepairs distances are in which subinterval
-  idx <- round(ds / discr) + 1
+  idx <- round(ds / discr) + 1L
+  idx <- pmin.int(idx, nr+1L)
   
-  #' translation edge correction faqctor: /W|/|W \cap W_{u-v}|
+  #' translation edge correction factor: /W|/|W \cap W_{u-v}|
   edgewt <- edge.Trans(dx=cp$dx, dy=cp$dy, W=win, paired=TRUE)
   
   if(homogeneous <- is.null(lambda)) {
@@ -58,7 +68,7 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
     lambda2area <- lambda^2 * areaW
     pcfargs <- list(X=X, r=rs,
                     divisor=divisor, kernel=kernel, correction="translate",
-                    close=cp)
+                    close=cpfull)
     renorm.factor <- 1
   } else {
     # inhomogeneous case: lambda is assumed to be a numeric vector giving
@@ -67,7 +77,7 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
     lambda2area <- lambda[cp$i] * lambda[cp$j] * areaW
     pcfargs <- list(X=X, lambda=lambda, r=rs,
                     divisor=divisor, kernel=kernel, correction="translate",
-                    close=cp)
+                    close=cpfull)
     renorm.factor <- (areaW/sum(1/lambda))
   }
   
@@ -85,7 +95,8 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
                 pcfargs=pcfargs,
                 lambda=lambda,
                 lambda2area=lambda2area,
-                renorm.factor=renorm.factor)
+                renorm.factor=renorm.factor,
+		show=verbose)
   stuff <- list2env(stuff)
 
   #' find optimum bandwidth
@@ -105,9 +116,9 @@ bw.pcf <- function(X, rmax=NULL, lambda=NULL, divisor="r",
 }
 
 CVforPCF <- function(bw, stuff) {
-  cat(paste("bw=", bw, "\n"))
-  assign("bw", bw, envir=stuff)
+  stuff$bw <- bw
   with(stuff, {
+    if(show) splat("bw=", bw)
     #' values of pair correlation at breaks of subintervals
     a <- append(pcfargs, list(bw=bw))
     grs <- if(homogeneous) do.call(pcf.ppp, a) else do.call(pcfinhom, a)
@@ -139,7 +150,7 @@ CVforPCF <- function(bw, stuff) {
       }
     }
     #' remove negative and zero values
-    gds <- pmax.int(.Machine$double.eps, 0)
+    gds <- pmax.int(.Machine$double.eps, gds)
     switch(cv.method,
            compLik={
              #' composite likelihood cross-validation
@@ -154,7 +165,7 @@ CVforPCF <- function(bw, stuff) {
              value <- 2 * sum(gds * edgewt / (lambda2area)) - normconst
            },
            stop("Unrecognised cross-validation method"))
-    cat(paste("value=", value, "\n"))
+    if(show) splat("value=", value)
     return(value)
   })
 }

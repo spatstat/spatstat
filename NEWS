@@ -1,9 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.016
+        CHANGES IN spatstat VERSION 1.51-0.017
 
 OVERVIEW
 
-    o Version nickname: 'Sir Code-A-Lot'
+    o We thank Rasmus Waagepetersen and Abdollah Jalilian for contributions.
+
+    o Bug fix in bandwidth selector.
+    
+    o Version nickname: 'Plain Packaging'
 
 NEW FUNCTIONS
 
@@ -40,9 +44,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o density.ppp
     New argument 'verbose'.
+
+    o bw.pcf
+    New argument 'verbose'.
     
 BUG FIXES
 
+    o bw.pcf
+    Results were totally incorrect due to a typo.
+    Fixed.
+    
     o plot.ppp
     The argument 'type="n"' did not suppress plotting of the legend,
     for marked point patterns.
