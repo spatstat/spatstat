@@ -99,8 +99,6 @@
 \alias{default.n.tiling}
 \alias{default.ntile}
 \alias{deltasuffstat}
-\alias{denomrule.linearK}
-\alias{denomrule.linearKinhom}
 \alias{Deviation}
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
@@ -825,8 +823,6 @@ default.clipwindow(object, epsilon)
 default.linnet.tolerance(L)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
-denomrule.linearK(X, \dots)
-denomrule.linearKinhom(X, auxdata, \dots, normpower)
 deltasuffstat(model, \dots, restrict, dataonly, force, quadsub, sparseOK)
 Deviation(x, ref, leaveout, n, xi)
 dflt.redraw(button, name, env)
