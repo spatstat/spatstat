@@ -13,30 +13,9 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
                              Ang="Ang",
                              best="Ang"),
                            multi=FALSE)
-  if(!spatstat.options("developer")) {
-    # original code, requires connected network
-    X <- as.lpp(X, sparse=FALSE)
-    L <- domain(X)
-    if(any(is.infinite(L$dpath)))
-      stop(paste("Network is not connected;",
-                 "linearK is not yet implemented for this case"),
-           call.=FALSE)
-    # extract info about pattern
-    np <- npoints(X)
-    lengthL <- volume(L)
-    # compute K
-    denom <- np * (np - 1)/lengthL
-    K <- linearKengine(X, r=r, denom=denom, correction=correction,
-                       ratio=ratio, ...)
-  } else {
-    myrule <- function(X, ...) {
-      np <- npoints(X)
-      lengthL <- volume(domain(X))
-      denom <- np * (np - 1)/lengthL
-      return(list(denom=denom))
-    }
-    K <- ApplyConnected(X, linearKengine, r=r, rule=myrule, ratio=ratio, ...)
-  }
+  K <- ApplyConnected(X, linearKengine, 
+       		      rule=denomrule.linearK,
+ 		      r=r, ..., correction=correction, ratio=ratio)
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -49,6 +28,13 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
          })
   K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
   return(K)
+}
+
+denomrule.linearK <- function(X, ...) {
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
+  denom <- np * (np - 1)/lengthL
+  return(list(denom=denom))
 }
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
@@ -65,45 +51,17 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   if(normalise) {
     check.1.real(normpower)
     stopifnot(normpower >= 1)
-  }
-  X <- as.lpp(X, sparse=FALSE)
-  L <- domain(X)
-  # extract info about pattern
-  lengthL <- volume(L)
-  #
+  } else normpower <- 0
+
   lambdaX <- getlambda.lpp(lambda, X, ...)
-  #
   invlam <- 1/lambdaX
 
-  if(!spatstat.options("developer")) {
-    # original code, requires connected network
-    if(any(is.infinite(L$dpath)))
-      stop(paste("Network is not connected;",
-                 "linearK is not yet implemented for this case"),
-           call.=FALSE)
-    invlam2 <- outer(invlam, invlam, "*")
-    denom <- if(!normalise) lengthL else
-             if(normpower == 1) sum(invlam) else
-             lengthL * (sum(invlam)/lengthL)^normpower
-    K <- linearKengine(X, ...,
-                       r=r, reweight=invlam2, denom=denom,
-		       correction=correction, ratio=ratio)
-  } else {
-    oxdata <- list(invlam=invlam)
-    myrule <- function(X, auxdata, ..., normpower) {
-      invlam <- auxdata$invlam
-      invlam2 <- outer(invlam, invlam, "*")
-      lengthL <- volume(domain(X))
-      denom <- if(!normalise) lengthL else
-               if(normpower == 1) sum(invlam) else
-               lengthL * (sum(invlam)/lengthL)^normpower
-      return(list(reweight=invlam2, denom=denom))	       
-    }
-    K <- ApplyConnected(X, linearKengine, r=r,
-                        rule=myrule, auxdata=oxdata,
-			correction=correction, normpower=normpower,
-			ratio=ratio, ...)
-  }
+  oxdata <- list(invlam=invlam)
+  K <- ApplyConnected(X, linearKengine, 
+                      rule=denomrule.linearKinhom,
+		      auxdata=oxdata,
+		      r=r, correction=correction, normpower=normpower,
+	 	      ratio=ratio, ...)
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -117,6 +75,16 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab)
   attr(K, "dangerous") <- attr(lambdaX, "dangerous")
   return(K)
+}
+
+denomrule.linearKinhom <- function(X, auxdata, ..., normpower=0) {
+  invlam <- auxdata$invlam
+  invlam2 <- outer(invlam, invlam, "*")
+  lengthL <- volume(domain(X))
+  denom <- if(normpower == 0) lengthL else
+           if(normpower == 1) sum(invlam) else
+           lengthL * (sum(invlam)/lengthL)^normpower
+  return(list(reweight=invlam2, denom=denom))	       
 }
 
 getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
