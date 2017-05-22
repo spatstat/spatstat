@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.021
+        CHANGES IN spatstat VERSION 1.51-0.022
 
 OVERVIEW
 
@@ -83,7 +83,15 @@ BUG FIXES
     caused an error if 'X' contained zero points.
     Fixed
 
+    o linearK, linearKinhom
+    Crashed if the network was disconnected.
+    Fixed.
+    
     o crossdist.lpp
+    Crashed if the network was disconnected.
+    Fixed.
+    
+    o countends
     Crashed if the network was disconnected.
     Fixed.
     

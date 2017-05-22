@@ -13,9 +13,11 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
                              Ang="Ang",
                              best="Ang"),
                            multi=FALSE)
-  K <- ApplyConnected(X, linearKengine, 
-       		      rule=denomrule.linearK,
- 		      r=r, ..., correction=correction, ratio=ratio)
+  np <- npoints(X)
+  lengthL <- volume(domain(X))
+  denom <- np * (np - 1)/lengthL
+  K <- linearKengine(X, r=r, ..., 
+ 		     denom=denom, correction=correction, ratio=ratio)
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -28,13 +30,6 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
          })
   K <- rebadge.fv(K, new.ylab=ylab, new.fname=fname)
   return(K)
-}
-
-denomrule.linearK <- function(X, ...) {
-  np <- npoints(X)
-  lengthL <- volume(domain(X))
-  denom <- np * (np - 1)/lengthL
-  return(list(denom=denom))
 }
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
@@ -51,17 +46,21 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   if(normalise) {
     check.1.real(normpower)
     stopifnot(normpower >= 1)
-  } else normpower <- 0
+  } 
 
   lambdaX <- getlambda.lpp(lambda, X, ...)
   invlam <- 1/lambdaX
+  invlam2 <- outer(invlam, invlam, "*")
+  lengthL <- volume(domain(X))
+  denom <- if(!normalise) lengthL else
+           if(normpower == 1) sum(invlam) else
+           lengthL * (sum(invlam)/lengthL)^normpower
 
-  oxdata <- list(invlam=invlam)
-  K <- ApplyConnected(X, linearKengine, 
-                      rule=denomrule.linearKinhom,
-		      auxdata=oxdata,
-		      r=r, correction=correction, normpower=normpower,
-	 	      ratio=ratio, ...)
+  K <- linearKengine(X,
+                     reweight=invlam2, denom=denom, 
+  	             r=r, correction=correction, normpower=normpower,
+	 	     ratio=ratio, ...)
+		     
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -77,15 +76,6 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   return(K)
 }
 
-denomrule.linearKinhom <- function(X, auxdata, ..., normpower=0) {
-  invlam <- auxdata$invlam
-  invlam2 <- outer(invlam, invlam, "*")
-  lengthL <- volume(domain(X))
-  denom <- if(normpower == 0) lengthL else
-           if(normpower == 1) sum(invlam) else
-           lengthL * (sum(invlam)/lengthL)^normpower
-  return(list(reweight=invlam2, denom=denom))	       
-}
 
 getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
   lambdaname <- deparse(substitute(lambda))
@@ -181,7 +171,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
      m <- matrix(1, np, np)
      for(j in 1:np) 
        m[ -j, j] <- countends(L, X[-j], D[-j,j], toler=toler)
-     if(any(uhoh <- (m == 0))) {
+     if(any(uhoh <- (m == 0) & is.finite(D))) {
        warning("Internal error: disc boundary count equal to zero")
        m[uhoh] <- 1
      }
@@ -191,9 +181,15 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
   K <- compileK(D, r, weights=wt, denom=denom, fname=fname, ratio=ratio)
   # tack on theoretical value
-  K <- bind.fv(K, data.frame(theo=r),
-               makefvlabel(NULL, NULL, fname, "theo"),
-               "theoretical Poisson %s")
+  if(ratio) {
+    K <- bind.ratfv(K, data.frame(theo= r * denom), denom,
+                    makefvlabel(NULL, NULL, fname, "theo"),
+                    "theoretical Poisson %s")
+  } else {
+    K <- bind.fv(K, data.frame(theo=r),
+                 makefvlabel(NULL, NULL, fname, "theo"),
+                 "theoretical Poisson %s")
+  }		 
   K <- rebadge.fv(K, ylab, fname)
   unitname(K) <- unitname(X)
   fvnames(K, ".") <- rev(fvnames(K, "."))

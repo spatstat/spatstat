@@ -149,22 +149,37 @@ countends <- function(L, x=locator(1), r, toler=NULL) {
   # r is the radius of the disc
   #
   stopifnot(inherits(L, "linnet"))
+  # get x
+  if(missing(x))
+    x <- clickppp(1, Window(L), add=TRUE)
+  if(!inherits(x, "lpp"))
+    x <- as.lpp(x, L=L)
+  np <- npoints(x)
+  
+  if(length(r) != np)
+    stop("Length of vector r does not match number of points in x")
+  #
+  if(!is.connected(L)) {
+    #' disconnected network - split into components
+    result <- numeric(np)
+    lab <- connected(L, what="labels")
+    subsets <- split(seq_len(nvertices(L)), factor(lab))
+    for(subi in subsets) {
+      xi <- thinNetwork(x, retainvertices=subi)
+      witch <- which(attr(xi, "retainpoints"))
+      ok <- is.finite(r[witch])
+      witchok <- witch[ok]
+      result[witchok] <-
+        countends(domain(xi), xi[ok], r[witchok], toler=toler)      
+    }
+    return(result)
+  }
   lines <- L$lines
   vertices <- L$vertices
   lengths <- lengths.psp(lines)
   dpath <- L$dpath
-  win <- L$window
   nv <- vertices$n
   ns <- lines$n
-  # get x
-  if(missing(x))
-    x <- clickppp(1, win, add=TRUE)
-  if(!inherits(x, "lpp"))
-    x <- as.lpp(x, L=L)
-  #
-  np <- npoints(x)
-  if(length(r) != np)
-    stop("Length of vector r does not match number of points in x")
   #
   if(!spatstat.options("Ccountends")) {
     #' interpreted code
