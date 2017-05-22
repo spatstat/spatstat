@@ -37,11 +37,17 @@
   code in the C language. If \code{method="interpreted"} then the
   computation is performed using interpreted \R code. The \R code is
   much slower, but is provided for checking purposes.
+
+  The \code{k}th nearest neighbour distance is infinite
+  if the \code{k}th nearest neighbour does not exist. This can occur
+  if there are fewer than \code{k+1} points in the dataset, or if
+  the linear network is not connected.
 }
 \value{
   A numeric vector, of length equal to the number of points in \code{X},
   or a matrix, with one row for each point in \code{X} and one column
-  for each entry of \code{k}.
+  for each entry of \code{k}. Entries are nonnegative numbers or
+  infinity (\code{Inf}).
 }
 \author{
   \adrian

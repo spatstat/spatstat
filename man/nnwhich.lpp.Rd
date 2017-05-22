@@ -37,6 +37,11 @@
   code in the C language. If \code{method="interpreted"} then the
   computation is performed using interpreted \R code. The \R code is
   much slower, but is provided for checking purposes.
+
+  The result is \code{NA} if the \code{k}th nearest neighbour
+  does not exist. This can occur
+  if there are fewer than \code{k+1} points in the dataset, or if
+  the linear network is not connected.
 }
 \value{
   An integer vector, of length equal to the number of points in

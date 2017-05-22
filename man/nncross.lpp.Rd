@@ -69,6 +69,11 @@
   the vector of identifiers for points in \code{Y}. Then the code
   will only compare two points if they have different values of the
   identifier. See the Examples.
+
+  The \code{k}th nearest neighbour may be undefined, for example
+  if there are fewer than \code{k+1} points in the dataset, or if
+  the linear network is not connected.
+  In this case, the \code{k}th nearest neighbour distance is infinite.
 }
 \value{
   By default (if \code{what=c("dist", "which")} and \code{k=1})

@@ -27,21 +27,23 @@
 \details{
   Given a pattern of points on a linear network, this function computes the
   matrix of distances between all pairs of points, measuring
-  distance by the shortest path in the network.
+  distance by the shortest path in the network. 
   
   If \code{method="C"} the distances are computed using
   code in the C language. If \code{method="interpreted"} then the
   computation is performed using interpreted \R code. The \R code is
   much slower, but is provided for checking purposes.
+
+  If two points cannot be joined by a path,
+  the distance between them is infinite (\code{Inf}).
 }
 \value{
-  A symmetric matrix.
+  A symmetric matrix, whose values are nonnegative numbers or infinity
+  (\code{Inf}).
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  \adrian
-  
-  
+  \adrian.
 }
 \seealso{
   \code{\link{lpp}}
