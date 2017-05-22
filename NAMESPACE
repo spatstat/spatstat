@@ -42,6 +42,10 @@ export("as.linfun.linfun")
 export("bits.test")
 export("as.data.frame.envelope")
 export("connected.lpp")
+export("is.connected")
+export("is.connected.default")
+export("is.connected.linnet")
+export("is.connected.ppp")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
@@ -3695,3 +3699,6 @@ S3method("summary", "lintess")
 S3method("print", "summary.lintess")
 S3method("as.data.frame", "envelope")
 S3method("connected", "lpp")
+S3method("is.connected", "default")
+S3method("is.connected", "linnet")
+S3method("is.connected", "ppp")

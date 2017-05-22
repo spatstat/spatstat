@@ -579,6 +579,14 @@ connected.linnet <- function(X, ..., what=c("labels", "components")) {
   return(nets)
 }
 
+is.connected.linnet <- function(X, ...) {
+  if(!is.null(dpath <- X$dpath))
+    return(all(is.finite(dpath)))
+  lab <- connected(X, what="labels")
+  npieces <- length(levels(lab))
+  return(npieces == 1)
+}
+
 crossing.linnet <- function(X, Y) {
   X <- as.linnet(X)
   if(!inherits(Y, c("linnet", "infline", "psp")))

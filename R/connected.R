@@ -178,3 +178,22 @@ connected.ppp <- function(X, R, ...) {
   return(Y)
 }
 
+# .................................................
+
+is.connected <- function(X, ...) {
+  UseMethod("is.connected")
+}
+
+is.connected.default <- function(X, ...) {
+  y <- connected(X, ...)
+  npieces <- length(levels(y))
+  if(npieces == 0)
+    stop("Unable to determine connectedness")
+  return(npieces == 1)
+}
+
+is.connected.ppp <- function(X, R, ...) {
+  lab <- connected(X, R, internal=TRUE)
+  npieces <- length(unique(lab))
+  return(npieces == 1)
+}

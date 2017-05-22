@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.020
+        CHANGES IN spatstat VERSION 1.51-0.021
 
 OVERVIEW
 
@@ -15,6 +15,14 @@ NEW FUNCTIONS
     Extract function data from an envelope object,
     including the functions for the simulated data ('simfuns')
     if they were saved.
+
+    o is.connected, is.connected.default, is.connected.linnet
+    Determines whether a spatial object consists of
+    one topologically connected piece, or several pieces.
+
+    o is.connected.ppp
+    Determines whether a point pattern is connected after
+    all pairs of points closer than distance R are joined.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
