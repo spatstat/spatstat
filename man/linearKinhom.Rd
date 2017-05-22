@@ -9,7 +9,7 @@
 }
 \usage{
 linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
-             normalise=TRUE, normpower=1)
+             normalise=TRUE, normpower=1, ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -42,6 +42,12 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
   \item{normpower}{
     Integer (usually either 1 or 2).
     Normalisation power. See Details.
+  }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    the estimate will also be saved,
+    for use in analysing replicated point patterns.
   }
 }
 \details{

@@ -8,7 +8,7 @@
   for a point pattern on a linear network.
 }
 \usage{
-linearK(X, r=NULL, ..., correction="Ang")
+linearK(X, r=NULL, ..., correction="Ang", ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -24,6 +24,12 @@ linearK(X, r=NULL, ..., correction="Ang")
   \item{correction}{
     Geometry correction.
     Either \code{"none"} or \code{"Ang"}. See Details.
+  }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    the estimate will also be saved,
+    for use in analysing replicated point patterns.
   }
 }
 \details{
@@ -42,9 +48,7 @@ linearK(X, r=NULL, ..., correction="Ang")
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  \adrian
-  
-  
+  \adrian.
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

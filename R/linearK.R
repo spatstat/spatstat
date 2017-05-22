@@ -6,7 +6,7 @@
 # K function for point pattern on linear network
 #
 #
-linearK <- function(X, r=NULL, ..., correction="Ang") {
+linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -26,7 +26,8 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
     lengthL <- volume(L)
     # compute K
     denom <- np * (np - 1)/lengthL
-    K <- linearKengine(X, r=r, denom=denom, correction=correction, ...)
+    K <- linearKengine(X, r=r, denom=denom, correction=correction,
+                       ratio=ratio, ...)
   } else {
     myrule <- function(X, ...) {
       np <- npoints(X)
@@ -34,7 +35,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
       denom <- np * (np - 1)/lengthL
       return(list(denom=denom))
     }
-    K <- ApplyConnected(X, linearKengine, r=r, rule=myrule, ...)
+    K <- ApplyConnected(X, linearKengine, r=r, rule=myrule, ratio=ratio, ...)
   }
   # set appropriate y axis label
   switch(correction,
@@ -51,7 +52,8 @@ linearK <- function(X, r=NULL, ..., correction="Ang") {
 }
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
-                         correction="Ang", normalise=TRUE, normpower=1) {
+                         correction="Ang", normalise=TRUE, normpower=1,
+			 ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -59,7 +61,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                              best="Ang"),
                            multi=FALSE)
   if(is.null(lambda))
-    linearK(X, r=r, ..., correction=correction)
+    linearK(X, r=r, ..., ratio=ratio, correction=correction)
   if(normalise) {
     check.1.real(normpower)
     stopifnot(normpower >= 1)
@@ -85,7 +87,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
              lengthL * (sum(invlam)/lengthL)^normpower
     K <- linearKengine(X, ...,
                        r=r, reweight=invlam2, denom=denom,
-		       correction=correction)
+		       correction=correction, ratio=ratio)
   } else {
     oxdata <- list(invlam=invlam)
     myrule <- function(X, auxdata, ..., normpower) {
@@ -99,7 +101,8 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
     }
     K <- ApplyConnected(X, linearKengine, r=r,
                         rule=myrule, auxdata=oxdata,
-			correction=correction, normpower=normpower, ...)
+			correction=correction, normpower=normpower,
+			ratio=ratio, ...)
   }
   # set appropriate y axis label
   switch(correction,
@@ -132,8 +135,9 @@ getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
   } else danger <- TRUE
   lambdaX <-
     if(is.vector(lambda)) lambda  else
-    if(is.function(lambda)) lambda(XX$x, XX$y, ...) else
-    if(is.im(lambda)) safelookup(lambda, XX) else 
+    if(is.function(lambda)) {
+      do.call.matched(lambda, list(x=XX$x, y=XX$y, ...))
+    } else if(is.im(lambda)) safelookup(lambda, XX) else 
     if(inherits(lambda, "linim")) safelookup(as.im(lambda), XX) else 
     if(is.ppm(lambda) || inherits(lambda, "lppm"))
       predict(lambda, locations=as.data.frame(XX)) else
@@ -154,7 +158,7 @@ getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
 }
 
 linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
-                          correction="Ang", showworking=FALSE) {
+                          correction="Ang", ratio=FALSE, showworking=FALSE) {
   # ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
@@ -194,7 +198,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   #---  compile into K function ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    K <- compileK(D, r, denom=denom, fname=fname)
+    K <- compileK(D, r, denom=denom, fname=fname, ratio=ratio)
     K <- rebadge.fv(K, ylab, fname)
     unitname(K) <- unitname(X)
     return(K)
@@ -217,7 +221,7 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   }
   # compute K
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  K <- compileK(D, r, weights=wt, denom=denom, fname=fname)
+  K <- compileK(D, r, weights=wt, denom=denom, fname=fname, ratio=ratio)
   # tack on theoretical value
   K <- bind.fv(K, data.frame(theo=r),
                makefvlabel(NULL, NULL, fname, "theo"),

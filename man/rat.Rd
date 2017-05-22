@@ -54,10 +54,7 @@ rat(ratio, numerator, denominator, check = TRUE)
   and has additional attributes \code{numerator} and \code{denominator}.
 }
 \author{\adrian
-  
-  
-  and \rolf
-  
+  and \rolf.
 }
 \seealso{
   \code{\link{compatible}}, 

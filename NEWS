@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.019
+        CHANGES IN spatstat VERSION 1.51-0.020
 
 OVERVIEW
 
@@ -18,6 +18,9 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o linearK, linearKinhom, compilepcf
+    New argument 'ratio'
+    
     o bind.fv
     New argument 'clip'.
 

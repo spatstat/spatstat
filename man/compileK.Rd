@@ -16,7 +16,8 @@ compileK(D, r, weights = NULL, denom = 1,
          check = TRUE, ratio = FALSE, fname = "K")
 
 compilepcf(D, r, weights = NULL, denom = 1,
-         check = TRUE, endcorrect = TRUE, \dots, fname = "g")
+         check = TRUE, endcorrect = TRUE, ratio=FALSE,
+	 \dots, fname = "g")
 }
 \arguments{
   \item{D}{
@@ -94,6 +95,11 @@ compilepcf(D, r, weights = NULL, denom = 1,
   values. Additional columns (such as a column giving the theoretical
   value) must be added by the user, with the aid of
   \code{\link{bind.fv}}.
+
+  If \code{ratio=TRUE}, the result also belongs to class \code{"rat"}
+  and has attributes containing the numerator and denominator
+  of the function estimate. This allows function estimates from
+  several datasets to be pooled using \code{\link{pool}}.
 }
 \value{
   An object of class \code{"fv"} representing the estimated function.

@@ -1031,7 +1031,8 @@ kraeverRandomFields()
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
-linearKengine(X, \dots, r, reweight, denom, correction, showworking)
+linearKengine(X, \dots, r, reweight, denom, correction,
+              ratio, showworking)
 linearKmulti(X, I, J, r, \dots, correction)
 linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,
              normalise)
