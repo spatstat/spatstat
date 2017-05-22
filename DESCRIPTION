@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.51-0.018
+Version: 1.51-0.019
 Nickname: Plain Packaging
-Date: 2017-05-19
+Date: 2017-05-22
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

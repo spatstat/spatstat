@@ -23,6 +23,23 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
     if(!identical(L, LY))
       stop("X and Y are on different linear networks")
   }
+
+  if(any(is.infinite(L$dpath))) {
+    #' disconnected network
+    lab <- connected(L, what="labels")
+    subsets <- split(seq_len(nvertices(L)), lab)
+    crossdistmat <- matrix(Inf,nX,nY)
+    for(subi in subsets) {
+      Xi <- thinNetwork(X, retainvertices=subi)
+      Yi <- thinNetwork(Y, retainvertices=subi)
+      whichX <- attr(Xi, "retainpoints")      
+      whichY <- attr(Yi, "retainpoints")      
+      crossdistmat[whichX, whichY] <- crossdist.lpp(Xi, Yi, method=method)
+    }
+    return(crossdistmat)
+  }
+
+  # network is connected
   
   P <- as.ppp(X)
   Q <- as.ppp(Y)
@@ -37,10 +54,9 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
   Xpro <- coords(X, local=TRUE, spatial=FALSE, temporal=FALSE)$seg
   Ypro <- coords(Y, local=TRUE, spatial=FALSE, temporal=FALSE)$seg
 
-  crossdistmat <- matrix(0,nX,nY)
-
   if(method == "interpreted") {
     # loop through all pairs of data points
+    crossdistmat <- matrix(,nX,nY)
     for (i in 1:nX) {
       Xproi <- Xpro[i]
       Xi <- P[i]
@@ -99,7 +115,7 @@ crossdist.lpp <- function(X, Y, ..., method="C") {
              dpath = as.double(dpath),
              psegmap = as.integer(Xsegmap),
              qsegmap = as.integer(Ysegmap),
-             answer = as.double(crossdistmat),
+             answer = as.double(numeric(nX * nY)),
              PACKAGE = "spatstat")
     crossdistmat <- matrix(zz$answer, nX, nY)
   }

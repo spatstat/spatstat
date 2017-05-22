@@ -25,6 +25,7 @@
   A matrix whose \code{[i,j]} entry is the distance
   from the \code{i}-th point in \code{X}
   to the \code{j}-th point in \code{Y}.
+  Matrix entries are nonnegative numbers or infinity (\code{Inf}).
 }
 \details{
   Given two point patterns on a linear network,
@@ -47,6 +48,9 @@
   computed using interpreted R code only. If \code{method="C"}
   (the default) then C code is used. 
   The C code is much faster.
+
+  If two points cannot be joined by a path,
+  the distance between them is infinite (\code{Inf}).
 }
 \seealso{
   \code{\link{crossdist}},
@@ -61,9 +65,7 @@
    d <- crossdist(X, Y)
 }
 \author{
-  \adrian
-  
-  
+  \adrian.
 }
 \keyword{spatial}
 \keyword{math}
