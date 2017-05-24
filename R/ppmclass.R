@@ -767,6 +767,8 @@ model.matrix.ppm <- function(object,
     if(any(forgot <- !(names(bt) %in% names(data)))) 
       data <- do.call(cbind, append(list(data), bt[forgot]))
     mm <- model.matrix(gf, data=data, ...)
+    if(inherits(gf, "gam")) 
+      attr(mm, "assign") <- gf$assign
     return(mm)
   }
 
@@ -774,6 +776,8 @@ model.matrix.ppm <- function(object,
     # extract model matrix of glm fit object
     # restricting to its 'subset' 
     mm <- model.matrix(gf, ...)
+    if(inherits(gf, "gam")) 
+      attr(mm, "assign") <- gf$assign
     return(mm)
   }
   
@@ -794,6 +798,8 @@ model.matrix.ppm <- function(object,
     } else 
     stop("internal error: model matrix does not match glm data frame")
   }
+  if(inherits(gf, "gam")) 
+    attr(mm, "assign") <- gf$assign
   colnames(mm) <- cn
   return(mm)
 }

@@ -1,12 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.022
+        CHANGES IN spatstat VERSION 1.51-0.023
 
 OVERVIEW
 
     o We thank Rasmus Waagepetersen and Abdollah Jalilian for contributions.
 
-    o Bug fix in bandwidth selector.
+    o Important bug fixes.
     
+    o Bug fix in bandwidth selection for pair correlation function.
+
+    o Now handles disconnected linear networks.
+
     o Version nickname: 'Plain Packaging'
 
 NEW FUNCTIONS
@@ -48,21 +52,33 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pool.fv
     New arguments 'relabel' and 'variance'
     
-    o logLik.ppm
-    The warning about pseudolikelihood ('log likelihood not available')
-    is given only once, and is not repeated in subsequent calls,
-    within a spatstat session.
-
     o density.ppp
     New argument 'verbose'.
 
     o bw.pcf
     New argument 'verbose'.
     
+    o logLik.ppm
+    The warning about pseudolikelihood ('log likelihood not available')
+    is given only once, and is not repeated in subsequent calls,
+    within a spatstat session.
+
 BUG FIXES
 
     o bw.pcf
     Results were totally incorrect due to a typo.
+    Fixed.
+    
+    o linearK, linearKinhom
+    Crashed if the network was disconnected.
+    Fixed.
+    
+    o crossdist.lpp
+    Crashed if the network was disconnected.
+    Fixed.
+    
+    o countends
+    Crashed if the network was disconnected.
     Fixed.
     
     o plot.ppp
@@ -83,16 +99,9 @@ BUG FIXES
     caused an error if 'X' contained zero points.
     Fixed
 
-    o linearK, linearKinhom
-    Crashed if the network was disconnected.
-    Fixed.
-    
-    o crossdist.lpp
-    Crashed if the network was disconnected.
-    Fixed.
-    
-    o countends
-    Crashed if the network was disconnected.
+    o model.depends
+    Crashed when applied to regression models fitted by 'gam',
+    or point process models fitted by 'ppm' with 'use.gam=TRUE'.
     Fixed.
     
     o pool.fv
@@ -102,6 +111,15 @@ BUG FIXES
 
     o linearK
     The 'theo' column was missing if npoints(X) < 2 and correction="Ang".
+    Fixed.
+    
+    o model.matrix.ppm
+    Result was malformed if the model was fitted with 'use.gam=TRUE'.
+    Fixed.
+    
+    o effectfun
+    Crashed if 'covname' was omitted,
+    if the model was fitted with 'use.gam=TRUE'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
