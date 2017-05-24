@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.023
+        CHANGES IN spatstat VERSION 1.51-0.024
 
 OVERVIEW
 
@@ -69,7 +69,12 @@ BUG FIXES
     Results were totally incorrect due to a typo.
     Fixed.
     
-    o linearK, linearKinhom
+    o linearK, linearKinhom, linearpcf, linearpcfinhom, linearKcross,
+    linearKdot, linearpcfcross, linearpcfdot, linearKcross.inhom,
+    linearKdot.inhom, linearpcfcross.inhom, linearpcfdot.inhom
+    Crashed if the network was disconnected.
+    Fixed.
+    
     Crashed if the network was disconnected.
     Fixed.
     

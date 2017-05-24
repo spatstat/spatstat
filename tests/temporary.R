@@ -32,6 +32,7 @@ summary(L)
 Z <- connected(L, what="components")
 
 #' point pattern with no points in one connected component
+set.seed(42)
 X <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 B <- lineardirichlet(X)
 plot(B)
@@ -42,6 +43,20 @@ H <- nnwhich(X)
 Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 G <- nncross(X, Y)
 J <- crossdist(X, Y)
-K <- linearK(X)
-KI <- linearKinhom(X, lambda=rep(intensity(X), npoints(X)))
 
+#' K functions in disconnected network
+K <- linearK(X)
+lamX <- intensity(X)
+nX <- npoints(X)
+KI <- linearKinhom(X, lambda=rep(lamX, nX))
+P <- linearpcf(X)
+PJ <- linearpcfinhom(X, lambda=rep(lamX, nX))
+Y <- X %mark% factor(rep(1:2, nX)[1:nX])
+Y1 <- split(Y)[[1]]
+Y2 <- split(Y)[[2]]
+KY <- linearKcross(Y)
+PY <- linearpcfcross(Y)
+KYI <- linearKcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
+                       lambdaJ=rep(intensity(Y2), npoints(Y2)))
+PYI <- linearpcfcross.inhom(Y, lambdaI=rep(intensity(Y1), npoints(Y1)),
+                    lambdaJ=rep(intensity(Y2), npoints(Y2)))
