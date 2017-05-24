@@ -81,24 +81,18 @@
   \code{\link{fv.object}}
 }
 \examples{
-  data(copper)
   X <- copper$SouthPoints
-  D <- distmap(copper$SouthLines)
-  fit <- ppm(X, ~polynom(Z, 5), covariates=list(Z=D))
-  \donttest{
-     plot(effectfun(fit, "Z"))
-  } 
-  plot(effectfun(fit, "Z", se.fit=TRUE), shade=c("hi", "lo"))
-  fit <- ppm(X, ~x + polynom(Z, 5), covariates=list(Z=D))
-  plot(effectfun(fit, "Z", x=20))
-  fit <- ppm(X, ~x)
-  plot(effectfun(fit, "x"))
+  D <- distfun(copper$SouthLines)
+  fit <- ppm(X ~ polynom(D, 5))
+  effectfun(fit)
+  plot(effectfun(fit, se.fit=TRUE))
+
+  fitx <- ppm(X ~ x + polynom(D, 5))
+  plot(effectfun(fitx, "D", x=20))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{models}
