@@ -43,6 +43,7 @@ H <- nnwhich(X)
 Y <- rpoislpp(lambda=function(x,y) { 10 * (x < 0.5)}, L)
 G <- nncross(X, Y)
 J <- crossdist(X, Y)
+plot(distfun(X))  # includes evaluation of nncross(what="dist")
 
 #' K functions in disconnected network
 K <- linearK(X)

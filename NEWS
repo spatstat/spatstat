@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.025
+        CHANGES IN spatstat VERSION 1.51-0.026
 
 OVERVIEW
 
@@ -78,11 +78,11 @@ BUG FIXES
     o crossdist.lpp
     Crashed if the network was disconnected.
     Fixed.
-    
+
     o countends
     Crashed if the network was disconnected.
     Fixed.
-    
+
     o plot.ppp
     The argument 'type="n"' did not suppress plotting of the legend,
     for marked point patterns.
@@ -122,6 +122,10 @@ BUG FIXES
     o effectfun
     Crashed if 'covname' was omitted,
     if the model was fitted with 'use.gam=TRUE'.
+    Fixed.
+    
+    o nncross.lpp
+    Result had incorrect format if Y was empty, in some cases.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
