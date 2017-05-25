@@ -358,6 +358,7 @@ nncross.lpp <- local({
       nndistmat <- if("dist" %in% what) matrix(Inf, nX, length(k)) else NULL
       nnwhichmat <-
          if("which" %in% what) matrix(NA_integer_, nX, length(k)) else NULL
+      oneanswer <- (length(what) == 1)
       for(i in seq_along(subsets)) {
         subi <- subsets[[i]]
         Xi <- thinNetwork(X, retainvertices=subi)
@@ -369,9 +370,9 @@ nncross.lpp <- local({
 	                 what=what, k=k, method=method,
 			 format="list")
         if("dist" %in% what)
-	   nndistmat[useX, ] <- z$dist
+	   nndistmat[useX, ] <- if(oneanswer) z else z$dist
         if("which" %in% what)
-	   nnwhichmat[useX, ] <- which(useY)[z$which]
+	   nnwhichmat[useX, ] <- which(useY)[if(oneanswer) z else z$which]
       }
       result <- list(dist=nndistmat, which=nnwhichmat)[what]
       if(format == "data.frame")
