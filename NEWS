@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.026
+        CHANGES IN spatstat VERSION 1.51-0.027
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o Now handles disconnected linear networks.
 
-    o Version nickname: 'Plain Packaging'
+    o Version nickname: 'Conditions Apply'
 
 NEW FUNCTIONS
 
@@ -27,6 +27,9 @@ NEW FUNCTIONS
     o is.connected.ppp
     Determines whether a point pattern is connected after
     all pairs of points closer than distance R are joined.
+
+    o hist.funxy
+    Histogram of values of a spatial function.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -57,6 +60,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o bw.pcf
     New argument 'verbose'.
+    
+    o hist.im
+    New argument 'xname'.
     
     o logLik.ppm
     The warning about pseudolikelihood ('log likelihood not available')

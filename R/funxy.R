@@ -94,3 +94,14 @@ persp.funxy <- function(x, ...) {
   invisible(NULL)
 }
 
+hist.funxy <- function(x, ..., xname) {
+  if(missing(xname) || is.null(xname)) xname <- short.deparse(substitute(x))
+  a <- do.call.matched(as.im,
+                       list(X=x, ...),
+                       c("X", "W",
+		         "dimyx", "eps", "xy",
+   		         "na.replace", "strict"),
+		       sieve=TRUE)
+  Z <- a$result
+  do.call(hist.im, append(list(x=Z, xname=xname), a$otherargs))
+}

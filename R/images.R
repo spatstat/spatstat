@@ -849,8 +849,8 @@ as.double.im <- function(x, ...) { as.double(x[], ...) }
 
 ##
 
-hist.im <- function(x, ..., probability=FALSE) {
-  xname <- short.deparse(substitute(x))
+hist.im <- function(x, ..., probability=FALSE, xname) {
+  if(missing(xname) || is.null(xname)) xname <- short.deparse(substitute(x))
   verifyclass(x, "im")
   main <- paste("Histogram of", xname)
   # default plot arguments
