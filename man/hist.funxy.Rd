@@ -6,7 +6,7 @@
   of class \code{"funxy"}.
 }
 \usage{
-  \method{hist}{funxy}(x, \dots, probability=FALSE, xname)
+  \method{hist}{funxy}(x, \dots, xname)
 }
 \arguments{
   \item{x}{A pixel image (object of class \code{"funxy"}).}
