@@ -228,6 +228,9 @@ as.ppm.profilepl <- function(object) {
   object$fit
 }
 
+predict.profilepl <- function(object, ...) {
+  predict(object$fit, ...)
+}
 
 ##
 ##  plot method 

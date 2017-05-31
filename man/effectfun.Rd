@@ -11,7 +11,8 @@
 \arguments{
   \item{model}{
     A fitted point process model (object of class
-    \code{"ppm"}, \code{"kppm"} or \code{"lppm"}).
+    \code{"ppm"}, \code{"kppm"}, \code{"lppm"}, \code{"dppm"}, \code{"rppm"}
+    or \code{"profilepl"}).
   }
   \item{covname}{
     The name of the covariate. A character string.
@@ -28,7 +29,8 @@
 }
 \details{
   The object \code{model} should be an object of class
-  \code{"ppm"}, \code{"kppm"} or \code{"lppm"}
+  \code{"ppm"}, \code{"kppm"}, \code{"lppm"}, \code{"dppm"}, \code{"rppm"}
+    or \code{"profilepl"}
   representing a point process model fitted to point pattern data.
 
   The model's trend formula should involve a spatial covariate

@@ -6,12 +6,15 @@
 
 effectfun <- local({
 
+  okclasses <- c("ppm", "kppm", "lppm", "dppm", "rppm", "profilepl")
+
 effectfun <-  function(model, covname, ..., se.fit=FALSE) {
-  if(!is.ppm(model)) {
-    if(is.kppm(model)) model <- as.ppm(model) else
-    if(is.lppm(model)) model <- model$fit else
-    stop("First argument 'model' should be a ppm, kppm or lppm object")
-  }
+  if(!inherits(model, okclasses))
+    stop(paste("First argument 'model' should be a fitted model of class",
+               commasep(sQuote(okclasses), " or ")),
+	 call.=FALSE)
+  orig.model <- model	 
+  model <- as.ppm(model)
   dotargs <- list(...)
   # determine names of covariates involved
   intern.names <-
@@ -122,7 +125,7 @@ effectfun <-  function(model, covname, ..., se.fit=FALSE) {
   fakecov <- if(length(fakecov) > 0) do.call(data.frame, fakecov) else NULL
   #
   # Now predict
-  pred <- predict(model, locations=fakeloc, covariates=fakecov, se=se.fit)
+  pred <- predict(orig.model, locations=fakeloc, covariates=fakecov, se=se.fit)
   if(!se.fit) lambda <- pred else {
     lambda <- pred$estimate
     se     <- pred$se

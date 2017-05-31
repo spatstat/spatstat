@@ -30,6 +30,9 @@ rppm <- function(..., rpargs=list()) {
   return(result)
 }
 
+# undocumented
+as.ppm.rppm <- function(object) { object$pfit }
+
 print.rppm <- function(x, ...) {
   splat("Point process model with recursive partitioning")
   splat("Data:", sQuote(x$pfit$Qname))

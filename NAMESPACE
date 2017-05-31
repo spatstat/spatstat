@@ -47,6 +47,9 @@ export("is.connected.default")
 export("is.connected.linnet")
 export("is.connected.ppp")
 export("hist.funxy")
+export("as.ppm.lppm")
+export("as.ppm.rppm")
+export("predict.profilepl")
 
 # .................................................. 
 # Automatically-generated list of documented objects 
@@ -3704,3 +3707,6 @@ S3method("is.connected", "default")
 S3method("is.connected", "linnet")
 S3method("is.connected", "ppp")
 S3method("hist", "funxy")
+S3method("as.ppm", "lppm")
+S3method("as.ppm", "rppm")
+S3method("predict", "profilepl")

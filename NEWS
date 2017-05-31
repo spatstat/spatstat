@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.027
+        CHANGES IN spatstat VERSION 1.51-0.028
 
 OVERVIEW
 
@@ -10,6 +10,8 @@ OVERVIEW
     o Bug fix in bandwidth selection for pair correlation function.
 
     o Now handles disconnected linear networks.
+
+    o Effect function is now available for all types of fitted model.
 
     o Version nickname: 'Conditions Apply'
 
@@ -33,6 +35,9 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o effectfun
+    Now works for 'ppm', 'kppm', 'lppm', 'dppm', 'rppm' and 'profilepl' objects.
+    
     o linearK, linearKinhom, compilepcf
     New argument 'ratio'
     

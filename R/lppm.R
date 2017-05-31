@@ -71,6 +71,9 @@ lppm.lpp <- function(X, ..., eps=NULL, nd=1000, random=FALSE) {
 
 is.lppm <- function(x) { inherits(x, "lppm") }
 
+# undocumented
+as.ppm.lppm <- function(object) { object$fit }
+
 fitted.lppm <- function(object, ..., dataonly=FALSE, new.coef=NULL) {
   pfit <- object$fit
   v <- fitted(pfit, dataonly=dataonly, new.coef=new.coef)

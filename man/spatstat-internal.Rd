@@ -717,6 +717,10 @@
 \alias{allElementsIdentical}
 \alias{resampleNetworkDataFrame}
 \alias{sparseVectorCumul}
+%%
+\alias{as.ppm.lppm}
+\alias{as.ppm.rppm}
+\alias{predict.profilepl}
 %%%%%%%
 \description{
   Internal spatstat functions.
@@ -1565,6 +1569,10 @@ expandSparse(x, n, across)
 allElementsIdentical(x, entry)
 resampleNetworkDataFrame(df, template)
 sparseVectorCumul(x, i, length)
+%%
+\method{as.ppm}{lppm}(object)
+\method{as.ppm}{rppm}(object)
+\method{predict}{profilepl}(object, \dots)
 %%%%%%%
 }
 \details{
