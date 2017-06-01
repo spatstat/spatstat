@@ -763,14 +763,15 @@ print.influence.ppm <- function(x, ...) {
   return(invisible(NULL))
 }
 
-"[.leverage.ppm" <- function(x, i, ...) {
+"[.leverage.ppm" <- function(x, i, ..., update=TRUE) {
   if(missing(i)) return(x)
   y <- x$lev
   smoi <- if(is.im(y$smo)) y$smo[i, ...] else solapply(y$smo, "[", i=i, ...)
   if(!inherits(smoi, c("im", "imlist"))) return(smoi)
   y$smo <- smoi
   y$val <- y$val[i, ...]
-  y$ave <- if(is.im(smoi)) mean(smoi) else mean(sapply(smoi, mean))
+  if(update) 
+    y$ave <- if(is.im(smoi)) mean(smoi) else mean(sapply(smoi, mean))
   x$lev <- y
   return(x)
 }

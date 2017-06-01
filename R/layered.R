@@ -199,8 +199,8 @@ plotEachLayer <- function(x, ..., main,
   if(i.given) {
     if(is.owin(i)) {
       #' spatial window subset
-      isnul <- (lengths(x) == 0)
-      x[!isnul] <- lapply(x[!isnul], "[", i=i)
+      nonemp <- (lengths(x) != 0)
+      x[nonemp] <- lapply(x[nonemp], "[", i=i, ...)
     } else {
       #' vector subset index
       x <- x[i]
@@ -209,8 +209,8 @@ plotEachLayer <- function(x, ..., main,
     }
   }
   if(j.given) {
-    isnul <- (lengths(x) == 0)
-    x[!isnul] <- lapply(x[!isnul], "[", i=j)
+    nonemp <- (lengths(x) != 0)
+    x[nonemp] <- lapply(x[nonemp], "[", i=j, ...)
   }
   if(drop && nx == 1)
     return(x[[1L]])

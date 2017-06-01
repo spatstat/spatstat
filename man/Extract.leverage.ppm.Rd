@@ -6,7 +6,7 @@
   or extract the leverage values at specified locations.
 }
 \usage{
-  \method{[}{leverage.ppm}(x, i, ...)
+  \method{[}{leverage.ppm}(x, i, \dots, update=TRUE)
 }
 \arguments{
   \item{x}{
@@ -22,6 +22,10 @@
     Further arguments passed to \code{\link{[.im}},
     especially the argument \code{drop}.
   }
+  \item{update}{
+    Logical value indicating whether to update the internally-stored value
+    of the mean leverage, by averaging over the specified subset.
+  }    
 }
 \value{
   Another object of class \code{"leverage.ppm"},
@@ -57,7 +61,7 @@
   \code{\link{leverage.ppm}}.
 }
 \examples{
-   fit <- ppm(cells, ~x)
+   fit <- ppm(cells ~x)
    lev <- leverage(fit)
    b <- owin(c(0.1, 0.3), c(0.2, 0.4))
    lev[b]

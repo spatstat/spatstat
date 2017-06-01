@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.028
+        CHANGES IN spatstat VERSION 1.51-0.029
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
 
     o Effect function is now available for all types of fitted model.
 
-    o Version nickname: 'Conditions Apply'
+    o Version nickname: 'Spatfefe'
 
 NEW FUNCTIONS
 
@@ -68,6 +68,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o hist.im
     New argument 'xname'.
+
+    o [.leverage.ppm
+    New argument 'update'.
+    
+    o [.layered
+    Additional arguments '...' are now passed to other methods.
     
     o logLik.ppm
     The warning about pseudolikelihood ('log likelihood not available')

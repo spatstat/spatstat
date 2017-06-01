@@ -33,7 +33,8 @@
     will be returned.
   }
   \item{\dots}{
-    Ignored. 
+     Additional arguments, passed to other subset methods
+     if the subset index is a window.
   }
   \item{value}{List of objects which shall replace the designated
     subset, or an object which shall replace the designated element.
