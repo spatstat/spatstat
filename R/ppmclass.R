@@ -742,7 +742,8 @@ model.matrix.ppm <- function(object,
       stop("Q should be a point pattern or quadrature scheme")
     if(is.ppp(Q)) Q <- quad(Q, Q[FALSE])
     ## construct Berman-Turner frame
-    needed <- c("trend", "interaction", "covariates", "correction", "rbord")
+    needed <- c("trend", "interaction", "covariates", "covfunargs",
+                "correction", "rbord")
     bt <- do.call(bt.frame, append(list(Q), object[needed]))
     ## compute model matrix
     mf <- model.frame(bt$fmla, bt$glmdata, ...)

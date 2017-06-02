@@ -91,6 +91,7 @@ mpl.engine <-
     ## rbord applies only to border correction
     if(correction != "border") rbord <- 0 
     ##
+    covfunargs <- as.list(covfunargs)
     ##
     ## Interpret the call
     if(is.null(trend)) {

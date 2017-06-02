@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.029
+        CHANGES IN spatstat VERSION 1.51-0.030
 
 OVERVIEW
 
@@ -91,13 +91,22 @@ BUG FIXES
     linearKdot.inhom, linearpcfcross.inhom, linearpcfdot.inhom
     Crashed if the network was disconnected.
     Fixed.
-    
+
     o crossdist.lpp
     Crashed if the network was disconnected.
     Fixed.
 
     o countends
     Crashed if the network was disconnected.
+    Fixed.
+
+    o model.images.ppm
+    Crashed for models fitted using 'covfunargs'.
+    Fixed.
+
+    o model.matrix.ppm
+    Crashed for models fitted using 'covfunargs',
+    if argument 'Q' was given.
     Fixed.
 
     o plot.ppp
