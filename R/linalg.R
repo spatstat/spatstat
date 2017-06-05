@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.22 $ $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.23 $ $Date: 2017/06/05 10:31:58 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {

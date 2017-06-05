@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.236 $    $Date: 2016/12/30 03:24:37 $
+#    $Revision: 1.237 $    $Date: 2017/06/05 10:31:58 $
 #
 
 # common invocation of matrixsample

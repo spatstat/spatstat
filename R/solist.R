@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.14 $ $Date: 2017/01/20 10:06:37 $
+## $Revision: 1.15 $ $Date: 2017/06/05 10:31:58 $
 
 anylist <- function(...) {
   x <- list(...)

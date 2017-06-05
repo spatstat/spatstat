@@ -3,7 +3,7 @@
 #'
 #'   weighted versions of hist, var, median, quantile
 #'
-#'  $Revision: 1.2 $  $Date: 2016/07/17 05:26:54 $
+#'  $Revision: 1.3 $  $Date: 2017/06/05 10:31:58 $
 #'
 
 

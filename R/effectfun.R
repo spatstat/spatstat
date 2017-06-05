@@ -1,7 +1,7 @@
 #
 #  effectfun.R
 #
-#   $Revision: 1.19 $ $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.20 $ $Date: 2017/06/05 10:31:58 $
 #
 
 effectfun <- local({

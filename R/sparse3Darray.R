@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.23 $  $Date: 2017/02/23 05:30:04 $
+#' $Revision: 1.24 $  $Date: 2017/06/05 10:31:58 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),

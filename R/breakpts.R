@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.20 $	$Date: 2016/10/04 01:02:27 $
+#	$Revision: 1.21 $	$Date: 2017/06/05 10:31:58 $
 #
 #
 #       Other functions in this directory use the standard Splus function

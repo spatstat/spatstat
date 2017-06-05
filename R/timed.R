@@ -3,7 +3,7 @@
 #'
 #'   Timed objects
 #'
-#'   $Revision: 1.1 $ $Date: 2016/12/30 03:24:47 $
+#'   $Revision: 1.2 $ $Date: 2017/06/05 10:31:58 $
 
 timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
   if(is.null(starttime) && is.null(timetaken)) # time starts now.

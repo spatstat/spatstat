@@ -1,7 +1,7 @@
 #'
 #'     pool.R
 #'
-#'  $Revision: 1.4 $  $Date: 2016/07/26 10:41:19 $
+#'  $Revision: 1.5 $  $Date: 2017/06/05 10:31:58 $
 
 pool <- function(...) {
   UseMethod("pool")

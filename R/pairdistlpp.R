@@ -1,7 +1,7 @@
 #
 # pairdistlpp.R
 #
-#  $Revision: 1.11 $ $Date: 2015/02/13 06:42:44 $
+#  $Revision: 1.12 $ $Date: 2017/06/05 10:31:58 $
 #
 #
 #  pairdist.lpp

@@ -3,7 +3,7 @@
 #' 
 #'    Dealing with other packages
 #' 
-#'    $Revision: 1.16 $  $Date: 2017/02/08 08:34:29 $
+#'    $Revision: 1.17 $  $Date: 2017/06/05 10:31:58 $
 
 fft2D <- function(z, inverse=FALSE, west=fftwAvailable()) {
   if(west) return(fftwtools::fftw2d(data=z, inverse=inverse))

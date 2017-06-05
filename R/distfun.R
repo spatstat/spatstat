@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.22 $   $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.23 $   $Date: 2017/06/05 10:31:58 $
 #
 
 distfun <- function(X, ...) {

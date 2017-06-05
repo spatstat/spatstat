@@ -1,7 +1,7 @@
 #
 #	Kest.R		Estimation of K function
 #
-#	$Revision: 5.119 $	$Date: 2016/07/16 03:08:23 $
+#	$Revision: 5.120 $	$Date: 2017/06/05 10:31:58 $
 #
 #
 # -------- functions ----------------------------------------

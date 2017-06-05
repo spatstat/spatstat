@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.121 $	$Date: 2017/01/08 00:37:15 $
+#	$Revision: 4.122 $	$Date: 2017/06/05 10:31:58 $
 #
 
 volume.owin <- function(x) { area.owin(x) }

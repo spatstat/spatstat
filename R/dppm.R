@@ -1,7 +1,7 @@
 #'
 #'     dppm.R
 #'
-#'     $Revision: 1.7 $   $Date: 2016/04/25 02:34:40 $
+#'     $Revision: 1.8 $   $Date: 2017/06/05 10:31:58 $
 
 dppm <-
   function(formula, family, data=NULL,

@@ -1,7 +1,7 @@
 #
 # crossdistlpp.R
 #
-#  $Revision: 1.5 $ $Date: 2015/02/13 06:43:00 $
+#  $Revision: 1.6 $ $Date: 2017/06/05 10:31:58 $
 #
 #  crossdist.lpp
 #        Calculates the shortest-path distance from each point of X

@@ -40,6 +40,7 @@ static const R_CMethodDef CEntries[] = {
     {"Clinequad",        (DL_FUNC) &Clinequad,        18},
     {"ClineRMquad",      (DL_FUNC) &ClineRMquad,      23},
     {"ClineRquad",       (DL_FUNC) &ClineRquad,       18},
+    {"Clinvwhichdist",   (DL_FUNC) &Clinvwhichdist,   12},
     {"Clixellate",       (DL_FUNC) &Clixellate,       16},
     {"cocoGraph",        (DL_FUNC) &cocoGraph,         6},
     {"cocoImage",        (DL_FUNC) &cocoImage,         3},
@@ -171,8 +172,6 @@ static const R_CMethodDef CEntries[] = {
     {"xysi",             (DL_FUNC) &xysi,             12},
     {"xysiANY",          (DL_FUNC) &xysiANY,          12},
     {"xysxi",            (DL_FUNC) &xysxi,             7},
-    {"Clinvwhichdist",   (DL_FUNC) &Clinvwhichdist,   12},
-    {"Clinvdist",        (DL_FUNC) &Clinvdist,        11},
     {NULL, NULL, 0}
 };
 

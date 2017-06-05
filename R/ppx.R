@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.59 $  $Date: 2017/03/02 01:27:04 $
+#  $Revision: 1.60 $  $Date: 2017/06/05 10:31:58 $
 #
 
 ppx <- local({

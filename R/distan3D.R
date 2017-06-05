@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.12 $     $Date: 2014/11/10 11:01:39 $
+#      $Revision: 1.13 $     $Date: 2017/06/05 10:31:58 $
 #
 #      Interpoint distances for 3D points
 #

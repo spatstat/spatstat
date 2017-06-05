@@ -1,7 +1,7 @@
 #
 #     dg.S
 #
-#    $Revision: 1.18 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.19 $	$Date: 2017/06/05 10:31:58 $
 #
 #     Diggle-Gratton pair potential
 #

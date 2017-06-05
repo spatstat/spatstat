@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.79 $   $Date: 2017/02/04 10:27:18 $
+#    $Revision: 1.80 $   $Date: 2017/06/05 10:31:58 $
 #
 #
 

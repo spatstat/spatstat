@@ -1,7 +1,7 @@
 #
 #   pcfinhom.R
 #
-#   $Revision: 1.20 $   $Date: 2017/02/09 03:59:29 $
+#   $Revision: 1.21 $   $Date: 2017/06/05 10:31:58 $
 #
 #   inhomogeneous pair correlation function of point pattern 
 #

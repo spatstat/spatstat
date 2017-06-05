@@ -1,5 +1,5 @@
 #'
-#' $Revision$ $Date$
+#' $Revision: 1.1 $ $Date: 2017/06/05 10:31:58 $
 #'
 
 clicklpp <- local({

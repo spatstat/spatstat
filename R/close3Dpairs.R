@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.8 $   $Date: 2016/03/06 11:18:54 $
+#   $Revision: 1.9 $   $Date: 2017/06/05 10:31:58 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 

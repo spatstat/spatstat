@@ -355,7 +355,7 @@ local({
 #
 # Tests of ppm(method='logi')
 #
-# $Revision: 1.4 $  Date$
+# $Revision: 1.5 $  Date$
 #
 
 require(spatstat)
@@ -368,14 +368,13 @@ local({
   fS <- fitted(fitS)
   pS <- predict(fitS)
   uS <- summary(fitS)
-  if(FALSE) { # fix later
-    a <- leverage(fit)
-    b <- influence(fit)
-    d <- dfbetas(fit)
-    aS <- leverage(fitS)
-    bS <- influence(fitS)
-    dS <- dfbetas(fitS)
-  }
+
+  plot(leverage(fit))
+  plot(influence(fit))
+  plot(dfbetas(fit))
+  plot(leverage(fitS))
+  plot(influence(fitS))
+  plot(dfbetas(fitS))
 })
 
 local({
@@ -502,6 +501,11 @@ local({
 
   stopifnot(identical(unmark(chicago[1]),
                       unmark(chicago)[1]))
+
+  #' ppx with zero points
+  U <- chicago[integer(0)]
+  V <- U %mark% 1
+  V <- U %mark% factor("a")
 })
 #
 # tests/prediction.R

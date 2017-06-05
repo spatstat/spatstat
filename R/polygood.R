@@ -3,7 +3,7 @@
 #'
 #'   Check validity of polygon data
 #'
-#'  $Revision: 1.1 $  $Date: 2017/01/08 00:37:54 $
+#'  $Revision: 1.2 $  $Date: 2017/06/05 10:31:58 $
 #'
 
 #' check validity of a polygonal owin

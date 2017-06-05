@@ -3,7 +3,7 @@
 ##
 ## bandwidth selection rules bw.diggle and bw.scott (for density.ppp)
 ##
-## $Revision: 1.4 $ $Date: 2015/04/02 02:01:01 $
+## $Revision: 1.5 $ $Date: 2017/06/05 10:31:58 $
 ##
 
 bw.scott <- function(X) {

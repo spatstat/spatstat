@@ -10,7 +10,7 @@
 #'     GmultiInhom
 #'     FmultiInhom
 #'
-#'      $Revision: 1.5 $ $Date: 2016/07/06 07:01:22 $
+#'      $Revision: 1.6 $ $Date: 2017/06/05 10:31:58 $
 
 GmultiInhom <- function(X, I, J, 
                         lambda=NULL, lambdaI=NULL, lambdaJ=NULL,

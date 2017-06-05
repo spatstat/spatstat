@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.5 $  $Date: 2017/02/22 08:00:18 $
+#'  $Revision: 1.6 $  $Date: 2017/06/05 10:31:58 $
 #'
 
 #'  .............. completely generic ....................

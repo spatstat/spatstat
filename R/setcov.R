@@ -2,7 +2,7 @@
 #
 #     setcov.R
 #
-#     $Revision: 1.14 $ $Date: 2017/02/04 10:27:30 $
+#     $Revision: 1.15 $ $Date: 2017/06/05 10:31:58 $
 #
 #    Compute the set covariance function of a window
 #    or the (noncentred) spatial covariance function of an image

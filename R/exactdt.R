@@ -2,7 +2,7 @@
 #	exactdt.S
 #	S function exactdt() for exact distance transform
 #
-#	$Revision: 4.16 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 4.17 $	$Date: 2017/06/05 10:31:58 $
 #
 
 exactdt <- local({

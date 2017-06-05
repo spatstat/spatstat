@@ -3,7 +3,7 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.6 $ $Date: 2016/08/27 09:22:06 $
+#'  $Revision: 1.7 $ $Date: 2017/06/05 10:31:58 $
 
 
 "%(+)%" <- MinkowskiSum <- local({

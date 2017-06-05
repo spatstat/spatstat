@@ -2,7 +2,7 @@
 #
 #    dgs.R
 #
-#    $Revision: 1.8 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.9 $	$Date: 2017/06/05 10:31:58 $
 #
 #    Diggle-Gates-Stibbard process
 #

@@ -3,7 +3,7 @@
 #'
 #'  bounding circle and its centre
 #'
-#'  $Revision: 1.5 $ $Date: 2016/07/16 03:07:02 $
+#'  $Revision: 1.6 $ $Date: 2017/06/05 10:31:58 $
 #'
 
 circumradius <- function(x, ...) {

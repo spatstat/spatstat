@@ -3,7 +3,7 @@
 ##
 ##  Dao-Genton adjusted p-values
 ##
-##  $Revision: 1.13 $  $Date: 2015/12/20 09:05:27 $
+##  $Revision: 1.14 $  $Date: 2017/06/05 10:31:58 $
 ##
 
 bits.test <- function(X, ..., exponent=2, nsim=19,

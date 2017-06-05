@@ -1,7 +1,7 @@
 #
 # Jinhom.R
 #
-#  $Revision: 1.10 $ $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.11 $ $Date: 2017/06/05 10:31:58 $
 #
 
 Ginhom <- function(X, lambda=NULL, lmin=NULL,

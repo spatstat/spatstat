@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.13 $   $Date: 2016/06/10 15:04:32 $
+#   $Revision: 1.14 $   $Date: 2017/06/05 10:31:58 $
 #
 
 spatstat.xy.coords <- function(x,y) {

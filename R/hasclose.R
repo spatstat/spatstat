@@ -3,7 +3,7 @@
 #'
 #'    Determine whether each point has a close neighbour
 #'
-#'    $Revision: 1.10 $  $Date: 2017/02/06 10:44:44 $
+#'    $Revision: 1.11 $  $Date: 2017/06/05 10:31:58 $
 
 has.close <- function(X, r, Y=NULL, ...) {
   UseMethod("has.close")

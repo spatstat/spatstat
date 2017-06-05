@@ -10,7 +10,7 @@
 
   Calculation of density estimate at data points
 
-  $Revision: 1.17 $     $Date: 2016/07/06 03:20:18 $
+  $Revision: 1.18 $     $Date: 2017/06/05 10:53:59 $
 
   Assumes point pattern is sorted in increasing order of x coordinate
 

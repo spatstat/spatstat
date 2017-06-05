@@ -3,7 +3,7 @@
 # Function to take a matrix of pairwise distances
 # and compile a 'K' function in the format required by spatstat.
 #
-#   $Revision: 1.8 $  $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.9 $  $Date: 2017/06/05 10:31:58 $
 # -------------------------------------------------------------------
 
 compileK <- function(D, r, weights=NULL, denom=1, check=TRUE, ratio=FALSE,

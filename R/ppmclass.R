@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.132 $	$Date: 2016/12/19 06:09:50 $
+#	$Revision: 2.133 $	$Date: 2017/06/05 10:31:58 $
 #
 #       An object of class 'ppm' contains the following:
 #

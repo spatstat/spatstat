@@ -3,7 +3,7 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.22 $   $Date: 2016/02/26 10:47:57 $
+#    $Revision: 1.23 $   $Date: 2017/06/05 10:31:58 $
 #
 #
 crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {

@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.61 $    $Date: 2017/02/04 10:22:57 $
+#           $Revision: 1.62 $    $Date: 2017/06/05 10:31:58 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #

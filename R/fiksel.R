@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.13 $	$Date: 2017/02/07 07:22:47 $
+#    $Revision: 1.14 $	$Date: 2017/06/05 10:31:58 $
 #
 #    Fiksel interaction 
 #    

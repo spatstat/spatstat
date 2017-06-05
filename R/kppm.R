@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.132 $ $Date: 2017/02/24 05:52:53 $
+# $Revision: 1.133 $ $Date: 2017/06/05 10:31:58 $
 #
 
 kppm <- function(X, ...) {

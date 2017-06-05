@@ -3,7 +3,7 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.16 $   $Date: 2017/02/07 07:22:47 $
+#   $Revision: 1.17 $   $Date: 2017/06/05 10:31:58 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
