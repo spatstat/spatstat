@@ -6,7 +6,7 @@
   as a function of one of its covariates.
 }
 \usage{
-  effectfun(model, covname, ..., se.fit=FALSE)
+  effectfun(model, covname, \dots, se.fit=FALSE)
 }
 \arguments{
   \item{model}{
@@ -66,6 +66,12 @@
   Gibbs representation). In Poisson or Gibbs models fitted by
   \code{\link{ppm}}, the trend is the only part of the model that
   depends on the covariates.
+}
+\section{Determinantal point process models with fixed intensity}{
+  The function \code{\link{dppm}} which fits 
+  a determinantal point process model allows the user to specify the
+  intensity \code{lambda}. In such cases the effect function is
+  undefined, and \code{effectfun} stops with an error message.
 }
 \value{
   A data frame containing a column of values of the covariate and a column
