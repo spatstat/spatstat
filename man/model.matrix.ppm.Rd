@@ -3,6 +3,7 @@
 \alias{model.matrix.kppm}
 \alias{model.matrix.dppm}
 \alias{model.matrix.lppm}
+\alias{model.matrix.ippm}
 \title{Extract Design Matrix from Point Process Model}
 \description{
   Given a point process model that has been
@@ -29,11 +30,17 @@
                               data=model.frame(object, na.action=NULL),
                               \dots, 
                               keepNA=TRUE)
+
+   \method{model.matrix}{ippm}(object,
+                              data=model.frame(object, na.action=NULL),
+                              \dots, 
+                              Q=NULL, keepNA=TRUE,
+			      irregular=FALSE)
 }
 \arguments{
   \item{object}{
     The fitted point process model. An object of class \code{"ppm"}
-    or \code{"kppm"} or \code{"dppm"} or \code{"lppm"}.
+    or \code{"kppm"} or \code{"dppm"} or \code{"ippm"} or \code{"lppm"}.
   }
   \item{data}{
     A model frame, containing the data required for the Berman-Turner device.
@@ -50,6 +57,10 @@
   \item{\dots}{
     Other arguments (such as \code{na.action}) passed to
     \code{\link{model.matrix.lm}}.
+  }
+  \item{irregular}{
+    Logical value indicating whether to include the irregular score
+    components.
   }
 }
 \details{
@@ -91,7 +102,7 @@
   \code{\link{quad.ppm}}.
 }
 \value{
-  A matrix. Columns of the matrix are covariates in the model.
+  A matrix. Columns of the matrix are canonical covariates in the model.
   Rows of the matrix correspond to quadrature points
   in the fitting procedure (provided \code{keepNA=TRUE}).
 }
@@ -105,6 +116,7 @@
   \code{\link{kppm}},
   \code{\link{dppm}},
   \code{\link{lppm}},
+  \code{\link{ippm}},
   \code{\link{ppm.object}},
   \code{\link{quad.ppm}},
   \code{\link{residuals.ppm}}

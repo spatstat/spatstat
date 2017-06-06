@@ -161,12 +161,11 @@ ippm(Q, \dots,
   # irregular score
   Dlogf <- list(gamma=DlogfDgamma, delta=DlogfDdelta)
   # fit model
-  ippm(X, ~Z + offset(log(f)),
+  ippm(X ~Z + offset(log(f)),
        covariates=list(Z=Z, f=f),
        iScore=Dlogf,
        start=list(gamma=1, delta=1),
        nd=nd)
-
 }
 \keyword{spatial}
 \keyword{models}

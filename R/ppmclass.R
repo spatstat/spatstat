@@ -735,7 +735,24 @@ modelFrameGam <- function(formula, ...) {
 model.matrix.ppm <- function(object,
                              data=model.frame(object, na.action=NULL),
                              ..., Q=NULL, keepNA=TRUE) {
-  data.given <- !missing(data) && !is.null(data)
+  if(missing(data)) data <- NULL			     
+  PPMmodelmatrix(object, data=data, ..., Q=Q, keepNA=keepNA)
+}
+
+model.matrix.ippm <- function(object,
+                              data=model.frame(object, na.action=NULL),
+                              ..., Q=NULL, keepNA=TRUE, irregular=FALSE) {
+  if(missing(data)) data <- NULL			     
+  PPMmodelmatrix(object, data=data, ...,
+                 Q=Q, keepNA=keepNA, irregular=irregular)
+}
+
+PPMmodelmatrix <- function(object,
+                           data=model.frame(object, na.action=NULL),
+                           ..., Q=NULL, keepNA=TRUE, irregular=FALSE) {
+  # handles ppm and ippm			      
+  data.given <- !is.null(data)
+  irregular <- irregular && inherits(object, "ippm") && !is.null(object$iScore)
   if(!is.null(Q)) {
     if(data.given) stop("Arguments Q and data are incompatible")
     if(!inherits(Q, c("ppp", "quad")))
@@ -748,9 +765,19 @@ model.matrix.ppm <- function(object,
     ## compute model matrix
     mf <- model.frame(bt$fmla, bt$glmdata, ...)
     mm <- model.matrix(bt$fmla, mf, ...)
+    if(irregular) {
+       ## add irregular score components
+       U <- union.quad(Q)
+       mi <- sapply(object$iScore, do.call,
+                    args=append(list(x=U$x, y=U$y), object$covfunargs),
+		    envir=environment(terms(object)))
+       if(nrow(mi) != nrow(mm))
+         stop("Internal error: incorrect number of rows in iScore")
+       mm <- cbind(mm, mi)
+    }
     ## remove NA's ?
     if(!keepNA)
-      mm <- mm[complete.cases(mm), ..., drop=FALSE]
+      mm <- mm[complete.cases(mm), , drop=FALSE]
     return(mm)
   }
   gf <- getglmfit(object)
@@ -768,12 +795,21 @@ model.matrix.ppm <- function(object,
     if(any(forgot <- !(names(bt) %in% names(data)))) 
       data <- do.call(cbind, append(list(data), bt[forgot]))
     mm <- model.matrix(gf, data=data, ...)
+    if(irregular) {
+       ## add irregular score components 
+       mi <- sapply(object$iScore, do.call,
+                    args=append(list(x=data$x, y=data$y), object$covfunargs),
+		    envir=environment(terms(object)))
+       if(nrow(mi) != nrow(mm))
+         stop("Internal error: incorrect number of rows in iScore")
+       mm <- cbind(mm, mi)
+    }
     if(inherits(gf, "gam")) 
       attr(mm, "assign") <- gf$assign
     return(mm)
   }
 
-  if(!keepNA) {
+  if(!keepNA && !irregular) {
     # extract model matrix of glm fit object
     # restricting to its 'subset' 
     mm <- model.matrix(gf, ...)
@@ -799,6 +835,19 @@ model.matrix.ppm <- function(object,
     } else 
     stop("internal error: model matrix does not match glm data frame")
   }
+  if(irregular) {
+     ## add irregular score components 
+     U <- union.quad(quad.ppm(object, drop=FALSE))
+     mi <- sapply(object$iScore, do.call,
+                  args=append(list(x=U$x, y=U$y), object$covfunargs),
+		  envir=environment(terms(object)))
+     if(nrow(mi) != nrow(mm))
+       stop("Internal error: incorrect number of rows in iScore")
+     mm <- cbind(mm, mi)
+     cn <- c(cn, colnames(mi))
+  }
+  if(!keepNA)
+    mm <- mm[complete.cases(mm), , drop=FALSE]
   if(inherits(gf, "gam")) 
     attr(mm, "assign") <- gf$assign
   colnames(mm) <- cn
@@ -811,10 +860,11 @@ model.images <- function(object, ...) {
 
 model.images.ppm <- function(object, W=as.owin(object), ...) {
   X <- data.ppm(object)
+  irregular <- resolve.1.default(list(irregular=FALSE), list(...))
   ## make a quadscheme with a dummy point at every pixel
   Q <- pixelquad(X, W)
   ## compute model matrix
-  mm <- model.matrix(object, Q=Q)
+  mm <- model.matrix(object, Q=Q, ...)
   ## retain only the entries for dummy points (pixels)
   mm <- mm[!is.data(Q), , drop=FALSE]
   mm <- as.data.frame(mm)

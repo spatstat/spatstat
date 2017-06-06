@@ -125,6 +125,7 @@ ippm <- local({
     fit$call <- cl
     fit$callstring <- callstring
     fit$callframe <- callframe
+    fit$iScore <- iScore
     class(fit) <- c("ippm", class(fit))
     return(fit)
   }

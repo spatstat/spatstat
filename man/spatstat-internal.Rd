@@ -300,6 +300,7 @@
 \alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{positiveIndex}
+\alias{PPMmodelmatrix}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
 \alias{lookup2DkernelInfo}
@@ -1074,6 +1075,7 @@ PoisSaddlePairwise(beta, fi)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny)
 positiveIndex(i, nama, len)
+PPMmodelmatrix(object, data, \dots, Q, keepNA, irregular)
 \method{print}{localpcfmatrix}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
 putSpatstatVariable(name, value)

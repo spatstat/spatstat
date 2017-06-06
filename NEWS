@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.033
+        CHANGES IN spatstat VERSION 1.51-0.034
 
 OVERVIEW
 
@@ -33,10 +33,17 @@ NEW FUNCTIONS
     o hist.funxy
     Histogram of values of a spatial function.
 
+    o model.matrix.ippm
+    Method for 'model.matrix' which allows computation of
+    regular and irregular score components.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o effectfun
     Now works for 'ppm', 'kppm', 'lppm', 'dppm', 'rppm' and 'profilepl' objects.
+
+    o ippm
+    The internal format of the result has been extended slightly.
     
     o linearK, linearKinhom, compilepcf
     New argument 'ratio'
