@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.032
+        CHANGES IN spatstat VERSION 1.51-0.033
 
 OVERVIEW
 
@@ -85,6 +85,9 @@ BUG FIXES
     o bw.pcf
     Results were totally incorrect due to a typo.
     Fixed.
+
+    o predict.rho2hat
+    Results were incorrect for a rho2hat object computed from a point pattern.
     
     o linearK, linearKinhom, linearpcf, linearpcfinhom, linearKcross,
     linearKdot, linearpcfcross, linearpcfdot, linearKcross.inhom,

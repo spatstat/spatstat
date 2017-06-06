@@ -259,7 +259,7 @@ predict.rho2hat <- function(object, ..., relative=FALSE) {
   Y <- Z1
   Y[] <- YY
   # adjust to reference baseline
-  if(reference != "Lebesgue" && !relative) {
+  if(!(relative || reference == "area")) {
     lambda <- s$lambda
     Y <- Y * lambda
   }
