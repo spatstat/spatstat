@@ -174,14 +174,14 @@
    # mean nearest neighbour distances
    aggregate(nnda, by=list(from=marks(ants)), mean)
    # The mean distance from a Messor nest to
-   # the nearest other Messor nest is 59.02549 units
+   # the nearest Cataglyphis nest is 59.02549 units
 }
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}
   and
-  \adrian
-  
-  
+  Adrian Baddeley
+  \email{Adrian.Baddeley@uwa.edu.au}
+  \url{http://www.maths.uwa.edu.au/~adrian/}
 }
 \keyword{spatial}
 \keyword{math}
