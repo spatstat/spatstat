@@ -179,9 +179,7 @@
 \author{Pavel Grabarnik
   \email{pavel.grabar@issp.serpukhov.su}
   and
-  Adrian Baddeley
-  \email{Adrian.Baddeley@uwa.edu.au}
-  \url{http://www.maths.uwa.edu.au/~adrian/}
+  \adrian.
 }
 \keyword{spatial}
 \keyword{math}
