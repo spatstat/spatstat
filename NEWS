@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.034
+        CHANGES IN spatstat VERSION 1.51-0.035
 
 OVERVIEW
 
@@ -86,6 +86,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The warning about pseudolikelihood ('log likelihood not available')
     is given only once, and is not repeated in subsequent calls,
     within a spatstat session.
+
+    o kppm
+    Refuses to fit a log-Gaussian Cox model with anisotropic covariance.
 
 BUG FIXES
 

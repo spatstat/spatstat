@@ -568,8 +568,14 @@
                  margs <- cmod[names(cmod)!="model"]
                }
              }
-             if(length(margs)==0)
+             if(length(margs)==0) {
                  margs <- NULL
+             } else {
+	         # detect anisotropic model
+		 if("Aniso" %in% names(margs))
+		   stop("Anisotropic covariance models cannot be used",
+		        call.=FALSE)
+	     }
              out$margs <- margs
              out$model <- model
              out$covmodel <- list(type="Covariance", model=model, margs=margs)

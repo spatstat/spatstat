@@ -277,9 +277,32 @@
   \code{trace}, \code{maxit} and \code{abstol}
   (documented in the help for \code{\link[stats]{optim}}).
 
-  Fitting the LGCP model requires the \pkg{RandomFields} package
+  Fitting the LGCP model requires the \pkg{RandomFields} package,
   except in the default case where the exponential covariance
   is assumed.
+}
+\section{Log-Gaussian Cox Models}{
+  To fit a log-Gaussian Cox model with non-exponential covariance,
+  specify \code{clusters="LGCP"} and use additional arguments
+  \code{"\dots"} to specify the covariance model.
+  
+  The argument \code{model} specifies the type of covariance
+  model: the default is \code{model="exp"} for an exponential covariance.
+  Alternatives include \code{"matern"}, \code{"cauchy"} and \code{"spheric"}.
+  Model names correspond to functions beginning with \code{RM} in the
+  \pkg{RandomFields} package: for example \code{model="matern"}
+  corresponds to the function \code{RMmatern} in the 
+  \pkg{RandomFields} package.
+  
+  Additional arguments are passed to the
+  relevant function in the \pkg{RandomFields} package:
+  for example if \code{model="matern"} then the additional argument
+  \code{nu} is required, and is passed to the function
+  \code{RMmatern} in the \pkg{RandomFields} package.
+
+  Note that it is not possible to use \emph{anisotropic} covariance models
+  because the \code{kppm} technique assumes the pair correlation function
+  is isotropic.
 }
 \value{
   An object of class \code{"kppm"} representing the fitted model.
@@ -369,9 +392,6 @@
                               control=list(maxit=10))
   }
 
-  # fit with composite likelihood method
-  kppm(redwood ~ x, "VarGamma", method="clik2", nu.ker=-3/8)
-  
   # fit intensity with quasi-likelihood method
   kppm(redwood ~ x, "Thomas", improve.type = "quasi")
 }
