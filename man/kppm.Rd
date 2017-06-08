@@ -284,8 +284,14 @@
 \section{Log-Gaussian Cox Models}{
   To fit a log-Gaussian Cox model with non-exponential covariance,
   specify \code{clusters="LGCP"} and use additional arguments
-  \code{"\dots"} to specify the covariance model.
-  
+  to specify the covariance structure. These additional arguments can
+  be given individually in the call to \code{kppm}, or they can be
+  collected together in a list called \code{covmodel}.
+
+  For example a Matern model with parameter \eqn{\nu=0.5} could be specified
+  either by \code{kppm(X, clusters="LGCP", model="matern", nu=0.5)} or by
+  \code{kppm(X, clusters="LGCP", covmodel=list(model="matern", nu=0.5))}.
+
   The argument \code{model} specifies the type of covariance
   model: the default is \code{model="exp"} for an exponential covariance.
   Alternatives include \code{"matern"}, \code{"cauchy"} and \code{"spheric"}.
@@ -358,7 +364,7 @@
 
   Jalilian, A., Guan, Y. and Waagepetersen, R. (2012)
   Decomposition of variance for spatial Cox processes.
-  \emph{Scandinavian Journal of Statistics}, in press.
+  \emph{Scandinavian Journal of Statistics} \bold{40}, 119--137.
 
   Tanaka, U. and Ogata, Y. and Stoyan, D. (2008)
   Parameter estimation and model selection for
