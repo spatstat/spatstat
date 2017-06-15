@@ -140,7 +140,7 @@ ppmInfluenceEngine <- function(fit,
   gotScore <- !is.null(iscoremat)
   needHess <- gotScore && influencecalc
   if(gotScore) {
-    if(logi)
+    if(logi && !spatstat.options('developer'))
       stop("ppm influence measures are not yet implemented for method=logi with irregular parameters.")
     ## count regular and irregular parameters
     nreg <- ncol(mom)
