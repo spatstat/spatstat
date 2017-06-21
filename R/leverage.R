@@ -85,7 +85,7 @@ ppmInfluenceEngine <- function(fit,
                          fitname=NULL,
                          multitypeOK=FALSE,
                          entrywise = TRUE) {
-  logi <- fit$method == "logi"
+  logi <- identical(fit$method, "logi")
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
   stopifnot(is.ppm(fit))
@@ -139,9 +139,9 @@ ppmInfluenceEngine <- function(fit,
   iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
   gotScore <- !is.null(iscoremat)
   needHess <- gotScore && influencecalc
-  if(gotScore) {
-    if(logi && !spatstat.options('developer'))
-      stop("ppm influence measures are not yet implemented for method=logi with irregular parameters.")
+  if(!gotScore) {
+    REG <- 1:ncol(mom)
+  } else {
     ## count regular and irregular parameters
     nreg <- ncol(mom)
     nirr <- ncol(iscoremat)
@@ -154,65 +154,113 @@ ppmInfluenceEngine <- function(fit,
     if(gotHess <- !is.null(ihessmat))
     ## recompute negative Hessian of log PL and its mean
     fush <- hessextra <- matrix(0, ncol(mom), ncol(mom))
-    ## integral over domain
-    switch(method,
-           interpreted = {
-             for(i in seq(loc$n)) {
-               # weight for integrand
-               wti <- lam[i] * w[i]
-               if(all(is.finite(wti))) {
-                 # integral of outer product of score 
+    if(!logi) {
+      ## pseudolikelihood
+      switch(method,
+             interpreted = {
+               for(i in seq(loc$n)) {
+                 # weight for integrand
+                 wti <- lam[i] * w[i]
+                 if(all(is.finite(wti))) {
+                   # integral of outer product of score 
+                   momi <- mom[i, ]
+                   v1 <- outer(momi, momi, "*") * wti
+                   if(all(is.finite(v1)))
+                     fush <- fush + v1
+                   # integral of Hessian
+                   # contributions nonzero for irregular parameters
+                   if(gotHess) {
+                     v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) * wti
+                     if(all(is.finite(v2)))
+                       hessextra[IRR, IRR] <- hessextra[IRR, IRR] + v2
+                   }
+                 }
+               }
+               # subtract sum over data points
+               if(gotHess) {
+                 for(i in which(isdata)) {
+                   v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) 
+                   if(all(is.finite(v2)))
+                     hessextra[IRR, IRR] <- hessextra[IRR, IRR] - v2
+                 }
+                 hess <- fush + hessextra
+                 invhess <- solve(hess)
+               } else {
+                 invhess <- hess <- NULL
+               }
+             },
+             C = {
+               wlam <- lam * w
+               fush <- sumouter(mom, wlam)
+               if(gotHess) {
+                 # integral term
+                 isfin <- is.finite(wlam) & matrowall(is.finite(ihessmat))
+                 vintegral <-
+                   if(all(isfin)) wlam %*% ihessmat else
+                               wlam[isfin] %*% ihessmat[isfin,, drop=FALSE]
+                 # sum over data points
+                 vdata <- .colSums(ihessmat[isdata, , drop=FALSE],
+                                   sum(isdata), ncol(ihessmat),
+                                   na.rm=TRUE)
+                 vcontrib <- vintegral - vdata
+                 hessextra[IRR, IRR] <-
+                   hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
+                 hess <- fush + hessextra
+                 invhess <- solve(hess)
+               } else {
+                 invhess <- hess <- NULL
+               }
+             })
+    } else {
+      if(!spatstat.options('developer'))
+        stop("Logistic fits are not yet supported")
+      ## logistic fit
+      switch(method,
+             interpreted = {
+	       oweight <- logiprob * (1 - logiprob)
+	       hweight <- ifelse(isdata, -(1 - logiprob), logiprob)
+               for(i in seq(loc$n)) {
+                 ## outer product of score 
                  momi <- mom[i, ]
-                 v1 <- outer(momi, momi, "*") * wti
+                 v1 <- outer(momi, momi, "*") * oweight[i]
                  if(all(is.finite(v1)))
                    fush <- fush + v1
-                 # integral of Hessian
-                 # contributions nonzero for irregular parameters
+		 ## Hessian term
+                 ## contributions nonzero for irregular parameters
                  if(gotHess) {
-                   v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) * wti
+                   v2 <- hweight[i] *
+		         matrix(as.numeric(ihessmat[i,]), nirr, nirr)
                    if(all(is.finite(v2)))
                      hessextra[IRR, IRR] <- hessextra[IRR, IRR] + v2
                  }
                }
-             }
-             # subtract sum over data points
-             if(gotHess) {
-               for(i in which(isdata)) {
-                 v2 <- matrix(as.numeric(ihessmat[i,]), nirr, nirr) 
-                 if(all(is.finite(v2)))
-                   hessextra[IRR, IRR] <- hessextra[IRR, IRR] - v2
+	       if(gotHess) {
+                 hess <- fush + hessextra
+                 invhess <- solve(hess)
+               } else {
+                 invhess <- hess <- NULL
+	       }
+             },
+             C = {
+	       oweight <- logiprob * (1 - logiprob)
+	       hweight <- ifelse(isdata, -(1 - logiprob), logiprob)
+               fush <- sumouter(mom, oweight)
+               if(gotHess) {
+                 # Hessian term
+                 isfin <- is.finite(hweight) & matrowall(is.finite(ihessmat))
+                 vcontrib <-
+                   if(all(isfin)) hweight %*% ihessmat else
+                               hweight[isfin] %*% ihessmat[isfin,, drop=FALSE]
+                 hessextra[IRR, IRR] <-
+                   hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
+                 hess <- fush + hessextra
+                 invhess <- solve(hess)
+               } else {
+                 invhess <- hess <- NULL
                }
-               hess <- fush + hessextra
-               invhess <- solve(hess)
-             } else {
-               invhess <- hess <- NULL
-             }
-           },
-           C = {
-             wlam <- lam * w
-             fush <- sumouter(mom, wlam)
-             if(gotHess) {
-               # integral term
-               isfin <- is.finite(wlam) & matrowall(is.finite(ihessmat))
-               vintegral <-
-                 if(all(isfin)) wlam %*% ihessmat else
-                             wlam[isfin] %*% ihessmat[isfin,, drop=FALSE]
-               # sum over data points
-               vdata <- .colSums(ihessmat[isdata, , drop=FALSE],
-                                 sum(isdata), ncol(ihessmat),
-                                 na.rm=TRUE)
-               vcontrib <- vintegral - vdata
-               hessextra[IRR, IRR] <-
-                 hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
-               hess <- fush + hessextra
-               invhess <- solve(hess)
-             } else {
-               invhess <- hess <- NULL
-             }
-           })
+             })
+    }
     vc <- solve(fush)
-  } else {
-    REG <- 1:ncol(mom)
   }
   
   if(!needHess) {

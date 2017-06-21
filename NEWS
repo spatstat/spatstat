@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.038
+        CHANGES IN spatstat VERSION 1.51-0.039
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
 
     o Effect function is now available for all types of fitted model.
 
-    o Version nickname: 'Department of Redundancy Department'
+    o Version nickname: 'Glorious Foundation'
 
 NEW FUNCTIONS
 
