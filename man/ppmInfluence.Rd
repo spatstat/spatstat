@@ -53,6 +53,20 @@
   When analysing large datasets, the user can
   call \code{ppmInfluence} to perform the calculations efficiently,
   then extract the leverage and influence values as desired.
+
+  If the point process model trend has irregular parameters that were
+  fitted (using \code{\link{ippm}})
+  then the influence calculation requires the first and second
+  derivatives of the log trend with respect to the irregular parameters. 
+  The argument \code{iScore} should be a list,
+  with one entry for each irregular parameter, of \R functions that compute the
+  partial derivatives of the log trend (i.e. log intensity or
+  log conditional intensity) with respect to each irregular
+  parameter. The argument \code{iHessian} should be a list,
+  with \eqn{p^2} entries where \eqn{p} is the number of irregular
+  parameters, of \R functions that compute the second order
+  partial derivatives of the
+  log trend with respect to each pair of irregular parameters.
 }
 \value{
   A list containing the leverage and influence measures specified by

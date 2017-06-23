@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.040
+        CHANGES IN spatstat VERSION 1.51-0.041
 
 OVERVIEW
 
@@ -90,6 +90,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     Refuses to fit a log-Gaussian Cox model with anisotropic covariance.
 
+    o ippm
+    Accelerated.
+    
 BUG FIXES
 
     o bw.pcf

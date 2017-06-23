@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.74 $ $Date: 2017/06/23 02:20:17 $
+#  $Revision: 1.75 $ $Date: 2017/06/23 06:33:48 $
 #
 
 leverage <- function(model, ...) {
@@ -796,25 +796,25 @@ domain.leverage.ppm <- domain.influence.ppm <-
   function(X, ...) { as.owin(X) } 
 
 print.leverage.ppm <- function(x, ...) {
-  cat("Point process leverage function\n")
+  splat("Point process leverage function")
   fitname <- x$fitname
-  cat(paste("for model:", fitname, "\n"))
+  splat("for model:", fitname)
   lev <- x$lev
-  cat("\nExact values:\n")
+  splat("\nExact values:")
   print(lev$val)
-  cat("\nSmoothed values:\n")
+  splat("\nSmoothed values:")
   print(lev$smo)
   ## for compatibility we retain the x$fit usage
   if(x$fit.is.poisson %orifnull% is.poisson(x$fit))
-    cat(paste("\nAverage value:", lev$ave, "\n"))
+    splat("\nAverage value:", lev$ave)
   return(invisible(NULL))
 }
 
 print.influence.ppm <- function(x, ...) {
-  cat("Point process influence measure\n")  
+  splat("Point process influence measure")  
   fitname <- x$fitname
-  cat(paste("for model:", fitname, "\n"))
-  cat("\nExact values:\n")
+  splat("for model:", fitname)
+  splat("\nExact values:")
   print(x$infl)
   return(invisible(NULL))
 }
