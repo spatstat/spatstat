@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#          CORRECTED VERSION !!
+#  $Revision: 1.74 $ $Date: 2017/06/23 02:20:17 $
 #
 
 leverage <- function(model, ...) {
@@ -75,7 +75,7 @@ ppmInfluence <- function(fit,
 
 ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
-                           "derivatives", "increments"),
+                           "score", "derivatives", "increments"),
                          ...,
                          iScore=NULL, iHessian=NULL, iArgs=NULL,
                          drop=FALSE,
@@ -89,25 +89,37 @@ ppmInfluenceEngine <- function(fit,
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
   stopifnot(is.ppm(fit))
-  what <- match.arg(what, several.ok=TRUE)
+
+  ## type of calculation
   method <- match.arg(method)
-  info <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
+  what <- match.arg(what, several.ok=TRUE)
+  influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
+  hesscalc <- influencecalc || any(what == "derivatives")
+  sparse <- sparseOK 
+
+  ## Detect presence of irregular parameters
   if(is.null(iArgs))
     iArgs <- fit$covfunargs
   gotScore <- !is.null(iScore)
   gotHess <- !is.null(iHessian)
-  influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
-  needHess <- gotScore && influencecalc
+  needHess <- gotScore && hesscalc  # may be updated later
   if(!gotHess && needHess)
     stop("Must supply iHessian", call.=FALSE)
-  sparse <- sparseOK 
-  #
-  # extract precomputed values if given
+
+  ## extract values from model, using precomputed values if given
   theta  <- precomputed$coef   %orifnull% coef(fit)
   lam    <- precomputed$lambda %orifnull% fitted(fit, check=FALSE)
   mom    <- precomputed$mom    %orifnull% model.matrix(fit)
-  # 
   p <- length(theta)
+  Q <- quad.ppm(fit)
+  w <- w.quad(Q)
+  loc <- union.quad(Q)
+  isdata <- is.data(Q)
+  if(length(w) != length(lam))
+    stop(paste("Internal error: length(w) = ", length(w),
+               "!=", length(lam), "= length(lam)"))
+	       
+  ## extract negative Hessian matrix
   if(logi){
     ## Intensity of dummy points
     rho <- fit$Q$param$rho %orifnull% intensity(as.ppp(fit$Q))
@@ -117,28 +129,15 @@ ppmInfluenceEngine <- function(fit,
     fush <- vclist$fisher
     invhess <- solve(hess)
     vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
-  } else{
-  vc <- vcov(fit, hessian=TRUE)
-  fush <- hess <- solve(vc)
+  } else {
+    vc <- vcov(fit, hessian=TRUE)
+    fush <- hess <- solve(vc)
   }
-  Q <- quad.ppm(fit)
-  # hess = negative hessian of log (pseudo) likelihood
-  # fush = E(hess)
-  # invhess = solve(hess)
-  # vc = solve(fush)
-  #
-  w <- w.quad(Q)
-  loc <- union.quad(Q)
-  isdata <- is.data(Q)
-  #
-  if(length(w) != length(lam))
-    stop(paste("Internal error: length(w) = ", length(w),
-               "!=", length(lam), "= length(lam)\n"))
 
-  ## evaluate additional (`irregular') components of score
+  ## evaluate additional (`irregular') components of score, if any
   iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
   gotScore <- !is.null(iscoremat)
-  needHess <- gotScore && influencecalc
+  needHess <- gotScore && hesscalc
   if(!gotScore) {
     REG <- 1:ncol(mom)
   } else {
@@ -150,10 +149,12 @@ ppmInfluenceEngine <- function(fit,
     REG <- 1:nreg
     IRR <- nreg + 1:nirr
     ## evaluate additional (`irregular') entries of Hessian
-    ihessmat <- ppmDerivatives(fit, "hessian", iHessian, loc, covfunargs=iArgs)
-    if(gotHess <- !is.null(ihessmat))
-    ## recompute negative Hessian of log PL and its mean
-    fush <- hessextra <- matrix(0, ncol(mom), ncol(mom))
+    ihessmat <- if(!needHess) NULL else
+                ppmDerivatives(fit, "hessian", iHessian, loc, covfunargs=iArgs)
+    if(gotHess <- !is.null(ihessmat)) {
+      ## recompute negative Hessian of log PL and its mean
+      fush <- hessextra <- matrix(0, ncol(mom), ncol(mom))
+    }  
     if(!logi) {
       ## pseudolikelihood
       switch(method,
@@ -291,19 +292,26 @@ ppmInfluenceEngine <- function(fit,
 
   # ........  start assembling results .....................
   # 
-  result <- as.list(info)
+  ## start building result
+  result <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
   class(result) <- "ppmInfluence"
-  # 
-  if("derivatives" %in% what) {
-    rawresid <- isdata - lam * w
-    score <- matrix(rawresid, nrow=1) %*% mom
-    result$deriv <- list(mom=mom, score=score,
-                         fush=fush, vc=vc,
-                         hess=hess, invhess=invhess)
-  }
-  if(all(what == "derivatives"))
-    return(result)
 
+  if(any(c("score", "derivatives") %in% what)) {
+    ## calculate the composite score
+    rawmean <- if(logi) logiprob else (lam * w)
+    rawresid <- isdata - rawmean
+    score <- matrix(rawresid, nrow=1) %*% mom
+
+    if("score" %in% what)
+      result$score <- score
+    if("derivatives" %in% what) 
+      result$deriv <- list(mom=mom, score=score,
+                           fush=fush, vc=vc,
+                           hess=hess, invhess=invhess)
+    if(all(what %in% c("score", "derivatives")))
+      return(result)
+  }
+    
   # compute effect of adding/deleting each quadrature point
   #    columns index the point being added/deleted
   #    rows index the points affected
