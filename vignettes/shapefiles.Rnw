@@ -90,7 +90,7 @@ To read shapefile data into \pkg{spatstat}, you follow two steps:
 \item 
   using the facilities of \pkg{maptools}, read the shapefiles
   and store the data in one of the standard formats supported by \pkg{sp}.
-\item 
+\item
   convert the \pkg{sp} data type into one of the data types
   supported by \pkg{spatstat}.
 \end{enumerate}
@@ -156,12 +156,18 @@ To convert the dataset to an object in the
 \pkg{spatstat} package, the procedure depends on the 
 type of data, as explained below. 
 
+Both packages \pkg{maptools} and \pkg{spatstat} must be loaded
+in order to convert the data.
+
 \subsubsection{Objects of class \texttt{SpatialPoints}}
 
 An object \texttt{x} of class \texttt{SpatialPoints}
 represents a spatial point pattern.
 Use \verb!as(x, "ppp")! or \texttt{as.ppp(x)} to convert it to a 
 spatial point pattern in \pkg{spatstat}.
+
+(The conversion is performed by \texttt{as.ppp.SpatialPoints},
+a function in \pkg{maptools}.)
 
 The window for the point pattern will be taken from
 the bounding box of the points. You will probably wish to change this window,
@@ -190,6 +196,9 @@ become the \texttt{marks} of the point pattern \texttt{z}.
 <<eval=FALSE>>=
 y <- as(x, "ppp")
 @ 
+
+(The conversion is performed by \texttt{as.ppp.SpatialPointsDataFrame},
+a function in \pkg{maptools}.)
 
 Before the conversion you can extract the
 data frame of auxiliary data by 
@@ -273,6 +282,9 @@ the \texttt{i}-th group of connected curves (for example the
 
 The window for the spatial line segment pattern can be specified
 as an argument \texttt{window} to the function \texttt{as.psp}.
+
+(The conversion is performed by \texttt{as.psp.SpatialLines}
+or \texttt{as.psp.Lines}, which are functions in \pkg{maptools}.)
 
 \subsubsection{Objects of class \texttt{SpatialLinesDataFrame}}
 
