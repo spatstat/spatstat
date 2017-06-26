@@ -9,7 +9,9 @@
 }
 \usage{
 linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
-               normalise=TRUE, normpower=1)
+               normalise=TRUE, normpower=1,
+	       update = TRUE, leaveoneout = TRUE,
+	       ratio = FALSE)
 }
 \arguments{
   \item{X}{
@@ -43,6 +45,28 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
     Integer (usually either 1 or 2).
     Normalisation power. See explanation in \code{\link{linearKinhom}}.
   }
+  \item{update}{
+    Logical value indicating what to do when \code{lambda} is a fitted model
+    (class \code{"lppm"} or \code{"ppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.lppm}} or \code{\link{update.ppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{fitted.lppm}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity,
+    when \code{lambda} is a fitted model.
+  }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    each estimate will also be saved,
+    for use in analysing replicated point patterns.
+  }
 }
 \details{
   This command computes the inhomogeneous version of the 
@@ -70,12 +94,16 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
 }
 \value{
   Function value table (object of class \code{"fv"}).
+
+  If \code{ratio=TRUE} then the return value also has two
+  attributes called \code{"numerator"} and \code{"denominator"}
+  which are \code{"fv"} objects
+  containing the numerators and denominators of each
+  estimate of \eqn{g(r)}. 
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  \adrian
-  
-  
+  \adrian.
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

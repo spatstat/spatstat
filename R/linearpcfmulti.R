@@ -161,8 +161,8 @@ linearpcfmulti.inhom <- function(X, I, J, lambdaI, lambdaJ,
   if(!any(I)) stop("no points satisfy I")
 
   # validate lambda vectors
-  lambdaI <- getlambda.lpp(lambdaI, X[I], ...)
-  lambdaJ <- getlambda.lpp(lambdaJ, X[J], ...)
+  lambdaI <- getlambda.lpp(lambdaI, X, subset=I, ...)
+  lambdaJ <- getlambda.lpp(lambdaJ, X, subset=J, ...)
 
   # compute pcf
   weightsIJ <- outer(1/lambdaI, 1/lambdaJ, "*")

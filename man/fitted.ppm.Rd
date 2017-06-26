@@ -93,7 +93,7 @@
   deleting this point from the data and re-fitting the model to the
   reduced pattern \code{X[-i]}, then predicting the value at
   \code{X[i]}. (Instead of literally performing this calculation,
-  we apply a Taylor approximation using the leverage
+  we apply a Taylor approximation using the influence function
   computed in \code{\link{dfbetas.ppm}}. 
   
   The argument \code{drop} is explained in \code{\link{quad.ppm}}.

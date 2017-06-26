@@ -946,7 +946,8 @@ getfields(X, L, fatal = TRUE)
 getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
-getlambda.lpp(lambda, X, \dots, update)
+getlambda.lpp(lambda, X, subset, \dots,
+              update, leaveoneout, lambdaname)
 getlastshift(X)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
@@ -1041,7 +1042,7 @@ linearKengine(X, \dots, r, reweight, denom, correction,
 linearKmulti(X, I, J, r, \dots, correction)
 linearKmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots, correction,
              normalise)
-linearpcfengine(X, \dots, r, reweight, denom, correction)
+linearpcfengine(X, \dots, r, reweight, denom, correction, ratio)
 linearpcfmulti(X, I, J, r, \dots, correction)
 linearpcfmulti.inhom(X, I, J, lambdaI, lambdaJ, r, \dots,
                      correction, normalise)

@@ -8,7 +8,7 @@
   for a point pattern on a linear network.
 }
 \usage{
-linearpcf(X, r=NULL, ..., correction="Ang")
+linearpcf(X, r=NULL, ..., correction="Ang", ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -25,6 +25,12 @@ linearpcf(X, r=NULL, ..., correction="Ang")
   \item{correction}{
     Geometry correction.
     Either \code{"none"} or \code{"Ang"}. See Details.
+  }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    each estimate will also be saved,
+    for use in analysing replicated point patterns.
   }
 }
 \details{
@@ -50,12 +56,16 @@ linearpcf(X, r=NULL, ..., correction="Ang")
 }
 \value{
   Function value table (object of class \code{"fv"}).
+
+  If \code{ratio=TRUE} then the return value also has two
+  attributes called \code{"numerator"} and \code{"denominator"}
+  which are \code{"fv"} objects
+  containing the numerators and denominators of each
+  estimate of \eqn{g(r)}. 
 }
 \author{
   Ang Qi Wei \email{aqw07398@hotmail.com} and
-  \adrian
-  
-  
+  \adrian.
 }
 \references{
   Ang, Q.W. (2010) Statistical methodology for spatial point patterns

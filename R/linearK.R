@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.42 $ $Date: 2017/06/05 10:31:58 $
+# $Revision: 1.44 $ $Date: 2017/06/26 04:08:15 $
 #
 # K function for point pattern on linear network
 #
@@ -34,6 +34,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                          correction="Ang", normalise=TRUE, normpower=1,
+			 update=TRUE, leaveoneout=TRUE,
 			 ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
@@ -48,7 +49,9 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
     stopifnot(normpower >= 1)
   } 
 
-  lambdaX <- getlambda.lpp(lambda, X, ...)
+  lambdaX <- getlambda.lpp(lambda, X, ...,
+                           update=update, leaveoneout=leaveoneout,
+                           lambdaname="lambda")
   invlam <- 1/lambdaX
   invlam2 <- outer(invlam, invlam, "*")
   lengthL <- volume(domain(X))
@@ -58,7 +61,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
 
   K <- linearKengine(X,
                      reweight=invlam2, denom=denom, 
-  	             r=r, correction=correction, normpower=normpower,
+  	             r=r, correction=correction, 
 	 	     ratio=ratio, ...)
 		     
   # set appropriate y axis label
@@ -77,42 +80,63 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
 }
 
 
-getlambda.lpp <- function(lambda, X, ..., update=TRUE) {
-  lambdaname <- deparse(substitute(lambda))
-  XX <- as.ppp(X)
+getlambda.lpp <- function(lambda, X, subset=NULL, ...,
+                          update=TRUE, leaveoneout=TRUE,
+			  lambdaname) {
   missup <- missing(update)
-  if(update && (is.lppm(lambda) || is.ppm(lambda))) {
-    danger <- FALSE
-    lambda <- if(is.lppm(lambda)) update(lambda, X) else update(lambda, XX)
-    if(missup)
-      warn.once("lin.inhom.update",
-                "The behaviour of linearKinhom and similar functions",
-                "when lambda is an lppm object",
-                "has changed (in spatstat 1.41-0 and later)",
-                "See help(linearKinhom)")
-  } else danger <- TRUE
-  lambdaX <-
-    if(is.vector(lambda)) lambda  else
-    if(is.function(lambda)) {
-      do.call.matched(lambda, list(x=XX$x, y=XX$y, ...))
-    } else if(is.im(lambda)) safelookup(lambda, XX) else 
-    if(inherits(lambda, "linim")) safelookup(as.im(lambda), XX) else 
-    if(is.ppm(lambda) || inherits(lambda, "lppm"))
-      predict(lambda, locations=as.data.frame(XX)) else
-    stop(paste(lambdaname, "should be",
-               "a numeric vector, function, pixel image, or fitted model"))
-  if(!is.numeric(lambdaX))
+  if(missing(lambdaname)) lambdaname <- deparse(substitute(lambda))
+  Y <- if(is.null(subset)) X else X[subset]
+  danger <- TRUE
+  if(is.ppm(lambda) || is.lppm(lambda)) {
+    ## fitted model
+    if(update) {
+      ## refit the model to the full dataset X
+      lambda <- if(is.lppm(lambda)) update(lambda, X) else
+                update(lambda, as.ppp(X))
+      ## now evaluate
+      lambdaX <- fitted(lambda, dataonly=TRUE, leaveoneout=leaveoneout)
+      ## restrict if required
+      lambdaY <- if(is.null(subset)) lambdaX else lambdaX[subset]
+      ## 
+      danger <- FALSE
+      if(missup)
+        warn.once("lin.inhom.update",
+                  "The behaviour of linearKinhom and similar functions",
+                  "when lambda is an lppm object",
+                  "has changed in spatstat 1.41-0,",
+		  "and again in spatstat 1.52-0.",
+                  "See help(linearKinhom)")
+    } else {
+      if(leaveoneout)
+        stop("leave-one-out calculation is only available when update=TRUE",
+             call.=FALSE)
+      lambdaY <- predict(lambda, locations=as.data.frame(as.ppp(Y)))
+    }
+  } else {
+    ## lambda is some other kind of object
+    lambdaY <-
+      if(is.vector(lambda)) lambda  else
+      if(inherits(lambda, "linfun")) lambda(Y, ...) else
+      if(inherits(lambda, "linim")) lambda[Y, drop=FALSE] else
+      if(is.function(lambda)) {
+        coo <- coords(Y)
+        do.call.matched(lambda, list(x=coo$x, y=coo$y, ...))
+      } else if(is.im(lambda)) safelookup(lambda, as.ppp(Y)) else 
+      stop(paste(lambdaname, "should be",
+                 "a numeric vector, function, pixel image, or fitted model"))
+  }
+  if(!is.numeric(lambdaY))
     stop(paste("Values of", lambdaname, "are not numeric"))
-  if((nv <- length(lambdaX)) != (np <- npoints(X)))
-     stop(paste("Obtained", nv, "values of", lambdaname,
+  if((nv <- length(lambdaY)) != (np <- npoints(Y)))
+    stop(paste("Obtained", nv, "values of", lambdaname,
 	   "but point pattern contains", np, "points"))
-  if(any(lambdaX < 0))
+  if(any(lambdaY < 0))
     stop(paste("Negative values of", lambdaname, "obtained"))
-  if(any(lambdaX == 0))
+  if(any(lambdaY == 0))
     stop(paste("Zero values of", lambdaname, "obtained"))
   if(danger)
-    attr(lambdaX, "dangerous") <- lambdaname
-  return(lambdaX)
+    attr(lambdaY, "dangerous") <- lambdaname
+  return(lambdaY)
 }
 
 linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
@@ -138,16 +162,19 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
     # no pairs to count: return zero function
     zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
-    K <- fv(df, "r", ylab,
+    K <- ratfv(df, NULL, 0,
+            "r", ylab,
             "est", . ~ r, c(0, rmax),
             c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname = fname)
+            fname = fname,
+	    ratio=ratio)
     if(correction == "Ang") {
       # tack on theoretical value
-      K <- bind.fv(K, data.frame(theo=r),
-                   makefvlabel(NULL, NULL, fname, "theo"),
-                  "theoretical Poisson %s")
+      K <- bind.ratfv(K, data.frame(theo=r), 0,
+                      makefvlabel(NULL, NULL, fname, "theo"),
+                      "theoretical Poisson %s",
+		      ratio=ratio)
     }
     return(K)
   }

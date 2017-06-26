@@ -10,7 +10,9 @@
   or at the points of the quadrature scheme used to fit the model.
 }
 \usage{
-\method{fitted}{lppm}(object, \dots, dataonly = FALSE, new.coef = NULL)
+\method{fitted}{lppm}(object, \dots,
+                      dataonly = FALSE, new.coef = NULL,
+		      leaveoneout = FALSE)
 }
 \arguments{
   \item{object}{
@@ -31,6 +33,10 @@
     Numeric vector of parameter values to replace the 
     fitted model parameters \code{coef(object)}.
   }
+  \item{leaveoneout}{
+    Logical. If \code{TRUE} the fitted value at each data
+    point will be computed using a leave-one-out method. See Details.
+  }
 }
 \details{
   This is a method for the generic function \code{\link[stats]{fitted}}
@@ -43,6 +49,15 @@
   They include the data points (the points of the original point pattern
   dataset \code{x}) and other ``dummy'' points 
   in the window of observation.
+
+  If \code{leaveoneout=TRUE}, fitted values will be computed
+  for the data points only, using a \sQuote{leave-one-out} rule: 
+  the fitted value at \code{X[i]} is effectively computed by
+  deleting this point from the data and re-fitting the model to the
+  reduced pattern \code{X[-i]}, then predicting the value at
+  \code{X[i]}. (Instead of literally performing this calculation,
+  we apply a Taylor approximation using the influence function
+  computed in \code{\link{dfbetas.ppm}}. 
 }
 \value{
   A vector containing the values of the fitted spatial trend.

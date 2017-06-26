@@ -9,7 +9,8 @@
 }
 \usage{
 linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
-             normalise=TRUE, normpower=1, ratio=FALSE)
+             normalise=TRUE, normpower=1,
+	     update=TRUE, leaveoneout=TRUE, ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -42,6 +43,22 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
   \item{normpower}{
     Integer (usually either 1 or 2).
     Normalisation power. See Details.
+  }
+  \item{update}{
+    Logical value indicating what to do when \code{lambda} is a fitted model
+    (class \code{"lppm"} or \code{"ppm"}).
+    If \code{update=TRUE} (the default),
+    the model will first be refitted to the data \code{X}
+    (using \code{\link{update.lppm}} or \code{\link{update.ppm}})
+    before the fitted intensity is computed.
+    If \code{update=FALSE}, the fitted intensity of the
+    model will be computed without re-fitting it to \code{X}.
+  }
+  \item{leaveoneout}{
+    Logical value (passed to \code{\link{fitted.lppm}} or
+    \code{\link{fitted.ppm}}) specifying whether to use a
+    leave-one-out rule when calculating the intensity,
+    when \code{lambda} is a fitted model.
   }
   \item{ratio}{
     Logical. 

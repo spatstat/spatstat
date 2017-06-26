@@ -1,12 +1,12 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.19 $ $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.21 $ $Date: 2017/06/26 04:33:43 $
 #
 # pair correlation function for point pattern on linear network
 #
 #
-linearpcf <- function(X, r=NULL, ..., correction="Ang") {
+linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -18,7 +18,8 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang") {
   lengthL <- volume(domain(X))
   # compute
   denom <- np * (np - 1)/lengthL
-  g <- linearpcfengine(X, r=r, ..., denom=denom, correction=correction)
+  g <- linearpcfengine(X, r=r, ...,
+                       denom=denom, correction=correction, ratio=ratio)
   # set appropriate y axis label
   switch(correction,
          Ang  = {
@@ -34,7 +35,8 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang") {
 }
 
 linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
-                           correction="Ang", normalise=TRUE, normpower=1) {
+                           correction="Ang", normalise=TRUE, normpower=1,
+			   update=TRUE, leaveoneout=TRUE, ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
                            c(none="none",
@@ -42,7 +44,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
                              best="Ang"),
                            multi=FALSE)
   if(is.null(lambda))
-    linearpcf(X, r=r, ..., correction=correction)
+    linearpcf(X, r=r, ..., correction=correction, ratio=ratio)
   if(normalise) {
     check.1.real(normpower)
     stopifnot(normpower >= 1)
@@ -50,7 +52,9 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
   # extract info about pattern
   lengthL <- volume(domain(X))
   #
-  lambdaX <- getlambda.lpp(lambda, X, ...)
+  lambdaX <- getlambda.lpp(lambda, X, ...,
+                           update=update, leaveoneout=leaveoneout,
+                           lambdaname="lambda")
   #
   invlam <- 1/lambdaX
   invlam2 <- outer(invlam, invlam, "*")
@@ -58,7 +62,8 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
            if(normpower == 1) sum(invlam) else
            lengthL * (sum(invlam)/lengthL)^normpower
   g <- linearpcfengine(X, ..., r=r,
-                       reweight=invlam2, denom=denom, correction=correction)
+                       reweight=invlam2, denom=denom,
+		       correction=correction, ratio=ratio)
   # extract bandwidth
   bw <- attr(g, "bw")
   # set appropriate y axis label
@@ -80,7 +85,8 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
 
 
 linearpcfengine <- function(X, ..., r=NULL,
-                            reweight=NULL, denom=1, correction="Ang") {
+                            reweight=NULL, denom=1,
+			    correction="Ang", ratio=FALSE) {
   # ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
   # extract info about pattern
@@ -102,11 +108,20 @@ linearpcfengine <- function(X, ..., r=NULL,
     # no pairs to count: return zero function
     zeroes <- numeric(length(r))
     df <- data.frame(r = r, est = zeroes)
-    g <- fv(df, "r", ylab,
+    g <- ratfv(df, NULL, 0,
+            "r", ylab,
             "est", . ~ r, c(0, rmax),
             c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
-            fname = fname)
+            fname = fname,
+	    rario=ratio)
+    if(correction == "Ang") {
+      # tack on theoretical value
+      g <- bind.ratfv(g, data.frame(theo=r), 0, 
+                      makefvlabel(NULL, NULL, fname, "theo"),
+                     "theoretical Poisson %s",
+		     ratio=ratio)
+    }
     return(g)
   }
   # compute pairwise distances  
@@ -114,7 +129,7 @@ linearpcfengine <- function(X, ..., r=NULL,
   #---  compile into pcf ---
   if(correction == "none" && is.null(reweight)) {
     # no weights (Okabe-Yamada)
-    g <- compilepcf(D, r, denom=denom, fname=fname)
+    g <- compilepcf(D, r, denom=denom, fname=fname, ratio=ratio)
     unitname(g) <- unitname(X)
     attr(g, "correction") <- correction
     return(g)
@@ -133,7 +148,7 @@ linearpcfengine <- function(X, ..., r=NULL,
   }
   # compute pcf
   wt <- if(!is.null(reweight)) edgewt * reweight else edgewt
-  g <- compilepcf(D, r, weights=wt, denom=denom, ..., fname=fname)
+  g <- compilepcf(D, r, weights=wt, denom=denom, ..., fname=fname, ratio=ratio)
   # extract bandwidth
   bw <- attr(g, "bw")
   # tack on theoretical value

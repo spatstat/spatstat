@@ -74,9 +74,11 @@ is.lppm <- function(x) { inherits(x, "lppm") }
 # undocumented
 as.ppm.lppm <- function(object) { object$fit }
 
-fitted.lppm <- function(object, ..., dataonly=FALSE, new.coef=NULL) {
+fitted.lppm <- function(object, ..., dataonly=FALSE, new.coef=NULL,
+                        leaveoneout=FALSE) {
   pfit <- object$fit
-  v <- fitted(pfit, dataonly=dataonly, new.coef=new.coef)
+  v <- fitted(pfit, dataonly=dataonly, new.coef=new.coef,
+              leaveoneout=leaveoneout)
   return(v)
 }
   

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.042
+        CHANGES IN spatstat VERSION 1.51-0.043
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
 
     o Effect function is now available for all types of fitted model.
 
-    o Version nickname: 'Glorious Foundation'
+    o Version nickname: 'Rubble Rouser'
 
 NEW FUNCTIONS
 
@@ -39,14 +39,21 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o linearKinhom, linearpcfinhom
+    Changed default behaviour when 'lambda' is a fitted model.
+    New arguments 'update' and 'leaveoneout'.
+    
     o effectfun
     Now works for 'ppm', 'kppm', 'lppm', 'dppm', 'rppm' and 'profilepl' objects.
+
+    o fitted.lppm
+    New argument 'leaveoneout' allows leave-one-out computation of fitted value.
 
     o ippm
     The internal format of the result has been extended slightly.
     
-    o linearK, linearKinhom, compilepcf
-    New argument 'ratio'
+    o linearK, linearKinhom, linearpcf, linearpcfinhom, compilepcf
+    New argument 'ratio'.
     
     o bind.fv
     New argument 'clip'.
