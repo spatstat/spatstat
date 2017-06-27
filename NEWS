@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.043
+        CHANGES IN spatstat VERSION 1.51-0.044
 
 OVERVIEW
 
@@ -39,9 +39,15 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o Kinhom
+    New argument 'ratio'.
+    
     o linearKinhom, linearpcfinhom
     Changed default behaviour when 'lambda' is a fitted model.
     New arguments 'update' and 'leaveoneout'.
+    
+    o linearK, linearKinhom, linearpcf, linearpcfinhom, compilepcf
+    New argument 'ratio'.
     
     o effectfun
     Now works for 'ppm', 'kppm', 'lppm', 'dppm', 'rppm' and 'profilepl' objects.
@@ -49,11 +55,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o fitted.lppm
     New argument 'leaveoneout' allows leave-one-out computation of fitted value.
 
+    o pool.rat
+    New arguments 'relabel' and 'variance'.
+    
     o ippm
     The internal format of the result has been extended slightly.
-    
-    o linearK, linearKinhom, linearpcf, linearpcfinhom, compilepcf
-    New argument 'ratio'.
     
     o bind.fv
     New argument 'clip'.

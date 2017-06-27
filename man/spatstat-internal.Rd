@@ -9,6 +9,7 @@
 \alias{acedist.noshow}
 \alias{active.interactions}
 \alias{adaptcoef}
+\alias{adjust.ratfv}
 \alias{affinexy}
 \alias{affinexypolygon}
 \alias{ang2rad}
@@ -637,6 +638,7 @@
 \alias{trianglediameters}
 \alias{trim.mask}        
 \alias{tweak.fv.entry}
+\alias{tweak.ratfv.entry}
 \alias{tweak.coefs}
 \alias{twostage.test}
 \alias{\%unit\%} %DoNotExport
@@ -734,6 +736,7 @@ acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
 adaptcoef(new.coef, fitcoef, drop)
+adjust.ratfv(f, columns, numfactor, denfactor)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
 ang2rad(ang, unit, start, clockwise)
@@ -1486,6 +1489,7 @@ trianglediameters(iedge, jedge, edgelength, \dots,
                   nvert, dmax, check)
 trim.mask(M, R, tolerant)
 tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
+tweak.ratfv.entry(x, \dots)
 tweak.coefs(model, new.coef)
 twostage.test(X, \dots, exponent, nsim, nsimsub,
               alternative, reuse, leaveout, interpolate,

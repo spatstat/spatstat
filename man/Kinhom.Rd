@@ -15,7 +15,8 @@
     nlarge = 1000,
     lambda2=NULL, reciplambda=NULL, reciplambda2=NULL,
     diagonal=TRUE,
-    sigma=NULL, varcov=NULL)
+    sigma=NULL, varcov=NULL,
+    ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -118,16 +119,22 @@
     to control the smoothing bandwidth, when \code{lambda} is
     estimated by kernel smoothing.
   }
+  \item{ratio}{
+    Logical. 
+    If \code{TRUE}, the numerator and denominator of
+    each edge-corrected estimate will also be saved,
+    for use in analysing replicated point patterns.
+  }
 }
 \value{
   An object of class \code{"fv"} (see \code{\link{fv.object}}).
   
   Essentially a data frame containing at least the following columns,
   \item{r}{the vector of values of the argument \eqn{r} 
-    at which \eqn{K_{\rm inhom}(r)}{Kinhom(r)} has been estimated
+    at which \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)} has been estimated
   }
   \item{theo}{vector of values of \eqn{\pi r^2}{pi * r^2},
-    the theoretical value of \eqn{K_{\rm inhom}(r)}{Kinhom(r)}
+    the theoretical value of \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)}
     for an inhomogeneous Poisson process
   }
   and containing additional columns
@@ -135,9 +142,15 @@
   argument. The additional columns are named
   \code{border}, \code{trans} and \code{iso}
   and give the estimated values of 
-  \eqn{K_{\rm inhom}(r)}{Kinhom(r)}
+  \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)}
   using the border correction, translation correction,
   and Ripley isotropic correction, respectively.
+
+If \code{ratio=TRUE} then the return value also has two
+  attributes called \code{"numerator"} and \code{"denominator"}
+  which are \code{"fv"} objects
+  containing the numerators and denominators of each
+  estimate of \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)}.
 }
 \details{
   This computes a generalisation of the \eqn{K} function
@@ -151,11 +164,11 @@
   for stationary point processes.
   
   The inhomogeneous \eqn{K} function
-  \eqn{K_{\rm inhom}(r)}{Kinhom(r)}
+  \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)}
   is a direct generalisation to nonstationary point processes.
   Suppose \eqn{x} is a point process with non-constant intensity
   \eqn{\lambda(u)}{lambda(u)} at each location \eqn{u}.
-  Define \eqn{K_{\rm inhom}(r)}{Kinhom(r)} to be the expected
+  Define \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)} to be the expected
   value, given that \eqn{u} is a point of \eqn{x},
   of the sum of all terms
   \eqn{1/\lambda(x_j)}{1/lambda(x[j])}
@@ -165,7 +178,7 @@
   \eqn{\lambda()}{lambda()} is constant.
   If \eqn{x} is an inhomogeneous Poisson process with intensity
   function \eqn{\lambda(u)}{lambda(u)}, then
-  \eqn{K_{\rm inhom}(r) = \pi r^2}{Kinhom(r) = pi * r^2}.
+  \eqn{K_{\mbox{\scriptsize\rm inhom}}(r) = \pi r^2}{Kinhom(r) = pi * r^2}.
   
   Given a point pattern dataset, the 
   inhomogeneous \eqn{K} function can be estimated
@@ -177,7 +190,7 @@
   This allows us to inspect a point pattern for evidence of 
   interpoint interactions after allowing for spatial inhomogeneity
   of the pattern. Values 
-  \eqn{K_{\rm inhom}(r) > \pi r^2}{Kinhom(r) > pi * r^2}
+  \eqn{K_{\mbox{\scriptsize\rm inhom}}(r) > \pi r^2}{Kinhom(r) > pi * r^2}
   are suggestive of clustering.
 
   The argument \code{lambda} should supply the
@@ -242,11 +255,12 @@
   \code{\link{density.ppp}} along with any extra arguments.
   
   Edge corrections are used to correct bias in the estimation
-  of \eqn{K_{\rm inhom}}{Kinhom}.
-  Each edge-corrected estimate of \eqn{K_{\rm inhom}(r)}{Kinhom(r)} is
+  of \eqn{K_{\mbox{\scriptsize\rm inhom}}}{Kinhom}.
+  Each edge-corrected estimate of
+  \eqn{K_{\mbox{\scriptsize\rm inhom}}(r)}{Kinhom(r)} is
   of the form
   \deqn{
-    \widehat K_{\rm inhom}(r) = (1/A)
+    \widehat K_{\mbox{\scriptsize\rm inhom}}(r) = (1/A)
     \sum_i \sum_j \frac{1\{d_{ij} \le r\}
       e(x_i,x_j,r)}{\lambda(x_i)\lambda(x_j)}
   }{

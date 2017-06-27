@@ -9,11 +9,19 @@
   and compute a pooled estimate.
 }
 \usage{
-\method{pool}{rat}(...)
+\method{pool}{rat}(..., relabel=TRUE, variance=TRUE)
 }
 \arguments{
   \item{\dots}{
     Objects of class \code{"rat"}.
+  }
+  \item{relabel}{
+    Logical value indicating whether the result 
+    should be relabelled to show that it was obtained by pooling.
+  }
+  \item{variance}{
+    Logical value indicating whether to compute the sample variance
+    and related terms.
   }
 }
 \details{
@@ -79,11 +87,8 @@
   \emph{Sampling techniques}, 3rd edition.
   New York: John Wiley and Sons.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{nonparametric}
