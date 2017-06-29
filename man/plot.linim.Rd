@@ -10,7 +10,7 @@
 }
 \usage{
 \method{plot}{linim}(x, ..., style = c("colour", "width"),
-             scale, adjust = 1,
+             scale, adjust = 1, legend=TRUE,
              do.plot=TRUE)
 }
 \arguments{
@@ -32,6 +32,10 @@
   \item{adjust}{
     Adjustment factor for the default scale.
   }
+  \item{legend}{
+    Logical value indicating whether to plot a legend
+    (colour ribbon or scale bar).
+  }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.
   }
@@ -50,8 +54,15 @@
   thick lines centred on the line segments of the linear network.
 }
 \value{
-  An (invisible) window (class \code{"owin"}) containing the
-  area that will be plotted, including the colour ribbon.
+  If \code{style="colour"}, the result is
+  an object of class \code{"colourmap"} specifying the colour map used.
+  If \code{style="width"}, the result is 
+  a numeric value \code{v} giving the physical scale:
+  one unit of pixel value is represented as \code{v} physical units on the plot.
+
+  The result also has an attribute \code{"bbox"} giving a bounding box
+  for the plot. The bounding box includes the ribbon or scale bar, if present,
+  but not the main title.
 }
 \author{
   \adrian
@@ -73,6 +84,6 @@
   X <- as.linim(X)
   
   plot(X)
-  plot(X, style="width")
+  plot(X, style="width", main="Width represents value")
 }
 \keyword{spatial}

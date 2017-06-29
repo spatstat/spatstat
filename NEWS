@@ -1,9 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.044
+        CHANGES IN spatstat VERSION 1.51-0.045
 
 OVERVIEW
 
-    o We thank Rasmus Waagepetersen and Abdollah Jalilian for contributions.
+    o We thank Nicholas Read, Abdollah Jalilian and Rasmus Waagepetersen
+    for contributions.
 
     o Important bug fixes.
     
@@ -47,6 +48,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New arguments 'update' and 'leaveoneout'.
     
     o linearK, linearKinhom, linearpcf, linearpcfinhom, compilepcf
+    Ratio calculations are now supported.
     New argument 'ratio'.
     
     o effectfun
@@ -57,6 +59,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pool.rat
     New arguments 'relabel' and 'variance'.
+    
+    o plot.linim, plot.linfun
+    A scale bar is now plotted when style="width".
+    New argument 'legend'.
     
     o ippm
     The internal format of the result has been extended slightly.
@@ -103,9 +109,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     Refuses to fit a log-Gaussian Cox model with anisotropic covariance.
 
+    o plot.linim, plot.linfun
+    The return value has a different format.
+    
     o ippm
     Accelerated.
-    
+
 BUG FIXES
 
     o bw.pcf
@@ -164,6 +173,11 @@ BUG FIXES
     o pool.fv
     Crashed sometimes, if the arguments did not have the same set of
     column names.
+    Fixed.
+
+    o pool.rat
+    Crashed with an error message from 'fmt'
+    if there were more than 20 objects to be pooled.
     Fixed.
 
     o linearK

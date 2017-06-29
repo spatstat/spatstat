@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.32 $   $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.33 $   $Date: 2017/06/29 08:18:03 $
 #
 #  Image/function on a linear network
 #
@@ -107,8 +107,9 @@ print.summary.linim <- function(x, ...) {
 }
 
 
-plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
-                       do.plot=TRUE) {
+plot.linim <- function(x, ..., style=c("colour", "width"),
+                       scale, adjust=1,
+		       legend=TRUE, do.plot=TRUE) {
   xname <- short.deparse(substitute(x))
   style <- match.arg(style)
   # colour style: plot as pixel image
@@ -116,15 +117,31 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
     return(do.call(plot.im,
                    resolve.defaults(list(x),
                                     list(...),
-                                    list(main=xname, do.plot=do.plot))))
+                                    list(main=xname,
+				         legend=legend,
+					 do.plot=do.plot))))
   # width style
   L <- attr(x, "L")
   df <- attr(x, "df")
   Llines <- as.psp(L)
-  # initialise plot
   W <- as.owin(L)
+  # plan layout
+  if(legend) {
+    # use layout procedure in plot.im
+    z <- do.call(plot.im,
+		 resolve.defaults(list(x, do.plot=FALSE, legend=TRUE),
+                                  list(...),
+                                  list(main=xname)))
+    bb.all <- attr(z, "bbox")
+    bb.rib <- attr(z, "bbox.legend")
+  } else {
+    bb.all <- Frame(W)
+    bb.rib <- NULL
+  }
+  legend <- !is.null(bb.rib)
+  # initialise plot
   bb <- do.call.matched(plot.owin,
-                        resolve.defaults(list(x=W, type="n"),
+                        resolve.defaults(list(x=bb.all, type="n"),
                                          list(...), list(main=xname)),
                         extrargs="type")
   # resolve graphics parameters for polygons
@@ -190,7 +207,53 @@ plot.linim <- function(x, ..., style=c("colour", "width"), scale, adjust=1,
     # now draw main
     do.call(polygon, append(list(x=xx, y=yy), grafpar))
   }
-  return(invisible(bb))
+  result <- adjust * scale
+  attr(result, "bbox") <- bb
+  if(legend) {
+    attr(result, "bbox.ribbon") <- bb.rib
+    # set up scale of typical pixel values
+    gvals <- prettyinside(range(x))
+    # corresponding widths
+    wvals <- adjust * scale * gvals
+    # ribbon info
+    argh <- list(...)
+    ribside <- argh$ribside %orifnull% "right"
+    ribside <- match.arg(ribside, c("right", "left", "bottom", "top"))
+    ribargs <- argh$ribargs %orifnull% list()
+    ribcode <- as.integer(list(bottom=1, left=2, top=3, right=4)[[ribside]])
+    # glyph positions
+    ng <- length(gvals)
+    xr <- bb.rib$xrange
+    yr <- bb.rib$yrange
+    switch(ribside,
+           right = ,
+	   left = {
+	     y <- seq(yr[1], yr[2], length.out=ng+1L)
+	     y <- (y[-1L] + y[-(ng+1L)])/2
+	     for(j in 1:ng) {
+               xx <- xr[c(1L,2L,2L,1L)]
+	       yy <- (y[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
+	       do.call(polygon, append(list(xx, yy), grafpar))
+	     }
+	   },
+	   bottom = ,
+	   top = {
+	     x <- seq(xr[1], xr[2], length.out=ng+1L)
+	     x <- (x[-1L] + x[-(ng+1L)])/2
+	     for(j in 1:ng) {
+	       xx <- (x[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
+               yy <- yr[c(1L,2L,2L,1L)]
+	       do.call(polygon, append(list(xx, yy), grafpar))
+	     }
+	     axis(ribcode, at=x, labels=gvals)
+	   })
+     switch(ribside,
+            right  = text(xr[2], y,     pos=4, labels=gvals),
+            left   = text(xr[1], y,     pos=2, labels=gvals),
+	    bottom = text(x,     yr[1], pos=1, labels=gvals),
+	    top    = text(x,     yr[2], pos=3, labels=gvals))
+  }
+  return(invisible(result))
 }
 
 sortalongsegment <- function(df) {

@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.51-0.044
+Version: 1.51-0.045
 Nickname: Rubble Rouser
-Date: 2017-06-27
+Date: 2017-06-28
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -141,7 +141,8 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	S. Rakshit; 
 	B. Ramage;
 	P. Ramon;
-	X. Raynaud,
+	X. Raynaud;
+	N. Read; 
 	M. Reiter; 
         I. Renner;
 	T.O. Richardson;  

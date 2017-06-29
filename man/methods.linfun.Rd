@@ -68,7 +68,7 @@
   For \code{print.linfun} and \code{summary.linfun} the result is \code{NULL}.
 
   For \code{plot.linfun} the result is the same as
-  for \code{\link{plot.im}}.
+  for \code{\link{plot.linim}}.
   
   For the conversion methods, the result is an object of the
   required type: \code{as.owin.linfun} returns an object of

@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.21 $ $Date: 2017/06/26 04:33:43 $
+# $Revision: 1.23 $ $Date: 2017/06/29 03:00:23 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -20,7 +20,9 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
   denom <- np * (np - 1)/lengthL
   g <- linearpcfengine(X, r=r, ...,
                        denom=denom, correction=correction, ratio=ratio)
-  # set appropriate y axis label
+  # extract bandwidth
+  bw <- attr(g, "bw")
+   # set appropriate y axis label
   switch(correction,
          Ang  = {
            ylab <- quote(g[L](r))
@@ -31,6 +33,8 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
            fname <- c("g", "net")
          })
   g <- rebadge.fv(g, new.ylab=ylab, new.fname=fname)
+  # reattach bandwidth
+  attr(g, "bw") <- bw
   return(g)
 }
 
@@ -114,7 +118,7 @@ linearpcfengine <- function(X, ..., r=NULL,
             c("r", makefvlabel(NULL, "hat", fname)), 
             c("distance argument r", "estimated %s"),
             fname = fname,
-	    rario=ratio)
+	    ratio=ratio)
     if(correction == "Ang") {
       # tack on theoretical value
       g <- bind.ratfv(g, data.frame(theo=r), 0, 

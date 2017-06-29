@@ -514,6 +514,7 @@ plot.im <- local({
     bb.all <- boundingbox(bb.rib, bb)
 
     attr(output.colmap, "bbox") <- bb.all
+    attr(output.colmap, "bbox.legend") <- bb.rib
     if(!do.plot)
       return(output.colmap)
 
