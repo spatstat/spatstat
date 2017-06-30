@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.33 $   $Date: 2017/06/29 08:18:03 $
+#  $Revision: 1.34 $   $Date: 2017/06/30 01:05:17 $
 #
 #  Image/function on a linear network
 #
@@ -139,6 +139,20 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
     bb.rib <- NULL
   }
   legend <- !is.null(bb.rib)
+  if(legend) {
+    # ribbon info
+    argh <- list(...)
+    ribside <- argh$ribside %orifnull% "right"
+    ribside <- match.arg(ribside, c("right", "left", "bottom", "top"))
+    ribargs <- argh$ribargs %orifnull% list()
+    ribscale <- argh$ribscale %orifnull% 1
+    # expand plot region to accommodate text annotation in legend
+    if(ribside %in% c("left", "right")) {
+      delta <- 2 * sidelengths(bb.rib)[1]
+      xmargin <- if(ribside == "right") c(0, delta) else c(delta, 0)
+      bb.all <- grow.rectangle(bb.all, xmargin=xmargin)
+    }
+  }
   # initialise plot
   bb <- do.call.matched(plot.owin,
                         resolve.defaults(list(x=bb.all, type="n"),
@@ -215,12 +229,6 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
     gvals <- prettyinside(range(x))
     # corresponding widths
     wvals <- adjust * scale * gvals
-    # ribbon info
-    argh <- list(...)
-    ribside <- argh$ribside %orifnull% "right"
-    ribside <- match.arg(ribside, c("right", "left", "bottom", "top"))
-    ribargs <- argh$ribargs %orifnull% list()
-    ribcode <- as.integer(list(bottom=1, left=2, top=3, right=4)[[ribside]])
     # glyph positions
     ng <- length(gvals)
     xr <- bb.rib$xrange
@@ -245,13 +253,14 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
                yy <- yr[c(1L,2L,2L,1L)]
 	       do.call(polygon, append(list(xx, yy), grafpar))
 	     }
-	     axis(ribcode, at=x, labels=gvals)
 	   })
+     # add text labels
+     glabs <- signif(ribscale * gvals, 2)
      switch(ribside,
-            right  = text(xr[2], y,     pos=4, labels=gvals),
-            left   = text(xr[1], y,     pos=2, labels=gvals),
-	    bottom = text(x,     yr[1], pos=1, labels=gvals),
-	    top    = text(x,     yr[2], pos=3, labels=gvals))
+            right  = text(xr[2], y,     pos=4, labels=glabs),
+            left   = text(xr[1], y,     pos=2, labels=glabs),
+	    bottom = text(x,     yr[1], pos=1, labels=glabs),
+	    top    = text(x,     yr[2], pos=3, labels=glabs))
   }
   return(invisible(result))
 }
