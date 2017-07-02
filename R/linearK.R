@@ -171,10 +171,12 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
 	    ratio=ratio)
     if(correction == "Ang") {
       # tack on theoretical value
-      K <- bind.ratfv(K, data.frame(theo=r), 0,
-                      makefvlabel(NULL, NULL, fname, "theo"),
-                      "theoretical Poisson %s",
-		      ratio=ratio)
+      K <- bind.ratfv(K,
+		      quotient    = data.frame(theo=r), 
+                      denominator = 0,
+                      labl = makefvlabel(NULL, NULL, fname, "theo"),
+                      desc = "theoretical Poisson %s",
+		      ratio = ratio)
     }
     return(K)
   }
@@ -209,9 +211,11 @@ linearKengine <- function(X, ..., r=NULL, reweight=NULL, denom=1,
   K <- compileK(D, r, weights=wt, denom=denom, fname=fname, ratio=ratio)
   # tack on theoretical value
   if(ratio) {
-    K <- bind.ratfv(K, data.frame(theo= r * denom), denom,
-                    makefvlabel(NULL, NULL, fname, "theo"),
-                    "theoretical Poisson %s")
+    K <- bind.ratfv(K,
+		    quotient = data.frame(theo = r),
+		    denominator = denom,
+                    labl = makefvlabel(NULL, NULL, fname, "theo"),
+                    desc = "theoretical Poisson %s")
   } else {
     K <- bind.fv(K, data.frame(theo=r),
                  makefvlabel(NULL, NULL, fname, "theo"),

@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.90 $	$Date: 2017/06/27 05:25:13 $
+#	$Revision: 1.92 $	$Date: 2017/07/02 08:07:51 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -269,8 +269,10 @@
       }
       K <-
         if(bord && !none) Kb else
-        if(!bord && none) Kn else 
-      cbind.fv(Kb, Kn[, names(Kn) != "theo"])
+        if(!bord && none) Kn else
+	if(!ratio) cbind.fv(Kb,  Kn[, c("r", "un")]) else 
+	bind.ratfv(Kb,  Kn[, c("r", "un")], ratio=TRUE)
+	
       ## tweak labels
       K <- rebadge.fv(K, quote(K[inhom](r)), c("K", "inhom"))
       if(danger)
@@ -344,19 +346,21 @@
       if(any(correction == "border")) {
         Kb <- RS$ratio
         K <- bind.ratfv(K,
-	                data.frame(border=Kb), denom,
-	               "{hat(%s)[%s]^{bord}}(r)",
-                       "border-corrected estimate of %s",
-                       "border",
-		       ratio=ratio)
+	                quotient = data.frame(border=Kb),
+			denominator = denom,
+	                labl = "{hat(%s)[%s]^{bord}}(r)",
+                        desc = "border-corrected estimate of %s",
+                        preferred = "border",
+		        ratio=ratio)
       }
       if(any(correction == "bord.modif")) {
         Kbm <- RS$numerator/eroded.areas(W, r)
     	K <- bind.ratfv(K,
-	                data.frame(bord.modif=Kbm), denom,
-			"{hat(%s)[%s]^{bordm}}(r)",
-                        "modified border-corrected estimate of %s",
-                        "bord.modif",
+	                quotient = data.frame(bord.modif=Kbm),
+			denominator = denom,
+			labl = "{hat(%s)[%s]^{bordm}}(r)",
+                        desc = "modified border-corrected estimate of %s",
+                        preferred = "bord.modif",
 			ratio=ratio)
       }
     }
@@ -369,10 +373,11 @@
       rmax <- diamW/2
       Ktrans[r >= rmax] <- NA
       K <- bind.ratfv(K,
-                      data.frame(trans=Ktrans), denom,
-		      "{hat(%s)[%s]^{trans}}(r)",
-                      "translation-correction estimate of %s",
-                      "trans",
+                      quotient = data.frame(trans=Ktrans),
+		      denominator = denom,
+		      labl ="{hat(%s)[%s]^{trans}}(r)",
+                      desc = "translation-correction estimate of %s",
+                      preferred = "trans",
 		      ratio=ratio)
     }
     if(any(correction == "isotropic" | correction == "Ripley")) {
@@ -384,10 +389,11 @@
       rmax <- diamW/2
       Kiso[r >= rmax] <- NA
       K <- bind.ratfv(K,
-                      data.frame(iso=Kiso), denom,
-		      "{hat(%s)[%s]^{iso}}(r)",
-                      "Ripley isotropic correction estimate of %s",
-                      "iso",
+                      quotient = data.frame(iso=Kiso),
+		      denominator = denom,
+		      labl = "{hat(%s)[%s]^{iso}}(r)",
+                      desc = "Ripley isotropic correction estimate of %s",
+                      preferred = "iso",
 		      ratio=ratio)
     }
 

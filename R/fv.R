@@ -1376,12 +1376,15 @@ ratfv <- function(df, numer, denom, ..., ratio=TRUE) {
 
 ## Tack new column(s) onto a ratio fv object
 
-bind.ratfv <- function(x, numerator, denominator, 
+bind.ratfv <- function(x, numerator=NULL, denominator=NULL, 
                        labl = NULL, desc = NULL, preferred = NULL,
-                       ratio=TRUE) {
+                       ratio=TRUE,
+		       quotient=NULL) {
   if(ratio && !inherits(x, "rat"))
     stop("ratio=TRUE is set, but x has no ratio information", call.=FALSE)
-  if(missing(denominator) && inherits(numerator, "rat")) {
+  if(is.null(numerator) && !is.null(denominator) && !is.null(quotient))
+    numerator <- quotient * denominator
+  if(is.null(denominator) && inherits(numerator, "rat")) {
     ## extract numerator & denominator from ratio object
     both <- numerator
     denominator <- attr(both, "denominator")
@@ -1394,10 +1397,17 @@ bind.ratfv <- function(x, numerator, denominator,
     if(is.null(labl)) labl <- attr(both, "labl")
   }
   # calculate ratio
-  y <- bind.fv(x, numerator/denominator,
+  #    The argument 'quotient' is rarely needed 
+  #    except to avoid 0/0 or to improve accuracy
+  if(is.null(quotient))
+    quotient <- numerator/denominator
+    
+  # bind new column to x   
+  y <- bind.fv(x, quotient,
                labl=labl, desc=desc, preferred=preferred)
   if(!ratio)
     return(y)
+    
   ## convert scalar denominator to data frame
   if(!is.data.frame(denominator)) {
     if(!is.numeric(denominator) || !is.vector(denominator))

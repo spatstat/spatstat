@@ -2,6 +2,7 @@
 \title{Internal spatstat functions}
 \alias{[.pp3}
 \alias{[.localpcfmatrix}
+\alias{[.rat}
 \alias{[.splitppx}
 \alias{[.diagramobj}
 \alias{[<-.splitppx}
@@ -732,6 +733,7 @@
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
 \method{[}{diagramobj}(x, \dots)
+\method{[}{rat}(x, \dots)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 active.interactions(object)
@@ -767,9 +769,11 @@ as.units(s)
 augment.msr(x, \dots, sigma)
 BartCalc(fY, fK)
 bbEngine(\dots)
-bermantestEngine(model, covariate, which, alternative, \dots, modelname, covname, dataname)
+bermantestEngine(model, covariate, which, alternative, \dots,
+                 modelname, covname, dataname)
 bdry.mask(W)
-bind.ratfv(x, numerator, denominator, labl, desc, preferred, ratio)
+bind.ratfv(x, numerator, denominator, labl, desc, preferred,
+           ratio, quotient)
 blankcoefnames(x)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)

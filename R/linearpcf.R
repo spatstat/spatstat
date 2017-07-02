@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.23 $ $Date: 2017/06/29 03:00:23 $
+# $Revision: 1.24 $ $Date: 2017/07/02 08:27:50 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -121,10 +121,12 @@ linearpcfengine <- function(X, ..., r=NULL,
 	    ratio=ratio)
     if(correction == "Ang") {
       # tack on theoretical value
-      g <- bind.ratfv(g, data.frame(theo=r), 0, 
-                      makefvlabel(NULL, NULL, fname, "theo"),
-                     "theoretical Poisson %s",
-		     ratio=ratio)
+      g <- bind.ratfv(g,
+                      quotient = data.frame(theo=r),
+		      denominator = 0, 
+                      labl = makefvlabel(NULL, NULL, fname, "theo"),
+                      desc = "theoretical Poisson %s",
+   		      ratio=ratio)
     }
     return(g)
   }
@@ -156,9 +158,12 @@ linearpcfengine <- function(X, ..., r=NULL,
   # extract bandwidth
   bw <- attr(g, "bw")
   # tack on theoretical value
-  g <- bind.fv(g, data.frame(theo=rep.int(1,length(r))),
-               makefvlabel(NULL, NULL, fname, "pois"),
-               "theoretical Poisson %s")
+  g <- bind.ratfv(g,
+                  quotient = data.frame(theo=rep.int(1,length(r))),
+		  denominator = denom,
+                  labl = makefvlabel(NULL, NULL, fname, "pois"),
+                  desc = "theoretical Poisson %s",
+		  ratio = ratio)
   # tweak
   unitname(g) <- unitname(X)
   fvnames(g, ".") <- rev(fvnames(g, "."))

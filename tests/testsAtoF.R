@@ -535,7 +535,7 @@ local({
 #
 # check fast and slow code for Kest
 #
-#   $Revision: 1.2 $   $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.3 $   $Date: 2017/07/02 08:41:46 $
 #
 require(spatstat)
 local({
@@ -545,6 +545,14 @@ local({
   Kbu <- Kest(cells, correction=c("none", "border"))
   ## slow code, full set of corrections, sqrt transformation
   Ldd <- Lest(unmark(demopat), correction="all", var.approx=TRUE)
+  ## Kinhom
+  lam <- density(cells, at="points", leaveoneout=TRUE)
+  ## fast code
+  Kib <- Kinhom(cells, lam, nlarge=0)
+  Kiu <- Kest(cells, lam, correction="none")
+  Kibu <- Kest(cells, lam, correction=c("none", "border"))
+  ## slow code
+  Lidd <- Linhom(unmark(demopat), sigma=bw.scott)
 })
 
 
