@@ -197,6 +197,7 @@
 \alias{geyercounts}
 \alias{geyerdelta2}
 \alias{GLMpredict}
+\alias{GeomSmooth}
 \alias{good.correction.K}
 %\alias{gridadjacencymatrix} %DoNotExport
 \alias{gridindex}            
@@ -964,6 +965,7 @@ getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
 geyerdelta2(X,r,sat,\dots,sparseOK)
 GLMpredict(fit, data, coefs, changecoef, type)
+GeomSmooth(X, \dots, at)
 good.correction.K(X)
 %gridadjacencymatrix(dims)
 gridindex(x, y, xrange, yrange, nx, ny)            

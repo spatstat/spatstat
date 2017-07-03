@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.38 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.40 $  $Date: 2017/07/03 09:23:49 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -755,3 +755,44 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   return(result)
 }
 
+GeomSmooth <- function(X, ..., at=c("pixels", "points")) {
+  verifyclass(X, "ppp")
+  at <- match.arg(at)
+  X <- coerce.marks.numeric(X)
+  marx <- marks(X)
+  d <- dim(marx)
+  if(!is.null(d) && d[2] > 1) {
+    switch(at,
+           points = {
+             Z <- lapply(unstack(X), GeomSmooth, ..., at=at)
+             Z <- do.call(data.frame(Z))
+           },
+           pixels = {
+             Z <- solapply(unstack(X), GeomSmooth, ..., at=at)
+           })
+    return(Z)
+  }
+  # vector or single column of numeric marks
+  v <- as.numeric(marx)
+  rv <- range(v)
+  if(any(rv < 0)) stop("Negative values in GeomSmooth", call.=FALSE)
+  Y <- X %mark% log(v)
+  if(rv[1] > 0) {
+    Z <- Smooth(Y, ..., at=at)
+  } else {
+    yok <- is.finite(marks(Y))
+    switch(at,
+           points = {
+             Z <- rep(-Inf, npoints(X))
+             Z[yok] <- Smooth(Y[yok], ..., at=at)
+           },
+           pixels = {
+             isfinite <- nnmark(Y %mark% yok, ...)
+             support <- solutionset(isfinite)
+             Z <- as.im(-Inf, W=Window(Y), ...)
+             YOK <- Y[support]
+             Z[support] <- Smooth(YOK, ..., at=at)[]
+           })
+  }
+  return(exp(Z))
+}

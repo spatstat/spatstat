@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.75 $ $Date: 2017/06/23 06:33:48 $
+#  $Revision: 1.76 $ $Date: 2017/07/03 09:32:57 $
 #
 
 leverage <- function(model, ...) {
@@ -578,11 +578,22 @@ ppmInfluenceEngine <- function(fit,
       h <- data.frame(leverage=h, type=marks(loc))
     levval <- (loc %mark% h)[ok]
     levvaldum <- levval[!isdata[ok]]
-    if(!mt) {
-      levsmo <- Smooth(levvaldum, sigma=maxnndist(loc))
+    geomsmooth <- spatstat.options('developer')
+    if(!geomsmooth) {
+      if(!mt) {
+        levsmo <- Smooth(levvaldum, sigma=maxnndist(loc))
+      } else {
+        levsplitdum <- split(levvaldum, reduce=TRUE)
+        levsmo <- Smooth(levsplitdum, sigma=max(sapply(levsplitdum, maxnndist)))
+      }
     } else {
-      levsplitdum <- split(levvaldum, reduce=TRUE)
-      levsmo <- Smooth(levsplitdum, sigma=max(sapply(levsplitdum, maxnndist)))
+      if(!mt) {
+        levsmo <- GeomSmooth(levvaldum, sigma=maxnndist(loc))
+      } else {
+        levsplitdum <- split(levvaldum, reduce=TRUE)
+        levsmo <- solapply(levsplitdum, GeomSmooth,
+                           sigma=max(sapply(levsplitdum, maxnndist)))
+      }
     }
     ## nominal mean level
     a <- area(Window(loc)) * markspace.integral(loc)
