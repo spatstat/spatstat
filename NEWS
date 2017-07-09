@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.048
+        CHANGES IN spatstat VERSION 1.51-0.049
 
 OVERVIEW
 
@@ -115,6 +115,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ippm
     Accelerated.
 
+    o Smooth.ppp
+    Now exits gracefully if any mark values are NA, NaN or Inf.
+    
 BUG FIXES
 
     o bw.pcf

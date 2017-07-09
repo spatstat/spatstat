@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.40 $  $Date: 2017/07/03 09:23:49 $
+#  $Revision: 1.41 $  $Date: 2017/07/09 06:37:52 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -24,9 +24,11 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
                        weights=rep(1, npoints(X)), at="pixels",
                        edge=TRUE, diggle=FALSE) {
   verifyclass(X, "ppp")
-  if(!is.marked(X, dfok=TRUE))
-    stop("X should be a marked point pattern")
+  if(!is.marked(X, dfok=TRUE, na.action="fatal"))
+    stop("X should be a marked point pattern", call.=FALSE)
   X <- coerce.marks.numeric(X)
+  if(!all(is.finite(as.matrix(marks(X)))))
+    stop("Some mark values are Inf, NaN or NA", call.=FALSE)
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
