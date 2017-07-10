@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.65 $  $Date: 2017/07/10 09:06:20 $
+#  $Revision: 1.66 $  $Date: 2017/07/10 10:02:34 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -267,7 +267,8 @@ plot.msr <- function(x, ..., add=FALSE,
                      how=c("image", "contour", "imagecontour"),
                      main=NULL, 
                      do.plot=TRUE,
-                     multiplot=TRUE) {
+                     multiplot=TRUE,
+                     massthresh=0) {
   if(is.null(main)) 
     main <- short.deparse(substitute(x))
   how <- match.arg(how)
@@ -321,7 +322,13 @@ plot.msr <- function(x, ..., add=FALSE,
   }
   ## scalar measure
   x <- y[[1]]
+  ## get atoms
   xatomic <- (x$loc %mark% x$discrete)[x$atoms]
+  if(length(massthresh) && all(is.finite(massthresh))) {
+    ## ignore atoms with absolute mass <= massthresh
+    check.1.real(massthresh)
+    xatomic <- xatomic[abs(marks(xatomic)) > massthresh]
+  }
   xtra.im <- graphicsPars("image")
   xtra.pp <- setdiff(graphicsPars("ppp"), c("box", "col"))
   xtra.ow <- graphicsPars("owin")
@@ -629,6 +636,9 @@ harmonise.msr <- local({
     Umasslist <- lapply(Umasslist, extract, i=isatom)
     ## make common quadrature scheme
     UQ <- quadscheme(Uloc[isatom], Uloc[!isatom])
+    ## reorder density data correspondingly
+    neworder <- c(which(isatom), which(!isatom))
+    Udenslist <- lapply(Udenslist, extract, i=neworder)
     ## make new measures
     result <- mapply(msr,
                      MoreArgs=list(qscheme=UQ),

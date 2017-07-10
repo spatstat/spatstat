@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.051
+        CHANGES IN spatstat VERSION 1.51-0.052
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
     o Now handles disconnected linear networks.
 
     o Effect function is now available for all types of fitted model.
+
+    o More support for measures.
 
     o Version nickname: 'Darth Modi'
 
@@ -90,6 +92,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pool.fv
     New arguments 'relabel' and 'variance'
     
+    o plot.msr
+    New argument 'massthresh'.
+    
     o density.ppp
     New argument 'verbose'.
 
@@ -115,7 +120,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.linim, plot.linfun
     The return value has a different format.
-    
+
     o ippm
     Accelerated.
 
