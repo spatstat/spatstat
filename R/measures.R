@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.64 $  $Date: 2017/07/10 08:39:51 $
+#  $Revision: 1.65 $  $Date: 2017/07/10 09:06:20 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -598,7 +598,7 @@ harmonise.msr <- local({
       stop("Some, but not all, quadrature schemes are marked")
     ismarked <- all(ismarked)
     ## union of all quadrature points in all measures
-    Uloc <- do.call(superimpose, append(loclist, list(check=FALSE)))
+    Uloc <- do.call(superimpose, append(unname(loclist), list(check=FALSE)))
     Uloc <- unique(Uloc)
     nU <- npoints(Uloc)
     ## match each quadrature set to the union
