@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.049
+        CHANGES IN spatstat VERSION 1.51-0.050
 
 OVERVIEW
 
@@ -37,6 +37,10 @@ NEW FUNCTIONS
     o model.matrix.ippm
     Method for 'model.matrix' which allows computation of
     regular and irregular score components.
+
+    o harmonise.msr
+    Convert several measures (objects of class 'msr')
+    to a common quadrature scheme.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

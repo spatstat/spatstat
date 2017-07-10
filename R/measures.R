@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.62 $  $Date: 2017/01/07 02:50:14 $
+#  $Revision: 1.64 $  $Date: 2017/07/10 08:39:51 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -570,3 +570,89 @@ measureVariation <- function(x) {
 
 totalVariation <- function(x) integral(measureVariation(x))
   
+harmonise.msr <- local({
+
+  harmonise.msr <- function(...) {
+    argz <- list(...)
+    n <- length(argz)
+    if(n == 0) return(argz)
+    ismeasure <- sapply(argz, inherits, what="msr")
+    if(!any(ismeasure))
+      stop("No measures supplied")
+    if(!all(ismeasure))
+    stop("All arguments should be measures (objects of class msr)")
+    if(n < 2) return(argz)
+    result <- vector(mode="list", length=n)
+    ## extract entries
+    loclist <- lapply(argz, getElement, name="loc")
+    atomlist <- lapply(argz, getElement, name="atoms")
+    masslist <- lapply(argz, getElement, name="discrete")
+    denslist <- lapply(argz, getElement, name="density")
+    ## check for compatible dimensions of measure values
+    dimen <- unique(sapply(argz, ncol))
+    if(length(dimen) > 1)
+      stop("Measures have different dimensions:", commasep(sort(dimen)))
+    ## check for marked points
+    ismarked <- sapply(loclist, is.marked)
+    if(any(ismarked) && !all(ismarked))
+      stop("Some, but not all, quadrature schemes are marked")
+    ismarked <- all(ismarked)
+    ## union of all quadrature points in all measures
+    Uloc <- do.call(superimpose, append(loclist, list(check=FALSE)))
+    Uloc <- unique(Uloc)
+    nU <- npoints(Uloc)
+    ## match each quadrature set to the union
+    ## and find nearest data point to each point in the union
+    if(!ismarked) {
+      matchlist <- lapply(loclist, nncross, Y=Uloc, what="which")
+      nearlist  <- lapply(loclist, ssorcnn, xx=Uloc, what="which")
+    } else {
+      stop("Not yet implemented for marked quadrature schemes")
+    }
+    ## nearest neighbour interpolation of density values of each argument
+    ## onto the common quadrature set
+    Udenslist <- mapply(extract, x=denslist, i=nearlist,
+                        SIMPLIFY=FALSE)
+    ## initialise other bits
+    noatoms  <- logical(nU) 
+    zeromass <- if(dimen == 1) numeric(nU) else matrix(0, nU, dimen)
+    Uatomlist <- rep(list(noatoms), n)  
+    Umasslist <- rep(list(zeromass), n)
+    ## assign atoms in each argument
+    Uatomlist <- mapply(subsetgets, x=Uatomlist, i=matchlist, value=atomlist,
+                        SIMPLIFY=FALSE)
+    Umasslist <- mapply(subsetgets, x=Umasslist, i=matchlist, value=masslist,
+                        SIMPLIFY=FALSE)
+    ## union of atoms
+    isatom <- Reduce("|", Uatomlist)
+    ## masses at atoms
+    Umasslist <- lapply(Umasslist, extract, i=isatom)
+    ## make common quadrature scheme
+    UQ <- quadscheme(Uloc[isatom], Uloc[!isatom])
+    ## make new measures
+    result <- mapply(msr,
+                     MoreArgs=list(qscheme=UQ),
+                     discrete=Umasslist,
+                     density=Udenslist,
+                     SIMPLIFY=FALSE)
+    names(result) <- names(argz)
+    class(result) <- unique(c("solist", class(result)))
+    return(result)
+  }
+
+  ssorcnn <- function(xx, yy, what) nncross(xx, yy, what=what)
+  
+  extract <- function(x, i) {
+    if(is.matrix(x)) x[i, , drop=FALSE] else x[i]
+  }
+  subsetgets <- function(x, i, value) {
+    if(is.matrix(x)) {
+      x[i, ] <- value
+    } else {
+      x[i] <- value
+    }
+    return(x)
+  }
+
+  harmonise.msr
+})
