@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.052
+        CHANGES IN spatstat VERSION 1.51-0.053
 
 OVERVIEW
 
@@ -94,6 +94,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o plot.msr
     New argument 'massthresh'.
+
+    o Ops.msr
+    Calculations like A+B can now be performed even when the measures A and B
+    are not defined on the same quadrature scheme.
     
     o density.ppp
     New argument 'verbose'.

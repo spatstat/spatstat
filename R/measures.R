@@ -507,11 +507,19 @@ Ops.msr <- function(e1,e2=NULL){
         stop(paste("Operation", sQuote(paste0("A", .Generic, "B")),
                    "is undefined for measures A, B"),
              call.=FALSE)
-      if(!identical(e1$loc, e2$loc))
-        stop(paste("Cannot perform operation",
-                   paste0(sQuote(.Generic), ":"),
-                   "measures are defined on different quadrature schemes"),
+      k1 <- dim(e1)[2]
+      k2 <- dim(e2)[2]
+      if(k1 != k2) 
+        stop(paste("Operation", sQuote(paste0("A", .Generic, "B")),
+                   "is undefined because A, B have incompatible dimensions:",
+                   "A is", ngettext(k1, "scalar", paste0(k1, "-vector")),
+                   ", B is", ngettext(k2, "scalar", paste0(k2, "-vector"))),
              call.=FALSE)
+      if(!identical(e1$loc, e2$loc)) {
+        haha <- harmonise(e1, e2)
+        e1 <- haha[[1L]]
+        e2 <- haha[[2L]]
+      }
       e1 <- unclass(e1)
       e2 <- unclass(e2)
       e1[vn] <- mapply(.Generic, e1[vn], e2[vn],

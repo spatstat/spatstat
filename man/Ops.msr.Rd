@@ -24,14 +24,16 @@
   If \code{A} is a measure (object of class \code{"msr"})
   then the operations \code{-A} and \code{+A} are defined.
   
-  If \code{A} and \code{B} are measures,
+  If \code{A} and \code{B} are measures with the same dimension
+  (i.e. both are scalar-valued, or both are \code{k}-dimensional vector-valued)
   then \code{A + B} and \code{A - B} are defined.
-  (This is implemented only when \code{A} and \code{B}
-  are represented using the same quadrature scheme.)
 
   If \code{A} is a measure and \code{z} is a numeric value,
   then \code{A * z} and \code{A / z} are defined,
   and \code{z * A} is defined.
+}
+\value{
+  Another measure (object of class \code{"msr"}).
 }
 \seealso{
   \code{\link{with.msr}}

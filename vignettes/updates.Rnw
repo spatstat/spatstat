@@ -128,6 +128,10 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Now handles disconnected linear networks.
+    
+  \item Effect function is now available for all types of fitted model.
+    
   \item New fast algorithm for kernel smoothing on a linear network.
     
   \item Leverage and influence diagnostics extended to Poisson/Gibbs models
@@ -320,7 +324,31 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+    \item \texttt{as.data.frame.envelope}:
+    Extract function data from an envelope object,
+    including the functions for the simulated data ('simfuns')
+    if they were saved.
 
+    \item \texttt{is.connected}, \texttt{is.connected.default}, 
+      \texttt{is.connected.linnet}:
+    Determines whether a spatial object consists of
+    one topologically connected piece, or several pieces.
+
+    \item \texttt{is.connected.ppp}:
+    Determines whether a point pattern is connected after
+    all pairs of points closer than distance R are joined.
+
+    \item \texttt{hist.funxy}:
+    Histogram of values of a spatial function.
+
+    \item \texttt{model.matrix.ippm}:
+    Method for \texttt{model.matrix} which allows computation of
+    regular and irregular score components.
+
+    \item \texttt{harmonise.msr}:
+    Convert several measures (objects of class \texttt{msr})
+    to a common quadrature scheme.
+    
     \item \texttt{bits.test}:
     Balanced Independent Two-Stage Monte Carlo test,
     an improvement on the Dao-Genton test.
@@ -762,6 +790,9 @@ listed alphabetically.
  \item \texttt{as.function.tess}:
     New argument \texttt{values} specifies the function values.
 
+  \item \texttt{as.im.distfun}:
+  New argument \texttt{approx} specifies the choice of algorithm.
+
   \item \texttt{as.im.function}:
   New argument \texttt{strict}.
 
@@ -798,6 +829,9 @@ also carries these marks in the \verb!$lines! component.
 %%B
  \item \texttt{bdist.pixels}:
    Accelerated for polygonal windows. New argument \texttt{method}.
+   
+ \item \texttt{bind.fv}:
+   New argument \texttt{clip}.
    
  \item \texttt{bw.ppl}:
    New arguments \texttt{weights} and \texttt{sigma}.
@@ -931,6 +965,7 @@ also carries these marks in the \verb!$lines! component.
      and \texttt{kernel="gaussian"}.
   \item 
      Accelerated in the cases where weights are given or \texttt{diggle=TRUE}.
+   \item New argument \texttt{verbose}.
    \end{itemize}
 
  \item \texttt{density.psp}:
@@ -975,6 +1010,10 @@ also carries these marks in the \verb!$lines! component.
     
   \item \texttt{edge.Trans}:
     New argument \texttt{gW} for efficiency.
+
+  \item \texttt{effectfun}:
+    Now works for \texttt{ppm}, \texttt{kppm}, 
+    \texttt{lppm}, \texttt{dppm}, \texttt{rppm} and \texttt{profilepl} objects.
     
  \item \texttt{envelope}:
    \begin{itemize}
@@ -1001,6 +1040,9 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{Fest}:
    Additional checks for errors in input data.
 
+ \item \texttt{fitted.lppm}:
+  New argument \texttt{leaveoneout}.
+  
  \item \texttt{fitted.ppm}:
   New option, \texttt{type="link"}.
   
@@ -1026,6 +1068,8 @@ also carries these marks in the \verb!$lines! component.
    \item Additional checks for errors in input data.
    \end{itemize}
    
+ \item \texttt{hist.im}: New argument \texttt{xname}.
+   
 %%I
  \item \texttt{influence.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
@@ -1038,6 +1082,14 @@ also carries these marks in the \verb!$lines! component.
 \item \texttt{intensity.ppm}:
    Intensity approximation is now implemented for
    area-interaction model, and Geyer saturation model.
+
+ \item \texttt{ippm}:
+   \begin{itemize}
+   \item Accelerated.
+   \item 
+   The internal format of the result has been extended slightly.
+   \end{itemize}
+
    
 %%J
 %%K
@@ -1054,6 +1106,9 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{Kest.fft}:
    Now has \verb!...! arguments allowing control of spatial resolution.
 
+ \item \texttt{Kinhom}:
+   New argument \texttt{ratio}.
+    
  \item \texttt{kppm}:
    \begin{itemize}
    \item 
@@ -1065,6 +1120,7 @@ also carries these marks in the \verb!$lines! component.
      \item 
        Left hand side of formula can now involve entries 
        in the list \texttt{data}.
+     \item refuses to fit a log-Gaussian Cox model with anisotropic covariance.
      \item 
     A warning about infinite values of the summary function 
     no longer occurs when the default settings are used.
@@ -1093,11 +1149,21 @@ also carries these marks in the \verb!$lines! component.
     composite likelihood (\texttt{method='logi'}).
     
 
- \item \texttt{linearK}, \texttt{linearpcf} and relatives: 
-   substantially accelerated.
-   
+ \item \texttt{linearK}, \texttt{linearpcf} and relatives: \\ 
+   \begin{itemize}
+     \item substantially accelerated.
+     \item ratio calculations are now supported.
+     \item new argument \texttt{ratio}.
+     \end{itemize}
+     
  \item \texttt{linearKinhom}:
    new argument \texttt{normpower}.
+   
+ \item \texttt{linearKinhom}, \texttt{linearpcfinhom}:
+   \begin{itemize}
+   \item Changed behaviour when \texttt{lambda} is a fitted model.
+   \item New arguments \texttt{update} and \texttt{leaveoneout}.
+   \end{itemize}
    
  \item \texttt{linearpcf}:
    new argument \texttt{normpower}.
@@ -1124,7 +1190,12 @@ also carries these marks in the \verb!$lines! component.
     resulting in a tesellation with only one tile.
   
   \item \texttt{logLik.ppm}:
-   New argument \texttt{absolute}.
+    \begin{itemize}
+    \item  New argument \texttt{absolute}.
+    \item The warning about pseudolikelihood (`log likelihood not available')
+    is given only once, and is not repeated in subsequent calls,
+    within a spatstat session.
+    \end{itemize}
 
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
@@ -1267,7 +1338,15 @@ also carries these marks in the \verb!$lines! component.
    New argument \texttt{multiplot}.
 
  \item \texttt{plot.linfun}:
-    Now passes arguments to the function being plotted.
+   \begin{itemize}
+   \item  Now passes arguments to the function being plotted.
+   \item A scale bar is now plotted when \texttt{style="width"}.
+   \item New argument \texttt{legend}.
+   \item The return value has a different format.
+  \end{itemize}
+
+ \item \texttt{plot.linim}:
+   The return value has a different format.
 
  \item \texttt{plot.lintess}:
    Improved plot method, with more options.
@@ -1286,8 +1365,12 @@ also carries these marks in the \verb!$lines! component.
    New argument \texttt{se}.
    
    \item \texttt{plot.msr}:
-   Now handles multitype measures.
-    New argument \texttt{multiplot}.
+     \begin{itemize}
+     \item  Now handles multitype measures.
+     \item New argument \texttt{multiplot}.
+     \item New argument \texttt{massthresh}.
+     \end{itemize}
+
 
   \item \texttt{plot.pp3}:
     New arguments \texttt{box.front}, \texttt{box.back} 
@@ -1330,8 +1413,15 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{polynom}: This function now has a help file.
      
    \item \texttt{pool.fv}:
+     \begin{itemize}
+     \item 
     The default plot of the pooled function no longer includes 
     the variance curves.
+  \item  New arguments \texttt{relabel} and \texttt{variance}.
+     \end{itemize}
+
+   \item \texttt{pool.rat}:
+     New arguments \texttt{relabel} and \texttt{variance}.
 
   \item \texttt{ppm}:
   Argument \code{interaction} can now be a function that makes an interaction,
@@ -1359,6 +1449,11 @@ also carries these marks in the \verb!$lines! component.
   \item \texttt{predict.mppm}:
     The argument \texttt{type="all"} is now recognised: it selects
     all the available options. [This is also the default.]
+
+  \item \texttt{predict.rhohat}:    
+     New argument \texttt{what} determines which value should be calculated:
+    the function estimate, the upper/lower confidence limits, or the
+    standard error.
 
   \item \texttt{print.quad}: More information is printed.
     
@@ -1505,6 +1600,8 @@ also carries these marks in the \verb!$lines! component.
    \item Accelerated by about 30\% in the case where \texttt{at="pixels"}.
    \item Accelerated by about 15\% in the case where \texttt{at="points"}
      and \texttt{kernel="gaussian"}.
+   \item Now exits gracefully if any mark values are \texttt{NA}, \texttt{NaN}
+     or \texttt{Inf}.
    \end{itemize}
 
  
@@ -1622,7 +1719,15 @@ also carries these marks in the \verb!$lines! component.
    class \texttt{linim}.
 
  \item \verb![.layered!:
+   \begin{itemize}
+   \item 
        Subset index \texttt{i} can now be an \texttt{owin} object.
+     \item Additional arguments \verb!...! are now passed to other methods.
+   \end{itemize}
+
+       
+ \item \verb![.leverage.ppm!:
+   New argument \texttt{update}.
        
  \item \verb![.linnet!, \verb![.lpp!:
     New argument \texttt{snip} determines what to do with segments 
@@ -1645,6 +1750,11 @@ also carries these marks in the \verb!$lines! component.
    These methods now have an argument \texttt{drop} which determines
    whether to remove unused levels of a factor.
 
+   \item \verb![.psp!:
+   New argument \texttt{fragments} specifies whether to keep fragments of
+    line segments that are cut by the new window, or only to retain
+    segments that lie entirely inside the window.
+     
  \item \verb![.solist!:
        Subset index \texttt{i} can now be an \texttt{owin} object.
  \end{itemize}
@@ -1771,6 +1881,15 @@ of potential impact.
    \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
 
    %% LEVEL 2: often completely wrong, moderate impact
+   
+ \item \texttt{bw.pcf}:
+   Results were totally incorrect due to a typo.
+   \bugger{1.51-0}{may 2017}{1.52-0}{july 2017}   
+   
+ \item \texttt{predict.rho2hat}:
+   Results were incorrect for a \texttt{rho2hat} object computed
+   from a point pattern.
+   \bugger{1.42-0}{may 2015}{1.52-0}{july 2017}   
    
 \item \texttt{envelope.ppm}:
    If the model was an inhomogeneous Poisson process, 
