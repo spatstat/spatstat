@@ -350,13 +350,14 @@ local({
   prd <- predict(fit)
 })
 
-#
-#  tests/ppmlogi.R
-#
-# Tests of ppm(method='logi')
-#
-# $Revision: 1.5 $  Date$
-#
+#'
+#'  tests/ppmlogi.R
+#'
+#' Tests of ppm(method='logi')
+#'    and related code (predict, leverage etc)
+#'
+#' $Revision: 1.7 $  $Date: 2017/07/11 08:13:18 $
+#'
 
 require(spatstat)
 local({
@@ -364,7 +365,7 @@ local({
   f <- fitted(fit)
   p <- predict(fit)
   u <- summary(fit)
-  fitS <- ppm(cells ~x, Strauss(0.08), method="logi")
+  fitS <- ppm(cells ~x, Strauss(0.12), method="logi")
   fS <- fitted(fitS)
   pS <- predict(fitS)
   uS <- summary(fitS)
@@ -377,6 +378,17 @@ local({
   plot(dfbetas(fitS))
 })
 
+local({
+  #' same with hard core - A1 is singular
+  fitH <- ppm(cells ~x, Strauss(0.08), method="logi")
+  fH <- fitted(fitH)
+  pH <- predict(fitH)
+  uH <- summary(fitH)
+  plot(leverage(fitH))
+  plot(influence(fitH))
+  plot(dfbetas(fitH))
+})
+  
 local({
   #' logistic fit to data frame of covariates
   z <- c(rep(TRUE, 5), rep(FALSE, 5))

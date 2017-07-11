@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.76 $ $Date: 2017/07/03 09:32:57 $
+#  $Revision: 1.78 $ $Date: 2017/07/11 08:07:54 $
 #
 
 leverage <- function(model, ...) {
@@ -84,7 +84,8 @@ ppmInfluenceEngine <- function(fit,
                          sparseOK=TRUE,
                          fitname=NULL,
                          multitypeOK=FALSE,
-                         entrywise = TRUE) {
+                         entrywise = TRUE,
+                         matrix.action = c("warn", "fatal", "silent")) {
   logi <- identical(fit$method, "logi")
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
@@ -93,10 +94,13 @@ ppmInfluenceEngine <- function(fit,
   ## type of calculation
   method <- match.arg(method)
   what <- match.arg(what, several.ok=TRUE)
+  matrix.action <- match.arg(matrix.action)
+
   influencecalc <- any(what %in% c("leverage", "influence", "dfbetas"))
   hesscalc <- influencecalc || any(what == "derivatives")
   sparse <- sparseOK 
-
+  target <- paste(what, collapse=",")
+  
   ## Detect presence of irregular parameters
   if(is.null(iArgs))
     iArgs <- fit$covfunargs
@@ -119,19 +123,38 @@ ppmInfluenceEngine <- function(fit,
     stop(paste("Internal error: length(w) = ", length(w),
                "!=", length(lam), "= length(lam)"))
 	       
-  ## extract negative Hessian matrix
+  ## extract negative Hessian matrix of regular part of log composite likelihood
+  ##  hess = negative Hessian H
+  ##  fgrad = Fisher-scoring-like gradient G = estimate of E[H]
   if(logi){
     ## Intensity of dummy points
     rho <- fit$Q$param$rho %orifnull% intensity(as.ppp(fit$Q))
     logiprob <- lam / (lam + rho)
-    vclist <- vcov(fit, what = "internals")
+    vclist <- vcov(fit, what = "internals", matrix.action="silent")
     hess <- vclist$Slog
-    fush <- vclist$fisher
-    invhess <- solve(hess)
-    vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
+    fgrad <- vclist$fisher
+    invhess <- if(is.null(hess)) NULL else checksolve(hess, "silent")
+    invfgrad <- if(is.null(fgrad)) NULL else checksolve(fgrad, "silent")
+    if(is.null(invhess) || is.null(invfgrad)) {
+      #' use more expensive estimate of variance terms
+      vclist <- vcov(fit, what = "internals", fine=TRUE,
+                     matrix.action=matrix.action)
+      hess <- vclist$Slog
+      fgrad <- vclist$fisher
+      #' try again - exit if really singular
+      invhess <- checksolve(hess, matrix.action, "Hessian", target)
+      invfgrad <- checksolve(fgrad, matrix.action, "gradient matrix", target)
+    }
+#    vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
   } else {
-    vc <- vcov(fit, hessian=TRUE)
-    fush <- hess <- solve(vc)
+    invfgrad <- vcov(fit, hessian=TRUE, matrix.action="silent")
+    fgrad <- hess <-
+      if(is.null(invfgrad)) NULL else checksolve(invfgrad, "silent")
+    if(is.null(fgrad)) {
+      invfgrad <- vcov(fit, hessian=TRUE, fine=TRUE,
+                       matrix.action=matrix.action)
+      fgrad <- hess <- checksolve(invfgrad, matrix.action, "Hessian", target)
+    }
   }
 
   ## evaluate additional (`irregular') components of score, if any
@@ -153,7 +176,7 @@ ppmInfluenceEngine <- function(fit,
                 ppmDerivatives(fit, "hessian", iHessian, loc, covfunargs=iArgs)
     if(gotHess <- !is.null(ihessmat)) {
       ## recompute negative Hessian of log PL and its mean
-      fush <- hessextra <- matrix(0, ncol(mom), ncol(mom))
+      fgrad <- hessextra <- matrix(0, ncol(mom), ncol(mom))
     }  
     if(!logi) {
       ## pseudolikelihood
@@ -167,7 +190,7 @@ ppmInfluenceEngine <- function(fit,
                    momi <- mom[i, ]
                    v1 <- outer(momi, momi, "*") * wti
                    if(all(is.finite(v1)))
-                     fush <- fush + v1
+                     fgrad <- fgrad + v1
                    # integral of Hessian
                    # contributions nonzero for irregular parameters
                    if(gotHess) {
@@ -184,15 +207,15 @@ ppmInfluenceEngine <- function(fit,
                    if(all(is.finite(v2)))
                      hessextra[IRR, IRR] <- hessextra[IRR, IRR] - v2
                  }
-                 hess <- fush + hessextra
-                 invhess <- solve(hess)
+                 hess <- fgrad + hessextra
+                 invhess <- checksolve(hess, matrix.action, "Hessian", target)
                } else {
                  invhess <- hess <- NULL
                }
              },
              C = {
                wlam <- lam * w
-               fush <- sumouter(mom, wlam)
+               fgrad <- sumouter(mom, wlam)
                if(gotHess) {
                  # integral term
                  isfin <- is.finite(wlam) & matrowall(is.finite(ihessmat))
@@ -206,8 +229,8 @@ ppmInfluenceEngine <- function(fit,
                  vcontrib <- vintegral - vdata
                  hessextra[IRR, IRR] <-
                    hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
-                 hess <- fush + hessextra
-                 invhess <- solve(hess)
+                 hess <- fgrad + hessextra
+                 invhess <- checksolve(hess, matrix.action, "Hessian", target)
                } else {
                  invhess <- hess <- NULL
                }
@@ -225,7 +248,7 @@ ppmInfluenceEngine <- function(fit,
                  momi <- mom[i, ]
                  v1 <- outer(momi, momi, "*") * oweight[i]
                  if(all(is.finite(v1)))
-                   fush <- fush + v1
+                   fgrad <- fgrad + v1
 		 ## Hessian term
                  ## contributions nonzero for irregular parameters
                  if(gotHess) {
@@ -236,8 +259,8 @@ ppmInfluenceEngine <- function(fit,
                  }
                }
 	       if(gotHess) {
-                 hess <- fush + hessextra
-                 invhess <- solve(hess)
+                 hess <- fgrad + hessextra
+                 invhess <- checksolve(hess, matrix.action, "Hessian", target)
                } else {
                  invhess <- hess <- NULL
 	       }
@@ -245,7 +268,7 @@ ppmInfluenceEngine <- function(fit,
              C = {
 	       oweight <- logiprob * (1 - logiprob)
 	       hweight <- ifelse(isdata, -(1 - logiprob), logiprob)
-               fush <- sumouter(mom, oweight)
+               fgrad <- sumouter(mom, oweight)
                if(gotHess) {
                  # Hessian term
                  isfin <- is.finite(hweight) & matrowall(is.finite(ihessmat))
@@ -254,20 +277,20 @@ ppmInfluenceEngine <- function(fit,
                                hweight[isfin] %*% ihessmat[isfin,, drop=FALSE]
                  hessextra[IRR, IRR] <-
                    hessextra[IRR, IRR] + matrix(vcontrib, nirr, nirr)
-                 hess <- fush + hessextra
-                 invhess <- solve(hess)
+                 hess <- fgrad + hessextra
+                 invhess <- checksolve(hess, matrix.action, "Hessian", target)
                } else {
                  invhess <- hess <- NULL
                }
              })
     }
-    vc <- solve(fush)
+    invfgrad <- checksolve(fgrad, matrix.action, "gradient matrix", target)
   }
   
   if(!needHess) {
     if(!logi){
-    hess <- fush
-    invhess <- vc
+    hess <- fgrad
+    invhess <- invfgrad
     }
   }
   #
@@ -306,7 +329,7 @@ ppmInfluenceEngine <- function(fit,
       result$score <- score
     if("derivatives" %in% what) 
       result$deriv <- list(mom=mom, score=score,
-                           fush=fush, vc=vc,
+                           fgrad=fgrad, invfgrad=invfgrad,
                            hess=hess, invhess=invhess)
     if(all(what %in% c("score", "derivatives")))
       return(result)
