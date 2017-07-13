@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.056
+        CHANGES IN spatstat VERSION 1.51-0.057
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
     o Effect function is now available for all types of fitted model.
 
     o More support for measures.
+
+    o pooling operations improved.
 
     o Version nickname: 'Darth Modi'
 
@@ -91,6 +93,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pool.fv
     New arguments 'relabel' and 'variance'
+    
+    o pool.rat
+    New argument 'weights'.
     
     o plot.msr
     New argument 'massthresh'.

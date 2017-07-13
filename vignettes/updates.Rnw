@@ -131,7 +131,7 @@ the News and Release Notes for each update.
   \item Now handles disconnected linear networks.
     
   \item Effect function is now available for all types of fitted model.
-    
+
   \item New fast algorithm for kernel smoothing on a linear network.
     
   \item Leverage and influence diagnostics extended to Poisson/Gibbs models
@@ -147,6 +147,8 @@ the News and Release Notes for each update.
 
   \item Bandwidth selection for pair correlation function.
   
+  \item Pooling operations improved. 
+
   \item Operations on signed measures.
 
    \item Operations on lists of pixel images.
@@ -1421,7 +1423,7 @@ also carries these marks in the \verb!$lines! component.
      \end{itemize}
 
    \item \texttt{pool.rat}:
-     New arguments \texttt{relabel} and \texttt{variance}.
+     New arguments \texttt{weights}, \texttt{relabel} and \texttt{variance}.
 
   \item \texttt{ppm}:
   Argument \code{interaction} can now be a function that makes an interaction,

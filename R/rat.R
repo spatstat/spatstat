@@ -5,7 +5,7 @@
 #
 #   Numerator and denominator are stored as attributes
 #
-#   $Revision: 1.10 $   $Date: 2017/07/02 08:00:22 $
+#   $Revision: 1.11 $   $Date: 2017/07/13 08:02:16 $
 #
 
 rat <- function(ratio, numerator, denominator, check=TRUE) {
@@ -35,7 +35,7 @@ pool.rat <- local({
   Square <- function(A) { force(A);         eval.fv(A^2, relabel=FALSE) }
   Mul <- function(A,B){ force(A); force(B); eval.fv(A*B, relabel=FALSE) }
 
-  pool.rat <- function(..., relabel=TRUE, variance=TRUE) {
+  pool.rat <- function(..., weights=NULL, relabel=TRUE, variance=TRUE) {
     argh <- list(...)
     n <- narg <- length(argh)
     if(narg == 0) return(NULL)
@@ -60,6 +60,12 @@ pool.rat <- local({
     Y <- do.call(harmonise, Y)
     templateX <- vanilla.fv(X[[1]])
     templateY <- vanilla.fv(Y[[1]])
+    ## compute products
+    if(!is.null(weights)) {
+      check.nvector(weights, narg, things="Functions")
+      X <- Map(Mul, X, weights)
+      Y <- Map(Mul, Y, weights)
+    } 
     ## sum
     sumX <- Reduce(Add, X)
     sumY <- Reduce(Add, Y)
