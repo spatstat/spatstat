@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.147 $   $Date: 2017/06/05 10:31:58 $
+##    $Revision: 1.148 $   $Date: 2017/07/13 01:26:02 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -795,6 +795,24 @@ rebadge.as.dotfun <- function(x, main, sub=NULL, i) {
                        list(main=main, sub=sub, i=i))
   }
   y <- rebadge.fv(x, new.ylab=ylab, new.fname=fname, new.yexp=yexp)
+  return(y)
+}
+
+## even simpler wrapper for rebadge.fv
+rename.fv <- function(x, fname, ylab, yexp=ylab) {
+  stopifnot(is.fv(x))
+  stopifnot(is.character(fname) && (length(fname) %in% 1:2))
+  argu <- fvnames(x, ".x")
+  if(missing(ylab) || is.null(ylab))
+    ylab <- switch(length(fname),
+                   substitute(fn(argu), list(fn=as.name(fname),
+                                             argu=as.name(argu))),
+                   substitute(fn[fsub](argu), list(fn=as.name(fname[1]),
+                                                   fsub=as.name(fname[2]),
+                                                   argu=as.name(argu))))
+  if(missing(yexp) || is.null(yexp))
+    yexp <- ylab
+  y <- rebadge.fv(x, new.fname=fname, new.ylab=ylab, new.yexp=yexp)
   return(y)
 }
 

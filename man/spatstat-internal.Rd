@@ -536,6 +536,7 @@
 \alias{rebound.psp}
 \alias{rebound.owin}
 \alias{reconcile.fv}
+\alias{rename.fv}
 \alias{repair.old.factor.image}
 \alias{reincarnate.interact}
 \alias{resid4plot}
@@ -1377,6 +1378,7 @@ rebound(x, rect)
 \method{rebound}{psp}(x, rect) 
 \method{rebound}{owin}(x, rect)
 reconcile.fv(\dots)
+rename.fv(x, fname, ylab, yexp)
 repair.old.factor.image(x)
 reincarnate.interact(object)
 resid4plot(RES, plot.neg, plot.smooth,
