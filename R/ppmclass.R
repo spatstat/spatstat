@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.133 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 2.134 $	$Date: 2017/07/13 02:03:11 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -860,7 +860,7 @@ model.images <- function(object, ...) {
 
 model.images.ppm <- function(object, W=as.owin(object), ...) {
   X <- data.ppm(object)
-  irregular <- resolve.1.default(list(irregular=FALSE), list(...))
+#  irregular <- resolve.1.default(list(irregular=FALSE), list(...))
   ## make a quadscheme with a dummy point at every pixel
   Q <- pixelquad(X, W)
   ## compute model matrix

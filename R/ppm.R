@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.56 $	$Date: 2017/02/24 00:03:27 $
+#	$Revision: 1.57 $	$Date: 2017/07/13 02:06:02 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -147,6 +147,7 @@ function(Q,
   } else if(inherits(interaction, "intermaker")) {
     ## e.g. 'interaction=Hardcore': invoke it without arguments
     interaction <- (f <- interaction)()
+    dont.complain.about(f)
   } else if(!is.interact(interaction))
     stop("Argument 'interaction' must be an object of class 'interact'")
   

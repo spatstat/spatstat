@@ -10,7 +10,13 @@
 }
 \usage{
 \method{plot}{linim}(x, ..., style = c("colour", "width"),
-             scale, adjust = 1, legend=TRUE,
+             scale, adjust = 1,
+             legend=TRUE,
+             leg.side=c("right", "left", "bottom", "top"),
+             leg.sep=0.1,
+             leg.wid=0.1,
+             leg.args=list(),
+             leg.scale=1,
              do.plot=TRUE)
 }
 \arguments{
@@ -35,6 +41,29 @@
   \item{legend}{
     Logical value indicating whether to plot a legend
     (colour ribbon or scale bar).
+  }
+  \item{leg.side}{
+    Character string indicating where to display the legend
+    relative to the main image.
+  }
+  \item{leg.sep}{
+    Factor controlling the space between the legend and the image.
+  }
+  \item{leg.wid}{
+    Factor controlling the width of the legend.
+  }
+  \item{leg.scale}{
+    Rescaling factor for annotations on the legend.
+    The values on the numerical scale
+    printed beside the legend will be multiplied by this rescaling factor.
+  }
+  \item{leg.args}{
+    List of additional arguments passed to
+    \code{\link[graphics]{image.default}},
+    \code{\link[graphics]{axis}}
+    or \code{\link[graphics]{text.default}} 
+    to control the display of the legend.
+    These may override the \code{\dots} arguments. 
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.

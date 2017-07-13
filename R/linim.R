@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.34 $   $Date: 2017/06/30 01:05:17 $
+#  $Revision: 1.35 $   $Date: 2017/07/13 02:43:30 $
 #
 #  Image/function on a linear network
 #
@@ -109,14 +109,27 @@ print.summary.linim <- function(x, ...) {
 
 plot.linim <- function(x, ..., style=c("colour", "width"),
                        scale, adjust=1,
-		       legend=TRUE, do.plot=TRUE) {
+		       legend=TRUE,
+                       leg.side=c("right", "left", "bottom", "top"),
+                       leg.sep=0.1,
+                       leg.wid=0.1,
+                       leg.args=list(),
+                       leg.scale=1,
+                       do.plot=TRUE) {
   xname <- short.deparse(substitute(x))
   style <- match.arg(style)
+  leg.side <- match.arg(leg.side)
+  ribstuff <- list(ribside  = leg.side,
+                   ribsep   = leg.sep,
+                   ribwid   = leg.wid,
+                   ribargs  = leg.args,
+                   ribscale = leg.scale)
   # colour style: plot as pixel image
   if(style == "colour" || !do.plot)
     return(do.call(plot.im,
                    resolve.defaults(list(x),
                                     list(...),
+                                    ribstuff,
                                     list(main=xname,
 				         legend=legend,
 					 do.plot=do.plot))))
@@ -131,25 +144,20 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
     z <- do.call(plot.im,
 		 resolve.defaults(list(x, do.plot=FALSE, legend=TRUE),
                                   list(...),
+                                  ribstuff,
                                   list(main=xname)))
     bb.all <- attr(z, "bbox")
-    bb.rib <- attr(z, "bbox.legend")
+    bb.leg <- attr(z, "bbox.legend")
   } else {
     bb.all <- Frame(W)
-    bb.rib <- NULL
+    bb.leg <- NULL
   }
-  legend <- !is.null(bb.rib)
+  legend <- !is.null(bb.leg)
   if(legend) {
-    # ribbon info
-    argh <- list(...)
-    ribside <- argh$ribside %orifnull% "right"
-    ribside <- match.arg(ribside, c("right", "left", "bottom", "top"))
-    ribargs <- argh$ribargs %orifnull% list()
-    ribscale <- argh$ribscale %orifnull% 1
     # expand plot region to accommodate text annotation in legend
-    if(ribside %in% c("left", "right")) {
-      delta <- 2 * sidelengths(bb.rib)[1]
-      xmargin <- if(ribside == "right") c(0, delta) else c(delta, 0)
+    if(leg.side %in% c("left", "right")) {
+      delta <- 2 * sidelengths(bb.leg)[1]
+      xmargin <- if(leg.side == "right") c(0, delta) else c(delta, 0)
       bb.all <- grow.rectangle(bb.all, xmargin=xmargin)
     }
   }
@@ -224,16 +232,19 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
   result <- adjust * scale
   attr(result, "bbox") <- bb
   if(legend) {
-    attr(result, "bbox.ribbon") <- bb.rib
-    # set up scale of typical pixel values
-    gvals <- prettyinside(range(x))
+    attr(result, "bbox.legend") <- bb.leg
+    ## get graphical arguments
+    grafpar <- resolve.defaults(leg.args, grafpar)
+    grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
+    ## set up scale of typical pixel values
+    gvals <- leg.args$at %orifnull% prettyinside(range(x))
     # corresponding widths
     wvals <- adjust * scale * gvals
     # glyph positions
     ng <- length(gvals)
-    xr <- bb.rib$xrange
-    yr <- bb.rib$yrange
-    switch(ribside,
+    xr <- bb.leg$xrange
+    yr <- bb.leg$yrange
+    switch(leg.side,
            right = ,
 	   left = {
 	     y <- seq(yr[1], yr[2], length.out=ng+1L)
@@ -255,8 +266,9 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
 	     }
 	   })
      # add text labels
-     glabs <- signif(ribscale * gvals, 2)
-     switch(ribside,
+     check.1.real(leg.scale)
+     glabs <- leg.args$labels %orifnull% signif(leg.scale * gvals, 2)
+     switch(leg.side,
             right  = text(xr[2], y,     pos=4, labels=glabs),
             left   = text(xr[1], y,     pos=2, labels=glabs),
 	    bottom = text(x,     yr[1], pos=1, labels=glabs),

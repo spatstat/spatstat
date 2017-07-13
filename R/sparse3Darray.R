@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.24 $  $Date: 2017/06/05 10:31:58 $
+#' $Revision: 1.25 $  $Date: 2017/07/13 02:01:19 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -897,7 +897,6 @@ evalSparse3Dentrywise <- function(expr, envir) {
   if(!any(isSpud))
     stop("No sparse 3D arrays in this expression")
   spuds <- vars[isSpud]
-  nspud <- sum(isSpud)
   template <- spuds[[1L]]
   ## replace each array by its entries, and evaluate
   spudvalues <- lapply(spuds, getElement, name="x")

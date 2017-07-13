@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.055
+        CHANGES IN spatstat VERSION 1.51-0.056
 
 OVERVIEW
 
@@ -124,6 +124,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.linim, plot.linfun
     The return value has a different format.
+    Arguments have been renamed and reorganised.
 
     o ippm
     Accelerated.

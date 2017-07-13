@@ -208,7 +208,7 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
 FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000, 
 	              sparse=FALSE, dtx) {
   net2 <- as.linnet(lppobj)
-  ends1 <- net2$lines$ends
+#  ends1 <- net2$lines$ends
   lenfs <- lengths.psp(as.psp(net2))
   seg_in_lengths <- pmax(1, round(lenfs/dtx))
   new_lpp <- lixellate(lppobj, nsplit=seg_in_lengths)
@@ -241,7 +241,7 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
   alpha <- dtt/(dtx^2)
 
   A1 <- net_nodes$m *1
-  ml <- nrow(net_nodes$m)
+#  ml <- nrow(net_nodes$m)
 
   degree <- colSums(A1)
   dmax <- max(degree)
