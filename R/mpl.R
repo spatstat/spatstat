@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.205 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 5.206 $	$Date: 2017/07/14 01:25:26 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -106,7 +106,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2017/06/05 10:31:58 $")
+                        date="$Date: 2017/07/14 01:25:26 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -718,6 +718,10 @@ mpl.prepare <- local({
     if(!is.null(subsetexpr)) {
       ## user-defined subset expression
       USER.SUBSET <- eval(subsetexpr, glmdata, environment(trend))
+      if(inherits(USER.SUBSET, "owin")) 
+        USER.SUBSET <- inside.owin(P$x, P$y, USER.SUBSET)
+      if(!(is.logical(USER.SUBSET) || is.numeric(USER.SUBSET)))
+        stop("Argument 'subset' should yield logical values", call.=FALSE)
       .mpl$SUBSET <- .mpl$SUBSET & USER.SUBSET
     }
                         

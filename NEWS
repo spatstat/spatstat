@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.057
+        CHANGES IN spatstat VERSION 1.51-0.058
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
     o Now handles disconnected linear networks.
 
     o Effect function is now available for all types of fitted model.
+
+    o fit a model to a sub-region of data.
 
     o More support for measures.
 
@@ -62,6 +64,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o effectfun
     Now works for 'ppm', 'kppm', 'lppm', 'dppm', 'rppm' and 'profilepl' objects.
 
+    o ppm
+    The argument 'subset' can now be a window (class 'owin')
+    specifying the subset of data to which the model should be fitted.
+    
     o fitted.lppm
     New argument 'leaveoneout' allows leave-one-out computation of fitted value.
 
