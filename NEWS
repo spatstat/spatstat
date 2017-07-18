@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.059
+        CHANGES IN spatstat VERSION 1.51-0.060
 
 OVERVIEW
 
@@ -14,11 +14,13 @@ OVERVIEW
 
     o Effect function is now available for all types of fitted model.
 
-    o fit a model to a sub-region of data.
+    o A model can be fitted or re-fitted to a sub-region of data.
 
     o More support for measures.
 
-    o pooling operations improved.
+    o 'Pool' operations improved.
+
+    o Changed algorithm defaults in ippm.
 
     o Version nickname: 'Darth Modi'
 
@@ -77,10 +79,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.linim, plot.linfun
     A scale bar is now plotted when style="width".
     New argument 'legend'.
-    
+
+    o ippm
+    Default values for the parameters of the optimisation algorithm (nlm.args)
+    have changed: they are now identical to the default values in nlm().
+
     o ippm
     The internal format of the result has been extended slightly.
-    Improved defaults for algorithm parameters.
     
     o bind.fv
     New argument 'clip'.

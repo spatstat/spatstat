@@ -163,7 +163,7 @@ ippm <- local({
                      "lower than current estimate. ",
                      "Either current estimate is an approximate ",
                      "local minimum of the function ",
-                     "or 'steptol' is too large"),
+                     "or 'steptol' is too small"),
                    "Iteration limit exceeded",
                    c("Maximum step size 'stepmax' ",
                      "exceeded five consecutive times. ",
