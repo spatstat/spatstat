@@ -1,7 +1,7 @@
 #
 #	Kinhom.S	Estimation of K function for inhomogeneous patterns
 #
-#	$Revision: 1.92 $	$Date: 2017/07/02 08:07:51 $
+#	$Revision: 1.93 $	$Date: 2017/07/18 10:14:42 $
 #
 #	Kinhom()	compute estimate of K_inhom
 #
@@ -205,7 +205,6 @@
       } 
     }
 
-    
     # recommended range of r values
     alim <- c(0, min(rmax, rmaxdefault))
         
@@ -345,6 +344,8 @@
       RS <- Kwtsum(dIJ, bI, wIJ, b, w=reciplambda, breaks)
       if(any(correction == "border")) {
         Kb <- RS$ratio
+        if(renormalise)
+          Kb <- Kb * renorm.factor
         K <- bind.ratfv(K,
 	                quotient = data.frame(border=Kb),
 			denominator = denom,
@@ -355,6 +356,8 @@
       }
       if(any(correction == "bord.modif")) {
         Kbm <- RS$numerator/eroded.areas(W, r)
+        if(renormalise)
+          Kbm <- Kbm * renorm.factor
     	K <- bind.ratfv(K,
 	                quotient = data.frame(bord.modif=Kbm),
 			denominator = denom,
@@ -370,6 +373,8 @@
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
       Ktrans <- cumsum(wh)/areaW
+      if(renormalise)
+        Ktrans <- Ktrans * renorm.factor
       rmax <- diamW/2
       Ktrans[r >= rmax] <- NA
       K <- bind.ratfv(K,
@@ -386,6 +391,8 @@
       allweight <- edgewt * wIJ
       wh <- whist(dIJ, breaks$val, allweight)
       Kiso <- cumsum(wh)/areaW
+      if(renormalise)
+        Kiso <- Kiso * renorm.factor
       rmax <- diamW/2
       Kiso[r >= rmax] <- NA
       K <- bind.ratfv(K,
