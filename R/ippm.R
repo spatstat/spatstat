@@ -1,7 +1,7 @@
 #
 # ippm.R
 #
-#   $Revision: 2.22 $   $Date: 2017/06/23 02:21:07 $
+#   $Revision: 2.24 $   $Date: 2017/07/18 00:38:31 $
 #
 # Fisher scoring algorithm for irregular parameters in ppm trend
 #
@@ -9,6 +9,8 @@
 ippm <- local({
 
   chucknames <- c("iScore", "start", "nlm.args", "silent", "warn.unused")
+
+  hasarg <- function(f,a) { a %in% names(formals(f)) }
   
   ippm <- function(Q, ...,
                    iScore=NULL, 
@@ -35,7 +37,7 @@ ippm <- local({
       if(!is.list(iScore) || length(iScore) != length(start))
         stop("iScore should be a list of the same length as start")
       stopifnot(identical(names(iScore), names(start)))
-      if(!all(unlist(lapply(iScore, is.function))))
+      if(!all(sapply(iScore, is.function)))
         stop("iScore should be a list of functions")
     }
     ##
@@ -50,16 +52,15 @@ ippm <- local({
 #    p <- length(coef(fit0))
     ## examine covariates and trend
     covariates <- fit0$covariates
-    isfun <- unlist(lapply(covariates, is.function))
+    isfun <- sapply(covariates, is.function)
     covfuns <- covariates[isfun]
     ## determine which covariates depend on which irregular parameters
     pnames <- names(start)
-    hasarg <- function(f,a) { a %in% names(formals(f)) }
     depmat <- matrix(FALSE, nrow=length(covfuns), ncol=length(pnames))
     rownames(depmat) <- names(covfuns)
     colnames(depmat) <- pnames
     for(j in 1:length(pnames))
-      depmat[,j] <- unlist(lapply(covfuns, hasarg, pnames[j]))
+      depmat[,j] <- sapply(covfuns, hasarg, pnames[j])
     ## find covariates that depend on ANY irregular parameter 
     depvar <- rownames(depmat)[apply(depmat, 1L, any)]
     ## check that these covariates appear only in offset terms
@@ -106,7 +107,7 @@ ippm <- local({
                                        p=startvec,
                                        thedata=fdata),
                                   nlm.args,
-                                  list(stepmax=1/2, typsize=typsize)))
+                                  list(typsize=typsize)))
     popt <- g$estimate
     ## detect error states
     icode <- g$code
@@ -191,7 +192,7 @@ update.ippm <- local({
     old.callframe <- object$callframe
     Qold <- eval(old.call$Q, as.list(envir), enclos=old.callframe)
     argh <- list(...)
-    if(any(isfmla <- unlist(lapply(argh, inherits, what="formula")))) {
+    if(any(isfmla <- sapply(argh, inherits, what="formula"))) {
       if(sum(isfmla) > 1)
         stop("Syntax not understood: several arguments are formulas")
       i <- min(which(isfmla))

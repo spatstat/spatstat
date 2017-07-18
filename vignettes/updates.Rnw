@@ -1092,6 +1092,7 @@ also carries these marks in the \verb!$lines! component.
    \item Accelerated.
    \item 
    The internal format of the result has been extended slightly.
+   \item Improved defaults for numerical algorithm parameters.
    \end{itemize}
 
    

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.058
+        CHANGES IN spatstat VERSION 1.51-0.059
 
 OVERVIEW
 
@@ -80,6 +80,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o ippm
     The internal format of the result has been extended slightly.
+    Improved defaults for algorithm parameters.
     
     o bind.fv
     New argument 'clip'.
