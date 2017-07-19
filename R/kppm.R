@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.133 $ $Date: 2017/06/05 10:31:58 $
+# $Revision: 1.134 $ $Date: 2017/07/19 07:18:54 $
 #
 
 kppm <- function(X, ...) {
@@ -63,6 +63,7 @@ kppm.ppp <- kppm.quad <-
            data=NULL,
            ...,
            covariates = data,
+           subset, 
            method = c("mincon", "clik2", "palm"),
            improve.type = c("none", "clik1", "wclik1", "quasi"),
            improve.args = list(),
@@ -100,6 +101,18 @@ kppm.ppp <- kppm.quad <-
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
   if(is.marked(X))
     stop("Sorry, cannot handle marked point patterns")
+  if(!missing(subset)) {
+    W <- eval(subset, covariates, parent.frame())
+    if(!is.null(W)) {
+      if(is.im(W)) {
+        W <- solutionset(W)
+      } else if(!is.owin(W)) {
+        stop("Argument 'subset' should yield a window or logical image",
+             call.=FALSE)
+      }
+      X <- X[W]
+    }
+  }
   po <- ppm(Q=X, trend=trend, covariates=covariates,
             forcefit=TRUE, rename.intercept=FALSE,
             covfunargs=covfunargs, use.gam=use.gam, nd=nd, eps=eps)

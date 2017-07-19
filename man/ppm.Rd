@@ -38,10 +38,15 @@
     functions, windows, tessellations or single numbers. See Details.
   }
   \item{subset}{
-    Optional. An expression (typically involving the Cartesian coordinates
-    \code{x} and \code{y} or the names of entries in \code{data})
+    Optional.
+    An expression (which may involve the names of the
+    Cartesian coordinates \code{x} and \code{y}
+    and the names of entries in \code{data})
     defining a subset of the spatial domain,
     to which the model-fitting should be restricted.
+    The result of evaluating the expression should be either a logical
+    vector, or a window (object of class \code{"owin"})
+    or a logical-valued pixel image (object of class \code{"im"}).
   }
 }
 \value{

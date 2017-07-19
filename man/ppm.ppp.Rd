@@ -89,7 +89,8 @@
     defining a subset of the spatial domain,
     to which the model-fitting should be restricted.
     The result of evaluating the expression should be either a logical
-    vector, or a window (object of class \code{"owin"}).
+    vector, or a window (object of class \code{"owin"})
+    or a logical-valued pixel image (object of class \code{"im"}).
   }
   \item{covfunargs}{
     A named list containing the values of any additional arguments

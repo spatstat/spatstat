@@ -26,6 +26,7 @@
        data = NULL,
        ...,
        covariates=data,
+       subset,
        method = c("mincon", "clik2", "palm"),
        improve.type = c("none", "clik1", "wclik1", "quasi"),
        improve.args = list(),
@@ -45,6 +46,7 @@
        data = NULL,
        ...,
        covariates=data,
+       subset,
        method = c("mincon", "clik2", "palm"),
        improve.type = c("none", "clik1", "wclik1", "quasi"),
        improve.args = list(),
@@ -82,6 +84,15 @@
   }
   \item{\dots}{
     Additional arguments. See Details.
+  }
+  \item{subset}{
+    Optional.
+    A subset of the spatial domain,
+    to which the model-fitting should be restricted.
+    A window (object of class \code{"owin"})
+    or a logical-valued pixel image (object of class \code{"im"}),
+    or an expression (possibly involving the names of entries in \code{data})
+    which can be evaluated to yield a window or pixel image.
   }
   \item{method}{
     The fitting method. Either 
