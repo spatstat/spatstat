@@ -3,13 +3,11 @@
 
 OVERVIEW
 
-    o We thank Nicholas Read, Abdollah Jalilian and Rasmus Waagepetersen
-    for contributions.
+    o We thank Nicholas Read, Abdollah Jalilian, Dominic Schuhmacher
+    and Rasmus Waagepetersen for contributions.
 
     o Important bug fixes.
     
-    o Bug fix in bandwidth selection for pair correlation function.
-
     o Now handles disconnected linear networks.
 
     o Effect function is now available for all types of fitted model.
@@ -22,7 +20,7 @@ OVERVIEW
 
     o Changed algorithm defaults in ippm.
 
-    o Version nickname: 'Darth Modi'
+    o Version nickname: "Oh, I'm Afraid the Software Will Be Quite Operational"
 
 NEW FUNCTIONS
 
@@ -157,6 +155,14 @@ BUG FIXES
 
     o predict.rho2hat
     Results were incorrect for a rho2hat object computed from a point pattern.
+    Fixed.
+    
+    o density.ppp
+    If the smoothing bandwidth was very small (e.g.\ smaller than pixel width),
+    results were inaccurate if the default resolution was used,
+    and completely wrong if another resolution was specified.
+    [Spotted by Dominic Schuhmacher.]
+    Fixed.
     
     o linearK, linearKinhom, linearpcf, linearpcfinhom, linearKcross,
     linearKdot, linearpcfcross, linearpcfdot, linearKcross.inhom,

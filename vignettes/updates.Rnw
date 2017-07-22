@@ -1989,6 +1989,13 @@ of potential impact.
 
 %% LEVEL 4: partially incorrect
    
+\item \texttt{density.ppp}:
+  If the smoothing bandwidth \texttt{sigma} was very small 
+  (e.g.\ less than the width of a pixel), 
+  results were inaccurate if the default resolution was used,
+  and completely incorrect if a user-specified resolution was given.
+  \bugger{1.26-0}{april 2012}{1.52-0}{july 2017}
+  
  \item \texttt{selfcrossing.psp}:
    $y$ coordinate values were incorrect.   
    \bugger{1.23-2}{august 2011}{1.25-3}{february 2012}

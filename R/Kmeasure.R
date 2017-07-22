@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.62 $    $Date: 2017/06/05 10:31:58 $
+#           $Revision: 1.63 $    $Date: 2017/07/22 08:33:10 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -176,6 +176,8 @@ second.moment.engine <-
     names(blanklist) <- names(Xlist)
   } else stop("internal error: unrecognised format for x")
   unitsX <- unitname(X)
+  xstep <- X$xstep
+  ystep <- X$ystep
   # ensure obswin has same bounding frame as X
   if(!missing(obswin))
     obswin <- rebound.owin(obswin, as.rectangle(X))
@@ -192,8 +194,8 @@ second.moment.engine <-
   Ypad <- Ypadlist[[1]]
   lengthYpad <- 4 * nc * nr
   # corresponding coordinates
-  xcol.pad <- X$xcol[1] + X$xstep * (0:(2*nc-1))
-  yrow.pad <- X$yrow[1] + X$ystep * (0:(2*nr-1))
+  xcol.pad <- X$xcol[1] + xstep * (0:(2*nc-1))
+  yrow.pad <- X$yrow[1] + ystep * (0:(2*nr-1))
   # compute kernel and its Fourier transform
   if(!needs.kernel && 
      identical(kernel, "gaussian") &&
@@ -208,14 +210,16 @@ second.moment.engine <-
     fK <- outer(uu, vv, "*")
   } else {
     # set up kernel
-    xcol.ker <- X$xstep * c(0:(nc-1),-(nc:1))
-    yrow.ker <- X$ystep * c(0:(nr-1),-(nr:1))
-    kerpixarea <- X$xstep * X$ystep
+    xcol.ker <- xstep * c(0:(nc-1),-(nc:1))
+    yrow.ker <- ystep * c(0:(nr-1),-(nr:1))
+    kerpixarea <- xstep * ystep
     if(identical(kernel, "gaussian")) {
       if(!is.null(sigma)) {
         densX.ker <- dnorm(xcol.ker, sd=sigma)
         densY.ker <- dnorm(yrow.ker, sd=sigma)
-        Kern <- outer(densY.ker, densX.ker, "*") * kerpixarea
+        #' WAS:  Kern <- outer(densY.ker, densX.ker, "*") * kerpixarea
+        Kern <- outer(densY.ker, densX.ker, "*")
+        Kern <- Kern/sum(Kern)
       } else if(!is.null(varcov)) {
         ## anisotropic kernel
         detSigma <- det(varcov)
@@ -228,6 +232,7 @@ second.moment.engine <-
         Kern <- constker * exp(-(xsq * halfSinv[1,1]
                                  + xy * (halfSinv[1,2]+halfSinv[2,1])
                                  + ysq * halfSinv[2,2]))
+        Kern <- Kern/sum(Kern)
       } else 
         stop("Must specify either sigma or varcov")
     } else {
@@ -238,6 +243,7 @@ second.moment.engine <-
       Kern <- evaluate2Dkernel(kernel, xker, yker,
                                sigma=sigma, varcov=varcov, ...) * kerpixarea
       Kern <- matrix(Kern, ncol=2*nc, nrow=2*nr)
+      Kern <- Kern/sum(Kern)
     }
 
     if(what %in% c("kernel", "all")) {
@@ -387,7 +393,7 @@ second.moment.engine <-
   }
   # edge correction
   if(edge || what %in% c("edge", "all", "smoothedge")) {
-    M <- as.mask(obswin, dimyx=c(nr, nc))$m
+    M <- as.mask(obswin, xy=list(x=X$xcol, y=X$yrow))$m
     # previous line ensures M has same dimensions and scale as Y 
     Mpad <- matrix(0, ncol=2*nc, nrow=2*nr)
     Mpad[1:nr, 1:nc] <- M
@@ -449,7 +455,7 @@ second.moment.engine <-
     return(result)
   # Second moment measure, density estimate
   # Divide by number of points * lambda and convert mass to density
-  pixarea <- with(X, xstep * ystep)
+  pixarea <- xstep * ystep
   if(nimages == 1) {
     mom <- mom * area(obswin) / (pixarea * npts^2)
     # this is the second moment measure
