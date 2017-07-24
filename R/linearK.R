@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.44 $ $Date: 2017/06/26 04:08:15 $
+# $Revision: 1.45 $ $Date: 2017/07/24 03:12:07 $
 #
 # K function for point pattern on linear network
 #
@@ -68,13 +68,15 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   switch(correction,
          Ang  = {
            ylab <- quote(K[L, inhom](r))
+           yexp <- quote(K[list(L, "inhom")](r))
            fname <- c("K", "list(L, inhom)")
          },
          none = {
            ylab <- quote(K[net, inhom](r))
+           yexp <- quote(K[list(net, "inhom")](r))
            fname <- c("K", "list(net, inhom)")
          })
-  K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab)
+  K <- rebadge.fv(K, new.fname=fname, new.ylab=ylab, new.yexp=yexp)
   attr(K, "dangerous") <- attr(lambdaX, "dangerous")
   return(K)
 }

@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.51-0.063
+Version: 1.51-0.064
 Nickname: Oh, I'm Afraid the Software Will Be Quite Operational
-Date: 2017-07-22
+Date: 2017-07-24
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

@@ -1,10 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.062
+        CHANGES IN spatstat VERSION 1.51-0.064
 
 OVERVIEW
 
-    o We thank Nicholas Read, Abdollah Jalilian, Dominic Schuhmacher
-    and Rasmus Waagepetersen for contributions.
+    o We thank Nicholas Read, Abdollah Jalilian, Suman Rakshit,
+    Dominic Schuhmacher and Rasmus Waagepetersen for contributions.
 
     o Important bug fixes.
     
@@ -235,6 +235,11 @@ BUG FIXES
     
     o nncross.lpp
     Result had incorrect format if Y was empty, in some cases.
+    Fixed.
+
+    o linearKinhom
+    Plot label for y axis was incorrect.
+    [Spotted by Suman Rakshit.]
     Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
