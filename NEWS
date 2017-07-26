@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.064
+        CHANGES IN spatstat VERSION 1.51-0.065
 
 OVERVIEW
 
@@ -137,6 +137,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     Refuses to fit a log-Gaussian Cox model with anisotropic covariance.
 
+    o anova.mppm
+    Refuses to work on models with random effects (because anova is
+    not implemented for glmmPQL).
+    
     o plot.linim, plot.linfun
     The return value has a different format.
     Arguments have been renamed and reorganised.
@@ -151,6 +155,7 @@ BUG FIXES
 
     o bw.pcf
     Results were totally incorrect due to a typo.
+    [Spotted by Abdollah Jalilian and Rasmus Waagepetersen.]
     Fixed.
 
     o predict.rho2hat

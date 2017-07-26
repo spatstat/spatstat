@@ -88,8 +88,8 @@ Plot <- function(fmla, ..., dat=z) {
 Plot((Rlines + srclines)/1000 ~ date, ylab="Lines of code (x 1000)", 
      main="Spatstat growth")
 lines(srclines/1000 ~ date, data=z)
-text(as.Date("2013-01-01"), 9.5, "C code")
-text(as.Date("2013-01-01"), 50, "R code")
+text(as.Date("2015-01-01"), 9.5, "C code")
+text(as.Date("2015-01-01"), 60, "R code")
 @ 
 }
 

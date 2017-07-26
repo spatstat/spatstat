@@ -1,7 +1,7 @@
 #
 # anova.mppm.R
 #
-# $Revision: 1.10 $ $Date: 2016/10/23 10:36:58 $
+# $Revision: 1.11 $ $Date: 2017/07/26 08:54:05 $
 #
 
 anova.mppm <- local({
@@ -106,7 +106,10 @@ anova.mppm <- local({
     }
 
     opt <- list(test=test, dispersion=1)
-    if(fitter == "glmmPQL") opt <- list(test=test)
+    if(fitter == "glmmPQL") {
+      opt <- list(test=test)
+      stop("Sorry, anova is not yet available for glmmPQL fits", call.=FALSE)
+    }
 
     ## Finally do the appropriate ANOVA
     result <- do.call(anova, append(fitz, opt))
