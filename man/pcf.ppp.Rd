@@ -24,17 +24,24 @@
   }
   \item{kernel}{
     Choice of smoothing kernel,
-    passed to \code{density}.
+    passed to \code{\link{density.default}}.
   }
   \item{bw}{
-    Bandwidth for smoothing kernel, passed to \code{density}.
+    Bandwidth for smoothing kernel,
+    passed to \code{\link{density.default}}.
+    Either a single numeric value,
+    or a character string specifying a bandwidth selection rule
+    recognised by \code{\link{density.default}}.
+    If \code{bw} is missing or \code{NULL},
+    the default value is computed using
+    Stoyan's rule of thumb: see Details.
   }
   \item{\dots}{
     Other arguments passed to the kernel density estimation 
-    function \code{density}.
+    function \code{\link{density.default}}.
   }
   \item{stoyan}{
-    Bandwidth coefficient; see Details.
+    Coefficient for Stoyan's bandwidth selection rule; see Details.
   }
   \item{correction}{
     Choice of edge correction.
@@ -162,7 +169,7 @@
   Alternatively \code{correction="all"} selects all options.
   
   The choice of smoothing kernel is controlled by the 
-  argument \code{kernel} which is passed to \code{\link{density}}.
+  argument \code{kernel} which is passed to \code{\link{density.default}}.
   The default is the Epanechnikov kernel, recommended by
   Stoyan and Stoyan (1994, page 285).
 
@@ -178,7 +185,8 @@
   where \eqn{\lambda}{lambda} is the (estimated) intensity of the
   point process, and \eqn{c} is a constant in the range from 0.1 to 0.2.
   See equation (15.16).
-  If \code{bw} is missing, then this rule of thumb will be applied.
+  If \code{bw} is missing or \code{NULL},
+  then this rule of thumb will be applied.
   The argument \code{stoyan} determines the value of \eqn{c}.
   The smoothing bandwidth that was used in the calculation is returned
   as an attribute of the final result.
@@ -230,7 +238,9 @@
 \seealso{
   \code{\link{Kest}},
   \code{\link{pcf}},
-  \code{\link{density}},
+  \code{\link{density.default}},
+  \code{\link{bw.stoyan}},
+  \code{\link{bw.pcf}},
   \code{\link{lohboot}}.
 }
 \examples{

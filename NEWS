@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.065
+        CHANGES IN spatstat VERSION 1.51-0.067
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Changed algorithm defaults in ippm.
 
-    o Version nickname: "Oh, I'm Afraid the Software Will Be Quite Operational"
+    o Version nickname: "Combinatorial Nightmare"
 
 NEW FUNCTIONS
 
@@ -192,6 +192,11 @@ BUG FIXES
     if argument 'Q' was given.
     Fixed.
 
+    o polynom
+    Expansion of some polynomials caused an error message
+    about 'invalid model formula'.
+    Fixed.
+    
     o plot.ppp
     The argument 'type="n"' did not suppress plotting of the legend,
     for marked point patterns.

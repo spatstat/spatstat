@@ -91,6 +91,13 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
   any correction for the geometry of the linear network.
   If \code{correction="Ang"}, the pair counts are weighted using
   Ang's correction (Ang, 2010). 
+
+  The bandwidth for smoothing the pairwise distances
+  is determined by arguments \code{\dots}
+  passed to \code{\link{density.default}}, mainly the arguments
+  \code{bw} and \code{adjust}. The default is
+  to choose the bandwidth by Silverman's rule of thumb 
+  \code{bw="nrd0"} explained in \code{\link{density.default}}.
 }
 \value{
   Function value table (object of class \code{"fv"}).

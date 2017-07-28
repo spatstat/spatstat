@@ -43,7 +43,14 @@ linearpcf(X, r=NULL, ..., correction="Ang", ratio=FALSE)
   \code{\link{density.default}}, 
   with a bias correction at each end of the interval of \eqn{r} values.
   To switch off the bias correction, set \code{endcorrect=FALSE}.
-  
+
+  The bandwidth for smoothing the pairwise distances
+  is determined by arguments \code{\dots}
+  passed to \code{\link{density.default}}, mainly the arguments
+  \code{bw} and \code{adjust}. The default is
+  to choose the bandwidth by Silverman's rule of thumb 
+  \code{bw="nrd0"} explained in \code{\link{density.default}}.
+
   If \code{correction="none"}, the calculations do not include
   any correction for the geometry of the linear network. The result is
   an estimate of the first derivative of the 
@@ -52,7 +59,6 @@ linearpcf(X, r=NULL, ..., correction="Ang", ratio=FALSE)
   If \code{correction="Ang"}, the pair counts are weighted using
   Ang's correction (Ang, 2010). The result is an estimate of the
   pair correlation function in the linear network.
-
 }
 \value{
   Function value table (object of class \code{"fv"}).

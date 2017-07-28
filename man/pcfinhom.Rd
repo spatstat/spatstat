@@ -39,14 +39,22 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
     Choice of smoothing kernel, passed to \code{\link{density.default}}.
   }
   \item{bw}{
-    Bandwidth for smoothing kernel, passed to \code{\link{density.default}}.
+    Bandwidth for smoothing kernel,
+    passed to \code{\link{density.default}}.
+    Either a single numeric value,
+    or a character string specifying a bandwidth selection rule
+    recognised by \code{\link{density.default}}.
+    If \code{bw} is missing or \code{NULL},
+    the default value is computed using
+    Stoyan's rule of thumb: see \code{\link{bw.stoyan}}.
   }
   \item{\dots}{
     Other arguments passed to the kernel density estimation 
     function \code{\link{density.default}}.
   }
   \item{stoyan}{
-    Bandwidth coefficient; see \code{\link{pcf.ppp}}.
+    Coefficient for Stoyan's bandwidth selection rule;
+    see \code{\link{bw.stoyan}}.
   }
   \item{correction}{
     Choice of edge correction.
@@ -182,6 +190,8 @@ pcfinhom(X, lambda = NULL, ..., r = NULL,
 \seealso{
   \code{\link{pcf}}, 
   \code{\link{pcf.ppp}}, 
+  \code{\link{bw.stoyan}},
+  \code{\link{bw.pcf}},
   \code{\link{Kinhom}}
 }
 \examples{
