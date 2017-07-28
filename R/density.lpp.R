@@ -11,11 +11,12 @@ density.lpp <- function(x, sigma, ...,
                         kernel="gaussian", 
                         continuous=TRUE,
                         epsilon=1e-6,
-                        verbose=TRUE, debug=FALSE, savehistory=TRUE) {
+                        verbose=TRUE, debug=FALSE, savehistory=TRUE,
+                        old=FALSE) {
   stopifnot(inherits(x, "lpp"))
   kernel <- match.kernel(kernel)
 
-  if(continuous && (kernel == "gaussian"))
+  if(continuous && (kernel == "gaussian") && !old)
      return(PDEdensityLPP(x, sigma, ..., weights=weights))
 
   L <- as.linnet(x)

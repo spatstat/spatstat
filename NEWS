@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.067
+        CHANGES IN spatstat VERSION 1.51-0.068
 
 OVERVIEW
 
@@ -150,6 +150,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o Smooth.ppp
     Now exits gracefully if any mark values are NA, NaN or Inf.
+
+    o density.lpp
+    New argument 'old'.
     
 BUG FIXES
 
