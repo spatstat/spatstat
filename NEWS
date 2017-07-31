@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.068
+        CHANGES IN spatstat VERSION 1.51-0.069
 
 OVERVIEW
 
@@ -145,14 +145,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The return value has a different format.
     Arguments have been renamed and reorganised.
 
+    o density.lpp
+    New argument 'old'.
+
     o ippm
     Accelerated.
 
     o Smooth.ppp
     Now exits gracefully if any mark values are NA, NaN or Inf.
 
-    o density.lpp
-    New argument 'old'.
+    o timeTaken
+    Now exits gracefully if there is no timing information.
     
 BUG FIXES
 

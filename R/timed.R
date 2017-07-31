@@ -3,7 +3,7 @@
 #'
 #'   Timed objects
 #'
-#'   $Revision: 1.2 $ $Date: 2017/06/05 10:31:58 $
+#'   $Revision: 1.3 $ $Date: 2017/07/31 01:08:55 $
 
 timed <- function(x, ..., starttime=NULL, timetaken=NULL) {
   if(is.null(starttime) && is.null(timetaken)) # time starts now.
@@ -33,8 +33,12 @@ print.timed <- function(x, ...) {
 timeTaken <- function(..., warn=TRUE) {
   allargs <- list(...)
   hastime <- sapply(allargs, inherits, what="timed")
+  if(!any(hastime)) {
+    if(warn) warning("Data did not contain timing information", call.=FALSE)
+    return(NULL)
+  }
   if(warn && !all(hastime))
-    warning("Some arguments did not contain timing information")
+    warning("Some arguments did not contain timing information", call.=FALSE)
   times <- sapply(allargs[hastime], attr, which="timetaken")
   tottime <- rowSums(times)
   class(tottime) <- "proc_time"
