@@ -174,7 +174,7 @@ There are also the following spatial data sets which are not 2D point patterns:
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
 {\tt austates} & Australian states & tessellation \\
-{\tt chicago} & street crimes & point pattern on linear network \\
+{\tt chicago} & crimes & point pattern on linear network \\
 {\tt dendrite} & dendritic spines & point pattern on linear network \\
 {\tt spiders} & spider webs & point pattern on linear network \\
 {\tt flu} & virus proteins & replicated 2D point patterns \\
@@ -360,14 +360,14 @@ Often used as a demonstration example.
 plot(cells)
 @ 
 
-\subsubsection*{\texttt{chicago}: Chicago street crimes}
+\subsubsection*{\texttt{chicago}: Chicago crimes}
 
-Street crimes reported in a two-week period
+Locations (street addresses) of crimes reported in a two-week period
 in an area close to the University of Chicago.
 A multitype point pattern on a linear network.
 
 <<fig=TRUE>>=
-plot(chicago, main="Chicago Street Crimes", col="grey",
+plot(chicago, main="Chicago Crimes", col="grey",
      cols=c("red", "blue", "black", "blue", "red", "blue", "blue"),
      chars=c(16,2,22,17,24,15,6), leg.side="left", show.window=FALSE)
 @ 

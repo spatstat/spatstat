@@ -2,17 +2,17 @@
 \alias{chicago}
 \docType{data}
 \title{
-  Chicago Street Crime Data
+  Chicago Crime Data
 }
 \description{
-  This dataset is a record of street crimes
+  This dataset is a record of spatial locations of crimes
   reported in the period 25 April to 8 May 2002,
   in an area of Chicago (Illinois, USA)
   close to the University of Chicago.
-  The original street crime map was published in the
+  The original crime map was published in the
   Chicago Weekly News in 2002. 
   
-  The data give the spatial location of each crime,
+  The data give the spatial location (street address) of each crime report,
   and the type of crime. The type labels are interpreted as follows:
   \tabular{ll}{
     \code{assault} \tab battery/assault \cr

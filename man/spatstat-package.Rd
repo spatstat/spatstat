@@ -280,7 +280,7 @@
 	\code{\link{bramblecanes}} \tab Bramble Canes data \cr
 	\code{\link{bronzefilter}} \tab Bronze Filter Section data \cr
 	\code{\link{cells}} \tab Crick-Ripley biological cells data \cr
-	\code{\link{chicago}} \tab Chicago street crimes \cr
+	\code{\link{chicago}} \tab Chicago crimes \cr
 	\code{\link{chorley}} \tab Chorley-Ribble cancer data \cr
 	\code{\link{clmfires}} \tab Castilla-La Mancha forest fires \cr
 	\code{\link{copper}} \tab Berman-Huntington copper deposits data \cr
@@ -725,7 +725,7 @@
       \code{\link{subset.lpp}} \tab method for \code{subset} \cr
       \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
-      \code{\link{chicago}} \tab Chicago street crime data \cr
+      \code{\link{chicago}} \tab Chicago crime data \cr
       \code{\link{dendrite}} \tab Dendritic spines data \cr
       \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall 
     }

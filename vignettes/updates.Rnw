@@ -1895,12 +1895,12 @@ of potential impact.
    
  \item \texttt{bw.pcf}:
    Results were totally incorrect due to a typo.
-   \bugger{1.51-0}{may 2017}{1.52-0}{july 2017}   
+   \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
    
  \item \texttt{predict.rho2hat}:
    Results were incorrect for a \texttt{rho2hat} object computed
    from a point pattern.
-   \bugger{1.42-0}{may 2015}{1.52-0}{july 2017}   
+   \bugger{1.42-0}{may 2015}{1.52-0}{august 2017}   
    
 \item \texttt{envelope.ppm}:
    If the model was an inhomogeneous Poisson process, 
@@ -1994,7 +1994,7 @@ of potential impact.
   (e.g.\ less than the width of a pixel), 
   results were inaccurate if the default resolution was used,
   and completely incorrect if a user-specified resolution was given.
-  \bugger{1.26-0}{april 2012}{1.52-0}{july 2017}
+  \bugger{1.26-0}{april 2012}{1.52-0}{august 2017}
   
  \item \texttt{selfcrossing.psp}:
    $y$ coordinate values were incorrect.   
