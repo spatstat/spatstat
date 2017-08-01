@@ -48,11 +48,15 @@ and will also *import* the `spatstat.utils` library. This means that
 the user. To access these utility functions directly, you need to type
 `library(spatstat.utils)`.
 
-There are also some *extension packages* under development, which will provide
-*additional* capabilities beyond those in `spatstat`. These extension
-packages include
-[spatstat.local](https://github.com/baddstats/spatstat.local) and
-[spatstat.sphere](https://github.com/spatstat/spatstat.sphere).
+There are also *extension packages* which provide additional capabilities
+and must be loaded explicitly when you need them. 
+Currently there are two extension packages:
+
+   . [spatstat.local](https://github.com/baddstats/spatstat.local)
+   for local model-fitting, 
+
+   . [spatstat.sphere](https://github.com/spatstat/spatstat.sphere)
+   for analysing point patterns on a sphere.
 
 ## Installation
 
