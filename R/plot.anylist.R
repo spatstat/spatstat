@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.23 $ $Date: 2017/01/05 08:44:41 $
+##  $Revision: 1.24 $ $Date: 2017/08/02 09:50:55 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -472,6 +472,9 @@ plot.imlist <- local({
   plot.imlist <- function(x, ..., plotcommand="image",
                           equal.ribbon = FALSE, ribmar=NULL) {
     xname <- short.deparse(substitute(x))
+    if(missing(plotcommand) &&
+       any(sapply(x, inherits, what=c("linim", "linfun"))))
+      plotcommand <- "plot"
     if(equal.ribbon &&
        (list(plotcommand) %in% list("image", "plot", image, plot))) {
       out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)

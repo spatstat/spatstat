@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.070
+        CHANGES IN spatstat VERSION 1.51-0.071
 
 OVERVIEW
 
@@ -20,7 +20,7 @@ OVERVIEW
 
     o Changed algorithm defaults in ippm.
 
-    o Version nickname: "Combinatorial Nightmare"
+    o Version nickname: "Exponentiated Combinatorial Nightmare"
 
 NEW FUNCTIONS
 
@@ -256,6 +256,11 @@ BUG FIXES
     o linearKinhom
     Plot label for y axis was incorrect.
     [Spotted by Suman Rakshit.]
+    Fixed.
+
+    o plot.solist
+    If the entries were 'linim' objects, they were plotted using image()
+    so arguments like 'style="w"' were ignored.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
