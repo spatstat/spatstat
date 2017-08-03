@@ -47,10 +47,14 @@ in having to deal with coordinates which are expressed as very
 large integers with a bewildering number of digits.  Amongst other
 things, these huge numbers tended to create very untidy axis labels
 on graphs.  The width of the bounding box of the window was made
-equal to 1000 (nameless) units. In addition the lower left hand
+equal to 1000 units. In addition the lower left hand
 corner of this bounding box was shifted to the origin. The height
 of the bounding box was changed proportionately, resulting in a
 value of approximately 959.
+
+In the final dataset \code{nbfires}, one coordinate unit is equivalent to
+0.403716 kilometres. To convert the data to kilometres,
+use \code{rescale(nbfires)}.
 
 The window for the fire patterns comprises 6 polygonal components,
 consisting of mainland New Brunswick and the 5 largest islands.
@@ -194,7 +198,6 @@ URL: \code{gge.unb.ca/Pubs/Pubs.html}.
 
 \examples{
 \dontrun{
-data(nbfires)
 # Get the year 2000 data.
 X <- split(nbfires,"year")
 Y.00 <- X[["2000"]]

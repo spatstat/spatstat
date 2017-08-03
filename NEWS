@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.071
+        CHANGES IN spatstat VERSION 1.51-0.072
 
 OVERVIEW
 
@@ -156,6 +156,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o timeTaken
     Now exits gracefully if there is no timing information.
+
+    o nbfires
+    The unit of length for the coordinates is now specified in this dataset.
     
 BUG FIXES
 
