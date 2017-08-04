@@ -180,6 +180,7 @@ as.ppp.quad <- function(X, ..., fatal=TRUE) {
 }
 
 as.ppp.data.frame <- function(X, W = NULL, ..., fatal=TRUE) {
+  X <- as.data.frame(X) #' swim against the tidyverse
   check <- resolve.defaults(list(...), list(check=TRUE))$check
   if(ncol(X) < 2) 
     return(complaining("X must have at least two columns",

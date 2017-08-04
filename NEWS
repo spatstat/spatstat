@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.072
+        CHANGES IN spatstat VERSION 1.51-0.073
 
 OVERVIEW
 
@@ -264,6 +264,10 @@ BUG FIXES
     o plot.solist
     If the entries were 'linim' objects, they were plotted using image()
     so arguments like 'style="w"' were ignored.
+    Fixed.
+
+    o as.ppp.data.frame
+    Crashed if X was an object of class 'tbl_df' from the dplyr package.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.51-0
