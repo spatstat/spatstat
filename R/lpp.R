@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.55 $   $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.56 $   $Date: 2017/08/08 03:24:35 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -106,11 +106,14 @@ plot.lpp <- function(x, ..., main, add=FALSE,
     main <- short.deparse(substitute(x))
   ## Handle multiple columns of marks as separate plots
   ##  (unless add=TRUE or which.marks selects a single column
-  ##   or multipage = FALSE)
-  if(use.marks && is.data.frame(mx <- marks(x))) {
+  ##   or multiplot = FALSE)
+  mx <- marks(x)
+  if(use.marks && !is.null(dim(mx))) {
     implied.all <- is.null(which.marks)
-    want.several <- implied.all || is.data.frame(mx <- mx[,which.marks])
+    want.several <- implied.all || !is.null(dim(mx <- mx[,which.marks]))
     do.several <- want.several && !add && multiplot
+    if(want.several)
+      mx <- as.data.frame(mx) #' ditch hyperframe columns
     if(do.several) {
       ## generate one plot for each column of marks
       y <- solapply(mx, setmarks, x=x)
@@ -119,7 +122,7 @@ plot.lpp <- function(x, ..., main, add=FALSE,
                             show.window=show.window),
                        list(...)))
       return(invisible(out))
-    } 
+    }
     if(is.null(which.marks)) {
       which.marks <- 1
       if(do.plot) message("Plotting the first column of marks")
