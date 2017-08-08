@@ -99,8 +99,7 @@
   (class \code{"splitppx"}) which will return a list of pixel images.
 }
 \value{
-  Pixel image on the linear network (class
-  \code{"linim"}) or a function on the linear network (class \code{"linfun"}).
+  A pixel image on the linear network (object of class \code{"linim"}).
 }
 \references{
 McSwiggan, G., Baddeley, A. and Nair, G. (2016)

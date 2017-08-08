@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.074
+        CHANGES IN spatstat VERSION 1.51-0.076
 
 OVERVIEW
 
@@ -67,12 +67,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ppm, kppm
     The argument 'subset' can now be a window (class 'owin')
     specifying the subset of data to which the model should be fitted.
-    
+
     o fitted.lppm
     New argument 'leaveoneout' allows leave-one-out computation of fitted value.
 
     o pool.rat
     New arguments 'relabel' and 'variance'.
+
+    o density.lpp
+    The return value is a pixel image of class 'linim' in all cases.
     
     o plot.linim, plot.linfun
     A scale bar is now plotted when style="width".
@@ -80,7 +83,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o ippm
     Default values for the parameters of the optimisation algorithm (nlm.args)
-    have changed: they are now identical to the default values in nlm().
+    have changed.
 
     o ippm
     The internal format of the result has been extended slightly.
@@ -137,10 +140,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o kppm
     Refuses to fit a log-Gaussian Cox model with anisotropic covariance.
 
-    o anova.mppm
-    Refuses to work on models with random effects (because anova is
-    not implemented for glmmPQL).
-    
     o plot.linim, plot.linfun
     The return value has a different format.
     Arguments have been renamed and reorganised.

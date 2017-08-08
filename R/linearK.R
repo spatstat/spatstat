@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.45 $ $Date: 2017/07/24 03:12:07 $
+# $Revision: 1.47 $ $Date: 2017/08/08 09:40:13 $
 #
 # K function for point pattern on linear network
 #
@@ -34,7 +34,7 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                          correction="Ang", normalise=TRUE, normpower=1,
-			 update=TRUE, leaveoneout=TRUE,
+			 update=TRUE, leaveoneout=update,
 			 ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
   correction <- pickoption("correction", correction,
@@ -239,7 +239,6 @@ ApplyConnected <- function(X, Engine, r=NULL,
   stopifnot(is.function(rule))
   # Ensure distance information is present
   X <- as.lpp(X, sparse=FALSE)
-  nX <- npoints(X)
   L <- domain(X)
   # check network connectivity
   br <- boundingradius(L)

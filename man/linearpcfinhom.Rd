@@ -10,7 +10,7 @@
 \usage{
 linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
                normalise=TRUE, normpower=1,
-	       update = TRUE, leaveoneout = TRUE,
+	       update = TRUE, leaveoneout = update,
 	       ratio = FALSE)
 }
 \arguments{
@@ -135,7 +135,7 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
 \examples{
   data(simplenet)
   X <- rpoislpp(5, simplenet)
-  fit <- lppm(X, ~x)
+  fit <- lppm(X ~x)
   K <- linearpcfinhom(X, lambda=fit)
   plot(K)
 }

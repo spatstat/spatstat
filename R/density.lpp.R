@@ -169,7 +169,7 @@ density.splitppx <- function(x, sigma, ...) {
 }
 
 PDEdensityLPP <- function(x, sigma, ..., weights=NULL, 
-                        dx=NULL, dt=NULL) {
+                          dx=NULL, dt=NULL, fun=FALSE) {
   stopifnot(is.lpp(x))
   L <- as.linnet(x)
   check.1.real(sigma)
@@ -199,6 +199,7 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
                  weights=weights,
                  iterMax=1e6, sparse=TRUE)
   result <- a$kernel_fun
+  if(!fun) result <- as.linim(result)
   attr(result, "sigma") <- sigma
   attr(result, "dx") <- a$deltax
   attr(result, "dt") <- a$deltat

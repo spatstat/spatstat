@@ -10,7 +10,7 @@
 \usage{
 linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
              normalise=TRUE, normpower=1,
-	     update=TRUE, leaveoneout=TRUE, ratio=FALSE)
+	     update=TRUE, leaveoneout=update, ratio=FALSE)
 }
 \arguments{
   \item{X}{
@@ -154,7 +154,7 @@ linearKinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
 \examples{
   data(simplenet)
   X <- rpoislpp(5, simplenet)
-  fit <- lppm(X, ~x)
+  fit <- lppm(X ~x)
   K <- linearKinhom(X, lambda=fit)
   plot(K)
 }

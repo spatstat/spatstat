@@ -13,7 +13,7 @@ ippm(Q, \dots,
           iScore=NULL,
           start=list(),
           covfunargs=start,
-          nlm.args=list(),
+          nlm.args=list(stepmax=1/2),
           silent=FALSE,
           warn.unused=TRUE)
 }
