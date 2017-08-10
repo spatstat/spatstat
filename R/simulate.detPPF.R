@@ -72,14 +72,11 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   if (n==1)
     return(ppx(x[1,,drop=FALSE], window, simplify = TRUE))
   
-  # Initialize matrices for Gram-Schmidt vectors and conj. trans.:
-  e <- matrix(as.complex(0),n,n-1)
-  estar <- matrix(as.complex(0),n,n-1)
   # First vector of basis-functions evaluated at first point:
   v <- basis(x[1,,drop=FALSE],index,window)
   ## Record normalized version in the Gram-Schmidt matrices:
-  e[,1] <- v/sqrt(sum(abs(v)^2))
-  estar[,1] <- Conj(e[,1])
+  e <- v/sqrt(sum(abs(v)^2))
+  estar <- Conj(e)
   if(progress>0)
     cat(paste("Simulating", n, "points:\n"))
 
@@ -94,15 +91,13 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
     if(debug){
       rejected <- matrix(NA,reject_max,d)
     }
-    ## Non-zero vectors of estar matrix:
-    estar2 <- estar[,1:(n-i)]
     repeat{
       ## Proposed point:
       newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
       ## Basis functions eval. at proposed point:
       v <- as.vector(basis(newx, index, window))
       ## Vector of projection weights (has length n-i)
-      wei <- t(v)%*%estar2
+      wei <- t(v)%*%estar
       ## Accept probability:
       tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
       ## If proposal is accepted the loop is broken:
@@ -134,7 +129,7 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
       debugList[[n-i+1]] = list(
                 old=ppx(x[1:(n-i),,drop=FALSE],window, simplify=TRUE),
                 accepted=ppx(newx,window,simplify=TRUE),
-                rejected=rej, index=index, estar = estar2)
+                rejected=rej, index=index, estar = estar)
     }
 
     ## If it is the last point exit the main loop:
@@ -142,10 +137,11 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
 
     ## Calculate orthogonal vector for Gram-Schmidt procedure:
     # w <- v - rowSums(matrix(wei,n,n-i,byrow=TRUE)*e[,1:(n-i)])
-    w <- v - colSums(t(e[,1:(n-i)])*as.vector(wei))
+    w <- v - colSums(t(e)*as.vector(wei))
     ## Record normalized version in the Gram-Schmidt matrices:
-    e[,n-i+1]=w/sqrt(sum(abs(w)^2))
-    estar[,n-i+1] <- Conj(e[,n-i+1])
+    enew <- w/sqrt(sum(abs(w)^2))
+    e <- cbind(e, enew)
+    estar <- cbind(estar,Conj(enew))
   } ## END OF MAIN FOR LOOP
   # Save points as point pattern:
   X <- ppx(x, window, simplify = TRUE)
