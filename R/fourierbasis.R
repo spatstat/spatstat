@@ -16,5 +16,5 @@ fourierbasis <- function(x, k, win = boxx(rep(list(0:1), ncol(k)))) {
       rslt <- rslt * exp(2 * pi * (0+1i) * outer(k[, i], x[, i]/boxlengths[i]))
     }
   }
-  return(rslt/prod(boxlengths))
+  return(rslt/sqrt(prod(boxlengths)))
 }
