@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.41 $  $Date: 2017/07/09 06:37:52 $
+#  $Revision: 1.43 $  $Date: 2017/08/10 01:50:51 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -22,7 +22,7 @@ Smooth.solist <- function(X, ...) {
 
 Smooth.ppp <- function(X, sigma=NULL, ...,
                        weights=rep(1, npoints(X)), at="pixels",
-                       edge=TRUE, diggle=FALSE) {
+                       edge=TRUE, diggle=FALSE, geometric=FALSE) {
   verifyclass(X, "ppp")
   if(!is.marked(X, dfok=TRUE, na.action="fatal"))
     stop("X should be a marked point pattern", call.=FALSE)
@@ -32,6 +32,24 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
   at <- pickoption("output location type", at,
                    c(pixels="pixels",
                      points="points"))
+  ## weights
+  weightsgiven <- !missing(weights) && !is.null(weights) 
+  if(weightsgiven) {
+    # convert to numeric
+    if(is.im(weights)) {
+      weights <- safelookup(weights, X) # includes warning if NA
+    } else if(is.expression(weights)) 
+      weights <- eval(weights, envir=as.data.frame(X), enclos=parent.frame())
+    if(length(weights) == 0)
+      weightsgiven <- FALSE
+  }
+  if(weightsgiven) {
+    check.nvector(weights, npoints(X))
+  } else weights <- NULL
+  ## geometric mean smoothing
+  if(geometric) 
+    return(ExpSmoothLog(X, sigma=sigma, ..., at=at,
+                        weights=weights, edge=edge, diggle=diggle))
   ## determine smoothing parameters
   ker <- resolve.2D.kernel(sigma=sigma, ...,
                            x=X, bwfun=bw.smoothppp, allow.zero=TRUE)
@@ -56,19 +74,6 @@ Smooth.ppp <- function(X, sigma=NULL, ...,
     }
     return(Y)
   }
-  ## weights
-  weightsgiven <- !missing(weights) && !is.null(weights) 
-  if(weightsgiven) {
-    if(is.im(weights)) {
-      weights <- safelookup(weights, X) # includes warning if NA
-    } else if(is.expression(weights)) 
-      weights <- eval(weights, envir=as.data.frame(X), enclos=parent.frame())
-    if(length(weights) == 0 || (!is.null(dim(weights)) && nrow(weights) == 0))
-      weightsgiven <- FALSE
-  }
-  if(weightsgiven) {
-    check.nvector(weights, npoints(X))
-  } else weights <- NULL
 
   if(diggle) {
     ## absorb Diggle edge correction into weights vector
@@ -757,43 +762,50 @@ smoothcrossEngine <- function(Xdata, Xquery, values, sigma, ...,
   return(result)
 }
 
-GeomSmooth <- function(X, ..., at=c("pixels", "points")) {
+ExpSmoothLog <- function(X, ..., at=c("pixels", "points"), weights=NULL) {
   verifyclass(X, "ppp")
   at <- match.arg(at)
+  if(!is.null(weights)) 
+    check.nvector(weights, npoints(X))
   X <- coerce.marks.numeric(X)
   marx <- marks(X)
   d <- dim(marx)
   if(!is.null(d) && d[2] > 1) {
     switch(at,
            points = {
-             Z <- lapply(unstack(X), GeomSmooth, ..., at=at)
+             Z <- lapply(unstack(X), ExpSmoothLog, ...,
+                         at=at, weights=weights)
              Z <- do.call(data.frame(Z))
            },
            pixels = {
-             Z <- solapply(unstack(X), GeomSmooth, ..., at=at)
+             Z <- solapply(unstack(X), ExpSmoothLog, ...,
+                           at=at, weights=weights)
            })
     return(Z)
   }
   # vector or single column of numeric marks
   v <- as.numeric(marx)
-  rv <- range(v)
-  if(any(rv < 0)) stop("Negative values in GeomSmooth", call.=FALSE)
+  vmin <- min(v)
+  if(vmin < 0) stop("Negative values in geometric mean smoothing",
+                       call.=FALSE)
   Y <- X %mark% log(v)
-  if(rv[1] > 0) {
-    Z <- Smooth(Y, ..., at=at)
+  if(vmin > 0) {
+    Z <- Smooth(Y, ..., at=at, weights=weights)
   } else {
     yok <- is.finite(marks(Y))
+    YOK <- Y[yok]
+    weightsOK <- if(is.null(weights)) NULL else weights[yok]
     switch(at,
            points = {
              Z <- rep(-Inf, npoints(X))
-             Z[yok] <- Smooth(Y[yok], ..., at=at)
+             Z[yok] <- Smooth(YOK, ..., at=at, weights=weightsOK)
            },
            pixels = {
              isfinite <- nnmark(Y %mark% yok, ...)
              support <- solutionset(isfinite)
+             Window(YOK) <- support
              Z <- as.im(-Inf, W=Window(Y), ...)
-             YOK <- Y[support]
-             Z[support] <- Smooth(YOK, ..., at=at)[]
+             Z[support] <- Smooth(YOK, ..., at=at, weights=weightsOK)[]
            })
   }
   return(exp(Z))

@@ -1,7 +1,7 @@
 #
 # linearK
 #
-# $Revision: 1.47 $ $Date: 2017/08/08 09:40:13 $
+# $Revision: 1.48 $ $Date: 2017/08/09 00:21:51 $
 #
 # K function for point pattern on linear network
 #
@@ -34,9 +34,10 @@ linearK <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
 
 linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
                          correction="Ang", normalise=TRUE, normpower=1,
-			 update=TRUE, leaveoneout=update,
+			 update=TRUE, leaveoneout=TRUE,
 			 ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
+  loo.given <- !missing(leaveoneout)
   correction <- pickoption("correction", correction,
                            c(none="none",
                              Ang="Ang",
@@ -47,10 +48,10 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
   if(normalise) {
     check.1.real(normpower)
     stopifnot(normpower >= 1)
-  } 
-
+  }
   lambdaX <- getlambda.lpp(lambda, X, ...,
                            update=update, leaveoneout=leaveoneout,
+                           loo.given=loo.given,
                            lambdaname="lambda")
   invlam <- 1/lambdaX
   invlam2 <- outer(invlam, invlam, "*")
@@ -84,6 +85,7 @@ linearKinhom <- function(X, lambda=NULL, r=NULL,  ...,
 
 getlambda.lpp <- function(lambda, X, subset=NULL, ...,
                           update=TRUE, leaveoneout=TRUE,
+                          loo.given=TRUE,
 			  lambdaname) {
   missup <- missing(update)
   if(missing(lambdaname)) lambdaname <- deparse(substitute(lambda))
@@ -109,8 +111,8 @@ getlambda.lpp <- function(lambda, X, subset=NULL, ...,
 		  "and again in spatstat 1.52-0.",
                   "See help(linearKinhom)")
     } else {
-      if(leaveoneout)
-        stop("leave-one-out calculation is only available when update=TRUE",
+      if(loo.given && leaveoneout)
+        stop("leave-one-out calculation for fitted models is only available when update=TRUE",
              call.=FALSE)
       lambdaY <- predict(lambda, locations=as.data.frame(as.ppp(Y)))
     }

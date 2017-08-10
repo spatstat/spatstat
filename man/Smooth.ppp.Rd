@@ -13,7 +13,7 @@
                      ...,
                      weights = rep(1, npoints(X)),
                      at="pixels",
-                     edge=TRUE, diggle=FALSE)
+                     edge=TRUE, diggle=FALSE, geometric=FALSE)
 
 markmean(X, ...)
 
@@ -51,6 +51,10 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
   \item{varcov}{
     Variance-covariance matrix. An alternative
     to \code{sigma}. See \code{\link{density.ppp}}.
+  }
+  \item{geometric}{
+    Logical value indicating whether to perform geometric mean
+    smoothing instead of arithmetic mean smoothing. See Details.
   }
 }
 \details{
@@ -112,6 +116,13 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
     g(u) = (sum of k(u-x[i]) v[i] w[i])/(sum of k(u-x[i]) w[i])
   }
 
+  If \code{geometric=TRUE} then geometric mean smoothing
+  is performed instead of arithmetic mean smoothing.
+  The mark values must be non-negative numbers.
+  The logarithm of the mark values is computed; these logarithmic values are
+  kernel-smoothed as described above; then the exponential function
+  is applied to the smoothed values.
+  
   An alternative to kernel smoothing is inverse-distance weighting,
   which is performed by \code{\link{idw}}.
 }
@@ -176,8 +187,8 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
    # data frame of marks: trees marked by diameter and height
    plot(Smooth(finpines, sigma=2))
 }
-\author{\adrian
-  and \rolf
+\author{
+  \spatstatAuthors.
 }
 \references{
   Nadaraya, E.A. (1964) On estimating regression.

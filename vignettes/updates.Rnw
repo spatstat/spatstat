@@ -132,10 +132,12 @@ the News and Release Notes for each update.
     
   \item Effect function is now available for all types of fitted model.
 
-  \item Fit a model to a sub-region of data.
+  \item Geometric-mean smoothing.
+
+  \item A model can be fitted or re-fitted to a sub-region of data.
     
   \item New fast algorithm for kernel smoothing on a linear network.
-    
+
   \item Leverage and influence diagnostics extended to Poisson/Gibbs models
         fitted by logistic composite likelihood.
 
@@ -954,7 +956,7 @@ also carries these marks in the \verb!$lines! component.
      `equal-split discontinuous' smoothers. New argument \texttt{continuous} 
      determines the choice of smoother.
    \item 
-     New argument \texttt{weights}.
+     New arguments \texttt{weights} and \texttt{old}.
    \end{itemize}
    
  \item \texttt{density.ppp}:
@@ -1045,7 +1047,8 @@ also carries these marks in the \verb!$lines! component.
    Additional checks for errors in input data.
 
  \item \texttt{fitted.lppm}:
-  New argument \texttt{leaveoneout}.
+  New argument \texttt{leaveoneout}
+  allows leave-one-out computation of fitted value.
   
  \item \texttt{fitted.ppm}:
   New option, \texttt{type="link"}.
@@ -1251,6 +1254,9 @@ also carries these marks in the \verb!$lines! component.
 
 %%N
    
+   \item \texttt{nbfires}:
+     the unit of length for the coordinates is now specified in this dataset.
+   
  \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
    New argument \texttt{k} allows computation of $k$-th nearest point.
    Computation accelerated.
@@ -1351,7 +1357,10 @@ also carries these marks in the \verb!$lines! component.
   \end{itemize}
 
  \item \texttt{plot.linim}:
-   The return value has a different format.
+   \begin{itemize}
+   \item A scale bar is now plotted when \texttt{style="width"}.
+   \item  The return value has a different format.
+   \end{itemize}
 
  \item \texttt{plot.lintess}:
    Improved plot method, with more options.
@@ -1613,6 +1622,7 @@ also carries these marks in the \verb!$lines! component.
      and \texttt{kernel="gaussian"}.
    \item Now exits gracefully if any mark values are \texttt{NA}, \texttt{NaN}
      or \texttt{Inf}.
+   \item New argument \texttt{geometric} supports geometric-mean smoothing.
    \end{itemize}
 
  

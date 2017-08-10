@@ -10,7 +10,7 @@
 \usage{
 linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
                normalise=TRUE, normpower=1,
-	       update = TRUE, leaveoneout = update,
+	       update = TRUE, leaveoneout = TRUE,
 	       ratio = FALSE)
 }
 \arguments{
@@ -38,7 +38,7 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
   \item{normalise}{
     Logical. If \code{TRUE} (the default), the denominator of the estimator is 
     data-dependent (equal to the sum of the reciprocal intensities at the data
-    points), which reduces the sampling variability.
+    points, raised to \code{normpower}), which reduces the sampling variability.
     If \code{FALSE}, the denominator is the length of the network.
   }
   \item{normpower}{
@@ -60,6 +60,7 @@ linearpcfinhom(X, lambda=NULL, r=NULL, ..., correction="Ang",
     \code{\link{fitted.ppm}}) specifying whether to use a
     leave-one-out rule when calculating the intensity,
     when \code{lambda} is a fitted model.
+    Supported only when \code{update=TRUE}.
   }
   \item{ratio}{
     Logical. 

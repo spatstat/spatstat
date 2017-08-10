@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.51-0.076
+        CHANGES IN spatstat VERSION 1.52-0
 
 OVERVIEW
 
@@ -18,9 +18,11 @@ OVERVIEW
 
     o 'Pool' operations improved.
 
+    o Geometric-mean smoothing.
+    
     o Changed algorithm defaults in ippm.
 
-    o Version nickname: "Exponentiated Combinatorial Nightmare"
+    o Version nickname: "Rudimentary Lathe"
 
 NEW FUNCTIONS
 
@@ -50,6 +52,9 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o Smooth.ppp
+    New argument 'geometric' supports geometric-mean smoothing.
+    
     o Kinhom
     New argument 'ratio'.
     

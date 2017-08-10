@@ -1,7 +1,7 @@
 #
 # linearpcf.R
 #
-# $Revision: 1.25 $ $Date: 2017/08/08 09:40:03 $
+# $Revision: 1.26 $ $Date: 2017/08/09 00:21:46 $
 #
 # pair correlation function for point pattern on linear network
 #
@@ -40,8 +40,9 @@ linearpcf <- function(X, r=NULL, ..., correction="Ang", ratio=FALSE) {
 
 linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
                            correction="Ang", normalise=TRUE, normpower=1,
-			   update=TRUE, leaveoneout=update, ratio=FALSE) {
+			   update=TRUE, leaveoneout=TRUE, ratio=FALSE) {
   stopifnot(inherits(X, "lpp"))
+  loo.given <- !missing(leaveoneout)
   correction <- pickoption("correction", correction,
                            c(none="none",
                              Ang="Ang",
@@ -58,6 +59,7 @@ linearpcfinhom <- function(X, lambda=NULL, r=NULL,  ...,
   #
   lambdaX <- getlambda.lpp(lambda, X, ...,
                            update=update, leaveoneout=leaveoneout,
+                           loo.given=loo.given,
                            lambdaname="lambda")
   #
   invlam <- 1/lambdaX

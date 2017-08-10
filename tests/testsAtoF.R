@@ -187,7 +187,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.8 $  $Date: 2017/01/22 01:50:49 $
+#  $Revision: 1.9 $  $Date: 2017/08/10 02:01:54 $
 #
 
 require(spatstat)
@@ -291,6 +291,10 @@ local({
   Z <- Smooth(X, 5)
 
   ZZ <- bw.smoothppp(finpines, hmin=0.01, hmax=0.012, nh=2) # reshaping problem
+
+  ## geometric-mean smoothing
+  U <- Smooth(longleaf, 5, geometric=TRUE)
+  UU <- Smooth(X, 5, geometric=TRUE)
 })
 #'
 #'  tests/discarea.R

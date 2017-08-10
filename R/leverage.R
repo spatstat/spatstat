@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.78 $ $Date: 2017/07/11 08:07:54 $
+#  $Revision: 1.81 $ $Date: 2017/08/10 02:31:47 $
 #
 
 leverage <- function(model, ...) {
@@ -85,7 +85,8 @@ ppmInfluenceEngine <- function(fit,
                          fitname=NULL,
                          multitypeOK=FALSE,
                          entrywise = TRUE,
-                         matrix.action = c("warn", "fatal", "silent")) {
+                         matrix.action = c("warn", "fatal", "silent"),
+                         geomsmooth = TRUE) {
   logi <- identical(fit$method, "logi")
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
@@ -601,22 +602,14 @@ ppmInfluenceEngine <- function(fit,
       h <- data.frame(leverage=h, type=marks(loc))
     levval <- (loc %mark% h)[ok]
     levvaldum <- levval[!isdata[ok]]
-    geomsmooth <- spatstat.options('developer')
-    if(!geomsmooth) {
-      if(!mt) {
-        levsmo <- Smooth(levvaldum, sigma=maxnndist(loc))
-      } else {
-        levsplitdum <- split(levvaldum, reduce=TRUE)
-        levsmo <- Smooth(levsplitdum, sigma=max(sapply(levsplitdum, maxnndist)))
-      }
+    geomsmooth <- geomsmooth && all(marks(levvaldum) >= 0)
+    if(!mt) {
+      levsmo <- Smooth(levvaldum, sigma=maxnndist(loc), geometric=geomsmooth)
     } else {
-      if(!mt) {
-        levsmo <- GeomSmooth(levvaldum, sigma=maxnndist(loc))
-      } else {
-        levsplitdum <- split(levvaldum, reduce=TRUE)
-        levsmo <- solapply(levsplitdum, GeomSmooth,
-                           sigma=max(sapply(levsplitdum, maxnndist)))
-      }
+      levsplitdum <- split(levvaldum, reduce=TRUE)
+      levsmo <- Smooth(levsplitdum,
+                       sigma=max(sapply(levsplitdum, maxnndist)),
+                       geometric=geomsmooth)
     }
     ## nominal mean level
     a <- area(Window(loc)) * markspace.integral(loc)

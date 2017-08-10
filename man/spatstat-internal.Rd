@@ -153,6 +153,7 @@
 \alias{existsSpatstatVariable}
 \alias{expandSpecialLists}
 \alias{expandwinPerfect}
+\alias{ExpSmoothLog}
 \alias{extractAIC.slrm}
 \alias{extractAtomicQtests}
 \alias{fakemaintitle}
@@ -197,7 +198,6 @@
 \alias{geyercounts}
 \alias{geyerdelta2}
 \alias{GLMpredict}
-\alias{GeomSmooth}
 \alias{good.correction.K}
 %\alias{gridadjacencymatrix} %DoNotExport
 \alias{gridindex}            
@@ -921,6 +921,7 @@ exactPdt(w)
 existsSpatstatVariable(name)
 expandSpecialLists(x, special)
 expandwinPerfect(W, expand, amount)
+ExpSmoothLog(X, \dots, at, weights)
 \method{extractAIC}{slrm}(fit, scale = 0, k = 2, \dots)
 extractAtomicQtests(x)
 fakemaintitle(bb, main, \dots)
@@ -956,7 +957,7 @@ getglmdata(object, drop=FALSE)
 getglmfit(object)
 getglmsubset(object)
 getlambda.lpp(lambda, X, subset, \dots,
-              update, leaveoneout, lambdaname)
+              update, leaveoneout, loo.given, lambdaname)
 getlastshift(X)
 getppmdatasubset(object)
 getppmOriginalCovariates(object)
@@ -966,7 +967,6 @@ getSumFun(abbreviation, classname, ismarked, fatal)
 geyercounts(U,X,r,sat,Xcounts,EqualPairs)
 geyerdelta2(X,r,sat,\dots,sparseOK)
 GLMpredict(fit, data, coefs, changecoef, type)
-GeomSmooth(X, \dots, at)
 good.correction.K(X)
 %gridadjacencymatrix(dims)
 gridindex(x, y, xrange, yrange, nx, ny)            
@@ -1229,7 +1229,8 @@ ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
               drop, method, precomputed, sparseOK,
-              fitname, multitypeOK, entrywise, matrix.action)
+              fitname, multitypeOK, entrywise, matrix.action,
+              geomsmooth)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
