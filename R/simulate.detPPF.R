@@ -39,6 +39,9 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   ranges <- window$ranges
   if(ncol(ranges)!=d)
     stop("The dimension differs from the number of columns in index")
+  if(basis != "fourierbasis")
+    warning("Non Fourier basis probably doesn't work correctly! Fourier is
+            assumed for bounds in rejection sampling.")
   basis <- get(basis)
   if (!(is.function(basis)))
     stop(paste(sQuote("basis"), "must be a function"))
@@ -99,7 +102,8 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
       ## Vector of projection weights (has length n-i)
       wei <- t(v)%*%estar
       ## Accept probability:
-      tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
+      # tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
+      tmp <- 1-prod(ranges[2,]-ranges[1,])/n*(sum(abs(wei)^2))
       ## If proposal is accepted the loop is broken:
       if(runif(1)<as.numeric(abs(tmp))){
         break
