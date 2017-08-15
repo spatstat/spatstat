@@ -39,13 +39,15 @@ covers everything in \spst\ up to version \texttt{1.42-0},
 released in May 2015.
 
 <<echo=FALSE,results=hide>>=
-getSizeTable <- function(packagename="spatstat") {
-  fname <- system.file("doc", "packagesizes.txt", package=packagename)
-  if(!file.exists(fname)) 
-    return(NULL)
+readSizeTable <- function(fname) {
+  if(is.null(fname) || !file.exists(fname)) return(NULL)
   a <- read.table(fname, header=TRUE)
   a$date <- as.Date(a$date)
   return(a)
+}
+getSizeTable <- function(packagename="spatstat", tablename="packagesizes.txt") {
+  fname <- system.file("doc", tablename, package=packagename)
+  readSizeTable(fname)
 }
 counts <- c("nhelpfiles", "nobjects", "ndatasets", "Rlines", "srclines")
 mergeSizeTables <- function(a, b) {
@@ -59,7 +61,9 @@ mergeSizeTables <- function(a, b) {
 }
 z <- getSizeTable()
 zutils <- getSizeTable("spatstat.utils")
+zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
 z <- mergeSizeTables(z, zutils)
+z <- mergeSizeTables(z, zlocal)
 #
 changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
 newobj <- changes[["nobjects"]]
