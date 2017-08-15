@@ -1,7 +1,7 @@
 ##
 ##   Math.imlist.R
 ##
-##   $Revision: 1.2 $ $Date: 2017/01/07 02:40:15 $
+##   $Revision: 1.4 $ $Date: 2017/08/15 03:46:57 $
 ##
 
 Math.imlist <- function(x, ...){
@@ -24,15 +24,17 @@ Summary.imlist <- function(..., na.rm=TRUE){
 Ops.imlist <- function(e1,e2=NULL){
   if(nargs() == 1L) {
     #' unary operation
-    solapply(e1, .Generic)
-  } else {
-    #' binary operation
-    if(inherits(e2, "imlist")) {
-      as.solist(mapply(.Generic, unname(e1), unname(e2), SIMPLIFY=FALSE))
-    } else {
-      solapply(e1, .Generic, e2=e2)
-    }
+    return(solapply(e1, .Generic))
+  } 
+  #' binary operation
+  if(inherits(e2, "imlist")) {
+    #' two image lists - must have equal length
+    v <- mapply(.Generic, unname(e1), unname(e2), SIMPLIFY=FALSE)
+    names(v) <- names(e1)
+    return(as.solist(v))
   }
+  #' other binary operation e.g. imlist + constant, imlist + im
+  return(solapply(e1, .Generic, e2=e2))
 }
 
 
