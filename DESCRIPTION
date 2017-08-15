@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-0
-Nickname: Rudimentary Lathe
-Date: 2017-08-10
+Version: 1.52-0.001
+Nickname: I Can't Believe It's Not Bounded
+Date: 2017-08-15
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

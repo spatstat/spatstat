@@ -1,4 +1,24 @@
 
+        CHANGES IN spatstat VERSION 1.52-0.001
+
+OVERVIEW
+
+    o Nickname: "I Can't Believe It's Not Bounded"
+
+NEW FUNCTIONS
+
+    o None yet
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o None yet
+
+BUG FIXES
+
+    o Ops.imlist
+    Improved the 'names' of the result.
+
+
         CHANGES IN spatstat VERSION 1.52-0
 
 OVERVIEW
