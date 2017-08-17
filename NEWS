@@ -1,23 +1,38 @@
 
-        CHANGES IN spatstat VERSION 1.52-0.001
+        CHANGES IN spatstat VERSION 1.52-1.001
 
 OVERVIEW
 
-    o Nickname: "I Can't Believe It's Not Bounded"
+    o Nickname: "Phubbed"
 
-NEW FUNCTIONS
-
-    o None yet
-    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o None yet
 
 BUG FIXES
 
+    o "[.solist"
+    Did not pass the "..." arguments in some cases.
+    Fixed.
+
+        CHANGES IN spatstat VERSION 1.52-1
+
+OVERVIEW
+
+    o Bug fix to satisfy the development version of R.
+    
+    o Nickname: "Apophenia"
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
     o Ops.imlist
     Improved the 'names' of the result.
 
+BUG FIXES
+
+    o bw.smoothppp
+    Crashes in R-devel.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.52-0
 

@@ -905,9 +905,11 @@ erodemask(w,r,strict)
 erode.owin(\dots)
 evalCovar(model, covariate, \dots)
 \method{evalCovar}{ppm}(model, covariate, \dots, lambdatype,
-          dimyx, eps, interpolate, jitter, modelname, covname, dataname) 
+          dimyx, eps, interpolate, jitter, modelname, covname, dataname,
+          subset) 
 \method{evalCovar}{lppm}(model, covariate, \dots, lambdatype, 
-          eps, nd, interpolate, jitter, modelname, covname, dataname)
+          eps, nd, interpolate, jitter, modelname, covname, dataname,
+          subset)
 evalCovariate(covariate, locations)
 evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,\dots,
