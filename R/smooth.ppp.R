@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.43 $  $Date: 2017/08/10 01:50:51 $
+#  $Revision: 1.44 $  $Date: 2017/08/16 05:40:56 $
 #
 
 smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -530,10 +530,14 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
                        hmin=NULL, hmax=NULL, warn=TRUE) {
   stopifnot(is.ppp(X))
   stopifnot(is.marked(X))
+  X <- coerce.marks.numeric(X)
   # rearrange in ascending order of x-coordinate (for C code)
   X <- X[fave.order(X$x)]
   #
   marx <- marks(X)
+  dimmarx <- dim(marx)
+  if(!is.null(dimmarx))
+    marx <- as.matrix(as.data.frame(marx))
   # determine a range of bandwidth values
 #  n <- npoints(X)
   if(is.null(hmin) || is.null(hmax)) {
@@ -561,7 +565,9 @@ bw.smoothppp <- function(X, nh=spatstat.options("n.bandwidth"),
   # compute cross-validation criterion
   for(i in seq_len(nh)) {
     yhat <- Smooth(X, sigma=h[i], at="points", leaveoneout=TRUE,
-                       sorted=TRUE)
+                   sorted=TRUE)
+    if(!is.null(dimmarx))
+      yhat <- as.matrix(as.data.frame(yhat))
     cv[i] <- mean((marx - yhat)^2)
   }
 
