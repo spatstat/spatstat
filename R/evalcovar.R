@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.21 $ $Date: 2017/01/18 07:29:46 $
+#' $Revision: 1.22 $ $Date: 2017/08/17 08:19:18 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -17,7 +17,7 @@ evalCovar.ppm <- local({
                             dimyx=NULL, eps=NULL,
                             interpolate=TRUE, jitter=TRUE, 
                             modelname=NULL, covname=NULL,
-                            dataname=NULL) {
+                            dataname=NULL, subset=NULL) {
     lambdatype <- match.arg(lambdatype)
     #' evaluate covariate values at data points and at pixels
     csr <- is.poisson.ppm(model) && is.stationary.ppm(model)
@@ -42,6 +42,12 @@ evalCovar.ppm <- local({
     if(!is.null(dimyx) || !is.null(eps))
       W <- as.mask(W, dimyx=dimyx, eps=eps)
 
+    if(!is.null(subset)) {
+      #' restrict to subset if required
+      X <- X[subset]
+      W <- W[subset, drop=FALSE]
+    }
+    
     #' evaluate covariate 
     if(is.character(covariate)) {
       #' One of the characters 'x' or 'y'
@@ -196,7 +202,7 @@ evalCovar.ppm <- local({
     lambdaname <- paste("the fitted", lambdaname)
     check.finite(lambda, xname=lambdaname, usergiven=FALSE)
     check.finite(Zvalues, xname="the covariate", usergiven=TRUE)
-    
+
     #' wrap up 
     values <- list(Zimage    = Z,
                    Zvalues   = Zvalues,
@@ -226,7 +232,7 @@ evalCovar.lppm <- local({
                              eps=NULL, nd=1000,
                              interpolate=TRUE, jitter=TRUE, 
                              modelname=NULL, covname=NULL,
-                             dataname=NULL) {
+                             dataname=NULL, subset=NULL) {
     lambdatype <- match.arg(lambdatype)
     #' evaluate covariate values at data points and at pixels
     csr <- is.poisson(model) && is.stationary(model)
@@ -265,6 +271,11 @@ evalCovar.lppm <- local({
     #'
     L <- as.linnet(X)
     Q <- quad.ppm(fit)
+    #' restrict to subset if required
+    if(!is.null(subset)) {
+      X <- X[subset]
+      Q <- Q[subset]
+    }
     isdat <- is.data(Q)
     U <- union.quad(Q)
     wt <- w.quad(Q)
@@ -396,6 +407,10 @@ evalCovar.lppm <- local({
     lambdaname <- paste("the fitted", lambdaname)
     check.finite(lambda, xname=lambdaname, usergiven=FALSE)
     check.finite(Zvalues, xname="the covariate", usergiven=TRUE)
+
+    #' restrict image to subset 
+    if(!is.null(subset))
+      Zimage <- Zimage[subset, drop=FALSE]
 
     #' wrap up 
     values <- list(Zimage    = Zimage,
