@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.66 $  $Date: 2017/07/10 10:02:34 $
+#  $Revision: 1.68 $  $Date: 2017/08/23 07:26:52 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -268,7 +268,9 @@ plot.msr <- function(x, ..., add=FALSE,
                      main=NULL, 
                      do.plot=TRUE,
                      multiplot=TRUE,
-                     massthresh=0) {
+                     massthresh=0,
+                     equal.markscale=FALSE,
+                     equal.ribbon=FALSE) {
   if(is.null(main)) 
     main <- short.deparse(substitute(x))
   how <- match.arg(how)
@@ -304,20 +306,39 @@ plot.msr <- function(x, ..., add=FALSE,
     y <- as.solist(Reduce(append, lapply(y, unstack)))
     names(y) <- as.vector(t(outer(typenames, vecnames, paste, sep=".")))
   } 
-  # ensure image of density is present
-  y <- lapply(y, augment.msr)
+  #' ensure image of density is present
+  y <- solapply(y, augment.msr)
 
+  #' ready to plot
   if(length(y) > 1) {
     ## plot as an array of panels
     userarg <- list(...)
     rowcol <- list(nrows=k, ncols=d)
     if(any(c("nrows", "ncols") %in% names(userarg))) rowcol <- list()
-    result <- do.call(plot.solist, resolve.defaults(list(y),
-                                                    userarg,
-                                                    rowcol,
-                                                    list(how=how,
-                                                         main=main,
-                                                         equal.scales=TRUE)))
+    #' determine common scales if required
+    scaleinfo <- list()
+    if(equal.markscale) {
+      W <- Window(x)
+      #' extract vectors of atomic masses from each panel
+      marx <- lapply(y, getElement, name="discrete")
+      #' make a separate scale calculation for each panel
+      scales <- sapply(marx, mark.scale.default, w=W, ...)
+      scaleinfo$markscale <- min(scales)
+    } 
+    if(equal.ribbon) {
+      images <- lapply(y, attr, which="smoothdensity")
+      scaleinfo$zlim <- range(sapply(images, range))
+    } 
+    ## go
+    result <- do.call(plot.solist,
+                      resolve.defaults(list(y),
+                                       userarg,
+                                       rowcol,
+                                       scaleinfo,
+                                       list(how=how,
+                                            main=main,
+                                            equal.scales=TRUE,
+                                            claim.title.space=TRUE)))
     return(invisible(result))
   }
   ## scalar measure
@@ -383,7 +404,8 @@ plot.msr <- function(x, ..., add=FALSE,
                                             axes=FALSE, show.all=!do.image)),
                       extrargs=c("zlim", "labels", "labcex",
                         ## DO NOT ALLOW 'col' 
-                        "drawlabels", "method", "vfont", "lty", "lwd"))
+                        "drawlabels", "method", "vfont", "lty", "lwd",
+                        "claim.title.space"))
     ## display atoms
     do.call.matched(plot.ppp,
                     resolve.defaults(list(x=xatomic, add=TRUE, main=""),

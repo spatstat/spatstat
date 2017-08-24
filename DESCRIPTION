@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.001
-Nickname: Phubbed
-Date: 2017-08-17
+Version: 1.52-1.005
+Nickname: Frame Dragging
+Date: 2017-08-24
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 
@@ -196,7 +196,7 @@ Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	A. Zeileis.
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.3.0), stats, graphics, grDevices, utils, methods, nlme, rpart
-Imports: spatstat.utils (>= 1.7-0), mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.5-0), goftest
+Imports: spatstat.utils (>= 1.7-1), mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.5-0), goftest
 Suggests: sm, maptools, gsl, locfit, spatial, rpanel, tkrplot, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
 Remotes: spatstat/spatstat.utils
 Description: Comprehensive open-source toolbox for analysing Spatial Point Patterns. Focused mainly on two-dimensional point patterns, including multitype/marked points, in any spatial region. Also supports three-dimensional point patterns, space-time point patterns in any number of dimensions, point patterns on a linear network, and patterns of other geometrical objects. Supports spatial covariate data such as pixel images. 

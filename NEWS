@@ -1,20 +1,52 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.001
+        CHANGES IN spatstat VERSION 1.52-1.005
 
 OVERVIEW
 
-    o Nickname: "Phubbed"
+    o Nickname: "Frame Dragging"
 
+    o Minor enhancements
+    
+    o Bug fixes
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None yet
+    o plot.msr
+    New arguments 'equal.markscale' and 'equal.ribbon'.
+    
+    o rhohat
+    New argument 'subset' allows computation for a subset of the data.
 
+    o predict.lppm
+    Argument 'locations' can now be an 'lpp' object.
+    
 BUG FIXES
 
     o "[.solist"
-    Did not pass the "..." arguments in some cases.
+    Ignored the "..." arguments in some cases.
     Fixed.
 
+    o plot.msr
+    Plotted the panel titles on top of each other, if how="contour".
+    Fixed.
+    
+    o contour.im
+    Plotted the title text at the wrong place when add=TRUE and show.all=TRUE.
+    Fixed.
+    
+    o predict.lppm
+    Crashed if 'locations' was an 'lpp' object.
+    Fixed.
+
+    o plot.ppp
+    Crashed if the window had height 0 and width 0
+    and the pattern had several colums of marks.
+    Fixed.
+    
+    o plot.solist
+    Crashed if all panels had windows of height 0 and width 0.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.52-1
 
 OVERVIEW

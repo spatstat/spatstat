@@ -5,12 +5,15 @@
   Plot a signed measure or vector-valued measure.
 }
 \usage{
-  \method{plot}{msr}(x, \dots, add=FALSE,
-                     how=c("image", "contour", "imagecontour"),
-                     main=NULL,
-                     do.plot=TRUE,
-                     multiplot=TRUE,
-                     massthresh=0)
+  \method{plot}{msr}(x, \dots,
+                     add = FALSE,
+                     how = c("image", "contour", "imagecontour"),
+                     main = NULL,
+                     do.plot = TRUE,
+                     multiplot = TRUE,
+                     massthresh = 0,
+                     equal.markscale = FALSE,
+                     equal.ribbon = FALSE)
 }
 \arguments{
   \item{x}{
@@ -51,6 +54,15 @@
     If \code{massthresh > 0} then only atoms whose absolute mass
     exceeds \code{massthresh} will be plotted.
     If \code{massthresh=NULL}, then all atoms of the measure will be plotted.
+  }
+  \item{equal.markscale}{
+    Logical value indicating whether different panels should use the
+    same symbol map (to represent the masses of atoms of the measure).
+  }
+  \item{equal.ribbon}{
+    Logical value indicating whether different panels should use the
+    same colour map (to represent the density values in the
+    diffuse component of the measure).
   }
 }
 \value{
@@ -94,11 +106,8 @@
    plot(rs)
    plot(rs, how="contour")
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}
