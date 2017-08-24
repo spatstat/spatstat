@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.22 $ $Date: 2017/08/17 08:19:18 $
+#' $Revision: 1.23 $ $Date: 2017/08/17 09:20:00 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -203,10 +203,14 @@ evalCovar.ppm <- local({
     check.finite(lambda, xname=lambdaname, usergiven=FALSE)
     check.finite(Zvalues, xname="the covariate", usergiven=TRUE)
 
+    #' lambda values at data points
+    lambdaX <- predict(model, locations=X, type=lambdatype)
+    
     #' wrap up 
     values <- list(Zimage    = Z,
                    Zvalues   = Zvalues,
                    lambda    = lambda,
+                   lambdaX   = lambdaX,
                    weights   = pixelarea,
                    ZX        = ZX,
                    type      = type)
@@ -412,10 +416,14 @@ evalCovar.lppm <- local({
     if(!is.null(subset))
       Zimage <- Zimage[subset, drop=FALSE]
 
+    #' lambda values at data points
+    lambdaX <- predict(model, locations=X, type=lambdatype)
+    
     #' wrap up 
     values <- list(Zimage    = Zimage,
                    Zvalues   = Zvalues,
                    lambda    = lambda,
+                   lambdaX   = lambdaX,
                    weights   = wt,
                    ZX        = ZX,
                    type      = type)
