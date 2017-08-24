@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.39 $   $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.40 $   $Date: 2017/08/17 09:19:28 $
 #
 
 lppm <- function(X, ...) {
@@ -92,7 +92,8 @@ predict.lppm <- function(object, ...,
   L <- as.linnet(X)
 
   if(!is.null(locations)) {
-    # locations given; return a vector of predicted values
+    #' locations given; return a vector of predicted values
+    if(is.lpp(locations)) locations <- as.ppp(locations)
     values <- predict(fit, locations=locations, type=type, new.coef=new.coef)
     return(values)
   }
