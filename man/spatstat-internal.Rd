@@ -1107,7 +1107,7 @@ markformat(x)
 \method{markformat}{ppx}(x) 
 \method{markformat}{psp}(x) 
 \method{markformat}{default}(x) 
-mark.scale.default(marx, w, markscale, maxsize, meansize, characters)
+mark.scale.default(marx, w, \dots, markscale, maxsize, meansize, characters)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)
 \method{marks}{quad}(x, dfok=FALSE, \dots)
@@ -1341,7 +1341,7 @@ resolveEinfo(x, what, fallback, warn, atomic)
 resolve.vargamma.shape(\dots, nu.ker, nu.pcf, default = FALSE)
 rgbNA(red, green, blue, alpha, maxColorValue)
 rhohatEngine(model, covariate, reference, volume, \dots,
-               weights, method, horvitz, smoother, resolution, 
+               subset, weights, method, horvitz, smoother, resolution, 
                n, bw, adjust, from, to, 
                bwref, covname, covunits, confidence, modelcall, callstring)
 rhohatCalc(ZX, Zvalues, lambda, denom, \dots,
