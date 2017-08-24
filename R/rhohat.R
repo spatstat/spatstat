@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.71 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.72 $  $Date: 2017/08/17 09:35:46 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -18,6 +18,7 @@ rhohat.ppp <- rhohat.quad <-
            method=c("ratio", "reweight", "transform"),
            horvitz=FALSE,
            smoother=c("kernel", "local"),
+           subset=NULL,
            dimyx=NULL, eps=NULL,
            n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
            bwref=bw, covname, confidence=0.95) {
@@ -54,9 +55,12 @@ rhohat.ppp <- rhohat.quad <-
     covunits <- NULL
   }
 
-  areaW <- area(Window(data.ppm(model)))
+  W <- Window(data.ppm(model))
+  if(!is.null(subset)) W <- W[subset, drop=FALSE]
+  areaW <- area(W)
   
-  rhohatEngine(model, covariate, reference, areaW, ...,
+  rhohatEngine(model, covariate, reference, areaW, ..., 
+               subset=subset,
                weights=weights,
                method=method,
                horvitz=horvitz,
@@ -73,6 +77,7 @@ rhohat.ppm <- function(object, covariate, ...,
                        method=c("ratio", "reweight", "transform"),
                        horvitz=FALSE,
                        smoother=c("kernel", "local"),
+                       subset=NULL,
                        dimyx=NULL, eps=NULL,
                        n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
                        bwref=bw, covname, confidence=0.95) {
@@ -108,7 +113,9 @@ rhohat.ppm <- function(object, covariate, ...,
     covunits <- NULL
   }
 
-  areaW <- area(Window(data.ppm(model)))
+  W <- Window(data.ppm(model))
+  if(!is.null(subset)) W <- W[subset, drop=FALSE]
+  areaW <- area(W)
   
   rhohatEngine(model, covariate, reference, areaW, ...,
                weights=weights,
@@ -128,6 +135,7 @@ rhohat.lpp <- rhohat.lppm <-
            method=c("ratio", "reweight", "transform"),
            horvitz=FALSE,
            smoother=c("kernel", "local"),
+           subset=NULL,
            nd=1000, eps=NULL, random=TRUE, 
            n=512, bw="nrd0", adjust=1, from=NULL, to=NULL, 
            bwref=bw, covname, confidence=0.95) {
@@ -171,9 +179,12 @@ rhohat.lpp <- rhohat.lppm <-
     covunits <- NULL
   }
 
-  totlen <- sum(lengths.psp(as.psp(as.linnet(X))))
+  S <- as.psp(as.linnet(X))
+  if(!is.null(subset)) S <- S[subset]
+  totlen <- sum(lengths.psp(S))
   
   rhohatEngine(model, covariate, reference, totlen, ...,
+               subset=subset,
                weights=weights,
                method=method,
                horvitz=horvitz,
@@ -189,6 +200,7 @@ rhohatEngine <- function(model, covariate,
                          reference=c("Lebesgue", "model", "baseline"),
                          volume,
                          ...,
+                         subset=NULL,
                          weights=NULL,
                          method=c("ratio", "reweight", "transform"),
                          horvitz=FALSE,
@@ -200,13 +212,16 @@ rhohatEngine <- function(model, covariate,
   reference <- match.arg(reference)
   # evaluate the covariate at data points and at pixels
   stuff <- do.call(evalCovar,
-                   append(list(model, covariate), resolution))
+                   append(list(model=model,
+                               covariate=covariate,
+                               subset=subset),
+                          resolution))
   # unpack
 #  info   <- stuff$info
   values <- stuff$values
   # values at each data point
   ZX      <- values$ZX
-  lambdaX <- if(horvitz) fitted(model, dataonly=TRUE) else NULL
+  lambdaX <- values$lambdaX
   # values at each pixel
   Zimage  <- values$Zimage
   Zvalues <- values$Zvalues

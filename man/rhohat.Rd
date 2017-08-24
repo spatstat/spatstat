@@ -22,6 +22,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
+       subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
@@ -32,6 +33,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
+       subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
@@ -42,6 +44,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
+       subset=NULL, 
        dimyx=NULL, eps=NULL,
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
@@ -52,6 +55,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
+       subset=NULL, 
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
@@ -62,6 +66,7 @@ rhohat(object, covariate, ...)
        method=c("ratio", "reweight", "transform"),
        horvitz=FALSE,
        smoother=c("kernel", "local"),
+       subset=NULL, 
        nd=1000, eps=NULL, random=TRUE, 
        n = 512, bw = "nrd0", adjust=1, from = NULL, to = NULL,
        bwref=bw,
@@ -102,6 +107,11 @@ rhohat(object, covariate, ...)
   }
   \item{smoother}{
     Character string determining the smoothing algorithm. See Details.
+  }
+  \item{subset}{
+    Optional. A spatial window (object of class \code{"owin"})
+    specifying a subset of the data, from which the estimate should
+    be calculated.
   }
   \item{dimyx,eps,nd,random}{
     Arguments controlling the pixel
@@ -245,6 +255,9 @@ rhohat(object, covariate, ...)
   If the argument \code{weights} is present, then the contribution
   from each data point \code{X[i]} to the estimate of \eqn{\rho}{rho} is
   multiplied by \code{weights[i]}.
+
+  If the argument \code{subset} is present, then the calculations are
+  performed using only the data inside this spatial region.
 }
 \value{
   A function value table (object of class \code{"fv"})
