@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.115 $   $Date: 2016/09/10 10:23:21 $
+#  $Revision: 1.116 $   $Date: 2017/08/23 02:30:33 $
 #
 #  Plotting code for pixel images
 #
@@ -707,14 +707,18 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                         clipwin=NULL, show.all=!add, do.plot=TRUE)
 {
   defaultmain <- deparse(substitute(x))
+  dotargs <- list(...)
+  bb <- Frame(x)
   ## return value
-  z <- as.rectangle(x)
-  attr(z, "bbox") <- z
-  if(!do.plot) return(z)
-  ## 
+  result <- bb
+  attr(result, "bbox") <- bb
+  if(!do.plot) return(result)
+  ## main title
   sop <- spatstat.options("par.contour")
   if(missing(main)) 
     main <- resolve.1.default(list(main=defaultmain), sop)
+  pt <- prepareTitle(main)
+  ## plotting parameters
   if(missing(add)) {
     force(add) ## use default in formal arguments, unless overridden
     add <- resolve.1.default(list(add=add), sop)
@@ -723,30 +727,49 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
     force(axes)
     axes <- resolve.1.default(list(axes=axes), sop)
   }
+  axes <- axes && !add
+  col0 <- if(inherits(col, "colourmap")) par("fg") else col
+  ## clip to subset
   if(!is.null(clipwin))
     x <- x[clipwin, drop=FALSE]
-  if(show.all) {
-    col0 <- if(inherits(col, "colourmap")) par("fg") else col
-    if(axes) # with axes
+  #' start plotting
+  if(!add) {
+    ## new plot - establish coordinate system
+    if(axes && show.all) {
+      #' standard plot initialisation in base graphics
       do.call.plotfun(plot.default,
                       resolve.defaults(
                                        list(x = range(x$xcol),
                                             y = range(x$yrow),
-                                            type = "n", add=add),
+                                            type = "n"),
                                        list(...),
                                        list(asp = 1,
                                             xlab = "x",
                                             ylab = "y",
                                             col = col0,
                                             main = main)))
-    else { # box without axes
-      rec <- owin(x$xrange, x$yrange)
-      do.call.matched(plot.owin,
-                      resolve.defaults(list(x=rec, add=add, show.all=TRUE),
-                                       list(...),
-                                       list(col=col0, main=main)))
+    } else {
+      #' plot invisible bounding box
+      do.call.plotfun(plot.owin,
+                      resolve.defaults(list(x=bb,
+                                            type="n",
+                                            main=pt$blank),
+                                       dotargs),
+                      extrargs=graphicsPars("owin"))
     }
+  } 
+  if(show.all && !axes) {
+    ## plot title centred over contour region
+    do.call.plotfun(plot.owin,
+                    resolve.defaults(list(x=bb,
+                                          main=main,
+                                          add=TRUE,
+                                          show.all=TRUE),
+                                     dotargs,
+                                     list(col.main=col0)),
+                    extrargs=graphicsPars("owin"))
   }
+  #' plot contour lines
   if(!inherits(col, "colourmap")) {
     do.call.plotfun(contour.default,
                     resolve.defaults(list(x=x$xcol, y=x$yrow, z=t(x$v)),
@@ -767,6 +790,6 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
       do.call.matched(lines.default, argi, extrargs=linpar)
     }
   }
-  return(invisible(z))
+  return(invisible(result))
 }
 

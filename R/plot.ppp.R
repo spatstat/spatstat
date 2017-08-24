@@ -424,7 +424,7 @@ plot.ppp
 })
 
 
-mark.scale.default <- function(marx, w, markscale=NULL,
+mark.scale.default <- function(marx, w, ..., markscale=NULL,
                                maxsize=NULL, meansize=NULL,
                                characters=FALSE) {
   ## establish values of markscale, maxsize, meansize

@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.24 $ $Date: 2017/08/02 09:50:55 $
+##  $Revision: 1.25 $ $Date: 2017/08/24 01:58:09 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -278,9 +278,15 @@ plot.anylist <- plot.solist <- plot.listof <-
         bheights <- unlist(lapply(sides, "[", 2))
         ## Force equal heights, unless there is only one column
         scales <- if(ncols > 1) 1/bheights else 1/bwidths
-        scaledboxes <- vector(mode="list", length=n)
-        for(i in 1:n)
-          scaledboxes[[i]] <- scalardilate(boxes[[i]], scales[i])
+        if(all(is.finite(scales))) {
+          scaledboxes <- vector(mode="list", length=n)
+          for(i in 1:n)
+            scaledboxes[[i]] <- scalardilate(boxes[[i]], scales[i])
+        } else {
+          #' uh-oh
+          equal.scales <- sizes.known <- FALSE
+          scaledboxes <- boxes
+        }
       }
     }
     ## determine whether to display all objects in one enormous plot
