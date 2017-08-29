@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.005
+        CHANGES IN spatstat VERSION 1.52-1.006
 
 OVERVIEW
 
@@ -45,6 +45,11 @@ BUG FIXES
     
     o plot.solist
     Crashed if all panels had windows of height 0 and width 0.
+    Fixed.
+
+    o linearK, linearKinhom, linearpcf, linearpcfinhom
+    Crashed if the linear network was disconnected and one component
+    of the network contained fewer than 2 points.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.52-1

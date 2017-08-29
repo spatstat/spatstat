@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.005
+Version: 1.52-1.006
 Nickname: Frame Dragging
-Date: 2017-08-24
+Date: 2017-08-29
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

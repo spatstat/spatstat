@@ -3,7 +3,7 @@
 #'
 #' Surgery on linear networks and related objects
 #'
-#' $Revision: 1.11 $  $Date: 2017/06/05 10:31:58 $
+#' $Revision: 1.12 $  $Date: 2017/08/29 00:39:31 $
 #'
 
 insertVertices <- function(L, ...) {
@@ -163,11 +163,11 @@ thinNetwork <- function(X, retainvertices, retainedges) {
   ## X is an lpp object
   ## Find data points that lie on accepted segments
   dat <- X$data
-  ok <- retainedges[dat$seg]
+  ok <- retainedges[unlist(dat$seg)]
   dsub <- dat[ok, , drop=FALSE]
   ## compute new serial numbers for retained segments
   segmap <- cumsum(retainedges)
-  dsub$seg <- segmap[as.integer(dsub$seg)]
+  dsub$seg <- segmap[as.integer(unlist(dsub$seg))]
   # make new lpp object
   Y <- ppx(data=dsub, domain=Lsub, coord.type=as.character(X$ctype))
   class(Y) <- c("lpp", class(Y))
