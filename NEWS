@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.006
+        CHANGES IN spatstat VERSION 1.52-1.007
 
 OVERVIEW
 
@@ -22,6 +22,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o with.msr
+    The value of 'atommass' was incorrect, due to a coding error.
+    Fixed.
+    
     o "[.solist"
     Ignored the "..." arguments in some cases.
     Fixed.

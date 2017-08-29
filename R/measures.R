@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.68 $  $Date: 2017/08/23 07:26:52 $
+#  $Revision: 1.69 $  $Date: 2017/08/29 08:30:07 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -106,7 +106,7 @@ with.msr <- function(data, expr, ...) {
                 qweights   = data$wt,
                 qlocations = data$loc,
                 atoms      = data$loc[data$atoms],
-                atommass   = data$wt[data$atoms])
+                atommass   = marksubset(data$discrete, data$atoms))
   y <- eval(substitute(expr), envir=stuff, enclos=parent.frame())
   if(is.character(y) && length(y) == 1 && y %in% names(stuff))
     y <- stuff[[y]]
@@ -320,7 +320,7 @@ plot.msr <- function(x, ..., add=FALSE,
     if(equal.markscale) {
       W <- Window(x)
       #' extract vectors of atomic masses from each panel
-      marx <- lapply(y, getElement, name="discrete")
+      marx <- lapply(y, with, "atommass")
       #' make a separate scale calculation for each panel
       scales <- sapply(marx, mark.scale.default, w=W, ...)
       scaleinfo$markscale <- min(scales)
