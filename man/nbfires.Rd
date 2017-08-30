@@ -1,7 +1,8 @@
 \name{nbfires}
 \alias{nbfires}
-\alias{nbfires.extra}
 \alias{nbw.rect}
+\alias{nbw.seg}
+\alias{nbfires.extra}
 \docType{data}
 \title{Point Patterns of New Brunswick Forest Fires}
 \description{
@@ -12,23 +13,32 @@ under their jurisdiction for the years 1987 to 2003 inclusive
 }
 \usage{data(nbfires)}
 \format{
-Executing \code{data(nbfires)} gives access to three objects: \code{nbfires},
-\code{nbfires.extra} and \code{nbw.rect}.
+  Executing \code{data(nbfires)} gives access to four objects:
+  \code{nbfires}, \code{nbw.rect}, \code{nbw.seg} and \code{nbfires.extra}.
 
-The object \code{nbfires} is a marked point pattern (an object of
-class \code{"ppp"}) consisting of all of the fires in the years
-1987 to 2003 inclusive, with the omission of 1988.  The marks
-consist of a data frame of auxiliary information about the fires;
-see \emph{Details.} Patterns for individual years can be extracted
-using the function \code{\link{split.ppp}()}.  (See \bold{Examples}.)
+  The object \code{nbfires} is a marked point pattern (an object of
+  class \code{"ppp"}) consisting of all of the fires in the years
+  1987 to 2003 inclusive, with the omission of 1988.  The marks
+  consist of a data frame of auxiliary information about the fires;
+  see \emph{Details.} Patterns for individual years can be extracted
+  using the function \code{\link{split.ppp}()}.  (See \bold{Examples}.)
 
-The object \code{nbw.rect} is a rectangular window which covers
-central New Brunswick.  It is provided for use in illustrative and
-\sQuote{practice} calculations inasmuch as the use of a rectangular
-window simplifies some computations considerably.
+  The object \code{nbw.rect} is a rectangular window which covers
+  central New Brunswick.  It is provided for use in illustrative and
+  \sQuote{practice} calculations inasmuch as the use of a rectangular
+  window simplifies some computations considerably.
 
-For conformity with other datasets, \code{nbfires.extra} is also
-provided. It is a list containing just the window \code{nbw.rect}.
+  The object \code{nbw.seg} is a line segment pattern (object of class
+  \code{"psp"}) consisting of all the boundary segments of the polygonal window
+  of New Brunswick. The \code{marks} of this pattern are categorical
+  values which classify the segments into three types:
+  \code{"border"} (land border),
+  \code{"coast"} (coast of the mainland)
+  and \code{"island"} (coast of the 5 islands).
+
+  For conformity with other datasets, \code{nbfires.extra} is a list
+  containing all the supplementary data. It contains copies of
+  \code{nbw.rect} and \code{nbw.seg}.
 }
 \details{
 The coordinates of the fire locations were provided in terms of

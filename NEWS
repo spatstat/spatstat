@@ -1,14 +1,16 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.009
+        CHANGES IN spatstat VERSION 1.52-1.010
 
 OVERVIEW
 
-    o Nickname: "Frame Dragging"
+    o We thank Tilman Davies for contributions.
 
     o Minor enhancements
     
     o Bug fixes
     
+    o Nickname: "Frame Dragging"
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.msr
@@ -22,6 +24,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o ewcdf
     Argument 'weights' can now be NULL.
+
+    o nbfires
+    This dataset now includes information about the different 
+    land and sea borders of New Brunswick.
     
 BUG FIXES
 
