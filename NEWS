@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.008
+        CHANGES IN spatstat VERSION 1.52-1.009
 
 OVERVIEW
 
@@ -19,6 +19,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o predict.lppm
     Argument 'locations' can now be an 'lpp' object.
+
+    o ewcdf
+    Argument 'weights' can now be NULL.
     
 BUG FIXES
 

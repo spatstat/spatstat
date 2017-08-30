@@ -1,14 +1,20 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.11 $  $Date: 2017/01/04 07:27:39 $
+#     $Revision: 1.12 $  $Date: 2017/08/30 02:04:46 $
 #
 #  With contributions from Kevin Ummel
 #
 
 ewcdf <- function(x, weights=rep(1/length(x), length(x)))
 {
-  stopifnot(length(x) == length(weights))
+  nw <- length(weights)
+  nx <- length(x)
+  if(nw == 0) {
+    weights <- rep(1/nx, nx)
+  } else if(nw == 1) {
+    weights <- rep(weights, nx)
+  } else if(nw != nx) stopifnot(length(x) == length(weights))
   # remove NA's together
   nbg <- is.na(x) 
   x <- x[!nbg]
