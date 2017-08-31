@@ -9,9 +9,10 @@
 }
 \usage{
 \method{plot}{symbolmap}(x, \dots, main, xlim = NULL, ylim = NULL,
-                           vertical = FALSE,
-                           side = c("bottom", "left", "top", "right"),
-                           annotate = TRUE, labelmap = NULL, add = FALSE)
+                         vertical = FALSE,
+                         side = c("bottom", "left", "top", "right"),
+                         annotate = TRUE, labelmap = NULL, add = FALSE,
+                         nsymbols = NULL)
 } 
 \arguments{
   \item{x}{
@@ -47,6 +48,10 @@
     Logical value indicating whether to add the plot to the
     current plot (\code{add=TRUE}) or to initialise a new plot.
   }
+  \item{nsymbols}{
+    Optional. The number of symbols that should be displayed.
+    (This may not be exactly obeyed.)
+  }
 }
 \details{
   A graphics symbol map is
@@ -58,12 +63,8 @@
 \value{
   None.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{symbolmap}} to create a symbol map.

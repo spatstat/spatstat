@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.34 $  $Date: 2016/09/12 10:50:51 $
+##   $Revision: 1.35 $  $Date: 2017/08/31 08:48:24 $
 ##
 
 symbolmap <- local({
@@ -426,7 +426,8 @@ plot.symbolmap <- function(x, ..., main,
                            xlim=NULL, ylim=NULL,
                            vertical=FALSE,
                            side=c("bottom", "left", "top", "right"),
-                           annotate=TRUE, labelmap=NULL, add=FALSE) {
+                           annotate=TRUE, labelmap=NULL, add=FALSE,
+                           nsymbols=NULL) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   miss.side <- missing(side)
@@ -456,12 +457,14 @@ plot.symbolmap <- function(x, ..., main,
            ra <- stuff$range
            if(is.null(ra))
              stop("Cannot plot symbolmap with an infinite range")
-           vv <- prettyinside(ra)
+           vv <- if(is.null(nsymbols)) prettyinside(ra) else
+                 prettyinside(ra, n = nsymbols)
            if(is.numeric(vv))
              vv <- signif(vv, 4)
          },
          discrete = {
-           vv <- prettydiscrete(stuff$inputs)
+           vv <- if(is.null(nsymbols)) prettydiscrete(stuff$inputs) else
+                 prettydiscrete(stuff$inputs, n = nsymbols)
            if(vertical) vv <- rev(vv)
          })
   nn <- length(vv)

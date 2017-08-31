@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.91 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 1.92 $	$Date: 2017/08/31 08:15:00 $
 #
 #
 #--------------------------------------------------------------------------
@@ -15,7 +15,8 @@ plot.ppp <- local({
   ## determine symbol map for marks of points
   default.symap.points <- function(x, ..., 
                                   chars=NULL, cols=NULL, 
-                                  maxsize=NULL, meansize=NULL, markscale=NULL) {
+                                  maxsize=NULL, meansize=NULL, markscale=NULL,
+                                  markrange=NULL, marklevels=NULL) {
     marx <- marks(x)
     if(is.null(marx)) {
       ## null or constant symbol map
@@ -75,9 +76,16 @@ plot.ppp <- local({
     if(is.numeric(marx)) {
       ## ............. marks are numeric values ...................
       marx <- marx[is.finite(marx)]
-      if(length(marx) == 0)
-        return(symbolmap(..., chars=chars, cols=cols))
-      markrange <- range(marx)
+      if(is.null(markrange)) {
+        #' usual case
+        if(length(marx) == 0)
+          return(symbolmap(..., chars=chars, cols=cols))
+        markrange <- range(marx)
+      } else {
+        if(!all(inside.range(marx, markrange)))
+          warning("markrange does not encompass the range of mark values",
+                  call.=FALSE)
+      }
       ## 
       if(sizegiven) {
         g <- do.call(symbolmap,
@@ -127,7 +135,8 @@ plot.ppp <- local({
       return(g)
     }
     ##  ...........  non-numeric marks .........................
-    um <- if(is.factor(marx)) levels(marx) else sort(unique(marx))
+    um <- marklevels %orifnull%
+          if(is.factor(marx)) levels(marx) else sort(unique(marx))
     ntypes <- length(um)
     if(!is.null(cols))
       cols <- rep.int(cols, ntypes)[1:ntypes]

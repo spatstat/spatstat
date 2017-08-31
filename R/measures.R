@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.70 $  $Date: 2017/08/29 09:06:38 $
+#  $Revision: 1.71 $  $Date: 2017/08/31 08:27:12 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -324,6 +324,7 @@ plot.msr <- function(x, ..., add=FALSE,
       #' make a separate scale calculation for each panel
       scales <- sapply(marx, mark.scale.default, w=W, ...)
       scaleinfo$markscale <- min(scales)
+      scaleinfo$markrange <- range(unlist(marx))
     } 
     if(equal.ribbon) {
       images <- lapply(y, attr, which="smoothdensity")
@@ -354,6 +355,7 @@ plot.msr <- function(x, ..., add=FALSE,
   }
   xtra.im <- graphicsPars("image")
   xtra.pp <- setdiff(graphicsPars("ppp"), c("box", "col"))
+  xtra.pp <- union(xtra.pp, c("markrange", "marklevels"))
   xtra.ow <- graphicsPars("owin")
   smo <- attr(x, "smoothdensity")
   ##

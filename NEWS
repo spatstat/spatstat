@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.011
+        CHANGES IN spatstat VERSION 1.52-1.012
 
 OVERVIEW
 
@@ -13,12 +13,9 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o plot.msr
-    New arguments 'equal.markscale' and 'equal.ribbon'.
-
-    o plot.im
-    The number of tick marks in the colour ribbon can now be controlled
-    using the argument 'nint' in 'ribargs'.
+    o nbfires
+    This dataset now includes information about the different 
+    land and sea borders of New Brunswick.
 
     o rhohat
     New argument 'subset' allows computation for a subset of the data.
@@ -29,9 +26,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o ewcdf
     Argument 'weights' can now be NULL.
 
-    o nbfires
-    This dataset now includes information about the different 
-    land and sea borders of New Brunswick.
+    o plot.msr
+    New arguments 'equal.markscale' and 'equal.ribbon'.
+
+    o plot.im
+    The number of tick marks in the colour ribbon can now be controlled
+    using the argument 'nint' in 'ribargs'.
+
+    o plot.symbolmap
+    New argument 'nsymbols' controls the number of symbols plotted.
     
 BUG FIXES
 
