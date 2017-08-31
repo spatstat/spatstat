@@ -90,8 +90,9 @@
   }
   \item{ribargs}{
     List of additional arguments passed to
-    \code{\link[graphics]{image.default}} and
-    \code{\link[graphics]{axis}} 
+    \code{\link[graphics]{image.default}}, 
+    \code{\link[graphics]{axis}} and
+    \code{\link[grDevices]{axisTicks}}
     to control the display of the ribbon and its scale axis. These may override
     the \code{\dots} arguments. 
   }
@@ -137,22 +138,35 @@
   The legend consists of a colour ribbon and an axis with tick-marks,
   showing the correspondence between the pixel values and the colour map.
 
+  Arguments \code{ribside, ribsep, ribwid} control the placement
+  of the colour ribbon.
   By default, the ribbon is placed at the right of the main image.
   This can be changed using the argument \code{ribside}.
-  
-  Arguments \code{ribsep, ribwid, ribn} control the appearance of the
-  ribbon.
   The width of the ribbon is \code{ribwid} times the size of the pixel
   image, where `size' means the larger of the width and the height.
   The distance separating the ribbon and the image is \code{ribsep} times
-  the size of the pixel image. The ribbon contains \code{ribn}
+  the size of the pixel image.
+
+  The ribbon contains the colours representing \code{ribn}
   different numerical values, evenly spaced between the minimum and
   maximum pixel values in the image \code{x}, rendered according to
   the chosen colour map.
 
-  Arguments \code{ribscale, ribargs} control the annotation of the
-  colour ribbon. To plot the colour ribbon without the axis and
+  The argument \code{ribargs} controls the annotation of the
+  colour ribbon. It is a list of arguments to be passed to
+  \code{\link[graphics]{image.default}}, 
+  \code{\link[graphics]{axis}} and
+  \code{\link[grDevices]{axisTicks}}.
+  To plot the colour ribbon without the axis and
   tick-marks, use \code{ribargs=list(axes=FALSE)}.
+  To ensure that the numerals or symbols printed next to the colour map
+  are oriented horizontally, use \code{ribargs=list(las=1)}.
+  To control the number of tick-marks, use \code{ribargs=list(nint=N)}
+  where \code{N} is the desired number of intervals (so there will
+  be \code{N+1} tickmarks, subject to the vagaries of \R internal code). 
+  
+  The argument \code{ribscale} is used
+  to rescale the numerals printed next to the colour map.
 
   Normally the pixel values are displayed using the colours given in the
   argument \code{col}. This may be either

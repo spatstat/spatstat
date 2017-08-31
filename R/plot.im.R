@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.116 $   $Date: 2017/08/23 02:30:33 $
+#  $Revision: 1.117 $   $Date: 2017/08/31 07:43:05 $
 #
 #  Plotting code for pixel images
 #
@@ -93,6 +93,12 @@ plot.im <- local({
     y[ok] <- log10(x[ok])
     return(y)
   }
+
+  Ticks <- function(usr, log=FALSE, nint=NULL, ...) {
+    #' same as axisTicks but accepts nint=NULL as if it were missing
+    if(!is.null(nint)) return(axisTicks(usr=usr, log=log, nint=nint, ...))
+    return(axisTicks(usr=usr, log=log, ...))
+  }
   
   # main function
   PlotIm <- function(x, ...,
@@ -121,6 +127,7 @@ plot.im <- local({
 
     stopifnot(is.list(ribargs))
     user.ticks <- ribargs$at
+    user.nint <- ribargs$nint
     
     if(!is.null(clipwin)) {
       x <- x[as.rectangle(clipwin)]
@@ -276,8 +283,9 @@ plot.im <- local({
                                    length.out=ribn)
                ribbonrange <- vrange
                nominalrange <- Log(ribscale * Exp(ribbonrange))
-               nominalmarks <-
-                 user.ticks %orifnull% axisTicks(nominalrange, log=do.log)
+               nominalmarks <- user.ticks %orifnull% Ticks(nominalrange,
+                                                           log=do.log,
+                                                           nint=user.nint)
                ribbonticks <- Log(nominalmarks/ribscale)
                ribbonlabels <- paste(nominalmarks)
              }
@@ -295,7 +303,9 @@ plot.im <- local({
                if(!is.null(user.ticks)) {
                  nominalmarks <- user.ticks
                } else {
-                 nominalmarks <- axisTicks(nominalrange, log=do.log)
+                 nominalmarks <- Ticks(nominalrange,
+                                       log=do.log,
+                                       nint = user.nint)
                  nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
                }
                ribbonticks <- Log(nominalmarks/ribscale)

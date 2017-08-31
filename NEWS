@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.010
+        CHANGES IN spatstat VERSION 1.52-1.011
 
 OVERVIEW
 
@@ -15,7 +15,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.msr
     New arguments 'equal.markscale' and 'equal.ribbon'.
-    
+
+    o plot.im
+    The number of tick marks in the colour ribbon can now be controlled
+    using the argument 'nint' in 'ribargs'.
+
     o rhohat
     New argument 'subset' allows computation for a subset of the data.
 
