@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.35 $   $Date: 2017/07/13 02:43:30 $
+#  $Revision: 1.36 $   $Date: 2017/09/02 06:52:40 $
 #
 #  Image/function on a linear network
 #
@@ -473,7 +473,7 @@ as.linnet.linim <- function(X, ...) {
         }
       }
       if(drop && anyNA(result))
-        result <- result(!is.na(result))
+        result <- result[!is.na(result)]
       return(result)
     }
     #' give up and use pixel image
@@ -505,10 +505,11 @@ integral.linim <- function(f, domain=NULL, ...){
   nper <- table(seg)
   if(any(missed <- (nper == 0))) {
     missed <- unname(which(missed))
-    xy <- midpoints.psp(as.psp(L)[missed])
-    valxy <- f[xy]
+    mp <- midpoints.psp(as.psp(L)[missed])
+    mp <- lpp(data.frame(x=mp$x, y=mp$y, seg=missed, tp=0.5), L=L)
+    valmid <- f[mp, drop=FALSE]
     seg <- c(seg, factor(missed, levels=1:ns))
-    vals <- c(vals, valxy)
+    vals <- c(vals, valmid)
   }
   #' take average of data on each segment
   mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))

@@ -1,15 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.012
+        CHANGES IN spatstat VERSION 1.52-1.013
 
 OVERVIEW
 
     o We thank Tilman Davies for contributions.
 
-    o Minor enhancements
+    o Minor enhancements.
     
-    o Bug fixes
+    o Bug fixes.
     
-    o Nickname: "Frame Dragging"
+    o Nickname: "Triskaidekaphobia"
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -70,6 +70,14 @@ BUG FIXES
     o linearK, linearKinhom, linearpcf, linearpcfinhom
     Crashed if the linear network was disconnected and one component
     of the network contained fewer than 2 points.
+    Fixed.
+
+    o integral.linim
+    Crashed in some cases.
+    Fixed.
+    
+    o "[.linim"
+    Crashed in some cases.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.52-1
