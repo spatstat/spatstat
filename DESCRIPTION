@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.013
+Version: 1.52-1.014
 Nickname: Triskaidekaphobia
-Date: 2017-09-02
+Date: 2017-09-03
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

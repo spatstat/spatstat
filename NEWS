@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.013
+        CHANGES IN spatstat VERSION 1.52-1.014
 
 OVERVIEW
 
@@ -41,6 +41,11 @@ BUG FIXES
     o with.msr
     The value of 'atommass' was incorrect, due to a coding error.
     Fixed.
+
+    o as.linim
+    The result had incorrect internal format when Window(X) was a mask
+    and one of the arguments 'eps', 'dimyx', 'xy' was present.
+    Fixed.
     
     o "[.solist"
     Ignored the "..." arguments in some cases.
@@ -60,7 +65,7 @@ BUG FIXES
 
     o plot.ppp
     Crashed if the window had height 0 and width 0
-    and the pattern had several colums of marks.
+    and the pattern had several columns of marks.
     Fixed.
     
     o plot.solist

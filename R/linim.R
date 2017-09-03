@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.36 $   $Date: 2017/09/02 06:52:40 $
+#  $Revision: 1.37 $   $Date: 2017/09/03 09:57:33 $
 #
 #  Image/function on a linear network
 #
@@ -296,7 +296,7 @@ as.linim <- function(X, ...) {
 as.linim.default <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
                                         delta = NULL) {
   stopifnot(inherits(L, "linnet"))
-  Y <- as.im(X, W=as.rectangle(as.owin(L)), ..., eps=eps, dimyx=dimyx, xy=xy)
+  Y <- as.im(X, W=Frame(L), ..., eps=eps, dimyx=dimyx, xy=xy)
   M <- as.mask.psp(as.psp(L), as.owin(Y))
   Y[complement.owin(M)] <- NA
   df <- NULL
@@ -309,6 +309,8 @@ as.linim.default <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
     df <- df[,c("xc", "yc", "x", "y", "seg", "tp", "values")]
     names(df)[names(df) == "seg"] <- "mapXY"
   }
+  if(is.mask(WL <- Window(L)) && !all(sapply(list(eps, dimyx, xy), is.null)))
+     Window(L, check=FALSE) <- as.mask(WL, eps=eps, dimyx=dimyx, xy=xy)
   out <- linim(L, Y, df=df)
   return(out)
 }
