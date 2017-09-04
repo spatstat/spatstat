@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.47 $   $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.48 $   $Date: 2017/09/04 05:03:30 $
 #
 #    as.im()
 #
@@ -16,8 +16,9 @@ as.im.im <- function(X, W=NULL, ...,
                      eps=NULL, dimyx=NULL, xy=NULL,
                      na.replace=NULL) {
   X <- repair.old.factor.image(X)
+  nopar <- is.null(eps) && is.null(dimyx) && is.null(xy)
   if(is.null(W)) {
-    if(is.null(eps) && is.null(dimyx) && is.null(xy)) {
+    if(nopar) {
       X <- repair.image.xycoords(X)
       X <- na.handle.im(X, na.replace)
       return(X)
@@ -26,14 +27,15 @@ as.im.im <- function(X, W=NULL, ...,
     W <- as.mask(as.rectangle(X), eps=eps, dimyx=dimyx, xy=xy)
     # invoke as.im.owin
     Y <- as.im(W)
-  } else {
-    # apply dimyx (etc) if present,
-    # otherwise use W to determine pixel raster
+  } else if(is.mask(W) || is.im(W) || !nopar) {
+    #' raster information is present in { W, eps, dimyx, xy }
     Y <- as.im(W, eps=eps, dimyx=dimyx, xy=xy)
+  } else {
+    #' use existing raster information in X
+    return(X[W, drop=FALSE, tight=TRUE])
   }
   # resample X onto raster of Y
   Y <- rastersample(X, Y)
-
   return(na.handle.im(Y, na.replace))
 }
 

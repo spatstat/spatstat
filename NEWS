@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.014
+        CHANGES IN spatstat VERSION 1.52-1.015
 
 OVERVIEW
 
@@ -35,6 +35,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.symbolmap
     New argument 'nsymbols' controls the number of symbols plotted.
+
+    o square
+    Handles a common error in the format of the arguments.
     
 BUG FIXES
 
@@ -46,7 +49,14 @@ BUG FIXES
     The result had incorrect internal format when Window(X) was a mask
     and one of the arguments 'eps', 'dimyx', 'xy' was present.
     Fixed.
-    
+
+    o as.im.im
+    If W was a rectangle or polygonal window, the pixel resolution of the 
+    result was determined by the spatstat defaults, rather than being
+    determined by the image argument X. This was contrary to the
+    rule advertised in help(as.im). 
+    Fixed.
+
     o "[.solist"
     Ignored the "..." arguments in some cases.
     Fixed.
