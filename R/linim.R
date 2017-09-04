@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.37 $   $Date: 2017/09/03 09:57:33 $
+#  $Revision: 1.38 $   $Date: 2017/09/04 07:39:39 $
 #
 #  Image/function on a linear network
 #
@@ -490,6 +490,24 @@ as.linnet.linim <- function(X, ...) {
   W <- Window(y)
   attr(y, "L") <- L[W]
   attr(y, "df") <- df[inside.owin(df$xc, df$yc, W), , drop=FALSE]
+  return(y)
+}
+
+"[<-.linim" <- function(x, i, j, value) {
+  y <- NextMethod("[<-")
+  #' extract linear network info
+  L <- attr(x, "L")
+  df <- attr(x, "df")
+  #' update values at sample points
+  pos <- nearest.pixel(df$xc, df$yc, y)
+  df$values <- y$v[cbind(pos$row, pos$col)]
+  #' restrict main pixel image to network
+  m <- as.mask.psp(L, as.mask(y))$m
+  y$v[!m] <- NA
+  #' package up
+  attr(y, "L") <- L
+  attr(y, "df") <- df
+  class(y) <- unique(c("linim", class(y)))
   return(y)
 }
 

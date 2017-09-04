@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.015
+        CHANGES IN spatstat VERSION 1.52-1.016
 
 OVERVIEW
 
@@ -8,9 +8,14 @@ OVERVIEW
     o Minor enhancements.
     
     o Bug fixes.
-    
-    o Nickname: "Triskaidekaphobia"
 
+    o Nickname: "Jacindamania"
+
+NEW FUNCTIONS
+
+    o "[<-.linim"
+    Subset assignment method for pixel images on a linear network.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o nbfires
