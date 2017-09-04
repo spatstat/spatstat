@@ -13,7 +13,7 @@
   (object of class \code{"ppp"}) containing the spatial coordinates
   of each tree, marked by the tree diameter at breast height
   \code{dbh}.
-  The survey region is a 100 by 100 metre square.
+  The survey region is a 100 by 100 metre squawre.
   Coordinates are given in metres, while the \code{dbh} is in centimetres.
 }
 \usage{data(waka)}

@@ -31,6 +31,7 @@
   Obtained from the \pkg{oz} package and reformatted.
 }
 \examples{
-data(austates); plot(austates)
+  data(austates)
+  plot(austates)
 }
 \keyword{datasets}

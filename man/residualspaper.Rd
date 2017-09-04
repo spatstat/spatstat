@@ -60,6 +60,7 @@
 \dontrun{
   data(residualspaper)
   
+
   X <- residualspaper$Fig4a
   summary(X)
   plot(X)

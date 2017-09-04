@@ -53,6 +53,7 @@
 
   data(copper)
 
+
   # Plot full dataset
 
   plot(copper$Points)

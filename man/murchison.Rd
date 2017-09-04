@@ -52,12 +52,18 @@
  data(murchison)
 }
 \examples{
+%#%^!ifdef REQUIRESPATSTAT
+  if(require(spatstat)) {
+%#%^!endif
   if(interactive()) {
   data(murchison)
   plot(murchison$greenstone, main="Murchison data", col="lightgreen")
   plot(murchison$gold, add=TRUE, pch="+",col="blue")
   plot(murchison$faults, add=TRUE, col="red")
   }
+%#%^!ifdef REQUIRESPATSTAT
+  }
+%#%^!endif
 }
 \source{
   Data were kindly provided by Dr Carl Knox-Robinson of the
