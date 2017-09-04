@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.122 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 4.123 $	$Date: 2017/09/04 05:10:45 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -110,6 +110,12 @@ unit.square <- function() { owin(c(0,1),c(0,1)) }
 
 square <- function(r=1, unitname=NULL) {
   stopifnot(is.numeric(r))
+  if(is.numeric(unitname) && length(unitname) == 1 && length(r) == 1) {
+    #' common error
+    warning("Interpreting square(a, b) as square(c(a,b))", call.=FALSE)
+    r <- c(r, unitname)
+    unitname <- NULL
+  }
   if(!all(is.finite(r)))
     stop("argument r is NA or infinite")
   if(length(r) == 1) {
