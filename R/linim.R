@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.38 $   $Date: 2017/09/04 07:39:39 $
+#  $Revision: 1.39 $   $Date: 2017/09/04 09:21:04 $
 #
 #  Image/function on a linear network
 #
@@ -498,9 +498,13 @@ as.linnet.linim <- function(X, ...) {
   #' extract linear network info
   L <- attr(x, "L")
   df <- attr(x, "df")
-  #' update values at sample points
+  #' propagate *changed* pixel values to sample points
   pos <- nearest.pixel(df$xc, df$yc, y)
-  df$values <- y$v[cbind(pos$row, pos$col)]
+  pos <- cbind(pos$row, pos$col)
+  yvalue <- y$v[pos]
+  xvalue <- x$v[pos]
+  changed <- (yvalue != xvalue)
+  df$values[changed] <- yvalue[changed]
   #' restrict main pixel image to network
   m <- as.mask.psp(L, as.mask(y))$m
   y$v[!m] <- NA

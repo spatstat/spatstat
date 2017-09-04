@@ -51,7 +51,10 @@
   # make a function
   Y <- as.linim(distfun(runiflpp(5, simplenet)))
   # replace some values
-  Y[square(c(0.3, 0.6))] <- 2
+  B <- square(c(0.25, 0.55))
+  Y[B] <- 2
+  plot(Y, main="")
+  plot(B, add=TRUE, lty=3)
   X <- runiflpp(4, simplenet)
   Y[X] <- 5
 }
