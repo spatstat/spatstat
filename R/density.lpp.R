@@ -32,7 +32,7 @@ density.lpp <- function(x, sigma, ...,
   # pixellate linear network
   Llines <- as.psp(L)
   linemask <- as.mask.psp(Llines, ...)
-  lineimage <- as.im(linemask)
+  lineimage <- as.im(linemask, value=0)
   # extract pixel centres
   xx <- raster.x(linemask)
   yy <- raster.y(linemask)
