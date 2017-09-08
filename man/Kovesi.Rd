@@ -12,7 +12,7 @@
 }
 \usage{data(Kovesi)}
 \format{
-  A \code{\link{hyperframe}} with the following columns:
+  A \code{\link[spatstat]{hyperframe}} with the following columns:
 
   \tabular{ll}{
     \code{linear} \tab Logical: whether the sequence is linear. \cr

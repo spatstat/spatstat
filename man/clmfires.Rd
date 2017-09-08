@@ -51,7 +51,7 @@
 } 
 \format{
   \code{clmfires} is a marked point pattern (object of class \code{"ppp"}). 
-  See \code{\link{ppp.object}}.
+  See \code{\link[spatstat]{ppp.object}}.
 
   \code{clmfires.extra} is a list with two components, named
   \code{clmcov100} and \code{clmcov200}, which are lists of pixel images
@@ -73,7 +73,7 @@ patterns due to \dQuote{jittering} having been applied in order to
 avoid such duplication.  It is not clear just \emph{how} the fire
 locations were jittered.  It seems unlikely that the jittering was
 done using the \code{jitter()} function from \code{R} or the
-\pkg{spatstat} function \code{\link{rjitter}}.
+\pkg{spatstat} function \code{\link[spatstat]{rjitter}}.
 
 Of course there are many sets of points which are \emph{virtually}
 identical, being separated by distances induced by the jittering.

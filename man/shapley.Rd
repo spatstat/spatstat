@@ -10,7 +10,7 @@
 \format{
   \code{shapley} is an object of class \code{"ppp"}
   representing the point pattern of galaxy locations
-  (see \code{\link{ppp.object}}).
+  (see \code{\link[spatstat]{ppp.object}}).
 
   \code{shapley.extra} is a list containing additional data
   described under Notes.
@@ -60,8 +60,8 @@
 
   Note that the data contain duplicated points (two points at the
   same location). To determine which points are duplicates,
-  use \code{\link{duplicated.ppp}}.
-  To remove the duplication, use \code{\link{unique.ppp}}.
+  use \code{\link[spatstat]{duplicated.ppp}}.
+  To remove the duplication, use \code{\link[spatstat]{unique.ppp}}.
 
   The auxiliary dataset \code{shapley.extra} contains 
   the following components:

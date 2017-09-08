@@ -16,7 +16,7 @@
 }
 \usage{data(osteo)}
 \format{
-  A \code{\link{hyperframe}} with the following columns:
+  A \code{\link[spatstat]{hyperframe}} with the following columns:
 
   \tabular{ll}{
     \code{id} \tab character string identifier of bone sample \cr

@@ -45,7 +45,7 @@
   Object of class \code{"ppp"} 
   representing the point pattern of sapling locations marked by
   their heights and diameters.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(finpines)}
 \examples{

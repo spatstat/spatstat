@@ -15,7 +15,7 @@
   in a 56 x 38 metre sampling region. Each tree is marked
   with its diameter at breast height. All values are given in metres.
 
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object. The marks are numeric.
 
   These data have been analysed by Fiksel (1984, 1988),

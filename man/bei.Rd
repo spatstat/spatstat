@@ -12,12 +12,12 @@
 \format{
   \code{bei} is an object of class \code{"ppp"}
   representing the point pattern of tree locations.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 
   \code{bei.extra} is a list containing
   two pixel images, \code{elev} (elevation in metres) and
   \code{grad} (norm of elevation gradient). These pixel images are objects
-  of class \code{"im"}, see \code{\link{im.object}}.
+  of class \code{"im"}, see \code{\link[spatstat]{im.object}}.
 }
 \usage{data(bei)}
 \source{

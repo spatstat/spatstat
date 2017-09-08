@@ -17,7 +17,7 @@ point pattern.
 \format{
   An object of class \code{"ppp"}
   representing the point pattern of cell centres.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(cells)}
 \source{Crick and Ripley, see Ripley (1977)}

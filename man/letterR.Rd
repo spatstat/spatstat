@@ -10,7 +10,7 @@
   An object of class \code{"owin"}
   representing the capital letter R,
   in the same font as the R package logo.
-  See \code{\link{owin.object}} for details of the format.
+  See \code{\link[spatstat]{owin.object}} for details of the format.
 }
 \usage{
  data(letterR)

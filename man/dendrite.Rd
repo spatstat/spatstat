@@ -21,7 +21,7 @@
 \usage{data("dendrite")}
 \format{
   Object of class \code{"lpp"}. 
-  See \code{\link{lpp}}.
+  See \code{\link[spatstat]{lpp}}.
 }
 \source{
   Kosik Lab, UC Santa Barbara (Dr Kenneth Kosik, Dr Sourav Banerjee).

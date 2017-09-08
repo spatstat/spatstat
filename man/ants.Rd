@@ -77,7 +77,7 @@
 \format{
   \code{ants} is an object of class \code{"ppp"}
   representing the full point pattern of ants' nests.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
   The coordinates are scaled so that 1 unit equals 0.5 feet.
   The points are marked by species (with levels \code{Cataglyphis}
   and \code{Messor}).

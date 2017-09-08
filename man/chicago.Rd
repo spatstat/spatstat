@@ -28,14 +28,14 @@
 
   The dataset \code{chicago} is an object of class \code{"lpp"}
   representing a point pattern on a linear network.
-  See \code{\link{lpp}} for further information on the format.
+  See \code{\link[spatstat]{lpp}} for further information on the format.
 
   These data were published and analysed in
   Ang, Baddeley and Nair (2012).
 } 
 \format{
   Object of class \code{"lpp"}. 
-  See \code{\link{lpp}}.
+  See \code{\link[spatstat]{lpp}}.
 }
 \usage{data(chicago)}
 \examples{

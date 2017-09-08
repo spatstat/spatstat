@@ -20,7 +20,7 @@
     \tab indicating whether this is a case of cancer of the larynx\cr
     \tab or cancer of the lung.
   }
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 
   The dataset \code{chorley.extra} is a list with two components.
   The first component \code{plotit} is a function which will 
@@ -78,8 +78,8 @@
   Note that, due to the rounding of spatial coordinates,
   the data contain duplicated points (two points at the
   same location). To determine which points are duplicates,
-  use \code{\link{duplicated.ppp}}.
-  To remove the duplication, use \code{\link{unique.ppp}}.
+  use \code{\link[spatstat]{duplicated.ppp}}.
+  To remove the duplication, use \code{\link[spatstat]{unique.ppp}}.
 }
 \references{
   Baddeley, A., Turner, R., \ifelse{latex}{\out{M\o ller}}{Moller}, J. and Hazelton, M. (2005)

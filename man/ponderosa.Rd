@@ -33,7 +33,7 @@
   The dataset \code{ponderosa} is a spatial point pattern 
   (object of class \code{"ppp"})
   representing the point pattern of tree positions.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 
   The dataset \code{ponderosa.extra} is a list containing supplementary
   data. The entry \code{id} contains the index numbers of the

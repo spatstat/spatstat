@@ -14,7 +14,7 @@
 }
 \usage{data(demohyper)}
 \format{
-  A \code{\link{hyperframe}} with 3 rows and 3 columns:
+  A \code{\link[spatstat]{hyperframe}} with 3 rows and 3 columns:
   \describe{
     \item{Points}{
       List of spatial point patterns

@@ -60,7 +60,7 @@
 \format{
   The dataset \code{redwoodfull} is an object of class \code{"ppp"}
   representing the point pattern of tree locations.
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
   The window has been rescaled to the unit square.
   Its physical size is approximately 128 feet across.

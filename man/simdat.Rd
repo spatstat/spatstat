@@ -15,7 +15,7 @@
   An object of class \code{"ppp"}
   in a square window of size 10 by 10 units.
 
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(simdat)}

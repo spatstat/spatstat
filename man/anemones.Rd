@@ -39,7 +39,7 @@
   representing the point pattern of anemone locations.
   It is a marked point pattern with numeric marks representing
   anemone diameter.
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(anemones)}
 \examples{

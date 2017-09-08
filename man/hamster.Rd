@@ -17,7 +17,7 @@
     \code{marks} \tab factor with levels \code{"dividing"}
     and \code{"pyknotic"}.
   }
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(hamster)}
 \source{Dr W. A. Aherne, Department of Pathology, University of

@@ -15,7 +15,7 @@
     \code{y} \tab Cartesian \eqn{y}-coordinate of plant \cr
     \code{marks} \tab factor with levels 0,1, 2 indicating age
   }
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(bramblecanes)}
 \source{Hutchings (1979), data published in Diggle (1983)}

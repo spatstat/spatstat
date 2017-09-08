@@ -14,7 +14,7 @@
   An object of class \code{"ppp"}
   representing the point pattern.
 
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(demopat)}

@@ -21,7 +21,7 @@
   representing the point pattern of tree locations.
   The Cartesian coordinates are in feet.
 
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(nztrees)}

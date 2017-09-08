@@ -17,8 +17,8 @@
   
   Note that the data contain duplicated points (two points at the
   same location). To determine which points are duplicates,
-  use \code{\link{duplicated.ppp}}.
-  To remove the duplication, use \code{\link{unique.ppp}}.
+  use \code{\link[spatstat]{duplicated.ppp}}.
+  To remove the duplication, use \code{\link[spatstat]{unique.ppp}}.
 } 
 \format{
   An object of class \code{"ppp"}
@@ -37,7 +37,7 @@
   \code{misc},
   \code{redoak} and
   \code{whiteoak}.
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(lansing)}

@@ -21,7 +21,7 @@ under their jurisdiction for the years 1987 to 2003 inclusive
   1987 to 2003 inclusive, with the omission of 1988.  The marks
   consist of a data frame of auxiliary information about the fires;
   see \emph{Details.} Patterns for individual years can be extracted
-  using the function \code{\link{split.ppp}()}.  (See \bold{Examples}.)
+  using the function \code{\link[spatstat]{split.ppp}()}.  (See \bold{Examples}.)
 
   The object \code{nbw.rect} is a rectangular window which covers
   central New Brunswick.  It is provided for use in illustrative and
@@ -89,8 +89,8 @@ or deleting them, as seemed appropriate.
 
 Note that the data contain duplicated points (two points at the
 same location). To determine which points are duplicates,
-use \code{\link{duplicated.ppp}}.
-To remove the duplication, use \code{\link{unique.ppp}}.
+use \code{\link[spatstat]{duplicated.ppp}}.
+To remove the duplication, use \code{\link[spatstat]{unique.ppp}}.
 
 The columns of the data frame comprising the marks of
 \code{nbfires} are:

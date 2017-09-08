@@ -40,7 +40,7 @@
   representing the point pattern of tree locations.
   The window has been rescaled to the unit square.
 
-  See \code{\link{ppp.object}} for details of the format of a
+  See \code{\link[spatstat]{ppp.object}} for details of the format of a
   point pattern object.
 }
 \usage{data(redwood)}

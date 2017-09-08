@@ -16,7 +16,7 @@
     \code{marks} \tab factor with levels \code{off} and \code{on} \cr
                  \tab indicating ``off'' and ``on'' cells
   }
-  See \code{\link{ppp.object}} for details of the format.
+  See \code{\link[spatstat]{ppp.object}} for details of the format.
 }
 \usage{data(ganglia)}
 \source{W\"assle et al (1981), data supplied by Marie-Colette van
@@ -31,7 +31,7 @@
   nearest neighbour distances. The data used in their analysis
   are not available.
 
-  The present dataset \code{\link{ganglia}} was
+  The present dataset \code{\link[spatstat]{ganglia}} was
   scanned from Figure 6(a) of W\"assle et al (1981)
   in the early 1990's, but we have no further information.
   This dataset is the one analysed by Van Lieshout and Baddeley (1999)
@@ -46,12 +46,12 @@
   in the statistical literature.
 
   A new, corrected dataset, scanned from the original microscope image,
-  has been provided under the name \code{\link{betacells}}.  Use that
+  has been provided under the name \code{\link[spatstat]{betacells}}.  Use that
   dataset for any further study.
 }
 \section{Warnings}{
   These data are incorrect.
-  Use the new corrected dataset \code{\link{betacells}}.  
+  Use the new corrected dataset \code{\link[spatstat]{betacells}}.  
 }
 \references{
   Stoyan, D. (1995) Personal communication.

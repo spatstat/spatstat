@@ -30,11 +30,11 @@
   \describe{
     \item{Points}{a point pattern (object of class \code{"ppp"})
       representing the full point pattern of copper deposits.
-      See \code{\link{ppp.object}} for details of the format.
+      See \code{\link[spatstat]{ppp.object}} for details of the format.
     }
     \item{Lines}{a line segment pattern (object of class \code{"psp"})
       representing the lineaments in the full dataset.
-      See \code{\link{psp.object}} for details of the format.
+      See \code{\link[spatstat]{psp.object}} for details of the format.
     }
     \item{SouthWindow}{the window delineating the southern half of
       the study region. An object of class \code{"owin"}.
