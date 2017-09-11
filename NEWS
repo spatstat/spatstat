@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.020
+        CHANGES IN spatstat VERSION 1.52-1.021
 
 OVERVIEW
 
@@ -49,6 +49,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o [.linnet
     More robust against artefacts when the subset index is a pixel mask.
+
+    o linim
+    The image Z is now automatically restricted to the network.
+    New argument 'restrict'.
     
     o as.polygonal
     Accelerated when w is a pixel mask.

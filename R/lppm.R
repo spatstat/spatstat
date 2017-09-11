@@ -3,7 +3,7 @@
 #
 #  Point process models on a linear network
 #
-#  $Revision: 1.40 $   $Date: 2017/08/17 09:19:28 $
+#  $Revision: 1.41 $   $Date: 2017/09/11 19:35:22 $
 #
 
 lppm <- function(X, ...) {
@@ -124,7 +124,7 @@ predict.lppm <- function(object, ...,
     Z[pixelcentres] <- values
     # attach exact line position data
     df <- cbind(projdata, values)
-    out <- linim(L, Z, df=df)
+    out <- linim(L, Z, df=df, restrict=FALSE)
   } else {
     # predict for each type
     lev <- levels(marks(data.ppm(fit)))
@@ -136,7 +136,7 @@ predict.lppm <- function(object, ...,
       Z <- lineimage
       Z[pixelcentres] <- values
       df <- cbind(projdata, values)
-      out[[k]] <- linim(L, Z, df=df)
+      out[[k]] <- linim(L, Z, df=df, restrict=FALSE)
     }
     out <- as.solist(out)
     names(out) <- as.character(lev)
@@ -290,7 +290,7 @@ model.images.lppm <- local({
     return(m)
   }
 
-  tolinim <- function(x, L, imL) linim(L, eval.im(x * imL))
+  tolinim <- function(x, L, imL) linim(L, eval.im(x * imL), restrict=FALSE)
   tolinims <- function(x, L, imL) solapply(x, tolinim, L=L, imL=imL)
   
   model.images.lppm

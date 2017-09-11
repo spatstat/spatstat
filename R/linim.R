@@ -1,15 +1,40 @@
 #
 # linim.R
 #
-#  $Revision: 1.39 $   $Date: 2017/09/04 09:21:04 $
+#  $Revision: 1.42 $   $Date: 2017/09/11 19:29:37 $
 #
 #  Image/function on a linear network
 #
 
-linim <- function(L, Z, ..., df=NULL) {
+linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
   L <- as.linnet(L)
   stopifnot(is.im(Z))
-  if(is.null(df)) {
+  class(Z) <- "im"    # prevent unintended dispatch 
+  dfgiven <- !is.null(df)
+  if(dfgiven) {
+    stopifnot(is.data.frame(df))
+    neednames <- c("xc", "yc", "x", "y", "mapXY", "tp", "values")
+    ok <- neednames %in% names(df)
+    if(any(!ok)) {
+      nn <- sum(!ok)
+      stop(paste(ngettext(nn, "A column", "Columns"),
+                 "named", commasep(sQuote(neednames[!ok])),
+                 ngettext(nn, "is", "are"),
+                 "missing from argument", sQuote("df")))
+    }
+  }
+  if(restrict) {
+    #' restrict image to pixels actually lying on the network
+    M <- as.mask.psp(as.psp(L), Z)
+    if(dfgiven) {
+      #' ensure all mapped pixels are untouched
+      pos <- nearest.pixel(df$xc, df$yc, Z)
+      pos <- cbind(pos$row, pos$col)
+      M[pos] <- TRUE
+    }
+    Z <- Z[M, drop=FALSE]
+  }
+  if(!dfgiven) {
     # compute the data frame of mapping information
     xx <- rasterx.im(Z)
     yy <- rastery.im(Z)
@@ -27,16 +52,6 @@ linim <- function(L, Z, ..., df=NULL) {
     # bundle
     df <- cbind(pixdf, projloc, projmap, data.frame(values=values))
   } else {
-    stopifnot(is.data.frame(df))
-    neednames <- c("xc", "yc", "x", "y", "mapXY", "tp", "values")
-    ok <- neednames %in% names(df)
-    if(any(!ok)) {
-      nn <- sum(!ok)
-      stop(paste(ngettext(nn, "A column", "Columns"),
-                 "named", commasep(sQuote(neednames[!ok])),
-                 ngettext(nn, "is", "are"),
-                 "missing from argument", sQuote("df")))
-    }
   }
   out <- Z
   attr(out, "L") <- L
@@ -311,7 +326,7 @@ as.linim.default <- function(X, L, ..., eps = NULL, dimyx = NULL, xy = NULL,
   }
   if(is.mask(WL <- Window(L)) && !all(sapply(list(eps, dimyx, xy), is.null)))
      Window(L, check=FALSE) <- as.mask(WL, eps=eps, dimyx=dimyx, xy=xy)
-  out <- linim(L, Y, df=df)
+  out <- linim(L, Y, df=df, restrict=FALSE)
   return(out)
 }
 
@@ -421,7 +436,7 @@ eval.linim <- function(expr, envir, harmonize=TRUE) {
       dfY$values <- Yvalues
     }
   }
-  result <- linim(nets[[1L]], Y, df=dfY)
+  result <- linim(nets[[1L]], Y, df=dfY, restrict=FALSE)
   return(result)
 }
 
@@ -507,6 +522,7 @@ as.linnet.linim <- function(X, ...) {
   df$values[changed] <- yvalue[changed]
   #' restrict main pixel image to network
   m <- as.mask.psp(L, as.mask(y))$m
+  m[pos] <- TRUE
   y$v[!m] <- NA
   #' package up
   attr(y, "L") <- L
@@ -582,7 +598,7 @@ shift.linim <- function (X, ...) {
   df <- attr(X, "df")
   df[,c("xc","yc")] <- shiftxy(df[,c("xc", "yc")], v)
   df[,c("x","y")]   <- shiftxy(df[,c("x", "y")],   v)
-  Y <- linim(L, Z, df=df)
+  Y <- linim(L, Z, df=df, restrict=FALSE)
   return(putlastshift(Y, v))
 }
 
@@ -592,7 +608,7 @@ affine.linim <- function(X, mat = diag(c(1, 1)), vec = c(0, 0), ...) {
   df <- attr(X, "df")
   df[,c("xc","yc")] <- affinexy(df[,c("xc", "yc")], mat=mat, vec=vec)
   df[,c("x","y")]   <- affinexy(df[,c("x", "y")],   mat=mat, vec=vec)
-  Y <- linim(L, Z, df=df)
+  Y <- linim(L, Z, df=df, restrict=FALSE)
   return(Y)
 }
 
