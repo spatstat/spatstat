@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.175 $	$Date: 2016/09/01 05:52:38 $
+#	$Revision: 4.176 $	$Date: 2017/09/11 16:35:38 $
 #
 #
 #	A window may be either
@@ -714,14 +714,19 @@ as.polygonal <- function(W, repair=FALSE) {
            M <- W$m
            nr <- nrow(M)
            notM <- !M
-           out <- NULL
            xcol <- W$xcol
            yrow <- W$yrow
            xbracket <- 1.1 * c(-1,1) * W$xstep/2
            ybracket <- 1.1 * c(-1,1) * W$ystep/2
+           ## determine resolution for polyclip operations
+           p <- list(x0 = xcol[1],
+                     y0 = yrow[1],
+                     eps = max(W$xstep, W$ystep)/(2^31))
            # identify runs of TRUE entries in each column
            start <- M & rbind(TRUE, notM[-nr, ])
            finish <- M & rbind(notM[-1, ], TRUE)
+           #' build result
+           out <- NULL
            for(j in 1:ncol(M)) {
              xj <- xcol[j]
              # identify start and end positions in column j
@@ -737,14 +742,29 @@ as.polygonal <- function(W, repair=FALSE) {
                  yfrom <- yrow[starts[k]]
                  yto   <- yrow[finishes[k]]
                  yk <- sort(c(yfrom,yto))
-                 # make rectangle
-                 recto <- owin(xj+xbracket,yk+ybracket)
-                 # add to result
-                 out <- union.owin(out, recto)
+                 #' make rectangle boundary in reversed orientation
+                 xrect <- xj + xbracket
+                 yrect <- yk + ybracket
+                 recto <- list(list(x = xrect[c(1,2,2,1)],
+                                    y = yrect[c(2,2,1,1)]))
+                 #' add to result
+                 if(is.null(out)) {
+                   out <- recto
+                 } else {
+                   out <- polyclip::polyclip(out, recto, "union",
+                                             fillA="nonzero", fillB="nonzero",
+                                             eps = p$eps,
+                                             x0  = p$x0,
+                                             y0  = p$y0)
+                 }
                }
-               unitname(out) <- unitname(W)
              }
            }
+           if(is.null(out)) return(emptywindow(Frame(W)))
+           totarea <- sum(sapply(out, Area.xypolygon))
+           if(totarea < 0)
+             out <- lapply(out, reverse.xypolygon)
+           out <- owin(poly=out, check=FALSE, unitname=unitname(W))
            return(out)
          }
          )
