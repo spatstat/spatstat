@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.019
+        CHANGES IN spatstat VERSION 1.52-1.020
 
 OVERVIEW
 
     o We thank Tilman Davies and Mehdi Moradi for contributions.
 
+    o Numerous bug fixes for linear networks.
+    
     o Minor enhancements and bug fixes.
 
-    o Nickname: "Jacindamania"
+    o Nickname: "I'm Sciencing As Fast As I Can"
 
 NEW FUNCTIONS
 
@@ -41,6 +43,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o square
     Handles a common error in the format of the arguments.
+
+    o [.linim
+    More robust against artefacts.
+    
+    o [.linnet
+    More robust against artefacts when the subset index is a pixel mask.
+    
+    o as.polygonal
+    Accelerated when w is a pixel mask.
     
 BUG FIXES
 

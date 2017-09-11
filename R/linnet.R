@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.62 $    $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.63 $    $Date: 2017/09/11 16:36:37 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -498,8 +498,15 @@ rescale.linnet <- function(X, s, unitname) {
   if(!is.owin(i))
     stop("In [.linnet: the index i should be a window", call.=FALSE)
   w <- i
+  wp <- as.polygonal(w)
+  if(is.mask(w)) {
+    ## protect against pixellation artefacts
+    pixel <- owin(w$xstep * c(-1,1)/2, w$ystep * c(-1,1)/2)
+    wp <- MinkowskiSum(wp, pixel)
+    wp <- intersect.owin(wp, Frame(w))
+  }
   ## Find vertices that lie inside window
-  vertinside <- inside.owin(x$vertices, w=w)
+  vertinside <- inside.owin(x$vertices, w=wp)
   from <- x$from
   to   <- x$to
   if(snip) {
@@ -509,13 +516,13 @@ rescale.linnet <- function(X, s, unitname) {
     ## extract relevant subset of network graph
     x <- thinNetwork(x, retainedges=okedge)
     ## Now add vertices at crossing points with boundary of 'w'
-    b <- crossing.psp(as.psp(x), edges(w))
+    b <- crossing.psp(as.psp(x), edges(wp))
     x <- insertVertices(x, unique(b))
     boundarypoints <- attr(x, "id")
     ## update data
     from <- x$from
     to   <- x$to
-    vertinside <- inside.owin(x$vertices, w=w)
+    vertinside <- inside.owin(x$vertices, w=wp)
     vertinside[boundarypoints] <- TRUE
   }
   ## find segments whose endpoints BOTH lie in 'w'
