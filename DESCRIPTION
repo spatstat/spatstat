@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.021
-Nickname: I'm Sciencing As Fast As I Can
-Date: 2017-09-11
+Version: 1.52-1.022
+Nickname: Stabilator
+Date: 2017-09-12
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

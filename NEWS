@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.021
+        CHANGES IN spatstat VERSION 1.52-1.022
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
     
     o Minor enhancements and bug fixes.
 
-    o Nickname: "I'm Sciencing As Fast As I Can"
+    o Nickname: "Stabilator"
 
 NEW FUNCTIONS
 
@@ -63,6 +63,10 @@ BUG FIXES
     The value of 'atommass' was incorrect, due to a coding error.
     Fixed.
 
+    o [.linim
+    Internal data was sometimes corrupted.
+    Fixed.
+    
     o as.linim
     The result had incorrect internal format when Window(X) was a mask
     and one of the arguments 'eps', 'dimyx', 'xy' was present.

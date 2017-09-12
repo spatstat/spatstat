@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.42 $   $Date: 2017/09/11 19:29:37 $
+#  $Revision: 1.43 $   $Date: 2017/09/12 04:35:45 $
 #
 #  Image/function on a linear network
 #
@@ -503,8 +503,16 @@ as.linnet.linim <- function(X, ...) {
   df <- attr(x, "df")
   #' clip to new window
   W <- Window(y)
-  attr(y, "L") <- L[W]
-  attr(y, "df") <- df[inside.owin(df$xc, df$yc, W), , drop=FALSE]
+  LW <- L[W]
+  df <- df[inside.owin(df$xc, df$yc, W), , drop=FALSE]
+  #' update local coordinates in data frame
+  samplepoints <- ppp(df$x, df$y, window=Frame(W), check=FALSE)
+  a <- project2segment(samplepoints, as.psp(LW))
+  df$mapXY <- a$mapXY
+  df$tp    <- a$tp
+  #' wrap up
+  attr(y, "L") <- LW
+  attr(y, "df") <- df
   return(y)
 }
 
