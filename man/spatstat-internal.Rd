@@ -270,6 +270,7 @@
 \alias{kraever}
 \alias{kraeverRandomFields}
 \alias{labels.ppm}
+\alias{ldtEngine}
 \alias{levels.im}
 \alias{levels<-.im}
 \alias{levelsAsFactor}
@@ -668,6 +669,7 @@
 \alias{versionstring.ppm}
 \alias{versionstring.spatstat}
 \alias{verifyclass}
+\alias{vnnFind}
 \alias{Window.lintess}
 \alias{Window<-.linnet}
 \alias{Window<-.lpp}
@@ -1046,6 +1048,8 @@ kppmPalmLik(X, Xname, po, clusters, control, weightfun, rmax,
 kraever(package, fatal)
 kraeverRandomFields()
 \method{labels}{ppm}(object, \dots)
+ldtEngine(nv, ns, from, to, seglen, huge,
+          coUXord, vnndist, vnnwhich, vnnlab)
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
@@ -1528,6 +1532,7 @@ versionstring.interact(object)
 versionstring.ppm(object)
 versionstring.spatstat()
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
+vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax)
 \method{Window}{lintess}(X, \dots)
 \method{Window}{linnet}(X, \dots, check=TRUE) <- value
 \method{Window}{lpp}(X, \dots, check=TRUE) <- value

@@ -2,6 +2,7 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
+#'   $Revision: 1.5 $  $Date: 2017/09/12 17:30:13 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))
@@ -25,105 +26,151 @@ lineardirichlet <- function(X) {
   seglen <- lengths.psp(as.psp(L))
   from <- L$from
   to   <- L$to
-  #' upper point on interpoint distance
+  #' upper bound on interpoint distance
   huge <- sum(seglen)
   #' numerical tolerance for nnwhich
   tol <- max(sqrt(.Machine$double.eps), diameter(Frame(L))/2^20)
+  #' Find data point (in sorted pattern) nearest to each vertex of network
+  a <- vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol)
+  vnndist  <- a$vnndist
+  vnnwhich <- a$vnnwhich
+  #' index back into original data pattern
+  vnnlab <- coUXord$lab[vnnwhich] 
+  #' compute Dirichlet tessellation
+  df <- ldtEngine(nv, ns, from, to, seglen, huge,
+                  coUXord,
+                  vnndist, vnnwhich, vnnlab)
+  return(lintess(L, df))
+}
+
+vnnFind <- function(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax=1) {
   #' Find data point nearest to each vertex of network
+  #' Assumed 'seg' is sorted in increasing order
+  #'         'tp' is increasing within 'seg'
+  nX <- length(seg)
   from0 <- from - 1L
   to0   <- to - 1L
   seg0  <- seg - 1L
-  z <- .C("Clinvwhichdist",
-          np = as.integer(nuX),
-	  sp = as.integer(seg0),
-	  tp = as.double(tp),
-	  nv = as.integer(nv),
-	  ns = as.integer(ns),
-	  from = as.integer(from0),
-	  to   = as.integer(to0),
-	  seglen = as.double(seglen),
-	  huge = as.double(huge),
-	  tol = as.double(tol),
-	  dist = as.double(numeric(nv)),
-	  which = as.integer(integer(nv)),
-	  PACKAGE = "spatstat")
-   vnndist <- z$dist
-   vnnwhich <- z$which + 1L  # index into sorted unique point pattern
-   vnnwhich[vnnwhich == 0] <- NA # possible if network is disconnected
-   vnnlab <- coUXord$lab[vnnwhich] # index into original data pattern
-   #' initialise tessellation data
-   df <- data.frame(seg=integer(0),
-                    t0=numeric(0),
-		    t1=numeric(0),
-		    tile=integer(0))
-   #' split point data by segment, discarding segments which contain no points
-   fseg <- factor(seg, levels=1:ns)
-   blist <- split(coUXord, fseg, drop=TRUE)
-   #' process each segment containing data points
-   for(b in blist) {
-     n <- nrow(b)
-     #' which segment?
-     sygmund <- b$seg[[1L]]
-     lenf <- seglen[sygmund]
-     #' segment endpoints
-     A <- from[sygmund]
-     B <- to[sygmund]
-     #' data points (from X) closest to endpoints
-     jA <- vnnlab[A]
-     jB <- vnnlab[B]
-     dA <- vnndist[A]
-     dB <- vnndist[B]
-     #' data points (along segment) closest to endpoints
-     iA <- b$lab[1L]
-     iB <- b$lab[n]
-     #' splits between consecutive data points
-     btp <- b$tp
-     tcut <- if(n < 2) numeric(0) else (btp[-1] + btp[-n])/2
-     labs <- b$lab
-     #' consider left endpoint
-     if(jA == iA) {
-       #' leftmost data point covers left endpoint
-       tcut <- c(0, tcut)
-     } else {
-       #' cut between left endpoint and leftmost data point
-       dA1 <- lenf * btp[1L]
-       dx <- (dA1 - dA)/2
-       if(dx > 0) {
-         #' expected!
-	 tx <- dx/lenf
-	 tcut <- c(0, tx, tcut)
-	 labs <- c(jA, labs)
-       } else {
-         #' unexpected
-	 tcut <- c(0, tcut)
-       }
-     }
-     #' consider right endpoint
-     if(jB == iB) {
-       #' rightmost data point covers right endpoint
-       tcut <- c(tcut, 1)
-     } else {
-       #' cut between right endpoint and rightmost data point
-       dB1 <- lenf * (1 - btp[n])
-       dx <- (dB1 - dB)/2
-       if(dx > 0) {
-         #' expected!
-	 tx <- 1 - dx/lenf
-	 tcut <- c(tcut, tx, 1)
-	 labs <- c(labs, jB)
-       } else {
-         #' unexpected
-	 tcut <- c(tcut, 1)
-       }
-     }
-     m <- length(tcut)
-     newdf <- data.frame(seg=sygmund, t0=tcut[-m], t1=tcut[-1L], tile=labs)
-     df <- rbind(df, newdf)
-   }
-   #' now deal with segments having no data points
-   unloved <- (table(fseg) == 0)
-   if(any(unloved)) {
-     for(sygmund in which(unloved)) {
+  #'
+  if(kmax == 1) {
+    z <- .C("Clinvwhichdist",
+            np = as.integer(nX),
+            sp = as.integer(seg0),
+            tp = as.double(tp),
+            nv = as.integer(nv),
+            ns = as.integer(ns),
+            from = as.integer(from0),
+            to   = as.integer(to0),
+            seglen = as.double(seglen),
+            huge = as.double(huge),
+            tol = as.double(tol),
+            dist = as.double(numeric(nv)),
+            which = as.integer(integer(nv)),
+            PACKAGE = "spatstat")
+  } else {
+    z <- .C("linvknndist",
+            kmax = as.integer(kmax), 
+            nq = as.integer(nX),
+            sq = as.integer(seg0),
+            tq = as.double(tp),
+            nv = as.integer(nv),
+            ns = as.integer(ns),
+            from = as.integer(from0),
+            to   = as.integer(to0),
+            seglen = as.double(seglen),
+            huge = as.double(huge),
+            tol = as.double(tol),
+            dist = as.double(numeric(kmax * nv)),
+            which = as.integer(integer(kmax * nv)),
+            PACKAGE = "spatstat")
+  }
+  vnndist <- z$dist
+  vnnwhich <- z$which + 1L 
+  vnnwhich[vnnwhich == 0] <- NA # possible if network is disconnected
+  if(kmax > 1) {
+    vnndist <- matrix(vnndist, ncol=kmax)
+    vnnwhich <- matrix(vnnwhich, ncol=kmax)
+  }
+  return(list(vnndist=vnndist, vnnwhich=vnnwhich))
+}
+
+ldtEngine <- function(nv, ns, from, to, seglen, huge,  # network
+                      coUXord,  # point coordinates, sorted
+                      vnndist, vnnwhich, # nearest data point for each vertex
+                      vnnlab) {
+  #' initialise tessellation data
+  df <- data.frame(seg=integer(0),
+                   t0=numeric(0),
+                   t1=numeric(0),
+                   tile=integer(0))
+  #' split point data by segment, discarding segments which contain no points
+  fseg <- factor(coUXord$seg, levels=1:ns)
+  blist <- split(coUXord, fseg, drop=TRUE)
+  #' process each segment containing data points
+  for(b in blist) {
+    n <- nrow(b)
+    #' which segment?
+    sygmund <- b$seg[[1L]]
+    lenf <- seglen[sygmund]
+    #' segment endpoints
+    A <- from[sygmund]
+    B <- to[sygmund]
+    #' data points (from X) closest to endpoints
+    jA <- vnnlab[A]
+    jB <- vnnlab[B]
+    dA <- vnndist[A]
+    dB <- vnndist[B]
+    #' data points (along segment) closest to endpoints
+    iA <- b$lab[1L]
+    iB <- b$lab[n]
+    #' splits between consecutive data points
+    btp <- b$tp
+    tcut <- if(n < 2) numeric(0) else (btp[-1] + btp[-n])/2
+    labs <- b$lab
+    #' consider left endpoint
+    if(jA == iA) {
+      #' leftmost data point covers left endpoint
+      tcut <- c(0, tcut)
+    } else {
+      #' cut between left endpoint and leftmost data point
+      dA1 <- lenf * btp[1L]
+      dx <- (dA1 - dA)/2
+      if(dx > 0) {
+        #' expected!
+        tx <- dx/lenf
+        tcut <- c(0, tx, tcut)
+        labs <- c(jA, labs)
+      } else {
+        #' unexpected
+        tcut <- c(0, tcut)
+      }
+    }
+    #' consider right endpoint
+    if(jB == iB) {
+      #' rightmost data point covers right endpoint
+      tcut <- c(tcut, 1)
+    } else {
+      #' cut between right endpoint and rightmost data point
+      dB1 <- lenf * (1 - btp[n])
+      dx <- (dB1 - dB)/2
+      if(dx > 0) {
+        #' expected!
+        tx <- 1 - dx/lenf
+        tcut <- c(tcut, tx, 1)
+        labs <- c(labs, jB)
+      } else {
+        #' unexpected
+        tcut <- c(tcut, 1)
+      }
+    }
+    m <- length(tcut)
+    newdf <- data.frame(seg=sygmund, t0=tcut[-m], t1=tcut[-1L], tile=labs)
+    df <- rbind(df, newdf)
+  }
+  #' now deal with segments having no data points
+  unloved <- (table(fseg) == 0)
+  if(any(unloved)) {
+    for(sygmund in which(unloved)) {
       lenf <- seglen[sygmund]
       #' segment endpoints
       A <- from[sygmund]
@@ -152,7 +199,7 @@ lineardirichlet <- function(X) {
 	}
       }
       df <- rbind(df, newdf)
-     }
-   }
-   return(lintess(L, df))
+    }
+  }
+  return(df)
 }

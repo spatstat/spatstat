@@ -11,7 +11,7 @@
 
   Needs only the sparse representation of the network
 
-  $Revision: 1.3 $  $Date: 2016/02/02 01:53:51 $
+  $Revision: 1.5 $  $Date: 2017/09/12 17:47:37 $
 
   ! Data points must be ordered by segment index !
 

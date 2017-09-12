@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.022
+        CHANGES IN spatstat VERSION 1.52-1.023
 
 OVERVIEW
 
@@ -15,6 +15,9 @@ NEW FUNCTIONS
 
     o "[<-.linim"
     Subset assignment method for pixel images on a linear network.
+
+    o tile.lengths
+    Calculate the length of each tile in a tessellation on a network.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

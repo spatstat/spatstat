@@ -48,7 +48,8 @@ lintess(L, df)
 }
 \value{
   An object of class \code{"lintess"}.
-  There are methods for printing and plotting this object.
+  There are methods for \code{print}, \code{plot} and
+  \code{summary} for this object.
 }
 \author{
   \adrian and Greg McSwiggan.
@@ -60,10 +61,16 @@ lintess(L, df)
 
   \code{\link{divide.linnet}} to make a tessellation demarcated by
   given points.
+
+  \code{\link{lineardirichlet}} to create the Dirichlet-Voronoi
+  tessellation from a point pattern on a linear network.
   
   \code{\link{as.linfun.lintess}}, \code{\link{as.linnet.lintess}} and
   \code{\link{as.linim}} to convert to other classes.
 
+  \code{\link{tile.lengths}} to compute the length of each tile
+  in the tessellation.
+  
   The undocumented methods \code{Window.lintess} and
   \code{as.owin.lintess} extract the spatial window.
 }
