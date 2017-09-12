@@ -2,7 +2,7 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
-#'   $Revision: 1.5 $  $Date: 2017/09/12 17:30:13 $
+#'   $Revision: 1.6 $  $Date: 2017/09/12 20:31:34 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))
@@ -88,8 +88,8 @@ vnnFind <- function(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax=1) {
   vnnwhich <- z$which + 1L 
   vnnwhich[vnnwhich == 0] <- NA # possible if network is disconnected
   if(kmax > 1) {
-    vnndist <- matrix(vnndist, ncol=kmax)
-    vnnwhich <- matrix(vnnwhich, ncol=kmax)
+    vnndist <- matrix(vnndist, ncol=kmax, byrow=TRUE)
+    vnnwhich <- matrix(vnnwhich, ncol=kmax, byrow=TRUE)
   }
   return(list(vnndist=vnndist, vnnwhich=vnnwhich))
 }
