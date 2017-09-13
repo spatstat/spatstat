@@ -13,9 +13,6 @@
   \item{x}{
     A line segment pattern (object of class \code{"psp"}).
   }
-  \item{\dots}{
-    Ignored.
-  }
   \item{labels}{
     Labels associated with the segments, to be plotted when the
     segments are identified. A character vector or numeric vector
@@ -26,6 +23,10 @@
   }
   \item{plot}{
     Logical. Whether to plot the labels when a segment is identified.
+  }
+  \item{\dots}{
+    Arguments passed to \code{\link[graphics]{text.default}}
+    controlling the plotting of the labels.
   }
 }
 \value{
@@ -51,11 +52,8 @@
   \code{\link[graphics]{identify}},
   \code{\link{identify.ppp}}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors
 }
 \keyword{spatial}
 \keyword{iplot}

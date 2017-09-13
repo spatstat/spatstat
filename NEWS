@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.024
+        CHANGES IN spatstat VERSION 1.52-1.025
 
 OVERVIEW
 
@@ -56,6 +56,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o linim
     The image Z is now automatically restricted to the network.
     New argument 'restrict'.
+
+    o identify.psp
+    Improved placement of labels.
+    Arguments can be passed to text.default to control the plotting of labels.
     
     o as.polygonal
     Accelerated when w is a pixel mask.
