@@ -662,3 +662,8 @@ connected.lpp <- function(X, R=Inf, ..., dismantle=TRUE) {
     YY <- YY[[1]]
   return(YY)
 }
+
+text.lpp <- function(x, ...) {
+  co <- coords(x)
+  graphics::text.default(x=co$x, y=co$y, ...)
+}

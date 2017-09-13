@@ -93,7 +93,7 @@
 
   See \code{\link{plot.ppp}} for options for representing the points.
 
-  See also \code{\link{points.lpp}}.
+  See also \code{\link{points.lpp}}, \code{\link{text.lpp}}.
 }
 \examples{
   plot(chicago, cols=1:6)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.025
+        CHANGES IN spatstat VERSION 1.52-1.026
 
 OVERVIEW
 
@@ -18,6 +18,9 @@ NEW FUNCTIONS
 
     o tile.lengths
     Calculate the length of each tile in a tessellation on a network.
+
+    o text.ppp, text.lpp, text.psp
+    Methods for 'text' for spatial patterns.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

@@ -99,6 +99,7 @@
   \code{\link{plot}},
   \code{\link{par}},
   \code{\link{plot.owin}},
+  \code{\link{text.psp}},
   \code{\link{symbols}}
 }
 \examples{

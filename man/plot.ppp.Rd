@@ -288,6 +288,7 @@
   \code{\link{plot}},
   \code{\link{par}},
   \code{\link{points}},
+  \code{\link{text.ppp}},
   \code{\link{plot.owin}},
   \code{\link{symbols}}
 }

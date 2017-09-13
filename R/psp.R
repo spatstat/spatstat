@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.88 $ $Date: 2017/09/13 05:40:29 $
+#  $Revision: 1.89 $ $Date: 2017/09/13 09:52:15 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -757,3 +757,13 @@ edit.psp <- function(name, ...) {
   return(xnew)
 }
 
+text.psp <- function(x, ...) {
+  mids <- midpoints.psp(x)
+  poz <- c(1, 2,4, 3)[(floor(angles.psp(x)/(pi/4)) %% 4) + 1L]
+  do.call.matched(graphics::text.default,
+                  resolve.defaults(list(x=mids$x, y=mids$y),
+                                   list(...),
+                                   list(pos=poz),
+                                   .StripNull=TRUE))
+  return(invisible(NULL))
+}

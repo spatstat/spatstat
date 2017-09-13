@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.92 $	$Date: 2017/08/31 08:15:00 $
+#	$Revision: 1.93 $	$Date: 2017/09/13 09:52:28 $
 #
 #
 #--------------------------------------------------------------------------
@@ -506,4 +506,8 @@ fakemaintitle <- function(bb, main, ...) {
                                    parlist,    list(...)),
                   funargs=graphicsPars("text"))
   return(invisible(NULL))
+}
+
+text.ppp <- function(x, ...) {
+  graphics::text.default(x=x$x, y=x$y, ...)
 }
