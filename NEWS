@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.026
+        CHANGES IN spatstat VERSION 1.52-1.027
 
 OVERVIEW
 
@@ -16,12 +16,16 @@ NEW FUNCTIONS
     o "[<-.linim"
     Subset assignment method for pixel images on a linear network.
 
+    o nnfromvertex
+    Given a point pattern on a linear network,
+    find the nearest data point from each vertex of the network.
+    
     o tile.lengths
     Calculate the length of each tile in a tessellation on a network.
 
     o text.ppp, text.lpp, text.psp
     Methods for 'text' for spatial patterns.
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o nbfires

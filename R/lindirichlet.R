@@ -2,7 +2,7 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
-#'   $Revision: 1.6 $  $Date: 2017/09/12 20:31:34 $
+#'   $Revision: 1.7 $  $Date: 2017/09/13 19:20:26 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))
@@ -41,57 +41,6 @@ lineardirichlet <- function(X) {
                   coUXord,
                   vnndist, vnnwhich, vnnlab)
   return(lintess(L, df))
-}
-
-vnnFind <- function(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax=1) {
-  #' Find data point nearest to each vertex of network
-  #' Assumed 'seg' is sorted in increasing order
-  #'         'tp' is increasing within 'seg'
-  nX <- length(seg)
-  from0 <- from - 1L
-  to0   <- to - 1L
-  seg0  <- seg - 1L
-  #'
-  if(kmax == 1) {
-    z <- .C("Clinvwhichdist",
-            np = as.integer(nX),
-            sp = as.integer(seg0),
-            tp = as.double(tp),
-            nv = as.integer(nv),
-            ns = as.integer(ns),
-            from = as.integer(from0),
-            to   = as.integer(to0),
-            seglen = as.double(seglen),
-            huge = as.double(huge),
-            tol = as.double(tol),
-            dist = as.double(numeric(nv)),
-            which = as.integer(integer(nv)),
-            PACKAGE = "spatstat")
-  } else {
-    z <- .C("linvknndist",
-            kmax = as.integer(kmax), 
-            nq = as.integer(nX),
-            sq = as.integer(seg0),
-            tq = as.double(tp),
-            nv = as.integer(nv),
-            ns = as.integer(ns),
-            from = as.integer(from0),
-            to   = as.integer(to0),
-            seglen = as.double(seglen),
-            huge = as.double(huge),
-            tol = as.double(tol),
-            dist = as.double(numeric(kmax * nv)),
-            which = as.integer(integer(kmax * nv)),
-            PACKAGE = "spatstat")
-  }
-  vnndist <- z$dist
-  vnnwhich <- z$which + 1L 
-  vnnwhich[vnnwhich == 0] <- NA # possible if network is disconnected
-  if(kmax > 1) {
-    vnndist <- matrix(vnndist, ncol=kmax, byrow=TRUE)
-    vnnwhich <- matrix(vnnwhich, ncol=kmax, byrow=TRUE)
-  }
-  return(list(vnndist=vnndist, vnnwhich=vnnwhich))
 }
 
 ldtEngine <- function(nv, ns, from, to, seglen, huge,  # network
