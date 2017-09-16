@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.028
+        CHANGES IN spatstat VERSION 1.52-1.029
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
     
     o Minor enhancements and bug fixes.
 
-    o Nickname: "Stabilator"
+    o Nickname: "Seemed Like A Good Idea At The Time"
 
 NEW FUNCTIONS
 
@@ -104,6 +104,10 @@ BUG FIXES
     
     o "[.solist"
     Ignored the "..." arguments in some cases.
+    Fixed.
+
+    o density.lpp
+    Ignored the resolution arguments 'eps', 'dimyx' in the default case.
     Fixed.
 
     o plot.msr

@@ -199,7 +199,7 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
                  weights=weights,
                  iterMax=1e6, sparse=TRUE)
   result <- a$kernel_fun
-  if(!fun) result <- as.linim(result)
+  if(!fun) result <- as.linim(result, ...)
   attr(result, "sigma") <- sigma
   attr(result, "dx") <- a$deltax
   attr(result, "dt") <- a$deltat
