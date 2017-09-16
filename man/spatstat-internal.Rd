@@ -661,6 +661,7 @@
 \alias{validate.lpp.coords}
 \alias{validate.mask}        
 \alias{validate.quad}        
+\alias{validate.weights}        
 \alias{vanilla.fv}
 \alias{varcountEngine}
 %\alias{vblogit} %DoNotExport
@@ -1524,6 +1525,7 @@ validate.angles(angles, unit, guess)
 validate.lpp.coords(X, fatal, context)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
+validate.weights(x, recip, how, allowzero, allowinf)
 vanilla.fv(x)
 varcountEngine(g, B, lambdaB, f)
 %vblogit(y, X, offset, eps, m0, S0, S0i, xi0, verb, maxiter, \dots)

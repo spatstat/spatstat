@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.027
+        CHANGES IN spatstat VERSION 1.52-1.028
 
 OVERVIEW
 
@@ -70,6 +70,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o as.polygonal
     Accelerated when w is a pixel mask.
+
+    o Kinhom
+    Stops gracefully if 'lambda' contains any zero values.
     
 BUG FIXES
 
@@ -136,7 +139,7 @@ BUG FIXES
     o "[.linim"
     Crashed in some cases.
     Fixed.
-    
+
         CHANGES IN spatstat VERSION 1.52-1
 
 OVERVIEW

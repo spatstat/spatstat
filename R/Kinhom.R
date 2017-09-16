@@ -122,10 +122,12 @@
     
     # Use matrix of weights if it was provided and if it is sufficient
     if(lambda2.suffices && lambda2.given) {
-      if(!is.null(reciplambda2)) 
+      if(!is.null(reciplambda2)) {
         check.nmatrix(reciplambda2, npts)
-      else {
+        validate.weights(reciplambda2, recip=TRUE)
+      } else {
         check.nmatrix(lambda2, npts)
+        validate.weights(lambda2)
         reciplambda2 <- 1/lambda2
       }
       # renormalise
@@ -145,6 +147,7 @@
         lambda <- density(X, ..., sigma=sigma, varcov=varcov,
                             at="points", leaveoneout=leaveoneout)
         lambda <- as.numeric(lambda)
+        validate.weights(lambda, how="density estimation")
         reciplambda <- 1/lambda
       } else if(!is.null(reciplambda)) {
         # 1/lambda values provided
@@ -156,6 +159,7 @@
           check.nvector(reciplambda, npts)
         else stop(paste(sQuote("reciplambda"),
                         "should be a vector, a pixel image, or a function"))
+        validate.weights(reciplambda, recip=TRUE)
       } else {
         # lambda values provided
         if(is.im(lambda)) 
@@ -190,6 +194,7 @@
           check.nvector(lambda, npts)
         else stop(paste(sQuote("lambda"),
                           "should be a vector, a pixel image, or a function"))
+        validate.weights(lambda)
         # evaluate reciprocal
         reciplambda <- 1/lambda
       }
@@ -460,4 +465,21 @@ Kwtsum <- function(dIJ, bI, wIJ, b, w, breaks) {
     stop("internal error: length(denom.count) != breaks$ncells")
   return(list(numerator=numerator, denominator=denominator, ratio=ratio))
 }
-	
+
+validate.weights <- function(x, recip=FALSE, how = NULL,
+                             allowzero = recip,
+                             allowinf  = !recip) {
+  xname <- deparse(substitute(x))
+  ra <- range(x)
+  offence <-
+    if(!allowinf && !all(is.finite(ra)))  "infinite" else
+    if(ra[1] < 0)                         "negative" else
+    if(!allowzero && ra[1] == 0)          "zero" else NULL
+  if(!is.null(offence)) {
+    offenders <- paste(offence, "values of", sQuote(xname))
+    if(is.null(how))
+      stop(paste(offenders, "are not allowed"), call.=FALSE)
+    stop(paste(how, "yielded", offenders), call.=FALSE)
+  }
+  return(TRUE)
+}
