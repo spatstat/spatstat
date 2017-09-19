@@ -51,7 +51,6 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
     values <- Z[pixelcentres]
     # bundle
     df <- cbind(pixdf, projloc, projmap, data.frame(values=values))
-  } else {
   }
   out <- Z
   attr(out, "L") <- L
@@ -62,8 +61,17 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
 
 print.linim <- function(x, ...) {
   splat("Image on linear network")
-  print(attr(x, "L"))
+  L <- attr(x, "L")
+  Lu <- summary(unitname(L))
+  nsample <- nrow(attr(x, "df"))
+  print(L)
   NextMethod("print")
+  if(!is.null(nsample))
+    splat(" Data frame:", nsample, "sample points along network", "\n",
+          "Average density: one sample point per",
+          signif(volume(L)/nsample, 3),
+          Lu$plural, Lu$explain)
+  return(invisible(NULL))
 }
 
 summary.linim <- function(object, ...) {
@@ -122,152 +130,162 @@ print.summary.linim <- function(x, ...) {
 }
 
 
-plot.linim <- function(x, ..., style=c("colour", "width"),
-                       scale, adjust=1,
-		       legend=TRUE,
-                       leg.side=c("right", "left", "bottom", "top"),
-                       leg.sep=0.1,
-                       leg.wid=0.1,
-                       leg.args=list(),
-                       leg.scale=1,
-                       do.plot=TRUE) {
-  xname <- short.deparse(substitute(x))
-  style <- match.arg(style)
-  leg.side <- match.arg(leg.side)
-  ribstuff <- list(ribside  = leg.side,
-                   ribsep   = leg.sep,
-                   ribwid   = leg.wid,
-                   ribargs  = leg.args,
-                   ribscale = leg.scale)
-  # colour style: plot as pixel image
-  if(style == "colour" || !do.plot)
-    return(do.call(plot.im,
-                   resolve.defaults(list(x),
+plot.linim <- local({
+
+  plot.linim <- function(x, ..., style=c("colour", "width"),
+                         scale, adjust=1,
+                         negative.args=list(col=2),
+                         legend=TRUE,
+                         leg.side=c("right", "left", "bottom", "top"),
+                         leg.sep=0.1,
+                         leg.wid=0.1,
+                         leg.args=list(),
+                         leg.scale=1,
+                         do.plot=TRUE) {
+    xname <- short.deparse(substitute(x))
+    style <- match.arg(style)
+    leg.side <- match.arg(leg.side)
+    ribstuff <- list(ribside  = leg.side,
+                     ribsep   = leg.sep,
+                     ribwid   = leg.wid,
+                     ribargs  = leg.args,
+                     ribscale = leg.scale)
+    #' colour style: plot as pixel image
+    if(style == "colour" || !do.plot)
+      return(do.call(plot.im,
+                     resolve.defaults(list(x),
+                                      list(...),
+                                      ribstuff,
+                                      list(main=xname,
+                                           legend=legend,
+                                           do.plot=do.plot))))
+    #' width style
+    L <- attr(x, "L")
+    df <- attr(x, "df")
+    Llines <- as.psp(L)
+    W <- as.owin(L)
+    #' plan layout
+    if(legend) {
+      #' use layout procedure in plot.im
+      z <- do.call(plot.im,
+                   resolve.defaults(list(x, do.plot=FALSE, legend=TRUE),
                                     list(...),
                                     ribstuff,
-                                    list(main=xname,
-				         legend=legend,
-					 do.plot=do.plot))))
-  # width style
-  L <- attr(x, "L")
-  df <- attr(x, "df")
-  Llines <- as.psp(L)
-  W <- as.owin(L)
-  # plan layout
-  if(legend) {
-    # use layout procedure in plot.im
-    z <- do.call(plot.im,
-		 resolve.defaults(list(x, do.plot=FALSE, legend=TRUE),
-                                  list(...),
-                                  ribstuff,
-                                  list(main=xname)))
-    bb.all <- attr(z, "bbox")
-    bb.leg <- attr(z, "bbox.legend")
-  } else {
-    bb.all <- Frame(W)
-    bb.leg <- NULL
-  }
-  legend <- !is.null(bb.leg)
-  if(legend) {
-    # expand plot region to accommodate text annotation in legend
-    if(leg.side %in% c("left", "right")) {
-      delta <- 2 * sidelengths(bb.leg)[1]
-      xmargin <- if(leg.side == "right") c(0, delta) else c(delta, 0)
-      bb.all <- grow.rectangle(bb.all, xmargin=xmargin)
+                                    list(main=xname)))
+      bb.all <- attr(z, "bbox")
+      bb.leg <- attr(z, "bbox.legend")
+    } else {
+      bb.all <- Frame(W)
+      bb.leg <- NULL
     }
-  }
-  # initialise plot
-  bb <- do.call.matched(plot.owin,
-                        resolve.defaults(list(x=bb.all, type="n"),
-                                         list(...), list(main=xname)),
-                        extrargs="type")
-  # resolve graphics parameters for polygons
-  grafpar <- resolve.defaults(list(...), list(border=1, col=1))
-  grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
-  # rescale values to a plottable range
-  vr <- range(df$values)
-  vr[1L] <- min(0, vr[1L])
-  if(missing(scale)) {
-    maxsize <- mean(distmap(Llines))/2
-    scale <- maxsize/diff(vr)
-  } 
-  df$values <- adjust * scale * (df$values - vr[1L])/2
-  # split data by segment
-  mapXY <- factor(df$mapXY, levels=seq_len(Llines$n))
-  dfmap <- split(df, mapXY, drop=TRUE)
-  # sort each segment's data by position along segment
-  dfmap <- lapply(dfmap, sortalongsegment)
-  # plot each segment's data
-#  Lends <- Llines$ends
-  Lperp <- angles.psp(Llines) + pi/2
-  Lfrom <- L$from
-  Lto   <- L$to
-  Lvert <- L$vertices
-  Ljoined  <- (vertexdegree(L) > 1)
-  # precompute coordinates of dodecagon
-  dodo <- disc(npoly=12)$bdry[[1L]]
-  #
-  for(i in seq(length(dfmap))) {
-    z <- dfmap[[i]]
-    segid <- unique(z$mapXY)[1L]
-    xx <- z$x
-    yy <- z$y
-    vv <- z$values
-    # add endpoints of segment
-    ileft <- Lfrom[segid]
-    iright <- Lto[segid]
-    leftend <- Lvert[ileft]
-    rightend <- Lvert[iright]
-    xx <- c(leftend$x, xx, rightend$x)
-    yy <- c(leftend$y, yy, rightend$y)
-    vv <- c(vv[1L],     vv, vv[length(vv)])
-    rleft <- vv[1L]
-    rright <- vv[length(vv)]
-    # draw polygon around segment
-    xx <- c(xx, rev(xx))
-    yy <- c(yy, rev(yy))
-    vv <- c(vv, -rev(vv))
-    ang <- Lperp[segid]
-    xx <- xx + cos(ang) * vv
-    yy <- yy + sin(ang) * vv
-    ## first add dodecagonal 'joints'
-    if(Ljoined[ileft] && rleft > 0) 
-      do.call(polygon,
-              append(list(x=rleft * dodo$x + leftend$x,
-                          y=rleft * dodo$y + leftend$y),
-                     grafpar))
-    if(Ljoined[iright] && rright > 0)
-      do.call(polygon,
-              append(list(x=rright * dodo$x + rightend$x,
-                          y=rright * dodo$y + rightend$y),
-                     grafpar))
-    # now draw main
-    do.call(polygon, append(list(x=xx, y=yy), grafpar))
-  }
-  result <- adjust * scale
-  attr(result, "bbox") <- bb
-  if(legend) {
-    attr(result, "bbox.legend") <- bb.leg
-    ## get graphical arguments
-    grafpar <- resolve.defaults(leg.args, grafpar)
-    grafpar <- grafpar[names(grafpar) %in% names(formals(polygon))]
-    ## set up scale of typical pixel values
-    gvals <- leg.args$at %orifnull% prettyinside(range(x))
-    # corresponding widths
-    wvals <- adjust * scale * gvals
-    # glyph positions
-    ng <- length(gvals)
-    xr <- bb.leg$xrange
-    yr <- bb.leg$yrange
-    switch(leg.side,
-           right = ,
-	   left = {
-	     y <- seq(yr[1], yr[2], length.out=ng+1L)
-	     y <- (y[-1L] + y[-(ng+1L)])/2
-	     for(j in 1:ng) {
-               xx <- xr[c(1L,2L,2L,1L)]
-	       yy <- (y[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
-	       do.call(polygon, append(list(xx, yy), grafpar))
+    legend <- !is.null(bb.leg)
+    if(legend) {
+      #' expand plot region to accommodate text annotation in legend
+      if(leg.side %in% c("left", "right")) {
+        delta <- 2 * sidelengths(bb.leg)[1]
+        xmargin <- if(leg.side == "right") c(0, delta) else c(delta, 0)
+        bb.all <- grow.rectangle(bb.all, xmargin=xmargin)
+      }
+    }
+    #' initialise plot
+    bb <- do.call.matched(plot.owin,
+                          resolve.defaults(list(x=bb.all, type="n"),
+                                           list(...), list(main=xname)),
+                          extrargs="type")
+    #' resolve graphics parameters for polygons
+    names(negative.args) <- paste0(names(negative.args), ".neg")
+    grafpar <- resolve.defaults(negative.args,
+                                list(...),
+                                list(col=1),
+                                .MatchNull=FALSE)
+    #' rescale values to a plottable range
+    vr <- range(df$values, 0)
+    if(missing(scale)) {
+      maxsize <- mean(distmap(Llines))/2
+      scale <- maxsize/max(abs(vr))
+    } 
+    df$values <- adjust * scale * df$values/2
+    #' examine sign of values
+    signtype <- if(vr[1] >= 0) "positive" else
+                if(vr[2] <= 0) "negative" else "mixed"
+    #' split data by segment
+    mapXY <- factor(df$mapXY, levels=seq_len(Llines$n))
+    dfmap <- split(df, mapXY, drop=TRUE)
+    #' sort each segment's data by position along segment
+    dfmap <- lapply(dfmap, sortalongsegment)
+    #' plot each segment's data
+    Lperp <- angles.psp(Llines) + pi/2
+    Lfrom <- L$from
+    Lto   <- L$to
+    Lvert <- L$vertices
+    Ljoined  <- (vertexdegree(L) > 1)
+    #' precompute coordinates of dodecagon
+    dodo <- disc(npoly=12)$bdry[[1L]]
+    #'
+    for(i in seq(length(dfmap))) {
+      z <- dfmap[[i]]
+      segid <- unique(z$mapXY)[1L]
+      xx <- z$x
+      yy <- z$y
+      vv <- z$values
+      #' add endpoints of segment
+      ileft <- Lfrom[segid]
+      iright <- Lto[segid]
+      leftend <- Lvert[ileft]
+      rightend <- Lvert[iright]
+      xx <- c(leftend$x, xx, rightend$x)
+      yy <- c(leftend$y, yy, rightend$y)
+      vv <- c(vv[1L],     vv, vv[length(vv)])
+      rleft <- vv[1L]
+      rright <- vv[length(vv)]
+      ## first add dodecagonal 'joints'
+      if(Ljoined[ileft] && rleft != 0) 
+        pltpoly(x=rleft * dodo$x + leftend$x,
+                y=rleft * dodo$y + leftend$y,
+                grafpar, sign(rleft))
+      if(Ljoined[iright] && rright != 0)
+        pltpoly(x=rright * dodo$x + rightend$x,
+                y=rright * dodo$y + rightend$y,
+                grafpar, sign(rright))
+      ## Now render main polygon
+      ang <- Lperp[segid]
+      switch(signtype,
+             positive = pltseg(xx, yy, vv, ang, grafpar),
+             negative = pltseg(xx, yy, vv, ang, grafpar),
+             mixed = {
+               ## find zero-crossings
+               xing <- (diff(sign(vv)) != 0)
+               ## excursions
+               excu <- factor(c(0, cumsum(xing)))
+               elist <- split(data.frame(xx=xx, yy=yy, vv=vv), excu)
+               ## plot each excursion
+               for(e in elist) 
+                 with(e, pltseg(xx, yy, vv, ang, grafpar))
+             })
+    }
+    result <- adjust * scale
+    attr(result, "bbox") <- bb
+    if(legend) {
+      attr(result, "bbox.legend") <- bb.leg
+      ## get graphical arguments
+      grafpar <- resolve.defaults(leg.args, grafpar)
+      ## set up scale of typical pixel values
+      gvals <- leg.args$at %orifnull% prettyinside(range(x))
+      ## corresponding widths
+      wvals <- adjust * scale * gvals
+      ## glyph positions
+      ng <- length(gvals)
+      xr <- bb.leg$xrange
+      yr <- bb.leg$yrange
+      switch(leg.side,
+             right = ,
+             left = {
+               y <- seq(yr[1], yr[2], length.out=ng+1L)
+               y <- (y[-1L] + y[-(ng+1L)])/2
+               for(j in 1:ng) {
+                 xx <- xr[c(1L,2L,2L,1L)]
+                 yy <- (y[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
+                 pltpoly(x = xx, y = yy, grafpar, sign(wvals[j]))
 	     }
 	   },
 	   bottom = ,
@@ -277,7 +295,7 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
 	     for(j in 1:ng) {
 	       xx <- (x[j] + c(-1,1) * wvals[j]/2)[c(1L,1L,2L,2L)]
                yy <- yr[c(1L,2L,2L,1L)]
-	       do.call(polygon, append(list(xx, yy), grafpar))
+               pltpoly(x = xx, y = yy, grafpar, sign(wvals[j]))
 	     }
 	   })
      # add text labels
@@ -291,6 +309,46 @@ plot.linim <- function(x, ..., style=c("colour", "width"),
   }
   return(invisible(result))
 }
+
+  pltseg <- function(xx, yy, vv, ang, pars) {
+    ## draw polygon around segment
+    sgn <- sign(mean(vv))
+    xx <- c(xx, rev(xx))
+    yy <- c(yy, rev(yy))
+    vv <- c(vv, -rev(vv))
+    xx <- xx + cos(ang) * vv
+    yy <- yy + sin(ang) * vv
+    pltpoly(xx, yy, pars, sgn)
+    invisible(NULL)
+  }
+
+  pNames <- c("density", "angle", "border", "col", "lty")
+  posnames <- paste(pNames, ".pos", sep="")
+  negnames <- paste(pNames, ".neg", sep="")
+  
+  pltpoly <- function(x, y, pars, sgn) {
+    #' plot polygon using parameters appropriate to "sign"
+    if(sgn >= 0) {
+      pars <- redub(posnames, pNames, pars)
+    } else {
+      pars <- redub(negnames, pNames, pars)
+    }
+    pars <- pars[names(pars) %in% pNames]
+    if(is.null(pars$border)) pars$border <- pars$col
+    do.call(polygon, append(list(x=x, y=y), pars))
+    invisible(NULL)
+  }
+  
+  redub <- function(from, to, x) {
+    #' rename entry x$from to x$to
+    m <- match(from, names(x))
+    if(any(ok <- !is.na(m))) 
+      names(x)[m[ok]] <- to[ok]
+    return(resolve.defaults(x))
+  }
+  
+  plot.linim
+})
 
 sortalongsegment <- function(df) {
   df[fave.order(df$tp), , drop=FALSE]
