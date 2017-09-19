@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.43 $   $Date: 2017/09/12 04:35:45 $
+#  $Revision: 1.44 $   $Date: 2017/09/19 08:26:58 $
 #
 #  Image/function on a linear network
 #
@@ -141,10 +141,19 @@ plot.linim <- local({
                          leg.wid=0.1,
                          leg.args=list(),
                          leg.scale=1,
+                         zlim, 
                          do.plot=TRUE) {
     xname <- short.deparse(substitute(x))
     style <- match.arg(style)
     leg.side <- match.arg(leg.side)
+
+    if(missing(zlim) || is.null(zlim)) {
+      zlim <- range(x, finite=TRUE)
+    } else {
+      check.range(zlim)
+      stopifnot(all(is.finite(zlim)))
+    }
+    
     ribstuff <- list(ribside  = leg.side,
                      ribsep   = leg.sep,
                      ribwid   = leg.wid,
@@ -158,6 +167,7 @@ plot.linim <- local({
                                       ribstuff,
                                       list(main=xname,
                                            legend=legend,
+                                           zlim=zlim,
                                            do.plot=do.plot))))
     #' width style
     L <- attr(x, "L")
@@ -199,7 +209,7 @@ plot.linim <- local({
                                 list(col=1),
                                 .MatchNull=FALSE)
     #' rescale values to a plottable range
-    vr <- range(df$values, 0)
+    vr <- range(zlim, 0)
     if(missing(scale)) {
       maxsize <- mean(distmap(Llines))/2
       scale <- maxsize/max(abs(vr))
@@ -270,7 +280,7 @@ plot.linim <- local({
       ## get graphical arguments
       grafpar <- resolve.defaults(leg.args, grafpar)
       ## set up scale of typical pixel values
-      gvals <- leg.args$at %orifnull% prettyinside(range(x))
+      gvals <- leg.args$at %orifnull% prettyinside(zlim)
       ## corresponding widths
       wvals <- adjust * scale * gvals
       ## glyph positions

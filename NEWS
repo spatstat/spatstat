@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.030
+        CHANGES IN spatstat VERSION 1.52-1.031
 
 OVERVIEW
 
@@ -68,6 +68,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     When style="width", negative values are plotted in red (by default).
     New argument 'negative.args' controls this.
 
+    o plot.linim
+    New argument 'zlim' specifies the range of values to be mapped.
+
+    o Summary.linim
+    Recognises the argument 'finite' so that range(x, finite=TRUE)
+    works for a linim object x.
+    
     o identify.psp
     Improved placement of labels.
     Arguments can be passed to text.default to control the plotting of labels.

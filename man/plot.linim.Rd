@@ -18,6 +18,7 @@
              leg.wid=0.1,
              leg.args=list(),
              leg.scale=1,
+             zlim,
              do.plot=TRUE)
 }
 \arguments{
@@ -70,6 +71,11 @@
     or \code{\link[graphics]{text.default}} 
     to control the display of the legend.
     These may override the \code{\dots} arguments. 
+  }
+  \item{zlim}{
+    The range of numerical values that should be mapped.
+    A numeric vector of length 2.
+    Defaults to the range of values of \code{x}.
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.
