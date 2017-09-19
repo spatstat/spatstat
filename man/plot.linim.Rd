@@ -11,6 +11,7 @@
 \usage{
 \method{plot}{linim}(x, ..., style = c("colour", "width"),
              scale, adjust = 1,
+             negative.args = list(col=2),
              legend=TRUE,
              leg.side=c("right", "left", "bottom", "top"),
              leg.sep=0.1,
@@ -37,6 +38,11 @@
   }
   \item{adjust}{
     Adjustment factor for the default scale.
+  }
+  \item{negative.args}{
+    A list of arguments to be passed to \code{\link[graphics]{polygon}}
+    specifying how to plot negative values of \code{x}
+    when \code{style="width"}.
   }
   \item{legend}{
     Logical value indicating whether to plot a legend
@@ -113,6 +119,13 @@
   X <- as.linim(X)
   
   plot(X)
-  plot(X, style="width", main="Width represents value")
+  plot(X, style="width", main="Width proportional to function value")
+
+  # signed values
+  f <- linfun(function(x,y,seg,tp){y-x}, simplenet)
+  plot(f, style="w", main="Negative values in red")
+
+  plot(f, style="w", negative.args=list(density=10),
+       main="Negative values are hatched")
 }
 \keyword{spatial}
