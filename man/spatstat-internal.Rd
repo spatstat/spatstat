@@ -1085,7 +1085,8 @@ match2DkernelName(kernel)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
-PDEdensityLPP(x, sigma, \dots, weights, dx, dt, fun)
+PDEdensityLPP(x, sigma, \dots, weights, dx, dt,
+              fun, finespacing, finedata)
 PoisSaddle(beta, fi)
 PoisSaddleArea(beta, fi)
 PoisSaddleGeyer(beta, fi)

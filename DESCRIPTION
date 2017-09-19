@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.029
+Version: 1.52-1.030
 Nickname: Seemed Like A Good Idea At The Time
-Date: 2017-09-16
+Date: 2017-09-19
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.029
+        CHANGES IN spatstat VERSION 1.52-1.030
 
 OVERVIEW
 
     o We thank Tilman Davies and Mehdi Moradi for contributions.
 
-    o Numerous bug fixes for linear networks.
+    o Numerous bug fixes for linear networks code.
     
     o Minor enhancements and bug fixes.
 
@@ -64,6 +64,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The image Z is now automatically restricted to the network.
     New argument 'restrict'.
 
+    o plot.linim
+    When style="width", negative values are plotted in red (by default).
+    New argument 'negative.args' controls this.
+
     o identify.psp
     Improved placement of labels.
     Arguments can be passed to text.default to control the plotting of labels.
@@ -71,9 +75,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o as.polygonal
     Accelerated when w is a pixel mask.
 
+    o density.lpp
+    Accelerated in the default case.
+    
     o Kinhom
     Stops gracefully if 'lambda' contains any zero values.
     
+    o print.linim
+    Prints more information.
+
 BUG FIXES
 
     o with.msr

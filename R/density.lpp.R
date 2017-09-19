@@ -169,7 +169,9 @@ density.splitppx <- function(x, sigma, ...) {
 }
 
 PDEdensityLPP <- function(x, sigma, ..., weights=NULL, 
-                          dx=NULL, dt=NULL, fun=FALSE) {
+                          dx=NULL, dt=NULL,
+                          fun=FALSE, 
+                          finespacing=FALSE, finedata=finespacing) {
   stopifnot(is.lpp(x))
   L <- as.linnet(x)
   check.1.real(sigma)
@@ -177,15 +179,29 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
   if(!is.null(weights)) 
     check.nvector(weights, npoints(x))
   if(is.null(dx)) {
-    #' segment lengths
+    #' default rule for spacing of sample points
     lenths <- lengths.psp(as.psp(L))
     lbar <- mean(lenths)
-    ltot <- sum(lenths)
-    #' specify 30 steps per segment, on average
-    dx <- lbar/30
+    ltot <- lbar * length(lenths)
+    if(finespacing) {
+      #' specify 30 steps per segment, on average
+      dx <- lbar/30
+    } else {
+      #' use pixel size
+      argh <- list(...)
+      W <- Frame(x)
+      eps <- if(!is.null(argh$eps)) {
+               min(argh$eps)
+             } else if(!is.null(argh$dimyx)) {
+               min(sidelengths(W)/argh$dimyx)
+             } else if(!is.null(argh$xy)) {
+               with(as.mask(W, xy=xy), min(xstep, ystep))
+             } else min(sidelengths(W)/spatstat.options("npixel"))
+      dx <- min(eps, min(lenths)/1.1)
+    }
     D <- ceiling(ltot/dx)
     dx <- ltot/D
-  } 
+  }
   verdeg <- vertexdegree(L)
   amb <- max(verdeg[L$from] + verdeg[L$to])
   dtmax <- min(0.95 * (dx^2)/amb, sigma^2/(2 * 10), sigma * dx/6)
@@ -198,8 +214,21 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
   a <- FDMKERNEL(lppobj=x, sigma=sigma, dtx=dx, dtt=dt,
                  weights=weights,
                  iterMax=1e6, sparse=TRUE)
-  result <- a$kernel_fun
-  if(!fun) result <- as.linim(result, ...)
+  f <- a$kernel_fun
+  if(fun) {
+    result <- f
+  } else if(!finespacing) {
+    result <- as.linim(f, ...)
+  } else {
+    Z <- as.im(as.linim(f, ...))
+    df <- a$df
+    colnames(df)[colnames(df) == "seg"] <- "mapXY"
+    ij <- nearest.valid.pixel(df$x, df$y, Z)
+    xy <- data.frame(xc = Z$xcol[ij$col],
+                     yc = Z$yrow[ij$row])
+    df <- cbind(xy, df)
+    result <- linim(domain(f), Z, restrict=FALSE, df=df)
+  }
   attr(result, "sigma") <- sigma
   attr(result, "dx") <- a$deltax
   attr(result, "dt") <- a$deltat
@@ -260,6 +289,7 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
       v <- A2 %*% v
     finalU <- as.numeric(v)
   } else finalU <- U0
+
   vert_new <- cbind(vertco_new, vertseg_new, verttp_new)
   colnames(vert_new) <- c("x", "y", "seg", "tp")
   Nodes <- lpp(vert_new, net2, check=FALSE)
@@ -268,8 +298,10 @@ FDMKERNEL <- function(lppobj, sigma, dtt, weights=NULL, iterMax=5000,
     finalU[nodemap(x,y,seg,tp)]
   }
   interpU <- linfun(interpUxyst, net2)
-  out <- list(kernel_fun   = interpU,
-              deltax       = dtx,
-              deltat       = dtt)
+  df <- cbind(vert_new, data.frame(values=finalU))
+  out <- list(kernel_fun = interpU,
+              df         = df, 
+              deltax     = dtx,
+              deltat     = dtt)
   return(out)
 }
