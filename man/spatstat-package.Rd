@@ -271,53 +271,53 @@
       of all datasets, including background information, and plots.
       
       \tabular{ll}{
-	\code{\link{amacrine}} \tab Austin Hughes' rabbit amacrine cells \cr
-	\code{\link{anemones}} \tab Upton-Fingleton sea anemones data\cr
-	\code{\link{ants}} \tab Harkness-Isham ant nests data\cr
-	\code{\link{bdspots}} \tab Breakdown spots in microelectrodes \cr
-	\code{\link{bei}} \tab Tropical rainforest trees \cr
-	\code{\link{betacells}} \tab Waessle et al. cat retinal ganglia data \cr
-	\code{\link{bramblecanes}} \tab Bramble Canes data \cr
-	\code{\link{bronzefilter}} \tab Bronze Filter Section data \cr
-	\code{\link{cells}} \tab Crick-Ripley biological cells data \cr
-	\code{\link{chicago}} \tab Chicago crimes \cr
-	\code{\link{chorley}} \tab Chorley-Ribble cancer data \cr
-	\code{\link{clmfires}} \tab Castilla-La Mancha forest fires \cr
-	\code{\link{copper}} \tab Berman-Huntington copper deposits data \cr
-	\code{\link{dendrite}} \tab Dendritic spines \cr
-	\code{\link{demohyper}} \tab Synthetic point patterns\cr
-	\code{\link{demopat}} \tab Synthetic point pattern \cr
-	\code{\link{finpines}} \tab Finnish Pines data \cr
-	\code{\link{flu}} \tab Influenza virus proteins \cr
-	\code{\link{gordon}} \tab People in Gordon Square, London \cr
-	\code{\link{gorillas}} \tab Gorilla nest sites \cr
-	\code{\link{hamster}} \tab Aherne's hamster tumour data \cr
-	\code{\link{humberside}} \tab North Humberside childhood leukaemia data \cr
-	\code{\link{hyytiala}} \tab {Mixed forest in
+	\code{\link[spatstat.data]{amacrine}} \tab Austin Hughes' rabbit amacrine cells \cr
+	\code{\link[spatstat.data]{anemones}} \tab Upton-Fingleton sea anemones data\cr
+	\code{\link[spatstat.data]{ants}} \tab Harkness-Isham ant nests data\cr
+	\code{\link[spatstat.data]{bdspots}} \tab Breakdown spots in microelectrodes \cr
+	\code{\link[spatstat.data]{bei}} \tab Tropical rainforest trees \cr
+	\code{\link[spatstat.data]{betacells}} \tab Waessle et al. cat retinal ganglia data \cr
+	\code{\link[spatstat.data]{bramblecanes}} \tab Bramble Canes data \cr
+	\code{\link[spatstat.data]{bronzefilter}} \tab Bronze Filter Section data \cr
+	\code{\link[spatstat.data]{cells}} \tab Crick-Ripley biological cells data \cr
+	\code{\link[spatstat.data]{chicago}} \tab Chicago crimes \cr
+	\code{\link[spatstat.data]{chorley}} \tab Chorley-Ribble cancer data \cr
+	\code{\link[spatstat.data]{clmfires}} \tab Castilla-La Mancha forest fires \cr
+	\code{\link[spatstat.data]{copper}} \tab Berman-Huntington copper deposits data \cr
+	\code{\link[spatstat.data]{dendrite}} \tab Dendritic spines \cr
+	\code{\link[spatstat.data]{demohyper}} \tab Synthetic point patterns\cr
+	\code{\link[spatstat.data]{demopat}} \tab Synthetic point pattern \cr
+	\code{\link[spatstat.data]{finpines}} \tab Finnish Pines data \cr
+	\code{\link[spatstat.data]{flu}} \tab Influenza virus proteins \cr
+	\code{\link[spatstat.data]{gordon}} \tab People in Gordon Square, London \cr
+	\code{\link[spatstat.data]{gorillas}} \tab Gorilla nest sites \cr
+	\code{\link[spatstat.data]{hamster}} \tab Aherne's hamster tumour data \cr
+	\code{\link[spatstat.data]{humberside}} \tab North Humberside childhood leukaemia data \cr
+	\code{\link[spatstat.data]{hyytiala}} \tab {Mixed forest in
               \ifelse{latex}{\out{Hyyti{\"a}l{\"a}}}{Hyytiala}, Finland}\cr
-	\code{\link{japanesepines}} \tab Japanese Pines data \cr
-	\code{\link{lansing}} \tab Lansing Woods data \cr
-	\code{\link{longleaf}} \tab Longleaf Pines data \cr
-	\code{\link{mucosa}} \tab Cells in gastric mucosa \cr
-	\code{\link{murchison}} \tab Murchison gold deposits \cr
-	\code{\link{nbfires}} \tab New Brunswick fires data \cr
-	\code{\link{nztrees}} \tab Mark-Esler-Ripley trees data \cr
-	\code{\link{osteo}} \tab Osteocyte lacunae (3D, replicated) \cr
-	\code{\link{paracou}} \tab Kimboto trees in Paracou, French Guiana \cr
-	\code{\link{ponderosa}} \tab Getis-Franklin ponderosa pine trees data \cr
-	\code{\link{pyramidal}} \tab Pyramidal neurons from 31 brains \cr
-	\code{\link{redwood}} \tab Strauss-Ripley redwood saplings data \cr
-	\code{\link{redwoodfull}} \tab Strauss redwood saplings data (full set) \cr
-	\code{\link{residualspaper}} \tab Data from Baddeley et al (2005) \cr
-	\code{\link{shapley}} \tab Galaxies in an astronomical survey \cr
-	\code{\link{simdat}} \tab Simulated point pattern (inhomogeneous, with interaction) \cr
-	\code{\link{spiders}} \tab Spider webs on mortar lines of brick wall \cr
-	\code{\link{sporophores}} \tab Mycorrhizal fungi around a tree \cr
-	\code{\link{spruces}} \tab Spruce trees in Saxonia \cr
-	\code{\link{swedishpines}} \tab Strand-Ripley Swedish pines data \cr
-	\code{\link{urkiola}} \tab Urkiola Woods data \cr
-	\code{\link{waka}} \tab Trees in Waka national park \cr
-	\code{\link{waterstriders}} \tab Insects on water surface 
+	\code{\link[spatstat.data]{japanesepines}} \tab Japanese Pines data \cr
+	\code{\link[spatstat.data]{lansing}} \tab Lansing Woods data \cr
+	\code{\link[spatstat.data]{longleaf}} \tab Longleaf Pines data \cr
+	\code{\link[spatstat.data]{mucosa}} \tab Cells in gastric mucosa \cr
+	\code{\link[spatstat.data]{murchison}} \tab Murchison gold deposits \cr
+	\code{\link[spatstat.data]{nbfires}} \tab New Brunswick fires data \cr
+	\code{\link[spatstat.data]{nztrees}} \tab Mark-Esler-Ripley trees data \cr
+	\code{\link[spatstat.data]{osteo}} \tab Osteocyte lacunae (3D, replicated) \cr
+	\code{\link[spatstat.data]{paracou}} \tab Kimboto trees in Paracou, French Guiana \cr
+	\code{\link[spatstat.data]{ponderosa}} \tab Getis-Franklin ponderosa pine trees data \cr
+	\code{\link[spatstat.data]{pyramidal}} \tab Pyramidal neurons from 31 brains \cr
+	\code{\link[spatstat.data]{redwood}} \tab Strauss-Ripley redwood saplings data \cr
+	\code{\link[spatstat.data]{redwoodfull}} \tab Strauss redwood saplings data (full set) \cr
+	\code{\link[spatstat.data]{residualspaper}} \tab Data from Baddeley et al (2005) \cr
+	\code{\link[spatstat.data]{shapley}} \tab Galaxies in an astronomical survey \cr
+	\code{\link[spatstat.data]{simdat}} \tab Simulated point pattern (inhomogeneous, with interaction) \cr
+	\code{\link[spatstat.data]{spiders}} \tab Spider webs on mortar lines of brick wall \cr
+	\code{\link[spatstat.data]{sporophores}} \tab Mycorrhizal fungi around a tree \cr
+	\code{\link[spatstat.data]{spruces}} \tab Spruce trees in Saxonia \cr
+	\code{\link[spatstat.data]{swedishpines}} \tab Strand-Ripley Swedish pines data \cr
+	\code{\link[spatstat.data]{urkiola}} \tab Urkiola Woods data \cr
+	\code{\link[spatstat.data]{waka}} \tab Trees in Waka national park \cr
+	\code{\link[spatstat.data]{waterstriders}} \tab Insects on water surface 
       }
 
       \bold{To manipulate a point pattern:}
@@ -415,7 +415,7 @@
 	\code{\link{ripras}}    \tab
 	Ripley-Rasson estimator of window, given only the points \cr
 	\code{\link{convexhull}} \tab compute convex hull of something \cr 
-	\code{\link{letterR}}    \tab
+	\code{\link[spatstat.data]{letterR}}    \tab
 	polygonal window in the shape of the \R logo \cr
 	\code{\link{clickpoly}}    \tab
 	interactively draw a polygonal window  \cr
@@ -706,7 +706,7 @@
       \code{\link{linnet}} \tab create a linear network \cr
       \code{\link{clickjoin}} \tab interactively join vertices in network \cr
       \code{\link{iplot.linnet}} \tab interactively plot network \cr
-      \code{\link{simplenet}} \tab simple example of network \cr
+      \code{\link[spatstat.data]{simplenet}} \tab simple example of network \cr
       \code{\link{lineardisc}} \tab disc in a linear network \cr
       \code{\link{delaunayNetwork}} \tab network of Delaunay triangulation \cr
       \code{\link{dirichletNetwork}} \tab network of Dirichlet edges \cr
@@ -725,9 +725,9 @@
       \code{\link{subset.lpp}} \tab method for \code{subset} \cr
       \code{\link{rpoislpp}} \tab simulate Poisson points on linear network \cr
       \code{\link{runiflpp}} \tab simulate random points on a linear network \cr
-      \code{\link{chicago}} \tab Chicago crime data \cr
-      \code{\link{dendrite}} \tab Dendritic spines data \cr
-      \code{\link{spiders}} \tab Spider webs on mortar lines of brick wall 
+      \code{\link[spatstat.data]{chicago}} \tab Chicago crime data \cr
+      \code{\link[spatstat.data]{dendrite}} \tab Dendritic spines data \cr
+      \code{\link[spatstat.data]{spiders}} \tab Spider webs on mortar lines of brick wall 
     }
     
     \bold{Hyperframes}
@@ -1607,7 +1607,7 @@
   \tabular{ll}{
     \code{\link{diagnose.ppm}} \tab diagnostic plots for spatial trend\cr
     \code{\link{qqplot.ppm}} \tab diagnostic Q-Q plot for interpoint interaction\cr
-    \code{\link{residualspaper}} \tab examples from Baddeley et al (2005) \cr
+    \code{\link[spatstat.data]{residualspaper}} \tab examples from Baddeley et al (2005) \cr
     \code{\link{Kcom}} \tab model compensator of \eqn{K} function \cr
     \code{\link{Gcom}} \tab model compensator of \eqn{G} function \cr
     \code{\link{Kres}} \tab score residual of \eqn{K} function \cr

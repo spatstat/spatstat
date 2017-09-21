@@ -22,9 +22,9 @@
 }
 \details{
   ``Marks'' are observations attached to each point of a point pattern.
-  For example the \code{\link{longleaf}} dataset contains the locations
-  of trees, each tree being marked by its diameter;
-  the \code{\link{amacrine}} dataset gives the locations of cells
+  For example the \code{\link[spatstat.data]{longleaf}} dataset
+  contains the locations of trees, each tree being marked by its diameter;
+  the \code{\link[spatstat.data]{amacrine}} dataset gives the locations of cells
   of two types (on/off) and the type of cell may be regarded as a mark attached
   to the location of the cell.
   Other objects related to point patterns, such as point process models,
@@ -34,9 +34,9 @@
   contains or involves marked points, \bold{and} that the
   marks are a factor.
 
-  For example, the \code{\link{amacrine}}
+  For example, the \code{\link[spatstat.data]{amacrine}}
   dataset is multitype (there are two types of cells, on and off),
-  but the \code{\link{longleaf}} dataset is \emph{not} multitype
+  but the \code{\link[spatstat.data]{longleaf}} dataset is \emph{not} multitype
   (the marks are real numbers).
   
   This function is generic; methods are provided

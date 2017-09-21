@@ -1,15 +1,17 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.031
+        CHANGES IN spatstat VERSION 1.52-1.032
 
 OVERVIEW
 
     o We thank Tilman Davies and Mehdi Moradi for contributions.
 
     o Numerous bug fixes for linear networks code.
+
+    o spatstat now requires the sub-package 'spatstat.data'
     
     o Minor enhancements and bug fixes.
 
-    o Nickname: "Seemed Like A Good Idea At The Time"
+    o Nickname: "Thermal Time"
 
 NEW FUNCTIONS
 

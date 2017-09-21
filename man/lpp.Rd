@@ -75,7 +75,9 @@ lpp(X, L, \dots)
 }
 \seealso{
   Installed datasets which are \code{"lpp"} objects:
-  \code{\link{chicago}}, \code{\link{dendrite}}, \code{\link{spiders}}.
+  \code{\link[spatstat.data]{chicago}},
+  \code{\link[spatstat.data]{dendrite}},
+  \code{\link[spatstat.data]{spiders}}.
   
   See \code{\link{as.lpp}} for converting data to an \code{lpp} object.
 

@@ -67,7 +67,7 @@ linnet(vertices, m, edges, sparse=FALSE, warn=TRUE)
   \adrian 
 }
 \seealso{
-  \code{\link{simplenet}} for an example of a linear network.
+  \code{\link[spatstat.data]{simplenet}} for an example of a linear network.
 
   \code{\link[spatstat:methods.linnet]{methods.linnet}} for
   methods applicable to \code{linnet} objects.

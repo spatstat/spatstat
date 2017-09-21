@@ -61,8 +61,10 @@ mergeSizeTables <- function(a, b) {
 }
 z <- getSizeTable()
 zutils <- getSizeTable("spatstat.utils")
+zdata <- getSizeTable("spatstat.data")
 zlocal <- getSizeTable("spatstat", "spatstatlocalsize.txt")
 z <- mergeSizeTables(z, zutils)
+z <- mergeSizeTables(z, zdata)
 z <- mergeSizeTables(z, zlocal)
 #
 changes <- z[nrow(z), ] - z[z$version == "1.42-0", ]
