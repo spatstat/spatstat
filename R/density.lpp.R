@@ -182,7 +182,8 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
     #' default rule for spacing of sample points
     lenths <- lengths.psp(as.psp(L))
     lbar <- mean(lenths)
-    ltot <- lbar * length(lenths)
+    nseg <- length(lenths)
+    ltot <- lbar * nseg
     if(finespacing) {
       #' specify 30 steps per segment, on average
       dx <- lbar/30
@@ -197,9 +198,10 @@ PDEdensityLPP <- function(x, sigma, ..., weights=NULL,
              } else if(!is.null(argh$xy)) {
                with(as.mask(W, xy=xy), min(xstep, ystep))
              } else min(sidelengths(W)/spatstat.options("npixel"))
-      dx <- min(eps, min(lenths)/1.1)
+      dx <- max(eps/1.4, lbar/30)
     }
     D <- ceiling(ltot/dx)
+    D <- min(D, .Machine$integer.max)
     dx <- ltot/D
   }
   verdeg <- vertexdegree(L)
