@@ -85,6 +85,7 @@ from github is through the `remotes` package. Start `R` and type
 ```R
 require(remotes)
 install_github('spatstat/spatstat.utils')
+install_github('spatstat/spatstat.data')
 install_github('spatstat/spatstat')
 ```
 
