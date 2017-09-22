@@ -1,6 +1,6 @@
 \documentclass[11pt]{article}
 
-% \VignetteIndexEntry{Datasets Provided in Spatstat}
+% \VignetteIndexEntry{Datasets Provided for the Spatstat Package}
 
 <<echo=FALSE,results=hide,fig=FALSE>>=
 options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
@@ -15,6 +15,8 @@ options(SweaveHooks=list(fig=function() par(mar=c(1,1,1,1))))
 \newcommand{\R}{{\sf R}}
 \newcommand{\spst}{\pkg{spatstat}}
 \newcommand{\Spst}{\pkg{Spatstat}}
+\newcommand{\sdat}{\pkg{spatstat.data}}
+\newcommand{\Sdat}{\pkg{Spatstat.data}}
 
 \begin{document}
 \bibliographystyle{plain}
@@ -32,18 +34,18 @@ spatstat.options(transparent=FALSE)
 options(useFancyQuotes=FALSE)
 @ 
 
-\title{Datasets provided in \spst}
+\title{Datasets provided for \spst}
 \author{Adrian Baddeley, Rolf Turner and Ege Rubak}
 \date{For \spst\ version \texttt{\Sexpr{sversion}}}
 \maketitle
 
 This document is an overview of the spatial datasets
-that are provided in the \spst\ package. 
+that are provided for the \spst\ package. 
 
 To flick through a nice display of all the data sets that come with
 \spst\ type \texttt{demo(data)}.  To see information about a given
 data set, type \texttt{help({\em name})} where \emph{name} is the
-name of the data set  To plot a given data set, 
+name of the data set.  To plot a given data set, 
 type \texttt{plot({\em name})}.
 
 Datasets in \spst\ are ``lazy-loaded'', which means that they can
@@ -51,12 +53,20 @@ be accessed simply by typing their name. Not all packages do this;
 in some packages you have to type \texttt{data({\em name})} in
 order to access a data set.
 
+To list all the datasets in \spst, you need to type
+\texttt{data(package="spatstat.data")}. This is because, 
+for efficiency, the datasets are actually installed in a
+sub-package \sdat. This is the only time you should ever need to
+mention \sdat\ explicitly. When the \spst\ package 
+is loaded by the command \texttt{library(spatstat)},
+the sub-package \sdat\ is automatically loaded.
+
 \section{List of datasets}
 
 \subsection{Point patterns in 2D}
 
 Here is a list of the standard point pattern data sets 
-that are supplied with the current installation of \spst:
+that are supplied with the current installation of \sdat:
 
 \newcommand{\recto}{\framebox{\hphantom{re}\vphantom{re}}}
 \newcommand{\irregpoly}{\includegraphics*[width=6mm]{irregpoly}}
@@ -155,7 +165,7 @@ Currently these are the available options:
   {\tt bei.extra} & covariate images \\
   {\tt chorley.extra} & incinerator location; plotting function \\
   {\tt gorillas.extra} & covariate images\\
-  {\tt nbfires.extra} & inscribed rectangle \\
+  {\tt nbfires.extra} & inscribed rectangle; border type labels \\
   {\tt ponderosa.extra} & data points of interest; plotting function\\
   {\tt redwoodfull.extra} & subregions; plotting function \\
   {\tt shapley.extra} & individual survey fields; plotting function \\
