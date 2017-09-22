@@ -34,19 +34,28 @@ access to all the functions in `spatstat` that you know from previous versions.
 
 However, messages from `R` about the installation and loading of the package
 will now show that `spatstat` consists of several pieces.
-Currently there are two pieces:
+Currently there are three pieces:
 
   . `spatstat`: contains the main functionality of the `spatstat` family.
 
-  . `spatstat.utils`: utility functions originally included in `spatstat`
-  which are now accessible as a separate package. The current development
-  version of `spatstat.utils` is [here](https://github.com/spatstat/spatstat.utils).
+  . `spatstat.data`: contains the datasets for the `spatstat` family.
+  The current development version of `spatstat.data` is
+  [here](https://github.com/spatstat/spatstat.data).
 
-When you type `library(spatstat)` this will load the main `spatstat` library
+  . `spatstat.utils`: utility functions originally included in `spatstat`
+  which are now accessible as a separate package.
+  The current development version of `spatstat.utils` is
+  [here](https://github.com/spatstat/spatstat.utils).
+
+When you type `library(spatstat)` this will load
+the main `spatstat` library
+and the `spatstat.data` library, 
 and will also *import* the `spatstat.utils` library. This means that
 `spatstat.utils` functions can be used by `spatstat` but cannot be accessed by
 the user. To access these utility functions directly, you need to type
 `library(spatstat.utils)`.
+
+### Extension packages
 
 There are also *extension packages* which provide additional capabilities
 and must be loaded explicitly when you need them. 
