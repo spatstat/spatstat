@@ -2,7 +2,7 @@
 #'
 #'  Nearest data point to each vertex of a network
 #'
-#'  $Revision: 1.1 $  $Date: 2017/09/13 19:07:10 $
+#'  $Revision: 1.2 $  $Date: 2017/09/23 04:56:45 $
 #'
 
 nnfromvertex <- function(X, what=c("dist", "which"), k=1) {
@@ -35,7 +35,6 @@ nnfromvertex <- function(X, what=c("dist", "which"), k=1) {
     #' Unique points, remembering original sequence
     ii <- which(!duplicated(X))
     uX <- X[ii]
-    nuX <- npoints(uX)
     #' local coordinates
     coUX <- coords(uX)[, c("seg", "tp")]
     #' add label from original sequence index

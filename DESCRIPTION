@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.52-1.034
-Nickname: Thermal Time
-Date: 2017-09-22
+Version: 1.53-0
+Nickname: Tinfoil Hat
+Date: 2017-09-23
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

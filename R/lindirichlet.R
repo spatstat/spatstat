@@ -2,14 +2,13 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
-#'   $Revision: 1.7 $  $Date: 2017/09/13 19:20:26 $
+#'   $Revision: 1.8 $  $Date: 2017/09/23 04:56:23 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))
   #' unique points, remembering original sequence
   ii <- which(!duplicated(X))
   uX <- X[ii]
-  nuX <- npoints(uX)
   #' local coordinates
   coUX <- coords(uX)[, c("seg", "tp")]
   #' add label from original sequence index

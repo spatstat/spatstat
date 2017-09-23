@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.52-1.034
+        CHANGES IN spatstat VERSION 1.53-0
 
 OVERVIEW
 
@@ -8,10 +8,11 @@ OVERVIEW
     o Numerous bug fixes for linear networks code.
 
     o spatstat now requires the sub-package 'spatstat.data'
+    which contains the datasets.
     
     o Minor enhancements and bug fixes.
 
-    o Nickname: "Thermal Time"
+    o Nickname: "Tinfoil Hat"
 
 NEW FUNCTIONS
 
@@ -30,6 +31,14 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o datasets
+    All datasets installed in 'spatstat' have now been moved
+    into the sub-package 'spatstat.data'. This should not have any effect
+    on normal use. The 'spatstat.data' package is automatically loaded
+    when spatstat is loaded, and the datasets are lazy-loaded so that
+    they are available in the usual way. To list all datasets you now need
+    to type 'data(package="spatstat.data")'
+    
     o nbfires
     This dataset now includes information about the different 
     land and sea borders of New Brunswick.
