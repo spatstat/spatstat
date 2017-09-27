@@ -1,4 +1,6 @@
 README.md
+ChangeLogs
+ChangeLogs/ChangeLog*
 .git
 .gitignore
 ^.*\.Rproj$

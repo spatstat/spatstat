@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.44 $   $Date: 2017/09/19 08:26:58 $
+#  $Revision: 1.45 $   $Date: 2017/09/27 09:31:17 $
 #
 #  Image/function on a linear network
 #
@@ -141,17 +141,19 @@ plot.linim <- local({
                          leg.wid=0.1,
                          leg.args=list(),
                          leg.scale=1,
-                         zlim, 
+                         zlim,
                          do.plot=TRUE) {
     xname <- short.deparse(substitute(x))
     style <- match.arg(style)
     leg.side <- match.arg(leg.side)
 
     if(missing(zlim) || is.null(zlim)) {
-      zlim <- range(x, finite=TRUE)
+      zlim <- NULL
+      zliminfo <- list()
     } else {
       check.range(zlim)
       stopifnot(all(is.finite(zlim)))
+      zliminfo <- list(zlim=zlim)
     }
     
     ribstuff <- list(ribside  = leg.side,
@@ -165,9 +167,9 @@ plot.linim <- local({
                      resolve.defaults(list(x),
                                       list(...),
                                       ribstuff,
+                                      zliminfo, 
                                       list(main=xname,
                                            legend=legend,
-                                           zlim=zlim,
                                            do.plot=do.plot))))
     #' width style
     L <- attr(x, "L")
@@ -206,10 +208,11 @@ plot.linim <- local({
     names(negative.args) <- paste0(names(negative.args), ".neg")
     grafpar <- resolve.defaults(negative.args,
                                 list(...),
-                                list(col=1),
+                               list(col=1),
                                 .MatchNull=FALSE)
     #' rescale values to a plottable range
-    vr <- range(zlim, 0)
+    if(is.null(zlim)) zlim <- range(x, finite=TRUE)
+    vr <- range(0, zlim)
     if(missing(scale)) {
       maxsize <- mean(distmap(Llines))/2
       scale <- maxsize/max(abs(vr))

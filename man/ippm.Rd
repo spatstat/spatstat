@@ -165,6 +165,7 @@ ippm(Q, \dots,
        covariates=list(Z=Z, f=f),
        iScore=Dlogf,
        start=list(gamma=1, delta=1),
+       nlm.args=list(stepmax=1),
        nd=nd)
 }
 \keyword{spatial}

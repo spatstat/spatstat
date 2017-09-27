@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat VERSION 1.53-0.001
+
+OVERVIEW
+
+    o We thank Suman Rakshit for contributions.
+    
+    o Bug fix in plot.linim
+
+    o Nickname: "Cosmic Capitalism"
+
+BUG FIXES
+
+    o plot.linim
+    Colour map was mangled if log=TRUE.
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.53-0
 
 OVERVIEW
