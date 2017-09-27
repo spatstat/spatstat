@@ -1,0 +1,27 @@
+Change log from 1.53-0 to 1.53-xxxxx
+================================
+
+23 sept 2017
+
+   DESCRIPTION
+   NEWS
+	Initialised as version 1.53-0.001
+	Nicknamed 'Cosmic Capitalism'
+
+
+27 sept 2017
+
+   linim.R
+	Bug fix in plot.linim when log=TRUE
+	Thanks to Suman.
+
+   DESCRIPTION
+	Updated
+	
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+
+
