@@ -1,4 +1,4 @@
-Change log from 1.53-0 to 1.53-xxxxx
+Change log from 1.53-0 to 1.53-1
 ================================
 
 23 sept 2017
@@ -17,10 +17,17 @@ Change log from 1.53-0 to 1.53-xxxxx
 
    DESCRIPTION
 	Updated
-	
+
+28 sept 2017
+
+   DESCRIPTION
+   NEWS
+	Dubbed 1.53-1 "Drongo"
+
 ------------- passed R-3.4.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+------------- submitted to CRAN        ---------------
 
 
 
