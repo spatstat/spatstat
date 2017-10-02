@@ -16,5 +16,24 @@ Change log from 1.53-1 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+02 oct 2017
+
+   lohboot.R
+   lohboot.Rd
+	Corrected implementation (thanks to Christophe Biscio and Rasmus W)
+
+   DESCRIPTION
+	Deleted nickname field, by order of CRAN.
+
+   doc/Nickname.txt [New file]
+   	File to contain the version nickname.
+
+   First.R
+	Nickname is now read from 'Nickname.txt'
+
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
 
 
