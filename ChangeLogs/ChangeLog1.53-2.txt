@@ -1,0 +1,20 @@
+Change log from 1.53-1 to 1.53-xx
+================================
+
+29 sept 2017
+
+   DESCRIPTION
+   NEWS
+	Initialised as version 1.53-1.001
+	Nicknamed 'Necrotrophic'
+
+
+   newformula.R
+	Bug fix affecting update.ppm
+
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+

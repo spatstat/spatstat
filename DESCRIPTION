@@ -1,7 +1,7 @@
 Package: spatstat
-Version: 1.53-1
-Nickname: Drongo
-Date: 2017-09-28
+Version: 1.53-1.001
+Nickname: Necrotrophic
+Date: 2017-09-29
 Title: Spatial Point Pattern Analysis, Model-Fitting, Simulation, Tests
 Author: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>,
 	Rolf Turner <r.turner@auckland.ac.nz> 

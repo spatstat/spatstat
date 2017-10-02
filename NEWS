@@ -1,4 +1,19 @@
 
+        CHANGES IN spatstat VERSION 1.53-1.001
+
+OVERVIEW
+
+    o Bug fix
+    
+    o Nickname: "Necrotrophic"
+
+BUG FIXES
+
+    o update.ppm
+    Did not always work correctly with formulae that included 'polynom()' terms.
+    Fixed.
+    
+
         CHANGES IN spatstat VERSION 1.53-1
 
 OVERVIEW
