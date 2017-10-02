@@ -103,7 +103,7 @@ Go to
 and press *new issue* to start a new bug report, documentation correction
 or feature request.
 
-Please do not post *questions* on the Issues page
+**Please do not post questions** on the Issues page,
 because it's too clunky for correspondence.
 
 ## Questions about spatstat

@@ -1,7 +1,7 @@
 #
 #  lohboot.R
 #
-#  $Revision: 1.14 $   $Date: 2017/02/07 08:12:05 $
+#  $Revision: 1.16 $   $Date: 2017/10/02 07:54:12 $
 #
 #  Loh's bootstrap CI's for local pcf, local K etc
 #
@@ -9,8 +9,15 @@
 lohboot <-
   function(X,
            fun=c("pcf", "Kest", "Lest", "pcfinhom", "Kinhom", "Linhom"),
-           ..., nsim=200, block=FALSE, nx = 4, ny = nx, basicboot=FALSE,
-           confidence=0.95, global=FALSE, type=7, Vcorrection=FALSE) {
+           ...,
+           block=FALSE,
+           global=FALSE,
+           basicboot=FALSE,
+           Vcorrection=FALSE,
+           confidence=0.95,
+           nx = 4, ny = nx,
+           nsim=200,
+           type=7) {
   stopifnot(is.ppp(X))
   fun.name <- short.deparse(substitute(fun))
   if(is.character(fun)) {

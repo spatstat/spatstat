@@ -1,18 +1,33 @@
 
-        CHANGES IN spatstat VERSION 1.53-1.001
+        CHANGES IN spatstat VERSION 1.53-1.002
 
 OVERVIEW
 
-    o Bug fix
+    o We thank Christophe Biscio and Rasmus Waagepetersen for contributions.
+
+    o Correction to 'lohboot'
     
-    o Nickname: "Necrotrophic"
+    o Bug fix.
+    
+    o Nickname: "Edge Correction"
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o lohboot
+    Algorithm has been corrected and extended
+    thanks to Christophe Biscio and Rasmus Waagepetersen.
+    New arguments 'block', 'basicboot', 'Vcorrection'.
 
 BUG FIXES
 
+    o lohboot
+    Implementation was incorrect.
+    [Spotted and fixed by Christophe Biscio and Rasmus Waagepetersen.]
+    Fixed.
+    
     o update.ppm
     Did not always work correctly with formulae that included 'polynom()' terms.
     Fixed.
-    
 
         CHANGES IN spatstat VERSION 1.53-1
 

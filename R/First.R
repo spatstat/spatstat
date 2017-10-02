@@ -1,6 +1,6 @@
 #  First.R
 #
-#  $Revision: 1.45 $ $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.46 $ $Date: 2017/10/02 08:12:29 $
 #
 
 .onLoad <- function(...) reset.spatstat.options()
@@ -9,7 +9,8 @@
   store.versionstring.spatstat()
   ver <- versionstring.spatstat()
   descfile <- system.file("DESCRIPTION", package="spatstat")
-  ni <- as.character(read.dcf(file=descfile, fields="Nickname"))
+  nickfile <- system.file("doc", "Nickname.txt", package="spatstat")
+  ni <- scan(file=nickfile, what=character(), n=1, quiet=TRUE)
   msg <- paste("\nspatstat", ver,
                "     ",
                paren(paste("nickname:", sQuote(ni))),
