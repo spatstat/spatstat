@@ -10,6 +10,7 @@
 }
 \usage{
  \method{plot}{leverage.ppm}(x, \dots, showcut=TRUE, col.cut=par("fg"),
+                             args.contour=list(), 
                              multiplot=TRUE)
 
  \method{persp}{leverage.ppm}(x, \dots, main)
@@ -20,8 +21,8 @@
     \code{\link{leverage.ppm}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{plot.im}}
-    or \code{\link{contour.im}} controlling the plot.
+    Arguments passed to \code{\link{plot.im}} 
+    or \code{\link{persp.im}} controlling the plot.
   }
   \item{showcut}{
     Logical. If \code{TRUE}, a contour line is plotted at the
@@ -29,6 +30,11 @@
   }
   \item{col.cut}{
     Optional colour for the contour line.
+  }
+  \item{args.contour}{
+    Optional list of arguments passed to
+    \code{\link[graphics]{contour.default}} to control the
+    plotting of the contour line.
   }
   \item{multiplot}{
     Logical value indicating whether it is permissible to display
@@ -46,7 +52,7 @@
   The \code{plot} method displays the leverage function 
   as a colour pixel image using \code{\link{plot.im}},
   and draws a single contour line at the mean leverage value
-  using \code{\link{contour.im}}.
+  using \code{\link{contour.default}}.
   Use the argument \code{clipwin} to restrict the plot to a subset
   of the full data.
 

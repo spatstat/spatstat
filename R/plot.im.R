@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.117 $   $Date: 2017/08/31 07:43:05 $
+#  $Revision: 1.120 $   $Date: 2017/10/03 02:01:01 $
 #
 #  Plotting code for pixel images
 #
@@ -21,6 +21,8 @@ plot.im <- local({
     aarg <- resolve.defaults(...)
     add      <- resolve.1.default(list(add=FALSE),     aarg)
     show.all <- resolve.1.default(list(show.all=!add), aarg)
+    addcontour <- resolve.1.default(list(addcontour=FALSE), aarg)
+    args.contour <- resolve.1.default(list(args.contour=list()), aarg)
     if(add && show.all) {
       ## set up the window space *with* the main title
       ## using the same code as plot.owin, for consistency
@@ -44,11 +46,48 @@ plot.im <- local({
       }
     }
     extrargs <- setdiff(extrargs, c("claim.title.space", "box"))
-    do.call.matched(image.default,
-                    append(imagedata, aarg),
-                    extrargs=extrargs)
+    z <- do.call.matched(image.default,
+                         append(imagedata, aarg),
+                         extrargs=extrargs)
+    if(addcontour)
+      do.call(do.contour,
+              resolve.defaults(imagedata,
+                               list(add=TRUE),
+                               args.contour,
+                               list(col=par('fg')),
+                               aarg,
+                               .StripNull=TRUE))
+    return(z)
   }
 
+  do.contour <- function(x, y, z, ..., drawlabels=TRUE) {
+    nx <- length(x)
+    ny <- length(y)
+    nz <- dim(z)
+    if(nx > nz[1]) {
+      if(nz[1] == 1) {
+        z <- rbind(z, z)
+        nz <- dim(z)
+        drawlabels <- FALSE
+      } else {
+        x <- (x[-1] + x[-nx])/2
+        nx <- nx-1
+      }
+    }
+    if(ny > nz[2]) {
+      if(nz[2] == 1) {
+        z <- cbind(z, z)
+        nz <- dim(z)
+        drawlabels <- FALSE
+      } else {
+        y <- (y[-1] + y[-ny])/2
+        ny <- ny-1
+      }
+    }
+    do.call.matched(contour.default,
+                    list(x=x, y=y, z=z, ..., drawlabels=drawlabels))
+  }
+                 
   do.box.etc <- function(bb, add, argh)
     do.call(box.etc, append(list(bb=bb, add=add), argh))
   

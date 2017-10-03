@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.81 $ $Date: 2017/08/10 02:31:47 $
+#  $Revision: 1.82 $ $Date: 2017/10/03 02:04:21 $
 #
 
 leverage <- function(model, ...) {
@@ -709,53 +709,38 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
   return(result)
 }
 
-plot.leverage.ppm <- local({
-
-  plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg"),
-                                multiplot=TRUE) {
-    fitname <- x$fitname
-    defaultmain <- paste("Leverage for", fitname)
-    y <- x$lev
-    smo <- y$smo
-    ave <- y$ave
-    if(!multiplot && inherits(smo, "imlist")) {
-      ave <- ave * length(smo)
-      smo <- Reduce("+", smo)
-      defaultmain <- c(defaultmain, "(sum over all types of point)")
-    }
-    if(is.im(smo)) {
-      do.call(plot.im,
-              resolve.defaults(list(smo),
-                               list(...),
-                               list(main=defaultmain)))
-      if(showcut)
-        onecontour(0, x=smo, ..., level.cut=ave, col.cut=col.cut)
-    } else if(inherits(smo, "imlist")) {
-      xtra <- list(panel.end=onecontour,
-                   panel.end.args=list(level.cut=ave, col.cut=col.cut))
-      do.call(plot.solist,
-              resolve.defaults(list(smo),
-                               list(...),
-                               list(main=defaultmain),
-                               if(showcut) xtra else list()))
-    } 
-    invisible(NULL)
+plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg"),
+                              args.contour=list(),
+                              multiplot=TRUE) {
+  fitname <- x$fitname
+  defaultmain <- paste("Leverage for", fitname)
+  y <- x$lev
+  smo <- y$smo
+  ave <- y$ave
+  if(!multiplot && inherits(smo, "imlist")) {
+    ave <- ave * length(smo)
+    smo <- Reduce("+", smo)
+    defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
+  cutinfo <- list(addcontour=showcut,
+                  args.contour=append(list(levels=ave, col=col.cut),
+                                      args.contour))
+  if(is.im(smo)) {
+    do.call(plot.im,
+            resolve.defaults(list(smo),
+                             list(...),
+                             cutinfo,
+                             list(main=defaultmain)))
+  } else if(inherits(smo, "imlist")) {
+    do.call(plot.solist,
+            resolve.defaults(list(smo),
+                             list(...),
+                             cutinfo,
+                             list(main=defaultmain)))
+  } 
+  invisible(NULL)
+}
 
-  onecontour <- function(i, x, ..., level.cut, col.cut) {
-    if(diff(range(x)) > 0)
-      do.call.matched(contour.im,
-                      resolve.defaults(list(x=x, levels=level.cut,
-                                            add=TRUE, col=col.cut),
-                                       list(...),
-                                       list(drawlabels=FALSE)),
-                      extrargs=c("levels", "drawlabels",
-                        "labcex", "col", "lty", "lwd", "frameplot"))
-  }
-
-  plot.leverage.ppm
-})
-                           
 plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
   fitname <- x$fitname
   defaultmain <- paste("Influence for", fitname)

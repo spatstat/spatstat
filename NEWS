@@ -1,13 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.53-1.002
+        CHANGES IN spatstat VERSION 1.53-1.003
 
 OVERVIEW
 
     o We thank Christophe Biscio and Rasmus Waagepetersen for contributions.
 
     o Correction to 'lohboot'
-    
-    o Bug fix.
+
+    o Bug fixes and minor improvements.
     
     o Nickname: "Edge Correction"
 
@@ -18,6 +18,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     thanks to Christophe Biscio and Rasmus Waagepetersen.
     New arguments 'block', 'basicboot', 'Vcorrection'.
 
+    o plot.leverage.ppm
+    A contour line showing the average value of leverage
+    is now drawn on the colour ribbon, as well as on the main image.
+    New argument 'args.contour'.
+    
 BUG FIXES
 
     o lohboot
