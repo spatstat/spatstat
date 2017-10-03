@@ -54,5 +54,16 @@ Change log from 1.53-1 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   logistic.R
+   mpl.R
+   spatstat-internal.Rd
+	mpl.engine and logi.engine have new argument 'clipwin',
+	so far undocumented.
 
-
+   DESCRIPTION
+   NEWS
+	Updated as version 1.53-1.004
+	
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

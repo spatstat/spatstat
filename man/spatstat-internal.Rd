@@ -1074,7 +1074,8 @@ local2lpp(L, seg, tp, X, df.only)
 logicalIndex(i, nama, len)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 logi.engine(Q, trend, interaction, \dots, 
-            covariates, subsetexpr, correction, rbord, covfunargs, allcovar, 
+            covariates, subsetexpr, clipwin,
+            correction, rbord, covfunargs, allcovar, 
             vnamebase, vnameprefix, justQ, savecomputed, precomputed,
             VB)
 \method{logLik}{vblogit}(object, \dots) 
@@ -1134,7 +1135,7 @@ meanY.owin(w)
 model.se.image(fit, W, \dots, what)
 modelFrameGam(formula, \dots)
 mpl.engine(Q, trend, interaction, \dots,
-         covariates, subsetexpr, covfunargs, correction,
+         covariates, subsetexpr, clipwin, covfunargs, correction,
 	 rbord, use.gam, gcontrol,
          GLM, GLMfamily, GLMcontrol, famille,
          forcefit, nd, eps, allcovar, callstring,

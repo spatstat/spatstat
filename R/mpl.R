@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.208 $	$Date: 2017/07/19 06:55:15 $
+#	$Revision: 5.209 $	$Date: 2017/10/03 09:15:36 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -32,6 +32,7 @@ mpl.engine <-
            ...,
            covariates = NULL,
            subsetexpr = NULL,
+           clipwin = NULL,
            covfunargs = list(),
            correction="border",
            rbord = 0,
@@ -75,6 +76,14 @@ mpl.engine <-
       ## Data and dummy points together
       P <- union.quad(Q)
     }
+    ## clip to subset?
+    if(!is.null(clipwin)) {
+      if(is.data.frame(covariates)) 
+        covariates <- covariates[inside.owin(P, w=clipwin), , drop=FALSE]
+      Q <- Q[clipwin]
+      X <- X[clipwin]
+      P <- P[clipwin]
+    }
     ## secret exit  
     if(justQ) return(Q)
     ##  
@@ -106,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2017/07/19 06:55:15 $")
+                        date="$Date: 2017/10/03 09:15:36 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object

@@ -1,7 +1,7 @@
 #
 #  logistic.R
 #
-#   $Revision: 1.23 $  $Date: 2017/02/07 08:12:05 $
+#   $Revision: 1.24 $  $Date: 2017/10/03 09:15:23 $
 #
 #  Logistic likelihood method - under development
 #
@@ -12,6 +12,7 @@ logi.engine <- function(Q,
                         ...,
                         covariates=NULL,
                         subsetexpr=NULL,
+                        clipwin=NULL,
                         correction="border",
                         rbord=reach(interaction),
                         covfunargs=list(),
@@ -69,6 +70,16 @@ logi.engine <- function(Q,
     }
     Q <- quadscheme.logi(Xplus, D)
   } else stop("Format of object Q is not understood")
+  ## clip to subset?
+  if(!is.null(clipwin)) {
+    if(is.data.frame(covariates)) {
+      ok <- inside.owin(union.quad(Q), w=clipwin)
+      covariates <- covariates[ok, , drop=FALSE]
+    }
+    Q <- Q[clipwin]
+    Xplus <- Q$data
+    D     <- Q$dummy
+  }
   if (justQ) 
     return(Q)
   ### Dirty way of recording arguments so that the model can be refitted later (should probably be done using call, eval, envir, etc.):
@@ -207,7 +218,7 @@ logi.engine <- function(Q,
   the.version <- list(major=spv$major,
                       minor=spv$minor,
                       release=spv$patchlevel,
-                      date="$Date: 2017/02/07 08:12:05 $")
+                      date="$Date: 2017/10/03 09:15:23 $")
 
   ## Compile results
   fit <- list(method      = "logi",
