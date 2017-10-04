@@ -1,5 +1,5 @@
 #
-#	$Revision: 1.57 $	$Date: 2017/07/13 02:06:02 $
+#	$Revision: 1.58 $	$Date: 2017/10/04 04:10:33 $
 #
 #    ppm()
 #          Fit a point process model to a two-dimensional point pattern
@@ -69,6 +69,7 @@ function(Q,
          data = NULL,
          covfunargs = list(),
          subset,
+         clipwin,
 	 correction="border",
 	 rbord = reach(interaction),
          use.gam=FALSE,
@@ -91,6 +92,7 @@ function(Q,
   Qname <- short.deparse(substitute(Q))
 
   subsetexpr <- if(!missing(subset)) substitute(subset) else NULL
+  clipwin    <- if(!missing(clipwin)) clipwin else NULL
 
   datalistname <- if(missing(covariates)) "data" else "covariates"
 
@@ -213,6 +215,7 @@ function(Q,
                            covariates=covariates,
                            covfunargs=covfunargs,
                            subsetexpr=subsetexpr,
+                           clipwin=clipwin,
                            correction=correction,
                            rbord=rbord,
                            use.gam=use.gam,
@@ -239,6 +242,7 @@ function(Q,
                        covariates=covariates,
                        covfunargs=covfunargs,
                        subsetexpr=subsetexpr,
+                       clipwin=clipwin,
                        correction=correction,
                        rbord=rbord,
                        use.gam=use.gam,

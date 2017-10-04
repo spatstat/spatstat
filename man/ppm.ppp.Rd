@@ -17,6 +17,7 @@
        data=NULL,
        covfunargs = list(),
        subset,
+       clipwin,
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
@@ -39,6 +40,7 @@
        data=NULL,
        covfunargs = list(),
        subset,
+       clipwin,
        correction="border",
        rbord=reach(interaction),
        use.gam=FALSE,
@@ -87,10 +89,16 @@
     Cartesian coordinates \code{x} and \code{y}
     and the names of entries in \code{data})
     defining a subset of the spatial domain,
-    to which the model-fitting should be restricted.
+    to which the likelihood or pseudolikelihood should be restricted.
+    See Details.
     The result of evaluating the expression should be either a logical
     vector, or a window (object of class \code{"owin"})
     or a logical-valued pixel image (object of class \code{"im"}).
+  }
+  \item{clipwin}{
+    Optional. A spatial window (object of class \code{"owin"})
+    to which data will be restricted, before model-fitting
+    is performed. See Details.
   }
   \item{covfunargs}{
     A named list containing the values of any additional arguments
@@ -492,6 +500,24 @@
       For pairwise interaction models
       there is also Ripley's isotropic correction,
       identified by \code{correction="isotropic"} or \code{"Ripley"}.
+    }
+    \item{Subsetting}{
+      The arguments \code{subset} and \code{clipwin} specify that the
+      model should be fitted to a restricted subset of the available
+      data. These arguments are equivalent for Poisson point process models,
+      but different for Gibbs models.
+      If \code{clipwin} is specified, then all the available data will
+      be restricted to this spatial region, and data outside this region
+      will be discarded, before the model is fitted.
+      If \code{subset} is specified, then no data are deleted, but
+      the domain of integration of the likelihood or pseudolikelihood
+      is restricted to the \code{subset}.
+      For Poisson models, these two arguments have the same effect;
+      but for a Gibbs model, 
+      interactions between points inside and outside the \code{subset}
+      are taken into account, while
+      interactions between points inside and outside the \code{clipwin}
+      are ignored.
     }
   }
 }

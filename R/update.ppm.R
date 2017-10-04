@@ -2,7 +2,7 @@
 #  update.ppm.R
 #
 #
-#  $Revision: 1.60 $    $Date: 2016/03/08 05:43:46 $
+#  $Revision: 1.61 $    $Date: 2017/10/04 03:51:04 $
 #
 #
 #
@@ -283,7 +283,8 @@ update.ppm <- local({
     ## ****** Special action when Q is a point pattern *************
     ## *************************************************************
     if(X.is.new && fixdummy && oldstyle &&
-       inherits((X <- eval(call$Q, as.list(envir), enclos=callframe)), "ppp")) {
+       is.ppp(X <- eval(call$Q, as.list(envir), enclos=callframe)) &&
+       identical(Window(X), Window(data.ppm(object)))) {
       ## Instead of allowing default.dummy(X) to occur,
       ## explicitly create a quadrature scheme from X,
       ## using the same dummy points and weight parameters

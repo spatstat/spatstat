@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.53-1.004
+        CHANGES IN spatstat VERSION 1.53-1.005
 
 OVERVIEW
 
     o We thank Christophe Biscio and Rasmus Waagepetersen for contributions.
 
     o Correction to 'lohboot'
+
+    o Improvements to ppm and update.ppm
 
     o Bug fixes and minor improvements.
     
@@ -18,6 +20,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     thanks to Christophe Biscio and Rasmus Waagepetersen.
     New arguments 'block', 'basicboot', 'Vcorrection'.
 
+    o ppm.ppp, ppm.quad
+    New argument 'clipwin'
+
+    o update.ppm
+    For the case 'update(model, X)' where X is a point pattern,
+    if the window of X is different from the original window,
+    then the model is re-fitted from scratch (i.e. use.internal=FALSE).
+    
     o plot.leverage.ppm
     A contour line showing the average value of leverage
     is now drawn on the colour ribbon, as well as on the main image.

@@ -1228,7 +1228,7 @@ plotPolygonBdry(x, \dots)
         legendpos = "topleft", lbox = FALSE, add = FALSE)
 ppllengine(X, Y, action="project", check=FALSE)
 \method{ppm}{default}(Q, trend, interaction,
-       \dots, covariates, data, covfunargs, subset, 
+       \dots, covariates, data, covfunargs, subset, clipwin,
        correction, rbord, use.gam, method, forcefit, emend, project,
        prior.mean, prior.var,
        nd, eps, gcontrol, nsim, nrmh, start, control,

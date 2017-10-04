@@ -67,3 +67,23 @@ Change log from 1.53-1 to 1.53-xx
 ------------- passed R-3.4.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+04 oct 2017
+
+   update.ppm.R
+   update.ppm.Rd
+	Changed default behaviour of update(model, X)
+	when X is a point pattern with a different window
+
+   ppm.R
+   ppm.ppp.Rd
+   spatstat-internal.Rd
+	Methods for ppm have new argument 'clipwin'.
+
+   DESCRIPTION
+   NEWS
+	Updated as version 1.53-1.005
+	
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
