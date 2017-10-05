@@ -87,3 +87,18 @@ Change log from 1.53-1 to 1.53-xx
 ------------- passed R-3.4.1 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+05 oct 2017
+
+   profilepl.R
+   profilepl.Rd
+   fitin.Rd
+	New method fitin.profilepl
+
+   DESCRIPTION
+   NEWS
+	Updated as version 1.53-1.006
+	
+------------- passed R-3.4.1 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

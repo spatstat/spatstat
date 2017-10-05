@@ -1,6 +1,7 @@
 \name{fitin.ppm}
 \alias{fitin}
 \alias{fitin.ppm}
+\alias{fitin.profilepl}
 \title{Extract the Interaction from a Fitted Point Process Model}
 \description{
   Given a point process model that has been fitted to point pattern
@@ -9,11 +10,14 @@
 }
 \usage{
 fitin(object)
+
 \method{fitin}{ppm}(object)
+
+\method{fitin}{profilepl}(object)
 }
 \arguments{
   \item{object}{A fitted point process model (object of class
-    \code{"ppm"}).
+    \code{"ppm"} or \code{"profilepl"}).
   }
 }
 \details{
@@ -46,11 +50,8 @@ fitin(object)
   An object of class \code{"fii"} representing the fitted
   interpoint interaction. This object can be printed and plotted.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   Methods for handling fitted interactions: 

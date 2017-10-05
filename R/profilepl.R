@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.43 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.44 $  $Date: 2017/10/05 07:53:38 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -228,8 +228,12 @@ as.ppm.profilepl <- function(object) {
   object$fit
 }
 
+fitin.profilepl <- function(object) {
+  fitin(as.ppm(object))
+}
+
 predict.profilepl <- function(object, ...) {
-  predict(object$fit, ...)
+  predict(as.ppm(object), ...)
 }
 
 ##

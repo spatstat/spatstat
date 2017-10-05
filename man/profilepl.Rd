@@ -131,7 +131,8 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
   \code{\link[base]{print}},
   \code{\link[base]{summary}},
   \code{\link[stats]{simulate}},
-  \code{\link{as.ppm}}
+  \code{\link{as.ppm}},
+  \code{\link{fitin}}
   and 
   \code{\link{parameters}} for objects of this class.
 

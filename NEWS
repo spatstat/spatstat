@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-1.005
+        CHANGES IN spatstat VERSION 1.53-1.006
 
 OVERVIEW
 
@@ -13,6 +13,11 @@ OVERVIEW
     
     o Nickname: "Edge Correction"
 
+NEW FUNCTIONS
+
+    o fitin.profilepl
+    Extract the fitted interaction from a model fitted by profile likelihood.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o lohboot
