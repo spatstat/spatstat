@@ -132,8 +132,16 @@ the News and Release Notes for each update.
 
   \item \spst\ now Imports the package \pkg{spatstat.utils}.
 
+  \item \spst\ now requires the package \pkg{spatstat.data} which contains the datasets.
+
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Improvements to \texttt{ppm} and \texttt{update.ppm}.
+    
+  \item Correction to \texttt{lohboot}
+    
+  \item Numerous bug fixes for linear networks code.
+    
   \item Now handles disconnected linear networks.
     
   \item Effect function is now available for all types of fitted model.
@@ -336,7 +344,23 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
-    \item \texttt{as.data.frame.envelope}:
+    \item \texttt{fitin.profilepl}:
+    Extract the fitted interaction from a model fitted by profile likelihood.
+    
+    \item \verb![<-.linim!:  
+      Subset assignment method for pixel images on a linear network.
+      
+    \item \texttt{nnfromvertex}:
+    Given a point pattern on a linear network,
+    find the nearest data point from each vertex of the network.
+    
+    \item \texttt{tile.lengths}:
+    Calculate the length of each tile in a tessellation on a network.
+
+    \item \texttt{text.ppp}, \texttt{text.lpp}, \texttt{text.psp}:
+    Methods for \texttt{text} for spatial patterns.
+  
+  \item \texttt{as.data.frame.envelope}:
     Extract function data from an envelope object,
     including the functions for the simulated data ('simfuns')
     if they were saved.
@@ -832,7 +856,11 @@ also carries these marks in the \verb!$lines! component.
     New argument \texttt{step}
 
   \item \texttt{as.polygonal}:
-  Can now repair errors in polygon data, if \texttt{repair=TRUE}.
+    \begin{itemize}
+    \item 
+      Can now repair errors in polygon data, if \texttt{repair=TRUE}.
+    \item Accelerated when \texttt{w} is a pixel mask.
+    \end{itemize}
 
   \item \texttt{as.solist}:
     The argument \texttt{x} can now be a spatial object;
@@ -954,6 +982,7 @@ also carries these marks in the \verb!$lines! component.
     New fast algorithm (up to 1000 times faster) for the default case
     where \texttt{kernel="gaussian"} and \texttt{continuous=TRUE}.
     Generously contributed by Greg McSwiggan.
+  \item Fast algorithm has been further accelerated.
    \item 
      New argument \texttt{kernel} specifies the smoothing kernel.
      Any of the standard one-dimensional smoothing kernels can be used.
@@ -1046,7 +1075,9 @@ also carries these marks in the \verb!$lines! component.
     New arguments \texttt{fix.n} and \texttt{fix.marks}
     allow envelopes to be computed
     using simulations conditional on the observed number of points.   
-    
+
+ \item \texttt{ewcdf}: Argument \texttt{weights} can now be \texttt{NULL}.
+   
 %%F
    
  \item \texttt{Fest}:
@@ -1084,6 +1115,10 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{hist.im}: New argument \texttt{xname}.
    
 %%I
+ \item \texttt{identify.psp}: Improved placement of labels.
+   Arguments can be passed to \texttt{text.default}
+   to control the plotting of labels.
+   
  \item \texttt{influence.ppm}:
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
@@ -1121,7 +1156,13 @@ also carries these marks in the \verb!$lines! component.
    Now has \verb!...! arguments allowing control of spatial resolution.
 
  \item \texttt{Kinhom}:
+   \begin{itemize}
+   \item 
    New argument \texttt{ratio}.
+ \item 
+   Stops gracefully if \texttt{lambda} contains any zero values.
+   \end{itemize}
+
     
  \item \texttt{kppm}:
    \begin{itemize}
@@ -1181,6 +1222,13 @@ also carries these marks in the \verb!$lines! component.
    
  \item \texttt{linearpcf}:
    new argument \texttt{normpower}.
+
+
+ \item \texttt{linim}:
+   \begin{itemize}
+   \item The image \texttt{Z} is now automatically restricted to the network.
+   \item New argument \texttt{restrict}.
+   \end{itemize}
    
  \item \texttt{linnet}:
    \begin{itemize}
@@ -1213,6 +1261,11 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{logLik.mppm}: new argument \texttt{warn}.
    
+ \item \texttt{lohboot}:
+    Algorithm has been corrected and extended
+    thanks to Christophe Biscio and Rasmus Waagepetersen.
+    New arguments \texttt{block}, \texttt{basicboot}, \texttt{Vcorrection}.
+
  \item \texttt{lpp}:
    \begin{itemize}
    \item 
@@ -1261,7 +1314,13 @@ also carries these marks in the \verb!$lines! component.
 %%N
    
    \item \texttt{nbfires}:
+     \begin{itemize}
+     \item 
      the unit of length for the coordinates is now specified in this dataset.
+   \item This dataset now includes information about the different 
+    land and sea borders of New Brunswick.
+   \end{itemize}
+
    
  \item \texttt{nndist.lpp, nnwhich.lpp, nncross.lpp, distfun.lpp}:
    New argument \texttt{k} allows computation of $k$-th nearest point.
@@ -1333,6 +1392,8 @@ also carries these marks in the \verb!$lines! component.
    \item  New argument \texttt{workaround} to avoid a bug in some MacOS
      device drivers that causes the image to be displayed
      in the wrong spatial orientation.
+   \item The number of tick marks in the colour ribbon can now be controlled
+    using the argument \texttt{nint} in \texttt{ribargs}.
    \end{itemize}
 
  \item \texttt{plot.imlist}:
@@ -1352,7 +1413,15 @@ also carries these marks in the \verb!$lines! component.
    \end{itemize}
 
  \item \texttt{plot.leverage.ppm}:
+   \begin{itemize}
+   \item 
    New argument \texttt{multiplot}.
+   \item
+   A contour line showing the average value of leverage
+   is now drawn on the colour ribbon, as well as on the main image.
+   New argument \texttt{args.contour}.
+ \end{itemize}
+
 
  \item \texttt{plot.linfun}:
    \begin{itemize}
@@ -1364,8 +1433,11 @@ also carries these marks in the \verb!$lines! component.
 
  \item \texttt{plot.linim}:
    \begin{itemize}
-   \item A scale bar is now plotted when \texttt{style="width"}.
    \item  The return value has a different format.
+   \item A scale bar is now plotted when \texttt{style="width"}.
+   \item When \texttt{style="width"}, negative values are plotted in
+     red (by default). New argument \texttt{negative.args} controls this.
+   \item New argument \texttt{zlim} specifies the range of values to be mapped.
    \end{itemize}
 
  \item \texttt{plot.lintess}:
@@ -1389,6 +1461,7 @@ also carries these marks in the \verb!$lines! component.
      \item  Now handles multitype measures.
      \item New argument \texttt{multiplot}.
      \item New argument \texttt{massthresh}.
+     \item New arguments \texttt{equal.markscale} and \texttt{equal.ribbon}.
      \end{itemize}
 
 
@@ -1426,6 +1499,10 @@ also carries these marks in the \verb!$lines! component.
         from executing the plot of each panel.
       \end{itemize}
 
+    \item \texttt{plot.symbolmap}:
+      New argument \texttt{nsymbols} controls the number of symbols plotted.
+
+
    \item \code{ponderosa}:
     In this installed dataset, the function \code{ponderosa.extra\$plotit}
     has changed slightly (to accommodate the
@@ -1454,7 +1531,13 @@ also carries these marks in the \verb!$lines! component.
     \end{itemize}
 
   \item \texttt{ppm.ppp, ppm.quad}:
-   New argument \texttt{emend}, equivalent to \texttt{project}.
+    \begin{itemize}
+    \item 
+      New argument \texttt{emend}, equivalent to \texttt{project}.
+    \item 
+      New arguments \texttt{subset} and \texttt{clipwin}.
+    \end{itemize}
+
 
  \item \texttt{ppp}:
        \begin{itemize}
@@ -1472,6 +1555,9 @@ also carries these marks in the \verb!$lines! component.
    (This currently happens in predict.kppm when se=TRUE or interval != "none",
    and in residuals.kppm when type != "raw").
 
+  \item \texttt{predict.lppm}:
+    Argument \texttt{locations} can now be an \texttt{lpp} object.
+
   \item \texttt{predict.mppm}:
     The argument \texttt{type="all"} is now recognised: it selects
     all the available options. [This is also the default.]
@@ -1481,6 +1567,8 @@ also carries these marks in the \verb!$lines! component.
     the function estimate, the upper/lower confidence limits, or the
     standard error.
 
+  \item \texttt{print.linim}: More information is printed.
+    
   \item \texttt{print.quad}: More information is printed.
     
   \item \texttt{progressreport}
@@ -1523,6 +1611,9 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{rgb2hex}:
    New argument \texttt{maxColorValue}
 
+   \texttt{rhohat}:
+   New argument \texttt{subset} allows computation for a subset of the data.
+   
    \texttt{rhohat.lpp}:
    New argument \texttt{random} controls placement of dummy points.
 
@@ -1641,6 +1732,9 @@ also carries these marks in the \verb!$lines! component.
    \item \texttt{split.ppp}
    The splitting variable \texttt{f} can now be a logical vector.
 
+   \item \texttt{square}: 
+     Handles a common error in the format of the arguments.
+     
    \item \texttt{step}: now works for models of class \texttt{"mppm"}.
 
    \item \texttt{stieltjes}:
@@ -1671,6 +1765,10 @@ also carries these marks in the \verb!$lines! component.
         \texttt{pcfcross.inhom}, \texttt{pcfcross}, \texttt{pcf}, 
         \texttt{Tstat}.
     \end{quote}
+    
+  \item \texttt{Summary.linim}: 
+     Recognises the argument \texttt{finite} so that 
+     \texttt{range(x, finite=TRUE)} works for a linim object \texttt{x}.
     
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
@@ -1721,6 +1819,11 @@ also carries these marks in the \verb!$lines! component.
    \item Improved behaviour.
    \end{itemize}
 
+   \item \texttt{update.ppm}:
+     For the case \texttt{update(model, X)} where \texttt{X} is a point pattern,
+    if the window of \texttt{X} is different from the original window,
+    then the model is re-fitted from scratch (i.e. \texttt{use.internal=FALSE}).
+
 %%V
    
    \item \texttt{valid.ppm}
@@ -1756,7 +1859,19 @@ also carries these marks in the \verb!$lines! component.
  \item \verb![.leverage.ppm!:
    New argument \texttt{update}.
        
- \item \verb![.linnet!, \verb![.lpp!:
+ \item \verb![.linnet!:
+   \begin{itemize}
+   \item 
+    New argument \texttt{snip} determines what to do with segments 
+    of the network that cross the boundary of the window. 
+    Default behaviour has changed.
+  \item More robust against artefacts when the subset index is a pixel mask.
+   \end{itemize}
+
+ \item \verb![.linim!:
+    More robust against artefacts.
+    
+ \item \verb![.lpp!:
     New argument \texttt{snip} determines what to do with segments 
     of the network that cross the boundary of the window. 
     Default behaviour has changed.
@@ -1901,6 +2016,9 @@ of potential impact.
    The local coordinate \texttt{seg} was completely incorrect,
    when \texttt{i} was a window.
    \bugger{1.31-2}{april 2013}{1.45-0}{march 2016}
+   
+ \item \texttt{lohboot}:  Implementation was completely incorrect.
+   \bugger{1.26-1}{april 2012}{1.53-2}{october 2017}
    
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
    Results were incorrect for non-Poisson processes

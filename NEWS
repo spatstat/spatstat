@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-1.006
+        CHANGES IN spatstat VERSION 1.53-2
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
 
     o Bug fixes and minor improvements.
     
-    o Nickname: "Edge Correction"
+    o Nickname: "Quantum Entanglement"
 
 NEW FUNCTIONS
 
@@ -41,7 +41,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
     o lohboot
-    Implementation was incorrect.
+    Implementation was completely incorrect.
     [Spotted and fixed by Christophe Biscio and Rasmus Waagepetersen.]
     Fixed.
     
