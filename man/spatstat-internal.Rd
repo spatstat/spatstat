@@ -1236,7 +1236,7 @@ ppllengine(X, Y, action="project", check=FALSE)
 ppmCovariates(model)
 ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
-              drop, method, precomputed, sparseOK,
+              drop, method, fine, precomputed, sparseOK,
               fitname, multitypeOK, entrywise, matrix.action,
               geomsmooth)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,

@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.82 $ $Date: 2017/10/03 02:04:21 $
+#  $Revision: 1.83 $ $Date: 2017/10/09 08:07:35 $
 #
 
 leverage <- function(model, ...) {
@@ -80,6 +80,7 @@ ppmInfluenceEngine <- function(fit,
                          iScore=NULL, iHessian=NULL, iArgs=NULL,
                          drop=FALSE,
                          method=c("C", "interpreted"),
+                         fine=FALSE,
                          precomputed=list(),
                          sparseOK=TRUE,
                          fitname=NULL,
@@ -131,7 +132,7 @@ ppmInfluenceEngine <- function(fit,
     ## Intensity of dummy points
     rho <- fit$Q$param$rho %orifnull% intensity(as.ppp(fit$Q))
     logiprob <- lam / (lam + rho)
-    vclist <- vcov(fit, what = "internals", matrix.action="silent")
+    vclist <- vcov(fit, what = "internals", fine=fine, matrix.action="silent")
     hess <- vclist$Slog
     fgrad <- vclist$fisher
     invhess <- if(is.null(hess)) NULL else checksolve(hess, "silent")
@@ -148,9 +149,9 @@ ppmInfluenceEngine <- function(fit,
     }
 #    vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
   } else {
-    invfgrad <- vcov(fit, hessian=TRUE, matrix.action="silent")
+    invfgrad <- vcov(fit, hessian=TRUE, fine=fine, matrix.action="silent")
     fgrad <- hess <-
-      if(is.null(invfgrad)) NULL else checksolve(invfgrad, "silent")
+      if(is.null(invfgrad) || anyNA(invfgrad)) NULL else checksolve(invfgrad, "silent")
     if(is.null(fgrad)) {
       invfgrad <- vcov(fit, hessian=TRUE, fine=TRUE,
                        matrix.action=matrix.action)
