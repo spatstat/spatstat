@@ -9,7 +9,7 @@
    nrows=NULL, ncols=NULL, main.panel=NULL,
    mar.panel=c(2,1,1,2), hsep=0, vsep=0,
    panel.begin=NULL, panel.end=NULL, panel.args=NULL,
-   panel.begin.args=NULL, panel.end.args=NULL,
+   panel.begin.args=NULL, panel.end.args=NULL, panel.vpad=0.2, 
    plotcommand="plot",
    adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
    adorn.size=0.2, equal.scales=FALSE, halign=FALSE, valign=FALSE)
@@ -67,6 +67,13 @@
   \item{panel.end.args}{
     Optional. List of additional arguments for \code{panel.end}
     when it is a function.
+  }
+  \item{panel.vpad}{
+    Amount of extra vertical space that should be allowed for the
+    title of each panel, if a title will be displayed.
+    Expressed as a fraction of the height of the panel.
+    Applies only when \code{equal.scales=FALSE} (the default) and
+    requires that the height of each panel can be determined.
   }
   \item{plotcommand}{
     Optional.

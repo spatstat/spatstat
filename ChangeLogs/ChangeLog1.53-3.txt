@@ -27,3 +27,23 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+10 oct 2017
+
+   plot.anylist.R
+   plot.anylist.Rd
+   plot.solist.Rd
+   plot.listof.Rd
+	New argument 'panel.vpad' controls vertical space for panel title.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.003
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	
+   

@@ -1,12 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.002
+        CHANGES IN spatstat VERSION 1.53-2.003
 
 OVERVIEW
 
-    o Nothing yet.
+    o Tweaks.
 
     o Nickname: 'Smectic'
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.solist, plot.anylist
+    New argument 'panel.vpad' controls vertical space for panel title
+    when equal.scales=FALSE.
+    
 BUG FIXES
 
     o plot.solist

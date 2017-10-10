@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.26 $ $Date: 2017/10/09 09:37:31 $
+##  $Revision: 1.27 $ $Date: 2017/10/10 09:10:48 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -125,6 +125,7 @@ plot.anylist <- plot.solist <- plot.listof <-
                             panel.args=NULL,
                             panel.begin.args=NULL,
                             panel.end.args=NULL,
+                            panel.vpad = 0.2,
                             plotcommand="plot",
                             adorn.left=NULL,
                             adorn.right=NULL,
@@ -384,7 +385,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     mar.panel <- pmax(0, mar.panel + c(vsep, hsep, vsep, hsep)/2)
     ## increase heights to accommodate panel titles
     if(sizes.known && any(nzchar(main.panel))) 
-      heights <- heights * 1.15
+      heights <- heights * (1 + panel.vpad)
     ## check for adornment
     if(!is.null(adorn.left)) {
       ## add margin at left, of width adorn.size * meanwidth
