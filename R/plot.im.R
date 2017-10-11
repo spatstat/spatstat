@@ -143,7 +143,8 @@ plot.im <- local({
   PlotIm <- function(x, ...,
                      main, 
                      add=FALSE, clipwin=NULL,
-                     col=NULL, valuesAreColours=NULL, log=FALSE, gamma=1, 
+                     col=NULL, valuesAreColours=NULL, log=FALSE,
+                     ncolours=256, gamma=1, 
                      ribbon=show.all, show.all=!add,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
@@ -434,7 +435,7 @@ plot.im <- local({
     } else if(!is.null(colfun)) {
       ## Function colfun(n)
       colourinfo <-
-        if(is.null(imagebreaks)) list(col=colfun(256)) else
+        if(is.null(imagebreaks)) list(col=colfun(ncolours)) else
         list(breaks=imagebreaks, col=colfun(length(imagebreaks) - 1L))
     } else if(col.given) {
       ## Colour values

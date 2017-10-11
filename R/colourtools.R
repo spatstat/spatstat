@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.19 $   $Date: 2017/10/11 02:46:41 $
+#   $Revision: 1.20 $   $Date: 2017/10/11 07:19:33 $
 #
 
 
@@ -96,6 +96,18 @@ to.transparent <- function(x, fraction) {
   if(all(fraction == 1))
     return(to.opaque(x))
   rgb(t(col2rgb(x))/255, alpha=fraction, maxColorValue=1)
+}
+
+to.saturated <- function(x, s=1) {
+  y <- rgb2hsv(col2rgb(x))
+  ## map grey to black, otherwise saturate the colour
+  notwhite <- !(y["h",] == 0 & y["s",] == 0 & y["v", ] == 1)
+  isgrey <- (y["s", ] == 0) 
+  y["v",  isgrey & notwhite] <- 0
+  y["s", !isgrey & notwhite] <- s
+  ## convert back
+  z <- hsv(y["h",], y["s",], y["v",])
+  return(z)
 }
   
 to.grey <- function(x, weights=c(0.299, 0.587, 0.114), transparent=FALSE) {

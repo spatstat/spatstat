@@ -13,6 +13,7 @@
 \alias{to.grey}
 \alias{to.opaque}
 \alias{to.transparent}
+\alias{to.saturated}
 \title{
   Convert and Compare Colours in Different Formats
 }
@@ -34,6 +35,7 @@ to.grey(x, weights=c(0.299, 0.587, 0.114), transparent=FALSE)
 is.grey(x)
 to.opaque(x)
 to.transparent(x, fraction)
+to.saturated(x, s=1)
 }
 
 \arguments{
@@ -77,6 +79,9 @@ to.transparent(x, fraction)
   }
   \item{length.out}{
     Integer. Length of desired sequence.
+  }
+  \item{s}{
+    Saturation value (between 0 and 1).
   }
 }
 \details{
@@ -123,6 +128,10 @@ to.transparent(x, fraction)
   \code{to.transparent}, if all the data in \code{x} specifies colours from the
   standard palette, and if the result would be equivalent to \code{x},
   then the result is identical to \code{x}.
+
+  \code{to.saturated} converts each colour in \code{x} to
+  its fully-saturated equivalent. For example, pink is mapped to red.
+  Shades of grey are converted to black; white is unchanged.
   
   \code{complementarycolour} replaces each colour by its
   complementary colour in RGB space (the colour obtained by replacing
@@ -178,6 +187,7 @@ to.transparent(x, fraction)
   paletteindex("grey")
   col2hex("orange")
   to.grey("orange")
+  to.saturated("orange")
   complementarycolour("orange")
   is.grey("lightgrey")
   is.grey(8)

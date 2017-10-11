@@ -1,18 +1,26 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.004
+        CHANGES IN spatstat VERSION 1.53-2.006
 
 OVERVIEW
 
-    o Tweaks.
+    o Gamma correction for colour maps and image plots.
 
-    o Gamma correction for colour maps.
+    o Increase colour saturation.
     
+    o Improved layout in plot.solist
+
     o Nickname: 'Smectic'
 
+NEW FUNCTIONS
+
+    o to.saturated
+    Convert a colour value to the corresponding fully-saturated colour.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     New argument 'gamma' supports gamma correction of colour maps.
+    New argument 'ncolours' specifies the default number of colours.
 
     o colourmap, lut
     New argument 'gamma' supports gamma correction of colour maps.

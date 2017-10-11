@@ -66,3 +66,16 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   colourtools.R
+   colourtools.Rd
+	New function 'to.saturated'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.005
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
