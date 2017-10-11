@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.120 $   $Date: 2017/10/03 02:01:01 $
+#  $Revision: 1.122 $   $Date: 2017/10/11 04:33:39 $
 #
 #  Plotting code for pixel images
 #
@@ -143,7 +143,7 @@ plot.im <- local({
   PlotIm <- function(x, ...,
                      main, 
                      add=FALSE, clipwin=NULL,
-                     col=NULL, valuesAreColours=NULL, log=FALSE,
+                     col=NULL, valuesAreColours=NULL, log=FALSE, gamma=1, 
                      ribbon=show.all, show.all=!add,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
@@ -433,8 +433,9 @@ plot.im <- local({
       colourinfo <- list(breaks=imagebreaks, col=col)
     } else if(!is.null(colfun)) {
       ## Function colfun(n)
-      colourinfo <- if(is.null(imagebreaks)) list(col=colfun(256)) else
-                    list(breaks=imagebreaks, col=colfun(length(imagebreaks)-1))
+      colourinfo <-
+        if(is.null(imagebreaks)) list(col=colfun(256)) else
+        list(breaks=imagebreaks, col=colfun(length(imagebreaks) - 1L))
     } else if(col.given) {
       ## Colour values
       if(inherits(try(col2rgb(col), silent=TRUE), "try-error"))
@@ -469,7 +470,7 @@ plot.im <- local({
              real= {
                if(!is.null(i.bks)) {
                  colourmap(col=i.col, breaks=i.bks)
-               } else colourmap(col=i.col, range=vrange)
+               } else colourmap(col=i.col, range=vrange, gamma=gamma)
              },
              logical={
                colourmap(col=i.col, inputs=c(FALSE,TRUE))
@@ -479,6 +480,11 @@ plot.im <- local({
                colourmap(col=i.col, inputs=lev)
              },
              NULL)
+
+    ## gamma correction
+    soc <- summary(output.colmap)
+    if(!is.null(gamma <- soc$gamma) && gamma != 1)
+      colourinfo$breaks <- soc$breaks
 
     ##  ........ decide whether to use rasterImage .........
     

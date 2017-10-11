@@ -181,6 +181,7 @@
 \alias{fvlabels<-}
 \alias{fvlabelmap}
 \alias{fvlegend}
+\alias{gammabreaks}
 \alias{g3engine}
 \alias{g3Cengine}
 \alias{getdataname}
@@ -953,6 +954,7 @@ fvlabels(x, expand=FALSE)
 fvlabels(x) <- value
 fvlabelmap(x, dot=TRUE)
 fvlegend(object, elang)
+gammabreaks(ra, n, gamma)
 g3engine(x, y, z, box, rmax, nrval, correction)
 g3Cengine(x, y, z, box, rmax, nrval)
 getdataname(defaultvalue, \dots, dataname)

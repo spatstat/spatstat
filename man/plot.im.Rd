@@ -9,7 +9,7 @@
   \method{plot}{im}(x, \dots,
                    main,
                    add=FALSE, clipwin=NULL,
-                   col=NULL, valuesAreColours=NULL, log=FALSE,
+                   col=NULL, valuesAreColours=NULL, log=FALSE, gamma=1, 
                    ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
@@ -20,7 +20,7 @@
   \method{image}{im}(x, \dots,
                    main,
                    add=FALSE, clipwin=NULL,
-                   col=NULL, valuesAreColours=NULL, log=FALSE,
+                   col=NULL, valuesAreColours=NULL, log=FALSE, gamma=1,
                    ribbon=show.all, show.all=!add,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
@@ -60,6 +60,10 @@
   \item{log}{
     Logical value. If \code{TRUE}, the colour map will be
     evenly-spaced on a logarithmic scale.
+  }
+  \item{gamma}{
+    Exponent for the gamma correction of the colours.
+    A single positive number.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon

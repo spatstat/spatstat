@@ -1,18 +1,26 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.003
+        CHANGES IN spatstat VERSION 1.53-2.004
 
 OVERVIEW
 
     o Tweaks.
 
+    o Gamma correction for colour maps.
+    
     o Nickname: 'Smectic'
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o plot.im
+    New argument 'gamma' supports gamma correction of colour maps.
+
+    o colourmap, lut
+    New argument 'gamma' supports gamma correction of colour maps.
+    
     o plot.solist, plot.anylist
     New argument 'panel.vpad' controls vertical space for panel title
     when equal.scales=FALSE.
-    
+
 BUG FIXES
 
     o plot.solist

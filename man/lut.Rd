@@ -5,7 +5,7 @@
   Create a lookup table.
 }
 \usage{
-lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL)
+lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
 }
 \arguments{
   \item{outputs}{Vector of output values}
@@ -25,6 +25,11 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL)
     Breakpoints for the lookup table.
     A numeric vector of length equal to \code{length(outputs)+1}.
     Incompatible with \code{range} or \code{inputs}.
+  }
+  \item{gamma}{
+    Exponent for gamma correction, when \code{range} is given.
+    A single positive number.
+    See Details.
   }
 }
 \details{
@@ -52,6 +57,10 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL)
   If \code{range} is given, then it determines the interval of the real
   number line that will be mapped. It should be a numeric vector of
   length 2. 
+  The interval will be divided evenly into bands, each of which is
+  mapped to an entry of \code{outputs}. (If \code{gamma} is given,
+  then the bands are equally spaced on a scale where the original values
+  are raised to the power \code{gamma}.)
 
   If \code{breaks} is given, then it determines intervals
   of the real number line
@@ -87,11 +96,8 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL)
   ct <- lut(c(0,1), inputs=c(FALSE, TRUE))
   ct(TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

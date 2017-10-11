@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.18 $   $Date: 2017/01/02 04:47:50 $
+#   $Revision: 1.19 $   $Date: 2017/10/11 02:46:41 $
 #
 
 
@@ -182,3 +182,13 @@ do.call.plotfun <- function(fun, arglist, ...) {
   do.call.matched(fun, arglist, ...)
 }
 
+gammabreaks <- function(ra, n, gamma=1) {
+  # make breaks for x which are evenly spaced on the scale y = x^gamma
+  check.1.real(gamma)
+  stopifnot(gamma > 0)
+  y <- seq(from=0, to=1, length.out=n)
+  breaks <- ra[1L] + diff(ra) * y^(1/gamma)
+  breaks[1L] <- ra[1L]
+  breaks[n]  <- ra[2L]
+  return(breaks)
+}

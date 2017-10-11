@@ -44,6 +44,25 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+11 oct 2017
 
-	
+   colourtools.R
+   spatstat-internal.Rd
+	New internal function 'gammabreaks'
+
+   colourtables.R
+   colourmap.Rd
+   lut.Rd
+	New argument 'gamma'.
+
+   plot.im.R
+   plot.im.Rd
+	New argument 'gamma'
    
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.004
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

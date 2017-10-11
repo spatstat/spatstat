@@ -5,7 +5,7 @@
   Create a colour map (colour lookup table).
 }
 \usage{
-colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
+colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
 }
 \arguments{
   \item{col}{Vector of values specifying colours}
@@ -25,6 +25,11 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
     Breakpoints for the colour map.
     A numeric vector of length equal to \code{length(col)+1}.
     Incompatible with \code{range} or \code{inputs}.
+  }
+  \item{gamma}{
+    Exponent for the gamma correction, when \code{range} is given.
+    A single positive number.
+    See Details.
   }
 }
 \details{
@@ -55,7 +60,10 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
 
   If \code{range} is given, then it determines the interval of the real
   number line that will be mapped. It should be a numeric vector of
-  length 2. 
+  length 2. The interval will be divided evenly into bands, each of which is
+  assigned one of the colours in \code{col}. (If \code{gamma} is given,
+  then the bands are equally spaced on a scale where the original values
+  are raised to the power \code{gamma}.)
 
   If \code{breaks} is given, then it determines the precise intervals
   of the real number line
@@ -108,11 +116,8 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL)
   ct <- colourmap(c("red", "green"), inputs=c(FALSE, TRUE))
   ct(TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{color}

@@ -3,10 +3,10 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.37 $ $Date: 2016/02/16 01:39:12 $
+# $Revision: 1.40 $ $Date: 2017/10/11 04:28:46 $
 #
 
-colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
+colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
   if(nargs() == 0) {
     ## null colour map
     f <- lut()
@@ -14,13 +14,13 @@ colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL) {
     ## validate colour data 
     col2hex(col)
     ## store without conversion
-    f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs)
+    f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs, gamma=gamma)
   }
   class(f) <- c("colourmap", class(f))
   f
 }
 
-lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
+lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
   if(nargs() == 0) {
     ## null lookup table
     f <- function(x, what="value"){NULL}
@@ -28,6 +28,7 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
     attr(f, "stuff") <- list(n=0)
     return(f)
   }
+  if(is.null(gamma)) gamma <- 1
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
   names(given) <- c("range", "breaks", "inputs")
@@ -57,7 +58,8 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
     # date/time interval mapped to colours
     timeclass <- if(inherits(range, "Date")) "Date" else "POSIXt"
     if(is.null(breaks)) {
-      breaks <- seq(from=range[1L], to=range[2L], length.out=length(outputs)+1L)
+      breaks <- gammabreaks(range, n + 1L, gamma)
+      gamma.used <- gamma
     } else {
       if(!inherits(breaks, timeclass))
         stop(paste("breaks should belong to class", dQuote(timeclass)),
@@ -66,8 +68,10 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
       stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
         stop("breaks must be increasing")
+      gamma.used <- NULL
     }
-    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs)
+    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
+                  gamma=gamma.used)
     f <- function(x, what="value") {
       x <- as.vector(as.numeric(x))
       z <- findInterval(x, stuff$breaks,
@@ -80,14 +84,17 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL) {
   } else {
     # interval of real line mapped to colours
     if(is.null(breaks)) {
-      breaks <- seq(from=range[1L], to=range[2L], length.out=length(outputs)+1L)
+      breaks <- gammabreaks(range, n + 1L, gamma)
+      gamma.used <- gamma
     } else {
       stopifnot(is.numeric(breaks) && length(breaks) >= 2L)
       stopifnot(length(breaks) == length(outputs) + 1L)
       if(!all(diff(breaks) > 0))
         stop("breaks must be increasing")
+      gamma.used <- NULL
     }
-    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs)
+    stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
+                  gamma=gamma.used)
     f <- function(x, what="value") {
       stopifnot(is.numeric(x))
       x <- as.vector(x)
@@ -132,6 +139,8 @@ print.lut <- function(x, ...) {
   }
   colnames(out)[2L] <- outputname
   print(out)
+  if(!is.null(gamma <- stuff$gamma) && gamma != 1)
+    cat(paste("Generated using gamma =", gamma, "\n"))
   invisible(NULL)
 }
 
