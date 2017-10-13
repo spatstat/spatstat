@@ -73,9 +73,35 @@ Change log from 1.53-2 to 1.53-xx
 
    DESCRIPTION
    NEWS
-	Updated to version 1.53-2.005
+	Updated to version 1.53-2.006 (oops)
 	
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12 oct 2017
+
+   leverage.R
+	Experimental fix for bug
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.007
+	Nickame: 'Vexatious Litigant'
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+13 oct 2017
+
+   leverage.R
+	More experimental fixes
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.009
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.006
+        CHANGES IN spatstat VERSION 1.53-2.009
 
 OVERVIEW
 
@@ -9,7 +9,9 @@ OVERVIEW
     
     o Improved layout in plot.solist
 
-    o Nickname: 'Smectic'
+    o Experimental fix for bug in leverage code
+    
+    o Nickname: 'Vexatious Litigant'
 
 NEW FUNCTIONS
 
@@ -31,6 +33,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Calculations were slightly incorrect for models fitted using the
+    border correction.
+    An *experimental* fix has been applied.
+    
     o plot.solist
     Panel titles were cut off, when equal.scales=FALSE (the default).
     Fixed.
