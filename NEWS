@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.009
+        CHANGES IN spatstat VERSION 1.53-2.010
 
 OVERVIEW
 
@@ -37,7 +37,11 @@ BUG FIXES
     Calculations were slightly incorrect for models fitted using the
     border correction.
     An *experimental* fix has been applied.
-    
+
+    o update.kppm
+    Did not function correctly when several additional arguments were given.
+    Fixed.
+
     o plot.solist
     Panel titles were cut off, when equal.scales=FALSE (the default).
     Fixed.

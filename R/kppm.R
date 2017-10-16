@@ -3,7 +3,7 @@
 #
 # kluster/kox point process models
 #
-# $Revision: 1.134 $ $Date: 2017/07/19 07:18:54 $
+# $Revision: 1.136 $ $Date: 2017/10/16 03:24:24 $
 #
 
 kppm <- function(X, ...) {
@@ -1504,8 +1504,10 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
   Xexpr <- if(length(jX) > 0) sys.call()[[2L + jX]] else NULL
   #' remove arguments just recognised, if any
   jused <- c(jf, jX)
-  if(length(jused) > 0)
+  if(length(jused) > 0) {
     argh <- argh[-jused]
+    nama <- names(argh)
+  }
   #' update the matched call
   thecall <- getCall(object)
   methodname <- as.character(thecall[[1L]])
@@ -1537,8 +1539,13 @@ update.kppm <- function(object, ..., evaluate=TRUE) {
 	      thecall$X <- fom
 	   }
          })
-  knownnames <- union(names(formals(kppm.ppp)), names(formals(mincontrast)))
-  knownnames <- setdiff(knownnames, c("X", "trend", "observed", "theoretical"))
+  knownnames <- unique(c(names(formals(kppm.ppp)),
+                         names(formals(mincontrast)),
+                         names(formals(optim))))
+  knownnames <- setdiff(knownnames,
+                        c("X", "trend",
+                          "observed", "theoretical",
+                          "fn", "gr", "..."))
   ok <- nama %in% knownnames
   thecall <- replace(thecall, nama[ok], argh[ok])
   thecall$formula <- NULL # artefact of 'step', etc
