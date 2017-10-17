@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.22 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 2.23 $	$Date: 2017/10/16 10:35:47 $
 #
 #    The Strauss/hard core process
 #
@@ -121,8 +121,37 @@ StraussHard <- local({
          r <- self$par$r
          hc <- self$par$hc
          return(pi * (hc^2 + (1-gamma) * (r^2 - hc^2)))
+       },
+       delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
+         r  <- inte$par$r
+         hc <- inte$par$hc
+         #' positive part
+         U <- as.ppp(X)
+         nU <- npoints(U)
+         cl <- weightedclosepairs(U, r, correction)
+         if(is.null(cl))
+           return(NULL)
+         v <- sparseMatrix(i=cl$i, j=cl$j, x=cl$weight,
+                           dims=c(nU, nU))
+         if(!sparseOK)
+           v <- as.matrix(v)
+         #' hard core part
+         hcl <- if(is.ppp(X)) {
+                  closepairs(X, hc, what="indices")
+                } else if(inherits(X, "quad")) {
+                  #' only data points enforce hard core
+                  crosspairquad(X, hc, what="indices")
+                } else stop("X should be a ppp or quad object")
+         nhit <- as.integer(table(factor(hcl$j, levels=seq_len(nU))))
+         changes <- (nhit == 1)
+         if(any(changes)) {
+           vh <- sparseMatrix(i=hcl$i, j=hcl$j, x=changes[hcl$j],
+                              dims=c(nU, nU))
+           attr(v, "hard") <- vh
+         }
+         return(v)
        }
-         )
+    )
   class(BlankStraussHard) <- "interact"
   
   StraussHard <- function(r, hc=NA) {

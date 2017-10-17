@@ -606,7 +606,7 @@ crosspairquad <- function(Q, rmax, what=c("all", "indices")) {
   # convert all indices to serial numbers in union.quad(Q)
   # assumes data are listed first
   clXD$j <- npoints(X) + clXD$j
-  result <- list(rbind(as.data.frame(clX), as.data.frame(clXD)))
+  result <- as.list(rbind(as.data.frame(clX), as.data.frame(clXD)))
   return(result)
 }
 

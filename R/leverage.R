@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.84 $ $Date: 2017/10/12 07:05:49 $
+#  $Revision: 1.86 $ $Date: 2017/10/17 00:41:00 $
 #
 
 leverage <- function(model, ...) {
@@ -324,7 +324,8 @@ ppmInfluenceEngine <- function(fit,
   # ........  start assembling results .....................
   # 
   ## start building result
-  result <- list(fitname=fitname, fit.is.poisson=is.poisson(fit))
+  fit.is.poisson <- is.poisson(fit)
+  result <- list(fitname=fitname, fit.is.poisson=fit.is.poisson)
   class(result) <- "ppmInfluence"
 
   if(any(c("score", "derivatives") %in% what)) {
@@ -350,7 +351,7 @@ ppmInfluenceEngine <- function(fit,
 
   
   ## compute effect of adding/deleting each quadrature point
-  if(is.poisson(fit)) {
+  if(fit.is.poisson) {
     ##  ........ Poisson case ..................................
     eff <- mom
     ddS <- ddSintegrand <- NULL
@@ -640,6 +641,11 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... influence .............
   if("influence" %in% what) {
+    if(!fit.is.poisson && anyzerocif) 
+      warn.once("influence.hard",
+                "influence calculation is slightly incorrect",
+                "when the model has a hard core;",
+                "this is a known bug")
     if(logi){
       X <- loc
       effX <- as.numeric(isdata) * eff - mom * (inside * logiprob)
@@ -660,6 +666,11 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... dfbetas .............
   if("dfbetas" %in% what) {
+    if(!fit.is.poisson && anyzerocif) 
+      warn.once("dfbeta.hard",
+                "dfbetas calculation is slightly incorrect",
+                "when the model has a hard core;",
+                "this is a known bug")
     if(logi){
       M <- as.numeric(isdata) * eff - mom * (inside * logiprob)
       M <- t(invhess %*% t(M))

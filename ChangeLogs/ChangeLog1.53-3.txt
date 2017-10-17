@@ -105,3 +105,43 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+16 oct 2017
+
+   kppm.R
+	Bug fix in update.kppm (spotted by Rolf)
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.010
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   closepairs.R
+	Bug fix in crosspairquad()
+	
+   strauss.R
+   spatstat-internal.Rd
+	New internal function weightedclosepairs.
+
+   strauss.R
+	Strauss()$delta2 now uses weightedclosepairs.
+
+   strausshard.R
+	Experimental implementation of $delta2 for model with a hard core.
+
+17 oct 2017
+
+   leverage.R
+	Inserted warning about incorrect calculation for hard core models
+	
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.011
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

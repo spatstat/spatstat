@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.37 $	$Date: 2017/06/05 10:31:58 $
+#    $Revision: 2.38 $	$Date: 2017/10/16 09:53:46 $
 #
 #    The Strauss process
 #
@@ -93,27 +93,10 @@ Strauss <- local({
          r <- inte$par$r
          X <- as.ppp(X) # algorithm is the same for data and dummy points
          nX <- npoints(X)
-	 switch(correction,
-	        none = ,
-		border = {
-                  cl <- closepairs(X, r, what="indices")
-		  weight <- 1
-		},
-		isotropic = ,
-		Ripley = {
-                  cl <- closepairs(X, r, what="ijd")
-		  weight <- edge.Ripley(X[cl$i], cl$d)
-		},
-		translate = {
-                  cl <- closepairs(X, r, what="all")
-		  weight <- edge.Trans(dx = cl$dx,
-		   	    	       dy = cl$dy,
-		                       W = Window(X),
-				       paired=TRUE)
-		},
-		return(NULL)
-		)
-         v <- sparseMatrix(i=cl$i, j=cl$j, x=as.numeric(weight),
+         cl <- weightedclosepairs(X, r, correction)
+         if(is.null(cl))
+           return(NULL)
+         v <- sparseMatrix(i=cl$i, j=cl$j, x=cl$weight,
                            dims=c(nX, nX))
          if(!sparseOK)
            v <- as.matrix(v)
@@ -197,3 +180,40 @@ closepaircounts <- function(X, r) {
   return(answer)
 }
 
+weightedclosepairs <- function(X, r, correction) {
+  ## return list(i,j,weight) for all r-close pairs
+  nX <- npoints(X)
+  switch(correction,
+         none = ,
+         border = {
+           cl <- closepairs(X, r, what="indices")
+           weight <- rep(1, length(cl$i))
+         },
+         isotropic = ,
+         Ripley = {
+           cl <- closepairs(X, r, what="ijd")
+           weight <- edge.Ripley(X[cl$i], cl$d)
+         },
+         translate = {
+           cl <- closepairs(X, r, what="all")
+           weight <- edge.Trans(dx = cl$dx,
+                                dy = cl$dy,
+                                W = Window(X),
+                                paired=TRUE)
+         },
+         periodic = {
+           proche <- (pairdist(X, periodic=TRUE, squared=TRUE) <= r^2)
+           diag(proche) <- FALSE
+           cl <- which(proche, arr.ind=TRUE)
+           cl <- list(i = cl[,1], j=cl[,2])
+           weight <- rep(1, length(cl$i))
+         },
+         {
+           warning(paste("Unrecognised correction", sQuote(correction)),
+                   call.=FALSE)
+           return(NULL)
+         }
+         )
+  result <- list(i=cl$i, j=cl$j, weight=as.numeric(weight))
+  return(result)
+}

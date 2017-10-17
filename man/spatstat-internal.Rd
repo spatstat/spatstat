@@ -676,6 +676,7 @@
 \alias{Window<-.lpp}
 \alias{warn.once}
 \alias{waxlyrical}
+\alias{weightedclosepairs}
 \alias{windows.mppm}
 \alias{w.quad}               
 \alias{x.quad}
@@ -1542,6 +1543,7 @@ vnnFind(seg, tp, ns, nv, from, to, seglen, huge, tol, kmax)
 \method{Window}{lpp}(X, \dots, check=TRUE) <- value
 warn.once(key, \dots)
 waxlyrical(type, terse)
+weightedclosepairs(X, r, correction)
 windows.mppm(x)
 w.quad(Q)               
 x.quad(Q)
