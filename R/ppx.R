@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.60 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.61 $  $Date: 2017/10/24 01:02:35 $
 #
 
 ppx <- local({
@@ -314,7 +314,7 @@ boxx <- function(..., unitname=NULL) {
     stop("Data should be vectors of length 2")
   if(any(unlist(lapply(ranges, diff)) <= 0))
     stop("Illegal range: Second element <= first element")
-  out <- list(ranges=ranges, units=as.units(unitname))
+  out <- list(ranges=ranges, units=as.unitname(unitname))
   class(out) <- "boxx"
   return(out)
 }
@@ -329,11 +329,12 @@ as.boxx <- function(..., warn.owin = TRUE) {
     if (inherits(a, "boxx")) 
       return(a)
     if (inherits(a, "box3")) 
-      return(boxx(a$xrange, a$yrange, a$zrange, unitname = a$units))
+      return(boxx(a$xrange, a$yrange, a$zrange, 
+		  unitname = as.unitname(a$units)))
     if (inherits(a, "owin")) {
       if (!is.rectangle(a) && warn.owin) 
         warning("The owin object does not appear to be rectangular - the bounding box is used!")
-      return(boxx(a$xrange, a$yrange, unitname = a$units))
+      return(boxx(a$xrange, a$yrange, unitname = as.unitname(a$units)))
     }
     if (is.numeric(a)) {
       if ((length(a)%%2) == 0) 
@@ -358,10 +359,10 @@ print.boxx <- function(x, ...) {
   invisible(NULL)
 }
 
-unitname.boxx <- function(x) { x$units }
+unitname.boxx <- function(x) { as.unitname(x$units) }
 
 "unitname<-.boxx" <- function(x, value) {
-  x$units <- as.units(value)
+  x$units <- as.unitname(value)
   return(x)
 }
 

@@ -2,7 +2,7 @@
 #
 #   rescale.R
 #
-#   $Revision: 1.6 $ $Date: 2014/10/24 00:22:30 $
+#   $Revision: 1.7 $ $Date: 2017/10/24 01:03:07 $
 #
 #
 
@@ -48,8 +48,8 @@ rescale.psp <- function(X, s, unitname) {
   return(Y)
 }
   
-rescale.units <- function(X, s, unitname) {
-  if(!missing(unitname) && !is.null(unitname)) return(as.units(unitname))
+rescale.unitname <- function(X, s, unitname) {
+  if(!missing(unitname) && !is.null(unitname)) return(as.unitname(unitname))
   if(summary(X)$vanilla)
     return(X)
   if(missing(s)) {

@@ -1,17 +1,19 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.011
+        CHANGES IN spatstat VERSION 1.53-2.012
 
 OVERVIEW
 
     o Gamma correction for colour maps and image plots.
 
-    o Increase colour saturation.
+    o Experimental fix for bug in leverage code
+
+    o Class 'units' has been renamed 'unitname'
+
+    o Tools to increase colour saturation.
     
     o Improved layout in plot.solist
-
-    o Experimental fix for bug in leverage code
     
-    o Nickname: 'Vexatious Litigant'
+    o Nickname: 'The Package That Must Not Be Named'
 
 NEW FUNCTIONS
 
@@ -30,6 +32,26 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.solist, plot.anylist
     New argument 'panel.vpad' controls vertical space for panel title
     when equal.scales=FALSE.
+
+    o class 'units'
+    The class 'units' has been renamed 'unitname' to avoid a clash with
+    other packages.
+
+    o unitname
+    The generic function 'unitname' now returns an object of class 'unitname'. 
+    
+    o print.units, summary.units, print.summary.units, as.character.units,
+    compatible.units
+    These methods are now called print.unitname, summary.unitname,
+    print.summary.unitname, as.character.unitname and compatible.unitname.
+
+    o as.units
+    This function has been renamed 'as.unitname' and now returns
+    an object of class 'unitname'.
+
+    o rescale.units
+    This method has been renamed 'rescale.unitname' and now returns
+    an object of class 'unitname'.
 
 BUG FIXES
 

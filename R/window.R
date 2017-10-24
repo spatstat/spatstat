@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.176 $	$Date: 2017/09/11 16:35:38 $
+#	$Revision: 4.177 $	$Date: 2017/10/24 01:02:35 $
 #
 #
 #	A window may be either
@@ -80,7 +80,7 @@ owin <- local({
   if(nargs() == 1 && !missing(xrange) && is.owin(xrange))
     return(xrange)
   
-  unitname <- as.units(unitname)
+  unitname <- as.unitname(unitname)
 
   ## Exterminate ambiguities
   poly.given <- !is.null(poly)
@@ -523,7 +523,7 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
 #	dimyx:		   dimensions of pixel raster
 #       xy:                coordinates of pixel raster
   nonamedargs <- is.null(eps) && is.null(dimyx) && is.null(xy)
-  uname <- as.units(NULL)
+  uname <- as.unitname(NULL)
   if(!missing(w) && !is.null(w)) {
     if(is.data.frame(w)) return(owin(mask=w, xy=xy))
     if(is.matrix(w)) {

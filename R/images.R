@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.145 $     $Date: 2017/06/05 10:31:58 $
+#      $Revision: 1.146 $     $Date: 2017/10/24 01:02:35 $
 #
 #      The class "im" of raster images
 #
@@ -87,7 +87,7 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
     yrange <- range(yrow) + c(-1,1) * ystep/2
   }  else stop("Cannot determine pixel height")
 
-  unitname <- as.units(unitname)
+  unitname <- as.unitname(unitname)
 
   out <- list(v   = mat,
               dim = c(nr, nc),

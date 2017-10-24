@@ -1,34 +1,34 @@
-\name{methods.units}
+\name{methods.unitname}
 \Rdversion{1.1}
-\alias{methods.units} %DoNotExport
-\alias{print.units}
-\alias{summary.units}
-\alias{rescale.units}
-\alias{compatible.units}
+\alias{methods.unitname} %DoNotExport
+\alias{print.unitname}
+\alias{summary.unitname}
+\alias{rescale.unitname}
+\alias{compatible.unitname}
 \title{
   Methods for Units
 }
 \description{
-  Methods for class \code{"units"}.
+  Methods for class \code{"unitname"}.
 }
 \usage{
-  \method{print}{units}(x, ...)
-  \method{summary}{units}(object, ...)
-  \method{rescale}{units}(X, s, unitname)
-  \method{compatible}{units}(A,B, ..., coerce=TRUE)
+  \method{print}{unitname}(x, ...)
+  \method{summary}{unitname}(object, ...)
+  \method{rescale}{unitname}(X, s, unitname)
+  \method{compatible}{unitname}(A,B, ..., coerce=TRUE)
 }
 \arguments{
   \item{x,X,A,B,object}{
-    Objects of class \code{"units"} representing
+    Objects of class \code{"unitname"} representing
     units of length.
   }
   \item{s}{Conversion factor: the new units are \code{s} times the old units.}
   \item{\dots}{
     Other arguments.
-    For \code{print.units} these arguments are passed to \code{print.default}.
-    For \code{summary.units} they are ignored.
-    For \code{compatible.units} these arguments
-    are other objects of class \code{"units"}.
+    For \code{print.unitname} these arguments are passed to \code{print.default}.
+    For \code{summary.unitname} they are ignored.
+    For \code{compatible.unitname} these arguments
+    are other objects of class \code{"unitname"}.
   }
   \item{coerce}{
     Logical. If \code{TRUE}, a null unit of length is compatible with
@@ -41,9 +41,9 @@
   These are methods for the generic functions
   \code{\link{print}}, \code{\link{summary}}, \code{\link{rescale}}
   and \code{\link{compatible}}
-  for the class \code{"units"}.
+  for the class \code{"unitname"}.
 
-  An object of class \code{"units"} represents a unit of length.
+  An object of class \code{"unitname"} represents a unit of length.
 
   The \code{print} method prints a description of the unit of length,
   and the \code{summary} method gives a more detailed description.
@@ -54,17 +54,14 @@
   are compatible.
 }
 \value{
-  For \code{print.units} the value is \code{NULL}.
-  For \code{summary.units} the value is an object of class
-  \code{summary.units} (with its own print method).
-  For \code{rescale.units} the value is another object of class \code{"units"}.
-  For \code{compatible.units} the result is logical.
+  For \code{print.unitname} the value is \code{NULL}.
+  For \code{summary.unitname} the value is an object of class
+  \code{summary.unitname} (with its own print method).
+  For \code{rescale.unitname} the value is another object of class \code{"unitname"}.
+  For \code{compatible.unitname} the result is logical.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{box3}},

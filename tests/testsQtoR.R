@@ -303,7 +303,7 @@ if(!inherits(out, "try-error"))
 #
 # test decisions about expansion of simulation window
 #
-#  $Revision: 1.2 $  $Date: 2011/12/05 07:29:16 $
+#  $Revision: 1.3 $  $Date: 2017/10/24 01:53:11 $
 #
 
 require(spatstat)
@@ -313,7 +313,11 @@ fit <- ppm(cells, ~x)
 # check rmhmodel.ppm
 mod <- rmhmodel(fit)
 wsim <- as.rectangle(mod$trend)
-if(!identical(wsim, as.owin(cells)))
+# work around changes in 'unitname'
+wcel <- as.owin(cells)
+unitname(wcel) <- unitname(cells)
+# test
+if(!identical(wsim, wcel))
   stop("Expansion occurred improperly in rmhmodel.ppm")
 })
 

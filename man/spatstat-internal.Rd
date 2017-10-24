@@ -26,7 +26,7 @@
 \alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
-\alias{as.character.units}
+\alias{as.character.unitname}
 \alias{as.data.frame.bw.optim}
 \alias{as.data.frame.fv}
 \alias{as.double.im}
@@ -34,7 +34,7 @@
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.owin.lintess}
-\alias{as.units}
+\alias{as.unitname}
 \alias{augment.msr}
 \alias{BartCalc}
 \alias{bbEngine}
@@ -312,7 +312,7 @@
 \alias{majorminorversion}
 \alias{make.even.breaks}
 \alias{makefvlabel}
-\alias{makeunits}
+\alias{makeunitname}
 \alias{markappend}
 \alias{markcbind}
 \alias{markformat}
@@ -482,7 +482,7 @@
 \alias{print.summary.solist}
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
-\alias{print.summary.units}
+\alias{print.summary.unitname}
 \alias{print.symbolmap}       
 \alias{print.textstring}
 \alias{print.texturemap}
@@ -763,7 +763,7 @@ areaLoss.grid(X, r, \dots, W, subset,
 assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
-\method{as.character}{units}(x, \dots)
+\method{as.character}{unitname}(x, \dots)
 \method{as.data.frame}{bw.optim}(x, \dots)
 \method{as.data.frame}{fv}(x, \dots)
 \method{as.double}{im}(x, \dots)
@@ -771,7 +771,7 @@ as.breakpts(\dots)
 \method{as.list}{hyperframe}(x, \dots)
 as.listof(x)
 \method{as.owin}{lintess}(W, \dots)
-as.units(s)
+as.unitname(s)
 augment.msr(x, \dots, sigma)
 BartCalc(fY, fK)
 bbEngine(\dots)
@@ -1108,7 +1108,7 @@ lookup2DkernelInfo(kernel)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
 makefvlabel(op, accent, fname, sub, argname)
-makeunits(sing, plur, mul)
+makeunitname(sing, plur, mul)
 markappend(\dots)
 markcbind(\dots)
 markformat(x)
@@ -1322,7 +1322,7 @@ prepareTitle(main)
 \method{print}{summary.splitppp}(x, \dots)
 \method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
-\method{print}{summary.units}(x, \dots)
+\method{print}{summary.unitname}(x, \dots)
 \method{print}{symbolmap}(x, \dots)
 \method{print}{textstring}(x, \dots)
 \method{print}{texturemap}(x, \dots)

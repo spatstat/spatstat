@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.49 $	$Date: 2016/10/23 10:36:58 $
+#	$Revision: 1.50 $	$Date: 2017/10/24 01:02:35 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -42,7 +42,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
     stop(paste(sQuote("mat"), "should be a 2 x 2 matrix"))
   diagonalmatrix <- all(mat == diag(diag(mat)))
   scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1)
-  newunits <- if(scaletransform) unitname(X) else as.units(NULL)
+  newunits <- if(scaletransform) unitname(X) else as.unitname(NULL)
   #
   switch(X$type,
          rectangle={
@@ -109,7 +109,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
   #
   diagonalmatrix <- all(mat == diag(diag(mat)))
   scaletransform <- diagonalmatrix && (length(unique(diag(mat))) == 1L)
-  newunits <- if(scaletransform) unitname(X) else as.units(NULL)
+  newunits <- if(scaletransform) unitname(X) else as.unitname(NULL)
   newpixels <- (length(list(...)) > 0)
   #
   if(diagonalmatrix && !newpixels) {

@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.123 $	$Date: 2017/09/04 05:10:45 $
+#	$Revision: 4.124 $	$Date: 2017/10/24 01:02:35 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -192,7 +192,7 @@ overlap.owin <- function(A, B) {
   # compute the area of overlap between two windows
   
   # check units
-  if(!compatible.units(unitname(A), unitname(B)))
+  if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
   
   At <- A$type

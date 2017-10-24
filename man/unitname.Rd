@@ -95,15 +95,13 @@ unitname(x) <- value
  values, use \code{\link{rescale}}.
 }
 \value{
-  The return value of \code{unitname} is an object of class \code{"units"}
+  The return value of \code{unitname} is an object of class \code{"unitname"}
   containing the name of the unit of length in \code{x}. There are
-  methods for \code{print} and \code{summary}.
+  methods for \code{print}, \code{summary}, \code{as.character},
+  \code{\link{rescale}} and \code{\link{compatible}}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{rescale}},

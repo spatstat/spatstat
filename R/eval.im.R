@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.41 $     $Date: 2016/11/18 08:40:40 $
+#     $Revision: 1.42 $     $Date: 2017/10/24 01:02:35 $
 #
 
 eval.im <- local({
@@ -95,7 +95,7 @@ compatible.im <- function(A, B, ..., tol=1e-6) {
                  abs(A$yrow - B$yrow))
   xok <- (xdiscrep < tol * min(A$xstep, B$xstep))
   yok <- (ydiscrep < tol * min(A$ystep, B$ystep))
-  uok <- compatible.units(unitname(A), unitname(B))
+  uok <- compatible.unitname(unitname(A), unitname(B))
   if(!(xok && yok && uok))
     return(FALSE)
   ## A and B are compatible
@@ -126,7 +126,7 @@ harmonize.im <- harmonise.im <- function(...) {
   } else {
     ## test for compatible units
     un <- lapply(imgs, unitname)
-    uok <- unlist(lapply(un, compatible.units, y=un[[1L]]))
+    uok <- unlist(lapply(un, compatible.unitname, y=un[[1L]]))
     if(!all(uok))
       stop("Images have incompatible units of length")
     ## find the image with the highest resolution
@@ -186,7 +186,7 @@ commonGrid <- local({
     } else {
       ## test for compatible units
       un <- lapply(rasterlist, unitname)
-      uok <- unlist(lapply(un, compatible.units, y=un[[1L]]))
+      uok <- unlist(lapply(un, compatible.unitname, y=un[[1L]]))
       if(!all(uok))
         stop("Objects have incompatible units of length")
       ## find the image/mask with the highest resolution

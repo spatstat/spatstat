@@ -19,7 +19,7 @@
   What is meant by \sQuote{compatible} depends on the class of object.
 
   There are methods for the classes \code{"fv"}, \code{"fasp"},
-  \code{"im"} and \code{"units"}.
+  \code{"im"} and \code{"unitname"}.
 }
 \value{
   Logical value: \code{TRUE} if the objects are compatible, and \code{FALSE}
@@ -29,13 +29,10 @@
   \code{\link{compatible.fv}},
   \code{\link{compatible.fasp}},
   \code{\link{compatible.im}},
-  \code{\link{compatible.units}} 
+  \code{\link{compatible.unitname}} 
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

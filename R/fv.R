@@ -4,7 +4,7 @@
 ##
 ##    class "fv" of function value objects
 ##
-##    $Revision: 1.148 $   $Date: 2017/07/13 01:26:02 $
+##    $Revision: 1.149 $   $Date: 2017/10/24 01:02:35 $
 ##
 ##
 ##    An "fv" object represents one or more related functions
@@ -95,7 +95,7 @@ fv <- function(x, argu="r", ylab=NULL, valu, fmla=NULL,
   attr(x, "alim") <- alim
   attr(x, "labl") <- labl
   attr(x, "desc") <- desc
-  attr(x, "units") <- as.units(unitname)
+  attr(x, "units") <- as.unitname(unitname)
   attr(x, "fname") <- fname
   attr(x, "dotnames") <- NULL
   attr(x, "shade") <- NULL

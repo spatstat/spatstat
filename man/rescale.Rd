@@ -62,7 +62,7 @@ Available methods:
 \code{\link{rescale.owin}},
 \code{\link{rescale.ppp}},
 \code{\link{rescale.psp}}
-and \code{\link{rescale.units}}.
+and \code{\link{rescale.unitname}}.
 
 Other generics: 
 \code{\link{unitname}},
@@ -70,11 +70,8 @@ Other generics:
   \code{\link{rotate}},
   \code{\link{shift}}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

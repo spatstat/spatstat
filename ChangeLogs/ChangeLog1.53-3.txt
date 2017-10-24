@@ -145,3 +145,38 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 oct 2017
+
+   units.R
+   unitname.Rd
+   methods.units.Rd -> methods.unitname.Rd
+   spatstat-internal.Rd
+	Class name 'units' changed to 'unitname'.
+	as.units -> as.unitname
+	makeunits -> makeunitname
+	renamed methods for print, summary, compatible, as.character
+
+   rescale.R
+	renamed method rescale.units -> rescale.unitname
+	
+   affine.R
+   eval.im.R
+   fv.R
+   images.R
+   pp3.R
+   ppx.R
+   window.R
+   wingeom.R
+	Consequential changes
+	
+   DESCRIPTION
+   Nickname.txt
+   NEWS
+	Updated to version 1.53-2.012
+	Nickname: 'The Package That Must Not Be Named'
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	
