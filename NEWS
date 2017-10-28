@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.012
+        CHANGES IN spatstat VERSION 1.53-2.013
 
 OVERVIEW
 
@@ -60,6 +60,11 @@ BUG FIXES
     border correction.
     An *experimental* fix has been applied.
 
+    o integral.linim
+    Gave incorrect value in some extreme cases
+    (where many network segments were shorter than one pixel width).
+    Fixed.
+    
     o update.kppm
     Did not function correctly when several additional arguments were given.
     Fixed.

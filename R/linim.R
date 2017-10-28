@@ -625,8 +625,8 @@ integral.linim <- function(f, domain=NULL, ...){
   if(any(missed <- (nper == 0))) {
     missed <- unname(which(missed))
     mp <- midpoints.psp(as.psp(L)[missed])
-    mp <- lpp(data.frame(x=mp$x, y=mp$y, seg=missed, tp=0.5), L=L)
-    valmid <- f[mp, drop=FALSE]
+    # nearest pixel value
+    valmid <- safelookup(f, mp)
     seg <- c(seg, factor(missed, levels=1:ns))
     vals <- c(vals, valmid)
   }

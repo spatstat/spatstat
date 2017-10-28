@@ -168,7 +168,10 @@ Change log from 1.53-2 to 1.53-xx
    window.R
    wingeom.R
 	Consequential changes
-	
+
+   tests/rmhExpand.R
+	Workaround 
+
    DESCRIPTION
    Nickname.txt
    NEWS
@@ -179,4 +182,18 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-	
+28 oct 2017
+
+   linim.R
+	Bug fix. Again.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.013
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+   
