@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.89 $ $Date: 2017/09/13 09:52:15 $
+#  $Revision: 1.90 $ $Date: 2017/10/29 08:30:38 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -767,3 +767,43 @@ text.psp <- function(x, ...) {
                                    .StripNull=TRUE))
   return(invisible(NULL))
 }
+
+intensity.psp <- function(X, ..., weights=NULL) {
+  len <- lengths.psp(X)
+  a <- area(Window(X))
+  if(is.null(weights)) {
+    ## unweighted case - for efficiency
+    if(is.multitype(X)) {
+      mks <- marks(X)
+      answer <- tapply(len, mks, sum)/a
+      answer[is.na(answer)] <- 0
+      names(answer) <- levels(mks)
+    } else answer <- sum(len)/a
+    return(answer)
+  }
+  ## weighted case 
+  if(is.numeric(weights)) {
+    check.nvector(weights, nsegments(X), things="segments")
+  } else if(is.expression(weights)) {
+    # evaluate expression in data frame of coordinates and marks
+    df <- as.data.frame(X)
+    pf <- parent.frame()
+    eval.weights <- try(eval(weights, envir=df, enclos=pf))
+    if(inherits(eval.weights, "try-error"))
+      stop("Unable to evaluate expression for weights", call.=FALSE)
+    if(!check.nvector(eval.weights, nsegments(X), fatal=FALSE, warn=TRUE))
+      stop("Result of evaluating the expression for weights has wrong format")
+    weights <- eval.weights
+  } else stop("Unrecognised format for argument 'weights'")
+  ##
+  if(is.multitype(X)) {
+    mks <- marks(X)
+    answer <- as.vector(tapply(weights * len, mks, sum))/a
+    answer[is.na(answer)] <- 0
+    names(answer) <- levels(mks)
+  } else {
+    answer <- sum(weights)/a
+  }
+  return(answer)
+}
+

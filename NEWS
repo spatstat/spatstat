@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.013
+        CHANGES IN spatstat VERSION 1.53-2.014
 
 OVERVIEW
 
@@ -19,6 +19,9 @@ NEW FUNCTIONS
 
     o to.saturated
     Convert a colour value to the corresponding fully-saturated colour.
+
+    o intensity.psp
+    Compute the average total length of segments per unit area.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

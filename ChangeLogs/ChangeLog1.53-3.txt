@@ -185,7 +185,7 @@ Change log from 1.53-2 to 1.53-xx
 28 oct 2017
 
    linim.R
-	Bug fix. Again.
+	Bug fix in integral.linim.
 
    DESCRIPTION
    NEWS
@@ -195,5 +195,16 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+29 oct 2017
 
-   
+   psp.R
+   intensity.psp.Rd [New file]
+   	New method intensity.psp
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.014
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
