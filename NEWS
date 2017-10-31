@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.014
+        CHANGES IN spatstat VERSION 1.53-2.015
 
 OVERVIEW
 
@@ -7,11 +7,13 @@ OVERVIEW
 
     o Experimental fix for bug in leverage code
 
-    o Class 'units' has been renamed 'unitname'
+    o Class 'units' has been renamed 'unitname' to avoid package collision.
 
-    o Tools to increase colour saturation.
+    o Tighter bounding box for psp, lpp, linnet objects.
     
     o Improved layout in plot.solist
+    
+    o Tools to increase colour saturation.
     
     o Nickname: 'The Package That Must Not Be Named'
 
@@ -22,7 +24,22 @@ NEW FUNCTIONS
 
     o intensity.psp
     Compute the average total length of segments per unit area.
-    
+
+    o boundingbox.psp
+    Bounding box for line segment patterns.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    o boundingbox.lpp
+    Bounding box for point patterns on a linear network.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    o boundingbox.linnet
+    Bounding box for a linear network.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    o "Frame<-.default"
+    New default method for assigning bounding frame to a spatial object.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im

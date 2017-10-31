@@ -208,3 +208,22 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+31 oct 2017
+
+   window.R
+   Frame.Rd
+	Added "Frame<-.default"
+
+   boundingbox.R
+   boundingbox.Rd
+	New methods for psp, linnet, lpp.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.015
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

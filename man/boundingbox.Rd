@@ -4,6 +4,9 @@
 \alias{boundingbox.im}
 \alias{boundingbox.owin}
 \alias{boundingbox.ppp}
+\alias{boundingbox.psp}
+\alias{boundingbox.lpp}
+\alias{boundingbox.linnet}
 \alias{boundingbox.solist}
 \title{
   Bounding Box of a Window, Image, or Point Pattern
@@ -23,12 +26,21 @@ boundingbox(\dots)
 
 \method{boundingbox}{ppp}(\dots)
 
+\method{boundingbox}{psp}(\dots)
+
+\method{boundingbox}{lpp}(\dots)
+
+\method{boundingbox}{linnet}(\dots)
+
 \method{boundingbox}{solist}(\dots)
 }
 \arguments{
   \item{\dots}{One or more windows (objects of class \code{"owin"}),
     pixel images (objects of class \code{"im"}) or
-    point patterns (objects of class \code{"ppp"}).
+    point patterns (objects of class \code{"ppp"} or \code{"lpp"})
+    or line segment patterns (objects of class \code{"psp"})
+    or linear networks (objects of class \code{"linnet"})
+    or any combination of such objects.
     Alternatively, the argument may be a list of such objects,
     of class \code{"solist"}.
   }
@@ -42,9 +54,17 @@ boundingbox(\dots)
   window (this is generally smaller than the enclosing frame,
   which is returned by \code{\link{as.rectangle}}).
 
-  For a point pattern (object of class \code{"ppp"}), the bounding box
+  For a point pattern (object of class \code{"ppp"} or \code{"lpp"}),
+  the bounding box
   is the smallest rectangle that contains all the points of the pattern.
+  This is usually smaller than the bounding box of the window of the
+  point pattern.
 
+  For a line segment pattern (object of class \code{"psp"})
+  or a linear network (object of class \code{"linnet"}), the
+  bounding box is the smallest rectangle that contains all endpoints
+  of line segments.
+  
   For a pixel image (object of class \code{"im"}), the image will
   be converted to a window using \code{\link{as.owin}},
   and the bounding box of this window is obtained.
@@ -67,11 +87,8 @@ boundingbox(\dots)
   r <- boundingbox(w, w2)
   # returns rectangle [0,3] x [0,7]
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{utilities}

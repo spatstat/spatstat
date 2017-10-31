@@ -2,6 +2,7 @@
 \alias{Frame}
 \alias{Frame<-}
 \alias{Frame.default}
+\alias{Frame<-.default}
 \alias{Frame<-.owin}
 \alias{Frame<-.ppp}
 \alias{Frame<-.im}
@@ -25,6 +26,8 @@
    \method{Frame}{ppp}(X) <- value
 
    \method{Frame}{im}(X) <- value
+
+   \method{Frame}{default}(X) <- value
 }
 \arguments{
   \item{X}{
@@ -53,13 +56,8 @@
   The result of \code{Frame<-} is the updated object \code{X},
   of the same class as \code{X}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{Window}}

@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.8 $ $Date: 2016/02/11 10:17:12 $
+## $Revision: 1.10 $ $Date: 2017/10/31 03:39:36 $
 
 bounding.box <- function(...) {
   .Deprecated("boundingbox", "spatstat")
@@ -30,13 +30,15 @@ boundingbox.ppp  <-
 boundingbox.psp  <-
 boundingbox.owin <-
 boundingbox.list <-
+boundingbox.linnet <-
+boundingbox.lpp <-
 boundingbox.im   <- function(...) {
    bbEngine(...)
 }
 
 recognise.spatstat.type <- local({
 
-  knowntypes <- c("ppp","psp","owin","im")
+  knowntypes <- c("ppp","psp","owin","im", "lpp", "linnet")
 
   function(x) {
     for(kt in knowntypes)
@@ -55,6 +57,10 @@ bbEngine <- local({
 
   bb.listxy <- function(X) owin(range(X$x), range(X$y))
 
+  bb.linnet <- function(X) boundingbox(vertices(X))
+
+  bb.lpp <- function(X) boundingbox(as.ppp(X))
+  
   bbEngine <- function(...) {
     wins <- list(...)
     ## first detect any numeric vector arguments
@@ -79,6 +85,10 @@ bbEngine <- local({
         wins[isppp] <- lapply(wins[isppp], boundingbox)
       if(any(islistxy <- (objtype == "listxy")))
         wins[islistxy] <- lapply(wins[islistxy], bb.listxy)
+      if(any(isnet <- (objtype == "linnet")))
+        wins[isnet] <- lapply(wins[isnet], bb.linnet)
+      if(any(islpp <- (objtype == "lpp")))
+        wins[islpp] <- lapply(wins[islpp], bb.lpp)
       ## then convert all windows to owin
       wins <- lapply(wins, as.owin)
       ## then take bounding box of each window
@@ -110,10 +120,20 @@ bbEngine <- local({
     if(wtype == "ppp")
       return(boundingbox(coords(w)))
     
+    ## line segment pattern?
+    if(wtype == "psp")
+      return(boundingbox(endpoints.psp(w)))
+    
     ## list(x,y)
     if(wtype == "listxy")
       return(bb.listxy(w))
-          
+
+    if(wtype == "linnet")
+      w <- return(bb.linnet(w))
+
+    if(wtype == "lpp")
+      w <- return(bb.lpp(w))
+    
     ## convert to window
     w <- as.owin(w)
 

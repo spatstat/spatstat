@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.177 $	$Date: 2017/10/24 01:02:35 $
+#	$Revision: 4.178 $	$Date: 2017/10/31 03:18:09 $
 #
 #
 #	A window may be either
@@ -499,6 +499,11 @@ Frame <- function(X) { UseMethod("Frame") }
 "Frame<-" <- function(X, value) { UseMethod("Frame<-") }
 
 Frame.default <- function(X) { as.rectangle(X) }
+
+"Frame<-.default" <- function(X, value) {
+  Frame(Window(X)) <- value
+  return(X)
+}
 
 ## .........................................................
 
