@@ -135,9 +135,11 @@ pairwise.family <-
        },
        # end of function `plot'
        # ----------------------------------------------------
-       eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
-           ..., Reach=NULL, precomputed=NULL, savecomputed=FALSE,
-           pot.only=FALSE) {
+    eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
+                     finite=FALSE,
+                     ..., Reach=NULL,
+                     precomputed=NULL, savecomputed=FALSE,
+                     pot.only=FALSE) {
   #
   # This is the eval function for the `pairwise' family.
   # 
@@ -186,16 +188,12 @@ pairwise.family <-
   # and
   #  par is a list of parameters for the potential.
   #         
+  # The additional argument 'finite' is also permitted.
+  #         
   # It must return a matrix with the same dimensions as d
   # or an array with its first two dimensions the same as the dimensions of d.
 
-fop <- names(formals(pairpot))
-if(identical(all.equal(fop, c("d", "par")), TRUE))
-  marx <- FALSE
-else if(identical(all.equal(fop, c("d", "tx", "tu", "par")), TRUE))
-  marx <- TRUE
-else 
-  stop("Formal arguments of pair potential function are not understood")
+pt <- PairPotentialType(pairpot) # includes validation of pair potential
 
 ## edge correction argument
 
@@ -234,12 +232,16 @@ dimM <- c(nX, nU)
 
 # Evaluate the pairwise potential without edge correction
 
-if(use.closepairs)
-  POT <- evalPairPotential(X,U,EqualPairs,pairpot,potpars,Reach)
-else if(!marx) 
-  POT <- pairpot(M, potpars)
-else
-  POT <- pairpot(M, marks(X), marks(U), potpars)
+if(use.closepairs) {
+  POT <- evalPairPotential(X,U,EqualPairs,pairpot,potpars,Reach,finite=finite)
+} else {
+  POT <- do.call.matched(pairpot,
+                         list(d=M,
+                              tx=marks(X),
+                              tu=marks(U),
+                              par=potpars,
+                              finite=finite))
+}
 
 # Determine whether each column of potential is an offset
 
@@ -368,7 +370,7 @@ return(V)
   return(result)
   },
 ######### end of function $suffstat
-  delta2 = function(X, inte, correction, ...) {
+  delta2 = function(X, inte, correction, ..., finite=FALSE) {
   # Sufficient statistic for second order conditional intensity
   # for pairwise interaction processes
   # Equivalent to evaluating pair potential.
@@ -380,7 +382,9 @@ return(V)
                                  inte$pot,inte$par,
                                  correction,
                                  pot.only=TRUE,
-                                 Reach=R)
+                                 Reach=R,
+                                 finite=finite)
+    return(result)
   }
 ######### end of function $delta2
 )
@@ -391,24 +395,34 @@ class(pairwise.family) <- "isf"
 
 # externally visible
 
-evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
+PairPotentialType <- function(pairpot) {
+  stopifnot(is.function(pairpot))
+  fop <- names(formals(pairpot))
+  v <- match(list(fop),
+             list(c("d", "par"),
+                  c("d", "par", "finite"),
+                  c("d", "tx", "tu", "par"),
+                  c("d", "tx", "tu", "par", "finite")))
+  if(is.na(v))
+    stop("Formal arguments of pair potential function are not understood",
+         call.=FALSE)
+  has.finite <- (v %in% c(2,4))
+  marked <- (v %in% 3:4)
+  return(list(marked=marked, has.finite=has.finite))
+}
+
+evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
   # Evaluate pair potential without edge correction weights
   nX <- npoints(X)
   nP <- npoints(P)
-  stopifnot(is.function(pairpot))
-  fop <- names(formals(pairpot))
-  if(identical(all.equal(fop, c("d", "par")), TRUE)) {
-    unmarked <- TRUE
-  } else if(identical(all.equal(fop, c("d", "tx", "tu", "par")), TRUE)) {
-    unmarked <- FALSE
-  } else 
-  stop("Formal arguments of pair potential function are not understood")
+  pt <- PairPotentialType(pairpot) # includes validation
   # determine dimension of potential, etc
-  fakePOT <- if(unmarked) pairpot(matrix(, 0, 0), potpars) else 
-                          pairpot(matrix(, 0, 0),
-                                  marks(X)[integer(0)],
-                                  marks(P)[integer(0)],
-                                  potpars)
+  fakePOT <- do.call.matched(pairpot,
+                             list(d=matrix(, 0, 0),
+                                  tx=marks(X)[integer(0)],
+                                  tu=marks(P)[integer(0)],
+                                  par=potpars,
+                                  finite=finite))
   IsOffset <- attr(fakePOT, "IsOffset")
   fakePOT <- ensure3Darray(fakePOT)
   Vnames <- dimnames(fakePOT)[[3]]
@@ -426,9 +440,12 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
   }
   # evaluate potential for close pairs
   # POT is a 1-column matrix or array, with rows corresponding to close pairs
-  if(unmarked) {
+  if(!pt$marked) {
     # unmarked
-    POT <- pairpot(D, potpars)
+    POT <- do.call.matched(pairpot,
+                           list(d=D,
+                                par=potpars,
+                                finite=finite))
     IsOffset <- attr(POT, "IsOffset")
   } else {
     # marked
@@ -445,7 +462,12 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
       relevant <- which(mJ == k)
       if(length(relevant) > 0) {
         fk <- factor(k, levels=types)
-        POTk <- pairpot(D[relevant,  , drop=FALSE], mI[relevant], fk, potpars)
+        POTk <- do.call.matched(pairpot,
+                                list(d=D[relevant,  , drop=FALSE],
+                                     tx=mI[relevant],
+                                     tu=fk,
+                                     par=potpars,
+                                     finite=finite))
         POTk <- ensure3Darray(POTk)
         if(is.null(POT)) {
           # use first result of 'pairpot' to determine dimension

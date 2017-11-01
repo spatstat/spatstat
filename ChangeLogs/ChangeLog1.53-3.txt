@@ -227,3 +227,12 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   pairwise.family.R
+   strausshard.R
+   spatstat-internal.Rd
+	Experimenting with new strategy for 'finite' potentials
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.016
+

@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.23 $	$Date: 2017/10/16 10:35:47 $
+#    $Revision: 2.24 $	$Date: 2017/10/31 07:16:45 $
 #
 #    The Strauss/hard core process
 #
@@ -20,9 +20,10 @@ StraussHard <- local({
          name   = "Strauss - hard core process",
          creator = "StraussHard",
          family  = "pairwise.family",  # evaluated later
-         pot    = function(d, par) {
-           v <- 1 * (d <= par$r)
-           v[ d <= par$hc ] <-  (-Inf)
+         pot    = function(d, par, finite=FALSE) {
+           v <- (d <= par$r)
+           if(!finite)
+             v[ d <= par$hc ] <-  (-Inf)
            v
          },
          par    = list(r = NULL, hc = NULL), # filled in later

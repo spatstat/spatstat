@@ -297,6 +297,7 @@
 \alias{match2DkernelName}
 \alias{parbreak}
 \alias{plan.legend.layout}
+\alias{PairPotentialType}
 \alias{PDEdensityLPP}
 \alias{PoisSaddle}
 \alias{PoisSaddleArea}
@@ -918,7 +919,7 @@ evalCovariate(covariate, locations)
 evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,\dots,
                 Reach,precomputed,savecomputed)
-evalPairPotential(X,P,E,pairpot,potpars,R)
+evalPairPotential(X,P,E,pairpot,potpars,R,finite)
 evalSparse3Dentrywise(expr, envir)
 evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
 even.breaks.owin(w)
@@ -1088,6 +1089,7 @@ match2DkernelName(kernel)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
+PairPotentialType(pairpot)
 PDEdensityLPP(x, sigma, \dots, weights, dx, dt,
               fun, finespacing, finedata)
 PoisSaddle(beta, fi)
