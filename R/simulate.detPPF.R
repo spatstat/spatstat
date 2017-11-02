@@ -37,17 +37,24 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   d <- ncol(index)
   window <- as.boxx(window)
   ranges <- window$ranges
+  boxlengths <- as.numeric(ranges[2L, ] - ranges[1L, ])
   if(ncol(ranges)!=d)
     stop("The dimension differs from the number of columns in index")
-  if(basis != "fourierbasis")
+  if(basis != "fourierbasis"){
     warning("Non Fourier basis probably doesn't work correctly! Fourier is
             assumed for bounds in rejection sampling.")
-  basis <- get(basis)
-  if (!(is.function(basis)))
-    stop(paste(sQuote("basis"), "must be a function"))
-  tmp <- basis(ranges[1,,drop=FALSE], index, window)
-  if (!(is.numeric(tmp) || is.complex(tmp)))
-    stop(paste("Output of", sQuote("basis"), "must be numeric or complex"))
+    userbasis <- get(basis)
+    if (!(is.function(userbasis)))
+      stop(paste(sQuote("basis"), "must be a function"))
+    tmp <- userbasis(ranges[1,,drop=FALSE], index, window)
+    if (!(is.numeric(tmp) || is.complex(tmp)))
+      stop(paste("Output of", sQuote("basis"), "must be numeric or complex"))
+    basis <- function(x, k, boxlengths){
+      userbasis(x, k, boxx(lapply(boxlengths, function(x) list(c(0,x)))))
+    }
+  } else{
+    basis <- fourierbasisraw
+  }
 
   ## Number of points to simulate:
   n <- nrow(index)
@@ -76,7 +83,7 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
     return(ppx(x[1,,drop=FALSE], window, simplify = TRUE))
   
   # First vector of basis-functions evaluated at first point:
-  v <- basis(x[1,,drop=FALSE],index,window)
+  v <- basis(x[1,,drop=FALSE],index,boxlengths)
   ## Record normalized version in the Gram-Schmidt matrices:
   e <- v/sqrt(sum(abs(v)^2))
   estar <- Conj(e)
@@ -98,7 +105,7 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
       ## Proposed point:
       newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
       ## Basis functions eval. at proposed point:
-      v <- as.vector(basis(newx, index, window))
+      v <- as.vector(basis(newx, index, boxlengths))
       ## Vector of projection weights (has length n-i)
       wei <- t(v)%*%estar
       ## Accept probability:
