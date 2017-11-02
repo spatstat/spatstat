@@ -236,3 +236,24 @@ Change log from 1.53-2 to 1.53-xx
    NEWS
 	Updated to version 1.53-2.016
 
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+02 nov 2017
+
+   src/proto.h
+	Bug fix in automatically-generated declarations of functions.
+
+   doc/Nickname.txt
+	Nickname: 'Intelligence Failure'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.017
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
