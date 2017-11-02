@@ -128,7 +128,8 @@ profilepl <- local({
                           rbord=rbord, precomputed=precomp,
                           warn.illegal=FALSE,
                           callstring="",
-                          skip.border=TRUE)
+                          skip.border=TRUE,
+                          clip.interaction=!fast)
       } else {
         ## use precomputed data
         argi <- append(savedargs, list(interaction=fi))
