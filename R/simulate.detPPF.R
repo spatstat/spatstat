@@ -25,7 +25,7 @@ emptyppx <- function(W, simplify = TRUE){
 }
 
 rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), ncol(index))),
-                  reject_max = 1e4, progress = 0, debug = FALSE, ...){
+                  reject_max = 1e4, progress = 0, debug = FALSE, given = NULL, given_max_volume = 0.5, ...){
   ## Check arguments:
   if (!(is.logical(debug)))
     stop(paste(sQuote("debug"), "must be TRUE or FALSE"))
@@ -58,7 +58,29 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
 
   ## Number of points to simulate:
   n <- nrow(index)
-
+  
+  ## Resolve `given` for pseudo conditional simulation
+  if(!is.null(given)){
+    # Make sure `given` is a list of point patterns
+    if(is.ppp(given) || is.pp3(given) || is.ppx(given)){
+      given <- list(given)
+    }
+    stopifnot(all(sapply(given, function(x){ is.ppp(x) || is.pp3(x) || is.ppx(x)})))
+    # Check that the window (or its boundingbox) is inside the simulation window
+    Wgiven <- lapply(given, function(x) as.boxx(domain(x)))
+    stopifnot(all(sapply(Wgiven,
+      function(w){
+        all(w$ranges[1,] >= ranges[1,]) && all(w$ranges[2,] <= ranges[2,])
+        })))
+    stopifnot(sum(sapply(Wgiven, volume))<given_max_volume)
+    # Resolve number of given points and extract coordinates
+    ngiven <- sum(sapply(given, npoints))
+    stopifnot(ngiven <= n)
+    if(ngiven == n) return(given)
+    coordsgiven <- lapply(given, function(x) as.matrix(coords(x)))
+    coordsgiven <- Reduce(rbind, coordsgiven)
+  }
+  
   ## Return empty point pattern if n=0:
   empty <- emptyppx(window)
   if (n==0)
@@ -68,11 +90,14 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   if(debug){
     debugList = replicate(n, list(old=empty, accepted=empty, rejected=empty, index=index), simplify=FALSE)
   }
-
+  
   # Matrix of coordinates:
   x <- matrix(0,n,d)
   colnames(x) <- paste("x",1:d,sep="")
   x[1,] <- runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,]))
+  if(!is.null(given)){
+    x[1,] <- coordsgiven[1,,drop=FALSE]
+  }
   
   # Debug info:
   if(debug){
@@ -80,7 +105,7 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   }
   
   if (n==1)
-    return(ppx(x[1,,drop=FALSE], window, simplify = TRUE))
+    return(ppx(x, window, simplify = TRUE))
   
   # First vector of basis-functions evaluated at first point:
   v <- basis(x[1,,drop=FALSE],index,boxlengths)
@@ -104,10 +129,21 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
     repeat{
       ## Proposed point:
       newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
+      if(!is.null(given)){
+        if(i>(n-ngiven)){
+          newx <- coordsgiven[n-i+1,,drop=FALSE]
+        } else{
+          while(any(sapply(Wgiven, function(w) inside.boxx(as.hyperframe(newx), w = w))))
+            newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
+        }
+      }
       ## Basis functions eval. at proposed point:
       v <- as.vector(basis(newx, index, boxlengths))
       ## Vector of projection weights (has length n-i)
       wei <- t(v)%*%estar
+      if(!is.null(given) && i>(n-ngiven)){
+        break
+      }
       ## Accept probability:
       # tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
       tmp <- 1-prod(ranges[2,]-ranges[1,])/n*(sum(abs(wei)^2))
