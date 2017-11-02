@@ -1153,7 +1153,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             subsetexpr,
             covfunargs, allcovar, precomputed, savecomputed,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
-            weightfactor, skip.border)
+            weightfactor, skip.border, clip.interaction)
 mpl.usable(x)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
 multiplicityNumeric(x)

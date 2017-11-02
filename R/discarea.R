@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.18 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.20 $  $Date: 2017/11/02 07:09:05 $
 #
 #
 #  Compute area of intersection between a disc and a window,
@@ -66,7 +66,7 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
     exact <- FALSE
     warning("Option exact=TRUE is only available for ppp objects")
   }
-  if(!constrained) {
+  if(!constrained || is.null(W)) {
     # unconstrained dilation
     bb <- as.rectangle(X)
     W <- grow.rectangle(bb, max(r))
@@ -76,7 +76,7 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
       X$window <- W
   } else W <- as.owin(W)
   if(!exact) {
-    D <- distmap(X)
+    D <- distmap(X, ...)
     pixelarea <- D$xstep * D$ystep
     Dvals <- D[W, drop=TRUE]
     if(is.im(Dvals))
@@ -86,7 +86,6 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
     h <- cumsum(whist(Dvals, rr))
     return(h * pixelarea)
   }
-  X <- unique(X)
   npts <- npoints(X)
   nr <- length(r)
   if(npts == 0)
@@ -96,16 +95,20 @@ dilated.areas <- function(X, r, W=as.owin(X), ...,
   samebox <- (W$type == "rectangle") &&
               identical(all.equal(W, as.owin(X)), "TRUE")
   needclip <- constrained && !samebox
+  X <- unique(X)
   dd <- dirichlet(X)
   til <- tiles(dd)
-  out <- matrix(0, npts, nr)
-  for(i in 1:npts) {
-    Ti <- til[[i]]
+  #' some data points may not have a tile
+  whichpoint <- as.integer(names(til))
+  partareas <- matrix(0, length(til), nr)
+  for(j in seq_along(til)) {
+    Tj <- til[[j]]
     if(needclip)
-      Ti <- intersect.owin(Ti, W)
-    out[i,] <- discpartarea(X[i], r, Ti)
+      Tj <- intersect.owin(Tj, W)
+    i <- whichpoint[j]
+    partareas[j,] <- discpartarea(X[i], r, Tj)
   }
-  return(apply(out, 2, sum))
+  return(colSums(partareas))
 }
 
   

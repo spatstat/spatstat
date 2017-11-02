@@ -257,3 +257,25 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   discarea.R
+   areadiff.R
+	Tweaks and buglet fixes.
+
+   mpl.R
+   spatstat-internal.Rd
+	mpl.prepare has yet another internal argument 'clip.interaction'.
+	
+   profilepl.R
+   profilepl.Rd
+	New argument 'fast'
+	Explained speed issues and shortcuts in help file.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.018
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

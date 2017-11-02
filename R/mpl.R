@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.209 $	$Date: 2017/10/03 09:15:36 $
+#	$Revision: 5.210 $	$Date: 2017/11/02 06:22:37 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2017/10/03 09:15:36 $")
+                        date="$Date: 2017/11/02 06:22:37 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -347,7 +347,8 @@ mpl.prepare <- local({
                           warn.illegal=TRUE,
                           warn.unidentifiable=TRUE,
                           weightfactor=NULL,
-                          skip.border=FALSE) {
+                          skip.border=FALSE,
+                          clip.interaction=TRUE) {
     ## Q: quadrature scheme
     ## X = data.quad(Q)
     ## P = union.quad(Q)
@@ -566,26 +567,37 @@ mpl.prepare <- local({
           Esub <- precomputed$Esub
           Retain <- precomputed$Retain
         } else {
-          Retain <- .mpl$DOMAIN
+          ## extract subset of quadrature points
+          Retain <- .mpl$DOMAIN | is.data(Q)
           Psub <- P[Retain]
-          ## map serial numbers in 'P[Retain]' to serial numbers in 'Psub'
+          ## map serial numbers in P to serial numbers in Psub
           Pmap <- cumsum(Retain)
+          ## extract subset of equal-pairs matrix
           keepE <- Retain[ E[,2] ]
-          ## adjust equal pairs matrix
           Esub <- E[ keepE, , drop=FALSE]
+          ## adjust indices in equal pairs matrix
           Esub[,2] <- Pmap[Esub[,2]]
         }
         ## call evaluator on reduced data
-        ## with 'W=NULL' (currently detected only by AreaInter)
         if(all(c("X", "Q", "U") %in% names.precomputed)) {
           subcomputed <- resolve.defaults(list(E=Esub, U=Psub, Q=Q[Retain]),
                                           precomputed)
         } else subcomputed <- NULL
-        V <- evalInteraction(X, Psub, Esub, interaction, correction,
-                             ...,
-                             W=NULL,
-                             precomputed=subcomputed,
-                             savecomputed=savecomputed)
+        if(clip.interaction) {
+          ## normal
+          V <- evalInteraction(X, Psub, Esub, interaction, correction,
+                               ...,
+                               precomputed=subcomputed,
+                               savecomputed=savecomputed)
+        } else {
+          ## ignore window when calculating interaction
+          ## by setting 'W=NULL' (currently detected only by AreaInter)
+          V <- evalInteraction(X, Psub, Esub, interaction, correction,
+                               ...,
+                               W=NULL,
+                               precomputed=subcomputed,
+                               savecomputed=savecomputed)
+        }
         if(savecomputed) {
           computed$Usub <- Psub
           computed$Esub <- Esub

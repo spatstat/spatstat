@@ -1,7 +1,7 @@
 #
 # profilepl.R
 #
-#  $Revision: 1.44 $  $Date: 2017/10/05 07:53:38 $
+#  $Revision: 1.45 $  $Date: 2017/11/02 06:53:56 $
 #
 #  computes profile log pseudolikelihood
 #
@@ -17,7 +17,8 @@ profilepl <- local({
   }
   isSingleNA <- function(x) { length(x) == 1 && is.na(x) }
   
-  profilepl <- function(s, f, ..., aic=FALSE, rbord=NULL, verbose=TRUE) {
+  profilepl <- function(s, f, ..., aic=FALSE, rbord=NULL, verbose=TRUE,
+                        fast=TRUE) {
     callenv <- parent.frame()
     s <- as.data.frame(s)
     n <- nrow(s)
@@ -117,7 +118,8 @@ profilepl <- local({
                      rbord=rbord, savecomputed=savecomp,
                      warn.illegal=FALSE,
                      callstring="",
-                     skip.border=TRUE)
+                     skip.border=TRUE,
+                     clip.interaction=!fast)
         if(pass.cfa) arg1 <- append(arg1, cfai)
         fiti <- do.call(ppm, arg1, envir=callenv)
         ## save intermediate computations (pairwise distances, etc)

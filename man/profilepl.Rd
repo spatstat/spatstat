@@ -6,7 +6,7 @@
   profile pseudolikelihood, profile composite likelihood or AIC.
 }
 \usage{
-profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
+profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE, fast=TRUE)
 }
 \arguments{
   \item{s}{
@@ -31,7 +31,12 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
     If omitted, this will be computed from the interactions.
   }
   \item{verbose}{
-    Logical flag indicating whether to print progress reports.
+    Logical value indicating whether to print progress reports.
+  }
+  \item{fast}{
+    Logical value indicating whether to use a faster, less accurate
+    model-fitting technique when computing the profile pseudolikelihood.
+    See Section on Speed and Accuracy.
   }
 }
 \details{
@@ -124,6 +129,31 @@ profilepl(s, f, \dots, aic=FALSE, rbord=NULL, verbose = TRUE)
   an interaction object (object of class \code{"interact"})
   that can be used in a call to \code{\link{ppm}}. Each argument of
   \code{f} must be a single value. 
+}
+\section{Speed and Accuracy}{
+  Computation of the profile pseudolikelihood can be time-consuming.
+  We recommend starting with a small experiment in which
+  \code{s} contains only a few rows of values. This will indicate 
+  roughly the optimal values of the parameters.
+  Then a full calculation using more finely
+  spaced values can identify the exact optimal values.
+
+  It is normal that the procedure appears to slow down at the end.
+  During the computation of the profile pseudolikelihood,
+  the model-fitting procedure is accelerated by omitting some
+  calculations that are not needed for computing the pseudolikelihood.
+  When the optimal parameter values have been identified, they are used to
+  fit the final model in its entirety. Fitting the final model
+  can take longer than computing the profile pseudolikelihood.
+
+  If \code{fast=TRUE} (the default), then additional shortcuts are taken
+  in order to accelerate the computation of the profile
+  log pseudolikelihood. These shortcuts mean that the values of the profile
+  log pseudolikelihood in the result (\code{$prof})
+  may not be equal to the values that would be obtained if the model was
+  fitted normally. Currently this happens only for the area interaction
+  \code{\link{AreaInter}}. It may be wise to do a small experiment with
+  \code{fast=TRUE} and then a definitive calculation with \code{fast=FALSE}.
 }
 \value{
   An object of class \code{"profilepl"}. There are methods

@@ -22,7 +22,10 @@
   \item{r}{
     Disc radius, or vector of disc radii.
   }
-  \item{\dots}{Ignored.}
+  \item{\dots}{
+    Arguments passed to \code{\link{distmap}} to determine the pixel
+    resolution, when \code{exact=FALSE}.
+  }
   \item{W}{
     Window (object of class \code{"owin"})
     in which the area should be computed.

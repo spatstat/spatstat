@@ -1,8 +1,10 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.017
+        CHANGES IN spatstat VERSION 1.53-2.018
 
 OVERVIEW
 
+    o We thank Ian Renner for contributions.
+    
     o Gamma correction for colour maps and image plots.
 
     o Experimental fix for bug in leverage code
@@ -73,6 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This method has been renamed 'rescale.unitname' and now returns
     an object of class 'unitname'.
 
+    o profilepl
+    New argument 'fast' controls the use of shorcuts.
+    
 BUG FIXES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm

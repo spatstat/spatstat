@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.33 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.34 $  $Date: 2017/11/02 06:26:23 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -46,38 +46,46 @@ areaLoss.diri <- function(X, r, ..., W=as.owin(X), subset=NULL) {
     return(matrix(, nrow=0, ncol=nr))
   else if(npts == 1) 
     return(matrix(discpartarea(X, r, W), nrow=1))
-  # set up output array
+  #' set up output array
   indices <- 1L:npts
   if(!is.null(subset))
     indices <- indices[subset]
-  out <- matrix(, nrow=length(indices), ncol=nr)
-  #
-  w <- X$window
-  pir2 <- pi * r^2
+  out <- matrix(0, nrow=length(indices), ncol=nr)
+  #' handle duplicate points
+  retain <- !duplicated(X)
+  getzero <- (multiplicity(X) > 1)
+  uX <- X[retain]
+  newserial <- cumsum(retain)
   # dirichlet neighbour relation in entire pattern 
-  dd <- deldir(X$x, X$y, rw=c(w$xrange, w$yrange))
+  w <- X$window
+  dd <- deldir(uX$x, uX$y, rw=c(w$xrange, w$yrange))
   a <- dd$delsgs[,5L]
   b <- dd$delsgs[,6L]
+  pir2 <- pi * r^2
   for(k in seq_along(indices)) {
-    i <- indices[k]
-    # find all Delaunay neighbours of i 
-    jj <- c(b[a==i], a[b==i])
-    jj <- sort(unique(jj))
-    # extract only these points
-    Yminus <- X[jj]
-    Yplus  <- X[c(jj, i)]
-    # dilate
-    aplus <- dilated.areas(Yplus, r, W, exact=TRUE)
-    aminus <- dilated.areas(Yminus, r, W, exact=TRUE)
-    areas <- aplus - aminus
-    # area/(pi * r^2) must be positive and nonincreasing
-    y <- ifelseAX(r == 0, 1, areas/pir2)
-    y <- pmin.int(1, y)
-    ok <- is.finite(y)
-    y[ok] <- rev(cummax(rev(y[ok])))
-    areas <- pmax.int(0, y * pir2)
-    # save
-    out[k, ] <- areas
+    ind <- indices[k]
+    if(!getzero[ind]) {
+      #' find serial number in uX
+      i <- newserial[ind]
+      #' find all Delaunay neighbours of i 
+      jj <- c(b[a==i], a[b==i])
+      jj <- sort(unique(jj))
+      #' extract only these points
+      Yminus <- uX[jj]
+      Yplus  <- uX[c(jj, i)]
+      #' dilate
+      aplus <- dilated.areas(Yplus, r, W, exact=TRUE, ...)
+      aminus <- dilated.areas(Yminus, r, W, exact=TRUE, ...)
+      areas <- aplus - aminus
+      #' area/(pi * r^2) must be positive and nonincreasing
+      y <- ifelseAX(r == 0, 1, areas/pir2)
+      y <- pmin.int(1, y)
+      ok <- is.finite(y)
+      y[ok] <- rev(cummax(rev(y[ok])))
+      areas <- pmax.int(0, y * pir2)
+      #' save
+      out[k, ] <- areas
+    }
   }
   return(out)
 }
@@ -244,7 +252,7 @@ areaLoss.grid <- function(X, r, ...,
            for(k in seq_along(indices)) {
              i <- indices[k]
              answer[k,] <- areaGain(X[i], X[-i], r, W=W,
-                                    ngrid=ngrid, exact=exact)
+                                    ngrid=ngrid, exact=exact, ...)
            }
          },
          distmap = {

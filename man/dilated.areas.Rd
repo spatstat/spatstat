@@ -24,7 +24,10 @@
     Window (object of class \code{"owin"}) inside which the areas
     will be computed, if \code{constrained=TRUE}.
   }
-  \item{\dots}{Ignored.}
+  \item{\dots}{
+    Arguments passed to \code{\link{distmap}} to control the
+    pixel resolution, if \code{exact=FALSE}.
+  }
   \item{constrained}{
     Logical flag indicating whether areas should be restricted
     to the window \code{W}.
