@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.46 $	$Date: 2017/11/02 10:41:22 $
+#    $Revision: 1.47 $	$Date: 2017/11/03 08:17:58 $
 #
 #    The area interaction
 #
@@ -33,46 +33,29 @@ AreaInter <- local({
       }
       r <- pars$r
       if(is.null(r)) stop("internal error: r parameter not found")
-      #' debug
-      DEBUG <- spatstat.options('developer')
-      if(DEBUG) {
-        cat(paste("npoints(X) =", npoints(X),
-                  "\t npoints(U) =", npoints(U), "\n"))
-        cat(paste("nrow(EqualPairs)=", nrow(EqualPairs), "\n"))
-        cat(paste("min(bdist.points(X)) =", min(bdist.points(X)), "\n"))
-        if(is.null(W)) cat("\nWindow is NULL\n") else print(W)
+      #'
+      if(Poly <- spatstat.options('areainter.polygonal')) {
+        if(is.mask(W)) W <- as.polygonal(W)
+        if(is.mask(Window(X))) Window(X) <- as.polygonal(Window(X))
+        if(is.mask(Window(U))) Window(U) <- as.polygonal(Window(U))
       }
       n <- U$n
       areas <- numeric(n)
       #' dummy points
       dummies <- setdiff(seq_len(n), EqualPairs[,2L])
-      if(length(dummies)) {
-        areas[dummies] <- areaGain(U[dummies], X, r, W=W)
-        if(DEBUG) {
-          cat(paste("min(bdist.points(dummies)) =",
-                    min(bdist.points(U[dummies])), "\n"))
-          areas.correct <- areaGain(U[dummies], X, r)
-          erro <- areas[dummies] - areas.correct
-          cat("Error range (dummies): ")
-          print(range(erro))
-        }
-      }
+      if(length(dummies)) 
+        areas[dummies] <- areaGain(U[dummies], X, r, W=W, exact=Poly)
       #' data points represented in U
       ii <- EqualPairs[,1L]
       jj <- EqualPairs[,2L]
       inborder <- (bdist.points(X[ii]) <= r) # sic
       #' points in border region need clipping
       if(any(inborder))
-        areas[jj[inborder]] <- areaLoss(X, r, subset=ii[inborder])
+        areas[jj[inborder]] <- areaLoss(X, r, subset=ii[inborder], exact=Poly)
       #' points in eroded region do not necessarily
       if(any(ineroded <- !inborder)) {
-        areas[jj[ineroded]] <- areaLoss(X, r, subset=ii[ineroded], W=W)
-        if(DEBUG) {
-          a.correct <- areaLoss(X, r, subset=ii[ineroded])
-          errx <- areas[jj[ineroded]] - a.correct
-          cat("Error range (X in eroded): ")
-          print(range(errx))
-        }
+        areas[jj[ineroded]] <-
+          areaLoss(X, r, subset=ii[ineroded], W=W, exact=Poly)
       }
       return(1 - areas/(pi * r^2))
     }

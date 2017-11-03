@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.019
+        CHANGES IN spatstat VERSION 1.53-2.021
 
 OVERVIEW
 
@@ -14,7 +14,7 @@ OVERVIEW
     o Tighter bounding box for psp, lpp, linnet objects.
     
     o Improved layout in plot.solist
-    
+
     o Tools to increase colour saturation.
     
     o Nickname: 'Intelligence Failure'
@@ -77,7 +77,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o profilepl
     New argument 'fast' controls the use of shorcuts.
-    
+
 BUG FIXES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm

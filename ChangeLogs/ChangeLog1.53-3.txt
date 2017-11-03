@@ -278,4 +278,44 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   areainter.R
+	Inserted debug code
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.019
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+03 nov 2017
+
+   areadiff.R
+        Improved default pixel resolution in some functions
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.020
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   areadiff.R
+   spatstat-internal.Rd
+	Experimental new algorithm - is not faster!
+
+   areainter.R
+   options.R
+	Polygonal, 'exact' calculations enabled
+	if spatstat.options('areainter.polygonal') = TRUE
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.021
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

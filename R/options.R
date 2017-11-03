@@ -81,6 +81,12 @@ warn.once <- function(key, ...) {
 
 ".Spat.Stat.Opt.Table" <-
   list(
+       areainter.polygonal = list(
+         ## use polygonal calculations in AreaInter
+         default=FALSE,
+         check=function(x) { is.logical(x) && length(x) == 1},
+         valid="a single logical value"
+         ),
        checkpolygons = list(
          ## superseded
          superseded=TRUE,

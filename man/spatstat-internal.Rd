@@ -23,6 +23,7 @@
 \alias{areaGain.grid}       
 \alias{areaLoss.diri}       
 \alias{areaLoss.grid}
+\alias{areaLoss.poly}
 \alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
@@ -761,6 +762,7 @@ areaLoss.grid(X, r, \dots, W, subset,
                          method = c("count", "distmap"),
                          ngrid = spatstat.options("ngrid.disc"),
                          exact = FALSE)
+areaLoss.poly(X, r, \dots, W, subset, splitem)
 assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
