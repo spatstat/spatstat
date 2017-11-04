@@ -1,3 +1,6 @@
+#'  fourierbasis.R
+#'    $Revision: 1.4 $  $Date: 2017/11/04 04:10:32 $
+
 fourierbasis <- function(x, k, win = boxx(rep(list(0:1), ncol(k)))) {
   x <- as.matrix(x)
   k <- as.matrix(k)

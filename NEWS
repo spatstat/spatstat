@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.022
+        CHANGES IN spatstat VERSION 1.53-2.023
 
 OVERVIEW
 
@@ -18,8 +18,10 @@ OVERVIEW
     o Tools to increase colour saturation.
 
     o Accelerated lineardirichlet.
+
+    o Accelerated simulation of determinantal point processes.
     
-    o Nickname: 'Intelligence Failure'
+    o Nickname: 'Fast and Loose'
 
 NEW FUNCTIONS
 

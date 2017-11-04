@@ -322,7 +322,7 @@ Change log from 1.53-2 to 1.53-xx
 04 nov 2017
 
    lindirichlet.R
-	Ege's code changes - huge speedup
+	Ege's code changes (merged branch lineardirichlet) - huge speedup
 
    DESCRIPTION
    NEWS
@@ -331,3 +331,19 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   fourierbasis.R
+   fourierbasis.Rd
+   simulate.detPPF.R
+	Ege's code changes (merged branch DPPsim) - acceleration
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'Fast and Loose'
+	Updated to version 1.53-2.023
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

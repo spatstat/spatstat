@@ -1,3 +1,6 @@
+##   simulate.detPPF.R
+##            $Revision: 1.3 $  $Date: 2017/11/04 04:12:17 $
+##
 ## This file contains functions to simulate DPP models.
 ## Two simulation functions are visible:
 ## - simulate.detpointprocfamily (most useful)
