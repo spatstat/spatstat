@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.021
+        CHANGES IN spatstat VERSION 1.53-2.022
 
 OVERVIEW
 
@@ -16,6 +16,8 @@ OVERVIEW
     o Improved layout in plot.solist
 
     o Tools to increase colour saturation.
+
+    o Accelerated lineardirichlet.
     
     o Nickname: 'Intelligence Failure'
 
@@ -78,6 +80,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o profilepl
     New argument 'fast' controls the use of shorcuts.
 
+    o lineardirichlet
+    Accelerated.
+    
 BUG FIXES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm

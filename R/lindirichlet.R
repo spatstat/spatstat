@@ -2,7 +2,7 @@
 #'
 #'   Dirichlet tessellation on a linear network
 #'
-#'   $Revision: 1.8 $  $Date: 2017/09/23 04:56:23 $
+#'   $Revision: 1.9 $  $Date: 2017/11/04 03:49:18 $
 
 lineardirichlet <- function(X) {
   stopifnot(is.lpp(X))

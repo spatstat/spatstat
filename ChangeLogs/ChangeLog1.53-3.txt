@@ -319,3 +319,15 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+04 nov 2017
+
+   lindirichlet.R
+	Ege's code changes - huge speedup
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.022
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
