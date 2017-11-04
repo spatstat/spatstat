@@ -47,10 +47,10 @@ ldtEngine <- function(nv, ns, from, to, seglen, huge,  # network
                       vnndist, vnnwhich, # nearest data point for each vertex
                       vnnlab) {
   #' initialise tessellation data
-  df <- data.frame(seg=integer(0),
-                   t0=numeric(0),
-                   t1=numeric(0),
-                   tile=integer(0))
+  seg <- integer(0)
+  t0 <- numeric(0)
+  t1 <- numeric(0)
+  tile <- integer(0)
   #' split point data by segment, discarding segments which contain no points
   fseg <- factor(coUXord$seg, levels=1:ns)
   blist <- split(coUXord, fseg, drop=TRUE)
@@ -112,13 +112,21 @@ ldtEngine <- function(nv, ns, from, to, seglen, huge,  # network
       }
     }
     m <- length(tcut)
-    newdf <- data.frame(seg=sygmund, t0=tcut[-m], t1=tcut[-1L], tile=labs)
-    df <- rbind(df, newdf)
+    seg <- c(seg, rep(sygmund, m-1L))
+    t0 <- c(t0, tcut[-m])
+    t1 <- c(t1, tcut[-1L])
+    tile <- c(tile, labs)
   }
+  df <- data.frame(seg=seg, t0=t0, t1=t1, tile=tile)
   #' now deal with segments having no data points
   unloved <- (table(fseg) == 0)
   if(any(unloved)) {
+    unlovedt0 <- rep(0, 2*sum(unloved))
+    unlovedt1 <- rep(1, 2*sum(unloved))
+    unlovedseg <- unlovedtile <- rep(-1, 2*sum(unloved))
+    counter <- 0
     for(sygmund in which(unloved)) {
+      counter <- counter + 1
       lenf <- seglen[sygmund]
       #' segment endpoints
       A <- from[sygmund]
@@ -130,24 +138,35 @@ ldtEngine <- function(nv, ns, from, to, seglen, huge,  # network
       dB <- vnndist[B]
       if(is.na(jA) || is.na(jB) || jA == jB) {
         #' entire segment is covered by one tile
-        thetile <- if(is.na(jA)) jB else jA
-	newdf <- data.frame(seg=sygmund, t0=0.0, t1=1.0, tile=thetile)
+        unlovedtile[counter] <- if(is.na(jA)) jB else jA
+        unlovedseg[counter] <- sygmund
       } else {
         #' split somewhere
-	tx <- (dB - dA + lenf)/(2 * lenf)
-	if(tx >= 0 && tx <= 1) {
-  	  newdf <- data.frame(seg=sygmund,
-	                      t0=c(0,tx), t1=c(tx,1), tile=c(jA, jB))
-	} else if(tx < 0) {
-	  # weird
-	  newdf <- data.frame(seg=sygmund, t0=0.0, t1=1.0, tile=jB)
-	} else {
-	  # weird
-	  newdf <- data.frame(seg=sygmund, t0=0.0, t1=1.0, tile=jA)
-	}
+	      tx <- (dB - dA + lenf)/(2 * lenf)
+	      if(tx >= 0 && tx <= 1) {
+	        unlovedseg[counter] <- sygmund
+	        unlovedtile[counter] <- jA
+	        unlovedt1[counter] <- tx
+	        counter <- counter + 1
+	        unlovedseg[counter] <- sygmund
+	        unlovedtile[counter] <- jB
+	        unlovedt0[counter] <- tx
+	      } else if(tx < 0) {
+    	    # weird
+	        unlovedseg[counter] <- sygmund
+	        unlovedtile[counter] <- jB
+	      } else {
+	        # weird
+	        unlovedseg[counter] <- sygmund
+	        unlovedtile[counter] <- jA
+	      }
       }
-      df <- rbind(df, newdf)
     }
+    newdf <- data.frame(seg = unlovedseg[1:counter],
+                        t0 = unlovedt0[1:counter],
+                        t1 = unlovedt1[1:counter],
+                        tile = unlovedtile[1:counter])
+    df <- rbind(df, newdf)
   }
   return(df)
 }
