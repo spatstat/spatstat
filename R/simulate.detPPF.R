@@ -25,7 +25,7 @@ emptyppx <- function(W, simplify = TRUE){
 }
 
 rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), ncol(index))),
-                  reject_max = 1e4, progress = 0, debug = FALSE, ...){
+                  reject_max = 1e4, progress = 0, debug = FALSE, given = NULL, given_max_volume = 0.5, ...){
   ## Check arguments:
   if (!(is.logical(debug)))
     stop(paste(sQuote("debug"), "must be TRUE or FALSE"))
@@ -37,18 +37,50 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   d <- ncol(index)
   window <- as.boxx(window)
   ranges <- window$ranges
+  boxlengths <- as.numeric(ranges[2L, ] - ranges[1L, ])
   if(ncol(ranges)!=d)
     stop("The dimension differs from the number of columns in index")
-  basis <- get(basis)
-  if (!(is.function(basis)))
-    stop(paste(sQuote("basis"), "must be a function"))
-  tmp <- basis(ranges[1,,drop=FALSE], index, window)
-  if (!(is.numeric(tmp) || is.complex(tmp)))
-    stop(paste("Output of", sQuote("basis"), "must be numeric or complex"))
+  if(basis != "fourierbasis"){
+    warning("Non Fourier basis probably doesn't work correctly! Fourier is
+            assumed for bounds in rejection sampling.")
+    userbasis <- get(basis)
+    if (!(is.function(userbasis)))
+      stop(paste(sQuote("basis"), "must be a function"))
+    tmp <- userbasis(ranges[1,,drop=FALSE], index, window)
+    if (!(is.numeric(tmp) || is.complex(tmp)))
+      stop(paste("Output of", sQuote("basis"), "must be numeric or complex"))
+    basis <- function(x, k, boxlengths){
+      userbasis(x, k, boxx(lapply(boxlengths, function(x) list(c(0,x)))))
+    }
+  } else{
+    basis <- fourierbasisraw
+  }
 
   ## Number of points to simulate:
   n <- nrow(index)
-
+  
+  ## Resolve `given` for pseudo conditional simulation
+  if(!is.null(given)){
+    # Make sure `given` is a list of point patterns
+    if(is.ppp(given) || is.pp3(given) || is.ppx(given)){
+      given <- list(given)
+    }
+    stopifnot(all(sapply(given, function(x){ is.ppp(x) || is.pp3(x) || is.ppx(x)})))
+    # Check that the window (or its boundingbox) is inside the simulation window
+    Wgiven <- lapply(given, function(x) as.boxx(domain(x)))
+    stopifnot(all(sapply(Wgiven,
+      function(w){
+        all(w$ranges[1,] >= ranges[1,]) && all(w$ranges[2,] <= ranges[2,])
+        })))
+    stopifnot(sum(sapply(Wgiven, volume))<given_max_volume)
+    # Resolve number of given points and extract coordinates
+    ngiven <- sum(sapply(given, npoints))
+    stopifnot(ngiven <= n)
+    if(ngiven == n) return(given)
+    coordsgiven <- lapply(given, function(x) as.matrix(coords(x)))
+    coordsgiven <- Reduce(rbind, coordsgiven)
+  }
+  
   ## Return empty point pattern if n=0:
   empty <- emptyppx(window)
   if (n==0)
@@ -58,11 +90,14 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   if(debug){
     debugList = replicate(n, list(old=empty, accepted=empty, rejected=empty, index=index), simplify=FALSE)
   }
-
+  
   # Matrix of coordinates:
   x <- matrix(0,n,d)
   colnames(x) <- paste("x",1:d,sep="")
   x[1,] <- runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,]))
+  if(!is.null(given)){
+    x[1,] <- coordsgiven[1,,drop=FALSE]
+  }
   
   # Debug info:
   if(debug){
@@ -70,16 +105,13 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
   }
   
   if (n==1)
-    return(ppx(x[1,,drop=FALSE], window, simplify = TRUE))
+    return(ppx(x, window, simplify = TRUE))
   
-  # Initialize matrices for Gram-Schmidt vectors and conj. trans.:
-  e <- matrix(as.complex(0),n,n-1)
-  estar <- matrix(as.complex(0),n-1,n)
   # First vector of basis-functions evaluated at first point:
-  v <- basis(x[1,,drop=FALSE],index,window)
+  v <- basis(x[1,,drop=FALSE],index,boxlengths)
   ## Record normalized version in the Gram-Schmidt matrices:
-  e[,1] <- v/sqrt(sum(abs(v)^2))
-  estar[1,] <- Conj(e[,1])
+  e <- v/sqrt(sum(abs(v)^2))
+  estar <- Conj(e)
   if(progress>0)
     cat(paste("Simulating", n, "points:\n"))
 
@@ -94,17 +126,27 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
     if(debug){
       rejected <- matrix(NA,reject_max,d)
     }
-    ## Non-zero vectors of estar matrix:
-    estar2 <- estar[1:(n-i),]
     repeat{
       ## Proposed point:
       newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
+      if(!is.null(given)){
+        if(i>(n-ngiven)){
+          newx <- coordsgiven[n-i+1,,drop=FALSE]
+        } else{
+          while(any(sapply(Wgiven, function(w) inside.boxx(as.hyperframe(newx), w = w))))
+            newx <- matrix(runif(d,as.numeric(ranges[1,]),as.numeric(ranges[2,])),ncol=d)
+        }
+      }
       ## Basis functions eval. at proposed point:
-      v <- basis(newx, index, window)
+      v <- as.vector(basis(newx, index, boxlengths))
       ## Vector of projection weights (has length n-i)
-      wei <- estar2%*%v
+      wei <- t(v)%*%estar
+      if(!is.null(given) && i>(n-ngiven)){
+        break
+      }
       ## Accept probability:
-      tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
+      # tmp <- prod(ranges[2,]-ranges[1,])/n*(sum(abs(v)^2)-sum(abs(wei)^2))
+      tmp <- 1-prod(ranges[2,]-ranges[1,])/n*(sum(abs(wei)^2))
       ## If proposal is accepted the loop is broken:
       if(runif(1)<as.numeric(abs(tmp))){
         break
@@ -134,17 +176,19 @@ rdppp <- function(index, basis = "fourierbasis", window = boxx(rep(list(0:1), nc
       debugList[[n-i+1]] = list(
                 old=ppx(x[1:(n-i),,drop=FALSE],window, simplify=TRUE),
                 accepted=ppx(newx,window,simplify=TRUE),
-                rejected=rej, index=index, estar = estar2)
+                rejected=rej, index=index, estar = estar)
     }
 
     ## If it is the last point exit the main loop:
     if(i==1){break}
 
     ## Calculate orthogonal vector for Gram-Schmidt procedure:
-    w <- v - rowSums(matrix(wei,n,n-i,byrow=TRUE)*e[,1:(n-i)])
+    # w <- v - rowSums(matrix(wei,n,n-i,byrow=TRUE)*e[,1:(n-i)])
+    w <- v - colSums(t(e)*as.vector(wei))
     ## Record normalized version in the Gram-Schmidt matrices:
-    e[,n-i+1]=w/sqrt(sum(abs(w)^2))
-    estar[n-i+1,] <- Conj(e[,n-i+1])
+    enew <- w/sqrt(sum(abs(w)^2))
+    e <- cbind(e, enew)
+    estar <- cbind(estar,Conj(enew))
   } ## END OF MAIN FOR LOOP
   # Save points as point pattern:
   X <- ppx(x, window, simplify = TRUE)
