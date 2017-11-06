@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.19 $  $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.20 $  $Date: 2017/11/06 02:01:55 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -147,8 +147,10 @@ connected.owin <- function(X, ..., method="C") {
 }
 
 connected.ppp <- connected.pp3 <- function(X, R, ...) {
-  stopifnot(is.ppp(X) | is.pp3(X))
-  check.1.real(R, paste0("In connected.", class(X)[1]))
+  methodname <- if(is.ppp(X)) "connected.ppp" else
+                if(is.pp3(X)) "connected.pp3" else 
+                stopifnot(is.ppp(X) || is.pp3(X))
+  check.1.real(R, paste("In", methodname))
   stopifnot(R >= 0)
   internal <- resolve.1.default("internal", list(...), list(internal=FALSE))
   nv <- npoints(X)
@@ -165,7 +167,7 @@ connected.ppp <- connected.pp3 <- function(X, R, ...) {
            status=as.integer(integer(1L)),
            PACKAGE = "spatstat")
   if(zz$status != 0)
-    stop(paste0("Internal error: connected.", class(X)[1], " did not converge"))
+    stop(paste("Internal error:", methodname, "did not converge"), call.=FALSE)
   if(internal)
     return(zz$label)
   lab <- zz$label + 1L

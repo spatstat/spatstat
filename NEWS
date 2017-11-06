@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.023
+        CHANGES IN spatstat VERSION 1.53-2.024
 
 OVERVIEW
 
@@ -17,11 +17,15 @@ OVERVIEW
 
     o Tools to increase colour saturation.
 
+    o Connected components of a 3D point pattern.
+    
     o Accelerated lineardirichlet.
 
     o Accelerated simulation of determinantal point processes.
+
+    o Improved printing of 3D point patterns.
     
-    o Nickname: 'Fast and Loose'
+    o Nickname: 'All Power to the Serviettes'
 
 NEW FUNCTIONS
 
@@ -46,6 +50,9 @@ NEW FUNCTIONS
     o "Frame<-.default"
     New default method for assigning bounding frame to a spatial object.
 
+    o connected.pp3
+    Connected components of a 3D point pattern.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
@@ -84,6 +91,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lineardirichlet
     Accelerated.
+
+    o print.pp3
+    More informative output when x is marked.
     
 BUG FIXES
 

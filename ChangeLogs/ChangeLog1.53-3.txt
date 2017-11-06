@@ -347,3 +347,21 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+06 nov 2017
+
+   connected.R
+   connected.ppp.Rd
+        Ege's code: new method connected.pp3 
+
+   pp3.R
+        Ege's code: improved print.pp3
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'All Power to the Serviettes'
+	Updated to version 1.53-2.024
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

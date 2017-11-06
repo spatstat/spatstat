@@ -11,11 +11,12 @@
 }
 \usage{
 \method{connected}{ppp}(X, R, \dots)
+
 \method{connected}{pp3}(X, R, \dots)
 }
 \arguments{
   \item{X}{
-    A point pattern (object of class \code{"ppp"}).
+    A point pattern (object of class \code{"ppp"} or \code{"pp3"}).
   }
   \item{R}{
     Threshold distance. Pairs of points closer than \code{R} units apart
@@ -28,7 +29,7 @@
 \details{
   This function can be used to identify clumps of points in a point pattern.
 
-  The function \code{connected} is generic. This is the method for
+  The function \code{connected} is generic. This file documents the methods for
   point patterns in dimension two or three (objects of class \code{"ppp"} or
   \code{"pp3"}).
 
@@ -66,11 +67,7 @@
    }
 }
 \author{
-  \adrian
-  
-  
-  and \rolf
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}
