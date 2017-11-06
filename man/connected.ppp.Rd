@@ -1,6 +1,7 @@
 \name{connected.ppp}  
 \Rdversion{1.1}
 \alias{connected.ppp}
+\alias{connected.pp3}
 \title{
   Connected Components of a Point Pattern
 }
@@ -10,6 +11,7 @@
 }
 \usage{
 \method{connected}{ppp}(X, R, \dots)
+\method{connected}{pp3}(X, R, \dots)
 }
 \arguments{
   \item{X}{
@@ -27,7 +29,8 @@
   This function can be used to identify clumps of points in a point pattern.
 
   The function \code{connected} is generic. This is the method for
-  point patterns (objects of class \code{"ppp"}).
+  point patterns in dimension two or three (objects of class \code{"ppp"} or
+  \code{"pp3"}).
 
   The point pattern \code{X} is first converted into an abstract graph
   by joining every pair of points that lie closer than \code{R} units
@@ -55,6 +58,11 @@
    if(interactive()) {
     plot(Y, cols=1:length(levels(marks(Y))),
          main="connected(redwoodfull, 0.1)")
+   }
+   X <- osteo$pts[[1]]
+   Z <- connected(X, 32)
+   if(interactive()) {
+    plot(Z, col=marks(Z), main="")
    }
 }
 \author{

@@ -146,9 +146,9 @@ connected.owin <- function(X, ..., method="C") {
   return(Z)
 }
 
-connected.ppp <- function(X, R, ...) {
-  stopifnot(is.ppp(X))
-  check.1.real(R, "In connected.ppp")
+connected.ppp <- connected.pp3 <- function(X, R, ...) {
+  stopifnot(is.ppp(X) | is.pp3(X))
+  check.1.real(R, paste0("In connected.", class(X)[1]))
   stopifnot(R >= 0)
   internal <- resolve.1.default("internal", list(...), list(internal=FALSE))
   nv <- npoints(X)
@@ -165,7 +165,7 @@ connected.ppp <- function(X, R, ...) {
            status=as.integer(integer(1L)),
            PACKAGE = "spatstat")
   if(zz$status != 0)
-    stop("Internal error: connected.ppp did not converge")
+    stop(paste0("Internal error: connected.", class(X)[1], " did not converge"))
   if(internal)
     return(zz$label)
   lab <- zz$label + 1L

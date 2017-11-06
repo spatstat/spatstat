@@ -114,10 +114,33 @@ is.pp3 <- function(x) { inherits(x, "pp3") }
 npoints.pp3 <- function(x) { nrow(x$data) }
 
 print.pp3 <- function(x, ...) {
-  splat("Three-dimensional point pattern")
-  sd <- summary(x$data)
-  np <- sd$ncases
-  splat(np, ngettext(np, "point", "points"))
+  ism <- is.marked(x, dfok=TRUE)
+  nx <- npoints(x)
+  splat(if(ism) "Marked three-dimensional" else "Three-dimensional",
+        "point pattern:",
+        nx, ngettext(nx, "point", "points"))
+  if(ism) {
+    mks <- marks(x, dfok=TRUE)
+    if(is.data.frame(mks) | is.hyperframe(mks)) {
+      ## data frame of marks
+      exhibitStringList("Mark variables:", names(mks))
+    } else {
+      ## vector of marks
+      if(is.factor(mks)) {
+        exhibitStringList("Multitype, with levels =", levels(mks))
+      } else {
+        ## Numeric, or could be dates
+        if(inherits(mks, "Date")) {
+          splat("marks are dates, of class", sQuote("Date"))
+        } else if(inherits(mks, "POSIXt")) {
+          splat("marks are dates, of class", sQuote("POSIXt"))
+        } else {
+          splat(paste0("marks are", if(is.numeric(mks)) " numeric," else NULL),
+                "of storage type ", sQuote(typeof(mks)))
+        }
+      }
+    }
+  }
   print(x$domain)
   invisible(NULL)
 }
