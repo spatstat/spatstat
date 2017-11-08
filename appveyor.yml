@@ -15,6 +15,8 @@ install:
 environment:
   access_token:
     secure: GCPohlv0NVqq0Cv3wh0Luw1OgO3jS4hyU7zUkA4a/TPMsqq1mYSm0/8Qb3uPrR7d
+  global:
+    R_ARCH: x64
 
 build_script:
   - travis-tool.sh install_deps
