@@ -49,13 +49,7 @@
   integral(X)
 }
 \author{
-\adrian
-
-
-\rolf
-
-and \ege
-
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{math}

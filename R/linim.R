@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.47 $   $Date: 2017/11/13 09:40:39 $
+#  $Revision: 1.48 $   $Date: 2017/11/13 14:13:11 $
 #
 #  Image/function on a linear network
 #
@@ -634,10 +634,12 @@ integral.linim <- function(f, domain=NULL, ...){
   if(any(missed <- (nper == 0))) {
     missed <- unname(which(missed))
     mp <- midpoints.psp(as.psp(L)[missed])
-    # nearest pixel value
+    #' nearest pixel value
     valmid <- safelookup(f, mp)
-    seg <- c(seg, factor(missed, levels=1:ns))
+    #' concatenate factors
+    seg <- unlist(list(seg, factor(missed, levels=1:ns)))
     vals <- c(vals, valmid)
+    #' update
     nper <- table(seg)
   }
   #' take average of data on each segment

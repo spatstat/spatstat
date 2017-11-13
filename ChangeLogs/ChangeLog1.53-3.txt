@@ -393,3 +393,13 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   linim.R
+	Bug fix.
+	
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.027
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

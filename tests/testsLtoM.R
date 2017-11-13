@@ -168,7 +168,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.9 $  $Date: 2016/09/28 04:28:05 $
+#  $Revision: 1.10 $  $Date: 2017/11/13 14:21:54 $
 
 
 require(spatstat)
@@ -298,6 +298,11 @@ local({
   if(abs(bR-bC) > 0.001 * (bR+bC)/2)
     stop("Disagreement between R and C algorithms for boundingradius.linnet",
          call.=FALSE)
+    
+  ## integral.linim with missing entries
+  xcoord <- linfun(function(x,y,seg,tp) { x }, domain(chicago))
+  xcoord <- as.linim(xcoord, dimyx=32)
+  integral(xcoord)
 })
 
 ##
