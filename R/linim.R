@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.45 $   $Date: 2017/09/27 09:31:17 $
+#  $Revision: 1.46 $   $Date: 2017/11/13 07:19:21 $
 #
 #  Image/function on a linear network
 #
@@ -15,12 +15,17 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
     stopifnot(is.data.frame(df))
     neednames <- c("xc", "yc", "x", "y", "mapXY", "tp", "values")
     ok <- neednames %in% names(df)
-    if(any(!ok)) {
-      nn <- sum(!ok)
-      stop(paste(ngettext(nn, "A column", "Columns"),
-                 "named", commasep(sQuote(neednames[!ok])),
-                 ngettext(nn, "is", "are"),
-                 "missing from argument", sQuote("df")))
+    dfcomplete <- all(ok)
+    if(!dfcomplete) {
+      #' omission of "values" column is permissible, but not other columns
+      mapnames <- setdiff(neednames, "values")
+      if(!all(mapnames %in% names(df))) {
+        nn <- sum(!ok)
+        stop(paste(ngettext(nn, "A column", "Columns"),
+                   "named", commasep(sQuote(neednames[!ok])),
+                   ngettext(nn, "is", "are"),
+                   "missing from argument", sQuote("df")))
+      }
     }
   }
   if(restrict) {
@@ -51,6 +56,10 @@ linim <- function(L, Z, ..., restrict=TRUE, df=NULL) {
     values <- Z[pixelcentres]
     # bundle
     df <- cbind(pixdf, projloc, projmap, data.frame(values=values))
+  } else if(!dfcomplete) {
+    #' look up values
+    pixelcentres <- ppp(df$xc, df$yc, window=as.rectangle(Z), check=FALSE)
+    df$values <- safelookup(Z, pixelcentres)
   }
   out <- Z
   attr(out, "L") <- L

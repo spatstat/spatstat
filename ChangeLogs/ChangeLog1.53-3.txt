@@ -365,3 +365,18 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+13 nov 2017
+
+   linim.R
+	Now allows 'df' to omit the column 'values'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.025
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
