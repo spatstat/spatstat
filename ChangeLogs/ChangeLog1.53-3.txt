@@ -369,7 +369,9 @@ Change log from 1.53-2 to 1.53-xx
 13 nov 2017
 
    linim.R
-	Now allows 'df' to omit the column 'values'
+	linim() now allows 'df' to omit the column 'values'.
+	This permits efficiencies when multiple calculations are
+	performed on the same network.
 
    DESCRIPTION
    NEWS
@@ -379,4 +381,15 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   linim.R
+	Accelerated integral.linim using 'tapplysum'
+
+   DESCRIPTION
+   NEWS
+	spatstat requires spatstat.utils 1.8-0
+	Updated to version 1.53-2.026
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

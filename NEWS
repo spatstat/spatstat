@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.025
+        CHANGES IN spatstat VERSION 1.53-2.026
 
 OVERVIEW
 
@@ -19,7 +19,7 @@ OVERVIEW
 
     o Connected components of a 3D point pattern.
     
-    o Accelerated lineardirichlet.
+    o Accelerated computations on linear networks.
 
     o Accelerated simulation of determinantal point processes.
 
@@ -92,6 +92,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lineardirichlet
     Accelerated.
 
+    o integral.linim
+    Accelerated.
+    
     o print.pp3
     More informative output when x is marked.
     

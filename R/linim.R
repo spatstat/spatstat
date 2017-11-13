@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.46 $   $Date: 2017/11/13 07:19:21 $
+#  $Revision: 1.47 $   $Date: 2017/11/13 09:40:39 $
 #
 #  Image/function on a linear network
 #
@@ -638,15 +638,20 @@ integral.linim <- function(f, domain=NULL, ...){
     valmid <- safelookup(f, mp)
     seg <- c(seg, factor(missed, levels=1:ns))
     vals <- c(vals, valmid)
+    nper <- table(seg)
   }
   #' take average of data on each segment
-  mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
-  mu[is.na(mu)] <- 0
+  ##  mu <- as.numeric(by(vals, seg, mean, ..., na.rm=TRUE))
+  ## mu[is.na(mu)] <- 0
+  num <- tapplysum(vals, list(seg), na.rm=TRUE)
+  mu <- num/nper
   #' weighted sum
   len <- lengths.psp(as.psp(L))
   if(anyNA(vals)) {
-    p <- as.numeric(by(!is.na(vals), seg, mean, ..., na.rm=TRUE))
-    p[is.na(p)] <- 0
+    ##    p <- as.numeric(by(!is.na(vals), seg, mean, ..., na.rm=TRUE))
+    ##    p[is.na(p)] <- 0
+    pnum <- tapplysum(!is.na(vals), list(seg), na.rm=FALSE)
+    p <- pnum/nper
     len <- len * p
   }
   return(sum(mu * len))
