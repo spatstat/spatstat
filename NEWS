@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.027
+        CHANGES IN spatstat VERSION 1.53-2.028
 
 OVERVIEW
 
@@ -89,6 +89,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o profilepl
     New argument 'fast' controls the use of shorcuts.
 
+    o reload.or.compute
+    New argument 'force'.
+    
     o lineardirichlet
     Accelerated.
 

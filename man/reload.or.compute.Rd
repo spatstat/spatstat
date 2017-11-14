@@ -9,7 +9,8 @@
   If the file already exists, re-load the results from the file.
 }
 \usage{
-reload.or.compute(filename, expr, objects = NULL, destination = parent.frame())
+reload.or.compute(filename, expr, objects = NULL,
+                  destination = parent.frame(), force=FALSE)
 }
 \arguments{
   \item{filename}{
@@ -27,6 +28,10 @@ reload.or.compute(filename, expr, objects = NULL, destination = parent.frame())
   \item{destination}{
     Environment in which the resulting objects should be assigned.
   }
+  \item{force}{
+    Logical value indicating whether to perform the computation
+    in any case.
+  }
 }
 \details{
   This facility is useful for saving, and later re-loading, the results of
@@ -41,13 +46,21 @@ reload.or.compute(filename, expr, objects = NULL, destination = parent.frame())
   by evaluating the expression. 
 
   If the file called \code{filename} already exists, then it
-  will be loaded. The optional argument \code{objects} specifies the names
+  will be loaded.
+  The optional argument \code{objects} specifies the names
   of objects that should be present in the file; a warning is issued
   if any of them are missing.
 
   The resulting objects can be assigned into any desired \code{destination}.
   The default behaviour is equivalent to evaluating \code{expr}
   in the current environment.
+
+  If \code{force=TRUE} then \code{expr} will be evaluated
+  (regardless of whether the file already exists or not)
+  and the results will be saved in \code{filename}, overwriting
+  any previously-existing file with that name. This is a convenient
+  way to force the code to re-compute everything
+  in an \R script file or \code{\link[utils]{Sweave}} document.
 }
 \value{
   Character vector (invisible) giving the names of the objects computed
