@@ -10,7 +10,7 @@
   between the window and each pixel in a raster.
 }
 \usage{
-\method{pixellate}{owin}(x, W = NULL, ...)
+\method{pixellate}{owin}(x, W = NULL, ..., DivideByPixelArea=FALSE)
 }
 \arguments{
   \item{x}{
@@ -23,6 +23,10 @@
   \item{\dots}{
     Optional. Extra arguments passed to \code{\link{as.mask}}
     to determine the pixel raster.
+  }
+  \item{DivideByPixelArea}{
+    Logical value, indicating whether the resulting pixel values
+    should be divided by the pixel area.
   }
 }
 \details{
@@ -75,10 +79,7 @@
    plot(pixellate(letterR, W, dimyx=15))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

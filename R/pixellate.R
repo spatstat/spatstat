@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.24 $    $Date: 2017/06/05 10:31:58 $
+#           $Revision: 1.25 $    $Date: 2017/11/15 07:23:16 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -17,7 +17,8 @@ pixellate <- function(x, ...) {
 }
 
 pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
-                          fractional=FALSE, preserve=FALSE) {
+                          fractional=FALSE, preserve=FALSE,
+                          DivideByPixelArea=FALSE) {
   verifyclass(x, "ppp")
 
   if(is.null(W))
@@ -41,7 +42,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   xrangeW <- W$xrange
   yrangeW <- W$yrange
   unitsW <- unitname(W)
-    
+  
   # multiple columns of weights?
   if(is.data.frame(weights) || is.matrix(weights)) {
     k <- ncol(weights)
@@ -126,6 +127,16 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     }
   }
 
+  #' divide by pixel area?
+  if(DivideByPixelArea) {
+    pixelarea <- W$xstep * W$ystep
+    if(k == 1) {
+      ta <- ta/pixelarea
+    } else {
+      ta <- lapply(ta, "/", e2=pixelarea)
+    }
+  }
+
   # pack up as image(s)
   if(k == 1) {
     # single image
@@ -161,7 +172,7 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   return(out)
 }
 
-pixellate.owin <- function(x, W=NULL, ...) {
+pixellate.owin <- function(x, W=NULL, ..., DivideByPixelArea=FALSE) {
   stopifnot(is.owin(x))
   P <- as.polygonal(x)
   R <- as.rectangle(x)
@@ -174,14 +185,16 @@ pixellate.owin <- function(x, W=NULL, ...) {
                        resolve.defaults(list(...),
                                         list(w=W)))
   ## compute
-  Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2L], ny=W$dim[1L])
+  Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2L], ny=W$dim[1L],
+                             DivideByPixelArea)
   ## convert to image
   Z <- im(Zmat, xcol=W$xcol, yrow=W$yrow, xrange=W$xrange, yrange=W$yrange,
           unitname=unitname(W))
   return(Z)
 }
 
-polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
+polytileareaEngine <- function(P, xrange, yrange, nx, ny,
+                               DivideByPixelArea=FALSE) {
   x0 <- xrange[1L]
   y0 <- yrange[1L]
   dx <- diff(xrange)/nx
@@ -217,9 +230,12 @@ polytileareaEngine <- function(P, xrange, yrange, nx, ny) {
     # increment output 
     Z[] <- Z[] + zz$out
   }
-  # revert to original scale
-  pixelarea <- dx * dy
-  return(Z * pixelarea)
+  if(!DivideByPixelArea) {
+    #' revert to original scale
+    pixelarea <- dx * dy
+    Z <- Z * pixelarea
+  }
+  return(Z)
 }
 
 

@@ -9,7 +9,8 @@
 }
 \usage{
 \method{pixellate}{ppp}(x, W=NULL, \dots, weights = NULL,
-                        padzero=FALSE, fractional=FALSE, preserve=FALSE)
+                        padzero=FALSE, fractional=FALSE, preserve=FALSE,
+                        DivideByPixelArea=FALSE)
 
 \method{as.im}{ppp}(X, \dots)
 }
@@ -28,6 +29,10 @@
   \item{fractional,preserve}{
     Logical values determining the type of discretisation.
     See Details.
+  }
+  \item{DivideByPixelArea}{
+    Logical value, indicating whether the resulting pixel values
+    should be divided by the pixel area.
   }
 }
 \details{

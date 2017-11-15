@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.11 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.12 $  $Date: 2017/11/15 07:21:21 $
 #
 #
 
@@ -49,7 +49,8 @@ as.mask.psp <- function(x, W=NULL, ...) {
 
 
 pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
-                          what=c("length", "number")) {
+                          what=c("length", "number"),
+                          DivideByPixelArea=FALSE) {
   L <- as.psp(x)
   what <- match.arg(what)
   
@@ -123,10 +124,16 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
                     PACKAGE = "spatstat")
          })
   mm <- matrix(zz$out, nr, nc)
-  mm[is.na(Z$v)] <- NA
   ## intersect with existing window
+  mm[is.na(Z$v)] <- NA
+  ##
+  if(DivideByPixelArea) {
+    pixelarea <- W$xstep * W$ystep
+    mm <- mm/pixelarea
+  }
+  ## pack up
   Z$v <- mm
-  Z
+  return(Z)
 }
 
 

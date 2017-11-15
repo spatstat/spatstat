@@ -99,8 +99,13 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE) {
 }
 
 as.solist <- function(x, ...) {
-  if(inherits(x, "solist") && length(list(...)) == 0)
+  if(inherits(x, "solist") && length(list(...)) == 0) {
+    #' wipe superfluous info
+    if(inherits(x, "ppplist")) 
+      attributes(x)[c("fsplit", "fgroup")] <- NULL
+    class(x) <- c("solist", "anylist", "listof")
     return(x)
+  }
   if(!is.list(x) || is.sob(x))
     x <- list(x)
   return(do.call(solist, append(x, list(...))))

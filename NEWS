@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.029
+        CHANGES IN spatstat VERSION 1.53-2.030
 
 OVERVIEW
 
@@ -93,7 +93,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o reload.or.compute
     New argument 'force'.
-    
+
+    o pixellate.ppp, pixellate.owin, pixellate.psp
+    New argument 'DivideByPixelArea'.
+
+    o as.solist
+    as.solist(x) always returns an object of class 'solist',
+    removing any additional classes.
+
     o lineardirichlet
     Accelerated.
 

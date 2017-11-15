@@ -440,3 +440,25 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   solist.R
+	as.solist(x) now removes any additional classes
+	
+   pixellate.R
+   pixellate.ppp.Rd
+   pixellate.owin.Rd
+	pixellate.ppp and pixellate.owin have new argument 'DivideByPixelArea'.
+	
+   psp2pix.R
+   pixellate.psp.Rd
+   spatstat-internal.Rd
+	New argument 'DivideByPixelArea'.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.030
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+	

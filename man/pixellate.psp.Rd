@@ -9,7 +9,8 @@
 }
 \usage{
 \method{pixellate}{psp}(x, W=NULL, ..., weights = NULL,
-                        what=c("length", "number"))
+                        what=c("length", "number"),
+                        DivideByPixelArea=FALSE)
 }
 \arguments{
   \item{x}{
@@ -31,6 +32,10 @@
     total length of intersection (\code{what="length"}, the default)
     or the total number of segments intersecting each pixel
     (\code{what="number"}).
+  }
+  \item{DivideByPixelArea}{
+    Logical value, indicating whether the resulting pixel values
+    should be divided by the pixel area.
   }
 }
 \details{
@@ -75,13 +80,8 @@
   sum(pixellate(X))
   plot(pixellate(X, what="n"))
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}
