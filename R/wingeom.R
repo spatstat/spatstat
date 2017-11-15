@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.124 $	$Date: 2017/10/24 01:02:35 $
+#	$Revision: 4.125 $	$Date: 2017/11/15 01:30:34 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -318,13 +318,14 @@ intersect.owin <- function(..., fatal=TRUE, p) {
   # check units
   if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
+  uname <- harmonise(unitname(A), unitname(B), single=TRUE)
 
   # determine intersection of x and y ranges
   xr <- intersect.ranges(A$xrange, B$xrange, fatal=fatal)
   yr <- intersect.ranges(A$yrange, B$yrange, fatal=fatal)
   if(!fatal && (is.null(xr) || is.null(yr)))
     return(NULL)
-  C <- owin(xr, yr, unitname=unitname(A))
+  C <- owin(xr, yr, unitname=uname)
 
   if(is.empty(A) || is.empty(B))
     return(emptywindow(C))
@@ -356,7 +357,7 @@ intersect.owin <- function(..., fatal=TRUE, p) {
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
+    AB <- owin(poly=ab, check=FALSE, unitname=uname)
     AB <- rescue.rectangle(AB)
     return(AB)
   }
@@ -491,6 +492,7 @@ union.owin <- function(..., p) {
   ## check units
   if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
+  uname <- harmonise(unitname(A), unitname(B), single=TRUE)
   
   ## Determine type of intersection
   
@@ -505,7 +507,7 @@ union.owin <- function(..., p) {
   
   C <- owin(range(A$xrange, B$xrange),
             range(A$yrange, B$yrange),
-            unitname=unitname(A))
+            unitname=uname)
 
   if(!Amask && !Bmask) {
     ####### Result is polygonal (or rectangular) ############
@@ -521,7 +523,7 @@ union.owin <- function(..., p) {
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
+    AB <- owin(poly=ab, check=FALSE, unitname=uname)
     AB <- rescue.rectangle(AB)
     return(AB)
   }
@@ -574,6 +576,7 @@ setminus.owin <- function(A, B, ..., p) {
   ## check units
   if(!compatible(unitname(A), unitname(B)))
     warning("The two windows have incompatible units of length")
+  uname <- harmonise(unitname(A), unitname(B), single=TRUE)
   
   ## Determine type of arguments
   
@@ -609,7 +612,7 @@ setminus.owin <- function(A, B, ..., p) {
     totarea <- sum(unlist(lapply(ab, Area.xypolygon)))
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
-    AB <- owin(poly=ab, check=FALSE, unitname=unitname(A))
+    AB <- owin(poly=ab, check=FALSE, unitname=uname)
     AB <- rescue.rectangle(AB)
     return(AB)
   }

@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.19 $   $Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.22 $   $Date: 2017/11/15 02:06:14 $
 #
 #
  
@@ -12,6 +12,8 @@
 clip.psp <- function(x, window, check=TRUE, fragments=TRUE) {
   verifyclass(x, "psp")
   verifyclass(window, "owin")
+  if(is.vanilla(unitname(window)))
+     unitname(window) <- unitname(x)
   if(check && !is.subset.owin(window, x$window))
     warning("The clipping window is not a subset of the window containing the line segment pattern x")
   if(x$n == 0) {

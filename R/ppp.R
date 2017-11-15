@@ -320,6 +320,8 @@ cobble.xy <- function(x, y, f=ripras, fatal=TRUE, ...) {
             # i is a window
             window <- i
             if(clip) window <- intersect.owin(window, x$window)
+            if(is.vanilla(unitname(window)))
+              unitname(window) <- unitname(x)
             ok <- inside.owin(x$x, x$y, window)
             x <- ppp(x$x[ok], x$y[ok], window=window, #SIC
                      marks=marksubset(x$marks, ok),

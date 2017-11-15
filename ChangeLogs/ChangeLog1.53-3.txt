@@ -403,3 +403,40 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+14 nov 2017
+
+   scriptUtils.R
+	Added an argument to 'reload.or.compute'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.028
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+15 nov 2017
+
+   units.R
+   methods.unitname.Rd
+	New method 'harmonise.unitname'
+
+   wingeom.R
+	bug fix in handling unitnames in
+	intersection.owin, union.owin, setminus.owin
+
+   ppp.R
+   lpp.R
+   clip.psp.R
+	improvement to handling unitnames (affects [.ppp, [.lpp, [.psp)
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.029
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

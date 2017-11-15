@@ -257,6 +257,7 @@
 \alias{is.scov}
 \alias{is.sob}
 \alias{is.tess}
+\alias{is.vanilla}
 \alias{k3engine}
 \alias{Kborder.engine}
 \alias{Knone.engine}
@@ -1036,6 +1037,7 @@ is.psp(x)
 is.scov(x)
 is.sob(x)
 is.tess(x)
+is.vanilla(u)
 k3engine(x, y, z, box, rmax, nrval, correction)
 Kborder.engine(X, rmax, nr, correction, weights, ratio)
 Knone.engine(X, rmax, nr, weights, ratio)

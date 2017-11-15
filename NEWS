@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.028
+        CHANGES IN spatstat VERSION 1.53-2.029
 
 OVERVIEW
 
@@ -24,6 +24,8 @@ OVERVIEW
     o Accelerated simulation of determinantal point processes.
 
     o Improved printing of 3D point patterns.
+    
+    o Minor corrections to handling of unitnames.
     
     o Nickname: 'All Power to the Serviettes'
 
@@ -98,6 +100,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o integral.linim
     Accelerated.
     
+    o "[.ppp", "[.lpp", "[.psp"
+    In the expression X[W] where W is a window,
+    if X has a unitname but W does not, 
+    the result now inherits the unitname of X.
+    
     o print.pp3
     More informative output when x is marked.
     
@@ -119,6 +126,10 @@ BUG FIXES
 
     o plot.solist
     Panel titles were cut off, when equal.scales=FALSE (the default).
+    Fixed.
+
+    o intersection.owin, union.owin, setminus.owin
+    The result sometimes did not inherit the correct 'unitname'.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.53-2

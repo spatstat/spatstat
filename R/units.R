@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.24 $   $Date: 2017/10/24 01:03:35 $
+#   $Revision: 1.27 $   $Date: 2017/11/15 01:53:21 $
 #
 #
 
@@ -108,6 +108,12 @@ as.character.unitname <- function(x, ...) {
   return(if(mul == 1) x$plural else paste(mul, x$plural))
 }
 
+is.vanilla <- function(u) {
+  u <- as.unitname(u)
+  z <- (u$singular == "unit") && (u$multiplier == 1)
+  return(z)
+}
+
 summary.unitname <- function(object, ...) {
   x <- object
   scaled <- (x$multiplier != 1)
@@ -169,6 +175,29 @@ compatible.unitname <- function(A, B, ..., coerce=TRUE) {
   if(length(list(...)) == 0) return(TRUE)
   # recursion
   return(compatible.unitname(B, ...))
+}
+
+harmonize.unitname <-
+harmonise.unitname <- function(..., coerce=TRUE, single=FALSE) {
+  argh <- list(...)
+  n <- length(argh)
+  if(n == 0) return(NULL)
+  u <- lapply(argh, as.unitname)
+  if(n == 1) return(if(single) u[[1L]] else u)
+  if(coerce) {
+    #' vanilla units are compatible with another unit
+    s <- lapply(u, summary)
+    v <- sapply(s, getElement, name="vanilla")
+    if(all(v))
+      return(if(single) u[[1L]] else u)
+    u <- u[!v]
+  }
+  z <- unique(u)
+  if(length(z) > 1) stop("Unitnames are incompatible", call.=FALSE)
+  if(single) return(z[[1]])
+  z <- rep(z, n)
+  names(z) <- names(argh)
+  return(z)
 }
 
 # class 'numberwithunit':  numeric value(s) with unit of length

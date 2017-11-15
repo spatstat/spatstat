@@ -1,7 +1,7 @@
 #
 # lpp.R
 #
-#  $Revision: 1.56 $   $Date: 2017/08/08 03:24:35 $
+#  $Revision: 1.58 $   $Date: 2017/11/15 01:56:47 $
 #
 # Class "lpp" of point patterns on linear networks
 
@@ -410,6 +410,8 @@ local2lpp <- function(L, seg, tp, X=NULL, df.only=FALSE) {
   stopifnot(is.owin(j))
   w <- j
   L <- x$domain
+  if(is.vanilla(unitname(w)))
+    unitname(w) <- unitname(x)
   # Find vertices that lie inside 'w'
   vertinside <- inside.owin(L$vertices, w=w)
   from <- L$from
