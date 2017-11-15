@@ -10,13 +10,14 @@ distfun <- function(X, ...) {
   UseMethod("distfun")
 }
 
-distfun.ppp <- function(X, ..., k=1) {
+distfun.ppp <- function(X, ..., k=1, undef=Inf) {
   # this line forces X to be bound
   stopifnot(is.ppp(X))
   stopifnot(length(k) == 1)
   g <- function(x,y=NULL) {
     Y <- xy.coords(x, y)[c("x", "y")]
-    nncross(Y, X, what="dist", k=k)
+    if(npoints(X) < k) rep(undef, length(Y$x)) else
+    nncross(Y, X, what="dist", k=k) 
   }
   attr(g, "Xclass") <- "ppp"
   g <- funxy(g, as.rectangle(as.owin(X)))

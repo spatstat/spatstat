@@ -13,7 +13,7 @@
 \usage{
   distfun(X, \dots)
 
-  \method{distfun}{ppp}(X, \dots, k=1)
+  \method{distfun}{ppp}(X, \dots, k=1, undef=Inf)
 
   \method{distfun}{psp}(X, \dots)
 
@@ -31,6 +31,10 @@
   \item{k}{
     An integer. The distance to the \code{k}th nearest point
     will be computed.
+  }
+  \item{undef}{
+    The value that should be returned if the distance is undefined
+    (that is, if \code{X} contains fewer than \code{k} points).
   }
   \item{invert}{
     If \code{TRUE}, compute the distance transform of the

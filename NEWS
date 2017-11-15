@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.030
+        CHANGES IN spatstat VERSION 1.53-2.031
 
 OVERVIEW
 
@@ -111,6 +111,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     In the expression X[W] where W is a window,
     if X has a unitname but W does not, 
     the result now inherits the unitname of X.
+    
+    o distfun.ppp
+    New argument 'undef'.
     
     o print.pp3
     More informative output when x is marked.
