@@ -2,27 +2,52 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.9 $    $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.11 $    $Date: 2017/11/16 04:38:49 $
 #
 #
 
 density.psp <- function(x, sigma, ..., edge=TRUE,
-                        method=c("FFT", "C", "interpreted")) {
+                        method=c("FFT", "C", "interpreted"),
+                        at=NULL) {
   verifyclass(x, "psp")
   method <- match.arg(method)
   w <- x$window
   n <- x$n
+  len <- lengths.psp(x)
+  ang <- angles.psp(x, directed=TRUE)
+  ux <- unitname(x)
   if(missing(sigma))
     sigma <- 0.1 * diameter(w)
-  w <- as.mask(w, ...)
-  len <- lengths.psp(x)
-  if(n == 0 || all(len == 0))
-    return(as.im(0, w))
-  #
-  ang <- angles.psp(x, directed=TRUE)
-  xy <- rasterxy.mask(w)
-  xx <- xy$x
-  yy <- xy$y
+  #' determine locations for evaluation of density
+  if(is.null(at)) {
+    atype <- "window"
+    w <- as.mask(w, ...)
+  } else if(is.owin(at)) {
+    atype <- "window"
+    w <- as.mask(at, ...)
+  } else {  
+    atype <- "points"
+    atY <- try(as.ppp(at, W=w))
+    if(inherits(atY, "try-error"))
+      stop("Argument 'at' should be a window or a point pattern", call.=FALSE)
+  }
+  #' detect empty pattern
+  if(n == 0 || all(len == 0)) 
+    switch(atype,
+           window = return(as.im(0, w)),
+           points = return(rep(0, npoints(atY))))
+  #' determine prediction coordinates
+  switch(atype,
+         window = {
+           xy <- rasterxy.mask(w)
+           xx <- xy$x
+           yy <- xy$y
+         },
+         points = {
+           xx <- atY$x
+           yy <- atY$y
+         })
+  #' c o m p u t e
   switch(method,
          interpreted = {
            #' compute matrix contribution from each segment 
@@ -38,7 +63,9 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
                (pnorm(u1, sd=sigma) - pnorm(u1-len[i], sd=sigma))
              totvalue <- if(i == 1L) value else (value + totvalue)
            }
-           dens <- im(totvalue, w$xcol, w$yrow)
+           dens <- switch(atype,
+                          window = im(totvalue, w$xcol, w$yrow, unitname=ux),
+                          points = totvalue)
          },
          C = {
            #' C implementation of the above
@@ -59,18 +86,27 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
                    yp = as.double(yp),
                    z = as.double(numeric(np)),
                    PACKAGE = "spatstat")
-           dens <- im(z$z, w$xcol, w$yrow)
+           dens <- switch(atype,
+                          window = im(z$z, w$xcol, w$yrow, unitname=ux),
+                          points = z$z)
          },
          FFT = {
-           L <- pixellate(x, ...)
-           L <- L/with(L, xstep * ystep)
+           L <- pixellate(x, ..., DivideByPixelArea=TRUE)
            dens <- blur(L, sigma, normalise=edge, bleed=FALSE)
+           if(atype == "points") dens <- dens[atY, drop=FALSE]
          })
-  unitname(dens) <- unitname(x)
   if(edge && method != "FFT") {
     edg <- second.moment.calc(midpoints.psp(x), sigma, what="edge", ...)
-    dens <- eval.im(dens/edg)
+    switch(atype,
+           window = {
+             dens <- eval.im(dens/edg)
+           },
+           points = {
+             edgY <- edg[atY, drop=FALSE]
+             dens <- dens/edgY
+           })
   }
-  dens <- dens[x$window, drop=FALSE]
+  if(atype == "window")
+    dens <- dens[x$window, drop=FALSE]
   return(dens)
 }

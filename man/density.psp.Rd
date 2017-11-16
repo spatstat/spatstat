@@ -6,7 +6,8 @@
 }
 \usage{
   \method{density}{psp}(x, sigma, \dots, edge=TRUE,
-                   method=c("FFT", "C", "interpreted"))
+                   method=c("FFT", "C", "interpreted"),
+                   at=NULL)
 }
 \arguments{
   \item{x}{
@@ -27,9 +28,15 @@
     computation. Option \code{"FFT"} is the fastest, while
     \code{"C"} is the most accurate.
   }
+  \item{at}{
+    Optional. An object specifying the locations where density values
+    should be computed. Either a window (object of class \code{"owin"})
+    or a point pattern (object of class \code{"ppp"} or \code{"lpp"}).
+  }
 }
 \value{
-  A pixel image (object of class \code{"im"}).
+  A pixel image (object of class \code{"im"})
+  or a numeric vector.
 }
 \details{
   This is a method for the generic function \code{\link{density}}.
@@ -54,6 +61,18 @@
   If \code{edge=TRUE} this result is adjusted for edge effects
   by dividing it by the convolution of the same Gaussian kernel
   with the observation window.
+
+  If the argument \code{at} is given, then it specifies the locations
+  where density values should be computed.
+  \itemize{
+    \item If \code{at} is a window,
+    then the window is converted to a binary mask
+    using the arguments \code{\dots}, and density values are computed at
+    the centre of each pixel in this mask. The result is a pixel image.
+    \item
+    If \code{at} is a point pattern, then density values are computed at
+    each point location, and the result is a numeric vector.
+  }
 }
 \seealso{
   \code{\link{psp.object}},

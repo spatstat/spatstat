@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.031
+        CHANGES IN spatstat VERSION 1.53-2.032
 
 OVERVIEW
 
@@ -97,6 +97,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pixellate.ppp, pixellate.owin, pixellate.psp
     New argument 'DivideByPixelArea'.
 
+    o density.psp
+    New argument 'at' determines locations where the density is evaluated.
+    
     o as.solist
     as.solist(x) always returns an object of class 'solist',
     removing any additional classes.
