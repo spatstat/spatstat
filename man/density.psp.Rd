@@ -1,24 +1,30 @@
 \name{density.psp}
 \alias{density.psp}
-\title{Kernel Smoothing of Line Segment Pattern}
+\alias{density.linnet}
+\title{Kernel Smoothing of Line Segment Pattern or Linear Network}
 \description{
-  Compute a kernel smoothed intensity function from a line segment pattern.
+  Compute a kernel smoothed intensity function from a line segment
+  pattern or a linear network.
 }
 \usage{
   \method{density}{psp}(x, sigma, \dots, edge=TRUE,
                    method=c("FFT", "C", "interpreted"),
                    at=NULL)
+
+  \method{density}{linnet}(x, \dots)
 }
 \arguments{
   \item{x}{
-    Line segment pattern (object of class \code{"psp"}) to be smoothed.
+    Line segment pattern (object of class \code{"psp"})
+    or linear network (object of class \code{"linnet"})
+    to be smoothed.
   }
   \item{sigma}{
     Standard deviation of isotropic Gaussian smoothing kernel.
   }
   \item{\dots}{
-    Extra arguments passed to \code{\link{as.mask}} which determine
-    the resolution of the resulting image.
+    Extra arguments, including arguments passed to \code{\link{as.mask}}
+    to determine the resolution of the resulting image.
   }
   \item{edge}{
     Logical flag indicating whether to apply edge correction.
@@ -39,7 +45,11 @@
   or a numeric vector.
 }
 \details{
-  This is a method for the generic function \code{\link{density}}.
+  These are methods for the generic function \code{\link{density}}
+  for the classes \code{"psp"} (line segment patterns)
+  and \code{"linnet"} (linear networks).
+  If \code{x} is a linear network, it is first converted
+  to a line segment pattern.
 
   A kernel estimate of the intensity of the line segment pattern
   is computed. The result is 
@@ -85,11 +95,8 @@
   plot(D, main="density(L)")
   plot(L, add=TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{methods}

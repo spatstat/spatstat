@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.63 $    $Date: 2017/09/11 16:36:37 $
+#    $Revision: 1.64 $    $Date: 2017/11/17 00:46:30 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -618,4 +618,8 @@ crossing.linnet <- function(X, Y) {
             as.lpp(x=x, y=y, seg=iA, tp=tA, L=X,
                    marks=factor(id[as.integer(jB)], levels=lev)))
   return(Z)
+}
+
+density.linnet <- function(x, ...) {
+  density.psp(as.psp(x), ...)
 }

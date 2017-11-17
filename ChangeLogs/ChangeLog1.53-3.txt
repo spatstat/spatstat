@@ -486,3 +486,17 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+17 nov 2017
+
+   linnet.R
+   density.psp.Rd
+	New method density.linnet
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.033
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
