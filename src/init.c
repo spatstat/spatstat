@@ -147,6 +147,7 @@ static const R_CMethodDef CEntries[] = {
     {"poly2imA",         (DL_FUNC) &poly2imA,          7},
     {"poly2imI",         (DL_FUNC) &poly2imI,          6},
     {"ps_exact_dt_R",    (DL_FUNC) &ps_exact_dt_R,    13},
+    {"raster3filter",    (DL_FUNC) &raster3filter,     5},
     {"RcallF3",          (DL_FUNC) &RcallF3,          17},
     {"RcallF3cen",       (DL_FUNC) &RcallF3cen,       20},
     {"RcallG3",          (DL_FUNC) &RcallG3,          17},

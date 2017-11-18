@@ -499,6 +499,7 @@
 \alias{quad.mppm}
 \alias{quadBlockSizes}
 \alias{RandomFieldsSafe}
+\alias{rasterfilter}
 \alias{ratfv}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
@@ -600,7 +601,8 @@
 \alias{slrAssemblePixelData}
 \alias{Smooth.solist}
 \alias{smoothcrossEngine}              
-\alias{smoothpointsEngine}              
+\alias{smoothpointsEngine}
+\alias{smudge}
 \alias{sort.im}
 \alias{sortalongsegment}
 \alias{spatstat.xy.coords}
@@ -1342,6 +1344,7 @@ quad(data, dummy, w, param)
 quad.mppm(x)
 quadBlockSizes(nX, nD, p, nMAX, announce)
 RandomFieldsSafe()
+rasterfilter(X, f)
 ratfv(df, numer, denom, \dots, ratio)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
@@ -1467,6 +1470,7 @@ smoothcrossEngine(Xdata, Xquery, values, sigma, \dots,
                     weights, varcov, sorted)
 smoothpointsEngine(x, values, sigma, \dots,
                     weights, varcov, leaveoneout, sorted, cutoff)
+smudge(X)
 \method{sort}{im}(x, \dots)
 sortalongsegment(df)
 spatstat.xy.coords(x, y)

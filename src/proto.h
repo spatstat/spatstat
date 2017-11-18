@@ -169,6 +169,7 @@ void xysiANY(int *, double *, double *, double *, double *, int *, double *, dou
 void xysegXint(int *, double *, double *, double *, double *, double *, double *, double *, double *, double *, int *); 
 void xysxi(int *, double *, double *, double *, double *, double *, int *);
 void Corput(int *, int *, double *);
+void raster3filter(int *, int *, double *, double *, double *);
 void knownCif(char *, int *);
 void scantrans(double *, double *, int *, double *, double *, double *, double *, int *, int *, double *, int *);
 void Gsmoopt(int *, double *, double *, double *, int *, double *, double *); 

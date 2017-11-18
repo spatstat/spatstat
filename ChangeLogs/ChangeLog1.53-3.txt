@@ -500,3 +500,18 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+18 nov 2017
+
+   rasterfilter.c [New file]
+   rasterfilter.R [New file]
+   spatstat-internal.Rd
+	New internal functions 'rasterfilter' and 'smudge'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.034
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
