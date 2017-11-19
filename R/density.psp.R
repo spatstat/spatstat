@@ -2,7 +2,7 @@
 #
 #  density.psp.R
 #
-#  $Revision: 1.11 $    $Date: 2017/11/16 04:38:49 $
+#  $Revision: 1.13 $    $Date: 2017/11/19 04:18:27 $
 #
 #
 
@@ -91,8 +91,8 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
                           points = z$z)
          },
          FFT = {
-           L <- pixellate(x, ..., DivideByPixelArea=TRUE)
-           dens <- blur(L, sigma, normalise=edge, bleed=FALSE)
+           Y <- pixellate(x, ..., DivideByPixelArea=TRUE)
+           dens <- blur(Y, sigma, normalise=edge, bleed=FALSE)
            if(atype == "points") dens <- dens[atY, drop=FALSE]
          })
   if(edge && method != "FFT") {
@@ -108,5 +108,6 @@ density.psp <- function(x, sigma, ..., edge=TRUE,
   }
   if(atype == "window")
     dens <- dens[x$window, drop=FALSE]
+  attr(dens, "sigma") <- sigma
   return(dens)
 }

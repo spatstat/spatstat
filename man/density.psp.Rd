@@ -57,10 +57,12 @@
   standard deviation \code{sigma}, with the line segments.
   The result is computed as follows:
   \itemize{
-    \item if \code{method="FFT"}, the line segments are discretised
+    \item if \code{method="FFT"} (the default),
+    the line segments are discretised
     using \code{\link{pixellate.psp}}, then the Fast Fourier Transform
     is used to calculate the convolution. This method is the fastest,
-    but is slightly less accurate.
+    but is slightly less accurate. Accuracy can be improved by
+    increasing pixel resolution.
     \item if \code{method="C"} the exact value of the convolution at the
     centre of each pixel is computed analytically using \code{C} code;
     \item if \code{method="interpreted"},

@@ -1,7 +1,7 @@
 #
 #           Kmeasure.R
 #
-#           $Revision: 1.63 $    $Date: 2017/07/22 08:33:10 $
+#           $Revision: 1.65 $    $Date: 2017/11/19 04:32:28 $
 #
 #     Kmeasure()         compute an estimate of the second order moment measure
 #
@@ -70,8 +70,9 @@ second.moment.calc <- function(x, sigma=NULL, edge=TRUE,
                                    what=what, debug=debug, ..., varcov=varcov)
     return(result)
   }
-  # need to expand window
-  bigger <- grow.rectangle(rec, (7 * sig - across)/2)
+  #' need to expand window
+  wid <- (7 * sig - across)/2
+  bigger <- grow.rectangle(rec, wid)
   switch(xtype,
          ppp = {
            # pixellate first (to preserve pixel resolution)

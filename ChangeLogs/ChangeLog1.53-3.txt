@@ -515,3 +515,20 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+19 nov 2017
+
+   blur.R
+	ellipsis arguments are passed to second.moment.calc
+
+   Kmeasure.R
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.035
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

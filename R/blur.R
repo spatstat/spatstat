@@ -3,7 +3,7 @@
 #
 # apply Gaussian blur to an image
 #
-#    $Revision: 1.16 $   $Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.17 $   $Date: 2017/11/19 04:17:39 $
 #
 fillNA <- function(x, value=0) {
   stopifnot(is.im(x))
@@ -47,7 +47,8 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
   # replace NA's in image raster by zeroes 
   X <- fillNA(x, 0)
   # convolve with Gaussian
-  Y <- second.moment.calc(X, sigma=sigma, varcov=varcov, what="smooth")
+  Y <- second.moment.calc(X, sigma=sigma, ...,
+                          varcov=varcov, what="smooth")
   # if no bleeding, we restrict data to the original boundary
   if(!bleed)
     Y$v[is.na(x$v)] <- NA
@@ -61,7 +62,8 @@ blur <- function(x, sigma=NULL, ..., normalise=FALSE, bleed=TRUE, varcov=NULL) {
   Xone$v[isna] <- 0
   Xone$v[!isna] <- 1
   # convolve with Gaussian
-  Ydenom <- second.moment.calc(Xone, sigma=sigma, ..., varcov=varcov, what="smooth")
+  Ydenom <- second.moment.calc(Xone, sigma=sigma, ...,
+                               varcov=varcov, what="smooth")
   # normalise
   Z <- eval.im(Y/Ydenom)
   return(Z)
