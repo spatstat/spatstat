@@ -83,8 +83,6 @@
 \alias{cobble.xy}
 \alias{codetime}
 \alias{col.args.to.grey}
-\alias{colouroutputs}
-\alias{colouroutputs<-}
 \alias{commonPolyclipArgs}
 \alias{conform.imagelist}
 \alias{countingweights}
@@ -829,8 +827,6 @@ crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
 col.args.to.grey(x, \dots)
-colouroutputs(x)
-colouroutputs(x) <- value
 commonPolyclipArgs(\dots, p)
 conform.imagelist(X, Zlist)
 countingweights(id, areas, check = TRUE)

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.035
+        CHANGES IN spatstat VERSION 1.53-2.036
 
 OVERVIEW
 
@@ -54,6 +54,10 @@ NEW FUNCTIONS
 
     o connected.pp3
     Connected components of a 3D point pattern.
+
+    o colouroutputs, "colouroutputs<-"
+    Extract or assign colour values in a colour map.
+    (Documented a previously-existing function)
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

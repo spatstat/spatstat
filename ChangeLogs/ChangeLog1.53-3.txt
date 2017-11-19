@@ -532,3 +532,15 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   colouroutputs.Rd [New file]
+   spatstat-internal.Rd
+	Documented the previously undocumented functions
+	colouroutputs and colouroutputs<-
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.036
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

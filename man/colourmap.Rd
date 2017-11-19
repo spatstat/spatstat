@@ -97,6 +97,8 @@ colourmap(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
   \code{\link{interp.colourmap}}.
   To alter individual colour values, see
   \code{\link{tweak.colourmap}}.
+  To extract or replace all colour values, see
+  \code{\link{colouroutputs}}.
     
   See \code{\link[spatstat:colourtools]{colourtools}}
   for more tools to manipulate colour values.
