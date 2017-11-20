@@ -2116,11 +2116,17 @@ of potential impact.
   \bugger{1.9-4}{june 2006}{1.25-2}{january 2012}
 
  \item \texttt{update.kppm}:
+   \begin{itemize}
+   \item Did not function correctly when several additional arguments
+     were given.
+     \bugger{1.42-2}{june 2015}{1.54-0}{november 2017}
+   \item 
   If the call to \texttt{update} did not include a formula argument
    or a point pattern argument, then all arguments were ignored. 
    Example: \texttt{update(fit, improve.type="quasi")} was identical to 
    \texttt{fit}.
    \bugger{1.42-2}{june 2015}{1.45-0}{march 2016}
+   \end{itemize}
 
   \item \texttt{markcorrint}:
    Results were completely incorrect.
@@ -2202,6 +2208,12 @@ of potential impact.
     an edge correction other than \texttt{"border"} or \texttt{"none"}.
    \bugger{1.25-0}{december 2011}{1.51-0}{may 2017}
 
+ \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
+   Results were slightly incorrect for models fitted using the border
+   correction.
+   \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
+
+   
  \item \texttt{vcov.ppm}, \texttt{suffstat}:
    These functions sometimes gave incorrect values 
    for marked point process models.   
@@ -2253,6 +2265,10 @@ of potential impact.
    results were inaccurate if many of the segment lengths were
    shorter than the width of a pixel.
    \bugger{1.41-0}{february 2015}{1.48-0}{december 2016}
+    \item 
+   results were wildly inaccurate in some extreme cases where many segments
+   were very short.
+   \bugger{1.41-0}{february 2015}{1.54-0}{november 2017}
    \end{itemize}
    
  \item \texttt{predict.ppm}:

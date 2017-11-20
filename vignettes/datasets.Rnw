@@ -184,18 +184,19 @@ There are also the following spatial data sets which are not 2D point patterns:
 \begin{tabular}[c]{l|l|l}
 {\sf name} & {\sf description} & {\sf format} \\ \hline
 {\tt austates} & Australian states & tessellation \\
+{\tt cetaceans} & marine survey & replicated 2D point patterns \\
 {\tt chicago} & crimes & point pattern on linear network \\
+{\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
 {\tt dendrite} & dendritic spines & point pattern on linear network \\
-{\tt spiders} & spider webs & point pattern on linear network \\
 {\tt flu} & virus proteins & replicated 2D point patterns \\
 {\tt heather} & heather mosaic & binary image (three versions) \\
-{\tt demohyper} & simulated data & replicated 2D point patterns with covariates\\
 {\tt osteo} & osteocyte lacunae & replicated 3D point patterns with covariates\\
 {\tt pyramidal} & pyramidal neurons & replicated 2D point patterns in 3 groups\\
 {\tt residualspaper} 
                 & data \& code from Baddeley et al (2005) &  
                        2D point patterns, \R\ function \\
 {\tt simba} & simulated data & replicated 2D point patterns in 2 groups\\
+{\tt spiders} & spider webs & point pattern on linear network \\
 {\tt waterstriders} & insects on water & replicated 2D point patterns\\
 \hline
 \end{tabular}
@@ -368,6 +369,15 @@ Often used as a demonstration example.
 
 <<fig=TRUE>>=
 plot(cells)
+@ 
+
+\subsubsection*{\texttt{cetaceans}: Survey of marine species}
+
+Recorded sightings of whales, dolphins and other marine species
+in a series of surveys. Replicated 2D marked point patterns.
+
+<<fig=TRUE>>=
+plot(cetaceans.extra$patterns, main="Cetaceans data", cols=1:5, hsep=1)
 @ 
 
 \subsubsection*{\texttt{chicago}: Chicago crimes}

@@ -586,3 +586,19 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   updates.Rnw
+	Updated the list of bugs.
+
+   datasets.Rnw
+	Added cetaceans.
+
+   DESCRIPTION
+   NEWS
+	Now requires spatstat.data >= 1.2-0.
+	Updated to version 1.53-2.040
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
