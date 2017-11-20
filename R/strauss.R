@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.38 $	$Date: 2017/10/16 09:53:46 $
+#    $Revision: 2.39 $	$Date: 2017/11/20 00:55:33 $
 #
 #    The Strauss process
 #
@@ -182,7 +182,6 @@ closepaircounts <- function(X, r) {
 
 weightedclosepairs <- function(X, r, correction) {
   ## return list(i,j,weight) for all r-close pairs
-  nX <- npoints(X)
   switch(correction,
          none = ,
          border = {

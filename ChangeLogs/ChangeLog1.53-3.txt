@@ -564,4 +564,25 @@ Change log from 1.53-2 to 1.53-xx
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-   
+   strauss.R
+   leverage.R
+	Removed unused variables (spotted by codetools).
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.038
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   solist.R
+	Consequential bug fixes.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.039
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

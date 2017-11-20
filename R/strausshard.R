@@ -151,6 +151,8 @@ StraussHard <- local({
          if(any(changes)) {
            vh <- sparseMatrix(i=hcl$i, j=hcl$j, x=changes[hcl$j],
                               dims=c(nU, nU))
+           if(!sparseOK)
+             vh <- as.matrix(vh)
            attr(v, "-Inf") <- vh
          }
          return(v)

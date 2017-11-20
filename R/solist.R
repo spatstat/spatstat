@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.16 $ $Date: 2017/08/17 07:52:24 $
+## $Revision: 1.18 $ $Date: 2017/11/20 04:23:36 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -169,10 +169,9 @@ as.layered.solist <- function(X) {
 
 as.ppplist <- function(x, check=TRUE) {
   if(check) {
-     x <- as.solist(x)
-     if(inherits(x, "ppplist"))
-       return(x)
-     stop("some entries are not point patterns")
+    x <- as.solist(x, promote=TRUE, check=TRUE)
+    if(!inherits(x, "ppplist"))
+      stop("some entries are not point patterns")
   }
   class(x) <- unique(c("ppplist", "solist", "anylist", "listof", class(x)))
   return(x)
@@ -180,10 +179,9 @@ as.ppplist <- function(x, check=TRUE) {
 
 as.imlist <- function(x, check=TRUE) {
   if(check) {
-     x <- as.solist(x)
-     if(inherits(x, "imlist"))
-       return(x)
-     stop("some entries are not images")
+    x <- as.solist(x, promote=TRUE, check=TRUE)
+    if(!inherits(x, "imlist"))
+      stop("some entries are not images")
   }
   class(x) <- unique(c("imlist", "solist", "anylist", "listof", class(x)))
   return(x)
