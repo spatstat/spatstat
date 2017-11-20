@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.24 $	$Date: 2017/10/31 07:16:45 $
+#    $Revision: 2.25 $	$Date: 2017/11/19 10:18:52 $
 #
 #    The Strauss/hard core process
 #
@@ -22,8 +22,11 @@ StraussHard <- local({
          family  = "pairwise.family",  # evaluated later
          pot    = function(d, par, finite=FALSE) {
            v <- (d <= par$r)
-           if(!finite)
+           if(!finite) {
              v[ d <= par$hc ] <-  (-Inf)
+           } else {
+             attr(v, "-Inf") <- (d <= par$hc)
+           }
            v
          },
          par    = list(r = NULL, hc = NULL), # filled in later
@@ -148,7 +151,7 @@ StraussHard <- local({
          if(any(changes)) {
            vh <- sparseMatrix(i=hcl$i, j=hcl$j, x=changes[hcl$j],
                               dims=c(nU, nU))
-           attr(v, "hard") <- vh
+           attr(v, "-Inf") <- vh
          }
          return(v)
        }

@@ -109,13 +109,19 @@ text(as.Date("2015-01-01"), 60, "R code")
     the requirements of CRAN. This should not affect the user:
     existing code will continue to work in the same way.
 
-    Currently there are two sub-packages, called \pkg{spatstat.utils}
+    Currently there are three sub-packages, called 
+    \pkg{spatstat.utils},
+    \pkg{spatstat.data} 
     and \pkg{spatstat}.
 
     Typing \code{library(spatstat)} will load the familiar
-    \pkg{spatstat} package which can be used as before, and will silently
-    import the \pkg{spatstat.utils} package.
+    \pkg{spatstat} package which can be used as before.
+    This will automatically load the \pkg{spatstat.data} package 
+    and will silently ``import'' the \pkg{spatstat.utils} package.
 
+    The \pkg{spatstat.data} package now contains all the datasets
+    for \pkg{spatstat}.
+    
     The \pkg{spatstat.utils} package
     contains utility functions that were originally written for \pkg{spatstat}:
     they were undocumented internal functions in \pkg{spatstat}, but are now
@@ -136,6 +142,30 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item New dataset \code{cetaceans}.
+    
+  \item Gamma correction for colour maps and image plots.
+
+  \item Class \code{units} has been renamed \code{unitname} to avoid package collision.
+
+  \item Bug fix in leverage code
+    
+  \item Tighter bounding box for \code{psp}, \code{lpp}, \code{linnet} objects.
+    
+  \item Improved layout in \code{plot.solist}
+
+  \item Tools to increase colour saturation.
+
+  \item Connected components of a 3D point pattern.
+    
+  \item Accelerated computations on linear networks.
+
+  \item Accelerated simulation of determinantal point processes.
+
+  \item Improved printing of 3D point patterns.
+    
+  \item Minor corrections to handling of unitnames.
+    
   \item Improvements to \texttt{ppm} and \texttt{update.ppm}.
     
   \item Correction to \texttt{lohboot}
@@ -344,7 +374,35 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
-    \item \texttt{fitin.profilepl}:
+    \item \code{to.saturated}:
+    Convert a colour value to the corresponding fully-saturated colour.
+
+    \item \code{intensity.psp}:
+    Compute the average total length of segments per unit area.
+
+    \item \code{boundingbox.psp}:
+    Bounding box for line segment patterns.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    \item \code{boundingbox.lpp}:
+    Bounding box for point patterns on a linear network.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    \item \code{boundingbox.linnet}:
+    Bounding box for a linear network.
+    This produces a tighter bounding box than the previous default behaviour.
+
+    \item \verb!"Frame<-.default"!:
+    New default method for assigning bounding frame to a spatial object.
+
+    \item \code{connected.pp3}:
+    Connected components of a 3D point pattern.
+
+    \item \code{colouroutputs}, \verb!"colouroutputs<-"!:
+    Extract or assign colour values in a colour map.
+    (Documented a previously-existing function)
+
+  \item \texttt{fitin.profilepl}:
     Extract the fitted interaction from a model fitted by profile likelihood.
     
     \item \verb![<-.linim!:  

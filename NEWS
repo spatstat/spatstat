@@ -1,15 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.036
+        CHANGES IN spatstat VERSION 1.53-2.037
 
 OVERVIEW
 
-    o We thank Ian Renner for contributions.
+    o We thank Rochelle Constantine, Lily Kozmian-Ledward,
+    Ian Renner and Leigh Torres for contributions.
+
+    o New dataset 'cetaceans'.
     
     o Gamma correction for colour maps and image plots.
 
-    o Experimental fix for bug in leverage code
-
     o Class 'units' has been renamed 'unitname' to avoid package collision.
+
+    o Bug fix in leverage code
 
     o Tighter bounding box for psp, lpp, linnet objects.
     
@@ -27,8 +30,16 @@ OVERVIEW
     
     o Minor corrections to handling of unitnames.
     
-    o Nickname: 'All Power to the Serviettes'
+    o Nickname: 'Package McPackageface' 
 
+NEW DATASETS
+
+    o cetaceans
+    Nine replicates of a marine survey in New Zealand,
+    consisting of recorded sightings of dolphins, whales and other species.
+    Generously contributed by Lily Kozmian-Ledward, Rochelle Constantine
+    and Leigh Torres.
+    
 NEW FUNCTIONS
 
     o to.saturated
@@ -130,7 +141,7 @@ BUG FIXES
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Calculations were slightly incorrect for models fitted using the
     border correction.
-    An *experimental* fix has been applied.
+    Fixed.
 
     o integral.linim
     Gave incorrect value in some extreme cases

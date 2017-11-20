@@ -544,3 +544,24 @@ Change log from 1.53-2 to 1.53-xx
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   strausshard.R
+	Hard core indicator is returned as attr(, "-Inf")
+	in both functions $pot and $delta2
+
+   updates.Rnw
+	updated to include all the above.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+   Nickname.txt
+	Nickname changed to 'Package McPackageface'
+	Acknowledged 'cetaceans' contributors.
+	Updated to version 1.53-2.037
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
