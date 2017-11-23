@@ -1,0 +1,616 @@
+Change log from 1.53-2 to 1.54-0
+================================
+
+09 oct 2017
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Initialised as version 1.53-2.001
+	Nicknamed 'Smectic'
+
+   leverage.R
+   spatstat-internal.Rd
+	ppmInfluenceEngine has new argument 'fine'
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   plot.anylist.R
+	Bug fix.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.002
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+10 oct 2017
+
+   plot.anylist.R
+   plot.anylist.Rd
+   plot.solist.Rd
+   plot.listof.Rd
+	New argument 'panel.vpad' controls vertical space for panel title.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.003
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+11 oct 2017
+
+   colourtools.R
+   spatstat-internal.Rd
+	New internal function 'gammabreaks'
+
+   colourtables.R
+   colourmap.Rd
+   lut.Rd
+	New argument 'gamma'.
+
+   plot.im.R
+   plot.im.Rd
+	New argument 'gamma'
+   
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.004
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   colourtools.R
+   colourtools.Rd
+	New function 'to.saturated'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.006 (oops)
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+12 oct 2017
+
+   leverage.R
+	Experimental fix for bug
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.007
+	Nickame: 'Vexatious Litigant'
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+13 oct 2017
+
+   leverage.R
+	More experimental fixes
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.009
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+16 oct 2017
+
+   kppm.R
+	Bug fix in update.kppm (spotted by Rolf)
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.010
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   closepairs.R
+	Bug fix in crosspairquad()
+	
+   strauss.R
+   spatstat-internal.Rd
+	New internal function weightedclosepairs.
+
+   strauss.R
+	Strauss()$delta2 now uses weightedclosepairs.
+
+   strausshard.R
+	Experimental implementation of $delta2 for model with a hard core.
+
+17 oct 2017
+
+   leverage.R
+	Inserted warning about incorrect calculation for hard core models
+	
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.011
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+24 oct 2017
+
+   units.R
+   unitname.Rd
+   methods.units.Rd -> methods.unitname.Rd
+   spatstat-internal.Rd
+	Class name 'units' changed to 'unitname'.
+	as.units -> as.unitname
+	makeunits -> makeunitname
+	renamed methods for print, summary, compatible, as.character
+
+   rescale.R
+	renamed method rescale.units -> rescale.unitname
+	
+   affine.R
+   eval.im.R
+   fv.R
+   images.R
+   pp3.R
+   ppx.R
+   window.R
+   wingeom.R
+	Consequential changes
+
+   tests/rmhExpand.R
+	Workaround 
+
+   DESCRIPTION
+   Nickname.txt
+   NEWS
+	Updated to version 1.53-2.012
+	Nickname: 'The Package That Must Not Be Named'
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+28 oct 2017
+
+   linim.R
+	Bug fix in integral.linim.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.013
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+29 oct 2017
+
+   psp.R
+   intensity.psp.Rd [New file]
+   	New method intensity.psp
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.014
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+31 oct 2017
+
+   window.R
+   Frame.Rd
+	Added "Frame<-.default"
+
+   boundingbox.R
+   boundingbox.Rd
+	New methods for psp, linnet, lpp.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.015
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   pairwise.family.R
+   strausshard.R
+   spatstat-internal.Rd
+	Experimenting with new strategy for 'finite' potentials
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.016
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+02 nov 2017
+
+   src/proto.h
+	Bug fix in automatically-generated declarations of functions.
+
+   doc/Nickname.txt
+	Nickname: 'Intelligence Failure'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.017
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   discarea.R
+   areadiff.R
+	Tweaks and buglet fixes.
+
+   mpl.R
+   spatstat-internal.Rd
+	mpl.prepare has yet another internal argument 'clip.interaction'.
+	
+   profilepl.R
+   profilepl.Rd
+	New argument 'fast'
+	Explained speed issues and shortcuts in help file.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.018
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   areainter.R
+	Inserted debug code
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.019
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+03 nov 2017
+
+   areadiff.R
+        Improved default pixel resolution in some functions
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.020
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   areadiff.R
+   spatstat-internal.Rd
+	Experimental new algorithm - is not faster!
+
+   areainter.R
+   options.R
+	Polygonal, 'exact' calculations enabled
+	if spatstat.options('areainter.polygonal') = TRUE
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.021
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+04 nov 2017
+
+   lindirichlet.R
+	Ege's code changes (merged branch lineardirichlet) - huge speedup
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.022
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   fourierbasis.R
+   fourierbasis.Rd
+   simulate.detPPF.R
+	Ege's code changes (merged branch DPPsim) - acceleration
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'Fast and Loose'
+	Updated to version 1.53-2.023
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+06 nov 2017
+
+   connected.R
+   connected.ppp.Rd
+        Ege's code: new method connected.pp3 
+
+   pp3.R
+        Ege's code: improved print.pp3
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'All Power to the Serviettes'
+	Updated to version 1.53-2.024
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+13 nov 2017
+
+   linim.R
+	linim() now allows 'df' to omit the column 'values'.
+	This permits efficiencies when multiple calculations are
+	performed on the same network.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.025
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   linim.R
+	Accelerated integral.linim using 'tapplysum'
+
+   DESCRIPTION
+   NEWS
+	spatstat requires spatstat.utils 1.8-0
+	Updated to version 1.53-2.026
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   linim.R
+	Bug fix.
+	
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.027
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+14 nov 2017
+
+   scriptUtils.R
+	Added an argument to 'reload.or.compute'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.028
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+15 nov 2017
+
+   units.R
+   methods.unitname.Rd
+	New method 'harmonise.unitname'
+
+   wingeom.R
+	bug fix in handling unitnames in
+	intersection.owin, union.owin, setminus.owin
+
+   ppp.R
+   lpp.R
+   clip.psp.R
+	improvement to handling unitnames (affects [.ppp, [.lpp, [.psp)
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.029
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   solist.R
+	as.solist(x) now removes any additional classes
+	
+   pixellate.R
+   pixellate.ppp.Rd
+   pixellate.owin.Rd
+	pixellate.ppp and pixellate.owin have new argument 'DivideByPixelArea'.
+	
+   psp2pix.R
+   pixellate.psp.Rd
+   spatstat-internal.Rd
+	New argument 'DivideByPixelArea'.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.030
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   
+   distfun.R
+   distfun.Rd
+	distfun.ppp has new argument 'undef'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.031
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+16 nov 2017
+
+   density.psp.R
+   density.psp.Rd
+	New argument 'at'.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.032
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+17 nov 2017
+
+   linnet.R
+   density.psp.Rd
+	New method density.linnet
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.033
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+18 nov 2017
+
+   rasterfilter.c [New file]
+   rasterfilter.R [New file]
+   spatstat-internal.Rd
+	New internal functions 'rasterfilter' and 'smudge'
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.034
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+19 nov 2017
+
+   blur.R
+	ellipsis arguments are passed to second.moment.calc
+
+   Kmeasure.R
+	tweak
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.035
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   colouroutputs.Rd [New file]
+   spatstat-internal.Rd
+	Documented the previously undocumented functions
+	colouroutputs and colouroutputs<-
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.036
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   strausshard.R
+	Hard core indicator is returned as attr(, "-Inf")
+	in both functions $pot and $delta2
+
+   updates.Rnw
+	updated to include all the above.
+	
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+   Nickname.txt
+	Nickname changed to 'Package McPackageface'
+	Acknowledged 'cetaceans' contributors.
+	Updated to version 1.53-2.037
+	
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   strauss.R
+   leverage.R
+	Removed unused variables (spotted by codetools).
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.038
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   solist.R
+	Consequential bug fixes.
+
+   DESCRIPTION
+   NEWS
+	Updated to version 1.53-2.039
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   updates.Rnw
+	Updated the list of bugs.
+
+   datasets.Rnw
+	Added cetaceans.
+
+   DESCRIPTION
+   NEWS
+	Now requires spatstat.data >= 1.2-0.
+	Updated to version 1.53-2.040
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+21 nov 2017
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Updated to version 1.54-0
+	Nickname: 'Vacuous Mission Statement'
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

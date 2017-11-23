@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.53-2.040
+        CHANGES IN spatstat VERSION 1.54-0
 
 OVERVIEW
 
@@ -30,7 +30,7 @@ OVERVIEW
     
     o Minor corrections to handling of unitnames.
     
-    o Nickname: 'Package McPackageface' 
+    o Nickname: 'Vacuous Mission Statement' 
 
 NEW DATASETS
 
