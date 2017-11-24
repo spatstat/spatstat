@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.001
+        CHANGES IN spatstat VERSION 1.54-0.002
 
 OVERVIEW
 
@@ -7,6 +7,15 @@ OVERVIEW
 
     o Nickname: "Post-Truth"
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o None
+
+BUG FIXES
+
+    o plot.leverage.ppm
+    Contour line was labelled, sometimes with a very long number.
+    Fixed.
 
         CHANGES IN spatstat VERSION 1.54-0
 

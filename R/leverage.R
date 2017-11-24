@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.87 $ $Date: 2017/11/20 00:57:34 $
+#  $Revision: 1.88 $ $Date: 2017/11/24 04:01:12 $
 #
 
 leverage <- function(model, ...) {
@@ -756,9 +756,12 @@ plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg"),
     smo <- Reduce("+", smo)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
+  args.contour <- resolve.defaults(args.contour,
+                                   list(levels=ave,
+                                        col=col.cut,
+                                        drawlabels=FALSE))
   cutinfo <- list(addcontour=showcut,
-                  args.contour=append(list(levels=ave, col=col.cut),
-                                      args.contour))
+                  args.contour=args.contour)
   if(is.im(smo)) {
     do.call(plot.im,
             resolve.defaults(list(smo),
