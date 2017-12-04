@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.52 $ $Date: 2017/02/07 08:12:05 $
+# $Revision: 1.53 $ $Date: 2017/12/04 02:04:40 $
 #
 
 lurking <- local({
@@ -398,7 +398,8 @@ lurking <- local({
     attr(stuff, "info") <- list(typename=typename,
                                 cumulative=cumulative,
                                 covrange=covrange,
-                                covname=covname)
+                                covname=covname,
+                                oldstyle=oldstyle)
     class(stuff) <- "lurk"
     ## ---------------  PLOT THEM  ----------------------------------
     if(plot.it) 
@@ -478,5 +479,29 @@ plot.lurk <- function(x, ..., shade="grey") {
   return(invisible(NULL))
 }
 
+#'  print a lurk object
 
-
+print.lurk <- function(x, ...) {
+  splat("Lurking variable plot (object of class 'lurk')")
+  info <- attr(x, "info")
+  with(info, {
+    splat("Residual type: ", typename)
+    splat("Covariate on horizontal axis: ", covname)
+    splat("Range of covariate values: ", prange(covrange))
+    splat(if(cumulative) "Cumulative" else "Non-cumulative", "plot")
+  })
+  has.bands <- !is.null(x$theoretical$upper)
+  has.sd    <- !is.null(x$theoretical$sd)
+  if(!has.bands && !has.sd) {
+    splat("No confidence bands computed")
+  } else {
+    splat("Includes",
+          if(has.sd) "standard deviation for" else NULL,
+          "confidence bands")
+    if(!is.null(info$oldstyle)) 
+      splat("Variance calculation:",
+            if(info$oldstyle) "old" else "new",
+            "style")
+  }
+  return(invisible(NULL))
+}

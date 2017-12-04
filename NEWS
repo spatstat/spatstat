@@ -1,12 +1,18 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.002
+        CHANGES IN spatstat VERSION 1.54-0.003
 
 OVERVIEW
 
-    o Nothing yet.
+    o Minor improvements.
 
     o Nickname: "Post-Truth"
 
+NEW FUNCTIONS
+
+    o print.lurk
+    Prints information about the object returned by the function 'lurking'
+    representing a lurking variable plot.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o None

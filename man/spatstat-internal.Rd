@@ -442,6 +442,7 @@
 \alias{print.leverage.ppm}
 \alias{print.lintess}
 \alias{print.localpcfmatrix}
+\alias{print.lurk}
 \alias{print.lut}
 \alias{print.minconfit}
 \alias{print.mppm}
@@ -1285,6 +1286,7 @@ prepareTitle(main)
 \method{print}{layered}(x, \dots)
 \method{print}{leverage.ppm}(x, \dots)
 \method{print}{lintess}(x, \dots)
+\method{print}{lurk}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{minconfit}(x, \dots)
 \method{print}{mppm}(x, \dots)

@@ -25,3 +25,18 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+04 dec 2017
+
+   lurking.R
+   spatstat-internal.Rd
+	New method print.lurk
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.003
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
