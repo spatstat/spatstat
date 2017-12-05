@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.003
+        CHANGES IN spatstat VERSION 1.54-0.004
 
 OVERVIEW
 
@@ -9,13 +9,17 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o lurking.ppp, lurking.ppm
+    Methods for 'lurking'.
+    
     o print.lurk
     Prints information about the object returned by the function 'lurking'
     representing a lurking variable plot.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None
+    o lurking
+    This function is now generic, with methods for class 'ppm' and 'ppp'.
 
 BUG FIXES
 

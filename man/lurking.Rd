@@ -1,11 +1,29 @@
 \name{lurking}
 \alias{lurking}               
-\title{Lurking variable plot}
+\alias{lurking.ppp}               
+\alias{lurking.ppm}               
+\title{Lurking Variable Plot}
 \description{
   Plot spatial point process residuals against a covariate
 }
 \usage{
-lurking(object, covariate, type="eem",
+lurking(object, \dots)
+
+\method{lurking}{ppm}(object, covariate, type="eem",
+                    cumulative=TRUE,
+                    clipwindow=default.clipwindow(object),
+                    rv,
+                    plot.sd,
+                    envelope=FALSE, nsim=39, nrank=1,
+                    plot.it=TRUE,
+                    typename,
+                    covname,
+                    oldstyle=FALSE, check=TRUE,
+                    \dots,
+                    splineargs=list(spar=0.5),
+                    verbose=TRUE)
+
+\method{lurking}{ppp}(object, covariate, type="eem",
                     cumulative=TRUE,
                     clipwindow=default.clipwindow(object),
                     rv,
@@ -116,7 +134,11 @@ lurking(object, covariate, type="eem",
   }
 }
 \value{
-  A list containing two dataframes
+  The (invisible) return value is an object 
+  belonging to the class \code{"lurk"}, for which there
+  are methods for \code{plot} and \code{print}.
+
+  This object is a list containing two dataframes
   \code{empirical} and \code{theoretical}. 
   The first dataframe \code{empirical} contains columns
   \code{covariate} and \code{value} giving the coordinates of the
@@ -124,9 +146,6 @@ lurking(object, covariate, type="eem",
   contains columns \code{covariate}, \code{mean} and \code{sd}
   giving the coordinates of the plot of the theoretical mean
   and standard deviation.
-
-  The return value belongs to the class \code{"lurk"} for which there is
-  a plot method. 
 }
 \details{
   This function generates a `lurking variable' plot for a
@@ -135,6 +154,16 @@ lurking(object, covariate, type="eem",
   are plotted against the covariate specified by \code{covariate}.
   This plot can be used to reveal departures from the fitted model,
   in particular, to reveal that the point pattern depends on the covariate.
+
+  The function \code{lurking} is generic, with methods for
+  \code{ppm} and \code{ppp} documented here, and possibly other methods.
+
+  The argument \code{object} would usually be a fitted point process model
+  (object of class \code{"ppm"}) produced by the
+  model-fitting algorithm \code{\link{ppm}}). If
+  \code{object} is a point pattern (object of class \code{"ppp"}) then
+  the model is taken to be the uniform Poisson process (Complete
+  Spatial Randomness) fitted to this point pattern.
 
   First the residuals from the fitted model (Baddeley et al, 2004)
   are computed at each quadrature point,
@@ -195,10 +224,6 @@ lurking(object, covariate, type="eem",
   the two-standard-deviation limits are calculated
   using the innovation variance, an over-estimate of the true
   variance of the residuals.
-
-  The argument \code{object} must be a fitted point process model
-  (object of class \code{"ppm"}) typically produced by the maximum
-  pseudolikelihood fitting algorithm \code{\link{ppm}}).
 
   The argument \code{covariate} is either a numeric vector, a pixel
   image, or an R language expression.
@@ -264,17 +289,13 @@ lurking(object, covariate, type="eem",
   \emph{Mathematische Nachrichten}, 151:95--100.
 }
 \examples{
-  data(nztrees)
   lurking(nztrees, expression(x))
   fit <- ppm(nztrees, ~x, Poisson())
   lurking(fit, expression(x))
   lurking(fit, expression(x), cumulative=FALSE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian and \rolf.
 }
 \keyword{spatial}
 \keyword{models}

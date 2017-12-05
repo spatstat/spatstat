@@ -1,30 +1,43 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.53 $ $Date: 2017/12/04 02:04:40 $
+# $Revision: 1.54 $ $Date: 2017/12/05 02:08:22 $
 #
 
-lurking <- local({
+lurking <- function(object, ...) {
+  UseMethod("lurking")
+}
+
+lurking.ppp <- lurking.ppm <- local({
 
   cumsumna <- function(x) { cumsum(ifelse(is.na(x), 0, x)) }
 
   ## main function
-  lurking <- function(object, covariate, type="eem",
-                      cumulative=TRUE,
-                      clipwindow=default.clipwindow(object),
-                      rv = NULL,
-                      plot.sd=is.poisson(object), 
-                      envelope=FALSE, nsim=39, nrank=1,
-                      plot.it=TRUE,
-                      typename,
-                      covname, oldstyle=FALSE,
-                      check=TRUE, ..., splineargs=list(spar=0.5),
-                      verbose=TRUE) {
+  Lurking.ppm <- function(object, covariate, type="eem",
+                          cumulative=TRUE,
+                          clipwindow=default.clipwindow(object),
+                          rv = NULL,
+                          plot.sd=is.poisson(object), 
+                          envelope=FALSE, nsim=39, nrank=1,
+                          plot.it=TRUE,
+                          typename,
+                          covname, oldstyle=FALSE,
+                          check=TRUE, ..., splineargs=list(spar=0.5),
+                          verbose=TRUE) {
     cl <- match.call()
+
+    ## validate object
+    if(is.ppp(object)) {
+      X <- object
+      object <- ppm(X ~1, forcefit=TRUE)
+      dont.complain.about(X)
+    } else verifyclass(object, "ppm")
+
     ## default name for covariate
     if(missing(covname) || is.null(covname)) {
-      covname <- if(is.name(cl$covariate)) as.character(cl$covariate) else
-                 if(is.expression(cl$covariate)) cl$covariate else NULL
+      co <- cl$covariate
+      covname <- if(is.name(co)) as.character(co) else
+                 if(is.expression(co)) format(co[[1]]) else NULL
     }
 
     if(!identical(envelope, FALSE)) {
@@ -50,13 +63,6 @@ lurking <- local({
       }
     }
     
-    ## validate object
-    if(is.ppp(object)) {
-      X <- object
-      object <- ppm(X ~1, forcefit=TRUE)
-      dont.complain.about(X)
-    } else verifyclass(object, "ppm")
-
     ## may need to refit the model
     if(plot.sd && is.null(getglmfit(object)))
       object <- update(object, forcefit=TRUE, use.internal=TRUE)
@@ -407,7 +413,7 @@ lurking <- local({
     return(invisible(stuff))
   }
 
-  lurking
+  Lurking.ppm
 })
 
 
