@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.54 $ $Date: 2017/12/05 02:08:22 $
+# $Revision: 1.55 $ $Date: 2017/12/06 07:50:30 $
 #
 
 lurking <- function(object, ...) {
@@ -22,7 +22,9 @@ lurking.ppp <- lurking.ppm <- local({
                           plot.it=TRUE,
                           typename,
                           covname, oldstyle=FALSE,
-                          check=TRUE, ..., splineargs=list(spar=0.5),
+                          check=TRUE,
+                          saveworking=FALSE,
+                          ..., splineargs=list(spar=0.5),
                           verbose=TRUE) {
     cl <- match.call()
 
@@ -271,6 +273,8 @@ lurking.ppp <- lurking.ppm <- local({
       theoretical <- data.frame(covariate=cvalues, mean=derivmean)
     }
 
+    working <- NULL
+    
     ## ------------------------------------------------------------------------
   
     ## (C) STANDARD DEVIATION if desired
@@ -346,7 +350,8 @@ lurking.ppp <- lurking.ppm <- local({
         ## Cumulate columns
         B <- apply(dB, 2, cumsum)
         ## compute B' V B for each i 
-        varII <- diag(B %*% V %*% t(B))
+        varII <- quadform(B, V)
+        ##  was:   varII <- diag(B %*% V %*% t(B))
       }
       ##
       ## variance of residuals
@@ -367,6 +372,10 @@ lurking.ppp <- lurking.ppm <- local({
         }
       }
       theoretical$sd <- sqrt(varR)
+
+      ##
+      if(saveworking) 
+        working <- list(varI=varI, varII=varII, B=B)
     }
 
     ## 
@@ -406,6 +415,7 @@ lurking.ppp <- lurking.ppm <- local({
                                 covrange=covrange,
                                 covname=covname,
                                 oldstyle=oldstyle)
+    if(saveworking) attr(stuff, "working") <- working
     class(stuff) <- "lurk"
     ## ---------------  PLOT THEM  ----------------------------------
     if(plot.it) 

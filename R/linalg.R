@@ -3,7 +3,7 @@
 #
 #  Linear Algebra
 #
-# $Revision: 1.23 $ $Date: 2017/06/05 10:31:58 $
+# $Revision: 1.24 $ $Date: 2017/12/06 07:37:02 $
 #
 
 sumouter <- function(x, w=NULL, y=x) {
@@ -89,7 +89,7 @@ sumouter <- function(x, w=NULL, y=x) {
 }
 
 quadform <- function(x, v) {
-  #' compute vector of values y[i] = x[i, ] %*% v %*% t(x[i,]
+  #' compute vector of values y[i] = x[i, ] %*% v %*% t(x[i,])
   stopifnot(is.matrix(x))
   p <- ncol(x)
   n <- nrow(x)

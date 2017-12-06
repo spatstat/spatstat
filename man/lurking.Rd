@@ -19,6 +19,7 @@ lurking(object, \dots)
                     typename,
                     covname,
                     oldstyle=FALSE, check=TRUE,
+                    saveworking=FALSE,
                     \dots,
                     splineargs=list(spar=0.5),
                     verbose=TRUE)
@@ -33,6 +34,7 @@ lurking(object, \dots)
                     typename,
                     covname,
                     oldstyle=FALSE, check=TRUE,
+                    saveworking=FALSE,
                     \dots,
                     splineargs=list(spar=0.5),
                     verbose=TRUE)
@@ -120,6 +122,7 @@ lurking(object, \dots)
     Logical flag indicating whether the integrity of the data structure
     in \code{object} should be checked.
   }
+  \item{saveworking}{Internal use only.}
   \item{\dots}{
     Arguments passed to \code{\link{plot.default}}
     and \code{\link{lines}} to control the plot behaviour.
