@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.55 $ $Date: 2017/12/06 07:50:30 $
+# $Revision: 1.56 $ $Date: 2017/12/06 09:29:24 $
 #
 
 lurking <- function(object, ...) {
@@ -333,6 +333,8 @@ lurking.ppp <- lurking.ppm <- local({
       ## Second term: B' V B
       if(oldstyle) {
         varII <- 0
+        if(saveworking) 
+          working <- list(varI=varI)
       } else {
         ## lamp = lambda^(p + 1)
         lamp <- switch(type,
@@ -352,6 +354,8 @@ lurking.ppp <- lurking.ppm <- local({
         ## compute B' V B for each i 
         varII <- quadform(B, V)
         ##  was:   varII <- diag(B %*% V %*% t(B))
+        if(saveworking) 
+          working <- list(varI=varI, varII=varII, B=B)
       }
       ##
       ## variance of residuals
@@ -372,10 +376,6 @@ lurking.ppp <- lurking.ppm <- local({
         }
       }
       theoretical$sd <- sqrt(varR)
-
-      ##
-      if(saveworking) 
-        working <- list(varI=varI, varII=varII, B=B)
     }
 
     ## 

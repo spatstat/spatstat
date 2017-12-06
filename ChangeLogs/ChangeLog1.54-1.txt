@@ -40,3 +40,31 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+05 dec 2017
+
+   lurking.R
+   lurking.Rd
+	lurking() is now generic, with methods for ppm and ppp
+	
+   DESCRIPTION
+   NEWS
+	version 1.54-0.004
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+06 dec 2017
+
+   lurking.R
+   lurking.Rd
+	New internal argument 'saveworking'.
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.005
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
