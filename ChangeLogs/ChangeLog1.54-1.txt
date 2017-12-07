@@ -68,3 +68,24 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+07 dec 2017
+
+   lurking.R
+   residppm.R
+	Tweaks and minor fixes
+
+   ppmclass.R
+	Bug fix in model.frame.ppm and model.matrix.ppm
+	in handling the result of subfits().
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname: 'The Dog That Ate My Homework'
+	version 1.54-0.006
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

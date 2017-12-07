@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.56 $ $Date: 2017/12/06 09:29:24 $
+# $Revision: 1.57 $ $Date: 2017/12/07 02:23:04 $
 #
 
 lurking <- function(object, ...) {
@@ -344,7 +344,8 @@ lurking.ppp <- lurking.ppm <- local({
                        eem     = as.integer(lambda > 0))
         ## Compute sum of w * lamp * suff for quad points in intervals
         Bcontrib <- as.vector(wts * lamp) * suff
-        dB <- matrix(, nrow=length(cumarea), ncol=ncol(Bcontrib))
+        dB <- matrix(, nrow=length(cumarea), ncol=ncol(Bcontrib),
+                     dimnames=list(NULL, colnames(suff)))
         for(j in seq_len(ncol(dB))) 
           dB[,j] <- tapply(Bcontrib[,j], covclass, sum, na.rm=TRUE)
         ## tapply() returns NA when the table is empty

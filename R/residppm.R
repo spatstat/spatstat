@@ -4,7 +4,7 @@
 # computes residuals for fitted point process model
 #
 #
-# $Revision: 1.24 $ $Date: 2016/06/30 03:29:54 $
+# $Revision: 1.25 $ $Date: 2017/12/07 03:03:48 $
 #
 
 residuals.ppm <-
@@ -88,7 +88,7 @@ residuals.ppm <-
     if(drop) {
       gs <- getglmsubset(object)
       ok <- !is.na(gs) & gs
-      X <- X[ok,]
+      X <- X[ok, , drop=FALSE]
     }
   }
       
@@ -98,7 +98,7 @@ residuals.ppm <-
                      raw     = rep.int(1, sum(Z)), 
                      inverse = 1/lambda[Z],
                      pearson = 1/sqrt(lambda[Z]),
-                     score   = X[Z, ]
+                     score   = X[Z, , drop=FALSE]
                      )
 
   density <- switch(type,

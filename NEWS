@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.005
+        CHANGES IN spatstat VERSION 1.54-0.006
 
 OVERVIEW
 
     o Minor improvements.
 
-    o Nickname: "Post-Truth"
+    o Nickname: "The Dog That Ate My Homework"
 
 NEW FUNCTIONS
 
@@ -31,6 +31,15 @@ BUG FIXES
     Contour line was labelled, sometimes with a very long number.
     Fixed.
 
+    o model.matrix.ppm, model.frame.ppm
+    Values were sometimes incorrect when applied to the result of subfits().
+    To be precise, if 'fit' was an mppm object fitted to a hyperframe
+    that included 'design covariates' (covariates that take a constant value
+    in each row of the hyperframe), and if 'futs <- subfits(fit)', then
+    model.matrix(futs[[i]]) gave incorrect values in the columns
+    corresponding to the design covariates. 
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.54-0
 
 OVERVIEW

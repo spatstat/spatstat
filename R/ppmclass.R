@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.134 $	$Date: 2017/07/13 02:03:11 $
+#	$Revision: 2.135 $	$Date: 2017/12/07 03:41:51 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -706,9 +706,13 @@ model.frame.ppm <- function(formula, ...) {
     object <- update(object, forcefit=TRUE)
     gf <- getglmfit(object)
   }
-#  gd <- getglmdata(object)
-#  model.frame(gf, data=gd, ...)
-  if(object$fitter == "gam") modelFrameGam(gf, ...) else model.frame(gf, ...)
+  argh <- list(formula=gf, ...)
+  if(is.na(match("data", names(argh))))
+    argh$data <- getglmdata(object)
+  result <- switch(object$fitter,
+                   gam = do.call(modelFrameGam, argh),
+                   do.call(model.frame, argh))
+  return(result)
 }
 
 #' a hacked version of model.frame.glm that works for gam objects (mgcv)
