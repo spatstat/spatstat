@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.48 $   $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.50 $   $Date: 2017/12/07 08:27:35 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2016/04/25 02:34:40 $")
+                         date="$Date: 2017/12/07 08:27:35 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -380,6 +380,7 @@ subfits.old <- local({
       Yi <- Y[[i]]
       Wi <- if(is.ppp(Yi)) Yi$window else Yi$data$window
       ## assemble relevant covariate images
+      scrambled <- FALSE
       if(!has.covar) { 
         covariates <- NULL
       } else {
@@ -389,6 +390,7 @@ subfits.old <- local({
           imrowi <- lapply(covariates[dfvar], as.im, W=Wi)
           ## Problem: constant covariate leads to singular fit
           ## --------------- Hack: ---------------------------
+          scrambled <- TRUE
           ##  Construct fake data by resampling from possible values
           covar.vals <- lapply(as.list(covariates[dfvar, drop=FALSE]), possible)
           fake.imrowi <- lapply(covar.vals, scramble, W=Wi, Y=Yi$data)
@@ -401,6 +403,7 @@ subfits.old <- local({
         if(any(spatialfactors)) {
           ## problem: factor levels may be dropped
           ## more fakery...
+          scrambled <- TRUE
           spfnames <- names(spatialfactors)[spatialfactors]
           covariates[spatialfactors] <-
             lapply(levelslist[spfnames],
@@ -423,6 +426,7 @@ subfits.old <- local({
                       allcovar=has.random,
                       use.gam=use.gam)
       }
+      fiti$scrambled <- scrambled
       ## fiti determines which coefficients are required
       coefi.fitted <- fiti$coef
       coefnames.wanted <- names(coefi.fitted)
@@ -445,7 +449,9 @@ subfits.old <- local({
       fiti$method <- "mppm"
       ## ... and replace fake data by true data
       if(has.design) {
-        for(nam in names(imrowi)) {
+        fiti$internal$glmdata.scrambled <- gd <- fiti$internal$glmdata
+        fixnames <- intersect(names(imrowi), colnames(gd))
+        for(nam in fixnames) {
           fiti$covariates[[nam]] <- imrowi[[nam]]
           fiti$internal$glmdata[[nam]] <- data[i, nam, drop=TRUE]
         }

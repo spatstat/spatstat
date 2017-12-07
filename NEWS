@@ -1,11 +1,13 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.006
+        CHANGES IN spatstat VERSION 1.54-0.008
 
 OVERVIEW
 
+    o Lurking variable plot for models fitted to several point patterns.
+    
     o Minor improvements.
 
-    o Nickname: "The Dog That Ate My Homework"
+    o Nickname: "Cigarettes and Whisky and Bugs in Software"
 
 NEW FUNCTIONS
 
@@ -13,8 +15,12 @@ NEW FUNCTIONS
     New generic function for lurking variable plots.
 
     o lurking.ppp, lurking.ppm
-    The original function 'lurking' has now become a method
-    for the new generic 'lurking', for objects of class 'ppm' and 'ppp'.
+    These are equivalent to the original function 'lurking'.
+    They are now methods for the new generic 'lurking'.
+
+    o lurking.mppm
+    New method for class 'mppm'
+    Lurking variable plot for models fitted to several point patterns.
     
     o print.lurk
     Prints information about the object returned by the function 'lurking'
@@ -24,11 +30,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o lurking.ppm
     Accelerated.
-    
+
 BUG FIXES
 
     o plot.leverage.ppm
-    Contour line was labelled, sometimes with a very long number.
+    Contour line was annotated, which was not intended.
     Fixed.
 
     o model.matrix.ppm, model.frame.ppm

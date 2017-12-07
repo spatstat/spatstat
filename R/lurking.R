@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.57 $ $Date: 2017/12/07 02:23:04 $
+# $Revision: 1.62 $ $Date: 2017/12/07 14:50:20 $
 #
 
 lurking <- function(object, ...) {
@@ -222,7 +222,12 @@ lurking.ppp <- lurking.ppm <- local({
     markscovres <- marks(covres)
     o <- fave.order(markscovres)
     covsort <- markscovres[o]
-    cummark <- cumsumna(marks(res)[o]) 
+    cummark <- cumsumna(marks(res)[o])
+    if(anyDuplicated(covsort)) {
+      right <- !duplicated(covsort, fromLast=TRUE)
+      covsort <- covsort[right]
+      cummark <- cummark[right]
+    }
     ## we'll plot(covsort, cummark) in the cumulative case
 
     ## (B) THEORETICAL MEAN CUMULATIVE FUNCTION
@@ -231,14 +236,21 @@ lurking.ppp <- lurking.ppm <- local({
     ## Range of covariate values
     covqmarks <- marks(covq)
     covrange <- range(covqmarks, na.rm=TRUE)
-    ## Suitable breakpoints
-    cvalues <- seq(from=covrange[1L], to=covrange[2L], length.out=100)
-    csmall <- cvalues[1L] - diff(cvalues[1:2])
-    cbreaks <- c(csmall, cvalues)
-    ## cumulative area as function of covariate values
-    covclass <- cut(covqmarks, breaks=cbreaks)
-    increm <- tapply(wts, covclass, sum)
-    cumarea <- cumsumna(increm)
+    if(diff(covrange) > 0) {
+      ## Suitable breakpoints
+      cvalues <- seq(from=covrange[1L], to=covrange[2L], length.out=100)
+      csmall <- cvalues[1L] - diff(cvalues[1:2])
+      cbreaks <- c(csmall, cvalues)
+      ## cumulative area as function of covariate values
+      covclass <- cut(covqmarks, breaks=cbreaks)
+      increm <- tapply(wts, covclass, sum)
+      cumarea <- cumsumna(increm)
+    } else {
+      ## Covariate is constant
+      cvalues <- covrange[1L]
+      covclass <- factor(rep(1, length(wts)))
+      cumarea <- increm <- sum(wts)
+    }
     ## compute theoretical mean (when model is true)
     mean0 <- if(type == "eem") cumarea else numeric(length(cumarea))
     ## we'll plot(cvalues, mean0) in the cumulative case
@@ -273,8 +285,6 @@ lurking.ppp <- lurking.ppm <- local({
       theoretical <- data.frame(covariate=cvalues, mean=derivmean)
     }
 
-    working <- NULL
-    
     ## ------------------------------------------------------------------------
   
     ## (C) STANDARD DEVIATION if desired
@@ -329,12 +339,14 @@ lurking.ppp <- lurking.ppm <- local({
         warning("Fisher information is singular; reverting to oldstyle=TRUE")
         oldstyle <- TRUE
       }
+
+      working <- NULL
       
       ## Second term: B' V B
       if(oldstyle) {
         varII <- 0
         if(saveworking) 
-          working <- list(varI=varI)
+          working <- data.frame(varI=varI)
       } else {
         ## lamp = lambda^(p + 1)
         lamp <- switch(type,
@@ -352,11 +364,13 @@ lurking.ppp <- lurking.ppm <- local({
         dB[is.na(dB)] <- 0
         ## Cumulate columns
         B <- apply(dB, 2, cumsum)
+        if(!is.matrix(B)) B <- matrix(B, nrow=1)
         ## compute B' V B for each i 
         varII <- quadform(B, V)
         ##  was:   varII <- diag(B %*% V %*% t(B))
         if(saveworking) 
-          working <- list(varI=varI, varII=varII, B=B)
+          working <- cbind(data.frame(varI=varI, varII=varII),
+                           as.data.frame(B))
       }
       ##
       ## variance of residuals

@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.135 $	$Date: 2017/12/07 03:41:51 $
+#	$Revision: 2.140 $	$Date: 2017/12/07 08:29:42 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -706,9 +706,10 @@ model.frame.ppm <- function(formula, ...) {
     object <- update(object, forcefit=TRUE)
     gf <- getglmfit(object)
   }
-  argh <- list(formula=gf, ...)
-  if(is.na(match("data", names(argh))))
-    argh$data <- getglmdata(object)
+  argh <- resolve.defaults(list(formula=gf),
+                           list(...),
+                           list(data = getglmdata(object),
+                                subset = TRUE))
   result <- switch(object$fitter,
                    gam = do.call(modelFrameGam, argh),
                    do.call(model.frame, argh))
@@ -739,21 +740,22 @@ modelFrameGam <- function(formula, ...) {
 model.matrix.ppm <- function(object,
                              data=model.frame(object, na.action=NULL),
                              ..., Q=NULL, keepNA=TRUE) {
-  if(missing(data)) data <- NULL			     
+  if(missing(data)) data <- NULL
   PPMmodelmatrix(object, data=data, ..., Q=Q, keepNA=keepNA)
 }
 
 model.matrix.ippm <- function(object,
                               data=model.frame(object, na.action=NULL),
                               ..., Q=NULL, keepNA=TRUE, irregular=FALSE) {
-  if(missing(data)) data <- NULL			     
+  if(missing(data)) data <- NULL 
   PPMmodelmatrix(object, data=data, ...,
                  Q=Q, keepNA=keepNA, irregular=irregular)
 }
 
 PPMmodelmatrix <- function(object,
-                           data=model.frame(object, na.action=NULL),
-                           ..., Q=NULL, keepNA=TRUE, irregular=FALSE) {
+                           data, 
+                           ...,
+                           subset, Q=NULL, keepNA=TRUE, irregular=FALSE) {
   # handles ppm and ippm			      
   data.given <- !is.null(data)
   irregular <- irregular && inherits(object, "ippm") && !is.null(object$iScore)
@@ -779,11 +781,18 @@ PPMmodelmatrix <- function(object,
          stop("Internal error: incorrect number of rows in iScore")
        mm <- cbind(mm, mi)
     }
+    ## subset
+    if(!missing(subset)) {
+      ok <- eval(substitute(subset), envir=bt$glmdata)
+      mm <- mm[ok, , drop=FALSE]
+    }
     ## remove NA's ?
     if(!keepNA)
       mm <- mm[complete.cases(mm), , drop=FALSE]
     return(mm)
   }
+
+  #' extract GLM fit 
   gf <- getglmfit(object)
   if(is.null(gf)) {
     warning("Model re-fitted with forcefit=TRUE")
@@ -792,13 +801,13 @@ PPMmodelmatrix <- function(object,
     if(is.null(gf))
       stop("internal error: unable to extract a glm fit")
   }
-  
+
   if(data.given) {
-    # new data. Must contain the Berman-Turner variables as well.
+    #' new data. Must contain the Berman-Turner variables as well.
     bt <- list(.mpl.Y=1, .mpl.W=1, .mpl.SUBSET=TRUE)
     if(any(forgot <- !(names(bt) %in% names(data)))) 
       data <- do.call(cbind, append(list(data), bt[forgot]))
-    mm <- model.matrix(gf, data=data, ...)
+    mm <- model.matrix(gf, data=data, ..., subset=NULL)
     if(irregular) {
        ## add irregular score components 
        mi <- sapply(object$iScore, do.call,
@@ -813,7 +822,10 @@ PPMmodelmatrix <- function(object,
     return(mm)
   }
 
-  if(!keepNA && !irregular) {
+  scrambled <- object$scrambled %orifnull% FALSE
+  ## if TRUE, this object was produced by 'subfits' using jittered covariate
+
+  if(!keepNA && !irregular && !scrambled) {
     # extract model matrix of glm fit object
     # restricting to its 'subset' 
     mm <- model.matrix(gf, ...)
@@ -822,10 +834,22 @@ PPMmodelmatrix <- function(object,
     return(mm)
   }
   
-  # extract model matrix for all cases
-  mm <- model.matrix(gf, ..., subset=NULL, na.action=NULL)
+  ## extract model matrix for all cases
+  gd <- getglmdata(object, drop=FALSE) 
+  if(!scrambled) {
+    ## 'gf' was fitted to correct data. Use internals.
+    mm <- model.matrix(gf, ..., subset=NULL, na.action=NULL)
+  } else {
+    ## 'gf' was originally fitted using jittered data:
+    ## Use correct data given by 'gd'
+    ## Temporarily add scrambled data to avoid singular matrices etc
+    gds <- object$internal$glmdata.scrambled
+    gdplus <- rbind(gd, gds)
+    mm <- model.matrix(gf, ..., data=gdplus, subset=NULL, na.action=NULL)
+    ## Now remove rows corresponding to scrambled data
+    mm <- mm[seq_len(nrow(gd)), , drop=FALSE]
+  } 
   cn <- colnames(mm)
-  gd <- getglmdata(object, drop=FALSE)
   if(nrow(mm) != nrow(gd)) {
     # can occur if covariates include NA's or interaction is -Inf
     insubset <- getglmsubset(object)
@@ -850,6 +874,12 @@ PPMmodelmatrix <- function(object,
      mm <- cbind(mm, mi)
      cn <- c(cn, colnames(mi))
   }
+  ## subset
+  if(!missing(subset)) {
+    ok <- eval(substitute(subset), envir=gd)
+    mm <- mm[ok, , drop=FALSE]
+  }
+  ## remove NA's
   if(!keepNA)
     mm <- mm[complete.cases(mm), , drop=FALSE]
   if(inherits(gf, "gam")) 

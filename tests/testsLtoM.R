@@ -362,7 +362,7 @@ local({
 #
 # Basic tests of mppm
 #
-# $Revision: 1.8 $ $Date: 2016/06/28 04:19:08 $
+# $Revision: 1.9 $ $Date: 2017/12/07 15:11:20 $
 # 
 
 require(spatstat)
@@ -479,3 +479,20 @@ local({
   if(max(abs(subco - co)) > 0.001)
     stop("Wrong coefficient values in subfits, for multitype interaction")
 })
+
+local({
+  ## test lurking.mppm
+  # example from 'mppm'
+  n <- 7
+  H <- hyperframe(V=1:n,
+                  U=runif(n, min=-1, max=1))
+  H$Z <- setcov(square(1))
+  H$U <- with(H, as.im(U, as.rectangle(Z)))
+  H$Y <- with(H, rpoispp(eval.im(exp(2+3*Z))))
+  fit <- mppm(Y ~ Z + U + V, data=H)
+
+  lurking(fit, expression(Z), type="P")
+  lurking(fit, expression(V), type="raw") # design covariate
+  lurking(fit, expression(U), type="raw") # image, constant in each row
+})
+

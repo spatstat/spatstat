@@ -88,4 +88,39 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   ppmclass.R
+	Further bug fix
+	
+   DESCRIPTION
+   NEWS
+	version 1.54-0.007
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   ppmclass.R
+   spatstat-internal.Rd
+	Yet another bug fix and some improvements
+
+   subfits.R
+	subfit objects now have an internal value 'scrambled'
+	and also save the scrambled version of glmdata
+	
+   ppmclass.R
+	model.matrix.ppm handles the 'scrambled' and 'unscrambled' data
+
+   lurkmppm.R [New file]
+   lurking.mppm.Rd [New file]
+   	Lurking variable plot for mppm objects.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Cigarettes and Whisky and Bugs in Software'
+	version 1.54-0.008
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
