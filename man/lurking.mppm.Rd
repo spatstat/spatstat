@@ -8,8 +8,11 @@
   against a covariate, for a model fitted to several point patterns.
 }
 \usage{
-\method{lurking}{mppm}(object, covariate, \dots,
-                       plot.it = TRUE, covname, oldstyle = FALSE, nx = 512)
+\method{lurking}{mppm}(object, covariate, type="eem",
+                       \dots,
+                       separate = FALSE, 
+                       plot.it = TRUE,
+                       covname, oldstyle = FALSE, nx = 512, main="")
 }
 \arguments{
   \item{object}{
@@ -22,8 +25,21 @@
     original data, or a list of pixel images, one image for each
     point pattern in the original data.
   }
+  \item{type}{
+    String indicating the type of residuals or weights to be computed.
+    Choices include \code{"eem"},
+    \code{"raw"}, \code{"inverse"} and \code{"pearson"}.
+    See \code{\link{diagnose.ppm}} for all possible choices.
+  }
   \item{\dots}{
-    Additional arguments passed to \code{\link{lurking.ppm}}.
+    Additional arguments passed to \code{\link{lurking.ppm}},
+    including arguments controlling the plot.
+  }
+  \item{separate}{
+    Logical value indicating whether to compute a separate lurking
+    variable plot for each of the original point patterns.
+    If \code{FALSE} (the default), a single lurking-variable plot
+    is produced by combining residuals from all patterns.
   }
   \item{plot.it}{
     Logical value indicating whether 
@@ -41,11 +57,14 @@
     or using the correct asymptotic formula (\code{oldstyle=FALSE}).
   }
   \item{nx}{
-    Number of covariate values to be used in the plot.
+    Integer. Number of covariate values to be used in the plot.
+  }
+  \item{main}{
+    Character string giving a main title for the plot.
   }
 }
 \details{
-  This function generates a `lurking variable' plot for a
+  This function generates a \sQuote{lurking variable} plot for a
   point process model fitted to several point patterns.
   Residuals from the model represented by \code{object}
   are plotted against the covariate specified by \code{covariate}.
@@ -58,18 +77,15 @@
   model-fitting algorithm \code{\link{mppm}}.
 }
 \value{
-  The (invisible) return value is an object 
+  If \code{separate=FALSE} (the default), 
+  the return value is an object 
   belonging to the class \code{"lurk"}, for which there
   are methods for \code{plot} and \code{print}.
-
-  This object is a list containing two dataframes
-  \code{empirical} and \code{theoretical}. 
-  The first dataframe \code{empirical} contains columns
-  \code{covariate} and \code{value} giving the coordinates of the
-  lurking variable plot. The second dataframe \code{theoretical}
-  contains columns \code{covariate}, \code{mean} and \code{sd}
-  giving the coordinates of the plot of the theoretical mean
-  and standard deviation.
+  See \code{\link{lurking}} for details of the format.
+  
+  If \code{separate=TRUE}, the result is a list of such objects,
+  and also belongs to the class \code{anylist} so that it can be
+  printed and plotted. 
 }
 \author{
   \adrian,
@@ -81,6 +97,7 @@
 \examples{
   fit <- mppm(Points ~ Image + Group, demohyper)
   lurking(fit, expression(Image), type="P")
+  lurking(fit, expression(Image), type="P", separate=TRUE)
 }
 \keyword{spatial}
 \keyword{models}

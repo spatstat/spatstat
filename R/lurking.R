@@ -1,7 +1,7 @@
 # Lurking variable plot for arbitrary covariate.
 #
 #
-# $Revision: 1.62 $ $Date: 2017/12/07 14:50:20 $
+# $Revision: 1.63 $ $Date: 2017/12/08 03:46:08 $
 #
 
 lurking <- function(object, ...) {
@@ -13,19 +13,22 @@ lurking.ppp <- lurking.ppm <- local({
   cumsumna <- function(x) { cumsum(ifelse(is.na(x), 0, x)) }
 
   ## main function
-  Lurking.ppm <- function(object, covariate, type="eem",
+  Lurking.ppm <- function(object, covariate,
+                          type="eem",
                           cumulative=TRUE,
+                          ..., 
+                          plot.it=TRUE,
+                          plot.sd=is.poisson(object), 
                           clipwindow=default.clipwindow(object),
                           rv = NULL,
-                          plot.sd=is.poisson(object), 
                           envelope=FALSE, nsim=39, nrank=1,
-                          plot.it=TRUE,
                           typename,
                           covname, oldstyle=FALSE,
                           check=TRUE,
-                          saveworking=FALSE,
-                          ..., splineargs=list(spar=0.5),
-                          verbose=TRUE) {
+                          verbose=TRUE,
+                          nx=128,
+                          splineargs=list(spar=0.5),
+                          internal=NULL) {
     cl <- match.call()
 
     ## validate object
@@ -42,6 +45,15 @@ lurking.ppp <- lurking.ppm <- local({
                  if(is.expression(co)) format(co[[1]]) else NULL
     }
 
+    ## handle secret data
+    internal <- resolve.defaults(internal,
+                                 list(saveworking=FALSE,
+                                      Fisher=NULL,
+                                      covrange=NULL))
+    saveworking <- internal$saveworking
+    Fisher      <- internal$Fisher  # possibly from a larger model
+    covrange    <- internal$covrange
+    
     if(!identical(envelope, FALSE)) {
       ## compute simulation envelope
       Xsim <- NULL
@@ -98,8 +110,10 @@ lurking.ppp <- lurking.ppm <- local({
     
     if(is.im(covariate)) {
       covvalues <- covariate[quadpoints, drop=FALSE]
+      covrange <- covrange %orifnull% range(covariate, finite=TRUE)
     } else if(is.vector(covariate) && is.numeric(covariate)) {
       covvalues <- covariate
+      covrange <- covrange %orifnull% range(covariate, finite=TRUE)
       if(length(covvalues) != quadpoints$n)
         stop("Length of covariate vector,", length(covvalues), "!=",
              quadpoints$n, ", number of quadrature points")
@@ -131,12 +145,18 @@ lurking.ppp <- lurking.ppm <- local({
       ## Evaluate expression
       sp <- parent.frame()
       covvalues <- eval(covariate, envir= glmdata, enclos=sp)
+      covrange <- covrange %orifnull% range(covvalues, finite=TRUE)
       if(!is.numeric(covvalues))
         stop("The evaluated covariate is not numeric")
     } else 
       stop(paste("The", sQuote("covariate"), "should be either",
                  "a pixel image, an expression or a numeric vector"))
 
+    #################################################################
+    ## Secret exit
+    if(identical(internal$getrange, TRUE))
+      return(covrange)
+    
     #################################################################
     ## Validate covariate values
 
@@ -235,10 +255,10 @@ lurking.ppp <- lurking.ppm <- local({
     
     ## Range of covariate values
     covqmarks <- marks(covq)
-    covrange <- range(covqmarks, na.rm=TRUE)
+    covrange <- covrange %orifnull% range(covqmarks, na.rm=TRUE)
     if(diff(covrange) > 0) {
       ## Suitable breakpoints
-      cvalues <- seq(from=covrange[1L], to=covrange[2L], length.out=100)
+      cvalues <- seq(from=covrange[1L], to=covrange[2L], length.out=nx)
       csmall <- cvalues[1L] - diff(cvalues[1:2])
       cbreaks <- c(csmall, cvalues)
       ## cumulative area as function of covariate values
@@ -301,7 +321,7 @@ lurking.ppp <- lurking.ppm <- local({
       lambda <- lambda[ok]
       ## Fisher information for coefficients
       asymp <- vcov(object,what="internals")
-      Fisher <- asymp$fisher
+      Fisher <- Fisher %orifnull% asymp$fisher
       ## Local sufficient statistic at quadrature points
       suff <- asymp$suff
       suff <- suff[ok, ,drop=FALSE]
@@ -333,11 +353,17 @@ lurking.ppp <- lurking.ppm <- local({
                varI <- cumsum(dvar)
              })
 
+
       ## variance-covariance matrix of coefficients
       V <- try(solve(Fisher), silent=TRUE)
       if(inherits(V, "try-error")) {
         warning("Fisher information is singular; reverting to oldstyle=TRUE")
         oldstyle <- TRUE
+      }
+      if(any(dim(V) != ncol(suff))) {
+        #' drop rows and columns
+        nama <- colnames(suff)
+        V <- V[nama, nama, drop=FALSE]
       }
 
       working <- NULL
@@ -433,9 +459,12 @@ lurking.ppp <- lurking.ppm <- local({
     if(saveworking) attr(stuff, "working") <- working
     class(stuff) <- "lurk"
     ## ---------------  PLOT THEM  ----------------------------------
-    if(plot.it) 
+    if(plot.it) {
       plot(stuff, ...)
-    return(invisible(stuff))
+      return(invisible(stuff))
+    } else {
+      return(stuff)
+    }
   }
 
   Lurking.ppm

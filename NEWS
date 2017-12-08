@@ -1,13 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.008
+        CHANGES IN spatstat VERSION 1.54-0.009
 
 OVERVIEW
 
+    o We thank Nicholas Read for contributions.
+    
     o Lurking variable plot for models fitted to several point patterns.
     
-    o Minor improvements.
+    o Bug fixes and improvements.
 
-    o Nickname: "Cigarettes and Whisky and Bugs in Software"
+    o Nickname: "Holy Hand Grenade"
 
 NEW FUNCTIONS
 

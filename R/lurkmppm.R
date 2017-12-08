@@ -1,6 +1,6 @@
 #' lurkmppm.R
 #'    Lurking variable plot for mppm
-#'    $Revision: 1.4 $ $Date: 2017/12/07 15:37:49 $
+#'    $Revision: 1.5 $ $Date: 2017/12/08 04:15:29 $
 
 lurking.mppm <- local({
 
@@ -53,8 +53,12 @@ lurking.mppm <- local({
     return(as.data.frame(y))
   }
 
-  multilurk <- function(object, covariate, ..., 
-                        plot.it=TRUE, covname, oldstyle=FALSE, nx=512) {
+  multilurk <- function(object, covariate,
+                        type="eem",
+                        ...,
+                        separate=FALSE,
+                        plot.it=TRUE,
+                        covname, oldstyle=FALSE, nx=512, main="") {
     cl <- match.call()
     stopifnot(is.mppm(object))
     if(missing(covname)) {
@@ -62,6 +66,9 @@ lurking.mppm <- local({
       covname <- if(is.name(co)) as.character(co) else
                  if(is.expression(co)) format(co[[1]]) else "covariate"
     }
+
+    Fisher <- vcov(object, what="fisher")
+    Vcov <- solve(Fisher)
 
     if(acceptable(covariate)) {
       cov.is.list <- FALSE
@@ -84,20 +91,42 @@ lurking.mppm <- local({
       lurks <- mapply(lurking.ppm,
                       object=futs,
                       covariate=covariate,
-                      MoreArgs=list(plot.it=FALSE,
+                      MoreArgs=list(type=type,
+                                    plot.it=FALSE,
                                     ...,
-                                    saveworking=TRUE,
+                                    internal=list(saveworking=TRUE),
+                                    nx=nx,
                                     oldstyle=oldstyle,
                                     covname=covname),
                       SIMPLIFY=FALSE)
     } else {
-      #' one covariate argument to rule them all
-      lurks <- lapply(futs, lurking,
-                      covariate=covariate,
-                      plot.it=FALSE, 
-                      ..., saveworking=TRUE,
-                      oldstyle=oldstyle,
-                      covname=covname)
+      #' One covariate argument to rule them all
+      #'    First determine range of covariate values
+      covrange <- range(sapply(futs, lurking, covariate=covariate,
+                               type=type,
+                               internal=list(getrange=TRUE)),
+                        na.rm=TRUE)
+      #'    Now compute lurking variable plots
+      lurks <- anylapply(futs, lurking,
+                         covariate=covariate,
+                         type=type,
+                         plot.it=FALSE, 
+                         ...,
+                         internal=list(saveworking=TRUE,
+                                       Fisher=Fisher,
+                                       covrange=covrange),
+                         nx=nx,
+                         oldstyle=oldstyle,
+                         covname=covname)
+    }
+    if(separate) {
+      #' separate lurking variable plots for each row
+      if(plot.it) {
+        plot(lurks, ..., main=main)
+        return(invisible(lurks))
+      } else {
+        return(lurks)
+      }
     }
     #' auxiliary info
     infos <- lapply(lurks, attr, which="info")
@@ -127,7 +156,7 @@ lurking.mppm <- local({
       } else {
         Bnames <- setdiff(colnames(w), c("varI", "varII")) 
         B <- as.matrix(w[, Bnames, drop=FALSE])
-        varII <- quadform(B, vcov(object))
+        varII <- quadform(B, Vcov)
         varR <- varI - varII
         ra <- range(varR, finite=TRUE)
         if(ra[1] < 0) {
@@ -150,7 +179,12 @@ lurking.mppm <- local({
     info$covrange <- covrange
     attr(result, "info") <- info
 
-    if(plot.it) plot(result)
+    if(plot.it)
+      do.call(plot.lurk,
+              resolve.defaults(list(x=result),
+                               list(...),
+                               list(mar.panel=c(5,5,3,3),
+                                    main=main)))
     return(invisible(result))
   }
 

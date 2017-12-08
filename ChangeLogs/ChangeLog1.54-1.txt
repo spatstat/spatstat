@@ -124,3 +124,23 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 dec 2017
+
+   lurking.R
+   lurking.Rd
+	Rearranged argument list.
+	More internal/secret arguments.
+	
+   lurkmppm.R
+   lurking.mppm.Rd
+	New argument 'separate'.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Holy Hand Grenade'.
+	version 1.54-0.009
+
+------------- passed R-3.4.2 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

@@ -9,35 +9,42 @@
 \usage{
 lurking(object, \dots)
 
-\method{lurking}{ppm}(object, covariate, type="eem",
+\method{lurking}{ppm}(object, covariate,
+                    type="eem",
                     cumulative=TRUE,
+                    \dots,
+                    plot.it = TRUE,
+                    plot.sd = is.poisson(object),
                     clipwindow=default.clipwindow(object),
-                    rv,
-                    plot.sd,
+                    rv = NULL,
                     envelope=FALSE, nsim=39, nrank=1,
-                    plot.it=TRUE,
                     typename,
                     covname,
-                    oldstyle=FALSE, check=TRUE,
-                    saveworking=FALSE,
-                    \dots,
+                    oldstyle=FALSE,
+                    check=TRUE,
+                    verbose=TRUE,
+                    nx=128,
                     splineargs=list(spar=0.5),
-                    verbose=TRUE)
+                    internal=NULL) 
 
-\method{lurking}{ppp}(object, covariate, type="eem",
+\method{lurking}{ppp}(object, covariate,
+                    type="eem",
                     cumulative=TRUE,
+                    \dots,
+                    plot.it = TRUE,
+                    plot.sd = is.poisson(object),
                     clipwindow=default.clipwindow(object),
-                    rv,
-                    plot.sd,
+                    rv = NULL,
                     envelope=FALSE, nsim=39, nrank=1,
-                    plot.it=TRUE,
                     typename,
                     covname,
-                    oldstyle=FALSE, check=TRUE,
-                    saveworking=FALSE,
-                    \dots,
+                    oldstyle=FALSE,
+                    check=TRUE,
+                    verbose=TRUE,
+                    nx=128,
                     splineargs=list(spar=0.5),
-                    verbose=TRUE)
+                    internal=NULL) 
+
 }
 \arguments{
   \item{object}{
@@ -64,6 +71,22 @@ lurking(object, \dots)
     of this sum, a marginal density of the smoothed residual field
     (\code{cumulative=FALSE}).
    }
+  \item{\dots}{
+    Arguments passed to \code{\link{plot.default}}
+    and \code{\link{lines}} to control the plot behaviour.
+  }
+  \item{plot.it}{
+    Logical value indicating whether 
+    plots should be shown. If \code{plot.it=FALSE}, only
+    the computed coordinates for the plots are returned.
+    See \emph{Value}.
+  }
+  \item{plot.sd}{
+    Logical value indicating whether 
+    error bounds should be added to plot.
+    The default is \code{TRUE} for Poisson models and
+    \code{FALSE} for non-Poisson models. See Details.
+  }
   \item{clipwindow}{
     If not \code{NULL} this argument indicates that residuals shall
     only be computed inside a subregion of the window containing the
@@ -75,12 +98,6 @@ lurking(object, \dots)
     If this argument is present, the point process residuals will not be
     calculated from the fitted model \code{object},
     but will instead be taken directly from \code{rv}. 
-  }
-  \item{plot.sd}{
-    Logical value indicating whether 
-    error bounds should be added to plot.
-    The default is \code{TRUE} for Poisson models and
-    \code{FALSE} for non-Poisson models. See Details.
   }
   \item{envelope}{
     Logical value indicating whether to compute simulation envelopes
@@ -97,12 +114,6 @@ lurking(object, \dots)
     Integer. Rank of the envelope value amongst the \code{nsim} simulated
     values. A rank of 1 means that the minimum and maximum
     simulated values will be used.
-  }
-  \item{plot.it}{
-    Logical value indicating whether 
-    plots should be shown. If \code{plot.it=FALSE}, only
-    the computed coordinates for the plots are returned.
-    See \emph{Value}.
   }
   \item{typename}{
     Usually absent. 
@@ -122,18 +133,19 @@ lurking(object, \dots)
     Logical flag indicating whether the integrity of the data structure
     in \code{object} should be checked.
   }
-  \item{saveworking}{Internal use only.}
-  \item{\dots}{
-    Arguments passed to \code{\link{plot.default}}
-    and \code{\link{lines}} to control the plot behaviour.
+  \item{verbose}{
+    Logical value indicating
+    whether to print progress reports during Monte Carlo simulation.
+  }
+  \item{nx}{
+    Integer. Number of covariate values to be used in the plot.
   }
   \item{splineargs}{
     A list of arguments passed to \code{smooth.spline}
     for the estimation of the derivatives in the case \code{cumulative=FALSE}.
   }
-  \item{verbose}{
-    Logical value indicating
-    whether to print progress reports during Monte Carlo simulation.
+  \item{internal}{
+    Internal use only.
   }
 }
 \value{
@@ -151,7 +163,7 @@ lurking(object, \dots)
   and standard deviation.
 }
 \details{
-  This function generates a `lurking variable' plot for a
+  This function generates a \sQuote{lurking variable} plot for a
   fitted point process model. 
   Residuals from the model represented by \code{object}
   are plotted against the covariate specified by \code{covariate}.
