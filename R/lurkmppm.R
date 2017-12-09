@@ -1,6 +1,6 @@
 #' lurkmppm.R
 #'    Lurking variable plot for mppm
-#'    $Revision: 1.5 $ $Date: 2017/12/08 04:15:29 $
+#'    $Revision: 1.6 $ $Date: 2017/12/09 04:33:27 $
 
 lurking.mppm <- local({
 
@@ -122,7 +122,11 @@ lurking.mppm <- local({
     if(separate) {
       #' separate lurking variable plots for each row
       if(plot.it) {
-        plot(lurks, ..., main=main)
+        do.call(plot,
+                resolve.defaults(list(x=lurks),
+                                 list(...),
+                                 list(main=main,
+                                      mar.panel=c(5,4,2,3))))
         return(invisible(lurks))
       } else {
         return(lurks)
@@ -180,11 +184,7 @@ lurking.mppm <- local({
     attr(result, "info") <- info
 
     if(plot.it)
-      do.call(plot.lurk,
-              resolve.defaults(list(x=result),
-                               list(...),
-                               list(mar.panel=c(5,5,3,3),
-                                    main=main)))
+      plot(result, ..., main=main)
     return(invisible(result))
   }
 

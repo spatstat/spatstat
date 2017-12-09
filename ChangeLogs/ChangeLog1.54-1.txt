@@ -144,3 +144,17 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.2 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+09 dec 2017
+
+   lurkmppm.R
+	buglet fix in plot parameters
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.010
+
++++++++++++++ installed R-3.4.3 ++++++++++++++++++++++
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
