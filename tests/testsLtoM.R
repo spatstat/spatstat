@@ -375,32 +375,33 @@ local({
   fit2 <- mppm(Points ~ group, simba,
                hyperframe(po=Poisson(), str=Strauss(0.1)),
                iformula=~str/id)
-  fit3 <- mppm(Points ~ group, simba,
-               hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
-        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
+# currently invalid  
+#  fit3 <- mppm(Points ~ group, simba,
+#               hyperframe(po=Poisson(), pie=PairPiece(c(0.05,0.1))),
+#        iformula=~I((group=="control") * po) + I((group=="treatment") * pie))
   fit1
   fit2
-  fit3
+#  fit3
 
   ## run summary.mppm which currently sits in spatstat-internal.Rd
   summary(fit1)
   summary(fit2)
-  summary(fit3)
+#  summary(fit3)
 
   ## test vcov algorithm
   vcov(fit1)
   vcov(fit2)
-  vcov(fit3)
+#  vcov(fit3)
 
   ## test subfits algorithm
   s1 <- subfits(fit1)
   s2 <- subfits(fit2)
-  s3 <- subfits(fit3)
+#  s3 <- subfits(fit3)
 
   ## validity of results of subfits()
   p1 <- solapply(s1, predict)
   p2 <- solapply(s2, predict)
-  p3 <- solapply(s3, predict)
+#  p3 <- solapply(s3, predict)
 
 })
 

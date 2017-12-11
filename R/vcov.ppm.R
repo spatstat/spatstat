@@ -3,7 +3,7 @@
 ## and Fisher information matrix
 ## for ppm objects
 ##
-##  $Revision: 1.129 $  $Date: 2017/06/05 10:31:58 $
+##  $Revision: 1.130 $  $Date: 2017/12/10 02:23:46 $
 ##
 
 vcov.ppm <- local({
@@ -49,7 +49,8 @@ vcov.ppm <- function(object, ..., what="vcov", verbose=TRUE,
   }
   
   ## nonstandard calculations (hack) 
-  generic.triggers <- c("A1", "new.coef", "matwt", "saveterms", "sparseOK")
+  generic.triggers <- c("A1", "new.coef",
+                        "modmat", "matwt", "saveterms", "sparseOK")
   nonstandard <- any(generic.triggers %in% names(argh)) || fine
 #  saveterms <- identical(resolve.1.default("saveterms", argh), TRUE)
   
@@ -131,8 +132,10 @@ vcalcPois <- function(object, ...,
                       matrix.action=c("warn", "fatal", "silent"),
                       method=c("C", "interpreted"),
                       verbose=TRUE,
-                      fisher=NULL, 
-                      matwt=NULL, new.coef=NULL, dropcoef=FALSE, 
+                      fisher=NULL,
+                      modmat=model.matrix(object), 
+                      matwt=NULL, # weights on rows of model matrix
+                      new.coef=NULL, dropcoef=FALSE, 
                       saveterms=FALSE) {
   ## variance-covariance matrix of Poisson model,
   ## or Hessian of Gibbs model
@@ -159,7 +162,7 @@ vcalcPois <- function(object, ...,
     ltype <- if(is.poisson(object)) "trend" else "lambda"
     lambda <- fitted(object, type=ltype, new.coef=new.coef,
                      dropcoef=dropcoef, check=FALSE)
-    mom <- model.matrix(object)
+    mom <- modmat 
     nmom <- nrow(mom)
     Q <- quad.ppm(object)
     wt <- w.quad(Q)
@@ -229,7 +232,7 @@ vcalcPois <- function(object, ...,
   if(what %in% c("all", "internals")) {
     ## Internals needed
     if(is.null(internals))
-      internals <- list(suff = model.matrix(object))
+      internals <- list(suff = modmat)
     internals$fisher <- fisher
     if(reweighting)
       internals$gradient <- gradient
@@ -353,11 +356,14 @@ vcalcGibbsGeneral <- function(model,
                          A1 = NULL,
                          fine = FALSE,
                          hessian = FALSE,
-                         matwt = NULL, new.coef = NULL, dropcoef=FALSE,
+                         modmat = model.matrix(model), 
+                         matwt = NULL,
+                         new.coef = NULL, dropcoef=FALSE,
                          saveterms = FALSE,
                          parallel = TRUE,
                          sparseOK = FALSE
                          ) {
+  modmat.given <- !missing(modmat)
   na.action <- match.arg(na.action)
   matrix.action <- match.arg(matrix.action)
   logi.action <- match.arg(logi.action)
@@ -371,12 +377,18 @@ vcalcGibbsGeneral <- function(model,
   
   old.coef <- coef(model)
   use.coef <- adaptcoef(new.coef, old.coef, drop=dropcoef)
-  p <- length(old.coef)
+  if(modmat.given) {
+    p <- ncol(modmat)
+    pnames <- colnames(modmat)
+  } else {
+    p <- length(old.coef)
+    pnames <- names(old.coef)
+  }
+  
   if(p == 0) {
     ## this probably can't happen
     if(!spill) return(matrix(, 0, 0)) else return(list())
   }
-  pnames <- names(old.coef)
   dnames <- list(pnames, pnames)
   # (may be revised later)
   
@@ -424,8 +436,7 @@ vcalcGibbsGeneral <- function(model,
   nX <- npoints(X)
   ## sufficient statistic h(X[i] | X) = h(X[i] | X[-i])
   ## data and dummy:
-  mall <- model.matrix(model)
-  ## check dimension of canonical statistic 
+  mall <- modmat
   if(ncol(mall) != length(pnames)) {
     if(!dropcoef)
       stop(paste("Internal error: dimension of sufficient statistic = ",

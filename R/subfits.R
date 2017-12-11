@@ -1,6 +1,6 @@
 #
 #
-#  $Revision: 1.50 $   $Date: 2017/12/07 08:27:35 $
+#  $Revision: 1.52 $   $Date: 2017/12/10 06:11:16 $
 #
 #
 
@@ -151,7 +151,7 @@ subfits.new <- local({
     fake.version <- list(major=spv$major,
                          minor=spv$minor,
                          release=spv$patchlevel,
-                         date="$Date: 2017/12/07 08:27:35 $")
+                         date="$Date: 2017/12/10 06:11:16 $")
     fake.call <- call("cannot.update", Q=NULL, trend=trend,
                       interaction=NULL, covariates=NULL,
                       correction=object$Info$correction,
@@ -305,6 +305,18 @@ subfits.old <- local({
     }
     announce("done.\n")
 
+    ## This code is currently not usable because the mapping is wrong
+    reconcile <- FALSE
+    if(reconcile) {
+      ## determine which coefficients of main model are interaction terms
+      announce("Identifying interaction coefficients...")
+      md <- model.depends(object$Fit$FIT)
+      usetags <- unlist(lapply(implcoef, colnames))
+      isVname <- apply(md[, usetags, drop=FALSE], 1, any)
+      mainVnames <- row.names(md)[isVname]
+      announce("done.\n")
+    }
+
     ## Fisher information and vcov
     fisher <- varcov <- NULL
     if(what == "models") {
@@ -427,9 +439,17 @@ subfits.old <- local({
                       use.gam=use.gam)
       }
       fiti$scrambled <- scrambled
-      ## fiti determines which coefficients are required
+      ## fiti determines which coefficients are required 
       coefi.fitted <- fiti$coef
-      coefnames.wanted <- names(coefi.fitted)
+      coefnames.wanted <- coefnames.fitted <- names(coefi.fitted)
+      ## reconcile interaction coefficient names
+      if(reconcile) {
+        coefnames.translated <- coefnames.wanted
+        ma <- match(coefnames.fitted, fiti$internal$Vnames)
+        hit <- !is.na(ma)
+        if(any(hit)) 
+          coefnames.translated[hit] <- mainVnames[ ma[hit] ]
+      }
       ## take the required coefficients from the full mppm fit
       coefs.avail  <- coefs.full[i,]
       names(coefs.avail) <- coefs.names
@@ -440,6 +460,7 @@ subfits.old <- local({
         ## overwrite any existing values of coefficients; add new ones.
         coefs.avail[names(coefs.implied)] <- coefs.implied
       }
+      ## check
       if(!all(coefnames.wanted %in% names(coefs.avail))) 
         stop("Internal error: some fitted coefficients not accessible")
       coefi.new <- coefs.avail[coefnames.wanted]
@@ -461,10 +482,30 @@ subfits.old <- local({
       fiti$internal$glmfit$rank <- sum(is.finite(fiti$coef))
       ## Fisher information and variance-covariance if known
       ## Extract submatrices for relevant parameters
-      if(!is.null(fisher)) 
-        fiti$fisher <- fisher[coefnames.wanted, coefnames.wanted, drop=FALSE]
-      if(!is.null(varcov))
-        fiti$varcov <- varcov[coefnames.wanted, coefnames.wanted, drop=FALSE]
+      if(reconcile) {
+        #' currently disabled because mapping is wrong
+        if(!is.null(fisher)) {
+          if(!reconcile) {
+            fiti$fisher <-
+              fisher[coefnames.wanted, coefnames.wanted, drop=FALSE]
+          } else {
+            fush <-
+              fisher[coefnames.translated, coefnames.translated, drop=FALSE]
+            dimnames(fush) <- list(coefnames.wanted, coefnames.wanted)
+            fiti$fisher <- fush
+          }
+        }
+        if(!is.null(varcov)) {
+          if(!reconcile) {
+            fiti$varcov <-
+              varcov[coefnames.wanted, coefnames.wanted, drop=FALSE]
+          } else {
+            vc <- varcov[coefnames.translated, coefnames.translated, drop=FALSE]
+            dimnames(vc) <- list(coefnames.wanted, coefnames.wanted)
+            fiti$varcov <- vc
+          }
+        }
+      }
       ## store in list
       results[[i]] <- fiti
     }

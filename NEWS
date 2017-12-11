@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.010
+        CHANGES IN spatstat VERSION 1.54-0.011
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
     
     o Bug fixes and improvements.
 
-    o Nickname: "Holy Hand Grenade"
+    o Nickname: "Plucky Comic Relief"
 
 NEW FUNCTIONS
 
@@ -23,10 +23,13 @@ NEW FUNCTIONS
     o lurking.mppm
     New method for class 'mppm'
     Lurking variable plot for models fitted to several point patterns.
-    
+
     o print.lurk
     Prints information about the object returned by the function 'lurking'
     representing a lurking variable plot.
+
+    o model.matrix.mppm
+    Method for 'model.matrix' for models of class 'mppm'.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -39,6 +42,10 @@ BUG FIXES
     Contour line was annotated, which was not intended.
     Fixed.
 
+    o vcov.mppm
+    Format was incorrect (rows/columns were omitted) in some cases.
+    Fixed.
+    
     o model.matrix.ppm, model.frame.ppm
     Values were sometimes incorrect when applied to the result of subfits().
     To be precise, if 'fit' was an mppm object fitted to a hyperframe
@@ -47,7 +54,11 @@ BUG FIXES
     model.matrix(futs[[i]]) gave incorrect values in the columns
     corresponding to the design covariates. 
     Fixed.
-    
+
+    o model.matrix.ppm
+    The attribute 'assign' was omitted, in some cases.
+    Fixed.
+
         CHANGES IN spatstat VERSION 1.54-0
 
 OVERVIEW

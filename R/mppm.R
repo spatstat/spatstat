@@ -1,7 +1,7 @@
 #
 # mppm.R
 #
-#  $Revision: 1.81 $   $Date: 2016/12/30 01:44:07 $
+#  $Revision: 1.85 $   $Date: 2017/12/10 03:47:42 $
 #
 
 mppm <- local({
@@ -403,6 +403,8 @@ mppm <- local({
     fmla <- as.formula(fmla)
     ## Fix scoping problem
     assign("glmmsubset", moadf$.mpl.SUBSET, envir=environment(fmla))
+    for(nama in colnames(moadf))
+      assign(nama,       moadf[[nama]],     envir=environment(fmla))
     ## Satisfy package checker
     glmmsubset <- .mpl.SUBSET <- moadf$.mpl.SUBSET
     .mpl.W      <- moadf$.mpl.W
@@ -437,6 +439,8 @@ mppm <- local({
                   control=ctrl)
       deviants <- deviance(FIT)
     }
+    env <- list2env(moadf, parent=sys.frame(sys.nframe()))
+    environment(FIT$terms) <- env
     ## maximised log-pseudolikelihood
     W <- moadf$.mpl.W
     SUBSET <- moadf$.mpl.SUBSET
@@ -657,3 +661,26 @@ simulate.mppm <- function(object, nsim=1, ..., verbose=TRUE) {
   }
   return(h)
 }
+
+model.matrix.mppm <- function(object, ..., keepNA=TRUE, separate=FALSE) {
+  FIT <- object$Fit$FIT
+  df <- object$Fit$moadf
+  environment(FIT) <- list2env(df)
+  mm <- model.matrix(FIT, ...)
+  if(keepNA) {
+    comp <- complete.cases(df)
+    if(!all(comp)) {
+      if(sum(comp) != nrow(mm))
+        stop("Internal error in patching NA's")
+      mmplus <- matrix(NA, nrow(df), ncol(mm))
+      mmplus[comp, ] <- mm
+      mm <- mmplus
+    }
+  }
+  if(separate) {
+    id <- df$id
+    mm <- split.data.frame(mm, id)  # see help(split)
+  }
+  return(mm)
+}
+

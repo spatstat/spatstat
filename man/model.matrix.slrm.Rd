@@ -18,7 +18,7 @@
     \code{\link{model.matrix.lm}}.
   }
   \item{keepNA}{
-    Logical. Determines whether rows containing NA values will be
+    Logical. Determines whether rows containing \code{NA} values will be
     deleted or retained.
   }
 }

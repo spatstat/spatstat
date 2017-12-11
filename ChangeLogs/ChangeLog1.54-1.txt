@@ -158,3 +158,37 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+10 dec 2017
+
+   vcov.ppm.R
+	New secret argument 'modmat' = model matrix
+	(coding not finished - has conflict with deltasuffstat)
+	
+   mppm.R
+   model.matrix.mppm.Rd [New file]
+   	New method
+
+11 dec 2017
+
+   vcov.mppm.R
+	Completely revised algorithm
+
+   mppm.R
+	Fixed scoping problem
+
+   subfits.R
+	Bug fixes
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nickname 'Plucky Comic Relief'.
+	version 1.54-0.011
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	

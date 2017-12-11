@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.140 $	$Date: 2017/12/07 08:29:42 $
+#	$Revision: 2.141 $	$Date: 2017/12/10 10:28:22 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -771,24 +771,29 @@ PPMmodelmatrix <- function(object,
     ## compute model matrix
     mf <- model.frame(bt$fmla, bt$glmdata, ...)
     mm <- model.matrix(bt$fmla, mf, ...)
+    ass <- attr(mm, "assign")
     if(irregular) {
-       ## add irregular score components
-       U <- union.quad(Q)
-       mi <- sapply(object$iScore, do.call,
-                    args=append(list(x=U$x, y=U$y), object$covfunargs),
-		    envir=environment(terms(object)))
-       if(nrow(mi) != nrow(mm))
-         stop("Internal error: incorrect number of rows in iScore")
-       mm <- cbind(mm, mi)
+      ## add irregular score components
+      U <- union.quad(Q)
+      mi <- sapply(object$iScore, do.call,
+                   args=append(list(x=U$x, y=U$y), object$covfunargs),
+                   envir=environment(terms(object)))
+      if(nrow(mi) != nrow(mm))
+        stop("Internal error: incorrect number of rows in iScore")
+      mm <- cbind(mm, mi)
+      attr(mm, "assign") <- ass 
     }
     ## subset
     if(!missing(subset)) {
       ok <- eval(substitute(subset), envir=bt$glmdata)
       mm <- mm[ok, , drop=FALSE]
+      attr(mm, "assign") <- ass 
     }
     ## remove NA's ?
-    if(!keepNA)
+    if(!keepNA) {
       mm <- mm[complete.cases(mm), , drop=FALSE]
+      attr(mm, "assign") <- ass
+    }
     return(mm)
   }
 
@@ -808,14 +813,16 @@ PPMmodelmatrix <- function(object,
     if(any(forgot <- !(names(bt) %in% names(data)))) 
       data <- do.call(cbind, append(list(data), bt[forgot]))
     mm <- model.matrix(gf, data=data, ..., subset=NULL)
+    ass <- attr(mm, "assign")
     if(irregular) {
-       ## add irregular score components 
-       mi <- sapply(object$iScore, do.call,
-                    args=append(list(x=data$x, y=data$y), object$covfunargs),
-		    envir=environment(terms(object)))
-       if(nrow(mi) != nrow(mm))
-         stop("Internal error: incorrect number of rows in iScore")
-       mm <- cbind(mm, mi)
+      ## add irregular score components 
+      mi <- sapply(object$iScore, do.call,
+                   args=append(list(x=data$x, y=data$y), object$covfunargs),
+                   envir=environment(terms(object)))
+      if(nrow(mi) != nrow(mm))
+        stop("Internal error: incorrect number of rows in iScore")
+      mm <- cbind(mm, mi)
+      attr(mm, "assign") <- ass
     }
     if(inherits(gf, "gam")) 
       attr(mm, "assign") <- gf$assign
@@ -839,6 +846,7 @@ PPMmodelmatrix <- function(object,
   if(!scrambled) {
     ## 'gf' was fitted to correct data. Use internals.
     mm <- model.matrix(gf, ..., subset=NULL, na.action=NULL)
+    ass <- attr(mm, "assign")
   } else {
     ## 'gf' was originally fitted using jittered data:
     ## Use correct data given by 'gd'
@@ -846,8 +854,10 @@ PPMmodelmatrix <- function(object,
     gds <- object$internal$glmdata.scrambled
     gdplus <- rbind(gd, gds)
     mm <- model.matrix(gf, ..., data=gdplus, subset=NULL, na.action=NULL)
+    ass <- attr(mm, "assign")
     ## Now remove rows corresponding to scrambled data
     mm <- mm[seq_len(nrow(gd)), , drop=FALSE]
+    attr(mm, "assign") <- ass
   } 
   cn <- colnames(mm)
   if(nrow(mm) != nrow(gd)) {
@@ -860,28 +870,33 @@ PPMmodelmatrix <- function(object,
       mmplus[isna, ] <- NA
       mmplus[!isna, ] <- mm
       mm <- mmplus
+      attr(mm, "assign") <- ass
     } else 
     stop("internal error: model matrix does not match glm data frame")
   }
   if(irregular) {
-     ## add irregular score components 
-     U <- union.quad(quad.ppm(object, drop=FALSE))
-     mi <- sapply(object$iScore, do.call,
-                  args=append(list(x=U$x, y=U$y), object$covfunargs),
-		  envir=environment(terms(object)))
-     if(nrow(mi) != nrow(mm))
-       stop("Internal error: incorrect number of rows in iScore")
-     mm <- cbind(mm, mi)
-     cn <- c(cn, colnames(mi))
+    ## add irregular score components 
+    U <- union.quad(quad.ppm(object, drop=FALSE))
+    mi <- sapply(object$iScore, do.call,
+                 args=append(list(x=U$x, y=U$y), object$covfunargs),
+	  envir=environment(terms(object)))
+    if(nrow(mi) != nrow(mm))
+      stop("Internal error: incorrect number of rows in iScore")
+    mm <- cbind(mm, mi)
+    attr(mm, "assign") <- ass
+    cn <- c(cn, colnames(mi))
   }
   ## subset
   if(!missing(subset)) {
     ok <- eval(substitute(subset), envir=gd)
     mm <- mm[ok, , drop=FALSE]
+    attr(mm, "assign") <- ass
   }
   ## remove NA's
-  if(!keepNA)
+  if(!keepNA) {
     mm <- mm[complete.cases(mm), , drop=FALSE]
+    attr(mm, "assign") <- ass
+  }
   if(inherits(gf, "gam")) 
     attr(mm, "assign") <- gf$assign
   colnames(mm) <- cn
