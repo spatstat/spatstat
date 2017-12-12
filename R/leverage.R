@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.88 $ $Date: 2017/11/24 04:01:12 $
+#  $Revision: 1.89 $ $Date: 2017/12/12 02:24:11 $
 #
 
 leverage <- function(model, ...) {
@@ -70,8 +70,13 @@ ppmInfluence <- function(fit,
   }
   other <- setdiff(names(stuff), c("lev", "infl", "dfbetas"))
   result[other] <- stuff[other]
+  class(result) <- "ppmInfluence"
   return(result)
 }
+
+leverage.ppmInfluence <- function(model, ...) { model$leverage }
+influence.ppmInfluence <- function(model, ...) { model$influence }
+dfbetas.ppmInfluence <- function(model, ...) { model$dfbetas }
 
 ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
@@ -326,7 +331,6 @@ ppmInfluenceEngine <- function(fit,
   ## start building result
   fit.is.poisson <- is.poisson(fit)
   result <- list(fitname=fitname, fit.is.poisson=fit.is.poisson)
-  class(result) <- "ppmInfluence"
 
   if(any(c("score", "derivatives") %in% what)) {
     ## calculate the composite score

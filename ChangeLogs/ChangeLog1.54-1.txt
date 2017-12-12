@@ -190,5 +190,17 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12 dec 2017
 
-	
+   leverage.R
+   spatstat-internal.Rd
+	Result of ppmInfluence is now of class 'ppmInfluence'
+	New methods for this class for 'influence', 'leverage', 'dfbetas'
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.012
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

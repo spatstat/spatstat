@@ -1,11 +1,15 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.011
+        CHANGES IN spatstat VERSION 1.54-0.012
 
 OVERVIEW
 
     o We thank Nicholas Read for contributions.
     
     o Lurking variable plot for models fitted to several point patterns.
+
+    o Improvements to code for class 'mppm'.
+
+    o Improvements to leverage and influence diagnostics.
     
     o Bug fixes and improvements.
 
@@ -33,6 +37,11 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o ppmInfluence
+    The result now belongs to class 'ppmInfluence', for which there are
+    methods for 'leverage', 'influence', 'dfbetas' which extract the
+    deired component.
+    
     o lurking.ppm
     Accelerated.
 

@@ -53,7 +53,9 @@
   When analysing large datasets, the user can
   call \code{ppmInfluence} to perform the calculations efficiently,
   then extract the leverage and influence values as desired.
-
+  For example the leverage can be extracted either as
+  \code{result$leverage} or \code{leverage(result)}.
+  
   If the point process model trend has irregular parameters that were
   fitted (using \code{\link{ippm}})
   then the influence calculation requires the first and second
@@ -70,7 +72,7 @@
 }
 \value{
   A list containing the leverage and influence measures specified by
-  \code{what}.
+  \code{what}. The result also belongs to the class \code{"ppmInfluence"}. 
 }
 \author{
   \adrian
@@ -85,6 +87,7 @@
    fit <- ppm(X ~ x+y)
    fI <- ppmInfluence(fit)
    fI$influence
+   influence(fI) 
    fI$leverage
    fI$dfbetas
 }

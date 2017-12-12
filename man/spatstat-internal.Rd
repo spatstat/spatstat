@@ -101,6 +101,7 @@
 \alias{default.ntile}
 \alias{deltasuffstat}
 \alias{Deviation}
+\alias{dfbetas.ppmInfluence}
 \alias{dflt.redraw}
 \alias{densitycrossEngine}
 \alias{densitypointsEngine}
@@ -220,6 +221,7 @@
 \alias{implemented.for.K}
 \alias{impliedpresence}
 \alias{impliedcoefficients}
+\alias{influence.ppmInfluence}
 \alias{inpoint}
 \alias{instantiate.interact}
 \alias{interactionfamilyname}
@@ -275,6 +277,7 @@
 \alias{levels.im}
 \alias{levels<-.im}
 \alias{levelsAsFactor}
+\alias{leverage.ppmInfluence}
 \alias{linearKengine}
 \alias{linearKmulti}
 \alias{linearKmulti.inhom}
@@ -846,6 +849,7 @@ default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly, force, quadsub, sparseOK)
 Deviation(x, ref, leaveout, n, xi)
+\method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)
 densitycrossEngine(Xdata, Xquery, sigma, \dots,
                     weights, edge, varcov,
@@ -1001,6 +1005,7 @@ illegal.iformula(ifmla, itags, dfvarnames)
 implemented.for.K(correction, windowtype, explicit)
 impliedpresence(tags, formula, df, extranames=character(0))
 impliedcoefficients(object, tag)
+\method{influence}{ppmInfluence}(model, \dots)
 inpoint(W)
 instantiate.interact(x, par)
 interactionfamilyname(x)
@@ -1060,6 +1065,7 @@ ldtEngine(nv, ns, from, to, seglen, huge,
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
+\method{leverage}{ppmInfluence}(model, \dots)
 linearKengine(X, \dots, r, reweight, denom, correction,
               ratio, showworking)
 linearKmulti(X, I, J, r, \dots, correction)
