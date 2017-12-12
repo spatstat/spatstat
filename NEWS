@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.012
+        CHANGES IN spatstat VERSION 1.54-0.013
 
 OVERVIEW
 
@@ -37,6 +37,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o leverage.ppm, dfbetas.ppm
+    Increased the default resolution of the pixel images.
+    Spatial resolution can now be controlled by the arguments 'dimyx', 'eps'.
+    
     o ppmInfluence
     The result now belongs to class 'ppmInfluence', for which there are
     methods for 'leverage', 'influence', 'dfbetas' which extract the

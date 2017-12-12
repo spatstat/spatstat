@@ -16,7 +16,10 @@ iHessian=NULL, iArgs=NULL)
     Fitted point process model (object of class \code{"ppm"}).
   }
   \item{\dots}{
-    Ignored.
+    Ignored, except for the arguments \code{dimyx} and \code{eps}
+    which are passed to \code{\link{as.mask}}
+    to control the spatial resolution of the image of the density
+    component.    
   }
   \item{drop}{
     Logical. Whether to include (\code{drop=FALSE}) or

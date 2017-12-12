@@ -1252,6 +1252,7 @@ ppmDerivatives(fit, what, Dcovfun, loc, covfunargs)
 ppmInfluenceEngine(fit, what, \dots, iScore, iHessian, iArgs,
               drop, method, fine, precomputed, sparseOK,
               fitname, multitypeOK, entrywise, matrix.action,
+              dimyx, eps,
               geomsmooth)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)

@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.89 $ $Date: 2017/12/12 02:24:11 $
+#  $Revision: 1.90 $ $Date: 2017/12/12 05:47:55 $
 #
 
 leverage <- function(model, ...) {
@@ -92,6 +92,7 @@ ppmInfluenceEngine <- function(fit,
                          multitypeOK=FALSE,
                          entrywise = TRUE,
                          matrix.action = c("warn", "fatal", "silent"),
+                         dimyx=NULL, eps=NULL,
                          geomsmooth = TRUE) {
   logi <- identical(fit$method, "logi")
   if(is.null(fitname)) 
@@ -126,10 +127,16 @@ ppmInfluenceEngine <- function(fit,
   w <- w.quad(Q)
   loc <- union.quad(Q)
   isdata <- is.data(Q)
+  mt <- is.multitype(loc)
   if(length(w) != length(lam))
     stop(paste("Internal error: length(w) = ", length(w),
                "!=", length(lam), "= length(lam)"),
          call.=FALSE)
+
+  ## smoothing bandwidth and resolution for smoothed images of densities
+  smallsigma <- if(!mt) maxnndist(loc) else max(sapply(split(loc), maxnndist))
+  if(is.null(dimyx) && is.null(eps)) 
+    eps <- sqrt(prod(sidelengths(Frame(loc))))/256
 
   ## domain of composite likelihood
   ## (e.g. eroded window in border correction)
@@ -626,18 +633,22 @@ ppmInfluenceEngine <- function(fit,
     ## values of leverage (diagonal) at points of 'loc'
     h <- b * lam
     ok <- is.finite(h)
-    if(mt <- is.multitype(loc))
+    if(mt)
       h <- data.frame(leverage=h, type=marks(loc))
     levval <- (loc %mark% h)[ok]
     levvaldum <- levval[!isdata[ok]]
     geomsmooth <- geomsmooth && all(marks(levvaldum) >= 0)
     if(!mt) {
-      levsmo <- Smooth(levvaldum, sigma=maxnndist(loc), geometric=geomsmooth)
+      levsmo <- Smooth(levvaldum,
+                       sigma=smallsigma,
+                       geometric=geomsmooth,
+                       dimyx=dimyx, eps=eps)
     } else {
       levsplitdum <- split(levvaldum, reduce=TRUE)
       levsmo <- Smooth(levsplitdum,
-                       sigma=max(sapply(levsplitdum, maxnndist)),
-                       geometric=geomsmooth)
+                       sigma=smallsigma,
+                       geometric=geomsmooth,
+                       dimyx=dimyx, eps=eps)
     }
     ## nominal mean level
     a <- area(Window(loc)) * markspace.integral(loc)
@@ -683,8 +694,8 @@ ppmInfluenceEngine <- function(fit,
       Mdum <- M
       Mdum[isdata,] <- 0
       Mdum <- Mdum / w.quad(Q)
-      result$dfbetas <- msr(Q, M[isdata, ], Mdum)
-    } else{
+      DFB <- msr(Q, M[isdata, ], Mdum)
+    } else {
       vex <- invhess %*% t(mom)
       dex <- invhess %*% t(eff)
       switch(method,
@@ -704,9 +715,11 @@ ppmInfluenceEngine <- function(fit,
                con[(lam == 0 | !inside), ] <- 0
              })
       colnames(dis) <- colnames(con) <- colnames(mom)
-      # result is a vector valued measure
-      result$dfbetas <- msr(Q, dis[isdata, ], con)
+      DFB <- msr(Q, dis[isdata, ], con)
     }
+    #' add smooth component
+    DFB <- augment.msr(DFB, sigma=smallsigma, dimyx=dimyx, eps=eps)
+    result$dfbetas <- DFB
   }
   return(result)
 }

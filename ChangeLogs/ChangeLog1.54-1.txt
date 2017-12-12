@@ -204,3 +204,19 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   leverage.R
+   spatstat-internal.Rd
+   leverage.ppm.Rd
+   dfbetas.ppm.Rd
+	Increased default resolution of image components.
+	ppmInfluenceEngine now has arguments 'dimyx' and 'eps'
+	to control resolution.
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.013
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
