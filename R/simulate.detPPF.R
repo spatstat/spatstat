@@ -1,5 +1,5 @@
 ##   simulate.detPPF.R
-##            $Revision: 1.3 $  $Date: 2017/11/04 04:12:17 $
+##            $Revision: 1.5 $  $Date: 2017/12/13 01:01:35 $
 ##
 ## This file contains functions to simulate DPP models.
 ## Two simulation functions are visible:
@@ -338,7 +338,7 @@ simulate.detpointprocfamily <- function(object, nsim = 1, seed = NULL, ..., W = 
     if(!statmodel)
         rslt <- lapply(rslt, rthin, P=thin)
     names(rslt) <- paste("Simulation", 1:nsim)
-    rslt <- as.solist(rslt)
+    rslt <- if(dim == 2) as.solist(rslt) else as.anylist(rslt)
   }
   attr(rslt, "seed") <- RNGstate
   return(rslt)

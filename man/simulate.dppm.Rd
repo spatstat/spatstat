@@ -82,12 +82,15 @@
   then the simulation is done in an extended window. Edge effects are
   theoretically completely removed by doubling the size of the window in
   each spatial dimension, but for practical purposes much less extension
-  may be sufficient. The numeric \code{rbord} determines the extend of
+  may be sufficient. The numeric \code{rbord} determines the extent of
   the extra space added to the window.
 }
 \value{
-  A list of length \code{nsim} containing simulated point patterns
-  (objects of class \code{"ppp"}). The list has class \code{"solist"}.
+  A list of length \code{nsim} containing simulated point patterns.
+  If the patterns are two-dimensional, then they are 
+  objects of class \code{"ppp"}, and the list has class \code{"solist"}.
+  Otherwise, the patterns are objects of class \code{"ppx"} and the
+  list has class \code{"anylist"}.
 
   The return value also carries an attribute \code{"seed"} that
   captures the initial state of the random number generator.

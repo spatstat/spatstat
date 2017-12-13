@@ -220,3 +220,18 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+13 dec 2017
+
+   simulate.detPPF.R
+   simulate.dppm.Rd
+	Bug fix when nsim > 1 and dimension > 2
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.014
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   

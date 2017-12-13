@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.013
+        CHANGES IN spatstat VERSION 1.54-0.014
 
 OVERVIEW
 
-    o We thank Nicholas Read for contributions.
+    o We thank 'AdriMaz' and Nicholas Read for contributions.
     
     o Lurking variable plot for models fitted to several point patterns.
 
@@ -51,6 +51,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o simulate.dppm, simulate.detpointprocfamily
+    Crashed if nsim > 1 and the spatial dimension was not equal to 2.
+    Fixed.
+    
     o plot.leverage.ppm
     Contour line was annotated, which was not intended.
     Fixed.
