@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.014
+        CHANGES IN spatstat VERSION 1.54-0.015
 
 OVERVIEW
 
@@ -53,6 +53,11 @@ BUG FIXES
 
     o simulate.dppm, simulate.detpointprocfamily
     Crashed if nsim > 1 and the spatial dimension was not equal to 2.
+    Fixed.
+
+    o simulate.dppm, simulate.detpointprocfamily
+    In dimensions higher than 2, the result was shifted so that
+    it was centred at the origin.
     Fixed.
     
     o plot.leverage.ppm

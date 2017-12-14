@@ -1,5 +1,5 @@
 ##   simulate.detPPF.R
-##            $Revision: 1.5 $  $Date: 2017/12/13 01:01:35 $
+##            $Revision: 1.6 $  $Date: 2017/12/14 00:56:09 $
 ##
 ## This file contains functions to simulate DPP models.
 ## Two simulation functions are visible:
