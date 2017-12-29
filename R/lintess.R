@@ -3,7 +3,7 @@
 #'
 #'   Tessellations on a Linear Network
 #'
-#'   $Revision: 1.15 $   $Date: 2017/09/12 15:16:26 $
+#'   $Revision: 1.16 $   $Date: 2017/12/18 00:57:05 $
 #'
 
 lintess <- function(L, df) {
@@ -67,7 +67,7 @@ lintess <- function(L, df) {
 print.lintess <- function(x, ...) {
   splat("Tessellation on a linear network")
   nt <- length(levels(x$df$tile))
-  splat(nt, "tiles")
+  splat(nt, ngettext(nt, "tile", "tiles"))
   if(anyNA(x$df$tile)) splat("[An additional tile is labelled NA]")
   return(invisible(NULL))
 }
