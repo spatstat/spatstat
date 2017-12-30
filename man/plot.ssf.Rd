@@ -65,7 +65,7 @@
   If \code{how="points"} the exact function values
   will be displayed as circles centred at the locations where they
   were computed. If \code{how="smoothed"} (the default) these
-  values will be kernel-smoothed using \code{\link{smooth.ppp}}
+  values will be kernel-smoothed using \code{\link{Smooth.ppp}}
   and displayed as a pixel image.
   If \code{how="nearest"} the values will be interpolated
   by nearest neighbour interpolation using \code{\link{nnmark}}

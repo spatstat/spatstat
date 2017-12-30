@@ -263,3 +263,65 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+30 dec 2017
+
+  plot.ppp.R
+	Removed old warning about mark scale.
+
+  mpl.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'mpl'
+
+  density.ppp.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'ksmooth.ppp'
+
+  plot.fv.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'conspire'
+
+  superimpose.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'superimposePSP'
+	
+  boundingbox.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'bounding.box'
+
+  dclftest.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'clf.test'
+
+  hyperframe.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'eval.hyper'
+
+  smoothfv.R
+  smooth.ppp.R
+  spatstat-deprecated.Rd
+        Deleted deprecated functions 'smooth.fv', 'smooth.ppp'
+
+  measures.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'smooth.msr'
+
+  rshift.R
+  spatstat-deprecated.Rd
+        Deleted deprecated function 'rtoro'
+
+  plot.ssf.Rd
+	Corrected cross-reference.
+  
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	nickname: "Auld Lang Cosyne"
+	version 1.54-0.017
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+

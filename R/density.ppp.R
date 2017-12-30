@@ -3,13 +3,13 @@
 #
 #  Method for 'density' for point patterns
 #
-#  $Revision: 1.86 $    $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.87 $    $Date: 2017/12/30 05:00:22 $
 #
 
-ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
-  .Deprecated("density.ppp", package="spatstat")
-  density.ppp(x, sigma, ..., edge=edge)
-}
+# ksmooth.ppp <- function(x, sigma, ..., edge=TRUE) {
+#  .Deprecated("density.ppp", package="spatstat")
+#  density.ppp(x, sigma, ..., edge=edge)
+# }
 
 density.ppp <- local({
   

@@ -1,6 +1,6 @@
 # superimpose.R
 #
-# $Revision: 1.36 $ $Date: 2016/10/17 06:48:25 $
+# $Revision: 1.37 $ $Date: 2017/12/30 05:03:15 $
 #
 #
 ############################# 
@@ -175,98 +175,5 @@ superimposeMarks <- function(arglist, nobj) {
     } else colnames(marx)[ncol(marx)] <- "pattern"
   }
   return(marx)
-}
-
-#==+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===+===
-
-  # This function is now deprecated.
-superimposePSP <-
-  function(..., W=NULL, check=TRUE)
-{
-  .Deprecated("superimpose","spatstat")
-  
-  # superimpose any number of line segment patterns
-  arglist <- list(...)
-
-  nargue <- length(arglist)
-  if(nargue == 0)
-    stop("No line segment patterns given", call.=FALSE)
-  
-  # catch possible abuses
-  if(is.null(W) && any(suspicious <- (names(arglist) == "window"))) {
-    id <- min(which(suspicious))
-    Win <- arglist[[id]]
-    if(is.owin(Win) || is.null(Win)) {
-      W <- Win
-      arglist <- arglist[-id]
-      nargue <- length(arglist)
-    }
-  }
-
-  # unpack a list
-  if(nargue == 1) {
-    X <- arglist[[1]]
-    if(!inherits(X, "psp") && inherits(X, "list"))
-      arglist <- X
-  }
-
-  isnull <- unlist(lapply(arglist, is.null))
-  arglist <- arglist[!isnull]
-  
-  if(!all(unlist(lapply(arglist, is.psp))))
-    stop("Some of the arguments are not psp objects", call.=FALSE)
-  
-  # extract segment coordinates
-  matlist <- lapply(arglist, function(x) { as.matrix(x$ends) })
-  # tack them together
-  mat <- do.call(rbind, matlist)
-
-  # extract marks if any
-  marxlist <- lapply(arglist, marks)
-
-  # check on compatibility of marks
-  mkfmt <- sapply(marxlist,markformat)
-  if(length(unique(mkfmt))>1)
-	stop(paste("The marks of the point patterns have different formats:",
-                   commasep(sQuote(mkfmt))),
-             call.=FALSE)
-  mkfmt <- mkfmt[1]
-  if(mkfmt=="dataframe") {
-	mcnms <- lapply(marxlist,names)
-	cdim  <- lengths(mcnms)
-	OK    <- length(unique(cdim)) == 1
-	if(OK) {
-		allInOne <- sapply(mcnms,paste,collapse="")
-		OK <- length(unique(allInOne)) == 1
-		if(!OK)
-                  stop("Data frames of marks have different names", call.=FALSE)
-	} else stop("Data frames of marks have different column dimensions",
-                    call.=FALSE)
-  }
- 
-  # combine the marks
-  marx <- switch(mkfmt,
-                 none = NULL,
-                 vector = {
-                   marxlist <- lapply(marxlist,
-                                      as.data.frame.vector,
-                                      nm="v1")
-                   do.call(rbind, marxlist)[,1]
-                 },
-                 dataframe = do.call(rbind, marxlist))
-
-  # determine window
-  if(!is.null(W))
-    W <- as.owin(W)
-  else {
-    # extract windows from psp objects
-    Wlist <- lapply(arglist, as.owin)
-    # take the union of all the windows
-    W <- NULL
-    for(i in seq_along(Wlist))
-      W <- union.owin(W, Wlist[[i]])
-  }
-
-  return(as.psp(mat, window=W, marks=marx, check=check))
 }
 

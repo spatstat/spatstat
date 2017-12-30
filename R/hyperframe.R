@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.64 $  $Date: 2017/02/07 07:35:32 $
+# $Revision: 1.65 $  $Date: 2017/12/30 05:12:36 $
 #
 
 hyperframe <- local({
@@ -343,12 +343,12 @@ as.list.hyperframe <- function(x, ...) {
 
 # evaluation
 
-eval.hyper <- function(e, h, simplify=TRUE, ee=NULL) {
-  .Deprecated("with.hyperframe", package="spatstat")
-  if(is.null(ee))
-    ee <- as.expression(substitute(e))
-  with.hyperframe(h, simplify=simplify, ee=ee)
-}
+# eval.hyper <- function(e, h, simplify=TRUE, ee=NULL) {
+#   .Deprecated("with.hyperframe", package="spatstat")
+#   if(is.null(ee))
+#     ee <- as.expression(substitute(e))
+#   with.hyperframe(h, simplify=simplify, ee=ee)
+# }
 
 with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
                             enclos=NULL) {

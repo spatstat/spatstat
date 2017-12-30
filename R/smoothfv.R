@@ -1,16 +1,16 @@
 #
 #  smoothfv.R
 #
-#   $Revision: 1.13 $   $Date: 2014/01/15 10:03:35 $
+#   $Revision: 1.14 $   $Date: 2017/12/30 05:14:18 $
 #
   
-smooth.fv <- function(x, which="*", ..., 
-                      method=c("smooth.spline", "loess"),
-                      xinterval=NULL) {
-  .Deprecated("Smooth.fv", package="spatstat",
-     msg="smooth.fv is deprecated: use the generic Smooth with a capital S")
-  Smooth(x, which=which, ..., method=method, xinterval=xinterval)
-}
+# smooth.fv <- function(x, which="*", ..., 
+#                      method=c("smooth.spline", "loess"),
+#                      xinterval=NULL) {
+#  .Deprecated("Smooth.fv", package="spatstat",
+#     msg="smooth.fv is deprecated: use the generic Smooth with a capital S")
+#  Smooth(x, which=which, ..., method=method, xinterval=xinterval)
+# }
   
 Smooth.fv <- function(X, which="*", ..., 
                       method=c("smooth.spline", "loess"),

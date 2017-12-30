@@ -1,15 +1,15 @@
 #
 #  dclftest.R
 #
-#  $Revision: 1.35 $  $Date: 2016/12/30 01:44:07 $
+#  $Revision: 1.36 $  $Date: 2017/12/30 05:10:25 $
 #
 #  Monte Carlo tests for CSR (etc)
 #
 
-clf.test <- function(...) {
- .Deprecated("dclf.test", package="spatstat")
- dclf.test(...)
-}
+# clf.test <- function(...) {
+#  .Deprecated("dclf.test", package="spatstat")
+#  dclf.test(...)
+# }
 
 dclf.test <- function(X, ...,
                       alternative=c("two.sided", "less", "greater"),

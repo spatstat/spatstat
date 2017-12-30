@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.210 $	$Date: 2017/11/02 06:22:37 $
+#	$Revision: 5.211 $	$Date: 2017/12/30 04:58:33 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -12,18 +12,18 @@
 # -------------------------------------------------------------------
 #
 
-"mpl" <- function(Q,
-         trend = ~1,
-	 interaction = NULL,
-         data = NULL,
-	 correction="border",
-	 rbord = 0,
-         use.gam=FALSE) {
-   .Deprecated("ppm", package="spatstat")
-   ppm(Q=Q, trend=trend, interaction=interaction,
-       covariates=data, correction=correction, rbord=rbord,
-       use.gam=use.gam, method="mpl")
-}
+# "mpl" <- function(Q,
+#         trend = ~1,
+#	 interaction = NULL,
+#         data = NULL,
+#	 correction="border",
+#	 rbord = 0,
+#         use.gam=FALSE) {
+#   .Deprecated("ppm", package="spatstat")
+#   ppm(Q=Q, trend=trend, interaction=interaction,
+#       covariates=data, correction=correction, rbord=rbord,
+#       use.gam=use.gam, method="mpl")
+# }
 
 mpl.engine <- 
   function(Q,
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2017/11/02 06:22:37 $")
+                        date="$Date: 2017/12/30 04:58:33 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object

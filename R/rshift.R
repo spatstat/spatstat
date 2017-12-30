@@ -3,7 +3,7 @@
 #
 #   random shift with optional toroidal boundary
 #
-#   $Revision: 1.17 $   $Date: 2016/02/11 10:17:12 $
+#   $Revision: 1.18 $   $Date: 2017/12/30 05:39:13 $
 #
 #
 rshift <- function(X, ...) {
@@ -169,7 +169,7 @@ handle.rshift.args <- function(W, ...,
               edge=edge, clip=clip))
 }
 
-rtoro <- function(X, which=NULL, radius=NULL, width=NULL, height=NULL) {
-  .Deprecated("rshift", package="spatstat")
-  rshift(X, which=which, radius=radius, width=width, height=height)
-}
+# rtoro <- function(X, which=NULL, radius=NULL, width=NULL, height=NULL) {
+#  .Deprecated("rshift", package="spatstat")
+#  rshift(X, which=which, radius=radius, width=width, height=height)
+# }

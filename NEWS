@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.016
+        CHANGES IN spatstat VERSION 1.54-0.017
 
 OVERVIEW
 
@@ -13,7 +13,9 @@ OVERVIEW
     
     o Bug fixes and improvements.
 
-    o Nickname: "Plucky Comic Relief"
+    o Removed old warnings and deprecated functions.
+    
+    o Nickname: "Auld Lang Cosyne"
 
 NEW FUNCTIONS
 
@@ -49,6 +51,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lurking.ppm
     Accelerated.
 
+    o clf.test, conspire, bounding.box, ksmooth.ppp, mpl, superimposePSP,
+    eval.hyper, smooth.fv, smooth.ppp, smooth.msr, rtoro
+    These deprecated functions have now been removed.
+    
+    o plot.ppp
+    A very old warning, about the interpretation of the mark scale
+    as the circle diameter, is no longer printed.
+    
 BUG FIXES
 
     o simulate.dppm, simulate.detpointprocfamily

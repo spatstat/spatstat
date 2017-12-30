@@ -1,14 +1,14 @@
 #
 #       plot.fv.R   (was: conspire.S)
 #
-#  $Revision: 1.128 $    $Date: 2016/12/30 01:44:07 $
+#  $Revision: 1.129 $    $Date: 2017/12/30 05:01:31 $
 #
 #
 
-conspire <- function(...) {
-  .Deprecated("plot.fv", package="spatstat")
-  plot.fv(...)
-}
+# conspire <- function(...) {
+#  .Deprecated("plot.fv", package="spatstat")
+#  plot.fv(...)
+# }
 
 plot.fv <- local({
 

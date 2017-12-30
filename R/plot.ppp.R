@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.93 $	$Date: 2017/09/13 09:52:28 $
+#	$Revision: 1.94 $	$Date: 2017/12/30 04:46:55 $
 #
 #
 #--------------------------------------------------------------------------
@@ -190,11 +190,11 @@ plot.ppp <- local({
   type <- match.arg(type)
   if(missing(legend)) legend <- (type == "p")
 
-  if(!missing(maxsize) || !missing(markscale) || !missing(meansize))
-    warn.once("circlescale",
-              "Interpretation of arguments maxsize and markscale",
-              "has changed (in spatstat version 1.37-0 and later).",
-              "Size of a circle is now measured by its diameter.")
+#  if(!missing(maxsize) || !missing(markscale) || !missing(meansize))
+#    warn.once("circlescale",
+#              "Interpretation of arguments maxsize and markscale",
+#              "has changed (in spatstat version 1.37-0 and later).",
+#              "Size of a circle is now measured by its diameter.")
 
   if(clipped <- !is.null(clipwin)) {
     stopifnot(is.owin(clipwin))

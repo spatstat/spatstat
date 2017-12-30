@@ -3,14 +3,14 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.44 $  $Date: 2017/08/16 05:40:56 $
+#  $Revision: 1.45 $  $Date: 2017/12/30 05:14:56 $
 #
 
-smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
-  .Deprecated("Smooth.ppp", package="spatstat",
-    msg="smooth.ppp is deprecated: use the generic Smooth with a capital S")
-  Smooth(X, ..., weights=weights, at=at)
-}
+# smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
+#   .Deprecated("Smooth.ppp", package="spatstat",
+#    msg="smooth.ppp is deprecated: use the generic Smooth with a capital S")
+#   Smooth(X, ..., weights=weights, at=at)
+# }
 
 Smooth <- function(X, ...) {
   UseMethod("Smooth")

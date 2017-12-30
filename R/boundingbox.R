@@ -1,12 +1,12 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.10 $ $Date: 2017/10/31 03:39:36 $
+## $Revision: 1.11 $ $Date: 2017/12/30 05:04:44 $
 
-bounding.box <- function(...) {
-  .Deprecated("boundingbox", "spatstat")
-  boundingbox(...)
-}
+# bounding.box <- function(...) {
+#  .Deprecated("boundingbox", "spatstat")
+#  boundingbox(...)
+# }
 
 boundingbox <- function(...) {
   ## remove any NULL arguments
