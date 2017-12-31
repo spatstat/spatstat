@@ -323,5 +323,19 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+31 dec 2017
+
+   leverage.R
+   plot.leverage.ppm.Rd
+	persp.leverage.ppm has new argument 'zlab'.
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.018
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
 
 

@@ -13,7 +13,7 @@
                              args.contour=list(), 
                              multiplot=TRUE)
 
- \method{persp}{leverage.ppm}(x, \dots, main)
+ \method{persp}{leverage.ppm}(x, \dots, main, zlab="leverage")
 }
 \arguments{
   \item{x}{
@@ -41,7 +41,10 @@
     several plot panels.
   }
   \item{main}{
-    Optional main title.
+    Optional main title. A character string or character vector.
+  }
+  \item{zlab}{
+    Label for the \eqn{z} axis. A character string.
   }
 }
 \details{

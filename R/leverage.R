@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.90 $ $Date: 2017/12/12 05:47:55 $
+#  $Revision: 1.91 $ $Date: 2017/12/31 04:27:17 $
 #
 
 leverage <- function(model, ...) {
@@ -823,12 +823,12 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
                                 which.marks=1)))
 }
 
-persp.leverage.ppm <- function(x, ..., main) {
+persp.leverage.ppm <- function(x, ..., main, zlab="leverage") {
   if(missing(main)) main <- deparse(substitute(x))
   y <- as.im(x)
-  if(is.im(y)) return(persp(y, main=main, ...))
+  if(is.im(y)) return(persp(y, main=main, ..., zlab=zlab))
   pa <- par(ask=TRUE)
-  lapply(y, persp, main=main, ...)
+  lapply(y, persp, main=main, ..., zlab=zlab)
   par(pa)
   return(invisible(NULL))
 }

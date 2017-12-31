@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.017
+        CHANGES IN spatstat VERSION 1.54-0.018
 
 OVERVIEW
 
@@ -47,6 +47,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The result now belongs to class 'ppmInfluence', for which there are
     methods for 'leverage', 'influence', 'dfbetas' which extract the
     deired component.
+    
+    o persp.leverage.ppm
+    New argument 'zlab'.
     
     o lurking.ppm
     Accelerated.
