@@ -9,11 +9,15 @@
   of a leverage function that has been computed by \code{\link{leverage.ppm}}.
 }
 \usage{
- \method{plot}{leverage.ppm}(x, \dots, showcut=TRUE, col.cut=par("fg"),
+ \method{plot}{leverage.ppm}(x, \dots,
+                             what=c("smooth", "nearest", "exact"),
+                             showcut=TRUE, col.cut=par("fg"),
                              args.contour=list(), 
                              multiplot=TRUE)
 
- \method{persp}{leverage.ppm}(x, \dots, main, zlab="leverage")
+ \method{persp}{leverage.ppm}(x, \dots,
+               what=c("smooth", "nearest"),
+               main, zlab="leverage")
 }
 \arguments{
   \item{x}{
@@ -23,6 +27,10 @@
   \item{\dots}{
     Arguments passed to \code{\link{plot.im}} 
     or \code{\link{persp.im}} controlling the plot.
+  }
+  \item{what}{
+    Character string (partially matched)
+    specifying the kind of plot. See Details.
   }
   \item{showcut}{
     Logical. If \code{TRUE}, a contour line is plotted at the
@@ -61,6 +69,30 @@
 
   The \code{persp} method displays the leverage function as a surface
   in perspective view, using \code{\link{persp.im}}.
+
+  Since the exact values of leverage are computed only
+  at a finite set of quadrature locations, there are several options for
+  these plots:
+  \describe{
+    \item{\code{what="smooth"}:}{
+      (the default) an image plot showing a smooth function,
+      obtained by applying kernel smoothing to the exact leverage values;
+    }
+    \item{\code{what="nearest"}:}{
+      an image plot showing a piecewise-constant function,
+      obtained by taking the exact leverage value at the nearest
+      quadrature point;
+    }
+    \item{\code{what="exact"}:}{
+      a symbol plot showing the exact values of leverage as
+      circles, centred at the quadrature points,
+      with diameters proportional to leverage.
+    }
+  }
+  The pixel images are already contained in the object \code{x}
+  and were computed by \code{\link{leverage.ppm}};
+  the resolution of these images is controlled
+  by arguments to \code{\link{leverage.ppm}}.
 }
 \value{
   Same as for \code{\link{plot.im}} 

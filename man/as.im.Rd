@@ -49,7 +49,7 @@
 
   \method{as.im}{Smoothfun}(X, W=NULL, \dots)
 
-  \method{as.im}{leverage.ppm}(X, \dots)
+  \method{as.im}{leverage.ppm}(X, \dots, what=c("smooth", "nearest"))
 
   \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
 
@@ -105,7 +105,12 @@
    Logical value indicating whether to compute an approximate result
    at faster speed, by using \code{\link{distmap}}, when \code{X} is
    a distance function.
-  }
+ }
+ \item{what}{
+   Character string (partially matched) specifying which image data
+   should be extracted. See \code{\link{plot.leverage.ppm}} for
+   explanation.
+ }
 }
 \details{
   This function converts the data \code{X} into a pixel image

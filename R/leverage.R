@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.91 $ $Date: 2017/12/31 04:27:17 $
+#  $Revision: 1.95 $ $Date: 2018/01/08 03:44:16 $
 #
 
 leverage <- function(model, ...) {
@@ -643,17 +643,19 @@ ppmInfluenceEngine <- function(fit,
                        sigma=smallsigma,
                        geometric=geomsmooth,
                        dimyx=dimyx, eps=eps)
+      levnearest <- nnmark(levvaldum, dimyx=dimyx, eps=eps)
     } else {
       levsplitdum <- split(levvaldum, reduce=TRUE)
       levsmo <- Smooth(levsplitdum,
                        sigma=smallsigma,
                        geometric=geomsmooth,
                        dimyx=dimyx, eps=eps)
+      levnearest <- solapply(levsplitdum, nnmark, dimyx=dimyx, eps=eps)
     }
     ## nominal mean level
     a <- area(Window(loc)) * markspace.integral(loc)
     levmean <- p/a
-    lev <- list(val=levval, smo=levsmo, ave=levmean)
+    lev <- list(val=levval, smo=levsmo, ave=levmean, nearest=levnearest)
     result$lev <- lev
   }
   # .......... influence .............
@@ -760,13 +762,29 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
   return(result)
 }
 
-plot.leverage.ppm <- function(x, ..., showcut=TRUE, col.cut=par("fg"),
+plot.leverage.ppm <- function(x, ...,
+                              what=c("smooth", "nearest", "exact"),
+                              showcut=TRUE, col.cut=par("fg"),
                               args.contour=list(),
                               multiplot=TRUE) {
+  what <- match.arg(what)
   fitname <- x$fitname
   defaultmain <- paste("Leverage for", fitname)
+
   y <- x$lev
-  smo <- y$smo
+
+  if(what == "exact") {
+    #' plot exact quadrature locations and leverage values
+    z <- do.call(plot,
+                 resolve.defaults(list(x=y$val, multiplot=multiplot),
+                                  list(...),
+                                  list(main=defaultmain)))
+    return(invisible(z))
+  }
+
+  smo <- as.im(x, what=what)
+  if(is.null(smo)) return(invisible(NULL))
+  
   ave <- y$ave
   if(!multiplot && inherits(smo, "imlist")) {
     ave <- ave * length(smo)
@@ -823,9 +841,12 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
                                 which.marks=1)))
 }
 
-persp.leverage.ppm <- function(x, ..., main, zlab="leverage") {
+persp.leverage.ppm <- function(x, ..., what=c("smooth", "nearest"),
+                               main, zlab="leverage") {
   if(missing(main)) main <- deparse(substitute(x))
-  y <- as.im(x)
+  what <- match.arg(what)
+  y <- as.im(x, what=what)
+  if(is.null(y)) return(invisible(NULL))
   if(is.im(y)) return(persp(y, main=main, ..., zlab=zlab))
   pa <- par(ask=TRUE)
   lapply(y, persp, main=main, ..., zlab=zlab)
@@ -833,8 +854,16 @@ persp.leverage.ppm <- function(x, ..., main, zlab="leverage") {
   return(invisible(NULL))
 }
   
-as.im.leverage.ppm <- function(X, ...) {
-  return(X$lev$smo) # could be either an image or a list of images
+as.im.leverage.ppm <- function(X, ..., what=c("smooth", "nearest")) {
+  what <- match.arg(what)
+  y <- switch(what,
+              smooth = X$lev$smo,
+              nearest = X$lev$nearest)
+  if(is.null(y))
+    warning(paste("Data for", sQuote(what), "image are not available:",
+                  "please recompute the leverage using the current spatstat"),
+            call.=FALSE)
+  return(y) # could be either an image or a list of images
 }
 
 as.function.leverage.ppm <- function(x, ...) {

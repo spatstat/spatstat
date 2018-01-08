@@ -358,3 +358,25 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   leverage.R
+	Leverage calculation now includes the result of 'nnmark'.
+
+   leverage.R
+   plot.leverage.ppm.Rd
+   as.im.Rd
+	New argument 'what' added to plot.leverage.ppm,
+	persp.leverage.ppm and as.im.leverage.ppm
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	version 1.54-0.020
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   
+
+
+   

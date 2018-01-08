@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.019
+        CHANGES IN spatstat VERSION 1.54-0.020
 
 OVERVIEW
 
@@ -49,9 +49,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The result now belongs to class 'ppmInfluence', for which there are
     methods for 'leverage', 'influence', 'dfbetas' which extract the
     deired component.
+
+    o plot.leverage.ppm
+    New argument 'what'.
     
     o persp.leverage.ppm
-    New argument 'zlab'.
+    New arguments 'zlab' and 'what'.
+    
+    o as.im.leverage.ppm
+    New argument 'what'.
+    
+    o summary.funxy, summary.distfun
+    Printed information now includes a summary of the function values.
     
     o lurking.ppm
     Accelerated.
@@ -64,9 +73,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     A very old warning, about the interpretation of the mark scale
     as the circle diameter, is no longer printed.
 
-    o summary.funxy, summary.distfun
-    Printed information now includes a summary of the function values.
-    
 BUG FIXES
 
     o simulate.dppm, simulate.detpointprocfamily
