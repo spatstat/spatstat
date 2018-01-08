@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.23 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.24 $   $Date: 2018/01/08 01:08:56 $
 #
 
 distfun <- function(X, ...) {
@@ -107,12 +107,63 @@ print.distfun <- function(x, ...) {
                     ppp="point",
                     psp="line segment",
                     "object")
-  cat(paste("Distance function for", typestring, "\n"))
+  splat("Distance function for", typestring)
   X <- get("X", envir=environment(x))
   print(X)
   if(!is.null(k <- attr(x, "k")) && k > 1)
-    cat(paste("Distance to", ordinal(k), "nearest", objname,
-              "will be computed\n"))
+    splat("Distance to", ordinal(k), "nearest", objname, "will be computed")
   return(invisible(NULL))
+}
+
+summary.distfun <- function(object, ...) {
+  xtype <- attr(object, "Xclass")
+  w <- as.owin(object)
+  fundef <- attr(object, "f")
+  attr(fundef, "Xclass") <- NULL
+  X <- get("X", envir=environment(object))
+  z <- list(xtype   = xtype,
+            k       = attr(object, "k") %orifnull% 1,
+            Xsumry  = summary(X),
+            values  = summary(as.im(object)),
+            wintype = w$type,
+            frame   = Frame(w),
+            units   = unitname(w))
+  class(z) <- "summary.distfun"
+  return(z)
+}
+
+print.summary.distfun <- function(x, ...) {
+  typestring <- switch(x$xtype,
+                       ppp="point pattern",
+                       psp="line segment pattern",
+                       owin="window",
+                       "unrecognised object")
+  objname <- switch(x$xtype,
+                    ppp="point",
+                    psp="line segment",
+                    "object")
+  splat("Distance function for", typestring)
+  if(x$k > 1)
+    splat("Distance to", ordinal(x$k), "nearest", objname, "will be computed")
+  windesc <- switch(x$wintype,
+                    rectangle="the rectangle",
+                    polygonal="a polygonal window inside the frame",
+                    mask="a binary mask in the rectangle")
+  unitinfo <- summary(x$units)
+  sigdig <- getOption('digits')
+  splat("defined in",
+        windesc,
+        prange(signif(x$frame$xrange, sigdig)),
+        "x",
+        prange(signif(x$frame$yrange, sigdig)),
+        unitinfo$plural,
+        unitinfo$explain
+        )
+  v <- x$values
+  splat("\nDistance function values:")
+  splat("\trange =", prange(signif(v$range, sigdig)))
+#  splat("\tintegral =", signif(v$integral, sigdig))
+  splat("\tmean =", signif(v$mean, sigdig))
+  invisible(NULL)
 }
 

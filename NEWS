@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.018
+        CHANGES IN spatstat VERSION 1.54-0.019
 
 OVERVIEW
 
@@ -10,12 +10,14 @@ OVERVIEW
     o Improvements to code for class 'mppm'.
 
     o Improvements to leverage and influence diagnostics.
+
+    o Improved summary information for funxy and distfun objects.
     
     o Bug fixes and improvements.
 
     o Removed old warnings and deprecated functions.
     
-    o Nickname: "Auld Lang Cosyne"
+    o Nickname: "Stable Genius Software"
 
 NEW FUNCTIONS
 
@@ -36,7 +38,7 @@ NEW FUNCTIONS
 
     o model.matrix.mppm
     Method for 'model.matrix' for models of class 'mppm'.
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o leverage.ppm, dfbetas.ppm
@@ -61,6 +63,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp
     A very old warning, about the interpretation of the mark scale
     as the circle diameter, is no longer printed.
+
+    o summary.funxy, summary.distfun
+    Printed information now includes a summary of the function values.
     
 BUG FIXES
 

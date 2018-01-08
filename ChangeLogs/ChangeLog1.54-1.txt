@@ -337,5 +337,24 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 jan 2018
 
+   funxy.R
+   spatstat-internal.Rd
+	summary.funxy now returns an object of class summary.funxy
+	New method print.summary.funxy
+
+   distfun.R
+   spatstat-internal.Rd
+	New methods summary.distfun and print.summary.distfun
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	Nicknamed 'Stable Genius Software'
+	version 1.54-0.019
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

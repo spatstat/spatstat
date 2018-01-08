@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.14 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.17 $   $Date: 2018/01/08 01:09:07 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -50,7 +50,62 @@ print.funxy <- function(x, ...) {
   print(attr(x, "f"))
 }
 
-summary.funxy <- function(object, ...) { print(object, ...) }
+summary.funxy <- function(object, ...) {
+  w <- as.owin(object)
+  z <- list(argues  = names(formals(object)),
+            fundef  = attr(object, "f"),
+            values  = summary(as.im(object)),
+            wintype = w$type,
+            frame   = Frame(w),
+            units   = unitname(w))
+  class(z) <- "summary.funxy"
+  return(z)
+}
+
+print.summary.funxy <- function(x, ...) {
+  sigdig <- getOption('digits')
+  splat(paste0("function", paren(paste(x$argues,collapse=","))),
+        "of class", sQuote("funxy"))
+  windesc <- switch(x$wintype,
+                    rectangle="the rectangle",
+                    polygonal="a polygonal window inside the frame",
+                    mask="a binary mask in the rectangle")
+  unitinfo <- summary(x$units)
+  splat("defined in",
+        windesc,
+        prange(signif(x$frame$xrange, sigdig)),
+        "x",
+        prange(signif(x$frame$yrange, sigdig)),
+        unitinfo$plural,
+        unitinfo$explain
+        )
+  splat("\nOriginal function definition:")
+  print(x$fundef)
+  v <- x$values
+  splat("\nFunction values are", v$type)
+  switch(v$type,
+         integer=,
+         real={
+           splat("\trange =", prange(signif(v$range, sigdig)))
+           splat("\tintegral =", signif(v$integral, sigdig))
+           splat("\tmean =", signif(v$mean, sigdig))
+         },
+         factor={
+           print(v$table)
+         },
+         complex={
+           splat("\trange: Real",
+                 prange(signif(v$Re$range, sigdig)),
+                 "Imaginary",
+                 prange(signif(v$Im$range, sigdig)))
+#           splat("\tintegral =", signif(v$integral, sigdig))
+           splat("\tmean =", signif(v$mean, sigdig))
+         },
+         {
+           print(v$summary)
+         })
+  invisible(NULL)
+}
 
 as.owin.funxy <- function(W, ..., fatal=TRUE) {
   W <- attr(W, "W")

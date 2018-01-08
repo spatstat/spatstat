@@ -472,6 +472,8 @@
 \alias{print.Smoothfun}       
 \alias{print.solist}
 \alias{print.splitppx}
+\alias{print.summary.distfun}
+\alias{print.summary.funxy}
 \alias{print.summary.hyperframe}
 \alias{print.summary.listof}
 \alias{print.summary.linim}
@@ -624,6 +626,7 @@
 \alias{suffstat.generic}
 \alias{suffstat.poisson}
 \alias{summarise.trend}
+\alias{summary.distfun}
 \alias{summary.envelope}
 \alias{summary.funxy}
 \alias{summary.hyperframe}
@@ -1320,6 +1323,8 @@ prepareTitle(main)
 \method{print}{solist}(x, \dots)
 \method{print}{splitppp}(x, \dots)
 \method{print}{splitppx}(x, \dots)
+\method{print}{summary.distfun}(x, \dots)
+\method{print}{summary.funxy}(x, \dots)
 \method{print}{summary.hyperframe}(x, \dots)
 \method{print}{summary.linim}(x, \dots)
 \method{print}{summary.linnet}(x, \dots)
@@ -1497,6 +1502,7 @@ suffloc(object)
 suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
+\method{summary}{distfun}(object,\dots)
 \method{summary}{envelope}(object,\dots)
 \method{summary}{funxy}(object,\dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
