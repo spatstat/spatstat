@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.020
+        CHANGES IN spatstat VERSION 1.54-0.021
 
 OVERVIEW
 
@@ -41,6 +41,10 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o predict.ppm
+    Now recognises the arguments 'dimyx' and 'eps' for specifying the
+    resolution of the grid of prediction points.
+    
     o leverage.ppm, dfbetas.ppm
     Increased the default resolution of the pixel images.
     Spatial resolution can now be controlled by the arguments 'dimyx', 'eps'.

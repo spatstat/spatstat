@@ -14,7 +14,9 @@ at new locations.
    interval=c("none", "confidence", "prediction"),
    level = 0.95, 
    X=data.ppm(object), correction, 
-   \dots, new.coef=NULL, check=TRUE, repair=TRUE)
+   \dots,
+   dimyx=NULL, eps=NULL,
+   new.coef=NULL, check=TRUE, repair=TRUE)
 }
 \arguments{
   \item{object}{
@@ -33,7 +35,8 @@ at new locations.
     inside \code{window} where the predictions should be computed.
     An integer, or an integer vector of length 2,
     specifying the number of grid points in the \eqn{y} and \eqn{x}
-    directions. (Incompatible with \code{locations})
+    directions. (Incompatible with \code{locations}. Equivalent to
+    \code{dimyx}.) 
   }
   \item{locations}{
     Optional. Data giving the exact
@@ -41,7 +44,7 @@ at new locations.
     of locations at which predictions should be computed.
     Either a point pattern, or a data frame with columns named \code{x} and
     \code{y}, or a binary image mask, or a pixel image.
-    (Incompatible with \code{ngrid})
+    (Incompatible with \code{ngrid}, \code{dimyx} and \code{eps}).
   }
   \item{covariates}{
     Values of external covariates required by the model.
@@ -85,6 +88,13 @@ at new locations.
   }
   \item{\dots}{
     Ignored.
+  }
+  \item{dimyx}{
+    Equivalent to \code{ngrid}.
+  }
+  \item{eps}{
+    Width and height of pixels in the prediction grid.
+    A numerical value, or numeric vector of length 2.
   }
   \item{new.coef}{
     Numeric vector of parameter values to replace the 

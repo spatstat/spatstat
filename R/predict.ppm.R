@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.100 $	$Date: 2016/12/19 09:13:07 $
+#	$Revision: 1.101 $	$Date: 2018/01/13 09:30:28 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -65,7 +65,9 @@ predict.ppm <- local({
                           level = 0.95,
                           X=data.ppm(object),
                           correction,
-                          ..., new.coef=NULL, check=TRUE, repair=TRUE) {
+                          ...,
+                          dimyx=NULL, eps=NULL, 
+                          new.coef=NULL, check=TRUE, repair=TRUE) {
     interval <- match.arg(interval)
     ## extract undocumented arguments 
     xarg <- xtract(...)
@@ -238,18 +240,36 @@ predict.ppm <- local({
       window <- locations
       locations <- NULL
     }
-  
-    if(!is.null(ngrid) && !is.null(locations))
-      stop(paste("Only one of",
-                 sQuote("ngrid"), "and", sQuote("locations"),
-                 "should be specified"))
 
+    #' incompatible:
+    if(!is.null(locations)) {
+      #' other arguments are incompatible
+      offending <- c(!is.null(ngrid), !is.null(dimyx), !is.null(eps))
+      if(any(offending)) {
+        offenders <- c("grid", "dimyx", "eps")[offending]
+        nbad <- sum(offending)
+        stop(paste(ngettext(nbad, "The argument", "The arguments"),
+                   commasep(sQuote(offenders)), 
+                   ngettext(nbad, "is", "are"),
+                   "incompatible with", sQuote("locations")),
+             call.=FALSE)
+      }
+    }
+
+    #' equivalent:
+    if(!is.null(ngrid) && !is.null(dimyx))
+      warning(paste("The arguments", sQuote("ngrid"), "and", sQuote("dimyx"),
+                    "are equivalent: only one should be given"),
+              call.=FALSE)
+    
+    ngrid <- ngrid %orifnull% dimyx
+    
     if(is.null(ngrid) && is.null(locations)) 
       ## use regular grid
       ngrid <- rev(spatstat.options("npixel"))
     
     want.image <- is.null(locations) || is.mask(locations)
-    make.grid <- !is.null(ngrid)
+    make.grid <- !is.null(ngrid) 
 
     ## ##############   Determine prediction points  #####################
 
@@ -308,7 +328,7 @@ predict.ppm <- local({
         }
         if(is.null(window))
           window <- sumobj$entries$data$window
-        masque <- as.mask(window, dimyx=ngrid)
+        masque <- as.mask(window, dimyx=ngrid, eps=eps)
       }
       ## Hack -----------------------------------------------
       ## gam with lo() will not allow extrapolation beyond the range of x,y
