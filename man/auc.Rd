@@ -78,7 +78,11 @@ auc(X, \dots)
   (Lobo et al, 2007).
 }
 \value{
-  A numeric vector of length 2 giving the AUC value 
+  Numeric.
+  For \code{auc.ppp} and \code{auc.lpp}, the result is a single number
+  giving the AUC value.
+  For \code{auc.ppm}, \code{auc.kppm} and \code{auc.lppm}, the result is a 
+  numeric vector of length 2 giving the AUC value 
   and the theoretically expected AUC value for this model.
 }
 \references{
