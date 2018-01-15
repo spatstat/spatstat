@@ -396,8 +396,24 @@ Change log from 1.54-0 to 1.54-1
 
    DESCRIPTION
    NEWS
-   Nickname.txt
 	version 1.54-0.022
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+   cdftest.R
+   bermantest.R
+   moribund.Rd [Deleted file]
+   spatstat-deprecated.Rd
+   	Removed deprecated functions.
+
+   leverage.R
+	Trying a better choice of 'smallsigma'.
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.023
 
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------

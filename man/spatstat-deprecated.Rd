@@ -1,6 +1,5 @@
 \name{spatstat-deprecated}
 \alias{as.psp.owin}
-\alias{ks.test.ppm}
 \alias{which.max.im}
 \alias{delaunay.distance}
 \alias{delaunay.network}
@@ -19,7 +18,6 @@
 \usage{
 \method{as.psp}{owin}(x, \dots, window=NULL, 
        check=spatstat.options("checksegments"), fatal=TRUE)
-ks.test.ppm(\dots)
 which.max.im(x)
 delaunay.distance(\dots)
 delaunay.network(\dots)
@@ -38,9 +36,6 @@ circumradius(x, \dots)
   the \pkg{spatstat} package.
   
   \code{as.psp.owin} has been replaced by \code{\link{edges}}.
-  
-  \code{ks.test.ppm} has been replaced by
-  \code{\link{cdf.test}}.
   
   \code{which.max.im(x)} is replaced by
   \code{\link{im.apply}(x, which.max)}.

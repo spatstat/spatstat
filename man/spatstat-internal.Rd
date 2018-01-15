@@ -18,7 +18,7 @@
 \alias{ApplyConnected}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
-\alias{areadelta2}       
+\alias{areadelta2}
 \alias{areaGain.diri}       
 \alias{areaGain.grid}       
 \alias{areaLoss.diri}       
@@ -37,6 +37,7 @@
 \alias{as.owin.lintess}
 \alias{as.unitname}
 \alias{augment.msr}
+\alias{avenndist}
 \alias{BartCalc}
 \alias{bbEngine}
 \alias{bermantestEngine}
@@ -784,6 +785,7 @@ as.listof(x)
 \method{as.owin}{lintess}(W, \dots)
 as.unitname(s)
 augment.msr(x, \dots, sigma)
+avenndist(X)
 BartCalc(fY, fK)
 bbEngine(\dots)
 bermantestEngine(model, covariate, which, alternative, \dots,

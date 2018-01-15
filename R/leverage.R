@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.95 $ $Date: 2018/01/08 03:44:16 $
+#  $Revision: 1.96 $ $Date: 2018/01/15 13:37:32 $
 #
 
 leverage <- function(model, ...) {
@@ -78,6 +78,8 @@ leverage.ppmInfluence <- function(model, ...) { model$leverage }
 influence.ppmInfluence <- function(model, ...) { model$influence }
 dfbetas.ppmInfluence <- function(model, ...) { model$dfbetas }
 
+avenndist <- function(X) mean(nndist(X))
+
 ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
                            "score", "derivatives", "increments"),
@@ -134,7 +136,8 @@ ppmInfluenceEngine <- function(fit,
          call.=FALSE)
 
   ## smoothing bandwidth and resolution for smoothed images of densities
-  smallsigma <- if(!mt) maxnndist(loc) else max(sapply(split(loc), maxnndist))
+  smallsigma <- if(!mt) avenndist(loc) else max(sapply(split(loc), avenndist))
+  ## previously used 'maxnndist' instead of 'avenndist'
   if(is.null(dimyx) && is.null(eps)) 
     eps <- sqrt(prod(sidelengths(Frame(loc))))/256
 

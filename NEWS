@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.022
+        CHANGES IN spatstat VERSION 1.54-0.023
 
 OVERVIEW
 
@@ -44,11 +44,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o predict.ppm
     Now recognises the arguments 'dimyx' and 'eps' for specifying the
     resolution of the grid of prediction points.
-    
+
     o leverage.ppm, dfbetas.ppm
     Increased the default resolution of the pixel images.
     Spatial resolution can now be controlled by the arguments 'dimyx', 'eps'.
-    
+
     o ppmInfluence
     The result now belongs to class 'ppmInfluence', for which there are
     methods for 'leverage', 'influence', 'dfbetas' which extract the
@@ -70,9 +70,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Accelerated.
 
     o clf.test, conspire, bounding.box, ksmooth.ppp, mpl, superimposePSP,
-    eval.hyper, smooth.fv, smooth.ppp, smooth.msr, rtoro
+    eval.hyper, smooth.fv, smooth.ppp, smooth.msr, rtoro, plot.kstest
     These deprecated functions have now been removed.
+
+    o bermantest
+    This deprecated function has now been removed.
+    Use berman.test instead.
     
+    o kstest
+    This deprecated function has now been removed.
+    Use cdf.test instead.
+
     o plot.ppp
     A very old warning, about the interpretation of the mark scale
     as the circle diameter, is no longer printed.
@@ -95,7 +103,7 @@ BUG FIXES
     o vcov.mppm
     Format was incorrect (rows/columns were omitted) in some cases.
     Fixed.
-    
+
     o model.matrix.ppm, model.frame.ppm
     Values were sometimes incorrect when applied to the result of subfits().
     To be precise, if 'fit' was an mppm object fitted to a hyperframe
@@ -109,6 +117,11 @@ BUG FIXES
     The attribute 'assign' was omitted, in some cases.
     Fixed.
 
+    o leverage.ppm
+    The leverage function was oversmoothed, when the model was fitted
+    with method="logi".
+    Fixed.
+    
         CHANGES IN spatstat VERSION 1.54-0
 
 OVERVIEW

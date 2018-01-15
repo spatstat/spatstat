@@ -1,26 +1,9 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.15 $  $Date: 2017/01/18 07:58:44 $
+#  $Revision: 2.16 $  $Date: 2018/01/15 13:08:12 $
 #
 #
-
-# --------- old -------------
-
-ks.test.ppm <- function(...) {
-  .Deprecated("cdf.test.ppm", package="spatstat")
-  cdf.test.ppm(...)
-}
-
-kstest <- kstest.ppp <- kstest.ppm <- kstest.lpp <- kstest.lppm <-
-  kstest.slrm <-
-  function(...) {
-    message("kstest is out of date; use cdf.test")
-#  .Deprecated("cdf.test", package="spatstat")
-  cdf.test(..., test="ks")
-}
-
-# ---------------------------
 
 cdf.test <- function(...) {
   UseMethod("cdf.test")

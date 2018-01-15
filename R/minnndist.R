@@ -61,4 +61,3 @@ maxnndist <- function(X, positive=FALSE) {
   return(sqrt(z$result))
 }
 
-          

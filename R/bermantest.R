@@ -3,43 +3,9 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.18 $  $Date: 2016/02/11 10:17:12 $
+#  $Revision: 1.19 $  $Date: 2018/01/15 13:08:21 $
 #
 #
-
-# --------- outdated --------
-
-bermantest <- function(...) {
-  message("bermantest is out of date; use berman.test")
-#  .Deprecated("berman.test", package="spatstat")
-  berman.test(...)
-}
-
-bermantest.ppp <- function(...) {
-    message("bermantest.ppp is out of date; use berman.test.ppp")
-#  .Deprecated("berman.test.ppp", package="spatstat")
-  berman.test.ppp(...)
-}
-
-bermantest.ppm <- function(...) {
-    message("bermantest.ppm is out of date; use berman.test.ppm")
-#  .Deprecated("berman.test.ppm", package="spatstat")
-  berman.test.ppm(...)
-}
-
-bermantest.lpp <- function(...) {
-    message("bermantest.lpp is out of date; use berman.test.lpp")
-#  .Deprecated("berman.test.lpp", package="spatstat")
-  berman.test.lpp(...)
-}
-
-bermantest.lppm <- function(...) {
-    message("bermantest.lppm is out of date; use berman.test.lppm")
-#  .Deprecated("berman.test.lppm", package="spatstat")
-  berman.test.lppm(...)
-}
-
-# ---------------------------
 
 berman.test <- function(...) {
   UseMethod("berman.test")
