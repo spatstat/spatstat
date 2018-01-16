@@ -51,6 +51,9 @@ plot(X,
      main="Point pattern on linear network (lpp)",
      show.window=FALSE)
 
+V <- as.linim(function(x,y,seg,tp){x^2-y^2}, L=simplenet)
+plot(V, main="Pixel image on a linear network")
+
 fanfare("II. Graphics")
 
 plot(letterR, col="green", border="red", lwd=2, main="Polygonal window with colour fill")
@@ -110,6 +113,10 @@ plot(rgbim(D,X,L,maxColorValue=1), valuesAreColours=TRUE,
      main="Three images: RGB display")
 plot(hsvim(D,L,X), valuesAreColours=TRUE,
      main="Three images: HSV display")
+
+V <- as.linim(function(x,y,seg,tp){(y/1000)^2-(x/1000)^3}, L=domain(chicago))
+plot(V, main="Pixel image on a linear network (colour plot)")
+plot(V, style="w", main="Pixel image on a linear network (width plot)")
 
 fanfare("III. Conversion between types")
 
@@ -505,6 +512,15 @@ plot(dpat, cols=c("red", "blue"))
 fit <- ppm(dpat ~marks + polynom(x,y,2), Poisson())
 plot(fit, trend=TRUE, se=TRUE)
 
+# Linear network data
+plot(spiders)
+fit <- lppm(spiders ~ polynom(x,y,2))
+anova(fit, test="Chi")
+(fit <- step(fit))
+lam <- predict(fit)
+plot(lam, main="Point process model on linear network", ribscale=1000)
+plot(spiders, add=TRUE, pch=16, show.network=FALSE)
+
 fanfare("VII. Simulation")
 
 plot(letterR, main="Poisson random points")
@@ -586,18 +602,18 @@ fanfare("VIII. Geometry")
 A <- letterR
 
 B <- shift(letterR, c(0.2,0.1))
-plot(bounding.box(A,B), main="shift", type="n")
+plot(boundingbox(A,B), main="shift", type="n")
 plot(A, add=TRUE)
 plot(B, add=TRUE, border="red")
 
 B <- rotate(letterR, 0.2)
-plot(bounding.box(A,B), main="rotate", type="n")
+plot(boundingbox(A,B), main="rotate", type="n")
 plot(A, add=TRUE)
 plot(B, add=TRUE, border="red")
 
 mat <- matrix(c(1.1, 0, 0.3, 1), 2, 2)
 B <- affine(letterR, mat=mat, vec=c(0.2,-0.1))
-plot(bounding.box(A,B), main="affine", type="n")
+plot(boundingbox(A,B), main="affine", type="n")
 plot(A, add=TRUE)
 plot(B, add=TRUE, border="red")
 

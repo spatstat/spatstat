@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.023
+        CHANGES IN spatstat VERSION 1.54-0.024
 
 OVERVIEW
 
@@ -17,7 +17,7 @@ OVERVIEW
 
     o Removed old warnings and deprecated functions.
     
-    o Nickname: "Stable Genius Software"
+    o Nickname: "Throttling State"
 
 NEW FUNCTIONS
 
