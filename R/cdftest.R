@@ -325,12 +325,6 @@ spatialCDFframe <- function(model, covariate, ...) {
   return(stuff)
 }
 
-plot.kstest <- function(x, ...) {
-  message("kstest is out of date; use cdf.test")
-#  .Deprecated("plot.cdftest", package="spatstat")
-  plot.cdftest(x, ...)
-}
-
 plot.cdftest <- function(x, ..., style=c("cdf", "PP", "QQ"),
                         lwd=par("lwd"), col=par("col"), lty=par("lty"),
                         lwd0=lwd, col0=2, lty0=2,

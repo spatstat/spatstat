@@ -3,7 +3,7 @@
 #
 # Test statistics from Berman (1986)
 #
-#  $Revision: 1.19 $  $Date: 2018/01/15 13:08:21 $
+#  $Revision: 1.21 $  $Date: 2018/01/17 08:46:51 $
 #
 #
 
@@ -107,24 +107,45 @@ bermantestEngine <- function(model, covariate,
   if(!is.poisson(model))
     stop("Only implemented for Poisson point process models")
 
-  # ........... first assemble data ...............
+  #'  compute required data 
   fram <- spatialCDFframe(model, covariate, ...,
-                        modelname=modelname,
-                        covname=covname,
-                        dataname=dataname)
+                          modelname=modelname,
+                          covname=covname,
+                          dataname=dataname)
+  #'  evaluate berman test statistic 
+  result <- bermantestCalc(fram, which=which, alternative=alternative)
+
+  return(result)
+}
+
+bermantestCalc <- function(fram,
+                           which=c("Z1", "Z2"),
+                           alternative=c("two.sided", "less", "greater"),
+                           ...) {
+
+  which <- match.arg(which)
+  alternative <- match.arg(alternative)
+
+  verifyclass(fram, "spatialCDFframe")
   fvalues <- fram$values
   info    <- fram$info
-  # values of covariate at data points
+  
+  ## values of covariate at data points
   ZX <- fvalues$ZX
-  # transformed to Unif[0,1] under H0
+  ## transformed to Unif[0,1] under H0
   U  <- fvalues$U
-  # values of covariate at pixels
+  ## values of covariate at pixels
   Zvalues <- fvalues$Zvalues
-  # corresponding pixel areas/weights
+  ## corresponding pixel areas/weights
   weights <- fvalues$weights
-  # intensity of model
+  ## intensity of model
   lambda  <- fvalues$lambda
 
+  ## names 
+  modelname <- info$modelname
+  dataname  <- info$dataname
+  covname   <- info$covname
+  
   switch(which,
          Z1={
            #......... Berman Z1 statistic .....................

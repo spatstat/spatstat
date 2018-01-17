@@ -40,6 +40,7 @@
 \alias{avenndist}
 \alias{BartCalc}
 \alias{bbEngine}
+\alias{bermantestCalc}
 \alias{bermantestEngine}
 \alias{bdry.mask}
 \alias{bind.ratfv}
@@ -788,6 +789,7 @@ augment.msr(x, \dots, sigma)
 avenndist(X)
 BartCalc(fY, fK)
 bbEngine(\dots)
+bermantestCalc(fram, which, alternative, \dots)
 bermantestEngine(model, covariate, which, alternative, \dots,
                  modelname, covname, dataname)
 bdry.mask(W)
