@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.025
+        CHANGES IN spatstat VERSION 1.54-0.026
 
 OVERVIEW
 
@@ -87,6 +87,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o nnmap, nnmark
+    Values were incorrect if the resulting pixel image
+    had unequal numbers of rows and columns.
+    Fixed.
+    
     o simulate.dppm, simulate.detpointprocfamily
     Crashed if nsim > 1 and the spatial dimension was not equal to 2.
     Fixed.

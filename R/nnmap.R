@@ -82,6 +82,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
       W <- flipxy(W)
       M <- flipxy(M)
       Mdim <- M$dim
+      nxcol <- Mdim[2]
+      nyrow <- Mdim[1]
     }
     xx <- X$x
     yy <- X$y
