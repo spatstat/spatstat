@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.027
+        CHANGES IN spatstat VERSION 1.54-0.028
 
 OVERVIEW
 
@@ -21,6 +21,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o contour.leverage.ppm
+    Method for 'contour' for leverage functions of class 'leverage.ppm'
+    
     o lurking
     New generic function for lurking variable plots.
 

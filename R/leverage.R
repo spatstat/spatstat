@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.96 $ $Date: 2018/01/15 13:37:32 $
+#  $Revision: 1.98 $ $Date: 2018/01/18 08:19:00 $
 #
 
 leverage <- function(model, ...) {
@@ -636,11 +636,11 @@ ppmInfluenceEngine <- function(fit,
     ## values of leverage (diagonal) at points of 'loc'
     h <- b * lam
     ok <- is.finite(h)
+    geomsmooth <- geomsmooth && all(h[!isdata & ok] >= 0)
     if(mt)
       h <- data.frame(leverage=h, type=marks(loc))
     levval <- (loc %mark% h)[ok]
     levvaldum <- levval[!isdata[ok]]
-    geomsmooth <- geomsmooth && all(marks(levvaldum) >= 0)
     if(!mt) {
       levsmo <- Smooth(levvaldum,
                        sigma=smallsigma,
@@ -767,8 +767,8 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
 
 plot.leverage.ppm <- function(x, ...,
                               what=c("smooth", "nearest", "exact"),
-                              showcut=TRUE, col.cut=par("fg"),
-                              args.contour=list(),
+                              showcut=TRUE,
+                              args.cut=list(drawlabels=FALSE),
                               multiplot=TRUE) {
   what <- match.arg(what)
   fitname <- x$fitname
@@ -794,10 +794,7 @@ plot.leverage.ppm <- function(x, ...,
     smo <- Reduce("+", smo)
     defaultmain <- c(defaultmain, "(sum over all types of point)")
   }
-  args.contour <- resolve.defaults(args.contour,
-                                   list(levels=ave,
-                                        col=col.cut,
-                                        drawlabels=FALSE))
+  args.contour <- resolve.defaults(args.cut, list(levels=ave))
   cutinfo <- list(addcontour=showcut,
                   args.contour=args.contour)
   if(is.im(smo)) {
@@ -814,6 +811,62 @@ plot.leverage.ppm <- function(x, ...,
                              list(main=defaultmain)))
   } 
   invisible(NULL)
+}
+
+
+persp.leverage.ppm <- function(x, ..., what=c("smooth", "nearest"),
+                               main, zlab="leverage") {
+  if(missing(main)) main <- deparse(substitute(x))
+  what <- match.arg(what)
+  y <- as.im(x, what=what)
+  if(is.null(y)) return(invisible(NULL))
+  if(is.im(y)) return(persp(y, main=main, ..., zlab=zlab))
+  pa <- par(ask=TRUE)
+  lapply(y, persp, main=main, ..., zlab=zlab)
+  par(pa)
+  return(invisible(NULL))
+}
+  
+contour.leverage.ppm <- function(x, ...,
+                                 what=c("smooth", "nearest"),
+                                 showcut=TRUE,
+                                 args.cut=list(col=3, lwd=3, drawlabels=FALSE),
+                                 multiplot=TRUE) {
+  defaultmain <- paste("Leverage for", x$fitname)
+  smo <- as.im(x, what=what)
+  y <- x$lev
+  ave <- y$ave
+  if(!multiplot && inherits(smo, "imlist")) {
+    ave <- ave * length(smo)
+    smo <- Reduce("+", smo)
+    defaultmain <- c(defaultmain, "(sum over all types of point)")
+  }
+  
+  argh1 <- resolve.defaults(list(...),
+                            list(main=defaultmain))
+  argh2 <- resolve.defaults(args.cut,
+                            list(levels=ave),
+                            list(...))
+
+  if(is.im(smo)) {
+    #' single panel
+    out <- do.call(contour, append(list(x=smo), argh1))
+    if(showcut)
+      do.call(contour, append(list(x=smo, add=TRUE), argh2))
+  } else if(inherits(smo, "imlist")) {
+    #' multiple panels
+    argh <- append(list(x=smo, plotcommand ="contour"), argh1)
+    if(showcut) {
+      argh <- append(argh,
+                     list(panel.end=function(i, y, ...) contour(y, ...),
+                          panel.end.args=argh2))
+    } 
+    out <- do.call(plot.solist, argh) 
+  } else {
+    warning("Unrecognised format")
+    out <- NULL
+  }
+  return(invisible(out))
 }
 
 plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
@@ -844,19 +897,7 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
                                 which.marks=1)))
 }
 
-persp.leverage.ppm <- function(x, ..., what=c("smooth", "nearest"),
-                               main, zlab="leverage") {
-  if(missing(main)) main <- deparse(substitute(x))
-  what <- match.arg(what)
-  y <- as.im(x, what=what)
-  if(is.null(y)) return(invisible(NULL))
-  if(is.im(y)) return(persp(y, main=main, ..., zlab=zlab))
-  pa <- par(ask=TRUE)
-  lapply(y, persp, main=main, ..., zlab=zlab)
-  par(pa)
-  return(invisible(NULL))
-}
-  
+
 as.im.leverage.ppm <- function(X, ..., what=c("smooth", "nearest")) {
   what <- match.arg(what)
   y <- switch(what,

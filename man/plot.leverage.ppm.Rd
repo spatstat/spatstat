@@ -1,18 +1,25 @@
 \name{plot.leverage.ppm}
 \alias{plot.leverage.ppm}
+\alias{contour.leverage.ppm}
 \alias{persp.leverage.ppm}
 \title{
   Plot Leverage Function
 }
 \description{
-  Generate a pixel image plot, or a perspective plot,
+  Generate a pixel image plot, or a contour plot, or a perspective plot,
   of a leverage function that has been computed by \code{\link{leverage.ppm}}.
 }
 \usage{
  \method{plot}{leverage.ppm}(x, \dots,
                              what=c("smooth", "nearest", "exact"),
-                             showcut=TRUE, col.cut=par("fg"),
-                             args.contour=list(), 
+                             showcut=TRUE,
+                             args.cut=list(drawlabels=FALSE), 
+                             multiplot=TRUE)
+
+ \method{contour}{leverage.ppm}(x, \dots,
+                             what=c("smooth", "nearest"),
+                             showcut=TRUE,
+                             args.cut=list(col=3, lwd=3, drawlabels=FALSE), 
                              multiplot=TRUE)
 
  \method{persp}{leverage.ppm}(x, \dots,
@@ -25,24 +32,21 @@
     \code{\link{leverage.ppm}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{plot.im}} 
+    Arguments passed to \code{\link{plot.im}} or \code{\link{contour.im}}
     or \code{\link{persp.im}} controlling the plot.
   }
   \item{what}{
     Character string (partially matched)
-    specifying the kind of plot. See Details.
+    specifying the values to be plotted. See Details.
   }
   \item{showcut}{
     Logical. If \code{TRUE}, a contour line is plotted at the
     level equal to the theoretical mean of the leverage.
   }
-  \item{col.cut}{
-    Optional colour for the contour line.
-  }
-  \item{args.contour}{
+  \item{args.cut}{
     Optional list of arguments passed to
     \code{\link[graphics]{contour.default}} to control the
-    plotting of the contour line.
+    plotting of the contour line for the mean leverage.
   }
   \item{multiplot}{
     Logical value indicating whether it is permissible to display
@@ -56,7 +60,7 @@
   }
 }
 \details{
-  These functions are the \code{plot} and \code{persp} methods
+  These functions are the \code{plot}, \code{contour} and \code{persp} methods
   for objects of class \code{"leverage.ppm"}.
   Such objects are computed by the command \code{\link{leverage.ppm}}.
 
@@ -67,6 +71,10 @@
   Use the argument \code{clipwin} to restrict the plot to a subset
   of the full data.
 
+  The \code{contour} method displays the leverage function as a contour
+  plot, and also draws a single contour line at the mean leverage value,
+  using \code{\link{contour.im}}.
+  
   The \code{persp} method displays the leverage function as a surface
   in perspective view, using \code{\link{persp.im}}.
 
@@ -95,7 +103,7 @@
   by arguments to \code{\link{leverage.ppm}}.
 }
 \value{
-  Same as for \code{\link{plot.im}} 
+  Same as for \code{\link{plot.im}}, \code{\link{contour.im}}
   and \code{\link{persp.im}} respectively.
 }
 \references{
@@ -114,6 +122,7 @@
    fit <- ppm(X ~x+y)
    lef <- leverage(fit)
    plot(lef)
+   contour(lef)
    persp(lef)
 }
 \keyword{spatial}

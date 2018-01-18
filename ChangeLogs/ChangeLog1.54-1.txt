@@ -484,4 +484,18 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   leverage.R
+   plot.leverage.ppm.Rd
+	New method 'contour.leverage.ppm'.
+	Harmonised with arguments of plot method.
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.028
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
 	
