@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.026
+        CHANGES IN spatstat VERSION 1.54-0.027
 
 OVERVIEW
 
@@ -90,6 +90,10 @@ BUG FIXES
     o nnmap, nnmark
     Values were incorrect if the resulting pixel image
     had unequal numbers of rows and columns.
+    Fixed.
+
+    o Smooth.ppp
+    Crashed if geometric=TRUE and there were several columns of marks.
     Fixed.
     
     o simulate.dppm, simulate.detpointprocfamily

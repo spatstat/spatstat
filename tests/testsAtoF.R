@@ -187,7 +187,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.9 $  $Date: 2017/08/10 02:01:54 $
+#  $Revision: 1.10 $  $Date: 2018/01/18 05:54:21 $
 #
 
 require(spatstat)
@@ -295,6 +295,8 @@ local({
   ## geometric-mean smoothing
   U <- Smooth(longleaf, 5, geometric=TRUE)
   UU <- Smooth(X, 5, geometric=TRUE)
+  V <- Smooth(longleaf, 5, geometric=TRUE, at="points")
+  VV <- Smooth(X, 5, geometric=TRUE, at="points")
 })
 #'
 #'  tests/discarea.R

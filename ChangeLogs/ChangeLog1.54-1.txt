@@ -466,3 +466,22 @@ Change log from 1.54-0 to 1.54-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   smooth.ppp.R
+	Bug fix.
+
+   Smooth.ppp.Rd
+	Added example
+	
+   tests/density.R
+	Added test for bug.
+	
+   DESCRIPTION
+   NEWS
+	version 1.54-0.027
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+	

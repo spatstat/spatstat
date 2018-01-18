@@ -186,6 +186,7 @@ markvar(X, sigma=NULL, ..., weights=NULL, varcov=NULL)
    plot(markvar(longleaf, sigma=5))
    # data frame of marks: trees marked by diameter and height
    plot(Smooth(finpines, sigma=2))
+   head(Smooth(finpines, sigma=2, at="points"))
 }
 \author{
   \spatstatAuthors.

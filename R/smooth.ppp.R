@@ -3,7 +3,7 @@
 #
 #  Smooth the marks of a point pattern
 # 
-#  $Revision: 1.45 $  $Date: 2017/12/30 05:14:56 $
+#  $Revision: 1.46 $  $Date: 2018/01/18 05:54:39 $
 #
 
 # smooth.ppp <- function(X, ..., weights=rep(1, npoints(X)), at="pixels") {
@@ -781,7 +781,7 @@ ExpSmoothLog <- function(X, ..., at=c("pixels", "points"), weights=NULL) {
            points = {
              Z <- lapply(unstack(X), ExpSmoothLog, ...,
                          at=at, weights=weights)
-             Z <- do.call(data.frame(Z))
+             Z <- do.call(data.frame, Z)
            },
            pixels = {
              Z <- solapply(unstack(X), ExpSmoothLog, ...,
