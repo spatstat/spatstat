@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.54-0.029
+        CHANGES IN spatstat VERSION 1.54-0.030
 
 OVERVIEW
 
@@ -42,6 +42,9 @@ NEW FUNCTIONS
     o model.matrix.mppm
     Method for 'model.matrix' for models of class 'mppm'.
 
+    o test.crossing.psp,  test.selfcrossing.psp
+    Previously undocumented functions for testing whether segments cross.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o predict.ppm
@@ -72,6 +75,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o lurking.ppm
     Accelerated.
 
+    o "[.psp"
+    Accelerated.
+    
     o clf.test, conspire, bounding.box, ksmooth.ppp, mpl, superimposePSP,
     eval.hyper, smooth.fv, smooth.ppp, smooth.msr, rtoro, plot.kstest
     These deprecated functions have now been removed.

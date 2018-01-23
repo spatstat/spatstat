@@ -647,8 +647,6 @@
 \alias{symbolmaptype}
 \alias{tail.hyperframe}
 \alias{tensor1x1}
-\alias{test.crossing.psp}
-\alias{test.selfcrossing.psp}
 \alias{thinjump}
 \alias{tilecentroids}        
 \alias{trianglediameters}
@@ -1525,8 +1523,6 @@ superimposeMarks(arglist, nobj)
 symbolmaptype(x)
 \method{tail}{hyperframe}(x,n,\dots)
 tensor1x1(A,B)
-test.crossing.psp(A,B)
-test.selfcrossing.psp(A)
 thinjump(n, p)
 tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
