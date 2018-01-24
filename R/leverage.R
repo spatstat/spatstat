@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.99 $ $Date: 2018/01/22 06:29:45 $
+#  $Revision: 1.100 $ $Date: 2018/01/24 08:16:47 $
 #
 
 leverage <- function(model, ...) {
@@ -101,6 +101,12 @@ ppmInfluenceEngine <- function(fit,
     fitname <- short.deparse(substitute(fit))
   stopifnot(is.ppm(fit))
 
+  #' ensure object contains GLM fit
+  if(!hasglmfit(fit)) {
+    fit <- update(fit, forcefit=TRUE)
+    precomputed <- list()
+  }
+  
   ## type of calculation
   method <- match.arg(method)
   what <- match.arg(what, several.ok=TRUE)

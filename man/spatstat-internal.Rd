@@ -209,6 +209,7 @@
 \alias{grow.mask}
 \alias{hackglmmPQL}
 \alias{hasenvelope}
+\alias{hasglmfit}
 \alias{HermiteCoefs}
 \alias{handle.r.b.args}
 \alias{handle.rshift.args}
@@ -636,6 +637,7 @@
 \alias{summary.logiquad}
 \alias{summary.lut}
 \alias{summary.mppm}
+\alias{summary.msr}
 \alias{summary.profilepl}
 \alias{summary.pppmatching}
 \alias{summary.ppx}
@@ -995,6 +997,7 @@ grow.mask(M, xmargin=0, ymargin=xmargin)
 hackglmmPQL(fixed, random, family, data, correlation, weights,
             control, niter, verbose, subset, \dots, reltol)
 hasenvelope(X, E)
+hasglmfit(object)
 HermiteCoefs(order)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
 handle.rshift.args(W, \dots, radius, width, height, edge, clip,
@@ -1512,6 +1515,7 @@ summarise.trend(trend, w, a)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
 \method{summary}{mppm}(object, \dots, brief=FALSE)
+\method{summary}{msr}(object, \dots)
 \method{summary}{profilepl}(object, \dots)
 \method{summary}{pppmatching}(object, \dots)
 \method{summary}{ppx}(object, \dots)

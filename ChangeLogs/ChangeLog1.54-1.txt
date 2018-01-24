@@ -527,3 +527,24 @@ Change log from 1.54-0 to 1.54-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 jan 2018
+
+   ppmclass.R
+   spatstat-internal.Rd
+	New internal function 'hasglmfit'
+	
+   leverage.R
+	Tweak to avoid ugly warning
+
+   measures.R
+   spatstat-internal.Rd
+	New method 'summary.msr', currently equivalent to print.msr
+
+   DESCRIPTION
+   NEWS
+	version 1.54-0.031
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

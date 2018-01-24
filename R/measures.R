@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.72 $  $Date: 2017/12/30 05:16:29 $
+#  $Revision: 1.73 $  $Date: 2018/01/24 08:35:58 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!inherits(qscheme, "quad"))
@@ -149,6 +149,8 @@ print.msr <- function(x, ...) {
   }
   return(invisible(NULL))
 }
+
+summary.msr <- function(object, ...) { print(object) }
 
 is.multitype.msr <- function(X, ...) {
   is.multitype(X$loc, ...)

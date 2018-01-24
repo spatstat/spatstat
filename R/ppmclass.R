@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.141 $	$Date: 2017/12/10 10:28:22 $
+#	$Revision: 2.142 $	$Date: 2018/01/24 08:15:01 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -265,6 +265,9 @@ coef.ppm <- function(object, ...) {
   object$coef
 }
 
+hasglmfit <- function(object) {
+  return(!is.null(object$internal$glmfit))
+}
 
 getglmfit <- function(object) {
   verifyclass(object, "ppm")
