@@ -142,13 +142,15 @@ the News and Release Notes for each update.
 
   \item \spst\ now suggests the package \pkg{fftwtools}.
 
+  \item Lurking variable plot for models fitted to several point patterns.
+    
   \item New dataset \code{cetaceans}.
     
   \item Gamma correction for colour maps and image plots.
 
   \item Class \code{units} has been renamed \code{unitname} to avoid package collision.
 
-  \item Bug fix in leverage code
+  \item Improvements and bug fixes for leverage and influence diagnostics.
     
   \item Tighter bounding box for \code{psp}, \code{lpp}, \code{linnet} objects.
     
@@ -374,6 +376,32 @@ The following datasets have been added to the package.
 Following is a list of all the functions that have been added.
 
 \begin{itemize}
+    \item \code{contour.leverage.ppm}:
+    Method for \code{contour} for leverage functions of class 
+    \code{leverage.ppm}
+    
+    \item \code{lurking}:
+    New generic function for lurking variable plots.
+
+    \item \code{lurking.ppp}, \code{lurking.ppm}:
+    These are equivalent to the original function \code{lurking}.
+    They are now methods for the new generic \code{lurking}.
+
+    \item \code{lurking.mppm}:
+    New method for class \code{mppm}.
+    Lurking variable plot for models fitted to several point patterns.
+
+    \item \code{print.lurk}:
+    Prints information about the object returned by the function 
+    \code{lurking}
+    representing a lurking variable plot.
+
+    \item \code{model.matrix.mppm}:
+    Method for \code{model.matrix} for models of class \code{mppm}.
+
+    \item \code{test.crossing.psp},  \code{test.selfcrossing.psp}:
+    Previously undocumented functions for testing whether segments cross.
+    
     \item \code{to.saturated}:
     Convert a colour value to the corresponding fully-saturated colour.
 
@@ -890,6 +918,9 @@ listed alphabetically.
   \item \texttt{as.im.function}:
   New argument \texttt{strict}.
 
+  \item \texttt{as.im.leverage.ppm}:
+  New argument \texttt{what}.
+
 \item \texttt{as.layered}:
     Default method now handles a (vanilla) list of spatial objects.
 
@@ -1074,9 +1105,15 @@ also carries these marks in the \verb!$lines! component.
    \end{itemize}
 
  \item \texttt{dfbetas.ppm}:
+   \begin{itemize}
+   \item 
     For Gibbs models, memory usage has been dramatically reduced, 
     so the code can handle larger datasets and finer quadrature schemes.
-
+  \item 
+    Increased the default resolution of the pixel images.
+    Spatial resolution can now be controlled by the arguments 
+    \code{dimyx}, \code{eps}.
+   \end{itemize}
     
   \item \texttt{diagnose.ppm}:
     Infinite values of \texttt{rbord} are now ignored and treated as zero.
@@ -1254,13 +1291,19 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{lengths.psp}: New argument \texttt{squared}.
    
  \item \texttt{leverage.ppm}:
+   \begin{itemize}
+   \item 
     For Gibbs models, memory usage has been dramatically reduced, 
-    so the code can handle larger datasets and finer quadrature schemes.
+    so the code can handle larger datasets and finer quadrature schemes. 
+  \item 
+    Increased the default resolution of the pixel images.
+    Spatial resolution can now be controlled by the arguments 
+    \code{dimyx}, \code{eps}.
+  \end{itemize}
 
  \item \texttt{leverage.ppm}, \texttt{influence.ppm}, \texttt{dfbetas.ppm}:
     These methods now work for models that were fitted by logistic
     composite likelihood (\texttt{method='logi'}).
-    
 
  \item \texttt{linearK}, \texttt{linearpcf} and relatives: \\ 
    \begin{itemize}
@@ -1348,6 +1391,7 @@ also carries these marks in the \verb!$lines! component.
    \item    Computation accelerated.
    \end{itemize}
 
+\item \texttt{lurking.ppm}: accelerated.
 %%M
    
  \item \texttt{markcorr}:
@@ -1473,7 +1517,7 @@ also carries these marks in the \verb!$lines! component.
  \item \texttt{plot.leverage.ppm}:
    \begin{itemize}
    \item 
-   New argument \texttt{multiplot}.
+   New arguments \texttt{multiplot} and \code{what}.
    \item
    A contour line showing the average value of leverage
    is now drawn on the colour ribbon, as well as on the main image.
@@ -1596,7 +1640,11 @@ also carries these marks in the \verb!$lines! component.
       New arguments \texttt{subset} and \texttt{clipwin}.
     \end{itemize}
 
-
+  \item \code{ppmInfluence}:
+    The result now belongs to class \code{ppmInfluence}, for which there are
+    methods for \code{leverage}, \code{influence}, \code{dfbetas}
+    which extract the desired component.
+  
  \item \texttt{ppp}:
        \begin{itemize}
        \item New argument \texttt{checkdup}.
@@ -1619,6 +1667,10 @@ also carries these marks in the \verb!$lines! component.
   \item \texttt{predict.mppm}:
     The argument \texttt{type="all"} is now recognised: it selects
     all the available options. [This is also the default.]
+
+  \item \texttt{predict.ppm}:
+   Now recognises the arguments \code{dimyx} and \code{eps} for specifying the
+    resolution of the grid of prediction points.
 
   \item \texttt{predict.rhohat}:    
      New argument \texttt{what} determines which value should be calculated:
@@ -1824,10 +1876,17 @@ also carries these marks in the \verb!$lines! component.
         \texttt{Tstat}.
     \end{quote}
     
-  \item \texttt{Summary.linim}: 
+  \item \texttt{Summary.linim} family supporting \texttt{range}, \texttt{max},
+    \texttt{min} etc:
      Recognises the argument \texttt{finite} so that 
      \texttt{range(x, finite=TRUE)} works for a linim object \texttt{x}.
     
+   \item \texttt{summary.distfun}:
+     More information is printed.
+
+   \item \texttt{summary.funxy}:
+     More information is printed.
+
    \item \texttt{summary.ppm}:
     New argument \texttt{fine} selects the algorithm for variance estimation.
 
@@ -1951,9 +2010,14 @@ also carries these marks in the \verb!$lines! component.
    whether to remove unused levels of a factor.
 
    \item \verb![.psp!:
-   New argument \texttt{fragments} specifies whether to keep fragments of
-    line segments that are cut by the new window, or only to retain
-    segments that lie entirely inside the window.
+     \begin{itemize}
+     \item accelerated.
+     \item 
+       New argument \texttt{fragments} specifies whether to keep fragments of
+       line segments that are cut by the new window, or only to retain
+       segments that lie entirely inside the window.
+     \end{itemize}
+
      
  \item \verb![.solist!:
        Subset index \texttt{i} can now be an \texttt{owin} object.
@@ -2089,6 +2153,26 @@ of potential impact.
    Results were totally incorrect due to a typo.
    \bugger{1.51-0}{may 2017}{1.52-0}{august 2017}   
    
+ \item \texttt{nnmap}, \texttt{nnmark}:
+   Values were incorrect if the resulting pixel image
+    had unequal numbers of rows and columns.
+   \bugger{1.35-0}{december 2013}{1.55-0}{january 2018}   
+
+ \item \texttt{vcov.mppm}:
+    Format was incorrect (rows/columns were omitted) in some cases.
+   \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+
+  \item \texttt{model.matrix.ppm}, \texttt{model.frame.ppm}:
+    Values were sometimes incorrect when applied to the result of
+    \texttt{subfits}.
+    To be precise, if \texttt{fit} was an \texttt{mppm}
+    object fitted to a hyperframe
+    that included ``design covariates'' (covariates that take a constant value
+    in each row of the hyperframe), and if \verb!futs <- subfits(fit)!, then
+    \verb!model.matrix(futs[[i]])! gave incorrect values in the columns
+    corresponding to the design covariates. 
+    \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+   
  \item \texttt{predict.rho2hat}:
    Results were incorrect for a \texttt{rho2hat} object computed
    from a point pattern.
@@ -2133,7 +2217,12 @@ of potential impact.
    \bugger{1.39-0}{october 2014}{1.40-0}{december 2014}
 
   %% LEVEL 3: substantially incorrect, moderate impact
-  
+
+   \item \texttt{simulate.dppm}, \texttt{simulate.detpointprocfamily}:
+    In dimensions higher than 2, the result was shifted so that
+    it was centred at the origin.
+    \bugger{1.54-0}{december 2017}{1.55-0}{january 2018}   
+
 \item \texttt{density.ppp}:
   Values of \verb!density(X, at="points")!
   and \verb!Smooth(X, at="points")!
@@ -2187,6 +2276,10 @@ of potential impact.
 
 %% LEVEL 4: partially incorrect
    
+ \item \texttt{model.matrix.ppm}:
+   The attribute \texttt{assign} was omitted in some cases.
+   \bugger{1.45-1}{may 2016}{1.55-0}{january 2018}   
+
 \item \texttt{density.ppp}:
   If the smoothing bandwidth \texttt{sigma} was very small 
   (e.g.\ less than the width of a pixel), 
@@ -2213,7 +2306,6 @@ of potential impact.
    correction.
    \bugger{1.25-0}{december 2011}{1.54-0}{november 2017}
 
-   
  \item \texttt{vcov.ppm}, \texttt{suffstat}:
    These functions sometimes gave incorrect values 
    for marked point process models.   
