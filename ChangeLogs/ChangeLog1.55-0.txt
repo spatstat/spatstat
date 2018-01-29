@@ -1,4 +1,4 @@
-Change log from 1.54-0 to 1.54-1
+Change log from 1.54-0 to 1.55-0
 ================================
 
 23 nov 2017
@@ -556,6 +556,22 @@ Change log from 1.54-0 to 1.54-1
    DESCRIPTION
    NEWS
 	version 1.54-0.032
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
++++++++++++++ passed 'make bookcheck'  +++++++++++++++
++++++++++++++ passed R-devel CMD check +++++++++++++++
+                 (2018-01-24 r74157)
+
+29 jan 2018
+
+  DESCRIPTION
+  NEWS
+  Nickname.txt
+        version 1.55-0 for release
+        nickname: "Stunned Mullet"
 
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
