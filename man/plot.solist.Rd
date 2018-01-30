@@ -39,7 +39,8 @@
   }
   \item{main.panel}{
     Optional. A character string, or a vector of character strings,
-    giving the headings for each of the objects.
+    or a vector of expressions, giving the headings for each
+    plot panel.
   }
   \item{mar.panel}{
     Size of the margins outside each plot panel.
