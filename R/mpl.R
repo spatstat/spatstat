@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.212 $	$Date: 2018/01/31 05:29:08 $
+#	$Revision: 5.213 $	$Date: 2018/01/31 08:13:55 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/01/31 05:29:08 $")
+                        date="$Date: 2018/01/31 08:13:55 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1214,6 +1214,7 @@ deltasuffstat <- local({
                             restrict=c("pairs", "first", "none"),
 			    dataonly=TRUE,
                             force=FALSE, warn.forced=FALSE,
+                            use.special=TRUE,
                             quadsub=NULL,
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
@@ -1262,11 +1263,13 @@ deltasuffstat <- local({
     ## Look for member function $delta2 in the interaction
     v <- NULL
     v.is.full <- FALSE
-    if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
+    if(use.special &&
+       !is.null(delta2 <- inte$delta2) &&
+       is.function(delta2)) {
       v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     }
     ## Look for generic $delta2 function for the family
-    if(is.null(v) &&
+    if(is.null(v) && use.special && 
        !is.null(delta2 <- inte$family$delta2) &&
        is.function(delta2))
       v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
@@ -1361,8 +1364,14 @@ deltasuffstat <- local({
     ## canonical statistic before and after deleting X[j]
     ## mbefore[ , i, j] = h(X[i] | X)
     ## mafter[ , i, j] = h(X[i] | X[-j])
-    mafter <- mbefore <- array(t(m), dim=c(p, nX, nX))
-  
+    dimwork <- c(p, nX, nX)
+    if(!sparseOK) {
+      mafter <- mbefore <- array(t(m), dim=dimwork)
+    } else {
+      ## fill in values later
+       mafter <- mbefore <- sparse3Darray(dims=dimwork)
+    }
+
     ## identify close pairs
     R <- reach(model)
     if(is.finite(R)) {
@@ -1417,14 +1426,22 @@ deltasuffstat <- local({
           ## for all j
           pmi <- matrix(, nJi, p)
           for(k in 1:nJi) {
-            j <- Ji[k]
+            ## j <- Ji[k]
             ## X.ij <- X[-c(i,j)]
             X.ij <- X.i[-J.i[k]]
             pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX.i, ]
           }
           ##
-          mafter[ , Ji, i] <- t(pmj)
-          mafter[ , i, Ji] <- t(pmi)
+          if(!sparseOK) {
+            mafter[ , Ji, i] <- t(pmj)
+            mafter[ , i, Ji] <- t(pmi)
+          } else {
+            mafter[ , Ji, i] <- array(t(pmj), dim=c(p, nJi, 1))
+            mafter[ , i, Ji] <- array(t(pmi), dim=c(p, 1, nJi))
+            mrowi <- m[i,]
+            mbefore[ , Ji, i] <- array(mrowi, dim=c(p, nJi, 1))
+            mbefore[ , i, Ji] <- array(mrowi, dim=c(p, 1, nJi))
+          } 
         }
       }
     }
@@ -1460,8 +1477,14 @@ deltasuffstat <- local({
     m <- m[isdata, ,drop=FALSE]
     
     ## canonical statistic before and after adding/deleting U[j]
-    mafter <- mbefore <- array(t(m), dim=c(p, nU, nU))
-    delta <- array(0, dim=dim(mafter))
+    dimwork <- c(p, nU, nU)
+    if(!sparseOK) {
+      mafter <- mbefore <- array(t(m), dim=dimwork)
+      delta <- array(0, dim=dimwork)
+    } else {
+      ## fill in values later
+      mafter <- mbefore <- delta <- sparse3Darray(dims=dimwork)
+    }
     ##   mbefore[ , i, j] = h(U[i] | X)
     ## For data points X[j]
     ##   mafter[ , i, j] = h(U[i] | X[-j])
@@ -1531,6 +1554,8 @@ deltasuffstat <- local({
           pmj <- partialModelMatrix(X.i, DJi, model)[c(J.i, JDi), , drop=FALSE]
           ##
           mafter[ , Ji, i] <- t(pmj)
+          if(sparseOK) 
+            mbefore[ , Ji, i] <- array(m[i,], dim=c(p, nJi, 1))
         }
       }
       ## Run through pairs i, j where 'i' is a dummy point
@@ -1564,7 +1589,13 @@ deltasuffstat <- local({
           ## for all j
           pmj <- partialModelMatrix(XUi, DJi, model)[c(J.i, JDi), , drop=FALSE]
           ##
-          mafter[ , c(JiData, JiDummy), i] <- t(pmj)
+          JiSort <- c(JiData, JiDummy)
+          if(!sparseOK) {
+            mafter[ , JiSort, i] <- t(pmj)
+          } else {
+            mafter[ , JiSort, i]  <- array(t(pmj), dim=c(p, nJi, 1))
+            mbefore[ , JiSort, i] <- array(m[i,], dim=c(p, nJi, 1))
+          }
         }
       }
     }

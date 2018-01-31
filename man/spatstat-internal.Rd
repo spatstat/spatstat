@@ -855,7 +855,7 @@ default.linnet.tolerance(L)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
 deltasuffstat(model, \dots, restrict, dataonly,
-              force, warn.forced, quadsub, sparseOK)
+              force, warn.forced, use.special, quadsub, sparseOK)
 Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)

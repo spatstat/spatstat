@@ -3,7 +3,7 @@
 #'
 #'   Code for handling vector/array indices
 #'
-#'   $Revision: 1.7 $  $Date: 2017/02/07 07:47:20 $
+#'   $Revision: 1.8 $  $Date: 2018/01/31 08:13:22 $
 #'
 
 grokIndexVector <- function(ind, len, nama=NULL) {
@@ -158,10 +158,12 @@ grokIndexVector <- function(ind, len, nama=NULL) {
 }
 
 replacementIndex <- function(ii, stuff) {
-  # 'stuff' is predigested information about a subset index.
-  # Find the location in the original array
-  # whose value should be replaced by the 'ii'-th replacement value
-  # according to this info.
+  ## 'stuff' is predigested information about a subset index.
+  ## Find the location in the original array
+  ## whose value should be replaced by the 'ii'-th replacement value
+  ## according to this info.
+  if(length(stuff) == 0)
+    stop("Internal error - no predigested info", call.=FALSE)
   with(stuff, {
     if(!is.null(map)) ii <- map[ii]
     i[ii]

@@ -33,3 +33,17 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   mpl.R
+   spatstat-internal.Rd
+	Brute force algorithm extended to sparse arrays
+
+   indices.R
+	Added check for internal error
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.003
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
