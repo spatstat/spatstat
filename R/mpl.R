@@ -1474,7 +1474,6 @@ deltasuffstat <- local({
     nX <- npoints(X)
     isdata <- is.data(Q)
     isdummy <- !isdata
-    m <- m[isdata, ,drop=FALSE]
     
     ## canonical statistic before and after adding/deleting U[j]
     dimwork <- c(p, nU, nU)

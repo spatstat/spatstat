@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.002
+        CHANGES IN spatstat VERSION 1.55-0.004
 
 OVERVIEW
 
@@ -8,10 +8,13 @@ OVERVIEW
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o leverage.ppm, influence.ppm, dfbetas.ppm
-    These algorithms now work for a wider range of models
-    (instead of giving a warning that the interaction or edge correction
-    is not supported).
+    Virtually all models and edge corrections are now supported,
+    using a "brute force" algorithm. This can be slow in some cases.
 
+BUG FIXES
+
+    o None yet.
+    
         CHANGES IN spatstat VERSION 1.55-0
 
 OVERVIEW
