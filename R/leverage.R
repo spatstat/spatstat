@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.100 $ $Date: 2018/01/24 08:16:47 $
+#  $Revision: 1.101 $ $Date: 2018/01/31 05:29:58 $
 #
 
 leverage <- function(model, ...) {
@@ -447,7 +447,8 @@ ppmInfluenceEngine <- function(fit,
       ## compute second order terms 
       ## ddS[i,j, ] = Delta_i Delta_j S(x)
       ddS <- deltasuffstat(fit, restrict = "first", dataonly=FALSE,
-                           quadsub=requested, sparseOK=sparse)
+                           quadsub=requested, sparseOK=sparse,
+                           force=TRUE, warn.forced=TRUE)
       ## 
       if(is.null(ddS)) {
         warning("Second order interaction terms are not implemented",

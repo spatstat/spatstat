@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.211 $	$Date: 2017/12/30 04:58:33 $
+#	$Revision: 5.212 $	$Date: 2018/01/31 05:29:08 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2017/12/30 04:58:33 $")
+                        date="$Date: 2018/01/31 05:29:08 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1212,7 +1212,8 @@ deltasuffstat <- local({
   
   deltasuffstat <- function(model, ...,
                             restrict=c("pairs", "first", "none"),
-			    dataonly=TRUE, force=FALSE,
+			    dataonly=TRUE,
+                            force=FALSE, warn.forced=FALSE,
                             quadsub=NULL,
                             sparseOK=FALSE) {
     stopifnot(is.ppm(model))
@@ -1260,6 +1261,7 @@ deltasuffstat <- local({
     ## Nontrivial interaction terms must be computed.
     ## Look for member function $delta2 in the interaction
     v <- NULL
+    v.is.full <- FALSE
     if(!is.null(delta2 <- inte$delta2) && is.function(delta2)) {
       v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     }
@@ -1273,8 +1275,12 @@ deltasuffstat <- local({
       if(!force)
         return(NULL)
       ## use brute force algorithm
+      if(warn.forced)
+        warning("Reverting to brute force to compute interaction terms",
+                call.=FALSE)
       v <- if(dataonly) deltasufX(model, sparseOK) else
            deltasufQ(model, quadsub, sparseOK)
+      v.is.full <- TRUE
     }
     ## make it a 3D array
     if(length(dim(v)) != 3) {
@@ -1300,27 +1306,41 @@ deltasuffstat <- local({
 	       none = {})
     }
 
-    ## Output array: planes must correspond to model coefficients
-    result <- zeroes
-    ## Planes of 'v' correspond to interaction terms (including offsets)
-    if(length(Inames) != dim(v)[3])
-      stop(paste("Internal error: deltasuffstat:",
-                 "number of planes of v =", dim(v)[3],
-                 "!= number of interaction terms =", length(Inames)),
-           call.=FALSE)
-    ## Offset terms do not contribute to sufficient statistic
-    if(any(IsOffset)) {
-      v <- v[ , , !IsOffset, drop=FALSE]
-      Inames <- Inames[!IsOffset]
-    }
-    ## Map planes of 'v' into coefficients
-    Imap <- match(Inames, names(coef(model)))
-    if(anyNA(Imap))
-      stop(paste("Internal error: deltasuffstat:",
-                 "cannot match interaction coefficients"))
-    if(length(Imap) > 0) {
-      ## insert 'v' into array
-      result[ , , Imap] <- v
+    ## Make output array, with planes corresponding to model coefficients
+    if(v.is.full) {
+      ## Planes of 'v' already correspond to coefficients of model
+      cnames <- names(coef(model))
+      ## Remove any offset interaction terms
+      ## (e.g. Hardcore interaction): these do not contribute to suff stat
+      if(any(IsOffset)) {
+        retain <- is.na(match(cnames, Inames[IsOffset]))
+        v <- v[ , , retain, drop=FALSE]
+        Inames <- Inames[!IsOffset]
+      }
+      result <- v
+    } else {
+      ## Planes of 'v' correspond to interaction terms only.
+      ## Fill out the first order terms with zeroes
+      result <- zeroes
+      if(length(Inames) != dim(v)[3])
+        stop(paste("Internal error: deltasuffstat:",
+                   "number of planes of v =", dim(v)[3],
+                   "!= number of interaction terms =", length(Inames)),
+             call.=FALSE)
+      ## Offset terms do not contribute to sufficient statistic
+      if(any(IsOffset)) {
+        v <- v[ , , !IsOffset, drop=FALSE]
+        Inames <- Inames[!IsOffset]
+      }
+      ## Map planes of 'v' into coefficients
+      Imap <- match(Inames, names(coef(model)))
+      if(anyNA(Imap))
+        stop(paste("Internal error: deltasuffstat:",
+                   "cannot match interaction coefficients"))
+      if(length(Imap) > 0) {
+        ## insert 'v' into array
+        result[ , , Imap] <- v
+      }
     }
     return(result)
   }

@@ -15,3 +15,21 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+31 jan 2018
+
+   mpl.R
+   spatstat-internal.Rd
+	Bug fix in deltasuffstat when the brute-force algorithm is required.
+
+   leverage.R
+	Brute force algorithm for deltasuffstat is now permitted (force=TRUE)
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.002
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
