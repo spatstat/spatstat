@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.25 $  $Date: 2017/07/13 02:01:19 $
+#' $Revision: 1.26 $  $Date: 2018/02/01 04:18:32 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -799,11 +799,13 @@ Summary.sparse3Darray <- function(..., na.rm=FALSE) {
   argh <- list(...)
   is3D <- sapply(argh, inherits, what="sparse3Darray")
   if(any(is3D)) {
-    xvalues <- lapply(argh[is3D], getElement, name="x")
-    argh[is3D] <- lapply(xvalues, .Generic, na.rm=na.rm)
+    xvalues   <- lapply(argh[is3D], getElement, name="x")
+    fullsizes <- sapply(lapply(argh[is3D], dim), prod)
+    argh[is3D] <- xvalues
+    #' zero entry should be appended if and only if there are any empty cells
     zeroes <- lapply(xvalues, RelevantZero)
-    fzeroes <- lapply(zeroes, .Generic, na.rm=na.rm)
-    argh <- append(argh, fzeroes)
+    zeroes <- zeroes[lengths(xvalues) < fullsizes]
+    argh <- append(argh, zeroes)
   }
   rslt <- do.call(.Generic, append(argh, list(na.rm=na.rm)))
   return(rslt)

@@ -512,7 +512,7 @@ local({
 #
 #  Thanks to Ege Rubak
 #
-#  $Revision: 1.6 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.8 $  $Date: 2018/02/01 04:22:12 $
 #
 
 require(spatstat)
@@ -539,7 +539,7 @@ local({
     stop("Non-symmetric matrix produced by vcov.ppm 'vectorclip' algorithm")
   if(asymmetric(vn))
     stop("Non-symmetric matrix produced by vcov.ppm Strauss algorithm")
-  
+    
   if(disagree(v, b))
     stop("Disagreement between vcov.ppm algorithms 'vector' and 'basic' ")
   if(disagree(v, vc))
@@ -586,7 +586,18 @@ local({
     stop("Disagreement between vcov.ppm algorithms for MultiStrauss model")
 
   ## Test that 'deltasuffstat' works for Hybrids
-  modHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
+  modelHyb <- ppm(japanesepines ~ 1, Hybrid(Strauss(0.05), Strauss(0.1)))
+  vHyb <- vcov(modelHyb)
+  
+  ## Compare 'deltasuffstat' algorithms
+  modelS <- ppm(cells ~ x, Strauss(0.13), nd=10)
+  dSS <- deltasuffstat(modelS, sparseOK=TRUE)
+  dBS <- deltasuffstat(modelS, sparseOK=TRUE,  use.special=FALSE, force=TRUE)
+  dBF <- deltasuffstat(modelS, sparseOK=FALSE, use.special=FALSE, force=TRUE)
+  if(disagree(dBS, dSS))
+    stop("Brute force algorithm disagrees with special algorithm")
+  if(disagree(dBF, dBS))
+    stop("Sparse and full versions of brute force algorithm disagree")
 })
 #
 # tests/windows.R

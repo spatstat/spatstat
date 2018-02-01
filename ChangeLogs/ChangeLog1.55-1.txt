@@ -58,3 +58,21 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+01 feb 2018
+
+   mpl.R
+	Further bug fixes in brute force algorithm
+
+   sparse3Darray.R
+	Bug fix in Summary.sparse3Darray
+	in handling empty array
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.005
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   

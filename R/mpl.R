@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.213 $	$Date: 2018/01/31 08:13:55 $
+#	$Revision: 5.214 $	$Date: 2018/02/01 04:23:46 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/01/31 08:13:55 $")
+                        date="$Date: 2018/02/01 04:23:46 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1388,10 +1388,11 @@ deltasuffstat <- local({
       I2 <- I <- IJ$I
       J2 <- J <- IJ$J
     }
+    ## DO NOT RESTRICT - THIS IS NOW DONE IN deltasuffstat
     ## filter:  I and J must both belong to the nominated subset 
-    okIJ <- ok[I] & ok[J]
-    I <- I[okIJ]
-    J <- J[okIJ]
+    ## okIJ <- ok[I] & ok[J]
+    ## I <- I[okIJ]
+    ## J <- J[okIJ]
     ##
     if(length(I) > 0 && length(J) > 0) {
       ## .............. loop over pairs ........................
@@ -1415,8 +1416,6 @@ deltasuffstat <- local({
           J.i <- match(Ji, J2i)
           if(anyNA(J.i))
             stop("Internal error: Ji not a subset of J2i")
-          ## equalpairs matrix
-          E.i <- cbind(J.i, seq_len(nJi))
           ## values of sufficient statistic 
           ##    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
           ## for all j
@@ -1438,9 +1437,8 @@ deltasuffstat <- local({
           } else {
             mafter[ , Ji, i] <- array(t(pmj), dim=c(p, nJi, 1))
             mafter[ , i, Ji] <- array(t(pmi), dim=c(p, 1, nJi))
-            mrowi <- m[i,]
-            mbefore[ , Ji, i] <- array(mrowi, dim=c(p, nJi, 1))
-            mbefore[ , i, Ji] <- array(mrowi, dim=c(p, 1, nJi))
+            mbefore[ , Ji, i] <- array(t(m[Ji,]), dim=c(p, nJi, 1))
+            mbefore[ , i, Ji] <- array(m[i,], dim=c(p, 1, nJi))
           } 
         }
       }
@@ -1554,7 +1552,7 @@ deltasuffstat <- local({
           ##
           mafter[ , Ji, i] <- t(pmj)
           if(sparseOK) 
-            mbefore[ , Ji, i] <- array(m[i,], dim=c(p, nJi, 1))
+            mbefore[ , Ji, i] <- array(t(m[Ji,]), dim=c(p, nJi, 1))
         }
       }
       ## Run through pairs i, j where 'i' is a dummy point
@@ -1593,7 +1591,7 @@ deltasuffstat <- local({
             mafter[ , JiSort, i] <- t(pmj)
           } else {
             mafter[ , JiSort, i]  <- array(t(pmj), dim=c(p, nJi, 1))
-            mbefore[ , JiSort, i] <- array(m[i,], dim=c(p, nJi, 1))
+            mbefore[ , JiSort, i] <- array(t(m[Jisort,]), dim=c(p, nJi, 1))
           }
         }
       }
