@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.214 $	$Date: 2018/02/01 04:23:46 $
+#	$Revision: 5.215 $	$Date: 2018/02/01 06:28:51 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/02/01 04:23:46 $")
+                        date="$Date: 2018/02/01 06:28:51 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1591,7 +1591,7 @@ deltasuffstat <- local({
             mafter[ , JiSort, i] <- t(pmj)
           } else {
             mafter[ , JiSort, i]  <- array(t(pmj), dim=c(p, nJi, 1))
-            mbefore[ , JiSort, i] <- array(t(m[Jisort,]), dim=c(p, nJi, 1))
+            mbefore[ , JiSort, i] <- array(t(m[JiSort,]), dim=c(p, nJi, 1))
           }
         }
       }
