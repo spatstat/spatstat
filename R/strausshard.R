@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.25 $	$Date: 2017/11/19 10:18:52 $
+#    $Revision: 2.26 $	$Date: 2018/02/02 03:38:59 $
 #
 #    The Strauss/hard core process
 #
@@ -132,7 +132,7 @@ StraussHard <- local({
          #' positive part
          U <- as.ppp(X)
          nU <- npoints(U)
-         cl <- weightedclosepairs(U, r, correction)
+         cl <- weightedclosepairs(U, r, correction=correction, what="indices")
          if(is.null(cl))
            return(NULL)
          v <- sparseMatrix(i=cl$i, j=cl$j, x=cl$weight,

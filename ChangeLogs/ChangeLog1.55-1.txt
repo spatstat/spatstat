@@ -87,3 +87,22 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   strauss.R
+   spatstat-internal.Rd
+	Internal function 'weightedclosepairs' now has argument 'what'.
+	
+   strausshard.R
+	Consequential changes.
+	
+   geyer.R
+	geyerdelta2 and Geyer()$delta2 now do fast computation
+	for isotropic and translation corrections.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.006
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

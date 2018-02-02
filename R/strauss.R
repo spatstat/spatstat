@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.39 $	$Date: 2017/11/20 00:55:33 $
+#    $Revision: 2.40 $	$Date: 2018/02/02 03:39:15 $
 #
 #    The Strauss process
 #
@@ -93,7 +93,7 @@ Strauss <- local({
          r <- inte$par$r
          X <- as.ppp(X) # algorithm is the same for data and dummy points
          nX <- npoints(X)
-         cl <- weightedclosepairs(X, r, correction)
+         cl <- weightedclosepairs(X, r, correction=correction, what="indices")
          if(is.null(cl))
            return(NULL)
          v <- sparseMatrix(i=cl$i, j=cl$j, x=cl$weight,
@@ -180,18 +180,26 @@ closepaircounts <- function(X, r) {
   return(answer)
 }
 
-weightedclosepairs <- function(X, r, correction) {
-  ## return list(i,j,weight) for all r-close pairs
+weightedclosepairs <- function(X, r, correction,
+                               what=c("all", "indices", "ijd")) {
+  what <- match.arg(what)
+  ## return list(i,j,..,weight) for all r-close pairs
   switch(correction,
          none = ,
          border = {
-           cl <- closepairs(X, r, what="indices")
+           cl <- closepairs(X, r, what=what)
            weight <- rep(1, length(cl$i))
          },
          isotropic = ,
          Ripley = {
-           cl <- closepairs(X, r, what="ijd")
-           weight <- edge.Ripley(X[cl$i], cl$d)
+           if(what == "indices") {
+             cl <- closepairs(X, r, what="ijd")
+             weight <- edge.Ripley(X[cl$i], cl$d)
+             cl <- cl[c("i", "j")]
+           } else {
+             cl <- closepairs(X, r, what=what)
+             weight <- edge.Ripley(X[cl$i], cl$d)
+           }
          },
          translate = {
            cl <- closepairs(X, r, what="all")
@@ -199,6 +207,10 @@ weightedclosepairs <- function(X, r, correction) {
                                 dy = cl$dy,
                                 W = Window(X),
                                 paired=TRUE)
+           switch(what,
+                  indices = { cl <- cl[c("i", "j")] },
+                  ijd     = { cl <- cl[c("i", "j", "d")] },
+                  all     = { })
          },
          periodic = {
            proche <- (pairdist(X, periodic=TRUE, squared=TRUE) <= r^2)
@@ -213,6 +225,6 @@ weightedclosepairs <- function(X, r, correction) {
            return(NULL)
          }
          )
-  result <- list(i=cl$i, j=cl$j, weight=as.numeric(weight))
+  result <- append(cl, list(weight=as.numeric(weight)))
   return(result)
 }

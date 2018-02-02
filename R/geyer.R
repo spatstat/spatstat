@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.38 $	$Date: 2017/06/05 10:31:58 $
+#    $Revision: 2.40 $	$Date: 2018/02/02 05:09:26 $
 #
 #    Geyer's saturation process
 #
@@ -163,11 +163,11 @@ Geyer <- local({
          # Sufficient statistic for second order conditional intensity
          # h(X[i] | X) - h(X[i] | X[-j])
          # Geyer interaction
-         if(!(correction %in% c("border", "none")))
-           return(NULL)
+         if(correction == "periodic") return(NULL)
          r   <- inte$par$r
          sat <- inte$par$sat
-         result <- geyerdelta2(X, r, sat, sparseOK=sparseOK)
+         result <- geyerdelta2(X, r, sat,
+                               correction=correction, sparseOK=sparseOK)
          return(result)
        }
   )
@@ -232,53 +232,82 @@ geyercounts <- function(U, X, r, sat, Xcounts, EqualPairs) {
 
 geyerdelta2 <- local({
 
-  geyerdelta2 <- function(X, r, sat, ..., sparseOK=FALSE) {
-    # Sufficient statistic for second order conditional intensity
-    # Geyer model
+  geyerdelta2 <- function(X, r, sat, ..., sparseOK=FALSE, correction="none") {
+    ## Sufficient statistic for second order conditional intensity
+    ## Geyer model
     stopifnot(is.numeric(sat) && length(sat) == 1 && sat > 0)
-    # X could be a ppp or quad.
+    ## X could be a ppp or quad.
     if(is.ppp(X)) {
       # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
       # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
-      return(geydelppp(X, r, sat, sparseOK))
+      return(geydelppp(X, r, sat, correction, sparseOK))
     } else if(inherits(X, "quad")) {
       # evaluate \Delta_{u_i} \Delta_{u_j} S(x) for quadrature points u_i, u_j
-      return(geydelquad(X, r, sat, sparseOK))
+      return(geydelquad(X, r, sat, correction, sparseOK))
     } else stop("Internal error: X should be a ppp or quad object")
   }
 
-  geydelppp <- function(X, r, sat, sparseOK) {
+  geydelppp <- function(X, r, sat, correction, sparseOK) {
     # initialise
     nX <- npoints(X)
     result <- if(!sparseOK) matrix(0, nX, nX) else
               sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
                            dims=c(nX, nX))
-    # identify all r-close pairs (ordered pairs i ~ j)
-    a <- closepairs(X, r, what="indices")
-    I <- a$i
-    J <- a$j
-    IJ <- cbind(I,J)
-    # count number of r-neighbours for each point
-    # (consistently with the above)
-    tvals <- table(factor(I, levels=1:nX))
+    ## identify all r-close pairs (ordered pairs i ~ j)
+    unweighted <- correction %in% c("border", "none")
+    if(unweighted) {
+      a <- closepairs(X, r, what="indices")
+      I <- a$i
+      J <- a$j
+      IJ <- cbind(I,J)
+      ## count number of r-neighbours for each point
+      tvals <- table(factor(I, levels=1:nX))
+    } else {
+      a <- weightedclosepairs(X, r, correction=correction, what="indices")
+      I <- a$i
+      J <- a$j
+      IJ <- cbind(I,J)
+      wIJ <- a$weight
+      wmatrix <- sparseMatrix(i=I,j=J,x=wIJ, dims=c(nX,nX))
+      wJI <- wmatrix[cbind(J,I)]
+      ## total edge-correction weight over r-neighbours for each point
+      tvals <- tapplysum(wIJ, list(factor(I, levels=1:nX)))
+    }
     # Compute direct part
     # (arising when i~j) 
     tI <- tvals[I]
     tJ <- tvals[J]
-    result[IJ] <-
-      pmin(sat, tI) - pmin(sat, tI - 1) + pmin(sat, tJ) - pmin(sat, tJ - 1)
+    if(unweighted) {
+      result[IJ] <-
+        pmin(sat, tI) - pmin(sat, tI - 1L) + pmin(sat, tJ) - pmin(sat, tJ - 1L)
+    } else {
+      result[IJ] <-
+        pmin(sat, tI) - pmin(sat, tI - wIJ) +
+        pmin(sat, tJ) - pmin(sat, tJ - wJI)
+    }
     # Compute indirect part
     # (arising when i~k and j~k for another point k)
     # First find all such triples 
     ord <- (I < J)
     vees <- edges2vees(I[ord], J[ord], nX)
     # evaluate contribution of (k, i, j)
-    KK <- vees$i
-    tKK <- tvals[KK]
-    contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1) + pmin(sat, tKK-2)
-    # for each (i, j), sum the contributions over k 
     II <- vees$j
     JJ <- vees$k
+    KK <- vees$i
+    tKK <- tvals[KK]
+    if(unweighted) {
+      contribKK <- pmin(sat, tKK) - 2 * pmin(sat, tKK-1L) + pmin(sat, tKK-2L)
+    } else {
+      wKKII <- wmatrix[cbind(KK, II)]
+      wKKJJ <- wmatrix[cbind(KK, JJ)]
+      contribKK <- (
+        pmin(sat, tKK)
+        - pmin(sat, tKK-wKKII)
+        - pmin(sat, tKK-wKKJJ)
+        + pmin(sat, tKK-wKKII-wKKJJ)
+      )
+    }
+    # for each (i, j), sum the contributions over k 
     if(!sparseOK) {
       II <- factor(II, levels=1:nX)
       JJ <- factor(JJ, levels=1:nX)
@@ -294,7 +323,7 @@ geyerdelta2 <- local({
     return(result)
   }
 
-  geydelquad <- function(Q, r, sat, sparseOK) {
+  geydelquad <- function(Q, r, sat, correction, sparseOK) {
     Z <- is.data(Q)
     U <- union.quad(Q)
     nU <- npoints(U)
@@ -302,26 +331,49 @@ geyerdelta2 <- local({
     result <- if(!sparseOK) matrix(0, nU, nU) else
               sparseMatrix(i=integer(0), j=integer(0), x=numeric(0),
                            dims=c(nU, nU))
-    # identify all r-close pairs U[i], U[j]
-    a <- closepairs(U, r, what="indices")
-    I <- a$i
-    J <- a$j
-    IJ <- cbind(I, J)
-    # tag which ones are data points
+    ## identify all r-close pairs U[i], U[j]
+    unweighted <- correction %in% c("none", "border")
+    if(unweighted) {
+      a <- closepairs(U, r, what="indices")
+      I <- a$i
+      J <- a$j
+      IJ <- cbind(I, J)
+    } else {
+      a <- weightedclosepairs(U, r, correction=correction, what="indices")
+      I <- a$i
+      J <- a$j
+      IJ <- cbind(I, J)
+      wIJ <- a$weight
+      wmatrix <- sparseMatrix(i=I, j=J, x=wIJ, dims=c(nU,nU))
+      wJI <- wmatrix[cbind(J,I)]
+    }
+    ## tag which ones are data points
     zI <- Z[I]
     zJ <- Z[J]
     # count t(U[i], X)
     IzJ <- I[zJ]
     JzJ <- J[zJ]
-    tvals <- table(factor(IzJ, levels=1:nU))
-    # Compute direct part
-    # (arising when U[i]~U[j]) 
+    if(unweighted) {
+      tvals <- table(factor(IzJ, levels=1:nU))
+    } else {
+      wzJ <- wIJ[zJ]
+      tvals <- tapplysum(wzJ, list(factor(IzJ, levels=1:nU)))
+    }
+    ## Compute direct part
+    ## (arising when U[i]~U[j]) 
     tI <- tvals[I]
     tJ <- tvals[J]
-    tIJ <- tI - zJ
-    tJI <- tJ - zI
-    result[IJ] <-  pmin(sat, tIJ + 1L) - pmin(sat, tIJ) +
-                   pmin(sat, tJI + 1L) - pmin(sat, tJI) 
+    if(unweighted) {
+      tIJ <- tI - zJ
+      tJI <- tJ - zI
+      result[IJ] <- pmin(sat, tIJ + 1L) - pmin(sat, tIJ) +
+                    pmin(sat, tJI + 1L) - pmin(sat, tJI)
+    } else {
+      tIJ <- tI - zJ * wIJ
+      tJI <- tJ - zI * wJI
+      result[IJ] <- pmin(sat, tIJ + wIJ) - pmin(sat, tIJ) +
+                    pmin(sat, tJI + wJI) - pmin(sat, tJI)
+    }
     # Compute indirect part
     # (arising when U[i]~X[k] and U[j]~X[k] for another point X[k])
     # First find all such triples
@@ -342,9 +394,19 @@ geyerdelta2 <- local({
     tKK <- tvals[KK]
     zII <- Z[II]
     zJJ <- Z[JJ]
-    tKIJ <- tKK - zII - zJJ 
-    contribKK <-
-      pmin(sat, tKIJ + 2) - 2 * pmin(sat, tKIJ + 1) + pmin(sat, tKIJ)
+    if(unweighted) {
+      tKIJ <- tKK - zII - zJJ 
+      contribKK <-
+        pmin(sat, tKIJ + 2L) - 2 * pmin(sat, tKIJ + 1L) + pmin(sat, tKIJ)
+    } else {
+      wKKII <- wmatrix[cbind(KK, II)]
+      wKKJJ <- wmatrix[cbind(KK, JJ)]
+      tKIJ <- tKK - zII * wKKII - zJJ * wKKJJ
+      contribKK <- (pmin(sat, tKIJ + wKKII + wKKJJ)
+        - pmin(sat, tKIJ + wKKII)
+        - pmin(sat, tKIJ + wKKJJ)
+        + pmin(sat, tKIJ))
+    }
     # for each (i, j), sum the contributions over k
     if(!sparseOK) {
       II <- factor(II, levels=1:nU)
