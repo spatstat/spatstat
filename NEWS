@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.007
+        CHANGES IN spatstat VERSION 1.55-0.008
 
 OVERVIEW
 
@@ -7,6 +7,13 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o closepairs.ppp
+    New argument 'periodic'
+    
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Computation has been vastly accelerated for models with Geyer interaction
+    fitted using isotropic or translation edge corrections.
+    
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Virtually all models and edge corrections are now supported,
     using a "brute force" algorithm. This can be slow in some cases.

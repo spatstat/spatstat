@@ -100,9 +100,28 @@ Change log from 1.55-0 to 1.55-1
 
    DESCRIPTION
    NEWS
-	version 1.55-0.006
+	version 1.55-0.007
 
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+03 feb 2018
+
+   periodic.c [New file]
+   	Algorithm for closepairs with periodic edge correction.
+
+   closepairs.R
+   closepairs.Rd
+	closepairs.ppp has new argument 'periodic'.
+
+   tests/closeshave.R
+	Added a test of closepairs (periodic=TRUE)
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.008
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

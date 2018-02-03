@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.40 $	$Date: 2018/02/02 03:39:15 $
+#    $Revision: 2.41 $	$Date: 2018/02/03 08:33:58 $
 #
 #    The Strauss process
 #
@@ -213,10 +213,7 @@ weightedclosepairs <- function(X, r, correction,
                   all     = { })
          },
          periodic = {
-           proche <- (pairdist(X, periodic=TRUE, squared=TRUE) <= r^2)
-           diag(proche) <- FALSE
-           cl <- which(proche, arr.ind=TRUE)
-           cl <- list(i = cl[,1], j=cl[,2])
+           cl <- closepairs(X, r, what=what, periodic=TRUE)
            weight <- rep(1, length(cl$i))
          },
          {

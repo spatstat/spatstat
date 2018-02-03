@@ -180,6 +180,7 @@ static const R_CMethodDef CEntries[] = {
 static const R_CallMethodDef CallEntries[] = {
     {"close3IJpairs",        (DL_FUNC) &close3IJpairs,         5},
     {"close3pairs",          (DL_FUNC) &close3pairs,           5},
+    {"closePpair",           (DL_FUNC) &closePpair,            5},
     {"cross3IJpairs",        (DL_FUNC) &cross3IJpairs,         8},
     {"cross3pairs",          (DL_FUNC) &cross3pairs,           8},
     {"Cwhist",               (DL_FUNC) &Cwhist,                3},

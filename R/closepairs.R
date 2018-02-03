@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.39 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.41 $   $Date: 2018/02/03 08:56:29 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -14,7 +14,8 @@ closepairs <- function(X, rmax, ...) {
   
 closepairs.ppp <- function(X, rmax, twice=TRUE,
                            what=c("all", "indices", "ijd"),
-                           distinct=TRUE, neat=TRUE, 
+                           distinct=TRUE, neat=TRUE,
+                           periodic=FALSE,
                            ...) {
   verifyclass(X, "ppp")
   what <- match.arg(what)
@@ -26,6 +27,10 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     warning("Obsolete argument 'ordered' has been replaced by 'twice'")
     twice <- ordered
   }
+  if(periodic && !is.rectangle(Window(X)))
+    warning("Periodic edge correction applied in non-rectangular window",
+            call.=FALSE)
+  
   npts <- npoints(X)
   null.answer <- switch(what,
                         all = {
@@ -50,10 +55,12 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
                         })
   if(npts == 0)
     return(null.answer)
-  # sort points by increasing x coordinate
-  oo <- fave.order(X$x)
-  Xsort <- X[oo]
-  # First make an OVERESTIMATE of the number of unordered pairs
+  ## sort points by increasing x coordinate
+  if(!periodic) {
+    oo <- fave.order(X$x)
+    Xsort <- X[oo]
+  } 
+  ## First make an OVERESTIMATE of the number of unordered pairs
   nsize <- ceiling(2 * pi * (npts^2) * (rmax^2)/area(Window(X)))
   nsize <- max(1024, nsize)
   if(nsize > .Machine$integer.max) {
@@ -61,8 +68,39 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
             call.=FALSE)
     nsize <- .Machine$integer.max
   }
-  # Now extract pairs
-  if(spatstat.options("closepairs.newcode")) {
+  ## Now extract pairs
+  if(periodic) {
+    ## special algorithm for periodic distance
+    got.twice <- TRUE
+    x <- X$x
+    y <- X$y
+    r <- rmax
+    p <- sidelengths(Frame(X))
+    ng <- nsize
+    storage.mode(x) <- "double"
+    storage.mode(y) <- "double"
+    storage.mode(r) <- "double"
+    storage.mode(p) <- "double"
+    storage.mode(ng) <- "integer"
+    z <- .Call("closePpair",
+               xx=x,
+               yy=y,
+               pp=p,
+               rr=r,
+               nguess=ng,
+               PACKAGE="spatstat")
+    i <- z[[1L]]
+    j <- z[[2L]]
+    d <- z[[3L]]
+    if(what == "all") {
+      xi <- x[i]
+      yi <- y[i]
+      xj <- x[j]
+      yj <- y[j]
+      dx <- xj - xi
+      dy <- yj - yi
+    }
+  } else if(spatstat.options("closepairs.newcode")) {
     # ------------------- use new faster code ---------------------
     # fast algorithms collect each distinct pair only once
     got.twice <- FALSE
@@ -227,9 +265,12 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     # ------------------- end code switch ------------------------
   }
   
-  # convert i,j indices to original sequence
-  i <- oo[i]
-  j <- oo[j]
+  if(!periodic) {
+    ## convert i,j indices to original sequence
+    i <- oo[i]
+    j <- oo[j]
+  }
+  
   if(twice) {
     ## both (i, j) and (j, i) should be returned
     if(!got.twice) {

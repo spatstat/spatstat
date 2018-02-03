@@ -50,7 +50,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.5 $ $Date: 2016/03/28 04:21:07 $
+## $Revision: 1.6 $ $Date: 2018/02/03 09:41:16 $
 
 local({
   r <- 0.12
@@ -101,6 +101,26 @@ local({
   if(!isSymmetric(G))
     stop("crosspairs is not symmetric in Rasmus example")
 
+  #' periodic distance
+  pclose <- function(X, R, method=c("raw", "C")) {
+    method <- match.arg(method)
+    switch(method,
+           raw = {
+             D <- pairdist(X, periodic=TRUE)
+             diag(D) <- Inf
+             result <- which(D <= R, arr.ind=TRUE)
+           },
+           C = {
+             result <- closepairs(X, R, periodic=TRUE, what="indices")
+           })
+    result <- as.data.frame(result)
+    colnames(result) <- c("i","j")
+    return(result)
+  }
+  A <- pclose(redwood, 0.2, "raw")
+  B <- pclose(redwood, 0.2, "C")
+  if(!samesame(A,B))
+    stop("closepairs.ppp(periodic=TRUE) gives wrong answer")
 })
 ## tests/colour.R
 ##

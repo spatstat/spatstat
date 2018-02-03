@@ -20,7 +20,8 @@ closepairs(X, rmax, \dots)
 
 \method{closepairs}{ppp}(X, rmax, twice=TRUE,
                          what=c("all","indices","ijd"),
-                         distinct=TRUE, neat=TRUE, \dots)
+                         distinct=TRUE, neat=TRUE,
+                         periodic=FALSE, \dots)
 
 crosspairs(X, Y, rmax, \dots)
 
@@ -60,6 +61,11 @@ crosspairs(X, Y, rmax, \dots)
   \item{neat}{
     Logical value indicating whether to ensure that \code{i < j}
     in each output pair, when \code{twice=FALSE}. 
+  }
+  \item{periodic}{
+    Logical value indicating whether to use the periodic edge correction.
+    The window of \code{X} should be a rectangle.
+    Opposite pairs of edges of the window will be treated as identical.
   }
   \item{\dots}{Extra arguments, ignored by methods.}
 }

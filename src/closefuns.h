@@ -20,7 +20,7 @@
 
   SINGLE     if defined, capture only i < j
 
-  $Revision: 1.9 $ $Date: 2015/12/30 04:01:51 $
+  $Revision: 1.10 $ $Date: 2018/02/02 08:34:00 $
 
 */
 
