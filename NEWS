@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.008
+        CHANGES IN spatstat VERSION 1.55-0.009
 
 OVERVIEW
 
-    o Nothing yet.
+    o Some code runs faster.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -17,6 +17,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Virtually all models and edge corrections are now supported,
     using a "brute force" algorithm. This can be slow in some cases.
+
+    o cdf.test
+    Monte Carlo test runs faster.
 
 BUG FIXES
 

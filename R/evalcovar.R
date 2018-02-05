@@ -3,7 +3,7 @@
 #'
 #'   evaluate covariate values at data points and at pixels
 #'
-#' $Revision: 1.23 $ $Date: 2017/08/17 09:20:00 $
+#' $Revision: 1.24 $ $Date: 2018/02/05 06:04:16 $
 #'
 
 evalCovar <- function(model, covariate, ...) {
@@ -20,7 +20,8 @@ evalCovar.ppm <- local({
                             dataname=NULL, subset=NULL) {
     lambdatype <- match.arg(lambdatype)
     #' evaluate covariate values at data points and at pixels
-    csr <- is.poisson.ppm(model) && is.stationary.ppm(model)
+    ispois <- is.poisson(model)
+    csr <- ispois && is.stationary(model)
     #' determine names
     if(is.null(modelname))
       modelname <- if(csr) "CSR" else short.deparse(substitute(model))
@@ -32,7 +33,7 @@ evalCovar.ppm <- local({
       dataname <- model$Qname
     
     info <-  list(modelname=modelname, covname=covname,
-                  dataname=dataname, csr=csr,
+                  dataname=dataname, csr=csr, ispois=ispois,
                   spacename="two dimensions")
   
     X <- data.ppm(model)
@@ -239,7 +240,8 @@ evalCovar.lppm <- local({
                              dataname=NULL, subset=NULL) {
     lambdatype <- match.arg(lambdatype)
     #' evaluate covariate values at data points and at pixels
-    csr <- is.poisson(model) && is.stationary(model)
+    ispois <- is.poisson(model)
+    csr <- ispois && is.stationary(model)
 
     #' determine names
     if(is.null(modelname))
@@ -251,7 +253,7 @@ evalCovar.lppm <- local({
     if(is.null(dataname))
       dataname <- model$Xname
     info <-  list(modelname=modelname, covname=covname,
-                  dataname=dataname, csr=csr,
+                  dataname=dataname, csr=csr, ispois=ispois, 
                   spacename="linear network")
 
     #' convert character covariate to function

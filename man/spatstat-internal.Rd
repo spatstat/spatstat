@@ -618,6 +618,7 @@
 \alias{spatstatRmhInfo}
 \alias{spatialCDFframe}
 \alias{spatialCDFtest}
+\alias{spatialCDFtestCalc}
 \alias{splitHybridInteraction}
 \alias{sp.foundclass}
 \alias{sp.foundclasses}
@@ -1497,6 +1498,7 @@ spatialCDFframe(model, covariate, \dots)
 spatialCDFtest(model, covariate, test, \dots,
          dimyx, eps, interpolate, jitter,
          nsim, verbose, modelname, covname, dataname)
+spatialCDFtestCalc(fra, test, \dots, details)
 sphere.volume(range, nval = 10)
 splitHybridInteraction(coeffs, inte)
 sp.foundclass(cname, inlist, formalname, argsgiven)             

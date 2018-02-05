@@ -1,7 +1,7 @@
 #
 #  cdftest.R
 #
-#  $Revision: 2.16 $  $Date: 2018/01/15 13:08:12 $
+#  $Revision: 2.18 $  $Date: 2018/02/05 06:42:04 $
 #
 #
 
@@ -200,15 +200,66 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                            dimyx=NULL, eps=NULL,
                            interpolate=TRUE, jitter=TRUE, nsim=99, verbose=TRUE,
                            modelname=NULL, covname=NULL, dataname=NULL) {
-  # conduct test based on comparison of CDF's of covariate values
+  ## conduct test based on comparison of CDF's of covariate values
   test <- match.arg(test)
-  ispois <- is.poisson(model)
-  # compute the essential data
+  ## compute the essential data
   fra <- spatialCDFframe(model, covariate,
                          dimyx=dimyx, eps=eps,
                          interpolate=interpolate, jitter=jitter,
                          modelname=modelname,
                          covname=covname, dataname=dataname)
+  ## calculate the test statistic
+  result <- spatialCDFtestCalc(fra, test=test, ...)
+
+  if(is.poisson(model))
+    return(result)
+
+  ## Gibbs model: perform Monte Carlo test
+  result$poisson.p.value <- pobs <- result$p.value
+  result$poisson.statistic <- tobs <- result$statistic
+  Xsim <- simulate(model, nsim=nsim, progress=verbose)
+  sim.pvals <- sim.stats <- numeric(nsim)
+  if(verbose) {
+    cat("Processing.. ")
+    state <- list()
+  }
+  for(i in seq_len(nsim)) {
+    model.i <- update(model, Xsim[[i]])
+    fra.i <- spatialCDFframe(model.i, covariate,
+                             dimyx=dimyx, eps=eps,
+                             interpolate=interpolate, jitter=jitter,
+                             modelname=modelname,
+                             covname=covname, dataname=dataname)
+    res.i <- spatialCDFtestCalc(fra.i, test=test, ..., details=FALSE)
+    sim.pvals[i] <- res.i$p.value
+    sim.stats[i] <- res.i$statistic
+    if(verbose) state <- progressreport(i, nsim, state=state)
+  }
+  if(verbose) cat("Done.\n")
+  result$sim.pvals <- sim.pvals
+  result$sim.stats <- sim.stats
+  ## Monte Carlo p-value
+  ## For tied p-values, first compare values of test statistics
+  ## (because p = 0 may occur due to rounding)
+  ## otherwise resolve ties by randomisation
+  nless <- sum(sim.pvals < pobs)
+  nplus <- sum(sim.pvals == pobs & sim.stats > tobs)
+  nties <- sum(sim.pvals == pobs & sim.stats == tobs) 
+  result$p.value <- (nless + nplus + sample(0:nties, 1L))/(nsim+1L)
+  ## modify the 'htest' entries
+  testname <- switch(test,
+                     ks="Kolmogorov-Smirnov",
+                     cvm="Cramer-Von Mises",
+                     ad="Anderson-Darling")
+  result$method <-
+    paste("Monte Carlo spatial", testname, "test",
+          "of Gibbs process in", fra$info$spacename)
+  return(result)        
+}
+
+spatialCDFtestCalc <- function(fra, test=c("ks", "cvm", "ad"), ...,
+                               details=TRUE) {
+  test <- match.arg(test)
   values <- fra$values
   info   <- fra$info
   ## Test uniformity of transformed values
@@ -217,66 +268,36 @@ spatialCDFtest <- function(model, covariate, test=c("ks", "cvm", "ad"),
                    ks  = ks.test(U, "punif", ...),
                    cvm = cvm.test(U, "punif", ...),
                    ad = ad.test(U, "punif", ...))
+
+  # shortcut for internal use only
+  if(!details) 
+    return(result)
+  
+  ## add a full explanation, internal data, etc.
+  
+  ## modify the 'htest' entries
+  csr    <- info$csr
+  ispois <- info$ispois
+  modelname <-
+    if(csr) "CSR" else
+    if(ispois) "inhomogeneous Poisson process" else "Gibbs process"
   testname <- switch(test,
                      ks="Kolmogorov-Smirnov",
                      cvm="Cramer-Von Mises",
                      ad="Anderson-Darling")
-  ## 
-  if(!ispois) {
-    ## Gibbs model: perform Monte Carlo test
-    result$poisson.p.value <- pobs <- result$p.value
-    result$poisson.statistic <- tobs <- result$statistic
-    Xsim <- simulate(model, nsim=nsim, progress=verbose)
-    sim.pvals <- sim.stats <- numeric(nsim)
-    if(verbose) {
-      cat("Processing.. ")
-      state <- list()
-    }
-    for(i in seq_len(nsim)) {
-      model.i <- update(model, Xsim[[i]])
-      fra.i <- spatialCDFframe(model.i, covariate,
-                               dimyx=dimyx, eps=eps,
-                               interpolate=interpolate, jitter=jitter,
-                               modelname=modelname,
-                               covname=covname, dataname=dataname)
-      U.i <- fra.i$values$U
-      res.i <- switch(test,
-                      ks  = ks.test(U.i, "punif", ...),
-                      cvm = cvm.test(U.i, "punif", ...),
-                      ad = ad.test(U.i, "punif", ...))     
-      sim.pvals[i] <- res.i$p.value
-      sim.stats[i] <- res.i$statistic
-      if(verbose) state <- progressreport(i, nsim, state=state)
-    }
-    if(verbose) cat("Done.\n")
-    result$sim.pvals <- sim.pvals
-    result$sim.stats <- sim.stats
-    ## Monte Carlo p-value
-    ## For tied p-values, first compare values of test statistics
-    ## (because p = 0 may occur due to rounding)
-    ## otherwise resolve ties by randomisation
-    nless <- sum(sim.pvals < pobs)
-    nplus <- sum(sim.pvals == pobs & sim.stats > tobs)
-    nties <- sum(sim.pvals == pobs & sim.stats == tobs) 
-    result$p.value <- (nless + nplus + sample(0:nties, 1L))/(nsim+1L)
-  }
-  ## 
-  # modify the 'htest' entries
-  csr <- info$csr
-  modelname <- if(csr) "CSR" else
-               if(ispois) "inhomogeneous Poisson process" else "Gibbs process"
   result$method <-
-    paste(if(ispois) "Spatial" else "Monte Carlo spatial",
-          testname, "test of", modelname, "in", info$spacename)
+    paste("Spatial", testname, "test of", modelname, "in", info$spacename)
   result$data.name <-
     paste("covariate", sQuote(singlestring(info$covname)),
           "evaluated at points of", sQuote(info$dataname), 
           "\n     and transformed to uniform distribution under",
           if(csr) info$modelname else sQuote(info$modelname))
-  
-  # additional class 'cdftest'
-  class(result) <- c("cdftest", class(result))
+
+  ## include internal data
   attr(result, "frame") <- fra
+
+  ## additional class 'cdftest'
+  class(result) <- c("cdftest", class(result))
   return(result)        
 }
 

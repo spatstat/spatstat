@@ -125,3 +125,20 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+04 feb 2018
+
+   evalcovar.R
+	'info' list now includes 'ispois' = is.poisson(model)
+
+   cdftest.R
+   spatstat-internal.Rd
+	new internal function 'spatialCDFtestCalc'
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.009
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
