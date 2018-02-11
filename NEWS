@@ -1,12 +1,20 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.009
+        CHANGES IN spatstat VERSION 1.55-0.010
 
 OVERVIEW
 
     o Some code runs faster.
 
+    o Minor improvements.
+
+    o Version nickname: "Phugoid"
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o as.owin.default
+    Now accepts a structure with entries named 'xmin,ymin,xmax,ymax'
+    in any order. This handles objects of class 'bbox' in the 'sf' package.
+    
     o closepairs.ppp
     New argument 'periodic'
     

@@ -142,3 +142,17 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+10 feb 2018
+
+   window.R
+   as.owin.Rd
+	as.owin.default accepts 'xmin, xmax, ymin, ymax'
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.010
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

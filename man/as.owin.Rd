@@ -81,9 +81,12 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{default}(W, \dots, fatal=TRUE)
 }
 \arguments{
-  \item{W}{Data specifying an observation window, in any of several formats
-    described under \emph{Details} below.}
-  \item{fatal}{Logical flag determining what to do
+  \item{W}{
+    Data specifying an observation window, in any of several formats
+    described under \emph{Details} below.
+  }
+  \item{fatal}{
+    Logical value determining what to do
     if the data cannot be converted to an observation window.
     See Details.
   }
@@ -103,7 +106,7 @@ in any of several formats, into an object of class \code{"owin"}.
   The class \code{"owin"} is a way of specifying the observation window
   for a point pattern. See \code{\link{owin.object}} for an overview.
  
-  This function converts data in any of several formats 
+  The function \code{as.owin} converts data in any of several formats 
   into an object of class \code{"owin"} for use by the \pkg{spatstat}
   package. The function \code{as.owin} is generic, with methods
   for different classes of objects, and a default method.
@@ -116,16 +119,22 @@ in any of several formats, into an object of class \code{"owin"}.
     a structure with entries \code{xrange}, \code{yrange} specifying the 
     \eqn{x} and \eqn{y} dimensions of a rectangle
     \item
-    a four-element vector
-    (interpreted as \code{(xmin, xmax, ymin, ymax)})
+    a structure with entries named \code{xmin}, \code{xmax}, \code{ymin},
+    \code{ymax} (in any order) 
+    specifying the \eqn{x} and \eqn{y} dimensions of a rectangle.
+    This will accept objects of class \code{bbox} in the \code{sf} package.
+    \item
+    a numeric vector of length 4
+    (interpreted as \code{(xmin, xmax, ymin, ymax)} in that order)
     specifying the \eqn{x} and \eqn{y} dimensions of a rectangle
     \item
-    a structure with entries \code{xl}, \code{xu}, \code{yl}, \code{yu}
+    a structure with entries named \code{xl}, \code{xu}, \code{yl}, \code{yu}
+    (in any order)
     specifying the \eqn{x} and \eqn{y} dimensions of a rectangle
     as \code{(xmin, xmax) = (xl, xu)} and 
     \code{(ymin, ymax) = (yl, yu)}. This will accept objects of
     class \code{spp} used in the Venables and Ripley \pkg{spatial}
-    library.
+    package.
     \item
     an object of class \code{"ppp"} representing a point pattern.
     In this case, the object's \code{window} structure will be
@@ -227,13 +236,8 @@ in any of several formats, into an object of class \code{"owin"}.
  w <- as.owin(towns)
  detach(package:spatial)
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

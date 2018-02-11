@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.178 $	$Date: 2017/10/31 03:18:09 $
+#	$Revision: 4.179 $	$Date: 2018/02/11 01:30:55 $
 #
 #
 #	A window may be either
@@ -457,8 +457,9 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
   ## Tries to interpret data as an object of class 'owin'
   ## W may be
   ##	a structure with entries xrange, yrange
-  ##	a four-element vector (interpreted xmin, xmax, ymin, ymax)
   ##	a structure with entries xl, xu, yl, yu
+  ##	a structure with entries xmin, xmax, ymin, ymax
+  ##	a four-element vector (interpreted xmin, xmax, ymin, ymax)
   ##	an object with attribute "bbox"
 
   if(inherits(W, "box3")) {
@@ -471,8 +472,9 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
   if(checkfields(W, c("xrange", "yrange"))) {
     Z <- owin(W$xrange, W$yrange)
     return(Z)
-  } else if(is.vector(W) && is.numeric(W) && length(W) == 4) {
-    Z <- owin(W[1:2], W[3:4])
+  } else if(checkfields(W, c("xmin", "xmax", "ymin", "ymax"))) {
+    W <- as.list(W)
+    Z <- owin(c(W$xmin, W$xmax),c(W$ymin, W$ymax))
     return(Z)
   } else if(checkfields(W, c("xl", "xu", "yl", "yu"))) {
     W <- as.list(W)
@@ -482,6 +484,9 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
             && checkfields(W$area, c("xl", "xu", "yl", "yu"))) {
     V <- as.list(W$area)
     Z <- owin(c(V$xl, V$xu),c(V$yl, V$yu))
+    return(Z)
+  } else if(is.vector(W) && is.numeric(W) && length(W) == 4) {
+    Z <- owin(W[1:2], W[3:4])
     return(Z)
   } else if(!is.null(Z <- attr(W, "bbox"))) {
     return(as.owin(Z, ..., fatal=fatal))
