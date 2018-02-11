@@ -258,6 +258,12 @@
   # convert to finer grid
   Z <- as.im(Z, dimyx=256)
 
+  #' distance functions
+  d <- distfun(redwood)
+  Zapprox <- as.im(d)
+  Zexact <- as.im(d, approx=FALSE)
+  plot(solist(approx=Zapprox, exact=Zexact), main="")
+
   # pixellate the Dirichlet tessellation
   Di <- dirichlet(runifpoint(10))
   plot(as.im(Di))
@@ -267,7 +273,7 @@
   grad <- bei.extra$grad
   slopedata <- as.data.frame(grad)
   slope <- as.im(slopedata)
-  unitname(slope) <- c("metre","metres")
+  unitname(grad) <- unitname(slope) <- unitname(grad) # for compatibility
   all.equal(slope, grad) # TRUE
 }
 \author{

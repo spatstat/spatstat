@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.9 $  $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.10 $  $Date: 2018/02/11 06:33:09 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -13,8 +13,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   stopifnot(is.ppp(X))
   sortby <- match.arg(sortby)
   outputarray <- resolve.1.default("outputarray", ..., outputarray=FALSE)
-  
-  W <- as.owin(W)
+
+  W <- as.owin(W %orifnull% X)
   huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(W)))
   
   what   <- match.arg(what, choices=c("dist", "which"), several.ok=TRUE)

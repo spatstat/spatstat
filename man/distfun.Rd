@@ -95,6 +95,7 @@
    d2 <- distfun(cells, k=2)
    d(0.5, 0.5)
    d2(0.5, 0.5)
+   domain(d)
 
    z <- d(japanesepines)
 }

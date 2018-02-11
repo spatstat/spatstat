@@ -65,6 +65,7 @@
 \examples{
   has.close(redwood, 0.05)
   with(split(amacrine), has.close(on, 0.05, off))
+  with(osteo, sum(has.close(pts, 20)))
 }
 \keyword{spatial}
 \keyword{math}

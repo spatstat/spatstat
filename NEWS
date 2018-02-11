@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.010
+        CHANGES IN spatstat VERSION 1.55-0.011
 
 OVERVIEW
 
@@ -31,7 +31,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-    o None yet.
+    o nnmap
+    Crashed if W = NULL.
+    Fixed.
+
+    o as.im.distfun
+    Crashed, for the distfun of a point pattern, if approx=FALSE.
+    Fixed.
     
         CHANGES IN spatstat VERSION 1.55-0
 

@@ -156,3 +156,20 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   has.close.Rd
+	Added 3D example.
+
+   as.im.Rd
+	Added distfun examples.
+
+   nnmap.R
+	Bug fix.
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.011
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
