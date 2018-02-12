@@ -201,6 +201,11 @@
    cdf.test(fit0, "x")
    # test right model
    cdf.test(fit1, "x")
+
+   # Gibbs model
+   fitGibbs <- update(fit0, interaction=Strauss(0.07))
+   ns <- if(interactive()) 19 else 3
+   cdf.test(fitGibbs, "x", nsim=ns)
 }
 \keyword{htest}
 \keyword{spatial}

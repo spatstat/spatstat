@@ -134,8 +134,8 @@ local({
 
 
 #'    tests/sparse3Darrays.R
-#'  Basic tests of sparse3array.R code
-#'  $Revision: 1.8 $ $Date: 2017/02/22 09:00:27 $
+#'  Basic tests of code in sparse3Darray.R and sparsecommon.R
+#'  $Revision: 1.9 $ $Date: 2018/02/12 01:50:30 $
 
 require(spatstat)
 local({
@@ -221,6 +221,25 @@ local({
     # no entries indexed
     Z[integer(0), integer(0), integer(0)] <- 42
     Z[matrix(, 0, 3)] <- 42
+
+    #' -----------  sparsecommon.R -----------------------
+    B <- sparseMatrix(i=1:3, j=3:1, x= 10 * (1:3), dims=c(4,4))
+    #' (and using sparse 3D array M and sparse vector V from above)
+
+    Bmap <- mapSparseEntries(B, 1, 4:1)
+    Mmap1 <- mapSparseEntries(M, 1, 5:1, across=3)
+    Mmap2 <- mapSparseEntries(M, 3, 2:1, conform=FALSE)
+    Mmap3 <- mapSparseEntries(M, 1, matrix(1:10, 5, 2), across=3)
+    
+    Vthrice  <- expandSparse(V, 3)
+    VthriceT <- expandSparse(V, 3, 1)
+
+    VV <- sparseVectorCumul(rep(1:3,2), rep(c(3,1,2), 2), 5)
+
+    Vsum <- applySparseEntries(V, sum)
+    Bdouble <- applySparseEntries(B, function(x) { 2 * x })
+    Mminus <- applySparseEntries(M, function(x) -x)
+    
   }
 })
 

@@ -3,7 +3,7 @@
 #'
 #'  Utilities for sparse arrays
 #'
-#'  $Revision: 1.6 $  $Date: 2017/06/05 10:31:58 $
+#'  $Revision: 1.8 $  $Date: 2018/02/12 01:47:55 $
 #'
 
 #'  .............. completely generic ....................
@@ -109,7 +109,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
   }
   if(inherits(x, "sparseMatrix")) {
     x <- as(x, Class="TsparseMatrix")
-    if(length(x$i) == 0) {
+    if(length(x@i) == 0) {
       # no entries
       return(x)
     }
@@ -134,6 +134,7 @@ mapSparseEntries <- function(x, margin, values, conform=TRUE, across) {
     if(conform) {
       #' ensure common pattern of sparse values
       #' in each slice on 'across' margin
+      force(across)
       nslice <- dimx[across]
       #' pick one representative of each equivalence class
       ## ---- old code ---------

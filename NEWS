@@ -1,11 +1,11 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.011
+        CHANGES IN spatstat VERSION 1.55-0.012
 
 OVERVIEW
 
     o Some code runs faster.
 
-    o Minor improvements.
+    o Minor improvements and bug fixes.
 
     o Version nickname: "Phugoid"
     

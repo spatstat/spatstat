@@ -25,20 +25,21 @@ local({
 
 
 ## tests/cdf.test.R
-## check cdf.test with strange data
 require(spatstat)
 local({
-  # Marked point patterns with some marks not represented
+  ## (1) check cdf.test with strange data
+  ## Marked point patterns with some marks not represented
   AC <- split(ants, un=FALSE)$Cataglyphis
   AM <- split(ants, un=FALSE)$Messor
   DM <- distmap(AM)
-  # should produce a warning, rather than a crash:
+  ## should produce a warning, rather than a crash:
   cdf.test(AC, DM)
-  # should be OK:
+  ## should be OK:
   cdf.test(unmark(AC), DM)
   cdf.test(unmark(AC), DM, "cvm")
   cdf.test(unmark(AC), DM, "ad")
-  # linear networks
+
+  ## (2) linear networks
   set.seed(42)
   X <- runiflpp(20, simplenet)
   fit <- lppm(X ~1)

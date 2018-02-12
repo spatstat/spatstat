@@ -173,3 +173,23 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+12 feb 2018
+
+   cdf.test.mppm.Rd
+	Added example of Gibbs case.
+
+   sparsecommon.R
+	Bug fix.
+
+   tests/sparse3Darray.R
+	More tests of sparse array code.
+
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.012
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
