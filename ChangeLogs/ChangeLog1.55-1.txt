@@ -193,3 +193,17 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+   mpl.R
+   spatstat-internal.Rd
+	Added progress reports in deltasuffstat brute force algorithm
+
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.013
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

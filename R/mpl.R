@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.215 $	$Date: 2018/02/01 06:28:51 $
+#	$Revision: 5.218 $	$Date: 2018/02/12 02:51:51 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/02/01 06:28:51 $")
+                        date="$Date: 2018/02/12 02:51:51 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1213,10 +1213,12 @@ deltasuffstat <- local({
   deltasuffstat <- function(model, ...,
                             restrict=c("pairs", "first", "none"),
 			    dataonly=TRUE,
-                            force=FALSE, warn.forced=FALSE,
-                            use.special=TRUE,
+                            sparseOK=FALSE,
                             quadsub=NULL,
-                            sparseOK=FALSE) {
+                            force=FALSE,
+                            warn.forced=FALSE,
+                            verbose=warn.forced,
+                            use.special=TRUE) {
     stopifnot(is.ppm(model))
     sparsegiven <- !missing(sparseOK)
     restrict <- match.arg(restrict)
@@ -1281,8 +1283,8 @@ deltasuffstat <- local({
       if(warn.forced)
         warning("Reverting to brute force to compute interaction terms",
                 call.=FALSE)
-      v <- if(dataonly) deltasufX(model, sparseOK) else
-           deltasufQ(model, quadsub, sparseOK)
+      v <- if(dataonly) deltasufX(model, sparseOK, verbose=verbose) else
+           deltasufQ(model, quadsub, sparseOK, verbose=verbose)
       v.is.full <- TRUE
     }
     ## make it a 3D array
@@ -1350,7 +1352,7 @@ deltasuffstat <- local({
 
   ## compute deltasuffstat using partialModelMatrix
 
-  deltasufX <- function(model, sparseOK=FALSE) {
+  deltasufX <- function(model, sparseOK=FALSE, verbose=FALSE) {
     stopifnot(is.ppm(model))
     X <- data.ppm(model)
   
@@ -1396,10 +1398,17 @@ deltasuffstat <- local({
     ##
     if(length(I) > 0 && length(J) > 0) {
       ## .............. loop over pairs ........................
+      uniqueI <- unique(I)
+      npairs <- length(uniqueI)
+      pstate <- list()
+      if(verbose) 
+        splat("Examining", npairs, "pairs of data points...")
       ## The following ensures that 'empty' and 'X' have compatible marks 
       empty <- X[integer(0)]
+      ## 
       ## Run through pairs
-      for(i in unique(I)) {
+      for(iter in seq_len(npairs)) {
+        i <- uniqueI[iter]
         ## all points within 2R
         J2i <- unique(J2[I2==i])
         ## all points within R
@@ -1441,6 +1450,8 @@ deltasuffstat <- local({
             mbefore[ , i, Ji] <- array(m[i,], dim=c(p, 1, nJi))
           } 
         }
+        if(verbose)
+          pstate <- progressreport(iter, npairs, state=pstate)
       }
     }
         
@@ -1451,7 +1462,7 @@ deltasuffstat <- local({
     return(delta)
   }
 
-  deltasufQ <- function(model, quadsub, sparseOK) {
+  deltasufQ <- function(model, quadsub, sparseOK, verbose=FALSE) {
     stopifnot(is.ppm(model))
 
     p <- length(coef(model))
@@ -1521,8 +1532,15 @@ deltasuffstat <- local({
       zI <- isdata[uI]
       uIdata <- uI[zI]
       uIdummy <- uI[!zI]
+      nuIdata <- length(uIdata)
+      nuIdummy <- length(uIdummy)
+      if(verbose) 
+        splat("Examining", nuIdata, "+", nuIdummy, "=", nuIdata + nuIdummy,
+              "pairs of points")
       ## Run through pairs i, j where 'i' is a data point
-      for(i in uIdata) {
+      pstate <- list()
+      for(iter in seq_len(nuIdata)) {
+        i <- uIdata[iter]
         ## all DATA points within 2R of X[i]
         ## This represents X[-i] 
         J2i <- unique(J2[I2==i])
@@ -1554,9 +1572,13 @@ deltasuffstat <- local({
           if(sparseOK) 
             mbefore[ , Ji, i] <- array(t(m[Ji,]), dim=c(p, nJi, 1))
         }
+        if(verbose)
+          pstate <- progressreport(iter, nuIdata, state=pstate)
       }
       ## Run through pairs i, j where 'i' is a dummy point
-      for(i in uIdummy) {
+      pstate <- list()
+      for(iter in seq_len(nuIdummy)) {
+        i <- uIdummy[iter]
         ## all DATA points within 2R of U[i]
         J2i <- unique(J2[I2==i])
         J2i <- J2i[isdata[J2i]]
@@ -1594,6 +1616,8 @@ deltasuffstat <- local({
             mbefore[ , JiSort, i] <- array(t(m[JiSort,]), dim=c(p, nJi, 1))
           }
         }
+        if(verbose)
+          pstate <- progressreport(iter, nuIdummy, state=pstate)
       }
     }
         

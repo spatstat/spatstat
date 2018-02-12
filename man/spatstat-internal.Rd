@@ -855,8 +855,9 @@ default.clipwindow(object, epsilon)
 default.linnet.tolerance(L)
 default.n.tiling(X, nd, ntile, npix, eps, random, quasi, verbose)
 default.ntile(X)
-deltasuffstat(model, \dots, restrict, dataonly,
-              force, warn.forced, use.special, quadsub, sparseOK)
+deltasuffstat(model, \dots,
+              restrict, dataonly, sparseOK, quadsub,
+              force, warn.forced, verbose, use.special)
 Deviation(x, ref, leaveout, n, xi)
 \method{dfbetas}{ppmInfluence}(model, \dots)
 dflt.redraw(button, name, env)
