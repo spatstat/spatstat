@@ -14,14 +14,18 @@
 \usage{
   pseudoR2(object, \dots)
 
-  \method{pseudoR2}{ppm}(object, \dots)
+  \method{pseudoR2}{ppm}(object, \dots, keepoffset=TRUE)
 
-  \method{pseudoR2}{lppm}(object, \dots)
+  \method{pseudoR2}{lppm}(object, \dots, keepoffset=TRUE)
 }
 \arguments{
   \item{object}{
     Fitted point process model. An object of class \code{"ppm"}
     or \code{"lppm"}.
+  }
+  \item{keepoffset}{
+    Logical value indicating whether to retain offset terms in the model
+    when computing the deviance difference. See Details.
   }
   \item{\dots}{
     Additional arguments passed to \code{\link{deviance.ppm}}
@@ -40,23 +44,22 @@
     R^2 = 1 - D/D0
   }
   where \eqn{D} is the deviance of the fitted model \code{object},
-  and \eqn{D_0}{D0} is the deviance of the null model
-  (obtained by refitting \code{object}
-  using the trend formula \code{~1}).
+  and \eqn{D_0}{D0} is the deviance of the null model.
   Deviance is defined as twice the negative log-likelihood
   or log-pseudolikelihood.
+
+  The null model is usually obtained by re-fitting the model
+  using the trend formula \code{~1}.
+  However if the original model formula included \code{offset} terms,
+  and if \code{keepoffset=TRUE} (the default),
+  then the null model formula consists of these offset terms. This
+  ensures that the \code{pseudoR2} value is non-negative.
 }
 \value{
   A single numeric value.
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{deviance.ppm}}, 
@@ -65,6 +68,10 @@
 \examples{
   fit <- ppm(swedishpines ~ x+y)
   pseudoR2(fit)
+
+  xcoord <- as.im(function(x,y) x, Window(swedishpines))
+  fut <- ppm(swedishpines ~ offset(xcoord/200) + y)
+  pseudoR2(fut)
 }
 \keyword{spatial}
 \keyword{models}

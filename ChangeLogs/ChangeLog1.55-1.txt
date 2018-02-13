@@ -207,3 +207,18 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+13 feb 2018
+
+   ppmclass.R
+   lppm.R
+   pseudoR2.Rd
+	pseudoR2.ppm and pseudoR2.lppm have new argument 'keepoffset'
+
+   DESCRIPTION
+   NEWS
+	version 1.55-0.014
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
