@@ -7,6 +7,7 @@
 \alias{as.function.ssf}
 \alias{as.ppp.ssf}
 \alias{print.ssf}
+\alias{summary.ssf}
 \alias{range.ssf}
 \alias{min.ssf}
 \alias{max.ssf}
@@ -31,6 +32,8 @@
 
   \method{print}{ssf}(x, \dots, brief=FALSE)
 
+  \method{summary}{ssf}(object, \dots)
+
   \method{range}{ssf}(x, \dots)
 
   \method{min}{ssf}(x, \dots)
@@ -40,7 +43,7 @@
   \method{integral}{ssf}(f, domain=NULL, ..., weights=attr(f, "weights"))
 }
 \arguments{
-  \item{x,X,f}{
+  \item{x,X,f,object}{
     A spatially sampled function (object of class \code{"ssf"}). 
   }
   \item{\dots}{Arguments passed to the default method.}
@@ -68,6 +71,9 @@
   
   \code{print} returns \code{NULL}.
 
+  \code{summary} returns an object of class
+  \code{"summary.ssf"} which has a print method.
+  
   \code{range} returns a numeric vector of length 2.
   \code{min} and \code{max} return a single numeric value.
 
@@ -88,6 +94,7 @@
   \code{\link{as.function}},
   \code{\link[spatstat]{as.ppp}},
   \code{\link{print}},
+  \code{\link{summary}},
   \code{\link{range}},
   \code{\link{min}},
   \code{\link{max}}
@@ -100,9 +107,11 @@
   X <- cells[1:4]
   f <- ssf(X, nndist(X, k=1:3))
   f
+  summary(f)
   marks(f)
   as.ppp(f)
   as.im(f)
+  integral(f)
 }
 \author{Adrian Baddeley}
 \keyword{spatial}

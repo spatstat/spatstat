@@ -489,6 +489,7 @@
 \alias{print.summary.ppp}
 \alias{print.summary.psp}
 \alias{print.summary.rmhexpand}
+\alias{print.summary.ssf}
 \alias{print.summary.solist}
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
@@ -1345,6 +1346,7 @@ prepareTitle(main)
 \method{print}{summary.ppp}(x, \dots, dp)
 \method{print}{summary.psp}(x, \dots)
 \method{print}{summary.rmhexpand}(x, \dots)
+\method{print}{summary.ssf}(x, \dots)
 \method{print}{summary.splitppp}(x, \dots)
 \method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)

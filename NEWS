@@ -1,13 +1,20 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.014
+        CHANGES IN spatstat VERSION 1.55-0.015
 
 OVERVIEW
 
+    o We thank Jens Astrom for suggestions.
+    
     o Some code runs faster.
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Phugoid"
+    o Version nickname: "Not Even a Bit of Wensleydale"
+
+NEW FUNCTIONS
+
+    o summary.ssf
+    Summary method for a spatially sampled function (class 'ssf').
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -15,6 +22,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Now accepts a structure with entries named 'xmin,ymin,xmax,ymax'
     in any order. This handles objects of class 'bbox' in the 'sf' package.
 
+    o as.owin.default
+    Now detects objects of class "SpatialPolygons"
+    and issues a more helpful error message.
+    
     o pseudoR2.ppm, pseudoR2.lppm
     The null model now includes any offset terms, by default.
     New argument 'keepoffset'.
@@ -39,6 +50,11 @@ BUG FIXES
     Crashed if W = NULL.
     Fixed.
 
+    o nnmark, as.im.ssf
+    if marks(X) was a matrix rather than a data frame, 
+    the results were completely incorrect (and had completely wrong format).
+    Fixed.
+    
     o as.im.distfun
     Crashed, for the distfun of a point pattern, if approx=FALSE.
     Fixed.

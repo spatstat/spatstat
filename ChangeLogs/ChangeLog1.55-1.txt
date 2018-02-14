@@ -222,3 +222,31 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Jens Astrom and Angela Li
+
+14 feb 2018
+
+   nnmark.R
+	Bug fix
+
+   window.R
+	as.owin.default detects SpatialPolygons and issues helpful message
+
+   ssf.R
+   methods.ssf.Rd
+   spatstat-internal.Rd
+	New methods summary.ssf and print.summary.ssf
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.015
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
+	
