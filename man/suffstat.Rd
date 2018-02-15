@@ -101,17 +101,12 @@
 }
 \examples{
     fitS <- ppm(swedishpines~1, Strauss(7))
+    suffstat(fitS)
     X <- rpoispp(intensity(swedishpines), win=Window(swedishpines))
     suffstat(fitS, X)
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{models}

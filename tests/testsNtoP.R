@@ -453,7 +453,9 @@ local({
 #   Test backdoor exits and hidden options in ppm
 #        and summary.ppm, print.summary.ppm
 #
-#   $Revision: 1.5 $  $Date: 2015/12/29 08:54:49 $
+#   Plus assorted tricks
+#
+#   $Revision: 1.6 $  $Date: 2018/02/15 04:06:40 $
 #
 require(spatstat)
 local({
@@ -490,6 +492,12 @@ local({
   print(summary(fit, quick="entries"))
   print(summary(fit, quick="no prediction"))
   print(summary(fit, quick="no variances"))
+
+  ## (6) suffstat.R
+  fitP <- update(fit, Poisson())
+  suffstat.poisson(fitP, cells)
+  fit0 <- killinteraction(fit)
+  suffstat.poisson(fit0, cells)
   
   spatstat.options(op)
 })

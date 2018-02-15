@@ -134,7 +134,7 @@ local({
 })#
 # tests/kppm.R
 #
-# $Revision: 1.15 $ $Date: 2016/09/13 02:30:05 $
+# $Revision: 1.16 $ $Date: 2018/02/15 03:35:14 $
 #
 # Test functionality of kppm that depends on RandomFields
 # Test update.kppm for old style kppm objects
@@ -148,12 +148,18 @@ local({
  fitC <- update(fit, cells)
  fitCx <- update(fit, cells ~ x)
 
+ # vcov.kppm different algorithms
+ vc  <- vcov(fitx)
+ vc2 <- vcov(fitx, fast=TRUE)
+ vc3 <- vcov(fitx, fast=TRUE, splitup=TRUE)
+ vc4 <- vcov(fitx,            splitup=TRUE)
+ 
  # improve.kppm
  fitI <- update(fit, improve.type="quasi")
  fitxI <- update(fitx, improve.type="quasi")
  # vcov.kppm
- vc <- vcov(fitxI)
-
+ vcI <- vcov(fitxI)
+ 
   # plot.kppm including predict.kppm
  fitMC <- kppm(redwood ~ x, "Thomas")
  fitCL <- kppm(redwood ~ x, "Thomas", method="c")

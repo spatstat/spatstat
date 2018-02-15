@@ -5,7 +5,7 @@
 #
 #   Original code: Abdollah Jalilian
 #
-#   $Revision: 1.10 $  $Date: 2015/07/11 08:19:26 $
+#   $Revision: 1.11 $  $Date: 2018/02/15 03:28:11 $
 #
 
 vcov.kppm <- function(object, ...,
@@ -16,6 +16,9 @@ vcov.kppm <- function(object, ...,
   what <- match.arg(what)
   verifyclass(object, "kppm")
   fast.given <- !is.null(fast)
+  #' secret argument (eg for testing)
+  splitup <- resolve.1.default(list(splitup=FALSE), list(...))
+  #'
   if(is.null(object$improve)) {
     ## Normal composite likelihood (poisson) case
     ## extract composite likelihood results
@@ -65,7 +68,7 @@ vcov.kppm <- function(object, ...,
                               dims=c(nU, nU))
     }
     ## compute quadratic form
-    if(!is.null(gminus1)) {
+    if(!splitup && !is.null(gminus1)) {
       E <- t(ff) %*% gminus1 %*% ff
     } else {
       ## split calculation of (gminus1 %*% ff) into blocks

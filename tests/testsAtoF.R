@@ -208,7 +208,7 @@ local({
 #
 #  Test behaviour of density methods and inhomogeneous summary functions
 #
-#  $Revision: 1.10 $  $Date: 2018/01/18 05:54:21 $
+#  $Revision: 1.12 $  $Date: 2018/02/15 04:43:59 $
 #
 
 require(spatstat)
@@ -222,13 +222,18 @@ local({
     Z <- density(cells, ..., at="points")
     return(invisible(NULL))
   }
-  
+
+  V <- diag(c(0.05^2, 0.07^2))
+  wdf <- data.frame(a=1:42,b=42:1)
+
   tryit(0.05)
   tryit(0.05, diggle=TRUE)
   tryit(0.05, se=TRUE)
-  tryit(varcov=diag(c(0.05^2, 0.07^2)))
-  tryit(0.05, weights=data.frame(a=1:42,b=42:1))
   tryit(0.05, weights=expression(x))
+  tryit(0.05, weights=wdf)
+  tryit(varcov=V)
+  tryit(varcov=V, weights=expression(x))
+  tryit(varcov=V, weights=wdf)
 
   # apply different discretisation rules
   Z <- density(cells, 0.05, fractional=TRUE)

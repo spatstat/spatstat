@@ -248,5 +248,32 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+15 feb 2018
+
+   vcov.kppm.Rd
+	Tweaked
+	
+   vcov.kppm.R
+	Secret argument 'splitup' introduced for testing purposes
+	
+   tests/kppm.R
+	More tests of code for vcov.kppm
+
+   tests/density.R
+	More tests of different cases of density.ppp
+
+   tests/ppmtricks.R
+	Tests of suffstat.poisson and killinteraction
+
+   mpl.R
+	Buglet fix in partialModelMatrix
+	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.016
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 
 	

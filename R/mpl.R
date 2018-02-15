@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.218 $	$Date: 2018/02/12 02:51:51 $
+#	$Revision: 5.219 $	$Date: 2018/02/15 04:23:27 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/02/12 02:51:51 $")
+                        date="$Date: 2018/02/15 04:23:27 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -983,7 +983,9 @@ partialModelMatrix <- function(X, D, model, callstring="", ...) {
   mof <- model.frame(fmla, glmdata)
   mom <- model.matrix(fmla, mof)
 
-  if(!identical(all.equal(colnames(mom), names(coef(model))), TRUE))
+  modelnames <- names(coef(model))
+  modelnames <- sub("log(lambda)", "(Intercept)", modelnames, fixed=TRUE)
+  if(!identical(all.equal(colnames(mom), modelnames), TRUE))
     warning(paste("Internal error: mismatch between",
                   "column names of model matrix",
                   "and names of coefficient vector in fitted model"))
