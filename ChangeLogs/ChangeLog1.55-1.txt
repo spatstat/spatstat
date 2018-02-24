@@ -276,4 +276,23 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+24 feb 2018
+
+   nndistlpp.R
+	Bug fix.
+
+   tests/lppstuff.R
+        Added test of case triggering this bug.
+
+   DESCRIPTION
+   NEWS
+   spatstat-package.Rd
+	Acknowledged Ines Moncada.
 	
+   DESCRIPTION
+   NEWS
+	version 1.55-0.017
+
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

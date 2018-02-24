@@ -1851,6 +1851,7 @@
   Robin Milne,
   Enrique Miranda,
   Jesper \ifelse{latex}{\out{M\o ller}}{Moller},
+  Ines Moncada,
   Mehdi Moradi,
   Virginia Morera Pujol,
   Erika Mudrak,

@@ -1,9 +1,9 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.016
+        CHANGES IN spatstat VERSION 1.55-0.017
 
 OVERVIEW
 
-    o We thank Jens Astrom for suggestions.
+    o We thank Jens Astrom and Ines Moncada for contributions.
     
     o Some code runs faster.
 
@@ -53,6 +53,11 @@ BUG FIXES
     o nnmark, as.im.ssf
     if marks(X) was a matrix rather than a data frame, 
     the results were completely incorrect (and had completely wrong format).
+    Fixed.
+
+    o nncross.lpp
+    Crashed sometimes with an obscure message about "z$which".
+    [Spotted by Ines Moncada.]
     Fixed.
     
     o as.im.distfun

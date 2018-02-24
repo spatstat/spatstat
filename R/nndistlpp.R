@@ -1,7 +1,7 @@
 #
 # nndistlpp.R
 #
-#  $Revision: 1.20 $ $Date: 2017/06/05 10:31:58 $
+#  $Revision: 1.23 $ $Date: 2018/02/24 11:00:51 $
 #
 # Methods for nndist, nnwhich, nncross for linear networks
 #
@@ -373,10 +373,9 @@ nncross.lpp <- local({
         if("which" %in% what)
 	   nnwhichmat[useX, ] <- which(useY)[z$which]
       }
-      result <- list(dist=nndistmat, which=nnwhichmat)[what]
-      if(format == "data.frame")
-        result <- as.data.frame(result)[,,drop=TRUE]
-      return(result)
+      return(shapedresult(dist=nndistmat,
+                          which=nnwhichmat,
+                          what=what, format=format))
     }
   }
 
@@ -407,10 +406,7 @@ nncross.lpp <- local({
     colnames(nnd) <- paste0("dist.", seq_len(maxk))
     nnd <- nnd[,k,drop=TRUE]
     nnw <- nnw[,k,drop=TRUE]
-    result <- list(dist=nnd, which=nnw)[what]
-    if(format == "data.frame")
-      result <- as.data.frame(result)[,,drop=TRUE]
-    return(result)
+    return(shapedresult(dist=nnd, which=nnw, what=what, format=format))
   }
   
   need.dist <- ("dist" %in% what) || exclude
@@ -442,10 +438,15 @@ nncross.lpp <- local({
   }
   
   # deal with null cases
-  if(nX == 0)
-    return(data.frame(dist=numeric(0), which=integer(0))[, what])
+  if(nX == 0) 
+    return(shapedresult(dist=numeric(0),
+                        which=integer(0),
+                        what=what, format=format))
+
   if(nY == 0)
-    return(data.frame(dist=rep(Inf, nX), which=rep(NA_integer_, nX))[, what])
+    return(shapedresult(dist=rep(Inf, nX),
+                        which=rep(NA_integer_, nX),
+                        what=what, format=format))
 
   # find nearest segment for each point
   Xcoords <- coords(X)
@@ -642,13 +643,20 @@ nncross.lpp <- local({
     nnd <- nnd[,koriginal]
     nnw <- nnw[,koriginal]
   }
-  result <- list(dist=nnd, which=nnw)[what]
-  if(format == "data.frame")
-    result <- as.data.frame(result)[,,drop=TRUE]
-  return(result)
+  return(shapedresult(dist=nnd, which=nnw, what=what, format=format))
 }
 
   whichcoltrue <- function(x, m) which(x)[m]
+
+  shapedresult <- function(dist, which,
+                           what=c("dist", "which"),
+                           format="data.frame") {
+    #' idiom to return result in correct format
+    result <- list(dist=dist, which=which)[what]
+    if(format == "data.frame")
+      result <- as.data.frame(result)[,,drop=TRUE]
+    return(result)
+  }
   
   nncross.lpp
 })

@@ -1,7 +1,7 @@
 #
 #  rhohat.R
 #
-#  $Revision: 1.72 $  $Date: 2017/08/17 09:35:46 $
+#  $Revision: 1.73 $  $Date: 2018/02/19 07:34:47 $
 #
 #  Non-parametric estimation of a transformation rho(z) determining
 #  the intensity function lambda(u) of a point process in terms of a
@@ -293,7 +293,7 @@ rhohatCalc <- local({
   }
 
   rhohatCalc <- function(ZX, Zvalues, lambda, denom, ...,
-                         weights=NULL, lambdaX=NULL,
+                         weights=NULL, lambdaX,
                          method=c("ratio", "reweight", "transform"),
                          horvitz=FALSE, 
                          smoother=c("kernel", "local"),

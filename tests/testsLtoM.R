@@ -168,7 +168,7 @@ local({
 #
 # Tests for lpp code
 #
-#  $Revision: 1.10 $  $Date: 2017/11/13 14:21:54 $
+#  $Revision: 1.11 $  $Date: 2018/02/24 10:48:20 $
 
 
 require(spatstat)
@@ -205,6 +205,13 @@ local({
   if(any(nw != nwP))
     stop("nnwhich.lpp does not agree with pairdist")
 
+  #' trivial cases in nncross.lpp
+  a <- nncross(runiflpp(0, simplenet), runiflpp(1, simplenet),
+               what="which", format="list")$which
+  a <- nncross(runiflpp(0, simplenet), runiflpp(1, simplenet),
+               what="dist", format="list")$dist
+
+  #' compare algorithms             
   ZZ <- split(chicago)
   XX <- ZZ$damage
   YY <- ZZ$assault
