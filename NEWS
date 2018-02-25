@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.017
+        CHANGES IN spatstat VERSION 1.55-0.018
 
 OVERVIEW
 
@@ -9,7 +9,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Not Even a Bit of Wensleydale"
+    o Version nickname: "Sandwich Board Preacher"
 
 NEW FUNCTIONS
 
@@ -55,13 +55,17 @@ BUG FIXES
     the results were completely incorrect (and had completely wrong format).
     Fixed.
 
-    o nncross.lpp
+    o density.lpp, nncross.lpp
     Crashed sometimes with an obscure message about "z$which".
     [Spotted by Ines Moncada.]
     Fixed.
     
     o as.im.distfun
     Crashed, for the distfun of a point pattern, if approx=FALSE.
+    Fixed.
+
+    o as.solist
+    Crashed when x was a 'layered' object.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-0

@@ -305,7 +305,7 @@ plot.msr <- function(x, ..., add=FALSE,
     y <- split(x)
     typenames <- names(y)
     vecnames <- colnames(x$val)
-    y <- as.solist(Reduce(append, lapply(y, unstack)))
+    y <- unstack(y)
     names(y) <- as.vector(t(outer(typenames, vecnames, paste, sep=".")))
   } 
   #' ensure image of density is present

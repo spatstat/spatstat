@@ -296,3 +296,28 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+25 feb 2018
+
+   tests/imageops.R
+	Added test of smudge() and rasterfilter()
+
+   unstack.R
+	Bug fixes
+
+   unstack.solist.Rd [New file]
+   spatstat-internal.Rd
+        Documented 'unstack' methods for solist, layered
+
+   solist.R
+	Bug fix in as.solist when x is a layered object
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        version 1.55-0.018
+	Nickname 'Sandwich Board Preacher'
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

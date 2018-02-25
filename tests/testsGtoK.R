@@ -59,7 +59,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.7 $   $Date: 2015/12/29 08:54:49 $
+#   $Revision: 1.8 $   $Date: 2018/02/25 03:44:33 $
 #
 
 require(spatstat)
@@ -82,6 +82,9 @@ local({
   ##
   d <- distmap(cells, dimyx=32)
   Z <- connected(d <= 0.06, method="interpreted")
+
+  ## smudge() and rasterfilter()
+  dd <- smudge(d)
 })
 
 

@@ -663,8 +663,6 @@
 %NAMESPACE export("%unit%")
 \alias{unitname.default}
 \alias{unitname<-.default}
-\alias{unstack.solist}
-\alias{unstack.layered}
 \alias{unstackFilter}
 \alias{update.im}
 \alias{update.ippm}
@@ -1547,8 +1545,6 @@ twostage.test(X, \dots, exponent, nsim, nsimsub,
 x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
-\method{unstack}{solist}(x, \dots)
-\method{unstack}{layered}(x, \dots)
 unstackFilter(x)
 \method{update}{im}(object, \dots) 
 \method{update}{ippm}(object, \dots, envir) 

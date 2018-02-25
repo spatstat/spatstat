@@ -3,7 +3,7 @@
 #'
 #'   Methods for generic 'unstack'
 #' 
-#'   $Revision: 1.3 $  $Date: 2016/06/28 04:01:40 $
+#'   $Revision: 1.4 $  $Date: 2018/02/25 04:24:40 $
 
 unstack.ppp <- unstack.psp <- unstack.lpp <- function(x, ...) {
   trap.extra.arguments(...)
@@ -48,7 +48,9 @@ unstackFilter <- function(x) {
 
 unstack.solist <- function(x, ...) {
   trap.extra.arguments(...)
-  as.solist(lapply(x, unstackFilter))
+  y <- lapply(x, unstackFilter)
+  z <- as.solist(unlist(y, recursive=FALSE))
+  return(z)
 }
 
 unstack.layered <- function(x, ...) {
@@ -57,19 +59,10 @@ unstack.layered <- function(x, ...) {
   ny <- lengths(y)
   nx <- length(ny)
   if(all(ny == 1) || nx == 0) return(solist(x))
-  pa <- layerplotargs(x)
-  mm <- indexCartesian(ny)
-  nz <- nrow(mm)
-  z <- vector(mode="list", length=nz)
-  nama <- lapply(y, names)
-  for(i in seq_len(nz)) {
-    ll <- mapply("[[", x=y, i=mm[i,], SIMPLIFY=FALSE)
-    nam <- mapply("[", x=nama, i=mm[i,])
-    nam <- nam[!sapply(nam, is.null)]
-    names(z)[i] <- paste(nam, collapse=".")
-    z[[i]] <- layered(LayerList=ll, plotargs=pa)
-  }
-  z <- as.solist(z)
+  pax <- layerplotargs(x)
+  pay <- rep(pax, times=ny)
+  z <- unlist(y, recursive=FALSE)
+  z <- layered(LayerList=z, plotargs=pay)
   return(z)
 }
 
