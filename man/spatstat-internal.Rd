@@ -631,9 +631,7 @@
 \alias{suffstat.generic}
 \alias{suffstat.poisson}
 \alias{summarise.trend}
-\alias{summary.distfun}
 \alias{summary.envelope}
-\alias{summary.funxy}
 \alias{summary.hyperframe}
 \alias{summary.lintess}
 \alias{summary.logiquad}
@@ -1511,9 +1509,7 @@ suffloc(object)
 suffstat.generic(model, X, callstring)
 suffstat.poisson(model, X, callstring)
 summarise.trend(trend, w, a)
-\method{summary}{distfun}(object,\dots)
 \method{summary}{envelope}(object,\dots)
-\method{summary}{funxy}(object,\dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
 \method{summary}{lintess}(object, \dots)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)

@@ -51,7 +51,8 @@
   \code{print}, \code{plot}, \code{contour} and \code{persp}.
 }
 \seealso{
-  \code{\link{plot.funxy}}
+  \code{\link{plot.funxy}},
+  \code{\link{summary.funxy}}
 }
 \examples{
    f <- function(x,y) { x^2 + y^2 - 1} 

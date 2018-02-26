@@ -49,11 +49,8 @@
 \value{
   \code{NULL}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{funxy}},
@@ -65,10 +62,11 @@
   \code{\link{spatstat.options}}
 }
 \examples{
-   data(letterR)
    f <- distfun(letterR)
    contour(f)
-   contour(f, W=owin(c(1,5),c(-1,4)), eps=0.1)
+   B <- owin(c(1,5), c(-1, 4))
+   contour(f, W=B)
+   persp(f, W=B, theta=40, phi=40, border=NA, shade=0.7)
 }
 \keyword{spatial}
 \keyword{methods}

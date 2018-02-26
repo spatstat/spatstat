@@ -321,3 +321,29 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+26 feb 2018
+
+   funxy.R
+   distfun.R
+      Summary methods now accept pixel resolution arguments via "..."
+
+   summary.distfun.Rd [New file]
+   spatstat-internal.Rd
+       Added documentation
+       
+   funxy.Rd
+   distfun.Rd 
+      Added cross-references
+      
+   funxy.R
+       Improved z axis label in persp.funxy
+	
+   DESCRIPTION
+   NEWS
+        version 1.55-0.019
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   

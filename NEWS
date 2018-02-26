@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.018
+        CHANGES IN spatstat VERSION 1.55-0.019
 
 OVERVIEW
 
@@ -28,6 +28,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o pseudoR2.ppm, pseudoR2.lppm
     The null model now includes any offset terms, by default.
+    [Suggested by Jens Astrom.]
     New argument 'keepoffset'.
     
     o closepairs.ppp
@@ -44,6 +45,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o cdf.test
     Monte Carlo test runs faster.
 
+    o summary.distfun, summary.funxy
+    Pixel resolution can now be controlled.
+
+    o persp.funxy
+    Improved z-axis label.
+    
 BUG FIXES
 
     o nnmap

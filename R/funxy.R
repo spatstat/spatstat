@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.17 $   $Date: 2018/01/08 01:09:07 $
+#   $Revision: 1.19 $   $Date: 2018/02/26 01:41:27 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -51,10 +51,10 @@ print.funxy <- function(x, ...) {
 }
 
 summary.funxy <- function(object, ...) {
-  w <- as.owin(object)
+  w <- Window(object)
   z <- list(argues  = names(formals(object)),
             fundef  = attr(object, "f"),
-            values  = summary(as.im(object)),
+            values  = summary(as.im(object, ...)),
             wintype = w$type,
             frame   = Frame(w),
             units   = unitname(w))
@@ -141,11 +141,12 @@ contour.funxy <- function(x, ...) {
 
 persp.funxy <- function(x, ...) {
   xname <- deparse(substitute(x))
+  zlab <- substitute(expression(f(x,y)), list(f=as.name(xname)))
   W <- as.rectangle(as.owin(x))
   do.call(do.as.im,
           resolve.defaults(list(x, action="persp"),
                            list(...),
-                           list(main=xname, W=W)))
+                           list(main=xname, W=W, zlab=zlab)))
   invisible(NULL)
 }
 

@@ -124,7 +124,7 @@ summary.distfun <- function(object, ...) {
   z <- list(xtype   = xtype,
             k       = attr(object, "k") %orifnull% 1,
             Xsumry  = summary(X),
-            values  = summary(as.im(object)),
+            values  = summary(as.im(object, ...)),
             wintype = w$type,
             frame   = Frame(w),
             units   = unitname(w))
