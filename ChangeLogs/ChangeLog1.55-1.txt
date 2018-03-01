@@ -346,4 +346,21 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
-   
+
+28 feb 2018
+
+   tests/envelopes.R
+	Tests for cases not covered elsewhere
+
+   tests/indices.R [New file]
+   	Tests of code for understanding index vectors
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.020
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+

@@ -418,7 +418,7 @@ local({
 #
 #  Test validity of envelope data
 #
-#  $Revision: 1.5 $  $Date: 2015/12/29 08:54:49 $
+#  $Revision: 1.6 $  $Date: 2018/02/28 03:11:23 $
 #
 
 require(spatstat)
@@ -488,6 +488,14 @@ local({
   A <- as.data.frame(E)
   B <- as.data.frame(E, simfuns=TRUE)
   stopifnot(ncol(B) - ncol(A) == Nsim)
+})
+
+local({
+  #' cases not covered elsewhere
+  A <- envelope(cells, nsim=5, alternative="less",
+                do.pwrong=TRUE, use.theory=FALSE,
+                savepatterns=TRUE, savefuns=TRUE)
+  B <- envelope(A, nsim=5, savefuns=TRUE)
 })
 #
 #    tests/factorbugs.R
