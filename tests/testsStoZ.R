@@ -135,12 +135,43 @@ local({
 
 #'    tests/sparse3Darrays.R
 #'  Basic tests of code in sparse3Darray.R and sparsecommon.R
-#'  $Revision: 1.9 $ $Date: 2018/02/12 01:50:30 $
+#'  $Revision: 1.10 $ $Date: 2018/03/01 14:39:11 $
 
 require(spatstat)
 local({
 
+  #' forming arrays
+  A1 <- matrix(c(1,0,0,2,
+                 3,0,4,0,
+                 0,0,0,5),
+               3, 4, byrow=TRUE)
+  A2 <- matrix(c(0,0,1,0,
+                 0,0,0,1,
+                 1,0,0,0),
+               3, 4, byrow=TRUE)
+  AA <- as.sparse3Darray(list(A1, A2))
+  dim(AA) <- dim(AA) + 1
+  
   if(require(Matrix)) {
+    A1 <- as(A1, "sparseMatrix")
+    A2 <- as(A2, "sparseMatrix")
+    AA <- as.sparse3Darray(list(A1, A2))
+
+    df <- data.frame(i=c(1,3,5), j=3:1, k=rep(2, 3), x=runif(3))
+    aa <- EntriesToSparse(df, NULL)
+    bb <- EntriesToSparse(df, 7)
+    cc <- EntriesToSparse(df, c(7, 4))
+    dd <- EntriesToSparse(df, c(7, 4, 3))
+  }
+
+  BB <- evalSparse3Dentrywise(AA + AA/2)
+})
+
+    
+local({
+
+  if(require(Matrix)) {
+
     M <- sparse3Darray(i=1:4, j=sample(1:4, replace=TRUE),
                        k=c(1,2,1,2), x=1:4, dims=c(5,5,2))
 

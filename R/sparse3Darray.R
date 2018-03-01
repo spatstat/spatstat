@@ -3,7 +3,7 @@
 #'
 #' Sparse 3D arrays represented as list(i,j,k,x)
 #' 
-#' $Revision: 1.26 $  $Date: 2018/02/01 04:18:32 $
+#' $Revision: 1.28 $  $Date: 2018/03/01 15:16:09 $
 #'
 
 sparse3Darray <- function(i=integer(0), j=integer(0), k=integer(0),
@@ -99,7 +99,7 @@ as.sparse3Darray <- function(x, ...) {
       isnul <- sapply(dnlist, is.null)
       dnlist <- unique(dnlist[!isnul])
       if(length(dnlist) > 1) stop("Dimnames of matrices do not match")
-      dn <- if(length(dnlist) == 0) NULL else c(dn[[1L]], NULL)
+      dn <- if(length(dnlist) == 0) NULL else c(dnlist[[1L]], list(NULL))
       for(k in seq_len(n)) {
         mk <- as(x[[k]], "TsparseMatrix")
         kvalue <- if(length(mk@i) > 0) k else integer(0)
