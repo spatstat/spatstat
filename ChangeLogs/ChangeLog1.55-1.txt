@@ -364,7 +364,7 @@ Change log from 1.55-0 to 1.55-1
 ------------- committed to GitHub      ---------------
 
    sparse3Darray.R
-	Bug fix
+	Bug fixes
 
    tests/sparse3Darrays.R
 	More tests of sparse code.
@@ -377,4 +377,16 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+04 mar 2018
 
+   units.R
+	'makeunits' hardened against other classes of data
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.022
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+   

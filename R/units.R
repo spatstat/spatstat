@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.27 $   $Date: 2017/11/15 01:53:21 $
+#   $Revision: 1.28 $   $Date: 2018/03/04 06:25:56 $
 #
 #
 
@@ -63,11 +63,9 @@ makeunitname <- function(sing="unit", plur="units", mul = 1) {
     stop("In unit name, first entry should be a character string")
   if(!is.character(plur))
     stop("In unit name, second entry should be a character string")
-  if(!is.numeric(mul)) {
-    mul <- try(as.numeric(mul), silent=TRUE)
-    if(inherits(mul, "try-error"))
-      stop("In unit name, third entry should be a number")
-  }
+  mul <- try(as.numeric(mul), silent=TRUE)
+  if(inherits(mul, "try-error"))
+    stop("In unit name, third entry should be a number")
   if(length(mul) != 1 || mul <= 0)
     stop("In unit name, third entry should be a single positive number")
   u <- list(singular=sing, plural=plur, multiplier=mul)
