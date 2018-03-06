@@ -1,14 +1,19 @@
 \name{plot.tess}
 \alias{plot.tess}
-\title{Plot a tessellation}
+\title{Plot a Tessellation}
 \description{
-  Plots a tessellation.
+  Plots a tessellation, with optional labels for the tiles, and optional
+  filled colour in each tile.
 }
 \usage{
-  \method{plot}{tess}(x, ..., main, add=FALSE,
-                      show.all=!add, col=NULL, do.plot=TRUE,
+  \method{plot}{tess}(x, \dots, main, add=FALSE,
+                      show.all=!add,
+                      border=NULL,
+                      do.plot=TRUE,
                       do.labels=FALSE,
-                      labels=tilenames(x), labelargs=list())
+                      labels=tilenames(x), labelargs=list(),
+                      do.col=FALSE,
+                      values=marks(x), col=NULL)
 }
 \arguments{
   \item{x}{Tessellation (object of class \code{"tess"}) to be plotted.}
@@ -21,8 +26,9 @@
     Logical value indicating whether to plot everything
     including the main title and the observation window of \code{x}.
   }
-  \item{col}{
-    Colour of the tile boundaries. A character string.
+  \item{border}{
+    Colour of the tile boundaries. A character string or other value
+    specifying a single colour. 
     Ignored for pixel tessellations.
   }
   \item{do.plot}{
@@ -37,6 +43,22 @@
     List of arguments passed to
     \code{\link{text.default}} to control display of the text labels.
   }
+  \item{do.col}{
+    Logical value indicating whether tiles should be filled with
+    colour. Always \code{TRUE} for pixel tessellations.
+  }
+  \item{values}{
+    A vector of numerical values (or a factor, or vector of character
+    strings) that will be associated with each tile of the tessellation
+    and which determine the colour of the tile. The default is
+    the marks of \code{x}. If the tessellation is not marked,
+    or if the argument \code{values=NULL} is given, the default is
+    a factor giving the tile identifier.
+  }
+  \item{col}{
+    A vector of colours for each of the \code{values},
+    or a \code{\link{colourmap}} that maps these values to colours.
+  }
 }
 \details{
   This is a method for the generic \code{\link{plot}} function
@@ -49,27 +71,29 @@
 }
 \value{
   (Invisible) window of class \code{"owin"} specifying a bounding box
-  for the plot (including a colour ribbon if plotted).
+  for the plot, or an object of class \code{"colourmap"} specifying the
+  colour map. (In the latter case, the bounding box information is
+  available as an attribute, and can be extracted
+  using \code{\link{as.owin}}.)
 }
 \seealso{
   \code{\link{tess}}
 }
 \examples{
   A <- tess(xgrid=0:4,ygrid=0:4)
-  plot(A, col="blue", lwd=2, lty=2)
+  plot(A, border="blue", lwd=2, lty=2)
+  plot(A, do.col=TRUE, values=runif(16), border="white")
   B <- A[c(1, 2, 5, 7, 9)]
   plot(B, hatch=TRUE)
   v <- as.im(function(x,y){factor(round(5 * (x^2 + y^2)))}, W=owin())
   levels(v) <- letters[seq(length(levels(v)))]
   E <- tess(image=v)
   plot(E)
+  plot(E, col=rainbow(11))
 }
 
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

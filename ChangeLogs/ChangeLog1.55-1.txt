@@ -390,3 +390,20 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
    
+06 mar 2018
+
+   plot.im.R
+      return value includes 'ribside'
+      
+   tess.R
+   plot.tess.Rd
+      Now supports colour fill in each tile
+      with values determined by marks
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.023
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------

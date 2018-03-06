@@ -571,6 +571,7 @@ plot.im <- local({
 
     attr(output.colmap, "bbox") <- bb.all
     attr(output.colmap, "bbox.legend") <- bb.rib
+    attr(output.colmap, "side.legend") <- rib.iside
     if(!do.plot)
       return(output.colmap)
 
@@ -698,9 +699,7 @@ plot.im <- local({
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              })
       do.call.plotfun(graphics::axis,
-                      resolve.defaults(ribargs,
-                                       axisargs, dotargs,
-                                       posargs),
+                      resolve.defaults(ribargs, axisargs, dotargs, posargs),
                       extrargs=graphicsPars("axis"))
     }
     #

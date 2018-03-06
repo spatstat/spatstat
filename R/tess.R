@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.75 $ $Date: 2016/12/20 04:06:47 $
+#   $Revision: 1.77 $ $Date: 2018/03/06 10:04:43 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -181,64 +181,126 @@ unitname.tess <- function(x) unitname(x$window)
 
 plot.tess <- local({
 
-  plotem <- function(z, ..., col=NULL) {
-    if(is.null(col))
-      plot(z, ..., add=TRUE)
-    else if(z$type != "mask")
-      plot(z, ..., border=col, add=TRUE)
-    else plot(z, ..., col=col, add=TRUE)
-  }
-
   plotpars <- c("sub", "lty", "lwd",
                 "cex.main", "col.main", "font.main",
                 "cex.sub", "col.sub", "font.sub", "border")
 
-  plot.tess <- function(x, ..., main, add=FALSE, show.all=!add, col=NULL,
+  plot.tess <- function(x, ..., main, add=FALSE, show.all=!add,
+                        border=NULL,
                         do.plot=TRUE,
                         do.labels=FALSE, labels=tilenames(x),
-                        labelargs=list()) {
+                        labelargs=list(),
+                        do.col=FALSE, 
+                        values=marks(x),
+                        col=NULL) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
+    if(do.col) {
+      #' Determine values associated with each tile
+      if(is.null(values)) {
+        #' default is tile ID
+        values <- factor(seq_len(x$n))
+      } else {
+        if(is.data.frame(values)) {
+          if(ncol(values) > 1)
+            warning("Using only the first column of values")
+          values <- values[,1]
+        }
+        if(length(values) != x$n)
+          stop(paste("Number of values =", length(values),
+                     "!=", x$n, "= number of tiles"))
+      }
+      #' Determine colour map and plan layout (including colour ribbon)
+      #' using rules for pixel images
+      y <- as.im(as.function(x, values=values))
+      result <- do.call(plot.im,
+                        resolve.defaults(
+                          list(x=y,
+                               do.plot=FALSE,
+                               show.all=show.all, add=add, main=main,
+                               col=col),
+                          list(...)))
+      #' exit if not actually plotting
+      if(!do.plot) return(result)
+      #' extract info
+      colmap <- result
+      bbox <- attr(result, "bbox")
+      bbox.legend <- attr(result, "bbox.legend")
+      need.legend <- TRUE
+    } else {
+      result <- NULL
+      bbox <- NULL
+      need.legend <- FALSE
+    }
+    #' initialise plot region if it is determined
+    if(do.plot && !is.null(bbox) && !add) {
+      plot(bbox, main=main, type="n")
+      add <- TRUE
+    }
     switch(x$type,
            rect={
              win <- x$window
-             result <-
-               do.call.matched(plot.owin,
-                               resolve.defaults(list(x=win, main=main,
-                                                     add=add,
-                                                     show.all=show.all,
-                                                     do.plot=do.plot),
-                                                list(...)),
-                               extrargs=plotpars)
+             z <- do.call.matched(plot.owin,
+                                  resolve.defaults(list(x=win,
+                                                        main=main,
+                                                        add=add,
+                                                        show.all=show.all,
+                                                        do.plot=do.plot),
+                                                   list(...)),
+                                  extrargs=plotpars)
+             if(is.null(result))
+               result <- z
              if(do.plot) {
-               xg <- x$xgrid
-               yg <- x$ygrid
-               do.call.matched(segments,
-                               resolve.defaults(list(x0=xg, y0=win$yrange[1],
-                                                     x1=xg, y1=win$yrange[2]),
-                                                list(col=col),
-                                                list(...),
-                                                .StripNull=TRUE))
-               do.call.matched(segments,
-                               resolve.defaults(list(x0=win$xrange[1], y0=yg,
-                                                     x1=win$xrange[2], y1=yg),
-                                                list(col=col),
-                                                list(...),
-                                                .StripNull=TRUE))
+               #' actually plot
+               if(do.col) {
+                 #' fill tiles with colours
+                 colours <- colmap(values)
+                 til <- tiles(x)
+                 for(i in seq_len(x$n))
+                   plot(til[[i]], add=TRUE,
+                        col=colours[i], border=border,
+                        main="", ...)
+               } else {
+                 #' draw tile boundaries only
+                 xg <- x$xgrid
+                 yg <- x$ygrid
+                 do.call.matched(segments,
+                                 resolve.defaults(list(x0=xg, y0=win$yrange[1],
+                                                       x1=xg, y1=win$yrange[2]),
+                                                  list(col=border),
+                                                  list(...),
+                                                  .StripNull=TRUE))
+                 do.call.matched(segments,
+                                 resolve.defaults(list(x0=win$xrange[1], y0=yg,
+                                                       x1=win$xrange[2], y1=yg),
+                                                  list(col=border),
+                                                  list(...),
+                                                  .StripNull=TRUE))
+               }
              }
            },
            tiled={
-             result <-
-               do.call.matched(plot.owin,
-                               resolve.defaults(list(x=x$window, main=main,
-                                                     add=add,
-                                                     show.all=show.all,
-                                                     do.plot=do.plot),
-                                                list(...)),
-                               extrargs=plotpars)
+             z <- do.call.matched(plot.owin,
+                                  resolve.defaults(list(x=x$window,
+                                                        main=main,
+                                                        add=add,
+                                                        show.all=show.all,
+                                                        do.plot=do.plot),
+                                                   list(...)),
+                                  extrargs=plotpars)
+             if(is.null(result)) result <- z
              if(do.plot) {
+               #' plot each tile
                til <- tiles(x)
-               lapply(til, plotem, ..., col=col)
+               if(!do.col) {
+                 #' border only
+                 lapply(til, plot.owin, ..., add=TRUE, border=border)
+               } else {
+                 #' fill with colour
+                 colours <- colmap(values)
+                 mapply(plot.owin, x=til, col=colours,
+                        MoreArgs=list(add=TRUE, main="", border=border, ...))
+               } 
              }
            },
            image={
@@ -246,9 +308,11 @@ plot.tess <- local({
                do.call(plot,
                        resolve.defaults(list(x$image, add=add, main=main,
                                              show.all=show.all,
-                                             do.plot=do.plot),
+                                             do.plot=do.plot,
+                                             col=col),
                                         list(...),
                                         list(valuesAreColours=FALSE)))
+             need.legend <- FALSE
            })
     if(do.plot && do.labels) {
       labels <- paste(as.vector(labels))
@@ -261,6 +325,19 @@ plot.tess <- local({
                                        list(labels=labels),
                                        labelargs),
                       funargs=graphicsPars("text"))
+    }
+    if(do.plot && need.legend) {
+      #' determine position of legend
+      xlim <- bbox.legend$xrange
+      ylim <- bbox.legend$yrange
+      sidecode <- attr(colmap, "side.legend")
+      vertical <- sidecode %in% c(2,4)
+      do.call(plot.colourmap,
+              resolve.defaults(list(x=colmap,
+                                    add=TRUE, main="",
+                                    xlim=xlim, ylim=ylim,
+                                    side=sidecode, vertical=vertical),
+                               list(...)))
     }
     return(invisible(result))
   }
