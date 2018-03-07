@@ -50,7 +50,7 @@
   \item{brief}{Logical value controlling the amount of detail printed.}
   \item{value}{Matrix of replacement values for the function.}
   \item{domain}{Optional.
-    Domain of integration. An object of class\code{"owin"}.
+    Domain of integration. An object of class\code{"owin"} or \code{"tess"}.
   }
   \item{weights}{
     Optional. Numeric vector of weights associated with the
@@ -77,8 +77,15 @@
   \code{range} returns a numeric vector of length 2.
   \code{min} and \code{max} return a single numeric value.
 
-  \code{integral} returns a numeric value (if \code{x} had numeric
-  values) or a numeric vector (if \code{x} had vector values).
+  \code{integral} returns a numeric or complex value, vector, or matrix.
+  \code{integral(f)} returns a numeric or complex value
+  (if \code{f} had numeric or complex values)
+  or a numeric vector (if \code{f} had vector values).
+  If \code{domain} is a tessellation then \code{integral(f, domain)}
+  returns a numeric or complex vector with one entry for each tile
+  (if \code{f} had numeric or complex values)
+  or a numeric matrix with one row for each tile
+  (if \code{f} had vector values).
 }
 \details{
   An object of class \code{"ssf"} represents a
@@ -91,13 +98,13 @@
   \code{\link[spatstat]{marks<-}},
   \code{\link[spatstat]{unmark}},
   \code{\link[spatstat]{as.im}},
-  \code{\link{as.function}},
+  \code{\link[base]{as.function}},
   \code{\link[spatstat]{as.ppp}},
-  \code{\link{print}},
-  \code{\link{summary}},
-  \code{\link{range}},
-  \code{\link{min}},
-  \code{\link{max}}
+  \code{\link[base]{print}},
+  \code{\link[base]{summary}},
+  \code{\link[base]{range}},
+  \code{\link[base]{min}},
+  \code{\link[base]{max}}
   and \code{\link[spatstat]{integral}}.
 }
 \seealso{
@@ -112,6 +119,7 @@
   as.ppp(f)
   as.im(f)
   integral(f)
+  integral(f, quadrats(Window(f), 3))
 }
 \author{Adrian Baddeley}
 \keyword{spatial}

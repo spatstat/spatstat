@@ -2,6 +2,7 @@
 \alias{unstack.ppp}
 \alias{unstack.psp}
 \alias{unstack.lpp}
+\alias{unstack.tess}
 \title{
   Separate Multiple Columns of Marks 
 }
@@ -16,12 +17,15 @@
 \method{unstack}{psp}(x, \dots)
 
 \method{unstack}{lpp}(x, \dots)
+
+\method{unstack}{tess}(x, \dots)
 }
 \arguments{
   \item{x}{
-    A spatial point pattern (object of class \code{"ppp"} or
-    \code{"lpp"}) or a spatial pattern of line segments (object of class
-    \code{"psp"}). 
+    A spatial point pattern
+    (object of class \code{"ppp"} or \code{"lpp"})
+    or a spatial pattern of line segments (object of class \code{"psp"})
+    or a spatial tessellation (object of class \code{"tess"}).
   }
   \item{\dots}{
     Ignored.
@@ -37,7 +41,8 @@
   matrix, data frame or hyperframe with several columns),
   then \code{y <- unstack(x)} is a list of spatial objects, each of the same
   kind as \code{x}. The \code{j}th entry \code{y[[j]]} is equivalent to
-  \code{x} except that it only includes the \code{j}th column of \code{marks(x)}.
+  \code{x} except that it only includes
+  the \code{j}th column of \code{marks(x)}.
   
   If \code{x} has no marks, or has only a single column of marks,
   the result is a list consisting of one entry, which is \code{x}.

@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.023
+        CHANGES IN spatstat VERSION 1.55-0.024
 
 OVERVIEW
 
@@ -7,16 +7,23 @@ OVERVIEW
     
     o Some code runs faster.
 
-    o Improved plotting for tessellations.
-    
+    o More support for tessellations.
+
+    o Improved support for linear networks.
+
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Sandwich Board Preacher"
+    o Version nickname: "Stoned Crow"
 
 NEW FUNCTIONS
 
     o summary.ssf
     Summary method for a spatially sampled function (class 'ssf').
+
+    o unstack.tess
+    Given a tessellation with multiple columns of marks,
+    take the columns one at a time, and return a list of tessellations,
+    each carrying only one of the original columns of marks.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -24,6 +31,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     This plot method can now fill each tile with a different colour.
     New arguments 'do.col', 'values' and 'col'.
     Old argument 'col' has been renamed 'border' for consistency.
+
+    o integral.linim, integral.linfun
+    Argument 'domain' can now be a tessellation.
+    
+    o integral.ssf
+    Argument 'domain' can now be a tessellation.
     
     o as.owin.default
     Now accepts a structure with entries named 'xmin,ymin,xmax,ymax'
@@ -60,13 +73,26 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
-    o nnmap
-    Crashed if W = NULL.
-    Fixed.
-
     o nnmark, as.im.ssf
     if marks(X) was a matrix rather than a data frame, 
     the results were completely incorrect (and had completely wrong format).
+    Fixed.
+
+    o integral.msr
+    If the result was a matrix, it was the transpose of the correct answer.
+    Fixed.
+
+    o "[.linim"
+    The result sometimes had the wrong class.
+    Fixed.
+
+    o "[.linnet"
+    In calculating L[W] where W is a window, the code ignored
+    segments of L that crossed W without having a vertex in W.
+    Fixed.
+
+    o nnmap
+    Crashed if W = NULL.
     Fixed.
 
     o density.lpp, nncross.lpp
@@ -80,6 +106,10 @@ BUG FIXES
 
     o as.solist
     Crashed when x was a 'layered' object.
+    Fixed.
+    
+    o linnet
+    Crashed in some trivial cases where there were no points or lines.
     Fixed.
     
         CHANGES IN spatstat VERSION 1.55-0

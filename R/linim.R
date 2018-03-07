@@ -1,7 +1,7 @@
 #
 # linim.R
 #
-#  $Revision: 1.48 $   $Date: 2017/11/13 14:13:11 $
+#  $Revision: 1.49 $   $Date: 2018/03/07 01:27:14 $
 #
 #  Image/function on a linear network
 #
@@ -578,6 +578,7 @@ as.linnet.linim <- function(X, ...) {
   #' apply subset method for 'im'
   y <- NextMethod("[")
   if(!is.im(y)) return(y) # vector of pixel values
+  class(y) <- unique(c("linim", class(y)))
   #' handle linear network info
   L <- attr(x, "L")
   df <- attr(x, "df")
@@ -621,6 +622,11 @@ as.linnet.linim <- function(X, ...) {
 
 integral.linim <- function(f, domain=NULL, ...){
   verifyclass(f, "linim")
+  if(is.tess(domain)) {
+    result <- sapply(tiles(domain), integral.linim, f = f)
+    if(length(dim(result)) > 1) result <- t(result)
+    return(result)
+  }
   if(!is.null(domain)) 
     f <- f[domain]
   #' extract data

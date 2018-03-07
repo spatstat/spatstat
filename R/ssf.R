@@ -232,6 +232,11 @@ integral.ssf <- function(f, domain=NULL, ..., weights=attr(f, "weights")) {
     check.nvector(weights, npoints(f), oneok=TRUE)
     if(length(weights) == 1) weights <- rep(weights, npoints(f))
   }
+  if(is.tess(domain)) {
+    result <- sapply(tiles(domain), integral.ssf, f=f, weights=weights)
+    if(length(dim(result)) > 1) result <- t(result)
+    return(result)
+  }
   if(!is.null(domain)) {
     ok <- inside.owin(f, w=domain)
     f <- f[ok,]

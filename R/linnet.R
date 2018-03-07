@@ -3,7 +3,7 @@
 #    
 #    Linear networks
 #
-#    $Revision: 1.64 $    $Date: 2017/11/17 00:46:30 $
+#    $Revision: 1.66 $    $Date: 2018/03/07 02:20:39 $
 #
 # An object of class 'linnet' defines a linear network.
 # It includes the following components
@@ -40,6 +40,7 @@ linnet <- function(vertices, m, edges, sparse=FALSE, warn=TRUE) {
   nv <- npoints(vertices)
   if(nv <= 1) {
     m <- matrix(FALSE, nv, nv)
+    from <- to <- integer(0)
   } else if(!missing(m)) {
     # check logical matrix or logical sparse matrix
     if(!is.matrix(m) && !inherits(m, c("lgCMatrix", "lgTMatrix")))
@@ -511,12 +512,19 @@ rescale.linnet <- function(X, s, unitname) {
   to   <- x$to
   if(snip) {
     ## For efficiency, first restrict network to relevant segments.
-    ## Find segments EITHER OF whose endpoints lie in 'w'
+    ## Find segments EITHER OF whose endpoints lie in 'w' ...
     okedge <- vertinside[from] | vertinside[to]
+    ## ... or which cross the boundary of 'w'
+    xlines <- as.psp(x)
+    wlines <- edges(wp)
+    if(any(miss <- !okedge)) {
+      hits <- apply(test.crossing.psp(xlines[miss], wlines), 1, any)
+      okedge[miss] <- hits
+    }
     ## extract relevant subset of network graph
     x <- thinNetwork(x, retainedges=okedge)
     ## Now add vertices at crossing points with boundary of 'w'
-    b <- crossing.psp(as.psp(x), edges(wp))
+    b <- crossing.psp(xlines, wlines)
     x <- insertVertices(x, unique(b))
     boundarypoints <- attr(x, "id")
     ## update data

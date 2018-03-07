@@ -5,7 +5,7 @@
 #' 
 #'   $Revision: 1.4 $  $Date: 2018/02/25 04:24:40 $
 
-unstack.ppp <- unstack.psp <- unstack.lpp <- function(x, ...) {
+unstack.ppp <- unstack.psp <- unstack.lpp <- unstack.tess <- function(x, ...) {
   trap.extra.arguments(...)
   marx <- marks(x)
   d <- dim(marx)

@@ -407,3 +407,42 @@ Change log from 1.55-0 to 1.55-1
 ------------- passed R-3.4.3 CMD check ---------------
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
+
+ 07 mar 2018
+
+    unstack.R
+    unstack.Rd
+	New method unstack.tess
+
+   measures.R
+	Bug fix when the result of integral.msr is a matrix;
+	it is now transposed
+
+   linim.R
+   integral.linim.Rd
+	integral.linim and integral.linfun now accept domain=<tessellation>
+
+   linim.R
+	Bug fix in [.linim
+
+   linnet.R
+	Bug fix in linnet
+	Bug fix in [.linnet
+	
+   nearestsegment.R
+	Bug fix in ppllengine in trivial case
+
+   ssf.R
+   methods.ssf.Rd
+	integral.ssf now accepts domain = <tessellation>
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        version 1.55-0.024
+	Nickname "Stoned Crow"
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

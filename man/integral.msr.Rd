@@ -35,8 +35,16 @@
   as shown in the Examples.
 }
 \value{
-  A numeric value (for a signed measure)
+  A numeric value, vector, or matrix.
+
+  \code{integral(f)} returns a numeric value (for a signed measure)
   or a vector of values (for a vector-valued measure).
+
+  If \code{domain} is a tessellation then \code{integral(f, domain)}
+  returns a numeric vector with one entry for each tile
+  (if \code{f} is a signed measure)
+  or a numeric matrix with one row for each tile
+  (if \code{f} is a vector-valued measure).
 }
 \seealso{
   \code{\link{msr}},
