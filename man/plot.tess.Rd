@@ -13,7 +13,7 @@
                       do.labels=FALSE,
                       labels=tilenames(x), labelargs=list(),
                       do.col=FALSE,
-                      values=marks(x), col=NULL)
+                      values=marks(x), col=NULL, ribargs=list())
 }
 \arguments{
   \item{x}{Tessellation (object of class \code{"tess"}) to be plotted.}
@@ -59,6 +59,10 @@
     A vector of colours for each of the \code{values},
     or a \code{\link{colourmap}} that maps these values to colours.
   }
+  \item{ribargs}{
+    List of additional arguments to control the plot of the colour map,
+    if \code{do.col=TRUE}. See explanation in \code{\link{plot.im}}.
+  }
 }
 \details{
   This is a method for the generic \code{\link{plot}} function
@@ -89,7 +93,7 @@
   levels(v) <- letters[seq(length(levels(v)))]
   E <- tess(image=v)
   plot(E)
-  plot(E, col=rainbow(11))
+  plot(E, col=rainbow(11), ribargs=list(las=1))
 }
 
 \author{

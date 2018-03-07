@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.77 $ $Date: 2018/03/06 10:04:43 $
+#   $Revision: 1.78 $ $Date: 2018/03/07 04:06:58 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -192,7 +192,8 @@ plot.tess <- local({
                         labelargs=list(),
                         do.col=FALSE, 
                         values=marks(x),
-                        col=NULL) {
+                        col=NULL,
+                        ribargs=list()) {
     if(missing(main) || is.null(main))
       main <- short.deparse(substitute(x))
     if(do.col) {
@@ -218,7 +219,7 @@ plot.tess <- local({
                           list(x=y,
                                do.plot=FALSE,
                                show.all=show.all, add=add, main=main,
-                               col=col),
+                               col=col, ribargs=ribargs),
                           list(...)))
       #' exit if not actually plotting
       if(!do.plot) return(result)
@@ -309,7 +310,7 @@ plot.tess <- local({
                        resolve.defaults(list(x$image, add=add, main=main,
                                              show.all=show.all,
                                              do.plot=do.plot,
-                                             col=col),
+                                             col=col, ribargs=ribargs),
                                         list(...),
                                         list(valuesAreColours=FALSE)))
              need.legend <- FALSE
@@ -337,6 +338,7 @@ plot.tess <- local({
                                     add=TRUE, main="",
                                     xlim=xlim, ylim=ylim,
                                     side=sidecode, vertical=vertical),
+                               ribargs,
                                list(...)))
     }
     return(invisible(result))

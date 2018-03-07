@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.025
+        CHANGES IN spatstat VERSION 1.55-0.026
 
 OVERVIEW
 
@@ -29,7 +29,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.tess
     This plot method can now fill each tile with a different colour.
-    New arguments 'do.col', 'values' and 'col'.
+    New arguments 'do.col', 'values', 'col' and 'ribargs'.
     Old argument 'col' has been renamed 'border' for consistency.
 
     o integral.linim, integral.linfun
