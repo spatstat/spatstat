@@ -111,8 +111,9 @@
   \code{\link{ssf}}
 }
 \examples{
-  X <- cells[1:4]
-  f <- ssf(X, nndist(X, k=1:3))
+  g <- distfun(cells[1:4])
+  X <- rsyst(Window(cells), 10)
+  f <- ssf(X, g(X))
   f
   summary(f)
   marks(f)

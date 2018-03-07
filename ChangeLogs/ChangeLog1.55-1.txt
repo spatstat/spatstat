@@ -446,3 +446,14 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   ssf.R
+       Bug fix
+       
+   DESCRIPTION
+   NEWS
+        version 1.55-0.025
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

@@ -3,7 +3,7 @@
 #
 #  spatially sampled functions
 #
-#  $Revision: 1.18 $  $Date: 2018/02/14 08:51:23 $
+#  $Revision: 1.19 $  $Date: 2018/03/07 03:31:17 $
 #
 
 ssf <- function(loc, val) {
@@ -251,5 +251,6 @@ integral.ssf <- function(f, domain=NULL, ..., weights=attr(f, "weights")) {
          apply(y, 2, weighted.mean, w=weights, na.rm=TRUE)
     a <- sum(weights)
   }
+  z[!is.finite(z)] <- 0
   return(z * a)
 }
