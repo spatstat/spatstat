@@ -469,3 +469,17 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+08 mar 2018
+
+   pairwise.family.R
+	evalPairPotential now handles finite=TRUE.
+	
+   DESCRIPTION
+   NEWS
+        version 1.55-0.027
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
