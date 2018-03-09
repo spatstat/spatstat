@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.027
+        CHANGES IN spatstat VERSION 1.55-0.028
 
 OVERVIEW
 
@@ -37,7 +37,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o integral.ssf
     Argument 'domain' can now be a tessellation.
-    
+
     o as.owin.default
     Now accepts a structure with entries named 'xmin,ymin,xmax,ymax'
     in any order. This handles objects of class 'bbox' in the 'sf' package.
@@ -53,6 +53,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o closepairs.ppp
     New argument 'periodic'
+    
+    o predict.ppm
+    New argument 'finite' makes it possible to compute the
+    predicted intensity ignoring any hard core interaction terms.
     
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Computation has been vastly accelerated for models with Geyer interaction

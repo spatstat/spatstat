@@ -1,7 +1,7 @@
 #
 #    predict.ppm.S
 #
-#	$Revision: 1.101 $	$Date: 2018/01/13 09:30:28 $
+#	$Revision: 1.104 $	$Date: 2018/03/09 02:43:15 $
 #
 #    predict.ppm()
 #	   From fitted model obtained by ppm(),	
@@ -65,6 +65,7 @@ predict.ppm <- local({
                           level = 0.95,
                           X=data.ppm(object),
                           correction,
+                          finite=FALSE,
                           ...,
                           dimyx=NULL, eps=NULL, 
                           new.coef=NULL, check=TRUE, repair=TRUE) {
@@ -523,10 +524,13 @@ predict.ppm <- local({
     
       ## evaluate interaction
       Vnew <- evalInteraction(X, U, E, inter, correction=correction,
+                              finite=finite,
                               check=check)
 
-      ## Negative infinite values signify cif = zero
-      cif.equals.zero <- matrowany(Vnew == -Inf)
+      if(!finite) {
+        ## Negative infinite values of potential signify cif = zero
+        cif.equals.zero <- matrowany(Vnew == -Inf)
+      }
     
       ## Insert the potential into the relevant column(s) of `newdata'
       if(ncol(Vnew) == 1) {
@@ -566,7 +570,7 @@ predict.ppm <- local({
                       changecoef=changedcoef)
     
       ## reset to zero if potential was zero
-      if(any(cif.equals.zero))
+      if(!finite && any(cif.equals.zero))
         z[cif.equals.zero] <- 0
     
       ## ###############################################################    

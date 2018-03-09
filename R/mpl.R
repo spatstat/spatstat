@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.219 $	$Date: 2018/02/15 04:23:27 $
+#	$Revision: 5.222 $	$Date: 2018/03/09 01:53:30 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/02/15 04:23:27 $")
+                        date="$Date: 2018/03/09 01:53:30 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1057,6 +1057,7 @@ quadBlockSizes <- function(nX, nD, p=1,
 
 evalInteraction <- function(X, P, E = equalpairs(P, X), 
                             interaction, correction,
+                            finite=FALSE,
                             ...,
                             precomputed=NULL,
                             savecomputed=FALSE) {
@@ -1068,18 +1069,19 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
 
   ## handle Poisson case
   if(is.poisson(interaction)) {
-    out <- matrix(, nrow=npoints(P), ncol=0)
+    out <- matrix(numeric(0), nrow=npoints(P), ncol=0)
     attr(out, "IsOffset") <- logical(0)
+    if(finite)
+      attr(out, "-Inf") <- matrix(logical(0), nrow=nrow(out), ncol=0)
     return(out)
   }
   
   ## determine whether to use fast evaluation in C
-  fastok    <- (spatstat.options("fasteval") %in% c("on", "test"))
-  if(fastok) {
-    cando   <- interaction$can.do.fast
-    par     <- interaction$par
-    dofast  <- !is.null(cando) && cando(X, correction, par)
-  } else dofast <- FALSE
+  dofast <- (spatstat.options("fasteval") %in% c("on", "test")) &&
+            !is.null(cando <- interaction$can.do.fast) &&
+            cando(X, correction, interaction$par) &&
+            !is.null(fe <- interaction$fasteval) && 
+            (!finite || ("finite" %in% names(formals(fe))))
 
   ## determine whether to split quadscheme into blocks
   if(dofast) {
@@ -1101,6 +1103,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     V <- evalInterEngine(X=X, P=P, E=E,
                          interaction=interaction,
                          correction=correction,
+                         finite=finite,
                          ...,
                          precomputed=precomputed,
                          savecomputed=savecomputed)
@@ -1132,13 +1135,18 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       Vi <- evalInterEngine(X=X, P=Pi, E=EX, 
                             interaction=interaction,
                             correction=correction,
+                            finite=finite,
                             ...,
                             savecomputed=FALSE)
+      Mi <- attr(Vi, "-Inf")
       if(iblock == 1) {
         V <- Vi
+        M <- Mi
       } else {
         ## tack on the glm variables for the extra DUMMY points only
         V <- rbind(V, Vi[-seqX, , drop=FALSE])
+        if(finite) 
+          M <- rbind(M, Mi[-seqX, , drop=FALSE])
       }
     }
     ## The first 'nX' rows of V contain values for X.
@@ -1146,14 +1154,20 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     if(length(Pdata) == 0) {
       ## simply discard rows corresponding to data
       V <- V[-seqX, , drop=FALSE]
+      if(finite) 
+        M <- M[-seqX, , drop=FALSE]
     } else {
       ## replace data in correct position
       ii <- integer(nP)
       ii[Pdata] <- seqX
       ii[Pdummy] <- (nX+1):nrow(V)
       V <- V[ii, , drop=FALSE]
+      if(finite)
+        M <- M[ii, , drop=FALSE]
     }
-  } 
+    if(finite)
+      attr(V, "-Inf") <- M
+  }
   return(V)
 }
 
@@ -1161,6 +1175,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
 
 evalInterEngine <- function(X, P, E, 
                             interaction, correction,
+                            finite=FALSE, 
                             ...,
                             Reach = NULL,
                             precomputed=NULL,
@@ -1180,19 +1195,25 @@ evalInterEngine <- function(X, P, E,
     if(feopt == "test")
       message("Calling fasteval")
     V <- fasteval(X, P, E,
-                  interaction$pot, interaction$par, correction, ...)
+                  interaction$pot, interaction$par, correction,
+                  finite=finite, ...)
   }
   if(is.null(V)) {
     ## use generic evaluator for family
     evaluate <- interaction$family$eval
     if(is.null(Reach)) Reach <- reach(interaction)
+    if(finite && is.na(match("finite", names(formals(evaluate)))))
+      stop("Argument finite=TRUE is not supported for this interaction",
+           call.=FALSE)
     if("precomputed" %in% names(formals(evaluate))) {
       ## Use precomputed data
       ## version 1.9-3 onward (pairwise and pairsat families)
       V <- evaluate(X, P, E,
                     interaction$pot,
                     interaction$par,
-                    correction, ...,
+                    correction=correction,
+                    finite=finite,
+                    ...,
                     Reach=Reach, 
                     precomputed=precomputed,
                     savecomputed=savecomputed)
@@ -1203,7 +1224,9 @@ evalInterEngine <- function(X, P, E,
       V <- evaluate(X, P, E,
                     interaction$pot,
                     interaction$par,
-                    correction, ..., Reach=Reach)
+                    correction=correction,
+                    finite=finite,
+                    ..., Reach=Reach)
     }
   }
 

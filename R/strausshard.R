@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.26 $	$Date: 2018/02/02 03:38:59 $
+#    $Revision: 2.27 $	$Date: 2018/03/09 04:39:15 $
 #
 #    The Strauss/hard core process
 #
@@ -106,19 +106,25 @@ StraussHard <- local({
        can.do.fast=function(X,correction,par) {
          return(all(correction %in% c("border", "none")))
        },
-       fasteval=function(X,U,EqualPairs,pairpot,potpars,correction, ...) {
-         # fast evaluator for StraussHard interaction
-         if(!all(correction %in% c("border", "none")))
-           return(NULL)
-         if(spatstat.options("fasteval") == "test")
-           message("Using fast eval for StraussHard")
-         r <- potpars$r
-         hc <- potpars$hc
-         hclose <- strausscounts(U, X, hc, EqualPairs)
-         rclose <- strausscounts(U, X, r,  EqualPairs)
-         answer <- ifelseXB(hclose == 0, rclose, -Inf)
-         return(matrix(answer, ncol=1))
-       },
+      fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
+                        finite=FALSE, ...) {
+        #' fast evaluator for StraussHard interaction
+        if(!all(correction %in% c("border", "none")))
+          return(NULL)
+        if(spatstat.options("fasteval") == "test")
+          message("Using fast eval for StraussHard")
+        r <- potpars$r
+        hc <- potpars$hc
+        hclose <- strausscounts(U, X, hc, EqualPairs)
+        rclose <- strausscounts(U, X, r,  EqualPairs)
+        if(finite) {
+          answer <- rclose
+          attr(answer, "-Inf") <- hclose
+        } else {
+          answer <- ifelseXB(hclose == 0, rclose, -Inf)
+        }
+        return(matrix(answer, ncol=1))
+      },
        Mayer=function(coeffs, self) {
          # second Mayer cluster integral
          gamma <- exp(as.numeric(coeffs[1]))

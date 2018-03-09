@@ -929,8 +929,9 @@ evalCovar(model, covariate, \dots)
           eps, nd, interpolate, jitter, modelname, covname, dataname,
           subset)
 evalCovariate(covariate, locations)
-evalInteraction(X,P,E,interaction,correction,\dots,precomputed,savecomputed)
-evalInterEngine(X,P,E,interaction,correction,\dots,
+evalInteraction(X,P,E,interaction,correction,finite,\dots,
+                precomputed,savecomputed)
+evalInterEngine(X,P,E,interaction,correction,finite,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R,finite)
 evalSparse3Dentrywise(expr, envir)

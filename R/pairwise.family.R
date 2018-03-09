@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.65 $	$Date: 2018/03/08 09:06:44 $
+#    $Revision: 1.66 $	$Date: 2018/03/08 09:34:20 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -247,6 +247,11 @@ if(use.closepairs) {
 
   IsOffset <- attr(POT, "IsOffset")
 
+#' positive case
+
+  IsNegInf <- attr(POT, "-Inf")
+  finite <- finite && !is.null(IsNegInf)
+      
 # Check errors and special cases
 
 if(!is.matrix(POT) && !is.array(POT)) {
@@ -266,8 +271,13 @@ if(length(dim(POT)) == 1 || any(dim(POT)[1:2] != dimM)) {
 
 # make it a 3D array
 if(length(dim(POT))==2)
-        POT <- array(POT, dim=c(dim(POT),1), dimnames=NULL)
-                          
+  POT <- array(POT, dim=c(dim(POT),1), dimnames=NULL)
+
+if(finite && length(dim(IsNegInf)) == 2)
+  IsNegInf <- array(IsNegInf, dim=dim(POT), dimnames=NULL)
+
+# handle corrections      
+
 if(correction == "translate" || correction == "translation") {
         edgewt <- edge.Trans(X, U)
         # sanity check ("everybody knows there ain't no...")
@@ -289,12 +299,17 @@ if(correction == "translate" || correction == "translation") {
 # No pair potential term between a point and itself
 if(length(EqualPairs) > 0) {
   nplanes <- dim(POT)[3]
-  for(k in 1:nplanes)
+  for(k in 1:nplanes) {
     POT[cbind(EqualPairs, k)] <- 0
+    if(finite) IsNegInf[cbind(EqualPairs, k)] <- FALSE
+  }
 }
 
+# reattach the negative infinity      
+if(finite) attr(POT, "-Inf") <- IsNegInf
+      
 # Return just the pair potential?
-if(pot.only)
+if(pot.only) 
   return(POT)
 
 # Sum the pairwise potentials 
