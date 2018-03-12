@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.66 $	$Date: 2018/03/08 09:34:20 $
+#    $Revision: 1.67 $	$Date: 2018/03/12 08:59:36 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -233,25 +233,19 @@ dimM <- c(nX, nU)
 # Evaluate the pairwise potential without edge correction
 
 if(use.closepairs) {
-  POT <- evalPairPotential(X,U,EqualPairs,pairpot,potpars,Reach,finite=finite)
+  POT <- evalPairPotential(X,U,EqualPairs,pairpot,potpars,Reach)
 } else {
   POT <- do.call.matched(pairpot,
                          list(d=M,
                               tx=marks(X),
                               tu=marks(U),
-                              par=potpars,
-                              finite=finite))
+                              par=potpars))
 }
 
-# Determine whether each column of potential is an offset
+# Determine whether each component of potential is an offset
 
   IsOffset <- attr(POT, "IsOffset")
 
-#' positive case
-
-  IsNegInf <- attr(POT, "-Inf")
-  finite <- finite && !is.null(IsNegInf)
-      
 # Check errors and special cases
 
 if(!is.matrix(POT) && !is.array(POT)) {
@@ -273,8 +267,13 @@ if(length(dim(POT)) == 1 || any(dim(POT)[1:2] != dimM)) {
 if(length(dim(POT))==2)
   POT <- array(POT, dim=c(dim(POT),1), dimnames=NULL)
 
-if(finite && length(dim(IsNegInf)) == 2)
-  IsNegInf <- array(IsNegInf, dim=dim(POT), dimnames=NULL)
+#' positive case
+
+  if(finite) {
+    IsNegInf <- (POT == -Inf)
+    POT[IsNegInf] <- 0
+  }
+      
 
 # handle corrections      
 
@@ -316,9 +315,15 @@ if(pot.only)
 
 V <- apply(POT, c(2,3), sum)
 
+# Handle positive case      
+
+if(finite) 
+  attr(V, "infinite") <- apply(IsNegInf, c(2,3), any)
+      
 # attach the original pair potentials
 attr(V, "POT") <- POT
 
+      
 # attach the offset identifier
 attr(V, "IsOffset") <- IsOffset
 
@@ -415,18 +420,15 @@ PairPotentialType <- function(pairpot) {
   fop <- names(formals(pairpot))
   v <- match(list(fop),
              list(c("d", "par"),
-                  c("d", "par", "finite"),
-                  c("d", "tx", "tu", "par"),
-                  c("d", "tx", "tu", "par", "finite")))
+                  c("d", "tx", "tu", "par")))
   if(is.na(v))
     stop("Formal arguments of pair potential function are not understood",
          call.=FALSE)
-  has.finite <- (v %in% c(2,4))
-  marked <- (v %in% 3:4)
-  return(list(marked=marked, has.finite=has.finite))
+  marked <- (v == 2)
+  return(list(marked=marked))
 }
 
-evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
+evalPairPotential <- function(X, P, E, pairpot, potpars, R) {
   # Evaluate pair potential without edge correction weights
   nX <- npoints(X)
   nP <- npoints(P)
@@ -436,10 +438,8 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
                              list(d=matrix(, 0, 0),
                                   tx=marks(X)[integer(0)],
                                   tu=marks(P)[integer(0)],
-                                  par=potpars,
-                                  finite=finite))
+                                  par=potpars))
   IsOffset <- attr(fakePOT, "IsOffset")
-  finite <- finite && !is.null(attr(fakePOT, "-Inf"))
   fakePOT <- ensure3Darray(fakePOT)
   Vnames <- dimnames(fakePOT)[[3]]
   p <- dim(fakePOT)[3]
@@ -453,8 +453,6 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
     di <- c(nX, nP, p)
     dn <- list(NULL, NULL, Vnames)
     result <- array(0, dim=di, dimnames=dn)
-    if(finite)
-      attr(result, "-Inf") <- array(FALSE, dim=di, dimnames=dn)
     attr(result, "IsOffset") <- IsOffset
     return(result)
   }
@@ -464,10 +462,8 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
     # unmarked
     POT <- do.call.matched(pairpot,
                            list(d=D,
-                                par=potpars,
-                                finite=finite))
+                                par=potpars))
     IsOffset <- attr(POT, "IsOffset")
-    if(finite) NegInf <- attr(POT, "-Inf")
   } else {
     # marked
     marX <- marks(X)
@@ -478,7 +474,6 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
     mI <- marX[I]
     mJ <- marP[J]
     POT <- NULL
-    if(finite) NegInf <- NULL
     # split data by type of P[j]
     for(k in types) {
       relevant <- which(mJ == k)
@@ -488,9 +483,7 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
                                 list(d=D[relevant,  , drop=FALSE],
                                      tx=mI[relevant],
                                      tu=fk,
-                                     par=potpars,
-                                     finite=finite))
-        if(finite) NegInf.k <- attr(POTk, "-Inf")
+                                     par=potpars))
         POTk <- ensure3Darray(POTk)
         if(is.null(POT)) {
           #' use first result of 'pairpot' to determine dimension
@@ -498,13 +491,9 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
           #' capture information about offsets, and names of interaction terms
           IsOffset <- attr(POTk, "IsOffset")
           Vnames <- dimnames(POTk)[[3]]
-          #'
-          if(finite) NegInf <- array(FALSE, dim=dim(POT))
         }
         # insert values just computed
         POT[relevant, , ] <- POTk
-        if(finite)
-          NegInf[relevant, , ] <- NegInf.k
       }
     }
   }
@@ -513,27 +502,18 @@ evalPairPotential <- function(X, P, E, pairpot, potpars, R, finite=FALSE) {
   # create result array
   result <- array(0, dim=c(npoints(X), npoints(P), p),
                   dimnames=list(NULL, NULL, Vnames))
-  if(finite) 
-    isneginf <- array(FALSE, dim=c(npoints(X), npoints(P), p),
-                      dimnames=list(NULL, NULL, Vnames))
   # insert results
   II <- rep(I, p)
   JJ <- rep(J, p)
   KK <- rep(1:p, each=length(I))
   IJK <- cbind(II, JJ, KK)
   result[IJK] <- POT
-  if(finite)
-    isneginf[IJK] <- NegInf
   # finally identify identical pairs and set value to 0
   if(length(E) > 0) {
     E.rep <- apply(E, 2, rep, times=p)
     p.rep <- rep(1:p, each=nrow(E))
     result[cbind(E.rep, p.rep)] <- 0
-    if(finite)
-      isneginf[cbind(E.rep, p.rep)] <- FALSE
-      
   }
   attr(result, "IsOffset") <- IsOffset
-  if(finite) attr(result, "-Inf") <- isneginf
   return(result)
 }

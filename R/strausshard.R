@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.27 $	$Date: 2018/03/09 04:39:15 $
+#    $Revision: 2.28 $	$Date: 2018/03/12 09:00:54 $
 #
 #    The Strauss/hard core process
 #
@@ -20,13 +20,9 @@ StraussHard <- local({
          name   = "Strauss - hard core process",
          creator = "StraussHard",
          family  = "pairwise.family",  # evaluated later
-         pot    = function(d, par, finite=FALSE) {
+         pot    = function(d, par) {
            v <- (d <= par$r)
-           if(!finite) {
-             v[ d <= par$hc ] <-  (-Inf)
-           } else {
-             attr(v, "-Inf") <- (d <= par$hc)
-           }
+           v[ d <= par$hc ] <-  (-Inf)
            v
          },
          par    = list(r = NULL, hc = NULL), # filled in later
@@ -106,8 +102,7 @@ StraussHard <- local({
        can.do.fast=function(X,correction,par) {
          return(all(correction %in% c("border", "none")))
        },
-      fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
-                        finite=FALSE, ...) {
+      fasteval=function(X,U,EqualPairs,pairpot,potpars,correction, ...) {
         #' fast evaluator for StraussHard interaction
         if(!all(correction %in% c("border", "none")))
           return(NULL)
@@ -117,12 +112,7 @@ StraussHard <- local({
         hc <- potpars$hc
         hclose <- strausscounts(U, X, hc, EqualPairs)
         rclose <- strausscounts(U, X, r,  EqualPairs)
-        if(finite) {
-          answer <- rclose
-          attr(answer, "-Inf") <- hclose
-        } else {
-          answer <- ifelseXB(hclose == 0, rclose, -Inf)
-        }
+        answer <- ifelseXB(hclose == 0, rclose, -Inf)
         return(matrix(answer, ncol=1))
       },
        Mayer=function(coeffs, self) {

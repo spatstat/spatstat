@@ -65,7 +65,7 @@ predict.ppm <- local({
                           level = 0.95,
                           X=data.ppm(object),
                           correction,
-                          finite=FALSE,
+                          ignore.hardcore=FALSE,
                           ...,
                           dimyx=NULL, eps=NULL, 
                           new.coef=NULL, check=TRUE, repair=TRUE) {
@@ -524,10 +524,10 @@ predict.ppm <- local({
     
       ## evaluate interaction
       Vnew <- evalInteraction(X, U, E, inter, correction=correction,
-                              finite=finite,
+                              finite=ignore.hardcore,
                               check=check)
 
-      if(!finite) {
+      if(!ignore.hardcore) {
         ## Negative infinite values of potential signify cif = zero
         cif.equals.zero <- matrowany(Vnew == -Inf)
       }
@@ -570,7 +570,7 @@ predict.ppm <- local({
                       changecoef=changedcoef)
     
       ## reset to zero if potential was zero
-      if(!finite && any(cif.equals.zero))
+      if(!ignore.hardcore && any(cif.equals.zero))
         z[cif.equals.zero] <- 0
     
       ## ###############################################################    

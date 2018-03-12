@@ -13,7 +13,7 @@ at new locations.
    se=FALSE,
    interval=c("none", "confidence", "prediction"),
    level = 0.95, 
-   X=data.ppm(object), correction, finite=FALSE,
+   X=data.ppm(object), correction, ignore.hardcore=FALSE,
    \dots,
    dimyx=NULL, eps=NULL,
    new.coef=NULL, check=TRUE, repair=TRUE)
@@ -86,7 +86,8 @@ at new locations.
     \code{"isotropic"} and \code{"translate"} depending on the model.
     The default correction is the one that was used to fit \code{object}.
   }
-  \item{finite}{
+  \item{ignore.hardcore}{
+    Advanced use only.
     Logical value specifying whether to compute only the
     finite part of the interaction potential (effectively removing
     any hard core interaction terms).

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.222 $	$Date: 2018/03/09 01:53:30 $
+#	$Revision: 5.224 $	$Date: 2018/03/12 08:33:32 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/03/09 01:53:30 $")
+                        date="$Date: 2018/03/12 08:33:32 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1080,8 +1080,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
   dofast <- (spatstat.options("fasteval") %in% c("on", "test")) &&
             !is.null(cando <- interaction$can.do.fast) &&
             cando(X, correction, interaction$par) &&
-            !is.null(fe <- interaction$fasteval) && 
-            (!finite || ("finite" %in% names(formals(fe))))
+            !is.null(interaction$fasteval)
 
   ## determine whether to split quadscheme into blocks
   if(dofast) {
@@ -1145,7 +1144,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       } else {
         ## tack on the glm variables for the extra DUMMY points only
         V <- rbind(V, Vi[-seqX, , drop=FALSE])
-        if(finite) 
+        if(finite && !is.null(M)) 
           M <- rbind(M, Mi[-seqX, , drop=FALSE])
       }
     }
@@ -1154,7 +1153,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     if(length(Pdata) == 0) {
       ## simply discard rows corresponding to data
       V <- V[-seqX, , drop=FALSE]
-      if(finite) 
+      if(finite && !is.null(M)) 
         M <- M[-seqX, , drop=FALSE]
     } else {
       ## replace data in correct position
@@ -1162,11 +1161,10 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       ii[Pdata] <- seqX
       ii[Pdummy] <- (nX+1):nrow(V)
       V <- V[ii, , drop=FALSE]
-      if(finite)
+      if(finite && !is.null(M))
         M <- M[ii, , drop=FALSE]
     }
-    if(finite)
-      attr(V, "-Inf") <- M
+    attr(V, "-Inf") <- M
   }
   return(V)
 }
@@ -1188,7 +1186,8 @@ evalInterEngine <- function(X, P, E,
   feopt    <- spatstat.options("fasteval")
   dofast   <- !is.null(fasteval) &&
               (is.null(cando) || cando(X, correction,par)) &&
-              (feopt %in% c("on", "test"))
+              (feopt %in% c("on", "test")) &&
+              (!finite || ("finite" %in% names(formals(fasteval))))
     
   V <- NULL
   if(dofast) {
@@ -1202,9 +1201,6 @@ evalInterEngine <- function(X, P, E,
     ## use generic evaluator for family
     evaluate <- interaction$family$eval
     if(is.null(Reach)) Reach <- reach(interaction)
-    if(finite && is.na(match("finite", names(formals(evaluate)))))
-      stop("Argument finite=TRUE is not supported for this interaction",
-           call.=FALSE)
     if("precomputed" %in% names(formals(evaluate))) {
       ## Use precomputed data
       ## version 1.9-3 onward (pairwise and pairsat families)

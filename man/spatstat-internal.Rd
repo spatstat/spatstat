@@ -933,7 +933,7 @@ evalInteraction(X,P,E,interaction,correction,finite,\dots,
                 precomputed,savecomputed)
 evalInterEngine(X,P,E,interaction,correction,finite,\dots,
                 Reach,precomputed,savecomputed)
-evalPairPotential(X,P,E,pairpot,potpars,R,finite)
+evalPairPotential(X,P,E,pairpot,potpars,R)
 evalSparse3Dentrywise(expr, envir)
 evaluate2Dkernel(kernel, x, y, sigma, varcov, \dots, scalekernel)
 even.breaks.owin(w)

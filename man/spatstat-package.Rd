@@ -1748,7 +1748,7 @@
   Monsuru Adepeju,
   Corey Anderson,
   Ang Qi Wei,
-  Jens Astrom,
+  Jens \ifelse{latex}{\out{{\AA}str{\" o}m}}{Astrom},
   Marcel Austenfeld,
   Sandro Azaele,
   Malissa Baddeley,

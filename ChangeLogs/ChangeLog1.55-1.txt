@@ -501,6 +501,32 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12 mar 2018
 
+   mpl.R
+   spatstat-internal.Rd
+	Simpler approach to 'finite=TRUE' case.
+	Removed 'finite' from arguments of evalPairPotential.
 
+   pairwise.family.R
+	Redesigned handling of finite=TRUE case.
+
+   strausshard.R
+	Removed argument 'finite' from potential.
+	Function delta2 still returns attr(, "-Inf").
+
+   predict.ppm.R
+   predict.ppm.Rd
+	Argument 'finite' renamed 'ignore.hardcore'.
+
+   spatstat-package.Rd
+        Scandinavian accents in surname 'Astrom'.
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.029
 	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

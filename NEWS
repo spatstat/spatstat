@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.028
+        CHANGES IN spatstat VERSION 1.55-0.029
 
 OVERVIEW
 
@@ -55,8 +55,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'periodic'
     
     o predict.ppm
-    New argument 'finite' makes it possible to compute the
-    predicted intensity ignoring any hard core interaction terms.
+    New argument 'ignore.hardcore'.
     
     o leverage.ppm, influence.ppm, dfbetas.ppm
     Computation has been vastly accelerated for models with Geyer interaction
