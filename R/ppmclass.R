@@ -4,7 +4,7 @@
 #	Class 'ppm' representing fitted point process models.
 #
 #
-#	$Revision: 2.143 $	$Date: 2018/02/13 02:41:31 $
+#	$Revision: 2.144 $	$Date: 2018/03/14 09:09:36 $
 #
 #       An object of class 'ppm' contains the following:
 #
@@ -767,10 +767,15 @@ model.matrix.ippm <- function(object,
 PPMmodelmatrix <- function(object,
                            data, 
                            ...,
-                           subset, Q=NULL, keepNA=TRUE, irregular=FALSE) {
+                           subset, Q=NULL, keepNA=TRUE, irregular=FALSE,
+                           splitInf=FALSE) {
   # handles ppm and ippm			      
   data.given <- !is.null(data)
   irregular <- irregular && inherits(object, "ippm") && !is.null(object$iScore)
+  if(splitInf && !data.given && is.null(Q)) {
+    #' force re-computation
+    Q <- quad.ppm(object)
+  }
   if(!is.null(Q)) {
     if(data.given) stop("Arguments Q and data are incompatible")
     if(!inherits(Q, c("ppp", "quad")))
@@ -779,7 +784,9 @@ PPMmodelmatrix <- function(object,
     ## construct Berman-Turner frame
     needed <- c("trend", "interaction", "covariates", "covfunargs",
                 "correction", "rbord")
-    bt <- do.call(bt.frame, append(list(Q), object[needed]))
+    bt <- do.call(bt.frame,
+                  c(list(Q), object[needed], list(splitInf=splitInf)))
+    forbid <- bt$forbid
     ## compute model matrix
     mf <- model.frame(bt$fmla, bt$glmdata, ...)
     mm <- model.matrix(bt$fmla, mf, ...)
@@ -793,19 +800,21 @@ PPMmodelmatrix <- function(object,
       if(nrow(mi) != nrow(mm))
         stop("Internal error: incorrect number of rows in iScore")
       mm <- cbind(mm, mi)
-      attr(mm, "assign") <- ass 
     }
     ## subset
     if(!missing(subset)) {
       ok <- eval(substitute(subset), envir=bt$glmdata)
       mm <- mm[ok, , drop=FALSE]
-      attr(mm, "assign") <- ass 
+      if(!is.null(forbid)) forbid <- forbid[ok]
     }
     ## remove NA's ?
     if(!keepNA) {
-      mm <- mm[complete.cases(mm), , drop=FALSE]
-      attr(mm, "assign") <- ass
+      ok <- complete.cases(mm)
+      mm <- mm[ok, , drop=FALSE]
+      if(!is.null(forbid)) forbid <- forbid[ok]
     }
+    attr(mm, "assign") <- ass 
+    attr(mm, "-Inf") <- forbid
     return(mm)
   }
 

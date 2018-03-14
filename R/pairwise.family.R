@@ -2,7 +2,7 @@
 #
 #    pairwise.family.S
 #
-#    $Revision: 1.67 $	$Date: 2018/03/12 08:59:36 $
+#    $Revision: 1.69 $	$Date: 2018/03/13 06:26:16 $
 #
 #    The pairwise interaction family of point process models
 #
@@ -136,7 +136,7 @@ pairwise.family <-
        # end of function `plot'
        # ----------------------------------------------------
     eval  = function(X,U,EqualPairs,pairpot,potpars,correction,
-                     finite=FALSE,
+                     splitInf=FALSE,
                      ..., Reach=NULL,
                      precomputed=NULL, savecomputed=FALSE,
                      pot.only=FALSE) {
@@ -188,7 +188,7 @@ pairwise.family <-
   # and
   #  par is a list of parameters for the potential.
   #         
-  # The additional argument 'finite' is also permitted.
+  # The additional argument 'splitInf' is also permitted.
   #         
   # It must return a matrix with the same dimensions as d
   # or an array with its first two dimensions the same as the dimensions of d.
@@ -269,7 +269,7 @@ if(length(dim(POT))==2)
 
 #' positive case
 
-  if(finite) {
+  if(splitInf) {
     IsNegInf <- (POT == -Inf)
     POT[IsNegInf] <- 0
   }
@@ -300,25 +300,25 @@ if(length(EqualPairs) > 0) {
   nplanes <- dim(POT)[3]
   for(k in 1:nplanes) {
     POT[cbind(EqualPairs, k)] <- 0
-    if(finite) IsNegInf[cbind(EqualPairs, k)] <- FALSE
+    if(splitInf) IsNegInf[cbind(EqualPairs, k)] <- FALSE
   }
 }
 
-# reattach the negative infinity      
-if(finite) attr(POT, "-Inf") <- IsNegInf
+# reattach the negative infinity for re-use by special code 
+if(splitInf) attr(POT, "IsNegInf") <- IsNegInf
       
 # Return just the pair potential?
 if(pot.only) 
   return(POT)
 
-# Sum the pairwise potentials 
+# Sum the pairwise potentials over data points for each quadrature point
 
 V <- apply(POT, c(2,3), sum)
 
 # Handle positive case      
 
-if(finite) 
-  attr(V, "infinite") <- apply(IsNegInf, c(2,3), any)
+if(splitInf) 
+  attr(V, "-Inf") <- apply(IsNegInf, 2, any)
       
 # attach the original pair potentials
 attr(V, "POT") <- POT
@@ -390,20 +390,73 @@ return(V)
   return(result)
   },
 ######### end of function $suffstat
-  delta2 = function(X, inte, correction, ..., finite=FALSE) {
-  # Sufficient statistic for second order conditional intensity
-  # for pairwise interaction processes
-  # Equivalent to evaluating pair potential.
-    X <- as.ppp(X)
-    seqX <- seq_len(npoints(X))
-    E <- cbind(seqX, seqX)
-    R <- reach(inte)
-    result <- pairwise.family$eval(X,X,E,
-                                 inte$pot,inte$par,
-                                 correction,
-                                 pot.only=TRUE,
-                                 Reach=R,
-                                 finite=finite)
+  delta2 = function(X, inte, correction, ...) {
+    #' Sufficient statistic for second order conditional intensity
+    #' for pairwise interaction processes
+    #' Equivalent to evaluating pair potential.
+    if(is.ppp(X)) {
+      seqX <- seq_len(npoints(X))
+      E <- cbind(seqX, seqX)
+      R <- reach(inte)
+      result <- pairwise.family$eval(X,X,E,
+                                     inte$pot,inte$par,
+                                     correction,
+                                     pot.only=TRUE,
+                                     Reach=R, splitInf=TRUE)
+      M <- attr(result, "IsNegInf")
+      if(!is.null(M)) {
+        #' validate
+        if(length(dim(M)) != 3)
+          stop("Internal error: IsNegInf is not a 3D array")
+        #' collapse vector-valued potential, yielding a matrix
+        M <- apply(M, c(1,2), any)
+        if(!is.matrix(M)) M <- matrix(M, nrow=nX)
+        #' count conflicts
+        hits <- colSums(M)
+        #'  hits[j] == 1 implies that X[j] violates hard core with only one X[i]
+        #'  and therefore changes status if X[i] is deleted.
+        deltaInf <- M
+        deltaInf[, hits != 1] <- FALSE
+      }
+    } else if(is.quad(X)) {
+      U <- union.quad(X)
+      izdat <- is.data(X)
+      nU <- npoints(U)
+      nX <- npoints(X$data)
+      seqU <- seq_len(nU)
+      E <- cbind(seqU, seqU)
+      R <- reach(inte)
+      result <- pairwise.family$eval(U,U,E,
+                                     inte$pot,inte$par,
+                                     correction,
+                                     pot.only=TRUE,
+                                     Reach=R, splitInf=TRUE)
+      M <- attr(result, "IsNegInf")
+      if(!is.null(M)) {
+        #' validate
+        if(length(dim(M)) != 3)
+          stop("Internal error: IsNegInf is not a 3D array")
+        #' consider conflicts with data points
+        MXU <- M[izdat, , , drop=FALSE]
+        #' collapse vector-valued potential, yielding a matrix
+        MXU <- apply(MXU, c(1,2), any)
+        if(!is.matrix(MXU)) MXU <- matrix(MXU, nrow=nX)
+        #' count data points conflicting with each quadrature point
+        nhitdata <- colSums(MXU)
+        #' for a conflicting pair U[i], U[j],
+        #' status of U[j] will change when U[i] is added/deleted
+        #' iff EITHER
+        #'     U[i] = X[i] is a data point and
+        #'     U[j] is only in conflict with X[i],
+        deltaInf <- M
+        deltaInf[izdat, nhitdata != 1] <- FALSE
+        #' OR
+        #'     U[i] is a dummy point,
+        #'     U[j] has no conflicts with X.
+        deltaInf[!izdat, nhitdata != 0] <- FALSE
+      }
+    }
+    attr(result, "deltaInf") <- deltaInf
     return(result)
   }
 ######### end of function $delta2

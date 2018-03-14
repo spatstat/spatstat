@@ -47,7 +47,8 @@ void acrdenspt(int *, double *, double *, int *, double *, double *, double *, d
 void awtcrdenspt(int *, double *, double *, int *, double *, double *, double *, double *, double *, double *, double *); 
 void awtcrdenspt(int *, double *, double *, int *, double *, double *, double *, double *, double *, double *, double *);
 void segdens(double *, int *, double *, double *, double *, double *, int *, double *, double *, double *);
-void Ediggra(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *, double *);
+void Ediggra(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *, double *); 
+void ESdiggra(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *, double *, int *);
 void Ediggatsti(int *, double *, double *, int *, int *, double *, double *, int *, double *, double *);
 void discareapoly(int *, double *, double *, int *, double *, int *, double *, double *, double *, double *, double *, double *);
 void Ddist2dpath(int *, double *, int *, double *, double *, int *, int *);

@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.41 $	$Date: 2018/02/03 08:33:58 $
+#    $Revision: 2.42 $	$Date: 2018/03/13 02:19:37 $
 #
 #    The Strauss process
 #
@@ -63,8 +63,10 @@ Strauss <- local({
        can.do.fast=function(X,correction,par) {
          return(all(correction %in% c("border", "none")))
        },
-       fasteval=function(X,U,EqualPairs,pairpot,potpars,correction, ...) {
-         # fast evaluator for Strauss interaction
+       fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
+                      splitInf=FALSE, ...) {
+         #' fast evaluator for Strauss interaction
+         dont.complain.about(splitInf)
          if(!all(correction %in% c("border", "none")))
            return(NULL)
          if(spatstat.options("fasteval") == "test")

@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.224 $	$Date: 2018/03/12 08:33:32 $
+#	$Revision: 5.229 $	$Date: 2018/03/14 09:12:34 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/03/12 08:33:32 $")
+                        date="$Date: 2018/03/14 09:12:34 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -348,7 +348,8 @@ mpl.prepare <- local({
                           warn.unidentifiable=TRUE,
                           weightfactor=NULL,
                           skip.border=FALSE,
-                          clip.interaction=TRUE) {
+                          clip.interaction=TRUE,
+                          splitInf=FALSE) {
     ## Q: quadrature scheme
     ## X = data.quad(Q)
     ## P = union.quad(Q)
@@ -545,7 +546,8 @@ mpl.prepare <- local({
 
     Vnames <- NULL
     IsOffset <- NULL
-
+    forbid <- NULL
+    
     if(want.inter) {
       ## Form the matrix of "regression variables" V.
       ## The rows of V correspond to the rows of P (quadrature points)
@@ -557,6 +559,7 @@ mpl.prepare <- local({
         ## usual case
         V <- evalInteraction(X, P, E, interaction, correction,
                              ...,
+                             splitInf=splitInf,
                              precomputed=precomputed,
                              savecomputed=savecomputed)
       } else {
@@ -587,6 +590,7 @@ mpl.prepare <- local({
           ## normal
           V <- evalInteraction(X, Psub, Esub, interaction, correction,
                                ...,
+                               splitInf=splitInf,
                                precomputed=subcomputed,
                                savecomputed=savecomputed)
         } else {
@@ -595,6 +599,7 @@ mpl.prepare <- local({
           V <- evalInteraction(X, Psub, Esub, interaction, correction,
                                ...,
                                W=NULL,
+                               splitInf=splitInf,
                                precomputed=subcomputed,
                                savecomputed=savecomputed)
         }
@@ -611,7 +616,12 @@ mpl.prepare <- local({
       ## extract information about offsets
       IsOffset <- attr(V, "IsOffset")
       if(is.null(IsOffset)) IsOffset <- FALSE
-      
+
+      if(splitInf) {
+        ## extract information about hard core terms
+        forbid <- attr(V, "-Inf") %orifnull% logical(nrow(V))
+      } 
+
       if(skip.border) {
         ## fill in the values in the border region with zeroes.
         Vnew <- matrix(0, nrow=npoints(P), ncol=ncol(V))
@@ -622,6 +632,11 @@ mpl.prepare <- local({
         attr(Vnew, "computed") <- attr(V, "computed")
         attr(Vnew, "POT") <- attr(V, "POT")
         V <- Vnew
+        if(splitInf) {
+          fnew <- logical(nrow(Vnew))
+          fnew[Retain] <- forbid
+          forbid <- fnew
+        }
       }
     
       ## extract intermediate computation results 
@@ -788,7 +803,8 @@ mpl.prepare <- local({
                    likelihood.is.zero=likelihood.is.zero,
                    is.identifiable=is.identifiable,
                    computed=computed,
-                   vnamebase=vnamebase, vnameprefix=vnameprefix)
+                   vnamebase=vnamebase, vnameprefix=vnameprefix,
+                   forbid=forbid)
     return(result)
   }
 
@@ -916,7 +932,7 @@ bt.frame <- function(Q, trend=~1, interaction=NULL,
                       covariates=NULL,
                       correction="border", rbord=0,
                       use.gam=FALSE, allcovar=FALSE) {
-  prep <- mpl.engine(Q=Q, trend=trend, interaction=interaction,
+  prep <- mpl.engine(Q, trend=trend, interaction=interaction,
                      ..., covariates=covariates,
                      correction=correction, rbord=rbord,
                      use.gam=use.gam, allcovar=allcovar,
@@ -991,6 +1007,7 @@ partialModelMatrix <- function(X, D, model, callstring="", ...) {
                   "and names of coefficient vector in fitted model"))
 
   attr(mom, "mplsubset") <- glmdata$.mpl.SUBSET
+  attr(mom, "-Inf") <- prep$forbid
   return(mom)
 }
   
@@ -1057,7 +1074,7 @@ quadBlockSizes <- function(nX, nD, p=1,
 
 evalInteraction <- function(X, P, E = equalpairs(P, X), 
                             interaction, correction,
-                            finite=FALSE,
+                            splitInf=FALSE,
                             ...,
                             precomputed=NULL,
                             savecomputed=FALSE) {
@@ -1071,8 +1088,8 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
   if(is.poisson(interaction)) {
     out <- matrix(numeric(0), nrow=npoints(P), ncol=0)
     attr(out, "IsOffset") <- logical(0)
-    if(finite)
-      attr(out, "-Inf") <- matrix(logical(0), nrow=nrow(out), ncol=0)
+    if(splitInf)
+      attr(out, "-Inf") <- logical(nrow(out))
     return(out)
   }
   
@@ -1102,7 +1119,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     V <- evalInterEngine(X=X, P=P, E=E,
                          interaction=interaction,
                          correction=correction,
-                         finite=finite,
+                         splitInf=splitInf,
                          ...,
                          precomputed=precomputed,
                          savecomputed=savecomputed)
@@ -1134,7 +1151,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       Vi <- evalInterEngine(X=X, P=Pi, E=EX, 
                             interaction=interaction,
                             correction=correction,
-                            finite=finite,
+                            splitInf=splitInf,
                             ...,
                             savecomputed=FALSE)
       Mi <- attr(Vi, "-Inf")
@@ -1144,8 +1161,8 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
       } else {
         ## tack on the glm variables for the extra DUMMY points only
         V <- rbind(V, Vi[-seqX, , drop=FALSE])
-        if(finite && !is.null(M)) 
-          M <- rbind(M, Mi[-seqX, , drop=FALSE])
+        if(splitInf && !is.null(M))
+          M <- c(M, Mi[-seqX])
       }
     }
     ## The first 'nX' rows of V contain values for X.
@@ -1153,16 +1170,16 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
     if(length(Pdata) == 0) {
       ## simply discard rows corresponding to data
       V <- V[-seqX, , drop=FALSE]
-      if(finite && !is.null(M)) 
-        M <- M[-seqX, , drop=FALSE]
+      if(splitInf && !is.null(M)) 
+        M <- M[-seqX]
     } else {
       ## replace data in correct position
       ii <- integer(nP)
       ii[Pdata] <- seqX
       ii[Pdummy] <- (nX+1):nrow(V)
       V <- V[ii, , drop=FALSE]
-      if(finite && !is.null(M))
-        M <- M[ii, , drop=FALSE]
+      if(splitInf && !is.null(M))
+        M <- M[ii]
     }
     attr(V, "-Inf") <- M
   }
@@ -1173,7 +1190,7 @@ evalInteraction <- function(X, P, E = equalpairs(P, X),
 
 evalInterEngine <- function(X, P, E, 
                             interaction, correction,
-                            finite=FALSE, 
+                            splitInf=FALSE, 
                             ...,
                             Reach = NULL,
                             precomputed=NULL,
@@ -1187,7 +1204,7 @@ evalInterEngine <- function(X, P, E,
   dofast   <- !is.null(fasteval) &&
               (is.null(cando) || cando(X, correction,par)) &&
               (feopt %in% c("on", "test")) &&
-              (!finite || ("finite" %in% names(formals(fasteval))))
+              (!splitInf || ("splitInf" %in% names(formals(fasteval))))
     
   V <- NULL
   if(dofast) {
@@ -1195,20 +1212,28 @@ evalInterEngine <- function(X, P, E,
       message("Calling fasteval")
     V <- fasteval(X, P, E,
                   interaction$pot, interaction$par, correction,
-                  finite=finite, ...)
+                  splitInf=splitInf, ...)
   }
   if(is.null(V)) {
     ## use generic evaluator for family
     evaluate <- interaction$family$eval
+    evalargs <- names(formals(evaluate))
+
+    if(splitInf && !("splitInf" %in% evalargs))
+      stop("Sorry, the", interaction$family$name, "interaction family",
+           "does not support calculation of the positive part",
+           call.=FALSE)
+
     if(is.null(Reach)) Reach <- reach(interaction)
-    if("precomputed" %in% names(formals(evaluate))) {
+
+    if("precomputed" %in% evalargs) {
       ## Use precomputed data
       ## version 1.9-3 onward (pairwise and pairsat families)
       V <- evaluate(X, P, E,
                     interaction$pot,
                     interaction$par,
                     correction=correction,
-                    finite=finite,
+                    splitInf=splitInf,
                     ...,
                     Reach=Reach, 
                     precomputed=precomputed,
@@ -1221,7 +1246,7 @@ evalInterEngine <- function(X, P, E,
                     interaction$pot,
                     interaction$par,
                     correction=correction,
-                    finite=finite,
+                    splitInf=splitInf,
                     ..., Reach=Reach)
     }
   }
@@ -1286,16 +1311,14 @@ deltasuffstat <- local({
     ## Look for member function $delta2 in the interaction
     v <- NULL
     v.is.full <- FALSE
-    if(use.special &&
-       !is.null(delta2 <- inte$delta2) &&
-       is.function(delta2)) {
-      v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
+    if(use.special) {
+      ## Use specialised $delta2 for interaction,if available
+      if(is.function(delta2 <- inte$delta2)) 
+        v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
+      ## Use generic $delta2 for the family, if available
+      if(is.null(v) && is.function(delta2 <- inte$family$delta2))
+        v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     }
-    ## Look for generic $delta2 function for the family
-    if(is.null(v) && use.special && 
-       !is.null(delta2 <- inte$family$delta2) &&
-       is.function(delta2))
-      v <- delta2(X, inte, model$correction, sparseOK=sparseOK)
     ## no luck?
     if(is.null(v)) {
       if(!force)
@@ -1308,7 +1331,11 @@ deltasuffstat <- local({
            deltasufQ(model, quadsub, sparseOK, verbose=verbose)
       v.is.full <- TRUE
     }
-    ## make it a 3D array
+    
+    ## extract hard core information
+    deltaInf <- attr(v, "deltaInf")
+
+    ## ensure 'v' is a 3D array
     if(length(dim(v)) != 3) {
       if(is.matrix(v)) {
         v <- array(v, dim=c(dim(v), 1))
@@ -1316,8 +1343,13 @@ deltasuffstat <- local({
         v <- as.sparse3Darray(v)
       }
     }
-    if(!sparseOK && inherits(v, "sparse3Darray"))
-      v <- as.array(v)
+
+    if(!sparseOK) {
+      if(inherits(v, "sparse3Darray"))
+        v <- as.array(v)
+      if(inherits(deltaInf, "sparseMatrix"))
+        deltaInf <- as.matrix(deltaInf)
+    }
 
     if(restrict != "none") {
       ## kill contributions from points outside the domain of pseudolikelihood
@@ -1325,11 +1357,18 @@ deltasuffstat <- local({
       use <- if(dataonly) getppmdatasubset(model) else
              if(is.null(quadsub)) getglmsubset(model) else
              getglmsubset(model)[quadsub]
-      if(any(kill <- !use))
+      if(any(kill <- !use)) {
         switch(restrict,
  	       pairs = { v[kill,kill,] <- 0 },
 	       first = { v[kill,,] <- 0 },
 	       none = {})
+        if(!is.null(deltaInf)) {
+          switch(restrict,
+                 pairs = { deltaInf[kill,kill] <- FALSE },
+                 first = { deltaInf[kill,] <- FALSE },
+                 none = {})
+        }
+      }
     }
 
     ## Make output array, with planes corresponding to model coefficients
@@ -1368,6 +1407,8 @@ deltasuffstat <- local({
         result[ , , Imap] <- v
       }
     }
+    ## pack up
+    attr(result, "deltaInf") <- deltaInf
     return(result)
   }
 
@@ -1387,6 +1428,7 @@ deltasuffstat <- local({
     ## canonical statistic before and after deleting X[j]
     ## mbefore[ , i, j] = h(X[i] | X)
     ## mafter[ , i, j] = h(X[i] | X[-j])
+    ## where h(u|x) is the canonical statistic of the *positive* cif
     dimwork <- c(p, nX, nX)
     if(!sparseOK) {
       mafter <- mbefore <- array(t(m), dim=dimwork)

@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.28 $	$Date: 2018/03/12 09:00:54 $
+#    $Revision: 2.33 $	$Date: 2018/03/13 05:14:44 $
 #
 #    The Strauss/hard core process
 #
@@ -102,7 +102,8 @@ StraussHard <- local({
        can.do.fast=function(X,correction,par) {
          return(all(correction %in% c("border", "none")))
        },
-      fasteval=function(X,U,EqualPairs,pairpot,potpars,correction, ...) {
+      fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
+                        splitInf=FALSE, ...) {
         #' fast evaluator for StraussHard interaction
         if(!all(correction %in% c("border", "none")))
           return(NULL)
@@ -110,10 +111,17 @@ StraussHard <- local({
           message("Using fast eval for StraussHard")
         r <- potpars$r
         hc <- potpars$hc
-        hclose <- strausscounts(U, X, hc, EqualPairs)
+        hclose <- (strausscounts(U, X, hc, EqualPairs) != 0)
         rclose <- strausscounts(U, X, r,  EqualPairs)
-        answer <- ifelseXB(hclose == 0, rclose, -Inf)
-        return(matrix(answer, ncol=1))
+        if(!splitInf) {
+          answer <- ifelseAX(hclose, -Inf, rclose)
+          answer <- matrix(answer, ncol=1)
+        } else {
+          answer <- rclose & !hclose
+          answer <- matrix(answer, ncol=1)
+          attr(answer, "-Inf") <- hclose
+        }
+        return(answer)
       },
        Mayer=function(coeffs, self) {
          # second Mayer cluster integral
@@ -129,28 +137,59 @@ StraussHard <- local({
          U <- as.ppp(X)
          nU <- npoints(U)
          cl <- weightedclosepairs(U, r, correction=correction, what="indices")
-         if(is.null(cl))
+
+         if(is.null(cl)) # can't handle edge correction
            return(NULL)
+         
          v <- sparseMatrix(i=cl$i, j=cl$j, x=cl$weight,
                            dims=c(nU, nU))
-         if(!sparseOK)
-           v <- as.matrix(v)
+         
          #' hard core part
-         hcl <- if(is.ppp(X)) {
-                  closepairs(X, hc, what="indices")
-                } else if(inherits(X, "quad")) {
-                  #' only data points enforce hard core
-                  crosspairquad(X, hc, what="indices")
-                } else stop("X should be a ppp or quad object")
-         nhit <- as.integer(table(factor(hcl$j, levels=seq_len(nU))))
-         changes <- (nhit == 1)
-         if(any(changes)) {
-           vh <- sparseMatrix(i=hcl$i, j=hcl$j, x=changes[hcl$j],
-                              dims=c(nU, nU))
-           if(!sparseOK)
-             vh <- as.matrix(vh)
-           attr(v, "-Inf") <- vh
+         hcl <- closepairs(U, hc, what="indices")
+         ihit <- hcl$i
+         jhit <- hcl$j
+         vh <- NULL
+
+         if(is.ppp(X)) {
+           #' count conflicts between data points
+           nhit <- as.integer(table(factor(jhit, levels=seq_len(nU))))
+           #' for a conflicting pair X[i], X[j],
+           #' status of X[j] will change when X[i] is deleted
+           #' iff X[j] is only in conflict with X[i]
+           changes <- (nhit == 1)
+           if(any(changes)) {
+             changesJ <- changes[jhit]
+             vh <- sparseMatrix(i=ihit[changesJ], j=jhit[changesJ], x=TRUE,
+                                dims=c(nU, nU))
+           }
+         } else if(inherits(X, "quad")) {
+           #' count conflicts with existing data points
+           izdat <- is.data(X)
+           hitdata <- izdat[ihit]
+           nhitdata <- as.integer(table(factor(jhit[hitdata],
+                                               levels=seq_len(nU))))
+           #' for a conflicting pair U[i], U[j],
+           #' status of U[j] will change when U[i] is added/deleted
+           #' iff EITHER
+           #'     U[i] = X[i] is a data point and
+           #'     U[j] is only in conflict with X[i],
+           #' OR
+           #'     U[i] is a dummy point,
+           #'     U[j] has no conflicts with X.
+           changes <- (hitdata & (nhitdata == 1)) | (!hitdata & (nhitdata == 0))
+           if(any(changes)) {
+             changesJ <- changes[hitj]
+             vh <- sparseMatrix(i=ihit[changesJ], j=jhit[changesJ], x=TRUE,
+                                dims=c(nU, nU))
+           }
+         } else stop("X should be a ppp or quad object")
+
+         # pack up
+         if(!sparseOK) {
+           v <- as.matrix(v)
+           if(!is.null(vh)) vh <- as.matrix(vh)
          }
+         attr(v, "deltaInf") <- vh
          return(v)
        }
     )

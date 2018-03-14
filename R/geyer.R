@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.40 $	$Date: 2018/02/02 05:09:26 $
+#    $Revision: 2.41 $	$Date: 2018/03/13 02:20:45 $
 #
 #    Geyer's saturation process
 #
@@ -103,8 +103,10 @@ Geyer <- local({
          return(all(correction %in% c("border", "none")))
        },
        fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
+                         splitInf=FALSE,
                          ..., halfway=FALSE, check=TRUE) {
-         # fast evaluator for Geyer interaction
+         #' fast evaluator for Geyer interaction
+         dont.complain.about(splitInf)
          if(!all(correction %in% c("border", "none")))
            return(NULL)
          if(spatstat.options("fasteval") == "test")

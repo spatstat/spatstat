@@ -1,7 +1,7 @@
 #
 #     dg.S
 #
-#    $Revision: 1.19 $	$Date: 2017/06/05 10:31:58 $
+#    $Revision: 1.21 $	$Date: 2018/03/12 13:08:24 $
 #
 #     Diggle-Gratton pair potential
 #
@@ -10,11 +10,11 @@ DiggleGratton <- local({
 
   # .... auxiliary functions ......
 
-  diggraterms <- function(X, Y, idX, idY, delta, rho) {
+  diggraterms <- function(X, Y, idX, idY, delta, rho, splitInf=FALSE) {
     stopifnot(is.numeric(delta))
     stopifnot(is.numeric(rho))
     stopifnot(delta < rho)
-    # sort in increasing order of x coordinate
+    ## sort in increasing order of x coordinate
     oX <- fave.order(X$x)
     oY <- fave.order(Y$x)
     Xsort <- X[oX]
@@ -23,22 +23,46 @@ DiggleGratton <- local({
     idYsort <- idY[oY]
     nX <- npoints(X)
     nY <- npoints(Y)
-    # call C routine
-    out <- .C("Ediggra",
-              nnsource = as.integer(nX),
-              xsource  = as.double(Xsort$x),
-              ysource  = as.double(Xsort$y),
-              idsource = as.integer(idXsort),
-              nntarget = as.integer(nY),
-              xtarget  = as.double(Ysort$x),
-              ytarget  = as.double(Ysort$y),
-              idtarget = as.integer(idYsort),
-              ddelta   = as.double(delta),
-              rrho     = as.double(rho),
-              values   = as.double(double(nX)),
-              PACKAGE = "spatstat")
-    answer <- integer(nX)
-    answer[oX] <- out$values
+    ## call C routine
+    if(!splitInf) {
+      ## usual case: allow cif to be zero because of hard core
+      out <- .C("Ediggra",
+                nnsource = as.integer(nX),
+                xsource  = as.double(Xsort$x),
+                ysource  = as.double(Xsort$y),
+                idsource = as.integer(idXsort),
+                nntarget = as.integer(nY),
+                xtarget  = as.double(Ysort$x),
+                ytarget  = as.double(Ysort$y),
+                idtarget = as.integer(idYsort),
+                ddelta   = as.double(delta),
+                rrho     = as.double(rho),
+                values   = as.double(double(nX)),
+                PACKAGE = "spatstat")
+      answer <- integer(nX)
+      answer[oX] <- out$values
+    } else {
+      ## split off the hard core terms and return them separately
+      out <- .C("ESdiggra",
+                nnsource = as.integer(nX),
+                xsource  = as.double(Xsort$x),
+                ysource  = as.double(Xsort$y),
+                idsource = as.integer(idXsort),
+                nntarget = as.integer(nY),
+                xtarget  = as.double(Ysort$x),
+                ytarget  = as.double(Ysort$y),
+                idtarget = as.integer(idYsort),
+                ddelta   = as.double(delta),
+                rrho     = as.double(rho),
+                positive = as.double(double(nX)),
+                hardcore = as.integer(integer(nX)),
+                PACKAGE = "spatstat")
+      answer <- integer(nX)
+      hardcore <- logical(nX)
+      answer[oX] <- out$positive
+      hardcore[oX] <- as.logical(out$hardcore)
+      attr(answer, "hardcore") <- hardcore
+    }
     return(answer)
   }
 
@@ -128,8 +152,9 @@ DiggleGratton <- local({
        can.do.fast=function(X,correction,par) {
          return(all(correction %in% c("border", "none")))
        },
-       fasteval=function(X,U,EqualPairs,pairpot,potpars,correction, ...) {
-         # fast evaluator for DiggleGratton interaction
+       fasteval=function(X,U,EqualPairs,pairpot,potpars,correction,
+                      splitInf=FALSE, ...) {
+         ## fast evaluator for DiggleGratton interaction
          if(!all(correction %in% c("border", "none")))
            return(NULL)
          if(spatstat.options("fasteval") == "test")
@@ -139,9 +164,12 @@ DiggleGratton <- local({
          idX <- seq_len(npoints(X))
          idU <- rep.int(-1L, npoints(U))
          idU[EqualPairs[,2L]] <- EqualPairs[,1L]
-         answer <- diggraterms(U, X, idU, idX, delta, rho)
-         answer <- log(pmax.int(0, answer))
-         return(matrix(answer, ncol=1L))
+         values <- diggraterms(U, X, idU, idX, delta, rho, splitInf)
+         result <- log(pmax.int(0, values))
+         result <- matrix(result, ncol=1L)
+         if(!splitInf)
+           attr(result, "-Inf") <- attr(values, "hardcore")
+         return(result)
        },
        Mayer=function(coeffs, self) {
          # second Mayer cluster integral

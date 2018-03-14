@@ -530,3 +530,73 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+12-14 mar 2018
+
+   Redesigned handling of infinite potential values.
+
+   mpl.R
+   spatstat-internal.Rd
+	evalInteraction and evalInterEngine have argument 'splitInf'
+	If splitInf=TRUE the return value has attr(, "-Inf")
+
+   pairwise.family
+	$eval() has argument 'splitInf' 
+	If splitInf=TRUE the return value has attr(, "-Inf")
+
+   diggra.c
+	Additional functions to support splitInf=TRUE.
+	
+   dg.R
+   fiksel.R
+   hardcore.R
+   strausshard.R
+	'fasteval' has argument 'splitInf' 
+	If splitInf=TRUE the return value has attr(, "-Inf")
+
+   dgs.R
+   geyer.R
+   strauss.R
+	'fasteval' has argument 'splitInf' which is ignored.
+
+   strausshard.R
+	delta2() completely rewritten (inc bug fix)
+	delta2() returns attr(, "deltaInf")
+
+   pairwise.family.R
+	delta2() completely rewritten (inc bug fix)
+
+   mpl.R
+   spatstat-internal.Rd
+	mpl.prepare has argument 'splitInf' 
+	Hence bt.frame handles 'splitInf'
+	(the results have component 'forbid')
+
+   ppmclass.R
+   spatstat-internal.Rd
+	model.matrix.ppm now handles 'splitInf'
+	(the result has attribute "-Inf")
+
+   mpl.R
+	partialModelMatrix handles 'splitInf'
+	(the result has attribute "-Inf")
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+	New nickname 'Remove Before Flight'
+        version 1.55-0.030
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+************* STILL TO DO:
+
+    delta2 functions in
+	hierpair.family.R, hybrid.family.R
+
+    Generic code in 
+        deltasuffstat -> deltasufX, deltasufQ 
+
+	
+

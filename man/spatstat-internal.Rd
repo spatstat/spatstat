@@ -929,9 +929,9 @@ evalCovar(model, covariate, \dots)
           eps, nd, interpolate, jitter, modelname, covname, dataname,
           subset)
 evalCovariate(covariate, locations)
-evalInteraction(X,P,E,interaction,correction,finite,\dots,
+evalInteraction(X,P,E,interaction,correction,splitInf,\dots,
                 precomputed,savecomputed)
-evalInterEngine(X,P,E,interaction,correction,finite,\dots,
+evalInterEngine(X,P,E,interaction,correction,splitInf,\dots,
                 Reach,precomputed,savecomputed)
 evalPairPotential(X,P,E,pairpot,potpars,R)
 evalSparse3Dentrywise(expr, envir)
@@ -1117,7 +1117,8 @@ PoisSaddlePairwise(beta, fi)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 positiveIndex(i, nama, len)
-PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular)
+PPMmodelmatrix(object, data, \dots, subset, Q, keepNA, irregular,
+               splitInf)
 \method{print}{localpcfmatrix}(x, \dots)
 \method{plot}{localpcfmatrix}(x, \dots)
 putSpatstatVariable(name, value)
@@ -1171,7 +1172,7 @@ mpl.prepare(Q, X, P, trend, interaction, covariates,
             subsetexpr,
             covfunargs, allcovar, precomputed, savecomputed,
             vnamebase, vnameprefix, warn.illegal, warn.unidentifiable,
-            weightfactor, skip.border, clip.interaction)
+            weightfactor, skip.border, clip.interaction, splitInf)
 mpl.usable(x)
 MultiPair.checkmatrix(mat, n, matname, naok, zerook, asymmok)
 multiplicityNumeric(x)
