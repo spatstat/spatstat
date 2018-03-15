@@ -2,7 +2,7 @@
 #
 #    ordthresh.S
 #
-#    $Revision: 1.11 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.12 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Ord process with threshold potential
 #
@@ -26,6 +26,7 @@ OrdThresh <- local({
       },
       par      = list(r = NULL),
       parnames = "threshold distance",
+      hasInf   = FALSE,
       init     = function(self) {
         r <- self$par$r
         if(!is.numeric(r) || length(r) != 1 || r <= 0)

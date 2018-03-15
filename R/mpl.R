@@ -1,6 +1,6 @@
 #    mpl.R
 #
-#	$Revision: 5.229 $	$Date: 2018/03/14 09:12:34 $
+#	$Revision: 5.230 $	$Date: 2018/03/15 08:47:36 $
 #
 #    mpl.engine()
 #          Fit a point process model to a two-dimensional point pattern
@@ -115,7 +115,7 @@ mpl.engine <-
     the.version <- list(major=spv$major,
                         minor=spv$minor,
                         release=spv$patchlevel,
-                        date="$Date: 2018/03/14 09:12:34 $")
+                        date="$Date: 2018/03/15 08:47:36 $")
 
     if(want.inter) {
       ## ensure we're using the latest version of the interaction object
@@ -1031,7 +1031,7 @@ oversize.quad <- function(Q, ..., nU, nX, p=1) {
 quadBlockSizes <- function(nX, nD, p=1,
                            nMAX=spatstat.options("maxmatrix")/p,
                            announce=TRUE) {
-  if(inherits(nX, "quad") && missing(nD)) {
+  if(is.quad(nX) && missing(nD)) {
     nD <- npoints(nX$dummy)
     nX <- npoints(nX$data)
   }
@@ -1303,8 +1303,10 @@ deltasuffstat <- local({
     f <- fitin(model)
     Inames <- f$Vnames
     IsOffset <- f$IsOffset
+    hasInf <- !identical(inte$hasInf, FALSE)
+    
     ## Offset terms do not contribute to sufficient statistic
-    if(all(IsOffset)) 
+    if(all(IsOffset) && !hasInf)
       return(zeroes)
     
     ## Nontrivial interaction terms must be computed.
@@ -1417,14 +1419,23 @@ deltasuffstat <- local({
   deltasufX <- function(model, sparseOK=FALSE, verbose=FALSE) {
     stopifnot(is.ppm(model))
     X <- data.ppm(model)
+    hasInf <- !identical(model$interaction$hasInf, FALSE)
   
     nX <- npoints(X)
     p <- length(coef(model))
 
-    isdata <- is.data(quad.ppm(model))
-    m <- model.matrix(model)[isdata, ]
-    ok <- getppmdatasubset(model)
+    m <- model.matrix(model, splitInf=hasInf)
+    if(hasInf) {
+      isInf <- attr(m, "-Inf")
+      hasInf <- !is.null(isInf)
+    }
 
+    isdata <- is.data(quad.ppm(model))
+    m <- m[isdata, ,drop=FALSE]
+    if(hasInf)
+      isInf <- isInf[isdata]
+    ok <- getppmdatasubset(model)
+    
     ## canonical statistic before and after deleting X[j]
     ## mbefore[ , i, j] = h(X[i] | X)
     ## mafter[ , i, j] = h(X[i] | X[-j])
@@ -1432,9 +1443,15 @@ deltasuffstat <- local({
     dimwork <- c(p, nX, nX)
     if(!sparseOK) {
       mafter <- mbefore <- array(t(m), dim=dimwork)
+      isInfafter <- isInfbefore <-
+        if(!hasInf) NULL else matrix(isInf, dim=dimwork[-1]) 
     } else {
-      ## fill in values later
-       mafter <- mbefore <- sparse3Darray(dims=dimwork)
+      ## make empty arrays; fill in values later
+      ## (but only where they might change)
+      mafter <- mbefore <- sparse3Darray(dims=dimwork)
+      isInfafter <- isInfbefore <- if(!hasInf) NULL else
+        sparseMatrix(i=integer(0), j=integer(0), x=logical(0),
+                     dims=dimwork[-1])
     }
 
     ## identify close pairs
@@ -1491,26 +1508,40 @@ deltasuffstat <- local({
           ## values of sufficient statistic 
           ##    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
           ## for all j
-          pmj <- partialModelMatrix(X.i, empty, model)[J.i, , drop=FALSE]
+          pmj <- snipModelMatrix(X.i, empty, model, J.i, hasInf)
+          if(hasInf) zzj <- attr(pmj, "-Inf")
           ## sufficient statistic in reverse order
           ##    h(X[i] | X[-j]) = h(X[i] | X[-c(i,j)]
           ## for all j
           pmi <- matrix(, nJi, p)
+          zzi <- logical(nJi)
           for(k in 1:nJi) {
             ## j <- Ji[k]
             ## X.ij <- X[-c(i,j)]
             X.ij <- X.i[-J.i[k]]
-            pmi[k, ] <- partialModelMatrix(X.ij, Xi, model)[nX.i, ]
+            pmik <- snipModelMatrix(X.ij, Xi, model, nX.i, hasInf)
+            pmi[k, ] <- pmik
+            if(hasInf) zzi[k] <- attr(pmik, "-Inf")
           }
           ##
           if(!sparseOK) {
             mafter[ , Ji, i] <- t(pmj)
             mafter[ , i, Ji] <- t(pmi)
+            if(hasInf) {
+              isInfafter[Ji, i] <- zzj
+              isInfafter[i, Ji] <- zzi
+            }
           } else {
             mafter[ , Ji, i] <- array(t(pmj), dim=c(p, nJi, 1))
             mafter[ , i, Ji] <- array(t(pmi), dim=c(p, 1, nJi))
             mbefore[ , Ji, i] <- array(t(m[Ji,]), dim=c(p, nJi, 1))
             mbefore[ , i, Ji] <- array(m[i,], dim=c(p, 1, nJi))
+            if(hasInf) {
+              isInfafter[Ji, i] <- zzj
+              isInfafter[i, Ji] <- zzi
+              isInfbefore[Ji, i] <- isInf[Ji]
+              isInfbefore[i, Ji] <- isInf[i]
+            }
           } 
         }
         if(verbose)
@@ -1522,22 +1553,34 @@ deltasuffstat <- local({
     delta <- mbefore - mafter
     ## delta[i, j, ] = h(X[i] | X) - h(X[i] | X[-j])
     delta <- aperm(delta, c(2,3,1))
+    ##
+    if(hasInf) {
+      deltaInf <- isInfbefore - isInfafter
+      attr(delta, "deltaInf") <- deltaInf
+    }
     return(delta)
   }
 
   deltasufQ <- function(model, quadsub, sparseOK, verbose=FALSE) {
     stopifnot(is.ppm(model))
+    hasInf <- !identical(model$interaction$hasInf, FALSE)
 
     p <- length(coef(model))
     
     Q <- quad.ppm(model)
-    m <- model.matrix(model)
     ok <- getglmsubset(model)
+
+    m <- model.matrix(model, splitInf=hasInf)
+    if(hasInf) {
+      isInf <- attr(m, "-Inf")
+      hasInf <- !is.null(isInf)
+    }
 
     if(!is.null(quadsub)) {
       Q <- Q[quadsub]
       m <- m[quadsub, , drop=FALSE]
       ok <- ok[quadsub]
+      if(hasInf) isInf <- isInf[quadsub]
     }
     
     X <- Q$data
@@ -1552,9 +1595,16 @@ deltasuffstat <- local({
     if(!sparseOK) {
       mafter <- mbefore <- array(t(m), dim=dimwork)
       delta <- array(0, dim=dimwork)
+      isInfafter <- isInfbefore <- deltaInf <-
+        if(!hasInf) NULL else matrix(isInf, dim=dimwork[-1])
     } else {
-      ## fill in values later
+      ## make empty arrays; fill in values later
+      ## [but only where they might change]
       mafter <- mbefore <- delta <- sparse3Darray(dims=dimwork)
+      isInfafter <- isInfbefore <- deltaInf <-
+        if(!hasInf) NULL else sparseMatrix(i=integer(0), j=integer(0),
+                                           x=logical(0),
+                                           dims=dimwork[-1])
     }
     ##   mbefore[ , i, j] = h(U[i] | X)
     ## For data points X[j]
@@ -1629,11 +1679,15 @@ deltasuffstat <- local({
           ## values of sufficient statistic 
           ##    h(X[j] | X[-i]) = h(X[j] | X[-c(i,j)]
           ## for all j
-          pmj <- partialModelMatrix(X.i, DJi, model)[c(J.i, JDi), , drop=FALSE]
+          pmj <- snipModelMatrix(X.i, DJi, model, c(J.i, JDi), hasInf)
           ##
           mafter[ , Ji, i] <- t(pmj)
-          if(sparseOK) 
+          if(hasInf)
+            isInfafter[Ji, i] <- attr(pmj, "-Inf")
+          if(sparseOK) {
             mbefore[ , Ji, i] <- array(t(m[Ji,]), dim=c(p, nJi, 1))
+            if(hasInf) isInfbefore[Ji, i] <- isInf[Ji]
+          }
         }
         if(verbose)
           pstate <- progressreport(iter, nuIdata, state=pstate)
@@ -1669,14 +1723,20 @@ deltasuffstat <- local({
           ## values of sufficient statistic 
           ##    h(X[j] | X \cup U[i]) 
           ## for all j
-          pmj <- partialModelMatrix(XUi, DJi, model)[c(J.i, JDi), , drop=FALSE]
+          pmj <- snipModelMatrix(XUi, DJi, model, c(J.i, JDi), hasInf)
           ##
           JiSort <- c(JiData, JiDummy)
           if(!sparseOK) {
             mafter[ , JiSort, i] <- t(pmj)
+            if(hasInf)
+              isInfafter[JiSort, i] <- attr(pmj, "-Inf")
           } else {
             mafter[ , JiSort, i]  <- array(t(pmj), dim=c(p, nJi, 1))
             mbefore[ , JiSort, i] <- array(t(m[JiSort,]), dim=c(p, nJi, 1))
+            if(hasInf) {
+              isInfafter[JiSort, i] <- attr(pmj, "-Inf")
+              isInfbefore[JiSort, i] <- isInf[JiSort]
+            }
           }
         }
         if(verbose)
@@ -1690,9 +1750,23 @@ deltasuffstat <- local({
     delta[ , , isdummy] <- mafter[, , isdummy] - mbefore[ , , isdummy]
     ## rearrange: new delta[i,j,] = old delta[, i, j]
     delta <- aperm(delta, c(2,3,1))
+    ##
+    if(hasInf) {
+      deltaInf[ , isdata]  <- isInfbefore[ , isdata] - isInfafter[ , isdata]
+      deltaInf[ , isdummy] <- isInfafter[ , isdummy] - isInfbefore[ , isdummy]
+      attr(delta, "deltaInf") <- deltaInf
+    }
     return(delta)
   }
 
+  snipModelMatrix <- function(X, D, model, retain, splitInf=FALSE) {
+    M <- partialModelMatrix(X, D, model, splitInf=splitInf)
+    if(splitInf) isInf <- attr(M, "-Inf")
+    M <- M[retain, , drop=FALSE]
+    if(splitInf) attr(M, "-Inf") <- isInf[retain]
+    return(M)
+  }
+      
   deltasuffstat
 })
 

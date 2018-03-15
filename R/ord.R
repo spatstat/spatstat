@@ -2,7 +2,7 @@
 #
 #    ord.S
 #
-#    $Revision: 1.7 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.8 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Ord process with user-supplied potential
 #
@@ -24,6 +24,7 @@ Ord <- local({
          pot      = NULL,
          par      = NULL,
          parnames = NULL,
+         hasInf   = NA,
          init     = NULL,
          update   = function(self, ...){
            do.call(Ord,

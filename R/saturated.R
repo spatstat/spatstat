@@ -2,7 +2,7 @@
 #
 #    saturated.S
 #
-#    $Revision: 1.8 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.9 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Saturated pairwise process with user-supplied potential
 #
@@ -33,6 +33,7 @@ Saturated <- function(pot, name) {
          pot      = pot,
          par      = NULL,
          parnames = NULL,
+         hasInf   = NA,
          init     = NULL,
          update   = function(self, ...){
            do.call(Saturated,

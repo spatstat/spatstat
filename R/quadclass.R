@@ -80,6 +80,10 @@ quad <- function(data, dummy, w, param=NULL) {
   invisible(Q)
 }
 
+is.quad <- function(x) {
+  inherits(x, "quad")
+}
+
 # ------------------ extractor functions ----------------------
 
 x.quad <- function(Q) {

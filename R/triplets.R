@@ -2,7 +2,7 @@
 #
 #    triplets.R
 #
-#    $Revision: 1.17 $	$Date: 2016/12/30 01:44:07 $
+#    $Revision: 1.18 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The triplets interaction
 #
@@ -110,6 +110,7 @@ Triplets <- local({
          pot      = TripletPotential,
          par      = list(r=NULL), # filled in later
          parnames = "interaction distance",
+         hasInf   = FALSE,
          init     = function(self) {
                       r <- self$par$r
                       if(!is.numeric(r) || length(r) != 1 || r <= 0)

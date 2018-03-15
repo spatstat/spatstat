@@ -2,7 +2,7 @@
 #
 #    strauss.R
 #
-#    $Revision: 2.42 $	$Date: 2018/03/13 02:19:37 $
+#    $Revision: 2.43 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The Strauss process
 #
@@ -27,6 +27,7 @@ Strauss <- local({
        },
        par      = list(r = NULL), # to be filled in
        parnames = "interaction distance",
+       hasInf   = FALSE,
        init     = function(self) {
          r <- self$par$r
          if(!is.numeric(r) || length(r) != 1 || r <= 0)

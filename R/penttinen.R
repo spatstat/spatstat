@@ -2,7 +2,7 @@
 #
 #    penttinen.R
 #
-#    $Revision: 1.2 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.3 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Penttinen pairwise interaction
 #
@@ -30,6 +30,7 @@ Penttinen <- local({
        },
        par      = list(r = NULL), # to be filled in
        parnames = "circle radius",
+       hasInf = FALSE,
        init     = function(self) {
          r <- self$par$r
          if(!is.numeric(r) || length(r) != 1 || r <= 0)

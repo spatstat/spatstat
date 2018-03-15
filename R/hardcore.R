@@ -2,7 +2,7 @@
 #
 #    hardcore.S
 #
-#    $Revision: 1.13 $	$Date: 2018/03/12 13:09:33 $
+#    $Revision: 1.14 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The Hard core process
 #
@@ -27,7 +27,8 @@ Hardcore <- local({
            v
          },
          par    = list(hc = NULL),  # filled in later
-         parnames = "hard core distance", 
+         parnames = "hard core distance",
+         hasInf = TRUE, 
          selfstart = function(X, self) {
            # self starter for Hardcore
            nX <- npoints(X)

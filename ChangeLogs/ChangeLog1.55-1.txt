@@ -590,13 +590,75 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
-************* STILL TO DO:
+15 mar 2018
 
-    delta2 functions in
-	hierpair.family.R, hybrid.family.R
+   man/macros/defns.Rd
+      Correction to a macro
+      
+   areainter.R	
+   badgey.R	
+   concom.R	
+   dgs.R		
+   dg.R		
+   fiksel.R	
+   geyer.R		
+   hardcore.R	
+   hierhard.R
+   hierstrauss.R
+   hierstrhard.R
+   hybrid.R	
+   lennard.R	
+   multihard.R	
+   multistrauss.R	
+   multistrhard.R	
+   ordthresh.R	
+   ord.R		
+   pairpiece.R	
+   pairwise.R	
+   penttinen.R	
+   satpiece.R	
+   saturated.R	
+   softcore.R	
+   strauss.R	
+   strausshard.R	
+   triplets.R	
+      All interactions have a component $hasInf = TRUE, FALSE or NA
+      indicating whether they sometimes return -Inf values.
 
-    Generic code in 
-        deltasuffstat -> deltasufX, deltasufQ 
+   mpl.R
+      deltasuffstat generic code (deltasufX, deltasufQ)
+      now handles attr(,"-Inf") data
 
+   hybrid.family.R
+   hierpair.family.R
+      delta2 function now handles attr(,"deltainf") from each interaction
+
+   quadclass.R
+   spatstat-internal.Rd
+	new function is.quad
+
+   areainter.R
+   anova.ppm.R
+   Gcom.R
+   geyer.R
+   kppm.R
+   measures.R
+   mpl.R
+   ppm.R
+   predictmppm.R
+   psstA.R
+   psstG.R
+   psst.R
+   residppm.R
+   rho2hat.R
+   strausshard.R
+	replaced inherits(x,"quad") by is.quad(x)
 	
+   DESCRIPTION
+   NEWS
+        version 1.55-0.031
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
 

@@ -2,7 +2,7 @@
 #
 #    hybrid.R
 #
-#    $Revision: 1.8 $	$Date: 2017/02/07 07:35:32 $
+#    $Revision: 1.9 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Hybrid of several interactions
 #
@@ -49,6 +49,11 @@ Hybrid <- local({
     #' ensure all components have names
     names(interlist) <- good.names(names(interlist),
                                    "HybridComponent", 1:ncomponents)
+    #' check for infinite potential values
+    haveInf <- lapply(interlist, getElement, name="hasInf")
+    haveInf <- !sapply(haveInf, identical, y=FALSE)
+    hasInf <- any(haveInf)
+    #' build object
     out <- 
       list(
         name     = "Hybrid interaction",
@@ -57,6 +62,7 @@ Hybrid <- local({
         pot      = NULL,
         par      = interlist,
         parnames = names(interlist),
+        hasInf   = hasInf,
         selfstart = function(X, self) {
           ilist <- self$par
           sslist <- lapply(ilist, getElement, name="selfstart")

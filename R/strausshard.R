@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.33 $	$Date: 2018/03/13 05:14:44 $
+#    $Revision: 2.34 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The Strauss/hard core process
 #
@@ -28,6 +28,7 @@ StraussHard <- local({
          par    = list(r = NULL, hc = NULL), # filled in later
          parnames = c("interaction distance",
                       "hard core distance"), 
+         hasInf = TRUE, 
          selfstart = function(X, self) {
            # self starter for StraussHard
            nX <- npoints(X)
@@ -162,7 +163,7 @@ StraussHard <- local({
              vh <- sparseMatrix(i=ihit[changesJ], j=jhit[changesJ], x=TRUE,
                                 dims=c(nU, nU))
            }
-         } else if(inherits(X, "quad")) {
+         } else if(is.quad(X)) {
            #' count conflicts with existing data points
            izdat <- is.data(X)
            hitdata <- izdat[ihit]

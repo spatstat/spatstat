@@ -2,7 +2,7 @@
 #
 #    dgs.R
 #
-#    $Revision: 1.10 $	$Date: 2018/03/12 10:42:00 $
+#    $Revision: 1.11 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Diggle-Gates-Stibbard process
 #
@@ -56,7 +56,8 @@ DiggleGatesStibbard <- local({
            v
          },
          par    = list(rho = NULL),  # to be filled in later
-         parnames = "interaction range", 
+         parnames = "interaction range",
+         hasInf = TRUE,
          init   = function(self) {
            rho <- self$par$rho
            if(!is.numeric(rho) || length(rho) != 1L || rho <= 0)

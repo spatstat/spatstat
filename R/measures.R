@@ -6,7 +6,7 @@
 #  $Revision: 1.74 $  $Date: 2018/03/07 01:03:48 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
-  if(!inherits(qscheme, "quad"))
+  if(!is.quad(qscheme))
     stop("qscheme should be a quadrature scheme")
   nquad <- n.quad(qscheme)
   U <- union.quad(qscheme)

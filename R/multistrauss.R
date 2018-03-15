@@ -102,6 +102,7 @@ MultiStrauss <- local({
        parnames = c("possible types", "interaction distances"),
        pardesc  = c("vector of possible types",
                     "matrix of hardcore distances"),
+       hasInf   = FALSE,
        selfstart = function(X, self) {
          if(!is.null(self$par$types)) return(self)
          types <- levels(marks(X))

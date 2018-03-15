@@ -197,7 +197,7 @@ predict.mppm <- local({
     }
     
     ## ensure Y contains data points only 
-    if(inherits(Y[[1]], "quad"))
+    if(is.quad(Y[[1]]))
       Y <- lapply(Y, getElement, name="data")
 
     ## Determine locations for prediction

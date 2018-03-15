@@ -2,7 +2,7 @@
 #
 #    geyer.S
 #
-#    $Revision: 2.41 $	$Date: 2018/03/13 02:20:45 $
+#    $Revision: 2.42 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Geyer's saturation process
 #
@@ -25,6 +25,7 @@ Geyer <- local({
                     },
          par      = list(r = NULL, sat=NULL),  # filled in later
          parnames = c("interaction distance","saturation parameter"),
+         hasInf   = FALSE,
          init     = function(self) {
                       r <- self$par$r
                       sat <- self$par$sat
@@ -243,7 +244,7 @@ geyerdelta2 <- local({
       # evaluate \Delta_{x_i} \Delta_{x_j} S(x) for data points x_i, x_j
       # i.e.  h(X[i]|X) - h(X[i]|X[-j]) where h is first order cif statistic
       return(geydelppp(X, r, sat, correction, sparseOK))
-    } else if(inherits(X, "quad")) {
+    } else if(is.quad(X)) {
       # evaluate \Delta_{u_i} \Delta_{u_j} S(x) for quadrature points u_i, u_j
       return(geydelquad(X, r, sat, correction, sparseOK))
     } else stop("Internal error: X should be a ppp or quad object")

@@ -2,7 +2,7 @@
 #
 #    fiksel.R
 #
-#    $Revision: 1.17 $	$Date: 2018/03/13 02:17:36 $
+#    $Revision: 1.18 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Fiksel interaction 
 #    
@@ -68,7 +68,8 @@ Fiksel <- local({
          par    = list(r = NULL, hc = NULL, kappa=NULL),  # filled in later
          parnames = c("interaction distance",
                       "hard core distance",
-                      "rate parameter"), 
+                      "rate parameter"),
+         hasInf = TRUE, 
          selfstart = function(X, self) {
            # self starter for Fiksel
            nX <- npoints(X)

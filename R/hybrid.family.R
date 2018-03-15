@@ -1,7 +1,7 @@
 #
 #   hybrid.family.R
 #
-#    $Revision: 1.12 $	$Date: 2017/02/07 07:35:32 $
+#    $Revision: 1.13 $	$Date: 2018/03/15 08:47:20 $
 #
 #    Hybrid interactions
 #
@@ -140,6 +140,7 @@ hybrid.family <-
        delta2 = function(X, inte, correction, ..., sparseOK=FALSE) {
          ## Sufficient statistic for second order conditional intensity
          result <- NULL
+         deltaInf <- FALSE
          interlist <- inte$par
          for(ii in interlist) {
            v <- NULL
@@ -162,7 +163,10 @@ hybrid.family <-
            } else {
              result <- abind::abind(as.array(result), v, along=3)
            }
+           deltaInf <- deltaInf | (attr(v, "deltaInf") %orifnull% FALSE)
          }
+         if(length(dim(deltaInf)))
+           attr(result, "deltaInf") <- deltaInf
          return(result)
        },
        suffstat = NULL

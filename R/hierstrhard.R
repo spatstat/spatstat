@@ -1,7 +1,7 @@
 ##
 ##    hierstrhard.R
 ##
-##    $Revision: 1.4 $	$Date: 2017/02/07 07:35:32 $
+##    $Revision: 1.5 $	$Date: 2018/03/15 07:37:41 $
 ##
 ##    The hierarchical Strauss-hard core process
 ##
@@ -108,7 +108,8 @@ HierStraussHard <- local({
     pardesc  = c("vector of possible types",
                   "matrix of interaction distances",
                   "matrix of hardcore distances",
-                  "hierarchical order"),
+                 "hierarchical order"),
+    hasInf = TRUE, 
     selfstart = function(X, self) {
       types <- self$par$types
       hradii <- self$par$hradii

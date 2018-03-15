@@ -12,7 +12,7 @@ rho2hat <- function(object, cov1, cov2, ..., method=c("ratio", "reweight")) {
   callstring <- short.deparse(sys.call())
   method <- match.arg(method)
   # validate model
-  if(is.ppp(object) || inherits(object, "quad")) {
+  if(is.ppp(object) || is.quad(object)) {
     model <- ppm(object, ~1, forcefit=TRUE)
     reference <- "area"
     modelcall <- NULL

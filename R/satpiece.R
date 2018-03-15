@@ -2,7 +2,7 @@
 #
 #    satpiece.S
 #
-#    $Revision: 1.16 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.17 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Saturated pairwise interaction process with piecewise constant potential
 #
@@ -46,6 +46,7 @@ SatPiece <- local({
                     },
          par      = list(r = NULL, sat=NULL), # filled in later
          parnames = c("interaction thresholds", "saturation parameters"),
+         hasInf = FALSE, 
          init     = function(self) {
                       r <- self$par$r
                       sat <- self$par$sat

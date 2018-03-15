@@ -2,7 +2,7 @@
 #
 #    pairwise.S
 #
-#    $Revision: 1.10 $	$Date: 2015/10/21 09:06:57 $
+#    $Revision: 1.11 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Pairwise()    create a user-defined pairwise interaction process
 #                 [an object of class 'interact']
@@ -50,6 +50,7 @@ Pairwise <- function(pot, name = "user-defined pairwise interaction process",
          pot      = pot,
          par      = par,
          parnames = parnames,
+         hasInf   = NA,
          init     = NULL,
          update   = function(self, ...){
            do.call(Pairwise,

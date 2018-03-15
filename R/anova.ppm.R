@@ -8,7 +8,7 @@ anova.ppm <- local({
 
   do.gripe <- function(...) warning(paste(...), call.=FALSE)
   dont.gripe <- function(...) NULL
-  nquad <- function(x) { if(inherits(x, "quad")) n.quad(x) else 0 }
+  nquad <- function(x) { if(is.quad(x)) n.quad(x) else 0 }
   fmlaString <- function(z) { paste(as.expression(formula(z))) }
   interString <- function(z) { as.interact(z)$creator }
 

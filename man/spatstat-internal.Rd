@@ -257,6 +257,7 @@
 \alias{is.pp3}
 \alias{is.ppx}
 \alias{is.psp}
+\alias{is.quad}
 \alias{is.scov}
 \alias{is.sob}
 \alias{is.tess}
@@ -1047,6 +1048,7 @@ is.mppm(x)
 is.pp3(x)
 is.ppx(x)
 is.psp(x)
+is.quad(x)
 is.scov(x)
 is.sob(x)
 is.tess(x)

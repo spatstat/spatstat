@@ -1,7 +1,7 @@
 #
 #     dg.S
 #
-#    $Revision: 1.21 $	$Date: 2018/03/12 13:08:24 $
+#    $Revision: 1.22 $	$Date: 2018/03/15 07:37:41 $
 #
 #     Diggle-Gratton pair potential
 #
@@ -83,6 +83,7 @@ DiggleGratton <- local({
                     },
          par      = list(delta=NULL, rho=NULL),  # to be filled in later
          parnames = list("lower limit delta", "upper limit rho"),
+         hasInf   = TRUE, 
          selfstart = function(X, self) {
            # self starter for DiggleGratton
            nX <- npoints(X)

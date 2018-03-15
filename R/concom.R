@@ -2,7 +2,7 @@
 #
 #    concom.R
 #
-#    $Revision: 1.4 $	$Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.5 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The connected component interaction
 #
@@ -82,6 +82,7 @@ Concom <- local({
          pot      = cocopot,
          par      = list(r = NULL), # to be filled in
          parnames = "distance threshold",
+         hasInf   = FALSE,
          init     = function(self) {
                       r <- self$par$r
                       if(!is.numeric(r) || length(r) != 1L || r <= 0)

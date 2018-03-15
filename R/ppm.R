@@ -136,9 +136,7 @@ function(Q,
   if(is.ppp(Q) && is.marked(Q) && !is.multitype(Q)) 
     stop(paste("ppm is not yet implemented for marked point patterns,",
                "other than multitype patterns."))
-  if(!(is.ppp(Q) ||
-       inherits(Q, "quad") ||
-       checkfields(Q, c("data", "dummy")))) {
+  if(!(is.ppp(Q) || is.quad(Q) || checkfields(Q, c("data", "dummy")))) {
     stop("Argument Q must be a point pattern or a quadrature scheme")
   }
   X <- if(is.ppp(Q)) Q else Q$data

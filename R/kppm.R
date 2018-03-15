@@ -96,7 +96,7 @@ kppm.ppp <- kppm.quad <-
                       rmax = rmax)
   Xenv <- list2env(as.list(covariates), parent=parent.frame())
   X <- eval(substitute(X), envir=Xenv, enclos=baseenv())
-  isquad <- inherits(X, "quad")
+  isquad <- is.quad(X)
   if(!is.ppp(X) && !isquad)
     stop("X should be a point pattern (ppp) or quadrature scheme (quad)")
   if(is.marked(X))

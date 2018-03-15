@@ -2,7 +2,7 @@
 #
 #    multihard.R
 #
-#    $Revision: 1.17 $	$Date: 2016/02/16 01:39:12 $
+#    $Revision: 1.18 $	$Date: 2018/03/15 07:37:41 $
 #
 #    The Hard core process
 #
@@ -101,6 +101,7 @@ MultiHard <- local({
        parnames = c("possible types", "hardcore distances"),
        pardesc  = c("vector of possible types",
                     "matrix of hardcore distances"),
+       hasInf   = TRUE,
        selfstart = function(X, self) {
          types <- self$par$types
          hradii <- self$par$hradii

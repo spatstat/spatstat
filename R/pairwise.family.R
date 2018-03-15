@@ -448,7 +448,7 @@ return(V)
         #' iff EITHER
         #'     U[i] = X[i] is a data point and
         #'     U[j] is only in conflict with X[i],
-        deltaInf <- M
+        deltaInf <- apply(M, c(1,2), any)
         deltaInf[izdat, nhitdata != 1] <- FALSE
         #' OR
         #'     U[i] is a dummy point,

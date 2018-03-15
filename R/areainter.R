@@ -2,7 +2,7 @@
 #
 #    areainter.R
 #
-#    $Revision: 1.47 $	$Date: 2017/11/03 08:17:58 $
+#    $Revision: 1.48 $	$Date: 2018/03/15 07:07:19 $
 #
 #    The area interaction
 #
@@ -75,6 +75,7 @@ AreaInter <- local({
          pot      = areapot,
          par      = list(r = NULL), # to be filled in
          parnames = "disc radius",
+         hasInf   = FALSE,
          init     = function(self) {
                       r <- self$par$r
                       if(!is.numeric(r) || length(r) != 1 || r <= 0)
@@ -173,7 +174,7 @@ areadelta2 <- local({
     # Sufficient statistic for second order conditional intensity
     # Area-interaction model 
     if(is.ppp(X)) return(areadelppp(X, r, ..., sparseOK=sparseOK)) else
-    if(inherits(X, "quad")) return(areadelquad(X, r, sparseOK=sparseOK)) else
+    if(is.quad(X)) return(areadelquad(X, r, sparseOK=sparseOK)) else
     stop("internal error: X should be a ppp or quad object")
   }
 

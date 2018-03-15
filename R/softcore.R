@@ -2,7 +2,7 @@
 #
 #    softcore.S
 #
-#    $Revision: 2.15 $   $Date: 2016/02/16 01:39:12 $
+#    $Revision: 2.16 $   $Date: 2018/03/15 07:37:41 $
 #
 #    Soft core processes.
 #
@@ -34,6 +34,7 @@ Softcore <- local({
        },
        par      = list(kappa = NULL, sigma0=NA),  # filled in later
        parnames = c("Exponent kappa", "Initial approximation to sigma"),
+       hasInf = TRUE, 
        selfstart = function(X, self) {
          # self starter for Softcore
          if(npoints(X) < 2) {

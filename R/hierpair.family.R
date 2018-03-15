@@ -2,7 +2,7 @@
 #
 #    hierpair.family.R
 #
-#    $Revision: 1.6 $	$Date: 2017/02/07 07:35:32 $
+#    $Revision: 1.7 $	$Date: 2018/03/15 08:51:50 $
 #
 #    The family of hierarchical pairwise interactions
 #
@@ -303,15 +303,70 @@ return(V)
   # Sufficient statistic for second order conditional intensity
   # for hierarchical pairwise interaction processes
   # Equivalent to evaluating pair potential.
-    X <- as.ppp(X)
-    nX <- npoints(X)
-    E <- cbind(1:nX, 1:nX)
-    R <- reach(inte)
-    result <- hierpair.family$eval(X,X,E,
-                                   inte$pot,inte$par,
-                                   correction,
-                                   pot.only=TRUE,
-                                   Reach=R)
+    if(is.ppp(X)) {
+      seqX <- seq_len(npoints(X))
+      E <- cbind(seqX, seqX)
+      R <- reach(inte)
+      result <- hierpair.family$eval(X,X,E,
+                                     inte$pot,inte$par,
+                                     correction,
+                                     pot.only=TRUE,
+                                     Reach=R, splitInf=TRUE)
+      M <- attr(result, "IsNegInf")
+      if(!is.null(M)) {
+        #' validate
+        if(length(dim(M)) != 3)
+          stop("Internal error: IsNegInf is not a 3D array")
+        #' collapse vector-valued potential, yielding a matrix
+        M <- apply(M, c(1,2), any)
+        if(!is.matrix(M)) M <- matrix(M, nrow=nX)
+        #' count conflicts
+        hits <- colSums(M)
+        #'  hits[j] == 1 implies that X[j] violates hard core with only one X[i]
+        #'  and therefore changes status if X[i] is deleted.
+        deltaInf <- M
+        deltaInf[, hits != 1] <- FALSE
+      }
+    } else if(is.quad(X)) {
+      U <- union.quad(X)
+      izdat <- is.data(X)
+      nU <- npoints(U)
+      nX <- npoints(X$data)
+      seqU <- seq_len(nU)
+      E <- cbind(seqU, seqU)
+      R <- reach(inte)
+      result <- hierpair.family$eval(U,U,E,
+                                     inte$pot,inte$par,
+                                     correction,
+                                     pot.only=TRUE,
+                                     Reach=R, splitInf=TRUE)
+      M <- attr(result, "IsNegInf")
+      if(!is.null(M)) {
+        #' validate
+        if(length(dim(M)) != 3)
+          stop("Internal error: IsNegInf is not a 3D array")
+        #' consider conflicts with data points
+        MXU <- M[izdat, , , drop=FALSE]
+        #' collapse vector-valued potential, yielding a matrix
+        MXU <- apply(MXU, c(1,2), any)
+        if(!is.matrix(MXU)) MXU <- matrix(MXU, nrow=nX)
+        #' count data points conflicting with each quadrature point
+        nhitdata <- colSums(MXU)
+        #' for a conflicting pair U[i], U[j],
+        #' status of U[j] will change when U[i] is added/deleted
+        #' iff EITHER
+        #'     U[i] = X[i] is a data point and
+        #'     U[j] is only in conflict with X[i],
+        deltaInf <- apply(M, c(1,2), any)
+        deltaInf[izdat, nhitdata != 1] <- FALSE
+        #' OR
+        #'     U[i] is a dummy point,
+        #'     U[j] has no conflicts with X.
+        deltaInf[!izdat, nhitdata != 0] <- FALSE
+      }
+    }
+    attr(result, "deltaInf") <- deltaInf
+    return(result)
   }
 ######### end of function $delta2
 )

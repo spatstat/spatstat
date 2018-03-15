@@ -15,9 +15,9 @@ psst <- function(object, fun, r=NULL, breaks=NULL, ...,
                  truecoef=NULL, hi.res=NULL,
                  funargs=list(correction="best"),
                  verbose=TRUE) {
-  if(inherits(object, "ppm")) {
+  if(is.ppm(object)) {
     fit <- object
-  } else if(is.ppp(object) || inherits(object, "quad")) {
+  } else if(is.ppp(object) || is.quad(object)) {
     if(is.ppp(object)) object <- quadscheme(object, ...)
     if(!is.null(model)) {
       fit <- update(model, Q=object, forcefit=TRUE)

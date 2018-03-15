@@ -18,11 +18,13 @@ fii <- function(interaction=NULL, coefs=numeric(0),
   else {
     stopifnot(is.logical(IsOffset))
     stopifnot(length(IsOffset) == length(Vnames))
-  } 
+  }
+  hasInf <- !identical(interaction$hasInf, FALSE)
   out <- list(interaction=interaction,
               coefs=coefs,
               Vnames=Vnames,
-              IsOffset=IsOffset)
+              IsOffset=IsOffset,
+              hasInf=hasInf)
   class(out) <- c("fii", class(out))
   return(out)
 }

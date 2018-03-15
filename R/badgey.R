@@ -2,7 +2,7 @@
 #
 #    badgey.S
 #
-#    $Revision: 1.16 $	$Date: 2016/04/25 02:34:40 $
+#    $Revision: 1.17 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Hybrid Geyer process
 #
@@ -47,6 +47,7 @@ BadGey <- local({
                     },
          par      = list(r = NULL, sat=NULL), # to fill in later
          parnames = c("interaction radii", "saturation parameters"),
+         hasInf   = FALSE,
          init     = function(self) {
                       r <- self$par$r
                       sat <- self$par$sat

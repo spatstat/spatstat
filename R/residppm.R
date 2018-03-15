@@ -47,7 +47,7 @@ residuals.ppm <-
     } else {
       # estimate model parameters using a (presumably) denser set of dummy pts
       # Determine new quadrature scheme
-      if(inherits(quad, "quad")) 
+      if(is.quad(quad))
         hi.res.quad <- quad
       else if(is.ppp(quad))
         hi.res.quad <- quadscheme(data=data.ppm(object), dummy=quad)

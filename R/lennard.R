@@ -2,7 +2,7 @@
 #
 #    lennard.R
 #
-#    $Revision: 1.21 $	$Date: 2017/02/07 08:12:05 $
+#    $Revision: 1.22 $	$Date: 2018/03/15 07:37:41 $
 #
 #    Lennard-Jones potential
 #
@@ -38,6 +38,7 @@ LennardJones <- local({
          },
          par      = list(sigma0=NULL),  # filled in later
          parnames = "Initial approximation to sigma",
+         hasInf = TRUE,
          selfstart = function(X, self) {
            # self starter for Lennard Jones
            # attempt to set value of 'sigma0'

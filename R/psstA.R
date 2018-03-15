@@ -16,11 +16,11 @@ psstA <- function(object, r=NULL, breaks=NULL, ...,
                   truecoef=NULL, hi.res=NULL,
                   nr=spatstat.options("psstA.nr"),
                   ngrid=spatstat.options("psstA.ngrid")) {
-  if(inherits(object, "ppm")) 
+  if(is.ppm(object))
     fit <- object
-  else if(inherits(object, "ppp") || inherits(object, "quad")) {
+  else if(is.ppp(object) || is.quad(object)) {
     # convert to quadscheme
-    if(inherits(object, "ppp"))
+    if(is.ppp(object))
       object <- quadscheme(object, ...)
     # fit model
     if(!is.null(model))

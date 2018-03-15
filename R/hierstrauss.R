@@ -1,7 +1,7 @@
 ##
 ##    hierstrauss.R
 ##
-##    $Revision: 1.9 $	$Date: 2016/02/16 01:39:12 $
+##    $Revision: 1.10 $	$Date: 2018/03/15 07:37:41 $
 ##
 ##    The hierarchical Strauss process
 ##
@@ -91,6 +91,7 @@ HierStrauss <- local({
        parnames = c("possible types",
                     "interaction distances",
                     "hierarchical order"),
+       hasInf   = FALSE,
        selfstart = function(X, self) {
          if(!is.null(self$par$types) && !is.null(self$par$archy))
            return(self)
