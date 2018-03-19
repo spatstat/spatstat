@@ -2,7 +2,7 @@
 #
 #    hardcore.S
 #
-#    $Revision: 1.14 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 1.15 $	$Date: 2018/03/19 14:44:53 $
 #
 #    The Hard core process
 #
@@ -97,7 +97,7 @@ Hardcore <- local({
            v <- matrix(ifelseAB(forbid, -Inf, 0), ncol=1L)
          } else {
            ## separate hard core 
-           v <- matrix(FALSE, nrow=npoints(U), ncol=1L)
+           v <- matrix(0, nrow=npoints(U), ncol=1L)
            attr(v, "-Inf") <- forbid
          }
          attr(v, "IsOffset") <- TRUE

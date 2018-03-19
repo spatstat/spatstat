@@ -440,6 +440,8 @@ predict.ppm <- local({
     ## #############################################################
 
     needSE <- se || (interval != "none")
+
+    attribeauts <- list()
     
     if(trivial) {
       ## ###########  UNIFORM POISSON PROCESS #####################
@@ -524,13 +526,17 @@ predict.ppm <- local({
     
       ## evaluate interaction
       Vnew <- evalInteraction(X, U, E, inter, correction=correction,
-                              finite=ignore.hardcore,
+                              splitInf=ignore.hardcore,
                               check=check)
 
       if(!ignore.hardcore) {
         ## Negative infinite values of potential signify cif = zero
         cif.equals.zero <- matrowany(Vnew == -Inf)
+      } else {
+        ## returned as attribute, unless vacuous
+        cif.equals.zero <- attr(Vnew, "-Inf") %orifnull% logical(nrow(Vnew))
       }
+      attribeauts <- c(attribeauts, list(isZero=cif.equals.zero))
     
       ## Insert the potential into the relevant column(s) of `newdata'
       if(ncol(Vnew) == 1) {
@@ -583,11 +589,15 @@ predict.ppm <- local({
     ##
     if(!want.image) {
       if(!se) {
-        out <- as.vector(z)
+        z <- as.vector(z)
+	attributes(z) <- c(attributes(z), attribeauts)
+        out <- z
       } else if(seonly) {
         out <- as.vector(zse)
       } else {
-        out <- list(as.vector(z), as.vector(zse))
+        z <- as.vector(z)
+	attributes(z) <- c(attributes(z), attribeauts)
+        out <- list(z, as.vector(zse))
         names(out) <- c(estimatename, "se")
       }
     }

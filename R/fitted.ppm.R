@@ -3,12 +3,13 @@
 #
 # method for 'fitted' for ppm objects
 #
-#   $Revision: 1.17 $   $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.18 $   $Date: 2018/03/19 14:29:48 $
 # 
 
 fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
                        new.coef=NULL, leaveoneout=FALSE,
-                       drop=FALSE, check=TRUE, repair=TRUE, dropcoef=FALSE) {
+                       drop=FALSE, check=TRUE, repair=TRUE,
+		       ignore.hardcore=FALSE, dropcoef=FALSE) {
   verifyclass(object, "ppm")
 
   if(check && damaged.ppm(object)) {
@@ -52,15 +53,34 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
     if(interacting) 
       switch(type,
            trend={
-             # zero the interaction statistics
+             ## zero the interaction statistics
              glmdata[ , Vnames] <- 0
            },
            link=,
            lambda={
-             # Find any dummy points with zero conditional intensity
-             forbid <- matrowany(as.matrix(glmdata[, Vnames]) == -Inf)
-             # exclude from predict.glm
-             glmdata <- glmdata[!forbid, ]
+             if(!ignore.hardcore) {
+               ## Find any dummy points with zero conditional intensity
+               forbid <- matrowany(as.matrix(glmdata[, Vnames]) == -Inf)
+               ## Exclude these locations from predict.glm
+               glmdata <- glmdata[!forbid, ]
+	     } else {
+	       ## Compute positive part of cif
+               Q <- quad.ppm(object, drop=drop)
+               X <- Q[["data"]]
+               U <- union.quad(Q)
+               E <- equalpairs.quad(Q)
+               eva <- evalInteraction(X, U, E,
+                                      object$interaction,
+                                      object$correction, 
+                                      splitInf=TRUE)
+	       forbid <- attr(eva, "-Inf") %orifnull% logical(npoints(U))
+	       ## Use positive part of interaction
+               if(ncol(eva) != length(Vnames)) 
+                 stop(paste("Internal error: evalInteraction yielded",
+                            ncol(eva), "variables instead of", length(Vnames)),
+                      call.=FALSE)
+	       glmdata[,Vnames] <- as.data.frame(eva)
+	     }
            })
 
     # Compute predicted [conditional] intensity values
@@ -73,7 +93,7 @@ fitted.ppm <- function(object, ..., type="lambda", dataonly=FALSE,
     # we would only get predictions at the quadrature points j
     # where glmdata$SUBSET[j]=TRUE. Assuming drop=FALSE.
 
-    if(interacting && type=="lambda") {
+    if(interacting && type=="lambda" && !ignore.hardcore) {
      # reinsert zeroes
       lam <- numeric(length(forbid))
       lam[forbid] <- 0

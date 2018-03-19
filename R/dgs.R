@@ -2,7 +2,7 @@
 #
 #    dgs.R
 #
-#    $Revision: 1.11 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 1.12 $	$Date: 2018/03/19 14:41:54 $
 #
 #    Diggle-Gates-Stibbard process
 #
@@ -37,7 +37,7 @@ DiggleGatesStibbard <- local({
             rrho     = as.double(rho),
             values   = as.double(double(nX)),
             PACKAGE = "spatstat")
-    answer <- integer(nX)
+    answer <- numeric(nX)
     answer[oX] <- out$values
     return(answer)
   }

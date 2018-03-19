@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.101 $ $Date: 2018/01/31 05:29:58 $
+#  $Revision: 1.105 $ $Date: 2018/03/19 14:29:40 $
 #
 
 leverage <- function(model, ...) {
@@ -80,6 +80,8 @@ dfbetas.ppmInfluence <- function(model, ...) { model$dfbetas }
 
 avenndist <- function(X) mean(nndist(X))
 
+## ...............  main workhorse ....................................
+
 ppmInfluenceEngine <- function(fit,
                          what=c("leverage", "influence", "dfbetas",
                            "score", "derivatives", "increments"),
@@ -96,18 +98,10 @@ ppmInfluenceEngine <- function(fit,
                          matrix.action = c("warn", "fatal", "silent"),
                          dimyx=NULL, eps=NULL,
                          geomsmooth = TRUE) {
-  logi <- identical(fit$method, "logi")
   if(is.null(fitname)) 
     fitname <- short.deparse(substitute(fit))
-  stopifnot(is.ppm(fit))
 
-  #' ensure object contains GLM fit
-  if(!hasglmfit(fit)) {
-    fit <- update(fit, forcefit=TRUE)
-    precomputed <- list()
-  }
-  
-  ## type of calculation
+  ## type of calculation to be performed
   method <- match.arg(method)
   what <- match.arg(what, several.ok=TRUE)
   matrix.action <- match.arg(matrix.action)
@@ -117,6 +111,33 @@ ppmInfluenceEngine <- function(fit,
   sparse <- sparseOK 
   target <- paste(what, collapse=",")
   
+  ## ...........  collect information about the model .................
+  
+  stopifnot(is.ppm(fit))
+
+  #' ensure object contains GLM fit
+  if(!hasglmfit(fit)) {
+    fit <- update(fit, forcefit=TRUE)
+    precomputed <- list()
+  }
+
+  #' type of interpoint interaction
+  fit.is.poisson <- is.poisson(fit)
+  hasInf <- !fit.is.poisson && !identical(fit$interaction$hasInf, FALSE)
+
+  #' estimating function 
+  fitmethod <- fit$method
+  logi <- (fitmethod == "logi")
+  pseudo <- (fitmethod == "mpl")
+  if(!logi && !pseudo) {
+    warning(paste("Model was fitted with method =", dQuote(fitmethod),
+                  "but is treated as having been fitted by maximum",
+		  if(fit.is.poisson) "likelihood" else "pseudolikelihood",
+		  "for leverage/influence calculation"),
+	    call.=FALSE)
+    pseudo <- TRUE
+  }
+
   ## Detect presence of irregular parameters
   if(is.null(iArgs))
     iArgs <- fit$covfunargs
@@ -126,10 +147,22 @@ ppmInfluenceEngine <- function(fit,
   if(!gotHess && needHess)
     stop("Must supply iHessian", call.=FALSE)
 
+  #' ...................  evaluate basic terms ....................
+  
   ## extract values from model, using precomputed values if given
   theta  <- precomputed$coef   %orifnull% coef(fit)
-  lam    <- precomputed$lambda %orifnull% fitted(fit, check=FALSE)
-  mom    <- precomputed$mom    %orifnull% model.matrix(fit)
+  lampos <- precomputed$lambda %orifnull% fitted(fit, ignore.hardcore=hasInf,
+                                                      check=FALSE)
+  mom    <- precomputed$mom    %orifnull% model.matrix(fit, splitInf=hasInf)
+
+  ## 'lampos' is positive part of cif
+  ## 'lam' is full model cif including zeroes
+  lam <- lampos
+  zerocif <- attr(mom, "-Inf") %orifnull% logical(nrow(mom))
+  anyzerocif <- any(zerocif)
+  if(hasInf && anyzerocif)
+    lam[zerocif] <- 0
+  
   p <- length(theta)
   Q <- quad.ppm(fit)
   w <- w.quad(Q)
@@ -147,6 +180,8 @@ ppmInfluenceEngine <- function(fit,
   if(is.null(dimyx) && is.null(eps)) 
     eps <- sqrt(prod(sidelengths(Frame(loc))))/256
 
+  #' ...............  evaluate Hessian of regular parameters ................
+
   ## domain of composite likelihood
   ## (e.g. eroded window in border correction)
   inside <- getglmsubset(fit) %orifnull% rep(TRUE, npoints(loc))
@@ -154,10 +189,12 @@ ppmInfluenceEngine <- function(fit,
   ## extract negative Hessian matrix of regular part of log composite likelihood
   ##  hess = negative Hessian H
   ##  fgrad = Fisher-scoring-like gradient G = estimate of E[H]
-  if(logi){
+
+  if(logi) {
+    ## ..............    logistic composite likelihood ......................
     ## Intensity of dummy points
     rho <- fit$Q$param$rho %orifnull% intensity(as.ppp(fit$Q))
-    logiprob <- lam / (lam + rho)
+    logiprob <- lampos / (lampos + rho)
     vclist <- vcov(fit, what = "internals", fine=fine, matrix.action="silent")
     hess <- vclist$Slog
     fgrad <- vclist$fisher
@@ -175,15 +212,18 @@ ppmInfluenceEngine <- function(fit,
     }
 #    vc <- invhess %*% (vclist$Sigma1log+vclist$Sigma2log) %*% invhess
   } else {
+    ## ..............  likelihood or pseudolikelihood ....................
     invfgrad <- vcov(fit, hessian=TRUE, fine=fine, matrix.action="silent")
-    fgrad <- hess <-
-      if(is.null(invfgrad) || anyNA(invfgrad)) NULL else checksolve(invfgrad, "silent")
+    fgrad <- hess <- if(is.null(invfgrad) || anyNA(invfgrad)) NULL else
+                     checksolve(invfgrad, "silent")
     if(is.null(fgrad)) {
       invfgrad <- vcov(fit, hessian=TRUE, fine=TRUE,
                        matrix.action=matrix.action)
       fgrad <- hess <- checksolve(invfgrad, matrix.action, "Hessian", target)
     }
   }
+
+  #' ...............  augment Hessian  ...................
 
   ## evaluate additional (`irregular') components of score, if any
   iscoremat <- ppmDerivatives(fit, "gradient", iScore, loc, covfunargs=iArgs)
@@ -207,7 +247,7 @@ ppmInfluenceEngine <- function(fit,
       fgrad <- hessextra <- matrix(0, ncol(mom), ncol(mom))
     }  
     if(!logi) {
-      ## pseudolikelihood
+      ## ..............  likelihood or pseudolikelihood ....................
       switch(method,
              interpreted = {
                for(i in seq(loc$n)) {
@@ -264,9 +304,7 @@ ppmInfluenceEngine <- function(fit,
                }
              })
     } else {
-      if(!spatstat.options('developer'))
-        stop("Logistic fits are not yet supported")
-      ## logistic fit
+      ## ..............  logistic composite likelihood ....................
       switch(method,
              interpreted = {
 	       oweight <- logiprob * (1 - logiprob)
@@ -342,10 +380,7 @@ ppmInfluenceEngine <- function(fit,
     }
   } 
 
-  # ........  start assembling results .....................
-  # 
-  ## start building result
-  fit.is.poisson <- is.poisson(fit)
+  # ........  start assembling result .....................
   result <- list(fitname=fitname, fit.is.poisson=fit.is.poisson)
 
   if(any(c("score", "derivatives") %in% what)) {
@@ -364,11 +399,12 @@ ppmInfluenceEngine <- function(fit,
       return(result)
   }
 
-  ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  ## NOTE: set model matrix to zero outside the domain
-  mom[!inside, ] <- 0
-  ## !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  ## :::::::::::::::  compute second order terms :::::::::::::
+
+
+  ##  >>>  set model matrix to zero outside the domain <<<
+  mom[!inside, ] <- 0
   
   ## compute effect of adding/deleting each quadrature point
   if(fit.is.poisson) {
@@ -388,8 +424,6 @@ ppmInfluenceEngine <- function(fit,
     ## 
     U <- union.quad(Q)
     nU <- npoints(U)
-    zerocif <- (lam == 0)
-    anyzerocif <- any(zerocif)
     ## decide whether to split into blocks
     nX <- Q$data$n
     nD <- Q$dummy$n
@@ -407,6 +441,8 @@ ppmInfluenceEngine <- function(fit,
     whichok <- if(!is.null(ok)) which(ok) else seq_len(nX+nD) 
     whichokdata <- whichok[isdata]
     whichokdummy <- whichok[!isdata]
+    
+    ## {{{{{{{{{{{{{   L O O P   }}}}}}}}}}}}}
     ## loop 
     for(iblock in 1:nblocks) {
       first <- min(nD, (iblock - 1) * nperblock + 1)
@@ -423,10 +459,12 @@ ppmInfluenceEngine <- function(fit,
         requested <- c(current, nabers)
         ## corresponding stuff ('B' for block)
         isdataB <- isdata[requested]
+        changesignB <- ifelse(isdataB, -1, 1)
         zerocifB <- zerocif[requested]
         anyzerocifB <- any(zerocifB)
         momB <- mom[requested, , drop=FALSE]
         lamB <- lam[requested]
+        lamposB <- lampos[requested]
         #' unused:
         #'     insideB <- inside[requested]
         if(logi) logiprobB <- logiprob[requested]
@@ -435,10 +473,12 @@ ppmInfluenceEngine <- function(fit,
       } else {
         requested <- NULL
         isdataB <- isdata
+        changesignB <- ifelse(isdataB, -1, 1)
         zerocifB <- zerocif
         anyzerocifB <- anyzerocif
         momB <- mom
         lamB <- lam
+	lamposB <- lampos
         #'  unused:
         #'     insideB <- inside
         if(logi) logiprobB <- logiprob
@@ -448,6 +488,7 @@ ppmInfluenceEngine <- function(fit,
       ## ddS[i,j, ] = Delta_i Delta_j S(x)
       ddS <- deltasuffstat(fit, restrict = "first", dataonly=FALSE,
                            quadsub=requested, sparseOK=sparse,
+			   splitInf=hasInf,
                            force=TRUE, warn.forced=TRUE)
       ## 
       if(is.null(ddS)) {
@@ -456,6 +497,11 @@ ppmInfluenceEngine <- function(fit,
         break
       } else {
         sparse <- inherits(ddS, "sparse3Darray")
+	if(hasInf) {
+          deltaInf <- attr(ddS, "deltaInf")
+          hasInf <- !is.null(deltaInf)
+          if(hasInf) sparse <- sparse && inherits(deltaInf, "sparseMatrix")
+	}
         if(gotScore) {
           ## add extra planes of zeroes to second-order model matrix
           ## (zero because the irregular components are part of the trend)
@@ -469,6 +515,7 @@ ppmInfluenceEngine <- function(fit,
           }
         }
       }
+      ## ^^^^^^^^^^^^^^^^^  second term in DeltaScore ^^^^^^^^^^^^^^^^^^^^
       ## effect of addition/deletion of U[j]
       ## on score contribution from data points (sum automatically restricted to
       ## interior for border correction by earlier call to
@@ -476,8 +523,7 @@ ppmInfluenceEngine <- function(fit,
       ddSX <- ddS[isdataB, , , drop=FALSE]
       eff.data.B <- marginSums(ddSX, c(2,3))
       ## check if any quadrature points have zero conditional intensity;
-      ## these do not contribute; the associated values of the sufficient
-      ## statistic may be Infinite and must be explicitly set to zero.
+      ## these do not contribute to this term
       if(anyzerocifB)
         eff.data.B[zerocifB, ] <- 0
       ## save results for current subset of quadrature points 
@@ -488,12 +534,12 @@ ppmInfluenceEngine <- function(fit,
       }
       ## 
       rm(ddSX, eff.data.B)
+      ## ^^^^^^^^^^^^^^^^^  third term in DeltaScore ^^^^^^^^^^^^^^^^^^^^
       ## effect of addition/deletion of U[j] on integral term in score
-      changesignB <- ifelse(isdataB, -1, 1)
       if(!sparse) {
-        if(logi){
-          stop("Non-sparse method is not implemented for method = 'logi'!")
-        } else{
+        ## ::::::::::::::: full arrays, simpler code :::::::::::::::::::
+        if(pseudo) {
+          ## ---------------  likelihood or pseudolikelihood -----------
           ## model matrix after addition/deletion of each U[j]
           ## mombefore[i,j,] <- mom[i,]
           di <- dim(ddS)
@@ -502,30 +548,54 @@ ppmInfluenceEngine <- function(fit,
           momchange[ , isdataB, ] <- - momchange[, isdataB, ]
           momafter <- mombefore + momchange
           ## effect of addition/deletion of U[j] on lambda(U[i], X)
-          if(gotScore){
+          if(gotScore) {
             lamratio <- exp(tensor::tensor(momchange[,,REG,drop=FALSE],
                                            theta, 3, 1))
-          } else{
+          } else {
             lamratio <- exp(tensor::tensor(momchange, theta, 3, 1))
           }
           lamratio <- array(lamratio, dim=dim(momafter))
-          ddSintegrand <- lamB * (momafter * lamratio - mombefore)
-          rm(lamratio)
+          if(!hasInf) {
+            #' cif is positive
+            ddSintegrand <- lamB * (momafter * lamratio - mombefore)
+          } else {
+            #' cif can be zero
+            zerobefore <- matrix(zerocifB, di[1], di[2])
+            zerochange <- deltaInf * 1L
+            zerochange[ , isdataB] <- - zerochange[ , isdataB]
+            zeroafter  <- zerobefore + zerochange
+            momZbefore <- mombefore
+            momZbefore[ , zerocifB, ] <- 0
+            IJK <- unname(which(array(zeroafter == 1, dim=di), arr.ind=TRUE))
+            momZafter <- momafter
+            momZafter[IJK] <- 0
+            momZchange <- momZafter- momZbefore
+            ddSintegrand <- lamB * (momZafter * lamratio - momZbefore)
+          }
+          rm(momchange, mombefore, momafter, lamratio)
+        } else {
+          ## ---------------  logistic composite likelihood -----------
+          stop("Non-sparse method is not implemented for method = 'logi'!")
         }
-        rm(momchange, mombefore, momafter)
         gc()
       } else {
-        if(logi){
+        ## ::::::::::::::::::   sparse arrays   ::::::::::::::::::::::::
+        if(logi) {
+          ## ---------------  logistic composite likelihood -----------
+          if(hasInf) stop("hasInf=TRUE not yet implemented for logistic")
           ## Delta suff. stat. with sign change for data/dummy (sparse3Darray)
           momchange <- ddS
           momchange[ , isdataB, ] <- - momchange[, isdataB, ]
-          ## theta^T %*% ddS (with sign -1/+1 according to data/dummy) as triplet sparse matrix
+          ## Evaluate theta^T %*% ddS (with sign -1/+1 according to data/dummy)
+          ## as triplet sparse matrix
           if(gotScore){
             momchangeeffect <- tenseur(momchange[,,REG,drop=FALSE], theta, 3, 1)
           } else{
             momchangeeffect <- tenseur(momchange, theta, 3, 1)
           }
-          momchangeeffect <- expandSparse(momchangeeffect, n = dim(ddS)[3], across = 3)
+          ## Copy to each slice 
+          momchangeeffect <- expandSparse(momchangeeffect,
+                                          n = dim(ddS)[3], across = 3)
           ijk <- SparseIndices(momchangeeffect)
           ## Entrywise calculations below
           momchange <- as.numeric(momchange[ijk])
@@ -541,7 +611,9 @@ ppmInfluenceEngine <- function(fit,
           ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k, x = ddSintegrand,
                                         dims = dim(ddS))
         } else{
-          if(entrywise){
+          ## ---------------  likelihood or pseudolikelihood -----------
+          if(entrywise) {
+            ## ......  sparse arrays, using explicit indices ......
             momchange <- ddS
             momchange[ , isdataB, ] <- - momchange[, isdataB, ]
             if(gotScore){
@@ -550,7 +622,8 @@ ppmInfluenceEngine <- function(fit,
             } else{
               lamratiominus1 <- expm1(tenseur(momchange, theta, 3, 1))
             }
-            lamratiominus1 <- expandSparse(lamratiominus1, n = dim(ddS)[3], across = 3)
+            lamratiominus1 <- expandSparse(lamratiominus1,
+                                           n = dim(ddS)[3], across = 3)
             ijk <- SparseIndices(lamratiominus1)
             ## Everything entrywise with ijk now:
             # lamratiominus1 <- lamratiominus1[cbind(ijk$i, ijk$j)]
@@ -560,10 +633,25 @@ ppmInfluenceEngine <- function(fit,
             momafter <- mombefore + momchange
             ## lamarray[i,j,k] <- lam[i]
             lamarray <- lamB[ijk$i]
-            ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
-            ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k, x = ddSintegrand,
+            if(!hasInf) {
+              #' cif is positive
+              ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
+            } else {
+              isdataBj <- isdataB[ijk$j]
+              zerobefore <- as.logical(zerocifB[ijk$i])
+              zerochange <- as.logical(deltaInf[cbind(ijk$i, ijk$j)])
+              zerochange[isdataBj] <- - zerochange[isdataBj]
+              zeroafter <- zerobefore + zerochange
+              momZbefore <- ifelse(zerobefore, 0, mombefore)
+              momZafter  <- ifelse(zeroafter,  0, momafter)
+              momZchange <- momZafter - momZbefore
+              ddSintegrand <- lamarray*(momZafter*lamratiominus1 + momZchange)
+            }
+            ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k,
+                                          x = ddSintegrand,
                                           dims = dim(ddS))
-          } else{
+          } else {
+            ## ......  sparse array code ......
             ## Entries are required only for pairs i,j which interact.
             ## mombefore[i,j,] <- mom[i,]
             mombefore <- mapSparseEntries(ddS, 1, momB, conform=TRUE, across=3)
@@ -579,9 +667,28 @@ ppmInfluenceEngine <- function(fit,
             } else{
               lamratiominus1 <- expm1(tenseur(momchange,theta, 3, 1))
             }
-            lamratiominus1 <- expandSparse(lamratiominus1, n = dim(ddS)[3], across = 3)
+            lamratiominus1 <- expandSparse(lamratiominus1,
+                                           n = dim(ddS)[3], across = 3)
             ##            ddSintegrand <- evalSparse3Dentrywise(lamarray * (momafter* lamratiominus1 + momchange))
-            ddSintegrand <- lamarray * (momafter* lamratiominus1 + momchange)
+            if(!hasInf) {
+              #' cif is positive 
+              ddSintegrand <- lamarray * (momafter* lamratiominus1 + momchange)
+            } else {
+              #' cif has zeroes
+              zerobefore <- mapSparseEntries(ddS, 1, zerocifB,
+                                             conform=TRUE, across=3)
+              zerochange <- mapSparseEntries(ddS, 1, deltaInf,
+                                             conform=TRUE, across=2)
+              zerochange[,isdataB,] <- - zerochange[,isdataB,]
+              zeroafter <- zerobefore + zerochange
+              momZbefore <- mombefore
+              momZafter  <- momafter
+              momZbefore[ , zerocifB , ] <- 0
+              IJK <- SparseIndices(zeroafter)
+              momZafter[IJK] <- 0
+              momZchange <- momZafter - momZbefore
+              ddSintegrand <- lamarray*(momZafter*lamratiominus1 + momZchange) 
+            }
           }
           rm(lamratiominus1, lamarray, momafter)
         }
@@ -605,6 +712,7 @@ ppmInfluenceEngine <- function(fit,
         eff.back[current,] <- as.matrix(eff.back.B[currentB, , drop=FALSE])
       }
     }
+    ## {{{{{{{{{{{{{   E N D   O F   L O O P   }}}}}}}}}}}}}
 
     ## total
     eff <- eff + eff.data - eff.back
@@ -736,6 +844,8 @@ ppmInfluenceEngine <- function(fit,
   return(result)
 }
 
+## >>>>>>>>>>>>>>>>>>>>>>>  HELPER FUNCTIONS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 ## extract derivatives from covariate functions
 ## WARNING: these are not the score components in general
 
@@ -771,6 +881,8 @@ ppmDerivatives <- function(fit, what=c("gradient", "hessian"),
          })
   return(result)
 }
+
+## >>>>>>>>>>>>>>>>  PLOT METHODS <<<<<<<<<<<<<<<<<<<<<
 
 plot.leverage.ppm <- function(x, ...,
                               what=c("smooth", "nearest", "exact"),
@@ -904,6 +1016,8 @@ plot.influence.ppm <- function(x, ..., multiplot=TRUE) {
                                 which.marks=1)))
 }
 
+## >>>>>>>>>>>>>>>>  CONVERSION METHODS <<<<<<<<<<<<<<<<<<<<<
+
 
 as.im.leverage.ppm <- function(X, ..., what=c("smooth", "nearest")) {
   what <- match.arg(what)
@@ -941,6 +1055,9 @@ domain.leverage.ppm <- domain.influence.ppm <-
   Window.leverage.ppm <- Window.influence.ppm <-
   function(X, ...) { as.owin(X) } 
 
+
+## >>>>>>>>>>>>>>>>  PRINT METHODS <<<<<<<<<<<<<<<<<<<<<
+
 print.leverage.ppm <- function(x, ...) {
   splat("Point process leverage function")
   fitname <- x$fitname
@@ -965,6 +1082,8 @@ print.influence.ppm <- function(x, ...) {
   return(invisible(NULL))
 }
 
+## >>>>>>>>>>>>>>>>  SUBSET METHODS <<<<<<<<<<<<<<<<<<<<<
+
 "[.leverage.ppm" <- function(x, i, ..., update=TRUE) {
   if(missing(i)) return(x)
   y <- x$lev
@@ -985,6 +1104,8 @@ print.influence.ppm <- function(x, ...) {
   x$infl <- y
   return(x)
 }
+
+## >>>>>>>>>>>>>>>>  GEOMETRICAL OPERATIONS <<<<<<<<<<<<<<<<<<<<<
 
 shift.leverage.ppm <- function(X, ...) {
   vec <- getlastshift(shift(as.owin(X), ...))

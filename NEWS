@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.031
+        CHANGES IN spatstat VERSION 1.55-0.032
 
 OVERVIEW
 
@@ -53,6 +53,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o closepairs.ppp
     New argument 'periodic'
+    
+    o fitted.ppm
+    New argument 'ignore.hardcore'.
     
     o predict.ppm
     New argument 'ignore.hardcore'.

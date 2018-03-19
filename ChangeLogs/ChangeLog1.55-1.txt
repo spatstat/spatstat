@@ -662,3 +662,29 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+19 mar 2018
+
+   dgs.R
+   hardcore.R
+   strausshard.R
+	Buglet fixes in fasteval 
+	
+   predict.ppm.R
+	Tweaked
+	
+   fitted.ppm.R
+   fitted.ppm.Rd
+	New argument 'ignore.hardcore'.
+	
+   leverage.R
+	Major edit.
+	Code for pseudolikelihood case now adjusts for presence of hard core.
+
+   DESCRIPTION
+   NEWS
+        version 1.55-0.032
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

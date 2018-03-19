@@ -2,7 +2,7 @@
 #
 #    strausshard.S
 #
-#    $Revision: 2.34 $	$Date: 2018/03/15 07:37:41 $
+#    $Revision: 2.35 $	$Date: 2018/03/19 13:39:26 $
 #
 #    The Strauss/hard core process
 #
@@ -118,7 +118,7 @@ StraussHard <- local({
           answer <- ifelseAX(hclose, -Inf, rclose)
           answer <- matrix(answer, ncol=1)
         } else {
-          answer <- rclose & !hclose
+          answer <- ifelseAX(hclose, 0, rclose)
           answer <- matrix(answer, ncol=1)
           attr(answer, "-Inf") <- hclose
         }

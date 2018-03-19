@@ -10,9 +10,10 @@
   or at the points of the quadrature scheme used to fit the model.
 }
 \usage{
-  \method{fitted}{ppm}(object, \dots, type="lambda", dataonly=FALSE,
-  new.coef=NULL, leaveoneout=FALSE, drop=FALSE, check=TRUE, repair=TRUE,
-  dropcoef=FALSE)
+  \method{fitted}{ppm}(object, \dots, type="lambda",
+                       dataonly=FALSE, new.coef=NULL, leaveoneout=FALSE,
+		       drop=FALSE, check=TRUE, repair=TRUE,
+		       ignore.hardcore=FALSE, dropcoef=FALSE)
 }
 \arguments{
   \item{object}{
@@ -55,6 +56,12 @@
   \item{repair}{
     Logical value indicating whether to repair the internal format
     of \code{object}, if it is found to be damaged. 
+  }
+  \item{ignore.hardcore}{
+    Advanced use only.
+    Logical value specifying whether to compute only the
+    finite part of the interaction potential (effectively removing
+    any hard core interaction terms).
   }
   \item{dropcoef}{
     Internal use only.
