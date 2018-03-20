@@ -8,9 +8,10 @@
   Computes the leverage measure for a fitted spatial point process model.
 }
 \usage{
-leverage(model, ...)
+leverage(model, \dots)
 
-\method{leverage}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
+\method{leverage}{ppm}(model, \dots,
+         drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{

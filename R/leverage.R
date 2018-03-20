@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.105 $ $Date: 2018/03/19 14:29:40 $
+#  $Revision: 1.107 $ $Date: 2018/03/20 01:43:49 $
 #
 
 leverage <- function(model, ...) {
@@ -246,7 +246,7 @@ ppmInfluenceEngine <- function(fit,
       ## recompute negative Hessian of log PL and its mean
       fgrad <- hessextra <- matrix(0, ncol(mom), ncol(mom))
     }  
-    if(!logi) {
+    if(pseudo) {
       ## ..............  likelihood or pseudolikelihood ....................
       switch(method,
              interpreted = {
@@ -354,7 +354,7 @@ ppmInfluenceEngine <- function(fit,
   }
   
   if(!needHess) {
-    if(!logi){
+    if(pseudo){
     hess <- fgrad
     invhess <- invfgrad
     }
@@ -582,7 +582,6 @@ ppmInfluenceEngine <- function(fit,
         ## ::::::::::::::::::   sparse arrays   ::::::::::::::::::::::::
         if(logi) {
           ## ---------------  logistic composite likelihood -----------
-          if(hasInf) stop("hasInf=TRUE not yet implemented for logistic")
           ## Delta suff. stat. with sign change for data/dummy (sparse3Darray)
           momchange <- ddS
           momchange[ , isdataB, ] <- - momchange[, isdataB, ]
@@ -599,16 +598,34 @@ ppmInfluenceEngine <- function(fit,
           ijk <- SparseIndices(momchangeeffect)
           ## Entrywise calculations below
           momchange <- as.numeric(momchange[ijk])
+          mombefore <- mom[cbind(ijk$i,ijk$k)]
+          momafter  <- mombefore + momchange
           ## Transform to change in probability
           expchange <- exp(momchangeeffect$x)
           lamBi <- lamB[ijk$i]
           logiprobBi <- logiprobB[ijk$i]
           changesignBj <- changesignB[ijk$j]
           pchange <- changesignBj*(lamBi * expchange / (lamBi*expchange + rho) - logiprobBi)
-          mombefore <- mom[cbind(ijk$i,ijk$k)]
           ## Note: changesignBj * momchange == as.numeric(ddS[ijk])
-          ddSintegrand <- (mombefore + momchange) * pchange + logiprobBi * changesignBj * momchange
-          ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k, x = ddSintegrand,
+          if(!hasInf) {
+            #' cif is positive
+            ddSintegrand <- momafter * pchange +
+              logiprobBi * changesignBj * momchange
+          } else {
+            #' cif can be zero
+            isdataBj <- isdataB[ijk$j]
+            zerobefore <- as.logical(zerocifB[ijk$i])
+            zerochange <- as.logical(deltaInf[cbind(ijk$i, ijk$j)])
+            zerochange[isdataBj] <- - zerochange[isdataBj]
+            zeroafter <- zerobefore + zerochange
+            momZbefore <- ifelse(zerobefore, 0, mombefore)
+            momZafter  <- ifelse(zeroafter,  0, momafter)
+            momZchange <- momZafter - momZbefore
+            ddSintegrand <- momZafter * pchange +
+              logiprobBi * changesignBj * momZchange
+          }
+          ddSintegrand <- sparse3Darray(i = ijk$i, j = ijk$j, k = ijk$k,
+                                        x = ddSintegrand,
                                         dims = dim(ddS))
         } else{
           ## ---------------  likelihood or pseudolikelihood -----------
@@ -637,6 +654,7 @@ ppmInfluenceEngine <- function(fit,
               #' cif is positive
               ddSintegrand <- lamarray * (momafter * lamratiominus1 + momchange)
             } else {
+              #' cif can be zero
               isdataBj <- isdataB[ijk$j]
               zerobefore <- as.logical(zerocifB[ijk$i])
               zerochange <- as.logical(deltaInf[cbind(ijk$i, ijk$j)])
@@ -778,11 +796,6 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... influence .............
   if("influence" %in% what) {
-    if(!fit.is.poisson && anyzerocif) 
-      warn.once("influence.hard",
-                "influence calculation is slightly incorrect",
-                "when the model has a hard core;",
-                "this is a known bug")
     if(logi){
       X <- loc
       effX <- as.numeric(isdata) * eff - mom * (inside * logiprob)
@@ -803,11 +816,6 @@ ppmInfluenceEngine <- function(fit,
   }
   # .......... dfbetas .............
   if("dfbetas" %in% what) {
-    if(!fit.is.poisson && anyzerocif) 
-      warn.once("dfbeta.hard",
-                "dfbetas calculation is slightly incorrect",
-                "when the model has a hard core;",
-                "this is a known bug")
     if(logi){
       M <- as.numeric(isdata) * eff - mom * (inside * logiprob)
       M <- t(invhess %*% t(M))

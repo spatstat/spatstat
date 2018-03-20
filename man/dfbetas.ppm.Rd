@@ -8,8 +8,8 @@
   in a fitted point process model.
 }
 \usage{
-\method{dfbetas}{ppm}(model, ..., drop = FALSE, iScore=NULL,
-iHessian=NULL, iArgs=NULL)
+\method{dfbetas}{ppm}(model, \dots,
+       drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{

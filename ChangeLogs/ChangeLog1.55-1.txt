@@ -688,3 +688,18 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+20 mar 2018
+
+   leverage.R
+	Code for logistic likelihood now adjusts for presence of hard core.
+
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        Nickname 'Pierce in Two Places With a Fork'
+        version 1.55-0.033
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+

@@ -7,7 +7,8 @@
   Computes the influence measure for a fitted spatial point process model.
 }
 \usage{
-\method{influence}{ppm}(model, ..., drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
+\method{influence}{ppm}(model, \dots,
+        drop = FALSE, iScore=NULL, iHessian=NULL, iArgs=NULL)
 }
 \arguments{
   \item{model}{

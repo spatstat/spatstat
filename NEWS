@@ -1,5 +1,5 @@
 
-        CHANGES IN spatstat VERSION 1.55-0.032
+        CHANGES IN spatstat VERSION 1.55-0.033
 
 OVERVIEW
 
@@ -11,9 +11,11 @@ OVERVIEW
 
     o Improved support for linear networks.
 
+    o Fixed longstanding bug in leverage and influence diagnostics.
+    
     o Minor improvements and bug fixes.
 
-    o Version nickname: "Remove Before Flight"
+    o Version nickname: "Pierce in Two Places With a Fork"
 
 NEW FUNCTIONS
 
@@ -84,6 +86,10 @@ BUG FIXES
     the results were completely incorrect (and had completely wrong format).
     Fixed.
 
+    o leverage.ppm, influence.ppm, dfbetas.ppm
+    Calculations were slightly incorrect for models with a hard core.
+    Fixed.
+    
     o integral.msr
     If the result was a matrix, it was the transpose of the correct answer.
     Fixed.
