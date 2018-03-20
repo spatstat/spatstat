@@ -3,7 +3,7 @@
 #
 #  leverage and influence
 #
-#  $Revision: 1.107 $ $Date: 2018/03/20 01:43:49 $
+#  $Revision: 1.108 $ $Date: 2018/03/20 08:58:41 $
 #
 
 leverage <- function(model, ...) {
@@ -464,9 +464,9 @@ ppmInfluenceEngine <- function(fit,
         anyzerocifB <- any(zerocifB)
         momB <- mom[requested, , drop=FALSE]
         lamB <- lam[requested]
-        lamposB <- lampos[requested]
         #' unused:
         #'     insideB <- inside[requested]
+        #'     lamposB <- lampos[requested]
         if(logi) logiprobB <- logiprob[requested]
         wB <- w[requested]
         currentB <- seq_along(current)
@@ -478,9 +478,9 @@ ppmInfluenceEngine <- function(fit,
         anyzerocifB <- anyzerocif
         momB <- mom
         lamB <- lam
-	lamposB <- lampos
         #'  unused:
         #'     insideB <- inside
+	#'     lamposB <- lampos
         if(logi) logiprobB <- logiprob
         wB <- w
       }

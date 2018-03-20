@@ -703,3 +703,19 @@ Change log from 1.55-0 to 1.55-1
 ------------- installed on laptop      ---------------
 ------------- committed to GitHub      ---------------
 
+   leverage.R
+	Removed unused variables detected by codetools
+
+   updates.Rnw
+	Updated to cover all of the above.
+	
+   DESCRIPTION
+   NEWS
+   Nickname.txt
+        version 1.55-0.034
+	
+------------- passed R-3.4.3 CMD check ---------------
+------------- installed on laptop      ---------------
+------------- committed to GitHub      ---------------
+
+
