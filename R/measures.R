@@ -3,7 +3,7 @@
 #
 #  signed/vector valued measures with atomic and diffuse components
 #
-#  $Revision: 1.78 $  $Date: 2018/03/21 14:04:31 $
+#  $Revision: 1.79 $  $Date: 2018/03/21 15:27:10 $
 #
 msr <- function(qscheme, discrete, density, check=TRUE) {
   if(!is.quad(qscheme))
@@ -573,11 +573,11 @@ Ops.msr <- function(e1,e2=NULL){
         } else if(is.im(sm1) && is.im(sm2)) {
           do.call(.Generic, list(sm1, sm2))
         } else if(is.im(sm1) && is.solist(sm2)) {
-          mapply(.Generic, e2=sm2, MoreArgs=list(e1=sm1))
+          mapply(.Generic, e2=sm2, MoreArgs=list(e1=sm1), SIMPLIFY=FALSE)
         } else if(is.solist(sm1) && is.im(sm2)) {
-          mapply(.Generic, e1=sm1, MoreArgs=list(e2=sm2))
+          mapply(.Generic, e1=sm1, MoreArgs=list(e2=sm2), SIMPLIFY=FALSE)
         } else if(is.solist(sm1) && is.solist(sm2)) {
-          mapply(.Generic, e1=sm1, e2=sm2)
+          mapply(.Generic, e1=sm1, e2=sm2, SIMPLIFY=FALSE)
         } else NULL
       attr(e1, "smoothdensity") <- sm
       return(e1)
